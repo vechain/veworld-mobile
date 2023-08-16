@@ -78,9 +78,7 @@ export const WalletSetupScreen = () => {
                                 pt={4}
                                 align="left"
                                 typographyFont="captionRegular">
-                                {
-                                    "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed euismod, nibh euismod."
-                                }
+                                {LL.BTN_CREATE_WALLET_TYPE_CREATE_NEW_SUBTITLE()}
                             </BaseText>
                         </BaseView>
                         <BaseIcon
@@ -108,9 +106,7 @@ export const WalletSetupScreen = () => {
                                 align="left"
                                 pt={4}
                                 typographyFont="captionRegular">
-                                {
-                                    "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed euismod, nibh euismod."
-                                }
+                                {LL.BTN_CREATE_WALLET_TYPE_IMPORT_SUBTITLE()}
                             </BaseText>
                         </BaseView>
                         <BaseIcon

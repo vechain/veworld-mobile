@@ -93,11 +93,8 @@ export const UserCreatePasswordScreen = () => {
                     <BaseText typographyFont="title">
                         {LL.TITLE_USER_PASSWORD()}
                     </BaseText>
-                    {/* TODO (Erik) (https://github.com/vechainfoundation/veworld-mobile/issues/771) change this lorem ipsum */}
-                    {/* eslint-disable-next-line i18next/no-literal-string */}
                     <BaseText typographyFont="body" my={10}>
-                        Lorem Ipsum is simply dummy text of the printing and
-                        typesetting industry
+                        {LL.SB_USER_PASSWORD()}
                     </BaseText>
                 </BaseView>
                 <BaseSpacer height={valueToHP[40]} />

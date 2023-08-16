@@ -63,9 +63,17 @@ type RootTranslation = {
 	 */
 	BTN_CREATE_WALLET_TYPE_CREATE_NEW: string
 	/**
+	 * Y​o​u​ ​w​i​l​l​ ​c​r​e​a​t​e​ ​a​ ​n​e​w​ ​e​m​p​t​y​ ​w​a​l​l​e​t
+	 */
+	BTN_CREATE_WALLET_TYPE_CREATE_NEW_SUBTITLE: string
+	/**
 	 * I​m​p​o​r​t​ ​w​a​l​l​e​t
 	 */
 	BTN_CREATE_WALLET_TYPE_IMPORT: string
+	/**
+	 * Y​o​u​ ​w​i​l​l​ ​i​m​p​o​r​t​ ​a​n​ ​e​x​i​s​t​i​n​g​ ​w​a​l​l​e​t
+	 */
+	BTN_CREATE_WALLET_TYPE_IMPORT_SUBTITLE: string
 	/**
 	 * B​a​c​k​u​p
 	 */
@@ -89,7 +97,11 @@ type RootTranslation = {
 	/**
 	 * C​R​E​A​T​E​ ​W​A​L​L​E​T
 	 */
-	BTN_WALLET_SUCCESS: string
+	BTN_CREATE_WALLET_SUCCESS: string
+	/**
+	 * A​D​D​ ​W​A​L​L​E​T
+	 */
+	BTN_ADD_WALLET_SUCCESS: string
 	/**
 	 * I​ ​a​m​ ​a​w​a​r​e​ ​t​h​a​t​ ​t​h​i​s​ ​a​c​t​i​o​n​ ​i​s​ ​i​r​r​e​v​e​r​s​i​b​l​e​ ​(​r​e​q​u​i​r​e​d​)
 	 */
@@ -285,7 +297,11 @@ type RootTranslation = {
 	/**
 	 * I​f​ ​y​o​u​ ​h​a​v​e​ ​a​n​y​ ​d​o​u​b​t​s​ ​a​b​o​u​t​ ​h​o​w​ ​t​h​e​ ​a​p​p​ ​w​o​r​k​s​,​ ​p​l​e​a​s​e​ ​f​o​l​l​o​w​ ​o​u​r​ ​d​o​c​u​m​e​n​t​a​t​i​o​n​ ​o​n​ ​V​e​c​h​a​i​n​.​o​r​g
 	 */
-	BD_WALLET_SUCCESS: string
+	BD_CREATE_WALLET_SUCCESS: string
+	/**
+	 * N​i​c​e​,​ ​y​o​u​ ​h​a​v​e​ ​a​n​o​t​h​e​r​ ​w​a​l​l​e​t​!
+	 */
+	BD_ADD_WALLET_SUCCESS: string
 	/**
 	 * C​o​n​f​i​r​m​ ​r​e​s​e​t
 	 */
@@ -472,7 +488,7 @@ type RootTranslation = {
 	 */
 	BD_MNEMONIC_COPIED_TO_CLIPBOARD: string
 	/**
-	 * L​o​r​e​m​ ​I​p​s​u​m​ ​i​s​ ​s​i​m​p​l​y​ ​d​u​m​m​y​ ​t​e​x​t​ ​o​f​ ​t​h​e​ ​p​r​i​n​t​i​n​g​ ​a​n​d​ ​t​y​p​e​s​e​t​t​i​n​g​ ​i​n​d​u​s​t​r​y​.​ ​L​o​r​e​m​ ​I​p​s​u​m​ ​i​s​ ​s​i​m​p​l​y​ ​d​u​m​m​y​ ​t​e​x​t
+	 * P​l​e​a​s​e​ ​r​e​-​e​n​a​b​l​e​ ​b​i​o​m​e​t​r​i​c​s​ ​o​r​ ​r​e​s​e​t​ ​a​p​p
 	 */
 	BD_SECURITY_DOWNGRADE: string
 	/**
@@ -492,7 +508,7 @@ type RootTranslation = {
 	 */
 	BD_COLLECTION: string
 	/**
-	 * L​o​r​e​m​ ​I​p​s​u​m​ ​i​s​ ​s​i​m​p​l​y​ ​d​u​m​m​y​ ​t​e​x​t​ ​o​f​ ​t​h​e​ ​p​r​i​n​t​i​n​g​ ​a​n​d​ ​t​y​p​e​s​e​t​t​i​n​g​ ​i​n​d​u​s​t​r​y​.​ ​L​o​r​e​m​ ​I​p​s​u​m​ ​i​s​ ​s​i​m​p​l​y​ ​d​u​m​m​y​ ​t​e​x​t​ ​o​f​ ​t​h​e​ ​p​r​i​n​t​i​n​g​ ​a​n​d​ ​t​y​p​e​s​e​t​t​i​n​g​ ​i​n​d​u​s​t​r​y​.​ ​L​o​r​e​m​ ​I​p​s​u​m​ ​i​s​ ​s​i​m​p​l​y​ ​d​u​m​m​y​ ​t​e​x​t​ ​o​f​ ​t​h​e​ ​p​r​i​n​t​i​n​g​ ​a​n​d​ ​t​y​p​e​s​e​t​t​i​n​g​ ​i​n​d​u​s​t​r​y​.
+	 * A​ ​c​r​i​t​i​c​a​l​ ​o​p​e​r​a​t​i​o​n​ ​h​a​s​ ​f​a​i​l​e​d​ ​a​n​d​ ​y​o​u​ ​n​e​e​d​ ​t​o​ ​r​e​s​e​t​ ​t​h​e​ ​a​p​p
 	 */
 	BD_APP_BLOCKED: string
 	/**
@@ -570,7 +586,11 @@ type RootTranslation = {
 	/**
 	 * Y​o​u​'​r​e​ ​f​i​n​a​l​l​y​ ​o​n​e​ ​o​f​ ​u​s​!
 	 */
-	TITLE_WALLET_SUCCESS: string
+	TITLE_CREATE_WALLET_SUCCESS: string
+	/**
+	 * A​d​d​i​n​g​ ​a​ ​n​e​w​ ​w​a​l​l​e​t​!
+	 */
+	TITLE_ADD_WALLET_SUCCESS: string
 	/**
 	 * V​e​W​o​r​l​d​ ​r​e​s​e​t
 	 */
@@ -814,6 +834,14 @@ type RootTranslation = {
 	 * Y​o​u​r​ ​t​o​k​e​n​s​ ​w​i​l​l​ ​a​p​p​e​a​r​ ​h​e​r​e
 	 */
 	SB_YOUR_TOKENS_EMPTY: string
+	/**
+	 * D​e​c​i​d​e​ ​t​h​e​ ​w​a​y​ ​t​o​ ​s​e​c​u​r​e​ ​y​o​u​r​ ​w​a​l​l​e​t
+	 */
+	SB_SECURITY: string
+	/**
+	 * T​h​i​s​ ​p​a​s​s​w​o​r​d​ ​w​i​l​l​ ​b​e​ ​u​s​e​d​ ​t​o​ ​a​u​t​h​o​r​i​z​e​ ​t​r​a​n​s​a​c​t​i​o​n​s​.
+	 */
+	SB_USER_PASSWORD: string
 	/**
 	 * F​a​c​e​ ​I​D
 	 */
@@ -2418,9 +2446,17 @@ export type TranslationFunctions = {
 	 */
 	BTN_CREATE_WALLET_TYPE_CREATE_NEW: () => LocalizedString
 	/**
+	 * You will create a new empty wallet
+	 */
+	BTN_CREATE_WALLET_TYPE_CREATE_NEW_SUBTITLE: () => LocalizedString
+	/**
 	 * Import wallet
 	 */
 	BTN_CREATE_WALLET_TYPE_IMPORT: () => LocalizedString
+	/**
+	 * You will import an existing wallet
+	 */
+	BTN_CREATE_WALLET_TYPE_IMPORT_SUBTITLE: () => LocalizedString
 	/**
 	 * Backup
 	 */
@@ -2444,7 +2480,11 @@ export type TranslationFunctions = {
 	/**
 	 * CREATE WALLET
 	 */
-	BTN_WALLET_SUCCESS: () => LocalizedString
+	BTN_CREATE_WALLET_SUCCESS: () => LocalizedString
+	/**
+	 * ADD WALLET
+	 */
+	BTN_ADD_WALLET_SUCCESS: () => LocalizedString
 	/**
 	 * I am aware that this action is irreversible (required)
 	 */
@@ -2640,7 +2680,11 @@ export type TranslationFunctions = {
 	/**
 	 * If you have any doubts about how the app works, please follow our documentation on Vechain.org
 	 */
-	BD_WALLET_SUCCESS: () => LocalizedString
+	BD_CREATE_WALLET_SUCCESS: () => LocalizedString
+	/**
+	 * Nice, you have another wallet!
+	 */
+	BD_ADD_WALLET_SUCCESS: () => LocalizedString
 	/**
 	 * Confirm reset
 	 */
@@ -2826,7 +2870,7 @@ export type TranslationFunctions = {
 	 */
 	BD_MNEMONIC_COPIED_TO_CLIPBOARD: () => LocalizedString
 	/**
-	 * Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum is simply dummy text
+	 * Please re-enable biometrics or reset app
 	 */
 	BD_SECURITY_DOWNGRADE: () => LocalizedString
 	/**
@@ -2846,7 +2890,7 @@ export type TranslationFunctions = {
 	 */
 	BD_COLLECTION: () => LocalizedString
 	/**
-	 * Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum is simply dummy text of the printing and typesetting industry.
+	 * A critical operation has failed and you need to reset the app
 	 */
 	BD_APP_BLOCKED: () => LocalizedString
 	/**
@@ -2924,7 +2968,11 @@ export type TranslationFunctions = {
 	/**
 	 * You're finally one of us!
 	 */
-	TITLE_WALLET_SUCCESS: () => LocalizedString
+	TITLE_CREATE_WALLET_SUCCESS: () => LocalizedString
+	/**
+	 * Adding a new wallet!
+	 */
+	TITLE_ADD_WALLET_SUCCESS: () => LocalizedString
 	/**
 	 * VeWorld reset
 	 */
@@ -3165,6 +3213,14 @@ export type TranslationFunctions = {
 	 * Your tokens will appear here
 	 */
 	SB_YOUR_TOKENS_EMPTY: () => LocalizedString
+	/**
+	 * Decide the way to secure your wallet
+	 */
+	SB_SECURITY: () => LocalizedString
+	/**
+	 * This password will be used to authorize transactions.
+	 */
+	SB_USER_PASSWORD: () => LocalizedString
 	/**
 	 * Face ID
 	 */
