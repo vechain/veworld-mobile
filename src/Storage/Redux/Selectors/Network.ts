@@ -52,20 +52,6 @@ export const selectNetworkById = createSelector(
     },
 )
 
-export const selectShowConversionOnOtherNets = createSelector(
-    selectNetworksState,
-    state => {
-        return state.showConversionOtherNets
-    },
-)
-
-export const selectShowTestnetTag = createSelector(
-    selectNetworksState,
-    state => {
-        return state.showTestNetTag
-    },
-)
-
 export const selectIsNodeError = createSelector(selectNetworksState, state => {
     return state.isNodeError
 })
