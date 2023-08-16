@@ -17,14 +17,17 @@ const en: BaseTranslation = {
     BTN_SECURTY_USE_TYPE: "Use {type:string}",
     BTN_SECURITY_CREATE_PASSWORD: "Create password",
     BTN_CREATE_WALLET_TYPE_CREATE_NEW: "Create new wallet",
+    BTN_CREATE_WALLET_TYPE_CREATE_NEW_SUBTITLE: "You will create a new empty wallet",
     BTN_CREATE_WALLET_TYPE_IMPORT: "Import wallet",
+    BTN_CREATE_WALLET_TYPE_IMPORT_SUBTITLE: "You will import an existing wallet",
     BTN_MNEMONIC_BACKUP: "Backup",
     BTN_MNEMONIC_CHECKBOX:
         "I state that I have saved the secret phrase and I am aware that I am responsible if I lose it.",
     BTN_MNEMONIC_CLIPBOARD: "Copy mnemonic to clipboard",
     BTN_IMPORT_WALLET_VERIFY: "Verify",
     BTN_WALLET_IMPORT_HELP: "Where can I find it?",
-    BTN_WALLET_SUCCESS: "CREATE WALLET",
+    BTN_CREATE_WALLET_SUCCESS: "CREATE WALLET",
+    BTN_ADD_WALLET_SUCCESS: "ADD WALLET",
     BTN_RESET_APP_CHECKBOX: "I am aware that this action is irreversible (required)",
     BTN_COPY_PUBLIC_ADDRESS: "Copy public address",
     BTN_SHOW_QR_CODE: "Show QR code",
@@ -88,7 +91,8 @@ const en: BaseTranslation = {
         "Import your wallet with your secret recovery phrase. Enter your wallet’s 12-words recovery phrase",
     BD_ALERT_FACE_ID_CANCELLED: "You cancelled using Face ID to authenticate. You must be authenticated to use VeWallet. Do you want to log out, or retry authenticating?",
     BD_ALERT_BIOMETRICS_CANCELLED: "You cancelled using Biometrics to authenticate. You must be authenticated to use VeWorld. Do you want to Reset the Wallet, or Retry authenticating?",
-    BD_WALLET_SUCCESS: "If you have any doubts about how the app works, please follow our documentation on Vechain.org",
+    BD_CREATE_WALLET_SUCCESS: "If you have any doubts about how the app works, please follow our documentation on Vechain.org",
+    BD_ADD_WALLET_SUCCESS: "Nice, you have another wallet!",
     BD_CONFIRM_RESET: "Confirm reset",
     BD_RESET_APP_01: "Resetting your account will log you out and erase all your data stored locally (accounts, wallets, transaction history etc).",
     BD_RESET_APP_02: "Resetting VeWorld will not change your accounts' balances but will require you to re-enter your secret recovery phrase to access them.",
@@ -135,12 +139,12 @@ const en: BaseTranslation = {
     BD_BACKUP_MNEMONIC: "Backup your mnemonic phrase",
     BD_ANALYTICS_TRACKING: "I accept to be tracked by Analytics and for research and service quality purposes",
     BD_MNEMONIC_COPIED_TO_CLIPBOARD: "Mnemonic copied to clipboard",
-    BD_SECURITY_DOWNGRADE: "Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum is simply dummy text",
+    BD_SECURITY_DOWNGRADE: "Please re-enable biometrics or reset app",
     BD_CREATE_WALLET_TYPE: "You can import your existing wallet, and retain all of your accounts and related transaction keys.",
     BD_CREATE_WALLET_TYPE_USER_ACCEPTS: "Creating the wallet the user accepts",
     BD_NFT_DESC_PLACEHOLDER: "Random NFT collection description placeholder in case the NFT collection doesn't have one",
     BD_COLLECTION: "Collection",
-    BD_APP_BLOCKED: "Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum is simply dummy text of the printing and typesetting industry.",
+    BD_APP_BLOCKED: "A critical operation has failed and you need to reset the app",
 
     // TITLES
     TITLE_WELCOME_TO: "Welcome to ",
@@ -162,7 +166,8 @@ const en: BaseTranslation = {
     TITLE_ALERT_CAMERA_PERMISSION: "Camera Permissions",
     TITLE_ALERT_BIOMETRICS_CANCELLED: "Biometrics Cancelled",
 
-    TITLE_WALLET_SUCCESS: "You're finally one of us!",
+    TITLE_CREATE_WALLET_SUCCESS: "You're finally one of us!",
+    TITLE_ADD_WALLET_SUCCESS: "Adding a new wallet!",
     TITLE_RESET_APP: "VeWorld reset",
     TITLE_WALLET_MANAGEMENT: "Wallet management",
     TITLE_SETTINGS: "Settings",
@@ -225,6 +230,9 @@ const en: BaseTranslation = {
     SB_BACKUP_YOUR_PHRASE_2: "RESET the App!",
     SB_UPGRADE_SECURITY_WARNING_ANDROID: "Also, you will be asked to use your biometrics security method for each wallet!",
     SB_YOUR_TOKENS_EMPTY: "Your tokens will appear here",
+    SB_SECURITY: "Decide the way to secure your wallet",
+    SB_USER_PASSWORD: "This password will be used to authorize transactions.",
+
 
     // ELEMENTS
     FACE_ID: "Face ID",
