@@ -36,7 +36,7 @@ export const SecurityProvider = ({ children }: Props) => {
             </AnimatedSplashScreen>
         )
 
-    // App is blocked and the user needs to re-enable bioemtrics or reset wallet
+    // App is blocked and the user needs to re-enable biometrics or reset wallet
     if (isSecurityDowngrade)
         return (
             <AnimatedSplashScreen playAnimation={true}>
