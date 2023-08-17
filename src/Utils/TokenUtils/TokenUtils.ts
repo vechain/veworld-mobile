@@ -14,8 +14,17 @@ export const mergeTokens = (
     return mergeArrays(a, b, "address")
 }
 
-export const compareSymbols = (sym1?: string, sym2?: string) =>
-    sym1 && sym2 && sym1.trim().toLowerCase() === sym2.trim().toLowerCase()
+export const compareSymbols = (sym1?: string, sym2?: string): boolean => {
+    return (
+        sym1 !== undefined &&
+        sym2 !== undefined &&
+        sym1.trim().toLowerCase() === sym2.trim().toLowerCase()
+    )
+}
 
-export const isVechainToken = (symbol: string) =>
-    compareSymbols(symbol, VET.symbol) ?? compareSymbols(symbol, VTHO.symbol)
+export const isVechainToken = (symbol: string): boolean => {
+    return (
+        compareSymbols(symbol, VET.symbol) ||
+        compareSymbols(symbol, VTHO.symbol)
+    )
+}
