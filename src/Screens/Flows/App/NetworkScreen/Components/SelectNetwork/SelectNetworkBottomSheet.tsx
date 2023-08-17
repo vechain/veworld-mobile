@@ -8,7 +8,7 @@ import {
     NetworkBox,
 } from "~Components"
 import { useI18nContext } from "~i18n"
-import { useAppDispatch, useAppSelector } from "~Storage/Redux"
+import { clearNFTCache, useAppDispatch, useAppSelector } from "~Storage/Redux"
 import { changeSelectedNetwork } from "~Storage/Redux/Actions"
 import { Network, NETWORK_TYPE } from "~Model"
 import {
@@ -21,7 +21,6 @@ import {
     SectionListRenderItemInfo,
     StyleSheet,
 } from "react-native"
-import { info } from "~Utils"
 import { useSetSelectedAccount } from "~Hooks"
 
 type Props = {
@@ -77,6 +76,7 @@ export const SelectNetworkBottomSheet = React.forwardRef<
     const onPress = useCallback(
         (network: Network) => {
             onSetSelectedAccount({})
+            dispatch(clearNFTCache())
             dispatch(changeSelectedNetwork(network))
             onClose()
         },
@@ -125,7 +125,6 @@ export const SelectNetworkBottomSheet = React.forwardRef<
     )
 
     const handleSheetChanges = useCallback((index: number) => {
-        info("walletManagementSheet position changed", index)
         setSnapIndex(index)
     }, [])
 

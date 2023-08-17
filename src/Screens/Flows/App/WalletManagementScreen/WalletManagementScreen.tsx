@@ -1,7 +1,6 @@
 import React, { useCallback, useRef, useState } from "react"
 import {
     AddAccountBottomSheet,
-    BaseSpacer,
     BaseView,
     DeviceBox,
     Layout,
@@ -157,10 +156,9 @@ export const WalletManagementScreen = () => {
                         isEdit={isEdit}
                         setIsEdit={setIsEdit}
                     />
-                    <BaseSpacer height={16} />
                 </>
             }
-            bodyWithoutScrollView={
+            fixedBody={
                 <BaseView style={styles.view}>
                     <DraggableFlatList<Device>
                         data={devices}
@@ -171,6 +169,7 @@ export const WalletManagementScreen = () => {
                         activationDistance={10}
                         showsVerticalScrollIndicator={false}
                         containerStyle={styles.draggableFlatListContainer}
+                        contentContainerStyle={styles.contentContainerStyle}
                     />
                     <WalletMgmtBottomSheet
                         ref={walletMgmtBottomSheetRef}
@@ -208,10 +207,13 @@ export const WalletManagementScreen = () => {
 
 const baseStyles = (theme: ColorThemeType) =>
     StyleSheet.create({
-        view: { top: 0, flexGrow: 1, marginBottom: 0 },
-        draggableFlatListContainer: { flexGrow: 1, marginTop: 12 },
+        view: { flexGrow: 1 },
+        draggableFlatListContainer: { flexGrow: 1 },
         deviceBoxPressable: {
             backgroundColor: theme.colors.card,
             borderRadius: 16,
+        },
+        contentContainerStyle: {
+            paddingTop: 8,
         },
     })

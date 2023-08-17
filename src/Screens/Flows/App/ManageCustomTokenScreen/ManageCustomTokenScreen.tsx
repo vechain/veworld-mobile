@@ -203,7 +203,7 @@ export const ManageCustomTokenScreen = () => {
                     </BaseText>
                 </>
             }
-            bodyWithoutScrollView={
+            fixedBody={
                 <>
                     {/* Tokens List */}
                     {!!tokens.length &&

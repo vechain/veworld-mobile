@@ -13,11 +13,9 @@ type Props = {
 
 export const AssetChart = ({ token }: Props) => {
     const { chartData, getChartData } = useChartData(token.symbol)
-
     const invokeHaptic = useCallback(async () => {
-        if (chartData && chartData.length)
-            await HapticsService.triggerImpact({ level: "Light" })
-    }, [chartData])
+        await HapticsService.triggerImpact({ level: "Light" })
+    }, [])
 
     const onTimelineButtonPress = useCallback(
         (button: string) => {

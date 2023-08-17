@@ -189,7 +189,7 @@ export const ContactsScreen = () => {
                     </BaseText>
                 </BaseView>
             }
-            bodyWithoutScrollView={
+            fixedBody={
                 <>
                     {/* Add contact button if contacts list is empty */}
                     {!contacts.length && renderAddContactButton()}
