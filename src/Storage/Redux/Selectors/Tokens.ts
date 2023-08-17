@@ -236,15 +236,15 @@ export const selectHasFetchedOfficialTokens = createSelector(
     selectSelectedNetwork,
     (state, account, network) => {
         if (network.type === NETWORK_TYPE.MAIN) {
-            if (!state.hasFetchedOfficialTokensMainnet[account.address])
+            if (!state.hasFetchedOfficialTokensMainnet?.[account.address])
                 return false
 
-            return state.hasFetchedOfficialTokensMainnet[account.address]
+            return state.hasFetchedOfficialTokensMainnet?.[account.address]
         } else {
-            if (!state.hasFetchedOfficialTokensTestnet[account.address])
+            if (!state.hasFetchedOfficialTokensTestnet?.[account.address])
                 return false
 
-            return state.hasFetchedOfficialTokensTestnet[account.address]
+            return state.hasFetchedOfficialTokensTestnet?.[account.address]
         }
     },
 )

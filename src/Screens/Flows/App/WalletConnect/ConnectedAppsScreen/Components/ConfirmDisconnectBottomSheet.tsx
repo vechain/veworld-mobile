@@ -14,7 +14,7 @@ import { useI18nContext } from "~i18n"
 import { useTheme } from "~Hooks"
 import { ConnectedAppBox } from "./ConnectedAppBox"
 
-const snapPoints = ["50%"]
+const snapPoints = ["50%", "70%"]
 
 type Props = {
     onConfirm: (topic: string) => void

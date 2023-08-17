@@ -26,6 +26,7 @@ export const TabStack = () => {
                 tabBarStyle: {
                     backgroundColor: theme.colors.card,
                     ...tabbarBaseStyles.tabbar,
+                    ...tabbarBaseStyles.shadow,
                 },
             }}>
             <Tab.Screen
@@ -100,5 +101,15 @@ export const tabbarBaseStyles = StyleSheet.create({
         borderTopLeftRadius: 20,
         borderTopRightRadius: 20,
         height: PlatformUtils.isIOS() ? 86 : 68,
+    },
+    shadow: {
+        shadowColor: "#000",
+        shadowOffset: {
+            width: 0,
+            height: -1,
+        },
+        shadowOpacity: 0.2,
+        shadowRadius: 10,
+        elevation: 5,
     },
 })

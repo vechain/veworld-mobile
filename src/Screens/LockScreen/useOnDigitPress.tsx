@@ -37,12 +37,16 @@ export const useOnDigitPress = ({
         setPin(updatedPin)
 
         if (updatedPin.length === digitNumber) {
-            onFinishCallback && onFinishCallback(updatedPin.join(""))
-            if (resetPinOnFinishTimer) {
-                setTimeout(() => {
-                    setPin([])
-                }, resetPinOnFinishTimer)
-            }
+            // this timeout is a workaround to render the last digit before calling the callback
+            // otherwise the last digit is not rendered and it feels a little bit buggy (especially on android)
+            setTimeout(() => {
+                onFinishCallback && onFinishCallback(updatedPin.join(""))
+                if (resetPinOnFinishTimer) {
+                    setTimeout(() => {
+                        setPin([])
+                    }, resetPinOnFinishTimer)
+                }
+            }, 0)
         }
     }
 

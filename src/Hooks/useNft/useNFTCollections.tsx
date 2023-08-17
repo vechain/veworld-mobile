@@ -1,4 +1,4 @@
-import { useCallback, useEffect } from "react"
+import { useCallback } from "react"
 import { useThor } from "~Components"
 import { NftCollection } from "~Model"
 import {
@@ -11,7 +11,6 @@ import {
     getTokenURI,
 } from "~Networking"
 import {
-    clearNFTCache,
     selectNftCollectionsWithoutMetadata,
     selectSelectedAccountAddress,
     selectSelectedNetwork,
@@ -59,71 +58,70 @@ export const useNFTCollections = () => {
     const currentAddress = useAppSelector(selectSelectedAccountAddress)
     const nftCollections = useAppSelector(selectNftCollectionsWithoutMetadata)
     const { fetchMetadata } = useTokenMetadata()
-
     const theme = useTheme()
-
-    // Clear caches on network change
-    useEffect(() => {
-        dispatch(clearNFTCache())
-    }, [dispatch, network])
 
     const lazyLoadMetadata = useCallback(
         async (collection: NftCollection) => {
-            // Exit if currentAddress.address is not set
-            if (!currentAddress) return
+            try {
+                // Exit if currentAddress.address is not set
+                if (!currentAddress) return
 
-            debug(`Lazy loading metadata for collection ${collection.address}`)
+                debug(
+                    `Lazy loading metadata for collection ${collection.address}`,
+                )
 
-            const { data, pagination } = await getNftsForContract(
-                network.type,
-                collection.address,
-                currentAddress,
-                1,
-                0,
-            )
-            if (data.length === 0) return
-
-            const tokenURI = await getTokenURI(
-                data[0].tokenId,
-                collection.address,
-                thor,
-            )
-
-            const tokenMetadata = await fetchMetadata(tokenURI)
-            const name =
-                tokenMetadata?.name ?? (await getName(collection.address, thor))
-            const image = URIUtils.convertUriToUrl(
-                tokenMetadata?.image ?? collection.image,
-            )
-            const mediaType = await MediaUtils.resolveMediaType(
-                image,
-                collection.mimeType,
-            )
-            const description =
-                tokenMetadata?.description ?? collection.description
-
-            const updated = {
-                ...collection,
-                balanceOf: pagination.totalElements,
-                hasCount: pagination.hasCount,
-                image,
-                mediaType,
-                name,
-                description,
-                updated: true,
-                symbol: await getSymbol(collection.address, thor),
-                totalSupply: await getTokenTotalSupply(
+                const { data, pagination } = await getNftsForContract(
+                    network.type,
+                    collection.address,
+                    currentAddress,
+                    1,
+                    0,
+                )
+                if (data.length === 0) return
+                const tokenURI = await getTokenURI(
+                    data[0].tokenId,
                     collection.address,
                     thor,
-                ),
-            }
+                )
+                const tokenMetadata = await fetchMetadata(tokenURI)
+                const name =
+                    tokenMetadata?.name ??
+                    (await getName(collection.address, thor))
+                const image = URIUtils.convertUriToUrl(
+                    tokenMetadata?.image ?? collection.image,
+                )
+                const mediaType = await MediaUtils.resolveMediaType(
+                    image,
+                    collection.mimeType,
+                )
+                const description =
+                    tokenMetadata?.description ?? collection.description
 
-            dispatch(
-                updateCollection({
-                    currentAccountAddress: currentAddress,
-                    collection: updated,
-                }),
-            )
+                const updated = {
+                    ...collection,
+                    balanceOf: pagination.totalElements,
+                    hasCount: pagination.hasCount,
+                    image,
+                    mediaType,
+                    name,
+                    description,
+                    updated: true,
+                    symbol: await getSymbol(collection.address, thor),
+                    totalSupply: await getTokenTotalSupply(
+                        collection.address,
+                        thor,
+                    ),
+                }
+
+                dispatch(
+                    updateCollection({
+                        currentAccountAddress: currentAddress,
+                        collection: updated,
+                    }),
+                )
+            } catch (e) {
+                error("Error: useNFTCollections", e)
+            }
         },
         [currentAddress, dispatch, fetchMetadata, network.type, thor],
     )

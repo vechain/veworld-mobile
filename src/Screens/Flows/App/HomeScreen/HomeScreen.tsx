@@ -10,14 +10,13 @@ import {
     BottomInsetsEXtraPadding,
     useBottomSheetModal,
     useMemoizedAnimation,
-    usePlatformBottomInsets,
     useSetSelectedAccount,
     useTheme,
 } from "~Hooks"
 import {
     AddAccountBottomSheet,
-    BaseSafeArea,
     BaseSpacer,
+    Layout,
     QRCodeBottomSheet,
     RenameAccountBottomSheet,
     SelectAccountBottomSheet,
@@ -50,8 +49,6 @@ export const HomeScreen = () => {
     const [refreshing, setRefreshing] = React.useState(false)
 
     const theme = useTheme()
-
-    const { tabBarAndroidBottomInsets } = usePlatformBottomInsets()
 
     const isBalanceVisible = useAppSelector(selectBalanceVisible)
 
@@ -153,85 +150,95 @@ export const HomeScreen = () => {
     const visibleHeightRef = useRef<number>(0)
 
     return (
-        <BaseSafeArea
-            grow={1}
-            style={{ marginBottom: tabBarAndroidBottomInsets }}>
-            <Header />
-            <NestableScrollContainer
-                showsVerticalScrollIndicator={false}
-                onContentSizeChange={visibleHeight => {
-                    visibleHeightRef.current = visibleHeight
-                }}
-                refreshControl={
-                    <RefreshControl
-                        onRefresh={onRefresh}
-                        tintColor={theme.colors.border}
-                        refreshing={refreshing}
+        <Layout
+            fixedHeader={<Header />}
+            noBackButton
+            noMargin
+            fixedBody={
+                <>
+                    <NestableScrollContainer
+                        showsVerticalScrollIndicator={false}
+                        onContentSizeChange={visibleHeight => {
+                            visibleHeightRef.current = visibleHeight
+                        }}
+                        refreshControl={
+                            <RefreshControl
+                                onRefresh={onRefresh}
+                                tintColor={theme.colors.border}
+                                refreshing={refreshing}
+                            />
+                        }>
+                        <HeaderView
+                            openAccountManagementSheet={
+                                openAccountManagementSheet
+                            }
+                            openSelectAccountBottomSheet={
+                                openSelectAccountBottomSheet
+                            }
+                        />
+                        <BaseSpacer height={24} />
+                        <EditTokensBar isEdit={isEdit} setIsEdit={setIsEdit} />
+                        <BaseSpacer height={24} />
+
+                        <TokenList
+                            isEdit={isEdit}
+                            visibleHeightRef={visibleHeightRef.current}
+                            isBalanceVisible={isBalanceVisible}
+                            entering={animateEntering}
+                        />
+                        <BaseSpacer height={BottomInsetsEXtraPadding.TabBar} />
+                    </NestableScrollContainer>
+
+                    <AccountManagementBottomSheet
+                        ref={accountManagementBottomSheetRef}
+                        onClose={closeAccountManagementSheet}
+                        openAddAccountSheet={openAddAccountSheet}
+                        openQRCodeSheet={openQRCodeSheet}
+                        openRenameAccountBottomSheet={
+                            openRenameAccountBottomSheet
+                        }
+                        openRemoveAccountBottomSheet={openRemoveAccountSheet}
                     />
-                }>
-                <HeaderView
-                    openAccountManagementSheet={openAccountManagementSheet}
-                    openSelectAccountBottomSheet={openSelectAccountBottomSheet}
-                />
-                <BaseSpacer height={24} />
-                <EditTokensBar isEdit={isEdit} setIsEdit={setIsEdit} />
-                <BaseSpacer height={24} />
 
-                <TokenList
-                    isEdit={isEdit}
-                    visibleHeightRef={visibleHeightRef.current}
-                    isBalanceVisible={isBalanceVisible}
-                    entering={animateEntering}
-                />
-                <BaseSpacer height={BottomInsetsEXtraPadding.TabBar} />
-            </NestableScrollContainer>
+                    <AddAccountBottomSheet
+                        ref={addAccountBottomSheetRef}
+                        onSuccess={closeAddAccountSheet}
+                    />
 
-            <AccountManagementBottomSheet
-                ref={accountManagementBottomSheetRef}
-                onClose={closeAccountManagementSheet}
-                openAddAccountSheet={openAddAccountSheet}
-                openQRCodeSheet={openQRCodeSheet}
-                openRenameAccountBottomSheet={openRenameAccountBottomSheet}
-                openRemoveAccountBottomSheet={openRemoveAccountSheet}
-            />
+                    {/*Account Selection*/}
+                    <SelectAccountBottomSheet
+                        closeBottomSheet={closeSelectAccountBottonSheet}
+                        accounts={accounts}
+                        setSelectedAccount={setSelectedAccount}
+                        selectedAccount={selectedAccount}
+                        isBalanceVisible={isBalanceVisible}
+                        ref={selectAccountBottomSheetRef}
+                    />
 
-            <AddAccountBottomSheet
-                ref={addAccountBottomSheetRef}
-                onSuccess={closeAddAccountSheet}
-            />
+                    {/*Account Removal*/}
+                    <SelectAccountBottomSheet
+                        accounts={allAccounts}
+                        setSelectedAccount={openConfirmRemoveAccountWarning}
+                        isBalanceVisible={isBalanceVisible}
+                        onDismiss={closeRemoveAccountSheet}
+                        ref={removeAccountBottomSheetRef}
+                    />
 
-            {/*Account Selection*/}
-            <SelectAccountBottomSheet
-                closeBottomSheet={closeSelectAccountBottonSheet}
-                accounts={accounts}
-                setSelectedAccount={setSelectedAccount}
-                selectedAccount={selectedAccount}
-                isBalanceVisible={isBalanceVisible}
-                ref={selectAccountBottomSheetRef}
-            />
+                    <RemoveAccountWarningBottomSheet
+                        onClose={openAccountManagementSheet}
+                        onConfirm={onRemoveAccount}
+                        ref={removeAccountWarningBottomSheetRef}
+                    />
 
-            {/*Account Removal*/}
-            <SelectAccountBottomSheet
-                accounts={allAccounts}
-                setSelectedAccount={openConfirmRemoveAccountWarning}
-                isBalanceVisible={isBalanceVisible}
-                onDismiss={closeRemoveAccountSheet}
-                ref={removeAccountBottomSheetRef}
-            />
+                    <QRCodeBottomSheet ref={QRCodeBottomSheetRef} />
 
-            <RemoveAccountWarningBottomSheet
-                onClose={openAccountManagementSheet}
-                onConfirm={onRemoveAccount}
-                ref={removeAccountWarningBottomSheetRef}
-            />
-
-            <QRCodeBottomSheet ref={QRCodeBottomSheetRef} />
-
-            <RenameAccountBottomSheet
-                ref={renameAccountBottomSheetRef}
-                account={selectedAccount}
-                onClose={closeRenameAccountBottonSheet}
-            />
-        </BaseSafeArea>
+                    <RenameAccountBottomSheet
+                        ref={renameAccountBottomSheetRef}
+                        account={selectedAccount}
+                        onClose={closeRenameAccountBottonSheet}
+                    />
+                </>
+            }
+        />
     )
 }

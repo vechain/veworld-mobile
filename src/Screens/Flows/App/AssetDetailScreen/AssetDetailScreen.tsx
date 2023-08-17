@@ -1,16 +1,14 @@
 import { useNavigation } from "@react-navigation/native"
 import { NativeStackScreenProps } from "@react-navigation/native-stack"
 import React, { useEffect, useMemo } from "react"
-import { ScrollView } from "react-native"
 import { useBottomSheetModal, useTheme } from "~Hooks"
 import {
-    BackButtonHeader,
     BaseIcon,
-    BaseSafeArea,
     BaseSpacer,
     BaseText,
     BaseView,
     FastActionsBar,
+    Layout,
     QRCodeBottomSheet,
     showWarningToast,
 } from "~Components"
@@ -32,7 +30,6 @@ import {
     useAppDispatch,
     useAppSelector,
 } from "~Storage/Redux"
-import { isAndroid } from "~Utils/PlatformUtils/PlatformUtils"
 
 type Props = NativeStackScreenProps<
     RootStackParamListDiscover,
@@ -101,70 +98,62 @@ export const AssetDetailScreen = ({ route }: Props) => {
     )
 
     return (
-        <BaseSafeArea grow={1}>
-            <ScrollView
-                showsVerticalScrollIndicator={false}
-                showsHorizontalScrollIndicator={false}
-                contentInsetAdjustmentBehavior="automatic"
-                style={{
-                    backgroundColor: theme.colors.background,
-                }}>
-                <BackButtonHeader />
+        <Layout
+            body={
+                <>
+                    <BaseView>
+                        <AssetHeader
+                            name={token.name}
+                            symbol={token.symbol}
+                            icon={token.icon}
+                        />
 
-                <BaseView mx={20}>
-                    <AssetHeader
-                        name={token.name}
-                        symbol={token.symbol}
-                        icon={token.icon}
-                    />
+                        <BaseSpacer height={24} />
+                        <AssetChart token={token} />
+                    </BaseView>
 
-                    <BaseSpacer height={24} />
-                    <AssetChart token={token} />
-                </BaseView>
+                    <BaseView alignItems="center">
+                        <BaseSpacer height={24} />
+                        <FastActionsBar actions={Actions} />
 
-                <BaseView mx={20} alignItems="center">
-                    <BaseSpacer height={24} />
-                    <FastActionsBar actions={Actions} />
+                        <BaseSpacer height={24} />
 
-                    <BaseSpacer height={24} />
+                        <BalanceView
+                            token={token}
+                            isBalanceVisible={isBalanceVisible}
+                        />
 
-                    <BalanceView
-                        token={token}
-                        isBalanceVisible={isBalanceVisible}
-                    />
+                        <BaseSpacer height={24} />
 
-                    <BaseSpacer height={24} />
+                        <MarketInfoView
+                            marketInfo={marketInfo}
+                            tokenSymbol={token.symbol}
+                        />
 
-                    <MarketInfoView
-                        marketInfo={marketInfo}
-                        tokenSymbol={token.symbol}
-                    />
+                        <BaseSpacer height={24} />
 
-                    <BaseSpacer height={24} />
+                        {token.desc && (
+                            <>
+                                <BaseText
+                                    typographyFont="bodyBold"
+                                    align="left"
+                                    alignContainer="flex-start"
+                                    w={100}
+                                    mb={12}>
+                                    {LL.TITLE_ABOUT()} {token.name}
+                                </BaseText>
 
-                    {token.desc && (
-                        <>
-                            <BaseText
-                                typographyFont="bodyBold"
-                                align="left"
-                                alignContainer="flex-start"
-                                w={100}
-                                mb={12}>
-                                {LL.TITLE_ABOUT()} {token.name}
-                            </BaseText>
-
-                            <BaseText>
-                                {striptags(token.desc.trim(), {
-                                    allowedTags: new Set(["strong"]),
-                                })}
-                            </BaseText>
-                        </>
-                    )}
-                    <BaseSpacer height={isAndroid() ? 95 : 25} />
-                </BaseView>
-            </ScrollView>
-
-            <QRCodeBottomSheet ref={QRCodeBottomSheetRef} />
-        </BaseSafeArea>
+                                <BaseText>
+                                    {striptags(token.desc.trim(), {
+                                        allowedTags: new Set(["strong"]),
+                                    })}
+                                </BaseText>
+                            </>
+                        )}
+                    </BaseView>
+                    <QRCodeBottomSheet ref={QRCodeBottomSheetRef} />
+                </>
+            }
+        />
     )
 }

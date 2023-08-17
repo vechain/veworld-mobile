@@ -86,23 +86,25 @@ const BaseTextInputComponent = forwardRef<TextInput, BaseTextInputProps>(
                         />
                     )}
                 </BaseView>
-                <BaseView
-                    pt={10}
-                    flexDirection="row"
-                    justifyContent="flex-start"
-                    style={styles.errorContainer}>
-                    <BaseIcon
-                        name={"alert-circle-outline"}
-                        size={20}
-                        color={theme.colors.danger}
-                    />
-                    <BaseText
-                        px={7}
-                        color={theme.colors.danger}
-                        typographyFont="caption">
-                        {errorMessage || " "}
-                    </BaseText>
-                </BaseView>
+                {errorMessage && (
+                    <BaseView
+                        pt={10}
+                        flexDirection="row"
+                        justifyContent="flex-start"
+                        style={styles.errorContainer}>
+                        <BaseIcon
+                            name={"alert-circle-outline"}
+                            size={20}
+                            color={theme.colors.danger}
+                        />
+                        <BaseText
+                            px={7}
+                            color={theme.colors.danger}
+                            typographyFont="caption">
+                            {errorMessage || " "}
+                        </BaseText>
+                    </BaseView>
+                )}
             </BaseView>
         )
     },

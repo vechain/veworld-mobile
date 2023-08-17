@@ -44,7 +44,7 @@ export const useFetchCollections = (
         if (isEmpty(allNFTCollections) && registryInfo !== undefined) {
             loadCollections(registryInfo, 0)
         }
-    }, [network, registryInfo, loadCollections, allNFTCollections])
+    }, [network.type, registryInfo, loadCollections, allNFTCollections])
 
     const fetchMoreCollections = useCallback(async () => {
         if (
