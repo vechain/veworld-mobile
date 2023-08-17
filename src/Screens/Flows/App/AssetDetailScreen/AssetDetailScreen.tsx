@@ -1,7 +1,7 @@
 import { useNavigation } from "@react-navigation/native"
 import { NativeStackScreenProps } from "@react-navigation/native-stack"
 import React, { useEffect, useMemo } from "react"
-import { useBottomSheetModal, useTheme } from "~Hooks"
+import { useBottomSheetModal, useTheme, usePlatformBottomInsets } from "~Hooks"
 import {
     BaseIcon,
     BaseSpacer,
@@ -30,6 +30,7 @@ import {
     useAppDispatch,
     useAppSelector,
 } from "~Storage/Redux"
+import { isAndroid } from "~Utils/PlatformUtils/PlatformUtils"
 
 type Props = NativeStackScreenProps<
     RootStackParamListDiscover,
@@ -44,6 +45,9 @@ export const AssetDetailScreen = ({ route }: Props) => {
     const marketInfo = useAppSelector(state =>
         selectMarketInfoFor(token.symbol, state),
     )
+
+    const { calculateBottomInsets, tabBarAndroidBottomInsets } =
+        usePlatformBottomInsets()
 
     const { ref: QRCodeBottomSheetRef, onOpen: openQRCodeSheet } =
         useBottomSheetModal()
@@ -150,6 +154,13 @@ export const AssetDetailScreen = ({ route }: Props) => {
                                 </BaseText>
                             </>
                         )}
+                        <BaseSpacer
+                            height={
+                                isAndroid()
+                                    ? tabBarAndroidBottomInsets
+                                    : calculateBottomInsets
+                            }
+                        />
                     </BaseView>
                     <QRCodeBottomSheet ref={QRCodeBottomSheetRef} />
                 </>
