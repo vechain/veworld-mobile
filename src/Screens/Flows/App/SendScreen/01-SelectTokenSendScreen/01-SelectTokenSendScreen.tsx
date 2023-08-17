@@ -60,12 +60,10 @@ export const SelectTokenSendScreen = ({ route }: Props) => {
                         setValue={setTokenQuery}
                         placeholder={LL.MANAGE_TOKEN_SEARCH_TOKEN()}
                     />
-                    <BaseSpacer height={16} />
                 </BaseView>
             }
             body={
                 <BaseView>
-                    <BaseSpacer height={8} />
                     {filteredTokens.length ? (
                         filteredTokens.map(token => (
                             <OfficialTokenCard

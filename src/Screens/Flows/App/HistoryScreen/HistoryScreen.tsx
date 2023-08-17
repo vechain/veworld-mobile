@@ -313,7 +313,7 @@ export const HistoryScreen = () => {
                     <BaseSpacer height={16} />
                 </>
             }
-            bodyWithoutScrollView={
+            fixedBody={
                 <>
                     {/* Activities List */}
                     {!!activities.length &&

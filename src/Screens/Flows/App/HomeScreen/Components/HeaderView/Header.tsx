@@ -35,6 +35,7 @@ export const Header = memo(() => {
         <BaseView
             w={100}
             px={20}
+            pb={8}
             flexDirection="row"
             alignItems="center"
             justifyContent="space-between">

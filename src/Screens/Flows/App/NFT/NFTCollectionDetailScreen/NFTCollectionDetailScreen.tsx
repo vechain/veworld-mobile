@@ -72,7 +72,7 @@ export const NFTCollectionDetailScreen = ({ route }: Props) => {
     return (
         <Layout
             safeAreaTestID="NFT_Collection_Detail_Screen"
-            bodyWithoutScrollView={
+            fixedBody={
                 <BaseView flex={1} justifyContent="center">
                     {renderContent}
                 </BaseView>

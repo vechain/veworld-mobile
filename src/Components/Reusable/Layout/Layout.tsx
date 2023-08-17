@@ -19,7 +19,7 @@ type Props = {
     title?: string
     fixedHeader?: ReactNode
     body?: ReactNode
-    bodyWithoutScrollView?: ReactNode
+    fixedBody?: ReactNode
     footer?: ReactNode
     isScrollEnabled?: boolean
     safeAreaTestID?: string
@@ -35,7 +35,7 @@ export const Layout = ({
     title,
     fixedHeader,
     body,
-    bodyWithoutScrollView,
+    fixedBody,
     footer,
     isScrollEnabled = true,
     safeAreaTestID,
@@ -49,11 +49,11 @@ export const Layout = ({
 
     const Title = useCallback(
         () => (
-            <BaseText typographyFont="title" mb={24} mt={fixedHeader ? 0 : 8}>
+            <BaseText typographyFont="title" mb={16}>
                 {title}
             </BaseText>
         ),
-        [fixedHeader, title],
+        [title],
     )
 
     return (
@@ -64,21 +64,25 @@ export const Layout = ({
             <BaseView h={100}>
                 <BaseView>
                     {!noBackButton && (
-                        <BackButtonHeader hasBottomSpacer={false} />
+                        <>
+                            <BackButtonHeader hasBottomSpacer={false} />
+                            <BaseSpacer height={8} />
+                        </>
                     )}
-                    <BaseView>
-                        <BaseSpacer height={fixedHeader ? 16 : 8} />
-                        <BaseView mx={noMargin ? 0 : 20}>
-                            {fixedHeader && title && <Title />}
-                            {fixedHeader && <BaseView>{fixedHeader}</BaseView>}
+                    {fixedHeader && (
+                        <BaseView>
+                            <BaseView mx={noMargin ? 0 : 20}>
+                                {title && <Title />}
+                                {<BaseView>{fixedHeader}</BaseView>}
+                            </BaseView>
+                            {!noMargin && <BaseSpacer height={16} />}
                         </BaseView>
-                    </BaseView>
+                    )}
                     {showSelectedNetwork && (
                         <BaseView style={styles.selectedNetworkViewerView}>
                             <SelectedNetworkViewer />
                         </BaseView>
                     )}
-                    {!fixedHeader && <BaseSpacer height={8} />}
                 </BaseView>
                 {/* Separator from header to body */}
                 <BaseSpacer height={1} background={theme.colors.card} />
@@ -88,10 +92,12 @@ export const Layout = ({
                         testID={scrollViewTestID || "Layout_ScrollView"}
                         scrollEnabled={isScrollEnabled}
                         style={noMargin ? {} : styles.scrollView}
+                        // eslint-disable-next-line react-native/no-inline-styles
                         contentContainerStyle={{
                             paddingBottom: isAndroid()
                                 ? tabBarAndroidBottomInsets
                                 : _calculateBottomInsets,
+                            paddingTop: noMargin ? 0 : 16,
                         }}>
                         {!fixedHeader && title && <Title />}
                         {body}
@@ -100,7 +106,7 @@ export const Layout = ({
                         )}
                     </BaseScrollView>
                 )}
-                {bodyWithoutScrollView}
+                {fixedBody}
                 {footer && (
                     <BaseView
                         mx={noMargin ? 0 : 20}
