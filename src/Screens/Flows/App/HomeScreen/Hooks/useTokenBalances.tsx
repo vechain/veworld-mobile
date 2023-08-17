@@ -53,6 +53,16 @@ export const useTokenBalances = () => {
         }
     }, [balances.length, dispatch, selectedAccount.address, thorClient])
 
+    const updateSuggested = useCallback(async () => {
+        await dispatch(
+            updateSuggestedTokens(
+                selectedAccount.address,
+                officialTokens,
+                network,
+            ),
+        )
+    }, [dispatch, network, officialTokens, selectedAccount.address])
+
     // fetch official tokens from github
     useEffect(() => {
         dispatch(updateOfficialTokens(network))
@@ -60,22 +70,15 @@ export const useTokenBalances = () => {
 
     // fetch suggested tokens
     useEffect(() => {
-        if (balances.length === 0 || officialTokens.length === 0) return
+        if (officialTokens.length <= 2) return
 
-        dispatch(
-            updateSuggestedTokens(
-                selectedAccount.address,
-                officialTokens,
-                network,
-            ),
-        )
+        updateSuggested()
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [
         dispatch,
-        network,
+        network.genesis.id,
         selectedAccount.address,
         officialTokens.length,
-        balances.length,
     ])
 
     // auto select suggested tokens if they don't exist already
@@ -158,5 +161,6 @@ export const useTokenBalances = () => {
 
     return {
         updateBalances,
+        updateSuggested,
     }
 }

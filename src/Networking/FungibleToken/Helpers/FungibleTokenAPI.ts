@@ -6,7 +6,7 @@ import {
     fetchFromEndpoint,
     getTokenBalancesAndInfoFromTokenAddresses,
 } from "~Networking"
-import { debug } from "~Utils"
+import { HexUtils, debug } from "~Utils"
 
 /**
  * Fetches fungible token contracts for the given account address.
@@ -99,7 +99,9 @@ export const fetchOfficialTokensOwned = async (
             true,
         )
 
-        tokenAddresses.push(...tokenAddressesResponse.data)
+        tokenAddresses.push(
+            ...tokenAddressesResponse.data.map(t => HexUtils.normalize(t)),
+        )
 
         hasNextPage = tokenAddressesResponse.pagination.hasNext
         page++

@@ -28,7 +28,6 @@ import {
     TokenInfoResponse,
 } from "../Types"
 import { fetchOfficialTokensOwned, getTokensFromGithub } from "~Networking"
-import { compareAddresses } from "~Utils/AddressUtils/AddressUtils"
 
 const allSettled = require("promise.allsettled")
 
@@ -183,8 +182,8 @@ export const updateSuggestedTokens =
 
             const suggestedTokens = tokenAddresses.filter(
                 tokenAddress =>
-                    officialTokens.findIndex(t =>
-                        compareAddresses(t.address, tokenAddress),
+                    officialTokens.findIndex(
+                        t => t.address === tokenAddress,
                     ) !== -1,
             )
 

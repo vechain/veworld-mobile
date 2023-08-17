@@ -39,7 +39,7 @@ import { useI18nContext } from "~i18n"
 import { RefreshControl } from "react-native"
 
 export const HomeScreen = () => {
-    const { updateBalances } = useTokenBalances()
+    const { updateBalances, updateSuggested } = useTokenBalances()
 
     const { onSetSelectedAccount } = useSetSelectedAccount()
 
@@ -135,10 +135,11 @@ export const HomeScreen = () => {
     const onRefresh = useCallback(async () => {
         setRefreshing(true)
 
-        updateBalances()
+        await updateBalances()
+        await updateSuggested()
 
         setRefreshing(false)
-    }, [updateBalances])
+    }, [updateBalances, updateSuggested])
 
     const { animateEntering } = useMemoizedAnimation({
         enteringAnimation: new FadeInRight(),
