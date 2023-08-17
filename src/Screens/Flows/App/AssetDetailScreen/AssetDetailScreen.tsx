@@ -160,7 +160,7 @@ export const AssetDetailScreen = ({ route }: Props) => {
                             </BaseText>
                         </>
                     )}
-                    <BaseSpacer height={isAndroid() ? 85 : 20} />
+                    <BaseSpacer height={isAndroid() ? 95 : 25} />
                 </BaseView>
             </ScrollView>
 
