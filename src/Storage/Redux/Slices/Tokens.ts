@@ -124,7 +124,7 @@ export const TokenSlice = createSlice({
             )
             // Only update the state if there is an actual change
             if (
-                compareListOfAddresses(
+                !compareListOfAddresses(
                     state.tokens[network].suggestedTokens,
                     normalisedTokens,
                 )
