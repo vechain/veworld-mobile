@@ -37,7 +37,7 @@ export const NFTDetailScreen = ({ route }: Props) => {
     const { LL, locale } = useI18nContext()
     const nav = useNavigation()
     const { onCopyToClipboard } = useCopyClipboard()
-    const { calculateBottomInsets } = usePlatformBottomInsets()
+    const { iosSpecificBottomInsetsIfIos } = usePlatformBottomInsets()
 
     const collection = useAppSelector(state =>
         selectCollectionWithContractAddress(
@@ -213,7 +213,7 @@ export const NFTDetailScreen = ({ route }: Props) => {
                     )}
                 </BaseView>
             }
-            _calculateBottomInsets={calculateBottomInsets}
+            _iosSpecificBottomInsetsIfIos={iosSpecificBottomInsetsIfIos}
             footer={
                 <FadeoutButton
                     disabled={!!isPendingTx}

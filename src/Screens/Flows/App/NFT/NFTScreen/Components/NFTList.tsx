@@ -31,7 +31,7 @@ export const NFTList = ({
 }: Props) => {
     const renderSeparator = useCallback(() => <BaseSpacer height={16} />, [])
 
-    const { tabBarAndroidBottomInsets } = usePlatformBottomInsets()
+    const { androidSpecificBottomInsetsIfAndroid } = usePlatformBottomInsets()
 
     const renderNftCollection = useCallback(
         ({ item, index }: NFTListProps) => (
@@ -46,7 +46,7 @@ export const NFTList = ({
             extraData={collections}
             contentContainerStyle={[
                 baseStyles.listContainer,
-                { paddingBottom: tabBarAndroidBottomInsets },
+                { paddingBottom: androidSpecificBottomInsetsIfAndroid },
             ]}
             numColumns={2}
             keyExtractor={item => String(item.address)}

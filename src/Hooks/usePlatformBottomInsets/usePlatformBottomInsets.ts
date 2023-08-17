@@ -13,15 +13,23 @@ export const usePlatformBottomInsets = (
     const paddingBottom = useBottomTabBarHeight()
     let staticExtraPadding = extraPadding ?? 0
 
-    const calculateBottomInsets: number = useMemo(() => {
+    const iosSpecificBottomInsetsIfIos: number = useMemo(() => {
         return PlatformUtils.isIOS() ? paddingBottom + staticExtraPadding : 0
     }, [paddingBottom, staticExtraPadding])
 
-    const tabBarAndroidBottomInsets: number = useMemo(() => {
+    const androidSpecificBottomInsetsIfAndroid: number = useMemo(() => {
         return PlatformUtils.isAndroid()
             ? paddingBottom + staticExtraPadding
             : staticExtraPadding
     }, [paddingBottom, staticExtraPadding])
 
-    return { calculateBottomInsets, tabBarAndroidBottomInsets }
+    const platformBottomInsets: number = useMemo(() => {
+        return paddingBottom + staticExtraPadding
+    }, [paddingBottom, staticExtraPadding])
+
+    return {
+        iosSpecificBottomInsetsIfIos,
+        androidSpecificBottomInsetsIfAndroid,
+        platformBottomInsets,
+    }
 }
