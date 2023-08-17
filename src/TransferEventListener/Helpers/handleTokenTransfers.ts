@@ -1,5 +1,5 @@
 import {
-    addOrUpdateCustomToken,
+    addOrUpdateCustomTokens,
     updateAccountBalances,
     upsertTokenBalance,
 } from "~Storage/Redux"
@@ -41,17 +41,19 @@ export const handleTokenTransfers = async ({
         })
 
         dispatch(
-            addOrUpdateCustomToken({
+            addOrUpdateCustomTokens({
+                network: network.type,
                 accountAddress: foundAccount.account.address,
-                newToken: {
-                    address: transfer.tokenAddress,
-                    symbol,
-                    decimals,
-                    custom: !isVechainToken(symbol),
-                    genesisId: network.genesis.id,
-                    icon: "",
-                    name,
-                },
+                newTokens: [
+                    {
+                        address: transfer.tokenAddress,
+                        symbol,
+                        decimals,
+                        custom: !isVechainToken(symbol),
+                        icon: "",
+                        name,
+                    },
+                ],
             }),
         )
 
@@ -75,10 +77,10 @@ export const handleTokenTransfers = async ({
 
     // User send token
     if (foundAccount.origin === TransactionOrigin.FROM) {
-        // inform usr for successfull transfer
+        // inform user of successful transfer
         InformUserForOutgoingToken({
             txId: transfer.txId,
-            amount: transfer.value || "0",
+            amount: transfer.value ?? "0",
             decimals,
             transfer,
             informUser,

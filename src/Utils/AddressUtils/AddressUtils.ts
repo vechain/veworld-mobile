@@ -46,11 +46,10 @@ export const getAddressFromHdNode = (hdNode: HDNode, index: number): string => {
  * @param address2
  */
 export const compareAddresses = (
-    address1: unknown,
-    address2: unknown,
+    address1?: string,
+    address2?: string,
 ): boolean => {
-    if (typeof address1 !== "string" || typeof address2 !== "string")
-        return false
+    if (!address1 || !address2) return false
 
     if (address2 === address1) {
         return true
@@ -77,6 +76,18 @@ export const compareAddresses = (
         )
         return false
     }
+}
+
+export const compareListOfAddresses = (add1: string[], add2: string[]) => {
+    if (add1.length !== add2.length) return false
+    const sortedAdd1 = [...add1].map(e => e.toLowerCase()).sort()
+    const sortedAdd2 = [...add2].map(e => e.toLowerCase()).sort()
+
+    for (let i = 0; i < sortedAdd1.length; i++) {
+        if (!compareAddresses(sortedAdd1[i], sortedAdd2[i])) return false
+    }
+
+    return true
 }
 
 export const regexPattern = () => {

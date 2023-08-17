@@ -1,19 +1,19 @@
 import {
     useAppDispatch,
     useAppSelector,
-    selectSelectedAccountBalances,
     selectSelectedNetwork,
     updateAccountBalances,
     resetTokenBalances,
-    fetchTokensWithInfo,
+    updateTokenPriceData,
     fetchExchangeRates,
     selectCoinGeckoTokens,
     selectSelectedAccount,
-    getTokensFromGithub,
-    addOfficialTokens,
-    updateOfficialTokensBalances,
-    selectNonVechainTokensWithBalances,
-    selectHasFetchedOfficialTokens,
+    updateSuggestedTokens,
+    selectVisibleBalances,
+    selectOfficialTokens,
+    updateOfficialTokens,
+    selectMissingSuggestedTokens,
+    autoSelectSuggestTokens,
 } from "~Storage/Redux"
 import { useThor } from "~Components"
 import { useCallback, useEffect } from "react"
@@ -21,12 +21,7 @@ import BigNumber from "bignumber.js"
 
 // If the env variable isn't set, use the default
 const EXCHANGE_RATE_SYNC_PERIOD = new BigNumber(
-    process.env.REACT_APP_EXCHANGE_RATE_SYNC_PERIOD || "120000",
-).toNumber()
-
-// If the env variable isn't set, use the default
-const TOKEN_BALANCE_SYNC_PERIOD = new BigNumber(
-    process.env.REACT_APP_TOKEN_BALANCE_SYNC_PERIOD || "300000",
+    process.env.REACT_APP_EXCHANGE_RATE_SYNC_PERIOD ?? "120000",
 ).toNumber()
 
 /**
@@ -39,29 +34,76 @@ export const useTokenBalances = () => {
 
     const selectedAccount = useAppSelector(selectSelectedAccount)
 
-    const balances = useAppSelector(selectSelectedAccountBalances)
+    const officialTokens = useAppSelector(selectOfficialTokens)
 
-    const nonVechainBalances = useAppSelector(
-        selectNonVechainTokensWithBalances,
-    )
+    const missingSuggestedTokens = useAppSelector(selectMissingSuggestedTokens)
 
-    const hasFetchedOfficialTokens = useAppSelector(
-        selectHasFetchedOfficialTokens,
-    )
+    const balances = useAppSelector(selectVisibleBalances)
 
     const thorClient = useThor()
 
     const coinGeckoTokens = useAppSelector(selectCoinGeckoTokens)
 
+    const updateBalances = useCallback(async () => {
+        // Update balances
+        if (balances.length > 0) {
+            await dispatch(
+                updateAccountBalances(thorClient, selectedAccount.address),
+            )
+        }
+    }, [balances.length, dispatch, selectedAccount.address, thorClient])
+
     // fetch official tokens from github
     useEffect(() => {
-        ;(async () => {
-            const tokens = await getTokensFromGithub({
-                network,
-            })
-            dispatch(addOfficialTokens(tokens))
-        })()
+        dispatch(updateOfficialTokens(network))
     }, [network, dispatch])
+
+    // fetch suggested tokens
+    useEffect(() => {
+        if (balances.length === 0 || officialTokens.length === 0) return
+
+        dispatch(
+            updateSuggestedTokens(
+                selectedAccount.address,
+                officialTokens,
+                network,
+            ),
+        )
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [
+        dispatch,
+        network,
+        selectedAccount.address,
+        officialTokens.length,
+        balances.length,
+    ])
+
+    // auto select suggested tokens if they don't exist already
+    useEffect(() => {
+        if (
+            balances.length === 0 ||
+            missingSuggestedTokens.length === 0 ||
+            thorClient.genesis.id !== network.genesis.id
+        )
+            return
+
+        dispatch(
+            autoSelectSuggestTokens(
+                selectedAccount.address,
+                missingSuggestedTokens,
+                network,
+                thorClient,
+            ),
+        )
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [
+        dispatch,
+        missingSuggestedTokens.length,
+        selectedAccount.address,
+        thorClient.genesis.id,
+        network.genesis.id,
+        balances.length,
+    ])
 
     /**
      * init default balances if no balances found on redux
@@ -73,37 +115,6 @@ export const useTokenBalances = () => {
         }
     }, [dispatch, thorClient, network, selectedAccount, balances.length])
 
-    const updateBalances = useCallback(async () => {
-        // Update balances
-        if (balances.length > 0) {
-            await dispatch(
-                updateAccountBalances(thorClient, selectedAccount.address),
-            )
-
-            if (nonVechainBalances.length <= 0 && !hasFetchedOfficialTokens) {
-                await dispatch(
-                    updateOfficialTokensBalances(
-                        thorClient,
-                        selectedAccount.address,
-                    ),
-                )
-            }
-        } else
-            await dispatch(
-                updateOfficialTokensBalances(
-                    thorClient,
-                    selectedAccount.address,
-                ),
-            )
-    }, [
-        balances.length,
-        dispatch,
-        hasFetchedOfficialTokens,
-        nonVechainBalances.length,
-        selectedAccount.address,
-        thorClient,
-    ])
-
     /**
      * keep balances up to date
      */
@@ -112,25 +123,20 @@ export const useTokenBalances = () => {
         if (thorClient.genesis.id !== network.genesis.id) return
 
         updateBalances()
-
-        const interval = setInterval(updateBalances, TOKEN_BALANCE_SYNC_PERIOD)
-        return () => clearInterval(interval)
-
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [
-        dispatch,
-        thorClient,
-        network,
-        selectedAccount,
-        nonVechainBalances.length,
+        thorClient.genesis.id,
+        network.genesis.id,
         balances.length,
+        dispatch,
+        selectedAccount.address,
     ])
 
     /**
-     * fetch tokens with info
+     * update token price data
      */
     useEffect(() => {
-        dispatch(fetchTokensWithInfo())
+        dispatch(updateTokenPriceData())
     }, [dispatch])
 
     /**

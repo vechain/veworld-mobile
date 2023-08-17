@@ -1,7 +1,6 @@
-import React, { useEffect, useState } from "react"
+import React, { useState } from "react"
 import { useAnalyticTracking, useBottomSheetModal, useTheme } from "~Hooks"
 import {
-    BaseCard,
     BaseIcon,
     BaseSearchInput,
     BaseSpacer,
@@ -21,13 +20,8 @@ import {
     selectSelectedAccount,
     selectNonVechainTokensWithBalances,
     selectSelectedNetwork,
-    selectSuggestedTokens,
 } from "~Storage/Redux/Selectors"
-import {
-    addTokenBalance,
-    removeTokenBalance,
-    setIsAppLoading,
-} from "~Storage/Redux/Slices"
+import { addTokenBalance, removeTokenBalance } from "~Storage/Redux/Slices"
 import {
     updateAccountBalances,
     useAppDispatch,
@@ -35,11 +29,7 @@ import {
 } from "~Storage/Redux"
 import { useNavigation } from "@react-navigation/native"
 import { Routes } from "~Navigation"
-import {
-    AddCustomTokenBottomSheet,
-    AddSuggestedBottomSheet,
-} from "../ManageCustomTokenScreen/BottomSheets"
-import { useSuggestedTokens } from "./useSuggestedTokens"
+import { AddCustomTokenBottomSheet } from "../ManageCustomTokenScreen/BottomSheets"
 import { AnalyticsEvent } from "~Constants"
 
 export const ManageTokenScreen = () => {
@@ -72,21 +62,6 @@ export const ManageTokenScreen = () => {
         onClose: closeAddCustomTokenSheet,
     } = useBottomSheetModal()
 
-    const {
-        ref: addSuggestedBottomSheet,
-        onOpen: openAddSuggestedBottomSheet,
-        onClose: closeAddSuggestedBottomSheet,
-    } = useBottomSheetModal()
-
-    useSuggestedTokens(selectedTokenSymbols)
-
-    const suggestedTokens = useAppSelector(selectSuggestedTokens)
-
-    const missingSuggestedTokens =
-        suggestedTokens?.filter(
-            token => !selectedTokenSymbols.includes(token.symbol),
-        ) || []
-
     const filteredTokens = tokens.filter(
         token =>
             token.name
@@ -109,15 +84,14 @@ export const ManageTokenScreen = () => {
 
         dispatch(
             addTokenBalance({
+                network: currentNetwork.type,
                 accountAddress: account.address,
                 balance: {
                     balance: "0",
-                    accountAddress: account.address,
                     tokenAddress: token.address,
                     timeUpdated: new Date().toISOString(),
-                    position: selectedTokenSymbols.length,
-                    genesisId: currentNetwork.genesis.id,
                     isCustomToken: false,
+                    isHidden: false,
                 },
             }),
         )
@@ -132,6 +106,7 @@ export const ManageTokenScreen = () => {
         )
         dispatch(
             removeTokenBalance({
+                network: currentNetwork.type,
                 accountAddress: account.address,
                 tokenAddress: token.address,
             }),
@@ -149,13 +124,6 @@ export const ManageTokenScreen = () => {
     const navigateManageCustomTokenScreen = () => {
         nav.navigate(Routes.MANAGE_CUSTOM_TOKEN)
     }
-
-    // On mount set app loading to false
-    useEffect(() => {
-        setTimeout(() => {
-            dispatch(setIsAppLoading(false))
-        }, 200)
-    }, [dispatch])
 
     return (
         <DismissKeyboardView>
@@ -211,31 +179,6 @@ export const ManageTokenScreen = () => {
                                 placeholder={LL.MANAGE_TOKEN_SEARCH_TOKEN()}
                                 testID="ManageTokenScreen_SearchInput_searchTokenInput"
                             />
-                            {!!missingSuggestedTokens.length && (
-                                <>
-                                    <BaseSpacer height={16} />
-                                    <BaseCard
-                                        onPress={openAddSuggestedBottomSheet}>
-                                        <BaseView
-                                            justifyContent="center"
-                                            w={100}>
-                                            <BaseText
-                                                typographyFont="body"
-                                                align="center">
-                                                {LL.MANAGE_TOKEN_SUGGESTED_TOKENS()}
-                                            </BaseText>
-
-                                            <BaseText
-                                                typographyFont="body"
-                                                underline
-                                                my={4}
-                                                align="center">
-                                                {LL.MANAGE_TOKEN_ADD_SUGGESTED_TOKENS()}
-                                            </BaseText>
-                                        </BaseView>
-                                    </BaseCard>
-                                </>
-                            )}
                         </BaseView>
                         <BaseSpacer height={24} />
 
@@ -281,12 +224,6 @@ export const ManageTokenScreen = () => {
                         <AddCustomTokenBottomSheet
                             ref={addCustomTokenSheetRef}
                             onClose={closeAddCustomTokenSheet}
-                        />
-                        <AddSuggestedBottomSheet
-                            setSelectedTokenSymbols={setSelectedTokenSymbols}
-                            missingSuggestedTokens={missingSuggestedTokens}
-                            ref={addSuggestedBottomSheet}
-                            onClose={closeAddSuggestedBottomSheet}
                         />
                     </>
                 }

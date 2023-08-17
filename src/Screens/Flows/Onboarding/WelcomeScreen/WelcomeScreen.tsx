@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect } from "react"
+import React, { useCallback } from "react"
 import {
     BaseButton,
     BaseSafeArea,
@@ -12,7 +12,6 @@ import { VeWorldLogoSVG } from "~Assets"
 import { useI18nContext } from "~i18n"
 import {
     addDeviceAndAccounts,
-    fetchTokensWithInfo,
     selectAccount,
     selectAreDevFeaturesEnabled,
     setAppLockStatus,
@@ -36,14 +35,6 @@ export const WelcomeScreen = () => {
     const onNavigate = useCallback(() => {
         nav.navigate(Routes.WALLET_SETUP)
     }, [nav])
-
-    /*
-     * Fetch tokens with info on app start
-     * We want to pre-fetch the tokens with info on app start to get better UX when there are no persisted tokens
-     */
-    useEffect(() => {
-        dispatch(fetchTokensWithInfo())
-    }, [dispatch])
 
     /**
      * onboarding with the demo account and password 111111 for TDD purposes

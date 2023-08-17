@@ -6,20 +6,15 @@ const token: TokenWithCompleteInfo = {
     address: "",
     icon: "fake icon string",
     balance: {
-        accountAddress: "0xf077b491b355E64048cE21E3A6Fc4751eEeA77fa",
         balance: "0x4210c6d8151be70000",
-        genesisId:
-            "0x000000000b2bce3c70bc649a02749e8687721b09ed2e15997f466536b20bb127",
-        position: undefined,
         timeUpdated: "2023-05-17T08:22:11.878Z",
         tokenAddress: "VET",
+        isHidden: false,
     },
     change: -1.46,
     coinGeckoId: "vechain",
     custom: false,
     decimals: 18,
-    genesisId:
-        "0x000000000b2bce3c70bc649a02749e8687721b09ed2e15997f466536b20bb127",
     links: {
         blockchain_site: [
             "https://vechainstats.com/",

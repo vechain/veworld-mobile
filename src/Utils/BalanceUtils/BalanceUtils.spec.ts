@@ -29,6 +29,7 @@ const tokenWithBalance = {
         position: 2,
         timeUpdated: "2023-08-14T13:18:27.544Z",
         tokenAddress: "0x645d2019ed39e58db76af602317d177b53ba8b9d",
+        isHidden: false,
     },
     custom: false,
     decimals: 18,

@@ -4,17 +4,15 @@ import {
     NonFungibleToken,
     Token,
 } from "~Model"
-import { account1D1 } from "./accounts"
-import { VET, VTHO, defaultMainNetwork } from "~Constants"
+import { VET, VTHO } from "~Constants"
 
 export const VETWithBalance: FungibleTokenWithBalance = {
     ...VET,
     balance: {
         balance: "35",
         tokenAddress: VET.address,
-        genesisId: defaultMainNetwork.genesis.id,
-        accountAddress: account1D1.address,
         timeUpdated: Date.now().toString(),
+        isHidden: false,
     },
 }
 
@@ -23,9 +21,8 @@ export const VTHOWithBalance: FungibleTokenWithBalance = {
     balance: {
         balance: "113",
         tokenAddress: VTHO.address,
-        genesisId: defaultMainNetwork.genesis.id,
-        accountAddress: account1D1.address,
         timeUpdated: Date.now().toString(),
+        isHidden: false,
     },
 }
 

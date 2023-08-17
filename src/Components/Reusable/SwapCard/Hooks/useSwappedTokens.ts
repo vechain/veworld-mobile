@@ -11,10 +11,11 @@ import { FungibleToken, Token } from "~Model"
 import { getCustomTokenInfo } from "~Screens/Flows/App/ManageCustomTokenScreen/Utils"
 import {
     selectSelectedNetwork,
-    selectTokenWithInfoWithID,
     selectTokensWithInfo,
+    selectVetTokenWithInfo,
     useAppSelector,
 } from "~Storage/Redux"
+import { AddressUtils } from "~Utils"
 
 /**
  * Custom React hook to fetch and set the details for paid and received tokens in a token swap operation.
@@ -38,9 +39,7 @@ export const useSwappedTokens = (
     receivedTokenAddress: string,
     paidTokenAddress: string,
 ) => {
-    const vetToken = useAppSelector(state =>
-        selectTokenWithInfoWithID(state, VET.symbol),
-    )
+    const vetToken = useAppSelector(selectVetTokenWithInfo)
 
     const tokens = useAppSelector(selectTokensWithInfo)
 
@@ -65,9 +64,8 @@ export const useSwappedTokens = (
                 return
             }
 
-            let token = tokens.find(
-                (tkn: Token) =>
-                    tkn.address.toLowerCase() === tokenAddress.toLowerCase(),
+            let token = tokens.find((tkn: Token) =>
+                AddressUtils.compareAddresses(tkn.address, tokenAddress),
             )
 
             if (!token) {

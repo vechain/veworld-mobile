@@ -1,19 +1,17 @@
-import {
-    FungibleToken,
-    TokenWithCompleteInfo,
-    FungibleTokenWithBalance,
-} from "~Model"
+import { FungibleToken, TokenWithCompleteInfo, NETWORK_TYPE } from "~Model"
 
-export interface TokensState {
-    custom: Record<string, FungibleToken[]>
+export type TokensState = {
+    tokens: {
+        [network in NETWORK_TYPE]: {
+            custom: Record<string, FungibleToken[]>
+            officialTokens: TokenWithCompleteInfo[]
+            suggestedTokens: string[]
+        }
+    }
     dashboardChartData: { [key: string]: number[][] }
     assetDetailChartData: { [key: string]: number[][] }
     coinMarketInfo: { [key: string]: CoinMarketInfo }
-    officialTokens: TokenWithCompleteInfo[]
-    suggestedTokens: FungibleTokenWithBalance[]
     coinGeckoTokens: TokenInfoResponse[]
-    hasFetchedOfficialTokensMainnet: Record<string, boolean>
-    hasFetchedOfficialTokensTestnet: Record<string, boolean>
 }
 
 export type TokenInfoResponse = {

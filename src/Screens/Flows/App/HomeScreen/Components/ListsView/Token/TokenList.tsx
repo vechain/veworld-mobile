@@ -8,7 +8,7 @@ import Animated, { AnimateProps } from "react-native-reanimated"
 import { SwipeableRow } from "~Components"
 import { AnimatedTokenCard } from "./AnimatedTokenCard"
 import { useBottomSheetModal, useThemedStyles } from "~Hooks"
-import { ColorThemeType, VET, VTHO } from "~Constants"
+import { ColorThemeType } from "~Constants"
 import {
     changeBalancePosition,
     removeTokenBalance,
@@ -18,7 +18,9 @@ import {
 import {
     selectNonVechainTokensWithBalances,
     selectSelectedAccount,
-    selectTokenWithInfoWithID,
+    selectSelectedNetwork,
+    selectVetTokenWithInfo,
+    selectVthoTokenWithInfo,
 } from "~Storage/Redux/Selectors"
 import { AnimatedChartCard } from "./AnimatedChartCard"
 import { FungibleTokenWithBalance } from "~Model"
@@ -39,10 +41,9 @@ export const TokenList = memo(
         ...animatedViewProps
     }: Props) => {
         const dispatch = useAppDispatch()
+        const network = useAppSelector(selectSelectedNetwork)
         const tokenBalances = useAppSelector(selectNonVechainTokensWithBalances)
-        const tokenWithInfoVET = useAppSelector(state =>
-            selectTokenWithInfoWithID(state, VET.symbol),
-        )
+        const tokenWithInfoVET = useAppSelector(selectVetTokenWithInfo)
 
         // Keep track of the swipeable items refs
         const swipeableItemRefs = useRef<
@@ -60,9 +61,7 @@ export const TokenList = memo(
             onClose: closeRemoveCustomTokenBottomSheet,
         } = useBottomSheetModal()
 
-        const tokenWithInfoVTHO = useAppSelector(state =>
-            selectTokenWithInfoWithID(state, VTHO.symbol),
-        )
+        const tokenWithInfoVTHO = useAppSelector(selectVthoTokenWithInfo)
 
         const { styles } = useThemedStyles(baseStyles)
 
@@ -70,6 +69,7 @@ export const TokenList = memo(
             if (tokenToRemove) {
                 dispatch(
                     removeTokenBalance({
+                        network: network.type,
                         accountAddress: selectedAccount.address,
                         tokenAddress: tokenToRemove.address,
                     }),
@@ -80,6 +80,7 @@ export const TokenList = memo(
         }, [
             tokenToRemove,
             dispatch,
+            network.type,
             selectedAccount.address,
             closeRemoveCustomTokenBottomSheet,
         ])
@@ -91,6 +92,7 @@ export const TokenList = memo(
         }) => {
             dispatch(
                 changeBalancePosition({
+                    network: network.type,
                     accountAddress: selectedAccount.address,
                     updatedAccountBalances: data.map(({ balance }, index) => ({
                         ...balance,

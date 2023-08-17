@@ -1,89 +1,63 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit"
-import {
-    FungibleToken,
-    FungibleTokenWithBalance,
-    TokenWithCompleteInfo,
-} from "~Model"
+import { FungibleToken, NETWORK_TYPE, TokenWithCompleteInfo } from "~Model"
 import { CoinMarketInfo, TokenInfoResponse, TokensState } from "../Types"
-import { AddressUtils } from "~Utils"
+import { mergeArrays } from "~Utils/MergeUtils/MergeUtils"
+import { HexUtils } from "~Utils"
+import { compareListOfAddresses } from "~Utils/AddressUtils/AddressUtils"
+
+const normaliseAddresses = (tokens: FungibleToken[]) => {
+    tokens.forEach(token => {
+        token.address = HexUtils.normalize(token.address)
+    })
+}
+
+const emptyTokenState = {
+    custom: {},
+    officialTokens: [],
+    suggestedTokens: [],
+}
 
 export const initialTokenState: TokensState = {
-    custom: {},
+    tokens: {
+        [NETWORK_TYPE.MAIN]: { ...emptyTokenState },
+        [NETWORK_TYPE.TEST]: { ...emptyTokenState },
+        [NETWORK_TYPE.SOLO]: { ...emptyTokenState },
+        [NETWORK_TYPE.OTHER]: { ...emptyTokenState },
+    },
     dashboardChartData: {},
     assetDetailChartData: {},
     coinMarketInfo: {},
-    officialTokens: [],
-    suggestedTokens: [],
     coinGeckoTokens: [],
-    hasFetchedOfficialTokensMainnet: {},
-    hasFetchedOfficialTokensTestnet: {},
 }
 
 export const TokenSlice = createSlice({
     name: "tokens",
     initialState: initialTokenState,
     reducers: {
-        addOrUpdateCustomToken: (
-            state,
-            action: PayloadAction<{
-                accountAddress: string
-                newToken: FungibleToken
-            }>,
-        ) => {
-            const { accountAddress, newToken } = action.payload
-
-            if (!state.custom[accountAddress]) {
-                state.custom[accountAddress] = []
-            }
-
-            const filteredTokens = state.custom[accountAddress].filter(
-                oldToken =>
-                    !AddressUtils.compareAddresses(
-                        oldToken.address,
-                        newToken.address,
-                    ) ||
-                    !AddressUtils.compareAddresses(
-                        oldToken.genesisId,
-                        newToken.genesisId,
-                    ),
-            )
-
-            filteredTokens.push(newToken)
-
-            state.custom[accountAddress] = filteredTokens
-        },
-
         addOrUpdateCustomTokens: (
             state,
             action: PayloadAction<{
+                network: NETWORK_TYPE
                 accountAddress: string
                 newTokens: FungibleToken[]
             }>,
         ) => {
-            const { accountAddress, newTokens } = action.payload
+            const { network, accountAddress, newTokens } = action.payload
 
-            if (!state.custom[accountAddress]) {
-                state.custom[accountAddress] = []
+            normaliseAddresses(newTokens)
+
+            if (!state.tokens[network].custom[accountAddress]) {
+                state.tokens[network].custom[accountAddress] = []
             }
 
-            const filteredTokens = state.custom[accountAddress].filter(
-                oldToken =>
-                    !newTokens.find(
-                        newToken =>
-                            AddressUtils.compareAddresses(
-                                oldToken.address,
-                                newToken.address,
-                            ) &&
-                            AddressUtils.compareAddresses(
-                                oldToken.genesisId,
-                                newToken.genesisId,
-                            ),
-                    ),
+            // Merge tokens with the same address
+            const mergedTokens = mergeArrays(
+                state.tokens[network].custom[accountAddress],
+                newTokens,
+                "address",
             )
 
-            filteredTokens.push(...newTokens)
-
-            state.custom[accountAddress] = filteredTokens
+            state.tokens[network].custom[accountAddress] = mergedTokens
         },
 
         setDashboardChartData: (
@@ -118,22 +92,44 @@ export const TokenSlice = createSlice({
 
         addOfficialTokens: (
             state,
-            action: PayloadAction<TokenWithCompleteInfo[]>,
+            action: PayloadAction<{
+                network: NETWORK_TYPE
+                tokens: TokenWithCompleteInfo[]
+            }>,
         ) => {
-            const tokensToInsert = action.payload.filter(
-                token =>
-                    state.officialTokens
-                        .map(t => t.address)
-                        .includes(token.address) === false,
+            const { network, tokens } = action.payload
+
+            normaliseAddresses(tokens)
+
+            // Merge tokens with the same address
+            const mergedTokens = mergeArrays(
+                state.tokens[network].officialTokens,
+                tokens,
+                "address",
             )
-            state.officialTokens.push(...tokensToInsert)
+
+            state.tokens[network].officialTokens = mergedTokens
         },
 
         setSuggestedTokens: (
             state,
-            action: PayloadAction<FungibleTokenWithBalance[]>,
+            action: PayloadAction<{
+                network: NETWORK_TYPE
+                tokens: string[]
+            }>,
         ) => {
-            state.suggestedTokens = action.payload
+            const { network, tokens } = action.payload
+            const normalisedTokens = tokens.map(token =>
+                HexUtils.normalize(token),
+            )
+            // Only update the state if there is an actual change
+            if (
+                compareListOfAddresses(
+                    state.tokens[network].suggestedTokens,
+                    normalisedTokens,
+                )
+            )
+                state.tokens[network].suggestedTokens = normalisedTokens
         },
 
         setCoinGeckoTokens: (
@@ -143,34 +139,11 @@ export const TokenSlice = createSlice({
             state.coinGeckoTokens = action.payload
         },
 
-        setHasFetchedOfficialTokensMainnet: (
-            state,
-            action: PayloadAction<{
-                accountAddress: string
-                hasFetched: boolean
-            }>,
-        ) => {
-            const { accountAddress, hasFetched } = action.payload
-            state.hasFetchedOfficialTokensMainnet[accountAddress] = hasFetched
-        },
-
-        setHasFetchedOfficialTokensTestnet: (
-            state,
-            action: PayloadAction<{
-                accountAddress: string
-                hasFetched: boolean
-            }>,
-        ) => {
-            const { accountAddress, hasFetched } = action.payload
-            state.hasFetchedOfficialTokensTestnet[accountAddress] = hasFetched
-        },
-
         resetTokensState: () => initialTokenState,
     },
 })
 
 export const {
-    addOrUpdateCustomToken,
     addOrUpdateCustomTokens,
     setDashboardChartData,
     addOfficialTokens,
@@ -178,7 +151,5 @@ export const {
     setCoinGeckoTokens,
     setSuggestedTokens,
     resetTokensState,
-    setHasFetchedOfficialTokensMainnet,
-    setHasFetchedOfficialTokensTestnet,
     setCoinMarketInfo,
 } = TokenSlice.actions

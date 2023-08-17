@@ -4,13 +4,13 @@ import { showWarningToast, useThor } from "~Components"
 import { Balance } from "~Model"
 import {
     selectSelectedAccount,
-    selectSelectedAccountBalances,
+    selectVisibleBalances,
     selectSelectedNetwork,
     useAppSelector,
 } from "~Storage/Redux"
 
 import { useI18nContext } from "~i18n"
-import { fetchCustomTokensOwned } from "~Networking"
+import { fetchTokensOwned } from "~Networking"
 
 /**
  * React hook to manage fetching and storing token balances owned by an account.
@@ -27,7 +27,7 @@ export const useTokensOwned = () => {
 
     const network = useAppSelector(selectSelectedNetwork)
 
-    const balances = useAppSelector(selectSelectedAccountBalances)
+    const balances = useAppSelector(selectVisibleBalances)
 
     const { LL } = useI18nContext()
 
@@ -55,14 +55,14 @@ export const useTokensOwned = () => {
     )
 
     const fetchTokens = useCallback(async () => {
-        info("Fetching activities on page", page)
+        info("Fetching tokens owned on page", page)
         // Reset hasFetched flag
         setHasFetched(false)
         // Proceed if address exists
         if (selectedAccount) {
             try {
                 // Fetch tokens owned
-                const tokensOwned = await fetchCustomTokensOwned(
+                const tokensOwned = await fetchTokensOwned(
                     selectedAccount.address,
                     page,
                     thor,
@@ -96,7 +96,6 @@ export const useTokensOwned = () => {
 
                 // Set fetched flag
                 setHasFetched(true)
-                if (page === 0) setPage(prevPage => prevPage + 1)
             }
         }
     }, [
