@@ -1,4 +1,4 @@
-import React from "react"
+import React, { useMemo } from "react"
 import {
     BaseButton,
     BaseSafeArea,
@@ -6,13 +6,21 @@ import {
     BaseText,
     BaseView,
 } from "~Components"
-import { SecurityDowngradeSVG } from "~Assets"
 import { useI18nContext } from "~i18n"
-import { useAppReset } from "~Hooks"
+import { useAppReset, useTheme } from "~Hooks"
+import LottieView from "lottie-react-native"
+import { StyleSheet } from "react-native"
+import { BlockedAppDark, BlockedAppLight } from "~Assets/Lottie/BlockedApp"
 
 export const AppBlockedScreen = () => {
     const { LL } = useI18nContext()
     const appReset = useAppReset()
+    const theme = useTheme()
+
+    const lottieSource = useMemo(
+        () => (theme.isDark ? BlockedAppDark : BlockedAppLight),
+        [theme],
+    )
 
     return (
         <BaseSafeArea grow={1}>
@@ -32,7 +40,11 @@ export const AppBlockedScreen = () => {
                 <BaseSpacer height={48} />
 
                 <BaseView alignItems="center" w={100} flexGrow={1}>
-                    <SecurityDowngradeSVG />
+                    <LottieView
+                        source={lottieSource}
+                        autoPlay
+                        style={styles.lottie}
+                    />
                     <BaseSpacer height={40} />
                     <BaseText align="left" py={20}>
                         {LL.BD_APP_BLOCKED()}
@@ -53,3 +65,10 @@ export const AppBlockedScreen = () => {
         </BaseSafeArea>
     )
 }
+
+const styles = StyleSheet.create({
+    lottie: {
+        width: 320,
+        height: 320,
+    },
+})
