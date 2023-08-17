@@ -46,9 +46,6 @@ export const Layout = ({
     const theme = useTheme()
     const { androidSpecificBottomInsetsIfAndroid, platformBottomInsets } =
         usePlatformBottomInsets()
-    const layoutBottomInset = fixedBody
-        ? androidSpecificBottomInsetsIfAndroid
-        : 0
 
     const Title = useCallback(
         () => (
@@ -107,7 +104,12 @@ export const Layout = ({
                         {footer && <BaseSpacer height={platformBottomInsets} />}
                     </BaseScrollView>
                 )}
-                {fixedBody}
+                {fixedBody && (
+                    <>
+                        {fixedBody}
+                        <BaseView mb={androidSpecificBottomInsetsIfAndroid} />
+                    </>
+                )}
                 {footer && (
                     <BaseView
                         mb={androidSpecificBottomInsetsIfAndroid}
@@ -115,7 +117,6 @@ export const Layout = ({
                         {footer}
                     </BaseView>
                 )}
-                <BaseView mb={layoutBottomInset} />
             </BaseView>
         </BaseSafeArea>
     )
