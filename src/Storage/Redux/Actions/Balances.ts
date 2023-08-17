@@ -139,7 +139,7 @@ export const resetTokenBalances = async (
             updateTokenBalances({
                 network: network.type,
                 accountAddress: account.address,
-                newBalances: defaultTokens!!.map(token => ({
+                newBalances: defaultTokens.map(token => ({
                     accountAddress: account.address,
                     tokenAddress: token.address,
                     balance: "0",
