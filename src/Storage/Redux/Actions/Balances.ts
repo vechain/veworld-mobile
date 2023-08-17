@@ -96,8 +96,6 @@ export const autoSelectSuggestTokens =
         thorClient: Connex.Thor,
     ) =>
     async (dispatch: Dispatch) => {
-        const startTime = Date.now()
-
         const officialTokensBalances: Balance[] = []
 
         try {
@@ -125,9 +123,6 @@ export const autoSelectSuggestTokens =
             )
         } catch (e) {
             throw Error(`Failed to get balances of official tokens: ${e}`)
-        } finally {
-            const endTime = Date.now()
-            debug(`autoSelectSuggestTokens took ${endTime - startTime}ms`)
         }
     }
 

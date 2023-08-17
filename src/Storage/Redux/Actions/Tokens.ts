@@ -175,14 +175,11 @@ export const updateSuggestedTokens =
         network: Network,
     ) =>
     async (dispatch: AppThunkDispatch) => {
-        const startTime = Date.now()
         try {
             const tokenAddresses = await fetchOfficialTokensOwned(
                 accountAddress,
                 network,
             )
-
-            debug(`Found ${tokenAddresses.length} tokens`)
 
             const suggestedTokens = tokenAddresses.filter(
                 tokenAddress =>
@@ -203,13 +200,6 @@ export const updateSuggestedTokens =
             )
         } catch (e) {
             error("updateSuggestedTokens", e)
-        } finally {
-            const endTime = Date.now()
-            debug(
-                `updateSuggestedTokens took ${
-                    endTime - startTime
-                }ms to complete`,
-            )
         }
     }
 
