@@ -1,4 +1,4 @@
-import React, { memo } from "react"
+import React, { memo, useMemo } from "react"
 import { StyleProp, StyleSheet, ViewProps, ViewStyle } from "react-native"
 import { useThemedStyles } from "~Hooks"
 import { ColorThemeType } from "~Constants"
@@ -9,6 +9,7 @@ type Props = {
     containerStyle?: StyleProp<ViewStyle>
     selected?: boolean
     onPress?: () => void
+    disableOpacityOnPressing?: boolean
 }
 
 export const BaseCard = memo(
@@ -19,8 +20,17 @@ export const BaseCard = memo(
         containerStyle,
         selected,
         onPress,
+        disableOpacityOnPressing = false,
     }: ViewProps & Props) => {
         const { styles } = useThemedStyles(baseStyles)
+
+        const renderChildren = useMemo(() => {
+            return (
+                <BaseView style={[styles.view, style]} testID={testID}>
+                    {children}
+                </BaseView>
+            )
+        }, [children, style, styles.view, testID])
         return (
             <BaseView
                 style={[
@@ -28,14 +38,18 @@ export const BaseCard = memo(
                     styles.container,
                     containerStyle,
                 ]}>
-                <BaseTouchable
-                    action={onPress}
-                    haptics="Light"
-                    activeOpacity={!onPress ? 1 : 0.2}>
-                    <BaseView style={[styles.view, style]} testID={testID}>
-                        {children}
-                    </BaseView>
-                </BaseTouchable>
+                {onPress ? (
+                    <BaseTouchable
+                        action={onPress}
+                        haptics="Light"
+                        activeOpacity={
+                            disableOpacityOnPressing || !onPress ? 1 : 0.2
+                        }>
+                        {renderChildren}
+                    </BaseTouchable>
+                ) : (
+                    renderChildren
+                )}
             </BaseView>
         )
     },

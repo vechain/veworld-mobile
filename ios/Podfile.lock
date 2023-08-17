@@ -18,8 +18,6 @@ PODS:
     - ExpoModulesCore
   - EXConstants (14.0.2):
     - ExpoModulesCore
-  - EXErrorRecovery (4.0.1):
-    - ExpoModulesCore
   - EXFileSystem (15.1.1):
     - ExpoModulesCore
   - EXFont (11.0.1):
@@ -138,9 +136,9 @@ PODS:
   - MixpanelReactNative (2.3.1):
     - Mixpanel-swift (= 4.1.3)
     - React-Core
-  - MMKV (1.3.0):
-    - MMKVCore (~> 1.3.0)
-  - MMKVCore (1.3.0)
+  - MMKV (1.3.1):
+    - MMKVCore (~> 1.3.1)
+  - MMKVCore (1.3.1)
   - MultiplatformBleAdapter (0.1.9)
   - OpenSSL-Universal (1.1.1100)
   - RCT-Folly (2021.07.22.00):
@@ -470,7 +468,7 @@ PODS:
     - React-Core
   - RNBootSplash (4.6.0):
     - React-Core
-  - RNCAsyncStorage (1.19.1):
+  - RNCAsyncStorage (1.19.2):
     - React-Core
   - RNCMaskedView (0.2.9):
     - React-Core
@@ -516,9 +514,9 @@ PODS:
   - RNScreens (3.24.0):
     - React-Core
     - React-RCTImage
-  - RNSentry (5.8.1):
+  - RNSentry (5.9.0):
     - React-Core
-    - Sentry/HybridSDK (= 8.9.3)
+    - Sentry/HybridSDK (= 8.9.4)
   - RNSVG (13.4.0):
     - React-Core
   - SDWebImage (5.11.1):
@@ -527,9 +525,9 @@ PODS:
   - SDWebImageWebPCoder (0.8.5):
     - libwebp (~> 1.0)
     - SDWebImage/Core (~> 5.10)
-  - Sentry/HybridSDK (8.9.3):
-    - SentryPrivate (= 8.9.3)
-  - SentryPrivate (8.9.3)
+  - Sentry/HybridSDK (8.9.4):
+    - SentryPrivate (= 8.9.4)
+  - SentryPrivate (8.9.4)
   - SocketRocket (0.6.1)
   - Yoga (1.14.0)
   - YogaKit (1.18.1):
@@ -549,7 +547,6 @@ DEPENDENCIES:
   - EXBarCodeScanner (from `../node_modules/expo-barcode-scanner/ios`)
   - EXCamera (from `../node_modules/expo-camera/ios`)
   - EXConstants (from `../node_modules/expo-constants/ios`)
-  - EXErrorRecovery (from `../node_modules/expo-error-recovery/ios`)
   - EXFileSystem (from `../node_modules/expo-file-system/ios`)
   - EXFont (from `../node_modules/expo-font/ios`)
   - EXImageLoader (from `../node_modules/expo-image-loader/ios`)
@@ -694,8 +691,6 @@ EXTERNAL SOURCES:
     :path: "../node_modules/expo-camera/ios"
   EXConstants:
     :path: "../node_modules/expo-constants/ios"
-  EXErrorRecovery:
-    :path: "../node_modules/expo-error-recovery/ios"
   EXFileSystem:
     :path: "../node_modules/expo-file-system/ios"
   EXFont:
@@ -849,7 +844,6 @@ SPEC CHECKSUMS:
   EXBarCodeScanner: cb4deb49e59b6c7ed6bbf38d187802359908d2a8
   EXCamera: eaf52a96480d4ae1505a9b5e139c244581b5f8ca
   EXConstants: 3c86653c422dd77e40d10cbbabb3025003977415
-  EXErrorRecovery: ae43433feb0608a64dc5b1c8363b3e7769a9ea24
   EXFileSystem: 60602b6eefa6873f97172c684b7537c9760b50d6
   EXFont: 319606bfe48c33b5b5063fb0994afdc496befe80
   EXImageLoader: 84b65e6bd9d3345d6fbb3ab936a546c54496a64d
@@ -881,8 +875,8 @@ SPEC CHECKSUMS:
   lottie-react-native: 646955b3212c448d59cf1895a0cb485a0a7be3cf
   Mixpanel-swift: d7c7c6a2f7c65f735af3cb4746ed61a5aab0e551
   MixpanelReactNative: 07c808338a1eb69b0c9077668e3acfb0b2dd6689
-  MMKV: 9c6c3fa4ddd849f28c7b9a5c9d23aab84f14ee35
-  MMKVCore: 9bb7440b170181ac5b81f542ac258103542e693d
+  MMKV: 5a07930c70c70b86cd87761a42c8f3836fb681d7
+  MMKVCore: e50135dbd33235b6ab390635991bab437ab873c0
   MultiplatformBleAdapter: 5a6a897b006764392f9cef785e4360f54fb9477d
   OpenSSL-Universal: ebc357f1e6bc71fa463ccb2fe676756aff50e88c
   RCT-Folly: 0080d0a6ebf2577475bda044aa59e2ca1f909cda
@@ -927,7 +921,7 @@ SPEC CHECKSUMS:
   ReactCommon: 349be31adeecffc7986a0de875d7fb0dcf4e251c
   ReactNativeExceptionHandler: b11ff67c78802b2f62eed0e10e75cb1ef7947c60
   RNBootSplash: 91e0c16bfc96703cb5b0562785b9a8cbfeb298fe
-  RNCAsyncStorage: f47fe18526970a69c34b548883e1aeceb115e3e1
+  RNCAsyncStorage: f57e929cd7757f2cb3dd8186d123c09e8281a1ad
   RNCMaskedView: 949696f25ec596bfc697fc88e6f95cf0c79669b6
   RNDeviceInfo: 5795b418ed3451ebcaf39384e6cf51f60cb931c9
   RNFastImage: 5c9c9fed9c076e521b3f509fe79e790418a544e8
@@ -936,12 +930,12 @@ SPEC CHECKSUMS:
   RNReactNativeHapticFeedback: 1e3efeca9628ff9876ee7cdd9edec1b336913f8c
   RNReanimated: bec7736122a268883bdede07f1bf9cf4b40158db
   RNScreens: b21dc57dfa2b710c30ec600786a3fc223b1b92e7
-  RNSentry: 221d8c3f0bf0d951e9ecc89d3e42ee97aab9d7c0
+  RNSentry: c167b3da6aa7f3cf85d909caae905d043a062b6c
   RNSVG: 07dbd870b0dcdecc99b3a202fa37c8ca163caec2
   SDWebImage: a7f831e1a65eb5e285e3fb046a23fcfbf08e696d
   SDWebImageWebPCoder: 908b83b6adda48effe7667cd2b7f78c897e5111d
-  Sentry: 97161cac725da1ecbe77d1445bf8a61c1e5667f1
-  SentryPrivate: 9a76def09fb08f9501997b8df946e8097947b94f
+  Sentry: 56c76eed917f7dffd46db50906afbf5c9aa2673a
+  SentryPrivate: f3be34b5deb9fe676fdfb1f1ad5cdb1b740c5688
   SocketRocket: f32cd54efbe0f095c4d7594881e52619cfe80b17
   Yoga: 99caf8d5ab45e9d637ee6e0174ec16fbbb01bcfc
   YogaKit: f782866e155069a2cca2517aafea43200b01fd5a

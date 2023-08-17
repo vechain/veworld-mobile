@@ -194,9 +194,14 @@ export const ManageCustomTokenScreen = () => {
         <Layout
             safeAreaTestID="History_Screen"
             fixedHeader={
-                <BaseText typographyFont="subTitleBold" pb={8}>
-                    {LL.MANAGE_TOKEN_MANAGE_CUSTOM()}
-                </BaseText>
+                <>
+                    <BaseText typographyFont="subTitleBold" pb={8}>
+                        {LL.MANAGE_TOKEN_TITLE_YOUR_TOKENS()}
+                    </BaseText>
+                    <BaseText typographyFont="bodyMedium" pb={8}>
+                        {LL.MANAGE_TOKEN_ADD_CUSTOM_TOKNE_SUBTITLE()}
+                    </BaseText>
+                </>
             }
             bodyWithoutScrollView={
                 <>

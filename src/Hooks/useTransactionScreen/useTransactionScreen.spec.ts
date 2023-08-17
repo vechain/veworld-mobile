@@ -90,7 +90,7 @@ describe("useTransactionScreen", () => {
     })
 
     it("hook should render", async () => {
-        const { result, waitForNextUpdate } = renderHook(
+        const { result } = renderHook(
             () =>
                 useTransactionScreen({
                     clauses: vetTransaction1.body.clauses,
@@ -102,7 +102,6 @@ describe("useTransactionScreen", () => {
                 wrapper: TestWrapper,
             },
         )
-        await waitForNextUpdate({ timeout: 5000 })
 
         expect(result.current).toEqual({
             Delegation: expect.any(Function),
@@ -123,7 +122,7 @@ describe("useTransactionScreen", () => {
 
     describe("send token transaction", () => {
         it("should submit transaction", async () => {
-            const { result, waitForNextUpdate } = renderHook(
+            const { result } = renderHook(
                 () =>
                     useTransactionScreen({
                         clauses: vetTransaction1.body.clauses,
@@ -138,7 +137,6 @@ describe("useTransactionScreen", () => {
                     wrapper: TestWrapper,
                 },
             )
-            await waitForNextUpdate({ timeout: 5000 })
 
             await act(async () => await result.current.onSubmit())
 
@@ -166,7 +164,7 @@ describe("useTransactionScreen", () => {
 
             mockAccount(accWithDevice)
 
-            const { result, waitForNextUpdate } = renderHook(
+            const { result } = renderHook(
                 () =>
                     useTransactionScreen({
                         clauses: vetTransaction1.body.clauses,
@@ -181,7 +179,6 @@ describe("useTransactionScreen", () => {
                     wrapper: TestWrapper,
                 },
             )
-            await waitForNextUpdate({ timeout: 5000 })
 
             await act(async () => await result.current.onSubmit())
 

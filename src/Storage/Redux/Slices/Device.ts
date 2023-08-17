@@ -22,7 +22,10 @@ export const DeviceSlice = createSlice({
             }
         },
         addDevice: (state, action: PayloadAction<Device>) => {
-            state.push(action.payload)
+            state.push({
+                ...action.payload,
+                position: state.length,
+            })
         },
         updateDevice: (
             state,
@@ -69,8 +72,22 @@ export const DeviceSlice = createSlice({
             if (deviceExistsIndex === -1) return
 
             state.splice(deviceExistsIndex, 1)
+
+            state.forEach(
+                (device, index) =>
+                    (state[index] = {
+                        ...device,
+                        position: index,
+                    }),
+            )
         },
         resetDeviceState: () => initialDeviceState,
+        setDeviceState: (
+            state: Device[],
+            action: PayloadAction<{
+                updatedDevices: Device[]
+            }>,
+        ) => action.payload.updatedDevices,
     },
 })
 
@@ -81,4 +98,5 @@ export const {
     bulkUpdateDevices,
     removeDevice,
     resetDeviceState,
+    setDeviceState,
 } = DeviceSlice.actions

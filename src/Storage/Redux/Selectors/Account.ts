@@ -3,6 +3,7 @@ import { AddressUtils } from "~Utils"
 import { RootState } from "../Types"
 import { selectDevicesState } from "./Device"
 import { AccountWithDevice, DEVICE_TYPE, LocalAccountWithDevice } from "~Model"
+import sortBy from "lodash/sortBy"
 
 export const selectAccountsState = (state: RootState) => state.accounts
 
@@ -13,20 +14,23 @@ export const selectAccounts = createSelector(
     selectAccountsState,
     selectDevicesState,
     (state, devices) => {
-        return state.accounts.map(account => {
-            const device = devices.find(
-                _device => _device.rootAddress === account.rootAddress,
-            )
-            if (!device) {
-                throw new Error(
-                    `No device found for account ${account.address}`,
+        return sortBy(
+            state.accounts.map(account => {
+                const device = devices.find(
+                    _device => _device.rootAddress === account.rootAddress,
                 )
-            }
-            return {
-                ...account,
-                device,
-            }
-        }) as AccountWithDevice[]
+                if (!device) {
+                    throw new Error(
+                        `No device found for account ${account.address}`,
+                    )
+                }
+                return {
+                    ...account,
+                    device,
+                }
+            }) as AccountWithDevice[],
+            account => account.device.position,
+        )
     },
 )
 
@@ -41,18 +45,29 @@ export const selectSelectedAccountAddress = createSelector(
 )
 
 /**
- * @returns the selected account
+ * @returns the selected account if there is one
  */
-export const selectSelectedAccount = createSelector(
+export const selectSelectedAccountOrNull = createSelector(
     selectAccounts,
     selectSelectedAccountAddress,
     (accounts, selectedAccountAddress) => {
-        const selectedAccount = accounts.find(account =>
+        return accounts.find(account =>
             AddressUtils.compareAddresses(
                 selectedAccountAddress,
                 account.address,
             ),
         )
+    },
+)
+
+/**
+ * @returns the selected account
+ * @throws if there is no selected account
+ */
+export const selectSelectedAccount = createSelector(
+    selectSelectedAccountOrNull,
+    selectSelectedAccountAddress,
+    (selectedAccount, selectedAccountAddress) => {
         if (!selectedAccount) {
             throw new Error(
                 `No account found for address ${selectedAccountAddress}`,

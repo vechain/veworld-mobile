@@ -26,7 +26,7 @@ export const NFTCollectionDetailScreen = ({ route }: Props) => {
         route.params.collectionAddress,
     )
 
-    const { NFTs, fetchMoreNFTs, isLoading, error, hasNext } =
+    const { nfts, fetchMoreNFTs, isLoading, error, hasNext } =
         useNFTWithMetadata(
             route.params.collectionAddress,
             onEndReachedCalledDuringMomentum,
@@ -38,12 +38,12 @@ export const NFTCollectionDetailScreen = ({ route }: Props) => {
     }, [])
 
     const renderNftList = useMemo(() => {
-        if (!isEmpty(NFTs) && !isEmpty(anyCollection)) {
+        if (!isEmpty(nfts) && !isEmpty(anyCollection)) {
             return (
                 <NFTList
                     collection={anyCollection}
                     isLoading={isLoading}
-                    NFTs={NFTs}
+                    nfts={nfts}
                     fetchMoreNFTs={fetchMoreNFTs}
                     onMomentumScrollBegin={onMomentumScrollBegin}
                     hasNext={hasNext}
@@ -51,7 +51,7 @@ export const NFTCollectionDetailScreen = ({ route }: Props) => {
             )
         }
     }, [
-        NFTs,
+        nfts,
         anyCollection,
         isLoading,
         fetchMoreNFTs,
@@ -60,14 +60,14 @@ export const NFTCollectionDetailScreen = ({ route }: Props) => {
     ])
 
     const renderContent = useMemo(() => {
-        if (!isEmpty(error) && isEmpty(NFTs)) return <NetworkErrorView />
+        if (!isEmpty(error) && isEmpty(nfts)) return <NetworkErrorView />
 
         return (
-            <NftLoader isLoading={isLoading && isEmpty(NFTs)}>
+            <NftLoader isLoading={isLoading && isEmpty(nfts)}>
                 {renderNftList}
             </NftLoader>
         )
-    }, [error, NFTs, isLoading, renderNftList])
+    }, [error, nfts, isLoading, renderNftList])
 
     return (
         <Layout

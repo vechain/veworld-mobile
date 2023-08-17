@@ -30,6 +30,8 @@ export const ConfirmDisconnectBottomSheet = React.forwardRef<
     const { LL } = useI18nContext()
     const theme = useTheme()
 
+    if (!session) return null
+
     const { name } = WalletConnectUtils.getSessionRequestAttributes(session)
 
     return (

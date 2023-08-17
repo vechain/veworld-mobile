@@ -41,7 +41,7 @@ type Props = NativeStackScreenProps<
 >
 
 export const SelectAmountSendScreen = ({ route }: Props) => {
-    const { token, initialRoute } = route.params
+    const { initialRoute, token } = route.params
 
     const theme = useTheme()
     const { LL } = useI18nContext()
@@ -161,6 +161,7 @@ export const SelectAmountSendScreen = ({ route }: Props) => {
             safeAreaTestID="Select_Amount_Send_Screen"
             isScrollEnabled={false}
             title={LL.SEND_TOKEN_TITLE()}
+            showSelectedNetwork={true}
             body={
                 <DismissKeyboardView>
                     <KeyboardAvoidingView behavior="padding">
@@ -294,7 +295,11 @@ export const SelectAmountSendScreen = ({ route }: Props) => {
                             <BaseCard>
                                 <BaseView flex={1}>
                                     <BaseText typographyFont="button">
-                                        {LL.SEND_BALANCE_PERCENTAGE()}
+                                        {LL.SEND_BALANCE_PERCENTAGE({
+                                            percentage: `${percentage.toFixed(
+                                                0,
+                                            )}%`,
+                                        })}
                                     </BaseText>
                                     <BaseView flexDirection="row">
                                         <BaseText
@@ -303,7 +308,6 @@ export const SelectAmountSendScreen = ({ route }: Props) => {
                                             {LL.SEND_RANGE_ZERO()}
                                         </BaseText>
                                         <BaseSpacer width={8} />
-                                        {/* TODO (Davide) (https://github.com/vechainfoundation/veworld-mobile/issues/766) understand how to add percentage value label */}
                                         <BaseRange
                                             value={percentage}
                                             onChange={

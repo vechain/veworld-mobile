@@ -91,7 +91,7 @@ const WalletConnectContextProvider = ({
                     LL.NOTIFICATION_warning_wallet_connect_connection_could_delay(),
                 )
             } catch (err: unknown) {
-                error("WalletConnectProvider:onPair", err)
+                error("WalletConnectProvider:onPair - err", err)
 
                 showErrorToast(LL.NOTIFICATION_wallet_connect_error_pairing())
             }

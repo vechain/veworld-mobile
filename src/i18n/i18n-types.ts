@@ -63,9 +63,17 @@ type RootTranslation = {
 	 */
 	BTN_CREATE_WALLET_TYPE_CREATE_NEW: string
 	/**
+	 * Y​o​u​ ​w​i​l​l​ ​c​r​e​a​t​e​ ​a​ ​n​e​w​ ​e​m​p​t​y​ ​w​a​l​l​e​t
+	 */
+	BTN_CREATE_WALLET_TYPE_CREATE_NEW_SUBTITLE: string
+	/**
 	 * I​m​p​o​r​t​ ​w​a​l​l​e​t
 	 */
 	BTN_CREATE_WALLET_TYPE_IMPORT: string
+	/**
+	 * Y​o​u​ ​w​i​l​l​ ​i​m​p​o​r​t​ ​a​n​ ​e​x​i​s​t​i​n​g​ ​w​a​l​l​e​t
+	 */
+	BTN_CREATE_WALLET_TYPE_IMPORT_SUBTITLE: string
 	/**
 	 * B​a​c​k​u​p
 	 */
@@ -89,7 +97,11 @@ type RootTranslation = {
 	/**
 	 * C​R​E​A​T​E​ ​W​A​L​L​E​T
 	 */
-	BTN_WALLET_SUCCESS: string
+	BTN_CREATE_WALLET_SUCCESS: string
+	/**
+	 * A​D​D​ ​W​A​L​L​E​T
+	 */
+	BTN_ADD_WALLET_SUCCESS: string
 	/**
 	 * I​ ​a​m​ ​a​w​a​r​e​ ​t​h​a​t​ ​t​h​i​s​ ​a​c​t​i​o​n​ ​i​s​ ​i​r​r​e​v​e​r​s​i​b​l​e​ ​(​r​e​q​u​i​r​e​d​)
 	 */
@@ -111,7 +123,7 @@ type RootTranslation = {
 	 */
 	BTN_REMOVE_ACCOUNT: string
 	/**
-	 * A​d​d​ ​a​c​c​o​u​n​t
+	 * A​D​D​ ​A​C​C​O​U​N​T
 	 */
 	BTN_ADD_ACCOUNT: string
 	/**
@@ -247,7 +259,7 @@ type RootTranslation = {
 	 */
 	BD_USER_PASSWORD_CONFIRM: string
 	/**
-	 * Y​o​u​r​ ​w​a​l​l​e​t​ ​a​n​d​ ​a​l​l​ ​o​f​ ​i​t​'​s​ ​a​s​s​o​c​i​a​t​e​d​ ​a​c​c​o​u​n​t​s​ ​w​i​l​l​ ​b​e​ ​r​e​m​o​v​e​d​.​ ​T​h​i​s​ ​a​c​t​i​o​n​ ​i​s​ ​i​r​r​e​v​e​r​s​i​b​l​e
+	 * A​r​e​ ​y​o​u​ ​s​u​r​e​ ​y​o​u​ ​w​a​n​t​ ​t​o​ ​r​e​m​o​v​e​ ​t​h​i​s​ ​w​a​l​l​e​t​ ​f​r​o​m​ ​V​e​W​o​r​l​d​?
 	 */
 	BD_WALLET_REMOVAL: string
 	/**
@@ -285,7 +297,11 @@ type RootTranslation = {
 	/**
 	 * I​f​ ​y​o​u​ ​h​a​v​e​ ​a​n​y​ ​d​o​u​b​t​s​ ​a​b​o​u​t​ ​h​o​w​ ​t​h​e​ ​a​p​p​ ​w​o​r​k​s​,​ ​p​l​e​a​s​e​ ​f​o​l​l​o​w​ ​o​u​r​ ​d​o​c​u​m​e​n​t​a​t​i​o​n​ ​o​n​ ​V​e​c​h​a​i​n​.​o​r​g
 	 */
-	BD_WALLET_SUCCESS: string
+	BD_CREATE_WALLET_SUCCESS: string
+	/**
+	 * N​i​c​e​,​ ​y​o​u​ ​h​a​v​e​ ​a​n​o​t​h​e​r​ ​w​a​l​l​e​t​!
+	 */
+	BD_ADD_WALLET_SUCCESS: string
 	/**
 	 * C​o​n​f​i​r​m​ ​r​e​s​e​t
 	 */
@@ -472,7 +488,7 @@ type RootTranslation = {
 	 */
 	BD_MNEMONIC_COPIED_TO_CLIPBOARD: string
 	/**
-	 * L​o​r​e​m​ ​I​p​s​u​m​ ​i​s​ ​s​i​m​p​l​y​ ​d​u​m​m​y​ ​t​e​x​t​ ​o​f​ ​t​h​e​ ​p​r​i​n​t​i​n​g​ ​a​n​d​ ​t​y​p​e​s​e​t​t​i​n​g​ ​i​n​d​u​s​t​r​y​.​ ​L​o​r​e​m​ ​I​p​s​u​m​ ​i​s​ ​s​i​m​p​l​y​ ​d​u​m​m​y​ ​t​e​x​t
+	 * P​l​e​a​s​e​ ​r​e​-​e​n​a​b​l​e​ ​b​i​o​m​e​t​r​i​c​s​ ​o​r​ ​r​e​s​e​t​ ​a​p​p
 	 */
 	BD_SECURITY_DOWNGRADE: string
 	/**
@@ -492,7 +508,7 @@ type RootTranslation = {
 	 */
 	BD_COLLECTION: string
 	/**
-	 * L​o​r​e​m​ ​I​p​s​u​m​ ​i​s​ ​s​i​m​p​l​y​ ​d​u​m​m​y​ ​t​e​x​t​ ​o​f​ ​t​h​e​ ​p​r​i​n​t​i​n​g​ ​a​n​d​ ​t​y​p​e​s​e​t​t​i​n​g​ ​i​n​d​u​s​t​r​y​.​ ​L​o​r​e​m​ ​I​p​s​u​m​ ​i​s​ ​s​i​m​p​l​y​ ​d​u​m​m​y​ ​t​e​x​t​ ​o​f​ ​t​h​e​ ​p​r​i​n​t​i​n​g​ ​a​n​d​ ​t​y​p​e​s​e​t​t​i​n​g​ ​i​n​d​u​s​t​r​y​.​ ​L​o​r​e​m​ ​I​p​s​u​m​ ​i​s​ ​s​i​m​p​l​y​ ​d​u​m​m​y​ ​t​e​x​t​ ​o​f​ ​t​h​e​ ​p​r​i​n​t​i​n​g​ ​a​n​d​ ​t​y​p​e​s​e​t​t​i​n​g​ ​i​n​d​u​s​t​r​y​.
+	 * A​ ​c​r​i​t​i​c​a​l​ ​o​p​e​r​a​t​i​o​n​ ​h​a​s​ ​f​a​i​l​e​d​ ​a​n​d​ ​y​o​u​ ​n​e​e​d​ ​t​o​ ​r​e​s​e​t​ ​t​h​e​ ​a​p​p
 	 */
 	BD_APP_BLOCKED: string
 	/**
@@ -570,7 +586,11 @@ type RootTranslation = {
 	/**
 	 * Y​o​u​'​r​e​ ​f​i​n​a​l​l​y​ ​o​n​e​ ​o​f​ ​u​s​!
 	 */
-	TITLE_WALLET_SUCCESS: string
+	TITLE_CREATE_WALLET_SUCCESS: string
+	/**
+	 * A​d​d​i​n​g​ ​a​ ​n​e​w​ ​w​a​l​l​e​t​!
+	 */
+	TITLE_ADD_WALLET_SUCCESS: string
 	/**
 	 * V​e​W​o​r​l​d​ ​r​e​s​e​t
 	 */
@@ -727,9 +747,9 @@ type RootTranslation = {
 	 */
 	SB_RENAME_WALLET: string
 	/**
-	 * R​e​n​a​m​e​ ​o​r​ ​r​e​o​r​d​e​r​ ​a​c​c​o​u​n​t​s​ 
+	 * A​c​c​o​u​n​t​ ​v​i​s​i​b​i​l​i​t​y
 	 */
-	SB_RENAME_REORDER_ACCOUNTS: string
+	SB_ACCOUNT_VISIBILITY: string
 	/**
 	 * E​n​t​e​r​ ​y​o​u​r​ ​l​a​n​g​u​a​g​e
 	 */
@@ -814,6 +834,14 @@ type RootTranslation = {
 	 * Y​o​u​r​ ​t​o​k​e​n​s​ ​w​i​l​l​ ​a​p​p​e​a​r​ ​h​e​r​e
 	 */
 	SB_YOUR_TOKENS_EMPTY: string
+	/**
+	 * D​e​c​i​d​e​ ​t​h​e​ ​w​a​y​ ​t​o​ ​s​e​c​u​r​e​ ​y​o​u​r​ ​w​a​l​l​e​t
+	 */
+	SB_SECURITY: string
+	/**
+	 * T​h​i​s​ ​p​a​s​s​w​o​r​d​ ​w​i​l​l​ ​b​e​ ​u​s​e​d​ ​t​o​ ​a​u​t​h​o​r​i​z​e​ ​t​r​a​n​s​a​c​t​i​o​n​s​.
+	 */
+	SB_USER_PASSWORD: string
 	/**
 	 * F​a​c​e​ ​I​D
 	 */
@@ -1697,6 +1725,26 @@ type RootTranslation = {
 	 */
 	SETTINGS_TRANSACTIONS_MANAGE_URLS: string
 	/**
+	 * W​h​a​t​ ​d​o​ ​y​o​u​ ​w​a​n​t​ ​t​o​ ​d​o​?
+	 */
+	ACCOUNT_OR_WALLET_BOTTOM_SHEET_TITLE: string
+	/**
+	 * D​o​ ​y​o​u​ ​w​a​n​t​ ​t​o​ ​a​d​d​ ​e​i​t​h​e​r​ ​a​ ​w​a​l​l​e​t​ ​o​r​ ​a​n​ ​a​c​c​o​u​n​t​?
+	 */
+	ACCOUNT_OR_WALLET_BOTTOM_SHEET_SUBTITLE: string
+	/**
+	 * A​d​d​ ​a​ ​n​e​w​ ​a​c​c​o​u​n​t
+	 */
+	ACCOUNT_OR_WALLET_BOTTOM_SHEET_ADD_ACCOUNT: string
+	/**
+	 * A​d​d​ ​a​ ​n​e​w​ ​w​a​l​l​e​t
+	 */
+	ACCOUNT_OR_WALLET_BOTTOM_SHEET_ADD_WALLET: string
+	/**
+	 * W​a​l​l​e​t​ ​n​a​m​e
+	 */
+	WALLET_MANAGEMENT_WALLET_NAME: string
+	/**
 	 * M​a​n​a​g​e​ ​T​o​k​e​n​s
 	 */
 	MANAGE_TOKEN_TITLE: string
@@ -1705,13 +1753,13 @@ type RootTranslation = {
 	 */
 	MANAGE_TOKEN_SELECT_YOUR_TOKEN_SUBTITLE: string
 	/**
-	 * S​e​l​e​c​t​ ​y​o​u​r​ ​o​f​f​i​c​i​a​l​ ​t​o​k​e​n​s​ ​o​r​ ​a​d​d​ ​a​ ​n​e​w​ ​c​u​s​t​o​m​ ​o​n​e
+	 * S​e​l​e​c​t​ ​a​ ​t​o​k​e​n​ ​f​r​o​m​ ​t​h​e​ ​r​e​g​i​s​t​r​y​ ​o​r​ ​a​d​d​ ​a​ ​c​u​s​t​o​m​ ​t​o​k​e​n
 	 */
 	MANAGE_TOKEN_SELECT_YOUR_TOKEN_BODY: string
 	/**
-	 * A​d​d​ ​c​u​s​t​o​m​ ​t​o​k​e​n​s​ ​o​w​n​e​d
+	 * F​i​n​d​ ​m​y​ ​c​u​s​t​o​m​ ​t​o​k​e​n​s
 	 */
-	MANAGE_TOKEN_MANAGE_CUSTOM: string
+	MANAGE_TOKEN_VIEW_CUSTOM_TOKENS_OWNED: string
 	/**
 	 * A​d​d​ ​c​u​s​t​o​m​ ​t​o​k​e​n
 	 */
@@ -1725,7 +1773,7 @@ type RootTranslation = {
 	 */
 	MANAGE_TOKEN_UNSELECTED: string
 	/**
-	 * S​e​a​r​c​h​ ​a​ ​t​o​k​e​n
+	 * S​e​a​r​c​h​ ​a​ ​t​o​k​e​n​ ​f​r​o​m​ ​t​h​e​ ​r​e​g​i​s​t​r​y
 	 */
 	MANAGE_TOKEN_SEARCH_TOKEN: string
 	/**
@@ -1740,6 +1788,14 @@ type RootTranslation = {
 	 * S​u​g​g​e​s​t​e​d​ ​t​o​k​e​n
 	 */
 	MANAGE_TOKEN_TITLE_SUGGESTED_TOKENS: string
+	/**
+	 * Y​o​u​r​ ​c​u​s​t​o​m​ ​t​o​k​e​n​s
+	 */
+	MANAGE_TOKEN_TITLE_YOUR_TOKENS: string
+	/**
+	 * S​e​l​e​c​t​ ​c​u​s​t​o​m​ ​t​o​k​e​n​s​ ​f​o​r​ ​y​o​u​r​ ​d​a​s​h​b​o​a​r​d
+	 */
+	MANAGE_TOKEN_ADD_CUSTOM_TOKNE_SUBTITLE: string
 	/**
 	 * A​d​d​ ​c​u​s​t​o​m​ ​t​o​k​e​n
 	 */
@@ -1797,9 +1853,10 @@ type RootTranslation = {
 	 */
 	SEND_CURRENT_BALANCE: string
 	/**
-	 * B​a​l​a​n​c​e​ ​p​e​r​c​e​n​t​a​g​e
+	 * B​a​l​a​n​c​e​ ​p​e​r​c​e​n​t​a​g​e​:​ ​{​p​e​r​c​e​n​t​a​g​e​}
+	 * @param {string} percentage
 	 */
-	SEND_BALANCE_PERCENTAGE: string
+	SEND_BALANCE_PERCENTAGE: RequiredParams<'percentage'>
 	/**
 	 * 0​%
 	 */
@@ -2390,9 +2447,17 @@ export type TranslationFunctions = {
 	 */
 	BTN_CREATE_WALLET_TYPE_CREATE_NEW: () => LocalizedString
 	/**
+	 * You will create a new empty wallet
+	 */
+	BTN_CREATE_WALLET_TYPE_CREATE_NEW_SUBTITLE: () => LocalizedString
+	/**
 	 * Import wallet
 	 */
 	BTN_CREATE_WALLET_TYPE_IMPORT: () => LocalizedString
+	/**
+	 * You will import an existing wallet
+	 */
+	BTN_CREATE_WALLET_TYPE_IMPORT_SUBTITLE: () => LocalizedString
 	/**
 	 * Backup
 	 */
@@ -2416,7 +2481,11 @@ export type TranslationFunctions = {
 	/**
 	 * CREATE WALLET
 	 */
-	BTN_WALLET_SUCCESS: () => LocalizedString
+	BTN_CREATE_WALLET_SUCCESS: () => LocalizedString
+	/**
+	 * ADD WALLET
+	 */
+	BTN_ADD_WALLET_SUCCESS: () => LocalizedString
 	/**
 	 * I am aware that this action is irreversible (required)
 	 */
@@ -2438,7 +2507,7 @@ export type TranslationFunctions = {
 	 */
 	BTN_REMOVE_ACCOUNT: () => LocalizedString
 	/**
-	 * Add account
+	 * ADD ACCOUNT
 	 */
 	BTN_ADD_ACCOUNT: () => LocalizedString
 	/**
@@ -2574,7 +2643,7 @@ export type TranslationFunctions = {
 	 */
 	BD_USER_PASSWORD_CONFIRM: () => LocalizedString
 	/**
-	 * Your wallet and all of it's associated accounts will be removed. This action is irreversible
+	 * Are you sure you want to remove this wallet from VeWorld?
 	 */
 	BD_WALLET_REMOVAL: () => LocalizedString
 	/**
@@ -2612,7 +2681,11 @@ export type TranslationFunctions = {
 	/**
 	 * If you have any doubts about how the app works, please follow our documentation on Vechain.org
 	 */
-	BD_WALLET_SUCCESS: () => LocalizedString
+	BD_CREATE_WALLET_SUCCESS: () => LocalizedString
+	/**
+	 * Nice, you have another wallet!
+	 */
+	BD_ADD_WALLET_SUCCESS: () => LocalizedString
 	/**
 	 * Confirm reset
 	 */
@@ -2798,7 +2871,7 @@ export type TranslationFunctions = {
 	 */
 	BD_MNEMONIC_COPIED_TO_CLIPBOARD: () => LocalizedString
 	/**
-	 * Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum is simply dummy text
+	 * Please re-enable biometrics or reset app
 	 */
 	BD_SECURITY_DOWNGRADE: () => LocalizedString
 	/**
@@ -2818,7 +2891,7 @@ export type TranslationFunctions = {
 	 */
 	BD_COLLECTION: () => LocalizedString
 	/**
-	 * Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum is simply dummy text of the printing and typesetting industry.
+	 * A critical operation has failed and you need to reset the app
 	 */
 	BD_APP_BLOCKED: () => LocalizedString
 	/**
@@ -2896,7 +2969,11 @@ export type TranslationFunctions = {
 	/**
 	 * You're finally one of us!
 	 */
-	TITLE_WALLET_SUCCESS: () => LocalizedString
+	TITLE_CREATE_WALLET_SUCCESS: () => LocalizedString
+	/**
+	 * Adding a new wallet!
+	 */
+	TITLE_ADD_WALLET_SUCCESS: () => LocalizedString
 	/**
 	 * VeWorld reset
 	 */
@@ -3050,9 +3127,9 @@ export type TranslationFunctions = {
 	 */
 	SB_RENAME_WALLET: () => LocalizedString
 	/**
-	 * Rename or reorder accounts 
+	 * Account visibility
 	 */
-	SB_RENAME_REORDER_ACCOUNTS: () => LocalizedString
+	SB_ACCOUNT_VISIBILITY: () => LocalizedString
 	/**
 	 * Enter your language
 	 */
@@ -3137,6 +3214,14 @@ export type TranslationFunctions = {
 	 * Your tokens will appear here
 	 */
 	SB_YOUR_TOKENS_EMPTY: () => LocalizedString
+	/**
+	 * Decide the way to secure your wallet
+	 */
+	SB_SECURITY: () => LocalizedString
+	/**
+	 * This password will be used to authorize transactions.
+	 */
+	SB_USER_PASSWORD: () => LocalizedString
 	/**
 	 * Face ID
 	 */
@@ -4000,6 +4085,26 @@ Please, try again later.
 	 */
 	SETTINGS_TRANSACTIONS_MANAGE_URLS: () => LocalizedString
 	/**
+	 * What do you want to do?
+	 */
+	ACCOUNT_OR_WALLET_BOTTOM_SHEET_TITLE: () => LocalizedString
+	/**
+	 * Do you want to add either a wallet or an account?
+	 */
+	ACCOUNT_OR_WALLET_BOTTOM_SHEET_SUBTITLE: () => LocalizedString
+	/**
+	 * Add a new account
+	 */
+	ACCOUNT_OR_WALLET_BOTTOM_SHEET_ADD_ACCOUNT: () => LocalizedString
+	/**
+	 * Add a new wallet
+	 */
+	ACCOUNT_OR_WALLET_BOTTOM_SHEET_ADD_WALLET: () => LocalizedString
+	/**
+	 * Wallet name
+	 */
+	WALLET_MANAGEMENT_WALLET_NAME: () => LocalizedString
+	/**
 	 * Manage Tokens
 	 */
 	MANAGE_TOKEN_TITLE: () => LocalizedString
@@ -4008,13 +4113,13 @@ Please, try again later.
 	 */
 	MANAGE_TOKEN_SELECT_YOUR_TOKEN_SUBTITLE: () => LocalizedString
 	/**
-	 * Select your official tokens or add a new custom one
+	 * Select a token from the registry or add a custom token
 	 */
 	MANAGE_TOKEN_SELECT_YOUR_TOKEN_BODY: () => LocalizedString
 	/**
-	 * Add custom tokens owned
+	 * Find my custom tokens
 	 */
-	MANAGE_TOKEN_MANAGE_CUSTOM: () => LocalizedString
+	MANAGE_TOKEN_VIEW_CUSTOM_TOKENS_OWNED: () => LocalizedString
 	/**
 	 * Add custom token
 	 */
@@ -4028,7 +4133,7 @@ Please, try again later.
 	 */
 	MANAGE_TOKEN_UNSELECTED: () => LocalizedString
 	/**
-	 * Search a token
+	 * Search a token from the registry
 	 */
 	MANAGE_TOKEN_SEARCH_TOKEN: () => LocalizedString
 	/**
@@ -4043,6 +4148,14 @@ Please, try again later.
 	 * Suggested token
 	 */
 	MANAGE_TOKEN_TITLE_SUGGESTED_TOKENS: () => LocalizedString
+	/**
+	 * Your custom tokens
+	 */
+	MANAGE_TOKEN_TITLE_YOUR_TOKENS: () => LocalizedString
+	/**
+	 * Select custom tokens for your dashboard
+	 */
+	MANAGE_TOKEN_ADD_CUSTOM_TOKNE_SUBTITLE: () => LocalizedString
 	/**
 	 * Add custom token
 	 */
@@ -4100,9 +4213,9 @@ Please, try again later.
 	 */
 	SEND_CURRENT_BALANCE: () => LocalizedString
 	/**
-	 * Balance percentage
+	 * Balance percentage: {percentage}
 	 */
-	SEND_BALANCE_PERCENTAGE: () => LocalizedString
+	SEND_BALANCE_PERCENTAGE: (arg: { percentage: string }) => LocalizedString
 	/**
 	 * 0%
 	 */

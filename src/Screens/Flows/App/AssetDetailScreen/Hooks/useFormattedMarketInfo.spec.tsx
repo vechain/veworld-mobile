@@ -59,14 +59,12 @@ describe("useFormattedMarketInfo", () => {
             () => CURRENCY.USD,
         )
 
-        const { result, waitForNextUpdate } = renderHook(
+        const { result } = renderHook(
             () => useFormattedMarketInfo(marketInfo, VET.symbol),
             {
                 wrapper: TestWrapper,
             },
         )
-
-        await waitForNextUpdate({ timeout: 5000 })
 
         expect(result.current.circulatingSupply).toBe(results.circulatingSupply)
     })
@@ -76,14 +74,12 @@ describe("useFormattedMarketInfo", () => {
             () => CURRENCY.USD,
         )
 
-        const { result, waitForNextUpdate } = renderHook(
+        const { result } = renderHook(
             () => useFormattedMarketInfo(marketInfo, "USD"),
             {
                 wrapper: TestWrapper,
             },
         )
-
-        await waitForNextUpdate({ timeout: 5000 })
 
         expect(result.current.marketCap).toBe(results.marketCap)
     })
@@ -93,14 +89,12 @@ describe("useFormattedMarketInfo", () => {
             () => CURRENCY.USD,
         )
 
-        const { result, waitForNextUpdate } = renderHook(
+        const { result } = renderHook(
             () => useFormattedMarketInfo(marketInfo, VET.symbol),
             {
                 wrapper: TestWrapper,
             },
         )
-
-        await waitForNextUpdate({ timeout: 5000 })
 
         expect(result.current.totalSupply).toBe(results.totalSupply)
     })
@@ -110,14 +104,12 @@ describe("useFormattedMarketInfo", () => {
             () => CURRENCY.USD,
         )
 
-        const { result, waitForNextUpdate } = renderHook(
+        const { result } = renderHook(
             () => useFormattedMarketInfo(marketInfo, "USD"),
             {
                 wrapper: TestWrapper,
             },
         )
-
-        await waitForNextUpdate({ timeout: 5000 })
 
         expect(result.current.totalVolume).toBe(results.totalVolume)
     })

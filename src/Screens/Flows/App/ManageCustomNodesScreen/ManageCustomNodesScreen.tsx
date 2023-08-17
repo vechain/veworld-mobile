@@ -10,6 +10,7 @@ import {
     BaseView,
     DeleteConfirmationBottomSheet,
     NetworkBox,
+    SwipeableRow,
 } from "~Components"
 import { useI18nContext } from "~i18n"
 import { Network, NETWORK_TYPE } from "~Model"
@@ -30,7 +31,7 @@ import {
 
 import { Routes } from "~Navigation"
 import { useNavigation } from "@react-navigation/native"
-import { EditCustomNodeBottomSheet, SwipeableNetworkBox } from "./components"
+import { EditCustomNodeBottomSheet } from "./components"
 import * as Haptics from "expo-haptics"
 import { SwipeableItemImperativeRef } from "react-native-swipeable-item"
 
@@ -113,14 +114,6 @@ export const ManageCustomNodesScreen = () => {
         [openEditNetworkSheet],
     )
 
-    const onDeleteNetworkClick = useCallback(() => {
-        openDeleteConfirmationSheet()
-    }, [openDeleteConfirmationSheet])
-
-    const onSwipeNetwork = useCallback((network: Network) => {
-        setNetworkToEditDeleteId(network.id)
-    }, [])
-
     const onDeleteNetworkConfirm = useCallback(() => {
         try {
             if (networkToEditDeleteId) {
@@ -145,16 +138,8 @@ export const ManageCustomNodesScreen = () => {
         [],
     )
 
-    // Keep track of the swipeable items refs
     const swipeableItemRefs = useRef<Map<string, SwipeableItemImperativeRef>>(
         new Map(),
-    )
-
-    const registerSwipeableItemRef = useCallback(
-        (id: string, ref: SwipeableItemImperativeRef | null) => {
-            if (ref) swipeableItemRefs.current.set(id, ref)
-        },
-        [],
     )
 
     const closeOtherSwipeableItems = useCallback((network?: Network) => {
@@ -168,35 +153,26 @@ export const ManageCustomNodesScreen = () => {
     const renderItem = useCallback(
         ({ item }: SectionListRenderItemInfo<Network, Section>) => {
             const onPress = () => onEditNetworkClick(item)
-            const onSwipe = () => onSwipeNetwork(item)
-            const onDelete = () => onDeleteNetworkClick()
-            const closeSwipeables = () => closeOtherSwipeableItems(item)
-
             return (
-                <BaseView flexDirection="row" mx={20}>
-                    <SwipeableNetworkBox
+                <SwipeableRow
+                    item={item}
+                    itemKey={item.id}
+                    swipeableItemRefs={swipeableItemRefs}
+                    handleTrashIconPress={openDeleteConfirmationSheet}
+                    setSelectedItem={(network: Network) =>
+                        setNetworkToEditDeleteId(network.id)
+                    }>
+                    <NetworkBox
+                        activeOpacity={1}
+                        flex={1}
                         network={item}
                         onPress={onPress}
-                        onSwipe={onSwipe}
-                        onDelete={onDelete}
-                        registerSwipeable={registerSwipeableItemRef}
-                        closeSwipeables={closeSwipeables}
+                        rightIcon="pencil-outline"
                     />
-                </BaseView>
+                </SwipeableRow>
             )
         },
-        [
-            registerSwipeableItemRef,
-            onEditNetworkClick,
-            onSwipeNetwork,
-            onDeleteNetworkClick,
-            closeOtherSwipeableItems,
-        ],
-    )
-
-    const renderItemSeparator = useCallback(
-        () => <BaseSpacer height={16} />,
-        [],
+        [onEditNetworkClick, openDeleteConfirmationSheet],
     )
 
     const renderSectionSeparator = useCallback(
@@ -233,7 +209,6 @@ export const ManageCustomNodesScreen = () => {
                 <SectionList
                     sections={sections}
                     keyExtractor={i => i.id}
-                    ItemSeparatorComponent={renderItemSeparator}
                     SectionSeparatorComponent={renderSectionSeparator}
                     renderSectionHeader={renderSectionHeader}
                     renderItem={renderItem}

@@ -1,4 +1,4 @@
-import React, { memo, useEffect } from "react"
+import React, { memo, useCallback, useEffect } from "react"
 import { Pressable, View, StyleSheet } from "react-native"
 import { RenderItemParams } from "react-native-draggable-flatlist"
 import Animated from "react-native-reanimated"
@@ -9,6 +9,9 @@ import { TokenCard } from "./TokenCard"
 import { useTokenAnimations } from "./useTokenAnimations"
 import { FungibleTokenWithBalance } from "~Model"
 import HapticsService from "~Services/HapticsService"
+import { useNavigation } from "@react-navigation/native"
+import { Routes } from "~Navigation"
+import { BalanceUtils } from "~Utils"
 
 interface IAnimatedTokenCard
     extends RenderItemParams<FungibleTokenWithBalance> {
@@ -27,9 +30,25 @@ export const AnimatedTokenCard = memo(
         const { styles } = useThemedStyles(baseStyles(isActive))
         const { animatedOpacity } = useTokenAnimations(isEdit)
 
+        const nav = useNavigation()
+
         useEffect(() => {
             isEdit && HapticsService.triggerImpact({ level: "Light" })
         }, [isActive, isEdit])
+
+        const inTokenPress = useCallback(
+            (_isEdit: boolean, token: FungibleTokenWithBalance) => {
+                const isTokenBalance = BalanceUtils.getIsTokenWithBalance(token)
+
+                if (!_isEdit && isTokenBalance) {
+                    nav.navigate(Routes.SELECT_AMOUNT_SEND, {
+                        token,
+                        initialRoute: Routes.HOME,
+                    })
+                }
+            },
+            [nav],
+        )
 
         return (
             <View style={styles.outerContainer}>
@@ -37,6 +56,7 @@ export const AnimatedTokenCard = memo(
                     <Pressable
                         onPressIn={isEdit ? drag : undefined}
                         disabled={isActive}
+                        onPress={() => inTokenPress(isEdit, item)}
                         style={styles.pressable}>
                         <View style={styles.animatedOuterContainer}>
                             <Animated.View
@@ -68,7 +88,6 @@ const baseStyles = (isActive: boolean) => (theme: ColorThemeType) =>
         },
         pressable: {
             borderRadius: 10,
-            marginHorizontal: 20,
         },
         animatedOuterContainer: {
             backgroundColor: theme.colors.card,

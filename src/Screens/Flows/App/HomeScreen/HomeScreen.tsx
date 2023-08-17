@@ -1,7 +1,6 @@
 import React, { useCallback, useRef, useState } from "react"
 import {
     AccountManagementBottomSheet,
-    AddAccountBottomSheet,
     EditTokensBar,
     Header,
     HeaderView,
@@ -16,6 +15,7 @@ import {
     useTheme,
 } from "~Hooks"
 import {
+    AddAccountBottomSheet,
     BaseSafeArea,
     BaseSpacer,
     QRCodeBottomSheet,
@@ -197,7 +197,7 @@ export const HomeScreen = () => {
 
             <AddAccountBottomSheet
                 ref={addAccountBottomSheetRef}
-                onClose={closeAddAccountSheet}
+                onSuccess={closeAddAccountSheet}
             />
 
             {/*Account Selection*/}

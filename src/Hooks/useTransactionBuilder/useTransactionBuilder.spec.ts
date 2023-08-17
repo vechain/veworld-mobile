@@ -7,7 +7,7 @@ const { vetTransaction1 } = TestData.data
 
 describe("useTransactionBuilder", () => {
     it("should be defined", async () => {
-        const { result, waitForNextUpdate } = renderHook(
+        const { result } = renderHook(
             () =>
                 useTransactionBuilder({
                     clauses: vetTransaction1.body.clauses,
@@ -15,14 +15,12 @@ describe("useTransactionBuilder", () => {
                 }),
             { wrapper: TestWrapper },
         )
-
-        await waitForNextUpdate()
 
         expect(result.current.buildTransaction).toBeDefined()
     })
 
     it("should throw an error if no gas is provided", async () => {
-        const { result, waitForNextUpdate } = renderHook(
+        const { result } = renderHook(
             () =>
                 useTransactionBuilder({
                     clauses: vetTransaction1.body.clauses,
@@ -31,13 +29,11 @@ describe("useTransactionBuilder", () => {
             { wrapper: TestWrapper },
         )
 
-        await waitForNextUpdate()
-
         expect(result.current.buildTransaction).toThrow()
     })
 
     it("should build with provided gas", async () => {
-        const { result, waitForNextUpdate } = renderHook(
+        const { result } = renderHook(
             () =>
                 useTransactionBuilder({
                     clauses: vetTransaction1.body.clauses,
@@ -47,15 +43,13 @@ describe("useTransactionBuilder", () => {
             { wrapper: TestWrapper },
         )
 
-        await waitForNextUpdate()
-
         const tx = result.current.buildTransaction()
         expect(tx).toBeDefined()
         expect(tx.body.clauses).toEqual(vetTransaction1.body.clauses)
     })
 
     it("should build with gas from estimate", async () => {
-        const { result, waitForNextUpdate } = renderHook(
+        const { result } = renderHook(
             () =>
                 useTransactionBuilder({
                     clauses: vetTransaction1.body.clauses,
@@ -72,8 +66,6 @@ describe("useTransactionBuilder", () => {
             { wrapper: TestWrapper },
         )
 
-        await waitForNextUpdate()
-
         const tx = result.current.buildTransaction()
         expect(tx).toBeDefined()
         expect(tx.body.clauses).toEqual(vetTransaction1.body.clauses)
@@ -82,7 +74,7 @@ describe("useTransactionBuilder", () => {
     it("dependsOn should be defined", async () => {
         const dependsOn = "0x1234"
 
-        const { result, waitForNextUpdate } = renderHook(
+        const { result } = renderHook(
             () =>
                 useTransactionBuilder({
                     clauses: vetTransaction1.body.clauses,
@@ -93,14 +85,12 @@ describe("useTransactionBuilder", () => {
             { wrapper: TestWrapper },
         )
 
-        await waitForNextUpdate()
-
         const tx = result.current.buildTransaction()
         expect(tx.body.dependsOn).toEqual(dependsOn)
     })
 
     it("delegated txs should have feature defined", async () => {
-        const { result, waitForNextUpdate } = renderHook(
+        const { result } = renderHook(
             () =>
                 useTransactionBuilder({
                     clauses: vetTransaction1.body.clauses,
@@ -109,8 +99,6 @@ describe("useTransactionBuilder", () => {
                 }),
             { wrapper: TestWrapper },
         )
-
-        await waitForNextUpdate()
 
         const tx = result.current.buildTransaction()
 

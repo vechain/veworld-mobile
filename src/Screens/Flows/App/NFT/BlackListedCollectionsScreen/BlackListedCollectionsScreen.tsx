@@ -6,11 +6,11 @@ import { selectBlackListedCollections, useAppSelector } from "~Storage/Redux"
 import { NFTCollectionView } from "../NFTCollectionView"
 import { ScrollView } from "react-native-gesture-handler"
 import { isEmpty } from "lodash"
-import { NonFungibleTokenCollection } from "~Model"
+import { NftCollection } from "~Model"
 import { useI18nContext } from "~i18n"
 
 type NFTListProps = {
-    item: NonFungibleTokenCollection
+    item: NftCollection
     index: number
 }
 
@@ -55,7 +55,7 @@ export const BlackListedCollectionsScreen = () => {
                             data={blackListedCollections}
                             extraData={blackListedCollections}
                             contentContainerStyle={
-                                styles.collectionlistContainer
+                                styles.collectionListContainer
                             }
                             numColumns={2}
                             keyExtractor={item => String(item.address)}
@@ -86,7 +86,7 @@ export const BlackListedCollectionsScreen = () => {
 
 const baseStyles = (calculateBottomInsets: number) => () =>
     StyleSheet.create({
-        collectionlistContainer: {
+        collectionListContainer: {
             marginHorizontal: 20,
             paddingVertical: 24,
         },

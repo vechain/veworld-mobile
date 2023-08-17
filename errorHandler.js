@@ -26,7 +26,7 @@ setJSExceptionHandler((error, isFatal) => {
 const forceAppQuit = true // is an optional ANDROID specific parameter that defines
 //    if the app should be force quit on error.  default value is true.
 //    To see usecase check the common issues section.
-const executeDefaultHandler = false // is an optional boolean (both IOS, ANDROID)
+const executeDefaultHandler = true // is an optional boolean (both IOS, ANDROID)
 //    It executes previous exception handlers if set by some other module.
 //    It will come handy when you use any other crash analytics module along with this one
 //    Default value is set to false. Set to true if you are using other analytics modules.

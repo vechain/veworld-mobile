@@ -27,19 +27,10 @@ describe("useCheckIdentity", () => {
     describe("Biometrics enabled", () => {
         it("calls onIdentityConfirmed without password when biometric is correct", async () => {
             const onIdentityConfirmed = jest.fn()
-            const { result, waitForNextUpdate } = renderHook(
-                () =>
-                    useCheckIdentity({
-                        onIdentityConfirmed,
-                        allowAutoPassword,
-                    }),
-                { wrapper: TestWrapper },
-            )
 
             ;(useWalletSecurity as jest.Mock).mockReturnValue({
                 isWalletSecurityBiometrics: true,
             })
-            await waitForNextUpdate({ timeout: 5000 })
 
             jest.spyOn(
                 BiometricsUtils,
@@ -47,6 +38,15 @@ describe("useCheckIdentity", () => {
             ).mockResolvedValue({
                 success: true,
             })
+
+            const { result } = renderHook(
+                () =>
+                    useCheckIdentity({
+                        onIdentityConfirmed,
+                        allowAutoPassword,
+                    }),
+                { wrapper: TestWrapper },
+            )
 
             await act(async () => {
                 await result.current.checkIdentityBeforeOpening()
@@ -57,7 +57,11 @@ describe("useCheckIdentity", () => {
 
     describe("Biometrics disabled", () => {
         it("opens password prompt when biometrics is not enabled", async () => {
-            const { result, waitForNextUpdate } = renderHook(
+            ;(useWalletSecurity as jest.Mock).mockReturnValue({
+                isWalletSecurityBiometrics: false,
+            })
+
+            const { result } = renderHook(
                 () =>
                     useCheckIdentity({
                         onIdentityConfirmed: jest.fn(),
@@ -66,10 +70,6 @@ describe("useCheckIdentity", () => {
                 { wrapper: TestWrapper },
             )
 
-            ;(useWalletSecurity as jest.Mock).mockReturnValue({
-                isWalletSecurityBiometrics: false,
-            })
-            await waitForNextUpdate({ timeout: 5000 })
             await act(async () => {
                 await result.current.checkIdentityBeforeOpening()
             })
@@ -80,7 +80,12 @@ describe("useCheckIdentity", () => {
         it("calls onIdentityConfirmed with password when password prompt is successful", async () => {
             const password = "password123"
             const mockedOnIdentityConfirmed = jest.fn()
-            const { result, waitForNextUpdate } = renderHook(
+
+            ;(useWalletSecurity as jest.Mock).mockReturnValue({
+                isWalletSecurityBiometrics: true,
+            })
+
+            const { result } = renderHook(
                 () =>
                     useCheckIdentity({
                         onIdentityConfirmed: mockedOnIdentityConfirmed,
@@ -88,10 +93,7 @@ describe("useCheckIdentity", () => {
                     }),
                 { wrapper: TestWrapper },
             )
-            await waitForNextUpdate({ timeout: 5000 })
-            ;(useWalletSecurity as jest.Mock).mockReturnValue({
-                isWalletSecurityBiometrics: true,
-            })
+
             await act(async () => {
                 await result.current.onPasswordSuccess(password)
             })

@@ -1,11 +1,5 @@
-/* eslint-disable @typescript-eslint/no-shadow */
 import { createSlice, PayloadAction } from "@reduxjs/toolkit"
-import { uniqBy } from "lodash"
-import {
-    NETWORK_TYPE,
-    NonFungibleToken,
-    NonFungibleTokenCollection,
-} from "~Model"
+import { NETWORK_TYPE, NonFungibleToken, NftCollection } from "~Model"
 import {
     BlackListedCollections,
     CollectionRegistryInfo,
@@ -15,31 +9,48 @@ import {
 } from "../Types/Nft"
 import { GithubCollectionResponse, PaginationResponse } from "~Networking"
 import { AddressUtils, HexUtils } from "~Utils"
+import { mergeArrays, mergeNftCollections } from "~Utils/MergeUtils/MergeUtils"
 
 export type NftSliceState = {
     collectionRegistryInfo: CollectionRegistryInfo
-    collectionsPerAccount: Collections
-    NFTsPerAccount: NFTs
-
-    blackListedCollectionsPerAccount: BlackListedCollections
-
+    collections: Collections
+    nfts: NFTs
+    blackListedCollections: BlackListedCollections
     isLoading: boolean
     error: string | undefined
 }
 
 export const initialStateNft: NftSliceState = {
-    collectionRegistryInfo: {},
-    collectionsPerAccount: {},
-    NFTsPerAccount: {},
-    blackListedCollectionsPerAccount: {
+    collectionRegistryInfo: {
+        [NETWORK_TYPE.MAIN]: [],
+        [NETWORK_TYPE.TEST]: [],
+        [NETWORK_TYPE.SOLO]: [],
+        [NETWORK_TYPE.OTHER]: [],
+    },
+    collections: {},
+    nfts: {},
+    blackListedCollections: {
         [NETWORK_TYPE.MAIN]: {},
         [NETWORK_TYPE.TEST]: {},
         [NETWORK_TYPE.SOLO]: {},
         [NETWORK_TYPE.OTHER]: {},
     },
-
     isLoading: true,
     error: undefined,
+}
+
+const findExistingCollection = (
+    state: NftSliceState,
+    currentAccountAddress: string,
+    collectionAddress: string,
+): NftCollection | undefined => {
+    const normalizedAcct = HexUtils.normalize(currentAccountAddress)
+
+    if (!state.collections[normalizedAcct]) return
+
+    return state.collections[normalizedAcct].collections?.find(col =>
+        AddressUtils.compareAddresses(col.address, collectionAddress),
+    ) as NftCollection
 }
 
 // todo.vas - add testnet state
@@ -60,8 +71,8 @@ export const NftSlice = createSlice({
 
             const normalizedAcct = HexUtils.normalize(currentAccountAddress)
 
-            if (!state.collectionsPerAccount[normalizedAcct]) {
-                state.collectionsPerAccount[normalizedAcct] = {
+            if (!state.collections[normalizedAcct]) {
+                state.collections[normalizedAcct] = {
                     collections: [],
                     pagination: {
                         countLimit: 0,
@@ -73,15 +84,13 @@ export const NftSlice = createSlice({
                 }
             }
 
-            const uniqueCollections = [
-                ...state.collectionsPerAccount[normalizedAcct].collections,
-                ...collectionData.collections,
-            ]
+            const mergedCollections = mergeNftCollections(
+                state.collections[normalizedAcct].collections,
+                collectionData.collections,
+            )
 
-            const allUnique = uniqBy(uniqueCollections, "address")
-
-            state.collectionsPerAccount[normalizedAcct] = {
-                collections: allUnique,
+            state.collections[normalizedAcct] = {
+                collections: mergedCollections,
                 pagination: collectionData.pagination,
             }
 
@@ -92,28 +101,21 @@ export const NftSlice = createSlice({
             state,
             action: PayloadAction<{
                 currentAccountAddress: string
-                collection: NonFungibleTokenCollection
+                collection: NftCollection
             }>,
         ) => {
             const { currentAccountAddress, collection } = action.payload
 
-            const normalizedAcct = HexUtils.normalize(currentAccountAddress)
+            const existing = findExistingCollection(
+                state,
+                currentAccountAddress,
+                collection.address,
+            )
 
-            if (state.collectionsPerAccount[normalizedAcct] !== undefined) {
-                const existing = state.collectionsPerAccount[
-                    normalizedAcct
-                ].collections?.find(col =>
-                    AddressUtils.compareAddresses(
-                        col.address,
-                        collection.address,
-                    ),
-                ) as NonFungibleTokenCollection
-
-                if (existing) {
-                    // Replace all field values of existing collection with the new collection recursively
-                    Object.assign(existing, collection)
-                }
+            if (existing) {
+                Object.assign(existing, collection)
             }
+
             return state
         },
 
@@ -121,7 +123,7 @@ export const NftSlice = createSlice({
         setCollectionRegistryInfo: (
             state,
             action: PayloadAction<{
-                network: string
+                network: NETWORK_TYPE
                 registryInfo: GithubCollectionResponse[]
             }>,
         ) => {
@@ -132,72 +134,39 @@ export const NftSlice = createSlice({
             return state
         },
 
-        // SET BLACKLISTED COLLECTIONS
-        setBlackListCollection: (
+        // TOGGLE BLACKLIST COLLECTION
+        toggleBlackListCollection: (
             state,
             action: PayloadAction<{
-                network: string
-                collection: NonFungibleTokenCollection
+                network: NETWORK_TYPE
+                collection: NftCollection
                 accountAddress: string
             }>,
         ) => {
             const { network, collection, accountAddress } = action.payload
 
-            const normalizedAcct = HexUtils.normalize(accountAddress)
+            const currentBlackList =
+                state.blackListedCollections[network][accountAddress]
 
-            if (
-                !state.blackListedCollectionsPerAccount[network][normalizedAcct]
-            ) {
-                state.blackListedCollectionsPerAccount[network][
-                    normalizedAcct
-                ] = {
-                    collections: [],
+            const isBlackListed =
+                currentBlackList?.addresses.includes(collection.address) ??
+                false
+
+            if (isBlackListed) {
+                currentBlackList.addresses = currentBlackList.addresses.filter(
+                    address => address !== collection.address,
+                )
+            } else {
+                if (currentBlackList) {
+                    state.blackListedCollections[network][
+                        accountAddress
+                    ].addresses.push(collection.address)
+                } else {
+                    state.blackListedCollections[network][accountAddress] = {
+                        addresses: [collection.address],
+                    }
                 }
             }
-
-            let allCollections = [
-                ...state.blackListedCollectionsPerAccount[network][
-                    normalizedAcct
-                ].collections,
-                collection,
-            ]
-
-            const uniqueCollections = uniqBy(allCollections, "address")
-
-            state.blackListedCollectionsPerAccount[network][normalizedAcct] = {
-                collections: uniqueCollections,
-            }
-
-            return state
-        },
-
-        // REMOVE BLACKLISTED COLLECTIONS
-        removeBlackListCollection: (
-            state,
-            action: PayloadAction<{
-                network: string
-                collection: NonFungibleTokenCollection
-                accountAddress: string
-            }>,
-        ) => {
-            const { network, collection, accountAddress } = action.payload
-
-            const normalizedAcct = HexUtils.normalize(accountAddress)
-
-            const filteredCollections = state.blackListedCollectionsPerAccount[
-                network
-            ][normalizedAcct].collections.filter(
-                col =>
-                    !AddressUtils.compareAddresses(
-                        col.address,
-                        collection.address,
-                    ),
-            )
-
-            state.blackListedCollectionsPerAccount[network][normalizedAcct] = {
-                collections: filteredCollections,
-            }
-
             return state
         },
 
@@ -207,21 +176,21 @@ export const NftSlice = createSlice({
             action: PayloadAction<{
                 address: string
                 collectionAddress: string
-                NFTs: NonFungibleToken[]
+                nfts: NonFungibleToken[]
                 pagination: PaginationResponse
             }>,
         ) => {
-            const { address, collectionAddress, NFTs, pagination } =
+            const { address, collectionAddress, nfts, pagination } =
                 action.payload
 
             const normalizedAcct = HexUtils.normalize(address)
             const normalizedCollection = HexUtils.normalize(collectionAddress)
 
             // comes the first time
-            if (!state.NFTsPerAccount[normalizedAcct]) {
-                state.NFTsPerAccount[normalizedAcct] = {
+            if (!state.nfts[normalizedAcct]) {
+                state.nfts[normalizedAcct] = {
                     [normalizedCollection]: {
-                        NFTs: [],
+                        nfts: [],
                         pagination: {
                             countLimit: 0,
                             hasNext: false,
@@ -234,9 +203,9 @@ export const NftSlice = createSlice({
             }
 
             // comes every time the users loads NFTs from a new collection
-            if (!state.NFTsPerAccount[normalizedAcct][normalizedCollection]) {
-                state.NFTsPerAccount[normalizedAcct][normalizedCollection] = {
-                    NFTs: [],
+            if (!state.nfts[normalizedAcct][normalizedCollection]) {
+                state.nfts[normalizedAcct][normalizedCollection] = {
+                    nfts: [],
                     pagination: {
                         countLimit: 0,
                         hasNext: false,
@@ -247,19 +216,16 @@ export const NftSlice = createSlice({
                 }
             }
 
-            let uniqueNFTs = [
-                ...state.NFTsPerAccount[normalizedAcct][normalizedCollection]
-                    .NFTs,
-                ...NFTs,
-            ]
+            const mergedNfts = mergeArrays(
+                state.nfts[normalizedAcct][normalizedCollection].nfts,
+                nfts,
+                "id",
+            )
 
-            const allUnique = uniqBy(uniqueNFTs, "id")
-            state.NFTsPerAccount[normalizedAcct][normalizedCollection].NFTs =
-                allUnique
-
-            state.NFTsPerAccount[normalizedAcct][
-                normalizedCollection
-            ].pagination = pagination
+            state.nfts[normalizedAcct][normalizedCollection] = {
+                nfts: mergedNfts,
+                pagination,
+            }
 
             return state
         },
@@ -277,10 +243,10 @@ export const NftSlice = createSlice({
             const normalizedAcct = HexUtils.normalize(address)
             const normalizedCollection = HexUtils.normalize(collectionAddress)
 
-            if (state.NFTsPerAccount[normalizedAcct] !== undefined) {
-                const existing = state.NFTsPerAccount[normalizedAcct][
+            if (state.nfts[normalizedAcct] !== undefined) {
+                const existing = state.nfts[normalizedAcct][
                     normalizedCollection
-                ]?.NFTs?.find(
+                ]?.nfts?.find(
                     n => n.tokenId === nft.tokenId,
                 ) as NonFungibleToken
 
@@ -308,21 +274,23 @@ export const NftSlice = createSlice({
         // TODO.vas -> https://github.com/vechainfoundation/veworld-mobile/issues/808
         refreshNFTs: (
             state,
-            action: PayloadAction<{ accountAddress: string }>,
+            action: PayloadAction<{
+                accountAddress: string
+            }>,
         ) => {
             const { accountAddress } = action.payload
 
             const normalizedAcct = HexUtils.normalize(accountAddress)
 
-            delete state.collectionsPerAccount[normalizedAcct]
-            delete state.NFTsPerAccount[normalizedAcct]
+            delete state.collections[normalizedAcct]
+            delete state.nfts[normalizedAcct]
 
             return state
         },
 
         clearNFTCache: state => {
-            state.collectionsPerAccount = {}
-            state.NFTsPerAccount = {}
+            state.collections = {}
+            state.nfts = {}
             state.isLoading = true
             delete state.error
 
@@ -334,12 +302,11 @@ export const NftSlice = createSlice({
 })
 
 export const {
-    setBlackListCollection,
     setCollections,
     updateCollection,
     setCollectionRegistryInfo,
     setNetworkingSideEffects,
-    removeBlackListCollection,
+    toggleBlackListCollection,
     setNFTs,
     updateNFT,
     resetNftState,

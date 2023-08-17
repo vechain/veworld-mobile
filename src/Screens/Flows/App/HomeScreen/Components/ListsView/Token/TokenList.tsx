@@ -2,10 +2,10 @@ import React, { memo, useCallback, useRef, useState } from "react"
 import { StyleSheet, ViewProps } from "react-native"
 import {
     NestableDraggableFlatList,
-    RenderItemParams,
+    RenderItem,
 } from "react-native-draggable-flatlist"
 import Animated, { AnimateProps } from "react-native-reanimated"
-import { BaseSpacer, BaseView, DeleteUnderlay } from "~Components"
+import { SwipeableRow } from "~Components"
 import { AnimatedTokenCard } from "./AnimatedTokenCard"
 import { useBottomSheetModal, useThemedStyles } from "~Hooks"
 import { ColorThemeType, VET, VTHO } from "~Constants"
@@ -23,18 +23,13 @@ import {
 import { AnimatedChartCard } from "./AnimatedChartCard"
 import { FungibleTokenWithBalance } from "~Model"
 import { RemoveCustomTokenBottomSheet } from "../../RemoveCustomTokenBottomSheet"
-import SwipeableItem, {
-    OpenDirection,
-    SwipeableItemImperativeRef,
-} from "react-native-swipeable-item"
+import { SwipeableItemImperativeRef } from "react-native-swipeable-item"
 
 interface Props extends AnimateProps<ViewProps> {
     isEdit: boolean
     visibleHeightRef: number
     isBalanceVisible: boolean
 }
-
-const underlaySnapPoints = [58]
 
 export const TokenList = memo(
     ({
@@ -70,15 +65,6 @@ export const TokenList = memo(
         )
 
         const { styles } = useThemedStyles(baseStyles)
-
-        const renderSeparator = useCallback(
-            () => <BaseSpacer height={16} />,
-            [],
-        )
-
-        const onRemoveToken = useCallback(() => {
-            openRemoveCustomTokenBottomSheet()
-        }, [openRemoveCustomTokenBottomSheet])
 
         const onConfirmRemoveToken = useCallback(() => {
             if (tokenToRemove) {
@@ -122,59 +108,28 @@ export const TokenList = memo(
             })
         }, [])
 
-        const onSwipeableItemChange = useCallback(
-            (token: FungibleTokenWithBalance) => {
-                setTokenToRemove(token)
-                closeOtherSwipeableItems(token.address)
-            },
-            [closeOtherSwipeableItems],
-        )
-
-        const registerSwipeableItemRef = useCallback(
-            (address: string, ref: SwipeableItemImperativeRef | null) => {
-                if (ref) swipeableItemRefs.current.set(address, ref)
-            },
-            [],
-        )
-
-        const renderToken = useCallback(
-            (itemParams: RenderItemParams<FungibleTokenWithBalance>) => {
+        const renderItem: RenderItem<FungibleTokenWithBalance> = useCallback(
+            ({ item, getIndex, isActive, drag }) => {
                 return (
-                    <SwipeableItem
-                        ref={ref =>
-                            registerSwipeableItemRef(
-                                itemParams.item.address,
-                                ref,
-                            )
-                        }
-                        key={itemParams.item.address}
-                        item={itemParams.item}
-                        onChange={({ openDirection }) => {
-                            if (openDirection !== OpenDirection.NONE)
-                                onSwipeableItemChange(itemParams.item)
-                        }}
-                        renderUnderlayLeft={() => (
-                            <BaseView mx={20}>
-                                <DeleteUnderlay onPress={onRemoveToken} />
-                            </BaseView>
-                        )}
-                        snapPointsLeft={underlaySnapPoints}
+                    <SwipeableRow
+                        item={item}
+                        itemKey={item.address}
+                        swipeableItemRefs={swipeableItemRefs}
+                        handleTrashIconPress={openRemoveCustomTokenBottomSheet}
+                        setSelectedItem={setTokenToRemove}
                         swipeEnabled={!isEdit}>
                         <AnimatedTokenCard
-                            {...itemParams}
+                            item={item}
+                            isActive={isActive}
+                            getIndex={getIndex}
+                            drag={drag}
                             isEdit={isEdit}
                             isBalanceVisible={isBalanceVisible}
                         />
-                    </SwipeableItem>
+                    </SwipeableRow>
                 )
             },
-            [
-                isBalanceVisible,
-                isEdit,
-                onRemoveToken,
-                onSwipeableItemChange,
-                registerSwipeableItemRef,
-            ],
+            [isBalanceVisible, isEdit, openRemoveCustomTokenBottomSheet],
         )
 
         return (
@@ -197,14 +152,10 @@ export const TokenList = memo(
                         extraData={isEdit}
                         onDragEnd={handleDragEnd}
                         keyExtractor={item => item.address}
-                        renderItem={itemParams => (
-                            <BaseView>{renderToken(itemParams)}</BaseView>
-                        )}
-                        activationDistance={60}
+                        renderItem={renderItem}
+                        activationDistance={10}
                         showsVerticalScrollIndicator={false}
                         autoscrollThreshold={visibleHeightRef}
-                        ItemSeparatorComponent={renderSeparator}
-                        contentContainerStyle={styles.paddingTop}
                     />
                 </Animated.View>
 
@@ -223,8 +174,5 @@ const baseStyles = (theme: ColorThemeType) =>
     StyleSheet.create({
         container: {
             backgroundColor: theme.colors.background,
-        },
-        paddingTop: {
-            paddingTop: 16,
         },
     })
