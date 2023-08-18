@@ -2,9 +2,7 @@ import React, { FC, useCallback, useMemo } from "react"
 import { StyleSheet, TouchableWithoutFeedback } from "react-native"
 import { BaseIcon, BaseText, BaseView } from "~Components/Base"
 import { BlurView } from "./BlurView"
-import { useDisclosure, useThemedStyles } from "~Hooks"
-import { PlatformUtils } from "~Utils"
-import { HideView } from "./HideView"
+import { useDisclosure, useTheme } from "~Hooks"
 import HapticsService from "~Services/HapticsService"
 
 type Props = {
@@ -14,9 +12,7 @@ type Props = {
 export const MnemonicCard: FC<Props> = ({ mnemonicArray }) => {
     const { isOpen: isShow, onToggle: toggleShow } = useDisclosure()
 
-    const { styles, theme } = useThemedStyles(
-        baseStyles(PlatformUtils.isAndroid()),
-    )
+    const theme = useTheme()
 
     const iconColor = useMemo(
         () => (theme.isDark ? theme.colors.tertiary : theme.colors.card),
@@ -55,10 +51,7 @@ export const MnemonicCard: FC<Props> = ({ mnemonicArray }) => {
                             }. ${word}`}</BaseText>
                         ))}
 
-                        {!isShow && PlatformUtils.isIOS() && <BlurView />}
-                        {!isShow && PlatformUtils.isAndroid() && (
-                            <HideView background={theme.colors.background} />
-                        )}
+                        {!isShow && <BlurView />}
                     </BaseView>
 
                     <BaseView
@@ -83,18 +76,16 @@ export const MnemonicCard: FC<Props> = ({ mnemonicArray }) => {
     )
 }
 
-const baseStyles = (isAndroid: boolean) => () =>
-    StyleSheet.create({
-        box: {
-            borderTopLeftRadius: 16,
-            borderBottomStartRadius: 16,
-            overflow: "hidden",
-            borderWidth: isAndroid ? 1 : 0,
-        },
-        button: {
-            flexGrow: 1,
-            borderTopRightRadius: 16,
-            borderBottomEndRadius: 16,
-        },
-        icon: { flex: 1, width: 100 },
-    })
+const styles = StyleSheet.create({
+    box: {
+        borderTopLeftRadius: 16,
+        borderBottomStartRadius: 16,
+        overflow: "hidden",
+    },
+    button: {
+        flexGrow: 1,
+        borderTopRightRadius: 16,
+        borderBottomEndRadius: 16,
+    },
+    icon: { flex: 1, width: 100 },
+})

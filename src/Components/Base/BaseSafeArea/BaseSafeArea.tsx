@@ -51,7 +51,13 @@ export const BaseSafeArea = ({
     }, [nav, iosSpecificBottomInsetsIfIos])
 
     return (
-        <SafeAreaView style={[themedStyles.container, style]} {...otherProps}>
+        <SafeAreaView
+            style={[
+                isAndroid() ? themedStyles.androidTopPadding : {},
+                themedStyles.container,
+                style,
+            ]}
+            {...otherProps}>
             {children}
         </SafeAreaView>
     )
@@ -76,11 +82,13 @@ const baseStyles =
     (theme: ColorThemeType) =>
         StyleSheet.create({
             container: {
-                marginTop: isAndroid() ? 12 : 0,
                 paddingBottom: isTab ? iosSpecificBottomInsetsIfIos : 0,
                 flexGrow,
                 backgroundColor: bgTransparent
                     ? "transparent"
                     : bg || theme.colors.background,
+            },
+            androidTopPadding: {
+                paddingTop: 12,
             },
         })

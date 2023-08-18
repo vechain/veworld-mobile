@@ -4,6 +4,7 @@ import { useTheme } from "~Hooks"
 import { BaseButton } from "./BaseButton"
 import { TFonts } from "~Constants"
 import { BaseView } from "./BaseView"
+import { BaseSpacer } from "./BaseSpacer"
 
 export type Button = {
     id: string
@@ -55,26 +56,29 @@ export const BaseButtonGroup = ({
                     ? theme.colors.textReversed
                     : theme.colors.text
                 return (
-                    <BaseButton
-                        key={`${index}-${label}`}
-                        action={onPress(button)}
-                        disabled={disabled}
-                        title={label}
-                        bgColor={bgColor}
-                        textColor={textColor}
-                        haptics="Light"
-                        typographyFont={typographyFont}
-                        style={{
-                            borderTopLeftRadius: borderTopRadius,
-                            borderTopRightRadius: borderTopRadius,
-                            borderBottomLeftRadius: borderBottomRadius,
-                            borderBottomRightRadius: borderBottomRadius,
-                            borderBottomWidth:
-                                index === buttons.length - 1 ? 0 : 1,
-                            borderBottomColor: theme.colors.background,
-                        }}
-                        testID={`${buttonTestID}-${id}`}
-                    />
+                    <>
+                        <BaseButton
+                            key={`${index}-${label}`}
+                            action={onPress(button)}
+                            disabled={disabled}
+                            title={label}
+                            bgColor={bgColor}
+                            textColor={textColor}
+                            haptics="Light"
+                            typographyFont={typographyFont}
+                            style={{
+                                borderTopLeftRadius: borderTopRadius,
+                                borderTopRightRadius: borderTopRadius,
+                                borderBottomLeftRadius: borderBottomRadius,
+                                borderBottomRightRadius: borderBottomRadius,
+                                borderBottomColor: theme.colors.background,
+                            }}
+                            testID={`${buttonTestID}-${id}`}
+                        />
+                        {index !== buttons.length - 1 && (
+                            <BaseSpacer height={1} />
+                        )}
+                    </>
                 )
             })}
         </BaseView>
