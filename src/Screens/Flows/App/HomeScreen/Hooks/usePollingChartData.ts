@@ -1,8 +1,8 @@
 import { useEffect } from "react"
 import { fetchChartData, useAppDispatch } from "~Storage/Redux"
 
-const TOKEN_BALANCE_SYNC_PERIOD = Number(
-    process.env.REACT_APP_TOKEN_BALANCE_SYNC_PERIOD || "300000",
+const CHART_DATA_SYNC_PERIOD = Number(
+    process.env.REACT_APP_CHART_DATA_SYNC_PERIOD ?? "300000",
 )
 
 export const usePollingChartData = (
@@ -21,7 +21,7 @@ export const usePollingChartData = (
 
         const _interval = setInterval(
             updateHistoricalData,
-            TOKEN_BALANCE_SYNC_PERIOD,
+            CHART_DATA_SYNC_PERIOD,
         )
         return () => clearInterval(_interval)
     }, [days, dispatch, interval, symbol])

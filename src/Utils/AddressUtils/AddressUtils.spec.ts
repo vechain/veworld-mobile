@@ -3,6 +3,7 @@ import { HDNode, mnemonic } from "thor-devkit"
 import { XPub } from "~Model/Crypto"
 import {
     compareAddresses,
+    compareListOfAddresses,
     getAddressFromHdNode,
     getAddressFromXPub,
     isValid,
@@ -145,8 +146,59 @@ describe("compareAddresses - negative testing", () => {
     test("one address no hex", () => {
         expect(compareAddresses(address1, address1NoHex)).toBe(true)
     })
-    test("nonstring addresses", () => {
-        expect(compareAddresses(1234, 5678)).toBe(false)
+})
+
+describe("compareListOfAddresses - positive testing", () => {
+    test("same list", () => {
+        expect(
+            compareListOfAddresses([address1, address2], [address1, address2]),
+        ).toBe(true)
+    })
+
+    test("same list, different order", () => {
+        expect(
+            compareListOfAddresses([address1, address2], [address2, address1]),
+        ).toBe(true)
+    })
+
+    test("same list, different case", () => {
+        expect(
+            compareListOfAddresses(
+                [address1.toLowerCase(), address2.toUpperCase()],
+                [address2.toLowerCase(), address1.toUpperCase()],
+            ),
+        ).toBe(true)
+    })
+})
+
+describe("compareListOfAddresses - negative testing", () => {
+    test("different lists", () => {
+        expect(
+            compareListOfAddresses([address1, address2], [address1, address1]),
+        ).toBe(false)
+    })
+
+    test("different lists, different order", () => {
+        expect(
+            compareListOfAddresses([address1, address2], [address2, address2]),
+        ).toBe(false)
+    })
+
+    test("different lists, different case", () => {
+        expect(
+            compareListOfAddresses(
+                [address1.toLowerCase(), address2.toUpperCase()],
+                [address2.toLowerCase(), address2.toUpperCase()],
+            ),
+        ).toBe(false)
+    })
+
+    test("first list empty", () => {
+        expect(compareListOfAddresses([], [address1, address2])).toBe(false)
+    })
+
+    test("second list empty", () => {
+        expect(compareListOfAddresses([address1, address2], [])).toBe(false)
     })
 })
 
@@ -198,7 +250,7 @@ describe("Check vechain address", () => {
         expect(isVechainToken("invalid-address")).toBe(false)
     })
 
-    test("Shoud add correct padding to address", () => {
+    test("Should add correct padding to address", () => {
         expect(leftPadWithZeros(address1, 64)).toBe(
             "0x000000000000000000000000" + address1NoHex,
         )

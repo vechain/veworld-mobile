@@ -13,7 +13,7 @@ import {
 import {
     selectCurrency,
     selectCustomTokens,
-    selectFungibleTokens,
+    selectOfficialTokens,
     useAppSelector,
 } from "~Storage/Redux"
 import { selectCurrencyExchangeRate } from "~Storage/Redux/Selectors/Currency"
@@ -37,7 +37,7 @@ export const FungibleTokenActivityBox: React.FC<Props> = memo(
 
         const allTokens = [
             useAppSelector(selectCustomTokens),
-            useAppSelector(selectFungibleTokens),
+            useAppSelector(selectOfficialTokens),
         ].flat()
 
         const { symbol, decimals } = useFungibleTokenInfo(activity.tokenAddress)

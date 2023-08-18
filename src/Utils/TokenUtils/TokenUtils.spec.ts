@@ -3,24 +3,24 @@ import { isVechainToken, mergeTokens } from "./TokenUtils"
 import { VET, VTHO } from "~Constants"
 
 describe("mergeTokens", () => {
-    it("mergeTokens should merge two token arrays and remove duplicates based on symbol and genesisId", () => {
+    it("mergeTokens should merge two token arrays and remove duplicates based on address", () => {
         const a = [
-            { symbol: "ETH", genesisId: "1" },
-            { symbol: "BTC", genesisId: "2" },
-            { symbol: "USDT", genesisId: "3" },
+            { symbol: "ETH", address: "0x1" },
+            { symbol: "BTC", address: "0x2" },
+            { symbol: "USDT", address: "0x3" },
         ]
 
         const b = [
-            { symbol: "BTC", genesisId: "2" },
-            { symbol: "LINK", genesisId: "4" },
-            { symbol: "ETH", genesisId: "1" },
+            { symbol: "BTC", address: "2" },
+            { symbol: "LINK", address: "4" },
+            { symbol: "ETH", address: "1" },
         ]
 
         const expectedOutput = [
-            { symbol: "USDT", genesisId: "3" },
-            { symbol: "BTC", genesisId: "2" },
-            { symbol: "LINK", genesisId: "4" },
-            { symbol: "ETH", genesisId: "1" },
+            { symbol: "ETH", address: "0x1" },
+            { symbol: "BTC", address: "0x2" },
+            { symbol: "USDT", address: "0x3" },
+            { symbol: "LINK", address: "0x4" },
         ]
 
         const output = mergeTokens(a as FungibleToken[], b as FungibleToken[])

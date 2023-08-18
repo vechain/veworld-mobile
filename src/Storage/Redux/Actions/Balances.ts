@@ -1,22 +1,18 @@
 import {
     selectSelectedAccount,
     selectSelectedNetwork,
-    selectAccountBalances,
-    selectFungibleTokens,
+    selectBalancesForAccount,
 } from "~Storage/Redux/Selectors"
 import { RootState } from "~Storage/Redux/Types"
 import { Dispatch } from "@reduxjs/toolkit"
-import { error } from "~Utils/Logger"
+import { debug, error } from "~Utils/Logger"
 import { BalanceUtils } from "~Utils"
-import { DEFAULT_VECHAIN_TOKENS_MAP } from "~Constants"
 import {
-    setHasFetchedOfficialTokensMainnet,
-    setHasFetchedOfficialTokensTestnet,
     setIsTokensOwnedLoading,
     updateTokenBalances,
-    upsertTokenBalances,
 } from "~Storage/Redux/Slices"
-import { Balance, NETWORK_TYPE } from "~Model"
+import { Balance, Network } from "~Model"
+import { VET, VTHO } from "~Constants"
 
 export const upsertTokenBalance =
     (thorClient: Connex.Thor, accountAddress: string, tokenAddress: string) =>
@@ -33,23 +29,31 @@ export const upsertTokenBalance =
         if (!balance) return
 
         dispatch(
-            upsertTokenBalances({ accountAddress, newBalances: [balance] }),
+            updateTokenBalances({
+                network: network.type,
+                accountAddress,
+                newBalances: [balance],
+            }),
         )
     }
 
 /**
  * Updates all balances for an account
- * @param accountAddress - the acccount address for this balance
+ * @param accountAddress - the account address for this balance
  */
 export const updateAccountBalances =
     (thorClient: Connex.Thor, accountAddress: string) =>
     async (dispatch: Dispatch, getState: () => RootState) => {
         dispatch(setIsTokensOwnedLoading(true))
 
-        const accountBalances = selectAccountBalances(
+        const accountBalances = selectBalancesForAccount(
             getState(),
             accountAddress,
         )
+
+        if (accountBalances.length === 0) return
+
+        debug(`Updating ${accountBalances.length} account balances`)
 
         const network = selectSelectedNetwork(getState())
 
@@ -59,7 +63,7 @@ export const updateAccountBalances =
             for (const accountBalance of accountBalances) {
                 const balance = await BalanceUtils.getBalanceFromBlockchain(
                     accountBalance.tokenAddress,
-                    accountBalance.accountAddress,
+                    accountAddress,
                     network,
                     thorClient,
                 )
@@ -68,39 +72,36 @@ export const updateAccountBalances =
 
                 balances.push({
                     ...balance,
-
-                    position: accountBalance.position,
                 })
             }
             dispatch(
                 updateTokenBalances({
+                    network: network.type,
                     accountAddress,
                     newBalances: balances,
                 }),
             )
-
-            dispatch(setIsTokensOwnedLoading(false))
         } catch (e) {
-            dispatch(setIsTokensOwnedLoading(false))
             throw new Error(`Failed to get balance from external service: ${e}`)
+        } finally {
+            dispatch(setIsTokensOwnedLoading(false))
         }
     }
 
-export const updateOfficialTokensBalances =
-    (thorClient: Connex.Thor, accountAddress: string) =>
-    async (dispatch: Dispatch, getState: () => RootState) => {
-        dispatch(setIsTokensOwnedLoading(true))
-
-        const network = selectSelectedNetwork(getState())
-
-        const officialTokens = selectFungibleTokens(getState())
-
+export const autoSelectSuggestTokens =
+    (
+        accountAddress: string,
+        suggestedTokens: string[],
+        network: Network,
+        thorClient: Connex.Thor,
+    ) =>
+    async (dispatch: Dispatch) => {
         const officialTokensBalances: Balance[] = []
 
         try {
-            for (const officialToken of officialTokens) {
+            for (const tokenAddress of suggestedTokens) {
                 const balance = await BalanceUtils.getBalanceFromBlockchain(
-                    officialToken.address,
+                    tokenAddress,
                     accountAddress,
                     network,
                     thorClient,
@@ -111,31 +112,17 @@ export const updateOfficialTokensBalances =
                 officialTokensBalances.push(balance)
             }
 
+            debug(`Auto adding ${officialTokensBalances.length} token balances`)
+
             dispatch(
-                upsertTokenBalances({
+                updateTokenBalances({
+                    network: network.type,
                     accountAddress,
                     newBalances: officialTokensBalances,
                 }),
             )
-
-            network.type === NETWORK_TYPE.MAIN
-                ? dispatch(
-                      setHasFetchedOfficialTokensMainnet({
-                          accountAddress,
-                          hasFetched: true,
-                      }),
-                  )
-                : dispatch(
-                      setHasFetchedOfficialTokensTestnet({
-                          accountAddress,
-                          hasFetched: true,
-                      }),
-                  )
-
-            dispatch(setIsTokensOwnedLoading(false))
         } catch (e) {
-            dispatch(setIsTokensOwnedLoading(false))
-            throw new Error(`Failed to get balances of official tokens: ${e}`)
+            throw Error(`Failed to get balances of official tokens: ${e}`)
         }
     }
 
@@ -146,18 +133,19 @@ export const resetTokenBalances = async (
     const account = selectSelectedAccount(getState())
     const network = selectSelectedNetwork(getState())
 
-    const defaultTokens = DEFAULT_VECHAIN_TOKENS_MAP.get(network.type)
+    const defaultTokens = [{ ...VET }, { ...VTHO }]
     if (account) {
         dispatch(
-            upsertTokenBalances({
+            updateTokenBalances({
+                network: network.type,
                 accountAddress: account.address,
-                newBalances: defaultTokens!!.map(token => ({
+                newBalances: defaultTokens.map(token => ({
                     accountAddress: account.address,
                     tokenAddress: token.address,
                     balance: "0",
                     timeUpdated: new Date().toISOString(),
-                    genesisId: network.genesis.id,
                     isCustomToken: false,
+                    isHidden: false,
                 })),
             }),
         )

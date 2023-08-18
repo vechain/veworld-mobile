@@ -1,34 +1,29 @@
 import { createSelector } from "@reduxjs/toolkit"
 import { RootState } from "../Types"
-import {
-    Balance,
-    FungibleToken,
-    NETWORK_TYPE,
-    TokenWithCompleteInfo,
-} from "~Model"
-import { DEFAULT_VECHAIN_TOKENS, VET, VTHO } from "~Constants"
-import { LocaleUtils, TokenUtils } from "~Utils"
-import { uniqBy } from "lodash"
-import {
-    selectVetTokenWithBalance,
-    selectVthoTokenWithBalance,
-} from "./Balances"
+import { FungibleToken, TokenWithCompleteInfo } from "~Model"
+import { VET, VTHO } from "~Constants"
+import { HexUtils, LocaleUtils, TokenUtils } from "~Utils"
 import { selectSelectedNetwork } from "./Network"
 import { selectSelectedAccount } from "./Account"
 import { selectAllExchangeRates } from "./Currency"
+import { uniqBy } from "lodash"
+import { compareSymbols } from "~Utils/TokenUtils/TokenUtils"
+import { compareAddresses } from "~Utils/AddressUtils/AddressUtils"
 
 const selectTokenState = (state: RootState) => state.tokens
+
+export const selectTokensForNetwork = createSelector(
+    [selectTokenState, selectSelectedNetwork],
+    (tokens, network) => tokens.tokens[network.type],
+)
 
 export const selectCustomTokens = createSelector(
     selectTokenState,
     selectSelectedNetwork,
     selectSelectedAccount,
-    (tokens, network, account) => {
-        if (!tokens.custom[account.address]) return []
-
-        return tokens.custom[account.address].filter(
-            (token: FungibleToken) => token.genesisId === network.genesis.id,
-        )
+    (state, network, account) => {
+        const normAccountAddress = HexUtils.normalize(account.address)
+        return state.tokens[network.type].custom[normAccountAddress] ?? []
     },
 )
 
@@ -72,82 +67,63 @@ export const selectCoinGeckoTokens = createSelector(
 )
 
 export const selectOfficialTokens = createSelector(
-    selectTokenState,
-    state => state.officialTokens,
+    selectTokensForNetwork,
+    state =>
+        TokenUtils.mergeTokens([{ ...VET }, { ...VTHO }], state.officialTokens),
 )
 
-export const selectSuggestedTokens = createSelector(
-    selectTokenState,
-    state => state.suggestedTokens,
-)
-
-export const selectAllFungibleTokens = createSelector(
+export const selectAllTokens = createSelector(
     selectOfficialTokens,
-    tokens => TokenUtils.mergeTokens(DEFAULT_VECHAIN_TOKENS, tokens),
+    selectCustomTokens,
+    (officialTokens, customTokens) => {
+        return TokenUtils.mergeTokens(officialTokens, customTokens)
+    },
 )
 
 /**
- * Get fungible tokens for the current network
+ * Returns the addresses of all tokens that have a balance
  */
-export const selectFungibleTokens = createSelector(
-    selectAllFungibleTokens,
-    selectSelectedNetwork,
-    (tokens, network) =>
-        tokens.filter(
-            (token: FungibleToken) => token.genesisId === network.genesis.id,
-        ),
+export const selectSuggestedTokens = createSelector(
+    selectTokensForNetwork,
+    state => state.suggestedTokens,
 )
 
 /**
  * Get fungible tokens for the current network but remove default ones
  */
 export const selectNonVechainFungibleTokens = createSelector(
-    selectFungibleTokens,
+    selectOfficialTokens,
     tokens =>
         tokens.filter(
             (token: FungibleToken) =>
-                token.symbol !== VET.symbol && token.symbol !== VTHO.symbol,
+                !compareAddresses(token.address, VET.address) &&
+                !compareAddresses(token.address, VTHO.address),
         ),
 )
 
+export const selectMarketInfoFor = createSelector(
+    [(_, state) => selectTokenState(state), symbol => symbol],
+    (tokens, symbol) => {
+        return tokens.coinMarketInfo[symbol.toLowerCase()]
+    },
+)
+
 export const selectTokensWithInfo = createSelector(
-    [
-        selectCoinGeckoTokens,
-        selectFungibleTokens,
-        selectAllExchangeRates,
-        selectVetTokenWithBalance,
-        selectVthoTokenWithBalance,
-        selectSelectedNetwork,
-    ],
-    (
-        coinGeckoTokens,
-        githubTokens,
-        exchangeRates,
-        vetBalance,
-        vthoBalance,
-        network,
-    ) => {
+    [selectCoinGeckoTokens, selectOfficialTokens, selectAllExchangeRates],
+    (coinGeckoTokens, githubTokens, exchangeRates) => {
         const defaultLocale = LocaleUtils.getLocale()
 
         const tokens: TokenWithCompleteInfo[] = githubTokens.map(
             (token: FungibleToken) => {
-                const foundToken = coinGeckoTokens.find(
-                    t => t.symbol.toLowerCase() === token.symbol.toLowerCase(),
-                )
-
-                const foundExchangeRate = exchangeRates.find(
-                    rate => foundToken?.id === rate?.coinGeckoId,
+                const foundToken = coinGeckoTokens.find(t =>
+                    compareSymbols(t.symbol, token.symbol),
                 )
 
                 if (!foundToken) return token as TokenWithCompleteInfo
 
-                let tokenBalance: Balance | undefined
-
-                if (token.symbol.toUpperCase() === "VET")
-                    tokenBalance = vetBalance?.balance
-
-                if (token.symbol.toUpperCase() === "VTHO")
-                    tokenBalance = vthoBalance?.balance
+                const foundExchangeRate = exchangeRates.find(rate =>
+                    compareSymbols(foundToken.symbol, rate?.symbol),
+                )
 
                 return {
                     ...token,
@@ -155,20 +131,11 @@ export const selectTokensWithInfo = createSelector(
                     symbol: foundToken.symbol.toUpperCase() ?? token.symbol,
                     name: foundToken.name ?? token.name,
                     decimals:
-                        foundToken.detail_platforms.vechain.decimal_place ||
+                        foundToken.detail_platforms.vechain.decimal_place ??
                         token.decimals,
-                    address:
-                        foundToken.detail_platforms.vechain.contract_address ??
-                        token.address,
-                    icon:
-                        token.symbol.toUpperCase() === "VET" ||
-                        token.symbol.toUpperCase() === "VTHO"
-                            ? token.icon
-                            : foundToken.image.large,
-                    rate: foundExchangeRate?.rate || 0,
-                    change: foundExchangeRate?.change || 0,
+                    rate: foundExchangeRate?.rate ?? 0,
+                    change: foundExchangeRate?.change ?? 0,
                     desc: foundToken.description[defaultLocale] ?? token.desc,
-                    balance: tokenBalance,
                     links: {
                         blockchain_site: foundToken.links.blockchain_site,
                         homepage: foundToken.links.homepage,
@@ -177,12 +144,8 @@ export const selectTokensWithInfo = createSelector(
             },
         )
 
-        const sortedTokens = uniqBy(tokens, "symbol")
-            .filter(
-                (token: TokenWithCompleteInfo) =>
-                    token.genesisId === network.genesis.id,
-            )
-            .sort((a: TokenWithCompleteInfo, b: TokenWithCompleteInfo) => {
+        const sortedTokens = uniqBy(tokens, "address").sort(
+            (a: TokenWithCompleteInfo, b: TokenWithCompleteInfo) => {
                 // if both objects have a coinGeckoId property
                 if (a.coinGeckoId && b.coinGeckoId) return 0
 
@@ -194,57 +157,9 @@ export const selectTokensWithInfo = createSelector(
 
                 // if neither object has a coinGeckoId property, sort by name
                 return 0
-            })
-
-        return sortedTokens
-    },
-)
-
-export const selectTokenWithInfoWithID = createSelector(
-    [selectTokensWithInfo, (state: RootState, symbol: string) => symbol],
-    (tokens, symbol) => {
-        const foundToken = tokens.find(
-            (token: TokenWithCompleteInfo) =>
-                token.symbol.toLowerCase() === symbol.toLowerCase(),
+            },
         )
 
-        if (foundToken) {
-            return foundToken
-        } else {
-            // Fallback returns static token info
-            if (symbol.toLocaleLowerCase() === VET.symbol.toLocaleLowerCase())
-                return VET
-
-            if (symbol.toLocaleLowerCase() === VTHO.symbol.toLocaleLowerCase())
-                return VTHO
-
-            return VET
-        }
-    },
-)
-
-export const selectMarketInfoFor = createSelector(
-    [(_, state) => selectTokenState(state), symbol => symbol],
-    (tokens, symbol) => {
-        return tokens.coinMarketInfo[symbol.toLowerCase()]
-    },
-)
-
-export const selectHasFetchedOfficialTokens = createSelector(
-    selectTokenState,
-    selectSelectedAccount,
-    selectSelectedNetwork,
-    (state, account, network) => {
-        if (network.type === NETWORK_TYPE.MAIN) {
-            if (!state.hasFetchedOfficialTokensMainnet?.[account.address])
-                return false
-
-            return state.hasFetchedOfficialTokensMainnet?.[account.address]
-        } else {
-            if (!state.hasFetchedOfficialTokensTestnet?.[account.address])
-                return false
-
-            return state.hasFetchedOfficialTokensTestnet?.[account.address]
-        }
+        return sortedTokens
     },
 )

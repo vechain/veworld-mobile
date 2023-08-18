@@ -13,11 +13,10 @@ import {
 import { StyleSheet } from "react-native"
 import { useI18nContext } from "~i18n"
 import {
-    addOrUpdateCustomToken,
+    addOrUpdateCustomTokens,
     addTokenBalance,
-    selectAccountCustomTokens,
-    selectFungibleTokens,
-    selectNonVechainTokensWithBalances,
+    selectVisibleCustomTokens,
+    selectOfficialTokens,
     selectSelectedAccount,
     selectSelectedNetwork,
     updateAccountBalances,
@@ -57,13 +56,11 @@ export const AddCustomTokenBottomSheet = React.forwardRef<
 
     const [errorMessage, setErrorMessage] = useState("")
 
-    const officialTokens = useAppSelector(selectFungibleTokens)
+    const officialTokens = useAppSelector(selectOfficialTokens)
 
-    const customTokens = useAppSelector(selectAccountCustomTokens)
+    const customTokens = useAppSelector(selectVisibleCustomTokens)
 
     const account = useAppSelector(selectSelectedAccount)
-
-    const tokenBalances = useAppSelector(selectNonVechainTokensWithBalances)
 
     const handleValueChange = useCallback(
         async (addressRaw: string) => {
@@ -146,22 +143,22 @@ export const AddCustomTokenBottomSheet = React.forwardRef<
 
     const handleAddCustomToken = () => {
         dispatch(
-            addOrUpdateCustomToken({
+            addOrUpdateCustomTokens({
+                network: network.type,
                 accountAddress: account.address,
-                newToken: newCustomToken!!,
+                newTokens: newCustomToken ? [newCustomToken] : [],
             }),
         )
         dispatch(
             addTokenBalance({
+                network: network.type,
                 accountAddress: account.address,
                 balance: {
                     balance: "0",
-                    accountAddress: account.address,
                     tokenAddress: newCustomToken!!.address,
                     timeUpdated: new Date().toISOString(),
-                    position: tokenBalances.length,
-                    genesisId: network.genesis.id,
                     isCustomToken: true,
+                    isHidden: false,
                 },
             }),
         )

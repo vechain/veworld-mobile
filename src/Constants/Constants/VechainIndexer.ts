@@ -144,6 +144,7 @@ export const getBlock = (thor: Connex.Thor, blockId: string) => {
  *
  * @param thor - Connex.Thor instance to communicate with the blockchain
  * @param address - The address of origin or destination of the fungible tokens transfer events
+ * @param officialTokensOnly - Whether to fetch only official tokens or not
  * @param page - The results page number
  * @param pageSize - The results page size
  * @param direction - The sort direction (DESC or ASC)
@@ -151,11 +152,12 @@ export const getBlock = (thor: Connex.Thor, blockId: string) => {
 export const getFungibleTokensContracts = (
     network: Network,
     address: string,
+    officialTokensOnly: boolean,
     page: number,
     pageSize: number,
     direction: ORDER,
 ) => {
     return network.type === NETWORK_TYPE.MAIN
-        ? `${process.env.REACT_APP_INDEXER_MAINNET_URL}/transfers/fungible-tokens-contracts?address=${address}&size=${pageSize}&page=${page}&direction=${direction}`
-        : `${process.env.REACT_APP_INDEXER_TESTNET_URL}/transfers/fungible-tokens-contracts?address=${address}&size=${pageSize}&page=${page}&direction=${direction}`
+        ? `${process.env.REACT_APP_INDEXER_MAINNET_URL}/transfers/fungible-tokens-contracts?address=${address}&officialTokensOnly=${officialTokensOnly}&size=${pageSize}&page=${page}&direction=${direction}`
+        : `${process.env.REACT_APP_INDEXER_TESTNET_URL}/transfers/fungible-tokens-contracts?address=${address}&officialTokensOnly=${officialTokensOnly}&size=${pageSize}&page=${page}&direction=${direction}`
 }

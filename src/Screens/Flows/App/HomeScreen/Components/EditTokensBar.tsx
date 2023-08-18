@@ -11,7 +11,6 @@ import {
 } from "~Components"
 import { useI18nContext } from "~i18n"
 import { Routes } from "~Navigation"
-import { setIsAppLoading, useAppDispatch } from "~Storage/Redux"
 
 type Props = {
     isEdit: boolean
@@ -27,14 +26,9 @@ export const EditTokensBar = memo(({ isEdit, setIsEdit }: Props) => {
 
     const nav = useNavigation()
 
-    const dispatch = useAppDispatch()
-
     const handleManageToken = useCallback(() => {
-        dispatch(setIsAppLoading(true))
-        setTimeout(() => {
-            nav.navigate(Routes.MANAGE_TOKEN)
-        }, 200)
-    }, [dispatch, nav])
+        nav.navigate(Routes.MANAGE_TOKEN)
+    }, [nav])
 
     const getActionsButtons = useCallback(() => {
         if (!isEdit)

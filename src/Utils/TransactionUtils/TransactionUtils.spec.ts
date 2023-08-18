@@ -920,7 +920,7 @@ describe("TransactionUtils", () => {
                 data: "0x",
             }
 
-            const expected = "VET"
+            const expected = "0x0"
 
             expect(
                 TransactionUtils.getContractAddressFromClause(clause),

@@ -1,4 +1,6 @@
+import axios from "axios"
 import { abis } from "~Constants"
+import { FungibleToken, NETWORK_TYPE, Network } from "~Model"
 
 /**
  * Asynchronously retrieves the symbol of a given token using its contract address.
@@ -76,4 +78,44 @@ export const getTokenName = async (
     } catch (e) {
         throw new Error("Failed to call or decode getTokenName: " + e)
     }
+}
+
+const TOKEN_URL = "https://vechain.github.io/token-registry/"
+
+/**
+ * Call out to our github repo and return the tokens for the given network
+ */
+export const getTokensFromGithub = async ({
+    network,
+}: {
+    network: Network
+}): Promise<FungibleToken[]> => {
+    let tokens: FungibleToken[] = []
+
+    if (
+        network.type === NETWORK_TYPE.MAIN ||
+        network.type === NETWORK_TYPE.TEST
+    ) {
+        const rawTokens = await axios.get(
+            `${TOKEN_URL}/${
+                network.type === NETWORK_TYPE.MAIN ? "main" : "test"
+            }.json`,
+            {
+                transformResponse: data => data,
+                timeout: 30 * 1000,
+            },
+        )
+
+        const tokensFromGithub = JSON.parse(rawTokens.data) as FungibleToken[]
+        tokens = tokensFromGithub.map(token => {
+            return {
+                ...token,
+                genesisId: network.genesis.id,
+                icon: `${TOKEN_URL}/assets/${token.icon}`,
+                custom: false,
+            }
+        })
+    }
+
+    return tokens
 }

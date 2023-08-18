@@ -3,7 +3,7 @@ import { Token } from "~Model"
 import { SWAP_SIDE } from "../SwapCard"
 import { useI18nContext } from "~i18n"
 import {
-    selectAccountCustomTokens,
+    selectVisibleCustomTokens,
     selectCurrency,
     selectTokensWithInfo,
     useAppSelector,
@@ -40,7 +40,7 @@ export const TokenBox = ({
     const provenanceText =
         provenance === SWAP_SIDE.PAID ? LL.PAID() : LL.RECEIVED()
 
-    const customTokens = useAppSelector(selectAccountCustomTokens)
+    const customTokens = useAppSelector(selectVisibleCustomTokens)
 
     const tokens = useAppSelector(selectTokensWithInfo)
 

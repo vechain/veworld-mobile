@@ -1,47 +1,67 @@
 import { createSelector } from "@reduxjs/toolkit"
-import { AddressUtils, FormattingUtils } from "~Utils"
+import { FormattingUtils } from "~Utils"
 import { selectSelectedAccount } from "./Account"
-import { VET, VET_BY_NETWORK, VTHO, VTHO_BY_NETWORK } from "~Constants"
+import { VET, VTHO } from "~Constants"
 import { RootState } from "~Storage/Redux/Types"
 import { selectCurrencyExchangeRate } from "./Currency"
 import { BigNumber } from "bignumber.js"
 import { selectSelectedNetwork } from "./Network"
-import { Balance, FungibleToken, FungibleTokenWithBalance } from "~Model"
 import {
-    selectCustomTokensForNetwork,
-    selectFungibleTokensAll,
-} from "./TokenBalances"
+    FungibleToken,
+    FungibleTokenWithBalance,
+    TokenWithCompleteInfo,
+} from "~Model"
+import {
+    selectAllTokens,
+    selectCustomTokens,
+    selectSuggestedTokens,
+    selectTokensWithInfo,
+} from "./Tokens"
+import { compareAddresses } from "~Utils/AddressUtils/AddressUtils"
+import { compareSymbols } from "~Utils/TokenUtils/TokenUtils"
 
 export const selectBalancesState = (state: RootState) => state.balances
 
-/**
- * Get all balances of the selected network
- */
-export const selectSelectedNetworkBalances = createSelector(
-    [selectBalancesState, selectSelectedNetwork],
-    (balances, network) => {
-        let allBalances: Balance[] = []
+export const selectAllBalances = createSelector(
+    [selectBalancesState, selectSelectedNetwork, selectSelectedAccount],
+    (balances, network, account) => {
+        const netBalances = balances[network.type]
+        if (!netBalances) return []
 
-        Object.values(balances).forEach(balance => {
-            allBalances = [...allBalances, ...balance]
-        })
+        return netBalances[account.address] ?? []
+    },
+)
 
-        return allBalances.filter(
-            balance => network.genesis.id === balance?.genesisId,
+export const selectVisibleBalances = createSelector(
+    [selectAllBalances],
+    balances => {
+        return balances.filter(balance => !balance.isHidden)
+    },
+)
+
+export const selectBalanceForToken = createSelector(
+    [selectAllBalances, (_: RootState, tokenAddress: string) => tokenAddress],
+    (balances, tokenAddress) => {
+        return balances.find(balance =>
+            compareAddresses(balance.tokenAddress, tokenAddress),
         )
     },
 )
 
-/**
- * Get all balances of the selected account
- */
-export const selectSelectedAccountBalances = createSelector(
-    [selectBalancesState, selectSelectedAccount, selectSelectedNetwork],
-    (balances, account, network) => {
-        if (!balances[account.address]) return []
+export const selectVetBalance = createSelector(
+    [selectAllBalances],
+    balances => {
+        return balances.find(balance =>
+            compareAddresses(balance.tokenAddress, VET.address),
+        )
+    },
+)
 
-        return balances[account.address].filter(
-            balance => network.genesis.id === balance?.genesisId,
+export const selectVthoBalance = createSelector(
+    [selectAllBalances],
+    balances => {
+        return balances.find(balance =>
+            compareAddresses(balance.tokenAddress, VTHO.address),
         )
     },
 )
@@ -49,24 +69,30 @@ export const selectSelectedAccountBalances = createSelector(
 /**
  * Get all balances of a specific account
  */
-export const selectAccountBalances = createSelector(
+export const selectAllBalancesForAccount = createSelector(
     [
         selectBalancesState,
         selectSelectedNetwork,
         (_: RootState, accountAddress: string) => accountAddress,
     ],
     (balances, network, accountAddress) => {
-        if (!balances[accountAddress]) return []
+        const netBalances = balances[network.type]
+        if (!netBalances) return []
 
-        return balances[accountAddress].filter(
-            balance => network.genesis.id === balance?.genesisId,
-        )
+        return netBalances[accountAddress] ?? []
     },
 )
 
-export const selectAccountCustomTokens = createSelector(
-    selectCustomTokensForNetwork,
-    selectSelectedAccountBalances,
+export const selectBalancesForAccount = createSelector(
+    [selectAllBalancesForAccount],
+    balances => {
+        return balances.filter(balance => !balance.isHidden)
+    },
+)
+
+export const selectVisibleCustomTokens = createSelector(
+    selectCustomTokens,
+    selectVisibleBalances,
     (tokens, balances) => {
         const accountTokenAddresses = balances.map(
             balance => balance.tokenAddress,
@@ -78,63 +104,32 @@ export const selectAccountCustomTokens = createSelector(
 )
 
 /**
- * Get all account balances with related token data
- */
-export const selectAllAccountsTokensWithBalances = createSelector(
-    [
-        selectBalancesState,
-        selectFungibleTokensAll,
-        selectCustomTokensForNetwork,
-    ],
-    (balances, tokens, customTokens): FungibleTokenWithBalance[] => {
-        const allBalances = Object.values(balances).flat()
-
-        return allBalances.map(balance => {
-            const balanceToken = [...tokens, ...customTokens].find(token =>
-                AddressUtils.compareAddresses(
-                    token.address,
-                    balance.tokenAddress,
-                ),
-            )
-            if (!balanceToken) {
-                throw new Error(
-                    `Unable to find token with this address: ${balance.tokenAddress}`,
-                )
-            }
-            return {
-                ...balanceToken,
-                balance,
-            }
-        })
-    },
-)
-/**
  * Get balances with related token data for selected account
  */
 export const selectTokensWithBalances = createSelector(
-    [
-        selectSelectedAccountBalances,
-        selectFungibleTokensAll,
-        selectAccountCustomTokens,
-    ],
-    (balances, tokens, customTokens): FungibleTokenWithBalance[] => {
-        return balances.map(balance => {
-            const balanceToken = [...tokens, ...customTokens].find(token =>
-                AddressUtils.compareAddresses(
-                    token.address,
-                    balance.tokenAddress,
-                ),
+    [selectVisibleBalances, selectAllTokens],
+    (balances, tokens): FungibleTokenWithBalance[] => {
+        return balances
+            .filter(
+                b =>
+                    tokens.findIndex(t =>
+                        compareAddresses(t.address, b.tokenAddress),
+                    ) !== -1,
             )
-            if (!balanceToken) {
-                throw new Error(
-                    `Unable to find token with this address: ${balance.tokenAddress}`,
+            .map(balance => {
+                const balanceToken = tokens.find(token =>
+                    compareAddresses(token.address, balance.tokenAddress),
                 )
-            }
-            return {
-                ...balanceToken,
-                balance,
-            }
-        })
+                if (!balanceToken) {
+                    throw new Error(
+                        `Unable to find token with this address: ${balance.tokenAddress}`,
+                    )
+                }
+                return {
+                    ...balanceToken,
+                    balance,
+                }
+            })
     },
 )
 
@@ -144,23 +139,22 @@ export const selectTokensWithBalances = createSelector(
 export const selectNonVechainTokensWithBalances = createSelector(
     [selectTokensWithBalances],
     (tokensWithBalance): FungibleTokenWithBalance[] =>
-        tokensWithBalance
-            .filter(
-                tokenWithBalance =>
-                    tokenWithBalance.symbol !== VET.symbol &&
-                    tokenWithBalance.symbol !== VTHO.symbol,
-            )
-            .sort((a, b) => a.balance.position!! - b.balance.position!!),
+        tokensWithBalance.filter(
+            tokenWithBalance =>
+                !compareAddresses(tokenWithBalance.address, VET.address) &&
+                !compareAddresses(tokenWithBalance.address, VTHO.address),
+        ),
 )
 
 /**
  * Get just vet token and related balance for selected account
  */
 export const selectVetTokenWithBalance = createSelector(
+    selectSelectedAccount,
     selectTokensWithBalances,
-    tokensWithBalance =>
-        tokensWithBalance.find(
-            tokenWithBalance => tokenWithBalance.symbol === VET.symbol,
+    (account, tokensWithBalance) =>
+        tokensWithBalance.find(tokenWithBalance =>
+            compareAddresses(tokenWithBalance.address, VET.address),
         ),
 )
 
@@ -168,10 +162,11 @@ export const selectVetTokenWithBalance = createSelector(
  * Get just vtho balance for selected account
  */
 export const selectVthoTokenWithBalance = createSelector(
+    selectSelectedAccount,
     selectTokensWithBalances,
-    tokensWithBalance =>
-        tokensWithBalance.find(
-            tokenWithBalance => tokenWithBalance.symbol === VTHO.symbol,
+    (account, tokensWithBalance) =>
+        tokensWithBalance.find(tokenWithBalance =>
+            compareAddresses(tokenWithBalance.address, VTHO.address),
         ),
 )
 
@@ -209,15 +204,15 @@ export const selectFiatBalance = createSelector(
     (vetBalance, vetExchangeRate, vthoBalance, vthoExchangeRate) => {
         return new BigNumber(
             FormattingUtils.convertToFiatBalance(
-                vetBalance?.balance.balance || "0",
-                vetExchangeRate?.rate || 0,
+                vetBalance?.balance.balance ?? "0",
+                vetExchangeRate?.rate ?? 0,
                 VET.decimals,
             ),
         )
             .plus(
                 FormattingUtils.convertToFiatBalance(
-                    vthoBalance?.balance.balance || "0",
-                    vthoExchangeRate?.rate || 0,
+                    vthoBalance?.balance.balance ?? "0",
+                    vthoExchangeRate?.rate ?? 0,
                     VTHO.decimals,
                 ),
             )
@@ -225,49 +220,37 @@ export const selectFiatBalance = createSelector(
     },
 )
 
-export const selectVetBalance = createSelector(
-    [selectVetTokenWithBalance],
-    vetBalance => {
-        return new BigNumber(
-            FormattingUtils.convertToFiatBalance(
-                vetBalance?.balance.balance || "0",
-                1,
-                VET.decimals,
-            ),
-        ).toString()
-    },
-)
-
 export const selectVetTokenWithBalanceByAccount = createSelector(
     [
-        selectSelectedNetworkBalances,
+        selectBalancesState,
         selectSelectedNetwork,
-        (_state, accountAddress) => accountAddress,
+        (_: RootState, accountAddress: string) => accountAddress,
     ],
     (balances, network, accountAddress) => {
-        const vetToken = VET_BY_NETWORK[network.type]
-
-        const balance = balances.find(
-            _balance =>
-                _balance.accountAddress === accountAddress &&
-                _balance.tokenAddress === vetToken.address,
-        )
-
-        if (!balance) {
-            return {
-                ...vetToken,
-                balance: {
-                    balance: "0",
-                    accountAddress,
-                    tokenAddress: vetToken.address,
-                    genesisId: network.genesis.id,
-                    isCustomToken: false,
-                },
-            }
+        const defaultVetWithBalance = {
+            ...VET,
+            balance: {
+                balance: "0",
+                accountAddress,
+                tokenAddress: VET.address,
+                isCustomToken: false,
+            },
         }
 
+        const netBalances = balances[network.type]
+        if (!netBalances) return defaultVetWithBalance
+
+        const balancesForAccount = netBalances[accountAddress]
+        if (!balancesForAccount) return defaultVetWithBalance
+
+        const balance = netBalances[accountAddress].find(
+            _balance => _balance.tokenAddress === VET.address,
+        )
+
+        if (!balance) return defaultVetWithBalance
+
         return {
-            ...vetToken,
+            ...VET,
             balance,
         }
     },
@@ -278,7 +261,7 @@ export const selectVetBalanceByAccount = createSelector(
     vetBalance => {
         return new BigNumber(
             FormattingUtils.convertToFiatBalance(
-                vetBalance?.balance.balance || "0",
+                vetBalance?.balance.balance ?? "0",
                 1,
                 VET.decimals,
             ),
@@ -288,34 +271,35 @@ export const selectVetBalanceByAccount = createSelector(
 
 export const selectVthoTokenWithBalanceByAccount = createSelector(
     [
-        selectSelectedNetworkBalances,
+        selectBalancesState,
         selectSelectedNetwork,
-        (_state, accountAddress) => accountAddress,
+        (_: RootState, accountAddress: string) => accountAddress,
     ],
     (balances, network, accountAddress) => {
-        const vthoToken = VTHO_BY_NETWORK[network.type]
-
-        const balance = balances.find(
-            _balance =>
-                _balance.accountAddress === accountAddress &&
-                _balance.tokenAddress === vthoToken.address,
-        )
-
-        if (!balance) {
-            return {
-                ...vthoToken,
-                balance: {
-                    balance: "0",
-                    accountAddress,
-                    tokenAddress: vthoToken.address,
-                    genesisId: network.genesis.id,
-                    isCustomToken: false,
-                },
-            }
+        const defaultVetWithBalance = {
+            ...VTHO,
+            balance: {
+                balance: "0",
+                accountAddress,
+                tokenAddress: VET.address,
+                isCustomToken: false,
+            },
         }
 
+        const netBalances = balances[network.type]
+        if (!netBalances) return defaultVetWithBalance
+
+        const balancesForAccount = netBalances[accountAddress]
+        if (!balancesForAccount) return defaultVetWithBalance
+
+        const balance = netBalances[accountAddress].find(
+            _balance => _balance.tokenAddress === VTHO.address,
+        )
+
+        if (!balance) return defaultVetWithBalance
+
         return {
-            ...vthoToken,
+            ...VTHO,
             balance,
         }
     },
@@ -326,10 +310,56 @@ export const selectVthoBalanceByAccount = createSelector(
     vthoBalance => {
         return new BigNumber(
             FormattingUtils.convertToFiatBalance(
-                vthoBalance?.balance.balance || "0",
+                vthoBalance?.balance.balance ?? "0",
                 1,
                 VTHO.decimals,
             ),
         ).toString()
+    },
+)
+
+export const selectMissingSuggestedTokens = createSelector(
+    [selectSuggestedTokens, selectAllBalances],
+    (suggestedTokens, allBalances) => {
+        return suggestedTokens.filter(
+            tokenAddress =>
+                !allBalances.find(balance =>
+                    compareAddresses(balance.tokenAddress, tokenAddress),
+                ),
+        )
+    },
+)
+
+export const selectVetTokenWithInfo = createSelector(
+    selectTokensWithInfo,
+    selectVetBalance,
+    (tokens, balance) => {
+        const tokenWithInfo = tokens.find(t =>
+            compareSymbols(t.symbol, VET.symbol),
+        )
+
+        if (!tokenWithInfo) return VET as TokenWithCompleteInfo
+
+        return {
+            ...tokenWithInfo,
+            balance,
+        }
+    },
+)
+
+export const selectVthoTokenWithInfo = createSelector(
+    selectTokensWithInfo,
+    selectVthoBalance,
+    (tokens, balance) => {
+        const tokenWithInfo = tokens.find(t =>
+            compareAddresses(t.address, VTHO.address),
+        )
+
+        if (!tokenWithInfo) return VTHO as TokenWithCompleteInfo
+
+        return {
+            ...tokenWithInfo,
+            balance: balance,
+        }
     },
 )

@@ -6,7 +6,7 @@ import {
     fetchFromEndpoint,
     getTokenBalancesAndInfoFromTokenAddresses,
 } from "~Networking"
-import { debug } from "~Utils"
+import { HexUtils, debug } from "~Utils"
 
 /**
  * Fetches fungible token contracts for the given account address.
@@ -22,14 +22,16 @@ export const fetchFungibleTokensContracts = async (
     accountAddress: string,
     page: number,
     network: Network,
+    officialTokensOnly: boolean = false,
 ) => {
-    debug(`Fetching token addresses for ${accountAddress}`)
+    debug(`Fetching token addresses for ${accountAddress} page ${page}`)
 
     try {
         return await fetchFromEndpoint<FetchFungibleTokensContractsResponse>(
             getFungibleTokensContracts(
                 network,
                 accountAddress,
+                officialTokensOnly,
                 page,
                 DEFAULT_PAGE_SIZE,
                 ORDER.DESC,
@@ -47,17 +49,24 @@ export const fetchFungibleTokensContracts = async (
  * @param {number} page The page number to fetch.
  * @param {Connex.Thor} thor The Connex.Thor instance to use.
  * @param {Network} network The network to use.
+ * @param {boolean} officialTokensOnly Whether to fetch only official tokens or not.
  *
  * @returns {Promise<Balance[]>} A promise that resolves with the balances of the custom tokens owned.
  */
-export const fetchCustomTokensOwned = async (
+export const fetchTokensOwned = async (
     accountAddress: string,
     page: number,
     thor: Connex.Thor,
     network: Network,
+    officialTokensOnly: boolean = false,
 ): Promise<Balance[]> => {
     const tokenAddresses: FetchFungibleTokensContractsResponse =
-        await fetchFungibleTokensContracts(accountAddress, page, network)
+        await fetchFungibleTokensContracts(
+            accountAddress,
+            page,
+            network,
+            officialTokensOnly,
+        )
 
     const fungibleTokens: Balance[] =
         await getTokenBalancesAndInfoFromTokenAddresses(
@@ -68,4 +77,35 @@ export const fetchCustomTokensOwned = async (
         )
 
     return fungibleTokens
+}
+
+/**
+ * Fetches all official tokens owned
+ *
+ */
+export const fetchOfficialTokensOwned = async (
+    accountAddress: string,
+    network: Network,
+): Promise<string[]> => {
+    const tokenAddresses: string[] = []
+    let page = 0
+    let hasNextPage = true
+
+    while (hasNextPage) {
+        const tokenAddressesResponse = await fetchFungibleTokensContracts(
+            accountAddress,
+            page,
+            network,
+            true,
+        )
+
+        tokenAddresses.push(
+            ...tokenAddressesResponse.data.map(t => HexUtils.normalize(t)),
+        )
+
+        hasNextPage = tokenAddressesResponse.pagination.hasNext
+        page++
+    }
+
+    return tokenAddresses
 }

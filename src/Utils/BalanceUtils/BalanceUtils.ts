@@ -43,10 +43,9 @@ const getBalanceFromBlockchain = async (
 
         return {
             balance,
-            accountAddress,
-            genesisId: network.genesis.id,
             tokenAddress,
             timeUpdated: new Date().toISOString(),
+            isHidden: false,
         }
     } catch (e) {
         error("getBalanceFromBlockchain", e)

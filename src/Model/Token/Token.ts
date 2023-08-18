@@ -23,11 +23,9 @@ export interface Token {
 /**
  * VIP180 - Fungible Token
  * @field `decimals` - The number of `decimal` places as defined on the contract
- * @field `genesisId` - The ID of the genesis block. Used to identify the network
  */
 export interface FungibleToken extends Token {
     decimals: number
-    genesisId: string
 }
 
 export interface TokenWithCompleteInfo extends FungibleToken {

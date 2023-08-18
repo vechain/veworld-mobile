@@ -10,14 +10,16 @@ import {
     VET,
     VTHO,
 } from "~Constants"
-import { error, TokenUtils } from "~Utils"
-import { FungibleToken, Network, NETWORK_TYPE } from "~Model"
+import { debug, error, TokenUtils } from "~Utils"
+import { FungibleToken, Network } from "~Model"
 import { selectCoinGeckoTokens, selectCurrency } from "../Selectors"
 import {
+    addOfficialTokens,
     setAssertDetailChartData,
     setCoinGeckoTokens,
     setCoinMarketInfo,
     setDashboardChartData,
+    setSuggestedTokens,
 } from "../Slices"
 import {
     AppThunkDispatch,
@@ -25,7 +27,7 @@ import {
     RootState,
     TokenInfoResponse,
 } from "../Types"
-import { fetchExchangeRates } from "./Currency"
+import { fetchOfficialTokensOwned, getTokensFromGithub } from "~Networking"
 
 const allSettled = require("promise.allsettled")
 
@@ -108,85 +110,97 @@ export const getTokenInfo = async (tokenId: string) => {
 
 /**
  * Fetches all tokens from CoinGecko that are on the VeChain network
- * and dispatches the results to the store. Then calls "fetchExchangeRates"
- * to fetch the exchange rates for each token.
+ * and dispatches the results to the store
  */
-export const fetchTokensWithInfo = () => async (dispatch: AppThunkDispatch) => {
-    try {
-        const coinGeckoTokensResponse = await axios.get<FetchTokensResponse[]>(
-            COINGECKO_LIST,
-            {
+export const updateTokenPriceData =
+    () => async (dispatch: AppThunkDispatch) => {
+        try {
+            const coinGeckoTokensResponse = await axios.get<
+                FetchTokensResponse[]
+            >(COINGECKO_LIST, {
                 ...EXCHANGE_CLIENT_AXIOS_OPTS,
                 params: {
                     days: 1,
                 },
-            },
-        )
+            })
 
-        const foundTokens = coinGeckoTokensResponse.data.filter(c =>
-            c.platforms.hasOwnProperty("vechain"),
-        )
+            const foundTokens = coinGeckoTokensResponse.data.filter(c =>
+                c.platforms.hasOwnProperty("vechain"),
+            )
 
-        const tokenPromises: Promise<TokenInfoResponse>[] = []
-        for (const token of foundTokens) {
-            if (TokenUtils.isVechainToken(token.symbol))
-                tokenPromises.push(getTokenInfo(token.id))
-        }
-
-        const tokenResults = await allSettled(tokenPromises)
-
-        const coinGeckoTokens: TokenInfoResponse[] = tokenResults.map(
-            (result: PromiseSettledResult<TokenInfoResponse>) => {
-                if (result.status === "fulfilled") {
-                    return result.value
-                }
-            },
-        )
-
-        dispatch(setCoinGeckoTokens(coinGeckoTokens))
-        dispatch(fetchExchangeRates({ coinGeckoTokens }))
-    } catch (e) {}
-}
-
-const TOKEN_URL = "https://vechain.github.io/token-registry/"
-
-/**
- * Call out to our github repo and return the tokens for the given network
- */
-export const getTokensFromGithub = async ({
-    network,
-}: {
-    network: Network
-}): Promise<FungibleToken[]> => {
-    let tokens: FungibleToken[] = []
-
-    if (
-        network.type === NETWORK_TYPE.MAIN ||
-        network.type === NETWORK_TYPE.TEST
-    ) {
-        const rawTokens = await axios.get(
-            `${TOKEN_URL}/${
-                network.type === NETWORK_TYPE.MAIN ? "main" : "test"
-            }.json`,
-            {
-                transformResponse: data => data,
-                timeout: 30 * 1000,
-            },
-        )
-
-        const tokensFromGithub = JSON.parse(rawTokens.data) as FungibleToken[]
-        tokens = tokensFromGithub.map(token => {
-            return {
-                ...token,
-                genesisId: network.genesis.id,
-                icon: `${TOKEN_URL}/assets/${token.icon}`,
-                custom: false,
+            const tokenPromises: Promise<TokenInfoResponse>[] = []
+            for (const token of foundTokens) {
+                if (TokenUtils.isVechainToken(token.symbol))
+                    tokenPromises.push(getTokenInfo(token.id))
             }
-        })
+
+            const tokenResults = await allSettled(tokenPromises)
+
+            const coinGeckoTokens: TokenInfoResponse[] = tokenResults.map(
+                (result: PromiseSettledResult<TokenInfoResponse>) => {
+                    if (result.status === "fulfilled") {
+                        return result.value
+                    }
+                },
+            )
+
+            dispatch(setCoinGeckoTokens(coinGeckoTokens))
+        } catch (e) {
+            error("updateTokenPriceData", e)
+        }
     }
 
-    return tokens
-}
+/**
+ * Update official tokens from Github
+ */
+export const updateOfficialTokens =
+    (network: Network) => async (dispatch: AppThunkDispatch) => {
+        const tokens = await getTokensFromGithub({
+            network,
+        })
+        dispatch(addOfficialTokens({ network: network.type, tokens }))
+    }
+
+/**
+ * Update suggested tokens
+ * @param accountAddress
+ * @param officialTokens
+ * @param network
+ */
+export const updateSuggestedTokens =
+    (
+        accountAddress: string,
+        officialTokens: FungibleToken[],
+        network: Network,
+    ) =>
+    async (dispatch: AppThunkDispatch) => {
+        try {
+            const tokenAddresses = await fetchOfficialTokensOwned(
+                accountAddress,
+                network,
+            )
+
+            const suggestedTokens = tokenAddresses.filter(
+                tokenAddress =>
+                    officialTokens.findIndex(
+                        t => t.address === tokenAddress,
+                    ) !== -1,
+            )
+
+            debug(`Found ${suggestedTokens.length} suggested tokens`)
+
+            if (suggestedTokens.length === 0) return
+
+            dispatch(
+                setSuggestedTokens({
+                    network: network.type,
+                    tokens: suggestedTokens,
+                }),
+            )
+        } catch (e) {
+            error("updateSuggestedTokens", e)
+        }
+    }
 
 export const fetchVechainMarketInfo =
     () => async (dispatch: Dispatch, getState: () => RootState) => {
