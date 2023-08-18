@@ -10,14 +10,14 @@ type Props = {
 }
 
 export const ImportNFTView = ({ onImportPress }: Props) => {
-    const { calculateBottomInsets } = usePlatformBottomInsets()
+    const { iosSpecificBottomInsetsIfIos } = usePlatformBottomInsets()
     const { LL } = useI18nContext()
 
     return (
         <BaseView
             style={{
                 ...baseStyles.importNFTView,
-                marginBottom: calculateBottomInsets,
+                marginBottom: iosSpecificBottomInsetsIfIos,
             }}
             mx={20}
             justifyContent="center"
