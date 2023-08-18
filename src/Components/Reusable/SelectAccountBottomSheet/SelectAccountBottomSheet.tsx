@@ -5,6 +5,7 @@ import { useScrollableBottomSheet } from "~Hooks"
 import { AccountCard, BaseBottomSheet, BaseSpacer, BaseText } from "~Components"
 import { AccountWithDevice } from "~Model"
 import { useI18nContext } from "~i18n"
+import { PlatformUtils } from "~Utils"
 
 /**
  * @typedef {object} Props
@@ -69,6 +70,8 @@ export const SelectAccountBottomSheet = React.forwardRef<
                     data={accounts}
                     keyExtractor={account => account.address}
                     ItemSeparatorComponent={ItemSeparatorComponent}
+                    windowSize={PlatformUtils.isIOS() ? 4 : 20}
+                    maxToRenderPerBatch={PlatformUtils.isIOS() ? 2 : 5}
                     renderItem={({ item }) => (
                         <AccountCard
                             account={item}
