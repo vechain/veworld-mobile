@@ -25,14 +25,14 @@ export const BaseSafeArea = ({
     ...otherProps
 }: Props) => {
     const nav = useNavigation()
-    const { calculateBottomInsets } = usePlatformBottomInsets()
+    const { iosSpecificBottomInsetsIfIos } = usePlatformBottomInsets()
 
     const [isTab, setIsTab] = useState(false)
 
     const { styles: themedStyles } = useThemedStyles(
         baseStyles({
             isTab,
-            calculateBottomInsets,
+            iosSpecificBottomInsetsIfIos,
             flexGrow,
             bgTransparent,
             bg,
@@ -48,7 +48,7 @@ export const BaseSafeArea = ({
                 setIsTab(false)
             }
         }
-    }, [nav, calculateBottomInsets])
+    }, [nav, iosSpecificBottomInsetsIfIos])
 
     return (
         <SafeAreaView
@@ -65,7 +65,7 @@ export const BaseSafeArea = ({
 
 type BaseStylesProps = {
     isTab: boolean
-    calculateBottomInsets: number
+    iosSpecificBottomInsetsIfIos: number
     flexGrow?: number
     bgTransparent: boolean
     bg?: string
@@ -74,7 +74,7 @@ type BaseStylesProps = {
 const baseStyles =
     ({
         isTab,
-        calculateBottomInsets,
+        iosSpecificBottomInsetsIfIos,
         flexGrow,
         bgTransparent,
         bg,
@@ -82,7 +82,7 @@ const baseStyles =
     (theme: ColorThemeType) =>
         StyleSheet.create({
             container: {
-                paddingBottom: isTab ? calculateBottomInsets : 0,
+                paddingBottom: isTab ? iosSpecificBottomInsetsIfIos : 0,
                 flexGrow,
                 backgroundColor: bgTransparent
                     ? "transparent"

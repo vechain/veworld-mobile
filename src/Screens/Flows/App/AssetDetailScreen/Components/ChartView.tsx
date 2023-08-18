@@ -110,7 +110,7 @@ const baseStyles = () =>
     StyleSheet.create({
         priceText: { opacity: 0 },
         container: { maxHeight: 180 },
-        negativeMargin: { marginLeft: -20 },
+        negativeMargin: { marginLeft: -24 },
         fullWidth: { width: SCREEN_WIDTH - 20 * 2 },
         absolutePosition: {
             position: "absolute",

@@ -1,7 +1,7 @@
 import { useNavigation } from "@react-navigation/native"
 import { NativeStackScreenProps } from "@react-navigation/native-stack"
 import React, { useEffect, useMemo } from "react"
-import { useBottomSheetModal, useTheme, usePlatformBottomInsets } from "~Hooks"
+import { useBottomSheetModal, useThemedStyles } from "~Hooks"
 import {
     BaseIcon,
     BaseSpacer,
@@ -30,7 +30,8 @@ import {
     useAppDispatch,
     useAppSelector,
 } from "~Storage/Redux"
-import { isAndroid } from "~Utils/PlatformUtils/PlatformUtils"
+import { ScrollView } from "react-native-gesture-handler"
+import { StyleSheet } from "react-native"
 
 type Props = NativeStackScreenProps<
     RootStackParamListDiscover,
@@ -39,15 +40,12 @@ type Props = NativeStackScreenProps<
 
 export const AssetDetailScreen = ({ route }: Props) => {
     const token = route.params.token
-    const theme = useTheme()
+    const { styles, theme } = useThemedStyles(baseStyles)
     const nav = useNavigation()
     const { LL } = useI18nContext()
     const marketInfo = useAppSelector(state =>
         selectMarketInfoFor(token.symbol, state),
     )
-
-    const { calculateBottomInsets, tabBarAndroidBottomInsets } =
-        usePlatformBottomInsets()
 
     const { ref: QRCodeBottomSheetRef, onOpen: openQRCodeSheet } =
         useBottomSheetModal()
@@ -103,9 +101,10 @@ export const AssetDetailScreen = ({ route }: Props) => {
 
     return (
         <Layout
-            body={
-                <>
-                    <BaseView>
+            noMargin
+            fixedBody={
+                <ScrollView>
+                    <BaseView style={styles.assetDetailsHeader}>
                         <AssetHeader
                             name={token.name}
                             symbol={token.symbol}
@@ -116,7 +115,9 @@ export const AssetDetailScreen = ({ route }: Props) => {
                         <AssetChart token={token} />
                     </BaseView>
 
-                    <BaseView alignItems="center">
+                    <BaseView
+                        alignItems="center"
+                        style={styles.assetDetailsBody}>
                         <BaseSpacer height={24} />
                         <FastActionsBar actions={Actions} />
 
@@ -147,24 +148,28 @@ export const AssetDetailScreen = ({ route }: Props) => {
                                     {LL.TITLE_ABOUT()} {token.name}
                                 </BaseText>
 
-                                <BaseText>
+                                <BaseText mb={25}>
                                     {striptags(token.desc.trim(), {
                                         allowedTags: new Set(["strong"]),
                                     })}
                                 </BaseText>
                             </>
                         )}
-                        <BaseSpacer
-                            height={
-                                isAndroid()
-                                    ? tabBarAndroidBottomInsets
-                                    : calculateBottomInsets
-                            }
-                        />
                     </BaseView>
                     <QRCodeBottomSheet ref={QRCodeBottomSheetRef} />
-                </>
+                </ScrollView>
             }
         />
     )
 }
+
+const baseStyles = () =>
+    StyleSheet.create({
+        assetDetailsHeader: {
+            marginTop: 25,
+            paddingHorizontal: 24,
+        },
+        assetDetailsBody: {
+            paddingHorizontal: 24,
+        },
+    })

@@ -15,13 +15,13 @@ type NFTListProps = {
 }
 
 export const BlackListedCollectionsScreen = () => {
-    const { calculateBottomInsets } = usePlatformBottomInsets()
+    const { iosSpecificBottomInsetsIfIos } = usePlatformBottomInsets()
 
     const { LL } = useI18nContext()
 
     const blackListedCollections = useAppSelector(selectBlackListedCollections)
 
-    const { styles } = useThemedStyles(baseStyles(calculateBottomInsets))
+    const { styles } = useThemedStyles(baseStyles(iosSpecificBottomInsetsIfIos))
 
     const renderSeparator = useCallback(() => <BaseSpacer height={16} />, [])
 
@@ -84,7 +84,7 @@ export const BlackListedCollectionsScreen = () => {
     )
 }
 
-const baseStyles = (calculateBottomInsets: number) => () =>
+const baseStyles = (iosSpecificBottomInsetsIfIos: number) => () =>
     StyleSheet.create({
         collectionListContainer: {
             marginHorizontal: 20,
@@ -95,7 +95,7 @@ const baseStyles = (calculateBottomInsets: number) => () =>
             transform: [{ scale: 1.2 }],
         },
         nftListContainer: {
-            paddingBottom: calculateBottomInsets,
+            paddingBottom: iosSpecificBottomInsetsIfIos,
             marginHorizontal: 20,
             paddingVertical: 24,
         },
