@@ -62,6 +62,7 @@ export const BackupWarningBottomSheet = React.forwardRef<
                 footer={
                     <BaseView>
                         <CheckBoxWithText
+                            isChecked={isChecked}
                             text={LL.BTN_SECURITY_OPERATION_CHECKBOX()}
                             checkAction={setChecked}
                             testID="security-operation-app-checkbox"

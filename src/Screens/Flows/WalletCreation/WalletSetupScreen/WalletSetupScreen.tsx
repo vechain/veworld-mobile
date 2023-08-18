@@ -132,6 +132,7 @@ export const WalletSetupScreen = () => {
                             {LL.COMMON_LBL_TERMS_AND_CONDITIONS()}
                         </BaseText>
                         <BaseText typographyFont="body" align="center">
+                            {" "}
                             {LL.COMMON_LBL_AND()}{" "}
                         </BaseText>
                         <BaseText

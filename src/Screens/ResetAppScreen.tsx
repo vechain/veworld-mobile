@@ -25,7 +25,7 @@ export const ResetAppScreen = () => {
 
     const bottomPadding = tabbarHeight - insets.bottom
 
-    const [IsChecked, setIsChecked] = useState(false)
+    const [isChecked, setIsChecked] = useState(false)
 
     // navigate to reset app screen
     const onBackPress = useCallback(() => nav.goBack(), [nav])
@@ -74,6 +74,7 @@ export const ResetAppScreen = () => {
 
                 <BaseView alignItems="center" w={100}>
                     <CheckBoxWithText
+                        isChecked={isChecked}
                         text={LL.BTN_RESET_APP_CHECKBOX()}
                         checkAction={setIsChecked}
                         testID="reset-app-checkbox"
@@ -85,7 +86,7 @@ export const ResetAppScreen = () => {
                         w={100}
                         px={20}
                         title={LL.BTN_RESET_APP().toUpperCase()}
-                        disabled={!IsChecked}
+                        disabled={!isChecked}
                         bgColor={theme.colors.primary}
                     />
                 </BaseView>
