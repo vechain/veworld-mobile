@@ -1,12 +1,14 @@
 import React, { FC, useCallback } from "react"
 import BouncyCheckbox from "react-native-bouncy-checkbox"
-import { BaseText } from "~Components/Base"
-import { useTheme } from "~Hooks"
+import { BaseIcon, BaseText } from "~Components/Base"
+import { useThemedStyles } from "~Hooks"
 import { LocalizedString } from "typesafe-i18n"
-import { TFonts } from "~Constants"
+import { ColorThemeType, TFonts } from "~Constants"
 import HapticsService from "~Services/HapticsService"
+import { StyleSheet } from "react-native"
 
 type Props = {
+    isChecked: boolean
     font?: TFonts
     fontColor?: string
     text: LocalizedString | string
@@ -22,8 +24,9 @@ export const CheckBoxWithText: FC<Props> = ({
     checkSize,
     testID,
     checkAction,
+    isChecked,
 }) => {
-    const theme = useTheme()
+    const { styles, theme } = useThemedStyles(baseStyles)
 
     const onPress = useCallback(
         async (checked: boolean) => {
@@ -37,7 +40,22 @@ export const CheckBoxWithText: FC<Props> = ({
         <BouncyCheckbox
             onPress={onPress}
             size={checkSize ?? 22}
-            fillColor={theme.colors.primary}
+            unfillColor="transparent"
+            fillColor="transparent"
+            innerIconStyle={styles.innerIcon}
+            iconStyle={styles.icon}
+            iconComponent={
+                isChecked ? (
+                    <BaseIcon
+                        name="check"
+                        size={20}
+                        color={theme.colors.text}
+                    />
+                ) : (
+                    <></>
+                )
+            }
+            isChecked={isChecked}
             textComponent={
                 <BaseText
                     typographyFont={font ? font : "footNote"}
@@ -51,3 +69,16 @@ export const CheckBoxWithText: FC<Props> = ({
         />
     )
 }
+
+const baseStyles = (theme: ColorThemeType) =>
+    StyleSheet.create({
+        innerIcon: {
+            borderColor: theme.colors.text,
+            borderRadius: 6,
+            color: theme.colors.text,
+        },
+        icon: {
+            borderRadius: 6,
+            color: theme.colors.text,
+        },
+    })

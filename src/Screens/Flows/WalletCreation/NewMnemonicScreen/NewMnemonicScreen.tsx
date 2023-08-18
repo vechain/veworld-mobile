@@ -93,11 +93,14 @@ export const NewMnemonicScreen = () => {
                 </BaseView>
 
                 <BaseView alignItems="center" w={100}>
-                    <CheckBoxWithText
-                        text={LL.BTN_MNEMONIC_CHECKBOX()}
-                        checkAction={setIsChecked}
-                        testID="mnemonic-checkbox"
-                    />
+                    <BaseView mx={16}>
+                        <CheckBoxWithText
+                            isChecked={isChecked}
+                            text={LL.BTN_MNEMONIC_CHECKBOX()}
+                            checkAction={setIsChecked}
+                            testID="mnemonic-checkbox"
+                        />
+                    </BaseView>
 
                     <BaseButton
                         action={onBackupPress}

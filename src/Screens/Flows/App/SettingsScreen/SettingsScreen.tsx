@@ -74,8 +74,8 @@ const baseStyles = (theme: ColorThemeType) =>
             paddingHorizontal: 24,
         },
         separator: {
-            borderBottomColor: theme.colors.text,
-            borderBottomWidth: 0.5,
+            backgroundColor: theme.colors.text,
+            height: 0.5,
         },
         list: { flex: 1 },
     })
