@@ -13,6 +13,7 @@ import { AccountWithDevice } from "~Model"
 import { ImageStyle } from "react-native-fast-image"
 import { AppDetailsBottomSheet } from "./AppDetailsBottomSheet"
 import { ConfirmDisconnectBottomSheet } from "./ConfirmDisconnectBottomSheet"
+import { ColorThemeType } from "~Constants"
 
 type Props = {
     session: SessionTypes.Struct
@@ -44,10 +45,9 @@ export const ConnectedAppBox: React.FC<Props> = memo(
         } = useBottomSheetModal()
 
         return (
-            <>
+            <BaseView style={styles.touchableContainer}>
                 <BaseTouchableBox
                     action={onPress}
-                    activeOpacity={1}
                     innerContainerStyle={styles.container}>
                     <BaseView
                         w={100}
@@ -108,12 +108,12 @@ export const ConnectedAppBox: React.FC<Props> = memo(
                         account={account}
                     />
                 </BaseTouchableBox>
-            </>
+            </BaseView>
         )
     },
 )
 
-const baseStyles = () =>
+const baseStyles = (theme: ColorThemeType) =>
     StyleSheet.create({
         innerContainer: {
             height: 45,
@@ -122,4 +122,8 @@ const baseStyles = () =>
             width: "100%",
         },
         image: { width: 35, height: 35, borderRadius: 24 },
+        touchableContainer: {
+            backgroundColor: theme.colors.card,
+            borderRadius: 16,
+        },
     })

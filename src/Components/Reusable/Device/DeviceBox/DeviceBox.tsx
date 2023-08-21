@@ -1,5 +1,5 @@
 import React from "react"
-import { useTheme, useThemedStyles } from "~Hooks"
+import { useThemedStyles } from "~Hooks"
 
 import {
     BaseCard,
@@ -31,8 +31,7 @@ export const DeviceBox: React.FC<Props> = ({
     drag,
     isActive,
 }) => {
-    const theme = useTheme()
-    const { styles } = useThemedStyles(baseStyles)
+    const { styles, theme } = useThemedStyles(baseStyles)
 
     /**
      * this is workaround for draggable flatlist

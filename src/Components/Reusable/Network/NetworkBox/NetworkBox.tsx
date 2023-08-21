@@ -20,12 +20,10 @@ export const NetworkBox: React.FC<Props> = ({
     onPress,
     rightIcon,
     isSelected = false,
-    flex,
-    activeOpacity,
 }) => {
     const { LL } = useI18nContext()
-    const { theme, styles: themedStyles } = useThemedStyles(baseStyles)
-    const style = isSelected ? themedStyles.selected : themedStyles.notSelected
+    const { theme, styles } = useThemedStyles(baseStyles)
+    const style = isSelected ? styles.selected : styles.notSelected
 
     const handleOnPress = useCallback(
         () => !!onPress && onPress(network),
@@ -33,32 +31,33 @@ export const NetworkBox: React.FC<Props> = ({
     )
 
     return (
-        <BaseTouchableBox
-            haptics="Light"
-            flex={flex}
-            activeOpacity={activeOpacity}
-            action={handleOnPress}
-            innerContainerStyle={style}
-            justifyContent="space-between">
-            <BaseView flexDirection="column" alignItems="flex-start">
-                <BaseView flexDirection="row">
-                    <BaseText typographyFont="button">
-                        {StringUtils.capitalize(network.name)}
-                    </BaseText>
-                    {network.defaultNet && (
-                        <BaseText pl={2} typographyFont="captionRegular">
-                            ({LL.COMMON_LBL_DEFAULT()})
+        <BaseView style={styles.touchableContainer}>
+            <BaseTouchableBox
+                haptics="Light"
+                flex={1}
+                action={handleOnPress}
+                innerContainerStyle={style}
+                justifyContent="space-between">
+                <BaseView flexDirection="column" alignItems="flex-start">
+                    <BaseView flexDirection="row">
+                        <BaseText typographyFont="button">
+                            {StringUtils.capitalize(network.name)}
                         </BaseText>
-                    )}
+                        {network.defaultNet && (
+                            <BaseText pl={2} typographyFont="captionRegular">
+                                ({LL.COMMON_LBL_DEFAULT()})
+                            </BaseText>
+                        )}
+                    </BaseView>
+                    <BaseText pt={2} typographyFont="captionMedium">
+                        {network.currentUrl}
+                    </BaseText>
                 </BaseView>
-                <BaseText pt={2} typographyFont="captionMedium">
-                    {network.currentUrl}
-                </BaseText>
-            </BaseView>
-            {rightIcon && (
-                <BaseIcon name={rightIcon} color={theme.colors.text} />
-            )}
-        </BaseTouchableBox>
+                {rightIcon && (
+                    <BaseIcon name={rightIcon} color={theme.colors.text} />
+                )}
+            </BaseTouchableBox>
+        </BaseView>
     )
 }
 
@@ -71,5 +70,9 @@ const baseStyles = (theme: ColorThemeType) =>
         notSelected: {
             borderWidth: 1.5,
             borderColor: theme.colors.card,
+        },
+        touchableContainer: {
+            backgroundColor: theme.colors.card,
+            borderRadius: 16,
         },
     })

@@ -163,8 +163,6 @@ export const ManageCustomNodesScreen = () => {
                         setNetworkToEditDeleteId(network.id)
                     }>
                     <NetworkBox
-                        activeOpacity={1}
-                        flex={1}
                         network={item}
                         onPress={onPress}
                         rightIcon="pencil-outline"
