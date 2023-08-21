@@ -9,6 +9,7 @@ import { FungibleToken } from "~Model"
  * @field `tokenDecimals` - The number of decimals the token has
  * @field `isCustomToken` - Whether the token is a custom token
  * @field `isHidden` - Whether the token is hidden
+ * @field `position` - tokens position in the home screen
  */
 export interface Balance {
     tokenAddress: string
@@ -19,6 +20,7 @@ export interface Balance {
     tokenDecimals?: number
     isCustomToken?: boolean
     isHidden: boolean
+    position?: number
 }
 
 export type DenormalizedAccountTokenBalance = Balance & {

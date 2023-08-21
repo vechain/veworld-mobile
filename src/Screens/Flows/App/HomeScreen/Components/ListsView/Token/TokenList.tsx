@@ -1,9 +1,6 @@
 import React, { memo, useCallback, useRef, useState } from "react"
-import { StyleSheet, ViewProps } from "react-native"
-import {
-    NestableDraggableFlatList,
-    RenderItem,
-} from "react-native-draggable-flatlist"
+import { FlatList, StyleSheet, ViewProps } from "react-native"
+import DraggableFlatList, { RenderItem } from "react-native-draggable-flatlist"
 import Animated, { AnimateProps } from "react-native-reanimated"
 import { SwipeableRow } from "~Components"
 import { AnimatedTokenCard } from "./AnimatedTokenCard"
@@ -29,17 +26,11 @@ import { SwipeableItemImperativeRef } from "react-native-swipeable-item"
 
 interface Props extends AnimateProps<ViewProps> {
     isEdit: boolean
-    visibleHeightRef: number
     isBalanceVisible: boolean
 }
 
 export const TokenList = memo(
-    ({
-        isEdit,
-        visibleHeightRef,
-        isBalanceVisible,
-        ...animatedViewProps
-    }: Props) => {
+    ({ isEdit, isBalanceVisible, ...animatedViewProps }: Props) => {
         const dispatch = useAppDispatch()
         const network = useAppSelector(selectSelectedNetwork)
         const tokenBalances = useAppSelector(selectNonVechainTokensWithBalances)
@@ -119,12 +110,20 @@ export const TokenList = memo(
                             drag={drag}
                             isEdit={isEdit}
                             isBalanceVisible={isBalanceVisible}
+                            swipeableItemRefs={swipeableItemRefs}
                         />
                     </SwipeableRow>
                 )
             },
             [isBalanceVisible, isEdit, openRemoveCustomTokenBottomSheet],
         )
+
+        /*
+         *   this is a workaround for letting the token list to be scrollable in swipeable mode (when !isEdit)
+         *   otherwise with DragableFlatList is is not
+         *   I didn't find a better way to handle it
+         */
+        const DraggableComponent = isEdit ? DraggableFlatList : FlatList
 
         return (
             <>
@@ -140,15 +139,15 @@ export const TokenList = memo(
                         isBalanceVisible={isBalanceVisible}
                     />
 
-                    <NestableDraggableFlatList
+                    <DraggableComponent
                         data={tokenBalances}
                         extraData={isEdit}
                         onDragEnd={handleDragEnd}
                         keyExtractor={item => item.address}
+                        // @ts-ignore
                         renderItem={renderItem}
                         activationDistance={10}
                         showsVerticalScrollIndicator={false}
-                        autoscrollThreshold={visibleHeightRef}
                     />
                 </Animated.View>
 

@@ -26,6 +26,7 @@ type Props = {
     showSelectedNetwork?: boolean
     onTouchBody?: () => void
     _iosSpecificBottomInsetsIfIos?: number
+    refreshControl?: ReactNode
 }
 
 export const Layout = ({
@@ -42,6 +43,7 @@ export const Layout = ({
     scrollViewTestID,
     _iosSpecificBottomInsetsIfIos,
     showSelectedNetwork = false,
+    refreshControl,
 }: Props) => {
     const theme = useTheme()
     const { androidSpecificBottomInsetsIfAndroid, platformBottomInsets } =
@@ -89,6 +91,7 @@ export const Layout = ({
 
                 {body && (
                     <BaseScrollView
+                        refreshControl={refreshControl}
                         testID={scrollViewTestID || "Layout_ScrollView"}
                         scrollEnabled={isScrollEnabled}
                         style={noMargin ? {} : styles.scrollView}
