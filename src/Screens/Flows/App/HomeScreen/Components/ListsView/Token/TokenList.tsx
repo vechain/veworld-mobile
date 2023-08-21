@@ -102,14 +102,6 @@ export const TokenList = memo(
             )
         }
 
-        const closeOtherSwipeableItems = useCallback((tokenAddress: string) => {
-            swipeableItemRefs?.current.forEach((ref, address) => {
-                if (address !== tokenAddress) {
-                    ref?.close()
-                }
-            })
-        }, [])
-
         const renderItem: RenderItem<FungibleTokenWithBalance> = useCallback(
             ({ item, getIndex, isActive, drag }) => {
                 return (
@@ -150,7 +142,6 @@ export const TokenList = memo(
 
                     <NestableDraggableFlatList
                         data={tokenBalances}
-                        onTouchStart={() => closeOtherSwipeableItems("")}
                         extraData={isEdit}
                         onDragEnd={handleDragEnd}
                         keyExtractor={item => item.address}
