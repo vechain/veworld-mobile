@@ -1,11 +1,11 @@
-import React, { useCallback, useMemo, useState } from "react"
+import React, { useCallback, useMemo } from "react"
 import { BottomSheetModalMethods } from "@gorhom/bottom-sheet/lib/typescript/types"
 import { BaseSpacer, BaseText, BaseView, BaseBottomSheet } from "~Components"
 import { useI18nContext } from "~i18n"
 import { BaseDevice } from "~Model"
 import { StyleSheet } from "react-native"
 import { BottomSheetFlatList } from "@gorhom/bottom-sheet"
-import { useScrollableList } from "~Hooks"
+import { useScrollableBottomSheet } from "~Hooks"
 import { DeviceBox } from "../DeviceBox"
 
 // Redecalare forwardRef in order to support additional generics
@@ -28,19 +28,15 @@ function SelectDeviceBottomSheetInner<T extends BaseDevice = BaseDevice>(
 
     const snapPoints = useMemo(() => ["30%", "90%"], [])
 
-    const [snapIndex, setSnapIndex] = useState<number>(0)
-
-    const { isListScrollable, viewabilityConfig, onViewableItemsChanged } =
-        useScrollableList(devices, snapIndex, snapPoints.length)
-
-    const handleSheetChanges = useCallback((index: number) => {
-        setSnapIndex(index)
-    }, [])
-
     const accountsListSeparator = useCallback(
         () => <BaseSpacer height={16} />,
         [],
     )
+
+    const { flatListScrollProps } = useScrollableBottomSheet({
+        data: devices,
+        snapPoints,
+    })
 
     const onDeviceSelected = useCallback(
         (device: T) => () => {
@@ -50,10 +46,7 @@ function SelectDeviceBottomSheetInner<T extends BaseDevice = BaseDevice>(
     )
 
     return (
-        <BaseBottomSheet
-            snapPoints={snapPoints}
-            onChange={handleSheetChanges}
-            ref={ref}>
+        <BaseBottomSheet snapPoints={snapPoints} ref={ref}>
             <BaseView flexDirection="row" w={100}>
                 <BaseText typographyFont="subTitleBold">
                     {LL.TITLE_EDIT_WALLET()}
@@ -68,8 +61,6 @@ function SelectDeviceBottomSheetInner<T extends BaseDevice = BaseDevice>(
                         data={devices}
                         keyExtractor={device => device.rootAddress}
                         ItemSeparatorComponent={accountsListSeparator}
-                        onViewableItemsChanged={onViewableItemsChanged}
-                        viewabilityConfig={viewabilityConfig}
                         renderItem={({ item }) => {
                             return (
                                 <DeviceBox
@@ -79,9 +70,7 @@ function SelectDeviceBottomSheetInner<T extends BaseDevice = BaseDevice>(
                                 />
                             )
                         }}
-                        scrollEnabled={isListScrollable}
-                        showsVerticalScrollIndicator={false}
-                        showsHorizontalScrollIndicator={false}
+                        {...flatListScrollProps}
                     />
                 )}
             </BaseView>
