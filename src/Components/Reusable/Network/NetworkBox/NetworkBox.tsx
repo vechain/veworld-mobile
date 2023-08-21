@@ -32,32 +32,39 @@ export const NetworkBox: React.FC<Props> = ({
         [onPress, network],
     )
 
+    const paddingRightWithIcon = rightIcon ? 20 : 0
+
     return (
         <BaseTouchableBox
             haptics="Light"
-            flex={flex}
             activeOpacity={activeOpacity}
             action={handleOnPress}
-            innerContainerStyle={style}
-            justifyContent="space-between">
-            <BaseView flexDirection="column" alignItems="flex-start">
-                <BaseView flexDirection="row">
-                    <BaseText typographyFont="button">
-                        {StringUtils.capitalize(network.name)}
-                    </BaseText>
-                    {network.defaultNet && (
-                        <BaseText pl={2} typographyFont="captionRegular">
-                            ({LL.COMMON_LBL_DEFAULT()})
+            innerContainerStyle={style}>
+            <BaseView
+                flexDirection="row"
+                justifyContent="space-between"
+                alignItems="center"
+                flex={flex}
+                pr={paddingRightWithIcon}>
+                <BaseView flexDirection="column" alignItems="flex-start">
+                    <BaseView flexDirection="row" pr={paddingRightWithIcon}>
+                        <BaseText typographyFont="button">
+                            {StringUtils.capitalize(network.name)}
                         </BaseText>
-                    )}
+                        {network.defaultNet && (
+                            <BaseText pl={2} typographyFont="captionRegular">
+                                ({LL.COMMON_LBL_DEFAULT()})
+                            </BaseText>
+                        )}
+                    </BaseView>
+                    <BaseText pt={2} typographyFont="captionMedium">
+                        {network.currentUrl}
+                    </BaseText>
                 </BaseView>
-                <BaseText pt={2} typographyFont="captionMedium">
-                    {network.currentUrl}
-                </BaseText>
+                {rightIcon && (
+                    <BaseIcon name={rightIcon} color={theme.colors.text} />
+                )}
             </BaseView>
-            {rightIcon && (
-                <BaseIcon name={rightIcon} color={theme.colors.text} />
-            )}
         </BaseTouchableBox>
     )
 }
