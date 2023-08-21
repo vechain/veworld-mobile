@@ -32,6 +32,8 @@ export const NetworkBox: React.FC<Props> = ({
         [onPress, network],
     )
 
+    const paddingRightWithIcon = rightIcon ? 20 : 0
+
     return (
         <BaseTouchableBox
             haptics="Light"
@@ -43,12 +45,9 @@ export const NetworkBox: React.FC<Props> = ({
                 justifyContent="space-between"
                 alignItems="center"
                 flex={flex}
-                pr={15}>
-                <BaseView
-                    flexDirection="column"
-                    alignItems="flex-start"
-                    pr={20}>
-                    <BaseView flexDirection="row">
+                pr={paddingRightWithIcon}>
+                <BaseView flexDirection="column" alignItems="flex-start">
+                    <BaseView flexDirection="row" pr={paddingRightWithIcon}>
                         <BaseText typographyFont="button">
                             {StringUtils.capitalize(network.name)}
                         </BaseText>
