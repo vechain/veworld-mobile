@@ -12,7 +12,7 @@ import { VeWorldLogoSVG } from "~Assets"
 import { useI18nContext } from "~i18n"
 import {
     addDeviceAndAccounts,
-    selectAccount,
+    setSelectedAccount,
     selectAreDevFeaturesEnabled,
     setAppLockStatus,
     setPinValidationString,
@@ -67,7 +67,7 @@ export const WelcomeScreen = () => {
         )
 
         dispatch(setAppLockStatus(WALLET_STATUS.UNLOCKED))
-        dispatch(selectAccount({ address: newAccount.address }))
+        dispatch(setSelectedAccount({ address: newAccount.address }))
         const parent = nav.getParent()
         if (parent) {
             if (parent.canGoBack()) {
