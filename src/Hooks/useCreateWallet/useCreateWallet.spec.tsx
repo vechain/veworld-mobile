@@ -74,8 +74,8 @@ jest.mock("~Storage/Redux/Actions", () => ({
     addDeviceAndAccounts: jest.fn(
         jest.requireActual("~Storage/Redux/Actions").addDeviceAndAccounts,
     ),
-    selectAccount: jest.fn(
-        jest.requireActual("~Storage/Redux/Actions").selectAccount,
+    setSelectedAccount: jest.fn(
+        jest.requireActual("~Storage/Redux/Actions").setSelectedAccount,
     ),
     setUserSelectedSecurity: jest.fn(
         jest.requireActual("~Storage/Redux/Actions").setUserSelectedSecurity,
