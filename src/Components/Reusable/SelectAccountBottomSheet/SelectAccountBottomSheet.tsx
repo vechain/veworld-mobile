@@ -74,6 +74,7 @@ export const SelectAccountBottomSheet = React.forwardRef<
                     data={accounts}
                     keyExtractor={account => account.address}
                     ItemSeparatorComponent={ItemSeparatorComponent}
+                    estimatedItemSize={74}
                     renderItem={({ item }) => (
                         <AccountCard
                             account={item}
