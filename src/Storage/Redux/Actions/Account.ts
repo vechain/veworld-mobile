@@ -1,6 +1,6 @@
 import { BaseDevice, WalletAccount } from "~Model"
 import {
-    selectAccount,
+    setSelectedAccount,
     renameAccount,
     removeAccountsByDevice,
     setAccountVisibility,
@@ -41,7 +41,7 @@ const addAccountForDevice =
     }
 
 export {
-    selectAccount,
+    setSelectedAccount,
     renameAccount,
     removeAccountsByDevice,
     setAccountVisibility,

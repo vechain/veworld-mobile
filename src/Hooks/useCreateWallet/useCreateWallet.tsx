@@ -2,15 +2,16 @@ import { useCallback, useState } from "react"
 import { CryptoUtils } from "~Utils"
 import { NewLedgerDevice, WALLET_STATUS } from "~Model"
 import { useDeviceUtils } from "../useDeviceUtils"
-import { useAppDispatch, useAppSelector } from "~Storage/Redux"
 import {
+    useAppDispatch,
+    useAppSelector,
     addDeviceAndAccounts,
-    selectAccount,
+    setSelectedAccount,
     setMnemonic,
     setAppLockStatus,
     setNewLedgerDevice,
     addLedgerDeviceAndAccounts,
-} from "~Storage/Redux/Actions"
+} from "~Storage/Redux"
 import { selectAccountsState } from "~Storage/Redux/Selectors"
 import { error } from "~Utils/Logger"
 import { useBiometrics } from "../useBiometrics"
@@ -74,7 +75,9 @@ export const useCreateWallet = () => {
                 dispatch(setAppLockStatus(WALLET_STATUS.UNLOCKED))
 
                 if (!selectedAccount)
-                    dispatch(selectAccount({ address: newAccount.address }))
+                    dispatch(
+                        setSelectedAccount({ address: newAccount.address }),
+                    )
 
                 setIsComplete(true)
                 track(AnalyticsEvent.WALLET_ADD_LOCAL_SUCCESS)
@@ -112,7 +115,9 @@ export const useCreateWallet = () => {
                 dispatch(setAppLockStatus(WALLET_STATUS.UNLOCKED))
 
                 if (!selectedAccount)
-                    dispatch(selectAccount({ address: accounts[0]?.address }))
+                    dispatch(
+                        setSelectedAccount({ address: accounts[0]?.address }),
+                    )
 
                 setIsComplete(true)
                 track(AnalyticsEvent.WALLET_ADD_LEDGER_SUCCESS)

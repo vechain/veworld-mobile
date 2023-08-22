@@ -1,4 +1,4 @@
-import { selectAccount, useAppDispatch } from "~Storage/Redux"
+import { setSelectedAccount, useAppDispatch } from "~Storage/Redux"
 import { useResetStacks } from "./useResetStacks"
 
 export const useSetSelectedAccount = () => {
@@ -7,7 +7,7 @@ export const useSetSelectedAccount = () => {
 
     const onSetSelectedAccount = ({ address }: { address?: string }) => {
         resetStacks()
-        address && dispatch(selectAccount({ address }))
+        address && dispatch(setSelectedAccount({ address }))
     }
 
     return { onSetSelectedAccount }
