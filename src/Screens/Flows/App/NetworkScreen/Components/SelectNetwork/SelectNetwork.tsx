@@ -31,6 +31,7 @@ export const SelectNetwork: React.FC<Props> = ({
                 network={selectedNetwork}
                 onPress={openBottomSheet}
                 rightIcon="magnify"
+                flex={1}
             />
         </>
     )

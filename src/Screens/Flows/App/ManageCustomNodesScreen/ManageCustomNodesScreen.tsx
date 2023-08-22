@@ -166,6 +166,7 @@ export const ManageCustomNodesScreen = () => {
                         network={item}
                         onPress={onPress}
                         rightIcon="pencil-outline"
+                        flex={1}
                     />
                 </SwipeableRow>
             )
