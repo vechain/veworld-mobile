@@ -4,6 +4,7 @@ import { useRenameWallet, useScrollableBottomSheet, useTheme } from "~Hooks"
 import { AddressUtils } from "~Utils"
 import {
     BaseBottomSheet,
+    BaseFlashList,
     BaseIcon,
     BaseSpacer,
     BaseText,
@@ -24,7 +25,6 @@ import {
     selectSelectedAccount,
 } from "~Storage/Redux/Selectors"
 import { StyleSheet } from "react-native"
-import { BottomSheetFlatList } from "@gorhom/bottom-sheet"
 
 type Props = {
     device?: Device
@@ -115,7 +115,7 @@ export const WalletMgmtBottomSheet = React.forwardRef<
             <BaseSpacer height={16} />
             <BaseView flexDirection="row" style={baseStyles.list}>
                 {device && !!deviceAccounts.length && (
-                    <BottomSheetFlatList
+                    <BaseFlashList
                         data={deviceAccounts}
                         keyExtractor={account => account.address}
                         ItemSeparatorComponent={accountsListSeparator}
