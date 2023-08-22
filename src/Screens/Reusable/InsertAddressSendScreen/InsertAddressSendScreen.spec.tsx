@@ -2,24 +2,17 @@ import React from "react"
 import { TestWrapper } from "~Test"
 import { InsertAddressSendScreen } from "./InsertAddressSendScreen"
 import { render, screen } from "@testing-library/react-native"
-import {
-    RootStackParamListHome,
-    RootStackParamListNFT,
-    Routes,
-} from "~Navigation"
+import { RootStackParamListHome, Routes } from "~Navigation"
 import { NativeStackNavigationProp } from "@react-navigation/native-stack"
 import { RouteProp } from "@react-navigation/native"
 
 type NavigationType = NativeStackNavigationProp<
-    RootStackParamListHome & RootStackParamListNFT,
+    RootStackParamListHome,
     Routes.INSERT_ADDRESS_SEND,
     undefined
 >
 
-type RouteType = RouteProp<
-    RootStackParamListHome & RootStackParamListNFT,
-    Routes.INSERT_ADDRESS_SEND
->
+type RouteType = RouteProp<RootStackParamListHome, Routes.INSERT_ADDRESS_SEND>
 
 const findElement = async () =>
     await screen.findByTestId(

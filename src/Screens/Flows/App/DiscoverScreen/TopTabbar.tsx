@@ -30,8 +30,9 @@ export const TopTabbar = ({
                         // The `merge: true` option makes sure that the params inside the tab screen are preserved
                         navigation.navigate({
                             name: route.name,
+                            params: undefined,
                             merge: true,
-                        } as any)
+                        })
                     }
                 }
 

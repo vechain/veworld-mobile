@@ -1,7 +1,7 @@
 import { TestHelpers } from "~Test"
 import LedgerUtils from "./LedgerUtils"
 import { defaultMainNetwork, LEDGER_ERROR_CODES } from "~Constants"
-import { BleError } from "react-native-ble-plx"
+import { BleError, BleErrorCodeMessageMapping } from "react-native-ble-plx"
 import { DisconnectedDeviceDuringOperation } from "@ledgerhq/errors"
 
 const successCallback = jest.fn()
@@ -24,7 +24,7 @@ describe("LedgerUtils", () => {
         it("BleError - should return OFF_OR_LOCKED", () => {
             const error = new BleError("BleError", {
                 0: "UnknownError",
-            } as any)
+            } as BleErrorCodeMessageMapping)
             expect(LedgerUtils.ledgerErrorHandler(error)).toBe(
                 LEDGER_ERROR_CODES.OFF_OR_LOCKED,
             )

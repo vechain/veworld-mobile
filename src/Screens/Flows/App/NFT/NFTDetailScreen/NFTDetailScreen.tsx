@@ -63,7 +63,7 @@ export const NFTDetailScreen = ({ route }: Props) => {
             nav.navigate(Routes.INSERT_ADDRESS_SEND, {
                 contractAddress: route.params.collectionAddress!,
                 tokenId: route.params.nftTokenId,
-            } as any), // todo https://github.com/vechainfoundation/veworld-mobile/issues/867
+            }),
         [nav, route.params.collectionAddress, route.params.nftTokenId],
     )
 

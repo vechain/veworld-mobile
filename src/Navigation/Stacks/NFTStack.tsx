@@ -8,6 +8,7 @@ import {
     SendNFTRecapScreen,
 } from "~Screens"
 import { Routes } from "~Navigation/Enums"
+import { FungibleTokenWithBalance } from "~Model"
 
 export type RootStackParamListNFT = {
     [Routes.NFTS]: undefined
@@ -18,7 +19,13 @@ export type RootStackParamListNFT = {
     [Routes.NFT_COLLECTION_DETAILS]: { collectionAddress: string }
     [Routes.BLACKLISTED_COLLECTIONS]: undefined
 
-    [Routes.INSERT_ADDRESS_SEND]: { contractAddress: string; tokenId: string }
+    [Routes.INSERT_ADDRESS_SEND]: {
+        token?: FungibleTokenWithBalance
+        amount?: string
+        initialRoute?: Routes
+        contractAddress?: string
+        tokenId?: string
+    }
 
     [Routes.SEND_NFT_RECAP]: {
         contractAddress: string
