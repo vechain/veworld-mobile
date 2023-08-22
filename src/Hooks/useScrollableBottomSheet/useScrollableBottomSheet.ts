@@ -1,6 +1,5 @@
 import { useCallback, useState } from "react"
 import { useScrollableList } from "~Hooks/useScrollableList"
-import { PlatformUtils } from "~Utils"
 
 export const useScrollableBottomSheet = ({
     snapPoints,
@@ -20,14 +19,10 @@ export const useScrollableBottomSheet = ({
 
     return {
         handleSheetChangePosition,
-        flatListScrollProps: {
+        scrollableBottomSheetProps: {
             onViewableItemsChanged,
             viewabilityConfig,
             scrollEnabled: isListScrollable,
-            showsVerticalScrollIndicator: false,
-            showsHorizontalScrollIndicator: false,
-            windowSize: PlatformUtils.isIOS() ? 3 : 20,
-            maxToRenderPerBatch: PlatformUtils.isIOS() ? 1 : 5,
         },
     }
 }

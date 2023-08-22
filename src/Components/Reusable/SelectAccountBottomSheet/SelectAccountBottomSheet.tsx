@@ -1,8 +1,13 @@
 import React from "react"
-import { BottomSheetFlatList } from "@gorhom/bottom-sheet"
 import { BottomSheetModalMethods } from "@gorhom/bottom-sheet/lib/typescript/types"
 import { useScrollableBottomSheet } from "~Hooks"
-import { AccountCard, BaseBottomSheet, BaseSpacer, BaseText } from "~Components"
+import {
+    AccountCard,
+    BaseBottomSheet,
+    BaseSpacer,
+    BaseText,
+    BaseFlashList,
+} from "~Components"
 import { AccountWithDevice } from "~Model"
 import { useI18nContext } from "~i18n"
 
@@ -52,7 +57,7 @@ export const SelectAccountBottomSheet = React.forwardRef<
             if (closeBottomSheet) closeBottomSheet()
         }
 
-        const { flatListScrollProps, handleSheetChangePosition } =
+        const { scrollableBottomSheetProps, handleSheetChangePosition } =
             useScrollableBottomSheet({ data: accounts, snapPoints })
 
         return (
@@ -65,7 +70,7 @@ export const SelectAccountBottomSheet = React.forwardRef<
                     {LL.COMMON_SELECT_ACCOUNT()}
                 </BaseText>
                 <BaseSpacer height={12} />
-                <BottomSheetFlatList
+                <BaseFlashList
                     data={accounts}
                     keyExtractor={account => account.address}
                     ItemSeparatorComponent={ItemSeparatorComponent}
@@ -78,7 +83,7 @@ export const SelectAccountBottomSheet = React.forwardRef<
                             isBalanceVisible={isBalanceVisible}
                         />
                     )}
-                    {...flatListScrollProps}
+                    {...scrollableBottomSheetProps}
                 />
             </BaseBottomSheet>
         )
