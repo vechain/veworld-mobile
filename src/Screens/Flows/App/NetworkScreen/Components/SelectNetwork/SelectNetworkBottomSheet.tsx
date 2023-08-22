@@ -100,6 +100,7 @@ export const SelectNetworkBottomSheet = React.forwardRef<
                     network={item}
                     isSelected={isSelected}
                     onPress={() => onPress(item)}
+                    flex={1}
                 />
             )
         },

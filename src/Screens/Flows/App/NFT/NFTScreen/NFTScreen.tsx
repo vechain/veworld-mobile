@@ -1,7 +1,7 @@
 import React, { useCallback, useMemo, useState } from "react"
 import {
-    BaseSafeArea,
     BaseView,
+    Layout,
     QRCodeBottomSheet,
     SelectAccountBottomSheet,
 } from "~Components"
@@ -110,25 +110,32 @@ export const NFTScreen = () => {
     }, [error, collections, isLoading, renderImportNftView, renderNFTList])
 
     return (
-        <BaseSafeArea>
-            <NftScreenHeader
-                openSelectAccountBottomSheet={openSelectAccountBottomSheet}
-            />
+        <Layout
+            fixedHeader={
+                <NftScreenHeader
+                    openSelectAccountBottomSheet={openSelectAccountBottomSheet}
+                />
+            }
+            noBackButton
+            noMargin
+            fixedBody={
+                <>
+                    <BaseView flex={1} justifyContent="center">
+                        {renderContent}
+                    </BaseView>
 
-            <BaseView flex={1} justifyContent="center">
-                {renderContent}
-            </BaseView>
+                    {/* BOTTOM SHEETS */}
+                    <SelectAccountBottomSheet
+                        closeBottomSheet={closeSelectAccountBottonSheet}
+                        accounts={accounts}
+                        setSelectedAccount={setSelectedAccount}
+                        selectedAccount={selectedAccount}
+                        ref={selectAccountBottomSheetRef}
+                    />
 
-            {/* BOTTOM SHEETS */}
-            <SelectAccountBottomSheet
-                closeBottomSheet={closeSelectAccountBottonSheet}
-                accounts={accounts}
-                setSelectedAccount={setSelectedAccount}
-                selectedAccount={selectedAccount}
-                ref={selectAccountBottomSheetRef}
-            />
-
-            <QRCodeBottomSheet ref={QRCodeBottomSheetRef} />
-        </BaseSafeArea>
+                    <QRCodeBottomSheet ref={QRCodeBottomSheetRef} />
+                </>
+            }
+        />
     )
 }

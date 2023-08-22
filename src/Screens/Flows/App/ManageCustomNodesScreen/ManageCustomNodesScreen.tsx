@@ -164,10 +164,10 @@ export const ManageCustomNodesScreen = () => {
                     }>
                     <NetworkBox
                         activeOpacity={1}
-                        flex={1}
                         network={item}
                         onPress={onPress}
                         rightIcon="pencil-outline"
+                        flex={1}
                     />
                 </SwipeableRow>
             )
