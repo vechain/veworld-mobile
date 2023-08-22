@@ -9,18 +9,18 @@ import {
     BaseView,
     LedgerBadge,
 } from "~Components"
-import { DEVICE_TYPE, Device } from "~Model"
+import { BaseDevice, DEVICE_TYPE } from "~Model"
 import { Pressable, StyleSheet } from "react-native"
 import { ColorThemeType } from "~Constants"
 import { TouchableOpacity } from "react-native-gesture-handler"
 
 type Props = {
-    device: Device
-    onDeviceSelected?: (item: Device) => () => void
+    device: BaseDevice
+    onDeviceSelected?: (item: BaseDevice) => () => void
     isIconVisible?: boolean
     isEdit?: boolean
-    drag: () => void
-    isActive: boolean
+    drag?: () => void
+    isActive?: boolean
 }
 
 export const DeviceBox: React.FC<Props> = ({
@@ -29,7 +29,7 @@ export const DeviceBox: React.FC<Props> = ({
     isEdit = false,
     onDeviceSelected,
     drag,
-    isActive,
+    isActive = false,
 }) => {
     const { styles, theme } = useThemedStyles(baseStyles)
 

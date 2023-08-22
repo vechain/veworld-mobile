@@ -7,7 +7,7 @@ import {
     RequireUserPassword,
     SwipeableRow,
 } from "~Components"
-import { Device } from "~Model"
+import { BaseDevice, Device } from "~Model"
 import { setDeviceState, useAppSelector } from "~Storage/Redux"
 import { selectDevices } from "~Storage/Redux/Selectors"
 import {
@@ -84,9 +84,9 @@ export const WalletManagementScreen = () => {
     )
 
     const onDeviceSelected = useCallback(
-        (device: Device) => () => {
+        (device: BaseDevice) => () => {
             closeOtherSwipeableItems()
-            setSelectedDevice(device)
+            setSelectedDevice(device as Device)
             openWalletMgmtSheet()
         },
         [closeOtherSwipeableItems, openWalletMgmtSheet],
