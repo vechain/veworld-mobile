@@ -9,17 +9,16 @@ import {
 } from "~Components"
 import { DevicesList } from "./DevicesList"
 import { useI18nContext } from "~i18n"
-import { useAppDispatch } from "~Storage/Redux"
+import { selectDevices, useAppDispatch, useAppSelector } from "~Storage/Redux"
 import { addAccountForDevice } from "~Storage/Redux/Actions"
 import { BaseDevice } from "~Model"
-import { info } from "~Utils"
-import { useSetSelectedAccount } from "~Hooks"
+import { useScrollableBottomSheet, useSetSelectedAccount } from "~Hooks"
 
 type Props = {
     onSuccess?: () => void
 }
 
-const snapPoints = ["60%"]
+const snapPoints = ["60%", "90%"]
 
 export const AddAccountBottomSheet = React.forwardRef<
     BottomSheetModalMethods,
@@ -40,15 +39,15 @@ export const AddAccountBottomSheet = React.forwardRef<
         }
     }, [dispatch, onSetSelectedAccount, onSuccess, selectedDevice])
 
-    const handleSheetChanges = useCallback((index: number) => {
-        info("addAccountSheet position changed", index)
-    }, [])
+    const devices = useAppSelector(selectDevices)
+    const { flatListScrollProps, handleSheetChangePosition } =
+        useScrollableBottomSheet({ data: devices, snapPoints })
 
     return (
         <BaseBottomSheet
             snapPoints={snapPoints}
-            onChange={handleSheetChanges}
-            ref={ref}>
+            ref={ref}
+            onChange={handleSheetChangePosition}>
             <BaseView justifyContent="space-between" flexGrow={1}>
                 <BaseView flexGrow={1}>
                     <BaseText typographyFont="subTitleBold">
@@ -59,6 +58,8 @@ export const AddAccountBottomSheet = React.forwardRef<
                         selectedDevice={selectedDevice}
                         onDevicePress={setSelectedDevice}
                         inBottomSheet={false}
+                        devices={devices}
+                        flatListScrollProps={flatListScrollProps}
                     />
                 </BaseView>
                 <BaseButton
