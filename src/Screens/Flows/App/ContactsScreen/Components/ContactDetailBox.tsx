@@ -1,6 +1,6 @@
 import React, { memo } from "react"
 import { StyleSheet } from "react-native"
-import { useTheme } from "~Hooks"
+import { useThemedStyles } from "~Hooks"
 import { FormattingUtils } from "~Utils"
 import {
     BaseIcon,
@@ -10,6 +10,7 @@ import {
     BaseView,
 } from "~Components"
 import { Contact } from "~Model"
+import { ColorThemeType } from "~Constants"
 
 type Props = {
     contact: Contact
@@ -18,16 +19,18 @@ type Props = {
 
 export const ContactDetailBox: React.FC<Props> = memo(
     ({ contact, onEditPress }) => {
-        const theme = useTheme()
+        const { styles, theme } = useThemedStyles(baseStyles)
 
         return (
-            <BaseView w={100} flexDirection="row">
+            <BaseView
+                w={100}
+                flexDirection="row"
+                style={styles.touchableContainer}>
                 <BaseTouchableBox
                     haptics="Light"
                     action={() => onEditPress(contact.alias, contact.address)}
                     justifyContent="space-between"
-                    containerStyle={baseStyles.container}
-                    activeOpacity={1}
+                    containerStyle={styles.container}
                     testID={`${contact.alias}-contact-box`}>
                     <BaseView flexDirection="column">
                         <BaseText typographyFont="button">
@@ -44,7 +47,7 @@ export const ContactDetailBox: React.FC<Props> = memo(
                             )}
                         </BaseText>
                     </BaseView>
-                    <BaseView style={baseStyles.rightSubContainer}>
+                    <BaseView style={styles.rightSubContainer}>
                         <BaseIcon
                             color={theme.colors.primary}
                             size={24}
@@ -60,17 +63,22 @@ export const ContactDetailBox: React.FC<Props> = memo(
     },
 )
 
-const baseStyles = StyleSheet.create({
-    container: {
-        flex: 1,
-    },
-    rightSubContainer: {
-        flexDirection: "column",
-        alignItems: "flex-end",
-    },
-    leftSwipeBox: {
-        flexDirection: "row",
-        alignItems: "flex-end",
-        paddingLeft: 16,
-    },
-})
+const baseStyles = (theme: ColorThemeType) =>
+    StyleSheet.create({
+        container: {
+            flex: 1,
+        },
+        rightSubContainer: {
+            flexDirection: "column",
+            alignItems: "flex-end",
+        },
+        leftSwipeBox: {
+            flexDirection: "row",
+            alignItems: "flex-end",
+            paddingLeft: 16,
+        },
+        touchableContainer: {
+            backgroundColor: theme.colors.card,
+            borderRadius: 16,
+        },
+    })

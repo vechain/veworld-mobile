@@ -1,6 +1,6 @@
 import React, { useCallback, useRef } from "react"
 import { FlatList, ListRenderItem, StyleSheet, View } from "react-native"
-import { useTheme } from "~Hooks"
+import { useThemedStyles } from "~Hooks"
 import {
     BaseCard,
     BaseIcon,
@@ -18,6 +18,7 @@ import {
 } from "~Storage/Redux"
 import { useI18nContext } from "~i18n"
 import { SwipeableItemImperativeRef } from "react-native-swipeable-item"
+import { ColorThemeType } from "~Constants"
 
 type Props = {
     openAddUrl: () => void
@@ -25,7 +26,7 @@ type Props = {
 
 export const ManageUrls = ({ openAddUrl }: Props) => {
     const { LL } = useI18nContext()
-    const theme = useTheme()
+    const { styles, theme } = useThemedStyles(baseStyles)
     const delegationUrls = useAppSelector(selectDelegationUrls)
     const dispatch = useAppDispatch()
     const thor = useThor()
@@ -49,15 +50,17 @@ export const ManageUrls = ({ openAddUrl }: Props) => {
                     itemKey={String(index)}
                     swipeableItemRefs={swipeableItemRefs}
                     handleTrashIconPress={deleteUrl}>
-                    <BaseCard>
-                        <BaseText typographyFont="bodyBold" w={100} py={8}>
-                            {item}
-                        </BaseText>
-                    </BaseCard>
+                    <BaseView style={styles.touchableContainer}>
+                        <BaseCard onPress={() => {}}>
+                            <BaseText typographyFont="bodyBold" w={100} py={8}>
+                                {item}
+                            </BaseText>
+                        </BaseCard>
+                    </BaseView>
                 </SwipeableRow>
             )
         },
-        [deleteUrl],
+        [deleteUrl, styles.touchableContainer],
     )
 
     return (
@@ -90,10 +93,15 @@ export const ManageUrls = ({ openAddUrl }: Props) => {
     )
 }
 
-const styles = StyleSheet.create({
-    flatListContainer: {
-        flex: 1,
-        width: "100%",
-        marginBottom: 60,
-    },
-})
+const baseStyles = (theme: ColorThemeType) =>
+    StyleSheet.create({
+        touchableContainer: {
+            backgroundColor: theme.colors.card,
+            borderRadius: 16,
+        },
+        flatListContainer: {
+            flex: 1,
+            width: "100%",
+            marginBottom: 60,
+        },
+    })

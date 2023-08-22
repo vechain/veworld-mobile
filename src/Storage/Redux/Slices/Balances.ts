@@ -130,7 +130,6 @@ export const BalanceSlice = createSlice({
                         balance.tokenAddress ===
                         updatedAccountBalance.tokenAddress,
                 )
-
                 return updatedBalance ? updatedBalance : balance
             })
         },

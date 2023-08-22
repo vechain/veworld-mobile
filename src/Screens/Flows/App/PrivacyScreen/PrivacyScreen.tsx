@@ -193,19 +193,10 @@ export const PrivacyScreen = () => {
 
                         <BaseSpacer height={24} />
 
-                        <BaseText typographyFont="bodyMedium">
-                            {LL.SB_BACKUP_MNEMONIC()}
-                        </BaseText>
-                        <BaseText typographyFont="caption">
-                            {LL.BD_BACKUP_MNEMONIC()}
-                        </BaseText>
-
-                        <BaseSpacer height={16} />
-
                         <BaseTouchable
                             haptics="Light"
                             action={checkSecurityBeforeOpening}
-                            title={LL.BTN_BACKUP_MENMONIC()}
+                            title={LL.BD_BACKUP_MNEMONIC()}
                             underlined
                         />
 

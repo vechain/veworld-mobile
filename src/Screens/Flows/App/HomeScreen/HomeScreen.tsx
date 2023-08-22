@@ -1,4 +1,4 @@
-import React, { useCallback, useRef, useState } from "react"
+import React, { useCallback, useState } from "react"
 import {
     AccountManagementBottomSheet,
     EditTokensBar,
@@ -16,6 +16,7 @@ import {
 import {
     AddAccountBottomSheet,
     BaseSpacer,
+    BaseView,
     Layout,
     QRCodeBottomSheet,
     RenameAccountBottomSheet,
@@ -24,7 +25,6 @@ import {
 } from "~Components"
 import { FadeInRight } from "react-native-reanimated"
 import { useTokenBalances } from "./Hooks/useTokenBalances"
-import { NestableScrollContainer } from "react-native-draggable-flatlist"
 import {
     selectAccounts,
     selectBalanceVisible,
@@ -44,12 +44,10 @@ export const HomeScreen = () => {
     const { onSetSelectedAccount } = useSetSelectedAccount()
 
     const { LL } = useI18nContext()
-
     // Pull down to refresh
     const [refreshing, setRefreshing] = React.useState(false)
 
     const theme = useTheme()
-
     const isBalanceVisible = useAppSelector(selectBalanceVisible)
 
     const {
@@ -148,27 +146,22 @@ export const HomeScreen = () => {
     })
 
     const [isEdit, setIsEdit] = useState(false)
-    const visibleHeightRef = useRef<number>(0)
 
     return (
         <Layout
             fixedHeader={<Header />}
             noBackButton
             noMargin
-            fixedBody={
+            refreshControl={
+                <RefreshControl
+                    onRefresh={onRefresh}
+                    tintColor={theme.colors.border}
+                    refreshing={refreshing}
+                />
+            }
+            body={
                 <>
-                    <NestableScrollContainer
-                        showsVerticalScrollIndicator={false}
-                        onContentSizeChange={visibleHeight => {
-                            visibleHeightRef.current = visibleHeight
-                        }}
-                        refreshControl={
-                            <RefreshControl
-                                onRefresh={onRefresh}
-                                tintColor={theme.colors.border}
-                                refreshing={refreshing}
-                            />
-                        }>
+                    <BaseView>
                         <HeaderView
                             openAccountManagementSheet={
                                 openAccountManagementSheet
@@ -183,12 +176,11 @@ export const HomeScreen = () => {
 
                         <TokenList
                             isEdit={isEdit}
-                            visibleHeightRef={visibleHeightRef.current}
                             isBalanceVisible={isBalanceVisible}
                             entering={animateEntering}
                         />
                         <BaseSpacer height={BottomInsetsEXtraPadding.TabBar} />
-                    </NestableScrollContainer>
+                    </BaseView>
 
                     <AccountManagementBottomSheet
                         ref={accountManagementBottomSheetRef}
