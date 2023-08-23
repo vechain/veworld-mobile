@@ -5,6 +5,7 @@ import SwipeableItem, {
     SwipeableItemImperativeRef,
 } from "react-native-swipeable-item"
 import { DeleteUnderlay } from "../DeleteUnderlay"
+import { Pressable } from "react-native"
 
 type Props<T> = {
     item: T
@@ -70,7 +71,9 @@ export const SwipeableRow = <T,>({
                 )}
                 snapPointsLeft={[58]}
                 onChange={handleSwipe}>
-                {children}
+                <Pressable onTouchStart={() => closeOtherSwipeableItems(false)}>
+                    {children}
+                </Pressable>
             </SwipeableItem>
         </BaseView>
     )

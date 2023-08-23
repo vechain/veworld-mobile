@@ -155,7 +155,6 @@ export const ContactsScreen = () => {
     return (
         <Layout
             safeAreaTestID="ContactsScreen"
-            onTouchBody={() => closeOtherSwipeableItems("")}
             fixedHeader={
                 <BaseView pb={16}>
                     <BaseView

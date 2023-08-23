@@ -96,16 +96,23 @@ export const BalanceSlice = createSlice({
 
             ensureBalanceSlotExists(state, network, accountAddress)
 
-            const existing = state[network][normAccountAddress].find(bal =>
-                AddressUtils.compareAddresses(
-                    bal.tokenAddress,
-                    normTokenAddress,
-                ),
-            )
-
-            debug(`Removing balance ${existing?.tokenAddress}`)
-
-            if (existing) existing.isHidden = true
+            state[network][normAccountAddress] = state[network][
+                normAccountAddress
+            ].map(balance => {
+                if (
+                    AddressUtils.compareAddresses(
+                        balance.tokenAddress,
+                        normTokenAddress,
+                    )
+                ) {
+                    debug(`Removing balance ${balance.tokenAddress}`)
+                    return {
+                        ...balance,
+                        isHidden: true,
+                    }
+                }
+                return balance
+            })
         },
 
         changeBalancePosition: (
@@ -130,7 +137,6 @@ export const BalanceSlice = createSlice({
                         balance.tokenAddress ===
                         updatedAccountBalance.tokenAddress,
                 )
-
                 return updatedBalance ? updatedBalance : balance
             })
         },
