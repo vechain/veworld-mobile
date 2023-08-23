@@ -1,9 +1,7 @@
-import React, { ReactElement, useCallback } from "react"
+import React, { ReactElement } from "react"
 import { StyleSheet, ViewProps } from "react-native"
-import RNRestart from "react-native-restart"
 import { useTheme } from "~Hooks"
 import {
-    BaseButton,
     BaseIcon,
     BaseSafeArea,
     BaseSpacer,
@@ -15,10 +13,7 @@ import { useI18nContext } from "~i18n"
 const Error = (): ReactElement => {
     const { LL } = useI18nContext()
     const theme = useTheme()
-    const handleBackToSignIn = useCallback(() => {
-        // restart app
-        RNRestart.Restart()
-    }, [])
+
     return (
         <BaseSafeArea grow={1}>
             <BaseView flexGrow={1} px={24} justifyContent="space-between">
@@ -43,12 +38,6 @@ const Error = (): ReactElement => {
                         {LL.ERROR_GENERIC_BODY()}
                     </BaseText>
                 </BaseView>
-                <BaseButton
-                    title={"Restart"}
-                    action={handleBackToSignIn}
-                    my={24}
-                    radius={16}
-                />
             </BaseView>
         </BaseSafeArea>
     )
