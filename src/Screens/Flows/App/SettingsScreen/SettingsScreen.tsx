@@ -81,7 +81,7 @@ const baseStyles = (theme: ColorThemeType) =>
     })
 
 const getList = (LL: TranslationFunctions, devEnabled: boolean) => {
-    const settingsList = [
+    const settingsList: RowProps[] = [
         {
             title: LL.TITLE_GENERAL(),
             screenName: Routes.SETTINGS_GENERAL,

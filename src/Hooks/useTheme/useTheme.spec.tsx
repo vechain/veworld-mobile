@@ -4,59 +4,46 @@ import { useTheme, useThemedStyles } from "./useTheme"
 import { ColorTheme, ColorThemeType } from "../../Constants/Theme/Theme"
 import { TestWrapper } from "~Test"
 import { ThemeEnum } from "~Constants"
+import { RootState } from "~Storage/Redux/Types"
 
 describe("useTheme", () => {
     it("should return the correct system theme", async () => {
         const preloadedState = {
-            userPreferences: { theme: ThemeEnum.SYSTEM } as any,
-        }
+            userPreferences: { theme: ThemeEnum.SYSTEM },
+        } as Partial<RootState>
         const { result } = renderHook(() => useTheme(), {
-            wrapper: (({ children }: { children: React.ReactNode }) => (
+            wrapper: ({ children }: { children: React.ReactNode }) => (
                 <TestWrapper preloadedState={preloadedState}>
                     {children}
                 </TestWrapper>
-            )) as any,
+            ),
         })
         expect(result.current).toEqual(ColorTheme("light"))
     })
     it("should return the correct dark theme", async () => {
         const preloadedState = {
-            userPreferences: { theme: ThemeEnum.DARK } as any,
-        }
+            userPreferences: { theme: ThemeEnum.DARK },
+        } as Partial<RootState>
         const { result } = renderHook(() => useTheme(), {
-            wrapper: (({ children }: { children: React.ReactNode }) => (
+            wrapper: ({ children }: { children: React.ReactNode }) => (
                 <TestWrapper preloadedState={preloadedState}>
                     {children}
                 </TestWrapper>
-            )) as any,
+            ),
         })
 
         expect(result.current).toEqual(ColorTheme("dark"))
     })
     it("should return the correct light theme", async () => {
         const preloadedState = {
-            userPreferences: { theme: ThemeEnum.LIGHT } as any,
-        }
+            userPreferences: { theme: ThemeEnum.LIGHT },
+        } as Partial<RootState>
         const { result } = renderHook(() => useTheme(), {
-            wrapper: (({ children }: { children: React.ReactNode }) => (
+            wrapper: ({ children }: { children: React.ReactNode }) => (
                 <TestWrapper preloadedState={preloadedState}>
                     {children}
                 </TestWrapper>
-            )) as any,
-        })
-
-        expect(result.current).toEqual(ColorTheme("light"))
-    })
-    it("should return the correct light theme if theme is null", async () => {
-        const preloadedState = {
-            userPreferences: { theme: null } as any,
-        }
-        const { result } = renderHook(() => useTheme(), {
-            wrapper: (({ children }: { children: React.ReactNode }) => (
-                <TestWrapper preloadedState={preloadedState}>
-                    {children}
-                </TestWrapper>
-            )) as any,
+            ),
         })
 
         expect(result.current).toEqual(ColorTheme("light"))

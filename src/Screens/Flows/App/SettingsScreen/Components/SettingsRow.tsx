@@ -4,10 +4,11 @@ import { StyleSheet } from "react-native"
 import { LocalizedString } from "typesafe-i18n"
 import { useTheme } from "~Hooks"
 import { BaseIcon, BaseText, BaseTouchable, BaseView } from "~Components"
+import { RootStackParamListSettings } from "~Navigation"
 
 export type RowProps = {
     title: LocalizedString
-    screenName: string
+    screenName: keyof RootStackParamListSettings
     icon: string
 }
 
@@ -17,8 +18,7 @@ export const SettingsRow = ({ title, screenName, icon }: RowProps) => {
     const theme = useTheme()
 
     const onPress = useCallback(
-        // TODO (Davide) (https://github.com/vechainfoundation/veworld-mobile/issues/768) add types
-        () => nav.navigate(screenName as any),
+        () => nav.navigate(screenName),
         [screenName, nav],
     )
 
