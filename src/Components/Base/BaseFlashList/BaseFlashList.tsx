@@ -6,7 +6,6 @@ type flashListPredefinedProps = {
     showsVerticalScrollIndicator?: boolean
     showsHorizontalScrollIndicator?: boolean
     renderScrollComponent?: typeof ScrollView
-    estimatedItemSize?: number
 }
 export function BaseFlashList<T>(props: FlashListProps<T>) {
     const panRef = useRef<FlashList<T> | null>(null)
