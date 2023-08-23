@@ -20,8 +20,10 @@ export const AutoLogoutProvider = ({ children }: ProviderProps) => {
         } else if (inactivityStartTime > 0 && backgroundToActive) {
             debug("App is now active")
             /**
-             * note I had to comment this out because it was causing the app to crash
-             * since the library we were using to restart the app was not working
+             * NOTE: I had to comment this out because it was causing the app to crash
+             * since the library we were using to restart the app (react-native-restart) was conflicting with reanimated and the app crashed
+             * I also tried other apps but nothing worked
+             * so I commented it out for now
              */
             // Check if the app was closed for more than 5 minutes
             // const now = Date.now()
