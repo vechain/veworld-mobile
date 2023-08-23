@@ -71,7 +71,7 @@ export const mockedTransport = new BleTransport(
     mockedDevice as Device,
     characteristics,
     characteristics,
-    null as any,
+    null as unknown as Characteristic,
     mockDeviceModel,
 )
 
