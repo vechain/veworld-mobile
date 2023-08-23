@@ -4,7 +4,7 @@ import { Linking } from "react-native"
 import { defaultMainNetwork } from "~Constants"
 import { Network } from "~Model"
 import { Routes } from "~Navigation"
-import { selectAccount, useAppDispatch } from "~Storage/Redux"
+import { setSelectedAccount, useAppDispatch } from "~Storage/Redux"
 
 export const useInformUser = ({ network }: { network: Network }) => {
     const nav = useNavigation()
@@ -23,7 +23,7 @@ export const useInformUser = ({ network }: { network: Network }) => {
                 // received token/VET
                 nav.navigate(Routes.HOME)
                 disptach(
-                    selectAccount({
+                    setSelectedAccount({
                         address: params.accountAddress,
                     }),
                 )
@@ -45,7 +45,7 @@ export const useInformUser = ({ network }: { network: Network }) => {
                 // 1. User received NFT
                 nav.navigate(Routes.NFTS)
                 disptach(
-                    selectAccount({
+                    setSelectedAccount({
                         address: params.accountAddress,
                     }),
                 )

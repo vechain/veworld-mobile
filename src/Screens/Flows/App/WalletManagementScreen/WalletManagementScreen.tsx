@@ -7,7 +7,7 @@ import {
     RequireUserPassword,
     SwipeableRow,
 } from "~Components"
-import { Device } from "~Model"
+import { BaseDevice, Device } from "~Model"
 import { setDeviceState, useAppSelector } from "~Storage/Redux"
 import { selectDevices } from "~Storage/Redux/Selectors"
 import {
@@ -17,13 +17,12 @@ import {
     WalletManagementHeader,
     WalletMgmtBottomSheet,
 } from "./components"
-import { Pressable, StyleSheet } from "react-native"
-import { useBottomSheetModal, useCheckIdentity, useThemedStyles } from "~Hooks"
+import { StyleSheet } from "react-native"
+import { useBottomSheetModal, useCheckIdentity } from "~Hooks"
 import { SwipeableItemImperativeRef } from "react-native-swipeable-item"
 import DraggableFlatList, { RenderItem } from "react-native-draggable-flatlist"
 import { useNavigation } from "@react-navigation/native"
 import { useDispatch } from "react-redux"
-import { ColorThemeType } from "~Constants"
 
 export const WalletManagementScreen = () => {
     const devices = useAppSelector(selectDevices)
@@ -40,7 +39,6 @@ export const WalletManagementScreen = () => {
         onIdentityConfirmed: deleteWallet,
         allowAutoPassword: false,
     })
-    const { styles } = useThemedStyles(baseStyles)
 
     const {
         ref: createWalletOrAccountBottomSheetRef,
@@ -86,9 +84,9 @@ export const WalletManagementScreen = () => {
     )
 
     const onDeviceSelected = useCallback(
-        (device: Device) => () => {
+        (device: BaseDevice) => () => {
             closeOtherSwipeableItems()
-            setSelectedDevice(device)
+            setSelectedDevice(device as Device)
             openWalletMgmtSheet()
         },
         [closeOtherSwipeableItems, openWalletMgmtSheet],
@@ -104,28 +102,17 @@ export const WalletManagementScreen = () => {
                     handleTrashIconPress={openRemoveWalletBottomSheet}
                     setSelectedItem={setSelectedDevice}
                     swipeEnabled={!isEdit && devices.length > 1}>
-                    <Pressable
-                        onPressIn={isEdit ? drag : undefined}
-                        disabled={isActive}
-                        style={styles.deviceBoxPressable}>
-                        <DeviceBox
-                            device={item}
-                            onDeviceSelected={
-                                isEdit ? undefined : onDeviceSelected(item)
-                            }
-                            isEdit={isEdit}
-                        />
-                    </Pressable>
+                    <DeviceBox
+                        device={item}
+                        isEdit={isEdit}
+                        drag={drag}
+                        isActive={isActive}
+                        onDeviceSelected={onDeviceSelected}
+                    />
                 </SwipeableRow>
             )
         },
-        [
-            devices.length,
-            isEdit,
-            onDeviceSelected,
-            openRemoveWalletBottomSheet,
-            styles.deviceBoxPressable,
-        ],
+        [devices.length, isEdit, onDeviceSelected, openRemoveWalletBottomSheet],
     )
 
     const handleOnSuccessAddAccountBottomSheet = useCallback(() => {
@@ -205,15 +192,11 @@ export const WalletManagementScreen = () => {
     )
 }
 
-const baseStyles = (theme: ColorThemeType) =>
-    StyleSheet.create({
-        view: { flexGrow: 1 },
-        draggableFlatListContainer: { flexGrow: 1 },
-        deviceBoxPressable: {
-            backgroundColor: theme.colors.card,
-            borderRadius: 16,
-        },
-        contentContainerStyle: {
-            paddingTop: 8,
-        },
-    })
+const styles = StyleSheet.create({
+    view: { flexGrow: 1 },
+    draggableFlatListContainer: { flexGrow: 1 },
+
+    contentContainerStyle: {
+        paddingTop: 8,
+    },
+})

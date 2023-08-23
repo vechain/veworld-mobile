@@ -31,7 +31,7 @@ function SelectDeviceBottomSheetInner<T extends BaseDevice = BaseDevice>(
 ) {
     const { LL } = useI18nContext()
 
-    const snapPoints = useMemo(() => ["30%", "90%"], [])
+    const snapPoints = useMemo(() => ["50%", "90%"], [])
 
     const [snapIndex, setSnapIndex] = useState<number>(0)
 
@@ -48,8 +48,8 @@ function SelectDeviceBottomSheetInner<T extends BaseDevice = BaseDevice>(
     )
 
     const onDeviceSelected = useCallback(
-        (device: T) => () => {
-            onClose(device)
+        (device: BaseDevice) => () => {
+            onClose(device as T)
         },
         [onClose],
     )
@@ -79,7 +79,7 @@ function SelectDeviceBottomSheetInner<T extends BaseDevice = BaseDevice>(
                             return (
                                 <DeviceBox
                                     device={item}
-                                    onDeviceSelected={onDeviceSelected(item)}
+                                    onDeviceSelected={onDeviceSelected}
                                     isIconVisible={false}
                                 />
                             )

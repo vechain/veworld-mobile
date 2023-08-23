@@ -1,4 +1,9 @@
-import React, { ReactNode, useCallback } from "react"
+import React, {
+    JSXElementConstructor,
+    ReactElement,
+    ReactNode,
+    useCallback,
+} from "react"
 import {
     BaseSafeArea,
     BaseScrollView,
@@ -7,7 +12,7 @@ import {
     BaseView,
 } from "~Components/Base"
 import { BackButtonHeader } from "../BackButtonHeader"
-import { StyleSheet } from "react-native"
+import { RefreshControlProps, StyleSheet } from "react-native"
 import { usePlatformBottomInsets, useTheme } from "~Hooks"
 import { isAndroid } from "~Utils/PlatformUtils/PlatformUtils"
 import { SelectedNetworkViewer } from "~Components"
@@ -26,6 +31,10 @@ type Props = {
     showSelectedNetwork?: boolean
     onTouchBody?: () => void
     _iosSpecificBottomInsetsIfIos?: number
+    refreshControl?: ReactElement<
+        RefreshControlProps,
+        string | JSXElementConstructor<any>
+    >
 }
 
 export const Layout = ({
@@ -42,6 +51,7 @@ export const Layout = ({
     scrollViewTestID,
     _iosSpecificBottomInsetsIfIos,
     showSelectedNetwork = false,
+    refreshControl,
 }: Props) => {
     const theme = useTheme()
     const { androidSpecificBottomInsetsIfAndroid, platformBottomInsets } =
@@ -89,6 +99,7 @@ export const Layout = ({
 
                 {body && (
                     <BaseScrollView
+                        refreshControl={refreshControl}
                         testID={scrollViewTestID || "Layout_ScrollView"}
                         scrollEnabled={isScrollEnabled}
                         style={noMargin ? {} : styles.scrollView}

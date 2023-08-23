@@ -1,5 +1,5 @@
 import React from "react"
-import { useTheme } from "~Hooks"
+import { useThemedStyles } from "~Hooks"
 
 import {
     BaseCard,
@@ -10,53 +10,83 @@ import {
     LedgerBadge,
 } from "~Components"
 import { BaseDevice, DEVICE_TYPE } from "~Model"
-import { StyleSheet } from "react-native"
+import { Pressable, StyleSheet } from "react-native"
+import { ColorThemeType } from "~Constants"
+import { TouchableOpacity } from "react-native-gesture-handler"
 
 type Props = {
     device: BaseDevice
-    onDeviceSelected?: () => void
+    onDeviceSelected?: (item: BaseDevice) => () => void
     isIconVisible?: boolean
     isEdit?: boolean
+    drag?: () => void
+    isActive?: boolean
 }
 
 export const DeviceBox: React.FC<Props> = ({
     device,
-    onDeviceSelected,
     isIconVisible = true,
     isEdit = false,
+    onDeviceSelected,
+    drag,
+    isActive = false,
 }) => {
-    const theme = useTheme()
+    const { styles, theme } = useThemedStyles(baseStyles)
+
+    /**
+     * this is workaround for draggable flatlist
+     * TouchableOpacity is not draggable in edit mode
+     * Pressable has issues with swipeable row when is not edit mode
+     */
+    const PressableComponent = isEdit ? Pressable : TouchableOpacity
 
     return (
-        <BaseCard style={styles.card} onPress={onDeviceSelected}>
-            <BaseView flexDirection="row">
-                {isEdit && (
-                    <BaseIcon
-                        name={"drag"}
-                        color={theme.colors.text}
-                        size={24}
-                    />
-                )}
-                <BaseSpacer width={8} />
-                <BaseText typographyFont="subTitleBold">
-                    {device.alias}
-                </BaseText>
-                <BaseSpacer width={8} />
-                {device.type === DEVICE_TYPE.LEDGER && <LedgerBadge />}
-            </BaseView>
-            {isIconVisible && !isEdit && (
-                <BaseIcon
-                    name={"pencil-outline"}
-                    color={theme.colors.text}
-                    size={24}
-                />
-            )}
-        </BaseCard>
+        <BaseView style={styles.touchableContainer}>
+            <PressableComponent
+                onPressIn={isEdit ? drag : undefined}
+                disabled={isActive}
+                style={styles.deviceBoxPressable}
+                onPress={isEdit ? undefined : onDeviceSelected?.(device)}>
+                <BaseCard style={styles.card}>
+                    <BaseView flexDirection="row">
+                        {isEdit && (
+                            <BaseIcon
+                                name={"drag"}
+                                color={theme.colors.text}
+                                size={24}
+                            />
+                        )}
+                        <BaseSpacer width={8} />
+                        <BaseText typographyFont="subTitleBold">
+                            {device.alias}
+                        </BaseText>
+                        <BaseSpacer width={8} />
+                        {device.type === DEVICE_TYPE.LEDGER && <LedgerBadge />}
+                    </BaseView>
+                    {isIconVisible && !isEdit && (
+                        <BaseIcon
+                            name={"pencil-outline"}
+                            color={theme.colors.text}
+                            size={24}
+                        />
+                    )}
+                </BaseCard>
+            </PressableComponent>
+        </BaseView>
     )
 }
 
-const styles = StyleSheet.create({
-    card: {
-        justifyContent: "space-between",
-    },
-})
+const baseStyles = (theme: ColorThemeType) =>
+    StyleSheet.create({
+        card: {
+            justifyContent: "space-between",
+        },
+        touchableContainer: {
+            backgroundColor: theme.colors.card,
+            borderRadius: 16,
+        },
+        deviceBoxPressable: {
+            backgroundColor: theme.colors.card,
+            borderRadius: 16,
+        },
+    })

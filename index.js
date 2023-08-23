@@ -68,22 +68,6 @@ const Main = () => {
         [fontFamily["Mono-Light"]]: Mono_Light,
     })
 
-    const sentryTrackingEnabled = useAppSelector(selectSentryTrackingEnabled)
-
-    useEffect(() => {
-        if (sentryTrackingEnabled) {
-            Sentry.init({
-                dsn: process.env.REACT_APP_SENTRY_DSN,
-                // Set tracesSampleRate to 1.0 to capture 100% of transactions for performance monitoring.
-                // We recommend adjusting this value in production.
-                tracesSampleRate: 1.0,
-                environment: process.env.NODE_ENV,
-            })
-        } else {
-            Sentry.close()
-        }
-    }, [sentryTrackingEnabled])
-
     const isAnalyticsEnabled = useAppSelector(selectAnalyticsTrackingEnabled)
 
     useEffect(() => {
@@ -136,15 +120,38 @@ const NavigationProvider = ({ children }) => {
     )
 }
 
+const SentryWrappedMain = Sentry.wrap(Main)
+
+const SentryInitialedMain = () => {
+    const sentryTrackingEnabled = useAppSelector(selectSentryTrackingEnabled)
+    const [initializedSentry, setInitializedSentry] = React.useState(false)
+    useEffect(() => {
+        if (sentryTrackingEnabled) {
+            Sentry.init({
+                dsn: process.env.REACT_APP_SENTRY_DSN,
+                // Set tracesSampleRate to 1.0 to capture 100% of transactions for performance monitoring.
+                // We recommend adjusting this value in production.
+                tracesSampleRate: 1.0,
+                environment: process.env.NODE_ENV,
+            })
+            setInitializedSentry(true)
+        } else {
+            Sentry.close()
+        }
+    }, [sentryTrackingEnabled])
+
+    return initializedSentry ? <SentryWrappedMain /> : <Main />
+}
+
 const ReduxWrappedMain = () => {
     return (
         <StoreContextProvider>
-            <Main />
+            <SentryInitialedMain />
         </StoreContextProvider>
     )
 }
 
-AppRegistry.registerComponent(appName, () => Sentry.wrap(ReduxWrappedMain))
+AppRegistry.registerComponent(appName, () => ReduxWrappedMain)
 
 if (__DEV__) {
     const ignoreWarns = [

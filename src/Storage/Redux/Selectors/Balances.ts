@@ -19,6 +19,7 @@ import {
 } from "./Tokens"
 import { compareAddresses } from "~Utils/AddressUtils/AddressUtils"
 import { compareSymbols } from "~Utils/TokenUtils/TokenUtils"
+import sortBy from "lodash/sortBy"
 
 export const selectBalancesState = (state: RootState) => state.balances
 
@@ -139,10 +140,13 @@ export const selectTokensWithBalances = createSelector(
 export const selectNonVechainTokensWithBalances = createSelector(
     [selectTokensWithBalances],
     (tokensWithBalance): FungibleTokenWithBalance[] =>
-        tokensWithBalance.filter(
-            tokenWithBalance =>
-                !compareAddresses(tokenWithBalance.address, VET.address) &&
-                !compareAddresses(tokenWithBalance.address, VTHO.address),
+        sortBy(
+            tokensWithBalance.filter(
+                tokenWithBalance =>
+                    !compareAddresses(tokenWithBalance.address, VET.address) &&
+                    !compareAddresses(tokenWithBalance.address, VTHO.address),
+            ),
+            balance => balance.balance.position,
         ),
 )
 
