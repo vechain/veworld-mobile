@@ -24,6 +24,7 @@ export const AutoLogoutProvider = ({ children }: ProviderProps) => {
              * since the library we were using to restart the app (react-native-restart) was conflicting with reanimated and the app crashed
              * I also tried other apps but nothing worked
              * so I commented it out for now
+             * known issue: https://github.com/avishayil/react-native-restart/issues/239
              */
             // Check if the app was closed for more than 5 minutes
             // const now = Date.now()
