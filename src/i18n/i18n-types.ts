@@ -215,7 +215,7 @@ type RootTranslation = {
 	 */
 	BD_GDPR: string
 	/**
-	 * T​h​e​ ​F​u​t​u​r​e​ ​o​f​ ​S​u​s​t​a​i​n​a​b​l​e​ ​S​e​l​f​-​C​u​s​t​o​d​y​ ​W​e​b​ ​e​x​t​e​n​s​i​o​n​ ​W​a​l​l​e​t​,​ ​E​n​a​b​l​e​d​ ​B​y​ ​V​e​C​h​a​i​n​’​s​ ​A​d​v​a​n​c​e​d​ ​B​l​o​c​k​c​h​a​i​n​ ​T​e​c​h​n​o​l​o​g​y
+	 * Y​o​u​r​ ​V​e​W​o​r​l​d​.​ ​A​ ​s​e​l​f​ ​c​u​s​t​o​d​y​ ​m​o​b​i​l​e​ ​c​r​y​p​t​o​ ​w​a​l​l​e​t​.
 	 */
 	BD_WELCOME_SCREEN: string
 	/**
@@ -2599,7 +2599,7 @@ export type TranslationFunctions = {
 	 */
 	BD_GDPR: () => LocalizedString
 	/**
-	 * The Future of Sustainable Self-Custody Web extension Wallet, Enabled By VeChain’s Advanced Blockchain Technology
+	 * Your VeWorld. A self custody mobile crypto wallet.
 	 */
 	BD_WELCOME_SCREEN: () => LocalizedString
 	/**
