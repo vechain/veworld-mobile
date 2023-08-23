@@ -1,15 +1,14 @@
 import { FlashList, FlashListProps } from "@shopify/flash-list"
-import React, { useRef } from "react"
-import { PanGestureHandler, ScrollView } from "react-native-gesture-handler"
+import React from "react"
+import { ScrollView } from "react-native-gesture-handler"
 
 type flashListPredefinedProps = {
     showsVerticalScrollIndicator?: boolean
     showsHorizontalScrollIndicator?: boolean
     renderScrollComponent?: typeof ScrollView
 }
-export function BaseFlashList<T>(props: FlashListProps<T>) {
-    const panRef = useRef<FlashList<T> | null>(null)
 
+export function BaseFlashList<T>(props: FlashListProps<T>) {
     const flashListPredefinedProps: flashListPredefinedProps = {
         showsVerticalScrollIndicator: false,
         showsHorizontalScrollIndicator: false,
@@ -20,11 +19,5 @@ export function BaseFlashList<T>(props: FlashListProps<T>) {
         ...flashListPredefinedProps,
     }
 
-    return (
-        <PanGestureHandler ref={panRef}>
-            <FlashList ref={panRef} {...props}>
-                {props.children}
-            </FlashList>
-        </PanGestureHandler>
-    )
+    return <FlashList {...props}>{props.children}</FlashList>
 }
