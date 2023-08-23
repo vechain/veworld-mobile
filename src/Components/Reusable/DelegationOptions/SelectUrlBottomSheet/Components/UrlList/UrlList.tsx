@@ -1,5 +1,5 @@
 import React from "react"
-import { useTheme } from "~Hooks"
+import { ScrollableBottomSheetPropsType, useTheme } from "~Hooks"
 import {
     BaseCard,
     BaseFlashList,
@@ -16,6 +16,7 @@ type Props = {
     setSelectedDelegationUrl: (s: string) => void
     selectedDelegationUrl?: string
     onCloseBottomSheet: () => void
+    scrollableBottomSheetProps: ScrollableBottomSheetPropsType
 }
 const ItemSeparatorComponent = () => <BaseSpacer height={16} />
 
@@ -24,6 +25,7 @@ export const UrlList = ({
     setSelectedDelegationUrl,
     selectedDelegationUrl,
     onCloseBottomSheet,
+    scrollableBottomSheetProps,
 }: Props) => {
     const { LL } = useI18nContext()
     const theme = useTheme()
@@ -68,6 +70,7 @@ export const UrlList = ({
                 showsVerticalScrollIndicator={false}
                 showsHorizontalScrollIndicator={false}
                 estimatedItemSize={74}
+                {...scrollableBottomSheetProps}
             />
         </BaseView>
     )
