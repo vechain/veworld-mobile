@@ -7,7 +7,6 @@ import {
     TokenList,
 } from "./Components"
 import {
-    BottomInsetsEXtraPadding,
     useBottomSheetModal,
     useMemoizedAnimation,
     useSetSelectedAccount,
@@ -179,7 +178,7 @@ export const HomeScreen = () => {
                             isBalanceVisible={isBalanceVisible}
                             entering={animateEntering}
                         />
-                        <BaseSpacer height={BottomInsetsEXtraPadding.TabBar} />
+                        <BaseSpacer height={24} />
                     </BaseView>
 
                     <AccountManagementBottomSheet

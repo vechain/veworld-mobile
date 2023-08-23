@@ -1,6 +1,6 @@
 import React from "react"
 import { StyleSheet } from "react-native"
-import { usePlatformBottomInsets } from "~Hooks"
+import { useTabBarBottomMargin } from "~Hooks"
 import { COLORS } from "~Constants"
 import { BaseIcon, BaseText, BaseTouchable, BaseView } from "~Components"
 import { useI18nContext } from "~i18n"
@@ -10,14 +10,14 @@ type Props = {
 }
 
 export const ImportNFTView = ({ onImportPress }: Props) => {
-    const { iosSpecificBottomInsetsIfIos } = usePlatformBottomInsets()
+    const { iosOnlyTabBarBottomMargin } = useTabBarBottomMargin()
     const { LL } = useI18nContext()
 
     return (
         <BaseView
             style={{
                 ...baseStyles.importNFTView,
-                marginBottom: iosSpecificBottomInsetsIfIos,
+                marginBottom: iosOnlyTabBarBottomMargin,
             }}
             mx={20}
             justifyContent="center"
