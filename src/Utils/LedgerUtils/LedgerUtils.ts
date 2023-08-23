@@ -27,6 +27,13 @@ export enum LedgerConfig {
  * Parses ledger errors based on common issues
  */
 export const ledgerErrorHandler = (err: unknown): LEDGER_ERROR_CODES => {
+    if (
+        typeof err === "string" &&
+        Object.values(LEDGER_ERROR_CODES).includes(err as LEDGER_ERROR_CODES)
+    ) {
+        return err as LEDGER_ERROR_CODES
+    }
+
     if (!(err instanceof Error)) {
         return LEDGER_ERROR_CODES.UNKNOWN
     }
@@ -284,9 +291,7 @@ const validateRootAddress = async (
     )
 
     if (!AddressUtils.compareAddresses(rootAddress, rootAccount.address)) {
-        throw new Error(
-            "Ledger address does not match expected account address",
-        )
+        throw LEDGER_ERROR_CODES.WRONG_ROOT_ACCOUNT
     }
 }
 

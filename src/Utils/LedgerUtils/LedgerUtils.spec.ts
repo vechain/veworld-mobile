@@ -3,6 +3,11 @@ import LedgerUtils from "./LedgerUtils"
 import { defaultMainNetwork, LEDGER_ERROR_CODES } from "~Constants"
 import { BleError } from "react-native-ble-plx"
 import { DisconnectedDeviceDuringOperation } from "@ledgerhq/errors"
+import BleTransport from "@ledgerhq/react-native-hw-transport-ble"
+
+const withTransport: (func: (t: BleTransport) => any) => any = async func => {
+    return await func(TestHelpers.data.mockedTransport)
+}
 
 describe("LedgerUtils", () => {
     describe("ledgerErrorHandler", () => {
@@ -57,12 +62,37 @@ describe("LedgerUtils", () => {
                 LEDGER_ERROR_CODES.UNKNOWN,
             )
         })
+
+        it("random string should return unknown", () => {
+            expect(LedgerUtils.ledgerErrorHandler("hello world")).toBe(
+                LEDGER_ERROR_CODES.UNKNOWN,
+            )
+        })
+
+        it("not error or string should return unknown", () => {
+            expect(LedgerUtils.ledgerErrorHandler({})).toBe(
+                LEDGER_ERROR_CODES.UNKNOWN,
+            )
+        })
+
+        it("LEDGER_ERROR_CODES should return LEDGER_ERROR_CODES", () => {
+            expect(
+                LedgerUtils.ledgerErrorHandler(LEDGER_ERROR_CODES.DISCONNECTED),
+            ).toBe(LEDGER_ERROR_CODES.DISCONNECTED)
+        })
+
+        it("0x6985 - should return USER_REJECTED", () => {
+            const error = new Error("0x6985")
+            expect(LedgerUtils.ledgerErrorHandler(error)).toBe(
+                LEDGER_ERROR_CODES.USER_REJECTED,
+            )
+        })
     })
 
     describe("checkLedgerConnection", () => {
         // TODO (Erik) (https://github.com/vechainfoundation/veworld-mobile/issues/776) mock transport and test more
         it("should not throw", async () => {
-            await LedgerUtils.verifyTransport(TestHelpers.data.mockedTransport)
+            await LedgerUtils.verifyTransport(withTransport)
         })
     })
 
@@ -83,11 +113,15 @@ describe("LedgerUtils", () => {
                     0,
                     TestHelpers.data.mockedCertificate,
                     { ...TestHelpers.data.ledgerDevice, rootAddress: "dddd" },
-                    TestHelpers.data.mockedTransport,
+                    withTransport,
                 )
-            expect(signCertificateCall).rejects.toThrow(
-                "Failed to sign the message",
-            )
+
+            const res = await signCertificateCall()
+
+            expect(res).toEqual({
+                payload: LEDGER_ERROR_CODES.UNKNOWN,
+                success: false,
+            })
         })
     })
 
@@ -110,12 +144,15 @@ describe("LedgerUtils", () => {
                     0,
                     TestHelpers.data.vetTransaction1,
                     { ...TestHelpers.data.ledgerDevice, rootAddress: "dddd" },
-                    TestHelpers.data.mockedTransport,
+                    withTransport,
                     () => {},
                 )
-            expect(signCertificateCall).rejects.toThrow(
-                "Failed to sign the transaction",
-            )
+            const res = await signCertificateCall()
+
+            expect(res).toEqual({
+                payload: LEDGER_ERROR_CODES.UNKNOWN,
+                success: false,
+            })
         })
     })
 
