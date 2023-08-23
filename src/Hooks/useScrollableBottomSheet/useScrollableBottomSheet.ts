@@ -1,17 +1,5 @@
-import { ViewToken } from "@shopify/flash-list"
 import { useCallback, useState } from "react"
 import { useScrollableList } from "~Hooks/useScrollableList"
-
-export type ScrollableBottomSheetPropsType = {
-    onViewableItemsChanged: (info: {
-        viewableItems: ViewToken[]
-        changed: ViewToken[]
-    }) => void
-    viewabilityConfig: {
-        itemVisiblePercentThreshold: number
-    }
-    scrollEnabled: boolean
-}
 
 export const useScrollableBottomSheet = ({
     snapPoints,
@@ -19,10 +7,7 @@ export const useScrollableBottomSheet = ({
 }: {
     snapPoints: string[]
     data: any[]
-}): {
-    handleSheetChangePosition: (index: number) => void
-    scrollableBottomSheetProps: ScrollableBottomSheetPropsType
-} => {
+}) => {
     const [snapIndex, setSnapIndex] = useState<number>(0)
 
     const handleSheetChangePosition = useCallback((index: number) => {
