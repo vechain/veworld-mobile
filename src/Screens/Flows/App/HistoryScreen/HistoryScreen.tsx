@@ -11,6 +11,7 @@ import {
     BaseSpacer,
     SelectAccountBottomSheet,
     Layout,
+    BaseFlashList,
 } from "~Components"
 import {
     selectBalanceVisible,
@@ -20,7 +21,6 @@ import {
     useAppSelector,
 } from "~Storage/Redux"
 import { useI18nContext } from "~i18n"
-import { FlashList } from "@shopify/flash-list"
 import {
     ConnectedAppActivityBox,
     DappTransactionActivityBox,
@@ -198,7 +198,7 @@ export const HistoryScreen = () => {
         return (
             <>
                 <BaseView flexDirection="row" style={baseStyles.list}>
-                    <FlashList
+                    <BaseFlashList
                         data={activities}
                         keyExtractor={activity => activity.id}
                         ListFooterComponent={

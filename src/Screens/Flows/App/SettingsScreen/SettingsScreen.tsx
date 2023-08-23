@@ -1,8 +1,7 @@
 import React, { useCallback, useMemo } from "react"
-import { BaseSafeArea, BaseText, BaseView } from "~Components"
+import { BaseFlashList, BaseSafeArea, BaseText, BaseView } from "~Components"
 import { TranslationFunctions, useI18nContext } from "~i18n"
 import { Routes } from "~Navigation"
-import { FlashList } from "@shopify/flash-list"
 import { StyleSheet, View } from "react-native"
 import { RowProps, SettingsRow } from "./Components/SettingsRow"
 import { useThemedStyles } from "~Hooks"
@@ -48,7 +47,7 @@ export const SettingsScreen = () => {
             </BaseText>
 
             <BaseView flexDirection="row" style={[themedStyles.list]}>
-                <FlashList
+                <BaseFlashList
                     data={SCREEN_LIST}
                     contentContainerStyle={themedStyles.contentContainerStyle}
                     ItemSeparatorComponent={renderSeparator}

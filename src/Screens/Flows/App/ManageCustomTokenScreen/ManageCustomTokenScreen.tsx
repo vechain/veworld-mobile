@@ -1,6 +1,7 @@
 import React, { useCallback, useMemo, useState } from "react"
 import { useBottomSheetModal, useScrollableList, useTheme } from "~Hooks"
 import {
+    BaseFlashList,
     BaseSpacer,
     BaseText,
     BaseView,
@@ -9,7 +10,6 @@ import {
 } from "~Components"
 import { useI18nContext } from "~i18n"
 import { FlatList, RefreshControl, StyleSheet } from "react-native"
-import { FlashList } from "@shopify/flash-list"
 import {
     CustomTokenBox,
     NoTokensButton,
@@ -89,7 +89,7 @@ export const ManageCustomTokenScreen = () => {
         return (
             <>
                 <BaseView flexDirection="row" style={[styles.list]}>
-                    <FlashList
+                    <BaseFlashList
                         data={tokens}
                         keyExtractor={token => token.tokenAddress}
                         ItemSeparatorComponent={tokensListSeparator}

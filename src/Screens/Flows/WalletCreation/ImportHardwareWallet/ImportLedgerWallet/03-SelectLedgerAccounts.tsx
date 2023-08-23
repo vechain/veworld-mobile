@@ -2,6 +2,7 @@ import React, { useCallback, useEffect, useState } from "react"
 import {
     BaseActivityIndicator,
     BaseButton,
+    BaseFlashList,
     BaseIcon,
     BaseSafeArea,
     BaseSpacer,
@@ -31,7 +32,7 @@ import {
     useAppDispatch,
     useAppSelector,
 } from "~Storage/Redux"
-import { FlashList, ViewToken } from "@shopify/flash-list"
+import { ViewToken } from "@shopify/flash-list"
 import * as Haptics from "expo-haptics"
 import { LedgerAccount } from "~Model"
 
@@ -220,7 +221,7 @@ export const SelectLedgerAccounts: React.FC<Props> = ({ route }) => {
                     <BaseSpacer height={20} />
                     <BaseView style={themedStyles.container} pb={20}>
                         {!!ledgerAccounts.length && (
-                            <FlashList
+                            <BaseFlashList
                                 data={ledgerAccounts}
                                 extraData={selectedAccountsIndex}
                                 scrollEnabled={isScrollable}

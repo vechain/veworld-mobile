@@ -1,10 +1,11 @@
 import { useNavigation } from "@react-navigation/native"
-import { FlashList, ListRenderItem } from "@shopify/flash-list"
+import { ListRenderItem } from "@shopify/flash-list"
 import React, { useCallback, useRef, useState } from "react"
 import { StyleSheet } from "react-native"
 import { useBottomSheetModal, useScrollableList, useTheme } from "~Hooks"
 import { FormattingUtils } from "~Utils"
 import {
+    BaseFlashList,
     BaseIcon,
     BaseSpacer,
     BaseText,
@@ -197,7 +198,7 @@ export const ContactsScreen = () => {
                     {/* Contacts List */}
                     {!!contacts.length && (
                         <BaseView flexDirection="row" style={[baseStyles.list]}>
-                            <FlashList
+                            <BaseFlashList
                                 data={contacts}
                                 keyExtractor={contact => contact.address}
                                 onViewableItemsChanged={onViewableItemsChanged}
