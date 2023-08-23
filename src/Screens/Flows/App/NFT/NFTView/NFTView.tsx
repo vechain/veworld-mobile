@@ -47,70 +47,68 @@ export const NFTView = memo(({ nft, index, collection }: Props) => {
     )
 
     const renderNft = useMemo(() => {
-        if (nft.updated)
-            return (
-                <BaseView style={styles.nftCollectionNameBarRadius}>
-                    {nft.mediaType === NFTMediaType.IMAGE && (
-                        <NFTImage
-                            uri={nft.image}
-                            // @ts-ignore
+        return (
+            <BaseView style={styles.nftCollectionNameBarRadius}>
+                {nft.mediaType === NFTMediaType.IMAGE && (
+                    <NFTImage
+                        uri={nft.image}
+                        // @ts-ignore
+                        style={styles.nftPreviewImage}
+                    />
+                )}
+
+                {nft.mediaType === NFTMediaType.VIDEO && (
+                    <BaseView style={styles.nftPreviewImage}>
+                        <Video
+                            PosterComponent={renderNFTStaticImage}
+                            usePoster
+                            ref={video}
+                            shouldPlay
                             style={styles.nftPreviewImage}
+                            source={{ uri: nft.image }}
+                            resizeMode={ResizeMode.COVER}
+                            isLooping
+                            isMuted
                         />
-                    )}
+                    </BaseView>
+                )}
 
-                    {nft.mediaType === NFTMediaType.VIDEO && (
-                        <BaseView style={styles.nftPreviewImage}>
-                            <Video
-                                PosterComponent={renderNFTStaticImage}
-                                usePoster
-                                ref={video}
-                                shouldPlay
-                                style={styles.nftPreviewImage}
-                                source={{ uri: nft.image }}
-                                resizeMode={ResizeMode.COVER}
-                                isLooping
-                                isMuted
-                            />
-                        </BaseView>
-                    )}
+                {nft.mediaType === NFTMediaType.UNKNOWN && (
+                    <NFTImage
+                        uri={NFTPlaceholder}
+                        // @ts-ignore
+                        style={styles.nftPreviewImage}
+                    />
+                )}
 
-                    {nft.mediaType === NFTMediaType.UNKNOWN && (
-                        <NFTImage
-                            uri={NFTPlaceholder}
-                            // @ts-ignore
-                            style={styles.nftPreviewImage}
-                        />
-                    )}
-
-                    {isPendingTx && (
-                        <BaseView
-                            w={43}
-                            style={styles.nftPendingLabel}
-                            flexDirection="row"
-                            alignItems="center"
-                            justifyContent="space-between">
-                            <BaseText
-                                typographyFont="caption"
-                                color={COLORS.WHITE}
-                                w={80}>
-                                {LL.ACTIVITIES_STATUS_pending()}
-                            </BaseText>
-                        </BaseView>
-                    )}
-
+                {isPendingTx && (
                     <BaseView
-                        style={styles.nftCollectionNameBar}
+                        w={43}
+                        style={styles.nftPendingLabel}
                         flexDirection="row"
                         alignItems="center"
                         justifyContent="space-between">
-                        <BaseText color={COLORS.WHITE} numberOfLines={1} w={80}>
-                            #{nft.tokenId}
+                        <BaseText
+                            typographyFont="caption"
+                            color={COLORS.WHITE}
+                            w={80}>
+                            {LL.ACTIVITIES_STATUS_pending()}
                         </BaseText>
                     </BaseView>
+                )}
+
+                <BaseView
+                    style={styles.nftCollectionNameBar}
+                    flexDirection="row"
+                    alignItems="center"
+                    justifyContent="space-between">
+                    <BaseText color={COLORS.WHITE} numberOfLines={1} w={80}>
+                        #{nft.tokenId}
+                    </BaseText>
                 </BaseView>
-            )
+            </BaseView>
+        )
     }, [
-        nft.updated,
         nft.mediaType,
         nft.image,
         nft.tokenId,
@@ -123,22 +121,7 @@ export const NFTView = memo(({ nft, index, collection }: Props) => {
         LL,
     ])
 
-    const renderSkeleton = useMemo(() => {
-        if (!nft.updated)
-            return (
-                <SkeletonContent
-                    containerStyle={styles.nftPreviewImage}
-                    animationDirection="horizontalLeft"
-                    boneColor={theme.colors.skeletonBoneColor}
-                    highlightColor={theme.colors.skeletonHighlightColor}
-                    // @ts-ignore
-                    layout={[{ ...styles.nftPreviewImage, opacity: 0.1 }]}
-                    isLoading={true}
-                />
-            )
-    }, [nft.updated, styles.nftPreviewImage, theme.colors])
-
-    return (
+    return nft.updated ? (
         <TouchableOpacity
             activeOpacity={0.6}
             // Workaround -> https://github.com/mpiannucci/react-native-context-menu-view/issues/60#issuecomment-1453864955
@@ -152,8 +135,17 @@ export const NFTView = memo(({ nft, index, collection }: Props) => {
                 },
             ]}>
             {renderNft}
-            {renderSkeleton}
         </TouchableOpacity>
+    ) : (
+        <SkeletonContent
+            containerStyle={styles.nftPreviewImage}
+            animationDirection="horizontalLeft"
+            boneColor={theme.colors.skeletonBoneColor}
+            highlightColor={theme.colors.skeletonHighlightColor}
+            // @ts-ignore
+            layout={[{ ...styles.nftPreviewImage, opacity: 0.1 }]}
+            isLoading={true}
+        />
     )
 })
 

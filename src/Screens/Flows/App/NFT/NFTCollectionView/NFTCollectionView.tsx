@@ -47,41 +47,40 @@ export const NFTCollectionView = ({ collection, index }: Props) => {
     }, [nav, collection.address])
 
     const renderCollection = useMemo(() => {
-        if (collection.updated)
-            return (
-                <BaseView style={styles.nftCollectionNameBarRadius}>
-                    <NFTImage
-                        uri={
-                            collection.mediaType === NFTMediaType.IMAGE
-                                ? collection.image
-                                : NFTPlaceholder
-                        }
-                        // @ts-ignore
-                        style={styles.nftPreviewImage}
-                    />
+        return (
+            <BaseView style={styles.nftCollectionNameBarRadius}>
+                <NFTImage
+                    uri={
+                        collection.mediaType === NFTMediaType.IMAGE
+                            ? collection.image
+                            : NFTPlaceholder
+                    }
+                    // @ts-ignore
+                    style={styles.nftPreviewImage}
+                />
 
-                    <BaseView
-                        style={styles.nftCollectionNameBar}
-                        flexDirection="row"
-                        alignItems="center"
-                        justifyContent="space-between">
-                        <BaseText color={COLORS.WHITE} numberOfLines={1} w={80}>
-                            {collection.name}
-                        </BaseText>
-                        {collection.balanceOf > 0 && (
-                            <BaseView
-                                style={styles.nftCounterLabel}
-                                justifyContent="center"
-                                alignItems="center">
-                                <BaseText color={COLORS.WHITE}>
-                                    {!collection.hasCount && "+"}
-                                    {collection.balanceOf}
-                                </BaseText>
-                            </BaseView>
-                        )}
-                    </BaseView>
+                <BaseView
+                    style={styles.nftCollectionNameBar}
+                    flexDirection="row"
+                    alignItems="center"
+                    justifyContent="space-between">
+                    <BaseText color={COLORS.WHITE} numberOfLines={1} w={80}>
+                        {collection.name}
+                    </BaseText>
+                    {collection.balanceOf > 0 && (
+                        <BaseView
+                            style={styles.nftCounterLabel}
+                            justifyContent="center"
+                            alignItems="center">
+                            <BaseText color={COLORS.WHITE}>
+                                {!collection.hasCount && "+"}
+                                {collection.balanceOf}
+                            </BaseText>
+                        </BaseView>
+                    )}
                 </BaseView>
-            )
+            </BaseView>
+        )
     }, [
         collection,
         styles.nftCollectionNameBar,
@@ -90,9 +89,26 @@ export const NFTCollectionView = ({ collection, index }: Props) => {
         styles.nftPreviewImage,
     ])
 
-    const renderSkeleton = useMemo(() => {
-        if (!collection.updated)
-            return (
+    return (
+        <TouchableOpacity
+            activeOpacity={0.6}
+            // Workaround -> https://github.com/mpiannucci/react-native-context-menu-view/issues/60#issuecomment-1453864955
+            onLongPress={() => {}}
+            onPress={collection.updated ? onCollectionPress : undefined}
+            style={[
+                styles.nftContainer,
+                // eslint-disable-next-line react-native/no-inline-styles
+                {
+                    justifyContent: index % 2 === 0 ? "flex-start" : "flex-end",
+                },
+            ]}>
+            {collection.updated ? (
+                <LongPressProvider
+                    items={CollectionItem}
+                    action={onToggleCollection}>
+                    {renderCollection}
+                </LongPressProvider>
+            ) : (
                 <SkeletonContent
                     containerStyle={styles.nftPreviewImage}
                     animationDirection="horizontalLeft"
@@ -102,33 +118,7 @@ export const NFTCollectionView = ({ collection, index }: Props) => {
                     layout={[{ ...styles.nftPreviewImage, opacity: 0.1 }]}
                     isLoading={true}
                 />
-            )
-    }, [
-        collection,
-        styles.nftPreviewImage,
-        theme.colors.skeletonBoneColor,
-        theme.colors.skeletonHighlightColor,
-    ])
-
-    return (
-        <TouchableOpacity
-            activeOpacity={0.6}
-            // Workaround -> https://github.com/mpiannucci/react-native-context-menu-view/issues/60#issuecomment-1453864955
-            onLongPress={() => {}}
-            onPress={onCollectionPress}
-            style={[
-                styles.nftContainer,
-                // eslint-disable-next-line react-native/no-inline-styles
-                {
-                    justifyContent: index % 2 === 0 ? "flex-start" : "flex-end",
-                },
-            ]}>
-            <LongPressProvider
-                items={CollectionItem}
-                action={onToggleCollection}>
-                {renderCollection}
-                {renderSkeleton}
-            </LongPressProvider>
+            )}
         </TouchableOpacity>
     )
 }
