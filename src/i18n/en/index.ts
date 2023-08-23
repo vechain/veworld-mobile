@@ -61,7 +61,7 @@ const en: BaseTranslation = {
     BD_GDPR:
         "By pressing ‘get started’ you are agreeing to VeWorld’s Terms and conditions and Privacy policy, compliant with Art. 5 GDPR (Required)",
     BD_WELCOME_SCREEN:
-        "The Future of Sustainable Self-Custody Web extension Wallet, Enabled By VeChain’s Advanced Blockchain Technology",
+        "Your VeWorld. A self custody mobile crypto wallet.",
     BD_ONBOARDING_SLIDE_01:
         "Viewing and managing your crypto assets has never been easier.",
     BD_ONBOARDING_SLIDE_02:

@@ -1,7 +1,6 @@
 import React, { useCallback } from "react"
 import { StyleSheet } from "react-native"
-import { FlatList } from "react-native-gesture-handler"
-import { useThemedStyles } from "~Hooks"
+import { FlatListScrollPropsType, useThemedStyles } from "~Hooks"
 import { ColorThemeType } from "~Constants"
 import { AddressUtils } from "~Utils"
 import {
@@ -12,20 +11,22 @@ import {
     LedgerBadge,
 } from "~Components"
 import { BaseDevice, DEVICE_TYPE } from "~Model"
-import { useAppSelector } from "~Storage/Redux"
-import { selectDevices } from "~Storage/Redux/Selectors"
+import { BottomSheetFlatList } from "@gorhom/bottom-sheet"
 
 type Props = {
     selectedDevice?: BaseDevice
     onDevicePress: (device: BaseDevice) => void
     inBottomSheet?: boolean
+    devices: BaseDevice[]
+    flatListScrollProps: FlatListScrollPropsType
 }
 export const DevicesList: React.FC<Props> = ({
     selectedDevice,
     onDevicePress,
+    devices,
+    flatListScrollProps,
 }) => {
     const { styles: themedStyles } = useThemedStyles(baseStyles)
-    const devices = useAppSelector(selectDevices)
 
     const handleOnDevicePress = useCallback(
         (device: BaseDevice) => () => {
@@ -63,16 +64,17 @@ export const DevicesList: React.FC<Props> = ({
     const renderSeparator = useCallback(() => <BaseSpacer height={16} />, [])
 
     return (
-        <FlatList
+        <BottomSheetFlatList
             style={themedStyles.container}
             data={devices}
             numColumns={1}
             horizontal={false}
             renderItem={renderItem}
             nestedScrollEnabled={false}
-            showsVerticalScrollIndicator={false}
             ItemSeparatorComponent={renderSeparator}
             keyExtractor={item => item.rootAddress}
+            contentContainerStyle={themedStyles.contentContainer}
+            {...flatListScrollProps}
         />
     )
 }
@@ -82,6 +84,9 @@ const baseStyles = (theme: ColorThemeType) =>
         container: {
             width: "100%",
             backgroundColor: "white ",
+        },
+        contentContainer: {
+            paddingBottom: 24,
         },
         selected: {
             borderWidth: 1.5,

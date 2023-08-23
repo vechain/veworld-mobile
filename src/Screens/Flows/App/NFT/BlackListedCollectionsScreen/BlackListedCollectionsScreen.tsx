@@ -1,6 +1,6 @@
 import React, { useCallback } from "react"
 import { FlatList, StyleSheet } from "react-native"
-import { usePlatformBottomInsets, useThemedStyles } from "~Hooks"
+import { useTabBarBottomMargin, useThemedStyles } from "~Hooks"
 import { BackButtonHeader, BaseSpacer, BaseText, BaseView } from "~Components"
 import { selectBlackListedCollections, useAppSelector } from "~Storage/Redux"
 import { NFTCollectionView } from "../NFTCollectionView"
@@ -15,13 +15,13 @@ type NFTListProps = {
 }
 
 export const BlackListedCollectionsScreen = () => {
-    const { iosSpecificBottomInsetsIfIos } = usePlatformBottomInsets()
+    const { iosOnlyTabBarBottomMargin } = useTabBarBottomMargin()
 
     const { LL } = useI18nContext()
 
     const blackListedCollections = useAppSelector(selectBlackListedCollections)
 
-    const { styles } = useThemedStyles(baseStyles(iosSpecificBottomInsetsIfIos))
+    const { styles } = useThemedStyles(baseStyles(iosOnlyTabBarBottomMargin))
 
     const renderSeparator = useCallback(() => <BaseSpacer height={16} />, [])
 
@@ -84,7 +84,7 @@ export const BlackListedCollectionsScreen = () => {
     )
 }
 
-const baseStyles = (iosSpecificBottomInsetsIfIos: number) => () =>
+const baseStyles = (iosOnlyTabBarBottomMargin: number) => () =>
     StyleSheet.create({
         collectionListContainer: {
             marginHorizontal: 20,
@@ -95,7 +95,7 @@ const baseStyles = (iosSpecificBottomInsetsIfIos: number) => () =>
             transform: [{ scale: 1.2 }],
         },
         nftListContainer: {
-            paddingBottom: iosSpecificBottomInsetsIfIos,
+            paddingBottom: iosOnlyTabBarBottomMargin,
             marginHorizontal: 20,
             paddingVertical: 24,
         },
