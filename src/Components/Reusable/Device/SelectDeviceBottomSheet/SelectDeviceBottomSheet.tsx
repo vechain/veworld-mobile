@@ -1,10 +1,15 @@
 import React, { useCallback, useMemo, useState } from "react"
 import { BottomSheetModalMethods } from "@gorhom/bottom-sheet/lib/typescript/types"
-import { BaseSpacer, BaseText, BaseView, BaseBottomSheet } from "~Components"
+import {
+    BaseSpacer,
+    BaseText,
+    BaseView,
+    BaseBottomSheet,
+    BaseFlashList,
+} from "~Components"
 import { useI18nContext } from "~i18n"
 import { BaseDevice } from "~Model"
 import { StyleSheet } from "react-native"
-import { BottomSheetFlatList } from "@gorhom/bottom-sheet"
 import { useScrollableList } from "~Hooks"
 import { DeviceBox } from "../DeviceBox"
 
@@ -64,7 +69,7 @@ function SelectDeviceBottomSheetInner<T extends BaseDevice = BaseDevice>(
 
             <BaseView flexDirection="row" style={baseStyles.list}>
                 {!!devices?.length && (
-                    <BottomSheetFlatList
+                    <BaseFlashList
                         data={devices}
                         keyExtractor={device => device.rootAddress}
                         ItemSeparatorComponent={accountsListSeparator}

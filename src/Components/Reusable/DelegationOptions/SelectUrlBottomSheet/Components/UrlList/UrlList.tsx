@@ -1,7 +1,13 @@
-import { BottomSheetFlatList } from "@gorhom/bottom-sheet"
 import React from "react"
 import { useTheme } from "~Hooks"
-import { BaseCard, BaseIcon, BaseSpacer, BaseText, BaseView } from "~Components"
+import {
+    BaseCard,
+    BaseFlashList,
+    BaseIcon,
+    BaseSpacer,
+    BaseText,
+    BaseView,
+} from "~Components"
 import { selectDelegationUrls, useAppSelector } from "~Storage/Redux"
 import { useI18nContext } from "~i18n"
 
@@ -46,7 +52,7 @@ export const UrlList = ({
                 />
             </BaseView>
             <BaseSpacer height={16} />
-            <BottomSheetFlatList
+            <BaseFlashList
                 data={delegationUrls}
                 keyExtractor={(url: string) => url}
                 renderItem={({ item }) => (

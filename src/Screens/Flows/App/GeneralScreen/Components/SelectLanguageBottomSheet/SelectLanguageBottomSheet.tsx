@@ -6,13 +6,13 @@ import {
     BaseTouchableBox,
     BaseView,
     BaseBottomSheet,
+    BaseFlashList,
 } from "~Components"
 import { useI18nContext } from "~i18n"
 import { useScrollableList, useTheme } from "~Hooks"
 import { LANGUAGE } from "~Constants"
 import { LanguageUtils } from "~Utils"
 import { StyleSheet } from "react-native"
-import { BottomSheetFlatList } from "@gorhom/bottom-sheet"
 
 type Props = {
     selectedLanguage: LANGUAGE
@@ -63,7 +63,7 @@ export const SelectLanguageBottomSheet = React.forwardRef<
             </BaseView>
             <BaseSpacer height={16} />
             <BaseView flexDirection="row" style={baseStyles.list}>
-                <BottomSheetFlatList
+                <BaseFlashList
                     data={supportedLanguages}
                     keyExtractor={lang => lang}
                     ItemSeparatorComponent={languagesListSeparator}
