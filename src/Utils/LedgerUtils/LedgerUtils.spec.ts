@@ -4,9 +4,6 @@ import { defaultMainNetwork, LEDGER_ERROR_CODES } from "~Constants"
 import { BleError } from "react-native-ble-plx"
 import { DisconnectedDeviceDuringOperation } from "@ledgerhq/errors"
 
-const successCallback = jest.fn()
-const errorCallback = jest.fn()
-
 describe("LedgerUtils", () => {
     describe("ledgerErrorHandler", () => {
         it("0x6d02 - should return NO_VET_APP", () => {
@@ -65,11 +62,7 @@ describe("LedgerUtils", () => {
     describe("checkLedgerConnection", () => {
         // TODO (Erik) (https://github.com/vechainfoundation/veworld-mobile/issues/776) mock transport and test more
         it("should not throw", async () => {
-            await LedgerUtils.checkLedgerConnection({
-                transport: TestHelpers.data.mockedTransport,
-                successCallback,
-                errorCallback,
-            })
+            await LedgerUtils.verifyTransport(TestHelpers.data.mockedTransport)
         })
     })
 

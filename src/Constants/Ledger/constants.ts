@@ -15,6 +15,7 @@ export enum LEDGER_ERROR_CODES {
     CONTRACT_AND_CLAUSES_DISABLED = "contracts_and_clauses_disabled",
     CONTRACT_DISABLED = "contract_disabled",
     CLAUSES_DISABLED = "clauses_disabled",
+    USER_REJECTED = "user_rejected",
 }
 
 export enum StatusCodes {

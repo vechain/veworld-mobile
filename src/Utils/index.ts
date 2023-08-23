@@ -14,6 +14,7 @@ import AccountUtils from "./AccountUtils"
 import GasUtils from "./GasUtils"
 import LanguageUtils from "./LanguageUtils"
 import LedgerUtils from "./LedgerUtils"
+
 import LocaleUtils from "./LocaleUtils"
 import LockScreenUtils from "./LockScreenUtils"
 import PasswordUtils from "./PasswordUtils"

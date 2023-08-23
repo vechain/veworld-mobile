@@ -135,6 +135,14 @@ type RootTranslation = {
 	 */
 	BTN_EDIT_CUSTOM_NODE: string
 	/**
+	 * C​o​n​t​i​n​u​e
+	 */
+	BTN_CONTINUE: string
+	/**
+	 * R​e​t​r​y
+	 */
+	BTN_RETRY: string
+	/**
 	 * D​o​w​n​l​o​a​d​ ​l​o​g​s
 	 */
 	BTN_DOWNLOAD_LOGS: string
@@ -2518,6 +2526,14 @@ export type TranslationFunctions = {
 	 * Edit custom node
 	 */
 	BTN_EDIT_CUSTOM_NODE: () => LocalizedString
+	/**
+	 * Continue
+	 */
+	BTN_CONTINUE: () => LocalizedString
+	/**
+	 * Retry
+	 */
+	BTN_RETRY: () => LocalizedString
 	/**
 	 * Download logs
 	 */

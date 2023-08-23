@@ -36,6 +36,8 @@ const en: BaseTranslation = {
     BTN_ADD_ACCOUNT: "ADD ACCOUNT",
     BTN_ADD_CUSTOM_NODE: "Add a custom node",
     BTN_EDIT_CUSTOM_NODE: "Edit custom node",
+    BTN_CONTINUE: "Continue",
+    BTN_RETRY: "Retry",
     BTN_DOWNLOAD_LOGS: "Download logs",
     BTN_RESET_APP: "Reset App",
     BTN_BUY: "Buy",

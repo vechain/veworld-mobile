@@ -43,32 +43,27 @@ export const EnableAdditionalSettings: React.FC<Props> = ({ route }) => {
 
     const { ref, onOpen, onClose } = useBottomSheetModal()
 
-    const onConnectionError = useCallback(() => {
-        // Haptics.notificationAsync(Haptics.NotificationFeedbackType.Error)
-        onOpen()
-    }, [onOpen])
-
     const {
         rootAccount,
         errorCode,
-        openOrFinalizeConnection,
         isConnecting,
-        setTimerEnabled,
         removeLedger,
+        tryLedgerConnection,
     } = useLedger({
         deviceId: device.id,
-        waitFirstManualConnection: true,
-        onConnectionError,
+        autoConnect: false,
     })
 
-    const onConnectionErrorDismiss = useCallback(() => {
-        setTimerEnabled(false)
-    }, [setTimerEnabled])
+    useEffect(() => {
+        if (errorCode) {
+            onOpen()
+        }
+    }, [errorCode, onOpen])
 
     const onConfirm = useCallback(async () => {
         await Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light)
-        await openOrFinalizeConnection()
-    }, [openOrFinalizeConnection])
+        await tryLedgerConnection()
+    }, [tryLedgerConnection])
 
     /**
      * Whenever we are able to get the root account from ledger, we can navigate to the next screen
@@ -153,8 +148,8 @@ export const EnableAdditionalSettings: React.FC<Props> = ({ route }) => {
     return (
         <BaseSafeArea grow={1}>
             <ConnectionErrorBottomSheet
-                onDismiss={onConnectionErrorDismiss}
                 ref={ref}
+                onDismiss={onClose}
                 error={errorCode}
             />
             <BackButtonHeader beforeNavigating={removeLedger} />

@@ -1,5 +1,4 @@
-import { LedgerDevice, Network } from "~Model"
-import { Mutex } from "async-mutex"
+import { LedgerDevice, Network, Response } from "~Model"
 import { Certificate, HDNode, Transaction } from "thor-devkit"
 import { AddressUtils, BalanceUtils } from "~Utils"
 import {
@@ -13,12 +12,11 @@ import { Buffer } from "buffer"
 
 import BleTransport from "@ledgerhq/react-native-hw-transport-ble"
 
-const ledgerMutex = new Mutex()
-
 /**
  * Codes to detect if the leder has the clause and contract enabled
  */
 export enum LedgerConfig {
+    UNKNOWN = "00000000",
     CLAUSE_AND_CONTRACT_ENABLED = "03010007",
     CLAUSE_ONLY_ENABLED = "02010007",
     CONTRACT_ONLY_ENABLED = "01010007",
@@ -28,7 +26,11 @@ export enum LedgerConfig {
 /**
  * Parses ledger errors based on common issues
  */
-export const ledgerErrorHandler = (err: Error) => {
+export const ledgerErrorHandler = (err: unknown): LEDGER_ERROR_CODES => {
+    if (!(err instanceof Error)) {
+        return LEDGER_ERROR_CODES.UNKNOWN
+    }
+
     //0x6d02 - user in homescreen?
     //0x6a15 - user in another app
     if (err.message.includes("0x6d02") || err.message.includes("0x6a15")) {
@@ -48,37 +50,65 @@ export const ledgerErrorHandler = (err: Error) => {
         return LEDGER_ERROR_CODES.DISCONNECTED
     }
 
+    if (err.message.includes("0x6985")) {
+        return LEDGER_ERROR_CODES.USER_REJECTED
+    }
+
     error("[Ledger] - Unknown Error", err)
     return LEDGER_ERROR_CODES.UNKNOWN
 }
 
-export const checkLedgerConnection = async ({
-    transport,
-    successCallback,
-    errorCallback,
-}: {
-    transport: BleTransport
-    successCallback?: (app: VETLedgerApp, rootAccount: VETLedgerAccount) => void
-    errorCallback?: (errorType: LEDGER_ERROR_CODES) => void
-}) => {
-    try {
+/**
+ * Response from the verify transport function
+ * @category Ledger
+ * @property error - The error if there is one
+ * @property response - The response, which should be defined, only if there is no error
+ */
+type VerifyTransportResponse = {
+    appConfig: LedgerConfig
+    rootAccount: VETLedgerAccount
+    app: VETLedgerApp
+}
+
+type VerifyResponse = Promise<Response<VerifyTransportResponse>>
+
+export const verifyTransport = async (
+    withTransport: (
+        func: (t: BleTransport) => VerifyResponse,
+    ) => VerifyResponse,
+): VerifyResponse => {
+    const res = async (transport: BleTransport): VerifyResponse => {
         const app = new VETLedgerApp(transport)
 
-        // In order to detecting if the app is opened
-        await app.getAppConfiguration()
-        // const _appConfigHex = appConfig.toString("hex")
+        try {
+            const config = await app.getAppConfiguration()
 
-        const rootAccount = await app.getAddress(
-            VET_DERIVATION_PATH,
-            false,
-            true,
-        )
-        successCallback?.(app, rootAccount)
-    } catch (e) {
-        warn("LedgerUtils:checkLedgerConnection", e)
-        warn(ledgerErrorHandler(e as Error))
-        errorCallback?.(ledgerErrorHandler(e as Error))
+            const appConfig: LedgerConfig = config.toString(
+                "hex",
+            ) as LedgerConfig
+            const rootAccount: VETLedgerAccount = await app.getAddress(
+                VET_DERIVATION_PATH,
+                false,
+                true,
+            )
+
+            return {
+                success: true,
+                payload: {
+                    appConfig,
+                    rootAccount,
+                    app,
+                },
+            }
+        } catch (e) {
+            return {
+                success: false,
+                payload: ledgerErrorHandler(e as Error),
+            }
+        }
     }
+
+    return await withTransport(res)
 }
 
 /**
@@ -87,18 +117,21 @@ export const checkLedgerConnection = async ({
  * @param index  The index of the account to sign the certificate with
  * @param cert  The certificate to sign
  * @param device  The device to sign the certificate with
- * @param transport The ledger transport
+ * @param withTransport  The transport to perform an action with
  * @returns The signed certificate
  */
+
+type CertResponse = Promise<Response<Buffer>>
+
 const signCertificate = async (
     index: number,
     cert: Certificate,
     device: LedgerDevice,
-    transport: BleTransport,
-): Promise<Buffer> => {
+    withTransport: (func: (t: BleTransport) => CertResponse) => CertResponse,
+): CertResponse => {
     debug("Signing certificate")
 
-    return await ledgerMutex.runExclusive(async () => {
+    const res = async (transport: BleTransport): CertResponse => {
         try {
             const vetLedger = new VETLedgerApp(transport)
 
@@ -107,16 +140,23 @@ const signCertificate = async (
             const dataToSign = Buffer.from(Certificate.encode(cert), "utf8")
 
             const path = `${VET_DERIVATION_PATH}/${index}`
-            return await vetLedger.signJSON(path, dataToSign)
+            const signature = await vetLedger.signJSON(path, dataToSign)
+
+            return {
+                success: true,
+                payload: signature,
+            }
         } catch (e) {
-            warn("signCertificate", e)
-            throw new Error("Failed to sign the message")
-        } finally {
-            transport.close().catch(e => {
-                warn("signCertificate:closeTransport", e)
-            })
+            warn("Error signing transaction", e)
+
+            return {
+                success: false,
+                payload: ledgerErrorHandler(e),
+            }
         }
-    })
+    }
+
+    return await withTransport(res)
 }
 
 /**
@@ -124,43 +164,52 @@ const signCertificate = async (
  * @param index  The index of the account to sign the transaction with
  * @param transaction  The transaction to sign
  * @param device  The device to sign the transaction with
- * @param vetLedger  The ledger app to sign the transaction with
+ * @param withTransport  The transport to perform an action with
  * @param onIsAwaitingForSignature  A callback that is called when the ledger is awaiting for a signature
  * @param onProgressUpdate  A callback that is called when the progress of the signature is updated
  * @returns  The signed transaction
  */
+
+type TxResponse = Promise<Response<Buffer>>
+
 const signTransaction = async (
     index: number,
     transaction: Transaction,
     device: LedgerDevice,
-    transport: BleTransport,
+    withTransport: (func: (t: BleTransport) => TxResponse) => TxResponse,
     onIsAwaitingForSignature: () => void,
     onProgressUpdate?: (progress: number) => void,
-): Promise<Buffer> => {
+): TxResponse => {
     debug("Signing transaction")
 
-    return await ledgerMutex.runExclusive(async () => {
-        // use a fresh transport to avoid possible device is disconnected errors
+    const res = async (transport: BleTransport): TxResponse => {
         const vetLedger = new VETLedgerApp(transport)
         try {
             await validateRootAddress(device.rootAddress, vetLedger)
 
             const path = `${VET_DERIVATION_PATH}/${index}`
-            return await vetLedger.signTransaction(
+            const signature = await vetLedger.signTransaction(
                 path,
                 transaction.encode(),
                 onIsAwaitingForSignature,
                 onProgressUpdate,
             )
+
+            return {
+                success: true,
+                payload: signature,
+            }
         } catch (e) {
-            warn("signTransaction", e)
-            throw new Error("Failed to sign the transaction")
-        } finally {
-            vetLedger.transport.close().catch(e => {
-                warn("Ledger:signTransaction", e)
-            })
+            warn("Error signing transaction", e)
+
+            return {
+                success: false,
+                payload: ledgerErrorHandler(e),
+            }
         }
-    })
+    }
+
+    return await withTransport(res)
 }
 
 export type LedgerAccount = {
@@ -243,7 +292,7 @@ const validateRootAddress = async (
 
 export default {
     ledgerErrorHandler,
-    checkLedgerConnection,
+    verifyTransport,
     getAccountsWithBalances,
     signCertificate,
     signTransaction,

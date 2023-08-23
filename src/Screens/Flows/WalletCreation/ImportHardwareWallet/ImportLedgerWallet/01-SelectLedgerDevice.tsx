@@ -40,16 +40,6 @@ export const SelectLedgerDevice = () => {
     const { androidPermissionsGranted, checkPermissions } =
         LedgerAndroidPermissions()
 
-    const onImportClick = useCallback(() => {
-        if (selectedDevice) {
-            Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light)
-            nav.navigate(Routes.IMPORT_HW_LEDGER_ENABLE_ADDITIONAL_SETTINGS, {
-                device: selectedDevice,
-            })
-            track(AnalyticsEvent.IMPORT_HW_SELECTED_LEDGER)
-        }
-    }, [nav, selectedDevice, track])
-
     const onDevice = useCallback(
         (device: ConnectedLedgerDevice) => {
             if (!selectedDevice) setSelectedDevice(device)
@@ -63,10 +53,21 @@ export const SelectLedgerDevice = () => {
         } else return true
     }, [androidPermissionsGranted])
 
-    const { availableDevices } = useLedgerSubscription({
+    const { availableDevices, unsubscribe } = useLedgerSubscription({
         onDevice,
         readyToScan,
     })
+
+    const onImportClick = useCallback(() => {
+        if (selectedDevice) {
+            unsubscribe()
+            Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light)
+            nav.navigate(Routes.IMPORT_HW_LEDGER_ENABLE_ADDITIONAL_SETTINGS, {
+                device: selectedDevice,
+            })
+            track(AnalyticsEvent.IMPORT_HW_SELECTED_LEDGER)
+        }
+    }, [unsubscribe, nav, selectedDevice, track])
 
     const renderItem = useCallback(
         ({ item }: { item: ConnectedLedgerDevice }) => {
@@ -103,7 +104,7 @@ export const SelectLedgerDevice = () => {
     return (
         <DismissKeyboardView>
             <BaseSafeArea grow={1}>
-                <BackButtonHeader />
+                <BackButtonHeader beforeNavigating={unsubscribe} />
                 <BaseView
                     alignItems="center"
                     justifyContent="space-between"
