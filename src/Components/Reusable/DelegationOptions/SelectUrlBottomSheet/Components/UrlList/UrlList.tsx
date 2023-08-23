@@ -67,6 +67,7 @@ export const UrlList = ({
                 ItemSeparatorComponent={ItemSeparatorComponent}
                 showsVerticalScrollIndicator={false}
                 showsHorizontalScrollIndicator={false}
+                estimatedItemSize={74}
             />
         </BaseView>
     )

@@ -87,6 +87,7 @@ function SelectDeviceBottomSheetInner<T extends BaseDevice = BaseDevice>(
                         scrollEnabled={isListScrollable}
                         showsVerticalScrollIndicator={false}
                         showsHorizontalScrollIndicator={false}
+                        estimatedItemSize={48}
                     />
                 )}
             </BaseView>

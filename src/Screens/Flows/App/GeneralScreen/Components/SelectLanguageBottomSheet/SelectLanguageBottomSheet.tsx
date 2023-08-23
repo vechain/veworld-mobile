@@ -97,6 +97,7 @@ export const SelectLanguageBottomSheet = React.forwardRef<
                     showsVerticalScrollIndicator={false}
                     showsHorizontalScrollIndicator={false}
                     scrollEnabled={isListScrollable}
+                    estimatedItemSize={41}
                 />
             </BaseView>
         </BaseBottomSheet>
