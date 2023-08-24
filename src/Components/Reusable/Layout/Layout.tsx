@@ -37,6 +37,8 @@ type Props = {
     >
 }
 
+const STATIC_BOTTOM_PADDING = 40
+
 export const Layout = ({
     noBackButton = false,
     noMargin = false,
@@ -54,8 +56,7 @@ export const Layout = ({
     refreshControl,
 }: Props) => {
     const theme = useTheme()
-    const { androidOnlyTabBarBottomMargin, tabBarBottomMargin } =
-        useTabBarBottomMargin()
+    const { androidOnlyTabBarBottomMargin } = useTabBarBottomMargin()
 
     const Title = useCallback(
         () => (
@@ -112,7 +113,6 @@ export const Layout = ({
                         }}>
                         {!fixedHeader && title && <Title />}
                         {body}
-                        {footer && <BaseSpacer height={tabBarBottomMargin} />}
                     </BaseScrollView>
                 )}
                 {fixedBody && (
@@ -123,7 +123,12 @@ export const Layout = ({
                 )}
                 {footer && (
                     <BaseView
-                        mb={androidOnlyTabBarBottomMargin}
+                        mb={
+                            noMargin
+                                ? 0
+                                : Number(androidOnlyTabBarBottomMargin) +
+                                  STATIC_BOTTOM_PADDING
+                        }
                         mx={noMargin ? 0 : 20}>
                         {footer}
                     </BaseView>
