@@ -243,11 +243,18 @@ export const LedgerSignTransaction: React.FC<Props> = ({ route }) => {
             appOpen &&
             appConfig === LedgerConfig.CLAUSE_AND_CONTRACT_ENABLED
         ) {
+            setSigningError(false)
             signTransaction()
         } else {
             debug("LedgerSignTransaction:signTransaction:skipped")
         }
     }, [userRejected, appOpen, appConfig, signature, signTransaction])
+
+    useEffect(() => {
+        if (currentStep >= SignSteps.SIGNING) {
+            setSigningError(false)
+        }
+    }, [currentStep])
 
     /**
      * Open the connection error sheet when the error code is not null

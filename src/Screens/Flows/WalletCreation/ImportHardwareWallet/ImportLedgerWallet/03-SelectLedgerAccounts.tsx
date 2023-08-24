@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect, useState } from "react"
+import React, { useCallback, useEffect, useMemo, useState } from "react"
 import {
     BaseActivityIndicator,
     BaseButton,
@@ -73,11 +73,17 @@ export const SelectLedgerAccounts: React.FC<Props> = ({ route }) => {
         }
     }, [rootAccount])
 
+    const ledgerErrorCode = useMemo(() => {
+        if (rootAcc) return undefined
+
+        return errorCode
+    }, [errorCode, rootAcc])
+
     const { ref, onOpen, onClose } = useBottomSheetModal()
 
     useEffect(() => {
-        if (errorCode) onOpen()
-    }, [errorCode, onOpen])
+        if (ledgerErrorCode) onOpen()
+    }, [ledgerErrorCode, onOpen])
 
     const [ledgerAccounts, setLedgerAccounts] = useState<LedgerAccount[]>([])
     const [ledgerAccountsLoading, setLedgerAccountsLoading] = useState(false)
@@ -145,7 +151,10 @@ export const SelectLedgerAccounts: React.FC<Props> = ({ route }) => {
         getLedgerAccounts()
     }, [rootAcc, selectedNetwork])
 
-    const goBack = useCallback(() => nav.goBack(), [nav])
+    const goBack = useCallback(() => {
+        nav.goBack()
+        removeLedger()
+    }, [removeLedger, nav])
 
     const renderItem = ({
         item,
@@ -216,7 +225,7 @@ export const SelectLedgerAccounts: React.FC<Props> = ({ route }) => {
             <ConnectionErrorBottomSheet
                 ref={ref}
                 onDismiss={onClose}
-                error={errorCode}
+                error={ledgerErrorCode}
             />
             <BaseActivityIndicator
                 isVisible={ledgerAccountsLoading}
