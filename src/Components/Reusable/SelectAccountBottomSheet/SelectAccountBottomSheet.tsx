@@ -57,13 +57,15 @@ export const SelectAccountBottomSheet = React.forwardRef<
             if (closeBottomSheet) closeBottomSheet()
         }
 
+        const sheetRef = ref as any
+
         const { listScrollProps, handleSheetChangePosition } =
             useScrollableBottomSheet({ data: accounts, snapPoints })
 
         return (
             <BaseBottomSheet
                 snapPoints={snapPoints}
-                ref={ref}
+                ref={sheetRef}
                 onChange={handleSheetChangePosition}
                 onDismiss={onDismiss}>
                 <BaseText typographyFont="subTitleBold">
@@ -75,6 +77,7 @@ export const SelectAccountBottomSheet = React.forwardRef<
                     keyExtractor={account => account.address}
                     ItemSeparatorComponent={ItemSeparatorComponent}
                     estimatedItemSize={74}
+                    modalMethods={sheetRef?.current}
                     renderItem={({ item }) => (
                         <AccountCard
                             account={item}
