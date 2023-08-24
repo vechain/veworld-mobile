@@ -2,13 +2,14 @@ import { useCallback } from "react"
 import { useThor } from "~Components"
 import { NftCollection } from "~Model"
 import {
-    GithubCollectionResponse,
     getContractAddresses,
     getName,
+    getNftBalanceOf,
     getNftsForContract,
     getSymbol,
     getTokenTotalSupply,
     getTokenURI,
+    GithubCollectionResponse,
 } from "~Networking"
 import {
     selectNftCollectionsWithoutMetadata,
@@ -20,7 +21,7 @@ import {
     useAppDispatch,
     useAppSelector,
 } from "~Storage/Redux"
-import { MediaUtils, URIUtils, debug, error } from "~Utils"
+import { debug, error, MediaUtils, URIUtils } from "~Utils"
 import {
     initCollectionMetadataFromRegistry,
     initCollectionMetadataWithoutRegistry,
@@ -83,6 +84,13 @@ export const useNFTCollections = () => {
                     collection.address,
                     thor,
                 )
+
+                const balanceOf = await getNftBalanceOf(
+                    currentAddress,
+                    collection.address,
+                    thor,
+                )
+
                 const tokenMetadata = await fetchMetadata(tokenURI)
                 const name =
                     tokenMetadata?.name ??
@@ -99,7 +107,7 @@ export const useNFTCollections = () => {
 
                 const updated = {
                     ...collection,
-                    balanceOf: pagination.totalElements,
+                    balanceOf: balanceOf,
                     hasCount: pagination.hasCount,
                     image,
                     mediaType,
@@ -154,7 +162,8 @@ export const useNFTCollections = () => {
                     )
 
                 // exit early if there are no more pages to fetch
-                if (_page >= pagination.totalPages) return
+                if (pagination.totalPages && _page >= pagination.totalPages)
+                    return
 
                 // Parse collection metadata from registry info or the chain if needed
                 const _nftCollections: NftCollection[] = contractsForNFTs.map(

@@ -31,8 +31,9 @@ export const useFetchCollections = (
 
     const hasNext = useMemo(
         () =>
+            !allNFTCollections?.pagination.totalElements ||
             (allNFTCollections?.collections.length ?? 0) <
-            allNFTCollections?.pagination.totalElements,
+                allNFTCollections?.pagination.totalElements,
 
         [
             allNFTCollections?.collections.length,
