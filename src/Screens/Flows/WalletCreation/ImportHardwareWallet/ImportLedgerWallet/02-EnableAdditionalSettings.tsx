@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect } from "react"
+import React, { useCallback } from "react"
 import {
     BackButtonHeader,
     BaseButton,
@@ -6,7 +6,6 @@ import {
     BaseSpacer,
     BaseText,
     BaseView,
-    ConnectionErrorBottomSheet,
 } from "~Components"
 import { useI18nContext } from "~i18n"
 
@@ -20,7 +19,7 @@ import {
     Routes,
 } from "~Navigation"
 
-import { useBottomSheetModal, useLedger, useTheme } from "~Hooks"
+import { useTheme } from "~Hooks"
 
 import * as Haptics from "expo-haptics"
 import { FlatList } from "react-native-gesture-handler"
@@ -41,63 +40,12 @@ export const EnableAdditionalSettings: React.FC<Props> = ({ route }) => {
     const nav = useNavigation()
     const theme = useTheme()
 
-    const { ref, onOpen, onClose } = useBottomSheetModal()
-
-    const onConnectionError = useCallback(() => {
-        // Haptics.notificationAsync(Haptics.NotificationFeedbackType.Error)
-        onOpen()
-    }, [onOpen])
-
-    const {
-        rootAccount,
-        errorCode,
-        openOrFinalizeConnection,
-        isConnecting,
-        setTimerEnabled,
-        removeLedger,
-    } = useLedger({
-        deviceId: device.id,
-        waitFirstManualConnection: true,
-        onConnectionError,
-    })
-
-    const onConnectionErrorDismiss = useCallback(() => {
-        setTimerEnabled(false)
-    }, [setTimerEnabled])
-
     const onConfirm = useCallback(async () => {
         await Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light)
-        await openOrFinalizeConnection()
-    }, [openOrFinalizeConnection])
-
-    /**
-     * Whenever we are able to get the root account from ledger, we can navigate to the next screen
-     */
-    useEffect(() => {
-        const triggerHapticsAndNavigate = async () => {
-            if (!rootAccount) return
-            await Haptics.notificationAsync(
-                Haptics.NotificationFeedbackType.Success,
-            )
-
-            await removeLedger()
-            nav.navigate(Routes.IMPORT_HW_LEDGER_SELECT_ACCOUNTS, {
-                rootAccount,
-                device,
-            })
-        }
-        if (!rootAccount) return
-        triggerHapticsAndNavigate()
-    }, [removeLedger, rootAccount, device, nav])
-
-    /**
-     * close the bottom sheet modal when error disappears
-     */
-    useEffect(() => {
-        if (!errorCode) {
-            onClose()
-        }
-    }, [errorCode, onClose])
+        nav.navigate(Routes.IMPORT_HW_LEDGER_SELECT_ACCOUNTS, {
+            device,
+        })
+    }, [device, nav])
 
     const Steps: Step[] = [
         {
@@ -152,12 +100,7 @@ export const EnableAdditionalSettings: React.FC<Props> = ({ route }) => {
 
     return (
         <BaseSafeArea grow={1}>
-            <ConnectionErrorBottomSheet
-                onDismiss={onConnectionErrorDismiss}
-                ref={ref}
-                error={errorCode}
-            />
-            <BackButtonHeader beforeNavigating={removeLedger} />
+            <BackButtonHeader />
             <BaseView
                 alignItems="center"
                 justifyContent="space-between"
@@ -188,10 +131,8 @@ export const EnableAdditionalSettings: React.FC<Props> = ({ route }) => {
                 <BaseView w={100}>
                     <BaseButton
                         action={onConfirm}
-                        isLoading={isConnecting}
-                        disabled={isConnecting}
                         w={100}
-                        title={LL.COMMON_LBL_IMPORT()}
+                        title={LL.BTN_CONTINUE()}
                     />
                 </BaseView>
             </BaseView>

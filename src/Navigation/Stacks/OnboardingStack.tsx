@@ -1,21 +1,20 @@
 import React from "react"
 import { createNativeStackNavigator } from "@react-navigation/native-stack"
 import {
-    WelcomeScreen,
-    NewMnemonicScreen,
-    WalletSetupScreen,
-    ConfirmMnemonicScreen,
     AppSecurityScreen,
-    UserCreatePasswordScreen,
-    ImportMnemonicScreen,
-    WalletSuccessScreen,
-    SelectLedgerDevice,
-    SelectLedgerAccounts,
+    ConfirmMnemonicScreen,
     EnableAdditionalSettings,
+    ImportMnemonicScreen,
+    NewMnemonicScreen,
+    SelectLedgerAccounts,
+    SelectLedgerDevice,
+    UserCreatePasswordScreen,
+    WalletSetupScreen,
+    WalletSuccessScreen,
+    WelcomeScreen,
 } from "~Screens"
 import { Routes } from "~Navigation/Enums"
 import { ConnectedLedgerDevice, SecurityLevelType } from "~Model"
-import { VETLedgerAccount } from "~Constants"
 
 export type RootStackParamListOnboarding = {
     [Routes.WELCOME]: undefined
@@ -31,7 +30,6 @@ export type RootStackParamListOnboarding = {
     }
     [Routes.IMPORT_HW_LEDGER_SELECT_ACCOUNTS]: {
         device: ConnectedLedgerDevice
-        rootAccount: VETLedgerAccount
     }
     [Routes.WALLET_SUCCESS]:
         | {

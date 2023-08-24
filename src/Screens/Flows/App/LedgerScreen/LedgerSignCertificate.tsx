@@ -34,6 +34,12 @@ type Props = NativeStackScreenProps<
     Routes.LEDGER_SIGN_CERTIFICATE
 >
 
+enum SigningStep {
+    CONNECTING,
+    SIGNING,
+    DONE,
+}
+
 export const LedgerSignCertificate: React.FC<Props> = ({ route }) => {
     const { accountWithDevice, certificate, initialRoute, requestEvent } =
         route.params
@@ -43,6 +49,7 @@ export const LedgerSignCertificate: React.FC<Props> = ({ route }) => {
     const { LL } = useI18nContext()
     const nav = useNavigation()
 
+    const [userRejected, setUserRejected] = useState<boolean>(false)
     const [signature, setSignature] = useState<Buffer>()
     const [isAwaitingSignature, setIsAwaitingSignature] = useState(false)
     const [signingError, setSigningError] = useState<boolean>()
@@ -54,22 +61,16 @@ export const LedgerSignCertificate: React.FC<Props> = ({ route }) => {
         onClose: closeConnectionErrorSheet,
     } = useBottomSheetModal()
 
-    const onConnectionError = useCallback(() => {
-        openConnectionErrorSheet()
-    }, [openConnectionErrorSheet])
-
-    const {
-        errorCode,
-        setTimerEnabled,
-        vetApp,
-        openBleConnection,
-        transport,
-        removeLedger,
-    } = useLedger({
+    const { appOpen, errorCode, withTransport, removeLedger } = useLedger({
         deviceId: accountWithDevice.device.deviceId,
-        waitFirstManualConnection: false,
-        onConnectionError,
+        autoConnect: true,
     })
+
+    useEffect(() => {
+        if (errorCode) {
+            openConnectionErrorSheet()
+        }
+    }, [openConnectionErrorSheet, errorCode])
 
     const ledgerErrorCode = useMemo(() => {
         if (errorCode) return errorCode
@@ -101,12 +102,41 @@ export const LedgerSignCertificate: React.FC<Props> = ({ route }) => {
     )
 
     const currentStep = useMemo(() => {
-        if (!vetApp) return 0
+        if (signature) return SigningStep.DONE
 
-        if (!signature) return 1
+        if (!appOpen) return SigningStep.CONNECTING
 
-        return 2
-    }, [vetApp, signature])
+        return SigningStep.SIGNING
+    }, [appOpen, signature])
+
+    const signCertificate = useCallback(async () => {
+        try {
+            if (!withTransport) return
+
+            const { success, payload } = await LedgerUtils.signCertificate(
+                accountWithDevice.index,
+                certificate,
+                accountWithDevice.device,
+                withTransport,
+            )
+            debug("Signature OK")
+
+            if (success) {
+                setSignature(payload)
+            } else {
+                if (payload === LEDGER_ERROR_CODES.USER_REJECTED) {
+                    setUserRejected(true)
+                } else {
+                    setSigningError(true)
+                }
+            }
+        } catch (e) {
+            error("LedgerSignCertificate:signCertificate", e)
+            setSigningError(true)
+        } finally {
+            setIsAwaitingSignature(false)
+        }
+    }, [accountWithDevice, certificate, withTransport])
 
     /** Effects */
 
@@ -114,31 +144,9 @@ export const LedgerSignCertificate: React.FC<Props> = ({ route }) => {
      * Sign the transaction when the device is connected and the clauses are enabled
      */
     useEffect(() => {
-        if (!vetApp) return
-
-        const signCertificate = async () => {
-            try {
-                //recreate transport to avoid DisconnectedDeviceDuringOperation error
-                await openBleConnection()
-                if (!transport) return
-
-                const _signature = await LedgerUtils.signCertificate(
-                    accountWithDevice.index,
-                    certificate,
-                    accountWithDevice.device,
-                    transport,
-                )
-                debug("Signature OK")
-                setSignature(_signature)
-            } catch (e) {
-                error("LedgerSignCertificate:signCertificate", e)
-                setSigningError(true)
-            } finally {
-                setIsAwaitingSignature(false)
-            }
-        }
+        if (!appOpen || userRejected) return
         signCertificate()
-    }, [openBleConnection, vetApp, accountWithDevice, certificate, transport])
+    }, [userRejected, signCertificate, appOpen])
 
     /**
      * Open the connection error sheet when the error code is not null
@@ -210,10 +218,6 @@ export const LedgerSignCertificate: React.FC<Props> = ({ route }) => {
         navigateOnFinish,
     ])
 
-    const onConnectionErrorDismiss = useCallback(() => {
-        setTimerEnabled(false)
-    }, [setTimerEnabled])
-
     const beforeNavigatingBack = useCallback(async () => {
         await removeLedger()
         if (web3Wallet && requestEvent)
@@ -223,6 +227,45 @@ export const LedgerSignCertificate: React.FC<Props> = ({ route }) => {
                 LL,
             })
     }, [removeLedger, requestEvent, web3Wallet, LL])
+
+    const BottomButton = useCallback(() => {
+        if (currentStep === SigningStep.SIGNING && userRejected) {
+            return (
+                <BaseButton
+                    style={styles.button}
+                    mx={24}
+                    haptics="Light"
+                    title={LL.BTN_RETRY()}
+                    isLoading={isSending}
+                    action={signCertificate}
+                />
+            )
+        }
+
+        if (currentStep === SigningStep.DONE) {
+            return (
+                <BaseButton
+                    style={styles.button}
+                    mx={24}
+                    haptics="Light"
+                    title={LL.COMMON_BTN_CONFIRM()}
+                    disabled={!signature || isSending}
+                    isLoading={isSending}
+                    action={handleOnConfirm}
+                />
+            )
+        }
+
+        return <></>
+    }, [
+        currentStep,
+        userRejected,
+        isSending,
+        LL,
+        signCertificate,
+        signature,
+        handleOnConfirm,
+    ])
 
     return (
         <BaseSafeArea grow={1}>
@@ -256,20 +299,12 @@ export const LedgerSignCertificate: React.FC<Props> = ({ route }) => {
                         LL.LEDGER_CERTIFICATE_READ_SB()}
                 </BaseText>
             </BaseView>
-            <BaseButton
-                style={styles.button}
-                mx={24}
-                haptics="Light"
-                title={LL.COMMON_BTN_CONFIRM()}
-                disabled={!signature || isSending}
-                isLoading={isSending}
-                action={handleOnConfirm}
-            />
+            <BottomButton />
 
             <BluetoothStatusBottomSheet />
             <ConnectionErrorBottomSheet
                 ref={connectionErrorSheetRef}
-                onDismiss={onConnectionErrorDismiss}
+                onDismiss={closeConnectionErrorSheet}
                 error={ledgerErrorCode}
             />
         </BaseSafeArea>

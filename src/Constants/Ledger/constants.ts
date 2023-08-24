@@ -10,11 +10,14 @@ export enum LEDGER_ERROR_CODES {
     OFF_OR_LOCKED = "off_or_locked",
     NO_VET_APP = "no_vet_app",
     UNKNOWN = "unknown",
+    WRONG_ROOT_ACCOUNT = "wrong_root_account",
     DISCONNECTED = "disconnected",
     WAITING_SIGNATURE = "waiting_signature",
     CONTRACT_AND_CLAUSES_DISABLED = "contracts_and_clauses_disabled",
     CONTRACT_DISABLED = "contract_disabled",
     CLAUSES_DISABLED = "clauses_disabled",
+    USER_REJECTED = "user_rejected",
+    DEVICE_NOT_FOUND = "device_not_found",
 }
 
 export enum StatusCodes {

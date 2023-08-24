@@ -2,18 +2,17 @@ import React from "react"
 import { createNativeStackNavigator } from "@react-navigation/native-stack"
 import {
     ConfirmMnemonicScreen,
+    EnableAdditionalSettings,
     ImportMnemonicScreen,
     NewMnemonicScreen,
-    SelectLedgerDevice,
-    EnableAdditionalSettings,
     SelectLedgerAccounts,
+    SelectLedgerDevice,
     UserCreatePasswordScreen,
-    WalletSuccessScreen,
     WalletSetupScreen,
+    WalletSuccessScreen,
 } from "~Screens"
 import { Routes } from "~Navigation/Enums"
 import { ConnectedLedgerDevice, SecurityLevelType } from "~Model"
-import { VETLedgerAccount } from "~Constants"
 
 export type RootStackParamListCreateWalletApp = {
     Home: undefined
@@ -27,7 +26,6 @@ export type RootStackParamListCreateWalletApp = {
     }
     [Routes.IMPORT_HW_LEDGER_SELECT_ACCOUNTS]: {
         device: ConnectedLedgerDevice
-        rootAccount: VETLedgerAccount
     }
     [Routes.WALLET_SUCCESS]:
         | {

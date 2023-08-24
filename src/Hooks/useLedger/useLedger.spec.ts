@@ -1,18 +1,17 @@
 import { renderHook } from "@testing-library/react-hooks"
-import { useLedger } from "./useLedger"
+import { useLedger } from "."
 
 import { TestHelpers } from "~Test"
 import { act } from "@testing-library/react-native"
 import BleTransport from "@ledgerhq/react-native-hw-transport-ble"
-import { LEDGER_ERROR_CODES } from "~Constants"
 import { useLedgerSubscription } from "~Hooks"
+import { LedgerConfig } from "~Utils/LedgerUtils/LedgerUtils"
+import { LEDGER_ERROR_CODES } from "~Constants"
 
 jest.mock("@ledgerhq/react-native-hw-transport-ble")
 jest.mock("~Hooks/useLedgerSubscription/useLedgerSubscription")
 
 const deviceId = "testDeviceId"
-const waitFirstManualConnection = false
-const onConnectionError = jest.fn()
 
 describe("useLedger", () => {
     beforeEach(() => {
@@ -27,6 +26,9 @@ describe("useLedger", () => {
         ).mockReturnValue({
             canConnect: true,
             availableDevices: [],
+            unsubscribe: jest.fn(),
+            timedOut: false,
+            setCanConnect: jest.fn(),
         })
     })
     describe("waitFirstManualConnection", () => {
@@ -34,21 +36,20 @@ describe("useLedger", () => {
             const { result } = renderHook(() =>
                 useLedger({
                     deviceId,
-                    waitFirstManualConnection,
-                    onConnectionError,
+                    autoConnect: false,
                 }),
             )
 
             expect(result.current).toEqual({
-                vetApp: undefined,
+                appOpen: false,
+                appConfig: LedgerConfig.UNKNOWN,
                 rootAccount: undefined,
-                isConnecting: true,
                 errorCode: undefined,
-                openOrFinalizeConnection: expect.any(Function),
-                setTimerEnabled: expect.any(Function),
-                transport: undefined,
-                openBleConnection: expect.any(Function),
+                tryLedgerConnection: expect.any(Function),
+                tryLedgerVerification: expect.any(Function),
+                isConnecting: false,
                 removeLedger: expect.any(Function),
+                withTransport: undefined,
             })
         })
 
@@ -60,29 +61,25 @@ describe("useLedger", () => {
             const { result, waitForNextUpdate } = renderHook(() =>
                 useLedger({
                     deviceId,
-                    waitFirstManualConnection,
-                    onConnectionError,
+                    autoConnect: false,
                 }),
             )
 
             act(async () => {
-                await result.current.openOrFinalizeConnection()
+                await result.current.tryLedgerConnection()
             })
             await waitForNextUpdate({ timeout: 5000 })
-            expect(onConnectionError).toHaveBeenCalledWith(
-                LEDGER_ERROR_CODES.DISCONNECTED,
-            )
 
             expect(result.current).toEqual({
-                vetApp: undefined,
+                appOpen: false,
+                appConfig: LedgerConfig.UNKNOWN,
                 rootAccount: undefined,
-                isConnecting: true,
-                errorCode: LEDGER_ERROR_CODES.DISCONNECTED,
-                openOrFinalizeConnection: expect.any(Function),
-                setTimerEnabled: expect.any(Function),
-                transport: undefined,
-                openBleConnection: expect.any(Function),
+                errorCode: LEDGER_ERROR_CODES.UNKNOWN,
+                tryLedgerConnection: expect.any(Function),
+                tryLedgerVerification: expect.any(Function),
+                isConnecting: false,
                 removeLedger: expect.any(Function),
+                withTransport: undefined,
             })
         })
         it("call openOrFinalizeConnection - unknown error on getAppConfig", async () => {
@@ -93,28 +90,25 @@ describe("useLedger", () => {
             const { result, waitForNextUpdate } = renderHook(() =>
                 useLedger({
                     deviceId,
-                    waitFirstManualConnection,
-                    onConnectionError,
+                    autoConnect: false,
                 }),
             )
 
             act(async () => {
-                await result.current.openOrFinalizeConnection()
+                await result.current.tryLedgerConnection()
             })
             await waitForNextUpdate({ timeout: 5000 })
-            expect(onConnectionError).toHaveBeenCalledWith(
-                LEDGER_ERROR_CODES.UNKNOWN,
-            )
+
             expect(result.current).toEqual({
-                vetApp: undefined,
+                appOpen: false,
+                appConfig: LedgerConfig.UNKNOWN,
                 rootAccount: undefined,
-                isConnecting: false,
                 errorCode: LEDGER_ERROR_CODES.UNKNOWN,
-                openOrFinalizeConnection: expect.any(Function),
-                setTimerEnabled: expect.any(Function),
-                transport: TestHelpers.data.mockedTransport,
-                openBleConnection: expect.any(Function),
+                tryLedgerConnection: expect.any(Function),
+                tryLedgerVerification: expect.any(Function),
+                isConnecting: false,
                 removeLedger: expect.any(Function),
+                withTransport: undefined,
             })
         })
     })

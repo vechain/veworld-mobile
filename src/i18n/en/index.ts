@@ -36,6 +36,8 @@ const en: BaseTranslation = {
     BTN_ADD_ACCOUNT: "ADD ACCOUNT",
     BTN_ADD_CUSTOM_NODE: "Add a custom node",
     BTN_EDIT_CUSTOM_NODE: "Edit custom node",
+    BTN_CONTINUE: "Continue",
+    BTN_RETRY: "Retry",
     BTN_DOWNLOAD_LOGS: "Download logs",
     BTN_RESET_APP: "Reset App",
     BTN_BUY: "Buy",
@@ -662,8 +664,9 @@ const en: BaseTranslation = {
     WALLET_LEDGER_ERROR_CONTRACT_DATA_DISABLED_DESC: "Contract data is needed to sign transactions. Navigate to Contract data inside your VET app and press both buttons to enable it.",
     WALLET_LEDGER_ERROR_UNKNOWN: "Unknown error",
     WALLET_LEDGER_ERROR_UNKNOWN_DESC: "An unknown error occurred. Please try again",
-
-
+    WALLET_LEDGER_NO_DEVICES: "No devices found",
+    WALLET_LEDGER_NO_DEVICES_DESC: "We couldn't find any Ledger devices to connect to",
+    
     // Transaction Labels
 
     // Unlock

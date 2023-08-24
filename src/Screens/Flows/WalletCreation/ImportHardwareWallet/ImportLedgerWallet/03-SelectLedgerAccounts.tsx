@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect, useState } from "react"
+import React, { useCallback, useEffect, useMemo, useState } from "react"
 import {
     BaseActivityIndicator,
     BaseButton,
@@ -8,11 +8,22 @@ import {
     BaseText,
     BaseTouchableBox,
     BaseView,
+    ConnectionErrorBottomSheet,
     showErrorToast,
 } from "~Components"
 import { useI18nContext } from "~i18n"
-import { useAnalyticTracking, useThemedStyles } from "~Hooks"
-import { AnalyticsEvent, ColorThemeType, VET } from "~Constants"
+import {
+    useAnalyticTracking,
+    useBottomSheetModal,
+    useLedger,
+    useThemedStyles,
+} from "~Hooks"
+import {
+    AnalyticsEvent,
+    ColorThemeType,
+    VET,
+    VETLedgerAccount,
+} from "~Constants"
 import { FormattingUtils, LedgerUtils } from "~Utils"
 import { StyleSheet } from "react-native"
 import { useNavigation } from "@react-navigation/native"
@@ -41,14 +52,38 @@ type Props = {} & NativeStackScreenProps<
 >
 
 export const SelectLedgerAccounts: React.FC<Props> = ({ route }) => {
-    const { device, rootAccount } = route.params
+    const { device } = route.params
     const dispatch = useAppDispatch()
     const { LL } = useI18nContext()
     const nav = useNavigation()
     const { styles: themedStyles, theme } = useThemedStyles(styles)
     const selectedNetwork = useAppSelector(selectSelectedNetwork)
     const userHasOnboarded = useAppSelector(selectHasOnboarded)
+    const [rootAcc, setRootAcc] = useState<VETLedgerAccount>()
     const track = useAnalyticTracking()
+
+    const { errorCode, rootAccount, removeLedger } = useLedger({
+        deviceId: device.id,
+    })
+
+    useEffect(() => {
+        // root account will be undefined if the user disconnects. We don't care abet that, we only want to read it
+        if (rootAccount) {
+            setRootAcc({ ...rootAccount })
+        }
+    }, [rootAccount])
+
+    const ledgerErrorCode = useMemo(() => {
+        if (rootAcc) return undefined
+
+        return errorCode
+    }, [errorCode, rootAcc])
+
+    const { ref, onOpen, onClose } = useBottomSheetModal()
+
+    useEffect(() => {
+        if (ledgerErrorCode) onOpen()
+    }, [ledgerErrorCode, onOpen])
 
     const [ledgerAccounts, setLedgerAccounts] = useState<LedgerAccount[]>([])
     const [ledgerAccountsLoading, setLedgerAccountsLoading] = useState(false)
@@ -57,23 +92,25 @@ export const SelectLedgerAccounts: React.FC<Props> = ({ route }) => {
     >([])
     const [isScrollable, setIsScrollable] = useState(false)
 
-    const navigateNext = useCallback(() => {
+    const navigateNext = useCallback(async () => {
+        await removeLedger()
+
         if (userHasOnboarded) {
             nav.navigate(Routes.WALLET_SUCCESS)
         } else {
             nav.navigate(Routes.APP_SECURITY)
         }
-    }, [nav, userHasOnboarded])
+    }, [removeLedger, nav, userHasOnboarded])
 
     const onConfirm = useCallback(async () => {
         try {
             track(AnalyticsEvent.IMPORT_HW_USER_SUBMITTED_ACCOUNTS)
-            if (selectedAccountsIndex.length > 0 && rootAccount) {
+            if (selectedAccountsIndex.length > 0 && rootAcc) {
                 // set device in the store we can use it in walletSuccess
                 dispatch(
                     setNewLedgerDevice({
                         deviceId: device.id,
-                        rootAccount,
+                        rootAccount: rootAcc,
                         alias: device.localName,
                         accounts: selectedAccountsIndex,
                     }),
@@ -88,7 +125,7 @@ export const SelectLedgerAccounts: React.FC<Props> = ({ route }) => {
     }, [
         track,
         selectedAccountsIndex,
-        rootAccount,
+        rootAcc,
         dispatch,
         device.id,
         device.localName,
@@ -100,10 +137,10 @@ export const SelectLedgerAccounts: React.FC<Props> = ({ route }) => {
      */
     useEffect(() => {
         const getLedgerAccounts = async () => {
-            if (rootAccount) {
+            if (rootAcc) {
                 setLedgerAccountsLoading(true)
                 const accounts = await LedgerUtils.getAccountsWithBalances(
-                    rootAccount,
+                    rootAcc,
                     selectedNetwork,
                     10,
                 )
@@ -112,9 +149,12 @@ export const SelectLedgerAccounts: React.FC<Props> = ({ route }) => {
             setLedgerAccountsLoading(false)
         }
         getLedgerAccounts()
-    }, [rootAccount, selectedNetwork])
+    }, [rootAcc, selectedNetwork])
 
-    const goBack = useCallback(() => nav.goBack(), [nav])
+    const goBack = useCallback(() => {
+        nav.goBack()
+        removeLedger()
+    }, [removeLedger, nav])
 
     const renderItem = ({
         item,
@@ -182,6 +222,11 @@ export const SelectLedgerAccounts: React.FC<Props> = ({ route }) => {
 
     return (
         <BaseSafeArea grow={1}>
+            <ConnectionErrorBottomSheet
+                ref={ref}
+                onDismiss={onClose}
+                error={ledgerErrorCode}
+            />
             <BaseActivityIndicator
                 isVisible={ledgerAccountsLoading}
                 onHide={() => null}
@@ -214,6 +259,7 @@ export const SelectLedgerAccounts: React.FC<Props> = ({ route }) => {
                         action={onConfirm}
                         w={100}
                         title={LL.COMMON_LBL_IMPORT()}
+                        isLoading={!rootAcc}
                         disabled={!selectedAccountsIndex.length}
                     />
 

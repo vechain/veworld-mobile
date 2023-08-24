@@ -135,6 +135,14 @@ type RootTranslation = {
 	 */
 	BTN_EDIT_CUSTOM_NODE: string
 	/**
+	 * C​o​n​t​i​n​u​e
+	 */
+	BTN_CONTINUE: string
+	/**
+	 * R​e​t​r​y
+	 */
+	BTN_RETRY: string
+	/**
 	 * D​o​w​n​l​o​a​d​ ​l​o​g​s
 	 */
 	BTN_DOWNLOAD_LOGS: string
@@ -2236,6 +2244,14 @@ type RootTranslation = {
 	 */
 	WALLET_LEDGER_ERROR_UNKNOWN_DESC: string
 	/**
+	 * N​o​ ​d​e​v​i​c​e​s​ ​f​o​u​n​d
+	 */
+	WALLET_LEDGER_NO_DEVICES: string
+	/**
+	 * W​e​ ​c​o​u​l​d​n​'​t​ ​f​i​n​d​ ​a​n​y​ ​L​e​d​g​e​r​ ​d​e​v​i​c​e​s​ ​t​o​ ​c​o​n​n​e​c​t​ ​t​o
+	 */
+	WALLET_LEDGER_NO_DEVICES_DESC: string
+	/**
 	 * D​a​t​e​ ​n​o​t​ ​a​v​a​i​l​a​b​l​e
 	 */
 	DATE_NOT_AVAILABLE: string
@@ -2526,6 +2542,14 @@ export type TranslationFunctions = {
 	 * Edit custom node
 	 */
 	BTN_EDIT_CUSTOM_NODE: () => LocalizedString
+	/**
+	 * Continue
+	 */
+	BTN_CONTINUE: () => LocalizedString
+	/**
+	 * Retry
+	 */
+	BTN_RETRY: () => LocalizedString
 	/**
 	 * Download logs
 	 */
@@ -4600,6 +4624,14 @@ Please, try again later.
 	 * An unknown error occurred. Please try again
 	 */
 	WALLET_LEDGER_ERROR_UNKNOWN_DESC: () => LocalizedString
+	/**
+	 * No devices found
+	 */
+	WALLET_LEDGER_NO_DEVICES: () => LocalizedString
+	/**
+	 * We couldn't find any Ledger devices to connect to
+	 */
+	WALLET_LEDGER_NO_DEVICES_DESC: () => LocalizedString
 	/**
 	 * Date not available
 	 */
