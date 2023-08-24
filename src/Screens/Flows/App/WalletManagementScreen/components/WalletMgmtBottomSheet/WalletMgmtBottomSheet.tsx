@@ -55,7 +55,7 @@ export const WalletMgmtBottomSheet = React.forwardRef<
         [],
     )
 
-    const { scrollableBottomSheetProps, handleSheetChangePosition } =
+    const { listScrollProps, handleSheetChangePosition } =
         useScrollableBottomSheet({ data: deviceAccounts, snapPoints })
 
     const onAddAccountClicked = () => {
@@ -133,7 +133,7 @@ export const WalletMgmtBottomSheet = React.forwardRef<
                                 />
                             )
                         }}
-                        {...scrollableBottomSheetProps}
+                        {...listScrollProps}
                     />
                 )}
             </BaseView>

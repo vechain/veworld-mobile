@@ -57,7 +57,7 @@ export const SelectAccountBottomSheet = React.forwardRef<
             if (closeBottomSheet) closeBottomSheet()
         }
 
-        const { scrollableBottomSheetProps, handleSheetChangePosition } =
+        const { listScrollProps, handleSheetChangePosition } =
             useScrollableBottomSheet({ data: accounts, snapPoints })
 
         return (
@@ -84,7 +84,7 @@ export const SelectAccountBottomSheet = React.forwardRef<
                             isBalanceVisible={isBalanceVisible}
                         />
                     )}
-                    {...scrollableBottomSheetProps}
+                    {...listScrollProps}
                 />
             </BaseBottomSheet>
         )

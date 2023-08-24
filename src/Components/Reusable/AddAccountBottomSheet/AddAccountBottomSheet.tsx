@@ -40,7 +40,7 @@ export const AddAccountBottomSheet = React.forwardRef<
     }, [dispatch, onSetSelectedAccount, onSuccess, selectedDevice])
 
     const devices = useAppSelector(selectDevices)
-    const { flatListScrollProps, handleSheetChangePosition } =
+    const { listScrollProps, handleSheetChangePosition } =
         useScrollableBottomSheet({ data: devices, snapPoints })
 
     return (
@@ -59,7 +59,7 @@ export const AddAccountBottomSheet = React.forwardRef<
                         onDevicePress={setSelectedDevice}
                         inBottomSheet={false}
                         devices={devices}
-                        flatListScrollProps={flatListScrollProps}
+                        listScrollProps={listScrollProps}
                     />
                 </BaseView>
                 <BaseButton

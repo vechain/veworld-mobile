@@ -1,6 +1,6 @@
 import React, { useCallback } from "react"
 import { StyleSheet } from "react-native"
-import { FlatListScrollPropsType, useThemedStyles } from "~Hooks"
+import { ListScrollPropsType, useThemedStyles } from "~Hooks"
 import { ColorThemeType } from "~Constants"
 import { AddressUtils } from "~Utils"
 import {
@@ -18,13 +18,13 @@ type Props = {
     onDevicePress: (device: BaseDevice) => void
     inBottomSheet?: boolean
     devices: BaseDevice[]
-    flatListScrollProps: FlatListScrollPropsType
+    listScrollProps: ListScrollPropsType
 }
 export const DevicesList: React.FC<Props> = ({
     selectedDevice,
     onDevicePress,
     devices,
-    flatListScrollProps,
+    listScrollProps,
 }) => {
     const { styles: themedStyles } = useThemedStyles(baseStyles)
 
@@ -74,7 +74,7 @@ export const DevicesList: React.FC<Props> = ({
             ItemSeparatorComponent={renderSeparator}
             keyExtractor={item => item.rootAddress}
             contentContainerStyle={themedStyles.contentContainer}
-            {...flatListScrollProps}
+            {...listScrollProps}
         />
     )
 }
