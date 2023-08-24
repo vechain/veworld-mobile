@@ -1,12 +1,5 @@
 import React, { useCallback } from "react"
-import {
-    BackButtonHeader,
-    BaseButton,
-    BaseSafeArea,
-    BaseSpacer,
-    BaseText,
-    BaseView,
-} from "~Components"
+import { BaseButton, BaseText, BaseView, Layout } from "~Components"
 import {
     useBiometricType,
     useBiometrics,
@@ -38,22 +31,23 @@ export const AppSecurityScreen = () => {
     }, [nav])
 
     return (
-        <BaseSafeArea grow={1}>
-            <BackButtonHeader />
-            <BaseView
-                alignItems="center"
-                justifyContent="space-between"
-                flexGrow={1}
-                mx={20}>
-                <BaseView alignSelf="flex-start">
-                    <BaseText typographyFont="title">
-                        {LL.TITLE_SECURITY()}
-                    </BaseText>
-                    <BaseText typographyFont="body" my={10}>
-                        {LL.SB_SECURITY()}
-                    </BaseText>
+        <Layout
+            body={
+                <BaseView
+                    alignItems="center"
+                    justifyContent="space-between"
+                    flexGrow={1}>
+                    <BaseView alignSelf="flex-start">
+                        <BaseText typographyFont="title">
+                            {LL.TITLE_SECURITY()}
+                        </BaseText>
+                        <BaseText typographyFont="body" my={10}>
+                            {LL.SB_SECURITY()}
+                        </BaseText>
+                    </BaseView>
                 </BaseView>
-
+            }
+            footer={
                 <BaseView alignItems="center" w={100}>
                     <BaseButton
                         haptics="Medium"
@@ -75,9 +69,7 @@ export const AppSecurityScreen = () => {
                         title={LL.BTN_SECURITY_CREATE_PASSWORD()}
                     />
                 </BaseView>
-            </BaseView>
-
-            <BaseSpacer height={40} />
-        </BaseSafeArea>
+            }
+        />
     )
 }

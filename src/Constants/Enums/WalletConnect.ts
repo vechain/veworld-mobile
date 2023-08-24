@@ -1,5 +1,4 @@
 export const RequestMethods = {
-    IDENTIFY: "identify",
-    SIGN: "sign",
-    REQUEST_TRANSACTION: "request_transaction",
+    SIGN_CERTIFICATE: "thor_signCertificate",
+    REQUEST_TRANSACTION: "thor_requestTransaction",
 }

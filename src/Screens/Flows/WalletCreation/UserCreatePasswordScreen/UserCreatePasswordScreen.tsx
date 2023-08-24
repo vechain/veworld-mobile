@@ -1,12 +1,11 @@
 import React, { useCallback, useEffect, useState } from "react"
 import {
-    BaseSafeArea,
     BaseSpacer,
     BaseText,
     BaseView,
     PasswordPins,
     NumPad,
-    BackButtonHeader,
+    Layout,
 } from "~Components"
 import { useI18nContext } from "~i18n"
 import {
@@ -82,35 +81,30 @@ export const UserCreatePasswordScreen = () => {
     }, [])
 
     return (
-        <BaseSafeArea grow={1}>
-            <BackButtonHeader />
-            <BaseView
-                alignItems="center"
-                justifyContent="flex-start"
-                flexGrow={1}
-                mx={20}>
-                <BaseView alignSelf="flex-start">
-                    <BaseText typographyFont="title">
-                        {LL.TITLE_USER_PASSWORD()}
-                    </BaseText>
-                    <BaseText typographyFont="body" my={10}>
-                        {LL.SB_USER_PASSWORD()}
-                    </BaseText>
+        <Layout
+            body={
+                <BaseView alignItems="center" justifyContent="flex-start">
+                    <BaseView alignSelf="flex-start">
+                        <BaseText typographyFont="title">
+                            {LL.TITLE_USER_PASSWORD()}
+                        </BaseText>
+                        <BaseText typographyFont="body" my={10}>
+                            {LL.SB_USER_PASSWORD()}
+                        </BaseText>
+                    </BaseView>
+                    <BaseSpacer height={valueToHP[40]} />
+                    <PasswordPins
+                        pin={pin}
+                        digitNumber={digitNumber}
+                        isPINRetype={isPinRetype}
+                        isPinError={isConfirmationError}
+                    />
+                    <NumPad
+                        onDigitPress={handleOnDigitPress}
+                        onDigitDelete={handleOnDigitDelete}
+                    />
                 </BaseView>
-                <BaseSpacer height={valueToHP[40]} />
-                <PasswordPins
-                    pin={pin}
-                    digitNumber={digitNumber}
-                    isPINRetype={isPinRetype}
-                    isPinError={isConfirmationError}
-                />
-                <NumPad
-                    onDigitPress={handleOnDigitPress}
-                    onDigitDelete={handleOnDigitDelete}
-                />
-            </BaseView>
-
-            <BaseSpacer height={valueToHP[40]} />
-        </BaseSafeArea>
+            }
+        />
     )
 }

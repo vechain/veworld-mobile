@@ -32,8 +32,8 @@ export const AppConnectionRequests = ({ name, methods }: Props) => {
         if (
             methods.find(
                 method =>
-                    method === RequestMethods.IDENTIFY ||
-                    method === RequestMethods.SIGN,
+                    method === RequestMethods.SIGN_CERTIFICATE ||
+                    method === RequestMethods.REQUEST_TRANSACTION,
             )
         ) {
             return (
