@@ -4,12 +4,10 @@ import { PlatformType } from "~Constants"
 import { PlatformUtils } from "~Utils"
 
 export const useTabBarBottomMargin = () => {
-    const paddingBottom = useBottomTabBarHeight()
+    const padding = useBottomTabBarHeight() || 0
 
     const getPadding = useCallback(
         (onlyForThisPlatform?: PlatformType) => {
-            const padding = paddingBottom
-
             if (onlyForThisPlatform === PlatformType.ANDROID) {
                 if (PlatformUtils.isAndroid()) {
                     return padding
@@ -24,7 +22,7 @@ export const useTabBarBottomMargin = () => {
             }
             return padding
         },
-        [paddingBottom],
+        [padding],
     )
 
     const iosOnlyTabBarBottomMargin: number = useMemo(
