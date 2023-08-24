@@ -11,8 +11,8 @@ export const wcMethodsToRequestTranslations = (
         translations.push(LL.CONNECTION_REQUEST_TRANSACTION_DESCRIPTION())
 
     if (
-        methods.includes(RequestMethods.IDENTIFY) ||
-        methods.includes(RequestMethods.SIGN)
+        methods.includes(RequestMethods.REQUEST_TRANSACTION) ||
+        methods.includes(RequestMethods.SIGN_CERTIFICATE)
     )
         translations.push(LL.CONNECTION_REQUEST_SIGN_DESCRIPTION())
 
