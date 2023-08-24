@@ -155,6 +155,9 @@ export const SelectAmountSendScreen = ({ route }: Props) => {
     }
 
     const inputColor = isError ? theme.colors.danger : theme.colors.text
+    const placeholderColor = theme.isDark
+        ? COLORS.WHITE_DISABLED
+        : COLORS.DARK_PURPLE_DISABLED
 
     return (
         <Layout
@@ -240,7 +243,7 @@ export const SelectAmountSendScreen = ({ route }: Props) => {
                                                             styles.input,
                                                         ]}
                                                         placeholderTextColor={
-                                                            inputColor
+                                                            placeholderColor
                                                         }
                                                         keyboardType="numeric"
                                                         value={input}

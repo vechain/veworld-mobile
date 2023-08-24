@@ -1,7 +1,7 @@
 import React, { memo } from "react"
 import { TextInput, StyleSheet } from "react-native"
 import { useTheme, useThemedStyles } from "~Hooks"
-import { typography, ColorThemeType } from "~Constants"
+import { typography, ColorThemeType, COLORS } from "~Constants"
 import { BaseIcon } from "../BaseIcon"
 import { BaseView } from "../BaseView"
 const { defaults: defaultTypography } = typography
@@ -19,12 +19,16 @@ export const BaseSearchInput = memo(
 
         const theme = useTheme()
 
+        const placeholderColor = theme.isDark
+            ? COLORS.WHITE_DISABLED
+            : COLORS.DARK_PURPLE_DISABLED
+
         return (
             <BaseView style={styles.container}>
                 <TextInput
                     style={styles.input}
                     placeholder={placeholder}
-                    placeholderTextColor={theme.colors.text}
+                    placeholderTextColor={placeholderColor}
                     onChangeText={setValue}
                     value={value}
                     testID={testID}
