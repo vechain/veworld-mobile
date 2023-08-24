@@ -9,11 +9,17 @@ import {
     BaseText,
     BaseTouchableBox,
     BaseView,
+    showErrorToast,
+    showSuccessToast,
 } from "~Components"
 
 import { useI18nContext } from "~i18n"
-import { useAppSelector } from "~Storage/Redux"
-import { selectSelectedAccount } from "~Storage/Redux/Selectors"
+import {
+    addAccountForDevice,
+    useAppDispatch,
+    useAppSelector,
+} from "~Storage/Redux"
+import { selectDevices, selectSelectedAccount } from "~Storage/Redux/Selectors"
 
 type Props = {
     onClose: () => void
@@ -42,15 +48,30 @@ export const AccountManagementBottomSheet = React.forwardRef<
 
         const snapPoints = useMemo(() => ["50%"], [])
         const selectedAccount = useAppSelector(selectSelectedAccount)
+        const devices = useAppSelector(selectDevices)
+        const dispatch = useAppDispatch()
 
         const handleSheetChanges = useCallback((index: number) => {
             info("accountManagementSheet position changed", index)
         }, [])
 
-        const onAddAccount = useCallback(() => {
+        const onAddAccount = useCallback(async () => {
             onClose()
-            openAddAccountSheet()
-        }, [onClose, openAddAccountSheet])
+            if (devices.length === 1) {
+                try {
+                    await dispatch(addAccountForDevice(devices[0]))
+                    showSuccessToast(
+                        LL.WALLET_MANAGEMENT_NOTIFICATION_CREATE_ACCOUNT_SUCCESS(),
+                    )
+                } catch (e) {
+                    showErrorToast(
+                        LL.WALLET_MANAGEMENT_NOTIFICATION_CREATE_ACCOUNT_ERROR(),
+                    )
+                }
+            } else {
+                openAddAccountSheet()
+            }
+        }, [LL, devices, dispatch, onClose, openAddAccountSheet])
 
         const { onCopyToClipboard } = useCopyClipboard()
 

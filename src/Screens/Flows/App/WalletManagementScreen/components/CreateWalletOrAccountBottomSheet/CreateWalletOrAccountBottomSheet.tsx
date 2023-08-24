@@ -1,10 +1,23 @@
 import React, { useCallback } from "react"
 import { BottomSheetModalMethods } from "@gorhom/bottom-sheet/lib/typescript/types"
-import { BaseBottomSheet, BaseSpacer, BaseText, CardButton } from "~Components"
+import {
+    BaseBottomSheet,
+    BaseSpacer,
+    BaseText,
+    CardButton,
+    showErrorToast,
+    showSuccessToast,
+} from "~Components"
 import { useI18nContext } from "~i18n"
 
 import { Routes } from "~Navigation"
 import { useNavigation } from "@react-navigation/native"
+import {
+    addAccountForDevice,
+    selectDevices,
+    useAppDispatch,
+    useAppSelector,
+} from "~Storage/Redux"
 
 type Props = {
     onCreateAccount: () => void
@@ -20,16 +33,31 @@ export const CreateWalletOrAccountBottomSheet = React.forwardRef<
     const { LL } = useI18nContext()
 
     const navigation = useNavigation()
+    const dispatch = useAppDispatch()
 
     const goToCreateWalletFlow = useCallback(() => {
         onClose()
         navigation.navigate(Routes.CREATE_WALLET_FLOW)
     }, [navigation, onClose])
+    const devices = useAppSelector(selectDevices)
 
-    const handleCreateAccount = useCallback(() => {
+    const handleCreateAccount = useCallback(async () => {
         onClose()
-        onCreateAccount()
-    }, [onClose, onCreateAccount])
+        if (devices.length === 1) {
+            try {
+                await dispatch(addAccountForDevice(devices[0]))
+                showSuccessToast(
+                    LL.WALLET_MANAGEMENT_NOTIFICATION_CREATE_ACCOUNT_SUCCESS(),
+                )
+            } catch (e) {
+                showErrorToast(
+                    LL.WALLET_MANAGEMENT_NOTIFICATION_CREATE_ACCOUNT_ERROR(),
+                )
+            }
+        } else {
+            onCreateAccount()
+        }
+    }, [LL, devices, dispatch, onClose, onCreateAccount])
 
     return (
         <BaseBottomSheet snapPoints={snapPoints} onDismiss={onClose} ref={ref}>

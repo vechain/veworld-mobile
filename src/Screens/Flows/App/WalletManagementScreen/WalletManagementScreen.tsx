@@ -6,6 +6,7 @@ import {
     Layout,
     RequireUserPassword,
     SwipeableRow,
+    showSuccessToast,
 } from "~Components"
 import { BaseDevice, Device } from "~Model"
 import { setDeviceState, useAppSelector } from "~Storage/Redux"
@@ -25,15 +26,15 @@ import {
 } from "~Hooks"
 import { SwipeableItemImperativeRef } from "react-native-swipeable-item"
 import DraggableFlatList, { RenderItem } from "react-native-draggable-flatlist"
-import { useNavigation } from "@react-navigation/native"
 import { useDispatch } from "react-redux"
+import { useI18nContext } from "~i18n"
 
 export const WalletManagementScreen = () => {
     const { tabBarBottomMargin } = useTabBarBottomMargin()
     const devices = useAppSelector(selectDevices)
     const [selectedDevice, setSelectedDevice] = useState<Device>()
     const { deleteWallet } = useWalletDeletion(selectedDevice)
-    const navigation = useNavigation()
+    const { LL } = useI18nContext()
     const dispatch = useDispatch()
     const {
         isPasswordPromptOpen,
@@ -122,8 +123,10 @@ export const WalletManagementScreen = () => {
 
     const handleOnSuccessAddAccountBottomSheet = useCallback(() => {
         closeAddAccountBottomSheet()
-        navigation.goBack()
-    }, [closeAddAccountBottomSheet, navigation])
+        showSuccessToast(
+            LL.WALLET_MANAGEMENT_NOTIFICATION_CREATE_ACCOUNT_SUCCESS(),
+        )
+    }, [LL, closeAddAccountBottomSheet])
 
     const handleDragEnd = ({ data }: { data: Device[] }) => {
         dispatch(

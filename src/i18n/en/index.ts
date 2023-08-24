@@ -387,8 +387,8 @@ const en: BaseTranslation = {
     NOTIFICATION_INCOMING_NFT_BODY: "{collectionName: string} You received a new NFT from {from: string} to {alias: string}.",
     NOTIFIACTION_INCOMING_NFT_ACTION: "Go to NFTs",
     NOTIFICATION_OUTGOING_NFT_TITLE: "Outgoing!",
-    NOTIFICATION_OUTGOING_NFT_BODY: "{collectionName: string} NFT was succesfully sent to {to: string}.",
-    NOTIFIACTION_OUTGOING_TOKEN_BODY: "{amount: string} was succesfully sent to {to: string}.",
+    NOTIFICATION_OUTGOING_NFT_BODY: "{collectionName: string} NFT was successfully sent to {to: string}.",
+    NOTIFIACTION_OUTGOING_TOKEN_BODY: "{amount: string} was successfully sent to {to: string}.",
     NOTIFICATION_VIEW_ACCOUNT: "View account",
 
     NOTIFICATION_FAILED_TO_REMOVE_ACCOUNT: "Failed to remove account",
@@ -512,6 +512,9 @@ const en: BaseTranslation = {
     ACCOUNT_OR_WALLET_BOTTOM_SHEET_ADD_ACCOUNT: "Add a new account",
     ACCOUNT_OR_WALLET_BOTTOM_SHEET_ADD_WALLET: "Add a new wallet",
     WALLET_MANAGEMENT_WALLET_NAME: "Wallet name",
+    WALLET_MANAGEMENT_NOTIFICATION_CREATE_ACCOUNT_SUCCESS: "Account created successfully",
+    WALLET_MANAGEMENT_NOTIFICATION_CREATE_ACCOUNT_ERROR: "Account created successfully",
+
 
 
     // Manage Token
