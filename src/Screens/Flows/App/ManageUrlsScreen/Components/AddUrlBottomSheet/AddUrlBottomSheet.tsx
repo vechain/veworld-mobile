@@ -9,6 +9,7 @@ import {
     BaseText,
     BaseView,
     ScrollViewWithFooter,
+    showWarningToast,
     useThor,
 } from "~Components"
 import { addDelegationUrl, useAppDispatch } from "~Storage/Redux"
@@ -29,7 +30,17 @@ export const AddUrlBottomSheet = React.forwardRef<
     const { LL } = useI18nContext()
     const thor = useThor()
     const handleAddUrl = () => {
-        dispatch(addDelegationUrl({ url: newUrl, genesisId: thor.genesis.id }))
+        dispatch(
+            addDelegationUrl({
+                url: newUrl,
+                genesisId: thor.genesis.id,
+                callbackIfAlreadyPresent: () => {
+                    showWarningToast(
+                        LL.SEND_DELEGATION_ADD_URL_ALREADY_PRESENT(),
+                    )
+                },
+            }),
+        )
         setNewUrl("")
         handleClose()
     }

@@ -1970,6 +1970,10 @@ type RootTranslation = {
 	 */
 	SEND_DELEGATION_ADD_URL: string
 	/**
+	 * U​R​L​ ​a​l​r​e​a​d​y​ ​p​r​e​s​e​n​t​!
+	 */
+	SEND_DELEGATION_ADD_URL_ALREADY_PRESENT: string
+	/**
 	 * I​n​s​e​r​t​ ​t​h​e​ ​U​R​L​ ​y​o​u​ ​w​a​n​t​ ​t​o​ ​t​o​ ​u​s​e​ ​t​o​ ​d​e​l​e​g​a​t​e​ ​t​h​i​s​ ​t​r​a​n​s​a​c​t​i​o​n
 	 */
 	SEND_DELEGATION_ADD_URL_SUBTITLE: string
@@ -4352,6 +4356,10 @@ Please, try again later.
 	 * Add delegation URL
 	 */
 	SEND_DELEGATION_ADD_URL: () => LocalizedString
+	/**
+	 * URL already present!
+	 */
+	SEND_DELEGATION_ADD_URL_ALREADY_PRESENT: () => LocalizedString
 	/**
 	 * Insert the URL you want to to use to delegate this transaction
 	 */

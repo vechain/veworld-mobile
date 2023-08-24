@@ -22,7 +22,11 @@ describe("DelegationSlice", () => {
         const url = "https://example.com"
         const nextState = DelegationSlice.reducer(
             initialState,
-            addDelegationUrl({ url, genesisId: defaultMainNetwork.genesis.id }),
+            addDelegationUrl({
+                url,
+                genesisId: defaultMainNetwork.genesis.id,
+                callbackIfAlreadyPresent: () => {},
+            }),
         )
         expect(nextState[defaultMainNetwork.genesis.id].urls).toContain(url)
     })
