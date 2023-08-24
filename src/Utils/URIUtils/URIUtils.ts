@@ -117,7 +117,7 @@ const convertUriToUrl = (uri: string) => {
     if (uri.startsWith("data:")) return uri
     const splitUri = uri?.split("://")
     if (splitUri.length !== 2) throw new Error(`Invalid URI ${uri}`)
-    const protocol = splitUri[0]
+    const protocol = splitUri[0].trim()
     const uriWithoutProtocol = splitUri[1]
 
     switch (protocol) {

@@ -27,7 +27,7 @@ export const useTokenMetadata = () => {
             debug(`Fetching metadata for ${uri}`)
 
             try {
-                const protocol = uri?.split(":")[0]
+                const protocol = uri?.split(":")[0].trim()
 
                 switch (protocol) {
                     case URIProtocol.IPFS:
