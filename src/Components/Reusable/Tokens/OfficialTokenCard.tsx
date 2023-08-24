@@ -30,11 +30,16 @@ export const OfficialTokenCard = memo(
             <BaseCard
                 onPress={action}
                 containerStyle={[styles.container, style]}>
-                <BaseView flexDirection="row" justifyContent="space-between">
+                <BaseView flexDirection="row" justifyContent="flex-start">
                     <TokenImage icon={token.icon} />
                     <BaseSpacer width={16} />
-                    <BaseView flexDirection="column" flexGrow={1}>
-                        <BaseText typographyFont="buttonPrimary">
+                    <BaseView
+                        flexDirection="column"
+                        style={{ width: Dimensions.get("window").width - 140 }}>
+                        <BaseText
+                            typographyFont="buttonPrimary"
+                            ellipsizeMode="tail"
+                            numberOfLines={1}>
                             {token.name}
                         </BaseText>
                         <BaseText typographyFont="captionRegular">
@@ -75,12 +80,8 @@ export const OfficialTokenCard = memo(
 
 const baseStyles = (selected?: boolean) => (theme: ColorThemeType) =>
     StyleSheet.create({
-        imageShadow: {
-            width: "auto",
-        },
         container: {
             minWidth: Dimensions.get("window").width - 48,
-            // width: "100%",
             marginVertical: 7,
             borderWidth: selected ? 1 : 0,
             borderRadius: 16,
