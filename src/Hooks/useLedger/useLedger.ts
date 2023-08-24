@@ -70,10 +70,7 @@ export const useLedger = ({
             debug("[Ledger] - removeLedger")
 
             setRemoved(true)
-
             unsubscribe()
-
-            setRemoved(true)
             if (transport.current) {
                 try {
                     await BleTransport.disconnect(deviceId)
