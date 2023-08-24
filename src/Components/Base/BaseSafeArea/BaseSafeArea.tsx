@@ -2,7 +2,7 @@ import { useNavigation } from "@react-navigation/native"
 import React, { useEffect, useState } from "react"
 import { StyleSheet } from "react-native"
 import { SafeAreaViewProps } from "react-native-safe-area-context"
-import { usePlatformBottomInsets, useThemedStyles } from "~Hooks"
+import { useTabBarBottomMargin, useThemedStyles } from "~Hooks"
 import { ColorThemeType } from "~Constants"
 import { getTabbar } from "../Helpers/getTabbar"
 import { SafeAreaView } from "./SafeAreaView"
@@ -25,14 +25,14 @@ export const BaseSafeArea = ({
     ...otherProps
 }: Props) => {
     const nav = useNavigation()
-    const { iosSpecificBottomInsetsIfIos } = usePlatformBottomInsets()
+    const { iosOnlyTabBarBottomMargin } = useTabBarBottomMargin()
 
     const [isTab, setIsTab] = useState(false)
 
     const { styles: themedStyles } = useThemedStyles(
         baseStyles({
             isTab,
-            iosSpecificBottomInsetsIfIos,
+            iosOnlyTabBarBottomMargin,
             flexGrow,
             bgTransparent,
             bg,
@@ -48,7 +48,7 @@ export const BaseSafeArea = ({
                 setIsTab(false)
             }
         }
-    }, [nav, iosSpecificBottomInsetsIfIos])
+    }, [nav, iosOnlyTabBarBottomMargin])
 
     return (
         <SafeAreaView
@@ -65,7 +65,7 @@ export const BaseSafeArea = ({
 
 type BaseStylesProps = {
     isTab: boolean
-    iosSpecificBottomInsetsIfIos: number
+    iosOnlyTabBarBottomMargin: number
     flexGrow?: number
     bgTransparent: boolean
     bg?: string
@@ -74,7 +74,7 @@ type BaseStylesProps = {
 const baseStyles =
     ({
         isTab,
-        iosSpecificBottomInsetsIfIos,
+        iosOnlyTabBarBottomMargin,
         flexGrow,
         bgTransparent,
         bg,
@@ -82,7 +82,7 @@ const baseStyles =
     (theme: ColorThemeType) =>
         StyleSheet.create({
             container: {
-                paddingBottom: isTab ? iosSpecificBottomInsetsIfIos : 0,
+                paddingBottom: isTab ? iosOnlyTabBarBottomMargin : 0,
                 flexGrow,
                 backgroundColor: bgTransparent
                     ? "transparent"

@@ -13,7 +13,7 @@ import {
 } from "~Components/Base"
 import { BackButtonHeader } from "../BackButtonHeader"
 import { RefreshControlProps, StyleSheet } from "react-native"
-import { usePlatformBottomInsets, useTheme } from "~Hooks"
+import { useTabBarBottomMargin, useTheme } from "~Hooks"
 import { isAndroid } from "~Utils/PlatformUtils/PlatformUtils"
 import { SelectedNetworkViewer } from "~Components"
 
@@ -30,12 +30,14 @@ type Props = {
     scrollViewTestID?: string
     showSelectedNetwork?: boolean
     onTouchBody?: () => void
-    _iosSpecificBottomInsetsIfIos?: number
+    _iosOnlyTabBarBottomMargin?: number
     refreshControl?: ReactElement<
         RefreshControlProps,
         string | JSXElementConstructor<any>
     >
 }
+
+const STATIC_BOTTOM_PADDING = 40
 
 export const Layout = ({
     noBackButton = false,
@@ -49,13 +51,12 @@ export const Layout = ({
     safeAreaTestID,
     onTouchBody,
     scrollViewTestID,
-    _iosSpecificBottomInsetsIfIos,
+    _iosOnlyTabBarBottomMargin,
     showSelectedNetwork = false,
     refreshControl,
 }: Props) => {
     const theme = useTheme()
-    const { androidSpecificBottomInsetsIfAndroid, platformBottomInsets } =
-        usePlatformBottomInsets()
+    const { androidOnlyTabBarBottomMargin } = useTabBarBottomMargin()
 
     const Title = useCallback(
         () => (
@@ -106,24 +107,28 @@ export const Layout = ({
                         // eslint-disable-next-line react-native/no-inline-styles
                         contentContainerStyle={{
                             paddingBottom: isAndroid()
-                                ? androidSpecificBottomInsetsIfAndroid
-                                : _iosSpecificBottomInsetsIfIos,
+                                ? androidOnlyTabBarBottomMargin
+                                : _iosOnlyTabBarBottomMargin,
                             paddingTop: noMargin ? 0 : 16,
                         }}>
                         {!fixedHeader && title && <Title />}
                         {body}
-                        {footer && <BaseSpacer height={platformBottomInsets} />}
                     </BaseScrollView>
                 )}
                 {fixedBody && (
                     <>
                         {fixedBody}
-                        <BaseView mb={androidSpecificBottomInsetsIfAndroid} />
+                        <BaseView mb={androidOnlyTabBarBottomMargin} />
                     </>
                 )}
                 {footer && (
                     <BaseView
-                        mb={androidSpecificBottomInsetsIfAndroid}
+                        mb={
+                            noMargin
+                                ? 0
+                                : Number(androidOnlyTabBarBottomMargin) +
+                                  STATIC_BOTTOM_PADDING
+                        }
                         mx={noMargin ? 0 : 20}>
                         {footer}
                     </BaseView>

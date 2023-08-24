@@ -1,13 +1,12 @@
 import React, { useCallback, useState } from "react"
 import {
-    BackButtonHeader,
     BaseButton,
     BaseIcon,
-    BaseSafeArea,
     BaseSpacer,
     BaseText,
     BaseView,
     CheckBoxWithText,
+    Layout,
     MnemonicCard,
 } from "~Components"
 import { StyleSheet } from "react-native"
@@ -37,61 +36,59 @@ export const NewMnemonicScreen = () => {
     }, [dispatch, mnemonic, nav])
 
     return (
-        <BaseSafeArea grow={1}>
-            <BackButtonHeader />
-            <BaseView
-                alignItems="flex-start"
-                justifyContent="space-between"
-                flexGrow={1}
-                mx={20}>
+        <Layout
+            body={
                 <BaseView alignItems="flex-start">
-                    <BaseText typographyFont="title" align="left">
-                        {LL.TITLE_MNEMONIC()}
-                    </BaseText>
+                    <BaseView alignItems="flex-start">
+                        <BaseText typographyFont="title" align="left">
+                            {LL.TITLE_MNEMONIC()}
+                        </BaseText>
 
-                    <BaseText typographyFont="body" my={10}>
-                        {LL.BD_MNEMONIC_SUBTITLE()}
-                    </BaseText>
+                        <BaseText typographyFont="body" my={10}>
+                            {LL.BD_MNEMONIC_SUBTITLE()}
+                        </BaseText>
 
-                    <BaseSpacer height={24} />
+                        <BaseSpacer height={24} />
 
-                    <MnemonicCard mnemonicArray={mnemonicArray} />
-                    <BaseSpacer height={20} />
-                    <BaseButton
-                        size="sm"
-                        selfAlign="flex-end"
-                        action={() =>
-                            onCopyToClipboard(
-                                mnemonicArray.join(" "),
-                                LL.TITLE_MNEMONIC(),
-                            )
-                        }
-                        w={100}
-                        title={LL.BTN_MNEMONIC_CLIPBOARD()}
-                        disabled={!mnemonic}
-                        rightIcon={
-                            <BaseIcon
-                                name="content-copy"
-                                color={theme.colors.card}
-                                size={12}
-                                style={styles.icon}
-                            />
-                        }
-                    />
-                    <BaseSpacer height={28} />
+                        <MnemonicCard mnemonicArray={mnemonicArray} />
+                        <BaseSpacer height={20} />
+                        <BaseButton
+                            size="sm"
+                            selfAlign="flex-end"
+                            action={() =>
+                                onCopyToClipboard(
+                                    mnemonicArray.join(" "),
+                                    LL.TITLE_MNEMONIC(),
+                                )
+                            }
+                            w={100}
+                            title={LL.BTN_MNEMONIC_CLIPBOARD()}
+                            disabled={!mnemonic}
+                            rightIcon={
+                                <BaseIcon
+                                    name="content-copy"
+                                    color={theme.colors.card}
+                                    size={12}
+                                    style={styles.icon}
+                                />
+                            }
+                        />
+                        <BaseSpacer height={28} />
 
-                    <BaseText
-                        typographyFont="footNoteAccent"
-                        color={theme.colors.danger}
-                        my={10}>
-                        {LL.BD_MNEMONIC_DISCLAIMER()}
-                    </BaseText>
+                        <BaseText
+                            typographyFont="footNoteAccent"
+                            color={theme.colors.danger}
+                            my={10}>
+                            {LL.BD_MNEMONIC_DISCLAIMER()}
+                        </BaseText>
 
-                    <BaseText typographyFont="footNote">
-                        {LL.BD_MNEMONIC_BACKUP()}
-                    </BaseText>
+                        <BaseText typographyFont="footNote">
+                            {LL.BD_MNEMONIC_BACKUP()}
+                        </BaseText>
+                    </BaseView>
                 </BaseView>
-
+            }
+            footer={
                 <BaseView alignItems="center" w={100}>
                     <BaseView mx={16}>
                         <CheckBoxWithText
@@ -111,10 +108,8 @@ export const NewMnemonicScreen = () => {
                         disabled={!isChecked}
                     />
                 </BaseView>
-            </BaseView>
-
-            <BaseSpacer height={40} />
-        </BaseSafeArea>
+            }
+        />
     )
 }
 
