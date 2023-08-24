@@ -55,11 +55,11 @@ export const AccountManagementBottomSheet = React.forwardRef<
             info("accountManagementSheet position changed", index)
         }, [])
 
-        const onAddAccount = useCallback(async () => {
+        const onAddAccount = useCallback(() => {
             onClose()
             if (devices.length === 1) {
                 try {
-                    await dispatch(addAccountForDevice(devices[0]))
+                    dispatch(addAccountForDevice(devices[0]))
                     showSuccessToast(
                         LL.WALLET_MANAGEMENT_NOTIFICATION_CREATE_ACCOUNT_SUCCESS(),
                     )
