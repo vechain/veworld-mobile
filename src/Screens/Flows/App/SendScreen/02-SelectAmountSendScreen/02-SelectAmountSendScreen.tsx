@@ -151,7 +151,7 @@ export const SelectAmountSendScreen = ({ route }: Props) => {
             token,
             amount: isInputInFiat ? rawTokenInput : input,
             initialRoute: initialRoute ?? "",
-        } as any) // Todo https://github.com/vechainfoundation/veworld-mobile/issues/867
+        })
     }
 
     const inputColor = isError ? theme.colors.danger : theme.colors.text

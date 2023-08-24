@@ -99,7 +99,9 @@ jest.mock("@react-navigation/bottom-tabs", () => ({
     ...jest.requireActual("@react-navigation/bottom-tabs"),
     useBottomTabBarHeight: jest.fn(() => 10),
 }))
-;(global as any).ReanimatedDataMock = {
+;(
+    global as typeof globalThis & { ReanimatedDataMock: { now: () => number } }
+).ReanimatedDataMock = {
     now: () => 0,
 }
 

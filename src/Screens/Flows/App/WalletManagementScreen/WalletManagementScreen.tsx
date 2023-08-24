@@ -18,13 +18,18 @@ import {
     WalletMgmtBottomSheet,
 } from "./components"
 import { StyleSheet } from "react-native"
-import { useBottomSheetModal, useCheckIdentity } from "~Hooks"
+import {
+    useBottomSheetModal,
+    useCheckIdentity,
+    useTabBarBottomMargin,
+} from "~Hooks"
 import { SwipeableItemImperativeRef } from "react-native-swipeable-item"
 import DraggableFlatList, { RenderItem } from "react-native-draggable-flatlist"
 import { useNavigation } from "@react-navigation/native"
 import { useDispatch } from "react-redux"
 
 export const WalletManagementScreen = () => {
+    const { tabBarBottomMargin } = useTabBarBottomMargin()
     const devices = useAppSelector(selectDevices)
     const [selectedDevice, setSelectedDevice] = useState<Device>()
     const { deleteWallet } = useWalletDeletion(selectedDevice)
@@ -146,7 +151,7 @@ export const WalletManagementScreen = () => {
                 </>
             }
             fixedBody={
-                <BaseView style={styles.view}>
+                <BaseView style={styles.view} mb={tabBarBottomMargin}>
                     <DraggableFlatList<Device>
                         data={devices}
                         extraData={isEdit}
@@ -198,5 +203,6 @@ const styles = StyleSheet.create({
 
     contentContainerStyle: {
         paddingTop: 8,
+        paddingBottom: 24,
     },
 })
