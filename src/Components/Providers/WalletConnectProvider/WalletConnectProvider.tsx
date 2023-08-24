@@ -313,8 +313,7 @@ const WalletConnectContextProvider = ({
 
             // Show the screen based on the request method
             switch (requestEvent.params.request.method) {
-                case RequestMethods.SIGN:
-                case RequestMethods.IDENTIFY:
+                case RequestMethods.SIGN_CERTIFICATE:
                     goToSignMessage(requestEvent, session, address)
                     break
                 case RequestMethods.REQUEST_TRANSACTION:
