@@ -40,6 +40,7 @@ export const ConnectionErrorBottomSheet = React.forwardRef<
 
     const data: DataToDisplay = useMemo(() => {
         switch (error) {
+            case LEDGER_ERROR_CODES.DEVICE_NOT_FOUND:
             case LEDGER_ERROR_CODES.OFF_OR_LOCKED:
                 return {
                     title: LL.WALLET_LEDGER_ERROR_UNLOCK_LEDGER(),

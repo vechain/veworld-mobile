@@ -64,7 +64,6 @@ export const LedgerSignCertificate: React.FC<Props> = ({ route }) => {
     const { appOpen, errorCode, withTransport, removeLedger } = useLedger({
         deviceId: accountWithDevice.device.deviceId,
         autoConnect: true,
-        maxRetries: 5,
     })
 
     useEffect(() => {

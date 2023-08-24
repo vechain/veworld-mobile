@@ -2236,6 +2236,14 @@ type RootTranslation = {
 	 */
 	WALLET_LEDGER_ERROR_UNKNOWN_DESC: string
 	/**
+	 * N​o​ ​d​e​v​i​c​e​s​ ​f​o​u​n​d
+	 */
+	WALLET_LEDGER_NO_DEVICES: string
+	/**
+	 * W​e​ ​c​o​u​l​d​n​'​t​ ​f​i​n​d​ ​a​n​y​ ​L​e​d​g​e​r​ ​d​e​v​i​c​e​s​ ​t​o​ ​c​o​n​n​e​c​t​ ​t​o
+	 */
+	WALLET_LEDGER_NO_DEVICES_DESC: string
+	/**
 	 * D​a​t​e​ ​n​o​t​ ​a​v​a​i​l​a​b​l​e
 	 */
 	DATE_NOT_AVAILABLE: string
@@ -4600,6 +4608,14 @@ Please, try again later.
 	 * An unknown error occurred. Please try again
 	 */
 	WALLET_LEDGER_ERROR_UNKNOWN_DESC: () => LocalizedString
+	/**
+	 * No devices found
+	 */
+	WALLET_LEDGER_NO_DEVICES: () => LocalizedString
+	/**
+	 * We couldn't find any Ledger devices to connect to
+	 */
+	WALLET_LEDGER_NO_DEVICES_DESC: () => LocalizedString
 	/**
 	 * Date not available
 	 */

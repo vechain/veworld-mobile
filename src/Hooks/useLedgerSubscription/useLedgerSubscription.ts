@@ -21,6 +21,7 @@ type Props = {
     readyToScan?: boolean
     deviceId?: string
     onDevice?: (device: ConnectedLedgerDevice) => void
+    timeout?: number
 }
 
 type SubscriptionEvent = {
@@ -32,8 +33,10 @@ export const useLedgerSubscription = ({
     deviceId,
     onDevice,
     readyToScan = true,
+    timeout,
 }: Props) => {
     const subscription = useRef<TransportSubscription>()
+    const [timedOut, setTimedOut] = useState<boolean>(false)
     const [canConnect, setCanConnect] = useState<boolean>(false)
     const [availableDevices, setAvailableDevices] = useState<
         ConnectedLedgerDevice[]
@@ -93,6 +96,24 @@ export const useLedgerSubscription = ({
         subscription.current = BleTransport.listen(bleObserver.current)
     }, [readyToScan])
 
+    useEffect(() => {
+        if (timeout && deviceId) {
+            setInterval(() => {
+                setAvailableDevices(prev => {
+                    if (!prev.some(d => d.id === deviceId)) {
+                        setTimedOut(true)
+                        debug(
+                            "useLedgerSubscription - timedOut waiting for device",
+                        )
+                    }
+
+                    return prev
+                })
+            }, timeout)
+        }
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [])
+
     const unsubscribe = useCallback(() => {
         debug("useLedgerSubscription - unsubscribe")
         subscription.current?.unsubscribe()
@@ -102,6 +123,8 @@ export const useLedgerSubscription = ({
     return {
         availableDevices,
         canConnect,
+        setCanConnect,
         unsubscribe,
+        timedOut,
     }
 }

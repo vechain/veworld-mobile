@@ -28,11 +28,9 @@ import { LedgerConfig } from "~Utils/LedgerUtils/LedgerUtils"
 export const useLedger = ({
     deviceId,
     autoConnect = true,
-    maxRetries = 5,
 }: {
     deviceId: string
     autoConnect?: boolean
-    maxRetries?: number
 }): UseLedgerProps => {
     // useEffect(() => {
     //     listen(log => {
@@ -42,9 +40,13 @@ export const useLedger = ({
 
     const mutex = useRef<Mutex>(new Mutex())
 
-    const { canConnect, unsubscribe } = useLedgerSubscription({ deviceId })
-    const transport = useRef<BleTransport | undefined>()
+    const { canConnect, unsubscribe, timedOut, setCanConnect } =
+        useLedgerSubscription({
+            deviceId,
+            timeout: 5000,
+        })
 
+    const transport = useRef<BleTransport | undefined>()
     const [appOpen, setAppOpen] = useState<boolean>(false)
     const [appConfig, setAppConfig] = useState<LedgerConfig>(
         LedgerConfig.UNKNOWN,
@@ -53,22 +55,21 @@ export const useLedger = ({
     const [disconnected, setDisconnected] = useState<boolean>(false)
     const [isConnecting, setIsConnecting] = useState<boolean>(false)
     const [rootAccount, setRootAccount] = useState<VETLedgerAccount>()
-    const [autoConnectAttempted, setAutoConnectAttempted] =
-        useState<boolean>(false)
     const [errorCode, setErrorCode] = useState<LEDGER_ERROR_CODES | undefined>(
         undefined,
     )
 
+    useEffect(() => {
+        if (timedOut) {
+            setErrorCode(LEDGER_ERROR_CODES.DEVICE_NOT_FOUND)
+        }
+    }, [timedOut])
+
     const removeLedger = useCallback(async () => {
-        let alreadyRemoved = false
-
-        setRemoved(prev => {
-            alreadyRemoved = prev
-            return true
-        })
-
-        if (!alreadyRemoved) {
+        if (!removed) {
             debug("[Ledger] - removeLedger")
+
+            setRemoved(true)
 
             unsubscribe()
 
@@ -85,7 +86,7 @@ export const useLedger = ({
             setErrorCode(undefined)
             transport.current = undefined
         }
-    }, [unsubscribe, deviceId])
+    }, [removed, unsubscribe, deviceId])
 
     /**
      * @param bleTransport - the transport to use
@@ -142,15 +143,10 @@ export const useLedger = ({
     const openBleConnection = useCallback(async () => {
         debug("[Ledger] - openBleConnection")
 
-        transport.current = await BleTransport.open(deviceId)
-            .then(t => {
-                debug("[Ledger] - openBleConnection - transport", t)
-                return t
-            })
-            .catch(e => {
-                error("[Ledger] - openBleConnection", e)
-                throw e
-            })
+        transport.current = await BleTransport.open(deviceId).catch(e => {
+            error("[Ledger] - openBleConnection", e)
+            throw e
+        })
 
         debug("[Ledger] - connection successful")
 
@@ -159,51 +155,44 @@ export const useLedger = ({
             setDisconnected(true)
             setRootAccount(undefined)
             setAppOpen(false)
+            setCanConnect(false)
+            setErrorCode(LEDGER_ERROR_CODES.DISCONNECTED)
             transport.current = undefined
         })
 
         await onConnectionConfirmed()
-    }, [onConnectionConfirmed, deviceId])
+    }, [setCanConnect, onConnectionConfirmed, deviceId])
 
-    const attemptAutoConnect = useCallback(async () => {
+    const attemptBleConnection = useCallback(async () => {
         debug("[Ledger] - attemptAutoConnect")
         setIsConnecting(true)
-        for (let i = 0; i < maxRetries; i++) {
-            try {
-                debug("[Ledger] - Attempting to open connection", i)
-                await openBleConnection()
-                debug("[Ledger] - Opened connection", i)
-                break
-            } catch (e) {
-                warn("[Ledger] - Error opening connection", e)
-                setErrorCode(LEDGER_ERROR_CODES.UNKNOWN)
-                await new Promise(resolve => setTimeout(resolve, 1000))
-            }
+
+        try {
+            debug("[Ledger] - Attempting to open connection")
+            await openBleConnection()
+            debug("[Ledger] - Opened connection")
+        } catch (e) {
+            warn("[Ledger] - Error opening connection", e)
+            setErrorCode(LEDGER_ERROR_CODES.UNKNOWN)
         }
+
         debug("[Ledger] - Finished attempting to open connection")
         setIsConnecting(false)
-    }, [openBleConnection, maxRetries])
+    }, [openBleConnection])
 
     useEffect(() => {
-        if (autoConnect && canConnect && !autoConnectAttempted) {
+        debug("[Ledger] - useLedger - useEffect - autoConnect", {
+            autoConnect,
+            canConnect,
+        })
+
+        if (autoConnect && canConnect) {
             debug("[Ledger] - Attempting to auto connect")
-            setAutoConnectAttempted(true)
-            attemptAutoConnect().catch(e =>
+            attemptBleConnection().catch(e =>
                 warn("[Ledger] - Auto connect error:", e),
             )
         }
-    }, [autoConnect, canConnect, attemptAutoConnect, autoConnectAttempted])
-
-    const openBleConnectionSafe = useCallback(async () => {
-        debug("[Ledger] - openBleConnectionSafe")
-        setIsConnecting(true)
-        try {
-            await openBleConnection()
-        } catch (e) {
-            setErrorCode(LEDGER_ERROR_CODES.UNKNOWN)
-        }
-        setIsConnecting(false)
-    }, [openBleConnection])
+    }, [autoConnect, canConnect, attemptBleConnection])
 
     useEffect(() => {
         if (!removed && disconnected) {
@@ -216,16 +205,6 @@ export const useLedger = ({
         return withTransport(transport.current)
     }, [appOpen, withTransport])
 
-    useEffect(() => {
-        debug({
-            rootAccount,
-            errorCode,
-            isConnecting,
-            transport: !!transport.current,
-            appConfig,
-        })
-    }, [rootAccount, errorCode, isConnecting, appConfig])
-
     return {
         appOpen,
         appConfig,
@@ -234,7 +213,7 @@ export const useLedger = ({
         errorCode: isConnecting ? undefined : errorCode,
         removeLedger,
         withTransport: externalWithTransport,
-        tryLedgerConnection: openBleConnectionSafe,
+        tryLedgerConnection: attemptBleConnection,
         tryLedgerVerification: onConnectionConfirmed,
     }
 }

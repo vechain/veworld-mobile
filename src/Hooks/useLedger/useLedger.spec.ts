@@ -27,6 +27,8 @@ describe("useLedger", () => {
             canConnect: true,
             availableDevices: [],
             unsubscribe: jest.fn(),
+            timedOut: false,
+            setCanConnect: jest.fn(),
         })
     })
     describe("waitFirstManualConnection", () => {
