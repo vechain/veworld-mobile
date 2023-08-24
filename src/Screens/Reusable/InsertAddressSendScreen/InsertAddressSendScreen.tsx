@@ -43,23 +43,29 @@ export const InsertAddressSendScreen = ({ route }: Props) => {
 
     const navigateNext = useCallback(
         (address: string) => {
-            if (route.params.hasOwnProperty("token")) {
+            if (
+                (
+                    route.params as
+                        | RootStackParamListHome[Routes.INSERT_ADDRESS_SEND]
+                        | RootStackParamListNFT[Routes.INSERT_ADDRESS_SEND]
+                ).hasOwnProperty("token")
+            ) {
                 const params =
                     route.params as RootStackParamListHome[Routes.INSERT_ADDRESS_SEND]
 
                 nav.navigate(Routes.TRANSACTION_SUMMARY_SEND, {
-                    token: params.token,
-                    amount: params.amount,
+                    token: params.token!,
+                    amount: params.amount!,
                     address,
-                    initialRoute: params.initialRoute ?? "",
+                    initialRoute: params.initialRoute ?? Routes.HOME,
                 })
             } else {
                 const params =
                     route.params as RootStackParamListNFT[Routes.INSERT_ADDRESS_SEND]
 
                 nav.navigate(Routes.SEND_NFT_RECAP, {
-                    contractAddress: params.contractAddress,
-                    tokenId: params.tokenId,
+                    contractAddress: params.contractAddress!,
+                    tokenId: params.tokenId!,
                     receiverAddress: selectedAddress,
                 })
             }

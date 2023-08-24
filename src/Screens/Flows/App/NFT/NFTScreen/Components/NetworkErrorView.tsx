@@ -1,17 +1,17 @@
 import React from "react"
-import { usePlatformBottomInsets } from "~Hooks"
+import { useTabBarBottomMargin } from "~Hooks"
 import { BaseText, BaseView } from "~Components"
 import { useI18nContext } from "~i18n"
 
 export const NetworkErrorView = () => {
-    const { iosSpecificBottomInsetsIfIos } = usePlatformBottomInsets()
+    const { iosOnlyTabBarBottomMargin } = useTabBarBottomMargin()
     const { LL } = useI18nContext()
 
     return (
         <BaseView
             flexDirection="row"
             justifyContent="space-evenly"
-            style={{ marginBottom: iosSpecificBottomInsetsIfIos }}
+            style={{ marginBottom: iosOnlyTabBarBottomMargin }}
             px={20}
             w={100}>
             <BaseText>{LL.NFT_DOWNLOAD_ERROR()}</BaseText>

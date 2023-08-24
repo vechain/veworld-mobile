@@ -537,7 +537,7 @@ describe("getNameAndUrl", () => {
                     },
                 }
             },
-        } as any as IWeb3Wallet
+        } as IWeb3Wallet
 
         expect(getNameAndUrl(web3Wallet, requestEvent)).toEqual({
             name: "VeWorld Mobile Wallet",

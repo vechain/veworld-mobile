@@ -26,6 +26,7 @@ export type RootStackParamListSettings = {
     [Routes.SETTINGS_PRIVACY]: undefined
     [Routes.SETTINGS_ABOUT]: undefined
     [Routes.SETTINGS_GENERAL]: undefined
+    [Routes.SETTINGS_ALERTS]: undefined
     [Routes.SETTINGS_CONTACTS]: undefined
     [Routes.SETTINGS_ADD_CONTACT]: undefined
     [Routes.WALLET_MANAGEMENT]: undefined
