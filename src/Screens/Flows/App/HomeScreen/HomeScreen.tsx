@@ -20,6 +20,7 @@ import {
     QRCodeBottomSheet,
     RenameAccountBottomSheet,
     SelectAccountBottomSheet,
+    showSuccessToast,
     showWarningToast,
 } from "~Components"
 import { FadeInRight } from "react-native-reanimated"
@@ -87,6 +88,13 @@ export const HomeScreen = () => {
         onOpen: openRenameAccountBottomSheet,
         onClose: closeRenameAccountBottonSheet,
     } = useBottomSheetModal()
+
+    const handleOnSuccessAddAccountBottomSheet = useCallback(() => {
+        closeAddAccountSheet()
+        showSuccessToast(
+            LL.WALLET_MANAGEMENT_NOTIFICATION_CREATE_ACCOUNT_SUCCESS(),
+        )
+    }, [LL, closeAddAccountSheet])
 
     const accounts = useAppSelector(selectVisibleAccounts)
     const allAccounts = useAppSelector(selectAccounts)
@@ -194,7 +202,7 @@ export const HomeScreen = () => {
 
                     <AddAccountBottomSheet
                         ref={addAccountBottomSheetRef}
-                        onSuccess={closeAddAccountSheet}
+                        onSuccess={handleOnSuccessAddAccountBottomSheet}
                     />
 
                     {/*Account Selection*/}

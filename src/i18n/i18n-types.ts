@@ -1355,13 +1355,13 @@ type RootTranslation = {
 	 */
 	NOTIFICATION_OUTGOING_NFT_TITLE: string
 	/**
-	 * {​c​o​l​l​e​c​t​i​o​n​N​a​m​e​}​ ​N​F​T​ ​w​a​s​ ​s​u​c​c​e​s​f​u​l​l​y​ ​s​e​n​t​ ​t​o​ ​{​t​o​}​.
+	 * {​c​o​l​l​e​c​t​i​o​n​N​a​m​e​}​ ​N​F​T​ ​w​a​s​ ​s​u​c​c​e​s​s​f​u​l​l​y​ ​s​e​n​t​ ​t​o​ ​{​t​o​}​.
 	 * @param {string} collectionName
 	 * @param {string} to
 	 */
 	NOTIFICATION_OUTGOING_NFT_BODY: RequiredParams<'collectionName' | 'to'>
 	/**
-	 * {​a​m​o​u​n​t​}​ ​w​a​s​ ​s​u​c​c​e​s​f​u​l​l​y​ ​s​e​n​t​ ​t​o​ ​{​t​o​}​.
+	 * {​a​m​o​u​n​t​}​ ​w​a​s​ ​s​u​c​c​e​s​s​f​u​l​l​y​ ​s​e​n​t​ ​t​o​ ​{​t​o​}​.
 	 * @param {string} amount
 	 * @param {string} to
 	 */
@@ -1744,6 +1744,14 @@ type RootTranslation = {
 	 * W​a​l​l​e​t​ ​n​a​m​e
 	 */
 	WALLET_MANAGEMENT_WALLET_NAME: string
+	/**
+	 * A​c​c​o​u​n​t​ ​c​r​e​a​t​e​d​ ​s​u​c​c​e​s​s​f​u​l​l​y
+	 */
+	WALLET_MANAGEMENT_NOTIFICATION_CREATE_ACCOUNT_SUCCESS: string
+	/**
+	 * A​c​c​o​u​n​t​ ​c​r​e​a​t​e​d​ ​s​u​c​c​e​s​s​f​u​l​l​y
+	 */
+	WALLET_MANAGEMENT_NOTIFICATION_CREATE_ACCOUNT_ERROR: string
 	/**
 	 * M​a​n​a​g​e​ ​T​o​k​e​n​s
 	 */
@@ -3725,11 +3733,11 @@ Please, try again later.
 	 */
 	NOTIFICATION_OUTGOING_NFT_TITLE: () => LocalizedString
 	/**
-	 * {collectionName} NFT was succesfully sent to {to}.
+	 * {collectionName} NFT was successfully sent to {to}.
 	 */
 	NOTIFICATION_OUTGOING_NFT_BODY: (arg: { collectionName: string, to: string }) => LocalizedString
 	/**
-	 * {amount} was succesfully sent to {to}.
+	 * {amount} was successfully sent to {to}.
 	 */
 	NOTIFIACTION_OUTGOING_TOKEN_BODY: (arg: { amount: string, to: string }) => LocalizedString
 	/**
@@ -4104,6 +4112,14 @@ Please, try again later.
 	 * Wallet name
 	 */
 	WALLET_MANAGEMENT_WALLET_NAME: () => LocalizedString
+	/**
+	 * Account created successfully
+	 */
+	WALLET_MANAGEMENT_NOTIFICATION_CREATE_ACCOUNT_SUCCESS: () => LocalizedString
+	/**
+	 * Account created successfully
+	 */
+	WALLET_MANAGEMENT_NOTIFICATION_CREATE_ACCOUNT_ERROR: () => LocalizedString
 	/**
 	 * Manage Tokens
 	 */

@@ -18,7 +18,7 @@ type Props = {
     onSuccess?: () => void
 }
 
-const snapPoints = ["60%", "90%"]
+const snapPoints = ["75%"]
 
 export const AddAccountBottomSheet = React.forwardRef<
     BottomSheetModalMethods,
