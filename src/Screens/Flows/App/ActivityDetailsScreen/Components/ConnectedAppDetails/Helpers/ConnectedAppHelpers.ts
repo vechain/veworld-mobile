@@ -10,10 +10,7 @@ export const wcMethodsToRequestTranslations = (
     if (methods.includes(RequestMethods.REQUEST_TRANSACTION))
         translations.push(LL.CONNECTION_REQUEST_TRANSACTION_DESCRIPTION())
 
-    if (
-        methods.includes(RequestMethods.REQUEST_TRANSACTION) ||
-        methods.includes(RequestMethods.SIGN_CERTIFICATE)
-    )
+    if (methods.includes(RequestMethods.SIGN_CERTIFICATE))
         translations.push(LL.CONNECTION_REQUEST_SIGN_DESCRIPTION())
 
     if (!translations.length) return ""
