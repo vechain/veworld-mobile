@@ -1,13 +1,12 @@
 import React, { useState } from "react"
 import {
-    BackButtonHeader,
     BaseButton,
     BaseIcon,
-    BaseSafeArea,
     BaseSpacer,
     BaseText,
     BaseView,
     DismissKeyboardView,
+    Layout,
 } from "~Components"
 import { useI18nContext } from "~i18n"
 import * as Clipboard from "expo-clipboard"
@@ -115,68 +114,66 @@ export const ImportMnemonicScreen = () => {
 
     return (
         <DismissKeyboardView>
-            <BaseSafeArea grow={1}>
-                <BackButtonHeader />
-                <BaseView
-                    alignItems="center"
-                    justifyContent="space-between"
-                    flexGrow={1}
-                    mx={20}>
-                    <BaseView alignSelf="flex-start" w={100}>
-                        <BaseView flexDirection="row" w={100}>
-                            <BaseText typographyFont="title">
-                                {LL.TITLE_WALLET_IMPORT_LOCAL()}
+            <Layout
+                body={
+                    <BaseView justifyContent="space-between">
+                        <BaseView>
+                            <BaseView flexDirection="row" w={100}>
+                                <BaseText typographyFont="title">
+                                    {LL.TITLE_WALLET_IMPORT_LOCAL()}
+                                </BaseText>
+                                {areDevFeaturesEnabled && (
+                                    <BaseButton
+                                        size="md"
+                                        variant="link"
+                                        action={onDemoMnemonicClick}
+                                        title="DEV:DEMO"
+                                    />
+                                )}
+                            </BaseView>
+                            <BaseText typographyFont="body" my={10}>
+                                {LL.BD_WALLET_IMPORT_LOCAL()}
                             </BaseText>
-                            {areDevFeaturesEnabled && (
-                                <BaseButton
-                                    size="md"
-                                    variant="link"
-                                    action={onDemoMnemonicClick}
-                                    title="DEV:DEMO"
+
+                            <BaseSpacer height={20} />
+
+                            <BaseView flexDirection="row" alignSelf="flex-end">
+                                <BaseIcon
+                                    name={"content-paste"}
+                                    size={32}
+                                    style={styles.icon}
+                                    bg={theme.colors.secondary}
+                                    action={onPasteFromClipboard}
                                 />
+                                <BaseIcon
+                                    name={"trash-can-outline"}
+                                    size={32}
+                                    bg={theme.colors.secondary}
+                                    action={onClearSeed}
+                                />
+                            </BaseView>
+
+                            <BaseSpacer height={40} />
+
+                            <ImportMnemonicInput
+                                mnemonic={localMnemonic}
+                                onChangeText={onChangeText}
+                                isError={!!isError}
+                            />
+                            {!!isError && (
+                                <BaseText my={10} color={theme.colors.danger}>
+                                    {isError}
+                                </BaseText>
                             )}
                         </BaseView>
-                        <BaseText typographyFont="body" my={10}>
-                            {LL.BD_WALLET_IMPORT_LOCAL()}
-                        </BaseText>
-
-                        <BaseSpacer height={20} />
-
-                        <BaseView flexDirection="row" alignSelf="flex-end">
-                            <BaseIcon
-                                name={"content-paste"}
-                                size={32}
-                                style={styles.icon}
-                                bg={theme.colors.secondary}
-                                action={onPasteFromClipboard}
-                            />
-                            <BaseIcon
-                                name={"trash-can-outline"}
-                                size={32}
-                                bg={theme.colors.secondary}
-                                action={onClearSeed}
-                            />
-                        </BaseView>
-
-                        <BaseSpacer height={40} />
-
-                        <ImportMnemonicInput
-                            mnemonic={localMnemonic}
-                            onChangeText={onChangeText}
-                            isError={!!isError}
-                        />
-                        {!!isError && (
-                            <BaseText my={10} color={theme.colors.danger}>
-                                {isError}
-                            </BaseText>
-                        )}
                     </BaseView>
-
+                }
+                footer={
                     <BaseView w={100}>
                         <BaseButton
                             haptics="Light"
                             variant="ghost"
-                            action={() => {}}
+                            action={() => {}} // TODO: useless button https://github.com/vechainfoundation/veworld-mobile/issues/1162
                             typographyFont="footNoteAccent"
                             title={LL.BTN_WALLET_IMPORT_HELP()}
                             px={5}
@@ -189,10 +186,8 @@ export const ImportMnemonicScreen = () => {
                             disabled={isDisabled}
                         />
                     </BaseView>
-                </BaseView>
-
-                <BaseSpacer height={40} />
-            </BaseSafeArea>
+                }
+            />
         </DismissKeyboardView>
     )
 }

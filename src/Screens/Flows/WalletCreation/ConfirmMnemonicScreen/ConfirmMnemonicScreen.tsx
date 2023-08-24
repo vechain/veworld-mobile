@@ -3,12 +3,11 @@ import React, { useCallback, useMemo, useState } from "react"
 import { useAnalyticTracking, useTheme } from "~Hooks"
 import { CryptoUtils } from "~Utils"
 import {
-    BackButtonHeader,
     BaseButton,
-    BaseSafeArea,
     BaseSpacer,
     BaseText,
     BaseView,
+    Layout,
     showErrorToast,
 } from "~Components"
 import {
@@ -20,8 +19,7 @@ import { Routes } from "~Navigation"
 import { getThreeRandomIndexes } from "./getThreeRandomIndexes"
 import { selectAreDevFeaturesEnabled, useAppSelector } from "~Storage/Redux"
 import { selectHasOnboarded, selectMnemonic } from "~Storage/Redux/Selectors"
-import { AnalyticsEvent, isSmallScreen, valueToHP } from "~Constants"
-import { ScrollView, StyleSheet } from "react-native"
+import { AnalyticsEvent, valueToHP } from "~Constants"
 
 export const ConfirmMnemonicScreen = () => {
     const nav = useNavigation()
@@ -168,25 +166,13 @@ export const ConfirmMnemonicScreen = () => {
         !selectedFirstWord || !selectedSecondWord || !selectedThirdWord
 
     return (
-        <BaseSafeArea grow={1}>
-            <BackButtonHeader />
-            <ScrollView
-                showsVerticalScrollIndicator={false}
-                showsHorizontalScrollIndicator={false}
-                contentInsetAdjustmentBehavior="automatic"
-                scrollEnabled={isSmallScreen}
-                contentContainerStyle={[baseStyles.scrollViewContainer]}
-                style={baseStyles.scrollView}>
-                <BaseView
-                    justifyContent="space-between"
-                    alignItems="flex-start"
-                    flexGrow={1}
-                    mx={20}>
-                    <BaseView justifyContent="space-between" w={100}>
+        <Layout
+            body={
+                <BaseView justifyContent="space-between" flexGrow={1}>
+                    <BaseView justifyContent="space-between">
                         <BaseView
                             flexDirection="row"
-                            justifyContent="space-between"
-                            w={100}>
+                            justifyContent="space-between">
                             <BaseText align="left" typographyFont="title">
                                 {LL.TITLE_CONFIRM_MNEMONIC()}
                             </BaseText>
@@ -247,28 +233,19 @@ export const ConfirmMnemonicScreen = () => {
                         />
                     </BaseView>
                     <BaseSpacer height={20} />
-                    <BaseButton
-                        haptics="Medium"
-                        action={onConfirmPress}
-                        w={100}
-                        px={20}
-                        title={LL.COMMON_BTN_CONFIRM()}
-                        disabled={isSubmitDisabled}
-                        radius={16}
-                    />
                 </BaseView>
-
-                <BaseSpacer height={20} />
-            </ScrollView>
-        </BaseSafeArea>
+            }
+            footer={
+                <BaseButton
+                    haptics="Medium"
+                    action={onConfirmPress}
+                    w={100}
+                    px={20}
+                    title={LL.COMMON_BTN_CONFIRM()}
+                    disabled={isSubmitDisabled}
+                    radius={16}
+                />
+            }
+        />
     )
 }
-
-const baseStyles = StyleSheet.create({
-    scrollViewContainer: {
-        width: "100%",
-    },
-    scrollView: {
-        width: "100%",
-    },
-})
