@@ -1,13 +1,14 @@
 import { renderHook } from "@testing-library/react-hooks"
 import { useNonFungibleTokenInfo } from "./useNonFungibleTokenInfo"
 import { useThor } from "~Components"
-import { getName, getTokenURI } from "~Networking"
+import { getName, getNftBalanceOf, getTokenURI } from "~Networking"
 import * as logger from "~Utils/Logger/Logger"
 import { NFTMediaType, TokenMetadata } from "~Model"
 
 jest.mock("~Networking", () => ({
     getName: jest.fn(),
     getTokenURI: jest.fn(),
+    getNftBalanceOf: jest.fn(),
 }))
 
 const fetchMetadata = jest.fn()
@@ -54,6 +55,7 @@ describe("useNonFungibleTokenInfo", () => {
             mediaType: NFTMediaType.IMAGE,
         }
 
+        ;(getNftBalanceOf as jest.Mock).mockResolvedValue(1)
         ;(getTokenURI as jest.Mock).mockResolvedValue(tokenUriMock)
         ;(getName as jest.Mock).mockResolvedValue(nameMock)
         fetchMetadata.mockResolvedValue(nftMetaMock)
@@ -115,6 +117,7 @@ describe("useNonFungibleTokenInfo", () => {
 
         const consoleErrorSpy = jest.spyOn(logger, "error")
 
+        ;(getNftBalanceOf as jest.Mock).mockResolvedValue(1)
         ;(getTokenURI as jest.Mock).mockResolvedValue(tokenUriMock)
         ;(getName as jest.Mock).mockResolvedValue(nameMock)
         fetchMetadata.mockResolvedValue(errorMock)
@@ -130,7 +133,7 @@ describe("useNonFungibleTokenInfo", () => {
         expect(result.current.tokenUri).toEqual(tokenUriMock)
         expect(result.current.collectionName).toEqual(nameMock)
         expect(result.current.tokenImage).toBeUndefined()
-        expect(result.current.tokenMediaType).toBe(NFTMediaType.IMAGE)
+        expect(result.current.tokenMediaType).toBe(NFTMediaType.UNKNOWN)
         expect(result.current.isMediaLoading).toBeFalsy()
         expect(getTokenURI).toHaveBeenCalledWith(tokenId, contractAddress, thor)
         expect(getName).toHaveBeenCalledWith(contractAddress, thor)
