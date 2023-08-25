@@ -1,5 +1,5 @@
 import { StyleSheet, FlatList } from "react-native"
-import React, { useCallback } from "react"
+import React, { Ref, useCallback } from "react"
 import { BaseSpacer } from "~Components"
 import { NFTCollectionView } from "../../NFTCollectionView"
 import { NftCollection } from "~Model"
@@ -18,6 +18,7 @@ type Props = {
     fetchMoreCollections: () => void
     onMomentumScrollBegin: () => void
     hasNext: boolean
+    flatListRef: Ref<FlatList>
 }
 
 export const NFTList = ({
@@ -27,6 +28,7 @@ export const NFTList = ({
     onGoToBlackListed,
     onMomentumScrollBegin,
     hasNext,
+    flatListRef,
 }: Props) => {
     const renderSeparator = useCallback(() => <BaseSpacer height={16} />, [])
 
@@ -39,6 +41,7 @@ export const NFTList = ({
 
     return (
         <FlatList
+            ref={flatListRef}
             data={collections}
             extraData={collections}
             contentContainerStyle={[baseStyles.listContainer]}

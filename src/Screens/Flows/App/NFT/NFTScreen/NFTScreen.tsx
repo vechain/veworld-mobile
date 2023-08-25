@@ -1,4 +1,4 @@
-import React, { useCallback, useMemo, useState } from "react"
+import React, { useCallback, useMemo, useRef, useState } from "react"
 import {
     BaseView,
     Layout,
@@ -11,7 +11,7 @@ import { isEmpty } from "lodash"
 import { NftLoader } from "./Components/NftLoader"
 import { useBottomSheetModal, useSetSelectedAccount } from "~Hooks"
 import { useFetchCollections } from "./useFetchCollections"
-import { useNavigation } from "@react-navigation/native"
+import { useNavigation, useScrollToTop } from "@react-navigation/native"
 import { Routes } from "~Navigation"
 import {
     selectBlackListedCollections,
@@ -76,6 +76,10 @@ export const NFTScreen = () => {
             return <ImportNFTView onImportPress={openQRCodeSheet} />
     }, [isShowImportNFTs, openQRCodeSheet])
 
+    const flatListRef = useRef(null)
+
+    useScrollToTop(flatListRef)
+
     const renderNFTList = useMemo(() => {
         if (!isEmpty(collections) || !isEmpty(blackListedCollections))
             return (
@@ -86,6 +90,7 @@ export const NFTScreen = () => {
                     fetchMoreCollections={fetchMoreCollections}
                     onMomentumScrollBegin={onMomentumScrollBegin}
                     hasNext={hasNext}
+                    flatListRef={flatListRef}
                 />
             )
     }, [
