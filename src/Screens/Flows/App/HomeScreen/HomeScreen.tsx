@@ -37,6 +37,7 @@ import { RemoveAccountWarningBottomSheet } from "~Screens/Flows/App/HomeScreen/C
 import { useAccountDelete } from "~Screens/Flows/App/HomeScreen/Hooks/useAccountDelete"
 import { useI18nContext } from "~i18n"
 import { RefreshControl } from "react-native"
+import { NestableScrollContainer } from "react-native-draggable-flatlist"
 
 export const HomeScreen = () => {
     const { updateBalances, updateSuggested } = useTokenBalances()
@@ -166,77 +167,84 @@ export const HomeScreen = () => {
                     refreshing={refreshing}
                 />
             }
-            body={
+            fixedBody={
                 <>
-                    <BaseView>
-                        <HeaderView
-                            openAccountManagementSheet={
-                                openAccountManagementSheet
+                    <NestableScrollContainer>
+                        <BaseView>
+                            <HeaderView
+                                openAccountManagementSheet={
+                                    openAccountManagementSheet
+                                }
+                                openSelectAccountBottomSheet={
+                                    openSelectAccountBottomSheet
+                                }
+                            />
+                            <BaseSpacer height={24} />
+                            <EditTokensBar
+                                isEdit={isEdit}
+                                setIsEdit={setIsEdit}
+                            />
+                            <BaseSpacer height={24} />
+
+                            <TokenList
+                                isEdit={isEdit}
+                                isBalanceVisible={isBalanceVisible}
+                                entering={animateEntering}
+                            />
+                            <BaseSpacer height={24} />
+                        </BaseView>
+
+                        <AccountManagementBottomSheet
+                            ref={accountManagementBottomSheetRef}
+                            onClose={closeAccountManagementSheet}
+                            openAddAccountSheet={openAddAccountSheet}
+                            openQRCodeSheet={openQRCodeSheet}
+                            openRenameAccountBottomSheet={
+                                openRenameAccountBottomSheet
                             }
-                            openSelectAccountBottomSheet={
-                                openSelectAccountBottomSheet
+                            openRemoveAccountBottomSheet={
+                                openRemoveAccountSheet
                             }
                         />
-                        <BaseSpacer height={24} />
-                        <EditTokensBar isEdit={isEdit} setIsEdit={setIsEdit} />
-                        <BaseSpacer height={24} />
 
-                        <TokenList
-                            isEdit={isEdit}
+                        <AddAccountBottomSheet
+                            ref={addAccountBottomSheetRef}
+                            onSuccess={handleOnSuccessAddAccountBottomSheet}
+                        />
+
+                        {/*Account Selection*/}
+                        <SelectAccountBottomSheet
+                            closeBottomSheet={closeSelectAccountBottonSheet}
+                            accounts={accounts}
+                            setSelectedAccount={setSelectedAccount}
+                            selectedAccount={selectedAccount}
                             isBalanceVisible={isBalanceVisible}
-                            entering={animateEntering}
+                            ref={selectAccountBottomSheetRef}
                         />
-                        <BaseSpacer height={24} />
-                    </BaseView>
 
-                    <AccountManagementBottomSheet
-                        ref={accountManagementBottomSheetRef}
-                        onClose={closeAccountManagementSheet}
-                        openAddAccountSheet={openAddAccountSheet}
-                        openQRCodeSheet={openQRCodeSheet}
-                        openRenameAccountBottomSheet={
-                            openRenameAccountBottomSheet
-                        }
-                        openRemoveAccountBottomSheet={openRemoveAccountSheet}
-                    />
+                        {/*Account Removal*/}
+                        <SelectAccountBottomSheet
+                            accounts={allAccounts}
+                            setSelectedAccount={openConfirmRemoveAccountWarning}
+                            isBalanceVisible={isBalanceVisible}
+                            onDismiss={closeRemoveAccountSheet}
+                            ref={removeAccountBottomSheetRef}
+                        />
 
-                    <AddAccountBottomSheet
-                        ref={addAccountBottomSheetRef}
-                        onSuccess={handleOnSuccessAddAccountBottomSheet}
-                    />
+                        <RemoveAccountWarningBottomSheet
+                            onClose={openAccountManagementSheet}
+                            onConfirm={onRemoveAccount}
+                            ref={removeAccountWarningBottomSheetRef}
+                        />
 
-                    {/*Account Selection*/}
-                    <SelectAccountBottomSheet
-                        closeBottomSheet={closeSelectAccountBottonSheet}
-                        accounts={accounts}
-                        setSelectedAccount={setSelectedAccount}
-                        selectedAccount={selectedAccount}
-                        isBalanceVisible={isBalanceVisible}
-                        ref={selectAccountBottomSheetRef}
-                    />
+                        <QRCodeBottomSheet ref={QRCodeBottomSheetRef} />
 
-                    {/*Account Removal*/}
-                    <SelectAccountBottomSheet
-                        accounts={allAccounts}
-                        setSelectedAccount={openConfirmRemoveAccountWarning}
-                        isBalanceVisible={isBalanceVisible}
-                        onDismiss={closeRemoveAccountSheet}
-                        ref={removeAccountBottomSheetRef}
-                    />
-
-                    <RemoveAccountWarningBottomSheet
-                        onClose={openAccountManagementSheet}
-                        onConfirm={onRemoveAccount}
-                        ref={removeAccountWarningBottomSheetRef}
-                    />
-
-                    <QRCodeBottomSheet ref={QRCodeBottomSheetRef} />
-
-                    <RenameAccountBottomSheet
-                        ref={renameAccountBottomSheetRef}
-                        account={selectedAccount}
-                        onClose={closeRenameAccountBottonSheet}
-                    />
+                        <RenameAccountBottomSheet
+                            ref={renameAccountBottomSheetRef}
+                            account={selectedAccount}
+                            onClose={closeRenameAccountBottonSheet}
+                        />
+                    </NestableScrollContainer>
                 </>
             }
         />
