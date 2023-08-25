@@ -59,9 +59,11 @@ export const AnimatedTokenCard = ({
         [nav, closeOtherSwipeableItems],
     )
 
+    const PressableComponent = isEdit ? Pressable : TouchableOpacity
+
     return (
         <BaseView style={styles.touchableContainer}>
-            <TouchableOpacity
+            <PressableComponent
                 disabled={isActive}
                 onPress={() => onTokenPress(isEdit, item)}
                 style={styles.pressable}>
@@ -84,7 +86,7 @@ export const AnimatedTokenCard = ({
                         isBalanceVisible={isBalanceVisible}
                     />
                 </BaseView>
-            </TouchableOpacity>
+            </PressableComponent>
         </BaseView>
     )
 }
