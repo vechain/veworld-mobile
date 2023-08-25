@@ -118,10 +118,15 @@ export const selectVisibleAccountsButSelected = createSelector(
 )
 
 export const selectDelegationAccounts = createSelector(
-    selectAccounts,
-    accounts => {
+    [selectAccounts, selectSelectedAccountAddress],
+    (accounts, selectedAccountAddress) => {
         return accounts.filter(
-            account => account.device.type === DEVICE_TYPE.LOCAL_MNEMONIC,
+            account =>
+                account.device.type === DEVICE_TYPE.LOCAL_MNEMONIC &&
+                !AddressUtils.compareAddresses(
+                    selectedAccountAddress,
+                    account.address,
+                ),
         ) as LocalAccountWithDevice[]
     },
 )
