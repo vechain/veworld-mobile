@@ -54,7 +54,6 @@ describe("Helpers - initCollectionMetadataFromRegistry", () => {
         expect(result).toEqual({
             id: "0x456",
             address: "0x456",
-            balanceOf: -1,
             creator: "creator",
             description: "description",
             image: `https://vechain.github.io/nft-registry/${regInfo.icon}`,
@@ -87,7 +86,6 @@ describe("Helpers - initCollectionMetadataWithoutRegistry", () => {
         expect(result).toEqual({
             id: "0x456",
             address: "0x456",
-            balanceOf: -1,
             creator: "notAvailable",
             description: "notAvailable",
             image: NFTPlaceHolderLight,

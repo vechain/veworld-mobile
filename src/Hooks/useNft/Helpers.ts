@@ -13,7 +13,7 @@ export const initCollectionMetadataFromRegistry = (
     collection: string,
     regInfo: GithubCollectionResponse,
 ): NftCollection => {
-    const nftCollection: NftCollection = {
+    return {
         id: collection,
         address: collection,
         name: regInfo.name,
@@ -23,11 +23,8 @@ export const initCollectionMetadataFromRegistry = (
         image: `https://vechain.github.io/nft-registry/${regInfo.icon}`,
         mimeType: "image/webp",
         mediaType: NFTMediaType.IMAGE,
-        balanceOf: -1,
         updated: false,
     }
-
-    return nftCollection
 }
 
 export const initCollectionMetadataWithoutRegistry = (
@@ -46,7 +43,6 @@ export const initCollectionMetadataWithoutRegistry = (
         description: notAvailable,
         image: isDarkTheme ? NFTPlaceholderDark : NFTPlaceHolderLight,
         mediaType: NFTMediaType.IMAGE,
-        balanceOf: -1,
         updated: false,
     }
 }
@@ -57,7 +53,7 @@ export const initialiseNFTMetadata = (
     owner: string,
     isDarkTheme: boolean,
 ): NonFungibleToken => {
-    const nftWithMetadata: NonFungibleToken = {
+    return {
         id: contractAddress + tokenId + owner,
         name: "",
         description: "",
@@ -68,6 +64,4 @@ export const initialiseNFTMetadata = (
         mediaType: NFTMediaType.IMAGE,
         updated: false,
     }
-
-    return nftWithMetadata
 }
