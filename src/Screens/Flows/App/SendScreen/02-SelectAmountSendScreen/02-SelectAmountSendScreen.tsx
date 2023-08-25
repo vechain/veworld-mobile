@@ -165,6 +165,7 @@ export const SelectAmountSendScreen = ({ route }: Props) => {
             isScrollEnabled={false}
             title={LL.SEND_TOKEN_TITLE()}
             showSelectedNetwork={true}
+            noStaticBottomPadding
             body={
                 <DismissKeyboardView>
                     <KeyboardAvoidingView behavior="padding">

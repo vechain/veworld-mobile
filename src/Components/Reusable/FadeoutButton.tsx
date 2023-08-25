@@ -2,7 +2,7 @@ import { StyleSheet } from "react-native"
 import React from "react"
 import LinearGradient from "react-native-linear-gradient"
 import { useBottomTabBarHeight } from "@react-navigation/bottom-tabs"
-import { SCREEN_WIDTH, valueToHP } from "~Constants"
+import { SCREEN_WIDTH } from "~Constants"
 import { useTheme } from "~Hooks"
 import { BaseButton, BaseView } from "~Components/Base"
 
@@ -44,7 +44,7 @@ export const FadeoutButton = ({
             <BaseView
                 mx={mx ?? 20}
                 style={{ width: SCREEN_WIDTH - 40 }}
-                py={valueToHP[16]}>
+                pb={24}>
                 <BaseButton
                     disabled={disabled}
                     size="lg"

@@ -251,7 +251,6 @@ export const WalletSuccessScreen: FC<Props> = ({ route }) => {
                             />
                         </BaseView>
                     </BaseView>
-
                     <BaseSpacer height={40} />
                 </BaseView>
             </BaseSafeArea>
