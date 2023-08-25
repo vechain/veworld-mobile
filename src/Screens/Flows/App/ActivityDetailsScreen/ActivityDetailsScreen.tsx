@@ -213,14 +213,10 @@ export const ActivityDetailsScreen = ({ route }: Props) => {
             <Layout
                 safeAreaTestID="Activity_Details_Screen"
                 showSelectedNetwork={true}
+                noStaticBottomPadding
+                title={getActivityTitle(activity, LL, isSwap)}
                 body={
                     <>
-                        <BaseText typographyFont="title" pt={12}>
-                            {getActivityTitle(activity, LL, isSwap)}
-                        </BaseText>
-
-                        <BaseSpacer height={16} />
-
                         <BaseText typographyFont="subSubTitleLight">
                             {dateTimeActivity}
                         </BaseText>
