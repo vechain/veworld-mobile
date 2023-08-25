@@ -41,9 +41,19 @@ export const NetworkBox: React.FC<Props> = ({
                     justifyContent="space-between"
                     alignItems="center"
                     flex={1}>
-                    <BaseView flexDirection="column" alignItems="flex-start">
+                    <BaseView
+                        flexDirection="column"
+                        alignItems="flex-start"
+                        style={
+                            rightIcon
+                                ? styles.NetworkInfoRightIcon
+                                : styles.NetworkInfoNoRightIcon
+                        }>
                         <BaseView flexDirection="row">
-                            <BaseText typographyFont="button">
+                            <BaseText
+                                typographyFont="button"
+                                ellipsizeMode="tail"
+                                numberOfLines={1}>
                                 {StringUtils.capitalize(network.name)}
                             </BaseText>
                             {network.defaultNet && (
@@ -80,5 +90,11 @@ const baseStyles = (theme: ColorThemeType) =>
         touchableContainer: {
             backgroundColor: theme.colors.card,
             borderRadius: 16,
+        },
+        NetworkInfoRightIcon: {
+            width: "90%",
+        },
+        NetworkInfoNoRightIcon: {
+            width: "100%",
         },
     })
