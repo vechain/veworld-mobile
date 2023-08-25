@@ -1,10 +1,10 @@
 import { GithubCollectionResponse } from "~Networking"
-import { NFTPlaceHolderLight, NFTPlaceholderDark } from "~Assets"
+import { NFTPlaceholderDark, NFTPlaceHolderLight } from "~Assets"
 import {
     NETWORK_TYPE,
+    NftCollection,
     NFTMediaType,
     NonFungibleToken,
-    NftCollection,
 } from "~Model"
 
 export const initCollectionMetadataFromRegistry = (
@@ -24,7 +24,6 @@ export const initCollectionMetadataFromRegistry = (
         mimeType: "image/webp",
         mediaType: NFTMediaType.IMAGE,
         balanceOf: -1,
-        hasCount: false,
         updated: false,
     }
 
@@ -38,7 +37,7 @@ export const initCollectionMetadataWithoutRegistry = (
     notAvailable: string,
     isDarkTheme: boolean,
 ): NftCollection => {
-    const nftCollection: NftCollection = {
+    return {
         id: collection,
         address: collection,
         name: "",
@@ -48,11 +47,8 @@ export const initCollectionMetadataWithoutRegistry = (
         image: isDarkTheme ? NFTPlaceholderDark : NFTPlaceHolderLight,
         mediaType: NFTMediaType.IMAGE,
         balanceOf: -1,
-        hasCount: false,
         updated: false,
     }
-
-    return nftCollection
 }
 
 export const initialiseNFTMetadata = (

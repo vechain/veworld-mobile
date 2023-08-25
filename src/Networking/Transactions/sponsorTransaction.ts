@@ -16,7 +16,7 @@ export const sponsorTransaction = async (
     try {
         response = await axios.post(delegateUrl, sponsorRequest)
     } catch (e) {
-        if (e instanceof Object && "isAxiosError" in e && e.isAxiosError) {
+        if (e instanceof AxiosError) {
             const axiosError = e as AxiosError
 
             error(

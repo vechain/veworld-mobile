@@ -45,7 +45,7 @@ export const useSendTransaction = (
                 encodedRawTx,
             )
         } catch (e) {
-            if (e instanceof Object && "isAxiosError" in e && e.isAxiosError) {
+            if (e instanceof AxiosError) {
                 const axiosError = e as AxiosError
 
                 error(

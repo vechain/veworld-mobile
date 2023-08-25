@@ -10,7 +10,8 @@ export const usePagination = () => {
             cb: (page: number) => Promise<void>,
         ) => {
             if (
-                totalReceived >= pagination?.totalElements ||
+                (pagination?.totalElements &&
+                    totalReceived >= pagination?.totalElements) ||
                 totalReceived % pageSize !== 0
             )
                 return

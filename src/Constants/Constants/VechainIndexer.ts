@@ -1,5 +1,5 @@
 import { genesises } from "~Constants"
-import { NETWORK_TYPE, Network } from "~Model"
+import { Network, NETWORK_TYPE } from "~Model"
 
 const isMainnet = (thor: Connex.Thor) => thor.genesis.id === genesises.main.id
 
@@ -15,6 +15,7 @@ export enum ORDER {
  * @param ownerAddress - Address to get NFTs for
  * @param resultsPerPage - Number of results per page
  * @param page - Page number
+ * @param direction - Direction of results
  *
  * @returns URL to fetch Contract addresses of NFTs owned by an address
  */
@@ -23,12 +24,13 @@ export const NFT_CONTRACTS_FOR_ADDRESS = (
     ownerAddress: string,
     resultsPerPage: number,
     page: number,
+    direction: ORDER = ORDER.DESC,
 ) =>
     `${
         networkType === NETWORK_TYPE.MAIN
             ? process.env.REACT_APP_INDEXER_MAINNET_URL
             : process.env.REACT_APP_INDEXER_TESTNET_URL
-    }/nfts/contracts?owner=${ownerAddress}&size=${resultsPerPage}&page=${page}&direction=ASC`
+    }/nfts/contracts?owner=${ownerAddress}&size=${resultsPerPage}&page=${page}&direction=${direction}`
 
 /**
  * Get NFTs owned given an NFT contract address
@@ -38,6 +40,7 @@ export const NFT_CONTRACTS_FOR_ADDRESS = (
  * @param contractAddress - NFT contract address
  * @param resultsPerPage - Number of results per page
  * @param page - Page number
+ * @param direction - Direction of results
  *
  * @returns URL to fetch NFTs owned given an NFT contract address
  */
@@ -47,12 +50,13 @@ export const NFTS_OWNED_PER_CONTRACT = (
     contractAddress: string,
     resultsPerPage: number = 20,
     page: number = 0,
+    direction: ORDER = ORDER.DESC,
 ) =>
     `${
         networkType === NETWORK_TYPE.MAIN
             ? process.env.REACT_APP_INDEXER_MAINNET_URL
             : process.env.REACT_APP_INDEXER_TESTNET_URL
-    }/nfts?address=${ownerAddress}&contractAddress=${contractAddress}&size=${resultsPerPage}&page=${page}&direction=ASC`
+    }/nfts?address=${ownerAddress}&contractAddress=${contractAddress}&size=${resultsPerPage}&page=${page}&direction=${direction}`
 
 /**
  * Get all transactions performed by a given address

@@ -17,8 +17,8 @@ export type PaginationResponse = {
     countLimit: number
     hasNext: boolean
     hasCount: boolean
-    totalElements: number
-    totalPages: number
+    totalElements: number | null
+    totalPages: number | null
 }
 
 export type NftForContractResponse = {

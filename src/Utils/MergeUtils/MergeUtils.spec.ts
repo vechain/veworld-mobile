@@ -1,4 +1,4 @@
-import { NFTMediaType, NftCollection } from "~Model"
+import { NftCollection, NFTMediaType } from "~Model"
 import { mergeArrays, mergeNftCollections, mergeObjects } from "./MergeUtils"
 
 interface Person {
@@ -37,7 +37,6 @@ const collection1: NftCollection = {
     symbol: "COL1",
     creator: "0x1",
     balanceOf: 1,
-    hasCount: true,
     totalSupply: 1,
     updated: false,
     description: "collection 1 description",
@@ -52,7 +51,6 @@ const collection2: NftCollection = {
     symbol: "COL2",
     creator: "0x2",
     balanceOf: 20,
-    hasCount: true,
     totalSupply: 2,
     updated: false,
     description: "collection 2 description",
@@ -67,7 +65,6 @@ const collection3: NftCollection = {
     symbol: "COL3",
     creator: "0x3",
     balanceOf: 30,
-    hasCount: true,
     totalSupply: 3,
     updated: false,
     description: "collection 3 description",
@@ -82,7 +79,6 @@ const collection4: NftCollection = {
     symbol: "COL4",
     creator: "0x4",
     balanceOf: 40,
-    hasCount: true,
     totalSupply: 4,
     updated: false,
     description: "collection 4 description",
@@ -97,7 +93,6 @@ const collection5: NftCollection = {
     symbol: "COL5",
     creator: "0x5",
     balanceOf: 5,
-    hasCount: true,
     totalSupply: 5,
     updated: false,
     description: "collection 5 description",

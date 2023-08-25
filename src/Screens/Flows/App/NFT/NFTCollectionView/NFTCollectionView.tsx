@@ -1,9 +1,9 @@
 import { useNavigation } from "@react-navigation/native"
 import React, { useCallback, useMemo } from "react"
-import { TouchableOpacity, StyleSheet } from "react-native"
+import { StyleSheet, TouchableOpacity } from "react-native"
 import { COLORS, SCREEN_WIDTH } from "~Constants"
-import { NFTImage, BaseText, BaseView, LongPressProvider } from "~Components"
-import { NFTMediaType, NftCollection } from "~Model"
+import { BaseText, BaseView, LongPressProvider, NFTImage } from "~Components"
+import { NftCollection, NFTMediaType } from "~Model"
 import { Routes } from "~Navigation"
 import { NFTPlaceholder } from "~Assets"
 import HapticsService from "~Services/HapticsService"
@@ -73,8 +73,8 @@ export const NFTCollectionView = ({ collection, index }: Props) => {
                             justifyContent="center"
                             alignItems="center">
                             <BaseText color={COLORS.WHITE}>
-                                {!collection.hasCount && "+"}
-                                {collection.balanceOf}
+                                {collection.balanceOf > 0 &&
+                                    collection.balanceOf}
                             </BaseText>
                         </BaseView>
                     )}
