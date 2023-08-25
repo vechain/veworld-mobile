@@ -92,10 +92,9 @@ export const NFTDetailScreen = ({ route }: Props) => {
     return (
         <Layout
             safeAreaTestID="NFT_Detail_Screen"
+            noStaticBottomPadding
             body={
                 <BaseView flex={1}>
-                    <BaseSpacer height={26} />
-
                     {nft && <NFTDetailImage nft={nft} />}
 
                     <BaseSpacer height={26} />

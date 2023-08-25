@@ -3,6 +3,7 @@ import React, {
     ReactElement,
     ReactNode,
     useCallback,
+    useMemo,
 } from "react"
 import {
     BaseSafeArea,
@@ -35,9 +36,8 @@ type Props = {
         RefreshControlProps,
         string | JSXElementConstructor<any>
     >
+    noStaticBottomPadding?: boolean
 }
-
-const STATIC_BOTTOM_PADDING = 40
 
 export const Layout = ({
     noBackButton = false,
@@ -54,9 +54,18 @@ export const Layout = ({
     _iosOnlyTabBarBottomMargin,
     showSelectedNetwork = false,
     refreshControl,
+    noStaticBottomPadding = false, // this is often used with components with FadeoutButton (that have padding to show the fade effect)
 }: Props) => {
     const theme = useTheme()
-    const { androidOnlyTabBarBottomMargin } = useTabBarBottomMargin()
+    const { androidOnlyTabBarBottomMargin, tabBarBottomMargin } =
+        useTabBarBottomMargin()
+
+    // this value is for automate bottom padding instead of having to set a custom padding
+    let STATIC_BOTTOM_PADDING = useMemo(() => {
+        if (noStaticBottomPadding) return 0
+
+        return tabBarBottomMargin ? 24 : 40 // this is because when the bottom tab bar is not present the device bottom line takes space (the one to come back home)
+    }, [noStaticBottomPadding, tabBarBottomMargin])
 
     const Title = useCallback(
         () => (
