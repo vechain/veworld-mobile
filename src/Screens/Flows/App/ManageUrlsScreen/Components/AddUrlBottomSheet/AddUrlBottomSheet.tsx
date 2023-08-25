@@ -51,7 +51,10 @@ export const AddUrlBottomSheet = React.forwardRef<
                 noBackButton
                 noMargin
                 fixedBody={
-                    <BaseView flex={1} style={styles.bodyContainer}>
+                    <BaseView
+                        flex={1}
+                        style={styles.bodyContainer}
+                        justifyContent="flex-start">
                         <BaseText typographyFont="subTitleBold">
                             {LL.SEND_DELEGATION_ADD_URL()}
                         </BaseText>

@@ -96,10 +96,9 @@ export const Layout = ({
                     )}
                 </BaseView>
                 {/* Separator from header to body */}
-                {!noBackButton ||
-                    (fixedHeader && (
-                        <BaseSpacer height={1} background={theme.colors.card} />
-                    ))}
+                {(!noBackButton || fixedHeader) && (
+                    <BaseSpacer height={1} background={theme.colors.card} />
+                )}
 
                 {body && (
                     <BaseScrollView
