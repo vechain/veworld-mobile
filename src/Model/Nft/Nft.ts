@@ -14,7 +14,7 @@ export interface NftCollection extends ERC721Metadata, WithID, MetadataUpdated {
     address: string
     symbol: string
     creator: string
-    balanceOf: number
+    balanceOf?: number
     totalSupply?: number
 }
 

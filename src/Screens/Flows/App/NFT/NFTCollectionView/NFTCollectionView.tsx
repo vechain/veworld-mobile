@@ -67,14 +67,13 @@ export const NFTCollectionView = ({ collection, index }: Props) => {
                     <BaseText color={COLORS.WHITE} numberOfLines={1} w={80}>
                         {collection.name}
                     </BaseText>
-                    {collection.balanceOf > 0 && (
+                    {collection.balanceOf && collection.balanceOf > 0 && (
                         <BaseView
                             style={styles.nftCounterLabel}
                             justifyContent="center"
                             alignItems="center">
                             <BaseText color={COLORS.WHITE}>
-                                {collection.balanceOf > 0 &&
-                                    collection.balanceOf}
+                                {collection.balanceOf}
                             </BaseText>
                         </BaseView>
                     )}

@@ -91,6 +91,13 @@ const WalletConnectContextProvider = ({
                     LL.NOTIFICATION_warning_wallet_connect_connection_could_delay(),
                 )
             } catch (err: unknown) {
+                if (
+                    err instanceof Error &&
+                    err.message.includes("Pairing already exists")
+                ) {
+                    return
+                }
+
                 error("WalletConnectProvider:onPair - err", err)
 
                 showErrorToast(LL.NOTIFICATION_wallet_connect_error_pairing())
@@ -456,9 +463,9 @@ const WalletConnectContextProvider = ({
         if (linkingUrls.length > 0) {
             const firstUrl = linkingUrls[0]
 
-            handleLinkingUrl(firstUrl).then(() => {
-                setLinkingUrls(prev => prev.filter(url => url !== firstUrl))
-            })
+            setLinkingUrls(prev => prev.filter(url => url !== firstUrl))
+
+            handleLinkingUrl(firstUrl)
         }
     }, [handleLinkingUrl, linkingUrls])
 

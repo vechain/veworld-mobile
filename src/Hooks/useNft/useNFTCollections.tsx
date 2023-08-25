@@ -21,7 +21,7 @@ import {
     useAppDispatch,
     useAppSelector,
 } from "~Storage/Redux"
-import { debug, error, MediaUtils, URIUtils } from "~Utils"
+import { debug, error, MediaUtils, URIUtils, warn } from "~Utils"
 import {
     initCollectionMetadataFromRegistry,
     initCollectionMetadataWithoutRegistry,
@@ -71,7 +71,7 @@ export const useNFTCollections = () => {
                     `Lazy loading metadata for collection ${collection.address}`,
                 )
 
-                const { data, pagination } = await getNftsForContract(
+                const { data } = await getNftsForContract(
                     network.type,
                     collection.address,
                     currentAddress,
@@ -85,11 +85,17 @@ export const useNFTCollections = () => {
                     thor,
                 )
 
-                const balanceOf = await getNftBalanceOf(
-                    currentAddress,
-                    collection.address,
-                    thor,
-                )
+                let balanceOf: number | undefined
+
+                try {
+                    balanceOf = await getNftBalanceOf(
+                        currentAddress,
+                        collection.address,
+                        thor,
+                    )
+                } catch (e) {
+                    warn(" useNFTCollections - failed to get balanceO", e)
+                }
 
                 const tokenMetadata = await fetchMetadata(tokenURI)
                 const name =
@@ -105,10 +111,9 @@ export const useNFTCollections = () => {
                 const description =
                     tokenMetadata?.description ?? collection.description
 
-                const updated = {
+                const updated: NftCollection = {
                     ...collection,
                     balanceOf: balanceOf,
-                    hasCount: pagination.hasCount,
                     image,
                     mediaType,
                     name,
