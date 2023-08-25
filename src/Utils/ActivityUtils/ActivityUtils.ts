@@ -10,7 +10,8 @@ import TransactionUtils from "../TransactionUtils"
 export const getActivityTypeFromClause = (
     clauses: Connex.VM.Clause[],
 ): ActivityType => {
-    if (clauses.length > 1) return ActivityType.DAPP_TRANSACTION
+    if (clauses.length > 1 || clauses.length === 0)
+        return ActivityType.DAPP_TRANSACTION
 
     if (TransactionUtils.isTokenTransferClause(clauses[0])) {
         return ActivityType.FUNGIBLE_TOKEN

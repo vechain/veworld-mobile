@@ -16,13 +16,13 @@ export interface TransactionsResponse extends BaseTransactionResponse {
     clauses: Connex.VM.Clause[]
     gasPriceCoef: number
     gas: number
-    dependsOn: string
+    dependsOn: string | null
     nonce: string
     gasUsed: number
     gasPayer: string
     paid: string
     reward: string
-    reverted: true
+    reverted: boolean
     origin: string
     outputs: OutputResponse[]
 }
