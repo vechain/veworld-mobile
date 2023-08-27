@@ -1,4 +1,4 @@
-import React, { useCallback, useMemo } from "react"
+import React, { useCallback, useMemo, useRef } from "react"
 import { BaseSafeArea, BaseText, BaseView } from "~Components"
 import { TranslationFunctions, useI18nContext } from "~i18n"
 import { Routes } from "~Navigation"
@@ -8,6 +8,7 @@ import { RowProps, SettingsRow } from "./Components/SettingsRow"
 import { useThemedStyles } from "~Hooks"
 import { ColorThemeType, isSmallScreen } from "~Constants"
 import { selectAreDevFeaturesEnabled, useAppSelector } from "~Storage/Redux"
+import { useScrollToTop } from "@react-navigation/native"
 
 export const SettingsScreen = () => {
     const { LL } = useI18nContext()
@@ -36,6 +37,9 @@ export const SettingsScreen = () => {
         ),
         [],
     )
+    const flatListRef = useRef(null)
+
+    useScrollToTop(flatListRef)
 
     return (
         <BaseSafeArea>
@@ -49,6 +53,7 @@ export const SettingsScreen = () => {
 
             <BaseView flexDirection="row" style={[themedStyles.list]}>
                 <FlashList
+                    ref={flatListRef}
                     data={SCREEN_LIST}
                     contentContainerStyle={themedStyles.contentContainerStyle}
                     ItemSeparatorComponent={renderSeparator}
