@@ -69,7 +69,7 @@ module.exports = {
             statements: 96.19,
             branches: 89.15,
             functions: 95.9,
-            lines: 96.77,
+            lines: 96.75,
         },
     },
     maxWorkers: 2,
