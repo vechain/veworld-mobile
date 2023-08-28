@@ -138,7 +138,7 @@ const baseStyles = (isEdit: boolean) =>
             // flexWrap: "wrap",
             // flexGrow: 1,
             paddingHorizontal: 12,
-            paddingLeft: isEdit ? 44 : 12,
+            paddingLeft: isEdit ? 0 : 12,
         },
         skeleton: {
             width: 40,

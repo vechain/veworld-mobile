@@ -1,6 +1,9 @@
 import React, { memo, useCallback, useRef, useState } from "react"
-import { FlatList, StyleSheet, ViewProps } from "react-native"
-import DraggableFlatList, { RenderItem } from "react-native-draggable-flatlist"
+import { StyleSheet, ViewProps } from "react-native"
+import {
+    NestableDraggableFlatList,
+    RenderItem,
+} from "react-native-draggable-flatlist"
 import Animated, { AnimateProps } from "react-native-reanimated"
 import { SwipeableRow } from "~Components"
 import { AnimatedTokenCard } from "./AnimatedTokenCard"
@@ -118,13 +121,6 @@ export const TokenList = memo(
             [isBalanceVisible, isEdit, openRemoveCustomTokenBottomSheet],
         )
 
-        /*
-         *   this is a workaround for letting the token list to be scrollable in swipeable mode (when !isEdit)
-         *   otherwise with DragableFlatList is is not
-         *   I didn't find a better way to handle it
-         */
-        const DraggableComponent = isEdit ? DraggableFlatList : FlatList
-
         return (
             <>
                 <Animated.View style={styles.container} {...animatedViewProps}>
@@ -139,15 +135,15 @@ export const TokenList = memo(
                         isBalanceVisible={isBalanceVisible}
                     />
 
-                    <DraggableComponent
+                    <NestableDraggableFlatList
                         data={tokenBalances}
                         extraData={isEdit}
                         onDragEnd={handleDragEnd}
                         keyExtractor={item => item.address}
                         // @ts-ignore
                         renderItem={renderItem}
-                        activationDistance={10}
                         showsVerticalScrollIndicator={false}
+                        activationDistance={30}
                     />
                 </Animated.View>
 
