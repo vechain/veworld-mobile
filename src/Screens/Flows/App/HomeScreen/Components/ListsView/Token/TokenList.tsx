@@ -140,7 +140,6 @@ export const TokenList = memo(
                         extraData={isEdit}
                         onDragEnd={handleDragEnd}
                         keyExtractor={item => item.address}
-                        // @ts-ignore
                         renderItem={renderItem}
                         showsVerticalScrollIndicator={false}
                         activationDistance={30}

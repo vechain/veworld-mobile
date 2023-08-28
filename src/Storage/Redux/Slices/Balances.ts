@@ -51,7 +51,36 @@ export const BalanceSlice = createSlice({
 
             ensureBalanceSlotExists(state, network, normAccountAddress)
 
-            state[network][normAccountAddress].push(balance)
+            if (
+                state[network][normAccountAddress]
+                    .map(row => row.tokenAddress)
+                    .includes(balance.tokenAddress)
+            ) {
+                state[network][normAccountAddress] = state[network][
+                    normAccountAddress
+                ].map(_balance => {
+                    if (
+                        AddressUtils.compareAddresses(
+                            balance.tokenAddress,
+                            _balance.tokenAddress,
+                        )
+                    ) {
+                        debug("balance already present showing it", _balance)
+                        return {
+                            ..._balance,
+                            isHidden: false,
+                        }
+                    }
+                    return _balance
+                })
+                return
+            } else {
+                debug("creating balance ", balance)
+                state[network][normAccountAddress].push({
+                    ...balance,
+                    position: state[network][normAccountAddress].length,
+                })
+            }
         },
         updateTokenBalances: (
             state: Draft<BalanceState>,
@@ -134,8 +163,10 @@ export const BalanceSlice = createSlice({
             ].map(balance => {
                 const updatedBalance = updatedAccountBalances.find(
                     updatedAccountBalance =>
-                        balance.tokenAddress ===
-                        updatedAccountBalance.tokenAddress,
+                        AddressUtils.compareAddresses(
+                            balance.tokenAddress,
+                            updatedAccountBalance.tokenAddress,
+                        ),
                 )
                 return updatedBalance ? updatedBalance : balance
             })
