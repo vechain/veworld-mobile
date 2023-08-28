@@ -1,4 +1,4 @@
-import React, { useCallback, useState } from "react"
+import React, { useCallback, useRef, useState } from "react"
 import {
     AccountManagementBottomSheet,
     EditTokensBar,
@@ -37,6 +37,7 @@ import { RemoveAccountWarningBottomSheet } from "~Screens/Flows/App/HomeScreen/C
 import { useAccountDelete } from "~Screens/Flows/App/HomeScreen/Hooks/useAccountDelete"
 import { useI18nContext } from "~i18n"
 import { RefreshControl } from "react-native"
+import { useScrollToTop } from "@react-navigation/native"
 import { NestableScrollContainer } from "react-native-draggable-flatlist"
 
 export const HomeScreen = () => {
@@ -154,6 +155,9 @@ export const HomeScreen = () => {
     })
 
     const [isEdit, setIsEdit] = useState(false)
+    const scrollViewRef = useRef(null)
+
+    useScrollToTop(scrollViewRef)
 
     return (
         <Layout
@@ -169,7 +173,7 @@ export const HomeScreen = () => {
             }
             fixedBody={
                 <>
-                    <NestableScrollContainer>
+                    <NestableScrollContainer ref={scrollViewRef}>
                         <BaseView>
                             <HeaderView
                                 openAccountManagementSheet={

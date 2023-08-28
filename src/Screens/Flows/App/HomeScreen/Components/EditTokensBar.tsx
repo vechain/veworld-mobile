@@ -11,6 +11,11 @@ import {
 } from "~Components"
 import { useI18nContext } from "~i18n"
 import { Routes } from "~Navigation"
+import { StyleSheet } from "react-native"
+import {
+    selectNonVechainTokensWithBalances,
+    useAppSelector,
+} from "~Storage/Redux"
 
 type Props = {
     isEdit: boolean
@@ -30,18 +35,25 @@ export const EditTokensBar = memo(({ isEdit, setIsEdit }: Props) => {
         nav.navigate(Routes.MANAGE_TOKEN)
     }, [nav])
 
+    const tokenBalances = useAppSelector(selectNonVechainTokensWithBalances)
+
     const getActionsButtons = useCallback(() => {
         if (!isEdit)
             return (
                 <BaseView flexDirection="row">
-                    <BaseIcon
-                        haptics="Light"
-                        name="priority-low"
-                        action={onButtonPress}
-                        size={24}
-                        color={theme.colors.text}
-                    />
-                    <BaseSpacer width={18} />
+                    {tokenBalances.length > 1 && (
+                        <>
+                            <BaseIcon
+                                haptics="Light"
+                                name="priority-low"
+                                action={onButtonPress}
+                                size={24}
+                                color={theme.colors.text}
+                                style={styles.icon}
+                            />
+                            <BaseSpacer width={8} />
+                        </>
+                    )}
                     <BaseIcon
                         haptics="Light"
                         name="pencil-outline"
@@ -50,6 +62,7 @@ export const EditTokensBar = memo(({ isEdit, setIsEdit }: Props) => {
                         action={handleManageToken}
                         size={24}
                         testID="EditTokensBar_BaseIcon_manageToken"
+                        style={styles.icon}
                     />
                 </BaseView>
             )
@@ -72,7 +85,14 @@ export const EditTokensBar = memo(({ isEdit, setIsEdit }: Props) => {
                 {LL.COMMON_BTN_SAVE()}
             </BaseButton>
         )
-    }, [isEdit, onButtonPress, theme.colors.text, handleManageToken, LL])
+    }, [
+        isEdit,
+        tokenBalances.length,
+        onButtonPress,
+        theme.colors.text,
+        handleManageToken,
+        LL,
+    ])
 
     return (
         <BaseView
@@ -87,4 +107,10 @@ export const EditTokensBar = memo(({ isEdit, setIsEdit }: Props) => {
             {getActionsButtons()}
         </BaseView>
     )
+})
+
+const styles = StyleSheet.create({
+    icon: {
+        padding: 8,
+    },
 })

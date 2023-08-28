@@ -2,6 +2,7 @@ import React, {
     JSXElementConstructor,
     ReactElement,
     ReactNode,
+    Ref,
     useCallback,
     useMemo,
 } from "react"
@@ -13,7 +14,7 @@ import {
     BaseView,
 } from "~Components/Base"
 import { BackButtonHeader } from "../BackButtonHeader"
-import { RefreshControlProps, StyleSheet } from "react-native"
+import { RefreshControlProps, ScrollView, StyleSheet } from "react-native"
 import { useTabBarBottomMargin, useTheme } from "~Hooks"
 import { isAndroid } from "~Utils/PlatformUtils/PlatformUtils"
 import { SelectedNetworkViewer } from "~Components"
@@ -37,6 +38,7 @@ type Props = {
         string | JSXElementConstructor<any>
     >
     noStaticBottomPadding?: boolean
+    scrollViewRef?: Ref<ScrollView>
 }
 
 export const Layout = ({
@@ -55,6 +57,7 @@ export const Layout = ({
     showSelectedNetwork = false,
     refreshControl,
     noStaticBottomPadding = false, // this is often used with components with FadeoutButton (that have padding to show the fade effect)
+    scrollViewRef,
 }: Props) => {
     const theme = useTheme()
     const { androidOnlyTabBarBottomMargin, tabBarBottomMargin } =
@@ -105,10 +108,13 @@ export const Layout = ({
                     )}
                 </BaseView>
                 {/* Separator from header to body */}
-                <BaseSpacer height={1} background={theme.colors.card} />
+                {(!noBackButton || fixedHeader) && (
+                    <BaseSpacer height={1} background={theme.colors.card} />
+                )}
 
                 {body && (
                     <BaseScrollView
+                        ref={scrollViewRef}
                         refreshControl={refreshControl}
                         testID={scrollViewTestID || "Layout_ScrollView"}
                         scrollEnabled={isScrollEnabled}

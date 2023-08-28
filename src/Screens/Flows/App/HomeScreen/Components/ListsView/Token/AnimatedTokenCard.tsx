@@ -112,6 +112,7 @@ const baseStyles = (isActive: boolean) => (theme: ColorThemeType) =>
             position: "relative",
             height: "100%",
             paddingLeft: 12,
+            paddingRight: 3,
             justifyContent: "center",
             color: "red",
         },
