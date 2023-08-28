@@ -10,7 +10,7 @@ import { useI18nContext } from "~i18n"
 import { createMaterialTopTabNavigator } from "@react-navigation/material-top-tabs"
 import { Dimensions } from "react-native"
 import { TopTabbar } from "./TopTabbar"
-import { FormattingUtils } from "~Utils"
+import { FormattingUtils, PlatformUtils } from "~Utils"
 import { selectSelectedAccount, useAppSelector } from "~Storage/Redux"
 import { DiscoverAssets } from "./DiscoverAssets"
 import { DiscoverDApps } from "./DiscoverDApps"
@@ -48,7 +48,8 @@ export const DiscoverScreen = () => {
                 initialLayout={{
                     width: Dimensions.get("window").width,
                 }}
-                tabBar={TopTabbar}>
+                tabBar={TopTabbar}
+                screenOptions={{ animationEnabled: PlatformUtils.isIOS() }}>
                 <Tab.Screen
                     name={LL.COMMON_ASSETS()}
                     component={DiscoverAssets}

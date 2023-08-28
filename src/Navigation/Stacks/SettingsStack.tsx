@@ -17,6 +17,7 @@ import {
 } from "~Screens"
 import { Routes } from "~Navigation/Enums"
 import { AboutScreen } from "~Screens/Flows/App/AboutScreen"
+import { PlatformUtils } from "~Utils"
 
 export type RootStackParamListSettings = {
     [Routes.SETTINGS]: undefined
@@ -40,7 +41,11 @@ const Settings = createNativeStackNavigator<RootStackParamListSettings>()
 
 export const SettingsStack = () => {
     return (
-        <Settings.Navigator screenOptions={{ headerShown: false }}>
+        <Settings.Navigator
+            screenOptions={{
+                headerShown: false,
+                animation: PlatformUtils.isIOS() ? "default" : "none",
+            }}>
             <Settings.Group>
                 <Settings.Screen
                     name={Routes.SETTINGS}

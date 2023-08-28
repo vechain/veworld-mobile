@@ -27,6 +27,7 @@ import {
     TransactionOutcomes,
 } from "~Model"
 import { Transaction } from "thor-devkit"
+import { PlatformUtils } from "~Utils"
 
 export type RootStackParamListHome = {
     [Routes.HOME]: undefined
@@ -76,7 +77,11 @@ const { Navigator, Group, Screen } =
 
 export const HomeStack = () => {
     return (
-        <Navigator id="HomeStack">
+        <Navigator
+            id="HomeStack"
+            screenOptions={{
+                animation: PlatformUtils.isIOS() ? "default" : "none",
+            }}>
             <Group>
                 <Screen
                     name={Routes.HOME}
