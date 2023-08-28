@@ -23,6 +23,7 @@ import {
     LedgerSignCertificate,
     LedgerSignTransaction,
 } from "~Screens/Flows/App/LedgerScreen"
+import { PlatformUtils } from "~Utils"
 
 export type RootStackParamListSwitch = {
     OnboardingStack: undefined
@@ -140,6 +141,7 @@ export const SwitchStack = () => {
         <Switch.Navigator
             screenOptions={{
                 headerShown: false,
+                animation: PlatformUtils.isIOS() ? "default" : "none",
             }}>
             {RenderStacks}
         </Switch.Navigator>

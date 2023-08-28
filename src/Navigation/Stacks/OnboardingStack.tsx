@@ -15,6 +15,7 @@ import {
 } from "~Screens"
 import { Routes } from "~Navigation/Enums"
 import { ConnectedLedgerDevice, SecurityLevelType } from "~Model"
+import { PlatformUtils } from "~Utils"
 
 export type RootStackParamListOnboarding = {
     [Routes.WELCOME]: undefined
@@ -46,7 +47,11 @@ const Onboarding = createNativeStackNavigator<RootStackParamListOnboarding>()
 
 export const OnboardingStack = () => {
     return (
-        <Onboarding.Navigator screenOptions={{ headerShown: false }}>
+        <Onboarding.Navigator
+            screenOptions={{
+                headerShown: false,
+                animation: PlatformUtils.isIOS() ? "default" : "none",
+            }}>
             <Onboarding.Group>
                 <Onboarding.Screen
                     name={Routes.WELCOME}

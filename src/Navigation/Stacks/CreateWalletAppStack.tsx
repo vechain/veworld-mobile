@@ -13,6 +13,7 @@ import {
 } from "~Screens"
 import { Routes } from "~Navigation/Enums"
 import { ConnectedLedgerDevice, SecurityLevelType } from "~Model"
+import { PlatformUtils } from "~Utils"
 
 export type RootStackParamListCreateWalletApp = {
     Home: undefined
@@ -44,37 +45,36 @@ const CreateWalletApp =
 
 export const CreateWalletAppStack = () => {
     return (
-        <CreateWalletApp.Navigator screenOptions={{ headerShown: false }}>
+        <CreateWalletApp.Navigator
+            screenOptions={{
+                headerShown: false,
+                animation: PlatformUtils.isIOS() ? "default" : "none",
+            }}>
             <CreateWalletApp.Screen
                 name={Routes.WALLET_SETUP}
                 component={WalletSetupScreen}
                 options={{ headerShown: false }}
             />
-
             <CreateWalletApp.Screen
                 name={Routes.NEW_MNEMONIC}
                 component={NewMnemonicScreen}
                 options={{ headerShown: false }}
             />
-
             <CreateWalletApp.Screen
                 name={Routes.CONFIRM_MNEMONIC}
                 component={ConfirmMnemonicScreen}
                 options={{ headerShown: false }}
             />
-
             <CreateWalletApp.Screen
                 name={Routes.WALLET_SUCCESS}
                 component={WalletSuccessScreen}
                 options={{ headerShown: false }}
             />
-
             <CreateWalletApp.Screen
                 name={Routes.IMPORT_MNEMONIC}
                 component={ImportMnemonicScreen}
                 options={{ headerShown: false }}
             />
-
             <CreateWalletApp.Screen
                 name={Routes.IMPORT_HW_LEDGER_SELECT_DEVICE}
                 component={SelectLedgerDevice}
@@ -85,13 +85,11 @@ export const CreateWalletAppStack = () => {
                 component={EnableAdditionalSettings}
                 options={{ headerShown: false }}
             />
-
             <CreateWalletApp.Screen
                 name={Routes.IMPORT_HW_LEDGER_SELECT_ACCOUNTS}
                 component={SelectLedgerAccounts}
                 options={{ headerShown: false }}
             />
-
             <CreateWalletApp.Screen
                 name={Routes.USER_CREATE_PASSWORD}
                 component={UserCreatePasswordScreen}
