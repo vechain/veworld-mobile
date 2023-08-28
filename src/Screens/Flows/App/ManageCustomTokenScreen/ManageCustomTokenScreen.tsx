@@ -15,8 +15,6 @@ import {
     NoTokensButton,
     SkeletonCustomTokenBox,
 } from "./Components"
-import { PlatformUtils } from "~Utils"
-import { tabbarBaseStyles } from "~Navigation"
 import { SkeletonActivityBox } from "../HistoryScreen/Components"
 import { AddCustomTokenBottomSheet } from "./BottomSheets"
 import { useTokensOwned } from "./Hooks"
@@ -240,9 +238,6 @@ const styles = StyleSheet.create({
     list: {
         top: 0,
         flex: 1,
-        marginBottom: PlatformUtils?.isIOS()
-            ? 0
-            : tabbarBaseStyles?.tabbar?.height,
     },
     noTokensButton: {
         position: "absolute",
