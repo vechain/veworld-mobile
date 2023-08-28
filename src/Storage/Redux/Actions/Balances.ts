@@ -146,6 +146,7 @@ export const resetTokenBalances = async (
                     timeUpdated: new Date().toISOString(),
                     isCustomToken: false,
                     isHidden: false,
+                    position: undefined,
                 })),
             }),
         )
