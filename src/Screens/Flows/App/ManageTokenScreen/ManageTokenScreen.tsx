@@ -192,6 +192,8 @@ export const ManageTokenScreen = () => {
                                         <BaseSpacer height={16} />
                                         {selectedTokens.map(token => (
                                             <OfficialTokenCard
+                                                iconHeight={20}
+                                                iconWidth={20}
                                                 selected
                                                 key={token.address}
                                                 token={token}
@@ -209,6 +211,8 @@ export const ManageTokenScreen = () => {
                                         <BaseSpacer height={16} />
                                         {unselectedTokens.map(token => (
                                             <OfficialTokenCard
+                                                iconHeight={20}
+                                                iconWidth={20}
                                                 key={token.address}
                                                 token={token}
                                                 action={handleClickToken(token)}

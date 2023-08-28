@@ -159,6 +159,12 @@ export const SelectAmountSendScreen = ({ route }: Props) => {
         ? COLORS.WHITE_DISABLED
         : COLORS.DARK_PURPLE_DISABLED
 
+    const shortenedTokenName = useMemo(() => {
+        return token.name.length > 30
+            ? `${token.name.slice(0, 29)}...`
+            : token.name
+    }, [token.name])
+
     return (
         <Layout
             safeAreaTestID="Select_Amount_Send_Screen"
@@ -216,10 +222,12 @@ export const SelectAmountSendScreen = ({ route }: Props) => {
                                                 <BaseText typographyFont="captionBold">
                                                     {isInputInFiat
                                                         ? currency
-                                                        : token.symbol}
+                                                        : shortenedTokenName}
                                                 </BaseText>
                                                 <BaseSpacer height={6} />
-                                                <BaseView flexDirection="row">
+                                                <BaseView
+                                                    flexDirection="row"
+                                                    p={6}>
                                                     {isInputInFiat ? (
                                                         <BaseText typographyFont="largeTitle">
                                                             {
@@ -231,6 +239,14 @@ export const SelectAmountSendScreen = ({ route }: Props) => {
                                                     ) : (
                                                         <TokenImage
                                                             icon={token.icon}
+                                                            tokenAddress={
+                                                                token.address
+                                                            }
+                                                            symbol={
+                                                                token.symbol
+                                                            }
+                                                            height={20}
+                                                            width={20}
                                                         />
                                                     )}
                                                     <BaseSpacer width={16} />
@@ -251,7 +267,6 @@ export const SelectAmountSendScreen = ({ route }: Props) => {
                                                         onChangeText={
                                                             handleChangeInput
                                                         }
-                                                        maxLength={10}
                                                         testID="SendScreen_amountInput"
                                                     />
                                                 </BaseView>
@@ -300,9 +315,11 @@ export const SelectAmountSendScreen = ({ route }: Props) => {
                                 <BaseView flex={1}>
                                     <BaseText typographyFont="button">
                                         {LL.SEND_BALANCE_PERCENTAGE({
-                                            percentage: `${percentage.toFixed(
-                                                0,
-                                            )}%`,
+                                            percentage: `${
+                                                percentage <= 100
+                                                    ? percentage.toFixed(0)
+                                                    : "100"
+                                            }%`,
                                         })}
                                     </BaseText>
                                     <BaseView flexDirection="row">
