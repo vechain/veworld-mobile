@@ -9,6 +9,8 @@ import { TokenImage } from "../TokenImage"
 type OfficialTokenCardProps = {
     token: TokenWithCompleteInfo
     action: () => void
+    iconHeight: number
+    iconWidth: number
     selected?: boolean
     currency?: CURRENCY
     isPositive24hChange?: boolean
@@ -20,6 +22,8 @@ export const OfficialTokenCard = memo(
         token,
         style,
         action,
+        iconHeight,
+        iconWidth,
         selected,
         currency,
         isPositive24hChange,
@@ -31,7 +35,13 @@ export const OfficialTokenCard = memo(
                 onPress={action}
                 containerStyle={[styles.container, style]}>
                 <BaseView flexDirection="row" justifyContent="flex-start">
-                    <TokenImage icon={token.icon} />
+                    <TokenImage
+                        icon={token.icon}
+                        height={iconHeight}
+                        width={iconWidth}
+                        tokenAddress={token.address}
+                        symbol={token.symbol}
+                    />
                     <BaseSpacer width={16} />
                     <BaseView
                         flexDirection="column"

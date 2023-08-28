@@ -67,6 +67,8 @@ export const SelectTokenSendScreen = ({ route }: Props) => {
                     {filteredTokens.length ? (
                         filteredTokens.map(token => (
                             <OfficialTokenCard
+                                iconHeight={20}
+                                iconWidth={20}
                                 key={token.address}
                                 token={token}
                                 action={handleClickToken(token)}

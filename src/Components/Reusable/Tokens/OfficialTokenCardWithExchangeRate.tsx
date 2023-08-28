@@ -29,6 +29,8 @@ export const OfficialTokenCardWithExchangeRate = memo(
             <OfficialTokenCard
                 token={token}
                 action={action}
+                iconHeight={20}
+                iconWidth={20}
                 style={style}
                 currency={currency}
                 change24h={change24h}

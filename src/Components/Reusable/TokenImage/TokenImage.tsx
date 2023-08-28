@@ -1,24 +1,45 @@
 import React from "react"
 import { StyleSheet } from "react-native"
-import { PlaceholderSVG } from "~Assets"
 import { COLORS } from "~Constants"
-import { BaseCard, BaseImage } from "~Components/Base"
+import { BaseCard, BaseCustomTokenIcon, BaseImage } from "~Components/Base"
 
 type Props = {
+    height: number
+    width: number
     icon?: string
+    tokenAddress?: string
+    symbol?: string
 }
 
-export const TokenImage = ({ icon }: Props) => {
+export const TokenImage = ({
+    height,
+    width,
+    icon,
+    tokenAddress,
+    symbol,
+}: Props) => {
     return (
-        <BaseCard
-            style={[styles.imageContainer, { backgroundColor: COLORS.WHITE }]}
-            containerStyle={styles.imageShadow}>
+        <>
             {icon ? (
-                <BaseImage uri={icon} style={styles.image} />
+                <BaseCard
+                    style={[
+                        styles.imageContainer,
+                        { backgroundColor: COLORS.WHITE },
+                    ]}
+                    containerStyle={styles.imageShadow}>
+                    <BaseImage
+                        uri={icon}
+                        style={{ height: height, width: width }}
+                    />
+                </BaseCard>
             ) : (
-                <PlaceholderSVG />
+                <BaseCustomTokenIcon
+                    style={styles.icon}
+                    tokenAddress={tokenAddress ?? ""}
+                    tokenSymbol={symbol ?? ""}
+                />
             )}
-        </BaseCard>
+        </>
     )
 }
 const styles = StyleSheet.create({
@@ -29,5 +50,11 @@ const styles = StyleSheet.create({
         borderRadius: 30,
         padding: 10,
     },
-    image: { width: 20, height: 20 },
+    icon: {
+        width: 38,
+        height: 38,
+        borderRadius: 38 / 2,
+        alignItems: "center",
+        justifyContent: "center",
+    },
 })
