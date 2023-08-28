@@ -8,11 +8,13 @@ import {
     BaseSpacer,
     BaseText,
     BaseView,
-    ScrollViewWithFooter,
+    Layout,
+    showWarningToast,
     useThor,
 } from "~Components"
 import { addDelegationUrl, useAppDispatch } from "~Storage/Redux"
 import { useI18nContext } from "~i18n"
+import { StyleSheet } from "react-native"
 
 const snapPoints = ["50%"]
 
@@ -29,13 +31,46 @@ export const AddUrlBottomSheet = React.forwardRef<
     const { LL } = useI18nContext()
     const thor = useThor()
     const handleAddUrl = () => {
-        dispatch(addDelegationUrl({ url: newUrl, genesisId: thor.genesis.id }))
+        dispatch(
+            addDelegationUrl({
+                url: newUrl,
+                genesisId: thor.genesis.id,
+                callbackIfAlreadyPresent: () => {
+                    showWarningToast(
+                        LL.SEND_DELEGATION_ADD_URL_ALREADY_PRESENT(),
+                    )
+                },
+            }),
+        )
         setNewUrl("")
         handleClose()
     }
     return (
         <BaseBottomSheet snapPoints={snapPoints} ref={ref}>
-            <ScrollViewWithFooter
+            <Layout
+                noBackButton
+                noMargin
+                fixedBody={
+                    <BaseView
+                        flex={1}
+                        style={styles.bodyContainer}
+                        justifyContent="flex-start">
+                        <BaseText typographyFont="subTitleBold">
+                            {LL.SEND_DELEGATION_ADD_URL()}
+                        </BaseText>
+                        <BaseSpacer height={16} />
+                        <BaseText typographyFont="subSubTitleLight">
+                            {LL.SEND_DELEGATION_ADD_URL_SUBTITLE()}
+                        </BaseText>
+                        <BaseSpacer height={24} />
+                        <BaseBottomSheetTextInput
+                            value={newUrl}
+                            onChangeText={setNewUrl}
+                            placeholder={LL.SEND_DELEGATION_ADD_URL_PLACEHOLDER()}
+                            testID="AddUrl_input"
+                        />
+                    </BaseView>
+                }
                 footer={
                     <BaseView flexDirection="row">
                         <BaseButton
@@ -54,22 +89,12 @@ export const AddUrlBottomSheet = React.forwardRef<
                             flex={1}
                         />
                     </BaseView>
-                }>
-                <BaseText typographyFont="subTitleBold">
-                    {LL.SEND_DELEGATION_ADD_URL()}
-                </BaseText>
-                <BaseSpacer height={16} />
-                <BaseText typographyFont="subSubTitleLight">
-                    {LL.SEND_DELEGATION_ADD_URL_SUBTITLE()}
-                </BaseText>
-                <BaseSpacer height={24} />
-                <BaseBottomSheetTextInput
-                    value={newUrl}
-                    onChangeText={setNewUrl}
-                    placeholder={LL.SEND_DELEGATION_ADD_URL_PLACEHOLDER()}
-                    testID="AddUrl_input"
-                />
-            </ScrollViewWithFooter>
+                }
+            />
         </BaseBottomSheet>
     )
+})
+
+const styles = StyleSheet.create({
+    bodyContainer: { minHeight: 200 },
 })

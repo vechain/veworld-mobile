@@ -32,9 +32,13 @@ export const DelegationSlice = createSlice({
     reducers: {
         addDelegationUrl: (
             state,
-            action: PayloadAction<{ url: string; genesisId: string }>,
+            action: PayloadAction<{
+                url: string
+                genesisId: string
+                callbackIfAlreadyPresent: () => void
+            }>,
         ) => {
-            const { url, genesisId } = action.payload
+            const { url, genesisId, callbackIfAlreadyPresent } = action.payload
 
             if (!state[genesisId]) {
                 state[genesisId] = {
@@ -45,6 +49,8 @@ export const DelegationSlice = createSlice({
 
             if (!state[genesisId].urls.includes(url)) {
                 state[genesisId].urls.push(url)
+            } else {
+                callbackIfAlreadyPresent()
             }
         },
         deleteDelegationUrl: (
