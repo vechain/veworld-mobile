@@ -111,7 +111,7 @@ const baseStyles = (isActive: boolean) => (theme: ColorThemeType) =>
         animatedInnerContainer: {
             position: "relative",
             height: "100%",
-            paddingHorizontal: 12,
+            paddingLeft: 12,
             justifyContent: "center",
             color: "red",
         },
