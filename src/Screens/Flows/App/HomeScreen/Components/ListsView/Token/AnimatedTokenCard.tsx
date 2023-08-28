@@ -1,12 +1,10 @@
 import React, { MutableRefObject, useCallback, useEffect } from "react"
 import { StyleSheet, Pressable } from "react-native"
 import { RenderItemParams } from "react-native-draggable-flatlist"
-import Animated from "react-native-reanimated"
 import { BaseIcon, BaseView } from "~Components"
 import { useThemedStyles } from "~Hooks"
 import { ColorThemeType } from "~Constants"
 import { TokenCard } from "./TokenCard"
-import { useTokenAnimations } from "./useTokenAnimations"
 import { FungibleTokenWithBalance } from "~Model"
 import HapticsService from "~Services/HapticsService"
 import { useNavigation } from "@react-navigation/native"
@@ -32,8 +30,7 @@ export const AnimatedTokenCard = ({
     isBalanceVisible,
     swipeableItemRefs,
 }: IAnimatedTokenCard) => {
-    const { styles } = useThemedStyles(baseStyles(isActive))
-    const { animatedOpacity } = useTokenAnimations(isEdit)
+    const { styles, theme } = useThemedStyles(baseStyles(isActive))
 
     const nav = useNavigation()
 
@@ -62,27 +59,27 @@ export const AnimatedTokenCard = ({
         [nav, closeOtherSwipeableItems],
     )
 
-    /**
-     * this is workaround for draggable flatlist
-     * TouchableOpacity is not draggable in edit mode
-     * Pressable has issues with swipeable row when is not edit mode
-     */
     const PressableComponent = isEdit ? Pressable : TouchableOpacity
+
     return (
         <BaseView style={styles.touchableContainer}>
             <PressableComponent
-                onPressIn={isEdit ? drag : undefined}
                 disabled={isActive}
                 onPress={() => onTokenPress(isEdit, item)}
                 style={styles.pressable}>
                 <BaseView style={styles.animatedOuterContainer}>
-                    <Animated.View
-                        style={[
-                            animatedOpacity,
-                            styles.animatedInnerContainer,
-                        ]}>
-                        <BaseIcon name={"drag"} size={28} />
-                    </Animated.View>
+                    {isEdit && (
+                        <Pressable
+                            disabled={isActive}
+                            style={[styles.animatedInnerContainer]}
+                            onPressIn={isEdit ? drag : undefined}>
+                            <BaseIcon
+                                color={theme.colors.text}
+                                name={"drag"}
+                                size={30}
+                            />
+                        </Pressable>
+                    )}
                     <TokenCard
                         tokenWithBalance={item}
                         isEdit={isEdit}
@@ -112,10 +109,13 @@ const baseStyles = (isActive: boolean) => (theme: ColorThemeType) =>
             height: 62,
         },
         animatedInnerContainer: {
-            position: "absolute",
-            left: 10,
+            position: "relative",
+            height: "100%",
+            paddingLeft: 12,
+            paddingRight: 3,
+            justifyContent: "center",
+            color: "red",
         },
-
         deleteIconColor: {
             backgroundColor: theme.colors.secondary,
         },
