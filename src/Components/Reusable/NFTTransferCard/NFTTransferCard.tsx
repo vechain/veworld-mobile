@@ -36,6 +36,10 @@ export const NFTTransferCard = ({ collectionAddress, tokenId }: Props) => {
             : collectionName
     }, [LL, collectionName])
 
+    const validatedTokenId = useMemo(() => {
+        return tokenId.length > 13 ? `${tokenId.slice(0, 12)}...` : tokenId
+    }, [tokenId])
+
     const placeholderImg = useMemo(() => {
         return theme.isDark ? NFTPlaceholderDark : NFTPlaceHolderLight
     }, [theme.isDark])
@@ -122,7 +126,7 @@ export const NFTTransferCard = ({ collectionAddress, tokenId }: Props) => {
                                     {LL.TOKEN_ID()}
                                 </BaseText>
                                 <BaseText typographyFont="subSubTitle">
-                                    #{tokenId}
+                                    #{validatedTokenId}
                                 </BaseText>
                             </BaseView>
                         </BaseView>
