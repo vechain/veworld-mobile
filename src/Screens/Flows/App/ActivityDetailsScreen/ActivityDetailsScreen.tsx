@@ -285,7 +285,7 @@ export const ActivityDetailsScreen = ({ route }: Props) => {
                         {/* Render Activity Details based on the 'activity.type' */}
                         {renderActivityDetails}
 
-                        <BaseSpacer height={64} />
+                        <BaseSpacer height={72} />
                     </>
                 }
                 footer={
