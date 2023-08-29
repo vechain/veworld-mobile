@@ -39,6 +39,7 @@ type Props = {
     >
     noStaticBottomPadding?: boolean
     scrollViewRef?: Ref<ScrollView>
+    onGoBack?: () => void
 }
 
 export const Layout = ({
@@ -58,6 +59,7 @@ export const Layout = ({
     refreshControl,
     noStaticBottomPadding = false, // this is often used with components with FadeoutButton (that have padding to show the fade effect)
     scrollViewRef,
+    onGoBack,
 }: Props) => {
     const theme = useTheme()
     const { androidOnlyTabBarBottomMargin, tabBarBottomMargin } =
@@ -88,7 +90,10 @@ export const Layout = ({
                 <BaseView>
                     {!noBackButton && (
                         <>
-                            <BackButtonHeader hasBottomSpacer={false} />
+                            <BackButtonHeader
+                                hasBottomSpacer={false}
+                                onGoBack={onGoBack}
+                            />
                             <BaseSpacer height={8} />
                         </>
                     )}

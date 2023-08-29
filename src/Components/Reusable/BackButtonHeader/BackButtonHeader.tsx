@@ -10,6 +10,7 @@ type Props = {
     iconColor?: string
     beforeNavigating?: () => Promise<void> | void
     action?: () => void
+    onGoBack?: () => void
 } & ViewProps
 
 export const BackButtonHeader = ({
@@ -17,6 +18,7 @@ export const BackButtonHeader = ({
     hasBottomSpacer = true,
     iconColor,
     beforeNavigating,
+    onGoBack,
     action,
     ...otherProps
 }: Props) => {
@@ -30,8 +32,9 @@ export const BackButtonHeader = ({
             action()
         } else {
             nav.goBack()
+            onGoBack?.()
         }
-    }, [beforeNavigating, action, nav])
+    }, [beforeNavigating, action, nav, onGoBack])
 
     return (
         <View {...otherProps}>

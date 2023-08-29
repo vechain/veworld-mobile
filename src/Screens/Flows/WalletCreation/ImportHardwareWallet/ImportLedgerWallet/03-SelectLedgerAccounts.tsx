@@ -2,13 +2,12 @@ import React, { useCallback, useEffect, useMemo, useState } from "react"
 import {
     BaseActivityIndicator,
     BaseButton,
-    BaseIcon,
-    BaseSafeArea,
     BaseSpacer,
     BaseText,
     BaseTouchableBox,
     BaseView,
     ConnectionErrorBottomSheet,
+    Layout,
     showErrorToast,
 } from "~Components"
 import { useI18nContext } from "~i18n"
@@ -56,7 +55,7 @@ export const SelectLedgerAccounts: React.FC<Props> = ({ route }) => {
     const dispatch = useAppDispatch()
     const { LL } = useI18nContext()
     const nav = useNavigation()
-    const { styles: themedStyles, theme } = useThemedStyles(styles)
+    const { styles: themedStyles } = useThemedStyles(styles)
     const selectedNetwork = useAppSelector(selectSelectedNetwork)
     const userHasOnboarded = useAppSelector(selectHasOnboarded)
     const [rootAcc, setRootAcc] = useState<VETLedgerAccount>()
@@ -151,11 +150,6 @@ export const SelectLedgerAccounts: React.FC<Props> = ({ route }) => {
         getLedgerAccounts()
     }, [rootAcc, selectedNetwork])
 
-    const goBack = useCallback(() => {
-        nav.goBack()
-        removeLedger()
-    }, [removeLedger, nav])
-
     const renderItem = ({
         item,
         index,
@@ -221,31 +215,10 @@ export const SelectLedgerAccounts: React.FC<Props> = ({ route }) => {
     )
 
     return (
-        <BaseSafeArea grow={1}>
-            <ConnectionErrorBottomSheet
-                ref={ref}
-                onDismiss={onClose}
-                error={ledgerErrorCode}
-            />
-            <BaseActivityIndicator
-                isVisible={ledgerAccountsLoading}
-                onHide={() => null}
-            />
-            <BaseIcon
-                style={themedStyles.backIcon}
-                mx={8}
-                size={36}
-                name="chevron-left"
-                color={theme.colors.text}
-                action={goBack}
-            />
-            <BaseSpacer height={22} />
-            <BaseView
-                alignItems="center"
-                justifyContent="space-between"
-                flexGrow={1}
-                mx={20}>
-                <BaseView alignSelf="flex-start" w={100}>
+        <Layout
+            onGoBack={removeLedger}
+            fixedHeader={
+                <BaseView>
                     <BaseView flexDirection="row" w={100}>
                         <BaseText typographyFont="title">
                             {LL.WALLET_LEDGER_SELECT_DEVICE_TITLE()}
@@ -262,9 +235,20 @@ export const SelectLedgerAccounts: React.FC<Props> = ({ route }) => {
                         isLoading={!rootAcc}
                         disabled={!selectedAccountsIndex.length}
                     />
-
-                    <BaseSpacer height={20} />
-                    <BaseView style={themedStyles.container} pb={20}>
+                </BaseView>
+            }
+            fixedBody={
+                <>
+                    <ConnectionErrorBottomSheet
+                        ref={ref}
+                        onDismiss={onClose}
+                        error={ledgerErrorCode}
+                    />
+                    <BaseActivityIndicator
+                        isVisible={ledgerAccountsLoading}
+                        onHide={() => null}
+                    />
+                    <BaseView flexGrow={1} mx={24}>
                         {!!ledgerAccounts.length && (
                             <FlashList
                                 data={ledgerAccounts}
@@ -283,24 +267,21 @@ export const SelectLedgerAccounts: React.FC<Props> = ({ route }) => {
                                         152 * ledgerAccounts.length +
                                         (ledgerAccounts.length - 1) * 16,
                                 }}
+                                contentContainerStyle={
+                                    themedStyles.flashListContent
+                                }
                             />
                         )}
                     </BaseView>
-                </BaseView>
-            </BaseView>
-
-            <BaseSpacer height={40} />
-        </BaseSafeArea>
+                </>
+            }
+        />
     )
 }
 
 const styles = (theme: ColorThemeType) =>
     StyleSheet.create({
-        backIcon: { marginHorizontal: 20, alignSelf: "flex-start" },
-        container: {
-            width: "100%",
-            height: 500,
-        },
+        list: { top: 0, flex: 1 },
         selected: {
             borderWidth: 1.5,
             borderColor: theme.colors.text,
@@ -308,5 +289,8 @@ const styles = (theme: ColorThemeType) =>
         notSelected: {
             borderWidth: 1.5,
             borderColor: theme.colors.card,
+        },
+        flashListContent: {
+            paddingVertical: 24,
         },
     })
