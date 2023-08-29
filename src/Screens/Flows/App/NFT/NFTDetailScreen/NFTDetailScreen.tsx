@@ -88,7 +88,6 @@ export const NFTDetailScreen = ({ route }: Props) => {
         [LL, onCopyToClipboard],
     )
 
-    // TODO (Vas) (https://github.com/vechainfoundation/veworld-mobile/issues/758) add LL for headers
     return (
         <Layout
             safeAreaTestID="NFT_Detail_Screen"
@@ -127,7 +126,7 @@ export const NFTDetailScreen = ({ route }: Props) => {
 
                     {collection?.totalSupply && (
                         <InfoSectionView<string>
-                            title={"Total Supply"}
+                            title={LL.NFT_DETAIL_TOTAL_SUPPLY()}
                             data={collection.totalSupply.toString()}
                         />
                     )}
@@ -143,21 +142,21 @@ export const NFTDetailScreen = ({ route }: Props) => {
 
                     {collection?.creator && (
                         <InfoSectionView<string>
-                            title={"Creator"}
+                            title={LL.NFT_DETAIL_CREATOR()}
                             data={collection?.creator}
                         />
                     )}
 
                     {nft?.edition && (
                         <InfoSectionView<string>
-                            title={"Edition"}
+                            title={LL.NFT_DETAIL_EDITION()}
                             data={nft?.edition.toString()}
                         />
                     )}
 
                     {nft?.external_url && (
                         <InfoSectionView<string>
-                            title={"Marketplace"}
+                            title={LL.NFT_DETAIL_MARKETPLACE()}
                             data={"Link"}
                             action={onMarketPlacePress}
                         />
@@ -165,7 +164,7 @@ export const NFTDetailScreen = ({ route }: Props) => {
 
                     {nft?.date && (
                         <InfoSectionView<string>
-                            title={"Minted At"}
+                            title={LL.NFT_DETAIL_MINTED_AT()}
                             data={DateUtils.formatDateTime(
                                 nft?.date,
                                 locale,
@@ -177,21 +176,21 @@ export const NFTDetailScreen = ({ route }: Props) => {
 
                     {nft?.rank && (
                         <InfoSectionView<string>
-                            title={"Rank"}
+                            title={LL.NFT_DETAIL_RANK()}
                             data={nft?.rank.toString()}
                         />
                     )}
 
                     {nft?.rarity && nft?.rarity !== 0 ? (
                         <InfoSectionView<string>
-                            title={"Rarity"}
+                            title={LL.NFT_DETAIL_RARITY()}
                             data={nft?.rarity?.toString()}
                         />
                     ) : null}
 
                     {!!nft?.scores?.length && (
                         <InfoSectionView<NFTAttributeData[]>
-                            title={"Scores"}
+                            title={LL.NFT_DETAIL_SCORES()}
                             data={nft?.scores}
                         />
                     )}

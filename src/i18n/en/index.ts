@@ -19,15 +19,14 @@ const en: BaseTranslation = {
     BTN_CREATE_WALLET_TYPE_CREATE_NEW: "Create new wallet",
     BTN_CREATE_WALLET_TYPE_CREATE_NEW_SUBTITLE: "You will create a new empty wallet",
     BTN_CREATE_WALLET_TYPE_IMPORT: "Import wallet",
-    BTN_CREATE_WALLET_TYPE_IMPORT_SUBTITLE: "You will import an existing wallet",
+    BTN_CREATE_WALLET_TYPE_IMPORT_SUBTITLE: "Import an existing wallet and manage your vechain portfolio",
     BTN_MNEMONIC_BACKUP: "Backup",
     BTN_MNEMONIC_CHECKBOX:
         "I state that I have saved the secret phrase and I am aware that I am responsible if I lose it.",
     BTN_MNEMONIC_CLIPBOARD: "Copy mnemonic to clipboard",
     BTN_IMPORT_WALLET_VERIFY: "Verify",
     BTN_WALLET_IMPORT_HELP: "Where can I find it?",
-    BTN_CREATE_WALLET_SUCCESS: "CREATE WALLET",
-    BTN_ADD_WALLET_SUCCESS: "ADD WALLET",
+    BTN_CREATE_WALLET_SUCCESS: "GO TO YOUR WALLET",
     BTN_RESET_APP_CHECKBOX: "I am aware that this action is irreversible (required)",
     BTN_COPY_PUBLIC_ADDRESS: "Copy public address",
     BTN_SHOW_QR_CODE: "Show QR code",
@@ -63,7 +62,7 @@ const en: BaseTranslation = {
     BD_GDPR:
         "By pressing ‘get started’ you are agreeing to VeWorld’s Terms and conditions and Privacy policy, compliant with Art. 5 GDPR (Required)",
     BD_WELCOME_SCREEN:
-        "Your VeWorld. A self custody mobile crypto wallet.",
+        "Your VeWorld. A self custody mobile crypto wallet for vechain",
     BD_ONBOARDING_SLIDE_01:
         "Viewing and managing your crypto assets has never been easier.",
     BD_ONBOARDING_SLIDE_02:
@@ -93,8 +92,7 @@ const en: BaseTranslation = {
         "Import your wallet with your secret recovery phrase. Enter your wallet’s 12-words recovery phrase",
     BD_ALERT_FACE_ID_CANCELLED: "You cancelled using Face ID to authenticate. You must be authenticated to use VeWallet. Do you want to log out, or retry authenticating?",
     BD_ALERT_BIOMETRICS_CANCELLED: "You cancelled using Biometrics to authenticate. You must be authenticated to use VeWorld. Do you want to Reset the Wallet, or Retry authenticating?",
-    BD_CREATE_WALLET_SUCCESS: "If you have any doubts about how the app works, please follow our documentation on Vechain.org",
-    BD_ADD_WALLET_SUCCESS: "Nice, you have another wallet!",
+    BD_CREATE_WALLET_SUCCESS: "Unleash the power of sustainability and web3 for a better world.",
     BD_CONFIRM_RESET: "Confirm reset",
     BD_RESET_APP_01: "Resetting your account will log you out and erase all your data stored locally (accounts, wallets, transaction history etc).",
     BD_RESET_APP_02: "Resetting VeWorld will not change your accounts' balances but will require you to re-enter your secret recovery phrase to access them.",
@@ -142,7 +140,7 @@ const en: BaseTranslation = {
     BD_ANALYTICS_TRACKING: "I accept to be tracked by Analytics and for research and service quality purposes",
     BD_MNEMONIC_COPIED_TO_CLIPBOARD: "Mnemonic copied to clipboard",
     BD_SECURITY_DOWNGRADE: "Please re-enable biometrics or reset app",
-    BD_CREATE_WALLET_TYPE: "You can import your existing wallet, and retain all of your accounts and related transaction keys.",
+    BD_CREATE_WALLET_TYPE: "You can create a new wallet or import your existing wallet.",
     BD_CREATE_WALLET_TYPE_USER_ACCEPTS: "Creating the wallet the user accepts",
     BD_NFT_DESC_PLACEHOLDER: "Random NFT collection description placeholder in case the NFT collection doesn't have one",
     BD_COLLECTION: "Collection",
@@ -168,8 +166,7 @@ const en: BaseTranslation = {
     TITLE_ALERT_CAMERA_PERMISSION: "Camera Permissions",
     TITLE_ALERT_BIOMETRICS_CANCELLED: "Biometrics Cancelled",
 
-    TITLE_CREATE_WALLET_SUCCESS: "You're finally one of us!",
-    TITLE_ADD_WALLET_SUCCESS: "Adding a new wallet!",
+    TITLE_CREATE_WALLET_SUCCESS: "Your vechain wallet is ready!",
     TITLE_RESET_APP: "VeWorld reset",
     TITLE_WALLET_MANAGEMENT: "Wallet management",
     TITLE_SETTINGS: "Settings",
@@ -472,6 +469,14 @@ const en: BaseTranslation = {
     UNKNOWN_COLLECTION: "Unknown collection name",
     ESTIMATED_GAS_FEE: "Estimated gas fee",
     ESTIMATED_TIME: "Estimated time",
+    NFT_DETAIL_TOTAL_SUPPLY: "Total Supply",
+    NFT_DETAIL_CREATOR: "Creator",
+    NFT_DETAIL_EDITION: "Edition",
+    NFT_DETAIL_MARKETPLACE: "Marketplace",
+    NFT_DETAIL_MINTED_AT: "Minted At",
+    NFT_DETAIL_RANK: "Rank",
+    NFT_DETAIL_RARITY: "Rarity",
+    NFT_DETAIL_SCORES: "Scores",
 
     // Onboarding
 

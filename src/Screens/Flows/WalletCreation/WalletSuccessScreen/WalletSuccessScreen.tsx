@@ -30,7 +30,6 @@ import {
     useAppSelector,
 } from "~Storage/Redux"
 import {
-    selectDevices,
     selectHasOnboarded,
     selectMnemonic,
     selectNewLedgerDevice,
@@ -44,7 +43,6 @@ type Props = {} & NativeStackScreenProps<
 >
 
 export const WalletSuccessScreen: FC<Props> = ({ route }) => {
-    const devices = useAppSelector(selectDevices)
     const nav = useNavigation()
     const { LL } = useI18nContext()
 
@@ -207,9 +205,7 @@ export const WalletSuccessScreen: FC<Props> = ({ route }) => {
                 <BaseView alignItems="center" mx={20} flexGrow={1}>
                     <BaseView flexDirection="row" flexWrap="wrap">
                         <BaseText typographyFont="title">
-                            {devices.length
-                                ? LL.TITLE_ADD_WALLET_SUCCESS()
-                                : LL.TITLE_CREATE_WALLET_SUCCESS()}
+                            {LL.TITLE_CREATE_WALLET_SUCCESS()}
                         </BaseText>
                     </BaseView>
 
@@ -223,9 +219,7 @@ export const WalletSuccessScreen: FC<Props> = ({ route }) => {
                         <BaseView alignItems="center">
                             <VeWorldLogoSVG height={200} width={200} />
                             <BaseText align="center" py={20}>
-                                {devices.length
-                                    ? LL.BD_ADD_WALLET_SUCCESS()
-                                    : LL.BD_CREATE_WALLET_SUCCESS()}
+                                {LL.BD_CREATE_WALLET_SUCCESS()}
                             </BaseText>
                         </BaseView>
 
@@ -239,11 +233,7 @@ export const WalletSuccessScreen: FC<Props> = ({ route }) => {
                             <BaseButton
                                 action={onButtonPress}
                                 w={100}
-                                title={
-                                    devices.length
-                                        ? LL.BTN_ADD_WALLET_SUCCESS()
-                                        : LL.BTN_CREATE_WALLET_SUCCESS()
-                                }
+                                title={LL.BTN_CREATE_WALLET_SUCCESS()}
                                 testID="GET_STARTED_BTN"
                                 haptics="Success"
                                 isLoading={isBiometricsEmpty}

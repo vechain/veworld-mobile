@@ -1,11 +1,5 @@
 import React, { useCallback } from "react"
-import {
-    BaseButton,
-    BaseSafeArea,
-    BaseSpacer,
-    BaseText,
-    BaseView,
-} from "~Components"
+import { BaseButton, BaseSpacer, BaseText, BaseView, Layout } from "~Components"
 import { useNavigation } from "@react-navigation/native"
 import { Routes } from "~Navigation"
 import { VeWorldLogoSVG } from "~Assets"
@@ -77,34 +71,35 @@ export const WelcomeScreen = () => {
     }
 
     return (
-        <BaseSafeArea grow={1}>
-            <BaseSpacer height={20} />
-
-            <BaseView alignItems="center" mx={20} flexGrow={1}>
-                <BaseView flexDirection="row">
-                    <BaseText
-                        typographyFont="largeTitle"
-                        testID="welcome-title-id">
-                        {LL.TITLE_WELCOME_TO()}
-                    </BaseText>
-                    <BaseText typographyFont="largeTitle">
-                        {LL.VEWORLD()}
-                    </BaseText>
-                </BaseView>
-
-                <BaseSpacer height={80} />
-
-                <BaseView alignItems="center" w={100} flexGrow={1}>
-                    <VeWorldLogoSVG height={200} width={200} />
+        <Layout
+            noBackButton
+            body={
+                <BaseView alignItems="center" justifyContent="space-between">
+                    <BaseView flexDirection="row">
+                        <BaseText
+                            typographyFont="largeTitle"
+                            testID="welcome-title-id">
+                            {LL.TITLE_WELCOME_TO()}
+                        </BaseText>
+                        <BaseText typographyFont="largeTitle">
+                            {LL.VEWORLD()}
+                        </BaseText>
+                    </BaseView>
                     <BaseSpacer height={40} />
-                    <BaseText
-                        align="left"
-                        typographyFont="buttonPrimary"
-                        py={20}>
-                        {LL.BD_WELCOME_SCREEN()}
-                    </BaseText>
-                </BaseView>
 
+                    <BaseView alignItems="center" w={100}>
+                        <VeWorldLogoSVG height={200} width={200} />
+                        <BaseSpacer height={40} />
+                        <BaseText
+                            align="center"
+                            typographyFont="buttonSecondary"
+                            py={20}>
+                            {LL.BD_WELCOME_SCREEN()}
+                        </BaseText>
+                    </BaseView>
+                </BaseView>
+            }
+            footer={
                 <BaseView alignItems="center" w={100}>
                     <BaseText typographyFont="caption" py={10}>
                         {LL.BD_GDPR()}
@@ -117,17 +112,16 @@ export const WelcomeScreen = () => {
                         testID="GET_STARTED_BTN"
                         haptics="Medium"
                     />
+                    {devFeaturesEnabled && (
+                        <BaseButton
+                            size="md"
+                            variant="link"
+                            action={onDemoOnboarding}
+                            title="DEV:DEMO"
+                        />
+                    )}
                 </BaseView>
-                {devFeaturesEnabled && (
-                    <BaseButton
-                        size="md"
-                        variant="link"
-                        action={onDemoOnboarding}
-                        title="DEV:DEMO"
-                    />
-                )}
-                <BaseSpacer height={40} />
-            </BaseView>
-        </BaseSafeArea>
+            }
+        />
     )
 }

@@ -71,7 +71,7 @@ type RootTranslation = {
 	 */
 	BTN_CREATE_WALLET_TYPE_IMPORT: string
 	/**
-	 * Y​o​u​ ​w​i​l​l​ ​i​m​p​o​r​t​ ​a​n​ ​e​x​i​s​t​i​n​g​ ​w​a​l​l​e​t
+	 * I​m​p​o​r​t​ ​a​n​ ​e​x​i​s​t​i​n​g​ ​w​a​l​l​e​t​ ​a​n​d​ ​m​a​n​a​g​e​ ​y​o​u​r​ ​v​e​c​h​a​i​n​ ​p​o​r​t​f​o​l​i​o
 	 */
 	BTN_CREATE_WALLET_TYPE_IMPORT_SUBTITLE: string
 	/**
@@ -95,13 +95,9 @@ type RootTranslation = {
 	 */
 	BTN_WALLET_IMPORT_HELP: string
 	/**
-	 * C​R​E​A​T​E​ ​W​A​L​L​E​T
+	 * G​O​ ​T​O​ ​Y​O​U​R​ ​W​A​L​L​E​T
 	 */
 	BTN_CREATE_WALLET_SUCCESS: string
-	/**
-	 * A​D​D​ ​W​A​L​L​E​T
-	 */
-	BTN_ADD_WALLET_SUCCESS: string
 	/**
 	 * I​ ​a​m​ ​a​w​a​r​e​ ​t​h​a​t​ ​t​h​i​s​ ​a​c​t​i​o​n​ ​i​s​ ​i​r​r​e​v​e​r​s​i​b​l​e​ ​(​r​e​q​u​i​r​e​d​)
 	 */
@@ -223,7 +219,7 @@ type RootTranslation = {
 	 */
 	BD_GDPR: string
 	/**
-	 * Y​o​u​r​ ​V​e​W​o​r​l​d​.​ ​A​ ​s​e​l​f​ ​c​u​s​t​o​d​y​ ​m​o​b​i​l​e​ ​c​r​y​p​t​o​ ​w​a​l​l​e​t​.
+	 * Y​o​u​r​ ​V​e​W​o​r​l​d​.​ ​A​ ​s​e​l​f​ ​c​u​s​t​o​d​y​ ​m​o​b​i​l​e​ ​c​r​y​p​t​o​ ​w​a​l​l​e​t​ ​f​o​r​ ​v​e​c​h​a​i​n
 	 */
 	BD_WELCOME_SCREEN: string
 	/**
@@ -303,13 +299,9 @@ type RootTranslation = {
 	 */
 	BD_ALERT_BIOMETRICS_CANCELLED: string
 	/**
-	 * I​f​ ​y​o​u​ ​h​a​v​e​ ​a​n​y​ ​d​o​u​b​t​s​ ​a​b​o​u​t​ ​h​o​w​ ​t​h​e​ ​a​p​p​ ​w​o​r​k​s​,​ ​p​l​e​a​s​e​ ​f​o​l​l​o​w​ ​o​u​r​ ​d​o​c​u​m​e​n​t​a​t​i​o​n​ ​o​n​ ​V​e​c​h​a​i​n​.​o​r​g
+	 * U​n​l​e​a​s​h​ ​t​h​e​ ​p​o​w​e​r​ ​o​f​ ​s​u​s​t​a​i​n​a​b​i​l​i​t​y​ ​a​n​d​ ​w​e​b​3​ ​f​o​r​ ​a​ ​b​e​t​t​e​r​ ​w​o​r​l​d​.
 	 */
 	BD_CREATE_WALLET_SUCCESS: string
-	/**
-	 * N​i​c​e​,​ ​y​o​u​ ​h​a​v​e​ ​a​n​o​t​h​e​r​ ​w​a​l​l​e​t​!
-	 */
-	BD_ADD_WALLET_SUCCESS: string
 	/**
 	 * C​o​n​f​i​r​m​ ​r​e​s​e​t
 	 */
@@ -500,7 +492,7 @@ type RootTranslation = {
 	 */
 	BD_SECURITY_DOWNGRADE: string
 	/**
-	 * Y​o​u​ ​c​a​n​ ​i​m​p​o​r​t​ ​y​o​u​r​ ​e​x​i​s​t​i​n​g​ ​w​a​l​l​e​t​,​ ​a​n​d​ ​r​e​t​a​i​n​ ​a​l​l​ ​o​f​ ​y​o​u​r​ ​a​c​c​o​u​n​t​s​ ​a​n​d​ ​r​e​l​a​t​e​d​ ​t​r​a​n​s​a​c​t​i​o​n​ ​k​e​y​s​.
+	 * Y​o​u​ ​c​a​n​ ​c​r​e​a​t​e​ ​a​ ​n​e​w​ ​w​a​l​l​e​t​ ​o​r​ ​i​m​p​o​r​t​ ​y​o​u​r​ ​e​x​i​s​t​i​n​g​ ​w​a​l​l​e​t​.
 	 */
 	BD_CREATE_WALLET_TYPE: string
 	/**
@@ -592,13 +584,9 @@ type RootTranslation = {
 	 */
 	TITLE_ALERT_BIOMETRICS_CANCELLED: string
 	/**
-	 * Y​o​u​'​r​e​ ​f​i​n​a​l​l​y​ ​o​n​e​ ​o​f​ ​u​s​!
+	 * Y​o​u​r​ ​v​e​c​h​a​i​n​ ​w​a​l​l​e​t​ ​i​s​ ​r​e​a​d​y​!
 	 */
 	TITLE_CREATE_WALLET_SUCCESS: string
-	/**
-	 * A​d​d​i​n​g​ ​a​ ​n​e​w​ ​w​a​l​l​e​t​!
-	 */
-	TITLE_ADD_WALLET_SUCCESS: string
 	/**
 	 * V​e​W​o​r​l​d​ ​r​e​s​e​t
 	 */
@@ -843,7 +831,7 @@ type RootTranslation = {
 	 */
 	SB_YOUR_TOKENS_EMPTY: string
 	/**
-	 * D​e​c​i​d​e​ ​t​h​e​ ​w​a​y​ ​t​o​ ​s​e​c​u​r​e​ ​y​o​u​r​ ​w​a​l​l​e​t
+	 * T​o​ ​s​e​c​u​r​e​ ​y​o​u​r​ ​w​a​l​l​e​t​,​ ​y​o​u​ ​c​a​n​ ​e​i​t​h​e​r​ ​u​s​e​ ​y​o​u​r​ ​d​e​v​i​c​e​'​s​ ​b​i​o​m​e​t​r​i​c​ ​(​l​i​k​e​ ​a​ ​f​i​n​g​e​r​p​r​i​n​t​)​ ​o​r​ ​s​e​t​ ​u​p​ ​a​ ​p​a​s​s​w​o​r​d​.​ ​Y​o​u​ ​c​a​n​ ​c​h​a​n​g​e​ ​t​h​e​ ​p​a​s​s​w​o​r​d​ ​a​n​y​t​i​m​e​ ​i​f​ ​n​e​e​d​e​d​.
 	 */
 	SB_SECURITY: string
 	/**
@@ -1664,6 +1652,38 @@ type RootTranslation = {
 	 */
 	ESTIMATED_TIME: string
 	/**
+	 * T​o​t​a​l​ ​S​u​p​p​l​y
+	 */
+	NFT_DETAIL_TOTAL_SUPPLY: string
+	/**
+	 * C​r​e​a​t​o​r
+	 */
+	NFT_DETAIL_CREATOR: string
+	/**
+	 * E​d​i​t​i​o​n
+	 */
+	NFT_DETAIL_EDITION: string
+	/**
+	 * M​a​r​k​e​t​p​l​a​c​e
+	 */
+	NFT_DETAIL_MARKETPLACE: string
+	/**
+	 * M​i​n​t​e​d​ ​A​t
+	 */
+	NFT_DETAIL_MINTED_AT: string
+	/**
+	 * R​a​n​k
+	 */
+	NFT_DETAIL_RANK: string
+	/**
+	 * R​a​r​i​t​y
+	 */
+	NFT_DETAIL_RARITY: string
+	/**
+	 * S​c​o​r​e​s
+	 */
+	NFT_DETAIL_SCORES: string
+	/**
 	 * L​i​g​h​t
 	 */
 	LIGHT_THEME: string
@@ -2483,7 +2503,7 @@ export type TranslationFunctions = {
 	 */
 	BTN_CREATE_WALLET_TYPE_IMPORT: () => LocalizedString
 	/**
-	 * You will import an existing wallet
+	 * Import an existing wallet and manage your vechain portfolio
 	 */
 	BTN_CREATE_WALLET_TYPE_IMPORT_SUBTITLE: () => LocalizedString
 	/**
@@ -2507,13 +2527,9 @@ export type TranslationFunctions = {
 	 */
 	BTN_WALLET_IMPORT_HELP: () => LocalizedString
 	/**
-	 * CREATE WALLET
+	 * GO TO YOUR WALLET
 	 */
 	BTN_CREATE_WALLET_SUCCESS: () => LocalizedString
-	/**
-	 * ADD WALLET
-	 */
-	BTN_ADD_WALLET_SUCCESS: () => LocalizedString
 	/**
 	 * I am aware that this action is irreversible (required)
 	 */
@@ -2635,7 +2651,7 @@ export type TranslationFunctions = {
 	 */
 	BD_GDPR: () => LocalizedString
 	/**
-	 * Your VeWorld. A self custody mobile crypto wallet.
+	 * Your VeWorld. A self custody mobile crypto wallet for vechain
 	 */
 	BD_WELCOME_SCREEN: () => LocalizedString
 	/**
@@ -2715,13 +2731,9 @@ export type TranslationFunctions = {
 	 */
 	BD_ALERT_BIOMETRICS_CANCELLED: () => LocalizedString
 	/**
-	 * If you have any doubts about how the app works, please follow our documentation on Vechain.org
+	 * Unleash the power of sustainability and web3 for a better world.
 	 */
 	BD_CREATE_WALLET_SUCCESS: () => LocalizedString
-	/**
-	 * Nice, you have another wallet!
-	 */
-	BD_ADD_WALLET_SUCCESS: () => LocalizedString
 	/**
 	 * Confirm reset
 	 */
@@ -2911,7 +2923,7 @@ export type TranslationFunctions = {
 	 */
 	BD_SECURITY_DOWNGRADE: () => LocalizedString
 	/**
-	 * You can import your existing wallet, and retain all of your accounts and related transaction keys.
+	 * You can create a new wallet or import your existing wallet.
 	 */
 	BD_CREATE_WALLET_TYPE: () => LocalizedString
 	/**
@@ -3003,13 +3015,9 @@ export type TranslationFunctions = {
 	 */
 	TITLE_ALERT_BIOMETRICS_CANCELLED: () => LocalizedString
 	/**
-	 * You're finally one of us!
+	 * Your vechain wallet is ready!
 	 */
 	TITLE_CREATE_WALLET_SUCCESS: () => LocalizedString
-	/**
-	 * Adding a new wallet!
-	 */
-	TITLE_ADD_WALLET_SUCCESS: () => LocalizedString
 	/**
 	 * VeWorld reset
 	 */
@@ -3251,7 +3259,7 @@ export type TranslationFunctions = {
 	 */
 	SB_YOUR_TOKENS_EMPTY: () => LocalizedString
 	/**
-	 * Decide the way to secure your wallet
+	 * To secure your wallet, you can either use your device's biometric (like a fingerprint) or set up a password. You can change the password anytime if needed.
 	 */
 	SB_SECURITY: () => LocalizedString
 	/**
@@ -4052,6 +4060,38 @@ Please, try again later.
 	 * Estimated time
 	 */
 	ESTIMATED_TIME: () => LocalizedString
+	/**
+	 * Total Supply
+	 */
+	NFT_DETAIL_TOTAL_SUPPLY: () => LocalizedString
+	/**
+	 * Creator
+	 */
+	NFT_DETAIL_CREATOR: () => LocalizedString
+	/**
+	 * Edition
+	 */
+	NFT_DETAIL_EDITION: () => LocalizedString
+	/**
+	 * Marketplace
+	 */
+	NFT_DETAIL_MARKETPLACE: () => LocalizedString
+	/**
+	 * Minted At
+	 */
+	NFT_DETAIL_MINTED_AT: () => LocalizedString
+	/**
+	 * Rank
+	 */
+	NFT_DETAIL_RANK: () => LocalizedString
+	/**
+	 * Rarity
+	 */
+	NFT_DETAIL_RARITY: () => LocalizedString
+	/**
+	 * Scores
+	 */
+	NFT_DETAIL_SCORES: () => LocalizedString
 	/**
 	 * Light
 	 */
