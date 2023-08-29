@@ -1,14 +1,18 @@
-import React, { useCallback } from "react"
-import { BaseButton, BaseText, BaseView, Layout } from "~Components"
+import React, { useCallback, useMemo } from "react"
+import { BaseButton, BaseSpacer, BaseText, BaseView, Layout } from "~Components"
 import {
     useBiometricType,
     useBiometrics,
     useBiometricsValidation,
+    useTheme,
 } from "~Hooks"
 import { useI18nContext } from "~i18n"
 import { useNavigation } from "@react-navigation/native"
 import { Routes } from "~Navigation"
 import { SecurityLevelType } from "~Model"
+import { StyleSheet } from "react-native"
+import Lottie from "lottie-react-native"
+import { ProtectWalletDark, ProtectWalletLight } from "~Assets"
 
 export const AppSecurityScreen = () => {
     const { LL } = useI18nContext()
@@ -30,6 +34,20 @@ export const AppSecurityScreen = () => {
         nav.navigate(Routes.USER_CREATE_PASSWORD)
     }, [nav])
 
+    const { isDark } = useTheme()
+
+    const protectWalletImage = useMemo(() => {
+        return isDark ? (
+            <Lottie source={ProtectWalletDark} autoPlay style={styles.lottie} />
+        ) : (
+            <Lottie
+                source={ProtectWalletLight}
+                autoPlay
+                style={styles.lottie}
+            />
+        )
+    }, [isDark])
+
     return (
         <Layout
             body={
@@ -41,6 +59,10 @@ export const AppSecurityScreen = () => {
                         <BaseText typographyFont="title">
                             {LL.TITLE_SECURITY()}
                         </BaseText>
+                    </BaseView>
+                    <BaseSpacer height={24} />
+                    {protectWalletImage}
+                    <BaseView alignSelf="flex-start">
                         <BaseText typographyFont="body" my={10}>
                             {LL.SB_SECURITY()}
                         </BaseText>
@@ -73,3 +95,10 @@ export const AppSecurityScreen = () => {
         />
     )
 }
+
+const styles = StyleSheet.create({
+    lottie: {
+        width: "100%",
+        height: 300,
+    },
+})
