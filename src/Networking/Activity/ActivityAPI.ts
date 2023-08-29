@@ -2,7 +2,7 @@ import { debug } from "~Utils"
 import {
     getActivitiesFromIncomingTransfers,
     getActivitiesFromTransactions,
-} from "./ActivityHelpers"
+} from "./Helpers"
 import { Activity, NETWORK_TYPE, Network } from "~Model"
 import {
     ORDER,
