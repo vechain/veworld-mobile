@@ -1,4 +1,4 @@
-import React, { useState } from "react"
+import React, { useCallback, useState } from "react"
 import {
     BaseButton,
     BaseIcon,
@@ -45,35 +45,39 @@ export const ImportMnemonicScreen = () => {
     const [isError, setIsError] = useState<string>("")
     const [isDisabled, setIsDisabled] = useState(true)
 
-    const onVerify = (_mnemonic: string) => {
-        const sanitisedMnemonic = SeedUtils.sanifySeed(_mnemonic).join(" ")
-        if (CryptoUtils.verifyMnemonic(sanitisedMnemonic)) {
-            try {
-                getDeviceFromMnemonic(sanitisedMnemonic)
-            } catch (e) {
-                warn("onVerify", e)
-                HapticsService.triggerNotification({ level: "Error" })
-                setIsError(LL.ERROR_WALLET_ALREADY_EXISTS())
-                return
-            }
+    const onVerify = useCallback(
+        (_mnemonic: string) => {
+            const sanitisedMnemonic = SeedUtils.sanifySeed(_mnemonic).join(" ")
+            if (CryptoUtils.verifyMnemonic(sanitisedMnemonic)) {
+                try {
+                    getDeviceFromMnemonic(sanitisedMnemonic)
+                } catch (e) {
+                    warn("onVerify", e)
+                    HapticsService.triggerNotification({ level: "Error" })
+                    setIsError(LL.ERROR_WALLET_ALREADY_EXISTS())
+                    return
+                }
 
-            dispatch(setMnemonic(sanitisedMnemonic))
+                dispatch(setMnemonic(sanitisedMnemonic))
 
-            HapticsService.triggerImpact({ level: "Medium" })
-            track(AnalyticsEvent.IMPORT_MNEMONIC_SUBMITTED)
-            if (userHasOnboarded) {
-                nav.navigate(Routes.WALLET_SUCCESS)
+                HapticsService.triggerImpact({ level: "Medium" })
+                track(AnalyticsEvent.IMPORT_MNEMONIC_SUBMITTED)
+                if (userHasOnboarded) {
+                    nav.navigate(Routes.WALLET_SUCCESS)
+                } else {
+                    nav.navigate(Routes.APP_SECURITY)
+                }
             } else {
-                nav.navigate(Routes.APP_SECURITY)
+                HapticsService.triggerNotification({ level: "Error" })
+                setIsError(LL.ERROR_INCORRECT_MNEMONIC())
+                track(AnalyticsEvent.IMPORT_MNEMONIC_FAILED)
             }
-        } else {
-            HapticsService.triggerNotification({ level: "Error" })
-            setIsError(LL.ERROR_INCORRECT_MNEMONIC())
-            track(AnalyticsEvent.IMPORT_MNEMONIC_FAILED)
-        }
-    }
+        },
+        [LL, dispatch, getDeviceFromMnemonic, nav, track, userHasOnboarded],
+    )
 
     const onPasteFromClipboard = async () => {
+        setIsError("")
         let isString = await Clipboard.hasStringAsync()
         if (isString) {
             let _seed = await Clipboard.getStringAsync()
@@ -97,6 +101,7 @@ export const ImportMnemonicScreen = () => {
     }
 
     const onChangeText = (text: string) => {
+        setIsError("")
         let wordCounter = text.split(" ").filter(str => str !== "").length
         setLocalMnemonic(text)
         if (wordCounter === 12) {
@@ -111,6 +116,16 @@ export const ImportMnemonicScreen = () => {
         setLocalMnemonic("")
         setIsError("")
     }
+
+    const handleVerify = useCallback(
+        () => onVerify(localMnemonic),
+        [localMnemonic, onVerify],
+    )
+
+    const disabledAction = useCallback(
+        () => setIsError(LL.ERROR_INCORRECT_MNEMONIC()),
+        [LL],
+    )
 
     return (
         <DismissKeyboardView>
@@ -180,10 +195,11 @@ export const ImportMnemonicScreen = () => {
                         />
 
                         <BaseButton
-                            action={() => onVerify(localMnemonic)}
+                            action={handleVerify}
                             w={100}
                             title={LL.BTN_IMPORT_WALLET_VERIFY()}
                             disabled={isDisabled}
+                            disabledAction={disabledAction}
                         />
                     </BaseView>
                 }

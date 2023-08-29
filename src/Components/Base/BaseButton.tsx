@@ -18,6 +18,7 @@ const { defaults: defaultTypography, ...otherTypography } = typography
 
 type Props = {
     action: () => void
+    disabledAction?: () => void
     disabled?: boolean
     isDisabledTextOnly?: boolean
     variant?: "solid" | "outline" | "ghost" | "link"
@@ -65,6 +66,7 @@ export const BaseButton = ({
     flex,
     loaderStyle,
     invertLoaderColor = false,
+    disabledAction,
     ...otherProps
 }: Props) => {
     const { typographyFont, fontFamily, fontSize, fontWeight, children } =
@@ -74,10 +76,14 @@ export const BaseButton = ({
     )
 
     const onButtonPress = useCallback(() => {
-        const { haptics } = otherProps
-        otherProps.action()
-        haptics && HapticsService.triggerHaptics({ haptics })
-    }, [otherProps])
+        if (disabled) {
+            disabledAction?.()
+        } else {
+            const { haptics } = otherProps
+            otherProps.action()
+            haptics && HapticsService.triggerHaptics({ haptics })
+        }
+    }, [disabled, disabledAction, otherProps])
 
     const bgColor = useMemo(() => {
         if (otherProps.bgColor) return otherProps.bgColor
@@ -141,8 +147,7 @@ export const BaseButton = ({
     return (
         <TouchableOpacity
             onPress={onButtonPress}
-            activeOpacity={activeOpacity}
-            disabled={disabled}
+            activeOpacity={disabled ? 1 : activeOpacity}
             style={[
                 {
                     backgroundColor: calculateBackgroundColor,
