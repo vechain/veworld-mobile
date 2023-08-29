@@ -14,6 +14,7 @@ import { useAnalyticTracking, useBottomSheetModal, useTheme } from "~Hooks"
 import { ImportWalletBottomSheet } from "./components"
 import { WalletSetupSvg } from "~Assets"
 import { AnalyticsEvent } from "~Constants"
+import { Linking } from "react-native"
 
 export const WalletSetupScreen = () => {
     const nav = useNavigation()
@@ -32,6 +33,16 @@ export const WalletSetupScreen = () => {
         track(AnalyticsEvent.SELECT_WALLET_IMPORT_WALLET)
         onOpen()
     }, [onOpen, track])
+
+    const goToTermsAndConditions = useCallback(() => {
+        const url = process.env.REACT_APP_TERMS_OF_SERVICE_URL
+        url && Linking.openURL(url)
+    }, [])
+
+    const goToPrivacyPolicy = useCallback(() => {
+        const url = process.env.REACT_APP_PRIVACY_POLICY_URL
+        url && Linking.openURL(url)
+    }, [])
 
     useEffect(() => {
         track(AnalyticsEvent.PAGE_LOADED_IMPORT_OR_CREATE)
@@ -133,7 +144,8 @@ export const WalletSetupScreen = () => {
                             <BaseText
                                 typographyFont="bodyMedium"
                                 underline
-                                align="center">
+                                align="center"
+                                onPress={goToTermsAndConditions}>
                                 {LL.COMMON_LBL_TERMS_AND_CONDITIONS()}
                             </BaseText>
                             <BaseText typographyFont="body" align="center">
@@ -143,7 +155,8 @@ export const WalletSetupScreen = () => {
                             <BaseText
                                 typographyFont="bodyMedium"
                                 underline
-                                align="center">
+                                align="center"
+                                onPress={goToPrivacyPolicy}>
                                 {LL.COMMON_LBL_PRIVACY_POLICY()}
                             </BaseText>
                         </BaseView>

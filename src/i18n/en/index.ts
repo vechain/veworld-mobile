@@ -25,7 +25,6 @@ const en: BaseTranslation = {
         "I state that I have saved the secret phrase and I am aware that I am responsible if I lose it.",
     BTN_MNEMONIC_CLIPBOARD: "Copy mnemonic to clipboard",
     BTN_IMPORT_WALLET_VERIFY: "Verify",
-    BTN_WALLET_IMPORT_HELP: "Where can I find it?",
     BTN_CREATE_WALLET_SUCCESS: "GO TO YOUR WALLET",
     BTN_RESET_APP_CHECKBOX: "I am aware that this action is irreversible (required)",
     BTN_COPY_PUBLIC_ADDRESS: "Copy public address",
