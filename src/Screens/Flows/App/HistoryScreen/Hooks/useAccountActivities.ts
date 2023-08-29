@@ -10,7 +10,7 @@ import {
     useAppDispatch,
     useAppSelector,
 } from "~Storage/Redux"
-import { fetchAccountTransactionActivities } from "~Storage/Redux/Actions/Activity/API"
+import { fetchAccountTransactionActivities } from "~Networking"
 import { useI18nContext } from "~i18n"
 
 /**

@@ -26,10 +26,10 @@ import {
     createPendingNFTTransferActivityFromTx,
     createPendingTransferActivityFromTx,
     createSignCertificateActivity,
-} from "./API"
+    DEFAULT_PAGE_SIZE,
+} from "~Networking"
 import { Transaction } from "thor-devkit"
 import { genesisesId } from "~Constants"
-import { DEFAULT_PAGE_SIZE } from "~Networking"
 
 /**
  * This method upserts an activity to the store fetching the transaction details from the chain
