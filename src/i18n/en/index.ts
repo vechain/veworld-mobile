@@ -232,7 +232,7 @@ const en: BaseTranslation = {
     SB_BACKUP_YOUR_PHRASE_2: "RESET the App!",
     SB_UPGRADE_SECURITY_WARNING_ANDROID: "Also, you will be asked to use your biometrics security method for each wallet!",
     SB_YOUR_TOKENS_EMPTY: "Your tokens will appear here",
-    SB_SECURITY: "Decide the way to secure your wallet",
+    SB_SECURITY: "To secure your wallet, you can either use your device's biometric (like a fingerprint) or set up a password. You can change the password anytime if needed.",
     SB_USER_PASSWORD: "This password will be used to authorize transactions.",
 
 

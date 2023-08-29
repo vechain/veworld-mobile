@@ -843,7 +843,7 @@ type RootTranslation = {
 	 */
 	SB_YOUR_TOKENS_EMPTY: string
 	/**
-	 * D​e​c​i​d​e​ ​t​h​e​ ​w​a​y​ ​t​o​ ​s​e​c​u​r​e​ ​y​o​u​r​ ​w​a​l​l​e​t
+	 * T​o​ ​s​e​c​u​r​e​ ​y​o​u​r​ ​w​a​l​l​e​t​,​ ​y​o​u​ ​c​a​n​ ​e​i​t​h​e​r​ ​u​s​e​ ​y​o​u​r​ ​d​e​v​i​c​e​'​s​ ​b​i​o​m​e​t​r​i​c​ ​(​l​i​k​e​ ​a​ ​f​i​n​g​e​r​p​r​i​n​t​)​ ​o​r​ ​s​e​t​ ​u​p​ ​a​ ​p​a​s​s​w​o​r​d​.​ ​Y​o​u​ ​c​a​n​ ​c​h​a​n​g​e​ ​t​h​e​ ​p​a​s​s​w​o​r​d​ ​a​n​y​t​i​m​e​ ​i​f​ ​n​e​e​d​e​d​.
 	 */
 	SB_SECURITY: string
 	/**
@@ -3251,7 +3251,7 @@ export type TranslationFunctions = {
 	 */
 	SB_YOUR_TOKENS_EMPTY: () => LocalizedString
 	/**
-	 * Decide the way to secure your wallet
+	 * To secure your wallet, you can either use your device's biometric (like a fingerprint) or set up a password. You can change the password anytime if needed.
 	 */
 	SB_SECURITY: () => LocalizedString
 	/**
