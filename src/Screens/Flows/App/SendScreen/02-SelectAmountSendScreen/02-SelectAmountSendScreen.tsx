@@ -82,7 +82,7 @@ export const SelectAmountSendScreen = ({ route }: Props) => {
             exchangeRate?.rate ?? 1,
             0,
         ),
-        input,
+        input || "0",
     )
     const rawTokenInput = FormattingUtils.convertToFiatBalance(
         input || "0",
