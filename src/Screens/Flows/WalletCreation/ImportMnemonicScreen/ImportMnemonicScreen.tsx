@@ -186,15 +186,6 @@ export const ImportMnemonicScreen = () => {
                 footer={
                     <BaseView w={100}>
                         <BaseButton
-                            haptics="Light"
-                            variant="ghost"
-                            action={() => {}} // TODO: useless button https://github.com/vechainfoundation/veworld-mobile/issues/1162
-                            typographyFont="footNoteAccent"
-                            title={LL.BTN_WALLET_IMPORT_HELP()}
-                            px={5}
-                        />
-
-                        <BaseButton
                             action={handleVerify}
                             w={100}
                             title={LL.BTN_IMPORT_WALLET_VERIFY()}
