@@ -372,7 +372,7 @@ type RootTranslation = {
 	 */
 	BD_RESET: string
 	/**
-	 * C​l​i​c​k​ ​t​o​ ​r​e​s​e​t​ ​V​e​V​a​u​l​t​ ​a​n​d​ ​e​r​a​s​e​ ​a​l​l​ ​y​o​u​r​ ​d​a​t​a​ ​s​t​o​r​e​d​ ​o​n​ ​i​t
+	 * C​l​i​c​k​ ​t​o​ ​r​e​s​e​t​ ​V​e​W​o​r​l​d​ ​a​n​d​ ​e​r​a​s​e​ ​a​l​l​ ​y​o​u​r​ ​d​a​t​a​ ​s​t​o​r​e​d​ ​o​n​ ​i​t
 	 */
 	BD_RESET_DISCLAIMER: string
 	/**
@@ -464,7 +464,7 @@ type RootTranslation = {
 	 */
 	BD_APP_LOCK: string
 	/**
-	 * C​l​i​c​k​ ​t​o​ ​r​e​s​e​t​ ​V​e​V​a​u​l​t​ ​a​n​d​ ​e​r​a​s​e​ ​a​l​l​ ​y​o​u​r​ ​d​a​t​a​ ​s​t​o​r​e​d​ ​o​n​ ​i​t
+	 * C​l​i​c​k​ ​t​o​ ​r​e​s​e​t​ ​V​e​W​o​r​l​d​ ​a​n​d​ ​e​r​a​s​e​ ​a​l​l​ ​y​o​u​r​ ​d​a​t​a​ ​s​t​o​r​e​d​ ​o​n​ ​i​t
 	 */
 	BD_SECURITY_METHOD: string
 	/**
@@ -2799,7 +2799,7 @@ export type TranslationFunctions = {
 	 */
 	BD_RESET: () => LocalizedString
 	/**
-	 * Click to reset VeVault and erase all your data stored on it
+	 * Click to reset VeWorld and erase all your data stored on it
 	 */
 	BD_RESET_DISCLAIMER: () => LocalizedString
 	/**
@@ -2891,7 +2891,7 @@ export type TranslationFunctions = {
 	 */
 	BD_APP_LOCK: () => LocalizedString
 	/**
-	 * Click to reset VeVault and erase all your data stored on it
+	 * Click to reset VeWorld and erase all your data stored on it
 	 */
 	BD_SECURITY_METHOD: () => LocalizedString
 	/**
