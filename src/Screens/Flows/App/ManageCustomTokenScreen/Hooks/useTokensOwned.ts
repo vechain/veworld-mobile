@@ -120,7 +120,8 @@ export const useTokensOwned = () => {
         }
 
         if (page === 0) fetchOnMount()
-    }, [fetchTokens, page])
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [page])
 
     // When balances are updated, remove the balances from the tokens state
     useEffect(() => {
