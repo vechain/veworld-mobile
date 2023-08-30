@@ -96,6 +96,7 @@ const baseStyles = (isActive: boolean) => (theme: ColorThemeType) =>
         touchableContainer: {
             backgroundColor: theme.colors.card,
             borderRadius: 16,
+            overflow: "hidden",
         },
         pressable: {
             borderRadius: 10,
