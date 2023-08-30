@@ -18,6 +18,7 @@ const { defaults: defaultTypography, ...otherTypography } = typography
 
 type Props = {
     action: () => void
+    disabledAction?: () => void
     disabled?: boolean
     isDisabledTextOnly?: boolean
     variant?: "solid" | "outline" | "ghost" | "link"
@@ -48,6 +49,13 @@ type Props = {
     darkLoader?: boolean
     flex?: number
     activeOpacity?: number
+    disabledActionHaptics?:
+        | "Success"
+        | "Warning"
+        | "Error"
+        | "Light"
+        | "Medium"
+        | "Heavy"
 } & TouchableOpacityProps
 
 export const BaseButton = ({
@@ -65,41 +73,68 @@ export const BaseButton = ({
     flex,
     loaderStyle,
     invertLoaderColor = false,
+    disabledAction,
+    disabledActionHaptics,
     ...otherProps
 }: Props) => {
-    const { typographyFont, fontFamily, fontSize, fontWeight, children } =
-        otherProps
+    const {
+        typographyFont,
+        fontFamily,
+        fontSize,
+        fontWeight,
+        children,
+        haptics,
+        action,
+        bgColor,
+        px,
+        py,
+        w,
+        h,
+        m,
+        my,
+        mx,
+        p,
+        selfAlign,
+        title,
+    } = otherProps
     const { styles: themedStyles, theme } = useThemedStyles(
         baseStyles(variant === "link"),
     )
 
     const onButtonPress = useCallback(() => {
-        const { haptics } = otherProps
-        otherProps.action()
-        haptics && HapticsService.triggerHaptics({ haptics })
-    }, [otherProps])
+        if (disabled) {
+            disabledAction?.()
+            disabledActionHaptics &&
+                HapticsService.triggerHaptics({
+                    haptics: disabledActionHaptics,
+                })
+        } else {
+            action()
+            haptics && HapticsService.triggerHaptics({ haptics })
+        }
+    }, [action, disabled, disabledAction, disabledActionHaptics, haptics])
 
-    const bgColor = useMemo(() => {
-        if (otherProps.bgColor) return otherProps.bgColor
+    const backgroundColor = useMemo(() => {
+        if (bgColor) return bgColor
         return theme.colors.primary
-    }, [theme, otherProps.bgColor])
+    }, [theme, bgColor])
 
     const isSolidButton = useMemo(() => variant === "solid", [variant])
     const isOutlineButton = useMemo(() => variant === "outline", [variant])
 
     const paddingX = useMemo(() => {
-        if (Number.isFinite(otherProps.px)) return otherProps.px
+        if (Number.isFinite(px)) return px
         if (size === "sm") return 8
         if (size === "md") return 8
         if (size === "lg") return 16
-    }, [otherProps.px, size])
+    }, [px, size])
 
     const paddingY = useMemo(() => {
-        if (Number.isFinite(otherProps.py)) return otherProps.py
+        if (Number.isFinite(py)) return py
         if (size === "sm") return 3.5
         if (size === "md") return 9.5
         if (size === "lg") return 15
-    }, [otherProps.py, size])
+    }, [py, size])
 
     const computedTypographyFont: TFonts | undefined = useMemo(() => {
         if (typographyFont) return typographyFont
@@ -117,13 +152,13 @@ export const BaseButton = ({
     }, [theme, invertLoaderColor])
 
     const calculateBackgroundColor = useMemo(() => {
-        if (disabled && isDisabledTextOnly) return bgColor
+        if (disabled && isDisabledTextOnly) return backgroundColor
         if (disabled) return theme.colors.disabledButton
 
-        if (isSolidButton) return bgColor
+        if (isSolidButton) return backgroundColor
         else return theme.colors.transparent
     }, [
-        bgColor,
+        backgroundColor,
         disabled,
         isDisabledTextOnly,
         isSolidButton,
@@ -141,23 +176,22 @@ export const BaseButton = ({
     return (
         <TouchableOpacity
             onPress={onButtonPress}
-            activeOpacity={activeOpacity}
-            disabled={disabled}
+            activeOpacity={disabled ? 1 : activeOpacity}
             style={[
                 {
                     backgroundColor: calculateBackgroundColor,
                     borderColor: isOutlineButton
-                        ? bgColor
+                        ? backgroundColor
                         : theme.colors.transparent,
-                    width: otherProps.w && `${otherProps.w}%`,
-                    height: otherProps.h && `${otherProps.h}%`,
-                    margin: otherProps.m,
-                    marginVertical: otherProps.my,
-                    marginHorizontal: otherProps.mx,
-                    padding: otherProps.p,
+                    width: w && `${w}%`,
+                    height: h && `${h}%`,
+                    margin: m,
+                    marginVertical: my,
+                    marginHorizontal: mx,
+                    padding: p,
                     paddingVertical: paddingY,
                     paddingHorizontal: paddingX,
-                    alignSelf: otherProps.selfAlign,
+                    alignSelf: selfAlign,
                     display: "flex",
                     alignItems: "center",
                     flexDirection: leftIcon || rightIcon ? "row" : "column",
@@ -177,7 +211,7 @@ export const BaseButton = ({
                     fontWeight={fontWeight}
                     fontSize={fontSize}
                     style={themedStyles.text}>
-                    {otherProps.title}
+                    {title}
                     {children}
                 </BaseText>
             ) : (
