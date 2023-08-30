@@ -91,10 +91,6 @@ type RootTranslation = {
 	 */
 	BTN_IMPORT_WALLET_VERIFY: string
 	/**
-	 * W​h​e​r​e​ ​c​a​n​ ​I​ ​f​i​n​d​ ​i​t​?
-	 */
-	BTN_WALLET_IMPORT_HELP: string
-	/**
 	 * G​O​ ​T​O​ ​Y​O​U​R​ ​W​A​L​L​E​T
 	 */
 	BTN_CREATE_WALLET_SUCCESS: string
@@ -2522,10 +2518,6 @@ export type TranslationFunctions = {
 	 * Verify
 	 */
 	BTN_IMPORT_WALLET_VERIFY: () => LocalizedString
-	/**
-	 * Where can I find it?
-	 */
-	BTN_WALLET_IMPORT_HELP: () => LocalizedString
 	/**
 	 * GO TO YOUR WALLET
 	 */
