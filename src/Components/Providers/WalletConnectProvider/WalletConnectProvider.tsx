@@ -141,11 +141,16 @@ const WalletConnectContextProvider = ({
      */
     const onSessionProposal = useCallback(
         (proposal: SignClientTypes.EventArguments["session_proposal"]) => {
-            if (proposal.verifyContext.verified.validation !== "VALID")
-                warn("Session proposal is not valid", proposal.verifyContext)
+            const valid = proposal.verifyContext.verified.validation === "VALID"
 
-            //TODO: Verify DApps: proposal.verifyContext.verified.validation === "VALID"
-            if (true) {
+            if (valid || __DEV__) {
+                //So we can see invalid proposals in dev mode
+                if (!valid)
+                    error(
+                        "onSessionProposal - session not valid",
+                        proposal.verifyContext,
+                    )
+
                 if (!selectedAccountAddress) return
                 if (!web3Wallet) return
                 if (!proposal.params.requiredNamespaces.vechain) {
@@ -159,6 +164,10 @@ const WalletConnectContextProvider = ({
                     sessionProposal: proposal,
                 })
             } else {
+                warn(
+                    "onSessionProposal - session not valid",
+                    proposal.verifyContext,
+                )
                 showErrorToast(
                     LL.NOTIFICATION_WALLET_CONNECT_DAPP_NOT_VERIFIED(),
                 )
