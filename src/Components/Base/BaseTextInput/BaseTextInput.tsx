@@ -70,7 +70,7 @@ const BaseTextInputComponent = forwardRef<TextInput, BaseTextInputProps>(
                         value={value}
                         autoCapitalize="none"
                         testID={testID}
-                        editable={disabled}
+                        editable={!disabled}
                         selectTextOnFocus={disabled}
                         {...otherProps}
                     />
