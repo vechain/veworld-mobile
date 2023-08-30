@@ -1,5 +1,5 @@
 import React, { useCallback, useEffect, useMemo, useState } from "react"
-import { AddressUtils, debug, error, WalletConnectUtils } from "~Utils"
+import { AddressUtils, debug, error, WalletConnectUtils, warn } from "~Utils"
 import { IWeb3Wallet } from "@walletconnect/web3wallet"
 import {
     PendingRequestTypes,
@@ -143,11 +143,14 @@ const WalletConnectContextProvider = ({
         (proposal: SignClientTypes.EventArguments["session_proposal"]) => {
             const valid = proposal.verifyContext.verified.validation === "VALID"
 
-            if (!valid) {
-                error("onSessionProposal - session not valid", proposal)
-            }
-
             if (valid || __DEV__) {
+                //So we can see invalid proposals in dev mode
+                if (!valid)
+                    error(
+                        "onSessionProposal - session not valid",
+                        proposal.verifyContext,
+                    )
+
                 if (!selectedAccountAddress) return
                 if (!web3Wallet) return
                 if (!proposal.params.requiredNamespaces.vechain) {
@@ -161,6 +164,10 @@ const WalletConnectContextProvider = ({
                     sessionProposal: proposal,
                 })
             } else {
+                warn(
+                    "onSessionProposal - session not valid",
+                    proposal.verifyContext,
+                )
                 showErrorToast(
                     LL.NOTIFICATION_WALLET_CONNECT_DAPP_NOT_VERIFIED(),
                 )
