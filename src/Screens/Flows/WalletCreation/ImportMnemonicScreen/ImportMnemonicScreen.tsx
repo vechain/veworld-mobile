@@ -200,6 +200,7 @@ export const ImportMnemonicScreen = () => {
                             title={LL.BTN_IMPORT_WALLET_VERIFY()}
                             disabled={isDisabled}
                             disabledAction={disabledAction}
+                            disabledActionHaptics="Heavy"
                         />
                     </BaseView>
                 }

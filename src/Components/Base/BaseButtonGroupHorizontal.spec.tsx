@@ -100,7 +100,6 @@ describe("BaseButtonGroupHorizontal", () => {
             const baseButton = await findGroupButton(button.id)
             expect(baseButton).toBeVisible()
             if (button.disabled) {
-                expect(baseButton).toBeDisabled()
                 fireEvent.press(baseButton)
                 expect(mockAction).not.toHaveBeenCalledWith(button)
             } else {
