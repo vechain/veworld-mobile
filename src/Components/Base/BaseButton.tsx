@@ -56,7 +56,6 @@ type Props = {
         | "Light"
         | "Medium"
         | "Heavy"
-        | undefined
 } & TouchableOpacityProps
 
 export const BaseButton = ({
