@@ -9,6 +9,7 @@ import {
 } from "~Components"
 import { useI18nContext } from "~i18n"
 import { COLORS } from "~Constants"
+import { selectDevices, useAppSelector } from "~Storage/Redux"
 
 type Props = {
     isEdit: boolean
@@ -22,6 +23,7 @@ export const WalletManagementHeader = ({
 }: Props) => {
     const { LL } = useI18nContext()
     const theme = useTheme()
+    const devices = useAppSelector(selectDevices)
 
     return (
         <BaseView flexDirection="row" justifyContent="space-between" w={100}>
@@ -49,14 +51,18 @@ export const WalletManagementHeader = ({
                     </BaseButton>
                 ) : (
                     <>
-                        <BaseIcon
-                            haptics="Light"
-                            name="priority-low"
-                            action={() => setIsEdit(true)}
-                            size={24}
-                            color={theme.colors.text}
-                        />
-                        <BaseSpacer width={16} />
+                        {devices.length > 1 && (
+                            <>
+                                <BaseIcon
+                                    haptics="Light"
+                                    name="priority-low"
+                                    action={() => setIsEdit(true)}
+                                    size={24}
+                                    color={theme.colors.text}
+                                />
+                                <BaseSpacer width={16} />
+                            </>
+                        )}
                         <BaseIcon
                             haptics="Light"
                             size={24}
