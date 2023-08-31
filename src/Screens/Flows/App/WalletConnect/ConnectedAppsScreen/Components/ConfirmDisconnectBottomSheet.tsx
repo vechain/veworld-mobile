@@ -36,7 +36,7 @@ export const ConfirmDisconnectBottomSheet = React.forwardRef<
 
     return (
         <BaseBottomSheet snapPoints={snapPoints} ref={ref} onDismiss={onCancel}>
-            <BaseView mx={10}>
+            <BaseView>
                 <BaseText typographyFont="subTitleBold">
                     {LL.SB_CONFIRM_OPERATION()}
                 </BaseText>

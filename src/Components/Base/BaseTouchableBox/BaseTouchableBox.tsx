@@ -118,6 +118,8 @@ const baseStyles =
             container: {
                 flex,
                 width: w || "100%",
+                borderRadius: 16,
+                overflow: "hidden",
             },
             innerContainer: {
                 justifyContent,
