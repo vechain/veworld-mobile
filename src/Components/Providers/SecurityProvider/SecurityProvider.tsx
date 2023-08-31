@@ -11,6 +11,7 @@ import { SecurityDowngradeScreen } from "~Screens"
 import { AppBlockedScreen } from "~Screens/Flows/App/AppBlockedScreen"
 import { AnimatedSplashScreen } from "../../../AnimatedSplashScreen"
 import { AutoLogoutProvider } from "../AutoLogoutProvider"
+import { PlatformUtils } from "~Utils"
 
 type Props = {
     children: React.ReactNode
@@ -57,7 +58,8 @@ export const SecurityProvider = ({ children }: Props) => {
     return (
         <AutoLogoutProvider>
             <AnimatedSplashScreen
-                playAnimation={isSplashHidden || isBiometricsSucceeded}>
+                playAnimation={isSplashHidden || isBiometricsSucceeded}
+                animationDelay={PlatformUtils.isAndroid() ? 500 : undefined}>
                 {children}
             </AnimatedSplashScreen>
         </AutoLogoutProvider>

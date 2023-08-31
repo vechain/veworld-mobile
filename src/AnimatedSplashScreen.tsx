@@ -13,6 +13,7 @@ import { PlatformUtils } from "~Utils"
 
 type Props = {
     playAnimation: boolean
+    animationDelay?: number
     children: React.ReactNode
 }
 
@@ -32,6 +33,7 @@ type Props = {
  */
 export const AnimatedSplashScreen = ({
     playAnimation,
+    animationDelay,
     children,
 }: Props): React.ReactElement => {
     const loadingProgress = useSharedValue(0)
@@ -40,12 +42,19 @@ export const AnimatedSplashScreen = ({
     const { styles } = useThemedStyles(baseStyles)
 
     useEffect(() => {
-        if (playAnimation) {
-            loadingProgress.value = withTiming(100, { duration: 700 }, () => {
+        const startSplashScreenAnimation = () => {
+            loadingProgress.value = withTiming(100, { duration: 800 }, () => {
                 runOnJS(setAnimationDone)(true)
             })
         }
-    }, [playAnimation, loadingProgress])
+
+        if (playAnimation) {
+            setTimeout(
+                () => startSplashScreenAnimation(),
+                animationDelay ? animationDelay : 1,
+            )
+        }
+    }, [playAnimation, loadingProgress, animationDelay])
 
     const colorLayer = animationDone ? null : (
         <View style={[StyleSheet.absoluteFill, styles.colorLayer]} />
@@ -133,6 +142,8 @@ const baseStyles = (theme: ColorThemeType) =>
             alignItems: "center",
             justifyContent: "center",
         },
-        colorLayer: { backgroundColor: theme.colors.splashColorLayer },
+        colorLayer: {
+            backgroundColor: theme.colors.splashColorLayer,
+        },
         whiteLayer: { backgroundColor: COLORS.WHITE },
     })
