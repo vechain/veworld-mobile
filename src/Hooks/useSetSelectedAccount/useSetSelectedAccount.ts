@@ -1,5 +1,5 @@
 import {
-    selectSelectedAccount,
+    selectSelectedAccountOrNull,
     setSelectedAccount,
     useAppDispatch,
     useAppSelector,
@@ -8,7 +8,7 @@ import { useResetStacks } from "./useResetStacks"
 import { AddressUtils } from "~Utils"
 
 export const useSetSelectedAccount = () => {
-    const selectedAccount = useAppSelector(selectSelectedAccount)
+    const selectedAccount = useAppSelector(selectSelectedAccountOrNull)
     const { resetStacks } = useResetStacks()
     const dispatch = useAppDispatch()
 
