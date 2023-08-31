@@ -1,4 +1,4 @@
-import React, { useState } from "react"
+import React, { useEffect, useState } from "react"
 import { useAnalyticTracking, useBottomSheetModal, useTheme } from "~Hooks"
 import {
     BaseIcon,
@@ -21,7 +21,11 @@ import {
     selectNonVechainTokensWithBalances,
     selectSelectedNetwork,
 } from "~Storage/Redux/Selectors"
-import { addTokenBalance, removeTokenBalance } from "~Storage/Redux/Slices"
+import {
+    addTokenBalance,
+    removeTokenBalance,
+    setIsAppLoading,
+} from "~Storage/Redux/Slices"
 import {
     updateAccountBalances,
     useAppDispatch,
@@ -124,6 +128,12 @@ export const ManageTokenScreen = () => {
     const navigateManageCustomTokenScreen = () => {
         nav.navigate(Routes.MANAGE_CUSTOM_TOKEN)
     }
+
+    useEffect(() => {
+        setTimeout(() => {
+            dispatch(setIsAppLoading(false))
+        }, 1000)
+    }, [dispatch])
 
     return (
         <DismissKeyboardView>
