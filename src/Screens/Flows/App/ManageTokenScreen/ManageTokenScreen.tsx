@@ -132,7 +132,7 @@ export const ManageTokenScreen = () => {
     useEffect(() => {
         setTimeout(() => {
             dispatch(setIsAppLoading(false))
-        }, 1000)
+        }, 300)
     }, [dispatch])
 
     return (
