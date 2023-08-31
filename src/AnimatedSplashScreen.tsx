@@ -118,7 +118,6 @@ const baseStyles = (theme: ColorThemeType) =>
             flex: 1,
         },
         containerAndroid: {
-            flex: 1,
             position: "absolute",
             top: 0,
             left: 0,
