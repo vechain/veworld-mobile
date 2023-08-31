@@ -112,10 +112,7 @@ export const InsertAddressSendScreen = ({ route }: Props) => {
             noStaticBottomPadding
             fixedHeader={
                 <BaseView>
-                    <BaseText typographyFont="body">
-                        {LL.SEND_INSERT_ADDRESS_DESCRIPTION()}
-                    </BaseText>
-                    <BaseSpacer height={24} />
+                    <BaseSpacer height={4} />
                     <BaseView flexDirection="row" w={100}>
                         {BaseTextInputElement}
                     </BaseView>
@@ -123,84 +120,100 @@ export const InsertAddressSendScreen = ({ route }: Props) => {
             }
             body={
                 <BaseView mb={80}>
-                    <BaseAccordion
-                        defaultIsOpen={!!filteredContacts.length}
-                        extraData={filteredContacts.length}
-                        itmeHeight={CONTACT_CARD_DEFAULT_HIGHT}
-                        headerComponent={
-                            <BaseView flexDirection="row">
-                                <BaseText>
-                                    {LL.SEND_INSERT_CONTACTS()} (
-                                    {filteredContacts.length})
+                    {filteredContacts.length !== 0 && (
+                        <BaseAccordion
+                            defaultIsOpen={!!filteredContacts.length}
+                            extraData={filteredContacts.length}
+                            itmeHeight={CONTACT_CARD_DEFAULT_HIGHT}
+                            headerComponent={
+                                <BaseView flexDirection="row">
+                                    <BaseText>
+                                        {LL.SEND_INSERT_CONTACTS()} (
+                                        {filteredContacts.length})
+                                    </BaseText>
+                                </BaseView>
+                            }
+                            bodyComponent={
+                                <>
+                                    {filteredContacts.map(contact => {
+                                        const isSelected =
+                                            !!selectedAddress &&
+                                            AddressUtils.compareAddresses(
+                                                contact.address,
+                                                selectedAddress,
+                                            )
+
+                                        const onPress = () =>
+                                            setSelectedAddress(contact.address)
+
+                                        return (
+                                            <ContactCard
+                                                key={contact.address}
+                                                containerStyle={
+                                                    baseStyles.contactCard
+                                                }
+                                                contact={contact}
+                                                onPress={onPress}
+                                                selected={isSelected}
+                                            />
+                                        )
+                                    })}
+                                </>
+                            }
+                        />
+                    )}
+                    {filteredAccounts.length !== 0 && (
+                        <BaseAccordion
+                            defaultIsOpen={!!filteredAccounts.length}
+                            extraData={filteredAccounts.length}
+                            itmeHeight={ACCOUNT_CARD_DEFAULT_HIGHT}
+                            headerComponent={
+                                <BaseView flexDirection="row">
+                                    <BaseText>
+                                        {LL.SEND_INSERT_ACCOUNTS()} (
+                                        {filteredAccounts.length})
+                                    </BaseText>
+                                </BaseView>
+                            }
+                            bodyComponent={
+                                <BaseView>
+                                    {filteredAccounts.map(account => {
+                                        const isSelected =
+                                            !!selectedAddress &&
+                                            AddressUtils.compareAddresses(
+                                                account.address,
+                                                selectedAddress,
+                                            )
+                                        const onPress = () =>
+                                            setSelectedAddress(account.address)
+                                        return (
+                                            <AccountCard
+                                                key={account.address}
+                                                containerStyle={
+                                                    baseStyles.accountCard
+                                                }
+                                                account={account}
+                                                onPress={onPress}
+                                                selected={isSelected}
+                                            />
+                                        )
+                                    })}
+                                </BaseView>
+                            }
+                        />
+                    )}
+
+                    {filteredAccounts.length === 0 &&
+                        filteredContacts.length === 0 && (
+                            <BaseView w={100} alignItems="center">
+                                <BaseText typographyFont="body">
+                                    {LL.SEND_NO_CONTACTS_OR_ACCOUNTS_FOUND()}
+                                </BaseText>
+                                <BaseText typographyFont="body">
+                                    {LL.SEND_PLEASE_TYPE_ADDRESS()}
                                 </BaseText>
                             </BaseView>
-                        }
-                        bodyComponent={
-                            <>
-                                {filteredContacts.map(contact => {
-                                    const isSelected =
-                                        !!selectedAddress &&
-                                        AddressUtils.compareAddresses(
-                                            contact.address,
-                                            selectedAddress,
-                                        )
-
-                                    const onPress = () =>
-                                        setSelectedAddress(contact.address)
-
-                                    return (
-                                        <ContactCard
-                                            key={contact.address}
-                                            containerStyle={
-                                                baseStyles.contactCard
-                                            }
-                                            contact={contact}
-                                            onPress={onPress}
-                                            selected={isSelected}
-                                        />
-                                    )
-                                })}
-                            </>
-                        }
-                    />
-                    <BaseAccordion
-                        defaultIsOpen={!!filteredAccounts.length}
-                        extraData={filteredAccounts.length}
-                        itmeHeight={ACCOUNT_CARD_DEFAULT_HIGHT}
-                        headerComponent={
-                            <BaseView flexDirection="row">
-                                <BaseText>
-                                    {LL.SEND_INSERT_ACCOUNTS()} (
-                                    {filteredAccounts.length})
-                                </BaseText>
-                            </BaseView>
-                        }
-                        bodyComponent={
-                            <BaseView>
-                                {filteredAccounts.map(account => {
-                                    const isSelected =
-                                        !!selectedAddress &&
-                                        AddressUtils.compareAddresses(
-                                            account.address,
-                                            selectedAddress,
-                                        )
-                                    const onPress = () =>
-                                        setSelectedAddress(account.address)
-                                    return (
-                                        <AccountCard
-                                            key={account.address}
-                                            containerStyle={
-                                                baseStyles.accountCard
-                                            }
-                                            account={account}
-                                            onPress={onPress}
-                                            selected={isSelected}
-                                        />
-                                    )
-                                })}
-                            </BaseView>
-                        }
-                    />
+                        )}
                 </BaseView>
             }
             footer={
