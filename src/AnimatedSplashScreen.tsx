@@ -49,7 +49,7 @@ export const AnimatedSplashScreen = ({
         }
 
         if (playAnimation) {
-            setTimeout(() => startSplashScreenAnimation(), animationDelay || 1)
+            setTimeout(() => startSplashScreenAnimation(), animationDelay ?? 1)
         }
     }, [playAnimation, loadingProgress, animationDelay])
 
