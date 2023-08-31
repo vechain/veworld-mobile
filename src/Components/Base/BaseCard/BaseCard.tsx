@@ -41,6 +41,7 @@ export const BaseCard = memo(
                 {onPress ? (
                     <TouchableOpacity
                         onPress={onPress}
+                        containerStyle={styles.touchableContainer}
                         activeOpacity={
                             disableOpacityOnPressing || !onPress ? 1 : 0.2
                         }>
@@ -56,6 +57,10 @@ export const BaseCard = memo(
 
 const baseStyles = (theme: ColorThemeType) =>
     StyleSheet.create({
+        touchableContainer: {
+            borderRadius: 16,
+            overflow: "hidden",
+        },
         container: {
             width: "100%",
         },

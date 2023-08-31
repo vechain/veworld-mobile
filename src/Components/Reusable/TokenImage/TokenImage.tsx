@@ -2,6 +2,7 @@ import React from "react"
 import { StyleSheet } from "react-native"
 import { COLORS } from "~Constants"
 import { BaseCard, BaseCustomTokenIcon, BaseImage } from "~Components/Base"
+import { address } from "thor-devkit"
 
 type Props = {
     height: number
@@ -35,7 +36,7 @@ export const TokenImage = ({
             ) : (
                 <BaseCustomTokenIcon
                     style={styles.icon}
-                    tokenAddress={tokenAddress ?? ""}
+                    tokenAddress={address.toChecksumed(tokenAddress ?? "")}
                     tokenSymbol={symbol ?? ""}
                 />
             )}

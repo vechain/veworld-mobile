@@ -6,7 +6,6 @@ import {
     BaseSpacer,
     BaseText,
     BaseView,
-    ScrollViewWithFooter,
     BaseBottomSheetTextInput,
 } from "~Components"
 import { useI18nContext } from "~i18n"
@@ -51,7 +50,7 @@ export const CreateContactBottomSheet = React.forwardRef<
     }, [addressError.length, nameError.length])
 
     const dispatch = useAppDispatch()
-    const snapPoints = creationMode ? ["60%"] : ["40%"]
+    const snapPoints = creationMode ? ["57%"] : ["40%"]
 
     const closeAndSubmit = useCallback(() => {
         setAlias("")
@@ -68,26 +67,7 @@ export const CreateContactBottomSheet = React.forwardRef<
     return (
         <BaseBottomSheet ref={ref} snapPoints={snapPoints}>
             {creationMode ? (
-                <ScrollViewWithFooter
-                    footer={
-                        <BaseView>
-                            <BaseButton
-                                w={100}
-                                haptics="Light"
-                                title={LL.COMMON_BTN_SAVE()}
-                                action={handleSaveButton}
-                                disabled={!isFormValid}
-                            />
-                            <BaseSpacer height={16} />
-                            <BaseButton
-                                w={100}
-                                haptics="Light"
-                                variant="outline"
-                                title={LL.COMMON_BTN_CANCEL()}
-                                action={() => setCreationMode(false)}
-                            />
-                        </BaseView>
-                    }>
+                <BaseView justifyContent="space-between" flexGrow={1}>
                     <BaseView alignItems="stretch" w={100}>
                         <BaseText typographyFont="subTitleBold">
                             {LL.SEND_CREATE_CONTACT_TITLE()}
@@ -109,27 +89,28 @@ export const CreateContactBottomSheet = React.forwardRef<
                         <BaseSpacer height={16} />
                         <BaseBottomSheetTextInput disabled value={address} />
                     </BaseView>
-                </ScrollViewWithFooter>
+
+                    <BaseView>
+                        <BaseSpacer height={24} />
+                        <BaseButton
+                            w={100}
+                            haptics="Light"
+                            title={LL.COMMON_BTN_SAVE()}
+                            action={handleSaveButton}
+                            disabled={!isFormValid}
+                        />
+                        <BaseSpacer height={16} />
+                        <BaseButton
+                            w={100}
+                            haptics="Light"
+                            variant="outline"
+                            title={LL.COMMON_BTN_CANCEL()}
+                            action={() => setCreationMode(false)}
+                        />
+                    </BaseView>
+                </BaseView>
             ) : (
-                <ScrollViewWithFooter
-                    footer={
-                        <BaseView>
-                            <BaseButton
-                                w={100}
-                                haptics="Light"
-                                title={LL.SEND_CREATE_CONTACT_CREATE_BUTTON()}
-                                action={() => setCreationMode(true)}
-                            />
-                            <BaseSpacer height={16} />
-                            <BaseButton
-                                w={100}
-                                haptics="Light"
-                                variant="outline"
-                                title={LL.SEND_CREATE_CONTACT_PROCEED_ANYWAY_BUTTON()}
-                                action={closeAndSubmit}
-                            />
-                        </BaseView>
-                    }>
+                <BaseView justifyContent="space-between" flexGrow={1}>
                     <BaseView>
                         <BaseText typographyFont="subTitleBold">
                             {LL.SEND_CREATE_CONTACT_TITLE()}
@@ -139,7 +120,24 @@ export const CreateContactBottomSheet = React.forwardRef<
                             {LL.SEND_CREATE_CONTACT_SUBTITLE()}
                         </BaseText>
                     </BaseView>
-                </ScrollViewWithFooter>
+
+                    <BaseView>
+                        <BaseButton
+                            w={100}
+                            haptics="Light"
+                            title={LL.SEND_CREATE_CONTACT_CREATE_BUTTON()}
+                            action={() => setCreationMode(true)}
+                        />
+                        <BaseSpacer height={16} />
+                        <BaseButton
+                            w={100}
+                            haptics="Light"
+                            variant="outline"
+                            title={LL.SEND_CREATE_CONTACT_PROCEED_ANYWAY_BUTTON()}
+                            action={closeAndSubmit}
+                        />
+                    </BaseView>
+                </BaseView>
             )}
         </BaseBottomSheet>
     )
