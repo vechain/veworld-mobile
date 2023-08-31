@@ -54,7 +54,7 @@ export const AnimatedSplashScreen = ({
         <View style={[StyleSheet.absoluteFill, styles.whiteLayer]} />
     )
 
-    const animatedStyles = useAnimatedStyle(() => {
+    const scaleOut = useAnimatedStyle(() => {
         return {
             transform: [
                 {
@@ -64,16 +64,38 @@ export const AnimatedSplashScreen = ({
         }
     })
 
-    if (PlatformUtils.isAndroid()) return <>{children}</>
+    const fadeOut = useAnimatedStyle(() => {
+        return {
+            opacity: 1 - loadingProgress.value / 100,
+        }
+    })
 
-    return (
-        <View style={styles.container}>
+    return PlatformUtils.isAndroid() ? (
+        <>
+            {children}
+            {!animationDone && (
+                <Animated.View style={[styles.containerAndroid, fadeOut]}>
+                    <View style={styles.centered}>
+                        <Animated.View style={scaleOut}>
+                            <Image
+                                source={require("../bootsplash_logo_white.png")}
+                                // eslint-disable-next-line react-native/no-inline-styles
+                                style={{ width: 1000 }}
+                                resizeMode="contain"
+                            />
+                        </Animated.View>
+                    </View>
+                </Animated.View>
+            )}
+        </>
+    ) : (
+        <View style={styles.containerIOS}>
             {colorLayer}
             <MaskedView
                 style={styles.innerContainer}
                 maskElement={
                     <View style={styles.centered}>
-                        <Animated.View style={animatedStyles}>
+                        <Animated.View style={scaleOut}>
                             <Image
                                 source={require("../bootsplash_logo_white.png")}
                                 // eslint-disable-next-line react-native/no-inline-styles
@@ -92,8 +114,17 @@ export const AnimatedSplashScreen = ({
 
 const baseStyles = (theme: ColorThemeType) =>
     StyleSheet.create({
-        container: {
+        containerIOS: {
             flex: 1,
+        },
+        containerAndroid: {
+            flex: 1,
+            position: "absolute",
+            top: 0,
+            left: 0,
+            right: 0,
+            bottom: 0,
+            backgroundColor: theme.colors.splashBackground,
         },
         innerContainer: {
             flex: 1,
@@ -103,6 +134,6 @@ const baseStyles = (theme: ColorThemeType) =>
             alignItems: "center",
             justifyContent: "center",
         },
-        colorLayer: { backgroundColor: theme.colors.splashBackground },
+        colorLayer: { backgroundColor: theme.colors.splashColorLayer },
         whiteLayer: { backgroundColor: COLORS.WHITE },
     })
