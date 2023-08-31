@@ -1910,9 +1910,17 @@ type RootTranslation = {
 	 */
 	SEND_INSERT_ADDRESS_DESCRIPTION: string
 	/**
-	 * E​n​t​e​r​ ​a​n​ ​a​d​d​r​e​s​s​ ​o​r​ ​s​e​a​r​c​h​ ​y​o​u​r​ ​c​o​n​t​a​c​t​s
+	 * E​n​t​e​r​ ​t​h​e​ ​a​d​d​r​e​s​s​ ​t​o​ ​s​e​n​d​ ​t​o​.​.​.
 	 */
 	SEND_ENTER_AN_ADDRESS: string
+	/**
+	 * O​o​p​s​!​ ​W​e​ ​c​o​u​l​d​n​’​t​ ​f​i​n​d​ ​a​n​y​ ​c​o​n​t​a​c​t​s​ ​o​r​ ​a​c​c​o​u​n​t​s​.
+	 */
+	SEND_NO_CONTACTS_OR_ACCOUNTS_FOUND: string
+	/**
+	 * P​l​e​a​s​e​ ​t​y​p​e​ ​i​n​ ​t​h​e​ ​a​d​d​r​e​s​s​.
+	 */
+	SEND_PLEASE_TYPE_ADDRESS: string
 	/**
 	 * C​o​n​t​a​c​t​s
 	 */
@@ -4313,9 +4321,17 @@ Please, try again later.
 	 */
 	SEND_INSERT_ADDRESS_DESCRIPTION: () => LocalizedString
 	/**
-	 * Enter an address or search your contacts
+	 * Enter the address to send to...
 	 */
 	SEND_ENTER_AN_ADDRESS: () => LocalizedString
+	/**
+	 * Oops! We couldn’t find any contacts or accounts.
+	 */
+	SEND_NO_CONTACTS_OR_ACCOUNTS_FOUND: () => LocalizedString
+	/**
+	 * Please type in the address.
+	 */
+	SEND_PLEASE_TYPE_ADDRESS: () => LocalizedString
 	/**
 	 * Contacts
 	 */
