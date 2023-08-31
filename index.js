@@ -1,5 +1,5 @@
 /* eslint-disable react-native/no-inline-styles */
-import React, { useEffect, useMemo } from "react"
+import React, { useEffect, useMemo, useState } from "react"
 import { AppRegistry, LogBox } from "react-native"
 import { enableAllPlugins } from "immer"
 import { EntryPoint } from "./src/EntryPoint"
@@ -27,7 +27,7 @@ import {
     Mono_Regular,
 } from "~Assets"
 import { typography } from "~Constants"
-import { info, AnalyticsUtils } from "~Utils"
+import { AnalyticsUtils, info } from "~Utils"
 import { BottomSheetModalProvider } from "@gorhom/bottom-sheet"
 import "./errorHandler"
 import { StoreContextProvider } from "~Components/Providers/StoreProvider"
@@ -106,6 +106,8 @@ const Main = () => {
 const NavigationProvider = ({ children }) => {
     const theme = useTheme()
 
+    const [ready, setReady] = useState(false)
+
     const navigationTheme = useMemo(
         () => ({
             dark: theme.isDark,
@@ -113,9 +115,12 @@ const NavigationProvider = ({ children }) => {
         }),
         [theme],
     )
+
     return (
-        <NavigationContainer theme={navigationTheme}>
-            {children}
+        <NavigationContainer
+            onReady={() => setReady(true)}
+            theme={navigationTheme}>
+            {ready ? children : null}
         </NavigationContainer>
     )
 }
