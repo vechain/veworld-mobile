@@ -1,6 +1,7 @@
 import React, { useCallback, useMemo, useState } from "react"
 import { useBottomSheetModal, useScrollableList, useTheme } from "~Hooks"
 import {
+    BaseCard,
     BaseSpacer,
     BaseText,
     BaseView,
@@ -15,7 +16,6 @@ import {
     NoTokensButton,
     SkeletonCustomTokenBox,
 } from "./Components"
-import { SkeletonActivityBox } from "../HistoryScreen/Components"
 import { AddCustomTokenBottomSheet } from "./BottomSheets"
 import { useTokensOwned } from "./Hooks"
 
@@ -99,8 +99,14 @@ export const ManageCustomTokenScreen = () => {
                             hasFetched ? (
                                 <BaseSpacer height={20} />
                             ) : (
-                                <BaseView mr={20} ml={36} pt={12}>
-                                    <SkeletonActivityBox />
+                                <BaseView mx={20} pt={8}>
+                                    <BaseCard
+                                        style={styles.skeletonContainer}
+                                        containerStyle={
+                                            styles.skeletonCardContainer
+                                        }>
+                                        <SkeletonCustomTokenBox />
+                                    </BaseCard>
                                 </BaseView>
                             )
                         }
@@ -164,7 +170,13 @@ export const ManageCustomTokenScreen = () => {
                         renderItem={() => {
                             return (
                                 <BaseView mx={20}>
-                                    <SkeletonCustomTokenBox />
+                                    <BaseCard
+                                        style={styles.skeletonContainer}
+                                        containerStyle={
+                                            styles.skeletonCardContainer
+                                        }>
+                                        <SkeletonCustomTokenBox />
+                                    </BaseCard>
                                 </BaseView>
                             )
                         }}
@@ -242,5 +254,12 @@ const styles = StyleSheet.create({
     noTokensButton: {
         position: "absolute",
         bottom: "50%",
+    },
+    skeletonCardContainer: {
+        marginVertical: 8,
+    },
+    skeletonContainer: {
+        paddingVertical: 12,
+        paddingHorizontal: 16,
     },
 })

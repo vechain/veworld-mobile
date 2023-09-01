@@ -18,10 +18,10 @@ export const SkeletonCustomTokenBox = () => {
                 {
                     flexDirection: "row",
                     alignItems: "center",
-                    height: 70,
+                    height: 38,
                     children: [
                         // Circle
-                        { width: 45, height: 45, borderRadius: 45 / 2 },
+                        { width: 38, height: 38, borderRadius: 45 / 2 },
                         // Lines
                         {
                             flexDirection: "column",
@@ -31,15 +31,15 @@ export const SkeletonCustomTokenBox = () => {
                                 // Line
                                 {
                                     width: "40%",
-                                    height: 18,
-                                    marginLeft: 10,
+                                    height: 10,
+                                    marginLeft: 8,
                                 },
                                 // Short line
                                 {
-                                    marginTop: 6,
-                                    width: "30%",
-                                    height: 14,
-                                    marginLeft: 10,
+                                    marginTop: 8,
+                                    width: "20%",
+                                    height: 8,
+                                    marginLeft: 8,
                                 },
                             ],
                         },
@@ -55,6 +55,5 @@ const baseStyles = StyleSheet.create({
         flex: 1,
         width: "100%",
         flexDirection: "column",
-        marginLeft: -1,
     },
 })
