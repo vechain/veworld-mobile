@@ -59,6 +59,7 @@ export const SecurityProvider = ({ children }: Props) => {
         <AutoLogoutProvider>
             <AnimatedSplashScreen
                 playAnimation={isSplashHidden || isBiometricsSucceeded}
+                useFadeOutAnimation={isSplashHidden}
                 animationDelay={PlatformUtils.isAndroid() ? 500 : undefined}>
                 {children}
             </AnimatedSplashScreen>

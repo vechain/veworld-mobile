@@ -14,6 +14,7 @@ import { PlatformUtils } from "~Utils"
 type Props = {
     playAnimation: boolean
     animationDelay?: number
+    useFadeOutAnimation?: boolean
     children: React.ReactNode
 }
 
@@ -34,6 +35,7 @@ type Props = {
 export const AnimatedSplashScreen = ({
     playAnimation,
     animationDelay,
+    useFadeOutAnimation,
     children,
 }: Props): React.ReactElement => {
     const loadingProgress = useSharedValue(0)
@@ -43,15 +45,19 @@ export const AnimatedSplashScreen = ({
 
     useEffect(() => {
         const startSplashScreenAnimation = () => {
-            loadingProgress.value = withTiming(100, { duration: 800 }, () => {
-                runOnJS(setAnimationDone)(true)
-            })
+            loadingProgress.value = withTiming(
+                100,
+                { duration: useFadeOutAnimation ? 50 : 800 },
+                () => {
+                    runOnJS(setAnimationDone)(true)
+                },
+            )
         }
 
         if (playAnimation) {
             setTimeout(() => startSplashScreenAnimation(), animationDelay ?? 1)
         }
-    }, [playAnimation, loadingProgress, animationDelay])
+    }, [playAnimation, loadingProgress, animationDelay, useFadeOutAnimation])
 
     const colorLayer = animationDone ? null : (
         <View style={[StyleSheet.absoluteFill, styles.colorLayer]} />
@@ -76,7 +82,7 @@ export const AnimatedSplashScreen = ({
         }
     })
 
-    return PlatformUtils.isAndroid() ? (
+    const animatedScaleOut = PlatformUtils.isAndroid() ? (
         <>
             {children}
             {!animationDone && (
@@ -116,6 +122,17 @@ export const AnimatedSplashScreen = ({
             </MaskedView>
         </View>
     )
+
+    const animatedFadeOut = (
+        <>
+            {children}
+            {!animationDone && (
+                <Animated.View style={[styles.containerFadeOut, fadeOut]} />
+            )}
+        </>
+    )
+
+    return useFadeOutAnimation ? animatedFadeOut : animatedScaleOut
 }
 
 const baseStyles = (theme: ColorThemeType) =>
@@ -130,6 +147,10 @@ const baseStyles = (theme: ColorThemeType) =>
             right: 0,
             bottom: 0,
             backgroundColor: theme.colors.splashBackground,
+        },
+        containerFadeOut: {
+            flex: 1,
+            backgroundColor: theme.colors.background,
         },
         innerContainer: {
             flex: 1,
