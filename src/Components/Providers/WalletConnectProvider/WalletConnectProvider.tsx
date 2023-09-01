@@ -9,6 +9,7 @@ import {
 import {
     changeSelectedNetwork,
     deleteSession,
+    selectAppLockStatus,
     selectNetworks,
     selectSelectedAccountAddress,
     selectSessionsFlat,
@@ -22,7 +23,7 @@ import { getSdkError } from "@walletconnect/utils"
 import { Routes } from "~Navigation"
 import { useNavigation } from "@react-navigation/native"
 import { AnalyticsEvent, RequestMethods } from "~Constants"
-import { AccountWithDevice } from "~Model"
+import { AccountWithDevice, WALLET_STATUS } from "~Model"
 import { useAnalyticTracking, useSetSelectedAccount } from "~Hooks"
 import { Linking } from "react-native"
 
@@ -59,6 +60,7 @@ const WalletConnectContextProvider = ({
     const accounts = useAppSelector(selectVisibleAccounts)
     const activeSessionsFlat = useAppSelector(selectSessionsFlat)
     const networks = useAppSelector(selectNetworks)
+    const walletStatus = useAppSelector(selectAppLockStatus)
     const { onSetSelectedAccount } = useSetSelectedAccount()
     const track = useAnalyticTracking()
     const [linkingUrls, setLinkingUrls] = useState<string[]>([])
@@ -452,7 +454,7 @@ const WalletConnectContextProvider = ({
         Linking.getInitialURL().then(url => {
             debug("WalletConnectProvider:Linking.getInitialURL", url)
             if (url) {
-                handleLinkingUrl(url)
+                setLinkingUrls(prev => [...prev, url])
             }
         })
     }, [handleLinkingUrl])
@@ -469,14 +471,14 @@ const WalletConnectContextProvider = ({
     }, [])
 
     useEffect(() => {
-        if (linkingUrls.length > 0) {
+        if (linkingUrls.length > 0 && walletStatus === WALLET_STATUS.UNLOCKED) {
             const firstUrl = linkingUrls[0]
 
             setLinkingUrls(prev => prev.filter(url => url !== firstUrl))
 
             handleLinkingUrl(firstUrl)
         }
-    }, [handleLinkingUrl, linkingUrls])
+    }, [walletStatus, handleLinkingUrl, linkingUrls])
 
     /**
      * Remove expired sessions
