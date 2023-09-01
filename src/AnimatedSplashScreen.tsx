@@ -13,6 +13,8 @@ import { PlatformUtils } from "~Utils"
 
 type Props = {
     playAnimation: boolean
+    animationDelay?: number
+    useFadeOutAnimation?: boolean
     children: React.ReactNode
 }
 
@@ -32,6 +34,8 @@ type Props = {
  */
 export const AnimatedSplashScreen = ({
     playAnimation,
+    animationDelay,
+    useFadeOutAnimation,
     children,
 }: Props): React.ReactElement => {
     const loadingProgress = useSharedValue(0)
@@ -40,12 +44,20 @@ export const AnimatedSplashScreen = ({
     const { styles } = useThemedStyles(baseStyles)
 
     useEffect(() => {
-        if (playAnimation) {
-            loadingProgress.value = withTiming(100, { duration: 700 }, () => {
-                runOnJS(setAnimationDone)(true)
-            })
+        const startSplashScreenAnimation = () => {
+            loadingProgress.value = withTiming(
+                100,
+                { duration: useFadeOutAnimation ? 50 : 800 },
+                () => {
+                    runOnJS(setAnimationDone)(true)
+                },
+            )
         }
-    }, [playAnimation, loadingProgress])
+
+        if (playAnimation) {
+            setTimeout(() => startSplashScreenAnimation(), animationDelay ?? 1)
+        }
+    }, [playAnimation, loadingProgress, animationDelay, useFadeOutAnimation])
 
     const colorLayer = animationDone ? null : (
         <View style={[StyleSheet.absoluteFill, styles.colorLayer]} />
@@ -54,7 +66,7 @@ export const AnimatedSplashScreen = ({
         <View style={[StyleSheet.absoluteFill, styles.whiteLayer]} />
     )
 
-    const animatedStyles = useAnimatedStyle(() => {
+    const scaleOut = useAnimatedStyle(() => {
         return {
             transform: [
                 {
@@ -64,16 +76,38 @@ export const AnimatedSplashScreen = ({
         }
     })
 
-    if (PlatformUtils.isAndroid()) return <>{children}</>
+    const fadeOut = useAnimatedStyle(() => {
+        return {
+            opacity: 1 - loadingProgress.value / 100,
+        }
+    })
 
-    return (
-        <View style={styles.container}>
+    const animatedScaleOut = PlatformUtils.isAndroid() ? (
+        <>
+            {children}
+            {!animationDone && (
+                <Animated.View style={[styles.containerAndroid, fadeOut]}>
+                    <View style={styles.centered}>
+                        <Animated.View style={scaleOut}>
+                            <Image
+                                source={require("../bootsplash_logo_white.png")}
+                                // eslint-disable-next-line react-native/no-inline-styles
+                                style={{ width: 1000 }}
+                                resizeMode="contain"
+                            />
+                        </Animated.View>
+                    </View>
+                </Animated.View>
+            )}
+        </>
+    ) : (
+        <View style={styles.containerIOS}>
             {colorLayer}
             <MaskedView
                 style={styles.innerContainer}
                 maskElement={
                     <View style={styles.centered}>
-                        <Animated.View style={animatedStyles}>
+                        <Animated.View style={scaleOut}>
                             <Image
                                 source={require("../bootsplash_logo_white.png")}
                                 // eslint-disable-next-line react-native/no-inline-styles
@@ -88,12 +122,35 @@ export const AnimatedSplashScreen = ({
             </MaskedView>
         </View>
     )
+
+    const animatedFadeOut = (
+        <>
+            {children}
+            {!animationDone && (
+                <Animated.View style={[styles.containerFadeOut, fadeOut]} />
+            )}
+        </>
+    )
+
+    return useFadeOutAnimation ? animatedFadeOut : animatedScaleOut
 }
 
 const baseStyles = (theme: ColorThemeType) =>
     StyleSheet.create({
-        container: {
+        containerIOS: {
             flex: 1,
+        },
+        containerAndroid: {
+            position: "absolute",
+            top: 0,
+            left: 0,
+            right: 0,
+            bottom: 0,
+            backgroundColor: theme.colors.splashBackground,
+        },
+        containerFadeOut: {
+            flex: 1,
+            backgroundColor: theme.colors.background,
         },
         innerContainer: {
             flex: 1,
@@ -103,6 +160,8 @@ const baseStyles = (theme: ColorThemeType) =>
             alignItems: "center",
             justifyContent: "center",
         },
-        colorLayer: { backgroundColor: theme.colors.splashBackground },
+        colorLayer: {
+            backgroundColor: theme.colors.splashColorLayer,
+        },
         whiteLayer: { backgroundColor: COLORS.WHITE },
     })

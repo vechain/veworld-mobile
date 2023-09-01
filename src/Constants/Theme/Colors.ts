@@ -21,6 +21,7 @@ export type Colors = {
     backgroundReversed: string
     backgroundTransparent: string
     splashBackground: string
+    splashColorLayer: string
     card: string
     border: string
     notification: string
@@ -90,6 +91,7 @@ const light: Colors = {
     background: COLORS.LIGHT_GRAY,
     backgroundReversed: COLORS.DARK_PURPLE,
     backgroundTransparent: COLORS.LIGHT_GRAY_TRANSPARENT,
+    splashColorLayer: COLORS.DARK_PURPLE,
     splashBackground: COLORS.DARK_PURPLE,
     card: COLORS.WHITE,
     border: COLORS.DARK_PURPLE,
@@ -126,7 +128,8 @@ const dark: Colors = {
     background: COLORS.DARK_PURPLE,
     backgroundReversed: COLORS.GRAY,
     backgroundTransparent: COLORS.DARK_PURPLE_TRANSPARENT,
-    splashBackground: COLORS.LIME_GREEN,
+    splashColorLayer: COLORS.LIME_GREEN,
+    splashBackground: COLORS.DARK_PURPLE,
     card: COLORS.PURPLE,
     border: COLORS.WHITE,
     notification: COLORS.WHITE,
