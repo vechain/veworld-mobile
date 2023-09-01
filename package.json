@@ -120,7 +120,6 @@
     "react-native-device-info": "^10.7.0",
     "react-native-draggable-flatlist": "4.0.1",
     "react-native-drop-shadow": "^0.0.6",
-    "react-native-exception-handler": "^2.10.10",
     "react-native-fast-image": "^8.6.3",
     "react-native-flipper": "0.163.0",
     "react-native-gesture-handler": "2.9.0",
