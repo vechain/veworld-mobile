@@ -59,6 +59,8 @@ export const NFTImage = memo((props: Props) => {
                     <Image
                         style={[
                             baseStyles.placeholder,
+                            // @ts-ignore
+                            style,
                             { width: w, height: h },
                         ]}
                     />
@@ -66,6 +68,7 @@ export const NFTImage = memo((props: Props) => {
                         blurAmount={10}
                         style={[
                             baseStyles.placeholder,
+                            style,
                             { width: w, height: h },
                         ]}
                     />
