@@ -205,7 +205,7 @@ export const HistoryScreen = () => {
                             hasFetched ? (
                                 <BaseSpacer height={20} />
                             ) : (
-                                <BaseView mx={20} pt={12}>
+                                <BaseView mx={20}>
                                     <SkeletonActivityBox />
                                 </BaseView>
                             )

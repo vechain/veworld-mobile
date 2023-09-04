@@ -31,16 +31,16 @@ export const SkeletonActivityBox = () => {
                             children: [
                                 // Line
                                 {
-                                    width: "40%",
-                                    height: 18,
-                                    marginLeft: 10,
+                                    width: "20%",
+                                    height: 10,
+                                    marginLeft: 12,
                                 },
                                 // Short line
                                 {
-                                    marginTop: 6,
+                                    marginTop: 10,
                                     width: "30%",
-                                    height: 14,
-                                    marginLeft: 10,
+                                    height: 8,
+                                    marginLeft: 12,
                                 },
                             ],
                         },
