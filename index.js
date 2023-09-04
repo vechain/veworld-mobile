@@ -29,7 +29,6 @@ import {
 import { typography } from "~Constants"
 import { AnalyticsUtils, info } from "~Utils"
 import { BottomSheetModalProvider } from "@gorhom/bottom-sheet"
-import "./errorHandler"
 import { StoreContextProvider } from "~Components/Providers/StoreProvider"
 import {
     selectAnalyticsTrackingEnabled,
