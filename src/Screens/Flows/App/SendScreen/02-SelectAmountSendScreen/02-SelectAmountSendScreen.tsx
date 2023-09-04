@@ -170,7 +170,7 @@ export const SelectAmountSendScreen = ({ route }: Props) => {
             safeAreaTestID="Select_Amount_Send_Screen"
             isScrollEnabled={false}
             title={LL.SEND_TOKEN_TITLE()}
-            showSelectedNetwork={true}
+            showSelectedNetwork
             noStaticBottomPadding
             body={
                 <DismissKeyboardView>

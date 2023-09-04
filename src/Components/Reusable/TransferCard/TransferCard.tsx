@@ -9,6 +9,7 @@ import {
     BaseSpacer,
     BaseText,
     BaseView,
+    LedgerBadge,
     PaginatedDot,
     PicassoAddressIcon,
 } from "~Components"
@@ -26,6 +27,8 @@ type Props = {
     fromAddress: string
     toAddresses?: Array<string>
     onAddContactPress?: (address: string) => void
+    isFromAccountLedger?: boolean
+    isToAccountLedger?: boolean
 }
 
 enum PROVENANCE {
@@ -34,7 +37,13 @@ enum PROVENANCE {
 }
 
 export const TransferCard = memo(
-    ({ fromAddress, toAddresses, onAddContactPress }: Props) => {
+    ({
+        fromAddress,
+        toAddresses,
+        onAddContactPress,
+        isFromAccountLedger,
+        isToAccountLedger,
+    }: Props) => {
         const { LL } = useI18nContext()
 
         const { styles, theme } = useThemedStyles(baseStyles)
@@ -119,6 +128,7 @@ export const TransferCard = memo(
                 _address: string,
                 addressShort: string,
                 contactName?: string,
+                isLedger?: boolean,
             ) => {
                 const provenanceText =
                     provenance === PROVENANCE.FROM ? LL.FROM() : LL.TO()
@@ -140,17 +150,24 @@ export const TransferCard = memo(
                                         {contactName}
                                     </BaseText>
                                 )}
-                                <BaseText
-                                    typographyFont={
-                                        contactName
-                                            ? "captionRegular"
-                                            : "button"
-                                    }
-                                    pt={3}>
-                                    {addressShort}
-                                </BaseText>
+                                <BaseView flexDirection="row" mt={3}>
+                                    {isLedger && (
+                                        <>
+                                            <LedgerBadge />
+                                            <BaseSpacer width={8} />
+                                        </>
+                                    )}
+                                    <BaseText
+                                        typographyFont={
+                                            contactName
+                                                ? "captionRegular"
+                                                : "button"
+                                        }>
+                                        {addressShort}
+                                    </BaseText>
+                                </BaseView>
                             </BaseView>
-                            {!contactName && (
+                            {!contactName && onAddContactPress && (
                                 <BaseView pl={12}>
                                     <BaseIcon
                                         haptics="Light"
@@ -159,13 +176,8 @@ export const TransferCard = memo(
                                         bg={COLORS.LIME_GREEN}
                                         iconPadding={3}
                                         color={COLORS.DARK_PURPLE}
-                                        action={
-                                            onAddContactPress
-                                                ? () =>
-                                                      onAddContactPress(
-                                                          _address,
-                                                      )
-                                                : undefined
+                                        action={() =>
+                                            onAddContactPress(_address)
                                         }
                                     />
                                 </BaseView>
@@ -187,8 +199,15 @@ export const TransferCard = memo(
                 _address,
                 addressShort,
                 contactName,
+                isFromAccountLedger,
             )
-        }, [fromAddress, fromAddressShort, fromContactName, renderAccount])
+        }, [
+            fromAddress,
+            fromAddressShort,
+            fromContactName,
+            isFromAccountLedger,
+            renderAccount,
+        ])
 
         const renderToAccount = useCallback(
             ({ index }: { index: number }) => {
@@ -201,9 +220,16 @@ export const TransferCard = memo(
                     _address,
                     addressShort,
                     contactName,
+                    isToAccountLedger,
                 )
             },
-            [renderAccount, toAddresses, toAddressesShort, toContactNames],
+            [
+                isToAccountLedger,
+                renderAccount,
+                toAddresses,
+                toAddressesShort,
+                toContactNames,
+            ],
         )
 
         const onViewableItemsChanged = useCallback(

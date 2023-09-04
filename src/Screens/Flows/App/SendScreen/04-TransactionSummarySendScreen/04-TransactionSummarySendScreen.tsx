@@ -1,19 +1,20 @@
 import React, { useCallback, useMemo } from "react"
 import { NativeStackScreenProps } from "@react-navigation/native-stack"
-import { StyleSheet } from "react-native"
-import { useAnalyticTracking, useTheme, useTransactionScreen } from "~Hooks"
+import {
+    useAnalyticTracking,
+    useTheme,
+    useTransactionScreen,
+    useTransferAddContact,
+} from "~Hooks"
 import { AddressUtils, FormattingUtils } from "~Utils"
 import { AnalyticsEvent, COLORS } from "~Constants"
 import {
-    AccountIcon,
-    BaseCardGroup,
-    BaseIcon,
     BaseSpacer,
     BaseText,
     BaseView,
     Layout,
-    LedgerBadge,
     RequireUserPassword,
+    TransferCard,
 } from "~Components"
 import {
     RootStackParamListDiscover,
@@ -25,7 +26,6 @@ import {
     selectAccounts,
     selectCurrency,
     selectCurrencyExchangeRate,
-    selectKnownContacts,
     selectPendingTx,
     selectSelectedAccount,
     setIsAppLoading,
@@ -34,9 +34,10 @@ import {
 } from "~Storage/Redux"
 import { useI18nContext } from "~i18n"
 import { useNavigation } from "@react-navigation/native"
-import { DEVICE_TYPE } from "~Model"
+import { ContactType, DEVICE_TYPE } from "~Model"
 import { prepareFungibleClause } from "~Utils/TransactionUtils/TransactionUtils"
 import { Transaction } from "thor-devkit"
+import { ContactManagementBottomSheet } from "../../ContactsScreen"
 
 type Props = NativeStackScreenProps<
     RootStackParamListHome & RootStackParamListDiscover,
@@ -53,8 +54,6 @@ export const TransactionSummarySendScreen = ({ route }: Props) => {
     const nav = useNavigation()
 
     // TODO (Vas) (https://github.com/vechainfoundation/veworld-mobile/issues/763) refactor to a new hook
-    const accounts = useAppSelector(selectAccounts)
-    const contacts = useAppSelector(selectKnownContacts)
     const account = useAppSelector(selectSelectedAccount)
     const currency = useAppSelector(selectCurrency)
     const exchangeRate = useAppSelector(state =>
@@ -64,10 +63,13 @@ export const TransactionSummarySendScreen = ({ route }: Props) => {
         selectPendingTx(state, token.address),
     )
 
-    const accountsAndContacts = useMemo(
-        () => [...accounts, ...contacts],
-        [accounts, contacts],
-    )
+    const {
+        onAddContactPress,
+        handleSaveContact,
+        addContactSheet,
+        selectedContactAddress,
+        closeAddContactSheet,
+    } = useTransferAddContact()
 
     const formattedFiatAmount = useMemo(
         () =>
@@ -133,127 +135,31 @@ export const TransactionSummarySendScreen = ({ route }: Props) => {
         initialRoute: Routes.HOME,
     })
 
-    const ReceiverDetails = useCallback(() => {
-        const receiverExists = accountsAndContacts.find(_account =>
-            AddressUtils.compareAddresses(_account.address, address),
-        )
-
-        const receiverIsAccount = accounts.find(_account =>
-            AddressUtils.compareAddresses(_account.address, address),
-        )
-
-        if (receiverExists)
-            return (
-                <BaseView>
-                    <BaseText typographyFont="subSubTitle">
-                        {receiverExists.alias}
-                    </BaseText>
-                    <BaseView flexDirection="row" mt={3}>
-                        {receiverIsAccount?.device.type ===
-                            DEVICE_TYPE.LEDGER && (
-                            <LedgerBadge //eslint-disable-next-line react-native/no-inline-styles
-                                containerStyle={{
-                                    mr: 8,
-                                }}
-                            />
-                        )}
-                        <BaseText typographyFont="captionRegular">
-                            {FormattingUtils.humanAddress(
-                                receiverExists.address || "",
-                            )}
-                        </BaseText>
-                    </BaseView>
-                </BaseView>
-            )
-
-        return (
-            <BaseView>
-                <BaseText typographyFont="subSubTitle">
-                    {FormattingUtils.humanAddress(address)}
-                </BaseText>
-            </BaseView>
-        )
-    }, [accountsAndContacts, address, accounts])
+    const accounts = useAppSelector(selectAccounts)
+    const receiverIsAccount = accounts.find(_account =>
+        AddressUtils.compareAddresses(_account.address, address),
+    )
 
     return (
         <Layout
             safeAreaTestID="Transaction_Summary_Send_Screen"
             title={LL.SEND_TOKEN_TITLE()}
-            showSelectedNetwork={true}
+            showSelectedNetwork
             noStaticBottomPadding
             body={
                 <BaseView mb={80} mt={8}>
-                    {/* TODO (Vas) (https://github.com/vechainfoundation/veworld-mobile/issues/767) CHange BaseCardGroup with TransferCard */}
-                    <BaseCardGroup
-                        views={[
-                            {
-                                children: (
-                                    <BaseView
-                                        flex={1}
-                                        style={styles.addressContainer}
-                                        alignItems="flex-start">
-                                        <BaseText typographyFont="captionBold">
-                                            {LL.SEND_FROM()}
-                                        </BaseText>
-                                        <BaseSpacer height={8} />
-                                        <BaseView flexDirection="row">
-                                            <AccountIcon
-                                                address={account.address}
-                                            />
-                                            <BaseSpacer width={8} />
-                                            <BaseView>
-                                                <BaseText typographyFont="subSubTitle">
-                                                    {account.alias}
-                                                </BaseText>
-                                                <BaseView
-                                                    flexDirection="row"
-                                                    mt={3}>
-                                                    {account.device?.type ===
-                                                        DEVICE_TYPE.LEDGER && (
-                                                        <LedgerBadge
-                                                            //eslint-disable-next-line react-native/no-inline-styles
-                                                            containerStyle={{
-                                                                mr: 8,
-                                                            }}
-                                                        />
-                                                    )}
-                                                    <BaseText typographyFont="captionRegular">
-                                                        {FormattingUtils.humanAddress(
-                                                            account.address,
-                                                        )}
-                                                    </BaseText>
-                                                </BaseView>
-                                            </BaseView>
-                                        </BaseView>
-                                        <BaseIcon
-                                            name={"arrow-down"}
-                                            size={20}
-                                            color={COLORS.WHITE}
-                                            bg={COLORS.DARK_PURPLE_DISABLED}
-                                            style={styles.icon}
-                                        />
-                                    </BaseView>
-                                ),
-                                style: styles.addressView,
-                            },
-                            {
-                                children: (
-                                    <BaseView flex={1} alignItems="flex-start">
-                                        <BaseText typographyFont="captionBold">
-                                            {LL.SEND_TO()}
-                                        </BaseText>
-                                        <BaseSpacer height={8} />
-                                        <BaseView flexDirection="row">
-                                            <AccountIcon address={address} />
-                                            <BaseSpacer width={8} />
-                                            {ReceiverDetails()}
-                                        </BaseView>
-                                    </BaseView>
-                                ),
-                            },
-                        ]}
+                    <TransferCard
+                        fromAddress={account.address}
+                        toAddresses={[address]}
+                        onAddContactPress={onAddContactPress}
+                        isFromAccountLedger={
+                            account.device?.type === DEVICE_TYPE.LEDGER
+                        }
+                        isToAccountLedger={
+                            receiverIsAccount?.device.type ===
+                            DEVICE_TYPE.LEDGER
+                        }
                     />
-
                     {!!pendingTransaction && (
                         <>
                             <BaseSpacer height={24} />
@@ -320,27 +226,21 @@ export const TransactionSummarySendScreen = ({ route }: Props) => {
                     <BaseText typographyFont="subSubTitle">
                         {LL.SEND_LESS_THAN_1_MIN()}
                     </BaseText>
+                    <ContactManagementBottomSheet
+                        ref={addContactSheet}
+                        contact={{
+                            alias: "",
+                            address: selectedContactAddress ?? "",
+                            type: ContactType.KNOWN,
+                        }}
+                        onClose={closeAddContactSheet}
+                        onSaveContact={handleSaveContact}
+                        isAddingContact={true}
+                        checkTouched={false}
+                    />
                 </BaseView>
             }
             footer={SubmitButton()}
         />
     )
 }
-
-const styles = StyleSheet.create({
-    icon: {
-        position: "absolute",
-        right: 16,
-        bottom: -32,
-        padding: 8,
-    },
-    nextButton: {
-        marginBottom: 70,
-    },
-    addressContainer: {
-        overflow: "visible",
-    },
-    addressView: {
-        zIndex: 2,
-    },
-})

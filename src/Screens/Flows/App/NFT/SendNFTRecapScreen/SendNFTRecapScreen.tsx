@@ -4,7 +4,6 @@ import { RootStackParamListNFT } from "~Navigation/Stacks/NFTStack"
 import { Routes } from "~Navigation"
 import {
     BaseSpacer,
-    BaseText,
     BaseView,
     Layout,
     NFTTransferCard,
@@ -14,6 +13,7 @@ import {
 import { useI18nContext } from "~i18n"
 import {
     addPendingNFTtransferTransactionActivity,
+    selectAccounts,
     selectNFTWithAddressAndTokenId,
     selectSelectedAccount,
     setIsAppLoading,
@@ -21,11 +21,18 @@ import {
     useAppSelector,
 } from "~Storage/Redux"
 import { InfoSectionView } from "../NFTDetailScreen/Components"
-import { useAnalyticTracking, useTransactionScreen } from "~Hooks"
+import {
+    useAnalyticTracking,
+    useTransactionScreen,
+    useTransferAddContact,
+} from "~Hooks"
 import { StackActions, useNavigation } from "@react-navigation/native"
 import { prepareNonFungibleClause } from "~Utils/TransactionUtils/TransactionUtils"
 import { Transaction } from "thor-devkit"
 import { AnalyticsEvent } from "~Constants"
+import { ContactType, DEVICE_TYPE } from "~Model"
+import { ContactManagementBottomSheet } from "../../ContactsScreen"
+import { AddressUtils } from "~Utils"
 
 type Props = NativeStackScreenProps<
     RootStackParamListNFT,
@@ -93,21 +100,43 @@ export const SendNFTRecapScreen = ({ route }: Props) => {
         initialRoute: Routes.HOME,
     })
 
+    const {
+        onAddContactPress,
+        handleSaveContact,
+        addContactSheet,
+        selectedContactAddress,
+        closeAddContactSheet,
+    } = useTransferAddContact()
+
+    const accounts = useAppSelector(selectAccounts)
+    const receiverAccount = accounts.find(_account =>
+        AddressUtils.compareAddresses(
+            _account.address,
+            route.params.receiverAddress,
+        ),
+    )
+
     return (
         <Layout
+            noStaticBottomPadding
             safeAreaTestID="Send_NFT_Recap_Screen"
-            showSelectedNetwork={true}
+            showSelectedNetwork
+            title={LL.RECAP()}
             body={
                 <>
-                    <BaseView>
-                        <BaseSpacer height={16} />
-                        <BaseText typographyFont="title">{LL.RECAP()}</BaseText>
-
-                        <BaseSpacer height={24} />
-
+                    <BaseView mb={80}>
                         <TransferCard
                             fromAddress={selectedAccount.address}
                             toAddresses={[route.params.receiverAddress]}
+                            onAddContactPress={onAddContactPress}
+                            isFromAccountLedger={
+                                selectedAccount.device?.type ===
+                                DEVICE_TYPE.LEDGER
+                            }
+                            isToAccountLedger={
+                                receiverAccount?.device.type ===
+                                DEVICE_TYPE.LEDGER
+                            }
                         />
 
                         <BaseSpacer height={24} />
@@ -139,6 +168,18 @@ export const SendNFTRecapScreen = ({ route }: Props) => {
                         isOpen={isPasswordPromptOpen}
                         onClose={handleClosePasswordModal}
                         onSuccess={onPasswordSuccess}
+                    />
+                    <ContactManagementBottomSheet
+                        ref={addContactSheet}
+                        contact={{
+                            alias: "",
+                            address: selectedContactAddress ?? "",
+                            type: ContactType.KNOWN,
+                        }}
+                        onClose={closeAddContactSheet}
+                        onSaveContact={handleSaveContact}
+                        isAddingContact={true}
+                        checkTouched={false}
                     />
                 </>
             }
