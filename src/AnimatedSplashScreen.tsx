@@ -13,7 +13,6 @@ import { PlatformUtils } from "~Utils"
 
 type Props = {
     playAnimation: boolean
-    animationDelay?: number
     useFadeOutAnimation?: boolean
     children: React.ReactNode
 }
@@ -34,7 +33,6 @@ type Props = {
  */
 export const AnimatedSplashScreen = ({
     playAnimation,
-    animationDelay,
     useFadeOutAnimation,
     children,
 }: Props): React.ReactElement => {
@@ -45,19 +43,15 @@ export const AnimatedSplashScreen = ({
 
     useEffect(() => {
         const startSplashScreenAnimation = () => {
-            loadingProgress.value = withTiming(
-                100,
-                { duration: useFadeOutAnimation ? 50 : 800 },
-                () => {
-                    runOnJS(setAnimationDone)(true)
-                },
-            )
+            loadingProgress.value = withTiming(100, { duration: 800 }, () => {
+                runOnJS(setAnimationDone)(true)
+            })
         }
 
         if (playAnimation) {
-            setTimeout(() => startSplashScreenAnimation(), animationDelay ?? 1)
+            startSplashScreenAnimation()
         }
-    }, [playAnimation, loadingProgress, animationDelay, useFadeOutAnimation])
+    }, [playAnimation, loadingProgress])
 
     const colorLayer = animationDone ? null : (
         <View style={[StyleSheet.absoluteFill, styles.colorLayer]} />
