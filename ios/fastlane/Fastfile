@@ -213,6 +213,7 @@ platform :ios do
       )
 
 
+=begin
       # if new version is specified rotate certificates
       if !versionType.nil? 
         # rotate certificates
@@ -221,6 +222,9 @@ platform :ios do
         # use same certificates get them from github
         fetch_certificates_from_gh
       end
+=end
+
+      fetch_certificates_from_gh
 
       # build app
       build_app(
@@ -247,17 +251,19 @@ platform :ios do
         create_changelog(version:version)
 
         add_git_tag(
-          tag: "v#{version}-ios"
+          tag: "v#{version}-#{build}-ios"
         )
 
         push_git_tags
 
+=begin
         # push to github latest artifacts
         gh_setup_after(
           github_username:github_username, 
           github_token:github_token,
           build_or_version_number:version
         )
+=end
       end
 
       # create pull request
