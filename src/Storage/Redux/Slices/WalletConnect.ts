@@ -1,15 +1,19 @@
 import { createSlice, Draft, PayloadAction } from "@reduxjs/toolkit"
 import { SessionTypes } from "@walletconnect/types"
+import { Verify } from "@walletconnect/types/dist/types/core/verify"
 
 /**
  * One account can have multiple sessions.
  *
  * Mapping account address => Sessions
  */
-type WalletConnectSessionsSliceState = Record<
-    string,
-    Array<SessionTypes.Struct>
->
+
+export type ConnectedApp = {
+    session: SessionTypes.Struct
+    verifyContext: Verify.Context
+}
+
+type WalletConnectSessionsSliceState = Record<string, Array<ConnectedApp>>
 
 export const initialSessionsState: WalletConnectSessionsSliceState = {}
 
@@ -21,20 +25,20 @@ export const WalletConnectSessionsSlice = createSlice({
             state: Draft<WalletConnectSessionsSliceState>,
             action: PayloadAction<{
                 address: string
-                session: SessionTypes.Struct
+                connectedApp: ConnectedApp
             }>,
         ) => {
-            const { address, session } = action.payload
+            const { address, connectedApp } = action.payload
 
             if (!state[address]) {
                 state[address] = []
             }
 
             const sessionExists = state[address].find(
-                currentSession => currentSession.topic === session.topic,
+                app => connectedApp.session.topic === app.session.topic,
             )
             if (!sessionExists) {
-                state[address].push(session)
+                state[address].push(connectedApp)
             }
         },
         deleteSession: (
@@ -47,7 +51,7 @@ export const WalletConnectSessionsSlice = createSlice({
 
             for (const address in state) {
                 const sessionExistsIndex = state[address].findIndex(
-                    currentSession => currentSession.topic === topic,
+                    app => app.session.topic === topic,
                 )
 
                 if (sessionExistsIndex !== -1) {

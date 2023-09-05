@@ -14,6 +14,7 @@ import {
 } from "~Components"
 import {
     addPendingDappTransactionActivity,
+    selectedConnectedApp,
     selectSelectedAccount,
     selectSelectedNetwork,
     selectTokensWithInfo,
@@ -34,7 +35,7 @@ import { NativeStackScreenProps } from "@react-navigation/native-stack"
 import { useNavigation } from "@react-navigation/native"
 import { ClausesCarousel } from "../../ActivityDetailsScreen/Components"
 import { Transaction } from "thor-devkit"
-import { TransactionDetails } from "~Screens"
+import { TransactionDetails, UnknownAppMessage } from "~Screens"
 import { AnalyticsEvent } from "~Constants"
 
 type Props = NativeStackScreenProps<
@@ -56,6 +57,8 @@ export const SendTransactionScreen: FC<Props> = ({ route }: Props) => {
     const nav = useNavigation()
     const track = useAnalyticTracking()
 
+    const [isInvalidChecked, setInvalidChecked] = React.useState(false)
+
     const network = useAppSelector(selectSelectedNetwork)
     const selectedAccount = useAppSelector(selectSelectedAccount)
     const tokens = useAppSelector(selectTokensWithInfo)
@@ -69,6 +72,16 @@ export const SendTransactionScreen: FC<Props> = ({ route }: Props) => {
         () => WalletConnectUtils.getSessionRequestAttributes(sessionRequest),
         [sessionRequest],
     )
+
+    const connectedApp = useAppSelector(state => {
+        return selectedConnectedApp(state, topic)
+    })
+
+    const validConnectedApp = useMemo(() => {
+        if (!connectedApp) return true
+
+        return connectedApp.verifyContext.verified.validation === "VALID"
+    }, [connectedApp])
 
     const clausesMetadata = useMemo(
         () => TransactionUtils.interpretClauses(message, tokens),
@@ -232,6 +245,14 @@ export const SendTransactionScreen: FC<Props> = ({ route }: Props) => {
                     {!!clausesMetadata.length && (
                         <ClausesCarousel clausesMetadata={clausesMetadata} />
                     )}
+
+                    <BaseSpacer height={30} />
+
+                    <UnknownAppMessage
+                        verifyContext={connectedApp?.verifyContext}
+                        confirmed={isInvalidChecked}
+                        setConfirmed={setInvalidChecked}
+                    />
                 </BaseView>
 
                 <BaseSpacer height={40} />
@@ -241,7 +262,11 @@ export const SendTransactionScreen: FC<Props> = ({ route }: Props) => {
                         haptics="Light"
                         title={LL.COMMON_BTN_SIGN_AND_SEND()}
                         action={onSubmit}
-                        disabled={isLoading || continueNotAllowed}
+                        disabled={
+                            isLoading ||
+                            continueNotAllowed ||
+                            (!validConnectedApp && !isInvalidChecked)
+                        }
                         isLoading={isLoading}
                     />
                     <BaseSpacer height={16} />
