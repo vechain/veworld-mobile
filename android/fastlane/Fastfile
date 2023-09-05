@@ -191,6 +191,8 @@ platform :android do
         }
       )
   
+
+=begin
       upload_to_play_store(
         verbose: true,
         release_status: release_status,
@@ -202,7 +204,7 @@ platform :android do
       )
 
       push_git_tags
-
+=end
 
 =begin
       # create changelog and tag if version is specified
