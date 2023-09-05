@@ -290,7 +290,7 @@ describe("URIUtils", () => {
     describe("convertUriToUrl", () => {
         it("should return IPFS URL", () => {
             expect(URIUtils.convertUriToUrl("ipfs://QmZ1YXJzZS5jb20")).toBe(
-                "https://ipfs.io/ipfs/QmZ1YXJzZS5jb20",
+                "https://api.vorj.app/ipfs/QmZ1YXJzZS5jb20",
             )
         })
 
