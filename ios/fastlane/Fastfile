@@ -228,9 +228,6 @@ platform :ios do
         ipa: "./build/VeWorld.ipa",
       )
 
-      # upload source maps to sentry
-      # upload_source_maps_to_sentry(build:build)
-
       create_changelog(version:version)
 
       add_git_tag(
@@ -307,3 +304,7 @@ end
     end
   end
 =end
+
+
+# upload source maps to sentry      
+# upload_source_maps_to_sentry(build:build)
