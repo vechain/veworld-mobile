@@ -232,12 +232,15 @@ platform :ios do
         output_directory: "./build",
       )
         
+
+=begin
       # upload to testflight
       upload_to_testflight(
         skip_waiting_for_build_processing: true, 
         apple_id: "6446854569",
         ipa: "./build/VeWorld.ipa",
       )
+=end
 
       # upload source maps to sentry
       # upload_source_maps_to_sentry(build:build)
