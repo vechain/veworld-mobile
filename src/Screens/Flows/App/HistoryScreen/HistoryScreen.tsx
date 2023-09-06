@@ -287,7 +287,7 @@ export const HistoryScreen = () => {
     return (
         <Layout
             safeAreaTestID="History_Screen"
-            showSelectedNetwork={true}
+            showSelectedNetwork
             fixedHeader={
                 <>
                     <BaseView

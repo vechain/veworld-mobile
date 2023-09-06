@@ -12,7 +12,7 @@ import {
 } from "~Components"
 import { RootStackParamListHome, Routes } from "~Navigation"
 import { Linking } from "react-native"
-import { useBottomSheetModal } from "~Hooks"
+import { useBottomSheetModal, useTransferAddContact } from "~Hooks"
 import { DateUtils, HexUtils, TransactionUtils } from "~Utils"
 import { useI18nContext } from "~i18n"
 import { getActivityTitle } from "./util"
@@ -35,11 +35,9 @@ import {
     ConnectedAppDetails,
 } from "./Components"
 import { ContactManagementBottomSheet } from "../ContactsScreen"
-import { addContact } from "~Storage/Redux/Actions/Contacts"
 import {
     selectActivity,
     selectSelectedNetwork,
-    useAppDispatch,
     useAppSelector,
 } from "~Storage/Redux"
 import { AddCustomTokenBottomSheet } from "../ManageCustomTokenScreen/BottomSheets"
@@ -60,11 +58,6 @@ export const ActivityDetailsScreen = ({ route }: Props) => {
 
     const { LL, locale } = useI18nContext()
 
-    const dispatch = useAppDispatch()
-
-    const [selectedContactAddress, setSelectedContactAddress] =
-        useState<string>()
-
     const [customTokenAddress, setCustomTokenAddress] = useState<string>()
 
     const activityFromStore = useAppSelector(state =>
@@ -78,10 +71,12 @@ export const ActivityDetailsScreen = ({ route }: Props) => {
     } = useBottomSheetModal()
 
     const {
-        ref: addContactSheet,
-        onOpen: openAddContactSheet,
-        onClose: closeAddContactSheet,
-    } = useBottomSheetModal()
+        onAddContactPress,
+        handleSaveContact,
+        addContactSheet,
+        selectedContactAddress,
+        closeAddContactSheet,
+    } = useTransferAddContact()
 
     const swapResult = useMemo(() => {
         if (
@@ -180,15 +175,6 @@ export const ActivityDetailsScreen = ({ route }: Props) => {
         }
     }, [activity, activityFromStore, token])
 
-    const onAddContactPress = useCallback(
-        (address: string) => {
-            setSelectedContactAddress(address)
-
-            openAddContactSheet()
-        },
-        [openAddContactSheet],
-    )
-
     const onAddCustomToken = useCallback(
         (tokenAddress: string) => {
             setCustomTokenAddress(tokenAddress)
@@ -198,21 +184,11 @@ export const ActivityDetailsScreen = ({ route }: Props) => {
         [openAddCustomTokenSheet],
     )
 
-    const handleSaveContact = useCallback(
-        (_alias: string, _address: string) => {
-            if (selectedContactAddress) {
-                dispatch(addContact(_alias, _address))
-                closeAddContactSheet()
-            }
-        },
-        [closeAddContactSheet, dispatch, selectedContactAddress],
-    )
-
     return (
         <>
             <Layout
                 safeAreaTestID="Activity_Details_Screen"
-                showSelectedNetwork={true}
+                showSelectedNetwork
                 noStaticBottomPadding
                 title={getActivityTitle(activity, LL, isSwap)}
                 body={

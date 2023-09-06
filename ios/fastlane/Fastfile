@@ -74,6 +74,7 @@ platform :ios do
     sh("./rotate_match_password.sh") # Generate new password for the certificates.
     nuke_appstore_certificates # CAUTION!!! This lane will prompt you to choose which sertificate to revoke. Make sure you choose the right one.
     remove_certificates_from_gh # Remove the certificates from GitHub.
+    # Before the next step - Need to run fastlane match change_password and use the new password generated in the previous step.
     generate_new_certificates # Generate new certificates.
   end
 
@@ -169,10 +170,6 @@ platform :ios do
     versionType = options[:version]
     buildNumber = options[:build]
 
-    #prepare git
-    # ensure_git_status_clean
-    # ensure_git_branch(branch: "main")
-
     # clean build artifacts if any
     clean_build_artifacts
 
@@ -194,6 +191,8 @@ platform :ios do
         version = increment_version_number_in_plist(bump_type: versionType.downcase, xcodeproj: "VeWorld.xcodeproj")
                   increment_version_number_in_xcodeproj(version_number: versionType.downcase, xcodeproj: "VeWorld.xcodeproj")
       end
+    else
+      version = get_version_number(xcodeproj: "VeWorld.xcodeproj")
     end
 
     # update yarn packages and pods
@@ -212,15 +211,7 @@ platform :ios do
         build_or_version_number: versionType.nil? ? build : version
       )
 
-
-      # if new version is specified rotate certificates
-      if !versionType.nil? 
-        # rotate certificates
-        rotate_certificates
-      else 
-        # use same certificates get them from github
-        fetch_certificates_from_gh
-      end
+      fetch_certificates_from_gh
 
       # build app
       build_app(
@@ -239,26 +230,13 @@ platform :ios do
         ipa: "./build/VeWorld.ipa",
       )
 
-      # upload source maps to sentry
-      # upload_source_maps_to_sentry(build:build)
+      create_changelog(version:version)
 
-      # create changelog and tag if version is specified
-      if !versionType.nil?
-        create_changelog(version:version)
+      add_git_tag(
+        tag: "v#{version}-#{build}-ios"
+      )
 
-        add_git_tag(
-          tag: "v#{version}-ios"
-        )
-
-        push_git_tags
-
-        # push to github latest artifacts
-        gh_setup_after(
-          github_username:github_username, 
-          github_token:github_token,
-          build_or_version_number:version
-        )
-      end
+      push_git_tags
 
       # create pull request
       create_pull_request(
@@ -328,3 +306,7 @@ end
     end
   end
 =end
+
+
+# upload source maps to sentry      
+# upload_source_maps_to_sentry(build:build)

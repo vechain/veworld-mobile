@@ -138,7 +138,13 @@ export const NFTView = memo(({ nft, index, collection }: Props) => {
         </TouchableOpacity>
     ) : (
         <SkeletonContent
-            containerStyle={styles.nftPreviewImage}
+            containerStyle={[
+                styles.nftContainer,
+                // eslint-disable-next-line react-native/no-inline-styles
+                {
+                    justifyContent: index % 2 === 0 ? "flex-start" : "flex-end",
+                },
+            ]}
             animationDirection="horizontalLeft"
             boneColor={theme.colors.skeletonBoneColor}
             highlightColor={theme.colors.skeletonHighlightColor}

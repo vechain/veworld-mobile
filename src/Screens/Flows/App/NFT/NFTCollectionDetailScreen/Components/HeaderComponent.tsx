@@ -90,14 +90,14 @@ export const HeaderComponent = memo(
                 <>
                     <BaseSpacer height={24} />
 
-                    {!isEmpty(collection.description) ? (
+                    {!isEmpty(collection.description) && (
                         <>
                             <BaseText mb={12}>{LL.SB_DESCRIPTION()}</BaseText>
                             <BaseText typographyFont="bodyBold">
                                 {collection.description}
                             </BaseText>
                         </>
-                    ) : null}
+                    )}
 
                     <BaseSpacer height={24} />
                     <BaseText typographyFont="biggerTitle">

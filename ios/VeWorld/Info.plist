@@ -35,7 +35,7 @@
 		</dict>
 	</array>
 	<key>CFBundleVersion</key>
-	<string>72</string>
+	<string>88</string>
 	<key>ITSAppUsesNonExemptEncryption</key>
 	<false/>
 	<key>LSRequiresIPhoneOS</key>
@@ -52,15 +52,17 @@
 		</dict>
 	</dict>
 	<key>NSBluetoothAlwaysUsageDescription</key>
-	<string>$(PRODUCT_NAME) requires Bluetooth access.</string>
+	<string>$(PRODUCT_NAME) requires Bluetooth access to connect to your Ledger hardware wallet.</string>
 	<key>NSCameraUsageDescription</key>
-	<string>$(PRODUCT_NAME) requires Camera access.</string>
+	<string>$(PRODUCT_NAME) needs camera access to scan QR codes for VeChain addresses and
+			connecting to dApps.</string>
 	<key>NSFaceIDUsageDescription</key>
-	<string>$(PRODUCT_NAME) requires that you use Face ID to secure your wallet.</string>
+	<string>$(PRODUCT_NAME) uses Face ID to enhance the security of your wallet on this device.</string>
 	<key>NSLocationWhenInUseUsageDescription</key>
-	<string/>
+	<string>$(PRODUCT_NAME) requires your location when in use to ensure a secure connection with
+			your Ledger device.</string>
 	<key>NSMicrophoneUsageDescription</key>
-	<string>$(PRODUCT_NAME) requires Microphone access.</string>
+	<string>$(PRODUCT_NAME) needs microphone access.</string>
 	<key>UIAppFonts</key>
 	<array>
 		<string>fonts/MaterialIcons.ttf</string>
