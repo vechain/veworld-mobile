@@ -1,6 +1,7 @@
 import Arweave from "arweave"
 import { error } from "~Utils/Logger"
 import { MAX_IMAGE_SIZE, NFT_AXIOS_TIMEOUT } from "~Constants/Constants/NFT"
+import { identifyMimeType } from "~Utils/ImageUtils/ImageUtils"
 
 const arweave = Arweave.init({
     host: "arweave.net",
@@ -11,34 +12,6 @@ const arweave = Arweave.init({
 })
 
 const toID = (uri: string) => uri?.split("://")[1]
-
-const identifyMimeType = (buffer: Buffer): string | null => {
-    // Check the buffer length to prevent out-of-bounds errors
-    if (buffer.length < 4) {
-        return null
-    }
-
-    // Retrieve the first 4 bytes of the file
-    const magicBytes = buffer.subarray(0, 4)
-
-    // Define magic numbers for JPEG, PNG, and GIF
-    const jpgMagic = Buffer.from([0xff, 0xd8, 0xff])
-    const pngMagic = Buffer.from([0x89, 0x50, 0x4e, 0x47])
-    const gifMagic = Buffer.from([0x47, 0x49, 0x46, 0x38])
-
-    // Identify the file type based on magic numbers
-    if (Buffer.from(magicBytes.subarray(0, 3)).equals(jpgMagic)) {
-        return "image/jpeg"
-    }
-    if (Buffer.from(magicBytes.subarray(0, 4)).equals(pngMagic)) {
-        return "image/png"
-    }
-    if (Buffer.from(magicBytes.subarray(0, 4)).equals(gifMagic)) {
-        return "image/gif"
-    }
-
-    return null
-}
 
 export const getTokenImageArweave = async (uri: string): Promise<string> => {
     try {

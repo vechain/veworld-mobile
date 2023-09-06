@@ -10,7 +10,15 @@ export const getTokenImageIpfs = async (uri: string): Promise<string> => {
         })
 
         // Check if the MIME type is allowed
-        const allowedMimeTypes = ["image/jpeg", "image/png", "image/gif"]
+        const allowedMimeTypes = [
+            "image/jpeg",
+            "image/png",
+            "image/gif",
+            "image/bmp",
+            "image/tiff",
+            "image/webp",
+            "image/svg+xml",
+        ]
         if (!allowedMimeTypes.includes(response.data.type)) {
             throw new Error(`Unsupported MIME type: ${response.data.type}`)
         }
@@ -22,7 +30,7 @@ export const getTokenImageIpfs = async (uri: string): Promise<string> => {
                 resolve(reader.result as string)
             }
             reader.onerror = () => {
-                reject("Error occurred while reading blob.")
+                reject(Error("Error occurred while reading blob."))
             }
         })
     } catch (err) {
