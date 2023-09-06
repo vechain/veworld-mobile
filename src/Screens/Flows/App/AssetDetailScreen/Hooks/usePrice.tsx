@@ -100,15 +100,6 @@ export function useLineChartRelativeChange({
     const { currentIndex, data, isActive } = useLineChart()
 
     const relativeChange = useDerivedValue(() => {
-        if (!isActive.value && Boolean(spotRelativeChange)) {
-            // break early when chart is not active (scrubbing) and spot relative
-            // change is available
-            // this should only happen for the daily HistoryDuration where calculating
-            // relative change from historical data leads to data inconsistencies in
-            // the ui
-            return spotRelativeChange?.value ?? 0
-        }
-
         // when scrubbing, compute relative change from open price
         const openPrice = data[0]?.value
 
@@ -129,14 +120,14 @@ export function useLineChartRelativeChange({
         const change = ((closePrice - openPrice) / openPrice) * 100
 
         return change
-    })
+    }, [currentIndex.value, data, isActive.value, spotRelativeChange?.value])
 
     const relativeChangeFormatted = useDerivedValue(() => {
         return ReanimatedUtils.numberToPercentWorklet(relativeChange.value, {
             precision: 2,
             absolute: true,
         })
-    })
+    }, [relativeChange.value])
 
     return { value: relativeChange, formatted: relativeChangeFormatted }
 }

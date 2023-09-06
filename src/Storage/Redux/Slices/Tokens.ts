@@ -28,6 +28,10 @@ export const initialTokenState: TokensState = {
     assetDetailChartData: {},
     coinMarketInfo: {},
     coinGeckoTokens: [],
+    chartDataIsLoading: {
+        VET: false,
+        VTHO: false,
+    },
 }
 
 export const TokenSlice = createSlice({
@@ -74,6 +78,14 @@ export const TokenSlice = createSlice({
         ) => {
             const { symbol, data } = action.payload
             state.assetDetailChartData[symbol] = data
+        },
+
+        setChartDataIsLoading: (
+            state,
+            action: PayloadAction<{ symbol: string; isLoading: boolean }>,
+        ) => {
+            const { symbol, isLoading } = action.payload
+            state.chartDataIsLoading[symbol.toUpperCase()] = isLoading
         },
 
         setCoinMarketInfo: (
@@ -152,4 +164,5 @@ export const {
     setSuggestedTokens,
     resetTokensState,
     setCoinMarketInfo,
+    setChartDataIsLoading,
 } = TokenSlice.actions

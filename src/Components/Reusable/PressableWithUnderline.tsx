@@ -16,10 +16,11 @@ export const PressableWithUnderline = (props: Props) => {
 
     const onButtonPress = useCallback(
         (button: { label: string }, index: number) => {
+            if (index === activeIndex) return
             setActiveIndex(index)
             onPress(button.label)
         },
-        [onPress],
+        [activeIndex, onPress],
     )
 
     return (
