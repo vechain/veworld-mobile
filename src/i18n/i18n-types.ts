@@ -1243,6 +1243,22 @@ type RootTranslation = {
 	 */
 	CUSTOM_TOKENS_NOT_AVAIABLE: string
 	/**
+	 * U​n​v​e​r​i​f​i​e​d​ ​a​p​p
+	 */
+	UNVERIFIED_APP_TITLE: string
+	/**
+	 * T​h​e​ ​a​p​p​l​i​c​a​t​i​o​n​ ​t​h​a​t​ ​i​s​ ​m​a​k​i​n​g​ ​t​h​i​s​ ​r​e​q​u​e​s​t​ ​c​o​u​l​d​ ​n​o​t​ ​b​e​ ​v​e​r​i​f​i​e​d​.​ ​P​r​o​c​e​e​d​ ​a​t​ ​y​o​u​r​ ​o​w​n​ ​r​i​s​k​.
+	 */
+	APP_VERIFICATION_UNKNOWN: string
+	/**
+	 * C​o​n​n​e​c​t​i​o​n​ ​t​o​ ​t​h​i​s​ ​a​p​p​l​i​c​a​t​i​o​n​ ​i​s​ ​f​o​r​b​i​d​d​e​n​ ​a​s​ ​t​h​e​ ​r​e​q​u​e​s​t​ ​l​o​o​k​s​ ​m​a​l​i​c​i​o​u​s​.
+	 */
+	APP_VERIFICATION_INVALID: string
+	/**
+	 * P​l​e​a​s​e​ ​c​o​n​f​i​r​m​ ​t​h​a​t​ ​y​o​u​ ​w​o​u​l​d​ ​l​i​k​e​ ​t​o​ ​p​r​o​c​e​s​s​ ​t​h​i​s​ ​r​e​q​u​e​s​t​.
+	 */
+	APP_VERIFICATION_CONFIRM: string
+	/**
 	 * S​e​a​r​c​h​ ​a​ ​t​o​k​e​n
 	 */
 	PLACEHOLDER_SEARCH_TOKEN: string
@@ -3672,6 +3688,22 @@ Please, try again later.
 	 * Custom tokens are not available at the moment. Check your internet connection or try later
 	 */
 	CUSTOM_TOKENS_NOT_AVAIABLE: () => LocalizedString
+	/**
+	 * Unverified app
+	 */
+	UNVERIFIED_APP_TITLE: () => LocalizedString
+	/**
+	 * The application that is making this request could not be verified. Proceed at your own risk.
+	 */
+	APP_VERIFICATION_UNKNOWN: () => LocalizedString
+	/**
+	 * Connection to this application is forbidden as the request looks malicious.
+	 */
+	APP_VERIFICATION_INVALID: () => LocalizedString
+	/**
+	 * Please confirm that you would like to process this request.
+	 */
+	APP_VERIFICATION_CONFIRM: () => LocalizedString
 	/**
 	 * Search a token
 	 */
