@@ -11,6 +11,7 @@ import {
     DelegationSlice,
     DeviceSlice,
     MetadataCacheSlice,
+    ImageCacheSlice,
     NetworkSlice,
     NftSlice,
     PendingSlice,
@@ -33,6 +34,7 @@ import {
     TokenSlice,
     UserPreferencesSlice,
     WalletConnectSessionsSlice,
+    resetImageCacheState,
 } from "./Slices"
 import { migrationUpdates } from "~Storage/Redux/Migrations"
 import { createMigrate } from "redux-persist"
@@ -78,6 +80,7 @@ export const getPersistorConfig = async () => {
             DelegationSlice.name,
             WalletConnectSessionsSlice.name,
             MetadataCacheSlice.name,
+            ImageCacheSlice.name,
         ],
         migrate: createMigrate(migrationUpdates, { debug: true }),
         transforms: [encryptor],
@@ -104,6 +107,7 @@ export const resetActions = [
     resetWalletConnectState,
     resetPendingState,
     resetMetadataCacheState,
+    resetImageCacheState,
 
     // Config reset always comes last
     resetConfigState,

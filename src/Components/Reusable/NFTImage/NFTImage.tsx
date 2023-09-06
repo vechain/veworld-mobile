@@ -1,9 +1,9 @@
-import React, { memo, useCallback, useMemo, useState } from "react"
+import React, { memo, useCallback, useEffect, useMemo, useState } from "react"
 import { Image, StyleSheet } from "react-native"
 import FastImage, { FastImageProps } from "react-native-fast-image"
 import { BaseView } from "~Components/Base"
 import { BlurView } from "../BlurView"
-import { useTheme } from "~Hooks"
+import { useTheme, useTokenImage } from "~Hooks"
 
 type Props = {
     uri: string
@@ -14,6 +14,11 @@ type Props = {
 export const NFTImage = memo((props: Props) => {
     const { uri, w, h, style, testID, ...rest } = props
     const [isLoading, setIsLoading] = useState(false)
+    const [resolvedUri, setResolvedUri] = useState<string | undefined>(
+        undefined,
+    )
+
+    const { fetchImage } = useTokenImage()
 
     const theme = useTheme()
 
@@ -31,6 +36,13 @@ export const NFTImage = memo((props: Props) => {
             : require("../../../Assets/Img/NFTPlaceholder_Light.png")
     }, [theme.isDark])
 
+    useEffect(() => {
+        fetchImage(uri).then(result => {
+            setResolvedUri(result)
+        })
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [])
+
     return (
         <BaseView>
             <FastImage
@@ -46,7 +58,7 @@ export const NFTImage = memo((props: Props) => {
                 onLoadEnd={onLoadEnd}
                 defaultSource={placeholderImg} // not working on android dev only
                 source={{
-                    uri,
+                    uri: resolvedUri,
                     priority: FastImage.priority.high,
                     cache: FastImage.cacheControl.immutable,
                 }}

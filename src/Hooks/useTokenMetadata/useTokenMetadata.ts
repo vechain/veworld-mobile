@@ -1,6 +1,7 @@
 import axios from "axios"
 import { useCallback } from "react"
 import { NFT_AXIOS_TIMEOUT } from "~Constants/Constants/NFT"
+import { URIProtocol } from "~Constants/Enums/URIProtocol"
 import { TokenMetadata } from "~Model"
 import { getTokenMetaArweave, getTokenMetaIpfs } from "~Networking"
 import {
@@ -12,20 +13,12 @@ import {
 } from "~Storage/Redux"
 import { debug, warn } from "~Utils"
 
-enum URIProtocol {
-    IPFS = "ipfs",
-    ARWEAVE = "ar",
-    HTTPS = "https",
-}
-
 export const useTokenMetadata = () => {
     const dispatch = useAppDispatch()
     const metadata = useAppSelector(selectMetadataCacheState)
 
     const fetchMetadata = useCallback(
         async (uri: string) => {
-            debug(`Fetching metadata for ${uri}`)
-
             try {
                 const protocol = uri?.split(":")[0].trim()
 
@@ -36,8 +29,12 @@ export const useTokenMetadata = () => {
                             metadata,
                             uri,
                         )
-                        if (cachedData) return cachedData
+                        if (cachedData) {
+                            debug(`Using cached metadata for ${uri}`)
+                            return cachedData
+                        }
 
+                        debug(`Fetching metadata for ${uri}`)
                         const retrievedData = URIProtocol.IPFS
                             ? await getTokenMetaIpfs(uri)
                             : await getTokenMetaArweave(uri)
@@ -52,6 +49,7 @@ export const useTokenMetadata = () => {
                     }
 
                     case URIProtocol.HTTPS: {
+                        debug(`Fetching metadata for ${uri}`)
                         return (
                             (
                                 await axios.get<TokenMetadata>(uri, {

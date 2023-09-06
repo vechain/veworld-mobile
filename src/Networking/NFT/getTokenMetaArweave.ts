@@ -2,6 +2,7 @@ import Arweave from "arweave"
 import { error } from "~Utils/Logger"
 import { TokenMetadata } from "~Model/Nft/Nft"
 import { NFT_AXIOS_TIMEOUT } from "~Constants/Constants/NFT"
+import { URIUtils } from "~Utils"
 
 const arweave = Arweave.init({
     host: "arweave.net",
@@ -15,7 +16,8 @@ const toID = (uri: string) => uri?.split("://")[1]
 
 export const getTokenMetaArweave = async (uri: string) => {
     try {
-        const id = toID(uri)
+        const url = URIUtils.convertUriToUrl(uri)
+        const id = toID(url)
 
         const response = await arweave.api.get<TokenMetadata>(id)
         return response.data
