@@ -12,13 +12,12 @@ import {
 import { NonFungibleToken } from "~Model"
 import { getNftsForContract, getTokenURI } from "~Networking"
 import { useThor } from "~Components"
-import { MediaUtils, URIUtils, debug, error } from "~Utils"
+import { MediaUtils, debug, error } from "~Utils"
 import { NFT_PAGE_SIZE } from "~Constants/Constants/NFT"
 import { useI18nContext } from "~i18n"
 import { initialiseNFTMetadata } from "./Helpers"
-import { useTheme } from "~Hooks"
+import { useTheme, useTokenMetadata } from "~Hooks"
 import { useLazyLoader } from "./useLazyLoader"
-import { useTokenMetadata } from "~Hooks/useTokenMetadata"
 
 //  Note: To test this hook, replace `selectedAccount.address` with `ACCOUNT_WITH_NFTS` to get an account with numerous NFT collections and NFTs.
 export const useNFTs = () => {
@@ -42,9 +41,8 @@ export const useNFTs = () => {
                 nft.tokenURI ??
                 (await getTokenURI(nft.tokenId, nft.address, thor))
             const tokenMetadata = await fetchMetadata(tokenURI)
-            const image = URIUtils.convertUriToUrl(
-                tokenMetadata?.image ?? nft.image,
-            )
+            const image = tokenMetadata?.image ?? nft.image
+
             const mediaType = await MediaUtils.resolveMediaType(
                 image,
                 nft.mimeType,

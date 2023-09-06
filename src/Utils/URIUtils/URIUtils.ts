@@ -124,6 +124,9 @@ const convertUriToUrl = (uri: string) => {
         case "ipfs":
             if (!validateIpfsUri(uri))
                 throw new Error(`Invalid IPFS URI ${uri}`)
+
+            // Check cache for IPFS document
+
             return `https://api.vorj.app/ipfs/${uriWithoutProtocol}`
         case "ar":
             return `https://arweave.net/${uriWithoutProtocol}`

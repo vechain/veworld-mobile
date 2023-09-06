@@ -21,7 +21,7 @@ import {
     useAppDispatch,
     useAppSelector,
 } from "~Storage/Redux"
-import { debug, error, MediaUtils, URIUtils, warn } from "~Utils"
+import { debug, error, MediaUtils, warn } from "~Utils"
 import {
     initCollectionMetadataFromRegistry,
     initCollectionMetadataWithoutRegistry,
@@ -29,9 +29,8 @@ import {
 import { useI18nContext } from "~i18n"
 import { NFT_PAGE_SIZE } from "~Constants/Constants/NFT"
 import { compareAddresses } from "~Utils/AddressUtils/AddressUtils"
-import { useTheme } from "~Hooks"
+import { useTheme, useTokenMetadata } from "~Hooks"
 import { useLazyLoader } from "./useLazyLoader"
-import { useTokenMetadata } from "~Hooks/useTokenMetadata"
 
 /**
  * `useNFTCollections` is a React hook that facilitates the fetching and management of NFT collections for a selected account.
@@ -101,9 +100,8 @@ export const useNFTCollections = () => {
                 const name =
                     tokenMetadata?.name ??
                     (await getName(collection.address, thor))
-                const image = URIUtils.convertUriToUrl(
-                    tokenMetadata?.image ?? collection.image,
-                )
+                const image = tokenMetadata?.image ?? collection.image
+
                 const mediaType = await MediaUtils.resolveMediaType(
                     image,
                     collection.mimeType,

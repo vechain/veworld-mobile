@@ -1,9 +1,9 @@
 import { useEffect, useState } from "react"
 import { useThor } from "~Components"
-import { useTokenMetadata } from "~Hooks/useTokenMetadata"
+import { useTokenMetadata } from "~Hooks"
 import { NFTMediaType, TokenMetadata } from "~Model"
 import { getName, getTokenURI } from "~Networking"
-import { MediaUtils, URIUtils, error } from "~Utils"
+import { MediaUtils, error } from "~Utils"
 
 /**
  * `useNonFungibleTokenInfo` is a hook for fetching and managing non-fungible token (NFT) information.
@@ -57,7 +57,7 @@ export const useNonFungibleTokenInfo = (
                 )
 
                 setTokenMediaType(mediaType)
-                setTokenImage(URIUtils.convertUriToUrl(metadata?.image))
+                setTokenImage(metadata?.image)
                 setIsMediaLoading(false)
             } catch (e) {
                 error(
