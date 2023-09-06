@@ -191,6 +191,8 @@ platform :ios do
         version = increment_version_number_in_plist(bump_type: versionType.downcase, xcodeproj: "VeWorld.xcodeproj")
                   increment_version_number_in_xcodeproj(version_number: versionType.downcase, xcodeproj: "VeWorld.xcodeproj")
       end
+    else
+      version = get_version_number(xcodeproj: "VeWorld.xcodeproj")
     end
 
     # update yarn packages and pods

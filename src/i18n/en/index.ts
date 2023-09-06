@@ -352,7 +352,10 @@ const en: BaseTranslation = {
     HEADS_UP: "Heads up!",
     ACTIVITIES_NOT_UP_TO_DATE: "Activities might not be up-to-date. Check your internet connection or try later",
     CUSTOM_TOKENS_NOT_AVAIABLE: "Custom tokens are not available at the moment. Check your internet connection or try later",
-
+    UNVERIFIED_APP_TITLE: "Unverified app",
+    APP_VERIFICATION_UNKNOWN: "The application that is making this request could not be verified. Proceed at your own risk.",
+    APP_VERIFICATION_INVALID: "Connection to this application is forbidden as the request looks malicious.",
+    APP_VERIFICATION_CONFIRM: "Please confirm that you would like to process this request.",
 
     // Placeholders
     PLACEHOLDER_SEARCH_TOKEN: "Search a token",
@@ -522,7 +525,6 @@ const en: BaseTranslation = {
     WALLET_MANAGEMENT_NOTIFICATION_CREATE_ACCOUNT_ERROR: "Account created successfully",
 
 
-
     // Manage Token
     MANAGE_TOKEN_TITLE: "Manage Tokens",
     MANAGE_TOKEN_SELECT_YOUR_TOKEN_SUBTITLE: "Select your token",
@@ -673,7 +675,7 @@ const en: BaseTranslation = {
     WALLET_LEDGER_ERROR_UNKNOWN_DESC: "An unknown error occurred. Please try again",
     WALLET_LEDGER_NO_DEVICES: "No devices found",
     WALLET_LEDGER_NO_DEVICES_DESC: "We couldn't find any Ledger devices to connect to",
-    
+
     // Transaction Labels
 
     // Unlock
