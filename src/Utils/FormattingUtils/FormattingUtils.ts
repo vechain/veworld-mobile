@@ -1,12 +1,6 @@
 import { BigNumber } from "bignumber.js"
 import { error } from "../Logger"
 import { isFinite } from "lodash"
-// import dayjs from "dayjs"
-// import RelativeTime from "dayjs/plugin/relativeTime"
-// import VeWorldErrors from "common/errors/VeWorldErrors"
-// import { error } from "common/logging/Logger"
-// import { detectLocale } from "i18n"
-// import { CURRENCY } from "popup/model/Settings/enums"
 import RoundingMode = BigNumber.RoundingMode
 
 export const ROUND_DECIMAL_DEFAULT = 2

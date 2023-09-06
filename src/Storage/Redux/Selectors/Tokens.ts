@@ -52,6 +52,11 @@ export const selectDashboardChartData = createSelector(
         })) || DEFAULT_CHART_DATA,
 )
 
+export const selectChartDataIsLoading = createSelector(
+    [(_, state) => selectTokenState(state), (symbol: string) => symbol],
+    (tokens, symbol) => tokens.chartDataIsLoading?.[symbol] ?? false,
+)
+
 export const selectAssetDetailChartData = createSelector(
     [(_, state) => selectTokenState(state), symbol => symbol],
     (tokens, symbol) =>

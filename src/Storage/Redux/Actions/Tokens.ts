@@ -16,6 +16,7 @@ import { selectCoinGeckoTokens, selectCurrency } from "../Selectors"
 import {
     addOfficialTokens,
     setAssertDetailChartData,
+    setChartDataIsLoading,
     setCoinGeckoTokens,
     setCoinMarketInfo,
     setDashboardChartData,
@@ -55,6 +56,8 @@ export const fetchChartData =
             t => t.symbol.toLowerCase() === symbol.toLowerCase(),
         )
 
+        dispatch(setChartDataIsLoading({ symbol, isLoading: true }))
+
         try {
             const pricesResponse = await axios.get<CoinMarketChartResponse>(
                 COINGECKO_MARKET_CHART_ENDPOINT(
@@ -81,7 +84,15 @@ export const fetchChartData =
             if (!coinGeckoTokens.length) {
                 dispatch(setAssertDetailChartData({ symbol, data: prices }))
             }
+
+            // timeout to prevent flickering on the component
+            setTimeout(() => {
+                dispatch(setChartDataIsLoading({ symbol, isLoading: false }))
+            }, 200)
         } catch (e) {
+            setTimeout(() => {
+                dispatch(setChartDataIsLoading({ symbol, isLoading: false }))
+            }, 200)
             error("fetchChartData", e)
         }
     }
