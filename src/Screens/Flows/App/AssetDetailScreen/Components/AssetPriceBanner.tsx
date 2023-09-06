@@ -1,8 +1,8 @@
-import React, { useMemo } from "react"
+import React from "react"
 import { useAnimatedStyle, useDerivedValue } from "react-native-reanimated"
 import { StyleSheet } from "react-native"
 import { useThemedStyles } from "~Hooks"
-import { FormattingUtils } from "~Utils"
+
 import { BaseText, BaseView } from "~Components"
 import { useI18nContext } from "~i18n"
 import {
@@ -10,20 +10,18 @@ import {
     useLineChartPrice,
     useLineChartRelativeChange,
 } from "../Hooks/usePrice"
-
 import { typography, ColorThemeType } from "~Constants"
-import { TokenWithCompleteInfo } from "~Model"
-import { selectCurrencySymbol, useAppSelector } from "~Storage/Redux"
 import { BaseAnimatedText } from "./AnimatedTextInput"
+import { selectChartDataIsLoading, useAppSelector } from "~Storage/Redux"
+import { AssetTrendBannerSkeleton } from "./AssetTrendBannerSkeleton"
+import { AssetPriceBannerSkeleton } from "./AssetPriceBannerSkeleton"
 const { ...otherTypography } = typography
 
-export const AssetPriceBanner = ({
-    token,
-}: {
-    token?: TokenWithCompleteInfo
-}) => {
+export const AssetPriceBanner = ({ symbol }: { symbol: string }) => {
     const { LL } = useI18nContext()
-    const currency = useAppSelector(selectCurrencySymbol)
+    const chartDataIsLoading = useAppSelector(state =>
+        selectChartDataIsLoading(symbol, state),
+    )
     const datetime = useLineChartDatetime()
     const { formatted: formattedPrice } = useLineChartPrice()
     const { value: priceChangeValue, formatted: formattedPriceChange } =
@@ -31,26 +29,19 @@ export const AssetPriceBanner = ({
 
     const { styles, theme } = useThemedStyles(baseStyles)
 
-    const isPositive24hChange = useMemo(
-        () => (token?.change || 0) > 0,
-        [token?.change],
+    const icon = useDerivedValue(
+        () => (priceChangeValue.value > 0 ? "+" : "-"),
+        [priceChangeValue.value],
     )
-
-    const change24h = useMemo(
-        () =>
-            (isPositive24hChange ? "+" : "") +
-            FormattingUtils.humanNumber(token?.change || 0) +
-            "%",
-        [isPositive24hChange, token?.change],
+    const changeStyles = useAnimatedStyle(
+        () => ({
+            color:
+                priceChangeValue.value > 0
+                    ? theme.colors.success
+                    : theme.colors.danger,
+        }),
+        [priceChangeValue.value, theme.colors.success, theme.colors.danger],
     )
-
-    const icon = useDerivedValue(() => (priceChangeValue.value > 0 ? "+" : "-"))
-    const changeStyles = useAnimatedStyle(() => ({
-        color:
-            priceChangeValue.value > 0
-                ? theme.colors.success
-                : theme.colors.danger,
-    }))
 
     const responsiveFontSize = useDerivedValue(() => {
         if (formattedPrice.value.length < 10) {
@@ -67,15 +58,8 @@ export const AssetPriceBanner = ({
                 justifyContent="space-between">
                 <BaseText typographyFont="body">{LL.COMMON_PRICE()}</BaseText>
                 <BaseView flexDirection="row" alignItems="baseline">
-                    {token ? (
-                        <>
-                            <BaseText typographyFont="largeTitle">
-                                {currency}
-                            </BaseText>
-                            <BaseText typographyFont="largeTitle">
-                                {token.rate?.toFixed(5)}
-                            </BaseText>
-                        </>
+                    {chartDataIsLoading ? (
+                        <AssetPriceBannerSkeleton symbol={symbol} />
                     ) : (
                         <BaseAnimatedText
                             text={formattedPrice}
@@ -102,32 +86,20 @@ export const AssetPriceBanner = ({
                     style={{ color: theme.colors.text }}
                 />
 
-                <BaseView flexDirection="row">
-                    {token ? (
-                        <>
-                            <BaseText
-                                typographyFont="title"
-                                color={
-                                    isPositive24hChange
-                                        ? theme.colors.success
-                                        : theme.colors.danger
-                                }>
-                                {change24h}
-                            </BaseText>
-                        </>
-                    ) : (
-                        <>
-                            <BaseAnimatedText
-                                text={icon}
-                                style={[changeStyles, styles.textTitle]}
-                            />
-                            <BaseAnimatedText
-                                text={formattedPriceChange}
-                                style={[changeStyles, styles.textTitle]}
-                            />
-                        </>
-                    )}
-                </BaseView>
+                {chartDataIsLoading ? (
+                    <AssetTrendBannerSkeleton />
+                ) : (
+                    <BaseView flexDirection="row">
+                        <BaseAnimatedText
+                            text={icon}
+                            style={[changeStyles, styles.textTitle]}
+                        />
+                        <BaseAnimatedText
+                            text={formattedPriceChange}
+                            style={[changeStyles, styles.textTitle]}
+                        />
+                    </BaseView>
+                )}
             </BaseView>
         </BaseView>
     )

@@ -96,7 +96,7 @@ export const ChartView = ({
                 flexDirection="row"
                 justifyContent="space-between"
                 w={100}>
-                <AssetPriceBanner />
+                <AssetPriceBanner symbol={token.symbol} />
             </BaseView>
 
             <BaseSpacer height={24} />
