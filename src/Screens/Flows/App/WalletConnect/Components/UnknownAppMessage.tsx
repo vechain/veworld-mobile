@@ -10,6 +10,7 @@ import { Verify } from "@walletconnect/types/dist/types/core/verify"
 import { COLORS } from "~Constants"
 import { StyleSheet } from "react-native"
 import { useI18nContext } from "~i18n"
+import { useTheme } from "~Hooks"
 
 type Props = {
     verifyContext: Verify.Context | undefined
@@ -23,6 +24,8 @@ export const UnknownAppMessage: React.FC<Props> = ({
 }) => {
     const { LL } = useI18nContext()
 
+    const theme = useTheme()
+
     const isUnverified = useMemo(
         () => verifyContext?.verified.validation === "INVALID",
         [verifyContext],
@@ -31,6 +34,22 @@ export const UnknownAppMessage: React.FC<Props> = ({
         () => verifyContext?.verified.validation === "UNKNOWN",
         [verifyContext],
     )
+
+    const bgColor = useMemo(() => {
+        if (theme.isDark) {
+            return isUnverified ? COLORS.MEDIUM_RED : COLORS.MEDIUM_ORANGE
+        } else {
+            return isUnverified ? COLORS.PASTEL_RED : COLORS.PASTEL_ORANGE
+        }
+    }, [theme, isUnverified])
+
+    const iconColor = useMemo(() => {
+        if (theme.isDark) {
+            return isUnverified ? COLORS.DARK_RED : COLORS.DARK_ORANGE_ALERT
+        } else {
+            return isUnverified ? COLORS.MEDIUM_RED : COLORS.MEDIUM_ORANGE
+        }
+    }, [theme, isUnverified])
 
     if (!verifyContext || verifyContext.verified.validation === "VALID")
         return <></>
@@ -41,7 +60,7 @@ export const UnknownAppMessage: React.FC<Props> = ({
                 <BaseSpacer height={24} />
 
                 <BaseView
-                    bg={isUnverified ? COLORS.PASTEL_RED : COLORS.PASTEL_ORANGE}
+                    bg={bgColor}
                     flexDirection={"row"}
                     alignItems={"center"}
                     style={baseStyles.warningBackground}>
@@ -49,16 +68,12 @@ export const UnknownAppMessage: React.FC<Props> = ({
                         <BaseIcon
                             size={40}
                             name="alert-outline"
-                            color={
-                                isUnverified
-                                    ? COLORS.MEDIUM_RED
-                                    : COLORS.MEDIUM_ORANGE
-                            }
+                            color={iconColor}
                         />
                     </BaseView>
 
                     <BaseView style={baseStyles.text}>
-                        <BaseText>
+                        <BaseText color={theme.colors.text}>
                             {isUnverified
                                 ? LL.APP_VERIFICATION_INVALID()
                                 : LL.APP_VERIFICATION_UNKNOWN()}
