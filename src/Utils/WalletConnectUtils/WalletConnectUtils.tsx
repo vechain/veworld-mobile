@@ -32,7 +32,7 @@ export async function getWeb3Wallet() {
             metadata: {
                 name: "VeWorld Mobile Wallet",
                 description: "Manage your VeChain assets with VeWorld",
-                url: "https://walletconnect.com/",
+                url: "https://veworld.com",
                 icons: ["https://avatars.githubusercontent.com/u/37784886"],
             },
         })
