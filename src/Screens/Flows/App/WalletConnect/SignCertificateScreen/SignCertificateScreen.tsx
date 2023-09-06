@@ -14,19 +14,25 @@ import {
 import { blake2b256, Certificate } from "thor-devkit"
 import {
     addSignCertificateActivity,
+    selectedConnectedApp,
     selectSelectedAccount,
     setIsAppLoading,
     useAppDispatch,
     useAppSelector,
 } from "~Storage/Redux"
-import { error, WalletConnectResponseUtils, WalletConnectUtils } from "~Utils"
+import {
+    debug,
+    error,
+    WalletConnectResponseUtils,
+    WalletConnectUtils,
+} from "~Utils"
 import { useAnalyticTracking, useCheckIdentity, useSignMessage } from "~Hooks"
 import { AccountWithDevice, DEVICE_TYPE, LedgerAccountWithDevice } from "~Model"
 import { useI18nContext } from "~i18n"
 import { RootStackParamListSwitch, Routes } from "~Navigation"
 import { NativeStackScreenProps } from "@react-navigation/native-stack"
 import { useNavigation } from "@react-navigation/native"
-import { MessageDetails } from "~Screens"
+import { MessageDetails, UnknownAppMessage } from "~Screens"
 import { AnalyticsEvent } from "~Constants"
 
 type Props = NativeStackScreenProps<
@@ -46,8 +52,20 @@ export const SignCertificateScreen: FC<Props> = ({ route }: Props) => {
     const track = useAnalyticTracking()
     const dispatch = useAppDispatch()
 
+    const [isInvalidChecked, setInvalidChecked] = React.useState(false)
+
     // Request values
     const { url } = WalletConnectUtils.getSessionRequestAttributes(session)
+
+    const connectedApp = useAppSelector(state => {
+        return selectedConnectedApp(state, session.topic)
+    })
+
+    const validConnectedApp = useMemo(() => {
+        if (!connectedApp) return true
+
+        return connectedApp.verifyContext.verified.validation === "VALID"
+    }, [connectedApp])
 
     // Prepare certificate to sign
     const cert: Certificate = useMemo(() => {
@@ -181,6 +199,11 @@ export const SignCertificateScreen: FC<Props> = ({ route }: Props) => {
         await onReject()
     }, [onReject])
 
+    debug({
+        isInvalidChecked,
+        validConnectedApp,
+    })
+
     return (
         <BaseSafeArea>
             <ScrollView
@@ -221,9 +244,18 @@ export const SignCertificateScreen: FC<Props> = ({ route }: Props) => {
                         requestEvent={requestEvent}
                         message={message}
                     />
+
+                    <BaseSpacer height={30} />
+
+                    <UnknownAppMessage
+                        verifyContext={connectedApp?.verifyContext}
+                        confirmed={isInvalidChecked}
+                        setConfirmed={setInvalidChecked}
+                    />
                 </BaseView>
 
-                <BaseSpacer height={48} />
+                <BaseSpacer height={30} />
+
                 <BaseView style={styles.footer}>
                     <BaseButton
                         w={100}
@@ -232,7 +264,10 @@ export const SignCertificateScreen: FC<Props> = ({ route }: Props) => {
                         action={checkIdentityBeforeOpening}
                         /* We must assert that `biometrics` is not empty otherwise we don't know if the user has set biometrics or passcode, thus failing to decrypt the wallet when signing */
                         isLoading={isBiometricsEmpty}
-                        disabled={isBiometricsEmpty}
+                        disabled={
+                            isBiometricsEmpty ||
+                            (!validConnectedApp && !isInvalidChecked)
+                        }
                     />
                     <BaseSpacer height={16} />
                     <BaseButton
@@ -244,6 +279,7 @@ export const SignCertificateScreen: FC<Props> = ({ route }: Props) => {
                     />
                 </BaseView>
             </ScrollView>
+
             <RequireUserPassword
                 isOpen={isPasswordPromptOpen}
                 onClose={handleClosePasswordModal}

@@ -2,7 +2,7 @@ import { useNavigation } from "@react-navigation/native"
 import { NativeStackScreenProps } from "@react-navigation/native-stack"
 import { ProposalTypes, RelayerTypes, SessionTypes } from "@walletconnect/types"
 import { getSdkError } from "@walletconnect/utils"
-import React, { FC, useCallback } from "react"
+import React, { FC, useCallback, useMemo } from "react"
 import { ScrollView, StyleSheet } from "react-native"
 import {
     AccountCard,
@@ -32,7 +32,7 @@ import {
 import { error, WalletConnectUtils, warn } from "~Utils"
 import { useI18nContext } from "~i18n"
 import { AppConnectionRequests } from "./Components"
-import { AppInfo } from "../Components"
+import { AppInfo, UnknownAppMessage } from "../Components"
 import { useSetSelectedAccount } from "~Hooks/useSetSelectedAccount"
 
 type Props = NativeStackScreenProps<
@@ -55,22 +55,27 @@ export const ConnectAppScreen: FC<Props> = ({ route }: Props) => {
     const selectedAccount = useAppSelector(selectSelectedAccount)
     const networks = useAppSelector(selectNetworks)
 
+    const [isInvalidChecked, setInvalidChecked] = React.useState(false)
+
     const {
         ref: selectAccountBottomSheetRef,
         onOpen: openSelectAccountBottomSheet,
         onClose: closeSelectAccountBottonSheet,
     } = useBottomSheetModal()
+
     const setSelectedAccount = (account: AccountWithDevice) => {
         onSetSelectedAccount({ address: account.address })
     }
 
-    const { name, url, methods, icon, description } =
-        WalletConnectUtils.getPairAttributes(currentProposal)
+    const { name, url, methods, icon, description } = useMemo(
+        () => WalletConnectUtils.getPairAttributes(currentProposal),
+        [currentProposal],
+    )
 
     /**
      * Handle session proposal
      */
-    const handleAccept = useCallback(async () => {
+    const processProposal = useCallback(async () => {
         const { id, params } = currentProposal
 
         const requiredNamespaces: ProposalTypes.RequiredNamespaces =
@@ -126,7 +131,10 @@ export const ConnectAppScreen: FC<Props> = ({ route }: Props) => {
             dispatch(
                 insertSession({
                     address: selectedAccount.address,
-                    session,
+                    connectedApp: {
+                        session,
+                        verifyContext: currentProposal.verifyContext,
+                    },
                 }),
             )
 
@@ -180,6 +188,16 @@ export const ConnectAppScreen: FC<Props> = ({ route }: Props) => {
         nav.goBack()
     }, [nav, handleReject])
 
+    const isConfirmDisabled = useMemo(() => {
+        const { validation } = currentProposal.verifyContext.verified
+
+        if (validation === "UNKNOWN" && !isInvalidChecked) {
+            return true
+        }
+
+        return validation === "INVALID"
+    }, [currentProposal, isInvalidChecked])
+
     return (
         <BaseSafeArea grow={1}>
             <ScrollView
@@ -200,6 +218,7 @@ export const ConnectAppScreen: FC<Props> = ({ route }: Props) => {
                     </BaseText>
 
                     <BaseSpacer height={16} />
+
                     <AppInfo
                         name={name}
                         url={url}
@@ -222,6 +241,12 @@ export const ConnectAppScreen: FC<Props> = ({ route }: Props) => {
                         onPress={openSelectAccountBottomSheet}
                         showSelectAccountIcon={true}
                     />
+
+                    <UnknownAppMessage
+                        verifyContext={currentProposal.verifyContext}
+                        confirmed={isInvalidChecked}
+                        setConfirmed={setInvalidChecked}
+                    />
                 </BaseView>
 
                 <BaseView mx={20}>
@@ -230,7 +255,8 @@ export const ConnectAppScreen: FC<Props> = ({ route }: Props) => {
                         w={100}
                         haptics="Light"
                         title={LL.COMMON_BTN_CONNECT()}
-                        action={handleAccept}
+                        action={processProposal}
+                        disabled={isConfirmDisabled}
                     />
                     <BaseSpacer height={16} />
                     <BaseButton
