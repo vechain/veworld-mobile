@@ -1,13 +1,18 @@
-import { useCallback } from "react"
 import { URIProtocol } from "~Constants/Enums/URIProtocol"
+import { NFTMediaType } from "~Model"
 import { getTokenImageArweave } from "~Networking/NFT/getTokenImageArweave"
 import { getTokenImageIpfs } from "~Networking/NFT/getTokenImageIpfs"
-import Cache from "~Storage/Cache/ImageCache"
 
-import { URIUtils, debug, warn } from "~Utils"
+import { MediaUtils, URIUtils, debug, warn } from "~Utils"
+
+export interface TokenImage {
+    image: string
+    mime: string
+    mediaType: NFTMediaType
+}
 
 export const useTokenImage = () => {
-    const fetchImage = useCallback(async (uri: string) => {
+    const getImage = async (uri: string) => {
         try {
             const protocol = uri?.split(":")[0].trim()
 
@@ -19,18 +24,11 @@ export const useTokenImage = () => {
 
                 case URIProtocol.IPFS:
                 case URIProtocol.ARWEAVE: {
-                    const cachedData = Cache.getItem(uri)
-                    if (cachedData) {
-                        debug(`Using cached image for ${uri}`)
-                        return cachedData
-                    }
-
                     debug(`Fetching image for ${uri}`)
                     const imageStr = URIProtocol.IPFS
                         ? await getTokenImageIpfs(uri)
                         : await getTokenImageArweave(uri)
 
-                    Cache.setItem(uri, imageStr)
                     return imageStr
                 }
 
@@ -41,7 +39,19 @@ export const useTokenImage = () => {
             warn(`Error fetching image ${uri}`, e)
         }
         return URIUtils.convertUriToUrl(uri)
-    }, [])
+    }
+
+    const fetchImage = async (uri: string): Promise<TokenImage> => {
+        const image = await getImage(uri)
+        const mime = await MediaUtils.resolveMimeType(image)
+        const mediaType = await MediaUtils.resolveMediaType(image, mime)
+
+        return {
+            image,
+            mime,
+            mediaType,
+        }
+    }
 
     return {
         fetchImage,

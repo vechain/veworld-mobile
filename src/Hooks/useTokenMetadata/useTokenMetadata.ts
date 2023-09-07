@@ -1,14 +1,16 @@
 import axios from "axios"
-import { useCallback } from "react"
 import { NFT_AXIOS_TIMEOUT } from "~Constants/Constants/NFT"
 import { URIProtocol } from "~Constants/Enums/URIProtocol"
+import { useTokenImage } from "~Hooks/useTokenImage"
 import { TokenMetadata } from "~Model"
 import { getTokenMetaArweave, getTokenMetaIpfs } from "~Networking"
 import Cache from "~Storage/Cache/MetadataCache"
 import { debug, warn } from "~Utils"
 
 export const useTokenMetadata = () => {
-    const fetchMetadata = useCallback(async (uri: string) => {
+    const { fetchImage } = useTokenImage()
+
+    const fetchMetadata = async (uri: string) => {
         try {
             const protocol = uri?.split(":")[0].trim()
 
@@ -25,6 +27,10 @@ export const useTokenMetadata = () => {
                     const retrievedData = URIProtocol.IPFS
                         ? await getTokenMetaIpfs(uri)
                         : await getTokenMetaArweave(uri)
+
+                    const image = await fetchImage(retrievedData?.image)
+                    retrievedData.image = image.image
+                    retrievedData.mediaType = image.mediaType
 
                     Cache.setItem(uri, retrievedData)
                     return retrievedData
@@ -48,7 +54,7 @@ export const useTokenMetadata = () => {
         } catch (e) {
             warn(`Error fetching metadata ${uri}`, e)
         }
-    }, [])
+    }
 
     return {
         fetchMetadata,

@@ -1,9 +1,8 @@
 import { useCallback } from "react"
 import { useWalletSecurity } from "~Hooks/useWalletSecurity"
 import KeychainService from "~Services/KeychainService"
-import ImageCache from "~Storage/Cache/ImageCache"
 import MetadataCache from "~Storage/Cache/MetadataCache"
-import { CACHE_IMAGE_KEY, CACHE_METADATA_KEY } from "~Storage/Cache/constants"
+import { CACHE_METADATA_KEY } from "~Storage/Cache/constants"
 import { resetApp, useAppDispatch, useAppSelector } from "~Storage/Redux"
 import { selectDevices } from "~Storage/Redux/Selectors"
 import { info } from "~Utils/Logger"
@@ -23,7 +22,6 @@ export const useAppReset = () => {
             )
         })
 
-        promises.push(KeychainService.deleteKey(CACHE_IMAGE_KEY))
         promises.push(KeychainService.deleteKey(CACHE_METADATA_KEY))
 
         await Promise.all(promises)
@@ -32,7 +30,6 @@ export const useAppReset = () => {
     const appReset = useCallback(async () => {
         await removeEncryptionKeysFromKeychain()
         await dispatch(resetApp())
-        ImageCache.reset()
         MetadataCache.reset()
         info("App Reset Finished")
     }, [dispatch, removeEncryptionKeysFromKeychain])

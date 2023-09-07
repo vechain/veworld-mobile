@@ -12,7 +12,7 @@ import {
 import { NonFungibleToken } from "~Model"
 import { getNftsForContract, getTokenURI } from "~Networking"
 import { useThor } from "~Components"
-import { MediaUtils, debug, error } from "~Utils"
+import { debug, error } from "~Utils"
 import { NFT_PAGE_SIZE } from "~Constants/Constants/NFT"
 import { useI18nContext } from "~i18n"
 import { initialiseNFTMetadata } from "./Helpers"
@@ -43,15 +43,9 @@ export const useNFTs = () => {
             const tokenMetadata = await fetchMetadata(tokenURI)
             const image = tokenMetadata?.image ?? nft.image
 
-            const mediaType = await MediaUtils.resolveMediaType(
-                image,
-                nft.mimeType,
-            )
-
             const updated = {
                 ...nft,
                 image,
-                mediaType,
                 tokenURI,
                 updated: true,
                 name: tokenMetadata?.name ?? LL.COMMON_NOT_AVAILABLE(),

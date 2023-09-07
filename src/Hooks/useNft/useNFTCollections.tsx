@@ -21,7 +21,7 @@ import {
     useAppDispatch,
     useAppSelector,
 } from "~Storage/Redux"
-import { debug, error, MediaUtils, warn } from "~Utils"
+import { debug, error, warn } from "~Utils"
 import {
     initCollectionMetadataFromRegistry,
     initCollectionMetadataWithoutRegistry,
@@ -102,10 +102,6 @@ export const useNFTCollections = () => {
                     (await getName(collection.address, thor))
                 const image = tokenMetadata?.image ?? collection.image
 
-                const mediaType = await MediaUtils.resolveMediaType(
-                    image,
-                    collection.mimeType,
-                )
                 const description =
                     tokenMetadata?.description ?? collection.description
 
@@ -113,7 +109,6 @@ export const useNFTCollections = () => {
                     ...collection,
                     balanceOf: balanceOf,
                     image,
-                    mediaType,
                     name,
                     description,
                     updated: true,

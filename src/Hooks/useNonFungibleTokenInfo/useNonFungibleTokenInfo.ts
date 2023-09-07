@@ -1,9 +1,9 @@
 import { useEffect, useState } from "react"
 import { useThor } from "~Components"
 import { useTokenMetadata } from "~Hooks"
-import { NFTMediaType, TokenMetadata } from "~Model"
+import { TokenMetadata } from "~Model"
 import { getName, getTokenURI } from "~Networking"
-import { MediaUtils, error } from "~Utils"
+import { error } from "~Utils"
 
 /**
  * `useNonFungibleTokenInfo` is a hook for fetching and managing non-fungible token (NFT) information.
@@ -30,12 +30,9 @@ export const useNonFungibleTokenInfo = (
     contractAddress: string,
 ) => {
     const { fetchMetadata } = useTokenMetadata()
-    const [tokenUri, setTokenUri] = useState<string | undefined>()
     const [tokenMetadata, setTokenMetadata] = useState<
         TokenMetadata | undefined
     >()
-    const [tokenImage, setTokenImage] = useState<string | undefined>()
-    const [tokenMediaType, setTokenMediaType] = useState(NFTMediaType.UNKNOWN)
     const [collectionName, setCollectionName] = useState<string | undefined>()
 
     const [isMediaLoading, setIsMediaLoading] = useState<boolean>(true)
@@ -48,16 +45,9 @@ export const useNonFungibleTokenInfo = (
                 const name = await getName(contractAddress, thor)
                 setCollectionName(name)
                 const uri = await getTokenURI(tokenId, contractAddress, thor)
-                setTokenUri(uri)
                 const metadata = await fetchMetadata(uri)
                 if (!metadata) throw new Error("No metadata found")
                 setTokenMetadata(metadata)
-                const mediaType = await MediaUtils.resolveMediaType(
-                    metadata.image,
-                )
-
-                setTokenMediaType(mediaType)
-                setTokenImage(metadata?.image)
                 setIsMediaLoading(false)
             } catch (e) {
                 error(
@@ -67,14 +57,13 @@ export const useNonFungibleTokenInfo = (
             }
         }
         if (tokenId && contractAddress && thor) load()
-    }, [tokenId, contractAddress, thor, fetchMetadata])
+
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [tokenId, contractAddress, thor.genesis.id])
 
     return {
         tokenMetadata,
-        tokenUri,
         collectionName,
-        tokenImage,
-        tokenMediaType,
         isMediaLoading,
     }
 }

@@ -19,7 +19,7 @@ type Props = {
 }
 
 export const NFTTransferCard = ({ collectionAddress, tokenId }: Props) => {
-    const { isMediaLoading, tokenImage, collectionName, tokenMediaType } =
+    const { isMediaLoading, tokenMetadata, collectionName } =
         useNonFungibleTokenInfo(tokenId, collectionAddress)
 
     const { styles, theme } = useThemedStyles(baseStyles)
@@ -58,17 +58,20 @@ export const NFTTransferCard = ({ collectionAddress, tokenId }: Props) => {
     const renderMedia = useMemo(() => {
         if (isMediaLoading) return <NFTTransferCardSkeleton />
 
-        if (tokenMediaType === NFTMediaType.IMAGE)
+        if (tokenMetadata?.mediaType === NFTMediaType.IMAGE)
             // @ts-ignore
             return (
                 <NFTImage
-                    uri={tokenImage ?? ""}
+                    uri={tokenMetadata?.image ?? ""}
                     // @ts-ignore
                     style={styles.nftImage}
                 />
             )
 
-        if (tokenMediaType === NFTMediaType.VIDEO && tokenImage)
+        if (
+            tokenMetadata?.mediaType === NFTMediaType.VIDEO &&
+            tokenMetadata?.image
+        )
             return (
                 <BaseView style={styles.nftImage}>
                     <Video
@@ -78,7 +81,7 @@ export const NFTTransferCard = ({ collectionAddress, tokenId }: Props) => {
                         shouldPlay
                         useNativeControls
                         style={styles.nftImage}
-                        source={{ uri: tokenImage }}
+                        source={{ uri: tokenMetadata?.image }}
                         resizeMode={ResizeMode.COVER}
                         isLooping
                     />
@@ -98,8 +101,7 @@ export const NFTTransferCard = ({ collectionAddress, tokenId }: Props) => {
         placeholderImg,
         posterComponent,
         styles.nftImage,
-        tokenImage,
-        tokenMediaType,
+        tokenMetadata,
     ])
 
     return (
