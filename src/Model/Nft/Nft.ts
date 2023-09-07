@@ -16,6 +16,7 @@ export interface NftCollection extends ERC721Metadata, WithID, MetadataUpdated {
     creator: string
     balanceOf?: number
     totalSupply?: number
+    fromRegistry: boolean
 }
 
 export interface NonFungibleToken
