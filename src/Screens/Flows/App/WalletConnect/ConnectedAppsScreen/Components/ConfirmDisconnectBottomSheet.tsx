@@ -49,11 +49,7 @@ export const ConfirmDisconnectBottomSheet = React.forwardRef<
                 </BaseText>
 
                 <BaseSpacer height={24} />
-                <ConnectedAppBox
-                    session={session}
-                    account={account}
-                    clickable={false}
-                />
+                <ConnectedAppBox session={session} />
 
                 <BaseSpacer height={48} />
                 <BaseButton
