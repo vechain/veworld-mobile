@@ -30,6 +30,7 @@ export const ManageUrls = ({ openAddUrl }: Props) => {
     const delegationUrls = useAppSelector(selectDelegationUrls)
     const dispatch = useAppDispatch()
     const thor = useThor()
+    const [urlToDelete, setUrlToDelete] = React.useState<string>()
 
     const deleteUrl = useCallback(
         (url: string) => {
@@ -49,18 +50,18 @@ export const ManageUrls = ({ openAddUrl }: Props) => {
                     item={item}
                     itemKey={String(index)}
                     swipeableItemRefs={swipeableItemRefs}
-                    handleTrashIconPress={deleteUrl}>
-                    <BaseView style={styles.touchableContainer}>
-                        <BaseCard onPress={() => {}}>
-                            <BaseText typographyFont="bodyBold" w={100} py={8}>
-                                {item}
-                            </BaseText>
-                        </BaseCard>
-                    </BaseView>
+                    handleTrashIconPress={deleteUrl}
+                    setSelectedItem={setUrlToDelete}
+                    isOpen={urlToDelete === item}>
+                    <BaseCard>
+                        <BaseText typographyFont="bodyBold" w={100} py={8}>
+                            {item}
+                        </BaseText>
+                    </BaseCard>
                 </SwipeableRow>
             )
         },
-        [deleteUrl, styles.touchableContainer],
+        [deleteUrl, urlToDelete],
     )
 
     return (

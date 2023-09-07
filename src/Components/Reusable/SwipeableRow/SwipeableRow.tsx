@@ -5,7 +5,10 @@ import SwipeableItem, {
     SwipeableItemImperativeRef,
 } from "react-native-swipeable-item"
 import { DeleteUnderlay } from "../DeleteUnderlay"
-import { Pressable } from "react-native"
+import { TouchableOpacity } from "react-native-gesture-handler"
+import { Pressable, StyleSheet } from "react-native"
+import { useThemedStyles } from "~Hooks"
+import { ColorThemeType } from "~Constants"
 
 type Props<T> = {
     item: T
@@ -13,10 +16,13 @@ type Props<T> = {
     itemKey: string
     handleTrashIconPress: (item: T) => void
     swipeEnabled?: boolean
-    setSelectedItem?: (item: T) => void
+    setSelectedItem?: (item: T | undefined) => void
     swipeableItemRefs: MutableRefObject<Map<string, SwipeableItemImperativeRef>>
     testID?: string
     xMargins?: number
+    onPress?: (item: T) => void
+    isDragging?: boolean
+    isOpen?: boolean
 }
 
 // this component is used to wrap the item in the list and uniform the logic with swipeable items
@@ -30,7 +36,12 @@ export const SwipeableRow = <T,>({
     swipeEnabled = true,
     testID,
     xMargins = 20,
+    onPress,
+    isDragging,
+    isOpen,
 }: Props<T>) => {
+    const { styles } = useThemedStyles(baseStyles)
+
     const closeOtherSwipeableItems = useCallback(
         (all = false) => {
             swipeableItemRefs?.current.forEach((ref, id) => {
@@ -51,12 +62,33 @@ export const SwipeableRow = <T,>({
             closeOtherSwipeableItems()
             setSelectedItem?.(item)
         }
+        if (openDirection === OpenDirection.NONE) {
+            setSelectedItem?.(undefined)
+        }
     }
 
     const onTrashIconPress = useCallback(() => {
         closeOtherSwipeableItems(true) // close all swipeable items
         handleTrashIconPress(item)
     }, [closeOtherSwipeableItems, handleTrashIconPress, item])
+
+    const handleLongPress = useCallback(() => {
+        const element = swipeableItemRefs.current.get(itemKey)
+        if (element && !isOpen) {
+            element.open(OpenDirection.LEFT, -40)
+            setTimeout(() => {
+                element.close()
+                setTimeout(() => {
+                    element.open(OpenDirection.LEFT, -40)
+                    setTimeout(() => {
+                        element.close()
+                    }, 100)
+                }, 100)
+            }, 100)
+        }
+    }, [isOpen, itemKey, swipeableItemRefs])
+
+    const PressableComponent = isDragging ? Pressable : TouchableOpacity
 
     return (
         <BaseView flexDirection="row" mx={xMargins} my={8} testID={testID}>
@@ -71,10 +103,26 @@ export const SwipeableRow = <T,>({
                 )}
                 snapPointsLeft={[58]}
                 onChange={handleSwipe}>
-                <Pressable onTouchStart={() => closeOtherSwipeableItems(false)}>
-                    {children}
-                </Pressable>
+                <BaseView style={styles.touchableContainer}>
+                    <PressableComponent
+                        onPress={() => onPress?.(item)}
+                        onPressIn={() => {
+                            closeOtherSwipeableItems(false)
+                        }}
+                        onLongPress={handleLongPress}>
+                        <BaseView>{children}</BaseView>
+                    </PressableComponent>
+                </BaseView>
             </SwipeableItem>
         </BaseView>
     )
 }
+
+const baseStyles = (theme: ColorThemeType) =>
+    StyleSheet.create({
+        touchableContainer: {
+            backgroundColor: theme.colors.card,
+            borderRadius: 16,
+            overflow: "hidden",
+        },
+    })

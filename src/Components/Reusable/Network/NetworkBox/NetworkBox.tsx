@@ -3,7 +3,13 @@ import { StyleSheet } from "react-native"
 import { useThemedStyles } from "~Hooks"
 import { ColorThemeType } from "~Constants"
 import { StringUtils } from "~Utils"
-import { BaseIcon, BaseText, BaseTouchableBox, BaseView } from "~Components"
+import {
+    BaseCard,
+    BaseIcon,
+    BaseText,
+    BaseTouchableBox,
+    BaseView,
+} from "~Components"
 import { Network } from "~Model"
 import { useI18nContext } from "~i18n"
 
@@ -30,50 +36,66 @@ export const NetworkBox: React.FC<Props> = ({
         [onPress, network],
     )
 
-    return (
+    const networkBoxBody = useCallback(
+        () => (
+            <BaseView
+                flexDirection="row"
+                justifyContent="space-between"
+                alignItems="center"
+                flex={1}>
+                <BaseView
+                    flexDirection="column"
+                    alignItems="flex-start"
+                    style={
+                        rightIcon
+                            ? styles.NetworkInfoRightIcon
+                            : styles.NetworkInfoNoRightIcon
+                    }>
+                    <BaseView flexDirection="row">
+                        <BaseText
+                            typographyFont="button"
+                            ellipsizeMode="tail"
+                            numberOfLines={1}>
+                            {StringUtils.capitalize(network.name)}
+                        </BaseText>
+                        {network.defaultNet && (
+                            <BaseText pl={2} typographyFont="captionRegular">
+                                ({LL.COMMON_LBL_DEFAULT()})
+                            </BaseText>
+                        )}
+                    </BaseView>
+                    <BaseText pt={2} typographyFont="captionMedium">
+                        {network.currentUrl}
+                    </BaseText>
+                </BaseView>
+                {rightIcon && (
+                    <BaseIcon name={rightIcon} color={theme.colors.text} />
+                )}
+            </BaseView>
+        ),
+        [
+            LL,
+            network.currentUrl,
+            network.defaultNet,
+            network.name,
+            rightIcon,
+            styles.NetworkInfoNoRightIcon,
+            styles.NetworkInfoRightIcon,
+            theme.colors.text,
+        ],
+    )
+
+    return onPress ? (
         <BaseView style={styles.touchableContainer} flexDirection="row">
             <BaseTouchableBox
                 haptics="Light"
                 action={handleOnPress}
                 innerContainerStyle={style}>
-                <BaseView
-                    flexDirection="row"
-                    justifyContent="space-between"
-                    alignItems="center"
-                    flex={1}>
-                    <BaseView
-                        flexDirection="column"
-                        alignItems="flex-start"
-                        style={
-                            rightIcon
-                                ? styles.NetworkInfoRightIcon
-                                : styles.NetworkInfoNoRightIcon
-                        }>
-                        <BaseView flexDirection="row">
-                            <BaseText
-                                typographyFont="button"
-                                ellipsizeMode="tail"
-                                numberOfLines={1}>
-                                {StringUtils.capitalize(network.name)}
-                            </BaseText>
-                            {network.defaultNet && (
-                                <BaseText
-                                    pl={2}
-                                    typographyFont="captionRegular">
-                                    ({LL.COMMON_LBL_DEFAULT()})
-                                </BaseText>
-                            )}
-                        </BaseView>
-                        <BaseText pt={2} typographyFont="captionMedium">
-                            {network.currentUrl}
-                        </BaseText>
-                    </BaseView>
-                    {rightIcon && (
-                        <BaseIcon name={rightIcon} color={theme.colors.text} />
-                    )}
-                </BaseView>
+                {networkBoxBody()}
             </BaseTouchableBox>
         </BaseView>
+    ) : (
+        <BaseCard style={style}>{networkBoxBody()}</BaseCard>
     )
 }
 

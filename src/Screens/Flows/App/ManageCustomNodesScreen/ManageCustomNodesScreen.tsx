@@ -41,6 +41,7 @@ export const ManageCustomNodesScreen = () => {
     const theme = useTheme()
 
     const [networkToEditDeleteId, setNetworkToEditDeleteId] = useState<string>()
+    const [networkToDelete, setNetworkToDelete] = useState<string>()
     const [isScrollable, setIsScrollable] = useState<boolean>(false)
 
     const dispatch = useAppDispatch()
@@ -142,14 +143,6 @@ export const ManageCustomNodesScreen = () => {
         new Map(),
     )
 
-    const closeOtherSwipeableItems = useCallback((network?: Network) => {
-        swipeableItemRefs?.current.forEach((ref, id) => {
-            if (id !== network?.id) {
-                ref?.close()
-            }
-        })
-    }, [])
-
     const renderItem = useCallback(
         ({ item }: SectionListRenderItemInfo<Network, Section>) => {
             const onPress = () => onEditNetworkClick(item)
@@ -159,19 +152,20 @@ export const ManageCustomNodesScreen = () => {
                     itemKey={item.id}
                     swipeableItemRefs={swipeableItemRefs}
                     handleTrashIconPress={openDeleteConfirmationSheet}
-                    setSelectedItem={(network: Network) =>
-                        setNetworkToEditDeleteId(network.id)
-                    }>
+                    setSelectedItem={(network?: Network) =>
+                        setNetworkToDelete(network?.id)
+                    }
+                    onPress={onPress}
+                    isOpen={networkToDelete === item.id}>
                     <NetworkBox
                         network={item}
-                        onPress={onPress}
                         rightIcon="pencil-outline"
                         flex={1}
                     />
                 </SwipeableRow>
             )
         },
-        [onEditNetworkClick, openDeleteConfirmationSheet],
+        [networkToDelete, onEditNetworkClick, openDeleteConfirmationSheet],
     )
 
     const renderSectionSeparator = useCallback(
@@ -187,7 +181,7 @@ export const ManageCustomNodesScreen = () => {
     )
 
     return (
-        <BaseSafeArea grow={1} onTouchStart={() => closeOtherSwipeableItems()}>
+        <BaseSafeArea grow={1}>
             <BackButtonHeader />
             <BaseView
                 flexDirection="row"
@@ -206,6 +200,7 @@ export const ManageCustomNodesScreen = () => {
             <BaseSpacer height={16} />
             <BaseView flexDirection="row" style={styles.listContainer}>
                 <SectionList
+                    extraData={networkToDelete}
                     sections={sections}
                     keyExtractor={i => i.id}
                     SectionSeparatorComponent={renderSectionSeparator}

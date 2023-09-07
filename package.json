@@ -19,6 +19,7 @@
     "start:watchman": "watchman watch-del './'; watchman watch-project './'; react-native start",
     "start:reset": "react-native start --reset-cache",
     "start:i18n": "yarn i18n & react-native start & wait",
+    "start:i18n:reset": "yarn i18n & react-native start --reset-cache & wait",
     "test": "jest",
     "test:troubleshoot": "jest --detectOpenHandles",
     "test:coverage:debug": "yarn test --forceExit --coverage",

@@ -1,4 +1,4 @@
-import React, { useMemo, useRef, useState } from "react"
+import React, { Fragment, useMemo, useRef, useState } from "react"
 import {
     BaseSpacer,
     BaseText,
@@ -16,6 +16,7 @@ import {
 import { SessionTypes } from "@walletconnect/types"
 import { isEmpty } from "lodash"
 import {
+    AppDetailsBottomSheet,
     ConfirmDisconnectBottomSheet,
     ConnectedAppBox,
     ConnectedAppsHeader,
@@ -32,6 +33,8 @@ export const ConnectedAppsScreen = () => {
     const { LL } = useI18nContext()
     const { disconnect } = useWalletConnect()
     const [selectedSession, setSelectedSession] =
+        useState<SessionTypes.Struct>()
+    const [sessionToDelete, setSessionToDelete] =
         useState<SessionTypes.Struct>()
 
     const totalSessions = useMemo(() => {
@@ -51,6 +54,12 @@ export const ConnectedAppsScreen = () => {
     const swipeableItemRefs = useRef<Map<string, SwipeableItemImperativeRef>>(
         new Map(),
     )
+
+    const {
+        ref: connectedAppDetailsBottomSheetRef,
+        onOpen: openConnectedAppDetailsSheet,
+        onClose: closeConnectedAppDetailsSheet,
+    } = useBottomSheetModal()
 
     return (
         <Layout
@@ -104,25 +113,50 @@ export const ConnectedAppsScreen = () => {
                                     </BaseView>
                                     {accountSessions.map(session => {
                                         return (
-                                            <SwipeableRow
-                                                key={session.topic}
-                                                item={session}
-                                                itemKey={session.topic}
-                                                swipeableItemRefs={
-                                                    swipeableItemRefs
-                                                }
-                                                handleTrashIconPress={
-                                                    openConfirmDisconnectDetailsSheet
-                                                }
-                                                setSelectedItem={
-                                                    setSelectedSession
-                                                }>
-                                                <ConnectedAppBox
-                                                    key={session.topic}
+                                            <Fragment key={session.topic}>
+                                                <SwipeableRow
+                                                    item={session}
+                                                    itemKey={session.topic}
+                                                    swipeableItemRefs={
+                                                        swipeableItemRefs
+                                                    }
+                                                    handleTrashIconPress={
+                                                        openConfirmDisconnectDetailsSheet
+                                                    }
+                                                    setSelectedItem={
+                                                        setSessionToDelete
+                                                    }
+                                                    onPress={(
+                                                        _session?: SessionTypes.Struct,
+                                                    ) => {
+                                                        setSelectedSession(
+                                                            _session,
+                                                        )
+                                                        openConnectedAppDetailsSheet()
+                                                    }}
+                                                    isOpen={
+                                                        sessionToDelete ===
+                                                        session
+                                                    }>
+                                                    <ConnectedAppBox
+                                                        key={session.topic}
+                                                        session={session}
+                                                    />
+                                                </SwipeableRow>
+                                                <AppDetailsBottomSheet
+                                                    ref={
+                                                        connectedAppDetailsBottomSheetRef
+                                                    }
+                                                    onClose={
+                                                        closeConnectedAppDetailsSheet
+                                                    }
                                                     session={session}
                                                     account={account}
+                                                    onDisconnect={
+                                                        openConfirmDisconnectDetailsSheet
+                                                    }
                                                 />
-                                            </SwipeableRow>
+                                            </Fragment>
                                         )
                                     })}
                                     <ConfirmDisconnectBottomSheet

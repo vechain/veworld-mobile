@@ -26,6 +26,9 @@ import { AnimatedChartCard } from "./AnimatedChartCard"
 import { FungibleTokenWithBalance } from "~Model"
 import { RemoveCustomTokenBottomSheet } from "../../RemoveCustomTokenBottomSheet"
 import { SwipeableItemImperativeRef } from "react-native-swipeable-item"
+import { BalanceUtils } from "~Utils"
+import { Routes } from "~Navigation"
+import { useNavigation } from "@react-navigation/native"
 
 interface Props extends AnimateProps<ViewProps> {
     isEdit: boolean
@@ -96,6 +99,29 @@ export const TokenList = memo(
             )
         }
 
+        const nav = useNavigation()
+
+        const closeOtherSwipeableItems = useCallback(() => {
+            swipeableItemRefs?.current.forEach(ref => {
+                ref?.close()
+            })
+        }, [swipeableItemRefs])
+
+        const onTokenPress = useCallback(
+            (token: FungibleTokenWithBalance) => {
+                const isTokenBalance = BalanceUtils.getIsTokenWithBalance(token)
+
+                if (!isEdit && isTokenBalance) {
+                    closeOtherSwipeableItems()
+                    nav.navigate(Routes.SELECT_AMOUNT_SEND, {
+                        token,
+                        initialRoute: Routes.HOME,
+                    })
+                }
+            },
+            [nav, closeOtherSwipeableItems, isEdit],
+        )
+
         const renderItem: RenderItem<FungibleTokenWithBalance> = useCallback(
             ({ item, getIndex, isActive, drag }) => {
                 return (
@@ -105,7 +131,10 @@ export const TokenList = memo(
                         swipeableItemRefs={swipeableItemRefs}
                         handleTrashIconPress={openRemoveCustomTokenBottomSheet}
                         setSelectedItem={setTokenToRemove}
-                        swipeEnabled={!isEdit}>
+                        swipeEnabled={!isEdit}
+                        onPress={onTokenPress}
+                        isDragging={isEdit}
+                        isOpen={tokenToRemove === item}>
                         <AnimatedTokenCard
                             item={item}
                             isActive={isActive}
@@ -113,12 +142,17 @@ export const TokenList = memo(
                             drag={drag}
                             isEdit={isEdit}
                             isBalanceVisible={isBalanceVisible}
-                            swipeableItemRefs={swipeableItemRefs}
                         />
                     </SwipeableRow>
                 )
             },
-            [isBalanceVisible, isEdit, openRemoveCustomTokenBottomSheet],
+            [
+                isBalanceVisible,
+                isEdit,
+                onTokenPress,
+                openRemoveCustomTokenBottomSheet,
+                tokenToRemove,
+            ],
         )
 
         return (

@@ -65,6 +65,7 @@ export const ContactsScreen = () => {
 
     const [selectedContactAddress, setSelectedContactAddress] =
         useState<string>()
+    const [contactToRemove, setContactToRemove] = useState<string>()
 
     const selectedContact = useAppSelector(state =>
         selectContactByAddress(state, selectedContactAddress),
@@ -87,10 +88,14 @@ export const ContactsScreen = () => {
         })
     }, [])
 
-    const onEditContactPress = useCallback(() => {
-        openEditContactSheet()
-        closeOtherSwipeableItems("") // Pass an empty string to close all items
-    }, [closeOtherSwipeableItems, openEditContactSheet])
+    const onEditContactPress = useCallback(
+        (contact: Contact) => {
+            setSelectedContactAddress(contact.address)
+            openEditContactSheet()
+            closeOtherSwipeableItems("") // Pass an empty string to close all items
+        },
+        [closeOtherSwipeableItems, openEditContactSheet],
+    )
 
     const handleRemoveContact = useCallback(() => {
         if (selectedContactAddress) {
@@ -137,17 +142,16 @@ export const ContactsScreen = () => {
                     itemKey={item.address}
                     swipeableItemRefs={swipeableItemRefs}
                     handleTrashIconPress={openRemoveContactSheet}
-                    setSelectedItem={(contact: Contact) =>
-                        setSelectedContactAddress(contact.address)
-                    }>
-                    <ContactDetailBox
-                        contact={item}
-                        onEditPress={onEditContactPress}
-                    />
+                    setSelectedItem={(contact?: Contact) =>
+                        setContactToRemove(contact?.address)
+                    }
+                    onPress={onEditContactPress}
+                    isOpen={contactToRemove === item.address}>
+                    <ContactDetailBox contact={item} />
                 </SwipeableRow>
             )
         },
-        [onEditContactPress, openRemoveContactSheet],
+        [openRemoveContactSheet, onEditContactPress, contactToRemove],
     )
 
     // [End] Render sub components
@@ -197,6 +201,7 @@ export const ContactsScreen = () => {
                     {!!contacts.length && (
                         <BaseView flexDirection="row" style={[baseStyles.list]}>
                             <FlashList
+                                extraData={contactToRemove}
                                 data={contacts}
                                 keyExtractor={contact => contact.address}
                                 onViewableItemsChanged={onViewableItemsChanged}
