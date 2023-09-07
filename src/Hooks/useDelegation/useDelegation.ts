@@ -52,7 +52,7 @@ export const useDelegation = ({ providedUrl, setGasPayer }: Props) => {
     const handleSetSelectedDelegationAccount = (
         selectedAccount: AccountWithDevice,
     ) => {
-        if (account.device.type === DEVICE_TYPE.LEDGER) return
+        if (selectedAccount.device.type === DEVICE_TYPE.LEDGER) return
 
         setSelectedDelegationAccount(selectedAccount as LocalAccountWithDevice)
         setSelectedDelegationOption(DelegationType.ACCOUNT)
