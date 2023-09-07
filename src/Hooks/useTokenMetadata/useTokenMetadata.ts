@@ -4,34 +4,25 @@ import { NFT_AXIOS_TIMEOUT } from "~Constants/Constants/NFT"
 import { URIProtocol } from "~Constants/Enums/URIProtocol"
 import { TokenMetadata } from "~Model"
 import { getTokenMetaArweave, getTokenMetaIpfs } from "~Networking"
-import {
-    addMetadataEntry,
-    selectEntryFromMetadataCache,
-    selectMetadataCacheState,
-    useAppDispatch,
-    useAppSelector,
-} from "~Storage/Redux"
 import { debug, warn } from "~Utils"
+import { MMKV } from "react-native-mmkv"
+
+const metadataStorage = new MMKV({ id: "ipfs-cache" })
 
 export const useTokenMetadata = () => {
-    const dispatch = useAppDispatch()
-    const metadata = useAppSelector(selectMetadataCacheState)
-
     const fetchMetadata = useCallback(
-        async (uri: string) => {
+        async (uri: string): Promise<TokenMetadata | undefined> => {
             try {
                 const protocol = uri?.split(":")[0].trim()
 
                 switch (protocol) {
                     case URIProtocol.IPFS:
                     case URIProtocol.ARWEAVE: {
-                        const cachedData = selectEntryFromMetadataCache(
-                            metadata,
-                            uri,
-                        )
+                        const cachedData = metadataStorage.getString(uri)
+
                         if (cachedData) {
                             debug(`Using cached metadata for ${uri}`)
-                            return cachedData
+                            return JSON.parse(cachedData)
                         }
 
                         debug(`Fetching metadata for ${uri}`)
@@ -39,12 +30,8 @@ export const useTokenMetadata = () => {
                             ? await getTokenMetaIpfs(uri)
                             : await getTokenMetaArweave(uri)
 
-                        dispatch(
-                            addMetadataEntry({
-                                seed: uri,
-                                value: retrievedData,
-                            }),
-                        )
+                        metadataStorage.set(uri, JSON.stringify(retrievedData))
+
                         return retrievedData
                     }
 
@@ -69,7 +56,7 @@ export const useTokenMetadata = () => {
                 warn(`Error fetching metadata ${uri}`, e)
             }
         },
-        [dispatch, metadata],
+        [],
     )
 
     return {

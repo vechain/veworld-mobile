@@ -1,23 +1,22 @@
 import { combineReducers } from "redux"
 import {
-    DeviceSlice,
-    UserPreferencesSlice,
-    ConfigSlice,
     AccountSlice,
-    BalanceSlice,
-    NetworkSlice,
-    CacheSlice,
-    ContactsSlice,
-    TokenSlice,
-    CurrencySlice,
     ActivitiesSlice,
-    DelegationSlice,
-    NftSlice,
-    WalletConnectSessionsSlice,
-    PendingSlice,
+    BalanceSlice,
     BeatSlice,
-    MetadataCacheSlice,
+    CacheSlice,
+    ConfigSlice,
+    ContactsSlice,
+    CurrencySlice,
+    DelegationSlice,
+    DeviceSlice,
     ImageCacheSlice,
+    NetworkSlice,
+    NftSlice,
+    PendingSlice,
+    TokenSlice,
+    UserPreferencesSlice,
+    WalletConnectSessionsSlice,
 } from "./Slices"
 import { nftPersistConfig } from "./Helpers"
 import { persistReducer } from "redux-persist"
@@ -39,6 +38,5 @@ export const reducer = combineReducers({
     [WalletConnectSessionsSlice.name]: WalletConnectSessionsSlice.reducer,
     [PendingSlice.name]: PendingSlice.reducer,
     [BeatSlice.name]: BeatSlice.reducer,
-    [MetadataCacheSlice.name]: MetadataCacheSlice.reducer,
     [ImageCacheSlice.name]: ImageCacheSlice.reducer,
 })
