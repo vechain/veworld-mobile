@@ -51,6 +51,7 @@ export const ListFooterView = memo(
                     <NftSkeleton
                         numberOfChildren={NFT_PAGE_SIZE}
                         renderExtra={renderExtraSkeleton}
+                        showMargin={true}
                     />
                 )}
             </>

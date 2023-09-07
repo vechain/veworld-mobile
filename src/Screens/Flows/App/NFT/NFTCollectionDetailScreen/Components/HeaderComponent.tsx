@@ -37,7 +37,7 @@ export const HeaderComponent = memo(
 
         return (
             <>
-                <BaseView flexDirection="row" alignItems="flex-end">
+                <BaseView flexDirection="row" alignItems="flex-end" mx={20}>
                     {collection.mediaType === NFTMediaType.IMAGE ? (
                         <NFTImage
                             uri={collection?.image}
@@ -87,7 +87,7 @@ export const HeaderComponent = memo(
                     </BaseView>
                 </BaseView>
 
-                <>
+                <BaseView mx={20}>
                     <BaseSpacer height={24} />
 
                     {!isEmpty(collection.description) && (
@@ -103,7 +103,7 @@ export const HeaderComponent = memo(
                     <BaseText typographyFont="biggerTitle">
                         {LL.SB_COLLECTIBLES()}
                     </BaseText>
-                </>
+                </BaseView>
 
                 <BaseSpacer height={12} />
             </>

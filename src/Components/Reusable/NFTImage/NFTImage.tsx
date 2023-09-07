@@ -59,7 +59,7 @@ export const NFTImage = memo((props: Props) => {
                 defaultSource={placeholderImg} // not working on android dev only
                 source={{
                     uri: resolvedUri,
-                    priority: FastImage.priority.high,
+                    priority: FastImage.priority.low,
                     cache: FastImage.cacheControl.immutable,
                 }}
                 {...rest}
