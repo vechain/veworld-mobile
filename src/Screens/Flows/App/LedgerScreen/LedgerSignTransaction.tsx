@@ -292,8 +292,8 @@ export const LedgerSignTransaction: React.FC<Props> = ({ route }) => {
 
             transaction.signature = delegationSignature
                 ? Buffer.concat([
-                      Buffer.from(delegationSignature, "hex"),
                       signature,
+                      Buffer.from(delegationSignature, "hex"),
                   ])
                 : signature
 
