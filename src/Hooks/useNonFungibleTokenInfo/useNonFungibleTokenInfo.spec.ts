@@ -1,7 +1,7 @@
 import { renderHook } from "@testing-library/react-hooks"
 import { useNonFungibleTokenInfo } from "./useNonFungibleTokenInfo"
 import { useThor } from "~Components"
-import { getName, getNftBalanceOf, getTokenURI } from "~Networking"
+import { getName, getTokenURI } from "~Networking"
 import * as logger from "~Utils/Logger/Logger"
 import { NFTMediaType, TokenMetadata } from "~Model"
 
@@ -44,7 +44,7 @@ describe("useNonFungibleTokenInfo", () => {
 
     it("should fetch NFT info correctly", async () => {
         const tokenId = "tokenId1"
-        const thor = "thor"
+        const thor = { genesis: { id: "blah" } }
         const tokenUriMock = "http://token.uri"
         const nameMock = "NFT Collection"
         const address = "contractAddress1"
@@ -55,7 +55,6 @@ describe("useNonFungibleTokenInfo", () => {
             mediaType: NFTMediaType.IMAGE,
         }
 
-        ;(getNftBalanceOf as jest.Mock).mockResolvedValue(1)
         ;(getTokenURI as jest.Mock).mockResolvedValue(tokenUriMock)
         ;(getName as jest.Mock).mockResolvedValue(nameMock)
         fetchMetadata.mockResolvedValue(nftMetaMock)
@@ -67,11 +66,8 @@ describe("useNonFungibleTokenInfo", () => {
 
         await waitForNextUpdate({ timeout: 10000 })
 
-        expect(result.current.tokenUri).toEqual(tokenUriMock)
         expect(result.current.collectionName).toEqual(nameMock)
         expect(result.current.tokenMetadata).toEqual(nftMetaMock)
-        expect(result.current.tokenImage).toEqual(nftMetaMock.image)
-        expect(result.current.tokenMediaType).toBe(NFTMediaType.IMAGE)
         expect(result.current.isMediaLoading).toBeFalsy()
         expect(getTokenURI).toHaveBeenCalledWith(tokenId, address, thor)
         expect(getName).toHaveBeenCalledWith(address, thor)
@@ -81,7 +77,7 @@ describe("useNonFungibleTokenInfo", () => {
     it("should handle error when fetching NFT info", async () => {
         const tokenId = "tokenId1"
         const contractAddress = "contractAddress1"
-        const thor = "thor"
+        const thor = { genesis: { id: "blah" } }
         const errorMock = new Error("Error")
 
         ;(getTokenURI as jest.Mock).mockRejectedValue(errorMock)
@@ -98,29 +94,23 @@ describe("useNonFungibleTokenInfo", () => {
         await waitForNextUpdate({ timeout: 10000 })
 
         expect(consoleErrorSpy).toHaveBeenCalled()
-        expect(result.current.tokenUri).toBeUndefined()
         expect(result.current.collectionName).toBeUndefined()
         expect(result.current.tokenMetadata).toBeUndefined()
-        expect(result.current.tokenImage).toBeUndefined()
-        expect(result.current.tokenMediaType).toBe(NFTMediaType.UNKNOWN)
         expect(result.current.isMediaLoading).toBeFalsy()
     })
 
     it("should handle error when token uri generates error", async () => {
         const tokenId = "tokenId1"
         const contractAddress = "contractAddress1"
-        const thor = "thor"
+        const thor = { genesis: { id: "blah" } }
         const tokenUriMock = "http://token.uri"
         const nameMock = "NFT Collection"
 
-        const errorMock = new Error("Error")
-
         const consoleErrorSpy = jest.spyOn(logger, "error")
 
-        ;(getNftBalanceOf as jest.Mock).mockResolvedValue(1)
         ;(getTokenURI as jest.Mock).mockResolvedValue(tokenUriMock)
         ;(getName as jest.Mock).mockResolvedValue(nameMock)
-        fetchMetadata.mockResolvedValue(errorMock)
+        fetchMetadata.mockRejectedValueOnce(new Error("Error"))
         ;(useThor as jest.Mock).mockReturnValue(thor)
 
         const { result, waitForNextUpdate } = renderHook(() =>
@@ -130,10 +120,7 @@ describe("useNonFungibleTokenInfo", () => {
         await waitForNextUpdate({ timeout: 10000 })
 
         expect(consoleErrorSpy).toHaveBeenCalled()
-        expect(result.current.tokenUri).toEqual(tokenUriMock)
         expect(result.current.collectionName).toEqual(nameMock)
-        expect(result.current.tokenImage).toBeUndefined()
-        expect(result.current.tokenMediaType).toBe(NFTMediaType.UNKNOWN)
         expect(result.current.isMediaLoading).toBeFalsy()
         expect(getTokenURI).toHaveBeenCalledWith(tokenId, contractAddress, thor)
         expect(getName).toHaveBeenCalledWith(contractAddress, thor)

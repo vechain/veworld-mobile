@@ -14,10 +14,7 @@ import { error } from "~Utils"
  * @returns {Object} The hook returns an object with the following properties:
  *
  * - `tokenMetadata`: Contains metadata of the NFT. Can be undefined if metadata is not retrieved yet or there was an error.
- * - `tokenUri`: The URI of the token. Can be undefined if URI is not retrieved yet or there was an error.
  * - `collectionName`: The name of the collection the NFT belongs to. Can be undefined if name is not retrieved yet or there was an error.
- * - `tokenImage`: The image URL of the token. Can be undefined if image URL is not retrieved yet or there was an error.
- * - `tokenMime`: The MIME type of the token's image. Defaults to 'image/png' if not retrieved or there was an error.
  * - `isMediaLoading`: A boolean indicating whether the media (metadata, URI, name, image, MIME type) is currently loading.
  *
  * @example
@@ -46,7 +43,7 @@ export const useNonFungibleTokenInfo = (
                 setCollectionName(name)
                 const uri = await getTokenURI(tokenId, contractAddress, thor)
                 const metadata = await fetchMetadata(uri)
-                if (!metadata) throw new Error("No metadata found")
+                if (!metadata) throw Error("No metadata found")
                 setTokenMetadata(metadata)
                 setIsMediaLoading(false)
             } catch (e) {
