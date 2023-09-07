@@ -12,6 +12,7 @@ import { useI18nContext } from "~i18n"
 import HapticsService from "~Services/HapticsService"
 import SkeletonContent from "react-native-skeleton-content-nonexpo"
 import { useThemedStyles } from "~Hooks"
+import { PlatformUtils } from "~Utils"
 
 type Props = {
     nft: NonFungibleToken
@@ -57,21 +58,26 @@ export const NFTView = memo(({ nft, index, collection }: Props) => {
                     />
                 )}
 
-                {nft.mediaType === NFTMediaType.VIDEO && (
-                    <BaseView style={styles.nftPreviewImage}>
-                        <Video
-                            PosterComponent={renderNFTStaticImage}
-                            usePoster
-                            ref={video}
-                            shouldPlay
-                            style={styles.nftPreviewImage}
-                            source={{ uri: nft.image }}
-                            resizeMode={ResizeMode.COVER}
-                            isLooping
-                            isMuted
-                        />
-                    </BaseView>
-                )}
+                {nft.mediaType === NFTMediaType.VIDEO &&
+                    PlatformUtils.isIOS() && (
+                        <BaseView style={styles.nftPreviewImage}>
+                            <Video
+                                usePoster
+                                ref={video}
+                                shouldPlay={false}
+                                style={styles.nftPreviewImage}
+                                source={{ uri: nft.image }}
+                                resizeMode={ResizeMode.COVER}
+                                isLooping
+                                isMuted
+                            />
+                        </BaseView>
+                    )}
+
+                {/* On Android devices with low RAM showing video previews causes rendering overload and crashes */}
+                {nft.mediaType === NFTMediaType.VIDEO &&
+                    PlatformUtils.isAndroid() &&
+                    renderNFTStaticImage()}
 
                 {nft.mediaType === NFTMediaType.UNKNOWN && (
                     <NFTImage
@@ -161,7 +167,8 @@ const baseStyles = () =>
             flexWrap: "wrap",
             flexDirection: "row",
             justifyContent: "space-between",
-            width: "50%",
+            marginLeft: 20,
+            marginRight: 20,
         },
 
         nftPreviewImage: {
