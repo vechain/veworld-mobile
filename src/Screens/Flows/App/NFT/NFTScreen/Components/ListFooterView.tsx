@@ -12,10 +12,17 @@ type Props = {
     isLoading: boolean
     hasNext: boolean
     renderExtraSkeleton?: boolean
+    showMargin?: boolean
 }
 
 export const ListFooterView = memo(
-    ({ onGoToBlackListed, isLoading, hasNext, renderExtraSkeleton }: Props) => {
+    ({
+        onGoToBlackListed,
+        isLoading,
+        hasNext,
+        renderExtraSkeleton,
+        showMargin = false,
+    }: Props) => {
         const { LL } = useI18nContext()
         const blackListedCollections = useAppSelector(
             selectBlackListedCollections,
@@ -51,7 +58,7 @@ export const ListFooterView = memo(
                     <NftSkeleton
                         numberOfChildren={NFT_PAGE_SIZE}
                         renderExtra={renderExtraSkeleton}
-                        showMargin={true}
+                        showMargin={showMargin}
                     />
                 )}
             </>

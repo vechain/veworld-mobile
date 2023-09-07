@@ -52,7 +52,11 @@ export const NFTList = ({
             removeClippedSubviews={true}
             ListFooterComponent={
                 <>
-                    <ListFooterView isLoading={isLoading} hasNext={hasNext} />
+                    <ListFooterView
+                        isLoading={isLoading}
+                        hasNext={hasNext}
+                        showMargin={true}
+                    />
                     {!isLoading && <BaseSpacer height={16} />}
                 </>
             }
