@@ -1,4 +1,4 @@
-import React from "react"
+import React, { useCallback } from "react"
 import { useThemedStyles } from "~Hooks"
 
 import {
@@ -40,42 +40,60 @@ export const DeviceBox: React.FC<Props> = ({
      */
     const PressableComponent = isEdit ? Pressable : TouchableOpacity
 
-    return (
+    const deviceBoxBody = useCallback(
+        () => (
+            <BaseCard style={styles.card}>
+                <BaseView flexDirection="row">
+                    {isEdit && (
+                        <Pressable
+                            onPressIn={isEdit ? drag : undefined}
+                            disabled={isActive}>
+                            <BaseIcon
+                                name={"drag"}
+                                color={theme.colors.text}
+                                size={24}
+                            />
+                        </Pressable>
+                    )}
+                    <BaseSpacer width={8} />
+                    <BaseText typographyFont="subTitleBold">
+                        {device.alias}
+                    </BaseText>
+                    <BaseSpacer width={8} />
+                    {device.type === DEVICE_TYPE.LEDGER && <LedgerBadge />}
+                </BaseView>
+                {isIconVisible && !isEdit && (
+                    <BaseIcon
+                        name={"pencil-outline"}
+                        color={theme.colors.text}
+                        size={24}
+                    />
+                )}
+            </BaseCard>
+        ),
+        [
+            device.alias,
+            device.type,
+            drag,
+            isActive,
+            isEdit,
+            isIconVisible,
+            styles.card,
+            theme.colors.text,
+        ],
+    )
+
+    return onDeviceSelected ? (
         <BaseView style={styles.touchableContainer}>
             <PressableComponent
                 disabled={isActive}
                 style={styles.deviceBoxPressable}
                 onPress={isEdit ? undefined : onDeviceSelected?.(device)}>
-                <BaseCard style={styles.card}>
-                    <BaseView flexDirection="row">
-                        {isEdit && (
-                            <Pressable
-                                onPressIn={isEdit ? drag : undefined}
-                                disabled={isActive}>
-                                <BaseIcon
-                                    name={"drag"}
-                                    color={theme.colors.text}
-                                    size={24}
-                                />
-                            </Pressable>
-                        )}
-                        <BaseSpacer width={8} />
-                        <BaseText typographyFont="subTitleBold">
-                            {device.alias}
-                        </BaseText>
-                        <BaseSpacer width={8} />
-                        {device.type === DEVICE_TYPE.LEDGER && <LedgerBadge />}
-                    </BaseView>
-                    {isIconVisible && !isEdit && (
-                        <BaseIcon
-                            name={"pencil-outline"}
-                            color={theme.colors.text}
-                            size={24}
-                        />
-                    )}
-                </BaseCard>
+                {deviceBoxBody()}
             </PressableComponent>
         </BaseView>
+    ) : (
+        deviceBoxBody()
     )
 }
 

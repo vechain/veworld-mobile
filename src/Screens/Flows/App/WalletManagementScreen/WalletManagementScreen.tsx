@@ -33,6 +33,7 @@ export const WalletManagementScreen = () => {
     const { tabBarBottomMargin } = useTabBarBottomMargin()
     const devices = useAppSelector(selectDevices)
     const [selectedDevice, setSelectedDevice] = useState<Device>()
+    const [deviceToRemove, setDeviceToRemove] = useState<Device>()
     const { deleteWallet } = useWalletDeletion(selectedDevice)
     const { LL } = useI18nContext()
     const dispatch = useDispatch()
@@ -90,7 +91,7 @@ export const WalletManagementScreen = () => {
     )
 
     const onDeviceSelected = useCallback(
-        (device: BaseDevice) => () => {
+        (device: BaseDevice) => {
             closeOtherSwipeableItems()
             setSelectedDevice(device as Device)
             openWalletMgmtSheet()
@@ -106,19 +107,27 @@ export const WalletManagementScreen = () => {
                     itemKey={item.rootAddress}
                     swipeableItemRefs={swipeableItemRefs}
                     handleTrashIconPress={openRemoveWalletBottomSheet}
-                    setSelectedItem={setSelectedDevice}
-                    swipeEnabled={!isEdit && devices.length > 1}>
+                    setSelectedItem={setDeviceToRemove}
+                    swipeEnabled={!isEdit && devices.length > 1}
+                    onPress={onDeviceSelected}
+                    isDragMode={isEdit}
+                    isOpen={deviceToRemove === item}>
                     <DeviceBox
                         device={item}
                         isEdit={isEdit}
                         drag={drag}
                         isActive={isActive}
-                        onDeviceSelected={onDeviceSelected}
                     />
                 </SwipeableRow>
             )
         },
-        [devices.length, isEdit, onDeviceSelected, openRemoveWalletBottomSheet],
+        [
+            deviceToRemove,
+            devices.length,
+            isEdit,
+            onDeviceSelected,
+            openRemoveWalletBottomSheet,
+        ],
     )
 
     const handleOnSuccessAddAccountBottomSheet = useCallback(() => {

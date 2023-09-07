@@ -43,6 +43,7 @@ export const DevicesList: React.FC<Props> = ({
             const style = isSelected
                 ? themedStyles.selected
                 : themedStyles.notSelected
+            // TODO: use Device Box here (https://github.com/vechainfoundation/veworld-mobile/issues/1299)
             return (
                 <BaseTouchableBox
                     haptics="Light"

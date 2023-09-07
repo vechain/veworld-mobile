@@ -76,10 +76,12 @@ export const ContactForm: React.FC<Props> = memo(
             const commonProps = {
                 placeholder: placeholderName,
                 label: titleName,
-                setValue: setName,
+                setValue: (name: string) => {
+                    setName(name)
+                    setNameTouched(true)
+                },
                 errorMessage: canShowNameError ? nameError : "",
                 value: valueName,
-                onTouchStart: () => setNameTouched(true),
                 editable: !nameFieldDisabled,
                 testID: "Contact-Name-Input",
             }
@@ -104,10 +106,12 @@ export const ContactForm: React.FC<Props> = memo(
             const commonProps = {
                 placeholder: placeholderAddress,
                 label: titleAddress,
-                setValue: setAddress,
+                setValue: (address: string) => {
+                    setAddress(address)
+                    setAddressTouched(true)
+                },
                 errorMessage: canShowAddressError ? addressError : "",
                 value: valueAddress,
-                onTouchStart: () => setAddressTouched(true),
                 rightIcon: !addressFieldDisabled ? "qrcode-scan" : "",
                 onIconPress: onOpenCamera,
                 testID: "Contact-Address-Input",
