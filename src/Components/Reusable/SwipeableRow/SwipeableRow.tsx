@@ -21,7 +21,7 @@ type Props<T> = {
     testID?: string
     xMargins?: number
     onPress?: (item: T) => void
-    isDragging?: boolean
+    isDragMode?: boolean
     isOpen?: boolean
 }
 
@@ -37,7 +37,7 @@ export const SwipeableRow = <T,>({
     testID,
     xMargins = 20,
     onPress,
-    isDragging,
+    isDragMode,
     isOpen,
 }: Props<T>) => {
     const { styles } = useThemedStyles(baseStyles)
@@ -88,7 +88,7 @@ export const SwipeableRow = <T,>({
         }
     }, [isOpen, itemKey, swipeableItemRefs])
 
-    const PressableComponent = isDragging ? Pressable : TouchableOpacity
+    const PressableComponent = isDragMode ? Pressable : TouchableOpacity
 
     return (
         <BaseView flexDirection="row" mx={xMargins} my={8} testID={testID}>
@@ -105,6 +105,7 @@ export const SwipeableRow = <T,>({
                 onChange={handleSwipe}>
                 <BaseView style={styles.touchableContainer}>
                     <PressableComponent
+                        disabled={isDragMode}
                         onPress={() => onPress?.(item)}
                         onPressIn={() => {
                             closeOtherSwipeableItems(false)

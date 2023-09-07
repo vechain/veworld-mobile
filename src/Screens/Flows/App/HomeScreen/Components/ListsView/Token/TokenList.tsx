@@ -133,7 +133,7 @@ export const TokenList = memo(
                         setSelectedItem={setTokenToRemove}
                         swipeEnabled={!isEdit}
                         onPress={onTokenPress}
-                        isDragging={isEdit}
+                        isDragMode={isEdit}
                         isOpen={tokenToRemove === item}>
                         <AnimatedTokenCard
                             item={item}

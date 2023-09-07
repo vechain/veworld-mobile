@@ -1,6 +1,6 @@
 import React, { useCallback, useRef } from "react"
 import { FlatList, ListRenderItem, StyleSheet, View } from "react-native"
-import { useThemedStyles } from "~Hooks"
+import { useTheme } from "~Hooks"
 import {
     BaseCard,
     BaseIcon,
@@ -18,15 +18,14 @@ import {
 } from "~Storage/Redux"
 import { useI18nContext } from "~i18n"
 import { SwipeableItemImperativeRef } from "react-native-swipeable-item"
-import { ColorThemeType } from "~Constants"
 
 type Props = {
     openAddUrl: () => void
 }
 
 export const ManageUrls = ({ openAddUrl }: Props) => {
+    const theme = useTheme()
     const { LL } = useI18nContext()
-    const { styles, theme } = useThemedStyles(baseStyles)
     const delegationUrls = useAppSelector(selectDelegationUrls)
     const dispatch = useAppDispatch()
     const thor = useThor()
@@ -94,15 +93,10 @@ export const ManageUrls = ({ openAddUrl }: Props) => {
     )
 }
 
-const baseStyles = (theme: ColorThemeType) =>
-    StyleSheet.create({
-        touchableContainer: {
-            backgroundColor: theme.colors.card,
-            borderRadius: 16,
-        },
-        flatListContainer: {
-            flex: 1,
-            width: "100%",
-            marginBottom: 60,
-        },
-    })
+const styles = StyleSheet.create({
+    flatListContainer: {
+        flex: 1,
+        width: "100%",
+        marginBottom: 60,
+    },
+})

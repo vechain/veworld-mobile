@@ -110,7 +110,7 @@ export const WalletManagementScreen = () => {
                     setSelectedItem={setDeviceToRemove}
                     swipeEnabled={!isEdit && devices.length > 1}
                     onPress={onDeviceSelected}
-                    isDragging={isEdit}
+                    isDragMode={isEdit}
                     isOpen={deviceToRemove === item}>
                     <DeviceBox
                         device={item}
