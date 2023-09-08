@@ -523,6 +523,7 @@ const en: BaseTranslation = {
     WALLET_MANAGEMENT_WALLET_NAME: "Wallet name",
     WALLET_MANAGEMENT_NOTIFICATION_CREATE_ACCOUNT_SUCCESS: "Account created successfully",
     WALLET_MANAGEMENT_NOTIFICATION_CREATE_ACCOUNT_ERROR: "Account created successfully",
+    WALLET_MANAGEMENT_NOTIFICATION_LAST_WALLET: "You can not delete the last wallet, but you can reset the app by going to Settings > General > Reset App",
 
 
     // Manage Token

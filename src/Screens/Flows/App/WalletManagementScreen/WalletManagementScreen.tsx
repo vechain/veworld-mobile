@@ -7,6 +7,7 @@ import {
     RequireUserPassword,
     SwipeableRow,
     showSuccessToast,
+    showWarningToast,
 } from "~Components"
 import { BaseDevice, Device } from "~Model"
 import { setDeviceState, useAppSelector } from "~Storage/Redux"
@@ -101,10 +102,16 @@ export const WalletManagementScreen = () => {
 
     const onTrashIconPress = useCallback(
         (item: Device) => () => {
-            setSelectedDevice(item)
-            openRemoveWalletBottomSheet()
+            if (devices.length > 1) {
+                setSelectedDevice(item)
+                openRemoveWalletBottomSheet()
+            } else {
+                showWarningToast(
+                    LL.WALLET_MANAGEMENT_NOTIFICATION_LAST_WALLET(),
+                )
+            }
         },
-        [openRemoveWalletBottomSheet],
+        [LL, devices.length, openRemoveWalletBottomSheet],
     )
 
     const renderItem: RenderItem<Device> = useCallback(
@@ -116,7 +123,7 @@ export const WalletManagementScreen = () => {
                     swipeableItemRefs={swipeableItemRefs}
                     handleTrashIconPress={onTrashIconPress(item)}
                     setSelectedItem={setDeviceToRemove}
-                    swipeEnabled={!isEdit && devices.length > 1}
+                    swipeEnabled={!isEdit}
                     onPress={onDeviceSelected}
                     isDragMode={isEdit}
                     isOpen={deviceToRemove === item}>
@@ -129,13 +136,7 @@ export const WalletManagementScreen = () => {
                 </SwipeableRow>
             )
         },
-        [
-            deviceToRemove,
-            devices.length,
-            isEdit,
-            onDeviceSelected,
-            onTrashIconPress,
-        ],
+        [deviceToRemove, isEdit, onDeviceSelected, onTrashIconPress],
     )
 
     const handleOnSuccessAddAccountBottomSheet = useCallback(() => {
