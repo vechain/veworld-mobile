@@ -1793,6 +1793,10 @@ type RootTranslation = {
 	 */
 	WALLET_MANAGEMENT_NOTIFICATION_CREATE_ACCOUNT_ERROR: string
 	/**
+	 * Y​o​u​ ​c​a​n​ ​n​o​t​ ​d​e​l​e​t​e​ ​t​h​e​ ​l​a​s​t​ ​w​a​l​l​e​t​,​ ​b​u​t​ ​y​o​u​ ​c​a​n​ ​r​e​s​e​t​ ​t​h​e​ ​a​p​p​ ​b​y​ ​g​o​i​n​g​ ​t​o​ ​S​e​t​t​i​n​g​s​ ​>​ ​G​e​n​e​r​a​l​ ​>​ ​R​e​s​e​t​ ​A​p​p
+	 */
+	WALLET_MANAGEMENT_NOTIFICATION_LAST_WALLET: string
+	/**
 	 * M​a​n​a​g​e​ ​T​o​k​e​n​s
 	 */
 	MANAGE_TOKEN_TITLE: string
@@ -4220,6 +4224,10 @@ Please, try again later.
 	 * Account created successfully
 	 */
 	WALLET_MANAGEMENT_NOTIFICATION_CREATE_ACCOUNT_ERROR: () => LocalizedString
+	/**
+	 * You can not delete the last wallet, but you can reset the app by going to Settings > General > Reset App
+	 */
+	WALLET_MANAGEMENT_NOTIFICATION_LAST_WALLET: () => LocalizedString
 	/**
 	 * Manage Tokens
 	 */
