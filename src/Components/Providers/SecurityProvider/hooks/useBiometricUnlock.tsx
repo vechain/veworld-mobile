@@ -1,6 +1,12 @@
 import { useCallback, useEffect, useState } from "react"
 import { useAppLock, useAppReset, useWalletSecurity } from "~Hooks"
-import { AlertUtils, BiometricsUtils, LockScreenUtils, debug } from "~Utils"
+import {
+    AlertUtils,
+    BiometricsUtils,
+    LockScreenUtils,
+    PlatformUtils,
+    debug,
+} from "~Utils"
 import RNBootSplash from "react-native-bootsplash"
 import { selectIsSecurityDowngrade, useAppSelector } from "~Storage/Redux"
 
@@ -19,6 +25,10 @@ export const useBiometricUnlock = () => {
             await RNBootSplash.hide({ fade: true })
             setIsBiometricsSucceeded(true)
         } else if (results.error === "user_cancel") {
+            // Hide native splash screen on Android because of bug with alert not showing over the splash screen
+            if (PlatformUtils.isAndroid())
+                await RNBootSplash.hide({ fade: true })
+
             AlertUtils.showCancelledBiometricsAlert(
                 async () => {
                     await appReset()
