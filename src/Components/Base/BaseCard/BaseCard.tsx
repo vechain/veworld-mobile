@@ -34,7 +34,9 @@ export const BaseCard = memo(
         return (
             <BaseView
                 style={[
-                    selected ? styles.selectedContainer : {},
+                    selected
+                        ? styles.selectedContainer
+                        : styles.unselectedContainer,
                     styles.container,
                     containerStyle,
                 ]}>
@@ -63,16 +65,18 @@ const baseStyles = (theme: ColorThemeType) =>
         },
         container: {
             width: "100%",
-        },
-        selectedContainer: {
+            backgroundColor: theme.colors.card,
             borderWidth: 1,
             borderRadius: 16,
+        },
+        selectedContainer: {
             borderColor: theme.colors.text,
+        },
+        unselectedContainer: {
+            borderColor: theme.colors.card,
         },
         view: {
             flexDirection: "row",
-            borderRadius: 16,
             padding: 12,
-            backgroundColor: theme.colors.card,
         },
     })
