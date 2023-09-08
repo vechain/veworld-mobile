@@ -24,6 +24,7 @@ export const initCollectionMetadataFromRegistry = (
         mimeType: "image/webp",
         mediaType: NFTMediaType.IMAGE,
         updated: false,
+        fromRegistry: true,
     }
 }
 
@@ -44,6 +45,7 @@ export const initCollectionMetadataWithoutRegistry = (
         image: isDarkTheme ? NFTPlaceholderDark : NFTPlaceHolderLight,
         mediaType: NFTMediaType.IMAGE,
         updated: false,
+        fromRegistry: false,
     }
 }
 

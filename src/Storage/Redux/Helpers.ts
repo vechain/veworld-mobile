@@ -1,5 +1,8 @@
 import { warn } from "~Utils"
-import { encryptTransform, initEncryption } from "./EncryptionService"
+import {
+    encryptTransform,
+    initEncryption,
+} from "../../Services/EncryptionService/EncryptionService"
 import { storage } from "./Storage"
 import {
     AccountSlice,
@@ -10,8 +13,6 @@ import {
     CurrencySlice,
     DelegationSlice,
     DeviceSlice,
-    MetadataCacheSlice,
-    ImageCacheSlice,
     NetworkSlice,
     NftSlice,
     PendingSlice,
@@ -24,7 +25,6 @@ import {
     resetCurrencyState,
     resetDelegationState,
     resetDeviceState,
-    resetMetadataCacheState,
     resetNetworkState,
     resetNftState,
     resetPendingState,
@@ -34,10 +34,11 @@ import {
     TokenSlice,
     UserPreferencesSlice,
     WalletConnectSessionsSlice,
-    resetImageCacheState,
 } from "./Slices"
 import { migrationUpdates } from "~Storage/Redux/Migrations"
 import { createMigrate } from "redux-persist"
+
+const REDUX_KEY = "VeWorld_Redux_key"
 
 export const nftPersistConfig = {
     key: NftSlice.name,
@@ -52,7 +53,7 @@ export const nftPersistConfig = {
  * @returns A `Promise` that resolves with the configuration object for a Redux Persistor.
  */
 export const getPersistorConfig = async () => {
-    const key = await initEncryption()
+    const key = await initEncryption(REDUX_KEY)
 
     const encryptor = encryptTransform({
         secretKey: key,
@@ -79,8 +80,6 @@ export const getPersistorConfig = async () => {
             ActivitiesSlice.name,
             DelegationSlice.name,
             WalletConnectSessionsSlice.name,
-            MetadataCacheSlice.name,
-            ImageCacheSlice.name,
         ],
         migrate: createMigrate(migrationUpdates, { debug: true }),
         transforms: [encryptor],
@@ -106,8 +105,6 @@ export const resetActions = [
     resetUserPreferencesState,
     resetWalletConnectState,
     resetPendingState,
-    resetMetadataCacheState,
-    resetImageCacheState,
 
     // Config reset always comes last
     resetConfigState,

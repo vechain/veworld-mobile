@@ -1,7 +1,6 @@
 export * from "./Hooks"
 export * from "./Store"
 export * from "./Storage"
-export * from "./EncryptionService"
 export * from "./Helpers"
 export * from "./Actions"
 export * from "./Slices"

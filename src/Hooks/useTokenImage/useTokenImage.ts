@@ -1,66 +1,58 @@
-import { useCallback } from "react"
 import { URIProtocol } from "~Constants/Enums/URIProtocol"
+import { NFTMediaType } from "~Model"
 import { getTokenImageArweave } from "~Networking/NFT/getTokenImageArweave"
 import { getTokenImageIpfs } from "~Networking/NFT/getTokenImageIpfs"
-import {
-    addImageEntry,
-    selectEntryFromImageCache,
-    selectImageCacheState,
-    useAppDispatch,
-    useAppSelector,
-} from "~Storage/Redux"
-import { URIUtils, debug, warn } from "~Utils"
+
+import { MediaUtils, URIUtils, debug, warn } from "~Utils"
+
+export interface TokenImage {
+    image: string
+    mime: string
+    mediaType: NFTMediaType
+}
 
 export const useTokenImage = () => {
-    const dispatch = useAppDispatch()
-    const images = useAppSelector(selectImageCacheState)
+    const getImage = async (uri: string) => {
+        try {
+            const protocol = uri?.split(":")[0].trim()
 
-    const fetchImage = useCallback(
-        async (uri: string) => {
-            try {
-                const protocol = uri?.split(":")[0].trim()
-
-                switch (protocol) {
-                    case URIProtocol.DATA:
-                    case URIProtocol.HTTPS: {
-                        return uri
-                    }
-
-                    case URIProtocol.IPFS:
-                    case URIProtocol.ARWEAVE: {
-                        const cachedData = selectEntryFromImageCache(
-                            images,
-                            uri,
-                        )
-                        if (cachedData) {
-                            debug(`Using cached image for ${uri}`)
-                            return cachedData
-                        }
-
-                        debug(`Fetching image for ${uri}`)
-                        const imageStr = URIProtocol.IPFS
-                            ? await getTokenImageIpfs(uri)
-                            : await getTokenImageArweave(uri)
-
-                        dispatch(
-                            addImageEntry({
-                                seed: uri,
-                                value: imageStr,
-                            }),
-                        )
-                        return imageStr
-                    }
-
-                    default:
-                        warn(`Unable to detect protocol for image URI ${uri}`)
+            switch (protocol) {
+                case URIProtocol.DATA:
+                case URIProtocol.HTTPS:
+                case URIProtocol.HTTP: {
+                    return uri
                 }
-            } catch (e) {
-                warn(`Error fetching image ${uri}`, e)
+
+                case URIProtocol.IPFS:
+                case URIProtocol.ARWEAVE: {
+                    debug(`Fetching image for ${uri}`)
+                    const imageStr = URIProtocol.IPFS
+                        ? await getTokenImageIpfs(uri)
+                        : await getTokenImageArweave(uri)
+
+                    return imageStr
+                }
+
+                default:
+                    warn(`Unable to detect protocol for image URI ${uri}`)
             }
-            return URIUtils.convertUriToUrl(uri)
-        },
-        [dispatch, images],
-    )
+        } catch (e) {
+            warn(`Error fetching image ${uri}`, e)
+        }
+        return URIUtils.convertUriToUrl(uri)
+    }
+
+    const fetchImage = async (uri: string): Promise<TokenImage> => {
+        const image = await getImage(uri)
+        const mime = await MediaUtils.resolveMimeType(image)
+        const mediaType = await MediaUtils.resolveMediaType(image, mime)
+
+        return {
+            image,
+            mime,
+            mediaType,
+        }
+    }
 
     return {
         fetchImage,

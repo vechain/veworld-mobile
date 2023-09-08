@@ -1,10 +1,10 @@
 import React, { useCallback } from "react"
-import { FlatList, StyleSheet } from "react-native"
 import { BaseSpacer } from "~Components"
 import { HeaderComponent } from "./HeaderComponent"
 import { NonFungibleToken, NftCollection } from "~Model"
 import { NFTView } from "../../NFTView"
 import { ListFooterView } from "../../NFTScreen/Components/ListFooterView"
+import { FlashList } from "@shopify/flash-list"
 
 type Props = {
     collection: NftCollection
@@ -36,34 +36,31 @@ export const NFTList = ({
     )
 
     return (
-        <FlatList
+        <FlashList
             ListHeaderComponent={<HeaderComponent collection={collection} />}
             data={nfts}
-            initialNumToRender={6}
             ItemSeparatorComponent={contactsListSeparator}
             numColumns={2}
             keyExtractor={(item: NonFungibleToken) => String(item.id)}
             extraData={[]}
             renderItem={renderItem}
-            contentContainerStyle={baseStyles.listContainer}
             showsVerticalScrollIndicator={false}
             showsHorizontalScrollIndicator={false}
             onScroll={onMomentumScrollBegin}
-            onEndReachedThreshold={0.1}
+            onEndReachedThreshold={0.2}
             onEndReached={fetchMoreNFTs}
+            removeClippedSubviews={true}
             ListFooterComponent={
                 <>
-                    <ListFooterView isLoading={isLoading} hasNext={hasNext} />
+                    <ListFooterView
+                        isLoading={isLoading}
+                        hasNext={hasNext}
+                        showMargin={true}
+                    />
                     {!isLoading && <BaseSpacer height={16} />}
                 </>
             }
+            estimatedItemSize={160}
         />
     )
 }
-
-const baseStyles = StyleSheet.create({
-    listContainer: {
-        paddingTop: 12,
-        marginHorizontal: 20,
-    },
-})

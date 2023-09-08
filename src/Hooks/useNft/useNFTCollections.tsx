@@ -21,7 +21,7 @@ import {
     useAppDispatch,
     useAppSelector,
 } from "~Storage/Redux"
-import { debug, error, MediaUtils, warn } from "~Utils"
+import { debug, error, warn } from "~Utils"
 import {
     initCollectionMetadataFromRegistry,
     initCollectionMetadataWithoutRegistry,
@@ -70,20 +70,6 @@ export const useNFTCollections = () => {
                     `Lazy loading metadata for collection ${collection.address}`,
                 )
 
-                const { data } = await getNftsForContract(
-                    network.type,
-                    collection.address,
-                    currentAddress,
-                    1,
-                    0,
-                )
-                if (data.length === 0) return
-                const tokenURI = await getTokenURI(
-                    data[0].tokenId,
-                    collection.address,
-                    thor,
-                )
-
                 let balanceOf: number | undefined
 
                 try {
@@ -96,25 +82,34 @@ export const useNFTCollections = () => {
                     warn(" useNFTCollections - failed to get balanceO", e)
                 }
 
-                const tokenMetadata = await fetchMetadata(tokenURI)
-                const name =
-                    tokenMetadata?.name ??
-                    (await getName(collection.address, thor))
-                const image = tokenMetadata?.image ?? collection.image
+                let image = collection.image
+                let description = collection.description
 
-                const mediaType = await MediaUtils.resolveMediaType(
-                    image,
-                    collection.mimeType,
-                )
-                const description =
-                    tokenMetadata?.description ?? collection.description
+                if (!collection.fromRegistry) {
+                    const { data } = await getNftsForContract(
+                        network.type,
+                        collection.address,
+                        currentAddress,
+                        1,
+                        0,
+                    )
+                    const tokenURI = await getTokenURI(
+                        data[0].tokenId,
+                        collection.address,
+                        thor,
+                    )
+                    const tokenMetadata = await fetchMetadata(tokenURI)
 
+                    if (tokenMetadata) {
+                        image = tokenMetadata.image
+                        description = tokenMetadata.description
+                    }
+                }
                 const updated: NftCollection = {
                     ...collection,
                     balanceOf: balanceOf,
                     image,
-                    mediaType,
-                    name,
+                    name: await getName(collection.address, thor),
                     description,
                     updated: true,
                     symbol: await getSymbol(collection.address, thor),

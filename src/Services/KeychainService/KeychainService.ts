@@ -4,7 +4,6 @@ import * as SecureStore from "expo-secure-store"
 import * as i18n from "~i18n"
 
 const WALLET_KEY = "VeWorld_Wallet_key"
-const REDUX_KEY = "VeWorld_Redux_key"
 
 enum ACCESS_CONTROL_KEY {
     ACCESS_CONTROL = "access_control",
@@ -135,29 +134,42 @@ const deleteDeviceEncryptionKey = async (
     }
 }
 
-const getReduxKey = async () => {
+const deleteKey = async (keyId: string) => {
     const options = {
         keychainAccessible: SecureStore.WHEN_UNLOCKED_THIS_DEVICE_ONLY,
-        keychainService: REDUX_KEY,
+        keychainService: keyId,
     }
 
     try {
-        return await Keychain.get(options, REDUX_KEY)
+        await Keychain.deleteItem(keyId, options)
     } catch (err) {
-        error("getReduxKey", err)
+        error("deleteKey", err)
     }
 }
 
-const setReduxKey = async (Enckey: string) => {
+const getKey = async (keyId: string) => {
     const options = {
         keychainAccessible: SecureStore.WHEN_UNLOCKED_THIS_DEVICE_ONLY,
-        keychainService: REDUX_KEY,
+        keychainService: keyId,
     }
 
     try {
-        await Keychain.set(Enckey, options, REDUX_KEY)
+        return await Keychain.get(options, keyId)
     } catch (err) {
-        error("setReduxKey", err)
+        error("getKey", err)
+    }
+}
+
+const setKey = async (keyId: string, Enckey: string) => {
+    const options = {
+        keychainAccessible: SecureStore.WHEN_UNLOCKED_THIS_DEVICE_ONLY,
+        keychainService: keyId,
+    }
+
+    try {
+        await Keychain.set(Enckey, options, keyId)
+    } catch (err) {
+        error("setKey", err)
     }
 }
 
@@ -165,6 +177,7 @@ export default {
     getDeviceEncryptionKey,
     setDeviceEncryptionKey,
     deleteDeviceEncryptionKey,
-    getReduxKey,
-    setReduxKey,
+    getKey,
+    setKey,
+    deleteKey,
 }

@@ -62,6 +62,7 @@ describe("Helpers - initCollectionMetadataFromRegistry", () => {
             name: "name",
             symbol: "",
             updated: false,
+            fromRegistry: true,
         })
     })
 })
@@ -93,6 +94,7 @@ describe("Helpers - initCollectionMetadataWithoutRegistry", () => {
             name: "",
             symbol: "",
             updated: false,
+            fromRegistry: false,
         })
     })
 })

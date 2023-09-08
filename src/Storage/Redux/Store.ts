@@ -16,8 +16,6 @@ import {
     WalletConnectSessionsSlice,
     PendingSlice,
     BeatSlice,
-    MetadataCacheSlice,
-    ImageCacheSlice,
 } from "./Slices"
 import { nftPersistConfig } from "./Helpers"
 import { persistReducer } from "redux-persist"
@@ -39,6 +37,4 @@ export const reducer = combineReducers({
     [WalletConnectSessionsSlice.name]: WalletConnectSessionsSlice.reducer,
     [PendingSlice.name]: PendingSlice.reducer,
     [BeatSlice.name]: BeatSlice.reducer,
-    [MetadataCacheSlice.name]: MetadataCacheSlice.reducer,
-    [ImageCacheSlice.name]: ImageCacheSlice.reducer,
 })

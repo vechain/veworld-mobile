@@ -43,6 +43,7 @@ const collection1: NftCollection = {
     image: "collection 1 image",
     mediaType: NFTMediaType.IMAGE,
     id: "collection 1 id",
+    fromRegistry: false,
 }
 
 const collection2: NftCollection = {
@@ -57,6 +58,7 @@ const collection2: NftCollection = {
     image: "collection 2 image",
     mediaType: NFTMediaType.VIDEO,
     id: "collection 2 id",
+    fromRegistry: false,
 }
 
 const collection3: NftCollection = {
@@ -71,6 +73,7 @@ const collection3: NftCollection = {
     image: "collection 3 image",
     mediaType: NFTMediaType.UNKNOWN,
     id: "collection 3 id",
+    fromRegistry: false,
 }
 
 const collection4: NftCollection = {
@@ -85,6 +88,7 @@ const collection4: NftCollection = {
     image: "collection 4 image",
     mediaType: NFTMediaType.IMAGE,
     id: "collection 4 id",
+    fromRegistry: false,
 }
 
 const collection5: NftCollection = {
@@ -99,6 +103,7 @@ const collection5: NftCollection = {
     image: "collection 5 image",
     mediaType: NFTMediaType.IMAGE,
     id: "collection 5 id",
+    fromRegistry: true,
 }
 
 describe("MergeUtils", () => {

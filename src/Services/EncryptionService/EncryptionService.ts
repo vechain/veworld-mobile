@@ -66,13 +66,13 @@ export const encryptTransform = <HSS, S = any, RS = any>(
     )
 }
 
-export const initEncryption = async () => {
-    const encKey = await KeychainService.getReduxKey()
+export const initEncryption = async (keyId: string) => {
+    const encKey = await KeychainService.getKey(keyId)
     if (encKey) {
         return encKey
     } else {
         const keyHex = createKey()
-        await KeychainService.setReduxKey(keyHex)
+        await KeychainService.setKey(keyId, keyHex)
         return keyHex
     }
 }
