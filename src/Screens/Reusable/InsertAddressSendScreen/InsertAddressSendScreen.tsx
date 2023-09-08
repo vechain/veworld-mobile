@@ -253,6 +253,6 @@ const baseStyles = StyleSheet.create({
     nextButton: {
         marginBottom: 70,
     },
-    accountCard: { marginVertical: 5, height: 74 },
-    contactCard: { marginVertical: 5, height: 62 },
+    accountCard: { marginVertical: 5, height: 74, justifyContent: "center" },
+    contactCard: { marginVertical: 5, height: 64, justifyContent: "center" },
 })

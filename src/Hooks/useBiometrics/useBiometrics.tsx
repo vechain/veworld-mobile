@@ -1,6 +1,6 @@
 import { useCallback, useEffect, useState } from "react"
 import { useAppState } from "../useAppState"
-import BiometricsUtils from "~Utils/BiometricsUtils" // TODO (Davide) (https://github.com/vechainfoundation/veworld-mobile/issues/748) remove this circular dependency
+import BiometricsUtils from "~Utils/BiometricsUtils"
 import { AppStateType, BiometricState, SecurityLevelType } from "~Model"
 import { isEqual } from "lodash"
 
