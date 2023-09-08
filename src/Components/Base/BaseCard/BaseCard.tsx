@@ -22,19 +22,33 @@ export const BaseCard = memo(
         onPress,
         disableOpacityOnPressing = false,
     }: ViewProps & Props) => {
-        const { styles } = useThemedStyles(baseStyles)
+        const { styles } = useThemedStyles(baseStyles(selected))
 
         const renderChildren = useMemo(() => {
             return (
-                <BaseView style={[styles.view, style]} testID={testID}>
+                <BaseView
+                    style={[
+                        styles.view,
+                        style,
+                        selected ? styles.selectedContainer : {},
+                    ]}
+                    testID={testID}>
                     {children}
                 </BaseView>
             )
-        }, [children, style, styles.view, testID])
+        }, [
+            children,
+            selected,
+            style,
+            styles.selectedContainer,
+            styles.view,
+            testID,
+        ])
+
         return (
             <BaseView
                 style={[
-                    selected ? styles.selectedContainer : {},
+                    // selected ? styles.selectedContainer : {},
                     styles.container,
                     containerStyle,
                 ]}>
@@ -55,7 +69,7 @@ export const BaseCard = memo(
     },
 )
 
-const baseStyles = (theme: ColorThemeType) =>
+const baseStyles = (selected: boolean | undefined) => (theme: ColorThemeType) =>
     StyleSheet.create({
         touchableContainer: {
             borderRadius: 16,
@@ -72,7 +86,7 @@ const baseStyles = (theme: ColorThemeType) =>
         view: {
             flexDirection: "row",
             borderRadius: 16,
-            padding: 12,
+            padding: selected ? 11 : 12,
             backgroundColor: theme.colors.card,
         },
     })
