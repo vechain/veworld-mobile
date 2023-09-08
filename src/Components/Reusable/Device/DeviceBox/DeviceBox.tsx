@@ -10,17 +10,18 @@ import {
     LedgerBadge,
 } from "~Components"
 import { BaseDevice, DEVICE_TYPE } from "~Model"
-import { Pressable, StyleSheet } from "react-native"
+import { Pressable, StyleSheet, ViewStyle } from "react-native"
 import { ColorThemeType } from "~Constants"
 import { TouchableOpacity } from "react-native-gesture-handler"
 
 type Props = {
-    device: BaseDevice
+    device?: BaseDevice
     onDeviceSelected?: (item: BaseDevice) => () => void
     isIconVisible?: boolean
     isEdit?: boolean
     drag?: () => void
     isActive?: boolean
+    cardStyle?: ViewStyle
 }
 
 export const DeviceBox: React.FC<Props> = ({
@@ -30,6 +31,7 @@ export const DeviceBox: React.FC<Props> = ({
     onDeviceSelected,
     drag,
     isActive = false,
+    cardStyle,
 }) => {
     const { styles, theme } = useThemedStyles(baseStyles)
 
@@ -42,7 +44,7 @@ export const DeviceBox: React.FC<Props> = ({
 
     const deviceBoxBody = useCallback(
         () => (
-            <BaseCard style={styles.card}>
+            <BaseCard style={[styles.card, cardStyle]}>
                 <BaseView flexDirection="row">
                     {isEdit && (
                         <Pressable
@@ -57,10 +59,10 @@ export const DeviceBox: React.FC<Props> = ({
                     )}
                     <BaseSpacer width={8} />
                     <BaseText typographyFont="subTitleBold">
-                        {device.alias}
+                        {device?.alias}
                     </BaseText>
                     <BaseSpacer width={8} />
-                    {device.type === DEVICE_TYPE.LEDGER && <LedgerBadge />}
+                    {device?.type === DEVICE_TYPE.LEDGER && <LedgerBadge />}
                 </BaseView>
                 {isIconVisible && !isEdit && (
                     <BaseIcon
@@ -72,8 +74,9 @@ export const DeviceBox: React.FC<Props> = ({
             </BaseCard>
         ),
         [
-            device.alias,
-            device.type,
+            cardStyle,
+            device?.alias,
+            device?.type,
             drag,
             isActive,
             isEdit,
@@ -88,7 +91,7 @@ export const DeviceBox: React.FC<Props> = ({
             <PressableComponent
                 disabled={isActive}
                 style={styles.deviceBoxPressable}
-                onPress={isEdit ? undefined : onDeviceSelected?.(device)}>
+                onPress={isEdit ? undefined : onDeviceSelected?.(device!)}>
                 {deviceBoxBody()}
             </PressableComponent>
         </BaseView>

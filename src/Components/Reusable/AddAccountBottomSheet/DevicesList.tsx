@@ -3,14 +3,8 @@ import { StyleSheet } from "react-native"
 import { FlatListScrollPropsType, useThemedStyles } from "~Hooks"
 import { ColorThemeType } from "~Constants"
 import { AddressUtils } from "~Utils"
-import {
-    BaseSpacer,
-    BaseText,
-    BaseTouchableBox,
-    BaseView,
-    LedgerBadge,
-} from "~Components"
-import { BaseDevice, DEVICE_TYPE } from "~Model"
+import { BaseSpacer, DeviceBox } from "~Components"
+import { BaseDevice } from "~Model"
 import { BottomSheetFlatList } from "@gorhom/bottom-sheet"
 
 type Props = {
@@ -29,9 +23,7 @@ export const DevicesList: React.FC<Props> = ({
     const { styles: themedStyles } = useThemedStyles(baseStyles)
 
     const handleOnDevicePress = useCallback(
-        (device: BaseDevice) => () => {
-            onDevicePress(device)
-        },
+        (device: BaseDevice) => () => onDevicePress(device),
         [onDevicePress],
     )
     const renderItem = useCallback(
@@ -43,20 +35,13 @@ export const DevicesList: React.FC<Props> = ({
             const style = isSelected
                 ? themedStyles.selected
                 : themedStyles.notSelected
-            // TODO: use Device Box here (https://github.com/vechainfoundation/veworld-mobile/issues/1299)
             return (
-                <BaseTouchableBox
-                    haptics="Light"
-                    key={item.rootAddress}
-                    innerContainerStyle={style}
-                    action={handleOnDevicePress(item)}>
-                    <BaseView flexDirection="row">
-                        {item.type === DEVICE_TYPE.LEDGER && <LedgerBadge />}
-                        <BaseText pl={8} typographyFont="subSubTitle">
-                            {item.alias}
-                        </BaseText>
-                    </BaseView>
-                </BaseTouchableBox>
+                <DeviceBox
+                    isIconVisible={false}
+                    onDeviceSelected={handleOnDevicePress}
+                    device={item}
+                    cardStyle={style}
+                />
             )
         },
         [themedStyles, handleOnDevicePress, selectedDevice],
@@ -92,9 +77,11 @@ const baseStyles = (theme: ColorThemeType) =>
         selected: {
             borderWidth: 1.5,
             borderColor: theme.colors.text,
+            borderRadius: 16,
         },
         notSelected: {
             borderWidth: 1.5,
             borderColor: theme.colors.card,
+            borderRadius: 16,
         },
     })
