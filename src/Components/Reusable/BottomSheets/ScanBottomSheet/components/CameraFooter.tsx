@@ -38,9 +38,6 @@ const baseStyles = StyleSheet.create({
         position: "absolute",
         bottom: PlatformUtils.isIOS() ? 120 : 40,
         marginTop: PlatformUtils.isIOS() ? 60 : 20,
-    },
-    icon: {
-        position: "absolute",
-        left: PlatformUtils.isIOS() ? 20 : 8,
+        zIndex: 100,
     },
 })
