@@ -6,13 +6,13 @@ import {
     BaseSpacer,
     BaseText,
     BaseView,
-    CardButton,
+    DeviceBox,
     ScrollViewWithFooter,
 } from "~Components"
 import { useI18nContext } from "~i18n"
 import { isSmallScreen } from "~Constants"
 import { PlatformUtils } from "~Utils"
-import { Device } from "~Model"
+import { BaseDevice, Device } from "~Model"
 
 type Props = {
     onClose: () => void
@@ -76,7 +76,10 @@ export const RemoveWalletWarningBottomSheet = React.forwardRef<
 
                     <BaseSpacer height={16} />
 
-                    <CardButton title={selectedDevice?.alias || ""} />
+                    <DeviceBox
+                        device={selectedDevice as BaseDevice}
+                        isIconVisible={false}
+                    />
                 </BaseView>
             </ScrollViewWithFooter>
         </BaseBottomSheet>

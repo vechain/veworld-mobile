@@ -99,6 +99,14 @@ export const WalletManagementScreen = () => {
         [closeOtherSwipeableItems, openWalletMgmtSheet],
     )
 
+    const onTrashIconPress = useCallback(
+        (item: Device) => () => {
+            setSelectedDevice(item)
+            openRemoveWalletBottomSheet()
+        },
+        [openRemoveWalletBottomSheet],
+    )
+
     const renderItem: RenderItem<Device> = useCallback(
         ({ item, drag, isActive }) => {
             return (
@@ -106,7 +114,7 @@ export const WalletManagementScreen = () => {
                     item={item}
                     itemKey={item.rootAddress}
                     swipeableItemRefs={swipeableItemRefs}
-                    handleTrashIconPress={openRemoveWalletBottomSheet}
+                    handleTrashIconPress={onTrashIconPress(item)}
                     setSelectedItem={setDeviceToRemove}
                     swipeEnabled={!isEdit && devices.length > 1}
                     onPress={onDeviceSelected}
@@ -126,7 +134,7 @@ export const WalletManagementScreen = () => {
             devices.length,
             isEdit,
             onDeviceSelected,
-            openRemoveWalletBottomSheet,
+            onTrashIconPress,
         ],
     )
 

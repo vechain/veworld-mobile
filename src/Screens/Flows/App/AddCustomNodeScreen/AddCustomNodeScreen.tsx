@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect, useState } from "react"
+import React, { useCallback, useState } from "react"
 import { useI18nContext } from "~i18n"
 import {
     BackButtonHeader,
@@ -82,11 +82,13 @@ export const AddCustomNodeScreen = () => {
         [customNodes, LL],
     )
 
-    useEffect(() => {
-        if (nodeUrl) {
-            setNodeUrlError(validateUrlInput(nodeUrl))
-        }
-    }, [nodeUrl, validateUrlInput])
+    const handleChangeUrl = useCallback(
+        (url: string) => {
+            setNodeUrl(url)
+            setNodeUrlError(validateUrlInput(url))
+        },
+        [validateUrlInput],
+    )
 
     return (
         <DismissKeyboardView>
@@ -125,7 +127,7 @@ export const AddCustomNodeScreen = () => {
                             })}
                             label={LL.COMMON_LBL_URL()}
                             value={nodeUrl}
-                            setValue={setNodeUrl}
+                            setValue={handleChangeUrl}
                             errorMessage={nodeUrlError}
                         />
                     </BaseView>

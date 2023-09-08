@@ -49,6 +49,8 @@ export const TokenList = memo(
 
         const selectedAccount = useAppSelector(selectSelectedAccount)
 
+        const [selectedToken, setSelectedToken] =
+            useState<FungibleTokenWithBalance>()
         const [tokenToRemove, setTokenToRemove] =
             useState<FungibleTokenWithBalance>()
 
@@ -122,6 +124,14 @@ export const TokenList = memo(
             [nav, closeOtherSwipeableItems, isEdit],
         )
 
+        const handleTrashIconPress = useCallback(
+            (item: FungibleTokenWithBalance) => () => {
+                setSelectedToken(item)
+                openRemoveCustomTokenBottomSheet()
+            },
+            [openRemoveCustomTokenBottomSheet],
+        )
+
         const renderItem: RenderItem<FungibleTokenWithBalance> = useCallback(
             ({ item, getIndex, isActive, drag }) => {
                 return (
@@ -129,7 +139,7 @@ export const TokenList = memo(
                         item={item}
                         itemKey={item.address}
                         swipeableItemRefs={swipeableItemRefs}
-                        handleTrashIconPress={openRemoveCustomTokenBottomSheet}
+                        handleTrashIconPress={handleTrashIconPress(item)}
                         setSelectedItem={setTokenToRemove}
                         swipeEnabled={!isEdit}
                         onPress={onTokenPress}
@@ -147,10 +157,10 @@ export const TokenList = memo(
                 )
             },
             [
+                handleTrashIconPress,
                 isBalanceVisible,
                 isEdit,
                 onTokenPress,
-                openRemoveCustomTokenBottomSheet,
                 tokenToRemove,
             ],
         )
@@ -182,7 +192,7 @@ export const TokenList = memo(
 
                 <RemoveCustomTokenBottomSheet
                     ref={removeCustomTokenBottomSheetRef}
-                    tokenToRemove={tokenToRemove}
+                    tokenToRemove={selectedToken}
                     onConfirmRemoveToken={onConfirmRemoveToken}
                     onClose={closeRemoveCustomTokenBottomSheet}
                 />
