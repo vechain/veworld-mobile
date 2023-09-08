@@ -4,7 +4,7 @@ import { URIProtocol } from "~Constants/Enums/URIProtocol"
 import { useTokenImage } from "~Hooks/useTokenImage"
 import { TokenMetadata } from "~Model"
 import { getTokenMetaArweave, getTokenMetaIpfs } from "~Networking"
-import Cache from "~Storage/Cache/MetadataCache"
+import Cache from "~Storage/PersistedCache/MetadataCache"
 import { debug, warn } from "~Utils"
 
 export const useTokenMetadata = () => {
