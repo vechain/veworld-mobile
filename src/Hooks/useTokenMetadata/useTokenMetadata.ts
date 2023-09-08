@@ -36,7 +36,8 @@ export const useTokenMetadata = () => {
                     return retrievedData
                 }
 
-                case URIProtocol.HTTPS: {
+                case URIProtocol.HTTPS:
+                case URIProtocol.HTTP: {
                     debug(`Fetching metadata for ${uri}`)
                     return (
                         (

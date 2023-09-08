@@ -18,7 +18,8 @@ export const useTokenImage = () => {
 
             switch (protocol) {
                 case URIProtocol.DATA:
-                case URIProtocol.HTTPS: {
+                case URIProtocol.HTTPS:
+                case URIProtocol.HTTP: {
                     return uri
                 }
 
