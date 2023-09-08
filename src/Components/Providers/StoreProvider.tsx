@@ -1,21 +1,22 @@
-import React, { useState, useEffect, useCallback, useMemo } from "react"
+import React, { useCallback, useEffect, useMemo, useState } from "react"
 import { getPersistorConfig, reducer } from "~Storage/Redux"
 import { RootState, Store } from "~Storage/Redux/Types"
 import {
-    persistStore,
-    persistReducer,
     FLUSH,
-    REHYDRATE,
     PAUSE,
     PERSIST,
+    Persistor,
+    persistReducer,
+    persistStore,
     PURGE,
     REGISTER,
-    Persistor,
+    REHYDRATE,
 } from "redux-persist"
 import reduxReset from "redux-reset"
 import { configureStore } from "@reduxjs/toolkit"
 import { Provider } from "react-redux"
 import { PersistGate } from "redux-persist/integration/react"
+import { useEncryptedStorage } from "~Components/Providers/EncryptedStorageProvider"
 
 type StoreProvider = {
     store: Store
@@ -28,11 +29,13 @@ const StoreContext = React.createContext<StoreProvider | undefined>(undefined)
 type StoreContextProviderProps = { children: React.ReactNode }
 
 const StoreContextProvider = ({ children }: StoreContextProviderProps) => {
+    const { isOnboarding, storage } = useEncryptedStorage()
+
     const [store, setStore] = useState<Store | undefined>()
     const [persistor, setPersistor] = useState<Persistor | undefined>()
 
     const init = useCallback(async () => {
-        const persistConfig = await getPersistorConfig()
+        const persistConfig = await getPersistorConfig(storage)
 
         const persistedReducer = persistReducer<RootState>(
             persistConfig,

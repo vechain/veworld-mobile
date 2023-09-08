@@ -39,6 +39,7 @@ import * as Sentry from "@sentry/react-native"
 import { InternetDownScreen } from "~Screens"
 import NetInfo from "@react-native-community/netinfo"
 import "react-native-url-polyfill/auto"
+import { EncryptedStorageProvider } from "~Components/Providers/EncryptedStorageProvider"
 
 const { fontFamily } = typography
 
@@ -149,9 +150,11 @@ const SentryInitialedMain = () => {
 
 const ReduxWrappedMain = () => {
     return (
-        <StoreContextProvider>
-            <SentryInitialedMain />
-        </StoreContextProvider>
+        <EncryptedStorageProvider>
+            <StoreContextProvider>
+                <SentryInitialedMain />
+            </StoreContextProvider>
+        </EncryptedStorageProvider>
     )
 }
 

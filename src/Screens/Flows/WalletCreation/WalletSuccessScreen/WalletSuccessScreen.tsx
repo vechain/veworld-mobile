@@ -36,6 +36,7 @@ import {
 } from "~Storage/Redux/Selectors"
 import HapticsService from "~Services/HapticsService"
 import { AnalyticsEvent } from "~Constants"
+import { useEncryptedStorage } from "~Components/Providers/EncryptedStorageProvider"
 
 type Props = {} & NativeStackScreenProps<
     RootStackParamListOnboarding & RootStackParamListCreateWalletApp,
@@ -45,6 +46,8 @@ type Props = {} & NativeStackScreenProps<
 export const WalletSuccessScreen: FC<Props> = ({ route }) => {
     const nav = useNavigation()
     const { LL } = useI18nContext()
+
+    const { encryptWithUserKey } = useEncryptedStorage()
 
     const theme = useTheme()
     const [isError, setIsError] = useState("")
@@ -99,6 +102,9 @@ export const WalletSuccessScreen: FC<Props> = ({ route }) => {
                     onError: onWalletCreationError,
                 })
             }
+
+            //TODO: Encrypt the onboarding state with the user's key
+            //encryptWithUserKey(userPassword || bioMetricKey)
 
             navigateNext()
         },

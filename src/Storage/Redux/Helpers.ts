@@ -1,6 +1,6 @@
 import { warn } from "~Utils"
 import { encryptTransform, initEncryption } from "./EncryptionService"
-import { storage } from "./Storage"
+import { newStorage } from "./Storage"
 import {
     AccountSlice,
     ActivitiesSlice,
@@ -10,8 +10,8 @@ import {
     CurrencySlice,
     DelegationSlice,
     DeviceSlice,
-    MetadataCacheSlice,
     ImageCacheSlice,
+    MetadataCacheSlice,
     NetworkSlice,
     NftSlice,
     PendingSlice,
@@ -24,6 +24,7 @@ import {
     resetCurrencyState,
     resetDelegationState,
     resetDeviceState,
+    resetImageCacheState,
     resetMetadataCacheState,
     resetNetworkState,
     resetNftState,
@@ -34,16 +35,19 @@ import {
     TokenSlice,
     UserPreferencesSlice,
     WalletConnectSessionsSlice,
-    resetImageCacheState,
 } from "./Slices"
 import { migrationUpdates } from "~Storage/Redux/Migrations"
 import { createMigrate } from "redux-persist"
+import { PersistConfig } from "redux-persist/es/types"
+import { RootState } from "~Storage/Redux/Types"
+import { MMKV } from "react-native-mmkv"
 
-export const nftPersistConfig = {
-    key: NftSlice.name,
-    storage: storage,
-    whitelist: ["blackListedCollections"],
-}
+// TODO
+// export const nftPersistConfig = {
+//     key: NftSlice.name,
+//     storage: storage,
+//     whitelist: ["blackListedCollections"],
+// }
 
 /**
  * Asynchronously generates and returns the configuration object for a Redux Persistor.
@@ -51,7 +55,9 @@ export const nftPersistConfig = {
  *
  * @returns A `Promise` that resolves with the configuration object for a Redux Persistor.
  */
-export const getPersistorConfig = async () => {
+export const getPersistorConfig = async (
+    mmkv: MMKV,
+): Promise<PersistConfig<RootState>> => {
     const key = await initEncryption()
 
     const encryptor = encryptTransform({
@@ -60,6 +66,8 @@ export const getPersistorConfig = async () => {
             warn("encryptor", error)
         },
     })
+
+    const storage = newStorage(mmkv)
 
     return {
         key: "root",
