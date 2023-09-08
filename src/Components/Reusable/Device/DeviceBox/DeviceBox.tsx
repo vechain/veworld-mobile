@@ -15,7 +15,7 @@ import { ColorThemeType } from "~Constants"
 import { TouchableOpacity } from "react-native-gesture-handler"
 
 type Props = {
-    device: BaseDevice
+    device?: BaseDevice
     onDeviceSelected?: (item: BaseDevice) => () => void
     isIconVisible?: boolean
     isEdit?: boolean
@@ -59,10 +59,10 @@ export const DeviceBox: React.FC<Props> = ({
                     )}
                     <BaseSpacer width={8} />
                     <BaseText typographyFont="subTitleBold">
-                        {device.alias}
+                        {device?.alias}
                     </BaseText>
                     <BaseSpacer width={8} />
-                    {device.type === DEVICE_TYPE.LEDGER && <LedgerBadge />}
+                    {device?.type === DEVICE_TYPE.LEDGER && <LedgerBadge />}
                 </BaseView>
                 {isIconVisible && !isEdit && (
                     <BaseIcon
@@ -75,8 +75,8 @@ export const DeviceBox: React.FC<Props> = ({
         ),
         [
             cardStyle,
-            device.alias,
-            device.type,
+            device?.alias,
+            device?.type,
             drag,
             isActive,
             isEdit,
@@ -91,7 +91,7 @@ export const DeviceBox: React.FC<Props> = ({
             <PressableComponent
                 disabled={isActive}
                 style={styles.deviceBoxPressable}
-                onPress={isEdit ? undefined : onDeviceSelected?.(device)}>
+                onPress={isEdit ? undefined : onDeviceSelected?.(device!)}>
                 {deviceBoxBody()}
             </PressableComponent>
         </BaseView>
