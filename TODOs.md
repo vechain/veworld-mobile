@@ -2,7 +2,7 @@
 
 - EncryptedStorageContext - Leverage `WALLET_STATUS` instead of `WalletStauts`
 - ~~Decrypting Wallets -> Probably big changes here, signing not tested yet~~
-    - Testing sending simple transaction
+    - Tested sending simple transaction - works ok
     - Need to do more tests. Certificates, delegation, etc.
 - Create a standalone unlock screen for pincodes. See `TODO`s in `EncryptedStorageContext`
 - Unify Wallets and Redux Keys
