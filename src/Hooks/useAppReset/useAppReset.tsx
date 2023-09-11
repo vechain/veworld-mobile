@@ -4,13 +4,13 @@ import KeychainService from "~Services/KeychainService"
 import {
     TokenMetadataCache as tokenMetadataCache,
     TokenMediaCache as tokenMediaCache,
-    initTokenMediaCache,
-    initTokenMetadataCache,
+    initNFTMediaCache,
+    initNFTMetadataCache,
 } from "~Storage/PersistedCache"
 
 import {
-    CACHE_TOKEN_MEDIA_KEY,
-    CACHE_TOKEN_METADATA_KEY,
+    CACHE_NFT_MEDIA_KEY,
+    CACHE_NFT_METADATA_KEY,
 } from "~Storage/PersistedCache/constants"
 import { resetApp, useAppDispatch, useAppSelector } from "~Storage/Redux"
 import { selectDevices } from "~Storage/Redux/Selectors"
@@ -31,8 +31,8 @@ export const useAppReset = () => {
             )
         })
 
-        promises.push(KeychainService.deleteKey(CACHE_TOKEN_MEDIA_KEY))
-        promises.push(KeychainService.deleteKey(CACHE_TOKEN_METADATA_KEY))
+        promises.push(KeychainService.deleteKey(CACHE_NFT_MEDIA_KEY))
+        promises.push(KeychainService.deleteKey(CACHE_NFT_METADATA_KEY))
 
         await Promise.all(promises)
     }, [devices, isWalletSecurityBiometrics])
@@ -44,8 +44,8 @@ export const useAppReset = () => {
         tokenMediaCache?.reset()
 
         // TODO: Restarting the app would be better than initializing the cache again. However we are working through a known issue with react-native-restart
-        initTokenMetadataCache()
-        initTokenMediaCache()
+        initNFTMetadataCache()
+        initNFTMediaCache()
 
         info("App Reset Finished")
     }, [removeEncryptionKeysFromKeychain, dispatch])

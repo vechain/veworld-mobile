@@ -1,2 +1,2 @@
-export const CACHE_TOKEN_METADATA_KEY = "VeWorld_Cache_TokenMetadata_key"
-export const CACHE_TOKEN_MEDIA_KEY = "VeWorld_Cache_TokenMedia_key"
+export const CACHE_NFT_METADATA_KEY = "VeWorld_Cache__NFT_Metadata_key"
+export const CACHE_NFT_MEDIA_KEY = "VeWorld_Cache_NFT_Media_key"

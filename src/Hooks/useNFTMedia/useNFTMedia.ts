@@ -1,5 +1,5 @@
 import { URIProtocol } from "~Constants/Enums/URIProtocol"
-import { NFTMediaType, TokenMedia } from "~Model"
+import { NFTMediaType, NFTMedia } from "~Model"
 import { getTokenImageArweave } from "~Networking/NFT/getTokenImageArweave"
 import { TokenMediaCache as cache } from "~Storage/PersistedCache"
 import { getTokenImageIpfs } from "~Networking/NFT/getTokenImageIpfs"
@@ -7,8 +7,8 @@ import { getTokenImageIpfs } from "~Networking/NFT/getTokenImageIpfs"
 import { MediaUtils, URIUtils, debug, warn } from "~Utils"
 import { useCallback } from "react"
 
-export const useTokenMedia = () => {
-    const fetchMedia = useCallback(async (uri: string): Promise<TokenMedia> => {
+export const useNFTMedia = () => {
+    const fetchMedia = useCallback(async (uri: string): Promise<NFTMedia> => {
         try {
             const protocol = uri?.split(":")[0].trim()
 
@@ -16,7 +16,7 @@ export const useTokenMedia = () => {
                 case URIProtocol.DATA:
                 case URIProtocol.HTTPS:
                 case URIProtocol.HTTP: {
-                    const mimeType = await MediaUtils.resolveMediaTypeFromUri(
+                    const mimeType = await MediaUtils.resolveMimeTypeFromUri(
                         uri,
                     )
                     const mediaType =

@@ -1,6 +1,6 @@
 import React, { memo, useCallback, useEffect, useRef, useState } from "react"
-import { useTheme, useTokenMedia } from "~Hooks"
-import { NFTMediaType, TokenMedia } from "~Model"
+import { useTheme, useNFTMedia } from "~Hooks"
+import { NFTMediaType, NFTMedia as Media } from "~Model"
 import { error } from "~Utils"
 import { NFTVideo } from "../NFTVideo"
 import { StyleSheet } from "react-native"
@@ -16,14 +16,14 @@ export const NFTMedia = memo((props: Props) => {
     const { uri, styles } = props
     const [isLoading, setIsLoading] = useState(true)
     const timeoutRef = useRef<NodeJS.Timeout | null>(null)
-    const [tokenMedia, setTokenMedia] = useState<TokenMedia>()
+    const [tokenMedia, setTokenMedia] = useState<Media>()
     const theme = useTheme()
 
     const onLoadEnd = useCallback(() => {
         setIsLoading(false)
     }, [])
 
-    const { fetchMedia } = useTokenMedia()
+    const { fetchMedia } = useNFTMedia()
 
     useEffect(() => {
         if (!isLoading) return

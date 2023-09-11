@@ -6,7 +6,7 @@ import {
     NFTTransferCardSkeleton,
     NFTMedia,
 } from "~Components"
-import { useNonFungibleTokenInfo, useThemedStyles } from "~Hooks"
+import { useNFTInfo, useThemedStyles } from "~Hooks"
 import { useI18nContext } from "~i18n"
 import { ColorThemeType } from "~Constants"
 
@@ -16,8 +16,10 @@ type Props = {
 }
 
 export const NFTTransferCard = ({ collectionAddress, tokenId }: Props) => {
-    const { isMediaLoading, tokenMetadata, collectionName } =
-        useNonFungibleTokenInfo(tokenId, collectionAddress)
+    const { isMediaLoading, tokenMetadata, collectionName } = useNFTInfo(
+        tokenId,
+        collectionAddress,
+    )
 
     const { styles, theme } = useThemedStyles(baseStyles)
 

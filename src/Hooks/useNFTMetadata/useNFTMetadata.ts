@@ -1,15 +1,15 @@
 import axios from "axios"
 import { NFT_AXIOS_TIMEOUT } from "~Constants/Constants/NFT"
 import { URIProtocol } from "~Constants/Enums/URIProtocol"
-import { TokenMetadata } from "~Model"
+import { NFTMetadata } from "~Model"
 import { getTokenMetaArweave, getTokenMetaIpfs } from "~Networking"
 import { TokenMetadataCache as cache } from "~Storage/PersistedCache"
 import { debug, warn } from "~Utils"
 
-export const useTokenMetadata = () => {
+export const useNFTMetadata = () => {
     const fetchMetadata = async (
         uri: string,
-    ): Promise<TokenMetadata | undefined> => {
+    ): Promise<NFTMetadata | undefined> => {
         try {
             const protocol = uri?.split(":")[0].trim()
 
@@ -36,7 +36,7 @@ export const useTokenMetadata = () => {
                     debug(`Fetching metadata for ${uri}`)
                     return (
                         (
-                            await axios.get<TokenMetadata>(uri, {
+                            await axios.get<NFTMetadata>(uri, {
                                 timeout: NFT_AXIOS_TIMEOUT,
                             })
                         )?.data ?? undefined

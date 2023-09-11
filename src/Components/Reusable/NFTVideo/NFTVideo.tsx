@@ -3,6 +3,7 @@ import { StyleSheet } from "react-native"
 import { SCREEN_WIDTH } from "~Constants"
 import { Video, ResizeMode } from "expo-av"
 import { BaseView } from "~Components/Base"
+import { info } from "~Utils"
 
 type Props = {
     uri: string
@@ -12,6 +13,8 @@ export const NFTVideo = memo((props: Props) => {
     const { uri } = props
 
     const video = useRef(null)
+
+    info("Loading NFT video")
 
     return (
         <BaseView style={baseStyles.nftImage}>

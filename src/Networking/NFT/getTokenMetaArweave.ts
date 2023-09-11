@@ -1,6 +1,6 @@
 import Arweave from "arweave"
 import { error } from "~Utils/Logger"
-import { TokenMetadata } from "~Model/Nft/Nft"
+import { NFTMetadata } from "~Model/Nft/Nft"
 import { NFT_AXIOS_TIMEOUT } from "~Constants/Constants/NFT"
 import { URIUtils } from "~Utils"
 
@@ -19,7 +19,7 @@ export const getTokenMetaArweave = async (uri: string) => {
         const url = URIUtils.convertUriToUrl(uri)
         const id = toID(url)
 
-        const response = await arweave.api.get<TokenMetadata>(id)
+        const response = await arweave.api.get<NFTMetadata>(id)
         return response.data
     } catch (e) {
         error("getTokenMetaArweave", e)

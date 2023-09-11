@@ -1,12 +1,12 @@
 import { useEffect, useState } from "react"
 import { useThor } from "~Components"
-import { useTokenMetadata } from "~Hooks"
-import { TokenMetadata } from "~Model"
+import { useNFTMetadata } from "~Hooks"
+import { NFTMetadata } from "~Model"
 import { getName, getTokenURI } from "~Networking"
 import { error } from "~Utils"
 
 /**
- * `useNonFungibleTokenInfo` is a hook for fetching and managing non-fungible token (NFT) information.
+ * `useNFTInfo` is a hook for fetching and managing non-fungible token (NFT) information.
  *
  * @param {string} tokenId - The identifier of the non-fungible token.
  * @param {string} contractAddress - The contract address of the non-fungible token.
@@ -19,16 +19,13 @@ import { error } from "~Utils"
  *
  * @example
  *
- * const { tokenMetadata, tokenUri, collectionName, tokenImage, tokenMime, isMediaLoading } = useNonFungibleTokenInfo(tokenId, contractAddress);
+ * const { tokenMetadata, tokenUri, collectionName, tokenImage, tokenMime, isMediaLoading } = useNFTInfo(tokenId, contractAddress);
  *
  */
-export const useNonFungibleTokenInfo = (
-    tokenId: string,
-    contractAddress: string,
-) => {
-    const { fetchMetadata } = useTokenMetadata()
+export const useNFTInfo = (tokenId: string, contractAddress: string) => {
+    const { fetchMetadata } = useNFTMetadata()
     const [tokenMetadata, setTokenMetadata] = useState<
-        TokenMetadata | undefined
+        NFTMetadata | undefined
     >()
     const [collectionName, setCollectionName] = useState<string | undefined>()
 

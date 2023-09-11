@@ -2,7 +2,7 @@ import Arweave from "arweave"
 import { error } from "~Utils/Logger"
 import { MAX_IMAGE_SIZE, NFT_AXIOS_TIMEOUT } from "~Constants/Constants/NFT"
 import { MediaUtils } from "~Utils"
-import { TokenMedia } from "~Model"
+import { NFTMedia } from "~Model"
 
 const arweave = Arweave.init({
     host: "arweave.net",
@@ -14,9 +14,7 @@ const arweave = Arweave.init({
 
 const toID = (uri: string) => uri?.split("://")[1]
 
-export const getTokenImageArweave = async (
-    uri: string,
-): Promise<TokenMedia> => {
+export const getTokenImageArweave = async (uri: string): Promise<NFTMedia> => {
     try {
         const txId = toID(uri)
         const transaction = await arweave.transactions.get(txId)
