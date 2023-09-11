@@ -16,7 +16,7 @@ import { debug, error } from "~Utils"
 import { NFT_PAGE_SIZE } from "~Constants/Constants/NFT"
 import { useI18nContext } from "~i18n"
 import { initialiseNFTMetadata } from "./Helpers"
-import { useTheme, useTokenMetadata } from "~Hooks"
+import { useTheme, useNFTMetadata } from "~Hooks"
 import { useLazyLoader } from "./useLazyLoader"
 
 //  Note: To test this hook, replace `selectedAccount.address` with `ACCOUNT_WITH_NFTS` to get an account with numerous NFT collections and NFTs.
@@ -25,7 +25,7 @@ export const useNFTs = () => {
     const network = useAppSelector(selectSelectedNetwork)
     const currentAddress = useAppSelector(selectSelectedAccountAddress)
     const visibleNfts = useAppSelector(selectAllNftsWithoutMetadata)
-    const { fetchMetadata } = useTokenMetadata()
+    const { fetchMetadata } = useNFTMetadata()
     const thor = useThor()
     const { LL } = useI18nContext()
 

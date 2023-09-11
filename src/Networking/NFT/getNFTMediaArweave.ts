@@ -1,7 +1,8 @@
 import Arweave from "arweave"
 import { error } from "~Utils/Logger"
 import { MAX_IMAGE_SIZE, NFT_AXIOS_TIMEOUT } from "~Constants/Constants/NFT"
-import { identifyMimeType } from "~Utils/ImageUtils/ImageUtils"
+import { MediaUtils } from "~Utils"
+import { NFTMedia } from "~Model"
 
 const arweave = Arweave.init({
     host: "arweave.net",
@@ -13,7 +14,7 @@ const arweave = Arweave.init({
 
 const toID = (uri: string) => uri?.split("://")[1]
 
-export const getTokenImageArweave = async (uri: string): Promise<string> => {
+export const getNFTMediaArweave = async (uri: string): Promise<NFTMedia> => {
     try {
         const txId = toID(uri)
         const transaction = await arweave.transactions.get(txId)
@@ -25,13 +26,17 @@ export const getTokenImageArweave = async (uri: string): Promise<string> => {
             )
         }
 
-        const mimeType = identifyMimeType(buffer)
+        const mimeType = MediaUtils.resolveMimeTypeFromRawData(buffer)
         if (!mimeType) {
             throw new Error("Couldn't identify the MIME type of the image.")
         }
 
         const dataURI = `data:${mimeType};base64,${buffer.toString("base64")}`
-        return dataURI
+        return {
+            image: dataURI,
+            mime: mimeType,
+            mediaType: MediaUtils.resolveMediaTypeFromMimeType(mimeType),
+        }
     } catch (err) {
         error("Error fetching the image:", err)
         throw err

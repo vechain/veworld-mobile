@@ -19,10 +19,7 @@ export interface NftCollection extends ERC721Metadata, WithID, MetadataUpdated {
     fromRegistry: boolean
 }
 
-export interface NonFungibleToken
-    extends TokenMetadata,
-        WithID,
-        MetadataUpdated {
+export interface NonFungibleToken extends NFTMetadata, WithID, MetadataUpdated {
     owner: string
     address: string
     tokenURI?: string
@@ -37,7 +34,13 @@ export interface WithID {
     id: string
 }
 
-export interface TokenMetadata
+export interface NFTMedia {
+    image: string
+    mime: string
+    mediaType: NFTMediaType
+}
+
+export interface NFTMetadata
     extends ERC721Metadata,
         OpenSeaMetadata,
         WorldOfVMetadata {}
@@ -74,7 +77,7 @@ export interface OpenSeaMetadata {
 export interface ERC721Metadata {
     name: string
     description: string
-    image: string
+    image?: string
     mimeType?: string
     mediaType: NFTMediaType
 }

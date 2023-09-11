@@ -4,14 +4,11 @@ import { BaseView } from "./BaseView"
 import { useTheme } from "~Hooks"
 
 type Props = {
-    uri: string
-    w?: number
-    h?: number
-    isNFT?: boolean
+    uri?: string
 } & FastImageProps
 
 export const BaseImage = memo((props: Props) => {
-    const { uri, w, h, style, testID, ...rest } = props
+    const { uri, style, testID, ...rest } = props
 
     const theme = useTheme()
 
@@ -25,13 +22,18 @@ export const BaseImage = memo((props: Props) => {
         <BaseView>
             <FastImage
                 testID={testID}
-                style={[{ width: w, height: h }, style]}
+                style={[
+                    {
+                        backgroundColor: theme.colors.placeholder,
+                    },
+                    style,
+                ]}
                 fallback
                 // TODO (Vas) (https://github.com/vechainfoundation/veworld-mobile/issues/749) change fallback image
                 defaultSource={placeholderImg}
                 source={{
                     uri,
-                    priority: FastImage.priority.high,
+                    priority: FastImage.priority.low,
                     cache: FastImage.cacheControl.immutable,
                 }}
                 {...rest}

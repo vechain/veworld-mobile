@@ -1,6 +1,12 @@
 import { StyleSheet } from "react-native"
 import React from "react"
-import { BaseCard, BaseImage, BaseText, BaseView } from "~Components"
+import {
+    BaseCard,
+    BaseImage,
+    BaseSpacer,
+    BaseText,
+    BaseView,
+} from "~Components"
 import { COLORS } from "~Constants"
 
 type Props = {
@@ -15,9 +21,9 @@ export const AssetHeader = ({ name, symbol, icon }: Props) => {
             <BaseCard
                 style={[baseStyles.card, { backgroundColor: COLORS.WHITE }]}
                 containerStyle={baseStyles.imageShadow}>
-                <BaseImage uri={icon} w={20} h={20} />
+                <BaseImage uri={icon} style={baseStyles.icon} />
             </BaseCard>
-
+            <BaseSpacer width={16} />
             <BaseView>
                 <BaseText typographyFont="title">{name}</BaseText>
                 <BaseText typographyFont="body">{symbol}</BaseText>
@@ -27,12 +33,15 @@ export const AssetHeader = ({ name, symbol, icon }: Props) => {
 }
 
 const baseStyles = StyleSheet.create({
+    icon: {
+        width: 20,
+        height: 20,
+    },
     imageShadow: {
         width: "auto",
     },
     card: {
         borderRadius: 30,
         padding: 10,
-        marginEnd: 16,
     },
 })

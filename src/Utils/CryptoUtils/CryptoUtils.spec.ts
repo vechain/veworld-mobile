@@ -97,7 +97,7 @@ describe("hdNodeFromXPub", () => {
 })
 
 describe("encryptWallet: not tested properly", () => {
-    it("should not throw execptions", () => {
+    it("should not throw exceptions", () => {
         random()
         const arr = [1, 2, 3, 4, 5]
         shuffleArray(arr)

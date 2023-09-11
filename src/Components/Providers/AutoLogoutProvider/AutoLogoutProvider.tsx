@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react"
 import { useAppStateTransitions } from "~Hooks"
 import { setIsAppLoading, useAppDispatch } from "~Storage/Redux"
-import { debug } from "~Utils"
+import { debug, info } from "~Utils"
 
 type ProviderProps = { children: React.ReactNode }
 
@@ -27,15 +27,15 @@ export const AutoLogoutProvider = ({ children }: ProviderProps) => {
              * known issue: https://github.com/avishayil/react-native-restart/issues/239
              */
             // Check if the app was closed for more than 5 minutes
-            // const now = Date.now()
-            // const fiveMinutes = 5 * 60 * 1000
-            // if (now - inactivityStartTime > fiveMinutes) {
-            //     info("App was inactive for more than 5 minutes. Restarting...")
-            //     restart in some way
-            // } else {
-            dispatch(setIsAppLoading(false))
-            setInactivityStartTime(0)
-            // }
+            const now = Date.now()
+            const fiveMinutes = 5 * 60 * 1000
+            if (now - inactivityStartTime > fiveMinutes) {
+                info("App was inactive for more than 5 minutes. Restarting...")
+                //restart in some way
+            } else {
+                dispatch(setIsAppLoading(false))
+                setInactivityStartTime(0)
+            }
         }
     }, [dispatch, activeToBackground, backgroundToActive, inactivityStartTime])
 

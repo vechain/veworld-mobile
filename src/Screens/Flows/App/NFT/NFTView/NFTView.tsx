@@ -1,18 +1,14 @@
 import { useNavigation } from "@react-navigation/native"
-import React, { memo, useCallback, useMemo, useRef } from "react"
+import React, { memo, useCallback, useMemo } from "react"
 import { TouchableOpacity, StyleSheet } from "react-native"
 import { COLORS, SCREEN_WIDTH } from "~Constants"
-import { NFTImage, BaseText, BaseView } from "~Components"
-import { NFTMediaType, NonFungibleToken, NftCollection } from "~Model"
+import { BaseText, BaseView, NFTMedia } from "~Components"
+import { NonFungibleToken, NftCollection } from "~Model"
 import { Routes } from "~Navigation"
 import { selectPendingTx, useAppSelector } from "~Storage/Redux"
-import { Video, ResizeMode } from "expo-av"
-import { NFTPlaceholder } from "~Assets"
 import { useI18nContext } from "~i18n"
 import HapticsService from "~Services/HapticsService"
-import SkeletonContent from "react-native-skeleton-content-nonexpo"
 import { useThemedStyles } from "~Hooks"
-import { PlatformUtils } from "~Utils"
 
 type Props = {
     nft: NonFungibleToken
@@ -21,9 +17,8 @@ type Props = {
 }
 
 export const NFTView = memo(({ nft, index, collection }: Props) => {
-    const { styles, theme } = useThemedStyles(baseStyles)
+    const { styles } = useThemedStyles(baseStyles)
     const nav = useNavigation()
-    const video = useRef(null)
     const { LL } = useI18nContext()
 
     const isPendingTx = useAppSelector(state => selectPendingTx(state, nft.id))
@@ -36,56 +31,10 @@ export const NFTView = memo(({ nft, index, collection }: Props) => {
         })
     }, [nft, collection, nav])
 
-    const renderNFTStaticImage = useCallback(
-        () => (
-            <NFTImage
-                uri={NFTPlaceholder}
-                // @ts-ignore
-                style={styles.nftPreviewImage}
-            />
-        ),
-        [styles.nftPreviewImage],
-    )
-
     const renderNft = useMemo(() => {
         return (
             <BaseView style={styles.nftCollectionNameBarRadius}>
-                {nft.mediaType === NFTMediaType.IMAGE && (
-                    <NFTImage
-                        uri={nft.image}
-                        // @ts-ignore
-                        style={styles.nftPreviewImage}
-                    />
-                )}
-
-                {nft.mediaType === NFTMediaType.VIDEO &&
-                    PlatformUtils.isIOS() && (
-                        <BaseView style={styles.nftPreviewImage}>
-                            <Video
-                                usePoster
-                                ref={video}
-                                shouldPlay={false}
-                                style={styles.nftPreviewImage}
-                                source={{ uri: nft.image }}
-                                resizeMode={ResizeMode.COVER}
-                                isLooping
-                                isMuted
-                            />
-                        </BaseView>
-                    )}
-
-                {/* On Android devices with low RAM showing video previews causes rendering overload and crashes */}
-                {nft.mediaType === NFTMediaType.VIDEO &&
-                    PlatformUtils.isAndroid() &&
-                    renderNFTStaticImage()}
-
-                {nft.mediaType === NFTMediaType.UNKNOWN && (
-                    <NFTImage
-                        uri={NFTPlaceholder}
-                        // @ts-ignore
-                        style={styles.nftPreviewImage}
-                    />
-                )}
+                <NFTMedia uri={nft.image} styles={styles.nftPreviewImage} />
 
                 {isPendingTx && (
                     <BaseView
@@ -115,19 +64,17 @@ export const NFTView = memo(({ nft, index, collection }: Props) => {
             </BaseView>
         )
     }, [
-        nft.mediaType,
         nft.image,
         nft.tokenId,
         styles.nftCollectionNameBarRadius,
         styles.nftPreviewImage,
         styles.nftPendingLabel,
         styles.nftCollectionNameBar,
-        renderNFTStaticImage,
         isPendingTx,
         LL,
     ])
 
-    return nft.updated ? (
+    return (
         <TouchableOpacity
             activeOpacity={0.6}
             // Workaround -> https://github.com/mpiannucci/react-native-context-menu-view/issues/60#issuecomment-1453864955
@@ -142,22 +89,6 @@ export const NFTView = memo(({ nft, index, collection }: Props) => {
             ]}>
             {renderNft}
         </TouchableOpacity>
-    ) : (
-        <SkeletonContent
-            containerStyle={[
-                styles.nftContainer,
-                // eslint-disable-next-line react-native/no-inline-styles
-                {
-                    justifyContent: index % 2 === 0 ? "flex-start" : "flex-end",
-                },
-            ]}
-            animationDirection="horizontalLeft"
-            boneColor={theme.colors.skeletonBoneColor}
-            highlightColor={theme.colors.skeletonHighlightColor}
-            // @ts-ignore
-            layout={[{ ...styles.nftPreviewImage, opacity: 0.1 }]}
-            isLoading={true}
-        />
     )
 })
 
