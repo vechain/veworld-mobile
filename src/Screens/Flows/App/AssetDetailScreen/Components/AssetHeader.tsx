@@ -15,7 +15,7 @@ export const AssetHeader = ({ name, symbol, icon }: Props) => {
             <BaseCard
                 style={[baseStyles.card, { backgroundColor: COLORS.WHITE }]}
                 containerStyle={baseStyles.imageShadow}>
-                <BaseImage uri={icon} w={20} h={20} />
+                <BaseImage uri={icon} style={baseStyles.icon} />
             </BaseCard>
 
             <BaseView>
@@ -27,6 +27,10 @@ export const AssetHeader = ({ name, symbol, icon }: Props) => {
 }
 
 const baseStyles = StyleSheet.create({
+    icon: {
+        width: 20,
+        height: 20,
+    },
     imageShadow: {
         width: "auto",
     },

@@ -9,9 +9,17 @@ const findImage = async () =>
 
 describe("BaseIcon", () => {
     it("renders the icon with default values", async () => {
-        render(<BaseImage testID={testId} uri={uri} w={20} h={20} />, {
-            wrapper: TestWrapper,
-        })
+        render(
+            <BaseImage
+                testID={testId}
+                uri={uri}
+                // eslint-disable-next-line react-native/no-inline-styles
+                style={{ width: 20, height: 20 }}
+            />,
+            {
+                wrapper: TestWrapper,
+            },
+        )
 
         const icon = await findImage()
         expect(icon).toBeVisible()

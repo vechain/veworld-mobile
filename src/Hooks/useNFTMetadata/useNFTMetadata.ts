@@ -1,12 +1,14 @@
 import axios from "axios"
+import { usePersistedCache } from "~Components/Providers/PersistedCacheProvider"
 import { NFT_AXIOS_TIMEOUT } from "~Constants/Constants/NFT"
 import { URIProtocol } from "~Constants/Enums/URIProtocol"
 import { NFTMetadata } from "~Model"
 import { getNFTMetadataArweave, getNFTMetadataIpfs } from "~Networking"
-import { TokenMetadataCache as cache } from "~Storage/PersistedCache"
 import { debug, warn } from "~Utils"
 
 export const useNFTMetadata = () => {
+    const { metadataCache } = usePersistedCache()
+
     const fetchMetadata = async (
         uri: string,
     ): Promise<NFTMetadata | undefined> => {
@@ -16,7 +18,7 @@ export const useNFTMetadata = () => {
             switch (protocol) {
                 case URIProtocol.IPFS:
                 case URIProtocol.ARWEAVE: {
-                    const cachedData = cache?.getItem(uri)
+                    const cachedData = metadataCache?.getItem(uri)
                     if (cachedData) {
                         debug(`Using cached metadata for ${uri}`)
                         return cachedData
@@ -27,7 +29,7 @@ export const useNFTMetadata = () => {
                         ? await getNFTMetadataIpfs(uri)
                         : await getNFTMetadataArweave(uri)
 
-                    cache?.setItem(uri, retrievedData)
+                    metadataCache?.setItem(uri, retrievedData)
                     return retrievedData
                 }
 

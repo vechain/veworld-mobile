@@ -1,12 +1,7 @@
 import { useCallback } from "react"
+import { usePersistedCache } from "~Components/Providers/PersistedCacheProvider"
 import { useWalletSecurity } from "~Hooks/useWalletSecurity"
 import KeychainService from "~Services/KeychainService"
-import {
-    TokenMetadataCache as tokenMetadataCache,
-    TokenMediaCache as tokenMediaCache,
-    initNFTMediaCache,
-    initNFTMetadataCache,
-} from "~Storage/PersistedCache"
 
 import {
     CACHE_NFT_MEDIA_KEY,
@@ -18,6 +13,7 @@ import { info } from "~Utils/Logger"
 
 export const useAppReset = () => {
     const dispatch = useAppDispatch()
+    const { resetAllCaches, initAllCaches } = usePersistedCache()
     const devices = useAppSelector(selectDevices)
 
     const { isWalletSecurityBiometrics } = useWalletSecurity()
@@ -40,15 +36,19 @@ export const useAppReset = () => {
     const appReset = useCallback(async () => {
         await removeEncryptionKeysFromKeychain()
         await dispatch(resetApp())
-        tokenMetadataCache?.reset()
-        tokenMediaCache?.reset()
 
-        // TODO: Restarting the app would be better than initializing the cache again. However we are working through a known issue with react-native-restart
-        initNFTMetadataCache()
-        initNFTMediaCache()
+        await resetAllCaches()
+
+        // TODO: Move this to a more appropriate place
+        await initAllCaches()
 
         info("App Reset Finished")
-    }, [removeEncryptionKeysFromKeychain, dispatch])
+    }, [
+        removeEncryptionKeysFromKeychain,
+        resetAllCaches,
+        initAllCaches,
+        dispatch,
+    ])
 
     return appReset
 }

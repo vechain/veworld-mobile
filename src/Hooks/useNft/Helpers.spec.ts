@@ -82,15 +82,13 @@ describe("Helpers - initCollectionMetadataWithoutRegistry", () => {
             selectedAccount,
             collection,
             "notAvailable",
-            false,
         )
         expect(result).toEqual({
             id: "0x456",
             address: "0x456",
             creator: "notAvailable",
             description: "notAvailable",
-            image: NFTPlaceHolderLight,
-            mediaType: NFTMediaType.IMAGE,
+            mediaType: NFTMediaType.UNKNOWN,
             name: "",
             symbol: "",
             updated: false,
