@@ -16,10 +16,11 @@ import reduxReset from "redux-reset"
 import { configureStore } from "@reduxjs/toolkit"
 import { Provider } from "react-redux"
 import { PersistGate } from "redux-persist/integration/react"
+import { PersistedCacheProvider } from "./PersistedCacheProvider"
 import { useEncryptedStorage } from "~Components/Providers/EncryptedStorageProvider/EncryptedStorageProvider"
-import { MMKV } from "react-native-mmkv"
 import { Reducer } from "redux"
 import { warn } from "~Utils"
+import { MMKV } from "react-native-mmkv"
 
 const StoreContext = React.createContext<undefined>(undefined)
 
@@ -90,7 +91,7 @@ const StoreContextProvider = ({ children }: StoreContextProviderProps) => {
         <StoreContext.Provider value={undefined}>
             <Provider store={store.current}>
                 <PersistGate loading={null} persistor={persistor}>
-                    {children}
+                    <PersistedCacheProvider>{children}</PersistedCacheProvider>
                 </PersistGate>
             </Provider>
         </StoreContext.Provider>

@@ -1,9 +1,9 @@
 import { renderHook } from "@testing-library/react-hooks"
-import { useNonFungibleTokenInfo } from "./useNonFungibleTokenInfo"
+import { useNFTInfo } from "./useNFTInfo"
 import { useThor } from "~Components"
 import { getName, getTokenURI } from "~Networking"
 import * as logger from "~Utils/Logger/Logger"
-import { NFTMediaType, TokenMetadata } from "~Model"
+import { NFTMediaType, NFTMetadata } from "~Model"
 
 jest.mock("~Networking", () => ({
     getName: jest.fn(),
@@ -13,9 +13,9 @@ jest.mock("~Networking", () => ({
 
 const fetchMetadata = jest.fn()
 
-jest.mock("~Hooks/useTokenMetadata", () => {
+jest.mock("~Hooks/useNFTMetadata", () => {
     return {
-        useTokenMetadata: () => ({
+        useNFTMetadata: () => ({
             fetchMetadata,
         }),
     }
@@ -37,7 +37,7 @@ jest.mock("axios", () => ({
     }),
 }))
 
-describe("useNonFungibleTokenInfo", () => {
+describe("useNFTInfo", () => {
     afterEach(() => {
         jest.clearAllMocks()
     })
@@ -48,7 +48,7 @@ describe("useNonFungibleTokenInfo", () => {
         const tokenUriMock = "http://token.uri"
         const nameMock = "NFT Collection"
         const address = "contractAddress1"
-        const nftMetaMock: TokenMetadata = {
+        const nftMetaMock: NFTMetadata = {
             name: "NFT Name",
             description: "NFT Description",
             image: "http://nft.image",
@@ -61,7 +61,7 @@ describe("useNonFungibleTokenInfo", () => {
         ;(useThor as jest.Mock).mockReturnValue(thor)
 
         const { result, waitForNextUpdate } = renderHook(() =>
-            useNonFungibleTokenInfo(tokenId, address),
+            useNFTInfo(tokenId, address),
         )
 
         await waitForNextUpdate({ timeout: 10000 })
@@ -88,7 +88,7 @@ describe("useNonFungibleTokenInfo", () => {
         const consoleErrorSpy = jest.spyOn(logger, "error")
 
         const { result, waitForNextUpdate } = renderHook(() =>
-            useNonFungibleTokenInfo(tokenId, contractAddress),
+            useNFTInfo(tokenId, contractAddress),
         )
 
         await waitForNextUpdate({ timeout: 10000 })
@@ -114,7 +114,7 @@ describe("useNonFungibleTokenInfo", () => {
         ;(useThor as jest.Mock).mockReturnValue(thor)
 
         const { result, waitForNextUpdate } = renderHook(() =>
-            useNonFungibleTokenInfo(tokenId, contractAddress),
+            useNFTInfo(tokenId, contractAddress),
         )
 
         await waitForNextUpdate({ timeout: 10000 })

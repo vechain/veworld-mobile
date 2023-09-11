@@ -39,7 +39,7 @@ type IEncryptedStorage = {
         type: SecurityLevelType,
         pinCode?: string,
     ) => Promise<void>
-    wipeApplication: () => Promise<void>
+    wipeReduxStorage: () => Promise<void>
     walletStatus: WalletStatus
 }
 
@@ -170,7 +170,7 @@ export const EncryptedStorageProvider = ({
         setMetadataStorage(MetadataStorage(keys.metadata))
     }, [])
 
-    const wipeApplication = useCallback(async () => {
+    const wipeReduxStorage = useCallback(async () => {
         setReduxStorage({
             mmkv: OnboardingStorage,
             encryptionKey: onboardingKey,
@@ -230,7 +230,7 @@ export const EncryptedStorageProvider = ({
             migrateOnboarding,
             images: imageStorage,
             metadata: metadataStorage,
-            wipeApplication,
+            wipeReduxStorage,
             walletStatus,
         }
     }, [
@@ -239,7 +239,7 @@ export const EncryptedStorageProvider = ({
         reduxStorage,
         migrateOnboarding,
         walletStatus,
-        wipeApplication,
+        wipeReduxStorage,
     ])
 
     if (

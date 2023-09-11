@@ -8,8 +8,9 @@
 - Unify Wallets and Redux Keys
     - Currently, wallets and redux encryption keys and both encrypted with the pincodes and stored separately. This can
       lead to problems if we update the pincode, as we have to perform updates in 2 places.
+- AutoLock - TODO
 - Update Pin Code (Security Settings)
-- Switch Bio to PIN (Security Settings)
+- ~~Switch Bio to PIN (Security Settings)~~
 - Switch PIN to Bio (Security Settings)
 - `userPreferences` should not be encrypted so we can access it on the unlock screen.
 - Unlock with biometrics -> prompted multiple times. The following point may help
@@ -26,3 +27,5 @@
  */
 const OldAppStorage = new MMKV({ id: "mmkv.default" }) 
 ```
+
+- TODO: android
