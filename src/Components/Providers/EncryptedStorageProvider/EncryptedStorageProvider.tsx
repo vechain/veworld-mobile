@@ -2,7 +2,7 @@ import React, { useCallback, useEffect, useMemo, useState } from "react"
 import { MMKV } from "react-native-mmkv"
 import { CryptoUtils, debug, error, HexUtils, warn } from "~Utils"
 import { SecurityLevelType } from "~Model"
-import EncryptionKeyHepler from "~Components/Providers/EncryptedStorageProvider/Helpers/EncryptionKeyHepler"
+import { EncryptionKeyHelper } from "~Components/Providers"
 import { EncryptionKeys } from "~Components/Providers/EncryptedStorageProvider/Model"
 import Onboarding from "~Components/Providers/EncryptedStorageProvider/Helpers/Onboarding"
 
@@ -96,7 +96,7 @@ export const EncryptedStorageProvider = ({
                 metadata: HexUtils.generateRandom(8),
             }
 
-            await EncryptionKeyHepler.setKeys(encryptionKeys, type, pinCode)
+            await EncryptionKeyHelper.setKeys(encryptionKeys, type, pinCode)
 
             try {
                 await Onboarding.migrateState({
@@ -143,7 +143,7 @@ export const EncryptedStorageProvider = ({
     }, [])
 
     const getEncryptionKeys = useCallback(async () => {
-        const { type, data } = await EncryptionKeyHepler.getSecurityKeys()
+        const { type, data } = await EncryptionKeyHelper.getEncryptionKeys()
 
         setSecurityType(type)
 
@@ -153,7 +153,7 @@ export const EncryptedStorageProvider = ({
     }, [setWithBiometrics])
 
     const unlockWithPinCode = useCallback(async (pinCode: string) => {
-        const { data } = await EncryptionKeyHepler.getSecurityKeys()
+        const { data } = await EncryptionKeyHelper.getEncryptionKeys()
 
         const keys = CryptoUtils.decrypt(data, pinCode) as EncryptionKeys
 
@@ -180,7 +180,7 @@ export const EncryptedStorageProvider = ({
         setSecurityType(undefined)
         setWalletStatus("onboarding")
 
-        await EncryptionKeyHepler.deleteKeys()
+        await EncryptionKeyHelper.deleteKeys()
 
         const storeKeys = UserEncryptedStorage.getAllKeys()
         for (const key of storeKeys) {

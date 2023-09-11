@@ -1,8 +1,13 @@
 ## EncryptedStorageContext
 
 - EncryptedStorageContext - Leverage `WALLET_STATUS` instead of `WalletStauts`
-- Decrypting Wallets -> Probably big changes here, signing not tested yet
+- ~~Decrypting Wallets -> Probably big changes here, signing not tested yet~~
+    - Testing sending simple transaction
+    - Need to do more tests. Certificates, delegation, etc.
 - Create a standalone unlock screen for pincodes. See `TODO`s in `EncryptedStorageContext`
+- Unify Wallets and Redux Keys
+    - Currently, wallets and redux encryption keys and both encrypted with the pincodes. This can lead to problems if we
+      update 1 and not the other.
 - Update Pin Code (Security Settings)
 - Switch Bio to PIN (Security Settings)
 - Switch PIN to Bio (Security Settings)

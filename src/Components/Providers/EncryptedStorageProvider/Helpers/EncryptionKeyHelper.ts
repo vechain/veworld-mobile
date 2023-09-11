@@ -11,7 +11,7 @@ type SecurityKeysResponse = {
     data: string
     type: SecurityLevelType
 }
-export const getSecurityKeys = async (): Promise<SecurityKeysResponse> => {
+export const getEncryptionKeys = async (): Promise<SecurityKeysResponse> => {
     const keys = await Keychain.get({
         key: ENCRYPTION_KEY_STORAGE,
         options: {
@@ -91,8 +91,31 @@ const deleteKeys = async () => {
     })
 }
 
+const validatePinCode = async (pinCode: string): Promise<boolean> => {
+    try {
+        const keys = await Keychain.get({
+            key: ENCRYPTION_KEY_STORAGE,
+            options: {
+                requireAuthentication: false,
+            },
+        })
+
+        if (!keys) throw new Error("No key found")
+
+        const decryptedKeys = CryptoUtils.decrypt(
+            keys,
+            pinCode,
+        ) as EncryptionKeys
+
+        return !!decryptedKeys && !!decryptedKeys.redux
+    } catch (e) {
+        return false
+    }
+}
+
 export default {
     setKeys,
-    getSecurityKeys,
+    getEncryptionKeys,
     deleteKeys,
+    validatePinCode,
 }

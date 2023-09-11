@@ -1,12 +1,10 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit"
 import { SecurityLevelType } from "~Model"
-import { SettingsConstants } from "~Constants"
 
 export interface ConfigState {
     userSelectedSecurity: SecurityLevelType
     lastSecurityLevel: SecurityLevelType
     isSecurityDowngrade: boolean
-    pinValidationString: string
     isAppBlocked: boolean
 }
 
@@ -14,7 +12,6 @@ const initialState: ConfigState = {
     userSelectedSecurity: SecurityLevelType.NONE,
     lastSecurityLevel: SecurityLevelType.NONE,
     isSecurityDowngrade: false,
-    pinValidationString: SettingsConstants.VALIDATION_STRING,
     isAppBlocked: false,
 }
 
@@ -45,10 +42,6 @@ export const ConfigSlice = createSlice({
         setIsSecurityDowngrade: (state, action: PayloadAction<boolean>) => {
             state.isSecurityDowngrade = action.payload
         },
-
-        setPinValidationString: (state, action: PayloadAction<string>) => {
-            state.pinValidationString = action.payload
-        },
         setIsAppBlocked: (state, action: PayloadAction<boolean>) => {
             state.isAppBlocked = action.payload
         },
@@ -60,7 +53,6 @@ export const {
     setUserSelectedSecurity,
     setLastSecurityLevel,
     setIsSecurityDowngrade,
-    setPinValidationString,
     setIsAppBlocked,
     resetConfigState,
 } = ConfigSlice.actions

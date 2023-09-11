@@ -1,6 +1,5 @@
 import { useCallback } from "react"
 import { showErrorToast } from "~Components"
-import { usePasswordValidation } from "~Hooks"
 import { LocalDevice, SecurityLevelType, Wallet } from "~Model"
 import {
     bulkUpdateDevices,
@@ -10,6 +9,7 @@ import {
 } from "~Storage/Redux"
 import { CryptoUtils, error, info } from "~Utils"
 import { useI18nContext } from "~i18n"
+import { usePinCodeUpdate } from "~Hooks/usePinCodeUpdate/usePinCodeUpdate"
 
 export enum OperationType {
     EDIT_PIN = "EDIT_PIN",
@@ -56,7 +56,7 @@ export const useSecurityTransactions = ({
 
     const { LL } = useI18nContext()
 
-    const { updatePassword } = usePasswordValidation()
+    const { updatePinCode } = usePinCodeUpdate()
 
     const handleOnAppBlocked = useCallback(() => {
         //Dispatch Blocked flag
@@ -110,7 +110,7 @@ export const useSecurityTransactions = ({
 
                 if (operationType === OperationType.EDIT_PIN) {
                     // update password checker string on redux
-                    updatePassword(
+                    updatePinCode(
                         rollbackOperations[0].data.hashEncryptionKey ??
                             currentPassword,
                     )
@@ -140,7 +140,7 @@ export const useSecurityTransactions = ({
             handleOnAppBlocked,
             onStateCleanup,
             operationType,
-            updatePassword,
+            updatePinCode,
         ],
     )
 
@@ -193,7 +193,7 @@ export const useSecurityTransactions = ({
 
                 if (operationType === OperationType.EDIT_PIN) {
                     // update password checker string on redux
-                    updatePassword(
+                    updatePinCode(
                         operations[0].data.hashEncryptionKey ?? currentPassword,
                     )
                 } else {
@@ -240,7 +240,7 @@ export const useSecurityTransactions = ({
             onStateCleanup,
             operationType,
             rollbackTransactions,
-            updatePassword,
+            updatePinCode,
         ],
     )
 

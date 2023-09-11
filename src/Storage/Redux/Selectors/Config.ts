@@ -19,10 +19,6 @@ export const selectIsSecurityDowngrade = createSelector(reducer, state => {
     return state.isSecurityDowngrade
 })
 
-export const selectPinValidationString = createSelector(reducer, state => {
-    return state.pinValidationString
-})
-
 export const selectIsAppBlocked = createSelector(reducer, state => {
     return state.isAppBlocked
 })

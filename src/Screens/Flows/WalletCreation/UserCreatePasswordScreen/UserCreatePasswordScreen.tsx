@@ -24,7 +24,6 @@ import HapticsService from "~Services/HapticsService"
 const digitNumber = 6
 export const UserCreatePasswordScreen = () => {
     const { LL } = useI18nContext()
-    // const { updatePassword } = usePasswordValidation()
     const nav = useNavigation()
     const track = useAnalyticTracking()
 
