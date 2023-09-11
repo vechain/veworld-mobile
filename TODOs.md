@@ -6,8 +6,8 @@
     - Need to do more tests. Certificates, delegation, etc.
 - Create a standalone unlock screen for pincodes. See `TODO`s in `EncryptedStorageContext`
 - Unify Wallets and Redux Keys
-    - Currently, wallets and redux encryption keys and both encrypted with the pincodes. This can lead to problems if we
-      update 1 and not the other.
+    - Currently, wallets and redux encryption keys and both encrypted with the pincodes and stored separately. This can
+      lead to problems if we update the pincode, as we have to perform updates in 2 places.
 - Update Pin Code (Security Settings)
 - Switch Bio to PIN (Security Settings)
 - Switch PIN to Bio (Security Settings)
