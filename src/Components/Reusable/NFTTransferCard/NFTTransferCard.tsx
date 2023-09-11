@@ -1,17 +1,14 @@
-import React, { useCallback, useMemo, useRef } from "react"
+import React, { useMemo } from "react"
 import { StyleSheet } from "react-native"
 import {
     BaseView,
     BaseText,
     NFTTransferCardSkeleton,
-    NFTImage,
+    NFTMedia,
 } from "~Components"
 import { useNonFungibleTokenInfo, useThemedStyles } from "~Hooks"
-import { NFTMediaType } from "~Model"
-import { NFTPlaceHolderLight, NFTPlaceholderDark } from "~Assets"
 import { useI18nContext } from "~i18n"
 import { ColorThemeType } from "~Constants"
-import { ResizeMode, Video } from "expo-av"
 
 type Props = {
     collectionAddress: string
@@ -26,8 +23,6 @@ export const NFTTransferCard = ({ collectionAddress, tokenId }: Props) => {
 
     const { LL } = useI18nContext()
 
-    const video = useRef(null)
-
     const validatedCollectionName = useMemo(() => {
         if (!collectionName) return LL.UNKNOWN_COLLECTION()
 
@@ -40,69 +35,16 @@ export const NFTTransferCard = ({ collectionAddress, tokenId }: Props) => {
         return tokenId.length > 13 ? `${tokenId.slice(0, 12)}...` : tokenId
     }, [tokenId])
 
-    const placeholderImg = useMemo(() => {
-        return theme.isDark ? NFTPlaceholderDark : NFTPlaceHolderLight
-    }, [theme.isDark])
-
-    const posterComponent = useCallback(() => {
-        // @ts-ignore
-        return (
-            <NFTImage
-                uri={placeholderImg}
-                // @ts-ignore
-                style={styles.nftImage}
-            />
-        )
-    }, [placeholderImg, styles.nftImage])
-
     const renderMedia = useMemo(() => {
         if (isMediaLoading) return <NFTTransferCardSkeleton />
 
-        if (tokenMetadata?.mediaType === NFTMediaType.IMAGE)
-            // @ts-ignore
-            return (
-                <NFTImage
-                    uri={tokenMetadata?.image ?? ""}
-                    // @ts-ignore
-                    style={styles.nftImage}
-                />
-            )
-
-        if (
-            tokenMetadata?.mediaType === NFTMediaType.VIDEO &&
-            tokenMetadata?.image
-        )
-            return (
-                <BaseView style={styles.nftImage}>
-                    <Video
-                        PosterComponent={posterComponent}
-                        usePoster
-                        ref={video}
-                        shouldPlay
-                        useNativeControls
-                        style={styles.nftImage}
-                        source={{ uri: tokenMetadata?.image }}
-                        resizeMode={ResizeMode.COVER}
-                        isLooping
-                    />
-                </BaseView>
-            )
-
-        // @ts-ignore
         return (
-            <NFTImage
-                uri={placeholderImg}
-                // @ts-ignore
-                style={styles.nftImage}
+            <NFTMedia
+                uri={tokenMetadata?.image ?? ""}
+                styles={styles.nftImage}
             />
         )
-    }, [
-        isMediaLoading,
-        placeholderImg,
-        posterComponent,
-        styles.nftImage,
-        tokenMetadata,
-    ])
+    }, [isMediaLoading, styles.nftImage, tokenMetadata])
 
     return (
         <BaseView style={[styles.container]}>

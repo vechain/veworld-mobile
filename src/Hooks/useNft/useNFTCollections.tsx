@@ -29,15 +29,13 @@ import {
 import { useI18nContext } from "~i18n"
 import { NFT_PAGE_SIZE } from "~Constants/Constants/NFT"
 import { compareAddresses } from "~Utils/AddressUtils/AddressUtils"
-import { useTheme, useTokenMetadata } from "~Hooks"
+import { useTokenMetadata } from "~Hooks"
 import { useLazyLoader } from "./useLazyLoader"
 
 /**
  * `useNFTCollections` is a React hook that facilitates the fetching and management of NFT collections for a selected account.
  * It fetches the contract addresses for the NFTs owned by the selected account and retrieves additional details about each NFT collection from a registry.
  * The results are stored in a Redux store and can be accessed throughout the application.
- *
- * Note: To test this hook, replace `selectedAccount.address` with `ACCOUNT_WITH_NFTS` to get an account with numerous NFT collections and NFTs.
  *
  * @returns {object} The object returned contains a `loadCollections` function that can be invoked to fetch NFT collections.
  *
@@ -58,7 +56,6 @@ export const useNFTCollections = () => {
     const currentAddress = useAppSelector(selectSelectedAccountAddress)
     const nftCollections = useAppSelector(selectNftCollectionsWithoutMetadata)
     const { fetchMetadata } = useTokenMetadata()
-    const theme = useTheme()
 
     const lazyLoadMetadata = useCallback(
         async (collection: NftCollection) => {
@@ -182,7 +179,6 @@ export const useNFTCollections = () => {
                                 currentAddress,
                                 collection,
                                 LL.COMMON_NOT_AVAILABLE(),
-                                theme.isDark,
                             )
                         }
                     },
@@ -217,7 +213,7 @@ export const useNFTCollections = () => {
                 )
             }
         },
-        [LL, dispatch, currentAddress, network.type, theme.isDark],
+        [LL, dispatch, currentAddress, network.type],
     )
 
     return { loadCollections }

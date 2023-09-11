@@ -1,8 +1,9 @@
 import axios from "axios"
 import { MAX_IMAGE_SIZE } from "~Constants/Constants/NFT"
-import { URIUtils, error } from "~Utils"
+import { TokenMedia } from "~Model"
+import { MediaUtils, URIUtils, error } from "~Utils"
 
-export const getTokenImageIpfs = async (uri: string): Promise<string> => {
+export const getTokenImageIpfs = async (uri: string): Promise<TokenMedia> => {
     try {
         const response = await axios.get(URIUtils.convertUriToUrl(uri), {
             responseType: "blob",
@@ -27,7 +28,13 @@ export const getTokenImageIpfs = async (uri: string): Promise<string> => {
             const reader = new FileReader()
             reader.readAsDataURL(response.data)
             reader.onloadend = () => {
-                resolve(reader.result as string)
+                resolve({
+                    image: reader.result as string,
+                    mime: response.data.type,
+                    mediaType: MediaUtils.resolveMediaTypeFromMimeType(
+                        response.data.type,
+                    ),
+                })
             }
             reader.onerror = () => {
                 reject(Error("Error occurred while reading blob."))

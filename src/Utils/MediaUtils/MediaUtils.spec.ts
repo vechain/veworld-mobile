@@ -23,10 +23,10 @@ describe("isValidMimeType", () => {
     })
 })
 
-describe("resolveMimeType", () => {
+describe("resolveMimeTypeFromUri", () => {
     it("should resolve mime type for data URIs", async () => {
         const resource = "data:image/png;base64,iVBORw0KGgoAAAANS..."
-        const mime = await MediaUtils.resolveMimeType(resource)
+        const mime = await MediaUtils.resolveMimeTypeFromUri(resource)
         expect(mime).toBe("image/png")
     })
 
@@ -36,7 +36,7 @@ describe("resolveMimeType", () => {
         ;(axios.head as jest.Mock).mockResolvedValueOnce({
             headers: { "content-type": contentType },
         })
-        const mime = await MediaUtils.resolveMimeType(resource)
+        const mime = await MediaUtils.resolveMimeTypeFromUri(resource)
         expect(mime).toBe(contentType)
     })
 
@@ -45,16 +45,15 @@ describe("resolveMimeType", () => {
         ;(axios.head as jest.Mock).mockRejectedValueOnce(
             new Error("Network Error"),
         )
-        const mime = await MediaUtils.resolveMimeType(resource)
+        const mime = await MediaUtils.resolveMimeTypeFromUri(resource)
         expect(mime).toBe("image/png")
     })
 })
 
 describe("resolveMediaType", () => {
     it("should resolve media type based on the provided mime type", async () => {
-        const imageUrl = "https://example.com/image.jpg"
         const mimeType = "image/jpeg"
-        const mediaType = await MediaUtils.resolveMediaType(imageUrl, mimeType)
+        const mediaType = MediaUtils.resolveMediaTypeFromMimeType(mimeType)
         expect(mediaType).toBe("image")
     })
 
@@ -64,17 +63,23 @@ describe("resolveMediaType", () => {
         ;(axios.head as jest.Mock).mockResolvedValueOnce({
             headers: { "content-type": contentType },
         })
-        const mediaType = await MediaUtils.resolveMediaType(imageUrl)
+        const mediaType = await MediaUtils.resolveMediaTypeFromUri(imageUrl)
         expect(mediaType).toBe("image")
     })
 
-    it("should return 'unknown' if the mime type is not valid for image or video", async () => {
+    it("should return 'unknown' if the mime type is not valid for image or video - uri", async () => {
         const imageUrl = "https://example.com/file.pdf"
         const contentType = "application/pdf"
         ;(axios.head as jest.Mock).mockResolvedValueOnce({
             headers: { "content-type": contentType },
         })
-        const mediaType = await MediaUtils.resolveMediaType(imageUrl)
+        const mediaType = await MediaUtils.resolveMediaTypeFromUri(imageUrl)
+        expect(mediaType).toBe("unknown")
+    })
+
+    it("should return 'unknown' if the mime type is not valid for image or video", async () => {
+        const mimeType = "application/pdf"
+        const mediaType = MediaUtils.resolveMediaTypeFromMimeType(mimeType)
         expect(mediaType).toBe("unknown")
     })
 })

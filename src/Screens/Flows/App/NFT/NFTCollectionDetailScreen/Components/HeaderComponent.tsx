@@ -6,7 +6,7 @@ import {
     BaseSpacer,
     BaseText,
     BaseView,
-    NFTImage,
+    NFTMedia,
 } from "~Components"
 import { isEmpty } from "lodash"
 import { useI18nContext } from "~i18n"
@@ -15,7 +15,6 @@ import { NFTMediaType, NftCollection } from "~Model"
 import { COLORS } from "~Constants"
 import { useToggleCollection } from "./Hooks/useToggleCollection"
 import { useTheme } from "~Hooks"
-import { NFTPlaceholder } from "~Assets"
 
 export const HeaderComponent = memo(
     ({ collection }: { collection: NftCollection }) => {
@@ -38,15 +37,10 @@ export const HeaderComponent = memo(
         return (
             <>
                 <BaseView flexDirection="row" alignItems="flex-end" mx={20}>
-                    {collection.mediaType === NFTMediaType.IMAGE ? (
-                        <NFTImage
-                            uri={collection?.image}
-                            style={baseStyles.nftHeaderImage}
-                        />
-                    ) : (
-                        <NFTImage
-                            uri={NFTPlaceholder}
-                            style={baseStyles.nftHeaderImage}
+                    {collection.mediaType === NFTMediaType.IMAGE && (
+                        <NFTMedia
+                            uri={collection.image}
+                            styles={baseStyles.nftHeaderImage}
                         />
                     )}
 

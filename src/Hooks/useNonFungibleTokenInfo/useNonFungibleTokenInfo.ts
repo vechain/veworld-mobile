@@ -44,12 +44,13 @@ export const useNonFungibleTokenInfo = (
                 const uri = await getTokenURI(tokenId, contractAddress, thor)
                 const metadata = await fetchMetadata(uri)
                 if (!metadata) throw Error("No metadata found")
+
                 setTokenMetadata(metadata)
-                setIsMediaLoading(false)
             } catch (e) {
                 error(
-                    `Failed to load metadata for token ${tokenId} of collection ${contractAddress}`,
+                    `Failed to load NFT token info ${tokenId} of collection ${contractAddress}`,
                 )
+            } finally {
                 setIsMediaLoading(false)
             }
         }

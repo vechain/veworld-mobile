@@ -37,6 +37,12 @@ export interface WithID {
     id: string
 }
 
+export interface TokenMedia {
+    image: string
+    mime: string
+    mediaType: NFTMediaType
+}
+
 export interface TokenMetadata
     extends ERC721Metadata,
         OpenSeaMetadata,
@@ -74,7 +80,7 @@ export interface OpenSeaMetadata {
 export interface ERC721Metadata {
     name: string
     description: string
-    image: string
+    image?: string
     mimeType?: string
     mediaType: NFTMediaType
 }

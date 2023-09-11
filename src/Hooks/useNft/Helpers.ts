@@ -33,7 +33,6 @@ export const initCollectionMetadataWithoutRegistry = (
     selectedAccount: string,
     collection: string,
     notAvailable: string,
-    isDarkTheme: boolean,
 ): NftCollection => {
     return {
         id: collection,
@@ -42,8 +41,7 @@ export const initCollectionMetadataWithoutRegistry = (
         symbol: "",
         creator: notAvailable,
         description: notAvailable,
-        image: isDarkTheme ? NFTPlaceholderDark : NFTPlaceHolderLight,
-        mediaType: NFTMediaType.IMAGE,
+        mediaType: NFTMediaType.UNKNOWN,
         updated: false,
         fromRegistry: false,
     }

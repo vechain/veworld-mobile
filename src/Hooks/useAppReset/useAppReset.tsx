@@ -1,8 +1,17 @@
 import { useCallback } from "react"
 import { useWalletSecurity } from "~Hooks/useWalletSecurity"
 import KeychainService from "~Services/KeychainService"
-import MetadataCache from "~Storage/PersistedCache/MetadataCache"
-import { CACHE_METADATA_KEY } from "~Storage/PersistedCache/constants"
+import {
+    TokenMetadataCache as tokenMetadataCache,
+    TokenMediaCache as tokenMediaCache,
+    initTokenMediaCache,
+    initTokenMetadataCache,
+} from "~Storage/PersistedCache"
+
+import {
+    CACHE_TOKEN_MEDIA_KEY,
+    CACHE_TOKEN_METADATA_KEY,
+} from "~Storage/PersistedCache/constants"
 import { resetApp, useAppDispatch, useAppSelector } from "~Storage/Redux"
 import { selectDevices } from "~Storage/Redux/Selectors"
 import { info } from "~Utils/Logger"
@@ -22,7 +31,8 @@ export const useAppReset = () => {
             )
         })
 
-        promises.push(KeychainService.deleteKey(CACHE_METADATA_KEY))
+        promises.push(KeychainService.deleteKey(CACHE_TOKEN_MEDIA_KEY))
+        promises.push(KeychainService.deleteKey(CACHE_TOKEN_METADATA_KEY))
 
         await Promise.all(promises)
     }, [devices, isWalletSecurityBiometrics])
@@ -30,9 +40,15 @@ export const useAppReset = () => {
     const appReset = useCallback(async () => {
         await removeEncryptionKeysFromKeychain()
         await dispatch(resetApp())
-        MetadataCache.reset()
+        tokenMetadataCache?.reset()
+        tokenMediaCache?.reset()
+
+        // TODO: Restarting the app would be better than initializing the cache again. However we are working through a known issue with react-native-restart
+        initTokenMetadataCache()
+        initTokenMediaCache()
+
         info("App Reset Finished")
-    }, [dispatch, removeEncryptionKeysFromKeychain])
+    }, [removeEncryptionKeysFromKeychain, dispatch])
 
     return appReset
 }
