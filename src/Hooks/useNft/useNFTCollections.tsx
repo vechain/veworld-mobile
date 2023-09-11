@@ -29,7 +29,7 @@ import {
 import { useI18nContext } from "~i18n"
 import { NFT_PAGE_SIZE } from "~Constants/Constants/NFT"
 import { compareAddresses } from "~Utils/AddressUtils/AddressUtils"
-import { useTokenMetadata } from "~Hooks"
+import { useNFTMetadata } from "~Hooks"
 import { useLazyLoader } from "./useLazyLoader"
 
 /**
@@ -55,7 +55,7 @@ export const useNFTCollections = () => {
     const network = useAppSelector(selectSelectedNetwork)
     const currentAddress = useAppSelector(selectSelectedAccountAddress)
     const nftCollections = useAppSelector(selectNftCollectionsWithoutMetadata)
-    const { fetchMetadata } = useTokenMetadata()
+    const { fetchMetadata } = useNFTMetadata()
 
     const lazyLoadMetadata = useCallback(
         async (collection: NftCollection) => {
