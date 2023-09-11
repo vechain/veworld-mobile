@@ -157,6 +157,10 @@ export const EncryptedStorageProvider = ({
 
         const keys = CryptoUtils.decrypt(data, pinCode) as EncryptionKeys
 
+        if (!keys || !keys.redux) {
+            throw new Error("Invalid pin code")
+        }
+
         setReduxStorage({
             mmkv: UserEncryptedStorage,
             encryptionKey: keys.redux,
