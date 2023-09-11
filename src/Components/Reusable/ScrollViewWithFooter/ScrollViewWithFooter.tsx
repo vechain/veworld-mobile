@@ -13,7 +13,7 @@ export const ScrollViewWithFooter = ({
     isScrollEnabled = true,
 }: Props) => {
     return (
-        <BaseView h={100} alignItems={"stretch"}>
+        <BaseView flex={1} alignItems={"stretch"}>
             <BaseScrollView scrollEnabled={isScrollEnabled}>
                 <BaseView>{children}</BaseView>
                 {/** here we can add a fade like effect */}
