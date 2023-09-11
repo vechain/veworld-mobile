@@ -62,7 +62,7 @@ export const NFTMedia = memo((props: Props) => {
     return (
         <BaseView>
             {tokenMedia?.mediaType === NFTMediaType.VIDEO ? (
-                <NFTVideo uri={tokenMedia.image} />
+                <NFTVideo uri={tokenMedia.image} style={[styles]} />
             ) : (
                 <BaseImage
                     {...props}
@@ -76,7 +76,7 @@ export const NFTMedia = memo((props: Props) => {
                     ]}
                 />
             )}
-            {isLoading && (
+            {isLoading && tokenMedia?.mediaType !== NFTMediaType.VIDEO && (
                 <SkeletonContent
                     containerStyle={baseStyles.skeletonContainer}
                     animationDirection="horizontalLeft"
