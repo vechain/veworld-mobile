@@ -119,5 +119,6 @@ const baseStyles = (theme: ColorThemeType) =>
             fontSize: otherTypography.fontSize[22],
             fontWeight: "700",
             fontFamily: otherTypography.fontFamily["Inter-Bold"],
+            padding: 0,
         },
     })
