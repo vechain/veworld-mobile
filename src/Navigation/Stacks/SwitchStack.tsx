@@ -2,7 +2,6 @@ import React, { useMemo } from "react"
 import { createNativeStackNavigator } from "@react-navigation/native-stack"
 import { TabStack } from "~Navigation/Tabs"
 import { OnboardingStack } from "./OnboardingStack"
-import { AppInitState, useAppInitState } from "~Hooks"
 import { CreateWalletAppStack, Routes } from "~Navigation"
 import {
     BlackListedCollectionsScreen,
@@ -18,12 +17,13 @@ import {
 import { AppBlockedScreen } from "~Screens/Flows/App/AppBlockedScreen"
 import { TransferEventListener } from "../../TransferEventListener"
 import { Certificate, Transaction } from "thor-devkit"
-import { LedgerAccountWithDevice } from "~Model"
+import { LedgerAccountWithDevice, WALLET_STATUS } from "~Model"
 import {
     LedgerSignCertificate,
     LedgerSignTransaction,
 } from "~Screens/Flows/App/LedgerScreen"
 import { PlatformUtils } from "~Utils"
+import { useWalletStatus } from "~Components"
 
 export type RootStackParamListSwitch = {
     OnboardingStack: undefined
@@ -64,10 +64,10 @@ export type RootStackParamListSwitch = {
 const Switch = createNativeStackNavigator<RootStackParamListSwitch>()
 
 export const SwitchStack = () => {
-    const state = useAppInitState()
+    const walletStatus = useWalletStatus()
 
     const RenderStacks = useMemo(() => {
-        if (state === AppInitState.INIT_STATE) {
+        if (walletStatus === WALLET_STATUS.FIRST_TIME_ACCESS) {
             return (
                 <Switch.Screen
                     name="OnboardingStack"
@@ -135,7 +135,7 @@ export const SwitchStack = () => {
                 </>
             )
         }
-    }, [state])
+    }, [walletStatus])
 
     return (
         <Switch.Navigator
@@ -149,10 +149,16 @@ export const SwitchStack = () => {
 }
 
 const AppContainer = () => {
-    return (
-        <>
-            <TransferEventListener />
-            <TabStack />
-        </>
-    )
+    const walletStatus = useWalletStatus()
+
+    if (walletStatus === WALLET_STATUS.UNLOCKED) {
+        return (
+            <>
+                <TransferEventListener />
+                <TabStack />
+            </>
+        )
+    }
+
+    return <TabStack />
 }

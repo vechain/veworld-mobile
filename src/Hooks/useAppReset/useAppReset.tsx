@@ -11,11 +11,13 @@ import { resetApp, useAppDispatch, useAppSelector } from "~Storage/Redux"
 import { selectDevices } from "~Storage/Redux/Selectors"
 import { info } from "~Utils/Logger"
 import { useEncryptedStorage } from "~Components"
+import { useResetStacks } from "~Hooks/useSetSelectedAccount/useResetStacks"
 
 export const useAppReset = () => {
     const dispatch = useAppDispatch()
     const { resetAllCaches, initAllCaches } = usePersistedCache()
-    const { wipeReduxStorage } = useEncryptedStorage()
+    const { resetApplication } = useEncryptedStorage()
+    const { resetStacks } = useResetStacks()
     const devices = useAppSelector(selectDevices)
 
     const { isWalletSecurityBiometrics } = useWalletSecurity()
@@ -39,19 +41,22 @@ export const useAppReset = () => {
         await removeEncryptionKeysFromKeychain()
         await dispatch(resetApp())
 
+        resetStacks()
+
         await resetAllCaches()
 
-        await wipeReduxStorage()
+        await resetApplication()
 
         // TODO: Move this to a more appropriate place
         await initAllCaches()
 
         info("App Reset Finished")
     }, [
+        resetStacks,
         removeEncryptionKeysFromKeychain,
         resetAllCaches,
         initAllCaches,
-        wipeReduxStorage,
+        resetApplication,
         dispatch,
     ])
 }

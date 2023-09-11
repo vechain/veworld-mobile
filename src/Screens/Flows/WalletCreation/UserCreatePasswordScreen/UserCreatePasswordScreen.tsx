@@ -6,7 +6,6 @@ import {
     Layout,
     NumPad,
     PasswordPins,
-    useEncryptedStorage,
 } from "~Components"
 import { useI18nContext } from "~i18n"
 import {
@@ -27,8 +26,6 @@ export const UserCreatePasswordScreen = () => {
     const nav = useNavigation()
     const track = useAnalyticTracking()
 
-    const { migrateOnboarding } = useEncryptedStorage()
-
     /**
      * Called by `useOnDigitPressWithConfirmation` when the user has finished typing the pin
      * Store the encrypted pin validation string in the redux store
@@ -36,8 +33,6 @@ export const UserCreatePasswordScreen = () => {
      */
     const onFinishCallback = useCallback(
         async (insertedPin: string) => {
-            await migrateOnboarding(SecurityLevelType.SECRET, insertedPin)
-            // await updatePassword(insertedPin)
             await HapticsService.triggerNotification({ level: "Success" })
             track(AnalyticsEvent.PASSWORD_SETUP_SUBMITTED)
             nav.navigate(Routes.WALLET_SUCCESS, {
@@ -45,7 +40,7 @@ export const UserCreatePasswordScreen = () => {
                 userPin: insertedPin,
             })
         },
-        [migrateOnboarding, nav, track],
+        [nav, track],
     )
 
     const [isConfirmationError, setIsConfirmationError] =

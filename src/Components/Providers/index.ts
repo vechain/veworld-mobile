@@ -1,6 +1,5 @@
 export * from "./TranslationProvider"
 export * from "./WrappedTranslation"
-export * from "./SecurityProvider/SecurityProvider"
 export * from "./ConnexProvider"
 export * from "./WalletConnectProvider"
 export * from "./StoreProvider"
