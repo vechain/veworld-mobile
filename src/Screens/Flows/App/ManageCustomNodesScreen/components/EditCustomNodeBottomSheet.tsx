@@ -40,8 +40,8 @@ export const EditCustomNodeBottomSheet = React.forwardRef<
 
     const dispatch = useAppDispatch()
 
-    const [nodeName, setNodeName] = useState(network?.name)
-    const [nodeUrl, setNodeUrl] = useState(network?.currentUrl)
+    const [nodeName, setNodeName] = useState(network?.name ?? "")
+    const [nodeUrl, setNodeUrl] = useState(network?.currentUrl ?? "")
     const [nodeUrlError, setNodeUrlError] = useState("")
 
     const [isSubmitting, setIsSubmitting] = useState(false)
@@ -53,6 +53,8 @@ export const EditCustomNodeBottomSheet = React.forwardRef<
         if (isSubmitDisabled || !network?.id) return
         setIsSubmitting(true)
         try {
+            onClose()
+
             await dispatch(
                 validateAndUpdateCustomNode({
                     networkToUpdateId: network.id,
@@ -64,7 +66,6 @@ export const EditCustomNodeBottomSheet = React.forwardRef<
             await Haptics.notificationAsync(
                 Haptics.NotificationFeedbackType.Success,
             )
-            onClose()
         } catch (e) {
             warn("onEditNetworkPress", e)
             await Haptics.notificationAsync(
@@ -104,11 +105,13 @@ export const EditCustomNodeBottomSheet = React.forwardRef<
         setNodeUrl(network?.currentUrl ?? "")
     }, [network])
 
-    useEffect(() => {
-        if (nodeUrl) {
-            setNodeUrlError(validateUrlInput(nodeUrl))
-        }
-    }, [nodeUrl, validateUrlInput])
+    const handleChangeUrl = useCallback(
+        (url: string) => {
+            setNodeUrl(url)
+            setNodeUrlError(validateUrlInput(url))
+        },
+        [validateUrlInput],
+    )
 
     return (
         <BaseBottomSheet snapPoints={snapPoints} ref={ref}>
@@ -140,7 +143,7 @@ export const EditCustomNodeBottomSheet = React.forwardRef<
                         })}
                         label={LL.COMMON_LBL_URL()}
                         value={nodeUrl}
-                        setValue={setNodeUrl}
+                        setValue={handleChangeUrl}
                         errorMessage={nodeUrlError}
                     />
                 </BaseView>

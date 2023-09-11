@@ -2,7 +2,7 @@ import React from "react"
 import { BaseText, BaseTouchable, BaseView } from "~Components"
 import { StyleSheet } from "react-native"
 import * as Clipboard from "expo-clipboard"
-import PlatformUtils from "~Utils/PlatformUtils" // TODO (Davide) (https://github.com/vechainfoundation/veworld-mobile/issues/748) remove this circular dependency
+import PlatformUtils from "~Utils/PlatformUtils"
 
 interface Props {
     onPaste: (result: string) => void
@@ -38,9 +38,6 @@ const baseStyles = StyleSheet.create({
         position: "absolute",
         bottom: PlatformUtils.isIOS() ? 120 : 40,
         marginTop: PlatformUtils.isIOS() ? 60 : 20,
-    },
-    icon: {
-        position: "absolute",
-        left: PlatformUtils.isIOS() ? 20 : 8,
+        zIndex: 100,
     },
 })

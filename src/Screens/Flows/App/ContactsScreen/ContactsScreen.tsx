@@ -131,6 +131,14 @@ export const ContactsScreen = () => {
         )
     }, [onAddContactPress])
 
+    const handleTrashIconPress = useCallback(
+        (address: string) => () => {
+            setSelectedContactAddress(address)
+            openRemoveContactSheet()
+        },
+        [openRemoveContactSheet],
+    )
+
     const renderItem: ListRenderItem<Contact> = useCallback(
         ({ item }) => {
             const contactId = `${item.address}-${item.alias}`
@@ -141,7 +149,7 @@ export const ContactsScreen = () => {
                     item={item}
                     itemKey={item.address}
                     swipeableItemRefs={swipeableItemRefs}
-                    handleTrashIconPress={openRemoveContactSheet}
+                    handleTrashIconPress={handleTrashIconPress(item.address)}
                     setSelectedItem={(contact?: Contact) =>
                         setContactToRemove(contact?.address)
                     }
@@ -151,7 +159,7 @@ export const ContactsScreen = () => {
                 </SwipeableRow>
             )
         },
-        [openRemoveContactSheet, onEditContactPress, contactToRemove],
+        [handleTrashIconPress, onEditContactPress, contactToRemove],
     )
 
     // [End] Render sub components

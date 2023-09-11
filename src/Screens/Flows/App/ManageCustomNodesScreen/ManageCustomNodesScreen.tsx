@@ -143,6 +143,14 @@ export const ManageCustomNodesScreen = () => {
         new Map(),
     )
 
+    const handleTrashIconPress = useCallback(
+        (id: string) => () => {
+            setNetworkToEditDeleteId(id)
+            openDeleteConfirmationSheet()
+        },
+        [openDeleteConfirmationSheet],
+    )
+
     const renderItem = useCallback(
         ({ item }: SectionListRenderItemInfo<Network, Section>) => {
             const onPress = () => onEditNetworkClick(item)
@@ -151,7 +159,7 @@ export const ManageCustomNodesScreen = () => {
                     item={item}
                     itemKey={item.id}
                     swipeableItemRefs={swipeableItemRefs}
-                    handleTrashIconPress={openDeleteConfirmationSheet}
+                    handleTrashIconPress={handleTrashIconPress(item?.id)}
                     setSelectedItem={(network?: Network) =>
                         setNetworkToDelete(network?.id)
                     }
@@ -165,7 +173,7 @@ export const ManageCustomNodesScreen = () => {
                 </SwipeableRow>
             )
         },
-        [networkToDelete, onEditNetworkClick, openDeleteConfirmationSheet],
+        [handleTrashIconPress, networkToDelete, onEditNetworkClick],
     )
 
     const renderSectionSeparator = useCallback(

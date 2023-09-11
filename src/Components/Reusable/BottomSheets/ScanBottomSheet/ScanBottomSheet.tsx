@@ -107,10 +107,12 @@ export const ScanBottomSheet = React.forwardRef<BottomSheetModalMethods, Props>(
                         onBarCodeScanned={onQrScanned}
                         onMountError={onClose}
                         ratio={"16:9"}>
+                        <CameraHeader onClose={onClose} />
+
                         {isCameraReady && (
                             <QrScannerLayout color={COLORS.DARK_PURPLE_RBGA} />
                         )}
-                        <CameraHeader onClose={onClose} />
+
                         {target === ScanTarget.WALLET_CONNECT && (
                             <CameraFooter onPaste={onPasteFromClipboard} />
                         )}

@@ -7,6 +7,7 @@ import {
     RequireUserPassword,
     SwipeableRow,
     showSuccessToast,
+    showWarningToast,
 } from "~Components"
 import { BaseDevice, Device } from "~Model"
 import { setDeviceState, useAppSelector } from "~Storage/Redux"
@@ -99,6 +100,20 @@ export const WalletManagementScreen = () => {
         [closeOtherSwipeableItems, openWalletMgmtSheet],
     )
 
+    const onTrashIconPress = useCallback(
+        (item: Device) => () => {
+            if (devices.length > 1) {
+                setSelectedDevice(item)
+                openRemoveWalletBottomSheet()
+            } else {
+                showWarningToast(
+                    LL.WALLET_MANAGEMENT_NOTIFICATION_LAST_WALLET(),
+                )
+            }
+        },
+        [LL, devices.length, openRemoveWalletBottomSheet],
+    )
+
     const renderItem: RenderItem<Device> = useCallback(
         ({ item, drag, isActive }) => {
             return (
@@ -106,9 +121,9 @@ export const WalletManagementScreen = () => {
                     item={item}
                     itemKey={item.rootAddress}
                     swipeableItemRefs={swipeableItemRefs}
-                    handleTrashIconPress={openRemoveWalletBottomSheet}
+                    handleTrashIconPress={onTrashIconPress(item)}
                     setSelectedItem={setDeviceToRemove}
-                    swipeEnabled={!isEdit && devices.length > 1}
+                    swipeEnabled={!isEdit}
                     onPress={onDeviceSelected}
                     isDragMode={isEdit}
                     isOpen={deviceToRemove === item}>
@@ -121,13 +136,7 @@ export const WalletManagementScreen = () => {
                 </SwipeableRow>
             )
         },
-        [
-            deviceToRemove,
-            devices.length,
-            isEdit,
-            onDeviceSelected,
-            openRemoveWalletBottomSheet,
-        ],
+        [deviceToRemove, isEdit, onDeviceSelected, onTrashIconPress],
     )
 
     const handleOnSuccessAddAccountBottomSheet = useCallback(() => {

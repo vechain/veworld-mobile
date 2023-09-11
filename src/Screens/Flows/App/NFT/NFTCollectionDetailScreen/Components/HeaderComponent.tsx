@@ -37,7 +37,11 @@ export const HeaderComponent = memo(
 
         return (
             <>
-                <BaseView flexDirection="row" alignItems="flex-end" mx={20}>
+                <BaseView
+                    flexDirection="row"
+                    alignItems="flex-end"
+                    mx={20}
+                    mt={20}>
                     {collection.mediaType === NFTMediaType.IMAGE ? (
                         <NFTImage
                             uri={collection?.image}
