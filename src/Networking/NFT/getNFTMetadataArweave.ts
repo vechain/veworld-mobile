@@ -14,7 +14,7 @@ const arweave = Arweave.init({
 
 const toID = (uri: string) => uri?.split("://")[1]
 
-export const getTokenMetaArweave = async (uri: string) => {
+export const getNFTMetadataArweave = async (uri: string) => {
     try {
         const url = URIUtils.convertUriToUrl(uri)
         const id = toID(url)
@@ -22,7 +22,7 @@ export const getTokenMetaArweave = async (uri: string) => {
         const response = await arweave.api.get<NFTMetadata>(id)
         return response.data
     } catch (e) {
-        error("getTokenMetaArweave", e)
+        error("getNFTMetadataArweave", e)
         throw e
     }
 }

@@ -14,7 +14,7 @@ const arweave = Arweave.init({
 
 const toID = (uri: string) => uri?.split("://")[1]
 
-export const getTokenImageArweave = async (uri: string): Promise<NFTMedia> => {
+export const getNFTMediaArweave = async (uri: string): Promise<NFTMedia> => {
     try {
         const txId = toID(uri)
         const transaction = await arweave.transactions.get(txId)

@@ -2,7 +2,7 @@ import axios from "axios"
 import { NFT_AXIOS_TIMEOUT } from "~Constants/Constants/NFT"
 import { URIProtocol } from "~Constants/Enums/URIProtocol"
 import { NFTMetadata } from "~Model"
-import { getTokenMetaArweave, getTokenMetaIpfs } from "~Networking"
+import { getNFTMetadataArweave, getNFTMetadataIpfs } from "~Networking"
 import { TokenMetadataCache as cache } from "~Storage/PersistedCache"
 import { debug, warn } from "~Utils"
 
@@ -24,8 +24,8 @@ export const useNFTMetadata = () => {
 
                     debug(`Fetching metadata for ${uri}`)
                     const retrievedData = URIProtocol.IPFS
-                        ? await getTokenMetaIpfs(uri)
-                        : await getTokenMetaArweave(uri)
+                        ? await getNFTMetadataIpfs(uri)
+                        : await getNFTMetadataArweave(uri)
 
                     cache?.setItem(uri, retrievedData)
                     return retrievedData

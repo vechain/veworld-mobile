@@ -1,8 +1,8 @@
 import { URIProtocol } from "~Constants/Enums/URIProtocol"
 import { NFTMediaType, NFTMedia } from "~Model"
-import { getTokenImageArweave } from "~Networking/NFT/getTokenImageArweave"
+import { getNFTMediaArweave } from "~Networking/NFT/getNFTMediaArweave"
 import { TokenMediaCache as cache } from "~Storage/PersistedCache"
-import { getTokenImageIpfs } from "~Networking/NFT/getTokenImageIpfs"
+import { getNFTMediaIpfs } from "~Networking/NFT/getNFTMediaIpfs"
 
 import { MediaUtils, URIUtils, debug, warn } from "~Utils"
 import { useCallback } from "react"
@@ -38,8 +38,8 @@ export const useNFTMedia = () => {
 
                     debug(`Fetching media for ${uri}`)
                     const media = URIProtocol.IPFS
-                        ? await getTokenImageIpfs(uri)
-                        : await getTokenImageArweave(uri)
+                        ? await getNFTMediaIpfs(uri)
+                        : await getNFTMediaArweave(uri)
 
                     cache?.setItem(uri, media)
 

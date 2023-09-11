@@ -3,7 +3,7 @@ import { MAX_IMAGE_SIZE } from "~Constants/Constants/NFT"
 import { NFTMedia } from "~Model"
 import { MediaUtils, URIUtils, error } from "~Utils"
 
-export const getTokenImageIpfs = async (uri: string): Promise<NFTMedia> => {
+export const getNFTMediaIpfs = async (uri: string): Promise<NFTMedia> => {
     try {
         const response = await axios.get(URIUtils.convertUriToUrl(uri), {
             responseType: "blob",
