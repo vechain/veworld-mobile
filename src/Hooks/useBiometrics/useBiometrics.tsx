@@ -14,7 +14,7 @@ const {
 /**
  * hook that returns the biometrics state
  */
-export const useBiometrics = () => {
+export const useBiometrics = (): BiometricState | undefined => {
     const { previousState, currentState } = useAppState()
     const [biometrics, setBiometrics] = useState<BiometricState | undefined>()
 
@@ -51,5 +51,5 @@ export const useBiometrics = () => {
         }
     }, [currentState, init, previousState])
 
-    return { ...biometrics }
+    return biometrics
 }

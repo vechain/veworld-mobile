@@ -1,6 +1,6 @@
 ## EncryptedStorageContext
 
-- EncryptedStorageContext - Leverage `WALLET_STATUS` instead of `WalletStauts`
+- ~~EncryptedStorageContext - Leverage `WALLET_STATUS` instead of `WalletStauts`~~
 - ~~Decrypting Wallets -> Probably big changes here, signing not tested yet~~
     - Tested sending simple transaction - works ok
     - Need to do more tests. Certificates, delegation, etc.
@@ -13,8 +13,8 @@
 - ~~Switch Bio to PIN (Security Settings)~~
 - Switch PIN to Bio (Security Settings)
 - `userPreferences` should not be encrypted so we can access it on the unlock screen.
-- Unlock with biometrics -> prompted multiple times. The following point may help
-- `SecurityProvider` should probably get removed now, since all security is handled by root Provider
+- ~~Unlock with biometrics -> prompted multiple times. The following point may help~~
+- ~~`SecurityProvider` should probably get removed now, since all security is handled by root Provider~~
 - `PinCodeProvider` can probably get removed now as well
 - `useAppReset` -> navigate to Welcome screen on reset
 - Need to fix the NFT Slice. See this
