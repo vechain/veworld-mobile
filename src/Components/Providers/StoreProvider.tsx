@@ -16,6 +16,7 @@ import reduxReset from "redux-reset"
 import { configureStore } from "@reduxjs/toolkit"
 import { Provider } from "react-redux"
 import { PersistGate } from "redux-persist/integration/react"
+import { PersistedCacheProvider } from "./PersistedCacheProvider"
 
 type StoreProvider = {
     store: Store
@@ -97,7 +98,7 @@ const StoreContextProvider = ({ children }: StoreContextProviderProps) => {
         <StoreContext.Provider value={value}>
             <Provider store={value.store}>
                 <PersistGate loading={null} persistor={value.persistor}>
-                    {children}
+                    <PersistedCacheProvider>{children}</PersistedCacheProvider>
                 </PersistGate>
             </Provider>
         </StoreContext.Provider>

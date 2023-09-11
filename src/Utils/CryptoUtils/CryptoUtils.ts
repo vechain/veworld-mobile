@@ -69,7 +69,7 @@ function decryptState(data: string, key: string) {
     let txt = decipher.update(data, "hex", "utf-8")
     txt += decipher.final("utf-8")
     let txtToString = txt.toString()
-    return txtToString as string
+    return txtToString
 }
 
 const verifyMnemonic = (seed: string) => {
@@ -79,7 +79,7 @@ const verifyMnemonic = (seed: string) => {
     } catch (e) {
         warn("verifyMnemonic", e)
     }
-    return hdNode ? true : false
+    return !!hdNode
 }
 
 /**

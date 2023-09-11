@@ -2,14 +2,12 @@ import { useNavigation } from "@react-navigation/native"
 import React, { useCallback, useMemo } from "react"
 import { StyleSheet, TouchableOpacity } from "react-native"
 import { COLORS, SCREEN_WIDTH } from "~Constants"
-import { BaseText, BaseView, LongPressProvider, NFTImage } from "~Components"
-import { NftCollection, NFTMediaType } from "~Model"
+import { BaseText, BaseView, LongPressProvider, NFTMedia } from "~Components"
+import { NftCollection } from "~Model"
 import { Routes } from "~Navigation"
-import { NFTPlaceholder } from "~Assets"
 import HapticsService from "~Services/HapticsService"
 import { useToggleCollection } from "../NFTCollectionDetailScreen/Components/Hooks/useToggleCollection"
 import { useThemedStyles } from "~Hooks"
-import SkeletonContent from "react-native-skeleton-content-nonexpo"
 
 type Props = {
     collection: NftCollection
@@ -22,7 +20,7 @@ enum ItemTitle {
 }
 
 export const NFTCollectionView = ({ collection, index }: Props) => {
-    const { styles, theme } = useThemedStyles(baseStyles)
+    const { styles } = useThemedStyles(baseStyles)
     const nav = useNavigation()
 
     const { onToggleCollection, isBlacklisted } =
@@ -49,14 +47,9 @@ export const NFTCollectionView = ({ collection, index }: Props) => {
     const renderCollection = useMemo(() => {
         return (
             <BaseView style={styles.nftCollectionNameBarRadius}>
-                <NFTImage
-                    uri={
-                        collection.mediaType === NFTMediaType.IMAGE
-                            ? collection.image
-                            : NFTPlaceholder
-                    }
-                    // @ts-ignore
-                    style={styles.nftPreviewImage}
+                <NFTMedia
+                    uri={collection.image}
+                    styles={styles.nftPreviewImage}
                 />
 
                 <BaseView
@@ -101,23 +94,11 @@ export const NFTCollectionView = ({ collection, index }: Props) => {
                     justifyContent: index % 2 === 0 ? "flex-start" : "flex-end",
                 },
             ]}>
-            {collection.updated ? (
-                <LongPressProvider
-                    items={CollectionItem}
-                    action={onToggleCollection}>
-                    {renderCollection}
-                </LongPressProvider>
-            ) : (
-                <SkeletonContent
-                    containerStyle={styles.nftPreviewImage}
-                    animationDirection="horizontalLeft"
-                    boneColor={theme.colors.skeletonBoneColor}
-                    highlightColor={theme.colors.skeletonHighlightColor}
-                    // @ts-ignore
-                    layout={[{ ...styles.nftPreviewImage, opacity: 0.1 }]}
-                    isLoading={true}
-                />
-            )}
+            <LongPressProvider
+                items={CollectionItem}
+                action={onToggleCollection}>
+                {renderCollection}
+            </LongPressProvider>
         </TouchableOpacity>
     )
 }

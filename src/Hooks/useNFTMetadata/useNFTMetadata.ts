@@ -1,23 +1,24 @@
 import axios from "axios"
+import { usePersistedCache } from "~Components/Providers/PersistedCacheProvider"
 import { NFT_AXIOS_TIMEOUT } from "~Constants/Constants/NFT"
 import { URIProtocol } from "~Constants/Enums/URIProtocol"
-import { useTokenImage } from "~Hooks/useTokenImage"
-import { TokenMetadata } from "~Model"
-import { getTokenMetaArweave, getTokenMetaIpfs } from "~Networking"
-import Cache from "~Storage/PersistedCache/MetadataCache"
+import { NFTMetadata } from "~Model"
+import { getNFTMetadataArweave, getNFTMetadataIpfs } from "~Networking"
 import { debug, warn } from "~Utils"
 
-export const useTokenMetadata = () => {
-    const { fetchImage } = useTokenImage()
+export const useNFTMetadata = () => {
+    const { metadataCache } = usePersistedCache()
 
-    const fetchMetadata = async (uri: string) => {
+    const fetchMetadata = async (
+        uri: string,
+    ): Promise<NFTMetadata | undefined> => {
         try {
             const protocol = uri?.split(":")[0].trim()
 
             switch (protocol) {
                 case URIProtocol.IPFS:
                 case URIProtocol.ARWEAVE: {
-                    const cachedData = Cache.getItem(uri)
+                    const cachedData = metadataCache?.getItem(uri)
                     if (cachedData) {
                         debug(`Using cached metadata for ${uri}`)
                         return cachedData
@@ -25,14 +26,10 @@ export const useTokenMetadata = () => {
 
                     debug(`Fetching metadata for ${uri}`)
                     const retrievedData = URIProtocol.IPFS
-                        ? await getTokenMetaIpfs(uri)
-                        : await getTokenMetaArweave(uri)
+                        ? await getNFTMetadataIpfs(uri)
+                        : await getNFTMetadataArweave(uri)
 
-                    const image = await fetchImage(retrievedData?.image)
-                    retrievedData.image = image.image
-                    retrievedData.mediaType = image.mediaType
-
-                    Cache.setItem(uri, retrievedData)
+                    metadataCache?.setItem(uri, retrievedData)
                     return retrievedData
                 }
 
@@ -41,7 +38,7 @@ export const useTokenMetadata = () => {
                     debug(`Fetching metadata for ${uri}`)
                     return (
                         (
-                            await axios.get<TokenMetadata>(uri, {
+                            await axios.get<NFTMetadata>(uri, {
                                 timeout: NFT_AXIOS_TIMEOUT,
                             })
                         )?.data ?? undefined
