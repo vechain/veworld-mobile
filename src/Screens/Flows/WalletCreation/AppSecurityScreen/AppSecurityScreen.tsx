@@ -1,11 +1,13 @@
 import React, { useCallback, useMemo } from "react"
-import { BaseButton, BaseSpacer, BaseText, BaseView, Layout } from "~Components"
 import {
-    useBiometricType,
-    useBiometrics,
-    useBiometricsValidation,
-    useTheme,
-} from "~Hooks"
+    BaseButton,
+    BaseSpacer,
+    BaseText,
+    BaseView,
+    Layout,
+    useEncryptedStorage,
+} from "~Components"
+import { useBiometrics, useBiometricType, useTheme } from "~Hooks"
 import { useI18nContext } from "~i18n"
 import { useNavigation } from "@react-navigation/native"
 import { Routes } from "~Navigation"
@@ -20,15 +22,16 @@ export const AppSecurityScreen = () => {
 
     const { currentSecurityLevel } = useBiometricType()
     useBiometrics()
-    const { authenticateBiometrics } = useBiometricsValidation()
+
+    const { migrateOnboarding } = useEncryptedStorage()
 
     const onBiometricsPress = useCallback(async () => {
-        authenticateBiometrics(() => {
-            nav.navigate(Routes.WALLET_SUCCESS, {
-                securityLevelSelected: SecurityLevelType.BIOMETRIC,
-            })
+        await migrateOnboarding(SecurityLevelType.BIOMETRIC)
+
+        nav.navigate(Routes.WALLET_SUCCESS, {
+            securityLevelSelected: SecurityLevelType.BIOMETRIC,
         })
-    }, [authenticateBiometrics, nav])
+    }, [migrateOnboarding, nav])
 
     const onPasswordPress = useCallback(() => {
         nav.navigate(Routes.USER_CREATE_PASSWORD)

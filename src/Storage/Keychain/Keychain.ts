@@ -1,16 +1,30 @@
 import * as SecureStore from "expo-secure-store"
+import { SecureStoreOptions } from "expo-secure-store/src/SecureStore"
 
-export async function set(encKey: string, options: any, keychainKey: string) {
-    await SecureStore.setItemAsync(keychainKey, encKey, options)
+type Set = {
+    key: string
+    value: string
+    options?: SecureStoreOptions
 }
 
-export async function get(
-    options: any,
-    keychainKey: string,
-): Promise<string | null> {
-    return await SecureStore.getItemAsync(keychainKey, options)
+export async function set({ key, value, options = {} }: Set) {
+    await SecureStore.setItemAsync(key, value, options)
 }
 
-export async function deleteItem(key: string, options: any) {
+type Get = {
+    key: string
+    options?: SecureStoreOptions
+}
+
+export async function get({ key, options = {} }: Get): Promise<string | null> {
+    return await SecureStore.getItemAsync(key, options)
+}
+
+type Delete = {
+    key: string
+    options?: SecureStoreOptions
+}
+
+export async function deleteItem({ key, options = {} }: Delete) {
     return await SecureStore.deleteItemAsync(key, options)
 }

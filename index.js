@@ -11,6 +11,7 @@ import { useTheme } from "~Hooks"
 import {
     BaseToast,
     ConnexContextProvider,
+    EncryptedStorageProvider,
     TranslationProvider,
     WalletConnectContextProvider,
 } from "~Components"
@@ -149,9 +150,11 @@ const SentryInitialedMain = () => {
 
 const ReduxWrappedMain = () => {
     return (
-        <StoreContextProvider>
-            <SentryInitialedMain />
-        </StoreContextProvider>
+        <EncryptedStorageProvider>
+            <StoreContextProvider>
+                <SentryInitialedMain />
+            </StoreContextProvider>
+        </EncryptedStorageProvider>
     )
 }
 

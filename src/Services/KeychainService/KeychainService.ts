@@ -2,6 +2,7 @@ import { Keychain } from "~Storage"
 import { error } from "~Utils/Logger"
 import * as SecureStore from "expo-secure-store"
 import * as i18n from "~i18n"
+import { SecureStoreOptions } from "expo-secure-store/src/SecureStore"
 
 const WALLET_KEY = "VeWorld_Wallet_key"
 
@@ -29,33 +30,27 @@ const getDeviceEncryptionKey = async (
     const locale = i18n.detectLocale()
     let promptTitle = i18n.i18n()[locale].BIOMETRICS_PROMPT()
 
-    let options: any
+    let options: SecureStoreOptions
+    const key: string = `${WALLET_KEY}_${getAccessControl(
+        !!accessControl,
+    )}_${rootAddress}`
 
     if (accessControl) {
         options = {
             requireAuthentication: accessControl,
             keychainAccessible: SecureStore.WHEN_UNLOCKED_THIS_DEVICE_ONLY,
-            keychainService: `${WALLET_KEY}_${getAccessControl(
-                true,
-            )}_${rootAddress}`,
+            keychainService: key,
             authenticationPrompt: promptTitle.toString(),
         }
     } else {
         options = {
             keychainAccessible: SecureStore.WHEN_UNLOCKED_THIS_DEVICE_ONLY,
-            keychainService: `${WALLET_KEY}_${getAccessControl(
-                false,
-            )}_${rootAddress}`,
+            keychainService: key,
         }
     }
 
     try {
-        return await Keychain.get(
-            options,
-            `${WALLET_KEY}_${getAccessControl(
-                accessControl ?? false,
-            )}_${rootAddress}`,
-        )
+        return await Keychain.get({ options, key })
     } catch (err) {
         error("getDeviceEncryptionKey", err)
     }
@@ -75,34 +70,27 @@ const setDeviceEncryptionKey = async (
     const locale = i18n.detectLocale()
     let promptTitle = i18n.i18n()[locale].BIOMETRICS_PROMPT()
 
-    let options: any
+    const key = `${WALLET_KEY}_${getAccessControl(
+        !!accessControl,
+    )}_${rootAddress}`
+    let options: SecureStoreOptions
 
     if (accessControl) {
         options = {
             requireAuthentication: accessControl,
             keychainAccessible: SecureStore.WHEN_UNLOCKED_THIS_DEVICE_ONLY,
-            keychainService: `${WALLET_KEY}_${getAccessControl(
-                true,
-            )}_${rootAddress}`,
+            keychainService: key,
             authenticationPrompt: promptTitle.toString(),
         }
     } else {
         options = {
             keychainAccessible: SecureStore.WHEN_UNLOCKED_THIS_DEVICE_ONLY,
-            keychainService: `${WALLET_KEY}_${getAccessControl(
-                false,
-            )}_${rootAddress}`,
+            keychainService: key,
         }
     }
 
     try {
-        await Keychain.set(
-            encryptionKey,
-            options,
-            `${WALLET_KEY}_${getAccessControl(
-                accessControl ?? false,
-            )}_${rootAddress}`,
-        )
+        await Keychain.set({ key, value: encryptionKey, options })
     } catch (err) {
         error("setDeviceEncryptionKey", err)
         throw new Error("Error setting encryption key")
@@ -117,57 +105,56 @@ const deleteDeviceEncryptionKey = async (
     rootAddress: string,
     accessControl: boolean,
 ) => {
-    const options = {
+    const key = `${WALLET_KEY}_${getAccessControl(
+        accessControl,
+    )}_${rootAddress}`
+
+    const options: SecureStoreOptions = {
         keychainAccessible: SecureStore.WHEN_UNLOCKED_THIS_DEVICE_ONLY,
-        keychainService: `${WALLET_KEY}_${getAccessControl(
-            accessControl,
-        )}_${rootAddress}`,
+        keychainService: key,
     }
 
     try {
-        await Keychain.deleteItem(
-            `${WALLET_KEY}_${getAccessControl(accessControl)}_${rootAddress}`,
-            options,
-        )
+        await Keychain.deleteItem({ options, key })
     } catch (err) {
         error("deleteDeviceEncryptionKey", err)
     }
 }
 
-const deleteKey = async (keyId: string) => {
-    const options = {
+const deleteKey = async (key: string) => {
+    const options: SecureStoreOptions = {
         keychainAccessible: SecureStore.WHEN_UNLOCKED_THIS_DEVICE_ONLY,
-        keychainService: keyId,
+        keychainService: key,
     }
 
     try {
-        await Keychain.deleteItem(keyId, options)
+        await Keychain.deleteItem({ options, key })
     } catch (err) {
         error("deleteKey", err)
     }
 }
 
-const getKey = async (keyId: string) => {
-    const options = {
+const getKey = async (key: string) => {
+    const options: SecureStoreOptions = {
         keychainAccessible: SecureStore.WHEN_UNLOCKED_THIS_DEVICE_ONLY,
-        keychainService: keyId,
+        keychainService: key,
     }
 
     try {
-        return await Keychain.get(options, keyId)
+        return await Keychain.get({ options, key })
     } catch (err) {
         error("getKey", err)
     }
 }
 
-const setKey = async (keyId: string, Enckey: string) => {
-    const options = {
+const setKey = async (key: string, value: string) => {
+    const options: SecureStoreOptions = {
         keychainAccessible: SecureStore.WHEN_UNLOCKED_THIS_DEVICE_ONLY,
-        keychainService: keyId,
+        keychainService: key,
     }
 
     try {
-        await Keychain.set(Enckey, options, keyId)
+        await Keychain.set({ options, key, value })
     } catch (err) {
         error("setKey", err)
     }

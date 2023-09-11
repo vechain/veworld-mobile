@@ -1,102 +1,95 @@
-import React, { useState, useEffect, useCallback, useMemo } from "react"
+import React, { useCallback, useEffect, useRef, useState } from "react"
 import { getPersistorConfig, reducer } from "~Storage/Redux"
-import { RootState, Store } from "~Storage/Redux/Types"
+import { RootState } from "~Storage/Redux/Types"
 import {
-    persistStore,
-    persistReducer,
     FLUSH,
-    REHYDRATE,
     PAUSE,
     PERSIST,
+    Persistor,
+    persistReducer,
+    persistStore,
     PURGE,
     REGISTER,
-    Persistor,
+    REHYDRATE,
 } from "redux-persist"
 import reduxReset from "redux-reset"
 import { configureStore } from "@reduxjs/toolkit"
 import { Provider } from "react-redux"
 import { PersistGate } from "redux-persist/integration/react"
+import { useEncryptedStorage } from "~Components/Providers/EncryptedStorageProvider/EncryptedStorageProvider"
+import { MMKV } from "react-native-mmkv"
+import { Reducer } from "redux"
+import { warn } from "~Utils"
 
-type StoreProvider = {
-    store: Store
-    persistor: Persistor
-    init: () => Promise<void>
-}
-
-const StoreContext = React.createContext<StoreProvider | undefined>(undefined)
+const StoreContext = React.createContext<undefined>(undefined)
 
 type StoreContextProviderProps = { children: React.ReactNode }
 
 const StoreContextProvider = ({ children }: StoreContextProviderProps) => {
-    const [store, setStore] = useState<Store | undefined>()
+    const { redux: reduxStorage } = useEncryptedStorage()
+
+    const store = useRef<ReturnType<typeof configureStore>>()
+
     const [persistor, setPersistor] = useState<Persistor | undefined>()
 
-    const init = useCallback(async () => {
-        const persistConfig = await getPersistorConfig()
+    const initStore = useCallback(async (mmkv: MMKV, encryptionKey: string) => {
+        const persistConfig = await getPersistorConfig(mmkv, encryptionKey)
 
-        const persistedReducer = persistReducer<RootState>(
+        const persistedReducer: Reducer = persistReducer<RootState>(
             persistConfig,
             reducer,
         )
 
-        let middlewares: any[] = []
-        if (process.env.NODE_ENV !== "production") {
-            const createDebugger = require("redux-flipper").default
-            middlewares.push(createDebugger())
+        if (store.current) {
+            warn("Replacing store")
+            store.current.replaceReducer(persistedReducer)
+        } else {
+            let middlewares: any[] = []
+            if (process.env.NODE_ENV !== "production") {
+                const createDebugger = require("redux-flipper").default
+                middlewares.push(createDebugger())
+            }
+
+            store.current = configureStore({
+                reducer: persistedReducer,
+                middleware: getDefaultMiddleware =>
+                    getDefaultMiddleware({
+                        serializableCheck: {
+                            ignoredActions: [
+                                FLUSH,
+                                REHYDRATE,
+                                PAUSE,
+                                PERSIST,
+                                PURGE,
+                                REGISTER,
+                            ],
+                        },
+                        thunk: {
+                            extraArgument: {},
+                        },
+                    }).concat(middlewares),
+                enhancers: [reduxReset()],
+                devTools: process.env.NODE_ENV !== "production",
+            })
         }
 
-        const _store = configureStore({
-            reducer: persistedReducer,
-            middleware: getDefaultMiddleware =>
-                getDefaultMiddleware({
-                    serializableCheck: {
-                        ignoredActions: [
-                            FLUSH,
-                            REHYDRATE,
-                            PAUSE,
-                            PERSIST,
-                            PURGE,
-                            REGISTER,
-                        ],
-                    },
-                    thunk: {
-                        extraArgument: {},
-                    },
-                }).concat(middlewares),
-            enhancers: [reduxReset()],
-            devTools: process.env.NODE_ENV !== "production",
-        })
-
-        const _persistor = persistStore(_store)
-
-        setStore(_store)
+        const _persistor = persistStore(store.current)
         setPersistor(_persistor)
     }, [])
 
-    const value = useMemo(() => {
-        if (store && persistor)
-            return {
-                store,
-                persistor,
-                init,
-            }
-
-        return undefined
-    }, [init, persistor, store])
-
     useEffect(() => {
-        init()
+        initStore(reduxStorage.mmkv, reduxStorage.encryptionKey)
         // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [])
+    }, [reduxStorage])
 
-    if (!value) {
+    if (!store.current || !persistor) {
         return <></>
     }
 
     return (
-        <StoreContext.Provider value={value}>
-            <Provider store={value.store}>
-                <PersistGate loading={null} persistor={value.persistor}>
+        <StoreContext.Provider value={undefined}>
+            <Provider store={store.current}>
+                <PersistGate loading={null} persistor={persistor}>
                     {children}
                 </PersistGate>
             </Provider>
@@ -104,15 +97,4 @@ const StoreContextProvider = ({ children }: StoreContextProviderProps) => {
     )
 }
 
-const useInitStore = () => {
-    const context = React.useContext(StoreContext)
-    if (!context) {
-        throw new Error(
-            "useInitStore must be used within a StoreContextProvider",
-        )
-    }
-
-    return context
-}
-
-export { StoreContextProvider, useInitStore }
+export { StoreContextProvider }

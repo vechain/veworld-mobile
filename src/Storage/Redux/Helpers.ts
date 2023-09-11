@@ -1,9 +1,5 @@
 import { warn } from "~Utils"
-import {
-    encryptTransform,
-    initEncryption,
-} from "../../Services/EncryptionService/EncryptionService"
-import { storage } from "./Storage"
+import { encryptTransform } from "../../Services/EncryptionService/EncryptionService"
 import {
     AccountSlice,
     ActivitiesSlice,
@@ -37,14 +33,18 @@ import {
 } from "./Slices"
 import { migrationUpdates } from "~Storage/Redux/Migrations"
 import { createMigrate } from "redux-persist"
+import { PersistConfig } from "redux-persist/es/types"
+import { RootState } from "~Storage/Redux/Types"
+import { newStorage } from "~Storage/Redux/Storage"
+import { MMKV } from "react-native-mmkv"
 
 const REDUX_KEY = "VeWorld_Redux_key"
 
-export const nftPersistConfig = {
-    key: NftSlice.name,
-    storage: storage,
-    whitelist: ["blackListedCollections"],
-}
+// export const nftPersistConfig = {
+//     key: NftSlice.name,
+//     storage: storage,
+//     whitelist: ["blackListedCollections"],
+// }
 
 /**
  * Asynchronously generates and returns the configuration object for a Redux Persistor.
@@ -52,15 +52,18 @@ export const nftPersistConfig = {
  *
  * @returns A `Promise` that resolves with the configuration object for a Redux Persistor.
  */
-export const getPersistorConfig = async () => {
-    const key = await initEncryption(REDUX_KEY)
-
-    const encryptor = encryptTransform({
-        secretKey: key,
+export const getPersistorConfig = async (
+    mmkv: MMKV,
+    encryptionKey: string,
+): Promise<PersistConfig<RootState>> => {
+    let encryptor = encryptTransform({
+        secretKey: encryptionKey,
         onError: function (error) {
             warn("encryptor", error)
         },
     })
+
+    const storage = newStorage(mmkv)
 
     return {
         key: "root",
