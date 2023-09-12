@@ -1,6 +1,10 @@
 import { HDNode, secp256k1, Transaction } from "thor-devkit"
-import { CryptoUtils, HexUtils, warn } from "~Utils"
-import { showErrorToast, showWarningToast } from "~Components"
+import { HexUtils, warn } from "~Utils"
+import {
+    showErrorToast,
+    showWarningToast,
+    WalletEncryptionKeyHelper,
+} from "~Components"
 import {
     selectDevice,
     selectSelectedAccount,
@@ -135,8 +139,11 @@ export const useSignTransaction = ({
                 throw new Error("Delegated hardware wallet not supported yet")
             }
 
-            const { decryptedWallet: delegationWallet } =
-                await CryptoUtils.decryptWallet(delegationDevice, password)
+            const delegationWallet =
+                await WalletEncryptionKeyHelper.decryptWallet(
+                    delegationDevice.wallet,
+                    password,
+                )
 
             return await getSignature(
                 transaction,
@@ -213,8 +220,10 @@ export const useSignTransaction = ({
             throw new Error("Hardware wallet not supported yet")
         }
 
-        const { decryptedWallet: senderWallet } =
-            await CryptoUtils.decryptWallet(senderDevice, password)
+        const senderWallet = await WalletEncryptionKeyHelper.decryptWallet(
+            senderDevice.wallet,
+            password,
+        )
 
         const senderSignature = await getSignature(transaction, senderWallet)
         const delegationResult = await getDelegationSignature(
