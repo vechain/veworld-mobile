@@ -1,22 +1,23 @@
 import { useCallback, useState } from "react"
-import { CryptoUtils } from "~Utils"
 import { NewLedgerDevice, WALLET_STATUS } from "~Model"
 import { useDeviceUtils } from "../useDeviceUtils"
 import {
+    addDeviceAndAccounts,
+    addLedgerDeviceAndAccounts,
+    setAppLockStatus,
+    setMnemonic,
+    setNewLedgerDevice,
+    setSelectedAccount,
     useAppDispatch,
     useAppSelector,
-    addDeviceAndAccounts,
-    setSelectedAccount,
-    setMnemonic,
-    setAppLockStatus,
-    setNewLedgerDevice,
-    addLedgerDeviceAndAccounts,
 } from "~Storage/Redux"
 import { selectAccountsState } from "~Storage/Redux/Selectors"
 import { error } from "~Utils/Logger"
 import { useBiometrics } from "../useBiometrics"
 import { useAnalyticTracking } from "~Hooks/useAnalyticTracking"
 import { AnalyticsEvent } from "~Constants"
+import { WalletEncryptionKeyHelper } from "~Components"
+
 /**
  * useCreateWallet is a hook that allows you to create a wallet and store it in the store
  * @example const { onCreateWallet, accessControl, isComplete } = useCreateWallet()
@@ -53,17 +54,11 @@ export const useCreateWallet = () => {
                 const { device, wallet } = getDeviceFromMnemonic(mnemonic)
                 dispatch(setMnemonic(undefined))
 
-                // if userPassword is provided, encrypt the wallet with access control false
-                const accessControl = userPassword
-                    ? false
-                    : biometrics?.accessControl ?? false
-
-                const { encryptedWallet } = await CryptoUtils.encryptWallet({
-                    wallet,
-                    rootAddress: device.rootAddress,
-                    accessControl,
-                    hashEncryptionKey: userPassword,
-                })
+                const encryptedWallet =
+                    await WalletEncryptionKeyHelper.encryptWallet(
+                        wallet,
+                        userPassword,
+                    )
 
                 const newAccount = dispatch(
                     addDeviceAndAccounts({
@@ -87,7 +82,7 @@ export const useCreateWallet = () => {
                 onError?.(e)
             }
         },
-        [dispatch, biometrics, getDeviceFromMnemonic, selectedAccount, track],
+        [dispatch, getDeviceFromMnemonic, selectedAccount, track],
     )
     //* [END] - Create Wallet
 

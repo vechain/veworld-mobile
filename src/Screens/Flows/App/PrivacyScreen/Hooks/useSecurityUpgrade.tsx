@@ -1,13 +1,6 @@
 import { useCallback } from "react"
 import { useWalletSecurity } from "~Hooks"
-import { LocalDevice } from "~Model"
-import { CryptoUtils, debug, error } from "~Utils"
-import { selectLocalDevices, useAppSelector } from "~Storage/Redux"
-import {
-    Operation,
-    OperationType,
-    useSecurityTransactions,
-} from "./useSecurityTransactions"
+import { useEncryptedStorage } from "~Components"
 
 /**
  * `useSecurityUpgrade` is a custom hook that orchestrates a security upgrade of a wallet.
@@ -36,53 +29,20 @@ import {
  *
  * @requires `useWalletSecurity` hook for determining the current security state of the wallet.
  * @requires `useAppSelector` hook with `selectLocalDevices` selector for fetching the local devices where the wallet is stored.
- * @requires `useSecurityTransactions` hook for orchestrating the series of encryption and decryption operations.
  */
 export const useSecurityUpgrade = () => {
     const { isWalletSecurityBiometrics } = useWalletSecurity()
-    const devices = useAppSelector(selectLocalDevices) as LocalDevice[]
 
-    const { executeTransactions } = useSecurityTransactions({
-        operationType: OperationType.UPGRADE_SECURITY,
-    })
+    const { updateSecurityMethod } = useEncryptedStorage()
 
-    const runSecurityUpgrade = useCallback(
+    return useCallback(
         async (password: string, onSuccessCallback?: () => void) => {
             if (isWalletSecurityBiometrics) return
 
-            const operations: Operation[] = []
+            await updateSecurityMethod(password)
 
-            try {
-                debug("SECURITY UPGRADE START")
-
-                for (const device of devices) {
-                    const { decryptedWallet } = await CryptoUtils.decryptWallet(
-                        device,
-                        password,
-                    )
-
-                    operations.push({
-                        operation: CryptoUtils.encryptWallet,
-                        data: {
-                            wallet: decryptedWallet,
-                            rootAddress: device.rootAddress,
-                            accessControl: true,
-                            device,
-                        },
-                    })
-                }
-
-                await executeTransactions(operations, password)
-
-                onSuccessCallback?.()
-
-                debug("SECURITY UPGRADE SUCCESS")
-            } catch (e) {
-                error("SECURITY UPGRADE ERROR", e)
-            }
+            onSuccessCallback?.()
         },
-        [devices, executeTransactions, isWalletSecurityBiometrics],
+        [updateSecurityMethod, isWalletSecurityBiometrics],
     )
-
-    return runSecurityUpgrade
 }

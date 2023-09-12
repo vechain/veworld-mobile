@@ -4,7 +4,6 @@ import {
     AccountSlice,
     ActivitiesSlice,
     BalanceSlice,
-    ConfigSlice,
     ContactsSlice,
     CurrencySlice,
     DelegationSlice,
@@ -16,7 +15,6 @@ import {
     resetActivityState,
     resetBalancesState,
     resetCacheState,
-    resetConfigState,
     resetContactsState,
     resetCurrencyState,
     resetDelegationState,
@@ -37,8 +35,6 @@ import { PersistConfig } from "redux-persist/es/types"
 import { RootState } from "~Storage/Redux/Types"
 import { newStorage } from "~Storage/Redux/Storage"
 import { MMKV } from "react-native-mmkv"
-
-const REDUX_KEY = "VeWorld_Redux_key"
 
 // export const nftPersistConfig = {
 //     key: NftSlice.name,
@@ -74,7 +70,6 @@ export const getPersistorConfig = async (
             CurrencySlice.name,
             TokenSlice.name,
             UserPreferencesSlice.name,
-            ConfigSlice.name,
             DeviceSlice.name,
             AccountSlice.name,
             NetworkSlice.name,
@@ -108,7 +103,4 @@ export const resetActions = [
     resetUserPreferencesState,
     resetWalletConnectState,
     resetPendingState,
-
-    // Config reset always comes last
-    resetConfigState,
 ]
