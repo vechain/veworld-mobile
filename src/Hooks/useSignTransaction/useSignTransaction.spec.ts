@@ -2,15 +2,13 @@ import { TestHelpers, TestWrapper } from "~Test"
 import { SignStatus, useSignTransaction } from "./useSignTransaction"
 import { renderHook } from "@testing-library/react-hooks"
 import { DelegationType } from "~Model/Delegation"
-import { CryptoUtils } from "~Utils"
 import axios from "axios"
 import { Routes } from "~Navigation"
 import { Transaction } from "thor-devkit"
 
 jest.mock("axios")
 
-const { vetTransaction1, wallet1, device1, account1D1, wallet2 } =
-    TestHelpers.data
+const { vetTransaction1, device1, account1D1 } = TestHelpers.data
 
 jest.mock("~Components/Base/BaseToast/BaseToast", () => ({
     ...jest.requireActual("~Components/Base/BaseToast/BaseToast"),
@@ -69,10 +67,6 @@ describe("useSignTransaction", () => {
             signTransaction: expect.any(Function),
             navigateToLedger: expect.any(Function),
         })
-        jest.spyOn(CryptoUtils, "decryptWallet").mockResolvedValueOnce({
-            decryptedWallet: wallet1,
-            encryptionKey: "encryptionKey",
-        })
 
         const signedTransaction =
             (await result.current.signTransaction()) as Transaction
@@ -103,15 +97,6 @@ describe("useSignTransaction", () => {
                 signTransaction: expect.any(Function),
                 navigateToLedger: expect.any(Function),
             })
-            jest.spyOn(CryptoUtils, "decryptWallet")
-                .mockResolvedValue({
-                    decryptedWallet: wallet1,
-                    encryptionKey: "encryptionKey",
-                })
-                .mockResolvedValueOnce({
-                    decryptedWallet: wallet2,
-                    encryptionKey: "encryptionKey",
-                })
 
             const signedTransaction =
                 (await result.current.signTransaction()) as Transaction
@@ -136,10 +121,6 @@ describe("useSignTransaction", () => {
                 signTransaction: expect.any(Function),
                 navigateToLedger: expect.any(Function),
             })
-            jest.spyOn(CryptoUtils, "decryptWallet").mockResolvedValueOnce({
-                decryptedWallet: wallet1,
-                encryptionKey: "encryptionKey",
-            })
 
             const res = await result.current.signTransaction()
             expect(res).toEqual(SignStatus.DELEGATION_FAILURE)
@@ -163,10 +144,6 @@ describe("useSignTransaction", () => {
                 getAccountDelegationSignature: expect.any(Function),
                 signTransaction: expect.any(Function),
                 navigateToLedger: expect.any(Function),
-            })
-            jest.spyOn(CryptoUtils, "decryptWallet").mockResolvedValueOnce({
-                decryptedWallet: wallet1,
-                encryptionKey: "encryptionKey",
             })
             ;(axios.post as jest.Mock).mockResolvedValueOnce({
                 data: {
@@ -198,10 +175,6 @@ describe("useSignTransaction", () => {
                 getAccountDelegationSignature: expect.any(Function),
                 signTransaction: expect.any(Function),
                 navigateToLedger: expect.any(Function),
-            })
-            jest.spyOn(CryptoUtils, "decryptWallet").mockResolvedValueOnce({
-                decryptedWallet: wallet1,
-                encryptionKey: "encryptionKey",
             })
 
             const res = await result.current.signTransaction()

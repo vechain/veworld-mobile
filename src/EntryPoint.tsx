@@ -1,5 +1,5 @@
 import React, { useEffect } from "react"
-import { BaseStatusBar, useEncryptedStorage } from "~Components"
+import { BaseStatusBar, useApplicationSecurity } from "~Components"
 import { SwitchStack } from "~Navigation"
 import ErrorBoundary from "~Components/Providers/ErrorBoundary"
 import { AppLoader } from "./AppLoader"
@@ -9,7 +9,7 @@ import RNBootSplash from "react-native-bootsplash"
 import { SecurityLevelType } from "~Model"
 
 export const EntryPoint = () => {
-    const { setIsAppReady, securityType } = useEncryptedStorage()
+    const { setIsAppReady, securityType } = useApplicationSecurity()
 
     useEffect(() => {
         RNBootSplash.hide({ fade: false })

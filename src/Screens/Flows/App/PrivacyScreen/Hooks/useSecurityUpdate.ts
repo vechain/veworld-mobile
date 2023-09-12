@@ -1,10 +1,10 @@
-import { showErrorToast, useEncryptedStorage } from "~Components"
+import { showErrorToast, useApplicationSecurity } from "~Components"
 import { useCallback } from "react"
 import { useI18nContext } from "~i18n"
 import { setIsAppLoading, useAppDispatch } from "~Storage/Redux"
 
 export const useSecurityUpdate = () => {
-    const { updateSecurityMethod, lockApplication } = useEncryptedStorage()
+    const { updateSecurityMethod, lockApplication } = useApplicationSecurity()
     const { LL } = useI18nContext()
     const dispatch = useAppDispatch()
 

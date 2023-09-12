@@ -35,7 +35,7 @@ type EncryptedStorage = {
     encryptionKey: string
 }
 
-type IEncryptedStorage = {
+type IApplicationSecurity = {
     redux?: EncryptedStorage
     images?: EncryptedStorage
     metadata?: EncryptedStorage
@@ -56,14 +56,14 @@ type IEncryptedStorage = {
     lockApplication: () => void
 }
 
-const EncryptedStorageContext = React.createContext<
-    IEncryptedStorage | undefined
+const ApplicationSecurityContext = React.createContext<
+    IApplicationSecurity | undefined
 >(undefined)
 
-type EncryptedStorageContextProviderProps = { children: React.ReactNode }
-export const EncryptedStorageProvider = ({
+type ApplicationSecurityContextProviderProps = { children: React.ReactNode }
+export const ApplicationSecurityProvider = ({
     children,
-}: EncryptedStorageContextProviderProps) => {
+}: ApplicationSecurityContextProviderProps) => {
     const [walletStatus, setWalletStatus] = useState<WALLET_STATUS>(
         WALLET_STATUS.NOT_INITIALISED,
     )
@@ -300,7 +300,7 @@ export const EncryptedStorageProvider = ({
         }
     }, [walletStatus, biometrics, intialiseApp])
 
-    const value: IEncryptedStorage | undefined = useMemo(() => {
+    const value: IApplicationSecurity | undefined = useMemo(() => {
         if (!reduxStorage || walletStatus === WALLET_STATUS.NOT_INITIALISED)
             return
 
@@ -347,9 +347,9 @@ export const EncryptedStorageProvider = ({
 
             //App is onboarding and we're using temporary storage
             return (
-                <EncryptedStorageContext.Provider value={value}>
+                <ApplicationSecurityContext.Provider value={value}>
                     {children}
-                </EncryptedStorageContext.Provider>
+                </ApplicationSecurityContext.Provider>
             )
         case WALLET_STATUS.LOCKED:
             if (securityType !== SecurityLevelType.SECRET) return <></>
@@ -370,19 +370,19 @@ export const EncryptedStorageProvider = ({
 
             //App is unlocked and the storage is ready
             return (
-                <EncryptedStorageContext.Provider value={value}>
+                <ApplicationSecurityContext.Provider value={value}>
                     {children}
-                </EncryptedStorageContext.Provider>
+                </ApplicationSecurityContext.Provider>
             )
     }
 }
 
-export const useEncryptedStorage = () => {
-    const context = React.useContext(EncryptedStorageContext)
+export const useApplicationSecurity = () => {
+    const context = React.useContext(ApplicationSecurityContext)
 
     if (!context) {
         throw new Error(
-            "useEncryptedStorage must be used within a EncryptedStorageContext",
+            "useApplicationSecurity must be used within a ApplicationSecurityContext",
         )
     }
 
@@ -390,7 +390,7 @@ export const useEncryptedStorage = () => {
 }
 
 export const useWalletStatus = () => {
-    const { walletStatus } = useEncryptedStorage()
+    const { walletStatus } = useApplicationSecurity()
 
     return walletStatus
 }

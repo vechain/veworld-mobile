@@ -7,7 +7,7 @@ import {
     BaseView,
     RequireUserPassword,
     showErrorToast,
-    useEncryptedStorage,
+    useApplicationSecurity,
 } from "~Components"
 import { useNavigation } from "@react-navigation/native"
 import { VeWorldLogoSVG } from "~Assets"
@@ -56,7 +56,7 @@ export const WalletSuccessScreen: FC<Props> = ({ route }) => {
     const mnemonic = useAppSelector(selectMnemonic)
     const newLedger = useAppSelector(selectNewLedgerDevice)
 
-    const { migrateOnboarding } = useEncryptedStorage()
+    const { migrateOnboarding } = useApplicationSecurity()
 
     const {
         onCreateWallet: createWallet,
