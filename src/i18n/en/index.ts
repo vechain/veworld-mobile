@@ -281,6 +281,8 @@ const en: BaseTranslation = {
     COMMON_LBL_COMMENT: "Comment",
     COMMON_LBL_PRIVACY_POLICY: "Privacy Policy",
     COMMON_LBL_TERMS_AND_CONDITIONS: "Terms and Conditions",
+    COMMON_LBL_READ_MORE: "Read more",
+    COMMON_LBL_READ_LESS: "Read less",
     COMMON_ASSETS: "Assets",
     COMMON_DAPPS: "DApps",
     COMMON_PRICE: "Price",
