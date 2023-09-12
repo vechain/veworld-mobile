@@ -791,6 +791,14 @@ type RootTranslation = {
 	 */
 	SB_SECURITY_METHOD: string
 	/**
+	 * T​h​e​ ​s​e​c​u​r​i​t​y​ ​u​p​d​a​t​e​ ​h​a​s​ ​f​a​i​l​e​d​ ​a​n​d​ ​y​o​u​r​ ​s​e​c​u​r​i​t​y​ ​m​e​t​h​o​d​ ​h​a​s​ ​b​e​e​n​ ​r​e​v​e​r​t​e​d​ ​t​o​ ​t​h​e​ ​p​r​e​v​i​o​u​s​ ​o​n​e​.
+	 */
+	ERROR_SECURITY_UPDATE_REVERTED: string
+	/**
+	 * T​h​e​ ​s​e​c​u​r​i​t​y​ ​u​p​d​a​t​e​ ​h​a​s​ ​f​a​i​l​e​d​.​ ​L​o​c​k​i​n​g​ ​t​h​e​ ​a​p​p​l​i​c​a​t​i​o​n
+	 */
+	ERROR_SECURITY_UPDATE_FAILED: string
+	/**
 	 * B​a​c​k​u​p​ ​y​o​u​r​ ​m​n​e​m​o​n​i​c
 	 */
 	SB_BACKUP_MNEMONIC: string
@@ -3250,6 +3258,14 @@ export type TranslationFunctions = {
 	 * Security method
 	 */
 	SB_SECURITY_METHOD: () => LocalizedString
+	/**
+	 * The security update has failed and your security method has been reverted to the previous one.
+	 */
+	ERROR_SECURITY_UPDATE_REVERTED: () => LocalizedString
+	/**
+	 * The security update has failed. Locking the application
+	 */
+	ERROR_SECURITY_UPDATE_FAILED: () => LocalizedString
 	/**
 	 * Backup your mnemonic
 	 */

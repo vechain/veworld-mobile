@@ -1,6 +1,6 @@
 import { useCallback } from "react"
 import { useWalletSecurity } from "~Hooks"
-import { useEncryptedStorage } from "~Components"
+import { useSecurityUpdate } from "./useSecurityUpdate"
 
 /**
  * `useSecurityUpgrade` is a custom hook that orchestrates a security upgrade of a wallet.
@@ -33,7 +33,7 @@ import { useEncryptedStorage } from "~Components"
 export const useSecurityUpgrade = () => {
     const { isWalletSecurityBiometrics } = useWalletSecurity()
 
-    const { updateSecurityMethod } = useEncryptedStorage()
+    const updateSecurityMethod = useSecurityUpdate()
 
     return useCallback(
         async (password: string, onSuccessCallback?: () => void) => {

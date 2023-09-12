@@ -3,7 +3,9 @@ import { MMKV } from "react-native-mmkv"
 import { debug, error, HexUtils, warn } from "~Utils"
 import { BiometricState, SecurityLevelType, WALLET_STATUS } from "~Model"
 import {
+    EncryptionKeyHelper,
     SecurityConfig,
+    SecurityUpgrade,
     StorageEncryptionKeyHelper,
 } from "~Components/Providers"
 import Onboarding from "~Components/Providers/EncryptedStorageProvider/Helpers/Onboarding"
@@ -11,7 +13,6 @@ import { useBiometrics } from "~Hooks"
 import { StandaloneLockScreen } from "~Screens"
 import RNBootSplash from "react-native-bootsplash"
 import { AnimatedSplashScreen } from "../../../AnimatedSplashScreen"
-import EncryptionKeyHelper from "~Components/Providers/EncryptedStorageProvider/Helpers/EncryptionKeyHelper"
 
 const UserEncryptedStorage = new MMKV({
     id: "user_encrypted_storage",
@@ -47,11 +48,12 @@ type IEncryptedStorage = {
     updateSecurityMethod: (
         currentPinCode: string,
         newPinCode?: string,
-    ) => Promise<void>
+    ) => Promise<boolean>
     securityType: SecurityLevelType
     setWalletStatus: (status: WALLET_STATUS) => void
     isAppReady: boolean
     setIsAppReady: (isReady: boolean) => void
+    lockApplication: () => void
 }
 
 const EncryptedStorageContext = React.createContext<
@@ -116,7 +118,22 @@ export const EncryptedStorageProvider = ({
      * Unlock the app
      */
     const unlock = useCallback(async (pinCode?: string) => {
-        const keys = await StorageEncryptionKeyHelper.get(pinCode)
+        let backUpKeys = null
+
+        if (pinCode) {
+            // Will return null if they don't exist
+            backUpKeys = await SecurityUpgrade.get(pinCode)
+        }
+
+        if (backUpKeys) {
+            // Reset to old keys
+            // We verified pin code because the user was able to decrypt the keys in the backup
+            await EncryptionKeyHelper.set(backUpKeys, pinCode)
+            await SecurityUpgrade.clear()
+        }
+
+        const keys =
+            backUpKeys ?? (await StorageEncryptionKeyHelper.get(pinCode))
 
         setReduxStorage({
             mmkv: UserEncryptedStorage,
@@ -237,25 +254,36 @@ export const EncryptedStorageProvider = ({
         [updateSecurityType, resetApplication, onboardingKey],
     )
 
+    /**
+     * Update the security method
+     * @returns {boolean} - Whether the security method was updated successfully
+     */
     const updateSecurityMethod = useCallback(
         async (currentPinCode: string, newPinCode?: string) => {
             const type = newPinCode
                 ? SecurityLevelType.SECRET
                 : SecurityLevelType.BIOMETRIC
 
-            const keys = await EncryptionKeyHelper.get(currentPinCode)
+            const success = await SecurityUpgrade.updateSecurityMethod(
+                currentPinCode,
+                newPinCode,
+            )
 
-            try {
-                await EncryptionKeyHelper.remove()
-                await EncryptionKeyHelper.set(keys, newPinCode)
+            if (success) {
                 updateSecurityType(type)
-            } catch (e) {
-                await EncryptionKeyHelper.set(keys, currentPinCode)
-                throw e
             }
+
+            return success
         },
         [updateSecurityType],
     )
+
+    const lockApplication = useCallback(() => {
+        setWalletStatus(WALLET_STATUS.LOCKED)
+        setReduxStorage(undefined)
+        setImageStorage(undefined)
+        setMetadataStorage(undefined)
+    }, [])
 
     /**
      * Initialise the app
@@ -288,6 +316,7 @@ export const EncryptedStorageProvider = ({
             setIsAppReady,
             updateSecurityMethod,
             securityType,
+            lockApplication,
         }
     }, [
         reduxStorage,
@@ -299,6 +328,7 @@ export const EncryptedStorageProvider = ({
         isAppReady,
         updateSecurityMethod,
         securityType,
+        lockApplication,
     ])
 
     useEffect(() => {

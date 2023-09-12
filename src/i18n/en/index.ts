@@ -219,6 +219,8 @@ const en: BaseTranslation = {
     SB_EDIT_CONTACT: "Edit contact",
     SB_PASSWORD_AUTH: "Password authorization",
     SB_SECURITY_METHOD: "Security method",
+    ERROR_SECURITY_UPDATE_REVERTED: "The security update has failed and your security method has been reverted to the previous one.",
+    ERROR_SECURITY_UPDATE_FAILED: "The security update has failed. Locking the application",
     SB_BACKUP_MNEMONIC: "Backup your mnemonic",
     SB_ANALYTICS_TRACKING: "Analytics tracking",
     SB_NO_TRANSACTIONS: "Your activities will appear here",

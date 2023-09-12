@@ -2,7 +2,7 @@ import { isEmpty } from "lodash"
 import { useCallback, useEffect, useMemo, useState } from "react"
 import { useDisclosure, useWalletSecurity } from "~Hooks"
 import { LOCKSCREEN_SCENARIO } from "~Screens/LockScreen/Enums"
-import { useEncryptedStorage } from "~Components"
+import { useSecurityUpdate } from "./useSecurityUpdate"
 
 /**
  * `useEditPin` is a custom React hook that handles the process of editing the Pin for the wallet.
@@ -35,6 +35,8 @@ import { useEncryptedStorage } from "~Components"
 export const useEditPin = () => {
     // [START] - Hooks
     const { isWalletSecurityBiometrics } = useWalletSecurity()
+
+    const updateSecurityMethod = useSecurityUpdate()
 
     const [lockScreenScenario, setScenario] = useState(
         LOCKSCREEN_SCENARIO.EDIT_OLD_PIN,
@@ -72,8 +74,6 @@ export const useEditPin = () => {
         // reset old pin
         setOldPin("")
     }, [closeEditPinPrompt])
-
-    const { updateSecurityMethod } = useEncryptedStorage()
 
     const changePinInWallets = useCallback(
         async (_oldPin: string, newPin: string) => {
