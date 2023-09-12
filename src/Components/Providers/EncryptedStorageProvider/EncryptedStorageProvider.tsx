@@ -35,7 +35,7 @@ type EncryptedStorage = {
 }
 
 type IEncryptedStorage = {
-    redux: EncryptedStorage
+    redux?: EncryptedStorage
     images?: EncryptedStorage
     metadata?: EncryptedStorage
     migrateOnboarding: (
@@ -131,6 +131,8 @@ export const EncryptedStorageProvider = ({
             mmkv: MetadataStorage,
             encryptionKey: keys.metadata,
         })
+
+        setWalletStatus(WALLET_STATUS.UNLOCKED)
     }, [])
 
     /**
@@ -255,13 +257,6 @@ export const EncryptedStorageProvider = ({
         [updateSecurityType],
     )
 
-    useEffect(() => {
-        debug({
-            walletStatus,
-            securityType,
-        })
-    }, [walletStatus, securityType])
-
     /**
      * Initialise the app
      */
@@ -306,37 +301,50 @@ export const EncryptedStorageProvider = ({
         securityType,
     ])
 
-    if (
-        walletStatus === WALLET_STATUS.LOCKED &&
-        !reduxStorage?.encryptionKey &&
-        securityType === SecurityLevelType.SECRET
-    ) {
-        warn("Waiting for redux encryption key")
+    useEffect(() => {
+        debug({
+            walletStatus,
+            securityType,
+        })
+    }, [walletStatus, securityType])
 
-        RNBootSplash.hide({ fade: true, duration: 500 })
+    switch (walletStatus) {
+        case WALLET_STATUS.NOT_INITIALISED:
+            // App is initialising
+            return <></>
+        case WALLET_STATUS.FIRST_TIME_ACCESS:
+            if (!value?.redux) return <></>
 
-        return (
-            <AnimatedSplashScreen
-                playAnimation={true}
-                useFadeOutAnimation={false}>
-                <StandaloneLockScreen onPinInserted={unlock} />
-            </AnimatedSplashScreen>
-        )
+            //App is onboarding and we're using temporary storage
+            return (
+                <EncryptedStorageContext.Provider value={value}>
+                    {children}
+                </EncryptedStorageContext.Provider>
+            )
+        case WALLET_STATUS.LOCKED:
+            if (securityType !== SecurityLevelType.SECRET) return <></>
+
+            if (userDisabledBiometrics) return <></>
+
+            RNBootSplash.hide({ fade: true, duration: 500 })
+
+            return (
+                <AnimatedSplashScreen
+                    playAnimation={true}
+                    useFadeOutAnimation={false}>
+                    <StandaloneLockScreen onPinInserted={unlock} />
+                </AnimatedSplashScreen>
+            )
+        case WALLET_STATUS.UNLOCKED:
+            if (!value?.redux) return <></>
+
+            //App is unlocked and the storage is ready
+            return (
+                <EncryptedStorageContext.Provider value={value}>
+                    {children}
+                </EncryptedStorageContext.Provider>
+            )
     }
-
-    if (userDisabledBiometrics) {
-        // TODO: Add a standalone screen to tell the user they disabled biometrics (https://github.com/vechainfoundation/veworld-mobile/issues/1334)
-        // <SecurityDowngradeScreen />
-        return <></>
-    }
-
-    if (!value?.redux.encryptionKey) return <></>
-
-    return (
-        <EncryptedStorageContext.Provider value={value}>
-            {children}
-        </EncryptedStorageContext.Provider>
-    )
 }
 
 export const useEncryptedStorage = () => {

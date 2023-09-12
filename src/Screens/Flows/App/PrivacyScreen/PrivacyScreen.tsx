@@ -14,11 +14,10 @@ import {
 import { useBackupMnemonic } from "./Hooks/useBackupMnemonic"
 import { useI18nContext } from "~i18n"
 import { BackupMnemonicBottomSheet, EnableBiometrics } from "./Components"
-import { DEVICE_TYPE, LocalDevice, WALLET_STATUS } from "~Model"
+import { DEVICE_TYPE, LocalDevice } from "~Model"
 import {
     selectAreDevFeaturesEnabled,
     selectSelectedAccount,
-    setIsPinCodeRequired,
     useAppDispatch,
     useAppSelector,
 } from "~Storage/Redux"
@@ -27,14 +26,11 @@ import {
     selectLocalDevices,
 } from "~Storage/Redux/Selectors"
 
-import {
-    setAnalyticsTrackingEnabled,
-    setAppLockStatus,
-} from "~Storage/Redux/Actions"
+import { setAnalyticsTrackingEnabled } from "~Storage/Redux/Actions"
 import { useEditPin } from "./Hooks/useEditPin"
 import { BackupWarningBottomSheet } from "./Components/BackupWarningBottomSheet"
 import { isSmallScreen } from "~Constants"
-import { usePinCode } from "~Components/Providers/PinCodeProvider/PinCodeProvider"
+import { warn } from "~Utils"
 
 export const PrivacyScreen = () => {
     // [START] - Hooks setup
@@ -42,7 +38,6 @@ export const PrivacyScreen = () => {
 
     const dispatch = useAppDispatch()
 
-    const { isPinRequired, removePinCode, enablePinCodeStorage } = usePinCode()
     const devFeaturesEnabled = useAppSelector(selectAreDevFeaturesEnabled)
 
     const isAnalyticsTrackingEnabled = useAppSelector(
@@ -52,8 +47,7 @@ export const PrivacyScreen = () => {
 
     const selectedAccount = useAppSelector(selectSelectedAccount)
 
-    const { isWalletSecurityBiometrics, isWalletSecurityPassword } =
-        useWalletSecurity()
+    const { isWalletSecurityBiometrics } = useWalletSecurity()
 
     const {
         ref: BackupPhraseSheetRef,
@@ -71,12 +65,6 @@ export const PrivacyScreen = () => {
         isOpen: isPasswordPromptOpen,
         onOpen: openPasswordPrompt,
         onClose: closePasswordPrompt,
-    } = useDisclosure()
-
-    const {
-        isOpen: isNoPinRequiredPromptOpen,
-        onOpen: openNoPinRequiredPrompt,
-        onClose: closeNoPinRequiredPrompt,
     } = useDisclosure()
 
     const {
@@ -122,26 +110,9 @@ export const PrivacyScreen = () => {
     // [END] - Hooks setup
 
     // [START] - Internal Methods
-    const toggleAppLockSwitch = useCallback(
-        (newValue: boolean) => {
-            if (newValue) {
-                removePinCode()
-                dispatch(setIsPinCodeRequired(newValue))
-                dispatch(setAppLockStatus(WALLET_STATUS.UNLOCKED))
-            } else {
-                openNoPinRequiredPrompt()
-            }
-        },
-        [removePinCode, openNoPinRequiredPrompt, dispatch],
-    )
-
-    const onNoPinRequiredSuccess = useCallback(
-        (pin: string) => {
-            enablePinCodeStorage(pin)
-            closeNoPinRequiredPrompt()
-        },
-        [closeNoPinRequiredPrompt, enablePinCodeStorage],
-    )
+    const toggleAppLockSwitch = useCallback((newValue: boolean) => {
+        warn("toggleAppLockSwitch", newValue)
+    }, [])
 
     const toggleAnalyticsTrackingSwitch = useCallback(
         (newValue: boolean) => {
@@ -164,13 +135,14 @@ export const PrivacyScreen = () => {
                         </BaseText>
                         <BaseSpacer height={24} />
 
-                        {isWalletSecurityPassword && (
+                        {/*TODO: https://github.com/vechainfoundation/veworld-mobile/issues/1339*/}
+                        {__DEV__ && (
                             <>
                                 <EnableFeature
                                     title={LL.SB_PASSWORD_AUTH()}
                                     subtitle={LL.BD_APP_LOCK()}
                                     onValueChange={toggleAppLockSwitch}
-                                    value={isPinRequired}
+                                    value={false}
                                 />
 
                                 <BaseSpacer height={24} />
@@ -231,12 +203,6 @@ export const PrivacyScreen = () => {
                             isOpen={isPasswordPromptOpen}
                             onClose={closePasswordPrompt}
                             onSuccess={onPasswordSuccess}
-                        />
-
-                        <RequireUserPassword
-                            onSuccess={onNoPinRequiredSuccess}
-                            isOpen={isNoPinRequiredPromptOpen}
-                            onClose={closeNoPinRequiredPrompt}
                         />
 
                         <RequireUserPassword

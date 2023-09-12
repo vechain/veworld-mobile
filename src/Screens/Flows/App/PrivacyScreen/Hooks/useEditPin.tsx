@@ -2,7 +2,6 @@ import { isEmpty } from "lodash"
 import { useCallback, useEffect, useMemo, useState } from "react"
 import { useDisclosure, useWalletSecurity } from "~Hooks"
 import { LOCKSCREEN_SCENARIO } from "~Screens/LockScreen/Enums"
-import { usePinCode } from "~Components/Providers/PinCodeProvider/PinCodeProvider"
 import { useEncryptedStorage } from "~Components"
 
 /**
@@ -36,7 +35,6 @@ import { useEncryptedStorage } from "~Components"
 export const useEditPin = () => {
     // [START] - Hooks
     const { isWalletSecurityBiometrics } = useWalletSecurity()
-    const { updatePinCode } = usePinCode()
 
     const [lockScreenScenario, setScenario] = useState(
         LOCKSCREEN_SCENARIO.EDIT_OLD_PIN,
@@ -82,16 +80,10 @@ export const useEditPin = () => {
             if (isWalletSecurityBiometrics) return
 
             await updateSecurityMethod(_oldPin, newPin)
-            updatePinCode(newPin)
 
             onStateCleanup()
         },
-        [
-            onStateCleanup,
-            updatePinCode,
-            updateSecurityMethod,
-            isWalletSecurityBiometrics,
-        ],
+        [onStateCleanup, updateSecurityMethod, isWalletSecurityBiometrics],
     )
 
     const onPinSuccess = useCallback(
