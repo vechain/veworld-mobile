@@ -9,9 +9,9 @@ import { NavigationContainer } from "@react-navigation/native"
 import { SafeAreaProvider } from "react-native-safe-area-context"
 import { useTheme } from "~Hooks"
 import {
+    ApplicationSecurityProvider,
     BaseToast,
     ConnexContextProvider,
-    EncryptedStorageProvider,
     TranslationProvider,
     WalletConnectContextProvider,
 } from "~Components"
@@ -148,11 +148,11 @@ const ReduxWrappedMain = () => {
     return (
         <SafeAreaProvider>
             <TranslationProvider>
-                <EncryptedStorageProvider>
+                <ApplicationSecurityProvider>
                     <StoreContextProvider>
                         <SentryInitialedMain />
                     </StoreContextProvider>
-                </EncryptedStorageProvider>
+                </ApplicationSecurityProvider>
             </TranslationProvider>
         </SafeAreaProvider>
     )

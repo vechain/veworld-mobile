@@ -5,6 +5,7 @@ import {
     BaseText,
     BaseView,
     Layout,
+    StorageEncryptionKeyHelper,
     WalletEncryptionKeyHelper,
 } from "~Components"
 import { useNavigation } from "@react-navigation/native"
@@ -21,7 +22,6 @@ import {
 } from "~Storage/Redux"
 import { useDeviceUtils } from "~Hooks"
 import { WALLET_STATUS } from "~Model"
-import EncryptionKeyHelper from "~Components/Providers/EncryptedStorageProvider/Helpers/EncryptionKeyHelper"
 
 export const WelcomeScreen = () => {
     const nav = useNavigation()
@@ -45,7 +45,8 @@ export const WelcomeScreen = () => {
             "denial kitchen pet squirrel other broom bar gas better priority spoil cross"
         const { device, wallet } = getDeviceFromMnemonic(DEMO_MNEMONIC)
 
-        await EncryptionKeyHelper.init(FAKE_PIN)
+        await StorageEncryptionKeyHelper.init(FAKE_PIN)
+        await WalletEncryptionKeyHelper.init(FAKE_PIN)
 
         const encryptedWallet = await WalletEncryptionKeyHelper.encryptWallet(
             wallet,

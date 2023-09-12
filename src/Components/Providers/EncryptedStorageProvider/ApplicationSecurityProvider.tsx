@@ -4,14 +4,15 @@ import { debug, error, HexUtils, warn } from "~Utils"
 import { BiometricState, SecurityLevelType, WALLET_STATUS } from "~Model"
 import {
     SecurityConfig,
+    SecurityUpgradeBackup,
     StorageEncryptionKeyHelper,
+    WalletEncryptionKeyHelper,
 } from "~Components/Providers"
 import Onboarding from "~Components/Providers/EncryptedStorageProvider/Helpers/Onboarding"
 import { useBiometrics } from "~Hooks"
 import { StandaloneLockScreen } from "~Screens"
 import RNBootSplash from "react-native-bootsplash"
 import { AnimatedSplashScreen } from "../../../AnimatedSplashScreen"
-import EncryptionKeyHelper from "~Components/Providers/EncryptedStorageProvider/Helpers/EncryptionKeyHelper"
 
 const UserEncryptedStorage = new MMKV({
     id: "user_encrypted_storage",
@@ -34,7 +35,7 @@ type EncryptedStorage = {
     encryptionKey: string
 }
 
-type IEncryptedStorage = {
+type IApplicationSecurity = {
     redux?: EncryptedStorage
     images?: EncryptedStorage
     metadata?: EncryptedStorage
@@ -47,21 +48,22 @@ type IEncryptedStorage = {
     updateSecurityMethod: (
         currentPinCode: string,
         newPinCode?: string,
-    ) => Promise<void>
+    ) => Promise<boolean>
     securityType: SecurityLevelType
     setWalletStatus: (status: WALLET_STATUS) => void
     isAppReady: boolean
     setIsAppReady: (isReady: boolean) => void
+    lockApplication: () => void
 }
 
-const EncryptedStorageContext = React.createContext<
-    IEncryptedStorage | undefined
+const ApplicationSecurityContext = React.createContext<
+    IApplicationSecurity | undefined
 >(undefined)
 
-type EncryptedStorageContextProviderProps = { children: React.ReactNode }
-export const EncryptedStorageProvider = ({
+type ApplicationSecurityContextProviderProps = { children: React.ReactNode }
+export const ApplicationSecurityProvider = ({
     children,
-}: EncryptedStorageContextProviderProps) => {
+}: ApplicationSecurityContextProviderProps) => {
     const [walletStatus, setWalletStatus] = useState<WALLET_STATUS>(
         WALLET_STATUS.NOT_INITIALISED,
     )
@@ -109,14 +111,32 @@ export const EncryptedStorageProvider = ({
             encryptionKey: onboardingKey,
         })
 
-        await EncryptionKeyHelper.remove()
+        await WalletEncryptionKeyHelper.remove()
+        await StorageEncryptionKeyHelper.remove()
     }, [onboardingKey, updateSecurityType])
 
     /**
      * Unlock the app
      */
     const unlock = useCallback(async (pinCode?: string) => {
-        const keys = await StorageEncryptionKeyHelper.get(pinCode)
+        let backUpKeys = null
+
+        if (pinCode) {
+            // Will return null if they don't exist
+            backUpKeys = await SecurityUpgradeBackup.get(pinCode)
+        }
+
+        if (backUpKeys) {
+            // Reset to old keys
+            // We verified pin code because the user was able to decrypt the keys in the backup
+            await WalletEncryptionKeyHelper.set(backUpKeys.wallet, pinCode)
+            await StorageEncryptionKeyHelper.set(backUpKeys.storage, pinCode)
+            await SecurityUpgradeBackup.clear()
+        }
+
+        const keys =
+            backUpKeys?.storage ??
+            (await StorageEncryptionKeyHelper.get(pinCode))
 
         setReduxStorage({
             mmkv: UserEncryptedStorage,
@@ -237,25 +257,36 @@ export const EncryptedStorageProvider = ({
         [updateSecurityType, resetApplication, onboardingKey],
     )
 
+    /**
+     * Update the security method
+     * @returns {boolean} - Whether the security method was updated successfully
+     */
     const updateSecurityMethod = useCallback(
         async (currentPinCode: string, newPinCode?: string) => {
             const type = newPinCode
                 ? SecurityLevelType.SECRET
                 : SecurityLevelType.BIOMETRIC
 
-            const keys = await EncryptionKeyHelper.get(currentPinCode)
+            const success = await SecurityUpgradeBackup.updateSecurityMethod(
+                currentPinCode,
+                newPinCode,
+            )
 
-            try {
-                await EncryptionKeyHelper.remove()
-                await EncryptionKeyHelper.set(keys, newPinCode)
+            if (success) {
                 updateSecurityType(type)
-            } catch (e) {
-                await EncryptionKeyHelper.set(keys, currentPinCode)
-                throw e
             }
+
+            return success
         },
         [updateSecurityType],
     )
+
+    const lockApplication = useCallback(() => {
+        setWalletStatus(WALLET_STATUS.LOCKED)
+        setReduxStorage(undefined)
+        setImageStorage(undefined)
+        setMetadataStorage(undefined)
+    }, [])
 
     /**
      * Initialise the app
@@ -272,7 +303,7 @@ export const EncryptedStorageProvider = ({
         }
     }, [walletStatus, biometrics, intialiseApp])
 
-    const value: IEncryptedStorage | undefined = useMemo(() => {
+    const value: IApplicationSecurity | undefined = useMemo(() => {
         if (!reduxStorage || walletStatus === WALLET_STATUS.NOT_INITIALISED)
             return
 
@@ -288,6 +319,7 @@ export const EncryptedStorageProvider = ({
             setIsAppReady,
             updateSecurityMethod,
             securityType,
+            lockApplication,
         }
     }, [
         reduxStorage,
@@ -299,6 +331,7 @@ export const EncryptedStorageProvider = ({
         isAppReady,
         updateSecurityMethod,
         securityType,
+        lockApplication,
     ])
 
     useEffect(() => {
@@ -317,9 +350,9 @@ export const EncryptedStorageProvider = ({
 
             //App is onboarding and we're using temporary storage
             return (
-                <EncryptedStorageContext.Provider value={value}>
+                <ApplicationSecurityContext.Provider value={value}>
                     {children}
-                </EncryptedStorageContext.Provider>
+                </ApplicationSecurityContext.Provider>
             )
         case WALLET_STATUS.LOCKED:
             if (securityType !== SecurityLevelType.SECRET) return <></>
@@ -340,19 +373,19 @@ export const EncryptedStorageProvider = ({
 
             //App is unlocked and the storage is ready
             return (
-                <EncryptedStorageContext.Provider value={value}>
+                <ApplicationSecurityContext.Provider value={value}>
                     {children}
-                </EncryptedStorageContext.Provider>
+                </ApplicationSecurityContext.Provider>
             )
     }
 }
 
-export const useEncryptedStorage = () => {
-    const context = React.useContext(EncryptedStorageContext)
+export const useApplicationSecurity = () => {
+    const context = React.useContext(ApplicationSecurityContext)
 
     if (!context) {
         throw new Error(
-            "useEncryptedStorage must be used within a EncryptedStorageContext",
+            "useApplicationSecurity must be used within a ApplicationSecurityContext",
         )
     }
 
@@ -360,7 +393,7 @@ export const useEncryptedStorage = () => {
 }
 
 export const useWalletStatus = () => {
-    const { walletStatus } = useEncryptedStorage()
+    const { walletStatus } = useApplicationSecurity()
 
     return walletStatus
 }

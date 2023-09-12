@@ -1,10 +1,10 @@
 import React, { useEffect } from "react"
 import { Image, StyleSheet } from "react-native"
-import { useEncryptedStorage } from "~Components"
+import { useApplicationSecurity } from "~Components/Providers"
 import { SCREEN_HEIGHT } from "~Constants"
 import Animated, {
-    useSharedValue,
     useAnimatedStyle,
+    useSharedValue,
     withTiming,
 } from "react-native-reanimated"
 
@@ -13,7 +13,7 @@ type Props = {
 }
 
 export const SplashScreen = ({ children }: Props): React.ReactElement => {
-    const { isAppReady } = useEncryptedStorage()
+    const { isAppReady } = useApplicationSecurity()
 
     const opacity = useSharedValue(0)
 

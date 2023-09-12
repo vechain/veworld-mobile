@@ -1,7 +1,7 @@
 import { useMemo } from "react"
 import { SecurityLevelType } from "~Model"
 import { useBiometrics } from "../useBiometrics"
-import { useEncryptedStorage } from "~Components"
+import { useApplicationSecurity } from "~Components/Providers"
 
 enum WalletSecurity {
     NONE = "NONE",
@@ -13,7 +13,7 @@ enum WalletSecurity {
  * hook with the logic to determine the wallet security level and some helper functions
  */
 export const useWalletSecurity = () => {
-    const { securityType } = useEncryptedStorage()
+    const { securityType } = useApplicationSecurity()
     const biometrics = useBiometrics()
 
     const walletSecurity = useMemo(() => {

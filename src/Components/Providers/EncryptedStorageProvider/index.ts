@@ -1,2 +1,2 @@
-export * from "./EncryptedStorageProvider"
+export * from "./ApplicationSecurityProvider"
 export * from "./Helpers"

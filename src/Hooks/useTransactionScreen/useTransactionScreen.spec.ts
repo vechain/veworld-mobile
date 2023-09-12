@@ -5,7 +5,6 @@ import { Routes } from "~Navigation"
 import { DelegationType } from "~Model/Delegation"
 import { AccountWithDevice, BaseDevice, SecurityLevelType } from "~Model"
 import crypto from "react-native-quick-crypto"
-import { CryptoUtils } from "~Utils"
 import axios from "axios"
 import { waitFor } from "@testing-library/react-native"
 import { Transaction } from "thor-devkit"
@@ -13,7 +12,6 @@ import { selectDevice, selectSelectedAccount } from "~Storage/Redux"
 
 const {
     vetTransaction1,
-    wallet1,
     account1D1,
     device1,
     firstLedgerAccount,
@@ -74,10 +72,6 @@ describe("useTransactionScreen", () => {
         ;(crypto.randomFillSync as jest.Mock).mockReturnValue(
             Buffer.from("1234abc", "hex"),
         )
-        jest.spyOn(CryptoUtils, "decryptWallet").mockResolvedValue({
-            decryptedWallet: wallet1,
-            encryptionKey: "encryptionKey",
-        })
         ;(axios.post as jest.Mock).mockResolvedValueOnce({
             data: { id: "0x1234" },
             status: 200,

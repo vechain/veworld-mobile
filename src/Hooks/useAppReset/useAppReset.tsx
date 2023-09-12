@@ -8,12 +8,12 @@ import {
 } from "~Storage/PersistedCache/constants"
 import { resetApp, useAppDispatch } from "~Storage/Redux"
 import { info } from "~Utils/Logger"
-import { useEncryptedStorage } from "~Components"
+import { useApplicationSecurity } from "~Components/Providers"
 
 export const useAppReset = () => {
     const dispatch = useAppDispatch()
     const { resetAllCaches, initAllCaches } = usePersistedCache()
-    const { resetApplication } = useEncryptedStorage()
+    const { resetApplication } = useApplicationSecurity()
 
     // for every device delete the encryption keys from keychain
     const removeEncryptionKeysFromKeychain = useCallback(async () => {

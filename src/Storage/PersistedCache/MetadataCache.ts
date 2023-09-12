@@ -1,9 +1,9 @@
 import { MMKV, MMKVConfiguration } from "react-native-mmkv"
-import { TokenMetadata } from "~Model"
 import { createKey } from "~Utils/CacheKeyUtils/CacheKeyUtils"
 import { initEncryption } from "~Services/EncryptionService"
 import { CryptoUtils, error } from "~Utils"
-import { CACHE_METADATA_KEY } from "./constants"
+import { CACHE_NFT_METADATA_KEY } from "./constants"
+import { NFTMetadata } from "~Model"
 
 const config: MMKVConfiguration = { id: "cache-metadata" }
 const _cache = new MMKV(config)
@@ -11,21 +11,21 @@ const _cache = new MMKV(config)
 let encrKey: string | undefined
 
 const initKey = () => {
-    initEncryption(CACHE_METADATA_KEY)
+    initEncryption(CACHE_NFT_METADATA_KEY)
         .then(key => (encrKey = key))
         .catch(err => error("Failed to init encryption key", err))
 }
 
 initKey()
 
-const setItem = (itemKey: string, value: TokenMetadata): void => {
+const setItem = (itemKey: string, value: NFTMetadata): void => {
     if (!encrKey) throw Error("Encryption key not initialized")
     _cache.set(
         createKey(itemKey),
-        CryptoUtils.encryptState<TokenMetadata>(value, encrKey),
+        CryptoUtils.encryptState<NFTMetadata>(value, encrKey),
     )
 }
-const getItem = (itemKey: string): TokenMetadata | undefined => {
+const getItem = (itemKey: string): NFTMetadata | undefined => {
     if (!encrKey) throw Error("Encryption key not initialized")
     const value = _cache.getString(createKey(itemKey))
     return value

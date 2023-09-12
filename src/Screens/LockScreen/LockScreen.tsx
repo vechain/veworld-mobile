@@ -7,13 +7,13 @@ import {
     BaseView,
     NumPad,
     PasswordPins,
+    StorageEncryptionKeyHelper,
 } from "~Components"
 import { useI18nContext } from "~i18n"
 import { LOCKSCREEN_SCENARIO } from "./Enums"
 import { useOnDigitPress } from "./useOnDigitPress"
 import { PinVerificationError, PinVerificationErrorType } from "~Model"
 import { AnalyticsEvent, isSmallScreen } from "~Constants"
-import EncryptionKeyHelper from "~Components/Providers/EncryptedStorageProvider/Helpers/EncryptionKeyHelper"
 
 type Props = {
     onSuccess: (password: string) => void
@@ -49,7 +49,8 @@ export const LockScreen: React.FC<Props> = memo(
 
         const isOldPinSameAsNewPin = useCallback(
             async (pin: string) => {
-                const isValid = await EncryptionKeyHelper.validatePinCode(pin)
+                const isValid =
+                    await StorageEncryptionKeyHelper.validatePinCode(pin)
                 if (isValid) {
                     setIsError({
                         type: PinVerificationError.EDIT_PIN,
@@ -101,9 +102,8 @@ export const LockScreen: React.FC<Props> = memo(
                     return
                 }
 
-                const isValid = await EncryptionKeyHelper.validatePinCode(
-                    userPin,
-                )
+                const isValid =
+                    await StorageEncryptionKeyHelper.validatePinCode(userPin)
 
                 if (isValid) {
                     track(AnalyticsEvent.APP_PIN_UNLOCKED)

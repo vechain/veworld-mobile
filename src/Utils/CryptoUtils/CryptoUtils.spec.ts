@@ -1,39 +1,9 @@
 import { HDNode } from "thor-devkit"
-import { Wallet } from "~Model"
 import "~Test"
 
 import CryptoUtils from "./CryptoUtils"
-const {
-    decrypt,
-    decryptState,
-    encrypt,
-    encryptState,
-    encryptWallet,
-    hdNodeFromXPub,
-    random,
-    shuffleArray,
-    verifyMnemonic,
-    xPubFromHdNode,
-} = CryptoUtils
 
-const testWallet: Wallet = {
-    rootAddress: "0x4fec365ab34c21784b05e3fed80633268e6457ff",
-    nonce: "000000",
-    mnemonic: [
-        "viable",
-        " view",
-        "neither",
-        " tree",
-        "peanut",
-        "angle",
-        " rail",
-        "wheat",
-        "skate",
-        "flush",
-        "solid",
-        "panda",
-    ],
-}
+const { hdNodeFromXPub, verifyMnemonic, xPubFromHdNode } = CryptoUtils
 
 // const testDevice: Device = {
 //     index: 0,
@@ -43,7 +13,6 @@ const testWallet: Wallet = {
 //     wallet: "dfsfgsdgfs",
 // }
 
-const password = "password"
 const deviceEncryptionKey = "deviceEncryptionKey"
 
 jest.mock("~Services/KeychainService", () => {
@@ -95,48 +64,6 @@ describe("hdNodeFromXPub", () => {
         )
     })
 })
-
-describe("encryptWallet: not tested properly", () => {
-    it("should not throw exceptions", () => {
-        random()
-        const arr = [1, 2, 3, 4, 5]
-        shuffleArray(arr)
-        const data = { name: "Alice", age: 30 }
-        const encryptionKey = "secret key"
-        const encrypted = encrypt(data, encryptionKey)
-        decrypt(encrypted, encryptionKey)
-        const encryptedState = encryptState({ bar: "foo" }, "secret")
-        decryptState(encryptedState, "secret")
-        encryptWallet({
-            wallet: testWallet,
-            rootAddress: testWallet.rootAddress,
-            accessControl: true,
-            hashEncryptionKey: password,
-        })
-        encryptWallet({
-            wallet: testWallet,
-            rootAddress: testWallet.rootAddress,
-            accessControl: true,
-            hashEncryptionKey: password,
-        })
-    })
-})
-
-// describe("decryptWallet: not tested properly", () => {
-//     it("should not throw errors", async () => {
-//         const { encryptionKey, encryptedWallet } = await encryptWallet({
-//             wallet: testWallet,
-//             rootAddress: testWallet.rootAddress,
-//             accessControl: false,
-//             hashEncryptionKey: password,
-//         })
-
-//         await decryptWallet({
-//             device: { ...testDevice, wallet: encryptedWallet },
-//             userPassword: encryptionKey,
-//         })
-//     })
-// })
 
 describe("verifyMnemonic", () => {
     it("should create hdNode from mnemonic", () => {

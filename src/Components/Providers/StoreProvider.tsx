@@ -17,7 +17,7 @@ import { configureStore } from "@reduxjs/toolkit"
 import { Provider } from "react-redux"
 import { PersistGate } from "redux-persist/integration/react"
 import { PersistedCacheProvider } from "./PersistedCacheProvider"
-import { useEncryptedStorage } from "~Components/Providers/EncryptedStorageProvider/EncryptedStorageProvider"
+import { useApplicationSecurity } from "~Components/Providers"
 import { Reducer } from "redux"
 import { warn } from "~Utils"
 import { MMKV } from "react-native-mmkv"
@@ -28,7 +28,7 @@ const StoreContext = React.createContext<undefined>(undefined)
 type StoreContextProviderProps = { children: React.ReactNode }
 
 const StoreContextProvider = ({ children }: StoreContextProviderProps) => {
-    const { redux: reduxStorage } = useEncryptedStorage()
+    const { redux: reduxStorage } = useApplicationSecurity()
 
     const store = useRef<ReturnType<typeof configureStore>>()
 
@@ -80,7 +80,8 @@ const StoreContextProvider = ({ children }: StoreContextProviderProps) => {
     }, [])
 
     useEffect(() => {
-        initStore(reduxStorage.mmkv, reduxStorage.encryptionKey)
+        if (reduxStorage)
+            initStore(reduxStorage.mmkv, reduxStorage.encryptionKey)
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [reduxStorage])
 
