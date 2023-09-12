@@ -13,7 +13,7 @@ import { LOCKSCREEN_SCENARIO } from "./Enums"
 import { useOnDigitPress } from "./useOnDigitPress"
 import { PinVerificationError, PinVerificationErrorType } from "~Model"
 import { AnalyticsEvent, isSmallScreen } from "~Constants"
-import { EncryptionKeyHelper } from "~Components/Providers"
+import EncryptionKeyHelper from "~Components/Providers/EncryptedStorageProvider/Helpers/EncryptionKeyHelper"
 
 type Props = {
     onSuccess: (password: string) => void

@@ -5,7 +5,7 @@ import {
     selectSelectedAccount,
     useAppSelector,
 } from "~Storage/Redux"
-import { CryptoUtils } from "~Utils"
+import { WalletEncryptionKeyHelper } from "~Components"
 
 type Props = {
     hash: Buffer
@@ -41,10 +41,12 @@ export const useSignMessage = ({ hash }: Props) => {
         if (!senderDevice.wallet)
             throw new Error("The device doesn't have a wallet")
 
-        const { decryptedWallet: senderWallet } =
-            await CryptoUtils.decryptWallet(senderDevice, password)
+        const wallet: Wallet = await WalletEncryptionKeyHelper.decryptWallet(
+            senderDevice.wallet,
+            password,
+        )
 
-        return await getSignature(senderWallet)
+        return await getSignature(wallet)
     }
 
     return {

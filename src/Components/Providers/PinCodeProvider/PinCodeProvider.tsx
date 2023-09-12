@@ -1,7 +1,6 @@
 import React, { useCallback, useEffect, useMemo } from "react"
 import {
     selectIsPinCodeRequired,
-    selectUserSelectedSecurity,
     setAppLockStatus,
     setIsPinCodeRequired,
     useAppDispatch,
@@ -9,6 +8,7 @@ import {
 } from "~Storage/Redux"
 import { SecurityLevelType, WALLET_STATUS } from "~Model"
 import { CryptoUtils, HexUtils, warn } from "~Utils"
+import { useEncryptedStorage } from "~Components"
 
 const PinCodeContext = React.createContext<{
     removePinCode: () => void
@@ -41,7 +41,7 @@ export const PinCodeProvider = ({ children }: PinCodeContextProviderProps) => {
     const encryptionKey = useMemo(() => HexUtils.generateRandom(256), [])
 
     const isPinCodeRequired = useAppSelector(selectIsPinCodeRequired)
-    const userSelectedSecurity = useAppSelector(selectUserSelectedSecurity)
+    const { securityType } = useEncryptedStorage()
     const dispatch = useAppDispatch()
 
     const [encryptedPinCode, setEncryptedPinCode] = React.useState<
@@ -79,10 +79,8 @@ export const PinCodeProvider = ({ children }: PinCodeContextProviderProps) => {
     )
 
     const pinCodeStorageEnabled = useMemo(
-        () =>
-            !isPinCodeRequired &&
-            userSelectedSecurity === SecurityLevelType.SECRET,
-        [isPinCodeRequired, userSelectedSecurity],
+        () => !isPinCodeRequired && securityType === SecurityLevelType.SECRET,
+        [isPinCodeRequired, securityType],
     )
 
     const getPinCode = useCallback(() => {

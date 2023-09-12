@@ -1,7 +1,7 @@
 import { useMemo } from "react"
 import { SecurityLevelType } from "~Model"
 import { useBiometrics } from "../useBiometrics"
-import { selectUserSelectedSecurity, useAppSelector } from "~Storage/Redux"
+import { useEncryptedStorage } from "~Components"
 
 enum WalletSecurity {
     NONE = "NONE",
@@ -13,23 +13,23 @@ enum WalletSecurity {
  * hook with the logic to determine the wallet security level and some helper functions
  */
 export const useWalletSecurity = () => {
-    const userSelectedSecurity = useAppSelector(selectUserSelectedSecurity)
+    const { securityType } = useEncryptedStorage()
     const biometrics = useBiometrics()
 
     const walletSecurity = useMemo(() => {
         if (
             biometrics?.accessControl &&
-            userSelectedSecurity === SecurityLevelType.BIOMETRIC
+            securityType === SecurityLevelType.BIOMETRIC
         ) {
             return WalletSecurity.BIO_UNLOCK
         }
 
-        if (userSelectedSecurity === SecurityLevelType.SECRET) {
+        if (securityType === SecurityLevelType.SECRET) {
             return WalletSecurity.PASS_UNLOCK
         }
 
         return WalletSecurity.NONE
-    }, [biometrics?.accessControl, userSelectedSecurity])
+    }, [biometrics?.accessControl, securityType])
 
     const isWalletSecurityBiometrics = useMemo(
         () => walletSecurity === WalletSecurity.BIO_UNLOCK,
