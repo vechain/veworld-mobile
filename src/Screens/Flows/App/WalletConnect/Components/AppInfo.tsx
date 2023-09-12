@@ -1,5 +1,10 @@
 import React from "react"
-import { BaseSpacer, BaseText, BaseView } from "~Components"
+import {
+    BaseSpacer,
+    BaseText,
+    BaseView,
+    CompressAndExpandBaseText,
+} from "~Components"
 import { StyleSheet, Image } from "react-native"
 
 type Props = {
@@ -7,9 +12,16 @@ type Props = {
     description: string
     url: string
     icon: string
+    hanldeOnReadMore?: (isDescriptionExpanded: boolean) => void
 }
 
-export const AppInfo = ({ name, description, url, icon }: Props) => {
+export const AppInfo = ({
+    name,
+    description,
+    url,
+    icon,
+    hanldeOnReadMore,
+}: Props) => {
     return (
         <BaseView>
             <Image
@@ -22,7 +34,12 @@ export const AppInfo = ({ name, description, url, icon }: Props) => {
             <BaseText typographyFont="subTitleBold">{name}</BaseText>
 
             <BaseSpacer height={8} />
-            <BaseText typographyFont="bodyMedium">{description}</BaseText>
+            <CompressAndExpandBaseText
+                text={description}
+                numberOfLines={2}
+                typographyFont="bodyMedium"
+                onReadMore={hanldeOnReadMore}
+            />
             <BaseSpacer height={8} />
             <BaseText>{url}</BaseText>
         </BaseView>
