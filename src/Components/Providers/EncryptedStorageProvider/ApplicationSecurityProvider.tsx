@@ -3,10 +3,10 @@ import { MMKV } from "react-native-mmkv"
 import { debug, error, HexUtils, warn } from "~Utils"
 import { BiometricState, SecurityLevelType, WALLET_STATUS } from "~Model"
 import {
-    EncryptionKeyHelper,
     SecurityConfig,
-    SecurityUpgrade,
+    SecurityUpgradeBackup,
     StorageEncryptionKeyHelper,
+    WalletEncryptionKeyHelper,
 } from "~Components/Providers"
 import Onboarding from "~Components/Providers/EncryptedStorageProvider/Helpers/Onboarding"
 import { useBiometrics } from "~Hooks"
@@ -111,7 +111,8 @@ export const ApplicationSecurityProvider = ({
             encryptionKey: onboardingKey,
         })
 
-        await EncryptionKeyHelper.remove()
+        await WalletEncryptionKeyHelper.remove()
+        await StorageEncryptionKeyHelper.remove()
     }, [onboardingKey, updateSecurityType])
 
     /**
@@ -122,18 +123,20 @@ export const ApplicationSecurityProvider = ({
 
         if (pinCode) {
             // Will return null if they don't exist
-            backUpKeys = await SecurityUpgrade.get(pinCode)
+            backUpKeys = await SecurityUpgradeBackup.get(pinCode)
         }
 
         if (backUpKeys) {
             // Reset to old keys
             // We verified pin code because the user was able to decrypt the keys in the backup
-            await EncryptionKeyHelper.set(backUpKeys, pinCode)
-            await SecurityUpgrade.clear()
+            await WalletEncryptionKeyHelper.set(backUpKeys.wallet, pinCode)
+            await StorageEncryptionKeyHelper.set(backUpKeys.storage, pinCode)
+            await SecurityUpgradeBackup.clear()
         }
 
         const keys =
-            backUpKeys ?? (await StorageEncryptionKeyHelper.get(pinCode))
+            backUpKeys?.storage ??
+            (await StorageEncryptionKeyHelper.get(pinCode))
 
         setReduxStorage({
             mmkv: UserEncryptedStorage,
@@ -264,7 +267,7 @@ export const ApplicationSecurityProvider = ({
                 ? SecurityLevelType.SECRET
                 : SecurityLevelType.BIOMETRIC
 
-            const success = await SecurityUpgrade.updateSecurityMethod(
+            const success = await SecurityUpgradeBackup.updateSecurityMethod(
                 currentPinCode,
                 newPinCode,
             )

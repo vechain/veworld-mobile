@@ -1,12 +1,23 @@
-import { EncryptionKeys } from "~Components/Providers/EncryptedStorageProvider/Model"
+import {
+    StorageEncryptionKeys,
+    WalletEncryptionKey,
+} from "~Components/Providers/EncryptedStorageProvider/Model"
 import { SecureStoreOptions } from "expo-secure-store/src/SecureStore"
 import { Keychain } from "~Storage"
 import { CryptoUtils, debug, error } from "~Utils"
-import EncryptionKeyHelper from "~Components/Providers/EncryptedStorageProvider/Helpers/EncryptionKeyHelper"
+import {
+    StorageEncryptionKeyHelper,
+    WalletEncryptionKeyHelper,
+} from "~Components"
 
 const BACKUP_KEY_STORAGE = "BACKUP_KEY_STORAGE"
 
-const _store = async (keys: EncryptionKeys, pinCode: string) => {
+type BackupKeys = {
+    wallet: WalletEncryptionKey
+    storage: StorageEncryptionKeys
+}
+
+const _store = async (keys: BackupKeys, pinCode: string) => {
     const encryptedKeys = CryptoUtils.encrypt(keys, pinCode)
 
     const options: SecureStoreOptions = {
@@ -20,7 +31,7 @@ const _store = async (keys: EncryptionKeys, pinCode: string) => {
     })
 }
 
-const get = async (pinCode: string): Promise<EncryptionKeys | null> => {
+const get = async (pinCode: string): Promise<BackupKeys | null> => {
     const keys = await Keychain.get({
         key: BACKUP_KEY_STORAGE,
         options: {
@@ -33,7 +44,7 @@ const get = async (pinCode: string): Promise<EncryptionKeys | null> => {
         return null
     }
 
-    return CryptoUtils.decrypt(keys, pinCode) as EncryptionKeys
+    return CryptoUtils.decrypt(keys, pinCode) as BackupKeys
 }
 
 const clear = async () => {
@@ -52,7 +63,8 @@ const handleSecurityUpgradeFailure = async (oldPin: string) => {
             error("CRITICAL: Security upgrade failed, no backup keys found")
             throw new Error("No backup keys found")
         }
-        await EncryptionKeyHelper.set(keys, oldPin)
+        await WalletEncryptionKeyHelper.set(keys.wallet, oldPin)
+        await StorageEncryptionKeyHelper.set(keys.storage, oldPin)
         await clear()
     } catch (e) {
         error("CRITICAL: Security upgrade failed", e)
@@ -69,13 +81,22 @@ const updateSecurityMethod = async (
     currentPinCode: string,
     newPinCode?: string,
 ): Promise<boolean> => {
-    const keys = await EncryptionKeyHelper.get(currentPinCode)
+    const wallet = await WalletEncryptionKeyHelper.get(currentPinCode)
+    const storage = await StorageEncryptionKeyHelper.get(currentPinCode)
 
-    await _store(keys, currentPinCode)
+    const backup: BackupKeys = {
+        wallet,
+        storage,
+    }
+
+    await _store(backup, currentPinCode)
 
     try {
-        await EncryptionKeyHelper.remove()
-        await EncryptionKeyHelper.set(keys, newPinCode)
+        await WalletEncryptionKeyHelper.remove()
+        await WalletEncryptionKeyHelper.set(wallet, newPinCode)
+
+        await StorageEncryptionKeyHelper.remove()
+        await StorageEncryptionKeyHelper.set(storage, newPinCode)
 
         await clear()
 

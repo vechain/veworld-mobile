@@ -7,5 +7,3 @@ export type StorageEncryptionKeys = {
     metadata: string
     images: string
 }
-
-export type EncryptionKeys = StorageEncryptionKeys & WalletEncryptionKey

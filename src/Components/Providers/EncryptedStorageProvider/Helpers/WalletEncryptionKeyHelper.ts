@@ -1,33 +1,115 @@
 import { Wallet } from "~Model"
 import { WalletEncryptionKey } from "~Components/Providers/EncryptedStorageProvider/Model"
-import { CryptoUtils } from "~Utils"
-import EncryptionKeyHelper from "./EncryptionKeyHelper"
+import { CryptoUtils, HexUtils } from "~Utils"
+import { Keychain } from "~Storage"
+import { SecureStoreOptions } from "expo-secure-store/src/SecureStore"
+
+const WALLET_ENCRYPTION_KEY_STORAGE = "WALLET_ENCRYPTION_KEY_STORAGE"
+const WALLET_BIOMETRIC_KEY_STORAGE = "WALLET_BIOMETRIC_KEY_STORAGE"
 
 const get = async (pinCode?: string): Promise<WalletEncryptionKey> => {
-    const { walletKey } = await EncryptionKeyHelper.get(pinCode)
+    const keys = await Keychain.get({
+        key: pinCode
+            ? WALLET_ENCRYPTION_KEY_STORAGE
+            : WALLET_BIOMETRIC_KEY_STORAGE,
+        options: {
+            requireAuthentication: pinCode === undefined,
+        },
+    })
 
-    return {
-        walletKey,
+    if (!keys) throw new Error("No key found")
+
+    if (pinCode) {
+        return CryptoUtils.decrypt(keys, pinCode) as WalletEncryptionKey
+    } else {
+        return JSON.parse(keys) as WalletEncryptionKey
     }
 }
 
+const setWithPinCode = async (
+    encryptionKeys: WalletEncryptionKey,
+    pinCode: string,
+) => {
+    const encryptedKeys = CryptoUtils.encrypt(encryptionKeys, pinCode)
+
+    const options: SecureStoreOptions = {
+        requireAuthentication: false,
+    }
+
+    await Keychain.set({
+        key: WALLET_ENCRYPTION_KEY_STORAGE,
+        options,
+        value: encryptedKeys,
+    })
+}
+
+const setWithBiometric = async (encryptionKeys: WalletEncryptionKey) => {
+    const encryptedKeys = JSON.stringify(encryptionKeys)
+
+    const options: SecureStoreOptions = {
+        requireAuthentication: true,
+    }
+
+    await Keychain.set({
+        key: WALLET_BIOMETRIC_KEY_STORAGE,
+        options,
+        value: encryptedKeys,
+    })
+}
+
+const set = async (encryptionKeys: WalletEncryptionKey, pinCode?: string) => {
+    if (pinCode) {
+        await setWithPinCode(encryptionKeys, pinCode)
+    } else {
+        await setWithBiometric(encryptionKeys)
+    }
+}
 const decryptWallet = async (
     encryptedWallet: string,
     pinCode?: string,
 ): Promise<Wallet> => {
-    const { walletKey } = await EncryptionKeyHelper.get(pinCode)
+    const { walletKey } = await get(pinCode)
 
     return CryptoUtils.decrypt<Wallet>(encryptedWallet, walletKey)
 }
 
 const encryptWallet = async (wallet: Wallet, pinCode?: string) => {
-    const { walletKey } = await EncryptionKeyHelper.get(pinCode)
+    const { walletKey } = await get(pinCode)
 
     return CryptoUtils.encrypt(wallet, walletKey)
 }
 
+const remove = async () => {
+    await Keychain.deleteItem({
+        key: WALLET_BIOMETRIC_KEY_STORAGE,
+        options: {
+            requireAuthentication: false,
+        },
+    })
+
+    await Keychain.deleteItem({
+        key: WALLET_ENCRYPTION_KEY_STORAGE,
+        options: {
+            requireAuthentication: false,
+        },
+    })
+}
+
+const init = async (pinCode?: string) => {
+    await remove()
+
+    const encryptionKeys: WalletEncryptionKey = {
+        walletKey: HexUtils.generateRandom(256),
+    }
+
+    await set(encryptionKeys, pinCode)
+}
+
 export default {
+    set,
     get,
     decryptWallet,
     encryptWallet,
+    init,
+    remove,
 }

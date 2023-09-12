@@ -7,7 +7,9 @@ import {
     BaseView,
     RequireUserPassword,
     showErrorToast,
+    StorageEncryptionKeyHelper,
     useApplicationSecurity,
+    WalletEncryptionKeyHelper,
 } from "~Components"
 import { useNavigation } from "@react-navigation/native"
 import { VeWorldLogoSVG } from "~Assets"
@@ -33,7 +35,6 @@ import {
 } from "~Storage/Redux/Selectors"
 import HapticsService from "~Services/HapticsService"
 import { AnalyticsEvent } from "~Constants"
-import EncryptionKeyHelper from "~Components/Providers/EncryptedStorageProvider/Helpers/EncryptionKeyHelper"
 
 type Props = {} & NativeStackScreenProps<
     RootStackParamListOnboarding & RootStackParamListCreateWalletApp,
@@ -152,7 +153,8 @@ export const WalletSuccessScreen: FC<Props> = ({ route }) => {
                     ? params?.userPin
                     : undefined
 
-            await EncryptionKeyHelper.init(pinCode)
+            await StorageEncryptionKeyHelper.init(pinCode)
+            await WalletEncryptionKeyHelper.init(pinCode)
 
             if (mnemonic) {
                 if (securityLevelSelected === SecurityLevelType.BIOMETRIC) {
