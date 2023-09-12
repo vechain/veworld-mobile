@@ -1,4 +1,4 @@
-import { Image, StyleSheet } from "react-native"
+import { StyleSheet } from "react-native"
 import React, { memo, useMemo } from "react"
 import {
     BaseText,
@@ -7,6 +7,7 @@ import {
     BaseSpacer,
     BaseCustomTokenIcon,
     BaseSkeleton,
+    BaseImage,
 } from "~Components"
 import { COLORS } from "~Constants"
 import { useTheme } from "~Hooks"
@@ -53,7 +54,10 @@ export const TokenCard = memo(
                             { backgroundColor: COLORS.WHITE },
                         ]}
                         containerStyle={styles.imageShadow}>
-                        <Image source={{ uri: icon }} style={styles.image} />
+                        <BaseImage
+                            source={{ uri: icon }}
+                            style={styles.image}
+                        />
                     </BaseCard>
                 )}
                 {!icon && (
