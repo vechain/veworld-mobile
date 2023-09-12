@@ -46,9 +46,11 @@ export const AnimatedSplashScreen = ({
         }
 
         if (playAnimation) {
-            startSplashScreenAnimation()
+            useFadeOutAnimation
+                ? startSplashScreenAnimation()
+                : setTimeout(() => startSplashScreenAnimation(), 200)
         }
-    }, [playAnimation, loadingProgress])
+    }, [playAnimation, loadingProgress, useFadeOutAnimation])
 
     const colorLayer = animationDone ? null : (
         <View style={[StyleSheet.absoluteFill, baseStyles.colorLayer]} />

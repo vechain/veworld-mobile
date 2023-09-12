@@ -7,9 +7,10 @@ import { AppLoader } from "./AppLoader"
 import { AutoLogoutProvider } from "~Components/Providers/AutoLogoutProvider"
 import { AnimatedSplashScreen } from "../src/AnimatedSplashScreen"
 import RNBootSplash from "react-native-bootsplash"
+import { SecurityLevelType } from "~Model"
 
 export const EntryPoint = () => {
-    const { setIsAppReady } = useEncryptedStorage()
+    const { setIsAppReady, securityType } = useEncryptedStorage()
 
     useEffect(() => {
         RNBootSplash.hide({ fade: false })
@@ -23,7 +24,9 @@ export const EntryPoint = () => {
                 <AutoLogoutProvider>
                     <AnimatedSplashScreen
                         playAnimation={true}
-                        useFadeOutAnimation={true}>
+                        useFadeOutAnimation={
+                            securityType === SecurityLevelType.SECRET
+                        }>
                         <AppLoader>
                             <BaseStatusBar />
                             <SwitchStack />
