@@ -1009,6 +1009,14 @@ type RootTranslation = {
 	 */
 	COMMON_LBL_TERMS_AND_CONDITIONS: string
 	/**
+	 * R​e​a​d​ ​m​o​r​e
+	 */
+	COMMON_LBL_READ_MORE: string
+	/**
+	 * R​e​a​d​ ​l​e​s​s
+	 */
+	COMMON_LBL_READ_LESS: string
+	/**
 	 * A​s​s​e​t​s
 	 */
 	COMMON_ASSETS: string
@@ -3458,6 +3466,14 @@ export type TranslationFunctions = {
 	 * Terms and Conditions
 	 */
 	COMMON_LBL_TERMS_AND_CONDITIONS: () => LocalizedString
+	/**
+	 * Read more
+	 */
+	COMMON_LBL_READ_MORE: () => LocalizedString
+	/**
+	 * Read less
+	 */
+	COMMON_LBL_READ_LESS: () => LocalizedString
 	/**
 	 * Assets
 	 */

@@ -1,10 +1,7 @@
 import { HDNode } from "thor-devkit"
 import crypto from "react-native-quick-crypto"
 import { XPub } from "~Model/Crypto"
-import HexUtils from "../HexUtils"
 import PasswordUtils from "../PasswordUtils"
-import { LocalDevice, Wallet } from "~Model"
-import KeychainService from "~Services/KeychainService"
 import stringify from "json-stringify-safe"
 import { warn } from "~Utils/Logger"
 
@@ -82,69 +79,6 @@ const verifyMnemonic = (seed: string) => {
     return !!hdNode
 }
 
-/**
- * Encrypt new wallet and insert mnemonic in keychain
- * @param wallet
- * @param deviceIndex
- * @param accessControl
- * @param hashEncryptionKey if provided, it is used to hash the encryptionKey (after being used to encrypt the wallet)
- * @returns
- */
-
-const encryptWallet = async ({
-    wallet,
-    rootAddress,
-    accessControl,
-    hashEncryptionKey,
-}: {
-    wallet: Wallet
-    rootAddress: string
-    accessControl: boolean
-    hashEncryptionKey?: string
-}) => {
-    let encryptionKey = HexUtils.generateRandom(8)
-    let encryptedWallet = encrypt<Wallet>(wallet, encryptionKey)
-
-    if (hashEncryptionKey)
-        encryptionKey = encrypt<string>(encryptionKey, hashEncryptionKey)
-
-    await KeychainService.setDeviceEncryptionKey(
-        encryptionKey,
-        rootAddress,
-        accessControl,
-    )
-    return { encryptionKey, encryptedWallet }
-}
-
-/**
- *  Decrypt wallet, pass password if the authentication is password
- * @param  {LocalDevice} device
- * @param  {string} password? if the authentication is password
- * @returns Wallet
- */
-const decryptWallet = async (device: LocalDevice, userPassword?: string) => {
-    const accessControl = !userPassword
-    let encryptedEncryptionKey = await KeychainService.getDeviceEncryptionKey(
-        device.rootAddress,
-        accessControl,
-    )
-
-    if (!encryptedEncryptionKey)
-        throw new Error(
-            `encryption key for device ${device.rootAddress} not found`,
-        )
-
-    let encryptionKey
-
-    if (userPassword) {
-        encryptionKey = decrypt<string>(encryptedEncryptionKey, userPassword)
-    } else encryptionKey = encryptedEncryptionKey
-
-    const decryptedWallet = decrypt<Wallet>(device.wallet, encryptionKey)
-
-    return { encryptionKey, decryptedWallet }
-}
-
 export default {
     xPubFromHdNode,
     hdNodeFromXPub,
@@ -155,6 +89,4 @@ export default {
     decryptState,
     encryptState,
     verifyMnemonic,
-    encryptWallet,
-    decryptWallet,
 }

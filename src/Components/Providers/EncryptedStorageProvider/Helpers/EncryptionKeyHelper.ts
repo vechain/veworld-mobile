@@ -1,41 +1,25 @@
-import { SecurityLevelType } from "~Model"
-import { CryptoUtils } from "~Utils"
+import { Keychain } from "~Storage"
+import { EncryptionKeys } from "~Components/Providers/EncryptedStorageProvider/Model"
+import { CryptoUtils, HexUtils } from "~Utils"
 import { SecureStoreOptions } from "expo-secure-store/src/SecureStore"
 
-import { EncryptionKeys } from "~Components/Providers/EncryptedStorageProvider/Model"
-import { Keychain } from "~Storage"
+const PIN_CODE_STORAGE = "ENCRYPTION_KEY_STORAGE"
+const BIOMETRIC_KEY_STORAGE = "BIOMETRIC_KEY_STORAGE"
 
-const ENCRYPTION_KEY_STORAGE = "ENCRYPTION_KEY_STORAGE"
-
-type SecurityKeysResponse = {
-    data: string
-    type: SecurityLevelType
-}
-export const getEncryptionKeys = async (): Promise<SecurityKeysResponse> => {
+const get = async (pinCode?: string): Promise<EncryptionKeys> => {
     const keys = await Keychain.get({
-        key: ENCRYPTION_KEY_STORAGE,
+        key: pinCode ? PIN_CODE_STORAGE : BIOMETRIC_KEY_STORAGE,
         options: {
-            requireAuthentication: false,
+            requireAuthentication: pinCode === undefined,
         },
     })
 
     if (!keys) throw new Error("No key found")
 
-    try {
-        /**
-         * If we can parse the keys, it means that they are not encrypted, and we retrieved with biometric
-         */
-        JSON.parse(keys)
-
-        return {
-            data: keys,
-            type: SecurityLevelType.BIOMETRIC,
-        }
-    } catch (e) {
-        return {
-            data: keys,
-            type: SecurityLevelType.SECRET,
-        }
+    if (pinCode) {
+        return CryptoUtils.decrypt(keys, pinCode) as EncryptionKeys
+    } else {
+        return JSON.parse(keys) as EncryptionKeys
     }
 }
 
@@ -50,7 +34,7 @@ const setWithPinCode = async (
     }
 
     await Keychain.set({
-        key: ENCRYPTION_KEY_STORAGE,
+        key: PIN_CODE_STORAGE,
         options,
         value: encryptedKeys,
     })
@@ -64,37 +48,24 @@ const setWithBiometric = async (encryptionKeys: EncryptionKeys) => {
     }
 
     await Keychain.set({
-        key: ENCRYPTION_KEY_STORAGE,
+        key: BIOMETRIC_KEY_STORAGE,
         options,
         value: encryptedKeys,
     })
 }
 
-const setKeys = async (
-    keys: EncryptionKeys,
-    type: SecurityLevelType,
-    pinCode?: string,
-) => {
-    if (type === SecurityLevelType.SECRET) {
-        if (!pinCode) throw new Error("Pin code is required")
-        await setWithPinCode(keys, pinCode)
-    } else if (type === SecurityLevelType.BIOMETRIC) {
-        await setWithBiometric(keys)
+const set = async (encryptionKeys: EncryptionKeys, pinCode?: string) => {
+    if (pinCode) {
+        await setWithPinCode(encryptionKeys, pinCode)
     } else {
-        throw new Error(`Invalid security type ${type}`)
+        await setWithBiometric(encryptionKeys)
     }
-}
-
-const deleteKeys = async () => {
-    await Keychain.deleteItem({
-        key: ENCRYPTION_KEY_STORAGE,
-    })
 }
 
 const validatePinCode = async (pinCode: string): Promise<boolean> => {
     try {
         const keys = await Keychain.get({
-            key: ENCRYPTION_KEY_STORAGE,
+            key: PIN_CODE_STORAGE,
             options: {
                 requireAuthentication: false,
             },
@@ -113,9 +84,39 @@ const validatePinCode = async (pinCode: string): Promise<boolean> => {
     }
 }
 
+const remove = async () => {
+    await Keychain.deleteItem({
+        key: BIOMETRIC_KEY_STORAGE,
+        options: {
+            requireAuthentication: false,
+        },
+    })
+
+    await Keychain.deleteItem({
+        key: PIN_CODE_STORAGE,
+        options: {
+            requireAuthentication: false,
+        },
+    })
+}
+
+const init = async (pinCode?: string) => {
+    await remove()
+
+    const encryptionKeys: EncryptionKeys = {
+        redux: HexUtils.generateRandom(256),
+        images: HexUtils.generateRandom(8),
+        metadata: HexUtils.generateRandom(8),
+        walletKey: HexUtils.generateRandom(256),
+    }
+
+    await set(encryptionKeys, pinCode)
+}
+
 export default {
-    setKeys,
-    getEncryptionKeys,
-    deleteKeys,
+    init,
+    get,
+    set,
+    remove,
     validatePinCode,
 }

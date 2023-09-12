@@ -1,14 +1,17 @@
 import React, { useCallback, useEffect, useMemo, useState } from "react"
 import { MMKV } from "react-native-mmkv"
-import { CryptoUtils, debug, error, HexUtils, warn } from "~Utils"
+import { debug, error, HexUtils, warn } from "~Utils"
 import { BiometricState, SecurityLevelType, WALLET_STATUS } from "~Model"
-import { EncryptionKeyHelper, SecurityConfig } from "~Components/Providers"
-import { EncryptionKeys } from "~Components/Providers/EncryptedStorageProvider/Model"
+import {
+    SecurityConfig,
+    StorageEncryptionKeyHelper,
+} from "~Components/Providers"
 import Onboarding from "~Components/Providers/EncryptedStorageProvider/Helpers/Onboarding"
 import { useBiometrics } from "~Hooks"
 import { StandaloneLockScreen } from "~Screens"
 import RNBootSplash from "react-native-bootsplash"
 import { AnimatedSplashScreen } from "../../../AnimatedSplashScreen"
+import EncryptionKeyHelper from "~Components/Providers/EncryptedStorageProvider/Helpers/EncryptionKeyHelper"
 
 const UserEncryptedStorage = new MMKV({
     id: "user_encrypted_storage",
@@ -18,31 +21,34 @@ const OnboardingStorage = new MMKV({
     id: "onboarding_storage",
 })
 
-const ImageStorage = (encryptionKey: string) =>
-    new MMKV({
-        id: "image_storage",
-        encryptionKey,
-    })
+const ImageStorage = new MMKV({
+    id: "image_storage",
+})
 
-const MetadataStorage = (encryptionKey: string) =>
-    new MMKV({
-        id: "metadata_storage",
-        encryptionKey,
-    })
+const MetadataStorage = new MMKV({
+    id: "metadata_storage",
+})
+
+type EncryptedStorage = {
+    mmkv: MMKV
+    encryptionKey: string
+}
 
 type IEncryptedStorage = {
-    redux: {
-        mmkv: MMKV
-        encryptionKey: string
-    }
-    images?: MMKV
-    metadata?: MMKV
+    redux: EncryptedStorage
+    images?: EncryptedStorage
+    metadata?: EncryptedStorage
     migrateOnboarding: (
         type: SecurityLevelType,
         pinCode?: string,
     ) => Promise<void>
     resetApplication: () => Promise<void>
     walletStatus: WALLET_STATUS
+    updateSecurityMethod: (
+        currentPinCode: string,
+        newPinCode?: string,
+    ) => Promise<void>
+    securityType: SecurityLevelType
     setWalletStatus: (status: WALLET_STATUS) => void
     isAppReady: boolean
     setIsAppReady: (isReady: boolean) => void
@@ -59,18 +65,12 @@ export const EncryptedStorageProvider = ({
     const [walletStatus, setWalletStatus] = useState<WALLET_STATUS>(
         WALLET_STATUS.NOT_INITIALISED,
     )
-    const [reduxStorage, setReduxStorage] = useState<
-        IEncryptedStorage["redux"] | undefined
-    >(undefined)
-    const [imageStorage, setImageStorage] = useState<MMKV | undefined>(
-        undefined,
+    const [securityType, setSecurityType] = useState<SecurityLevelType>(
+        SecurityLevelType.NONE,
     )
-    const [metadataStorage, setMetadataStorage] = useState<MMKV | undefined>(
-        undefined,
-    )
-    const [securityType, setSecurityType] = useState<
-        SecurityLevelType | undefined
-    >(undefined)
+    const [reduxStorage, setReduxStorage] = useState<EncryptedStorage>()
+    const [imageStorage, setImageStorage] = useState<EncryptedStorage>()
+    const [metadataStorage, setMetadataStorage] = useState<EncryptedStorage>()
     const [userDisabledBiometrics, setUserDisabledBiometrics] = useState(false)
 
     // After unlocking, we need to wait for the redux to be setup before we can render the app
@@ -80,6 +80,18 @@ export const EncryptedStorageProvider = ({
 
     const onboardingKey = useMemo(() => HexUtils.generateRandom(256), [])
 
+    const updateSecurityType = useCallback(
+        (type: SecurityLevelType | undefined) => {
+            if (!type) {
+                SecurityConfig.remove()
+            } else {
+                SecurityConfig.set(type)
+            }
+            setSecurityType(type ?? SecurityLevelType.NONE)
+        },
+        [],
+    )
+
     /**
      * Reset the application state
      */
@@ -87,7 +99,7 @@ export const EncryptedStorageProvider = ({
         setWalletStatus(WALLET_STATUS.FIRST_TIME_ACCESS)
         setImageStorage(undefined)
         setMetadataStorage(undefined)
-        setSecurityType(undefined)
+        updateSecurityType(undefined)
 
         UserEncryptedStorage.clearAll()
         OnboardingStorage.clearAll()
@@ -97,46 +109,28 @@ export const EncryptedStorageProvider = ({
             encryptionKey: onboardingKey,
         })
 
-        await EncryptionKeyHelper.deleteKeys()
-        SecurityConfig.remove()
-    }, [onboardingKey])
+        await EncryptionKeyHelper.remove()
+    }, [onboardingKey, updateSecurityType])
 
     /**
-     * Unlock the app with a pin code
+     * Unlock the app
      */
-    const unlockWithPinCode = useCallback(async (pinCode: string) => {
-        const { data } = await EncryptionKeyHelper.getEncryptionKeys()
-
-        const keys = CryptoUtils.decrypt(data, pinCode) as EncryptionKeys
-
-        if (!keys || !keys.redux) {
-            throw new Error("Invalid pin code")
-        }
+    const unlock = useCallback(async (pinCode?: string) => {
+        const keys = await StorageEncryptionKeyHelper.get(pinCode)
 
         setReduxStorage({
             mmkv: UserEncryptedStorage,
             encryptionKey: keys.redux,
         })
 
-        setImageStorage(ImageStorage(keys.images))
-        setMetadataStorage(MetadataStorage(keys.metadata))
-    }, [])
-
-    /**
-     * Unlock the app with biometrics
-     */
-    const unlockWithBiometrics = useCallback(async () => {
-        const { data } = await EncryptionKeyHelper.getEncryptionKeys()
-
-        const keys = JSON.parse(data) as EncryptionKeys
-
-        setReduxStorage({
-            mmkv: UserEncryptedStorage,
-            encryptionKey: keys.redux,
+        setImageStorage({
+            mmkv: ImageStorage,
+            encryptionKey: keys.images,
         })
-
-        setImageStorage(ImageStorage(keys.images))
-        setMetadataStorage(MetadataStorage(keys.metadata))
+        setMetadataStorage({
+            mmkv: MetadataStorage,
+            encryptionKey: keys.metadata,
+        })
     }, [])
 
     /**
@@ -167,12 +161,12 @@ export const EncryptedStorageProvider = ({
                     return
                 }
 
-                await unlockWithBiometrics()
+                await unlock()
             } catch (e) {
                 error("Failed to get encryption keys", e)
             }
         },
-        [unlockWithBiometrics],
+        [unlock],
     )
 
     /**
@@ -205,15 +199,9 @@ export const EncryptedStorageProvider = ({
 
     const migrateOnboarding = useCallback(
         async (type: SecurityLevelType, pinCode?: string): Promise<void> => {
-            SecurityConfig.set(type)
+            updateSecurityType(type)
 
-            const encryptionKeys: EncryptionKeys = {
-                redux: HexUtils.generateRandom(256),
-                images: HexUtils.generateRandom(8),
-                metadata: HexUtils.generateRandom(8),
-            }
-
-            await EncryptionKeyHelper.setKeys(encryptionKeys, type, pinCode)
+            const encryptionKeys = await StorageEncryptionKeyHelper.get(pinCode)
 
             try {
                 await Onboarding.migrateState({
@@ -229,9 +217,14 @@ export const EncryptedStorageProvider = ({
                     mmkv: UserEncryptedStorage,
                     encryptionKey: encryptionKeys.redux,
                 })
-                setImageStorage(ImageStorage(encryptionKeys.images))
-                setMetadataStorage(MetadataStorage(encryptionKeys.metadata))
-                setSecurityType(type)
+                setImageStorage({
+                    mmkv: ImageStorage,
+                    encryptionKey: encryptionKeys.images,
+                })
+                setMetadataStorage({
+                    mmkv: MetadataStorage,
+                    encryptionKey: encryptionKeys.metadata,
+                })
                 setWalletStatus(WALLET_STATUS.UNLOCKED)
             } catch (e) {
                 error(e)
@@ -239,7 +232,27 @@ export const EncryptedStorageProvider = ({
                 await resetApplication()
             }
         },
-        [resetApplication, onboardingKey],
+        [updateSecurityType, resetApplication, onboardingKey],
+    )
+
+    const updateSecurityMethod = useCallback(
+        async (currentPinCode: string, newPinCode?: string) => {
+            const type = newPinCode
+                ? SecurityLevelType.SECRET
+                : SecurityLevelType.BIOMETRIC
+
+            const keys = await EncryptionKeyHelper.get(currentPinCode)
+
+            try {
+                await EncryptionKeyHelper.remove()
+                await EncryptionKeyHelper.set(keys, newPinCode)
+                updateSecurityType(type)
+            } catch (e) {
+                await EncryptionKeyHelper.set(keys, currentPinCode)
+                throw e
+            }
+        },
+        [updateSecurityType],
     )
 
     useEffect(() => {
@@ -253,7 +266,7 @@ export const EncryptedStorageProvider = ({
      * Initialise the app
      */
     useEffect(() => {
-        if (biometrics) {
+        if (biometrics && walletStatus === WALLET_STATUS.NOT_INITIALISED) {
             intialiseApp(biometrics)
                 .then(() => {
                     debug("App state initialised app")
@@ -262,7 +275,7 @@ export const EncryptedStorageProvider = ({
                     error("App state failed to initialise app", e)
                 })
         }
-    }, [biometrics, intialiseApp])
+    }, [walletStatus, biometrics, intialiseApp])
 
     const value: IEncryptedStorage | undefined = useMemo(() => {
         if (!reduxStorage || walletStatus === WALLET_STATUS.NOT_INITIALISED)
@@ -278,6 +291,8 @@ export const EncryptedStorageProvider = ({
             setWalletStatus,
             isAppReady,
             setIsAppReady,
+            updateSecurityMethod,
+            securityType,
         }
     }, [
         reduxStorage,
@@ -287,6 +302,8 @@ export const EncryptedStorageProvider = ({
         metadataStorage,
         resetApplication,
         isAppReady,
+        updateSecurityMethod,
+        securityType,
     ])
 
     if (
@@ -302,7 +319,7 @@ export const EncryptedStorageProvider = ({
             <AnimatedSplashScreen
                 playAnimation={true}
                 useFadeOutAnimation={false}>
-                <StandaloneLockScreen onPinInserted={unlockWithPinCode} />
+                <StandaloneLockScreen onPinInserted={unlock} />
             </AnimatedSplashScreen>
         )
     }

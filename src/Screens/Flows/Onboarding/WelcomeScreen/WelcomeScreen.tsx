@@ -1,23 +1,27 @@
 import React, { useCallback } from "react"
-import { BaseButton, BaseSpacer, BaseText, BaseView, Layout } from "~Components"
+import {
+    BaseButton,
+    BaseSpacer,
+    BaseText,
+    BaseView,
+    Layout,
+    WalletEncryptionKeyHelper,
+} from "~Components"
 import { useNavigation } from "@react-navigation/native"
 import { Routes } from "~Navigation"
 import { VeWorldLogoSVG } from "~Assets"
 import { useI18nContext } from "~i18n"
 import {
     addDeviceAndAccounts,
-    setSelectedAccount,
     selectAreDevFeaturesEnabled,
     setAppLockStatus,
-    setPinValidationString,
-    setUserSelectedSecurity,
+    setSelectedAccount,
     useAppDispatch,
     useAppSelector,
 } from "~Storage/Redux"
-import { CryptoUtils } from "~Utils"
 import { useDeviceUtils } from "~Hooks"
-import { SettingsConstants } from "~Constants"
-import { SecurityLevelType, WALLET_STATUS } from "~Model"
+import { WALLET_STATUS } from "~Model"
+import EncryptionKeyHelper from "~Components/Providers/EncryptedStorageProvider/Helpers/EncryptionKeyHelper"
 
 export const WelcomeScreen = () => {
     const nav = useNavigation()
@@ -36,22 +40,17 @@ export const WelcomeScreen = () => {
     const { getDeviceFromMnemonic } = useDeviceUtils()
     const onDemoOnboarding = async () => {
         const FAKE_PIN = "111111"
-        const pinValidationString = CryptoUtils.encrypt<string>(
-            SettingsConstants.VALIDATION_STRING,
-            FAKE_PIN,
-        )
-        dispatch(setPinValidationString(pinValidationString))
-        dispatch(setUserSelectedSecurity(SecurityLevelType.SECRET))
 
         const DEMO_MNEMONIC =
             "denial kitchen pet squirrel other broom bar gas better priority spoil cross"
         const { device, wallet } = getDeviceFromMnemonic(DEMO_MNEMONIC)
-        const { encryptedWallet } = await CryptoUtils.encryptWallet({
+
+        await EncryptionKeyHelper.init(FAKE_PIN)
+
+        const encryptedWallet = await WalletEncryptionKeyHelper.encryptWallet(
             wallet,
-            rootAddress: device.rootAddress,
-            accessControl: false,
-            hashEncryptionKey: FAKE_PIN,
-        })
+            FAKE_PIN,
+        )
 
         const newAccount = dispatch(
             addDeviceAndAccounts({

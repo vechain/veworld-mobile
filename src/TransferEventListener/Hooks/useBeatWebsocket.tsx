@@ -5,6 +5,14 @@ import { updateNodeError, useAppDispatch } from "~Storage/Redux"
 import { useAppState, useCounter } from "~Hooks"
 import { AppStateType, Beat } from "~Model"
 
+interface LastMessage {
+    networkUrl: string
+    messageId: string
+    timestamp: number
+}
+
+const TEN_MINUTES = 10 * 60 * 1000
+
 const BASE_PATH = "/subscriptions/beat2"
 export const useBeatWebsocket = (
     currentNetworkUrl: string,
@@ -13,7 +21,7 @@ export const useBeatWebsocket = (
     const dispatch = useAppDispatch()
     const { currentState, previousState } = useAppState()
     const ws = useRef<WebSocket>()
-    const lastMessageId = useRef<Map<string, string>>(new Map())
+    const lastMessage = useRef<LastMessage>()
     const { count, increment } = useCounter()
     const [retryTimeoutId, setRetryTimeoutId] = useState<NodeJS.Timeout | null>(
         null,
@@ -27,7 +35,11 @@ export const useBeatWebsocket = (
         (ev: MessageEvent) => {
             const message = JSON.parse(ev.data.toString()) as Beat
             onMessage(message)
-            lastMessageId.current?.set(currentNetworkUrl, message.id)
+            lastMessage.current = {
+                networkUrl: currentNetworkUrl,
+                messageId: message.id,
+                timestamp: Date.now(),
+            }
         },
         [currentNetworkUrl, onMessage],
     )
@@ -71,9 +83,11 @@ export const useBeatWebsocket = (
             const url = new URL(
                 URIUtils.toWebsocketURL(currentNetworkUrl, BASE_PATH),
             )
-            const messageId = lastMessageId.current?.get(currentNetworkUrl)
-            if (messageId) {
-                url.searchParams.append("pos", messageId)
+            if (
+                lastMessage.current?.networkUrl === currentNetworkUrl &&
+                lastMessage.current?.timestamp + TEN_MINUTES > Date.now()
+            ) {
+                url.searchParams.append("pos", lastMessage.current?.messageId)
             }
             ws.current = new WebSocket(url.toString())
         } else if (
@@ -95,8 +109,8 @@ export const useBeatWebsocket = (
     }, [currentNetworkUrl, currentState, previousState, retryTimeoutId])
 
     useEffect(() => {
-        // Reset lastMessageId when currentNetworkUrl changes
-        lastMessageId.current = new Map()
+        // Reset lastMessage when currentNetworkUrl changes
+        lastMessage.current = undefined
     }, [currentNetworkUrl])
 
     // Effect for attaching and detaching event listeners

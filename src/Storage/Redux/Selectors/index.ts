@@ -1,7 +1,6 @@
 export * from "./UserPreferences"
 export * from "./Device"
 export * from "./Account"
-export * from "./Config"
 export * from "./Network"
 export * from "./Balances"
 export * from "./Cache"

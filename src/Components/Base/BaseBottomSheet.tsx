@@ -13,9 +13,12 @@ import { useThemedStyles } from "~Hooks"
 import { ColorThemeType, isSmallScreen } from "~Constants"
 import { BackdropPressBehavior } from "@gorhom/bottom-sheet/lib/typescript/components/bottomSheetBackdrop/types"
 import { FormattingUtils } from "~Utils"
+import { BaseText } from "~Components"
+import { LocalizedString } from "typesafe-i18n"
 
 type Props = Omit<BottomSheetModalProps, "snapPoints"> & {
     children: React.ReactNode
+    title?: LocalizedString
     snapPoints?: string[]
     ignoreMinimumSnapPoint?: boolean
     contentStyle?: StyleProp<ViewStyle>
@@ -31,6 +34,7 @@ type Props = Omit<BottomSheetModalProps, "snapPoints"> & {
  *
  * @component
  * @prop {(React.ReactNode)} children - The content of the modal.
+ * @prop {(LocalizedString|undefined)} title - The title of the modal.
  * @prop {(string[]|undefined)} snapPoints - Snap points for the bottom sheet. They should be an array of strings, each representing a percentage.
  * @prop {(boolean|undefined)} ignoreMinimumSnapPoint - If `true`, the minimum snap point is not enforced to 55% of the screen height.
  * @prop {(StyleProp<ViewStyle>|undefined)} contentStyle - Styles for the content view.
@@ -45,6 +49,7 @@ export const BaseBottomSheet = React.forwardRef<BottomSheetModalMethods, Props>(
         {
             contentStyle,
             snapPoints,
+            title,
             ignoreMinimumSnapPoint = false,
             footerStyle,
             noMargins = false,
@@ -128,6 +133,9 @@ export const BaseBottomSheet = React.forwardRef<BottomSheetModalMethods, Props>(
                     flexGrow={1}
                     alignItems="stretch"
                     style={contentStyle}>
+                    {title && (
+                        <BaseText typographyFont="title">{title}</BaseText>
+                    )}
                     {children}
                 </BaseView>
                 {footer && (

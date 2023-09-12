@@ -25,12 +25,7 @@ import {
     RootStackParamListOnboarding,
     Routes,
 } from "~Navigation"
-import {
-    setIsAppLoading,
-    setUserSelectedSecurity,
-    useAppDispatch,
-    useAppSelector,
-} from "~Storage/Redux"
+import { setIsAppLoading, useAppDispatch, useAppSelector } from "~Storage/Redux"
 import {
     selectHasOnboarded,
     selectMnemonic,
@@ -38,6 +33,7 @@ import {
 } from "~Storage/Redux/Selectors"
 import HapticsService from "~Services/HapticsService"
 import { AnalyticsEvent } from "~Constants"
+import EncryptionKeyHelper from "~Components/Providers/EncryptedStorageProvider/Helpers/EncryptionKeyHelper"
 
 type Props = {} & NativeStackScreenProps<
     RootStackParamListOnboarding & RootStackParamListCreateWalletApp,
@@ -150,6 +146,14 @@ export const WalletSuccessScreen: FC<Props> = ({ route }) => {
             }
 
             const securityLevelSelected = params.securityLevelSelected
+
+            let pinCode =
+                securityLevelSelected === SecurityLevelType.SECRET
+                    ? params?.userPin
+                    : undefined
+
+            await EncryptionKeyHelper.init(pinCode)
+
             if (mnemonic) {
                 if (securityLevelSelected === SecurityLevelType.BIOMETRIC) {
                     await createWallet({ mnemonic })
@@ -170,8 +174,6 @@ export const WalletSuccessScreen: FC<Props> = ({ route }) => {
                     )
                 }
             }
-
-            dispatch(setUserSelectedSecurity(securityLevelSelected))
         } finally {
             dispatch(setIsAppLoading(false))
         }

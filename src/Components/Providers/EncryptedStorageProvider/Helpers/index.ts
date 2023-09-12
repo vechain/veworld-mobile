@@ -1,6 +1,7 @@
-import EncryptionKeyHelper from "./EncryptionKeyHelper"
+import WalletEncryptionKeyHelper from "./WalletEncryptionKeyHelper"
+import StorageEncryptionKeyHelper from "./StorageEncryptionKeyHelper"
 import SecurityConfig from "./SecurityConfig"
 
 export * from "./Onboarding"
 
-export { EncryptionKeyHelper, SecurityConfig }
+export { WalletEncryptionKeyHelper, StorageEncryptionKeyHelper, SecurityConfig }
