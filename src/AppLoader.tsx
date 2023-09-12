@@ -81,8 +81,14 @@ export const AppLoader = ({ children }: Props) => {
                 />
             )
 
-        return <BlurView style={StyleSheet.absoluteFill} blurAmount={2} />
-    }, [theme.colors.background])
+        return (
+            <BlurView
+                style={StyleSheet.absoluteFill}
+                blurAmount={2}
+                blurType={theme.isDark ? "dark" : "light"}
+            />
+        )
+    }, [theme.colors.background, theme.isDark])
 
     return (
         <View style={StyleSheet.absoluteFill}>

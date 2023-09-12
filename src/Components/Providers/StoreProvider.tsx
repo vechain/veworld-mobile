@@ -21,6 +21,7 @@ import { useEncryptedStorage } from "~Components/Providers/EncryptedStorageProvi
 import { Reducer } from "redux"
 import { warn } from "~Utils"
 import { MMKV } from "react-native-mmkv"
+import { SplashScreen } from "../../../src/SplashScreen"
 
 const StoreContext = React.createContext<undefined>(undefined)
 
@@ -88,13 +89,17 @@ const StoreContextProvider = ({ children }: StoreContextProviderProps) => {
     }
 
     return (
-        <StoreContext.Provider value={undefined}>
-            <Provider store={store.current}>
-                <PersistGate loading={null} persistor={persistor}>
-                    <PersistedCacheProvider>{children}</PersistedCacheProvider>
-                </PersistGate>
-            </Provider>
-        </StoreContext.Provider>
+        <SplashScreen>
+            <StoreContext.Provider value={undefined}>
+                <Provider store={store.current}>
+                    <PersistGate loading={null} persistor={persistor}>
+                        <PersistedCacheProvider>
+                            {children}
+                        </PersistedCacheProvider>
+                    </PersistGate>
+                </Provider>
+            </StoreContext.Provider>
+        </SplashScreen>
     )
 }
 

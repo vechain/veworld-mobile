@@ -1,16 +1,21 @@
 import React, { useEffect } from "react"
-import { BaseStatusBar } from "~Components"
+import { BaseStatusBar, useEncryptedStorage } from "~Components"
 import { SwitchStack } from "~Navigation"
 import ErrorBoundary from "~Components/Providers/ErrorBoundary"
 import { PinCodeProvider } from "~Components/Providers/PinCodeProvider/PinCodeProvider"
 import { AppLoader } from "./AppLoader"
-import RNBootSplash from "react-native-bootsplash"
 import { AutoLogoutProvider } from "~Components/Providers/AutoLogoutProvider"
-import { AnimatedSplashScreen } from "./AnimatedSplashScreen"
+import { AnimatedSplashScreen } from "../src/AnimatedSplashScreen"
+import RNBootSplash from "react-native-bootsplash"
+import { SecurityLevelType } from "~Model"
 
 export const EntryPoint = () => {
+    const { setIsAppReady, securityType } = useEncryptedStorage()
+
     useEffect(() => {
-        RNBootSplash.hide({ fade: true, duration: 500 })
+        RNBootSplash.hide({ fade: false })
+        setIsAppReady(true)
+        // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [])
 
     return (
@@ -19,7 +24,9 @@ export const EntryPoint = () => {
                 <AutoLogoutProvider>
                     <AnimatedSplashScreen
                         playAnimation={true}
-                        useFadeOutAnimation={true}>
+                        useFadeOutAnimation={
+                            securityType === SecurityLevelType.SECRET
+                        }>
                         <AppLoader>
                             <BaseStatusBar />
                             <SwitchStack />

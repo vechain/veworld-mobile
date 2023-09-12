@@ -8,6 +8,9 @@ import {
 } from "~Components/Providers"
 import Onboarding from "~Components/Providers/EncryptedStorageProvider/Helpers/Onboarding"
 import { useBiometrics } from "~Hooks"
+import { StandaloneLockScreen } from "~Screens"
+import RNBootSplash from "react-native-bootsplash"
+import { AnimatedSplashScreen } from "../../../AnimatedSplashScreen"
 import EncryptionKeyHelper from "~Components/Providers/EncryptedStorageProvider/Helpers/EncryptionKeyHelper"
 
 const UserEncryptedStorage = new MMKV({
@@ -46,6 +49,9 @@ type IEncryptedStorage = {
         newPinCode?: string,
     ) => Promise<void>
     securityType: SecurityLevelType
+    setWalletStatus: (status: WALLET_STATUS) => void
+    isAppReady: boolean
+    setIsAppReady: (isReady: boolean) => void
 }
 
 const EncryptedStorageContext = React.createContext<
@@ -66,6 +72,9 @@ export const EncryptedStorageProvider = ({
     const [imageStorage, setImageStorage] = useState<EncryptedStorage>()
     const [metadataStorage, setMetadataStorage] = useState<EncryptedStorage>()
     const [userDisabledBiometrics, setUserDisabledBiometrics] = useState(false)
+
+    // After unlocking, we need to wait for the redux to be setup before we can render the app
+    const [isAppReady, setIsAppReady] = useState(false)
 
     const biometrics = useBiometrics()
 
@@ -268,19 +277,6 @@ export const EncryptedStorageProvider = ({
         }
     }, [walletStatus, biometrics, intialiseApp])
 
-    /**
-     * TODO: Remove this with standalone pin code screen - see TODO below
-     */
-    useEffect(() => {
-        if (
-            securityType === SecurityLevelType.SECRET &&
-            !reduxStorage?.encryptionKey
-        ) {
-            //TODO: this is unlocking the app for use
-            unlock("111111")
-        }
-    }, [unlock, securityType, reduxStorage])
-
     const value: IEncryptedStorage | undefined = useMemo(() => {
         if (!reduxStorage || walletStatus === WALLET_STATUS.NOT_INITIALISED)
             return
@@ -292,16 +288,20 @@ export const EncryptedStorageProvider = ({
             metadata: metadataStorage,
             resetApplication,
             walletStatus,
+            setWalletStatus,
+            isAppReady,
+            setIsAppReady,
             updateSecurityMethod,
             securityType,
         }
     }, [
+        reduxStorage,
+        walletStatus,
+        migrateOnboarding,
         imageStorage,
         metadataStorage,
-        reduxStorage,
-        migrateOnboarding,
-        walletStatus,
         resetApplication,
+        isAppReady,
         updateSecurityMethod,
         securityType,
     ])
@@ -312,13 +312,20 @@ export const EncryptedStorageProvider = ({
         securityType === SecurityLevelType.SECRET
     ) {
         warn("Waiting for redux encryption key")
-        // TODO: Add a standalone pin code screen
-        // <LockScreen />
-        return <></>
+
+        RNBootSplash.hide({ fade: true, duration: 500 })
+
+        return (
+            <AnimatedSplashScreen
+                playAnimation={true}
+                useFadeOutAnimation={false}>
+                <StandaloneLockScreen onPinInserted={unlock} />
+            </AnimatedSplashScreen>
+        )
     }
 
     if (userDisabledBiometrics) {
-        // TODO: Add a standalone screen to tell the user they disabled biometrics
+        // TODO: Add a standalone screen to tell the user they disabled biometrics (https://github.com/vechainfoundation/veworld-mobile/issues/1334)
         // <SecurityDowngradeScreen />
         return <></>
     }

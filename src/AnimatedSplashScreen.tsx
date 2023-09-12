@@ -7,8 +7,7 @@ import Animated, {
     withTiming,
 } from "react-native-reanimated"
 import MaskedView from "@react-native-masked-view/masked-view"
-import { COLORS, ColorThemeType } from "~Constants"
-import { useThemedStyles } from "~Hooks"
+import { COLORS } from "~Constants"
 import { PlatformUtils } from "~Utils"
 
 type Props = {
@@ -39,8 +38,6 @@ export const AnimatedSplashScreen = ({
     const loadingProgress = useSharedValue(0)
     const [animationDone, setAnimationDone] = useState(false)
 
-    const { styles } = useThemedStyles(baseStyles)
-
     useEffect(() => {
         const startSplashScreenAnimation = () => {
             loadingProgress.value = withTiming(100, { duration: 800 }, () => {
@@ -49,15 +46,17 @@ export const AnimatedSplashScreen = ({
         }
 
         if (playAnimation) {
-            startSplashScreenAnimation()
+            useFadeOutAnimation
+                ? startSplashScreenAnimation()
+                : setTimeout(() => startSplashScreenAnimation(), 200)
         }
-    }, [playAnimation, loadingProgress])
+    }, [playAnimation, loadingProgress, useFadeOutAnimation])
 
     const colorLayer = animationDone ? null : (
-        <View style={[StyleSheet.absoluteFill, styles.colorLayer]} />
+        <View style={[StyleSheet.absoluteFill, baseStyles.colorLayer]} />
     )
     const whiteLayer = animationDone ? null : (
-        <View style={[StyleSheet.absoluteFill, styles.whiteLayer]} />
+        <View style={[StyleSheet.absoluteFill, baseStyles.whiteLayer]} />
     )
 
     const scaleOut = useAnimatedStyle(() => {
@@ -80,8 +79,8 @@ export const AnimatedSplashScreen = ({
         <>
             {children}
             {!animationDone && (
-                <Animated.View style={[styles.containerAndroid, fadeOut]}>
-                    <View style={styles.centered}>
+                <Animated.View style={[baseStyles.containerAndroid, fadeOut]}>
+                    <View style={baseStyles.centered}>
                         <Animated.View style={scaleOut}>
                             <Image
                                 source={require("../bootsplash_logo_white.png")}
@@ -95,12 +94,12 @@ export const AnimatedSplashScreen = ({
             )}
         </>
     ) : (
-        <View style={styles.containerIOS}>
+        <View style={baseStyles.containerIOS}>
             {colorLayer}
             <MaskedView
-                style={styles.innerContainer}
+                style={baseStyles.innerContainer}
                 maskElement={
-                    <View style={styles.centered}>
+                    <View style={baseStyles.centered}>
                         <Animated.View style={scaleOut}>
                             <Image
                                 source={require("../bootsplash_logo_white.png")}
@@ -121,7 +120,7 @@ export const AnimatedSplashScreen = ({
         <>
             {children}
             {!animationDone && (
-                <Animated.View style={[styles.containerFadeOut, fadeOut]} />
+                <Animated.View style={[baseStyles.containerFadeOut, fadeOut]} />
             )}
         </>
     )
@@ -129,33 +128,32 @@ export const AnimatedSplashScreen = ({
     return useFadeOutAnimation ? animatedFadeOut : animatedScaleOut
 }
 
-const baseStyles = (theme: ColorThemeType) =>
-    StyleSheet.create({
-        containerIOS: {
-            flex: 1,
-        },
-        containerAndroid: {
-            position: "absolute",
-            top: 0,
-            left: 0,
-            right: 0,
-            bottom: 0,
-            backgroundColor: theme.colors.splashBackground,
-        },
-        containerFadeOut: {
-            flex: 1,
-            backgroundColor: theme.colors.background,
-        },
-        innerContainer: {
-            flex: 1,
-        },
-        centered: {
-            flex: 1,
-            alignItems: "center",
-            justifyContent: "center",
-        },
-        colorLayer: {
-            backgroundColor: theme.colors.splashColorLayer,
-        },
-        whiteLayer: { backgroundColor: COLORS.WHITE },
-    })
+const baseStyles = StyleSheet.create({
+    containerIOS: {
+        flex: 1,
+    },
+    containerAndroid: {
+        position: "absolute",
+        top: 0,
+        left: 0,
+        right: 0,
+        bottom: 0,
+        backgroundColor: COLORS.DARK_PURPLE, //TODO: Use themed background color instead (https://github.com/vechainfoundation/veworld-mobile/issues/1335)
+    },
+    containerFadeOut: {
+        flex: 1,
+        backgroundColor: COLORS.LIGHT_GRAY, //TODO: Use themed background color instead (https://github.com/vechainfoundation/veworld-mobile/issues/1335)
+    },
+    innerContainer: {
+        flex: 1,
+    },
+    centered: {
+        flex: 1,
+        alignItems: "center",
+        justifyContent: "center",
+    },
+    colorLayer: {
+        backgroundColor: COLORS.DARK_PURPLE, //TODO: Use themed background color instead (https://github.com/vechainfoundation/veworld-mobile/issues/1335)
+    },
+    whiteLayer: { backgroundColor: COLORS.WHITE },
+})
