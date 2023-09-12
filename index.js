@@ -81,24 +81,20 @@ const Main = () => {
 
     return (
         <GestureHandlerRootView style={{ flex: 1 }}>
-            <TranslationProvider>
-                {isConnected ? (
-                    <ConnexContextProvider>
-                        <SafeAreaProvider>
-                            <NavigationProvider>
-                                <BottomSheetModalProvider>
-                                    <WalletConnectContextProvider>
-                                        <EntryPoint />
-                                    </WalletConnectContextProvider>
-                                </BottomSheetModalProvider>
-                            </NavigationProvider>
-                            <BaseToast />
-                        </SafeAreaProvider>
-                    </ConnexContextProvider>
-                ) : (
-                    <InternetDownScreen />
-                )}
-            </TranslationProvider>
+            {isConnected ? (
+                <ConnexContextProvider>
+                    <NavigationProvider>
+                        <BottomSheetModalProvider>
+                            <WalletConnectContextProvider>
+                                <EntryPoint />
+                            </WalletConnectContextProvider>
+                        </BottomSheetModalProvider>
+                    </NavigationProvider>
+                    <BaseToast />
+                </ConnexContextProvider>
+            ) : (
+                <InternetDownScreen />
+            )}
         </GestureHandlerRootView>
     )
 }
@@ -150,11 +146,15 @@ const SentryInitialedMain = () => {
 
 const ReduxWrappedMain = () => {
     return (
-        <EncryptedStorageProvider>
-            <StoreContextProvider>
-                <SentryInitialedMain />
-            </StoreContextProvider>
-        </EncryptedStorageProvider>
+        <SafeAreaProvider>
+            <TranslationProvider>
+                <EncryptedStorageProvider>
+                    <StoreContextProvider>
+                        <SentryInitialedMain />
+                    </StoreContextProvider>
+                </EncryptedStorageProvider>
+            </TranslationProvider>
+        </SafeAreaProvider>
     )
 }
 
