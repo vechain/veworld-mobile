@@ -19,7 +19,7 @@ export type Store = ToolkitStore<
 >
 
 // 1. Get the root state's type from reducers
-export type RootState = ReturnType<typeof reducer>
+export type RootState = ReturnType<ReturnType<typeof reducer>>
 
 // 2. Create a type for thunk dispatch
 export type AppThunkDispatch = ThunkDispatch<RootState, any, AnyAction>

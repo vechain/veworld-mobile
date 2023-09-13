@@ -3,6 +3,7 @@ import { MMKV } from "react-native-mmkv"
 import { debug, error, HexUtils, warn } from "~Utils"
 import { BiometricState, SecurityLevelType, WALLET_STATUS } from "~Model"
 import {
+    PreviousInstallation,
     SecurityConfig,
     SecurityUpgradeBackup,
     StorageEncryptionKeyHelper,
@@ -201,6 +202,8 @@ export const ApplicationSecurityProvider = ({
 
             if (encryptedStorageKeys.length === 0) {
                 warn("No keys found in encrypted storage, user is onboarding")
+
+                await PreviousInstallation.clearOldStorage()
 
                 OnboardingStorage.getAllKeys().forEach(key => {
                     OnboardingStorage.delete(key)
