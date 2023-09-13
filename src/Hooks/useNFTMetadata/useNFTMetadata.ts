@@ -1,5 +1,5 @@
 import axios from "axios"
-import { usePersistedCache } from "~Components/Providers/PersistedCacheProvider"
+import { usePersistedCache } from "~Components/Providers"
 import { NFT_AXIOS_TIMEOUT } from "~Constants/Constants/NFT"
 import { URIProtocol } from "~Constants/Enums/URIProtocol"
 import { NFTMetadata } from "~Model"

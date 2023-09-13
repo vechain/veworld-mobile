@@ -16,8 +16,10 @@ import reduxReset from "redux-reset"
 import { configureStore } from "@reduxjs/toolkit"
 import { Provider } from "react-redux"
 import { PersistGate } from "redux-persist/integration/react"
-import { PersistedCacheProvider } from "./PersistedCacheProvider"
-import { useApplicationSecurity } from "~Components/Providers"
+import {
+    PersistedCacheProvider,
+    useApplicationSecurity,
+} from "~Components/Providers"
 import { Reducer } from "redux"
 import { warn } from "~Utils"
 import { MMKV } from "react-native-mmkv"
