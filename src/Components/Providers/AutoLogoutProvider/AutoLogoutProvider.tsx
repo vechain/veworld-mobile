@@ -4,19 +4,9 @@ import * as BackgroundFetch from "expo-background-fetch"
 import * as TaskManager from "expo-task-manager"
 import { useAppStateTransitions } from "~Hooks"
 import { setIsAppLoading, useAppDispatch } from "~Storage/Redux"
-import GlobalEventEmitter, { LOCK_APP_EVENT } from "~Events/GlobalEventEmitter"
+import { AUTO_LOGOUT_TASK } from "./constants"
 
 type ProviderProps = { children: React.ReactNode }
-
-const BACKGROUND_FETCH_TASK = "background-fetch"
-
-// 1. Define the task by providing a name and the function that should be executed
-// Note: This needs to be called in the global scope (e.g outside of your React components)
-TaskManager.defineTask(BACKGROUND_FETCH_TASK, () => {
-    debug("Lock app event triggered")
-    GlobalEventEmitter.emit(LOCK_APP_EVENT)
-    return BackgroundFetch.BackgroundFetchResult.NewData
-})
 
 const AutoLogoutContext = React.createContext(null)
 
@@ -24,21 +14,32 @@ export const AutoLogoutProvider = ({ children }: ProviderProps) => {
     const dispatch = useAppDispatch()
     const { activeToBackground, backgroundToActive } = useAppStateTransitions()
 
+    const checkStatusAsync = async () => {
+        const status = await BackgroundFetch.getStatusAsync()
+        const isRegistered = await TaskManager.isTaskRegisteredAsync(
+            AUTO_LOGOUT_TASK,
+        )
+        debug(
+            `Auto logout status: ${
+                status === 3 ? "AVAILABLE" : "NOT_AVAIlABLE"
+            }, isRegistered: ${isRegistered}`,
+        )
+    }
+
     // Function to configure BackgroundFetch
     const configureBackgroundFetch = async () => {
-        debug("Starting lock app listener")
-        await BackgroundFetch.registerTaskAsync(BACKGROUND_FETCH_TASK, {
+        debug("Starting auto logout listener")
+        await BackgroundFetch.registerTaskAsync(AUTO_LOGOUT_TASK, {
             minimumInterval: 60 * 1, // 15 minutes
-            stopOnTerminate: false, // android only,
-            startOnBoot: true, // android only
         })
+        checkStatusAsync()
     }
 
     const stopBackgroundFetch = () => {
-        debug("Stopping lock app listener")
-        BackgroundFetch.unregisterTaskAsync(BACKGROUND_FETCH_TASK)
+        debug("Stopping auto logout listener")
+        BackgroundFetch.unregisterTaskAsync(AUTO_LOGOUT_TASK)
+        checkStatusAsync()
     }
-
     useEffect(() => {
         if (activeToBackground) {
             dispatch(setIsAppLoading(true))
@@ -47,6 +48,7 @@ export const AutoLogoutProvider = ({ children }: ProviderProps) => {
             dispatch(setIsAppLoading(false))
             stopBackgroundFetch()
         }
+        // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [dispatch, activeToBackground, backgroundToActive])
 
     return (
