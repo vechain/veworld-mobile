@@ -1,5 +1,5 @@
 import React, { memo } from "react"
-import { Image, StyleProp, ViewStyle, StyleSheet } from "react-native"
+import { StyleProp, ViewStyle, StyleSheet } from "react-native"
 import { COLORS } from "~Constants"
 import {
     BaseText,
@@ -7,6 +7,7 @@ import {
     BaseSpacer,
     BaseView,
     BaseCustomTokenIcon,
+    BaseImage,
 } from "~Components"
 import { FungibleToken } from "~Model"
 import { address } from "thor-devkit"
@@ -30,7 +31,10 @@ export const CustomTokenCard = memo(({ token, containerStyle }: Props) => {
                         },
                     ]}
                     containerStyle={styles.imageShadow}>
-                    <Image source={{ uri: token.icon }} style={styles.image} />
+                    <BaseImage
+                        source={{ uri: token.icon }}
+                        style={styles.image}
+                    />
                 </BaseCard>
             )}
             {!hasIcon && (
