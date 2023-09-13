@@ -5,13 +5,15 @@ import { NavigationContainer } from "@react-navigation/native"
 import { useTheme } from "~Hooks"
 import { loadLocale_sync, Locales, TypesafeI18n } from "~i18n"
 import { Provider } from "react-redux"
-import { reducer } from "~Storage/Redux"
+import { newStorage, NftSlice, NftSliceState, reducer } from "~Storage/Redux"
 import { GestureHandlerRootView } from "react-native-gesture-handler"
 import { configureStore } from "@reduxjs/toolkit"
 import { DEVICE_TYPE } from "~Model"
 import { RootState } from "~Storage/Redux/Types"
 import { Platform } from "react-native"
 import TestHelpers from "./helpers"
+import { PersistConfig } from "redux-persist/es/types"
+import { MMKV } from "react-native-mmkv"
 
 export { default as TestHelpers } from "./helpers"
 
@@ -60,9 +62,15 @@ export const TestTranslationProvider = ({
     return <TypesafeI18n locale={localeLoaded}>{children}</TypesafeI18n>
 }
 
+const nftPersistence: PersistConfig<NftSliceState> = {
+    key: NftSlice.name,
+    storage: newStorage(new MMKV({ id: "test-nft-storage" })),
+    whitelist: ["blackListedCollections"],
+}
+
 const getStore = (preloadedState: Partial<RootState>) =>
     configureStore({
-        reducer: reducer,
+        reducer: reducer(nftPersistence),
         middleware: getDefaultMiddleware => getDefaultMiddleware(),
         preloadedState: {
             accounts: {
