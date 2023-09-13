@@ -7,8 +7,9 @@ import Animated, {
     withTiming,
 } from "react-native-reanimated"
 import MaskedView from "@react-native-masked-view/masked-view"
-import { COLORS } from "~Constants"
+import { COLORS, ColorThemeType } from "~Constants"
 import { PlatformUtils } from "~Utils"
+import { useThemedStyles } from "~Hooks"
 
 type Props = {
     playAnimation: boolean
@@ -38,6 +39,8 @@ export const AnimatedSplashScreen = ({
     const loadingProgress = useSharedValue(0)
     const [animationDone, setAnimationDone] = useState(false)
 
+    const { styles } = useThemedStyles(baseStyles)
+
     useEffect(() => {
         const startSplashScreenAnimation = () => {
             loadingProgress.value = withTiming(100, { duration: 800 }, () => {
@@ -53,10 +56,10 @@ export const AnimatedSplashScreen = ({
     }, [playAnimation, loadingProgress, useFadeOutAnimation])
 
     const colorLayer = animationDone ? null : (
-        <View style={[StyleSheet.absoluteFill, baseStyles.colorLayer]} />
+        <View style={[StyleSheet.absoluteFill, styles.colorLayer]} />
     )
     const whiteLayer = animationDone ? null : (
-        <View style={[StyleSheet.absoluteFill, baseStyles.whiteLayer]} />
+        <View style={[StyleSheet.absoluteFill, styles.whiteLayer]} />
     )
 
     const scaleOut = useAnimatedStyle(() => {
@@ -79,8 +82,8 @@ export const AnimatedSplashScreen = ({
         <>
             {children}
             {!animationDone && (
-                <Animated.View style={[baseStyles.containerAndroid, fadeOut]}>
-                    <View style={baseStyles.centered}>
+                <Animated.View style={[styles.containerAndroid, fadeOut]}>
+                    <View style={styles.centered}>
                         <Animated.View style={scaleOut}>
                             <Image
                                 source={require("../bootsplash_logo_white.png")}
@@ -94,12 +97,12 @@ export const AnimatedSplashScreen = ({
             )}
         </>
     ) : (
-        <View style={baseStyles.containerIOS}>
+        <View style={styles.containerIOS}>
             {colorLayer}
             <MaskedView
-                style={baseStyles.innerContainer}
+                style={styles.innerContainer}
                 maskElement={
-                    <View style={baseStyles.centered}>
+                    <View style={styles.centered}>
                         <Animated.View style={scaleOut}>
                             <Image
                                 source={require("../bootsplash_logo_white.png")}
@@ -120,7 +123,7 @@ export const AnimatedSplashScreen = ({
         <>
             {children}
             {!animationDone && (
-                <Animated.View style={[baseStyles.containerFadeOut, fadeOut]} />
+                <Animated.View style={[styles.containerFadeOut, fadeOut]} />
             )}
         </>
     )
@@ -128,32 +131,33 @@ export const AnimatedSplashScreen = ({
     return useFadeOutAnimation ? animatedFadeOut : animatedScaleOut
 }
 
-const baseStyles = StyleSheet.create({
-    containerIOS: {
-        flex: 1,
-    },
-    containerAndroid: {
-        position: "absolute",
-        top: 0,
-        left: 0,
-        right: 0,
-        bottom: 0,
-        backgroundColor: COLORS.DARK_PURPLE, //TODO: Use themed background color instead (https://github.com/vechainfoundation/veworld-mobile/issues/1335)
-    },
-    containerFadeOut: {
-        flex: 1,
-        backgroundColor: COLORS.LIGHT_GRAY, //TODO: Use themed background color instead (https://github.com/vechainfoundation/veworld-mobile/issues/1335)
-    },
-    innerContainer: {
-        flex: 1,
-    },
-    centered: {
-        flex: 1,
-        alignItems: "center",
-        justifyContent: "center",
-    },
-    colorLayer: {
-        backgroundColor: COLORS.DARK_PURPLE, //TODO: Use themed background color instead (https://github.com/vechainfoundation/veworld-mobile/issues/1335)
-    },
-    whiteLayer: { backgroundColor: COLORS.WHITE },
-})
+const baseStyles = (theme: ColorThemeType) =>
+    StyleSheet.create({
+        containerIOS: {
+            flex: 1,
+        },
+        containerAndroid: {
+            position: "absolute",
+            top: 0,
+            left: 0,
+            right: 0,
+            bottom: 0,
+            backgroundColor: theme.colors.splashBackground, //TODO: Use themed background color instead (https://github.com/vechainfoundation/veworld-mobile/issues/1335)
+        },
+        containerFadeOut: {
+            flex: 1,
+            backgroundColor: theme.colors.background, //TODO: Use themed background color instead (https://github.com/vechainfoundation/veworld-mobile/issues/1335)
+        },
+        innerContainer: {
+            flex: 1,
+        },
+        centered: {
+            flex: 1,
+            alignItems: "center",
+            justifyContent: "center",
+        },
+        colorLayer: {
+            backgroundColor: theme.colors.splashColorLayer, //TODO: Use themed background color instead (https://github.com/vechainfoundation/veworld-mobile/issues/1335)
+        },
+        whiteLayer: { backgroundColor: COLORS.WHITE },
+    })
