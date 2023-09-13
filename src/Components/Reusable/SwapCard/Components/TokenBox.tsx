@@ -10,9 +10,15 @@ import {
 } from "~Storage/Redux"
 import { SCREEN_WIDTH, VET, currencySymbolMap, COLORS } from "~Constants"
 import DropShadow from "react-native-drop-shadow"
-import { BaseCard, BaseIcon, BaseText, BaseView } from "~Components/Base"
+import {
+    BaseCard,
+    BaseIcon,
+    BaseImage,
+    BaseText,
+    BaseView,
+} from "~Components/Base"
 import { useTheme } from "~Hooks"
-import { Image, ImageStyle, StyleSheet } from "react-native"
+import { StyleSheet } from "react-native"
 
 type Props = {
     provenance: SWAP_SIDE
@@ -60,9 +66,9 @@ export const TokenBox = ({
                             { backgroundColor: COLORS.WHITE },
                         ]}
                         containerStyle={baseStyles.imageShadow}>
-                        <Image
+                        <BaseImage
                             source={{ uri: token.icon }}
-                            style={baseStyles.tokenIcon as ImageStyle}
+                            style={baseStyles.tokenIcon}
                         />
                     </BaseCard>
                 ) : (

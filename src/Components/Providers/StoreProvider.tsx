@@ -1,5 +1,11 @@
 import React, { useCallback, useEffect, useRef, useState } from "react"
-import { getPersistorConfig, reducer } from "~Storage/Redux"
+import {
+    getPersistorConfig,
+    newStorage,
+    NftSlice,
+    NftSliceState,
+    reducer,
+} from "~Storage/Redux"
 import { RootState } from "~Storage/Redux/Types"
 import {
     FLUSH,
@@ -24,6 +30,7 @@ import { Reducer } from "redux"
 import { warn } from "~Utils"
 import { MMKV } from "react-native-mmkv"
 import { SplashScreen } from "../../../src/SplashScreen"
+import { PersistConfig } from "redux-persist/es/types"
 
 const StoreContext = React.createContext<undefined>(undefined)
 
@@ -37,11 +44,18 @@ const StoreContextProvider = ({ children }: StoreContextProviderProps) => {
     const [persistor, setPersistor] = useState<Persistor | undefined>()
 
     const initStore = useCallback(async (mmkv: MMKV, encryptionKey: string) => {
-        const persistConfig = await getPersistorConfig(mmkv, encryptionKey)
+        const persistConfig: PersistConfig<RootState> =
+            await getPersistorConfig(mmkv, encryptionKey)
+
+        const nftPersistence: PersistConfig<NftSliceState> = {
+            key: NftSlice.name,
+            storage: newStorage(mmkv),
+            whitelist: ["blackListedCollections"],
+        }
 
         const persistedReducer: Reducer = persistReducer<RootState>(
             persistConfig,
-            reducer,
+            reducer(nftPersistence),
         )
 
         if (store.current) {

@@ -45,36 +45,38 @@ export const AboutScreen = () => {
             subtitle: LocalizedString
             url: string
         }) => (
-            <BaseCard
-                key={link.url}
-                style={styles.itemCard}
-                onPress={() => {
-                    HapticsService.triggerImpact({ level: "Light" })
-                    Linking.openURL(link.url)
-                }}>
-                <BaseView
-                    flex={1}
-                    flexDirection="row"
-                    justifyContent="space-between"
-                    alignItems="center">
-                    <BaseView>
-                        <BaseText typographyFont="subTitleBold">
-                            {link.title}
-                        </BaseText>
-                        <BaseSpacer height={8} />
-                        <BaseText typographyFont="captionRegular">
-                            {link.subtitle}
-                        </BaseText>
+            <BaseView style={styles.itemCardContainer}>
+                <BaseCard
+                    key={link.url}
+                    style={styles.itemCard}
+                    onPress={() => {
+                        HapticsService.triggerImpact({ level: "Light" })
+                        Linking.openURL(link.url)
+                    }}>
+                    <BaseView
+                        flex={1}
+                        flexDirection="row"
+                        justifyContent="space-between"
+                        alignItems="center">
+                        <BaseView>
+                            <BaseText typographyFont="subTitleBold">
+                                {link.title}
+                            </BaseText>
+                            <BaseSpacer height={8} />
+                            <BaseText typographyFont="captionRegular">
+                                {link.subtitle}
+                            </BaseText>
+                        </BaseView>
+                        <BaseView>
+                            <BaseIcon
+                                name="chevron-right"
+                                size={25}
+                                color={theme.colors.text}
+                            />
+                        </BaseView>
                     </BaseView>
-                    <BaseView>
-                        <BaseIcon
-                            name="chevron-right"
-                            size={25}
-                            color={theme.colors.text}
-                        />
-                    </BaseView>
-                </BaseView>
-            </BaseCard>
+                </BaseCard>
+            </BaseView>
         ),
         [theme.colors.text],
     )
@@ -106,7 +108,6 @@ export const AboutScreen = () => {
                             })}
                         </BaseText>
                         <BaseSpacer height={48} />
-
                         {links.map(link => renderLinks(link))}
                     </BaseView>
                 </>
@@ -130,6 +131,9 @@ const styles = {
     },
     itemCard: {
         padding: 16,
-        marginBottom: 16,
+    },
+    itemCardContainer: {
+        width: "100%",
+        paddingVertical: 8,
     },
 }
