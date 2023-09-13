@@ -3,6 +3,7 @@ import { WalletEncryptionKey } from "~Components/Providers/EncryptedStorageProvi
 import { CryptoUtils, HexUtils } from "~Utils"
 import { Keychain } from "~Storage"
 import { SecureStoreOptions } from "expo-secure-store/src/SecureStore"
+import SaltHelper from "./SaltHelper"
 
 const WALLET_ENCRYPTION_KEY_STORAGE = "WALLET_ENCRYPTION_KEY_STORAGE"
 const WALLET_BIOMETRIC_KEY_STORAGE = "WALLET_BIOMETRIC_KEY_STORAGE"
@@ -20,7 +21,8 @@ const get = async (pinCode?: string): Promise<WalletEncryptionKey> => {
     if (!keys) throw new Error("No key found")
 
     if (pinCode) {
-        return CryptoUtils.decrypt(keys, pinCode) as WalletEncryptionKey
+        const salt = await SaltHelper.getSalt()
+        return CryptoUtils.decrypt(keys, pinCode, salt) as WalletEncryptionKey
     } else {
         return JSON.parse(keys) as WalletEncryptionKey
     }
@@ -30,7 +32,9 @@ const setWithPinCode = async (
     encryptionKeys: WalletEncryptionKey,
     pinCode: string,
 ) => {
-    const encryptedKeys = CryptoUtils.encrypt(encryptionKeys, pinCode)
+    const salt = await SaltHelper.getSalt()
+
+    const encryptedKeys = CryptoUtils.encrypt(encryptionKeys, pinCode, salt)
 
     const options: SecureStoreOptions = {
         requireAuthentication: false,
