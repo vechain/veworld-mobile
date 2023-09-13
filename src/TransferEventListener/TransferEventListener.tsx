@@ -71,9 +71,9 @@ export const TransferEventListener: React.FC = () => {
                     ),
                 )
 
-                debug(
-                    `Bloom filter: ${relevantAccounts.length} of ${visibleAccounts.length} accounts are relevant in block ${beat.number}`,
-                )
+                // debug(
+                //     `Bloom filter: ${relevantAccounts.length} of ${visibleAccounts.length} accounts are relevant in block ${beat.number}`,
+                // )
 
                 // Update the pending transactions cache
                 await updateActivities(pendingActivities)
