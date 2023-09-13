@@ -4,13 +4,17 @@ import { IWeb3Wallet } from "@walletconnect/web3wallet"
 import { SignClientTypes } from "@walletconnect/types"
 import {
     deleteSession,
-    selectAppLockStatus,
     selectSelectedAccountAddress,
     selectSessionsFlat,
     useAppDispatch,
     useAppSelector,
 } from "~Storage/Redux"
-import { showErrorToast, showInfoToast, showSuccessToast } from "~Components"
+import {
+    showErrorToast,
+    showInfoToast,
+    showSuccessToast,
+    useApplicationSecurity,
+} from "~Components"
 import { useI18nContext } from "~i18n"
 import { getSdkError } from "@walletconnect/utils"
 import { Routes } from "~Navigation"
@@ -50,7 +54,7 @@ const WalletConnectContextProvider = ({
     const [web3Wallet, setWeb3wallet] = useState<IWeb3Wallet>()
     const nav = useNavigation()
     const activeSessionsFlat = useAppSelector(selectSessionsFlat)
-    const walletStatus = useAppSelector(selectAppLockStatus)
+    const { walletStatus } = useApplicationSecurity()
     const { onSessionRequest } = useWcRequest(web3Wallet)
     const [linkingUrls, setLinkingUrls] = useState<string[]>([])
 

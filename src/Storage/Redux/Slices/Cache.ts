@@ -1,5 +1,5 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit"
-import { WALLET_STATUS, NewLedgerDevice } from "~Model"
+import { NewLedgerDevice } from "~Model"
 
 /**
  * A state which is not persisted to storage usually used to share data between screens
@@ -11,7 +11,6 @@ import { WALLET_STATUS, NewLedgerDevice } from "~Model"
 export interface CacheState {
     mnemonic?: string
     newLedgerDevice?: NewLedgerDevice
-    appLockStatus: WALLET_STATUS
     isAppLoading: boolean
     isTokensOwnedLoading: boolean
 }
@@ -19,7 +18,6 @@ export interface CacheState {
 const initialState: CacheState = {
     mnemonic: undefined,
     newLedgerDevice: undefined,
-    appLockStatus: WALLET_STATUS.LOCKED,
     isAppLoading: false,
     isTokensOwnedLoading: false,
 }
@@ -37,9 +35,6 @@ export const CacheSlice = createSlice({
         ) => {
             state.newLedgerDevice = action.payload
         },
-        setAppLockStatus: (state, action: PayloadAction<WALLET_STATUS>) => {
-            state.appLockStatus = action.payload
-        },
         setIsAppLoading: (state, action: PayloadAction<boolean>) => {
             state.isAppLoading = action.payload
         },
@@ -53,7 +48,6 @@ export const CacheSlice = createSlice({
 export const {
     setMnemonic,
     setNewLedgerDevice,
-    setAppLockStatus,
     setIsAppLoading,
     setIsTokensOwnedLoading,
     resetCacheState,
