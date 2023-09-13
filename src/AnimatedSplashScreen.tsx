@@ -49,9 +49,13 @@ export const AnimatedSplashScreen = ({
         }
 
         if (playAnimation) {
-            useFadeOutAnimation
-                ? startSplashScreenAnimation()
-                : setTimeout(() => startSplashScreenAnimation(), 200)
+            if (useFadeOutAnimation) {
+                PlatformUtils.isIOS()
+                    ? startSplashScreenAnimation()
+                    : setTimeout(() => startSplashScreenAnimation(), 100)
+            } else {
+                setTimeout(() => startSplashScreenAnimation(), 300)
+            }
         }
     }, [playAnimation, loadingProgress, useFadeOutAnimation])
 
