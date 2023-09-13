@@ -286,11 +286,12 @@ export const ApplicationSecurityProvider = ({
     )
 
     const lockApplication = useCallback(() => {
+        if (walletStatus !== WALLET_STATUS.UNLOCKED) return
         setWalletStatus(WALLET_STATUS.LOCKED)
         setReduxStorage(undefined)
         setImageStorage(undefined)
         setMetadataStorage(undefined)
-    }, [])
+    }, [walletStatus])
 
     /**
      * Initialise the app
@@ -403,7 +404,7 @@ export const useApplicationSecurity = () => {
     return context
 }
 
-export const useWalletStatus = () => {
+export const useWalletStatus = (): WALLET_STATUS => {
     const { walletStatus } = useApplicationSecurity()
 
     return walletStatus
