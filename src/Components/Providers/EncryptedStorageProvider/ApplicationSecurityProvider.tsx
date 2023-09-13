@@ -15,17 +15,6 @@ import { StandaloneLockScreen } from "~Screens"
 import RNBootSplash from "react-native-bootsplash"
 import { AnimatedSplashScreen } from "../../../AnimatedSplashScreen"
 import GlobalEventEmitter, { LOCK_APP_EVENT } from "~Events/GlobalEventEmitter"
-import * as BackgroundFetch from "expo-background-fetch"
-import * as TaskManager from "expo-task-manager"
-import { AUTO_LOGOUT_TASK } from "~Components/Providers/AutoLogoutProvider"
-
-// 1. Define the task by providing a name and the function that should be executed
-// Note: This needs to be called in the global scope (e.g outside of your React components)
-TaskManager.defineTask(AUTO_LOGOUT_TASK, () => {
-    debug("Triggering lock app event")
-    GlobalEventEmitter.emit(LOCK_APP_EVENT)
-    return BackgroundFetch.BackgroundFetchResult.NewData
-})
 
 const UserEncryptedStorage = new MMKV({
     id: "user_encrypted_storage",
