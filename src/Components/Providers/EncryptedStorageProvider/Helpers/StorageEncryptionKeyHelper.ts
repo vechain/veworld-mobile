@@ -2,6 +2,7 @@ import { StorageEncryptionKeys } from "~Components/Providers/EncryptedStoragePro
 import { Keychain } from "~Storage"
 import { CryptoUtils, HexUtils } from "~Utils"
 import { SecureStoreOptions } from "expo-secure-store/src/SecureStore"
+import SaltHelper from "./SaltHelper"
 
 const PIN_CODE_STORAGE = "ENCRYPTION_KEY_STORAGE"
 const BIOMETRIC_KEY_STORAGE = "BIOMETRIC_KEY_STORAGE"
@@ -17,7 +18,8 @@ const get = async (pinCode?: string): Promise<StorageEncryptionKeys> => {
     if (!keys) throw new Error("No key found")
 
     if (pinCode) {
-        return CryptoUtils.decrypt(keys, pinCode) as StorageEncryptionKeys
+        const salt = await SaltHelper.getSalt()
+        return CryptoUtils.decrypt(keys, pinCode, salt) as StorageEncryptionKeys
     } else {
         return JSON.parse(keys) as StorageEncryptionKeys
     }
@@ -27,7 +29,9 @@ const setWithPinCode = async (
     encryptionKeys: StorageEncryptionKeys,
     pinCode: string,
 ) => {
-    const encryptedKeys = CryptoUtils.encrypt(encryptionKeys, pinCode)
+    const salt = await SaltHelper.getSalt()
+
+    const encryptedKeys = CryptoUtils.encrypt(encryptionKeys, pinCode, salt)
 
     const options: SecureStoreOptions = {
         requireAuthentication: false,
@@ -73,9 +77,12 @@ const validatePinCode = async (pinCode: string): Promise<boolean> => {
 
         if (!keys) throw new Error("No key found")
 
+        const salt = await SaltHelper.getSalt()
+
         const decryptedKeys = CryptoUtils.decrypt(
             keys,
             pinCode,
+            salt,
         ) as StorageEncryptionKeys
 
         return !!decryptedKeys && !!decryptedKeys.redux

@@ -4,8 +4,9 @@ import { NFTMediaType, NFTMedia as Media } from "~Model"
 import { error } from "~Utils"
 import { NFTVideo } from "../NFTVideo"
 import { StyleSheet } from "react-native"
-import { BaseImage, BaseView } from "~Components/Base"
+import { BaseView } from "~Components/Base"
 import SkeletonContent from "react-native-skeleton-content-nonexpo"
+import { NFTImage } from "../NFTImage"
 
 type Props = {
     uri?: string
@@ -64,7 +65,7 @@ export const NFTMedia = memo((props: Props) => {
             {tokenMedia?.mediaType === NFTMediaType.VIDEO ? (
                 <NFTVideo uri={tokenMedia.image} style={[styles]} />
             ) : (
-                <BaseImage
+                <NFTImage
                     {...props}
                     uri={tokenMedia?.image}
                     onLoadEnd={onLoadEnd}

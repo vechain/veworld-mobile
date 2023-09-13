@@ -9,6 +9,7 @@ import {
     StorageEncryptionKeyHelper,
     WalletEncryptionKeyHelper,
 } from "~Components"
+import SaltHelper from "./SaltHelper"
 
 const BACKUP_KEY_STORAGE = "BACKUP_KEY_STORAGE"
 
@@ -18,7 +19,8 @@ type BackupKeys = {
 }
 
 const _store = async (keys: BackupKeys, pinCode: string) => {
-    const encryptedKeys = CryptoUtils.encrypt(keys, pinCode)
+    const salt = await SaltHelper.getSalt()
+    const encryptedKeys = CryptoUtils.encrypt(keys, pinCode, salt)
 
     const options: SecureStoreOptions = {
         requireAuthentication: false,
@@ -44,7 +46,9 @@ const get = async (pinCode: string): Promise<BackupKeys | null> => {
         return null
     }
 
-    return CryptoUtils.decrypt(keys, pinCode) as BackupKeys
+    const salt = await SaltHelper.getSalt()
+
+    return CryptoUtils.decrypt(keys, pinCode, salt) as BackupKeys
 }
 
 const clear = async () => {
