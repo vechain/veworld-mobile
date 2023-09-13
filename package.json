@@ -88,6 +88,7 @@
     "eth-rpc-errors": "^4.0.3",
     "expo": "^47.0.9",
     "expo-av": "~13.0.3",
+    "expo-background-fetch": "~11.0.1",
     "expo-barcode-scanner": "~12.1.0",
     "expo-camera": "~13.1.0",
     "expo-clipboard": "~4.0.1",
