@@ -13,6 +13,7 @@ import { useBiometrics } from "~Hooks"
 import { StandaloneLockScreen } from "~Screens"
 import RNBootSplash from "react-native-bootsplash"
 import { AnimatedSplashScreen } from "../../../AnimatedSplashScreen"
+import GlobalEventEmitter, { LOCK_APP_EVENT } from "~Events/GlobalEventEmitter"
 
 const UserEncryptedStorage = new MMKV({
     id: "user_encrypted_storage",
@@ -302,6 +303,13 @@ export const ApplicationSecurityProvider = ({
                 })
         }
     }, [walletStatus, biometrics, intialiseApp])
+
+    useEffect(() => {
+        GlobalEventEmitter.on(LOCK_APP_EVENT, lockApplication)
+        return () => {
+            GlobalEventEmitter.removeListener(LOCK_APP_EVENT, lockApplication)
+        }
+    }, [lockApplication])
 
     const value: IApplicationSecurity | undefined = useMemo(() => {
         if (!reduxStorage || walletStatus === WALLET_STATUS.NOT_INITIALISED)

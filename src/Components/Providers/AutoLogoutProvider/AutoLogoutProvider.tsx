@@ -1,43 +1,51 @@
-import React, { useEffect, useState } from "react"
+import React, { useEffect } from "react"
+import { debug } from "~Utils"
+import * as BackgroundFetch from "expo-background-fetch"
+import * as TaskManager from "expo-task-manager"
 import { useAppStateTransitions } from "~Hooks"
 import { setIsAppLoading, useAppDispatch } from "~Storage/Redux"
-import { debug } from "~Utils"
+import GlobalEventEmitter, { LOCK_APP_EVENT } from "~Events/GlobalEventEmitter"
 
 type ProviderProps = { children: React.ReactNode }
+
+const BACKGROUND_FETCH_TASK = "background-fetch"
+
+// 1. Define the task by providing a name and the function that should be executed
+// Note: This needs to be called in the global scope (e.g outside of your React components)
+TaskManager.defineTask(BACKGROUND_FETCH_TASK, () => {
+    GlobalEventEmitter.emit(LOCK_APP_EVENT)
+    return BackgroundFetch.BackgroundFetchResult.NewData
+})
 
 const AutoLogoutContext = React.createContext(null)
 
 export const AutoLogoutProvider = ({ children }: ProviderProps) => {
     const dispatch = useAppDispatch()
     const { activeToBackground, backgroundToActive } = useAppStateTransitions()
-    const [inactivityStartTime, setInactivityStartTime] = useState<number>(0)
+
+    // Function to configure BackgroundFetch
+    const configureBackgroundFetch = async () => {
+        await BackgroundFetch.registerTaskAsync(BACKGROUND_FETCH_TASK, {
+            minimumInterval: 60 * 15, // 15 minutes
+            stopOnTerminate: false, // android only,
+            startOnBoot: true, // android only
+        })
+    }
+
+    const stopBackgroundFetch = () => {
+        debug("Stopping lock app listener")
+        BackgroundFetch.unregisterTaskAsync(BACKGROUND_FETCH_TASK)
+    }
 
     useEffect(() => {
-        if (inactivityStartTime === 0 && activeToBackground) {
-            debug("App went to background")
+        if (activeToBackground) {
             dispatch(setIsAppLoading(true))
-            setInactivityStartTime(Date.now())
-        } else if (inactivityStartTime > 0 && backgroundToActive) {
-            debug("App is now active")
-            /**
-             * NOTE: I had to comment this out because it was causing the app to crash
-             * since the library we were using to restart the app (react-native-restart) was conflicting with reanimated and the app crashed
-             * I also tried other apps but nothing worked
-             * so I commented it out for now
-             * known issue: https://github.com/avishayil/react-native-restart/issues/239
-             */
-            // Check if the app was closed for more than 5 minutes
-            // const now = Date.now()
-            // const fiveMinutes = 5 * 60 * 1000
-            // if (now - inactivityStartTime > fiveMinutes) {
-            //     info("App was inactive for more than 5 minutes. Restarting...")
-            //     //restart in some way
-            // } else {
+            configureBackgroundFetch()
+        } else if (backgroundToActive) {
             dispatch(setIsAppLoading(false))
-            setInactivityStartTime(0)
-            // }
+            stopBackgroundFetch()
         }
-    }, [dispatch, activeToBackground, backgroundToActive, inactivityStartTime])
+    }, [dispatch, activeToBackground, backgroundToActive])
 
     return (
         <AutoLogoutContext.Provider value={null}>
