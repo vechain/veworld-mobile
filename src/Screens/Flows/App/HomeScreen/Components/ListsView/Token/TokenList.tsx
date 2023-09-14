@@ -51,8 +51,8 @@ export const TokenList = memo(
 
         const [selectedToken, setSelectedToken] =
             useState<FungibleTokenWithBalance>()
-        const [tokenToRemove, setTokenToRemove] =
-            useState<FungibleTokenWithBalance>()
+
+        const tokenToRemove = useRef<FungibleTokenWithBalance | null>(null)
 
         const {
             ref: removeCustomTokenBottomSheetRef,
@@ -65,15 +65,15 @@ export const TokenList = memo(
         const { styles } = useThemedStyles(baseStyles)
 
         const onConfirmRemoveToken = useCallback(() => {
-            if (tokenToRemove) {
+            if (tokenToRemove.current) {
                 dispatch(
                     removeTokenBalance({
                         network: network.type,
                         accountAddress: selectedAccount.address,
-                        tokenAddress: tokenToRemove.address,
+                        tokenAddress: tokenToRemove.current.address,
                     }),
                 )
-                swipeableItemRefs?.current.delete(tokenToRemove.address)
+                swipeableItemRefs?.current.delete(tokenToRemove.current.address)
                 closeRemoveCustomTokenBottomSheet()
             }
         }, [
@@ -140,11 +140,13 @@ export const TokenList = memo(
                         itemKey={item.address}
                         swipeableItemRefs={swipeableItemRefs}
                         handleTrashIconPress={handleTrashIconPress(item)}
-                        setSelectedItem={setTokenToRemove}
+                        setSelectedItem={() => (tokenToRemove.current = item)}
                         swipeEnabled={!isEdit}
                         onPress={onTokenPress}
                         isDragMode={isEdit}
-                        isOpen={tokenToRemove === item}>
+                        isOpen={
+                            tokenToRemove.current?.address === item.address
+                        }>
                         <AnimatedTokenCard
                             item={item}
                             isActive={isActive}
