@@ -1,43 +1,46 @@
-import React, { useEffect, useState } from "react"
-import { useAppStateTransitions } from "~Hooks"
-import { setIsAppLoading, useAppDispatch } from "~Storage/Redux"
+import React, { useEffect } from "react"
 import { debug } from "~Utils"
+import * as BackgroundFetch from "expo-background-fetch"
+import * as TaskManager from "expo-task-manager"
+import GlobalEventEmitter, { LOCK_APP_EVENT } from "~Events/GlobalEventEmitter"
 
 type ProviderProps = { children: React.ReactNode }
+
+const AUTO_LOGOUT_TASK = "AUTO_LOGOUT_TASK"
+
+// Register auto logout task.
+TaskManager.defineTask(AUTO_LOGOUT_TASK, () => {
+    debug("Triggering lock app event")
+    GlobalEventEmitter.emit(LOCK_APP_EVENT)
+    return BackgroundFetch.BackgroundFetchResult.NewData
+})
 
 const AutoLogoutContext = React.createContext(null)
 
 export const AutoLogoutProvider = ({ children }: ProviderProps) => {
-    const dispatch = useAppDispatch()
-    const { activeToBackground, backgroundToActive } = useAppStateTransitions()
-    const [inactivityStartTime, setInactivityStartTime] = useState<number>(0)
+    // Function to configure BackgroundFetch
+    const configureBackgroundFetch = async () => {
+        await stopBackgroundFetch()
+        debug("Starting auto logout listener")
+        await BackgroundFetch.registerTaskAsync(AUTO_LOGOUT_TASK, {})
+    }
 
-    useEffect(() => {
-        if (inactivityStartTime === 0 && activeToBackground) {
-            debug("App went to background")
-            dispatch(setIsAppLoading(true))
-            setInactivityStartTime(Date.now())
-        } else if (inactivityStartTime > 0 && backgroundToActive) {
-            debug("App is now active")
-            /**
-             * NOTE: I had to comment this out because it was causing the app to crash
-             * since the library we were using to restart the app (react-native-restart) was conflicting with reanimated and the app crashed
-             * I also tried other apps but nothing worked
-             * so I commented it out for now
-             * known issue: https://github.com/avishayil/react-native-restart/issues/239
-             */
-            // Check if the app was closed for more than 5 minutes
-            // const now = Date.now()
-            // const fiveMinutes = 5 * 60 * 1000
-            // if (now - inactivityStartTime > fiveMinutes) {
-            //     info("App was inactive for more than 5 minutes. Restarting...")
-            //     //restart in some way
-            // } else {
-            dispatch(setIsAppLoading(false))
-            setInactivityStartTime(0)
-            // }
+    const stopBackgroundFetch = async () => {
+        const isRegistered = await TaskManager.isTaskRegisteredAsync(
+            AUTO_LOGOUT_TASK,
+        )
+        if (isRegistered) {
+            debug("Stopping auto logout listener")
+            await BackgroundFetch.unregisterTaskAsync(AUTO_LOGOUT_TASK)
         }
-    }, [dispatch, activeToBackground, backgroundToActive, inactivityStartTime])
+    }
+    useEffect(() => {
+        configureBackgroundFetch()
+        return () => {
+            stopBackgroundFetch()
+        }
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [])
 
     return (
         <AutoLogoutContext.Provider value={null}>

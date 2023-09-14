@@ -23,6 +23,7 @@
             "~i18n/*": ["./src/i18n/*"],
             "~Assets/*": ["./src/Assets/*"],
             "~Networking/*": ["./src/Networking/*"],
+            "~Events/*": ["./src/Events/*"],
             "~Test": ["./src/Test/index.tsx"]
         }
     }

@@ -22,6 +22,7 @@ module.exports = {
                     "~Selectors": "./src/Selectors",
                     "~Test": "./src/Test/index.tsx",
                     "~Networking": "./src/Networking",
+                    "~Events": "./src/Events",
                     http: "stream-http",
                     https: "https-browserify",
                     crypto: "react-native-quick-crypto",
