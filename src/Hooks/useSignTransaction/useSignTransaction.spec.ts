@@ -5,10 +5,11 @@ import { DelegationType } from "~Model/Delegation"
 import axios from "axios"
 import { Routes } from "~Navigation"
 import { Transaction } from "thor-devkit"
+import { WalletEncryptionKeyHelper } from "~Components"
 
 jest.mock("axios")
 
-const { vetTransaction1, device1, account1D1 } = TestHelpers.data
+const { vetTransaction1, device1, account1D1, wallet1 } = TestHelpers.data
 
 jest.mock("~Components/Base/BaseToast/BaseToast", () => ({
     ...jest.requireActual("~Components/Base/BaseToast/BaseToast"),
@@ -24,9 +25,26 @@ const defaultProps = {
     initialRoute: Routes.HOME,
     selectedDelegationOption: DelegationType.NONE,
 }
+
+jest.mock("~Components/Providers/EncryptedStorageProvider/Helpers", () => ({
+    ...jest.requireActual(
+        "~Components/Providers/EncryptedStorageProvider/Helpers",
+    ),
+    WalletEncryptionKeyHelper: {
+        get: jest.fn(),
+        set: jest.fn(),
+        decryptWallet: jest.fn(),
+        encryptWallet: jest.fn(),
+        init: jest.fn(),
+    },
+}))
+
 describe("useSignTransaction", () => {
     beforeEach(() => {
         jest.clearAllMocks()
+        ;(
+            WalletEncryptionKeyHelper.decryptWallet as jest.Mock
+        ).mockResolvedValue(wallet1)
     })
 
     it("should render correctly", async () => {
@@ -43,6 +61,12 @@ describe("useSignTransaction", () => {
     })
 
     it("signAndSendTransaction - throws error (not mocked decryptWallet)", async () => {
+        ;(
+            WalletEncryptionKeyHelper.decryptWallet as jest.Mock
+        ).mockImplementation(() => {
+            throw new Error("Error")
+        })
+
         const { result } = renderHook(() => useSignTransaction(defaultProps), {
             wrapper: TestWrapper,
         })

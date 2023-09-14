@@ -1,10 +1,9 @@
 import { useCallback, useState } from "react"
-import { NewLedgerDevice, WALLET_STATUS } from "~Model"
+import { NewLedgerDevice } from "~Model"
 import { useDeviceUtils } from "../useDeviceUtils"
 import {
     addDeviceAndAccounts,
     addLedgerDeviceAndAccounts,
-    setAppLockStatus,
     setMnemonic,
     setNewLedgerDevice,
     setSelectedAccount,
@@ -67,8 +66,6 @@ export const useCreateWallet = () => {
                     }),
                 )
 
-                dispatch(setAppLockStatus(WALLET_STATUS.UNLOCKED))
-
                 if (!selectedAccount)
                     dispatch(
                         setSelectedAccount({ address: newAccount.address }),
@@ -106,8 +103,6 @@ export const useCreateWallet = () => {
                 ).unwrap()
 
                 dispatch(setNewLedgerDevice(undefined))
-
-                dispatch(setAppLockStatus(WALLET_STATUS.UNLOCKED))
 
                 if (!selectedAccount)
                     dispatch(

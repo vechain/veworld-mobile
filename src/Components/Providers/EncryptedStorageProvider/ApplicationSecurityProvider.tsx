@@ -32,7 +32,7 @@ const MetadataStorage = new MMKV({
     id: "metadata_storage",
 })
 
-type EncryptedStorage = {
+export type EncryptedStorage = {
     mmkv: MMKV
     encryptionKey: string
 }
