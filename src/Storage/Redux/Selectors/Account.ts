@@ -61,6 +61,8 @@ export const selectSelectedAccountOrNull = createSelector(
         if (!selectedAccount && accounts.length > 0) {
             return accounts[0]
         }
+
+        return selectedAccount
     },
 )
 
