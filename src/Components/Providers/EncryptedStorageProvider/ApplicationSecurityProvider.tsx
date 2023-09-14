@@ -11,7 +11,7 @@ import {
 } from "~Components/Providers"
 import Onboarding from "~Components/Providers/EncryptedStorageProvider/Helpers/Onboarding"
 import { useBiometrics } from "~Hooks"
-import { StandaloneLockScreen } from "~Screens"
+import { StandaloneAppBlockedScreen, StandaloneLockScreen } from "~Screens"
 import RNBootSplash from "react-native-bootsplash"
 import { AnimatedSplashScreen } from "../../../AnimatedSplashScreen"
 import GlobalEventEmitter, { LOCK_APP_EVENT } from "~Events/GlobalEventEmitter"
@@ -358,6 +358,7 @@ export const ApplicationSecurityProvider = ({
             // App is initialising
             return <></>
         case WALLET_STATUS.FIRST_TIME_ACCESS:
+        case WALLET_STATUS.UNLOCKED:
             if (!value?.redux) return <></>
 
             //App is onboarding and we're using temporary storage
@@ -367,11 +368,11 @@ export const ApplicationSecurityProvider = ({
                 </ApplicationSecurityContext.Provider>
             )
         case WALLET_STATUS.LOCKED:
-            if (securityType !== SecurityLevelType.SECRET) return <></>
-
-            if (userDisabledBiometrics) return <></>
-
             RNBootSplash.hide({ fade: true, duration: 500 })
+
+            if (userDisabledBiometrics) return <StandaloneAppBlockedScreen />
+
+            if (securityType !== SecurityLevelType.SECRET) return <></>
 
             return (
                 <AnimatedSplashScreen
@@ -379,15 +380,6 @@ export const ApplicationSecurityProvider = ({
                     useFadeOutAnimation={false}>
                     <StandaloneLockScreen onPinInserted={unlock} />
                 </AnimatedSplashScreen>
-            )
-        case WALLET_STATUS.UNLOCKED:
-            if (!value?.redux) return <></>
-
-            //App is unlocked and the storage is ready
-            return (
-                <ApplicationSecurityContext.Provider value={value}>
-                    {children}
-                </ApplicationSecurityContext.Provider>
             )
     }
 }
