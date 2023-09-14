@@ -143,7 +143,7 @@ const en: BaseTranslation = {
     BD_CREATE_WALLET_TYPE_USER_ACCEPTS: "Creating the wallet the user accepts",
     BD_NFT_DESC_PLACEHOLDER: "Random NFT collection description placeholder in case the NFT collection doesn't have one",
     BD_COLLECTION: "Collection",
-    BD_APP_BLOCKED: "A critical operation has failed and you need to reset the app",
+    BD_APP_BLOCKED: "To continue using this app securely and effectively, please enable the biometric authentication feature in your device's settings.",
 
     // TITLES
     TITLE_WELCOME_TO: "Welcome to ",
