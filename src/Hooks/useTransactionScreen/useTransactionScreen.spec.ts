@@ -9,6 +9,7 @@ import axios from "axios"
 import { waitFor } from "@testing-library/react-native"
 import { Transaction } from "thor-devkit"
 import { selectDevice, selectSelectedAccount } from "~Storage/Redux"
+import { WalletEncryptionKeyHelper } from "~Components"
 
 const {
     vetTransaction1,
@@ -16,6 +17,7 @@ const {
     device1,
     firstLedgerAccount,
     ledgerDevice,
+    wallet1,
 } = TestHelpers.data
 
 const initialRoute = Routes.HOME
@@ -34,6 +36,20 @@ jest.mock("~Storage/Redux", () => ({
     selectDevice: jest.fn(),
     getDefaultDelegationUrl: jest.fn().mockReturnValue("https://example.com"),
 }))
+
+jest.mock("~Components/Providers/EncryptedStorageProvider/Helpers", () => ({
+    ...jest.requireActual(
+        "~Components/Providers/EncryptedStorageProvider/Helpers",
+    ),
+    WalletEncryptionKeyHelper: {
+        get: jest.fn(),
+        set: jest.fn(),
+        decryptWallet: jest.fn(),
+        encryptWallet: jest.fn(),
+        init: jest.fn(),
+    },
+}))
+
 jest.mock("@react-navigation/native", () => ({
     ...jest.requireActual("@react-navigation/native"),
     useNavigation: () => ({
@@ -81,6 +97,9 @@ describe("useTransactionScreen", () => {
             device: device1,
         })
         mockDevice(device1)
+        ;(
+            WalletEncryptionKeyHelper.decryptWallet as jest.Mock
+        ).mockResolvedValue(wallet1)
     })
 
     it("hook should render", async () => {
