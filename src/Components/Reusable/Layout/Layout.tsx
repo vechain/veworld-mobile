@@ -40,6 +40,7 @@ type Props = {
     noStaticBottomPadding?: boolean
     scrollViewRef?: Ref<ScrollView>
     onGoBack?: () => void
+    hasSafeArea?: boolean
 }
 
 export const Layout = ({
@@ -60,6 +61,7 @@ export const Layout = ({
     noStaticBottomPadding = false, // this is often used with components with FadeoutButton (that have padding to show the fade effect)
     scrollViewRef,
     onGoBack,
+    hasSafeArea = true,
 }: Props) => {
     const theme = useTheme()
     const { androidOnlyTabBarBottomMargin, tabBarBottomMargin } =
@@ -81,11 +83,8 @@ export const Layout = ({
         [title],
     )
 
-    return (
-        <BaseSafeArea
-            grow={1}
-            testID={safeAreaTestID}
-            onTouchStart={onTouchBody}>
+    const renderContent = useMemo(
+        () => (
             <BaseView h={100}>
                 <BaseView>
                     {!noBackButton && (
@@ -154,8 +153,41 @@ export const Layout = ({
                     </BaseView>
                 )}
             </BaseView>
-        </BaseSafeArea>
+        ),
+        [
+            STATIC_BOTTOM_PADDING,
+            Title,
+            _iosOnlyTabBarBottomMargin,
+            androidOnlyTabBarBottomMargin,
+            body,
+            fixedBody,
+            fixedHeader,
+            footer,
+            isScrollEnabled,
+            noBackButton,
+            noMargin,
+            onGoBack,
+            refreshControl,
+            scrollViewRef,
+            scrollViewTestID,
+            showSelectedNetwork,
+            theme.colors.card,
+            title,
+        ],
     )
+
+    if (hasSafeArea) {
+        return (
+            <BaseSafeArea
+                grow={1}
+                testID={safeAreaTestID}
+                onTouchStart={onTouchBody}>
+                {renderContent}
+            </BaseSafeArea>
+        )
+    } else {
+        return <>{renderContent}</>
+    }
 }
 
 const styles = StyleSheet.create({

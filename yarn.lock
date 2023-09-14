@@ -3934,12 +3934,12 @@
     "@urql/core" ">=2.3.1"
     wonka "^4.0.14"
 
-"@vechain/connex-driver@^2.0.12":
-  version "2.1.0"
-  resolved "https://registry.yarnpkg.com/@vechain/connex-driver/-/connex-driver-2.1.0.tgz#bb4587285ad48369a6501394610c416bb9aecd2e"
-  integrity sha512-wFTakrFwsjJPq/9e+USGl5QKnoy6+FeZG4h+/wEITw5IaIAzujtTR8m7wqJFdto/gLZbP8j3puR4ZU9LrdfpkA==
+"@vechain/connex-driver@2.0.12":
+  version "2.0.12"
+  resolved "https://registry.yarnpkg.com/@vechain/connex-driver/-/connex-driver-2.0.12.tgz#70a4adfaf9860db1b3f1fc9074a6553ea344ffda"
+  integrity sha512-KdlpCIuFPqnOSlJGc2tnqZDC62WypSjFFj0m/wH6bkOSPKugmy5wapQfhoMs0iR8EvO8xpXzg1jDcVapN7vgXQ==
   dependencies:
-    "@vechain/connex-types" "^2.1.0"
+    "@vechain/connex-types" "^2.0.12"
     axios "^0.21.1"
     bignumber.js "^7.2.1"
     isomorphic-ws "^4.0.1"
@@ -3947,17 +3947,17 @@
     thor-devkit "^2.0.5"
     ws "^7.1.0"
 
-"@vechain/connex-framework@^2.0.12":
-  version "2.1.0"
-  resolved "https://registry.yarnpkg.com/@vechain/connex-framework/-/connex-framework-2.1.0.tgz#4a838a5a15ed58687cb04ba5749c36b244958b9b"
-  integrity sha512-FaQgkNKPHY9PqAV5YTMb6Mpbun97jprn0rW1b198XKF2rj3U8xGV3UWdOM8+dCOCL9hBGfYIt2RzjBtAMb95xg==
+"@vechain/connex-framework@2.0.12":
+  version "2.0.12"
+  resolved "https://registry.yarnpkg.com/@vechain/connex-framework/-/connex-framework-2.0.12.tgz#3f759b2806dd396f6e5d29a5eb75d72804bb8eff"
+  integrity sha512-IwPBPHv9utWqUQc5nc2uEkQqMls6Gc1qX/4tVM1VNsc0r/MQZBZGyxJLFSIpcGumEploesZO0s3x7+zRicn7og==
   dependencies:
-    "@vechain/connex-types" "^2.1.0"
+    "@vechain/connex-types" "^2.0.12"
     bignumber.js "^7.2.1"
     thor-devkit "^2.0.5"
     validator-ts "^0.9.1"
 
-"@vechain/connex-types@^2.0.12", "@vechain/connex-types@^2.1.0":
+"@vechain/connex-types@^2.0.12":
   version "2.1.0"
   resolved "https://registry.yarnpkg.com/@vechain/connex-types/-/connex-types-2.1.0.tgz#5a4d97554f659532a0ec00a09e5cf25244c55c8a"
   integrity sha512-8NtOHAO+idy5llrYEmuArWTkwYbwG/FEWqkRScz1f6QuaGvkkj+93IuAnp9E89Pi+kV3t2DKBTaF6mpPjjTmHg==
@@ -3978,7 +3978,7 @@
     uuid "2.0.1"
     xmlhttprequest "1.8.0"
 
-"@vechain/picasso@^2.1.1":
+"@vechain/picasso@2.1.1":
   version "2.1.1"
   resolved "https://registry.yarnpkg.com/@vechain/picasso/-/picasso-2.1.1.tgz#a0adc594a3ce5047c606e7745566a65f341671fb"
   integrity sha512-SOH35A4jxmxQeIn+Q6qA2X+ivRKDE+9n/gvLgCQnacsJrrwh/tSinUbhj9KnfU4ixm+g1aRgTm0IYuz1/uS+uw==

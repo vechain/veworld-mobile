@@ -282,6 +282,13 @@ const mockPendingRequest = (params: unknown): PendingRequestTypes.Struct => {
             },
             chainId: "vechain",
         },
+        verifyContext: {
+            verified: {
+                origin: "https://vechain-demo-dapp.netlify.app",
+                validation: "INVALID",
+                verifyUrl: "",
+            },
+        },
     }
 }
 
@@ -308,6 +315,13 @@ describe("getSignCertOptions", () => {
                     params: [{}],
                 },
                 chainId: "vechain",
+            },
+            verifyContext: {
+                verified: {
+                    origin: "https://vechain-demo-dapp.netlify.app",
+                    validation: "INVALID",
+                    verifyUrl: "",
+                },
             },
         }
 
