@@ -2,8 +2,8 @@ import { Wallet } from "~Model"
 import { WalletEncryptionKey } from "~Components/Providers/EncryptedStorageProvider/Model"
 import { CryptoUtils, HexUtils } from "~Utils"
 import { Keychain } from "~Storage"
-import { SecureStoreOptions } from "expo-secure-store/src/SecureStore"
 import SaltHelper from "./SaltHelper"
+import { ACCESS_CONTROL, Options } from "react-native-keychain"
 
 const WALLET_ENCRYPTION_KEY_STORAGE = "WALLET_ENCRYPTION_KEY_STORAGE"
 const WALLET_BIOMETRIC_KEY_STORAGE = "WALLET_BIOMETRIC_KEY_STORAGE"
@@ -14,7 +14,9 @@ const get = async (pinCode?: string): Promise<WalletEncryptionKey> => {
             ? WALLET_ENCRYPTION_KEY_STORAGE
             : WALLET_BIOMETRIC_KEY_STORAGE,
         options: {
-            requireAuthentication: pinCode === undefined,
+            accessControl: pinCode
+                ? undefined
+                : ACCESS_CONTROL.BIOMETRY_ANY_OR_DEVICE_PASSCODE,
         },
     })
 
@@ -36,13 +38,8 @@ const setWithPinCode = async (
 
     const encryptedKeys = CryptoUtils.encrypt(encryptionKeys, pinCode, salt)
 
-    const options: SecureStoreOptions = {
-        requireAuthentication: false,
-    }
-
     await Keychain.set({
         key: WALLET_ENCRYPTION_KEY_STORAGE,
-        options,
         value: encryptedKeys,
     })
 }
@@ -50,8 +47,8 @@ const setWithPinCode = async (
 const setWithBiometric = async (encryptionKeys: WalletEncryptionKey) => {
     const encryptedKeys = JSON.stringify(encryptionKeys)
 
-    const options: SecureStoreOptions = {
-        requireAuthentication: true,
+    const options: Options = {
+        accessControl: ACCESS_CONTROL.BIOMETRY_ANY_OR_DEVICE_PASSCODE,
     }
 
     await Keychain.set({
@@ -86,16 +83,10 @@ const encryptWallet = async (wallet: Wallet, pinCode?: string) => {
 const remove = async () => {
     await Keychain.deleteItem({
         key: WALLET_BIOMETRIC_KEY_STORAGE,
-        options: {
-            requireAuthentication: false,
-        },
     })
 
     await Keychain.deleteItem({
         key: WALLET_ENCRYPTION_KEY_STORAGE,
-        options: {
-            requireAuthentication: false,
-        },
     })
 }
 

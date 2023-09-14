@@ -228,7 +228,9 @@ export const ApplicationSecurityProvider = ({
         async (type: SecurityLevelType, pinCode?: string): Promise<void> => {
             updateSecurityType(type)
 
-            const encryptionKeys = await StorageEncryptionKeyHelper.get(pinCode)
+            const encryptionKeys = await StorageEncryptionKeyHelper.init(
+                pinCode,
+            )
 
             try {
                 await Onboarding.migrateState({

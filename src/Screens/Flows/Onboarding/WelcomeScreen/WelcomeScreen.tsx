@@ -5,7 +5,6 @@ import {
     BaseText,
     BaseView,
     Layout,
-    StorageEncryptionKeyHelper,
     WalletEncryptionKeyHelper,
 } from "~Components"
 import { useNavigation } from "@react-navigation/native"
@@ -43,7 +42,6 @@ export const WelcomeScreen = () => {
             "denial kitchen pet squirrel other broom bar gas better priority spoil cross"
         const { device, wallet } = getDeviceFromMnemonic(DEMO_MNEMONIC)
 
-        await StorageEncryptionKeyHelper.init(FAKE_PIN)
         await WalletEncryptionKeyHelper.init(FAKE_PIN)
 
         const encryptedWallet = await WalletEncryptionKeyHelper.encryptWallet(

@@ -7,7 +7,6 @@ import {
     BaseView,
     RequireUserPassword,
     showErrorToast,
-    StorageEncryptionKeyHelper,
     useApplicationSecurity,
     WalletEncryptionKeyHelper,
 } from "~Components"
@@ -153,7 +152,6 @@ export const WalletSuccessScreen: FC<Props> = ({ route }) => {
                     ? params?.userPin
                     : undefined
 
-            await StorageEncryptionKeyHelper.init(pinCode)
             await WalletEncryptionKeyHelper.init(pinCode)
 
             if (mnemonic) {

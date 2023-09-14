@@ -1,8 +1,8 @@
 import { StorageEncryptionKeys } from "~Components/Providers/EncryptedStorageProvider/Model"
 import { Keychain } from "~Storage"
 import { CryptoUtils, HexUtils } from "~Utils"
-import { SecureStoreOptions } from "expo-secure-store/src/SecureStore"
 import SaltHelper from "./SaltHelper"
+import { ACCESS_CONTROL, Options } from "react-native-keychain"
 
 const PIN_CODE_STORAGE = "ENCRYPTION_KEY_STORAGE"
 const BIOMETRIC_KEY_STORAGE = "BIOMETRIC_KEY_STORAGE"
@@ -11,7 +11,9 @@ const get = async (pinCode?: string): Promise<StorageEncryptionKeys> => {
     const keys = await Keychain.get({
         key: pinCode ? PIN_CODE_STORAGE : BIOMETRIC_KEY_STORAGE,
         options: {
-            requireAuthentication: pinCode === undefined,
+            accessControl: pinCode
+                ? undefined
+                : ACCESS_CONTROL.BIOMETRY_ANY_OR_DEVICE_PASSCODE,
         },
     })
 
@@ -33,13 +35,8 @@ const setWithPinCode = async (
 
     const encryptedKeys = CryptoUtils.encrypt(encryptionKeys, pinCode, salt)
 
-    const options: SecureStoreOptions = {
-        requireAuthentication: false,
-    }
-
     await Keychain.set({
         key: PIN_CODE_STORAGE,
-        options,
         value: encryptedKeys,
     })
 }
@@ -47,8 +44,8 @@ const setWithPinCode = async (
 const setWithBiometric = async (encryptionKeys: StorageEncryptionKeys) => {
     const encryptedKeys = JSON.stringify(encryptionKeys)
 
-    const options: SecureStoreOptions = {
-        requireAuthentication: true,
+    const options: Options = {
+        accessControl: ACCESS_CONTROL.BIOMETRY_ANY_OR_DEVICE_PASSCODE,
     }
 
     await Keychain.set({
@@ -70,9 +67,6 @@ const validatePinCode = async (pinCode: string): Promise<boolean> => {
     try {
         const keys = await Keychain.get({
             key: PIN_CODE_STORAGE,
-            options: {
-                requireAuthentication: false,
-            },
         })
 
         if (!keys) throw new Error("No key found")
@@ -94,16 +88,10 @@ const validatePinCode = async (pinCode: string): Promise<boolean> => {
 const remove = async () => {
     await Keychain.deleteItem({
         key: BIOMETRIC_KEY_STORAGE,
-        options: {
-            requireAuthentication: false,
-        },
     })
 
     await Keychain.deleteItem({
         key: PIN_CODE_STORAGE,
-        options: {
-            requireAuthentication: false,
-        },
     })
 }
 
@@ -117,6 +105,8 @@ const init = async (pinCode?: string) => {
     }
 
     await set(encryptionKeys, pinCode)
+
+    return encryptionKeys
 }
 
 export default {
