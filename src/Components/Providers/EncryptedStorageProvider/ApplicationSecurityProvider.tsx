@@ -10,7 +10,7 @@ import {
     WalletEncryptionKeyHelper,
 } from "~Components/Providers"
 import Onboarding from "~Components/Providers/EncryptedStorageProvider/Helpers/Onboarding"
-import { useBiometrics } from "~Hooks"
+import { useAppState, useBiometrics } from "~Hooks"
 import { StandaloneLockScreen } from "~Screens"
 import RNBootSplash from "react-native-bootsplash"
 import { AnimatedSplashScreen } from "../../../AnimatedSplashScreen"
@@ -69,6 +69,7 @@ export const ApplicationSecurityProvider = ({
     const [walletStatus, setWalletStatus] = useState<WALLET_STATUS>(
         WALLET_STATUS.NOT_INITIALISED,
     )
+    const { currentState } = useAppState()
     const [securityType, setSecurityType] = useState<SecurityLevelType>(
         SecurityLevelType.NONE,
     )
@@ -289,7 +290,7 @@ export const ApplicationSecurityProvider = ({
 
     const lockApplication = useCallback(() => {
         if (walletStatus !== WALLET_STATUS.UNLOCKED) return
-        setWalletStatus(WALLET_STATUS.LOCKED)
+        setWalletStatus(WALLET_STATUS.NOT_INITIALISED)
         setReduxStorage(undefined)
         setImageStorage(undefined)
         setMetadataStorage(undefined)
@@ -299,7 +300,11 @@ export const ApplicationSecurityProvider = ({
      * Initialise the app
      */
     useEffect(() => {
-        if (biometrics && walletStatus === WALLET_STATUS.NOT_INITIALISED) {
+        if (
+            biometrics &&
+            currentState === "active" &&
+            walletStatus === WALLET_STATUS.NOT_INITIALISED
+        ) {
             intialiseApp(biometrics)
                 .then(() => {
                     debug("App state initialised app")
@@ -308,7 +313,7 @@ export const ApplicationSecurityProvider = ({
                     error("App state failed to initialise app", e)
                 })
         }
-    }, [walletStatus, biometrics, intialiseApp])
+    }, [walletStatus, currentState, biometrics, intialiseApp])
 
     useEffect(() => {
         GlobalEventEmitter.on(LOCK_APP_EVENT, lockApplication)
