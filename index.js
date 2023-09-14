@@ -30,7 +30,10 @@ import {
 import { typography } from "~Constants"
 import { AnalyticsUtils, info } from "~Utils"
 import { BottomSheetModalProvider } from "@gorhom/bottom-sheet"
-import { StoreContextProvider } from "~Components/Providers/StoreProvider"
+import {
+    StoreContextProvider,
+    PersistedThemeProvider,
+} from "~Components/Providers"
 import {
     selectAnalyticsTrackingEnabled,
     selectSentryTrackingEnabled,
@@ -148,11 +151,13 @@ const ReduxWrappedMain = () => {
     return (
         <SafeAreaProvider>
             <TranslationProvider>
-                <ApplicationSecurityProvider>
-                    <StoreContextProvider>
-                        <SentryInitialedMain />
-                    </StoreContextProvider>
-                </ApplicationSecurityProvider>
+                <PersistedThemeProvider>
+                    <ApplicationSecurityProvider>
+                        <StoreContextProvider>
+                            <SentryInitialedMain />
+                        </StoreContextProvider>
+                    </ApplicationSecurityProvider>
+                </PersistedThemeProvider>
             </TranslationProvider>
         </SafeAreaProvider>
     )

@@ -6,8 +6,9 @@ import { SafeAreaView } from "react-native-safe-area-context"
 import { View, StyleSheet, Text } from "react-native"
 import { PlatformUtils } from "~Utils"
 import { useI18nContext } from "~i18n"
-import { COLORS, isSmallScreen } from "~Constants"
+import { ColorThemeType, isSmallScreen } from "~Constants"
 import { StandaloneNumPad, StandalonePasswordPins } from "./components"
+import { useThemedStyles } from "~Hooks"
 
 type Props = {
     onPinInserted: (pin: string) => Promise<void>
@@ -28,6 +29,8 @@ export const StandaloneLockScreen: React.FC<Props> = memo(
         })
 
         const { LL } = useI18nContext()
+
+        const { styles } = useThemedStyles(baseStyles)
 
         /**
          * Called by `useOnDigitPress` when the user has finished typing the pin
@@ -72,15 +75,13 @@ export const StandaloneLockScreen: React.FC<Props> = memo(
         return (
             <SafeAreaView
                 style={[
-                    PlatformUtils.isAndroid()
-                        ? baseStyles.androidTopPadding
-                        : {},
-                    baseStyles.safeArea,
+                    PlatformUtils.isAndroid() ? styles.androidTopPadding : {},
+                    styles.safeArea,
                 ]}>
-                <View style={baseStyles.container}>
-                    <View style={baseStyles.titleContainer}>
-                        <Text style={baseStyles.title}>{title}</Text>
-                        <Text style={baseStyles.subTitle}>{subTitle}</Text>
+                <View style={styles.container}>
+                    <View style={styles.titleContainer}>
+                        <Text style={styles.title}>{title}</Text>
+                        <Text style={styles.subTitle}>{subTitle}</Text>
                     </View>
 
                     <View style={{ marginTop: isSmallScreen ? 32 : 62 }} />
@@ -101,31 +102,34 @@ export const StandaloneLockScreen: React.FC<Props> = memo(
     },
 )
 
-const baseStyles = StyleSheet.create({
-    safeArea: {
-        paddingBottom: 0,
-        flexGrow: 1,
-        backgroundColor: COLORS.LIGHT_GRAY,
-    },
-    container: {
-        alignItems: "center",
-        marginHorizontal: 24,
-        marginTop: 20,
-    },
-    titleContainer: {
-        alignSelf: "flex-start",
-    },
-    title: {
-        fontSize: 22,
-        fontWeight: "700",
-        lineHeight: 28,
-    },
-    subTitle: {
-        fontSize: 14,
-        fontWeight: "400",
-        marginVertical: 10,
-    },
-    androidTopPadding: {
-        paddingTop: 12,
-    },
-})
+const baseStyles = (theme: ColorThemeType) =>
+    StyleSheet.create({
+        safeArea: {
+            paddingBottom: 0,
+            flexGrow: 1,
+            backgroundColor: theme.colors.background,
+        },
+        container: {
+            alignItems: "center",
+            marginHorizontal: 24,
+            marginTop: 20,
+        },
+        titleContainer: {
+            alignSelf: "flex-start",
+        },
+        title: {
+            fontSize: 22,
+            fontWeight: "700",
+            lineHeight: 28,
+            color: theme.colors.text,
+        },
+        subTitle: {
+            fontSize: 14,
+            fontWeight: "400",
+            marginVertical: 10,
+            color: theme.colors.text,
+        },
+        androidTopPadding: {
+            paddingTop: 12,
+        },
+    })
