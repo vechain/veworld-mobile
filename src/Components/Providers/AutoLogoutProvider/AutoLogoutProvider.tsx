@@ -2,7 +2,7 @@ import React, { useEffect } from "react"
 import { debug } from "~Utils"
 import * as BackgroundFetch from "expo-background-fetch"
 import * as TaskManager from "expo-task-manager"
-import GlobalEventEmitter, { LOCK_APP_EVENT } from "~Events/GlobalEventEmitter"
+import { GlobalEventEmitter, LOCK_APP_EVENT } from "~Events"
 
 type ProviderProps = { children: React.ReactNode }
 
