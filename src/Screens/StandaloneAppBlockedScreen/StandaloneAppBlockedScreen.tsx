@@ -82,9 +82,9 @@ const baseStyles = (theme: ColorThemeType) =>
             height: 320,
         },
         bodyText: {
-            textAlign: "left",
-            fontSize: 14,
-            fontWeight: "400",
+            textAlign: "center",
+            fontSize: 15,
+            fontWeight: "600",
             color: theme.colors.text,
             paddingVertical: 20,
             marginTop: 40,
