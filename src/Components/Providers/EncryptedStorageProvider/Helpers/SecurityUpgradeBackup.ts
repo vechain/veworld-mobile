@@ -2,7 +2,6 @@ import {
     StorageEncryptionKeys,
     WalletEncryptionKey,
 } from "~Components/Providers/EncryptedStorageProvider/Model"
-import { SecureStoreOptions } from "expo-secure-store/src/SecureStore"
 import { Keychain } from "~Storage"
 import { CryptoUtils, debug, error } from "~Utils"
 import {
@@ -22,13 +21,8 @@ const _store = async (keys: BackupKeys, pinCode: string) => {
     const salt = await SaltHelper.getSalt()
     const encryptedKeys = CryptoUtils.encrypt(keys, pinCode, salt)
 
-    const options: SecureStoreOptions = {
-        requireAuthentication: false,
-    }
-
     await Keychain.set({
         key: BACKUP_KEY_STORAGE,
-        options,
         value: encryptedKeys,
     })
 }
@@ -36,9 +30,6 @@ const _store = async (keys: BackupKeys, pinCode: string) => {
 const get = async (pinCode: string): Promise<BackupKeys | null> => {
     const keys = await Keychain.get({
         key: BACKUP_KEY_STORAGE,
-        options: {
-            requireAuthentication: true,
-        },
     })
 
     if (!keys) {

@@ -1,30 +1,56 @@
-import * as SecureStore from "expo-secure-store"
-import { SecureStoreOptions } from "expo-secure-store/src/SecureStore"
+import {
+    ACCESSIBLE,
+    getInternetCredentials,
+    Options,
+    resetInternetCredentials,
+    setInternetCredentials,
+} from "react-native-keychain"
+import { debug } from "~Utils"
 
 type Set = {
     key: string
     value: string
-    options?: SecureStoreOptions
+    options?: Options
 }
 
 export async function set({ key, value, options = {} }: Set) {
-    await SecureStore.setItemAsync(key, value, options)
+    options.accessible = ACCESSIBLE.WHEN_UNLOCKED_THIS_DEVICE_ONLY
+    options.service = key
+
+    debug("KeyChain - SET:", key, options)
+
+    await setInternetCredentials(key, key, value, options)
 }
 
 type Get = {
     key: string
-    options?: SecureStoreOptions
+    options?: Options
 }
 
 export async function get({ key, options = {} }: Get): Promise<string | null> {
-    return await SecureStore.getItemAsync(key, options)
+    options.accessible = ACCESSIBLE.WHEN_UNLOCKED_THIS_DEVICE_ONLY
+    options.service = key
+
+    debug("KeyChain - GET:", key, options)
+
+    const res = await getInternetCredentials(key, options)
+
+    if (res === false) {
+        return null
+    }
+
+    return res.password
 }
 
 type Delete = {
     key: string
-    options?: SecureStoreOptions
+    options?: Options
 }
 
 export async function deleteItem({ key, options = {} }: Delete) {
-    return await SecureStore.deleteItemAsync(key, options)
+    options.accessible = ACCESSIBLE.WHEN_UNLOCKED_THIS_DEVICE_ONLY
+    options.service = key
+
+    debug("KeyChain - DELETE:", key, options)
+    return resetInternetCredentials(key, options)
 }
