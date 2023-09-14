@@ -1,13 +1,13 @@
 import { StyleSheet } from "react-native"
 import { ColorThemeType, ColorTheme } from "../../Constants/Theme/Theme"
-import { useAppSelector } from "~Storage/Redux"
-import { selectTheme } from "~Storage/Redux/Selectors"
 import { useColorScheme } from "../useColorScheme/useColorScheme"
 import { ThemeEnum } from "~Constants"
 import { useCallback } from "react"
+import { usePersistedTheme } from "~Components"
 
 export const useTheme = (): ColorThemeType => {
-    const theme = useAppSelector(selectTheme)
+    const { theme } = usePersistedTheme()
+
     const systemColorScheme = useColorScheme()
 
     const getThemeColor = useCallback(() => {

@@ -14,13 +14,11 @@ import { useI18nContext } from "~i18n"
 import {
     addDeviceAndAccounts,
     selectAreDevFeaturesEnabled,
-    setAppLockStatus,
     setSelectedAccount,
     useAppDispatch,
     useAppSelector,
 } from "~Storage/Redux"
 import { useDeviceUtils } from "~Hooks"
-import { WALLET_STATUS } from "~Model"
 
 export const WelcomeScreen = () => {
     const nav = useNavigation()
@@ -58,7 +56,6 @@ export const WelcomeScreen = () => {
             }),
         )
 
-        dispatch(setAppLockStatus(WALLET_STATUS.UNLOCKED))
         dispatch(setSelectedAccount({ address: newAccount.address }))
         const parent = nav.getParent()
         if (parent) {

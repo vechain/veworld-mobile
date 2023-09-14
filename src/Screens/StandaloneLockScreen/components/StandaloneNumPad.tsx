@@ -1,8 +1,9 @@
 import { Pressable, StyleSheet, Text, View } from "react-native"
 import React, { useCallback } from "react"
-import { COLORS, valueToHP } from "~Constants"
+import { ColorThemeType, valueToHP } from "~Constants"
 import { widthPercentageToDP as wp } from "react-native-responsive-screen"
 import Icon from "react-native-vector-icons/MaterialCommunityIcons"
+import { useThemedStyles } from "~Hooks"
 
 const numPad = [
     "1",
@@ -32,6 +33,8 @@ export const StandaloneNumPad = ({ onDigitPress, onDigitDelete }: Props) => {
         [onDigitPress],
     )
 
+    const { styles, theme } = useThemedStyles(baseStyles)
+
     return (
         <View style={styles.container}>
             {numPad.map(digit => {
@@ -56,7 +59,7 @@ export const StandaloneNumPad = ({ onDigitPress, onDigitDelete }: Props) => {
                                     <Icon
                                         size={22}
                                         name="backspace-outline"
-                                        color={COLORS.DARK_PURPLE}
+                                        color={theme.colors.text}
                                     />
                                 )}
                             </Pressable>
@@ -68,29 +71,31 @@ export const StandaloneNumPad = ({ onDigitPress, onDigitDelete }: Props) => {
     )
 }
 
-const styles = StyleSheet.create({
-    container: {
-        flexDirection: "row",
-        flexWrap: "wrap",
-        width: "100%",
-    },
-    width: {
-        width: "33%",
-        justifyContent: "center",
-        alignItems: "center",
-        paddingVertical: valueToHP[22],
-    },
-    pressable: {
-        width: wp("18%"),
-        height: wp("18%"),
-        justifyContent: "center",
-        alignItems: "center",
-        backgroundColor: COLORS.WHITE,
-        borderRadius: wp("9%"),
-    },
-    digitText: {
-        fontSize: 32,
-        fontWeight: "bold",
-        alignItems: "center",
-    },
-})
+const baseStyles = (theme: ColorThemeType) =>
+    StyleSheet.create({
+        container: {
+            flexDirection: "row",
+            flexWrap: "wrap",
+            width: "100%",
+        },
+        width: {
+            width: "33%",
+            justifyContent: "center",
+            alignItems: "center",
+            paddingVertical: valueToHP[22],
+        },
+        pressable: {
+            width: wp("18%"),
+            height: wp("18%"),
+            justifyContent: "center",
+            alignItems: "center",
+            backgroundColor: theme.colors.card,
+            borderRadius: wp("9%"),
+        },
+        digitText: {
+            fontSize: 32,
+            fontWeight: "bold",
+            alignItems: "center",
+            color: theme.colors.text,
+        },
+    })

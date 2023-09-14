@@ -1,9 +1,10 @@
 import React, { FC, memo, useMemo } from "react"
 import { StyleSheet, Text, View } from "react-native"
-import { valueToHP, COLORS } from "~Constants"
+import { valueToHP, COLORS, ColorThemeType } from "~Constants"
 import { WrapTranslation } from "~Components"
 import { PinVerificationErrorType, PinVerificationError } from "~Model"
 import { useI18nContext } from "~i18n"
+import { useThemedStyles } from "~Hooks"
 
 type Props = {
     pin: string[]
@@ -24,7 +25,7 @@ export const StandalonePasswordPins: FC<Props> = memo(
             return false
         }, [errorValue, isPINRetype])
 
-        const valuedStyles = styles(isMessageVisible)
+        const { styles, theme } = useThemedStyles(baseStyles(isMessageVisible))
 
         const getMessageText = useMemo(() => {
             if (isPINRetype) return LL.BD_USER_PASSWORD_CONFIRM()
@@ -34,8 +35,8 @@ export const StandalonePasswordPins: FC<Props> = memo(
                     <WrapTranslation
                         message={LL.BD_USER_PASSWORD_ERROR()}
                         renderComponent={() => (
-                            <View style={valuedStyles.messageContainer}>
-                                <Text style={valuedStyles.messageText}>!</Text>
+                            <View style={styles.messageContainer}>
+                                <Text style={styles.messageText}>!</Text>
                             </View>
                         )}
                     />
@@ -50,41 +51,38 @@ export const StandalonePasswordPins: FC<Props> = memo(
             LL,
             errorType,
             errorValue,
-            valuedStyles.messageContainer,
-            valuedStyles.messageText,
+            styles.messageContainer,
+            styles.messageText,
         ])
 
         const getMessageTextColor = useMemo(() => {
-            if (isPINRetype) return COLORS.DARK_PURPLE
-            if (isPinError) return COLORS.DARK_RED
+            if (isPINRetype) return theme.colors.text
+            if (isPinError) return theme.colors.danger
             return undefined
-        }, [isPINRetype, isPinError])
+        }, [isPINRetype, isPinError, theme.colors.danger, theme.colors.text])
 
         const getPinMessage = useMemo(() => {
             return (
                 <Text
-                    style={[
-                        valuedStyles.pinMessage,
-                        { color: getMessageTextColor },
-                    ]}>
+                    style={[styles.pinMessage, { color: getMessageTextColor }]}>
                     {getMessageText}
                 </Text>
             )
-        }, [valuedStyles.pinMessage, getMessageTextColor, getMessageText])
+        }, [styles.pinMessage, getMessageTextColor, getMessageText])
 
         return (
-            <View style={valuedStyles.container}>
-                <View style={valuedStyles.innerContainer}>
+            <View style={styles.container}>
+                <View style={styles.innerContainer}>
                     {Array.from(Array(digitNumber).keys()).map((digit, idx) => {
                         const digitExist = pin[idx]
                         return (
                             <View
                                 key={digit}
                                 style={[
-                                    valuedStyles.pinBase,
+                                    styles.pinBase,
                                     ...(digitExist
-                                        ? [valuedStyles.pressed]
-                                        : [valuedStyles.notPressed]),
+                                        ? [styles.pressed]
+                                        : [styles.notPressed]),
                                 ]}
                             />
                         )
@@ -97,7 +95,7 @@ export const StandalonePasswordPins: FC<Props> = memo(
     },
 )
 
-const styles = (isMessageVisible: boolean) =>
+const baseStyles = (isMessageVisible: boolean) => (theme: ColorThemeType) =>
     StyleSheet.create({
         container: {
             alignItems: "center",
@@ -113,10 +111,10 @@ const styles = (isMessageVisible: boolean) =>
             height: 16,
             width: 16,
             borderWidth: 1,
-            borderColor: COLORS.DARK_RED,
+            borderColor: theme.colors.danger,
         },
         messageText: {
-            color: COLORS.DARK_RED,
+            color: theme.colors.danger,
             fontSize: 10,
         },
         pinMessage: {
@@ -133,7 +131,7 @@ const styles = (isMessageVisible: boolean) =>
             marginHorizontal: 10,
         },
         pressed: {
-            backgroundColor: COLORS.DARK_PURPLE,
+            backgroundColor: theme.colors.text,
         },
         notPressed: {
             backgroundColor: COLORS.DARK_PURPLE_DISABLED,
