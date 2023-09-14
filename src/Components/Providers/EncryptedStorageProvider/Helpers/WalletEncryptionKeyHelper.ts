@@ -14,7 +14,9 @@ const get = async (pinCode?: string): Promise<WalletEncryptionKey> => {
             ? WALLET_ENCRYPTION_KEY_STORAGE
             : WALLET_BIOMETRIC_KEY_STORAGE,
         options: {
-            accessControl: pinCode ? undefined : ACCESS_CONTROL.BIOMETRY_ANY,
+            accessControl: pinCode
+                ? undefined
+                : ACCESS_CONTROL.BIOMETRY_ANY_OR_DEVICE_PASSCODE,
         },
     })
 
@@ -46,7 +48,7 @@ const setWithBiometric = async (encryptionKeys: WalletEncryptionKey) => {
     const encryptedKeys = JSON.stringify(encryptionKeys)
 
     const options: Options = {
-        accessControl: ACCESS_CONTROL.BIOMETRY_ANY,
+        accessControl: ACCESS_CONTROL.BIOMETRY_ANY_OR_DEVICE_PASSCODE,
     }
 
     await Keychain.set({

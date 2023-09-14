@@ -11,7 +11,9 @@ const get = async (pinCode?: string): Promise<StorageEncryptionKeys> => {
     const keys = await Keychain.get({
         key: pinCode ? PIN_CODE_STORAGE : BIOMETRIC_KEY_STORAGE,
         options: {
-            accessControl: pinCode ? undefined : ACCESS_CONTROL.BIOMETRY_ANY,
+            accessControl: pinCode
+                ? undefined
+                : ACCESS_CONTROL.BIOMETRY_ANY_OR_DEVICE_PASSCODE,
         },
     })
 
@@ -43,7 +45,7 @@ const setWithBiometric = async (encryptionKeys: StorageEncryptionKeys) => {
     const encryptedKeys = JSON.stringify(encryptionKeys)
 
     const options: Options = {
-        accessControl: ACCESS_CONTROL.BIOMETRY_ANY,
+        accessControl: ACCESS_CONTROL.BIOMETRY_ANY_OR_DEVICE_PASSCODE,
     }
 
     await Keychain.set({

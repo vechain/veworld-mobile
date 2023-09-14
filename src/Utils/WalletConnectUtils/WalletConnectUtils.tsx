@@ -28,6 +28,7 @@ export async function getWeb3Wallet() {
 
     try {
         web3wallet = await Web3Wallet.init({
+            // @ts-ignore
             core,
             metadata: {
                 name: "VeWorld Mobile Wallet",
