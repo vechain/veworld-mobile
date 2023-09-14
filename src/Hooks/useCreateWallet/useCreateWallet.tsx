@@ -51,7 +51,6 @@ export const useCreateWallet = () => {
         }) => {
             try {
                 const { device, wallet } = getDeviceFromMnemonic(mnemonic)
-                dispatch(setMnemonic(undefined))
 
                 const encryptedWallet =
                     await WalletEncryptionKeyHelper.encryptWallet(
@@ -71,12 +70,14 @@ export const useCreateWallet = () => {
                         setSelectedAccount({ address: newAccount.address }),
                     )
 
+                dispatch(setMnemonic(undefined))
                 setIsComplete(true)
                 track(AnalyticsEvent.WALLET_ADD_LOCAL_SUCCESS)
             } catch (e) {
                 error("CREATE WALLET ERROR : ", e)
                 track(AnalyticsEvent.WALLET_ADD_LOCAL_ERROR)
                 onError?.(e)
+                throw e
             }
         },
         [dispatch, getDeviceFromMnemonic, selectedAccount, track],
@@ -115,6 +116,7 @@ export const useCreateWallet = () => {
                 error("CREATE HW WALLET ERROR : ", e)
                 track(AnalyticsEvent.WALLET_ADD_LEDGER_ERROR)
                 onError?.(e)
+                throw e
             }
         },
         [dispatch, selectedAccount, track],

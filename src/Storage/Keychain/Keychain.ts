@@ -19,7 +19,13 @@ export async function set({ key, value, options = {} }: Set) {
 
     debug("KeyChain - SET:", key, options)
 
-    await setInternetCredentials(key, key, value, options)
+    const res = await setInternetCredentials(key, key, value, options)
+
+    if (res === false) {
+        throw new Error("Failed to set keychain")
+    }
+
+    return res
 }
 
 type Get = {
