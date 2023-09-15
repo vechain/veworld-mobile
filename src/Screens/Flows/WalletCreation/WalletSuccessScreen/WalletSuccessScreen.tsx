@@ -157,22 +157,23 @@ export const WalletSuccessScreen: FC<Props> = ({ route }) => {
             if (mnemonic) {
                 if (securityLevelSelected === SecurityLevelType.BIOMETRIC) {
                     await createWallet({ mnemonic })
-                    await migrateOnboarding(securityLevelSelected)
                 } else if (securityLevelSelected === SecurityLevelType.SECRET) {
                     await createWallet({
                         userPassword: params?.userPin,
                         onError: onWalletCreationError,
                         mnemonic,
                     })
-                    await migrateOnboarding(
-                        securityLevelSelected,
-                        params.userPin,
-                    )
                 } else {
                     throw new Error(
                         `Security level ${securityLevelSelected} is not valid`,
                     )
                 }
+            }
+
+            if (securityLevelSelected === SecurityLevelType.BIOMETRIC) {
+                await migrateOnboarding(securityLevelSelected)
+            } else {
+                await migrateOnboarding(securityLevelSelected, params.userPin)
             }
         } finally {
             dispatch(setIsAppLoading(false))
