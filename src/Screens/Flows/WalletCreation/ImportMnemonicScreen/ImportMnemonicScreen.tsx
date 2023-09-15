@@ -41,11 +41,9 @@ export const ImportMnemonicScreen = () => {
 
     const { getDeviceFromMnemonic } = useDeviceUtils()
 
-    const [localMnemonic, setLocalMnemonic] = useState<string>(
-        "mandate sound scan unfair globe near armor mule garbage onion awake bring",
-    )
+    const [localMnemonic, setLocalMnemonic] = useState<string>("")
     const [isError, setIsError] = useState<string>("")
-    const [isDisabled, setIsDisabled] = useState(false)
+    const [isDisabled, setIsDisabled] = useState(true)
 
     const onVerify = useCallback(
         (_mnemonic: string) => {
