@@ -1,5 +1,5 @@
 import React, { useEffect, useMemo, useState } from "react"
-import { BaseToast, ConnexContext } from "~Components"
+import { BaseToast, ConnexContext, usePersistedTheme } from "~Components"
 import { BottomSheetModalProvider } from "@gorhom/bottom-sheet"
 import { NavigationContainer } from "@react-navigation/native"
 import { useTheme } from "~Hooks"
@@ -14,6 +14,8 @@ import { Platform } from "react-native"
 import TestHelpers from "./helpers"
 import { PersistConfig } from "redux-persist/es/types"
 import { MMKV } from "react-native-mmkv"
+import { SecurePersistedCache } from "~Storage/PersistedCache"
+import { ThemeEnum } from "~Constants"
 
 export { default as TestHelpers } from "./helpers"
 
@@ -121,6 +123,19 @@ export const TestWrapper = ({
     children: React.ReactNode
     preloadedState: Partial<RootState>
 }) => {
+    ;(
+        usePersistedTheme as jest.Mock<ReturnType<typeof usePersistedTheme>>
+    ).mockReturnValue({
+        themeCache: new SecurePersistedCache<ThemeEnum>(
+            "test-theme-key",
+            "test-theme",
+        ),
+        theme: ThemeEnum.DARK,
+        initThemeCache: jest.fn(),
+        resetThemeCache: jest.fn(),
+        changeTheme: jest.fn(),
+    })
+
     return (
         <Provider store={getStore(preloadedState)}>
             <GestureHandlerRootView>

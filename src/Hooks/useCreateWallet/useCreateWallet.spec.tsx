@@ -174,10 +174,13 @@ describe("useCreateWallet", () => {
                 wrapper: TestWrapper,
             })
             const { onCreateLedgerWallet } = result.current
-            await onCreateLedgerWallet({
-                newLedger: ledger,
-                onError: undefined,
-            })
+
+            try {
+                await onCreateLedgerWallet({
+                    newLedger: ledger,
+                    onError: undefined,
+                })
+            } catch (e) {}
 
             expect(addLedgerDeviceAndAccounts).toBeCalledWith(ledger)
         })

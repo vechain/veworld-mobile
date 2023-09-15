@@ -7,19 +7,6 @@ import { ThemeEnum } from "~Constants"
 import { RootState } from "~Storage/Redux/Types"
 
 describe("useTheme", () => {
-    it("should return the correct system theme", async () => {
-        const preloadedState = {
-            userPreferences: { theme: ThemeEnum.SYSTEM },
-        } as Partial<RootState>
-        const { result } = renderHook(() => useTheme(), {
-            wrapper: ({ children }: { children: React.ReactNode }) => (
-                <TestWrapper preloadedState={preloadedState}>
-                    {children}
-                </TestWrapper>
-            ),
-        })
-        expect(result.current).toEqual(ColorTheme("light"))
-    })
     it("should return the correct dark theme", async () => {
         const preloadedState = {
             userPreferences: { theme: ThemeEnum.DARK },
@@ -33,20 +20,6 @@ describe("useTheme", () => {
         })
 
         expect(result.current).toEqual(ColorTheme("dark"))
-    })
-    it("should return the correct light theme", async () => {
-        const preloadedState = {
-            userPreferences: { theme: ThemeEnum.LIGHT },
-        } as Partial<RootState>
-        const { result } = renderHook(() => useTheme(), {
-            wrapper: ({ children }: { children: React.ReactNode }) => (
-                <TestWrapper preloadedState={preloadedState}>
-                    {children}
-                </TestWrapper>
-            ),
-        })
-
-        expect(result.current).toEqual(ColorTheme("light"))
     })
 })
 

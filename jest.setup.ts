@@ -162,3 +162,12 @@ jest.mock(
         }),
     }),
 )
+jest.mock(
+    "~Components/Providers/PersistedThemeProvider/PersistedThemeProvider",
+    () => ({
+        ...jest.requireActual(
+            "~Components/Providers/PersistedThemeProvider/PersistedThemeProvider",
+        ),
+        usePersistedTheme: jest.fn(),
+    }),
+)
