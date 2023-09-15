@@ -11,7 +11,11 @@ import {
 } from "~Components/Providers"
 import Onboarding from "~Components/Providers/EncryptedStorageProvider/Helpers/Onboarding"
 import { useAppState, useBiometrics } from "~Hooks"
-import { StandaloneAppBlockedScreen, StandaloneLockScreen } from "~Screens"
+import {
+    StandaloneAppBlockedScreen,
+    StandaloneLockScreen,
+    StandaloneRetryBiometrics,
+} from "~Screens/Standalone"
 import RNBootSplash from "react-native-bootsplash"
 import { AnimatedSplashScreen } from "../../../AnimatedSplashScreen"
 import { GlobalEventEmitter, LOCK_APP_EVENT } from "~Events"
@@ -77,6 +81,8 @@ export const ApplicationSecurityProvider = ({
     const [imageStorage, setImageStorage] = useState<EncryptedStorage>()
     const [metadataStorage, setMetadataStorage] = useState<EncryptedStorage>()
     const [userDisabledBiometrics, setUserDisabledBiometrics] = useState(false)
+    const [userCancelledBiometrics, setUserCancelledBiometrics] =
+        useState(false)
 
     // After unlocking, we need to wait for the redux to be setup before we can render the app
     const [isAppReady, setIsAppReady] = useState(false)
@@ -137,9 +143,23 @@ export const ApplicationSecurityProvider = ({
             await SecurityUpgradeBackup.clear()
         }
 
-        const keys =
-            backUpKeys?.storage ??
-            (await StorageEncryptionKeyHelper.get(pinCode))
+        let keys
+
+        try {
+            keys =
+                backUpKeys?.storage ??
+                (await StorageEncryptionKeyHelper.get(pinCode))
+        } catch (e) {
+            if (
+                e instanceof Error &&
+                e.message.includes("User canceled the operation")
+            ) {
+                setUserCancelledBiometrics(true)
+            }
+            throw e
+        }
+
+        setUserCancelledBiometrics(false)
 
         setReduxStorage({
             mmkv: UserEncryptedStorage,
@@ -378,6 +398,13 @@ export const ApplicationSecurityProvider = ({
             RNBootSplash.hide({ fade: true, duration: 500 })
 
             if (userDisabledBiometrics) return <StandaloneAppBlockedScreen />
+
+            if (userCancelledBiometrics)
+                return (
+                    <StandaloneRetryBiometrics
+                        retryBiometrics={() => unlock()}
+                    />
+                )
 
             if (securityType !== SecurityLevelType.SECRET) return <></>
 
