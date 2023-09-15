@@ -1,54 +1,54 @@
 import { useCallback } from "react"
-import { usePersistedCache } from "~Components/Providers/PersistedCacheProvider"
-import { useWalletSecurity } from "~Hooks/useWalletSecurity"
 import KeychainService from "~Services/KeychainService"
-
 import {
     CACHE_NFT_MEDIA_KEY,
     CACHE_NFT_METADATA_KEY,
 } from "~Storage/PersistedCache/constants"
-import { resetApp, useAppDispatch, useAppSelector } from "~Storage/Redux"
-import { selectDevices } from "~Storage/Redux/Selectors"
+import { resetApp, useAppDispatch } from "~Storage/Redux"
 import { info } from "~Utils/Logger"
+import {
+    useApplicationSecurity,
+    usePersistedCache,
+    usePersistedTheme,
+} from "~Components/Providers"
 
 export const useAppReset = () => {
     const dispatch = useAppDispatch()
     const { resetAllCaches, initAllCaches } = usePersistedCache()
-    const devices = useAppSelector(selectDevices)
-
-    const { isWalletSecurityBiometrics } = useWalletSecurity()
+    const { resetApplication } = useApplicationSecurity()
+    const { resetThemeCache } = usePersistedTheme()
 
     // for every device delete the encryption keys from keychain
     const removeEncryptionKeysFromKeychain = useCallback(async () => {
-        const promises = devices.map(device => {
-            return KeychainService.deleteDeviceEncryptionKey(
-                device.rootAddress,
-                isWalletSecurityBiometrics,
-            )
-        })
+        await Promise.all([
+            KeychainService.deleteKey(CACHE_NFT_MEDIA_KEY),
+            KeychainService.deleteKey(CACHE_NFT_METADATA_KEY),
+        ])
+    }, [])
 
-        promises.push(KeychainService.deleteKey(CACHE_NFT_MEDIA_KEY))
-        promises.push(KeychainService.deleteKey(CACHE_NFT_METADATA_KEY))
-
-        await Promise.all(promises)
-    }, [devices, isWalletSecurityBiometrics])
-
-    const appReset = useCallback(async () => {
-        await removeEncryptionKeysFromKeychain()
-        await dispatch(resetApp())
-
+    const resetCaches = useCallback(async () => {
         await resetAllCaches()
+        await resetThemeCache()
+    }, [resetAllCaches, resetThemeCache])
+
+    return useCallback(async () => {
+        await removeEncryptionKeysFromKeychain()
+
+        await resetCaches()
+
+        await resetApplication()
 
         // TODO: Move this to a more appropriate place
         await initAllCaches()
 
+        await dispatch(resetApp())
+
         info("App Reset Finished")
     }, [
         removeEncryptionKeysFromKeychain,
-        resetAllCaches,
+        resetCaches,
+        resetApplication,
         initAllCaches,
         dispatch,
     ])
-
-    return appReset
 }

@@ -5,6 +5,8 @@ import mockSafeAreaContext from "react-native-safe-area-context/jest/mock"
 // @ts-ignore
 import mockRNDeviceInfo from "react-native-device-info/jest/react-native-device-info-mock"
 import { ReactNode } from "react"
+import { SecurityLevelType, WALLET_STATUS } from "~Model"
+import { MMKV } from "react-native-mmkv"
 
 jest.mock("react-native-safe-area-context", () => mockSafeAreaContext)
 const componentMock = ({ children }: { children: ReactNode }) => children
@@ -134,3 +136,38 @@ jest.mock("mixpanel-react-native", () => ({
 }))
 
 jest.mock("react-native-device-info", () => mockRNDeviceInfo)
+
+jest.mock(
+    "~Components/Providers/EncryptedStorageProvider/ApplicationSecurityProvider",
+    () => ({
+        ...jest.requireActual(
+            "~Components/Providers/EncryptedStorageProvider/ApplicationSecurityProvider",
+        ),
+        useApplicationSecurity: jest.fn().mockReturnValue({
+            redux: {
+                mmkv: new MMKV({ id: "test-redux" }),
+                encryptionKey: "test-redux",
+            },
+            images: undefined,
+            metadata: undefined,
+            migrateOnboarding: jest.fn(),
+            resetApplication: jest.fn(),
+            walletStatus: WALLET_STATUS.UNLOCKED,
+            updateSecurityMethod: jest.fn(),
+            securityType: SecurityLevelType.BIOMETRIC,
+            setWalletStatus: jest.fn(),
+            isAppReady: true,
+            setIsAppReady: jest.fn(),
+            lockApplication: jest.fn(),
+        }),
+    }),
+)
+jest.mock(
+    "~Components/Providers/PersistedThemeProvider/PersistedThemeProvider",
+    () => ({
+        ...jest.requireActual(
+            "~Components/Providers/PersistedThemeProvider/PersistedThemeProvider",
+        ),
+        usePersistedTheme: jest.fn(),
+    }),
+)

@@ -8,8 +8,8 @@ import Animated, {
 } from "react-native-reanimated"
 import MaskedView from "@react-native-masked-view/masked-view"
 import { COLORS, ColorThemeType } from "~Constants"
-import { useThemedStyles } from "~Hooks"
 import { PlatformUtils } from "~Utils"
+import { useThemedStyles } from "~Hooks"
 
 type Props = {
     playAnimation: boolean
@@ -49,9 +49,15 @@ export const AnimatedSplashScreen = ({
         }
 
         if (playAnimation) {
-            startSplashScreenAnimation()
+            if (useFadeOutAnimation) {
+                PlatformUtils.isIOS()
+                    ? startSplashScreenAnimation()
+                    : setTimeout(() => startSplashScreenAnimation(), 100)
+            } else {
+                setTimeout(() => startSplashScreenAnimation(), 300)
+            }
         }
-    }, [playAnimation, loadingProgress])
+    }, [playAnimation, loadingProgress, useFadeOutAnimation])
 
     const colorLayer = animationDone ? null : (
         <View style={[StyleSheet.absoluteFill, styles.colorLayer]} />
@@ -140,11 +146,11 @@ const baseStyles = (theme: ColorThemeType) =>
             left: 0,
             right: 0,
             bottom: 0,
-            backgroundColor: theme.colors.splashBackground,
+            backgroundColor: theme.colors.splashBackground, //TODO: Use themed background color instead (https://github.com/vechainfoundation/veworld-mobile/issues/1335)
         },
         containerFadeOut: {
             flex: 1,
-            backgroundColor: theme.colors.background,
+            backgroundColor: theme.colors.background, //TODO: Use themed background color instead (https://github.com/vechainfoundation/veworld-mobile/issues/1335)
         },
         innerContainer: {
             flex: 1,
@@ -155,7 +161,7 @@ const baseStyles = (theme: ColorThemeType) =>
             justifyContent: "center",
         },
         colorLayer: {
-            backgroundColor: theme.colors.splashColorLayer,
+            backgroundColor: theme.colors.splashColorLayer, //TODO: Use themed background color instead (https://github.com/vechainfoundation/veworld-mobile/issues/1335)
         },
         whiteLayer: { backgroundColor: COLORS.WHITE },
     })

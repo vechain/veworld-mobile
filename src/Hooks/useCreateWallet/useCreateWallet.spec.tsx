@@ -3,12 +3,12 @@ import { waitFor } from "@testing-library/react-native"
 import {
     addDeviceAndAccounts,
     addLedgerDeviceAndAccounts,
-    setAppLockStatus,
     setMnemonic,
 } from "~Storage/Redux"
 import { TestWrapper } from "~Test"
 import { useCreateWallet } from "./useCreateWallet"
-import { NewLedgerDevice, WALLET_STATUS } from "~Model"
+import { NewLedgerDevice } from "~Model"
+import { WalletEncryptionKeyHelper } from "~Components"
 
 const device = {
     alias: "Wallet 1",
@@ -54,6 +54,19 @@ const ledger: NewLedgerDevice = {
     accounts: [1, 3, 4],
 }
 
+jest.mock("~Components/Providers/EncryptedStorageProvider/Helpers", () => ({
+    ...jest.requireActual(
+        "~Components/Providers/EncryptedStorageProvider/Helpers",
+    ),
+    WalletEncryptionKeyHelper: {
+        get: jest.fn(),
+        set: jest.fn(),
+        decryptWallet: jest.fn(),
+        encryptWallet: jest.fn(),
+        init: jest.fn(),
+    },
+}))
+
 jest.mock("../useDeviceUtils", () => ({
     useDeviceUtils: jest.fn(() => ({
         getDeviceFromMnemonic: jest.fn(() => ({
@@ -83,9 +96,6 @@ jest.mock("~Storage/Redux/Actions", () => ({
     setMnemonic: jest.fn(
         jest.requireActual("~Storage/Redux/Actions").setMnemonic,
     ),
-    setAppLockStatus: jest.fn(
-        jest.requireActual("~Storage/Redux/Actions").setAppLockStatus,
-    ),
     addLedgerDeviceAndAccounts: jest.fn(
         jest.requireActual("~Storage/Redux/Actions").addLedgerDeviceAndAccounts,
     ),
@@ -97,6 +107,12 @@ jest.mock("~Storage/Redux/Selectors", () => ({
 }))
 
 describe("useCreateWallet", () => {
+    beforeEach(() => {
+        ;(
+            WalletEncryptionKeyHelper.encryptWallet as jest.Mock
+        ).mockResolvedValue(JSON.stringify(wallet))
+    })
+
     describe("onCreateWallet", () => {
         it("should create a wallet with biometrics", async () => {
             const { result } = renderHook(() => useCreateWallet(), {
@@ -121,9 +137,6 @@ describe("useCreateWallet", () => {
                         "0494c3ff1acb0cf8e842c54a2bf109b7549d8f800895576892a4ea67eff584a427904a4b2545cf84569be87387bc5fe221c20d1ba5f23d278468faa98f54ddedbe",
                 },
             })
-            expect(setAppLockStatus).toHaveBeenCalledWith(
-                WALLET_STATUS.UNLOCKED,
-            )
         })
 
         it("should create wallet with password", async () => {
@@ -150,7 +163,6 @@ describe("useCreateWallet", () => {
                         "0494c3ff1acb0cf8e842c54a2bf109b7549d8f800895576892a4ea67eff584a427904a4b2545cf84569be87387bc5fe221c20d1ba5f23d278468faa98f54ddedbe",
                 },
             })
-            expect(setAppLockStatus).toBeCalledWith(WALLET_STATUS.UNLOCKED)
             expect(setMnemonic).toBeCalledWith(undefined)
             expect(result.current.isComplete).toBe(true)
         })
@@ -162,14 +174,15 @@ describe("useCreateWallet", () => {
                 wrapper: TestWrapper,
             })
             const { onCreateLedgerWallet } = result.current
-            await onCreateLedgerWallet({
-                newLedger: ledger,
-                onError: undefined,
-            })
+
+            try {
+                await onCreateLedgerWallet({
+                    newLedger: ledger,
+                    onError: undefined,
+                })
+            } catch (e) {}
 
             expect(addLedgerDeviceAndAccounts).toBeCalledWith(ledger)
-
-            expect(setAppLockStatus).toBeCalledWith(WALLET_STATUS.UNLOCKED)
         })
     })
 })

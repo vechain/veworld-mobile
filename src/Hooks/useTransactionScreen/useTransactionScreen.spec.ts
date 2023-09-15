@@ -5,19 +5,19 @@ import { Routes } from "~Navigation"
 import { DelegationType } from "~Model/Delegation"
 import { AccountWithDevice, BaseDevice, SecurityLevelType } from "~Model"
 import crypto from "react-native-quick-crypto"
-import { CryptoUtils } from "~Utils"
 import axios from "axios"
 import { waitFor } from "@testing-library/react-native"
 import { Transaction } from "thor-devkit"
 import { selectDevice, selectSelectedAccount } from "~Storage/Redux"
+import { WalletEncryptionKeyHelper } from "~Components"
 
 const {
     vetTransaction1,
-    wallet1,
     account1D1,
     device1,
     firstLedgerAccount,
     ledgerDevice,
+    wallet1,
 } = TestHelpers.data
 
 const initialRoute = Routes.HOME
@@ -36,6 +36,20 @@ jest.mock("~Storage/Redux", () => ({
     selectDevice: jest.fn(),
     getDefaultDelegationUrl: jest.fn().mockReturnValue("https://example.com"),
 }))
+
+jest.mock("~Components/Providers/EncryptedStorageProvider/Helpers", () => ({
+    ...jest.requireActual(
+        "~Components/Providers/EncryptedStorageProvider/Helpers",
+    ),
+    WalletEncryptionKeyHelper: {
+        get: jest.fn(),
+        set: jest.fn(),
+        decryptWallet: jest.fn(),
+        encryptWallet: jest.fn(),
+        init: jest.fn(),
+    },
+}))
+
 jest.mock("@react-navigation/native", () => ({
     ...jest.requireActual("@react-navigation/native"),
     useNavigation: () => ({
@@ -74,10 +88,6 @@ describe("useTransactionScreen", () => {
         ;(crypto.randomFillSync as jest.Mock).mockReturnValue(
             Buffer.from("1234abc", "hex"),
         )
-        jest.spyOn(CryptoUtils, "decryptWallet").mockResolvedValue({
-            decryptedWallet: wallet1,
-            encryptionKey: "encryptionKey",
-        })
         ;(axios.post as jest.Mock).mockResolvedValueOnce({
             data: { id: "0x1234" },
             status: 200,
@@ -87,6 +97,9 @@ describe("useTransactionScreen", () => {
             device: device1,
         })
         mockDevice(device1)
+        ;(
+            WalletEncryptionKeyHelper.decryptWallet as jest.Mock
+        ).mockResolvedValue(wallet1)
     })
 
     it("hook should render", async () => {

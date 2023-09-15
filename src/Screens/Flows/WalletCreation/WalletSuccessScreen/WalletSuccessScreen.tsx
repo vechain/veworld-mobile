@@ -7,6 +7,8 @@ import {
     BaseView,
     RequireUserPassword,
     showErrorToast,
+    useApplicationSecurity,
+    WalletEncryptionKeyHelper,
 } from "~Components"
 import { useNavigation } from "@react-navigation/native"
 import { VeWorldLogoSVG } from "~Assets"
@@ -24,11 +26,7 @@ import {
     RootStackParamListOnboarding,
     Routes,
 } from "~Navigation"
-import {
-    setUserSelectedSecurity,
-    useAppDispatch,
-    useAppSelector,
-} from "~Storage/Redux"
+import { setIsAppLoading, useAppDispatch, useAppSelector } from "~Storage/Redux"
 import {
     selectHasOnboarded,
     selectMnemonic,
@@ -57,6 +55,8 @@ export const WalletSuccessScreen: FC<Props> = ({ route }) => {
 
     const mnemonic = useAppSelector(selectMnemonic)
     const newLedger = useAppSelector(selectNewLedgerDevice)
+
+    const { migrateOnboarding } = useApplicationSecurity()
 
     const {
         onCreateWallet: createWallet,
@@ -123,44 +123,62 @@ export const WalletSuccessScreen: FC<Props> = ({ route }) => {
      * On first onboarding, create the wallet and set the security type selected by the user (biometric or secret)
      */
     const onboardingCreateWallet = useCallback(async () => {
-        let params = route.params
+        try {
+            let params = route.params
 
-        if (userHasOnboarded) return
+            if (userHasOnboarded) return
 
-        if (!mnemonic && !newLedger)
-            throw new Error(
-                "Wrong/corrupted data. No device available in store",
-            )
-
-        if (!params?.securityLevelSelected)
-            throw new Error("Security level is not available")
-
-        const securityLevelSelected = params.securityLevelSelected
-        if (mnemonic) {
-            if (securityLevelSelected === SecurityLevelType.BIOMETRIC) {
-                await createWallet({ mnemonic })
-            } else if (securityLevelSelected === SecurityLevelType.SECRET) {
-                await createWallet({
-                    userPassword: params?.userPin,
-                    onError: onWalletCreationError,
-                    mnemonic,
-                })
-            } else {
+            if (!mnemonic && !newLedger)
                 throw new Error(
-                    `Security level ${securityLevelSelected} is not valid`,
+                    "Wrong/corrupted data. No device available in store",
                 )
+
+            if (!params?.securityLevelSelected)
+                throw new Error("Security level is not available")
+
+            dispatch(setIsAppLoading(true))
+
+            if (newLedger) {
+                await createLedgerWallet({
+                    newLedger,
+                    onError: onWalletCreationError,
+                })
             }
-        }
 
-        if (newLedger) {
-            await createLedgerWallet({
-                newLedger,
-                onError: onWalletCreationError,
-            })
-        }
+            const securityLevelSelected = params.securityLevelSelected
 
-        dispatch(setUserSelectedSecurity(securityLevelSelected))
+            let pinCode =
+                securityLevelSelected === SecurityLevelType.SECRET
+                    ? params?.userPin
+                    : undefined
+
+            await WalletEncryptionKeyHelper.init(pinCode)
+
+            if (mnemonic) {
+                if (securityLevelSelected === SecurityLevelType.BIOMETRIC) {
+                    await createWallet({ mnemonic })
+                    await migrateOnboarding(securityLevelSelected)
+                } else if (securityLevelSelected === SecurityLevelType.SECRET) {
+                    await createWallet({
+                        userPassword: params?.userPin,
+                        onError: onWalletCreationError,
+                        mnemonic,
+                    })
+                    await migrateOnboarding(
+                        securityLevelSelected,
+                        params.userPin,
+                    )
+                } else {
+                    throw new Error(
+                        `Security level ${securityLevelSelected} is not valid`,
+                    )
+                }
+            }
+        } finally {
+            dispatch(setIsAppLoading(false))
+        }
     }, [
+        migrateOnboarding,
         newLedger,
         mnemonic,
         userHasOnboarded,

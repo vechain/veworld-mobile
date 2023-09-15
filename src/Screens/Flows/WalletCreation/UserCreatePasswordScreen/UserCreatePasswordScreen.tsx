@@ -3,9 +3,9 @@ import {
     BaseSpacer,
     BaseText,
     BaseView,
-    PasswordPins,
-    NumPad,
     Layout,
+    NumPad,
+    PasswordPins,
 } from "~Components"
 import { useI18nContext } from "~i18n"
 import {
@@ -16,14 +16,13 @@ import {
 import { Routes } from "~Navigation"
 import { useNavigation } from "@react-navigation/native"
 import { useOnDigitPressWithConfirmation } from "./useOnDigitPressWithConfirmation"
-import { useAnalyticTracking, usePasswordValidation } from "~Hooks"
+import { useAnalyticTracking } from "~Hooks"
 import { AnalyticsEvent, valueToHP } from "~Constants"
 import HapticsService from "~Services/HapticsService"
 
 const digitNumber = 6
 export const UserCreatePasswordScreen = () => {
     const { LL } = useI18nContext()
-    const { updatePassword } = usePasswordValidation()
     const nav = useNavigation()
     const track = useAnalyticTracking()
 
@@ -34,7 +33,6 @@ export const UserCreatePasswordScreen = () => {
      */
     const onFinishCallback = useCallback(
         async (insertedPin: string) => {
-            await updatePassword(insertedPin)
             await HapticsService.triggerNotification({ level: "Success" })
             track(AnalyticsEvent.PASSWORD_SETUP_SUBMITTED)
             nav.navigate(Routes.WALLET_SUCCESS, {
@@ -42,7 +40,7 @@ export const UserCreatePasswordScreen = () => {
                 userPin: insertedPin,
             })
         },
-        [updatePassword, nav, track],
+        [nav, track],
     )
 
     const [isConfirmationError, setIsConfirmationError] =

@@ -9,6 +9,7 @@ import { NavigationContainer } from "@react-navigation/native"
 import { SafeAreaProvider } from "react-native-safe-area-context"
 import { useTheme } from "~Hooks"
 import {
+    ApplicationSecurityProvider,
     BaseToast,
     ConnexContextProvider,
     TranslationProvider,
@@ -29,7 +30,10 @@ import {
 import { typography } from "~Constants"
 import { AnalyticsUtils, info } from "~Utils"
 import { BottomSheetModalProvider } from "@gorhom/bottom-sheet"
-import { StoreContextProvider } from "~Components/Providers/StoreProvider"
+import {
+    StoreContextProvider,
+    PersistedThemeProvider,
+} from "~Components/Providers"
 import {
     selectAnalyticsTrackingEnabled,
     selectSentryTrackingEnabled,
@@ -80,24 +84,20 @@ const Main = () => {
 
     return (
         <GestureHandlerRootView style={{ flex: 1 }}>
-            <TranslationProvider>
-                {isConnected ? (
-                    <ConnexContextProvider>
-                        <SafeAreaProvider>
-                            <NavigationProvider>
-                                <BottomSheetModalProvider>
-                                    <WalletConnectContextProvider>
-                                        <EntryPoint />
-                                    </WalletConnectContextProvider>
-                                </BottomSheetModalProvider>
-                            </NavigationProvider>
-                            <BaseToast />
-                        </SafeAreaProvider>
-                    </ConnexContextProvider>
-                ) : (
-                    <InternetDownScreen />
-                )}
-            </TranslationProvider>
+            {isConnected ? (
+                <ConnexContextProvider>
+                    <NavigationProvider>
+                        <BottomSheetModalProvider>
+                            <WalletConnectContextProvider>
+                                <EntryPoint />
+                            </WalletConnectContextProvider>
+                        </BottomSheetModalProvider>
+                    </NavigationProvider>
+                    <BaseToast />
+                </ConnexContextProvider>
+            ) : (
+                <InternetDownScreen />
+            )}
         </GestureHandlerRootView>
     )
 }
@@ -149,9 +149,17 @@ const SentryInitialedMain = () => {
 
 const ReduxWrappedMain = () => {
     return (
-        <StoreContextProvider>
-            <SentryInitialedMain />
-        </StoreContextProvider>
+        <SafeAreaProvider>
+            <TranslationProvider>
+                <PersistedThemeProvider>
+                    <ApplicationSecurityProvider>
+                        <StoreContextProvider>
+                            <SentryInitialedMain />
+                        </StoreContextProvider>
+                    </ApplicationSecurityProvider>
+                </PersistedThemeProvider>
+            </TranslationProvider>
+        </SafeAreaProvider>
     )
 }
 

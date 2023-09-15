@@ -1,5 +1,5 @@
 import React, { memo, useCallback, useMemo, useState } from "react"
-import { useAnalyticTracking, usePasswordValidation } from "~Hooks"
+import { useAnalyticTracking } from "~Hooks"
 import {
     BaseSafeArea,
     BaseSpacer,
@@ -7,6 +7,7 @@ import {
     BaseView,
     NumPad,
     PasswordPins,
+    StorageEncryptionKeyHelper,
 } from "~Components"
 import { useI18nContext } from "~i18n"
 import { LOCKSCREEN_SCENARIO } from "./Enums"
@@ -37,7 +38,6 @@ export const LockScreen: React.FC<Props> = memo(
     }) => {
         const { LL } = useI18nContext()
 
-        const { validatePassword } = usePasswordValidation()
         const track = useAnalyticTracking()
 
         const [firstPin, setFirstPin] = useState<string>()
@@ -49,7 +49,8 @@ export const LockScreen: React.FC<Props> = memo(
 
         const isOldPinSameAsNewPin = useCallback(
             async (pin: string) => {
-                const isValid = await validatePassword(pin)
+                const isValid =
+                    await StorageEncryptionKeyHelper.validatePinCode(pin)
                 if (isValid) {
                     setIsError({
                         type: PinVerificationError.EDIT_PIN,
@@ -59,7 +60,7 @@ export const LockScreen: React.FC<Props> = memo(
                     onSuccess(pin)
                 }
             },
-            [onSuccess, validatePassword],
+            [onSuccess],
         )
 
         const handleEditPin = useCallback(
@@ -101,7 +102,8 @@ export const LockScreen: React.FC<Props> = memo(
                     return
                 }
 
-                const isValid = await validatePassword(userPin)
+                const isValid =
+                    await StorageEncryptionKeyHelper.validatePinCode(userPin)
 
                 if (isValid) {
                     track(AnalyticsEvent.APP_PIN_UNLOCKED)
@@ -121,7 +123,6 @@ export const LockScreen: React.FC<Props> = memo(
                 isValidatePassword,
                 onSuccess,
                 track,
-                validatePassword,
             ],
         )
 

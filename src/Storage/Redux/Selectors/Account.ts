@@ -51,12 +51,18 @@ export const selectSelectedAccountOrNull = createSelector(
     selectAccounts,
     selectSelectedAccountAddress,
     (accounts, selectedAccountAddress) => {
-        return accounts.find(account =>
+        const selectedAccount = accounts.find(account =>
             AddressUtils.compareAddresses(
                 selectedAccountAddress,
                 account.address,
             ),
         )
+
+        if (!selectedAccount && accounts.length > 0) {
+            return accounts[0]
+        }
+
+        return selectedAccount
     },
 )
 

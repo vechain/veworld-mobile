@@ -2,7 +2,7 @@
 import { Text } from "react-native"
 import { TestWrapper } from "~Test"
 import React from "react"
-import { render, fireEvent, screen } from "@testing-library/react-native"
+import { fireEvent, render, screen } from "@testing-library/react-native"
 import { BaseTouchableBox } from "./BaseTouchableBox"
 
 const baseTouchableBoxTestId = "BaseTouchableBox"
@@ -75,7 +75,7 @@ describe("BaseTouchableBox component", () => {
             flexDirection: "row",
             paddingHorizontal: 16,
             paddingVertical: 12,
-            backgroundColor: "#FFFFFF",
+            backgroundColor: "#30265F",
             opacity: 0.5,
             borderRadius: 16,
             overflow: "hidden",

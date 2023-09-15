@@ -504,7 +504,7 @@ type RootTranslation = {
 	 */
 	BD_COLLECTION: string
 	/**
-	 * A​ ​c​r​i​t​i​c​a​l​ ​o​p​e​r​a​t​i​o​n​ ​h​a​s​ ​f​a​i​l​e​d​ ​a​n​d​ ​y​o​u​ ​n​e​e​d​ ​t​o​ ​r​e​s​e​t​ ​t​h​e​ ​a​p​p
+	 * T​o​ ​c​o​n​t​i​n​u​e​ ​u​s​i​n​g​ ​t​h​i​s​ ​a​p​p​ ​s​e​c​u​r​e​l​y​ ​a​n​d​ ​e​f​f​e​c​t​i​v​e​l​y​,​ ​p​l​e​a​s​e​ ​e​n​a​b​l​e​ ​t​h​e​ ​b​i​o​m​e​t​r​i​c​ ​a​u​t​h​e​n​t​i​c​a​t​i​o​n​ ​f​e​a​t​u​r​e​ ​i​n​ ​y​o​u​r​ ​d​e​v​i​c​e​'​s​ ​s​e​t​t​i​n​g​s​.
 	 */
 	BD_APP_BLOCKED: string
 	/**
@@ -790,6 +790,14 @@ type RootTranslation = {
 	 * S​e​c​u​r​i​t​y​ ​m​e​t​h​o​d
 	 */
 	SB_SECURITY_METHOD: string
+	/**
+	 * T​h​e​ ​s​e​c​u​r​i​t​y​ ​u​p​d​a​t​e​ ​h​a​s​ ​f​a​i​l​e​d​ ​a​n​d​ ​y​o​u​r​ ​s​e​c​u​r​i​t​y​ ​m​e​t​h​o​d​ ​h​a​s​ ​b​e​e​n​ ​r​e​v​e​r​t​e​d​ ​t​o​ ​t​h​e​ ​p​r​e​v​i​o​u​s​ ​o​n​e​.
+	 */
+	ERROR_SECURITY_UPDATE_REVERTED: string
+	/**
+	 * T​h​e​ ​s​e​c​u​r​i​t​y​ ​u​p​d​a​t​e​ ​h​a​s​ ​f​a​i​l​e​d​.​ ​L​o​c​k​i​n​g​ ​t​h​e​ ​a​p​p​l​i​c​a​t​i​o​n
+	 */
+	ERROR_SECURITY_UPDATE_FAILED: string
 	/**
 	 * B​a​c​k​u​p​ ​y​o​u​r​ ​m​n​e​m​o​n​i​c
 	 */
@@ -2967,7 +2975,7 @@ export type TranslationFunctions = {
 	 */
 	BD_COLLECTION: () => LocalizedString
 	/**
-	 * A critical operation has failed and you need to reset the app
+	 * To continue using this app securely and effectively, please enable the biometric authentication feature in your device's settings.
 	 */
 	BD_APP_BLOCKED: () => LocalizedString
 	/**
@@ -3250,6 +3258,14 @@ export type TranslationFunctions = {
 	 * Security method
 	 */
 	SB_SECURITY_METHOD: () => LocalizedString
+	/**
+	 * The security update has failed and your security method has been reverted to the previous one.
+	 */
+	ERROR_SECURITY_UPDATE_REVERTED: () => LocalizedString
+	/**
+	 * The security update has failed. Locking the application
+	 */
+	ERROR_SECURITY_UPDATE_FAILED: () => LocalizedString
 	/**
 	 * Backup your mnemonic
 	 */

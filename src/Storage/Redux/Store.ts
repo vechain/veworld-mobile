@@ -1,40 +1,40 @@
 import { combineReducers } from "redux"
 import {
-    DeviceSlice,
-    UserPreferencesSlice,
-    ConfigSlice,
     AccountSlice,
+    ActivitiesSlice,
     BalanceSlice,
-    NetworkSlice,
+    BeatSlice,
     CacheSlice,
     ContactsSlice,
-    TokenSlice,
     CurrencySlice,
-    ActivitiesSlice,
     DelegationSlice,
+    DeviceSlice,
+    NetworkSlice,
     NftSlice,
-    WalletConnectSessionsSlice,
+    NftSliceState,
     PendingSlice,
-    BeatSlice,
+    TokenSlice,
+    UserPreferencesSlice,
+    WalletConnectSessionsSlice,
 } from "./Slices"
-import { nftPersistConfig } from "./Helpers"
 import { persistReducer } from "redux-persist"
+import { PersistConfig } from "redux-persist/es/types"
 
-export const reducer = combineReducers({
-    [CurrencySlice.name]: CurrencySlice.reducer,
-    [TokenSlice.name]: TokenSlice.reducer,
-    [UserPreferencesSlice.name]: UserPreferencesSlice.reducer,
-    [ConfigSlice.name]: ConfigSlice.reducer,
-    [DeviceSlice.name]: DeviceSlice.reducer,
-    [AccountSlice.name]: AccountSlice.reducer,
-    [NetworkSlice.name]: NetworkSlice.reducer,
-    [BalanceSlice.name]: BalanceSlice.reducer,
-    [CacheSlice.name]: CacheSlice.reducer,
-    [ContactsSlice.name]: ContactsSlice.reducer,
-    [ActivitiesSlice.name]: ActivitiesSlice.reducer,
-    [DelegationSlice.name]: DelegationSlice.reducer,
-    [NftSlice.name]: persistReducer(nftPersistConfig, NftSlice.reducer), // persist specific keys from a reducer
-    [WalletConnectSessionsSlice.name]: WalletConnectSessionsSlice.reducer,
-    [PendingSlice.name]: PendingSlice.reducer,
-    [BeatSlice.name]: BeatSlice.reducer,
-})
+export const reducer = (nftPersistConfig: PersistConfig<NftSliceState>) =>
+    combineReducers({
+        [CurrencySlice.name]: CurrencySlice.reducer,
+        [TokenSlice.name]: TokenSlice.reducer,
+        [UserPreferencesSlice.name]: UserPreferencesSlice.reducer,
+        [DeviceSlice.name]: DeviceSlice.reducer,
+        [AccountSlice.name]: AccountSlice.reducer,
+        [NetworkSlice.name]: NetworkSlice.reducer,
+        [BalanceSlice.name]: BalanceSlice.reducer,
+        [CacheSlice.name]: CacheSlice.reducer,
+        [ContactsSlice.name]: ContactsSlice.reducer,
+        [ActivitiesSlice.name]: ActivitiesSlice.reducer,
+        [DelegationSlice.name]: DelegationSlice.reducer,
+        [NftSlice.name]: persistReducer(nftPersistConfig, NftSlice.reducer), // persist specific keys from a reducer
+        [WalletConnectSessionsSlice.name]: WalletConnectSessionsSlice.reducer,
+        [PendingSlice.name]: PendingSlice.reducer,
+        [BeatSlice.name]: BeatSlice.reducer,
+    })

@@ -143,7 +143,7 @@ const en: BaseTranslation = {
     BD_CREATE_WALLET_TYPE_USER_ACCEPTS: "Creating the wallet the user accepts",
     BD_NFT_DESC_PLACEHOLDER: "Random NFT collection description placeholder in case the NFT collection doesn't have one",
     BD_COLLECTION: "Collection",
-    BD_APP_BLOCKED: "A critical operation has failed and you need to reset the app",
+    BD_APP_BLOCKED: "To continue using this app securely and effectively, please enable the biometric authentication feature in your device's settings.",
 
     // TITLES
     TITLE_WELCOME_TO: "Welcome to ",
@@ -219,6 +219,8 @@ const en: BaseTranslation = {
     SB_EDIT_CONTACT: "Edit contact",
     SB_PASSWORD_AUTH: "Password authorization",
     SB_SECURITY_METHOD: "Security method",
+    ERROR_SECURITY_UPDATE_REVERTED: "The security update has failed and your security method has been reverted to the previous one.",
+    ERROR_SECURITY_UPDATE_FAILED: "The security update has failed. Locking the application",
     SB_BACKUP_MNEMONIC: "Backup your mnemonic",
     SB_ANALYTICS_TRACKING: "Analytics tracking",
     SB_NO_TRANSACTIONS: "Your activities will appear here",

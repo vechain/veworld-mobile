@@ -5,8 +5,10 @@ import { blake2b256 } from "thor-devkit"
 import { selectDevice, selectSelectedAccount } from "~Storage/Redux"
 import TestData from "../../Test/helpers"
 import { LedgerDevice, LocalDevice, WalletAccount } from "~Model"
+import { WalletEncryptionKeyHelper } from "~Components"
 
-const { firstLedgerAccount, ledgerDevice, account1D1, device1 } = TestData.data
+const { firstLedgerAccount, ledgerDevice, account1D1, device1, wallet1 } =
+    TestData.data
 
 jest.mock("axios")
 
@@ -29,6 +31,18 @@ jest.mock("~Services/KeychainService/KeychainService", () => ({
         .fn()
         .mockResolvedValue("ac4a45eaa86188615088082c1dee1547"),
 }))
+jest.mock("~Components/Providers/EncryptedStorageProvider/Helpers", () => ({
+    ...jest.requireActual(
+        "~Components/Providers/EncryptedStorageProvider/Helpers",
+    ),
+    WalletEncryptionKeyHelper: {
+        get: jest.fn(),
+        set: jest.fn(),
+        decryptWallet: jest.fn(),
+        encryptWallet: jest.fn(),
+        init: jest.fn(),
+    },
+}))
 
 const mockDevice = (device: LocalDevice | LedgerDevice) => {
     // @ts-ignore
@@ -45,6 +59,9 @@ const messageToSign = blake2b256("message to sign")
 describe("useSignMessage", () => {
     beforeEach(() => {
         jest.clearAllMocks()
+        ;(
+            WalletEncryptionKeyHelper.decryptWallet as jest.Mock
+        ).mockResolvedValue(wallet1)
     })
 
     it("should render correctly", async () => {

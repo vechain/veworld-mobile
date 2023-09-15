@@ -1,22 +1,22 @@
 import { useCallback, useState } from "react"
-import { CryptoUtils } from "~Utils"
-import { NewLedgerDevice, WALLET_STATUS } from "~Model"
+import { NewLedgerDevice } from "~Model"
 import { useDeviceUtils } from "../useDeviceUtils"
 import {
+    addDeviceAndAccounts,
+    addLedgerDeviceAndAccounts,
+    setMnemonic,
+    setNewLedgerDevice,
+    setSelectedAccount,
     useAppDispatch,
     useAppSelector,
-    addDeviceAndAccounts,
-    setSelectedAccount,
-    setMnemonic,
-    setAppLockStatus,
-    setNewLedgerDevice,
-    addLedgerDeviceAndAccounts,
 } from "~Storage/Redux"
 import { selectAccountsState } from "~Storage/Redux/Selectors"
 import { error } from "~Utils/Logger"
 import { useBiometrics } from "../useBiometrics"
 import { useAnalyticTracking } from "~Hooks/useAnalyticTracking"
 import { AnalyticsEvent } from "~Constants"
+import { WalletEncryptionKeyHelper } from "~Components"
+
 /**
  * useCreateWallet is a hook that allows you to create a wallet and store it in the store
  * @example const { onCreateWallet, accessControl, isComplete } = useCreateWallet()
@@ -51,19 +51,12 @@ export const useCreateWallet = () => {
         }) => {
             try {
                 const { device, wallet } = getDeviceFromMnemonic(mnemonic)
-                dispatch(setMnemonic(undefined))
 
-                // if userPassword is provided, encrypt the wallet with access control false
-                const accessControl = userPassword
-                    ? false
-                    : biometrics?.accessControl ?? false
-
-                const { encryptedWallet } = await CryptoUtils.encryptWallet({
-                    wallet,
-                    rootAddress: device.rootAddress,
-                    accessControl,
-                    hashEncryptionKey: userPassword,
-                })
+                const encryptedWallet =
+                    await WalletEncryptionKeyHelper.encryptWallet(
+                        wallet,
+                        userPassword,
+                    )
 
                 const newAccount = dispatch(
                     addDeviceAndAccounts({
@@ -72,22 +65,22 @@ export const useCreateWallet = () => {
                     }),
                 )
 
-                dispatch(setAppLockStatus(WALLET_STATUS.UNLOCKED))
-
                 if (!selectedAccount)
                     dispatch(
                         setSelectedAccount({ address: newAccount.address }),
                     )
 
+                dispatch(setMnemonic(undefined))
                 setIsComplete(true)
                 track(AnalyticsEvent.WALLET_ADD_LOCAL_SUCCESS)
             } catch (e) {
                 error("CREATE WALLET ERROR : ", e)
                 track(AnalyticsEvent.WALLET_ADD_LOCAL_ERROR)
                 onError?.(e)
+                throw e
             }
         },
-        [dispatch, biometrics, getDeviceFromMnemonic, selectedAccount, track],
+        [dispatch, getDeviceFromMnemonic, selectedAccount, track],
     )
     //* [END] - Create Wallet
 
@@ -112,8 +105,6 @@ export const useCreateWallet = () => {
 
                 dispatch(setNewLedgerDevice(undefined))
 
-                dispatch(setAppLockStatus(WALLET_STATUS.UNLOCKED))
-
                 if (!selectedAccount)
                     dispatch(
                         setSelectedAccount({ address: accounts[0]?.address }),
@@ -125,6 +116,7 @@ export const useCreateWallet = () => {
                 error("CREATE HW WALLET ERROR : ", e)
                 track(AnalyticsEvent.WALLET_ADD_LEDGER_ERROR)
                 onError?.(e)
+                throw e
             }
         },
         [dispatch, selectedAccount, track],

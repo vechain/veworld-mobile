@@ -1,16 +1,8 @@
 import { isEmpty } from "lodash"
 import { useCallback, useEffect, useMemo, useState } from "react"
 import { useDisclosure, useWalletSecurity } from "~Hooks"
-import { LocalDevice } from "~Model"
 import { LOCKSCREEN_SCENARIO } from "~Screens/LockScreen/Enums"
-import { selectLocalDevices, useAppSelector } from "~Storage/Redux"
-import {
-    Operation,
-    OperationType,
-    useSecurityTransactions,
-} from "./useSecurityTransactions"
-import { CryptoUtils } from "~Utils"
-import { usePinCode } from "~Components/Providers/PinCodeProvider/PinCodeProvider"
+import { useSecurityUpdate } from "./useSecurityUpdate"
 
 /**
  * `useEditPin` is a custom React hook that handles the process of editing the Pin for the wallet.
@@ -38,15 +30,13 @@ import { usePinCode } from "~Components/Providers/PinCodeProvider/PinCodeProvide
  *
  * @requires `useWalletSecurity` hook for determining the current security state of the wallet.
  * @requires `useAppSelector` hook with `selectLocalDevices` selector for fetching the local devices where the wallet is stored.
- * @requires `useSecurityTransactions` hook for orchestrating the series of encryption and decryption operations.
  *
  */
 export const useEditPin = () => {
     // [START] - Hooks
     const { isWalletSecurityBiometrics } = useWalletSecurity()
-    const { updatePinCode } = usePinCode()
 
-    const devices = useAppSelector(selectLocalDevices) as LocalDevice[]
+    const updateSecurityMethod = useSecurityUpdate()
 
     const [lockScreenScenario, setScenario] = useState(
         LOCKSCREEN_SCENARIO.EDIT_OLD_PIN,
@@ -85,44 +75,15 @@ export const useEditPin = () => {
         setOldPin("")
     }, [closeEditPinPrompt])
 
-    const { executeTransactions } = useSecurityTransactions({
-        operationType: OperationType.EDIT_PIN,
-        onStateCleanup,
-    })
-
     const changePinInWallets = useCallback(
         async (_oldPin: string, newPin: string) => {
             if (isWalletSecurityBiometrics) return
 
-            const operations: Operation[] = []
+            await updateSecurityMethod(_oldPin, newPin)
 
-            for (const device of devices) {
-                const { decryptedWallet } = await CryptoUtils.decryptWallet(
-                    device,
-                    _oldPin,
-                )
-
-                operations.push({
-                    operation: CryptoUtils.encryptWallet,
-                    data: {
-                        wallet: decryptedWallet,
-                        rootAddress: device.rootAddress,
-                        accessControl: false,
-                        hashEncryptionKey: newPin,
-                        device,
-                    },
-                })
-            }
-
-            await executeTransactions(operations, _oldPin)
-            updatePinCode(newPin)
+            onStateCleanup()
         },
-        [
-            updatePinCode,
-            devices,
-            executeTransactions,
-            isWalletSecurityBiometrics,
-        ],
+        [onStateCleanup, updateSecurityMethod, isWalletSecurityBiometrics],
     )
 
     const onPinSuccess = useCallback(
