@@ -1,6 +1,6 @@
 import React, { useCallback, useEffect, useMemo, useState } from "react"
 import { MMKV } from "react-native-mmkv"
-import { debug, error, HexUtils, warn } from "~Utils"
+import { debug, error, HexUtils, PlatformUtils, warn } from "~Utils"
 import { BiometricState, SecurityLevelType, WALLET_STATUS } from "~Model"
 import {
     PreviousInstallation,
@@ -143,10 +143,23 @@ export const ApplicationSecurityProvider = ({
                 backUpKeys?.storage ??
                 (await StorageEncryptionKeyHelper.get(pinCode))
         } catch (e) {
-            if (e instanceof Error && e.message.includes("User canceled")) {
-                return unlock()
-            } else {
-                throw e
+            if (PlatformUtils.isIOS()) {
+                if (e instanceof Error && e.message.includes("User canceled")) {
+                    return unlock()
+                } else {
+                    throw e
+                }
+            }
+            if (PlatformUtils.isAndroid()) {
+                if (
+                    e instanceof Error &&
+                    (e.message.includes("Cancel") ||
+                        e.message.includes("code: 13"))
+                ) {
+                    return unlock()
+                } else {
+                    throw e
+                }
             }
         }
 
