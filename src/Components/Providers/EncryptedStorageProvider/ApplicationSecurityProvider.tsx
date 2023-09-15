@@ -163,21 +163,23 @@ export const ApplicationSecurityProvider = ({
             }
         }
 
-        setReduxStorage({
-            mmkv: UserEncryptedStorage,
-            encryptionKey: keys.redux,
-        })
+        if (keys) {
+            setReduxStorage({
+                mmkv: UserEncryptedStorage,
+                encryptionKey: keys.redux,
+            })
 
-        setImageStorage({
-            mmkv: ImageStorage,
-            encryptionKey: keys.images,
-        })
-        setMetadataStorage({
-            mmkv: MetadataStorage,
-            encryptionKey: keys.metadata,
-        })
+            setImageStorage({
+                mmkv: ImageStorage,
+                encryptionKey: keys.images,
+            })
+            setMetadataStorage({
+                mmkv: MetadataStorage,
+                encryptionKey: keys.metadata,
+            })
 
-        setWalletStatus(WALLET_STATUS.UNLOCKED)
+            setWalletStatus(WALLET_STATUS.UNLOCKED)
+        }
     }, [])
 
     /**
