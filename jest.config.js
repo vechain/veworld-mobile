@@ -47,6 +47,7 @@ module.exports = {
         "^~Hooks(.*)": ["<rootDir>/src/Hooks$1"],
         "^~Utils(.*)": ["<rootDir>/src/Utils$1"],
         "^~Components(.*)": ["<rootDir>/src/Components$1"],
+        "^~Events(.*)": ["<rootDir>/src/Events$1"],
         "^~i18n(.*)": ["<rootDir>/src/i18n$1"],
         "^~Assets(.*)": ["<rootDir>/src/Assets$1"],
         "^~Test$": ["<rootDir>/src/Test/index.tsx"],
