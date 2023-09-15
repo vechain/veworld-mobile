@@ -1,4 +1,4 @@
-import React, { useMemo } from "react"
+import React, { useEffect, useMemo } from "react"
 import { useI18nContext } from "~i18n"
 import { useThemedStyles } from "~Hooks"
 import LottieView from "lottie-react-native"
@@ -7,9 +7,14 @@ import { BlockedAppDark, BlockedAppLight } from "~Assets/Lottie/BlockedApp"
 import { SafeAreaView } from "react-native-safe-area-context"
 import { PlatformUtils } from "~Utils"
 import { ColorThemeType } from "~Constants"
+import RNBootSplash from "react-native-bootsplash"
 
 export const StandaloneAppBlockedScreen = () => {
     const { LL } = useI18nContext()
+
+    useEffect(() => {
+        RNBootSplash.hide({ fade: true, duration: 500 })
+    }, [])
 
     const { styles, theme } = useThemedStyles(baseStyles)
 

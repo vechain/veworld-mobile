@@ -1,14 +1,15 @@
 /* eslint-disable react-native/no-inline-styles */
-import React, { memo, useCallback, useMemo, useState } from "react"
+import React, { memo, useCallback, useEffect, useMemo, useState } from "react"
 import { useOnDigitPress } from "../LockScreen/useOnDigitPress"
 import { PinVerificationError, PinVerificationErrorType } from "~Model"
 import { SafeAreaView } from "react-native-safe-area-context"
-import { View, StyleSheet, Text } from "react-native"
+import { StyleSheet, Text, View } from "react-native"
 import { PlatformUtils } from "~Utils"
 import { useI18nContext } from "~i18n"
 import { ColorThemeType, isSmallScreen } from "~Constants"
 import { StandaloneNumPad, StandalonePasswordPins } from "./components"
 import { useThemedStyles } from "~Hooks"
+import RNBootSplash from "react-native-bootsplash"
 
 type Props = {
     onPinInserted: (pin: string) => Promise<void>
@@ -31,6 +32,10 @@ export const StandaloneLockScreen: React.FC<Props> = memo(
         const { LL } = useI18nContext()
 
         const { styles } = useThemedStyles(baseStyles)
+
+        useEffect(() => {
+            RNBootSplash.hide({ fade: true, duration: 500 })
+        }, [])
 
         /**
          * Called by `useOnDigitPress` when the user has finished typing the pin

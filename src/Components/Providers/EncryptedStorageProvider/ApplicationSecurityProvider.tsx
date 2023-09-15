@@ -12,7 +12,6 @@ import {
 import Onboarding from "~Components/Providers/EncryptedStorageProvider/Helpers/Onboarding"
 import { useAppState, useBiometrics } from "~Hooks"
 import { StandaloneAppBlockedScreen, StandaloneLockScreen } from "~Screens"
-import RNBootSplash from "react-native-bootsplash"
 import { AnimatedSplashScreen } from "../../../AnimatedSplashScreen"
 import { GlobalEventEmitter, LOCK_APP_EVENT } from "~Events"
 
@@ -121,7 +120,7 @@ export const ApplicationSecurityProvider = ({
     /**
      * Unlock the app
      */
-    const unlock = useCallback(async (pinCode?: string) => {
+    const unlock = useCallback(async (pinCode?: string): Promise<void> => {
         let backUpKeys = null
 
         if (pinCode) {
@@ -137,9 +136,19 @@ export const ApplicationSecurityProvider = ({
             await SecurityUpgradeBackup.clear()
         }
 
-        const keys =
-            backUpKeys?.storage ??
-            (await StorageEncryptionKeyHelper.get(pinCode))
+        let keys
+
+        try {
+            keys =
+                backUpKeys?.storage ??
+                (await StorageEncryptionKeyHelper.get(pinCode))
+        } catch (e) {
+            if (e instanceof Error && e.message.includes("User canceled")) {
+                return unlock()
+            } else {
+                throw e
+            }
+        }
 
         setReduxStorage({
             mmkv: UserEncryptedStorage,
@@ -375,8 +384,6 @@ export const ApplicationSecurityProvider = ({
                 </ApplicationSecurityContext.Provider>
             )
         case WALLET_STATUS.LOCKED:
-            RNBootSplash.hide({ fade: true, duration: 500 })
-
             if (userDisabledBiometrics) return <StandaloneAppBlockedScreen />
 
             if (securityType !== SecurityLevelType.SECRET) return <></>
