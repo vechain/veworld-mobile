@@ -4,10 +4,10 @@ import { useRenameWallet, useScrollableBottomSheet, useTheme } from "~Hooks"
 import { AddressUtils } from "~Utils"
 import {
     BaseBottomSheet,
+    BaseBottomSheetTextInput,
     BaseIcon,
     BaseSpacer,
     BaseText,
-    BaseTextInput,
     BaseView,
 } from "~Components"
 import { useI18nContext } from "~i18n"
@@ -101,7 +101,7 @@ export const WalletMgmtBottomSheet = React.forwardRef<
                 />
             </BaseView>
             <BaseSpacer height={16} />
-            <BaseTextInput
+            <BaseBottomSheetTextInput
                 placeholder={
                     device?.alias || LL.WALLET_MANAGEMENT_WALLET_NAME()
                 }
