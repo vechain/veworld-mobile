@@ -40,7 +40,7 @@ export const CustomTokenCard = memo(({ token, containerStyle }: Props) => {
             {!hasIcon && (
                 <BaseCustomTokenIcon
                     style={styles.icon}
-                    tokenSymbol={token.symbol}
+                    tokenSymbol={token.symbol ?? ""}
                     tokenAddress={address.toChecksumed(token.address)}
                 />
             )}

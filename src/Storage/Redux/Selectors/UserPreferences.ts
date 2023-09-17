@@ -44,7 +44,7 @@ export const selectAnalyticsTrackingEnabled = createSelector(reducer, state => {
 })
 
 export const selectSentryTrackingEnabled = createSelector(reducer, state => {
-    return state.isSentryTrackingEnabled
+    return __DEV__ ? false : state.isSentryTrackingEnabled
 })
 
 export const selectAreDevFeaturesEnabled = createSelector(reducer, state => {
