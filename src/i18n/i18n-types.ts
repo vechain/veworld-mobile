@@ -859,6 +859,10 @@ type RootTranslation = {
 	 */
 	BIOMETRICS: string
 	/**
+	 * P​I​N​ ​C​o​d​e
+	 */
+	PIN_CODE: string
+	/**
 	 * I​r​i​s
 	 */
 	IRIS: string
@@ -3326,6 +3330,10 @@ export type TranslationFunctions = {
 	 * Biometrics
 	 */
 	BIOMETRICS: () => LocalizedString
+	/**
+	 * PIN Code
+	 */
+	PIN_CODE: () => LocalizedString
 	/**
 	 * Iris
 	 */

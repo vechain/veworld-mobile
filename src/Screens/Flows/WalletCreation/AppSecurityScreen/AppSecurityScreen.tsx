@@ -14,7 +14,7 @@ export const AppSecurityScreen = () => {
     const nav = useNavigation()
 
     const { currentSecurityLevel } = useBiometricType()
-    useBiometrics()
+    const biometrics = useBiometrics()
 
     const onBiometricsPress = useCallback(async () => {
         nav.navigate(Routes.WALLET_SUCCESS, {
@@ -66,6 +66,10 @@ export const AppSecurityScreen = () => {
                     <BaseButton
                         haptics="Medium"
                         action={onBiometricsPress}
+                        disabled={
+                            !biometrics ||
+                            biometrics.currentSecurityLevel !== "BIOMETRIC"
+                        }
                         w={100}
                         mx={20}
                         my={20}
