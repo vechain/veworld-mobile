@@ -29,24 +29,13 @@ export const useSecurityButtons = (handleOnSecurityUpgrade: () => void) => {
             buttons: [
                 {
                     id: SecurityLevelType.BIOMETRIC,
-                    // Multiple ternary prevents flickering of the button label
-                    label:
-                        authTypeAvailable === "FACIAL_RECOGNITION"
-                            ? LL.FACE_ID()
-                            : authTypeAvailable === "FINGERPRINT"
-                            ? LL.TOUCH_ID()
-                            : PlatformUtils.isAndroid()
-                            ? LL.TOUCH_ID()
-                            : LL.FACE_ID(),
+                    label: PlatformUtils.isAndroid()
+                        ? LL.TOUCH_ID()
+                        : LL.FACE_ID(),
                     // Multiple ternary prevents flickering of the button icon
-                    icon:
-                        authTypeAvailable === "FINGERPRINT"
-                            ? "fingerprint"
-                            : authTypeAvailable === "FACIAL_RECOGNITION"
-                            ? "face-recognition"
-                            : PlatformUtils.isAndroid()
-                            ? "fingerprint"
-                            : "face-recognition",
+                    icon: PlatformUtils.isAndroid()
+                        ? "fingerprint"
+                        : "face-recognition",
                     disabled:
                         !biometrics ||
                         biometrics.currentSecurityLevel !==
