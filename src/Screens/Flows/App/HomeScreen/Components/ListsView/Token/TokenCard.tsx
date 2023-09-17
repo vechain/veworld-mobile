@@ -63,7 +63,7 @@ export const TokenCard = memo(
                 {!icon && (
                     <BaseCustomTokenIcon
                         style={styles.icon}
-                        tokenSymbol={tokenWithBalance.symbol}
+                        tokenSymbol={tokenWithBalance.symbol ?? ""}
                         tokenAddress={address.toChecksumed(
                             tokenWithBalance.address,
                         )}
