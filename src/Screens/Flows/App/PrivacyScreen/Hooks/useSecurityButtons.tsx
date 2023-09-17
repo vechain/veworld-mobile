@@ -32,7 +32,6 @@ export const useSecurityButtons = (handleOnSecurityUpgrade: () => void) => {
                     label: PlatformUtils.isAndroid()
                         ? LL.TOUCH_ID()
                         : LL.FACE_ID(),
-                    // Multiple ternary prevents flickering of the button icon
                     icon: PlatformUtils.isAndroid()
                         ? "fingerprint"
                         : "face-recognition",
