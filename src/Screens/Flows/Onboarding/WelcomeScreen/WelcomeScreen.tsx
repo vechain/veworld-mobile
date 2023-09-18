@@ -19,6 +19,7 @@ import {
     useAppSelector,
 } from "~Storage/Redux"
 import { useDeviceUtils } from "~Hooks"
+import { Linking } from "react-native"
 
 export const WelcomeScreen = () => {
     const nav = useNavigation()
@@ -65,6 +66,16 @@ export const WelcomeScreen = () => {
         }
     }
 
+    const goToTermsAndConditions = useCallback(() => {
+        const url = process.env.REACT_APP_TERMS_OF_SERVICE_URL
+        url && Linking.openURL(url)
+    }, [])
+
+    const goToPrivacyPolicy = useCallback(() => {
+        const url = process.env.REACT_APP_PRIVACY_POLICY_URL
+        url && Linking.openURL(url)
+    }, [])
+
     return (
         <Layout
             noBackButton
@@ -96,10 +107,35 @@ export const WelcomeScreen = () => {
             }
             footer={
                 <BaseView alignItems="center" w={100}>
-                    <BaseText typographyFont="caption" py={10}>
-                        {LL.BD_GDPR()}
-                    </BaseText>
-
+                    <BaseView
+                        alignSelf="center"
+                        flexDirection="row"
+                        justifyContent="center"
+                        alignItems="center"
+                        flexWrap="wrap">
+                        <BaseText typographyFont="body" align="center">
+                            {LL.BD_CREATE_WALLET_TYPE_USER_ACCEPTS()}
+                        </BaseText>
+                        <BaseText
+                            typographyFont="bodyMedium"
+                            underline
+                            align="center"
+                            onPress={goToTermsAndConditions}>
+                            {LL.COMMON_LBL_TERMS_AND_CONDITIONS()}
+                        </BaseText>
+                        <BaseText typographyFont="body" align="center">
+                            {" "}
+                            {LL.COMMON_LBL_AND()}{" "}
+                        </BaseText>
+                        <BaseText
+                            typographyFont="bodyMedium"
+                            underline
+                            align="center"
+                            onPress={goToPrivacyPolicy}>
+                            {LL.COMMON_LBL_PRIVACY_POLICY()}
+                        </BaseText>
+                    </BaseView>
+                    <BaseSpacer height={20} />
                     <BaseButton
                         action={onNavigate}
                         w={100}
