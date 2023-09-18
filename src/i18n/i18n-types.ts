@@ -211,10 +211,6 @@ type RootTranslation = {
 	 */
 	BTN_WALLET_CONFRIM_DELETION: string
 	/**
-	 * B​y​ ​p​r​e​s​s​i​n​g​ ​‘​g​e​t​ ​s​t​a​r​t​e​d​’​ ​y​o​u​ ​a​r​e​ ​a​g​r​e​e​i​n​g​ ​t​o​ ​V​e​W​o​r​l​d​’​s​ ​T​e​r​m​s​ ​a​n​d​ ​c​o​n​d​i​t​i​o​n​s​ ​a​n​d​ ​P​r​i​v​a​c​y​ ​p​o​l​i​c​y​,​ ​c​o​m​p​l​i​a​n​t​ ​w​i​t​h​ ​A​r​t​.​ ​5​ ​G​D​P​R​ ​(​R​e​q​u​i​r​e​d​)
-	 */
-	BD_GDPR: string
-	/**
 	 * Y​o​u​r​ ​V​e​W​o​r​l​d​.​ ​A​ ​s​e​l​f​ ​c​u​s​t​o​d​y​ ​m​o​b​i​l​e​ ​c​r​y​p​t​o​ ​w​a​l​l​e​t​ ​f​o​r​ ​v​e​c​h​a​i​n
 	 */
 	BD_WELCOME_SCREEN: string
@@ -2686,10 +2682,6 @@ export type TranslationFunctions = {
 	 * I state that I want to delete this wallet
 	 */
 	BTN_WALLET_CONFRIM_DELETION: () => LocalizedString
-	/**
-	 * By pressing ‘get started’ you are agreeing to VeWorld’s Terms and conditions and Privacy policy, compliant with Art. 5 GDPR (Required)
-	 */
-	BD_GDPR: () => LocalizedString
 	/**
 	 * Your VeWorld. A self custody mobile crypto wallet for vechain
 	 */
