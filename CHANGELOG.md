@@ -1,5 +1,16 @@
 
 
+## [1.1.1](https://github.com/vechainfoundation/veworld-mobile/compare/0.0.1...1.1.1) (2023-09-18)
+
+
+### Bug Fixes
+
+* delete selected tokens ([#1351](https://github.com/vechainfoundation/veworld-mobile/issues/1351)) ([32ba764](https://github.com/vechainfoundation/veworld-mobile/commit/32ba764384bc6e061b70ce6305110c0982b701a1))
+* **ledger:** not migrating after onboarding with ledger ([#1372](https://github.com/vechainfoundation/veworld-mobile/issues/1372)) ([36a657c](https://github.com/vechainfoundation/veworld-mobile/commit/36a657c15b7e0b267142d94247a0e81a58d488a2))
+* length of undefined sentry error and remove sentry when running in dev mode ([#1380](https://github.com/vechainfoundation/veworld-mobile/issues/1380)) ([b3734a3](https://github.com/vechainfoundation/veworld-mobile/commit/b3734a366704980bdfabafefef973874fcfc7f4c))
+* remove dev mnemonic ([#1370](https://github.com/vechainfoundation/veworld-mobile/issues/1370)) ([17d6297](https://github.com/vechainfoundation/veworld-mobile/commit/17d629772e3f9f66394cf73ef50aa63882a01277))
+* wallet management bottom sheet text input ([#1376](https://github.com/vechainfoundation/veworld-mobile/issues/1376)) ([ba8f11a](https://github.com/vechainfoundation/veworld-mobile/commit/ba8f11ad23fd85de03c163a9dbda18ac0eae815e))
+
 ## [0.1.3](https://github.com/vechainfoundation/veworld-mobile/compare/v0.1.1-android...v0.1.3) (2023-08-14)
 
 
