@@ -239,6 +239,7 @@ const en: BaseTranslation = {
     TOUCH_ID: "Touch ID",
     FINGERPRINT: "Fingerprint",
     BIOMETRICS: "Biometrics",
+    PIN_CODE: "PIN Code",
     IRIS: "Iris",
     DEVICE_PIN: "Device Pin",
     TAP_TO_VIEW: "Tap to view",
