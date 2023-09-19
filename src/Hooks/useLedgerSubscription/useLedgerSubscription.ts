@@ -63,7 +63,7 @@ export const useLedgerSubscription = ({
                     localName: descriptor?.localName || "",
                     name: descriptor?.name || "",
                     rssi: descriptor?.rssi || 0,
-                    productName: deviceModel.productName,
+                    productName: deviceModel?.productName || "",
                 }
 
                 if (device)

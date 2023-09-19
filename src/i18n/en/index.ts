@@ -58,8 +58,6 @@ const en: BaseTranslation = {
 
 
     // BODY
-    BD_GDPR:
-        "By pressing ‘get started’ you are agreeing to VeWorld’s Terms and conditions and Privacy policy, compliant with Art. 5 GDPR (Required)",
     BD_WELCOME_SCREEN:
         "Your VeWorld. A self custody mobile crypto wallet for vechain",
     BD_ONBOARDING_SLIDE_01:
