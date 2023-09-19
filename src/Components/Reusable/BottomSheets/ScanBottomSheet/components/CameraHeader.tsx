@@ -14,6 +14,7 @@ export const CameraHeader = ({ onClose }: { onClose: () => void }) => {
             style={baseStyles.container}
             alignItems="center"
             justifyContent="center"
+            mb={12}
             w={100}>
             <BaseIcon
                 name="close"

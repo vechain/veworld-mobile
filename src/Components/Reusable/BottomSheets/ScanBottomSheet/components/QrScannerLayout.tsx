@@ -5,7 +5,7 @@ import { SCREEN_HEIGHT, SCREEN_WIDTH } from "~Constants"
 
 const deviceWidth = SCREEN_WIDTH
 const deviceHeight = SCREEN_HEIGHT
-const QR_SCAN_SQUARE_SIZE = Dimensions.get("window").width - 40
+const QR_SCAN_SQUARE_SIZE = Dimensions.get("window").width - 48
 
 type Props = { color: string }
 
@@ -14,10 +14,9 @@ export const QrScannerLayout = ({ color }: Props) => (
         <Svg height="100%" width="100%">
             <Defs>
                 <Mask id="mask" x="0" y="0" height="100%" width="100%">
-                    <Rect height="100%" width="100%" fill="#fff" />
                     <Rect
                         x={deviceWidth / 2 - QR_SCAN_SQUARE_SIZE / 2}
-                        y={deviceHeight / 2 - QR_SCAN_SQUARE_SIZE / 2}
+                        y={deviceHeight / 2.4 - QR_SCAN_SQUARE_SIZE / 2}
                         rx="50"
                         ry="50"
                         width={QR_SCAN_SQUARE_SIZE}
@@ -41,7 +40,9 @@ export const QrScannerLayout = ({ color }: Props) => (
 
 const baseStyles = StyleSheet.create({
     container: {
-        position: "absolute",
+        justifyContent: "center",
+        alignItems: "center",
+
         width: deviceWidth,
         height: deviceHeight,
     },
