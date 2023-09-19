@@ -875,6 +875,10 @@ type RootTranslation = {
 	 */
 	BIOMETRICS_PROMPT: string
 	/**
+	 * U​n​l​o​c​k​ ​y​o​u​r​ ​w​a​l​l​e​t​ ​u​s​i​n​g​ ​B​i​o​m​e​t​r​i​c​ ​A​u​t​h​e​n​t​i​c​a​t​i​o​n​.
+	 */
+	BIOMETRICS_PROMPT_UNLOCK: string
+	/**
 	 * V​e​W​o​r​l​d
 	 */
 	VEWORLD: string
@@ -3342,6 +3346,10 @@ export type TranslationFunctions = {
 	 * Please use Biometrics to secure your wallet.
 	 */
 	BIOMETRICS_PROMPT: () => LocalizedString
+	/**
+	 * Unlock your wallet using Biometric Authentication.
+	 */
+	BIOMETRICS_PROMPT_UNLOCK: () => LocalizedString
 	/**
 	 * VeWorld
 	 */

@@ -242,6 +242,7 @@ const en: BaseTranslation = {
     DEVICE_PIN: "Device Pin",
     TAP_TO_VIEW: "Tap to view",
     BIOMETRICS_PROMPT: "Please use Biometrics to secure your wallet.",
+    BIOMETRICS_PROMPT_UNLOCK: "Unlock your wallet using Biometric Authentication.",
     VEWORLD: "VeWorld",
 
 

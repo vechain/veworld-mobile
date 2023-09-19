@@ -1,6 +1,7 @@
 import { Keychain } from "~Storage"
 import { error } from "~Utils/Logger"
 import { ACCESSIBLE, Options } from "react-native-keychain"
+import * as i18n from "~i18n"
 
 const deleteKey = async (key: string) => {
     const options: Options = {
@@ -16,7 +17,12 @@ const deleteKey = async (key: string) => {
 }
 
 const getKey = async (key: string) => {
+    const locale = i18n.detectLocale()
+    let title = i18n.i18n()[locale].BIOMETRICS_PROMPT_UNLOCK()
+    let cancel = i18n.i18n()[locale].COMMON_BTN_CANCEL()
+
     const options: Options = {
+        authenticationPrompt: { title, cancel },
         accessible: ACCESSIBLE.WHEN_UNLOCKED_THIS_DEVICE_ONLY,
         service: key,
     }
@@ -29,7 +35,12 @@ const getKey = async (key: string) => {
 }
 
 const setKey = async (key: string, value: string) => {
+    const locale = i18n.detectLocale()
+    let title = i18n.i18n()[locale].BIOMETRICS_PROMPT_UNLOCK()
+    let cancel = i18n.i18n()[locale].COMMON_BTN_CANCEL()
+
     const options: Options = {
+        authenticationPrompt: { title, cancel },
         accessible: ACCESSIBLE.WHEN_UNLOCKED_THIS_DEVICE_ONLY,
         service: key,
     }
