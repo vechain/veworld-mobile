@@ -33,6 +33,9 @@ export const CameraHeader = ({ onClose }: { onClose: () => void }) => {
 const baseStyles = StyleSheet.create({
     container: {
         marginTop: PlatformUtils.isIOS() ? 60 : 20,
+        top: 0,
+        left: 0,
+        position: "absolute",
     },
     icon: {
         position: "absolute",
