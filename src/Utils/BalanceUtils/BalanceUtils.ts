@@ -39,7 +39,7 @@ const getBalanceFromBlockchain = async (
                 thor,
             )
 
-        if (!balance) throw new Error("Failed to get balance")
+        if (!balance) return
 
         return {
             balance,

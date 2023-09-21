@@ -554,6 +554,7 @@ const en: BaseTranslation = {
     MANAGE_CUSTOM_TOKENS_ADD_DESCRIPTION: "Are you sure you want to add the selected token?",
 
     MANAGE_CUSTOM_TOKENS_ERROR_WRONG_ADDRESS: "The address entered is incorrect or can't be added to this network",
+    MANAGE_CUSTOM_TOKENS_GENERIC_ERROR: "Something went wrong, please check the validty of the token and try again",
     MANAGE_CUSTOM_TOKENS_ERROR_OFFICIAL_TOKEN: "This is an official token, please select it from the previous list",
     MANAGE_CUSTOM_TOKENS_ERROR_ALREADY_PRESENT: "This custom token is already present",
     MANAGE_CUSTOM_TOKENS_RECEIVE_TOKENS: "Receive tokens",
