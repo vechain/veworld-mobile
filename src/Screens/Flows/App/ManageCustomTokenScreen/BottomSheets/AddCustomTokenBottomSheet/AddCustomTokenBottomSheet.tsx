@@ -25,9 +25,10 @@ import {
 } from "~Storage/Redux"
 import { FungibleToken } from "~Model"
 import { useAnalyticTracking, useCameraBottomSheet } from "~Hooks"
-import { AddressUtils, debug, info, warn } from "~Utils"
+import { AddressUtils, debug, warn } from "~Utils"
 import { getCustomTokenInfo } from "../../Utils"
 import { AnalyticsEvent, ScanTarget } from "~Constants"
+import { isEmpty } from "lodash"
 
 type Props = {
     tokenAddress?: string
@@ -62,13 +63,13 @@ export const AddCustomTokenBottomSheet = React.forwardRef<
 
     const account = useAppSelector(selectSelectedAccount)
 
+    // TODO: refactor token checks to a hook #1415
     const handleValueChange = useCallback(
         async (addressRaw: string) => {
             const address = addressRaw.toLowerCase()
             setErrorMessage("")
             setValue(address)
             if (AddressUtils.isValid(address)) {
-                debug("Valid address")
                 try {
                     // check if it is an official token
                     if (
@@ -98,10 +99,16 @@ export const AddCustomTokenBottomSheet = React.forwardRef<
                         thorClient,
                     })
                     if (newToken) {
-                        info(
-                            "fetched custom token info: ",
-                            JSON.stringify(newToken),
-                        )
+                        if (
+                            isEmpty(newToken.decimals) ||
+                            isEmpty(newToken.symbol) ||
+                            isEmpty(newToken.name)
+                        ) {
+                            setErrorMessage(
+                                LL.MANAGE_CUSTOM_TOKENS_GENERIC_ERROR(),
+                            )
+                            return
+                        }
                         setNewCustomToken(newToken)
                     } else {
                         setErrorMessage(
@@ -201,7 +208,12 @@ export const AddCustomTokenBottomSheet = React.forwardRef<
                             testID="AddCustomTokenBottomSheet-TextInput-Address"
                             rightIcon={value ? "close" : "qrcode-scan"}
                             onIconPress={
-                                !value ? handleOpenCamera : () => setValue("")
+                                !value
+                                    ? handleOpenCamera
+                                    : () => {
+                                          setValue("")
+                                          setErrorMessage("")
+                                      }
                             }
                         />
                     </BaseView>

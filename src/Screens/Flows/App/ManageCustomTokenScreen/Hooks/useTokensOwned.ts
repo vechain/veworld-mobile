@@ -11,6 +11,7 @@ import {
 
 import { useI18nContext } from "~i18n"
 import { fetchTokensOwned } from "~Networking"
+import { isEmpty } from "lodash"
 
 /**
  * React hook to manage fetching and storing token balances owned by an account.
@@ -54,11 +55,30 @@ export const useTokensOwned = () => {
         [],
     )
 
+    // Remove tokens that don't have a valid name, symbol or decimals
+    const filterNonValidTokens = useCallback(
+        (tokensToFilter: Balance[]): Balance[] => {
+            return tokensToFilter.filter((token: Balance) => {
+                if (
+                    isEmpty(token.tokenDecimals) ||
+                    isEmpty(token.tokenSymbol) ||
+                    isEmpty(token.tokenName)
+                ) {
+                    return
+                }
+
+                return token
+            })
+        },
+        [],
+    )
+
     const fetchTokens = useCallback(async () => {
         info("Fetching tokens owned on page", page)
         // Reset hasFetched flag
         setHasFetched(false)
         // Proceed if address exists
+
         if (selectedAccount) {
             try {
                 // Fetch tokens owned
@@ -79,13 +99,15 @@ export const useTokensOwned = () => {
                     balances,
                 )
 
+                const validTokens = filterNonValidTokens(tokensNotSelected)
+
                 if (page === 0) {
-                    setTokens(tokensNotSelected)
+                    setTokens(validTokens)
                     incrementPageAndSetFetchedFlag()
                     return
                 }
 
-                setTokens(prevTokens => [...prevTokens, ...tokensNotSelected])
+                setTokens(prevTokens => [...prevTokens, ...validTokens])
 
                 incrementPageAndSetFetchedFlag()
             } catch (e) {
@@ -105,6 +127,7 @@ export const useTokensOwned = () => {
         network,
         filterNonSelectedTokens,
         balances,
+        filterNonValidTokens,
         LL,
     ])
 

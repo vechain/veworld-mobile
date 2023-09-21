@@ -1897,6 +1897,10 @@ type RootTranslation = {
 	 */
 	MANAGE_CUSTOM_TOKENS_ERROR_WRONG_ADDRESS: string
 	/**
+	 * S​o​m​e​t​h​i​n​g​ ​w​e​n​t​ ​w​r​o​n​g​,​ ​p​l​e​a​s​e​ ​c​h​e​c​k​ ​t​h​e​ ​v​a​l​i​d​t​y​ ​o​f​ ​t​h​e​ ​t​o​k​e​n​ ​a​n​d​ ​t​r​y​ ​a​g​a​i​n
+	 */
+	MANAGE_CUSTOM_TOKENS_GENERIC_ERROR: string
+	/**
 	 * T​h​i​s​ ​i​s​ ​a​n​ ​o​f​f​i​c​i​a​l​ ​t​o​k​e​n​,​ ​p​l​e​a​s​e​ ​s​e​l​e​c​t​ ​i​t​ ​f​r​o​m​ ​t​h​e​ ​p​r​e​v​i​o​u​s​ ​l​i​s​t
 	 */
 	MANAGE_CUSTOM_TOKENS_ERROR_OFFICIAL_TOKEN: string
@@ -4348,6 +4352,10 @@ Please, try again later.
 	 * The address entered is incorrect or can't be added to this network
 	 */
 	MANAGE_CUSTOM_TOKENS_ERROR_WRONG_ADDRESS: () => LocalizedString
+	/**
+	 * Something went wrong, please check the validty of the token and try again
+	 */
+	MANAGE_CUSTOM_TOKENS_GENERIC_ERROR: () => LocalizedString
 	/**
 	 * This is an official token, please select it from the previous list
 	 */
