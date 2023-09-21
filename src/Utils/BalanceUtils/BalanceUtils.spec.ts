@@ -122,16 +122,15 @@ describe("BalanceUtils", () => {
         expect(balance?.balance).toEqual(decodedTokenBalance)
     })
 
-    it("SHA token - should throw an error", async () => {
-        const balanceRequest = async () =>
-            await BalanceUtils.getBalanceFromBlockchain(
-                token2.address,
-                account1D1.address,
-                mainNetwork,
-                thorClientWithCallError,
-            )
+    it("SHA token - should return undefined", async () => {
+        const balanceRequest = await BalanceUtils.getBalanceFromBlockchain(
+            token2.address,
+            account1D1.address,
+            mainNetwork,
+            thorClientWithCallError,
+        )
 
-        expect(balanceRequest).rejects.toThrowError()
+        expect(balanceRequest).toBeUndefined()
     })
 
     it("should return the correct indication for token balance", async () => {
