@@ -40,7 +40,9 @@ export const FungibleTokenActivityBox: React.FC<Props> = memo(
             useAppSelector(selectOfficialTokens),
         ].flat()
 
-        const { symbol, decimals } = useFungibleTokenInfo(activity.tokenAddress)
+        const { symbol, decimals, name, address } = useFungibleTokenInfo(
+            activity.tokenAddress,
+        )
 
         const token = useMemo(
             () =>
@@ -52,7 +54,17 @@ export const FungibleTokenActivityBox: React.FC<Props> = memo(
         )
 
         const exchangeRate = useAppSelector((state: RootState) =>
-            selectCurrencyExchangeRate(state, token?.symbol ?? symbol ?? ""),
+            selectCurrencyExchangeRate(
+                state,
+                token ?? {
+                    symbol: symbol ?? "",
+                    decimals: decimals ?? 0,
+                    name: name ?? "",
+                    address: address ?? "",
+                    icon: "",
+                    custom: false,
+                },
+            ),
         )
 
         const currency = useAppSelector(selectCurrency)

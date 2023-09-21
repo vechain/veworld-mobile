@@ -201,9 +201,9 @@ export const selectSendableTokensWithBalance = createSelector(
 export const selectFiatBalance = createSelector(
     [
         selectVetTokenWithBalance,
-        state => selectCurrencyExchangeRate(state, "VET"),
+        state => selectCurrencyExchangeRate(state, VET),
         selectVthoTokenWithBalance,
-        state => selectCurrencyExchangeRate(state, "VTHO"),
+        state => selectCurrencyExchangeRate(state, VTHO),
     ],
     (vetBalance, vetExchangeRate, vthoBalance, vthoExchangeRate) => {
         return new BigNumber(

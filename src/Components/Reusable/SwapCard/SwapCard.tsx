@@ -40,11 +40,11 @@ export const SwapCard = memo(
         )
 
         const exchangeRatePaid = useAppSelector((state: RootState) =>
-            selectCurrencyExchangeRate(state, paidToken?.symbol ?? ""),
+            selectCurrencyExchangeRate(state, paidToken),
         )
 
         const exchangeRateReceived = useAppSelector((state: RootState) =>
-            selectCurrencyExchangeRate(state, receivedToken?.symbol ?? ""),
+            selectCurrencyExchangeRate(state, receivedToken),
         )
 
         const paidTokenAddressShort = useMemo(() => {
