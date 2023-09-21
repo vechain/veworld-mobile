@@ -22,6 +22,8 @@ import { useNavigation } from "@react-navigation/native"
 import { WALLET_STATUS } from "~Model"
 import { Linking } from "react-native"
 import { useWcRequest } from "./hooks"
+import { rpcErrors } from "@metamask/rpc-errors"
+import { JsonRpcError } from "@metamask/rpc-errors/dist/classes"
 
 /**
  * Wallet Connect Flow:
@@ -131,6 +133,24 @@ const WalletConnectContextProvider = ({
         [onPair],
     )
 
+    const respondInvalidSession = useCallback(
+        async (
+            proposal: SignClientTypes.EventArguments["session_proposal"],
+            err: JsonRpcError<any>,
+        ) => {
+            if (!web3Wallet) return
+
+            await web3Wallet.rejectSession({
+                id: proposal.id,
+                reason: {
+                    code: err.code,
+                    message: err.message,
+                },
+            })
+        },
+        [web3Wallet],
+    )
+
     /**
      * Handle session proposal
      */
@@ -143,20 +163,25 @@ const WalletConnectContextProvider = ({
                     proposal.verifyContext,
                 )
 
-            if (!selectedAccountAddress) return
-            if (!web3Wallet) return
+            if (!selectedAccountAddress)
+                return respondInvalidSession(proposal, rpcErrors.internal())
+            if (!web3Wallet)
+                return respondInvalidSession(proposal, rpcErrors.internal())
             if (!proposal.params.requiredNamespaces.vechain) {
                 showErrorToast(
                     LL.NOTIFICATION_wallet_connect_incompatible_dapp(),
                 )
-                return
+                return respondInvalidSession(
+                    proposal,
+                    rpcErrors.invalidRequest(),
+                )
             }
 
             nav.navigate(Routes.CONNECT_APP_SCREEN, {
                 sessionProposal: proposal,
             })
         },
-        [nav, selectedAccountAddress, web3Wallet, LL],
+        [respondInvalidSession, nav, selectedAccountAddress, web3Wallet, LL],
     )
 
     /**
@@ -215,30 +240,6 @@ const WalletConnectContextProvider = ({
             }
         })()
     }, [web3Wallet])
-
-    /**
-     * Check that we are processing session requests every 3 seconds
-     */
-    useEffect(() => {
-        const checkRequests = async () => {
-            const pendingRequests = web3Wallet?.getPendingSessionRequests()
-
-            if (pendingRequests && pendingRequests.length > 0) {
-                const nextRequest = pendingRequests[0]
-                debug("Pending request: ", nextRequest.params.request.method)
-                if (WalletConnectUtils.shouldAutoNavigate(nav.getState()))
-                    await onSessionRequest(nextRequest)
-            }
-        }
-
-        const interval = setInterval(async () => {
-            await checkRequests()
-        }, 3000)
-
-        checkRequests()
-
-        return () => clearInterval(interval)
-    }, [web3Wallet, onSessionRequest, nav])
 
     useEffect(() => {
         if (web3Wallet) {
