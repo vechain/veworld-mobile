@@ -75,6 +75,7 @@ export const useFungibleTokenInfo = (tokenAddress?: string) => {
         symbol,
         decimals,
         error,
+        address: tokenAddress,
         fetchData,
     }
 }

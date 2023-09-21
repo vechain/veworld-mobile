@@ -30,7 +30,7 @@ export const VechainTokenCard = memo(
         const theme = useTheme()
 
         const exchangeRate = useAppSelector(state =>
-            selectCurrencyExchangeRate(state, tokenWithInfo.symbol as string),
+            selectCurrencyExchangeRate(state, tokenWithInfo),
         )
 
         const currency = useAppSelector(selectCurrency)

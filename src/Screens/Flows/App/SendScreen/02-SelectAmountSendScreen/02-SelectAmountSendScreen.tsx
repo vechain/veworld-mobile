@@ -48,7 +48,7 @@ export const SelectAmountSendScreen = ({ route }: Props) => {
     const nav = useNavigation()
     const { input, setInput } = useAmountInput()
     const exchangeRate = useAppSelector(state =>
-        selectCurrencyExchangeRate(state, token.symbol),
+        selectCurrencyExchangeRate(state, token),
     )
 
     const currency = useAppSelector(selectCurrency)
