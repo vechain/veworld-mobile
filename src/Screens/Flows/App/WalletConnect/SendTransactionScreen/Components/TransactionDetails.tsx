@@ -45,7 +45,7 @@ export const TransactionDetails = ({
     const { LL } = useI18nContext()
     const theme = useTheme()
     const exchangeRate = useAppSelector(state =>
-        selectCurrencyExchangeRate(state, ""),
+        selectCurrencyExchangeRate(state),
     )
     const currency = useAppSelector(selectCurrency)
 

@@ -52,7 +52,7 @@ export const FungibleTokenTransferDetails: React.FC<Props> = memo(
         }, [activity.amount, decimals, token])
 
         const exchangeRate = useAppSelector((state: RootState) =>
-            selectCurrencyExchangeRate(state, token?.symbol ?? ""),
+            selectCurrencyExchangeRate(state, token),
         )
 
         const fiatValueTransferred = useMemo(() => {

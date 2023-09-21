@@ -45,7 +45,7 @@ export const useGasFee = (activity: Activity) => {
     }, [activity.gasUsed, thor])
 
     const VTHOexchangeRate = useAppSelector((state: RootState) =>
-        selectCurrencyExchangeRate(state, VTHO.symbol),
+        selectCurrencyExchangeRate(state, VTHO),
     )
 
     /**

@@ -57,7 +57,7 @@ export const TransactionSummarySendScreen = ({ route }: Props) => {
     const account = useAppSelector(selectSelectedAccount)
     const currency = useAppSelector(selectCurrency)
     const exchangeRate = useAppSelector(state =>
-        selectCurrencyExchangeRate(state, token.symbol),
+        selectCurrencyExchangeRate(state, token),
     )
     const pendingTransaction = useAppSelector(state =>
         selectPendingTx(state, token.address),
