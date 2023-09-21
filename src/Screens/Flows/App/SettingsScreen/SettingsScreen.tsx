@@ -2,13 +2,13 @@ import React, { useCallback, useMemo, useRef } from "react"
 import { BaseSafeArea, BaseText, BaseView } from "~Components"
 import { TranslationFunctions, useI18nContext } from "~i18n"
 import { Routes } from "~Navigation"
-import { FlashList } from "@shopify/flash-list"
 import { StyleSheet, View } from "react-native"
 import { RowProps, SettingsRow } from "./Components/SettingsRow"
 import { useThemedStyles } from "~Hooks"
 import { ColorThemeType, isSmallScreen } from "~Constants"
 import { selectAreDevFeaturesEnabled, useAppSelector } from "~Storage/Redux"
 import { useScrollToTop } from "@react-navigation/native"
+import { FlatList } from "react-native-gesture-handler"
 
 export const SettingsScreen = () => {
     const { LL } = useI18nContext()
@@ -51,8 +51,8 @@ export const SettingsScreen = () => {
                 {LL.TITLE_SETTINGS()}
             </BaseText>
 
-            <BaseView flexDirection="row" style={[themedStyles.list]}>
-                <FlashList
+            <BaseView style={[themedStyles.list]}>
+                <FlatList
                     ref={flatListRef}
                     data={SCREEN_LIST}
                     contentContainerStyle={themedStyles.contentContainerStyle}
@@ -62,11 +62,6 @@ export const SettingsScreen = () => {
                     showsVerticalScrollIndicator={false}
                     showsHorizontalScrollIndicator={false}
                     renderItem={renderItem}
-                    estimatedItemSize={56}
-                    estimatedListSize={{
-                        height: 56 * SCREEN_LIST.length,
-                        width: 400,
-                    }}
                 />
             </BaseView>
         </BaseSafeArea>

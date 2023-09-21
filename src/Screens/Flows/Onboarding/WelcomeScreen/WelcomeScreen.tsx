@@ -79,9 +79,9 @@ export const WelcomeScreen = () => {
     return (
         <Layout
             noBackButton
-            body={
-                <BaseView alignItems="center" justifyContent="space-between">
-                    <BaseView flexDirection="row">
+            fixedBody={
+                <BaseView alignItems="center" flex={1} mx={24}>
+                    <BaseView flexDirection="row" mt={20}>
                         <BaseText
                             typographyFont="largeTitle"
                             testID="welcome-title-id">
@@ -91,10 +91,11 @@ export const WelcomeScreen = () => {
                             {LL.VEWORLD()}
                         </BaseText>
                     </BaseView>
+
                     <BaseSpacer height={40} />
+                    <VeWorldLogoSVG height={200} width={200} />
 
                     <BaseView alignItems="center" w={100}>
-                        <VeWorldLogoSVG height={200} width={200} />
                         <BaseSpacer height={40} />
                         <BaseText
                             align="center"
