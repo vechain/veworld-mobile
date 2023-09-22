@@ -8,12 +8,14 @@ import {
     changeSelectedNetwork,
     deleteSession,
     selectNetworks,
+    selectSelectedAccountAddress,
+    selectSelectedNetwork,
     selectSessionsFlat,
     selectVisibleAccounts,
     useAppDispatch,
     useAppSelector,
 } from "~Storage/Redux"
-import { showErrorToast } from "~Components"
+import { showErrorToast, showInfoToast } from "~Components"
 import { Routes } from "~Navigation"
 import { useNavigation } from "@react-navigation/native"
 import { useI18nContext } from "~i18n"
@@ -29,6 +31,8 @@ export const useWcRequest = (web3Wallet: IWeb3Wallet | undefined) => {
     const { LL } = useI18nContext()
     const { onSetSelectedAccount } = useSetSelectedAccount()
 
+    const selectedAccountAddress = useAppSelector(selectSelectedAccountAddress)
+    const selectedNetwork = useAppSelector(selectSelectedNetwork)
     const accounts = useAppSelector(selectVisibleAccounts)
     const networks = useAppSelector(selectNetworks)
     const sessions = useAppSelector(selectSessionsFlat)
@@ -136,11 +140,11 @@ export const useWcRequest = (web3Wallet: IWeb3Wallet | undefined) => {
 
             // Switch to the requested account
             const address = session.namespaces.vechain.accounts[0].split(":")[2]
-            const selectedAccount: AccountWithDevice | undefined =
+            const requestedAccount: AccountWithDevice | undefined =
                 accounts.find(acct => {
                     return AddressUtils.compareAddresses(address, acct.address)
                 })
-            if (!selectedAccount) {
+            if (!requestedAccount) {
                 await web3Wallet.disconnectSession({
                     topic: session.topic,
                     reason: {
@@ -151,11 +155,29 @@ export const useWcRequest = (web3Wallet: IWeb3Wallet | undefined) => {
                 throw new Error("Requested account not found")
             }
 
-            onSetSelectedAccount({ address: selectedAccount.address })
+            if (
+                !AddressUtils.compareAddresses(
+                    requestedAccount.address,
+                    selectedAccountAddress,
+                )
+            ) {
+                onSetSelectedAccount({ address: requestedAccount.address })
+                showInfoToast(
+                    LL.NOTIFICATION_WC_ACCOUNT_CHANGED({
+                        account: requestedAccount.alias,
+                    }),
+                )
+            }
 
-            return selectedAccount.address
+            return requestedAccount.address
         },
-        [accounts, onSetSelectedAccount, web3Wallet],
+        [
+            LL,
+            selectedAccountAddress,
+            accounts,
+            onSetSelectedAccount,
+            web3Wallet,
+        ],
     )
 
     const switchNetwork = useCallback(
@@ -182,9 +204,16 @@ export const useWcRequest = (web3Wallet: IWeb3Wallet | undefined) => {
                 throw new Error("Requested network not found")
             }
 
-            dispatch(changeSelectedNetwork(network))
+            if (selectedNetwork.genesis.id !== network.genesis.id) {
+                dispatch(changeSelectedNetwork(network))
+                showInfoToast(
+                    LL.NOTIFICATION_WC_NETWORK_CHANGED({
+                        network: network.name,
+                    }),
+                )
+            }
         },
-        [dispatch, web3Wallet, networks],
+        [LL, selectedNetwork, dispatch, web3Wallet, networks],
     )
     /**
      * Handle session request

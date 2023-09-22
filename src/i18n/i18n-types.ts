@@ -1407,6 +1407,16 @@ type RootTranslation = {
 	 */
 	NOTIFICATION_CANT_REMOVE_ONLY_ACCOUNT: string
 	/**
+	 * A​c​c​o​u​n​t​ ​c​h​a​n​g​e​d​ ​t​o​:​ ​{​a​c​c​o​u​n​t​}
+	 * @param {string} account
+	 */
+	NOTIFICATION_WC_ACCOUNT_CHANGED: RequiredParams<'account'>
+	/**
+	 * N​e​t​w​o​r​k​ ​c​h​a​n​g​e​d​ ​t​o​:​ ​{​n​e​t​w​o​r​k​}
+	 * @param {string} network
+	 */
+	NOTIFICATION_WC_NETWORK_CHANGED: RequiredParams<'network'>
+	/**
 	 * A​ ​c​o​n​n​e​c​t​e​d​ ​a​p​p​ ​s​u​c​c​e​s​s​f​u​l​l​y​ ​d​i​s​c​o​n​n​e​c​t​e​d​ ​f​r​o​m​ ​t​h​i​s​ ​w​a​l​l​e​t​.
 	 */
 	NOTIFICATION_wallet_connect_disconnected_from_remote: string
@@ -3868,6 +3878,14 @@ Please, try again later.
 	 * The associated wallet only has 1 account. Please remove the wallet to remove this account
 	 */
 	NOTIFICATION_CANT_REMOVE_ONLY_ACCOUNT: () => LocalizedString
+	/**
+	 * Account changed to: {account}
+	 */
+	NOTIFICATION_WC_ACCOUNT_CHANGED: (arg: { account: string }) => LocalizedString
+	/**
+	 * Network changed to: {network}
+	 */
+	NOTIFICATION_WC_NETWORK_CHANGED: (arg: { network: string }) => LocalizedString
 	/**
 	 * A connected app successfully disconnected from this wallet.
 	 */
