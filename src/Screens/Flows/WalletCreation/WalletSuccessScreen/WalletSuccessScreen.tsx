@@ -69,30 +69,29 @@ export const WalletSuccessScreen: FC<Props> = ({ route }) => {
         onCreateLedgerWallet: createLedgerWallet,
     } = useCreateWallet()
 
-    const onWalletCreationError = useCallback((_error: unknown) => {
-        const errorMessage = ErrorUtils.getErrorMessage(_error)
+    const onWalletCreationError = useCallback(
+        (_error: unknown) => {
+            const errorMessage = ErrorUtils.getErrorMessage(_error)
 
-        if (
-            errorMessage.includes(CANCEL_AUTH_MESSAGE_ANDROID) ||
-            errorMessage.includes(CANCEL_AUTH_MESSAGE_IOS)
-        ) {
-            return
-        }
+            if (
+                errorMessage.includes(CANCEL_AUTH_MESSAGE_ANDROID) ||
+                errorMessage.includes(CANCEL_AUTH_MESSAGE_IOS)
+            ) {
+                return
+            }
 
-        if (errorMessage.includes(TOO_MANY_AUTH_ATTEMPS_MESSAGE_ANDROID)) {
-            HapticsService.triggerNotification({ level: "Error" })
-            setIsError(
-                "Too many biometrics authentication attempts, please try again later",
-            )
-            showErrorToast(
-                "Too many biometrics authentication attempts, please try again later",
-            )
-        } else {
-            HapticsService.triggerNotification({ level: "Error" })
-            setIsError("Error creating wallet")
-            showErrorToast("Error creating wallet")
-        }
-    }, [])
+            if (errorMessage.includes(TOO_MANY_AUTH_ATTEMPS_MESSAGE_ANDROID)) {
+                HapticsService.triggerNotification({ level: "Error" })
+                setIsError(LL.ERROR_TOO_MANY_BIOMETRICS_AUTH_ATTEMPS())
+                showErrorToast(LL.ERROR_TOO_MANY_BIOMETRICS_AUTH_ATTEMPS())
+            } else {
+                HapticsService.triggerNotification({ level: "Error" })
+                setIsError("Error creating wallet")
+                showErrorToast("Error creating wallet")
+            }
+        },
+        [LL],
+    )
 
     const navigateNext = useCallback(() => {
         const parent = nav.getParent()
