@@ -14,6 +14,10 @@ import { useAppState, useBiometrics } from "~Hooks"
 import { StandaloneAppBlockedScreen, StandaloneLockScreen } from "~Screens"
 import { AnimatedSplashScreen } from "../../../AnimatedSplashScreen"
 import { GlobalEventEmitter, LOCK_APP_EVENT } from "~Events"
+import {
+    CANCEL_AUTH_MESSAGE_ANDROID,
+    CANCEL_AUTH_MESSAGE_IOS,
+} from "~Constants/Constants/Errors/ErrorsConstants"
 
 const UserEncryptedStorage = new MMKV({
     id: "user_encrypted_storage",
@@ -144,7 +148,10 @@ export const ApplicationSecurityProvider = ({
                 (await StorageEncryptionKeyHelper.get(pinCode))
         } catch (e) {
             if (PlatformUtils.isIOS()) {
-                if (e instanceof Error && e.message.includes("User canceled")) {
+                if (
+                    e instanceof Error &&
+                    e.message.includes(CANCEL_AUTH_MESSAGE_IOS)
+                ) {
                     return unlock()
                 } else {
                     throw e
@@ -154,7 +161,7 @@ export const ApplicationSecurityProvider = ({
                 if (
                     e instanceof Error &&
                     (e.message.includes("Cancel") ||
-                        e.message.includes("code: 13"))
+                        e.message.includes(CANCEL_AUTH_MESSAGE_ANDROID))
                 ) {
                     return unlock()
                 } else {

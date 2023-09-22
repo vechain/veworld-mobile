@@ -35,6 +35,11 @@ import {
 import HapticsService from "~Services/HapticsService"
 import { AnalyticsEvent } from "~Constants"
 import { ErrorUtils } from "~Utils"
+import {
+    CANCEL_AUTH_MESSAGE_ANDROID,
+    CANCEL_AUTH_MESSAGE_IOS,
+    TOO_MANY_AUTH_ATTEMPS_MESSAGE_ANDROID,
+} from "~Constants/Constants/Errors/ErrorsConstants"
 
 type Props = {} & NativeStackScreenProps<
     RootStackParamListOnboarding & RootStackParamListCreateWalletApp,
@@ -68,13 +73,13 @@ export const WalletSuccessScreen: FC<Props> = ({ route }) => {
         const errorMessage = ErrorUtils.getErrorMessage(_error)
 
         if (
-            errorMessage.includes("code: 13") ||
-            errorMessage.includes("User canceled")
+            errorMessage.includes(CANCEL_AUTH_MESSAGE_ANDROID) ||
+            errorMessage.includes(CANCEL_AUTH_MESSAGE_IOS)
         ) {
             return
         }
 
-        if (errorMessage.includes("code: 7")) {
+        if (errorMessage.includes(TOO_MANY_AUTH_ATTEMPS_MESSAGE_ANDROID)) {
             HapticsService.triggerNotification({ level: "Error" })
             setIsError(
                 "Too many biometrics authentication attempts, please try again later",
