@@ -400,6 +400,8 @@ const en: BaseTranslation = {
     NOTIFICATION_CANT_REMOVE_ONLY_ACCOUNT: "The associated wallet only has 1 account. Please remove the wallet to remove this account",
 
     // Wallet connect notifications
+    NOTIFICATION_WC_ACCOUNT_CHANGED: "Account changed to: {account : string}",
+    NOTIFICATION_WC_NETWORK_CHANGED: "Network changed to: {network : string}",
     NOTIFICATION_wallet_connect_disconnected_from_remote: "A connected app successfully disconnected from this wallet.",
     NOTIFICATION_wallet_connect_disconnected_success: "Successfully disconnected from app.",
     NOTIFICATION_warning_wallet_connect_connection_could_delay: "Connecting may take a few seconds.",
