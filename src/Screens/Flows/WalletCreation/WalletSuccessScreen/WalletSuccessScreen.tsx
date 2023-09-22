@@ -67,7 +67,10 @@ export const WalletSuccessScreen: FC<Props> = ({ route }) => {
     const onWalletCreationError = useCallback((_error: unknown) => {
         const errorMessage = ErrorUtils.getErrorMessage(_error)
 
-        if (errorMessage.includes("code: 13")) {
+        if (
+            errorMessage.includes("code: 13") ||
+            errorMessage.includes("User canceled")
+        ) {
             return
         }
 
