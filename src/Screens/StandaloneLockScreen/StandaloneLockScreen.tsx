@@ -37,6 +37,12 @@ export const StandaloneLockScreen: React.FC<Props> = memo(
             RNBootSplash.hide({ fade: true, duration: 500 })
         }, [])
 
+        useEffect(() => {
+            if (__DEV__) {
+                onPinInserted("111111")
+            }
+        }, [onPinInserted])
+
         /**
          * Called by `useOnDigitPress` when the user has finished typing the pin
          * Validates the user pin and calls `onSuccess` if the pin is valid
