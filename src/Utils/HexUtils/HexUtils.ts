@@ -74,6 +74,17 @@ const normalize = (hex: string): string => {
     return addPrefix(hex.toLowerCase().trim())
 }
 
+const compare = (hex1: string, hex2: string): boolean => {
+    try {
+        return (
+            removePrefix(hex1).toLowerCase() ===
+            removePrefix(hex2).toLowerCase()
+        )
+    } catch (e) {
+        return false
+    }
+}
+
 export default {
     removePrefix,
     addPrefix,
@@ -82,4 +93,5 @@ export default {
     isInvalid,
     normalize,
     generateRandom,
+    compare,
 }

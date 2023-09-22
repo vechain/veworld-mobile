@@ -2,7 +2,7 @@ import { useNavigation } from "@react-navigation/native"
 import { NativeStackScreenProps } from "@react-navigation/native-stack"
 import { ProposalTypes, RelayerTypes, SessionTypes } from "@walletconnect/types"
 import { getSdkError } from "@walletconnect/utils"
-import React, { FC, useCallback, useMemo } from "react"
+import React, { FC, useCallback, useEffect, useMemo } from "react"
 import { ScrollView, StyleSheet } from "react-native"
 import {
     AccountCard,
@@ -14,6 +14,7 @@ import {
     CloseModalButton,
     SelectAccountBottomSheet,
     showErrorToast,
+    showInfoToast,
     showSuccessToast,
     useWalletConnect,
 } from "~Components"
@@ -22,6 +23,7 @@ import { AccountWithDevice } from "~Model"
 import { RootStackParamListSwitch, Routes } from "~Navigation"
 import {
     addConnectedAppActivity,
+    changeSelectedNetwork,
     insertSession,
     selectNetworks,
     selectSelectedAccount,
@@ -29,10 +31,9 @@ import {
     useAppDispatch,
     useAppSelector,
 } from "~Storage/Redux"
-import { error, WalletConnectUtils, warn } from "~Utils"
+import { error, HexUtils, WalletConnectUtils, warn } from "~Utils"
 import { useI18nContext } from "~i18n"
-import { AppConnectionRequests } from "./Components"
-import { AppInfo, UnknownAppMessage } from "../Components"
+import { AppConnectionRequests, AppInfo, UnknownAppMessage } from "~Screens"
 import { useSetSelectedAccount } from "~Hooks/useSetSelectedAccount"
 
 type Props = NativeStackScreenProps<
@@ -67,10 +68,35 @@ export const ConnectAppScreen: FC<Props> = ({ route }: Props) => {
         onSetSelectedAccount({ address: account.address })
     }
 
-    const { name, url, methods, icon, description } = useMemo(
+    const { name, url, methods, icon, description, chains } = useMemo(
         () => WalletConnectUtils.getPairAttributes(currentProposal),
         [currentProposal],
     )
+
+    /**
+     * If the dApp requests ONLY one chain, switch to that chain
+     */
+    useEffect(() => {
+        if (chains && chains.length === 1) {
+            const requestedChain = chains[0]
+
+            const requestedNetwork = networks.find(net =>
+                HexUtils.compare(
+                    net.genesis.id.slice(-32),
+                    requestedChain.split(":")[1],
+                ),
+            )
+
+            if (requestedNetwork) {
+                dispatch(changeSelectedNetwork(requestedNetwork))
+                showInfoToast(
+                    LL.NOTIFICATION_WC_NETWORK_CHANGED({
+                        network: requestedNetwork.name,
+                    }),
+                )
+            }
+        }
+    }, [networks, LL, dispatch, chains])
 
     /**
      * Handle session proposal
@@ -100,7 +126,11 @@ export const ConnectAppScreen: FC<Props> = ({ route }: Props) => {
             network.genesis.id.slice(-32),
         )
 
-        requiredNamespaces.vechain.chains?.map((scope: string) => {
+        const _networks =
+            requiredNamespaces.vechain.chains ??
+            networks.map(network => `vechain:${network.genesis.id.slice(-32)}`)
+
+        _networks.map((scope: string) => {
             // Valid only for supported networks
             // scope example: vechain:b1ac3413d346d43539627e6be7ec1b4a, vechain:87721b09ed2e15997f466536b20bb127
             const network = scope.split(":")[1]

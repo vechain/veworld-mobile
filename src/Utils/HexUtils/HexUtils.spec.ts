@@ -188,4 +188,68 @@ describe("HexUtils tests", () => {
     test("Generate Random - length -1", () => {
         expect(() => HexUtils.generateRandom(-1)).toThrow()
     })
+
+    describe("compare", () => {
+        test("compare - hex lowercase has prefix", () => {
+            expect(
+                HexUtils.compare(hexLowercaseHasPrefix, hexLowercaseHasPrefix),
+            ).toBeTruthy()
+        })
+
+        test("compare - hex lowercase no prefix", () => {
+            expect(
+                HexUtils.compare(hexLowercaseNoPrefix, hexLowercaseNoPrefix),
+            ).toBeTruthy()
+        })
+
+        test("compare - hex uppercase has prefix uppercase", () => {
+            expect(
+                HexUtils.compare(
+                    hexUppercaseHasPrefixUppercase,
+                    hexUppercaseHasPrefixUppercase,
+                ),
+            ).toBeTruthy()
+        })
+
+        test("compare - hex uppercase has prefix lowercase", () => {
+            expect(
+                HexUtils.compare(
+                    hexUppercaseHasPrefixLowercase,
+                    hexUppercaseHasPrefixLowercase,
+                ),
+            ).toBeTruthy()
+        })
+
+        test("compare - hex uppercase no prefix", () => {
+            expect(
+                HexUtils.compare(hexUppercaseNoPrefix, hexUppercaseNoPrefix),
+            ).toBeTruthy()
+        })
+
+        test("compare - hex mixedcase has prefix", () => {
+            expect(
+                HexUtils.compare(hexMixedcaseHasPrefix, hexMixedcaseHasPrefix),
+            ).toBeTruthy()
+        })
+
+        test("compare - hex mixedcase no prefix", () => {
+            expect(
+                HexUtils.compare(hexMixedcaseNoPrefix, hexMixedcaseNoPrefix),
+            ).toBeTruthy()
+        })
+
+        test("compare - hex lowercase has prefix", () => {
+            expect(
+                HexUtils.compare(hexLowercaseHasPrefix, hexLowercaseNoPrefix),
+            ).toBeTruthy()
+        })
+
+        test("compare hex with non hex", () => {
+            expect(HexUtils.compare(hexLowercaseHasPrefix, "test")).toBeFalsy()
+        })
+
+        test("different hex should be false", () => {
+            expect(HexUtils.compare("0x23", "0x2345")).toBeFalsy()
+        })
+    })
 })
