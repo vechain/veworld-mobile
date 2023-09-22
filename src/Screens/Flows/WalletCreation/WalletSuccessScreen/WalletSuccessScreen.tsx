@@ -34,6 +34,12 @@ import {
 } from "~Storage/Redux/Selectors"
 import HapticsService from "~Services/HapticsService"
 import { AnalyticsEvent } from "~Constants"
+import { ErrorUtils } from "~Utils"
+import {
+    CANCEL_AUTH_MESSAGE_ANDROID,
+    CANCEL_AUTH_MESSAGE_IOS,
+    TOO_MANY_AUTH_ATTEMPS_MESSAGE_ANDROID,
+} from "~Constants/Constants/Errors/ErrorsConstants"
 
 type Props = {} & NativeStackScreenProps<
     RootStackParamListOnboarding & RootStackParamListCreateWalletApp,
@@ -63,11 +69,29 @@ export const WalletSuccessScreen: FC<Props> = ({ route }) => {
         onCreateLedgerWallet: createLedgerWallet,
     } = useCreateWallet()
 
-    const onWalletCreationError = useCallback((_error: unknown) => {
-        HapticsService.triggerNotification({ level: "Error" })
-        setIsError("Error creating wallet")
-        showErrorToast("Error creating wallet")
-    }, [])
+    const onWalletCreationError = useCallback(
+        (_error: unknown) => {
+            const errorMessage = ErrorUtils.getErrorMessage(_error)
+
+            if (
+                errorMessage.includes(CANCEL_AUTH_MESSAGE_ANDROID) ||
+                errorMessage.includes(CANCEL_AUTH_MESSAGE_IOS)
+            ) {
+                return
+            }
+
+            if (errorMessage.includes(TOO_MANY_AUTH_ATTEMPS_MESSAGE_ANDROID)) {
+                HapticsService.triggerNotification({ level: "Error" })
+                setIsError(LL.ERROR_TOO_MANY_BIOMETRICS_AUTH_ATTEMPS())
+                showErrorToast(LL.ERROR_TOO_MANY_BIOMETRICS_AUTH_ATTEMPS())
+            } else {
+                HapticsService.triggerNotification({ level: "Error" })
+                setIsError("Error creating wallet")
+                showErrorToast("Error creating wallet")
+            }
+        },
+        [LL],
+    )
 
     const navigateNext = useCallback(() => {
         const parent = nav.getParent()
@@ -156,7 +180,10 @@ export const WalletSuccessScreen: FC<Props> = ({ route }) => {
 
             if (mnemonic) {
                 if (securityLevelSelected === SecurityLevelType.BIOMETRIC) {
-                    await createWallet({ mnemonic })
+                    await createWallet({
+                        mnemonic: mnemonic,
+                        onError: onWalletCreationError,
+                    })
                 } else if (securityLevelSelected === SecurityLevelType.SECRET) {
                     await createWallet({
                         userPassword: params?.userPin,

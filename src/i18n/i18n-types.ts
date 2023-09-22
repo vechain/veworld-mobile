@@ -1239,6 +1239,10 @@ type RootTranslation = {
 	 */
 	ERROR_INVALID_ADDRESS: string
 	/**
+	 * T​o​o​ ​m​a​n​y​ ​b​i​o​m​e​t​r​i​c​s​ ​a​u​t​h​e​n​t​i​c​a​t​i​o​n​ ​a​t​t​e​m​p​t​s​,​ ​p​l​e​a​s​e​ ​t​r​y​ ​a​g​a​i​n​ ​l​a​t​e​r
+	 */
+	ERROR_TOO_MANY_BIOMETRICS_AUTH_ATTEMPS: string
+	/**
 	 * S​u​c​c​e​s​s​!
 	 */
 	SUCCESS_GENERIC: string
@@ -3722,6 +3726,10 @@ Please, try again later.
 	 * Invalid address
 	 */
 	ERROR_INVALID_ADDRESS: () => LocalizedString
+	/**
+	 * Too many biometrics authentication attempts, please try again later
+	 */
+	ERROR_TOO_MANY_BIOMETRICS_AUTH_ATTEMPS: () => LocalizedString
 	/**
 	 * Success!
 	 */
