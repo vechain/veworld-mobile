@@ -8,6 +8,7 @@ import ConnectionUtils from "./ConnectionUtils"
 import CryptoUtils from "./CryptoUtils"
 import HexUtils from "./HexUtils"
 import DateUtils from "./DateUtils"
+import ErrorUtils from "./ErrorMessageUtils"
 import FormattingUtils from "./FormattingUtils"
 import FormUtils from "./FormUtils"
 import AccountUtils from "./AccountUtils"
@@ -48,6 +49,7 @@ export {
     CryptoUtils,
     HexUtils,
     DateUtils,
+    ErrorUtils,
     FormattingUtils,
     FormUtils,
     GasUtils,

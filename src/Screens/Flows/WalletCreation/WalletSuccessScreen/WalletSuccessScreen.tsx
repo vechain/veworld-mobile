@@ -34,6 +34,7 @@ import {
 } from "~Storage/Redux/Selectors"
 import HapticsService from "~Services/HapticsService"
 import { AnalyticsEvent } from "~Constants"
+import { ErrorUtils } from "~Utils"
 
 type Props = {} & NativeStackScreenProps<
     RootStackParamListOnboarding & RootStackParamListCreateWalletApp,
@@ -64,9 +65,25 @@ export const WalletSuccessScreen: FC<Props> = ({ route }) => {
     } = useCreateWallet()
 
     const onWalletCreationError = useCallback((_error: unknown) => {
-        HapticsService.triggerNotification({ level: "Error" })
-        setIsError("Error creating wallet")
-        showErrorToast("Error creating wallet")
+        const errorMessage = ErrorUtils.getErrorMessage(_error)
+
+        if (errorMessage.includes("code: 13")) {
+            return
+        }
+
+        if (errorMessage.includes("code: 7")) {
+            HapticsService.triggerNotification({ level: "Error" })
+            setIsError(
+                "Too many biometrics authentication attempts, please try again later",
+            )
+            showErrorToast(
+                "Too many biometrics authentication attempts, please try again later",
+            )
+        } else {
+            HapticsService.triggerNotification({ level: "Error" })
+            setIsError("Error creating wallet")
+            showErrorToast("Error creating wallet")
+        }
     }, [])
 
     const navigateNext = useCallback(() => {
@@ -156,7 +173,10 @@ export const WalletSuccessScreen: FC<Props> = ({ route }) => {
 
             if (mnemonic) {
                 if (securityLevelSelected === SecurityLevelType.BIOMETRIC) {
-                    await createWallet({ mnemonic })
+                    await createWallet({
+                        mnemonic: mnemonic,
+                        onError: onWalletCreationError,
+                    })
                 } else if (securityLevelSelected === SecurityLevelType.SECRET) {
                     await createWallet({
                         userPassword: params?.userPin,
