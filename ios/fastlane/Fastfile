@@ -233,7 +233,7 @@ platform :ios do
       create_changelog(version:version)
 
       add_git_tag(
-        tag: "v#{version}-#{build}-ios"
+        tag: "v#{version}-#{build}"
       )
 
       push_git_tags
