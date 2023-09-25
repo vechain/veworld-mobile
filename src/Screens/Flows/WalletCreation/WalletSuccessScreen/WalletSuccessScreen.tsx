@@ -36,6 +36,7 @@ import HapticsService from "~Services/HapticsService"
 import { AnalyticsEvent } from "~Constants"
 import { ErrorUtils } from "~Utils"
 import {
+    BACK_OFF__AUTH_MESSAGE_ANDROID,
     CANCEL_AUTH_MESSAGE_ANDROID,
     CANCEL_AUTH_MESSAGE_IOS,
     TOO_MANY_AUTH_ATTEMPS_MESSAGE_ANDROID,
@@ -75,6 +76,7 @@ export const WalletSuccessScreen: FC<Props> = ({ route }) => {
 
             if (
                 errorMessage.includes(CANCEL_AUTH_MESSAGE_ANDROID) ||
+                errorMessage.includes(BACK_OFF__AUTH_MESSAGE_ANDROID) ||
                 errorMessage.includes(CANCEL_AUTH_MESSAGE_IOS)
             ) {
                 return
@@ -86,8 +88,8 @@ export const WalletSuccessScreen: FC<Props> = ({ route }) => {
                 showErrorToast(LL.ERROR_TOO_MANY_BIOMETRICS_AUTH_ATTEMPS())
             } else {
                 HapticsService.triggerNotification({ level: "Error" })
-                setIsError("Error creating wallet")
-                showErrorToast("Error creating wallet")
+                setIsError(LL.ERROR_CREATING_WALLET())
+                showErrorToast(LL.ERROR_CREATING_WALLET())
             }
         },
         [LL],

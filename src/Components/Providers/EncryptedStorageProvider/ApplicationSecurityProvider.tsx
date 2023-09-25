@@ -9,15 +9,17 @@ import {
     StorageEncryptionKeyHelper,
     WalletEncryptionKeyHelper,
 } from "~Components/Providers"
-import Onboarding from "~Components/Providers/EncryptedStorageProvider/Helpers/Onboarding"
+
 import { useAppState, useBiometrics } from "~Hooks"
 import { StandaloneAppBlockedScreen, StandaloneLockScreen } from "~Screens"
 import { AnimatedSplashScreen } from "../../../AnimatedSplashScreen"
 import { GlobalEventEmitter, LOCK_APP_EVENT } from "~Events"
 import {
+    BACK_OFF__AUTH_MESSAGE_ANDROID,
     CANCEL_AUTH_MESSAGE_ANDROID,
     CANCEL_AUTH_MESSAGE_IOS,
-} from "~Constants/Constants/Errors/ErrorsConstants"
+} from "~Constants"
+import Onboarding from "./Helpers/Onboarding"
 
 const UserEncryptedStorage = new MMKV({
     id: "user_encrypted_storage",
@@ -157,11 +159,13 @@ export const ApplicationSecurityProvider = ({
                     throw e
                 }
             }
+
             if (PlatformUtils.isAndroid()) {
                 if (
                     e instanceof Error &&
                     (e.message.includes("Cancel") ||
-                        e.message.includes(CANCEL_AUTH_MESSAGE_ANDROID))
+                        e.message.includes(CANCEL_AUTH_MESSAGE_ANDROID) ||
+                        e.message.includes(BACK_OFF__AUTH_MESSAGE_ANDROID))
                 ) {
                     return unlock()
                 } else {
