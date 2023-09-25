@@ -7,14 +7,14 @@ import { FastAction } from "~Model"
 export const FastActionsBar = memo(
     ({
         actions,
-        paddingHorizontal = 24,
+        actionItemWidth = 70,
     }: {
         actions: FastAction[]
-        paddingHorizontal?: number
+        actionItemWidth?: number
     }) => {
         const theme = useTheme()
 
-        const { styles } = useThemedStyles(baseStyles(paddingHorizontal))
+        const { styles } = useThemedStyles(baseStyles(actionItemWidth))
 
         const renderAction = useCallback(
             (action: FastAction) => {
@@ -45,7 +45,8 @@ export const FastActionsBar = memo(
                     alignItems="center"
                     justifyContent="center"
                     bg={theme.colors.card}
-                    borderRadius={34}>
+                    borderRadius={34}
+                    style={styles.actionsContainer}>
                     {actions.map(renderAction)}
                 </BaseView>
             </BaseView>
@@ -53,7 +54,7 @@ export const FastActionsBar = memo(
     },
 )
 
-const baseStyles = (paddingHorizontal: number) => () =>
+const baseStyles = (actionItemWidth: number) => () =>
     StyleSheet.create({
         container: {
             paddingHorizontal: 20,
@@ -61,7 +62,10 @@ const baseStyles = (paddingHorizontal: number) => () =>
             alignItems: "center",
         },
         action: {
-            paddingHorizontal,
             paddingVertical: 12,
+            width: actionItemWidth,
+        },
+        actionsContainer: {
+            paddingHorizontal: 10,
         },
     })

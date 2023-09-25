@@ -31,6 +31,17 @@ export const HeaderView = memo(
         const Actions: FastAction[] = useMemo(
             () => [
                 {
+                    name: LL.BTN_BUY(),
+                    action: () => nav.navigate(Routes.BUY),
+                    icon: (
+                        <BaseIcon
+                            color={theme.colors.text}
+                            name="cart-outline"
+                        />
+                    ),
+                    testID: "buyButton",
+                },
+                {
                     name: LL.BTN_SEND(),
                     action: () =>
                         nav.navigate(Routes.SELECT_TOKEN_SEND, {
