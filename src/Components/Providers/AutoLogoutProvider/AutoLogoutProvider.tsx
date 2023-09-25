@@ -1,28 +1,48 @@
-import React, { useEffect } from "react"
-import { debug } from "~Utils"
+import React, { useCallback, useEffect } from "react"
+import { error, debug } from "~Utils"
 import * as BackgroundFetch from "expo-background-fetch"
 import * as TaskManager from "expo-task-manager"
-import { GlobalEventEmitter, LOCK_APP_EVENT } from "~Events"
+import { useApplicationSecurity } from "../EncryptedStorageProvider"
 
 type ProviderProps = { children: React.ReactNode }
 
 const AUTO_LOGOUT_TASK = "AUTO_LOGOUT_TASK"
 
-// Register auto logout task.
-TaskManager.defineTask(AUTO_LOGOUT_TASK, () => {
-    debug("Triggering lock app event")
-    GlobalEventEmitter.emit(LOCK_APP_EVENT)
-    return BackgroundFetch.BackgroundFetchResult.NewData
-})
-
 const AutoLogoutContext = React.createContext(null)
 
 export const AutoLogoutProvider = ({ children }: ProviderProps) => {
+    const { setTriggerAutoLock } = useApplicationSecurity()
+
+    const registerAutoLogoutTask = useCallback(() => {
+        try {
+            if (setTriggerAutoLock) {
+                debug("Registering auto logout task")
+                // Register auto logout task.
+                TaskManager.defineTask(AUTO_LOGOUT_TASK, () => {
+                    debug("Trigging auto lock")
+                    setTriggerAutoLock(true)
+                    return BackgroundFetch.BackgroundFetchResult.NewData
+                })
+            }
+        } catch (err) {
+            error("Error registering background task", err)
+            return BackgroundFetch.BackgroundFetchResult.Failed
+        }
+    }, [setTriggerAutoLock])
+
     // Function to configure BackgroundFetch
     const configureBackgroundFetch = async () => {
-        await stopBackgroundFetch()
-        debug("Starting auto logout listener")
-        await BackgroundFetch.registerTaskAsync(AUTO_LOGOUT_TASK, {})
+        try {
+            await stopBackgroundFetch()
+            debug("Starting auto logout listener")
+            await BackgroundFetch.registerTaskAsync(AUTO_LOGOUT_TASK, {
+                minimumInterval: 600,
+                stopOnTerminate: false,
+                startOnBoot: true,
+            })
+        } catch (err) {
+            error("Error registering background task", err)
+        }
     }
 
     const stopBackgroundFetch = async () => {
@@ -34,6 +54,10 @@ export const AutoLogoutProvider = ({ children }: ProviderProps) => {
             await BackgroundFetch.unregisterTaskAsync(AUTO_LOGOUT_TASK)
         }
     }
+    useEffect(() => {
+        registerAutoLogoutTask()
+    }, [registerAutoLogoutTask])
+
     useEffect(() => {
         configureBackgroundFetch()
         return () => {

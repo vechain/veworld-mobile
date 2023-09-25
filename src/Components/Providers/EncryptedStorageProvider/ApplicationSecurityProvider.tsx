@@ -13,7 +13,6 @@ import Onboarding from "~Components/Providers/EncryptedStorageProvider/Helpers/O
 import { useAppState, useBiometrics } from "~Hooks"
 import { StandaloneAppBlockedScreen, StandaloneLockScreen } from "~Screens"
 import { AnimatedSplashScreen } from "../../../AnimatedSplashScreen"
-import { GlobalEventEmitter, LOCK_APP_EVENT } from "~Events"
 import {
     CANCEL_AUTH_MESSAGE_ANDROID,
     CANCEL_AUTH_MESSAGE_IOS,
@@ -59,6 +58,7 @@ type IApplicationSecurity = {
     isAppReady: boolean
     setIsAppReady: (isReady: boolean) => void
     lockApplication: () => void
+    setTriggerAutoLock: (trigger: boolean) => void
 }
 
 const ApplicationSecurityContext = React.createContext<
@@ -69,6 +69,7 @@ type ApplicationSecurityContextProviderProps = { children: React.ReactNode }
 export const ApplicationSecurityProvider = ({
     children,
 }: ApplicationSecurityContextProviderProps) => {
+    const [triggerAutoLock, setTriggerAutoLock] = useState(false)
     const [walletStatus, setWalletStatus] = useState<WALLET_STATUS>(
         WALLET_STATUS.NOT_INITIALISED,
     )
@@ -320,16 +321,11 @@ export const ApplicationSecurityProvider = ({
     )
 
     const lockApplication = useCallback(() => {
-        if (
-            walletStatus !== WALLET_STATUS.UNLOCKED ||
-            currentState === "active"
-        )
-            return
         setWalletStatus(WALLET_STATUS.NOT_INITIALISED)
         setReduxStorage(undefined)
         setImageStorage(undefined)
         setMetadataStorage(undefined)
-    }, [walletStatus, currentState])
+    }, [])
 
     /**
      * Initialise the app
@@ -350,12 +346,22 @@ export const ApplicationSecurityProvider = ({
         }
     }, [walletStatus, currentState, biometrics, intialiseApp])
 
+    // Handle auto lock
     useEffect(() => {
-        GlobalEventEmitter.on(LOCK_APP_EVENT, lockApplication)
-        return () => {
-            GlobalEventEmitter.removeListener(LOCK_APP_EVENT, lockApplication)
+        if (triggerAutoLock) {
+            try {
+                if (
+                    walletStatus === WALLET_STATUS.UNLOCKED &&
+                    currentState !== "active"
+                )
+                    lockApplication()
+            } catch (e) {
+                error("Failed to lock application", e)
+            } finally {
+                setTriggerAutoLock(false)
+            }
         }
-    }, [lockApplication])
+    }, [triggerAutoLock, currentState, walletStatus, lockApplication])
 
     const value: IApplicationSecurity | undefined = useMemo(() => {
         if (!reduxStorage || walletStatus === WALLET_STATUS.NOT_INITIALISED)
@@ -374,6 +380,7 @@ export const ApplicationSecurityProvider = ({
             updateSecurityMethod,
             securityType,
             lockApplication,
+            setTriggerAutoLock,
         }
     }, [
         reduxStorage,
