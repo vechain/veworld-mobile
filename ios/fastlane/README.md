@@ -87,6 +87,22 @@ Commit latest artifacts to GitHub
 
 
 
+### ios bump_build
+
+```sh
+[bundle exec] fastlane ios bump_build
+```
+
+
+
+### ios bump_version
+
+```sh
+[bundle exec] fastlane ios bump_version
+```
+
+
+
 ### ios build
 
 ```sh
