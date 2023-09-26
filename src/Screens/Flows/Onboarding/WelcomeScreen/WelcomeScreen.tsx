@@ -1,70 +1,18 @@
 import React, { useCallback } from "react"
-import {
-    BaseButton,
-    BaseSpacer,
-    BaseText,
-    BaseView,
-    Layout,
-    WalletEncryptionKeyHelper,
-} from "~Components"
+import { BaseButton, BaseSpacer, BaseText, BaseView, Layout } from "~Components"
 import { useNavigation } from "@react-navigation/native"
 import { Routes } from "~Navigation"
 import { VeWorldLogoSVG } from "~Assets"
 import { useI18nContext } from "~i18n"
-import {
-    addDeviceAndAccounts,
-    selectAreDevFeaturesEnabled,
-    setSelectedAccount,
-    useAppDispatch,
-    useAppSelector,
-} from "~Storage/Redux"
-import { useDeviceUtils } from "~Hooks"
 import { Linking } from "react-native"
 
 export const WelcomeScreen = () => {
     const nav = useNavigation()
-    const dispatch = useAppDispatch()
     const { LL } = useI18nContext()
-
-    const devFeaturesEnabled = useAppSelector(selectAreDevFeaturesEnabled)
 
     const onNavigate = useCallback(() => {
         nav.navigate(Routes.WALLET_SETUP)
     }, [nav])
-
-    /**
-     * onboarding with the demo account and password 111111 for TDD purposes
-     */
-    const { getDeviceFromMnemonic } = useDeviceUtils()
-    const onDemoOnboarding = async () => {
-        const FAKE_PIN = "111111"
-
-        const DEMO_MNEMONIC =
-            "denial kitchen pet squirrel other broom bar gas better priority spoil cross"
-        const { device, wallet } = getDeviceFromMnemonic(DEMO_MNEMONIC)
-
-        await WalletEncryptionKeyHelper.init(FAKE_PIN)
-
-        const encryptedWallet = await WalletEncryptionKeyHelper.encryptWallet(
-            wallet,
-            FAKE_PIN,
-        )
-
-        const newAccount = dispatch(
-            addDeviceAndAccounts({
-                ...device,
-                wallet: encryptedWallet,
-            }),
-        )
-
-        dispatch(setSelectedAccount({ address: newAccount.address }))
-        const parent = nav.getParent()
-        if (parent) {
-            if (parent.canGoBack()) {
-                parent.goBack()
-            }
-        }
-    }
 
     const goToTermsAndConditions = useCallback(() => {
         const url = process.env.REACT_APP_TERMS_OF_SERVICE_URL
@@ -144,14 +92,6 @@ export const WelcomeScreen = () => {
                         testID="GET_STARTED_BTN"
                         haptics="Medium"
                     />
-                    {devFeaturesEnabled && (
-                        <BaseButton
-                            size="md"
-                            variant="link"
-                            action={onDemoOnboarding}
-                            title="DEV:DEMO"
-                        />
-                    )}
                 </BaseView>
             }
         />

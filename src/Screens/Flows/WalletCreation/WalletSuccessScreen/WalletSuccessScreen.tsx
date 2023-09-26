@@ -34,13 +34,7 @@ import {
 } from "~Storage/Redux/Selectors"
 import HapticsService from "~Services/HapticsService"
 import { AnalyticsEvent } from "~Constants"
-import { ErrorUtils } from "~Utils"
-import {
-    BACK_OFF__AUTH_MESSAGE_ANDROID,
-    CANCEL_AUTH_MESSAGE_ANDROID,
-    CANCEL_AUTH_MESSAGE_IOS,
-    TOO_MANY_AUTH_ATTEMPS_MESSAGE_ANDROID,
-} from "~Constants/Constants/Errors/ErrorsConstants"
+import { BiometricsUtils } from "~Utils"
 
 type Props = {} & NativeStackScreenProps<
     RootStackParamListOnboarding & RootStackParamListCreateWalletApp,
@@ -72,27 +66,29 @@ export const WalletSuccessScreen: FC<Props> = ({ route }) => {
 
     const onWalletCreationError = useCallback(
         (_error: unknown) => {
-            const errorMessage = ErrorUtils.getErrorMessage(_error)
-
-            if (
-                errorMessage.includes(CANCEL_AUTH_MESSAGE_ANDROID) ||
-                errorMessage.includes(BACK_OFF__AUTH_MESSAGE_ANDROID) ||
-                errorMessage.includes(CANCEL_AUTH_MESSAGE_IOS)
-            ) {
+            if (BiometricsUtils.BiometricErrors.isBiometricCanceled(_error)) {
                 return
             }
 
-            if (errorMessage.includes(TOO_MANY_AUTH_ATTEMPS_MESSAGE_ANDROID)) {
+            if (
+                BiometricsUtils.BiometricErrors.isBiometricTooManyAttempts(
+                    _error,
+                )
+            ) {
                 HapticsService.triggerNotification({ level: "Error" })
                 setIsError(LL.ERROR_TOO_MANY_BIOMETRICS_AUTH_ATTEMPS())
                 showErrorToast(LL.ERROR_TOO_MANY_BIOMETRICS_AUTH_ATTEMPS())
+                nav.reset({
+                    index: 0,
+                    routes: [{ name: Routes.WELCOME }],
+                })
             } else {
                 HapticsService.triggerNotification({ level: "Error" })
                 setIsError(LL.ERROR_CREATING_WALLET())
                 showErrorToast(LL.ERROR_CREATING_WALLET())
             }
         },
-        [LL],
+        [LL, nav],
     )
 
     const navigateNext = useCallback(() => {
