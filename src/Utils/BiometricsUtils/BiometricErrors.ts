@@ -1,7 +1,7 @@
-import { debug } from "~Utils"
+import { PlatformUtils, debug } from "~Utils"
 
 const BiometricCancelErrors = {
-    IOS_CANCEL: "User canceled",
+    IOS_CANCEL: "-128",
     ANDROID_CANCEL: "13",
     ANDROID_BACK_CANCEL: "10",
 }
@@ -20,7 +20,7 @@ export const isBiometricCanceled = (error: unknown) => {
         error &&
         typeof error === "object" &&
         "code" in error &&
-        errors.some(err => String(error).includes(err))
+        getPlatformError(error, errors)
     ) {
         debug("User Cancelled Biometric Operation")
         return true
@@ -36,11 +36,24 @@ export const isBiometricTooManyAttempts = (error: unknown) => {
         error &&
         typeof error === "object" &&
         "code" in error &&
-        errors.some(err => String(error).includes(err))
+        getPlatformError(error, errors)
     ) {
         debug("User Failed Biometric AUthentication Too Many Times")
         return true
     }
 
     return false
+}
+
+const getPlatformError = (
+    error: object & Record<"code", unknown>,
+    errors: string[],
+) => {
+    if (PlatformUtils.isIOS()) {
+        return errors.some(err => String(error.code).includes(err))
+    }
+
+    if (PlatformUtils.isAndroid()) {
+        return errors.some(err => String(error).includes(err))
+    }
 }

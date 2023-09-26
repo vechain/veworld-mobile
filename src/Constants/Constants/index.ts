@@ -8,6 +8,5 @@ export * from "./Screen"
 export * from "./VechainIndexer"
 export * from "./NftRegistry"
 export * from "./Api"
-export * from "./Errors"
 
 export { SettingsConstants }
