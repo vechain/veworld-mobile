@@ -1,4 +1,7 @@
 {
-    "name": "VeWorld",
-    "displayName": "VeWorld"
+  "name": "VeWorld",
+  "displayName": "VeWorld",
+  "plugins": [
+    "react-native-background-fetch"
+  ]
 }

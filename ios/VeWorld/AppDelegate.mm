@@ -7,6 +7,7 @@
 
 #import <React/RCTAppSetupUtils.h>
 #import <React/RCTLinkingManager.h>
+#import <TSBackgroundFetch/TSBackgroundFetch.h>
 
 #if RCT_NEW_ARCH_ENABLED
 #import <React/CoreModulesPlugins.h>
@@ -107,6 +108,8 @@ return [RCTLinkingManager application:application openURL:url options:options];
   [self.window makeKeyAndVisible];
   [RNBootSplash initWithStoryboard:@"BootSplash" rootView:rootView];
   [super application:application didFinishLaunchingWithOptions:launchOptions];
+
+  [[TSBackgroundFetch sharedInstance] didFinishLaunching];
   return YES;
 }
 

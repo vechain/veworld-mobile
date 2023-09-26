@@ -1,67 +1,41 @@
-import React, { useCallback, useEffect } from "react"
-import { error, debug } from "~Utils"
-import * as BackgroundFetch from "expo-background-fetch"
-import * as TaskManager from "expo-task-manager"
+import React, { useEffect } from "react"
+import { debug, warn } from "~Utils"
+import BackgroundFetch from "react-native-background-fetch"
 import { useApplicationSecurity } from "../EncryptedStorageProvider"
 
 type ProviderProps = { children: React.ReactNode }
-
-const AUTO_LOGOUT_TASK = "AUTO_LOGOUT_TASK"
 
 const AutoLogoutContext = React.createContext(null)
 
 export const AutoLogoutProvider = ({ children }: ProviderProps) => {
     const { setTriggerAutoLock } = useApplicationSecurity()
 
-    const registerAutoLogoutTask = useCallback(() => {
-        try {
-            if (setTriggerAutoLock) {
-                debug("Registering auto logout task")
-                // Register auto logout task.
-                TaskManager.defineTask(AUTO_LOGOUT_TASK, () => {
-                    debug("Trigging auto lock")
-                    setTriggerAutoLock(true)
-                    return BackgroundFetch.BackgroundFetchResult.NewData
-                })
-            }
-        } catch (err) {
-            error("Error registering background task", err)
-            return BackgroundFetch.BackgroundFetchResult.Failed
-        }
-    }, [setTriggerAutoLock])
-
-    // Function to configure BackgroundFetch
-    const configureBackgroundFetch = async () => {
-        try {
-            await stopBackgroundFetch()
-            debug("Starting auto logout listener")
-            await BackgroundFetch.registerTaskAsync(AUTO_LOGOUT_TASK, {
-                minimumInterval: 600,
-                stopOnTerminate: false,
-                startOnBoot: true,
-            })
-        } catch (err) {
-            error("Error registering background task", err)
-        }
+    const onEvent = (taskId: string) => {
+        debug(`[BackgroundFetch] task: ${taskId} triggered ${Date()}`)
+        setTriggerAutoLock(true)
+        BackgroundFetch.finish(taskId)
     }
 
-    const stopBackgroundFetch = async () => {
-        const isRegistered = await TaskManager.isTaskRegisteredAsync(
-            AUTO_LOGOUT_TASK,
+    const onTimeout = (taskId: string) => {
+        warn(`[BackgroundFetch] TIMEOUT task: ${taskId}`)
+        BackgroundFetch.finish(taskId)
+    }
+
+    const initBackgroundFetch = async () => {
+        // Initialize BackgroundFetch only once when component mounts.
+        const status = await BackgroundFetch.configure(
+            { minimumFetchInterval: 15 },
+            onEvent,
+            onTimeout,
         )
-        if (isRegistered) {
-            debug("Stopping auto logout listener")
-            await BackgroundFetch.unregisterTaskAsync(AUTO_LOGOUT_TASK)
-        }
+
+        debug(`[BackgroundFetch] configure status: ${status}`)
     }
-    useEffect(() => {
-        registerAutoLogoutTask()
-    }, [registerAutoLogoutTask])
 
     useEffect(() => {
-        configureBackgroundFetch()
+        initBackgroundFetch()
         return () => {
-            stopBackgroundFetch()
+            initBackgroundFetch()
         }
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [])

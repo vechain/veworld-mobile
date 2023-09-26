@@ -1,6 +1,6 @@
 import React, { useCallback, useEffect, useMemo, useState } from "react"
 import { MMKV } from "react-native-mmkv"
-import { debug, error, HexUtils, PlatformUtils, warn } from "~Utils"
+import { debug, error, HexUtils, info, PlatformUtils, warn } from "~Utils"
 import { BiometricState, SecurityLevelType, WALLET_STATUS } from "~Model"
 import {
     PreviousInstallation,
@@ -321,6 +321,7 @@ export const ApplicationSecurityProvider = ({
     )
 
     const lockApplication = useCallback(() => {
+        info("Locking application")
         setWalletStatus(WALLET_STATUS.NOT_INITIALISED)
         setReduxStorage(undefined)
         setImageStorage(undefined)
