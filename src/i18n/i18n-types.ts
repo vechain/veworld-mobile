@@ -1243,6 +1243,10 @@ type RootTranslation = {
 	 */
 	ERROR_TOO_MANY_BIOMETRICS_AUTH_ATTEMPS: string
 	/**
+	 * E​r​r​o​r​ ​c​r​e​a​t​i​n​g​ ​w​a​l​l​e​t
+	 */
+	ERROR_CREATING_WALLET: string
+	/**
 	 * S​u​c​c​e​s​s​!
 	 */
 	SUCCESS_GENERIC: string
@@ -3730,6 +3734,10 @@ Please, try again later.
 	 * Too many biometrics authentication attempts, please try again later
 	 */
 	ERROR_TOO_MANY_BIOMETRICS_AUTH_ATTEMPS: () => LocalizedString
+	/**
+	 * Error creating wallet
+	 */
+	ERROR_CREATING_WALLET: () => LocalizedString
 	/**
 	 * Success!
 	 */

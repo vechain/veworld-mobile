@@ -1,6 +1,6 @@
 import React, { useCallback, useEffect, useMemo, useState } from "react"
 import { MMKV } from "react-native-mmkv"
-import { debug, error, HexUtils, PlatformUtils, warn } from "~Utils"
+import { BiometricsUtils, debug, error, HexUtils, warn } from "~Utils"
 import { BiometricState, SecurityLevelType, WALLET_STATUS } from "~Model"
 import {
     PreviousInstallation,
@@ -9,15 +9,12 @@ import {
     StorageEncryptionKeyHelper,
     WalletEncryptionKeyHelper,
 } from "~Components/Providers"
-import Onboarding from "~Components/Providers/EncryptedStorageProvider/Helpers/Onboarding"
+
 import { useAppState, useBiometrics } from "~Hooks"
 import { StandaloneAppBlockedScreen, StandaloneLockScreen } from "~Screens"
 import { AnimatedSplashScreen } from "../../../AnimatedSplashScreen"
 import { GlobalEventEmitter, LOCK_APP_EVENT } from "~Events"
-import {
-    CANCEL_AUTH_MESSAGE_ANDROID,
-    CANCEL_AUTH_MESSAGE_IOS,
-} from "~Constants/Constants/Errors/ErrorsConstants"
+import Onboarding from "./Helpers/Onboarding"
 
 const UserEncryptedStorage = new MMKV({
     id: "user_encrypted_storage",
@@ -147,26 +144,11 @@ export const ApplicationSecurityProvider = ({
                 backUpKeys?.storage ??
                 (await StorageEncryptionKeyHelper.get(pinCode))
         } catch (e) {
-            if (PlatformUtils.isIOS()) {
-                if (
-                    e instanceof Error &&
-                    e.message.includes(CANCEL_AUTH_MESSAGE_IOS)
-                ) {
-                    return unlock()
-                } else {
-                    throw e
-                }
-            }
-            if (PlatformUtils.isAndroid()) {
-                if (
-                    e instanceof Error &&
-                    (e.message.includes("Cancel") ||
-                        e.message.includes(CANCEL_AUTH_MESSAGE_ANDROID))
-                ) {
-                    return unlock()
-                } else {
-                    throw e
-                }
+            // handle cases when  the user cancels the biometric prompt and the keychain returns it as an error
+            if (BiometricsUtils.BiometricErrors.isBiometricCanceled(e)) {
+                return unlock()
+            } else {
+                throw e
             }
         }
 
