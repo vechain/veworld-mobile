@@ -20,7 +20,7 @@ const get = async (pinCode?: string): Promise<WalletEncryptionKey> => {
         },
     })
 
-    if (!keys) throw new Error("No key found")
+    if (!keys) throw new Error("WalletEncryptionKeyHelper: No key found")
 
     if (pinCode) {
         const salt = await SaltHelper.getSalt()

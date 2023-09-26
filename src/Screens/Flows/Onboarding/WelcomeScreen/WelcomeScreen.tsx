@@ -1,10 +1,27 @@
 import React, { useCallback } from "react"
-import { BaseButton, BaseSpacer, BaseText, BaseView, Layout } from "~Components"
+import {
+    BaseButton,
+    BaseSpacer,
+    BaseText,
+    BaseView,
+    Layout,
+    WalletEncryptionKeyHelper,
+    useApplicationSecurity,
+} from "~Components"
 import { useNavigation } from "@react-navigation/native"
 import { Routes } from "~Navigation"
 import { VeWorldLogoSVG } from "~Assets"
 import { useI18nContext } from "~i18n"
 import { Linking } from "react-native"
+import {
+    selectAreDevFeaturesEnabled,
+    setIsAppLoading,
+    useAppDispatch,
+    useAppSelector,
+} from "~Storage/Redux"
+import { useCreateWallet } from "~Hooks"
+import { error } from "~Utils"
+import { SecurityLevelType } from "~Model"
 
 export const WelcomeScreen = () => {
     const nav = useNavigation()
@@ -23,6 +40,28 @@ export const WelcomeScreen = () => {
         const url = process.env.REACT_APP_PRIVACY_POLICY_URL
         url && Linking.openURL(url)
     }, [])
+
+    // dev button
+    const dispatch = useAppDispatch()
+    const devFeaturesEnabled = useAppSelector(selectAreDevFeaturesEnabled)
+    const { onCreateWallet: createWallet } = useCreateWallet()
+    const { migrateOnboarding } = useApplicationSecurity()
+
+    const onDemoOnboarding = useCallback(async () => {
+        dispatch(setIsAppLoading(true))
+        const mnemonic =
+            "denial kitchen pet squirrel other broom bar gas better priority spoil cross"
+        const userPassword = "111111"
+        await WalletEncryptionKeyHelper.init(userPassword)
+        await createWallet({
+            userPassword,
+            onError: e => error(e),
+            mnemonic,
+        })
+        await migrateOnboarding(SecurityLevelType.SECRET, userPassword)
+        dispatch(setIsAppLoading(false))
+    }, [createWallet, dispatch, migrateOnboarding])
+    // end dev button
 
     return (
         <Layout
@@ -92,6 +131,14 @@ export const WelcomeScreen = () => {
                         testID="GET_STARTED_BTN"
                         haptics="Medium"
                     />
+                    {devFeaturesEnabled && (
+                        <BaseButton
+                            size="md"
+                            variant="link"
+                            action={onDemoOnboarding}
+                            title="DEV:DEMO"
+                        />
+                    )}
                 </BaseView>
             }
         />
