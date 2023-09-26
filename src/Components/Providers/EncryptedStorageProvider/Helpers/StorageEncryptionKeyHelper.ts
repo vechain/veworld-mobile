@@ -17,7 +17,8 @@ const get = async (pinCode?: string): Promise<StorageEncryptionKeys> => {
         },
     })
 
-    if (!keys) throw new Error("No key found")
+    if (!keys)
+        throw new Error("StorageEncryptionKeyHelper -> get: No key found")
 
     if (pinCode) {
         const salt = await SaltHelper.getSalt()
@@ -69,7 +70,10 @@ const validatePinCode = async (pinCode: string): Promise<boolean> => {
             key: PIN_CODE_STORAGE,
         })
 
-        if (!keys) throw new Error("No key found")
+        if (!keys)
+            throw new Error(
+                "StorageEncryptionKeyHelper -> validatePinCode: No key found",
+            )
 
         const salt = await SaltHelper.getSalt()
 
