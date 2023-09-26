@@ -5,13 +5,13 @@ const BiometricCancelErrors = {
     ANDROID_CANCEL: "13",
     ANDROID_BACK_CANCEL: "10",
 }
-const BiometricTooManyAttemptesErrors = {
+const BiometricTooManyAttemptsErrors = {
     ANDROID_TOO_MANY_ATTEMPTS: "7",
     ANDROID_DISSABLED_SENSOR: "9",
 }
 
 Object.freeze(BiometricCancelErrors)
-Object.freeze(BiometricTooManyAttemptesErrors)
+Object.freeze(BiometricTooManyAttemptsErrors)
 
 export const isBiometricCanceled = (error: unknown) => {
     const errors = Object.values(BiometricCancelErrors)
@@ -30,7 +30,7 @@ export const isBiometricCanceled = (error: unknown) => {
 }
 
 export const isBiometricTooManyAttempts = (error: unknown) => {
-    const errors = Object.values(BiometricTooManyAttemptesErrors)
+    const errors = Object.values(BiometricTooManyAttemptsErrors)
 
     if (
         error &&
