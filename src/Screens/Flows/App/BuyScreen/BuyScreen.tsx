@@ -1,12 +1,17 @@
 import React from "react"
-import { BackButtonHeader, BaseSafeArea, BaseText } from "~Components"
+import { CoinbasePayWebView, Layout } from "~Components"
+import { selectSelectedAccount, useAppSelector } from "~Storage/Redux"
 
 export const BuyScreen = () => {
+    const selectedAccount = useAppSelector(selectSelectedAccount)
     return (
-        <BaseSafeArea>
-            <BackButtonHeader />
-            {/* eslint-disable-next-line i18next/no-literal-string */}
-            <BaseText>Buy</BaseText>
-        </BaseSafeArea>
+        <Layout
+            fixedBody={
+                <CoinbasePayWebView
+                    currentAmount={0}
+                    destinationAddress={selectedAccount.address}
+                />
+            }
+        />
     )
 }
