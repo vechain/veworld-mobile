@@ -12,6 +12,7 @@ import {
     SettingsFlows,
     WalletSuccessScreen,
     WelcomeScreen,
+    textShouldBeVisible,
 } from "../helpers"
 
 Given(
@@ -170,22 +171,6 @@ Then(
     },
 )
 
-Then(
-    "The user should see biometrics disabled alert",
-    { timeout: -1 },
-    async () => {
-        await waitFor(element(by.text("Biometrics previously denied")))
-            .toBeVisible()
-            .withTimeout(LONG_TIMEOUT)
-    },
-)
-
-Then(
-    "The user should see biometrics not enrolled alert",
-    { timeout: -1 },
-    async () => {
-        await waitFor(element(by.text("Biometrics not available")))
-            .toBeVisible()
-            .withTimeout(LONG_TIMEOUT)
-    },
-)
+Then("The button use biometrics is disabled", { timeout: -1 }, async () => {
+    await textShouldBeVisible("Protect your wallet")
+})

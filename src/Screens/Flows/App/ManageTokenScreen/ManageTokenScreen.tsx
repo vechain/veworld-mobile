@@ -159,7 +159,7 @@ export const ManageTokenScreen = () => {
                                     size={24}
                                     bg={theme.colors.secondary}
                                     action={openAddCustomTokenSheet}
-                                    testID="Add_Custom_Token_Button"
+                                    testID="ManageTokenScreen_AddCustomToken_Button"
                                 />
                             </BaseView>
                             <BaseSpacer height={8} />
