@@ -13,7 +13,6 @@ import {
 import { useAppState, useBiometrics } from "~Hooks"
 import { StandaloneAppBlockedScreen, StandaloneLockScreen } from "~Screens"
 import { AnimatedSplashScreen } from "../../../AnimatedSplashScreen"
-import { GlobalEventEmitter, LOCK_APP_EVENT } from "~Events"
 import Onboarding from "./Helpers/Onboarding"
 
 const UserEncryptedStorage = new MMKV({
@@ -56,6 +55,7 @@ type IApplicationSecurity = {
     isAppReady: boolean
     setIsAppReady: (isReady: boolean) => void
     lockApplication: () => void
+    setTriggerAutoLock: (trigger: boolean) => void
 }
 
 const ApplicationSecurityContext = React.createContext<
@@ -66,6 +66,7 @@ type ApplicationSecurityContextProviderProps = { children: React.ReactNode }
 export const ApplicationSecurityProvider = ({
     children,
 }: ApplicationSecurityContextProviderProps) => {
+    const [triggerAutoLock, setTriggerAutoLock] = useState(false)
     const [walletStatus, setWalletStatus] = useState<WALLET_STATUS>(
         WALLET_STATUS.NOT_INITIALISED,
     )
@@ -333,11 +334,27 @@ export const ApplicationSecurityProvider = ({
     }, [walletStatus, currentState, biometrics, intialiseApp])
 
     useEffect(() => {
-        GlobalEventEmitter.on(LOCK_APP_EVENT, lockApplication)
-        return () => {
-            GlobalEventEmitter.removeListener(LOCK_APP_EVENT, lockApplication)
+        if (triggerAutoLock) {
+            try {
+                if (
+                    walletStatus === WALLET_STATUS.UNLOCKED &&
+                    currentState !== "active"
+                ) {
+                    lockApplication()
+                }
+            } catch (e) {
+                error("Error locking application", e)
+            } finally {
+                setTriggerAutoLock(false)
+            }
         }
-    }, [lockApplication])
+    }, [
+        triggerAutoLock,
+        setTriggerAutoLock,
+        walletStatus,
+        currentState,
+        lockApplication,
+    ])
 
     const value: IApplicationSecurity | undefined = useMemo(() => {
         if (!reduxStorage || walletStatus === WALLET_STATUS.NOT_INITIALISED)
@@ -356,6 +373,7 @@ export const ApplicationSecurityProvider = ({
             updateSecurityMethod,
             securityType,
             lockApplication,
+            setTriggerAutoLock,
         }
     }, [
         reduxStorage,
