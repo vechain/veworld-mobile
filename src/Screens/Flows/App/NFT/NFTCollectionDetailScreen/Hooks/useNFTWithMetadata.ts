@@ -8,6 +8,7 @@ import {
 import { usePagination } from "../../usePagination"
 import { useNFTs } from "~Hooks"
 import { NFT_PAGE_SIZE } from "~Constants/Constants/NFT"
+import { InteractionManager } from "react-native"
 
 export const useNFTWithMetadata = (
     collectionAddress: string,
@@ -67,8 +68,9 @@ export const useNFTWithMetadata = (
             await loadNFTsForCollection(collectionAddress, 0)
         }
 
-        init()
-
+        InteractionManager.runAfterInteractions(() => {
+            init()
+        })
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [selectedAccount])
 
