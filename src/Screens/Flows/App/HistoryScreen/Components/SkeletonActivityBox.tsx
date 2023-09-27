@@ -1,15 +1,14 @@
 import React from "react"
-import { useThemedStyles } from "~Hooks"
-import { ColorThemeType } from "~Constants"
 import { StyleSheet } from "react-native"
 import { BaseSkeleton } from "~Components"
+import { useTheme } from "~Hooks"
 
 export const SkeletonActivityBox = () => {
-    const { styles, theme } = useThemedStyles(baseStyles)
+    const theme = useTheme()
 
     return (
         <BaseSkeleton
-            containerStyle={styles.container}
+            containerStyle={baseStyles.container}
             animationDirection="horizontalLeft"
             boneColor={theme.colors.skeletonBoneColor}
             highlightColor={theme.colors.skeletonHighlightColor}
@@ -19,7 +18,7 @@ export const SkeletonActivityBox = () => {
                 {
                     flexDirection: "row",
                     alignItems: "center",
-                    height: 65,
+                    height: 68,
                     children: [
                         // Circle
                         { width: 40, height: 40, borderRadius: 20 },
@@ -51,14 +50,11 @@ export const SkeletonActivityBox = () => {
     )
 }
 
-const baseStyles = (theme: ColorThemeType) =>
-    StyleSheet.create({
-        container: {
-            flex: 1,
-            width: "100%",
-            flexDirection: "column",
-            marginLeft: -1,
-            borderBottomColor: theme.colors.skeletonBoneColor,
-            borderBottomWidth: 0.5,
-        },
-    })
+const baseStyles = StyleSheet.create({
+    container: {
+        flex: 1,
+        width: "100%",
+        flexDirection: "column",
+        marginLeft: -1,
+    },
+})
