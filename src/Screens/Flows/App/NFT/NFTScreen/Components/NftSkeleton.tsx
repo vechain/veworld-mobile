@@ -118,7 +118,7 @@ export const NftSkeleton = ({
         } else {
             return [
                 {
-                    marginTop: showMargin ? 22 : 16,
+                    marginTop: showMargin ? 12 : 16,
                     width: SCREEN_WIDTH,
                     justifyContent: "center",
                     alignItems: "center",
