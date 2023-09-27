@@ -1,6 +1,6 @@
 import React, { useCallback, useEffect, useMemo, useState } from "react"
 import { MMKV } from "react-native-mmkv"
-import { BiometricsUtils, debug, error, HexUtils, warn } from "~Utils"
+import { BiometricsUtils, debug, error, HexUtils, info } from "~Utils"
 import { BiometricState, SecurityLevelType, WALLET_STATUS } from "~Model"
 import {
     PreviousInstallation,
@@ -55,7 +55,7 @@ type IApplicationSecurity = {
     isAppReady: boolean
     setIsAppReady: (isReady: boolean) => void
     lockApplication: () => void
-    setTriggerAutoLock: (trigger: boolean) => void
+    triggerAutoLock: () => void
 }
 
 const ApplicationSecurityContext = React.createContext<
@@ -66,7 +66,7 @@ type ApplicationSecurityContextProviderProps = { children: React.ReactNode }
 export const ApplicationSecurityProvider = ({
     children,
 }: ApplicationSecurityContextProviderProps) => {
-    const [triggerAutoLock, setTriggerAutoLock] = useState(false)
+    const [autoLock, setAutoLock] = useState(false)
     const [walletStatus, setWalletStatus] = useState<WALLET_STATUS>(
         WALLET_STATUS.NOT_INITIALISED,
     )
@@ -85,6 +85,10 @@ export const ApplicationSecurityProvider = ({
     const biometrics = useBiometrics()
 
     const onboardingKey = useMemo(() => HexUtils.generateRandom(256), [])
+
+    const triggerAutoLock = () => {
+        setAutoLock(true)
+    }
 
     const updateSecurityType = useCallback(
         (type: SecurityLevelType | undefined) => {
@@ -216,7 +220,7 @@ export const ApplicationSecurityProvider = ({
             const encryptedStorageKeys = UserEncryptedStorage.getAllKeys()
 
             if (encryptedStorageKeys.length === 0) {
-                warn("No keys found in encrypted storage, user is onboarding")
+                info("No keys found in encrypted storage, user is onboarding")
 
                 await PreviousInstallation.clearOldStorage()
 
@@ -230,7 +234,6 @@ export const ApplicationSecurityProvider = ({
                 })
                 setWalletStatus(WALLET_STATUS.FIRST_TIME_ACCESS)
             } else {
-                warn("Keys found in encrypted storage")
                 setWalletStatus(WALLET_STATUS.LOCKED)
                 await setUpEncryptionKeys(_biometrics)
             }
@@ -303,16 +306,12 @@ export const ApplicationSecurityProvider = ({
     )
 
     const lockApplication = useCallback(() => {
-        if (
-            walletStatus !== WALLET_STATUS.UNLOCKED ||
-            currentState === "active"
-        )
-            return
+        if (walletStatus !== WALLET_STATUS.UNLOCKED) return
         setWalletStatus(WALLET_STATUS.NOT_INITIALISED)
         setReduxStorage(undefined)
         setImageStorage(undefined)
         setMetadataStorage(undefined)
-    }, [walletStatus, currentState])
+    }, [walletStatus])
 
     /**
      * Initialise the app
@@ -333,8 +332,9 @@ export const ApplicationSecurityProvider = ({
         }
     }, [walletStatus, currentState, biometrics, intialiseApp])
 
+    // Handle auto lock request
     useEffect(() => {
-        if (triggerAutoLock) {
+        if (autoLock) {
             try {
                 if (
                     walletStatus === WALLET_STATUS.UNLOCKED &&
@@ -345,16 +345,10 @@ export const ApplicationSecurityProvider = ({
             } catch (e) {
                 error("Error locking application", e)
             } finally {
-                setTriggerAutoLock(false)
+                setAutoLock(false)
             }
         }
-    }, [
-        triggerAutoLock,
-        setTriggerAutoLock,
-        walletStatus,
-        currentState,
-        lockApplication,
-    ])
+    }, [autoLock, setAutoLock, walletStatus, currentState, lockApplication])
 
     const value: IApplicationSecurity | undefined = useMemo(() => {
         if (!reduxStorage || walletStatus === WALLET_STATUS.NOT_INITIALISED)
@@ -373,7 +367,7 @@ export const ApplicationSecurityProvider = ({
             updateSecurityMethod,
             securityType,
             lockApplication,
-            setTriggerAutoLock,
+            triggerAutoLock,
         }
     }, [
         reduxStorage,

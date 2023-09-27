@@ -14,19 +14,19 @@ const FIVE_MINUTES = 5 * 60 * 1000
 const AutoLockContext = React.createContext(null)
 
 export const AutoLockProvider = ({ children }: ProviderProps) => {
-    const { setTriggerAutoLock } = useApplicationSecurity()
+    const { triggerAutoLock, lockApplication } = useApplicationSecurity()
     const dispatch = useAppDispatch()
     const { activeToBackground, backgroundToActive } = useAppStateTransitions()
     const [inactivityStartTime, setInactivityStartTime] = useState<number>(0)
 
     const registerAutoLockTask = useCallback(() => {
-        if (setTriggerAutoLock) {
+        if (triggerAutoLock) {
             debug("Registering auto lock task")
             // Register auto lock task.
             TaskManager.defineTask(AUTO_LOCK_TASK, () => {
                 try {
                     debug("Trigging auto lock")
-                    setTriggerAutoLock(true)
+                    triggerAutoLock()
                     return BackgroundFetch.BackgroundFetchResult.NewData
                 } catch (err) {
                     error("Error registering auto lock task", err)
@@ -34,7 +34,7 @@ export const AutoLockProvider = ({ children }: ProviderProps) => {
                 }
             })
         }
-    }, [setTriggerAutoLock])
+    }, [triggerAutoLock])
 
     // Function to configure BackgroundFetch
     const configureBackgroundFetch = async () => {
@@ -86,7 +86,7 @@ export const AutoLockProvider = ({ children }: ProviderProps) => {
                     now - inactivityStartTime > FIVE_MINUTES
                 ) {
                     info("App was inactive for more than 5 minutes. Locking...")
-                    setTriggerAutoLock(true)
+                    lockApplication()
                 }
             } catch (err) {
                 error("Error checking inactivity time", err)
@@ -100,7 +100,7 @@ export const AutoLockProvider = ({ children }: ProviderProps) => {
         activeToBackground,
         backgroundToActive,
         inactivityStartTime,
-        setTriggerAutoLock,
+        lockApplication,
     ])
 
     return (
