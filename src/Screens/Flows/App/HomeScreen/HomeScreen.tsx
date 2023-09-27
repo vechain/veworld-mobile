@@ -173,7 +173,9 @@ export const HomeScreen = () => {
             }
             fixedBody={
                 <>
-                    <NestableScrollContainer ref={scrollViewRef}>
+                    <NestableScrollContainer
+                        ref={scrollViewRef}
+                        testID="HomeScreen_ScrollView">
                         <BaseView>
                             <HeaderView
                                 openAccountManagementSheet={
