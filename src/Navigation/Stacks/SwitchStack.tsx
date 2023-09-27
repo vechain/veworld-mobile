@@ -5,6 +5,7 @@ import { OnboardingStack } from "./OnboardingStack"
 import { CreateWalletAppStack, Routes } from "~Navigation"
 import {
     BlackListedCollectionsScreen,
+    BuyScreen,
     ConnectAppScreen,
     SendTransactionScreen,
     SignCertificateScreen,
@@ -31,6 +32,7 @@ export type RootStackParamListSwitch = {
     ResetAppScreen: undefined
     [Routes.CREATE_WALLET_FLOW]: undefined
     [Routes.BLACKLISTED_COLLECTIONS]: undefined
+    [Routes.BUY]: undefined
     [Routes.CONNECT_APP_SCREEN]: {
         sessionProposal: SignClientTypes.EventArguments["session_proposal"]
     }
@@ -130,6 +132,13 @@ export const SwitchStack = () => {
                         <Switch.Screen
                             name={Routes.LEDGER_SIGN_TRANSACTION}
                             component={LedgerSignTransaction}
+                        />
+                        <Switch.Screen
+                            name={Routes.BUY}
+                            component={BuyScreen}
+                            options={{
+                                presentation: "modal",
+                            }}
                         />
                     </Switch.Group>
                 </>

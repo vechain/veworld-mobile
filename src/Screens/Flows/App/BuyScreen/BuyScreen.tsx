@@ -6,6 +6,9 @@ export const BuyScreen = () => {
     const selectedAccount = useAppSelector(selectSelectedAccount)
     return (
         <Layout
+            hasSafeArea={false}
+            noMargin
+            noBackButton
             fixedBody={
                 <CoinbasePayWebView
                     currentAmount={0}

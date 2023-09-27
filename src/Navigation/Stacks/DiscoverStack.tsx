@@ -2,7 +2,6 @@ import React from "react"
 import { createNativeStackNavigator } from "@react-navigation/native-stack"
 import {
     AssetDetailScreen,
-    BuyScreen,
     DiscoverScreen,
     LedgerSignTransaction,
     SelectAmountSendScreen,
@@ -22,7 +21,6 @@ import { PlatformUtils } from "~Utils"
 export type RootStackParamListDiscover = {
     [Routes.DISCOVER]: undefined
     [Routes.TOKEN_DETAILS]: { token: TokenWithCompleteInfo }
-    [Routes.BUY]: undefined
     [Routes.SWAP]: undefined
     [Routes.SELECT_TOKEN_SEND]: { initialRoute: Routes }
     [Routes.SELECT_AMOUNT_SEND]: {
@@ -62,12 +60,6 @@ export const DiscoverStack = () => {
                 <Screen
                     name={Routes.TOKEN_DETAILS}
                     component={AssetDetailScreen}
-                    options={{ headerShown: false }}
-                />
-
-                <Screen
-                    name={Routes.BUY}
-                    component={BuyScreen}
                     options={{ headerShown: false }}
                 />
                 <Screen
