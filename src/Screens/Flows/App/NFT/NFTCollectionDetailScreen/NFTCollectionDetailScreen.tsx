@@ -62,12 +62,12 @@ export const NFTCollectionDetailScreen = ({ route }: Props) => {
     const renderContent = useMemo(() => {
         if (!isEmpty(error) && isEmpty(nfts)) return <NetworkErrorView />
 
-        return (
-            <NftLoader isLoading={isLoading && isEmpty(nfts)}>
-                {renderNftList}
-            </NftLoader>
-        )
-    }, [error, nfts, isLoading, renderNftList])
+        if (isLoading && isEmpty(nfts)) {
+            return <NftLoader isLoading={isLoading && isEmpty(nfts)} />
+        } else {
+            return renderNftList
+        }
+    }, [error, isLoading, nfts, renderNftList])
 
     return (
         <Layout

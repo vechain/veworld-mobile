@@ -9,7 +9,6 @@ import {
 } from "~Screens"
 import { Routes } from "~Navigation/Enums"
 import { FungibleTokenWithBalance } from "~Model"
-import { PlatformUtils } from "~Utils"
 
 export type RootStackParamListNFT = {
     [Routes.NFTS]: undefined
@@ -40,11 +39,7 @@ const { Navigator, Group, Screen } =
 
 export const NFTStack = () => {
     return (
-        <Navigator
-            id="HomeStack"
-            screenOptions={{
-                animation: PlatformUtils.isIOS() ? "default" : "none",
-            }}>
+        <Navigator id="HomeStack" screenOptions={{}}>
             <Group>
                 <Screen
                     name={Routes.NFTS}

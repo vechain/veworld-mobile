@@ -17,7 +17,6 @@ import {
     TokenWithCompleteInfo,
 } from "~Model"
 import { Transaction } from "thor-devkit"
-import { PlatformUtils } from "~Utils"
 
 export type RootStackParamListDiscover = {
     [Routes.DISCOVER]: undefined
@@ -48,10 +47,7 @@ const { Navigator, Group, Screen } =
 
 export const DiscoverStack = () => {
     return (
-        <Navigator
-            screenOptions={{
-                animation: PlatformUtils.isIOS() ? "default" : "none",
-            }}>
+        <Navigator screenOptions={{}}>
             <Group>
                 <Screen
                     name={Routes.DISCOVER}

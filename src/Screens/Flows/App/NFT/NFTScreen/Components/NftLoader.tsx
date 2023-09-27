@@ -12,7 +12,7 @@ import Animated, {
 import { useTheme } from "~Hooks"
 
 type Props = {
-    children: React.ReactNode
+    children?: React.ReactNode
     isLoading?: boolean
 }
 

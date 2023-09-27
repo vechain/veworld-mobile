@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useMemo } from "react"
+import { useCallback, useLayoutEffect, useMemo } from "react"
 import {
     selectNFTsForCollection,
     selectNftNetworkingSideEffects,
@@ -62,7 +62,7 @@ export const useNFTWithMetadata = (
         setEndReachedCalledDuringMomentum,
     ])
 
-    useEffect(() => {
+    useLayoutEffect(() => {
         const init = async () => {
             await loadNFTsForCollection(collectionAddress, 0)
         }

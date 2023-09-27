@@ -13,7 +13,6 @@ import {
 } from "~Screens"
 import { Routes } from "~Navigation/Enums"
 import { ConnectedLedgerDevice, SecurityLevelType } from "~Model"
-import { PlatformUtils } from "~Utils"
 
 export type RootStackParamListCreateWalletApp = {
     Home: undefined
@@ -48,7 +47,6 @@ export const CreateWalletAppStack = () => {
         <CreateWalletApp.Navigator
             screenOptions={{
                 headerShown: false,
-                animation: PlatformUtils.isIOS() ? "default" : "none",
             }}>
             <CreateWalletApp.Screen
                 name={Routes.WALLET_SETUP}
