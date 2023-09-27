@@ -12,6 +12,7 @@ import {
 } from "~Storage/Redux"
 import { fetchAccountTransactionActivities } from "~Networking"
 import { useI18nContext } from "~i18n"
+import { InteractionManager } from "react-native"
 
 /**
  * Custom React hook to fetch and manage account activities.
@@ -131,7 +132,9 @@ export const useAccountActivities = () => {
             await fetchActivities()
         }
 
-        if (page === 0) fetchOnMount()
+        InteractionManager.runAfterInteractions(() => {
+            if (page === 0) fetchOnMount()
+        })
     }, [fetchActivities, page])
 
     // Reset page number on network change or on account change

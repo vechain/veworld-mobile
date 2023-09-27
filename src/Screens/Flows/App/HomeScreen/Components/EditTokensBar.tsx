@@ -14,8 +14,6 @@ import { Routes } from "~Navigation"
 import { StyleSheet } from "react-native"
 import {
     selectNonVechainTokensWithBalances,
-    setIsAppLoading,
-    useAppDispatch,
     useAppSelector,
 } from "~Storage/Redux"
 
@@ -27,7 +25,6 @@ type Props = {
 export const EditTokensBar = memo(({ isEdit, setIsEdit }: Props) => {
     const { LL } = useI18nContext()
     const theme = useTheme()
-    const dispatch = useAppDispatch()
     const onButtonPress = useCallback(() => {
         setIsEdit(prevState => !prevState)
     }, [setIsEdit])
@@ -35,11 +32,10 @@ export const EditTokensBar = memo(({ isEdit, setIsEdit }: Props) => {
     const nav = useNavigation()
 
     const handleManageToken = useCallback(() => {
-        dispatch(setIsAppLoading(true))
         setTimeout(() => {
             nav.navigate(Routes.MANAGE_TOKEN)
         }, 0)
-    }, [dispatch, nav])
+    }, [nav])
 
     const tokenBalances = useAppSelector(selectNonVechainTokensWithBalances)
 
