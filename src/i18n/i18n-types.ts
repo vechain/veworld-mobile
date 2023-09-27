@@ -211,6 +211,10 @@ type RootTranslation = {
 	 */
 	BTN_WALLET_CONFRIM_DELETION: string
 	/**
+	 * B​u​y​ ​w​i​t​h​ ​C​o​i​n​b​a​s​e
+	 */
+	BTN_BUY_COINBASE: string
+	/**
 	 * Y​o​u​r​ ​V​e​W​o​r​l​d​.​ ​A​ ​s​e​l​f​ ​c​u​s​t​o​d​y​ ​m​o​b​i​l​e​ ​c​r​y​p​t​o​ ​w​a​l​l​e​t​ ​f​o​r​ ​v​e​c​h​a​i​n
 	 */
 	BD_WELCOME_SCREEN: string
@@ -504,6 +508,10 @@ type RootTranslation = {
 	 */
 	BD_APP_BLOCKED: string
 	/**
+	 * C​h​o​o​s​e​ ​a​ ​p​a​y​m​e​n​t​ ​p​r​o​v​i​d​e​r
+	 */
+	BD_SELECT_PAYMENT_PROVIDER: string
+	/**
 	 * W​e​l​c​o​m​e​ ​t​o​ 
 	 */
 	TITLE_WELCOME_TO: string
@@ -685,6 +693,10 @@ type RootTranslation = {
 	 * @param {string} type
 	 */
 	TITLE_RENAME: RequiredParams<'type'>
+	/**
+	 * B​u​y​ ​V​e​c​h​a​i​n​T​h​o​r​ ​t​o​k​e​n​s
+	 */
+	TITLE_BUY: string
 	/**
 	 * W​h​i​c​h​ ​k​i​n​d​ ​o​f​ ​w​a​l​l​e​t​ ​d​o​ ​y​o​u​ ​w​a​n​t​ ​t​o​ ​i​m​p​o​r​t​?
 	 */
@@ -2705,6 +2717,10 @@ export type TranslationFunctions = {
 	 */
 	BTN_WALLET_CONFRIM_DELETION: () => LocalizedString
 	/**
+	 * Buy with Coinbase
+	 */
+	BTN_BUY_COINBASE: () => LocalizedString
+	/**
 	 * Your VeWorld. A self custody mobile crypto wallet for vechain
 	 */
 	BD_WELCOME_SCREEN: () => LocalizedString
@@ -2997,6 +3013,10 @@ export type TranslationFunctions = {
 	 */
 	BD_APP_BLOCKED: () => LocalizedString
 	/**
+	 * Choose a payment provider
+	 */
+	BD_SELECT_PAYMENT_PROVIDER: () => LocalizedString
+	/**
 	 * Welcome to 
 	 */
 	TITLE_WELCOME_TO: () => LocalizedString
@@ -3176,6 +3196,10 @@ export type TranslationFunctions = {
 	 * Rename {type}
 	 */
 	TITLE_RENAME: (arg: { type: string }) => LocalizedString
+	/**
+	 * Buy VechainThor tokens
+	 */
+	TITLE_BUY: () => LocalizedString
 	/**
 	 * Which kind of wallet do you want to import?
 	 */

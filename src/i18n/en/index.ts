@@ -55,6 +55,7 @@ const en: BaseTranslation = {
     BTN_LETS_GET_SENDING: "Let's get sending!",
     BTN_SECURITY_OPERATION_CHECKBOX: "I state that I have backed up my secret phrase",
     BTN_WALLET_CONFRIM_DELETION: "I state that I want to delete this wallet",
+    BTN_BUY_COINBASE: "Buy with Coinbase",
 
 
     // BODY
@@ -142,6 +143,7 @@ const en: BaseTranslation = {
     BD_NFT_DESC_PLACEHOLDER: "Random NFT collection description placeholder in case the NFT collection doesn't have one",
     BD_COLLECTION: "Collection",
     BD_APP_BLOCKED: "To continue using this app securely and effectively, please enable the biometric authentication feature in your device's settings.",
+    BD_SELECT_PAYMENT_PROVIDER: "Choose a payment provider:",
 
     // TITLES
     TITLE_WELCOME_TO: "Welcome to ",
@@ -190,6 +192,7 @@ const en: BaseTranslation = {
     TITLE_BACKUP_YOUR_PHRASE: "Backup your phrase",
     TITLE_QR_CODE_FOR_ACCOUNT: "Your QR Code for {accountAlias: string}",
     TITLE_RENAME: "Rename {type: string}",
+    TITLE_BUY: "Buy VechainThor tokens",
 
     // SUBTITLES
     SB_IMPORT_WALLET_TYPE: "Which kind of wallet do you want to import?",
