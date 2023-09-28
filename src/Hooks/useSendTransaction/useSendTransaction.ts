@@ -13,6 +13,7 @@ import axios, { AxiosError, AxiosResponse } from "axios"
 import { Linking } from "react-native"
 import { defaultMainNetwork } from "~Constants"
 import { useI18nContext } from "~i18n"
+import InAppReview from "react-native-in-app-review"
 
 /**
  * Hooks that expose a function to send a transaction and perform updates, showing a toast on success
@@ -80,6 +81,12 @@ export const useSendTransaction = (
             4000,
             "transactionSuccessToast",
         )
+
+        if (InAppReview.isAvailable()) {
+            InAppReview.RequestInAppReview().catch(inAppReviewError => {
+                error(`InAppReview error: ${inAppReviewError}`)
+            })
+        }
 
         await dispatch(
             updateAccountBalances(thorClient, selectedAccount.address),
