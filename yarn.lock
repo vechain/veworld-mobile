@@ -3262,7 +3262,7 @@
     localforage "^1.8.1"
     tslib "^2.4.1 || ^1.9.3"
 
-"@sentry/react-native@^5.6.0":
+"@sentry/react-native@^5.10.0":
   version "5.10.0"
   resolved "https://registry.yarnpkg.com/@sentry/react-native/-/react-native-5.10.0.tgz#b61861276fcb35e69dbe9c4e098ed7c88598f5d9"
   integrity sha512-YuEZJ3tW5qZlFGFm2FoAZ9vw1fWnjrhMh1IHxo+nUHP3FvVgGkAd/PmSSbgPr2T3YLOIJNiyDdG031Qi7YvtGA==
