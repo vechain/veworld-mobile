@@ -6,65 +6,30 @@ import {
     BaseView,
     Layout,
     WalletEncryptionKeyHelper,
+    useApplicationSecurity,
 } from "~Components"
 import { useNavigation } from "@react-navigation/native"
 import { Routes } from "~Navigation"
 import { VeWorldLogoSVG } from "~Assets"
 import { useI18nContext } from "~i18n"
+import { Linking } from "react-native"
 import {
-    addDeviceAndAccounts,
     selectAreDevFeaturesEnabled,
-    setSelectedAccount,
+    setIsAppLoading,
     useAppDispatch,
     useAppSelector,
 } from "~Storage/Redux"
-import { useDeviceUtils } from "~Hooks"
-import { Linking } from "react-native"
+import { useCreateWallet } from "~Hooks"
+import { error } from "~Utils"
+import { SecurityLevelType } from "~Model"
 
 export const WelcomeScreen = () => {
     const nav = useNavigation()
-    const dispatch = useAppDispatch()
     const { LL } = useI18nContext()
-
-    const devFeaturesEnabled = useAppSelector(selectAreDevFeaturesEnabled)
 
     const onNavigate = useCallback(() => {
         nav.navigate(Routes.WALLET_SETUP)
     }, [nav])
-
-    /**
-     * onboarding with the demo account and password 111111 for TDD purposes
-     */
-    const { getDeviceFromMnemonic } = useDeviceUtils()
-    const onDemoOnboarding = async () => {
-        const FAKE_PIN = "111111"
-
-        const DEMO_MNEMONIC =
-            "denial kitchen pet squirrel other broom bar gas better priority spoil cross"
-        const { device, wallet } = getDeviceFromMnemonic(DEMO_MNEMONIC)
-
-        await WalletEncryptionKeyHelper.init(FAKE_PIN)
-
-        const encryptedWallet = await WalletEncryptionKeyHelper.encryptWallet(
-            wallet,
-            FAKE_PIN,
-        )
-
-        const newAccount = dispatch(
-            addDeviceAndAccounts({
-                ...device,
-                wallet: encryptedWallet,
-            }),
-        )
-
-        dispatch(setSelectedAccount({ address: newAccount.address }))
-        const parent = nav.getParent()
-        if (parent) {
-            if (parent.canGoBack()) {
-                parent.goBack()
-            }
-        }
-    }
 
     const goToTermsAndConditions = useCallback(() => {
         const url = process.env.REACT_APP_TERMS_OF_SERVICE_URL
@@ -75,6 +40,28 @@ export const WelcomeScreen = () => {
         const url = process.env.REACT_APP_PRIVACY_POLICY_URL
         url && Linking.openURL(url)
     }, [])
+
+    // dev button
+    const dispatch = useAppDispatch()
+    const devFeaturesEnabled = useAppSelector(selectAreDevFeaturesEnabled)
+    const { onCreateWallet: createWallet } = useCreateWallet()
+    const { migrateOnboarding } = useApplicationSecurity()
+
+    const onDemoOnboarding = useCallback(async () => {
+        dispatch(setIsAppLoading(true))
+        const mnemonic =
+            "denial kitchen pet squirrel other broom bar gas better priority spoil cross"
+        const userPassword = "111111"
+        await WalletEncryptionKeyHelper.init(userPassword)
+        await createWallet({
+            userPassword,
+            onError: e => error(e),
+            mnemonic,
+        })
+        await migrateOnboarding(SecurityLevelType.SECRET, userPassword)
+        dispatch(setIsAppLoading(false))
+    }, [createWallet, dispatch, migrateOnboarding])
+    // end dev button
 
     return (
         <Layout

@@ -1,5 +1,13 @@
 
 
+## [1.1.2](https://github.com/vechainfoundation/veworld-mobile/compare/1.1.1...1.1.2) (2023-09-27)
+
+
+### Bug Fixes
+
+* add loggin dev button back ([#1441](https://github.com/vechainfoundation/veworld-mobile/issues/1441)) ([530b2be](https://github.com/vechainfoundation/veworld-mobile/commit/530b2be56422730f907b383ac6366ec4d310b540))
+* android biometric handling ([#1434](https://github.com/vechainfoundation/veworld-mobile/issues/1434)) ([83841ae](https://github.com/vechainfoundation/veworld-mobile/commit/83841ae4ae7865ed1c0f4bf141b426f23706e176))
+
 ## 1.2.0 (2023-09-22)
 
 

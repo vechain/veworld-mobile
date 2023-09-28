@@ -14,7 +14,7 @@ Feature: The user can manage transactions settings
 
     Examples:
       | account   |
-      | Account 2 |
+      | Account 1 |
 
   Scenario: User can select an URL as default delegation method for transactions
     When The user selects URL as delegation method

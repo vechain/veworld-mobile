@@ -1,6 +1,7 @@
-import { clickByText, isPresentText } from "../common"
+import { clickByText, isPresentText, textShouldBeVisible } from "../common"
 
 export const goToGeneralSettings = async () => {
+    await textShouldBeVisible("General", { timeout: 10000 })
     await clickByText("General")
 }
 
