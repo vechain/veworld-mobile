@@ -15,6 +15,7 @@ import AccountUtils from "./AccountUtils"
 import GasUtils from "./GasUtils"
 import LanguageUtils from "./LanguageUtils"
 import LedgerUtils from "./LedgerUtils"
+import DeviceInfoUtils from "./DeviceUtils"
 
 import LocaleUtils from "./LocaleUtils"
 import LockScreenUtils from "./LockScreenUtils"
@@ -75,4 +76,5 @@ export {
     MinimizerUtils,
     AnalyticsUtils,
     ColorUtils,
+    DeviceInfoUtils,
 }

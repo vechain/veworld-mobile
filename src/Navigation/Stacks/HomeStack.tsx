@@ -27,6 +27,7 @@ import {
     TransactionOutcomes,
 } from "~Model"
 import { Transaction } from "thor-devkit"
+import { useNavAnimation } from "~Hooks"
 
 export type RootStackParamListHome = {
     [Routes.HOME]: undefined
@@ -75,8 +76,12 @@ const { Navigator, Group, Screen } =
     createNativeStackNavigator<RootStackParamListHome>()
 
 export const HomeStack = () => {
+    const { animation } = useNavAnimation()
+
     return (
-        <Navigator id="HomeStack" screenOptions={{}}>
+        <Navigator
+            id="HomeStack"
+            screenOptions={{ headerShown: false, animation }}>
             <Group>
                 <Screen
                     name={Routes.HOME}

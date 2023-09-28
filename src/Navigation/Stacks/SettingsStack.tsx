@@ -17,6 +17,7 @@ import {
 } from "~Screens"
 import { Routes } from "~Navigation/Enums"
 import { AboutScreen } from "~Screens/Flows/App/AboutScreen"
+import { useNavAnimation } from "~Hooks"
 
 export type RootStackParamListSettings = {
     [Routes.SETTINGS]: undefined
@@ -39,11 +40,10 @@ export type RootStackParamListSettings = {
 const Settings = createNativeStackNavigator<RootStackParamListSettings>()
 
 export const SettingsStack = () => {
+    const { animation } = useNavAnimation()
+
     return (
-        <Settings.Navigator
-            screenOptions={{
-                headerShown: false,
-            }}>
+        <Settings.Navigator screenOptions={{ headerShown: false, animation }}>
             <Settings.Group>
                 <Settings.Screen
                     name={Routes.SETTINGS}
