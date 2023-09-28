@@ -24,6 +24,7 @@ export interface UserPreferenceState {
     isAnalyticsTrackingEnabled: boolean
     isSentryTrackingEnabled: boolean
     devFeaturesEnabled: boolean
+    lastReviewTimestamp?: string
 }
 
 const initialState: UserPreferenceState = {
@@ -36,6 +37,7 @@ const initialState: UserPreferenceState = {
     isAnalyticsTrackingEnabled: true, // this is enabled by default because otherwise onboarding events won't be tracked
     isSentryTrackingEnabled: true,
     devFeaturesEnabled: __DEV__,
+    lastReviewTimestamp: undefined,
 }
 
 export const UserPreferencesSlice = createSlice({
@@ -77,6 +79,10 @@ export const UserPreferencesSlice = createSlice({
             state.isSentryTrackingEnabled = action.payload
         },
 
+        setLastReviewTimestamp: (state, action: PayloadAction<string>) => {
+            state.lastReviewTimestamp = action.payload
+        },
+
         resetUserPreferencesState: () => initialState,
     },
 })
@@ -91,4 +97,5 @@ export const {
     setAnalyticsTrackingEnabled,
     setSentryTrackingEnabled,
     resetUserPreferencesState,
+    setLastReviewTimestamp,
 } = UserPreferencesSlice.actions

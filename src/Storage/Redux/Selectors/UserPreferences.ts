@@ -50,3 +50,7 @@ export const selectSentryTrackingEnabled = createSelector(reducer, state => {
 export const selectAreDevFeaturesEnabled = createSelector(reducer, state => {
     return state.devFeaturesEnabled
 })
+
+export const selectLastReviewTimestamp = createSelector(reducer, state => {
+    return state.lastReviewTimestamp
+})

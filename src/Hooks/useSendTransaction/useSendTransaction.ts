@@ -1,9 +1,11 @@
 import { Transaction } from "thor-devkit"
 import { showSuccessToast, useThor } from "~Components"
 import {
+    selectLastReviewTimestamp,
     selectSelectedAccount,
     selectSelectedNetwork,
     setIsAppLoading,
+    setLastReviewTimestamp,
     updateAccountBalances,
     useAppDispatch,
     useAppSelector,
@@ -14,7 +16,7 @@ import { Linking } from "react-native"
 import { defaultMainNetwork } from "~Constants"
 import { useI18nContext } from "~i18n"
 import InAppReview from "react-native-in-app-review"
-
+import moment from "moment"
 /**
  * Hooks that expose a function to send a transaction and perform updates, showing a toast on success
  * @param onSuccess the function to handle success
@@ -28,6 +30,7 @@ export const useSendTransaction = (
     const { LL } = useI18nContext()
     const selectedAccount = useAppSelector(selectSelectedAccount)
     const selectedNetwork = useAppSelector(selectSelectedNetwork)
+    const lastReviewTimestamp = useAppSelector(selectLastReviewTimestamp)
 
     const sendTransaction = async (
         signedTransaction: Transaction,
@@ -81,11 +84,18 @@ export const useSendTransaction = (
             4000,
             "transactionSuccessToast",
         )
+        const nextReviewDate = moment(lastReviewTimestamp).add(3, "weeks")
+        const isTimeForANewReview =
+            !lastReviewTimestamp || moment().isAfter(nextReviewDate)
 
-        if (InAppReview.isAvailable()) {
-            InAppReview.RequestInAppReview().catch(inAppReviewError => {
-                error(`InAppReview error: ${inAppReviewError}`)
-            })
+        if (InAppReview.isAvailable() && isTimeForANewReview) {
+            InAppReview.RequestInAppReview()
+                .then(() => {
+                    dispatch(setLastReviewTimestamp(new Date().toISOString()))
+                })
+                .catch(inAppReviewError => {
+                    error(`InAppReview error: ${inAppReviewError}`)
+                })
         }
 
         await dispatch(
