@@ -1,14 +1,21 @@
 import React from "react"
-import CoinbaseLogoSvg from "~Assets/Img/CoinbaseLogoSvg"
+import CoinbaseLogoSmallSvg from "~Assets/Img/CoinbaseLogoSmallSvg"
 import { useThemedStyles } from "~Hooks"
 import { useI18nContext } from "~i18n"
 import { StyleSheet } from "react-native"
 
+export type PaymentMethod = {
+    id: string
+    icon: string
+}
+
 export type PaymentProvider = {
     id: string
+    name: string
     description: string
     buttonText: string
-    img: any
+    img: React.ReactNode
+    paymentMethods: PaymentMethod[]
 }
 
 export const usePaymentProviderList = () => {
@@ -17,15 +24,20 @@ export const usePaymentProviderList = () => {
     return [
         {
             id: "coinbase-pay",
+            name: "Coinbase",
             description:
-                "Buy you VechainThor tokens with Coinbase and receive them directly in your wallet. Coinbase is a secure online platform for buying, selling, transferring, and storing cryptocurrency.",
+                "Buy on Coinbase and receive the tokens directly in your wallet.",
             buttonText: LL.BTN_BUY_COINBASE(),
             img: (
-                <CoinbaseLogoSvg
-                    width={"60%"}
-                    fill={theme.isDark ? theme.colors.text : undefined}
+                <CoinbaseLogoSmallSvg
+                    fill={theme.isDark ? "#0a0b0d" : "#0052FF"}
+                    width={22}
                 />
             ),
+            paymentMethods: [
+                { id: "credit-card", icon: "credit-card-outline" },
+                { id: "bank", icon: "bank-outline" },
+            ],
         },
     ]
 }

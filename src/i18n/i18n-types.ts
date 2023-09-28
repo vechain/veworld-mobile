@@ -508,9 +508,13 @@ type RootTranslation = {
 	 */
 	BD_APP_BLOCKED: string
 	/**
-	 * C​h​o​o​s​e​ ​a​ ​p​a​y​m​e​n​t​ ​p​r​o​v​i​d​e​r
+	 * C​h​o​o​s​e​ ​a​ ​p​a​y​m​e​n​t​ ​p​r​o​v​i​d​e​r​:
 	 */
 	BD_SELECT_PAYMENT_PROVIDER: string
+	/**
+	 * M​e​t​h​o​d​s​:
+	 */
+	BD_PAYMENT_METHODS: string
 	/**
 	 * W​e​l​c​o​m​e​ ​t​o​ 
 	 */
@@ -3017,9 +3021,13 @@ export type TranslationFunctions = {
 	 */
 	BD_APP_BLOCKED: () => LocalizedString
 	/**
-	 * Choose a payment provider
+	 * Choose a payment provider:
 	 */
 	BD_SELECT_PAYMENT_PROVIDER: () => LocalizedString
+	/**
+	 * Methods:
+	 */
+	BD_PAYMENT_METHODS: () => LocalizedString
 	/**
 	 * Welcome to 
 	 */

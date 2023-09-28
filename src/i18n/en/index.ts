@@ -144,6 +144,7 @@ const en: BaseTranslation = {
     BD_COLLECTION: "Collection",
     BD_APP_BLOCKED: "To continue using this app securely and effectively, please enable the biometric authentication feature in your device's settings.",
     BD_SELECT_PAYMENT_PROVIDER: "Choose a payment provider:",
+    BD_PAYMENT_METHODS: "Methods:",
 
     // TITLES
     TITLE_WELCOME_TO: "Welcome to ",

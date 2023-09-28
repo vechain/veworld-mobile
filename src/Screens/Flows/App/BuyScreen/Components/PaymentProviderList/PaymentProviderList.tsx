@@ -2,17 +2,25 @@ import React, { useCallback, useState } from "react"
 import { FlatList, StyleSheet, TouchableWithoutFeedback } from "react-native"
 import { ColorThemeType } from "~Constants"
 import { useThemedStyles } from "~Hooks"
-import { BaseButton, BaseText, BaseView } from "~Components"
+import {
+    BaseButton,
+    BaseIcon,
+    BaseSpacer,
+    BaseText,
+    BaseView,
+} from "~Components"
 import { useNavigation } from "@react-navigation/native"
 import { Routes } from "~Navigation"
 import {
     PaymentProvider,
     usePaymentProviderList,
 } from "../../Hooks/usePaymentProviderList"
+import { useI18nContext } from "~i18n"
 
 export const PaymentProviderList = () => {
-    const { styles } = useThemedStyles(baseStyles)
+    const { styles, theme } = useThemedStyles(baseStyles)
     const nav = useNavigation()
+    const { LL } = useI18nContext()
 
     const paymentsProviders = usePaymentProviderList()
 
@@ -28,35 +36,51 @@ export const PaymentProviderList = () => {
                     onPress={() => setSelectedProviderId(item.id)}>
                     <BaseView
                         flexDirection="column"
-                        alignItems="center"
-                        justifyContent="center"
-                        style={isSelected ? styles.cardSelected : styles.card}>
+                        alignItems="flex-start"
+                        justifyContent="flex-start"
+                        style={styles.card}>
                         <BaseView
                             style={styles.imageContainer}
-                            flexDirection="row">
-                            {item.img}
-                        </BaseView>
-                        {isSelected && (
-                            <>
-                                <BaseText style={styles.description}>
-                                    {item.description}
+                            flexDirection="row"
+                            justifyContent="space-between">
+                            <BaseView
+                                style={styles.imageContainer}
+                                flexDirection="row">
+                                {item.img}
+                                <BaseText style={styles.providerName}>
+                                    {item.name}
                                 </BaseText>
+                            </BaseView>
+                            <BaseText>{LL.BD_PAYMENT_METHODS()}</BaseText>
+                            {item.paymentMethods.map(method => (
+                                <>
+                                    <BaseSpacer width={10} />
+                                    <BaseIcon
+                                        key={method.id}
+                                        name={method.icon}
+                                        size={23}
+                                        color={theme.colors.text}
+                                    />
+                                </>
+                            ))}
+                        </BaseView>
 
-                                <BaseButton
-                                    title={item.buttonText}
-                                    disabled={!isSelected}
-                                    style={styles.button}
-                                    action={() =>
-                                        nav.navigate(Routes.BUY_WEBVIEW)
-                                    }
-                                />
-                            </>
-                        )}
+                        <BaseSpacer height={10} />
+                        <BaseText style={styles.description}>
+                            {item.description}
+                        </BaseText>
+
+                        <BaseButton
+                            title={item.buttonText}
+                            disabled={!isSelected}
+                            style={styles.button}
+                            action={() => nav.navigate(Routes.BUY_WEBVIEW)}
+                        />
                     </BaseView>
                 </TouchableWithoutFeedback>
             )
         },
-        [selectedProviderId, styles, nav],
+        [selectedProviderId, styles, nav, theme, LL],
     )
 
     return (
@@ -79,16 +103,11 @@ const baseStyles = (theme: ColorThemeType) =>
             padding: 20,
             borderRadius: 12,
             marginBottom: 20,
-            borderWidth: 1,
-            borderColor: theme.colors.card,
         },
-        cardSelected: {
-            backgroundColor: theme.colors.card,
-            padding: 20,
-            borderRadius: 12,
-            borderWidth: 1,
-            borderColor: theme.colors.border,
-            marginBottom: 20,
+        providerName: {
+            fontSize: 18,
+            paddingLeft: 10,
+            color: theme.colors.text,
         },
         description: {
             fontSize: 14,
