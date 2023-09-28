@@ -40,8 +40,6 @@ import {
     useAppSelector,
 } from "~Storage/Redux"
 import * as Sentry from "@sentry/react-native"
-import { InternetDownScreen } from "~Screens"
-import NetInfo from "@react-native-community/netinfo"
 import "react-native-url-polyfill/auto"
 
 const { fontFamily } = typography
@@ -58,8 +56,6 @@ if (__DEV__ && process.env.REACT_APP_UI_LOG === "false") {
 }
 
 const Main = () => {
-    const { isConnected } = NetInfo.useNetInfo()
-
     const [fontsLoaded] = useFonts({
         [fontFamily["Inter-Bold"]]: Inter_Bold,
         [fontFamily["Inter-Regular"]]: Inter_Regular,
@@ -84,20 +80,16 @@ const Main = () => {
 
     return (
         <GestureHandlerRootView style={{ flex: 1 }}>
-            {isConnected ? (
-                <ConnexContextProvider>
-                    <NavigationProvider>
-                        <BottomSheetModalProvider>
-                            <WalletConnectContextProvider>
-                                <EntryPoint />
-                            </WalletConnectContextProvider>
-                        </BottomSheetModalProvider>
-                    </NavigationProvider>
-                    <BaseToast />
-                </ConnexContextProvider>
-            ) : (
-                <InternetDownScreen />
-            )}
+            <ConnexContextProvider>
+                <NavigationProvider>
+                    <BottomSheetModalProvider>
+                        <WalletConnectContextProvider>
+                            <EntryPoint />
+                        </WalletConnectContextProvider>
+                    </BottomSheetModalProvider>
+                </NavigationProvider>
+                <BaseToast />
+            </ConnexContextProvider>
         </GestureHandlerRootView>
     )
 }

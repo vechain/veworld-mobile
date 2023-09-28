@@ -11,9 +11,14 @@ import {
 } from "~Components/Providers"
 
 import { useAppState, useBiometrics } from "~Hooks"
-import { StandaloneAppBlockedScreen, StandaloneLockScreen } from "~Screens"
+import {
+    StandaloneAppBlockedScreen,
+    StandaloneLockScreen,
+    InternetDownScreen,
+} from "~Screens"
 import { AnimatedSplashScreen } from "../../../AnimatedSplashScreen"
 import Onboarding from "./Helpers/Onboarding"
+import NetInfo from "@react-native-community/netinfo"
 
 const UserEncryptedStorage = new MMKV({
     id: "user_encrypted_storage",
@@ -389,6 +394,8 @@ export const ApplicationSecurityProvider = ({
         })
     }, [walletStatus, securityType])
 
+    const { isConnected } = NetInfo.useNetInfo()
+
     switch (walletStatus) {
         case WALLET_STATUS.NOT_INITIALISED:
             // App is initialising
@@ -400,14 +407,13 @@ export const ApplicationSecurityProvider = ({
             //App is onboarding and we're using temporary storage
             return (
                 <ApplicationSecurityContext.Provider value={value}>
-                    {children}
+                    {!isConnected ? <InternetDownScreen /> : children}
                 </ApplicationSecurityContext.Provider>
             )
         case WALLET_STATUS.LOCKED:
             if (userDisabledBiometrics) return <StandaloneAppBlockedScreen />
 
             if (securityType !== SecurityLevelType.SECRET) return <></>
-
             return (
                 <AnimatedSplashScreen
                     playAnimation={true}
