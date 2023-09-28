@@ -160,6 +160,7 @@
         "thor-devkit": "^2.0.8",
         "url": "^0.11.0",
         "util": "^0.12.5",
+        "react-native-in-app-review": "^4.3.3",
         "whatwg-fetch": "^3.6.2",
         "ws": "^8.13.0"
     },
