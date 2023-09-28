@@ -32,10 +32,13 @@ export const ConnectedAppsScreen = () => {
     const accounts = useAppSelector(selectAccounts)
     const { LL } = useI18nContext()
     const { disconnect } = useWalletConnect()
-    const [selectedSession, setSelectedSession] =
-        useState<SessionTypes.Struct>()
     const [sessionToDelete, setSessionToDelete] =
         useState<SessionTypes.Struct>()
+
+    // Keep track of the swipeable items refs
+    const swipeableItemRefs = useRef<Map<string, SwipeableItemImperativeRef>>(
+        new Map(),
+    )
 
     const totalSessions = useMemo(() => {
         return Object.values(connectedApps).reduce(
@@ -49,11 +52,6 @@ export const ConnectedAppsScreen = () => {
         onOpen: openConfirmDisconnectDetailsSheet,
         onClose: closeConfirmDisconnectDetailsSheet,
     } = useBottomSheetModal()
-
-    // Keep track of the swipeable items refs
-    const swipeableItemRefs = useRef<Map<string, SwipeableItemImperativeRef>>(
-        new Map(),
-    )
 
     const {
         ref: connectedAppDetailsBottomSheetRef,
@@ -129,7 +127,7 @@ export const ConnectedAppsScreen = () => {
                                                     onPress={(
                                                         _session?: SessionTypes.Struct,
                                                     ) => {
-                                                        setSelectedSession(
+                                                        setSessionToDelete(
                                                             _session,
                                                         )
                                                         openConnectedAppDetailsSheet()
@@ -165,7 +163,7 @@ export const ConnectedAppsScreen = () => {
                                             closeConfirmDisconnectDetailsSheet
                                         }
                                         onConfirm={topic => disconnect(topic)}
-                                        session={selectedSession!}
+                                        session={sessionToDelete!}
                                         account={account}
                                     />
                                 </BaseView>
