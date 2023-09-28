@@ -99,7 +99,7 @@ export const scrollUntilTextVisible = async (
     scrollStep: number = 50,
 ) => {
     await waitFor(element(by.text(text)))
-        .toBeVisible()
+        .toBeVisible(95)
         .whileElement(by.id(containerID))
         .scroll(scrollStep, direction)
 }

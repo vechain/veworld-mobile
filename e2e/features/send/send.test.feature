@@ -39,8 +39,8 @@ Feature: The user send tokens in test net
 
     Examples:
       | token | amount | address                                    | password | delegationAccount |
-      | VET   | 1      | 0x435933c8064b4Ae76bE665428e0307eF2cCFBD68 | 111111   | Account 2         |
-      | VTHO  | 1      | 0x435933c8064b4Ae76bE665428e0307eF2cCFBD68 | 111111   | Account 2         |
+      | VET   | 1      | 0x435933c8064b4Ae76bE665428e0307eF2cCFBD68 | 111111   | Account 1         |
+      | VTHO  | 1      | 0x435933c8064b4Ae76bE665428e0307eF2cCFBD68 | 111111   | Account 1         |
 
 
   Scenario: User should be able to send tokens delegating with url method

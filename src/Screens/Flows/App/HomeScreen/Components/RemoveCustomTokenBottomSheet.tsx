@@ -61,7 +61,7 @@ export const RemoveCustomTokenBottomSheet = React.forwardRef<
                         <BaseButton
                             w={100}
                             haptics="Light"
-                            title={LL.COMMON_BTN_REMOVE()}
+                            title={LL.COMMON_BTN_REMOVE().toUpperCase()}
                             action={onConfirmRemoveToken}
                         />
                         <BaseSpacer height={16} />
@@ -69,7 +69,7 @@ export const RemoveCustomTokenBottomSheet = React.forwardRef<
                             w={100}
                             haptics="Light"
                             variant="outline"
-                            title={LL.COMMON_BTN_CANCEL()}
+                            title={LL.COMMON_BTN_CANCEL().toUpperCase()}
                             action={onClose}
                         />
                     </BaseView>
