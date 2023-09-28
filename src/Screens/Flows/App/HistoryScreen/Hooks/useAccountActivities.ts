@@ -105,7 +105,10 @@ export const useAccountActivities = () => {
                 // In case of error, log and show warning toast
                 error("fetchActivities", e)
 
-                showWarningToast(LL.HEADS_UP(), LL.ACTIVITIES_NOT_UP_TO_DATE())
+                showWarningToast({
+                    text1: LL.HEADS_UP(),
+                    text2: LL.ACTIVITIES_NOT_UP_TO_DATE(),
+                })
 
                 // Set fetched flag
                 setHasFetched(true)

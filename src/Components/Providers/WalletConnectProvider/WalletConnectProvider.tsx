@@ -84,9 +84,9 @@ const WalletConnectContextProvider = ({
                     activatePairing: true,
                 })
 
-                showInfoToast(
-                    LL.NOTIFICATION_warning_wallet_connect_connection_could_delay(),
-                )
+                showInfoToast({
+                    text1: LL.NOTIFICATION_warning_wallet_connect_connection_could_delay(),
+                })
             } catch (err: unknown) {
                 if (
                     err instanceof Error &&
@@ -97,7 +97,9 @@ const WalletConnectContextProvider = ({
 
                 error("WalletConnectProvider:onPair - err", err)
 
-                showErrorToast(LL.NOTIFICATION_wallet_connect_error_pairing())
+                showErrorToast({
+                    text1: LL.NOTIFICATION_wallet_connect_error_pairing(),
+                })
             }
         },
         [activeSessionsFlat, web3Wallet, LL],
@@ -168,9 +170,9 @@ const WalletConnectContextProvider = ({
             if (!web3Wallet)
                 return respondInvalidSession(proposal, rpcErrors.internal())
             if (!proposal.params.requiredNamespaces.vechain) {
-                showErrorToast(
-                    LL.NOTIFICATION_wallet_connect_incompatible_dapp(),
-                )
+                showErrorToast({
+                    text1: LL.NOTIFICATION_wallet_connect_incompatible_dapp(),
+                })
                 return respondInvalidSession(
                     proposal,
                     rpcErrors.invalidRequest(),
@@ -204,13 +206,13 @@ const WalletConnectContextProvider = ({
                 dispatch(deleteSession({ topic }))
 
                 if (fromRemote) {
-                    showInfoToast(
-                        LL.NOTIFICATION_wallet_connect_disconnected_from_remote(),
-                    )
+                    showInfoToast({
+                        text1: LL.NOTIFICATION_wallet_connect_disconnected_from_remote(),
+                    })
                 } else {
-                    showSuccessToast(
-                        LL.NOTIFICATION_wallet_connect_disconnected_success(),
-                    )
+                    showSuccessToast({
+                        text1: LL.NOTIFICATION_wallet_connect_disconnected_success(),
+                    })
                 }
             }
         },

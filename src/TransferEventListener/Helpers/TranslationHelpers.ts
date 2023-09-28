@@ -27,18 +27,18 @@ export const informUserForIncomingNFT = ({
 
     const formattedFrom = FormattingUtils.humanAddress(from, 4, 5)
 
-    showSuccessToast(
-        i18n.i18n()[locale].NOTIFICATION_INCOMING_NFT_TITLE(),
-        i18n.i18n()[locale].NOTIFICATION_INCOMING_NFT_BODY({
+    showSuccessToast({
+        text1: i18n.i18n()[locale].NOTIFICATION_INCOMING_NFT_TITLE(),
+        text2: i18n.i18n()[locale].NOTIFICATION_INCOMING_NFT_BODY({
             alias,
             collectionName: isEmpty(collectionName) ? "" : collectionName + "!",
             from: formattedFrom,
         }),
-        i18n.i18n()[locale].NOTIFIACTION_INCOMING_NFT_ACTION(),
-        () => informUser({ accountAddress: transfer.to }),
-        10000,
-        "informUserForIncomingNFTSuccessToast",
-    )
+        textLink: i18n.i18n()[locale].NOTIFIACTION_INCOMING_NFT_ACTION(),
+        onPress: () => informUser({ accountAddress: transfer.to }),
+        visibilityTime: 10000,
+        testID: "informUserForIncomingNFTSuccessToast",
+    })
 }
 
 // ~ NFT - OUTGOING
@@ -61,17 +61,17 @@ export const informUserForOutgoingNFT = ({
 
     const formattedTo = FormattingUtils.humanAddress(to, 4, 5)
 
-    showSuccessToast(
-        i18n.i18n()[locale].NOTIFICATION_OUTGOING_NFT_TITLE(),
-        i18n.i18n()[locale].NOTIFICATION_OUTGOING_NFT_BODY({
+    showSuccessToast({
+        text1: i18n.i18n()[locale].NOTIFICATION_OUTGOING_NFT_TITLE(),
+        text2: i18n.i18n()[locale].NOTIFICATION_OUTGOING_NFT_BODY({
             collectionName,
             to: formattedTo,
         }),
-        i18n.i18n()[locale].SUCCESS_GENERIC_VIEW_DETAIL_LINK(),
-        () => informUser({ txId, accountAddress: from }),
-        10000,
-        "informUserForOutgoingNFTSuccessToast",
-    )
+        textLink: i18n.i18n()[locale].SUCCESS_GENERIC_VIEW_DETAIL_LINK(),
+        onPress: () => informUser({ txId, accountAddress: from }),
+        visibilityTime: 10000,
+        testID: "informUserForOutgoingNFTSuccessToast",
+    })
 }
 
 // ~TOKEN - INCOMING
@@ -103,18 +103,18 @@ export const InformUserForIncomingToken = ({
         amount,
     )
 
-    showSuccessToast(
-        i18n.i18n()[locale].NOTIFICATION_INCOMING_NFT_TITLE(),
-        i18n.i18n()[locale].NOTIFICATION_found_token_transfer({
+    showSuccessToast({
+        text1: i18n.i18n()[locale].NOTIFICATION_INCOMING_NFT_TITLE(),
+        text2: i18n.i18n()[locale].NOTIFICATION_found_token_transfer({
             token: symbol,
             amount: formattedAmmount,
             alias,
         }),
-        i18n.i18n()[locale].NOTIFICATION_VIEW_ACCOUNT(),
-        () => informUser({ accountAddress: transfer.to }),
-        7000,
-        "informUserForIncomingTokenSuccessToast",
-    )
+        textLink: i18n.i18n()[locale].NOTIFICATION_VIEW_ACCOUNT(),
+        onPress: () => informUser({ accountAddress: transfer.to }),
+        visibilityTime: 7000,
+        testID: "informUserForIncomingTokenSuccessToast",
+    })
 }
 
 // ~TOKEN - OUTGOING
@@ -146,17 +146,17 @@ export const InformUserForOutgoingToken = ({
         amount,
     )
 
-    showSuccessToast(
-        i18n.i18n()[locale].SUCCESS_GENERIC(),
-        i18n.i18n()[locale].NOTIFIACTION_OUTGOING_TOKEN_BODY({
+    showSuccessToast({
+        text1: i18n.i18n()[locale].SUCCESS_GENERIC(),
+        text2: i18n.i18n()[locale].NOTIFIACTION_OUTGOING_TOKEN_BODY({
             amount: formattedAmmount,
             to: formattedTo,
         }),
-        i18n.i18n()[locale].SUCCESS_GENERIC_VIEW_DETAIL_LINK(),
-        () => informUser({ accountAddress: transfer.from, txId }),
-        7000,
-        "informUserForOutgoingTokenSuccessToast",
-    )
+        textLink: i18n.i18n()[locale].SUCCESS_GENERIC_VIEW_DETAIL_LINK(),
+        onPress: () => informUser({ accountAddress: transfer.from, txId }),
+        visibilityTime: 7000,
+        testID: "informUserForOutgoingTokenSuccessToast",
+    })
 }
 
 // ~VET - INCOMING
@@ -184,18 +184,18 @@ export const InformUserForIncomingVET = ({
         amount,
     )
 
-    showSuccessToast(
-        i18n.i18n()[locale].NOTIFICATION_INCOMING_NFT_TITLE(),
-        i18n.i18n()[locale].NOTIFICATION_found_token_transfer({
+    showSuccessToast({
+        text1: i18n.i18n()[locale].NOTIFICATION_INCOMING_NFT_TITLE(),
+        text2: i18n.i18n()[locale].NOTIFICATION_found_token_transfer({
             token: VET.symbol,
             amount: formattedAmount,
             alias,
         }),
-        i18n.i18n()[locale].NOTIFICATION_VIEW_ACCOUNT(),
-        () => informUser({ accountAddress: to }),
-        7000,
-        "informUserForIncomingVETSuccessToast",
-    )
+        textLink: i18n.i18n()[locale].NOTIFICATION_VIEW_ACCOUNT(),
+        onPress: () => informUser({ accountAddress: to }),
+        visibilityTime: 7000,
+        testID: "informUserForIncomingVETSuccessToast",
+    })
 }
 
 // ~VET - OUTGOING
@@ -226,17 +226,17 @@ export const InformUserForOutgoingVET = ({
         amount,
     )
 
-    showSuccessToast(
-        i18n.i18n()[locale].SUCCESS_GENERIC(),
-        i18n.i18n()[locale].NOTIFIACTION_OUTGOING_TOKEN_BODY({
+    showSuccessToast({
+        text1: i18n.i18n()[locale].SUCCESS_GENERIC(),
+        text2: i18n.i18n()[locale].NOTIFIACTION_OUTGOING_TOKEN_BODY({
             amount: formattedAmount,
             to: fomattedTo,
         }),
-        i18n.i18n()[locale].SUCCESS_GENERIC_VIEW_DETAIL_LINK(),
-        () => informUser({ accountAddress: from, txId }),
-        7000,
-        "InformUserForOutgoingVETSuccessToast",
-    )
+        textLink: i18n.i18n()[locale].SUCCESS_GENERIC_VIEW_DETAIL_LINK(),
+        onPress: () => informUser({ accountAddress: from, txId }),
+        visibilityTime: 7000,
+        testID: "InformUserForOutgoingVETSuccessToast",
+    })
 }
 
 // ~ REVERTED TRANSACTION
@@ -250,18 +250,18 @@ export const informUserforRevertedTransaction = ({
     const locale = i18n.detectLocale()
     const formattedTxId = FormattingUtils.humanAddress(txId, 4, 5)
 
-    showErrorToast(
-        i18n.i18n()[locale].ERROR(),
-        i18n.i18n()[locale].NOTIFICATION_transaction_reverted({
+    showErrorToast({
+        text1: i18n.i18n()[locale].ERROR(),
+        text2: i18n.i18n()[locale].NOTIFICATION_transaction_reverted({
             txId: formattedTxId,
         }),
-        i18n.i18n()[locale].SUCCESS_GENERIC_VIEW_DETAIL_LINK(),
-        () => {
+        textLink: i18n.i18n()[locale].SUCCESS_GENERIC_VIEW_DETAIL_LINK(),
+        onPress: () => {
             Linking.openURL(
                 `${
                     network.explorerUrl ?? defaultMainNetwork.explorerUrl
                 }/transactions/${txId}`,
             )
         },
-    )
+    })
 }

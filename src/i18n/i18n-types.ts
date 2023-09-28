@@ -1407,6 +1407,18 @@ type RootTranslation = {
 	 */
 	NOTIFICATION_VIEW_ACCOUNT: string
 	/**
+	 * Q​R​ ​C​o​d​e​ ​N​o​t​ ​S​u​p​p​o​r​t​e​d
+	 */
+	NOTIFICATION_TITLE_INVALID_QR: string
+	/**
+	 * O​n​l​y​ ​W​a​l​l​e​t​C​o​n​n​e​c​t​ ​a​n​d​ ​a​d​d​r​e​s​s​ ​c​o​p​y​i​n​g​ ​a​r​e​ ​s​u​p​p​o​r​t​e​d​.​ ​P​l​e​a​s​e​ ​t​r​y​ ​a​g​a​i​n​.
+	 */
+	NOTIFICATION_INVALID_QR: string
+	/**
+	 * G​a​s​ ​f​e​e​ ​e​s​t​i​m​a​t​e​s​ ​m​i​g​h​t​ ​v​a​r​y​.​ ​A​l​w​a​y​s​ ​d​o​u​b​l​e​-​c​h​e​c​k​ ​b​e​f​o​r​e​ ​c​o​n​f​i​r​m​i​n​g​.
+	 */
+	NOTIFICATION_GAS_FEE_INACCURATE: string
+	/**
 	 * F​a​i​l​e​d​ ​t​o​ ​r​e​m​o​v​e​ ​a​c​c​o​u​n​t
 	 */
 	NOTIFICATION_FAILED_TO_REMOVE_ACCOUNT: string
@@ -3886,6 +3898,18 @@ Please, try again later.
 	 * View account
 	 */
 	NOTIFICATION_VIEW_ACCOUNT: () => LocalizedString
+	/**
+	 * QR Code Not Supported
+	 */
+	NOTIFICATION_TITLE_INVALID_QR: () => LocalizedString
+	/**
+	 * Only WalletConnect and address copying are supported. Please try again.
+	 */
+	NOTIFICATION_INVALID_QR: () => LocalizedString
+	/**
+	 * Gas fee estimates might vary. Always double-check before confirming.
+	 */
+	NOTIFICATION_GAS_FEE_INACCURATE: () => LocalizedString
 	/**
 	 * Failed to remove account
 	 */
