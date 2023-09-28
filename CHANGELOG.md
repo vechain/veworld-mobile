@@ -1,5 +1,16 @@
 
 
+## [1.1.3](https://github.com/vechainfoundation/veworld-mobile/compare/1.1.1...1.1.3) (2023-09-28)
+
+
+### Bug Fixes
+
+* add loggin dev button back ([#1441](https://github.com/vechainfoundation/veworld-mobile/issues/1441)) ([530b2be](https://github.com/vechainfoundation/veworld-mobile/commit/530b2be56422730f907b383ac6366ec4d310b540))
+* android biometric handling ([#1434](https://github.com/vechainfoundation/veworld-mobile/issues/1434)) ([83841ae](https://github.com/vechainfoundation/veworld-mobile/commit/83841ae4ae7865ed1c0f4bf141b426f23706e176))
+* e2e test ([#1448](https://github.com/vechainfoundation/veworld-mobile/issues/1448)) ([c280129](https://github.com/vechainfoundation/veworld-mobile/commit/c28012974d9f4b7a2d99df64a77df98e4bc696ce))
+* remove connected app ([#1449](https://github.com/vechainfoundation/veworld-mobile/issues/1449)) ([50b31d5](https://github.com/vechainfoundation/veworld-mobile/commit/50b31d50b76bf04e9e06b4e404895ff65ec634a5))
+* splashscreen with no connection lottie below ([#1453](https://github.com/vechainfoundation/veworld-mobile/issues/1453)) ([33e8206](https://github.com/vechainfoundation/veworld-mobile/commit/33e8206e6ac5961bfaaeb82e4457885de6a64bc5))
+
 ## [1.1.2](https://github.com/vechainfoundation/veworld-mobile/compare/1.1.1...1.1.2) (2023-09-27)
 
 
