@@ -1,30 +1,40 @@
 import { useNavigation } from "@react-navigation/native"
 import React, { memo, useCallback } from "react"
-import { useCameraBottomSheet, useTheme } from "~Hooks"
+import { useCameraBottomSheet, useCopyClipboard, useTheme } from "~Hooks"
 import { BaseIcon, BaseText, BaseView, useWalletConnect } from "~Components"
 import { useI18nContext } from "~i18n"
 import { Routes } from "~Navigation"
 import HapticsService from "~Services/HapticsService"
 import { ScanTarget } from "~Constants"
 import { SelectedNetworkViewer } from "~Components/Reusable/SelectedNetworkViewer"
+import { AddressUtils, WalletConnectUtils, debug } from "~Utils"
 
 export const Header = memo(() => {
     const theme = useTheme()
     const nav = useNavigation()
     const { LL } = useI18nContext()
+
     const { onPair } = useWalletConnect()
 
+    const { onCopyToClipboard } = useCopyClipboard()
+
     const onScan = useCallback(
-        (uri: string) => {
-            HapticsService.triggerImpact({ level: "Light" })
-            onPair(uri)
+        (qrData: string) => {
+            if (WalletConnectUtils.isValidURI(qrData)) {
+                HapticsService.triggerImpact({ level: "Light" })
+                onPair(qrData)
+            } else if (AddressUtils.isValid(qrData)) {
+                onCopyToClipboard(qrData, LL.COMMON_LBL_ADDRESS())
+            } else {
+                debug("Header:onScan - Invalid QR: ", qrData)
+            }
         },
-        [onPair],
+        [LL, onCopyToClipboard, onPair],
     )
 
     const { RenderCameraModal, handleOpenCamera } = useCameraBottomSheet({
         onScan,
-        target: ScanTarget.WALLET_CONNECT,
+        targets: [ScanTarget.WALLET_CONNECT, ScanTarget.ADDRESS],
     })
 
     const goToWalletManagement = useCallback(() => {
