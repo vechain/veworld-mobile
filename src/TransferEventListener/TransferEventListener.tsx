@@ -14,14 +14,15 @@ import { useInformUser, useStateReconciliation } from "./Hooks"
 import { useFungibleTokenInfo } from "~Hooks"
 import { Activity, Beat } from "~Model"
 import { useBeatWebsocket } from "./Hooks/useBeatWebsocket"
+import { EventTypeResponse } from "~Networking"
+import { fetchTransfersForBlock } from "~Networking/Transfers"
+import { useThor } from "~Components"
+import { filterNFTTransferEvents, filterTransferEventsByType } from "./Helpers"
 import {
-    fetchTransfersForBlock,
     handleNFTTransfers,
     handleTokenTransfers,
     handleVETTransfers,
-} from "./Helpers"
-import { EventTypeResponse } from "~Networking"
-import { useThor } from "~Components"
+} from "./Handlers"
 
 export const TransferEventListener: React.FC = () => {
     const visibleAccounts = useAppSelector(selectVisibleAccounts)
@@ -71,10 +72,6 @@ export const TransferEventListener: React.FC = () => {
                     ),
                 )
 
-                // debug(
-                //     `Bloom filter: ${relevantAccounts.length} of ${visibleAccounts.length} accounts are relevant in block ${beat.number}`,
-                // )
-
                 // Update the pending transactions cache
                 await updateActivities(pendingActivities)
 
@@ -101,62 +98,44 @@ export const TransferEventListener: React.FC = () => {
                 if (transfers.pagination.totalElements === 0) return
 
                 // ~ NFT TRANSFER
-                await Promise.all(
-                    transfers.data
-                        .filter(
-                            t =>
-                                t.eventType === EventTypeResponse.NFT &&
-                                !blackListedCollections
-                                    .map(c => c.address)
-                                    .includes(t.tokenAddress),
-                        )
-                        .map(async transfer => {
-                            await handleNFTTransfers({
-                                visibleAccounts: relevantAccounts,
-                                transfer,
-                                network: network,
-                                thorClient: thor,
-                                stateReconciliationAction: updateNFTs,
-                                informUser: forNFTs,
-                            })
-                        }),
+                const nftTransfers = filterNFTTransferEvents(
+                    transfers.data,
+                    blackListedCollections,
                 )
+                await handleNFTTransfers({
+                    visibleAccounts: relevantAccounts,
+                    transfers: nftTransfers,
+                    network: network,
+                    thorClient: thor,
+                    updateNFTs,
+                    informUser: forNFTs,
+                })
 
                 // ~ FUNGIBLE TOKEN TRANSFER
-                await Promise.all(
-                    transfers.data
-                        .filter(
-                            t =>
-                                t.eventType ===
-                                EventTypeResponse.FUNGIBLE_TOKEN,
-                        )
-                        .map(async transfer => {
-                            await handleTokenTransfers({
-                                visibleAccounts: relevantAccounts,
-                                transfer,
-                                network,
-                                thorClient: thor,
-                                fetchData,
-                                stateReconciliationAction: updateBalances,
-                                informUser: forTokens,
-                                dispatch,
-                            })
-                        }),
+                const tokenTransfers = filterTransferEventsByType(
+                    transfers.data,
+                    EventTypeResponse.FUNGIBLE_TOKEN,
                 )
 
+                await handleTokenTransfers({
+                    visibleAccounts: relevantAccounts,
+                    transfers: tokenTransfers,
+                    fetchData,
+                    updateBalances,
+                    informUser: forTokens,
+                })
+
                 // ~  VET TRANSFERS
-                await Promise.all(
-                    transfers.data
-                        .filter(t => t.eventType === EventTypeResponse.VET)
-                        .map(async transfer => {
-                            handleVETTransfers({
-                                transfer,
-                                visibleAccounts,
-                                stateReconciliationAction: updateBalances,
-                                informUser: forTokens,
-                            })
-                        }),
+                const vetTransfers = filterTransferEventsByType(
+                    transfers.data,
+                    EventTypeResponse.VET,
                 )
+                handleVETTransfers({
+                    transfers: vetTransfers,
+                    visibleAccounts,
+                    updateBalances,
+                    informUser: forTokens,
+                })
             } catch (e) {
                 error("onBeatMessage", e)
             }
