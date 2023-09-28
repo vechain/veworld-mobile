@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react"
 import { StackAnimationTypes } from "react-native-screens"
-import { DeviceInfoUtils } from "~Utils"
+import { DeviceInfoUtils, PlatformUtils } from "~Utils"
 
 export const useNavAnimation = () => {
     const [animation, setAnimation] = useState<
@@ -10,7 +10,12 @@ export const useNavAnimation = () => {
     useEffect(() => {
         async function init() {
             const isSlowDevice = await DeviceInfoUtils.isSlowDevice()
-            setAnimation(isSlowDevice ? "none" : "default")
+
+            if (PlatformUtils.isAndroid()) {
+                setAnimation(isSlowDevice ? "none" : "default")
+            } else {
+                setAnimation("default")
+            }
         }
         init()
     }, [])
