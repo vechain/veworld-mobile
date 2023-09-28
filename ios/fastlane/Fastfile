@@ -133,6 +133,7 @@ platform :ios do
 
   lane :upload_source_maps_to_sentry do |values|
     build = values[:build]
+    version = values[:version]
 
     Dir.chdir "../.." do # Navigate to the root of the project where the Detox files are placed.
 
@@ -150,7 +151,7 @@ platform :ios do
       sh("node node_modules/react-native/scripts/compose-source-maps.js main.jsbundle.packager.map main.jsbundle.hbc.map -o main.jsbundle.map")
 
       # upload source maps to sentry with cli
-      sh("node_modules/@sentry/cli/bin/sentry-cli releases files #{ENV["APP_IDENTIFIER"]} upload-sourcemaps --dist #{build} --strip-prefix ../../ main.jsbundle main.jsbundle.map --org 'vechain-foundation' --project 'veworld-mobile' --log-level=info")
+      sh("node_modules/@sentry/cli/bin/sentry-cli releases files #{ENV["APP_IDENTIFIER"]}@#{version}+#{build} upload-sourcemaps --dist #{build} --strip-prefix ../../ main.jsbundle main.jsbundle.map --org 'vechain-foundation' --project 'veworld-mobile' --log-level=info")
     end
   end
 
@@ -237,6 +238,8 @@ platform :ios do
       )
 
       push_git_tags
+
+      upload_source_maps_to_sentry(build:build, version:version)
 
       # create pull request
       create_pull_request(
