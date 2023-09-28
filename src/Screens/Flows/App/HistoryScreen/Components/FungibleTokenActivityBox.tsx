@@ -1,8 +1,8 @@
 import React, { memo, useMemo } from "react"
 import { StyleSheet } from "react-native"
-import { useFungibleTokenInfo, useTheme, useThemedStyles } from "~Hooks"
+import { useFungibleTokenInfo, useTheme } from "~Hooks"
 import { DateUtils, FormattingUtils } from "~Utils"
-import { COLORS, ColorThemeType, DIRECTIONS } from "~Constants"
+import { COLORS, DIRECTIONS } from "~Constants"
 import { BaseIcon, BaseText, BaseTouchable, BaseView } from "~Components"
 import {
     Activity,
@@ -30,8 +30,6 @@ type Props = {
 export const FungibleTokenActivityBox: React.FC<Props> = memo(
     ({ activity, onPress }) => {
         const theme = useTheme()
-
-        const { styles } = useThemedStyles(baseStyles)
 
         const { LL, locale } = useI18nContext()
 
@@ -162,11 +160,11 @@ export const FungibleTokenActivityBox: React.FC<Props> = memo(
             <BaseTouchable
                 haptics="Light"
                 action={() => onPress(activity, token)}
-                style={styles.container}>
+                style={baseStyles.container}>
                 <BaseView
                     w={100}
                     flexDirection="row"
-                    style={styles.innerContainer}
+                    style={baseStyles.innerContainer}
                     justifyContent="space-between">
                     <BaseView flexDirection="row">
                         <BaseView flexDirection="column" alignItems="center">
@@ -223,14 +221,11 @@ export const FungibleTokenActivityBox: React.FC<Props> = memo(
     },
 )
 
-const baseStyles = (theme: ColorThemeType) =>
-    StyleSheet.create({
-        innerContainer: {
-            borderBottomColor: theme.colors.separator,
-            borderBottomWidth: 0.5,
-            height: 65,
-        },
-        container: {
-            width: "100%",
-        },
-    })
+const baseStyles = StyleSheet.create({
+    innerContainer: {
+        height: 68,
+    },
+    container: {
+        width: "100%",
+    },
+})
