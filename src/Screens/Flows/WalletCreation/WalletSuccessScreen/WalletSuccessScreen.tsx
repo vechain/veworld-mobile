@@ -77,7 +77,9 @@ export const WalletSuccessScreen: FC<Props> = ({ route }) => {
             ) {
                 HapticsService.triggerNotification({ level: "Error" })
                 setIsError(LL.ERROR_TOO_MANY_BIOMETRICS_AUTH_ATTEMPS())
-                showErrorToast(LL.ERROR_TOO_MANY_BIOMETRICS_AUTH_ATTEMPS())
+                showErrorToast({
+                    text1: LL.ERROR_TOO_MANY_BIOMETRICS_AUTH_ATTEMPS(),
+                })
                 nav.reset({
                     index: 0,
                     routes: [{ name: Routes.WELCOME }],
@@ -85,7 +87,7 @@ export const WalletSuccessScreen: FC<Props> = ({ route }) => {
             } else {
                 HapticsService.triggerNotification({ level: "Error" })
                 setIsError(LL.ERROR_CREATING_WALLET())
-                showErrorToast(LL.ERROR_CREATING_WALLET())
+                showErrorToast({ text1: LL.ERROR_CREATING_WALLET() })
             }
         },
         [LL, nav],

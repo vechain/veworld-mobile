@@ -71,7 +71,7 @@ export const EditCustomNodeBottomSheet = React.forwardRef<
             await Haptics.notificationAsync(
                 Haptics.NotificationFeedbackType.Error,
             )
-            showErrorToast(e as string)
+            showErrorToast({ text1: e as string })
         }
         setIsSubmitting(false)
     }, [

@@ -52,7 +52,10 @@ export const AddContactScreen = () => {
                 dispatch(addContact(name, address))
                 nav.navigate(Routes.SETTINGS_CONTACTS)
             } catch (e) {
-                showErrorToast(LL.ERROR(), LL.ERROR_GENERIC_OPERATION())
+                showErrorToast({
+                    text1: LL.ERROR(),
+                    text2: LL.ERROR_GENERIC_OPERATION(),
+                })
             }
         }
     }, [LL, address, dispatch, isFormValid, name, nav])

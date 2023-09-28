@@ -266,9 +266,9 @@ describe("transactionRequestFailedResponse", () => {
         expect(
             LL.NOTIFICATION_wallet_connect_error_on_transaction,
         ).toHaveBeenCalled()
-        expect(showErrorToast).toHaveBeenCalledWith(
-            LL.NOTIFICATION_wallet_connect_error_on_transaction(),
-        )
+        expect(showErrorToast).toHaveBeenCalledWith({
+            text1: LL.NOTIFICATION_wallet_connect_error_on_transaction(),
+        })
         expect(
             LL.NOTIFICATION_wallet_connect_matching_error,
         ).not.toHaveBeenCalled()
@@ -301,9 +301,9 @@ describe("transactionRequestFailedResponse", () => {
         expect(
             LL.NOTIFICATION_wallet_connect_error_on_transaction,
         ).toHaveBeenCalled()
-        expect(showErrorToast).toHaveBeenCalledWith(
-            LL.NOTIFICATION_wallet_connect_error_on_transaction(),
-        )
+        expect(showErrorToast).toHaveBeenCalledWith({
+            text1: LL.NOTIFICATION_wallet_connect_error_on_transaction(),
+        })
         expect(LL.NOTIFICATION_wallet_connect_matching_error).toHaveBeenCalled()
     })
 })
@@ -392,9 +392,9 @@ describe("sponsorSignRequestFailedResponse", () => {
         expect(
             LL.NOTIFICATION_wallet_connect_error_delegating_transaction,
         ).toHaveBeenCalled()
-        expect(showErrorToast).toHaveBeenCalledWith(
-            LL.NOTIFICATION_wallet_connect_matching_error(),
-        )
+        expect(showErrorToast).toHaveBeenCalledWith({
+            text1: LL.NOTIFICATION_wallet_connect_matching_error(),
+        })
     })
 })
 

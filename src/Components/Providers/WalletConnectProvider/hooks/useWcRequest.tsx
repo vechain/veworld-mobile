@@ -50,7 +50,9 @@ export const useWcRequest = (web3Wallet: IWeb3Wallet | undefined) => {
                 AddressUtils.isValid(options.signer) &&
                 !AddressUtils.compareAddresses(options.signer, signingAccount)
             ) {
-                showErrorToast(LL.NOTIFICATION_DAPP_REQUEST_INVALID_ACCOUNT())
+                showErrorToast({
+                    text1: LL.NOTIFICATION_DAPP_REQUEST_INVALID_ACCOUNT(),
+                })
             }
 
             options.signer = signingAccount
@@ -64,7 +66,9 @@ export const useWcRequest = (web3Wallet: IWeb3Wallet | undefined) => {
                     options,
                 })
             } else {
-                showErrorToast(LL.NOTIFICATION_DAPP_INVALID_REQUEST())
+                showErrorToast({
+                    text1: LL.NOTIFICATION_DAPP_INVALID_REQUEST(),
+                })
 
                 const rpcError = rpcErrors.invalidRequest()
 
@@ -98,7 +102,9 @@ export const useWcRequest = (web3Wallet: IWeb3Wallet | undefined) => {
                 AddressUtils.isValid(options.signer) &&
                 !AddressUtils.compareAddresses(options.signer, signingAccount)
             ) {
-                showErrorToast(LL.NOTIFICATION_DAPP_REQUEST_INVALID_ACCOUNT())
+                showErrorToast({
+                    text1: LL.NOTIFICATION_DAPP_REQUEST_INVALID_ACCOUNT(),
+                })
             }
 
             options.signer = signingAccount
@@ -112,7 +118,9 @@ export const useWcRequest = (web3Wallet: IWeb3Wallet | undefined) => {
                     options,
                 })
             } else {
-                showErrorToast(LL.NOTIFICATION_DAPP_INVALID_REQUEST())
+                showErrorToast({
+                    text1: LL.NOTIFICATION_DAPP_INVALID_REQUEST(),
+                })
 
                 const rpcError = rpcErrors.invalidRequest()
 
@@ -162,11 +170,11 @@ export const useWcRequest = (web3Wallet: IWeb3Wallet | undefined) => {
                 )
             ) {
                 onSetSelectedAccount({ address: requestedAccount.address })
-                showInfoToast(
-                    LL.NOTIFICATION_WC_ACCOUNT_CHANGED({
+                showInfoToast({
+                    text1: LL.NOTIFICATION_WC_ACCOUNT_CHANGED({
                         account: requestedAccount.alias,
                     }),
-                )
+                })
             }
 
             return requestedAccount.address
@@ -206,11 +214,11 @@ export const useWcRequest = (web3Wallet: IWeb3Wallet | undefined) => {
 
             if (selectedNetwork.genesis.id !== network.genesis.id) {
                 dispatch(changeSelectedNetwork(network))
-                showInfoToast(
-                    LL.NOTIFICATION_WC_NETWORK_CHANGED({
+                showInfoToast({
+                    text1: LL.NOTIFICATION_WC_NETWORK_CHANGED({
                         network: network.name,
                     }),
-                )
+                })
             }
         },
         [LL, selectedNetwork, dispatch, web3Wallet, networks],

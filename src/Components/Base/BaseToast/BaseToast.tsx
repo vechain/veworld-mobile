@@ -113,6 +113,15 @@ export const commonToastParams: {
     bottomOffset: 40,
 }
 
+type CustomToastConfig = {
+    text1: string
+    text2?: string
+    textLink?: string
+    visibilityTime?: number
+    testID?: string
+    onPress?: () => void
+}
+
 /**
  * BaseToast is a functional component that renders a toast component
  * with the current theme and common parameters.
@@ -131,73 +140,72 @@ export const hideToast = () => {
 
 // Export utility functions to show success, error, warning, and info toasts:
 // showSuccessToast, showErrorToast, showWarningToast, showInfoToast
-export const showSuccessToast = (
-    text1: string,
-    text2?: string,
-    textLink?: string,
-    onPress?: () => void,
-    visibilityTime?: number,
-    testID?: string,
-) => {
+export const showSuccessToast = ({
+    text1,
+    text2,
+    textLink,
+    visibilityTime,
+    testID,
+    onPress,
+}: CustomToastConfig) => {
     Toast.show({
         type: "success",
         text1,
         text2,
         visibilityTime: visibilityTime ?? commonToastParams.visibilityTime,
-        props: {
-            textLink: textLink,
-            onPress: onPress,
-            testID,
-        },
+        props: { textLink, onPress, testID },
     })
 }
 
-export const showErrorToast = (
-    text1: string,
-    text2?: string,
-    textLink?: string,
-    action1?: () => void,
-    visibilityTime?: number,
-) => {
+export const showErrorToast = ({
+    text1,
+    text2,
+    textLink,
+    visibilityTime,
+    testID,
+    onPress,
+}: CustomToastConfig) => {
     HapticsService.triggerNotification({ level: "Error" })
     Toast.show({
         type: "error",
         text1,
         text2,
         visibilityTime: visibilityTime ?? commonToastParams.visibilityTime,
-        props: { textLink: textLink, onPress: action1 },
+        props: { textLink, onPress, testID },
     })
 }
 
-export const showWarningToast = (
-    text1: string,
-    text2?: string,
-    textLink?: string,
-    onPress?: () => void,
-    visibilityTime?: number,
-) => {
+export const showWarningToast = ({
+    text1,
+    text2,
+    textLink,
+    visibilityTime,
+    testID,
+    onPress,
+}: CustomToastConfig) => {
     Toast.show({
         type: "warning",
         text1,
         text2,
         visibilityTime: visibilityTime ?? commonToastParams.visibilityTime,
-        props: { textLink: textLink, onPress: onPress },
+        props: { textLink, onPress, testID },
     })
 }
 
-export const showInfoToast = (
-    text1: string,
-    text2?: string,
-    textLink?: string,
-    onPress?: () => void,
-    visibilityTime?: number,
-) => {
+export const showInfoToast = ({
+    text1,
+    text2,
+    textLink,
+    visibilityTime,
+    testID,
+    onPress,
+}: CustomToastConfig) => {
     Toast.show({
         type: "info",
         text1,
         text2,
         visibilityTime: visibilityTime ?? commonToastParams.visibilityTime,
-        props: { textLink: textLink, onPress: onPress },
+        props: { textLink, onPress, testID },
     })
 }
 

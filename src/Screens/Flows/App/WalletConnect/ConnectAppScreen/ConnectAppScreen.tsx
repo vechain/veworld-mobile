@@ -89,11 +89,11 @@ export const ConnectAppScreen: FC<Props> = ({ route }: Props) => {
 
             if (requestedNetwork) {
                 dispatch(changeSelectedNetwork(requestedNetwork))
-                showInfoToast(
-                    LL.NOTIFICATION_WC_NETWORK_CHANGED({
+                showInfoToast({
+                    text1: LL.NOTIFICATION_WC_NETWORK_CHANGED({
                         network: requestedNetwork.name,
                     }),
-                )
+                })
             }
         }
     }, [networks, LL, dispatch, chains])
@@ -109,13 +109,17 @@ export const ConnectAppScreen: FC<Props> = ({ route }: Props) => {
         const relays: RelayerTypes.ProtocolOptions[] = params.relays
 
         if (!web3Wallet) {
-            showErrorToast(LL.NOTIFICATION_wallet_connect_not_initialized())
+            showErrorToast({
+                text1: LL.NOTIFICATION_wallet_connect_not_initialized(),
+            })
             return
         }
 
         if (!currentProposal || !requiredNamespaces.vechain.chains) {
             warn("ConnectedAppScreen - session not valid")
-            showErrorToast(LL.NOTIFICATION_wallet_connect_error_pairing())
+            showErrorToast({
+                text1: LL.NOTIFICATION_wallet_connect_error_pairing(),
+            })
             return
         }
 
@@ -170,14 +174,16 @@ export const ConnectAppScreen: FC<Props> = ({ route }: Props) => {
 
             dispatch(addConnectedAppActivity(name, url, description, methods))
 
-            showSuccessToast(
-                LL.NOTIFICATION_wallet_connect_successfull_connection({
+            showSuccessToast({
+                text1: LL.NOTIFICATION_wallet_connect_successfull_connection({
                     name,
                 }),
-            )
+            })
         } catch (err: unknown) {
             error("ConnectedAppScreen:handleAccept", err)
-            showErrorToast(LL.NOTIFICATION_wallet_connect_error_pairing())
+            showErrorToast({
+                text1: LL.NOTIFICATION_wallet_connect_error_pairing(),
+            })
         }
     }, [
         currentProposal,

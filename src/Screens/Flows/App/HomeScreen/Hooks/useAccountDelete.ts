@@ -33,16 +33,15 @@ export const useAccountDelete = () => {
 
     const deleteAccount = useCallback(() => {
         if (!accountToRemove)
-            return showWarningToast(LL.NOTIFICATION_FAILED_TO_REMOVE_ACCOUNT())
+            return showWarningToast({
+                text1: LL.NOTIFICATION_FAILED_TO_REMOVE_ACCOUNT(),
+            })
 
         if (isOnlyAccount(accountToRemove.rootAddress))
-            return showWarningToast(
-                LL.NOTIFICATION_CANT_REMOVE_ONLY_ACCOUNT(),
-                undefined,
-                undefined,
-                undefined,
-                10000,
-            )
+            return showWarningToast({
+                text1: LL.NOTIFICATION_CANT_REMOVE_ONLY_ACCOUNT(),
+                visibilityTime: 10000,
+            })
 
         // [START] - Remove account
         dispatch(removeAccount(accountToRemove))
@@ -51,13 +50,10 @@ export const useAccountDelete = () => {
     const handleAccountToRemove = useCallback(
         (account: AccountWithDevice) => {
             if (isOnlyAccount(account.rootAddress))
-                return showWarningToast(
-                    LL.NOTIFICATION_CANT_REMOVE_ONLY_ACCOUNT(),
-                    undefined,
-                    undefined,
-                    undefined,
-                    10000,
-                )
+                return showWarningToast({
+                    text1: LL.NOTIFICATION_CANT_REMOVE_ONLY_ACCOUNT(),
+                    visibilityTime: 10000,
+                })
 
             setAccountToRemove(account)
         },

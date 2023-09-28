@@ -319,7 +319,10 @@ export const LedgerSignTransaction: React.FC<Props> = ({ route }) => {
             navigateOnFinish()
         } catch (e) {
             error("LedgerSignTransaction:handleOnConfirm", e)
-            showErrorToast(LL.ERROR(), LL.ERROR_GENERIC_OPERATION())
+            showErrorToast({
+                text1: LL.ERROR(),
+                text2: LL.ERROR_GENERIC_OPERATION(),
+            })
             track(AnalyticsEvent.LEDGER_TX_FAILED_TO_SEND)
             await Haptics.notificationAsync(
                 Haptics.NotificationFeedbackType.Error,
