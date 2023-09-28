@@ -2,7 +2,7 @@ import React, { useCallback, useMemo, useRef } from "react"
 import { BaseSafeArea, BaseText, BaseView } from "~Components"
 import { TranslationFunctions, useI18nContext } from "~i18n"
 import { Routes } from "~Navigation"
-import { StyleSheet, View } from "react-native"
+import { StyleSheet } from "react-native"
 import { RowProps, SettingsRow } from "./Components/SettingsRow"
 import { useThemedStyles } from "~Hooks"
 import { ColorThemeType, isSmallScreen } from "~Constants"
@@ -21,11 +21,6 @@ export const SettingsScreen = () => {
     )
 
     const { styles: themedStyles } = useThemedStyles(baseStyles)
-
-    const renderSeparator = useCallback(
-        () => <View style={themedStyles.separator} />,
-        [themedStyles],
-    )
 
     const renderItem = useCallback(
         ({ item }: { item: RowProps }) => (
@@ -56,7 +51,6 @@ export const SettingsScreen = () => {
                     ref={flatListRef}
                     data={SCREEN_LIST}
                     contentContainerStyle={themedStyles.contentContainerStyle}
-                    ItemSeparatorComponent={renderSeparator}
                     scrollEnabled={isSmallScreen}
                     keyExtractor={item => item.screenName}
                     showsVerticalScrollIndicator={false}

@@ -1,8 +1,8 @@
 import React, { memo, useMemo } from "react"
 import { StyleSheet } from "react-native"
-import { useTheme, useThemedStyles } from "~Hooks"
+import { useTheme } from "~Hooks"
 import { DateUtils } from "~Utils"
-import { COLORS, ColorThemeType } from "~Constants"
+import { COLORS } from "~Constants"
 import { BaseIcon, BaseText, BaseTouchable, BaseView } from "~Components"
 import { Activity, SignCertActivity } from "~Model"
 import { useI18nContext } from "~i18n"
@@ -16,8 +16,6 @@ type Props = {
 export const SignedCertificateActivityBox: React.FC<Props> = memo(
     ({ activity, onPress }) => {
         const theme = useTheme()
-
-        const { styles } = useThemedStyles(baseStyles)
 
         const { LL, locale } = useI18nContext()
 
@@ -35,11 +33,11 @@ export const SignedCertificateActivityBox: React.FC<Props> = memo(
             <BaseTouchable
                 haptics="Light"
                 action={() => onPress(activity)}
-                style={styles.container}>
+                style={baseStyles.container}>
                 <BaseView
                     w={100}
                     flexDirection="row"
-                    style={styles.innerContainer}
+                    style={baseStyles.innerContainer}
                     justifyContent="space-between">
                     <BaseView flexDirection="row">
                         <BaseView flexDirection="column" alignItems="center">
@@ -76,14 +74,11 @@ export const SignedCertificateActivityBox: React.FC<Props> = memo(
     },
 )
 
-const baseStyles = (theme: ColorThemeType) =>
-    StyleSheet.create({
-        innerContainer: {
-            borderBottomColor: theme.colors.separator,
-            borderBottomWidth: 0.5,
-            height: 65,
-        },
-        container: {
-            width: "100%",
-        },
-    })
+const baseStyles = StyleSheet.create({
+    innerContainer: {
+        height: 68,
+    },
+    container: {
+        width: "100%",
+    },
+})
