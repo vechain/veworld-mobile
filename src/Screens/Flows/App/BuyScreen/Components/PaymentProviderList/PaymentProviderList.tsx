@@ -15,12 +15,10 @@ import {
     PaymentProvider,
     usePaymentProviderList,
 } from "../../Hooks/usePaymentProviderList"
-import { useI18nContext } from "~i18n"
 
 export const PaymentProviderList = () => {
     const { styles, theme } = useThemedStyles(baseStyles)
     const nav = useNavigation()
-    const { LL } = useI18nContext()
 
     const paymentsProviders = usePaymentProviderList()
 
@@ -51,7 +49,6 @@ export const PaymentProviderList = () => {
                                     {item.name}
                                 </BaseText>
                             </BaseView>
-                            <BaseText>{LL.BD_PAYMENT_METHODS()}</BaseText>
                             {item.paymentMethods.map(method => (
                                 <>
                                     <BaseSpacer width={10} />
@@ -80,7 +77,7 @@ export const PaymentProviderList = () => {
                 </TouchableWithoutFeedback>
             )
         },
-        [selectedProviderId, styles, nav, theme, LL],
+        [selectedProviderId, styles, nav, theme],
     )
 
     return (

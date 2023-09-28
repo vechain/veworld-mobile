@@ -512,10 +512,6 @@ type RootTranslation = {
 	 */
 	BD_SELECT_PAYMENT_PROVIDER: string
 	/**
-	 * M​e​t​h​o​d​s​:
-	 */
-	BD_PAYMENT_METHODS: string
-	/**
 	 * W​e​l​c​o​m​e​ ​t​o​ 
 	 */
 	TITLE_WELCOME_TO: string
@@ -3024,10 +3020,6 @@ export type TranslationFunctions = {
 	 * Choose a payment provider:
 	 */
 	BD_SELECT_PAYMENT_PROVIDER: () => LocalizedString
-	/**
-	 * Methods:
-	 */
-	BD_PAYMENT_METHODS: () => LocalizedString
 	/**
 	 * Welcome to 
 	 */
