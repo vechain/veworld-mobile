@@ -2,39 +2,22 @@ import React, { useCallback, useState } from "react"
 import { FlatList, StyleSheet, TouchableWithoutFeedback } from "react-native"
 import { ColorThemeType } from "~Constants"
 import { useThemedStyles } from "~Hooks"
-import CoinbaseLogoSvg from "~Assets/Img/CoinbaseLogoSvg"
 import { BaseButton, BaseText, BaseView } from "~Components"
-import { useI18nContext } from "~i18n"
 import { useNavigation } from "@react-navigation/native"
 import { Routes } from "~Navigation"
-
-type PaymentProvider = {
-    id: string
-    description: string
-    buttonText: string
-    img: JSX.Element
-}
+import {
+    PaymentProvider,
+    usePaymentProviderList,
+} from "../../Hooks/usePaymentProviderList"
 
 export const PaymentProviderList = () => {
-    const { styles, theme } = useThemedStyles(baseStyles)
-    const { LL } = useI18nContext()
+    const { styles } = useThemedStyles(baseStyles)
     const nav = useNavigation()
-    const paymentsProviders: PaymentProvider[] = [
-        {
-            id: "1",
-            description:
-                "Buy you VechainThor tokens with Coinbase and receive them directly in your wallet. Coinbase is a secure online platform for buying, selling, transferring, and storing cryptocurrency.",
-            img: (
-                <CoinbaseLogoSvg
-                    width={"60%"}
-                    fill={theme.isDark ? theme.colors.text : undefined}
-                />
-            ),
-            buttonText: LL.BTN_BUY_COINBASE(),
-        },
-    ]
+
+    const paymentsProviders = usePaymentProviderList()
+
     const [selectedProviderId, setSelectedProviderId] = useState(
-        paymentsProviders[0].id,
+        paymentsProviders[0] ? paymentsProviders[0].id : "",
     )
 
     const renderItem = useCallback(
@@ -61,16 +44,11 @@ export const PaymentProviderList = () => {
 
                                 <BaseButton
                                     title={item.buttonText}
-                                    onPress={() => {
-                                        nav.navigate(Routes.BUY_WEBVIEW)
-                                    }}
                                     disabled={!isSelected}
                                     style={styles.button}
-                                    action={function (): void {
-                                        throw new Error(
-                                            "Function not implemented.",
-                                        )
-                                    }}
+                                    action={() =>
+                                        nav.navigate(Routes.BUY_WEBVIEW)
+                                    }
                                 />
                             </>
                         )}

@@ -1,12 +1,12 @@
 import React from "react"
 import { BaseButton, BaseSpacer, BaseText, BaseView, Layout } from "~Components"
-import { PaymentProviderList } from "./Components/PaymentProviderList"
 import { useI18nContext } from "~i18n"
 import { StatusBar, StyleSheet } from "react-native"
 import { useThemedStyles } from "~Hooks"
 import { PlatformUtils } from "~Utils"
 import { ColorThemeType } from "~Constants"
 import { useNavigation } from "@react-navigation/native"
+import { PaymentProviderList } from "./Components/PaymentProviderList/PaymentProviderList"
 
 export const BuyScreen = () => {
     const { styles } = useThemedStyles(baseStyles)
@@ -19,14 +19,7 @@ export const BuyScreen = () => {
             noMargin
             noBackButton
             footer={
-                <BaseButton
-                    style={styles.button}
-                    onPress={() => {
-                        nav.goBack()
-                    }}
-                    action={function (): void {
-                        throw new Error("Function not implemented.")
-                    }}>
+                <BaseButton style={styles.button} action={() => nav.goBack()}>
                     <BaseText
                         style={styles.buttonText}
                         typographyFont="bodyMedium">
