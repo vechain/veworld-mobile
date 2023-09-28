@@ -5,6 +5,8 @@ import { useThemedStyles } from "~Hooks"
 import CoinbaseLogoSvg from "~Assets/Img/CoinbaseLogoSvg"
 import { BaseButton, BaseText, BaseView } from "~Components"
 import { useI18nContext } from "~i18n"
+import { useNavigation } from "@react-navigation/native"
+import { Routes } from "~Navigation"
 
 type PaymentProvider = {
     id: string
@@ -16,6 +18,7 @@ type PaymentProvider = {
 export const PaymentProviderList = () => {
     const { styles, theme } = useThemedStyles(baseStyles)
     const { LL } = useI18nContext()
+    const nav = useNavigation()
     const paymentsProviders: PaymentProvider[] = [
         {
             id: "1",
@@ -58,7 +61,9 @@ export const PaymentProviderList = () => {
 
                                 <BaseButton
                                     title={item.buttonText}
-                                    onPress={() => {}}
+                                    onPress={() => {
+                                        nav.navigate(Routes.BUY_WEBVIEW)
+                                    }}
                                     disabled={!isSelected}
                                     style={styles.button}
                                     action={function (): void {
@@ -73,7 +78,7 @@ export const PaymentProviderList = () => {
                 </TouchableWithoutFeedback>
             )
         },
-        [selectedProviderId, styles],
+        [selectedProviderId, styles, nav],
     )
 
     return (

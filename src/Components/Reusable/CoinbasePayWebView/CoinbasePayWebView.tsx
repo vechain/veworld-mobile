@@ -9,6 +9,7 @@ import { PlatformUtils, debug } from "~Utils"
 import { BaseActivityIndicator, BaseView } from "~Components/Base"
 import { StatusBar, StyleSheet } from "react-native"
 import { useColorScheme } from "~Hooks"
+import { Routes } from "~Navigation"
 
 export const CoinbasePayWebView = (props: {
     currentAmount: number
@@ -66,7 +67,7 @@ export const CoinbasePayWebView = (props: {
                 const { data } = JSON.parse(event.nativeEvent.data)
                 if (data.eventName === "exit") {
                     setIsLoading(true)
-                    nav.goBack()
+                    nav.navigate(Routes.HOME)
                 }
             } catch (error) {
                 debug(getErrorMessage(error))

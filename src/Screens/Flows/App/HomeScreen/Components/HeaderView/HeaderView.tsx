@@ -32,7 +32,7 @@ export const HeaderView = memo(
             () => [
                 {
                     name: LL.BTN_BUY(),
-                    action: () => nav.navigate(Routes.BUY),
+                    action: () => nav.navigate(Routes.BUY_FLOW),
                     icon: (
                         <BaseIcon
                             color={theme.colors.text}
