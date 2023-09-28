@@ -3,7 +3,7 @@ import { BaseStatusBar, useApplicationSecurity } from "~Components"
 import { SwitchStack } from "~Navigation"
 import ErrorBoundary from "~Components/Providers/ErrorBoundary"
 import { AppLoader } from "./AppLoader"
-import { AutoLogoutProvider } from "~Components/Providers/AutoLogoutProvider"
+import { AutoLockProvider } from "~Components/Providers/AutoLockProvider"
 import { AnimatedSplashScreen } from "../src/AnimatedSplashScreen"
 import RNBootSplash from "react-native-bootsplash"
 import { SecurityLevelType } from "~Model"
@@ -19,7 +19,7 @@ export const EntryPoint = () => {
 
     return (
         <ErrorBoundary>
-            <AutoLogoutProvider>
+            <AutoLockProvider>
                 <AnimatedSplashScreen
                     playAnimation={true}
                     useFadeOutAnimation={
@@ -30,7 +30,7 @@ export const EntryPoint = () => {
                         <SwitchStack />
                     </AppLoader>
                 </AnimatedSplashScreen>
-            </AutoLogoutProvider>
+            </AutoLockProvider>
         </ErrorBoundary>
     )
 }
