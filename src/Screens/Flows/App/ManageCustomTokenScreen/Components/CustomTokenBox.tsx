@@ -23,23 +23,24 @@ export const CustomTokenBox: React.FC<Props> = memo(
         const theme = useTheme()
 
         const handleTokenPress = useCallback(() => {
+            const {
+                tokenAddress,
+                tokenDecimals = 0,
+                tokenName = "",
+                tokenSymbol = "",
+            } = tokenBalance
+
             const token: FungibleToken = {
-                address: tokenBalance.tokenAddress,
-                decimals: tokenBalance.tokenDecimals ?? 0,
-                name: tokenBalance.tokenName ?? "",
-                symbol: tokenBalance.tokenSymbol ?? "",
+                address: tokenAddress,
+                decimals: tokenDecimals,
+                name: tokenName,
+                symbol: tokenSymbol,
                 icon: "",
                 custom: true,
             }
 
             onTogglePress(token)
-        }, [
-            onTogglePress,
-            tokenBalance.tokenAddress,
-            tokenBalance.tokenDecimals,
-            tokenBalance.tokenName,
-            tokenBalance.tokenSymbol,
-        ])
+        }, [onTogglePress, tokenBalance])
 
         const tokenUnitBalance = useMemo(
             () =>
