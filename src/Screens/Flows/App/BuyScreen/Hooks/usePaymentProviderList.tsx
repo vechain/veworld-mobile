@@ -25,8 +25,7 @@ export const usePaymentProviderList = () => {
         {
             id: "coinbase-pay",
             name: "Coinbase",
-            description:
-                "Buy on Coinbase and receive the tokens directly in your wallet.",
+            description: LL.BD_BUY_DESCRIPTION_COINBASE(),
             buttonText: LL.BTN_BUY_COINBASE(),
             img: (
                 <CoinbaseLogoSmallSvg

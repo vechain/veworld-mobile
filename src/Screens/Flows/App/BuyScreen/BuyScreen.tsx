@@ -1,31 +1,33 @@
 import React from "react"
-import { BaseButton, BaseSpacer, BaseText, BaseView, Layout } from "~Components"
+import {
+    BackButtonHeader,
+    BaseSpacer,
+    BaseText,
+    BaseView,
+    Layout,
+} from "~Components"
 import { useI18nContext } from "~i18n"
 import { StatusBar, StyleSheet } from "react-native"
 import { useThemedStyles } from "~Hooks"
 import { PlatformUtils } from "~Utils"
 import { ColorThemeType } from "~Constants"
-import { useNavigation } from "@react-navigation/native"
 import { PaymentProviderList } from "./Components/PaymentProviderList/PaymentProviderList"
 
 export const BuyScreen = () => {
     const { styles } = useThemedStyles(baseStyles)
     const { LL } = useI18nContext()
-    const nav = useNavigation()
 
     return (
         <Layout
-            hasSafeArea={false}
-            noMargin
+            hasSafeArea={PlatformUtils.isIOS() ? false : true}
             noBackButton
-            footer={
-                <BaseButton style={styles.button} action={() => nav.goBack()}>
-                    <BaseText
-                        style={styles.buttonText}
-                        typographyFont="bodyMedium">
-                        {LL.BTN_GO_BACK()}
-                    </BaseText>
-                </BaseButton>
+            noMargin
+            fixedHeader={
+                <>
+                    <BaseSpacer height={16} />
+                    <BackButtonHeader hasBottomSpacer={false} />
+                    <BaseSpacer height={8} />
+                </>
             }
             body={
                 <BaseView style={styles.container}>

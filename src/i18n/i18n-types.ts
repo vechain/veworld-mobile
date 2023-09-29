@@ -512,6 +512,10 @@ type RootTranslation = {
 	 */
 	BD_SELECT_PAYMENT_PROVIDER: string
 	/**
+	 * B​u​y​ ​w​i​t​h​ ​C​o​i​n​b​a​s​e​ ​a​n​d​ ​r​e​c​e​i​v​e​ ​t​h​e​ ​t​o​k​e​n​s​ ​d​i​r​e​c​t​l​y​ ​i​n​ ​y​o​u​r​ ​w​a​l​l​e​t​.
+	 */
+	BD_BUY_DESCRIPTION_COINBASE: string
+	/**
 	 * W​e​l​c​o​m​e​ ​t​o​ 
 	 */
 	TITLE_WELCOME_TO: string
@@ -3020,6 +3024,10 @@ export type TranslationFunctions = {
 	 * Choose a payment provider:
 	 */
 	BD_SELECT_PAYMENT_PROVIDER: () => LocalizedString
+	/**
+	 * Buy with Coinbase and receive the tokens directly in your wallet.
+	 */
+	BD_BUY_DESCRIPTION_COINBASE: () => LocalizedString
 	/**
 	 * Welcome to 
 	 */
