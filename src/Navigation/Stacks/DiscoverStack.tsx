@@ -17,7 +17,7 @@ import {
     TokenWithCompleteInfo,
 } from "~Model"
 import { Transaction } from "thor-devkit"
-import { PlatformUtils } from "~Utils"
+import { useNavAnimation } from "~Hooks"
 
 export type RootStackParamListDiscover = {
     [Routes.DISCOVER]: undefined
@@ -47,11 +47,10 @@ const { Navigator, Group, Screen } =
     createNativeStackNavigator<RootStackParamListDiscover>()
 
 export const DiscoverStack = () => {
+    const { animation } = useNavAnimation()
+
     return (
-        <Navigator
-            screenOptions={{
-                animation: PlatformUtils.isIOS() ? "default" : "none",
-            }}>
+        <Navigator screenOptions={{ headerShown: false, animation }}>
             <Group>
                 <Screen
                     name={Routes.DISCOVER}
