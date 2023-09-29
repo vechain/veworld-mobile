@@ -239,6 +239,8 @@ platform :ios do
 
       push_git_tags
 
+      upload_source_maps_to_sentry(build:build, version:version)
+
       # create pull request
       create_pull_request(
         api_token: github_token,
