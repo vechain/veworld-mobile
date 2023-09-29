@@ -67,7 +67,7 @@ export const NFTCollectionDetailScreen = ({ route }: Props) => {
                 {renderNftList}
             </NftLoader>
         )
-    }, [error, nfts, isLoading, renderNftList])
+    }, [error, isLoading, nfts, renderNftList])
 
     return (
         <Layout

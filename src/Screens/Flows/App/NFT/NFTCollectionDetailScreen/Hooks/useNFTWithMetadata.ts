@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useMemo } from "react"
+import { useCallback, useLayoutEffect, useMemo } from "react"
 import {
     selectNFTsForCollection,
     selectNftNetworkingSideEffects,
@@ -8,6 +8,7 @@ import {
 import { usePagination } from "../../usePagination"
 import { useNFTs } from "~Hooks"
 import { NFT_PAGE_SIZE } from "~Constants/Constants/NFT"
+import { InteractionManager } from "react-native"
 
 export const useNFTWithMetadata = (
     collectionAddress: string,
@@ -62,13 +63,14 @@ export const useNFTWithMetadata = (
         setEndReachedCalledDuringMomentum,
     ])
 
-    useEffect(() => {
+    useLayoutEffect(() => {
         const init = async () => {
             await loadNFTsForCollection(collectionAddress, 0)
         }
 
-        init()
-
+        InteractionManager.runAfterInteractions(() => {
+            init()
+        })
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [selectedAccount])
 
