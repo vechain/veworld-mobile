@@ -32,6 +32,7 @@ import { isEmpty } from "lodash"
 
 type Props = {
     tokenAddress?: string
+    token?: FungibleToken
     onClose: () => void
 }
 
@@ -40,7 +41,7 @@ const snapPoints = ["40%"]
 export const AddCustomTokenBottomSheet = React.forwardRef<
     BottomSheetModalMethods,
     Props
->(({ tokenAddress, onClose }, ref) => {
+>(({ tokenAddress, token, onClose }, ref) => {
     const { LL } = useI18nContext()
 
     const dispatch = useAppDispatch()
@@ -51,7 +52,9 @@ export const AddCustomTokenBottomSheet = React.forwardRef<
 
     const thorClient = useThor()
 
-    const [newCustomToken, setNewCustomToken] = useState<FungibleToken>()
+    const [newCustomToken, setNewCustomToken] = useState<
+        FungibleToken | undefined
+    >(token)
 
     const [value, setValue] = useState("")
 
@@ -74,7 +77,7 @@ export const AddCustomTokenBottomSheet = React.forwardRef<
                     // check if it is an official token
                     if (
                         officialTokens
-                            .map(token => token.address.toLowerCase())
+                            .map(tkn => tkn.address.toLowerCase())
                             .includes(address)
                     ) {
                         setErrorMessage(
@@ -85,7 +88,7 @@ export const AddCustomTokenBottomSheet = React.forwardRef<
                     // check if already present
                     if (
                         customTokens
-                            .map(token => token.address.toLowerCase())
+                            .map(tkn => tkn.address.toLowerCase())
                             .includes(address)
                     ) {
                         setErrorMessage(
@@ -174,11 +177,12 @@ export const AddCustomTokenBottomSheet = React.forwardRef<
 
         onClose()
     }
-
-    // if we are adding a token from SwapCard screen, we need to set the token address
+    // if we are adding a token from SwapCard or custom tokens screen, we need to set the token address
     useEffect(() => {
         if (tokenAddress) handleValueChange(tokenAddress)
-    }, [handleValueChange, tokenAddress])
+
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [tokenAddress])
 
     return (
         <>
@@ -195,8 +199,8 @@ export const AddCustomTokenBottomSheet = React.forwardRef<
                     {LL.MANAGE_CUSTOM_TOKENS_ADD_DESCRIPTION()}
                 </BaseText>
                 <BaseSpacer height={24} />
-                {newCustomToken ? (
-                    <CustomTokenCard token={newCustomToken} />
+                {token ? (
+                    <CustomTokenCard token={token} />
                 ) : (
                     <BaseView flexDirection="row" w={100}>
                         <BaseBottomSheetTextInput
