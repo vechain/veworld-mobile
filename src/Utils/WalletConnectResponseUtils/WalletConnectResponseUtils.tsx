@@ -38,9 +38,9 @@ export const transactionRequestSuccessResponse = async (
             },
         })
     } catch (e) {
-        showErrorToast(
-            LL.NOTIFICATION_wallet_connect_transaction_broadcasted_with_communication_error(),
-        )
+        showErrorToast({
+            text1: LL.NOTIFICATION_wallet_connect_transaction_broadcasted_with_communication_error(),
+        })
     }
 }
 
@@ -65,10 +65,14 @@ export const signMessageRequestSuccessResponse = async (
                 },
             },
         })
-        showSuccessToast(LL.NOTIFICATION_wallet_connect_sign_success())
+        showSuccessToast({
+            text1: LL.NOTIFICATION_wallet_connect_sign_success(),
+        })
     } catch (err: unknown) {
         error("signMessageRequestSuccessResponse", err)
-        showErrorToast(LL.NOTIFICATION_wallet_connect_matching_error())
+        showErrorToast({
+            text1: LL.NOTIFICATION_wallet_connect_matching_error(),
+        })
     }
 }
 
@@ -93,9 +97,13 @@ export const transactionRequestFailedResponse = async ({
             response,
         })
     } catch {
-        showErrorToast(LL.NOTIFICATION_wallet_connect_matching_error())
+        showErrorToast({
+            text1: LL.NOTIFICATION_wallet_connect_matching_error(),
+        })
     } finally {
-        showErrorToast(LL.NOTIFICATION_wallet_connect_error_on_transaction())
+        showErrorToast({
+            text1: LL.NOTIFICATION_wallet_connect_error_on_transaction(),
+        })
     }
 }
 
@@ -119,7 +127,9 @@ export const sponsorSignRequestFailedResponse = async ({
             response: formattedResponse,
         })
     } catch {
-        showErrorToast(LL.NOTIFICATION_wallet_connect_matching_error())
+        showErrorToast({
+            text1: LL.NOTIFICATION_wallet_connect_matching_error(),
+        })
     }
 }
 
@@ -139,7 +149,9 @@ export const userRejectedMethodsResponse = async ({
             response,
         })
     } catch {
-        showErrorToast(LL.NOTIFICATION_wallet_connect_matching_error())
+        showErrorToast({
+            text1: LL.NOTIFICATION_wallet_connect_matching_error(),
+        })
     }
 }
 
@@ -159,6 +171,8 @@ export const signMessageRequestErrorResponse = async ({
             response,
         })
     } catch {
-        showErrorToast(LL.NOTIFICATION_wallet_connect_matching_error())
+        showErrorToast({
+            text1: LL.NOTIFICATION_wallet_connect_matching_error(),
+        })
     }
 }

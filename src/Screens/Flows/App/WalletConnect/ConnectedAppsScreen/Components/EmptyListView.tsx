@@ -27,7 +27,7 @@ export const EmptyListView = () => {
 
     const { RenderCameraModal, handleOpenCamera } = useCameraBottomSheet({
         onScan,
-        target: ScanTarget.WALLET_CONNECT,
+        targets: [ScanTarget.WALLET_CONNECT],
     })
 
     return (

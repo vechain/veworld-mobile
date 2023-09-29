@@ -7,6 +7,7 @@ import { VTHO, DEFAULT_GAS_COEFFICIENT } from "~Constants"
 import { FormattingUtils, GasUtils } from "~Utils"
 import { RootState } from "~Storage/Redux/Types"
 import { useAppSelector } from "~Storage/Redux"
+import { useI18nContext } from "~i18n"
 
 /**
  * `useGasFee` is a custom React Hook that calculates the gas fee for a specific activity (transaction).
@@ -29,6 +30,8 @@ export const useGasFee = (activity: Activity) => {
 
     const [gasFeeInVTHO, setFeeInVTHO] = useState<BigNumber>()
 
+    const { LL } = useI18nContext()
+
     /**
      * Effect hook to calculate the gas fee for a transaction.
      * The gas fee is calculated once the transaction receipt is available.
@@ -41,8 +44,13 @@ export const useGasFee = (activity: Activity) => {
             .then(res => {
                 setFeeInVTHO(res)
             })
-            .catch(() => showInfoToast("Info", "Gas fee may not be accurate."))
-    }, [activity.gasUsed, thor])
+            .catch(() =>
+                showInfoToast({
+                    text1: LL.HEADS_UP(),
+                    text2: LL.NOTIFICATION_GAS_FEE_INACCURATE(),
+                }),
+            )
+    }, [LL, activity.gasUsed, thor])
 
     const VTHOexchangeRate = useAppSelector((state: RootState) =>
         selectCurrencyExchangeRate(state, VTHO),

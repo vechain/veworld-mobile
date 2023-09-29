@@ -6,10 +6,10 @@ import { Keyboard } from "react-native"
 
 export const useCameraBottomSheet = ({
     onScan,
-    target,
+    targets,
 }: {
     onScan: (uri: string) => void
-    target: ScanTarget
+    targets: ScanTarget[]
 }) => {
     const {
         ref: scanAddressSheetRef,
@@ -32,10 +32,10 @@ export const useCameraBottomSheet = ({
                 ref={scanAddressSheetRef}
                 onClose={closeScanAddressSheetRef}
                 onScan={onScan}
-                target={target}
+                target={targets}
             />
         ),
-        [scanAddressSheetRef, closeScanAddressSheetRef, onScan, target],
+        [scanAddressSheetRef, closeScanAddressSheetRef, onScan, targets],
     )
 
     return { RenderCameraModal, handleOpenCamera }

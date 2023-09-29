@@ -24,7 +24,7 @@ export const ConnectedAppsHeader = ({ showAddButton = true }: Props) => {
 
     const { RenderCameraModal, handleOpenCamera } = useCameraBottomSheet({
         onScan,
-        target: ScanTarget.WALLET_CONNECT,
+        targets: [ScanTarget.WALLET_CONNECT],
     })
 
     return (
