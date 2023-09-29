@@ -143,7 +143,7 @@ const en: BaseTranslation = {
     BD_NFT_DESC_PLACEHOLDER: "Random NFT collection description placeholder in case the NFT collection doesn't have one",
     BD_COLLECTION: "Collection",
     BD_APP_BLOCKED: "To continue using this app securely and effectively, please enable the biometric authentication feature in your device's settings.",
-    BD_SELECT_PAYMENT_PROVIDER: "Choose a payment provider:",
+    BD_SELECT_PAYMENT_PROVIDER: "Choose a provider:",
     BD_BUY_DESCRIPTION_COINBASE: "Buy with Coinbase and receive the tokens directly in VeWorld.",
 
     // TITLES
