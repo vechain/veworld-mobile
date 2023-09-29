@@ -36,9 +36,9 @@ export const AddUrlBottomSheet = React.forwardRef<
                 url: newUrl,
                 genesisId: thor.genesis.id,
                 callbackIfAlreadyPresent: () => {
-                    showWarningToast(
-                        LL.SEND_DELEGATION_ADD_URL_ALREADY_PRESENT(),
-                    )
+                    showWarningToast({
+                        text1: LL.SEND_DELEGATION_ADD_URL_ALREADY_PRESENT(),
+                    })
                 },
             }),
         )

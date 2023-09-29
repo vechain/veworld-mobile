@@ -396,6 +396,9 @@ const en: BaseTranslation = {
     NOTIFICATION_OUTGOING_NFT_BODY: "{collectionName: string} NFT was successfully sent to {to: string}.",
     NOTIFIACTION_OUTGOING_TOKEN_BODY: "{amount: string} was successfully sent to {to: string}.",
     NOTIFICATION_VIEW_ACCOUNT: "View account",
+    NOTIFICATION_TITLE_INVALID_QR: "QR Code Not Supported",
+    NOTIFICATION_INVALID_QR: "Please scan a WalletConnect or wallet address QR code.",
+    NOTIFICATION_GAS_FEE_INACCURATE: "Gas fee estimates might vary. Always double-check before confirming.",
 
     NOTIFICATION_FAILED_TO_REMOVE_ACCOUNT: "Failed to remove account",
     NOTIFICATION_CANT_REMOVE_ONLY_ACCOUNT: "The associated wallet only has 1 account. Please remove the wallet to remove this account",

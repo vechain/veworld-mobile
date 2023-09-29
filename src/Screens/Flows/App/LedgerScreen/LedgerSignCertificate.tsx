@@ -201,7 +201,10 @@ export const LedgerSignCertificate: React.FC<Props> = ({ route }) => {
             navigateOnFinish()
         } catch (e) {
             error("LedgerSignCertificate:handleOnConfirm", e)
-            showErrorToast(LL.ERROR(), LL.ERROR_GENERIC_OPERATION())
+            showErrorToast({
+                text1: LL.ERROR(),
+                text2: LL.ERROR_GENERIC_OPERATION(),
+            })
             await Haptics.notificationAsync(
                 Haptics.NotificationFeedbackType.Error,
             )

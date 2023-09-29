@@ -115,10 +115,10 @@ export const useTransactionScreen = ({
                     case SignStatus.NAVIGATE_TO_LEDGER:
                         return
                     case SignStatus.DELEGATION_FAILURE:
-                        showWarningToast(
-                            LL.ERROR(),
-                            LL.SEND_DELEGATION_ERROR_SIGNATURE(),
-                        )
+                        showWarningToast({
+                            text1: LL.ERROR(),
+                            text2: LL.SEND_DELEGATION_ERROR_SIGNATURE(),
+                        })
                         return
                     default:
                         await sendTransaction(transaction)

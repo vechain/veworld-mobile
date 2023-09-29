@@ -57,7 +57,7 @@ export const ContactForm: React.FC<Props> = memo(
 
         const { RenderCameraModal, handleOpenCamera } = useCameraBottomSheet({
             onScan,
-            target: ScanTarget.ADDRESS,
+            targets: [ScanTarget.ADDRESS],
         })
 
         const onOpenCamera = useCallback(() => {

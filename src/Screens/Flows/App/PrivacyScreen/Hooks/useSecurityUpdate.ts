@@ -17,10 +17,12 @@ export const useSecurityUpdate = () => {
                 )
 
                 if (!updateSuccess) {
-                    showErrorToast(LL.ERROR_SECURITY_UPDATE_REVERTED())
+                    showErrorToast({
+                        text1: LL.ERROR_SECURITY_UPDATE_REVERTED(),
+                    })
                 }
             } catch (e) {
-                showErrorToast(LL.ERROR_SECURITY_UPDATE_FAILED())
+                showErrorToast({ text1: LL.ERROR_SECURITY_UPDATE_FAILED() })
 
                 dispatch(setIsAppLoading(true))
 

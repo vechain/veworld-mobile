@@ -44,7 +44,7 @@ describe("BaseToast", () => {
         const textLink = "Click here"
         const onPress = jest.fn()
 
-        showSuccessToast(text1, text2, textLink, onPress)
+        showSuccessToast({ text1, text2, textLink, onPress })
 
         expect(Toast.show).toHaveBeenCalledWith({
             type: "success",
@@ -61,7 +61,7 @@ describe("BaseToast", () => {
         const textLink = "Click here"
         const onPress = jest.fn()
 
-        showErrorToast(text1, text2, textLink, onPress)
+        showErrorToast({ text1, text2, textLink, onPress })
 
         expect(Toast.show).toHaveBeenCalledWith({
             type: "error",
@@ -78,7 +78,7 @@ describe("BaseToast", () => {
         const textLink = "Click here"
         const onPress = jest.fn()
 
-        showWarningToast(text1, text2, textLink, onPress)
+        showWarningToast({ text1, text2, textLink, onPress })
 
         expect(Toast.show).toHaveBeenCalledWith({
             type: "warning",
@@ -95,7 +95,7 @@ describe("BaseToast", () => {
         const textLink = "Click here"
         const onPress = jest.fn()
 
-        showInfoToast(text1, text2, textLink, onPress)
+        showInfoToast({ text1, text2, textLink, onPress })
 
         expect(Toast.show).toHaveBeenCalledWith({
             type: "info",
@@ -112,7 +112,7 @@ describe("BaseToast", () => {
         const textLink = "Click here"
         const onPress = jest.fn()
 
-        showInfoToast(text1, text2, textLink, onPress, 7000)
+        showInfoToast({ text1, text2, textLink, onPress, visibilityTime: 7000 })
 
         expect(Toast.show).toHaveBeenCalledWith({
             type: "info",
@@ -129,7 +129,7 @@ describe("BaseToast", () => {
         const textLink = "Click here"
         const onPress = jest.fn()
 
-        showSuccessToast(text1, text2, textLink, onPress)
+        showSuccessToast({ text1, text2, textLink, onPress })
 
         const configParams = (Toast.show as jest.Mock).mock.calls[0][0]
         const { props } = configParams
@@ -149,7 +149,7 @@ describe("BaseToast", () => {
         const textLink = "Click here"
         const onPress = jest.fn()
 
-        showErrorToast(text1, text2, textLink, onPress)
+        showErrorToast({ text1, text2, textLink, onPress })
 
         const configParams = (Toast.show as jest.Mock).mock.calls[0][0]
         const { props } = configParams
@@ -169,7 +169,7 @@ describe("BaseToast", () => {
         const textLink = "Click here"
         const onPress = jest.fn()
 
-        showWarningToast(text1, text2, textLink, onPress)
+        showWarningToast({ text1, text2, textLink, onPress })
 
         const configParams = (Toast.show as jest.Mock).mock.calls[0][0]
         const { props } = configParams
@@ -189,7 +189,7 @@ describe("BaseToast", () => {
         const textLink = "Click here"
         const onPress = jest.fn()
 
-        showInfoToast(text1, text2, textLink, onPress)
+        showInfoToast({ text1, text2, textLink, onPress })
 
         const configParams = (Toast.show as jest.Mock).mock.calls[0][0]
         const { props } = configParams
@@ -296,7 +296,7 @@ describe("toastConfig", () => {
 
 describe("hideToast", () => {
     it("calls Toast.hide()", () => {
-        showSuccessToast("Success")
+        showSuccessToast({ text1: "Success" })
 
         act(() => {
             // Wait for the toast to be displayed

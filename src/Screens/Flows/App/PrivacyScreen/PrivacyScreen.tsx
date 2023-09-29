@@ -99,10 +99,10 @@ export const PrivacyScreen = () => {
 
     const handleOnEditPinPress = useCallback(() => {
         if (selectedAccount.device.type === DEVICE_TYPE.LEDGER) {
-            return showWarningToast(
-                LL.HEADS_UP(),
-                LL.ALERT_CANT_BACKUP_LEDGER(),
-            )
+            return showWarningToast({
+                text1: LL.HEADS_UP(),
+                text2: LL.ALERT_CANT_BACKUP_LEDGER(),
+            })
         }
         openBackupWarningSheet()
     }, [selectedAccount, LL, openBackupWarningSheet])
