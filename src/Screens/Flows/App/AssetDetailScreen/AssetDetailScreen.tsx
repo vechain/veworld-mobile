@@ -31,7 +31,7 @@ import {
     useAppSelector,
 } from "~Storage/Redux"
 import { ScrollView } from "react-native-gesture-handler"
-import { StyleSheet } from "react-native"
+import { InteractionManager, StyleSheet } from "react-native"
 
 type Props = NativeStackScreenProps<
     RootStackParamListDiscover,
@@ -61,7 +61,9 @@ export const AssetDetailScreen = ({ route }: Props) => {
 
     const dispatch = useAppDispatch()
     useEffect(() => {
-        dispatch(fetchVechainMarketInfo())
+        InteractionManager.runAfterInteractions(() => {
+            dispatch(fetchVechainMarketInfo())
+        })
     }, [dispatch])
 
     const Actions: FastAction[] = useMemo(
