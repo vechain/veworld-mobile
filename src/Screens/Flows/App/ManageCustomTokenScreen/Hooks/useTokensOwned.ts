@@ -114,7 +114,10 @@ export const useTokensOwned = () => {
                 // In case of error, log and show warning toast
                 error("fetchTokens", e)
 
-                showWarningToast(LL.HEADS_UP(), LL.CUSTOM_TOKENS_NOT_AVAIABLE())
+                showWarningToast({
+                    text1: LL.HEADS_UP(),
+                    text2: LL.CUSTOM_TOKENS_NOT_AVAIABLE(),
+                })
 
                 // Set fetched flag
                 setHasFetched(true)

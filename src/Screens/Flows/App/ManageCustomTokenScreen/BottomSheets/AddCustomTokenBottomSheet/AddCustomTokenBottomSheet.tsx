@@ -137,7 +137,7 @@ export const AddCustomTokenBottomSheet = React.forwardRef<
 
     const { RenderCameraModal, handleOpenCamera } = useCameraBottomSheet({
         onScan: handleValueChange,
-        target: ScanTarget.ADDRESS,
+        targets: [ScanTarget.ADDRESS],
     })
 
     const handleOnDismissModal = () => {

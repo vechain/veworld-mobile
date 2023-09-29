@@ -161,7 +161,9 @@ export const SendTransactionScreen: FC<Props> = ({ route }: Props) => {
             // refactor(Minimizer): issues with iOS 17 & Android when connecting to desktop DApp (https://github.com/vechainfoundation/veworld-mobile/issues/951)
             // MinimizerUtils.goBack()
         } catch (e) {
-            showErrorToast(LL.NOTIFICATION_wallet_connect_matching_error())
+            showErrorToast({
+                text1: LL.NOTIFICATION_wallet_connect_matching_error(),
+            })
         } finally {
             nav.goBack()
         }

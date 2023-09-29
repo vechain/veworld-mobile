@@ -132,10 +132,10 @@ export const useSignTransaction = ({
                 )
 
             if (delegationDevice.type === DEVICE_TYPE.LEDGER) {
-                showWarningToast(
-                    LL.HEADS_UP(),
-                    LL.LEDGER_DELEGATION_NOT_SUPPORTED(),
-                )
+                showWarningToast({
+                    text1: LL.HEADS_UP(),
+                    text2: LL.LEDGER_DELEGATION_NOT_SUPPORTED(),
+                })
                 throw new Error("Delegated hardware wallet not supported yet")
             }
 
@@ -183,7 +183,10 @@ export const useSignTransaction = ({
         )
 
         if (delegationSignature === SignStatus.DELEGATION_FAILURE) {
-            showErrorToast(LL.ERROR(), LL.SEND_DELEGATION_ERROR_SIGNATURE())
+            showErrorToast({
+                text1: LL.ERROR(),
+                text2: LL.SEND_DELEGATION_ERROR_SIGNATURE(),
+            })
             return
         }
 

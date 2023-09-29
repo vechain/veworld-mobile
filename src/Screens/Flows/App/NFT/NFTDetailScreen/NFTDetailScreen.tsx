@@ -72,7 +72,7 @@ export const NFTDetailScreen = ({ route }: Props) => {
         if (supported) {
             await Linking.openURL(nft?.external_url!)
         } else {
-            showErrorToast(LL.NO_MARKETPLACE())
+            showErrorToast({ text1: LL.NO_MARKETPLACE() })
         }
     }, [nft?.external_url, LL])
 

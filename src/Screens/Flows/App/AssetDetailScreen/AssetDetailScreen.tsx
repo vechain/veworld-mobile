@@ -75,12 +75,12 @@ export const AssetDetailScreen = ({ route }: Props) => {
                             initialRoute: Routes.HOME,
                         })
                     } else {
-                        showWarningToast(
-                            LL.HEADS_UP(),
-                            LL.SEND_ERROR_TOKEN_NOT_FOUND({
+                        showWarningToast({
+                            text1: LL.HEADS_UP(),
+                            text2: LL.SEND_ERROR_TOKEN_NOT_FOUND({
                                 tokenName: token.symbol,
                             }),
-                        )
+                        })
                     }
                 },
                 icon: (

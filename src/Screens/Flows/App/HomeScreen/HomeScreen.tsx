@@ -93,9 +93,9 @@ export const HomeScreen = () => {
 
     const handleOnSuccessAddAccountBottomSheet = useCallback(() => {
         closeAddAccountSheet()
-        showSuccessToast(
-            LL.WALLET_MANAGEMENT_NOTIFICATION_CREATE_ACCOUNT_SUCCESS(),
-        )
+        showSuccessToast({
+            text1: LL.WALLET_MANAGEMENT_NOTIFICATION_CREATE_ACCOUNT_SUCCESS(),
+        })
     }, [LL, closeAddAccountSheet])
 
     const accounts = useAppSelector(selectVisibleAccounts)
@@ -112,9 +112,9 @@ export const HomeScreen = () => {
     const openConfirmRemoveAccountWarning = useCallback(
         (account: AccountWithDevice) => {
             if (isOnlyAccount(account.rootAddress))
-                return showWarningToast(
-                    LL.NOTIFICATION_CANT_REMOVE_ONLY_ACCOUNT(),
-                )
+                return showWarningToast({
+                    text1: LL.NOTIFICATION_CANT_REMOVE_ONLY_ACCOUNT(),
+                })
 
             setAccountToRemove(account)
             closeRemoveAccountSheet()
