@@ -83,10 +83,10 @@ export const ConfirmMnemonicScreen = () => {
         } else {
             track(AnalyticsEvent.NEW_WALLET_VERIFICATION_FAILED)
 
-            showErrorToast(
-                LL.ERROR_WRONG_WORDS_COMBINATION(),
-                LL.ERROR_WRONG_WORDS_COMBINATION_DESC(),
-            )
+            showErrorToast({
+                text1: LL.ERROR_WRONG_WORDS_COMBINATION(),
+                text2: LL.ERROR_WRONG_WORDS_COMBINATION_DESC(),
+            })
             setSelectedFirstWord(null)
             setSelectedSecondWord(null)
             setSelectedThirdWord(null)

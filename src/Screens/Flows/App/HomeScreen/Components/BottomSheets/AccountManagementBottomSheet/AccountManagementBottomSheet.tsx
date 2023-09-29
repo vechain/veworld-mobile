@@ -60,13 +60,13 @@ export const AccountManagementBottomSheet = React.forwardRef<
             if (devices.length === 1) {
                 try {
                     dispatch(addAccountForDevice(devices[0]))
-                    showSuccessToast(
-                        LL.WALLET_MANAGEMENT_NOTIFICATION_CREATE_ACCOUNT_SUCCESS(),
-                    )
+                    showSuccessToast({
+                        text1: LL.WALLET_MANAGEMENT_NOTIFICATION_CREATE_ACCOUNT_SUCCESS(),
+                    })
                 } catch (e) {
-                    showErrorToast(
-                        LL.WALLET_MANAGEMENT_NOTIFICATION_CREATE_ACCOUNT_ERROR(),
-                    )
+                    showErrorToast({
+                        text1: LL.WALLET_MANAGEMENT_NOTIFICATION_CREATE_ACCOUNT_ERROR(),
+                    })
                 }
             } else {
                 openAddAccountSheet()

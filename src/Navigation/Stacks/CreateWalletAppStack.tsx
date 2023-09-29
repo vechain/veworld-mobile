@@ -13,7 +13,7 @@ import {
 } from "~Screens"
 import { Routes } from "~Navigation/Enums"
 import { ConnectedLedgerDevice, SecurityLevelType } from "~Model"
-import { PlatformUtils } from "~Utils"
+import { useNavAnimation } from "~Hooks"
 
 export type RootStackParamListCreateWalletApp = {
     Home: undefined
@@ -44,12 +44,11 @@ const CreateWalletApp =
     createNativeStackNavigator<RootStackParamListCreateWalletApp>()
 
 export const CreateWalletAppStack = () => {
+    const { animation } = useNavAnimation()
+
     return (
         <CreateWalletApp.Navigator
-            screenOptions={{
-                headerShown: false,
-                animation: PlatformUtils.isIOS() ? "default" : "none",
-            }}>
+            screenOptions={{ headerShown: false, animation }}>
             <CreateWalletApp.Screen
                 name={Routes.WALLET_SETUP}
                 component={WalletSetupScreen}

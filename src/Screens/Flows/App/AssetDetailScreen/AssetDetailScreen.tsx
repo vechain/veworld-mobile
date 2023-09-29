@@ -31,7 +31,7 @@ import {
     useAppSelector,
 } from "~Storage/Redux"
 import { ScrollView } from "react-native-gesture-handler"
-import { StyleSheet } from "react-native"
+import { InteractionManager, StyleSheet } from "react-native"
 
 type Props = NativeStackScreenProps<
     RootStackParamListDiscover,
@@ -61,7 +61,9 @@ export const AssetDetailScreen = ({ route }: Props) => {
 
     const dispatch = useAppDispatch()
     useEffect(() => {
-        dispatch(fetchVechainMarketInfo())
+        InteractionManager.runAfterInteractions(() => {
+            dispatch(fetchVechainMarketInfo())
+        })
     }, [dispatch])
 
     const Actions: FastAction[] = useMemo(
@@ -75,12 +77,12 @@ export const AssetDetailScreen = ({ route }: Props) => {
                             initialRoute: Routes.HOME,
                         })
                     } else {
-                        showWarningToast(
-                            LL.HEADS_UP(),
-                            LL.SEND_ERROR_TOKEN_NOT_FOUND({
+                        showWarningToast({
+                            text1: LL.HEADS_UP(),
+                            text2: LL.SEND_ERROR_TOKEN_NOT_FOUND({
                                 tokenName: token.symbol,
                             }),
-                        )
+                        })
                     }
                 },
                 icon: (

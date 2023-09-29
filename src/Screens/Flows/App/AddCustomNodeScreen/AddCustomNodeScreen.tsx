@@ -61,7 +61,7 @@ export const AddCustomNodeScreen = () => {
             await Haptics.notificationAsync(
                 Haptics.NotificationFeedbackType.Error,
             )
-            showErrorToast(e as string)
+            showErrorToast({ text1: e as string })
         }
         setIsSubmitting(false)
     }, [setIsSubmitting, dispatch, isSubmitDisabled, nodeName, nodeUrl, goBack])

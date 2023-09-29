@@ -119,7 +119,7 @@ export const SelectLedgerAccounts: React.FC<Props> = ({ route }) => {
         } catch (e) {
             track(AnalyticsEvent.IMPORT_HW_FAILED_TO_IMPORT)
             Haptics.notificationAsync(Haptics.NotificationFeedbackType.Error)
-            showErrorToast(e as string)
+            showErrorToast({ text1: e as string })
         }
     }, [
         track,

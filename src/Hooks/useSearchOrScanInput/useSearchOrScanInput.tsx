@@ -43,7 +43,7 @@ export const useSearchOrScanInput = (
 
     const { RenderCameraModal, handleOpenCamera } = useCameraBottomSheet({
         onScan: onSuccessfullScan,
-        target: ScanTarget.ADDRESS,
+        targets: [ScanTarget.ADDRESS],
     })
 
     const onTextReset = useCallback(() => {
@@ -52,9 +52,8 @@ export const useSearchOrScanInput = (
     }, [])
 
     const handleSearchChange = useCallback((text: string) => {
-        const lowerCaseText = text.toLowerCase()
         setErrorMessage("")
-        setSearchText(lowerCaseText)
+        setSearchText(text)
     }, [])
 
     const handleOnIconPress = useCallback(() => {

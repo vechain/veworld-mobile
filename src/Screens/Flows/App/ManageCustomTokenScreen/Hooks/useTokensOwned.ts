@@ -12,6 +12,7 @@ import {
 import { useI18nContext } from "~i18n"
 import { fetchTokensOwned } from "~Networking"
 import { isEmpty } from "lodash"
+import { InteractionManager } from "react-native"
 
 /**
  * React hook to manage fetching and storing token balances owned by an account.
@@ -114,7 +115,10 @@ export const useTokensOwned = () => {
                 // In case of error, log and show warning toast
                 error("fetchTokens", e)
 
-                showWarningToast(LL.HEADS_UP(), LL.CUSTOM_TOKENS_NOT_AVAIABLE())
+                showWarningToast({
+                    text1: LL.HEADS_UP(),
+                    text2: LL.CUSTOM_TOKENS_NOT_AVAIABLE(),
+                })
 
                 // Set fetched flag
                 setHasFetched(true)
@@ -142,7 +146,9 @@ export const useTokensOwned = () => {
             await fetchTokens()
         }
 
-        if (page === 0) fetchOnMount()
+        InteractionManager.runAfterInteractions(() => {
+            if (page === 0) fetchOnMount()
+        })
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [page])
 

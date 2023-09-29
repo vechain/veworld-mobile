@@ -12,6 +12,7 @@ import {
 } from "~Storage/Redux"
 import { fetchAccountTransactionActivities } from "~Networking"
 import { useI18nContext } from "~i18n"
+import { InteractionManager } from "react-native"
 
 /**
  * Custom React hook to fetch and manage account activities.
@@ -105,7 +106,10 @@ export const useAccountActivities = () => {
                 // In case of error, log and show warning toast
                 error("fetchActivities", e)
 
-                showWarningToast(LL.HEADS_UP(), LL.ACTIVITIES_NOT_UP_TO_DATE())
+                showWarningToast({
+                    text1: LL.HEADS_UP(),
+                    text2: LL.ACTIVITIES_NOT_UP_TO_DATE(),
+                })
 
                 // Set fetched flag
                 setHasFetched(true)
@@ -131,7 +135,9 @@ export const useAccountActivities = () => {
             await fetchActivities()
         }
 
-        if (page === 0) fetchOnMount()
+        InteractionManager.runAfterInteractions(() => {
+            if (page === 0) fetchOnMount()
+        })
     }, [fetchActivities, page])
 
     // Reset page number on network change or on account change

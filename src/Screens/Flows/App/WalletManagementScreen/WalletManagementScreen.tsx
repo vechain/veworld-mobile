@@ -106,9 +106,9 @@ export const WalletManagementScreen = () => {
                 setSelectedDevice(item)
                 openRemoveWalletBottomSheet()
             } else {
-                showWarningToast(
-                    LL.WALLET_MANAGEMENT_NOTIFICATION_LAST_WALLET(),
-                )
+                showWarningToast({
+                    text1: LL.WALLET_MANAGEMENT_NOTIFICATION_LAST_WALLET(),
+                })
             }
         },
         [LL, devices.length, openRemoveWalletBottomSheet],
@@ -141,9 +141,9 @@ export const WalletManagementScreen = () => {
 
     const handleOnSuccessAddAccountBottomSheet = useCallback(() => {
         closeAddAccountBottomSheet()
-        showSuccessToast(
-            LL.WALLET_MANAGEMENT_NOTIFICATION_CREATE_ACCOUNT_SUCCESS(),
-        )
+        showSuccessToast({
+            text1: LL.WALLET_MANAGEMENT_NOTIFICATION_CREATE_ACCOUNT_SUCCESS(),
+        })
     }, [LL, closeAddAccountBottomSheet])
 
     const handleDragEnd = ({ data }: { data: Device[] }) => {

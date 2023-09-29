@@ -25,12 +25,12 @@ export const useCopyClipboard = () => {
             Clipboard.setStringAsync(text)
                 .then(async () => {
                     await HapticsService.triggerImpact({ level: "Light" })
-                    showInfoToast(
-                        LL.SUCCESS_GENERIC(),
-                        LL.NOTIFICATION_COPIED_CLIPBOARD({
+                    showInfoToast({
+                        text1: LL.SUCCESS_GENERIC(),
+                        text2: LL.NOTIFICATION_COPIED_CLIPBOARD({
                             name: labelName,
                         }),
-                    )
+                    })
                 })
                 .catch(error => {
                     debug(error)

@@ -65,11 +65,11 @@ export const useSendTransaction = (
 
         await onSuccess(signedTransaction, id)
 
-        showSuccessToast(
-            LL.SUCCESS_GENERIC(),
-            LL.SUCCESS_GENERIC_OPERATION(),
-            LL.SUCCESS_GENERIC_VIEW_DETAIL_LINK(),
-            async () => {
+        showSuccessToast({
+            text1: LL.SUCCESS_GENERIC(),
+            text2: LL.SUCCESS_GENERIC_OPERATION(),
+            textLink: LL.SUCCESS_GENERIC_VIEW_DETAIL_LINK(),
+            onPress: async () => {
                 await Linking.openURL(
                     `${
                         selectedNetwork.explorerUrl ??
@@ -77,9 +77,9 @@ export const useSendTransaction = (
                     }/transactions/${id}`,
                 )
             },
-            4000,
-            "transactionSuccessToast",
-        )
+            visibilityTime: 4000,
+            testID: "transactionSuccessToast",
+        })
 
         await dispatch(
             updateAccountBalances(thorClient, selectedAccount.address),

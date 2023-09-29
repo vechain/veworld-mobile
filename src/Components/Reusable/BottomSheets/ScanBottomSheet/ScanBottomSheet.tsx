@@ -1,6 +1,6 @@
 import React, { useCallback, useEffect } from "react"
 import { BottomSheetModalMethods } from "@gorhom/bottom-sheet/lib/typescript/types"
-import { BaseBottomSheet, BaseView, showErrorToast } from "~Components"
+import { BaseBottomSheet, BaseView, showWarningToast } from "~Components"
 import { useI18nContext } from "~i18n"
 import { useDisclosure } from "~Hooks"
 import { BarCodeScanningResult, Camera, CameraType } from "expo-camera"
@@ -10,12 +10,13 @@ import { StyleSheet } from "react-native"
 import { AddressUtils, WalletConnectUtils } from "~Utils"
 import { CameraHeader } from "./components/CameraHeader"
 import { CameraFooter } from "./components/CameraFooter"
+import HapticsService from "~Services/HapticsService"
 
 const QR_SCAN_SQUARE_SIZE = SCREEN_WIDTH - 80
 type Props = {
     onScan: (address: string) => void
     onClose: () => void
-    target: ScanTarget
+    target: ScanTarget[]
 }
 
 const snapPoints = ["100%"]
@@ -28,57 +29,70 @@ export const ScanBottomSheet = React.forwardRef<BottomSheetModalMethods, Props>(
         const { isOpen: isCameraReady, onOpen: onCameraReady } =
             useDisclosure(false)
 
-        //called when the camera detects a qr code
+        // Handles the common scan logic for all targets
+        const handleScan = useCallback(
+            (data: string) => {
+                const isAddressTarget = target.includes(ScanTarget.ADDRESS)
+                const isWalletConnectTarget = target.includes(
+                    ScanTarget.WALLET_CONNECT,
+                )
+
+                const isValidAddress =
+                    isAddressTarget && AddressUtils.isValid(data)
+                const isValidWalletConnectUri =
+                    isWalletConnectTarget && WalletConnectUtils.isValidURI(data)
+
+                if (isValidAddress || isValidWalletConnectUri) {
+                    onScan(data)
+                } else {
+                    let toastProps = {
+                        text1: LL.NOTIFICATION_TITLE_INVALID_QR(),
+                        text2: "",
+                        visibilityTime: 4000,
+                    }
+
+                    if (isWalletConnectTarget && !isAddressTarget) {
+                        // If target is only wallet connect
+                        toastProps = {
+                            ...toastProps,
+                            text2: LL.NOTIFICATION_wallet_connect_invalid_uri(),
+                        }
+                    } else if (isAddressTarget && !isWalletConnectTarget) {
+                        // If target is only address
+                        toastProps = {
+                            ...toastProps,
+                            text2: LL.ERROR_INVALID_ADDRESS(),
+                        }
+                    } else {
+                        // General error message
+                        toastProps = {
+                            ...toastProps,
+                            text2: LL.NOTIFICATION_INVALID_QR(),
+                            visibilityTime: 6000,
+                        }
+                    }
+
+                    HapticsService.triggerImpact({ level: "Light" })
+                    showWarningToast(toastProps)
+                }
+
+                onClose()
+            },
+            [target, onClose, onScan, LL],
+        )
+
         const onQrScanned = useCallback(
             (result: BarCodeScanningResult) => {
-                if (target === ScanTarget.ADDRESS) {
-                    const isValidAddress = AddressUtils.isValid(result.data)
-                    if (isValidAddress) {
-                        onClose()
-                        onScan(result.data)
-                    }
-                } else if (target === ScanTarget.WALLET_CONNECT) {
-                    const isValidWalletConnectUri =
-                        WalletConnectUtils.isValidURI(result.data)
-
-                    onClose()
-
-                    if (isValidWalletConnectUri) {
-                        onScan(result.data)
-                    } else {
-                        showErrorToast(
-                            LL.NOTIFICATION_wallet_connect_invalid_uri(),
-                        )
-                    }
-                }
+                handleScan(result.data)
             },
-            [onScan, onClose, LL, target],
+            [handleScan],
         )
 
         const onPasteFromClipboard = useCallback(
             (result: string) => {
-                if (target === ScanTarget.ADDRESS) {
-                    const isValidAddress = AddressUtils.isValid(result)
-                    if (isValidAddress) {
-                        onClose()
-                        onScan(result)
-                    }
-                } else if (target === ScanTarget.WALLET_CONNECT) {
-                    const isValidWalletConnectUri =
-                        WalletConnectUtils.isValidURI(result)
-
-                    onClose()
-
-                    if (isValidWalletConnectUri) {
-                        onScan(result)
-                    } else {
-                        showErrorToast(
-                            LL.NOTIFICATION_wallet_connect_invalid_uri(),
-                        )
-                    }
-                }
+                handleScan(result)
             },
-            [onScan, onClose, LL, target],
+            [handleScan],
         )
 
         // do not render camera when component unmounts
@@ -114,7 +128,7 @@ export const ScanBottomSheet = React.forwardRef<BottomSheetModalMethods, Props>(
 
                             <CameraHeader onClose={onClose} />
 
-                            {target === ScanTarget.WALLET_CONNECT && (
+                            {target.includes(ScanTarget.WALLET_CONNECT) && (
                                 <CameraFooter onPaste={onPasteFromClipboard} />
                             )}
                         </BaseView>
