@@ -2,6 +2,7 @@ import React, { useCallback } from "react"
 import {
     selectActivitiesWithoutFinality,
     selectBlackListedCollections,
+    selectSelectedAccount,
     selectSelectedNetwork,
     selectVisibleAccounts,
     updateBeat,
@@ -25,6 +26,8 @@ import {
 } from "./Handlers"
 
 export const TransferEventListener: React.FC = () => {
+    const selectedAccount = useAppSelector(selectSelectedAccount)
+
     const visibleAccounts = useAppSelector(selectVisibleAccounts)
 
     const pendingActivities = useAppSelector(selectActivitiesWithoutFinality)
@@ -103,6 +106,7 @@ export const TransferEventListener: React.FC = () => {
                     blackListedCollections,
                 )
                 await handleNFTTransfers({
+                    selectedAccount,
                     visibleAccounts: relevantAccounts,
                     transfers: nftTransfers,
                     network: network,
@@ -118,6 +122,7 @@ export const TransferEventListener: React.FC = () => {
                 )
 
                 await handleTokenTransfers({
+                    selectedAccount,
                     visibleAccounts: relevantAccounts,
                     transfers: tokenTransfers,
                     fetchData,
@@ -131,6 +136,7 @@ export const TransferEventListener: React.FC = () => {
                     EventTypeResponse.VET,
                 )
                 handleVETTransfers({
+                    selectedAccount,
                     transfers: vetTransfers,
                     visibleAccounts,
                     updateBalances,
@@ -141,6 +147,7 @@ export const TransferEventListener: React.FC = () => {
             }
         },
         [
+            selectedAccount,
             visibleAccounts,
             updateActivities,
             pendingActivities,

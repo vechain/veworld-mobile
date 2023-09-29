@@ -4,6 +4,7 @@ import { AccountWithDevice, Network } from "~Model"
 import { IncomingTransferResponse } from "~Networking"
 
 export interface BaseTransferHandlerProps {
+    selectedAccount: AccountWithDevice
     visibleAccounts: AccountWithDevice[]
     transfers: IncomingTransferResponse[]
     informUser: (params: { accountAddress: string; txId?: string }) => void

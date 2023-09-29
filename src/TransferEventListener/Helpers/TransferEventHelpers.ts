@@ -25,13 +25,45 @@ export interface InvolvedAcct {
     origin: TransactionOrigin
 }
 
+/**
+ * @returns the first account involved in the transfer
+ * @param visibleAccounts - all visible accounts
+ * @param decodedTransfer - the transfer to check
+ * @param priorityAccount - if provided, this account will be returned if it is involved in the transfer
+ *
+ */
 export const findFirstInvolvedAccount = (
     visibleAccounts: AccountWithDevice[],
     decodedTransfer: IncomingTransferResponse,
+    priorityAccount?: AccountWithDevice,
 ): InvolvedAcct | undefined => {
-    let origin
+    // First check the priority account if provided
+    let foundAccount: InvolvedAcct | undefined
 
-    const foundAccount = visibleAccounts.find(acc => {
+    if (priorityAccount) {
+        foundAccount = findFirstAccountInTransferResponse(
+            [priorityAccount],
+            decodedTransfer,
+        )
+    }
+
+    // If priority account was not found or not provided, check all accounts
+    if (!foundAccount) {
+        foundAccount = findFirstAccountInTransferResponse(
+            visibleAccounts,
+            decodedTransfer,
+        )
+    }
+
+    return foundAccount
+}
+
+const findFirstAccountInTransferResponse = (
+    accounts: AccountWithDevice[],
+    decodedTransfer: IncomingTransferResponse,
+): InvolvedAcct | undefined => {
+    let origin: TransactionOrigin | undefined
+    const foundAccount = accounts.find(acc => {
         if (AddressUtils.compareAddresses(acc.address, decodedTransfer.to)) {
             origin = TransactionOrigin.TO
             return acc

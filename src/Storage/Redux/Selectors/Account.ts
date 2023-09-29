@@ -72,12 +72,9 @@ export const selectSelectedAccountOrNull = createSelector(
  */
 export const selectSelectedAccount = createSelector(
     selectSelectedAccountOrNull,
-    selectSelectedAccountAddress,
-    (selectedAccount, selectedAccountAddress) => {
+    selectedAccount => {
         if (!selectedAccount) {
-            throw new Error(
-                `No account found for address ${selectedAccountAddress}`,
-            )
+            throw new Error("Failed to find selected account")
         }
         return selectedAccount
     },

@@ -249,13 +249,12 @@ describe("TransferEventHelpers", () => {
         })
 
         it("no account", () => {
-            const transfers: IncomingTransferResponse[] = [
-                {
-                    ...BASE_TRANSFER,
-                    to: "0x321434",
-                    from: "0x123",
-                },
-            ]
+            const transfers: IncomingTransferResponse = {
+                ...BASE_TRANSFER,
+                to: "0x321434",
+                from: "0x123",
+            }
+
             expect(
                 findFirstInvolvedAccount(
                     [
@@ -268,19 +267,18 @@ describe("TransferEventHelpers", () => {
                             visible: true,
                         },
                     ],
-                    transfers[0],
+                    transfers,
                 ),
             ).toEqual(undefined)
         })
 
         it("account is the origin", () => {
-            const transfers: IncomingTransferResponse[] = [
-                {
-                    ...BASE_TRANSFER,
-                    to: "0x321",
-                    from: "0x123",
-                },
-            ]
+            const transfer: IncomingTransferResponse = {
+                ...BASE_TRANSFER,
+                to: "0x321",
+                from: "0x123",
+            }
+
             const account = {
                 address: "0x123",
                 alias: "alias",
@@ -289,20 +287,19 @@ describe("TransferEventHelpers", () => {
                 index: 0,
                 visible: true,
             }
-            expect(findFirstInvolvedAccount([account], transfers[0])).toEqual({
+            expect(findFirstInvolvedAccount([account], transfer)).toEqual({
                 account,
                 origin: TransactionOrigin.FROM,
             })
         })
 
         it("account is the recipient", () => {
-            const transfers: IncomingTransferResponse[] = [
-                {
-                    ...BASE_TRANSFER,
-                    to: "0x123",
-                    from: "0x321",
-                },
-            ]
+            const transfer: IncomingTransferResponse = {
+                ...BASE_TRANSFER,
+                to: "0x123",
+                from: "0x321",
+            }
+
             const account = {
                 address: "0x123",
                 alias: "alias",
@@ -311,20 +308,19 @@ describe("TransferEventHelpers", () => {
                 index: 0,
                 visible: true,
             }
-            expect(findFirstInvolvedAccount([account], transfers[0])).toEqual({
+            expect(findFirstInvolvedAccount([account], transfer)).toEqual({
                 account,
                 origin: TransactionOrigin.TO,
             })
         })
 
         it("account is both origin and recipient", () => {
-            const transfers: IncomingTransferResponse[] = [
-                {
-                    ...BASE_TRANSFER,
-                    to: "0x123",
-                    from: "0x123",
-                },
-            ]
+            const transfer: IncomingTransferResponse = {
+                ...BASE_TRANSFER,
+                to: "0x123",
+                from: "0x123",
+            }
+
             const account = {
                 address: "0x123",
                 alias: "alias",
@@ -333,20 +329,50 @@ describe("TransferEventHelpers", () => {
                 index: 0,
                 visible: true,
             }
-            expect(findFirstInvolvedAccount([account], transfers[0])).toEqual({
+            expect(findFirstInvolvedAccount([account], transfer)).toEqual({
                 account,
                 origin: TransactionOrigin.TO,
             })
         })
 
         it("have two accounts one is the origin and the other is the sender", () => {
-            const transfers: IncomingTransferResponse[] = [
-                {
-                    ...BASE_TRANSFER,
-                    to: "0x123",
-                    from: "0x321",
-                },
-            ]
+            const transfer: IncomingTransferResponse = {
+                ...BASE_TRANSFER,
+                to: "0x123",
+                from: "0x321",
+            }
+
+            const toAccount = {
+                address: "0x123",
+                alias: "alias",
+                device: LOCAL_DEVICE,
+                rootAddress: "0x3467876543",
+                index: 0,
+                visible: true,
+            }
+            const fromAccount = {
+                address: "0x321",
+                alias: "alias",
+                device: LOCAL_DEVICE,
+                rootAddress: "0x3467876543",
+                index: 0,
+                visible: true,
+            }
+            expect(
+                findFirstInvolvedAccount([toAccount, fromAccount], transfer),
+            ).toEqual({
+                account: toAccount,
+                origin: TransactionOrigin.TO,
+            })
+        })
+
+        it("priority account is in the list", () => {
+            const transfer: IncomingTransferResponse = {
+                ...BASE_TRANSFER,
+                to: "0x123",
+                from: "0x321",
+            }
+
             const toAccount = {
                 address: "0x123",
                 alias: "alias",
@@ -366,7 +392,51 @@ describe("TransferEventHelpers", () => {
             expect(
                 findFirstInvolvedAccount(
                     [toAccount, fromAccount],
-                    transfers[0],
+                    transfer,
+                    fromAccount,
+                ),
+            ).toEqual({
+                account: fromAccount,
+                origin: TransactionOrigin.FROM,
+            })
+        })
+
+        it("priority account is not in the list", () => {
+            const transfer: IncomingTransferResponse = {
+                ...BASE_TRANSFER,
+                to: "0x123",
+                from: "0x321",
+            }
+
+            const toAccount = {
+                address: "0x123",
+                alias: "alias",
+                device: LOCAL_DEVICE,
+                rootAddress: "0x3467876543",
+                index: 0,
+                visible: true,
+            }
+            const fromAccount = {
+                address: "0x321",
+                alias: "alias",
+                device: LOCAL_DEVICE,
+                rootAddress: "0x3467876543",
+                index: 0,
+                visible: true,
+            }
+            const otherAccount = {
+                address: "other",
+                alias: "alias",
+                device: LOCAL_DEVICE,
+                rootAddress: "other",
+                index: 0,
+                visible: true,
+            }
+            expect(
+                findFirstInvolvedAccount(
+                    [toAccount, fromAccount, otherAccount],
+                    transfer,
+                    otherAccount,
                 ),
             ).toEqual({
                 account: toAccount,
