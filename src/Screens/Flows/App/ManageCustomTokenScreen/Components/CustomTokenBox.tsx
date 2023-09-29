@@ -1,4 +1,4 @@
-import React, { memo, useMemo } from "react"
+import React, { memo, useCallback, useMemo } from "react"
 import { StyleSheet } from "react-native"
 import { useTheme } from "~Hooks"
 import { BalanceUtils } from "~Utils"
@@ -10,17 +10,36 @@ import {
     BaseTouchableBox,
     BaseView,
 } from "~Components"
-import { Balance } from "~Model"
+import { Balance, FungibleToken } from "~Model"
 import { address } from "thor-devkit"
 
 type Props = {
     tokenBalance: Balance
-    onTogglePress: (tokenAddress: string) => void
+    onTogglePress: (token: FungibleToken) => void
 }
 
 export const CustomTokenBox: React.FC<Props> = memo(
     ({ tokenBalance, onTogglePress }) => {
         const theme = useTheme()
+
+        const handleTokenPress = useCallback(() => {
+            const token: FungibleToken = {
+                address: tokenBalance.tokenAddress,
+                decimals: tokenBalance.tokenDecimals ?? 0,
+                name: tokenBalance.tokenName ?? "",
+                symbol: tokenBalance.tokenSymbol ?? "",
+                icon: "",
+                custom: true,
+            }
+
+            onTogglePress(token)
+        }, [
+            onTogglePress,
+            tokenBalance.tokenAddress,
+            tokenBalance.tokenDecimals,
+            tokenBalance.tokenName,
+            tokenBalance.tokenSymbol,
+        ])
 
         const tokenUnitBalance = useMemo(
             () =>
@@ -43,7 +62,7 @@ export const CustomTokenBox: React.FC<Props> = memo(
             <BaseView w={100} flexDirection="row">
                 <BaseTouchableBox
                     haptics="Light"
-                    action={() => onTogglePress(tokenBalance.tokenAddress)}
+                    action={handleTokenPress}
                     justifyContent="space-between"
                     containerStyle={baseStyles.container}
                     testID={`${tokenBalance.tokenAddress}-token-box`}>
@@ -83,9 +102,7 @@ export const CustomTokenBox: React.FC<Props> = memo(
                             color={theme.colors.primary}
                             size={24}
                             name={"plus"}
-                            action={() =>
-                                onTogglePress(tokenBalance.tokenAddress)
-                            }
+                            action={handleTokenPress}
                         />
                     </BaseView>
                 </BaseTouchableBox>
