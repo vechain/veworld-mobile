@@ -13,12 +13,12 @@ import { FungibleToken } from "~Model"
 import { address } from "thor-devkit"
 
 type Props = {
-    token: FungibleToken
+    token?: FungibleToken
     containerStyle?: StyleProp<ViewStyle>
 }
 
 export const CustomTokenCard = memo(({ token, containerStyle }: Props) => {
-    const hasIcon = Boolean(token.icon)
+    const hasIcon = Boolean(token?.icon)
 
     return (
         <BaseCard containerStyle={containerStyle}>
@@ -32,7 +32,7 @@ export const CustomTokenCard = memo(({ token, containerStyle }: Props) => {
                     ]}
                     containerStyle={styles.imageShadow}>
                     <BaseImage
-                        source={{ uri: token.icon }}
+                        source={{ uri: token?.icon }}
                         style={styles.image}
                     />
                 </BaseCard>
@@ -40,8 +40,8 @@ export const CustomTokenCard = memo(({ token, containerStyle }: Props) => {
             {!hasIcon && (
                 <BaseCustomTokenIcon
                     style={styles.icon}
-                    tokenSymbol={token.symbol ?? ""}
-                    tokenAddress={address.toChecksumed(token.address)}
+                    tokenSymbol={token?.symbol ?? ""}
+                    tokenAddress={address.toChecksumed(token?.address ?? "")}
                 />
             )}
             <BaseSpacer width={8} />
@@ -50,10 +50,10 @@ export const CustomTokenCard = memo(({ token, containerStyle }: Props) => {
                     typographyFont="buttonPrimary"
                     numberOfLines={1}
                     ellipsizeMode="tail">
-                    {token.name}
+                    {token?.name}
                 </BaseText>
                 <BaseText typographyFont="captionRegular">
-                    {token.symbol}
+                    {token?.symbol}
                 </BaseText>
             </BaseView>
         </BaseCard>
