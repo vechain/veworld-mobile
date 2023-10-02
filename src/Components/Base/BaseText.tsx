@@ -1,9 +1,17 @@
 /* eslint-disable react-native/no-inline-styles */
-import React, { useMemo } from "react"
-import { FlexAlignType, Text, TextProps } from "react-native"
+import React, { createElement, useMemo } from "react"
+import { FlexAlignType, TextProps } from "react-native"
 import { useTheme } from "~Hooks"
-import { typography } from "~Constants"
+import { USE_FAST_REACT, typography } from "~Constants"
 import { BaseView } from "./BaseView"
+
+/*
+    if USE_FAST_REACT react will bumdle a bare version of <Text> component 
+    without a lot of extra (mostly never used) features for performance improvements
+*/
+const Text = USE_FAST_REACT
+    ? (props: TextProps) => createElement("RCTText", props)
+    : require("react-native").Text
 
 const { defaults: defaultTypography, ...otherTypography } = typography
 

@@ -1,5 +1,14 @@
 import React, { memo, useMemo } from "react"
-import { StyleSheet, View, ViewProps } from "react-native"
+import { StyleSheet, ViewProps } from "react-native"
+
+/*
+    if USE_FAST_REACT react will bumdle a bare version of <Text> component 
+    without a lot of extra (mostly never used) features for performance improvements
+*/
+const View = USE_FAST_REACT
+    ? require("react-native/Libraries/Components/View/ViewNativeComponent")
+          .default
+    : require("react-native").View
 
 import {
     AlignItems,
@@ -8,6 +17,7 @@ import {
     FlexDirection,
     JustifyContent,
     ColorThemeType,
+    USE_FAST_REACT,
 } from "~Constants"
 import { useThemedStyles } from "~Hooks"
 
