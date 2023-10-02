@@ -44,21 +44,19 @@ export const CoinbasePayWebView = (props: {
     }, [])
 
     const statusBar = useMemo(() => {
-        {
-            return (
-                <StatusBar
-                    animated={true}
-                    backgroundColor={
-                        systemColorScheme === "dark" ? "#0a0b0d" : "#ffffff"
-                    }
-                    barStyle={
-                        systemColorScheme === "dark"
-                            ? "light-content"
-                            : "dark-content"
-                    }
-                />
-            )
-        }
+        return (
+            <StatusBar
+                animated={true}
+                backgroundColor={
+                    systemColorScheme === "dark" ? "#0a0b0d" : "#ffffff"
+                }
+                barStyle={
+                    systemColorScheme === "dark"
+                        ? "light-content"
+                        : "dark-content"
+                }
+            />
+        )
     }, [systemColorScheme])
 
     const onMessage = useCallback(

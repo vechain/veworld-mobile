@@ -19,7 +19,7 @@ export const BuyScreen = () => {
 
     return (
         <Layout
-            hasSafeArea={PlatformUtils.isIOS() ? false : true}
+            hasSafeArea={!PlatformUtils.isIOS()}
             noBackButton
             noMargin
             fixedHeader={
@@ -51,7 +51,7 @@ const baseStyles = (theme: ColorThemeType) =>
         container: {
             flex: 1,
             flexDirection: "column",
-            marginTop: StatusBar.currentHeight || 0,
+            marginTop: StatusBar.currentHeight ?? 0,
             marginHorizontal: 24,
             paddingTop: PlatformUtils.isIOS() ? 40 : 12,
         },
