@@ -3,7 +3,7 @@ import { WebView } from "react-native-webview"
 import { generateOnRampURL } from "@coinbase/cbpay-js"
 import "react-native-url-polyfill/auto"
 import { useNavigation } from "@react-navigation/native"
-import { VECHAIN_BLOCKCHAIN } from "./Constants/constants"
+import { COINBASE_APP_ID, VECHAIN_BLOCKCHAIN } from "./Constants"
 import { PlatformUtils, debug, ErrorMessageUtils } from "~Utils"
 import { BaseActivityIndicator, BaseView } from "~Components"
 import { StatusBar, StyleSheet } from "react-native"
@@ -17,13 +17,12 @@ export const CoinbasePayWebView = (props: {
 }) => {
     const nav = useNavigation()
     const [isLoading, setIsLoading] = useState(true)
-    const coinbaseAppId = process.env.REACT_APP_COINBASE_APP_ID as string
     const systemColorScheme = useColorScheme()
     const styles = baseStyles(isLoading)
 
     const coinbaseURL = useMemo(() => {
         const options = {
-            appId: coinbaseAppId,
+            appId: COINBASE_APP_ID,
             destinationWallets: [
                 {
                     address: props.destinationAddress,
@@ -35,7 +34,7 @@ export const CoinbasePayWebView = (props: {
         }
 
         return generateOnRampURL(options)
-    }, [props.currentAmount, props.destinationAddress, coinbaseAppId])
+    }, [props.currentAmount, props.destinationAddress])
 
     const handleLoadEnd = useCallback(() => {
         setTimeout(() => {
