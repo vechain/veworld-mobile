@@ -127,6 +127,7 @@
     "react-native-flipper": "0.163.0",
     "react-native-gesture-handler": "2.9.0",
     "react-native-haptic-feedback": "^1.14.0",
+    "react-native-in-app-review": "^4.3.3",
     "react-native-keychain": "^8.1.2",
     "react-native-linear-gradient": "^2.6.2",
     "react-native-mmkv": "2.5.1",
@@ -161,7 +162,6 @@
     "url": "^0.11.0",
     "util": "^0.12.5",
     "whatwg-fetch": "^3.6.2",
-    "react-native-in-app-review": "^4.3.3",
     "ws": "^8.13.0"
   },
   "devDependencies": {
@@ -192,6 +192,7 @@
     "@walletconnect/types": "^2.7.7",
     "axios-mock-adapter": "^1.21.2",
     "babel-jest": "^29.3.1",
+    "babel-plugin-transform-remove-console": "^6.9.4",
     "detox": "^20.1.0",
     "eslint": "^7.32.0",
     "eslint-plugin-i18next": "^6.0.0-2",
