@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect, useState } from "react"
+import React, { useCallback, useEffect, useMemo, useState } from "react"
 import { BottomSheetModalMethods } from "@gorhom/bottom-sheet/lib/typescript/types"
 import {
     BaseBottomSheet,
@@ -32,6 +32,7 @@ import { isEmpty } from "lodash"
 
 type Props = {
     tokenAddress?: string
+    token?: FungibleToken
     onClose: () => void
 }
 
@@ -40,7 +41,7 @@ const snapPoints = ["40%"]
 export const AddCustomTokenBottomSheet = React.forwardRef<
     BottomSheetModalMethods,
     Props
->(({ tokenAddress, onClose }, ref) => {
+>(({ tokenAddress, token, onClose }, ref) => {
     const { LL } = useI18nContext()
 
     const dispatch = useAppDispatch()
@@ -51,7 +52,9 @@ export const AddCustomTokenBottomSheet = React.forwardRef<
 
     const thorClient = useThor()
 
-    const [newCustomToken, setNewCustomToken] = useState<FungibleToken>()
+    const [newCustomToken, setNewCustomToken] = useState<
+        FungibleToken | undefined
+    >(token)
 
     const [value, setValue] = useState("")
 
@@ -74,7 +77,7 @@ export const AddCustomTokenBottomSheet = React.forwardRef<
                     // check if it is an official token
                     if (
                         officialTokens
-                            .map(token => token.address.toLowerCase())
+                            .map(tkn => tkn.address.toLowerCase())
                             .includes(address)
                     ) {
                         setErrorMessage(
@@ -85,7 +88,7 @@ export const AddCustomTokenBottomSheet = React.forwardRef<
                     // check if already present
                     if (
                         customTokens
-                            .map(token => token.address.toLowerCase())
+                            .map(tkn => tkn.address.toLowerCase())
                             .includes(address)
                     ) {
                         setErrorMessage(
@@ -148,12 +151,20 @@ export const AddCustomTokenBottomSheet = React.forwardRef<
         setNewCustomToken(undefined)
     }
 
+    const availableTokens = useMemo(() => {
+        const customToken = newCustomToken ?? token
+
+        if (!customToken) return []
+
+        return [customToken]
+    }, [newCustomToken, token])
+
     const handleAddCustomToken = () => {
         dispatch(
             addOrUpdateCustomTokens({
                 network: network.type,
                 accountAddress: account.address,
-                newTokens: newCustomToken ? [newCustomToken] : [],
+                newTokens: availableTokens,
             }),
         )
         dispatch(
@@ -162,7 +173,8 @@ export const AddCustomTokenBottomSheet = React.forwardRef<
                 accountAddress: account.address,
                 balance: {
                     balance: "0",
-                    tokenAddress: newCustomToken!!.address,
+                    tokenAddress:
+                        token?.address ?? newCustomToken?.address ?? "",
                     timeUpdated: new Date().toISOString(),
                     isCustomToken: true,
                     isHidden: false,
@@ -175,10 +187,16 @@ export const AddCustomTokenBottomSheet = React.forwardRef<
         onClose()
     }
 
-    // if we are adding a token from SwapCard screen, we need to set the token address
+    const isTokenAvailable = useMemo(() => {
+        return newCustomToken ?? token
+    }, [newCustomToken, token])
+
+    // if we are adding a token from SwapCard or custom tokens screen, we need to set the token address
     useEffect(() => {
         if (tokenAddress) handleValueChange(tokenAddress)
-    }, [handleValueChange, tokenAddress])
+
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [tokenAddress])
 
     return (
         <>
@@ -195,8 +213,8 @@ export const AddCustomTokenBottomSheet = React.forwardRef<
                     {LL.MANAGE_CUSTOM_TOKENS_ADD_DESCRIPTION()}
                 </BaseText>
                 <BaseSpacer height={24} />
-                {newCustomToken ? (
-                    <CustomTokenCard token={newCustomToken} />
+                {isTokenAvailable ? (
+                    <CustomTokenCard token={token ?? newCustomToken} />
                 ) : (
                     <BaseView flexDirection="row" w={100}>
                         <BaseBottomSheetTextInput
@@ -224,7 +242,7 @@ export const AddCustomTokenBottomSheet = React.forwardRef<
                     w={100}
                     title={LL.COMMON_BTN_ADD()}
                     action={handleAddCustomToken}
-                    disabled={!newCustomToken}
+                    disabled={!isTokenAvailable}
                 />
             </BaseBottomSheet>
             {RenderCameraModal}
