@@ -188,7 +188,7 @@ export const AddCustomTokenBottomSheet = React.forwardRef<
     }
 
     const isTokenAvailable = useMemo(() => {
-        return newCustomToken || token
+        return newCustomToken ?? token
     }, [newCustomToken, token])
 
     // if we are adding a token from SwapCard or custom tokens screen, we need to set the token address
