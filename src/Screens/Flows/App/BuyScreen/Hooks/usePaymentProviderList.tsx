@@ -3,11 +3,11 @@ import CoinbaseLogoSmallSvg from "~Assets/Img/CoinbaseLogoSmallSvg"
 import { useTheme } from "~Hooks"
 import { useI18nContext } from "~i18n"
 import { COLORS } from "~Constants"
-
-export type PaymentMethod = {
-    id: string
-    icon: string
-}
+import {
+    PaymentMethod,
+    PaymentMethodsIds,
+    PaymentMethodsList,
+} from "./constants"
 
 export type PaymentProvider = {
     id: string
@@ -39,8 +39,8 @@ export const usePaymentProviderList = () => {
                 />
             ),
             paymentMethods: [
-                { id: "credit-card", icon: "credit-card-outline" },
-                { id: "bank", icon: "bank-outline" },
+                PaymentMethodsList[PaymentMethodsIds.CreditCard],
+                PaymentMethodsList[PaymentMethodsIds.BankAccount],
             ],
         },
     ]
