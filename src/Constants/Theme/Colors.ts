@@ -67,6 +67,9 @@ export enum COLORS {
     MEDIUM_ORANGE = "#FA710E",
     DISABLED_GREY = "#E5E5E5",
     MEDIUM_GRAY = "#C4C4C4",
+    COINBASE_BACKGROUND_LIGHT = "#ffffff",
+    COINBASE_BACKGROUND_DARK = "#0a0b0d",
+    COINBASE_BACKGROUND_BLUE = "#0052FF",
 }
 
 const light: Colors = {

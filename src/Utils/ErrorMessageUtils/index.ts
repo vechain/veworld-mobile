@@ -1,3 +1,3 @@
-import * as ErrorUtils from "./ErrorMessageUtils"
+import * as ErrorMessageUtils from "./ErrorMessageUtils"
 
-export default ErrorUtils
+export default ErrorMessageUtils

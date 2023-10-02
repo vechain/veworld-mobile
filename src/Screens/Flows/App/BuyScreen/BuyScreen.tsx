@@ -7,14 +7,11 @@ import {
     Layout,
 } from "~Components"
 import { useI18nContext } from "~i18n"
-import { StatusBar, StyleSheet } from "react-native"
-import { useThemedStyles } from "~Hooks"
+import { StatusBar } from "react-native"
 import { PlatformUtils } from "~Utils"
-import { ColorThemeType } from "~Constants"
-import { PaymentProviderList } from "./Components/PaymentProviderList/PaymentProviderList"
+import { PaymentProviderList } from "./Components"
 
 export const BuyScreen = () => {
-    const { styles } = useThemedStyles(baseStyles)
     const { LL } = useI18nContext()
 
     return (
@@ -30,12 +27,20 @@ export const BuyScreen = () => {
                 </>
             }
             body={
-                <BaseView style={styles.container}>
-                    <BaseText style={styles.title} typographyFont="title">
+                <BaseView
+                    flex={1}
+                    flexDirection="column"
+                    mt={StatusBar.currentHeight ?? 0}
+                    pt={PlatformUtils.isIOS() ? 40 : 12}
+                    mx={24}>
+                    <BaseText
+                        fontSize={24}
+                        fontWeight="bold"
+                        typographyFont="title">
                         {LL.TITLE_BUY()}
                     </BaseText>
                     <BaseSpacer height={10} />
-                    <BaseText style={styles.subTitle}>
+                    <BaseText fontSize={18} fontWeight="bold" pt={20}>
                         {LL.BD_SELECT_PAYMENT_PROVIDER()}
                     </BaseText>
                     <BaseSpacer height={20} />
@@ -45,30 +50,3 @@ export const BuyScreen = () => {
         />
     )
 }
-
-const baseStyles = (theme: ColorThemeType) =>
-    StyleSheet.create({
-        container: {
-            flex: 1,
-            flexDirection: "column",
-            marginTop: StatusBar.currentHeight ?? 0,
-            marginHorizontal: 24,
-            paddingTop: PlatformUtils.isIOS() ? 40 : 12,
-        },
-        title: {
-            fontSize: 24,
-            fontWeight: "bold",
-        },
-        subTitle: {
-            fontSize: 18,
-            fontWeight: "bold",
-            paddingTop: 20,
-        },
-        button: {
-            marginHorizontal: 30,
-            marginBottom: 40,
-        },
-        buttonText: {
-            color: theme.colors.textReversed,
-        },
-    })

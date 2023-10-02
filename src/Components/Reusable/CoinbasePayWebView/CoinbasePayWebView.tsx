@@ -4,12 +4,12 @@ import { generateOnRampURL } from "@coinbase/cbpay-js"
 import "react-native-url-polyfill/auto"
 import { useNavigation } from "@react-navigation/native"
 import { VECHAIN_BLOCKCHAIN } from "./Constants/constants"
-import { getErrorMessage } from "~Utils/ErrorMessageUtils/ErrorMessageUtils"
-import { PlatformUtils, debug } from "~Utils"
-import { BaseActivityIndicator, BaseView } from "~Components/Base"
+import { PlatformUtils, debug, ErrorMessageUtils } from "~Utils"
+import { BaseActivityIndicator, BaseView } from "~Components"
 import { StatusBar, StyleSheet } from "react-native"
 import { useColorScheme } from "~Hooks"
 import { Routes } from "~Navigation"
+import { COLORS } from "~Constants"
 
 export const CoinbasePayWebView = (props: {
     currentAmount: number
@@ -48,7 +48,9 @@ export const CoinbasePayWebView = (props: {
             <StatusBar
                 animated={true}
                 backgroundColor={
-                    systemColorScheme === "dark" ? "#0a0b0d" : "#ffffff"
+                    systemColorScheme === "dark"
+                        ? COLORS.COINBASE_BACKGROUND_DARK
+                        : COLORS.COINBASE_BACKGROUND_LIGHT
                 }
                 barStyle={
                     systemColorScheme === "dark"
@@ -68,7 +70,7 @@ export const CoinbasePayWebView = (props: {
                     nav.navigate(Routes.HOME)
                 }
             } catch (error) {
-                debug(getErrorMessage(error))
+                debug(ErrorMessageUtils.getErrorMessage(error))
             }
         },
         [nav],
@@ -76,7 +78,7 @@ export const CoinbasePayWebView = (props: {
 
     return (
         <BaseView style={styles.container}>
-            {!isLoading && PlatformUtils.isAndroid() && statusBar}
+            {!isLoading && PlatformUtils.isAndroid() ? statusBar : null}
             <BaseActivityIndicator isVisible={isLoading} onHide={() => null} />
             <WebView
                 source={{ uri: coinbaseURL }}

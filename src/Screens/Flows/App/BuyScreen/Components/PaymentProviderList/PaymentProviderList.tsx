@@ -11,10 +11,7 @@ import {
 } from "~Components"
 import { useNavigation } from "@react-navigation/native"
 import { Routes } from "~Navigation"
-import {
-    PaymentProvider,
-    usePaymentProviderList,
-} from "../../Hooks/usePaymentProviderList"
+import { PaymentProvider, usePaymentProviderList } from "../../Hooks"
 
 export const PaymentProviderList = () => {
     const { styles, theme } = useThemedStyles(baseStyles)
@@ -24,6 +21,11 @@ export const PaymentProviderList = () => {
 
     const [selectedProviderId, setSelectedProviderId] = useState(
         paymentsProviders[0] ? paymentsProviders[0].id : "",
+    )
+
+    const handleBuyClick = useCallback(
+        () => nav.navigate(Routes.BUY_WEBVIEW),
+        [nav],
     )
 
     const renderItem = useCallback(
@@ -36,6 +38,9 @@ export const PaymentProviderList = () => {
                         flexDirection="column"
                         alignItems="flex-start"
                         justifyContent="flex-start"
+                        p={20}
+                        borderRadius={12}
+                        mb={20}
                         style={styles.card}>
                         <BaseView
                             style={styles.imageContainer}
@@ -43,9 +48,13 @@ export const PaymentProviderList = () => {
                             justifyContent="space-between">
                             <BaseView
                                 style={styles.imageContainer}
+                                flex={1}
                                 flexDirection="row">
                                 {item.img}
-                                <BaseText style={styles.providerName}>
+                                <BaseText
+                                    fontSize={18}
+                                    pl={10}
+                                    color={theme.colors.text}>
                                     {item.name}
                                 </BaseText>
                             </BaseView>
@@ -63,7 +72,10 @@ export const PaymentProviderList = () => {
                         </BaseView>
 
                         <BaseSpacer height={10} />
-                        <BaseText style={styles.description}>
+                        <BaseText
+                            fontSize={14}
+                            color={theme.colors.text}
+                            py={10}>
                             {item.description}
                         </BaseText>
 
@@ -71,19 +83,19 @@ export const PaymentProviderList = () => {
                             title={item.buttonText}
                             disabled={!isSelected}
                             style={styles.button}
-                            action={() => nav.navigate(Routes.BUY_WEBVIEW)}
+                            action={handleBuyClick}
                         />
                     </BaseView>
                 </TouchableWithoutFeedback>
             )
         },
-        [selectedProviderId, styles, nav, theme],
+        [selectedProviderId, styles, theme, handleBuyClick],
     )
 
     return (
         <FlatList
             data={paymentsProviders}
-            renderItem={({ item }) => renderItem({ item })}
+            renderItem={renderItem}
             keyExtractor={item => item.id}
         />
     )
@@ -92,24 +104,10 @@ export const PaymentProviderList = () => {
 const baseStyles = (theme: ColorThemeType) =>
     StyleSheet.create({
         imageContainer: {
-            flex: 1,
             width: "100%",
         },
         card: {
             backgroundColor: theme.colors.card,
-            padding: 20,
-            borderRadius: 12,
-            marginBottom: 20,
-        },
-        providerName: {
-            fontSize: 18,
-            paddingLeft: 10,
-            color: theme.colors.text,
-        },
-        description: {
-            fontSize: 14,
-            color: theme.colors.text,
-            paddingVertical: 10,
         },
         button: {
             backgroundColor: theme.colors.primary,

@@ -1,8 +1,8 @@
 import React from "react"
 import CoinbaseLogoSmallSvg from "~Assets/Img/CoinbaseLogoSmallSvg"
-import { useThemedStyles } from "~Hooks"
+import { useTheme } from "~Hooks"
 import { useI18nContext } from "~i18n"
-import { StyleSheet } from "react-native"
+import { COLORS } from "~Constants"
 
 export type PaymentMethod = {
     id: string
@@ -20,7 +20,8 @@ export type PaymentProvider = {
 
 export const usePaymentProviderList = () => {
     const { LL } = useI18nContext()
-    const { theme } = useThemedStyles(baseStyles)
+    const theme = useTheme()
+
     return [
         {
             id: "coinbase-pay",
@@ -29,7 +30,11 @@ export const usePaymentProviderList = () => {
             buttonText: LL.BTN_BUY_COINBASE(),
             img: (
                 <CoinbaseLogoSmallSvg
-                    fill={theme.isDark ? "#0a0b0d" : "#0052FF"}
+                    fill={
+                        theme.isDark
+                            ? COLORS.COINBASE_BACKGROUND_DARK
+                            : COLORS.COINBASE_BACKGROUND_BLUE
+                    }
                     width={22}
                 />
             ),
@@ -40,5 +45,3 @@ export const usePaymentProviderList = () => {
         },
     ]
 }
-
-const baseStyles = () => StyleSheet.create({})
