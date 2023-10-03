@@ -193,6 +193,7 @@
     "@walletconnect/types": "^2.7.7",
     "axios-mock-adapter": "^1.21.2",
     "babel-jest": "^29.3.1",
+    "babel-plugin-transform-remove-console": "^6.9.4",
     "detox": "^20.1.0",
     "eslint": "^7.32.0",
     "eslint-plugin-i18next": "^6.0.0-2",

@@ -18,6 +18,7 @@ import {
 } from "./Components"
 import { AddCustomTokenBottomSheet } from "./BottomSheets"
 import { useTokensOwned } from "./Hooks"
+import { FungibleToken } from "~Model"
 
 // Number of Skeleton Token boxes to show when fetching first page of custom tokens owned.
 const SKELETON_COUNT = 12
@@ -30,7 +31,7 @@ export const ManageCustomTokenScreen = () => {
     const [hasScrolled, setHasScrolled] = useState(false)
 
     // Address of the custom token the user wants to add to the home screen.
-    const [customTokenAddress, setCustomTokenAddress] = useState<string>()
+    const [customToken, setCustomToken] = useState<FungibleToken>()
 
     const theme = useTheme()
 
@@ -51,8 +52,8 @@ export const ManageCustomTokenScreen = () => {
         useBottomSheetModal()
 
     const onAddCustomToken = useCallback(
-        (tokenAddress: string) => {
-            setCustomTokenAddress(tokenAddress)
+        (token: FungibleToken) => {
+            setCustomToken(token)
 
             openAddCustomTokenSheet()
         },
@@ -229,7 +230,7 @@ export const ManageCustomTokenScreen = () => {
                     <AddCustomTokenBottomSheet
                         ref={addCustomTokenSheetRef}
                         onClose={closeAddCustomTokenSheet}
-                        tokenAddress={customTokenAddress}
+                        token={customToken}
                     />
 
                     <QRCodeBottomSheet ref={QRCodeBottomSheetRef} />
