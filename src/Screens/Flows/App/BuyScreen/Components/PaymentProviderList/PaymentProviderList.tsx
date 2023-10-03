@@ -1,14 +1,8 @@
-import React, { useCallback, useState } from "react"
-import { FlatList, StyleSheet, TouchableWithoutFeedback } from "react-native"
+import React, { useCallback } from "react"
+import { FlatList, StyleSheet, TouchableOpacity } from "react-native"
 import { ColorThemeType } from "~Constants"
 import { useThemedStyles } from "~Hooks"
-import {
-    BaseButton,
-    BaseIcon,
-    BaseSpacer,
-    BaseText,
-    BaseView,
-} from "~Components"
+import { BaseIcon, BaseSpacer, BaseText, BaseView } from "~Components"
 import { useNavigation } from "@react-navigation/native"
 import { Routes } from "~Navigation"
 import { PaymentProvider, usePaymentProviderList } from "../../Hooks"
@@ -19,10 +13,6 @@ export const PaymentProviderList = () => {
 
     const paymentsProviders = usePaymentProviderList()
 
-    const [selectedProviderId, setSelectedProviderId] = useState(
-        paymentsProviders[0] ? paymentsProviders[0].id : "",
-    )
-
     const handleBuyClick = useCallback(
         () => nav.navigate(Routes.BUY_WEBVIEW),
         [nav],
@@ -30,66 +20,67 @@ export const PaymentProviderList = () => {
 
     const renderItem = useCallback(
         ({ item }: { item: PaymentProvider }) => {
-            const isSelected = item.id === selectedProviderId
             return (
-                <TouchableWithoutFeedback
-                    onPress={() => setSelectedProviderId(item.id)}>
+                <TouchableOpacity onPress={handleBuyClick}>
                     <BaseView
-                        flexDirection="column"
-                        alignItems="flex-start"
-                        justifyContent="flex-start"
-                        p={20}
+                        flexDirection="row"
                         borderRadius={12}
                         mb={20}
                         style={styles.card}>
                         <BaseView
-                            style={styles.imageContainer}
-                            flexDirection="row"
-                            justifyContent="space-between">
+                            flexDirection="column"
+                            alignItems="flex-start"
+                            justifyContent="flex-start"
+                            p={20}
+                            w={90}>
                             <BaseView
-                                style={styles.imageContainer}
-                                flex={1}
-                                flexDirection="row">
-                                {item.img}
-                                <BaseText
-                                    fontSize={18}
-                                    pl={10}
-                                    color={theme.colors.text}>
-                                    {item.name}
-                                </BaseText>
+                                flexDirection="row"
+                                justifyContent="space-between">
+                                <BaseView flex={1} flexDirection="row">
+                                    {item.img}
+                                    <BaseText
+                                        fontSize={18}
+                                        pl={10}
+                                        color={theme.colors.text}>
+                                        {item.name}
+                                    </BaseText>
+                                </BaseView>
+                                {item.paymentMethods.map(method => (
+                                    <>
+                                        <BaseSpacer width={10} />
+                                        <BaseIcon
+                                            key={method.id}
+                                            name={method.icon}
+                                            size={23}
+                                            color={theme.colors.text}
+                                        />
+                                    </>
+                                ))}
                             </BaseView>
-                            {item.paymentMethods.map(method => (
-                                <>
-                                    <BaseSpacer width={10} />
-                                    <BaseIcon
-                                        key={method.id}
-                                        name={method.icon}
-                                        size={23}
-                                        color={theme.colors.text}
-                                    />
-                                </>
-                            ))}
+
+                            <BaseSpacer height={10} />
+                            <BaseText
+                                fontSize={14}
+                                color={theme.colors.text}
+                                py={10}>
+                                {item.description}
+                            </BaseText>
                         </BaseView>
-
-                        <BaseSpacer height={10} />
-                        <BaseText
-                            fontSize={14}
-                            color={theme.colors.text}
-                            py={10}>
-                            {item.description}
-                        </BaseText>
-
-                        <BaseButton
-                            title={item.buttonText}
-                            disabled={!isSelected}
-                            style={styles.button}
-                            action={handleBuyClick}
-                        />
+                        <BaseView
+                            style={styles.arrowBackground}
+                            flex={1}
+                            flexDirection="row"
+                            justifyContent="center">
+                            <BaseIcon
+                                color={theme.colors.textReversed}
+                                name="chevron-right"
+                            />
+                        </BaseView>
                     </BaseView>
-                </TouchableWithoutFeedback>
+                </TouchableOpacity>
             )
         },
-        [selectedProviderId, styles, theme, handleBuyClick],
+        [styles, theme, handleBuyClick],
     )
 
     return (
@@ -103,9 +94,6 @@ export const PaymentProviderList = () => {
 
 const baseStyles = (theme: ColorThemeType) =>
     StyleSheet.create({
-        imageContainer: {
-            width: "100%",
-        },
         card: {
             backgroundColor: theme.colors.card,
         },
@@ -113,5 +101,11 @@ const baseStyles = (theme: ColorThemeType) =>
             backgroundColor: theme.colors.primary,
             width: "100%",
             marginTop: 20,
+        },
+        arrowBackground: {
+            height: "100%",
+            borderTopRightRadius: 12,
+            borderBottomRightRadius: 12,
+            backgroundColor: theme.colors.primary,
         },
     })
