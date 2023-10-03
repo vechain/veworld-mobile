@@ -7,7 +7,7 @@ import { BaseText } from "../BaseText"
 type Props = {
     text?: string
     isVisible: boolean
-    onHide: () => void
+    onHide?: () => void
 }
 export const BaseActivityIndicator: React.FC<Props> = ({
     text,
@@ -19,7 +19,7 @@ export const BaseActivityIndicator: React.FC<Props> = ({
             animationType="fade"
             presentationStyle="overFullScreen"
             isOpen={isVisible}
-            onClose={onHide}
+            onClose={onHide ? onHide : () => null}
             transparent={true}>
             <BaseView flex={1} alignItems="center" justifyContent="center">
                 <ActivityIndicator testID="activity-indicator" size="large" />
