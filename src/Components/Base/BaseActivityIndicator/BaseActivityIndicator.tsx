@@ -12,14 +12,14 @@ type Props = {
 export const BaseActivityIndicator: React.FC<Props> = ({
     text,
     isVisible,
-    onHide,
+    onHide = () => null,
 }) => {
     return (
         <BaseModal
             animationType="fade"
             presentationStyle="overFullScreen"
             isOpen={isVisible}
-            onClose={onHide ? onHide : () => null}
+            onClose={onHide}
             transparent={true}>
             <BaseView flex={1} alignItems="center" justifyContent="center">
                 <ActivityIndicator testID="activity-indicator" size="large" />
