@@ -13,7 +13,6 @@ export type PaymentProvider = {
     id: string
     name: string
     description: string
-    buttonText: string
     img: React.ReactNode
     paymentMethods: PaymentMethod[]
 }
@@ -27,7 +26,6 @@ export const usePaymentProviderList = () => {
             id: "coinbase-pay",
             name: "Coinbase",
             description: LL.BD_BUY_DESCRIPTION_COINBASE(),
-            buttonText: LL.BTN_BUY_COINBASE(),
             img: (
                 <CoinbaseLogoSmallSvg
                     fill={

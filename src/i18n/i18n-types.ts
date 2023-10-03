@@ -211,10 +211,6 @@ type RootTranslation = {
 	 */
 	BTN_WALLET_CONFRIM_DELETION: string
 	/**
-	 * B​u​y​ ​w​i​t​h​ ​C​o​i​n​b​a​s​e
-	 */
-	BTN_BUY_COINBASE: string
-	/**
 	 * Y​o​u​r​ ​V​e​W​o​r​l​d​.​ ​A​ ​s​e​l​f​ ​c​u​s​t​o​d​y​ ​m​o​b​i​l​e​ ​c​r​y​p​t​o​ ​w​a​l​l​e​t​ ​f​o​r​ ​v​e​c​h​a​i​n
 	 */
 	BD_WELCOME_SCREEN: string
@@ -508,11 +504,11 @@ type RootTranslation = {
 	 */
 	BD_APP_BLOCKED: string
 	/**
-	 * C​h​o​o​s​e​ ​a​ ​p​a​y​m​e​n​t​ ​p​r​o​v​i​d​e​r​:
+	 * C​h​o​o​s​e​ ​a​ ​p​r​o​v​i​d​e​r​:
 	 */
 	BD_SELECT_PAYMENT_PROVIDER: string
 	/**
-	 * B​u​y​ ​w​i​t​h​ ​C​o​i​n​b​a​s​e​ ​a​n​d​ ​r​e​c​e​i​v​e​ ​t​h​e​ ​t​o​k​e​n​s​ ​d​i​r​e​c​t​l​y​ ​i​n​ ​y​o​u​r​ ​w​a​l​l​e​t​.
+	 * B​u​y​ ​w​i​t​h​ ​C​o​i​n​b​a​s​e​ ​a​n​d​ ​r​e​c​e​i​v​e​ ​t​h​e​ ​t​o​k​e​n​s​ ​d​i​r​e​c​t​l​y​ ​i​n​ ​V​e​W​o​r​l​d​.
 	 */
 	BD_BUY_DESCRIPTION_COINBASE: string
 	/**
@@ -1427,7 +1423,7 @@ type RootTranslation = {
 	 */
 	NOTIFICATION_TITLE_INVALID_QR: string
 	/**
-	 * O​n​l​y​ ​W​a​l​l​e​t​C​o​n​n​e​c​t​ ​a​n​d​ ​a​d​d​r​e​s​s​ ​c​o​p​y​i​n​g​ ​a​r​e​ ​s​u​p​p​o​r​t​e​d​.​ ​P​l​e​a​s​e​ ​t​r​y​ ​a​g​a​i​n​.
+	 * P​l​e​a​s​e​ ​s​c​a​n​ ​a​ ​W​a​l​l​e​t​C​o​n​n​e​c​t​ ​o​r​ ​w​a​l​l​e​t​ ​a​d​d​r​e​s​s​ ​Q​R​ ​c​o​d​e​.
 	 */
 	NOTIFICATION_INVALID_QR: string
 	/**
@@ -2737,10 +2733,6 @@ export type TranslationFunctions = {
 	 */
 	BTN_WALLET_CONFRIM_DELETION: () => LocalizedString
 	/**
-	 * Buy with Coinbase
-	 */
-	BTN_BUY_COINBASE: () => LocalizedString
-	/**
 	 * Your VeWorld. A self custody mobile crypto wallet for vechain
 	 */
 	BD_WELCOME_SCREEN: () => LocalizedString
@@ -3033,11 +3025,11 @@ export type TranslationFunctions = {
 	 */
 	BD_APP_BLOCKED: () => LocalizedString
 	/**
-	 * Choose a payment provider:
+	 * Choose a provider:
 	 */
 	BD_SELECT_PAYMENT_PROVIDER: () => LocalizedString
 	/**
-	 * Buy with Coinbase and receive the tokens directly in your wallet.
+	 * Buy with Coinbase and receive the tokens directly in VeWorld.
 	 */
 	BD_BUY_DESCRIPTION_COINBASE: () => LocalizedString
 	/**
@@ -3935,7 +3927,7 @@ Please, try again later.
 	 */
 	NOTIFICATION_TITLE_INVALID_QR: () => LocalizedString
 	/**
-	 * Only WalletConnect and address copying are supported. Please try again.
+	 * Please scan a WalletConnect or wallet address QR code.
 	 */
 	NOTIFICATION_INVALID_QR: () => LocalizedString
 	/**
