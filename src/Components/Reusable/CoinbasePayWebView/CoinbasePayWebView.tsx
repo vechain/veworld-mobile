@@ -78,7 +78,7 @@ export const CoinbasePayWebView = (props: {
     return (
         <BaseView style={styles.container}>
             {!isLoading && PlatformUtils.isAndroid() ? statusBar : null}
-            <BaseActivityIndicator isVisible={isLoading} onHide={() => null} />
+            <BaseActivityIndicator isVisible={isLoading} />
             <WebView
                 source={{ uri: coinbaseURL }}
                 onLoadEnd={handleLoadEnd}
