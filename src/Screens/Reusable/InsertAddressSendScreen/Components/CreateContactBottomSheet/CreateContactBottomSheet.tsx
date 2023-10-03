@@ -59,6 +59,7 @@ export const CreateContactBottomSheet = React.forwardRef<
     }, [])
 
     const handleSaveButton = useCallback(() => {
+        if (!isFormValid) return
         dispatch(insertContact(contact))
         Keyboard.dismiss()
         // this is a workaround to wait for keyboard to be dismissed before closing the bottom sheet, otherwise it won't close
@@ -67,7 +68,15 @@ export const CreateContactBottomSheet = React.forwardRef<
             onSubmit(address)
             backToChooseMode()
         }, 200)
-    }, [dispatch, contact, backToChooseMode, onClose, onSubmit, address])
+    }, [
+        isFormValid,
+        dispatch,
+        contact,
+        onClose,
+        onSubmit,
+        address,
+        backToChooseMode,
+    ])
 
     const handleProceedAnywayButton = useCallback(() => {
         onClose()
