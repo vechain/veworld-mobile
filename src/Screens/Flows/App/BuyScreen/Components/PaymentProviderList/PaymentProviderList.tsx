@@ -46,15 +46,14 @@ export const PaymentProviderList = () => {
                                     </BaseText>
                                 </BaseView>
                                 {item.paymentMethods.map(method => (
-                                    <>
+                                    <React.Fragment key={method.id}>
                                         <BaseSpacer width={10} />
                                         <BaseIcon
-                                            key={method.id}
                                             name={method.icon}
                                             size={23}
                                             color={theme.colors.text}
                                         />
-                                    </>
+                                    </React.Fragment>
                                 ))}
                             </BaseView>
 
