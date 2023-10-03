@@ -21,7 +21,6 @@ import {
     showErrorToast,
     Step,
     StepsProgressBar,
-    useWalletConnect,
 } from "~Components"
 import {
     RootStackParamListDiscover,
@@ -80,7 +79,6 @@ export const LedgerSignTransaction: React.FC<Props> = ({ route }) => {
     const track = useAnalyticTracking()
     const { LL } = useI18nContext()
     const dispatch = useAppDispatch()
-    const { web3Wallet } = useWalletConnect()
 
     const [signature, setSignature] = useState<Buffer>()
     const [isAwaitingSignature, setIsAwaitingSignature] = useState(false)
@@ -106,7 +104,7 @@ export const LedgerSignTransaction: React.FC<Props> = ({ route }) => {
     }, [openConnectionErrorSheet, errorCode])
 
     const onTransactionSuccess = useCallback(
-        (tx: Transaction) => {
+        async (tx: Transaction) => {
             const activity = ActivityUtils.getActivityTypeFromClause(
                 tx.body.clauses,
             )
@@ -132,6 +130,8 @@ export const LedgerSignTransaction: React.FC<Props> = ({ route }) => {
                         accountType: accountWithDevice.device.type,
                     })
 
+                    const web3Wallet = await WalletConnectUtils.getWeb3Wallet()
+
                     const { name, url } = WalletConnectUtils.getNameAndUrl(
                         web3Wallet,
                         requestEvent,
@@ -140,7 +140,7 @@ export const LedgerSignTransaction: React.FC<Props> = ({ route }) => {
                     dispatch(addPendingDappTransactionActivity(tx, name, url))
             }
         },
-        [track, dispatch, accountWithDevice, web3Wallet, requestEvent],
+        [track, dispatch, accountWithDevice, requestEvent],
     )
 
     const { sendTransaction } = useSendTransaction(onTransactionSuccess)
@@ -305,7 +305,9 @@ export const LedgerSignTransaction: React.FC<Props> = ({ route }) => {
             await removeLedger()
 
             //If DApp transaction
-            if (requestEvent && web3Wallet) {
+            if (requestEvent) {
+                const web3Wallet = await WalletConnectUtils.getWeb3Wallet()
+
                 await WalletConnectResponseUtils.transactionRequestSuccessResponse(
                     { request: requestEvent, web3Wallet, LL },
                     txId,
@@ -327,7 +329,9 @@ export const LedgerSignTransaction: React.FC<Props> = ({ route }) => {
             await Haptics.notificationAsync(
                 Haptics.NotificationFeedbackType.Error,
             )
-            if (requestEvent && web3Wallet) {
+            if (requestEvent) {
+                const web3Wallet = await WalletConnectUtils.getWeb3Wallet()
+
                 await WalletConnectResponseUtils.transactionRequestFailedResponse(
                     {
                         request: requestEvent,
@@ -352,7 +356,6 @@ export const LedgerSignTransaction: React.FC<Props> = ({ route }) => {
         sendTransaction,
         removeLedger,
         requestEvent,
-        web3Wallet,
         navigateOnFinish,
         LL,
         accountWithDevice.address,
@@ -360,13 +363,16 @@ export const LedgerSignTransaction: React.FC<Props> = ({ route }) => {
 
     const beforeNavigatingBack = useCallback(async () => {
         await removeLedger()
-        if (web3Wallet && requestEvent)
+        if (requestEvent) {
+            const web3Wallet = await WalletConnectUtils.getWeb3Wallet()
+
             await WalletConnectResponseUtils.userRejectedMethodsResponse({
                 request: requestEvent,
                 web3Wallet,
                 LL,
             })
-    }, [removeLedger, requestEvent, web3Wallet, LL])
+        }
+    }, [removeLedger, requestEvent, LL])
 
     const BottomButton = useCallback(() => {
         if (currentStep === SignSteps.SIGNING && userRejected) {

@@ -24,10 +24,8 @@ import {
     resetPendingState,
     resetTokensState,
     resetUserPreferencesState,
-    resetWalletConnectState,
     TokenSlice,
     UserPreferencesSlice,
-    WalletConnectSessionsSlice,
 } from "./Slices"
 import { migrationUpdates } from "~Storage/Redux/Migrations"
 import { createMigrate } from "redux-persist"
@@ -35,12 +33,6 @@ import { PersistConfig } from "redux-persist/es/types"
 import { RootState } from "~Storage/Redux/Types"
 import { newStorage } from "~Storage/Redux/Storage"
 import { MMKV } from "react-native-mmkv"
-
-// export const nftPersistConfig = {
-//     key: NftSlice.name,
-//     storage: storage,
-//     whitelist: ["blackListedCollections"],
-// }
 
 /**
  * Asynchronously generates and returns the configuration object for a Redux Persistor.
@@ -77,7 +69,6 @@ export const getPersistorConfig = async (
             ContactsSlice.name,
             ActivitiesSlice.name,
             DelegationSlice.name,
-            WalletConnectSessionsSlice.name,
         ],
         migrate: createMigrate(migrationUpdates, { debug: true }),
         transforms: [encryptor],
@@ -101,6 +92,5 @@ export const resetActions = [
     resetNetworkState,
     resetNftState,
     resetUserPreferencesState,
-    resetWalletConnectState,
     resetPendingState,
 ]

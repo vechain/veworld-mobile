@@ -16,14 +16,19 @@ import {
     showErrorToast,
     Step,
     StepsProgressBar,
-    useWalletConnect,
 } from "~Components"
 import {
     RootStackParamListDiscover,
     RootStackParamListSwitch,
     Routes,
 } from "~Navigation"
-import { debug, error, LedgerUtils, WalletConnectResponseUtils } from "~Utils"
+import {
+    debug,
+    error,
+    LedgerUtils,
+    WalletConnectResponseUtils,
+    WalletConnectUtils,
+} from "~Utils"
 import { useI18nContext } from "~i18n"
 import { useNavigation } from "@react-navigation/native"
 import * as Haptics from "expo-haptics"
@@ -43,8 +48,6 @@ enum SigningStep {
 export const LedgerSignCertificate: React.FC<Props> = ({ route }) => {
     const { accountWithDevice, certificate, initialRoute, requestEvent } =
         route.params
-
-    const { web3Wallet } = useWalletConnect()
 
     const { LL } = useI18nContext()
     const nav = useNavigation()
@@ -183,6 +186,8 @@ export const LedgerSignCertificate: React.FC<Props> = ({ route }) => {
                 Haptics.NotificationFeedbackType.Success,
             )
 
+            const web3Wallet = await WalletConnectUtils.getWeb3Wallet()
+
             await WalletConnectResponseUtils.signMessageRequestSuccessResponse(
                 {
                     request: requestEvent,
@@ -214,7 +219,6 @@ export const LedgerSignCertificate: React.FC<Props> = ({ route }) => {
     }, [
         removeLedger,
         requestEvent,
-        web3Wallet,
         LL,
         signature,
         certificate,
@@ -223,13 +227,16 @@ export const LedgerSignCertificate: React.FC<Props> = ({ route }) => {
 
     const beforeNavigatingBack = useCallback(async () => {
         await removeLedger()
-        if (web3Wallet && requestEvent)
+
+        const web3Wallet = await WalletConnectUtils.getWeb3Wallet()
+
+        if (requestEvent)
             await WalletConnectResponseUtils.userRejectedMethodsResponse({
                 request: requestEvent,
                 web3Wallet,
                 LL,
             })
-    }, [removeLedger, requestEvent, web3Wallet, LL])
+    }, [removeLedger, requestEvent, LL])
 
     const BottomButton = useCallback(() => {
         if (currentStep === SigningStep.SIGNING && userRejected) {

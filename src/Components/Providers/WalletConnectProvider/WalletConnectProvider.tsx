@@ -1,14 +1,7 @@
 import React, { useCallback, useEffect, useMemo, useState } from "react"
 import { debug, error, WalletConnectUtils, warn } from "~Utils"
-import { IWeb3Wallet } from "@walletconnect/web3wallet"
 import { SignClientTypes } from "@walletconnect/types"
-import {
-    deleteSession,
-    selectSelectedAccountAddress,
-    selectSessionsFlat,
-    useAppDispatch,
-    useAppSelector,
-} from "~Storage/Redux"
+import { selectSelectedAccountAddress, useAppSelector } from "~Storage/Redux"
 import {
     showErrorToast,
     showInfoToast,
@@ -16,7 +9,6 @@ import {
     useApplicationSecurity,
 } from "~Components"
 import { useI18nContext } from "~i18n"
-import { getSdkError } from "@walletconnect/utils"
 import { Routes } from "~Navigation"
 import { useNavigation } from "@react-navigation/native"
 import { WALLET_STATUS } from "~Model"
@@ -35,13 +27,13 @@ import { JsonRpcError } from "@metamask/rpc-errors/dist/classes"
  * are handled by the provider can be shown no matter where we are inside the app.
  */
 
-type WalletConnectContextProviderProps = { children: React.ReactNode }
-const WalletConnectContext = React.createContext<{
-    web3Wallet: IWeb3Wallet | undefined
+type IWalletConnect = {
     disconnect: (topic: string) => Promise<void>
     onPair: (uri: string) => Promise<void>
-}>({
-    web3Wallet: undefined,
+}
+
+type WalletConnectContextProviderProps = { children: React.ReactNode }
+const WalletConnectContext = React.createContext<IWalletConnect>({
     disconnect: async () => {},
     onPair: async () => {},
 })
@@ -51,13 +43,10 @@ const WalletConnectContextProvider = ({
 }: WalletConnectContextProviderProps) => {
     // General
     const selectedAccountAddress = useAppSelector(selectSelectedAccountAddress)
-    const dispatch = useAppDispatch()
     const { LL } = useI18nContext()
-    const [web3Wallet, setWeb3wallet] = useState<IWeb3Wallet>()
     const nav = useNavigation()
-    const activeSessionsFlat = useAppSelector(selectSessionsFlat)
     const { walletStatus } = useApplicationSecurity()
-    const { onSessionRequest } = useWcRequest(web3Wallet)
+    const { onSessionRequest } = useWcRequest()
     const [linkingUrls, setLinkingUrls] = useState<string[]>([])
 
     /**
@@ -74,12 +63,16 @@ const WalletConnectContextProvider = ({
 
             const topic = WalletConnectUtils.getTopicFromPairUri(uri)
 
-            if (activeSessionsFlat.some(s => s.topic === topic)) {
+            const web3Wallet = await WalletConnectUtils.getWeb3Wallet()
+
+            const existingSession = web3Wallet.getActiveSessions()[topic]
+
+            if (existingSession) {
                 return
             }
 
             try {
-                await web3Wallet?.core.pairing.pair({
+                await web3Wallet.core.pairing.pair({
                     uri,
                     activatePairing: true,
                 })
@@ -102,7 +95,7 @@ const WalletConnectContextProvider = ({
                 })
             }
         },
-        [activeSessionsFlat, web3Wallet, LL],
+        [LL],
     )
 
     const handleLinkingUrl = useCallback(
@@ -140,7 +133,7 @@ const WalletConnectContextProvider = ({
             proposal: SignClientTypes.EventArguments["session_proposal"],
             err: JsonRpcError<any>,
         ) => {
-            if (!web3Wallet) return
+            const web3Wallet = await WalletConnectUtils.getWeb3Wallet()
 
             await web3Wallet.rejectSession({
                 id: proposal.id,
@@ -150,7 +143,7 @@ const WalletConnectContextProvider = ({
                 },
             })
         },
-        [web3Wallet],
+        [],
     )
 
     /**
@@ -167,8 +160,6 @@ const WalletConnectContextProvider = ({
 
             if (!selectedAccountAddress)
                 return respondInvalidSession(proposal, rpcErrors.internal())
-            if (!web3Wallet)
-                return respondInvalidSession(proposal, rpcErrors.internal())
             if (!proposal.params.requiredNamespaces.vechain) {
                 showErrorToast({
                     text1: LL.NOTIFICATION_wallet_connect_incompatible_dapp(),
@@ -183,7 +174,7 @@ const WalletConnectContextProvider = ({
                 sessionProposal: proposal,
             })
         },
-        [respondInvalidSession, nav, selectedAccountAddress, web3Wallet, LL],
+        [respondInvalidSession, nav, selectedAccountAddress, LL],
     )
 
     /**
@@ -193,30 +184,17 @@ const WalletConnectContextProvider = ({
         async (topic: string, fromRemote = false) => {
             debug("Disconnecting session", topic, fromRemote)
 
-            if (!web3Wallet) return
-
-            try {
-                await web3Wallet.disconnectSession({
-                    topic,
-                    reason: getSdkError("USER_DISCONNECTED"),
+            if (fromRemote) {
+                showInfoToast({
+                    text1: LL.NOTIFICATION_wallet_connect_disconnected_from_remote(),
                 })
-            } catch (err: unknown) {
-                error("WalletConnectProvider:disconnect", err)
-            } finally {
-                dispatch(deleteSession({ topic }))
-
-                if (fromRemote) {
-                    showInfoToast({
-                        text1: LL.NOTIFICATION_wallet_connect_disconnected_from_remote(),
-                    })
-                } else {
-                    showSuccessToast({
-                        text1: LL.NOTIFICATION_wallet_connect_disconnected_success(),
-                    })
-                }
+            } else {
+                showSuccessToast({
+                    text1: LL.NOTIFICATION_wallet_connect_disconnected_success(),
+                })
             }
         },
-        [web3Wallet, dispatch, LL],
+        [LL],
     )
 
     const onSessionDelete = useCallback(
@@ -235,28 +213,29 @@ const WalletConnectContextProvider = ({
      */
     useEffect(() => {
         ;(async () => {
-            if (!web3Wallet) {
-                const web3WalletInstance =
-                    await WalletConnectUtils.getWeb3Wallet()
-                setWeb3wallet(web3WalletInstance)
-            }
-        })()
-    }, [web3Wallet])
+            const web3Wallet = await WalletConnectUtils.getWeb3Wallet()
 
-    useEffect(() => {
-        if (web3Wallet) {
+            if (web3Wallet.events.listenerCount("session_proposal") >= 1) {
+                debug("Removing session_proposal listener")
+                web3Wallet.events.removeAllListeners("session_proposal")
+            }
+
+            if (web3Wallet.events.listenerCount("session_request") >= 1) {
+                debug("Removing session_request listener")
+                web3Wallet.events.removeAllListeners("session_request")
+            }
+
+            if (web3Wallet.events.listenerCount("session_delete") >= 1) {
+                debug("Removing session_delete listener")
+                web3Wallet.events.removeAllListeners("session_delete")
+            }
+
+            debug("Adding new Web3Wallet event listeners")
             web3Wallet.on("session_proposal", onSessionProposal)
             web3Wallet.on("session_request", onSessionRequest)
             web3Wallet.on("session_delete", onSessionDelete)
-        }
-
-        // Cancel subscription to events when component unmounts
-        return () => {
-            web3Wallet?.off("session_proposal", onSessionProposal)
-            web3Wallet?.off("session_request", onSessionRequest)
-            web3Wallet?.off("session_delete", onSessionDelete)
-        }
-    }, [web3Wallet, onSessionRequest, onSessionProposal, onSessionDelete])
+        })()
+    }, [onSessionRequest, onSessionDelete, onSessionProposal])
 
     useEffect(() => {
         Linking.getInitialURL().then(url => {
@@ -288,26 +267,13 @@ const WalletConnectContextProvider = ({
         }
     }, [walletStatus, handleLinkingUrl, linkingUrls])
 
-    /**
-     * Remove expired sessions
-     */
-    useEffect(() => {
-        activeSessionsFlat.forEach(session => {
-            if (session.expiry < Date.now() / 1000) {
-                disconnect(session.topic)
-            }
-        })
-    }, [disconnect, activeSessionsFlat])
-
     // Needed for the context
-    const value = useMemo(
-        () => ({
-            web3Wallet: web3Wallet ?? undefined,
+    const value: IWalletConnect = useMemo(() => {
+        return {
             disconnect,
             onPair,
-        }),
-        [web3Wallet, disconnect, onPair],
-    )
+        }
+    }, [disconnect, onPair])
 
     if (!value) {
         return <></>

@@ -16,7 +16,6 @@ import {
     showErrorToast,
     showInfoToast,
     showSuccessToast,
-    useWalletConnect,
 } from "~Components"
 import { useBottomSheetModal } from "~Hooks"
 import { AccountWithDevice } from "~Model"
@@ -24,14 +23,13 @@ import { RootStackParamListSwitch, Routes } from "~Navigation"
 import {
     addConnectedAppActivity,
     changeSelectedNetwork,
-    insertSession,
     selectNetworks,
     selectSelectedAccount,
     selectVisibleAccounts,
     useAppDispatch,
     useAppSelector,
 } from "~Storage/Redux"
-import { error, HexUtils, WalletConnectUtils, warn } from "~Utils"
+import { debug, error, HexUtils, WalletConnectUtils, warn } from "~Utils"
 import { useI18nContext } from "~i18n"
 import { AppConnectionRequests, AppInfo, UnknownAppMessage } from "~Screens"
 import { useSetSelectedAccount } from "~Hooks/useSetSelectedAccount"
@@ -45,8 +43,6 @@ export const ConnectAppScreen: FC<Props> = ({ route }: Props) => {
     const currentProposal = route.params.sessionProposal
 
     const { onSetSelectedAccount } = useSetSelectedAccount()
-
-    const { web3Wallet } = useWalletConnect()
 
     const nav = useNavigation()
     const dispatch = useAppDispatch()
@@ -108,13 +104,6 @@ export const ConnectAppScreen: FC<Props> = ({ route }: Props) => {
             params.requiredNamespaces
         const relays: RelayerTypes.ProtocolOptions[] = params.relays
 
-        if (!web3Wallet) {
-            showErrorToast({
-                text1: LL.NOTIFICATION_wallet_connect_not_initialized(),
-            })
-            return
-        }
-
         if (!currentProposal || !requiredNamespaces.vechain.chains) {
             warn("ConnectedAppScreen - session not valid")
             showErrorToast({
@@ -156,21 +145,20 @@ export const ConnectAppScreen: FC<Props> = ({ route }: Props) => {
         nav.navigate(Routes.SETTINGS_CONNECTED_APPS)
 
         try {
-            let session: SessionTypes.Struct = await web3Wallet.approveSession({
+            const web3Wallet = await WalletConnectUtils.getWeb3Wallet()
+
+            const session = await web3Wallet.approveSession({
                 id,
                 relayProtocol: relays[0].protocol,
                 namespaces,
             })
 
-            dispatch(
-                insertSession({
-                    address: selectedAccount.address,
-                    connectedApp: {
-                        session,
-                        verifyContext: currentProposal.verifyContext,
-                    },
-                }),
-            )
+            // DO NOT remove this: This is a bit of a hack of iOS 17. Session wasn't getting returned to the dApp unless that got called
+            const activeSessions = web3Wallet.getActiveSessions()
+
+            if (activeSessions[session.topic]) {
+                debug("Session successfully added")
+            }
 
             dispatch(addConnectedAppActivity(name, url, description, methods))
 
@@ -187,7 +175,6 @@ export const ConnectAppScreen: FC<Props> = ({ route }: Props) => {
         }
     }, [
         currentProposal,
-        web3Wallet,
         nav,
         LL,
         networks,
@@ -207,7 +194,9 @@ export const ConnectAppScreen: FC<Props> = ({ route }: Props) => {
             const { id } = currentProposal
 
             try {
-                await web3Wallet?.rejectSession({
+                const web3Wallet = await WalletConnectUtils.getWeb3Wallet()
+
+                await web3Wallet.rejectSession({
                     id,
                     reason: getSdkError("USER_REJECTED_METHODS"),
                 })
@@ -217,7 +206,7 @@ export const ConnectAppScreen: FC<Props> = ({ route }: Props) => {
                 nav.goBack()
             }
         }
-    }, [currentProposal, nav, web3Wallet])
+    }, [currentProposal, nav])
 
     const onPressBack = useCallback(async () => {
         await handleReject()

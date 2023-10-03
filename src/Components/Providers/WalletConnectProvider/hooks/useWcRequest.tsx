@@ -1,4 +1,3 @@
-import { IWeb3Wallet } from "@walletconnect/web3wallet"
 import { useCallback } from "react"
 import { PendingRequestTypes, SessionTypes } from "@walletconnect/types"
 import { AddressUtils, debug, error, WalletConnectUtils, warn } from "~Utils"
@@ -6,11 +5,9 @@ import { AnalyticsEvent, RequestMethods } from "~Constants"
 import { AccountWithDevice } from "~Model"
 import {
     changeSelectedNetwork,
-    deleteSession,
     selectNetworks,
     selectSelectedAccountAddress,
     selectSelectedNetwork,
-    selectSessionsFlat,
     selectVisibleAccounts,
     useAppDispatch,
     useAppSelector,
@@ -23,7 +20,7 @@ import { useAnalyticTracking, useSetSelectedAccount } from "~Hooks"
 import { getSdkError } from "@walletconnect/utils"
 import { rpcErrors } from "@metamask/rpc-errors"
 
-export const useWcRequest = (web3Wallet: IWeb3Wallet | undefined) => {
+export const useWcRequest = () => {
     const nav = useNavigation()
     const dispatch = useAppDispatch()
     const track = useAnalyticTracking()
@@ -35,10 +32,9 @@ export const useWcRequest = (web3Wallet: IWeb3Wallet | undefined) => {
     const selectedNetwork = useAppSelector(selectSelectedNetwork)
     const accounts = useAppSelector(selectVisibleAccounts)
     const networks = useAppSelector(selectNetworks)
-    const sessions = useAppSelector(selectSessionsFlat)
 
     const goToSignMessage = useCallback(
-        (
+        async (
             requestEvent: PendingRequestTypes.Struct,
             session: SessionTypes.Struct,
             signingAccount: string,
@@ -72,7 +68,9 @@ export const useWcRequest = (web3Wallet: IWeb3Wallet | undefined) => {
 
                 const rpcError = rpcErrors.invalidRequest()
 
-                web3Wallet?.respondSessionRequest({
+                const web3Wallet = await WalletConnectUtils.getWeb3Wallet()
+
+                await web3Wallet.respondSessionRequest({
                     topic: requestEvent.topic,
                     response: {
                         id: requestEvent.id,
@@ -86,11 +84,11 @@ export const useWcRequest = (web3Wallet: IWeb3Wallet | undefined) => {
                 })
             }
         },
-        [web3Wallet, LL, track, nav],
+        [LL, track, nav],
     )
 
     const goToSendTransaction = useCallback(
-        (
+        async (
             requestEvent: PendingRequestTypes.Struct,
             session: SessionTypes.Struct,
             signingAccount: string,
@@ -124,7 +122,9 @@ export const useWcRequest = (web3Wallet: IWeb3Wallet | undefined) => {
 
                 const rpcError = rpcErrors.invalidRequest()
 
-                web3Wallet?.respondSessionRequest({
+                const web3Wallet = await WalletConnectUtils.getWeb3Wallet()
+
+                await web3Wallet.respondSessionRequest({
                     topic: requestEvent.topic,
                     response: {
                         id: requestEvent.id,
@@ -138,13 +138,12 @@ export const useWcRequest = (web3Wallet: IWeb3Wallet | undefined) => {
                 })
             }
         },
-        [web3Wallet, LL, track, nav],
+        [LL, track, nav],
     )
 
     const switchAccount = useCallback(
         async (session: SessionTypes.Struct) => {
-            if (!web3Wallet)
-                throw new Error("Web3Wallet is not initialized properly")
+            const web3Wallet = await WalletConnectUtils.getWeb3Wallet()
 
             // Switch to the requested account
             const address = session.namespaces.vechain.accounts[0].split(":")[2]
@@ -179,13 +178,7 @@ export const useWcRequest = (web3Wallet: IWeb3Wallet | undefined) => {
 
             return requestedAccount.address
         },
-        [
-            LL,
-            selectedAccountAddress,
-            accounts,
-            onSetSelectedAccount,
-            web3Wallet,
-        ],
+        [LL, selectedAccountAddress, accounts, onSetSelectedAccount],
     )
 
     const switchNetwork = useCallback(
@@ -193,15 +186,14 @@ export const useWcRequest = (web3Wallet: IWeb3Wallet | undefined) => {
             requestEvent: PendingRequestTypes.Struct,
             session: SessionTypes.Struct,
         ) => {
-            if (!web3Wallet)
-                throw new Error("Web3Wallet is not initialized properly")
-
             const network = WalletConnectUtils.getNetwork(
                 requestEvent,
                 networks,
             )
 
             if (!network) {
+                const web3Wallet = await WalletConnectUtils.getWeb3Wallet()
+
                 await web3Wallet.disconnectSession({
                     topic: session.topic,
                     reason: {
@@ -221,7 +213,7 @@ export const useWcRequest = (web3Wallet: IWeb3Wallet | undefined) => {
                 })
             }
         },
-        [LL, selectedNetwork, dispatch, web3Wallet, networks],
+        [LL, selectedNetwork, dispatch, networks],
     )
     /**
      * Handle session request
@@ -237,10 +229,9 @@ export const useWcRequest = (web3Wallet: IWeb3Wallet | undefined) => {
                 }),
             )
 
-            if (!web3Wallet)
-                throw new Error("Web3Wallet is not initialized properly")
-
             let session: SessionTypes.Struct
+
+            const web3Wallet = await WalletConnectUtils.getWeb3Wallet()
 
             try {
                 // Get the session for this topic
@@ -249,10 +240,9 @@ export const useWcRequest = (web3Wallet: IWeb3Wallet | undefined) => {
                 )
             } catch (e) {
                 warn(
-                    "Failed to get WC session for wallet: ",
-                    JSON.stringify(sessions.map(s => s.topic)),
+                    `Failed to get WC session for wallet: ${requestEvent.topic}`,
+                    Object.keys(web3Wallet.getActiveSessions()),
                 )
-                dispatch(deleteSession({ topic: requestEvent.topic }))
                 await web3Wallet.respondSessionRequest({
                     topic: requestEvent.topic,
                     response: {
@@ -273,10 +263,10 @@ export const useWcRequest = (web3Wallet: IWeb3Wallet | undefined) => {
             // Show the screen based on the request method
             switch (requestEvent.params.request.method) {
                 case RequestMethods.SIGN_CERTIFICATE:
-                    goToSignMessage(requestEvent, session, address)
+                    await goToSignMessage(requestEvent, session, address)
                     break
                 case RequestMethods.REQUEST_TRANSACTION:
-                    goToSendTransaction(requestEvent, session, address)
+                    await goToSendTransaction(requestEvent, session, address)
                     break
                 default:
                     error(
@@ -286,15 +276,7 @@ export const useWcRequest = (web3Wallet: IWeb3Wallet | undefined) => {
                     break
             }
         },
-        [
-            switchAccount,
-            switchNetwork,
-            web3Wallet,
-            goToSendTransaction,
-            goToSignMessage,
-            dispatch,
-            sessions,
-        ],
+        [switchAccount, switchNetwork, goToSendTransaction, goToSignMessage],
     )
 
     return { onSessionRequest }

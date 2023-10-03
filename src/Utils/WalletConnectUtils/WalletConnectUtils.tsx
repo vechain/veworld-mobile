@@ -7,7 +7,7 @@ import {
 } from "@walletconnect/types"
 import { IWeb3Wallet, Web3Wallet } from "@walletconnect/web3wallet"
 import { Network } from "~Model"
-import { error, warn } from "~Utils/Logger"
+import { debug, error, warn } from "~Utils/Logger"
 import { NavigationState } from "@react-navigation/native"
 import { Routes } from "~Navigation"
 import {
@@ -15,31 +15,50 @@ import {
     JsonRpcError,
 } from "@walletconnect/jsonrpc-types/dist/cjs/jsonrpc"
 import HexUtils from "~Utils/HexUtils"
+import { ErrorUtils } from "~Utils"
+import { Mutex } from "async-mutex"
+import { VeWorldWCStorage } from "~Storage/WalletConnect"
 
-let web3wallet: IWeb3Wallet
+let _web3wallet: IWeb3Wallet
+
 export const core: ICore = new Core({
     projectId: process.env.REACT_APP_WALLET_CONNECT_PROJECT_ID,
+    storage: new VeWorldWCStorage(),
 })
 
-export async function getWeb3Wallet() {
-    if (web3wallet) {
-        return web3wallet
-    }
+const walletInitializer = new Mutex()
 
-    try {
-        web3wallet = await Web3Wallet.init({
-            core,
-            metadata: {
-                name: "VeWorld Mobile Wallet",
-                description: "Manage your VeChain assets with VeWorld",
-                url: "https://veworld.com",
-                icons: ["https://avatars.githubusercontent.com/u/37784886"],
-            },
-        })
-        return web3wallet
-    } catch (e) {
-        error("Failed to initialize Web3Wallet", e)
-    }
+export async function getWeb3Wallet(): Promise<IWeb3Wallet> {
+    return await walletInitializer.runExclusive(async () => {
+        if (_web3wallet) {
+            debug("Web3Wallet already initialized")
+            return _web3wallet
+        }
+
+        debug("Initializing Web3Wallet")
+
+        try {
+            _web3wallet = await Web3Wallet.init({
+                core,
+                metadata: {
+                    name: "VeWorld Mobile Wallet",
+                    description: "Manage your VeChain assets with VeWorld",
+                    url: "https://veworld.com",
+                    icons: ["https://avatars.githubusercontent.com/u/37784886"],
+                },
+            })
+
+            debug("Web3Wallet initialized")
+
+            return _web3wallet
+        } catch (e) {
+            error(
+                "Failed to initialize Web3Wallet",
+                ErrorUtils.getErrorMessage(e),
+            )
+            throw e
+        }
+    })
 }
 
 export function getPairAttributes(

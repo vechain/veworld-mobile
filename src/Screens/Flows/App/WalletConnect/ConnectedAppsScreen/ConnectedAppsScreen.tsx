@@ -1,4 +1,4 @@
-import React, { Fragment, useMemo, useRef, useState } from "react"
+import React, { Fragment, useEffect, useMemo, useRef, useState } from "react"
 import {
     BaseSpacer,
     BaseText,
@@ -7,12 +7,7 @@ import {
     SwipeableRow,
     useWalletConnect,
 } from "~Components"
-import {
-    ConnectedApp,
-    selectAccounts,
-    selectSessions,
-    useAppSelector,
-} from "~Storage/Redux"
+import { selectAccounts, useAppSelector } from "~Storage/Redux"
 import { SessionTypes } from "@walletconnect/types"
 import { isEmpty } from "lodash"
 import {
@@ -25,20 +20,49 @@ import {
 import { useI18nContext } from "~i18n"
 import { SwipeableItemImperativeRef } from "react-native-swipeable-item"
 import { useBottomSheetModal } from "~Hooks"
+import { WalletConnectUtils } from "~Utils"
+
+/**
+ * A map of account addresses to an array of sessions
+ */
+type AccountApps = Record<string, SessionTypes.Struct[]>
 
 export const ConnectedAppsScreen = () => {
-    const connectedApps: Record<string, ConnectedApp[]> =
-        useAppSelector(selectSessions)
     const accounts = useAppSelector(selectAccounts)
     const { LL } = useI18nContext()
     const { disconnect } = useWalletConnect()
     const [sessionToDelete, setSessionToDelete] =
         useState<SessionTypes.Struct>()
+    const [connectedApps, setConnectedApps] = useState<AccountApps>({})
 
     // Keep track of the swipeable items refs
     const swipeableItemRefs = useRef<Map<string, SwipeableItemImperativeRef>>(
         new Map(),
     )
+
+    /**
+     * Populates the account sessions from the Web3Wallet
+     */
+    useEffect(() => {
+        WalletConnectUtils.getWeb3Wallet().then(wallet => {
+            const sessions = Object.values(wallet.getActiveSessions())
+
+            const apps: AccountApps = {}
+
+            sessions.forEach(session => {
+                const account =
+                    session.namespaces.vechain.accounts[0].split(":")[2]
+
+                if (!apps[account]) {
+                    apps[account] = []
+                }
+
+                apps[account].push(session)
+            })
+
+            setConnectedApps(apps)
+        })
+    }, [])
 
     const totalSessions = useMemo(() => {
         return Object.values(connectedApps).reduce(
@@ -93,9 +117,8 @@ export const ConnectedAppsScreen = () => {
                             account.address in connectedApps &&
                             !isEmpty(connectedApps[account.address])
                         ) {
-                            const accountSessions = connectedApps[
-                                account.address
-                            ].map(it => it.session)
+                            const accountSessions =
+                                connectedApps[account.address]
 
                             return (
                                 <BaseView key={account.address}>

@@ -31,29 +31,42 @@ Download Xcode form the Mac AppStore
 
 # Run the project
 
-The first time you clone the repo you need to do:
+The first time you clone the repo you need to copy all the files from 1password into the root, `ios` and `android` folders. Then run:
 
-```js
-- yarn install
-- bundle install
-- npx pod-install
-- cp .env.local.example .env.local
+```bash
+yarn install
+```
+
+```bash
+bundle install
+```
+
+```bash
+npx pod-install
+```
+
+```bash
+npx pod-install
 ```
 
 then on every other time:
 
 ### iOS
-
-```js
-- yarn start
-- yarn ios
+```bash
+yarn start
 ```
 
+```bash
+yarn ios
+```
 ### Android
 
-```js
-- yarn start
-- yarn android
+```bash
+yarn start
+```
+
+```bash
+yarn android
 ```
 
 Follow the official React Native [documentation](https://reactnative.dev/docs/environment-setup) for detailed explenation and additional steps.

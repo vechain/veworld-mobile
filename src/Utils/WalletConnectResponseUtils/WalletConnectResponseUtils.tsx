@@ -10,7 +10,7 @@ import { TranslationFunctions } from "~i18n"
 
 type BaseProps = {
     request: PendingRequestTypes.Struct
-    web3Wallet: IWeb3Wallet | undefined
+    web3Wallet: IWeb3Wallet
     LL: TranslationFunctions
 }
 
@@ -26,7 +26,7 @@ export const transactionRequestSuccessResponse = async (
     signer: string,
 ) => {
     try {
-        await web3Wallet?.respondSessionRequest({
+        await web3Wallet.respondSessionRequest({
             topic: request.topic,
             response: {
                 id: request.id,
@@ -50,7 +50,7 @@ export const signMessageRequestSuccessResponse = async (
     cert: Certificate,
 ) => {
     try {
-        await web3Wallet?.respondSessionRequest({
+        await web3Wallet.respondSessionRequest({
             topic: request.topic,
             response: {
                 id: request.id,
@@ -92,7 +92,7 @@ export const transactionRequestFailedResponse = async ({
     })
 
     try {
-        await web3Wallet?.respondSessionRequest({
+        await web3Wallet.respondSessionRequest({
             topic: request.topic,
             response,
         })
@@ -122,7 +122,7 @@ export const sponsorSignRequestFailedResponse = async ({
             },
         )
 
-        await web3Wallet?.respondSessionRequest({
+        await web3Wallet.respondSessionRequest({
             topic: request.topic,
             response: formattedResponse,
         })
@@ -144,7 +144,7 @@ export const userRejectedMethodsResponse = async ({
             getSdkError("USER_REJECTED_METHODS"),
         )
 
-        await web3Wallet?.respondSessionRequest({
+        await web3Wallet.respondSessionRequest({
             topic: request.topic,
             response,
         })
@@ -166,7 +166,7 @@ export const signMessageRequestErrorResponse = async ({
             code: RCP_INTERNAL_ERROR,
         })
 
-        await web3Wallet?.respondSessionRequest({
+        await web3Wallet.respondSessionRequest({
             topic: request.topic,
             response,
         })

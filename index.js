@@ -31,8 +31,8 @@ import { typography } from "~Constants"
 import { AnalyticsUtils, info } from "~Utils"
 import { BottomSheetModalProvider } from "@gorhom/bottom-sheet"
 import {
-    StoreContextProvider,
     PersistedThemeProvider,
+    StoreContextProvider,
 } from "~Components/Providers"
 import {
     selectAnalyticsTrackingEnabled,
@@ -53,6 +53,11 @@ info("is Hermes active : ", isHermes())
 if (__DEV__ && process.env.REACT_APP_UI_LOG === "false") {
     // hide all ui logs
     LogBox.ignoreAllLogs()
+}
+
+if (__DEV__) {
+    // Debug websockets
+    require("basil-ws-flipper").wsDebugPlugin
 }
 
 const Main = () => {

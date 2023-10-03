@@ -10,11 +10,9 @@ import {
     CloseModalButton,
     RequireUserPassword,
     showErrorToast,
-    useWalletConnect,
 } from "~Components"
 import {
     addPendingDappTransactionActivity,
-    selectedConnectedApp,
     selectSelectedAccount,
     selectSelectedNetwork,
     selectTokensWithInfo,
@@ -35,7 +33,7 @@ import { NativeStackScreenProps } from "@react-navigation/native-stack"
 import { useNavigation } from "@react-navigation/native"
 import { ClausesCarousel } from "../../ActivityDetailsScreen/Components"
 import { Transaction } from "thor-devkit"
-import { TransactionDetails, UnknownAppMessage } from "~Screens"
+import { TransactionDetails } from "~Screens"
 import { AnalyticsEvent } from "~Constants"
 
 type Props = NativeStackScreenProps<
@@ -51,13 +49,10 @@ export const SendTransactionScreen: FC<Props> = ({ route }: Props) => {
         options,
     } = route.params
 
-    const { web3Wallet } = useWalletConnect()
     const dispatch = useAppDispatch()
     const { LL } = useI18nContext()
     const nav = useNavigation()
     const track = useAnalyticTracking()
-
-    const [isInvalidChecked, setInvalidChecked] = React.useState(false)
 
     const network = useAppSelector(selectSelectedNetwork)
     const selectedAccount = useAppSelector(selectSelectedAccount)
@@ -72,16 +67,6 @@ export const SendTransactionScreen: FC<Props> = ({ route }: Props) => {
         () => WalletConnectUtils.getSessionRequestAttributes(sessionRequest),
         [sessionRequest],
     )
-
-    const connectedApp = useAppSelector(state => {
-        return selectedConnectedApp(state, topic)
-    })
-
-    const validConnectedApp = useMemo(() => {
-        if (!connectedApp) return true
-
-        return connectedApp.verifyContext.verified.validation === "VALID"
-    }, [connectedApp])
 
     const clausesMetadata = useMemo(
         () => TransactionUtils.interpretClauses(message, tokens),
@@ -110,6 +95,8 @@ export const SendTransactionScreen: FC<Props> = ({ route }: Props) => {
 
     const onTransactionSuccess = useCallback(
         async (transaction: Transaction, id: string) => {
+            const web3Wallet = await WalletConnectUtils.getWeb3Wallet()
+
             await WalletConnectResponseUtils.transactionRequestSuccessResponse(
                 { request: requestEvent, web3Wallet, LL },
                 id,
@@ -124,7 +111,6 @@ export const SendTransactionScreen: FC<Props> = ({ route }: Props) => {
             onFinish,
             url,
             requestEvent,
-            web3Wallet,
             LL,
             selectedAccount.address,
             dispatch,
@@ -133,6 +119,8 @@ export const SendTransactionScreen: FC<Props> = ({ route }: Props) => {
     )
 
     const onTransactionFailure = useCallback(async () => {
+        const web3Wallet = await WalletConnectUtils.getWeb3Wallet()
+
         await WalletConnectResponseUtils.transactionRequestFailedResponse({
             request: requestEvent,
             web3Wallet,
@@ -140,7 +128,7 @@ export const SendTransactionScreen: FC<Props> = ({ route }: Props) => {
         })
 
         onFinish(false)
-    }, [requestEvent, web3Wallet, LL, onFinish])
+    }, [requestEvent, LL, onFinish])
 
     /**
      * Rejects the request and closes the modal
@@ -153,7 +141,9 @@ export const SendTransactionScreen: FC<Props> = ({ route }: Props) => {
                 getSdkError("USER_REJECTED_METHODS"),
             )
 
-            await web3Wallet?.respondSessionRequest({
+            const web3Wallet = await WalletConnectUtils.getWeb3Wallet()
+
+            await web3Wallet.respondSessionRequest({
                 topic,
                 response,
             })
@@ -167,7 +157,7 @@ export const SendTransactionScreen: FC<Props> = ({ route }: Props) => {
         } finally {
             nav.goBack()
         }
-    }, [requestEvent, web3Wallet, topic, LL, nav])
+    }, [requestEvent, topic, LL, nav])
 
     const {
         Delegation,
@@ -249,12 +239,6 @@ export const SendTransactionScreen: FC<Props> = ({ route }: Props) => {
                     )}
 
                     <BaseSpacer height={30} />
-
-                    <UnknownAppMessage
-                        verifyContext={connectedApp?.verifyContext}
-                        confirmed={isInvalidChecked}
-                        setConfirmed={setInvalidChecked}
-                    />
                 </BaseView>
 
                 <BaseSpacer height={40} />
@@ -264,11 +248,7 @@ export const SendTransactionScreen: FC<Props> = ({ route }: Props) => {
                         haptics="Light"
                         title={LL.COMMON_BTN_SIGN_AND_SEND()}
                         action={onSubmit}
-                        disabled={
-                            isLoading ||
-                            continueNotAllowed ||
-                            (!validConnectedApp && !isInvalidChecked)
-                        }
+                        disabled={isLoading || continueNotAllowed}
                         isLoading={isLoading}
                     />
                     <BaseSpacer height={16} />

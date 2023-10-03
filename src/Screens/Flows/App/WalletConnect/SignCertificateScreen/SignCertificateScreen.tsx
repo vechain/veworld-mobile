@@ -9,30 +9,23 @@ import {
     BaseView,
     CloseModalButton,
     RequireUserPassword,
-    useWalletConnect,
 } from "~Components"
 import { blake2b256, Certificate } from "thor-devkit"
 import {
     addSignCertificateActivity,
-    selectedConnectedApp,
     selectSelectedAccount,
     setIsAppLoading,
     useAppDispatch,
     useAppSelector,
 } from "~Storage/Redux"
-import {
-    debug,
-    error,
-    WalletConnectResponseUtils,
-    WalletConnectUtils,
-} from "~Utils"
+import { error, WalletConnectResponseUtils, WalletConnectUtils } from "~Utils"
 import { useAnalyticTracking, useCheckIdentity, useSignMessage } from "~Hooks"
 import { AccountWithDevice, DEVICE_TYPE, LedgerAccountWithDevice } from "~Model"
 import { useI18nContext } from "~i18n"
 import { RootStackParamListSwitch, Routes } from "~Navigation"
 import { NativeStackScreenProps } from "@react-navigation/native-stack"
 import { useNavigation } from "@react-navigation/native"
-import { MessageDetails, UnknownAppMessage } from "~Screens"
+import { MessageDetails } from "~Screens"
 import { AnalyticsEvent } from "~Constants"
 
 type Props = NativeStackScreenProps<
@@ -43,7 +36,6 @@ type Props = NativeStackScreenProps<
 export const SignCertificateScreen: FC<Props> = ({ route }: Props) => {
     const { requestEvent, session, message } = route.params
 
-    const { web3Wallet } = useWalletConnect()
     const { LL } = useI18nContext()
     const nav = useNavigation()
     const selectedAccount: AccountWithDevice = useAppSelector(
@@ -52,20 +44,8 @@ export const SignCertificateScreen: FC<Props> = ({ route }: Props) => {
     const track = useAnalyticTracking()
     const dispatch = useAppDispatch()
 
-    const [isInvalidChecked, setInvalidChecked] = React.useState(false)
-
     // Request values
     const { url } = WalletConnectUtils.getSessionRequestAttributes(session)
-
-    const connectedApp = useAppSelector(state => {
-        return selectedConnectedApp(state, session.topic)
-    })
-
-    const validConnectedApp = useMemo(() => {
-        if (!connectedApp) return true
-
-        return connectedApp.verifyContext.verified.validation === "VALID"
-    }, [connectedApp])
 
     // Prepare certificate to sign
     const cert: Certificate = useMemo(() => {
@@ -93,6 +73,8 @@ export const SignCertificateScreen: FC<Props> = ({ route }: Props) => {
 
     const handleAccept = useCallback(
         async (password?: string) => {
+            const web3Wallet = await WalletConnectUtils.getWeb3Wallet()
+
             try {
                 if (selectedAccount.device.type === DEVICE_TYPE.LEDGER) {
                     nav.navigate(Routes.LEDGER_SIGN_CERTIFICATE, {
@@ -112,7 +94,6 @@ export const SignCertificateScreen: FC<Props> = ({ route }: Props) => {
                 }
 
                 dispatch(setIsAppLoading(true))
-
                 await WalletConnectResponseUtils.signMessageRequestSuccessResponse(
                     {
                         request: requestEvent,
@@ -162,7 +143,6 @@ export const SignCertificateScreen: FC<Props> = ({ route }: Props) => {
             selectedAccount,
             signMessage,
             requestEvent,
-            web3Wallet,
             LL,
             cert,
             dispatch,
@@ -174,6 +154,8 @@ export const SignCertificateScreen: FC<Props> = ({ route }: Props) => {
 
     const onReject = useCallback(async () => {
         if (requestEvent) {
+            const web3Wallet = await WalletConnectUtils.getWeb3Wallet()
+
             await WalletConnectResponseUtils.userRejectedMethodsResponse({
                 request: requestEvent,
                 web3Wallet,
@@ -182,7 +164,7 @@ export const SignCertificateScreen: FC<Props> = ({ route }: Props) => {
         }
         track(AnalyticsEvent.DAPP_CERTIFICATE_REJECTED)
         onClose()
-    }, [requestEvent, track, onClose, web3Wallet, LL])
+    }, [requestEvent, track, onClose, LL])
 
     const {
         isPasswordPromptOpen,
@@ -198,11 +180,6 @@ export const SignCertificateScreen: FC<Props> = ({ route }: Props) => {
     const onPressBack = useCallback(async () => {
         await onReject()
     }, [onReject])
-
-    debug({
-        isInvalidChecked,
-        validConnectedApp,
-    })
 
     return (
         <BaseSafeArea>
@@ -246,12 +223,6 @@ export const SignCertificateScreen: FC<Props> = ({ route }: Props) => {
                     />
 
                     <BaseSpacer height={30} />
-
-                    <UnknownAppMessage
-                        verifyContext={connectedApp?.verifyContext}
-                        confirmed={isInvalidChecked}
-                        setConfirmed={setInvalidChecked}
-                    />
                 </BaseView>
 
                 <BaseSpacer height={30} />
@@ -264,10 +235,7 @@ export const SignCertificateScreen: FC<Props> = ({ route }: Props) => {
                         action={checkIdentityBeforeOpening}
                         /* We must assert that `biometrics` is not empty otherwise we don't know if the user has set biometrics or passcode, thus failing to decrypt the wallet when signing */
                         isLoading={isBiometricsEmpty}
-                        disabled={
-                            isBiometricsEmpty ||
-                            (!validConnectedApp && !isInvalidChecked)
-                        }
+                        disabled={isBiometricsEmpty}
                     />
                     <BaseSpacer height={16} />
                     <BaseButton
