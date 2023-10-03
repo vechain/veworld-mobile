@@ -188,7 +188,6 @@ export const ActivityDetailsScreen = ({ route }: Props) => {
         <>
             <Layout
                 safeAreaTestID="Activity_Details_Screen"
-                showSelectedNetwork
                 noStaticBottomPadding
                 title={getActivityTitle(activity, LL, isSwap)}
                 body={
