@@ -45,6 +45,11 @@ export const Balance: React.FC<Props> = memo(
             ).map(_value => "•")
         }, [balance, isVisible])
 
+        const computeFonts = useMemo(
+            () => (renderBalance.length > 9 ? "title" : "hugeTitle"),
+            [renderBalance.length],
+        )
+
         return (
             <>
                 <BaseView flexDirection="row">
@@ -73,14 +78,14 @@ export const Balance: React.FC<Props> = memo(
                                         : COLORS.DARK_PURPLE
                                 }
                                 highlightColor={COLORS.LIGHT_PURPLE}
-                                height={45}
+                                height={renderBalance.length > 9 ? 22 : 45}
                                 width={140}
                             />
                         </BaseView>
                     ) : (
                         <BaseText
                             color={theme.colors.textReversed}
-                            typographyFont="hugeTitle">
+                            typographyFont={computeFonts}>
                             {renderBalance}
                         </BaseText>
                     )}
