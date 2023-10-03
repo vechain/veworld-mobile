@@ -1,6 +1,6 @@
 Feature: User Onboarding
 
-  Background:
+  Background: 
     * The app is opened
     * The user is in the onboarding welcome screen
 
@@ -9,9 +9,9 @@ Feature: User Onboarding
     And The user chooses to protect the wallet with a password "<password>" and confirms with "<password>"
     Then The user should see wallet success screen
 
-    Examples:
+    Examples: 
       | password |
-      | 134679   |
+      |   134679 |
 
   Scenario: User successfully creates a local wallet with biometrics protection
     Given The app is opened and is iOS and has biometrics authorization
@@ -19,25 +19,20 @@ Feature: User Onboarding
     And The user chooses to protect the wallet with biometrics
     Then The user should see wallet success screen
 
-    Examples:
-      | password |
-      | 134679   |
-
-  Scenario:  User successfully imports a local wallet
+  Scenario: User successfully imports a local wallet
     When The user onboards with an imported mnemonic "<mnemonic>"
     And The user chooses to protect the wallet with a password "<password>" and confirms with "<password>"
     Then The user should see wallet success screen
 
-    Examples:
+    Examples: 
       | password | mnemonic                                                                    |
-      | 134679   | denial kitchen pet squirrel other broom bar gas better priority spoil cross |
-
+      |   134679 | denial kitchen pet squirrel other broom bar gas better priority spoil cross |
 
   Scenario: User attemps to import a local wallet with an invalid mnemonic
     When The user onboards with an imported mnemonic "<mnemonic>"
     Then The user should not see wallet protection screen
 
-    Examples:
+    Examples: 
       | mnemonic                                                                            |
       | denial denial denial denial denial denial denial denial denial denial denial denial |
 
@@ -46,19 +41,19 @@ Feature: User Onboarding
     And The user chooses to protect the wallet with a password "<password>" and confirms with "<confirmPassword>"
     Then The user should not see wallet success screen
 
-    Examples:
+    Examples: 
       | password | confirmPassword | mnemonic                                                                    |
-      | 134679   | 111111          | denial kitchen pet squirrel other broom bar gas better priority spoil cross |
+      |   134679 |          111111 | denial kitchen pet squirrel other broom bar gas better priority spoil cross |
 
-  Scenario:  User successfully imports a local wallet and chooses biometric protection
+  Scenario: User successfully imports a local wallet and chooses biometric protection
     Given The app is opened and is iOS and has biometrics authorization
     And The user onboards with an imported mnemonic "<mnemonic>"
     And The user chooses to protect the wallet with biometrics
     Then The user should see wallet success screen
 
-    Examples:
+    Examples: 
       | password | mnemonic                                                                    |
-      | 134679   | denial kitchen pet squirrel other broom bar gas better priority spoil cross |
+      |   134679 | denial kitchen pet squirrel other broom bar gas better priority spoil cross |
 
   Scenario: The user attempts to use biometrics when it is not authorized
     Given The app is opened and is iOS and does not have biometrics authorization
@@ -66,7 +61,7 @@ Feature: User Onboarding
     And The user chooses to protect the wallet with biometrics
     Then The button use biometrics is disabled
 
-    Examples:
+    Examples: 
       | mnemonic                                                                    |
       | denial kitchen pet squirrel other broom bar gas better priority spoil cross |
 
@@ -76,6 +71,6 @@ Feature: User Onboarding
     And The user chooses to protect the wallet with biometrics and does not enroll
     Then The button use biometrics is disabled
 
-    Examples:
+    Examples: 
       | mnemonic                                                                    |
       | denial kitchen pet squirrel other broom bar gas better priority spoil cross |
