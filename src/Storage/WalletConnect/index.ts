@@ -9,7 +9,7 @@ export function parseEntry(entry: [string, string | null]): [string, any] {
     return [entry[0], safeJsonParse(entry[1] ?? "")]
 }
 
-export class VeWorldWCStorage implements IKeyValueStorage {
+class VeWorldWCStorage implements IKeyValueStorage {
     async getKeys(): Promise<string[]> {
         return mmkv.getAllKeys()
     }
@@ -45,4 +45,12 @@ export class VeWorldWCStorage implements IKeyValueStorage {
     async removeItem(key: string): Promise<void> {
         mmkv.delete(key)
     }
+
+    async clear(): Promise<void> {
+        mmkv.getAllKeys().forEach(key => mmkv.delete(key))
+    }
 }
+
+const wcStorage = new VeWorldWCStorage()
+
+export { wcStorage }

@@ -1,4 +1,4 @@
-import React, { Fragment, useEffect, useMemo, useRef, useState } from "react"
+import React, { Fragment, useCallback, useMemo, useRef, useState } from "react"
 import {
     BaseSpacer,
     BaseText,
@@ -7,7 +7,6 @@ import {
     SwipeableRow,
     useWalletConnect,
 } from "~Components"
-import { selectAccounts, useAppSelector } from "~Storage/Redux"
 import { SessionTypes } from "@walletconnect/types"
 import { isEmpty } from "lodash"
 import {
@@ -20,7 +19,7 @@ import {
 import { useI18nContext } from "~i18n"
 import { SwipeableItemImperativeRef } from "react-native-swipeable-item"
 import { useBottomSheetModal } from "~Hooks"
-import { WalletConnectUtils } from "~Utils"
+import { selectAccounts, useAppSelector } from "~Storage/Redux"
 
 /**
  * A map of account addresses to an array of sessions
@@ -30,39 +29,32 @@ type AccountApps = Record<string, SessionTypes.Struct[]>
 export const ConnectedAppsScreen = () => {
     const accounts = useAppSelector(selectAccounts)
     const { LL } = useI18nContext()
-    const { disconnect } = useWalletConnect()
+    const { disconnectSession, activeSessions } = useWalletConnect()
     const [sessionToDelete, setSessionToDelete] =
         useState<SessionTypes.Struct>()
-    const [connectedApps, setConnectedApps] = useState<AccountApps>({})
 
     // Keep track of the swipeable items refs
     const swipeableItemRefs = useRef<Map<string, SwipeableItemImperativeRef>>(
         new Map(),
     )
 
-    /**
-     * Populates the account sessions from the Web3Wallet
-     */
-    useEffect(() => {
-        WalletConnectUtils.getWeb3Wallet().then(wallet => {
-            const sessions = Object.values(wallet.getActiveSessions())
+    const connectedApps = useMemo(() => {
+        const sessions = Object.values(activeSessions)
 
-            const apps: AccountApps = {}
+        const apps: AccountApps = {}
 
-            sessions.forEach(session => {
-                const account =
-                    session.namespaces.vechain.accounts[0].split(":")[2]
+        sessions.forEach(session => {
+            const account = session.namespaces.vechain.accounts[0].split(":")[2]
 
-                if (!apps[account]) {
-                    apps[account] = []
-                }
+            if (!apps[account]) {
+                apps[account] = []
+            }
 
-                apps[account].push(session)
-            })
-
-            setConnectedApps(apps)
+            apps[account].push(session)
         })
-    }, [])
+
+        return apps
+    }, [activeSessions])
 
     const totalSessions = useMemo(() => {
         return Object.values(connectedApps).reduce(
@@ -82,6 +74,14 @@ export const ConnectedAppsScreen = () => {
         onOpen: openConnectedAppDetailsSheet,
         onClose: closeConnectedAppDetailsSheet,
     } = useBottomSheetModal()
+
+    const removeApp = useCallback(
+        async (topic: string) => {
+            await disconnectSession(topic)
+            closeConfirmDisconnectDetailsSheet()
+        },
+        [disconnectSession, closeConfirmDisconnectDetailsSheet],
+    )
 
     return (
         <Layout
@@ -185,7 +185,7 @@ export const ConnectedAppsScreen = () => {
                                         onCancel={
                                             closeConfirmDisconnectDetailsSheet
                                         }
-                                        onConfirm={topic => disconnect(topic)}
+                                        onConfirm={removeApp}
                                         session={sessionToDelete!}
                                         account={account}
                                     />

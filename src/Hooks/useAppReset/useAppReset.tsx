@@ -11,6 +11,7 @@ import {
     usePersistedCache,
     usePersistedTheme,
 } from "~Components/Providers"
+import { wcStorage } from "~Storage/WalletConnect"
 
 export const useAppReset = () => {
     const dispatch = useAppDispatch()
@@ -33,6 +34,8 @@ export const useAppReset = () => {
 
     return useCallback(async () => {
         await removeEncryptionKeysFromKeychain()
+
+        await wcStorage.clear()
 
         await resetCaches()
 

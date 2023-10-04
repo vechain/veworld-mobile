@@ -17,13 +17,14 @@ import {
 import HexUtils from "~Utils/HexUtils"
 import { ErrorUtils } from "~Utils"
 import { Mutex } from "async-mutex"
-import { VeWorldWCStorage } from "~Storage/WalletConnect"
+import { wcStorage } from "~Storage/WalletConnect"
 
 let _web3wallet: IWeb3Wallet
 
 export const core: ICore = new Core({
     projectId: process.env.REACT_APP_WALLET_CONNECT_PROJECT_ID,
-    storage: new VeWorldWCStorage(),
+    storage: wcStorage,
+    logger: "trace",
 })
 
 const walletInitializer = new Mutex()
