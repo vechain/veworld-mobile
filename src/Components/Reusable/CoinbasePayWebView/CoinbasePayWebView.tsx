@@ -1,5 +1,5 @@
 import React, { useCallback, useMemo, useState } from "react"
-import { WebView } from "react-native-webview"
+import { WebView, WebViewMessageEvent } from "react-native-webview"
 import { generateOnRampURL } from "@coinbase/cbpay-js"
 import "react-native-url-polyfill/auto"
 import { useNavigation } from "@react-navigation/native"
@@ -61,7 +61,7 @@ export const CoinbasePayWebView = (props: {
     }, [systemColorScheme])
 
     const onMessage = useCallback(
-        (event: any) => {
+        (event: WebViewMessageEvent) => {
             try {
                 const { data } = JSON.parse(event.nativeEvent.data)
                 if (data.eventName === "exit") {
