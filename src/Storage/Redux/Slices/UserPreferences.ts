@@ -1,5 +1,6 @@
 import { LANGUAGE } from "../../../Constants/Enums/LanguageEnum"
 import { createSlice, PayloadAction } from "@reduxjs/toolkit"
+import moment from "moment"
 import { CURRENCY, ThemeEnum } from "~Constants"
 
 /**
@@ -24,7 +25,7 @@ export interface UserPreferenceState {
     isAnalyticsTrackingEnabled: boolean
     isSentryTrackingEnabled: boolean
     devFeaturesEnabled: boolean
-    lastReviewTimestamp?: string
+    lastReviewTimestamp: string
 }
 
 const initialState: UserPreferenceState = {
@@ -37,7 +38,11 @@ const initialState: UserPreferenceState = {
     isAnalyticsTrackingEnabled: true, // this is enabled by default because otherwise onboarding events won't be tracked
     isSentryTrackingEnabled: true,
     devFeaturesEnabled: __DEV__,
-    lastReviewTimestamp: undefined,
+    // this will ask the user to review the app after 3 days the first time
+    lastReviewTimestamp: moment()
+        .subtract(3, "weeks")
+        .add(3, "days")
+        .toISOString(),
 }
 
 export const UserPreferencesSlice = createSlice({
