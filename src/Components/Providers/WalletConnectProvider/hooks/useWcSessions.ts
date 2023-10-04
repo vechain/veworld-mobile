@@ -134,7 +134,7 @@ export const useWcSessions = (
                     topic: topic,
                 })
 
-                await setTimeout(() => {}, 1000)
+                await setTimeout(() => {}, 500)
             }
         },
         [],
