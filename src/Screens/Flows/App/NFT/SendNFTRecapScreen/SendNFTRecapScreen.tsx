@@ -120,7 +120,6 @@ export const SendNFTRecapScreen = ({ route }: Props) => {
         <Layout
             noStaticBottomPadding
             safeAreaTestID="Send_NFT_Recap_Screen"
-            showSelectedNetwork
             title={LL.RECAP()}
             body={
                 <>
