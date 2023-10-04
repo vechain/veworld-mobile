@@ -1,5 +1,5 @@
 import { Image, StyleSheet } from "react-native"
-import React, { memo } from "react"
+import React, { memo, useMemo } from "react"
 import {
     BaseText,
     BaseCard,
@@ -62,6 +62,11 @@ export const VechainTokenCard = memo(
         const tokenValueLabelColor = theme.isDark
             ? COLORS.WHITE_DISABLED
             : COLORS.DARK_PURPLE_DISABLED
+
+        const computeFonts = useMemo(
+            () => (fiatBalance.length > 6 ? "body" : "subTitleBold"),
+            [fiatBalance.length],
+        )
 
         return (
             <Animated.View style={[baseStyles.innerRow]}>
@@ -152,7 +157,7 @@ export const VechainTokenCard = memo(
                                 />
                             </BaseView>
                         ) : (
-                            <BaseText typographyFont="subTitleBold">
+                            <BaseText typographyFont={computeFonts}>
                                 {isBalanceVisible ? fiatBalance : "••••"}
                             </BaseText>
                         )}
