@@ -229,8 +229,8 @@ export const InsertAddressSendScreen = ({ route }: Props) => {
 
                     <CreateContactBottomSheet
                         ref={createContactBottomSheetRef}
-                        onClose={closeCreateContactSheet}
                         onSubmit={navigateNext}
+                        onClose={closeCreateContactSheet}
                         address={selectedAddress}
                     />
 
