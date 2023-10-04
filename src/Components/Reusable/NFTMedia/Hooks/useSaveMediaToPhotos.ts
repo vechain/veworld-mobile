@@ -107,6 +107,8 @@ export const useSaveMediaToPhotos = (
             })
                 .fetch("GET", image.image)
                 .progress((received, total) => {
+                    // only user progress for video download
+                    if (image.mediaType !== "video") return
                     setProgress(received / total)
                 })
 
