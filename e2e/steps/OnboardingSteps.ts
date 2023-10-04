@@ -21,6 +21,9 @@ Given(
     async () => {
         if (detox.device.getPlatform() !== "ios") return "skipped"
 
+        // Enroll in Face ID
+        await detox.device.setBiometricEnrollment(true)
+
         let retries: number = 5
         while (retries-- > 0) {
             try {
