@@ -24,7 +24,7 @@ let _web3wallet: IWeb3Wallet
 export const core: ICore = new Core({
     projectId: process.env.REACT_APP_WALLET_CONNECT_PROJECT_ID,
     storage: wcStorage,
-    logger: "trace",
+    logger: "info",
 })
 
 const walletInitializer = new Mutex()
