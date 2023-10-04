@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useMemo, useState } from "react"
+import { useCallback, useEffect, useMemo, useRef, useState } from "react"
 import { useI18nContext } from "~i18n"
 import ReactNativeBlobUtil, {
     FetchBlobResponse,
@@ -16,6 +16,7 @@ export const useSaveMediaToPhotos = (
 ) => {
     const { LL } = useI18nContext()
     const [progress, setProgress] = useState(0)
+    const imageToFlush = useRef<FetchBlobResponse | undefined>()
     const [task, setTask] = useState<
         StatefulPromise<FetchBlobResponse> | undefined
     >()
@@ -115,6 +116,7 @@ export const useSaveMediaToPhotos = (
             setTask(_task)
 
             const _image = await Promise.resolve(_task)
+            imageToFlush.current = _image // save image to flush later (in case of error)
 
             // save image to device storage
             if (PlatformUtils.isAndroid()) {
@@ -156,10 +158,14 @@ export const useSaveMediaToPhotos = (
                     LL.SAVE_MEDIA_ERROR_TITLE(),
                     LL.SAVE_MEDIA_ERROR_SUBTITLE(),
                     LL.COMMON_BTN_OK(),
+                    () => {
+                        imageToFlush.current?.flush()
+                        imageToFlush.current = undefined
+                    },
                 )
             }
         }
-    }, [image, hasAndroidPermission, LL, nftName])
+    }, [image, hasAndroidPermission, LL, nftName, imageToFlush])
 
     const onLongPressImage = useCallback(
         async (index: number) => {
