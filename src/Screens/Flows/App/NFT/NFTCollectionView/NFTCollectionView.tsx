@@ -8,20 +8,17 @@ import { Routes } from "~Navigation"
 import HapticsService from "~Services/HapticsService"
 import { useToggleCollection } from "../NFTCollectionDetailScreen/Components/Hooks/useToggleCollection"
 import { useThemedStyles } from "~Hooks"
+import { useI18nContext } from "~i18n"
 
 type Props = {
     collection: NftCollection
     index: number
 }
 
-enum ItemTitle {
-    HIDE_COLLECTION = "Hide collection",
-    SHOW_COLLECTION = "Show collection",
-}
-
 export const NFTCollectionView = ({ collection, index }: Props) => {
     const { styles } = useThemedStyles(baseStyles)
     const nav = useNavigation()
+    const { LL } = useI18nContext()
 
     const { onToggleCollection, isBlacklisted } =
         useToggleCollection(collection)
@@ -30,11 +27,18 @@ export const NFTCollectionView = ({ collection, index }: Props) => {
         () => [
             {
                 title: isBlacklisted
-                    ? ItemTitle.SHOW_COLLECTION
-                    : ItemTitle.HIDE_COLLECTION,
+                    ? LL.SHOW_COLLECTION()
+                    : LL.HIDE_COLLECTION(),
+
+                subtitle: isBlacklisted
+                    ? LL.SHOW_COLLECTION_SUBTITLE()
+                    : LL.HIDE_COLLECTION_SUBTITLE(),
+
+                systemIcon: "circle.slash", // iOS system icon name
+                destructive: true,
             },
         ],
-        [isBlacklisted],
+        [isBlacklisted, LL],
     )
 
     const onCollectionPress = useCallback(() => {
