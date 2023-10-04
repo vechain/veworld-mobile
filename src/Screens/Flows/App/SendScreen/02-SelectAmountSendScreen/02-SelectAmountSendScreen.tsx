@@ -165,6 +165,11 @@ export const SelectAmountSendScreen = ({ route }: Props) => {
             : token.name
     }, [token.name])
 
+    const computeFonts = useMemo(
+        () => (input.length > 7 ? 24 : 32),
+        [input.length],
+    )
+
     return (
         <Layout
             safeAreaTestID="Select_Amount_Send_Screen"
@@ -253,11 +258,13 @@ export const SelectAmountSendScreen = ({ route }: Props) => {
                                                     <TextInput
                                                         placeholder="0"
                                                         style={[
-                                                            {
-                                                                color: inputColor,
-                                                            },
                                                             // @ts-ignore
                                                             styles.input,
+                                                            {
+                                                                color: inputColor,
+                                                                fontSize:
+                                                                    computeFonts,
+                                                            },
                                                         ]}
                                                         placeholderTextColor={
                                                             placeholderColor
