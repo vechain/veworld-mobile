@@ -1,3 +1,4 @@
+@onboarding
 Feature: User Onboarding
 
   Background: 

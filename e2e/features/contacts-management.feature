@@ -1,3 +1,4 @@
+@contacts
 Feature: The user can manage contacts
 
   Background: 

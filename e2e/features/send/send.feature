@@ -1,3 +1,4 @@
+@send
 Feature: The user send tokens in test net
 
   Background: 

@@ -1,6 +1,7 @@
+@token-management
 Feature: The user can manage tokens
 
-  Background:
+  Background: 
     * The app is opened
     * Open with demo account
     * The user go to tokens management screen
@@ -9,7 +10,7 @@ Feature: The user can manage tokens
     When The user selects "<token>" token from the unselected tokens list
     Then The user should see "<token>" token balance in home screen
 
-    Examples:
+    Examples: 
       | token |
       | Plair |
 
@@ -17,7 +18,7 @@ Feature: The user can manage tokens
     When The user selects "<token>" and "<token2>" tokens from the unselected tokens list
     Then The user should see "<token>" and "<token2>" token balances in home screen
 
-    Examples:
+    Examples: 
       | token      | token2  |
       | Safe Haven | TicTalk |
 
@@ -26,7 +27,7 @@ Feature: The user can manage tokens
     And The user unselect "<token>"
     Then The user should not see "<token>" token balance in home screen
 
-    Examples:
+    Examples: 
       | token      | token2  |
       | Safe Haven | TicTalk |
 
@@ -34,7 +35,7 @@ Feature: The user can manage tokens
     When The user type the query "<query>"
     Then The list should display "<token>" and not "<token2>"
 
-    Examples:
+    Examples: 
       | query | token | token2  |
       | Plair | Plair | TicTalk |
 
@@ -43,7 +44,7 @@ Feature: The user can manage tokens
     And The user clicks back button
     Then The user should see "<token>" custom token balance in home screen
 
-    Examples:
+    Examples: 
       | address                                    | token     |
       | 0x34149f8da92222af599ba936d9089f5ce460b522 | CarpToken |
 
@@ -51,7 +52,7 @@ Feature: The user can manage tokens
     When The user add multiple custom tokens with address "<address1>" and "<address2>"
     Then The user should see "<token1>" and "<token2>" balances in home screen
 
-    Examples:
+    Examples: 
       | address1                                   | token1    | address2                                   | token2  |
       | 0x34149f8da92222af599ba936d9089f5ce460b522 | CarpToken | 0xbd0e5d86fdd4bd6d249ceea1336594f6d959c099 | DavMain |
 
@@ -60,7 +61,7 @@ Feature: The user can manage tokens
     And The user delete custom token "<token1>"
     Then The user should see "<token1>" but not "<token2>" in home screen
 
-    Examples:
+    Examples: 
       | address1                                   | token1    | address2                                   | token2  |
       | 0x34149f8da92222af599ba936d9089f5ce460b522 | CarpToken | 0xbd0e5d86fdd4bd6d249ceea1336594f6d959c099 | DavMain |
 
@@ -78,6 +79,6 @@ Feature: The user can manage tokens
     And The user goes to home tab
     Then The user is in home screen
 
-    Examples:
+    Examples: 
       | token | token2     |
       | Plair | Decent.bet |
