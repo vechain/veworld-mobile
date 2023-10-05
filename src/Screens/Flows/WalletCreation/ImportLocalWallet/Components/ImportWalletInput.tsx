@@ -42,7 +42,7 @@ const baseStyles = (isError: boolean) => (theme: ColorThemeType) =>
             borderRadius: 8,
             paddingVertical: 20,
             paddingHorizontal: 10,
-            height: 140,
+            height: 180,
             lineHeight: 28,
             fontSize: defaultTypography.bodyAccent.fontSize,
             fontFamily: defaultTypography.bodyAccent.fontFamily,
