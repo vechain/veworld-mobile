@@ -2,7 +2,7 @@ import * as React from "react"
 import Svg, { Circle, Path } from "react-native-svg"
 import { SvgProps } from "react-native-svg/lib/typescript/ReactNativeSVG"
 
-function CoinbaseLogoSmallSvg(props: SvgProps) {
+export function CoinbaseLogoSmallSvg(props: SvgProps) {
     return (
         <Svg
             width={props.width ? props.width : "100px"}
@@ -19,5 +19,3 @@ function CoinbaseLogoSmallSvg(props: SvgProps) {
         </Svg>
     )
 }
-
-export default CoinbaseLogoSmallSvg

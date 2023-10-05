@@ -1,8 +1,7 @@
 import React from "react"
 import { createNativeStackNavigator } from "@react-navigation/native-stack"
-import { BuyWebviewScreen } from "~Screens/Flows/App/BuyScreen/BuyWebviewScreen/BuyWebviewScreen"
 import { Routes } from "~Navigation/Enums"
-import { BuyScreen } from "~Screens"
+import { BuyScreen, BuyWebviewScreen } from "~Screens"
 import { useNavAnimation } from "~Hooks"
 
 export type RootStackParamListBuy = {

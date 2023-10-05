@@ -1,5 +1,4 @@
 import React from "react"
-import CoinbaseLogoSmallSvg from "~Assets/Img/CoinbaseLogoSmallSvg"
 import { useTheme } from "~Hooks"
 import { useI18nContext } from "~i18n"
 import { COLORS } from "~Constants"
@@ -8,6 +7,7 @@ import {
     PaymentMethodsIds,
     PaymentMethodsList,
 } from "./constants"
+import { CoinbaseLogoSmallSvg } from "~Assets"
 
 export type PaymentProvider = {
     id: string
