@@ -2834,6 +2834,11 @@
   dependencies:
     merge-options "^3.0.4"
 
+"@react-native-camera-roll/camera-roll@^5.10.0":
+  version "5.10.0"
+  resolved "https://registry.yarnpkg.com/@react-native-camera-roll/camera-roll/-/camera-roll-5.10.0.tgz#98cf5489be6805ac926b1c4d29ac956cf4df45dc"
+  integrity sha512-NZb/zU4S+k1Hx2Y3BdNufrfn8whNsiRjHNxeiGMak8OwDDJikqP5Ej7HXFv8sJSfTGfi1ddH0wdd541MHV/Nbw==
+
 "@react-native-community/blur@^4.3.0":
   version "4.3.2"
   resolved "https://registry.yarnpkg.com/@react-native-community/blur/-/blur-4.3.2.tgz#185a2c7dd03ba168cc95069bc4742e9505fd6c6c"
@@ -3132,9 +3137,9 @@
     nanoid "^3.1.23"
 
 "@reduxjs/toolkit@^1.9.3":
-  version "1.9.6"
-  resolved "https://registry.yarnpkg.com/@reduxjs/toolkit/-/toolkit-1.9.6.tgz#fc968b45fe5b17ff90932c4556960d9c1078365a"
-  integrity sha512-Gc4ikl90ORF4viIdAkY06JNUnODjKfGxZRwATM30EdHq8hLSVoSrwXne5dd739yenP5bJxAX7tLuOWK5RPGtrw==
+  version "1.9.7"
+  resolved "https://registry.yarnpkg.com/@reduxjs/toolkit/-/toolkit-1.9.7.tgz#7fc07c0b0ebec52043f8cb43510cf346405f78a6"
+  integrity sha512-t7v8ZPxhhKgOKtU+uyJT13lu4vL7az5aFi4IdoDs/eS548edn2M8Ik9h8fxgvMjGoAUVFSt6ZC1P5cWmQ014QQ==
   dependencies:
     immer "^9.0.21"
     redux "^4.2.1"
@@ -3793,9 +3798,9 @@
     "@types/react" "*"
 
 "@types/react@*", "@types/react@^18.0.21":
-  version "18.2.24"
-  resolved "https://registry.yarnpkg.com/@types/react/-/react-18.2.24.tgz#3c7d68c02e0205a472f04abe4a0c1df35d995c05"
-  integrity sha512-Ee0Jt4sbJxMu1iDcetZEIKQr99J1Zfb6D4F3qfUWoR1JpInkY1Wdg4WwCyBjL257D0+jGqSl1twBjV8iCaC0Aw==
+  version "18.2.25"
+  resolved "https://registry.yarnpkg.com/@types/react/-/react-18.2.25.tgz#99fa44154132979e870ff409dc5b6e67f06f0199"
+  integrity sha512-24xqse6+VByVLIr+xWaQ9muX1B4bXJKXBbjszbld/UEDslGLY53+ZucF44HCmLbMPejTzGG9XgR+3m2/Wqu1kw==
   dependencies:
     "@types/prop-types" "*"
     "@types/scheduler" "*"
@@ -5531,9 +5536,9 @@ camelcase@^7.0.1:
   integrity sha512-xlx1yCK2Oc1APsPXDL2LdlNP6+uu8OCDdhOBSVT279M/S+y75O30C2VuD8T2ogdePBBl7PfPF4504tnLgX3zfw==
 
 caniuse-lite@^1.0.30001541:
-  version "1.0.30001543"
-  resolved "https://registry.yarnpkg.com/caniuse-lite/-/caniuse-lite-1.0.30001543.tgz#478a3e9dddbb353c5ab214b0ecb0dbed529ed1d8"
-  integrity sha512-qxdO8KPWPQ+Zk6bvNpPeQIOH47qZSYdFZd6dXQzb2KzhnSXju4Kd7H1PkSJx6NICSMgo/IhRZRhhfPTHYpJUCA==
+  version "1.0.30001546"
+  resolved "https://registry.yarnpkg.com/caniuse-lite/-/caniuse-lite-1.0.30001546.tgz#10fdad03436cfe3cc632d3af7a99a0fb497407f0"
+  integrity sha512-zvtSJwuQFpewSyRrI3AsftF6rM0X80mZkChIt1spBGEvRglCrjTniXvinc8JKRoqTwXAgvqTImaN9igfSMtUBw==
 
 capital-case@^1.0.4:
   version "1.0.4"
@@ -6898,9 +6903,9 @@ ee-first@1.1.1:
   integrity sha512-WMwm9LhRUo+WUaRN+vRuETqG89IgZphVSNkdFgeb6sS/E4OrDIN7t48CAewSHXc6C8lefD8KKfr5vY61brQlow==
 
 electron-to-chromium@^1.4.535:
-  version "1.4.540"
-  resolved "https://registry.yarnpkg.com/electron-to-chromium/-/electron-to-chromium-1.4.540.tgz#c685f2f035e93eb21dd6a9cfe2c735bad8f77401"
-  integrity sha512-aoCqgU6r9+o9/S7wkcSbmPRFi7OWZWiXS9rtjEd+Ouyu/Xyw5RSq2XN8s5Qp8IaFOLiRrhQCphCIjAxgG3eCAg==
+  version "1.4.542"
+  resolved "https://registry.yarnpkg.com/electron-to-chromium/-/electron-to-chromium-1.4.542.tgz#9bfe19d8ddafc2591e4a17d04e60a5f5acc54965"
+  integrity sha512-6+cpa00G09N3sfh2joln4VUXHquWrOFx3FLZqiVQvl45+zS9DskDBTPvob+BhvFRmTBkyDSk0vvLMMRo/qc6mQ==
 
 elliptic@6.5.4, elliptic@^6.5.3:
   version "6.5.4"
@@ -10643,10 +10648,10 @@ loose-envify@^1.0.0, loose-envify@^1.1.0, loose-envify@^1.4.0:
   dependencies:
     js-tokens "^3.0.0 || ^4.0.0"
 
-lottie-react-native@6.0.1:
-  version "6.0.1"
-  resolved "https://registry.yarnpkg.com/lottie-react-native/-/lottie-react-native-6.0.1.tgz#0fb1bbe1b25633e681fcae31adffac6fba5b9d6f"
-  integrity sha512-XOVBiDcLLRZVwcXk4cBfyAOZTaXj8dD8iL932Fu+NEdsEpvLACta1YheZmq+tVGo8fLCGJfOlva+gpDfo09k4Q==
+lottie-react-native@^6.3.1:
+  version "6.3.1"
+  resolved "https://registry.yarnpkg.com/lottie-react-native/-/lottie-react-native-6.3.1.tgz#3ad152da79601e6a79ea811436a12a84fe1a4a72"
+  integrity sha512-M18nAVYeGMF//bhL27D2zuMcrFPH0jbD/deBvcWi0CCcfZf6LQfx45xt+cuDqwr5nh6dMm+ta8KfZJmkbNhtlg==
 
 lower-case@^2.0.2:
   version "2.0.2"
@@ -12969,6 +12974,13 @@ react-native-pager-view@^6.2.0:
   version "6.2.1"
   resolved "https://registry.yarnpkg.com/react-native-pager-view/-/react-native-pager-view-6.2.1.tgz#985d21bbb7d7bc012f4c142dedbb98ce4bdea104"
   integrity sha512-fZ8chez5J+w831nSnbtK8hwlCiMy1DgpFv8xG6ajXLsAI8uMkGvP554QDIDNlUoCuVwMf7OFyd32Y2Nm2Iaj9Q==
+
+react-native-progress@^5.0.0:
+  version "5.0.0"
+  resolved "https://registry.yarnpkg.com/react-native-progress/-/react-native-progress-5.0.0.tgz#f5ac6ceaeee27f184c660b00f29419e82a9d0ab0"
+  integrity sha512-KjnGIt3r9i5Kn2biOD9fXLJocf0bwxPRxOyAgXEnZTJQU2O+HyzgGFRCbM5h3izm9kKIkSc1txh8aGmMafCD9A==
+  dependencies:
+    prop-types "^15.7.2"
 
 react-native-qrcode-svg@^6.2.0:
   version "6.2.0"
