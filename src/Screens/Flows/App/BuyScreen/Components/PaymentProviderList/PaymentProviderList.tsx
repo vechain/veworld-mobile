@@ -21,7 +21,7 @@ export const PaymentProviderList = () => {
     const renderItem = useCallback(
         ({ item }: { item: PaymentProvider }) => {
             return (
-                <TouchableOpacity onPress={handleBuyClick}>
+                <TouchableOpacity key={item.id} onPress={handleBuyClick}>
                     <BaseView
                         flexDirection="row"
                         borderRadius={12}
