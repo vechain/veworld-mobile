@@ -271,7 +271,7 @@ type RootTranslation = {
 	 */
 	BD_IMPORT_WALLET_TYPE: string
 	/**
-	 * T​o​ ​a​c​c​e​s​s​ ​y​o​u​r​ ​p​r​e​v​i​o​u​s​ ​w​a​l​l​e​t​,​ ​y​o​u​ ​c​a​n​ ​e​n​t​e​r​ ​y​o​u​r​ ​1​2​-​w​o​r​d​ ​r​e​c​o​v​e​r​y​ ​p​h​r​a​s​e​.
+	 * T​o​ ​a​c​c​e​s​s​ ​y​o​u​r​ ​p​r​e​v​i​o​u​s​ ​w​a​l​l​e​t​,​ ​y​o​u​ ​c​a​n​ ​e​n​t​e​r​ ​y​o​u​r​ ​1​2​/​2​4​-​w​o​r​d​s​ ​r​e​c​o​v​e​r​y​ ​p​h​r​a​s​e​.
 	 */
 	BD_IMPORT_WALLET_TYPE_SEED: string
 	/**
@@ -279,7 +279,7 @@ type RootTranslation = {
 	 */
 	BD_IMPORT_WALLET_TYPE_HARDWARE: string
 	/**
-	 * I​m​p​o​r​t​ ​y​o​u​r​ ​w​a​l​l​e​t​ ​w​i​t​h​ ​y​o​u​r​ ​s​e​c​r​e​t​ ​r​e​c​o​v​e​r​y​ ​p​h​r​a​s​e​.​ ​E​n​t​e​r​ ​y​o​u​r​ ​w​a​l​l​e​t​’​s​ ​1​2​-​w​o​r​d​s​ ​r​e​c​o​v​e​r​y​ ​p​h​r​a​s​e
+	 * I​m​p​o​r​t​ ​y​o​u​r​ ​w​a​l​l​e​t​ ​w​i​t​h​ ​y​o​u​r​ ​s​e​c​r​e​t​ ​r​e​c​o​v​e​r​y​ ​p​h​r​a​s​e​.​ ​E​n​t​e​r​ ​y​o​u​r​ ​w​a​l​l​e​t​’​s​ ​1​2​/​2​4​-​w​o​r​d​s​ ​r​e​c​o​v​e​r​y​ ​p​h​r​a​s​e
 	 */
 	BD_WALLET_IMPORT_LOCAL: string
 	/**
@@ -1411,7 +1411,7 @@ type RootTranslation = {
 	 */
 	NOTIFICATION_TITLE_INVALID_QR: string
 	/**
-	 * O​n​l​y​ ​W​a​l​l​e​t​C​o​n​n​e​c​t​ ​a​n​d​ ​a​d​d​r​e​s​s​ ​c​o​p​y​i​n​g​ ​a​r​e​ ​s​u​p​p​o​r​t​e​d​.​ ​P​l​e​a​s​e​ ​t​r​y​ ​a​g​a​i​n​.
+	 * P​l​e​a​s​e​ ​s​c​a​n​ ​a​ ​W​a​l​l​e​t​C​o​n​n​e​c​t​ ​o​r​ ​w​a​l​l​e​t​ ​a​d​d​r​e​s​s​ ​Q​R​ ​c​o​d​e​.
 	 */
 	NOTIFICATION_INVALID_QR: string
 	/**
@@ -2781,7 +2781,7 @@ export type TranslationFunctions = {
 	 */
 	BD_IMPORT_WALLET_TYPE: () => LocalizedString
 	/**
-	 * To access your previous wallet, you can enter your 12-word recovery phrase.
+	 * To access your previous wallet, you can enter your 12/24-words recovery phrase.
 	 */
 	BD_IMPORT_WALLET_TYPE_SEED: () => LocalizedString
 	/**
@@ -2789,7 +2789,7 @@ export type TranslationFunctions = {
 	 */
 	BD_IMPORT_WALLET_TYPE_HARDWARE: () => LocalizedString
 	/**
-	 * Import your wallet with your secret recovery phrase. Enter your wallet’s 12-words recovery phrase
+	 * Import your wallet with your secret recovery phrase. Enter your wallet’s 12/24-words recovery phrase
 	 */
 	BD_WALLET_IMPORT_LOCAL: () => LocalizedString
 	/**
@@ -3903,7 +3903,7 @@ Please, try again later.
 	 */
 	NOTIFICATION_TITLE_INVALID_QR: () => LocalizedString
 	/**
-	 * Only WalletConnect and address copying are supported. Please try again.
+	 * Please scan a WalletConnect or wallet address QR code.
 	 */
 	NOTIFICATION_INVALID_QR: () => LocalizedString
 	/**

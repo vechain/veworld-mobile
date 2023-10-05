@@ -83,10 +83,10 @@ const en: BaseTranslation = {
     BD_USER_PASSWORD_ERROR: "<><> PIN doesn't match.",
     BD_USER_EDIT_PASSWORD_ERROR: "Old PIN can't be the same as new PIN",
     BD_IMPORT_WALLET_TYPE: "Select the type of wallet you want to import",
-    BD_IMPORT_WALLET_TYPE_SEED: "To access your previous wallet, you can enter your 12-word recovery phrase.",
+    BD_IMPORT_WALLET_TYPE_SEED: "To access your previous wallet, you can enter your 12/24-words recovery phrase.",
     BD_IMPORT_WALLET_TYPE_HARDWARE: "You can connect a hardware wallet which will give you access to your new and existing accounts.",
     BD_WALLET_IMPORT_LOCAL:
-        "Import your wallet with your secret recovery phrase. Enter your wallet’s 12-words recovery phrase",
+        "Import your wallet with your secret recovery phrase. Enter your wallet’s 12/24-words recovery phrase",
     BD_ALERT_FACE_ID_CANCELLED: "You cancelled using Face ID to authenticate. You must be authenticated to use VeWallet. Do you want to log out, or retry authenticating?",
     BD_ALERT_BIOMETRICS_CANCELLED: "You cancelled using Biometrics to authenticate. You must be authenticated to use VeWorld. Do you want to Reset the Wallet, or Retry authenticating?",
     BD_CREATE_WALLET_SUCCESS: "Unleash the power of sustainability and web3 for a better world.",
