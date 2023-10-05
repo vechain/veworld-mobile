@@ -37,6 +37,7 @@ export const HeaderView = memo(
                         <BaseIcon
                             color={theme.colors.text}
                             name="cart-outline"
+                            size={21}
                         />
                     ),
                     testID: "buyButton",

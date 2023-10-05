@@ -7,7 +7,7 @@ import { FastAction } from "~Model"
 export const FastActionsBar = memo(
     ({
         actions,
-        actionItemWidth = 70,
+        actionItemWidth = 60,
     }: {
         actions: FastAction[]
         actionItemWidth?: number
@@ -66,6 +66,6 @@ const baseStyles = (actionItemWidth: number) => () =>
             width: actionItemWidth,
         },
         actionsContainer: {
-            paddingHorizontal: 10,
+            paddingHorizontal: 16,
         },
     })
