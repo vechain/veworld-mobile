@@ -1710,7 +1710,7 @@ type RootTranslation = {
 	 */
 	SAVE_MEDIA_ERROR_TITLE: string
 	/**
-	 * T​h​e​r​e​ ​w​a​s​ ​a​n​ ​e​r​r​o​r​ ​t​r​y​i​n​g​ ​t​o​ ​s​a​v​e​ ​y​o​u​r​ ​m​e​d​i​a​.​ ​M​e​d​i​a​ ​t​p​y​e​ ​i​s​ ​u​n​s​u​p​p​o​r​t​e​d​.
+	 * T​h​e​r​e​ ​w​a​s​ ​a​n​ ​e​r​r​o​r​ ​t​r​y​i​n​g​ ​t​o​ ​s​a​v​e​ ​y​o​u​r​ ​m​e​d​i​a​.​ ​M​e​d​i​a​ ​t​y​p​e​ ​i​s​ ​u​n​s​u​p​p​o​r​t​e​d​.
 	 */
 	SAVE_MEDIA_ERROR_SUBTITLE: string
 	/**
@@ -1778,7 +1778,7 @@ type RootTranslation = {
 	 */
 	NFT_DETAIL_SCORES: string
 	/**
-	 * N​F​T​ ​i​a​m​g​e​ ​s​a​v​e​d​ ​t​o​ ​p​h​o​t​o​ ​a​l​b​u​m
+	 * N​F​T​ ​i​m​a​g​e​ ​s​a​v​e​d​ ​t​o​ ​p​h​o​t​o​ ​a​l​b​u​m
 	 */
 	NFT_ALERT_IMAGE_SAVED_TITLE: string
 	/**
@@ -4235,7 +4235,7 @@ Please, try again later.
 	 */
 	SAVE_MEDIA_ERROR_TITLE: () => LocalizedString
 	/**
-	 * There was an error trying to save your media. Media tpye is unsupported.
+	 * There was an error trying to save your media. Media type is unsupported.
 	 */
 	SAVE_MEDIA_ERROR_SUBTITLE: () => LocalizedString
 	/**
@@ -4303,7 +4303,7 @@ Please, try again later.
 	 */
 	NFT_DETAIL_SCORES: () => LocalizedString
 	/**
-	 * NFT iamge saved to photo album
+	 * NFT image saved to photo album
 	 */
 	NFT_ALERT_IMAGE_SAVED_TITLE: () => LocalizedString
 	/**

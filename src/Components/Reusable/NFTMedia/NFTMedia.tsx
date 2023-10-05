@@ -39,6 +39,7 @@ export const NFTMedia = memo(
         ...restProps
     }: Props) => {
         const [isLoading, setIsLoading] = useState(true)
+        const [isError, setIsError] = useState(false)
         const timeoutRef = useRef<NodeJS.Timeout | null>(null)
         const [tokenMedia, setTokenMedia] = useState<Media>()
         const theme = useTheme()
@@ -49,6 +50,7 @@ export const NFTMedia = memo(
             useSaveMediaToPhotos(tokenMedia, nftName)
 
         const onLoadEnd = useCallback(() => {
+            setIsError(true)
             setIsLoading(false)
         }, [])
 
@@ -116,7 +118,7 @@ export const NFTMedia = memo(
         ])
 
         const RenderImageWithProvider = useMemo(() => {
-            if (isUseLongPress) {
+            if (isUseLongPress && !isError) {
                 return (
                     <LongPressProvider
                         items={LongPressItems}
@@ -127,7 +129,13 @@ export const NFTMedia = memo(
             } else {
                 return RenderNFT
             }
-        }, [LongPressItems, RenderNFT, isUseLongPress, onLongPressImage])
+        }, [
+            LongPressItems,
+            RenderNFT,
+            isUseLongPress,
+            onLongPressImage,
+            isError,
+        ])
 
         return (
             <BaseView>

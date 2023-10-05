@@ -140,11 +140,9 @@ export const useSaveMediaToPhotos = (
                 LL.NFT_ALERT_IMAGE_SAVED_TITLE(),
                 LL.NFT_ALERT_IMAGE_SAVED_MSG(),
                 LL.COMMON_BTN_OK(),
-                () => {
-                    // remove image from device cache
-                    _image.flush()
-                },
             )
+
+            _image.flush()
         } catch (error) {
             setProgress(0)
 
@@ -158,12 +156,11 @@ export const useSaveMediaToPhotos = (
                     LL.SAVE_MEDIA_ERROR_TITLE(),
                     LL.SAVE_MEDIA_ERROR_SUBTITLE(),
                     LL.COMMON_BTN_OK(),
-                    () => {
-                        imageToFlush.current?.flush()
-                        imageToFlush.current = undefined
-                    },
                 )
             }
+
+            imageToFlush.current?.flush()
+            imageToFlush.current = undefined
         }
     }, [image, hasAndroidPermission, LL, nftName, imageToFlush])
 
