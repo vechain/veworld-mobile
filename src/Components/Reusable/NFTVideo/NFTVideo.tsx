@@ -6,6 +6,8 @@ import { useTheme } from "~Hooks"
 type Props = {
     uri: string
     style: any
+    isPlayAudio: boolean
+    useNativeControls: boolean
 }
 
 export const NFTVideo = memo((props: Props) => {
@@ -18,10 +20,11 @@ export const NFTVideo = memo((props: Props) => {
     return (
         <BaseView>
             <Video
+                volume={props.isPlayAudio ? 1 : 0}
                 usePoster
                 ref={video}
                 shouldPlay
-                useNativeControls
+                useNativeControls={props.useNativeControls}
                 style={[
                     {
                         backgroundColor: theme.colors.placeholder,

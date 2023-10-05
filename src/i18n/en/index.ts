@@ -477,7 +477,15 @@ const en: BaseTranslation = {
     RECEIVE_NFT: "Receive NFT",
     NFT_DOWNLOAD_ERROR: "Woops! There was an error trying to get your NFTs. Please try again in a while.",
     SHOW_COLLECTION: "Show collection",
+    SHOW_COLLECTION_SUBTITLE: "Bring back your hidden collection",
     HIDE_COLLECTION: "Hide collection",
+    HIDE_COLLECTION_SUBTITLE: "Hide unwanted collections.",
+    SAVE_IMAGE_ON_DEVICE: "Save image on device",
+    SAVE_IMAGE_ON_DEVICE_SUBTITLE: "Save your NFT image in your Photo Album",
+    SHARE_IMAGE: "Share image",
+    SHARE_IMAGE_SUBTITLE: "Share your NFT image with your friends",
+    SAVE_MEDIA_ERROR_TITLE: "Error saving media",
+    SAVE_MEDIA_ERROR_SUBTITLE: "There was an error trying to save your media. Media type is unsupported.",
     NO_MARKETPLACE: "Unable to open marketplace",
     SEND_NFT_TITLE: "Send your NFT",
     SEND_NFT_SUB_TITLE: "Fill the required fields",
@@ -494,6 +502,9 @@ const en: BaseTranslation = {
     NFT_DETAIL_RANK: "Rank",
     NFT_DETAIL_RARITY: "Rarity",
     NFT_DETAIL_SCORES: "Scores",
+    NFT_ALERT_IMAGE_SAVED_TITLE: "NFT image saved to photo album",
+    NFT_ALERT_IMAGE_SAVED_MSG: "You have successfully saved the NFT image to your photo album",
+
 
     // Onboarding
 

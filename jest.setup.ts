@@ -46,6 +46,8 @@ jest.mock("react-native-blob-util", () => ({
 
 jest.mock("react-native-bootsplash", () => {})
 
+jest.mock("@react-native-camera-roll/camera-roll", () => {})
+
 jest.mock("expo-secure-store", () => ({
     getItemAsync: jest.fn(),
     setItemAsync: jest.fn(),
