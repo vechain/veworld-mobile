@@ -1,6 +1,6 @@
 import * as React from "react"
 import Svg, { G, Path, Defs, ClipPath, Rect, SvgProps } from "react-native-svg"
-export const CoinbaseLogoSvg = (props: SvgProps) => (
+export const CoinbaseLogoSvg = (props: Readonly<SvgProps>) => (
     <Svg
         width={359}
         height={64}
