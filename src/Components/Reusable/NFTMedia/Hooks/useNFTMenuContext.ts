@@ -4,13 +4,13 @@ import ReactNativeBlobUtil, {
     FetchBlobResponse,
     StatefulPromise,
 } from "react-native-blob-util"
-
+import Share from "react-native-share"
 import { CameraRoll } from "@react-native-camera-roll/camera-roll"
-import { PermissionsAndroid, Platform } from "react-native"
 import { AlertUtils, PlatformUtils, debug } from "~Utils"
 import { NFTMedia } from "~Model"
+import { hasAndroidPermission } from "./Helpers"
 
-export const useSaveMediaToPhotos = (
+export const useNFTMenuContext = (
     image?: NFTMedia,
     nftName: string = "VeWorld NFT",
 ) => {
@@ -36,62 +36,6 @@ export const useSaveMediaToPhotos = (
         ],
         [LL],
     )
-
-    const hasAndroidPermission = useCallback(async () => {
-        const getCheckPermissionPromise = () => {
-            // Android always returns number version
-            if ((Platform.Version as number) >= 33) {
-                return Promise.all([
-                    PermissionsAndroid.check(
-                        PermissionsAndroid.PERMISSIONS.READ_MEDIA_IMAGES,
-                    ),
-                    PermissionsAndroid.check(
-                        PermissionsAndroid.PERMISSIONS.READ_MEDIA_VIDEO,
-                    ),
-                ]).then(
-                    ([
-                        hasReadMediaImagesPermission,
-                        hasReadMediaVideoPermission,
-                    ]) =>
-                        hasReadMediaImagesPermission &&
-                        hasReadMediaVideoPermission,
-                )
-            } else {
-                return PermissionsAndroid.check(
-                    PermissionsAndroid.PERMISSIONS.READ_EXTERNAL_STORAGE,
-                )
-            }
-        }
-
-        const hasPermission = await getCheckPermissionPromise()
-        if (hasPermission) {
-            return true
-        }
-
-        const getRequestPermissionPromise = () => {
-            // Android always returns number version
-            if ((Platform.Version as number) >= 33) {
-                return PermissionsAndroid.requestMultiple([
-                    PermissionsAndroid.PERMISSIONS.READ_MEDIA_IMAGES,
-                    PermissionsAndroid.PERMISSIONS.READ_MEDIA_VIDEO,
-                ]).then(
-                    statuses =>
-                        statuses[
-                            PermissionsAndroid.PERMISSIONS.READ_MEDIA_IMAGES
-                        ] === PermissionsAndroid.RESULTS.GRANTED &&
-                        statuses[
-                            PermissionsAndroid.PERMISSIONS.READ_MEDIA_VIDEO
-                        ] === PermissionsAndroid.RESULTS.GRANTED,
-                )
-            } else {
-                return PermissionsAndroid.request(
-                    PermissionsAndroid.PERMISSIONS.READ_EXTERNAL_STORAGE,
-                ).then(status => status === PermissionsAndroid.RESULTS.GRANTED)
-            }
-        }
-
-        return await getRequestPermissionPromise()
-    }, [])
 
     const downloadImage = useCallback(async () => {
         if (!image) return
@@ -162,15 +106,36 @@ export const useSaveMediaToPhotos = (
             imageToFlush.current?.flush()
             imageToFlush.current = undefined
         }
-    }, [image, hasAndroidPermission, LL, nftName, imageToFlush])
+    }, [image, LL, nftName, imageToFlush])
 
     const onLongPressImage = useCallback(
         async (index: number) => {
             if (LongPressItems[index].title === LL.SAVE_IMAGE_ON_DEVICE()) {
                 downloadImage()
+                return
+            }
+
+            if (LongPressItems[index].title === LL.SHARE_IMAGE()) {
+                if (!image) return
+
+                const shareOptions = {
+                    title: nftName,
+                    type: image.mime,
+                    url: image.image,
+                    failOnCancel: false,
+                    saveToFiles: false,
+                    excludedActivityTypes: [
+                        "addToReadingList",
+                        "openInIBooks",
+                        "saveToCameraRoll",
+                        "markupAsPDF",
+                    ],
+                }
+
+                await Share.open(shareOptions)
             }
         },
-        [LL, LongPressItems, downloadImage],
+        [LL, LongPressItems, downloadImage, image, nftName],
     )
 
     useEffect(() => {

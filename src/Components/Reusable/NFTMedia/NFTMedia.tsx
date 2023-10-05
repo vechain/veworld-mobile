@@ -15,7 +15,7 @@ import { BaseView } from "~Components/Base"
 import SkeletonContent from "react-native-skeleton-content-nonexpo"
 import { NFTImage } from "../NFTImage"
 import { LongPressProvider } from "../LongPressProvider"
-import { useSaveMediaToPhotos } from "./Hooks"
+import { useNFTMenuContext } from "./Hooks"
 // @ts-ignore
 import ProgressBar from "react-native-progress/Bar"
 
@@ -47,9 +47,13 @@ export const NFTMedia = memo(
         const { styles: themedStyles } = useThemedStyles(baseStyles(isLoading))
 
         const { LongPressItems, onLongPressImage, progress } =
-            useSaveMediaToPhotos(tokenMedia, nftName)
+            useNFTMenuContext(tokenMedia, nftName)
 
         const onLoadEnd = useCallback(() => {
+            setIsLoading(false)
+        }, [])
+
+        const onError = useCallback(() => {
             setIsError(true)
             setIsLoading(false)
         }, [])
@@ -102,12 +106,13 @@ export const NFTMedia = memo(
                     {...restProps}
                     uri={tokenMedia?.image}
                     onLoadEnd={onLoadEnd}
-                    onError={onLoadEnd}
+                    onError={onError}
                     style={[styles, themedStyles.imageOpacity]}
                 />
             )
         }, [
             isPlayAudio,
+            onError,
             onLoadEnd,
             restProps,
             styles,
