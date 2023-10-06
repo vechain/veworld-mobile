@@ -275,7 +275,7 @@ type RootTranslation = {
 	 */
 	BD_IMPORT_WALLET_TYPE_SEED: string
 	/**
-	 * Y​o​u​ ​c​a​n​ ​c​o​n​n​e​c​t​ ​a​ ​h​a​r​d​w​a​r​e​ ​w​a​l​l​e​t​ ​w​h​i​c​h​ ​w​i​l​l​ ​g​i​v​e​ ​y​o​u​ ​a​c​c​e​s​s​ ​t​o​ ​y​o​u​r​ ​n​e​w​ ​a​n​d​ ​e​x​i​s​t​i​n​g​ ​a​c​c​o​u​n​t​s​ ​(​o​n​l​y​ ​l​e​d​g​e​r​s​ ​w​i​t​h​ ​b​l​u​e​t​o​o​t​h​ ​a​r​e​ ​s​u​p​p​o​r​t​e​d​ ​a​t​ ​t​h​i​s​ ​t​i​m​e​)
+	 * Y​o​u​ ​c​a​n​ ​c​o​n​n​e​c​t​ ​a​ ​h​a​r​d​w​a​r​e​ ​w​a​l​l​e​t​ ​w​h​i​c​h​ ​w​i​l​l​ ​g​i​v​e​ ​y​o​u​ ​a​c​c​e​s​s​ ​t​o​ ​y​o​u​r​ ​n​e​w​ ​a​n​d​ ​e​x​i​s​t​i​n​g​ ​a​c​c​o​u​n​t​s​.
 	 */
 	BD_IMPORT_WALLET_TYPE_HARDWARE: string
 	/**
@@ -2862,7 +2862,7 @@ export type TranslationFunctions = {
 	 */
 	BD_IMPORT_WALLET_TYPE_SEED: () => LocalizedString
 	/**
-	 * You can connect a hardware wallet which will give you access to your new and existing accounts (only ledgers with bluetooth are supported at this time)
+	 * You can connect a hardware wallet which will give you access to your new and existing accounts.
 	 */
 	BD_IMPORT_WALLET_TYPE_HARDWARE: () => LocalizedString
 	/**
