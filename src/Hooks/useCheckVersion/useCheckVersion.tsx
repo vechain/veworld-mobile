@@ -1,5 +1,5 @@
 import moment from "moment"
-import { useEffect } from "react"
+import { useCallback, useEffect } from "react"
 import { Alert, Linking } from "react-native"
 import DeviceInfo from "react-native-device-info"
 import checkVersion from "react-native-store-version"
@@ -26,7 +26,7 @@ export const useCheckVersion = () => {
     const isTimeForANewCheck = moment().isAfter(nextVersionCheckDate)
     const dispatch = useAppDispatch()
 
-    const init = async () => {
+    const init = useCallback(async () => {
         if (isTimeForANewCheck) {
             dispatch(setLastVersionCheck(moment().toISOString()))
             if (countryCode) {
@@ -70,10 +70,16 @@ export const useCheckVersion = () => {
                 warn("useCheckVersion", "countryCode is undefined")
             }
         }
-    }
+    }, [
+        isTimeForANewCheck,
+        dispatch,
+        countryCode,
+        APPLE_STORE_URL,
+        LL,
+        regionCode,
+    ])
 
     useEffect(() => {
         init()
-        // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [])
+    }, [init])
 }
