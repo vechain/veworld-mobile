@@ -26,6 +26,7 @@ export interface UserPreferenceState {
     isSentryTrackingEnabled: boolean
     devFeaturesEnabled: boolean
     lastReviewTimestamp: string
+    lastVersionCheck: string
 }
 
 const initialState: UserPreferenceState = {
@@ -43,6 +44,7 @@ const initialState: UserPreferenceState = {
         .subtract(3, "weeks")
         .add(3, "days")
         .toISOString(),
+    lastVersionCheck: moment().toISOString(),
 }
 
 export const UserPreferencesSlice = createSlice({
@@ -88,6 +90,10 @@ export const UserPreferencesSlice = createSlice({
             state.lastReviewTimestamp = action.payload
         },
 
+        setLastVersionCheck: (state, action: PayloadAction<string>) => {
+            state.lastVersionCheck = action.payload
+        },
+
         resetUserPreferencesState: () => initialState,
     },
 })
@@ -103,4 +109,5 @@ export const {
     setSentryTrackingEnabled,
     resetUserPreferencesState,
     setLastReviewTimestamp,
+    setLastVersionCheck,
 } = UserPreferencesSlice.actions

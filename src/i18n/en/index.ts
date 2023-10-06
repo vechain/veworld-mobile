@@ -319,6 +319,10 @@ const en: BaseTranslation = {
     ALERT_MSG_ENABLE_LOCATION: "Please, open the device settings and enable location services to continue.",
     ALERT_MSG_INTERNET_DOWN: "Connection problems detected.\nTry reconnect your device to the internet.",
     ALERT_CANT_BACKUP_LEDGER: "You can't view a ledger mnemonic",
+    ALERT_TITLE_NEW_VERSION: "New version",
+    ALERT_MSG_NEW_VERSION: "A new version {version: string} is out now. Please update to the latest version",
+    ALERT_OPTION_UPDATE_NOW: "Update now",
+    ALERT_OPTION_ASK_ME_LATER: "Ask me later",
 
 
     // Errors
