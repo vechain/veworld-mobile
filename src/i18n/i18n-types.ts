@@ -1146,6 +1146,23 @@ type RootTranslation = {
 	 */
 	ALERT_CANT_BACKUP_LEDGER: string
 	/**
+	 * N​e​w​ ​v​e​r​s​i​o​n
+	 */
+	ALERT_TITLE_NEW_VERSION: string
+	/**
+	 * A​ ​n​e​w​ ​v​e​r​s​i​o​n​ ​{​v​e​r​s​i​o​n​}​ ​i​s​ ​o​u​t​ ​n​o​w​.​ ​P​l​e​a​s​e​ ​u​p​d​a​t​e​ ​t​o​ ​t​h​e​ ​l​a​t​e​s​t​ ​v​e​r​s​i​o​n
+	 * @param {string} version
+	 */
+	ALERT_MSG_NEW_VERSION: RequiredParams<'version'>
+	/**
+	 * U​p​d​a​t​e​ ​n​o​w
+	 */
+	ALERT_OPTION_UPDATE_NOW: string
+	/**
+	 * A​s​k​ ​m​e​ ​l​a​t​e​r
+	 */
+	ALERT_OPTION_ASK_ME_LATER: string
+	/**
 	 * S​o​m​e​t​h​i​n​g​ ​w​e​n​t​ ​w​r​o​n​g​!
 	 */
 	ERROR_GENERIC_SUBTITLE: string
@@ -3689,6 +3706,22 @@ Try reconnect your device to the internet.
 	 * You can't view a ledger mnemonic
 	 */
 	ALERT_CANT_BACKUP_LEDGER: () => LocalizedString
+	/**
+	 * New version
+	 */
+	ALERT_TITLE_NEW_VERSION: () => LocalizedString
+	/**
+	 * A new version {version} is out now. Please update to the latest version
+	 */
+	ALERT_MSG_NEW_VERSION: (arg: { version: string }) => LocalizedString
+	/**
+	 * Update now
+	 */
+	ALERT_OPTION_UPDATE_NOW: () => LocalizedString
+	/**
+	 * Ask me later
+	 */
+	ALERT_OPTION_ASK_ME_LATER: () => LocalizedString
 	/**
 	 * Something went wrong!
 	 */

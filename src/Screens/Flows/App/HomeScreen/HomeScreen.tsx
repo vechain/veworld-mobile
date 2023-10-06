@@ -8,6 +8,7 @@ import {
 } from "./Components"
 import {
     useBottomSheetModal,
+    useCheckVersion,
     useMemoizedAnimation,
     useSetSelectedAccount,
     useTheme,
@@ -158,6 +159,8 @@ export const HomeScreen = () => {
     const scrollViewRef = useRef(null)
 
     useScrollToTop(scrollViewRef)
+
+    useCheckVersion()
 
     return (
         <Layout

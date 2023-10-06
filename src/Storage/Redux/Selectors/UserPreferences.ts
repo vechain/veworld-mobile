@@ -54,3 +54,7 @@ export const selectAreDevFeaturesEnabled = createSelector(reducer, state => {
 export const selectLastReviewTimestamp = createSelector(reducer, state => {
     return state.lastReviewTimestamp
 })
+
+export const selectLastVersionCheck = createSelector(reducer, state => {
+    return state.lastVersionCheck
+})
