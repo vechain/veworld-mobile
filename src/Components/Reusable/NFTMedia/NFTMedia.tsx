@@ -15,9 +15,9 @@ import { BaseView } from "~Components/Base"
 import SkeletonContent from "react-native-skeleton-content-nonexpo"
 import { NFTImage } from "../NFTImage"
 import { LongPressProvider } from "../LongPressProvider"
-import { useSaveMediaToPhotos } from "./Hooks"
 // @ts-ignore
 import ProgressBar from "react-native-progress/Bar"
+import { useSaveMediaToPhotos } from "./Hooks"
 
 type Props = {
     uri?: string
@@ -39,7 +39,6 @@ export const NFTMedia = memo(
         ...restProps
     }: Props) => {
         const [isLoading, setIsLoading] = useState(true)
-        const [isError, setIsError] = useState(false)
         const timeoutRef = useRef<NodeJS.Timeout | null>(null)
         const [tokenMedia, setTokenMedia] = useState<Media>()
         const theme = useTheme()
@@ -50,7 +49,10 @@ export const NFTMedia = memo(
             useSaveMediaToPhotos(tokenMedia, nftName)
 
         const onLoadEnd = useCallback(() => {
-            setIsError(true)
+            setIsLoading(false)
+        }, [])
+
+        const onError = useCallback(() => {
             setIsLoading(false)
         }, [])
 
@@ -102,12 +104,13 @@ export const NFTMedia = memo(
                     {...restProps}
                     uri={tokenMedia?.image}
                     onLoadEnd={onLoadEnd}
-                    onError={onLoadEnd}
+                    onError={onError}
                     style={[styles, themedStyles.imageOpacity]}
                 />
             )
         }, [
             isPlayAudio,
+            onError,
             onLoadEnd,
             restProps,
             styles,
@@ -118,7 +121,7 @@ export const NFTMedia = memo(
         ])
 
         const RenderImageWithProvider = useMemo(() => {
-            if (isUseLongPress && !isError) {
+            if (isUseLongPress) {
                 return (
                     <LongPressProvider
                         items={LongPressItems}
@@ -129,13 +132,7 @@ export const NFTMedia = memo(
             } else {
                 return RenderNFT
             }
-        }, [
-            LongPressItems,
-            RenderNFT,
-            isUseLongPress,
-            onLongPressImage,
-            isError,
-        ])
+        }, [LongPressItems, RenderNFT, isUseLongPress, onLongPressImage])
 
         return (
             <BaseView>
