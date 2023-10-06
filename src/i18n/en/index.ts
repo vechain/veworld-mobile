@@ -83,10 +83,10 @@ const en: BaseTranslation = {
     BD_USER_PASSWORD_ERROR: "<><> PIN doesn't match.",
     BD_USER_EDIT_PASSWORD_ERROR: "Old PIN can't be the same as new PIN",
     BD_IMPORT_WALLET_TYPE: "Select the type of wallet you want to import",
-    BD_IMPORT_WALLET_TYPE_SEED: "To access your previous wallet, you can enter your 12-word recovery phrase.",
-    BD_IMPORT_WALLET_TYPE_HARDWARE: "You can connect a hardware wallet which will give you access to your new and existing accounts.",
+    BD_IMPORT_WALLET_TYPE_SEED: "To access your previous wallet, you can enter your 12/24-words recovery phrase.",
+    BD_IMPORT_WALLET_TYPE_HARDWARE: "You can connect a hardware wallet which will give you access to your new and existing accounts (only ledgers with bluetooth are supported at this time)",
     BD_WALLET_IMPORT_LOCAL:
-        "Import your wallet with your secret recovery phrase. Enter your wallet’s 12-words recovery phrase",
+        "Import your wallet with your secret recovery phrase. Enter your wallet’s 12/24-words recovery phrase",
     BD_ALERT_FACE_ID_CANCELLED: "You cancelled using Face ID to authenticate. You must be authenticated to use VeWallet. Do you want to log out, or retry authenticating?",
     BD_ALERT_BIOMETRICS_CANCELLED: "You cancelled using Biometrics to authenticate. You must be authenticated to use VeWorld. Do you want to Reset the Wallet, or Retry authenticating?",
     BD_CREATE_WALLET_SUCCESS: "Unleash the power of sustainability and web3 for a better world.",
@@ -317,6 +317,10 @@ const en: BaseTranslation = {
     ALERT_MSG_ENABLE_LOCATION: "Please, open the device settings and enable location services to continue.",
     ALERT_MSG_INTERNET_DOWN: "Connection problems detected.\nTry reconnect your device to the internet.",
     ALERT_CANT_BACKUP_LEDGER: "You can't view a ledger mnemonic",
+    ALERT_TITLE_NEW_VERSION: "New version",
+    ALERT_MSG_NEW_VERSION: "A new version {version: string} is out now. Please update to the latest version",
+    ALERT_OPTION_UPDATE_NOW: "Update now",
+    ALERT_OPTION_ASK_ME_LATER: "Ask me later",
 
 
     // Errors
@@ -472,7 +476,15 @@ const en: BaseTranslation = {
     RECEIVE_NFT: "Receive NFT",
     NFT_DOWNLOAD_ERROR: "Woops! There was an error trying to get your NFTs. Please try again in a while.",
     SHOW_COLLECTION: "Show collection",
+    SHOW_COLLECTION_SUBTITLE: "Bring back your hidden collection",
     HIDE_COLLECTION: "Hide collection",
+    HIDE_COLLECTION_SUBTITLE: "Hide unwanted collections.",
+    SAVE_IMAGE_ON_DEVICE: "Save image on device",
+    SAVE_IMAGE_ON_DEVICE_SUBTITLE: "Save your NFT image in your Photo Album",
+    SHARE_IMAGE: "Share image",
+    SHARE_IMAGE_SUBTITLE: "Share your NFT image with your friends",
+    SAVE_MEDIA_ERROR_TITLE: "Error saving media",
+    SAVE_MEDIA_ERROR_SUBTITLE: "There was an error trying to save your media. Media type is unsupported.",
     NO_MARKETPLACE: "Unable to open marketplace",
     SEND_NFT_TITLE: "Send your NFT",
     SEND_NFT_SUB_TITLE: "Fill the required fields",
@@ -489,6 +501,9 @@ const en: BaseTranslation = {
     NFT_DETAIL_RANK: "Rank",
     NFT_DETAIL_RARITY: "Rarity",
     NFT_DETAIL_SCORES: "Scores",
+    NFT_ALERT_IMAGE_SAVED_TITLE: "NFT image saved to photo album",
+    NFT_ALERT_IMAGE_SAVED_MSG: "You have successfully saved the NFT image to your photo album",
+
 
     // Onboarding
 
@@ -612,7 +627,7 @@ const en: BaseTranslation = {
     LEDGER_CERT_TITLE_SB: "Please follow the instructions below to sign the certificate with your Ledger",
     SEND_LEDGER_VALIDATE_TRANSACTION: "Validate transaction",
     SEND_LEDGER_CHECK_CONNECTION: "We are checking your ledger connection",
-    SEND_LEDGER_CHECK_CONNECTION_SB: "Please make sure your Ledger is unlocked with the bluetooth enabled and the VET app is open",
+    SEND_LEDGER_CHECK_CONNECTION_SB: "Please make sure your Ledger is unlocked with the bluetooth enabled and the VET app is open (only ledgers with bluetooth are supported at this time)",
     SEND_LEDGER_SIGN_DATA: "We are signing your transaction",
     SEND_LEDGER_SIGN_DATA_SB: "We are signing your transaction with your Ledger, please confirm the transaction on your device when required",
     CERT_LEDGER_SIGN_DATA: "We are signing your certificate",
@@ -659,7 +674,7 @@ const en: BaseTranslation = {
     WALLET_LEDGER_NO_DEVICES_FOUND: "No devices found",
     WALLET_LEDGER_ONE_DEVICE_FOUND: "1 device found",
     WALLET_LEDGER_MORE_DEVICES_FOUND: "{count: number} devices found",
-    WALLET_LEDGER_SELECT_DEVICE_SB: "Please make sure your Ledger is unlocked, the bluetooth enabled and location services are on",
+    WALLET_LEDGER_SELECT_DEVICE_SB: "Please make sure your Ledger is unlocked, the bluetooth enabled and location services are on (only ledgers with bluetooth are supported at this time)",
     WALLET_LEDGER_ENABLE_ADDITION_SETTINGS_TITLE: "Enable additional settings",
     WALLET_LEDGER_ENABLE_ADDITION_SETTINGS_SB: "in order to give you the best user experience, you need to enable some additional settings in your ledger (Contract data and Multi-clause). Please follow the instructions below to proceed",
     WALLET_LEDGER_ENABLE_ADDITION_SETTINGS_STEP_1: "Open the VET app on your Ledger",
