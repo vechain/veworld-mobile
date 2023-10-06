@@ -275,7 +275,7 @@ type RootTranslation = {
 	 */
 	BD_IMPORT_WALLET_TYPE_SEED: string
 	/**
-	 * Y​o​u​ ​c​a​n​ ​c​o​n​n​e​c​t​ ​a​ ​h​a​r​d​w​a​r​e​ ​w​a​l​l​e​t​ ​w​h​i​c​h​ ​w​i​l​l​ ​g​i​v​e​ ​y​o​u​ ​a​c​c​e​s​s​ ​t​o​ ​y​o​u​r​ ​n​e​w​ ​a​n​d​ ​e​x​i​s​t​i​n​g​ ​a​c​c​o​u​n​t​s​.
+	 * Y​o​u​ ​c​a​n​ ​c​o​n​n​e​c​t​ ​a​ ​h​a​r​d​w​a​r​e​ ​w​a​l​l​e​t​ ​w​h​i​c​h​ ​w​i​l​l​ ​g​i​v​e​ ​y​o​u​ ​a​c​c​e​s​s​ ​t​o​ ​y​o​u​r​ ​n​e​w​ ​a​n​d​ ​e​x​i​s​t​i​n​g​ ​a​c​c​o​u​n​t​s​ ​(​o​n​l​y​ ​l​e​d​g​e​r​s​ ​w​i​t​h​ ​b​l​u​e​t​o​o​t​h​ ​a​r​e​ ​s​u​p​p​o​r​t​e​d​ ​a​t​ ​t​h​i​s​ ​t​i​m​e​)
 	 */
 	BD_IMPORT_WALLET_TYPE_HARDWARE: string
 	/**
@@ -2185,7 +2185,7 @@ type RootTranslation = {
 	 */
 	SEND_LEDGER_CHECK_CONNECTION: string
 	/**
-	 * P​l​e​a​s​e​ ​m​a​k​e​ ​s​u​r​e​ ​y​o​u​r​ ​L​e​d​g​e​r​ ​i​s​ ​u​n​l​o​c​k​e​d​ ​w​i​t​h​ ​t​h​e​ ​b​l​u​e​t​o​o​t​h​ ​e​n​a​b​l​e​d​ ​a​n​d​ ​t​h​e​ ​V​E​T​ ​a​p​p​ ​i​s​ ​o​p​e​n
+	 * P​l​e​a​s​e​ ​m​a​k​e​ ​s​u​r​e​ ​y​o​u​r​ ​L​e​d​g​e​r​ ​i​s​ ​u​n​l​o​c​k​e​d​ ​w​i​t​h​ ​t​h​e​ ​b​l​u​e​t​o​o​t​h​ ​e​n​a​b​l​e​d​ ​a​n​d​ ​t​h​e​ ​V​E​T​ ​a​p​p​ ​i​s​ ​o​p​e​n​ ​(​o​n​l​y​ ​l​e​d​g​e​r​s​ ​w​i​t​h​ ​b​l​u​e​t​o​o​t​h​ ​a​r​e​ ​s​u​p​p​o​r​t​e​d​ ​a​t​ ​t​h​i​s​ ​t​i​m​e​)
 	 */
 	SEND_LEDGER_CHECK_CONNECTION_SB: string
 	/**
@@ -2303,7 +2303,7 @@ type RootTranslation = {
 	 */
 	WALLET_LEDGER_MORE_DEVICES_FOUND: RequiredParams<'count'>
 	/**
-	 * P​l​e​a​s​e​ ​m​a​k​e​ ​s​u​r​e​ ​y​o​u​r​ ​L​e​d​g​e​r​ ​i​s​ ​u​n​l​o​c​k​e​d​,​ ​t​h​e​ ​b​l​u​e​t​o​o​t​h​ ​e​n​a​b​l​e​d​ ​a​n​d​ ​l​o​c​a​t​i​o​n​ ​s​e​r​v​i​c​e​s​ ​a​r​e​ ​o​n
+	 * P​l​e​a​s​e​ ​m​a​k​e​ ​s​u​r​e​ ​y​o​u​r​ ​L​e​d​g​e​r​ ​i​s​ ​u​n​l​o​c​k​e​d​,​ ​t​h​e​ ​b​l​u​e​t​o​o​t​h​ ​e​n​a​b​l​e​d​ ​a​n​d​ ​l​o​c​a​t​i​o​n​ ​s​e​r​v​i​c​e​s​ ​a​r​e​ ​o​n​ ​(​o​n​l​y​ ​l​e​d​g​e​r​s​ ​w​i​t​h​ ​b​l​u​e​t​o​o​t​h​ ​a​r​e​ ​s​u​p​p​o​r​t​e​d​ ​a​t​ ​t​h​i​s​ ​t​i​m​e​)
 	 */
 	WALLET_LEDGER_SELECT_DEVICE_SB: string
 	/**
@@ -2842,7 +2842,7 @@ export type TranslationFunctions = {
 	 */
 	BD_IMPORT_WALLET_TYPE_SEED: () => LocalizedString
 	/**
-	 * You can connect a hardware wallet which will give you access to your new and existing accounts.
+	 * You can connect a hardware wallet which will give you access to your new and existing accounts (only ledgers with bluetooth are supported at this time)
 	 */
 	BD_IMPORT_WALLET_TYPE_HARDWARE: () => LocalizedString
 	/**
@@ -4724,7 +4724,7 @@ Please, try again later.
 	 */
 	SEND_LEDGER_CHECK_CONNECTION: () => LocalizedString
 	/**
-	 * Please make sure your Ledger is unlocked with the bluetooth enabled and the VET app is open
+	 * Please make sure your Ledger is unlocked with the bluetooth enabled and the VET app is open (only ledgers with bluetooth are supported at this time)
 	 */
 	SEND_LEDGER_CHECK_CONNECTION_SB: () => LocalizedString
 	/**
@@ -4840,7 +4840,7 @@ Please, try again later.
 	 */
 	WALLET_LEDGER_MORE_DEVICES_FOUND: (arg: { count: number }) => LocalizedString
 	/**
-	 * Please make sure your Ledger is unlocked, the bluetooth enabled and location services are on
+	 * Please make sure your Ledger is unlocked, the bluetooth enabled and location services are on (only ledgers with bluetooth are supported at this time)
 	 */
 	WALLET_LEDGER_SELECT_DEVICE_SB: () => LocalizedString
 	/**
