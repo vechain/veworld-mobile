@@ -9,17 +9,11 @@ import {
     BaseText,
     BaseTouchableBox,
     BaseView,
-    showErrorToast,
-    showSuccessToast,
 } from "~Components"
 
 import { useI18nContext } from "~i18n"
-import {
-    addAccountForDevice,
-    useAppDispatch,
-    useAppSelector,
-} from "~Storage/Redux"
-import { selectDevices, selectSelectedAccount } from "~Storage/Redux/Selectors"
+import { useAppSelector } from "~Storage/Redux"
+import { selectSelectedAccount } from "~Storage/Redux/Selectors"
 
 type Props = {
     onClose: () => void
@@ -48,30 +42,10 @@ export const AccountManagementBottomSheet = React.forwardRef<
 
         const snapPoints = useMemo(() => ["50%"], [])
         const selectedAccount = useAppSelector(selectSelectedAccount)
-        const devices = useAppSelector(selectDevices)
-        const dispatch = useAppDispatch()
 
         const handleSheetChanges = useCallback((index: number) => {
             info("accountManagementSheet position changed", index)
         }, [])
-
-        const onAddAccount = useCallback(() => {
-            onClose()
-            if (devices.length === 1) {
-                try {
-                    dispatch(addAccountForDevice(devices[0]))
-                    showSuccessToast({
-                        text1: LL.WALLET_MANAGEMENT_NOTIFICATION_CREATE_ACCOUNT_SUCCESS(),
-                    })
-                } catch (e) {
-                    showErrorToast({
-                        text1: LL.WALLET_MANAGEMENT_NOTIFICATION_CREATE_ACCOUNT_ERROR(),
-                    })
-                }
-            } else {
-                openAddAccountSheet()
-            }
-        }, [LL, devices, dispatch, onClose, openAddAccountSheet])
 
         const { onCopyToClipboard } = useCopyClipboard()
 
@@ -102,12 +76,13 @@ export const AccountManagementBottomSheet = React.forwardRef<
                     <BaseText typographyFont="subTitleBold">
                         {LL.SB_ACCOUNT_MANAGEMENT()}
                     </BaseText>
+
                     <BaseIcon
                         haptics="Light"
                         name={"plus"}
                         size={32}
                         bg={theme.colors.secondary}
-                        action={onAddAccount}
+                        action={openAddAccountSheet}
                         testID="AccountManagementBottomSheet_addAccountButton"
                     />
                 </BaseView>
@@ -129,7 +104,6 @@ export const AccountManagementBottomSheet = React.forwardRef<
                         name={"content-copy"}
                         size={18}
                         color={theme.colors.text}
-                        action={onAddAccount}
                     />
                     <BaseText mx={8}>{LL.BTN_COPY_PUBLIC_ADDRESS()}</BaseText>
                 </BaseTouchableBox>

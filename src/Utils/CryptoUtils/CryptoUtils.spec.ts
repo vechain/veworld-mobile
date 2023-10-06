@@ -1,17 +1,25 @@
-import { HDNode } from "thor-devkit"
+import { HDNode, Keystore } from "thor-devkit"
 import "~Test"
 
 import CryptoUtils from "./CryptoUtils"
 
-const { hdNodeFromXPub, verifyMnemonic, xPubFromHdNode } = CryptoUtils
+const {
+    hdNodeFromXPub,
+    xPubFromHdNode,
+    mnemonicStringToArray,
+    decryptKeystoreFile,
+} = CryptoUtils
 
-// const testDevice: Device = {
-//     index: 0,
-//     type: DEVICE_TYPE.LOCAL_MNEMONIC,
-//     alias: "test",
-//     rootAddress: "0x4fec365ab34c21784b05e3fed80633268e6457ff",
-//     wallet: "dfsfgsdgfs",
-// }
+const VALID_MNEMONIC_12 =
+    "denial kitchen pet squirrel other broom bar gas better priority spoil cross"
+// const INVALID_MENMONIC_12 =
+//     "denial denial denial denial denial denial denial denial denial denial denial denial"
+// const VALID_MNEMONIC_24 =
+//     "record minute play dream viable zero brisk true pink retreat juice fresh resist tent coast table damp pupil water mutual shoe year capable fluid"
+
+const KEYSTORE_FILE =
+    '{"version":3,"id":"8E39FB2F-3AE5-4DFC-849B-C78B310E6622","crypto":{"ciphertext":"ebcc42b079516d1ba5a0377743422a17d8795a1c24d3ad7b7d30dbd6c8edab12","cipherparams":{"iv":"3c3917afdf69bdc47f9693121fcc53e0"},"kdf":"scrypt","kdfparams":{"r":8,"p":1,"n":262144,"dklen":32,"salt":"ac93e95a3a6d1b070c720078625a4ccc2cef113508e2dcc9acd774325dfbe326"},"mac":"ff87134edec116091a51572a2ea745b96a169c2bae1fa09007070f3dcf4a53ec","cipher":"aes-128-ctr"},"address":"f077b491b355e64048ce21e3a6fc4751eeea77fa"}'
+const KEYSTORE_ENCRY_KEY = "Password1!"
 
 const deviceEncryptionKey = "deviceEncryptionKey"
 
@@ -65,11 +73,81 @@ describe("hdNodeFromXPub", () => {
     })
 })
 
-describe("verifyMnemonic", () => {
-    it("should create hdNode from mnemonic", () => {
+describe("decryptKeystoreFile", () => {
+    // These tests will always fail in this context because we are using a react native library for the scrypt algorithm
+    // it("valid keystore file", async () => {
+    //     const decrypted = await decryptKeystoreFile(
+    //         JSON.parse(KEYSTORE_FILE),
+    //         KEYSTORE_ENCRY_KEY,
+    //     )
+    //     expect(decrypted).toEqual(
+    //         "0x99f0500549792796c14fed62011a51081dc5b5e68fe8bd8a13b86be829c4fd36",
+    //     )
+    // }, 20000)
+
+    // it("valid keystore string", async () => {
+    //     const decrypted = await decryptKeystoreFile(
+    //         KEYSTORE_FILE,
+    //         KEYSTORE_ENCRY_KEY,
+    //     )
+    //     expect(decrypted).toEqual(
+    //         "0x99f0500549792796c14fed62011a51081dc5b5e68fe8bd8a13b86be829c4fd36",
+    //     )
+    // }, 20000)
+
+    it("invalid keystore file", async () => {
+        const ks: Keystore = JSON.parse(KEYSTORE_FILE)
+        ks.crypto = {}
+
+        await expect(
+            decryptKeystoreFile(ks, KEYSTORE_ENCRY_KEY),
+        ).rejects.toThrow()
+    }, 20000)
+
+    it("invalid keystore file version", async () => {
+        const ks: Keystore = JSON.parse(KEYSTORE_FILE)
+        ks.version = 0.1
+
+        await expect(
+            decryptKeystoreFile(ks, KEYSTORE_ENCRY_KEY),
+        ).rejects.toThrow()
+    }, 100000)
+
+    it("invalid keystore password", async () => {
+        await expect(
+            decryptKeystoreFile(JSON.parse(KEYSTORE_FILE), "invalid password"),
+        ).rejects.toThrow()
+    })
+})
+
+describe("mnemonicStringToArray", () => {
+    it("valid 12 word phrase - trailing and leading spaces", () => {
+        expect(mnemonicStringToArray(` ${VALID_MNEMONIC_12} `)).toStrictEqual(
+            VALID_MNEMONIC_12.split(" "),
+        )
+    })
+    it("valid 12 word phrase - double space delimited", () => {
         expect(
-            verifyMnemonic("agent resemble equip thought unfold bring"),
-        ).toBe(true)
-        expect(verifyMnemonic('!@#$@%^&$%#%#{}"')).toBe(false)
+            mnemonicStringToArray(VALID_MNEMONIC_12.split(" ").join("  ")),
+        ).toStrictEqual(VALID_MNEMONIC_12.split(" "))
+    })
+    it("valid 12 word phrase - double space delimited with trailing and leading spaces", () => {
+        expect(
+            mnemonicStringToArray(
+                ` ${VALID_MNEMONIC_12.split(" ").join("  ")} `,
+            ),
+        ).toStrictEqual(VALID_MNEMONIC_12.split(" "))
+    })
+    it("valid 12 word phrase - comma delimited", () => {
+        expect(
+            mnemonicStringToArray(VALID_MNEMONIC_12.split(" ").join(", ")),
+        ).toStrictEqual(VALID_MNEMONIC_12.split(" "))
+    })
+    it("valid 12 word phrase - comma delimited with trailing and leading spaces", () => {
+        expect(
+            mnemonicStringToArray(
+                ` ${VALID_MNEMONIC_12.split(" ").join(", ")} `,
+            ),
+        ).toStrictEqual(VALID_MNEMONIC_12.split(" "))
     })
 })

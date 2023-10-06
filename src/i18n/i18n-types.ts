@@ -271,7 +271,7 @@ type RootTranslation = {
 	 */
 	BD_IMPORT_WALLET_TYPE: string
 	/**
-	 * T​o​ ​a​c​c​e​s​s​ ​y​o​u​r​ ​p​r​e​v​i​o​u​s​ ​w​a​l​l​e​t​,​ ​y​o​u​ ​c​a​n​ ​e​n​t​e​r​ ​y​o​u​r​ ​1​2​-​w​o​r​d​ ​r​e​c​o​v​e​r​y​ ​p​h​r​a​s​e​.
+	 * T​o​ ​a​c​c​e​s​s​ ​y​o​u​r​ ​p​r​e​v​i​o​u​s​ ​w​a​l​l​e​t​,​ ​y​o​u​ ​c​a​n​ ​e​n​t​e​r​ ​y​o​u​r​ ​r​e​c​o​v​e​r​y​ ​p​h​r​a​s​e​,​ ​p​r​i​v​a​t​e​ ​k​e​y​ ​o​r​ ​k​e​y​s​t​o​r​e​ ​f​i​l​e​.
 	 */
 	BD_IMPORT_WALLET_TYPE_SEED: string
 	/**
@@ -279,7 +279,7 @@ type RootTranslation = {
 	 */
 	BD_IMPORT_WALLET_TYPE_HARDWARE: string
 	/**
-	 * I​m​p​o​r​t​ ​y​o​u​r​ ​w​a​l​l​e​t​ ​w​i​t​h​ ​y​o​u​r​ ​s​e​c​r​e​t​ ​r​e​c​o​v​e​r​y​ ​p​h​r​a​s​e​.​ ​E​n​t​e​r​ ​y​o​u​r​ ​w​a​l​l​e​t​’​s​ ​1​2​-​w​o​r​d​s​ ​r​e​c​o​v​e​r​y​ ​p​h​r​a​s​e
+	 * I​m​p​o​r​t​ ​y​o​u​r​ ​w​a​l​l​e​t​.​ ​E​n​t​e​r​ ​y​o​u​r​ ​w​a​l​l​e​t​’​s​ ​r​e​c​o​v​e​r​y​ ​p​h​r​a​s​e​,​ ​p​r​i​v​a​t​e​ ​k​e​y​ ​o​r​ ​k​e​y​s​t​o​r​e​ ​f​i​l​e​.
 	 */
 	BD_WALLET_IMPORT_LOCAL: string
 	/**
@@ -686,6 +686,10 @@ type RootTranslation = {
 	 */
 	TITLE_RENAME: RequiredParams<'type'>
 	/**
+	 * U​n​l​o​c​k​ ​k​e​y​s​t​o​r​e
+	 */
+	TITLE_UNLOCK_KEYSTORE: string
+	/**
 	 * W​h​i​c​h​ ​k​i​n​d​ ​o​f​ ​w​a​l​l​e​t​ ​d​o​ ​y​o​u​ ​w​a​n​t​ ​t​o​ ​i​m​p​o​r​t​?
 	 */
 	SB_IMPORT_WALLET_TYPE: string
@@ -955,6 +959,10 @@ type RootTranslation = {
 	 */
 	COMMON_BTN_RESET: string
 	/**
+	 * U​n​l​o​c​k
+	 */
+	COMMON_BTN_UNLOCK: string
+	/**
 	 * a​n​d
 	 */
 	COMMON_LBL_AND: string
@@ -1155,9 +1163,21 @@ type RootTranslation = {
 	 */
 	ERROR_GENERIC_BODY: string
 	/**
+	 * I​n​c​o​r​r​e​c​t​ ​i​m​p​o​r​t​ ​d​a​t​a
+	 */
+	ERROR_INCORRECT_IMPORT_DATA: string
+	/**
 	 * I​n​c​o​r​r​e​c​t​ ​m​n​e​m​o​n​i​c​ ​p​h​r​a​s​e
 	 */
 	ERROR_INCORRECT_MNEMONIC: string
+	/**
+	 * I​n​c​o​r​r​e​c​t​ ​p​r​i​v​a​t​e​ ​k​e​y
+	 */
+	ERROR_INCORRECT_PRIVATE_KEY: string
+	/**
+	 * I​n​c​o​r​r​e​c​t​ ​p​a​s​s​w​o​r​d
+	 */
+	ERROR_INCORRECT_PASSWORD: string
 	/**
 	 * W​r​o​n​g​ ​w​o​r​d​s​ ​c​o​m​b​i​n​a​t​i​o​n
 	 */
@@ -1241,7 +1261,7 @@ type RootTranslation = {
 	/**
 	 * T​o​o​ ​m​a​n​y​ ​b​i​o​m​e​t​r​i​c​s​ ​a​u​t​h​e​n​t​i​c​a​t​i​o​n​ ​a​t​t​e​m​p​t​s​,​ ​p​l​e​a​s​e​ ​t​r​y​ ​a​g​a​i​n​ ​l​a​t​e​r
 	 */
-	ERROR_TOO_MANY_BIOMETRICS_AUTH_ATTEMPS: string
+	ERROR_TOO_MANY_BIOMETRICS_AUTH_ATTEMPTS: string
 	/**
 	 * E​r​r​o​r​ ​c​r​e​a​t​i​n​g​ ​w​a​l​l​e​t
 	 */
@@ -1411,7 +1431,7 @@ type RootTranslation = {
 	 */
 	NOTIFICATION_TITLE_INVALID_QR: string
 	/**
-	 * O​n​l​y​ ​W​a​l​l​e​t​C​o​n​n​e​c​t​ ​a​n​d​ ​a​d​d​r​e​s​s​ ​c​o​p​y​i​n​g​ ​a​r​e​ ​s​u​p​p​o​r​t​e​d​.​ ​P​l​e​a​s​e​ ​t​r​y​ ​a​g​a​i​n​.
+	 * P​l​e​a​s​e​ ​s​c​a​n​ ​a​ ​W​a​l​l​e​t​C​o​n​n​e​c​t​ ​o​r​ ​w​a​l​l​e​t​ ​a​d​d​r​e​s​s​ ​Q​R​ ​c​o​d​e​.
 	 */
 	NOTIFICATION_INVALID_QR: string
 	/**
@@ -1839,7 +1859,7 @@ type RootTranslation = {
 	 */
 	WALLET_MANAGEMENT_NOTIFICATION_CREATE_ACCOUNT_SUCCESS: string
 	/**
-	 * A​c​c​o​u​n​t​ ​c​r​e​a​t​e​d​ ​s​u​c​c​e​s​s​f​u​l​l​y
+	 * F​a​i​l​e​d​ ​t​o​ ​c​r​e​a​t​e​ ​a​c​c​o​u​n​t
 	 */
 	WALLET_MANAGEMENT_NOTIFICATION_CREATE_ACCOUNT_ERROR: string
 	/**
@@ -2781,7 +2801,7 @@ export type TranslationFunctions = {
 	 */
 	BD_IMPORT_WALLET_TYPE: () => LocalizedString
 	/**
-	 * To access your previous wallet, you can enter your 12-word recovery phrase.
+	 * To access your previous wallet, you can enter your recovery phrase, private key or keystore file.
 	 */
 	BD_IMPORT_WALLET_TYPE_SEED: () => LocalizedString
 	/**
@@ -2789,7 +2809,7 @@ export type TranslationFunctions = {
 	 */
 	BD_IMPORT_WALLET_TYPE_HARDWARE: () => LocalizedString
 	/**
-	 * Import your wallet with your secret recovery phrase. Enter your wallet’s 12-words recovery phrase
+	 * Import your wallet. Enter your wallet’s recovery phrase, private key or keystore file.
 	 */
 	BD_WALLET_IMPORT_LOCAL: () => LocalizedString
 	/**
@@ -3193,6 +3213,10 @@ export type TranslationFunctions = {
 	 */
 	TITLE_RENAME: (arg: { type: string }) => LocalizedString
 	/**
+	 * Unlock keystore
+	 */
+	TITLE_UNLOCK_KEYSTORE: () => LocalizedString
+	/**
 	 * Which kind of wallet do you want to import?
 	 */
 	SB_IMPORT_WALLET_TYPE: () => LocalizedString
@@ -3461,6 +3485,10 @@ export type TranslationFunctions = {
 	 */
 	COMMON_BTN_RESET: () => LocalizedString
 	/**
+	 * Unlock
+	 */
+	COMMON_BTN_UNLOCK: () => LocalizedString
+	/**
 	 * and
 	 */
 	COMMON_LBL_AND: () => LocalizedString
@@ -3659,9 +3687,21 @@ Please, try again later.
 	 */
 	ERROR_GENERIC_BODY: () => LocalizedString
 	/**
+	 * Incorrect import data
+	 */
+	ERROR_INCORRECT_IMPORT_DATA: () => LocalizedString
+	/**
 	 * Incorrect mnemonic phrase
 	 */
 	ERROR_INCORRECT_MNEMONIC: () => LocalizedString
+	/**
+	 * Incorrect private key
+	 */
+	ERROR_INCORRECT_PRIVATE_KEY: () => LocalizedString
+	/**
+	 * Incorrect password
+	 */
+	ERROR_INCORRECT_PASSWORD: () => LocalizedString
 	/**
 	 * Wrong words combination
 	 */
@@ -3745,7 +3785,7 @@ Please, try again later.
 	/**
 	 * Too many biometrics authentication attempts, please try again later
 	 */
-	ERROR_TOO_MANY_BIOMETRICS_AUTH_ATTEMPS: () => LocalizedString
+	ERROR_TOO_MANY_BIOMETRICS_AUTH_ATTEMPTS: () => LocalizedString
 	/**
 	 * Error creating wallet
 	 */
@@ -3903,7 +3943,7 @@ Please, try again later.
 	 */
 	NOTIFICATION_TITLE_INVALID_QR: () => LocalizedString
 	/**
-	 * Only WalletConnect and address copying are supported. Please try again.
+	 * Please scan a WalletConnect or wallet address QR code.
 	 */
 	NOTIFICATION_INVALID_QR: () => LocalizedString
 	/**
@@ -4323,7 +4363,7 @@ Please, try again later.
 	 */
 	WALLET_MANAGEMENT_NOTIFICATION_CREATE_ACCOUNT_SUCCESS: () => LocalizedString
 	/**
-	 * Account created successfully
+	 * Failed to create account
 	 */
 	WALLET_MANAGEMENT_NOTIFICATION_CREATE_ACCOUNT_ERROR: () => LocalizedString
 	/**

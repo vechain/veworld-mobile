@@ -9,7 +9,8 @@ import { NewLedgerDevice } from "~Model"
  *
  */
 export interface CacheState {
-    mnemonic?: string
+    mnemonic?: string[]
+    privateKey?: string
     newLedgerDevice?: NewLedgerDevice
     isAppLoading: boolean
     isTokensOwnedLoading: boolean
@@ -17,6 +18,7 @@ export interface CacheState {
 
 const initialState: CacheState = {
     mnemonic: undefined,
+    privateKey: undefined,
     newLedgerDevice: undefined,
     isAppLoading: false,
     isTokensOwnedLoading: false,
@@ -26,7 +28,10 @@ export const CacheSlice = createSlice({
     name: "cache",
     initialState,
     reducers: {
-        setMnemonic: (state, action: PayloadAction<string | undefined>) => {
+        setPrivateKey: (state, action: PayloadAction<string | undefined>) => {
+            state.privateKey = action.payload
+        },
+        setMnemonic: (state, action: PayloadAction<string[] | undefined>) => {
             state.mnemonic = action.payload
         },
         setNewLedgerDevice: (
@@ -47,6 +52,7 @@ export const CacheSlice = createSlice({
 
 export const {
     setMnemonic,
+    setPrivateKey,
     setNewLedgerDevice,
     setIsAppLoading,
     setIsTokensOwnedLoading,

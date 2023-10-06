@@ -1,9 +1,18 @@
-import { HDNode } from "thor-devkit"
+import { HDNode, Keystore, mnemonic as Mnemonic } from "thor-devkit"
 import crypto from "react-native-quick-crypto"
 import { XPub } from "~Model/Crypto"
 import PasswordUtils from "../PasswordUtils"
 import stringify from "json-stringify-safe"
-import { warn } from "~Utils/Logger"
+import { error, warn } from "~Utils/Logger"
+import { IMPORT_TYPE } from "~Model"
+import { decryptKeystoreJson } from "./Helpers/KeystoreDecryptEthers"
+import HexUtils from "~Utils/HexUtils"
+
+const N = Buffer.from(
+    "fffffffffffffffffffffffffffffffebaaedce6af48a03bbfd25e8cd0364141",
+    "hex",
+)
+const ZERO = Buffer.alloc(32, 0)
 
 const xPubFromHdNode = (hdNode: HDNode): XPub => {
     return {
@@ -69,14 +78,65 @@ function decryptState(data: string, key: string) {
     return txtToString
 }
 
-const verifyMnemonic = (seed: string) => {
-    let hdNode
+const decryptKeystoreFile = async (
+    ks: Keystore | string,
+    key: string,
+): Promise<string> => {
     try {
-        hdNode = HDNode.fromMnemonic(seed.split(" "))
-    } catch (e) {
-        warn("verifyMnemonic", e)
+        const keystore: Keystore =
+            typeof ks === "string" ? (ks = JSON.parse(ks)) : ks
+        if (!Keystore.wellFormed(keystore)) throw Error("Invalid keystore")
+
+        // const pk = await Keystore.decrypt(keystore, key)
+        const keystoreAccount = await decryptKeystoreJson(
+            JSON.stringify(keystore),
+            key,
+        )
+        warn("keystoreAccount", keystoreAccount)
+        return HexUtils.removePrefix(keystoreAccount.privateKey)
+    } catch (err) {
+        error("Error decrypting keystore", err)
+        throw err
     }
-    return !!hdNode
+}
+
+/**
+ * Normalise mnemonic to be lowercase and remove any extra spaces, commas or other delimiting characters
+ * @param mnemonic
+ */
+const mnemonicStringToArray = (seedPhrase: string): string[] =>
+    seedPhrase
+        .toLowerCase()
+        .replace(/[^a-z0-9]+/g, " ")
+        .trim()
+        .replace(/\s+/g, " ")
+        .split(" ")
+
+const isValidPrivateKey = (key: Buffer): boolean => {
+    return (
+        Buffer.isBuffer(key) &&
+        key.length === 32 &&
+        !key.equals(ZERO) &&
+        key.compare(N) < 0
+    )
+}
+
+const isValidKeystoreFile = (fileContent: string): boolean => {
+    try {
+        const parsed = JSON.parse(fileContent)
+        return Keystore.wellFormed(parsed)
+    } catch (err) {
+        return false
+    }
+}
+
+const determineKeyImportType = (rawImportData: string): IMPORT_TYPE => {
+    if (Mnemonic.validate(mnemonicStringToArray(rawImportData)))
+        return IMPORT_TYPE.MNEMONIC
+    if (isValidPrivateKey(Buffer.from(rawImportData, "hex")))
+        return IMPORT_TYPE.PRIVATE_KEY
+    if (isValidKeystoreFile(rawImportData)) return IMPORT_TYPE.KEYSTORE_FILE
+    return IMPORT_TYPE.UNKNOWN
 }
 
 export default {
@@ -88,5 +148,7 @@ export default {
     decrypt,
     decryptState,
     encryptState,
-    verifyMnemonic,
+    decryptKeystoreFile,
+    mnemonicStringToArray,
+    determineKeyImportType,
 }

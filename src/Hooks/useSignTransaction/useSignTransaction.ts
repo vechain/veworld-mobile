@@ -69,18 +69,24 @@ export const useSignTransaction = ({
         delegateFor?: string,
         signatureAccount: AccountWithDevice = account,
     ): Promise<Buffer> => {
-        if (!wallet.mnemonic)
-            throw new Error("Mnemonic wallet can't have an empty mnemonic")
+        if (!wallet.mnemonic && !wallet.privateKey)
+            throw new Error("Either mnemonic or privateKey must be provided")
 
-        if (!signatureAccount.index && signatureAccount.index !== 0)
-            throw new Error("signatureAccount index is empty")
+        if (wallet.mnemonic) {
+            if (!signatureAccount.index && signatureAccount.index !== 0)
+                throw new Error("signatureAccount index is empty")
 
-        const hdNode = HDNode.fromMnemonic(wallet.mnemonic)
-        const derivedNode = hdNode.derive(signatureAccount.index)
+            const hdNode = HDNode.fromMnemonic(wallet.mnemonic)
+            const derivedNode = hdNode.derive(signatureAccount.index)
 
-        const privateKey = derivedNode.privateKey as Buffer
-        const hash = transaction.signingHash(delegateFor?.toLowerCase())
-        return secp256k1.sign(hash, privateKey)
+            const privateKey = derivedNode.privateKey as Buffer
+            const hash = transaction.signingHash(delegateFor?.toLowerCase())
+            return secp256k1.sign(hash, privateKey)
+        } else {
+            const privateKey = Buffer.from(wallet.privateKey!, "hex")
+            const hash = transaction.signingHash(delegateFor?.toLowerCase())
+            return secp256k1.sign(hash, privateKey)
+        }
     }
 
     const getUrlDelegationSignature = async (

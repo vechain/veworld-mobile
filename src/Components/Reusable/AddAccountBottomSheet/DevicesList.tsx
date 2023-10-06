@@ -4,7 +4,7 @@ import { FlatListScrollPropsType, useThemedStyles } from "~Hooks"
 import { ColorThemeType } from "~Constants"
 import { AddressUtils } from "~Utils"
 import { BaseSpacer, DeviceBox } from "~Components"
-import { BaseDevice } from "~Model"
+import { BaseDevice, DEVICE_TYPE } from "~Model"
 import { BottomSheetFlatList } from "@gorhom/bottom-sheet"
 
 type Props = {
@@ -41,6 +41,7 @@ export const DevicesList: React.FC<Props> = ({
                     onDeviceSelected={handleOnDevicePress}
                     device={item}
                     cardStyle={style}
+                    isActive={item.type !== DEVICE_TYPE.LOCAL_PRIVATE_KEY}
                 />
             )
         },

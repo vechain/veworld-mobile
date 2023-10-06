@@ -6,6 +6,7 @@ import {
     addLedgerDeviceAndAccounts,
     setMnemonic,
     setNewLedgerDevice,
+    setPrivateKey,
     setSelectedAccount,
     useAppDispatch,
     useAppSelector,
@@ -19,13 +20,13 @@ import { WalletEncryptionKeyHelper } from "~Components"
 
 /**
  * useCreateWallet is a hook that allows you to create a wallet and store it in the store
- * @example const { onCreateWallet, accessControl, isComplete } = useCreateWallet()
- * @returns { onCreateWallet, accessControl, isComplete }
+ * @example const { createLocalWallet, accessControl, isComplete } = useCreateWallet()
+ * @returns { createLocalWallet, accessControl, isComplete }
  * @category Hooks
  * @returns
  */
 export const useCreateWallet = () => {
-    const { getDeviceFromMnemonic } = useDeviceUtils()
+    const { createDevice } = useDeviceUtils()
     const biometrics = useBiometrics()
     const dispatch = useAppDispatch()
     const selectedAccount = useAppSelector(selectAccountsState)?.selectedAccount
@@ -39,18 +40,20 @@ export const useCreateWallet = () => {
      * @param onError callback called if erorr
      * @returns void
      */
-    const onCreateWallet = useCallback(
+    const createLocalWallet = useCallback(
         async ({
             mnemonic,
+            privateKey,
             userPassword,
             onError,
         }: {
-            mnemonic: string
+            mnemonic?: string[]
+            privateKey?: string
             userPassword?: string
             onError?: (error: unknown) => void
         }) => {
             try {
-                const { device, wallet } = getDeviceFromMnemonic(mnemonic)
+                const { device, wallet } = createDevice(mnemonic, privateKey)
 
                 const encryptedWallet =
                     await WalletEncryptionKeyHelper.encryptWallet(
@@ -71,6 +74,7 @@ export const useCreateWallet = () => {
                     )
 
                 dispatch(setMnemonic(undefined))
+                dispatch(setPrivateKey(undefined))
                 setIsComplete(true)
                 track(AnalyticsEvent.WALLET_ADD_LOCAL_SUCCESS)
             } catch (e) {
@@ -80,7 +84,7 @@ export const useCreateWallet = () => {
                 throw e
             }
         },
-        [dispatch, getDeviceFromMnemonic, selectedAccount, track],
+        [dispatch, createDevice, selectedAccount, track],
     )
     //* [END] - Create Wallet
 
@@ -90,7 +94,7 @@ export const useCreateWallet = () => {
      * @param onError callback called if error
      * @returns void
      */
-    const onCreateLedgerWallet = useCallback(
+    const createLedgerWallet = useCallback(
         async ({
             newLedger,
             onError,
@@ -124,8 +128,8 @@ export const useCreateWallet = () => {
     //* [END] - Create Wallet
 
     return {
-        onCreateWallet,
-        onCreateLedgerWallet,
+        createLocalWallet,
+        createLedgerWallet,
         accessControl: biometrics?.accessControl,
         isComplete,
     }

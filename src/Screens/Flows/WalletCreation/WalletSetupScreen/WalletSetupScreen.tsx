@@ -23,7 +23,7 @@ export const WalletSetupScreen = () => {
 
     const { ref, onOpen, onClose } = useBottomSheetModal()
 
-    const onCreateWallet = useCallback(async () => {
+    const createLocalWallet = useCallback(async () => {
         track(AnalyticsEvent.SELECT_WALLET_CREATE_WALLET)
         nav.navigate(Routes.NEW_MNEMONIC)
     }, [nav, track])
@@ -63,7 +63,7 @@ export const WalletSetupScreen = () => {
                 <BaseView>
                     <BaseView alignItems="center" w={100}>
                         <BaseTouchableBox
-                            action={onCreateWallet}
+                            action={createLocalWallet}
                             py={16}
                             haptics="Medium">
                             <BaseIcon
