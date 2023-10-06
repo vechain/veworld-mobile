@@ -271,7 +271,7 @@ type RootTranslation = {
 	 */
 	BD_IMPORT_WALLET_TYPE: string
 	/**
-	 * T​o​ ​a​c​c​e​s​s​ ​y​o​u​r​ ​p​r​e​v​i​o​u​s​ ​w​a​l​l​e​t​,​ ​y​o​u​ ​c​a​n​ ​e​n​t​e​r​ ​y​o​u​r​ ​1​2​-​w​o​r​d​ ​r​e​c​o​v​e​r​y​ ​p​h​r​a​s​e​.
+	 * T​o​ ​a​c​c​e​s​s​ ​y​o​u​r​ ​p​r​e​v​i​o​u​s​ ​w​a​l​l​e​t​,​ ​y​o​u​ ​c​a​n​ ​e​n​t​e​r​ ​y​o​u​r​ ​1​2​/​2​4​-​w​o​r​d​s​ ​r​e​c​o​v​e​r​y​ ​p​h​r​a​s​e​.
 	 */
 	BD_IMPORT_WALLET_TYPE_SEED: string
 	/**
@@ -279,7 +279,7 @@ type RootTranslation = {
 	 */
 	BD_IMPORT_WALLET_TYPE_HARDWARE: string
 	/**
-	 * I​m​p​o​r​t​ ​y​o​u​r​ ​w​a​l​l​e​t​ ​w​i​t​h​ ​y​o​u​r​ ​s​e​c​r​e​t​ ​r​e​c​o​v​e​r​y​ ​p​h​r​a​s​e​.​ ​E​n​t​e​r​ ​y​o​u​r​ ​w​a​l​l​e​t​’​s​ ​1​2​-​w​o​r​d​s​ ​r​e​c​o​v​e​r​y​ ​p​h​r​a​s​e
+	 * I​m​p​o​r​t​ ​y​o​u​r​ ​w​a​l​l​e​t​ ​w​i​t​h​ ​y​o​u​r​ ​s​e​c​r​e​t​ ​r​e​c​o​v​e​r​y​ ​p​h​r​a​s​e​.​ ​E​n​t​e​r​ ​y​o​u​r​ ​w​a​l​l​e​t​’​s​ ​1​2​/​2​4​-​w​o​r​d​s​ ​r​e​c​o​v​e​r​y​ ​p​h​r​a​s​e
 	 */
 	BD_WALLET_IMPORT_LOCAL: string
 	/**
@@ -1678,9 +1678,41 @@ type RootTranslation = {
 	 */
 	SHOW_COLLECTION: string
 	/**
+	 * B​r​i​n​g​ ​b​a​c​k​ ​y​o​u​r​ ​h​i​d​d​e​n​ ​c​o​l​l​e​c​t​i​o​n
+	 */
+	SHOW_COLLECTION_SUBTITLE: string
+	/**
 	 * H​i​d​e​ ​c​o​l​l​e​c​t​i​o​n
 	 */
 	HIDE_COLLECTION: string
+	/**
+	 * H​i​d​e​ ​u​n​w​a​n​t​e​d​ ​c​o​l​l​e​c​t​i​o​n​s​.
+	 */
+	HIDE_COLLECTION_SUBTITLE: string
+	/**
+	 * S​a​v​e​ ​i​m​a​g​e​ ​o​n​ ​d​e​v​i​c​e
+	 */
+	SAVE_IMAGE_ON_DEVICE: string
+	/**
+	 * S​a​v​e​ ​y​o​u​r​ ​N​F​T​ ​i​m​a​g​e​ ​i​n​ ​y​o​u​r​ ​P​h​o​t​o​ ​A​l​b​u​m
+	 */
+	SAVE_IMAGE_ON_DEVICE_SUBTITLE: string
+	/**
+	 * S​h​a​r​e​ ​i​m​a​g​e
+	 */
+	SHARE_IMAGE: string
+	/**
+	 * S​h​a​r​e​ ​y​o​u​r​ ​N​F​T​ ​i​m​a​g​e​ ​w​i​t​h​ ​y​o​u​r​ ​f​r​i​e​n​d​s
+	 */
+	SHARE_IMAGE_SUBTITLE: string
+	/**
+	 * E​r​r​o​r​ ​s​a​v​i​n​g​ ​m​e​d​i​a
+	 */
+	SAVE_MEDIA_ERROR_TITLE: string
+	/**
+	 * T​h​e​r​e​ ​w​a​s​ ​a​n​ ​e​r​r​o​r​ ​t​r​y​i​n​g​ ​t​o​ ​s​a​v​e​ ​y​o​u​r​ ​m​e​d​i​a​.​ ​M​e​d​i​a​ ​t​y​p​e​ ​i​s​ ​u​n​s​u​p​p​o​r​t​e​d​.
+	 */
+	SAVE_MEDIA_ERROR_SUBTITLE: string
 	/**
 	 * U​n​a​b​l​e​ ​t​o​ ​o​p​e​n​ ​m​a​r​k​e​t​p​l​a​c​e
 	 */
@@ -1745,6 +1777,14 @@ type RootTranslation = {
 	 * S​c​o​r​e​s
 	 */
 	NFT_DETAIL_SCORES: string
+	/**
+	 * N​F​T​ ​i​m​a​g​e​ ​s​a​v​e​d​ ​t​o​ ​p​h​o​t​o​ ​a​l​b​u​m
+	 */
+	NFT_ALERT_IMAGE_SAVED_TITLE: string
+	/**
+	 * Y​o​u​ ​h​a​v​e​ ​s​u​c​c​e​s​s​f​u​l​l​y​ ​s​a​v​e​d​ ​t​h​e​ ​N​F​T​ ​i​m​a​g​e​ ​t​o​ ​y​o​u​r​ ​p​h​o​t​o​ ​a​l​b​u​m
+	 */
+	NFT_ALERT_IMAGE_SAVED_MSG: string
 	/**
 	 * L​i​g​h​t
 	 */
@@ -2781,7 +2821,7 @@ export type TranslationFunctions = {
 	 */
 	BD_IMPORT_WALLET_TYPE: () => LocalizedString
 	/**
-	 * To access your previous wallet, you can enter your 12-word recovery phrase.
+	 * To access your previous wallet, you can enter your 12/24-words recovery phrase.
 	 */
 	BD_IMPORT_WALLET_TYPE_SEED: () => LocalizedString
 	/**
@@ -2789,7 +2829,7 @@ export type TranslationFunctions = {
 	 */
 	BD_IMPORT_WALLET_TYPE_HARDWARE: () => LocalizedString
 	/**
-	 * Import your wallet with your secret recovery phrase. Enter your wallet’s 12-words recovery phrase
+	 * Import your wallet with your secret recovery phrase. Enter your wallet’s 12/24-words recovery phrase
 	 */
 	BD_WALLET_IMPORT_LOCAL: () => LocalizedString
 	/**
@@ -4163,9 +4203,41 @@ Please, try again later.
 	 */
 	SHOW_COLLECTION: () => LocalizedString
 	/**
+	 * Bring back your hidden collection
+	 */
+	SHOW_COLLECTION_SUBTITLE: () => LocalizedString
+	/**
 	 * Hide collection
 	 */
 	HIDE_COLLECTION: () => LocalizedString
+	/**
+	 * Hide unwanted collections.
+	 */
+	HIDE_COLLECTION_SUBTITLE: () => LocalizedString
+	/**
+	 * Save image on device
+	 */
+	SAVE_IMAGE_ON_DEVICE: () => LocalizedString
+	/**
+	 * Save your NFT image in your Photo Album
+	 */
+	SAVE_IMAGE_ON_DEVICE_SUBTITLE: () => LocalizedString
+	/**
+	 * Share image
+	 */
+	SHARE_IMAGE: () => LocalizedString
+	/**
+	 * Share your NFT image with your friends
+	 */
+	SHARE_IMAGE_SUBTITLE: () => LocalizedString
+	/**
+	 * Error saving media
+	 */
+	SAVE_MEDIA_ERROR_TITLE: () => LocalizedString
+	/**
+	 * There was an error trying to save your media. Media type is unsupported.
+	 */
+	SAVE_MEDIA_ERROR_SUBTITLE: () => LocalizedString
 	/**
 	 * Unable to open marketplace
 	 */
@@ -4230,6 +4302,14 @@ Please, try again later.
 	 * Scores
 	 */
 	NFT_DETAIL_SCORES: () => LocalizedString
+	/**
+	 * NFT image saved to photo album
+	 */
+	NFT_ALERT_IMAGE_SAVED_TITLE: () => LocalizedString
+	/**
+	 * You have successfully saved the NFT image to your photo album
+	 */
+	NFT_ALERT_IMAGE_SAVED_MSG: () => LocalizedString
 	/**
 	 * Light
 	 */

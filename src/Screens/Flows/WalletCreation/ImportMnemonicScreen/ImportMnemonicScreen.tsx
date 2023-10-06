@@ -83,7 +83,8 @@ export const ImportMnemonicScreen = () => {
             let _seed = await Clipboard.getStringAsync()
             let sanified = SeedUtils.sanifySeed(_seed)
             setLocalMnemonic(sanified.join(" "))
-            if (sanified.length === 12) {
+
+            if (sanified.length >= 12 || sanified.length <= 24) {
                 HapticsService.triggerImpact({ level: "Light" })
                 setIsDisabled(false)
                 Keyboard.dismiss()
