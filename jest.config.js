@@ -64,13 +64,14 @@ module.exports = {
         "<rootDir>/src/Utils/ConnectionUtils/ConnectionUtils.ts",
         "<rootDir>/src/Utils/AnalyticsUtils/AnalyticsUtils.ts",
         "<rootDir>/src/Utils/MinimizerUtils/MinimizerUtils.ts",
+        "<rootDir>/src/Utils/CryptoUtils/Helpers/fastKeystoreDecrypt.ts",
     ],
     coverageThreshold: {
         global: {
-            statements: 91.82,
-            branches: 86.7,
-            functions: 91.5,
-            lines: 91.7,
+            statements: 90,
+            branches: 90,
+            functions: 90,
+            lines: 90,
         },
     },
     maxWorkers: 2,

@@ -20,14 +20,14 @@ var Buffer = require("@craftzdog/react-native-buffer").Buffer
 import scrypt from "react-native-scrypt"
 import { error } from "~Utils/Logger"
 
-export interface _KeystoreAccount {
+interface _KeystoreAccount {
     address: string
     privateKey: string
     mnemonic?: Mnemonic
     _isKeystoreAccount: boolean
 }
 
-export const decryptKeystoreJson = async (
+const fastKeystoreDecrypt = async (
     json: string,
     password: string,
 ): Promise<Wallet> => {
@@ -45,7 +45,7 @@ function decryptJsonWallet(
     return Promise.reject(new Error("invalid JSON wallet"))
 }
 
-export async function decrypt(
+async function decrypt(
     json: string,
     password: string,
 ): Promise<KeystoreAccount> {
@@ -214,14 +214,14 @@ function _getAccount(data: any, key: Uint8Array): KeystoreAccount {
 
 // ~ Utils
 
-export function looseArrayify(hexString: string): Uint8Array {
+function looseArrayify(hexString: string): Uint8Array {
     if (typeof hexString === "string" && hexString.substring(0, 2) !== "0x") {
         hexString = "0x" + hexString
     }
     return arrayify(hexString)
 }
 
-export function searchPath(object: any, path: string): string | null {
+function searchPath(object: any, path: string): string | null {
     let currentChild = object
 
     const comps = path.toLowerCase().split("/")
@@ -262,3 +262,5 @@ function _decrypt(
         return arrayify(aesCtr.decrypt(ciphertext))
     }
 }
+
+export default fastKeystoreDecrypt

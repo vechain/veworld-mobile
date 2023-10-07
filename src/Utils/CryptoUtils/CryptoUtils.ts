@@ -5,7 +5,7 @@ import PasswordUtils from "../PasswordUtils"
 import stringify from "json-stringify-safe"
 import { error, warn } from "~Utils/Logger"
 import { IMPORT_TYPE } from "~Model"
-import { decryptKeystoreJson } from "./Helpers/KeystoreDecryptEthers"
+import fastKeystoreDecrypt from "./Helpers/fastKeystoreDecrypt"
 import HexUtils from "~Utils/HexUtils"
 
 const N = Buffer.from(
@@ -88,7 +88,7 @@ const decryptKeystoreFile = async (
         if (!Keystore.wellFormed(keystore)) throw Error("Invalid keystore")
 
         // const pk = await Keystore.decrypt(keystore, key)
-        const keystoreAccount = await decryptKeystoreJson(
+        const keystoreAccount = await fastKeystoreDecrypt(
             JSON.stringify(keystore),
             key,
         )
