@@ -19,7 +19,10 @@ import {
     useAppDispatch,
     useAppSelector,
 } from "~Storage/Redux"
-import { selectDevices, selectSelectedAccount } from "~Storage/Redux/Selectors"
+import {
+    selectSelectedAccount,
+    selectSelectedDevice,
+} from "~Storage/Redux/Selectors"
 
 type Props = {
     onClose: () => void
@@ -48,7 +51,7 @@ export const AccountManagementBottomSheet = React.forwardRef<
 
         const snapPoints = useMemo(() => ["50%"], [])
         const selectedAccount = useAppSelector(selectSelectedAccount)
-        const devices = useAppSelector(selectDevices)
+        const selectedDevice = useAppSelector(selectSelectedDevice)
         const dispatch = useAppDispatch()
 
         const handleSheetChanges = useCallback((index: number) => {
@@ -57,9 +60,9 @@ export const AccountManagementBottomSheet = React.forwardRef<
 
         const onAddAccount = useCallback(() => {
             onClose()
-            if (devices.length === 1 && devices[0].xPub) {
+            if (selectedDevice?.xPub) {
                 try {
-                    dispatch(addAccountForDevice(devices[0]))
+                    dispatch(addAccountForDevice(selectedDevice))
                     showSuccessToast({
                         text1: LL.WALLET_MANAGEMENT_NOTIFICATION_CREATE_ACCOUNT_SUCCESS(),
                     })
@@ -71,7 +74,7 @@ export const AccountManagementBottomSheet = React.forwardRef<
             } else {
                 openAddAccountSheet()
             }
-        }, [LL, devices, dispatch, onClose, openAddAccountSheet])
+        }, [LL, selectedDevice, dispatch, onClose, openAddAccountSheet])
 
         const { onCopyToClipboard } = useCopyClipboard()
 
