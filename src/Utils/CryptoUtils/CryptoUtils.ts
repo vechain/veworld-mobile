@@ -83,8 +83,7 @@ const decryptKeystoreFile = async (
     key: string,
 ): Promise<string> => {
     try {
-        const keystore: Keystore =
-            typeof ks === "string" ? (ks = JSON.parse(ks)) : ks
+        const keystore: Keystore = typeof ks === "string" ? JSON.parse(ks) : ks
         if (!Keystore.wellFormed(keystore)) throw Error("Invalid keystore")
 
         // const pk = await Keystore.decrypt(keystore, key)

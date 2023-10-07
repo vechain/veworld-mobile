@@ -10,22 +10,17 @@ import {
     hexlify,
     keccak256,
     Logger,
-    Mnemonic,
 } from "ethers/lib/utils"
 import { ExternallyOwnedAccount } from "@ethersproject/abstract-signer"
 import { isKeystoreWallet } from "@ethersproject/json-wallets"
-import { KeystoreAccount } from "@ethersproject/json-wallets/lib/keystore"
+import {
+    _KeystoreAccount,
+    KeystoreAccount,
+} from "@ethersproject/json-wallets/lib/keystore"
 import aes from "aes-js"
-var Buffer = require("@craftzdog/react-native-buffer").Buffer
+const Buffer = require("@craftzdog/react-native-buffer").Buffer
 import scrypt from "react-native-scrypt"
 import { error } from "~Utils/Logger"
-
-interface _KeystoreAccount {
-    address: string
-    privateKey: string
-    mnemonic?: Mnemonic
-    _isKeystoreAccount: boolean
-}
 
 const fastKeystoreDecrypt = async (
     json: string,
@@ -174,8 +169,8 @@ function _getAccount(data: any, key: Uint8Array): KeystoreAccount {
             mnemonicCounter,
         )
 
-        const path = searchPath(data, "x-ethers/path") || defaultPath
-        const locale = searchPath(data, "x-ethers/locale") || "en"
+        const path = searchPath(data, "x-ethers/path") ?? defaultPath
+        const locale = searchPath(data, "x-ethers/locale") ?? "en"
 
         const entropy = arrayify(mnemonicAesCtr.decrypt(mnemonicCiphertext))
 
@@ -187,7 +182,7 @@ function _getAccount(data: any, key: Uint8Array): KeystoreAccount {
                 locale,
             ).derivePath(path)
 
-            if (node.privateKey != account.privateKey) {
+            if (node.privateKey !== account.privateKey) {
                 throw new Error("mnemonic mismatch")
             }
 
@@ -214,7 +209,7 @@ function _getAccount(data: any, key: Uint8Array): KeystoreAccount {
 // ~ Utils
 
 function looseArrayify(hexString: string): Uint8Array {
-    if (typeof hexString === "string" && hexString.substring(0, 2) !== "0x") {
+    if (typeof hexString === "string" && !hexString.startsWith("0x")) {
         hexString = "0x" + hexString
     }
     return arrayify(hexString)
@@ -224,11 +219,11 @@ function searchPath(object: any, path: string): string | null {
     let currentChild = object
 
     const comps = path.toLowerCase().split("/")
-    for (let i = 0; i < comps.length; i++) {
+    for (const element of comps) {
         // Search for a child object with a case-insensitive matching key
         let matchingChild = null
         for (const key in currentChild) {
-            if (key.toLowerCase() === comps[i]) {
+            if (key.toLowerCase() === element) {
                 matchingChild = currentChild[key]
                 break
             }
