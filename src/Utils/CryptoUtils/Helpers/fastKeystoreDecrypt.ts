@@ -100,7 +100,6 @@ async function _computeKdfKey(data: any, password: string) {
                 throwError("dklen", dkLen)
             }
 
-            // react-native-scrypt - Not working (3)
             const _key = await scrypt(
                 Buffer.from(password).toString("base64"),
                 Buffer.from(salt).toString("base64"),
