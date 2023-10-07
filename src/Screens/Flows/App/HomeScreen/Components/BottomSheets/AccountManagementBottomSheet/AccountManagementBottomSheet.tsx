@@ -9,11 +9,17 @@ import {
     BaseText,
     BaseTouchableBox,
     BaseView,
+    showErrorToast,
+    showSuccessToast,
 } from "~Components"
 
 import { useI18nContext } from "~i18n"
-import { useAppSelector } from "~Storage/Redux"
-import { selectSelectedAccount } from "~Storage/Redux/Selectors"
+import {
+    addAccountForDevice,
+    useAppDispatch,
+    useAppSelector,
+} from "~Storage/Redux"
+import { selectDevices, selectSelectedAccount } from "~Storage/Redux/Selectors"
 
 type Props = {
     onClose: () => void
@@ -42,10 +48,30 @@ export const AccountManagementBottomSheet = React.forwardRef<
 
         const snapPoints = useMemo(() => ["50%"], [])
         const selectedAccount = useAppSelector(selectSelectedAccount)
+        const devices = useAppSelector(selectDevices)
+        const dispatch = useAppDispatch()
 
         const handleSheetChanges = useCallback((index: number) => {
             info("accountManagementSheet position changed", index)
         }, [])
+
+        const onAddAccount = useCallback(() => {
+            onClose()
+            if (devices.length === 1 && devices[0].xPub) {
+                try {
+                    dispatch(addAccountForDevice(devices[0]))
+                    showSuccessToast({
+                        text1: LL.WALLET_MANAGEMENT_NOTIFICATION_CREATE_ACCOUNT_SUCCESS(),
+                    })
+                } catch (e) {
+                    showErrorToast({
+                        text1: LL.WALLET_MANAGEMENT_NOTIFICATION_CREATE_ACCOUNT_ERROR(),
+                    })
+                }
+            } else {
+                openAddAccountSheet()
+            }
+        }, [LL, devices, dispatch, onClose, openAddAccountSheet])
 
         const { onCopyToClipboard } = useCopyClipboard()
 
@@ -82,7 +108,7 @@ export const AccountManagementBottomSheet = React.forwardRef<
                         name={"plus"}
                         size={32}
                         bg={theme.colors.secondary}
-                        action={openAddAccountSheet}
+                        action={onAddAccount}
                         testID="AccountManagementBottomSheet_addAccountButton"
                     />
                 </BaseView>
