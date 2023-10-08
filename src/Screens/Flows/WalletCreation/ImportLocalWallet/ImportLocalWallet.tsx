@@ -31,7 +31,7 @@ import { setMnemonic, setPrivateKey } from "~Storage/Redux/Actions"
 import HapticsService from "~Services/HapticsService"
 import { AnalyticsEvent } from "~Constants"
 import { IMPORT_TYPE } from "~Model"
-import { UnlockKeystoretBottomSheet } from "./Components/UnlockKeystoreBottomSheet"
+import { UnlockKeystoreBottomSheet } from "./Components/UnlockKeystoreBottomSheet"
 
 const DEMO_MNEMONIC =
     "denial kitchen pet squirrel other broom bar gas better priority spoil cross"
@@ -236,7 +236,7 @@ export const ImportLocalWallet = () => {
                                 isError={!!isError}
                             />
 
-                            <UnlockKeystoretBottomSheet
+                            <UnlockKeystoreBottomSheet
                                 ref={unlockKeystoreBottomSheetRef}
                                 onHide={closeUnlockKeystoreBottomSheet}
                                 onUnlock={onUnlockKeyStoreFile}
