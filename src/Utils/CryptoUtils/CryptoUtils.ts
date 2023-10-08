@@ -130,6 +130,8 @@ const isValidKeystoreFile = (fileContent: string): boolean => {
 }
 
 const determineKeyImportType = (rawImportData: string): IMPORT_TYPE => {
+    if (!rawImportData) return IMPORT_TYPE.UNKNOWN
+
     if (Mnemonic.validate(mnemonicStringToArray(rawImportData)))
         return IMPORT_TYPE.MNEMONIC
     if (isValidPrivateKey(Buffer.from(rawImportData, "hex")))
