@@ -19,7 +19,7 @@ Feature: The user can manage transactions settings
 
   Scenario: User can select an URL as default delegation method for transactions
     When The user selects URL as delegation method
-    And The user inserts a new url "<url>"
+    And The user specifies the following delegation url "<url>"
     Then The user should see the delegation url "<url>" card
 
     Examples: 
@@ -28,11 +28,11 @@ Feature: The user can manage transactions settings
 
   Scenario: User can create multiple delegation URLs
     When The user selects URL as delegation method
-    And The user inserts a new url "<url1>"
+    And The user specifies the following delegation url "<url1>"
     And The user selects URL as delegation method
     And The user should see the delegation url "<url1>" card
     And The user click plush button to add a new url
-    And The user inserts a new url "<url2>"
+    And The user specifies the following delegation url "<url2>"
     And The user should see the delegation url "<url2>" card
     And The user selects URL as delegation method
     Then The user should see the delegation url "<url2>" card
@@ -45,7 +45,7 @@ Feature: The user can manage transactions settings
   Scenario: User can add a delegation URL with the Manage URLs button
     When The user click Manage URLs button
     And The user click the plus icon to add a new delegation url
-    And The user inserts a new url "<url1>"
+    And The user specifies the following delegation url "<url1>"
     Then The user should see the delegation url "<url1>" card
 
     Examples: 
@@ -55,9 +55,9 @@ Feature: The user can manage transactions settings
   Scenario: User can add multiple delegation URLs with the Manage URLs button
     When The user click Manage URLs button
     And The user click the plus icon to add a new delegation url
-    And The user inserts a new url "<url1>"
+    And The user specifies the following delegation url "<url1>"
     And The user click the plus icon to add a new delegation url
-    And The user inserts a new url "<url2>"
+    And The user specifies the following delegation url "<url2>"
     Then The user should see the delegation url "<url1>" card
     Then The user should see the delegation url "<url2>" card
 
@@ -68,9 +68,9 @@ Feature: The user can manage transactions settings
   Scenario: User can delete delegation URLs
     When The user click Manage URLs button
     And The user click the plus icon to add a new delegation url
-    And The user inserts a new url "<url1>"
+    And The user specifies the following delegation url "<url1>"
     And The user click the plus icon to add a new delegation url
-    And The user inserts a new url "<url2>"
+    And The user specifies the following delegation url "<url2>"
     And The user delete the delegation url "<url1>"
     Then The user should see the delegation url "<url2>" card
     Then The user should not see the delegation url "<url1>" card
