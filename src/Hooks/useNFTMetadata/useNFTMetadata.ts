@@ -14,6 +14,7 @@ export const useNFTMetadata = () => {
     ): Promise<NFTMetadata | undefined> => {
         try {
             const protocol = uri?.split(":")[0].trim()
+            let tokenMetadata: NFTMetadata | undefined
 
             switch (protocol) {
                 case URIProtocol.IPFS:
@@ -30,25 +31,35 @@ export const useNFTMetadata = () => {
                         : await getNFTMetadataArweave(uri)
 
                     metadataCache?.setItem(uri, retrievedData)
-                    return retrievedData
+                    tokenMetadata = retrievedData
+                    break
                 }
 
                 case URIProtocol.HTTPS:
                 case URIProtocol.HTTP: {
                     debug(`Fetching metadata for ${uri}`)
-                    return (
+                    tokenMetadata =
                         (
                             await axios.get<NFTMetadata>(uri, {
                                 timeout: NFT_AXIOS_TIMEOUT,
                             })
                         )?.data ?? undefined
-                    )
+                    break
                 }
 
                 default:
                     warn(`Unable to detect protocol for metadata URI ${uri}`)
                     return undefined
             }
+            // transform all metadata keys to lowercase avoiding case sensitive issues
+            return (
+                tokenMetadata &&
+                (Object.keys(tokenMetadata).reduce((acc: any, key) => {
+                    acc[key.toLowerCase()] =
+                        tokenMetadata?.[key as keyof NFTMetadata]
+                    return acc
+                }, {}) as NFTMetadata)
+            )
         } catch (e) {
             warn(`Error fetching metadata ${uri}`, e)
         }

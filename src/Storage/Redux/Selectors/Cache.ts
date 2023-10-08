@@ -7,6 +7,10 @@ export const selectMnemonic = createSelector(reducer, state => {
     return state.mnemonic
 })
 
+export const selectPrivateKey = createSelector(reducer, state => {
+    return state.privateKey
+})
+
 export const selectNewLedgerDevice = createSelector(reducer, state => {
     return state.newLedgerDevice
 })

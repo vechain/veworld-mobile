@@ -15,14 +15,13 @@ import AccountUtils from "./AccountUtils"
 import GasUtils from "./GasUtils"
 import LanguageUtils from "./LanguageUtils"
 import LedgerUtils from "./LedgerUtils"
-import DeviceInfoUtils from "./DeviceUtils"
+import DeviceUtils from "./DeviceUtils"
 
 import LocaleUtils from "./LocaleUtils"
 import LockScreenUtils from "./LockScreenUtils"
 import PasswordUtils from "./PasswordUtils"
 import PicassoUtils from "./PicassoUtils"
 import PlatformUtils from "./PlatformUtils"
-import SeedUtils from "./SeedUtils"
 import StringUtils from "./StringUtils"
 import TokenUtils from "./TokenUtils"
 import TransactionUtils from "./TransactionUtils"
@@ -62,7 +61,6 @@ export {
     PasswordUtils,
     PicassoUtils,
     PlatformUtils,
-    SeedUtils,
     StringUtils,
     TokenUtils,
     TransactionUtils,
@@ -76,5 +74,5 @@ export {
     MinimizerUtils,
     AnalyticsUtils,
     ColorUtils,
-    DeviceInfoUtils,
+    DeviceUtils,
 }

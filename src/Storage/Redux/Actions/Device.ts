@@ -27,9 +27,21 @@ const addDeviceAndAccounts =
     (device: LocalDevice): AppThunk<WalletAccount> =>
     dispatch => {
         dispatch(addDevice(device))
-        // TODO (Erik) (https://github.com/vechainfoundation/veworld-mobile/issues/773) here should add until i found an account with no balance
-        const account = dispatch(addAccountForDevice(device))
 
+        let account: WalletAccount
+        // If we are adding a private key device we want to add the root address as the first account
+        if (device.type === DEVICE_TYPE.LOCAL_PRIVATE_KEY) {
+            account = {
+                alias: AccountUtils.rootAlias,
+                address: device.rootAddress,
+                rootAddress: device.rootAddress,
+                index: -1,
+                visible: true,
+            }
+            dispatch(addAccount(account))
+        } else {
+            account = dispatch(addAccountForDevice(device))
+        }
         return account
     }
 
