@@ -231,6 +231,7 @@ const en: BaseTranslation = {
     SB_YOUR_TOKENS_EMPTY: "Your tokens will appear here",
     SB_SECURITY: "To secure your wallet, you can either use your device's biometric (like a fingerprint) or set up a password. You can change the password anytime if needed.",
     SB_USER_PASSWORD: "This password will be used to authorize transactions.",
+    SB_INSERT_KEYSTORE_PASSWORD: "Insert your keystore password",
 
 
     // ELEMENTS

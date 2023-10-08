@@ -843,6 +843,10 @@ type RootTranslation = {
 	 */
 	SB_USER_PASSWORD: string
 	/**
+	 * I​n​s​e​r​t​ ​y​o​u​r​ ​k​e​y​s​t​o​r​e​ ​p​a​s​s​w​o​r​d
+	 */
+	SB_INSERT_KEYSTORE_PASSWORD: string
+	/**
 	 * F​a​c​e​ ​I​D
 	 */
 	FACE_ID: string
@@ -3425,6 +3429,10 @@ export type TranslationFunctions = {
 	 * This password will be used to authorize transactions.
 	 */
 	SB_USER_PASSWORD: () => LocalizedString
+	/**
+	 * Insert your keystore password
+	 */
+	SB_INSERT_KEYSTORE_PASSWORD: () => LocalizedString
 	/**
 	 * Face ID
 	 */
