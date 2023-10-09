@@ -74,15 +74,6 @@ jobs:
             - name: Start Metro Bundler
               run: yarn react-native start &
 
-            # Add sentry.properties
-            - name: Add sentry.properties
-              run: |
-                echo "defaults.url=https://sentry.io/" > ./ios/sentry.properties
-                echo "defaults.org=vechain-foundation" >> ./ios/sentry.properties
-                echo "defaults.project=veworld-mobile" >> ./ios/sentry.properties
-                echo "auth.token=${{ secrets.SENTRY_AUTH_TOKEN }}" >> ./ios/sentry.properties
-
-
             # Restore Detox build cache
             # - name: Restore Detox build
             #   id: detox-cache-restore
@@ -95,7 +86,7 @@ jobs:
             - name: Detox build iOS Debug
               # if: steps.detox-cache-restore.outputs.cache-hit != 'true'
               timeout-minutes: 60
-              run: SKIP_SENTRY=true yarn detox build --configuration ios.sim.debug
+              run: SKIP_SENTRY=true yarn detox build --configuration ios.sim.debug:xcode-14.2 # GH macos-latest has Xcode 14.2
 
             # Save Detox build cache
             # - name: Save Detox build
@@ -107,9 +98,9 @@ jobs:
             #       key: ${{ runner.os }}-detox-build-${{ hashFiles('ios/Podfile.lock') }}
 
             # Test with Detox
-            - name: Detox test iOS release
-              timeout-minutes: 20
-              run: yarn detox test --configuration ios.sim.debug --cleanup --headless --record-logs all
+            - name: Detox test iOS Debug
+              timeout-minutes: 40
+              run: yarn detox test --configuration ios.sim.debug:xcode-14.2 --cleanup --headless --record-logs all
 
             # Upload artifacts
             - name: Upload artifacts
