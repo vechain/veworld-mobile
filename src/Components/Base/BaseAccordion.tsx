@@ -23,7 +23,7 @@ type Props = {
     bodyComponent: React.ReactNode
     defaultIsOpen?: boolean
     extraData: number
-    itmeHeight: number
+    itemHeight: number
 }
 
 export const BaseAccordion = ({
@@ -35,7 +35,7 @@ export const BaseAccordion = ({
     bodyComponent,
     defaultIsOpen,
     extraData,
-    itmeHeight,
+    itemHeight,
 }: Props) => {
     const theme = useTheme()
     const aref = useAnimatedRef<View>()
@@ -56,7 +56,7 @@ export const BaseAccordion = ({
     const bodyContainerDynamicStyle = useAnimatedStyle(() => {
         return {
             // height: height.value * progress.value + 1,
-            height: mix(progress.value, 0, itmeHeight * progress1.value),
+            height: mix(progress.value, 0, itemHeight * progress1.value),
             opacity: progress.value === 0 ? 0 : 1,
         }
     }, [height.value, progress.value, progress1.value])
@@ -69,11 +69,11 @@ export const BaseAccordion = ({
 
     const onHeaderPress = useCallback(() => {
         if (height.value === 0) {
-            height.value = mix(progress.value, 0, itmeHeight * extraData)
+            height.value = mix(progress.value, 0, itemHeight * extraData)
         }
         Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light)
         open.value = !open.value
-    }, [extraData, height, itmeHeight, open, progress.value])
+    }, [extraData, height, itemHeight, open, progress.value])
 
     const renderCollapseIcon = useMemo(() => {
         return (

@@ -1,6 +1,7 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit"
 import { AddressUtils } from "~Utils"
 import { Contact } from "~Model"
+import { address as addressThor } from "thor-devkit"
 
 type ContactsSliceState = {
     contacts: Contact[]
@@ -55,7 +56,8 @@ export const ContactsSlice = createSlice({
             )
 
             if (contactExistsIndex !== -1) {
-                state.contacts[contactExistsIndex].address = address
+                state.contacts[contactExistsIndex].address =
+                    addressThor.toChecksumed(address)
                 state.contacts[contactExistsIndex].alias = alias
             }
         },

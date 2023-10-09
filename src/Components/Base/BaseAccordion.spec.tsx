@@ -25,7 +25,7 @@ describe("BaseAccordion", () => {
         render(
             <BaseAccordion
                 extraData={dataLength}
-                itmeHeight={itemHeight}
+                itemHeight={itemHeight}
                 headerComponent={
                     <View testID={headerTestId}>HeaderComponent</View>
                 }
