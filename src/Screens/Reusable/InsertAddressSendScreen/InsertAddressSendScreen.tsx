@@ -108,7 +108,6 @@ export const InsertAddressSendScreen = ({ route }: Props) => {
         <Layout
             safeAreaTestID="Insert_Address_Send_Screen"
             title={LL.BTN_SEND()}
-            showSelectedNetwork
             noStaticBottomPadding
             fixedHeader={
                 <BaseView>
@@ -229,8 +228,8 @@ export const InsertAddressSendScreen = ({ route }: Props) => {
 
                     <CreateContactBottomSheet
                         ref={createContactBottomSheetRef}
-                        onClose={closeCreateContactSheet}
                         onSubmit={navigateNext}
+                        onClose={closeCreateContactSheet}
                         address={selectedAddress}
                     />
 

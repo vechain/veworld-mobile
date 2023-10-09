@@ -13,7 +13,8 @@ const addAccountForDevice =
     (device: BaseDevice): AppThunk<WalletAccount> =>
     (dispatch, getState) => {
         if (!device.xPub)
-            throw new Error("Cannot add account for device without xPub")
+            throw new Error("This is not a valid HD wallet device")
+
         const { accounts } = getState()
         const deviceAccounts = accounts.accounts.filter(account =>
             AddressUtils.compareAddresses(

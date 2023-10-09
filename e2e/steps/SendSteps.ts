@@ -32,6 +32,9 @@ When(
     { timeout: -1 },
     async function (amount: string) {
         await insertTextById(amount, "SendScreen_amountInput")
+
+        // Close the keyboard
+        await clickByText("Send")
     },
 )
 

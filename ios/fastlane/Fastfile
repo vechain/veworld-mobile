@@ -307,7 +307,7 @@ end
   lane :e2e do
     Dir.chdir "../.." do # Navigate to the root of the project where the Detox files are placed.
       sh("detox build --configuration ios.sim.debug")
-      sh("detox test --configuration ios.sim.debug --loglevel trace --record-logs all")
+      sh("detox test --configuration ios.sim.debug --record-logs all")
     end
   end
 =end

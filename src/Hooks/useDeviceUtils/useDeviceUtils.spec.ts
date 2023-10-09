@@ -20,26 +20,27 @@ jest.mock("~Storage/Redux/Selectors", () => ({
     selectDevices: jest.fn(() => [device1, device2]),
 }))
 
-describe("useDeviceUtils", () => {
+describe("createDevice", () => {
     it("should generate a new device from a given mnemonic", async () => {
         ;(selectDevices as unknown as jest.Mock).mockImplementation(() => [
             device1,
             device2,
         ])
-        const { result } = renderHook(() => useDeviceUtils(), {
+        const { result: hook } = renderHook(() => useDeviceUtils(), {
             wrapper: TestWrapper,
         })
 
         const mnemonic =
-            "patrol marriage valve view dismiss history retire mystery garlic limb adult swing dilemma dynamic hungry"
-        const { device, wallet } =
-            result.current.getDeviceFromMnemonic(mnemonic)
+            "patrol marriage valve view dismiss history retire mystery garlic limb adult swing dilemma dynamic hungry".split(
+                " ",
+            )
+        const { device, wallet } = hook.current.createDevice(mnemonic)
         expect(device).toBeDefined()
         expect(wallet).toBeDefined()
         expect(device.rootAddress).toBeDefined()
         expect(device.xPub?.publicKey).toBeDefined()
         expect(wallet.rootAddress).toBeDefined()
-        expect(wallet.mnemonic).toEqual(mnemonic.split(" "))
+        expect(wallet.mnemonic).toEqual(mnemonic)
     })
 
     it("should throw with the same device", async () => {
@@ -62,9 +63,11 @@ describe("useDeviceUtils", () => {
         })
 
         const mnemonic =
-            "patrol marriage valve view dismiss history retire mystery garlic limb adult swing dilemma dynamic hungry"
+            "patrol marriage valve view dismiss history retire mystery garlic limb adult swing dilemma dynamic hungry".split(
+                " ",
+            )
         expect(() => {
-            result.current.getDeviceFromMnemonic(mnemonic)
+            result.current.createDevice(mnemonic)
         }).toThrowError("Device already exists")
     })
 })

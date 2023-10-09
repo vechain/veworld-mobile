@@ -1,16 +1,14 @@
 import { renderHook, act } from "@testing-library/react-hooks"
 import { useAmountInput } from "./useAmountInput"
-import { useDecimalSeparator } from "../useDecimalSeparator"
+import { useLocale } from "../useLocale"
 
-jest.mock("../useDecimalSeparator")
+jest.mock("../useLocale")
 
 describe("useAmountInput", () => {
-    const mockDecimalSeparator = "."
+    const mockLocale = { decimalSeparator: "." }
 
     beforeEach(() => {
-        ;(useDecimalSeparator as jest.Mock).mockReturnValue(
-            mockDecimalSeparator,
-        )
+        ;(useLocale as jest.Mock).mockReturnValue(mockLocale)
     })
 
     afterEach(() => {

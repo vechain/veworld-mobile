@@ -69,7 +69,7 @@ jest.mock("~Components/Providers/EncryptedStorageProvider/Helpers", () => ({
 
 jest.mock("../useDeviceUtils", () => ({
     useDeviceUtils: jest.fn(() => ({
-        getDeviceFromMnemonic: jest.fn(() => ({
+        createDevice: jest.fn(() => ({
             device,
             wallet,
         })),
@@ -113,14 +113,14 @@ describe("useCreateWallet", () => {
         ).mockResolvedValue(JSON.stringify(wallet))
     })
 
-    describe("onCreateWallet", () => {
+    describe("createLocalWallet", () => {
         it("should create a wallet with biometrics", async () => {
             const { result } = renderHook(() => useCreateWallet(), {
                 wrapper: TestWrapper,
             })
-            const { onCreateWallet } = result.current
+            const { createLocalWallet } = result.current
 
-            await onCreateWallet({ mnemonic: mnemonic.join(" ") })
+            await createLocalWallet({ mnemonic: mnemonic })
             await waitFor(() => result.current.isComplete)
             expect(result.current.accessControl).toBe(true)
             expect(result.current.isComplete).toBe(true)
@@ -143,9 +143,9 @@ describe("useCreateWallet", () => {
             const { result } = renderHook(() => useCreateWallet(), {
                 wrapper: TestWrapper,
             })
-            const onCreateWallet = result.current.onCreateWallet
-            await onCreateWallet({
-                mnemonic: mnemonic.join(" "),
+            const createLocalWallet = result.current.createLocalWallet
+            await createLocalWallet({
+                mnemonic: mnemonic,
                 userPassword: "password",
                 onError: undefined,
             })
@@ -168,15 +168,15 @@ describe("useCreateWallet", () => {
         })
     })
 
-    describe("onCreateLedgerWallet", () => {
+    describe("createLedgerWallet", () => {
         it("should create wallet with Ledger", async () => {
             const { result } = renderHook(() => useCreateWallet(), {
                 wrapper: TestWrapper,
             })
-            const { onCreateLedgerWallet } = result.current
+            const { createLedgerWallet } = result.current
 
             try {
-                await onCreateLedgerWallet({
+                await createLedgerWallet({
                     newLedger: ledger,
                     onError: undefined,
                 })

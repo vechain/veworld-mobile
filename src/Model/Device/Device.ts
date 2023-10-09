@@ -1,5 +1,5 @@
 import { XPub } from "../Crypto"
-import { DEVICE_TYPE } from "../Wallet"
+import { DEVICE_TYPE, Wallet } from "../Wallet"
 
 /** A general model for storing data about devices in the wallet
  * @field `xPub` - used to generate new address without accessing the device directly
@@ -24,7 +24,7 @@ export interface BaseDevice {
  */
 export interface LocalDevice extends BaseDevice {
     wallet: string
-    readonly type: DEVICE_TYPE.LOCAL_MNEMONIC
+    readonly type: DEVICE_TYPE.LOCAL_MNEMONIC | DEVICE_TYPE.LOCAL_PRIVATE_KEY
 }
 
 /**
@@ -33,4 +33,9 @@ export interface LocalDevice extends BaseDevice {
 export interface LedgerDevice extends BaseDevice {
     deviceId: string
     readonly type: DEVICE_TYPE.LEDGER
+}
+
+export type WalletAndDevice = {
+    wallet: Wallet
+    device: Omit<LocalDevice, "wallet">
 }

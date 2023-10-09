@@ -84,9 +84,10 @@ export const useSendTransaction = (
             visibilityTime: 4000,
             testID: "transactionSuccessToast",
         })
+
+        // this will ask for the review after 3 weeks if the user has not reviewed the app yet
         const nextReviewDate = moment(lastReviewTimestamp).add(3, "weeks")
-        const isTimeForANewReview =
-            !lastReviewTimestamp || moment().isAfter(nextReviewDate)
+        const isTimeForANewReview = moment().isAfter(nextReviewDate)
 
         if (InAppReview.isAvailable() && isTimeForANewReview) {
             InAppReview.RequestInAppReview()

@@ -144,7 +144,6 @@ export const TransactionSummarySendScreen = ({ route }: Props) => {
         <Layout
             safeAreaTestID="Transaction_Summary_Send_Screen"
             title={LL.SEND_TOKEN_TITLE()}
-            showSelectedNetwork
             noStaticBottomPadding
             body={
                 <BaseView mb={80} mt={8}>

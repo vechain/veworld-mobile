@@ -1,14 +1,14 @@
 import { Given, Then, When } from "@cucumber/cucumber"
 import {
-    DEFAULT_TIMEOUT,
     LONG_TIMEOUT,
     EXAMPLE_CONTACTS,
     ContactsScreen,
     HomeFlows,
     ContactsManagementFlows,
-    clickByText,
+    closeBottomSheet,
+    textShouldBeVisible,
+    textShouldNotBeVisible,
 } from "../helpers"
-import { waitFor, element } from "detox"
 
 Given(
     "The user is in the contacts management screen",
@@ -63,18 +63,14 @@ Then(
     "The user should see contact with name {string} in contacts list",
     { timeout: -1 },
     async (name: string) => {
-        await waitFor(element(by.text(name)))
-            .toBeVisible()
-            .withTimeout(LONG_TIMEOUT)
+        await textShouldBeVisible(name, { timeout: LONG_TIMEOUT })
     },
 )
 
 Then(
     "The user should not see contact with name {string} in contacts list",
     async (name: string) => {
-        await waitFor(element(by.text(name)))
-            .not.toBeVisible()
-            .withTimeout(DEFAULT_TIMEOUT)
+        await textShouldNotBeVisible(name)
     },
 )
 
@@ -87,26 +83,19 @@ Then(
 )
 
 Then("The user should see the address exists error message", async () => {
-    await waitFor(element(by.text("Address already exists in contacts")))
-        .toBeVisible()
-        .withTimeout(DEFAULT_TIMEOUT)
+    await textShouldBeVisible("Address already exists in contacts")
 })
 
 Then(
-    "The user should see the address exists error message and click outside",
-    async () => {
-        await waitFor(element(by.text("Address already exists in contacts")))
-            .toBeVisible()
-            .withTimeout(DEFAULT_TIMEOUT)
-        // dismiss the modal clicking outside of it (the title)
-        await clickByText("Contacts")
+    "The user closes the {string} bottom sheet",
+    { timeout: -1 },
+    async (name: string) => {
+        await closeBottomSheet(name)
     },
 )
 
 Then("The user should see the address invalid error message", async () => {
-    await waitFor(element(by.text("Please enter a valid Vechain address")))
-        .toBeVisible()
-        .withTimeout(DEFAULT_TIMEOUT)
+    await textShouldBeVisible("Please enter a valid Vechain address")
 })
 
 Then(

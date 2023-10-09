@@ -12,7 +12,9 @@ import {
     SettingsFlows,
     WalletSuccessScreen,
     WelcomeScreen,
+    HomeScreen,
     textShouldBeVisible,
+    clickByText,
 } from "../helpers"
 
 Given(
@@ -20,6 +22,9 @@ Given(
     { timeout: -1 },
     async () => {
         if (detox.device.getPlatform() !== "ios") return "skipped"
+
+        // Enroll in Face ID
+        await detox.device.setBiometricEnrollment(true)
 
         let retries: number = 5
         while (retries-- > 0) {
@@ -109,16 +114,26 @@ When("The user onboards with a new local wallet", { timeout: -1 }, async () => {
 })
 
 When(
-    "The user onboards with an imported mnemonic {string}",
+    "The user onboards with an imported mnemonic or private key {string}",
     { timeout: -1 },
     async (mnemonic: string) => {
         await OnboardingFlows.skipToImportLocalWallet()
-        await OnboardingFlows.pasteMnemonic(mnemonic)
+        await OnboardingFlows.pasteIntoImportTextbox(mnemonic)
     },
 )
 
 When(
-    "The user chooses to protect the wallet with a password {string} and confirms with {string}",
+    "The user onboards with an imported keystore file {string} with password {string}",
+    { timeout: -1 },
+    async (keystoreFile: string, password: string) => {
+        await OnboardingFlows.skipToImportLocalWallet()
+        await OnboardingFlows.pasteIntoImportTextbox(keystoreFile)
+        await OnboardingFlows.enterPasswordAndUnlock(password)
+    },
+)
+
+When(
+    "The user chooses to protect the wallet with a pin {string} and confirms with {string}",
     { timeout: -1 },
     async (password: string, confirmPassword: string) => {
         await element(by.text("Create password")).tap()
@@ -128,6 +143,10 @@ When(
         )
     },
 )
+
+When("The user completes the wallet creation", { timeout: -1 }, async () => {
+    await clickByText("GO TO YOUR WALLET")
+})
 
 When(
     "The user chooses to protect the wallet with biometrics",
@@ -149,6 +168,10 @@ When(
 
 Then("The user should see wallet success screen", async () => {
     await WalletSuccessScreen.isActive()
+})
+
+Then("The user should see wallet home screen", async () => {
+    await HomeScreen.isActive()
 })
 
 Then(

@@ -24,7 +24,7 @@ export const NewMnemonicScreen = () => {
     const dispatch = useAppDispatch()
 
     const [isChecked, setIsChecked] = useState(false)
-    const { mnemonic, mnemonicArray } = useGenerateMnemonic()
+    const { mnemonic } = useGenerateMnemonic()
 
     const theme = useTheme()
 
@@ -50,14 +50,14 @@ export const NewMnemonicScreen = () => {
 
                         <BaseSpacer height={24} />
 
-                        <MnemonicCard mnemonicArray={mnemonicArray} />
+                        <MnemonicCard mnemonicArray={mnemonic} />
                         <BaseSpacer height={20} />
                         <BaseButton
                             size="sm"
                             selfAlign="flex-end"
                             action={() =>
                                 onCopyToClipboard(
-                                    mnemonicArray.join(" "),
+                                    mnemonic.join(" "),
                                     LL.TITLE_MNEMONIC(),
                                 )
                             }

@@ -1,3 +1,3 @@
-import * as DeviceInfoUtils from "./DeviceInfoUtils"
+import * as DeviceUtils from "./DeviceUtils"
 
-export default DeviceInfoUtils
+export default DeviceUtils

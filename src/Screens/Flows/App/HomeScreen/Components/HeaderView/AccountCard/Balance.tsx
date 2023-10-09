@@ -5,10 +5,9 @@ import { useTheme } from "~Hooks"
 import { FormattingUtils } from "~Utils"
 import { BaseIcon, BaseSkeleton, BaseText, BaseView } from "~Components"
 import { useI18nContext } from "~i18n"
-import BigNumber from "bignumber.js"
 import {
     selectIsTokensOwnedLoading,
-    selectVetTokenWithBalanceByAccount,
+    selectVetBalanceByAccount,
     useAppSelector,
 } from "~Storage/Redux"
 import { WalletAccount } from "~Model"
@@ -24,19 +23,11 @@ export const Balance: React.FC<Props> = memo(
         const theme = useTheme()
         const { LL } = useI18nContext()
 
-        const vetTokenWithBalance = useAppSelector(state =>
-            selectVetTokenWithBalanceByAccount(state, account.address),
+        const balance = useAppSelector(state =>
+            selectVetBalanceByAccount(state, account.address),
         )
 
         const isTokensOwnedLoading = useAppSelector(selectIsTokensOwnedLoading)
-
-        const balance = new BigNumber(
-            FormattingUtils.convertToFiatBalance(
-                vetTokenWithBalance?.balance.balance || "0",
-                1,
-                VET.decimals,
-            ),
-        ).toString()
 
         const renderBalance = useMemo(() => {
             if (isVisible) return FormattingUtils.humanNumber(balance, balance)
@@ -44,6 +35,11 @@ export const Balance: React.FC<Props> = memo(
                 Array(FormattingUtils.humanNumber(balance).length).keys(),
             ).map(_value => "•")
         }, [balance, isVisible])
+
+        const computeFonts = useMemo(
+            () => (renderBalance.length > 9 ? "title" : "hugeTitle"),
+            [renderBalance.length],
+        )
 
         return (
             <>
@@ -73,14 +69,14 @@ export const Balance: React.FC<Props> = memo(
                                         : COLORS.DARK_PURPLE
                                 }
                                 highlightColor={COLORS.LIGHT_PURPLE}
-                                height={45}
+                                height={renderBalance.length > 9 ? 22 : 45}
                                 width={140}
                             />
                         </BaseView>
                     ) : (
                         <BaseText
                             color={theme.colors.textReversed}
-                            typographyFont="hugeTitle">
+                            typographyFont={computeFonts}>
                             {renderBalance}
                         </BaseText>
                     )}

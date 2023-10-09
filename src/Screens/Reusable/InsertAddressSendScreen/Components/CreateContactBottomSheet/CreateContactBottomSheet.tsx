@@ -12,6 +12,7 @@ import { useI18nContext } from "~i18n"
 import { insertContact, useAppDispatch } from "~Storage/Redux"
 import { Contact, ContactType } from "~Model"
 import { useContactValidation } from "~Screens/Flows/App/ContactsScreen"
+import { Keyboard } from "react-native"
 
 type Props = {
     onClose: () => void
@@ -52,17 +53,35 @@ export const CreateContactBottomSheet = React.forwardRef<
     const dispatch = useAppDispatch()
     const snapPoints = creationMode ? ["57%"] : ["40%"]
 
-    const closeAndSubmit = useCallback(() => {
+    const backToChooseMode = useCallback(() => {
         setAlias("")
-        onClose()
-        onSubmit(address)
-    }, [onClose, onSubmit, address])
+        setCreationMode(false)
+    }, [])
 
     const handleSaveButton = useCallback(() => {
         if (!isFormValid) return
         dispatch(insertContact(contact))
-        closeAndSubmit()
-    }, [isFormValid, dispatch, contact, closeAndSubmit])
+        Keyboard.dismiss()
+        // this is a workaround to wait for keyboard to be dismissed before closing the bottom sheet, otherwise it won't close
+        setTimeout(() => {
+            onClose()
+            onSubmit(address)
+            backToChooseMode()
+        }, 200)
+    }, [
+        isFormValid,
+        dispatch,
+        contact,
+        onClose,
+        onSubmit,
+        address,
+        backToChooseMode,
+    ])
+
+    const handleProceedAnywayButton = useCallback(() => {
+        onClose()
+        onSubmit(address)
+    }, [address, onClose, onSubmit])
 
     return (
         <BaseBottomSheet ref={ref} snapPoints={snapPoints}>
@@ -105,7 +124,7 @@ export const CreateContactBottomSheet = React.forwardRef<
                             haptics="Light"
                             variant="outline"
                             title={LL.COMMON_BTN_CANCEL()}
-                            action={() => setCreationMode(false)}
+                            action={backToChooseMode}
                         />
                     </BaseView>
                 </BaseView>
@@ -134,7 +153,7 @@ export const CreateContactBottomSheet = React.forwardRef<
                             haptics="Light"
                             variant="outline"
                             title={LL.SEND_CREATE_CONTACT_PROCEED_ANYWAY_BUTTON()}
-                            action={closeAndSubmit}
+                            action={handleProceedAnywayButton}
                         />
                     </BaseView>
                 </BaseView>

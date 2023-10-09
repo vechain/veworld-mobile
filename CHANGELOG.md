@@ -1,5 +1,28 @@
 
 
+## [1.2.0](https://github.com/vechainfoundation/veworld-mobile/compare/1.1.1...1.2.0) (2023-10-04)
+
+
+### Features
+
+* add bable plugin to remove any forgotten logs in production ([#1473](https://github.com/vechainfoundation/veworld-mobile/issues/1473)) ([d3f5ed0](https://github.com/vechainfoundation/veworld-mobile/commit/d3f5ed0636c5930b3af3f839d6a8d7965cbf6e0f))
+* copy address from home QR scan & refactor toast methods config ([#1452](https://github.com/vechainfoundation/veworld-mobile/issues/1452)) ([0e7f4f3](https://github.com/vechainfoundation/veworld-mobile/commit/0e7f4f32e4c2846b8f3c8687732bad803eba5c82))
+
+
+### Bug Fixes
+
+* add loggin dev button back ([#1441](https://github.com/vechainfoundation/veworld-mobile/issues/1441)) ([530b2be](https://github.com/vechainfoundation/veworld-mobile/commit/530b2be56422730f907b383ac6366ec4d310b540))
+* add pressable to network banner ([#1479](https://github.com/vechainfoundation/veworld-mobile/issues/1479)) ([857c0db](https://github.com/vechainfoundation/veworld-mobile/commit/857c0db0ed4e2ad99f2b82b502e43f9322495a6d))
+* add unique key on map ([#1472](https://github.com/vechainfoundation/veworld-mobile/issues/1472)) ([7ad17ee](https://github.com/vechainfoundation/veworld-mobile/commit/7ad17ee4e6365e1eb4302299e7aecebc68e96cb2))
+* android biometric handling ([#1434](https://github.com/vechainfoundation/veworld-mobile/issues/1434)) ([83841ae](https://github.com/vechainfoundation/veworld-mobile/commit/83841ae4ae7865ed1c0f4bf141b426f23706e176))
+* ask review after 3 days the first time, then after 3 weeks ([#1482](https://github.com/vechainfoundation/veworld-mobile/issues/1482)) ([d88bdc9](https://github.com/vechainfoundation/veworld-mobile/commit/d88bdc9c559f2a1e0f01bb20abd2e0f6c0884c49))
+* contacts modal ([#1477](https://github.com/vechainfoundation/veworld-mobile/issues/1477)) ([82d1b1e](https://github.com/vechainfoundation/veworld-mobile/commit/82d1b1e07a69ea7c8148cb23833b6eb9a8182856))
+* e2e test ([#1448](https://github.com/vechainfoundation/veworld-mobile/issues/1448)) ([c280129](https://github.com/vechainfoundation/veworld-mobile/commit/c28012974d9f4b7a2d99df64a77df98e4bc696ce))
+* large blaances break view ([#1478](https://github.com/vechainfoundation/veworld-mobile/issues/1478)) ([02a383a](https://github.com/vechainfoundation/veworld-mobile/commit/02a383a8f024f33a1b6c6446b79a2399d3ef17cb))
+* remove connected app ([#1449](https://github.com/vechainfoundation/veworld-mobile/issues/1449)) ([50b31d5](https://github.com/vechainfoundation/veworld-mobile/commit/50b31d50b76bf04e9e06b4e404895ff65ec634a5))
+* splashscreen with no connection lottie below ([#1453](https://github.com/vechainfoundation/veworld-mobile/issues/1453)) ([33e8206](https://github.com/vechainfoundation/veworld-mobile/commit/33e8206e6ac5961bfaaeb82e4457885de6a64bc5))
+* token image change delay ([#1464](https://github.com/vechainfoundation/veworld-mobile/issues/1464)) ([9246451](https://github.com/vechainfoundation/veworld-mobile/commit/9246451b9c0f492a88f909f94a4c05e59834d0f2))
+
 ## [1.2.0](https://github.com/vechainfoundation/veworld-mobile/compare/1.1.1...1.2.0) (2023-10-02)
 
 

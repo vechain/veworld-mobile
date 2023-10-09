@@ -15,7 +15,7 @@ import {
     isPresentId,
 } from "../helpers"
 
-BeforeAll({ timeout: 600 * 1000 }, async () => {
+BeforeAll({ timeout: 120 * 1000 }, async () => {
     console.log("Starting a new Detox test session...")
     await detox.init()
     console.log("Detox test session started!")
@@ -25,7 +25,7 @@ BeforeAll({ timeout: 600 * 1000 }, async () => {
     console.log("App launched!")
 })
 
-Before({ timeout: 600 * 1000 }, async (message: ITestCaseHookParameter) => {
+Before({ timeout: 120 * 1000 }, async (message: ITestCaseHookParameter) => {
     await device.terminateApp()
 
     const { pickle } = message
@@ -37,7 +37,7 @@ Before({ timeout: 600 * 1000 }, async (message: ITestCaseHookParameter) => {
     })
 })
 
-After({ timeout: 600 * 1000 }, async (message: ITestCaseHookParameter) => {
+After({ timeout: 120 * 1000 }, async (message: ITestCaseHookParameter) => {
     const { pickle, result } = message
     await detox.onTestDone({
         title: pickle.uri,
@@ -54,7 +54,7 @@ After({ timeout: 600 * 1000 }, async (message: ITestCaseHookParameter) => {
     }
 })
 
-AfterAll({ timeout: 600 * 1000 }, async () => {
+AfterAll({ timeout: 120 * 1000 }, async () => {
     console.log("Starting cleanup Detox test session...")
     await detox.cleanup()
     console.log("Detox test session cleaned up!")

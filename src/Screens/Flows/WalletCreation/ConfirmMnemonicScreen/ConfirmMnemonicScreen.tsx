@@ -42,7 +42,7 @@ export const ConfirmMnemonicScreen = () => {
 
     const userHasOnboarded = useAppSelector(selectHasOnboarded)
 
-    const mnemonicArray = useMemo(() => mnemonic?.split(" ") || [], [mnemonic])
+    const mnemonicArray = useMemo(() => mnemonic ?? [], [mnemonic])
 
     const [firstIndex, secondIndex, thirdIndex] = useMemo(
         () => getThreeRandomIndexes(),
