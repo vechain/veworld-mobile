@@ -1,4 +1,4 @@
-import React, { ReactElement } from "react"
+import React from "react"
 import { StyleSheet, ViewProps } from "react-native"
 import { useTheme } from "~Hooks"
 import {
@@ -9,8 +9,9 @@ import {
     BaseView,
 } from "~Components/Base"
 import { useI18nContext } from "~i18n"
+import * as Sentry from "@sentry/react-native"
 
-const Error = (): ReactElement => {
+const ErrorView = () => {
     const { LL } = useI18nContext()
     const theme = useTheme()
 
@@ -26,7 +27,7 @@ const Error = (): ReactElement => {
                     <BaseIcon
                         name={"close-circle-outline"}
                         size={70}
-                        color={theme.colors.primary}
+                        color={theme.colors.danger}
                         style={styles.icon}
                     />
                     <BaseSpacer height={24} />
@@ -58,7 +59,10 @@ export class ErrorBoundary extends React.Component<ViewProps> {
         return { hasError: true }
     }
 
-    componentDidCatch(error: any, errorInfo: any) {
+    componentDidCatch(error: Error, errorInfo: any) {
+        Sentry.captureException(error)
+        Sentry.captureMessage(`Error Boundary Error : ${error} - ${errorInfo}`)
+
         this.setState({
             error,
             errorInfo,
@@ -67,7 +71,7 @@ export class ErrorBoundary extends React.Component<ViewProps> {
 
     render() {
         if (this.state.hasError) {
-            return <Error />
+            return <ErrorView />
         } else {
             return this.props.children
         }

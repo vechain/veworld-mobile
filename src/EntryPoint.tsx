@@ -1,10 +1,13 @@
 import React, { useEffect } from "react"
-import { BaseStatusBar, useApplicationSecurity } from "~Components"
+import {
+    BaseStatusBar,
+    ErrorBoundary,
+    useApplicationSecurity,
+    AutoLockProvider,
+} from "~Components"
 import { SwitchStack } from "~Navigation"
-import ErrorBoundary from "~Components/Providers/ErrorBoundary"
 import { AppLoader } from "./AppLoader"
-import { AutoLockProvider } from "~Components/Providers/AutoLockProvider"
-import { AnimatedSplashScreen } from "../src/AnimatedSplashScreen"
+import { AnimatedSplashScreen } from "./AnimatedSplashScreen"
 import RNBootSplash from "react-native-bootsplash"
 import { SecurityLevelType } from "~Model"
 
