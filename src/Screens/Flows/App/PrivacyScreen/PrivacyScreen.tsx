@@ -163,14 +163,18 @@ export const PrivacyScreen = () => {
 
                         <BaseSpacer height={24} />
 
-                        <BaseTouchable
-                            haptics="Light"
-                            action={checkSecurityBeforeOpening}
-                            title={LL.BD_BACKUP_MNEMONIC()}
-                            underlined
-                        />
-
-                        <BaseSpacer height={24} />
+                        {/** this fix a bug where there are only ledger wallets */}
+                        {!!devices.length && (
+                            <>
+                                <BaseTouchable
+                                    haptics="Light"
+                                    action={checkSecurityBeforeOpening}
+                                    title={LL.BD_BACKUP_MNEMONIC()}
+                                    underlined
+                                />
+                                <BaseSpacer height={24} />
+                            </>
+                        )}
 
                         {devFeaturesEnabled && (
                             <>

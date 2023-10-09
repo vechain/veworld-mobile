@@ -6,7 +6,7 @@ import {
     HomeScreen,
     OnboardingFlows,
     SettingsFlows,
-    TEST_PASSWORD,
+    TEST_PIN,
     TabFlows,
     clickById,
     clickByText,
@@ -14,7 +14,7 @@ import {
     idShouldExist,
 } from "../helpers"
 import { isPinRequested } from "../helpers/flows/HomeFlows"
-import { insertPassword } from "../helpers/flows/OnboardingFlows"
+import { enterPin } from "../helpers/flows/OnboardingFlows"
 
 Given("The app is opened", { timeout: -1 }, async () => {
     let retries: number = 5
@@ -36,7 +36,7 @@ Given("The user has previously onboarded", { timeout: -1 }, async function () {
 
 Given("Open with demo account", { timeout: -1 }, async function () {
     if (await isPinRequested()) {
-        await insertPassword(TEST_PASSWORD)
+        await enterPin(TEST_PIN)
     } else {
         if (!(await HomeScreen.isActive())) await clickByText("DEV:DEMO")
     }
@@ -82,9 +82,9 @@ Given("The user goes to home tab", { timeout: -1 }, async function () {
 })
 
 When(
-    "The user inserts password {string}",
+    "The user inserts pin {string}",
     { timeout: -1 },
-    async function (password: string) {
-        await insertPassword(password)
+    async function (pin: string) {
+        await enterPin(pin)
     },
 )

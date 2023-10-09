@@ -3,7 +3,7 @@ import { createNativeStackNavigator } from "@react-navigation/native-stack"
 import {
     ConfirmMnemonicScreen,
     EnableAdditionalSettings,
-    ImportMnemonicScreen,
+    ImportLocalWallet,
     NewMnemonicScreen,
     SelectLedgerAccounts,
     SelectLedgerDevice,
@@ -71,7 +71,7 @@ export const CreateWalletAppStack = () => {
             />
             <CreateWalletApp.Screen
                 name={Routes.IMPORT_MNEMONIC}
-                component={ImportMnemonicScreen}
+                component={ImportLocalWallet}
                 options={{ headerShown: false }}
             />
             <CreateWalletApp.Screen

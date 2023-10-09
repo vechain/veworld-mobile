@@ -5,9 +5,11 @@ import {
     Header,
     HeaderView,
     TokenList,
+    RemoveAccountWarningBottomSheet,
 } from "./Components"
 import {
     useBottomSheetModal,
+    useCheckVersion,
     useMemoizedAnimation,
     useSetSelectedAccount,
     useTheme,
@@ -24,7 +26,7 @@ import {
     showWarningToast,
 } from "~Components"
 import { FadeInRight } from "react-native-reanimated"
-import { useTokenBalances } from "./Hooks/useTokenBalances"
+import { useTokenBalances, useAccountDelete } from "./Hooks"
 import {
     selectAccounts,
     selectBalanceVisible,
@@ -33,8 +35,6 @@ import {
     useAppSelector,
 } from "~Storage/Redux"
 import { AccountWithDevice } from "~Model"
-import { RemoveAccountWarningBottomSheet } from "~Screens/Flows/App/HomeScreen/Components/BottomSheets/RemoveAccountWarningBottomSheet"
-import { useAccountDelete } from "~Screens/Flows/App/HomeScreen/Hooks/useAccountDelete"
 import { useI18nContext } from "~i18n"
 import { RefreshControl } from "react-native"
 import { useScrollToTop } from "@react-navigation/native"
@@ -158,6 +158,8 @@ export const HomeScreen = () => {
     const scrollViewRef = useRef(null)
 
     useScrollToTop(scrollViewRef)
+
+    useCheckVersion()
 
     return (
         <Layout

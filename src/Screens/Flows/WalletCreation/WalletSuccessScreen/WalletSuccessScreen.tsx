@@ -31,6 +31,7 @@ import {
     selectHasOnboarded,
     selectMnemonic,
     selectNewLedgerDevice,
+    selectPrivateKey,
 } from "~Storage/Redux/Selectors"
 import HapticsService from "~Services/HapticsService"
 import { AnalyticsEvent } from "~Constants"
@@ -55,14 +56,12 @@ export const WalletSuccessScreen: FC<Props> = ({ route }) => {
     const track = useAnalyticTracking()
 
     const mnemonic = useAppSelector(selectMnemonic)
+    const privateKey = useAppSelector(selectPrivateKey)
     const newLedger = useAppSelector(selectNewLedgerDevice)
 
     const { migrateOnboarding } = useApplicationSecurity()
 
-    const {
-        onCreateWallet: createWallet,
-        onCreateLedgerWallet: createLedgerWallet,
-    } = useCreateWallet()
+    const { createLocalWallet, createLedgerWallet } = useCreateWallet()
 
     const onWalletCreationError = useCallback(
         (_error: unknown) => {
@@ -76,9 +75,9 @@ export const WalletSuccessScreen: FC<Props> = ({ route }) => {
                 )
             ) {
                 HapticsService.triggerNotification({ level: "Error" })
-                setIsError(LL.ERROR_TOO_MANY_BIOMETRICS_AUTH_ATTEMPS())
+                setIsError(LL.ERROR_TOO_MANY_BIOMETRICS_AUTH_ATTEMPTS())
                 showErrorToast({
-                    text1: LL.ERROR_TOO_MANY_BIOMETRICS_AUTH_ATTEMPS(),
+                    text1: LL.ERROR_TOO_MANY_BIOMETRICS_AUTH_ATTEMPTS(),
                 })
                 nav.reset({
                     index: 0,
@@ -104,15 +103,16 @@ export const WalletSuccessScreen: FC<Props> = ({ route }) => {
 
     const onIdentityConfirmed = useCallback(
         async (userPassword?: string) => {
-            if (!mnemonic && !newLedger)
+            if (!mnemonic && !privateKey && !newLedger)
                 throw new Error(
                     "Wrong/corrupted data. No device available in store",
                 )
 
-            if (mnemonic) {
-                await createWallet({
-                    mnemonic,
-                    userPassword,
+            if (mnemonic || privateKey) {
+                await createLocalWallet({
+                    mnemonic: mnemonic,
+                    privateKey: privateKey,
+                    userPassword: userPassword,
                     onError: onWalletCreationError,
                 })
             }
@@ -128,7 +128,8 @@ export const WalletSuccessScreen: FC<Props> = ({ route }) => {
         },
         [
             mnemonic,
-            createWallet,
+            privateKey,
+            createLocalWallet,
             onWalletCreationError,
             navigateNext,
             newLedger,
@@ -142,7 +143,7 @@ export const WalletSuccessScreen: FC<Props> = ({ route }) => {
         onPasswordSuccess,
         checkIdentityBeforeOpening,
         isBiometricsEmpty,
-    } = useCheckIdentity({ onIdentityConfirmed, allowAutoPassword: true })
+    } = useCheckIdentity({ onIdentityConfirmed, allowAutoPassword: false })
     /**
      * On first onboarding, create the wallet and set the security type selected by the user (biometric or secret)
      */
@@ -152,7 +153,7 @@ export const WalletSuccessScreen: FC<Props> = ({ route }) => {
 
             if (userHasOnboarded) return
 
-            if (!mnemonic && !newLedger)
+            if (!mnemonic && !privateKey && !newLedger)
                 throw new Error(
                     "Wrong/corrupted data. No device available in store",
                 )
@@ -178,17 +179,19 @@ export const WalletSuccessScreen: FC<Props> = ({ route }) => {
 
             await WalletEncryptionKeyHelper.init(pinCode)
 
-            if (mnemonic) {
+            if (mnemonic || privateKey) {
                 if (securityLevelSelected === SecurityLevelType.BIOMETRIC) {
-                    await createWallet({
+                    await createLocalWallet({
                         mnemonic: mnemonic,
+                        privateKey: privateKey,
                         onError: onWalletCreationError,
                     })
                 } else if (securityLevelSelected === SecurityLevelType.SECRET) {
-                    await createWallet({
+                    await createLocalWallet({
+                        mnemonic: mnemonic,
+                        privateKey: privateKey,
                         userPassword: params?.userPin,
                         onError: onWalletCreationError,
-                        mnemonic,
                     })
                 } else {
                     throw new Error(
@@ -209,16 +212,17 @@ export const WalletSuccessScreen: FC<Props> = ({ route }) => {
         migrateOnboarding,
         newLedger,
         mnemonic,
+        privateKey,
         userHasOnboarded,
         route.params,
-        createWallet,
+        createLocalWallet,
         createLedgerWallet,
         dispatch,
         onWalletCreationError,
     ])
 
     const onButtonPress = useCallback(async () => {
-        if (!mnemonic && !newLedger)
+        if (!mnemonic && !privateKey && !newLedger)
             throw new Error(
                 "Wrong/corrupted data. No device available in store",
             )
@@ -230,6 +234,7 @@ export const WalletSuccessScreen: FC<Props> = ({ route }) => {
         checkIdentityBeforeOpening,
         onboardingCreateWallet,
         userHasOnboarded,
+        privateKey,
         mnemonic,
         newLedger,
     ])

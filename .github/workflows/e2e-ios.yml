@@ -75,32 +75,32 @@ jobs:
               run: yarn react-native start &
 
             # Restore Detox build cache
-            - name: Restore Detox build
-              id: detox-cache-restore
-              uses: actions/cache/restore@v3
-              with:
-                  path: ios/build
-                  key: ${{ runner.os }}-detox-build-${{ hashFiles('ios/Podfile.lock') }}
+            # - name: Restore Detox build
+            #   id: detox-cache-restore
+            #   uses: actions/cache/restore@v3
+            #   with:
+            #       path: ios/build
+            #       key: ${{ runner.os }}-detox-build-${{ hashFiles('ios/Podfile.lock') }}
 
             # Build iOS app
             - name: Detox build iOS Debug
-              if: steps.detox-cache-restore.outputs.cache-hit != 'true'
+              # if: steps.detox-cache-restore.outputs.cache-hit != 'true'
               timeout-minutes: 60
-              run: yarn detox build --configuration ios.sim.debug
+              run: SKIP_SENTRY=true yarn detox build --configuration ios.sim.debug
 
             # Save Detox build cache
-            - name: Save Detox build
-              id: detox-cache
-              uses: actions/cache/save@v3
-              if: always()
-              with:
-                  path: ios/build
-                  key: ${{ runner.os }}-detox-build-${{ hashFiles('ios/Podfile.lock') }}
+            # - name: Save Detox build
+            #   id: detox-cache
+            #   uses: actions/cache/save@v3
+            #   if: always()
+            #   with:
+            #       path: ios/build
+            #       key: ${{ runner.os }}-detox-build-${{ hashFiles('ios/Podfile.lock') }}
 
             # Test with Detox
             - name: Detox test iOS release
               timeout-minutes: 20
-              run: yarn detox test --configuration ios.sim.debug --cleanup --loglevel debug --headless --record-logs all
+              run: yarn detox test --configuration ios.sim.debug --cleanup --headless --record-logs all
 
             # Upload artifacts
             - name: Upload artifacts

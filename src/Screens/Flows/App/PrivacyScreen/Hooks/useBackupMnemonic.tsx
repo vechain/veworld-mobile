@@ -41,7 +41,7 @@ export const useBackupMnemonic = ({
                 const wallet = await WalletEncryptionKeyHelper.decryptWallet(
                     devices[0].wallet,
                 )
-                if (wallet) {
+                if (wallet?.mnemonic) {
                     setMnemonicArray(wallet.mnemonic)
                     openBackupPhraseSheetWithDelay(300)
                 }
@@ -76,7 +76,7 @@ export const useBackupMnemonic = ({
                     password,
                 )
 
-                if (wallet) {
+                if (wallet?.mnemonic) {
                     setMnemonicArray(wallet.mnemonic)
                     openBackupPhraseSheetWithDelay(300)
                 }
@@ -104,7 +104,7 @@ export const useBackupMnemonic = ({
                 userPin,
             )
 
-            if (wallet) {
+            if (wallet?.mnemonic) {
                 setMnemonicArray(wallet.mnemonic)
                 openBackupPhraseSheetWithDelay(300)
             }
