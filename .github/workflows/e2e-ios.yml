@@ -74,6 +74,15 @@ jobs:
             - name: Start Metro Bundler
               run: yarn react-native start &
 
+            # Add sentry.properties
+            - name: Add sentry.properties
+              run: |
+                echo "defaults.url=https://sentry.io/" > ./ios/sentry.properties
+                echo "defaults.org=vechain-foundation" >> ./ios/sentry.properties
+                echo "defaults.project=veworld-mobile" >> ./ios/sentry.properties
+                echo "auth.token=${{ secrets.SENTRY_AUTH_TOKEN }}" >> ./ios/sentry.properties
+
+
             # Restore Detox build cache
             # - name: Restore Detox build
             #   id: detox-cache-restore
