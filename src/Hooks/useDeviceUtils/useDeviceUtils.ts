@@ -1,31 +1,99 @@
-import { AddressUtils } from "~Utils"
+import { AddressUtils, DeviceUtils } from "~Utils"
 import { getNextDeviceIndex, useAppSelector } from "~Storage/Redux"
-import { selectDevices } from "~Storage/Redux/Selectors"
-import { getNodes } from "../useCreateWallet/Helpers"
+import { selectAccounts, selectDevices } from "~Storage/Redux/Selectors"
+import { LocalDevice, Wallet } from "~Model"
+import { getAddressFromXPub } from "~Utils/AddressUtils/AddressUtils"
+import * as i18n from "~i18n"
+
+type WalletAndDevice = {
+    wallet: Wallet
+    device: Omit<LocalDevice, "wallet">
+}
 
 export const useDeviceUtils = () => {
     const devices = useAppSelector(selectDevices)
-    /**
-     * Generate a device from a given mnemonic, throwing an error if the device already exists
-     * @param mnemonic
-     */
-    const getDeviceFromMnemonic = (mnemonic: string) => {
-        const deviceIndex = getNextDeviceIndex(devices)
-        const aliasIndex = deviceIndex + 1
-        const { device, wallet } = getNodes(
-            mnemonic.split(" "),
-            deviceIndex,
-            aliasIndex,
-        )
+    const accounts = useAppSelector(selectAccounts)
 
+    /**
+     * Verify that a conflicting device doesn't already exist
+     * Throws an error if a device already exists with the same root address or if an account already exists with the same address
+     * @param device
+     */
+    const verifyDeviceDoesntExist = (device: Omit<LocalDevice, "wallet">) => {
+        // Check if a device with the same root address already exists
         const deviceAlreadyExist = devices.find(d =>
             AddressUtils.compareAddresses(d.rootAddress, device.rootAddress),
         )
-
         if (deviceAlreadyExist) throw new Error("Device already exists")
 
-        return { device, wallet }
+        // Check if an account with the same address as the device root address already exists
+        const accountAlreadyExist = accounts.find(a =>
+            AddressUtils.compareAddresses(a.address, device.rootAddress),
+        )
+        if (accountAlreadyExist)
+            throw new Error("An account with this address already exists")
+
+        // Check if a device exists with the same root address as the first child account
+        if (device.xPub) {
+            const firstChildAddress = getAddressFromXPub(device.xPub, 0)
+            if (
+                devices.find(d =>
+                    AddressUtils.compareAddresses(
+                        d.rootAddress,
+                        firstChildAddress,
+                    ),
+                )
+            )
+                throw new Error("A device with this address already exists")
+        }
     }
 
-    return { getDeviceFromMnemonic }
+    /**
+     * Generate a device from a given mnemonic phrase or private key, throwing an error if the device already exists
+     * @param mnemonic (optional)
+     * @param privateKey (optional)
+     */
+    const createDevice = (mnemonic?: string[], privateKey?: string) => {
+        if (!mnemonic && !privateKey)
+            throw new Error("No mnemonic or private key provided")
+
+        const deviceIndex = getNextDeviceIndex(devices)
+
+        const locale = i18n.detectLocale()
+        const alias = `${i18n.i18n()[locale].WALLET_LABEL_WALLET()} ${
+            deviceIndex + 1
+        }`
+
+        let walletAndDevice: WalletAndDevice
+        if (mnemonic) {
+            walletAndDevice = DeviceUtils.generateDeviceForMnemonic(
+                mnemonic,
+                deviceIndex,
+                alias,
+            )
+        } else if (privateKey) {
+            walletAndDevice = DeviceUtils.generateDeviceForPrivateKey(
+                privateKey,
+                deviceIndex,
+                alias,
+            )
+        } else throw new Error("Failed to generate device")
+
+        verifyDeviceDoesntExist(walletAndDevice.device)
+
+        return walletAndDevice
+    }
+
+    const checkCanImportDevice = (
+        mnemonic?: string[],
+        privateKey?: string,
+    ): void => {
+        createDevice(mnemonic, privateKey)
+    }
+
+    return {
+        createDevice,
+        checkCanImportDevice,
+        verifyDeviceDoesntExist,
+    }
 }

@@ -80,6 +80,20 @@ export const selectSelectedAccount = createSelector(
     },
 )
 
+export const selectSelectedDevice = createSelector(
+    selectDevicesState,
+    selectSelectedAccount,
+    (devices, selectedAccount) => {
+        if (!selectedAccount) return null
+        return devices.find(device =>
+            AddressUtils.compareAddresses(
+                device.rootAddress,
+                selectedAccount.rootAddress,
+            ),
+        )
+    },
+)
+
 export const selectOtherAccounts = createSelector(
     selectAccounts,
     selectSelectedAccount,

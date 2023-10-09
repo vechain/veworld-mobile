@@ -41,8 +41,8 @@ export const ContactManagementBottomSheet = React.forwardRef<
 
         const theme = useTheme()
 
-        const [alias, setAlias] = useState<string>(contact?.alias || "")
-        const [address, setAddress] = useState<string>(contact?.address || "")
+        const [alias, setAlias] = useState<string>(contact?.alias ?? "")
+        const [address, setAddress] = useState<string>(contact?.address ?? "")
 
         useEffect(() => {
             setAlias(contact?.alias ?? "")

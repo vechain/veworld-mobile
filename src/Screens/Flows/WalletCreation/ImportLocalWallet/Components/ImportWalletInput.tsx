@@ -6,27 +6,25 @@ import { ColorThemeType, typography } from "~Constants"
 
 const { defaults: defaultTypography } = typography
 type Props = {
-    mnemonic: string
+    value: string
     onChangeText: (text: string) => void
     isError: boolean
 }
 
-export const ImportMnemonicInput = ({
-    mnemonic,
-    onChangeText,
-    isError,
-}: Props) => {
+export const ImportWalletInput = ({ value, onChangeText, isError }: Props) => {
     const { styles: themedStyles } = useThemedStyles(baseStyles(isError))
     return (
         <TextInput
             style={themedStyles.container}
             autoCapitalize="none"
+            autoCorrect={false}
             autoComplete="off"
             multiline={true}
             numberOfLines={4}
             onChangeText={onChangeText}
-            value={mnemonic}
-            testID="import-mnemonic-input"
+            value={value}
+            testID="import-input"
+            keyboardType="ascii-capable"
         />
     )
 }

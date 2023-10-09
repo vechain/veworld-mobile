@@ -83,10 +83,10 @@ const en: BaseTranslation = {
     BD_USER_PASSWORD_ERROR: "<><> PIN doesn't match.",
     BD_USER_EDIT_PASSWORD_ERROR: "Old PIN can't be the same as new PIN",
     BD_IMPORT_WALLET_TYPE: "Select the type of wallet you want to import",
-    BD_IMPORT_WALLET_TYPE_SEED: "To access your previous wallet, you can enter your 12/24-words recovery phrase.",
-    BD_IMPORT_WALLET_TYPE_HARDWARE: "You can connect a hardware wallet which will give you access to your new and existing accounts (only ledgers with bluetooth are supported at this time)",
+    BD_IMPORT_WALLET_TYPE_SEED: "To access your previous wallet, you can enter your recovery phrase, private key or keystore file.",
+    BD_IMPORT_WALLET_TYPE_HARDWARE: "You can connect a hardware wallet which will give you access to your new and existing accounts.",
     BD_WALLET_IMPORT_LOCAL:
-        "Import your wallet with your secret recovery phrase. Enter your wallet’s 12/24-words recovery phrase",
+        "Import your wallet. Enter your wallet’s recovery phrase, private key or keystore file.",
     BD_ALERT_FACE_ID_CANCELLED: "You cancelled using Face ID to authenticate. You must be authenticated to use VeWallet. Do you want to log out, or retry authenticating?",
     BD_ALERT_BIOMETRICS_CANCELLED: "You cancelled using Biometrics to authenticate. You must be authenticated to use VeWorld. Do you want to Reset the Wallet, or Retry authenticating?",
     BD_CREATE_WALLET_SUCCESS: "Unleash the power of sustainability and web3 for a better world.",
@@ -190,6 +190,7 @@ const en: BaseTranslation = {
     TITLE_BACKUP_YOUR_PHRASE: "Backup your phrase",
     TITLE_QR_CODE_FOR_ACCOUNT: "Your QR Code for {accountAlias: string}",
     TITLE_RENAME: "Rename {type: string}",
+    TITLE_UNLOCK_KEYSTORE: "Unlock keystore",
 
     // SUBTITLES
     SB_IMPORT_WALLET_TYPE: "Which kind of wallet do you want to import?",
@@ -230,6 +231,7 @@ const en: BaseTranslation = {
     SB_YOUR_TOKENS_EMPTY: "Your tokens will appear here",
     SB_SECURITY: "To secure your wallet, you can either use your device's biometric (like a fingerprint) or set up a password. You can change the password anytime if needed.",
     SB_USER_PASSWORD: "This password will be used to authorize transactions.",
+    SB_INSERT_KEYSTORE_PASSWORD: "Insert your keystore password",
 
 
     // ELEMENTS
@@ -265,6 +267,7 @@ const en: BaseTranslation = {
     COMMON_BTN_REJECT: "REJECT",
     COMMON_BTN_SIGN_AND_SEND: "SIGN AND SEND",
     COMMON_BTN_RESET: "Reset App",
+    COMMON_BTN_UNLOCK: "Unlock",
 
     // Common Labels
     COMMON_LBL_AND: "and",
@@ -326,7 +329,10 @@ const en: BaseTranslation = {
     // Errors
     ERROR_GENERIC_SUBTITLE: "Something went wrong!",
     ERROR_GENERIC_BODY: "We apologise for the inconvenience.\nPlease, try again later.",
+    ERROR_INCORRECT_IMPORT_DATA: "Incorrect import data",
     ERROR_INCORRECT_MNEMONIC: "Incorrect mnemonic phrase",
+    ERROR_INCORRECT_PRIVATE_KEY: "Incorrect private key",
+    ERROR_INCORRECT_PASSWORD: "Incorrect password",
     ERROR_WRONG_WORDS_COMBINATION: "Wrong words combination",
     ERROR_WRONG_WORDS_COMBINATION_DESC: "The words combination is wrong, try again.",
     ERROR_WALLET_ALREADY_EXISTS: "Wallet already exists",
@@ -348,7 +354,7 @@ const en: BaseTranslation = {
     ERROR_NFT_FAILED_TO_GET_METADATA: "Failed to get token metadata",
     ERROR_SECURITY_ACTION: "Security action failed. Please check your device and try again.",
     ERROR_INVALID_ADDRESS: "Invalid address",
-    ERROR_TOO_MANY_BIOMETRICS_AUTH_ATTEMPS: "Too many biometrics authentication attempts, please try again later",
+    ERROR_TOO_MANY_BIOMETRICS_AUTH_ATTEMPTS: "Too many biometrics authentication attempts, please try again later",
     ERROR_CREATING_WALLET: "Error creating wallet", 
 
     // Success
@@ -547,7 +553,7 @@ const en: BaseTranslation = {
     ACCOUNT_OR_WALLET_BOTTOM_SHEET_ADD_WALLET: "Add a new wallet",
     WALLET_MANAGEMENT_WALLET_NAME: "Wallet name",
     WALLET_MANAGEMENT_NOTIFICATION_CREATE_ACCOUNT_SUCCESS: "Account created successfully",
-    WALLET_MANAGEMENT_NOTIFICATION_CREATE_ACCOUNT_ERROR: "Account created successfully",
+    WALLET_MANAGEMENT_NOTIFICATION_CREATE_ACCOUNT_ERROR: "Failed to create account",
     WALLET_MANAGEMENT_NOTIFICATION_LAST_WALLET: "You can not delete the last wallet, but you can reset the app by going to Settings > General > Reset App",
 
 

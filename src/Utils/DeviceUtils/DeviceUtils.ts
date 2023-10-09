@@ -1,4 +1,71 @@
 import DeviceInfo from "react-native-device-info"
+import { HDNode } from "thor-devkit"
+import { DEVICE_TYPE, LocalDevice, Wallet, WalletAndDevice } from "~Model"
+import AddressUtils from "~Utils/AddressUtils"
+import CryptoUtils from "~Utils/CryptoUtils"
+import HexUtils from "~Utils/HexUtils"
+
+/**
+ * Generate a wallet and device from a mnemonic phrase
+ * @param mnemonic
+ * @param deviceIndex
+ * @returns
+ */
+export const generateDeviceForMnemonic = (
+    mnemonic: string[],
+    deviceIndex: number,
+    alias: string,
+): WalletAndDevice => {
+    const hdNode = HDNode.fromMnemonic(mnemonic)
+
+    const wallet: Wallet = {
+        mnemonic: mnemonic,
+        nonce: HexUtils.generateRandom(256),
+        rootAddress: hdNode.address,
+    }
+
+    const device: Omit<LocalDevice, "wallet"> = {
+        alias: alias,
+        xPub: CryptoUtils.xPubFromHdNode(hdNode),
+        rootAddress: hdNode.address,
+        type: DEVICE_TYPE.LOCAL_MNEMONIC,
+        index: deviceIndex,
+        position: 0, // this will be updated when the device is added to the redux store
+    }
+
+    return { wallet, device }
+}
+
+/**
+ * Generate a wallet and device from a private key
+ * @param privateKey
+ * @param deviceIndex
+ * @returns
+ */
+export const generateDeviceForPrivateKey = (
+    privateKey: string,
+    deviceIndex: number,
+    alias: string,
+): WalletAndDevice => {
+    const rootAddress =
+        AddressUtils.getAddressFromPrivateKey(privateKey).toLowerCase()
+
+    const wallet: Wallet = {
+        privateKey: privateKey,
+        nonce: HexUtils.generateRandom(256),
+        rootAddress: rootAddress,
+    }
+
+    const device: Omit<LocalDevice, "wallet"> = {
+        alias: alias,
+        rootAddress: rootAddress,
+        type: DEVICE_TYPE.LOCAL_PRIVATE_KEY,
+        index: deviceIndex,
+        position: 0, // this will be updated when the device is added to the redux store
+    }
+
+    return { wallet, device }
+}
 
 export const isSlowDevice = async () => {
     // Returns if the device has low RAM.

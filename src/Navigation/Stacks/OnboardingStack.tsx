@@ -4,7 +4,7 @@ import {
     AppSecurityScreen,
     ConfirmMnemonicScreen,
     EnableAdditionalSettings,
-    ImportMnemonicScreen,
+    ImportLocalWallet,
     NewMnemonicScreen,
     SelectLedgerAccounts,
     SelectLedgerDevice,
@@ -77,7 +77,7 @@ export const OnboardingStack = () => {
 
                 <Onboarding.Screen
                     name={Routes.IMPORT_MNEMONIC}
-                    component={ImportMnemonicScreen}
+                    component={ImportLocalWallet}
                     options={{ headerShown: false }}
                 />
 
