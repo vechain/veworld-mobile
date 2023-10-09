@@ -13,7 +13,6 @@ import { VeWorldLogoSVG } from "~Assets"
 import { Linking } from "react-native"
 import { LocalizedString } from "typesafe-i18n"
 import HapticsService from "~Services/HapticsService"
-import { isSmallScreen } from "~Constants"
 import { useTheme } from "~Hooks"
 
 export const AboutScreen = () => {
@@ -85,7 +84,6 @@ export const AboutScreen = () => {
 
     return (
         <Layout
-            isScrollEnabled={isSmallScreen}
             body={
                 <>
                     <BaseText typographyFont="title" pt={16}>

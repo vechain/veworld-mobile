@@ -63,8 +63,7 @@ export const RemoveWalletWarningBottomSheet = React.forwardRef<
                         />
                         <BaseSpacer height={16} />
                     </BaseView>
-                }
-                isScrollEnabled={false}>
+                }>
                 <BaseView>
                     <BaseText typographyFont="subTitleBold">
                         {LL.BTN_REMOVE_WALLET()}

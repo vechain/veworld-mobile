@@ -29,7 +29,6 @@ import {
 import { setAnalyticsTrackingEnabled } from "~Storage/Redux/Actions"
 import { useEditPin } from "./Hooks/useEditPin"
 import { BackupWarningBottomSheet } from "./Components/BackupWarningBottomSheet"
-import { isSmallScreen } from "~Constants"
 import { warn } from "~Utils"
 
 export const PrivacyScreen = () => {
@@ -126,7 +125,6 @@ export const PrivacyScreen = () => {
     return (
         <Layout
             safeAreaTestID="PrivacyScreen"
-            isScrollEnabled={isSmallScreen}
             body={
                 <>
                     <BaseView pt={16}>
