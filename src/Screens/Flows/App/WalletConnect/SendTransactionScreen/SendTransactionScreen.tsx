@@ -15,16 +15,13 @@ import {
     addPendingDappTransactionActivity,
     selectSelectedAccount,
     selectSelectedNetwork,
+    selectSessionByTopic,
     selectTokensWithInfo,
     setIsAppLoading,
     useAppDispatch,
     useAppSelector,
 } from "~Storage/Redux"
-import {
-    TransactionUtils,
-    WalletConnectResponseUtils,
-    WalletConnectUtils,
-} from "~Utils"
+import { TransactionUtils } from "~Utils"
 import { useAnalyticTracking, useTransactionScreen } from "~Hooks"
 import { getSdkError } from "@walletconnect/utils"
 import { useI18nContext } from "~i18n"
@@ -35,6 +32,8 @@ import { ClausesCarousel } from "../../ActivityDetailsScreen/Components"
 import { Transaction } from "thor-devkit"
 import { TransactionDetails } from "~Screens"
 import { AnalyticsEvent } from "~Constants"
+import { rpcErrors } from "@metamask/rpc-errors"
+import { useWcRequests } from "~Components/Providers/WalletConnectProvider/hooks/useWcRequests"
 
 type Props = NativeStackScreenProps<
     RootStackParamListSwitch,
@@ -42,12 +41,9 @@ type Props = NativeStackScreenProps<
 >
 
 export const SendTransactionScreen: FC<Props> = ({ route }: Props) => {
-    const {
-        requestEvent,
-        session: sessionRequest,
-        message,
-        options,
-    } = route.params
+    const { request } = route.params
+
+    const { rejectRequest, respondTransactionRequest } = useWcRequests(request)
 
     const dispatch = useAppDispatch()
     const { LL } = useI18nContext()
@@ -58,28 +54,22 @@ export const SendTransactionScreen: FC<Props> = ({ route }: Props) => {
     const selectedAccount = useAppSelector(selectSelectedAccount)
     const tokens = useAppSelector(selectTokensWithInfo)
 
-    const { topic } = useMemo(
-        () => WalletConnectUtils.getRequestEventAttributes(requestEvent),
-        [requestEvent],
-    )
-
-    const { name, url } = useMemo(
-        () => WalletConnectUtils.getSessionRequestAttributes(sessionRequest),
-        [sessionRequest],
+    const session = useAppSelector(state =>
+        selectSessionByTopic(state, request.topic),
     )
 
     const clausesMetadata = useMemo(
-        () => TransactionUtils.interpretClauses(message, tokens),
-        [message, tokens],
+        () => TransactionUtils.interpretClauses(request.message, tokens),
+        [request.message, tokens],
     )
 
     const clauses = useMemo(() => {
-        return message.map(clause => ({
+        return request.message.map(clause => ({
             to: clause.to,
             value: clause.value,
             data: clause.data || "0x",
         }))
-    }, [message])
+    }, [request])
 
     const onFinish = useCallback(
         (sucess: boolean) => {
@@ -95,58 +85,42 @@ export const SendTransactionScreen: FC<Props> = ({ route }: Props) => {
 
     const onTransactionSuccess = useCallback(
         async (transaction: Transaction, id: string) => {
-            const web3Wallet = await WalletConnectUtils.getWeb3Wallet()
+            await respondTransactionRequest({
+                signer: selectedAccount.address,
+                txid: id,
+            })
 
-            await WalletConnectResponseUtils.transactionRequestSuccessResponse(
-                { request: requestEvent, web3Wallet, LL },
-                id,
-                selectedAccount.address,
+            dispatch(
+                addPendingDappTransactionActivity(
+                    transaction,
+                    session?.dAppMetadata.name,
+                    session?.dAppMetadata.url,
+                ),
             )
-
-            dispatch(addPendingDappTransactionActivity(transaction, name, url))
 
             onFinish(true)
         },
         [
-            onFinish,
-            url,
-            requestEvent,
-            LL,
-            selectedAccount.address,
             dispatch,
-            name,
+            respondTransactionRequest,
+            onFinish,
+            selectedAccount.address,
+            session,
         ],
     )
 
     const onTransactionFailure = useCallback(async () => {
-        const web3Wallet = await WalletConnectUtils.getWeb3Wallet()
-
-        await WalletConnectResponseUtils.transactionRequestFailedResponse({
-            request: requestEvent,
-            web3Wallet,
-            LL,
-        })
+        await rejectRequest(rpcErrors.internal())
 
         onFinish(false)
-    }, [requestEvent, LL, onFinish])
+    }, [rejectRequest, onFinish])
 
     /**
      * Rejects the request and closes the modal
      */
     const onReject = useCallback(async () => {
-        const { id } = requestEvent
         try {
-            const response = WalletConnectUtils.formatJsonRpcError(
-                id,
-                getSdkError("USER_REJECTED_METHODS"),
-            )
-
-            const web3Wallet = await WalletConnectUtils.getWeb3Wallet()
-
-            await web3Wallet.respondSessionRequest({
-                topic,
-                response,
-            })
+            await rejectRequest(getSdkError("USER_REJECTED_METHODS"))
 
             // refactor(Minimizer): issues with iOS 17 & Android when connecting to desktop DApp (https://github.com/vechainfoundation/veworld-mobile/issues/951)
             // MinimizerUtils.goBack()
@@ -157,7 +131,7 @@ export const SendTransactionScreen: FC<Props> = ({ route }: Props) => {
         } finally {
             nav.goBack()
         }
-    }, [requestEvent, topic, LL, nav])
+    }, [rejectRequest, LL, nav])
 
     const {
         Delegation,
@@ -176,8 +150,8 @@ export const SendTransactionScreen: FC<Props> = ({ route }: Props) => {
         onTransactionSuccess,
         onTransactionFailure,
         initialRoute: Routes.HOME,
-        options,
-        requestEvent,
+        options: request.options,
+        request,
     })
 
     return (
@@ -227,10 +201,10 @@ export const SendTransactionScreen: FC<Props> = ({ route }: Props) => {
                         vthoGas={vthoGas}
                         isThereEnoughGas={isThereEnoughGas || false}
                         vthoBalance={vthoBalance}
-                        sessionRequest={sessionRequest}
+                        session={session}
                         network={network}
-                        message={message}
-                        options={options}
+                        message={request.message}
+                        options={request.options}
                     />
 
                     <BaseSpacer height={44} />

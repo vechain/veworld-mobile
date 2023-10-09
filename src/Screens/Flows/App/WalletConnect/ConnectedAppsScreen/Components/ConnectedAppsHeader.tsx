@@ -1,9 +1,10 @@
 import React, { useCallback } from "react"
 import { useCameraBottomSheet, useTheme } from "~Hooks"
-import { BaseIcon, BaseText, BaseView, useWalletConnect } from "~Components"
+import { BaseIcon, BaseText, BaseView } from "~Components"
 import { useI18nContext } from "~i18n"
 import { ScanTarget } from "~Constants"
 import HapticsService from "~Services/HapticsService"
+import { useWcPairing } from "~Components/Providers/WalletConnectProvider/hooks/useWcPairing"
 
 type Props = {
     showAddButton?: boolean
@@ -12,7 +13,7 @@ type Props = {
 export const ConnectedAppsHeader = ({ showAddButton = true }: Props) => {
     const { LL } = useI18nContext()
     const theme = useTheme()
-    const { onPair } = useWalletConnect()
+    const { onPair } = useWcPairing()
 
     const onScan = useCallback(
         (uri: string) => {

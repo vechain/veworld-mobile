@@ -1,17 +1,12 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit"
-import { ProposalTypes, SessionTypes } from "@walletconnect/types"
+import { CoreTypes, SessionTypes } from "@walletconnect/types"
 import { Verify } from "@walletconnect/types/dist/types/core/verify"
-
-export interface DappInfo {
-    name: string
-    url: string
-    icon: string | null
-}
+import { ProposalTypes } from "@walletconnect/types/dist/types/sign-client/proposal"
 
 export type WalletConnectPendingSession = {
     id: number
-    dapp: DappInfo
-    proposalNamespaces: ProposalTypes.RequiredNamespaces
+    dAppMetadata: CoreTypes.Metadata
+    namespace: ProposalTypes.RequiredNamespace
     verifyContext: Verify.Context["verified"]
 }
 
@@ -19,7 +14,8 @@ export type WalletConnectSession = {
     topic: string
     chains: string[]
     account: string
-    namespaces: SessionTypes.Namespaces
+    dAppMetadata: CoreTypes.Metadata
+    namespace: SessionTypes.Namespace
     verifyContext: Verify.Context["verified"]
 }
 
@@ -127,7 +123,6 @@ export const WalletConnectSlice = createSlice({
             state,
             action: PayloadAction<{
                 requestId: number
-                account: string
             }>,
         ) => {
             const { requestId } = action.payload

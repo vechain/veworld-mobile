@@ -1,2 +1,4 @@
 import * as WalletConnectUtils from "./WalletConnectUtils"
-export default WalletConnectUtils
+import * as WCRequestUtils from "./WCRequestUtils"
+
+export { WalletConnectUtils, WCRequestUtils }

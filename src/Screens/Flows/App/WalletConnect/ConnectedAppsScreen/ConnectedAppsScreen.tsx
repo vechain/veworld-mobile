@@ -5,9 +5,7 @@ import {
     BaseView,
     Layout,
     SwipeableRow,
-    useWalletConnect,
 } from "~Components"
-import { SessionTypes } from "@walletconnect/types"
 import { isEmpty } from "lodash"
 import {
     AppDetailsBottomSheet,
@@ -19,19 +17,28 @@ import {
 import { useI18nContext } from "~i18n"
 import { SwipeableItemImperativeRef } from "react-native-swipeable-item"
 import { useBottomSheetModal } from "~Hooks"
-import { selectAccounts, useAppSelector } from "~Storage/Redux"
+import {
+    removeSession,
+    selectAccounts,
+    selectSessions,
+    useAppDispatch,
+    useAppSelector,
+    WalletConnectSession,
+} from "~Storage/Redux"
+import { WalletConnectService } from "~Services"
+import { getSdkError } from "@walletconnect/utils"
 
 /**
  * A map of account addresses to an array of sessions
  */
-type AccountApps = Record<string, SessionTypes.Struct[]>
 
 export const ConnectedAppsScreen = () => {
     const accounts = useAppSelector(selectAccounts)
     const { LL } = useI18nContext()
-    const { disconnectSession, activeSessions } = useWalletConnect()
+    const sessions = useAppSelector(selectSessions)
     const [sessionToDelete, setSessionToDelete] =
-        useState<SessionTypes.Struct>()
+        useState<WalletConnectSession>()
+    const dispatch = useAppDispatch()
 
     // Keep track of the swipeable items refs
     const swipeableItemRefs = useRef<Map<string, SwipeableItemImperativeRef>>(
@@ -39,12 +46,12 @@ export const ConnectedAppsScreen = () => {
     )
 
     const connectedApps = useMemo(() => {
-        const sessions = Object.values(activeSessions)
+        const _sessions = Object.values(sessions)
 
-        const apps: AccountApps = {}
+        const apps: Record<string, WalletConnectSession[]> = {}
 
-        sessions.forEach(session => {
-            const account = session.namespaces.vechain.accounts[0].split(":")[2]
+        _sessions.forEach(session => {
+            const account = session.account
 
             if (!apps[account]) {
                 apps[account] = []
@@ -54,7 +61,7 @@ export const ConnectedAppsScreen = () => {
         })
 
         return apps
-    }, [activeSessions])
+    }, [sessions])
 
     const totalSessions = useMemo(() => {
         return Object.values(connectedApps).reduce(
@@ -77,10 +84,15 @@ export const ConnectedAppsScreen = () => {
 
     const removeApp = useCallback(
         async (topic: string) => {
-            await disconnectSession(topic)
+            await WalletConnectService.disconnectSession(
+                topic,
+                getSdkError("USER_DISCONNECTED"),
+            )
+
+            dispatch(removeSession({ topic }))
             closeConfirmDisconnectDetailsSheet()
         },
-        [disconnectSession, closeConfirmDisconnectDetailsSheet],
+        [dispatch, closeConfirmDisconnectDetailsSheet],
     )
 
     return (
@@ -148,7 +160,7 @@ export const ConnectedAppsScreen = () => {
                                                         setSessionToDelete
                                                     }
                                                     onPress={(
-                                                        _session?: SessionTypes.Struct,
+                                                        _session?: WalletConnectSession,
                                                     ) => {
                                                         setSessionToDelete(
                                                             _session,

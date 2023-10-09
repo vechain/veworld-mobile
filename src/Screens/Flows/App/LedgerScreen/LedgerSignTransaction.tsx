@@ -32,17 +32,12 @@ import {
     addPendingDappTransactionActivity,
     addPendingNFTtransferTransactionActivity,
     addPendingTransferTransactionActivity,
+    selectSessionByTopic,
     setIsAppLoading,
     useAppDispatch,
+    useAppSelector,
 } from "~Storage/Redux"
-import {
-    ActivityUtils,
-    debug,
-    error,
-    LedgerUtils,
-    WalletConnectResponseUtils,
-    WalletConnectUtils,
-} from "~Utils"
+import { ActivityUtils, debug, error, LedgerUtils } from "~Utils"
 import { useI18nContext } from "~i18n"
 import { useNavigation } from "@react-navigation/native"
 import * as Haptics from "expo-haptics"
@@ -51,6 +46,8 @@ import { Buffer } from "buffer"
 import { Transaction } from "thor-devkit"
 import { ActivityType } from "~Model"
 import { LedgerConfig } from "~Utils/LedgerUtils/LedgerUtils"
+import { rpcErrors } from "@metamask/rpc-errors"
+import { useWcRequests } from "~Components/Providers/WalletConnectProvider/hooks/useWcRequests"
 
 type Props = NativeStackScreenProps<
     RootStackParamListHome &
@@ -71,9 +68,12 @@ export const LedgerSignTransaction: React.FC<Props> = ({ route }) => {
         accountWithDevice,
         transaction,
         initialRoute,
-        requestEvent,
+        request,
         delegationSignature,
     } = route.params
+
+    const { rejectRequest, respondTransactionRequest, userRejectedRequest } =
+        useWcRequests(request)
 
     const nav = useNavigation()
     const track = useAnalyticTracking()
@@ -85,6 +85,10 @@ export const LedgerSignTransaction: React.FC<Props> = ({ route }) => {
     const [signingError, setSigningError] = useState<boolean>()
     const [isSending, setIsSending] = useState(false)
     const [userRejected, setUserRejected] = useState<boolean>(false)
+
+    const session = useAppSelector(state =>
+        selectSessionByTopic(state, request?.topic),
+    )
 
     const {
         ref: connectionErrorSheetRef,
@@ -130,17 +134,16 @@ export const LedgerSignTransaction: React.FC<Props> = ({ route }) => {
                         accountType: accountWithDevice.device.type,
                     })
 
-                    const web3Wallet = await WalletConnectUtils.getWeb3Wallet()
-
-                    const { name, url } = WalletConnectUtils.getNameAndUrl(
-                        web3Wallet,
-                        requestEvent,
+                    dispatch(
+                        addPendingDappTransactionActivity(
+                            tx,
+                            session?.dAppMetadata.name,
+                            session?.dAppMetadata.url,
+                        ),
                     )
-
-                    dispatch(addPendingDappTransactionActivity(tx, name, url))
             }
         },
-        [track, dispatch, accountWithDevice, requestEvent],
+        [track, dispatch, accountWithDevice, session],
     )
 
     const { sendTransaction } = useSendTransaction(onTransactionSuccess)
@@ -305,14 +308,11 @@ export const LedgerSignTransaction: React.FC<Props> = ({ route }) => {
             await removeLedger()
 
             //If DApp transaction
-            if (requestEvent) {
-                const web3Wallet = await WalletConnectUtils.getWeb3Wallet()
-
-                await WalletConnectResponseUtils.transactionRequestSuccessResponse(
-                    { request: requestEvent, web3Wallet, LL },
-                    txId,
-                    accountWithDevice.address,
-                )
+            if (request) {
+                await respondTransactionRequest({
+                    txid: txId,
+                    signer: accountWithDevice.address,
+                })
 
                 // refactor(Minimizer): issues with iOS 17 & Android when connecting to desktop DApp (https://github.com/vechainfoundation/veworld-mobile/issues/951)
                 // MinimizerUtils.goBack()
@@ -329,17 +329,8 @@ export const LedgerSignTransaction: React.FC<Props> = ({ route }) => {
             await Haptics.notificationAsync(
                 Haptics.NotificationFeedbackType.Error,
             )
-            if (requestEvent) {
-                const web3Wallet = await WalletConnectUtils.getWeb3Wallet()
-
-                await WalletConnectResponseUtils.transactionRequestFailedResponse(
-                    {
-                        request: requestEvent,
-                        web3Wallet,
-                        LL,
-                    },
-                )
-
+            if (request) {
+                await rejectRequest(rpcErrors.internal())
                 // refactor(Minimizer): issues with iOS 17 & Android when connecting to desktop DApp (https://github.com/vechainfoundation/veworld-mobile/issues/951)
                 // MinimizerUtils.goBack()
             }
@@ -355,7 +346,9 @@ export const LedgerSignTransaction: React.FC<Props> = ({ route }) => {
         delegationSignature,
         sendTransaction,
         removeLedger,
-        requestEvent,
+        rejectRequest,
+        respondTransactionRequest,
+        request,
         navigateOnFinish,
         LL,
         accountWithDevice.address,
@@ -363,16 +356,8 @@ export const LedgerSignTransaction: React.FC<Props> = ({ route }) => {
 
     const beforeNavigatingBack = useCallback(async () => {
         await removeLedger()
-        if (requestEvent) {
-            const web3Wallet = await WalletConnectUtils.getWeb3Wallet()
-
-            await WalletConnectResponseUtils.userRejectedMethodsResponse({
-                request: requestEvent,
-                web3Wallet,
-                LL,
-            })
-        }
-    }, [removeLedger, requestEvent, LL])
+        await userRejectedRequest()
+    }, [removeLedger, userRejectedRequest])
 
     const BottomButton = useCallback(() => {
         if (currentStep === SignSteps.SIGNING && userRejected) {

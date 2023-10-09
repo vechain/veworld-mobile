@@ -26,6 +26,7 @@ import {
     resetUserPreferencesState,
     TokenSlice,
     UserPreferencesSlice,
+    WalletConnectSlice,
 } from "./Slices"
 import { migrationUpdates } from "~Storage/Redux/Migrations"
 import { createMigrate } from "redux-persist"
@@ -69,6 +70,7 @@ export const getPersistorConfig = async (
             ContactsSlice.name,
             ActivitiesSlice.name,
             DelegationSlice.name,
+            WalletConnectSlice.name,
         ],
         migrate: createMigrate(migrationUpdates, { debug: true }),
         transforms: [encryptor],
@@ -91,6 +93,7 @@ export const resetActions = [
     resetDeviceState,
     resetNetworkState,
     resetNftState,
+
     resetUserPreferencesState,
     resetPendingState,
 ]

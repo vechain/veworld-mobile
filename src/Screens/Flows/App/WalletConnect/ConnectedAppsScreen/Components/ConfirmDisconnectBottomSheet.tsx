@@ -1,25 +1,24 @@
 import { BottomSheetModalMethods } from "@gorhom/bottom-sheet/lib/typescript/types"
-import { SessionTypes } from "@walletconnect/types"
 import React from "react"
 import {
-    BaseButton,
-    BaseView,
-    BaseText,
-    BaseSpacer,
     BaseBottomSheet,
+    BaseButton,
+    BaseSpacer,
+    BaseText,
+    BaseView,
 } from "~Components"
 import { AccountWithDevice } from "~Model"
-import { WalletConnectUtils } from "~Utils"
 import { useI18nContext } from "~i18n"
 import { useTheme } from "~Hooks"
 import { ConnectedAppBox } from "./ConnectedAppBox"
+import { WalletConnectSession } from "~Storage/Redux"
 
 const snapPoints = ["50%", "70%"]
 
 type Props = {
     onConfirm: (topic: string) => void
     onCancel: () => void
-    session: SessionTypes.Struct
+    session: WalletConnectSession
     account: AccountWithDevice
 }
 
@@ -32,8 +31,6 @@ export const ConfirmDisconnectBottomSheet = React.forwardRef<
 
     if (!session) return null
 
-    const { name } = WalletConnectUtils.getSessionRequestAttributes(session)
-
     return (
         <BaseBottomSheet snapPoints={snapPoints} ref={ref} onDismiss={onCancel}>
             <BaseView>
@@ -43,7 +40,7 @@ export const ConfirmDisconnectBottomSheet = React.forwardRef<
                 <BaseSpacer height={16} />
                 <BaseText typographyFont="body">
                     {LL.CONNECTED_APPS_CONFIRM_DISCONNECT_MESSAGE({
-                        name,
+                        name: session.dAppMetadata.name,
                         alias: account.alias,
                     })}
                 </BaseText>

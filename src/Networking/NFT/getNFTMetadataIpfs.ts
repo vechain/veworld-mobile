@@ -13,5 +13,18 @@ export const getNFTMetadataIpfs = async (uri: string): Promise<NFTMetadata> => {
         },
     )
 
-    return metadata.data
+    return convertFirstLetterToLowerCase(metadata.data)
+}
+
+function convertFirstLetterToLowerCase<T>(obj: T): T {
+    const newObj: Partial<T> = {}
+
+    for (const key in obj) {
+        if (Object.prototype.hasOwnProperty.call(obj, key)) {
+            const newKey = key.charAt(0).toLowerCase() + key.slice(1)
+            newObj[newKey as keyof T] = obj[key]
+        }
+    }
+
+    return newObj as T
 }

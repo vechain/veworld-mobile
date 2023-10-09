@@ -14,11 +14,12 @@ import { blake2b256, Certificate } from "thor-devkit"
 import {
     addSignCertificateActivity,
     selectSelectedAccount,
+    selectSessionByTopic,
     setIsAppLoading,
     useAppDispatch,
     useAppSelector,
 } from "~Storage/Redux"
-import { error, WalletConnectResponseUtils, WalletConnectUtils } from "~Utils"
+import { error } from "~Utils"
 import { useAnalyticTracking, useCheckIdentity, useSignMessage } from "~Hooks"
 import { AccountWithDevice, DEVICE_TYPE, LedgerAccountWithDevice } from "~Model"
 import { useI18nContext } from "~i18n"
@@ -27,6 +28,8 @@ import { NativeStackScreenProps } from "@react-navigation/native-stack"
 import { useNavigation } from "@react-navigation/native"
 import { MessageDetails } from "~Screens"
 import { AnalyticsEvent } from "~Constants"
+import { rpcErrors } from "@metamask/rpc-errors"
+import { useWcRequests } from "~Components/Providers/WalletConnectProvider/hooks/useWcRequests"
 
 type Props = NativeStackScreenProps<
     RootStackParamListSwitch,
@@ -34,7 +37,7 @@ type Props = NativeStackScreenProps<
 >
 
 export const SignCertificateScreen: FC<Props> = ({ route }: Props) => {
-    const { requestEvent, session, message } = route.params
+    const { request } = route.params
 
     const { LL } = useI18nContext()
     const nav = useNavigation()
@@ -44,19 +47,23 @@ export const SignCertificateScreen: FC<Props> = ({ route }: Props) => {
     const track = useAnalyticTracking()
     const dispatch = useAppDispatch()
 
-    // Request values
-    const { url } = WalletConnectUtils.getSessionRequestAttributes(session)
+    const { rejectRequest, respondSignCertRequest, userRejectedRequest } =
+        useWcRequests(request)
+
+    const session = useAppSelector(state =>
+        selectSessionByTopic(state, request.topic),
+    )
 
     // Prepare certificate to sign
     const cert: Certificate = useMemo(() => {
         return {
-            purpose: message.purpose,
-            payload: message.payload,
+            purpose: request.message.purpose,
+            payload: request.message.payload,
             timestamp: Math.round(Date.now() / 1000),
-            domain: new URL(url).hostname,
+            domain: session ? new URL(session.dAppMetadata.url).hostname : "",
             signer: selectedAccount?.address ?? "",
         }
-    }, [message, selectedAccount, url])
+    }, [session, request, selectedAccount])
 
     const payloadToSign = useMemo(() => {
         return blake2b256(Certificate.encode(cert))
@@ -73,12 +80,10 @@ export const SignCertificateScreen: FC<Props> = ({ route }: Props) => {
 
     const handleAccept = useCallback(
         async (password?: string) => {
-            const web3Wallet = await WalletConnectUtils.getWeb3Wallet()
-
             try {
                 if (selectedAccount.device.type === DEVICE_TYPE.LEDGER) {
                     nav.navigate(Routes.LEDGER_SIGN_CERTIFICATE, {
-                        requestEvent,
+                        request,
                         accountWithDevice:
                             selectedAccount as LedgerAccountWithDevice,
                         certificate: cert,
@@ -94,22 +99,15 @@ export const SignCertificateScreen: FC<Props> = ({ route }: Props) => {
                 }
 
                 dispatch(setIsAppLoading(true))
-                await WalletConnectResponseUtils.signMessageRequestSuccessResponse(
-                    {
-                        request: requestEvent,
-                        web3Wallet,
-                        LL,
-                    },
-                    signature,
-                    cert,
-                )
+
+                await respondSignCertRequest(cert, signature.toString("hex"))
 
                 // refactor(Minimizer): issues with iOS 17 & Android when connecting to desktop DApp (https://github.com/vechainfoundation/veworld-mobile/issues/951)
                 // MinimizerUtils.goBack()
 
                 dispatch(
                     addSignCertificateActivity(
-                        session.peer.metadata.name,
+                        session?.dAppMetadata.name ?? "",
                         cert.domain,
                         cert.payload.content,
                         cert.purpose,
@@ -123,13 +121,7 @@ export const SignCertificateScreen: FC<Props> = ({ route }: Props) => {
                 track(AnalyticsEvent.DAPP_CERTIFICATE_FAILED)
                 error("SignMessageScreen:handleAccept", err)
 
-                await WalletConnectResponseUtils.signMessageRequestErrorResponse(
-                    {
-                        request: requestEvent,
-                        web3Wallet,
-                        LL,
-                    },
-                )
+                await rejectRequest(rpcErrors.internal())
 
                 dispatch(setIsAppLoading(false))
             } finally {
@@ -139,32 +131,25 @@ export const SignCertificateScreen: FC<Props> = ({ route }: Props) => {
             onClose()
         },
         [
+            dispatch,
+            rejectRequest,
+            respondSignCertRequest,
             onClose,
             selectedAccount,
             signMessage,
-            requestEvent,
-            LL,
+            request,
             cert,
-            dispatch,
-            session.peer.metadata.name,
+            session,
             track,
             nav,
         ],
     )
 
     const onReject = useCallback(async () => {
-        if (requestEvent) {
-            const web3Wallet = await WalletConnectUtils.getWeb3Wallet()
-
-            await WalletConnectResponseUtils.userRejectedMethodsResponse({
-                request: requestEvent,
-                web3Wallet,
-                LL,
-            })
-        }
+        await userRejectedRequest()
         track(AnalyticsEvent.DAPP_CERTIFICATE_REJECTED)
         onClose()
-    }, [requestEvent, track, onClose, LL])
+    }, [userRejectedRequest, track, onClose])
 
     const {
         isPasswordPromptOpen,
@@ -216,11 +201,7 @@ export const SignCertificateScreen: FC<Props> = ({ route }: Props) => {
                     />
 
                     <BaseSpacer height={32} />
-                    <MessageDetails
-                        sessionRequest={session}
-                        requestEvent={requestEvent}
-                        message={message}
-                    />
+                    <MessageDetails session={session} request={request} />
 
                     <BaseSpacer height={30} />
                 </BaseView>

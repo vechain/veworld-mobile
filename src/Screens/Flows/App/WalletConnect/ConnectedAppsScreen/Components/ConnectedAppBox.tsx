@@ -1,11 +1,11 @@
-import { SessionTypes } from "@walletconnect/types"
 import React, { memo } from "react"
-import { BaseText, BaseView, BaseImage, BaseCard } from "~Components"
+import { BaseCard, BaseImage, BaseText, BaseView } from "~Components"
 import { StyleProp, StyleSheet } from "react-native"
 import { ImageStyle } from "react-native-fast-image"
+import { WalletConnectSession } from "~Storage/Redux"
 
 type Props = {
-    session: SessionTypes.Struct
+    session: WalletConnectSession
 }
 
 export const ConnectedAppBox: React.FC<Props> = memo(({ session }: Props) => {
@@ -19,7 +19,7 @@ export const ConnectedAppBox: React.FC<Props> = memo(({ session }: Props) => {
                 <BaseView flexDirection="row">
                     <BaseView flexDirection="column" alignItems="center">
                         <BaseImage
-                            uri={session.peer.metadata.icons[0]}
+                            uri={session.dAppMetadata.icons[0] ?? ""}
                             style={styles.image as StyleProp<ImageStyle>}
                         />
                     </BaseView>
@@ -33,7 +33,7 @@ export const ConnectedAppBox: React.FC<Props> = memo(({ session }: Props) => {
                                 <BaseText
                                     typographyFont="subSubTitle"
                                     fontSize={14}>
-                                    {session.peer?.metadata?.name}
+                                    {session.dAppMetadata.name}
                                 </BaseText>
                             </BaseView>
                         </BaseView>

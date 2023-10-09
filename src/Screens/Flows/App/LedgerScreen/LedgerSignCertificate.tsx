@@ -22,17 +22,12 @@ import {
     RootStackParamListSwitch,
     Routes,
 } from "~Navigation"
-import {
-    debug,
-    error,
-    LedgerUtils,
-    WalletConnectResponseUtils,
-    WalletConnectUtils,
-} from "~Utils"
+import { debug, error, LedgerUtils } from "~Utils"
 import { useI18nContext } from "~i18n"
 import { useNavigation } from "@react-navigation/native"
 import * as Haptics from "expo-haptics"
 import { LEDGER_ERROR_CODES } from "~Constants"
+import { useWcRequests } from "~Components/Providers/WalletConnectProvider/hooks/useWcRequests"
 
 type Props = NativeStackScreenProps<
     RootStackParamListSwitch & RootStackParamListDiscover,
@@ -46,7 +41,7 @@ enum SigningStep {
 }
 
 export const LedgerSignCertificate: React.FC<Props> = ({ route }) => {
-    const { accountWithDevice, certificate, initialRoute, requestEvent } =
+    const { accountWithDevice, certificate, initialRoute, request } =
         route.params
 
     const { LL } = useI18nContext()
@@ -57,6 +52,9 @@ export const LedgerSignCertificate: React.FC<Props> = ({ route }) => {
     const [isAwaitingSignature, setIsAwaitingSignature] = useState(false)
     const [signingError, setSigningError] = useState<boolean>()
     const [isSending, setIsSending] = useState(false)
+
+    const { respondSignCertRequest, userRejectedRequest } =
+        useWcRequests(request)
 
     const {
         ref: connectionErrorSheetRef,
@@ -186,17 +184,7 @@ export const LedgerSignCertificate: React.FC<Props> = ({ route }) => {
                 Haptics.NotificationFeedbackType.Success,
             )
 
-            const web3Wallet = await WalletConnectUtils.getWeb3Wallet()
-
-            await WalletConnectResponseUtils.signMessageRequestSuccessResponse(
-                {
-                    request: requestEvent,
-                    web3Wallet,
-                    LL,
-                },
-                signature,
-                certificate,
-            )
+            await respondSignCertRequest(certificate, signature.toString("hex"))
 
             await removeLedger()
 
@@ -217,8 +205,8 @@ export const LedgerSignCertificate: React.FC<Props> = ({ route }) => {
             setIsSending(false)
         }
     }, [
+        respondSignCertRequest,
         removeLedger,
-        requestEvent,
         LL,
         signature,
         certificate,
@@ -228,15 +216,8 @@ export const LedgerSignCertificate: React.FC<Props> = ({ route }) => {
     const beforeNavigatingBack = useCallback(async () => {
         await removeLedger()
 
-        const web3Wallet = await WalletConnectUtils.getWeb3Wallet()
-
-        if (requestEvent)
-            await WalletConnectResponseUtils.userRejectedMethodsResponse({
-                request: requestEvent,
-                web3Wallet,
-                LL,
-            })
-    }, [removeLedger, requestEvent, LL])
+        await userRejectedRequest()
+    }, [userRejectedRequest, removeLedger])
 
     const BottomButton = useCallback(() => {
         if (currentStep === SigningStep.SIGNING && userRejected) {

@@ -9,11 +9,6 @@ import {
     SendTransactionScreen,
     SignCertificateScreen,
 } from "~Screens"
-import {
-    PendingRequestTypes,
-    SessionTypes,
-    SignClientTypes,
-} from "@walletconnect/types"
 import { AppBlockedScreen } from "~Screens/Flows/App/AppBlockedScreen"
 import { TransferEventListener } from "../../TransferEventListener"
 import { Certificate, Transaction } from "thor-devkit"
@@ -23,6 +18,11 @@ import {
     LedgerSignTransaction,
 } from "~Screens/Flows/App/LedgerScreen"
 import { useWalletStatus } from "~Components"
+import {
+    CertificateRequest,
+    TransactionRequest,
+    WalletConnectPendingSession,
+} from "~Storage/Redux/Slices/WalletConnect"
 
 export type RootStackParamListSwitch = {
     OnboardingStack: undefined
@@ -31,22 +31,16 @@ export type RootStackParamListSwitch = {
     [Routes.CREATE_WALLET_FLOW]: undefined
     [Routes.BLACKLISTED_COLLECTIONS]: undefined
     [Routes.CONNECT_APP_SCREEN]: {
-        sessionProposal: SignClientTypes.EventArguments["session_proposal"]
+        sessionProposal: WalletConnectPendingSession
     }
     [Routes.CONNECTED_APP_SEND_TRANSACTION_SCREEN]: {
-        requestEvent: PendingRequestTypes.Struct
-        session: SessionTypes.Struct
-        message: Connex.Vendor.TxMessage
-        options: Connex.Driver.TxOptions
+        request: TransactionRequest
     }
     [Routes.CONNECTED_APP_SIGN_CERTIFICATE_SCREEN]: {
-        requestEvent: PendingRequestTypes.Struct
-        session: SessionTypes.Struct
-        message: Connex.Vendor.CertMessage
-        options: Connex.Driver.CertOptions
+        request: CertificateRequest
     }
     [Routes.LEDGER_SIGN_CERTIFICATE]: {
-        requestEvent: PendingRequestTypes.Struct
+        request: CertificateRequest
         certificate: Certificate
         accountWithDevice: LedgerAccountWithDevice
         initialRoute: Routes
@@ -56,7 +50,7 @@ export type RootStackParamListSwitch = {
         delegationSignature?: string
         transaction: Transaction
         initialRoute: Routes
-        requestEvent?: PendingRequestTypes.Struct
+        request?: TransactionRequest
     }
     [Routes.BLOCKED_APP_SCREEN]: undefined
 }

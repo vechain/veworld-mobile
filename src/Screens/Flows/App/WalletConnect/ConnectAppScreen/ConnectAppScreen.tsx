@@ -12,7 +12,6 @@ import {
     CloseModalButton,
     SelectAccountBottomSheet,
     showInfoToast,
-    useWcProposal,
 } from "~Components"
 import { useBottomSheetModal } from "~Hooks"
 import { AccountWithDevice } from "~Model"
@@ -25,10 +24,11 @@ import {
     useAppDispatch,
     useAppSelector,
 } from "~Storage/Redux"
-import { HexUtils, WalletConnectUtils } from "~Utils"
+import { HexUtils } from "~Utils"
 import { useI18nContext } from "~i18n"
 import { AppConnectionRequests, AppInfo, UnknownAppMessage } from "~Screens"
 import { useSetSelectedAccount } from "~Hooks/useSetSelectedAccount"
+import { useWcSessions } from "~Components/Providers/WalletConnectProvider/hooks/useWcSessions"
 
 type Props = NativeStackScreenProps<
     RootStackParamListSwitch,
@@ -40,6 +40,8 @@ export const ConnectAppScreen: FC<Props> = ({ route }: Props) => {
 
     const { onSetSelectedAccount } = useSetSelectedAccount()
 
+    const { approveSession, rejectSession } = useWcSessions(currentProposal)
+
     const nav = useNavigation()
     const dispatch = useAppDispatch()
     const { LL } = useI18nContext()
@@ -47,8 +49,6 @@ export const ConnectAppScreen: FC<Props> = ({ route }: Props) => {
     const visibleAccounts = useAppSelector(selectVisibleAccounts)
     const selectedAccount = useAppSelector(selectSelectedAccount)
     const networks = useAppSelector(selectNetworks)
-
-    const { processProposal, rejectProposal } = useWcProposal(currentProposal)
 
     const [isInvalidChecked, setInvalidChecked] = React.useState(false)
 
@@ -62,8 +62,8 @@ export const ConnectAppScreen: FC<Props> = ({ route }: Props) => {
         onSetSelectedAccount({ address: account.address })
     }
 
-    const { name, url, methods, icon, description, chains } = useMemo(
-        () => WalletConnectUtils.getPairAttributes(currentProposal),
+    const { chains } = useMemo(
+        () => currentProposal.namespace,
         [currentProposal],
     )
 
@@ -92,13 +92,13 @@ export const ConnectAppScreen: FC<Props> = ({ route }: Props) => {
         }
     }, [networks, LL, dispatch, chains])
 
-    const onPressBack = useCallback(async () => {
-        await rejectProposal(currentProposal)
+    const cancel = useCallback(async () => {
+        await rejectSession()
         nav.goBack()
-    }, [currentProposal, nav, rejectProposal])
+    }, [nav, rejectSession])
 
     const isConfirmDisabled = useMemo(() => {
-        const { validation } = currentProposal.verifyContext.verified
+        const { validation } = currentProposal.verifyContext
 
         if (validation === "UNKNOWN" && !isInvalidChecked) {
             return true
@@ -115,7 +115,7 @@ export const ConnectAppScreen: FC<Props> = ({ route }: Props) => {
                 contentInsetAdjustmentBehavior="automatic"
                 contentContainerStyle={[styles.scrollViewContainer]}
                 style={styles.scrollView}>
-                <CloseModalButton onPress={onPressBack} />
+                <CloseModalButton onPress={cancel} />
                 <BaseView mx={20} style={styles.alignLeft}>
                     <BaseText typographyFont="title">
                         {LL.CONNECTED_APP_TITLE()}
@@ -129,14 +129,17 @@ export const ConnectAppScreen: FC<Props> = ({ route }: Props) => {
                     <BaseSpacer height={16} />
 
                     <AppInfo
-                        name={name}
-                        url={url}
-                        icon={icon}
-                        description={description}
+                        name={currentProposal.dAppMetadata.name}
+                        url={currentProposal.dAppMetadata.url}
+                        icon={currentProposal.dAppMetadata.icons[0] || ""}
+                        description={currentProposal.dAppMetadata.description}
                     />
 
                     <BaseSpacer height={30} />
-                    <AppConnectionRequests name={name} methods={methods} />
+                    <AppConnectionRequests
+                        name={currentProposal.dAppMetadata.name}
+                        methods={currentProposal.namespace.methods}
+                    />
                 </BaseView>
 
                 <BaseView mx={20}>
@@ -164,7 +167,7 @@ export const ConnectAppScreen: FC<Props> = ({ route }: Props) => {
                         w={100}
                         haptics="Light"
                         title={LL.COMMON_BTN_CONNECT()}
-                        action={processProposal}
+                        action={approveSession}
                         disabled={isConfirmDisabled}
                     />
                     <BaseSpacer height={16} />
@@ -173,7 +176,7 @@ export const ConnectAppScreen: FC<Props> = ({ route }: Props) => {
                         haptics="Light"
                         variant="outline"
                         title={LL.COMMON_BTN_CANCEL_CAPS_LOCK()}
-                        action={() => rejectProposal(currentProposal)}
+                        action={cancel}
                     />
                 </BaseView>
             </ScrollView>

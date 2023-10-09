@@ -1,25 +1,24 @@
 import { BottomSheetModalMethods } from "@gorhom/bottom-sheet/lib/typescript/types"
-import { SessionTypes } from "@walletconnect/types"
 import React, { useCallback, useState } from "react"
 import {
-    BaseButton,
-    BaseView,
-    BaseText,
-    BaseSpacer,
-    BaseBottomSheet,
     AccountCard,
+    BaseBottomSheet,
+    BaseButton,
+    BaseSpacer,
+    BaseText,
+    BaseView,
     ScrollViewWithFooter,
 } from "~Components"
 import { AccountWithDevice } from "~Model"
-import { WalletConnectUtils } from "~Utils"
 import { useI18nContext } from "~i18n"
 import { AppInfo } from "../../Components"
+import { WalletConnectSession } from "~Storage/Redux"
 
 const snapPoints = ["65%"]
 
 type Props = {
     onClose: () => void
-    session: SessionTypes.Struct
+    session: WalletConnectSession
     account: AccountWithDevice
     onDisconnect: () => void
 }
@@ -32,8 +31,7 @@ export const AppDetailsBottomSheet = React.forwardRef<
 
     const { LL } = useI18nContext()
 
-    const { name, description, url, icon } =
-        WalletConnectUtils.getSessionRequestAttributes(session)
+    const { name, description, url, icons } = session.dAppMetadata
 
     const disconnectSession = useCallback(() => {
         onClose()
@@ -60,7 +58,7 @@ export const AppDetailsBottomSheet = React.forwardRef<
                     <AppInfo
                         name={name}
                         url={url}
-                        icon={icon}
+                        icon={icons[0] ?? ""}
                         description={description}
                         hanldeOnReadMore={hanldeOnReadMore}
                     />

@@ -9,6 +9,7 @@ import {
     selectDevice,
     selectSelectedAccount,
     useAppSelector,
+    WalletConnectRequest,
 } from "~Storage/Redux"
 import { useI18nContext } from "~i18n"
 import {
@@ -21,7 +22,6 @@ import { DelegationType } from "~Model/Delegation"
 import { sponsorTransaction } from "~Networking"
 import { Routes } from "~Navigation"
 import { useNavigation } from "@react-navigation/native"
-import { PendingRequestTypes } from "@walletconnect/types"
 
 type Props = {
     selectedDelegationAccount?: AccountWithDevice
@@ -29,7 +29,7 @@ type Props = {
     selectedDelegationUrl?: string
     initialRoute?: Routes
     buildTransaction: () => Transaction
-    requestEvent?: PendingRequestTypes.Struct
+    request?: WalletConnectRequest
 }
 
 export enum SignStatus {
@@ -53,7 +53,7 @@ export const useSignTransaction = ({
     selectedDelegationOption,
     selectedDelegationUrl,
     buildTransaction,
-    requestEvent,
+    request,
     initialRoute = Routes.HOME,
 }: Props) => {
     const { LL } = useI18nContext()
@@ -195,7 +195,7 @@ export const useSignTransaction = ({
             transaction,
             initialRoute,
             delegationSignature: delegationSignature?.toString("hex"),
-            requestEvent,
+            request,
         })
     }
 

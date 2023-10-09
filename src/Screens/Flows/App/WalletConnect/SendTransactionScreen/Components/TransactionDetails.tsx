@@ -12,12 +12,12 @@ import { VET, VTHO } from "~Constants"
 import { useTheme } from "~Hooks"
 import { capitalize } from "lodash"
 import { FormattingUtils } from "~Utils"
-import { SessionTypes } from "@walletconnect/types"
 import { Network } from "~Model"
 import {
     selectCurrency,
     selectCurrencyExchangeRate,
     useAppSelector,
+    WalletConnectSession,
 } from "~Storage/Redux"
 import { BigNumber } from "bignumber.js"
 
@@ -26,7 +26,7 @@ type Props = {
     vthoGas: string
     isThereEnoughGas: boolean
     vthoBalance: string
-    sessionRequest: SessionTypes.Struct
+    session?: WalletConnectSession
     network: Network
     message: Connex.Vendor.TxMessage
     options: Connex.Driver.TxOptions
@@ -37,7 +37,7 @@ export const TransactionDetails = ({
     vthoGas,
     isThereEnoughGas,
     vthoBalance,
-    sessionRequest,
+    session,
     network,
     message,
     options,
@@ -78,7 +78,7 @@ export const TransactionDetails = ({
             </BaseText>
             <BaseSpacer height={6} />
             <BaseText typographyFont="subSubTitle">
-                {sessionRequest.peer.metadata.name}
+                {session?.dAppMetadata.name}
             </BaseText>
 
             <BaseSpacer height={12} />

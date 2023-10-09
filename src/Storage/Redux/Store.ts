@@ -15,6 +15,7 @@ import {
     PendingSlice,
     TokenSlice,
     UserPreferencesSlice,
+    WalletConnectSlice,
 } from "./Slices"
 import { persistReducer } from "redux-persist"
 import { PersistConfig } from "redux-persist/es/types"
@@ -35,4 +36,5 @@ export const reducer = (nftPersistConfig: PersistConfig<NftSliceState>) =>
         [NftSlice.name]: persistReducer(nftPersistConfig, NftSlice.reducer), // persist specific keys from a reducer
         [PendingSlice.name]: PendingSlice.reducer,
         [BeatSlice.name]: BeatSlice.reducer,
+        [WalletConnectSlice.name]: WalletConnectSlice.reducer,
     })

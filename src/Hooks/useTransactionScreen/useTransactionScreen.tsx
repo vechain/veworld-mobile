@@ -17,6 +17,7 @@ import {
     setIsAppLoading,
     useAppDispatch,
     useAppSelector,
+    WalletConnectRequest,
 } from "~Storage/Redux"
 import {
     AccountCard,
@@ -31,7 +32,6 @@ import { error } from "~Utils"
 import { DEVICE_TYPE, LedgerAccountWithDevice } from "~Model"
 import { DelegationType } from "~Model/Delegation"
 import { Routes } from "~Navigation"
-import { PendingRequestTypes } from "@walletconnect/types"
 
 type Props = {
     clauses: Transaction.Body["clauses"]
@@ -39,7 +39,7 @@ type Props = {
     onTransactionFailure: (error: unknown) => void
     initialRoute: Routes
     options?: Connex.Driver.TxOptions
-    requestEvent?: PendingRequestTypes.Struct
+    request?: WalletConnectRequest
 }
 
 export const useTransactionScreen = ({
@@ -48,7 +48,7 @@ export const useTransactionScreen = ({
     onTransactionFailure,
     initialRoute,
     options,
-    requestEvent,
+    request,
 }: Props) => {
     const { LL } = useI18nContext()
     const dispatch = useAppDispatch()
@@ -88,7 +88,7 @@ export const useTransactionScreen = ({
         selectedDelegationOption,
         selectedDelegationUrl,
         initialRoute,
-        requestEvent,
+        request,
     })
 
     // 5. Send transaction

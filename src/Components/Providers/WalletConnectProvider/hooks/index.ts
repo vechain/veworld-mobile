@@ -1,3 +1,2 @@
-export * from "./useWcRequest"
-export * from "./useWcProposal"
-export * from "./useWcSessions"
+export * from "./useWcPairing"
+export * from "./useWcNavigationOnEvent"

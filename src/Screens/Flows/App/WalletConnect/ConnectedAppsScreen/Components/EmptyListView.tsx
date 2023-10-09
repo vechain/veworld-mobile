@@ -6,16 +6,16 @@ import {
     BaseText,
     BaseTouchable,
     BaseView,
-    useWalletConnect,
 } from "~Components"
 import { COLORS, ScanTarget } from "~Constants"
 import { useI18nContext } from "~i18n"
 import { StyleSheet } from "react-native"
 import HapticsService from "~Services/HapticsService"
+import { useWcPairing } from "~Components/Providers/WalletConnectProvider/hooks/useWcPairing"
 
 export const EmptyListView = () => {
     const { LL } = useI18nContext()
-    const { onPair } = useWalletConnect()
+    const { onPair } = useWcPairing()
 
     const onScan = useCallback(
         (uri: string) => {

@@ -6,19 +6,21 @@ import {
     selectPendingSession,
     selectSelectedAccountAddress,
     selectSelectedNetwork,
+    selectWalletConnectDeepLinks,
     useAppDispatch,
     useAppSelector,
     WalletConnectRequest,
 } from "~Storage/Redux"
-import { useCallback, useEffect, useMemo } from "react"
+import { useCallback, useEffect } from "react"
 import { useNavigation } from "@react-navigation/native"
 import { Routes } from "~Navigation"
-import { AddressUtils, debug, error, WalletConnectUtils } from "~Utils"
-import { showInfoToast } from "~Components"
+import { AddressUtils, debug, error } from "~Utils"
+import { showInfoToast, useWcPairing } from "~Components"
 import { AccountWithDevice } from "~Model"
 import { useI18nContext } from "~i18n"
 import { rpcErrors } from "@metamask/rpc-errors"
 import { useSetSelectedAccount } from "~Hooks"
+import { WalletConnectService } from "~Services"
 
 const ROUTE_BLACKLIST: string[] = [
     Routes.CONNECT_APP_SCREEN,
@@ -29,7 +31,10 @@ const ROUTE_BLACKLIST: string[] = [
 ]
 
 export const useWcNavigationOnEvent = () => {
+    const { handleLinkingUrl } = useWcPairing()
+
     const dispatch = useAppDispatch()
+    const deepLinks = useAppSelector(selectWalletConnectDeepLinks)
     const pendingSession = useAppSelector(selectPendingSession)
     const pendingRequests = useAppSelector(selectPendingRequests)
     const selectedNetwork = useAppSelector(selectSelectedNetwork)
@@ -43,8 +48,10 @@ export const useWcNavigationOnEvent = () => {
 
     const nav = useNavigation()
 
-    const isBlackList = useMemo(() => {
+    const isBlackList = useCallback(() => {
         const navState = nav.getState()
+
+        if (!navState) return true
 
         for (const route of navState.routes) {
             if (ROUTE_BLACKLIST.includes(route.name)) return true
@@ -57,18 +64,18 @@ export const useWcNavigationOnEvent = () => {
         async (wcRequest: WalletConnectRequest) => {
             const { topic, chainId } = wcRequest
 
-            const network = WalletConnectUtils.getNetwork(networks, chainId)
+            const network = networks.find(
+                net =>
+                    net.genesis.id.slice(-32).toLowerCase() ===
+                    chainId.toLowerCase(),
+            )
 
             if (!network) {
-                const web3Wallet = await WalletConnectUtils.getWeb3Wallet()
-
-                await web3Wallet.disconnectSession({
-                    topic: topic,
-                    reason: {
-                        code: -32001,
-                        message: "Requested network not found",
-                    },
+                await WalletConnectService.disconnectSession(topic, {
+                    code: -32001,
+                    message: "Requested network not found",
                 })
+
                 throw new Error("Requested network not found")
             }
 
@@ -86,9 +93,7 @@ export const useWcNavigationOnEvent = () => {
 
     const switchAccount = useCallback(
         async (wcRequest: WalletConnectRequest) => {
-            const web3Wallet = await WalletConnectUtils.getWeb3Wallet()
-
-            const { topic, requestId, account } = wcRequest
+            const { topic, account } = wcRequest
 
             // Switch to the requested account
             const address = account.split(":")[2]
@@ -97,23 +102,19 @@ export const useWcNavigationOnEvent = () => {
                     return AddressUtils.compareAddresses(address, acct.address)
                 })
             if (!requestedAccount) {
-                await web3Wallet.respondSessionRequest({
-                    topic: topic,
-                    response: {
-                        id: requestId,
-                        jsonrpc: "2.0",
-                        error: rpcErrors.resourceNotFound(
-                            "The requested account was not found",
-                        ),
-                    },
+                await WalletConnectService.rejectRequest(
+                    wcRequest.requestId,
+                    wcRequest.topic,
+                    rpcErrors.resourceNotFound(
+                        "The requested account was not found",
+                    ),
+                )
+
+                await WalletConnectService.disconnectSession(topic, {
+                    code: 4100,
+                    message: "Requested account not found",
                 })
-                await web3Wallet.disconnectSession({
-                    topic: topic,
-                    reason: {
-                        code: 4100,
-                        message: "Requested account not found",
-                    },
-                })
+
                 throw new Error("Requested account not found")
             }
 
@@ -155,7 +156,7 @@ export const useWcNavigationOnEvent = () => {
     )
 
     useEffect(() => {
-        if (isBlackList) return
+        if (isBlackList()) return
 
         if (pendingSession) {
             nav.navigate(Routes.CONNECT_APP_SCREEN, {
@@ -165,7 +166,7 @@ export const useWcNavigationOnEvent = () => {
     }, [isBlackList, pendingSession, nav])
 
     useEffect(() => {
-        if (isBlackList) return
+        if (isBlackList()) return
 
         if (pendingRequests.length > 0) {
             const pendingRequest = pendingRequests[0]
@@ -179,4 +180,18 @@ export const useWcNavigationOnEvent = () => {
                 })
         }
     }, [navigateToRequestScreen, pendingRequests, isBlackList])
+
+    useEffect(() => {
+        if (deepLinks.length > 0) {
+            const deepLink = deepLinks[0]
+
+            handleLinkingUrl(deepLink)
+                .then(() => {
+                    debug("WalletConnectProvider:onPair - success")
+                })
+                .catch(err => {
+                    error("WalletConnectProvider:onPair - err", err)
+                })
+        }
+    }, [handleLinkingUrl, deepLinks])
 }

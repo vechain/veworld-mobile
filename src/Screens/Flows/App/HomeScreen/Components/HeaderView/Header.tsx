@@ -1,20 +1,21 @@
 import { useNavigation } from "@react-navigation/native"
 import React, { memo, useCallback } from "react"
 import { useCameraBottomSheet, useCopyClipboard, useTheme } from "~Hooks"
-import { BaseIcon, BaseText, BaseView, useWalletConnect } from "~Components"
+import { BaseIcon, BaseText, BaseView } from "~Components"
 import { useI18nContext } from "~i18n"
 import { Routes } from "~Navigation"
 import HapticsService from "~Services/HapticsService"
 import { ScanTarget } from "~Constants"
 import { SelectedNetworkViewer } from "~Components/Reusable/SelectedNetworkViewer"
-import { AddressUtils, WalletConnectUtils, debug } from "~Utils"
+import { AddressUtils, debug, WalletConnectUtils } from "~Utils"
+import { useWcPairing } from "~Components/Providers/WalletConnectProvider/hooks/useWcPairing"
 
 export const Header = memo(() => {
     const theme = useTheme()
     const nav = useNavigation()
     const { LL } = useI18nContext()
 
-    const { onPair } = useWalletConnect()
+    const { onPair } = useWcPairing()
 
     const { onCopyToClipboard } = useCopyClipboard()
 

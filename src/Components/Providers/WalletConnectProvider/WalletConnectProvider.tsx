@@ -1,12 +1,13 @@
-import React, { useCallback, useEffect, useMemo, useState } from "react"
-import { debug, error, WalletConnectUtils } from "~Utils"
-import { useApplicationSecurity, useWcSessions } from "~Components"
-import { WALLET_STATUS } from "~Model"
+import React, { useEffect } from "react"
+import { debug } from "~Utils"
 import { Linking } from "react-native"
-import { useWcRequest } from "./hooks"
-import { IWeb3WalletEngine } from "@walletconnect/web3wallet/dist/types/types/engine"
-import { cloneDeep } from "lodash"
-import { SignClientTypes } from "@walletconnect/types"
+import { addDeepLink, removeSession, useAppDispatch } from "~Storage/Redux"
+import { useWcNavigationOnEvent } from "~Components/Providers/WalletConnectProvider/hooks/useWcNavigationOnEvent"
+import {
+    onSessionProposal,
+    onSessionRequest,
+} from "~Components/Providers/WalletConnectProvider/helpers/WCSessionEvents"
+import { WalletConnectService } from "~Services"
 
 /**
  * Wallet Connect Flow:
@@ -18,179 +19,55 @@ import { SignClientTypes } from "@walletconnect/types"
  * are handled by the provider can be shown no matter where we are inside the app.
  */
 
-export type ActiveSessions = ReturnType<IWeb3WalletEngine["getActiveSessions"]>
-
-export type WcSessionProposal =
-    SignClientTypes.EventArguments["session_proposal"]
-export type WcSessionRequest = SignClientTypes.EventArguments["session_request"]
-export type WcSessionDelete = SignClientTypes.EventArguments["session_delete"]
-
-type IWalletConnect = {
-    activeSessions: ActiveSessions
-    onPair: ReturnType<typeof useWcSessions>["onPair"]
-    approveSession: ReturnType<typeof useWcSessions>["approveSession"]
-    disconnectSession: ReturnType<typeof useWcSessions>["disconnectSession"]
-}
-
 type WalletConnectContextProviderProps = { children: React.ReactNode }
 
-const WalletConnectContext = React.createContext<IWalletConnect>({
-    activeSessions: {},
-    onPair: () => Promise.reject(),
-    approveSession: () => Promise.reject(),
-    disconnectSession: () => Promise.reject(),
-})
+const WalletConnectContext = React.createContext<{}>({})
 
 const WalletConnectContextProvider = ({
     children,
 }: WalletConnectContextProviderProps) => {
-    // General
-    const [activeSessions, setActiveSessions] = useState<ActiveSessions>({})
+    const dispatch = useAppDispatch()
 
-    const { walletStatus } = useApplicationSecurity()
-    const { onSessionRequest } = useWcRequest()
-    const {
-        onSessionDelete,
-        onSessionProposal,
-        onPair,
-        approveSession,
-        disconnectSession,
-    } = useWcSessions(setActiveSessions)
-
-    const [linkingUrls, setLinkingUrls] = useState<string[]>([])
-
-    const [sessionProposals, setSessionProposals] = useState<
-        Record<string, WcSessionProposal>
-    >({})
-    const [sessionRequests, setSessionRequests] = useState<
-        Record<string, WcSessionRequest>
-    >({})
-    const [sessionDeletes, setSessionDeletes] = useState<
-        Record<string, WcSessionDelete>
-    >({})
+    useWcNavigationOnEvent()
 
     useEffect(() => {
-        const proposalKeys = Object.keys(sessionProposals)
+        WalletConnectService.addEventListener(
+            "session_proposal",
+            async proposal => {
+                debug("WalletConnectProvider:session_proposal", proposal.id)
+                await dispatch(onSessionProposal(proposal))
+            },
+        )
 
-        if (proposalKeys.length > 0) {
-            const proposal = cloneDeep(sessionProposals[proposalKeys[0]])
+        WalletConnectService.addEventListener(
+            "session_request",
+            async request => {
+                debug("WalletConnectProvider:session_request", request.id)
+                await dispatch(onSessionRequest(request))
+            },
+        )
 
-            debug("Processing WC Session Proposal", proposal.id)
-
-            setSessionProposals(prev => {
-                const newState = { ...prev }
-                delete newState[proposal.id]
-                return newState
-            })
-
-            onSessionProposal(proposal)
-        }
-    }, [sessionProposals, onSessionProposal])
-
-    useEffect(() => {
-        const requestKeys = Object.keys(sessionRequests)
-
-        if (requestKeys.length > 0) {
-            const request = cloneDeep(sessionRequests[requestKeys[0]])
-
-            debug("Processing WC Session Request", request.id)
-
-            setSessionRequests(prev => {
-                const newState = { ...prev }
-                delete newState[request.id]
-                return newState
-            })
-
-            onSessionRequest(request)
-        }
-    }, [onSessionRequest, sessionRequests])
-
-    useEffect(() => {
-        const deleteKeys = Object.keys(sessionDeletes)
-
-        if (deleteKeys.length > 0) {
-            const _delete = cloneDeep(sessionDeletes[deleteKeys[0]])
-
-            debug("Processing WC Session Delete", _delete.id)
-
-            setSessionDeletes(prev => {
-                const newState = { ...prev }
-                delete newState[_delete.id]
-                return newState
-            })
-
-            onSessionDelete(_delete)
-        }
-    }, [sessionDeletes, onSessionDelete])
-
-    const handleLinkingUrl = useCallback(
-        async (url: string) => {
-            if (typeof url !== "string") return
-
-            try {
-                let pairingUri
-
-                // Android
-                if (WalletConnectUtils.isValidURI(url)) {
-                    pairingUri = url
-                } else {
-                    // iOS
-                    const iosUrl = new URL(url)
-                    const wcUri = iosUrl.searchParams.get("uri")
-
-                    if (wcUri && WalletConnectUtils.isValidURI(wcUri)) {
-                        pairingUri = wcUri
-                    }
-                }
-
-                if (pairingUri) {
-                    await onPair(pairingUri)
-                }
-            } catch (e) {
-                error("WalletConnectProvider:handleLinkingUrl", e)
-            }
-        },
-        [onPair],
-    )
-
-    /**
-     * Initialise the Web3Wallet and add event listeners
-     */
-    useEffect(() => {
-        ;(async () => {
-            const web3Wallet = await WalletConnectUtils.getWeb3Wallet()
-
-            web3Wallet.on("session_proposal", proposal => {
-                setSessionProposals(prev => ({
-                    ...prev,
-                    [proposal.id]: proposal,
-                }))
-            })
-            web3Wallet.on("session_request", request => {
-                setSessionRequests(prev => ({
-                    ...prev,
-                    [request.id]: request,
-                }))
-            })
-            web3Wallet.on("session_delete", _delete => {
-                setSessionDeletes(prev => ({
-                    ...prev,
-                    [_delete.id]: _delete,
-                }))
-            })
-        })()
+        WalletConnectService.addEventListener(
+            "session_delete",
+            async request => {
+                debug("WalletConnectProvider:session_delete", request.topic)
+                dispatch(removeSession({ topic: request.topic }))
+            },
+        )
+        // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [])
 
     /**
      * Handle initial linking URL
      */
     useEffect(() => {
-        Linking.getInitialURL().then(url => {
-            debug("WalletConnectProvider:Linking.getInitialURL", url)
-            if (url) {
-                setLinkingUrls(prev => [...prev, url])
+        Linking.getInitialURL().then(deepLink => {
+            debug("WalletConnectProvider:Linking.getInitialURL", deepLink)
+            if (deepLink) {
+                dispatch(addDeepLink({ deepLink }))
             }
         })
+        // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [])
 
     /**
@@ -198,53 +75,24 @@ const WalletConnectContextProvider = ({
      * - Don't set any dependencies here, otherwise the listener will be added multiple times (there was trouble removing, screen crashes etc.)
      */
     useEffect(() => {
+        if (Linking.listenerCount("url") > 0) {
+            Linking.removeAllListeners("url")
+        }
+
         Linking.addListener("url", event => {
             debug("WalletConnectProvider:Linking.addListener", event)
-            setLinkingUrls(prev => [...prev, event.url])
+            if (event.url) {
+                dispatch(addDeepLink({ deepLink: event.url }))
+            }
         })
+        // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [])
 
-    useEffect(() => {
-        if (linkingUrls.length > 0 && walletStatus === WALLET_STATUS.UNLOCKED) {
-            const firstUrl = linkingUrls[0]
-
-            setLinkingUrls(prev => prev.filter(url => url !== firstUrl))
-
-            handleLinkingUrl(firstUrl)
-                .then(() => {
-                    debug("WalletConnectProvider:handleLinkingUrl done")
-                })
-                .catch(e => {
-                    error("WalletConnectProvider:handleLinkingUrl", e)
-                })
-        }
-    }, [walletStatus, handleLinkingUrl, linkingUrls])
-
-    const value: IWalletConnect = useMemo(() => {
-        return {
-            activeSessions,
-            approveSession,
-            onPair,
-            disconnectSession,
-        }
-    }, [activeSessions, approveSession, onPair, disconnectSession])
-
     return (
-        <WalletConnectContext.Provider value={value}>
+        <WalletConnectContext.Provider value={{}}>
             {children}
         </WalletConnectContext.Provider>
     )
 }
 
-const useWalletConnect = () => {
-    const context = React.useContext(WalletConnectContext)
-    if (!context) {
-        throw new Error(
-            "useWalletConnect must be used within a WalletConnectContextProvider",
-        )
-    }
-
-    return context
-}
-
-export { WalletConnectContextProvider, useWalletConnect }
+export { WalletConnectContextProvider }
