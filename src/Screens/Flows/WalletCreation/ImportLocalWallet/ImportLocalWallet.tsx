@@ -16,7 +16,7 @@ import {
     useDeviceUtils,
     useTheme,
 } from "~Hooks"
-import { CryptoUtils, error } from "~Utils"
+import { CryptoUtils } from "~Utils"
 import { Keyboard, StyleSheet } from "react-native"
 import { Routes } from "~Navigation"
 import { ImportWalletInput } from "./Components/ImportWalletInput"
@@ -30,7 +30,7 @@ import { selectHasOnboarded } from "~Storage/Redux/Selectors"
 import { setMnemonic, setPrivateKey } from "~Storage/Redux/Actions"
 import HapticsService from "~Services/HapticsService"
 import { AnalyticsEvent } from "~Constants"
-import { IMPORT_TYPE } from "~Model"
+import { DEVICE_CREATION_ERRORS as ERRORS, IMPORT_TYPE } from "~Model"
 import { UnlockKeystoreBottomSheet } from "./Components/UnlockKeystoreBottomSheet"
 
 const DEMO_MNEMONIC =
@@ -62,6 +62,28 @@ export const ImportLocalWallet = () => {
         [textValue],
     )
 
+    const processErrorMessage = useCallback(
+        (err: unknown) => {
+            HapticsService.triggerNotification({ level: "Error" })
+            const e = err as Error
+
+            switch (e.message) {
+                case ERRORS.INCORRECT_PASSWORD:
+                    setIsError(LL.ERROR_INCORRECT_PASSWORD())
+                    break
+                case ERRORS.ADDRESS_EXISTS:
+                    setIsError(LL.ERROR_IMPORT_ADDRESS_EXISTS())
+                    break
+                case ERRORS.INVALID_IMPORT_DATA:
+                    setIsError(LL.ERROR_INVALID_IMPORT_DATA())
+                    break
+                default:
+                    setIsError(LL.ERROR_IMPORT_GENERIC())
+            }
+        },
+        [LL],
+    )
+
     const completeImport = useCallback(() => {
         HapticsService.triggerImpact({ level: "Medium" })
         if (userHasOnboarded) {
@@ -80,12 +102,17 @@ export const ImportLocalWallet = () => {
                 track(AnalyticsEvent.IMPORT_MNEMONIC_SUBMITTED)
                 completeImport()
             } catch (err) {
-                HapticsService.triggerNotification({ level: "Error" })
-                setIsError(LL.ERROR_INCORRECT_MNEMONIC())
+                processErrorMessage(err)
                 track(AnalyticsEvent.IMPORT_MNEMONIC_FAILED)
             }
         },
-        [checkCanImportDevice, dispatch, track, completeImport, LL],
+        [
+            checkCanImportDevice,
+            dispatch,
+            track,
+            completeImport,
+            processErrorMessage,
+        ],
     )
 
     const importPrivateKey = useCallback(
@@ -96,12 +123,17 @@ export const ImportLocalWallet = () => {
                 track(AnalyticsEvent.IMPORT_PRIVATE_KEY_SUBMITTED)
                 completeImport()
             } catch (err) {
-                HapticsService.triggerNotification({ level: "Error" })
-                setIsError(LL.ERROR_INCORRECT_PRIVATE_KEY())
+                processErrorMessage(err)
                 track(AnalyticsEvent.IMPORT_PRIVATE_KEY_FAILED)
             }
         },
-        [checkCanImportDevice, dispatch, track, completeImport, LL],
+        [
+            checkCanImportDevice,
+            dispatch,
+            track,
+            completeImport,
+            processErrorMessage,
+        ],
     )
 
     const onUnlockKeyStoreFile = useCallback(
@@ -116,33 +148,39 @@ export const ImportLocalWallet = () => {
                 track(AnalyticsEvent.IMPORT_KEYSTORE_FILE_SUBMITTED)
                 completeImport()
             } catch (err) {
-                error("Error unlocking keystore file", err)
-                HapticsService.triggerNotification({ level: "Error" })
-                setIsError(LL.ERROR_INCORRECT_PASSWORD())
+                processErrorMessage(err)
                 track(AnalyticsEvent.IMPORT_KEYSTORE_FILE_FAILED)
             }
         },
-        [textValue, checkCanImportDevice, dispatch, track, completeImport, LL],
+        [
+            textValue,
+            checkCanImportDevice,
+            dispatch,
+            track,
+            completeImport,
+            processErrorMessage,
+        ],
     )
 
     const onVerify = useCallback(
         (_textValue: string, _importType: string) => {
             try {
-                if (_importType === IMPORT_TYPE.UNKNOWN)
-                    throw new Error("Unknown import type")
-
-                if (_importType === IMPORT_TYPE.KEYSTORE_FILE) {
-                    openUnlockKeystoreBottomSheet()
-                    return
+                switch (_importType) {
+                    case IMPORT_TYPE.MNEMONIC:
+                        importMnemonic(_textValue)
+                        break
+                    case IMPORT_TYPE.PRIVATE_KEY:
+                        importPrivateKey(_textValue)
+                        break
+                    case IMPORT_TYPE.KEYSTORE_FILE:
+                        openUnlockKeystoreBottomSheet()
+                        break
+                    default:
+                        throw new Error("Unknown import type")
                 }
-
-                if (_importType === IMPORT_TYPE.MNEMONIC)
-                    importMnemonic(_textValue)
-                else if (_importType === IMPORT_TYPE.PRIVATE_KEY)
-                    importPrivateKey(_textValue)
             } catch (err) {
                 HapticsService.triggerNotification({ level: "Error" })
-                setIsError(LL.ERROR_INCORRECT_IMPORT_DATA())
+                setIsError(LL.ERROR_INVALID_IMPORT_DATA())
             }
         },
         [importMnemonic, importPrivateKey, openUnlockKeystoreBottomSheet, LL],
@@ -183,7 +221,7 @@ export const ImportLocalWallet = () => {
     )
 
     const disabledAction = useCallback(
-        () => setIsError(LL.ERROR_INCORRECT_IMPORT_DATA()),
+        () => setIsError(LL.ERROR_INVALID_IMPORT_DATA()),
         [LL],
     )
 

@@ -3,7 +3,7 @@ import crypto from "react-native-quick-crypto"
 import { XPub } from "~Model/Crypto"
 import PasswordUtils from "../PasswordUtils"
 import stringify from "json-stringify-safe"
-import { error, warn } from "~Utils/Logger"
+import { error } from "~Utils/Logger"
 import { IMPORT_TYPE } from "~Model"
 import fastKeystoreDecrypt from "./Helpers/fastKeystoreDecrypt"
 import HexUtils from "~Utils/HexUtils"
@@ -91,7 +91,6 @@ const decryptKeystoreFile = async (
             JSON.stringify(keystore),
             key,
         )
-        warn("keystoreAccount", keystoreAccount)
         return HexUtils.removePrefix(keystoreAccount.privateKey)
     } catch (err) {
         error("Error decrypting keystore", err)
