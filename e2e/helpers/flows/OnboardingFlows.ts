@@ -5,8 +5,9 @@ import {
     DEFAULT_TIMEOUT,
     SHORT_TIMEOUT,
     TEST_MNEMONIC,
-    TEST_PASSWORD,
+    TEST_PIN,
 } from "../constants"
+import { clickByText } from "../common"
 
 export const skipToCreateLocalWallet = async () => {
     await WelcomeScreen.goToWalletSetup()
@@ -19,15 +20,15 @@ export const skipToImportLocalWallet = async () => {
     await WalletSetupScreen.clickImportLocalWallet()
 }
 
-export const pasteMnemonic = async (mnemonic: string) => {
-    await waitFor(element(by.id("import-mnemonic-input")))
+export const pasteIntoImportTextbox = async (text: string) => {
+    await waitFor(element(by.id("import-input")))
         .toBeVisible()
         .withTimeout(DEFAULT_TIMEOUT)
 
-    await element(by.id("import-mnemonic-input")).replaceText(mnemonic)
+    await element(by.id("import-input")).replaceText(text)
 
     // TextInput needs to be tapped again to be able to dismiss keyboard
-    await element(by.id("import-mnemonic-input")).tap()
+    await element(by.id("import-input")).tap()
 
     // Dismiss keyboard by tapping outside, for example the title
     await element(by.text("Import Local Wallet")).tap()
@@ -39,18 +40,23 @@ export const pasteMnemonic = async (mnemonic: string) => {
     await element(by.text("Verify")).tap()
 }
 
-export const insertPassword = async (password: string) => {
-    for (let i = 0; i < password.length; i++) {
-        await element(by.text(password.charAt(i))).tap()
+export const enterPasswordAndUnlock = async (password: string) => {
+    await element(by.id("unlock-keystore-password-input")).replaceText(password)
+    await clickByText("UNLOCK")
+}
+
+export const enterPin = async (pin: string) => {
+    for (let i = 0; i < pin.length; i++) {
+        await element(by.text(pin.charAt(i))).tap()
     }
 }
 
 export const chooseAndConfirmPassword = async (
-    password: string,
-    confirmPassword: string,
+    pin: string,
+    confirmPin: string,
 ) => {
-    await insertPassword(password)
-    await insertPassword(confirmPassword)
+    await enterPin(pin)
+    await enterPin(confirmPin)
 }
 
 export const protectWithBiometrics = async () => {
@@ -109,9 +115,9 @@ export const completeOnboarding = async (
     await skipToImportLocalWallet()
 
     mnemonic = mnemonic || TEST_MNEMONIC
-    password = password || TEST_PASSWORD
+    password = password || TEST_PIN
 
-    await pasteMnemonic(mnemonic)
+    await pasteIntoImportTextbox(mnemonic)
 
     await element(by.text("Create password")).tap()
 

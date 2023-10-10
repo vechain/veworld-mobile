@@ -110,6 +110,7 @@ export const ContactsScreen = () => {
             if (selectedContactAddress) {
                 dispatch(editContact(_alias, _address, selectedContactAddress))
                 closeEditContactSheet()
+                setSelectedContactAddress(undefined)
             }
         },
         [closeEditContactSheet, dispatch, selectedContactAddress],

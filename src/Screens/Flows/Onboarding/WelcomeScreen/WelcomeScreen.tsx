@@ -44,13 +44,15 @@ export const WelcomeScreen = () => {
     // dev button
     const dispatch = useAppDispatch()
     const devFeaturesEnabled = useAppSelector(selectAreDevFeaturesEnabled)
-    const { onCreateWallet: createWallet } = useCreateWallet()
+    const { createLocalWallet: createWallet } = useCreateWallet()
     const { migrateOnboarding } = useApplicationSecurity()
 
     const onDemoOnboarding = useCallback(async () => {
         dispatch(setIsAppLoading(true))
         const mnemonic =
-            "denial kitchen pet squirrel other broom bar gas better priority spoil cross"
+            "denial kitchen pet squirrel other broom bar gas better priority spoil cross".split(
+                " ",
+            )
         const userPassword = "111111"
         await WalletEncryptionKeyHelper.init(userPassword)
         await createWallet({

@@ -1,4 +1,4 @@
-import React, { useEffect, useMemo, useState } from "react"
+import React, { useCallback, useEffect, useMemo, useState } from "react"
 import { BottomSheetModalMethods } from "@gorhom/bottom-sheet/lib/typescript/types"
 import {
     BaseBottomSheet,
@@ -13,6 +13,7 @@ import { useContactValidation } from "./Hooks"
 import { useTheme } from "~Hooks"
 import { isSmallScreen } from "~Constants"
 import { Contact } from "~Model"
+import { LocalizedString } from "typesafe-i18n"
 
 type Props = {
     contact?: Contact
@@ -41,23 +42,38 @@ export const ContactManagementBottomSheet = React.forwardRef<
 
         const theme = useTheme()
 
-        const [alias, setAlias] = useState<string>(contact?.alias || "")
-        const [address, setAddress] = useState<string>(contact?.address || "")
-
-        useEffect(() => {
-            setAlias(contact?.alias ?? "")
-            setAddress(contact?.address ?? "")
-        }, [contact])
+        const [alias, _setAlias] = useState<string>(contact?.alias ?? "")
+        const [address, _setAddress] = useState<string>(contact?.address ?? "")
+        const [nameError, setNameError] = useState<string | LocalizedString>("")
+        const [addressError, setAddressError] = useState<
+            string | LocalizedString
+        >("")
 
         const { validateName, validateAddress } = useContactValidation(
             false,
             contact,
         )
 
-        const { nameError, addressError } = {
-            nameError: validateName(alias),
-            addressError: validateAddress(address),
-        }
+        const setAlias = useCallback(
+            (_alias: string) => {
+                setNameError(validateName(_alias))
+                _setAlias(_alias)
+            },
+            [validateName],
+        )
+
+        const setAddress = useCallback(
+            (_address: string) => {
+                setAddressError(validateAddress(_address))
+                _setAddress(_address)
+            },
+            [validateAddress],
+        )
+
+        useEffect(() => {
+            _setAlias(contact?.alias ?? "")
+            _setAddress(contact?.address ?? "")
+        }, [contact, setAddress, setAlias])
 
         const isFormValid = useMemo(() => {
             return addressError.length === 0 && nameError.length === 0

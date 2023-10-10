@@ -30,7 +30,7 @@ export const DeviceBox: React.FC<Props> = ({
     isEdit = false,
     onDeviceSelected,
     drag,
-    isActive = false,
+    isActive = true,
     cardStyle,
 }) => {
     const { styles, theme } = useThemedStyles(baseStyles)
@@ -49,7 +49,7 @@ export const DeviceBox: React.FC<Props> = ({
                     {isEdit && (
                         <Pressable
                             onPressIn={isEdit ? drag : undefined}
-                            disabled={isActive}>
+                            disabled={!isActive}>
                             <BaseIcon
                                 name={"drag"}
                                 color={theme.colors.text}
@@ -89,7 +89,7 @@ export const DeviceBox: React.FC<Props> = ({
     return onDeviceSelected ? (
         <BaseView style={styles.touchableContainer}>
             <PressableComponent
-                disabled={isActive}
+                disabled={!isActive}
                 style={styles.deviceBoxPressable}
                 onPress={isEdit ? undefined : onDeviceSelected?.(device!)}>
                 {deviceBoxBody()}

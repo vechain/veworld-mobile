@@ -1,5 +1,10 @@
 import { DEFAULT_TIMEOUT } from "../constants"
 
+export const closeBottomSheet = async (name: string) => {
+    // Close sheet
+    await element(by.text(name)).swipe("down", "fast", 1)
+}
+
 const clickBy = async ({
     byWhat,
     selector,
@@ -56,7 +61,7 @@ export const idShouldExist = async (
 ) =>
     await waitFor(element(by.id(id)))
         .toExist()
-        .withTimeout(options?.timeout || DEFAULT_TIMEOUT)
+        .withTimeout(options?.timeout ?? DEFAULT_TIMEOUT)
 
 export const idShouldNotExist = async (
     id: string,
@@ -64,7 +69,7 @@ export const idShouldNotExist = async (
 ) =>
     await waitFor(element(by.id(id)))
         .not.toExist()
-        .withTimeout(options?.timeout || DEFAULT_TIMEOUT)
+        .withTimeout(options?.timeout ?? DEFAULT_TIMEOUT)
 
 export const textShouldExist = async (
     text: string,
@@ -72,7 +77,7 @@ export const textShouldExist = async (
 ) =>
     await waitFor(element(by.text(text)))
         .toExist()
-        .withTimeout(options?.timeout || DEFAULT_TIMEOUT)
+        .withTimeout(options?.timeout ?? DEFAULT_TIMEOUT)
 
 export const textShouldNotExist = async (
     text: string,
@@ -80,7 +85,23 @@ export const textShouldNotExist = async (
 ) =>
     await waitFor(element(by.text(text)))
         .not.toExist()
-        .withTimeout(options?.timeout || DEFAULT_TIMEOUT)
+        .withTimeout(options?.timeout ?? DEFAULT_TIMEOUT)
+
+export const idShouldBeVisible = async (
+    text: string,
+    options?: { timeout?: number },
+) =>
+    await waitFor(element(by.id(text)))
+        .toBeVisible()
+        .withTimeout(options?.timeout ?? DEFAULT_TIMEOUT)
+
+export const idShouldNotBeVisible = async (
+    text: string,
+    options?: { timeout?: number },
+) =>
+    await waitFor(element(by.id(text)))
+        .not.toBeVisible()
+        .withTimeout(options?.timeout ?? DEFAULT_TIMEOUT)
 
 export const textShouldBeVisible = async (
     text: string,
@@ -88,7 +109,15 @@ export const textShouldBeVisible = async (
 ) =>
     await waitFor(element(by.text(text)))
         .toBeVisible()
-        .withTimeout(options?.timeout || DEFAULT_TIMEOUT)
+        .withTimeout(options?.timeout ?? DEFAULT_TIMEOUT)
+
+export const textShouldNotBeVisible = async (
+    text: string,
+    options?: { timeout?: number },
+) =>
+    await waitFor(element(by.text(text)))
+        .not.toBeVisible()
+        .withTimeout(options?.timeout ?? DEFAULT_TIMEOUT)
 
 type Direction = "down" | "left" | "right" | "up"
 
@@ -119,7 +148,7 @@ export const isPresentText = async (
     try {
         await waitFor(element(by.text(text)))
             .toExist()
-            .withTimeout(options?.timeout || DEFAULT_TIMEOUT)
+            .withTimeout(options?.timeout ?? DEFAULT_TIMEOUT)
         return true
     } catch (error) {
         return false
@@ -133,7 +162,7 @@ export const isPresentId = async (
     try {
         await waitFor(element(by.id(id)))
             .toExist()
-            .withTimeout(options?.timeout || DEFAULT_TIMEOUT)
+            .withTimeout(options?.timeout ?? DEFAULT_TIMEOUT)
         return true
     } catch (error) {
         return false

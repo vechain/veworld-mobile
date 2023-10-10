@@ -21,7 +21,6 @@ import {
     useAppSelector,
 } from "~Storage/Redux"
 import { useI18nContext } from "~i18n"
-import { address } from "thor-devkit"
 
 type Props = {
     fromAddress: string
@@ -51,17 +50,11 @@ export const TransferCard = memo(
         const accounts = useAppSelector(selectVisibleAccounts)
 
         const fromContact = useAppSelector(state =>
-            selectContactByAddress(state, address.toChecksumed(fromAddress)),
+            selectContactByAddress(state, fromAddress),
         )
 
-        const toAddressesNonEmpty = useMemo(() => {
-            return toAddresses?.map((addr: string) =>
-                addr !== "" ? address.toChecksumed(addr) : "",
-            )
-        }, [toAddresses])
-
         const toContacts = useAppSelector(state =>
-            selectContactsByAddresses(state, toAddressesNonEmpty),
+            selectContactsByAddresses(state, toAddresses),
         )
 
         const [activeIndex, setActiveIndex] = useState(0)

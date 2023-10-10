@@ -19,7 +19,7 @@ const createContact = (
 ): Contact => {
     const contact: Contact = {
         alias: _alias,
-        address: address.toChecksumed(_address),
+        address: _address ? address.toChecksumed(_address) : "",
         type: _type,
     }
 
@@ -84,11 +84,7 @@ const addCachedContact =
 
         if (contactExists) throw new Error("Contact already exists!")
 
-        const contact: Contact = createContact(
-            "",
-            checksumedAddress,
-            ContactType.CACHE,
-        )
+        const contact: Contact = createContact("", _address, ContactType.CACHE)
 
         dispatch(insertContact(contact))
 
@@ -156,4 +152,10 @@ const editContact =
         )
     }
 
-export { addContact, addCachedContact, removeContact, editContact }
+export {
+    addContact,
+    addCachedContact,
+    removeContact,
+    editContact,
+    createContact,
+}

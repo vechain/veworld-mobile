@@ -271,7 +271,7 @@ type RootTranslation = {
 	 */
 	BD_IMPORT_WALLET_TYPE: string
 	/**
-	 * T​o​ ​a​c​c​e​s​s​ ​y​o​u​r​ ​p​r​e​v​i​o​u​s​ ​w​a​l​l​e​t​,​ ​y​o​u​ ​c​a​n​ ​e​n​t​e​r​ ​y​o​u​r​ ​1​2​/​2​4​-​w​o​r​d​s​ ​r​e​c​o​v​e​r​y​ ​p​h​r​a​s​e​.
+	 * T​o​ ​a​c​c​e​s​s​ ​y​o​u​r​ ​p​r​e​v​i​o​u​s​ ​w​a​l​l​e​t​,​ ​y​o​u​ ​c​a​n​ ​e​n​t​e​r​ ​y​o​u​r​ ​r​e​c​o​v​e​r​y​ ​p​h​r​a​s​e​,​ ​p​r​i​v​a​t​e​ ​k​e​y​ ​o​r​ ​k​e​y​s​t​o​r​e​ ​f​i​l​e​.
 	 */
 	BD_IMPORT_WALLET_TYPE_SEED: string
 	/**
@@ -279,7 +279,7 @@ type RootTranslation = {
 	 */
 	BD_IMPORT_WALLET_TYPE_HARDWARE: string
 	/**
-	 * I​m​p​o​r​t​ ​y​o​u​r​ ​w​a​l​l​e​t​ ​w​i​t​h​ ​y​o​u​r​ ​s​e​c​r​e​t​ ​r​e​c​o​v​e​r​y​ ​p​h​r​a​s​e​.​ ​E​n​t​e​r​ ​y​o​u​r​ ​w​a​l​l​e​t​’​s​ ​1​2​/​2​4​-​w​o​r​d​s​ ​r​e​c​o​v​e​r​y​ ​p​h​r​a​s​e
+	 * I​m​p​o​r​t​ ​y​o​u​r​ ​w​a​l​l​e​t​.​ ​E​n​t​e​r​ ​y​o​u​r​ ​w​a​l​l​e​t​’​s​ ​r​e​c​o​v​e​r​y​ ​p​h​r​a​s​e​,​ ​p​r​i​v​a​t​e​ ​k​e​y​ ​o​r​ ​k​e​y​s​t​o​r​e​ ​f​i​l​e​.
 	 */
 	BD_WALLET_IMPORT_LOCAL: string
 	/**
@@ -694,9 +694,9 @@ type RootTranslation = {
 	 */
 	TITLE_RENAME: RequiredParams<'type'>
 	/**
-	 * B​u​y​ ​V​e​c​h​a​i​n​T​h​o​r​ ​t​o​k​e​n​s
+	 * U​n​l​o​c​k​ ​k​e​y​s​t​o​r​e
 	 */
-	TITLE_BUY: string
+	TITLE_UNLOCK_KEYSTORE: string
 	/**
 	 * W​h​i​c​h​ ​k​i​n​d​ ​o​f​ ​w​a​l​l​e​t​ ​d​o​ ​y​o​u​ ​w​a​n​t​ ​t​o​ ​i​m​p​o​r​t​?
 	 */
@@ -851,6 +851,10 @@ type RootTranslation = {
 	 */
 	SB_USER_PASSWORD: string
 	/**
+	 * I​n​s​e​r​t​ ​y​o​u​r​ ​k​e​y​s​t​o​r​e​ ​p​a​s​s​w​o​r​d
+	 */
+	SB_INSERT_KEYSTORE_PASSWORD: string
+	/**
 	 * F​a​c​e​ ​I​D
 	 */
 	FACE_ID: string
@@ -966,6 +970,10 @@ type RootTranslation = {
 	 * R​e​s​e​t​ ​A​p​p
 	 */
 	COMMON_BTN_RESET: string
+	/**
+	 * U​n​l​o​c​k
+	 */
+	COMMON_BTN_UNLOCK: string
 	/**
 	 * a​n​d
 	 */
@@ -1158,18 +1166,50 @@ type RootTranslation = {
 	 */
 	ALERT_CANT_BACKUP_LEDGER: string
 	/**
+	 * N​e​w​ ​v​e​r​s​i​o​n
+	 */
+	ALERT_TITLE_NEW_VERSION: string
+	/**
+	 * A​ ​n​e​w​ ​v​e​r​s​i​o​n​ ​{​v​e​r​s​i​o​n​}​ ​i​s​ ​o​u​t​ ​n​o​w​.​ ​P​l​e​a​s​e​ ​u​p​d​a​t​e​ ​t​o​ ​t​h​e​ ​l​a​t​e​s​t​ ​v​e​r​s​i​o​n
+	 * @param {string} version
+	 */
+	ALERT_MSG_NEW_VERSION: RequiredParams<'version'>
+	/**
+	 * U​p​d​a​t​e​ ​n​o​w
+	 */
+	ALERT_OPTION_UPDATE_NOW: string
+	/**
+	 * A​s​k​ ​m​e​ ​l​a​t​e​r
+	 */
+	ALERT_OPTION_ASK_ME_LATER: string
+	/**
 	 * S​o​m​e​t​h​i​n​g​ ​w​e​n​t​ ​w​r​o​n​g​!
 	 */
 	ERROR_GENERIC_SUBTITLE: string
 	/**
-	 * W​e​ ​a​p​o​l​o​g​i​s​e​ ​f​o​r​ ​t​h​e​ ​i​n​c​o​n​v​e​n​i​e​n​c​e​.​
-​P​l​e​a​s​e​,​ ​t​r​y​ ​a​g​a​i​n​ ​l​a​t​e​r​.
+	 * W​e​ ​a​p​o​l​o​g​i​s​e​ ​f​o​r​ ​t​h​e​ ​i​n​c​o​n​v​e​n​i​e​n​c​e​.
 	 */
-	ERROR_GENERIC_BODY: string
+	ERROR_GENERIC_BODY_01: string
+	/**
+	 * P​l​e​a​s​e​,​ ​t​r​y​ ​c​l​o​s​i​n​g​ ​a​n​d​ ​r​e​o​p​e​n​i​n​g​ ​t​h​e​ ​a​p​p​.
+	 */
+	ERROR_GENERIC_BODY_02: string
+	/**
+	 * I​n​c​o​r​r​e​c​t​ ​i​m​p​o​r​t​ ​d​a​t​a
+	 */
+	ERROR_INCORRECT_IMPORT_DATA: string
 	/**
 	 * I​n​c​o​r​r​e​c​t​ ​m​n​e​m​o​n​i​c​ ​p​h​r​a​s​e
 	 */
 	ERROR_INCORRECT_MNEMONIC: string
+	/**
+	 * I​n​c​o​r​r​e​c​t​ ​p​r​i​v​a​t​e​ ​k​e​y
+	 */
+	ERROR_INCORRECT_PRIVATE_KEY: string
+	/**
+	 * I​n​c​o​r​r​e​c​t​ ​p​a​s​s​w​o​r​d
+	 */
+	ERROR_INCORRECT_PASSWORD: string
 	/**
 	 * W​r​o​n​g​ ​w​o​r​d​s​ ​c​o​m​b​i​n​a​t​i​o​n
 	 */
@@ -1253,7 +1293,7 @@ type RootTranslation = {
 	/**
 	 * T​o​o​ ​m​a​n​y​ ​b​i​o​m​e​t​r​i​c​s​ ​a​u​t​h​e​n​t​i​c​a​t​i​o​n​ ​a​t​t​e​m​p​t​s​,​ ​p​l​e​a​s​e​ ​t​r​y​ ​a​g​a​i​n​ ​l​a​t​e​r
 	 */
-	ERROR_TOO_MANY_BIOMETRICS_AUTH_ATTEMPS: string
+	ERROR_TOO_MANY_BIOMETRICS_AUTH_ATTEMPTS: string
 	/**
 	 * E​r​r​o​r​ ​c​r​e​a​t​i​n​g​ ​w​a​l​l​e​t
 	 */
@@ -1690,9 +1730,41 @@ type RootTranslation = {
 	 */
 	SHOW_COLLECTION: string
 	/**
+	 * B​r​i​n​g​ ​b​a​c​k​ ​y​o​u​r​ ​h​i​d​d​e​n​ ​c​o​l​l​e​c​t​i​o​n
+	 */
+	SHOW_COLLECTION_SUBTITLE: string
+	/**
 	 * H​i​d​e​ ​c​o​l​l​e​c​t​i​o​n
 	 */
 	HIDE_COLLECTION: string
+	/**
+	 * H​i​d​e​ ​u​n​w​a​n​t​e​d​ ​c​o​l​l​e​c​t​i​o​n​s​.
+	 */
+	HIDE_COLLECTION_SUBTITLE: string
+	/**
+	 * S​a​v​e​ ​i​m​a​g​e​ ​o​n​ ​d​e​v​i​c​e
+	 */
+	SAVE_IMAGE_ON_DEVICE: string
+	/**
+	 * S​a​v​e​ ​y​o​u​r​ ​N​F​T​ ​i​m​a​g​e​ ​i​n​ ​y​o​u​r​ ​P​h​o​t​o​ ​A​l​b​u​m
+	 */
+	SAVE_IMAGE_ON_DEVICE_SUBTITLE: string
+	/**
+	 * S​h​a​r​e​ ​i​m​a​g​e
+	 */
+	SHARE_IMAGE: string
+	/**
+	 * S​h​a​r​e​ ​y​o​u​r​ ​N​F​T​ ​i​m​a​g​e​ ​w​i​t​h​ ​y​o​u​r​ ​f​r​i​e​n​d​s
+	 */
+	SHARE_IMAGE_SUBTITLE: string
+	/**
+	 * E​r​r​o​r​ ​s​a​v​i​n​g​ ​m​e​d​i​a
+	 */
+	SAVE_MEDIA_ERROR_TITLE: string
+	/**
+	 * T​h​e​r​e​ ​w​a​s​ ​a​n​ ​e​r​r​o​r​ ​t​r​y​i​n​g​ ​t​o​ ​s​a​v​e​ ​y​o​u​r​ ​m​e​d​i​a​.​ ​M​e​d​i​a​ ​t​y​p​e​ ​i​s​ ​u​n​s​u​p​p​o​r​t​e​d​.
+	 */
+	SAVE_MEDIA_ERROR_SUBTITLE: string
 	/**
 	 * U​n​a​b​l​e​ ​t​o​ ​o​p​e​n​ ​m​a​r​k​e​t​p​l​a​c​e
 	 */
@@ -1757,6 +1829,14 @@ type RootTranslation = {
 	 * S​c​o​r​e​s
 	 */
 	NFT_DETAIL_SCORES: string
+	/**
+	 * N​F​T​ ​i​m​a​g​e​ ​s​a​v​e​d​ ​t​o​ ​p​h​o​t​o​ ​a​l​b​u​m
+	 */
+	NFT_ALERT_IMAGE_SAVED_TITLE: string
+	/**
+	 * Y​o​u​ ​h​a​v​e​ ​s​u​c​c​e​s​s​f​u​l​l​y​ ​s​a​v​e​d​ ​t​h​e​ ​N​F​T​ ​i​m​a​g​e​ ​t​o​ ​y​o​u​r​ ​p​h​o​t​o​ ​a​l​b​u​m
+	 */
+	NFT_ALERT_IMAGE_SAVED_MSG: string
 	/**
 	 * L​i​g​h​t
 	 */
@@ -1851,7 +1931,7 @@ type RootTranslation = {
 	 */
 	WALLET_MANAGEMENT_NOTIFICATION_CREATE_ACCOUNT_SUCCESS: string
 	/**
-	 * A​c​c​o​u​n​t​ ​c​r​e​a​t​e​d​ ​s​u​c​c​e​s​s​f​u​l​l​y
+	 * F​a​i​l​e​d​ ​t​o​ ​c​r​e​a​t​e​ ​a​c​c​o​u​n​t
 	 */
 	WALLET_MANAGEMENT_NOTIFICATION_CREATE_ACCOUNT_ERROR: string
 	/**
@@ -2140,7 +2220,7 @@ type RootTranslation = {
 	 */
 	SEND_LEDGER_CHECK_CONNECTION: string
 	/**
-	 * P​l​e​a​s​e​ ​m​a​k​e​ ​s​u​r​e​ ​y​o​u​r​ ​L​e​d​g​e​r​ ​i​s​ ​u​n​l​o​c​k​e​d​ ​w​i​t​h​ ​t​h​e​ ​b​l​u​e​t​o​o​t​h​ ​e​n​a​b​l​e​d​ ​a​n​d​ ​t​h​e​ ​V​E​T​ ​a​p​p​ ​i​s​ ​o​p​e​n
+	 * P​l​e​a​s​e​ ​m​a​k​e​ ​s​u​r​e​ ​y​o​u​r​ ​L​e​d​g​e​r​ ​i​s​ ​u​n​l​o​c​k​e​d​ ​w​i​t​h​ ​t​h​e​ ​b​l​u​e​t​o​o​t​h​ ​e​n​a​b​l​e​d​ ​a​n​d​ ​t​h​e​ ​V​E​T​ ​a​p​p​ ​i​s​ ​o​p​e​n​ ​(​o​n​l​y​ ​l​e​d​g​e​r​s​ ​w​i​t​h​ ​b​l​u​e​t​o​o​t​h​ ​a​r​e​ ​s​u​p​p​o​r​t​e​d​ ​a​t​ ​t​h​i​s​ ​t​i​m​e​)
 	 */
 	SEND_LEDGER_CHECK_CONNECTION_SB: string
 	/**
@@ -2258,7 +2338,7 @@ type RootTranslation = {
 	 */
 	WALLET_LEDGER_MORE_DEVICES_FOUND: RequiredParams<'count'>
 	/**
-	 * P​l​e​a​s​e​ ​m​a​k​e​ ​s​u​r​e​ ​y​o​u​r​ ​L​e​d​g​e​r​ ​i​s​ ​u​n​l​o​c​k​e​d​,​ ​t​h​e​ ​b​l​u​e​t​o​o​t​h​ ​e​n​a​b​l​e​d​ ​a​n​d​ ​l​o​c​a​t​i​o​n​ ​s​e​r​v​i​c​e​s​ ​a​r​e​ ​o​n
+	 * P​l​e​a​s​e​ ​m​a​k​e​ ​s​u​r​e​ ​y​o​u​r​ ​L​e​d​g​e​r​ ​i​s​ ​u​n​l​o​c​k​e​d​,​ ​t​h​e​ ​b​l​u​e​t​o​o​t​h​ ​e​n​a​b​l​e​d​ ​a​n​d​ ​l​o​c​a​t​i​o​n​ ​s​e​r​v​i​c​e​s​ ​a​r​e​ ​o​n​ ​(​o​n​l​y​ ​l​e​d​g​e​r​s​ ​w​i​t​h​ ​b​l​u​e​t​o​o​t​h​ ​a​r​e​ ​s​u​p​p​o​r​t​e​d​ ​a​t​ ​t​h​i​s​ ​t​i​m​e​)
 	 */
 	WALLET_LEDGER_SELECT_DEVICE_SB: string
 	/**
@@ -2793,7 +2873,7 @@ export type TranslationFunctions = {
 	 */
 	BD_IMPORT_WALLET_TYPE: () => LocalizedString
 	/**
-	 * To access your previous wallet, you can enter your 12/24-words recovery phrase.
+	 * To access your previous wallet, you can enter your recovery phrase, private key or keystore file.
 	 */
 	BD_IMPORT_WALLET_TYPE_SEED: () => LocalizedString
 	/**
@@ -2801,7 +2881,7 @@ export type TranslationFunctions = {
 	 */
 	BD_IMPORT_WALLET_TYPE_HARDWARE: () => LocalizedString
 	/**
-	 * Import your wallet with your secret recovery phrase. Enter your wallet’s 12/24-words recovery phrase
+	 * Import your wallet. Enter your wallet’s recovery phrase, private key or keystore file.
 	 */
 	BD_WALLET_IMPORT_LOCAL: () => LocalizedString
 	/**
@@ -3213,9 +3293,9 @@ export type TranslationFunctions = {
 	 */
 	TITLE_RENAME: (arg: { type: string }) => LocalizedString
 	/**
-	 * Buy VechainThor tokens
+	 * Unlock keystore
 	 */
-	TITLE_BUY: () => LocalizedString
+	TITLE_UNLOCK_KEYSTORE: () => LocalizedString
 	/**
 	 * Which kind of wallet do you want to import?
 	 */
@@ -3369,6 +3449,10 @@ export type TranslationFunctions = {
 	 */
 	SB_USER_PASSWORD: () => LocalizedString
 	/**
+	 * Insert your keystore password
+	 */
+	SB_INSERT_KEYSTORE_PASSWORD: () => LocalizedString
+	/**
 	 * Face ID
 	 */
 	FACE_ID: () => LocalizedString
@@ -3484,6 +3568,10 @@ export type TranslationFunctions = {
 	 * Reset App
 	 */
 	COMMON_BTN_RESET: () => LocalizedString
+	/**
+	 * Unlock
+	 */
+	COMMON_BTN_UNLOCK: () => LocalizedString
 	/**
 	 * and
 	 */
@@ -3674,18 +3762,49 @@ Try reconnect your device to the internet.
 	 */
 	ALERT_CANT_BACKUP_LEDGER: () => LocalizedString
 	/**
+	 * New version
+	 */
+	ALERT_TITLE_NEW_VERSION: () => LocalizedString
+	/**
+	 * A new version {version} is out now. Please update to the latest version
+	 */
+	ALERT_MSG_NEW_VERSION: (arg: { version: string }) => LocalizedString
+	/**
+	 * Update now
+	 */
+	ALERT_OPTION_UPDATE_NOW: () => LocalizedString
+	/**
+	 * Ask me later
+	 */
+	ALERT_OPTION_ASK_ME_LATER: () => LocalizedString
+	/**
 	 * Something went wrong!
 	 */
 	ERROR_GENERIC_SUBTITLE: () => LocalizedString
 	/**
 	 * We apologise for the inconvenience.
-Please, try again later.
 	 */
-	ERROR_GENERIC_BODY: () => LocalizedString
+	ERROR_GENERIC_BODY_01: () => LocalizedString
+	/**
+	 * Please, try closing and reopening the app.
+	 */
+	ERROR_GENERIC_BODY_02: () => LocalizedString
+	/**
+	 * Incorrect import data
+	 */
+	ERROR_INCORRECT_IMPORT_DATA: () => LocalizedString
 	/**
 	 * Incorrect mnemonic phrase
 	 */
 	ERROR_INCORRECT_MNEMONIC: () => LocalizedString
+	/**
+	 * Incorrect private key
+	 */
+	ERROR_INCORRECT_PRIVATE_KEY: () => LocalizedString
+	/**
+	 * Incorrect password
+	 */
+	ERROR_INCORRECT_PASSWORD: () => LocalizedString
 	/**
 	 * Wrong words combination
 	 */
@@ -3769,7 +3888,7 @@ Please, try again later.
 	/**
 	 * Too many biometrics authentication attempts, please try again later
 	 */
-	ERROR_TOO_MANY_BIOMETRICS_AUTH_ATTEMPS: () => LocalizedString
+	ERROR_TOO_MANY_BIOMETRICS_AUTH_ATTEMPTS: () => LocalizedString
 	/**
 	 * Error creating wallet
 	 */
@@ -4187,9 +4306,41 @@ Please, try again later.
 	 */
 	SHOW_COLLECTION: () => LocalizedString
 	/**
+	 * Bring back your hidden collection
+	 */
+	SHOW_COLLECTION_SUBTITLE: () => LocalizedString
+	/**
 	 * Hide collection
 	 */
 	HIDE_COLLECTION: () => LocalizedString
+	/**
+	 * Hide unwanted collections.
+	 */
+	HIDE_COLLECTION_SUBTITLE: () => LocalizedString
+	/**
+	 * Save image on device
+	 */
+	SAVE_IMAGE_ON_DEVICE: () => LocalizedString
+	/**
+	 * Save your NFT image in your Photo Album
+	 */
+	SAVE_IMAGE_ON_DEVICE_SUBTITLE: () => LocalizedString
+	/**
+	 * Share image
+	 */
+	SHARE_IMAGE: () => LocalizedString
+	/**
+	 * Share your NFT image with your friends
+	 */
+	SHARE_IMAGE_SUBTITLE: () => LocalizedString
+	/**
+	 * Error saving media
+	 */
+	SAVE_MEDIA_ERROR_TITLE: () => LocalizedString
+	/**
+	 * There was an error trying to save your media. Media type is unsupported.
+	 */
+	SAVE_MEDIA_ERROR_SUBTITLE: () => LocalizedString
 	/**
 	 * Unable to open marketplace
 	 */
@@ -4254,6 +4405,14 @@ Please, try again later.
 	 * Scores
 	 */
 	NFT_DETAIL_SCORES: () => LocalizedString
+	/**
+	 * NFT image saved to photo album
+	 */
+	NFT_ALERT_IMAGE_SAVED_TITLE: () => LocalizedString
+	/**
+	 * You have successfully saved the NFT image to your photo album
+	 */
+	NFT_ALERT_IMAGE_SAVED_MSG: () => LocalizedString
 	/**
 	 * Light
 	 */
@@ -4347,7 +4506,7 @@ Please, try again later.
 	 */
 	WALLET_MANAGEMENT_NOTIFICATION_CREATE_ACCOUNT_SUCCESS: () => LocalizedString
 	/**
-	 * Account created successfully
+	 * Failed to create account
 	 */
 	WALLET_MANAGEMENT_NOTIFICATION_CREATE_ACCOUNT_ERROR: () => LocalizedString
 	/**
@@ -4635,7 +4794,7 @@ Please, try again later.
 	 */
 	SEND_LEDGER_CHECK_CONNECTION: () => LocalizedString
 	/**
-	 * Please make sure your Ledger is unlocked with the bluetooth enabled and the VET app is open
+	 * Please make sure your Ledger is unlocked with the bluetooth enabled and the VET app is open (only ledgers with bluetooth are supported at this time)
 	 */
 	SEND_LEDGER_CHECK_CONNECTION_SB: () => LocalizedString
 	/**
@@ -4751,7 +4910,7 @@ Please, try again later.
 	 */
 	WALLET_LEDGER_MORE_DEVICES_FOUND: (arg: { count: number }) => LocalizedString
 	/**
-	 * Please make sure your Ledger is unlocked, the bluetooth enabled and location services are on
+	 * Please make sure your Ledger is unlocked, the bluetooth enabled and location services are on (only ledgers with bluetooth are supported at this time)
 	 */
 	WALLET_LEDGER_SELECT_DEVICE_SB: () => LocalizedString
 	/**

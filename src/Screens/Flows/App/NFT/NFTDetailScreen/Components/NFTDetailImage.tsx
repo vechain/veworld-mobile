@@ -13,8 +13,17 @@ export const NFTDetailImage = ({ nft }: Props) => {
     const theme = useTheme()
 
     const renderMedia = useMemo(() => {
-        return <NFTMedia uri={nft.image} styles={baseStyles.nftImage} />
-    }, [nft.image])
+        return (
+            <NFTMedia
+                uri={nft.image}
+                nftName={nft.name}
+                styles={baseStyles.nftImage}
+                isUseLongPress
+                isPlayAudio
+                useNativeControls
+            />
+        )
+    }, [nft.image, nft.name])
 
     return (
         <BaseView>

@@ -74,7 +74,6 @@ export const GeneralScreen = () => {
     return (
         <Layout
             safeAreaTestID="General_Screen"
-            isScrollEnabled={devFeaturesEnabled}
             body={
                 <BaseView pt={16}>
                     <BaseText typographyFont="title">

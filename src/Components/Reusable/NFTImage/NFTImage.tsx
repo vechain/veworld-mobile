@@ -2,6 +2,7 @@ import React, { memo, useMemo } from "react"
 import FastImage, { FastImageProps } from "react-native-fast-image"
 import { useTheme } from "~Hooks"
 import { BaseView } from "~Components/Base"
+import { NFTPlaceholderDark, NFTPlaceholderLight } from "~Assets"
 
 type Props = {
     uri?: string
@@ -13,9 +14,7 @@ export const NFTImage = memo((props: Props) => {
     const theme = useTheme()
 
     const placeholderImg = useMemo(() => {
-        return theme.isDark
-            ? require("../../../Assets/Img/NFTPlaceholder_Dark.png")
-            : require("../../../Assets/Img/NFTPlaceholder_Light.png")
+        return theme.isDark ? NFTPlaceholderDark : NFTPlaceholderLight
     }, [theme.isDark])
 
     return (
@@ -29,7 +28,6 @@ export const NFTImage = memo((props: Props) => {
                     style,
                 ]}
                 fallback
-                // TODO (Vas) (https://github.com/vechainfoundation/veworld-mobile/issues/749) change fallback image
                 defaultSource={placeholderImg}
                 source={{
                     uri,

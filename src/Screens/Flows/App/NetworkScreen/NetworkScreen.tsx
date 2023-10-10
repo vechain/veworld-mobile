@@ -10,7 +10,6 @@ import {
     SelectNetworkBottomSheet,
 } from "./Components"
 import { Routes } from "~Navigation"
-import { isSmallScreen } from "~Constants"
 
 export const ChangeNetworkScreen = () => {
     const nav = useNavigation()
@@ -30,7 +29,6 @@ export const ChangeNetworkScreen = () => {
     return (
         <Layout
             safeAreaTestID="NetworkScreen"
-            isScrollEnabled={isSmallScreen}
             body={
                 <>
                     <BaseView pt={16}>
