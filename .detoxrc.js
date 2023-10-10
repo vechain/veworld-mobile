@@ -68,7 +68,7 @@ module.exports = {
             device: "simulator",
             app: "ios.debug",
         },
-        "ios.sim.debug:xcode-14.2": {
+        "ios.sim.debug_xcode_14.2": {
             device: "simulator_14_2",
             app: "ios.debug",
         },

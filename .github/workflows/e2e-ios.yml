@@ -86,7 +86,7 @@ jobs:
             - name: Detox build iOS Debug
               # if: steps.detox-cache-restore.outputs.cache-hit != 'true'
               timeout-minutes: 60
-              run: SKIP_SENTRY=true yarn detox build --configuration ios.sim.debug:xcode-14.2 # GH macos-latest has Xcode 14.2
+              run: SKIP_SENTRY=true yarn detox build --configuration ios.sim.debug_xcode_14.2 # GH macos-latest has Xcode 14.2
 
             # Save Detox build cache
             # - name: Save Detox build
@@ -100,7 +100,7 @@ jobs:
             # Test with Detox
             - name: Detox test iOS Debug
               timeout-minutes: 40
-              run: yarn detox test --configuration ios.sim.debug-xcode-14.2 --cleanup --headless --record-logs all
+              run: yarn detox test --configuration ios.sim.debug_xcode_14.2 --cleanup --headless --record-logs all
 
             # Upload artifacts Detox
             - name: Upload detox fail artifacts
