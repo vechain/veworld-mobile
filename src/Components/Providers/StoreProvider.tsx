@@ -27,7 +27,7 @@ import {
     useApplicationSecurity,
 } from "~Components/Providers"
 import { Reducer } from "redux"
-import { warn } from "~Utils"
+import { debug } from "~Utils"
 import { MMKV } from "react-native-mmkv"
 import { SplashScreen } from "../../../src/SplashScreen"
 import { PersistConfig } from "redux-persist/es/types"
@@ -59,7 +59,7 @@ const StoreContextProvider = ({ children }: StoreContextProviderProps) => {
         )
 
         if (store.current) {
-            warn("Replacing store")
+            debug("Replacing store")
             store.current.replaceReducer(persistedReducer)
         } else {
             let middlewares: any[] = []

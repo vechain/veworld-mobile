@@ -133,7 +133,7 @@ PODS:
   - libwebp/sharpyuv (1.3.2)
   - libwebp/webp (1.3.2):
     - libwebp/sharpyuv
-  - lottie-ios (4.3.3)
+  - lottie-ios (4.3.2)
   - lottie-react-native (6.3.1):
     - lottie-ios (~> 4.3.0)
     - React-Core
@@ -525,9 +525,9 @@ PODS:
     - React-RCTImage
   - RNScrypt (1.2.1):
     - React
-  - RNSentry (5.10.0):
+  - RNSentry (5.11.0):
     - React-Core
-    - Sentry/HybridSDK (= 8.11.0)
+    - Sentry/HybridSDK (= 8.13.0)
   - RNSVG (13.4.0):
     - React-Core
   - SDWebImage (5.11.1):
@@ -536,9 +536,9 @@ PODS:
   - SDWebImageWebPCoder (0.8.5):
     - libwebp (~> 1.0)
     - SDWebImage/Core (~> 5.10)
-  - Sentry/HybridSDK (8.11.0):
-    - SentryPrivate (= 8.11.0)
-  - SentryPrivate (8.11.0)
+  - Sentry/HybridSDK (8.13.0):
+    - SentryPrivate (= 8.13.0)
+  - SentryPrivate (8.13.0)
   - SocketRocket (0.6.1)
   - UMAppLoader (4.0.0)
   - Yoga (1.14.0)
@@ -904,7 +904,7 @@ SPEC CHECKSUMS:
   hermes-engine: 2af7b7a59128f250adfd86f15aa1d5a2ecd39995
   libevent: 4049cae6c81cdb3654a443be001fb9bdceff7913
   libwebp: 1786c9f4ff8a279e4dac1e8f385004d5fc253009
-  lottie-ios: 25e7b2675dad5c3ddad369ac9baab03560c5bfdd
+  lottie-ios: 48af491639ba6e8bb7cfaf7649b8a339487da935
   lottie-react-native: c9f1db4f4124dcce9f8159e65d8dc6e8bcb11fb4
   Mixpanel-swift: d7c7c6a2f7c65f735af3cb4746ed61a5aab0e551
   MixpanelReactNative: 07c808338a1eb69b0c9077668e3acfb0b2dd6689
@@ -965,12 +965,12 @@ SPEC CHECKSUMS:
   RNReanimated: 6668b0587bebd4b15dd849b99e5a9c70fc12ed95
   RNScreens: 85d3880b52d34db7b8eeebe2f1a0e807c05e69fa
   RNScrypt: 95fdef077b482e9fdf8a761120cb69d129ef4016
-  RNSentry: 11917f7bf3e28806aca4c2791c6ba7522d8f09fe
+  RNSentry: 326fbf8a574cb1994f384b83c3cf5d3ccd05a1f9
   RNSVG: 07dbd870b0dcdecc99b3a202fa37c8ca163caec2
   SDWebImage: a7f831e1a65eb5e285e3fb046a23fcfbf08e696d
   SDWebImageWebPCoder: 908b83b6adda48effe7667cd2b7f78c897e5111d
-  Sentry: 39d57e691e311bdb73bc1ab5bbebbd6bc890050d
-  SentryPrivate: 48712023cdfd523735c2edb6b06bedf26c4730a3
+  Sentry: a067ca1db308066097314d8478e9682f3b575dee
+  SentryPrivate: 917c91aeb0f199cd079404fab2b50c83e4bad25c
   SocketRocket: f32cd54efbe0f095c4d7594881e52619cfe80b17
   UMAppLoader: 354d71d2d2ce8d6c19fb13d72b9c8209b18a8c56
   Yoga: 99caf8d5ab45e9d637ee6e0174ec16fbbb01bcfc
@@ -979,4 +979,4 @@ SPEC CHECKSUMS:
 
 PODFILE CHECKSUM: b40d147878bdb635d34571957b36f0013be9bfa2
 
-COCOAPODS: 1.12.1
+COCOAPODS: 1.13.0
