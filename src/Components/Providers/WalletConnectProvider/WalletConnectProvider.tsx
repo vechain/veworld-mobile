@@ -7,6 +7,7 @@ import { useWcRequest } from "./hooks"
 import { IWeb3WalletEngine } from "@walletconnect/web3wallet/dist/types/types/engine"
 import { cloneDeep } from "lodash"
 import { SignClientTypes } from "@walletconnect/types"
+import { useNavigation } from "@react-navigation/native"
 
 /**
  * Wallet Connect Flow:
@@ -57,6 +58,8 @@ const WalletConnectContextProvider = ({
         disconnectSession,
     } = useWcSessions(setActiveSessions)
 
+    const nav = useNavigation()
+
     const [linkingUrls, setLinkingUrls] = useState<string[]>([])
 
     const [sessionProposals, setSessionProposals] = useState<
@@ -70,6 +73,9 @@ const WalletConnectContextProvider = ({
     >({})
 
     useEffect(() => {
+        if (!nav || !WalletConnectUtils.shouldAutoNavigate(nav.getState()))
+            return
+
         const proposalKeys = Object.keys(sessionProposals)
 
         if (proposalKeys.length > 0) {
@@ -85,13 +91,16 @@ const WalletConnectContextProvider = ({
 
             onSessionProposal(proposal)
         }
-    }, [sessionProposals, onSessionProposal])
+    }, [nav, sessionProposals, onSessionProposal])
 
     useEffect(() => {
+        if (!nav || !WalletConnectUtils.shouldAutoNavigate(nav.getState()))
+            return
+
         const requestKeys = Object.keys(sessionRequests)
 
         if (requestKeys.length > 0) {
-            const request = cloneDeep(sessionRequests[requestKeys[0]])
+            const request = sessionRequests[requestKeys[0]]
 
             debug("Processing WC Session Request", request.id)
 
@@ -103,7 +112,7 @@ const WalletConnectContextProvider = ({
 
             onSessionRequest(request)
         }
-    }, [onSessionRequest, sessionRequests])
+    }, [nav, onSessionRequest, sessionRequests])
 
     useEffect(() => {
         const deleteKeys = Object.keys(sessionDeletes)
