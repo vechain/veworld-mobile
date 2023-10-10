@@ -5,7 +5,6 @@ import {
     ContactsScreen,
     HomeFlows,
     ContactsManagementFlows,
-    closeBottomSheet,
     textShouldBeVisible,
     textShouldNotBeVisible,
 } from "../helpers"
@@ -85,14 +84,6 @@ Then(
 Then("The user should see the address exists error message", async () => {
     await textShouldBeVisible("Address already exists in contacts")
 })
-
-Then(
-    "The user closes the {string} bottom sheet",
-    { timeout: -1 },
-    async (name: string) => {
-        await closeBottomSheet(name)
-    },
-)
 
 Then("The user should see the address invalid error message", async () => {
     await textShouldBeVisible("Please enter a valid Vechain address")
