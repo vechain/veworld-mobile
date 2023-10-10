@@ -143,7 +143,7 @@ export const WalletSuccessScreen: FC<Props> = ({ route }) => {
         onPasswordSuccess,
         checkIdentityBeforeOpening,
         isBiometricsEmpty,
-    } = useCheckIdentity({ onIdentityConfirmed, allowAutoPassword: true })
+    } = useCheckIdentity({ onIdentityConfirmed, allowAutoPassword: false })
     /**
      * On first onboarding, create the wallet and set the security type selected by the user (biometric or secret)
      */

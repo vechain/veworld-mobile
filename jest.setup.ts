@@ -44,6 +44,8 @@ jest.mock("react-native-blob-util", () => ({
     },
 }))
 
+jest.mock("@sentry/react-native", () => {})
+
 jest.mock("react-native-bootsplash", () => {})
 
 jest.mock("@react-native-camera-roll/camera-roll", () => {})

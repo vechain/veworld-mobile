@@ -21,13 +21,14 @@ import {
 } from "~Navigation"
 import { useI18nContext } from "~i18n"
 import { CreateContactBottomSheet } from "./Components"
+import { address as addressThor } from "thor-devkit"
 
 type Props = NativeStackScreenProps<
     RootStackParamListHome | RootStackParamListNFT,
     Routes.INSERT_ADDRESS_SEND
 >
 
-const CONTACT_CARD_DEFAULT_HIGHT = 72
+const CONTACT_CARD_DEFAULT_HIGHT = 73
 const ACCOUNT_CARD_DEFAULT_HIGHT = 86
 
 export const InsertAddressSendScreen = ({ route }: Props) => {
@@ -66,11 +67,11 @@ export const InsertAddressSendScreen = ({ route }: Props) => {
                 nav.navigate(Routes.SEND_NFT_RECAP, {
                     contractAddress: params.contractAddress!,
                     tokenId: params.tokenId!,
-                    receiverAddress: selectedAddress,
+                    receiverAddress: address,
                 })
             }
         },
-        [route.params, nav, selectedAddress],
+        [route.params, nav],
     )
 
     const {
@@ -92,7 +93,7 @@ export const InsertAddressSendScreen = ({ route }: Props) => {
 
     const onNext = useCallback(() => {
         if (isAddressInContactsOrAccounts && selectedAddress) {
-            navigateNext(selectedAddress)
+            navigateNext(addressThor.toChecksumed(selectedAddress))
         } else {
             Keyboard.dismiss()
             openCreateContactSheet()
@@ -123,7 +124,7 @@ export const InsertAddressSendScreen = ({ route }: Props) => {
                         <BaseAccordion
                             defaultIsOpen={!!filteredContacts.length}
                             extraData={filteredContacts.length}
-                            itmeHeight={CONTACT_CARD_DEFAULT_HIGHT}
+                            itemHeight={CONTACT_CARD_DEFAULT_HIGHT}
                             headerComponent={
                                 <BaseView flexDirection="row">
                                     <BaseText>
@@ -165,7 +166,7 @@ export const InsertAddressSendScreen = ({ route }: Props) => {
                         <BaseAccordion
                             defaultIsOpen={!!filteredAccounts.length}
                             extraData={filteredAccounts.length}
-                            itmeHeight={ACCOUNT_CARD_DEFAULT_HIGHT}
+                            itemHeight={ACCOUNT_CARD_DEFAULT_HIGHT}
                             headerComponent={
                                 <BaseView flexDirection="row">
                                     <BaseText>

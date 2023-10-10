@@ -88,6 +88,7 @@
         "async-mutex": "^0.4.0",
         "axios": "^0.27.2",
         "babel-plugin-module-resolver": "^4.1.0",
+        "basil-ws-flipper": "^1.0.0",
         "buffer": "^6.0.3",
         "eslint-plugin-es": "^4.1.0",
         "eth-rpc-errors": "^4.0.3",

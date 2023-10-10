@@ -5,6 +5,7 @@ import React, {
     Ref,
     useCallback,
     useMemo,
+    useState,
 } from "react"
 import {
     BaseSafeArea,
@@ -27,7 +28,6 @@ type Props = {
     body?: ReactNode
     fixedBody?: ReactNode
     footer?: ReactNode
-    isScrollEnabled?: boolean
     safeAreaTestID?: string
     scrollViewTestID?: string
     showSelectedNetwork?: boolean
@@ -51,7 +51,6 @@ export const Layout = ({
     body,
     fixedBody,
     footer,
-    isScrollEnabled = true,
     safeAreaTestID,
     onTouchBody,
     scrollViewTestID,
@@ -82,6 +81,9 @@ export const Layout = ({
         ),
         [title],
     )
+
+    const [scrollViewHeight, setScrollViewHeight] = useState(0)
+    const [scrollViewContentHeight, setScrollViewContentHeight] = useState(0)
 
     const renderContent = useMemo(
         () => (
@@ -118,10 +120,19 @@ export const Layout = ({
 
                 {body && (
                     <BaseScrollView
+                        onContentSizeChange={(_w: number, h: number) => {
+                            setScrollViewContentHeight(h)
+                        }}
+                        onLayout={event => {
+                            const { height } = event.nativeEvent.layout
+                            setScrollViewHeight(height)
+                        }}
                         ref={scrollViewRef}
                         refreshControl={refreshControl}
                         testID={scrollViewTestID || "Layout_ScrollView"}
-                        scrollEnabled={isScrollEnabled}
+                        scrollEnabled={
+                            scrollViewContentHeight > scrollViewHeight
+                        }
                         style={noMargin ? {} : styles.scrollView}
                         // eslint-disable-next-line react-native/no-inline-styles
                         contentContainerStyle={{
@@ -163,7 +174,8 @@ export const Layout = ({
             fixedBody,
             fixedHeader,
             footer,
-            isScrollEnabled,
+            scrollViewContentHeight,
+            scrollViewHeight,
             noBackButton,
             noMargin,
             onGoBack,
