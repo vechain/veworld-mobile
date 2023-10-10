@@ -3,7 +3,7 @@ import { WebView, WebViewMessageEvent } from "react-native-webview"
 import { generateOnRampURL } from "@coinbase/cbpay-js"
 import "react-native-url-polyfill/auto"
 import { useNavigation } from "@react-navigation/native"
-import { COINBASE_APP_ID, VECHAIN_BLOCKCHAIN } from "./Constants"
+import { VECHAIN_BLOCKCHAIN } from "./Constants"
 import { PlatformUtils, debug, ErrorMessageUtils } from "~Utils"
 import { BaseActivityIndicator, BaseView } from "~Components"
 import { StatusBar, StyleSheet } from "react-native"
@@ -22,7 +22,7 @@ export const CoinbasePayWebView = (props: {
 
     const coinbaseURL = useMemo(() => {
         const options = {
-            appId: COINBASE_APP_ID,
+            appId: process.env.REACT_APP_COINBASE_APP_ID as string,
             destinationWallets: [
                 {
                     address: props.destinationAddress,
