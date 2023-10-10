@@ -11,7 +11,6 @@ import {
     Layout,
     useThor,
 } from "~Components"
-import { isSmallScreen } from "~Constants"
 import { AccountWithDevice, DEVICE_TYPE, LocalAccountWithDevice } from "~Model"
 import { DelegationType } from "~Model/Delegation"
 import { Routes } from "~Navigation"
@@ -110,7 +109,6 @@ export const SettingsTransactionsScreen = () => {
     return (
         <Layout
             safeAreaTestID="SettingsTransactionsScreen"
-            isScrollEnabled={isSmallScreen}
             body={
                 <BaseView pt={16}>
                     <BaseText typographyFont="title">
