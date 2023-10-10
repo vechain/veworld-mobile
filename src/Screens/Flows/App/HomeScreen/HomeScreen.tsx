@@ -1,11 +1,11 @@
-import React, { useCallback, useRef, useState } from "react"
+import React, { useCallback, useMemo, useRef, useState } from "react"
 import {
     AccountManagementBottomSheet,
     EditTokensBar,
     Header,
-    HeaderView,
     TokenList,
     RemoveAccountWarningBottomSheet,
+    AccountCard,
 } from "./Components"
 import {
     useBottomSheetModal,
@@ -16,8 +16,10 @@ import {
 } from "~Hooks"
 import {
     AddAccountBottomSheet,
+    BaseIcon,
     BaseSpacer,
     BaseView,
+    FastActionsBar,
     Layout,
     QRCodeBottomSheet,
     RenameAccountBottomSheet,
@@ -30,15 +32,17 @@ import { useTokenBalances, useAccountDelete } from "./Hooks"
 import {
     selectAccounts,
     selectBalanceVisible,
+    selectCurrency,
     selectSelectedAccount,
     selectVisibleAccounts,
     useAppSelector,
 } from "~Storage/Redux"
-import { AccountWithDevice } from "~Model"
+import { AccountWithDevice, FastAction } from "~Model"
 import { useI18nContext } from "~i18n"
 import { RefreshControl } from "react-native"
-import { useScrollToTop } from "@react-navigation/native"
+import { useNavigation, useScrollToTop } from "@react-navigation/native"
 import { NestableScrollContainer } from "react-native-draggable-flatlist"
+import { Routes } from "~Navigation"
 
 export const HomeScreen = () => {
     const { updateBalances, updateSuggested } = useTokenBalances()
@@ -161,6 +165,32 @@ export const HomeScreen = () => {
 
     useCheckVersion()
 
+    const nav = useNavigation()
+
+    const Actions: FastAction[] = useMemo(
+        () => [
+            {
+                name: LL.BTN_SEND(),
+                action: () =>
+                    nav.navigate(Routes.SELECT_TOKEN_SEND, {
+                        initialRoute: Routes.HOME,
+                    }),
+                icon: (
+                    <BaseIcon color={theme.colors.text} name="send-outline" />
+                ),
+                testID: "sendButton",
+            },
+            {
+                name: LL.BTN_HISTORY(),
+                action: () => nav.navigate(Routes.HISTORY),
+                icon: <BaseIcon color={theme.colors.text} name="history" />,
+                testID: "historyButton",
+            },
+        ],
+        [LL, nav, theme.colors.text],
+    )
+    const selectedCurrency = useAppSelector(selectCurrency)
+
     return (
         <Layout
             fixedHeader={<Header />}
@@ -179,14 +209,24 @@ export const HomeScreen = () => {
                         ref={scrollViewRef}
                         testID="HomeScreen_ScrollView">
                         <BaseView>
-                            <HeaderView
-                                openAccountManagementSheet={
-                                    openAccountManagementSheet
-                                }
-                                openSelectAccountBottomSheet={
-                                    openSelectAccountBottomSheet
-                                }
-                            />
+                            <BaseView alignItems="center">
+                                <BaseSpacer height={20} />
+                                <AccountCard
+                                    balanceVisible={isBalanceVisible}
+                                    openAccountManagement={
+                                        openAccountManagementSheet
+                                    }
+                                    openSelectAccountBottomSheet={
+                                        openSelectAccountBottomSheet
+                                    }
+                                    account={selectedAccount}
+                                    selectedCurrency={selectedCurrency}
+                                />
+                            </BaseView>
+                            <BaseSpacer height={24} />
+
+                            <FastActionsBar actions={Actions} />
+
                             <BaseSpacer height={24} />
                             <EditTokensBar
                                 isEdit={isEdit}
