@@ -694,6 +694,10 @@ type RootTranslation = {
 	 */
 	TITLE_RENAME: RequiredParams<'type'>
 	/**
+	 * B​u​y​ ​V​e​c​h​a​i​n​T​h​o​r​ ​t​o​k​e​n​s
+	 */
+	TITLE_BUY: string
+	/**
 	 * U​n​l​o​c​k​ ​k​e​y​s​t​o​r​e
 	 */
 	TITLE_UNLOCK_KEYSTORE: string
@@ -3292,6 +3296,10 @@ export type TranslationFunctions = {
 	 * Rename {type}
 	 */
 	TITLE_RENAME: (arg: { type: string }) => LocalizedString
+	/**
+	 * Buy VechainThor tokens
+	 */
+	TITLE_BUY: () => LocalizedString
 	/**
 	 * Unlock keystore
 	 */
