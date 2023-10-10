@@ -59,11 +59,6 @@ if (__DEV__ && process.env.REACT_APP_UI_LOG === "false") {
     LogBox.ignoreAllLogs()
 }
 
-if (__DEV__) {
-    // Debug websockets
-    require("basil-ws-flipper").wsDebugPlugin
-}
-
 const Main = () => {
     const [fontsLoaded] = useFonts({
         [fontFamily["Inter-Bold"]]: Inter_Bold,
