@@ -18,7 +18,7 @@ import { useNavigation } from "@react-navigation/native"
 import { useI18nContext } from "~i18n"
 import { useAnalyticTracking, useSetSelectedAccount } from "~Hooks"
 import { getSdkError } from "@walletconnect/utils"
-import { rpcErrors } from "@metamask/rpc-errors"
+import { getRpcError } from "~Components/Providers/WalletConnectProvider/errors/rpcErrors"
 
 export const useWcRequest = () => {
     const nav = useNavigation()
@@ -66,8 +66,6 @@ export const useWcRequest = () => {
                     text1: LL.NOTIFICATION_DAPP_INVALID_REQUEST(),
                 })
 
-                const rpcError = rpcErrors.invalidRequest()
-
                 const web3Wallet = await WalletConnectUtils.getWeb3Wallet()
 
                 await web3Wallet.respondSessionRequest({
@@ -76,10 +74,7 @@ export const useWcRequest = () => {
                         id: requestEvent.id,
                         jsonrpc:
                             "The request does not contain a valid certificate message",
-                        error: {
-                            message: rpcError.message,
-                            code: rpcError.code,
-                        },
+                        error: getRpcError("invalidRequest"),
                     },
                 })
             }
@@ -120,8 +115,6 @@ export const useWcRequest = () => {
                     text1: LL.NOTIFICATION_DAPP_INVALID_REQUEST(),
                 })
 
-                const rpcError = rpcErrors.invalidRequest()
-
                 const web3Wallet = await WalletConnectUtils.getWeb3Wallet()
 
                 await web3Wallet.respondSessionRequest({
@@ -130,10 +123,7 @@ export const useWcRequest = () => {
                         id: requestEvent.id,
                         jsonrpc:
                             "The request does not contain a valid transaction message",
-                        error: {
-                            code: rpcError.code,
-                            message: rpcError.message,
-                        },
+                        error: getRpcError("invalidRequest"),
                     },
                 })
             }
@@ -220,60 +210,78 @@ export const useWcRequest = () => {
      */
     const onSessionRequest = useCallback(
         async (requestEvent: PendingRequestTypes.Struct) => {
-            debug(
-                "Session request: ",
-                JSON.stringify({
-                    id: requestEvent.id,
-                    topic: requestEvent.topic,
-                    method: requestEvent.params.request.method,
-                }),
-            )
-
-            let session: SessionTypes.Struct
-
             const web3Wallet = await WalletConnectUtils.getWeb3Wallet()
 
             try {
-                // Get the session for this topic
-                session = web3Wallet.engine.signClient.session.get(
-                    requestEvent.topic,
+                debug(
+                    "Session request: ",
+                    JSON.stringify({
+                        id: requestEvent.id,
+                        topic: requestEvent.topic,
+                        method: requestEvent.params.request.method,
+                    }),
                 )
+
+                let session: SessionTypes.Struct
+
+                try {
+                    // Get the session for this topic
+                    session = web3Wallet.engine.signClient.session.get(
+                        requestEvent.topic,
+                    )
+                } catch (e) {
+                    warn(
+                        `Failed to get WC session for wallet: ${requestEvent.topic}`,
+                        Object.keys(web3Wallet.getActiveSessions()),
+                    )
+                    await web3Wallet.respondSessionRequest({
+                        topic: requestEvent.topic,
+                        response: {
+                            id: requestEvent.id,
+                            jsonrpc: "The specified session was not found",
+                            error: getSdkError(
+                                "INVALID_SESSION_SETTLE_REQUEST",
+                            ),
+                        },
+                    })
+                    return
+                }
+
+                // Switch to the requested account
+                const address = await switchAccount(session)
+
+                // Switch to the requested network
+                await switchNetwork(requestEvent, session)
+
+                // Show the screen based on the request method
+                switch (requestEvent.params.request.method) {
+                    case RequestMethods.SIGN_CERTIFICATE:
+                        await goToSignMessage(requestEvent, session, address)
+                        break
+                    case RequestMethods.REQUEST_TRANSACTION:
+                        await goToSendTransaction(
+                            requestEvent,
+                            session,
+                            address,
+                        )
+                        break
+                    default:
+                        error(
+                            "Wallet Connect Session Request Invalid Method",
+                            requestEvent.params.request.method,
+                        )
+                        break
+                }
             } catch (e) {
-                warn(
-                    `Failed to get WC session for wallet: ${requestEvent.topic}`,
-                    Object.keys(web3Wallet.getActiveSessions()),
-                )
+                error("Wallet Connect Session Request Error", e)
                 await web3Wallet.respondSessionRequest({
                     topic: requestEvent.topic,
                     response: {
                         id: requestEvent.id,
-                        jsonrpc: "The specified session was not found",
-                        error: getSdkError("INVALID_SESSION_SETTLE_REQUEST"),
+                        jsonrpc: "The request could not be processed",
+                        error: getRpcError("internal"),
                     },
                 })
-                return
-            }
-
-            // Switch to the requested account
-            const address = await switchAccount(session)
-
-            // Switch to the requested network
-            await switchNetwork(requestEvent, session)
-
-            // Show the screen based on the request method
-            switch (requestEvent.params.request.method) {
-                case RequestMethods.SIGN_CERTIFICATE:
-                    await goToSignMessage(requestEvent, session, address)
-                    break
-                case RequestMethods.REQUEST_TRANSACTION:
-                    await goToSendTransaction(requestEvent, session, address)
-                    break
-                default:
-                    error(
-                        "Wallet Connect Session Request Invalid Method",
-                        requestEvent.params.request.method,
-                    )
-                    break
             }
         },
         [switchAccount, switchNetwork, goToSendTransaction, goToSignMessage],

@@ -10,11 +10,11 @@ import {
 } from "~Components"
 import { useI18nContext } from "~i18n"
 import { useNavigation } from "@react-navigation/native"
-import { JsonRpcError } from "@metamask/rpc-errors/dist/classes"
-import { rpcErrors } from "@metamask/rpc-errors"
 import { Routes } from "~Navigation"
 import { selectSelectedAccountAddress, useAppSelector } from "~Storage/Redux"
 import { IWeb3Wallet } from "@walletconnect/web3wallet"
+import { getRpcError } from "~Components/Providers/WalletConnectProvider/errors/rpcErrors"
+import { ErrorResponse } from "@walletconnect/jsonrpc-types/dist/cjs/jsonrpc"
 
 type ApproveSession = (args: {
     id: number
@@ -173,7 +173,7 @@ export const useWcSessions = (
     const respondInvalidSession = useCallback(
         async (
             proposal: SignClientTypes.EventArguments["session_proposal"],
-            err: JsonRpcError<any>,
+            err: ErrorResponse,
         ) => {
             const web3Wallet = await WalletConnectUtils.getWeb3Wallet()
 
@@ -201,14 +201,14 @@ export const useWcSessions = (
                 )
 
             if (!selectedAccountAddress)
-                return respondInvalidSession(proposal, rpcErrors.internal())
+                return respondInvalidSession(proposal, getRpcError("internal"))
             if (!proposal.params.requiredNamespaces.vechain) {
                 showErrorToast({
                     text1: LL.NOTIFICATION_wallet_connect_incompatible_dapp(),
                 })
                 return respondInvalidSession(
                     proposal,
-                    rpcErrors.invalidRequest(),
+                    getRpcError("invalidRequest"),
                 )
             }
 
