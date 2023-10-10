@@ -12,7 +12,6 @@ import { useI18nContext } from "~i18n"
 import { useNavigation } from "@react-navigation/native"
 import { Routes } from "~Navigation"
 import { selectSelectedAccountAddress, useAppSelector } from "~Storage/Redux"
-import { IWeb3Wallet } from "@walletconnect/web3wallet"
 import { getRpcError } from "~Components/Providers/WalletConnectProvider/errors/rpcErrors"
 import { ErrorResponse } from "@walletconnect/jsonrpc-types/dist/cjs/jsonrpc"
 
@@ -124,22 +123,6 @@ export const useWcSessions = (
         [setActiveSessions, LL],
     )
 
-    const pingClient = useCallback(
-        async (topic: string, web3Wallet: IWeb3Wallet) => {
-            for (let i = 0; i < 5; i++) {
-                const id = Math.floor(Math.random() * 9000000) + 1000000
-
-                web3Wallet.events.emit("session_ping", {
-                    id,
-                    topic: topic,
-                })
-
-                await setTimeout(() => {}, 500)
-            }
-        },
-        [],
-    )
-
     const approveSession: ApproveSession = useCallback(
         async ({
             id,
@@ -161,13 +144,9 @@ export const useWcSessions = (
                 }
             })
 
-            pingClient(session.topic, web3Wallet).then(() => {
-                debug("Finished pinging client")
-            })
-
             return session
         },
-        [pingClient, setActiveSessions],
+        [setActiveSessions],
     )
 
     const respondInvalidSession = useCallback(

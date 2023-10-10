@@ -9,7 +9,7 @@ import {
     BaseBottomSheetTextInput,
 } from "~Components"
 import { useI18nContext } from "~i18n"
-import { insertContact, useAppDispatch } from "~Storage/Redux"
+import { createContact, insertContact, useAppDispatch } from "~Storage/Redux"
 import { Contact, ContactType } from "~Model"
 import { useContactValidation } from "~Screens/Flows/App/ContactsScreen"
 import { Keyboard } from "react-native"
@@ -29,11 +29,7 @@ export const CreateContactBottomSheet = React.forwardRef<
     const [alias, setAlias] = useState<string>("")
 
     const contact: Contact = useMemo(() => {
-        return {
-            alias,
-            address,
-            type: ContactType.KNOWN,
-        }
+        return createContact(alias, address, ContactType.KNOWN)
     }, [alias, address])
 
     const { validateName, validateAddress } = useContactValidation(
@@ -65,18 +61,10 @@ export const CreateContactBottomSheet = React.forwardRef<
         // this is a workaround to wait for keyboard to be dismissed before closing the bottom sheet, otherwise it won't close
         setTimeout(() => {
             onClose()
-            onSubmit(address)
+            onSubmit(contact.address)
             backToChooseMode()
         }, 200)
-    }, [
-        isFormValid,
-        dispatch,
-        contact,
-        onClose,
-        onSubmit,
-        address,
-        backToChooseMode,
-    ])
+    }, [isFormValid, dispatch, contact, onClose, onSubmit, backToChooseMode])
 
     const handleProceedAnywayButton = useCallback(() => {
         onClose()

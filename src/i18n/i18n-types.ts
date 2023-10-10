@@ -1179,10 +1179,13 @@ type RootTranslation = {
 	 */
 	ERROR_GENERIC_SUBTITLE: string
 	/**
-	 * W​e​ ​a​p​o​l​o​g​i​s​e​ ​f​o​r​ ​t​h​e​ ​i​n​c​o​n​v​e​n​i​e​n​c​e​.​
-​P​l​e​a​s​e​,​ ​t​r​y​ ​a​g​a​i​n​ ​l​a​t​e​r​.
+	 * W​e​ ​a​p​o​l​o​g​i​s​e​ ​f​o​r​ ​t​h​e​ ​i​n​c​o​n​v​e​n​i​e​n​c​e​.
 	 */
-	ERROR_GENERIC_BODY: string
+	ERROR_GENERIC_BODY_01: string
+	/**
+	 * P​l​e​a​s​e​,​ ​t​r​y​ ​c​l​o​s​i​n​g​ ​a​n​d​ ​r​e​o​p​e​n​i​n​g​ ​t​h​e​ ​a​p​p​.
+	 */
+	ERROR_GENERIC_BODY_02: string
 	/**
 	 * I​n​c​o​r​r​e​c​t​ ​i​m​p​o​r​t​ ​d​a​t​a
 	 */
@@ -3764,9 +3767,12 @@ Try reconnect your device to the internet.
 	ERROR_GENERIC_SUBTITLE: () => LocalizedString
 	/**
 	 * We apologise for the inconvenience.
-Please, try again later.
 	 */
-	ERROR_GENERIC_BODY: () => LocalizedString
+	ERROR_GENERIC_BODY_01: () => LocalizedString
+	/**
+	 * Please, try closing and reopening the app.
+	 */
+	ERROR_GENERIC_BODY_02: () => LocalizedString
 	/**
 	 * Incorrect import data
 	 */

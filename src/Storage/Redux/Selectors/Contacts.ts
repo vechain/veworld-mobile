@@ -1,6 +1,7 @@
 import { createSelector } from "@reduxjs/toolkit"
 import { RootState } from "../Types"
 import { Contact, ContactType } from "~Model"
+import { AddressUtils } from "~Utils"
 
 /**
  * selectContactsState: A selector to get the contacts state from the root state.
@@ -54,7 +55,9 @@ export const selectContactByAddress = createSelector(
         (_state, _address?: string) => _address,
     ],
     (contacts, _address) => {
-        return contacts.find((contact: Contact) => contact.address === _address)
+        return contacts.find((contact: Contact) =>
+            AddressUtils.compareAddresses(contact.address, _address),
+        )
     },
 )
 
@@ -69,8 +72,10 @@ export const selectContactsByAddresses = createSelector(
         (_state, _addresses?: string[]) => _addresses,
     ],
     (contacts: Contact[], _addresses) => {
-        return contacts.filter((contact: Contact) =>
-            _addresses?.includes(contact.address),
-        )
+        return contacts.filter((contact: Contact) => {
+            return !!_addresses?.find((_address: string) =>
+                AddressUtils.compareAddresses(_address, contact.address),
+            )
+        })
     },
 )

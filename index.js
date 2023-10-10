@@ -47,6 +47,10 @@ const { fontFamily } = typography
 // immer setup
 enableAllPlugins()
 
+if (__DEV__) {
+    require("basil-ws-flipper").wsDebugPlugin
+}
+
 const isHermes = () => !!global.HermesInternal
 info("is Hermes active : ", isHermes())
 
@@ -126,6 +130,7 @@ const SentryWrappedMain = Sentry.wrap(Main)
 const SentryInitialedMain = () => {
     const sentryTrackingEnabled = useAppSelector(selectSentryTrackingEnabled)
     const [initializedSentry, setInitializedSentry] = React.useState(false)
+
     useEffect(() => {
         if (sentryTrackingEnabled) {
             Sentry.init({

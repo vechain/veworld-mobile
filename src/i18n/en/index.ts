@@ -328,7 +328,8 @@ const en: BaseTranslation = {
 
     // Errors
     ERROR_GENERIC_SUBTITLE: "Something went wrong!",
-    ERROR_GENERIC_BODY: "We apologise for the inconvenience.\nPlease, try again later.",
+    ERROR_GENERIC_BODY_01: "We apologise for the inconvenience.",
+    ERROR_GENERIC_BODY_02: "Please, try closing and reopening the app.",
     ERROR_INCORRECT_IMPORT_DATA: "Incorrect import data",
     ERROR_INCORRECT_MNEMONIC: "Incorrect mnemonic phrase",
     ERROR_INCORRECT_PRIVATE_KEY: "Incorrect private key",
