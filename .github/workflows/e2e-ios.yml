@@ -72,7 +72,7 @@ jobs:
 
             # Start Metro Bundler
             - name: Start Metro Bundler
-              run: yarn react-native start &
+              run: yarn react-native start &> metro-bundler.log &
 
             # Restore Detox build cache
             # - name: Restore Detox build
@@ -100,12 +100,19 @@ jobs:
             # Test with Detox
             - name: Detox test iOS Debug
               timeout-minutes: 40
-              run: yarn detox test --configuration ios.sim.debug:xcode-14.2 --cleanup --headless --record-logs all
+              run: yarn detox test --configuration ios.sim.debug-xcode-14.2 --cleanup --headless --record-logs all
 
-            # Upload artifacts
-            - name: Upload artifacts
+            # Upload artifacts Detox
+            - name: Upload detox fail artifacts
               if: failure()
               uses: actions/upload-artifact@v3
               with:
                   name: detox-fail-artifacts
                   path: artifacts
+
+            - name: Upload Metro Bundler logs
+              if: failure()
+              uses: actions/upload-artifact@v2
+              with:
+                  name: metro-bundler-logs
+                  path: metro-bundler.log
