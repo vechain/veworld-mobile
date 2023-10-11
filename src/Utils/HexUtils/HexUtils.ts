@@ -37,7 +37,7 @@ const addPrefix = (hex: string): string => {
  * @throws an error if the input is not a valid hex string
  */
 const validate = (hex: string) => {
-    if (!isValid(hex)) throw Error(`Provided hex value is not valid ${hex}`)
+    if (!isValid(hex)) throw Error("Provided hex value is not valid")
 }
 
 /**

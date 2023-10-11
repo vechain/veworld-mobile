@@ -25,6 +25,7 @@ import {
     BaseText,
     DelegationOptions,
     FadeoutButton,
+    showErrorToast,
     showWarningToast,
 } from "~Components"
 import { error } from "~Utils"
@@ -125,6 +126,10 @@ export const useTransactionScreen = ({
                 }
             } catch (e) {
                 error("signAndSendTransaction", e)
+                showErrorToast({
+                    text1: LL.ERROR(),
+                    text2: LL.SEND_TRANSACTION_ERROR(),
+                })
                 onTransactionFailure(e)
             } finally {
                 setLoading(false)
