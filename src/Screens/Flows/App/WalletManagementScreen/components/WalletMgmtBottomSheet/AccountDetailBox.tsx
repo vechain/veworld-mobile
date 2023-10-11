@@ -1,6 +1,6 @@
 import React, { memo, useCallback, useMemo, useState } from "react"
 import { StyleSheet } from "react-native"
-import { useRenameAccount, useTheme } from "~Hooks"
+import { useRenameAccount, useThemedStyles } from "~Hooks"
 import { FormattingUtils } from "~Utils"
 import {
     BaseBottomSheetTextInput,
@@ -17,7 +17,7 @@ import {
     useAppSelector,
 } from "~Storage/Redux"
 import { toggleAccountVisibility } from "~Storage/Redux/Actions"
-import { VET } from "~Constants"
+import { ColorThemeType, VET } from "~Constants"
 
 type Props = {
     account: WalletAccount
@@ -27,7 +27,7 @@ type Props = {
 }
 export const AccountDetailBox: React.FC<Props> = memo(
     ({ account, isSelected, isBalanceVisible, confirmRemoveAccount }) => {
-        const theme = useTheme()
+        const { styles, theme } = useThemedStyles(baseStyles)
         const dispatch = useAppDispatch()
 
         const { changeAccountAlias } = useRenameAccount(account)
@@ -86,14 +86,17 @@ export const AccountDetailBox: React.FC<Props> = memo(
                     haptics="Light"
                     justifyContent="space-between"
                     bg={cardBgColor}
-                    containerStyle={baseStyles.container}>
-                    <BaseView style={baseStyles.aliasContainer}>
+                    innerContainerStyle={
+                        isSelected ? styles.selected : styles.notSelected
+                    }
+                    containerStyle={styles.container}>
+                    <BaseView style={styles.aliasContainer}>
                         <BaseBottomSheetTextInput
                             placeholder={account?.alias}
                             value={accountAlias}
                             setValue={onRenameAccount}
                             style={[
-                                baseStyles.alias,
+                                styles.alias,
                                 {
                                     backgroundColor: cardBgColor,
                                     opacity: cardOpacity,
@@ -106,8 +109,8 @@ export const AccountDetailBox: React.FC<Props> = memo(
                             onFocus={handleFocus}
                         />
                     </BaseView>
-                    <BaseView style={baseStyles.rightSubContainer}>
-                        <BaseText style={baseStyles.address} fontSize={10}>
+                    <BaseView style={styles.rightSubContainer}>
+                        <BaseText style={styles.address} fontSize={10}>
                             {FormattingUtils.humanAddress(
                                 account.address,
                                 4,
@@ -121,7 +124,7 @@ export const AccountDetailBox: React.FC<Props> = memo(
                 <BaseIcon
                     haptics="Light"
                     size={24}
-                    style={baseStyles.eyeIcon}
+                    style={styles.eyeIcon}
                     name={account.visible ? "eye-outline" : "eye-off-outline"}
                     bg={theme.colors.secondary}
                     disabled={isSelected}
@@ -130,7 +133,7 @@ export const AccountDetailBox: React.FC<Props> = memo(
                 <BaseIcon
                     haptics="Light"
                     size={24}
-                    style={baseStyles.deleteIcon}
+                    style={styles.deleteIcon}
                     name={"delete"}
                     bg={theme.colors.danger}
                     disabled={isSelected}
@@ -142,25 +145,34 @@ export const AccountDetailBox: React.FC<Props> = memo(
     },
 )
 
-const baseStyles = StyleSheet.create({
-    alias: {
-        flex: 1,
-        paddingHorizontal: 0,
-        marginLeft: -16,
-    },
-    aliasContainer: {
-        flex: 1,
-    },
-    address: {
-        opacity: 0.7,
-    },
-    container: {
-        flex: 1,
-    },
-    rightSubContainer: {
-        flexDirection: "column",
-        alignItems: "flex-end",
-    },
-    eyeIcon: { marginLeft: 16 },
-    deleteIcon: { marginLeft: 16 },
-})
+const baseStyles = (theme: ColorThemeType) =>
+    StyleSheet.create({
+        selected: {
+            borderWidth: 1.5,
+            borderColor: theme.colors.text,
+        },
+        notSelected: {
+            borderWidth: 1.5,
+            borderColor: theme.colors.card,
+        },
+        alias: {
+            flex: 1,
+            paddingHorizontal: 0,
+            marginLeft: -16,
+        },
+        aliasContainer: {
+            flex: 1,
+        },
+        address: {
+            opacity: 0.7,
+        },
+        container: {
+            flex: 1,
+        },
+        rightSubContainer: {
+            flexDirection: "column",
+            alignItems: "flex-end",
+        },
+        eyeIcon: { marginLeft: 16 },
+        deleteIcon: { marginLeft: 16 },
+    })
