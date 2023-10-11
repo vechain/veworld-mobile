@@ -1189,7 +1189,11 @@ type RootTranslation = {
 	/**
 	 * I​n​c​o​r​r​e​c​t​ ​i​m​p​o​r​t​ ​d​a​t​a
 	 */
-	ERROR_INCORRECT_IMPORT_DATA: string
+	ERROR_INVALID_IMPORT_DATA: string
+	/**
+	 * A​n​ ​u​n​k​n​o​w​n​ ​e​r​r​o​r​ ​o​c​c​u​r​r​e​d​ ​w​h​i​l​e​ ​i​m​p​o​r​t​i​n​g​ ​t​h​e​ ​w​a​l​l​e​t​.​ ​P​l​e​a​s​e​ ​t​r​y​ ​a​g​a​i​n​.
+	 */
+	ERROR_IMPORT_GENERIC: string
 	/**
 	 * I​n​c​o​r​r​e​c​t​ ​m​n​e​m​o​n​i​c​ ​p​h​r​a​s​e
 	 */
@@ -1199,9 +1203,13 @@ type RootTranslation = {
 	 */
 	ERROR_INCORRECT_PRIVATE_KEY: string
 	/**
-	 * I​n​c​o​r​r​e​c​t​ ​p​a​s​s​w​o​r​d
+	 * I​n​c​o​r​r​e​c​t​ ​p​a​s​s​w​o​r​d​.​ ​P​l​e​a​s​e​ ​t​r​y​ ​a​g​a​i​n​.
 	 */
 	ERROR_INCORRECT_PASSWORD: string
+	/**
+	 * T​h​i​s​ ​a​p​p​e​a​r​s​ ​t​o​ ​b​e​ ​a​ ​d​u​p​l​i​c​a​t​e​ ​o​f​ ​a​n​ ​e​x​i​s​t​i​n​g​ ​w​a​l​l​e​t
+	 */
+	ERROR_IMPORT_ADDRESS_EXISTS: string
 	/**
 	 * W​r​o​n​g​ ​w​o​r​d​s​ ​c​o​m​b​i​n​a​t​i​o​n
 	 */
@@ -3776,7 +3784,11 @@ Try reconnect your device to the internet.
 	/**
 	 * Incorrect import data
 	 */
-	ERROR_INCORRECT_IMPORT_DATA: () => LocalizedString
+	ERROR_INVALID_IMPORT_DATA: () => LocalizedString
+	/**
+	 * An unknown error occurred while importing the wallet. Please try again.
+	 */
+	ERROR_IMPORT_GENERIC: () => LocalizedString
 	/**
 	 * Incorrect mnemonic phrase
 	 */
@@ -3786,9 +3798,13 @@ Try reconnect your device to the internet.
 	 */
 	ERROR_INCORRECT_PRIVATE_KEY: () => LocalizedString
 	/**
-	 * Incorrect password
+	 * Incorrect password. Please try again.
 	 */
 	ERROR_INCORRECT_PASSWORD: () => LocalizedString
+	/**
+	 * This appears to be a duplicate of an existing wallet
+	 */
+	ERROR_IMPORT_ADDRESS_EXISTS: () => LocalizedString
 	/**
 	 * Wrong words combination
 	 */

@@ -1,7 +1,7 @@
 import { AddressUtils, DeviceUtils } from "~Utils"
 import { getNextDeviceIndex, useAppSelector } from "~Storage/Redux"
 import { selectAccounts, selectDevices } from "~Storage/Redux/Selectors"
-import { LocalDevice, Wallet } from "~Model"
+import { DEVICE_CREATION_ERRORS as ERRORS, LocalDevice, Wallet } from "~Model"
 import { getAddressFromXPub } from "~Utils/AddressUtils/AddressUtils"
 import * as i18n from "~i18n"
 
@@ -24,14 +24,13 @@ export const useDeviceUtils = () => {
         const deviceAlreadyExist = devices.find(d =>
             AddressUtils.compareAddresses(d.rootAddress, device.rootAddress),
         )
-        if (deviceAlreadyExist) throw new Error("Device already exists")
+        if (deviceAlreadyExist) throw new Error(ERRORS.ADDRESS_EXISTS)
 
         // Check if an account with the same address as the device root address already exists
         const accountAlreadyExist = accounts.find(a =>
             AddressUtils.compareAddresses(a.address, device.rootAddress),
         )
-        if (accountAlreadyExist)
-            throw new Error("An account with this address already exists")
+        if (accountAlreadyExist) throw new Error(ERRORS.ADDRESS_EXISTS)
 
         // Check if a device exists with the same root address as the first child account
         if (device.xPub) {
@@ -44,7 +43,7 @@ export const useDeviceUtils = () => {
                     ),
                 )
             )
-                throw new Error("A device with this address already exists")
+                throw new Error(ERRORS.ADDRESS_EXISTS)
         }
     }
 
@@ -55,7 +54,7 @@ export const useDeviceUtils = () => {
      */
     const createDevice = (mnemonic?: string[], privateKey?: string) => {
         if (!mnemonic && !privateKey)
-            throw new Error("No mnemonic or private key provided")
+            throw new Error(ERRORS.INVALID_IMPORT_DATA)
 
         const deviceIndex = getNextDeviceIndex(devices)
 
@@ -77,7 +76,7 @@ export const useDeviceUtils = () => {
                 deviceIndex,
                 alias,
             )
-        } else throw new Error("Failed to generate device")
+        } else throw new Error(ERRORS.UNKNOWN_ERROR)
 
         verifyDeviceDoesntExist(walletAndDevice.device)
 
