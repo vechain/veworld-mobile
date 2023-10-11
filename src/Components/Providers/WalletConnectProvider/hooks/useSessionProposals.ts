@@ -1,5 +1,5 @@
 import { useCallback, useEffect, useMemo, useState } from "react"
-import { debug, error, WalletConnectUtils, warn } from "~Utils"
+import { debug, WalletConnectUtils, warn } from "~Utils"
 import {
     getRpcError,
     SessionProposal,
@@ -130,16 +130,19 @@ export const useSessionProposals = (
 
         const proposal: SessionProposal = proposalList[0]
 
-        const timer: NodeJS.Timeout = setTimeout(() => {
-            if (isBlackListScreen()) return
+        let timer: NodeJS.Timeout
 
-            handlePendingProposal(proposal).catch(err => {
-                error(
-                    "useSessionProposal - failed to handle pending requset",
-                    err,
-                )
-            })
-        }, 1000)
+        //Process instantly
+        if (!isBlackListScreen()) {
+            handlePendingProposal(proposal)
+            //Or else check every second, and process if the user is not on a blacklisted screen
+        } else {
+            timer = setTimeout(() => {
+                if (isBlackListScreen()) return
+
+                handlePendingProposal(proposal)
+            }, 250)
+        }
 
         return () => clearTimeout(timer)
     }, [
