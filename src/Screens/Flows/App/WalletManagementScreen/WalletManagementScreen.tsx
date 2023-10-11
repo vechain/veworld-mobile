@@ -1,20 +1,19 @@
 import React, { useCallback, useRef, useState } from "react"
 import {
-    AddAccountBottomSheet,
     BaseView,
     DeviceBox,
     Layout,
     RequireUserPassword,
     SwipeableRow,
-    showSuccessToast,
     showWarningToast,
 } from "~Components"
-import { BaseDevice, Device } from "~Model"
+import { AccountWithDevice, BaseDevice, Device } from "~Model"
 import { setDeviceState, useAppSelector } from "~Storage/Redux"
 import { selectDevices } from "~Storage/Redux/Selectors"
 import {
-    CreateWalletOrAccountBottomSheet,
+    RemoveAccountWarningBottomSheet,
     RemoveWalletWarningBottomSheet,
+    useAccountDelete,
     useWalletDeletion,
     WalletManagementHeader,
     WalletMgmtBottomSheet,
@@ -29,6 +28,8 @@ import { SwipeableItemImperativeRef } from "react-native-swipeable-item"
 import DraggableFlatList, { RenderItem } from "react-native-draggable-flatlist"
 import { useDispatch } from "react-redux"
 import { useI18nContext } from "~i18n"
+import { useNavigation } from "@react-navigation/native"
+import { Routes } from "~Navigation"
 
 export const WalletManagementScreen = () => {
     const { tabBarBottomMargin } = useTabBarBottomMargin()
@@ -48,18 +49,6 @@ export const WalletManagementScreen = () => {
         allowAutoPassword: false,
     })
 
-    const {
-        ref: createWalletOrAccountBottomSheetRef,
-        onOpen: openCreateWalletOrAccountBottomSheet,
-        onClose: closeCreateWalletOrAccountBottomSheet,
-    } = useBottomSheetModal()
-
-    const {
-        ref: addAccountBottomSheetRef,
-        onOpen: openAddAccountBottomSheet,
-        onClose: closeAddAccountBottomSheet,
-    } = useBottomSheetModal()
-
     const { ref: walletMgmtBottomSheetRef, onOpen: openWalletMgmtSheet } =
         useBottomSheetModal()
 
@@ -67,6 +56,12 @@ export const WalletManagementScreen = () => {
         ref: removeWalletBottomSheetRef,
         onOpen: openRemoveWalletBottomSheet,
         onClose: closeRemoveWalletBottomSheet,
+    } = useBottomSheetModal()
+
+    const {
+        ref: removeAccountWarningBottomSheetRef,
+        onOpen: openRemoveAccountWarningBottomSheet,
+        onClose: closeRemoveAccountWarningBottomSheet,
     } = useBottomSheetModal()
 
     const [isEdit, _setIsEdit] = useState(false)
@@ -139,13 +134,6 @@ export const WalletManagementScreen = () => {
         [deviceToRemove, isEdit, onDeviceSelected, onTrashIconPress],
     )
 
-    const handleOnSuccessAddAccountBottomSheet = useCallback(() => {
-        closeAddAccountBottomSheet()
-        showSuccessToast({
-            text1: LL.WALLET_MANAGEMENT_NOTIFICATION_CREATE_ACCOUNT_SUCCESS(),
-        })
-    }, [LL, closeAddAccountBottomSheet])
-
     const handleDragEnd = ({ data }: { data: Device[] }) => {
         dispatch(
             setDeviceState({
@@ -156,6 +144,37 @@ export const WalletManagementScreen = () => {
             }),
         )
     }
+    const navigation = useNavigation()
+
+    const goToCreateWalletFlow = useCallback(() => {
+        navigation.navigate(Routes.CREATE_WALLET_FLOW)
+    }, [navigation])
+
+    const { setAccountToRemove, deleteAccount, isOnlyAccount } =
+        useAccountDelete()
+
+    const confirmRemoveAccount = useCallback(
+        (account: AccountWithDevice) => {
+            if (isOnlyAccount(account.rootAddress))
+                return showWarningToast({
+                    text1: LL.NOTIFICATION_CANT_REMOVE_ONLY_ACCOUNT(),
+                })
+
+            setAccountToRemove(account)
+            openRemoveAccountWarningBottomSheet()
+        },
+        [
+            setAccountToRemove,
+            LL,
+            isOnlyAccount,
+            openRemoveAccountWarningBottomSheet,
+        ],
+    )
+
+    const onRemoveAccount = useCallback(() => {
+        closeRemoveAccountWarningBottomSheet()
+        deleteAccount()
+    }, [closeRemoveAccountWarningBottomSheet, deleteAccount])
 
     return (
         <Layout
@@ -163,9 +182,7 @@ export const WalletManagementScreen = () => {
             fixedHeader={
                 <>
                     <WalletManagementHeader
-                        openCreateWalletOrAccountBottomSheet={
-                            openCreateWalletOrAccountBottomSheet
-                        }
+                        goToCreateWalletFlow={goToCreateWalletFlow}
                         isEdit={isEdit}
                         setIsEdit={setIsEdit}
                     />
@@ -187,6 +204,12 @@ export const WalletManagementScreen = () => {
                     <WalletMgmtBottomSheet
                         ref={walletMgmtBottomSheetRef}
                         device={selectedDevice}
+                        confirmRemoveAccount={confirmRemoveAccount}
+                    />
+
+                    <RemoveAccountWarningBottomSheet
+                        onConfirm={onRemoveAccount}
+                        ref={removeAccountWarningBottomSheetRef}
                     />
 
                     <RemoveWalletWarningBottomSheet
@@ -194,17 +217,6 @@ export const WalletManagementScreen = () => {
                         onClose={closeRemoveWalletBottomSheet}
                         selectedDevice={selectedDevice}
                         ref={removeWalletBottomSheetRef}
-                    />
-
-                    <CreateWalletOrAccountBottomSheet
-                        onCreateAccount={openAddAccountBottomSheet}
-                        onClose={closeCreateWalletOrAccountBottomSheet}
-                        ref={createWalletOrAccountBottomSheetRef}
-                    />
-
-                    <AddAccountBottomSheet
-                        ref={addAccountBottomSheetRef}
-                        onSuccess={handleOnSuccessAddAccountBottomSheet}
                     />
 
                     <RequireUserPassword

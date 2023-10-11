@@ -13,20 +13,18 @@ import { isSmallScreen } from "~Constants"
 import { PlatformUtils } from "~Utils"
 
 type Props = {
-    onClose: () => void
     onConfirm: () => void
 }
 
 export const RemoveAccountWarningBottomSheet = React.forwardRef<
     BottomSheetModalMethods,
     Props
->(({ onClose, onConfirm }, ref) => {
+>(({ onConfirm }, ref) => {
     const { LL } = useI18nContext()
 
     const handleOnProceed = useCallback(() => {
         onConfirm()
-        onClose()
-    }, [onClose, onConfirm])
+    }, [onConfirm])
 
     const snapPoints = useMemo(() => {
         if (PlatformUtils.isAndroid()) {
@@ -39,7 +37,7 @@ export const RemoveAccountWarningBottomSheet = React.forwardRef<
     }, [])
 
     return (
-        <BaseBottomSheet ref={ref} snapPoints={snapPoints} onDismiss={onClose}>
+        <BaseBottomSheet ref={ref} snapPoints={snapPoints}>
             <ScrollViewWithFooter
                 footer={
                     <BaseView>

@@ -1,5 +1,5 @@
 export * from "./ListsView/Token/TokenList"
-export * from "./HeaderView"
+export * from "./Header"
+export * from "./AccountCard"
 export * from "./EditTokensBar"
-export * from "./BottomSheets"
 export * from "./RemoveCustomTokenBottomSheet"
