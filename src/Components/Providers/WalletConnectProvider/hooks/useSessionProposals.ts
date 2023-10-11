@@ -135,9 +135,9 @@ export const useSessionProposals = (
         //Process instantly
         if (!isBlackListScreen()) {
             handlePendingProposal(proposal)
-            //Or else check every second, and process if the user is not on a blacklisted screen
+            //Or else loop until we can process
         } else {
-            timer = setTimeout(() => {
+            timer = setInterval(() => {
                 if (isBlackListScreen()) return
 
                 handlePendingProposal(proposal)

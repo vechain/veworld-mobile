@@ -372,7 +372,7 @@ export const useWcRequest = (
             onSessionRequest(request)
             //Or else check every second, and process if the user is not on a blacklisted screen
         } else {
-            timer = setTimeout(() => {
+            timer = setInterval(() => {
                 if (isBlackListScreen()) return
 
                 onSessionRequest(request)
