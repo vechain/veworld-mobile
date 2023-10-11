@@ -1,67 +1,44 @@
 import { createSlice, Draft, PayloadAction } from "@reduxjs/toolkit"
-import { SessionTypes } from "@walletconnect/types"
 import { Verify } from "@walletconnect/types/dist/types/core/verify"
 
 /**
  * One account can have multiple sessions.
  *
- * Mapping account address => Sessions
+ * Mapping account topic => verify context
  */
 
-export type ConnectedApp = {
-    session: SessionTypes.Struct
-    verifyContext: Verify.Context
-}
+export type WalletConnectState = Record<string, Verify.Context["verified"]>
 
-type WalletConnectSessionsSliceState = Record<string, Array<ConnectedApp>>
-
-export const initialSessionsState: WalletConnectSessionsSliceState = {}
+export const initialSessionsState: WalletConnectState = {}
 
 export const WalletConnectSessionsSlice = createSlice({
     name: "sessions",
     initialState: initialSessionsState,
     reducers: {
-        insertSession: (
-            state: Draft<WalletConnectSessionsSliceState>,
+        insertContext: (
+            state: Draft<WalletConnectState>,
             action: PayloadAction<{
-                address: string
-                connectedApp: ConnectedApp
+                topic: string
+                verifyContext: Verify.Context["verified"]
             }>,
         ) => {
-            const { address, connectedApp } = action.payload
+            const { topic, verifyContext } = action.payload
 
-            if (!state[address]) {
-                state[address] = []
-            }
-
-            const sessionExists = state[address].find(
-                app => connectedApp.session.topic === app.session.topic,
-            )
-            if (!sessionExists) {
-                state[address].push(connectedApp)
-            }
+            state[topic] = verifyContext
         },
-        deleteSession: (
-            state,
+        deleteContext: (
+            state: Draft<WalletConnectState>,
             action: PayloadAction<{
                 topic: string
             }>,
         ) => {
             const { topic } = action.payload
 
-            for (const address in state) {
-                const sessionExistsIndex = state[address].findIndex(
-                    app => app.session.topic === topic,
-                )
-
-                if (sessionExistsIndex !== -1) {
-                    state[address].splice(sessionExistsIndex, 1)
-                }
-            }
+            delete state[topic]
         },
         resetWalletConnectState: () => initialSessionsState,
     },
 })
 
-export const { insertSession, deleteSession, resetWalletConnectState } =
+export const { insertContext, deleteContext, resetWalletConnectState } =
     WalletConnectSessionsSlice.actions
