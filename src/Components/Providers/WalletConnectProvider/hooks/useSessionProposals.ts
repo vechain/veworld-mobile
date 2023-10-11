@@ -1,0 +1,167 @@
+import { useCallback, useEffect, useMemo, useState } from "react"
+import { debug, WalletConnectUtils, warn } from "~Utils"
+import {
+    getRpcError,
+    SessionProposal,
+    SessionProposalState,
+    showErrorToast,
+} from "~Components"
+import { Routes } from "~Navigation"
+import { useNavigation } from "@react-navigation/native"
+import { ErrorResponse } from "@walletconnect/jsonrpc-types/dist/cjs/jsonrpc"
+import { useI18nContext } from "~i18n"
+import { SessionTypes } from "@walletconnect/types"
+
+export const useSessionProposals = (
+    isBlackListScreen: () => boolean,
+    addSession: (session: SessionTypes.Struct) => void,
+) => {
+    const nav = useNavigation()
+    const { LL } = useI18nContext()
+
+    const [sessionProposals, setSessionProposals] =
+        useState<SessionProposalState>({})
+    const proposalList = useMemo(
+        () => Object.values(sessionProposals),
+        [sessionProposals],
+    )
+
+    /**
+     * DO NOT add any dependencies to this callback, otherwise the listener will be added multiple times
+     */
+    const addPendingProposal = useCallback((proposal: SessionProposal) => {
+        setSessionProposals(prev => ({
+            ...prev,
+            [proposal.id]: proposal,
+        }))
+    }, [])
+
+    const removePendingProposal = useCallback((proposal: SessionProposal) => {
+        setSessionProposals(prev => {
+            const _prev = { ...prev }
+            delete _prev[proposal.id]
+            return _prev
+        })
+    }, [])
+
+    const respondInvalidSession = useCallback(
+        async (proposal: SessionProposal, err: ErrorResponse) => {
+            const web3Wallet = await WalletConnectUtils.getWeb3Wallet()
+
+            await web3Wallet.rejectSession({
+                id: proposal.id,
+                reason: err,
+            })
+
+            removePendingProposal(proposal)
+        },
+        [removePendingProposal],
+    )
+
+    const handlePendingProposal = useCallback(
+        async (proposal: SessionProposal) => {
+            if (proposal.verifyContext.verified.validation !== "VALID")
+                //So we can see invalid proposals in dev mode
+                warn(
+                    "onSessionProposal - session not valid",
+                    proposal.verifyContext,
+                )
+
+            if (!proposal.params.requiredNamespaces.vechain) {
+                showErrorToast({
+                    text1: LL.NOTIFICATION_wallet_connect_incompatible_dapp(),
+                })
+                return await respondInvalidSession(
+                    proposal,
+                    getRpcError("internal", "vechain namespace not found"),
+                )
+            }
+
+            nav.navigate(Routes.CONNECT_APP_SCREEN, {
+                sessionProposal: proposal,
+            })
+        },
+        [LL, nav, respondInvalidSession],
+    )
+
+    const approvePendingProposal = useCallback(
+        async (
+            proposal: SessionProposal,
+            namespace: SessionTypes.Namespace,
+        ) => {
+            const web3Wallet = await WalletConnectUtils.getWeb3Wallet()
+
+            const relays = proposal.params.relays[0]
+
+            const session = await web3Wallet.approveSession({
+                id: proposal.id,
+                namespaces: {
+                    vechain: namespace,
+                },
+                relayProtocol: relays.protocol,
+            })
+
+            addSession(session)
+
+            removePendingProposal(proposal)
+        },
+        [removePendingProposal, addSession],
+    )
+
+    const rejectPendingProposal = useCallback(
+        async (proposal: SessionProposal) => {
+            const web3Wallet = await WalletConnectUtils.getWeb3Wallet()
+
+            await web3Wallet.rejectSession({
+                id: proposal.id,
+                reason: getRpcError("userRejectedRequest"),
+            })
+
+            removePendingProposal(proposal)
+        },
+        [removePendingProposal],
+    )
+
+    /**
+     * Set's a timer to run if there is a pending proposal. Will not trigger until the user is NOT processing another WC request.
+     */
+    useEffect(() => {
+        if (proposalList.length === 0) return
+
+        const proposal: SessionProposal = proposalList[0]
+
+        let timer: NodeJS.Timeout
+
+        //Process instantly
+        if (!isBlackListScreen()) {
+            handlePendingProposal(proposal)
+            //Or else loop until we can process
+        } else {
+            timer = setInterval(() => {
+                if (isBlackListScreen()) return
+
+                handlePendingProposal(proposal)
+            }, 250)
+        }
+
+        return () => clearTimeout(timer)
+    }, [
+        proposalList,
+        isBlackListScreen,
+        sessionProposals,
+        handlePendingProposal,
+    ])
+
+    useEffect(() => {
+        debug(
+            "sessionProposals",
+            Object.values(sessionProposals).map(s => s.id),
+        )
+    }, [sessionProposals])
+
+    return {
+        addPendingProposal,
+        approvePendingProposal,
+        rejectPendingProposal,
+    }
+}

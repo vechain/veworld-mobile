@@ -1,29 +1,36 @@
-import { IWeb3Wallet } from "@walletconnect/web3wallet"
-import { useCallback } from "react"
+import { useCallback, useEffect, useMemo, useState } from "react"
 import { PendingRequestTypes, SessionTypes } from "@walletconnect/types"
 import { AddressUtils, debug, error, WalletConnectUtils, warn } from "~Utils"
 import { AnalyticsEvent, RequestMethods } from "~Constants"
 import { AccountWithDevice } from "~Model"
 import {
     changeSelectedNetwork,
-    deleteSession,
     selectNetworks,
     selectSelectedAccountAddress,
     selectSelectedNetwork,
-    selectSessionsFlat,
     selectVisibleAccounts,
     useAppDispatch,
     useAppSelector,
 } from "~Storage/Redux"
-import { showErrorToast, showInfoToast } from "~Components"
+import {
+    ActiveSessions,
+    getRpcError,
+    showErrorToast,
+    showInfoToast,
+} from "~Components"
 import { Routes } from "~Navigation"
 import { useNavigation } from "@react-navigation/native"
 import { useI18nContext } from "~i18n"
 import { useAnalyticTracking, useSetSelectedAccount } from "~Hooks"
-import { getSdkError } from "@walletconnect/utils"
-import { rpcErrors } from "@metamask/rpc-errors"
+import { IWeb3Wallet } from "@walletconnect/web3wallet"
+import { ErrorResponse } from "@walletconnect/jsonrpc-types/dist/cjs/jsonrpc"
 
-export const useWcRequest = (web3Wallet: IWeb3Wallet | undefined) => {
+type PendingRequests = Record<string, PendingRequestTypes.Struct>
+
+export const useWcRequest = (
+    isBlackListScreen: () => boolean,
+    activeSessions: ActiveSessions,
+) => {
     const nav = useNavigation()
     const dispatch = useAppDispatch()
     const track = useAnalyticTracking()
@@ -35,7 +42,80 @@ export const useWcRequest = (web3Wallet: IWeb3Wallet | undefined) => {
     const selectedNetwork = useAppSelector(selectSelectedNetwork)
     const accounts = useAppSelector(selectVisibleAccounts)
     const networks = useAppSelector(selectNetworks)
-    const sessions = useAppSelector(selectSessionsFlat)
+
+    const sessions = useMemo(
+        () => Object.values(activeSessions),
+        [activeSessions],
+    )
+
+    const [pendingRequests, setPendingRequests] = useState<PendingRequests>({})
+
+    const addPendingRequest = useCallback(
+        (requestEvent: PendingRequestTypes.Struct) => {
+            setPendingRequests(prev => ({
+                ...prev,
+                [requestEvent.id]: requestEvent,
+            }))
+        },
+        [],
+    )
+
+    const removePendingRequest = useCallback(
+        (requestEvent: PendingRequestTypes.Struct) => {
+            setPendingRequests(prev => {
+                const _prev = { ...prev }
+                delete _prev[requestEvent.id]
+                return _prev
+            })
+        },
+        [],
+    )
+
+    const processRequest = useCallback(
+        async (
+            requestEvent: PendingRequestTypes.Struct,
+            result: Connex.Vendor.CertResponse | Connex.Vendor.TxResponse,
+        ) => {
+            const web3Wallet = await WalletConnectUtils.getWeb3Wallet()
+
+            debug(`Responding with WC Request ${requestEvent.id}`, result)
+
+            await web3Wallet.respondSessionRequest({
+                topic: requestEvent.topic,
+                response: {
+                    id: requestEvent.id,
+                    jsonrpc: "2.0",
+                    result,
+                },
+            })
+
+            removePendingRequest(requestEvent)
+        },
+        [removePendingRequest],
+    )
+
+    const failRequest = useCallback(
+        async (
+            requestEvent: PendingRequestTypes.Struct,
+            err: ErrorResponse,
+        ) => {
+            const web3Wallet = await WalletConnectUtils.getWeb3Wallet()
+
+            warn(`Responding with WC Request ${requestEvent.id}`, err)
+
+            await web3Wallet.respondSessionRequest({
+                topic: requestEvent.topic,
+                response: {
+                    id: requestEvent.id,
+                    jsonrpc: "The request was rejected",
+                    error: err,
+                },
+            })
+
+            removePendingRequest(requestEvent)
+        },
+        [removePendingRequest],
+    )
 
     const goToSignMessage = useCallback(
         (
@@ -70,23 +150,10 @@ export const useWcRequest = (web3Wallet: IWeb3Wallet | undefined) => {
                     text1: LL.NOTIFICATION_DAPP_INVALID_REQUEST(),
                 })
 
-                const rpcError = rpcErrors.invalidRequest()
-
-                web3Wallet?.respondSessionRequest({
-                    topic: requestEvent.topic,
-                    response: {
-                        id: requestEvent.id,
-                        jsonrpc:
-                            "The request does not contain a valid certificate message",
-                        error: {
-                            message: rpcError.message,
-                            code: rpcError.code,
-                        },
-                    },
-                })
+                return failRequest(requestEvent, getRpcError("invalidParams"))
             }
         },
-        [web3Wallet, LL, track, nav],
+        [failRequest, LL, track, nav],
     )
 
     const goToSendTransaction = useCallback(
@@ -122,30 +189,16 @@ export const useWcRequest = (web3Wallet: IWeb3Wallet | undefined) => {
                     text1: LL.NOTIFICATION_DAPP_INVALID_REQUEST(),
                 })
 
-                const rpcError = rpcErrors.invalidRequest()
+                const rpcError = getRpcError("invalidParams")
 
-                web3Wallet?.respondSessionRequest({
-                    topic: requestEvent.topic,
-                    response: {
-                        id: requestEvent.id,
-                        jsonrpc:
-                            "The request does not contain a valid transaction message",
-                        error: {
-                            code: rpcError.code,
-                            message: rpcError.message,
-                        },
-                    },
-                })
+                return failRequest(requestEvent, rpcError)
             }
         },
-        [web3Wallet, LL, track, nav],
+        [failRequest, LL, track, nav],
     )
 
     const switchAccount = useCallback(
-        async (session: SessionTypes.Struct) => {
-            if (!web3Wallet)
-                throw new Error("Web3Wallet is not initialized properly")
-
+        async (session: SessionTypes.Struct, web3Wallet: IWeb3Wallet) => {
             // Switch to the requested account
             const address = session.namespaces.vechain.accounts[0].split(":")[2]
             const requestedAccount: AccountWithDevice | undefined =
@@ -179,23 +232,15 @@ export const useWcRequest = (web3Wallet: IWeb3Wallet | undefined) => {
 
             return requestedAccount.address
         },
-        [
-            LL,
-            selectedAccountAddress,
-            accounts,
-            onSetSelectedAccount,
-            web3Wallet,
-        ],
+        [LL, selectedAccountAddress, accounts, onSetSelectedAccount],
     )
 
     const switchNetwork = useCallback(
         async (
             requestEvent: PendingRequestTypes.Struct,
             session: SessionTypes.Struct,
+            web3Wallet: IWeb3Wallet,
         ) => {
-            if (!web3Wallet)
-                throw new Error("Web3Wallet is not initialized properly")
-
             const network = WalletConnectUtils.getNetwork(
                 requestEvent,
                 networks,
@@ -221,7 +266,7 @@ export const useWcRequest = (web3Wallet: IWeb3Wallet | undefined) => {
                 })
             }
         },
-        [LL, selectedNetwork, dispatch, web3Wallet, networks],
+        [LL, selectedNetwork, dispatch, networks],
     )
     /**
      * Handle session request
@@ -237,65 +282,112 @@ export const useWcRequest = (web3Wallet: IWeb3Wallet | undefined) => {
                 }),
             )
 
-            if (!web3Wallet)
-                throw new Error("Web3Wallet is not initialized properly")
-
-            let session: SessionTypes.Struct
+            const web3Wallet = await WalletConnectUtils.getWeb3Wallet()
 
             try {
-                // Get the session for this topic
-                session = web3Wallet.engine.signClient.session.get(
-                    requestEvent.topic,
-                )
+                let session: SessionTypes.Struct
+
+                try {
+                    // Get the session for this topic
+                    session = web3Wallet.engine.signClient.session.get(
+                        requestEvent.topic,
+                    )
+                } catch (e) {
+                    warn(
+                        "Failed to get WC session for wallet: ",
+                        JSON.stringify(sessions.map(s => s.topic)),
+                    )
+                    await web3Wallet.respondSessionRequest({
+                        topic: requestEvent.topic,
+                        response: {
+                            id: requestEvent.id,
+                            jsonrpc: "The specified session was not found",
+                            error: getRpcError(
+                                "internal",
+                                "Could not find the associated session",
+                            ),
+                        },
+                    })
+                    return
+                }
+
+                // Switch to the requested account
+                const address = await switchAccount(session, web3Wallet)
+
+                // Switch to the requested network
+                await switchNetwork(requestEvent, session, web3Wallet)
+
+                // Show the screen based on the request method
+                switch (requestEvent.params.request.method) {
+                    case RequestMethods.SIGN_CERTIFICATE:
+                        goToSignMessage(requestEvent, session, address)
+                        break
+                    case RequestMethods.REQUEST_TRANSACTION:
+                        goToSendTransaction(requestEvent, session, address)
+                        break
+                    default:
+                        error(
+                            "Wallet Connect Session Request Invalid Method",
+                            requestEvent.params.request.method,
+                        )
+                        break
+                }
             } catch (e) {
-                warn(
-                    "Failed to get WC session for wallet: ",
-                    JSON.stringify(sessions.map(s => s.topic)),
-                )
-                dispatch(deleteSession({ topic: requestEvent.topic }))
                 await web3Wallet.respondSessionRequest({
                     topic: requestEvent.topic,
                     response: {
                         id: requestEvent.id,
-                        jsonrpc: "The specified session was not found",
-                        error: getSdkError("INVALID_SESSION_SETTLE_REQUEST"),
+                        jsonrpc: "The request was rejected",
+                        error: getRpcError("internal"),
                     },
                 })
-                return
-            }
 
-            // Switch to the requested account
-            const address = await switchAccount(session)
-
-            // Switch to the requested network
-            await switchNetwork(requestEvent, session)
-
-            // Show the screen based on the request method
-            switch (requestEvent.params.request.method) {
-                case RequestMethods.SIGN_CERTIFICATE:
-                    goToSignMessage(requestEvent, session, address)
-                    break
-                case RequestMethods.REQUEST_TRANSACTION:
-                    goToSendTransaction(requestEvent, session, address)
-                    break
-                default:
-                    error(
-                        "Wallet Connect Session Request Invalid Method",
-                        requestEvent.params.request.method,
-                    )
-                    break
+                removePendingRequest(requestEvent)
             }
         },
         [
             switchAccount,
             switchNetwork,
-            web3Wallet,
             goToSendTransaction,
             goToSignMessage,
-            dispatch,
             sessions,
+            removePendingRequest,
         ],
     )
 
-    return { onSessionRequest }
+    /**
+     * Set's a timer to run if there is a pending proposal. Will not trigger until the user is NOT processing another WC request.
+     */
+    useEffect(() => {
+        const _pendingRequests = Object.values(pendingRequests)
+
+        if (_pendingRequests.length === 0) return
+
+        const request: PendingRequestTypes.Struct = _pendingRequests[0]
+
+        let timer: NodeJS.Timeout
+
+        //Process instantly
+        if (!isBlackListScreen()) {
+            onSessionRequest(request)
+            //Or else loop until we can process
+        } else {
+            timer = setInterval(() => {
+                if (isBlackListScreen()) return
+
+                onSessionRequest(request)
+            }, 250)
+        }
+
+        return () => clearTimeout(timer)
+    }, [pendingRequests, isBlackListScreen, onSessionRequest])
+
+    useEffect(() => {
+        debug(
+            "pendingRequests",
+            Object.values(pendingRequests).map(s => s.id),
+        )
+    }, [pendingRequests])
+
+    return { addPendingRequest, processRequest, failRequest }
 }

@@ -163,6 +163,42 @@ describe("mnemonicStringToArray", () => {
     })
 })
 
+describe("random", () => {
+    it("random should return a random number", () => {
+        const random = CryptoUtils.random()
+        expect(random).not.toBeNull()
+    })
+})
+describe("encrypt", () => {
+    it("encrypt should return an encrypted string", () => {
+        const encrypted = CryptoUtils.encrypt("test", deviceEncryptionKey)
+        expect(encrypted).not.toBeNull()
+    })
+})
+
+describe("decrypt", () => {
+    it("decrypt should return a decrypted string", () => {
+        const encrypted = CryptoUtils.encrypt("test", deviceEncryptionKey)
+        const decrypted = CryptoUtils.decrypt(encrypted, deviceEncryptionKey)
+        expect(decrypted).toEqual("test")
+    })
+})
+
+describe("encryptState", () => {
+    it("encryptState should return an encrypted string", () => {
+        const encrypted = CryptoUtils.encryptState({ test: "Hello" }, "myKey")
+        expect(encrypted).not.toBeNull()
+    })
+})
+
+describe("decryptState", () => {
+    it("decryptState should return a decrypted string", () => {
+        const encrypted = CryptoUtils.encryptState({ test: "Hello" }, "myKey")
+        const decrypted = CryptoUtils.decryptState(encrypted, "myKey")
+        expect(JSON.parse(decrypted)).toEqual({ test: "Hello" })
+    })
+})
+
 describe("determineKeyImportType", () => {
     it("valid 12 word mnemonic", () => {
         expect(determineKeyImportType(VALID_MNEMONIC_12)).toBe(

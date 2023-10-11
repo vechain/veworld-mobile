@@ -8,27 +8,23 @@ import {
     BaseText,
     BaseView,
     CloseModalButton,
+    getRpcError,
     RequireUserPassword,
     showErrorToast,
     useWalletConnect,
 } from "~Components"
 import {
     addPendingDappTransactionActivity,
-    selectedConnectedApp,
     selectSelectedAccount,
     selectSelectedNetwork,
     selectTokensWithInfo,
+    selectVerifyContext,
     setIsAppLoading,
     useAppDispatch,
     useAppSelector,
 } from "~Storage/Redux"
-import {
-    TransactionUtils,
-    WalletConnectResponseUtils,
-    WalletConnectUtils,
-} from "~Utils"
+import { TransactionUtils, WalletConnectUtils } from "~Utils"
 import { useAnalyticTracking, useTransactionScreen } from "~Hooks"
-import { getSdkError } from "@walletconnect/utils"
 import { useI18nContext } from "~i18n"
 import { RootStackParamListSwitch, Routes } from "~Navigation"
 import { NativeStackScreenProps } from "@react-navigation/native-stack"
@@ -51,11 +47,12 @@ export const SendTransactionScreen: FC<Props> = ({ route }: Props) => {
         options,
     } = route.params
 
-    const { web3Wallet } = useWalletConnect()
     const dispatch = useAppDispatch()
     const { LL } = useI18nContext()
     const nav = useNavigation()
     const track = useAnalyticTracking()
+
+    const { processRequest, failRequest } = useWalletConnect()
 
     const [isInvalidChecked, setInvalidChecked] = React.useState(false)
 
@@ -73,15 +70,15 @@ export const SendTransactionScreen: FC<Props> = ({ route }: Props) => {
         [sessionRequest],
     )
 
-    const connectedApp = useAppSelector(state => {
-        return selectedConnectedApp(state, topic)
-    })
+    const verifyContext = useAppSelector(state =>
+        selectVerifyContext(state, topic),
+    )
 
     const validConnectedApp = useMemo(() => {
-        if (!connectedApp) return true
+        if (!verifyContext) return true
 
-        return connectedApp.verifyContext.verified.validation === "VALID"
-    }, [connectedApp])
+        return verifyContext.validation === "VALID"
+    }, [verifyContext])
 
     const clausesMetadata = useMemo(
         () => TransactionUtils.interpretClauses(message, tokens),
@@ -110,11 +107,10 @@ export const SendTransactionScreen: FC<Props> = ({ route }: Props) => {
 
     const onTransactionSuccess = useCallback(
         async (transaction: Transaction, id: string) => {
-            await WalletConnectResponseUtils.transactionRequestSuccessResponse(
-                { request: requestEvent, web3Wallet, LL },
-                id,
-                selectedAccount.address,
-            )
+            await processRequest(requestEvent, {
+                txid: id,
+                signer: selectedAccount.address,
+            })
 
             dispatch(addPendingDappTransactionActivity(transaction, name, url))
 
@@ -124,8 +120,7 @@ export const SendTransactionScreen: FC<Props> = ({ route }: Props) => {
             onFinish,
             url,
             requestEvent,
-            web3Wallet,
-            LL,
+            processRequest,
             selectedAccount.address,
             dispatch,
             name,
@@ -133,30 +128,17 @@ export const SendTransactionScreen: FC<Props> = ({ route }: Props) => {
     )
 
     const onTransactionFailure = useCallback(async () => {
-        await WalletConnectResponseUtils.transactionRequestFailedResponse({
-            request: requestEvent,
-            web3Wallet,
-            LL,
-        })
+        await failRequest(requestEvent, getRpcError("internal"))
 
         onFinish(false)
-    }, [requestEvent, web3Wallet, LL, onFinish])
+    }, [requestEvent, failRequest, onFinish])
 
     /**
      * Rejects the request and closes the modal
      */
     const onReject = useCallback(async () => {
-        const { id } = requestEvent
         try {
-            const response = WalletConnectUtils.formatJsonRpcError(
-                id,
-                getSdkError("USER_REJECTED_METHODS"),
-            )
-
-            await web3Wallet?.respondSessionRequest({
-                topic,
-                response,
-            })
+            await failRequest(requestEvent, getRpcError("userRejectedRequest"))
 
             // refactor(Minimizer): issues with iOS 17 & Android when connecting to desktop DApp (https://github.com/vechainfoundation/veworld-mobile/issues/951)
             // MinimizerUtils.goBack()
@@ -167,7 +149,7 @@ export const SendTransactionScreen: FC<Props> = ({ route }: Props) => {
         } finally {
             nav.goBack()
         }
-    }, [requestEvent, web3Wallet, topic, LL, nav])
+    }, [requestEvent, failRequest, LL, nav])
 
     const {
         Delegation,
@@ -251,7 +233,7 @@ export const SendTransactionScreen: FC<Props> = ({ route }: Props) => {
                     <BaseSpacer height={30} />
 
                     <UnknownAppMessage
-                        verifyContext={connectedApp?.verifyContext}
+                        verifyContext={verifyContext}
                         confirmed={isInvalidChecked}
                         setConfirmed={setInvalidChecked}
                     />
