@@ -30,6 +30,12 @@ export const useWcSessions = () => {
         async (topic: string, fromRemote = false) => {
             debug("Disconnecting session", topic, fromRemote)
 
+            setActiveSessions(prev => {
+                const _prev = { ...prev }
+                delete _prev[topic]
+                return _prev
+            })
+
             const web3Wallet = await WalletConnectUtils.getWeb3Wallet()
 
             try {

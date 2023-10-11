@@ -1,4 +1,4 @@
-import React, { Fragment, useMemo, useRef, useState } from "react"
+import React, { Fragment, useCallback, useMemo, useRef, useState } from "react"
 import {
     BaseSpacer,
     BaseText,
@@ -69,6 +69,14 @@ export const ConnectedAppsScreen = () => {
         onOpen: openConnectedAppDetailsSheet,
         onClose: closeConnectedAppDetailsSheet,
     } = useBottomSheetModal()
+
+    const disconnect = useCallback(
+        async (topic: string) => {
+            await disconnectSession(topic)
+            closeConfirmDisconnectDetailsSheet()
+        },
+        [closeConfirmDisconnectDetailsSheet, disconnectSession],
+    )
 
     return (
         <Layout
@@ -172,9 +180,7 @@ export const ConnectedAppsScreen = () => {
                                         onCancel={
                                             closeConfirmDisconnectDetailsSheet
                                         }
-                                        onConfirm={topic =>
-                                            disconnectSession(topic)
-                                        }
+                                        onConfirm={disconnect}
                                         session={sessionToDelete!}
                                         account={account}
                                     />
