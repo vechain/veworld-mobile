@@ -365,16 +365,19 @@ export const useWcRequest = (
 
         const request: PendingRequestTypes.Struct = _pendingRequests[0]
 
-        const timer: NodeJS.Timeout = setTimeout(() => {
-            if (isBlackListScreen()) return
+        let timer: NodeJS.Timeout
 
-            onSessionRequest(request).catch(err => {
-                error(
-                    "useSessionProposal - failed to handle pending requset",
-                    err,
-                )
-            })
-        }, 1000)
+        //Process instantly
+        if (!isBlackListScreen()) {
+            onSessionRequest(request)
+            //Or else loop until we can process
+        } else {
+            timer = setInterval(() => {
+                if (isBlackListScreen()) return
+
+                onSessionRequest(request)
+            }, 250)
+        }
 
         return () => clearTimeout(timer)
     }, [pendingRequests, isBlackListScreen, onSessionRequest])
