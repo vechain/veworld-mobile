@@ -7,12 +7,7 @@ import {
     SwipeableRow,
     useWalletConnect,
 } from "~Components"
-import {
-    ConnectedApp,
-    selectAccounts,
-    selectSessions,
-    useAppSelector,
-} from "~Storage/Redux"
+import { selectAccounts, useAppSelector } from "~Storage/Redux"
 import { SessionTypes } from "@walletconnect/types"
 import { isEmpty } from "lodash"
 import {
@@ -27,11 +22,9 @@ import { SwipeableItemImperativeRef } from "react-native-swipeable-item"
 import { useBottomSheetModal } from "~Hooks"
 
 export const ConnectedAppsScreen = () => {
-    const connectedApps: Record<string, ConnectedApp[]> =
-        useAppSelector(selectSessions)
     const accounts = useAppSelector(selectAccounts)
     const { LL } = useI18nContext()
-    const { disconnect } = useWalletConnect()
+    const { disconnectSession, activeSessions } = useWalletConnect()
     const [sessionToDelete, setSessionToDelete] =
         useState<SessionTypes.Struct>()
 
@@ -41,11 +34,29 @@ export const ConnectedAppsScreen = () => {
     )
 
     const totalSessions = useMemo(() => {
-        return Object.values(connectedApps).reduce(
-            (acc, curr) => acc + curr.length,
-            0,
-        )
-    }, [connectedApps])
+        return Object.keys(activeSessions).length
+    }, [activeSessions])
+
+    const connectedApps = useMemo(() => {
+        const _apps: Record<string, SessionTypes.Struct[]> = {}
+
+        for (const key of Object.keys(activeSessions)) {
+            const session = activeSessions[key]
+
+            try {
+                const address =
+                    session.namespaces.vechain.accounts[0].split(":")[2]
+
+                if (!_apps[address]) {
+                    _apps[address] = [session]
+                } else {
+                    _apps[address].push(session)
+                }
+            } catch (e) {}
+        }
+
+        return _apps
+    }, [activeSessions])
 
     const {
         ref: confirmDisconnectBottomSheetRef,
@@ -93,9 +104,8 @@ export const ConnectedAppsScreen = () => {
                             account.address in connectedApps &&
                             !isEmpty(connectedApps[account.address])
                         ) {
-                            const accountSessions = connectedApps[
-                                account.address
-                            ].map(it => it.session)
+                            const accountSessions =
+                                connectedApps[account.address]
 
                             return (
                                 <BaseView key={account.address}>
@@ -162,7 +172,9 @@ export const ConnectedAppsScreen = () => {
                                         onCancel={
                                             closeConfirmDisconnectDetailsSheet
                                         }
-                                        onConfirm={topic => disconnect(topic)}
+                                        onConfirm={topic =>
+                                            disconnectSession(topic)
+                                        }
                                         session={sessionToDelete!}
                                         account={account}
                                     />

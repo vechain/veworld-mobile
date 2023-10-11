@@ -4,8 +4,6 @@ import {
     SignClientTypes,
 } from "@walletconnect/types"
 import {
-    formatJsonRpcError,
-    getNameAndUrl,
     getNetwork,
     getPairAttributes,
     getRequestEventAttributes,
@@ -22,7 +20,6 @@ import { NETWORK_TYPE } from "~Model"
 import { NavigationState } from "@react-navigation/native"
 import { Routes } from "~Navigation"
 import { defaultMainNetwork, defaultTestNetwork } from "~Constants"
-import { IWeb3Wallet } from "@walletconnect/web3wallet"
 
 describe("getPairAttributes", () => {
     it("should return the pair attributes correctly", () => {
@@ -174,27 +171,6 @@ describe("isValidURI", () => {
         const result = isValidURI(missingParametersURI)
 
         expect(result).toBe(false)
-    })
-})
-
-describe("formatJsonRpcError", () => {
-    it("should format the JSON-RPC error correctly", () => {
-        const id = 123
-        const error = {
-            code: 1234,
-            message: "Error message",
-        }
-
-        const result = formatJsonRpcError(id, error)
-
-        expect(result).toEqual({
-            id: 123,
-            jsonrpc: "2.0",
-            error: {
-                code: 1234,
-                message: "Error message",
-            },
-        })
     })
 })
 
@@ -515,49 +491,5 @@ describe("getSendTxOptions", () => {
         const requestEvent = mockPendingRequest([])
 
         expect(getSendTxOptions(requestEvent)).toEqual({})
-    })
-})
-
-describe("getNameAndUrl", () => {
-    it("should return no name or url", () => {
-        expect(getNameAndUrl(undefined, undefined)).toEqual({})
-    })
-
-    it("should return name and url", () => {
-        const requestEvent = {
-            params: {
-                chainId: "vechain",
-                request: {
-                    method: "methodName",
-                    params: ["param1", "param2"],
-                },
-            },
-            topic: "eventTopic",
-        } as PendingRequestTypes.Struct
-
-        const web3Wallet = {
-            getActiveSessions: () => {
-                return {
-                    [requestEvent.topic]: {
-                        peer: {
-                            metadata: {
-                                name: "VeWorld Mobile Wallet",
-                                icons: [
-                                    "https://avatars.githubusercontent.com/u/37784886",
-                                ],
-                                url: "https://walletconnect.com/",
-                            },
-                        },
-                    },
-                }
-            },
-        } as IWeb3Wallet
-
-        expect(getNameAndUrl(web3Wallet, requestEvent)).toEqual({
-            name: "VeWorld Mobile Wallet",
-            url: "https://walletconnect.com/",
-            description: undefined,
-            icon: "https://avatars.githubusercontent.com/u/37784886",
-        })
     })
 })

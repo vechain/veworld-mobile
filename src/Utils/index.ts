@@ -30,7 +30,6 @@ import URIUtils from "./URIUtils"
 import MinimizerUtils from "./MinimizerUtils"
 import ReanimatedUtils from "./ReanimatedUtils"
 import WalletConnectUtils from "./WalletConnectUtils"
-import WalletConnectResponseUtils from "./WalletConnectResponseUtils"
 import MediaUtils from "./MediaUtils"
 import MathUtils from "./MathUtils"
 import AnalyticsUtils from "./AnalyticsUtils"
@@ -68,7 +67,6 @@ export {
     URIUtils,
     ReanimatedUtils,
     WalletConnectUtils,
-    WalletConnectResponseUtils,
     MediaUtils,
     MathUtils,
     MinimizerUtils,

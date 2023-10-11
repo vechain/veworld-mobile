@@ -1,7 +1,6 @@
 import { useNavigation } from "@react-navigation/native"
 import { NativeStackScreenProps } from "@react-navigation/native-stack"
-import { ProposalTypes, RelayerTypes, SessionTypes } from "@walletconnect/types"
-import { getSdkError } from "@walletconnect/utils"
+import { ProposalTypes, SessionTypes } from "@walletconnect/types"
 import React, { FC, useCallback, useEffect, useMemo } from "react"
 import { ScrollView, StyleSheet } from "react-native"
 import {
@@ -24,14 +23,13 @@ import { RootStackParamListSwitch, Routes } from "~Navigation"
 import {
     addConnectedAppActivity,
     changeSelectedNetwork,
-    insertSession,
     selectNetworks,
     selectSelectedAccount,
     selectVisibleAccounts,
     useAppDispatch,
     useAppSelector,
 } from "~Storage/Redux"
-import { error, HexUtils, WalletConnectUtils, warn } from "~Utils"
+import { error, HexUtils, WalletConnectUtils } from "~Utils"
 import { useI18nContext } from "~i18n"
 import { AppConnectionRequests, AppInfo, UnknownAppMessage } from "~Screens"
 import { useSetSelectedAccount } from "~Hooks/useSetSelectedAccount"
@@ -46,7 +44,7 @@ export const ConnectAppScreen: FC<Props> = ({ route }: Props) => {
 
     const { onSetSelectedAccount } = useSetSelectedAccount()
 
-    const { web3Wallet } = useWalletConnect()
+    const { approvePendingProposal, rejectPendingProposal } = useWalletConnect()
 
     const nav = useNavigation()
     const dispatch = useAppDispatch()
@@ -102,36 +100,19 @@ export const ConnectAppScreen: FC<Props> = ({ route }: Props) => {
      * Handle session proposal
      */
     const processProposal = useCallback(async () => {
-        const { id, params } = currentProposal
+        const { params } = currentProposal
 
         const requiredNamespaces: ProposalTypes.RequiredNamespaces =
             params.requiredNamespaces
-        const relays: RelayerTypes.ProtocolOptions[] = params.relays
-
-        if (!web3Wallet) {
-            showErrorToast({
-                text1: LL.NOTIFICATION_wallet_connect_not_initialized(),
-            })
-            return
-        }
-
-        if (!currentProposal || !requiredNamespaces.vechain.chains) {
-            warn("ConnectedAppScreen - session not valid")
-            showErrorToast({
-                text1: LL.NOTIFICATION_wallet_connect_error_pairing(),
-            })
-            return
-        }
 
         // Setup vechain namespaces to return to the dapp
-        const namespaces: SessionTypes.Namespaces = {}
         const connectedAccounts: string[] = []
         const networkIdentifiers = networks.map(network =>
             network.genesis.id.slice(-32),
         )
 
         const _networks =
-            requiredNamespaces.vechain.chains ??
+            requiredNamespaces.vechain?.chains ??
             networks.map(network => `vechain:${network.genesis.id.slice(-32)}`)
 
         _networks.map((scope: string) => {
@@ -144,7 +125,7 @@ export const ConnectAppScreen: FC<Props> = ({ route }: Props) => {
             }
         })
 
-        namespaces.vechain = {
+        const namespace: SessionTypes.Namespace = {
             accounts: connectedAccounts,
             methods: requiredNamespaces.vechain.methods,
             events: requiredNamespaces.vechain.events,
@@ -153,24 +134,10 @@ export const ConnectAppScreen: FC<Props> = ({ route }: Props) => {
         // Doing this nav.navigate before approveSession because after approveSession the DApp
         // is IMMEDIATELY sending a session_proposal and the nav.navigate is
         // closing the session proposal screen instead of this one
-        nav.navigate(Routes.SETTINGS_CONNECTED_APPS)
+        nav.goBack()
 
         try {
-            let session: SessionTypes.Struct = await web3Wallet.approveSession({
-                id,
-                relayProtocol: relays[0].protocol,
-                namespaces,
-            })
-
-            dispatch(
-                insertSession({
-                    address: selectedAccount.address,
-                    connectedApp: {
-                        session,
-                        verifyContext: currentProposal.verifyContext,
-                    },
-                }),
-            )
+            await approvePendingProposal(currentProposal, namespace)
 
             dispatch(addConnectedAppActivity(name, url, description, methods))
 
@@ -187,7 +154,7 @@ export const ConnectAppScreen: FC<Props> = ({ route }: Props) => {
         }
     }, [
         currentProposal,
-        web3Wallet,
+        approvePendingProposal,
         nav,
         LL,
         networks,
@@ -204,20 +171,15 @@ export const ConnectAppScreen: FC<Props> = ({ route }: Props) => {
      */
     const handleReject = useCallback(async () => {
         if (currentProposal) {
-            const { id } = currentProposal
-
             try {
-                await web3Wallet?.rejectSession({
-                    id,
-                    reason: getSdkError("USER_REJECTED_METHODS"),
-                })
+                await rejectPendingProposal(currentProposal)
             } catch (err: unknown) {
                 error("ConnectedAppScreen:handleReject", err)
             } finally {
                 nav.goBack()
             }
         }
-    }, [currentProposal, nav, web3Wallet])
+    }, [currentProposal, nav, rejectPendingProposal])
 
     const onPressBack = useCallback(async () => {
         await handleReject()
@@ -279,7 +241,7 @@ export const ConnectAppScreen: FC<Props> = ({ route }: Props) => {
                     />
 
                     <UnknownAppMessage
-                        verifyContext={currentProposal.verifyContext}
+                        verifyContext={currentProposal.verifyContext.verified}
                         confirmed={isInvalidChecked}
                         setConfirmed={setInvalidChecked}
                     />
