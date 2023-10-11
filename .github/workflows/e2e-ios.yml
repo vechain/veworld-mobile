@@ -1,13 +1,10 @@
 name: E2E Testing - iOS
 
 on:
-    workflow_dispatch:
-    push:
-        branches:
-            - main
-    pull_request:
-        branches:
-            - main
+  workflow_dispatch:
+  schedule:
+    # Runs at 00:00 UTC every Monday to Friday
+    - cron: '0 0 * * 1-5'
 
 jobs:
     build-test-ios:
@@ -17,6 +14,8 @@ jobs:
         steps:
             - name: Checkout repository
               uses: actions/checkout@v3
+              with:
+                ref: main  # Ensure we're always testing the main branch
 
             # Install Homebrew and applesimutils for Detox
             - name: Install macOS dependencies
@@ -45,12 +44,12 @@ jobs:
               run: yarn install --frozen-lockfile --network-timeout 300000
 
             # Restore Pods cache
-            - name: Restore Pods cache
-              uses: actions/cache/restore@v3
-              id: pods-cache-restore
-              with:
-                  path: ios/Pods
-                  key: ${{ runner.os }}-pods-${{ hashFiles('ios/Podfile.lock') }}
+            #- name: Restore Pods cache
+            #  uses: actions/cache/restore@v3
+            #  id: pods-cache-restore
+            #  with:
+            #      path: ios/Pods
+            #      key: ${{ runner.os }}-pods-${{ hashFiles('ios/Podfile.lock') }}
 
             # Install CocoaPods
             - name: Install CocoaPods
@@ -58,13 +57,13 @@ jobs:
               run: npx pod-install
 
             # Save Pods cache
-            - name: Save Pods cache
-              uses: actions/cache/save@v3
-              id: pods-cache
-              if: always()
-              with:
-                  path: ios/Pods
-                  key: ${{ runner.os }}-pods-${{ hashFiles('ios/Podfile.lock') }}
+            #- name: Save Pods cache
+            #  uses: actions/cache/save@v3
+            #  id: pods-cache
+            #  if: always()
+            #  with:
+            #      path: ios/Pods
+            #      key: ${{ runner.os }}-pods-${{ hashFiles('ios/Podfile.lock') }}
 
             # Install Detox CLI
             - name: Rebuild Detox Framework
@@ -72,7 +71,7 @@ jobs:
 
             # Start Metro Bundler
             - name: Start Metro Bundler
-              run: yarn react-native start &
+              run: REACT_APP_UI_LOG=false yarn react-native start &> metro-bundler.log &
 
             # Restore Detox build cache
             # - name: Restore Detox build
@@ -86,7 +85,7 @@ jobs:
             - name: Detox build iOS Debug
               # if: steps.detox-cache-restore.outputs.cache-hit != 'true'
               timeout-minutes: 60
-              run: SKIP_SENTRY=true yarn detox build --configuration ios.sim.debug
+              run: SKIP_SENTRY=true yarn detox build --configuration ios.sim.debug_xcode_14.2 # GH macos-latest has Xcode 14.2
 
             # Save Detox build cache
             # - name: Save Detox build
@@ -98,14 +97,21 @@ jobs:
             #       key: ${{ runner.os }}-detox-build-${{ hashFiles('ios/Podfile.lock') }}
 
             # Test with Detox
-            - name: Detox test iOS release
-              timeout-minutes: 20
-              run: yarn detox test --configuration ios.sim.debug --cleanup --headless --record-logs all
+            - name: Detox test iOS Debug
+              timeout-minutes: 100
+              run: yarn detox test --configuration ios.sim.debug_xcode_14.2 --cleanup --headless --record-logs all
 
-            # Upload artifacts
-            - name: Upload artifacts
+            # Upload artifacts Detox
+            - name: Upload detox fail artifacts
               if: failure()
               uses: actions/upload-artifact@v3
               with:
                   name: detox-fail-artifacts
                   path: artifacts
+
+            - name: Upload Metro Bundler logs
+              if: failure()
+              uses: actions/upload-artifact@v2
+              with:
+                  name: metro-bundler-logs
+                  path: metro-bundler.log

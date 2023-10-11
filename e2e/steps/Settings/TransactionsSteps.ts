@@ -7,7 +7,6 @@ import {
     clickById,
     swipeLeftByText,
     textShouldNotExist,
-    isPresentId,
 } from "../../helpers"
 
 Given(
@@ -47,14 +46,11 @@ When("The user selects URL as delegation method", { timeout: -1 }, async () => {
 })
 
 When(
-    "The user specifies the following delegation url {string}",
+    "The user inserts the following delegation url {string}",
     { timeout: -1 },
     async (url: string) => {
-        if (await isPresentId("AddUrl_input")) {
-            await insertTextById(url, "AddUrl_input")
-        } else {
-            await clickByText(url)
-        }
+        await insertTextById(url, "AddUrl_input")
+
         await clickByText("Add")
     },
 )
@@ -76,7 +72,7 @@ Then(
 )
 
 When(
-    "The user click plush button to add a new url",
+    "The user click plus button to add a new url",
     { timeout: -1 },
     async () => {
         await clickById("UrlList_addUrlButton")

@@ -42,7 +42,6 @@ Feature: The user send tokens in test net
       | token | amount | address                                    | pin    | delegationAccount |
       | VET   |      1 | 0x435933c8064b4Ae76bE665428e0307eF2cCFBD68 | 111111 | Account 1         |
       | VTHO  |      1 | 0x435933c8064b4Ae76bE665428e0307eF2cCFBD68 | 111111 | Account 1         |
-
   Scenario: User should be able to send tokens delegating with url method
     When The user selects "<token>" token to be sent
     And The user inserts the amount "<amount>" to be sent
@@ -50,15 +49,16 @@ Feature: The user send tokens in test net
     And The user inserts the address "<address>" of the receiver
     And The user can click next button to go to the next screen
     And The user selects URL as delegation method
-    And The user specifies the following delegation url "<url>"
+    And The user inserts the following delegation url "<url>"
+    And The user closes the "<sheet_title>" bottom sheet
     And The user can click confirm button
     And The user inserts pin "<pin>"
     Then The user should see successfully sent message for the token "<token>"
 
     Examples: 
-      | token | amount | address                                    | pin    | url                                           |
-      | VET   |      1 | 0x435933c8064b4Ae76bE665428e0307eF2cCFBD68 | 111111 | https://sponsor-testnet.vechain.energy/by/226 |
-      | VTHO  |      1 | 0x435933c8064b4Ae76bE665428e0307eF2cCFBD68 | 111111 | https://sponsor-testnet.vechain.energy/by/226 |
+      | token | amount | address                                    | pin    | url                                           | sheet_title |
+      | VET   |      1 | 0x435933c8064b4Ae76bE665428e0307eF2cCFBD68 | 111111 | https://sponsor-testnet.vechain.energy/by/226 | Select URL |
+      | VTHO  |      1 | 0x435933c8064b4Ae76bE665428e0307eF2cCFBD68 | 111111 | https://sponsor-testnet.vechain.energy/by/226 | Select URL |
 
   Scenario: User should be able to send custom tokens
     When The user clicks back button
