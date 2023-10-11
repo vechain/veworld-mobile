@@ -10,6 +10,7 @@ import {
     TabFlows,
     clickById,
     clickByText,
+    closeBottomSheet,
     goBack,
     idShouldExist,
 } from "../helpers"
@@ -86,5 +87,13 @@ When(
     { timeout: -1 },
     async function (pin: string) {
         await enterPin(pin)
+    },
+)
+
+When(
+    "The user closes the {string} bottom sheet",
+    { timeout: -1 },
+    async (name: string) => {
+        await closeBottomSheet(name)
     },
 )
