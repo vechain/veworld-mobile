@@ -3448,9 +3448,9 @@
     tslib "^2.4.1 || ^1.9.3"
 
 "@sentry/react-native@^5.6.0":
-  version "5.11.0"
-  resolved "https://registry.yarnpkg.com/@sentry/react-native/-/react-native-5.11.0.tgz#ee04034f76323593d3f62f7f5463c79a847c7abe"
-  integrity sha512-pHVkV5lHtr4mGObBIRJIWWv8u5uSIlExRIH3v84lJaITbjEVDo02yFxIbU8kG1eAMqcDx8i35WVFsrpvgH1RaA==
+  version "5.11.1"
+  resolved "https://registry.yarnpkg.com/@sentry/react-native/-/react-native-5.11.1.tgz#d6d7f0ebe49f784101d5e371208cf49df37da36b"
+  integrity sha512-IrpPeh9wFoUZCNpzY62B0OaRKI1l8Dq9kqcTsTerFarafUimUxjxn52SdMyB3jX4SJZEmf4Cew0+BYYzjVrYCg==
   dependencies:
     "@sentry/browser" "7.73.0"
     "@sentry/cli" "2.21.2"

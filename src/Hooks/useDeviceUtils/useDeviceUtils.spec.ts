@@ -3,6 +3,7 @@ import { useDeviceUtils } from "./useDeviceUtils"
 import { selectDevices } from "~Storage/Redux/Selectors"
 import { TestWrapper } from "~Test"
 import { DEVICE_CREATION_ERRORS as ERRORS } from "~Model"
+import { HexUtils } from "~Utils"
 
 jest.mock("react-native-quick-crypto")
 
@@ -65,7 +66,7 @@ describe("createDevice", () => {
         expect(device.rootAddress).toBeDefined()
         expect(device.xPub).toBeUndefined()
         expect(wallet.rootAddress).toBeDefined()
-        expect(wallet.privateKey).toEqual(privateKey)
+        expect(wallet.privateKey).toEqual(HexUtils.normalize(privateKey))
         expect(wallet.mnemonic).toBeUndefined()
     })
 
