@@ -2,6 +2,7 @@ import { HDNode, Keystore } from "thor-devkit"
 import "~Test"
 
 import CryptoUtils from "./CryptoUtils"
+import { IMPORT_TYPE } from "~Model"
 
 const {
     hdNodeFromXPub,
@@ -158,5 +159,60 @@ describe("mnemonicStringToArray", () => {
                 ` ${VALID_MNEMONIC_12.split(" ").join(", ")} `,
             ),
         ).toStrictEqual(VALID_MNEMONIC_12.split(" "))
+    })
+})
+
+describe("random", () => {
+    it("random should return a random number", () => {
+        const random = CryptoUtils.random()
+        expect(random).not.toBeNull()
+    })
+})
+describe("encrypt", () => {
+    it("encrypt should return an encrypted string", () => {
+        const encrypted = CryptoUtils.encrypt("test", deviceEncryptionKey)
+        expect(encrypted).not.toBeNull()
+    })
+})
+
+describe("decrypt", () => {
+    it("decrypt should return a decrypted string", () => {
+        const encrypted = CryptoUtils.encrypt("test", deviceEncryptionKey)
+        const decrypted = CryptoUtils.decrypt(encrypted, deviceEncryptionKey)
+        expect(decrypted).toEqual("test")
+    })
+})
+
+describe("encryptState", () => {
+    it("encryptState should return an encrypted string", () => {
+        const encrypted = CryptoUtils.encryptState({ test: "Hello" }, "myKey")
+        expect(encrypted).not.toBeNull()
+    })
+})
+
+describe("decryptState", () => {
+    it("decryptState should return a decrypted string", () => {
+        const encrypted = CryptoUtils.encryptState({ test: "Hello" }, "myKey")
+        const decrypted = CryptoUtils.decryptState(encrypted, "myKey")
+        expect(JSON.parse(decrypted)).toEqual({ test: "Hello" })
+    })
+})
+
+describe("determineKeyImportType", () => {
+    it("should return IMPORT_TYPE.MNEMONIC", () => {
+        const importType = CryptoUtils.determineKeyImportType(VALID_MNEMONIC_12)
+        expect(importType).toEqual(IMPORT_TYPE.MNEMONIC)
+    })
+    it("should return IMPORT_TYPE.PRIVATE_KEY", () => {
+        const importType = CryptoUtils.determineKeyImportType(PRIVATE_KEY)
+        expect(importType).toEqual(IMPORT_TYPE.PRIVATE_KEY)
+    })
+    it("should return IMPORT_TYPE.KEYSTORE_FILE", () => {
+        const importType = CryptoUtils.determineKeyImportType(KEYSTORE_FILE)
+        expect(importType).toEqual(IMPORT_TYPE.KEYSTORE_FILE)
+    })
+    it("should return IMPORT_TYPE.UNKNOWN", () => {
+        const importType = CryptoUtils.determineKeyImportType("test")
+        expect(importType).toEqual(IMPORT_TYPE.UNKNOWN)
     })
 })
