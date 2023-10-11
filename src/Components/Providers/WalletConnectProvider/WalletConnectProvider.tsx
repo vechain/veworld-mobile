@@ -1,5 +1,5 @@
 import React, { useCallback, useEffect, useMemo } from "react"
-import { WalletConnectUtils } from "~Utils"
+import { error, WalletConnectUtils } from "~Utils"
 import { useNavigation } from "@react-navigation/native"
 import { useWcRequest } from "./hooks"
 import { useSessionProposals } from "~Components/Providers/WalletConnectProvider/hooks/useSessionProposals"
@@ -74,6 +74,18 @@ const WalletConnectContextProvider = ({
     useEffect(() => {
         ;(async () => {
             const web3Wallet = await WalletConnectUtils.getWeb3Wallet()
+
+            for (const event of [
+                "session_proposal",
+                "session_request",
+                "session_delete",
+            ]) {
+                if (web3Wallet.events.listenerCount(event) > 0) {
+                    error(
+                        `Wallet Connect Provider: ${event} listener already exists`,
+                    )
+                }
+            }
 
             web3Wallet.on("session_proposal", addPendingProposal)
             web3Wallet.on("session_request", addPendingRequest)
