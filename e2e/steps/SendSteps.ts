@@ -24,6 +24,8 @@ When(
     { timeout: -1 },
     async function () {
         await insertTextById("0.00001", "SendScreen_amountInput")
+
+        await clickByText("Send")
     },
 )
 
@@ -63,6 +65,8 @@ When(
     { timeout: -1 },
     async function () {
         await insertTextById("0,1", "SendScreen_amountInput")
+
+        await clickByText("Send")
     },
 )
 
