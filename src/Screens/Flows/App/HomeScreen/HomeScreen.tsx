@@ -166,18 +166,18 @@ export const HomeScreen = () => {
             fixedHeader={<Header />}
             noBackButton
             noMargin
-            refreshControl={
-                <RefreshControl
-                    onRefresh={onRefresh}
-                    tintColor={theme.colors.border}
-                    refreshing={refreshing}
-                />
-            }
             fixedBody={
                 <>
                     <NestableScrollContainer
                         ref={scrollViewRef}
-                        testID="HomeScreen_ScrollView">
+                        testID="HomeScreen_ScrollView"
+                        refreshControl={
+                            <RefreshControl
+                                onRefresh={onRefresh}
+                                tintColor={theme.colors.border}
+                                refreshing={refreshing}
+                            />
+                        }>
                         <BaseView>
                             <HeaderView
                                 openAccountManagementSheet={
