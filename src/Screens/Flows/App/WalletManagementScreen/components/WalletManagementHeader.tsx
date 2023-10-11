@@ -78,7 +78,7 @@ export const WalletManagementHeader = ({
                                     color={COLORS.DARK_PURPLE}
                                 />
                             }>
-                            <BaseSpacer width={8} />
+                            <BaseSpacer width={2} />
                             {LL.ADD_WALLET()}
                         </BaseButton>
                     </>

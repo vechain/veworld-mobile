@@ -113,7 +113,7 @@ export const WalletMgmtBottomSheet = React.forwardRef<
                                 color={COLORS.DARK_PURPLE}
                             />
                         }>
-                        <BaseSpacer width={8} />
+                        <BaseSpacer width={2} />
                         {LL.ADD_ACCOUNT()}
                     </BaseButton>
                 )}
