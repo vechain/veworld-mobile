@@ -646,8 +646,9 @@ const en: BaseTranslation = {
     LEDGER_CERTIFICATE_READ: "Certificate is ready",
     SEND_LEDGER_TX_READY_SB: "The transaction is ready to be sent, press confirm to send it to the network",
     LEDGER_CERTIFICATE_READ_SB: "The certificate is ready to be sent to the DApp, press confirm to continue",
-    SEND_PENDING_TX_REVERT_ALERT: "This transaction may be reverted if ypur balance is too low",
-    SEND_ERROR_TOKEN_NOT_FOUND: "It looks like you dont have any {tokenName: string} in your wallet",
+    SEND_PENDING_TX_REVERT_ALERT: "This transaction may be reverted if your balance is too low",
+    SEND_ERROR_TOKEN_NOT_FOUND: "It looks like you don't have any {tokenName: string} in your wallet",
+    SEND_TRANSACTION_ERROR: "Error signing transaction",
 
     LEDGER_CONNECTING: "Connecting",
     LEDGER_CONNECT: "Connect",

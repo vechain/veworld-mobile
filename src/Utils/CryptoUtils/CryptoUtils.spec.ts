@@ -3,20 +3,21 @@ import "~Test"
 
 import CryptoUtils from "./CryptoUtils"
 import { IMPORT_TYPE } from "~Model"
+import HexUtils from "~Utils/HexUtils"
 
 const {
     hdNodeFromXPub,
     xPubFromHdNode,
     mnemonicStringToArray,
     decryptKeystoreFile,
+    determineKeyImportType,
 } = CryptoUtils
 
 const VALID_MNEMONIC_12 =
     "denial kitchen pet squirrel other broom bar gas better priority spoil cross"
-// const INVALID_MENMONIC_12 =
-//     "denial denial denial denial denial denial denial denial denial denial denial denial"
-// const VALID_MNEMONIC_24 =
-//     "record minute play dream viable zero brisk true pink retreat juice fresh resist tent coast table damp pupil water mutual shoe year capable fluid"
+
+const VALID_MNEMONIC_24 =
+    "record minute play dream viable zero brisk true pink retreat juice fresh resist tent coast table damp pupil water mutual shoe year capable fluid"
 
 const KEYSTORE_FILE =
     '{"version":3,"id":"8E39FB2F-3AE5-4DFC-849B-C78B310E6622","crypto":{"ciphertext":"ebcc42b079516d1ba5a0377743422a17d8795a1c24d3ad7b7d30dbd6c8edab12","cipherparams":{"iv":"3c3917afdf69bdc47f9693121fcc53e0"},"kdf":"scrypt","kdfparams":{"r":8,"p":1,"n":262144,"dklen":32,"salt":"ac93e95a3a6d1b070c720078625a4ccc2cef113508e2dcc9acd774325dfbe326"},"mac":"ff87134edec116091a51572a2ea745b96a169c2bae1fa09007070f3dcf4a53ec","cipher":"aes-128-ctr"},"address":"f077b491b355e64048ce21e3a6fc4751eeea77fa"}'
@@ -199,20 +200,55 @@ describe("decryptState", () => {
 })
 
 describe("determineKeyImportType", () => {
-    it("should return IMPORT_TYPE.MNEMONIC", () => {
-        const importType = CryptoUtils.determineKeyImportType(VALID_MNEMONIC_12)
-        expect(importType).toEqual(IMPORT_TYPE.MNEMONIC)
+    it("valid 12 word mnemonic", () => {
+        expect(determineKeyImportType(VALID_MNEMONIC_12)).toBe(
+            IMPORT_TYPE.MNEMONIC,
+        )
     })
-    it("should return IMPORT_TYPE.PRIVATE_KEY", () => {
-        const importType = CryptoUtils.determineKeyImportType(PRIVATE_KEY)
-        expect(importType).toEqual(IMPORT_TYPE.PRIVATE_KEY)
+
+    it("valid 24 word mnemonic", () => {
+        expect(determineKeyImportType(VALID_MNEMONIC_24)).toBe(
+            IMPORT_TYPE.MNEMONIC,
+        )
     })
-    it("should return IMPORT_TYPE.KEYSTORE_FILE", () => {
-        const importType = CryptoUtils.determineKeyImportType(KEYSTORE_FILE)
-        expect(importType).toEqual(IMPORT_TYPE.KEYSTORE_FILE)
+
+    it("invalid checksum 12 word mnemonic", () => {
+        expect(
+            determineKeyImportType(
+                "record minute play dream viable zero brisk true pink retreat juice fresh",
+            ),
+        ).toBe(IMPORT_TYPE.UNKNOWN)
     })
-    it("should return IMPORT_TYPE.UNKNOWN", () => {
-        const importType = CryptoUtils.determineKeyImportType("test")
-        expect(importType).toEqual(IMPORT_TYPE.UNKNOWN)
+
+    it("valid private key", () => {
+        expect(determineKeyImportType(PRIVATE_KEY)).toBe(
+            IMPORT_TYPE.PRIVATE_KEY,
+        )
+    })
+
+    it("valid private key with hex prefix", () => {
+        expect(determineKeyImportType(HexUtils.addPrefix(PRIVATE_KEY))).toBe(
+            IMPORT_TYPE.PRIVATE_KEY,
+        )
+    })
+
+    it("valid private key with hex prefix and upper case", () => {
+        expect(
+            determineKeyImportType(
+                HexUtils.addPrefix(PRIVATE_KEY).toUpperCase(),
+            ),
+        ).toBe(IMPORT_TYPE.PRIVATE_KEY)
+    })
+
+    it("valid keystore file", () => {
+        expect(determineKeyImportType(KEYSTORE_FILE)).toBe(
+            IMPORT_TYPE.KEYSTORE_FILE,
+        )
+    })
+
+    it("invalid keystore file", () => {
+        expect(determineKeyImportType("invalid keystore file")).toBe(
+            IMPORT_TYPE.UNKNOWN,
+        )
     })
 })

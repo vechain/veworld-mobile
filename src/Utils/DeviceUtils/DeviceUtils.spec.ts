@@ -5,7 +5,7 @@ import {
     isSlowDevice,
 } from "./DeviceUtils" // Replace with the actual path to your module
 import { HDNode } from "thor-devkit"
-import { CryptoUtils } from "~Utils"
+import { CryptoUtils, HexUtils } from "~Utils"
 import { DEVICE_TYPE } from "~Model"
 
 // Mock the methods from react-native-device-info
@@ -14,6 +14,9 @@ jest.mock("react-native-device-info", () => ({
     getMaxMemory: jest.fn(),
     getTotalMemory: jest.fn(),
 }))
+
+const PRIVATE_KEY =
+    "0x99f0500549792796c14fed62011a51081dc5b5e68fe8bd8a13b86be829c4fd36"
 
 describe("generateDeviceForMnemonic", () => {
     it("valid menemonic phrase", () => {
@@ -57,19 +60,19 @@ describe("generateDeviceForMnemonic", () => {
     })
 })
 describe("generateDeviceForPrivateKey", () => {
-    it("valid private key", () => {
-        const privateKey =
-            "99f0500549792796c14fed62011a51081dc5b5e68fe8bd8a13b86be829c4fd36"
+    it("valid private key - hex prefix", () => {
         const deviceIndex = 1
 
         const result = generateDeviceForPrivateKey(
-            privateKey,
+            PRIVATE_KEY,
             deviceIndex,
             "Wallet 3",
         )
 
         expect(result.wallet.mnemonic).toBeUndefined()
-        expect(result.wallet.privateKey).toEqual(privateKey)
+        expect(result.wallet.privateKey).toEqual(
+            HexUtils.normalize(PRIVATE_KEY),
+        )
         expect(result.wallet.nonce).toHaveLength(258)
         expect(result.wallet.rootAddress).toEqual(
             "0xf077b491b355e64048ce21e3a6fc4751eeea77fa",
@@ -82,6 +85,107 @@ describe("generateDeviceForPrivateKey", () => {
         )
         expect(result.device.type).toEqual(DEVICE_TYPE.LOCAL_PRIVATE_KEY)
         expect(result.device.index).toEqual(deviceIndex)
+    })
+
+    it("valid private key - hex prefix and upper case", () => {
+        const deviceIndex = 1
+
+        const result = generateDeviceForPrivateKey(
+            PRIVATE_KEY.toUpperCase(),
+            deviceIndex,
+            "Wallet 3",
+        )
+
+        expect(result.wallet.mnemonic).toBeUndefined()
+        expect(result.wallet.privateKey).toEqual(
+            HexUtils.normalize(PRIVATE_KEY),
+        )
+        expect(result.wallet.nonce).toHaveLength(258)
+        expect(result.wallet.rootAddress).toEqual(
+            "0xf077b491b355e64048ce21e3a6fc4751eeea77fa",
+        )
+
+        expect(result.device.alias).toEqual("Wallet 3")
+        expect(result.device.xPub).toBeUndefined()
+        expect(result.device.rootAddress).toEqual(
+            "0xf077b491b355e64048ce21e3a6fc4751eeea77fa",
+        )
+        expect(result.device.type).toEqual(DEVICE_TYPE.LOCAL_PRIVATE_KEY)
+        expect(result.device.index).toEqual(deviceIndex)
+    })
+
+    it("valid private key - no hex prefix", () => {
+        const deviceIndex = 1
+
+        const result = generateDeviceForPrivateKey(
+            HexUtils.removePrefix(PRIVATE_KEY),
+            deviceIndex,
+            "Wallet 3",
+        )
+
+        expect(result.wallet.mnemonic).toBeUndefined()
+        expect(result.wallet.privateKey).toEqual(
+            HexUtils.normalize(PRIVATE_KEY),
+        )
+        expect(result.wallet.nonce).toHaveLength(258)
+        expect(result.wallet.rootAddress).toEqual(
+            "0xf077b491b355e64048ce21e3a6fc4751eeea77fa",
+        )
+
+        expect(result.device.alias).toEqual("Wallet 3")
+        expect(result.device.xPub).toBeUndefined()
+        expect(result.device.rootAddress).toEqual(
+            "0xf077b491b355e64048ce21e3a6fc4751eeea77fa",
+        )
+        expect(result.device.type).toEqual(DEVICE_TYPE.LOCAL_PRIVATE_KEY)
+        expect(result.device.index).toEqual(deviceIndex)
+    })
+
+    it("valid private key - no hex prefix and upper case", () => {
+        const deviceIndex = 1
+
+        const result = generateDeviceForPrivateKey(
+            HexUtils.removePrefix(PRIVATE_KEY).toUpperCase(),
+            deviceIndex,
+            "Wallet 3",
+        )
+
+        expect(result.wallet.mnemonic).toBeUndefined()
+        expect(result.wallet.privateKey).toEqual(
+            HexUtils.normalize(PRIVATE_KEY),
+        )
+        expect(result.wallet.nonce).toHaveLength(258)
+        expect(result.wallet.rootAddress).toEqual(
+            "0xf077b491b355e64048ce21e3a6fc4751eeea77fa",
+        )
+
+        expect(result.device.alias).toEqual("Wallet 3")
+        expect(result.device.xPub).toBeUndefined()
+        expect(result.device.rootAddress).toEqual(
+            "0xf077b491b355e64048ce21e3a6fc4751eeea77fa",
+        )
+        expect(result.device.type).toEqual(DEVICE_TYPE.LOCAL_PRIVATE_KEY)
+        expect(result.device.index).toEqual(deviceIndex)
+    })
+
+    it("invalid private key - not hex", () => {
+        const deviceIndex = 1
+
+        expect(() => {
+            generateDeviceForPrivateKey(
+                "invalid_private_key",
+                deviceIndex,
+                "Wallet 3",
+            )
+        }).toThrow("Provided hex value is not valid")
+    })
+
+    it("invalid private key - invalid length", () => {
+        const deviceIndex = 1
+
+        expect(() => {
+            generateDeviceForPrivateKey("0x1234567890", deviceIndex, "Wallet 3")
+        }).toThrow("Invalid private key")
     })
 })
 

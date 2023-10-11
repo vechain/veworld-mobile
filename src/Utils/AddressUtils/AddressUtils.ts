@@ -9,7 +9,7 @@ export const getAddressFromPrivateKey = (privateKey: string): string => {
     try {
         // The chaincode value provided here is irrelevant as we are only calculating the root address
         const hdNode = HDNode.fromPrivateKey(
-            Buffer.from(privateKey, "hex"),
+            Buffer.from(HexUtils.removePrefix(privateKey), "hex"),
             Buffer.from(
                 "51f873b803f6dd9365c8cb176bedba927f1fef1df117aa4ab8b9cf03b12c7e90",
                 "hex",

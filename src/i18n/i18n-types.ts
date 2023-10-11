@@ -1203,7 +1203,7 @@ type RootTranslation = {
 	 */
 	ERROR_INCORRECT_PRIVATE_KEY: string
 	/**
-	 * I​n​c​o​r​r​e​c​t​ ​p​a​s​s​w​o​r​d​.​ ​P​l​e​a​s​e​ ​t​r​y​ ​a​g​a​i​n​.
+	 * I​n​c​o​r​r​e​c​t​ ​p​a​s​s​w​o​r​d​.​ ​P​l​e​a​s​e​ ​t​r​y​ ​a​g​a​i​n
 	 */
 	ERROR_INCORRECT_PASSWORD: string
 	/**
@@ -2260,14 +2260,18 @@ type RootTranslation = {
 	 */
 	LEDGER_CERTIFICATE_READ_SB: string
 	/**
-	 * T​h​i​s​ ​t​r​a​n​s​a​c​t​i​o​n​ ​m​a​y​ ​b​e​ ​r​e​v​e​r​t​e​d​ ​i​f​ ​y​p​u​r​ ​b​a​l​a​n​c​e​ ​i​s​ ​t​o​o​ ​l​o​w
+	 * T​h​i​s​ ​t​r​a​n​s​a​c​t​i​o​n​ ​m​a​y​ ​b​e​ ​r​e​v​e​r​t​e​d​ ​i​f​ ​y​o​u​r​ ​b​a​l​a​n​c​e​ ​i​s​ ​t​o​o​ ​l​o​w
 	 */
 	SEND_PENDING_TX_REVERT_ALERT: string
 	/**
-	 * I​t​ ​l​o​o​k​s​ ​l​i​k​e​ ​y​o​u​ ​d​o​n​t​ ​h​a​v​e​ ​a​n​y​ ​{​t​o​k​e​n​N​a​m​e​}​ ​i​n​ ​y​o​u​r​ ​w​a​l​l​e​t
+	 * I​t​ ​l​o​o​k​s​ ​l​i​k​e​ ​y​o​u​ ​d​o​n​'​t​ ​h​a​v​e​ ​a​n​y​ ​{​t​o​k​e​n​N​a​m​e​}​ ​i​n​ ​y​o​u​r​ ​w​a​l​l​e​t
 	 * @param {string} tokenName
 	 */
 	SEND_ERROR_TOKEN_NOT_FOUND: RequiredParams<'tokenName'>
+	/**
+	 * E​r​r​o​r​ ​s​i​g​n​i​n​g​ ​t​r​a​n​s​a​c​t​i​o​n
+	 */
+	SEND_TRANSACTION_ERROR: string
 	/**
 	 * C​o​n​n​e​c​t​i​n​g
 	 */
@@ -3798,7 +3802,7 @@ Try reconnect your device to the internet.
 	 */
 	ERROR_INCORRECT_PRIVATE_KEY: () => LocalizedString
 	/**
-	 * Incorrect password. Please try again.
+	 * Incorrect password. Please try again
 	 */
 	ERROR_INCORRECT_PASSWORD: () => LocalizedString
 	/**
@@ -4834,13 +4838,17 @@ Try reconnect your device to the internet.
 	 */
 	LEDGER_CERTIFICATE_READ_SB: () => LocalizedString
 	/**
-	 * This transaction may be reverted if ypur balance is too low
+	 * This transaction may be reverted if your balance is too low
 	 */
 	SEND_PENDING_TX_REVERT_ALERT: () => LocalizedString
 	/**
-	 * It looks like you dont have any {tokenName} in your wallet
+	 * It looks like you don't have any {tokenName} in your wallet
 	 */
 	SEND_ERROR_TOKEN_NOT_FOUND: (arg: { tokenName: string }) => LocalizedString
+	/**
+	 * Error signing transaction
+	 */
+	SEND_TRANSACTION_ERROR: () => LocalizedString
 	/**
 	 * Connecting
 	 */

@@ -47,11 +47,13 @@ export const generateDeviceForPrivateKey = (
     deviceIndex: number,
     alias: string,
 ): WalletAndDevice => {
-    const rootAddress =
-        AddressUtils.getAddressFromPrivateKey(privateKey).toLowerCase()
+    const normalizedKey = HexUtils.normalize(privateKey)
+    const rootAddress = HexUtils.normalize(
+        AddressUtils.getAddressFromPrivateKey(normalizedKey),
+    )
 
     const wallet: Wallet = {
-        privateKey: privateKey,
+        privateKey: normalizedKey,
         nonce: HexUtils.generateRandom(256),
         rootAddress: rootAddress,
     }
