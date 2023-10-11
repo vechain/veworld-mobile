@@ -18,25 +18,31 @@ export const ChangeAccountButtonPill = ({ title, text, action }: Props) => {
             action={action}
             style={themedStyles.container}
             haptics="Light">
-            <BaseView>
+            <BaseView w={85} px={15}>
                 <BaseText
                     color={theme.colors.textReversed}
-                    typographyFont="smallCaptionBold">
+                    typographyFont="smallCaptionBold"
+                    numberOfLines={1}
+                    ellipsizeMode="tail">
                     {title}
                 </BaseText>
                 <BaseText
                     color={theme.colors.textReversed}
-                    typographyFont="smallCaption">
+                    typographyFont="smallCaption"
+                    numberOfLines={1}
+                    ellipsizeMode="tail">
                     {text}
                 </BaseText>
             </BaseView>
 
             <View style={themedStyles.seperator} />
 
-            <BaseIcon
-                name="account-sync-outline"
-                color={theme.colors.textReversed}
-            />
+            <BaseView w={35}>
+                <BaseIcon
+                    name="account-sync-outline"
+                    color={theme.colors.textReversed}
+                />
+            </BaseView>
         </BaseTouchable>
     )
 }
@@ -45,7 +51,7 @@ const baseStyles = (theme: ColorThemeType) =>
     StyleSheet.create({
         container: {
             height: 40,
-            width: 123,
+            width: 120,
             borderRadius: 12,
             overflow: "hidden",
             flexDirection: "row",
