@@ -584,7 +584,7 @@ type RootTranslation = {
 	 */
 	TITLE_RESET_APP: string
 	/**
-	 * W​a​l​l​e​t​ ​m​a​n​a​g​e​m​e​n​t
+	 * W​a​l​l​e​t​s
 	 */
 	TITLE_WALLET_MANAGEMENT: string
 	/**
@@ -739,9 +739,9 @@ type RootTranslation = {
 	 */
 	SB_RENAME_WALLET: string
 	/**
-	 * A​c​c​o​u​n​t​ ​v​i​s​i​b​i​l​i​t​y
+	 * A​c​c​o​u​n​t​s
 	 */
-	SB_ACCOUNT_VISIBILITY: string
+	SB_ACCOUNTS: string
 	/**
 	 * E​n​t​e​r​ ​y​o​u​r​ ​l​a​n​g​u​a​g​e
 	 */
@@ -1898,6 +1898,14 @@ type RootTranslation = {
 	 * M​a​n​a​g​e​ ​U​R​L​s
 	 */
 	SETTINGS_TRANSACTIONS_MANAGE_URLS: string
+	/**
+	 * A​d​d​ ​W​a​l​l​e​t
+	 */
+	ADD_WALLET: string
+	/**
+	 * A​d​d​ ​A​c​c​o​u​n​t
+	 */
+	ADD_ACCOUNT: string
 	/**
 	 * W​h​a​t​ ​d​o​ ​y​o​u​ ​w​a​n​t​ ​t​o​ ​d​o​?
 	 */
@@ -3177,7 +3185,7 @@ export type TranslationFunctions = {
 	 */
 	TITLE_RESET_APP: () => LocalizedString
 	/**
-	 * Wallet management
+	 * Wallets
 	 */
 	TITLE_WALLET_MANAGEMENT: () => LocalizedString
 	/**
@@ -3329,9 +3337,9 @@ export type TranslationFunctions = {
 	 */
 	SB_RENAME_WALLET: () => LocalizedString
 	/**
-	 * Account visibility
+	 * Accounts
 	 */
-	SB_ACCOUNT_VISIBILITY: () => LocalizedString
+	SB_ACCOUNTS: () => LocalizedString
 	/**
 	 * Enter your language
 	 */
@@ -4465,6 +4473,14 @@ Try reconnect your device to the internet.
 	 * Manage URLs
 	 */
 	SETTINGS_TRANSACTIONS_MANAGE_URLS: () => LocalizedString
+	/**
+	 * Add Wallet
+	 */
+	ADD_WALLET: () => LocalizedString
+	/**
+	 * Add Account
+	 */
+	ADD_ACCOUNT: () => LocalizedString
 	/**
 	 * What do you want to do?
 	 */

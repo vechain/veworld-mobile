@@ -165,7 +165,7 @@ const en: BaseTranslation = {
 
     TITLE_CREATE_WALLET_SUCCESS: "Your vechain wallet is ready!",
     TITLE_RESET_APP: "VeWorld reset",
-    TITLE_WALLET_MANAGEMENT: "Wallet management",
+    TITLE_WALLET_MANAGEMENT: "Wallets",
     TITLE_SETTINGS: "Settings",
     TITLE_GENERAL: "General",
     TITLE_ADVANCED: "Advanced",
@@ -205,7 +205,7 @@ const en: BaseTranslation = {
     SB_CHOOSE_A_WALLET: "Choose a wallet",
     SB_EDIT_WALLET: "Edit {name: string}",
     SB_RENAME_WALLET: "Rename wallet",
-    SB_ACCOUNT_VISIBILITY: "Account visibility",
+    SB_ACCOUNTS: "Accounts",
     SB_ENTER_LANGUAGE: "Enter your language",
     SB_SELECT_LANGUAGE: "Select your language",
     SB_ALERT_CAMERA_PERMISSION: "You have previously denied camera access to VeWorld. Please enable it in your device settings.",
@@ -548,6 +548,8 @@ const en: BaseTranslation = {
 
     // MANAGE_WALLET
 
+    ADD_WALLET: "Add Wallet",
+    ADD_ACCOUNT: "Add Account",
     ACCOUNT_OR_WALLET_BOTTOM_SHEET_TITLE: "What do you want to do?",
     ACCOUNT_OR_WALLET_BOTTOM_SHEET_SUBTITLE: "Do you want to add either a wallet or an account?",
     ACCOUNT_OR_WALLET_BOTTOM_SHEET_ADD_ACCOUNT: "Add a new account",

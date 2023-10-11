@@ -37,12 +37,12 @@ export const Balance: React.FC<Props> = memo(
         }, [balance, isVisible])
 
         const computeFonts = useMemo(
-            () => (renderBalance.length > 9 ? "title" : "hugeTitle"),
+            () => (renderBalance.length > 9 ? "title" : "largeTitle"),
             [renderBalance.length],
         )
 
         return (
-            <>
+            <BaseView>
                 <BaseView flexDirection="row">
                     <BaseText
                         color={theme.colors.textReversed}
@@ -88,7 +88,7 @@ export const Balance: React.FC<Props> = memo(
                         {VET.symbol}
                     </BaseText>
                 </BaseView>
-            </>
+            </BaseView>
         )
     },
 )

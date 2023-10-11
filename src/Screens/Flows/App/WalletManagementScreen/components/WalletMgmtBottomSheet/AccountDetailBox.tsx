@@ -1,15 +1,16 @@
-import React, { memo, useCallback, useMemo } from "react"
+import React, { memo, useCallback, useMemo, useState } from "react"
 import { StyleSheet } from "react-native"
-import { useTheme } from "~Hooks"
+import { useRenameAccount, useTheme } from "~Hooks"
 import { FormattingUtils } from "~Utils"
 import {
+    BaseBottomSheetTextInput,
     BaseIcon,
     BaseSpacer,
     BaseText,
     BaseTouchableBox,
     BaseView,
 } from "~Components"
-import { WalletAccount } from "~Model"
+import { AccountWithDevice, WalletAccount } from "~Model"
 import {
     selectVetBalanceByAccount,
     useAppDispatch,
@@ -22,11 +23,28 @@ type Props = {
     account: WalletAccount
     isSelected: boolean
     isBalanceVisible: boolean
+    confirmRemoveAccount: (account: AccountWithDevice) => void
 }
 export const AccountDetailBox: React.FC<Props> = memo(
-    ({ account, isSelected, isBalanceVisible }) => {
+    ({ account, isSelected, isBalanceVisible, confirmRemoveAccount }) => {
         const theme = useTheme()
         const dispatch = useAppDispatch()
+
+        const { changeAccountAlias } = useRenameAccount(account)
+
+        const [backupAlias, setBackupAlias] = useState(account.alias ?? "")
+        const [accountAlias, setAccountAlias] = useState(account.alias ?? "")
+
+        const onRenameAccount = (name: string) => {
+            setAccountAlias(name)
+            if (name === "") {
+                changeAccountAlias({
+                    newAlias: backupAlias ?? account.alias ?? "",
+                })
+            } else {
+                changeAccountAlias({ newAlias: name })
+            }
+        }
 
         const vetBalance = useAppSelector(state =>
             selectVetBalanceByAccount(state, account.address),
@@ -44,20 +62,50 @@ export const AccountDetailBox: React.FC<Props> = memo(
             dispatch(toggleAccountVisibility({ address: account.address }))
         }, [dispatch, account])
 
+        const deleteAccount = useCallback(() => {
+            confirmRemoveAccount(account as AccountWithDevice)
+        }, [confirmRemoveAccount, account])
+
+        const handleFocus = useCallback(
+            () => setBackupAlias(accountAlias),
+            [accountAlias],
+        )
+
+        const cardBgColor = useMemo(
+            () => (!account.visible ? theme.colors.neutralDisabled : undefined),
+            [account.visible, theme.colors.neutralDisabled],
+        )
+        const cardOpacity = useMemo(
+            () => (!account.visible ? 0.7 : undefined),
+            [account.visible],
+        )
+
         return (
             <BaseView w={100} flexDirection="row">
                 <BaseTouchableBox
                     haptics="Light"
                     justifyContent="space-between"
-                    bg={
-                        !account.visible
-                            ? theme.colors.neutralDisabled
-                            : undefined
-                    }
+                    bg={cardBgColor}
                     containerStyle={baseStyles.container}>
-                    <BaseText style={baseStyles.alias}>
-                        {account.alias}
-                    </BaseText>
+                    <BaseView style={baseStyles.aliasContainer}>
+                        <BaseBottomSheetTextInput
+                            placeholder={account?.alias}
+                            value={accountAlias}
+                            setValue={onRenameAccount}
+                            style={[
+                                baseStyles.alias,
+                                {
+                                    backgroundColor: cardBgColor,
+                                    opacity: cardOpacity,
+                                },
+                            ]}
+                            inputContainerStyle={{
+                                backgroundColor: cardBgColor,
+                                opacity: cardOpacity,
+                            }}
+                            onFocus={handleFocus}
+                        />
+                    </BaseView>
                     <BaseView style={baseStyles.rightSubContainer}>
                         <BaseText style={baseStyles.address} fontSize={10}>
                             {FormattingUtils.humanAddress(
@@ -79,6 +127,16 @@ export const AccountDetailBox: React.FC<Props> = memo(
                     disabled={isSelected}
                     action={toggleVisibility}
                 />
+                <BaseIcon
+                    haptics="Light"
+                    size={24}
+                    style={baseStyles.deleteIcon}
+                    name={"delete"}
+                    bg={theme.colors.danger}
+                    disabled={isSelected}
+                    action={deleteAccount}
+                    color={theme.colors.background}
+                />
             </BaseView>
         )
     },
@@ -86,7 +144,12 @@ export const AccountDetailBox: React.FC<Props> = memo(
 
 const baseStyles = StyleSheet.create({
     alias: {
-        opacity: 0.7,
+        flex: 1,
+        paddingHorizontal: 0,
+        marginLeft: -16,
+    },
+    aliasContainer: {
+        flex: 1,
     },
     address: {
         opacity: 0.7,
@@ -98,5 +161,6 @@ const baseStyles = StyleSheet.create({
         flexDirection: "column",
         alignItems: "flex-end",
     },
-    eyeIcon: { marginLeft: 16, flex: 0.1 },
+    eyeIcon: { marginLeft: 16 },
+    deleteIcon: { marginLeft: 16 },
 })

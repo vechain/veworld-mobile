@@ -5,14 +5,16 @@ import { AddressUtils } from "~Utils"
 import {
     BaseBottomSheet,
     BaseBottomSheetTextInput,
+    BaseButton,
     BaseIcon,
     BaseSpacer,
     BaseText,
     BaseView,
+    showSuccessToast,
 } from "~Components"
 import { useI18nContext } from "~i18n"
 import { AccountDetailBox } from "./AccountDetailBox"
-import { Device } from "~Model"
+import { AccountWithDevice, DEVICE_TYPE, Device } from "~Model"
 import {
     addAccountForDevice,
     useAppDispatch,
@@ -25,9 +27,11 @@ import {
 } from "~Storage/Redux/Selectors"
 import { StyleSheet } from "react-native"
 import { BottomSheetFlatList } from "@gorhom/bottom-sheet"
+import { COLORS } from "~Constants"
 
 type Props = {
     device?: Device
+    confirmRemoveAccount: (account: AccountWithDevice) => void
 }
 
 const snapPoints = ["50%", "75%", "90%"]
@@ -35,7 +39,7 @@ const snapPoints = ["50%", "75%", "90%"]
 export const WalletMgmtBottomSheet = React.forwardRef<
     BottomSheetModalMethods,
     Props
->(({ device }, ref) => {
+>(({ device, confirmRemoveAccount }, ref) => {
     const theme = useTheme()
     const { LL } = useI18nContext()
     const dispatch = useAppDispatch()
@@ -63,6 +67,9 @@ export const WalletMgmtBottomSheet = React.forwardRef<
             throw new Error("Device is undefined when trying to add account")
         }
         dispatch(addAccountForDevice(device))
+        showSuccessToast({
+            text1: LL.WALLET_MANAGEMENT_NOTIFICATION_CREATE_ACCOUNT_SUCCESS(),
+        })
     }
 
     const onRenameWallet = (name: string) => {
@@ -91,14 +98,25 @@ export const WalletMgmtBottomSheet = React.forwardRef<
                 <BaseText typographyFont="subTitleBold">
                     {walletAlias || device?.alias || ""}
                 </BaseText>
-
-                <BaseIcon
-                    haptics="Light"
-                    size={24}
-                    name="plus"
-                    bg={theme.colors.secondary}
-                    action={onAddAccountClicked}
-                />
+                {device?.type !== DEVICE_TYPE.LOCAL_PRIVATE_KEY && (
+                    <BaseButton
+                        haptics="Light"
+                        action={onAddAccountClicked}
+                        bgColor={theme.colors.secondary}
+                        textColor={COLORS.DARK_PURPLE}
+                        radius={30}
+                        py={10}
+                        leftIcon={
+                            <BaseIcon
+                                name="plus"
+                                size={20}
+                                color={COLORS.DARK_PURPLE}
+                            />
+                        }>
+                        <BaseSpacer width={8} />
+                        {LL.ADD_ACCOUNT()}
+                    </BaseButton>
+                )}
             </BaseView>
             <BaseSpacer height={16} />
             <BaseBottomSheetTextInput
@@ -109,9 +127,7 @@ export const WalletMgmtBottomSheet = React.forwardRef<
                 setValue={onRenameWallet}
             />
             <BaseSpacer height={16} />
-            <BaseText typographyFont="button">
-                {LL.SB_ACCOUNT_VISIBILITY()}
-            </BaseText>
+            <BaseText typographyFont="button">{LL.SB_ACCOUNTS()}</BaseText>
             <BaseSpacer height={16} />
             <BaseView flexDirection="row" style={baseStyles.list}>
                 {device && !!deviceAccounts.length && (
@@ -127,6 +143,7 @@ export const WalletMgmtBottomSheet = React.forwardRef<
 
                             return (
                                 <AccountDetailBox
+                                    confirmRemoveAccount={confirmRemoveAccount}
                                     isBalanceVisible={isBalanceVisible}
                                     account={item}
                                     isSelected={isSelected}

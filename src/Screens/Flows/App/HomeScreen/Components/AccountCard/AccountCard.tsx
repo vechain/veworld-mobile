@@ -2,14 +2,11 @@ import React, { memo, useCallback } from "react"
 import { ViewProps, StyleSheet } from "react-native"
 import { CURRENCY, ColorThemeType } from "~Constants"
 import { useThemedStyles } from "~Hooks"
-import { PlatformUtils } from "~Utils"
+import { FormattingUtils } from "~Utils"
 import {
     AccountIcon,
-    AddressButton,
-    BaseIcon,
     BaseSpacer,
     BaseText,
-    BaseTouchable,
     BaseView,
     LedgerBadge,
 } from "~Components"
@@ -17,21 +14,22 @@ import { AccountWithDevice, DEVICE_TYPE } from "~Model"
 import { useAppDispatch } from "~Storage/Redux"
 import { setBalanceVisible } from "~Storage/Redux/Actions"
 import { Balance } from "./Balance"
+import { AccountAddressButtonPill } from "./AccountAddressButtonPill"
 
 interface Props extends ViewProps {
     account: AccountWithDevice
-    openAccountManagement: () => void
     openSelectAccountBottomSheet: () => void
     balanceVisible: boolean
     selectedCurrency: CURRENCY
+    openQRCodeSheet: () => void
 }
 
 export const AccountCard: React.FC<Props> = memo(props => {
     const {
         account,
-        openAccountManagement,
         openSelectAccountBottomSheet,
         balanceVisible,
+        openQRCodeSheet,
     } = props
 
     const dispatch = useAppDispatch()
@@ -46,93 +44,63 @@ export const AccountCard: React.FC<Props> = memo(props => {
         <BaseView px={20} w={100} flexDirection="row">
             <BaseView
                 bg={theme.colors.primary}
-                borderRadius={24}
-                flexDirection="row"
-                w={100}>
+                borderRadius={20}
+                flexDirection="column"
+                justifyContent="space-between"
+                w={100}
+                flex={1}
+                py={20}
+                px={20}
+                style={styles.container}>
                 <BaseView
-                    flex={1}
-                    py={16}
-                    px={16}
+                    flexDirection="row"
                     justifyContent="space-between"
-                    alignItems="flex-start"
-                    style={styles.borderRight}>
-                    <BaseView flexDirection="row">
-                        <BaseView flexDirection="row">
-                            <AccountIcon address={account.address} size={60} />
-                            <BaseView px={8} alignItems="flex-start">
+                    alignItems="center"
+                    w={100}>
+                    <BaseView flexDirection="row" alignItems="center">
+                        <AccountIcon address={account.address} size={45} />
+                        <BaseView px={8} alignItems="flex-start">
+                            <BaseText
+                                typographyFont="buttonPrimary"
+                                color={theme.colors.textReversed}>
+                                {account.alias}
+                            </BaseText>
+                            <BaseSpacer height={6} />
+                            <BaseView flexDirection="row">
+                                {account.device?.type ===
+                                    DEVICE_TYPE.LEDGER && (
+                                    <LedgerBadge
+                                        containerStyle={
+                                            styles.ledgerBadgeContainer
+                                        }
+                                        logoStyle={{
+                                            color: theme.colors.text,
+                                        }}
+                                    />
+                                )}
                                 <BaseText
-                                    typographyFont="buttonPrimary"
+                                    typographyFont="captionMedium"
                                     color={theme.colors.textReversed}>
-                                    {account.alias}
+                                    {account.device?.alias}
                                 </BaseText>
-                                <BaseSpacer height={4} />
-                                <BaseView flexDirection="row">
-                                    {account.device?.type ===
-                                        DEVICE_TYPE.LEDGER && (
-                                        <LedgerBadge
-                                            containerStyle={
-                                                styles.ledgerBadgeContainer
-                                            }
-                                            logoStyle={{
-                                                color: theme.colors.text,
-                                            }}
-                                        />
-                                    )}
-                                    <BaseText
-                                        typographyFont="captionMedium"
-                                        color={theme.colors.textReversed}>
-                                        {account.device?.alias}
-                                    </BaseText>
-                                </BaseView>
-
-                                <BaseSpacer height={8} />
-                                <AddressButton address={account.address} />
                             </BaseView>
                         </BaseView>
                     </BaseView>
-                    <BaseSpacer height={PlatformUtils.isIOS() ? 18 : 10} />
-                    <Balance
-                        account={account}
-                        isVisible={balanceVisible}
-                        toggleVisible={toggleBalanceVisibility}
+                    <AccountAddressButtonPill
+                        text={FormattingUtils.humanAddress(
+                            account.address,
+                            6,
+                            3,
+                        )}
+                        openQRCodeSheet={openQRCodeSheet}
+                        switchAccount={openSelectAccountBottomSheet}
                     />
                 </BaseView>
-                <BaseView>
-                    <BaseTouchable
-                        haptics="Medium"
-                        action={openAccountManagement}
-                        style={styles.pressable}>
-                        <BaseView
-                            style={styles.borderBottom}
-                            px={14}
-                            justifyContent="center"
-                            alignItems="center"
-                            flex={1}>
-                            <BaseIcon
-                                name="account-cog-outline"
-                                color={theme.colors.textReversed}
-                                size={28}
-                                testID="AccountCard_accountManagementButton"
-                            />
-                        </BaseView>
-                    </BaseTouchable>
-                    <BaseTouchable
-                        haptics="Medium"
-                        action={openSelectAccountBottomSheet}
-                        style={styles.pressable}>
-                        <BaseView
-                            justifyContent="center"
-                            alignItems="center"
-                            flex={1}>
-                            <BaseIcon
-                                name="account-switch-outline"
-                                color={theme.colors.textReversed}
-                                size={28}
-                                testID="AccountCard_changeAccountButton"
-                            />
-                        </BaseView>
-                    </BaseTouchable>
-                </BaseView>
+                <Balance
+                    account={account}
+                    isVisible={balanceVisible}
+                    toggleVisible={toggleBalanceVisibility}
+                />
             </BaseView>
         </BaseView>
     )
@@ -140,9 +108,8 @@ export const AccountCard: React.FC<Props> = memo(props => {
 
 const baseStyles = (theme: ColorThemeType) =>
     StyleSheet.create({
-        borderRight: {
-            borderRightColor: theme.colors.info,
-            borderRightWidth: 1,
+        container: {
+            height: 162,
         },
         borderBottom: {
             borderBottomColor: theme.colors.info,
@@ -151,10 +118,5 @@ const baseStyles = (theme: ColorThemeType) =>
         ledgerBadgeContainer: {
             marginRight: 8,
             bg: theme.colors.textReversed,
-        },
-        pressable: {
-            justifyContent: "center",
-            alignItems: "center",
-            flex: 1,
         },
     })

@@ -1,12 +1,5 @@
 import React, { useCallback, useMemo, useRef, useState } from "react"
-import {
-    AccountManagementBottomSheet,
-    EditTokensBar,
-    Header,
-    TokenList,
-    RemoveAccountWarningBottomSheet,
-    AccountCard,
-} from "./Components"
+import { EditTokensBar, Header, TokenList, AccountCard } from "./Components"
 import {
     useBottomSheetModal,
     useCheckVersion,
@@ -15,22 +8,17 @@ import {
     useTheme,
 } from "~Hooks"
 import {
-    AddAccountBottomSheet,
     BaseIcon,
     BaseSpacer,
     BaseView,
     FastActionsBar,
     Layout,
     QRCodeBottomSheet,
-    RenameAccountBottomSheet,
     SelectAccountBottomSheet,
-    showSuccessToast,
-    showWarningToast,
 } from "~Components"
 import { FadeInRight } from "react-native-reanimated"
-import { useTokenBalances, useAccountDelete } from "./Hooks"
+import { useTokenBalances } from "./Hooks"
 import {
-    selectAccounts,
     selectBalanceVisible,
     selectCurrency,
     selectSelectedAccount,
@@ -57,91 +45,20 @@ export const HomeScreen = () => {
     const isBalanceVisible = useAppSelector(selectBalanceVisible)
 
     const {
-        ref: accountManagementBottomSheetRef,
-        onOpen: openAccountManagementSheet,
-        onClose: closeAccountManagementSheet,
-    } = useBottomSheetModal()
-
-    const {
-        ref: addAccountBottomSheetRef,
-        onOpen: openAddAccountSheet,
-        onClose: closeAddAccountSheet,
-    } = useBottomSheetModal()
-
-    const {
-        ref: removeAccountBottomSheetRef,
-        onOpen: openRemoveAccountSheet,
-        onClose: closeRemoveAccountSheet,
-    } = useBottomSheetModal()
-
-    const {
         ref: selectAccountBottomSheetRef,
         onOpen: openSelectAccountBottomSheet,
         onClose: closeSelectAccountBottonSheet,
     } = useBottomSheetModal()
 
-    const {
-        ref: removeAccountWarningBottomSheetRef,
-        onOpen: openRemoveAccountWarningBottomSheet,
-        onClose: closeRemoveAccountWarningBottomSheet,
-    } = useBottomSheetModal()
-
     const { ref: QRCodeBottomSheetRef, onOpen: openQRCodeSheet } =
         useBottomSheetModal()
 
-    const {
-        ref: renameAccountBottomSheetRef,
-        onOpen: openRenameAccountBottomSheet,
-        onClose: closeRenameAccountBottonSheet,
-    } = useBottomSheetModal()
-
-    const handleOnSuccessAddAccountBottomSheet = useCallback(() => {
-        closeAddAccountSheet()
-        showSuccessToast({
-            text1: LL.WALLET_MANAGEMENT_NOTIFICATION_CREATE_ACCOUNT_SUCCESS(),
-        })
-    }, [LL, closeAddAccountSheet])
-
     const accounts = useAppSelector(selectVisibleAccounts)
-    const allAccounts = useAppSelector(selectAccounts)
     const selectedAccount = useAppSelector(selectSelectedAccount)
 
     const setSelectedAccount = (account: AccountWithDevice) => {
         onSetSelectedAccount({ address: account.address })
     }
-
-    const { setAccountToRemove, deleteAccount, isOnlyAccount } =
-        useAccountDelete()
-
-    const openConfirmRemoveAccountWarning = useCallback(
-        (account: AccountWithDevice) => {
-            if (isOnlyAccount(account.rootAddress))
-                return showWarningToast({
-                    text1: LL.NOTIFICATION_CANT_REMOVE_ONLY_ACCOUNT(),
-                })
-
-            setAccountToRemove(account)
-            closeRemoveAccountSheet()
-            openRemoveAccountWarningBottomSheet()
-        },
-        [
-            setAccountToRemove,
-            LL,
-            isOnlyAccount,
-            closeRemoveAccountSheet,
-            openRemoveAccountWarningBottomSheet,
-        ],
-    )
-
-    const onRemoveAccount = useCallback(() => {
-        closeRemoveAccountWarningBottomSheet()
-        openAccountManagementSheet()
-        deleteAccount()
-    }, [
-        closeRemoveAccountWarningBottomSheet,
-        openAccountManagementSheet,
-        deleteAccount,
-    ])
 
     const onRefresh = useCallback(async () => {
         setRefreshing(true)
@@ -213,14 +130,12 @@ export const HomeScreen = () => {
                                 <BaseSpacer height={20} />
                                 <AccountCard
                                     balanceVisible={isBalanceVisible}
-                                    openAccountManagement={
-                                        openAccountManagementSheet
-                                    }
                                     openSelectAccountBottomSheet={
                                         openSelectAccountBottomSheet
                                     }
                                     account={selectedAccount}
                                     selectedCurrency={selectedCurrency}
+                                    openQRCodeSheet={openQRCodeSheet}
                                 />
                             </BaseView>
                             <BaseSpacer height={24} />
@@ -242,24 +157,6 @@ export const HomeScreen = () => {
                             <BaseSpacer height={24} />
                         </BaseView>
 
-                        <AccountManagementBottomSheet
-                            ref={accountManagementBottomSheetRef}
-                            onClose={closeAccountManagementSheet}
-                            openAddAccountSheet={openAddAccountSheet}
-                            openQRCodeSheet={openQRCodeSheet}
-                            openRenameAccountBottomSheet={
-                                openRenameAccountBottomSheet
-                            }
-                            openRemoveAccountBottomSheet={
-                                openRemoveAccountSheet
-                            }
-                        />
-
-                        <AddAccountBottomSheet
-                            ref={addAccountBottomSheetRef}
-                            onSuccess={handleOnSuccessAddAccountBottomSheet}
-                        />
-
                         {/*Account Selection*/}
                         <SelectAccountBottomSheet
                             closeBottomSheet={closeSelectAccountBottonSheet}
@@ -270,28 +167,7 @@ export const HomeScreen = () => {
                             ref={selectAccountBottomSheetRef}
                         />
 
-                        {/*Account Removal*/}
-                        <SelectAccountBottomSheet
-                            accounts={allAccounts}
-                            setSelectedAccount={openConfirmRemoveAccountWarning}
-                            isBalanceVisible={isBalanceVisible}
-                            onDismiss={closeRemoveAccountSheet}
-                            ref={removeAccountBottomSheetRef}
-                        />
-
-                        <RemoveAccountWarningBottomSheet
-                            onClose={openAccountManagementSheet}
-                            onConfirm={onRemoveAccount}
-                            ref={removeAccountWarningBottomSheetRef}
-                        />
-
                         <QRCodeBottomSheet ref={QRCodeBottomSheetRef} />
-
-                        <RenameAccountBottomSheet
-                            ref={renameAccountBottomSheetRef}
-                            account={selectedAccount}
-                            onClose={closeRenameAccountBottonSheet}
-                        />
                     </NestableScrollContainer>
                 </>
             }

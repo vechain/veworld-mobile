@@ -70,8 +70,8 @@ export const QRCodeBottomSheet = React.forwardRef<BottomSheetModalMethods>(
                         size="md"
                         title={FormattingUtils.humanAddress(
                             selectedAccount.address,
-                            5,
-                            4,
+                            8,
+                            7,
                         )}
                         action={() =>
                             onCopyToClipboard(
