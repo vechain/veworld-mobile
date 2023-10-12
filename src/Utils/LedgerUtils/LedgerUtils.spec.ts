@@ -172,7 +172,7 @@ describe("LedgerUtils", () => {
                     defaultMainNetwork,
                     0,
                 )
-            expect(getAccountsWithBalancesCall).rejects.toThrow(
+            await expect(getAccountsWithBalancesCall).rejects.toThrow(
                 "Must get at least 1 account",
             )
         })
@@ -184,7 +184,7 @@ describe("LedgerUtils", () => {
                     defaultMainNetwork,
                     1,
                 )
-            expect(getAccountsWithBalancesCall).rejects.toThrow(
+            await expect(getAccountsWithBalancesCall).rejects.toThrow(
                 "Failed to get public key/ chaincode",
             )
         })
@@ -198,7 +198,7 @@ describe("LedgerUtils", () => {
                     defaultMainNetwork,
                     1,
                 )
-            expect(getAccountsWithBalancesCall).rejects.toThrow(
+            await expect(getAccountsWithBalancesCall).rejects.toThrow(
                 "Failed to get public key/ chaincode",
             )
         })

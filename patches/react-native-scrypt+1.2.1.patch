@@ -1,5 +1,5 @@
 diff --git a/node_modules/react-native-scrypt/android/build.gradle b/node_modules/react-native-scrypt/android/build.gradle
-index dac9cc5..7505498 100644
+index dac9cc5..8575880 100644
 --- a/node_modules/react-native-scrypt/android/build.gradle
 +++ b/node_modules/react-native-scrypt/android/build.gradle
 @@ -27,6 +27,7 @@ android {
@@ -10,12 +10,11 @@ index dac9cc5..7505498 100644
          targetSdkVersion safeExtGet('targetSdkVersion', 23)
          versionCode 1
          versionName "1.0"
-@@ -54,6 +55,7 @@ repositories {
+@@ -54,6 +55,6 @@ repositories {
  }
  
  dependencies {
 -    compile 'com.facebook.react:react-native:+'
-+    // compile 'com.facebook.react:react-native:+'
 +    implementation 'com.facebook.react:react-native:+'
  }
  

@@ -119,7 +119,7 @@ jest.mock("@gorhom/bottom-sheet", () => ({
     },
 }))
 
-jest.mock("react-native-skeleton-content-nonexpo", () => "SkeletonContent")
+jest.mock("react-native-reanimated-skeleton", () => "Skeleton")
 
 jest.mock("@walletconnect/web3wallet", () => ({
     __esModule: true,

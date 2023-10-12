@@ -96,7 +96,7 @@ describe("BalanceUtils", () => {
                 thorClient,
             )
 
-        expect(balanceRequest).rejects.toThrowError(
+        await expect(balanceRequest).rejects.toThrowError(
             "Failed to get balance from external service",
         )
     })
