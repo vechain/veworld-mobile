@@ -1,0 +1,24 @@
+name: Test Slack
+
+on:
+    pull_request:
+        branches:
+            - main
+
+
+jobs:
+  test-slack:
+    name: Test Slack message
+    runs-on: ubuntu-latest
+    steps:
+      - name: Throw error
+        run: exit 1
+      - name: Post to a Slack channel
+        if: always()
+        id: slack
+        uses: slackapi/slack-github-action@v1.24.0
+        with:
+          channel-id: ${{ secrets.SLACK_VEWORLD_CHANNEL_ID }}
+          slack-message: "Test Slack message"
+        env:
+          SLACK_BOT_TOKEN: ${{ secrets.SLACK_VEWORLD_BOT_TOKEN }}
