@@ -47,7 +47,8 @@ export const AccountAddressButtonPill = ({
             <BaseTouchable
                 action={switchAccount}
                 haptics="Light"
-                style={themedStyles.pressable}>
+                style={themedStyles.pressable}
+                testID="AccountCard_changeAccountButton">
                 <BaseView px={8}>
                     <BaseIcon
                         name="account-sync-outline"
