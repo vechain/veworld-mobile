@@ -6,6 +6,5 @@ module.exports = {
         formatOptions: {
             snippetInterface: "synchronous",
         },
-        publishQuiet: true,
     },
 }
