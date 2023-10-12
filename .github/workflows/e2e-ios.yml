@@ -120,6 +120,7 @@ jobs:
                   path: metro-bundler.log
 
             - name: Post to a Slack channel
+              if: always()
               id: slack
               uses: slackapi/slack-github-action@v1.24.0
               with:
