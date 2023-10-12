@@ -592,7 +592,7 @@ type RootTranslation = {
 	 */
 	TITLE_RESET_APP: string
 	/**
-	 * W​a​l​l​e​t​ ​m​a​n​a​g​e​m​e​n​t
+	 * W​a​l​l​e​t​s
 	 */
 	TITLE_WALLET_MANAGEMENT: string
 	/**
@@ -751,9 +751,9 @@ type RootTranslation = {
 	 */
 	SB_RENAME_WALLET: string
 	/**
-	 * A​c​c​o​u​n​t​ ​v​i​s​i​b​i​l​i​t​y
+	 * A​c​c​o​u​n​t​s
 	 */
-	SB_ACCOUNT_VISIBILITY: string
+	SB_ACCOUNTS: string
 	/**
 	 * E​n​t​e​r​ ​y​o​u​r​ ​l​a​n​g​u​a​g​e
 	 */
@@ -1201,7 +1201,11 @@ type RootTranslation = {
 	/**
 	 * I​n​c​o​r​r​e​c​t​ ​i​m​p​o​r​t​ ​d​a​t​a
 	 */
-	ERROR_INCORRECT_IMPORT_DATA: string
+	ERROR_INVALID_IMPORT_DATA: string
+	/**
+	 * A​n​ ​u​n​k​n​o​w​n​ ​e​r​r​o​r​ ​o​c​c​u​r​r​e​d​ ​w​h​i​l​e​ ​i​m​p​o​r​t​i​n​g​ ​t​h​e​ ​w​a​l​l​e​t​.​ ​P​l​e​a​s​e​ ​t​r​y​ ​a​g​a​i​n​.
+	 */
+	ERROR_IMPORT_GENERIC: string
 	/**
 	 * I​n​c​o​r​r​e​c​t​ ​m​n​e​m​o​n​i​c​ ​p​h​r​a​s​e
 	 */
@@ -1211,9 +1215,13 @@ type RootTranslation = {
 	 */
 	ERROR_INCORRECT_PRIVATE_KEY: string
 	/**
-	 * I​n​c​o​r​r​e​c​t​ ​p​a​s​s​w​o​r​d
+	 * I​n​c​o​r​r​e​c​t​ ​p​a​s​s​w​o​r​d​.​ ​P​l​e​a​s​e​ ​t​r​y​ ​a​g​a​i​n
 	 */
 	ERROR_INCORRECT_PASSWORD: string
+	/**
+	 * T​h​i​s​ ​a​p​p​e​a​r​s​ ​t​o​ ​b​e​ ​a​ ​d​u​p​l​i​c​a​t​e​ ​o​f​ ​a​n​ ​e​x​i​s​t​i​n​g​ ​w​a​l​l​e​t
+	 */
+	ERROR_IMPORT_ADDRESS_EXISTS: string
 	/**
 	 * W​r​o​n​g​ ​w​o​r​d​s​ ​c​o​m​b​i​n​a​t​i​o​n
 	 */
@@ -1911,6 +1919,14 @@ type RootTranslation = {
 	 */
 	SETTINGS_TRANSACTIONS_MANAGE_URLS: string
 	/**
+	 * A​d​d​ ​W​a​l​l​e​t
+	 */
+	ADD_WALLET: string
+	/**
+	 * A​d​d​ ​A​c​c​o​u​n​t
+	 */
+	ADD_ACCOUNT: string
+	/**
 	 * W​h​a​t​ ​d​o​ ​y​o​u​ ​w​a​n​t​ ​t​o​ ​d​o​?
 	 */
 	ACCOUNT_OR_WALLET_BOTTOM_SHEET_TITLE: string
@@ -2264,14 +2280,18 @@ type RootTranslation = {
 	 */
 	LEDGER_CERTIFICATE_READ_SB: string
 	/**
-	 * T​h​i​s​ ​t​r​a​n​s​a​c​t​i​o​n​ ​m​a​y​ ​b​e​ ​r​e​v​e​r​t​e​d​ ​i​f​ ​y​p​u​r​ ​b​a​l​a​n​c​e​ ​i​s​ ​t​o​o​ ​l​o​w
+	 * T​h​i​s​ ​t​r​a​n​s​a​c​t​i​o​n​ ​m​a​y​ ​b​e​ ​r​e​v​e​r​t​e​d​ ​i​f​ ​y​o​u​r​ ​b​a​l​a​n​c​e​ ​i​s​ ​t​o​o​ ​l​o​w
 	 */
 	SEND_PENDING_TX_REVERT_ALERT: string
 	/**
-	 * I​t​ ​l​o​o​k​s​ ​l​i​k​e​ ​y​o​u​ ​d​o​n​t​ ​h​a​v​e​ ​a​n​y​ ​{​t​o​k​e​n​N​a​m​e​}​ ​i​n​ ​y​o​u​r​ ​w​a​l​l​e​t
+	 * I​t​ ​l​o​o​k​s​ ​l​i​k​e​ ​y​o​u​ ​d​o​n​'​t​ ​h​a​v​e​ ​a​n​y​ ​{​t​o​k​e​n​N​a​m​e​}​ ​i​n​ ​y​o​u​r​ ​w​a​l​l​e​t
 	 * @param {string} tokenName
 	 */
 	SEND_ERROR_TOKEN_NOT_FOUND: RequiredParams<'tokenName'>
+	/**
+	 * E​r​r​o​r​ ​s​i​g​n​i​n​g​ ​t​r​a​n​s​a​c​t​i​o​n
+	 */
+	SEND_TRANSACTION_ERROR: string
 	/**
 	 * C​o​n​n​e​c​t​i​n​g
 	 */
@@ -3197,7 +3217,7 @@ export type TranslationFunctions = {
 	 */
 	TITLE_RESET_APP: () => LocalizedString
 	/**
-	 * Wallet management
+	 * Wallets
 	 */
 	TITLE_WALLET_MANAGEMENT: () => LocalizedString
 	/**
@@ -3353,9 +3373,9 @@ export type TranslationFunctions = {
 	 */
 	SB_RENAME_WALLET: () => LocalizedString
 	/**
-	 * Account visibility
+	 * Accounts
 	 */
-	SB_ACCOUNT_VISIBILITY: () => LocalizedString
+	SB_ACCOUNTS: () => LocalizedString
 	/**
 	 * Enter your language
 	 */
@@ -3800,7 +3820,11 @@ Try reconnect your device to the internet.
 	/**
 	 * Incorrect import data
 	 */
-	ERROR_INCORRECT_IMPORT_DATA: () => LocalizedString
+	ERROR_INVALID_IMPORT_DATA: () => LocalizedString
+	/**
+	 * An unknown error occurred while importing the wallet. Please try again.
+	 */
+	ERROR_IMPORT_GENERIC: () => LocalizedString
 	/**
 	 * Incorrect mnemonic phrase
 	 */
@@ -3810,9 +3834,13 @@ Try reconnect your device to the internet.
 	 */
 	ERROR_INCORRECT_PRIVATE_KEY: () => LocalizedString
 	/**
-	 * Incorrect password
+	 * Incorrect password. Please try again
 	 */
 	ERROR_INCORRECT_PASSWORD: () => LocalizedString
+	/**
+	 * This appears to be a duplicate of an existing wallet
+	 */
+	ERROR_IMPORT_ADDRESS_EXISTS: () => LocalizedString
 	/**
 	 * Wrong words combination
 	 */
@@ -4490,6 +4518,14 @@ Try reconnect your device to the internet.
 	 */
 	SETTINGS_TRANSACTIONS_MANAGE_URLS: () => LocalizedString
 	/**
+	 * Add Wallet
+	 */
+	ADD_WALLET: () => LocalizedString
+	/**
+	 * Add Account
+	 */
+	ADD_ACCOUNT: () => LocalizedString
+	/**
 	 * What do you want to do?
 	 */
 	ACCOUNT_OR_WALLET_BOTTOM_SHEET_TITLE: () => LocalizedString
@@ -4842,13 +4878,17 @@ Try reconnect your device to the internet.
 	 */
 	LEDGER_CERTIFICATE_READ_SB: () => LocalizedString
 	/**
-	 * This transaction may be reverted if ypur balance is too low
+	 * This transaction may be reverted if your balance is too low
 	 */
 	SEND_PENDING_TX_REVERT_ALERT: () => LocalizedString
 	/**
-	 * It looks like you dont have any {tokenName} in your wallet
+	 * It looks like you don't have any {tokenName} in your wallet
 	 */
 	SEND_ERROR_TOKEN_NOT_FOUND: (arg: { tokenName: string }) => LocalizedString
+	/**
+	 * Error signing transaction
+	 */
+	SEND_TRANSACTION_ERROR: () => LocalizedString
 	/**
 	 * Connecting
 	 */

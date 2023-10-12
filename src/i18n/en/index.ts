@@ -167,7 +167,7 @@ const en: BaseTranslation = {
 
     TITLE_CREATE_WALLET_SUCCESS: "Your vechain wallet is ready!",
     TITLE_RESET_APP: "VeWorld reset",
-    TITLE_WALLET_MANAGEMENT: "Wallet management",
+    TITLE_WALLET_MANAGEMENT: "Wallets",
     TITLE_SETTINGS: "Settings",
     TITLE_GENERAL: "General",
     TITLE_ADVANCED: "Advanced",
@@ -208,7 +208,7 @@ const en: BaseTranslation = {
     SB_CHOOSE_A_WALLET: "Choose a wallet",
     SB_EDIT_WALLET: "Edit {name: string}",
     SB_RENAME_WALLET: "Rename wallet",
-    SB_ACCOUNT_VISIBILITY: "Account visibility",
+    SB_ACCOUNTS: "Accounts",
     SB_ENTER_LANGUAGE: "Enter your language",
     SB_SELECT_LANGUAGE: "Select your language",
     SB_ALERT_CAMERA_PERMISSION: "You have previously denied camera access to VeWorld. Please enable it in your device settings.",
@@ -333,10 +333,12 @@ const en: BaseTranslation = {
     ERROR_GENERIC_SUBTITLE: "Something went wrong!",
     ERROR_GENERIC_BODY_01: "We apologise for the inconvenience.",
     ERROR_GENERIC_BODY_02: "Please, try closing and reopening the app.",
-    ERROR_INCORRECT_IMPORT_DATA: "Incorrect import data",
+    ERROR_INVALID_IMPORT_DATA: "Incorrect import data",
+    ERROR_IMPORT_GENERIC: "An unknown error occurred while importing the wallet. Please try again.",
     ERROR_INCORRECT_MNEMONIC: "Incorrect mnemonic phrase",
     ERROR_INCORRECT_PRIVATE_KEY: "Incorrect private key",
-    ERROR_INCORRECT_PASSWORD: "Incorrect password",
+    ERROR_INCORRECT_PASSWORD: "Incorrect password. Please try again",
+    ERROR_IMPORT_ADDRESS_EXISTS: "This appears to be a duplicate of an existing wallet",
     ERROR_WRONG_WORDS_COMBINATION: "Wrong words combination",
     ERROR_WRONG_WORDS_COMBINATION_DESC: "The words combination is wrong, try again.",
     ERROR_WALLET_ALREADY_EXISTS: "Wallet already exists",
@@ -551,6 +553,8 @@ const en: BaseTranslation = {
 
     // MANAGE_WALLET
 
+    ADD_WALLET: "Add Wallet",
+    ADD_ACCOUNT: "Add Account",
     ACCOUNT_OR_WALLET_BOTTOM_SHEET_TITLE: "What do you want to do?",
     ACCOUNT_OR_WALLET_BOTTOM_SHEET_SUBTITLE: "Do you want to add either a wallet or an account?",
     ACCOUNT_OR_WALLET_BOTTOM_SHEET_ADD_ACCOUNT: "Add a new account",
@@ -647,8 +651,9 @@ const en: BaseTranslation = {
     LEDGER_CERTIFICATE_READ: "Certificate is ready",
     SEND_LEDGER_TX_READY_SB: "The transaction is ready to be sent, press confirm to send it to the network",
     LEDGER_CERTIFICATE_READ_SB: "The certificate is ready to be sent to the DApp, press confirm to continue",
-    SEND_PENDING_TX_REVERT_ALERT: "This transaction may be reverted if ypur balance is too low",
-    SEND_ERROR_TOKEN_NOT_FOUND: "It looks like you dont have any {tokenName: string} in your wallet",
+    SEND_PENDING_TX_REVERT_ALERT: "This transaction may be reverted if your balance is too low",
+    SEND_ERROR_TOKEN_NOT_FOUND: "It looks like you don't have any {tokenName: string} in your wallet",
+    SEND_TRANSACTION_ERROR: "Error signing transaction",
 
     LEDGER_CONNECTING: "Connecting",
     LEDGER_CONNECT: "Connect",

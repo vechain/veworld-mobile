@@ -13,7 +13,7 @@ import { useI18nContext } from "~i18n"
 import { useTheme } from "~Hooks"
 
 type Props = {
-    verifyContext: Verify.Context | undefined
+    verifyContext: Verify.Context["verified"] | undefined
     confirmed: boolean
     setConfirmed: (confirmed: boolean) => void
 }
@@ -27,11 +27,11 @@ export const UnknownAppMessage: React.FC<Props> = ({
     const theme = useTheme()
 
     const isUnverified = useMemo(
-        () => verifyContext?.verified.validation === "INVALID",
+        () => verifyContext?.validation === "INVALID",
         [verifyContext],
     )
     const isUnknown = useMemo(
-        () => verifyContext?.verified.validation === "UNKNOWN",
+        () => verifyContext?.validation === "UNKNOWN",
         [verifyContext],
     )
 
@@ -51,8 +51,7 @@ export const UnknownAppMessage: React.FC<Props> = ({
         }
     }, [theme, isUnverified])
 
-    if (!verifyContext || verifyContext.verified.validation === "VALID")
-        return <></>
+    if (!verifyContext || verifyContext.validation === "VALID") return <></>
 
     if (isUnknown || isUnverified)
         return (
@@ -81,7 +80,7 @@ export const UnknownAppMessage: React.FC<Props> = ({
                     </BaseView>
                 </BaseView>
 
-                {verifyContext.verified.validation === "UNKNOWN" && (
+                {verifyContext.validation === "UNKNOWN" && (
                     <CheckBoxWithText
                         isChecked={confirmed}
                         text={LL.APP_VERIFICATION_CONFIRM()}

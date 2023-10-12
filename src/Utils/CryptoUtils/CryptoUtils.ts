@@ -3,7 +3,7 @@ import crypto from "react-native-quick-crypto"
 import { XPub } from "~Model/Crypto"
 import PasswordUtils from "../PasswordUtils"
 import stringify from "json-stringify-safe"
-import { error, warn } from "~Utils/Logger"
+import { error } from "~Utils/Logger"
 import { IMPORT_TYPE } from "~Model"
 import fastKeystoreDecrypt from "./Helpers/fastKeystoreDecrypt"
 import HexUtils from "~Utils/HexUtils"
@@ -91,7 +91,6 @@ const decryptKeystoreFile = async (
             JSON.stringify(keystore),
             key,
         )
-        warn("keystoreAccount", keystoreAccount)
         return HexUtils.removePrefix(keystoreAccount.privateKey)
     } catch (err) {
         error("Error decrypting keystore", err)
@@ -111,7 +110,10 @@ const mnemonicStringToArray = (seedPhrase: string): string[] =>
         .replace(/\s+/g, " ")
         .split(" ")
 
-const isValidPrivateKey = (key: Buffer): boolean => {
+const isValidPrivateKey = (rawImportData: string): boolean => {
+    if (HexUtils.isInvalid(rawImportData)) return false
+
+    const key = Buffer.from(HexUtils.removePrefix(rawImportData), "hex")
     return (
         Buffer.isBuffer(key) &&
         key.length === 32 &&
@@ -134,8 +136,7 @@ const determineKeyImportType = (rawImportData: string): IMPORT_TYPE => {
 
     if (Mnemonic.validate(mnemonicStringToArray(rawImportData)))
         return IMPORT_TYPE.MNEMONIC
-    if (isValidPrivateKey(Buffer.from(rawImportData, "hex")))
-        return IMPORT_TYPE.PRIVATE_KEY
+    if (isValidPrivateKey(rawImportData)) return IMPORT_TYPE.PRIVATE_KEY
     if (isValidKeystoreFile(rawImportData)) return IMPORT_TYPE.KEYSTORE_FILE
     return IMPORT_TYPE.UNKNOWN
 }

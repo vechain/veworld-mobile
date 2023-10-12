@@ -14,12 +14,12 @@ import { selectDevices, useAppSelector } from "~Storage/Redux"
 type Props = {
     isEdit: boolean
     setIsEdit: (s: boolean) => void
-    openCreateWalletOrAccountBottomSheet: () => void
+    goToCreateWalletFlow: () => void
 }
 export const WalletManagementHeader = ({
     isEdit,
     setIsEdit,
-    openCreateWalletOrAccountBottomSheet,
+    goToCreateWalletFlow,
 }: Props) => {
     const { LL } = useI18nContext()
     const theme = useTheme()
@@ -63,13 +63,24 @@ export const WalletManagementHeader = ({
                                 <BaseSpacer width={16} />
                             </>
                         )}
-                        <BaseIcon
+
+                        <BaseButton
                             haptics="Light"
-                            size={24}
-                            name="plus"
-                            bg={theme.colors.secondary}
-                            action={openCreateWalletOrAccountBottomSheet}
-                        />
+                            action={goToCreateWalletFlow}
+                            bgColor={theme.colors.secondary}
+                            textColor={COLORS.DARK_PURPLE}
+                            radius={30}
+                            py={10}
+                            leftIcon={
+                                <BaseIcon
+                                    name="plus"
+                                    size={20}
+                                    color={COLORS.DARK_PURPLE}
+                                />
+                            }>
+                            <BaseSpacer width={2} />
+                            {LL.ADD_WALLET()}
+                        </BaseButton>
                     </>
                 )}
             </BaseView>

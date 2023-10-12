@@ -83,7 +83,10 @@ export const useSignTransaction = ({
             const hash = transaction.signingHash(delegateFor?.toLowerCase())
             return secp256k1.sign(hash, privateKey)
         } else {
-            const privateKey = Buffer.from(wallet.privateKey!, "hex")
+            const privateKey = Buffer.from(
+                HexUtils.removePrefix(wallet.privateKey!),
+                "hex",
+            )
             const hash = transaction.signingHash(delegateFor?.toLowerCase())
             return secp256k1.sign(hash, privateKey)
         }

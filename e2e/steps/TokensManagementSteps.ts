@@ -73,6 +73,8 @@ When(
             query,
             "ManageTokenScreen_SearchInput_searchTokenInput",
         )
+
+        await clickByText("Manage Tokens")
     },
 )
 

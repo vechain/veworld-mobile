@@ -2,6 +2,8 @@ import { renderHook } from "@testing-library/react-hooks"
 import { useDeviceUtils } from "./useDeviceUtils"
 import { selectDevices } from "~Storage/Redux/Selectors"
 import { TestWrapper } from "~Test"
+import { DEVICE_CREATION_ERRORS as ERRORS } from "~Model"
+import { HexUtils } from "~Utils"
 
 jest.mock("react-native-quick-crypto")
 
@@ -41,6 +43,31 @@ describe("createDevice", () => {
         expect(device.xPub?.publicKey).toBeDefined()
         expect(wallet.rootAddress).toBeDefined()
         expect(wallet.mnemonic).toEqual(mnemonic)
+        expect(wallet.privateKey).toBeUndefined()
+    })
+
+    it("should generate a new device from a given private key", async () => {
+        ;(selectDevices as unknown as jest.Mock).mockImplementation(() => [
+            device1,
+            device2,
+        ])
+        const { result: hook } = renderHook(() => useDeviceUtils(), {
+            wrapper: TestWrapper,
+        })
+
+        const privateKey =
+            "99f0500549792796c14fed62011a51081dc5b5e68fe8bd8a13b86be829c4fd36"
+        const { device, wallet } = hook.current.createDevice(
+            undefined,
+            privateKey,
+        )
+        expect(device).toBeDefined()
+        expect(wallet).toBeDefined()
+        expect(device.rootAddress).toBeDefined()
+        expect(device.xPub).toBeUndefined()
+        expect(wallet.rootAddress).toBeDefined()
+        expect(wallet.privateKey).toEqual(HexUtils.normalize(privateKey))
+        expect(wallet.mnemonic).toBeUndefined()
     })
 
     it("should throw with the same device", async () => {
@@ -68,6 +95,6 @@ describe("createDevice", () => {
             )
         expect(() => {
             result.current.createDevice(mnemonic)
-        }).toThrowError("Device already exists")
+        }).toThrowError(ERRORS.ADDRESS_EXISTS)
     })
 })

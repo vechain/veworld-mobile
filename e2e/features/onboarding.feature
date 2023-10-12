@@ -33,6 +33,8 @@ Feature: User Onboarding
       | 134679 | denial kitchen pet squirrel other broom bar gas better priority spoil cross                                                                      |
       | 134679 | record minute play dream viable zero brisk true pink retreat juice fresh resist tent coast table damp pupil water mutual shoe year capable fluid |
       | 134679 |                                                                                 99f0500549792796c14fed62011a51081dc5b5e68fe8bd8a13b86be829c4fd36 |
+      | 134679 |                                                                               0x99f0500549792796c14fed62011a51081dc5b5e68fe8bd8a13b86be829c4fd36 |
+      | 134679 |                                                                               0x99F0500549792796C14fED62011A51081DC5B5E68FE8BD8A13B86BE829c4FD36 |
 
   Scenario: User successfully imports a keystore file
     When The user onboards with an imported keystore file "<keystoreFile>" with password "<password>"

@@ -55,6 +55,7 @@ Feature: The user can manage contacts
     And The user edits the contact with name "<name2>" to name "<name>" and address "<address>"
     Then The user should see the address exists error message
     Then The user closes the "<sheet_title>" bottom sheet
+    Then The user closes the "<sheet_title>" bottom sheet
 
     Examples: 
       | name         | name2        | address                                    | address2                                   | sheet_title  |

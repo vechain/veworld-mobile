@@ -17,6 +17,7 @@ export type BaseTextInputProps = {
     rightIconTestID?: string
     onIconPress?: () => void
     containerStyle?: StyleProp<ViewStyle>
+    inputContainerStyle?: StyleProp<ViewStyle>
     setValue?: (s: string) => void
     disabled?: boolean
     inBottomSheet?: boolean
@@ -35,7 +36,9 @@ const BaseTextInputComponent = forwardRef<TextInput, BaseTextInputProps>(
             onIconPress,
             setValue,
             containerStyle,
+            inputContainerStyle,
             disabled,
+            style,
             ...otherProps
         },
         ref,
@@ -53,7 +56,7 @@ const BaseTextInputComponent = forwardRef<TextInput, BaseTextInputProps>(
                         {label}
                     </BaseText>
                 )}
-                <BaseView style={styles.container}>
+                <BaseView style={[styles.container, inputContainerStyle]}>
                     <TextInput
                         ref={ref}
                         style={[
@@ -63,6 +66,7 @@ const BaseTextInputComponent = forwardRef<TextInput, BaseTextInputProps>(
                                     ? theme.colors.text
                                     : theme.colors.textDisabled,
                             },
+                            style,
                         ]}
                         placeholder={placeholder}
                         placeholderTextColor={placeholderColor}

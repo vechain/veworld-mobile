@@ -8,24 +8,20 @@ import {
     BaseText,
     BaseView,
     CloseModalButton,
+    getRpcError,
     RequireUserPassword,
     useWalletConnect,
 } from "~Components"
 import { blake2b256, Certificate } from "thor-devkit"
 import {
     addSignCertificateActivity,
-    selectedConnectedApp,
     selectSelectedAccount,
+    selectVerifyContext,
     setIsAppLoading,
     useAppDispatch,
     useAppSelector,
 } from "~Storage/Redux"
-import {
-    debug,
-    error,
-    WalletConnectResponseUtils,
-    WalletConnectUtils,
-} from "~Utils"
+import { debug, error, HexUtils, WalletConnectUtils } from "~Utils"
 import { useAnalyticTracking, useCheckIdentity, useSignMessage } from "~Hooks"
 import { AccountWithDevice, DEVICE_TYPE, LedgerAccountWithDevice } from "~Model"
 import { useI18nContext } from "~i18n"
@@ -43,7 +39,7 @@ type Props = NativeStackScreenProps<
 export const SignCertificateScreen: FC<Props> = ({ route }: Props) => {
     const { requestEvent, session, message } = route.params
 
-    const { web3Wallet } = useWalletConnect()
+    const { processRequest, failRequest } = useWalletConnect()
     const { LL } = useI18nContext()
     const nav = useNavigation()
     const selectedAccount: AccountWithDevice = useAppSelector(
@@ -57,15 +53,15 @@ export const SignCertificateScreen: FC<Props> = ({ route }: Props) => {
     // Request values
     const { url } = WalletConnectUtils.getSessionRequestAttributes(session)
 
-    const connectedApp = useAppSelector(state => {
-        return selectedConnectedApp(state, session.topic)
-    })
+    const verifyContext = useAppSelector(state =>
+        selectVerifyContext(state, requestEvent.topic),
+    )
 
     const validConnectedApp = useMemo(() => {
-        if (!connectedApp) return true
+        if (!verifyContext) return true
 
-        return connectedApp.verifyContext.verified.validation === "VALID"
-    }, [connectedApp])
+        return verifyContext.validation === "VALID"
+    }, [verifyContext])
 
     // Prepare certificate to sign
     const cert: Certificate = useMemo(() => {
@@ -113,15 +109,14 @@ export const SignCertificateScreen: FC<Props> = ({ route }: Props) => {
 
                 dispatch(setIsAppLoading(true))
 
-                await WalletConnectResponseUtils.signMessageRequestSuccessResponse(
-                    {
-                        request: requestEvent,
-                        web3Wallet,
-                        LL,
+                await processRequest(requestEvent, {
+                    signature: HexUtils.addPrefix(signature.toString("hex")),
+                    annex: {
+                        domain: cert.domain,
+                        timestamp: cert.timestamp,
+                        signer: cert.signer,
                     },
-                    signature,
-                    cert,
-                )
+                })
 
                 // refactor(Minimizer): issues with iOS 17 & Android when connecting to desktop DApp (https://github.com/vechainfoundation/veworld-mobile/issues/951)
                 // MinimizerUtils.goBack()
@@ -142,13 +137,7 @@ export const SignCertificateScreen: FC<Props> = ({ route }: Props) => {
                 track(AnalyticsEvent.DAPP_CERTIFICATE_FAILED)
                 error("SignMessageScreen:handleAccept", err)
 
-                await WalletConnectResponseUtils.signMessageRequestErrorResponse(
-                    {
-                        request: requestEvent,
-                        web3Wallet,
-                        LL,
-                    },
-                )
+                await failRequest(requestEvent, getRpcError("internal"))
 
                 dispatch(setIsAppLoading(false))
             } finally {
@@ -162,8 +151,8 @@ export const SignCertificateScreen: FC<Props> = ({ route }: Props) => {
             selectedAccount,
             signMessage,
             requestEvent,
-            web3Wallet,
-            LL,
+            failRequest,
+            processRequest,
             cert,
             dispatch,
             session.peer.metadata.name,
@@ -173,16 +162,10 @@ export const SignCertificateScreen: FC<Props> = ({ route }: Props) => {
     )
 
     const onReject = useCallback(async () => {
-        if (requestEvent) {
-            await WalletConnectResponseUtils.userRejectedMethodsResponse({
-                request: requestEvent,
-                web3Wallet,
-                LL,
-            })
-        }
+        await failRequest(requestEvent, getRpcError("userRejectedRequest"))
         track(AnalyticsEvent.DAPP_CERTIFICATE_REJECTED)
         onClose()
-    }, [requestEvent, track, onClose, web3Wallet, LL])
+    }, [requestEvent, track, onClose, failRequest])
 
     const {
         isPasswordPromptOpen,
@@ -248,7 +231,7 @@ export const SignCertificateScreen: FC<Props> = ({ route }: Props) => {
                     <BaseSpacer height={30} />
 
                     <UnknownAppMessage
-                        verifyContext={connectedApp?.verifyContext}
+                        verifyContext={verifyContext}
                         confirmed={isInvalidChecked}
                         setConfirmed={setInvalidChecked}
                     />

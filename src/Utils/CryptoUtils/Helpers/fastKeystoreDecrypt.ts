@@ -20,6 +20,7 @@ import {
 import aes from "aes-js"
 const Buffer = require("@craftzdog/react-native-buffer").Buffer
 import scrypt from "react-native-scrypt"
+import { DEVICE_CREATION_ERRORS as ERRORS } from "~Model"
 import { error } from "~Utils/Logger"
 
 const fastKeystoreDecrypt = async (
@@ -118,7 +119,7 @@ function _getAccount(data: any, key: Uint8Array): KeystoreAccount {
     ).substring(2)
 
     if (computedMAC !== searchPath(data, "crypto/mac")?.toLowerCase()) {
-        throw new Error("invalid password")
+        throw new Error(ERRORS.INCORRECT_PASSWORD)
     }
 
     const privateKey = _decrypt(data, key.slice(0, 16), ciphertext)
