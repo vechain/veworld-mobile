@@ -1,6 +1,6 @@
 import ErrorMessageUtils from "."
 
-describe("ErrorUtils", () => {
+describe("ErrorMessageUtils", () => {
     it("should read correctly the error message of type unknown", () => {
         try {
             throw new Error("test")

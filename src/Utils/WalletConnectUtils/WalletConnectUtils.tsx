@@ -11,7 +11,7 @@ import { debug, error, warn } from "~Utils/Logger"
 import { NavigationState } from "@react-navigation/native"
 import { Routes } from "~Navigation"
 import HexUtils from "~Utils/HexUtils"
-import { ErrorUtils } from "~Utils"
+import { ErrorMessageUtils } from "~Utils"
 import { Mutex } from "async-mutex"
 
 let _web3wallet: IWeb3Wallet
@@ -50,7 +50,7 @@ export async function getWeb3Wallet(): Promise<IWeb3Wallet> {
         } catch (e) {
             error(
                 "Failed to initialize Web3Wallet",
-                ErrorUtils.getErrorMessage(e),
+                ErrorMessageUtils.getErrorMessage(e),
             )
             throw e
         }
