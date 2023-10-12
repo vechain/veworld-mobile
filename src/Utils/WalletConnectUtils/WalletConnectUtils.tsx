@@ -128,7 +128,7 @@ export function shouldAutoNavigate(
 
 export function getSignCertOptions(
     requestEvent: PendingRequestTypes.Struct,
-): Connex.Driver.CertOptions {
+): Connex.Signer.CertOptions {
     try {
         return requestEvent.params.request.params[0].options || {}
     } catch (e) {
@@ -193,7 +193,7 @@ export function getSendTxMessage(
 
 export function getSendTxOptions(
     requestEvent: PendingRequestTypes.Struct,
-): Connex.Driver.TxOptions {
+): Connex.Signer.TxOptions {
     try {
         return requestEvent.params.request.params[0].options || {}
     } catch (e) {

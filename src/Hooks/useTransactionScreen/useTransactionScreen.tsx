@@ -39,7 +39,7 @@ type Props = {
     onTransactionSuccess: (transaction: Transaction, txId: string) => void
     onTransactionFailure: (error: unknown) => void
     initialRoute: Routes
-    options?: Connex.Driver.TxOptions
+    options?: Connex.Signer.TxOptions
     requestEvent?: PendingRequestTypes.Struct
 }
 
