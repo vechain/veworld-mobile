@@ -5,9 +5,6 @@ on:
   schedule:
     # Runs at 00:00 UTC every Monday to Friday
     - cron: '0 0 * * 1-5'
-  pull_request:
-    branches:
-        - main
 
 jobs:
     build-test-ios:
@@ -128,6 +125,6 @@ jobs:
                 # See also: https://api.slack.com/methods/chat.postMessage#channels
                 # You can pass in multiple channels to post to by providing a comma-delimited list of channel IDs.
                 channel-id: ${{ secrets.SLACK_VEWORLD_CHANNEL_ID }}
-                slack-message: "🚀 E2E Testing - iOS Result: *${{ job.status }}*\n\n📦 Repository: *${{ github.repository }}*\n\n🌿 Branch: *${{ github.ref_name }}*\n\n🔨 Commit: *${{ github.actor }}* [${{ github.sha.short }}](${{ github.event.head_commit.url }})\n\n🔗 [View Run](${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }})"
+                slack-message: "🚀 E2E Testing - iOS Result: *${{ job.status }}*\n\n📦 Repository: *${{ github.repository }}*\n\n🌿 Branch: *${{ github.ref_name }}*\n\n🔨 Commit: *${{ github.actor }}* [${{ github.sha.short }}](${{ github.event.head_commit.url }})\n\n🔗 View Run: ${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}"
               env:
                 SLACK_BOT_TOKEN: ${{ secrets.SLACK_VEWORLD_BOT_TOKEN }}
