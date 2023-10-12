@@ -18,7 +18,7 @@ jobs:
         id: slack
         uses: slackapi/slack-github-action@v1.24.0
         with:
-          channel-id: ${{ secrets.SLACK_VEWORLD_CHANNEL_ID }}
+          channel-id: "${{ secrets.SLACK_VEWORLD_CHANNEL_ID }}"
           slack-message: "Test Slack message"
         env:
           SLACK_BOT_TOKEN: ${{ secrets.SLACK_VEWORLD_BOT_TOKEN }}
