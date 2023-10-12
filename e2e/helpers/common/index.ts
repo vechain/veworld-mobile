@@ -52,8 +52,12 @@ export const clickById = async (
         index: options?.index,
     })
 
-export const goBack = async () =>
+export const goBack = async () => {
+    await idShouldBeVisible("BackButtonHeader-BaseIcon-backButton", {
+        timeout: 3000,
+    })
     await clickById("BackButtonHeader-BaseIcon-backButton")
+}
 
 export const idShouldExist = async (
     id: string,
