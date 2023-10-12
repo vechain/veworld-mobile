@@ -31,6 +31,7 @@ import { RefreshControl } from "react-native"
 import { useNavigation, useScrollToTop } from "@react-navigation/native"
 import { NestableScrollContainer } from "react-native-draggable-flatlist"
 import { Routes } from "~Navigation"
+import { BUY_FEATURE_ENABLED } from "~Constants"
 
 export const HomeScreen = () => {
     const { updateBalances, updateSuggested } = useTokenBalances()
@@ -84,9 +85,10 @@ export const HomeScreen = () => {
 
     const nav = useNavigation()
 
-    const Actions: FastAction[] = useMemo(
-        () => [
-            {
+    const Actions: FastAction[] = useMemo(() => {
+        let actions: FastAction[] = []
+        if (BUY_FEATURE_ENABLED) {
+            actions.push({
                 name: LL.BTN_BUY(),
                 action: () => nav.navigate(Routes.BUY_FLOW),
                 icon: (
@@ -97,7 +99,9 @@ export const HomeScreen = () => {
                     />
                 ),
                 testID: "buyButton",
-            },
+            })
+        }
+        actions.push(
             {
                 name: LL.BTN_SEND(),
                 action: () =>
@@ -115,9 +119,10 @@ export const HomeScreen = () => {
                 icon: <BaseIcon color={theme.colors.text} name="history" />,
                 testID: "historyButton",
             },
-        ],
-        [LL, nav, theme.colors.text],
-    )
+        )
+
+        return actions
+    }, [LL, nav, theme.colors.text])
     const selectedCurrency = useAppSelector(selectCurrency)
 
     return (

@@ -24,6 +24,7 @@ import {
 } from "~Screens/Flows/App/LedgerScreen"
 import { useWalletStatus } from "~Components"
 import { BuyStack } from "./BuyStack"
+import { BUY_FEATURE_ENABLED } from "~Constants"
 
 export type RootStackParamListSwitch = {
     OnboardingStack: undefined
@@ -132,13 +133,15 @@ export const SwitchStack = () => {
                             name={Routes.LEDGER_SIGN_TRANSACTION}
                             component={LedgerSignTransaction}
                         />
-                        <Switch.Screen
-                            name={Routes.BUY_FLOW}
-                            component={BuyStack}
-                            options={{
-                                presentation: "modal",
-                            }}
-                        />
+                        {BUY_FEATURE_ENABLED && (
+                            <Switch.Screen
+                                name={Routes.BUY_FLOW}
+                                component={BuyStack}
+                                options={{
+                                    presentation: "modal",
+                                }}
+                            />
+                        )}
                     </Switch.Group>
                 </>
             )
