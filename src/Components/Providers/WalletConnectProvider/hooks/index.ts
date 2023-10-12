@@ -1,1 +1,5 @@
 export * from "./useWcRequest"
+export * from "./useWcPairing"
+export * from "./useSessionProposals"
+export * from "./useWcSessions"
+export * from "./useWcDeepLinking"

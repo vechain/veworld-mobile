@@ -2,10 +2,13 @@ import React, { useCallback, useEffect, useMemo } from "react"
 import { error, WalletConnectUtils } from "~Utils"
 import { useNavigation } from "@react-navigation/native"
 import { useWcRequest } from "./hooks"
-import { useSessionProposals } from "~Components/Providers/WalletConnectProvider/hooks/useSessionProposals"
-import { useWcSessions } from "~Components/Providers/WalletConnectProvider/hooks/useWcSessions"
-import { useWcPairing } from "~Components/Providers/WalletConnectProvider/hooks/useWcPairing"
-import { useWcDeepLinking } from "~Components/Providers/WalletConnectProvider/hooks/useWcDeepLinking"
+import {
+    performWcAction,
+    useSessionProposals,
+    useWcDeepLinking,
+    useWcPairing,
+    useWcSessions,
+} from "~Components"
 
 /**
  * Wallet Connect Flow:
@@ -72,9 +75,7 @@ const WalletConnectContextProvider = ({
      * Execute at start
      */
     useEffect(() => {
-        ;(async () => {
-            const web3Wallet = await WalletConnectUtils.getWeb3Wallet()
-
+        performWcAction(web3Wallet => {
             for (const event of [
                 "session_proposal",
                 "session_request",
@@ -90,7 +91,9 @@ const WalletConnectContextProvider = ({
             web3Wallet.on("session_proposal", addPendingProposal)
             web3Wallet.on("session_request", addPendingRequest)
             web3Wallet.on("session_delete", addSessionDisconnect)
-        })()
+        }).catch(err => {
+            error("Failed to add WC events", err)
+        })
     }, [addPendingRequest, addPendingProposal, addSessionDisconnect])
 
     // Needed for the context

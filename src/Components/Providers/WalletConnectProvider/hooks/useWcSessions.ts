@@ -1,7 +1,12 @@
 import { useCallback, useEffect, useState } from "react"
-import { debug, error, WalletConnectUtils } from "~Utils"
+import { debug, error } from "~Utils"
 import { getSdkError } from "@walletconnect/utils"
-import { ActiveSessions, showInfoToast, showSuccessToast } from "~Components"
+import {
+    ActiveSessions,
+    performWcAction,
+    showInfoToast,
+    showSuccessToast,
+} from "~Components"
 import { useI18nContext } from "~i18n"
 import { SessionTypes, SignClientTypes } from "@walletconnect/types"
 import { deleteContext, useAppDispatch } from "~Storage/Redux"
@@ -36,12 +41,12 @@ export const useWcSessions = () => {
                 return _prev
             })
 
-            const web3Wallet = await WalletConnectUtils.getWeb3Wallet()
-
             try {
-                await web3Wallet.disconnectSession({
-                    topic,
-                    reason: getSdkError("USER_DISCONNECTED"),
+                await performWcAction(async web3Wallet => {
+                    await web3Wallet.disconnectSession({
+                        topic,
+                        reason: getSdkError("USER_DISCONNECTED"),
+                    })
                 })
             } catch (err: unknown) {
                 error("WalletConnectProvider:disconnect", err)
@@ -77,9 +82,10 @@ export const useWcSessions = () => {
     }, [disconnectSession, sessionDeletes])
 
     useEffect(() => {
-        WalletConnectUtils.getWeb3Wallet().then(async web3Wallet => {
-            setActiveSessions(web3Wallet.getActiveSessions())
-        })
+        performWcAction(async web3Wallet => {
+            const _activeSessions = await web3Wallet.getActiveSessions()
+            setActiveSessions(_activeSessions)
+        }).catch(err => error("WalletConnectProvider:getActiveSessions", err))
     }, [])
 
     useEffect(() => {

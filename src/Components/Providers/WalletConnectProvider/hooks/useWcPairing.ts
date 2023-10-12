@@ -1,6 +1,6 @@
 import { useCallback, useMemo } from "react"
 import { debug, error, WalletConnectUtils } from "~Utils"
-import { showErrorToast, showInfoToast } from "~Components"
+import { performWcAction, showErrorToast, showInfoToast } from "~Components"
 import { useI18nContext } from "~i18n"
 import { SessionTypes } from "@walletconnect/types"
 
@@ -33,13 +33,12 @@ export const useWcPairing = (
             }
 
             try {
-                const web3Wallet = await WalletConnectUtils.getWeb3Wallet()
-
-                await web3Wallet?.core.pairing.pair({
-                    uri,
-                    activatePairing: true,
+                await performWcAction(async web3Wallet => {
+                    await web3Wallet.core.pairing.pair({
+                        uri,
+                        activatePairing: true,
+                    })
                 })
-
                 showInfoToast({
                     text1: LL.NOTIFICATION_warning_wallet_connect_connection_could_delay(),
                 })

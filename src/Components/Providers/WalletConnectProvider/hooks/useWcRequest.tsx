@@ -15,6 +15,7 @@ import {
 import {
     ActiveSessions,
     getRpcError,
+    performWcAction,
     showErrorToast,
     showInfoToast,
 } from "~Components"
@@ -22,7 +23,6 @@ import { Routes } from "~Navigation"
 import { useNavigation } from "@react-navigation/native"
 import { useI18nContext } from "~i18n"
 import { useAnalyticTracking, useSetSelectedAccount } from "~Hooks"
-import { IWeb3Wallet } from "@walletconnect/web3wallet"
 import { ErrorResponse } from "@walletconnect/jsonrpc-types/dist/cjs/jsonrpc"
 
 type PendingRequests = Record<string, PendingRequestTypes.Struct>
@@ -76,20 +76,20 @@ export const useWcRequest = (
             requestEvent: PendingRequestTypes.Struct,
             result: Connex.Vendor.CertResponse | Connex.Vendor.TxResponse,
         ) => {
-            const web3Wallet = await WalletConnectUtils.getWeb3Wallet()
-
             debug(`Responding with WC Request ${requestEvent.id}`, result)
 
-            await web3Wallet.respondSessionRequest({
-                topic: requestEvent.topic,
-                response: {
-                    id: requestEvent.id,
-                    jsonrpc: "2.0",
-                    result,
-                },
-            })
-
             removePendingRequest(requestEvent)
+
+            await performWcAction(async web3Wallet => {
+                await web3Wallet.respondSessionRequest({
+                    topic: requestEvent.topic,
+                    response: {
+                        id: requestEvent.id,
+                        jsonrpc: "2.0",
+                        result,
+                    },
+                })
+            })
         },
         [removePendingRequest],
     )
@@ -99,20 +99,20 @@ export const useWcRequest = (
             requestEvent: PendingRequestTypes.Struct,
             err: ErrorResponse,
         ) => {
-            const web3Wallet = await WalletConnectUtils.getWeb3Wallet()
+            removePendingRequest(requestEvent)
 
             warn(`Responding with WC Request ${requestEvent.id}`, err)
 
-            await web3Wallet.respondSessionRequest({
-                topic: requestEvent.topic,
-                response: {
-                    id: requestEvent.id,
-                    jsonrpc: "The request was rejected",
-                    error: err,
-                },
+            await performWcAction(async web3Wallet => {
+                await web3Wallet.respondSessionRequest({
+                    topic: requestEvent.topic,
+                    response: {
+                        id: requestEvent.id,
+                        jsonrpc: "The request was rejected",
+                        error: err,
+                    },
+                })
             })
-
-            removePendingRequest(requestEvent)
         },
         [removePendingRequest],
     )
@@ -198,7 +198,7 @@ export const useWcRequest = (
     )
 
     const switchAccount = useCallback(
-        async (session: SessionTypes.Struct, web3Wallet: IWeb3Wallet) => {
+        async (session: SessionTypes.Struct) => {
             // Switch to the requested account
             const address = session.namespaces.vechain.accounts[0].split(":")[2]
             const requestedAccount: AccountWithDevice | undefined =
@@ -206,12 +206,14 @@ export const useWcRequest = (
                     return AddressUtils.compareAddresses(address, acct.address)
                 })
             if (!requestedAccount) {
-                await web3Wallet.disconnectSession({
-                    topic: session.topic,
-                    reason: {
-                        code: 4100,
-                        message: "Requested account not found",
-                    },
+                await performWcAction(async web3Wallet => {
+                    await web3Wallet.disconnectSession({
+                        topic: session.topic,
+                        reason: {
+                            code: 4100,
+                            message: "Requested account not found",
+                        },
+                    })
                 })
                 throw new Error("Requested account not found")
             }
@@ -239,7 +241,6 @@ export const useWcRequest = (
         async (
             requestEvent: PendingRequestTypes.Struct,
             session: SessionTypes.Struct,
-            web3Wallet: IWeb3Wallet,
         ) => {
             const network = WalletConnectUtils.getNetwork(
                 requestEvent,
@@ -247,14 +248,16 @@ export const useWcRequest = (
             )
 
             if (!network) {
-                await web3Wallet.disconnectSession({
-                    topic: session.topic,
-                    reason: {
-                        code: -32001,
-                        message: "Requested network not found",
-                    },
+                await performWcAction(async web3Wallet => {
+                    await web3Wallet.disconnectSession({
+                        topic: session.topic,
+                        reason: {
+                            code: -32001,
+                            message: "Requested network not found",
+                        },
+                    })
                 })
-                throw new Error("Requested network not found")
+                return
             }
 
             if (selectedNetwork.genesis.id !== network.genesis.id) {
@@ -282,48 +285,51 @@ export const useWcRequest = (
                 }),
             )
 
-            const web3Wallet = await WalletConnectUtils.getWeb3Wallet()
-
             try {
                 let session: SessionTypes.Struct
 
                 try {
                     // Get the session for this topic
-                    session = web3Wallet.engine.signClient.session.get(
-                        requestEvent.topic,
-                    )
+                    session = await performWcAction(async web3Wallet => {
+                        return web3Wallet.engine.signClient.session.get(
+                            requestEvent.topic,
+                        )
+                    })
                 } catch (e) {
                     warn(
                         "Failed to get WC session for wallet: ",
                         JSON.stringify(sessions.map(s => s.topic)),
                     )
-                    await web3Wallet.respondSessionRequest({
-                        topic: requestEvent.topic,
-                        response: {
-                            id: requestEvent.id,
-                            jsonrpc: "The specified session was not found",
-                            error: getRpcError(
-                                "internal",
-                                "Could not find the associated session",
-                            ),
-                        },
+
+                    await performWcAction(async web3Wallet => {
+                        await web3Wallet.disconnectSession({
+                            topic: requestEvent.topic,
+                            reason: {
+                                code: 4100,
+                                message: "The specified session was not found",
+                            },
+                        })
                     })
                     return
                 }
 
                 // Switch to the requested account
-                const address = await switchAccount(session, web3Wallet)
+                const address = await switchAccount(session)
 
                 // Switch to the requested network
-                await switchNetwork(requestEvent, session, web3Wallet)
+                await switchNetwork(requestEvent, session)
 
                 // Show the screen based on the request method
                 switch (requestEvent.params.request.method) {
                     case RequestMethods.SIGN_CERTIFICATE:
-                        goToSignMessage(requestEvent, session, address)
+                        await goToSignMessage(requestEvent, session, address)
                         break
                     case RequestMethods.REQUEST_TRANSACTION:
-                        goToSendTransaction(requestEvent, session, address)
+                        await goToSendTransaction(
+                            requestEvent,
+                            session,
+                            address,
+                        )
                         break
                     default:
                         error(
@@ -333,16 +339,17 @@ export const useWcRequest = (
                         break
                 }
             } catch (e) {
-                await web3Wallet.respondSessionRequest({
-                    topic: requestEvent.topic,
-                    response: {
-                        id: requestEvent.id,
-                        jsonrpc: "The request was rejected",
-                        error: getRpcError("internal"),
-                    },
-                })
-
                 removePendingRequest(requestEvent)
+                await performWcAction(async web3Wallet => {
+                    await web3Wallet.respondSessionRequest({
+                        topic: requestEvent.topic,
+                        response: {
+                            id: requestEvent.id,
+                            jsonrpc: "The request was rejected",
+                            error: getRpcError("internal"),
+                        },
+                    })
+                })
             }
         },
         [

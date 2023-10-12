@@ -45,7 +45,7 @@ export const useWcDeepLinking = (onPair: (uri: string) => Promise<void>) => {
                 setLinkingUrls(prev => [...prev, url])
             }
         })
-    }, [handleLinkingUrl])
+    }, [])
 
     /**
      * Sets up a listener for DApp session proposals

@@ -1,61 +1,13 @@
-import { Core } from "@walletconnect/core"
 import {
-    ICore,
     PendingRequestTypes,
     SessionTypes,
     SignClientTypes,
 } from "@walletconnect/types"
-import { IWeb3Wallet, Web3Wallet } from "@walletconnect/web3wallet"
 import { Network } from "~Model"
-import { debug, error, warn } from "~Utils/Logger"
+import { error, warn } from "~Utils/Logger"
 import { NavigationState } from "@react-navigation/native"
 import { Routes } from "~Navigation"
 import HexUtils from "~Utils/HexUtils"
-import { ErrorUtils } from "~Utils"
-import { Mutex } from "async-mutex"
-
-let _web3wallet: IWeb3Wallet
-
-export const core: ICore = new Core({
-    projectId: process.env.REACT_APP_WALLET_CONNECT_PROJECT_ID,
-    // TODO: use a custom storage so we can wipe app state
-    logger: "info",
-})
-
-const walletInitializer = new Mutex()
-
-export async function getWeb3Wallet(): Promise<IWeb3Wallet> {
-    return await walletInitializer.runExclusive(async () => {
-        if (_web3wallet) {
-            debug("Web3Wallet already initialized")
-            return _web3wallet
-        }
-
-        debug("Initializing Web3Wallet")
-
-        try {
-            _web3wallet = await Web3Wallet.init({
-                core,
-                metadata: {
-                    name: "VeWorld Mobile Wallet",
-                    description: "Manage your VeChain assets with VeWorld",
-                    url: "https://veworld.com",
-                    icons: ["https://avatars.githubusercontent.com/u/37784886"],
-                },
-            })
-
-            debug("Web3Wallet initialized")
-
-            return _web3wallet
-        } catch (e) {
-            error(
-                "Failed to initialize Web3Wallet",
-                ErrorUtils.getErrorMessage(e),
-            )
-            throw e
-        }
-    })
-}
 
 export function getPairAttributes(
     proposal: SignClientTypes.EventArguments["session_proposal"],

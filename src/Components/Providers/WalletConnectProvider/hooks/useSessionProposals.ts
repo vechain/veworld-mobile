@@ -1,7 +1,8 @@
 import { useCallback, useEffect, useMemo, useState } from "react"
-import { debug, WalletConnectUtils, warn } from "~Utils"
+import { debug, warn } from "~Utils"
 import {
     getRpcError,
+    performWcAction,
     SessionProposal,
     SessionProposalState,
     showErrorToast,
@@ -46,14 +47,14 @@ export const useSessionProposals = (
 
     const respondInvalidSession = useCallback(
         async (proposal: SessionProposal, err: ErrorResponse) => {
-            const web3Wallet = await WalletConnectUtils.getWeb3Wallet()
-
-            await web3Wallet.rejectSession({
-                id: proposal.id,
-                reason: err,
-            })
-
             removePendingProposal(proposal)
+
+            await performWcAction(async web3Wallet => {
+                await web3Wallet.rejectSession({
+                    id: proposal.id,
+                    reason: err,
+                })
+            })
         },
         [removePendingProposal],
     )
@@ -89,16 +90,16 @@ export const useSessionProposals = (
             proposal: SessionProposal,
             namespace: SessionTypes.Namespace,
         ) => {
-            const web3Wallet = await WalletConnectUtils.getWeb3Wallet()
-
             const relays = proposal.params.relays[0]
 
-            const session = await web3Wallet.approveSession({
-                id: proposal.id,
-                namespaces: {
-                    vechain: namespace,
-                },
-                relayProtocol: relays.protocol,
+            const session = await performWcAction(async web3Wallet => {
+                return await web3Wallet.approveSession({
+                    id: proposal.id,
+                    namespaces: {
+                        vechain: namespace,
+                    },
+                    relayProtocol: relays.protocol,
+                })
             })
 
             addSession(session)
@@ -110,11 +111,11 @@ export const useSessionProposals = (
 
     const rejectPendingProposal = useCallback(
         async (proposal: SessionProposal) => {
-            const web3Wallet = await WalletConnectUtils.getWeb3Wallet()
-
-            await web3Wallet.rejectSession({
-                id: proposal.id,
-                reason: getRpcError("userRejectedRequest"),
+            await performWcAction(async web3Wallet => {
+                await web3Wallet.rejectSession({
+                    id: proposal.id,
+                    reason: getRpcError("userRejectedRequest"),
+                })
             })
 
             removePendingProposal(proposal)
