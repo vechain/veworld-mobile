@@ -100,6 +100,7 @@ export const WalletMgmtBottomSheet = React.forwardRef<
                 </BaseText>
                 {device?.type !== DEVICE_TYPE.LOCAL_PRIVATE_KEY && (
                     <BaseButton
+                        testID="WalletMgmtBottomSheet_addAccountButton"
                         haptics="Light"
                         action={onAddAccountClicked}
                         bgColor={theme.colors.secondary}
