@@ -5,6 +5,9 @@ on:
   schedule:
     # Runs at 00:00 UTC every Monday to Friday
     - cron: '0 0 * * 1-5'
+  pull_request:
+    branches:
+        - main
 
 jobs:
     build-test-ios:
