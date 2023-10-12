@@ -95,9 +95,15 @@ export const WalletMgmtBottomSheet = React.forwardRef<
                 flexDirection="row"
                 w={100}
                 justifyContent="space-between">
-                <BaseText typographyFont="subTitleBold">
-                    {walletAlias || device?.alias || ""}
-                </BaseText>
+                <BaseView flex={1}>
+                    <BaseText
+                        typographyFont="subTitleBold"
+                        ellipsizeMode="tail"
+                        numberOfLines={1}>
+                        {walletAlias || device?.alias || ""}
+                    </BaseText>
+                </BaseView>
+                <BaseSpacer width={4} />
                 {device?.type !== DEVICE_TYPE.LOCAL_PRIVATE_KEY && (
                     <BaseButton
                         haptics="Light"
@@ -125,6 +131,7 @@ export const WalletMgmtBottomSheet = React.forwardRef<
                 }
                 value={walletAlias}
                 setValue={onRenameWallet}
+                maxLength={35}
             />
             <BaseSpacer height={16} />
             <BaseText typographyFont="button">{LL.SB_ACCOUNTS()}</BaseText>

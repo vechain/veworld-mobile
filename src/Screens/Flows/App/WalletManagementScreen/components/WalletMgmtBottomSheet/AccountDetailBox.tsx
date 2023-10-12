@@ -107,6 +107,7 @@ export const AccountDetailBox: React.FC<Props> = memo(
                                 opacity: cardOpacity,
                             }}
                             onFocus={handleFocus}
+                            maxLength={20}
                         />
                     </BaseView>
                     <BaseView style={styles.rightSubContainer}>
