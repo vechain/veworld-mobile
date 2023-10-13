@@ -121,7 +121,15 @@ jest.mock("@gorhom/bottom-sheet", () => ({
 
 jest.mock("react-native-reanimated-skeleton", () => "Skeleton")
 
-jest.mock("@ledgerhq/react-native-hw-transport-ble", () => {})
+const mockDefaultLedgerTransport = Object.assign(jest.fn(), { open: jest.fn() })
+jest.mock("@ledgerhq/react-native-hw-transport-ble", () => ({
+    __esModule: true,
+    default: mockDefaultLedgerTransport,
+}))
+
+jest.mock("react-native-ble-plx", () => ({
+    BleError: jest.fn(),
+}))
 
 jest.mock("@walletconnect/web3wallet", () => ({
     __esModule: true,
