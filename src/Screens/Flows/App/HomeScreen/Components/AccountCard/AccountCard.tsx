@@ -70,9 +70,8 @@ export const AccountCard: React.FC<Props> = memo(props => {
                                 {account.device?.type ===
                                     DEVICE_TYPE.LEDGER && (
                                     <LedgerBadge
-                                        containerStyle={
-                                            styles.ledgerBadgeContainer
-                                        }
+                                        bg={theme.colors.textReversed}
+                                        mr={8}
                                         logoStyle={{
                                             color: theme.colors.text,
                                         }}
@@ -114,9 +113,5 @@ const baseStyles = (theme: ColorThemeType) =>
         borderBottom: {
             borderBottomColor: theme.colors.info,
             borderBottomWidth: 1,
-        },
-        ledgerBadgeContainer: {
-            marginRight: 8,
-            bg: theme.colors.textReversed,
         },
     })

@@ -1,11 +1,13 @@
 import React, { useCallback } from "react"
 import {
+    DimensionValue,
     StyleProp,
     StyleSheet,
     TouchableOpacityProps,
     ViewStyle,
+    TouchableOpacity,
 } from "react-native"
-import { TouchableOpacity } from "react-native-gesture-handler"
+
 import {
     AlignItems,
     ColorThemeType,
@@ -26,7 +28,7 @@ type Props = {
     containerStyle?: StyleProp<ViewStyle>
     innerContainerStyle?: StyleProp<ViewStyle>
     bg?: string
-    w?: string | number
+    w?: DimensionValue
     px?: number
     py?: number
     flex?: number
@@ -90,7 +92,7 @@ export const BaseTouchableBox: React.FC<Props> = ({
 
 type BaseStyles = {
     bg?: string
-    w?: number | string
+    w?: DimensionValue
     px?: number
     py?: number
     flexDirection: FlexDirection
@@ -100,6 +102,7 @@ type BaseStyles = {
     flex?: number
     showOpacityWhenDisabled?: boolean
 }
+
 const baseStyles =
     ({
         bg,
@@ -117,7 +120,7 @@ const baseStyles =
         StyleSheet.create({
             container: {
                 flex,
-                width: w || "100%",
+                width: w ?? "100%",
                 borderRadius: 16,
                 overflow: "hidden",
             },
@@ -127,7 +130,7 @@ const baseStyles =
                 flexDirection,
                 paddingHorizontal: px,
                 paddingVertical: py,
-                backgroundColor: bg || theme.colors.card,
+                backgroundColor: bg ?? theme.colors.card,
                 opacity: disabled && showOpacityWhenDisabled ? 0.5 : 1,
                 borderRadius: 16,
                 overflow: "hidden",

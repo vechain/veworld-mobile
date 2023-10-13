@@ -12158,10 +12158,10 @@ react-native-draggable-flatlist@^4.0.1:
   dependencies:
     "@babel/preset-typescript" "^7.17.12"
 
-react-native-drop-shadow@0.0.6:
-  version "0.0.6"
-  resolved "https://registry.yarnpkg.com/react-native-drop-shadow/-/react-native-drop-shadow-0.0.6.tgz#390ce56af70a1aa29abd9e86c8ca883803f7c097"
-  integrity sha512-eIFZoU7yhr90xB0/Gfuolt/Eelk0F+ohy3piutuYFA+xJx1xtJ/t9xWaaTPwTGXK+56CTnp8mAX4VPDz464NZg==
+react-native-drop-shadow@0.0.7:
+  version "0.0.7"
+  resolved "https://registry.yarnpkg.com/react-native-drop-shadow/-/react-native-drop-shadow-0.0.7.tgz#613eadccd296be6576b8905338875f3c17f96bac"
+  integrity sha512-TsY0RpikcU/TwtMy3vyYEXxCDK6zdlptw8zZqoV4SASCo0tTsZSdq7fbQF1dsH0/49w7ts7CYEOTbqT6InecfQ==
   dependencies:
     logkitty "^0.7.1"
 

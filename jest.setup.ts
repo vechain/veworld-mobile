@@ -121,6 +121,8 @@ jest.mock("@gorhom/bottom-sheet", () => ({
 
 jest.mock("react-native-reanimated-skeleton", () => "Skeleton")
 
+jest.mock("@ledgerhq/react-native-hw-transport-ble", () => {})
+
 jest.mock("@walletconnect/web3wallet", () => ({
     __esModule: true,
     init: jest.fn(),

@@ -1,4 +1,4 @@
-import { StyleSheet } from "react-native"
+import { DimensionValue, StyleSheet } from "react-native"
 import React from "react"
 import LinearGradient from "react-native-linear-gradient"
 import { useBottomTabBarHeight } from "@react-navigation/bottom-tabs"
@@ -13,7 +13,7 @@ type Props = {
     isLoading?: boolean
     bottom?: number
     mx?: number
-    width?: number | string
+    width?: DimensionValue
 }
 
 export const FadeoutButton = ({
