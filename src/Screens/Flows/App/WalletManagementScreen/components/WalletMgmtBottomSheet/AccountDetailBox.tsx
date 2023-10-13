@@ -1,6 +1,10 @@
 import React, { memo, useCallback, useMemo, useState } from "react"
 import { StyleSheet } from "react-native"
-import { useRenameAccount, useThemedStyles } from "~Hooks"
+import {
+    useRenameAccount,
+    useSetSelectedAccount,
+    useThemedStyles,
+} from "~Hooks"
 import { FormattingUtils } from "~Utils"
 import {
     BaseBottomSheetTextInput,
@@ -80,6 +84,11 @@ export const AccountDetailBox: React.FC<Props> = memo(
             [account.visible],
         )
 
+        const { onSetSelectedAccount } = useSetSelectedAccount()
+        const setSelectedAccount = async () => {
+            onSetSelectedAccount({ address: account.address })
+        }
+
         return (
             <BaseView w={100} flexDirection="row">
                 <BaseTouchableBox
@@ -89,7 +98,8 @@ export const AccountDetailBox: React.FC<Props> = memo(
                     innerContainerStyle={
                         isSelected ? styles.selected : styles.notSelected
                     }
-                    containerStyle={styles.container}>
+                    containerStyle={styles.container}
+                    action={setSelectedAccount}>
                     <BaseView style={styles.aliasContainer}>
                         <BaseBottomSheetTextInput
                             placeholder={account?.alias}
@@ -107,6 +117,7 @@ export const AccountDetailBox: React.FC<Props> = memo(
                                 opacity: cardOpacity,
                             }}
                             onFocus={handleFocus}
+                            maxLength={20}
                         />
                     </BaseView>
                     <BaseView style={styles.rightSubContainer}>

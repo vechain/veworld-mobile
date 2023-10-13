@@ -45,7 +45,7 @@ export const DeviceBox: React.FC<Props> = ({
     const deviceBoxBody = useCallback(
         () => (
             <BaseCard style={[styles.card, cardStyle]}>
-                <BaseView flexDirection="row">
+                <BaseView flexDirection="row" flex={1} pr={16}>
                     {isEdit && (
                         <Pressable
                             onPressIn={isEdit ? drag : undefined}
@@ -58,7 +58,12 @@ export const DeviceBox: React.FC<Props> = ({
                         </Pressable>
                     )}
                     <BaseSpacer width={8} />
-                    <BaseText typographyFont="subTitleBold">
+                    <BaseText
+                        typographyFont="subTitleBold"
+                        ellipsizeMode="tail"
+                        numberOfLines={1}
+                        pr={16}
+                        pl={isEdit ? 0 : 8}>
                         {device?.alias}
                     </BaseText>
                     <BaseSpacer width={8} />

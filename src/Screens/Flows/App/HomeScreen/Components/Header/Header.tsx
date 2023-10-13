@@ -72,6 +72,7 @@ export const Header = memo(() => {
                     bg={theme.colors.secondary}
                     action={goToWalletManagement}
                     haptics="Light"
+                    testID="HomeScreen_WalletManagementButton"
                 />
             </BaseView>
 

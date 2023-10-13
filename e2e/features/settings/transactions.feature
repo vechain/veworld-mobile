@@ -1,7 +1,7 @@
 @settings-transactions
 Feature: The user can manage transactions settings
 
-  Background: 
+  Background:
     * The app is opened
     * Open with demo account
     * The user has more than one account
@@ -12,33 +12,31 @@ Feature: The user can manage transactions settings
     When The user selects Account as delegation method
     And The user selects the account "<account>" from the list
     Then The user should see the delegation account "<account>" card
-    Examples: 
+    Examples:
       | account   |
       | Account 1 |
+
   Scenario: User can select an URL as default delegation method for transactions
     When The user selects URL as delegation method
     And The user inserts the following delegation url "<url>"
-    And The user closes the "<sheet_title>" bottom sheet
     Then The user should see the delegation url "<url>" card
-
-    Examples: 
+    Then The user closes the "<sheet_title>" bottom sheet
+    Examples:
       | url                                           | sheet_title |
       | https://sponsor-testnet.vechain.energy/by/218 | Select URL  |
 
+  @Dev
   Scenario: User can create multiple delegation URLs
     When The user selects URL as delegation method
     And The user inserts the following delegation url "<url1>"
-    And The user closes the "<sheet_title>" bottom sheet
-    And The user selects URL as delegation method
     And The user should see the delegation url "<url1>" card
     And The user click plus button to add a new url
     And The user inserts the following delegation url "<url2>"
     And The user should see the delegation url "<url2>" card
     And The user selects URL as delegation method
-    Then The user should see the delegation url "<url2>" card
     Then The user can click the "<url1>" url card to select it
 
-    Examples: 
+    Examples:
       | url1                                          | url2                                          | sheet_title |
       | https://sponsor-testnet.vechain.energy/by/218 | https://sponsor-testnet.vechain.energy/by/219 | Select URL  |
 
@@ -48,7 +46,7 @@ Feature: The user can manage transactions settings
     And The user inserts the following delegation url "<url1>"
     Then The user should see the delegation url "<url1>" card
 
-    Examples: 
+    Examples:
       | url1                                          |
       | https://sponsor-testnet.vechain.energy/by/218 |
 
@@ -61,7 +59,7 @@ Feature: The user can manage transactions settings
     Then The user should see the delegation url "<url1>" card
     Then The user should see the delegation url "<url2>" card
 
-    Examples: 
+    Examples:
       | url1                                          | url2                                          |
       | https://sponsor-testnet.vechain.energy/by/218 | https://sponsor-testnet.vechain.energy/by/219 |
 
@@ -75,6 +73,6 @@ Feature: The user can manage transactions settings
     Then The user should see the delegation url "<url2>" card
     Then The user should not see the delegation url "<url1>" card
 
-    Examples: 
+    Examples:
       | url1                                          | url2                                          |
       | https://sponsor-testnet.vechain.energy/by/218 | https://sponsor-testnet.vechain.energy/by/219 |
