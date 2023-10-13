@@ -3,6 +3,7 @@ import { DEFAULT_TIMEOUT } from "../constants"
 export const closeBottomSheet = async (name: string) => {
     // Close sheet
     await element(by.text(name)).swipe("down", "fast", 1)
+    await sleep(300)
 }
 
 const clickBy = async ({
@@ -171,4 +172,8 @@ export const isPresentId = async (
     } catch (error) {
         return false
     }
+}
+
+export const sleep = (milliseconds: number) => {
+    return new Promise(resolve => setTimeout(resolve, milliseconds))
 }
