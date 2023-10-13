@@ -9,7 +9,7 @@ on:
 jobs:
     build-test-ios:
         name: Detox Build & Test iOS Debug
-        runs-on: macos-latest
+        runs-on: macos-latest-xl
 
         steps:
             - name: Checkout repository
