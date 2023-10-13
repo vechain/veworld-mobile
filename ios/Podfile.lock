@@ -381,7 +381,7 @@ PODS:
     - React-Core
   - react-native-blur (4.3.2):
     - React-Core
-  - react-native-cameraroll (5.10.0):
+  - react-native-cameraroll (5.3.0):
     - React-Core
   - react-native-context-menu-view (1.11.0):
     - React
@@ -396,7 +396,7 @@ PODS:
     - React-Core
   - react-native-netinfo (9.4.1):
     - React-Core
-  - react-native-pager-view (6.2.1):
+  - react-native-pager-view (6.2.2):
     - React-Core
   - react-native-quick-crypto (0.5.0):
     - OpenSSL-Universal
@@ -546,10 +546,10 @@ PODS:
   - Yoga (1.14.0)
   - YogaKit (1.18.1):
     - Yoga (~> 1.14)
-  - ZXingObjC/Core (3.6.5)
-  - ZXingObjC/OneD (3.6.5):
+  - ZXingObjC/Core (3.6.9)
+  - ZXingObjC/OneD (3.6.9):
     - ZXingObjC/Core
-  - ZXingObjC/PDF417 (3.6.5):
+  - ZXingObjC/PDF417 (3.6.9):
     - ZXingObjC/Core
 
 DEPENDENCIES:
@@ -935,14 +935,14 @@ SPEC CHECKSUMS:
   react-native-ble-plx: f10240444452dfb2d2a13a0e4f58d7783e92d76e
   react-native-blob-util: 2d36383bb52c15c5451be81cb7ddf22bc34a12a6
   react-native-blur: cfdad7b3c01d725ab62a8a729f42ea463998afa2
-  react-native-cameraroll: 4701ae7c3dbcd3f5e9e150ca17f250a276154b35
+  react-native-cameraroll: a05136a5e648c35f2e8cced939ba85966e3bba8e
   react-native-context-menu-view: c13b66d44f85b7e7d791a6fbc1e6218c6047eb90
   react-native-flipper: 2d552a8178d839ef378220101fb7f0cd5b2a8003
   react-native-get-random-values: dee677497c6a740b71e5612e8dbd83e7539ed5bb
   react-native-in-app-review: db8bb167a5f238e7ceca5c242d6b36ce8c4404a4
   react-native-mmkv: 69b9c003f10afdd01addf7c6ee784ce42ee2eff3
   react-native-netinfo: fefd4e98d75cbdd6e85fc530f7111a8afdf2b0c5
-  react-native-pager-view: d211379f61895b6349bd7e571b44a26d005c2975
+  react-native-pager-view: 02a5c4962530f7efc10dd51ee9cdabeff5e6c631
   react-native-quick-crypto: a903ff39ac8fea78bb9d37cccc5cc0596afc9670
   react-native-safe-area-context: 7aa8e6d9d0f3100a820efb1a98af68aa747f9284
   react-native-slider: 1cdd6ba29675df21f30544253bf7351d3c2d68c4
@@ -981,7 +981,7 @@ SPEC CHECKSUMS:
   UMAppLoader: 354d71d2d2ce8d6c19fb13d72b9c8209b18a8c56
   Yoga: 99caf8d5ab45e9d637ee6e0174ec16fbbb01bcfc
   YogaKit: f782866e155069a2cca2517aafea43200b01fd5a
-  ZXingObjC: fdbb269f25dd2032da343e06f10224d62f537bdb
+  ZXingObjC: 8898711ab495761b2dbbdec76d90164a6d7e14c5
 
 PODFILE CHECKSUM: b40d147878bdb635d34571957b36f0013be9bfa2
 
