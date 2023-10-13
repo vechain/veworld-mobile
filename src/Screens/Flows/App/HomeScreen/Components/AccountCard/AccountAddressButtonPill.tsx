@@ -71,6 +71,7 @@ const baseStyles = (theme: ColorThemeType) =>
             alignItems: "center",
             justifyContent: "space-evenly",
             backgroundColor: theme.colors.primaryReversed,
+            marginLeft: 20,
         },
         seperator: {
             height: "100%",
