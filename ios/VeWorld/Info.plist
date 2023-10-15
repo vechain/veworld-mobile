@@ -67,6 +67,8 @@
 	<string>$(PRODUCT_NAME) needs microphone access.</string>
   <key>NSPhotoLibraryAddUsageDescription</key>
   <string>$(PRODUCT_NAME) requires access to your photo album to save media.</string>
+  <key>NSPhotoLibraryUsageDescription</key>
+  <string>$(PRODUCT_NAME) requires access to your photo album to read media.</string>
 	<key>UIAppFonts</key>
 	<array>
 		<string>fonts/MaterialIcons.ttf</string>
