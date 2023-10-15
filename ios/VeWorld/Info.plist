@@ -39,7 +39,7 @@
 		</dict>
 	</array>
 	<key>CFBundleVersion</key>
-	<string>101</string>
+	<string>105</string>
 	<key>ITSAppUsesNonExemptEncryption</key>
 	<false/>
 	<key>LSRequiresIPhoneOS</key>
@@ -65,8 +65,8 @@
 	<string>$(PRODUCT_NAME) requires your location when in use to ensure a secure connection with your Ledger device.</string>
 	<key>NSMicrophoneUsageDescription</key>
 	<string>$(PRODUCT_NAME) needs microphone access.</string>
-  <key>NSPhotoLibraryAddUsageDescription</key>
-  <string>$(PRODUCT_NAME) requires access to your photo album to save media.</string>
+	<key>NSPhotoLibraryAddUsageDescription</key>
+	<string>$(PRODUCT_NAME) requires access to your photo album to save media.</string>
 	<key>UIAppFonts</key>
 	<array>
 		<string>fonts/MaterialIcons.ttf</string>
