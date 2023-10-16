@@ -6,10 +6,16 @@ import { DisconnectedDeviceDuringOperation } from "@ledgerhq/errors"
 import BleTransport from "@ledgerhq/react-native-hw-transport-ble"
 
 const withTransport: (func: (t: BleTransport) => any) => any = async func => {
+    TestHelpers.data.mockedTransport.decorateAppAPIMethods = jest.fn()
+
     return await func(TestHelpers.data.mockedTransport)
 }
 
 describe("LedgerUtils", () => {
+    beforeEach(() => {
+        jest.resetAllMocks()
+    })
+
     describe("ledgerErrorHandler", () => {
         it("0x6d02 - should return NO_VET_APP", () => {
             const error = new Error("0x6d02")
@@ -28,7 +34,7 @@ describe("LedgerUtils", () => {
                 0: "UnknownError",
             } as BleErrorCodeMessageMapping)
             expect(LedgerUtils.ledgerErrorHandler(error)).toBe(
-                LEDGER_ERROR_CODES.OFF_OR_LOCKED,
+                LEDGER_ERROR_CODES.UNKNOWN,
             )
         })
 
