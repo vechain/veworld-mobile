@@ -1,5 +1,10 @@
-import React, { useCallback, useEffect, useState } from "react"
-import { useBottomSheetModal, useRenameWallet, useTheme } from "~Hooks"
+import React, { useCallback, useEffect, useRef, useState } from "react"
+import {
+    useBottomSheetModal,
+    useRenameWallet,
+    useSetSelectedAccount,
+    useTheme,
+} from "~Hooks"
 import { AddressUtils } from "~Utils"
 import {
     BaseTextInput,
@@ -11,6 +16,7 @@ import {
     showSuccessToast,
     showWarningToast,
     Layout,
+    SwipeableRow,
 } from "~Components"
 import { useI18nContext } from "~i18n"
 import { AccountDetailBox } from "./AccountDetailBox"
@@ -25,13 +31,13 @@ import {
     selectBalanceVisible,
     selectSelectedAccount,
 } from "~Storage/Redux/Selectors"
-import { StyleSheet } from "react-native"
 import { COLORS } from "~Constants"
 import { NativeStackScreenProps } from "@react-navigation/native-stack"
 import { RootStackParamListHome, Routes } from "~Navigation"
 import { FlashList } from "@shopify/flash-list"
 import { useAccountDelete } from "./hooks"
-import { RemoveAccountWarningBottomSheet } from "./components"
+import { AccountUnderlay, RemoveAccountWarningBottomSheet } from "./components"
+import { SwipeableItemImperativeRef } from "react-native-swipeable-item"
 
 type Props = NativeStackScreenProps<
     RootStackParamListHome,
@@ -44,7 +50,13 @@ export const WalletDetailScreen = ({ route: { params } }: Props) => {
     const { LL } = useI18nContext()
     const dispatch = useAppDispatch()
     const [walletAlias, setWalletAlias] = useState(device?.alias ?? "")
+    const [openedAccount, setOpenedAccount] = useState<AccountWithDevice>()
+
     const { changeDeviceAlias } = useRenameWallet(device)
+
+    const swipeableItemRefs = useRef<Map<string, SwipeableItemImperativeRef>>(
+        new Map(),
+    )
 
     const isBalanceVisible = useAppSelector(selectBalanceVisible)
 
@@ -59,11 +71,6 @@ export const WalletDetailScreen = ({ route: { params } }: Props) => {
         onOpen: openRemoveAccountWarningBottomSheet,
         onClose: closeRemoveAccountWarningBottomSheet,
     } = useBottomSheetModal()
-
-    const accountsListSeparator = useCallback(
-        () => <BaseSpacer height={16} />,
-        [],
-    )
 
     const onAddAccountClicked = () => {
         if (!device) {
@@ -114,10 +121,13 @@ export const WalletDetailScreen = ({ route: { params } }: Props) => {
         setWalletAlias(device?.alias ?? "")
     }, [device?.alias])
 
+    const { onSetSelectedAccount } = useSetSelectedAccount()
+
     return (
         <Layout
+            noMargin
             fixedHeader={
-                <BaseView>
+                <BaseView px={20} pb={16}>
                     <BaseView
                         flexDirection="row"
                         w={100}
@@ -163,39 +173,62 @@ export const WalletDetailScreen = ({ route: { params } }: Props) => {
                     />
                 </BaseView>
             }
-            body={
-                <BaseView>
-                    <BaseText typographyFont="button">
-                        {LL.SB_ACCOUNTS()}
-                    </BaseText>
-                    <BaseSpacer height={16} />
-                    <BaseView flexDirection="row" style={baseStyles.list}>
-                        {device && !!deviceAccounts.length && (
-                            <FlashList
-                                data={deviceAccounts}
-                                keyExtractor={account => account.address}
-                                ItemSeparatorComponent={accountsListSeparator}
-                                renderItem={({ item }) => {
-                                    const isSelected =
-                                        AddressUtils.compareAddresses(
-                                            selectedAccount.address,
-                                            item.address,
-                                        )
+            fixedBody={
+                <BaseView flex={1} flexGrow={1}>
+                    {device && !!deviceAccounts.length && (
+                        <FlashList
+                            data={deviceAccounts}
+                            keyExtractor={account => account.address}
+                            extraData={openedAccount}
+                            ListHeaderComponent={<BaseSpacer height={20} />}
+                            ListFooterComponent={<BaseSpacer height={20} />}
+                            renderItem={({ item }) => {
+                                const isSelected =
+                                    AddressUtils.compareAddresses(
+                                        selectedAccount.address,
+                                        item.address,
+                                    )
 
-                                    return (
+                                return (
+                                    <SwipeableRow<AccountWithDevice>
+                                        testID={item.address}
+                                        item={item}
+                                        itemKey={item.address}
+                                        swipeableItemRefs={swipeableItemRefs}
+                                        handleTrashIconPress={() =>
+                                            confirmRemoveAccount(item)
+                                        }
+                                        setSelectedItem={setOpenedAccount}
+                                        onPress={() => {
+                                            item.visible &&
+                                                onSetSelectedAccount({
+                                                    address: item.address,
+                                                })
+                                        }}
+                                        isOpen={
+                                            openedAccount?.address ===
+                                            item.address
+                                        }
+                                        customUnderlay={
+                                            <AccountUnderlay
+                                                confirmRemoveAccount={
+                                                    confirmRemoveAccount
+                                                }
+                                                account={item}
+                                                isSelected={isSelected}
+                                            />
+                                        }
+                                        snapPointsLeft={[140]}>
                                         <AccountDetailBox
-                                            confirmRemoveAccount={
-                                                confirmRemoveAccount
-                                            }
                                             isBalanceVisible={isBalanceVisible}
                                             account={item}
                                             isSelected={isSelected}
                                         />
-                                    )
-                                }}
-                            />
-                        )}
-                    </BaseView>
+                                    </SwipeableRow>
+                                )
+                            }}
+                        />
+                    )}
                     <RemoveAccountWarningBottomSheet
                         onConfirm={onRemoveAccount}
                         ref={removeAccountWarningBottomSheetRef}
@@ -205,15 +238,3 @@ export const WalletDetailScreen = ({ route: { params } }: Props) => {
         />
     )
 }
-
-const baseStyles = StyleSheet.create({
-    list: {
-        flex: 1,
-        paddingBottom: 24,
-    },
-    rightSubContainer: {
-        flexDirection: "row",
-        alignItems: "center",
-        justifyContent: "space-between",
-    },
-})

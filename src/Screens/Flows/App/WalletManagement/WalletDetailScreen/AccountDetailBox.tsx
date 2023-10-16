@@ -1,38 +1,20 @@
 import React, { memo, useCallback, useMemo, useState } from "react"
 import { StyleSheet } from "react-native"
-import {
-    useRenameAccount,
-    useSetSelectedAccount,
-    useThemedStyles,
-} from "~Hooks"
+import { useRenameAccount, useThemedStyles } from "~Hooks"
 import { FormattingUtils } from "~Utils"
-import {
-    BaseTextInput,
-    BaseIcon,
-    BaseSpacer,
-    BaseText,
-    BaseTouchableBox,
-    BaseView,
-} from "~Components"
-import { AccountWithDevice, WalletAccount } from "~Model"
-import {
-    selectVetBalanceByAccount,
-    useAppDispatch,
-    useAppSelector,
-} from "~Storage/Redux"
-import { toggleAccountVisibility } from "~Storage/Redux/Actions"
+import { BaseTextInput, BaseSpacer, BaseText, BaseView } from "~Components"
+import { WalletAccount } from "~Model"
+import { selectVetBalanceByAccount, useAppSelector } from "~Storage/Redux"
 import { ColorThemeType, VET } from "~Constants"
 
 type Props = {
     account: WalletAccount
     isSelected: boolean
     isBalanceVisible: boolean
-    confirmRemoveAccount: (account: AccountWithDevice) => void
 }
 export const AccountDetailBox: React.FC<Props> = memo(
-    ({ account, isSelected, isBalanceVisible, confirmRemoveAccount }) => {
+    ({ account, isSelected, isBalanceVisible }) => {
         const { styles, theme } = useThemedStyles(baseStyles)
-        const dispatch = useAppDispatch()
 
         const { changeAccountAlias } = useRenameAccount(account)
 
@@ -62,14 +44,6 @@ export const AccountDetailBox: React.FC<Props> = memo(
             return `${vetBalance} ${VET.symbol}`
         }, [isBalanceVisible, vetBalance])
 
-        const toggleVisibility = useCallback(() => {
-            dispatch(toggleAccountVisibility({ address: account.address }))
-        }, [dispatch, account])
-
-        const deleteAccount = useCallback(() => {
-            confirmRemoveAccount(account as AccountWithDevice)
-        }, [confirmRemoveAccount, account])
-
         const handleFocus = useCallback(
             () => setBackupAlias(accountAlias),
             [accountAlias],
@@ -84,73 +58,45 @@ export const AccountDetailBox: React.FC<Props> = memo(
             [account.visible],
         )
 
-        const { onSetSelectedAccount } = useSetSelectedAccount()
-        const setSelectedAccount = async () => {
-            onSetSelectedAccount({ address: account.address })
-        }
-
         return (
-            <BaseView w={100} flexDirection="row">
-                <BaseTouchableBox
-                    haptics="Light"
-                    justifyContent="space-between"
-                    bg={cardBgColor}
-                    innerContainerStyle={
-                        isSelected ? styles.selected : styles.notSelected
-                    }
-                    containerStyle={styles.container}
-                    action={setSelectedAccount}>
-                    <BaseView style={styles.aliasContainer}>
-                        <BaseTextInput
-                            placeholder={account?.alias}
-                            value={accountAlias}
-                            setValue={onRenameAccount}
-                            style={[
-                                styles.alias,
-                                {
-                                    backgroundColor: cardBgColor,
-                                    opacity: cardOpacity,
-                                },
-                            ]}
-                            inputContainerStyle={{
+            <BaseView
+                flexDirection="row"
+                justifyContent="space-between"
+                bg={cardBgColor}
+                style={[
+                    isSelected ? styles.selected : styles.notSelected,
+                    styles.container,
+                ]}>
+                <BaseView style={styles.aliasContainer}>
+                    <BaseTextInput
+                        placeholder={account?.alias}
+                        value={accountAlias}
+                        setValue={onRenameAccount}
+                        style={[
+                            styles.alias,
+                            {
                                 backgroundColor: cardBgColor,
                                 opacity: cardOpacity,
-                            }}
-                            onFocus={handleFocus}
-                            maxLength={20}
-                        />
-                    </BaseView>
-                    <BaseView style={styles.rightSubContainer}>
-                        <BaseText style={styles.address} fontSize={10}>
-                            {FormattingUtils.humanAddress(
-                                account.address,
-                                4,
-                                6,
-                            )}
-                        </BaseText>
-                        <BaseSpacer height={4} />
-                        <BaseText fontSize={10}>{balance}</BaseText>
-                    </BaseView>
-                </BaseTouchableBox>
-                <BaseIcon
-                    haptics="Light"
-                    size={24}
-                    style={styles.eyeIcon}
-                    name={account.visible ? "eye-outline" : "eye-off-outline"}
-                    bg={theme.colors.secondary}
-                    disabled={isSelected}
-                    action={toggleVisibility}
-                />
-                <BaseIcon
-                    haptics="Light"
-                    size={24}
-                    style={styles.deleteIcon}
-                    name={"delete"}
-                    bg={theme.colors.danger}
-                    disabled={isSelected}
-                    action={deleteAccount}
-                    color={theme.colors.background}
-                />
+                            },
+                        ]}
+                        inputContainerStyle={{
+                            backgroundColor: cardBgColor,
+                            opacity: cardOpacity,
+                        }}
+                        onFocus={handleFocus}
+                        maxLength={20}
+                    />
+                </BaseView>
+                <BaseView
+                    style={
+                        (styles.rightSubContainer, { opacity: cardOpacity })
+                    }>
+                    <BaseText style={styles.address} fontSize={10}>
+                        {FormattingUtils.humanAddress(account.address, 4, 6)}
+                    </BaseText>
+                    <BaseSpacer height={4} />
+                    <BaseText fontSize={10}>{balance}</BaseText>
+                </BaseView>
             </BaseView>
         )
     },
@@ -179,6 +125,9 @@ const baseStyles = (theme: ColorThemeType) =>
         },
         container: {
             flex: 1,
+            borderRadius: 16,
+            paddingHorizontal: 16,
+            paddingVertical: 12,
         },
         rightSubContainer: {
             flexDirection: "column",
