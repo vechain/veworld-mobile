@@ -25,7 +25,7 @@ export const useResetStacks = () => {
             if (
                 homeRoutes.length &&
                 homeRoutes[0]?.name !== Routes.HOME &&
-                homeRoutes[0]?.name !== Routes.WALLET_MANAGEMENT
+                homeRoutes[0]?.name !== Routes.WALLET_DETAILS
             ) {
                 nav.reset({
                     index: 0,

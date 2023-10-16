@@ -4,11 +4,11 @@ import { StyleSheet } from "react-native"
 import { LocalizedString } from "typesafe-i18n"
 import { useTheme } from "~Hooks"
 import { BaseIcon, BaseText, BaseTouchable, BaseView } from "~Components"
-import { RootStackParamListSettings } from "~Navigation"
+import { RootStackParamListSettings, Routes } from "~Navigation"
 
 export type RowProps = {
     title: LocalizedString
-    screenName: keyof RootStackParamListSettings
+    screenName: keyof Omit<RootStackParamListSettings, Routes.WALLET_DETAILS>
     icon: string
 }
 

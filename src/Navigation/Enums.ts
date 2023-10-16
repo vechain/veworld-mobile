@@ -33,6 +33,7 @@ export enum Routes {
     SEND_NFT = "Send_NFT",
     SEND_NFT_RECAP = "Send_NFT_Recap",
     WALLET_MANAGEMENT = "Wallet_Management",
+    WALLET_DETAILS = "Wallet_Details",
     SETTINGS_TRANSACTIONS = "Transactions",
     MANAGE_DELEGATION_URLS = "Manage_Delegation_URLs",
     SETTINGS_GENERAL = "Settings_General",

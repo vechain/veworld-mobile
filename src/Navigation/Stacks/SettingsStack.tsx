@@ -14,10 +14,12 @@ import {
     SettingsScreen,
     SettingsTransactionsScreen,
     WalletManagementScreen,
+    WalletDetailScreen,
 } from "~Screens"
 import { Routes } from "~Navigation/Enums"
 import { AboutScreen } from "~Screens/Flows/App/AboutScreen"
 import { useNavAnimation } from "~Hooks"
+import { Device } from "~Model"
 
 export type RootStackParamListSettings = {
     [Routes.SETTINGS]: undefined
@@ -31,6 +33,7 @@ export type RootStackParamListSettings = {
     [Routes.SETTINGS_CONTACTS]: undefined
     [Routes.SETTINGS_ADD_CONTACT]: undefined
     [Routes.WALLET_MANAGEMENT]: undefined
+    [Routes.WALLET_DETAILS]: { device: Device }
     [Routes.SETTINGS_TRANSACTIONS]: undefined
     [Routes.MANAGE_DELEGATION_URLS]: undefined
     [Routes.RESET_APP]: undefined
@@ -82,6 +85,11 @@ export const SettingsStack = () => {
                 <Settings.Screen
                     name={Routes.WALLET_MANAGEMENT}
                     component={WalletManagementScreen}
+                    options={{ headerShown: false }}
+                />
+                <Settings.Screen
+                    name={Routes.WALLET_DETAILS}
+                    component={WalletDetailScreen}
                     options={{ headerShown: false }}
                 />
 
