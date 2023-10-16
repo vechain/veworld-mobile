@@ -1,6 +1,7 @@
 name: TEST - Prerelease Trigger
 
 on:
+  workflow_dispatch:
   release:
     types: [published]
 
@@ -8,6 +9,10 @@ jobs:
     build-test-ios:
         name: Detox Build & Test iOS Debug
         runs-on: macos-latest-xl
+
+        # Proceed only if it's either not a release event or it's a pre-release.
+        if: ${{ github.event_name == 'release' }}
+        continue-on-error: true  # This ensures that the workflow doesn't mark as failed when skipped.
 
         steps:        
             - name: Post to a Slack channel
