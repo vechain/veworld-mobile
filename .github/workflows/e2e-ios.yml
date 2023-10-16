@@ -20,7 +20,9 @@ jobs:
             - name: Checkout repository
               uses: actions/checkout@v3
               with:
-                ref: main  # Ensure we're always testing the main branch
+                # If it's a pre-release, check out the tag corresponding to the pre-release; otherwise, use the main branch.
+                ref: ${{ github.event_name == 'release' && github.event.release.prerelease && github.event.release.tag_name || 'main' }}
+
 
             # Install Homebrew and applesimutils for Detox
             - name: Install macOS dependencies
