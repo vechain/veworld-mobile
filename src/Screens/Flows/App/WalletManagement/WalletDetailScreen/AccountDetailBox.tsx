@@ -7,7 +7,7 @@ import {
 } from "~Hooks"
 import { FormattingUtils } from "~Utils"
 import {
-    BaseBottomSheetTextInput,
+    BaseTextInput,
     BaseIcon,
     BaseSpacer,
     BaseText,
@@ -101,7 +101,7 @@ export const AccountDetailBox: React.FC<Props> = memo(
                     containerStyle={styles.container}
                     action={setSelectedAccount}>
                     <BaseView style={styles.aliasContainer}>
-                        <BaseBottomSheetTextInput
+                        <BaseTextInput
                             placeholder={account?.alias}
                             value={accountAlias}
                             setValue={onRenameAccount}

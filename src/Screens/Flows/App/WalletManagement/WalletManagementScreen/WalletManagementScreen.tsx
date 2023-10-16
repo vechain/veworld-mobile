@@ -7,17 +7,14 @@ import {
     SwipeableRow,
     showWarningToast,
 } from "~Components"
-import { AccountWithDevice, BaseDevice, Device } from "~Model"
+import { BaseDevice, Device } from "~Model"
 import { setDeviceState, useAppSelector } from "~Storage/Redux"
 import { selectDevices } from "~Storage/Redux/Selectors"
 import {
-    RemoveAccountWarningBottomSheet,
     RemoveWalletWarningBottomSheet,
-    useAccountDelete,
-    useWalletDeletion,
     WalletManagementHeader,
-    WalletMgmtBottomSheet,
 } from "./components"
+import { useWalletDeletion } from "./hooks"
 import { StyleSheet } from "react-native"
 import {
     useBottomSheetModal,
@@ -49,19 +46,10 @@ export const WalletManagementScreen = () => {
         allowAutoPassword: false,
     })
 
-    const { ref: walletMgmtBottomSheetRef, onOpen: openWalletMgmtSheet } =
-        useBottomSheetModal()
-
     const {
         ref: removeWalletBottomSheetRef,
         onOpen: openRemoveWalletBottomSheet,
         onClose: closeRemoveWalletBottomSheet,
-    } = useBottomSheetModal()
-
-    const {
-        ref: removeAccountWarningBottomSheetRef,
-        onOpen: openRemoveAccountWarningBottomSheet,
-        onClose: closeRemoveAccountWarningBottomSheet,
     } = useBottomSheetModal()
 
     const [isEdit, _setIsEdit] = useState(false)
@@ -86,13 +74,16 @@ export const WalletManagementScreen = () => {
         [closeOtherSwipeableItems],
     )
 
+    const nav = useNavigation()
     const onDeviceSelected = useCallback(
         (device: BaseDevice) => {
             closeOtherSwipeableItems()
             setSelectedDevice(device as Device)
-            openWalletMgmtSheet()
+            nav.navigate(Routes.WALLET_DETAILS, {
+                device: device as Device,
+            })
         },
-        [closeOtherSwipeableItems, openWalletMgmtSheet],
+        [closeOtherSwipeableItems, nav],
     )
 
     const onTrashIconPress = useCallback(
@@ -150,32 +141,6 @@ export const WalletManagementScreen = () => {
         navigation.navigate(Routes.CREATE_WALLET_FLOW)
     }, [navigation])
 
-    const { setAccountToRemove, deleteAccount, isOnlyAccount } =
-        useAccountDelete()
-
-    const confirmRemoveAccount = useCallback(
-        (account: AccountWithDevice) => {
-            if (isOnlyAccount(account.rootAddress))
-                return showWarningToast({
-                    text1: LL.NOTIFICATION_CANT_REMOVE_ONLY_ACCOUNT(),
-                })
-
-            setAccountToRemove(account)
-            openRemoveAccountWarningBottomSheet()
-        },
-        [
-            setAccountToRemove,
-            LL,
-            isOnlyAccount,
-            openRemoveAccountWarningBottomSheet,
-        ],
-    )
-
-    const onRemoveAccount = useCallback(() => {
-        closeRemoveAccountWarningBottomSheet()
-        deleteAccount()
-    }, [closeRemoveAccountWarningBottomSheet, deleteAccount])
-
     return (
         <Layout
             safeAreaTestID="Wallet_Management_Screen"
@@ -200,16 +165,6 @@ export const WalletManagementScreen = () => {
                         showsVerticalScrollIndicator={false}
                         containerStyle={styles.draggableFlatListContainer}
                         contentContainerStyle={styles.contentContainerStyle}
-                    />
-                    <WalletMgmtBottomSheet
-                        ref={walletMgmtBottomSheetRef}
-                        device={selectedDevice}
-                        confirmRemoveAccount={confirmRemoveAccount}
-                    />
-
-                    <RemoveAccountWarningBottomSheet
-                        onConfirm={onRemoveAccount}
-                        ref={removeAccountWarningBottomSheetRef}
                     />
 
                     <RemoveWalletWarningBottomSheet
