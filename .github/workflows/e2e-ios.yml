@@ -133,7 +133,7 @@ jobs:
                 # You can pass in multiple channels to post to by providing a comma-delimited list of channel IDs.
                 channel-id: ${{ secrets.SLACK_VEWORLD_CHANNEL_ID }}
                 slack-message: |
-                    🚀 THIS IS A TEST: *${{ job.status }}*
+                    🚀 E2E Testing - iOS Result: *${{ job.status }}*
                     📦 Repository: *${{ github.repository }}*
                     🌿 Branch: *${{ github.ref_name }}*
                     🔨 Commit: *${{ github.actor }}* [${{ github.sha.short }}](${{ github.event.head_commit.url }})
