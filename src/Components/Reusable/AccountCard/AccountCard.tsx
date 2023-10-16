@@ -89,12 +89,14 @@ export const AccountCard: React.FC<Props> = memo(
                                         containerStyle={{ mr: 8 }}
                                     />
                                 )}
-                                <BaseText
-                                    style={styles.wallet}
-                                    ellipsizeMode="tail"
-                                    numberOfLines={1}>
-                                    {account.device.alias}
-                                </BaseText>
+                                <BaseView flex={1}>
+                                    <BaseText
+                                        style={styles.wallet}
+                                        ellipsizeMode="tail"
+                                        numberOfLines={1}>
+                                        {account.device.alias}
+                                    </BaseText>
+                                </BaseView>
                             </BaseView>
                         </BaseView>
                     </BaseView>

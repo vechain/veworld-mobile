@@ -53,7 +53,7 @@ export const AccountAddressButtonPill = ({
                     <BaseIcon
                         name="account-sync-outline"
                         color={theme.colors.text}
-                        size={24}
+                        size={20}
                     />
                 </BaseView>
             </BaseTouchable>
@@ -71,11 +71,10 @@ const baseStyles = (theme: ColorThemeType) =>
             alignItems: "center",
             justifyContent: "space-evenly",
             backgroundColor: theme.colors.primaryReversed,
-            marginLeft: 20,
         },
         seperator: {
             height: "100%",
-            width: 2,
+            width: 1,
             backgroundColor: theme.colors.primary,
         },
         pressable: {
