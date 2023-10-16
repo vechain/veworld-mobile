@@ -1,0 +1,31 @@
+name: TEST - Prerelease Trigger
+
+on:
+  release:
+    types: [published]
+
+jobs:
+    build-test-ios:
+        name: Detox Build & Test iOS Debug
+        runs-on: macos-latest-xl
+
+        steps:        
+            - name: Post to a Slack channel
+              if: always()
+              id: slack
+              uses: slackapi/slack-github-action@v1.24.0
+              with:
+                # Slack channel id, channel name, or user id to post message.
+                # See also: https://api.slack.com/methods/chat.postMessage#channels
+                # You can pass in multiple channels to post to by providing a comma-delimited list of channel IDs.
+                channel-id: ${{ secrets.SLACK_VEWORLD_CHANNEL_ID }}
+                slack-message: |
+                   🚀 THIS IS A TEST: *${{ job.status }}*
+                   📦 Repository: *${{ github.repository }}*
+                   🌿 Branch: *${{ github.ref_name }}*
+                   🔨 Commit: *${{ github.actor }}* [${{ github.sha.short }}](${{ github.event.head_commit.url }})
+                   🔗 View Run: ${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}
+                   ${{ (github.event_name == 'release' && github.event.release.prerelease) && '🔴 THIS IS A PRE-RELEASE!' || '' }}
+                   ${{ (github.event_name == 'release') && ('🏷 Pre-Release Tag: ' || '') }} ${{ github.event.release.tag_name }}
+              env:
+                SLACK_BOT_TOKEN: ${{ secrets.SLACK_VEWORLD_BOT_TOKEN }}
