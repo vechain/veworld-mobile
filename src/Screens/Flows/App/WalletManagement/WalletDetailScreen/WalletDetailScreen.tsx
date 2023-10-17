@@ -91,8 +91,12 @@ export const WalletDetailScreen = ({ route: { params } }: Props) => {
         }
     }
 
-    const { setAccountToRemove, deleteAccount, isOnlyAccount } =
-        useAccountDelete()
+    const {
+        setAccountToRemove,
+        deleteAccount,
+        isOnlyAccount,
+        accountToRemove,
+    } = useAccountDelete()
 
     const confirmRemoveAccount = useCallback(
         (account: AccountWithDevice) => {
@@ -223,6 +227,7 @@ export const WalletDetailScreen = ({ route: { params } }: Props) => {
                                             isBalanceVisible={isBalanceVisible}
                                             account={item}
                                             isSelected={isSelected}
+                                            isDisabled={!item.visible}
                                         />
                                     </SwipeableRow>
                                 )
@@ -232,6 +237,9 @@ export const WalletDetailScreen = ({ route: { params } }: Props) => {
                     <RemoveAccountWarningBottomSheet
                         onConfirm={onRemoveAccount}
                         ref={removeAccountWarningBottomSheetRef}
+                        onCancel={closeRemoveAccountWarningBottomSheet}
+                        accountToRemove={accountToRemove}
+                        isBalanceVisible={isBalanceVisible}
                     />
                 </BaseView>
             }
