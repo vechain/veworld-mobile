@@ -1,15 +1,8 @@
 import { useCallback, useEffect, useMemo, useState } from "react"
 import { debug, WalletConnectUtils, warn } from "~Utils"
-import {
-    getRpcError,
-    SessionProposal,
-    SessionProposalState,
-    showErrorToast,
-} from "~Components"
+import { getRpcError, SessionProposal, SessionProposalState } from "~Components"
 import { Routes } from "~Navigation"
 import { useNavigation } from "@react-navigation/native"
-import { ErrorResponse } from "@walletconnect/jsonrpc-types/dist/cjs/jsonrpc"
-import { useI18nContext } from "~i18n"
 import { SessionTypes } from "@walletconnect/types"
 
 export const useSessionProposals = (
@@ -17,7 +10,6 @@ export const useSessionProposals = (
     addSession: (session: SessionTypes.Struct) => void,
 ) => {
     const nav = useNavigation()
-    const { LL } = useI18nContext()
 
     const [sessionProposals, setSessionProposals] =
         useState<SessionProposalState>({})
@@ -44,20 +36,6 @@ export const useSessionProposals = (
         })
     }, [])
 
-    const respondInvalidSession = useCallback(
-        async (proposal: SessionProposal, err: ErrorResponse) => {
-            const web3Wallet = await WalletConnectUtils.getWeb3Wallet()
-
-            await web3Wallet.rejectSession({
-                id: proposal.id,
-                reason: err,
-            })
-
-            removePendingProposal(proposal)
-        },
-        [removePendingProposal],
-    )
-
     const handlePendingProposal = useCallback(
         async (proposal: SessionProposal) => {
             if (proposal.verifyContext.verified.validation !== "VALID")
@@ -67,27 +45,17 @@ export const useSessionProposals = (
                     proposal.verifyContext,
                 )
 
-            if (!proposal.params.requiredNamespaces.vechain) {
-                showErrorToast({
-                    text1: LL.NOTIFICATION_wallet_connect_incompatible_dapp(),
-                })
-                return await respondInvalidSession(
-                    proposal,
-                    getRpcError("internal", "vechain namespace not found"),
-                )
-            }
-
             nav.navigate(Routes.CONNECT_APP_SCREEN, {
                 sessionProposal: proposal,
             })
         },
-        [LL, nav, respondInvalidSession],
+        [nav],
     )
 
     const approvePendingProposal = useCallback(
         async (
             proposal: SessionProposal,
-            namespace: SessionTypes.Namespace,
+            namespaces: SessionTypes.Namespaces,
         ) => {
             const web3Wallet = await WalletConnectUtils.getWeb3Wallet()
 
@@ -95,9 +63,7 @@ export const useSessionProposals = (
 
             const session = await web3Wallet.approveSession({
                 id: proposal.id,
-                namespaces: {
-                    vechain: namespace,
-                },
+                namespaces,
                 relayProtocol: relays.protocol,
             })
 

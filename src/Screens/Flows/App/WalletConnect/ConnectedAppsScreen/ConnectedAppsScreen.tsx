@@ -43,9 +43,12 @@ export const ConnectedAppsScreen = () => {
         for (const key of Object.keys(activeSessions)) {
             const session = activeSessions[key]
 
+            const firstNamespace = Object.keys(session.namespaces)[0]
+
             try {
-                const address =
-                    session.namespaces.vechain.accounts[0].split(":")[2]
+                const address = session.namespaces[firstNamespace].accounts[0]
+                    .split(":")[2]
+                    .toLowerCase()
 
                 if (!_apps[address]) {
                     _apps[address] = [session]
@@ -108,12 +111,13 @@ export const ConnectedAppsScreen = () => {
                         )}
                     </BaseView>
                     {accounts.map((account, index) => {
+                        const _addr = account.address.toLowerCase()
+
                         if (
-                            account.address in connectedApps &&
-                            !isEmpty(connectedApps[account.address])
+                            _addr in connectedApps &&
+                            !isEmpty(connectedApps[_addr])
                         ) {
-                            const accountSessions =
-                                connectedApps[account.address]
+                            const accountSessions = connectedApps[_addr]
 
                             return (
                                 <BaseView key={account.address}>

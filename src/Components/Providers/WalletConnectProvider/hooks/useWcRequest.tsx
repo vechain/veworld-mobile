@@ -1,6 +1,13 @@
 import { useCallback, useEffect, useMemo, useState } from "react"
 import { PendingRequestTypes, SessionTypes } from "@walletconnect/types"
-import { AddressUtils, debug, error, WalletConnectUtils, warn } from "~Utils"
+import {
+    AddressUtils,
+    debug,
+    error,
+    HexUtils,
+    WalletConnectUtils,
+    warn,
+} from "~Utils"
 import { AnalyticsEvent, RequestMethods } from "~Constants"
 import { AccountWithDevice } from "~Model"
 import {
@@ -24,6 +31,9 @@ import { useI18nContext } from "~i18n"
 import { useAnalyticTracking, useSetSelectedAccount } from "~Hooks"
 import { IWeb3Wallet } from "@walletconnect/web3wallet"
 import { ErrorResponse } from "@walletconnect/jsonrpc-types/dist/cjs/jsonrpc"
+import { HDNode } from "thor-devkit"
+import { secp256k1 } from "thor-devkit/dist/secp256k1"
+import { keccak256 } from "thor-devkit/dist/keccak"
 
 type PendingRequests = Record<string, PendingRequestTypes.Struct>
 
@@ -72,10 +82,7 @@ export const useWcRequest = (
     )
 
     const processRequest = useCallback(
-        async (
-            requestEvent: PendingRequestTypes.Struct,
-            result: Connex.Vendor.CertResponse | Connex.Vendor.TxResponse,
-        ) => {
+        async (requestEvent: PendingRequestTypes.Struct, result: any) => {
             const web3Wallet = await WalletConnectUtils.getWeb3Wallet()
 
             debug(`Responding with WC Request ${requestEvent.id}`, result)
@@ -200,7 +207,24 @@ export const useWcRequest = (
     const switchAccount = useCallback(
         async (session: SessionTypes.Struct, web3Wallet: IWeb3Wallet) => {
             // Switch to the requested account
-            const address = session.namespaces.vechain.accounts[0].split(":")[2]
+
+            let address: string | undefined
+
+            for (const key of Object.keys(session.namespaces)) {
+                address = session.namespaces[key].accounts[0].split(":")[2]
+            }
+
+            if (!address) {
+                await web3Wallet.disconnectSession({
+                    topic: session.topic,
+                    reason: {
+                        code: 4100,
+                        message: "No account found in session",
+                    },
+                })
+                throw new Error("No address found in session")
+            }
+
             const requestedAccount: AccountWithDevice | undefined =
                 accounts.find(acct => {
                     return AddressUtils.compareAddresses(address, acct.address)
@@ -268,21 +292,63 @@ export const useWcRequest = (
         },
         [LL, selectedNetwork, dispatch, networks],
     )
+
+    const hardcodedPersonalSign = useCallback(
+        async (requestEvent: PendingRequestTypes.Struct) => {
+            const hdNode = HDNode.fromMnemonic(
+                "denial kitchen pet squirrel other broom bar gas better priority spoil cross".split(
+                    " ",
+                ),
+            )
+
+            const message = requestEvent.params.request.params[0]
+
+            const utf8Message = Buffer.from(
+                HexUtils.removePrefix(message),
+                "hex",
+            ).toString("utf8")
+
+            //\x19Ethereum Signed Message:\n<length of message>
+            const messageToSign = `\x19Ethereum Signed Message:\n${utf8Message.length}${utf8Message}`
+
+            const hash = keccak256(Buffer.from(messageToSign, "utf8"))
+
+            const signature = secp256k1.sign(hash, hdNode.derive(0).privateKey!)
+
+            warn("Signature: ", signature.length)
+
+            const result = `0x${signature.toString("hex")}`
+
+            showInfoToast({
+                text1: "Auto Signed a message",
+                text2: utf8Message,
+                visibilityTime: 20000,
+            })
+
+            return await processRequest(requestEvent, result)
+        },
+        [processRequest],
+    )
+
     /**
      * Handle session request
      */
     const onSessionRequest = useCallback(
         async (requestEvent: PendingRequestTypes.Struct) => {
+            const web3Wallet = await WalletConnectUtils.getWeb3Wallet()
+
             debug(
                 "Session request: ",
                 JSON.stringify({
                     id: requestEvent.id,
                     topic: requestEvent.topic,
-                    method: requestEvent.params.request.method,
+                    params: requestEvent.params.request,
                 }),
             )
 
-            const web3Wallet = await WalletConnectUtils.getWeb3Wallet()
+            if (requestEvent.params.request.method === "personal_sign") {
+                return await hardcodedPersonalSign(requestEvent)
+            }
 
             try {
                 let session: SessionTypes.Struct
@@ -297,17 +363,6 @@ export const useWcRequest = (
                         "Failed to get WC session for wallet: ",
                         JSON.stringify(sessions.map(s => s.topic)),
                     )
-                    await web3Wallet.respondSessionRequest({
-                        topic: requestEvent.topic,
-                        response: {
-                            id: requestEvent.id,
-                            jsonrpc: "The specified session was not found",
-                            error: getRpcError(
-                                "internal",
-                                "Could not find the associated session",
-                            ),
-                        },
-                    })
                     return
                 }
 
@@ -320,10 +375,14 @@ export const useWcRequest = (
                 // Show the screen based on the request method
                 switch (requestEvent.params.request.method) {
                     case RequestMethods.SIGN_CERTIFICATE:
-                        goToSignMessage(requestEvent, session, address)
+                        await goToSignMessage(requestEvent, session, address)
                         break
                     case RequestMethods.REQUEST_TRANSACTION:
-                        goToSendTransaction(requestEvent, session, address)
+                        await goToSendTransaction(
+                            requestEvent,
+                            session,
+                            address,
+                        )
                         break
                     default:
                         error(
@@ -352,6 +411,7 @@ export const useWcRequest = (
             goToSignMessage,
             sessions,
             removePendingRequest,
+            hardcodedPersonalSign,
         ],
     )
 
@@ -386,6 +446,7 @@ export const useWcRequest = (
         debug(
             "pendingRequests",
             Object.values(pendingRequests).map(s => s.id),
+            JSON.stringify(pendingRequests[0]),
         )
     }, [pendingRequests])
 
