@@ -1,5 +1,13 @@
 
 
+## [1.2.0](https://github.com/vechainfoundation/veworld-mobile/compare/v1.0-test...v1.2.0) (2023-10-17)
+
+
+### Bug Fixes
+
+* long ledger wallet alias and improve account card ([#1546](https://github.com/vechainfoundation/veworld-mobile/issues/1546)) ([ec5dbc1](https://github.com/vechainfoundation/veworld-mobile/commit/ec5dbc1af5bc624ecfa59b377f57d545b16da585))
+* remove regex from network utils ([#1544](https://github.com/vechainfoundation/veworld-mobile/issues/1544)) ([ba65424](https://github.com/vechainfoundation/veworld-mobile/commit/ba6542413a06b09f2a7fa46f227a448569d14e39))
+
 ## [1.2.0](https://github.com/vechainfoundation/veworld-mobile/compare/1.1.1...1.2.0) (2023-10-16)
 
 
