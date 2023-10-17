@@ -25,7 +25,6 @@ Feature: The user can manage transactions settings
       | url                                           | sheet_title |
       | https://sponsor-testnet.vechain.energy/by/218 | Select URL  |
 
-  @Dev
   Scenario: User can create multiple delegation URLs
     When The user selects URL as delegation method
     And The user inserts the following delegation url "<url1>"
