@@ -43,7 +43,6 @@ Feature: The user send tokens in test net
       | VET   | 1      | 0x435933c8064b4Ae76bE665428e0307eF2cCFBD68 | 111111 | Account 1         |
       | VTHO  | 1      | 0x435933c8064b4Ae76bE665428e0307eF2cCFBD68 | 111111 | Account 1         |
 
-  @Dev
   Scenario: User should be able to send tokens delegating with url method
     When The user selects "<token>" token to be sent
     And The user inserts the amount "<amount>" to be sent
