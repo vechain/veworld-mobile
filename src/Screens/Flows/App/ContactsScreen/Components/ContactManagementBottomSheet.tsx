@@ -23,8 +23,6 @@ type Props = {
     onSaveContact: (alias: string, address: string) => void
 }
 
-const snapPoints = [isSmallScreen ? "60%" : "52%"]
-
 export const ContactManagementBottomSheet = React.forwardRef<
     BottomSheetModalMethods,
     Props
@@ -41,6 +39,10 @@ export const ContactManagementBottomSheet = React.forwardRef<
         const { LL } = useI18nContext()
 
         const theme = useTheme()
+
+        const snapPoints = useMemo(() => {
+            return isSmallScreen ? ["60%"] : ["52%"]
+        }, [])
 
         const [alias, _setAlias] = useState<string>(contact?.alias ?? "")
         const [address, _setAddress] = useState<string>(contact?.address ?? "")

@@ -11,25 +11,33 @@ const BottomSheetTextInputComponent = forwardRef<
     TextInput,
     BottomSheetTextInputProps & BaseTextInputProps
 >(({ onFocus, onBlur, ...rest }, ref) => {
-    const { shouldHandleKeyboardEvents } = useBottomSheetInternal()
+    const bottomSheetInternal = useBottomSheetInternal()
 
     const handleOnFocus = useCallback(
         (e: NativeSyntheticEvent<TextInputFocusEventData>) => {
             runOnUI(() => {
-                shouldHandleKeyboardEvents.value = true
+                if (!bottomSheetInternal) {
+                    return
+                }
+
+                bottomSheetInternal.shouldHandleKeyboardEvents.value = true
             })()
             onFocus?.(e)
         },
-        [onFocus, shouldHandleKeyboardEvents],
+        [onFocus, bottomSheetInternal],
     )
     const handleOnBlur = useCallback(
         (e: NativeSyntheticEvent<TextInputFocusEventData>) => {
             runOnUI(() => {
-                shouldHandleKeyboardEvents.value = false
+                if (!bottomSheetInternal) {
+                    return
+                }
+
+                bottomSheetInternal.shouldHandleKeyboardEvents.value = false
             })()
             onBlur?.(e)
         },
-        [onBlur, shouldHandleKeyboardEvents],
+        [bottomSheetInternal, onBlur],
     )
 
     return (
