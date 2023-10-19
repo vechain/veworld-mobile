@@ -3,6 +3,7 @@ import { HexUtils, TransactionUtils } from "~Utils"
 import { Transaction } from "thor-devkit"
 import { EstimateGasResult } from "~Model"
 import { useThor } from "~Components"
+import { GasPriceCoefficient } from "~Constants"
 
 type Props = {
     providedGas?: number
@@ -10,6 +11,7 @@ type Props = {
     clauses: Transaction.Body["clauses"]
     isDelegated: boolean
     dependsOn?: string
+    gasPriceCoef?: number
 }
 
 export const useTransactionBuilder = ({
@@ -18,6 +20,7 @@ export const useTransactionBuilder = ({
     dependsOn,
     clauses,
     isDelegated,
+    gasPriceCoef = GasPriceCoefficient.REGULAR,
 }: Props) => {
     const thor = useThor()
 
@@ -28,14 +31,13 @@ export const useTransactionBuilder = ({
 
         if (!txGas) throw new Error("Transaction gas is not ready")
 
-        const DEFAULT_GAS_COEFFICIENT = 0
         const txBody: Transaction.Body = {
             chainTag: parseInt(thor.genesis.id.slice(-2), 16),
             blockRef: thor.status.head.id.slice(0, 18),
             // 5 minutes
             expiration: 30,
             clauses: clauses,
-            gasPriceCoef: DEFAULT_GAS_COEFFICIENT,
+            gasPriceCoef,
             gas: txGas,
             dependsOn: dependsOn ?? null,
             nonce: nonce,
@@ -43,13 +45,14 @@ export const useTransactionBuilder = ({
 
         return TransactionUtils.fromBody(txBody, isDelegated)
     }, [
-        isDelegated,
-        clauses,
-        dependsOn,
-        gas,
         providedGas,
-        thor.status.head.id,
+        gas?.gas,
         thor.genesis.id,
+        thor.status.head.id,
+        clauses,
+        gasPriceCoef,
+        dependsOn,
+        isDelegated,
     ])
 
     return {

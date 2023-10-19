@@ -157,7 +157,7 @@ export const SendTransactionScreen: FC<Props> = ({ route }: Props) => {
         vthoBalance,
         selectedDelegationOption,
         isThereEnoughGas,
-        vthoGas,
+        vthoGasFee,
         continueNotAllowed,
         isLoading,
         isPasswordPromptOpen,
@@ -216,7 +216,7 @@ export const SendTransactionScreen: FC<Props> = ({ route }: Props) => {
                     <BaseSpacer height={44} />
                     <TransactionDetails
                         selectedDelegationOption={selectedDelegationOption}
-                        vthoGas={vthoGas}
+                        vthoGas={vthoGasFee}
                         isThereEnoughGas={isThereEnoughGas || false}
                         vthoBalance={vthoBalance}
                         sessionRequest={sessionRequest}

@@ -31,8 +31,7 @@ export const DappTransactionDetails: React.FC<Props> = memo(({ activity }) => {
 
     const currency = useAppSelector(selectCurrency)
 
-    const { gasFeeInVTHOHumanReadable, fiatValueGasFeeSpent } =
-        useGasFee(activity)
+    const { vthoGasFee, fiatValueGasFeeSpent } = useGasFee(activity)
 
     const tokens = useAppSelector(selectTokensWithInfo)
 
@@ -98,7 +97,7 @@ export const DappTransactionDetails: React.FC<Props> = memo(({ activity }) => {
         {
             id: 5,
             title: LL.GAS_FEE(),
-            value: `${gasFeeInVTHOHumanReadable} ${VTHO.symbol}`,
+            value: `${vthoGasFee} ${VTHO.symbol}`,
             typographyFont: "subSubTitle",
             underline: false,
             valueAdditional: fiatValueGasFeeSpent

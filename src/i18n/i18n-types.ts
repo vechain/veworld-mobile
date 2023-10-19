@@ -2184,6 +2184,18 @@ type RootTranslation = {
 	 */
 	SEND_DELEGATION_ERROR_SIGNATURE: string
 	/**
+	 * R​E​G​U​L​A​R
+	 */
+	SEND_FEE_REGULAR: string
+	/**
+	 * M​E​D​I​U​M
+	 */
+	SEND_FEE_MEDIUM: string
+	/**
+	 * H​I​G​H
+	 */
+	SEND_FEE_HIGH: string
+	/**
 	 * C​r​e​a​t​e​ ​c​o​n​t​a​c​t
 	 */
 	SEND_CREATE_CONTACT_TITLE: string
@@ -4769,6 +4781,18 @@ Try reconnect your device to the internet.
 	 * Failed to delegate the transaction with the provided URL
 	 */
 	SEND_DELEGATION_ERROR_SIGNATURE: () => LocalizedString
+	/**
+	 * REGULAR
+	 */
+	SEND_FEE_REGULAR: () => LocalizedString
+	/**
+	 * MEDIUM
+	 */
+	SEND_FEE_MEDIUM: () => LocalizedString
+	/**
+	 * HIGH
+	 */
+	SEND_FEE_HIGH: () => LocalizedString
 	/**
 	 * Create contact
 	 */
