@@ -34,7 +34,7 @@ export const StandaloneLockScreen: React.FC<Props> = memo(
         const { styles } = useThemedStyles(baseStyles)
 
         useEffect(() => {
-            RNBootSplash.hide({ fade: true, duration: 500 })
+            RNBootSplash.hide({ fade: true })
         }, [])
 
         /**

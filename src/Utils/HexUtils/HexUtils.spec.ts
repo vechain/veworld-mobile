@@ -238,7 +238,7 @@ describe("HexUtils tests", () => {
             ).toBeTruthy()
         })
 
-        test("compare - hex lowercase has prefix", () => {
+        test("compare - hex lowercase mix prefix", () => {
             expect(
                 HexUtils.compare(hexLowercaseHasPrefix, hexLowercaseNoPrefix),
             ).toBeTruthy()

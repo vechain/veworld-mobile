@@ -44,9 +44,7 @@ export const AboutScreen = () => {
             subtitle: LocalizedString
             url: string
         }) => (
-            <BaseView
-                style={styles.itemCardContainer}
-                key={link.title + link.subtitle}>
+            <BaseView w={100} py={8} key={link.title + link.subtitle}>
                 <BaseCard
                     key={link.url}
                     style={styles.itemCard}
@@ -131,9 +129,5 @@ const styles = {
     },
     itemCard: {
         padding: 16,
-    },
-    itemCardContainer: {
-        width: "100%",
-        paddingVertical: 8,
     },
 }

@@ -25,12 +25,15 @@
 const generateColorHash = (input: string): string => {
     let hash = 0
     for (let i = 0; i < input.length; i++) {
+        // eslint-disable-next-line no-bitwise
         hash = (hash << 5) - hash + input.charCodeAt(i)
+        // eslint-disable-next-line no-bitwise
         hash = hash & hash // Convert to 32-bit integer
     }
 
     let color = "#"
     for (let i = 0; i < 3; i++) {
+        // eslint-disable-next-line no-bitwise
         let value = (hash >> (i * 8)) & 255
         color += ("00" + value.toString(16)).slice(-2)
     }

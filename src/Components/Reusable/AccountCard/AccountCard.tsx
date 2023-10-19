@@ -84,10 +84,7 @@ export const AccountCard: React.FC<Props> = memo(
                             <BaseView flexDirection="row" mt={3}>
                                 {account.device?.type ===
                                     DEVICE_TYPE.LEDGER && (
-                                    <LedgerBadge
-                                        //eslint-disable-next-line react-native/no-inline-styles
-                                        containerStyle={{ mr: 8 }}
-                                    />
+                                    <LedgerBadge mr={8} />
                                 )}
                                 <BaseView flex={1}>
                                     <BaseText

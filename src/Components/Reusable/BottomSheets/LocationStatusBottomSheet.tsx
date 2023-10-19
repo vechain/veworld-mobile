@@ -41,7 +41,7 @@ export const LocationStatusBottomSheet: React.FC = () => {
     const handleOnPress = useCallback(() => {
         RNAndroidLocationEnabler.promptForEnableLocationIfNeeded({
             interval: 10000,
-            fastInterval: 5000,
+            waitForAccurate: true,
         })
             .then(() => {
                 // The user has accepted to enable the location services

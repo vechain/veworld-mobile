@@ -28,7 +28,7 @@
 	<array>
 		<dict>
 			<key>CFBundleTypeRole</key>
-			<string>Viewer</string>
+			<string>Editor</string>
 			<key>CFBundleURLName</key>
 			<string>org.vechain.veworld.app</string>
 			<key>CFBundleURLSchemes</key>
@@ -69,8 +69,8 @@
 	<string>$(PRODUCT_NAME) requires access to your photo album to use media.</string>
 	<key>UIAppFonts</key>
 	<array>
-		<string>fonts/MaterialIcons.ttf</string>
-		<string>fonts/MaterialCommunityIcons.ttf</string>
+		<string>MaterialIcons.ttf</string>
+		<string>MaterialCommunityIcons.ttf</string>
 	</array>
 	<key>UIApplicationSceneManifest</key>
 	<dict>
@@ -97,8 +97,7 @@
 	</array>
 	<key>UISupportedInterfaceOrientations~ipad</key>
 	<array>
-		<string>UIInterfaceOrientationLandscapeLeft</string>
-		<string>UIInterfaceOrientationLandscapeRight</string>
+		<string>UIInterfaceOrientationPortrait</string>
 	</array>
 	<key>UIViewControllerBasedStatusBarAppearance</key>
 	<false/>

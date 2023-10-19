@@ -13,7 +13,7 @@ export const StandaloneAppBlockedScreen = () => {
     const { LL } = useI18nContext()
 
     useEffect(() => {
-        RNBootSplash.hide({ fade: true, duration: 500 })
+        RNBootSplash.hide({ fade: true })
     }, [])
 
     const { styles, theme } = useThemedStyles(baseStyles)
