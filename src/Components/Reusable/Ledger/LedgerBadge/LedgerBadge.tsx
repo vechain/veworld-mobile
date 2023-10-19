@@ -2,23 +2,24 @@ import React from "react"
 import { SvgProps } from "react-native-svg"
 import { LedgerLogo } from "~Assets"
 import { BaseView } from "~Components/Base"
-import { BaseViewProps } from "~Components/Base/BaseView"
 import { useTheme } from "~Hooks"
 
 type Props = {
-    containerStyle?: BaseViewProps
+    mr?: number
+    bg?: string
     logoStyle?: SvgProps
 }
-export const LedgerBadge: React.FC<Props> = ({ containerStyle, logoStyle }) => {
+
+export const LedgerBadge: React.FC<Props> = ({ mr, bg, logoStyle }) => {
     const theme = useTheme()
 
     return (
         <BaseView
-            bg={theme.colors.text}
+            bg={bg ? bg : theme.colors.text}
             px={5}
             py={3.5}
             borderRadius={6}
-            {...containerStyle}>
+            mr={mr}>
             <LedgerLogo
                 color={theme.colors.textReversed}
                 width={35}

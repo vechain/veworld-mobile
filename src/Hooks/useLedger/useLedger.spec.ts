@@ -8,7 +8,6 @@ import { useLedgerSubscription } from "~Hooks"
 import { LedgerConfig } from "~Utils/LedgerUtils/LedgerUtils"
 import { LEDGER_ERROR_CODES } from "~Constants"
 
-jest.mock("@ledgerhq/react-native-hw-transport-ble")
 jest.mock("~Hooks/useLedgerSubscription/useLedgerSubscription")
 
 const deviceId = "testDeviceId"

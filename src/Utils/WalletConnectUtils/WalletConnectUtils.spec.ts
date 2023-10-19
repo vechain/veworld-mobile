@@ -270,7 +270,7 @@ const mockPendingRequest = (params: unknown): PendingRequestTypes.Struct => {
 
 describe("getSignCertOptions", () => {
     it("should return the sign cert options", () => {
-        const providedOptions: Connex.Driver.CertOptions = {
+        const providedOptions: Connex.Signer.CertOptions = {
             signer: "0xf077b491b355E64048cE21E3A6Fc4751eEeA77fa",
         }
 
@@ -472,7 +472,7 @@ describe("getSendTxMessage", () => {
 
 describe("getSendTxOptions", () => {
     it("should return the original tx options", () => {
-        const options: Connex.Driver.TxOptions = {
+        const options: Connex.Signer.TxOptions = {
             signer: "0x1234",
         }
 

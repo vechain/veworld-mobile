@@ -1,6 +1,6 @@
 module.exports = {
     root: true,
-    extends: ["@react-native-community", "plugin:prettier/recommended"],
+    extends: ["@react-native/eslint-config", "plugin:prettier/recommended"],
     parser: "@typescript-eslint/parser",
     plugins: ["@typescript-eslint", "i18next", "es"],
     ignorePatterns: ["src/i18n/*", "coverage/*"],

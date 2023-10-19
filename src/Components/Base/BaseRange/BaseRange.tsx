@@ -1,5 +1,5 @@
 import * as React from "react"
-import { StyleSheet, View } from "react-native"
+import { DimensionValue, StyleSheet, View } from "react-native"
 import Slider from "@react-native-community/slider"
 import { BaseView } from "../BaseView"
 import { useTheme } from "~Hooks"
@@ -29,8 +29,8 @@ export const BaseRange = ({
             testID={testID}>
             {marks.map((markValue: number, index: number) => {
                 let percentage = (markValue / maximumValue) * 100
-                let left: number | string = `${percentage}%`
-                let right: number | string = "auto"
+                let left: DimensionValue = `${percentage}%`
+                let right: DimensionValue = "auto"
                 if (percentage === 0 || percentage === 100) {
                     return null
                 }

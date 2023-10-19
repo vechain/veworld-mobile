@@ -49,6 +49,10 @@ export const useSaveMediaToPhotos = (
                 .progress((received, total) => {
                     // only user progress for video download
                     if (image.mediaType !== "video") return
+
+                    // this is a codegen library error - the types say they are strings but the values come as numbers
+                    // https://github.com/RonRadtke/react-native-blob-util/issues/300
+                    // @ts-ignore
                     setProgress(received / total)
                 })
 
@@ -82,21 +86,18 @@ export const useSaveMediaToPhotos = (
             )
 
             _image.flush()
-        } catch (error) {
+        } catch (_error) {
             setProgress(0)
 
-            if (
-                error &&
-                typeof error === "object" &&
-                "code" in error &&
-                error.code === "E_UNABLE_TO_SAVE"
-            ) {
-                AlertUtils.showDefaultAlert(
-                    LL.SAVE_MEDIA_ERROR_TITLE(),
-                    LL.SAVE_MEDIA_ERROR_SUBTITLE(),
-                    LL.COMMON_BTN_OK(),
-                )
-            }
+            // let er = error as IRCTPromiseRejectBlock
+
+            // if (er?.code === "E_UNABLE_TO_SAVE") {
+            AlertUtils.showDefaultAlert(
+                LL.SAVE_MEDIA_ERROR_TITLE(),
+                LL.SAVE_MEDIA_ERROR_SUBTITLE(),
+                LL.COMMON_BTN_OK(),
+            )
+            // }
 
             imageToFlush.current?.flush()
             imageToFlush.current = undefined

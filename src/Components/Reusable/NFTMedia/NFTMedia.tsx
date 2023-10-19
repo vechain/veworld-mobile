@@ -12,7 +12,7 @@ import { error } from "~Utils"
 import { NFTVideo } from "../NFTVideo"
 import { StyleSheet } from "react-native"
 import { BaseView } from "~Components/Base"
-import SkeletonContent from "react-native-skeleton-content-nonexpo"
+import Skeleton from "react-native-reanimated-skeleton"
 import { NFTImage } from "../NFTImage"
 import { LongPressProvider } from "../LongPressProvider"
 // @ts-ignore
@@ -138,7 +138,7 @@ export const NFTMedia = memo(
             <BaseView>
                 {RenderImageWithProvider}
                 {isLoading && tokenMedia?.mediaType !== NFTMediaType.VIDEO && (
-                    <SkeletonContent
+                    <Skeleton
                         containerStyle={themedStyles.skeletonContainer}
                         animationDirection="horizontalLeft"
                         boneColor={theme.colors.skeletonBoneColor}

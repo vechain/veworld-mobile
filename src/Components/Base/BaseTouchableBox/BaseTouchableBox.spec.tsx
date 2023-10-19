@@ -42,7 +42,7 @@ describe("BaseTouchableBox component", () => {
         )
         const baseTouchable = await findBaseTouchableBox()
         expect(baseTouchable).toBeVisible()
-        expect(baseTouchable.props.children.props.style[0][0]).toMatchObject({
+        expect(baseTouchable.props.style).toMatchObject({
             alignItems: "center",
             backgroundColor: "red",
             borderRadius: 16,
@@ -69,7 +69,7 @@ describe("BaseTouchableBox component", () => {
         const baseTouchable = await findBaseTouchableBox()
         expect(baseTouchable).toBeVisible()
 
-        expect(baseTouchable.props.children.props.style[0][0]).toMatchObject({
+        expect(baseTouchable.props.style).toMatchObject({
             justifyContent: "flex-start",
             alignItems: "center",
             flexDirection: "row",

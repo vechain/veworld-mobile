@@ -37,13 +37,13 @@ export type RootStackParamListSwitch = {
         requestEvent: PendingRequestTypes.Struct
         session: SessionTypes.Struct
         message: Connex.Vendor.TxMessage
-        options: Connex.Driver.TxOptions
+        options: Connex.Signer.TxOptions
     }
     [Routes.CONNECTED_APP_SIGN_CERTIFICATE_SCREEN]: {
         requestEvent: PendingRequestTypes.Struct
         session: SessionTypes.Struct
         message: Connex.Vendor.CertMessage
-        options: Connex.Driver.CertOptions
+        options: Connex.Signer.CertOptions
     }
     [Routes.LEDGER_SIGN_CERTIFICATE]: {
         requestEvent: PendingRequestTypes.Struct
