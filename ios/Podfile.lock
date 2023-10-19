@@ -27,7 +27,7 @@ PODS:
   - EXImageLoader (4.3.0):
     - ExpoModulesCore
     - React-Core
-  - Expo (49.0.13):
+  - Expo (49.0.15):
     - ExpoModulesCore
   - ExpoClipboard (4.3.1):
     - ExpoModulesCore
@@ -449,7 +449,7 @@ PODS:
   - React-jsinspector (0.72.5)
   - React-logger (0.72.5):
     - glog
-  - react-native-ble-plx (3.0.0):
+  - react-native-ble-plx (3.1.0):
     - MultiplatformBleAdapter (= 0.2.0)
     - RCT-Folly (= 2021.07.22.00)
     - React-Core
@@ -472,7 +472,7 @@ PODS:
     - React-Core
   - react-native-netinfo (9.4.1):
     - React-Core
-  - react-native-pager-view (6.2.1):
+  - react-native-pager-view (6.2.2):
     - React-Core
   - react-native-quick-base64 (2.0.7):
     - React-Core
@@ -481,7 +481,7 @@ PODS:
     - React
     - React-callinvoker
     - React-Core
-  - react-native-safe-area-context (4.7.2):
+  - react-native-safe-area-context (4.7.3):
     - React-Core
   - react-native-slider (4.4.3):
     - React-Core
@@ -609,7 +609,8 @@ PODS:
     - SDWebImageWebPCoder (~> 0.8.4)
   - RNFlashList (1.6.1):
     - React-Core
-  - RNGestureHandler (2.13.2):
+  - RNGestureHandler (2.13.3):
+    - RCT-Folly (= 2021.07.22.00)
     - React-Core
   - RNKeychain (8.1.2):
     - React-Core
@@ -644,9 +645,9 @@ PODS:
     - React-RCTText
     - ReactCommon/turbomodule/core
     - Yoga
-  - RNScreens (3.25.0):
+  - RNScreens (3.26.0):
+    - RCT-Folly (= 2021.07.22.00)
     - React-Core
-    - React-RCTImage
   - RNScrypt (1.2.1):
     - React
   - RNSentry (5.11.1):
@@ -1018,7 +1019,7 @@ SPEC CHECKSUMS:
   EXFileSystem: 2b826a3bf1071a4b80a8457e97124783d1ac860e
   EXFont: 738c44c390953ebcbab075a4848bfbef025fd9ee
   EXImageLoader: 34b214f9387e98f3c73989f15d8d5b399c9ab3f7
-  Expo: e7d2116b947e2e6fdeb09ee4f2754f819426d1b6
+  Expo: 4ddd44075a2e7c7c63a0f5b1e05223be74d48bc6
   ExpoClipboard: 695f274f8e028cd113837f917da40c76850877eb
   ExpoHaptics: 360af6898407ee4e8265d30a1a8fb16491a660eb
   ExpoKeepAwake: be4cbd52d9b177cde0fd66daa1913afa3161fc1d
@@ -1065,7 +1066,7 @@ SPEC CHECKSUMS:
   React-jsiexecutor: ff70a72027dea5cc7d71cfcc6fad7f599f63987a
   React-jsinspector: aef73cbd43b70675f572214d10fa438c89bf11ba
   React-logger: 2e4aee3e11b3ec4fa6cfd8004610bbb3b8d6cca4
-  react-native-ble-plx: 6f7f7d6e57bb109ff5751b8e5fce2654a9d7c033
+  react-native-ble-plx: c033a0b82890910e321e7d031fd01a88bddc3854
   react-native-blob-util: af2dc91365bfde33f61389cbd0c692af9a4a97cb
   react-native-blur: cfdad7b3c01d725ab62a8a729f42ea463998afa2
   react-native-cameraroll: 4701ae7c3dbcd3f5e9e150ca17f250a276154b35
@@ -1075,10 +1076,10 @@ SPEC CHECKSUMS:
   react-native-in-app-review: db8bb167a5f238e7ceca5c242d6b36ce8c4404a4
   react-native-mmkv: 9ae7ca3977e8ef48dbf7f066974eb844c20b5fd7
   react-native-netinfo: fefd4e98d75cbdd6e85fc530f7111a8afdf2b0c5
-  react-native-pager-view: d211379f61895b6349bd7e571b44a26d005c2975
+  react-native-pager-view: 02a5c4962530f7efc10dd51ee9cdabeff5e6c631
   react-native-quick-base64: a5dbe4528f1453e662fcf7351029500b8b63e7bb
   react-native-quick-crypto: 455c1b411db006dba1026a30681ececb19180187
-  react-native-safe-area-context: 7aa8e6d9d0f3100a820efb1a98af68aa747f9284
+  react-native-safe-area-context: 238cd8b619e05cb904ccad97ef42e84d1b5ae6ec
   react-native-slider: 1cdd6ba29675df21f30544253bf7351d3c2d68c4
   React-NativeModulesApple: 797bc6078d566eef3fb3f74127e6e1d2e945a15f
   React-perflogger: cd8886513f68e1c135a1e79d20575c6489641597
@@ -1103,11 +1104,11 @@ SPEC CHECKSUMS:
   RNDeviceInfo: bf8a32acbcb875f568217285d1793b0e8588c974
   RNFastImage: 5c9c9fed9c076e521b3f509fe79e790418a544e8
   RNFlashList: 236646d48f224a034f35baa0242e1b77db063b1e
-  RNGestureHandler: bb86e378287f7713baf3ca205423eb8109790022
+  RNGestureHandler: fa40ab6b6cafaa7609294d31f8e8fbbd0cce8ea6
   RNKeychain: a65256b6ca6ba6976132cc4124b238a5b13b3d9c
   RNReactNativeHapticFeedback: ec56a5f81c3941206fd85625fa669ffc7b4545f9
   RNReanimated: ab2e96c6d5591c3dfbb38a464f54c8d17fb34a87
-  RNScreens: 85d3880b52d34db7b8eeebe2f1a0e807c05e69fa
+  RNScreens: 2a28f2973f4d0d4623e18629ebfc2c4adaceb39a
   RNScrypt: 95fdef077b482e9fdf8a761120cb69d129ef4016
   RNSentry: e668d4e68fe09d475dc084bab81f02c3be2db173
   RNSVG: d00c8f91c3cbf6d476451313a18f04d220d4f396
@@ -1123,4 +1124,4 @@ SPEC CHECKSUMS:
 
 PODFILE CHECKSUM: 8539af608c0cd595f9920d888a6de36af30112be
 
-COCOAPODS: 1.13.0
+COCOAPODS: 1.12.1

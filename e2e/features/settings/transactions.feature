@@ -20,26 +20,24 @@ Feature: The user can manage transactions settings
     When The user selects URL as delegation method
     And The user inserts the following delegation url "<url>"
     Then The user should see the delegation url "<url>" card
-
+    Then The user closes the "<sheet_title>" bottom sheet
     Examples:
       | url                                           | sheet_title |
-      | https://sponsor-testnet.vechain.energy/by/218 | Select URL  |
+      | https://sponsor-testnet.vechain.energy/by/282 | Select URL  |
 
   Scenario: User can create multiple delegation URLs
     When The user selects URL as delegation method
     And The user inserts the following delegation url "<url1>"
-    And The user selects URL as delegation method
     And The user should see the delegation url "<url1>" card
     And The user click plus button to add a new url
     And The user inserts the following delegation url "<url2>"
     And The user should see the delegation url "<url2>" card
     And The user selects URL as delegation method
-    Then The user should see the delegation url "<url2>" card
     Then The user can click the "<url1>" url card to select it
 
     Examples:
       | url1                                          | url2                                          | sheet_title |
-      | https://sponsor-testnet.vechain.energy/by/218 | https://sponsor-testnet.vechain.energy/by/219 | Select URL  |
+      | https://sponsor-testnet.vechain.energy/by/282 | https://sponsor-testnet.vechain.energy/by/219 | Select URL  |
 
   Scenario: User can add a delegation URL with the Manage URLs button
     When The user click Manage URLs button
@@ -49,7 +47,7 @@ Feature: The user can manage transactions settings
 
     Examples:
       | url1                                          |
-      | https://sponsor-testnet.vechain.energy/by/218 |
+      | https://sponsor-testnet.vechain.energy/by/282 |
 
   Scenario: User can add multiple delegation URLs with the Manage URLs button
     When The user click Manage URLs button
@@ -62,7 +60,7 @@ Feature: The user can manage transactions settings
 
     Examples:
       | url1                                          | url2                                          |
-      | https://sponsor-testnet.vechain.energy/by/218 | https://sponsor-testnet.vechain.energy/by/219 |
+      | https://sponsor-testnet.vechain.energy/by/282 | https://sponsor-testnet.vechain.energy/by/219 |
 
   Scenario: User can delete delegation URLs
     When The user click Manage URLs button
@@ -76,4 +74,4 @@ Feature: The user can manage transactions settings
 
     Examples:
       | url1                                          | url2                                          |
-      | https://sponsor-testnet.vechain.energy/by/218 | https://sponsor-testnet.vechain.energy/by/219 |
+      | https://sponsor-testnet.vechain.energy/by/282 | https://sponsor-testnet.vechain.energy/by/219 |

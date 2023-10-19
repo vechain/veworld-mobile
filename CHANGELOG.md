@@ -1,5 +1,102 @@
 
 
+## [1.2.0](https://github.com/vechainfoundation/veworld-mobile/compare/v1.0-test...v1.2.0) (2023-10-17)
+
+
+### Bug Fixes
+
+* long ledger wallet alias and improve account card ([#1546](https://github.com/vechainfoundation/veworld-mobile/issues/1546)) ([ec5dbc1](https://github.com/vechainfoundation/veworld-mobile/commit/ec5dbc1af5bc624ecfa59b377f57d545b16da585))
+* remove regex from network utils ([#1544](https://github.com/vechainfoundation/veworld-mobile/issues/1544)) ([ba65424](https://github.com/vechainfoundation/veworld-mobile/commit/ba6542413a06b09f2a7fa46f227a448569d14e39))
+
+## [1.2.0](https://github.com/vechainfoundation/veworld-mobile/compare/1.1.1...1.2.0) (2023-10-16)
+
+
+### Features
+
+* add bable plugin to remove any forgotten logs in production ([#1473](https://github.com/vechainfoundation/veworld-mobile/issues/1473)) ([d3f5ed0](https://github.com/vechainfoundation/veworld-mobile/commit/d3f5ed0636c5930b3af3f839d6a8d7965cbf6e0f))
+* add prompt when a new version is out ([#1489](https://github.com/vechainfoundation/veworld-mobile/issues/1489)) ([daed0c8](https://github.com/vechainfoundation/veworld-mobile/commit/daed0c88e6455ef4964c9cea581e31675a0e4ad9))
+* copy address from home QR scan & refactor toast methods config ([#1452](https://github.com/vechainfoundation/veworld-mobile/issues/1452)) ([0e7f4f3](https://github.com/vechainfoundation/veworld-mobile/commit/0e7f4f32e4c2846b8f3c8687732bad803eba5c82))
+* e2e slack update on action completion ([#1523](https://github.com/vechainfoundation/veworld-mobile/issues/1523)) ([a3f15e6](https://github.com/vechainfoundation/veworld-mobile/commit/a3f15e697fdb7cb32f5e7981d96fbab0f4ebab6d))
+* import 24 words mnemonics ([#1484](https://github.com/vechainfoundation/veworld-mobile/issues/1484)) ([635ccc9](https://github.com/vechainfoundation/veworld-mobile/commit/635ccc91197653591075dc4e350978bc2997099b))
+* scroll enabled according to content height ([#1502](https://github.com/vechainfoundation/veworld-mobile/issues/1502)) ([306834a](https://github.com/vechainfoundation/veworld-mobile/commit/306834a5dfea3d85e84ba770688fa30930c2cc10))
+* state only bluetooth ledgers are supported ([#1481](https://github.com/vechainfoundation/veworld-mobile/issues/1481)) ([fc6621a](https://github.com/vechainfoundation/veworld-mobile/commit/fc6621ad4bceebd51b1c3faf032b2d89d599debb))
+
+
+### Bug Fixes
+
+* [#1529](https://github.com/vechainfoundation/veworld-mobile/issues/1529) [#1459](https://github.com/vechainfoundation/veworld-mobile/issues/1459) [#1532](https://github.com/vechainfoundation/veworld-mobile/issues/1532) ([#1533](https://github.com/vechainfoundation/veworld-mobile/issues/1533)) ([60bd7f9](https://github.com/vechainfoundation/veworld-mobile/commit/60bd7f9e8e049c156e2bea300a98b38d3be062c1))
+* add error logging on error boundary ([#1500](https://github.com/vechainfoundation/veworld-mobile/issues/1500)) ([65b7455](https://github.com/vechainfoundation/veworld-mobile/commit/65b74556b05666e48d70d4b1f7d08764a1cf38ab))
+* add loggin dev button back ([#1441](https://github.com/vechainfoundation/veworld-mobile/issues/1441)) ([530b2be](https://github.com/vechainfoundation/veworld-mobile/commit/530b2be56422730f907b383ac6366ec4d310b540))
+* add pressable to network banner ([#1479](https://github.com/vechainfoundation/veworld-mobile/issues/1479)) ([857c0db](https://github.com/vechainfoundation/veworld-mobile/commit/857c0db0ed4e2ad99f2b82b502e43f9322495a6d))
+* add unique key on map ([#1472](https://github.com/vechainfoundation/veworld-mobile/issues/1472)) ([7ad17ee](https://github.com/vechainfoundation/veworld-mobile/commit/7ad17ee4e6365e1eb4302299e7aecebc68e96cb2))
+* android biometric handling ([#1434](https://github.com/vechainfoundation/veworld-mobile/issues/1434)) ([83841ae](https://github.com/vechainfoundation/veworld-mobile/commit/83841ae4ae7865ed1c0f4bf141b426f23706e176))
+* ask review after 3 days the first time, then after 3 weeks ([#1482](https://github.com/vechainfoundation/veworld-mobile/issues/1482)) ([d88bdc9](https://github.com/vechainfoundation/veworld-mobile/commit/d88bdc9c559f2a1e0f01bb20abd2e0f6c0884c49))
+* change nft metadata to lowercase and refactor homepage balance ([#1494](https://github.com/vechainfoundation/veworld-mobile/issues/1494)) ([e5ad873](https://github.com/vechainfoundation/veworld-mobile/commit/e5ad873906c9548f0cf3fd4b69d3e77aa6e99f25))
+* contacts modal ([#1477](https://github.com/vechainfoundation/veworld-mobile/issues/1477)) ([82d1b1e](https://github.com/vechainfoundation/veworld-mobile/commit/82d1b1e07a69ea7c8148cb23833b6eb9a8182856))
+* e2e ios pipeline ([#1498](https://github.com/vechainfoundation/veworld-mobile/issues/1498)) ([1192b53](https://github.com/vechainfoundation/veworld-mobile/commit/1192b53a5a3aca50a416b0f93e7656709e8cafbe))
+* e2e test ([#1448](https://github.com/vechainfoundation/veworld-mobile/issues/1448)) ([c280129](https://github.com/vechainfoundation/veworld-mobile/commit/c28012974d9f4b7a2d99df64a77df98e4bc696ce))
+* fix bugs and improves performance on save nft and others ([#1493](https://github.com/vechainfoundation/veworld-mobile/issues/1493)) ([e34801d](https://github.com/vechainfoundation/veworld-mobile/commit/e34801d0cd9b9ef2e7f407c06efc76b6e3d80d74))
+* large blaances break view ([#1478](https://github.com/vechainfoundation/veworld-mobile/issues/1478)) ([02a383a](https://github.com/vechainfoundation/veworld-mobile/commit/02a383a8f024f33a1b6c6446b79a2399d3ef17cb))
+* limit text in account pill ([#1509](https://github.com/vechainfoundation/veworld-mobile/issues/1509)) ([3471cea](https://github.com/vechainfoundation/veworld-mobile/commit/3471cea88b5b293b35ae4f31e1697b2aae20ebf9))
+* long account/wallet names ([#1525](https://github.com/vechainfoundation/veworld-mobile/issues/1525)) ([5a7e035](https://github.com/vechainfoundation/veworld-mobile/commit/5a7e035c2409413f7eebf8f8a4ae098e88a4f19b))
+* missing NSPhotoLibraryUsageDescription ([#1536](https://github.com/vechainfoundation/veworld-mobile/issues/1536)) ([10cd957](https://github.com/vechainfoundation/veworld-mobile/commit/10cd957c75451a27c60fa89dad2d79c6a570a2e8))
+* patch scrypt library ([#1504](https://github.com/vechainfoundation/veworld-mobile/issues/1504)) ([d46381e](https://github.com/vechainfoundation/veworld-mobile/commit/d46381eb091d6c29b66ecf9ca7ddccb24d081f35))
+* refresh control on the homepage ([#1519](https://github.com/vechainfoundation/veworld-mobile/issues/1519)) ([1b7e734](https://github.com/vechainfoundation/veworld-mobile/commit/1b7e734ac794fccb75d425f0a867aaff3381ec3c))
+* remove connected app ([#1449](https://github.com/vechainfoundation/veworld-mobile/issues/1449)) ([50b31d5](https://github.com/vechainfoundation/veworld-mobile/commit/50b31d50b76bf04e9e06b4e404895ff65ec634a5))
+* sentry wallet errors, keys error and null coingecko token ([#1503](https://github.com/vechainfoundation/veworld-mobile/issues/1503)) ([0133c9e](https://github.com/vechainfoundation/veworld-mobile/commit/0133c9e9a29cddfcdc00de39af35270e4626da8e))
+* splashscreen with no connection lottie below ([#1453](https://github.com/vechainfoundation/veworld-mobile/issues/1453)) ([33e8206](https://github.com/vechainfoundation/veworld-mobile/commit/33e8206e6ac5961bfaaeb82e4457885de6a64bc5))
+* supporting pk import with hex prefix ([#1514](https://github.com/vechainfoundation/veworld-mobile/issues/1514)) ([bf3128c](https://github.com/vechainfoundation/veworld-mobile/commit/bf3128cbd2fca99e64d47ae4a9874c46e22057cc))
+* test and stabilize contacts for multiple flows ([#1501](https://github.com/vechainfoundation/veworld-mobile/issues/1501)) ([37f9b05](https://github.com/vechainfoundation/veworld-mobile/commit/37f9b057c0cd5a45a1abc101b5d8be97f3a9f0f5))
+* test e2e ([#1531](https://github.com/vechainfoundation/veworld-mobile/issues/1531)) ([b6efd19](https://github.com/vechainfoundation/veworld-mobile/commit/b6efd1915acfa50f25704b796d665a2b8583bb91))
+* token image change delay ([#1464](https://github.com/vechainfoundation/veworld-mobile/issues/1464)) ([9246451](https://github.com/vechainfoundation/veworld-mobile/commit/9246451b9c0f492a88f909f94a4c05e59834d0f2))
+* **wc:** handling bad requests ([#1510](https://github.com/vechainfoundation/veworld-mobile/issues/1510)) ([99270ba](https://github.com/vechainfoundation/veworld-mobile/commit/99270bad2889f23a78a528bf40ac422fedda4eae))
+* **wc:** processing request instantly if allowed ([#1513](https://github.com/vechainfoundation/veworld-mobile/issues/1513)) ([6e889be](https://github.com/vechainfoundation/veworld-mobile/commit/6e889becaa9a589c0a1d275e4cc2834354bbe024))
+* **wc:** remove dependency from deep linking ([#1522](https://github.com/vechainfoundation/veworld-mobile/issues/1522)) ([c0bc827](https://github.com/vechainfoundation/veworld-mobile/commit/c0bc82702bb41789cb05bdda80b189f047007336))
+
+## [1.2.0](https://github.com/vechainfoundation/veworld-mobile/compare/1.1.1...1.2.0) (2023-10-15)
+
+
+### Features
+
+* add bable plugin to remove any forgotten logs in production ([#1473](https://github.com/vechainfoundation/veworld-mobile/issues/1473)) ([d3f5ed0](https://github.com/vechainfoundation/veworld-mobile/commit/d3f5ed0636c5930b3af3f839d6a8d7965cbf6e0f))
+* add prompt when a new version is out ([#1489](https://github.com/vechainfoundation/veworld-mobile/issues/1489)) ([daed0c8](https://github.com/vechainfoundation/veworld-mobile/commit/daed0c88e6455ef4964c9cea581e31675a0e4ad9))
+* copy address from home QR scan & refactor toast methods config ([#1452](https://github.com/vechainfoundation/veworld-mobile/issues/1452)) ([0e7f4f3](https://github.com/vechainfoundation/veworld-mobile/commit/0e7f4f32e4c2846b8f3c8687732bad803eba5c82))
+* e2e slack update on action completion ([#1523](https://github.com/vechainfoundation/veworld-mobile/issues/1523)) ([a3f15e6](https://github.com/vechainfoundation/veworld-mobile/commit/a3f15e697fdb7cb32f5e7981d96fbab0f4ebab6d))
+* import 24 words mnemonics ([#1484](https://github.com/vechainfoundation/veworld-mobile/issues/1484)) ([635ccc9](https://github.com/vechainfoundation/veworld-mobile/commit/635ccc91197653591075dc4e350978bc2997099b))
+* scroll enabled according to content height ([#1502](https://github.com/vechainfoundation/veworld-mobile/issues/1502)) ([306834a](https://github.com/vechainfoundation/veworld-mobile/commit/306834a5dfea3d85e84ba770688fa30930c2cc10))
+* state only bluetooth ledgers are supported ([#1481](https://github.com/vechainfoundation/veworld-mobile/issues/1481)) ([fc6621a](https://github.com/vechainfoundation/veworld-mobile/commit/fc6621ad4bceebd51b1c3faf032b2d89d599debb))
+
+
+### Bug Fixes
+
+* [#1529](https://github.com/vechainfoundation/veworld-mobile/issues/1529) [#1459](https://github.com/vechainfoundation/veworld-mobile/issues/1459) [#1532](https://github.com/vechainfoundation/veworld-mobile/issues/1532) ([#1533](https://github.com/vechainfoundation/veworld-mobile/issues/1533)) ([60bd7f9](https://github.com/vechainfoundation/veworld-mobile/commit/60bd7f9e8e049c156e2bea300a98b38d3be062c1))
+* add error logging on error boundary ([#1500](https://github.com/vechainfoundation/veworld-mobile/issues/1500)) ([65b7455](https://github.com/vechainfoundation/veworld-mobile/commit/65b74556b05666e48d70d4b1f7d08764a1cf38ab))
+* add loggin dev button back ([#1441](https://github.com/vechainfoundation/veworld-mobile/issues/1441)) ([530b2be](https://github.com/vechainfoundation/veworld-mobile/commit/530b2be56422730f907b383ac6366ec4d310b540))
+* add pressable to network banner ([#1479](https://github.com/vechainfoundation/veworld-mobile/issues/1479)) ([857c0db](https://github.com/vechainfoundation/veworld-mobile/commit/857c0db0ed4e2ad99f2b82b502e43f9322495a6d))
+* add unique key on map ([#1472](https://github.com/vechainfoundation/veworld-mobile/issues/1472)) ([7ad17ee](https://github.com/vechainfoundation/veworld-mobile/commit/7ad17ee4e6365e1eb4302299e7aecebc68e96cb2))
+* android biometric handling ([#1434](https://github.com/vechainfoundation/veworld-mobile/issues/1434)) ([83841ae](https://github.com/vechainfoundation/veworld-mobile/commit/83841ae4ae7865ed1c0f4bf141b426f23706e176))
+* ask review after 3 days the first time, then after 3 weeks ([#1482](https://github.com/vechainfoundation/veworld-mobile/issues/1482)) ([d88bdc9](https://github.com/vechainfoundation/veworld-mobile/commit/d88bdc9c559f2a1e0f01bb20abd2e0f6c0884c49))
+* change nft metadata to lowercase and refactor homepage balance ([#1494](https://github.com/vechainfoundation/veworld-mobile/issues/1494)) ([e5ad873](https://github.com/vechainfoundation/veworld-mobile/commit/e5ad873906c9548f0cf3fd4b69d3e77aa6e99f25))
+* contacts modal ([#1477](https://github.com/vechainfoundation/veworld-mobile/issues/1477)) ([82d1b1e](https://github.com/vechainfoundation/veworld-mobile/commit/82d1b1e07a69ea7c8148cb23833b6eb9a8182856))
+* e2e ios pipeline ([#1498](https://github.com/vechainfoundation/veworld-mobile/issues/1498)) ([1192b53](https://github.com/vechainfoundation/veworld-mobile/commit/1192b53a5a3aca50a416b0f93e7656709e8cafbe))
+* e2e test ([#1448](https://github.com/vechainfoundation/veworld-mobile/issues/1448)) ([c280129](https://github.com/vechainfoundation/veworld-mobile/commit/c28012974d9f4b7a2d99df64a77df98e4bc696ce))
+* fix bugs and improves performance on save nft and others ([#1493](https://github.com/vechainfoundation/veworld-mobile/issues/1493)) ([e34801d](https://github.com/vechainfoundation/veworld-mobile/commit/e34801d0cd9b9ef2e7f407c06efc76b6e3d80d74))
+* large blaances break view ([#1478](https://github.com/vechainfoundation/veworld-mobile/issues/1478)) ([02a383a](https://github.com/vechainfoundation/veworld-mobile/commit/02a383a8f024f33a1b6c6446b79a2399d3ef17cb))
+* limit text in account pill ([#1509](https://github.com/vechainfoundation/veworld-mobile/issues/1509)) ([3471cea](https://github.com/vechainfoundation/veworld-mobile/commit/3471cea88b5b293b35ae4f31e1697b2aae20ebf9))
+* long account/wallet names ([#1525](https://github.com/vechainfoundation/veworld-mobile/issues/1525)) ([5a7e035](https://github.com/vechainfoundation/veworld-mobile/commit/5a7e035c2409413f7eebf8f8a4ae098e88a4f19b))
+* patch scrypt library ([#1504](https://github.com/vechainfoundation/veworld-mobile/issues/1504)) ([d46381e](https://github.com/vechainfoundation/veworld-mobile/commit/d46381eb091d6c29b66ecf9ca7ddccb24d081f35))
+* refresh control on the homepage ([#1519](https://github.com/vechainfoundation/veworld-mobile/issues/1519)) ([1b7e734](https://github.com/vechainfoundation/veworld-mobile/commit/1b7e734ac794fccb75d425f0a867aaff3381ec3c))
+* remove connected app ([#1449](https://github.com/vechainfoundation/veworld-mobile/issues/1449)) ([50b31d5](https://github.com/vechainfoundation/veworld-mobile/commit/50b31d50b76bf04e9e06b4e404895ff65ec634a5))
+* sentry wallet errors, keys error and null coingecko token ([#1503](https://github.com/vechainfoundation/veworld-mobile/issues/1503)) ([0133c9e](https://github.com/vechainfoundation/veworld-mobile/commit/0133c9e9a29cddfcdc00de39af35270e4626da8e))
+* splashscreen with no connection lottie below ([#1453](https://github.com/vechainfoundation/veworld-mobile/issues/1453)) ([33e8206](https://github.com/vechainfoundation/veworld-mobile/commit/33e8206e6ac5961bfaaeb82e4457885de6a64bc5))
+* supporting pk import with hex prefix ([#1514](https://github.com/vechainfoundation/veworld-mobile/issues/1514)) ([bf3128c](https://github.com/vechainfoundation/veworld-mobile/commit/bf3128cbd2fca99e64d47ae4a9874c46e22057cc))
+* test and stabilize contacts for multiple flows ([#1501](https://github.com/vechainfoundation/veworld-mobile/issues/1501)) ([37f9b05](https://github.com/vechainfoundation/veworld-mobile/commit/37f9b057c0cd5a45a1abc101b5d8be97f3a9f0f5))
+* test e2e ([#1531](https://github.com/vechainfoundation/veworld-mobile/issues/1531)) ([b6efd19](https://github.com/vechainfoundation/veworld-mobile/commit/b6efd1915acfa50f25704b796d665a2b8583bb91))
+* token image change delay ([#1464](https://github.com/vechainfoundation/veworld-mobile/issues/1464)) ([9246451](https://github.com/vechainfoundation/veworld-mobile/commit/9246451b9c0f492a88f909f94a4c05e59834d0f2))
+* **wc:** handling bad requests ([#1510](https://github.com/vechainfoundation/veworld-mobile/issues/1510)) ([99270ba](https://github.com/vechainfoundation/veworld-mobile/commit/99270bad2889f23a78a528bf40ac422fedda4eae))
+* **wc:** processing request instantly if allowed ([#1513](https://github.com/vechainfoundation/veworld-mobile/issues/1513)) ([6e889be](https://github.com/vechainfoundation/veworld-mobile/commit/6e889becaa9a589c0a1d275e4cc2834354bbe024))
+* **wc:** remove dependency from deep linking ([#1522](https://github.com/vechainfoundation/veworld-mobile/issues/1522)) ([c0bc827](https://github.com/vechainfoundation/veworld-mobile/commit/c0bc82702bb41789cb05bdda80b189f047007336))
+
 ## [1.2.0](https://github.com/vechainfoundation/veworld-mobile/compare/1.1.1...1.2.0) (2023-10-04)
 
 

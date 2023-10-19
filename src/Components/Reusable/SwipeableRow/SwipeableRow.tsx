@@ -23,6 +23,8 @@ type Props<T> = {
     onPress?: (item: T) => void
     isDragMode?: boolean
     isOpen?: boolean
+    customUnderlay?: ReactNode
+    snapPointsLeft?: number[]
 }
 
 // this component is used to wrap the item in the list and uniform the logic with swipeable items
@@ -39,6 +41,8 @@ export const SwipeableRow = <T,>({
     onPress,
     isDragMode,
     isOpen,
+    customUnderlay,
+    snapPointsLeft,
 }: Props<T>) => {
     const { styles } = useThemedStyles(baseStyles)
 
@@ -98,10 +102,12 @@ export const SwipeableRow = <T,>({
                 }}
                 swipeEnabled={swipeEnabled}
                 item={item}
-                renderUnderlayLeft={() => (
-                    <DeleteUnderlay onPress={onTrashIconPress} />
-                )}
-                snapPointsLeft={[58]}
+                renderUnderlayLeft={() =>
+                    customUnderlay || (
+                        <DeleteUnderlay onPress={onTrashIconPress} />
+                    )
+                }
+                snapPointsLeft={snapPointsLeft || [58]}
                 onChange={handleSwipe}>
                 <BaseView style={styles.touchableContainer}>
                     <PressableComponent

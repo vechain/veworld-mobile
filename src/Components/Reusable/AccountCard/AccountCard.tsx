@@ -74,19 +74,26 @@ export const AccountCard: React.FC<Props> = memo(
                         styles.container,
                         selected ? styles.selectedContainer : {},
                     ]}>
-                    <BaseView flexDirection="row">
+                    <BaseView flexDirection="row" flex={1} pr={10}>
                         <AccountIcon address={account.address} />
                         <BaseSpacer width={12} />
-                        <BaseView>
-                            <BaseText>{account.alias}</BaseText>
+                        <BaseView flex={1}>
+                            <BaseText ellipsizeMode="tail" numberOfLines={1}>
+                                {account.alias}
+                            </BaseText>
                             <BaseView flexDirection="row" mt={3}>
                                 {account.device?.type ===
                                     DEVICE_TYPE.LEDGER && (
                                     <LedgerBadge mr={8} />
                                 )}
-                                <BaseText style={styles.wallet}>
-                                    {account.device.alias}
-                                </BaseText>
+                                <BaseView flex={1}>
+                                    <BaseText
+                                        style={styles.wallet}
+                                        ellipsizeMode="tail"
+                                        numberOfLines={1}>
+                                        {account.device.alias}
+                                    </BaseText>
+                                </BaseView>
                             </BaseView>
                         </BaseView>
                     </BaseView>

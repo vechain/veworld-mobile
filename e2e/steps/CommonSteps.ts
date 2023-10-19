@@ -46,8 +46,8 @@ Given("Open with demo account", { timeout: -1 }, async function () {
 Given("The user has more than one account", { timeout: -1 }, async function () {
     await clickById("HomeScreen_WalletManagementButton")
     await clickByText("Wallet 1")
-    await clickById("WalletMgmtBottomSheet_addAccountButton")
-    await clickByText("Wallets") // to close the bottom sheet
+    await clickById("WalletDetailScreen_addAccountButton")
+    await goBack()
     await goBack()
 })
 

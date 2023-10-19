@@ -121,7 +121,7 @@ describe("useTransactionScreen", () => {
             SubmitButton: expect.any(Function),
             RenderGas: expect.any(Function),
             selectedDelegationOption: DelegationType.NONE,
-            vthoGas: "0.00",
+            vthoGasFee: "0.00",
             vthoBalance: "0.00",
             isThereEnoughGas: true,
             onSubmit: expect.any(Function),

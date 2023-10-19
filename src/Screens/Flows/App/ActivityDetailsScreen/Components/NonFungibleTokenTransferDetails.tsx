@@ -21,8 +21,7 @@ export const NonFungibleTokenTransferDetails: React.FC<Props> = memo(
 
         const { onCopyToClipboard } = useCopyClipboard()
 
-        const { gasFeeInVTHOHumanReadable, fiatValueGasFeeSpent } =
-            useGasFee(activity)
+        const { vthoGasFee, fiatValueGasFeeSpent } = useGasFee(activity)
 
         const transactionIDshort = useMemo(() => {
             return FormattingUtils.humanAddress(activity.txId ?? "", 7, 9)
@@ -43,9 +42,7 @@ export const NonFungibleTokenTransferDetails: React.FC<Props> = memo(
             {
                 id: 1,
                 title: LL.GAS_FEE(),
-                value: gasFeeInVTHOHumanReadable
-                    ? `${gasFeeInVTHOHumanReadable} ${VTHO.symbol}`
-                    : "",
+                value: vthoGasFee ? `${vthoGasFee} ${VTHO.symbol}` : "",
                 typographyFont: "subSubTitle",
                 underline: false,
                 valueAdditional: fiatValueGasFeeSpent

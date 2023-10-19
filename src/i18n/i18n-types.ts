@@ -883,7 +883,7 @@ type RootTranslation = {
 	 */
 	BIOMETRICS_PROMPT: string
 	/**
-	 * U​n​l​o​c​k​ ​y​o​u​r​ ​w​a​l​l​e​t​ ​u​s​i​n​g​ ​B​i​o​m​e​t​r​i​c​ ​A​u​t​h​e​n​t​i​c​a​t​i​o​n​.
+	 * U​n​l​o​c​k​ ​V​e​W​o​r​l​d​ ​u​s​i​n​g​ ​B​i​o​m​e​t​r​i​c​ ​A​u​t​h​e​n​t​i​c​a​t​i​o​n​.
 	 */
 	BIOMETRICS_PROMPT_UNLOCK: string
 	/**
@@ -2183,6 +2183,18 @@ type RootTranslation = {
 	 * F​a​i​l​e​d​ ​t​o​ ​d​e​l​e​g​a​t​e​ ​t​h​e​ ​t​r​a​n​s​a​c​t​i​o​n​ ​w​i​t​h​ ​t​h​e​ ​p​r​o​v​i​d​e​d​ ​U​R​L
 	 */
 	SEND_DELEGATION_ERROR_SIGNATURE: string
+	/**
+	 * R​E​G​U​L​A​R
+	 */
+	SEND_FEE_REGULAR: string
+	/**
+	 * M​E​D​I​U​M
+	 */
+	SEND_FEE_MEDIUM: string
+	/**
+	 * H​I​G​H
+	 */
+	SEND_FEE_HIGH: string
 	/**
 	 * C​r​e​a​t​e​ ​c​o​n​t​a​c​t
 	 */
@@ -3493,7 +3505,7 @@ export type TranslationFunctions = {
 	 */
 	BIOMETRICS_PROMPT: () => LocalizedString
 	/**
-	 * Unlock your wallet using Biometric Authentication.
+	 * Unlock VeWorld using Biometric Authentication.
 	 */
 	BIOMETRICS_PROMPT_UNLOCK: () => LocalizedString
 	/**
@@ -4769,6 +4781,18 @@ Try reconnect your device to the internet.
 	 * Failed to delegate the transaction with the provided URL
 	 */
 	SEND_DELEGATION_ERROR_SIGNATURE: () => LocalizedString
+	/**
+	 * REGULAR
+	 */
+	SEND_FEE_REGULAR: () => LocalizedString
+	/**
+	 * MEDIUM
+	 */
+	SEND_FEE_MEDIUM: () => LocalizedString
+	/**
+	 * HIGH
+	 */
+	SEND_FEE_HIGH: () => LocalizedString
 	/**
 	 * Create contact
 	 */

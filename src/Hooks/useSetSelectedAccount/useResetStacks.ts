@@ -22,7 +22,11 @@ export const useResetStacks = () => {
 
         // If the "Routes.HOME" route is not found at the top of the stack, reset the stack to have only "Routes.HOME" route
         try {
-            if (homeRoutes[0]?.name !== Routes.HOME) {
+            if (
+                homeRoutes.length &&
+                homeRoutes[0]?.name !== Routes.HOME &&
+                homeRoutes[0]?.name !== Routes.WALLET_DETAILS
+            ) {
                 nav.reset({
                     index: 0,
                     routes: [{ name: Routes.HOME }],
@@ -31,10 +35,9 @@ export const useResetStacks = () => {
         } catch (e) {
             warn("useResetStack, Routes.HOME", e)
         }
-
         // If the "Routes.NFTS" route is not found at the top of the stack, reset the stack to have only "Routes.NFTS" route
         try {
-            if (nftRoutes[0]?.name !== Routes.NFTS) {
+            if (nftRoutes.length && nftRoutes[0]?.name !== Routes.NFTS) {
                 nav.reset({
                     index: 0,
                     routes: [{ name: Routes.NFTS }],

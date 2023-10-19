@@ -244,7 +244,7 @@ const en: BaseTranslation = {
     DEVICE_PIN: "Device Pin",
     TAP_TO_VIEW: "Tap to view",
     BIOMETRICS_PROMPT: "Please use Biometrics to secure your wallet.",
-    BIOMETRICS_PROMPT_UNLOCK: "Unlock your wallet using Biometric Authentication.",
+    BIOMETRICS_PROMPT_UNLOCK: "Unlock VeWorld using Biometric Authentication.",
     VEWORLD: "VeWorld",
 
 
@@ -627,6 +627,9 @@ const en: BaseTranslation = {
     SEND_DELEGATION_ADD_URL_SUBTITLE: "Insert the URL you want to to use to delegate this transaction",
     SEND_DELEGATION_ADD_URL_PLACEHOLDER: "Enter URL",
     SEND_DELEGATION_ERROR_SIGNATURE: "Failed to delegate the transaction with the provided URL",
+    SEND_FEE_REGULAR: "REGULAR",
+    SEND_FEE_MEDIUM: "MEDIUM",
+    SEND_FEE_HIGH: "HIGH",
     SEND_CREATE_CONTACT_TITLE: "Create contact",
     SEND_CREATE_CONTACT_SUBTITLE: "We noticed that the address you entered is not associated with any saved contacts, would you like to create one?",
     SEND_CREATE_CONTACT_CREATE_BUTTON: "CREATE CONTACT",

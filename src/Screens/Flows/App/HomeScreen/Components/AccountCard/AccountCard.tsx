@@ -55,12 +55,13 @@ export const AccountCard: React.FC<Props> = memo(props => {
                 <BaseView
                     flexDirection="row"
                     justifyContent="space-between"
-                    alignItems="center"
-                    w={100}>
-                    <BaseView flexDirection="row" alignItems="center">
+                    alignItems="center">
+                    <BaseView flexDirection="row" alignItems="center" flex={1}>
                         <AccountIcon address={account.address} size={45} />
-                        <BaseView px={8} alignItems="flex-start">
+                        <BaseView px={8} alignItems="flex-start" flex={1}>
                             <BaseText
+                                ellipsizeMode="tail"
+                                numberOfLines={1}
                                 typographyFont="buttonPrimary"
                                 color={theme.colors.textReversed}>
                                 {account.alias}
@@ -77,11 +78,15 @@ export const AccountCard: React.FC<Props> = memo(props => {
                                         }}
                                     />
                                 )}
-                                <BaseText
-                                    typographyFont="captionMedium"
-                                    color={theme.colors.textReversed}>
-                                    {account.device?.alias}
-                                </BaseText>
+                                <BaseView flex={1}>
+                                    <BaseText
+                                        ellipsizeMode="tail"
+                                        numberOfLines={1}
+                                        typographyFont="captionMedium"
+                                        color={theme.colors.textReversed}>
+                                        {account.device?.alias}
+                                    </BaseText>
+                                </BaseView>
                             </BaseView>
                         </BaseView>
                     </BaseView>

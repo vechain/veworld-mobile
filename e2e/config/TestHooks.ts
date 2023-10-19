@@ -19,15 +19,9 @@ BeforeAll({ timeout: 600 * 1000 }, async () => {
     console.log("Starting a new Detox test session...")
     await detox.init()
     console.log("Detox test session started!")
-
-    console.log("Launching app...")
-    await device.launchApp({ newInstance: true })
-    console.log("App launched!")
 })
 
 Before({ timeout: 600 * 1000 }, async (message: ITestCaseHookParameter) => {
-    await device.terminateApp()
-
     const { pickle } = message
     console.log("Starting Detox test: " + pickle.name)
     await detox.onTestStart({
@@ -52,6 +46,8 @@ After({ timeout: 600 * 1000 }, async (message: ITestCaseHookParameter) => {
     } else {
         console.log("Cannot reset app for test: " + pickle.name)
     }
+
+    await device.terminateApp()
 })
 
 AfterAll({ timeout: 600 * 1000 }, async () => {
