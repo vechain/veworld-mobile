@@ -1,4 +1,3 @@
-/* eslint-disable react-native/no-inline-styles */
 import React, { useCallback } from "react"
 import { useTheme } from "~Hooks"
 import { BaseButton } from "./BaseButton"

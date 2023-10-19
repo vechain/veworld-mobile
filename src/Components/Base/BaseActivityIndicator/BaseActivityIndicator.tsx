@@ -7,12 +7,12 @@ import { BaseText } from "../BaseText"
 type Props = {
     text?: string
     isVisible: boolean
-    onHide: () => void
+    onHide?: () => void
 }
 export const BaseActivityIndicator: React.FC<Props> = ({
     text,
     isVisible,
-    onHide,
+    onHide = () => null,
 }) => {
     return (
         <BaseModal

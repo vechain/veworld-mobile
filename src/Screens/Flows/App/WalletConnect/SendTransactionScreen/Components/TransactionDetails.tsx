@@ -29,7 +29,7 @@ type Props = {
     sessionRequest: SessionTypes.Struct
     network: Network
     message: Connex.Vendor.TxMessage
-    options: Connex.Driver.TxOptions
+    options: Connex.Signer.TxOptions
 }
 
 export const TransactionDetails = ({

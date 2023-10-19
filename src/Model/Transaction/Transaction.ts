@@ -34,7 +34,7 @@ export interface ConnexTransactionData {
     isReverted: boolean
     clauses: TransactionOutcomes
     txMessage: Connex.Vendor.TxMessage
-    txOptions: Connex.Driver.TxOptions
+    txOptions: Connex.Signer.TxOptions
     sender: string
 }
 

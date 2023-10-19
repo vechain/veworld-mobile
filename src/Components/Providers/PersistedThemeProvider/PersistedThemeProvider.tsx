@@ -63,7 +63,6 @@ const PersistedThemeProvider = ({ children }: ThemeProviderProps) => {
         }
 
         setTheme(storedTheme)
-        // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [themeCache])
 
     const value = useMemo(() => {

@@ -1,11 +1,11 @@
 import React, { FC, memo } from "react"
-import { ViewProps } from "react-native"
+import { DimensionValue, ViewProps } from "react-native"
 import { useTheme } from "~Hooks"
 import { BaseView } from "./BaseView"
 
 type Props = {
-    height?: number | string
-    width?: number | string
+    height?: DimensionValue
+    width?: DimensionValue
     background?: string
 } & ViewProps
 

@@ -2,7 +2,8 @@ import React from "react"
 import { render, screen } from "@testing-library/react-native"
 import { BaseSkeleton } from "./BaseSkeleton"
 import { TestWrapper } from "~Test"
-import { ICustomViewStyle } from "react-native-skeleton-content-nonexpo/lib/Constants"
+import { ICustomViewStyle } from "react-native-reanimated-skeleton"
+import { StyleProp, ViewStyle } from "react-native"
 
 const baseSkeletonTestId = "BaseSkeleton"
 
@@ -57,7 +58,7 @@ describe("BaseSkeleton", () => {
     })
 
     it("renders correctly with customs styles and width", async () => {
-        const containerStyle = {
+        const containerStyle: StyleProp<ViewStyle> = {
             height: "100%",
         }
 

@@ -1,7 +1,6 @@
 import React, { useMemo } from "react"
 import { StyleProp, ViewStyle } from "react-native"
-import SkeletonContent from "react-native-skeleton-content-nonexpo"
-import { ICustomViewStyle } from "react-native-skeleton-content-nonexpo/lib/Constants"
+import Skeleton, { ICustomViewStyle } from "react-native-reanimated-skeleton"
 import { BaseView } from "~Components"
 
 type Props = {
@@ -93,7 +92,7 @@ export const BaseSkeleton = ({
 
     return (
         <BaseView testID={testID}>
-            <SkeletonContent
+            <Skeleton
                 containerStyle={computedContainerStyle}
                 animationDirection={animationDirection}
                 boneColor={boneColor}

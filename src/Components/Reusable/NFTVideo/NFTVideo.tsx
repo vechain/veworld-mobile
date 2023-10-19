@@ -1,9 +1,8 @@
-import React, { memo, useEffect, useRef, useState } from "react"
+import React, { memo, useCallback, useEffect, useRef } from "react"
 import {
     Audio,
     Video,
     ResizeMode,
-    AVPlaybackStatus,
     InterruptionModeAndroid,
     InterruptionModeIOS,
 } from "expo-av"
@@ -19,29 +18,32 @@ type Props = {
 
 // Workaround to play audio on iOS
 // https://stackoverflow.com/a/74493514/7977491
-const triggerAudio = async (ref: any) => {
+const triggerAudio = async (ref: React.RefObject<Video>) => {
     await Audio.setAudioModeAsync({
         playsInSilentModeIOS: true, // play audio even when phone is on silent mode
         interruptionModeAndroid: InterruptionModeAndroid.DoNotMix, // interrupt other apps' audio
         interruptionModeIOS: InterruptionModeIOS.DoNotMix, // interrupt other apps' audio
     })
 
-    ref.current.playAsync()
+    await ref?.current?.playAsync()
 }
 
 export const NFTVideo = memo((props: Props) => {
     const { uri, style, isPlayAudio } = props
-    const ref = useRef(null)
-    const [status, setStatus] = useState<AVPlaybackStatus | undefined>()
+    const ref = useRef<Video>(null)
+    const firstLoadRef = useRef(true)
+
+    const initPLayback = useCallback(async () => {
+        if (isPlayAudio) await triggerAudio(ref)
+    }, [isPlayAudio])
 
     useEffect(() => {
-        if (!status) return
-        if (status.isLoaded && isPlayAudio) triggerAudio(ref)
-
-        return () => {
-            ref.current = null
+        if (firstLoadRef.current) {
+            initPLayback()
+            firstLoadRef.current = false
+            return
         }
-    }, [ref, status, isPlayAudio])
+    }, [initPLayback])
 
     const theme = useTheme()
 
@@ -51,7 +53,6 @@ export const NFTVideo = memo((props: Props) => {
                 volume={isPlayAudio ? 1 : 0}
                 usePoster
                 ref={ref}
-                onPlaybackStatusUpdate={setStatus}
                 shouldPlay
                 useNativeControls={props.useNativeControls}
                 style={[

@@ -1,7 +1,6 @@
 /* eslint-disable react-native/no-inline-styles */
 import React, { useEffect, useMemo, useState } from "react"
 import { AppRegistry, LogBox } from "react-native"
-import { enableAllPlugins } from "immer"
 import { EntryPoint } from "./src/EntryPoint"
 import { name as appName } from "./app.json"
 import "@walletconnect/react-native-compat"
@@ -43,9 +42,6 @@ import * as Sentry from "@sentry/react-native"
 import "react-native-url-polyfill/auto"
 
 const { fontFamily } = typography
-
-// immer setup
-enableAllPlugins()
 
 if (__DEV__) {
     require("basil-ws-flipper").wsDebugPlugin
