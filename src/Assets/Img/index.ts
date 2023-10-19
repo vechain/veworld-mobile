@@ -5,6 +5,8 @@ export * from "./LedgerLogo"
 export * from "./veworldLogo"
 export * from "./NFTPlaceholderDark"
 export * from "./NFTPlaceholderLight"
+export * from "./CoinbaseLogoSmallSvg"
+export * from "./CoinbaseLogoSvg"
 
 const dark_nft_placeholder = require("./NFTPlaceholder_Dark.png")
 const light_nft_placeholder = require("./NFTPlaceholder_Light.png")

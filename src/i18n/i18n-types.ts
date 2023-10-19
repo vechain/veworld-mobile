@@ -504,6 +504,14 @@ type RootTranslation = {
 	 */
 	BD_APP_BLOCKED: string
 	/**
+	 * C​h​o​o​s​e​ ​a​ ​p​r​o​v​i​d​e​r​:
+	 */
+	BD_SELECT_PAYMENT_PROVIDER: string
+	/**
+	 * B​u​y​ ​w​i​t​h​ ​C​o​i​n​b​a​s​e​ ​a​n​d​ ​r​e​c​e​i​v​e​ ​t​h​e​ ​t​o​k​e​n​s​ ​d​i​r​e​c​t​l​y​ ​i​n​ ​V​e​W​o​r​l​d​.
+	 */
+	BD_BUY_DESCRIPTION_COINBASE: string
+	/**
 	 * W​e​l​c​o​m​e​ ​t​o​ 
 	 */
 	TITLE_WELCOME_TO: string
@@ -685,6 +693,10 @@ type RootTranslation = {
 	 * @param {string} type
 	 */
 	TITLE_RENAME: RequiredParams<'type'>
+	/**
+	 * B​u​y​ ​V​e​c​h​a​i​n​T​h​o​r​ ​t​o​k​e​n​s
+	 */
+	TITLE_BUY: string
 	/**
 	 * U​n​l​o​c​k​ ​k​e​y​s​t​o​r​e
 	 */
@@ -3129,6 +3141,14 @@ export type TranslationFunctions = {
 	 */
 	BD_APP_BLOCKED: () => LocalizedString
 	/**
+	 * Choose a provider:
+	 */
+	BD_SELECT_PAYMENT_PROVIDER: () => LocalizedString
+	/**
+	 * Buy with Coinbase and receive the tokens directly in VeWorld.
+	 */
+	BD_BUY_DESCRIPTION_COINBASE: () => LocalizedString
+	/**
 	 * Welcome to 
 	 */
 	TITLE_WELCOME_TO: () => LocalizedString
@@ -3308,6 +3328,10 @@ export type TranslationFunctions = {
 	 * Rename {type}
 	 */
 	TITLE_RENAME: (arg: { type: string }) => LocalizedString
+	/**
+	 * Buy VechainThor tokens
+	 */
+	TITLE_BUY: () => LocalizedString
 	/**
 	 * Unlock keystore
 	 */

@@ -244,10 +244,7 @@ export const SelectLedgerAccounts: React.FC<Props> = ({ route }) => {
                         onDismiss={onClose}
                         error={ledgerErrorCode}
                     />
-                    <BaseActivityIndicator
-                        isVisible={ledgerAccountsLoading}
-                        onHide={() => null}
-                    />
+                    <BaseActivityIndicator isVisible={ledgerAccountsLoading} />
                     <BaseView flexGrow={1} mx={24}>
                         {!!ledgerAccounts.length && (
                             <FlashList

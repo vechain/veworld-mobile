@@ -185,3 +185,18 @@ jest.mock(
         usePersistedTheme: jest.fn(),
     }),
 )
+
+jest.mock("react-native/Libraries/TurboModule/TurboModuleRegistry", () => {
+    const turboModuleRegistry = jest.requireActual(
+        "react-native/Libraries/TurboModule/TurboModuleRegistry",
+    )
+    return {
+        ...turboModuleRegistry,
+        getEnforcing: (name: string) => {
+            if (name === "RNCWebView") {
+                return null
+            }
+            return turboModuleRegistry.getEnforcing(name)
+        },
+    }
+})

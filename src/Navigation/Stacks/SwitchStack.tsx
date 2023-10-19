@@ -23,6 +23,8 @@ import {
     LedgerSignTransaction,
 } from "~Screens/Flows/App/LedgerScreen"
 import { useWalletStatus } from "~Components"
+import { BuyStack } from "./BuyStack"
+import { BUY_FEATURE_ENABLED } from "~Constants"
 
 export type RootStackParamListSwitch = {
     OnboardingStack: undefined
@@ -30,6 +32,7 @@ export type RootStackParamListSwitch = {
     ResetAppScreen: undefined
     [Routes.CREATE_WALLET_FLOW]: undefined
     [Routes.BLACKLISTED_COLLECTIONS]: undefined
+    [Routes.BUY_FLOW]: undefined
     [Routes.CONNECT_APP_SCREEN]: {
         sessionProposal: SignClientTypes.EventArguments["session_proposal"]
     }
@@ -130,6 +133,15 @@ export const SwitchStack = () => {
                             name={Routes.LEDGER_SIGN_TRANSACTION}
                             component={LedgerSignTransaction}
                         />
+                        {BUY_FEATURE_ENABLED && (
+                            <Switch.Screen
+                                name={Routes.BUY_FLOW}
+                                component={BuyStack}
+                                options={{
+                                    presentation: "modal",
+                                }}
+                            />
+                        )}
                     </Switch.Group>
                 </>
             )

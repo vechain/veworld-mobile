@@ -3,7 +3,6 @@ import { createNativeStackNavigator } from "@react-navigation/native-stack"
 import {
     ActivityDetailsScreen,
     AssetDetailScreen,
-    BuyScreen,
     ConnectedAppsScreen,
     HistoryScreen,
     HomeScreen,
@@ -33,7 +32,6 @@ import { useNavAnimation } from "~Hooks"
 
 export type RootStackParamListHome = {
     [Routes.HOME]: undefined
-    [Routes.BUY]: undefined
     [Routes.SELECT_TOKEN_SEND]: { initialRoute: Routes }
     [Routes.SELECT_AMOUNT_SEND]: {
         token: FungibleTokenWithBalance
@@ -89,11 +87,6 @@ export const HomeStack = () => {
                 <Screen
                     name={Routes.HOME}
                     component={HomeScreen}
-                    options={{ headerShown: false }}
-                />
-                <Screen
-                    name={Routes.BUY}
-                    component={BuyScreen}
                     options={{ headerShown: false }}
                 />
                 <Screen
