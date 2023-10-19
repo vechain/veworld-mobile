@@ -1,6 +1,7 @@
 import React, { useCallback, useEffect, useRef, useState } from "react"
 import {
     useBottomSheetModal,
+    useCheckIdentity,
     useRenameWallet,
     useSetSelectedAccount,
     useTheme,
@@ -17,6 +18,7 @@ import {
     showWarningToast,
     Layout,
     SwipeableRow,
+    RequireUserPassword,
 } from "~Components"
 import { useI18nContext } from "~i18n"
 import { AccountDetailBox } from "./AccountDetailBox"
@@ -91,8 +93,12 @@ export const WalletDetailScreen = ({ route: { params } }: Props) => {
         }
     }
 
-    const { setAccountToRemove, deleteAccount, isOnlyAccount } =
-        useAccountDelete()
+    const {
+        setAccountToRemove,
+        deleteAccount,
+        isOnlyAccount,
+        accountToRemove,
+    } = useAccountDelete()
 
     const confirmRemoveAccount = useCallback(
         (account: AccountWithDevice) => {
@@ -112,16 +118,26 @@ export const WalletDetailScreen = ({ route: { params } }: Props) => {
         ],
     )
 
-    const onRemoveAccount = useCallback(() => {
-        closeRemoveAccountWarningBottomSheet()
-        deleteAccount()
-    }, [closeRemoveAccountWarningBottomSheet, deleteAccount])
-
     useEffect(() => {
         setWalletAlias(device?.alias ?? "")
     }, [device?.alias])
 
     const { onSetSelectedAccount } = useSetSelectedAccount()
+
+    // delete account logic
+    const {
+        isPasswordPromptOpen,
+        handleClosePasswordModal,
+        onPasswordSuccess,
+        checkIdentityBeforeOpening,
+    } = useCheckIdentity({
+        onIdentityConfirmed: deleteAccount,
+        allowAutoPassword: false,
+    })
+    const closeWarningAndAskForPassword = useCallback(() => {
+        closeRemoveAccountWarningBottomSheet()
+        checkIdentityBeforeOpening()
+    }, [checkIdentityBeforeOpening, closeRemoveAccountWarningBottomSheet])
 
     return (
         <Layout
@@ -223,6 +239,7 @@ export const WalletDetailScreen = ({ route: { params } }: Props) => {
                                             isBalanceVisible={isBalanceVisible}
                                             account={item}
                                             isSelected={isSelected}
+                                            isDisabled={!item.visible}
                                         />
                                     </SwipeableRow>
                                 )
@@ -230,8 +247,17 @@ export const WalletDetailScreen = ({ route: { params } }: Props) => {
                         />
                     )}
                     <RemoveAccountWarningBottomSheet
-                        onConfirm={onRemoveAccount}
+                        onConfirm={closeWarningAndAskForPassword}
                         ref={removeAccountWarningBottomSheetRef}
+                        onCancel={closeRemoveAccountWarningBottomSheet}
+                        accountToRemove={accountToRemove}
+                        isBalanceVisible={isBalanceVisible}
+                    />
+
+                    <RequireUserPassword
+                        isOpen={isPasswordPromptOpen}
+                        onClose={handleClosePasswordModal}
+                        onSuccess={onPasswordSuccess}
                     />
                 </BaseView>
             }

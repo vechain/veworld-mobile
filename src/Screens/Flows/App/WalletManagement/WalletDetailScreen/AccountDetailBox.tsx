@@ -11,9 +11,17 @@ type Props = {
     account: WalletAccount
     isSelected: boolean
     isBalanceVisible: boolean
+    isDisabled: boolean
+    isEditable?: boolean
 }
 export const AccountDetailBox: React.FC<Props> = memo(
-    ({ account, isSelected, isBalanceVisible }) => {
+    ({
+        account,
+        isSelected,
+        isBalanceVisible,
+        isDisabled,
+        isEditable = true,
+    }) => {
         const { styles, theme } = useThemedStyles(baseStyles)
 
         const { changeAccountAlias } = useRenameAccount(account)
@@ -50,12 +58,12 @@ export const AccountDetailBox: React.FC<Props> = memo(
         )
 
         const cardBgColor = useMemo(
-            () => (!account.visible ? theme.colors.neutralDisabled : undefined),
-            [account.visible, theme.colors.neutralDisabled],
+            () => (isDisabled ? theme.colors.neutralDisabled : undefined),
+            [isDisabled, theme.colors.neutralDisabled],
         )
         const cardOpacity = useMemo(
-            () => (!account.visible ? 0.7 : undefined),
-            [account.visible],
+            () => (isDisabled ? 0.7 : undefined),
+            [isDisabled],
         )
 
         return (
@@ -69,6 +77,7 @@ export const AccountDetailBox: React.FC<Props> = memo(
                 ]}>
                 <BaseView style={styles.aliasContainer}>
                     <BaseTextInput
+                        disabled={!isEditable}
                         placeholder={account?.alias}
                         value={accountAlias}
                         setValue={onRenameAccount}
