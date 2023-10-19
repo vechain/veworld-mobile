@@ -116,8 +116,6 @@ export const genesises = {
     },
 }
 
-export const DEFAULT_GAS_COEFFICIENT = 0
-
 export const BASE_GAS_PRICE =
     "0x000000000000000000000000000000000000626173652d6761732d7072696365"
 

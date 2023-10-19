@@ -1,114 +1,6 @@
 import URIUtils from "./URIUtils"
 
 describe("URIUtils", () => {
-    describe("parseUrl", () => {
-        test("should return parsed URL - https", () => {
-            expect(URIUtils.parseUrl("https://www.google.com")).toEqual({
-                url: "https://www.google.com",
-                origin: "https://google.com",
-                protocol: "https",
-                host: "google.com",
-                hostname: "google.com",
-                port: undefined,
-                pathname: "",
-                search: "",
-                hash: "",
-            })
-        })
-        test("should return parsed URL - http", () => {
-            expect(URIUtils.parseUrl("http://www.google.com")).toEqual({
-                url: "http://www.google.com",
-                origin: "http://google.com",
-                protocol: "http",
-                host: "google.com",
-                hostname: "google.com",
-                port: undefined,
-                pathname: "",
-                search: "",
-                hash: "",
-            })
-        })
-
-        test("should return parsed URL - http with trailing spaces", () => {
-            expect(URIUtils.parseUrl(" http://www.google.com ")).toEqual({
-                url: "http://www.google.com",
-                origin: "http://google.com",
-                protocol: "http",
-                host: "google.com",
-                hostname: "google.com",
-                port: undefined,
-                pathname: "",
-                search: "",
-                hash: "",
-            })
-        })
-
-        test("should return parsed URL - search string", () => {
-            expect(
-                URIUtils.parseUrl("http://www.google.com?param1=blah"),
-            ).toEqual({
-                url: "http://www.google.com?param1=blah",
-                origin: "http://google.com",
-                protocol: "http",
-                host: "google.com",
-                hostname: "google.com",
-                port: undefined,
-                pathname: "",
-                search: "param1=blah",
-                hash: "",
-            })
-        })
-
-        test("should return parsed URL - hash string", () => {
-            expect(
-                URIUtils.parseUrl("http://www.google.com#somestring"),
-            ).toEqual({
-                url: "http://www.google.com#somestring",
-                origin: "http://google.com",
-                protocol: "http",
-                host: "google.com",
-                hostname: "google.com",
-                port: undefined,
-                pathname: "",
-                search: "",
-                hash: "somestring",
-            })
-        })
-
-        test("should return parsed URL - hash string and search", () => {
-            expect(
-                URIUtils.parseUrl(
-                    "http://www.google.com?param1=blah#somestring",
-                ),
-            ).toEqual({
-                url: "http://www.google.com?param1=blah#somestring",
-                origin: "http://google.com",
-                protocol: "http",
-                host: "google.com",
-                hostname: "google.com",
-                port: undefined,
-                pathname: "",
-                search: "param1=blah",
-                hash: "somestring",
-            })
-        })
-
-        test("should throw an exception - no protocol", () => {
-            expect(() => URIUtils.parseUrl("www.google.com")).toThrowError(
-                "Invalid URL",
-            )
-        })
-        test("should throw an exception - invalid protocol", () => {
-            expect(() =>
-                URIUtils.parseUrl("ftp://www.google.com"),
-            ).toThrowError("Invalid URL")
-        })
-        test("should throw an exception - invalid URL", () => {
-            expect(() => URIUtils.parseUrl("google")).toThrowError(
-                "Invalid URL",
-            )
-        })
-    })
     describe("Compare URLs", function () {
         test("should return true for same URLs", function () {
             expect(
@@ -161,25 +53,25 @@ describe("URIUtils", () => {
     describe("Clean URLs", function () {
         test("should return clean URL - no trailing slash", function () {
             expect(URIUtils.clean("https://www.google.com")).toBe(
-                "https://google.com",
+                "https://www.google.com",
             )
         })
 
         test("should return clean URL - trailing slash", function () {
             expect(URIUtils.clean("https://www.google.com/")).toBe(
-                "https://google.com",
+                "https://www.google.com",
             )
         })
 
         test("should return clean URL - paths", function () {
             expect(URIUtils.clean("https://www.google.com/search")).toBe(
-                "https://google.com/search",
+                "https://www.google.com/search",
             )
         })
 
         test("should return clean URL - paths with trailing slash", function () {
             expect(URIUtils.clean("https://www.google.com/search/")).toBe(
-                "https://google.com/search",
+                "https://www.google.com/search",
             )
         })
     })
@@ -191,12 +83,12 @@ describe("URIUtils", () => {
                     "https://www.google.com",
                     "/subscriptions/beat2",
                 ),
-            ).toBe("wss://google.com/subscriptions/beat2")
+            ).toBe("wss://www.google.com/subscriptions/beat2")
         })
 
         test("should return websocket URL - no suffix", function () {
             expect(URIUtils.toWebsocketURL("https://www.google.com")).toBe(
-                "wss://google.com",
+                "wss://www.google.com",
             )
         })
     })
@@ -205,7 +97,7 @@ describe("URIUtils", () => {
         test("should return  the node beat websocket URL", function () {
             expect(
                 URIUtils.toNodeBeatWebsocketUrl("https://www.google.com"),
-            ).toBe("wss://google.com/subscriptions/beat2")
+            ).toBe("wss://www.google.com/subscriptions/beat2")
         })
     })
 

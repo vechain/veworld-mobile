@@ -11,15 +11,20 @@ import {
 import { useI18nContext } from "~i18n"
 import { isSmallScreen } from "~Constants"
 import { PlatformUtils } from "~Utils"
+import { AccountWithDevice } from "~Model"
+import { AccountDetailBox } from "../../AccountDetailBox"
 
 type Props = {
     onConfirm: () => void
+    onCancel: () => void
+    accountToRemove?: AccountWithDevice
+    isBalanceVisible: boolean
 }
 
 export const RemoveAccountWarningBottomSheet = React.forwardRef<
     BottomSheetModalMethods,
     Props
->(({ onConfirm }, ref) => {
+>(({ onConfirm, onCancel, accountToRemove, isBalanceVisible }, ref) => {
     const { LL } = useI18nContext()
 
     const handleOnProceed = useCallback(() => {
@@ -46,10 +51,17 @@ export const RemoveAccountWarningBottomSheet = React.forwardRef<
                         <BaseButton
                             w={100}
                             haptics="Light"
-                            title={LL.COMMON_PROCEED()}
+                            title={LL.BTN_REMOVE_ACCOUNT().toUpperCase()}
                             action={handleOnProceed}
                         />
                         <BaseSpacer height={16} />
+                        <BaseButton
+                            w={100}
+                            haptics="Light"
+                            variant="outline"
+                            title={LL.COMMON_BTN_CANCEL().toUpperCase()}
+                            action={onCancel}
+                        />
                     </BaseView>
                 }
                 isScrollEnabled={false}>
@@ -57,6 +69,16 @@ export const RemoveAccountWarningBottomSheet = React.forwardRef<
                     <BaseText typographyFont="subTitleBold">
                         {LL.BTN_REMOVE_ACCOUNT()}
                     </BaseText>
+                    <BaseSpacer height={16} />
+                    {accountToRemove && (
+                        <AccountDetailBox
+                            isBalanceVisible={isBalanceVisible}
+                            account={accountToRemove}
+                            isSelected={false}
+                            isDisabled={false}
+                            isEditable={false}
+                        />
+                    )}
                     <BaseSpacer height={16} />
                     <BaseText typographyFont="subSubTitleLight">
                         {LL.BD_ACCOUNT_REMOVAL()}

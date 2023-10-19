@@ -403,7 +403,7 @@ PODS:
     - React
     - React-callinvoker
     - React-Core
-  - react-native-safe-area-context (4.7.2):
+  - react-native-safe-area-context (4.7.3):
     - React-Core
   - react-native-slider (4.4.3):
     - React-Core
@@ -522,7 +522,7 @@ PODS:
     - React-RCTText
     - ReactCommon/turbomodule/core
     - Yoga
-  - RNScreens (3.25.0):
+  - RNScreens (3.26.0):
     - React-Core
     - React-RCTImage
   - RNScrypt (1.2.1):
@@ -546,10 +546,10 @@ PODS:
   - Yoga (1.14.0)
   - YogaKit (1.18.1):
     - Yoga (~> 1.14)
-  - ZXingObjC/Core (3.6.9)
-  - ZXingObjC/OneD (3.6.9):
+  - ZXingObjC/Core (3.6.5)
+  - ZXingObjC/OneD (3.6.5):
     - ZXingObjC/Core
-  - ZXingObjC/PDF417 (3.6.9):
+  - ZXingObjC/PDF417 (3.6.5):
     - ZXingObjC/Core
 
 DEPENDENCIES:
@@ -944,7 +944,7 @@ SPEC CHECKSUMS:
   react-native-netinfo: fefd4e98d75cbdd6e85fc530f7111a8afdf2b0c5
   react-native-pager-view: 02a5c4962530f7efc10dd51ee9cdabeff5e6c631
   react-native-quick-crypto: a903ff39ac8fea78bb9d37cccc5cc0596afc9670
-  react-native-safe-area-context: 7aa8e6d9d0f3100a820efb1a98af68aa747f9284
+  react-native-safe-area-context: 238cd8b619e05cb904ccad97ef42e84d1b5ae6ec
   react-native-slider: 1cdd6ba29675df21f30544253bf7351d3c2d68c4
   react-native-webview: 8fc09f66a1a5b16bbe37c3878fda27d5982bb776
   React-perflogger: 8c79399b0500a30ee8152d0f9f11beae7fc36595
@@ -969,7 +969,7 @@ SPEC CHECKSUMS:
   RNKeychain: a65256b6ca6ba6976132cc4124b238a5b13b3d9c
   RNReactNativeHapticFeedback: 1e3efeca9628ff9876ee7cdd9edec1b336913f8c
   RNReanimated: 6668b0587bebd4b15dd849b99e5a9c70fc12ed95
-  RNScreens: 85d3880b52d34db7b8eeebe2f1a0e807c05e69fa
+  RNScreens: e145ee71415e19fdcbcd98d85247f5baf4feafad
   RNScrypt: 95fdef077b482e9fdf8a761120cb69d129ef4016
   RNSentry: e668d4e68fe09d475dc084bab81f02c3be2db173
   RNSVG: 07dbd870b0dcdecc99b3a202fa37c8ca163caec2
@@ -981,7 +981,7 @@ SPEC CHECKSUMS:
   UMAppLoader: 354d71d2d2ce8d6c19fb13d72b9c8209b18a8c56
   Yoga: 99caf8d5ab45e9d637ee6e0174ec16fbbb01bcfc
   YogaKit: f782866e155069a2cca2517aafea43200b01fd5a
-  ZXingObjC: 8898711ab495761b2dbbdec76d90164a6d7e14c5
+  ZXingObjC: fdbb269f25dd2032da343e06f10224d62f537bdb
 
 PODFILE CHECKSUM: b40d147878bdb635d34571957b36f0013be9bfa2
 

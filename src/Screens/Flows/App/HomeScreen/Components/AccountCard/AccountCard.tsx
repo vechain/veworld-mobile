@@ -58,7 +58,7 @@ export const AccountCard: React.FC<Props> = memo(props => {
                     alignItems="center">
                     <BaseView flexDirection="row" alignItems="center" flex={1}>
                         <AccountIcon address={account.address} size={45} />
-                        <BaseView px={8} alignItems="flex-start">
+                        <BaseView px={8} alignItems="flex-start" flex={1}>
                             <BaseText
                                 ellipsizeMode="tail"
                                 numberOfLines={1}
@@ -79,17 +79,18 @@ export const AccountCard: React.FC<Props> = memo(props => {
                                         }}
                                     />
                                 )}
-                                <BaseText
-                                    ellipsizeMode="tail"
-                                    numberOfLines={1}
-                                    typographyFont="captionMedium"
-                                    color={theme.colors.textReversed}>
-                                    {account.device?.alias}
-                                </BaseText>
+                                <BaseView flex={1}>
+                                    <BaseText
+                                        ellipsizeMode="tail"
+                                        numberOfLines={1}
+                                        typographyFont="captionMedium"
+                                        color={theme.colors.textReversed}>
+                                        {account.device?.alias}
+                                    </BaseText>
+                                </BaseView>
                             </BaseView>
                         </BaseView>
                     </BaseView>
-                    <BaseSpacer width={20} />
                     <AccountAddressButtonPill
                         text={FormattingUtils.humanAddress(
                             account.address,

@@ -1,7 +1,8 @@
 import BigNumber from "bignumber.js"
 import { Transaction } from "thor-devkit"
-import { abis, BASE_GAS_PRICE } from "~Constants"
+import { abis, BASE_GAS_PRICE, GasPriceCoefficient, VTHO } from "~Constants"
 import { EstimateGasResult } from "~Model"
+import FormattingUtils from "~Utils/FormattingUtils"
 
 const paramsCache: Record<string, string> = {}
 
@@ -56,6 +57,7 @@ const estimateGas = async (
 
     const baseGasPrice = await getBaseGasPrice(thor)
     const lastOutput = outputs.slice().pop()
+
     return {
         caller,
         gas,
@@ -76,20 +78,37 @@ const getRevertReason = (output: Connex.VM.Output | undefined): string => {
     return ""
 }
 
-const calculateFee = async (
-    thor: Connex.Thor,
-    gas: BigNumber | number,
-    gasPriceCoef: number,
-): Promise<BigNumber> => {
-    const baseGasPrice = await getBaseGasPrice(thor)
-    return new BigNumber(baseGasPrice)
-        .times(gasPriceCoef)
+/**
+ * Calculate the transaction fee based on gas usage, base gas price, and gas price coefficient.
+ *
+ * @param {BigNumber} gas - The amount of gas consumed by the transaction.
+ * @param {BigNumber} baseGasPrice - The base gas price in string format.
+ * @param {BigNumber} gasPriceCoefficient - The gas price coefficient to apply.
+ * @returns {number} - The calculated transaction fee.
+ */
+export function gasToVtho({
+    gas,
+    baseGasPrice,
+    gasPriceCoefficient = GasPriceCoefficient.REGULAR,
+    decimals = VTHO.decimals,
+}: {
+    gas: BigNumber
+    baseGasPrice: BigNumber
+    gasPriceCoefficient?: GasPriceCoefficient
+    decimals?: number
+}) {
+    const rawVtho = new BigNumber(baseGasPrice) // ex: 210000000000000000
+        .times(gasPriceCoefficient || GasPriceCoefficient.REGULAR)
         .idiv(255)
         .plus(baseGasPrice)
         .times(gas)
+
+    // transform to VTHO ex: 0.21
+    return FormattingUtils.scaleNumberDown(rawVtho, VTHO.decimals, decimals)
 }
 
 export default {
+    getBaseGasPrice,
     estimateGas,
-    calculateFee,
+    gasToVtho,
 }

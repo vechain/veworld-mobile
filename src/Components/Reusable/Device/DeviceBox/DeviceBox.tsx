@@ -45,30 +45,37 @@ export const DeviceBox: React.FC<Props> = ({
     const deviceBoxBody = useCallback(
         () => (
             <BaseCard style={[styles.card, cardStyle]}>
-                <BaseView flexDirection="row" flex={1} pr={16}>
+                <BaseView flexDirection="row" flex={1}>
                     {isEdit && (
-                        <Pressable
-                            onPressIn={isEdit ? drag : undefined}
-                            disabled={!isActive}>
-                            <BaseIcon
-                                name={"drag"}
-                                color={theme.colors.text}
-                                size={24}
-                            />
-                        </Pressable>
+                        <>
+                            <Pressable
+                                onPressIn={isEdit ? drag : undefined}
+                                disabled={!isActive}>
+                                <BaseIcon
+                                    name={"drag"}
+                                    color={theme.colors.text}
+                                    size={24}
+                                />
+                            </Pressable>
+                            <BaseSpacer width={8} />
+                        </>
                     )}
-                    <BaseSpacer width={8} />
-                    <BaseText
-                        typographyFont="subTitleBold"
-                        ellipsizeMode="tail"
-                        numberOfLines={1}
-                        pr={16}
-                        pl={isEdit ? 0 : 8}>
-                        {device?.alias}
-                    </BaseText>
-                    <BaseSpacer width={8} />
-                    {device?.type === DEVICE_TYPE.LEDGER && <LedgerBadge />}
+                    {device?.type === DEVICE_TYPE.LEDGER && (
+                        <>
+                            <LedgerBadge />
+                            <BaseSpacer width={8} />
+                        </>
+                    )}
+                    <BaseView flex={1}>
+                        <BaseText
+                            typographyFont="subTitleBold"
+                            ellipsizeMode="tail"
+                            numberOfLines={1}>
+                            {device?.alias}
+                        </BaseText>
+                    </BaseView>
                 </BaseView>
+                <BaseSpacer width={12} />
                 {isIconVisible && !isEdit && (
                     <BaseIcon
                         name={"pencil-outline"}
