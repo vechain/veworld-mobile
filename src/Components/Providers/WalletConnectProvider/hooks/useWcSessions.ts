@@ -4,7 +4,7 @@ import { getSdkError } from "@walletconnect/utils"
 import { ActiveSessions, showInfoToast, showSuccessToast } from "~Components"
 import { useI18nContext } from "~i18n"
 import { SessionTypes, SignClientTypes } from "@walletconnect/types"
-import { deleteContext, useAppDispatch } from "~Storage/Redux"
+import { cleanContexts, deleteContext, useAppDispatch } from "~Storage/Redux"
 
 type SessionDelete = Omit<SignClientTypes.BaseEventArgs, "params">
 type SessionDeleteState = Record<string, SessionDelete>
@@ -78,8 +78,15 @@ export const useWcSessions = () => {
 
     useEffect(() => {
         WalletConnectUtils.getWeb3Wallet().then(async web3Wallet => {
-            setActiveSessions(web3Wallet.getActiveSessions())
+            const _activeSessions = web3Wallet.getActiveSessions()
+
+            setActiveSessions(_activeSessions)
+
+            dispatch(
+                cleanContexts({ activeTopics: Object.keys(_activeSessions) }),
+            )
         })
+        //eslint-disable-next-line react-hooks/exhaustive-deps
     }, [])
 
     useEffect(() => {

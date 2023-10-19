@@ -358,7 +358,7 @@ const en: BaseTranslation = {
     ERROR_SECURITY_ACTION: "Security action failed. Please check your device and try again.",
     ERROR_INVALID_ADDRESS: "Invalid address",
     ERROR_TOO_MANY_BIOMETRICS_AUTH_ATTEMPTS: "Too many biometrics authentication attempts, please try again later",
-    ERROR_CREATING_WALLET: "Error creating wallet", 
+    ERROR_CREATING_WALLET: "Error creating wallet",
 
     // Success
 

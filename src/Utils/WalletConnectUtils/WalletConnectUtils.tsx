@@ -219,7 +219,24 @@ export function getSendTxOptions(
  * @returns boolean
  */
 
-export function isValidURI(providedUri: string): boolean {
+export type ValidURI = {
+    isValid: true
+    params: {
+        pairingTopic: string
+        symKey: string
+        relayProtocol: string
+    }
+}
+
+export type InValidURI = {
+    isValid: false
+}
+
+export function validateUri(
+    providedUri: string | null | undefined,
+): ValidURI | InValidURI {
+    if (!providedUri) return { isValid: false }
+
     try {
         const uri = new URL(providedUri)
 
@@ -227,16 +244,28 @@ export function isValidURI(providedUri: string): boolean {
         const symKey = uri.searchParams.get("symKey")
         const relayProtocol = uri.searchParams.get("relay-protocol")
 
-        return (
+        const isValid =
             // wc protocol
             protocol === "wc:" &&
             // version 2
             uri.pathname.endsWith("@2") &&
             !!symKey &&
             !!relayProtocol
-        )
+
+        if (!isValid) {
+            return { isValid: false }
+        } else {
+            return {
+                isValid: true,
+                params: {
+                    pairingTopic: uri.pathname.replace("@2", ""),
+                    symKey,
+                    relayProtocol,
+                },
+            }
+        }
     } catch (e) {
-        return false
+        return { isValid: false }
     }
 }
 
@@ -255,7 +284,7 @@ export function getNetwork(
 }
 
 export function getTopicFromPairUri(uri: string) {
-    if (!isValidURI(uri)) throw new Error("Invalid WC URI")
+    if (!validateUri(uri)) throw new Error("Invalid WC URI")
 
     const uriArray = uri.split(":")
     return uriArray[1].split("@")[0]

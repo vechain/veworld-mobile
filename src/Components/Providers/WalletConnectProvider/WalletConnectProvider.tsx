@@ -53,20 +53,24 @@ const WalletConnectContextProvider = ({
         addSession,
     } = useWcSessions()
 
+    const { onPair } = useWcPairing(activeSessions)
+
+    const { pairingTopics: deepLinkPairingTopics } = useWcDeepLinking(onPair)
+
     const {
         addPendingProposal,
         rejectPendingProposal,
         approvePendingProposal,
-    } = useSessionProposals(isBlackListScreen, addSession)
+    } = useSessionProposals(
+        isBlackListScreen,
+        addSession,
+        deepLinkPairingTopics,
+    )
 
     const { addPendingRequest, failRequest, processRequest } = useWcRequest(
         isBlackListScreen,
         activeSessions,
     )
-
-    const { onPair } = useWcPairing(activeSessions)
-
-    useWcDeepLinking(onPair)
 
     /**
      * Execute at start

@@ -1,6 +1,13 @@
 import { useCallback, useEffect, useMemo, useState } from "react"
 import { PendingRequestTypes, SessionTypes } from "@walletconnect/types"
-import { AddressUtils, debug, error, WalletConnectUtils, warn } from "~Utils"
+import {
+    AddressUtils,
+    debug,
+    error,
+    MinimizerUtils,
+    WalletConnectUtils,
+    warn,
+} from "~Utils"
 import { AnalyticsEvent, RequestMethods } from "~Constants"
 import { AccountWithDevice } from "~Model"
 import {
@@ -9,6 +16,7 @@ import {
     selectSelectedAccountAddress,
     selectSelectedNetwork,
     selectVisibleAccounts,
+    selectWcState,
     useAppDispatch,
     useAppSelector,
 } from "~Storage/Redux"
@@ -42,6 +50,7 @@ export const useWcRequest = (
     const selectedNetwork = useAppSelector(selectSelectedNetwork)
     const accounts = useAppSelector(selectVisibleAccounts)
     const networks = useAppSelector(selectNetworks)
+    const sessionContexts = useAppSelector(selectWcState)
 
     const sessions = useMemo(
         () => Object.values(activeSessions),
@@ -71,6 +80,21 @@ export const useWcRequest = (
         [],
     )
 
+    const afterRequest = useCallback(
+        (requestEvent: PendingRequestTypes.Struct) => {
+            removePendingRequest(requestEvent)
+
+            const context = sessionContexts[requestEvent.topic]
+
+            if (context && context.isDeepLink) {
+                setTimeout(() => {
+                    MinimizerUtils.goBack()
+                }, 1000)
+            }
+        },
+        [removePendingRequest, sessionContexts],
+    )
+
     const processRequest = useCallback(
         async (
             requestEvent: PendingRequestTypes.Struct,
@@ -89,9 +113,9 @@ export const useWcRequest = (
                 },
             })
 
-            removePendingRequest(requestEvent)
+            afterRequest(requestEvent)
         },
-        [removePendingRequest],
+        [afterRequest],
     )
 
     const failRequest = useCallback(
@@ -112,9 +136,9 @@ export const useWcRequest = (
                 },
             })
 
-            removePendingRequest(requestEvent)
+            afterRequest(requestEvent)
         },
-        [removePendingRequest],
+        [afterRequest],
     )
 
     const goToSignMessage = useCallback(

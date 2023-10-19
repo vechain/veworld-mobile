@@ -197,9 +197,6 @@ export const LedgerSignCertificate: React.FC<Props> = ({ route }) => {
 
             await removeLedger()
 
-            // refactor(Minimizer): issues with iOS 17 & Android when connecting to desktop DApp (https://github.com/vechainfoundation/veworld-mobile/issues/951)
-            // MinimizerUtils.goBack()
-
             navigateOnFinish()
         } catch (e) {
             error("LedgerSignCertificate:handleOnConfirm", e)

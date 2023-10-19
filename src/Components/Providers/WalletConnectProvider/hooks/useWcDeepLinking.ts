@@ -3,46 +3,80 @@ import { Linking } from "react-native"
 import { debug, error, WalletConnectUtils } from "~Utils"
 import { WALLET_STATUS } from "~Model"
 import { useApplicationSecurity } from "~Components"
+import { ValidURI } from "~Utils/WalletConnectUtils/WalletConnectUtils"
 
-export const useWcDeepLinking = (onPair: (uri: string) => Promise<void>) => {
-    const [linkingUrls, setLinkingUrls] = useState<string[]>([])
+/**
+ * @param pairingTopics - list of pairing topics from deep links
+ */
+type IUseWcDeepLinking = {
+    pairingTopics: string[]
+}
+
+/**
+ * useWcDeepLinking handles deeplinks which can be used to pair with a DApp
+ *
+ * If a valid deeplink is detected, the onPair is called
+ *
+ * @param onPair
+ *
+ * @returns IUseWcDeepLinking
+ */
+
+export const useWcDeepLinking = (
+    onPair: (uri: string) => Promise<void>,
+): IUseWcDeepLinking => {
+    const [deepLinkUris, setDeepLinkUris] = useState<string[]>([])
+    const [pairingTopics, setPairingTopics] = useState<string[]>([])
     const { walletStatus } = useApplicationSecurity()
+
+    const pair = useCallback(
+        (uri: string, validation: ValidURI) => {
+            setPairingTopics(prev => {
+                const { pairingTopic } = validation.params
+
+                if (prev.includes(pairingTopic)) return prev
+
+                return [...prev, pairingTopic]
+            })
+
+            onPair(uri)
+        },
+        [onPair],
+    )
 
     const handleLinkingUrl = useCallback(
         async (url: string) => {
             if (typeof url !== "string") return
 
             try {
-                let pairingUri
+                // Android - Eg: wc://topic?relay-protocol=1234?symkey=1234
+                const rawUri = WalletConnectUtils.validateUri(url)
 
-                // Android
-                if (WalletConnectUtils.isValidURI(url)) {
-                    pairingUri = url
-                } else {
-                    // iOS
-                    const iosUrl = new URL(url)
-                    const wcUri = iosUrl.searchParams.get("uri")
-
-                    if (wcUri && WalletConnectUtils.isValidURI(wcUri)) {
-                        pairingUri = wcUri
-                    }
+                if (rawUri.isValid) {
+                    return pair(url, rawUri)
                 }
 
-                if (pairingUri) {
-                    await onPair(pairingUri)
+                // iOS - Eg: veworld//app.veworld?uri=wc%3A%2F%2Ftopic%3Frelay-protocol%3D1234%3Fsymkey%3D1234
+                const deepLink = new URL(url)
+                const wcUri = deepLink.searchParams.get("uri")
+
+                const uriValidation = WalletConnectUtils.validateUri(wcUri)
+
+                if (wcUri && uriValidation.isValid) {
+                    return pair(wcUri, uriValidation)
                 }
             } catch (e) {
                 error("WalletConnectProvider:handleLinkingUrl", e)
             }
         },
-        [onPair],
+        [pair],
     )
 
     useEffect(() => {
         Linking.getInitialURL().then(url => {
             debug("WalletConnectProvider:Linking.getInitialURL", url)
             if (url) {
-                setLinkingUrls(prev => [...prev, url])
+                setDeepLinkUris(prev => [...prev, url])
             }
         })
     }, [])
@@ -54,17 +88,24 @@ export const useWcDeepLinking = (onPair: (uri: string) => Promise<void>) => {
     useEffect(() => {
         Linking.addListener("url", event => {
             debug("WalletConnectProvider:Linking.addListener", event)
-            setLinkingUrls(prev => [...prev, event.url])
+            setDeepLinkUris(prev => [...prev, event.url])
         })
     }, [])
 
     useEffect(() => {
-        if (linkingUrls.length > 0 && walletStatus === WALLET_STATUS.UNLOCKED) {
-            const firstUrl = linkingUrls[0]
+        if (
+            deepLinkUris.length > 0 &&
+            walletStatus === WALLET_STATUS.UNLOCKED
+        ) {
+            const firstUrl = deepLinkUris[0]
 
-            setLinkingUrls(prev => prev.filter(url => url !== firstUrl))
+            setDeepLinkUris(prev => prev.filter(url => url !== firstUrl))
 
             handleLinkingUrl(firstUrl)
         }
-    }, [walletStatus, handleLinkingUrl, linkingUrls])
+    }, [walletStatus, handleLinkingUrl, setDeepLinkUris, deepLinkUris])
+
+    return {
+        pairingTopics,
+    }
 }

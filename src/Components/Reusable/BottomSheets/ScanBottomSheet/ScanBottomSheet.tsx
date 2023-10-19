@@ -4,7 +4,7 @@ import { BaseBottomSheet, BaseView, showWarningToast } from "~Components"
 import { useI18nContext } from "~i18n"
 import { useDisclosure } from "~Hooks"
 import { BarCodeScanningResult, Camera, CameraType } from "expo-camera"
-import { ScanTarget, COLORS, SCREEN_WIDTH } from "~Constants"
+import { COLORS, ScanTarget, SCREEN_WIDTH } from "~Constants"
 import { BarCodeScanner } from "expo-barcode-scanner"
 import { StyleSheet } from "react-native"
 import { AddressUtils, WalletConnectUtils } from "~Utils"
@@ -40,7 +40,8 @@ export const ScanBottomSheet = React.forwardRef<BottomSheetModalMethods, Props>(
                 const isValidAddress =
                     isAddressTarget && AddressUtils.isValid(data)
                 const isValidWalletConnectUri =
-                    isWalletConnectTarget && WalletConnectUtils.isValidURI(data)
+                    isWalletConnectTarget &&
+                    WalletConnectUtils.validateUri(data).isValid
 
                 if (isValidAddress || isValidWalletConnectUri) {
                     onScan(data)

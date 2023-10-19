@@ -6,8 +6,12 @@ import { Verify } from "@walletconnect/types/dist/types/core/verify"
  *
  * Mapping account topic => verify context
  */
+type SessionState = {
+    verifyContext: Verify.Context["verified"]
+    isDeepLink: boolean
+}
 
-export type WalletConnectState = Record<string, Verify.Context["verified"]>
+export type WalletConnectState = Record<string, SessionState>
 
 export const initialSessionsState: WalletConnectState = {}
 
@@ -20,11 +24,12 @@ export const WalletConnectSessionsSlice = createSlice({
             action: PayloadAction<{
                 topic: string
                 verifyContext: Verify.Context["verified"]
+                isDeepLink: boolean
             }>,
         ) => {
-            const { topic, verifyContext } = action.payload
+            const { topic, verifyContext, isDeepLink } = action.payload
 
-            state[topic] = verifyContext
+            state[topic] = { verifyContext, isDeepLink }
         },
         deleteContext: (
             state: Draft<WalletConnectState>,
@@ -36,9 +41,28 @@ export const WalletConnectSessionsSlice = createSlice({
 
             delete state[topic]
         },
+
+        cleanContexts: (
+            state: Draft<WalletConnectState>,
+            action: PayloadAction<{
+                activeTopics: string[]
+            }>,
+        ) => {
+            const { activeTopics } = action.payload
+
+            Object.keys(state).forEach(topic => {
+                if (!activeTopics.includes(topic)) {
+                    delete state[topic]
+                }
+            })
+        },
         resetWalletConnectState: () => initialSessionsState,
     },
 })
 
-export const { insertContext, deleteContext, resetWalletConnectState } =
-    WalletConnectSessionsSlice.actions
+export const {
+    insertContext,
+    deleteContext,
+    resetWalletConnectState,
+    cleanContexts,
+} = WalletConnectSessionsSlice.actions
