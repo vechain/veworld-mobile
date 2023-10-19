@@ -33,8 +33,7 @@ export const FungibleTokenTransferDetails: React.FC<Props> = memo(
 
         const { onCopyToClipboard } = useCopyClipboard()
 
-        const { gasFeeInVTHOHumanReadable, fiatValueGasFeeSpent } =
-            useGasFee(activity)
+        const { vthoGasFee, fiatValueGasFeeSpent } = useGasFee(activity)
 
         const { symbol, decimals } = useFungibleTokenInfo(activity.tokenAddress)
 
@@ -91,9 +90,7 @@ export const FungibleTokenTransferDetails: React.FC<Props> = memo(
             {
                 id: 2,
                 title: LL.GAS_FEE(),
-                value: gasFeeInVTHOHumanReadable
-                    ? `${gasFeeInVTHOHumanReadable} ${VTHO.symbol}`
-                    : "",
+                value: vthoGasFee ? `${vthoGasFee} ${VTHO.symbol}` : "",
                 typographyFont: "subSubTitle",
                 underline: false,
                 valueAdditional: fiatValueGasFeeSpent

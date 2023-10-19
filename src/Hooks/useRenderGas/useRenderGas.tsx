@@ -1,8 +1,9 @@
 import React, { useCallback, useMemo } from "react"
 import { useTheme } from "~Hooks"
-import { FormattingUtils } from "~Utils"
-import { VTHO } from "~Constants"
+import { FormattingUtils, GasUtils } from "~Utils"
+import { GasPriceCoefficient, VTHO } from "~Constants"
 import {
+    BaseButtonGroupHorizontal,
     BaseIcon,
     BaseSkeleton,
     BaseSpacer,
@@ -14,9 +15,10 @@ import {
     useAppSelector,
 } from "~Storage/Redux"
 import { useI18nContext } from "~i18n"
-import { EstimateGasResult } from "~Model"
+import { BaseButtonGroupHorizontalType, EstimateGasResult } from "~Model"
 import { BigNumber } from "bignumber.js"
 import { DelegationType } from "~Model/Delegation"
+import { StyleSheet } from "react-native"
 
 export const useRenderGas = ({
     loadingGas,
@@ -39,12 +41,65 @@ export const useRenderGas = ({
     const vtho = useAppSelector(state =>
         selectVthoTokenWithBalanceByAccount(state, accountAddress),
     )
-
-    const vthoGas = FormattingUtils.convertToFiatBalance(
-        gas?.gas?.toString() || "0",
-        1,
-        5,
+    const [selectedFeeOption, setSelectedFeeOption] = React.useState<string>(
+        String(GasPriceCoefficient.REGULAR),
     )
+
+    const gasFeeButtons: Array<BaseButtonGroupHorizontalType> = useMemo(() => {
+        return [
+            {
+                id: String(GasPriceCoefficient.REGULAR),
+                label: LL.SEND_FEE_REGULAR(),
+                icon: "walk",
+            },
+            {
+                id: String(GasPriceCoefficient.MEDIUM),
+                label: LL.SEND_FEE_MEDIUM(),
+                icon: "car-outline",
+            },
+            {
+                id: String(GasPriceCoefficient.HIGH),
+                label: LL.SEND_FEE_HIGH(),
+                icon: "airplane",
+            },
+        ]
+    }, [LL])
+
+    const handleSelectFeeOption = useCallback(
+        (button: BaseButtonGroupHorizontalType) => {
+            setSelectedFeeOption(button.id)
+        },
+        [],
+    )
+
+    const calculateFeeByCoefficient = useCallback(
+        (coefficient: GasPriceCoefficient) =>
+            GasUtils.gasToVtho({
+                gas: new BigNumber(gas?.gas || 0),
+                baseGasPrice: new BigNumber(gas?.baseGasPrice || "0"),
+                gasPriceCoefficient: coefficient,
+                decimals: 2,
+            }),
+        [gas?.baseGasPrice, gas?.gas],
+    )
+
+    const gasFeeOptions = useMemo(
+        () => ({
+            [GasPriceCoefficient.REGULAR]: calculateFeeByCoefficient(
+                GasPriceCoefficient.REGULAR,
+            ),
+            [GasPriceCoefficient.MEDIUM]: calculateFeeByCoefficient(
+                GasPriceCoefficient.MEDIUM,
+            ),
+            [GasPriceCoefficient.HIGH]: calculateFeeByCoefficient(
+                GasPriceCoefficient.HIGH,
+            ),
+        }),
+        [calculateFeeByCoefficient],
+    )
+
+    const vthoGasFee =
+        gasFeeOptions[Number(selectedFeeOption) as GasPriceCoefficient]
 
     const vthoBalance = FormattingUtils.scaleNumberDown(
         vtho.balance.balance,
@@ -57,8 +112,8 @@ export const useRenderGas = ({
         if (tokenSymbol === VTHO.symbol && amount) {
             leftVtho = leftVtho.minus(amount)
         }
-        return vthoGas && leftVtho.gte(vthoGas)
-    }, [amount, vthoGas, tokenSymbol, vthoBalance])
+        return vthoGasFee && leftVtho.gte(vthoGasFee)
+    }, [amount, vthoGasFee, tokenSymbol, vthoBalance])
 
     const RenderGas = useCallback(() => {
         if (loadingGas) {
@@ -93,9 +148,49 @@ export const useRenderGas = ({
         } else {
             return (
                 <>
-                    <BaseText typographyFont="subSubTitle">
-                        {vthoGas || LL.COMMON_NOT_AVAILABLE()} {VTHO.symbol}
-                    </BaseText>
+                    <BaseView pt={8}>
+                        <BaseButtonGroupHorizontal
+                            selectedButtonIds={[selectedFeeOption]}
+                            buttons={gasFeeButtons}
+                            action={handleSelectFeeOption}
+                            renderButton={(button, textColor) => (
+                                <BaseView
+                                    justifyContent="center"
+                                    alignItems="center"
+                                    flexDirection="row"
+                                    style={styles.button}>
+                                    {button.icon && (
+                                        <BaseIcon
+                                            size={18}
+                                            name={button.icon}
+                                            color={textColor}
+                                        />
+                                    )}
+                                    <BaseView px={5}>
+                                        <BaseText
+                                            color={textColor}
+                                            typographyFont="smallButtonPrimary">
+                                            {button.label}
+                                        </BaseText>
+                                        <BaseSpacer height={4} />
+                                        <BaseText
+                                            color={textColor}
+                                            typographyFont="smallCaptionMedium">
+                                            {
+                                                gasFeeOptions[
+                                                    Number(
+                                                        button.id,
+                                                    ) as GasPriceCoefficient
+                                                ]
+                                            }{" "}
+                                            {VTHO.symbol}
+                                        </BaseText>
+                                    </BaseView>
+                                </BaseView>
+                            )}
+                        />
+                    </BaseView>
+
                     {!isThereEnoughGas && (
                         <>
                             <BaseSpacer height={8} />
@@ -119,14 +214,31 @@ export const useRenderGas = ({
             )
         }
     }, [
-        vthoBalance,
-        LL,
-        theme,
         loadingGas,
         selectedDelegationOption,
-        vthoGas,
+        theme.colors.skeletonBoneColor,
+        theme.colors.skeletonHighlightColor,
+        theme.colors.danger,
+        LL,
+        selectedFeeOption,
+        gasFeeButtons,
+        handleSelectFeeOption,
         isThereEnoughGas,
+        vthoBalance,
+        gasFeeOptions,
     ])
 
-    return { RenderGas, isThereEnoughGas, vthoGas, vthoBalance }
+    return {
+        RenderGas,
+        isThereEnoughGas,
+        vthoGasFee,
+        vthoBalance,
+        gasPriceCoef: Number(selectedFeeOption),
+    }
 }
+
+const styles = StyleSheet.create({
+    button: {
+        marginBottom: -5,
+    },
+})

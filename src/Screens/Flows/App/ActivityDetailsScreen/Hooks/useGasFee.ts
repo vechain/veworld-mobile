@@ -3,8 +3,8 @@ import { useEffect, useMemo, useState } from "react"
 import { BigNumber } from "bignumber.js"
 import { Activity } from "~Model"
 import { useThor, showInfoToast } from "~Components"
-import { VTHO, DEFAULT_GAS_COEFFICIENT } from "~Constants"
-import { FormattingUtils, GasUtils } from "~Utils"
+import { VTHO } from "~Constants"
+import { FormattingUtils, GasUtils, warn } from "~Utils"
 import { RootState } from "~Storage/Redux/Types"
 import { useAppSelector } from "~Storage/Redux"
 import { useI18nContext } from "~i18n"
@@ -28,7 +28,7 @@ import { useI18nContext } from "~i18n"
 export const useGasFee = (activity: Activity) => {
     const thor = useThor()
 
-    const [gasFeeInVTHO, setFeeInVTHO] = useState<BigNumber>()
+    const [vthoGasFee, setVthoGasFee] = useState<string>()
 
     const { LL } = useI18nContext()
 
@@ -38,49 +38,42 @@ export const useGasFee = (activity: Activity) => {
      */
     useEffect(() => {
         if (!activity.gasUsed) return
-
-        const gasBn = new BigNumber(activity.gasUsed)
-        GasUtils.calculateFee(thor, gasBn, DEFAULT_GAS_COEFFICIENT)
-            .then(res => {
-                setFeeInVTHO(res)
-            })
-            .catch(() =>
+        const calculateVthoFee = async () => {
+            try {
+                const baseGasPrice = await GasUtils.getBaseGasPrice(thor)
+                const gasFee = GasUtils.gasToVtho({
+                    gas: new BigNumber(activity.gasUsed || 0),
+                    baseGasPrice: new BigNumber(baseGasPrice),
+                    decimals: 2,
+                })
+                setVthoGasFee(gasFee)
+            } catch (e) {
+                warn(e)
                 showInfoToast({
                     text1: LL.HEADS_UP(),
                     text2: LL.NOTIFICATION_GAS_FEE_INACCURATE(),
-                }),
-            )
+                })
+            }
+        }
+        calculateVthoFee()
     }, [LL, activity.gasUsed, thor])
 
     const VTHOexchangeRate = useAppSelector((state: RootState) =>
         selectCurrencyExchangeRate(state, VTHO),
     )
 
-    /**
-     * Converts the gas fee from wei to a human-readable format in VTHO.
-     */
-    const gasFeeInVTHOHumanReadable = useMemo(() => {
-        if (!gasFeeInVTHO) return undefined
-
-        return FormattingUtils.scaleNumberDown(
-            gasFeeInVTHO,
-            VTHO.decimals,
-            FormattingUtils.ROUND_DECIMAL_DEFAULT,
-        )
-    }, [gasFeeInVTHO])
-
     const fiatValueGasFeeSpent = useMemo(() => {
-        if (VTHOexchangeRate?.rate && gasFeeInVTHOHumanReadable) {
+        if (VTHOexchangeRate?.rate && vthoGasFee) {
             return FormattingUtils.humanNumber(
                 FormattingUtils.convertToFiatBalance(
-                    gasFeeInVTHOHumanReadable,
+                    vthoGasFee,
                     VTHOexchangeRate.rate,
                     VTHO.decimals,
                 ),
-                gasFeeInVTHOHumanReadable,
+                vthoGasFee,
             )
         }
-    }, [VTHOexchangeRate?.rate, gasFeeInVTHOHumanReadable])
+    }, [VTHOexchangeRate?.rate, vthoGasFee])
 
-    return { gasFeeInVTHO, gasFeeInVTHOHumanReadable, fiatValueGasFeeSpent }
+    return { vthoGasFee, fiatValueGasFeeSpent }
 }

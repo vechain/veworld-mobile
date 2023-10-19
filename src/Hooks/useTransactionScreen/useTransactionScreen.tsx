@@ -73,6 +73,20 @@ export const useTransactionScreen = ({
         isDelegated,
     } = useDelegation({ setGasPayer, providedUrl: options?.delegator?.url })
 
+    const {
+        RenderGas,
+        isThereEnoughGas,
+        vthoGasFee,
+        vthoBalance,
+        gasPriceCoef,
+    } = useRenderGas({
+        loadingGas,
+        selectedDelegationOption,
+        gas,
+        accountAddress:
+            selectedDelegationAccount?.address ?? selectedAccount.address,
+    })
+
     // 3. Build transaction
     const { buildTransaction } = useTransactionBuilder({
         clauses,
@@ -80,6 +94,7 @@ export const useTransactionScreen = ({
         isDelegated,
         dependsOn: options?.dependsOn,
         providedGas: options?.gas,
+        gasPriceCoef,
     })
 
     // 4. Sign transaction
@@ -94,14 +109,6 @@ export const useTransactionScreen = ({
 
     // 5. Send transaction
     const { sendTransaction } = useSendTransaction(onTransactionSuccess)
-
-    const { RenderGas, isThereEnoughGas, vthoGas, vthoBalance } = useRenderGas({
-        loadingGas,
-        selectedDelegationOption,
-        gas,
-        accountAddress:
-            selectedDelegationAccount?.address ?? selectedAccount.address,
-    })
 
     /**
      * Signs the transaction and sends it to the blockchain
@@ -249,7 +256,7 @@ export const useTransactionScreen = ({
         SubmitButton,
         RenderGas,
         selectedDelegationOption,
-        vthoGas,
+        vthoGasFee,
         vthoBalance,
         isThereEnoughGas,
         onSubmit,
