@@ -33,7 +33,7 @@ export const ToastContent = ({
     }, [onPress])
 
     return (
-        <BaseView style={styles.container}>
+        <BaseView style={styles.container} testID="Toast_Container">
             <BaseView style={styles.contentContainer}>
                 <BaseIcon name={icon} size={20} color={styles.iconColor} />
                 <BaseView>

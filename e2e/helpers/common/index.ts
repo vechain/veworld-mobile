@@ -1,9 +1,11 @@
-import { DEFAULT_TIMEOUT } from "../constants"
+import { DEFAULT_TIMEOUT, LONG_TIMEOUT } from "../constants"
 
 export const closeBottomSheet = async (name: string) => {
-    // Close sheet
-    await element(by.text(name)).swipe("down", "fast", 1)
-    await sleep(300)
+    if (await isPresentText(name)) {
+        // Close sheet
+        await element(by.text(name)).swipe("down", "fast", 1)
+        await sleep(300)
+    }
 }
 
 const clickBy = async ({
@@ -18,7 +20,7 @@ const clickBy = async ({
     index?: number
 }) => {
     if (timeout) {
-        await waitFor(element(by[byWhat](selector)))
+        await waitFor(element(by[byWhat](selector)).atIndex(index ?? 0))
             .toExist()
             .withTimeout(timeout)
     }
@@ -55,7 +57,7 @@ export const clickById = async (
 
 export const goBack = async () => {
     await idShouldBeVisible("BackButtonHeader-BaseIcon-backButton", {
-        timeout: 5000,
+        timeout: LONG_TIMEOUT,
     })
     await clickById("BackButtonHeader-BaseIcon-backButton")
 }
@@ -80,7 +82,7 @@ export const textShouldExist = async (
     text: string,
     options?: { timeout?: number },
 ) =>
-    await waitFor(element(by.text(text)))
+    await waitFor(element(by.text(text)).atIndex(0))
         .toExist()
         .withTimeout(options?.timeout ?? DEFAULT_TIMEOUT)
 
@@ -97,7 +99,7 @@ export const idShouldBeVisible = async (
     options?: { timeout?: number },
 ) =>
     await waitFor(element(by.id(text)))
-        .toBeVisible()
+        .toBeVisible(100)
         .withTimeout(options?.timeout ?? DEFAULT_TIMEOUT)
 
 export const idShouldNotBeVisible = async (
@@ -130,10 +132,10 @@ export const scrollUntilTextVisible = async (
     text: string,
     containerID: string,
     direction: Direction = "down",
-    scrollStep: number = 50,
+    scrollStep: number = 100,
 ) => {
     await waitFor(element(by.text(text)))
-        .toBeVisible(95)
+        .toBeVisible(100)
         .whileElement(by.id(containerID))
         .scroll(scrollStep, direction)
 }
@@ -142,8 +144,23 @@ export const insertTextById = async (text: string, id: string) => {
     await element(by.id(id)).replaceText(text)
 }
 
-export const swipeLeftByText = async (text: string) => {
-    await element(by.text(text)).swipe("left", "slow", 0.4)
+export const swipeByText = async (
+    text: string,
+    direction: Direction = "left",
+) => {
+    await swipeBy("text", text, direction)
+}
+
+export const swipeById = async (id: string, direction: Direction = "left") => {
+    await swipeBy("id", id, direction)
+}
+
+export const swipeBy = async (
+    byWhat: "text" | "id",
+    selector: string,
+    direction: Direction = "left",
+) => {
+    await element(by[byWhat](selector)).swipe(direction, "slow", 0.4)
 }
 
 export const isPresentText = async (
@@ -176,4 +193,8 @@ export const isPresentId = async (
 
 export const sleep = (milliseconds: number) => {
     return new Promise(resolve => setTimeout(resolve, milliseconds))
+}
+
+export const closeToast = async () => {
+    await swipeById("Toast_Container", "up")
 }

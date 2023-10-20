@@ -15,7 +15,9 @@ Given(
     "The user selects {string} token to be sent",
     { timeout: -1 },
     async function (token: string) {
-        await clickByText(token)
+        await clickByText(token, {
+            index: 0,
+        })
     },
 )
 

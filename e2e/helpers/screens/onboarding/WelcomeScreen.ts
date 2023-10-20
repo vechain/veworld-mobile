@@ -10,8 +10,12 @@ export const isActive = async (): Promise<boolean> => {
 }
 
 export const goToWalletSetup = async () => {
+    await waitFor(element(by.id("Android_Splash_Screen")))
+        .not.toBeVisible()
+        .withTimeout(DEFAULT_TIMEOUT)
+
     await waitFor(element(by.text("GET STARTED")))
-        .toExist()
+        .toBeVisible(100)
         .withTimeout(DEFAULT_TIMEOUT)
     await element(by.text("GET STARTED")).tap()
 }
