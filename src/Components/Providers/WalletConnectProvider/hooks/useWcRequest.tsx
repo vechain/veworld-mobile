@@ -86,7 +86,7 @@ export const useWcRequest = (
 
             const context = sessionContexts[requestEvent.topic]
 
-            if (context && context.isDeepLink) {
+            if (context?.isDeepLink) {
                 setTimeout(() => {
                     MinimizerUtils.goBack()
                 }, 1000)
