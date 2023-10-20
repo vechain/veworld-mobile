@@ -26,9 +26,10 @@ export const useNFTMetadata = () => {
                     }
 
                     debug(`Fetching metadata for ${uri}`)
-                    const retrievedData = URIProtocol.IPFS
-                        ? await getNFTMetadataIpfs(uri)
-                        : await getNFTMetadataArweave(uri)
+                    const retrievedData =
+                        URIProtocol.IPFS === protocol
+                            ? await getNFTMetadataIpfs(uri)
+                            : await getNFTMetadataArweave(uri)
 
                     metadataCache?.setItem(uri, retrievedData)
                     tokenMetadata = retrievedData
@@ -48,7 +49,9 @@ export const useNFTMetadata = () => {
                 }
 
                 default:
-                    warn(`Unable to detect protocol for metadata URI ${uri}`)
+                    warn(
+                        `Unable to detect protocol ${protocol} for metadata URI ${uri}`,
+                    )
                     return undefined
             }
             // transform all metadata keys to lowercase avoiding case sensitive issues
