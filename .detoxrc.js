@@ -53,13 +53,19 @@ module.exports = {
         emulator_31: {
             type: "android.emulator",
             device: {
-                avdName: "Pixel_6_Pro_API_31",
+                avdName: "Pixel_7_Pro_API_31",
+            },
+        },
+        emulator_32: {
+            type: "android.emulator",
+            device: {
+                avdName: "Pixel_7_Pro_API_32",
             },
         },
         emulator_33: {
             type: "android.emulator",
             device: {
-                avdName: "Pixel_6_Pro_API_33",
+                avdName: "Pixel_7_Pro_API_33",
             },
         },
     },
@@ -86,6 +92,10 @@ module.exports = {
         },
         "android.emu.debug.31": {
             device: "emulator_31",
+            app: "android.debug",
+        },
+        "android.emu.debug.32": {
+            device: "emulator_32",
             app: "android.debug",
         },
         "android.emu.release.31": {
