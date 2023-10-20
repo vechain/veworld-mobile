@@ -70,15 +70,15 @@ export const SendTransactionScreen: FC<Props> = ({ route }: Props) => {
         [sessionRequest],
     )
 
-    const verifyContext = useAppSelector(state =>
+    const sessionContext = useAppSelector(state =>
         selectVerifyContext(state, topic),
     )
 
     const validConnectedApp = useMemo(() => {
-        if (!verifyContext) return true
+        if (!sessionContext) return true
 
-        return verifyContext.validation === "VALID"
-    }, [verifyContext])
+        return sessionContext.verifyContext.validation === "VALID"
+    }, [sessionContext])
 
     const clausesMetadata = useMemo(
         () => TransactionUtils.interpretClauses(message, tokens),
@@ -139,9 +139,6 @@ export const SendTransactionScreen: FC<Props> = ({ route }: Props) => {
     const onReject = useCallback(async () => {
         try {
             await failRequest(requestEvent, getRpcError("userRejectedRequest"))
-
-            // refactor(Minimizer): issues with iOS 17 & Android when connecting to desktop DApp (https://github.com/vechainfoundation/veworld-mobile/issues/951)
-            // MinimizerUtils.goBack()
         } catch (e) {
             showErrorToast({
                 text1: LL.NOTIFICATION_wallet_connect_matching_error(),
@@ -233,7 +230,7 @@ export const SendTransactionScreen: FC<Props> = ({ route }: Props) => {
                     <BaseSpacer height={30} />
 
                     <UnknownAppMessage
-                        verifyContext={verifyContext}
+                        verifyContext={sessionContext.verifyContext}
                         confirmed={isInvalidChecked}
                         setConfirmed={setInvalidChecked}
                     />

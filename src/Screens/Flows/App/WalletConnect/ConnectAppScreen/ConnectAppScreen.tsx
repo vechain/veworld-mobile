@@ -26,6 +26,7 @@ import {
     selectNetworks,
     selectSelectedAccount,
     selectVisibleAccounts,
+    setIsAppLoading,
     useAppDispatch,
     useAppSelector,
 } from "~Storage/Redux"
@@ -44,7 +45,8 @@ export const ConnectAppScreen: FC<Props> = ({ route }: Props) => {
 
     const { onSetSelectedAccount } = useSetSelectedAccount()
 
-    const { approvePendingProposal, rejectPendingProposal } = useWalletConnect()
+    const { approvePendingProposal, rejectPendingProposal, activeSessions } =
+        useWalletConnect()
 
     const nav = useNavigation()
     const dispatch = useAppDispatch()
@@ -53,6 +55,27 @@ export const ConnectAppScreen: FC<Props> = ({ route }: Props) => {
     const visibleAccounts = useAppSelector(selectVisibleAccounts)
     const selectedAccount = useAppSelector(selectSelectedAccount)
     const networks = useAppSelector(selectNetworks)
+
+    /**
+     * Navigates back if we have already processed the request
+     */
+    useEffect(() => {
+        const sessions = Object.values(activeSessions)
+
+        if (
+            sessions.some(
+                _session =>
+                    _session.pairingTopic ===
+                    currentProposal.params.pairingTopic,
+            )
+        ) {
+            if (nav.canGoBack()) {
+                nav.goBack()
+            } else {
+                nav.navigate(Routes.HOME)
+            }
+        }
+    }, [currentProposal, nav, activeSessions])
 
     const [isInvalidChecked, setInvalidChecked] = React.useState(false)
 
@@ -131,10 +154,7 @@ export const ConnectAppScreen: FC<Props> = ({ route }: Props) => {
             events: requiredNamespaces.vechain.events,
         }
 
-        // Doing this nav.navigate before approveSession because after approveSession the DApp
-        // is IMMEDIATELY sending a session_proposal and the nav.navigate is
-        // closing the session proposal screen instead of this one
-        nav.goBack()
+        dispatch(setIsAppLoading(true))
 
         try {
             await approvePendingProposal(currentProposal, namespace)
@@ -151,6 +171,9 @@ export const ConnectAppScreen: FC<Props> = ({ route }: Props) => {
             showErrorToast({
                 text1: LL.NOTIFICATION_wallet_connect_error_pairing(),
             })
+        } finally {
+            nav.goBack()
+            dispatch(setIsAppLoading(false))
         }
     }, [
         currentProposal,

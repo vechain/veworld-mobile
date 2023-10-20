@@ -53,15 +53,15 @@ export const SignCertificateScreen: FC<Props> = ({ route }: Props) => {
     // Request values
     const { url } = WalletConnectUtils.getSessionRequestAttributes(session)
 
-    const verifyContext = useAppSelector(state =>
+    const sessionContext = useAppSelector(state =>
         selectVerifyContext(state, requestEvent.topic),
     )
 
     const validConnectedApp = useMemo(() => {
-        if (!verifyContext) return true
+        if (!sessionContext) return true
 
-        return verifyContext.validation === "VALID"
-    }, [verifyContext])
+        return sessionContext.verifyContext.validation === "VALID"
+    }, [sessionContext])
 
     // Prepare certificate to sign
     const cert: Certificate = useMemo(() => {
@@ -117,9 +117,6 @@ export const SignCertificateScreen: FC<Props> = ({ route }: Props) => {
                         signer: cert.signer,
                     },
                 })
-
-                // refactor(Minimizer): issues with iOS 17 & Android when connecting to desktop DApp (https://github.com/vechainfoundation/veworld-mobile/issues/951)
-                // MinimizerUtils.goBack()
 
                 dispatch(
                     addSignCertificateActivity(
@@ -231,7 +228,7 @@ export const SignCertificateScreen: FC<Props> = ({ route }: Props) => {
                     <BaseSpacer height={30} />
 
                     <UnknownAppMessage
-                        verifyContext={verifyContext}
+                        verifyContext={sessionContext.verifyContext}
                         confirmed={isInvalidChecked}
                         setConfirmed={setInvalidChecked}
                     />

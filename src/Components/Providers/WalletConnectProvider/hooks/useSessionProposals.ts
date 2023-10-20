@@ -11,13 +11,17 @@ import { useNavigation } from "@react-navigation/native"
 import { ErrorResponse } from "@walletconnect/jsonrpc-types/dist/cjs/jsonrpc"
 import { useI18nContext } from "~i18n"
 import { SessionTypes } from "@walletconnect/types"
+import { insertContext, useAppDispatch } from "~Storage/Redux"
 
 export const useSessionProposals = (
     isBlackListScreen: () => boolean,
     addSession: (session: SessionTypes.Struct) => void,
+    deepLinkPairingTopics: string[],
 ) => {
     const nav = useNavigation()
     const { LL } = useI18nContext()
+
+    const dispatch = useAppDispatch()
 
     const [sessionProposals, setSessionProposals] =
         useState<SessionProposalState>({})
@@ -88,7 +92,7 @@ export const useSessionProposals = (
         async (
             proposal: SessionProposal,
             namespace: SessionTypes.Namespace,
-        ) => {
+        ): Promise<SessionTypes.Struct> => {
             const web3Wallet = await WalletConnectUtils.getWeb3Wallet()
 
             const relays = proposal.params.relays[0]
@@ -103,9 +107,23 @@ export const useSessionProposals = (
 
             addSession(session)
 
+            const isDeepLinkSession = deepLinkPairingTopics.includes(
+                session.pairingTopic,
+            )
+
+            dispatch(
+                insertContext({
+                    topic: session.topic,
+                    verifyContext: proposal.verifyContext.verified,
+                    isDeepLink: isDeepLinkSession,
+                }),
+            )
+
             removePendingProposal(proposal)
+
+            return session
         },
-        [removePendingProposal, addSession],
+        [deepLinkPairingTopics, dispatch, removePendingProposal, addSession],
     )
 
     const rejectPendingProposal = useCallback(

@@ -7,7 +7,7 @@ import { Routes } from "~Navigation"
 import HapticsService from "~Services/HapticsService"
 import { ScanTarget } from "~Constants"
 import { SelectedNetworkViewer } from "~Components/Reusable/SelectedNetworkViewer"
-import { AddressUtils, WalletConnectUtils, debug } from "~Utils"
+import { AddressUtils, debug, WalletConnectUtils } from "~Utils"
 
 export const Header = memo(() => {
     const theme = useTheme()
@@ -20,7 +20,7 @@ export const Header = memo(() => {
 
     const onScan = useCallback(
         (qrData: string) => {
-            if (WalletConnectUtils.isValidURI(qrData)) {
+            if (WalletConnectUtils.validateUri(qrData).isValid) {
                 HapticsService.triggerImpact({ level: "Light" })
                 onPair(qrData)
             } else if (AddressUtils.isValid(qrData)) {
