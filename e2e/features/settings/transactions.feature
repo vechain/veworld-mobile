@@ -24,11 +24,12 @@ Feature: The user can manage transactions settings
     Examples:
       | url                                           | sheet_title |
       | https://sponsor-testnet.vechain.energy/by/282 | Select URL  |
-
+      
   Scenario: User can create multiple delegation URLs
     When The user selects URL as delegation method
     And The user inserts the following delegation url "<url1>"
     And The user should see the delegation url "<url1>" card
+    And The user selects URL as delegation method    
     And The user click plus button to add a new url
     And The user inserts the following delegation url "<url2>"
     And The user should see the delegation url "<url2>" card
@@ -38,7 +39,7 @@ Feature: The user can manage transactions settings
     Examples:
       | url1                                          | url2                                          | sheet_title |
       | https://sponsor-testnet.vechain.energy/by/282 | https://sponsor-testnet.vechain.energy/by/219 | Select URL  |
-
+     
   Scenario: User can add a delegation URL with the Manage URLs button
     When The user click Manage URLs button
     And The user click the plus icon to add a new delegation url
