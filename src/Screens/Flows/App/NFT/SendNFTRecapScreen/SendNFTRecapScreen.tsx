@@ -5,6 +5,7 @@ import { Routes } from "~Navigation"
 import {
     BaseSpacer,
     BaseView,
+    GasFeeOptions,
     Layout,
     NFTTransferCard,
     RequireUserPassword,
@@ -88,11 +89,17 @@ export const SendNFTRecapScreen = ({ route }: Props) => {
 
     const {
         Delegation,
-        RenderGas,
         SubmitButton,
         isPasswordPromptOpen,
         handleClosePasswordModal,
         onPasswordSuccess,
+        setSelectedFeeOption,
+        selectedDelegationOption,
+        loadingGas,
+        selectedFeeOption,
+        gasFeeOptions,
+        isThereEnoughGas,
+        vthoBalance,
     } = useTransactionScreen({
         clauses,
         onTransactionSuccess,
@@ -154,7 +161,19 @@ export const SendNFTRecapScreen = ({ route }: Props) => {
                         <InfoSectionView<React.JSX.Element>
                             isFontReverse
                             title={LL.ESTIMATED_GAS_FEE()}
-                            data={RenderGas()}
+                            data={
+                                <GasFeeOptions
+                                    setSelectedFeeOption={setSelectedFeeOption}
+                                    selectedDelegationOption={
+                                        selectedDelegationOption
+                                    }
+                                    loadingGas={loadingGas}
+                                    selectedFeeOption={selectedFeeOption}
+                                    gasFeeOptions={gasFeeOptions}
+                                    isThereEnoughGas={isThereEnoughGas}
+                                    vthoBalance={vthoBalance}
+                                />
+                            }
                         />
 
                         <InfoSectionView<string>

@@ -1,12 +1,11 @@
-/* eslint-disable react-native/no-inline-styles */
-import React, { useCallback, useMemo } from "react"
+import React, { useCallback } from "react"
 import { useTheme, useThemedStyles } from "~Hooks"
 import { ColorThemeType } from "~Constants"
-import { BaseButton } from "./BaseButton"
 import { BaseView } from "./BaseView"
 import { BaseIcon, BaseText } from "~Components"
-import { StyleSheet } from "react-native"
+import { StyleSheet, TouchableOpacity } from "react-native"
 import { BaseButtonGroupHorizontalType } from "~Model"
+import HapticsService from "~Services/HapticsService"
 
 type Props = {
     action: (button: BaseButtonGroupHorizontalType) => void
@@ -32,11 +31,14 @@ export const BaseButtonGroupHorizontal = ({
     const theme = useTheme()
 
     const onPress = useCallback(
-        (button: BaseButtonGroupHorizontalType) => () => action(button),
+        (button: BaseButtonGroupHorizontalType) => () => {
+            HapticsService.triggerHaptics({
+                haptics: "Light",
+            })
+            action(button)
+        },
         [action],
     )
-
-    const buttonWidth = useMemo(() => 100 / buttons.length, [buttons.length])
 
     const { styles } = useThemedStyles(baseStyles)
 
@@ -45,11 +47,9 @@ export const BaseButtonGroupHorizontal = ({
             if (disabledStatus && selected) {
                 return theme.colors.disabled
             }
-
             if (selected) {
                 return theme.colors.primary
             }
-
             return theme.colors.card
         },
         [theme.colors.card, theme.colors.disabled, theme.colors.primary],
@@ -60,11 +60,9 @@ export const BaseButtonGroupHorizontal = ({
             if (disabledStatus) {
                 return theme.colors.textDisabled
             }
-
             if (selected) {
                 return theme.colors.card
             }
-
             return theme.colors.text
         },
         [theme.colors.card, theme.colors.text, theme.colors.textDisabled],
@@ -72,57 +70,51 @@ export const BaseButtonGroupHorizontal = ({
 
     return (
         <BaseView
-            justifyContent="center"
-            alignItems="center"
             flexDirection="row"
+            alignItems="stretch"
             style={styles.backgroundStyle}>
             {buttons.map((button, _) => {
                 const { id, label, disabled, icon } = button
                 const disabledStatus = disableAllButtons || disabled
-
                 const selected = selectedButtonIds.includes(id)
-
                 const bgColor = calculateBGColor(selected, disabledStatus)
-
                 const textColor = calculateTextColor(selected, disabledStatus)
+
                 return (
-                    <BaseButton
-                        haptics="Light"
+                    <BaseView
                         key={id}
-                        isDisabledTextOnly
-                        action={onPress(button)}
-                        disabled={disabledStatus}
-                        bgColor={bgColor}
-                        typographyFont="bodyMedium"
-                        w={buttonWidth}
+                        bg={bgColor}
                         style={styles.buttonStyle}
-                        testID={`button-${id}`}>
-                        {renderButton ? (
-                            renderButton(button, textColor)
-                        ) : (
-                            <BaseView
-                                justifyContent="center"
-                                alignItems="center"
-                                flexDirection="row"
-                                style={{
-                                    marginBottom: -5,
-                                }}>
-                                {icon && (
-                                    <BaseIcon
-                                        size={18}
-                                        name={icon}
+                        testID={`button-${id}`}
+                        flex={1}>
+                        <TouchableOpacity
+                            style={styles.pressable}
+                            onPress={onPress(button)}
+                            disabled={disabledStatus}>
+                            {renderButton ? (
+                                renderButton(button, textColor)
+                            ) : (
+                                <BaseView
+                                    justifyContent="center"
+                                    alignItems="center"
+                                    flexDirection="row">
+                                    {icon && (
+                                        <BaseIcon
+                                            size={18}
+                                            name={icon}
+                                            color={textColor}
+                                        />
+                                    )}
+                                    <BaseText
                                         color={textColor}
-                                    />
-                                )}
-                                <BaseText
-                                    color={textColor}
-                                    typographyFont="buttonPrimary"
-                                    px={5}>
-                                    {label}
-                                </BaseText>
-                            </BaseView>
-                        )}
-                    </BaseButton>
+                                        typographyFont="buttonPrimary"
+                                        px={5}>
+                                        {label}
+                                    </BaseText>
+                                </BaseView>
+                            )}
+                        </TouchableOpacity>
+                    </BaseView>
                 )
             })}
         </BaseView>
@@ -137,6 +129,8 @@ const baseStyles = (theme: ColorThemeType) =>
         },
         buttonStyle: {
             borderRadius: 16,
-            borderBottomColor: theme.colors.background,
+        },
+        pressable: {
+            padding: 10,
         },
     })
