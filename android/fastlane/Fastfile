@@ -150,9 +150,11 @@ platform :android do
     # ensure_git_branch(branch: "main")
 
     # update yarn packages and pods
+=begin
     Dir.chdir "../.." do
       sh("yarn purge:android && yarn install")
     end
+=end
 
     begin
 
