@@ -175,8 +175,6 @@ export const ConnectAppScreen: FC<Props> = ({ route }: Props) => {
         addNamespaces(params.requiredNamespaces)
         addNamespaces(params.optionalNamespaces)
 
-        warn("processProposal", namespaces)
-
         dispatch(setIsAppLoading(true))
 
         try {
