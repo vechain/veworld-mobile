@@ -119,7 +119,6 @@ describe("useTransactionScreen", () => {
         expect(result.current).toEqual({
             Delegation: expect.any(Function),
             SubmitButton: expect.any(Function),
-            RenderGas: expect.any(Function),
             selectedDelegationOption: DelegationType.NONE,
             vthoGasFee: "0.00",
             vthoBalance: "0.00",
@@ -130,6 +129,14 @@ describe("useTransactionScreen", () => {
             handleClosePasswordModal: expect.any(Function),
             isPasswordPromptOpen: false,
             onPasswordSuccess: expect.any(Function),
+            gasFeeOptions: {
+                "0": "0.00",
+                "127": "0.00",
+                "255": "0.00",
+            },
+            loadingGas: true,
+            selectedFeeOption: "0",
+            setSelectedFeeOption: expect.any(Function),
         })
     })
 

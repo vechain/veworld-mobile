@@ -85,9 +85,9 @@ export const BaseButtonGroupHorizontal = ({
                         key={id}
                         bg={bgColor}
                         style={styles.buttonStyle}
-                        testID={`button-${id}`}
                         flex={1}>
                         <TouchableOpacity
+                            testID={`button-${id}`}
                             style={styles.pressable}
                             onPress={onPress(button)}
                             disabled={disabledStatus}>
