@@ -28,6 +28,7 @@ import { NativeStackScreenProps } from "@react-navigation/native-stack"
 import { useNavigation } from "@react-navigation/native"
 import { UnknownAppMessage } from "~Screens"
 import { AnalyticsEvent } from "~Constants"
+import { getSdkError } from "@walletconnect/utils"
 
 type Props = NativeStackScreenProps<
     RootStackParamListSwitch,
