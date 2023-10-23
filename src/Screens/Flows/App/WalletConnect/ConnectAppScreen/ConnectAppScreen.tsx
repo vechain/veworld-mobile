@@ -30,10 +30,11 @@ import {
     useAppDispatch,
     useAppSelector,
 } from "~Storage/Redux"
-import { error, HexUtils, WalletConnectUtils } from "~Utils"
+import { error, HexUtils, WalletConnectUtils, warn } from "~Utils"
 import { useI18nContext } from "~i18n"
 import { AppConnectionRequests, AppInfo, UnknownAppMessage } from "~Screens"
 import { useSetSelectedAccount } from "~Hooks/useSetSelectedAccount"
+import { distinctValues } from "~Utils/ArrayUtils"
 
 type Props = NativeStackScreenProps<
     RootStackParamListSwitch,
@@ -125,39 +126,61 @@ export const ConnectAppScreen: FC<Props> = ({ route }: Props) => {
     const processProposal = useCallback(async () => {
         const { params } = currentProposal
 
-        const requiredNamespaces: ProposalTypes.RequiredNamespaces =
-            params.requiredNamespaces
+        const namespaces: SessionTypes.Namespaces = {}
 
-        // Setup vechain namespaces to return to the dapp
-        const connectedAccounts: string[] = []
-        const networkIdentifiers = networks.map(network =>
-            network.genesis.id.slice(-32),
-        )
+        const addNamespaces = (
+            proposedNamespaces: Record<
+                string,
+                ProposalTypes.BaseRequiredNamespace
+            >,
+        ) => {
+            for (const key of Object.keys(proposedNamespaces)) {
+                warn(proposedNamespaces[key])
 
-        const _networks =
-            requiredNamespaces.vechain?.chains ??
-            networks.map(network => `vechain:${network.genesis.id.slice(-32)}`)
+                const _chains =
+                    proposedNamespaces[key].chains ??
+                    networks.map(
+                        network => `vechain:${network.genesis.id.slice(-32)}`,
+                    )
 
-        _networks.map((scope: string) => {
-            // Valid only for supported networks
-            // scope example: vechain:b1ac3413d346d43539627e6be7ec1b4a, vechain:87721b09ed2e15997f466536b20bb127
-            const network = scope.split(":")[1]
+                const accounts = _chains.map((scope: string) => {
+                    return `${scope}:${selectedAccount.address}`
+                })
 
-            if (networkIdentifiers.includes(network)) {
-                connectedAccounts.push(`${scope}:${selectedAccount.address}`)
+                if (namespaces[key]) {
+                    namespaces[key] = {
+                        methods: distinctValues([
+                            ...namespaces[key].methods,
+                            ...proposedNamespaces[key].methods,
+                        ]),
+                        events: distinctValues([
+                            ...namespaces[key].events,
+                            ...proposedNamespaces[key].events,
+                        ]),
+                        accounts: distinctValues([
+                            ...namespaces[key].accounts,
+                            ...accounts,
+                        ]),
+                    }
+                } else {
+                    namespaces[key] = {
+                        methods: proposedNamespaces[key].methods,
+                        events: proposedNamespaces[key].events,
+                        accounts,
+                    }
+                }
             }
-        })
-
-        const namespace: SessionTypes.Namespace = {
-            accounts: connectedAccounts,
-            methods: requiredNamespaces.vechain.methods,
-            events: requiredNamespaces.vechain.events,
         }
+
+        addNamespaces(params.requiredNamespaces)
+        addNamespaces(params.optionalNamespaces)
+
+        warn("processProposal", namespaces)
 
         dispatch(setIsAppLoading(true))
 
         try {
-            await approvePendingProposal(currentProposal, namespace)
+            await approvePendingProposal(currentProposal, namespaces)
 
             dispatch(addConnectedAppActivity(name, url, description, methods))
 

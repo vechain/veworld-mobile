@@ -4,6 +4,7 @@ import {
     AddressUtils,
     debug,
     error,
+    HexUtils,
     MinimizerUtils,
     WalletConnectUtils,
     warn,
@@ -98,7 +99,10 @@ export const useWcRequest = (
     const processRequest = useCallback(
         async (
             requestEvent: PendingRequestTypes.Struct,
-            result: Connex.Vendor.CertResponse | Connex.Vendor.TxResponse,
+            result:
+                | Connex.Vendor.CertResponse //Connex Certificate
+                | Connex.Vendor.TxResponse //Connex Transaction
+                | string, // Personal Sign
         ) => {
             const web3Wallet = await WalletConnectUtils.getWeb3Wallet()
 
@@ -141,7 +145,7 @@ export const useWcRequest = (
         [afterRequest],
     )
 
-    const goToSignMessage = useCallback(
+    const goToSignCertificate = useCallback(
         (
             requestEvent: PendingRequestTypes.Struct,
             session: SessionTypes.Struct,
@@ -221,10 +225,36 @@ export const useWcRequest = (
         [failRequest, LL, track, nav],
     )
 
+    const goToSignMessage = useCallback(
+        (requestEvent: PendingRequestTypes.Struct) => {
+            const { params } = requestEvent.params.request
+
+            if (!params || params.length < 2 || !HexUtils.isValid(params[0])) {
+                return failRequest(requestEvent, getRpcError("invalidParams"))
+            }
+
+            //convert hex message to utf8
+            debug(
+                "messageUtf8",
+                Buffer.from(HexUtils.removePrefix(params[0]), "hex").toString(),
+            )
+
+            nav.navigate(Routes.CONNECTED_APP_SIGN_MESSAGE_SCREEN, {
+                requestEvent,
+                message: params[0],
+            })
+        },
+        [failRequest, nav],
+    )
+
     const switchAccount = useCallback(
         async (session: SessionTypes.Struct, web3Wallet: IWeb3Wallet) => {
             // Switch to the requested account
-            const address = session.namespaces.vechain.accounts[0].split(":")[2]
+
+            const namespace = Object.keys(session.namespaces)[0]
+
+            const address =
+                session.namespaces[namespace].accounts[0].split(":")[2]
             const requestedAccount: AccountWithDevice | undefined =
                 accounts.find(acct => {
                     return AddressUtils.compareAddresses(address, acct.address)
@@ -260,25 +290,14 @@ export const useWcRequest = (
     )
 
     const switchNetwork = useCallback(
-        async (
-            requestEvent: PendingRequestTypes.Struct,
-            session: SessionTypes.Struct,
-            web3Wallet: IWeb3Wallet,
-        ) => {
+        async (requestEvent: PendingRequestTypes.Struct) => {
             const network = WalletConnectUtils.getNetwork(
                 requestEvent,
                 networks,
             )
 
             if (!network) {
-                await web3Wallet.disconnectSession({
-                    topic: session.topic,
-                    reason: {
-                        code: -32001,
-                        message: "Requested network not found",
-                    },
-                })
-                throw new Error("Requested network not found")
+                return
             }
 
             if (selectedNetwork.genesis.id !== network.genesis.id) {
@@ -321,17 +340,6 @@ export const useWcRequest = (
                         "Failed to get WC session for wallet: ",
                         JSON.stringify(sessions.map(s => s.topic)),
                     )
-                    await web3Wallet.respondSessionRequest({
-                        topic: requestEvent.topic,
-                        response: {
-                            id: requestEvent.id,
-                            jsonrpc: "The specified session was not found",
-                            error: getRpcError(
-                                "internal",
-                                "Could not find the associated session",
-                            ),
-                        },
-                    })
                     return
                 }
 
@@ -339,17 +347,32 @@ export const useWcRequest = (
                 const address = await switchAccount(session, web3Wallet)
 
                 // Switch to the requested network
-                await switchNetwork(requestEvent, session, web3Wallet)
+                await switchNetwork(requestEvent)
 
                 // Show the screen based on the request method
                 switch (requestEvent.params.request.method) {
                     case RequestMethods.SIGN_CERTIFICATE:
-                        goToSignMessage(requestEvent, session, address)
+                        await goToSignCertificate(
+                            requestEvent,
+                            session,
+                            address,
+                        )
                         break
                     case RequestMethods.REQUEST_TRANSACTION:
-                        goToSendTransaction(requestEvent, session, address)
+                        await goToSendTransaction(
+                            requestEvent,
+                            session,
+                            address,
+                        )
+                        break
+                    case RequestMethods.PERSONAL_SIGN:
+                        await goToSignMessage(requestEvent)
                         break
                     default:
+                        await failRequest(
+                            requestEvent,
+                            getRpcError("methodNotSupported"),
+                        )
                         error(
                             "Wallet Connect Session Request Invalid Method",
                             requestEvent.params.request.method,
@@ -374,6 +397,8 @@ export const useWcRequest = (
             switchNetwork,
             goToSendTransaction,
             goToSignMessage,
+            goToSignCertificate,
+            failRequest,
             sessions,
             removePendingRequest,
         ],

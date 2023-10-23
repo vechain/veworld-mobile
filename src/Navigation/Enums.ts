@@ -27,6 +27,7 @@ export enum Routes {
     TRANSACTION_SUMMARY_SEND = "Transaction_Summary_Send",
     LEDGER_SIGN_TRANSACTION = "Ledger_Sign_Transaction",
     LEDGER_SIGN_CERTIFICATE = "Ledger_Sign_Certificate",
+    LEDGER_SIGN_MESSAGE = "Ledger_Sign_Message",
     SWAP = "Swap",
     HISTORY = "History",
     NFTS = "NFTs",
@@ -57,6 +58,7 @@ export enum Routes {
     BLACKLISTED_COLLECTIONS = "Blacklisted_Collections",
     CONNECT_APP_SCREEN = "Connect_App_Screen",
     CONNECTED_APP_SEND_TRANSACTION_SCREEN = "Connected_App_Send_Transaction_Screen",
-    CONNECTED_APP_SIGN_CERTIFICATE_SCREEN = "Connected_App_Sign_Message_Screen",
+    CONNECTED_APP_SIGN_CERTIFICATE_SCREEN = "Connected_App_Sign_Certificate_Screen",
+    CONNECTED_APP_SIGN_MESSAGE_SCREEN = "Connected_App_Sign_Message_Screen",
     BLOCKED_APP_SCREEN = "Blocked_App_Screen",
 }

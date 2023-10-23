@@ -36,6 +36,7 @@ import AnalyticsUtils from "./AnalyticsUtils"
 import ColorUtils from "./ColorUtils"
 
 export * from "./Logger"
+export * from "./SignMessageUtils"
 
 export {
     AddressUtils,

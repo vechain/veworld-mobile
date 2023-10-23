@@ -18,7 +18,6 @@ import {
     BaseView,
     BluetoothStatusBottomSheet,
     ConnectionErrorBottomSheet,
-    getRpcError,
     showErrorToast,
     Step,
     StepsProgressBar,
@@ -75,7 +74,7 @@ export const LedgerSignTransaction: React.FC<Props> = ({ route }) => {
     const track = useAnalyticTracking()
     const { LL } = useI18nContext()
     const dispatch = useAppDispatch()
-    const { activeSessions, failRequest, processRequest } = useWalletConnect()
+    const { activeSessions, processRequest } = useWalletConnect()
 
     const [signature, setSignature] = useState<Buffer>()
     const [isAwaitingSignature, setIsAwaitingSignature] = useState(false)
@@ -210,7 +209,7 @@ export const LedgerSignTransaction: React.FC<Props> = ({ route }) => {
         try {
             if (!withTransport) return
 
-            const { success, payload } = await LedgerUtils.signTransaction(
+            const res = await LedgerUtils.signTransaction(
                 accountWithDevice.index,
                 transaction,
                 accountWithDevice.device,
@@ -219,10 +218,10 @@ export const LedgerSignTransaction: React.FC<Props> = ({ route }) => {
             )
             debug("Signature OK")
 
-            if (success) {
-                setSignature(payload)
+            if (res.success) {
+                setSignature(res.payload)
             } else {
-                if (payload === LEDGER_ERROR_CODES.USER_REJECTED) {
+                if (res.err === LEDGER_ERROR_CODES.USER_REJECTED) {
                     setUserRejected(true)
                 } else {
                     setSigningError(true)
@@ -329,7 +328,7 @@ export const LedgerSignTransaction: React.FC<Props> = ({ route }) => {
                 Haptics.NotificationFeedbackType.Error,
             )
             if (requestEvent) {
-                await failRequest(requestEvent, getRpcError("internal"))
+                nav.goBack()
             }
         } finally {
             setIsSending(false)
@@ -346,16 +345,10 @@ export const LedgerSignTransaction: React.FC<Props> = ({ route }) => {
         requestEvent,
         navigateOnFinish,
         LL,
+        nav,
         accountWithDevice.address,
-        failRequest,
         processRequest,
     ])
-
-    const beforeNavigatingBack = useCallback(async () => {
-        await removeLedger()
-        if (requestEvent)
-            await failRequest(requestEvent, getRpcError("userRejectedRequest"))
-    }, [removeLedger, requestEvent, failRequest])
 
     const BottomButton = useCallback(() => {
         if (currentStep === SignSteps.SIGNING && userRejected) {
@@ -398,7 +391,7 @@ export const LedgerSignTransaction: React.FC<Props> = ({ route }) => {
 
     return (
         <BaseSafeArea grow={1}>
-            <BackButtonHeader beforeNavigating={beforeNavigatingBack} />
+            <BackButtonHeader beforeNavigating={removeLedger} />
             <BaseView alignItems="flex-start" flexGrow={1} flex={1} mx={20}>
                 <BaseText typographyFont="title">
                     {LL.SEND_LEDGER_TITLE()}

@@ -110,7 +110,61 @@ export const verifyTransport = async (
         } catch (e) {
             return {
                 success: false,
-                payload: ledgerErrorHandler(e as Error),
+                err: ledgerErrorHandler(e as Error),
+            }
+        }
+    }
+
+    return await withTransport(res)
+}
+
+/**
+ * Request a message signature to the ledger device
+ * @category Ledger
+ * @param index  The index of the account to sign the message with
+ * @param message  The message to sign
+ * @param device  The device to sign the message with
+ * @param withTransport  The transport to perform an action with
+ * @returns The signed message
+ */
+
+type MessageResponse = Promise<Response<Buffer>>
+type ISignMessage = {
+    index: number
+    message: Buffer
+    device: LedgerDevice
+    withTransport: (
+        func: (t: BleTransport) => MessageResponse,
+    ) => MessageResponse
+}
+
+const signMessage = async ({
+    index,
+    message,
+    device,
+    withTransport,
+}: ISignMessage): MessageResponse => {
+    debug("Signing message")
+
+    const res = async (transport: BleTransport): MessageResponse => {
+        try {
+            const vetLedger = new VETLedgerApp(transport)
+
+            await validateRootAddress(device.rootAddress, vetLedger)
+
+            const path = `${VET_DERIVATION_PATH}/${index}`
+            const signature = await vetLedger.signMessage(path, message)
+
+            return {
+                success: true,
+                payload: signature,
+            }
+        } catch (e) {
+            warn("Error signing message", e)
+
+            return {
+                success: false,
+                err: ledgerErrorHandler(e),
             }
         }
     }
@@ -158,7 +212,7 @@ const signCertificate = async (
 
             return {
                 success: false,
-                payload: ledgerErrorHandler(e),
+                err: ledgerErrorHandler(e),
             }
         }
     }
@@ -211,7 +265,7 @@ const signTransaction = async (
 
             return {
                 success: false,
-                payload: ledgerErrorHandler(e),
+                err: ledgerErrorHandler(e),
             }
         }
     }
@@ -301,4 +355,5 @@ export default {
     getAccountsWithBalances,
     signCertificate,
     signTransaction,
+    signMessage,
 }

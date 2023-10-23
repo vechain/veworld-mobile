@@ -1607,9 +1607,21 @@ type RootTranslation = {
 	 */
 	CONNECTED_APP_SIGN_REQUEST_TITLE: string
 	/**
+	 * S​i​g​n​ ​a​ ​m​e​s​s​a​g​e
+	 */
+	CONNECTED_APP_SIGN_MESSAGE_TITLE: string
+	/**
 	 * Y​o​u​r​ ​S​i​g​n​a​t​u​r​e​ ​i​s​ ​b​e​i​n​g​ ​r​e​q​u​e​s​t​e​d​ ​t​o​ ​s​i​g​n​ ​a​ ​c​e​r​t​i​f​i​c​a​t​e
 	 */
 	CONNECTED_APP_SIGN_REQUEST_DESCRIPTION: string
+	/**
+	 * Y​o​u​r​ ​S​i​g​n​a​t​u​r​e​ ​i​s​ ​b​e​i​n​g​ ​r​e​q​u​e​s​t​e​d​ ​t​o​ ​s​i​g​n​ ​a​ ​m​e​s​s​a​g​e
+	 */
+	CONNECTED_APP_SIGN_MESSAGE_REQUEST_DESCRIPTION: string
+	/**
+	 * M​e​s​s​a​g​e​:​ 
+	 */
+	CONNECTED_APP_MESSAGE_HEADER: string
 	/**
 	 * S​i​g​n​ ​a​n​d​ ​S​e​n​d​ ​a​ ​t​r​a​n​s​a​c​t​i​o​n
 	 */
@@ -2244,6 +2256,10 @@ type RootTranslation = {
 	 */
 	LEDGER_CERT_TITLE_SB: string
 	/**
+	 * P​l​e​a​s​e​ ​f​o​l​l​o​w​ ​t​h​e​ ​i​n​s​t​r​u​c​t​i​o​n​s​ ​b​e​l​o​w​ ​t​o​ ​s​i​g​n​ ​t​h​e​ ​m​e​s​s​a​g​e​ ​w​i​t​h​ ​y​o​u​r​ ​L​e​d​g​e​r
+	 */
+	LEDGER_MESSAGE_TITLE_SB: string
+	/**
 	 * V​a​l​i​d​a​t​e​ ​t​r​a​n​s​a​c​t​i​o​n
 	 */
 	SEND_LEDGER_VALIDATE_TRANSACTION: string
@@ -2268,9 +2284,17 @@ type RootTranslation = {
 	 */
 	CERT_LEDGER_SIGN_DATA: string
 	/**
+	 * W​e​ ​a​r​e​ ​s​i​g​n​i​n​g​ ​y​o​u​r​ ​m​e​s​s​a​g​e
+	 */
+	MESSAGE_LEDGER_SIGN_DATA: string
+	/**
 	 * W​e​ ​a​r​e​ ​s​i​g​n​i​n​g​ ​y​o​u​r​ ​c​e​r​t​i​f​i​c​a​t​e​ ​w​i​t​h​ ​y​o​u​r​ ​L​e​d​g​e​r​,​ ​p​l​e​a​s​e​ ​c​o​n​f​i​r​m​ ​t​h​e​ ​s​i​g​n​a​t​u​r​e​ ​o​n​ ​y​o​u​r​ ​d​e​v​i​c​e​ ​w​h​e​n​ ​r​e​q​u​i​r​e​d
 	 */
 	CERT_LEDGER_SIGN_DATA_SB: string
+	/**
+	 * W​e​ ​a​r​e​ ​s​i​g​n​i​n​g​ ​y​o​u​r​ ​m​e​s​s​a​g​e​ ​w​i​t​h​ ​y​o​u​r​ ​L​e​d​g​e​r​,​ ​p​l​e​a​s​e​ ​c​o​n​f​i​r​m​ ​t​h​e​ ​s​i​g​n​a​t​u​r​e​ ​o​n​ ​y​o​u​r​ ​d​e​v​i​c​e​ ​w​h​e​n​ ​r​e​q​u​i​r​e​d
+	 */
+	MESSAGE_LEDGER_SIGN_DATA_SB: string
 	/**
 	 * T​r​a​n​s​a​c​t​i​o​n​ ​i​s​ ​r​e​a​d​y
 	 */
@@ -2284,6 +2308,10 @@ type RootTranslation = {
 	 */
 	LEDGER_CERTIFICATE_READ: string
 	/**
+	 * M​e​s​s​a​g​e​ ​i​s​ ​r​e​a​d​y
+	 */
+	LEDGER_MESSAGE_READY: string
+	/**
 	 * T​h​e​ ​t​r​a​n​s​a​c​t​i​o​n​ ​i​s​ ​r​e​a​d​y​ ​t​o​ ​b​e​ ​s​e​n​t​,​ ​p​r​e​s​s​ ​c​o​n​f​i​r​m​ ​t​o​ ​s​e​n​d​ ​i​t​ ​t​o​ ​t​h​e​ ​n​e​t​w​o​r​k
 	 */
 	SEND_LEDGER_TX_READY_SB: string
@@ -2291,6 +2319,10 @@ type RootTranslation = {
 	 * T​h​e​ ​c​e​r​t​i​f​i​c​a​t​e​ ​i​s​ ​r​e​a​d​y​ ​t​o​ ​b​e​ ​s​e​n​t​ ​t​o​ ​t​h​e​ ​D​A​p​p​,​ ​p​r​e​s​s​ ​c​o​n​f​i​r​m​ ​t​o​ ​c​o​n​t​i​n​u​e
 	 */
 	LEDGER_CERTIFICATE_READ_SB: string
+	/**
+	 * T​h​e​ ​m​e​s​s​a​g​e​ ​i​s​ ​r​e​a​d​y​,​ ​p​r​e​s​s​ ​c​o​n​f​i​r​m​ ​t​o​ ​c​o​n​t​i​n​u​e
+	 */
+	LEDGER_MESSAGE_READ_SB: string
 	/**
 	 * T​h​i​s​ ​t​r​a​n​s​a​c​t​i​o​n​ ​m​a​y​ ​b​e​ ​r​e​v​e​r​t​e​d​ ​i​f​ ​y​o​u​r​ ​b​a​l​a​n​c​e​ ​i​s​ ​t​o​o​ ​l​o​w
 	 */
@@ -4222,9 +4254,21 @@ Try reconnect your device to the internet.
 	 */
 	CONNECTED_APP_SIGN_REQUEST_TITLE: () => LocalizedString
 	/**
+	 * Sign a message
+	 */
+	CONNECTED_APP_SIGN_MESSAGE_TITLE: () => LocalizedString
+	/**
 	 * Your Signature is being requested to sign a certificate
 	 */
 	CONNECTED_APP_SIGN_REQUEST_DESCRIPTION: () => LocalizedString
+	/**
+	 * Your Signature is being requested to sign a message
+	 */
+	CONNECTED_APP_SIGN_MESSAGE_REQUEST_DESCRIPTION: () => LocalizedString
+	/**
+	 * Message: 
+	 */
+	CONNECTED_APP_MESSAGE_HEADER: () => LocalizedString
 	/**
 	 * Sign and Send a transaction
 	 */
@@ -4854,6 +4898,10 @@ Try reconnect your device to the internet.
 	 */
 	LEDGER_CERT_TITLE_SB: () => LocalizedString
 	/**
+	 * Please follow the instructions below to sign the message with your Ledger
+	 */
+	LEDGER_MESSAGE_TITLE_SB: () => LocalizedString
+	/**
 	 * Validate transaction
 	 */
 	SEND_LEDGER_VALIDATE_TRANSACTION: () => LocalizedString
@@ -4878,9 +4926,17 @@ Try reconnect your device to the internet.
 	 */
 	CERT_LEDGER_SIGN_DATA: () => LocalizedString
 	/**
+	 * We are signing your message
+	 */
+	MESSAGE_LEDGER_SIGN_DATA: () => LocalizedString
+	/**
 	 * We are signing your certificate with your Ledger, please confirm the signature on your device when required
 	 */
 	CERT_LEDGER_SIGN_DATA_SB: () => LocalizedString
+	/**
+	 * We are signing your message with your Ledger, please confirm the signature on your device when required
+	 */
+	MESSAGE_LEDGER_SIGN_DATA_SB: () => LocalizedString
 	/**
 	 * Transaction is ready
 	 */
@@ -4894,6 +4950,10 @@ Try reconnect your device to the internet.
 	 */
 	LEDGER_CERTIFICATE_READ: () => LocalizedString
 	/**
+	 * Message is ready
+	 */
+	LEDGER_MESSAGE_READY: () => LocalizedString
+	/**
 	 * The transaction is ready to be sent, press confirm to send it to the network
 	 */
 	SEND_LEDGER_TX_READY_SB: () => LocalizedString
@@ -4901,6 +4961,10 @@ Try reconnect your device to the internet.
 	 * The certificate is ready to be sent to the DApp, press confirm to continue
 	 */
 	LEDGER_CERTIFICATE_READ_SB: () => LocalizedString
+	/**
+	 * The message is ready, press confirm to continue
+	 */
+	LEDGER_MESSAGE_READ_SB: () => LocalizedString
 	/**
 	 * This transaction may be reverted if your balance is too low
 	 */

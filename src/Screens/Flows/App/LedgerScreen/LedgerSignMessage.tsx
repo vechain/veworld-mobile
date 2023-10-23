@@ -18,20 +18,24 @@ import {
     StepsProgressBar,
     useWalletConnect,
 } from "~Components"
+import { RootStackParamListSwitch, Routes } from "~Navigation"
 import {
-    RootStackParamListDiscover,
-    RootStackParamListSwitch,
-    Routes,
-} from "~Navigation"
-import { debug, error, HexUtils, LedgerUtils } from "~Utils"
+    debug,
+    error,
+    HexUtils,
+    LedgerUtils,
+    SignMessageUtils,
+    warn,
+} from "~Utils"
 import { useI18nContext } from "~i18n"
 import { useNavigation } from "@react-navigation/native"
 import * as Haptics from "expo-haptics"
 import { LEDGER_ERROR_CODES } from "~Constants"
+import { compareAddresses } from "~Utils/AddressUtils/AddressUtils"
 
 type Props = NativeStackScreenProps<
-    RootStackParamListSwitch & RootStackParamListDiscover,
-    Routes.LEDGER_SIGN_CERTIFICATE
+    RootStackParamListSwitch,
+    Routes.LEDGER_SIGN_MESSAGE
 >
 
 enum SigningStep {
@@ -40,8 +44,8 @@ enum SigningStep {
     DONE,
 }
 
-export const LedgerSignCertificate: React.FC<Props> = ({ route }) => {
-    const { accountWithDevice, certificate, initialRoute, requestEvent } =
+export const LedgerSignMessage: React.FC<Props> = ({ route }) => {
+    const { accountWithDevice, message, requestEvent, initialRoute } =
         route.params
 
     const { processRequest } = useWalletConnect()
@@ -60,6 +64,15 @@ export const LedgerSignCertificate: React.FC<Props> = ({ route }) => {
         onOpen: openConnectionErrorSheet,
         onClose: closeConnectionErrorSheet,
     } = useBottomSheetModal()
+
+    const utfMessage = useMemo(() => {
+        try {
+            return Buffer.from(HexUtils.removePrefix(message), "hex").toString()
+        } catch (e) {
+            warn("SignMessageScreen: utfMessage", e)
+            return message
+        }
+    }, [message])
 
     const { appOpen, errorCode, withTransport, removeLedger } = useLedger({
         deviceId: accountWithDevice.device.deviceId,
@@ -94,8 +107,8 @@ export const LedgerSignCertificate: React.FC<Props> = ({ route }) => {
                 isNextText: LL.LEDGER_SIGN_DATA(),
                 isDoneText: LL.LEDGER_DATA_SIGNED(),
                 progressPercentage: 75,
-                title: LL.CERT_LEDGER_SIGN_DATA(),
-                subtitle: LL.CERT_LEDGER_SIGN_DATA_SB(),
+                title: LL.MESSAGE_LEDGER_SIGN_DATA(),
+                subtitle: LL.MESSAGE_LEDGER_SIGN_DATA_SB(),
             },
         ],
         [LL],
@@ -109,19 +122,40 @@ export const LedgerSignCertificate: React.FC<Props> = ({ route }) => {
         return SigningStep.SIGNING
     }, [appOpen, signature])
 
-    const signCertificate = useCallback(async () => {
+    const signMessage = useCallback(async () => {
         try {
             if (!withTransport) return
 
-            const res = await LedgerUtils.signCertificate(
-                accountWithDevice.index,
-                certificate,
-                accountWithDevice.device,
+            const _message = utfMessage
+
+            const res = await LedgerUtils.signMessage({
+                index: accountWithDevice.index,
+                message: Buffer.from(_message),
+                device: accountWithDevice.device,
                 withTransport,
-            )
+            })
+
             debug("Signature OK")
 
             if (res.success) {
+                const recoveredAddress = SignMessageUtils.recover({
+                    message: _message,
+                    signature: res.payload.toString("hex"),
+                    chain: "vechain",
+                })
+
+                if (
+                    compareAddresses(
+                        recoveredAddress,
+                        accountWithDevice.address,
+                    )
+                ) {
+                    error(
+                        "LedgerSignMessage:signMessage",
+                        "Recovered address does not match",
+                    )
+                }
+
                 setSignature(res.payload)
             } else {
                 if (res.err === LEDGER_ERROR_CODES.USER_REJECTED) {
@@ -131,12 +165,12 @@ export const LedgerSignCertificate: React.FC<Props> = ({ route }) => {
                 }
             }
         } catch (e) {
-            error("LedgerSignCertificate:signCertificate", e)
+            error("LedgerSignMessage:signMessage", e)
             setSigningError(true)
         } finally {
             setIsAwaitingSignature(false)
         }
-    }, [accountWithDevice, certificate, withTransport])
+    }, [utfMessage, accountWithDevice, withTransport])
 
     /** Effects */
 
@@ -145,8 +179,8 @@ export const LedgerSignCertificate: React.FC<Props> = ({ route }) => {
      */
     useEffect(() => {
         if (!appOpen || userRejected) return
-        signCertificate()
-    }, [userRejected, signCertificate, appOpen])
+        signMessage()
+    }, [userRejected, signMessage, appOpen])
 
     /**
      * Open the connection error sheet when the error code is not null
@@ -183,22 +217,16 @@ export const LedgerSignCertificate: React.FC<Props> = ({ route }) => {
                 Haptics.NotificationFeedbackType.Success,
             )
 
-            const certResponse: Connex.Vendor.CertResponse = {
-                annex: {
-                    domain: certificate.domain,
-                    timestamp: certificate.timestamp,
-                    signer: certificate.signer,
-                },
-                signature: HexUtils.addPrefix(signature.toString("hex")),
-            }
-
-            await processRequest(requestEvent, certResponse)
+            await processRequest(
+                requestEvent,
+                HexUtils.addPrefix(signature.toString("hex")),
+            )
 
             await removeLedger()
 
             navigateOnFinish()
         } catch (e) {
-            error("LedgerSignCertificate:handleOnConfirm", e)
+            error("LedgerSignMessage:handleOnConfirm", e)
             showErrorToast({
                 text1: LL.ERROR(),
                 text2: LL.ERROR_GENERIC_OPERATION(),
@@ -215,7 +243,6 @@ export const LedgerSignCertificate: React.FC<Props> = ({ route }) => {
         processRequest,
         LL,
         signature,
-        certificate,
         navigateOnFinish,
     ])
 
@@ -228,7 +255,7 @@ export const LedgerSignCertificate: React.FC<Props> = ({ route }) => {
                     haptics="Light"
                     title={LL.BTN_RETRY()}
                     isLoading={isSending}
-                    action={signCertificate}
+                    action={signMessage}
                 />
             )
         }
@@ -253,7 +280,7 @@ export const LedgerSignCertificate: React.FC<Props> = ({ route }) => {
         userRejected,
         isSending,
         LL,
-        signCertificate,
+        signMessage,
         signature,
         handleOnConfirm,
     ])
@@ -266,7 +293,7 @@ export const LedgerSignCertificate: React.FC<Props> = ({ route }) => {
                     {LL.SEND_LEDGER_TITLE()}
                 </BaseText>
                 <BaseText typographyFont="body" my={10}>
-                    {LL.LEDGER_CERT_TITLE_SB()}
+                    {LL.LEDGER_MESSAGE_TITLE_SB()}
                 </BaseText>
                 <BaseSpacer height={20} />
                 <Lottie
@@ -283,11 +310,11 @@ export const LedgerSignCertificate: React.FC<Props> = ({ route }) => {
                 />
                 <BaseSpacer height={96} />
                 <BaseText typographyFont="bodyBold">
-                    {Steps[currentStep]?.title || LL.LEDGER_CERTIFICATE_READ()}
+                    {Steps[currentStep]?.title || LL.LEDGER_MESSAGE_READY()}
                 </BaseText>
                 <BaseText typographyFont="body" mt={8}>
                     {Steps[currentStep]?.subtitle ||
-                        LL.LEDGER_CERTIFICATE_READ_SB()}
+                        LL.LEDGER_MESSAGE_READ_SB()}
                 </BaseText>
             </BaseView>
             <BottomButton />
