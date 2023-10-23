@@ -26,7 +26,7 @@ import { useI18nContext } from "~i18n"
 import { RootStackParamListSwitch, Routes } from "~Navigation"
 import { NativeStackScreenProps } from "@react-navigation/native-stack"
 import { useNavigation } from "@react-navigation/native"
-import { UnknownAppMessage } from "~Screens"
+import { AppInfo, UnknownAppMessage } from "~Screens"
 import { AnalyticsEvent } from "~Constants"
 import { getSdkError } from "@walletconnect/utils"
 
@@ -39,7 +39,7 @@ export const SignMessageScreen: FC<Props> = ({ route }: Props) => {
     const { requestEvent, message } = route.params
     const { chainId } = requestEvent.params
 
-    const { processRequest, failRequest } = useWalletConnect()
+    const { processRequest, failRequest, activeSessions } = useWalletConnect()
     const { LL } = useI18nContext()
     const nav = useNavigation()
     const selectedAccount: AccountWithDevice = useAppSelector(
@@ -53,6 +53,20 @@ export const SignMessageScreen: FC<Props> = ({ route }: Props) => {
     const sessionContext = useAppSelector(state =>
         selectVerifyContext(state, requestEvent.topic),
     )
+
+    const appInfo = useMemo(() => {
+        const session = activeSessions[requestEvent.topic]
+
+        if (!session)
+            return {
+                name: "",
+                description: "",
+                url: "",
+                icons: [],
+            }
+
+        return session.peer.metadata
+    }, [requestEvent, activeSessions])
 
     const validConnectedApp = useMemo(() => {
         if (!sessionContext) return true
@@ -190,6 +204,15 @@ export const SignMessageScreen: FC<Props> = ({ route }: Props) => {
                     <BaseText>
                         {LL.CONNECTED_APP_SIGN_MESSAGE_REQUEST_DESCRIPTION()}
                     </BaseText>
+
+                    <BaseSpacer height={16} />
+
+                    <AppInfo
+                        name={appInfo.name}
+                        description={appInfo.description}
+                        url={appInfo.url}
+                        icon={appInfo.icons[0]}
+                    />
 
                     <BaseSpacer height={32} />
                     <BaseText typographyFont="subTitleBold">
