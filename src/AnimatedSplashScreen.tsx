@@ -86,7 +86,9 @@ export const AnimatedSplashScreen = ({
         <>
             {children}
             {!animationDone && (
-                <Animated.View style={[styles.containerAndroid, fadeOut]}>
+                <Animated.View
+                    style={[styles.containerAndroid, fadeOut]}
+                    testID={"Android_Splash_Screen"}>
                     <View style={styles.centered}>
                         <Animated.View style={scaleOut}>
                             <Image

@@ -136,9 +136,9 @@ jobs:
                     🚀 E2E Testing - iOS Result: *${{ job.status }}*
                     📦 Repository: *${{ github.repository }}*
                     🌿 Branch: *${{ github.ref_name }}*
-                    🔨 Commit: *${{ github.actor }}* [${{ github.sha.short }}](${{ github.event.head_commit.url }})
                     🔗 View Run: ${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}
-                    ${{ (github.event_name == 'release' && github.event.release.prerelease) && '🔴 THIS IS A PRE-RELEASE!' || '' }}
-                    ${{ (github.event_name == 'release') && ('🏷 Pre-Release Tag: ' || '') }} ${{ github.event.release.tag_name }}
+                    ${{ (github.event_name == 'release' && github.event.release.prerelease) && '🟢 THIS IS A PRE-RELEASE!' || '' }}
+                    ${{ (github.event_name == 'release' && '🏷 Pre-Release Tag: ' && github.event.release.tag_name ) || '' }}
+                    ${{ (github.event.name != 'release' && '🔄 THIS IS A SCHEDULED RUN') || ''}}
               env:
                 SLACK_BOT_TOKEN: ${{ secrets.SLACK_VEWORLD_BOT_TOKEN }}

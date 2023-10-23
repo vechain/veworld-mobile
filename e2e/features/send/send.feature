@@ -5,7 +5,9 @@ Feature: The user send tokens in test net
     * The app is opened
     * Open with demo account
     * The user has more than one account
+    * The user closes the toast message
     * The user selects Account 1
+    * The user goes to home tab
     * The user selects the test network
     * The user clicks back button
     * The user goes to home tab
@@ -51,7 +53,7 @@ Feature: The user send tokens in test net
     And The user can click next button to go to the next screen
     And The user selects URL as delegation method
     And The user inserts the following delegation url "<url>"
-    And The user selects URL as delegation method
+    And The user closes the "<sheet_title>" bottom sheet
     And The user can click confirm button
     And The user inserts pin "<pin>"
     Then The user should see successfully sent message for the token "<token>"
@@ -79,9 +81,6 @@ Feature: The user send tokens in test net
     Examples:
       | token | amount | address                                    | tokenAddress                               | pin    |
       | CARP  | 10     | 0x435933c8064b4Ae76bE665428e0307eF2cCFBD68 | 0x8a9844e4750f5ce5f7988c4d1e04c278c718feea | 111111 |
-
-
-
   Scenario: Give back tokens to account 1
     When The user clicks back button
     And The user selects Account 2
@@ -99,7 +98,6 @@ Feature: The user send tokens in test net
       | token | amount | address                                    | pin    |
       | VET   | 3      | 0xf077b491b355E64048cE21E3A6Fc4751eEeA77fa | 111111 |
       | VTHO  | 3      | 0xf077b491b355E64048cE21E3A6Fc4751eEeA77fa | 111111 |
-
   Scenario: User should not get error for small amount (#557) on the send flow
     When The user selects "<token>" token to be sent
     And The user inserts a very small amount to be sent

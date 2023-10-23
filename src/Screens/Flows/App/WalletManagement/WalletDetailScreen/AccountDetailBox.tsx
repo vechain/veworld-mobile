@@ -97,9 +97,8 @@ export const AccountDetailBox: React.FC<Props> = memo(
                     />
                 </BaseView>
                 <BaseView
-                    style={
-                        (styles.rightSubContainer, { opacity: cardOpacity })
-                    }>
+                    style={(styles.rightSubContainer, { opacity: cardOpacity })}
+                    testID={`AccountDetailBox_${accountAlias}`}>
                     <BaseText style={styles.address} fontSize={10}>
                         {FormattingUtils.humanAddress(account.address, 4, 6)}
                     </BaseText>

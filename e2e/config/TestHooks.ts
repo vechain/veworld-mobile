@@ -19,6 +19,11 @@ BeforeAll({ timeout: 600 * 1000 }, async () => {
     console.log("Starting a new Detox test session...")
     await detox.init()
     console.log("Detox test session started!")
+
+    console.log("Launching app...")
+    await device.launchApp({ newInstance: true })
+
+    console.log("App launched!")
 })
 
 Before({ timeout: 600 * 1000 }, async (message: ITestCaseHookParameter) => {

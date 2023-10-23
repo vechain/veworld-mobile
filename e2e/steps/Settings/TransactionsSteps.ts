@@ -5,8 +5,9 @@ import {
     SettingsFlows,
     insertTextById,
     clickById,
-    swipeLeftByText,
+    swipeByText,
     textShouldNotExist,
+    isPresentText,
 } from "../../helpers"
 
 Given(
@@ -75,6 +76,9 @@ When(
     "The user click plus button to add a new url",
     { timeout: -1 },
     async () => {
+        if (!(await isPresentText("Select URL"))) {
+            await clickByText("URL")
+        }
         await clickById("UrlList_addUrlButton")
     },
 )
@@ -95,8 +99,8 @@ When(
     "The user delete the delegation url {string}",
     { timeout: -1 },
     async (url: string) => {
-        await swipeLeftByText(url)
-        await clickById("DeleteUnderlay_DeleteIcon")
+        await swipeByText(url, "left")
+        await clickById("DeleteUnderlay_DeleteIcon", { index: 0 })
     },
 )
 

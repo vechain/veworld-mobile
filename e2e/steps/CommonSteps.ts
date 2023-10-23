@@ -11,6 +11,7 @@ import {
     clickById,
     clickByText,
     closeBottomSheet,
+    closeToast,
     goBack,
     idShouldExist,
 } from "../helpers"
@@ -47,13 +48,13 @@ Given("The user has more than one account", { timeout: -1 }, async function () {
     await clickById("HomeScreen_WalletManagementButton")
     await clickByText("Wallet 1")
     await clickById("WalletDetailScreen_addAccountButton")
-    await goBack()
-    await goBack()
 })
 
 Given("The user selects Account 1", { timeout: -1 }, async function () {
-    await clickById("AccountCard_changeAccountButton")
-    await clickByText("Account 1")
+    await clickById("AccountDetailBox_Account 1")
+
+    await goBack()
+    await goBack()
 })
 
 Given("The user selects Account 2", { timeout: -1 }, async function () {
@@ -83,6 +84,10 @@ Given("The user is in home screen", { timeout: -1 }, async function () {
 
 Given("The user goes to home tab", { timeout: -1 }, async function () {
     await TabFlows.goBackToHomeTab()
+})
+
+Given("The user closes the toast message", { timeout: -1 }, async function () {
+    await closeToast()
 })
 
 When(

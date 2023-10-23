@@ -8,7 +8,7 @@ import {
     textShouldNotExist,
     insertTextById,
     clickById,
-    swipeLeftByText,
+    swipeByText,
 } from "../helpers"
 
 Given("The user go to tokens management screen", { timeout: -1 }, async () => {
@@ -142,8 +142,8 @@ When(
     { timeout: -1 },
     async (token1: string) => {
         await scrollUntilTextVisible(token1, "HomeScreen_ScrollView")
-        await swipeLeftByText(token1)
-        await clickById("DeleteUnderlay_DeleteIcon")
+        await swipeByText(token1, "left")
+        await clickById("DeleteUnderlay_DeleteIcon", { index: 0 })
         await clickByText("REMOVE")
     },
 )
