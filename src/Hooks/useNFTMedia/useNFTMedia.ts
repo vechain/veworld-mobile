@@ -38,9 +38,10 @@ export const useNFTMedia = () => {
                         }
 
                         debug(`Fetching media for ${uri}`)
-                        const media = URIProtocol.IPFS
-                            ? await getNFTMediaIpfs(uri)
-                            : await getNFTMediaArweave(uri)
+                        const media =
+                            URIProtocol.IPFS === protocol
+                                ? await getNFTMediaIpfs(uri)
+                                : await getNFTMediaArweave(uri)
 
                         mediaCache?.setItem(uri, media)
 
@@ -48,7 +49,9 @@ export const useNFTMedia = () => {
                     }
 
                     default:
-                        warn(`Unable to detect protocol for image URI ${uri}`)
+                        warn(
+                            `Unable to detect protocol ${protocol} for image URI ${uri}`,
+                        )
                 }
             } catch (e) {
                 warn(`Error fetching image ${uri}`, e)

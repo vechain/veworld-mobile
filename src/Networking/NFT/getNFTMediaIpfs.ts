@@ -13,6 +13,7 @@ export const getNFTMediaIpfs = async (uri: string): Promise<NFTMedia> => {
         // Check if the MIME type is allowed
         const allowedMimeTypes = [
             "image/jpeg",
+            "image/jpg",
             "image/png",
             "image/gif",
             "image/bmp",
@@ -41,7 +42,7 @@ export const getNFTMediaIpfs = async (uri: string): Promise<NFTMedia> => {
             }
         })
     } catch (err) {
-        error("Error fetching the image:", err)
+        error("Error fetching the image:", JSON.stringify(err))
         throw err
     }
 }
