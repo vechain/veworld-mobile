@@ -12,34 +12,34 @@ import {
     RequireUserPassword,
     useWalletConnect,
 } from "~Components"
-import { blake2b256, Certificate } from "thor-devkit"
 import {
-    addSignCertificateActivity,
     selectSelectedAccount,
     selectVerifyContext,
     setIsAppLoading,
     useAppDispatch,
     useAppSelector,
 } from "~Storage/Redux"
-import { debug, error, HexUtils, WalletConnectUtils } from "~Utils"
+import { error, HexUtils, SignMessageUtils, warn } from "~Utils"
 import { useAnalyticTracking, useCheckIdentity, useSignMessage } from "~Hooks"
 import { AccountWithDevice, DEVICE_TYPE, LedgerAccountWithDevice } from "~Model"
 import { useI18nContext } from "~i18n"
 import { RootStackParamListSwitch, Routes } from "~Navigation"
 import { NativeStackScreenProps } from "@react-navigation/native-stack"
 import { useNavigation } from "@react-navigation/native"
-import { MessageDetails, UnknownAppMessage } from "~Screens"
+import { AppInfo, UnknownAppMessage } from "~Screens"
 import { AnalyticsEvent } from "~Constants"
+import { getSdkError } from "@walletconnect/utils"
 
 type Props = NativeStackScreenProps<
     RootStackParamListSwitch,
-    Routes.CONNECTED_APP_SIGN_CERTIFICATE_SCREEN
+    Routes.CONNECTED_APP_SIGN_MESSAGE_SCREEN
 >
 
-export const SignCertificateScreen: FC<Props> = ({ route }: Props) => {
-    const { requestEvent, session, message } = route.params
+export const SignMessageScreen: FC<Props> = ({ route }: Props) => {
+    const { requestEvent, message } = route.params
+    const { chainId } = requestEvent.params
 
-    const { processRequest, failRequest } = useWalletConnect()
+    const { processRequest, failRequest, activeSessions } = useWalletConnect()
     const { LL } = useI18nContext()
     const nav = useNavigation()
     const selectedAccount: AccountWithDevice = useAppSelector(
@@ -50,12 +50,23 @@ export const SignCertificateScreen: FC<Props> = ({ route }: Props) => {
 
     const [isInvalidChecked, setInvalidChecked] = React.useState(false)
 
-    // Request values
-    const { url } = WalletConnectUtils.getSessionRequestAttributes(session)
-
     const sessionContext = useAppSelector(state =>
         selectVerifyContext(state, requestEvent.topic),
     )
+
+    const appInfo = useMemo(() => {
+        const session = activeSessions[requestEvent.topic]
+
+        if (!session)
+            return {
+                name: "",
+                description: "",
+                url: "",
+                icons: [],
+            }
+
+        return session.peer.metadata
+    }, [requestEvent, activeSessions])
 
     const validConnectedApp = useMemo(() => {
         if (!sessionContext) return true
@@ -63,20 +74,25 @@ export const SignCertificateScreen: FC<Props> = ({ route }: Props) => {
         return sessionContext.verifyContext.validation === "VALID"
     }, [sessionContext])
 
-    // Prepare certificate to sign
-    const cert: Certificate = useMemo(() => {
-        return {
-            purpose: message.purpose,
-            payload: message.payload,
-            timestamp: Math.round(Date.now() / 1000),
-            domain: new URL(url).hostname,
-            signer: selectedAccount?.address ?? "",
+    const utfMessage = useMemo(() => {
+        try {
+            return Buffer.from(HexUtils.removePrefix(message), "hex").toString()
+        } catch (e) {
+            warn("SignMessageScreen: utfMessage", e)
+            return message
         }
-    }, [message, selectedAccount, url])
+    }, [message])
 
-    const payloadToSign = useMemo(() => {
-        return blake2b256(Certificate.encode(cert))
-    }, [cert])
+    const payloadToSign: Buffer = useMemo(() => {
+        const chain = chainId.split(":")[0]
+
+        if (chain === "vechain" || chain === "eip155") {
+            return SignMessageUtils.hashMessage(utfMessage, chain)
+        }
+
+        // validation should be done before navigating to this screen
+        return Buffer.from([])
+    }, [chainId, utfMessage])
 
     // Sign
     const { signMessage } = useSignMessage({
@@ -87,19 +103,23 @@ export const SignCertificateScreen: FC<Props> = ({ route }: Props) => {
         nav.goBack()
     }, [nav])
 
+    const handleLedgerAccount = useCallback(async () => {
+        if (chainId !== "vechain") {
+            await failRequest(requestEvent, getSdkError("UNSUPPORTED_ACCOUNTS"))
+        } else {
+            nav.navigate(Routes.LEDGER_SIGN_MESSAGE, {
+                requestEvent,
+                accountWithDevice: selectedAccount as LedgerAccountWithDevice,
+                message,
+            })
+        }
+    }, [nav, chainId, requestEvent, selectedAccount, message, failRequest])
+
     const handleAccept = useCallback(
         async (password?: string) => {
             try {
                 if (selectedAccount.device.type === DEVICE_TYPE.LEDGER) {
-                    nav.navigate(Routes.LEDGER_SIGN_CERTIFICATE, {
-                        requestEvent,
-                        accountWithDevice:
-                            selectedAccount as LedgerAccountWithDevice,
-                        certificate: cert,
-                        //TODO: What should initialRoute be?
-                        initialRoute: Routes.HOME,
-                    })
-                    return
+                    return handleLedgerAccount()
                 }
 
                 const signature = await signMessage(password)
@@ -109,25 +129,10 @@ export const SignCertificateScreen: FC<Props> = ({ route }: Props) => {
 
                 dispatch(setIsAppLoading(true))
 
-                await processRequest(requestEvent, {
-                    signature: HexUtils.addPrefix(signature.toString("hex")),
-                    annex: {
-                        domain: cert.domain,
-                        timestamp: cert.timestamp,
-                        signer: cert.signer,
-                    },
-                })
-
-                dispatch(
-                    addSignCertificateActivity(
-                        session.peer.metadata.name,
-                        cert.domain,
-                        cert.payload.content,
-                        cert.purpose,
-                    ),
+                await processRequest(
+                    requestEvent,
+                    HexUtils.addPrefix(signature.toString("hex")),
                 )
-
-                track(AnalyticsEvent.DAPP_CERTIFICATE_SUCCESS)
 
                 dispatch(setIsAppLoading(false))
             } catch (err: unknown) {
@@ -144,17 +149,15 @@ export const SignCertificateScreen: FC<Props> = ({ route }: Props) => {
             onClose()
         },
         [
+            handleLedgerAccount,
             onClose,
             selectedAccount,
             signMessage,
             requestEvent,
             failRequest,
             processRequest,
-            cert,
             dispatch,
-            session.peer.metadata.name,
             track,
-            nav,
         ],
     )
 
@@ -179,11 +182,6 @@ export const SignCertificateScreen: FC<Props> = ({ route }: Props) => {
         await onReject()
     }, [onReject])
 
-    debug({
-        isInvalidChecked,
-        validConnectedApp,
-    })
-
     return (
         <BaseSafeArea>
             <ScrollView
@@ -200,12 +198,21 @@ export const SignCertificateScreen: FC<Props> = ({ route }: Props) => {
 
                     <BaseSpacer height={32} />
                     <BaseText typographyFont="subTitle">
-                        {LL.CONNECTED_APP_SIGN_REQUEST_TITLE()}
+                        {LL.CONNECTED_APP_SIGN_MESSAGE_TITLE()}
                     </BaseText>
                     <BaseSpacer height={16} />
                     <BaseText>
-                        {LL.CONNECTED_APP_SIGN_REQUEST_DESCRIPTION()}
+                        {LL.CONNECTED_APP_SIGN_MESSAGE_REQUEST_DESCRIPTION()}
                     </BaseText>
+
+                    <BaseSpacer height={16} />
+
+                    <AppInfo
+                        name={appInfo.name}
+                        description={appInfo.description}
+                        url={appInfo.url}
+                        icon={appInfo.icons[0]}
+                    />
 
                     <BaseSpacer height={32} />
                     <BaseText typographyFont="subTitleBold">
@@ -218,22 +225,18 @@ export const SignCertificateScreen: FC<Props> = ({ route }: Props) => {
                         showOpacityWhenDisabled={false}
                     />
 
-                    <BaseSpacer height={32} />
-                    <MessageDetails
-                        sessionRequest={session}
-                        requestEvent={requestEvent}
-                        message={message}
+                    <BaseSpacer height={16} />
+                    <BaseText typographyFont="subTitle">
+                        {LL.CONNECTED_APP_MESSAGE_HEADER()}
+                    </BaseText>
+                    <BaseSpacer height={16} />
+                    <BaseText>{utfMessage}</BaseText>
+
+                    <UnknownAppMessage
+                        verifyContext={sessionContext.verifyContext}
+                        confirmed={isInvalidChecked}
+                        setConfirmed={setInvalidChecked}
                     />
-
-                    <BaseSpacer height={30} />
-
-                    {sessionContext && (
-                        <UnknownAppMessage
-                            verifyContext={sessionContext.verifyContext}
-                            confirmed={isInvalidChecked}
-                            setConfirmed={setInvalidChecked}
-                        />
-                    )}
                 </BaseView>
 
                 <BaseSpacer height={30} />

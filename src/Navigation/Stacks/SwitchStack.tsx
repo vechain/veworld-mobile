@@ -25,6 +25,8 @@ import {
 import { useWalletStatus } from "~Components"
 import { BuyStack } from "./BuyStack"
 import { BUY_FEATURE_ENABLED } from "~Constants"
+import { SignMessageScreen } from "~Screens/Flows/App/WalletConnect/SignMessageScreen"
+import { LedgerSignMessage } from "~Screens/Flows/App/LedgerScreen/LedgerSignMessage"
 
 export type RootStackParamListSwitch = {
     OnboardingStack: undefined
@@ -48,6 +50,10 @@ export type RootStackParamListSwitch = {
         message: Connex.Vendor.CertMessage
         options: Connex.Signer.CertOptions
     }
+    [Routes.CONNECTED_APP_SIGN_MESSAGE_SCREEN]: {
+        requestEvent: PendingRequestTypes.Struct
+        message: string
+    }
     [Routes.LEDGER_SIGN_CERTIFICATE]: {
         requestEvent: PendingRequestTypes.Struct
         certificate: Certificate
@@ -62,6 +68,12 @@ export type RootStackParamListSwitch = {
         requestEvent?: PendingRequestTypes.Struct
     }
     [Routes.BLOCKED_APP_SCREEN]: undefined
+    [Routes.LEDGER_SIGN_MESSAGE]: {
+        requestEvent: PendingRequestTypes.Struct
+        message: string
+        accountWithDevice: LedgerAccountWithDevice
+        initialRoute?: Routes
+    }
 }
 const Switch = createNativeStackNavigator<RootStackParamListSwitch>()
 
@@ -120,6 +132,11 @@ export const SwitchStack = () => {
                         />
 
                         <Switch.Screen
+                            name={Routes.CONNECTED_APP_SIGN_MESSAGE_SCREEN}
+                            component={SignMessageScreen}
+                        />
+
+                        <Switch.Screen
                             name={Routes.BLOCKED_APP_SCREEN}
                             component={AppBlockedScreen}
                         />
@@ -133,6 +150,12 @@ export const SwitchStack = () => {
                             name={Routes.LEDGER_SIGN_TRANSACTION}
                             component={LedgerSignTransaction}
                         />
+
+                        <Switch.Screen
+                            name={Routes.LEDGER_SIGN_MESSAGE}
+                            component={LedgerSignMessage}
+                        />
+
                         {BUY_FEATURE_ENABLED && (
                             <Switch.Screen
                                 name={Routes.BUY_FLOW}

@@ -12,6 +12,7 @@ import { ErrorResponse } from "@walletconnect/jsonrpc-types/dist/cjs/jsonrpc"
 import { useI18nContext } from "~i18n"
 import { SessionTypes } from "@walletconnect/types"
 import { insertContext, useAppDispatch } from "~Storage/Redux"
+import { validateRequestNamespaces } from "~Components/Providers/WalletConnectProvider/config/supported-chains"
 
 export const useSessionProposals = (
     isBlackListScreen: () => boolean,
@@ -71,14 +72,16 @@ export const useSessionProposals = (
                     proposal.verifyContext,
                 )
 
-            if (!proposal.params.requiredNamespaces.vechain) {
+            const validationError =
+                validateRequestNamespaces(proposal.params.requiredNamespaces) ??
+                validateRequestNamespaces(proposal.params.optionalNamespaces)
+
+            if (validationError) {
+                warn("onSessionProposal - session not valid", validationError)
                 showErrorToast({
                     text1: LL.NOTIFICATION_wallet_connect_incompatible_dapp(),
                 })
-                return await respondInvalidSession(
-                    proposal,
-                    getRpcError("internal", "vechain namespace not found"),
-                )
+                return await respondInvalidSession(proposal, validationError)
             }
 
             nav.navigate(Routes.CONNECT_APP_SCREEN, {
@@ -91,7 +94,7 @@ export const useSessionProposals = (
     const approvePendingProposal = useCallback(
         async (
             proposal: SessionProposal,
-            namespace: SessionTypes.Namespace,
+            namespaces: SessionTypes.Namespaces,
         ): Promise<SessionTypes.Struct> => {
             const web3Wallet = await WalletConnectUtils.getWeb3Wallet()
 
@@ -99,9 +102,7 @@ export const useSessionProposals = (
 
             const session = await web3Wallet.approveSession({
                 id: proposal.id,
-                namespaces: {
-                    vechain: namespace,
-                },
+                namespaces,
                 relayProtocol: relays.protocol,
             })
 

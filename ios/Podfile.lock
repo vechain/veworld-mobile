@@ -147,7 +147,7 @@ PODS:
   - MMKV (1.3.1):
     - MMKVCore (~> 1.3.1)
   - MMKVCore (1.3.1)
-  - MultiplatformBleAdapter (0.2.0)
+  - MultiplatformBleAdapter (0.1.9)
   - OpenSSL-Universal (1.1.1100)
   - RCT-Folly (2021.07.22.00):
     - boost
@@ -449,9 +449,8 @@ PODS:
   - React-jsinspector (0.72.6)
   - React-logger (0.72.6):
     - glog
-  - react-native-ble-plx (3.1.0):
-    - MultiplatformBleAdapter (= 0.2.0)
-    - RCT-Folly (= 2021.07.22.00)
+  - react-native-ble-plx (2.0.3):
+    - MultiplatformBleAdapter (= 0.1.9)
     - React-Core
   - react-native-blob-util (0.19.1):
     - React-Core
@@ -1054,7 +1053,7 @@ SPEC CHECKSUMS:
   MixpanelReactNative: 07c808338a1eb69b0c9077668e3acfb0b2dd6689
   MMKV: 5a07930c70c70b86cd87761a42c8f3836fb681d7
   MMKVCore: e50135dbd33235b6ab390635991bab437ab873c0
-  MultiplatformBleAdapter: ea8bac405ec200d0ca9de0f89afef6f06fb2abbc
+  MultiplatformBleAdapter: 5a6a897b006764392f9cef785e4360f54fb9477d
   OpenSSL-Universal: ebc357f1e6bc71fa463ccb2fe676756aff50e88c
   RCT-Folly: 424b8c9a7a0b9ab2886ffe9c3b041ef628fd4fb1
   RCTRequired: 28469809442eb4eb5528462705f7d852948c8a74
@@ -1071,7 +1070,7 @@ SPEC CHECKSUMS:
   React-jsiexecutor: 3bf18ff7cb03cd8dfdce08fbbc0d15058c1d71ae
   React-jsinspector: 194e32c6aab382d88713ad3dd0025c5f5c4ee072
   React-logger: cebf22b6cf43434e471dc561e5911b40ac01d289
-  react-native-ble-plx: c033a0b82890910e321e7d031fd01a88bddc3854
+  react-native-ble-plx: f10240444452dfb2d2a13a0e4f58d7783e92d76e
   react-native-blob-util: af2dc91365bfde33f61389cbd0c692af9a4a97cb
   react-native-blur: cfdad7b3c01d725ab62a8a729f42ea463998afa2
   react-native-cameraroll: 4701ae7c3dbcd3f5e9e150ca17f250a276154b35
@@ -1130,4 +1129,4 @@ SPEC CHECKSUMS:
 
 PODFILE CHECKSUM: 8539af608c0cd595f9920d888a6de36af30112be
 
-COCOAPODS: 1.12.1
+COCOAPODS: 1.13.0

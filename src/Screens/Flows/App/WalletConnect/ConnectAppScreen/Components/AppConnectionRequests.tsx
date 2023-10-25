@@ -5,13 +5,15 @@ import { useI18nContext } from "~i18n"
 
 type Props = {
     name: string
-    methods: string[]
+    methods?: string[]
 }
 
 export const AppConnectionRequests = ({ name, methods }: Props) => {
     const { LL } = useI18nContext()
 
     const renderRequestTransactionDescription = useMemo(() => {
+        if (!methods) return <></>
+
         if (
             methods.find(
                 method => method === RequestMethods.REQUEST_TRANSACTION,
@@ -29,6 +31,8 @@ export const AppConnectionRequests = ({ name, methods }: Props) => {
     }, [methods, LL])
 
     const renderRequestSignDescription = useMemo(() => {
+        if (!methods) return <></>
+
         if (
             methods.find(
                 method =>

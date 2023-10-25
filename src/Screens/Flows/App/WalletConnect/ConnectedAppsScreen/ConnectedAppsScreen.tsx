@@ -43,9 +43,11 @@ export const ConnectedAppsScreen = () => {
         for (const key of Object.keys(activeSessions)) {
             const session = activeSessions[key]
 
+            const namespaceKey = Object.keys(session.namespaces)[0]
+
             try {
                 const address =
-                    session.namespaces.vechain.accounts[0].split(":")[2]
+                    session.namespaces[namespaceKey].accounts[0].split(":")[2]
 
                 if (!_apps[address]) {
                     _apps[address] = [session]

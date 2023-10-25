@@ -125,7 +125,7 @@ describe("LedgerUtils", () => {
             const res = await signCertificateCall()
 
             expect(res).toEqual({
-                payload: LEDGER_ERROR_CODES.UNKNOWN,
+                err: LEDGER_ERROR_CODES.UNKNOWN,
                 success: false,
             })
         })
@@ -156,7 +156,7 @@ describe("LedgerUtils", () => {
             const res = await signCertificateCall()
 
             expect(res).toEqual({
-                payload: LEDGER_ERROR_CODES.UNKNOWN,
+                err: LEDGER_ERROR_CODES.UNKNOWN,
                 success: false,
             })
         })

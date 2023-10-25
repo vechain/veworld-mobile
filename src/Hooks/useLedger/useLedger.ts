@@ -120,19 +120,19 @@ export const useLedger = ({
     const onConnectionConfirmed = useCallback(async () => {
         debug("[Ledger] - onConnectionConfirmed")
         if (transport.current) {
-            const { payload, success } = await LedgerUtils.verifyTransport(
+            const res = await LedgerUtils.verifyTransport(
                 withTransport(transport.current),
             )
 
-            debug("[Ledger] - verifyTransport", { payload, success })
+            debug("[Ledger] - verifyTransport", res)
 
-            if (success) {
+            if (res.success) {
                 setAppOpen(true)
-                setRootAccount(payload.rootAccount)
-                setConfig(payload.appConfig)
+                setRootAccount(res.payload.rootAccount)
+                setConfig(res.payload.appConfig)
                 setErrorCode(undefined)
             } else {
-                await setErrorCode(payload as LEDGER_ERROR_CODES)
+                await setErrorCode(res.err as LEDGER_ERROR_CODES)
             }
         }
     }, [setConfig, withTransport])

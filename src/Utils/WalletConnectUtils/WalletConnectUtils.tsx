@@ -60,12 +60,25 @@ export async function getWeb3Wallet(): Promise<IWeb3Wallet> {
 export function getPairAttributes(
     proposal: SignClientTypes.EventArguments["session_proposal"],
 ) {
+    const { requiredNamespaces, optionalNamespaces } = proposal.params
+
+    const firstNamespace =
+        Object.values(requiredNamespaces)[0] ??
+        Object.values(optionalNamespaces)[0]
+
+    let events: string[] | undefined
+    let methods: string[] | undefined
+    let chains: string[] | undefined
+
+    if (firstNamespace) {
+        events = firstNamespace.events
+        methods = firstNamespace.methods
+        chains = firstNamespace.chains
+    }
+
     const name = proposal.params.proposer.metadata.name
     const url = proposal.params.proposer.metadata.url
     const description = proposal.params.proposer.metadata.description
-    const methods = proposal.params.requiredNamespaces.vechain.methods
-    const events = proposal.params.requiredNamespaces.vechain.events
-    const chains = proposal.params.requiredNamespaces.vechain.chains
     const icon = proposal.params.proposer.metadata.icons[0]
 
     return {

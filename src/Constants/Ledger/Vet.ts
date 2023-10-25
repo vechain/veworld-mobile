@@ -138,6 +138,10 @@ export class VETLedgerApp {
         return this.sign(path, rawJSON, false, 0xe0, 0x09)
     }
 
+    public async signMessage(path: string, message: Buffer) {
+        return this.sign(path, message, false, 0xe0, 0x08)
+    }
+
     private async sign(
         path: string,
         raw: Buffer,

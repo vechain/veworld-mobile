@@ -1,6 +1,6 @@
 export interface Unsuccessful {
     success: false
-    payload: string
+    err: string
 }
 
 export interface Success<T> {
