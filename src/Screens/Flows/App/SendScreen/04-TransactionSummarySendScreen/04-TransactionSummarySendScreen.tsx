@@ -12,6 +12,7 @@ import {
     BaseSpacer,
     BaseText,
     BaseView,
+    GasFeeOptions,
     Layout,
     RequireUserPassword,
     TransferCard,
@@ -126,8 +127,14 @@ export const TransactionSummarySendScreen = ({ route }: Props) => {
         handleClosePasswordModal,
         onPasswordSuccess,
         Delegation,
-        RenderGas,
         SubmitButton,
+        setSelectedFeeOption,
+        selectedDelegationOption,
+        loadingGas,
+        selectedFeeOption,
+        gasFeeOptions,
+        isThereEnoughGas,
+        vthoBalance,
     } = useTransactionScreen({
         clauses,
         onTransactionSuccess,
@@ -209,7 +216,15 @@ export const TransactionSummarySendScreen = ({ route }: Props) => {
                     </BaseText>
                     <BaseSpacer height={6} />
 
-                    {RenderGas()}
+                    <GasFeeOptions
+                        setSelectedFeeOption={setSelectedFeeOption}
+                        selectedDelegationOption={selectedDelegationOption}
+                        loadingGas={loadingGas}
+                        selectedFeeOption={selectedFeeOption}
+                        gasFeeOptions={gasFeeOptions}
+                        isThereEnoughGas={isThereEnoughGas}
+                        vthoBalance={vthoBalance}
+                    />
 
                     <BaseSpacer height={12} />
                     <BaseSpacer

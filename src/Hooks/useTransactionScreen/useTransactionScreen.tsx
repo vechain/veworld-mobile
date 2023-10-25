@@ -74,14 +74,14 @@ export const useTransactionScreen = ({
     } = useDelegation({ setGasPayer, providedUrl: options?.delegator?.url })
 
     const {
-        RenderGas,
         isThereEnoughGas,
         vthoGasFee,
         vthoBalance,
         gasPriceCoef,
+        setSelectedFeeOption,
+        selectedFeeOption,
+        gasFeeOptions,
     } = useRenderGas({
-        loadingGas,
-        selectedDelegationOption,
         gas,
         accountAddress:
             selectedDelegationAccount?.address ?? selectedAccount.address,
@@ -254,8 +254,8 @@ export const useTransactionScreen = ({
     return {
         Delegation,
         SubmitButton,
-        RenderGas,
         selectedDelegationOption,
+        loadingGas,
         vthoGasFee,
         vthoBalance,
         isThereEnoughGas,
@@ -265,5 +265,8 @@ export const useTransactionScreen = ({
         isPasswordPromptOpen,
         handleClosePasswordModal,
         onPasswordSuccess,
+        setSelectedFeeOption,
+        selectedFeeOption,
+        gasFeeOptions,
     }
 }
