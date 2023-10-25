@@ -1,19 +1,27 @@
-# Examples of how to invoke the build lane
+# IOS Build
 
-### Build for interanl consumption
+### Build for internal consumption
 
 On the terminal inside the ios directory:
 
-`fastlane build username:<your github username> token:<your personal access token>`
+```bash
+fastlane build username:<your github username> token:<your personal access token>
+```
 
 if you want to specifically set a build number you should write:
 
-`fastlane build username:<your github username> token:<your personal access token> build:<set the build number>`
+```bash
+fastlane build username:<your github username> token:<your personal access token> build:<set the build number>
+```
 
 ### Build for official release
 
-`fastlane build username:<your github username> token:<your personal access token> version:<possible values : "patch", "minor", "major" "1.0.0">`
+```bash
+fastlane build username:<your github username> token:<your personal access token> version:<possible values : "patch", "minor", "major" "1.0.0">
+```
 
 or
 
-`fastlane build username:<your github username> token:<your personal access token> version:<possible values : "patch", "minor", "major" "1.0.0"> build:<set the build number>`
+```bash
+fastlane build username:<your github username> token:<your personal access token> version:<possible values : "patch", "minor", "major" "1.0.0"> build:<set the build number>
+```
