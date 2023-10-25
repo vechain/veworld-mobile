@@ -1,20 +1,17 @@
 import React, { useCallback, useState } from "react"
 import { useI18nContext } from "~i18n"
 import {
-    BackButtonHeader,
     BaseButton,
-    BaseSafeArea,
     BaseSpacer,
     BaseText,
     BaseTextInput,
     BaseView,
-    DismissKeyboardView,
+    Layout,
     hideToast,
     showErrorToast,
 } from "~Components"
 import { URIUtils, warn } from "~Utils"
 import { useNavigation } from "@react-navigation/native"
-import { useBottomTabBarHeight } from "@react-navigation/bottom-tabs"
 import {
     selectCustomNetworks,
     useAppDispatch,
@@ -26,7 +23,6 @@ import * as Haptics from "expo-haptics"
 export const AddCustomNodeScreen = () => {
     const { LL } = useI18nContext()
     const nav = useNavigation()
-    const tabBarHeight = useBottomTabBarHeight()
     const customNodes = useAppSelector(selectCustomNetworks)
     const dispatch = useAppDispatch()
 
@@ -91,15 +87,9 @@ export const AddCustomNodeScreen = () => {
     )
 
     return (
-        <DismissKeyboardView>
-            <BaseSafeArea grow={1}>
-                <BackButtonHeader />
-                <BaseSpacer height={12} />
-                <BaseView
-                    mx={20}
-                    flexGrow={1}
-                    justifyContent="space-between"
-                    pb={tabBarHeight}>
+        <Layout
+            body={
+                <BaseView flexGrow={1} justifyContent="space-between">
                     <BaseView>
                         <BaseText typographyFont="title">
                             {LL.BTN_ADD_CUSTOM_NODE()}
@@ -131,18 +121,20 @@ export const AddCustomNodeScreen = () => {
                             errorMessage={nodeUrlError}
                         />
                     </BaseView>
-                    <BaseButton
-                        haptics="Light"
-                        action={onAddNetworkPress}
-                        w={100}
-                        px={20}
-                        isLoading={isSubmitting}
-                        title={LL.NETWORK_ADD_CUSTOM_NODE_ADD_NETWORK()}
-                        disabled={isSubmitting || isSubmitDisabled}
-                        radius={16}
-                    />
                 </BaseView>
-            </BaseSafeArea>
-        </DismissKeyboardView>
+            }
+            footer={
+                <BaseButton
+                    haptics="Light"
+                    action={onAddNetworkPress}
+                    w={100}
+                    px={20}
+                    isLoading={isSubmitting}
+                    title={LL.NETWORK_ADD_CUSTOM_NODE_ADD_NETWORK()}
+                    disabled={isSubmitting || isSubmitDisabled}
+                    radius={16}
+                />
+            }
+        />
     )
 }
