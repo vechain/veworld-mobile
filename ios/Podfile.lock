@@ -18,7 +18,7 @@ PODS:
     - ZXingObjC/PDF417
   - EXCamera (13.4.4):
     - ExpoModulesCore
-  - EXConstants (14.4.2):
+  - EXConstants (14.5.1):
     - ExpoModulesCore
   - EXFileSystem (15.4.4):
     - ExpoModulesCore
@@ -723,7 +723,6 @@ DEPENDENCIES:
   - glog (from `../node_modules/react-native/third-party-podspecs/glog.podspec`)
   - hermes-engine (from `../node_modules/react-native/sdks/hermes-engine/hermes-engine.podspec`)
   - libevent (~> 2.1.12)
-  - lottie-ios (from `../node_modules/lottie-ios`)
   - lottie-react-native (from `../node_modules/lottie-react-native`)
   - MixpanelReactNative (from `../node_modules/mixpanel-react-native`)
   - OpenSSL-Universal
@@ -809,6 +808,7 @@ SPEC REPOS:
     - fmt
     - libevent
     - libwebp
+    - lottie-ios
     - Mixpanel-swift
     - MMKV
     - MMKVCore
@@ -874,8 +874,6 @@ EXTERNAL SOURCES:
   hermes-engine:
     :podspec: "../node_modules/react-native/sdks/hermes-engine/hermes-engine.podspec"
     :tag: hermes-2023-08-07-RNv0.72.4-813b2def12bc9df02654b3e3653ae4a68d0572e0
-  lottie-ios:
-    :path: "../node_modules/lottie-ios"
   lottie-react-native:
     :path: "../node_modules/lottie-react-native"
   MixpanelReactNative:
@@ -1019,7 +1017,7 @@ SPEC CHECKSUMS:
   EXBackgroundFetch: a4a45a5924d9ac6dd480d5d745aabe91bb17bb36
   EXBarCodeScanner: 44783bf0be375ab18a838dcfef29dd648397000a
   EXCamera: 6e6e79bf01a2b8190268d93297d8e79a843d5ede
-  EXConstants: ce5bbea779da8031ac818c36bea41b10e14d04e1
+  EXConstants: 6cb14c7520a3538d37894fe8f0de9b8196d38455
   EXFileSystem: 2b826a3bf1071a4b80a8457e97124783d1ac860e
   EXFont: 738c44c390953ebcbab075a4848bfbef025fd9ee
   EXImageLoader: 34b214f9387e98f3c73989f15d8d5b399c9ab3f7

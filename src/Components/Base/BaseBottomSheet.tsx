@@ -15,6 +15,7 @@ import { BackdropPressBehavior } from "@gorhom/bottom-sheet/lib/typescript/compo
 import { FormattingUtils } from "~Utils"
 import { BaseText } from "~Components"
 import { LocalizedString } from "typesafe-i18n"
+import { useReducedMotion } from "react-native-reanimated"
 
 type Props = Omit<BottomSheetModalProps, "snapPoints"> & {
     children: React.ReactNode
@@ -61,6 +62,7 @@ export const BaseBottomSheet = React.forwardRef<BottomSheetModalMethods, Props>(
         ref,
     ) => {
         const { styles } = useThemedStyles(baseStyles)
+        const reducedMotion = useReducedMotion()
 
         const renderBackdrop = useCallback(
             (props_: BottomSheetBackdropProps) => {
@@ -115,6 +117,7 @@ export const BaseBottomSheet = React.forwardRef<BottomSheetModalMethods, Props>(
 
         return (
             <BottomSheetModal
+                animateOnMount={!reducedMotion}
                 stackBehavior="push"
                 ref={ref}
                 enablePanDownToClose={true}
