@@ -1,6 +1,6 @@
 import { useNavigation } from "@react-navigation/native"
 import { FlashList, ListRenderItem } from "@shopify/flash-list"
-import React, { useCallback, useRef, useState } from "react"
+import React, { useCallback, useMemo, useRef, useState } from "react"
 import { StyleSheet } from "react-native"
 import { useBottomSheetModal, useScrollableList, useTheme } from "~Hooks"
 import { FormattingUtils } from "~Utils"
@@ -116,11 +116,15 @@ export const ContactsScreen = () => {
         [closeEditContactSheet, dispatch, selectedContactAddress],
     )
 
+    const formattedAddress = useMemo(() => {
+        return FormattingUtils.humanAddress(selectedContactAddress ?? "", 4, 6)
+    }, [selectedContactAddress])
+
     // [End] Methods
 
     // [Start] Render sub components
 
-    const renderAddContactButton = useCallback(() => {
+    const renderAddContactButton = useMemo(() => {
         return (
             <BaseView
                 justifyContent="center"
@@ -204,7 +208,7 @@ export const ContactsScreen = () => {
             fixedBody={
                 <>
                     {/* Add contact button if contacts list is empty */}
-                    {!contacts.length && renderAddContactButton()}
+                    {!contacts.length && renderAddContactButton}
 
                     {/* Contacts List */}
                     {!!contacts.length && (
@@ -252,11 +256,7 @@ export const ContactsScreen = () => {
                                         <BaseText
                                             fontSize={10}
                                             typographyFont="smallCaptionRegular">
-                                            {FormattingUtils.humanAddress(
-                                                selectedContactAddress || "",
-                                                4,
-                                                6,
-                                            )}
+                                            {formattedAddress}
                                         </BaseText>
                                     </BaseView>
                                 </BaseTouchableBox>

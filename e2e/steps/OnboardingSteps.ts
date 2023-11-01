@@ -32,6 +32,17 @@ Given(
                 await detox.device.launchApp({
                     newInstance: true,
                     permissions: { faceid: "YES" },
+                    launchArgs: {
+                        DTXEnableVerboseSyncSystem: "YES",
+                        DTXEnableVerboseSyncResources: "YES",
+                        detoxPrintBusyIdleResources: "YES",
+                        detoxURLBlacklistRegex: [
+                            ".*vechain.*",
+                            ".*walletconnect.*",
+                            ".*coingecko.*",
+                        ],
+                        appUrl: "http://localhost:8081",
+                    },
                 })
                 break
             } catch (error) {
@@ -54,6 +65,17 @@ Given(
                 await detox.device.launchApp({
                     newInstance: true,
                     permissions: { faceid: "NO" },
+                    launchArgs: {
+                        DTXEnableVerboseSyncSystem: "YES",
+                        DTXEnableVerboseSyncResources: "YES",
+                        detoxPrintBusyIdleResources: "YES",
+                        detoxURLBlacklistRegex: [
+                            ".*vechain.*",
+                            ".*walletconnect.*",
+                            ".*coingecko.*",
+                        ],
+                        appUrl: "http://localhost:8081",
+                    },
                 })
                 break
             } catch (error) {
@@ -72,6 +94,17 @@ Given("The app is opened and is iOS", { timeout: -1 }, async () => {
         try {
             await detox.device.launchApp({
                 newInstance: true,
+                launchArgs: {
+                    DTXEnableVerboseSyncSystem: "YES",
+                    DTXEnableVerboseSyncResources: "YES",
+                    detoxPrintBusyIdleResources: "YES",
+                    detoxURLBlacklistRegex: [
+                        ".*vechain.*",
+                        ".*walletconnect.*",
+                        ".*coingecko.*",
+                    ],
+                    appUrl: "http://localhost:8081",
+                },
             })
             break
         } catch (error) {

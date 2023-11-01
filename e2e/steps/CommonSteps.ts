@@ -21,7 +21,20 @@ Given("The app is opened", { timeout: -1 }, async () => {
     let retries: number = 5
     while (retries-- > 0) {
         try {
-            await detox.device.launchApp({ newInstance: true })
+            await detox.device.launchApp({
+                newInstance: true,
+                launchArgs: {
+                    DTXEnableVerboseSyncSystem: "YES",
+                    DTXEnableVerboseSyncResources: "YES",
+                    detoxPrintBusyIdleResources: "YES",
+                    detoxURLBlacklistRegex: [
+                        ".*vechain.*",
+                        ".*walletconnect.*",
+                        ".*coingecko.*",
+                    ],
+                    appUrl: "http://localhost:8081",
+                },
+            })
             break
         } catch (error) {
             console.log("Error while launching app: " + error)
