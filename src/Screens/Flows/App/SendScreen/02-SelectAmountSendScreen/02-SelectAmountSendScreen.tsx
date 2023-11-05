@@ -113,7 +113,9 @@ export const SelectAmountSendScreen = ({ route }: Props) => {
     }, [input, maxTokenAmount, rawTokenBalanceinFiat, isInputInFiat])
 
     const handleToggleInputInFiat = () => {
-        setInput(isInputInFiat ? formattedTokenInput : formattedFiatInput)
+        handleChangeInput(
+            isInputInFiat ? formattedTokenInput : formattedFiatInput,
+        )
         setIsInputInFiat(s => !s)
     }
 
@@ -122,7 +124,7 @@ export const SelectAmountSendScreen = ({ route }: Props) => {
             .div(100)
             .multipliedBy(value)
             .toString()
-        setInput(
+        handleChangeInput(
             isInputInFiat
                 ? Number(
                       FormattingUtils.convertToFiatBalance(
@@ -131,7 +133,9 @@ export const SelectAmountSendScreen = ({ route }: Props) => {
                           0,
                       ),
                   ).toFixed(2)
-                : new BigNumber(newTokenInput).decimalPlaces(4).toString(),
+                : new BigNumber(newTokenInput)
+                      .decimalPlaces(4, BigNumber.ROUND_DOWN)
+                      .toString(),
         )
     }
 
