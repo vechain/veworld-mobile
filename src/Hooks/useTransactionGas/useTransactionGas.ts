@@ -1,7 +1,7 @@
 import { useCallback, useEffect, useState } from "react"
 import { Transaction } from "thor-devkit"
 
-import { debug, error, GasUtils } from "~Utils"
+import { error, GasUtils } from "~Utils"
 import { useThor } from "~Components"
 import { EstimateGasResult } from "~Model"
 import { selectSelectedAccount, useAppSelector } from "~Storage/Redux"
@@ -63,7 +63,6 @@ export const useTransactionGas = ({
     )
 
     useEffect(() => {
-        debug("Estimating Gas")
         estimateGas(account.address, gasPayer, thorClient)
     }, [account.address, gasPayer, clauses, estimateGas, thorClient])
 
