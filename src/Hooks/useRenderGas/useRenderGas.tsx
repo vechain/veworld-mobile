@@ -8,17 +8,23 @@ import {
 } from "~Storage/Redux"
 import { EstimateGasResult } from "~Model"
 import { BigNumber } from "bignumber.js"
+import { compareAddresses } from "~Utils/AddressUtils/AddressUtils"
+import {
+    getAmountFromClause,
+    isTokenTransferClause,
+} from "~Utils/TransactionUtils/TransactionUtils"
+import { Transaction } from "thor-devkit"
 
 export const useRenderGas = ({
     gas,
-    tokenSymbol,
-    amount,
     accountAddress,
+    clauses,
+    isDelegated,
 }: {
     gas: EstimateGasResult | undefined
-    tokenSymbol?: string
-    amount?: string
     accountAddress: string
+    clauses: Transaction.Body["clauses"]
+    isDelegated: boolean
 }) => {
     const vtho = useAppSelector(state =>
         selectVthoTokenWithBalanceByAccount(state, accountAddress),
@@ -63,12 +69,25 @@ export const useRenderGas = ({
     )
 
     const isThereEnoughGas = useMemo(() => {
-        let leftVtho = new BigNumber(vthoBalance)
-        if (tokenSymbol === VTHO.symbol && amount) {
-            leftVtho = leftVtho.minus(amount)
+        const vthoTransferClauses = clauses.filter(
+            clause =>
+                clause.to &&
+                compareAddresses(clause.to, VTHO.address) &&
+                isTokenTransferClause(clause),
+        )
+
+        let txCost = new BigNumber(isDelegated ? 0 : gas?.gas ?? 0)
+
+        for (const clause of vthoTransferClauses) {
+            const clauseAmount = getAmountFromClause(clause)
+
+            if (clauseAmount) txCost = txCost.plus(clauseAmount)
         }
-        return !!(vthoGasFee && leftVtho.gte(vthoGasFee))
-    }, [amount, vthoGasFee, tokenSymbol, vthoBalance])
+
+        const balance = new BigNumber(vthoBalance)
+
+        return balance.isGreaterThanOrEqualTo(txCost)
+    }, [isDelegated, clauses, gas?.gas, vthoBalance])
 
     return {
         isThereEnoughGas,

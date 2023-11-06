@@ -39,6 +39,7 @@ import { ContactType, DEVICE_TYPE } from "~Model"
 import { prepareFungibleClause } from "~Utils/TransactionUtils/TransactionUtils"
 import { Transaction } from "thor-devkit"
 import { ContactManagementBottomSheet } from "../../ContactsScreen"
+import { BigNumber } from "bignumber.js"
 
 type Props = NativeStackScreenProps<
     RootStackParamListHome & RootStackParamListDiscover,
@@ -63,6 +64,10 @@ export const TransactionSummarySendScreen = ({ route }: Props) => {
     const pendingTransaction = useAppSelector(state =>
         selectPendingTx(state, token.address),
     )
+
+    const friendlyAmount = useMemo(() => {
+        return new BigNumber(amount).toFixed(2, BigNumber.ROUND_HALF_UP)
+    }, [amount])
 
     const {
         onAddContactPress,
@@ -195,7 +200,7 @@ export const TransactionSummarySendScreen = ({ route }: Props) => {
                     <BaseSpacer height={6} />
                     <BaseView flexDirection="row">
                         <BaseText typographyFont="subSubTitle">
-                            {amount} {token.symbol}
+                            {friendlyAmount} {token.symbol}
                         </BaseText>
                         {exchangeRate && (
                             <BaseText typographyFont="buttonSecondary">

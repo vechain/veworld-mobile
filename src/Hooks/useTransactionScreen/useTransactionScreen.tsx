@@ -85,6 +85,8 @@ export const useTransactionScreen = ({
         gas,
         accountAddress:
             selectedDelegationAccount?.address ?? selectedAccount.address,
+        clauses,
+        isDelegated,
     })
 
     // 3. Build transaction
