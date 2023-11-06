@@ -81,13 +81,15 @@ export const useRenderGas = ({
         for (const clause of vthoTransferClauses) {
             const clauseAmount = getAmountFromClause(clause)
 
-            if (clauseAmount) txCost = txCost.plus(clauseAmount)
+            if (clauseAmount) {
+                txCost = txCost.plus(clauseAmount)
+            }
         }
 
-        const balance = new BigNumber(vthoBalance)
+        const balance = new BigNumber(vtho.balance.balance)
 
         return balance.isGreaterThanOrEqualTo(txCost)
-    }, [isDelegated, clauses, gas?.gas, vthoBalance])
+    }, [clauses, isDelegated, gas?.gas, vtho.balance.balance])
 
     return {
         isThereEnoughGas,
