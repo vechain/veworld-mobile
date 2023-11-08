@@ -15,6 +15,7 @@ module.exports = {
                 semi: "off",
                 curly: "off",
                 quotes: [2, "double", { avoidEscape: true }],
+                "max-len": ["error", { code: 110, comments: 180 }],
                 "i18next/no-literal-string": "error",
                 "no-console": "error",
                 "no-duplicate-imports": "error",

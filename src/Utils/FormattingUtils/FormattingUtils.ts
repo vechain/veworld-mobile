@@ -24,8 +24,7 @@ export const scaleNumberUp = (
 ): string => {
     try {
         if (scaleDecimal === 0) return new BigNumber(val).toFixed()
-        if (scaleDecimal < 0)
-            throw Error("Decimal value must be greater than or equal to 0")
+        if (scaleDecimal < 0) throw Error("Decimal value must be greater than or equal to 0")
         const valBn = new BigNumber(val)
         if (valBn.isNaN()) throw Error("The value provided is NaN.")
 
@@ -57,8 +56,7 @@ export const scaleNumberDown = (
 ): string => {
     try {
         if (scaleDecimal === 0) return new BigNumber(val).toFixed()
-        if (scaleDecimal < 0)
-            throw Error("Decimal value must be greater than or equal to 0")
+        if (scaleDecimal < 0) throw Error("Decimal value must be greater than or equal to 0")
 
         const valBn = new BigNumber(val)
         if (valBn.isNaN()) throw Error("The value provided is NaN.")
@@ -83,18 +81,13 @@ export const scaleNumberDown = (
  * @returns the formatted time
  */
 export const convertToFiatBalance = (
-    balance: string,
+    balance: string | BigNumber,
     rate: number,
     decimals: number,
     roundDecimals: number = 2,
 ) => {
     const fiatBalance = new BigNumber(balance).multipliedBy(rate)
-    return scaleNumberDown(
-        fiatBalance,
-        decimals,
-        roundDecimals,
-        BigNumber.ROUND_DOWN,
-    )
+    return scaleNumberDown(fiatBalance, decimals, roundDecimals, BigNumber.ROUND_DOWN)
 }
 
 export type DateType = "short" | "full" | "long" | "medium" | undefined
@@ -194,8 +187,7 @@ export const humanNumber = (
 
     let value = new Intl.NumberFormat("en", {
         style: "decimal",
-        minimumFractionDigits:
-            Number.parseFloat(formattedValue.toString()) % 1 === 0 ? 0 : 2,
+        minimumFractionDigits: Number.parseFloat(formattedValue.toString()) % 1 === 0 ? 0 : 2,
     }).format(Number.parseFloat(formattedValue.toString()))
 
     //If the original number got scaled down to 0
@@ -218,11 +210,7 @@ export const isZero = (value?: BigNumber.Value) => {
  * @param lengthAfter - (optional, default 4) the characters to show after the dots
  * @returns the formatted address
  */
-export const humanAddress = (
-    address: string,
-    lengthBefore = 4,
-    lengthAfter = 10,
-) => {
+export const humanAddress = (address: string, lengthBefore = 4, lengthAfter = 10) => {
     const before = address.substring(0, lengthBefore)
     const after = address.substring(address.length - lengthAfter)
     return `${before}…${after}`
@@ -234,12 +222,7 @@ export const humanUrl = (url: string, lengthBefore = 8, lengthAfter = 6) => {
     return `${before}…${after}`
 }
 
-export const formatAlias = (
-    alias: string,
-    maxLength = 18,
-    lengthBefore = 6,
-    lengthAfter = 6,
-) => {
+export const formatAlias = (alias: string, maxLength = 18, lengthBefore = 6, lengthAfter = 6) => {
     if (alias.length <= maxLength) return alias
     const before = alias.substring(0, lengthBefore)
     const after = alias.substring(alias.length - lengthAfter)

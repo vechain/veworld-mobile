@@ -5,3 +5,4 @@ singleQuote: false
 trailingComma: "all"
 semi: false
 tabWidth: 4
+printWidth: 110
