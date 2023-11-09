@@ -1,7 +1,13 @@
 import { BottomSheetModalMethods } from "@gorhom/bottom-sheet/lib/typescript/types"
 import React, { useMemo } from "react"
 import { LEDGER_ERROR_CODES } from "~Constants"
-import { BaseBottomSheet, BaseSpacer, BaseText, BaseView } from "~Components"
+import {
+    BaseBottomSheet,
+    BaseButton,
+    BaseSpacer,
+    BaseText,
+    BaseView,
+} from "~Components"
 import { useI18nContext } from "~i18n"
 import Lottie from "lottie-react-native"
 import {
@@ -20,6 +26,7 @@ import { useTheme } from "~Hooks"
 type Props = {
     error?: LEDGER_ERROR_CODES
     onDismiss?: () => void
+    onRetry?: () => void
 }
 
 const snapPoints = ["50%"]
@@ -28,13 +35,14 @@ type DataToDisplay = {
     title: string
     desc: string
     image: React.ReactNode
+    retry?: boolean
 }
 
 // component to select an account
 export const ConnectionErrorBottomSheet = React.forwardRef<
     BottomSheetModalMethods,
     Props
->(({ error, onDismiss }, ref) => {
+>(({ error, onDismiss, onRetry }, ref) => {
     const { LL } = useI18nContext()
     const theme = useTheme()
 
@@ -52,6 +60,7 @@ export const ConnectionErrorBottomSheet = React.forwardRef<
                             style={styles.lottie}
                         />
                     ),
+                    retry: true,
                 }
             case LEDGER_ERROR_CODES.NO_VET_APP:
                 return {
@@ -88,6 +97,7 @@ export const ConnectionErrorBottomSheet = React.forwardRef<
                             style={styles.lottie}
                         />
                     ),
+                    retry: true,
                 }
             case LEDGER_ERROR_CODES.CONTRACT_DISABLED:
                 return {
@@ -100,6 +110,7 @@ export const ConnectionErrorBottomSheet = React.forwardRef<
                             style={styles.lottie}
                         />
                     ),
+                    retry: true,
                 }
             case LEDGER_ERROR_CODES.CLAUSES_DISABLED:
                 return {
@@ -112,6 +123,7 @@ export const ConnectionErrorBottomSheet = React.forwardRef<
                             style={styles.lottie}
                         />
                     ),
+                    retry: true,
                 }
             case LEDGER_ERROR_CODES.UNKNOWN:
                 return {
@@ -124,6 +136,7 @@ export const ConnectionErrorBottomSheet = React.forwardRef<
                             style={styles.lottie}
                         />
                     ),
+                    retry: true,
                 }
             default:
                 return {
@@ -164,6 +177,12 @@ export const ConnectionErrorBottomSheet = React.forwardRef<
                 <BaseText typographyFont="body">{data.desc}</BaseText>
                 <BaseSpacer height={72} />
                 {data.image}
+                {data.retry && onRetry && (
+                    <>
+                        <BaseSpacer height={8} />
+                        <BaseButton title={LL.BTN_RETRY()} action={onRetry} />
+                    </>
+                )}
             </BaseView>
         </BaseBottomSheet>
     )

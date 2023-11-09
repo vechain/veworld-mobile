@@ -44,6 +44,7 @@ import { AnalyticsEvent, LEDGER_ERROR_CODES } from "~Constants"
 import { Buffer } from "buffer"
 import { Transaction } from "thor-devkit"
 import { ActivityType } from "~Model"
+import { LedgerConfig } from "~Utils/LedgerUtils/LedgerUtils"
 import { getSessionRequestAttributes } from "~Utils/WalletConnectUtils/WalletConnectUtils"
 
 type Props = NativeStackScreenProps<
@@ -87,10 +88,16 @@ export const LedgerSignTransaction: React.FC<Props> = ({ route }) => {
         onClose: closeConnectionErrorSheet,
     } = useBottomSheetModal()
 
-    const { appOpen, appConfig, errorCode, withTransport, removeLedger } =
-        useLedger({
-            deviceId: accountWithDevice.device.deviceId,
-        })
+    const {
+        appOpen,
+        appConfig,
+        errorCode,
+        withTransport,
+        removeLedger,
+        tryLedgerVerification,
+    } = useLedger({
+        deviceId: accountWithDevice.device.deviceId,
+    })
 
     useEffect(() => {
         if (errorCode) {
@@ -240,7 +247,12 @@ export const LedgerSignTransaction: React.FC<Props> = ({ route }) => {
      * Sign the transaction when the device is connected and the clauses are enabled
      */
     useEffect(() => {
-        if (!userRejected && !signature && appOpen) {
+        if (
+            !userRejected &&
+            !signature &&
+            appOpen &&
+            appConfig === LedgerConfig.CLAUSE_AND_CONTRACT_ENABLED
+        ) {
             setSigningError(false)
             signTransaction()
         } else {
@@ -421,6 +433,7 @@ export const LedgerSignTransaction: React.FC<Props> = ({ route }) => {
                 ref={connectionErrorSheetRef}
                 onDismiss={closeConnectionErrorSheet}
                 error={ledgerErrorCode}
+                onRetry={tryLedgerVerification}
             />
         </BaseSafeArea>
     )

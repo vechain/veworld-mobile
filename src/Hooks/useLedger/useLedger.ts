@@ -114,6 +114,9 @@ export const useLedger = ({
                 break
             case LedgerConfig.CONTRACT_ONLY_ENABLED:
                 setErrorCode(LEDGER_ERROR_CODES.CLAUSES_DISABLED)
+                break
+            default:
+                setErrorCode(undefined)
         }
     }, [])
 
@@ -129,8 +132,11 @@ export const useLedger = ({
             if (res.success) {
                 setAppOpen(true)
                 setRootAccount(res.payload.rootAccount)
-                setConfig(res.payload.appConfig)
-                setErrorCode(undefined)
+                setConfig(
+                    res.payload.appConfig
+                        .toString()
+                        .slice(0, 2) as LedgerConfig,
+                )
             } else {
                 await setErrorCode(res.err as LEDGER_ERROR_CODES)
             }
@@ -207,7 +213,7 @@ export const useLedger = ({
         appConfig,
         rootAccount,
         isConnecting,
-        errorCode: isConnecting ? undefined : errorCode,
+        errorCode,
         removeLedger,
         withTransport: externalWithTransport,
         tryLedgerConnection: attemptBleConnection,
