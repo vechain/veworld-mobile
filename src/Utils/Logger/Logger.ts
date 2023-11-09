@@ -13,10 +13,23 @@ const LOG_LEVELS = {
     error: 4,
 }
 const logLevel = process.env.REACT_APP_LOG_LEVEL || "warn"
+import * as Sentry from "@sentry/react-native"
 
 const checkLogLevelHOC = (
     logID: keyof typeof LOG_LEVELS,
 ): ((...args: unknown[]) => void) => {
+    if (LOG_LEVELS[logID] === LOG_LEVELS.error) {
+        return (...args: unknown[]) => {
+            // eslint-disable-next-line no-console
+            console.error(...args)
+            try {
+                const stringifiedArgs = JSON.stringify(args)
+                Sentry.captureException(stringifiedArgs)
+            } catch {
+                Sentry.captureException(args)
+            }
+        }
+    }
     if (LOG_LEVELS[logID] >= LOG_LEVELS[logLevel as keyof typeof LOG_LEVELS]) {
         // eslint-disable-next-line no-console
         return console[logID]

@@ -44,7 +44,9 @@ jest.mock("react-native-blob-util", () => ({
     },
 }))
 
-jest.mock("@sentry/react-native", () => {})
+jest.mock("@sentry/react-native", () => ({
+    captureException: jest.fn(),
+}))
 
 jest.mock("react-native-bootsplash", () => {})
 
