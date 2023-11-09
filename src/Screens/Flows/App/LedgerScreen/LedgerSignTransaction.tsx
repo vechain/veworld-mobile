@@ -44,7 +44,6 @@ import { AnalyticsEvent, LEDGER_ERROR_CODES } from "~Constants"
 import { Buffer } from "buffer"
 import { Transaction } from "thor-devkit"
 import { ActivityType } from "~Model"
-import { LedgerConfig } from "~Utils/LedgerUtils/LedgerUtils"
 import { getSessionRequestAttributes } from "~Utils/WalletConnectUtils/WalletConnectUtils"
 
 type Props = NativeStackScreenProps<
@@ -241,12 +240,7 @@ export const LedgerSignTransaction: React.FC<Props> = ({ route }) => {
      * Sign the transaction when the device is connected and the clauses are enabled
      */
     useEffect(() => {
-        if (
-            !userRejected &&
-            !signature &&
-            appOpen &&
-            appConfig === LedgerConfig.CLAUSE_AND_CONTRACT_ENABLED
-        ) {
+        if (!userRejected && !signature && appOpen) {
             setSigningError(false)
             signTransaction()
         } else {
