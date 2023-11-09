@@ -16,11 +16,11 @@ import BleTransport from "@ledgerhq/react-native-hw-transport-ble"
  * Codes to detect if the leder has the clause and contract enabled
  */
 export enum LedgerConfig {
-    UNKNOWN = "00000000",
-    CLAUSE_AND_CONTRACT_ENABLED = "03010007",
-    CLAUSE_ONLY_ENABLED = "02010007",
-    CONTRACT_ONLY_ENABLED = "01010007",
-    CLAUSE_AND_CONTRACT_DISABLED = "00010007",
+    UNKNOWN = "0",
+    CLAUSE_AND_CONTRACT_DISABLED = "00",
+    CONTRACT_ONLY_ENABLED = "01",
+    CLAUSE_ONLY_ENABLED = "02",
+    CLAUSE_AND_CONTRACT_ENABLED = "03",
 }
 
 /**
