@@ -121,13 +121,10 @@ platform :ios do
 
   desc "Commit latest artifacts to GitHub"
   lane :gh_setup_after do |values|
-    branch_name = "release-build"
-    build_or_version_number = values[:build_or_version_number]
-
     sh("git add --all")
     sh("git commit -a -m 'build: complete'")
     # Push the branch to GitHub
-    sh("git push -u origin #{branch_name}-#{build_or_version_number}")
+    sh("git push")
   end
 
 
@@ -152,9 +149,9 @@ platform :ios do
       sh("node node_modules/react-native/scripts/compose-source-maps.js main.jsbundle.packager.map main.jsbundle.hbc.map -o main.jsbundle.map")
 
       # upload source maps to sentry with cli - handled by xcode build phase?
-=begin
+
       sh("node_modules/@sentry/cli/bin/sentry-cli releases files #{ENV["APP_IDENTIFIER"]}@#{version}+#{build} upload-sourcemaps --dist #{build} --strip-prefix ../../ main.jsbundle main.jsbundle.map --org 'vechain-foundation' --project 'veworld-mobile' --log-level=info")
-=end
+
     end
   end
 
@@ -208,7 +205,7 @@ platform :ios do
     # begin -> rescure == try -> catch
     begin
       
-=begin
+
       # create new branch and push to github
       gh_setup_before(
         github_username:github_username, 
@@ -216,7 +213,6 @@ platform :ios do
         build_number: build,
         version_number: version,
       )
-=end
 
       fetch_certificates_from_gh
 
@@ -237,7 +233,6 @@ platform :ios do
         ipa: "./build/VeWorld.ipa",
       )
 
-=begin
       create_changelog(version:version)
 
       add_git_tag(
@@ -245,12 +240,11 @@ platform :ios do
       )
 
       push_git_tags
-=end
 
       upload_source_maps_to_sentry(build:build, version:version)
 
+      gh_setup_after
 
-=begin
       # create pull request
       create_pull_request(
         api_token: github_token,
@@ -273,13 +267,11 @@ platform :ios do
 
       # clean build artifacts if any
       clean_build_artifacts
-=end
+
 
     rescue => exception # catch
       puts exception
 
-
-=begin
       # send slack message
       slack(
         message: versionType.nil? ? "Error releasing VeWorld build number: #{build} [iOS]" : "Error releasing VeWorld version number: #{version} [iOS]",
@@ -298,13 +290,16 @@ platform :ios do
       sh("git checkout main")
 
       # delete branch locally
-      sh("git branch -D release-build-#{versionType.nil? ? build : version}")
-
+      sh("git branch -D release-build-#{build}-#{version}")
+      
       # delete branch remotely
-      sh("git push origin --delete release-build-ios-#{versionType.nil? ? build : version}")
-=end
+      sh("git push origin --delete release-build-#{build}-#{version}")
 
+      # delete tag locally
+      sh("git tag -d v#{version}-#{build}") 
 
+      # delete tag remotely
+      sh("git push --delete origin v#{version}-#{build}") 
     end
   end
 end
