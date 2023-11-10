@@ -112,6 +112,21 @@ export const useTransactionScreen = ({
     // 5. Send transaction
     const { sendTransaction } = useSendTransaction(onTransactionSuccess)
 
+    const sendTransactionSafe = useCallback(
+        async (signedTx: Transaction) => {
+            try {
+                await sendTransaction(signedTx)
+            } catch (e) {
+                showErrorToast({
+                    text1: LL.ERROR(),
+                    text2: LL.SEND_TRANSACTION_ERROR(),
+                })
+                onTransactionFailure(e)
+            }
+        },
+        [sendTransaction, onTransactionFailure, LL],
+    )
+
     /**
      * Signs the transaction and sends it to the blockchain
      */
@@ -131,13 +146,13 @@ export const useTransactionScreen = ({
                         })
                         return
                     default:
-                        await sendTransaction(transaction)
+                        await sendTransactionSafe(transaction)
                 }
             } catch (e) {
                 error("signAndSendTransaction", e)
                 showErrorToast({
                     text1: LL.ERROR(),
-                    text2: LL.SEND_TRANSACTION_ERROR(),
+                    text2: LL.SIGN_TRANSACTION_ERROR(),
                 })
                 onTransactionFailure(e)
             } finally {
@@ -145,7 +160,13 @@ export const useTransactionScreen = ({
                 dispatch(setIsAppLoading(false))
             }
         },
-        [onTransactionFailure, dispatch, signTransaction, sendTransaction, LL],
+        [
+            sendTransactionSafe,
+            onTransactionFailure,
+            dispatch,
+            signTransaction,
+            LL,
+        ],
     )
 
     const {

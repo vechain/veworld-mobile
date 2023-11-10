@@ -1,5 +1,34 @@
 
 
+## [1.3.1](https://github.com/vechainfoundation/veworld-mobile/compare/1.3.0...1.3.1) (2023-11-10)
+
+## [1.3.0](https://github.com/vechainfoundation/veworld-mobile/compare/v1.0-test...v1.3.0) (2023-11-09)
+
+
+### Features
+
+* add priority preference on send transaction ([#1554](https://github.com/vechainfoundation/veworld-mobile/issues/1554)) ([3e934c7](https://github.com/vechainfoundation/veworld-mobile/commit/3e934c7c0b3d3f8e6024b457c7e2a9132de1ecf6))
+
+
+### Bug Fixes
+
+* 100% not working in some cases, bad rounding mode ([31e49c1](https://github.com/vechainfoundation/veworld-mobile/commit/31e49c156755c2d9fc84ea78284b497982009b11))
+* add custom node screen layout ([#1574](https://github.com/vechainfoundation/veworld-mobile/issues/1574)) ([aa64ccc](https://github.com/vechainfoundation/veworld-mobile/commit/aa64ccc976bdcdaf533464624008e35aa4e6551f))
+* android splash screen error ([#1565](https://github.com/vechainfoundation/veworld-mobile/issues/1565)) ([e19cda8](https://github.com/vechainfoundation/veworld-mobile/commit/e19cda88b7d0d09929c8537db1fc04b51ad20c8b))
+* **Android:** keyboard instability for input fields in bottomsheets ([#1555](https://github.com/vechainfoundation/veworld-mobile/issues/1555)) ([e350e54](https://github.com/vechainfoundation/veworld-mobile/commit/e350e546361bdc435efbc9d6f37791da62e483c0))
+* arweave image and metadata fetching ([#1567](https://github.com/vechainfoundation/veworld-mobile/issues/1567)) ([1d2c5ff](https://github.com/vechainfoundation/veworld-mobile/commit/1d2c5ff616748d2887a14a1ebc71ac0cc792f39f))
+* e2e tests ([#1551](https://github.com/vechainfoundation/veworld-mobile/issues/1551)) ([2175957](https://github.com/vechainfoundation/veworld-mobile/commit/2175957f0995b38794ea071f9b699cfea2663ce6))
+* kotlin version due to class conflict ([#1556](https://github.com/vechainfoundation/veworld-mobile/issues/1556)) ([66302e3](https://github.com/vechainfoundation/veworld-mobile/commit/66302e30e8bdbfa3b6078cda8a40119103808da4))
+* long ledger wallet alias and improve account card ([#1546](https://github.com/vechainfoundation/veworld-mobile/issues/1546)) ([ec5dbc1](https://github.com/vechainfoundation/veworld-mobile/commit/ec5dbc1af5bc624ecfa59b377f57d545b16da585))
+* readme ([#1571](https://github.com/vechainfoundation/veworld-mobile/issues/1571)) ([379546b](https://github.com/vechainfoundation/veworld-mobile/commit/379546b23c06afb8df94ff9774f7f4fa429db2e3))
+* remove regex from network utils ([#1544](https://github.com/vechainfoundation/veworld-mobile/issues/1544)) ([ba65424](https://github.com/vechainfoundation/veworld-mobile/commit/ba6542413a06b09f2a7fa46f227a448569d14e39))
+* remove useless test.setup ([#1563](https://github.com/vechainfoundation/veworld-mobile/issues/1563)) ([2780897](https://github.com/vechainfoundation/veworld-mobile/commit/2780897a6ef7dd1e1dd142ab8cf10f79ae8fb0d7))
+* scale fiat down ([78058b5](https://github.com/vechainfoundation/veworld-mobile/commit/78058b5dac278339c65c903835b89ad5b97434a4))
+* slack message condition in e2e workflow ([#1552](https://github.com/vechainfoundation/veworld-mobile/issues/1552)) ([09dc328](https://github.com/vechainfoundation/veworld-mobile/commit/09dc3284c27f9a4b17ac705e61aa61320ff8057e))
+* too much vtho not showing ([a3b83f7](https://github.com/vechainfoundation/veworld-mobile/commit/a3b83f748fa85ebf49ab47df5eeeaabe59868d9a))
+* **wc:** session proposal triggering twice ([#1564](https://github.com/vechainfoundation/veworld-mobile/issues/1564)) ([2dfc980](https://github.com/vechainfoundation/veworld-mobile/commit/2dfc980e3e46444abd7da00eda21805668c7daf3))
+* wrong gas value was used for gas amount avalablity ([a97d012](https://github.com/vechainfoundation/veworld-mobile/commit/a97d012a466322b937700c0f3741b12dadcec11b))
+
 ## [1.2.0](https://github.com/vechainfoundation/veworld-mobile/compare/v1.0-test...v1.2.0) (2023-10-17)
 
 

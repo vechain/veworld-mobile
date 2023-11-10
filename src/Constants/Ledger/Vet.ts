@@ -47,7 +47,7 @@ export class VETLedgerApp {
             [StatusCodes.OK],
         )
 
-        return response.subarray(0, 4)
+        return response.subarray(0, 1)
     }
 
     /**

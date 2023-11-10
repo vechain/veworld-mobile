@@ -2335,6 +2335,10 @@ type RootTranslation = {
 	/**
 	 * E​r​r​o​r​ ​s​i​g​n​i​n​g​ ​t​r​a​n​s​a​c​t​i​o​n
 	 */
+	SIGN_TRANSACTION_ERROR: string
+	/**
+	 * T​h​e​r​e​ ​w​a​s​ ​a​n​ ​e​r​r​o​r​ ​s​e​n​d​i​n​g​ ​t​h​e​ ​t​r​a​n​s​a​c​t​i​o​n​.​ ​T​h​i​s​ ​m​a​y​ ​b​e​ ​d​u​e​ ​t​o​ ​a​ ​l​a​c​k​ ​o​f​ ​f​u​n​d​s
+	 */
 	SEND_TRANSACTION_ERROR: string
 	/**
 	 * C​o​n​n​e​c​t​i​n​g
@@ -4975,6 +4979,10 @@ Try reconnect your device to the internet.
 	SEND_ERROR_TOKEN_NOT_FOUND: (arg: { tokenName: string }) => LocalizedString
 	/**
 	 * Error signing transaction
+	 */
+	SIGN_TRANSACTION_ERROR: () => LocalizedString
+	/**
+	 * There was an error sending the transaction. This may be due to a lack of funds
 	 */
 	SEND_TRANSACTION_ERROR: () => LocalizedString
 	/**
