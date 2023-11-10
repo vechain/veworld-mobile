@@ -29,6 +29,7 @@ import {
 } from "~Model"
 import { Transaction } from "thor-devkit"
 import { useNavAnimation } from "~Hooks"
+import { BigNumber } from "bignumber.js"
 
 export type RootStackParamListHome = {
     [Routes.HOME]: undefined
@@ -39,14 +40,14 @@ export type RootStackParamListHome = {
     }
     [Routes.INSERT_ADDRESS_SEND]: {
         token?: FungibleTokenWithBalance
-        amount?: string
+        amount?: BigNumber
         initialRoute?: Routes
         contractAddress?: string
         tokenId?: string
     }
     [Routes.TRANSACTION_SUMMARY_SEND]: {
         token: FungibleTokenWithBalance
-        amount: string
+        amount: BigNumber
         address: string
         initialRoute: Routes
     }
@@ -73,22 +74,15 @@ export type RootStackParamListHome = {
     [Routes.SETTINGS_CONNECTED_APPS]: undefined
 }
 
-const { Navigator, Group, Screen } =
-    createNativeStackNavigator<RootStackParamListHome>()
+const { Navigator, Group, Screen } = createNativeStackNavigator<RootStackParamListHome>()
 
 export const HomeStack = () => {
     const { animation } = useNavAnimation()
 
     return (
-        <Navigator
-            id="HomeStack"
-            screenOptions={{ headerShown: false, animation }}>
+        <Navigator id="HomeStack" screenOptions={{ headerShown: false, animation }}>
             <Group>
-                <Screen
-                    name={Routes.HOME}
-                    component={HomeScreen}
-                    options={{ headerShown: false }}
-                />
+                <Screen name={Routes.HOME} component={HomeScreen} options={{ headerShown: false }} />
                 <Screen
                     name={Routes.SELECT_TOKEN_SEND}
                     component={SelectTokenSendScreen}
@@ -114,21 +108,13 @@ export const HomeStack = () => {
                     component={LedgerSignTransaction}
                     options={{ headerShown: false }}
                 />
-                <Screen
-                    name={Routes.SWAP}
-                    component={SwapScreen}
-                    options={{ headerShown: false }}
-                />
+                <Screen name={Routes.SWAP} component={SwapScreen} options={{ headerShown: false }} />
                 <Screen
                     name={Routes.SETTINGS_CONNECTED_APPS}
                     component={ConnectedAppsScreen}
                     options={{ headerShown: false }}
                 />
-                <Screen
-                    name={Routes.HISTORY}
-                    component={HistoryScreen}
-                    options={{ headerShown: false }}
-                />
+                <Screen name={Routes.HISTORY} component={HistoryScreen} options={{ headerShown: false }} />
                 <Screen
                     name={Routes.ACTIVITY_DETAILS}
                     component={ActivityDetailsScreen}

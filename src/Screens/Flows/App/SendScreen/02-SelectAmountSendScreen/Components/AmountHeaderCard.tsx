@@ -4,13 +4,14 @@ import { BaseIcon, BaseSpacer, BaseText, BaseView } from "~Components"
 import { useTheme } from "~Hooks"
 import { FungibleTokenWithBalance } from "~Model"
 import { useI18nContext } from "~i18n"
+import { BigNumber } from "bignumber.js"
 
 export const AmountHeaderCard = ({
-    humanBalance,
+    totalBalance,
     token,
     isError,
 }: {
-    humanBalance: string
+    totalBalance: BigNumber
     token: FungibleTokenWithBalance
     isError: boolean
 }) => {
@@ -22,7 +23,7 @@ export const AmountHeaderCard = ({
             <BaseText typographyFont="button">{LL.SEND_CURRENT_BALANCE()}</BaseText>
             <BaseSpacer height={8} />
             <BaseView flexDirection="row" alignItems="baseline" w={100} style={styles.budget}>
-                <BaseText typographyFont="subTitleBold">{humanBalance}</BaseText>
+                <BaseText typographyFont="subTitleBold">{totalBalance.toString()}</BaseText>
                 <BaseSpacer width={5} />
                 <BaseText typographyFont="buttonSecondary">{token.symbol}</BaseText>
 

@@ -10,6 +10,7 @@ import {
 import { Routes } from "~Navigation/Enums"
 import { FungibleTokenWithBalance } from "~Model"
 import { useNavAnimation } from "~Hooks"
+import { BigNumber } from "bignumber.js"
 
 export type RootStackParamListNFT = {
     [Routes.NFTS]: undefined
@@ -22,7 +23,7 @@ export type RootStackParamListNFT = {
 
     [Routes.INSERT_ADDRESS_SEND]: {
         token?: FungibleTokenWithBalance
-        amount?: string
+        amount?: BigNumber
         initialRoute?: Routes
         contractAddress?: string
         tokenId?: string
@@ -35,22 +36,15 @@ export type RootStackParamListNFT = {
     }
 }
 
-const { Navigator, Group, Screen } =
-    createNativeStackNavigator<RootStackParamListNFT>()
+const { Navigator, Group, Screen } = createNativeStackNavigator<RootStackParamListNFT>()
 
 export const NFTStack = () => {
     const { animation } = useNavAnimation()
 
     return (
-        <Navigator
-            id="HomeStack"
-            screenOptions={{ headerShown: false, animation }}>
+        <Navigator id="HomeStack" screenOptions={{ headerShown: false, animation }}>
             <Group>
-                <Screen
-                    name={Routes.NFTS}
-                    component={NFTScreen}
-                    options={{ headerShown: false }}
-                />
+                <Screen name={Routes.NFTS} component={NFTScreen} options={{ headerShown: false }} />
 
                 <Screen
                     name={Routes.NFT_DETAILS}

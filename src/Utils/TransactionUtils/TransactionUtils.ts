@@ -21,45 +21,31 @@ import { FormattingUtils } from "~Utils"
 
 export const TRANSFER_SIG = new abi.Function(abis.VIP180.transfer).signature
 
-export const SWAP_EXACT_VET_FOR_TOKENS_SIG = new abi.Function(
-    abis.RouterV2.swapExactVETForTokens,
-).signature
+export const SWAP_EXACT_VET_FOR_TOKENS_SIG = new abi.Function(abis.RouterV2.swapExactVETForTokens).signature
 
-export const SWAP_VET_FOR_EXACT_TOKENS_SIG = new abi.Function(
-    abis.RouterV2.swapVETForExactTokens,
-).signature
+export const SWAP_VET_FOR_EXACT_TOKENS_SIG = new abi.Function(abis.RouterV2.swapVETForExactTokens).signature
 
-export const SWAP_EXACT_TOKENS_FOR_TOKENS_SIG = new abi.Function(
-    abis.RouterV2.swapExactTokensForTokens,
-).signature
-
-export const SWAP_TOKENS_FOR_EXACT_VET_SIG = new abi.Function(
-    abis.RouterV2.swapTokensForExactVET,
-).signature
-
-export const SWAP_EXACT_TOKENS_FOR_VET_SIG = new abi.Function(
-    abis.RouterV2.swapExactTokensForVET,
-).signature
-
-export const SWAP_EXACT_ETH_FOR_TOKENS_SIG = new abi.Function(
-    abis.UniswapRouterV2.swapExactETHForTokens,
-).signature
-
-export const SWAP_EXACT_TOKENS_FOR_ETH_SIG = new abi.Function(
-    abis.UniswapRouterV2.swapExactTokensForETH,
-).signature
-
-export const NFT_TRANSFER_SIG = new abi.Function(abis.VIP181.transferFrom)
+export const SWAP_EXACT_TOKENS_FOR_TOKENS_SIG = new abi.Function(abis.RouterV2.swapExactTokensForTokens)
     .signature
 
-export const SWAP_EVENT_SIG = new abi.Event(abis.UniswapPairV2.SwapEvent)
+export const SWAP_TOKENS_FOR_EXACT_VET_SIG = new abi.Function(abis.RouterV2.swapTokensForExactVET).signature
+
+export const SWAP_EXACT_TOKENS_FOR_VET_SIG = new abi.Function(abis.RouterV2.swapExactTokensForVET).signature
+
+export const SWAP_EXACT_ETH_FOR_TOKENS_SIG = new abi.Function(abis.UniswapRouterV2.swapExactETHForTokens)
     .signature
+
+export const SWAP_EXACT_TOKENS_FOR_ETH_SIG = new abi.Function(abis.UniswapRouterV2.swapExactTokensForETH)
+    .signature
+
+export const NFT_TRANSFER_SIG = new abi.Function(abis.VIP181.transferFrom).signature
+
+export const SWAP_EVENT_SIG = new abi.Event(abis.UniswapPairV2.SwapEvent).signature
 
 /*
  * Note: Fungible Token & NFT Transfer events have the same signature
  */
-export const TRANSFER_EVENT_SIG = new abi.Event(abis.VIP180.TransferEvent)
-    .signature
+export const TRANSFER_EVENT_SIG = new abi.Event(abis.VIP180.TransferEvent).signature
 
 /**
  * Checks if a clause represents a VET transfer.
@@ -102,9 +88,7 @@ export const isNFTTransferClause = (clause: Connex.VM.Clause): boolean => {
  * @param clause - The clause to check.
  * @returns the contract address of the clause.
  */
-export const getContractAddressFromClause = (
-    clause: Connex.VM.Clause,
-): string | undefined => {
+export const getContractAddressFromClause = (clause: Connex.VM.Clause): string | undefined => {
     if (isVETtransferClause(clause)) return VET.address
     if (isTokenTransferClause(clause) || isNFTTransferClause(clause)) {
         const contractAddress = clause.to?.toLowerCase()
@@ -114,11 +98,8 @@ export const getContractAddressFromClause = (
     return undefined
 }
 
-export const getAmountFromClause = (
-    clause: Connex.VM.Clause,
-): string | undefined => {
-    if (isVETtransferClause(clause))
-        return new BigNumber(clause.value).toString()
+export const getAmountFromClause = (clause: Connex.VM.Clause): string | undefined => {
+    if (isVETtransferClause(clause)) return new BigNumber(clause.value).toString()
     if (isTokenTransferClause(clause)) {
         const decoded = decodeTokenTransferClause(clause)
         return decoded?.amount
@@ -153,10 +134,7 @@ export const encodeTransferFungibleTokenClause = (
             data: "0x",
         }
 
-    const clauseData = new abi.Function(abis.VIP180.transfer).encode(
-        to,
-        hexValue,
-    )
+    const clauseData = new abi.Function(abis.VIP180.transfer).encode(to, hexValue)
 
     return {
         to: tokenAddress,
@@ -188,11 +166,7 @@ export const encodeTransferNonFungibleTokenClause = (
 ) => {
     const hexTokenId = "0x" + new BigNumber(tokenId).toString(16)
 
-    const clauseData = new abi.Function(abis.VIP181.transferFrom).encode(
-        from,
-        to,
-        hexTokenId,
-    )
+    const clauseData = new abi.Function(abis.VIP181.transferFrom).encode(from, to, hexTokenId)
 
     return {
         to: contractAddress,
@@ -282,10 +256,7 @@ export const decodeAMMClause = (
 ): ClauseWithMetadata | null => {
     if (clause.data?.startsWith(methodSignature)) {
         try {
-            const decoded = abi.decodeParameters(
-                paramters,
-                "0x" + clause.data.slice(methodSignature.length),
-            )
+            const decoded = abi.decodeParameters(paramters, "0x" + clause.data.slice(methodSignature.length))
             return {
                 ...clause,
                 type: clauseType,
@@ -304,10 +275,7 @@ export const decodeAMMClause = (
 export const decodeSwapEvent = (event: Connex.VM.Event): SwapEvent | null => {
     if (event.topics[0]?.startsWith(SWAP_EVENT_SIG)) {
         try {
-            const decoded = new abi.Event(abis.UniswapPairV2.SwapEvent).decode(
-                event.data,
-                event.topics,
-            )
+            const decoded = new abi.Event(abis.UniswapPairV2.SwapEvent).decode(event.data, event.topics)
 
             return {
                 sender: decoded.sender,
@@ -331,9 +299,7 @@ export const decodeSwapEvent = (event: Connex.VM.Event): SwapEvent | null => {
  * @param clause - The clause to decode.
  * @returns The decoded clause as a ClauseWithMetadata object, or null if the clause cannot be decoded.
  */
-export const decodeSwapExactVETForTokensClause = (
-    clause: Connex.VM.Clause,
-): ClauseWithMetadata | null => {
+export const decodeSwapExactVETForTokensClause = (clause: Connex.VM.Clause): ClauseWithMetadata | null => {
     return decodeAMMClause(
         clause,
         abis.RouterV2.swapExactVETForTokens.inputs,
@@ -348,9 +314,7 @@ export const decodeSwapExactVETForTokensClause = (
  * @param clause - The clause to decode.
  * @returns The decoded clause as a ClauseWithMetadata object, or null if the clause cannot be decoded.
  */
-export const decodeSwapVETForExactTokensClause = (
-    clause: Connex.VM.Clause,
-): ClauseWithMetadata | null => {
+export const decodeSwapVETForExactTokensClause = (clause: Connex.VM.Clause): ClauseWithMetadata | null => {
     return decodeAMMClause(
         clause,
         abis.RouterV2.swapVETForExactTokens.inputs,
@@ -365,9 +329,7 @@ export const decodeSwapVETForExactTokensClause = (
  * @param clause - The clause to decode.
  * @returns The decoded clause as a ClauseWithMetadata object, or null if the clause cannot be decoded.
  */
-export const decodeSwapTokensForExactVETClause = (
-    clause: Connex.VM.Clause,
-): ClauseWithMetadata | null => {
+export const decodeSwapTokensForExactVETClause = (clause: Connex.VM.Clause): ClauseWithMetadata | null => {
     return decodeAMMClause(
         clause,
         abis.RouterV2.swapTokensForExactVET.inputs,
@@ -382,9 +344,7 @@ export const decodeSwapTokensForExactVETClause = (
  * @param clause - The clause to decode.
  * @returns The decoded clause as a ClauseWithMetadata object, or null if the clause cannot be decoded.
  */
-export const decodeSwapExactTokensForVETClause = (
-    clause: Connex.VM.Clause,
-): ClauseWithMetadata | null => {
+export const decodeSwapExactTokensForVETClause = (clause: Connex.VM.Clause): ClauseWithMetadata | null => {
     return decodeAMMClause(
         clause,
         abis.RouterV2.swapExactTokensForVET.inputs,
@@ -399,9 +359,7 @@ export const decodeSwapExactTokensForVETClause = (
  * @param clause - The clause to decode.
  * @returns The decoded clause as a ClauseWithMetadata object, or null if the clause cannot be decoded.
  */
-export const decodeSwapExactTokensForTokensClause = (
-    clause: Connex.VM.Clause,
-): ClauseWithMetadata | null => {
+export const decodeSwapExactTokensForTokensClause = (clause: Connex.VM.Clause): ClauseWithMetadata | null => {
     return decodeAMMClause(
         clause,
         abis.RouterV2.swapExactTokensForTokens.inputs,
@@ -416,9 +374,7 @@ export const decodeSwapExactTokensForTokensClause = (
  * @param clause - The clause to decode.
  * @returns The decoded clause as a ClauseWithMetadata object, or null if the clause cannot be decoded.
  */
-export const decodeSwapExactETHForTokensClause = (
-    clause: Connex.VM.Clause,
-): ClauseWithMetadata | null => {
+export const decodeSwapExactETHForTokensClause = (clause: Connex.VM.Clause): ClauseWithMetadata | null => {
     return decodeAMMClause(
         clause,
         abis.UniswapRouterV2.swapExactETHForTokens.inputs,
@@ -433,9 +389,7 @@ export const decodeSwapExactETHForTokensClause = (
  * @param clause - The clause to decode.
  * @returns The decoded clause as a ClauseWithMetadata object, or null if the clause cannot be decoded.
  */
-export const decodeSwapExactTokensForETHClause = (
-    clause: Connex.VM.Clause,
-): ClauseWithMetadata | null => {
+export const decodeSwapExactTokensForETHClause = (clause: Connex.VM.Clause): ClauseWithMetadata | null => {
     return decodeAMMClause(
         clause,
         abis.UniswapRouterV2.swapExactTokensForETH.inputs,
@@ -469,17 +423,11 @@ export const decodeAsTokenTransferClause = (
  * @param message - the connex transaction request message
  * @param tokens - the tokens to check the message against
  */
-export const interpretClauses = (
-    message: Connex.Vendor.TxMessage,
-    tokens: Token[],
-): TransactionOutcomes => {
+export const interpretClauses = (message: Connex.Vendor.TxMessage, tokens: Token[]): TransactionOutcomes => {
     const result: TransactionOutcomes = []
 
     message.forEach((clause: ConnexClause) => {
-        const contractClauses: TransactionOutcomes = interpretContractClause(
-            clause,
-            tokens,
-        )
+        const contractClauses: TransactionOutcomes = interpretContractClause(clause, tokens)
 
         result.push(...contractClauses)
 
@@ -509,10 +457,7 @@ export const interpretClauses = (
  * @param tokens - The tokens to check the clause against.
  * @returns An array of transaction outcomes.
  */
-export const interpretContractClause = (
-    clause: ConnexClause,
-    tokens: Token[],
-): TransactionOutcomes => {
+export const interpretContractClause = (clause: ConnexClause, tokens: Token[]): TransactionOutcomes => {
     const result: TransactionOutcomes = []
 
     if (clause.to) {
@@ -537,10 +482,7 @@ export const interpretContractClause = (
  * @param tokens - The tokens to check the clause against.
  * @returns An array of transaction outcomes.
  */
-export const interpretContractCall = (
-    clause: ConnexClause,
-    tokens: Token[],
-) => {
+export const interpretContractCall = (clause: ConnexClause, tokens: Token[]) => {
     const result: TransactionOutcomes = []
 
     if (clause.data && clause.data !== "0x") {
@@ -661,14 +603,10 @@ export const findAndDecodeSwapEvents = (events: Connex.VM.Event[]) => {
  */
 export const extractEventAmounts = (decodedSwapEvent: SwapEvent) => {
     const paidAmount =
-        decodedSwapEvent.amount0In !== "0"
-            ? decodedSwapEvent.amount0In
-            : decodedSwapEvent.amount1In
+        decodedSwapEvent.amount0In !== "0" ? decodedSwapEvent.amount0In : decodedSwapEvent.amount1In
 
     const receivedAmount =
-        decodedSwapEvent.amount0Out !== "0"
-            ? decodedSwapEvent.amount0Out
-            : decodedSwapEvent.amount1Out
+        decodedSwapEvent.amount0Out !== "0" ? decodedSwapEvent.amount0Out : decodedSwapEvent.amount1Out
 
     return { paidAmount, receivedAmount }
 }
@@ -681,10 +619,7 @@ export const extractEventAmounts = (decodedSwapEvent: SwapEvent) => {
  *
  * @throws Will throw an error if the length of decodedSwapEvents does not match the expectedLength.
  */
-export const validateSwapEvents = (
-    decodedSwapEvents: SwapEvent[],
-    expectedLength: number,
-) => {
+export const validateSwapEvents = (decodedSwapEvents: SwapEvent[], expectedLength: number) => {
     if (decodedSwapEvents.length !== expectedLength)
         throw new Error(`Invalid swap event count, expected ${expectedLength}`)
 }
@@ -697,27 +632,25 @@ export const validateSwapEvents = (
  *
  * @returns An object containing paid and received token addresses and their respective amounts, or null if the transaction is not a swap transaction.
  *
- * @throws Will throw an error under several circumstances, e.g., if the transaction is not a swap transaction, if no swap events could be found or decoded, or if the swap clause path is invalid.
+ * @throws Will throw an error under several circumstances, e.g.,
+ * if the transaction is not a swap transaction, if no swap events could be found or decoded, or if the swap clause path is invalid.
  */
 export const decodeSwapTransferAmounts = (
     decodedClauses: TransactionOutcomes,
     activity: DappTxActivity,
 ): SwapResult | null => {
-    if (!isSwapTransaction(decodedClauses))
-        throw new Error("Transaction is not a swap transaction")
+    if (!isSwapTransaction(decodedClauses)) throw new Error("Transaction is not a swap transaction")
 
     if (!activity.outputs) throw new Error("Could not find transaction outputs")
 
     const events = activity.outputs.flatMap(output => output.events)
     const decodedSwapEvents = findAndDecodeSwapEvents(events)
 
-    if (decodedSwapEvents.length === 0)
-        throw new Error("Could not find or decode swap events")
+    if (decodedSwapEvents.length === 0) throw new Error("Could not find or decode swap events")
 
     const swapClause = decodedClauses.find(isSwapClause)
 
-    if (!swapClause?.path || swapClause.path.length < 2)
-        throw new Error("Invalid swap clause path")
+    if (!swapClause?.path || swapClause.path.length < 2) throw new Error("Invalid swap clause path")
 
     let paidTokenAddress, receivedTokenAddress, paidAmount, receivedAmount
 
@@ -727,9 +660,7 @@ export const decodeSwapTransferAmounts = (
     switch (swapClause?.type) {
         case ClauseType.SWAP_TOKENS_FOR_VET:
             validateSwapEvents(decodedSwapEvents, 1)
-            ;({ paidAmount, receivedAmount } = extractEventAmounts(
-                decodedSwapEvents[0],
-            ))
+            ;({ paidAmount, receivedAmount } = extractEventAmounts(decodedSwapEvents[0]))
 
             paidTokenAddress = firstTokenAddress
             receivedTokenAddress = VET.address
@@ -737,9 +668,7 @@ export const decodeSwapTransferAmounts = (
             break
         case ClauseType.SWAP_VET_FOR_TOKENS:
             validateSwapEvents(decodedSwapEvents, 1)
-            ;({ paidAmount, receivedAmount } = extractEventAmounts(
-                decodedSwapEvents[0],
-            ))
+            ;({ paidAmount, receivedAmount } = extractEventAmounts(decodedSwapEvents[0]))
 
             paidTokenAddress = VET.address
             receivedTokenAddress = secondTokenAddress
@@ -750,9 +679,7 @@ export const decodeSwapTransferAmounts = (
 
             paidAmount = extractEventAmounts(decodedSwapEvents[0]).paidAmount
 
-            receivedAmount = extractEventAmounts(
-                decodedSwapEvents[1],
-            ).receivedAmount
+            receivedAmount = extractEventAmounts(decodedSwapEvents[1]).receivedAmount
 
             paidTokenAddress = firstTokenAddress
             receivedTokenAddress = secondTokenAddress
@@ -781,18 +708,12 @@ export const fromBody = (txBody: Transaction.Body, delegate: boolean) => {
 /**
  * send signed transaction with thorest apis
  */
-export const sendSignedTransaction = async (
-    tx: Transaction,
-    networkUrl: string,
-) => {
+export const sendSignedTransaction = async (tx: Transaction, networkUrl: string) => {
     const encodedRawTx = {
         raw: HexUtils.addPrefix(tx.encode().toString("hex")),
     }
 
-    const response = await axios.post(
-        `${networkUrl}/transactions`,
-        encodedRawTx,
-    )
+    const response = await axios.post(`${networkUrl}/transactions`, encodedRawTx)
 
     return response.data.id as string
 }
@@ -822,10 +743,7 @@ export const prepareFungibleClause = (
     addressTo: string,
 ): Transaction.Body["clauses"] => {
     const scaledAmount =
-        "0x" +
-        new BigNumber(
-            FormattingUtils.scaleNumberUp(amount, _token.decimals),
-        ).toString(16)
+        "0x" + new BigNumber(FormattingUtils.scaleNumberUp(amount, _token.decimals)).toString(16)
 
     // if vet
     if (_token.symbol === VET.symbol) {
@@ -857,22 +775,17 @@ export const prepareFungibleClause = (
  * @returns An object containing the from, to and value of the token transfer event, or the from, to, and tokenId of the NFT transfer event.
  * Returns null if the event is not a token transfer or NFT transfer event.
  */
-export const decodeTransferEvent = (
-    event: Connex.VM.Event,
-): TransferEventResult | null => {
-    if (
-        event.topics[0]
-            ?.toLowerCase()
-            .startsWith(TRANSFER_EVENT_SIG.toLowerCase())
-    ) {
+export const decodeTransferEvent = (event: Connex.VM.Event): TransferEventResult | null => {
+    if (event.topics[0]?.toLowerCase().startsWith(TRANSFER_EVENT_SIG.toLowerCase())) {
         const isNFTTransferEvent = event.topics.length === 4
         const isFungibleTokenTransferEvent = event.topics.length === 3
 
         try {
             if (isNFTTransferEvent) {
-                const decodedNFTTransferEvent = new abi.Event(
-                    abis.VIP181.TransferEvent,
-                ).decode(event.data, event.topics)
+                const decodedNFTTransferEvent = new abi.Event(abis.VIP181.TransferEvent).decode(
+                    event.data,
+                    event.topics,
+                )
 
                 return {
                     from: decodedNFTTransferEvent.from,
@@ -880,9 +793,10 @@ export const decodeTransferEvent = (
                     tokenId: decodedNFTTransferEvent.tokenId,
                 }
             } else if (isFungibleTokenTransferEvent) {
-                const decodedTokenTransferEvent = new abi.Event(
-                    abis.VIP180.TransferEvent,
-                ).decode(event.data, event.topics)
+                const decodedTokenTransferEvent = new abi.Event(abis.VIP180.TransferEvent).decode(
+                    event.data,
+                    event.topics,
+                )
 
                 return {
                     from: decodedTokenTransferEvent.from,

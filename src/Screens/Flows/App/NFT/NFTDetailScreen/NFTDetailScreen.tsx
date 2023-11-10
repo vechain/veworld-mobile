@@ -40,23 +40,14 @@ export const NFTDetailScreen = ({ route }: Props) => {
     const { iosOnlyTabBarBottomMargin } = useTabBarBottomMargin()
 
     const collection = useAppSelector(state =>
-        selectCollectionWithContractAddress(
-            state,
-            route.params.collectionAddress!,
-        ),
+        selectCollectionWithContractAddress(state, route.params.collectionAddress!),
     )
 
     const nft = useAppSelector(state =>
-        selectNFTWithAddressAndTokenId(
-            state,
-            route.params.collectionAddress!,
-            route.params.nftTokenId,
-        ),
+        selectNFTWithAddressAndTokenId(state, route.params.collectionAddress!, route.params.nftTokenId),
     )
 
-    const isPendingTx = useAppSelector(state =>
-        selectPendingTx(state, nft?.id!),
-    )
+    const isPendingTx = useAppSelector(state => selectPendingTx(state, nft?.id!))
 
     const onSendPress = useCallback(
         () =>
@@ -100,11 +91,7 @@ export const NFTDetailScreen = ({ route }: Props) => {
 
                     {isPendingTx && (
                         <TransactionStatusBox
-                            status={
-                                isPendingTx
-                                    ? ActivityStatus.PENDING
-                                    : ActivityStatus.SUCCESS
-                            }
+                            status={isPendingTx ? ActivityStatus.PENDING : ActivityStatus.SUCCESS}
                         />
                     )}
 
@@ -118,10 +105,7 @@ export const NFTDetailScreen = ({ route }: Props) => {
                     )}
 
                     {collection?.name && (
-                        <InfoSectionView<string>
-                            title={LL.BD_COLLECTION()}
-                            data={collection?.name}
-                        />
+                        <InfoSectionView<string> title={LL.BD_COLLECTION()} data={collection?.name} />
                     )}
 
                     {collection?.totalSupply && (
@@ -141,10 +125,7 @@ export const NFTDetailScreen = ({ route }: Props) => {
                     )}
 
                     {collection?.creator && (
-                        <InfoSectionView<string>
-                            title={LL.NFT_DETAIL_CREATOR()}
-                            data={collection?.creator}
-                        />
+                        <InfoSectionView<string> title={LL.NFT_DETAIL_CREATOR()} data={collection?.creator} />
                     )}
 
                     {nft?.edition && (
@@ -168,17 +149,13 @@ export const NFTDetailScreen = ({ route }: Props) => {
                             data={DateUtils.formatDateTime(
                                 nft?.date,
                                 locale,
-                                getCalendars()[0].timeZone ??
-                                    DateUtils.DEFAULT_TIMEZONE,
+                                getCalendars()[0].timeZone ?? DateUtils.DEFAULT_TIMEZONE,
                             )}
                         />
                     )}
 
                     {nft?.rank && (
-                        <InfoSectionView<string>
-                            title={LL.NFT_DETAIL_RANK()}
-                            data={nft?.rank.toString()}
-                        />
+                        <InfoSectionView<string> title={LL.NFT_DETAIL_RANK()} data={nft?.rank.toString()} />
                     )}
 
                     {nft?.rarity && nft?.rarity !== 0 ? (
@@ -197,16 +174,10 @@ export const NFTDetailScreen = ({ route }: Props) => {
 
                     {collection?.address && (
                         <InfoSectionView<string>
-                            action={() =>
-                                onCopyToClipboardPress(collection.address)
-                            }
+                            action={() => onCopyToClipboardPress(collection.address)}
                             isLastInList
                             title={LL.CONTRACT_ADDRESS()}
-                            data={FormattingUtils.humanAddress(
-                                collection?.address ?? "",
-                                5,
-                                4,
-                            )}
+                            data={FormattingUtils.humanAddress(collection?.address ?? "", 5, 4)}
                         />
                     )}
                 </BaseView>
