@@ -1,4 +1,4 @@
-import React, { useMemo } from "react"
+import React from "react"
 import { StyleSheet, TextInput } from "react-native"
 import { BaseCardGroup, BaseIcon, BaseSpacer, BaseText, BaseView } from "~Components"
 import { TokenImage } from "~Components/Reusable/TokenImage"
@@ -6,7 +6,6 @@ import { COLORS, CURRENCY, CURRENCY_SYMBOLS, typography } from "~Constants"
 import { CurrencyExchangeRate, FungibleTokenWithBalance } from "~Model"
 const { defaults: defaultTypography } = typography
 import { BigNumber } from "bignumber.js"
-import { FormattingUtils } from "~Utils"
 
 export const AmountInputCard = ({
     isInputInFiat,
@@ -15,11 +14,11 @@ export const AmountInputCard = ({
     token,
     inputColor,
     placeholderColor,
-    input,
+    fiatAmount,
+    tokenAmount,
     handleChangeInput,
     isExchangeRateAvailable,
     handleToggleInputInFiat,
-    exchangeRate,
 }: {
     isInputInFiat: boolean
     currency: CURRENCY
@@ -27,17 +26,13 @@ export const AmountInputCard = ({
     token: FungibleTokenWithBalance
     inputColor: string
     placeholderColor: string
-    input: BigNumber
-    handleChangeInput: (newValue: string) => void
+    fiatAmount: BigNumber
+    tokenAmount: BigNumber
+    handleChangeInput: (newValue: BigNumber) => void
     isExchangeRateAvailable: boolean
     handleToggleInputInFiat: () => void
     exchangeRate: CurrencyExchangeRate | undefined
 }) => {
-    const fiatAmount = useMemo(
-        () => FormattingUtils.convertToFiatBalance(input || "0", exchangeRate?.rate ?? 1, 0),
-        [exchangeRate?.rate, input],
-    )
-
     return (
         <BaseCardGroup
             views={[
@@ -76,8 +71,8 @@ export const AmountInputCard = ({
                                     ]}
                                     placeholderTextColor={placeholderColor}
                                     keyboardType="numeric"
-                                    value={input.toString()}
-                                    onChangeText={handleChangeInput}
+                                    value={isInputInFiat ? fiatAmount.toString() : tokenAmount.toString()}
+                                    onChangeText={(text: string) => handleChangeInput(new BigNumber(text))}
                                     testID="SendScreen_amountInput"
                                 />
                             </BaseView>
@@ -101,7 +96,7 @@ export const AmountInputCard = ({
                               children: (
                                   <BaseText typographyFont="captionBold" color={inputColor}>
                                       {"≈ "}
-                                      {isInputInFiat ? input.toString() : fiatAmount}{" "}
+                                      {isInputInFiat ? tokenAmount.toString() : fiatAmount.toString()}{" "}
                                       {isInputInFiat ? token.symbol : currency}
                                   </BaseText>
                               ),

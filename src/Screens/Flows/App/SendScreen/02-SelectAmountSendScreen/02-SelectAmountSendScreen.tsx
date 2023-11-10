@@ -2,7 +2,6 @@ import { NativeStackScreenProps } from "@react-navigation/native-stack"
 import React, { useCallback, useMemo, useState } from "react"
 import { KeyboardAvoidingView } from "react-native"
 import { useTheme } from "~Hooks"
-import { FormattingUtils } from "~Utils"
 import { BaseSpacer, BaseView, DismissKeyboardView, FadeoutButton, Layout } from "~Components"
 import { RootStackParamListDiscover, RootStackParamListHome, Routes } from "~Navigation"
 import { useI18nContext } from "~i18n"
@@ -11,7 +10,7 @@ import { selectCurrency, selectCurrencyExchangeRate, useAppSelector } from "~Sto
 import { BigNumber } from "bignumber.js"
 import { useNavigation } from "@react-navigation/native"
 import { throttle } from "lodash"
-import { CurrencyExchangeRate, FungibleTokenWithBalance } from "~Model"
+import { FungibleTokenWithBalance } from "~Model"
 import { AmountHeaderCard, AmountInputCard, AmountSliderCard } from "./Components"
 
 type Props = NativeStackScreenProps<
@@ -29,48 +28,54 @@ export const SelectAmountSendScreen = ({ route }: Props) => {
     const isExchangeRateAvailable = !!exchangeRate?.rate
     const currency = useAppSelector(selectCurrency)
 
-    const [input, setInput] = useState(new BigNumber(0))
+    const [tokenAmount, setTokenAmount] = useState(new BigNumber(0))
+    const [fiatAmount, setFiatAmount] = useState(new BigNumber(0))
+
     const [isInputInFiat, setIsInputInFiat] = useState(false)
     const [isError, setIsError] = useState(false)
 
     const totalBalance = useMemo(() => new BigNumber(token.balance.balance), [token])
     const totalBalanceInFiat = useMemo(
-        () =>
-            new BigNumber(
-                FormattingUtils.convertToFiatBalance(totalBalance || "0", exchangeRate?.rate || 1, 0),
-            ),
+        () => totalBalance.multipliedBy(exchangeRate?.rate || 1),
         [totalBalance, exchangeRate?.rate],
     )
 
-    // ~ {"totalBalance": "46800000000000000000", "totalBalanceInFiat": "1025933752901595564"}
-    // eslint-disable-next-line no-console
-    console.log({ totalBalanceInFiat, totalBalance })
-
-    const { percentage } = getPercentage(totalBalance, isInputInFiat, input, totalBalanceInFiat)
+    const { percentage } = useMemo(
+        () => getPercentage(totalBalance, isInputInFiat, tokenAmount, fiatAmount, totalBalanceInFiat),
+        [fiatAmount, isInputInFiat, tokenAmount, totalBalance, totalBalanceInFiat],
+    )
 
     const checkIsInputAmountValid = useCallback(
-        (newValue: string) => {
-            if (new BigNumber(newValue).gt(totalBalance)) {
+        (newValue: BigNumber) => {
+            if (newValue.gt(totalBalance)) {
                 setIsError(true)
             } else {
                 setIsError(false)
             }
-            setInput(new BigNumber(newValue))
+
+            // setTokenAmount(newValue)
+            // setFiatAmount(newValue.multipliedBy(exchangeRate?.rate || 1))
         },
-        [totalBalance, setInput],
+        [totalBalance],
     )
 
-    const { throttleOnChangePercentage } = useCalculatePercentage({
-        totalBalance,
-        checkIsInputAmountValid,
-        isInputInFiat,
-        exchangeRate,
-    })
+    // ~ OK
+    const onChangePercentage = useCallback(
+        (value: number) => {
+            const newTokenInput = totalBalance.div(100).multipliedBy(value)
+            setTokenAmount(newTokenInput)
+            setFiatAmount(newTokenInput.multipliedBy(exchangeRate?.rate || 1))
+        },
+        [exchangeRate?.rate, totalBalance],
+    )
+    const throttleOnChangePercentage = throttle(onChangePercentage, 100)
 
     const handleToggleInputInFiat = useCallback(() => {
-        checkIsInputAmountValid(input.toString())
+        // checkIsInputAmountValid(isFiatActive ? tokenAmount : fiatAmount)
+        // setTokenAmount(tokenAmount)
+        // setFiatAmount(fiatAmount.multipliedBy(exchangeRate?.rate || 1))
         setIsInputInFiat(s => !s)
-    }, [checkIsInputAmountValid, input])
+    }, [])
 
     const { inputColor, placeholderColor, shortenedTokenName } = getUI({
         theme,
@@ -81,10 +86,10 @@ export const SelectAmountSendScreen = ({ route }: Props) => {
     const navigateToNextStep = useCallback(() => {
         nav.navigate(Routes.INSERT_ADDRESS_SEND, {
             token,
-            amount: isInputInFiat ? input : input,
+            amount: isInputInFiat ? fiatAmount : tokenAmount,
             initialRoute: initialRoute ?? "",
         })
-    }, [initialRoute, input, isInputInFiat, nav, token])
+    }, [fiatAmount, initialRoute, isInputInFiat, nav, token, tokenAmount])
 
     return (
         <Layout
@@ -106,7 +111,8 @@ export const SelectAmountSendScreen = ({ route }: Props) => {
                                 token={token}
                                 inputColor={inputColor}
                                 placeholderColor={placeholderColor}
-                                input={input}
+                                fiatAmount={fiatAmount}
+                                tokenAmount={tokenAmount}
                                 handleChangeInput={checkIsInputAmountValid}
                                 isExchangeRateAvailable={isExchangeRateAvailable}
                                 handleToggleInputInFiat={handleToggleInputInFiat}
@@ -126,7 +132,13 @@ export const SelectAmountSendScreen = ({ route }: Props) => {
             footer={
                 <FadeoutButton
                     title={LL.COMMON_BTN_NEXT()}
-                    disabled={isError || input.isNaN() || input.isZero()}
+                    disabled={
+                        isError ||
+                        tokenAmount.isNaN() ||
+                        tokenAmount.isZero() ||
+                        fiatAmount.isNaN() ||
+                        fiatAmount.isZero()
+                    }
                     action={navigateToNextStep}
                     bottom={0}
                     mx={0}
@@ -137,8 +149,7 @@ export const SelectAmountSendScreen = ({ route }: Props) => {
     )
 }
 
-// ~ HELPERS
-//
+// ~OK
 const getUI = ({
     theme,
     isError,
@@ -154,100 +165,23 @@ const getUI = ({
     return { inputColor, placeholderColor, shortenedTokenName }
 }
 
-// const getFiatBalances = (
-//     input: BigNumber,
-//     totalBalance: BigNumber,
-//     exchangeRate: CurrencyExchangeRate | undefined,
-// ) => {
-//     const humanFiatInput = FormattingUtils.humanNumber(
-//         FormattingUtils.convertToFiatBalance(input || "0", exchangeRate?.rate ?? 1, 0),
-//         input || "0",
-//     )
-
-//     const totalBalanceInFiat = FormattingUtils.convertToFiatBalance(
-//         totalBalance || "0",
-//         exchangeRate?.rate || 1,
-//         0,
-//     )
-
-//     return { humanFiatInput, totalBalanceInFiat }
-// }
-
-// const getTokeBalances = ({
-//     input,
-//     exchangeRate,
-//     totalBalance,
-// }: {
-//     input: BigNumber
-//     exchangeRate: CurrencyExchangeRate | undefined
-//     totalBalance: BigNumber
-// }) => {
-//     /*
-//         This one displays the human readable amount of tokens selected by the user both from the slider and the/or the input
-//         NOTE - They don't display the fiat amount (correctly)
-//         It is used for the small print under the input (to give the user the info on what he is sending relative to the selected token/fiat)
-//     */
-//     const inputBasedOnSlectectAmount = FormattingUtils.convertToFiatBalance(
-//         input || "0",
-//         1 / (exchangeRate?.rate ?? 1),
-//         0,
-//     )
-
-//     const humanTokenInputBasedOnSlectectAmount = FormattingUtils.humanNumber(
-//         inputBasedOnSlectectAmount,
-//         input,
-//     )
-
-//     const humanBalance = FormattingUtils.humanNumber(totalBalance, totalBalance)
-
-//     return { humanTokenInputBasedOnSlectectAmount, humanBalance }
-// }
-
+// ~OK
 const getPercentage = (
     totalBalance: BigNumber,
     isInputInFiat: boolean,
-    input: BigNumber,
+    tokenAmount: BigNumber,
+    fiatAmount: BigNumber,
     totalBalanceInFiat: BigNumber,
 ) => {
     if (totalBalance.isZero()) return { percentage: 0 }
 
     if (isInputInFiat) {
         return {
-            percentage: new BigNumber(input).div(totalBalanceInFiat).multipliedBy(100).toNumber() || 0,
+            percentage: fiatAmount.div(totalBalanceInFiat).multipliedBy(100).toNumber() || 0,
         }
     }
 
     return {
-        percentage: new BigNumber(input).div(totalBalance).multipliedBy(100).toNumber() || 0,
+        percentage: tokenAmount.div(totalBalance).multipliedBy(100).toNumber() || 0,
     }
-}
-
-// ~ HOOKS
-//
-const useCalculatePercentage = ({
-    totalBalance,
-    checkIsInputAmountValid,
-    isInputInFiat,
-    exchangeRate,
-}: {
-    totalBalance: BigNumber
-    checkIsInputAmountValid: (newValue: string) => void
-    isInputInFiat: boolean
-    exchangeRate: CurrencyExchangeRate | undefined
-}) => {
-    const onChangePercentage = (value: number) => {
-        const newTokenInput = totalBalance.div(100).multipliedBy(value).toString()
-
-        checkIsInputAmountValid(
-            isInputInFiat
-                ? Number(
-                      FormattingUtils.convertToFiatBalance(newTokenInput || "0", exchangeRate?.rate ?? 1, 0),
-                  ).toFixed(2)
-                : new BigNumber(newTokenInput).decimalPlaces(4, BigNumber.ROUND_DOWN).toString(),
-        )
-    }
-
-    const throttleOnChangePercentage = throttle(onChangePercentage, 100)
-
-    return { throttleOnChangePercentage }
 }
