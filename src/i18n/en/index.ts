@@ -664,7 +664,8 @@ const en: BaseTranslation = {
     LEDGER_MESSAGE_READ_SB: "The message is ready, press confirm to continue",
     SEND_PENDING_TX_REVERT_ALERT: "This transaction may be reverted if your balance is too low",
     SEND_ERROR_TOKEN_NOT_FOUND: "It looks like you don't have any {tokenName: string} in your wallet",
-    SEND_TRANSACTION_ERROR: "Error signing transaction",
+    SIGN_TRANSACTION_ERROR: "Error signing transaction",
+    SEND_TRANSACTION_ERROR: "There was an error sending the transaction. This may be due to a lack of funds/ permissions",
 
     LEDGER_CONNECTING: "Connecting",
     LEDGER_CONNECT: "Connect",
