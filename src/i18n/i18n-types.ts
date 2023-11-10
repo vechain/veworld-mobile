@@ -2337,7 +2337,7 @@ type RootTranslation = {
 	 */
 	SIGN_TRANSACTION_ERROR: string
 	/**
-	 * T​h​e​r​e​ ​w​a​s​ ​a​n​ ​e​r​r​o​r​ ​s​e​n​d​i​n​g​ ​t​h​e​ ​t​r​a​n​s​a​c​t​i​o​n​.​ ​T​h​i​s​ ​m​a​y​ ​b​e​ ​d​u​e​ ​t​o​ ​a​ ​l​a​c​k​ ​o​f​ ​f​u​n​d​s​/​ ​p​e​r​m​i​s​s​i​o​n​s
+	 * T​h​e​r​e​ ​w​a​s​ ​a​n​ ​e​r​r​o​r​ ​s​e​n​d​i​n​g​ ​t​h​e​ ​t​r​a​n​s​a​c​t​i​o​n​.​ ​T​h​i​s​ ​m​a​y​ ​b​e​ ​d​u​e​ ​t​o​ ​a​ ​l​a​c​k​ ​o​f​ ​f​u​n​d​s
 	 */
 	SEND_TRANSACTION_ERROR: string
 	/**
@@ -4982,7 +4982,7 @@ Try reconnect your device to the internet.
 	 */
 	SIGN_TRANSACTION_ERROR: () => LocalizedString
 	/**
-	 * There was an error sending the transaction. This may be due to a lack of funds/ permissions
+	 * There was an error sending the transaction. This may be due to a lack of funds
 	 */
 	SEND_TRANSACTION_ERROR: () => LocalizedString
 	/**
