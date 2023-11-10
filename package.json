@@ -77,7 +77,7 @@
     "aes-js": "3",
     "arweave": "^1.13.7",
     "async-mutex": "^0.4.0",
-    "axios": "^0.27.2",
+    "axios": "^1.6.0",
     "basil-ws-flipper": "^1.0.0",
     "buffer": "^6.0.3",
     "eslint-plugin-es": "^4.1.0",
