@@ -20,6 +20,8 @@ type Props = NativeStackScreenProps<
 
 export const SelectAmountSendScreen = ({ route }: Props) => {
     const { initialRoute, token } = route.params
+    // without this the native text will crash when we get numbers shows as exponential notation.
+    BigNumber.config({ EXPONENTIAL_AT: 1e9 })
 
     const theme = useTheme()
     const { LL } = useI18nContext()
@@ -47,35 +49,44 @@ export const SelectAmountSendScreen = ({ route }: Props) => {
 
     const checkIsInputAmountValid = useCallback(
         (newValue: BigNumber) => {
-            if (newValue.gt(totalBalance)) {
+            if (newValue.gt(isInputInFiat ? totalBalanceInFiat : totalBalance)) {
                 setIsError(true)
             } else {
                 setIsError(false)
             }
 
-            // setTokenAmount(newValue)
-            // setFiatAmount(newValue.multipliedBy(exchangeRate?.rate || 1))
+            setFiatAmount(newValue)
+            setTokenAmount(newValue)
         },
-        [totalBalance],
+        [isInputInFiat, totalBalance, totalBalanceInFiat],
     )
 
-    // ~ OK
     const onChangePercentage = useCallback(
         (value: number) => {
             const newTokenInput = totalBalance.div(100).multipliedBy(value)
+            if (
+                newTokenInput.multipliedBy(exchangeRate?.rate || 1).gt(totalBalanceInFiat) ||
+                newTokenInput.gt(totalBalance)
+            ) {
+                setIsError(true)
+            } else {
+                setIsError(false)
+            }
             setTokenAmount(newTokenInput)
             setFiatAmount(newTokenInput.multipliedBy(exchangeRate?.rate || 1))
         },
-        [exchangeRate?.rate, totalBalance],
+        [exchangeRate?.rate, totalBalance, totalBalanceInFiat],
     )
     const throttleOnChangePercentage = throttle(onChangePercentage, 100)
 
     const handleToggleInputInFiat = useCallback(() => {
-        // checkIsInputAmountValid(isFiatActive ? tokenAmount : fiatAmount)
-        // setTokenAmount(tokenAmount)
-        // setFiatAmount(fiatAmount.multipliedBy(exchangeRate?.rate || 1))
+        if (fiatAmount.gt(totalBalanceInFiat) || tokenAmount.gt(totalBalance)) {
+            setIsError(true)
+        } else {
+            setIsError(false)
+        }
         setIsInputInFiat(s => !s)
-    }, [])
+    }, [fiatAmount, tokenAmount, totalBalance, totalBalanceInFiat])
 
     const { inputColor, placeholderColor, shortenedTokenName } = getUI({
         theme,
@@ -149,7 +160,6 @@ export const SelectAmountSendScreen = ({ route }: Props) => {
     )
 }
 
-// ~OK
 const getUI = ({
     theme,
     isError,
@@ -165,7 +175,6 @@ const getUI = ({
     return { inputColor, placeholderColor, shortenedTokenName }
 }
 
-// ~OK
 const getPercentage = (
     totalBalance: BigNumber,
     isInputInFiat: boolean,

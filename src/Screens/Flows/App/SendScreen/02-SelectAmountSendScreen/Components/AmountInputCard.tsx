@@ -66,13 +66,15 @@ export const AmountInputCard = ({
                                         // eslint-disable-next-line react-native/no-inline-styles
                                         {
                                             color: inputColor,
-                                            fontSize: 26,
+                                            fontSize: 15,
                                         },
                                     ]}
                                     placeholderTextColor={placeholderColor}
                                     keyboardType="numeric"
                                     value={isInputInFiat ? fiatAmount.toString() : tokenAmount.toString()}
-                                    onChangeText={(text: string) => handleChangeInput(new BigNumber(text))}
+                                    onChangeText={(text: string) => {
+                                        handleChangeInput(new BigNumber(text === "" ? "0" : text))
+                                    }}
                                     testID="SendScreen_amountInput"
                                 />
                             </BaseView>
