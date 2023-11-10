@@ -278,7 +278,7 @@ export const ApplicationSecurityProvider = ({
                 })
                 setWalletStatus(WALLET_STATUS.UNLOCKED)
             } catch (e) {
-                error(e)
+                error("Failed migrating onboarding", e)
                 SecurityConfig.remove()
                 await resetApplication()
             }
