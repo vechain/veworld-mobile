@@ -1,5 +1,7 @@
 
 
+## [1.3.1](https://github.com/vechainfoundation/veworld-mobile/compare/1.3.0...1.3.1) (2023-11-10)
+
 ## [1.3.0](https://github.com/vechainfoundation/veworld-mobile/compare/v1.0-test...v1.3.0) (2023-11-09)
 
 
