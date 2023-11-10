@@ -1,8 +1,8 @@
 import { NativeStackScreenProps } from "@react-navigation/native-stack"
-import React, { useMemo, useState } from "react"
+import React, { useEffect, useMemo, useState } from "react"
 import { KeyboardAvoidingView, StyleSheet, TextInput } from "react-native"
-import { useAmountInput, useTheme } from "~Hooks"
-import { FormattingUtils } from "~Utils"
+import { useAmountInput, useTheme, useTransactionGas } from "~Hooks"
+import { FormattingUtils, TransactionUtils } from "~Utils"
 import {
     BaseCard,
     BaseCardGroup,
@@ -22,7 +22,7 @@ import {
     Routes,
 } from "~Navigation"
 import { useI18nContext } from "~i18n"
-import { COLORS, CURRENCY_SYMBOLS, typography } from "~Constants"
+import { COLORS, CURRENCY_SYMBOLS, typography, VET } from "~Constants"
 import {
     selectCurrency,
     selectCurrencyExchangeRate,
@@ -32,6 +32,7 @@ import { BigNumber } from "bignumber.js"
 import { useNavigation } from "@react-navigation/native"
 import { throttle } from "lodash"
 import { useMaxAmount } from "./Hooks/useMaxAmount"
+import { Transaction } from "thor-devkit"
 
 const { defaults: defaultTypography } = typography
 
@@ -39,6 +40,8 @@ type Props = NativeStackScreenProps<
     RootStackParamListHome & RootStackParamListDiscover,
     Routes.SELECT_AMOUNT_SEND
 >
+
+const TEST_ADDRESS = "0xf077b491b355E64048cE21E3A6Fc4751eEeA77fa"
 
 export const SelectAmountSendScreen = ({ route }: Props) => {
     const { initialRoute, token } = route.params
@@ -93,6 +96,38 @@ export const SelectAmountSendScreen = ({ route }: Props) => {
         rawTokenInput,
         input,
     )
+
+    const clauses = useMemo<Transaction.Clause[]>(() => {
+        const amount = isInputInFiat ? rawTokenInput : input
+
+        if (token.address === VET.address) {
+            return [
+                {
+                    to: token.address,
+                    value: amount,
+                    data: "",
+                },
+            ]
+        }
+
+        return TransactionUtils.prepareFungibleClause(
+            amount,
+            token,
+            //NOTE: We are not sending to this address, we just want to verify the TX gas
+            TEST_ADDRESS,
+        )
+    }, [input, isInputInFiat, rawTokenInput, token])
+
+    const { loadingGas, gas } = useTransactionGas({
+        clauses,
+    })
+
+    useEffect(() => {
+        if (gas?.reverted) {
+            //TODO: Don't show a generic error message
+            setIsError(true)
+        }
+    }, [gas])
 
     const percentage = useMemo(() => {
         if (new BigNumber(maxTokenAmount).isZero()) return 0
@@ -361,7 +396,10 @@ export const SelectAmountSendScreen = ({ route }: Props) => {
                 <FadeoutButton
                     title={LL.COMMON_BTN_NEXT()}
                     disabled={
-                        isError || input === "" || new BigNumber(input).isZero()
+                        loadingGas ||
+                        isError ||
+                        input === "" ||
+                        new BigNumber(input).isZero()
                     }
                     action={goToInsertAddress}
                     bottom={0}
