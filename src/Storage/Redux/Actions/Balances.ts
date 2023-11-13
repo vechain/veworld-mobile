@@ -151,11 +151,6 @@ export const resetTokenBalances = async (
             }),
         )
     } else {
-        error(
-            "Is not possible to init balances for account:",
-            account,
-            "and network:",
-            network,
-        )
+        error("Is not possible to init balances")
     }
 }

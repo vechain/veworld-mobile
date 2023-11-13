@@ -200,7 +200,7 @@ export function getSendTxMessage(
             return clause
         })
     } catch (e) {
-        error("Failed to extract send tx message parameters", requestEvent, e)
+        error("Failed to extract send tx message parameters", e)
     }
 }
 
@@ -210,7 +210,7 @@ export function getSendTxOptions(
     try {
         return requestEvent.params.request.params[0].options || {}
     } catch (e) {
-        warn("Failed to extract send tx options", requestEvent, e)
+        warn("Failed to extract send tx options", e)
         return {}
     }
 }

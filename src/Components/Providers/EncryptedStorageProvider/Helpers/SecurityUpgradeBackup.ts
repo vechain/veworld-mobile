@@ -90,7 +90,7 @@ const updateSecurityMethod = async (
 
         await _store(backup, currentPinCode)
     } catch (e) {
-        error("Failed to back up current keys keys", e)
+        error("Failed to back up current keys", e)
         return false
     }
 
