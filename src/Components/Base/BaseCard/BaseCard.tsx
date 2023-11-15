@@ -31,6 +31,7 @@ export const BaseCard = memo(
                 </BaseView>
             )
         }, [children, style, styles.view, testID])
+
         return (
             <BaseView
                 style={[
