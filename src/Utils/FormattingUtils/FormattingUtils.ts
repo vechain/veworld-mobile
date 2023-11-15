@@ -3,6 +3,7 @@ import { error } from "../Logger"
 import { isFinite } from "lodash"
 import RoundingMode = BigNumber.RoundingMode
 
+export const ROUND_DECIMAL_ZERO = 0
 export const ROUND_DECIMAL_DEFAULT = 2
 export const ROUND_DECIMAL_PRECISE = 6
 
@@ -89,6 +90,7 @@ export const convertToFiatBalance = (
     roundDecimals: number = 2,
 ) => {
     const fiatBalance = new BigNumber(balance).multipliedBy(rate)
+
     return scaleNumberDown(
         fiatBalance,
         decimals,
@@ -100,91 +102,31 @@ export const convertToFiatBalance = (
 export type DateType = "short" | "full" | "long" | "medium" | undefined
 
 /**
- * Format the date & time
- * @param time - epoch timestamp (in seconds)
- * @param dateSyle - the date style
- * @param timeStyle - the time style
- * @returns the formatted date time
- */
-// export const humanDateTimeFromEpoch = (
-//     time: number,
-//     dateSyle: DateType = "short",
-//     timeStyle: DateType = "short",
-// ) => {
-//     return humanDateTime(time * 1000, dateSyle, timeStyle)
-// }
-
-/**
- * Format the date & time
- * @param time - js timestamp (in milliseconds)
- * @param dateSyle - the date style
- * @param timeStyle - the time style
- * @returns the formatted date time
- */
-// export const humanDateTime = (
-//     time: number,
-//     dateSyle: "short" | "full" | "long" | "medium" | undefined = "short",
-//     timeStyle: "short" | "full" | "long" | "medium" | undefined = "short",
-// ) => {
-//     return new Date(time).toLocaleString(locale, {
-//         hour12: false,
-//         dateStyle: dateSyle,
-//         timeStyle: timeStyle,
-//     })
-// }
-
-/**
- * Format the date time from epoch timestamp
- * @param time - epoch timestamp (in seconds)
- * @returns the formatted time
- */
-// export const humanDateTimeRelativeFromEpoch = (time: number) => {
-//     return humanDateTimeRelative(time * 1000)
-// }
-
-/**
- * Format the time
- * @param time - js timestamp (in milliseconds)
- * @returns the formatted date time
- */
-// export const humanDateTimeRelative = (time: number) => {
-//     dayjs.extend(RelativeTime).locale(locale)
-
-//     const today = dayjs()
-//     const date = dayjs(time)
-//     if (date.isSame(today, "hour")) {
-//         return date.fromNow()
-//     } else if (date.isSame(today, "week")) {
-//         return `${date.fromNow()}, ${date.format("HH:mm")}`
-//     } else {
-//         return humanDateTime(time)
-//     }
-// }
-
-/**
- * Format the time
- * @param time - value in timestamp
- * @param time - (optional) additional options
- * @returns the formatted time
- */
-// export const humanTime = (
-//     time: number,
-//     options: object = {
-//         hour: "2-digit",
-//         minute: "2-digit",
-//     },
-// ) => {
-//     const date = new Date(time)
-//     return date.toLocaleTimeString(locale, options)
-// }
-
-/**
  * Format the number human friendly
  * @param formattedValue - value in string or number
  * @param originalValue - value in string or number to determine if the original value is 0
  * @param symbol - (optional) symbol to append at end of number (with a space)
  * @returns the formatted number
  */
+
+function roundDownSignificantDigits(numbers: number, decimals: number = 0) {
+    if (typeof numbers !== "number" || typeof decimals !== "number") {
+        throw new Error(
+            "Invalid input: number and decimals must be of type number",
+        )
+    }
+
+    const significantDigits = parseInt(
+        numbers.toExponential().split("e-")[1] || "0",
+        10,
+    )
+
+    const effectiveDecimals = Math.max(0, decimals + significantDigits)
+    const scaleFactor = Math.pow(10, effectiveDecimals)
+
+    return Math.floor(numbers * scaleFactor) / scaleFactor
+}
+
 export const humanNumber = (
     formattedValue: BigNumber.Value,
     originalValue?: BigNumber.Value,
@@ -192,11 +134,15 @@ export const humanNumber = (
 ) => {
     const suffix = symbol ? " " + symbol : ""
 
-    let value = new Intl.NumberFormat("en", {
+    let formatter = new Intl.NumberFormat("en", {
         style: "decimal",
         minimumFractionDigits:
             Number.parseFloat(formattedValue.toString()) % 1 === 0 ? 0 : 2,
-    }).format(Number.parseFloat(formattedValue.toString()))
+    })
+
+    let value = formatter.format(
+        roundDownSignificantDigits(Number(formattedValue), 2),
+    )
 
     //If the original number got scaled down to 0
     if (!isZero(originalValue) && isZero(value)) {
@@ -323,4 +269,63 @@ export const validateStringPercentages = (percentages: string[]): boolean => {
 
     // If we made it this far, all strings are valid percentages
     return true
+}
+
+export function formatToHumanNumber(
+    amount: string,
+    decimals: number,
+    locale: string,
+): string {
+    // Convert the amount to a floating point number
+    const numberAmount = parseFloat(amount)
+    const scale = 100
+
+    if (isNaN(numberAmount)) {
+        return "Invalid amount"
+    }
+
+    // Round the number to the specified decimal places
+    const roundedAmount = Math.floor(numberAmount * scale) / scale
+
+    // Convert the number to a string with fixed decimal places
+    let amountString = roundedAmount.toFixed(decimals)
+
+    switch (locale) {
+        // Euro locales with comma for decimal and period for thousands
+        case "at-AT": // Austria
+        case "be-BE": // Belgium
+        case "cy-CY": // Cyprus
+        case "fi-FI": // Finland
+        case "fr-FR": // France
+        case "de-DE": // Germany
+        case "gr-GR": // Greece
+        case "it-IT": // Italy
+        case "lv-LV": // Latvia
+        case "lt-LT": // Lithuania
+        case "lu-LU": // Luxembourg
+        case "mt-MT": // Malta
+        case "nl-NL": // the Netherlands
+        case "pt-PT": // Portugal
+        case "sk-SK": // Slovakia
+        case "si-SI": // Slovenia
+        case "es-ES": // Spain
+            amountString = amountString
+                .replace(/\B(?=(\d{3})+(?!\d))/g, ".")
+                .replace(/\.(\d+)$/, ",$1")
+            break
+
+        // Euro locales with dot for decimal and comma for thousands
+        case "en-IE": // English (Ireland)
+        case "et-EE": // Estonian
+        case "en-US":
+        default:
+            amountString = amountString.replace(/\B(?=(\d{3})+(?!\d))/g, ",")
+            break
+    }
+
+    if (!isZero(numberAmount) && isZero(roundedAmount)) {
+        amountString = "< 0.01"
+    }
+
+    return amountString
 }
