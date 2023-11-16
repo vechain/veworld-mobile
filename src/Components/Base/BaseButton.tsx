@@ -21,7 +21,6 @@ type Props = {
     disabledAction?: () => void
     disabled?: boolean
     isDisabledTextOnly?: boolean
-    isDisabledOpacity?: boolean
     variant?: "solid" | "outline" | "ghost" | "link"
     bgColor?: string
     textColor?: string
@@ -67,7 +66,6 @@ export const BaseButton = ({
     radius = 16,
     disabled = false,
     isDisabledTextOnly = false,
-    isDisabledOpacity = false,
     leftIcon,
     rightIcon,
     isLoading = false,
@@ -154,7 +152,6 @@ export const BaseButton = ({
     }, [theme, invertLoaderColor])
 
     const calculateBackgroundColor = useMemo(() => {
-        if (disabled && isDisabledOpacity) return backgroundColor
         if (disabled && isDisabledTextOnly) return backgroundColor
         if (disabled) return theme.colors.disabledButton
 
@@ -167,7 +164,6 @@ export const BaseButton = ({
         isSolidButton,
         theme.colors.disabledButton,
         theme.colors.transparent,
-        isDisabledOpacity,
     ])
 
     const calculateTextColor = useMemo(() => {
