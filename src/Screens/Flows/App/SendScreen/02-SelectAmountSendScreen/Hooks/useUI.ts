@@ -1,4 +1,9 @@
 import { useMemo } from "react"
+import {
+    useAnimatedStyle,
+    useSharedValue,
+    withSpring,
+} from "react-native-reanimated"
 import { COLORS, ColorThemeType } from "~Constants"
 import { FungibleTokenWithBalance } from "~Model"
 
@@ -24,10 +29,31 @@ export const useUI = ({
             : token.name
     }, [token.name])
 
-    const computeFonts = useMemo(
-        () => (input.length > 7 ? 24 : 32),
-        [input.length],
-    )
+    const inputTextSize = useSharedValue(38)
 
-    return { inputColor, placeholderColor, shortenedTokenName, computeFonts }
+    const animatedStyle = useAnimatedStyle(() => {
+        return {
+            fontSize: inputTextSize.value,
+        }
+    }, [])
+
+    const computeFonts = useMemo(() => {
+        return input.length > 12
+            ? (inputTextSize.value = withSpring(24, {
+                  damping: 20,
+                  stiffness: 100,
+              }))
+            : (inputTextSize.value = withSpring(38, {
+                  damping: 20,
+                  stiffness: 100,
+              }))
+    }, [input.length, inputTextSize])
+
+    return {
+        inputColor,
+        placeholderColor,
+        shortenedTokenName,
+        computeFonts,
+        animatedStyle,
+    }
 }
