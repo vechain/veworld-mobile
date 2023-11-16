@@ -189,13 +189,18 @@ export const SelectAmountSendScreen = ({ route }: Props) => {
         })
     }
 
-    const { inputColor, placeholderColor, shortenedTokenName, animatedStyle } =
-        useUI({
-            isError,
-            input,
-            token,
-            theme,
-        })
+    const {
+        inputColorNotAnimated,
+        placeholderColor,
+        shortenedTokenName,
+        animatedFontStyle,
+        animatedStyleInputColor,
+    } = useUI({
+        isError,
+        input,
+        token,
+        theme,
+    })
 
     return (
         <Layout
@@ -288,20 +293,19 @@ export const SelectAmountSendScreen = ({ route }: Props) => {
                                             </BaseView>
 
                                             <BaseSpacer width={16} />
+
                                             <AnimatedTextInput
                                                 contextMenuHidden
                                                 cursorColor={
-                                                    theme.colors.primary
+                                                    theme.colors.secondary
                                                 }
                                                 autoFocus
                                                 placeholder="0"
                                                 style={[
                                                     // @ts-ignore
                                                     styles.input,
-                                                    {
-                                                        color: inputColor,
-                                                        ...animatedStyle,
-                                                    },
+                                                    animatedFontStyle,
+                                                    animatedStyleInputColor,
                                                 ]}
                                                 placeholderTextColor={
                                                     placeholderColor
@@ -352,7 +356,9 @@ export const SelectAmountSendScreen = ({ route }: Props) => {
                                               children: (
                                                   <BaseText
                                                       typographyFont="captionBold"
-                                                      color={inputColor}>
+                                                      color={
+                                                          inputColorNotAnimated
+                                                      }>
                                                       {"≈ "}
                                                       {isInputInFiat
                                                           ? tokenHumanAmountFromFiat
