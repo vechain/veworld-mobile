@@ -31,6 +31,7 @@ import { BigNumber } from "bignumber.js"
 import { useNavigation } from "@react-navigation/native"
 import { useTotalTokenBalance, useTotalFiatBalance, useUI } from "./Hooks"
 import { isEmpty } from "lodash"
+import Animated from "react-native-reanimated"
 
 const { defaults: defaultTypography } = typography
 
@@ -38,6 +39,8 @@ type Props = NativeStackScreenProps<
     RootStackParamListHome & RootStackParamListDiscover,
     Routes.SELECT_AMOUNT_SEND
 >
+
+const AnimatedTextInput = Animated.createAnimatedComponent(TextInput)
 
 export const SelectAmountSendScreen = ({ route }: Props) => {
     const { initialRoute, token } = route.params
@@ -186,12 +189,13 @@ export const SelectAmountSendScreen = ({ route }: Props) => {
         })
     }
 
-    const { inputColor, placeholderColor, shortenedTokenName } = useUI({
-        isError,
-        input,
-        token,
-        theme,
-    })
+    const { inputColor, placeholderColor, shortenedTokenName, animatedStyle } =
+        useUI({
+            isError,
+            input,
+            token,
+            theme,
+        })
 
     return (
         <Layout
@@ -265,8 +269,6 @@ export const SelectAmountSendScreen = ({ route }: Props) => {
                                                         : shortenedTokenName}
                                                 </BaseText>
 
-                                                {/* <BaseSpacer height={6} /> */}
-
                                                 {isInputInFiat ? (
                                                     <BaseText
                                                         typographyFont="subTitleBold"
@@ -286,7 +288,7 @@ export const SelectAmountSendScreen = ({ route }: Props) => {
                                             </BaseView>
 
                                             <BaseSpacer width={16} />
-                                            <TextInput
+                                            <AnimatedTextInput
                                                 contextMenuHidden
                                                 cursorColor={
                                                     theme.colors.primary
@@ -298,6 +300,7 @@ export const SelectAmountSendScreen = ({ route }: Props) => {
                                                     styles.input,
                                                     {
                                                         color: inputColor,
+                                                        ...animatedStyle,
                                                     },
                                                 ]}
                                                 placeholderTextColor={
@@ -393,7 +396,6 @@ const styles = StyleSheet.create({
     input: {
         ...defaultTypography.largeTitle,
         flex: 1,
-        fontSize: 38,
     },
     budget: {
         justifyContent: "flex-start",
