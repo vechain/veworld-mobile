@@ -295,11 +295,12 @@ platform :ios do
       # delete branch remotely
       sh("git push origin --delete release-build-#{build}-#{version}")
 
-      # delete tag locally
-      sh("git tag -d v#{version}-#{build}") 
-
-      # delete tag remotely
-      sh("git push --delete origin v#{version}-#{build}") 
+      if git_tag_exists(tag: "v#{version}-#{build}")
+        # delete tag locally
+        sh("git tag -d v#{version}-#{build}") 
+        # delete tag remotely
+        sh("git push --delete origin v#{version}-#{build}") 
+      end
     end
   end
 end
