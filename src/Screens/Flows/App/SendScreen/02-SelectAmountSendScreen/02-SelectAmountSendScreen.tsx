@@ -32,6 +32,7 @@ import { useNavigation } from "@react-navigation/native"
 import { useTotalTokenBalance, useTotalFiatBalance, useUI } from "./Hooks"
 import { isEmpty } from "lodash"
 import Animated from "react-native-reanimated"
+import HapticsService from "~Services/HapticsService"
 
 const { defaults: defaultTypography } = typography
 
@@ -129,6 +130,7 @@ export const SelectAmountSendScreen = ({ route }: Props) => {
 
             if (new BigNumber(roundDownValue).gt(tokenTotalBalance)) {
                 setIsError(true)
+                HapticsService.triggerNotification({ level: "Error" })
             } else {
                 setIsError(false)
             }
@@ -326,12 +328,14 @@ export const SelectAmountSendScreen = ({ route }: Props) => {
                                                         }
                                                         bg={COLORS.LIME_GREEN}
                                                         style={styles.icon}
+                                                        haptics="Light"
                                                         action={
                                                             handleToggleInputMode
                                                         }
                                                     />
 
                                                     <BaseTouchable
+                                                        haptics="Light"
                                                         action={
                                                             handleOnMaxPress
                                                         }
