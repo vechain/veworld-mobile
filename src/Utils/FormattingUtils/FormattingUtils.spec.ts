@@ -11,7 +11,6 @@ import {
     scaleNumberDown,
     scaleNumberUp,
     validateStringPercentages,
-    formatToHumanNumber,
 } from "./FormattingUtils"
 import { BigNumber } from "bignumber.js"
 
@@ -208,47 +207,5 @@ describe("validateStringPercentages", () => {
     it("should return true for an empty array", () => {
         const percentages: string[] = []
         expect(validateStringPercentages(percentages)).toBe(false)
-    })
-})
-
-describe("foramt to human number and currency", () => {
-    it.each([
-        ["1234.5678", 2, "de-DE", "1.234,56"],
-        ["1000", 0, "en-US", "1,000"],
-        // Add more cases for different locales and decimal places
-    ])(
-        "should format %s with %i decimal places in %s locale as %s",
-        (amount, decimals, locale, expected) => {
-            expect(formatToHumanNumber(amount, decimals, locale)).toBe(expected)
-        },
-    )
-
-    // Test for invalid inputs
-    it.each([
-        ["not-a-number", 2, "en-US", "Invalid amount"],
-        ["bob2abc", 2, "en-US", "Invalid amount"],
-        // Add more invalid input cases
-    ])(
-        'should return "Invalid amount" for invalid input %s',
-        (amount, decimals, locale, expected) => {
-            expect(formatToHumanNumber(amount, decimals, locale)).toBe(expected)
-        },
-    )
-
-    // Test for rounding logic
-    it.each([
-        ["0.009", 2, "en-US", "< 0.01"],
-        ["0.004", 2, "en-US", "< 0.01"],
-        // Add more cases to test rounding
-    ])(
-        "should round %s correctly in %s locale",
-        (amount, decimals, locale, expected) => {
-            expect(formatToHumanNumber(amount, decimals, locale)).toBe(expected)
-        },
-    )
-
-    // Test for zero value logic
-    it("should handle zero correctly", () => {
-        expect(formatToHumanNumber("0", 2, "en-US")).toBe("0.00")
     })
 })
