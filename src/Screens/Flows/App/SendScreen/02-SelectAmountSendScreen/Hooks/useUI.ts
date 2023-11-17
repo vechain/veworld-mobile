@@ -41,7 +41,7 @@ export const useUI = ({
         return {
             color,
         }
-    }, [isError])
+    }, [isError, theme.isDark])
 
     const placeholderColor = theme.isDark
         ? COLORS.WHITE_DISABLED
@@ -64,11 +64,11 @@ export const useUI = ({
     const computeFonts = useMemo(() => {
         return input.length > 11
             ? (inputTextSize.value = withSpring(24, {
-                  damping: 20,
+                  damping: 14,
                   stiffness: 100,
               }))
             : (inputTextSize.value = withSpring(38, {
-                  damping: 20,
+                  damping: 14,
                   stiffness: 100,
               }))
     }, [input.length, inputTextSize])

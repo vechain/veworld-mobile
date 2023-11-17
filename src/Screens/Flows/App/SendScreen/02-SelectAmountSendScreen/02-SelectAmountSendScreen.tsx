@@ -1,7 +1,7 @@
 import { NativeStackScreenProps } from "@react-navigation/native-stack"
 import React, { useCallback, useState } from "react"
 import { StyleSheet, TextInput } from "react-native"
-import { useAmountInput, useLocale, useTheme } from "~Hooks"
+import { useAmountInput, useTheme } from "~Hooks"
 import { FormattingUtils } from "~Utils"
 import {
     BaseCardGroup,
@@ -29,7 +29,12 @@ import {
 } from "~Storage/Redux"
 import { BigNumber } from "bignumber.js"
 import { useNavigation } from "@react-navigation/native"
-import { useTotalTokenBalance, useTotalFiatBalance, useUI } from "./Hooks"
+import {
+    useTotalTokenBalance,
+    useTotalFiatBalance,
+    useUI,
+    useCalculateGas,
+} from "./Hooks"
 import { isEmpty } from "lodash"
 import Animated from "react-native-reanimated"
 import HapticsService from "~Services/HapticsService"
@@ -46,7 +51,6 @@ const AnimatedTextInput = Animated.createAnimatedComponent(TextInput)
 export const SelectAmountSendScreen = ({ route }: Props) => {
     const { initialRoute, token } = route.params
 
-    const { languageTag } = useLocale()
     const theme = useTheme()
     const { LL } = useI18nContext()
     const nav = useNavigation()
@@ -59,10 +63,9 @@ export const SelectAmountSendScreen = ({ route }: Props) => {
     const [isError, setIsError] = useState(false)
     const isExchangeRateAvailable = !!exchangeRate?.rate
 
-    const { tokenTotalBalance, tokenHumanTotalBalance } = useTotalTokenBalance(
-        token,
-        languageTag,
-    )
+    const vthoEstimate = useCalculateGas({ token })
+
+    const { tokenTotalBalance } = useTotalTokenBalance(token, vthoEstimate)
 
     const { fiatTotalBalance } = useTotalFiatBalance(
         tokenTotalBalance,
@@ -80,7 +83,6 @@ export const SelectAmountSendScreen = ({ route }: Props) => {
             0,
         ),
         2,
-        languageTag,
     )
 
     /**
@@ -93,10 +95,11 @@ export const SelectAmountSendScreen = ({ route }: Props) => {
      * TOKEN selected balance in human readable format (correct value is when FIAT is active)
      * Example "2,472.771"
      */
-    const tokenHumanAmountFromFiat = FormattingUtils.formatToHumanNumber(
+    const tokenHumanAmountFromFiat = FormattingUtils.scaleNumberDown(
         tokenAmountFromFiat || "0",
-        2,
-        languageTag,
+        0,
+        undefined,
+        BigNumber.ROUND_DOWN,
     )
 
     /**
@@ -147,11 +150,7 @@ export const SelectAmountSendScreen = ({ route }: Props) => {
     const handleOnMaxPress = useCallback(() => {
         setInput(
             isInputInFiat
-                ? FormattingUtils.formatToHumanNumber(
-                      fiatTotalBalance,
-                      2,
-                      languageTag,
-                  )
+                ? FormattingUtils.formatToHumanNumber(fiatTotalBalance, 2)
                 : tokenTotalBalance,
         )
 
@@ -173,7 +172,6 @@ export const SelectAmountSendScreen = ({ route }: Props) => {
         exchangeRate?.rate,
         fiatTotalBalance,
         isInputInFiat,
-        languageTag,
         setInput,
         tokenTotalBalance,
     ])
@@ -225,7 +223,7 @@ export const SelectAmountSendScreen = ({ route }: Props) => {
                             <BaseView flexDirection="row" mr={8}>
                                 <BaseText typographyFont="subTitleBold">
                                     {"≈ "}
-                                    {tokenHumanTotalBalance}
+                                    {Number(tokenTotalBalance).toFixed(2)}
                                 </BaseText>
                                 <BaseSpacer width={5} />
                                 <BaseText typographyFont="buttonSecondary">
@@ -365,7 +363,9 @@ export const SelectAmountSendScreen = ({ route }: Props) => {
                                                       }>
                                                       {"≈ "}
                                                       {isInputInFiat
-                                                          ? tokenHumanAmountFromFiat
+                                                          ? Number(
+                                                                tokenHumanAmountFromFiat,
+                                                            ).toFixed(2)
                                                           : fiatHumanAmount}{" "}
                                                       {isInputInFiat
                                                           ? token.symbol
@@ -378,6 +378,24 @@ export const SelectAmountSendScreen = ({ route }: Props) => {
                                     : []),
                             ]}
                         />
+
+                        <BaseSpacer height={16} />
+
+                        {token.symbol.toLowerCase() === "vtho" ? (
+                            <BaseText
+                                typographyFont="caption"
+                                px={4}
+                                color={theme.colors.textDisabled}>
+                                {LL.SEND_VTHO_WARNING_MAX()}
+                            </BaseText>
+                        ) : (
+                            <BaseText
+                                typographyFont="caption"
+                                px={4}
+                                color={theme.colors.textDisabled}>
+                                {LL.SEND_VTHO_WARNING_TOKEN()}
+                            </BaseText>
+                        )}
 
                         {/* [END] - INPUT */}
                     </BaseView>

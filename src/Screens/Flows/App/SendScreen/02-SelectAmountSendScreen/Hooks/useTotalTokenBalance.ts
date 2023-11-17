@@ -5,38 +5,39 @@ import { useMemo } from "react"
 
 export const useTotalTokenBalance = (
     token: FungibleTokenWithBalance,
-    languageTag: string,
+    vthoEstimate: BigNumber,
 ) => {
     /**
      * TOKEN total balance in raw-ish format (with decimals)
      * Example "2490.000029999996009823"
      */
-    const tokenTotalBalance = useMemo(
-        () =>
-            FormattingUtils.scaleNumberDown(
+    const tokenTotalBalance = useMemo(() => {
+        let total = ""
+
+        if (token?.symbol?.toLowerCase() === "vtho") {
+            let newTotal: BigNumber | string = new BigNumber(
+                token.balance.balance,
+            ).minus(vthoEstimate)
+
+            newTotal = newTotal.isLessThan(0) ? "0" : newTotal
+
+            total = FormattingUtils.scaleNumberDown(
+                newTotal,
+                token.decimals,
+                token.decimals,
+                BigNumber.ROUND_DOWN,
+            )
+        } else {
+            total = FormattingUtils.scaleNumberDown(
                 token.balance.balance,
                 token.decimals,
                 token.decimals,
                 BigNumber.ROUND_DOWN,
-            ),
-        [token.balance.balance, token.decimals],
-    )
+            )
+        }
 
-    /**
-     * TOKEN total balance in human readable format
-     * Example "2,490.00"
-     */
-    const tokenHumanTotalBalance = useMemo(
-        () =>
-            FormattingUtils.formatToHumanNumber(
-                new BigNumber(tokenTotalBalance)
-                    .decimalPlaces(2, BigNumber.ROUND_DOWN)
-                    .toString(),
-                2,
-                languageTag,
-            ),
-        [tokenTotalBalance, languageTag],
-    )
+        return total
+    }, [token.balance.balance, token.decimals, token.symbol, vthoEstimate])
 
-    return { tokenTotalBalance, tokenHumanTotalBalance }
+    return { tokenTotalBalance }
 }
