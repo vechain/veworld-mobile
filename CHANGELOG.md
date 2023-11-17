@@ -1,5 +1,15 @@
 
 
+## [1.3.2](https://github.com/vechainfoundation/veworld-mobile/compare/1.3.0...1.3.2) (2023-11-17)
+
+
+### Bug Fixes
+
+* currency formatting, max vtho warning copy ([580dbd6](https://github.com/vechainfoundation/veworld-mobile/commit/580dbd6a418cdadc1f271a3233a1ff32801540f8))
+* e2e test, add haptics ([fc938d4](https://github.com/vechainfoundation/veworld-mobile/commit/fc938d4b1abc1da92e695ef330bce90848f86c5e))
+* failing test ([3f730d7](https://github.com/vechainfoundation/veworld-mobile/commit/3f730d70eb51527334a42b0bac1844e22698cdfe))
+* input text color ([d97e25a](https://github.com/vechainfoundation/veworld-mobile/commit/d97e25ae9f831ef41c21e25b2ed0049b8af9c17b))
+
 ## [1.3.1](https://github.com/vechainfoundation/veworld-mobile/compare/1.3.0...1.3.1) (2023-11-10)
 
 ## [1.3.0](https://github.com/vechainfoundation/veworld-mobile/compare/v1.0-test...v1.3.0) (2023-11-09)
