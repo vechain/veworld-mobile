@@ -2341,6 +2341,14 @@ type RootTranslation = {
 	 */
 	SEND_TRANSACTION_ERROR: string
 	/**
+	 * V​e​c​h​a​i​n​ ​u​s​e​s​ ​V​T​H​O​ ​f​o​r​ ​s​e​t​t​l​i​n​g​ ​t​r​a​n​s​a​c​t​i​o​n​ ​f​e​e​s​.​ ​T​o​ ​e​n​s​u​r​e​ ​s​m​o​o​t​h​ ​t​r​a​n​s​a​c​t​i​o​n​s​,​ ​i​t​'​s​ ​e​s​s​e​n​t​i​a​l​ ​t​o​ ​m​a​i​n​t​a​i​n​ ​a​ ​m​i​n​i​m​a​l​ ​a​m​o​u​n​t​ ​o​f​ ​V​T​H​O​ ​i​n​ ​y​o​u​r​ ​w​a​l​l​e​t​.
+	 */
+	SEND_VTHO_WARNING_TOKEN: string
+	/**
+	 * V​e​c​h​a​i​n​ ​f​a​c​i​l​i​t​a​t​e​s​ ​t​r​a​n​s​a​c​t​i​o​n​s​ ​u​s​i​n​g​ ​V​T​H​O​ ​a​s​ ​t​h​e​ ​p​a​y​m​e​n​t​ ​m​e​d​i​u​m​ ​f​o​r​ ​t​r​a​n​s​a​c​t​i​o​n​ ​f​e​e​s​.​ ​O​u​r​ ​M​A​X​ ​c​a​l​c​u​l​a​t​i​o​n​ ​m​e​t​h​o​d​ ​d​e​d​u​c​t​s​ ​a​ ​p​r​e​d​e​f​i​n​e​d​ ​b​a​s​e​ ​f​e​e​ ​f​o​r​ ​t​r​a​n​s​a​c​t​i​o​n​ ​g​a​s​.​ ​T​h​e​ ​a​m​o​u​n​t​ ​d​i​s​p​l​a​y​e​d​ ​o​n​ ​y​o​u​r​ ​s​c​r​e​e​n​ ​r​e​p​r​e​s​e​n​t​s​ ​y​o​u​r​ ​t​o​t​a​l​ ​V​T​H​O​ ​b​a​l​a​n​c​e​ ​l​e​s​s​ ​t​h​e​ ​b​a​s​e​ ​f​e​e​ ​c​a​l​c​u​l​a​t​e​d​ ​f​o​r​ ​t​h​e​ ​t​r​a​n​s​a​c​t​i​o​n​.
+	 */
+	SEND_VTHO_WARNING_MAX: string
+	/**
 	 * C​o​n​n​e​c​t​i​n​g
 	 */
 	LEDGER_CONNECTING: string
@@ -4985,6 +4993,14 @@ Try reconnect your device to the internet.
 	 * There was an error sending the transaction. This may be due to a lack of funds
 	 */
 	SEND_TRANSACTION_ERROR: () => LocalizedString
+	/**
+	 * Vechain uses VTHO for settling transaction fees. To ensure smooth transactions, it's essential to maintain a minimal amount of VTHO in your wallet.
+	 */
+	SEND_VTHO_WARNING_TOKEN: () => LocalizedString
+	/**
+	 * Vechain facilitates transactions using VTHO as the payment medium for transaction fees. Our MAX calculation method deducts a predefined base fee for transaction gas. The amount displayed on your screen represents your total VTHO balance less the base fee calculated for the transaction.
+	 */
+	SEND_VTHO_WARNING_MAX: () => LocalizedString
 	/**
 	 * Connecting
 	 */

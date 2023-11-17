@@ -271,11 +271,7 @@ export const validateStringPercentages = (percentages: string[]): boolean => {
     return true
 }
 
-export function formatToHumanNumber(
-    amount: string,
-    decimals: number,
-    locale: string,
-): string {
+export function formatToHumanNumber(amount: string, decimals: number): string {
     // Convert the amount to a floating point number
     const numberAmount = parseFloat(amount)
     const scale = 100
@@ -288,40 +284,42 @@ export function formatToHumanNumber(
     const roundedAmount = Math.floor(numberAmount * scale) / scale
 
     // Convert the number to a string with fixed decimal places
-    let amountString = roundedAmount.toFixed(decimals)
+    let amountString = roundedAmount
+        .toFixed(decimals)
+        .replace(/\B(?=(\d{3})+(?!\d))/g, ",")
 
-    switch (locale) {
-        // Euro locales with comma for decimal and period for thousands
-        case "at-AT": // Austria
-        case "be-BE": // Belgium
-        case "cy-CY": // Cyprus
-        case "fi-FI": // Finland
-        case "fr-FR": // France
-        case "de-DE": // Germany
-        case "gr-GR": // Greece
-        case "it-IT": // Italy
-        case "lv-LV": // Latvia
-        case "lt-LT": // Lithuania
-        case "lu-LU": // Luxembourg
-        case "mt-MT": // Malta
-        case "nl-NL": // the Netherlands
-        case "pt-PT": // Portugal
-        case "sk-SK": // Slovakia
-        case "si-SI": // Slovenia
-        case "es-ES": // Spain
-            amountString = amountString
-                .replace(/\B(?=(\d{3})+(?!\d))/g, ".")
-                .replace(/\.(\d+)$/, ",$1")
-            break
+    // switch (locale) {
+    //     // Euro locales with comma for decimal and period for thousands
+    //     case "AT": // Austria
+    //     case "BE": // Belgium
+    //     case "CY": // Cyprus
+    //     case "FI": // Finland
+    //     case "FR": // France
+    //     case "DE": // Germany
+    //     case "GR": // Greece
+    //     case "IT": // Italy
+    //     case "LV": // Latvia
+    //     case "LT": // Lithuania
+    //     case "LU": // Luxembourg
+    //     case "MT": // Malta
+    //     case "NL": // the Netherlands
+    //     case "PT": // Portugal
+    //     case "SK": // Slovakia
+    //     case "SI": // Slovenia
+    //     case "ES": // Spain
+    //         amountString = amountString
+    //             .replace(/\B(?=(\d{3})+(?!\d))/g, ".")
+    //             .replace(/\.(\d+)$/, ",$1")
+    //         break
 
-        // Euro locales with dot for decimal and comma for thousands
-        case "en-IE": // English (Ireland)
-        case "et-EE": // Estonian
-        case "en-US":
-        default:
-            amountString = amountString.replace(/\B(?=(\d{3})+(?!\d))/g, ",")
-            break
-    }
+    //     // Euro locales with dot for decimal and comma for thousands
+    //     case "IE": // English (Ireland)
+    //     case "EE": // Estonian
+    //     case "US":
+    //     default:
+    //         amountString = amountString.replace(/\B(?=(\d{3})+(?!\d))/g, ",")
+    //         break
+    // }
 
     if (!isZero(numberAmount) && isZero(roundedAmount)) {
         amountString = "< 0.01"
