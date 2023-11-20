@@ -1395,10 +1395,10 @@
     minimatch "^3.1.2"
     strip-json-comments "^3.1.1"
 
-"@eslint/js@8.53.0":
-  version "8.53.0"
-  resolved "https://registry.yarnpkg.com/@eslint/js/-/js-8.53.0.tgz#bea56f2ed2b5baea164348ff4d5a879f6f81f20d"
-  integrity sha512-Kn7K8dx/5U6+cT1yEhpX1w4PCSg0M+XyRILPgvwcEBjerFWCwQj5sbr3/VmxqV0JGHCBCzyd6LxypEuehypY1w==
+"@eslint/js@8.54.0":
+  version "8.54.0"
+  resolved "https://registry.yarnpkg.com/@eslint/js/-/js-8.54.0.tgz#4fab9a2ff7860082c304f750e94acd644cf984cf"
+  integrity sha512-ut5V+D+fOoWPgGGNj83GGjnntO39xDy6DWxO0wb7Jp3DcMX0TfIqdzHF85VTQkerdyGmuuMD9AKAo5KiNlf/AQ==
 
 "@ethereumjs/common@^3.2.0":
   version "3.2.0"
@@ -3834,9 +3834,9 @@
   integrity sha512-nG96G3Wp6acyAgJqGasjODb+acrI7KltPiRxzHPXnP3NgI28bpQDRv53olbqGXbfcgF5aiiHmO3xpwEpS5Ld9g==
 
 "@types/node@*":
-  version "20.9.1"
-  resolved "https://registry.yarnpkg.com/@types/node/-/node-20.9.1.tgz#9d578c610ce1e984adda087f685ace940954fe19"
-  integrity sha512-HhmzZh5LSJNS5O8jQKpJ/3ZcrrlG6L70hpGqMIAoM9YVD0YBRNWYsfwcXq8VnSjlNpCpgLzMXdiPo+dxcvSmiA==
+  version "20.9.2"
+  resolved "https://registry.yarnpkg.com/@types/node/-/node-20.9.2.tgz#002815c8e87fe0c9369121c78b52e800fadc0ac6"
+  integrity sha512-WHZXKFCEyIUJzAwh3NyyTHYSR35SevJ6mZ1nWwJafKtiQbqRTIKSRcw3Ma3acqgsent3RRDqeVwpHntMk+9irg==
   dependencies:
     undici-types "~5.26.4"
 
@@ -3866,9 +3866,9 @@
   integrity sha512-mxSnDQxPqsZxmeShFH+uwQ4kO4gcJcGahjjMFeLbKE95IAZiiZyiEepGZjtXJ7hN/yfu0bu9xN2ajcU0JcxX6A==
 
 "@types/react-native-vector-icons@^6.4.12":
-  version "6.4.17"
-  resolved "https://registry.yarnpkg.com/@types/react-native-vector-icons/-/react-native-vector-icons-6.4.17.tgz#78a96737b9045af792923619f4e895460362ca44"
-  integrity sha512-pE5vmuKA9BgbrWmri+LVLYmhwLCJ1gKerpXU6qrXFehLqY/sJv1VdvkUul9UaVseKJ3XhhG2LWg3kF1xQD2EGA==
+  version "6.4.18"
+  resolved "https://registry.yarnpkg.com/@types/react-native-vector-icons/-/react-native-vector-icons-6.4.18.tgz#18671c617b9d0958747bc959903470dde91a8c79"
+  integrity sha512-YGlNWb+k5laTBHd7+uZowB9DpIK3SXUneZqAiKQaj1jnJCZM0x71GDim5JCTMi4IFkhc9m8H/Gm28T5BjyivUw==
   dependencies:
     "@types/react" "*"
     "@types/react-native" "^0.70"
@@ -6121,9 +6121,9 @@ cookie-es@^1.0.0:
   integrity sha512-mWYvfOLrfEc996hlKcdABeIiPHUPC6DM2QYZdGGOvhOTbA3tjm2eBwqlJpoFdjC89NI4Qt6h0Pu06Mp+1Pj5OQ==
 
 core-js-compat@^3.31.0, core-js-compat@^3.33.1:
-  version "3.33.2"
-  resolved "https://registry.yarnpkg.com/core-js-compat/-/core-js-compat-3.33.2.tgz#3ea4563bfd015ad4e4b52442865b02c62aba5085"
-  integrity sha512-axfo+wxFVxnqf8RvxTzoAlzW4gRoacrHeoFlc9n0x50+7BEyZL/Rt3hicaED1/CEd7I6tPCPVUYcJwCMO5XUYw==
+  version "3.33.3"
+  resolved "https://registry.yarnpkg.com/core-js-compat/-/core-js-compat-3.33.3.tgz#ec678b772c5a2d8a7c60a91c3a81869aa704ae01"
+  integrity sha512-cNzGqFsh3Ot+529GIXacjTJ7kegdt5fPXxCBVS1G0iaZpuo/tBz399ymceLJveQhFFZ8qThHiP3fzuoQjKN2ow==
   dependencies:
     browserslist "^4.22.1"
 
@@ -6579,7 +6579,7 @@ define-properties@^1.1.3, define-properties@^1.1.4, define-properties@^1.2.0, de
     has-property-descriptors "^1.0.0"
     object-keys "^1.1.1"
 
-defu@^6.1.2:
+defu@^6.1.2, defu@^6.1.3:
   version "6.1.3"
   resolved "https://registry.yarnpkg.com/defu/-/defu-6.1.3.tgz#6d7f56bc61668e844f9f593ace66fd67ef1205fd"
   integrity sha512-Vy2wmG3NTkmHNg/kzpuvHhkqeIx3ODWqasgCRbKtbXEN0G+HpEEv9BtJLp7ZG1CZloFaC41Ah3ZFbq7aqCqMeQ==
@@ -6875,9 +6875,9 @@ ee-first@1.1.1:
   integrity sha512-WMwm9LhRUo+WUaRN+vRuETqG89IgZphVSNkdFgeb6sS/E4OrDIN7t48CAewSHXc6C8lefD8KKfr5vY61brQlow==
 
 electron-to-chromium@^1.4.535:
-  version "1.4.587"
-  resolved "https://registry.yarnpkg.com/electron-to-chromium/-/electron-to-chromium-1.4.587.tgz#d8b864f21338b60798d447a3d83b90753f701d07"
-  integrity sha512-RyJX0q/zOkAoefZhB9XHghGeATVP0Q3mwA253XD/zj2OeXc+JZB9pCaEv6R578JUYaWM9PRhye0kXvd/V1cQ3Q==
+  version "1.4.588"
+  resolved "https://registry.yarnpkg.com/electron-to-chromium/-/electron-to-chromium-1.4.588.tgz#d553f3c008e73488fb181fdf2601fdb0b1ffbb78"
+  integrity sha512-soytjxwbgcCu7nh5Pf4S2/4wa6UIu+A3p03U2yVr53qGxi1/VTR3ENI+p50v+UxqqZAfl48j3z55ud7VHIOr9w==
 
 elliptic@6.5.4, elliptic@^6.5.3, elliptic@^6.5.4:
   version "6.5.4"
@@ -7261,14 +7261,14 @@ eslint-visitor-keys@^3.3.0, eslint-visitor-keys@^3.4.1, eslint-visitor-keys@^3.4
   integrity sha512-wpc+LXeiyiisxPlEkUzU6svyS1frIO3Mgxj1fdy7Pm8Ygzguax2N3Fa/D/ag1WqbOprdI+uY6wMUl8/a2G+iag==
 
 eslint@^8.19.0:
-  version "8.53.0"
-  resolved "https://registry.yarnpkg.com/eslint/-/eslint-8.53.0.tgz#14f2c8244298fcae1f46945459577413ba2697ce"
-  integrity sha512-N4VuiPjXDUa4xVeV/GC/RV3hQW9Nw+Y463lkWaKKXKYMvmRiRDAtfpuPFLN+E1/6ZhyR8J2ig+eVREnYgUsiag==
+  version "8.54.0"
+  resolved "https://registry.yarnpkg.com/eslint/-/eslint-8.54.0.tgz#588e0dd4388af91a2e8fa37ea64924074c783537"
+  integrity sha512-NY0DfAkM8BIZDVl6PgSa1ttZbx3xHgJzSNJKYcQglem6CppHyMhRIQkBVSSMaSRnLhig3jsDbEzOjwCVt4AmmA==
   dependencies:
     "@eslint-community/eslint-utils" "^4.2.0"
     "@eslint-community/regexpp" "^4.6.1"
     "@eslint/eslintrc" "^2.1.3"
-    "@eslint/js" "8.53.0"
+    "@eslint/js" "8.54.0"
     "@humanwhocodes/config-array" "^0.11.13"
     "@humanwhocodes/module-importer" "^1.0.1"
     "@nodelib/fs.walk" "^1.2.8"
@@ -7622,10 +7622,10 @@ expo-modules-autolinking@1.5.1:
     find-up "^5.0.0"
     fs-extra "^9.1.0"
 
-expo-modules-core@1.5.11:
-  version "1.5.11"
-  resolved "https://registry.yarnpkg.com/expo-modules-core/-/expo-modules-core-1.5.11.tgz#6ee33641cec5ef9c629393a267cef122110d2bf0"
-  integrity sha512-1Dj2t74nVjxq6xEQf2b9WFfAMhPzVnR0thY0PfRFgob4STyj3sq1U4PIHVWvKQBtDKIa227DrNRb+Hu+LqKWQg==
+expo-modules-core@1.5.12:
+  version "1.5.12"
+  resolved "https://registry.yarnpkg.com/expo-modules-core/-/expo-modules-core-1.5.12.tgz#07eb4de4bf25a3ec3e1924403e73d13c656613fd"
+  integrity sha512-mY4wTDU458dhwk7IVxLNkePlYXjs9BTgk4NQHBUXf0LapXsvr+i711qPZaFNO4egf5qq6fQV+Yfd/KUguHstnQ==
   dependencies:
     compare-versions "^3.4.0"
     invariant "^2.2.4"
@@ -7643,9 +7643,9 @@ expo-task-manager@~11.3.0:
     unimodules-app-loader "~4.2.0"
 
 expo@^49.0.0:
-  version "49.0.18"
-  resolved "https://registry.yarnpkg.com/expo/-/expo-49.0.18.tgz#e97e99a0bd20b21931e6c1cd93e7f930a91bbf5e"
-  integrity sha512-BrPtTxBlE7pFG1ZDi1fqq4pGbS5IcTg4bH9TTeUbJOTTs43W+QkXzsylmT0omf8nADOHGx9EFgufPneBcU1F1w==
+  version "49.0.19"
+  resolved "https://registry.yarnpkg.com/expo/-/expo-49.0.19.tgz#b7c4a1ab743674e91e9675a0c6d194419c60afa7"
+  integrity sha512-2Mrup5nqaE4jDCl95Cb2fDNJRjGMgUXRCMEX3k4HyMd9h3x1dFbkR6+hlRT/CSb6PzSQ9bLEsHagm5OIUKZZZw==
   dependencies:
     "@babel/runtime" "^7.20.0"
     "@expo/cli" "0.10.15"
@@ -7660,7 +7660,7 @@ expo@^49.0.0:
     expo-font "~11.4.0"
     expo-keep-awake "~12.3.0"
     expo-modules-autolinking "1.5.1"
-    expo-modules-core "1.5.11"
+    expo-modules-core "1.5.12"
     fbemitter "^3.0.0"
     invariant "^2.2.4"
     md5-file "^3.2.3"
@@ -8387,16 +8387,16 @@ graphql@15.8.0:
   integrity sha512-5gghUc24tP9HRznNpV2+FIoq3xKkj5dTQqf4v0CpdPbFVwFkWoxOM+o+2OC9ZSvjEMTjfmG9QT+gcvggTwW1zw==
 
 h3@^1.8.1, h3@^1.8.2:
-  version "1.8.2"
-  resolved "https://registry.yarnpkg.com/h3/-/h3-1.8.2.tgz#69ea8ca0285c1bb268cd08b9a7017e02939f88b7"
-  integrity sha512-1Ca0orJJlCaiFY68BvzQtP2lKLk46kcLAxVM8JgYbtm2cUg6IY7pjpYgWMwUvDO9QI30N5JAukOKoT8KD3Q0PQ==
+  version "1.9.0"
+  resolved "https://registry.yarnpkg.com/h3/-/h3-1.9.0.tgz#c5f512a93026df9837db6f30c9ef51135dd46752"
+  integrity sha512-+F3ZqrNV/CFXXfZ2lXBINHi+rM4Xw3CDC5z2CDK3NMPocjonKipGLLDSkrqY9DOrioZNPTIdDMWfQKm//3X2DA==
   dependencies:
     cookie-es "^1.0.0"
-    defu "^6.1.2"
-    destr "^2.0.1"
-    iron-webcrypto "^0.10.1"
+    defu "^6.1.3"
+    destr "^2.0.2"
+    iron-webcrypto "^1.0.0"
     radix3 "^1.1.0"
-    ufo "^1.3.0"
+    ufo "^1.3.2"
     uncrypto "^0.1.3"
     unenv "^1.7.4"
 
@@ -8851,10 +8851,10 @@ ipaddr.js@^1.9.0:
   resolved "https://registry.yarnpkg.com/ipaddr.js/-/ipaddr.js-1.9.1.tgz#bff38543eeb8984825079ff3a2a8e6cbd46781b3"
   integrity sha512-0KI/607xoxSToH7GjN1FfSbLoU0+btTicjsQSWQlh/hZykN8KpmMf7uYwPW3R+akZ6R/w18ZlXSHBYXiYUPO3g==
 
-iron-webcrypto@^0.10.1:
-  version "0.10.1"
-  resolved "https://registry.yarnpkg.com/iron-webcrypto/-/iron-webcrypto-0.10.1.tgz#cab8636a468685533a8521bfd7f06b19b7174809"
-  integrity sha512-QGOS8MRMnj/UiOa+aMIgfyHcvkhqNUsUxb1XzskENvbo+rEfp6TOwqd1KPuDzXC4OnGHcMSVxDGRoilqB8ViqA==
+iron-webcrypto@^1.0.0:
+  version "1.0.0"
+  resolved "https://registry.yarnpkg.com/iron-webcrypto/-/iron-webcrypto-1.0.0.tgz#e3b689c0c61b434a0a4cb82d0aeabbc8b672a867"
+  integrity sha512-anOK1Mktt8U1Xi7fCM3RELTuYbnFikQY5VtrDj7kPgpejV7d43tWKhzgioO0zpkazLEL/j/iayRqnJhrGfqUsg==
 
 is-arguments@^1.0.4, is-arguments@^1.1.1:
   version "1.1.1"
@@ -10498,11 +10498,9 @@ lowercase-keys@^3.0.0:
   integrity sha512-ozCC6gdQ+glXOQsveKD0YsDy8DSQFjDTz4zyzEHNV5+JP5D62LmfDZ6o1cycFx9ouG940M5dE8C8CTewdj2YWQ==
 
 lru-cache@^10.0.1, lru-cache@^10.0.2, "lru-cache@^9.1.1 || ^10.0.0":
-  version "10.0.2"
-  resolved "https://registry.yarnpkg.com/lru-cache/-/lru-cache-10.0.2.tgz#34504678cc3266b09b8dfd6fab4e1515258271b7"
-  integrity sha512-Yj9mA8fPiVgOUpByoTZO5pNrcl5Yk37FcSHsUINpAsaBIEZIuqcCclDZJCVxqQShDsmYX8QG63svJiTbOATZwg==
-  dependencies:
-    semver "^7.3.5"
+  version "10.0.3"
+  resolved "https://registry.yarnpkg.com/lru-cache/-/lru-cache-10.0.3.tgz#b40014d7d2d16d94130b87297a04a1f24874ae7c"
+  integrity sha512-B7gr+F6MkqB3uzINHXNctGieGsRTMwIBgxkp0yq/5BwcuDzD4A8wQpHQW6vDAm1uKSLQghmRdD9sKqf2vJ1cEg==
 
 lru-cache@^4.0.1:
   version "4.1.5"
@@ -12544,9 +12542,9 @@ react-native-blob-util@^0.19.1:
     glob "^7.2.3"
 
 react-native-bootsplash@^5.0.4:
-  version "5.1.2"
-  resolved "https://registry.yarnpkg.com/react-native-bootsplash/-/react-native-bootsplash-5.1.2.tgz#24fc824f3a35162e9bde365c6d275659e5c007c0"
-  integrity sha512-q9bZuH+nxoAoMsq8CdZygk9TnRUpRCHtZfN6uRi+/M8db6TRTDcw26G3TkN7eyojNdeFNzbnCC0V939KJRTdwQ==
+  version "5.1.3"
+  resolved "https://registry.yarnpkg.com/react-native-bootsplash/-/react-native-bootsplash-5.1.3.tgz#12a06a8c008c6d5a4c4ce4f36c32d1a8a3015b89"
+  integrity sha512-cdzPfN/y69V8f0/PUXVl2OwiHr0J7rvuQDX6XMGoWjU3aRSkO0k8F5Buo3kuvNR6zAyWK/Mp8pELUBu9ENMHoQ==
   dependencies:
     detect-indent "^6.1.0"
     fs-extra "^11.1.1"
@@ -12615,9 +12613,9 @@ react-native-gesture-handler@^2.13.1:
     prop-types "^15.7.2"
 
 react-native-get-random-values@^1.9.0:
-  version "1.9.0"
-  resolved "https://registry.yarnpkg.com/react-native-get-random-values/-/react-native-get-random-values-1.9.0.tgz#6cb30511c406922e75fe73833dc1812a85bfb37e"
-  integrity sha512-+29IR2oxzxNVeaRwCqGZ9ABadzMI8SLTBidrIDXPOkKnm5+kEmLt34QKM4JV+d2usPErvKyS85le0OmGTHnyWQ==
+  version "1.10.0"
+  resolved "https://registry.yarnpkg.com/react-native-get-random-values/-/react-native-get-random-values-1.10.0.tgz#c2c5f12a4ef8b1175145347b4a4b9f9a40d9ffc8"
+  integrity sha512-gZ1zbXhbb8+Jy9qYTV8c4Nf45/VB4g1jmXuavY5rPfUn7x3ok9Vl3FTl0dnE92Z4FFtfbUNNwtSfcmomdtWg+A==
   dependencies:
     fast-base64-decode "^1.0.0"
 
@@ -14812,7 +14810,7 @@ uc.micro@^1.0.1, uc.micro@^1.0.5:
   resolved "https://registry.yarnpkg.com/uc.micro/-/uc.micro-1.0.6.tgz#9c411a802a409a91fc6cf74081baba34b24499ac"
   integrity sha512-8Y75pvTYkLJW2hWQHXxoqRgV7qb9B+9vFEtidML+7koHUFapnVJAZ6cKs+Qjz5Aw3aZWHMC6u0wJE3At+nSGwA==
 
-ufo@^1.3.0, ufo@^1.3.1:
+ufo@^1.3.0, ufo@^1.3.1, ufo@^1.3.2:
   version "1.3.2"
   resolved "https://registry.yarnpkg.com/ufo/-/ufo-1.3.2.tgz#c7d719d0628a1c80c006d2240e0d169f6e3c0496"
   integrity sha512-o+ORpgGwaYQXgqGDwd+hkS4PuZ3QnmqMMxRuajK/a38L6fTpcE5GPIfrf+L/KemFzfUpeUQc1rRS1iDBozvnFA==
