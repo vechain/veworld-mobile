@@ -4,7 +4,7 @@ import { createBottomTabNavigator } from "@react-navigation/bottom-tabs"
 import { TabIcon } from "~Components"
 import { useTheme } from "~Hooks"
 import PlatformUtils from "~Utils/PlatformUtils"
-import { HomeStack, SettingsStack } from "~Navigation/Stacks"
+import { BrowserStack, HomeStack, SettingsStack } from "~Navigation/Stacks"
 import { NFTStack } from "~Navigation/Stacks/NFTStack"
 
 const Tab = createBottomTabNavigator()
@@ -49,6 +49,22 @@ export const TabStack = () => {
                 options={{
                     tabBarLabel: "NFT",
                     tabBarTestID: "nft-tab",
+                    tabBarIcon: ({ focused }) =>
+                        renderTabBarIcon(
+                            focused,
+                            focused
+                                ? "image-multiple"
+                                : "image-multiple-outline",
+                        ),
+                }}
+            />
+
+            <Tab.Screen
+                name="BrowserStack"
+                component={BrowserStack}
+                options={{
+                    tabBarLabel: "Browser",
+                    tabBarTestID: "browser-tab",
                     tabBarIcon: ({ focused }) =>
                         renderTabBarIcon(
                             focused,

@@ -70,11 +70,7 @@ export const ConnectAppScreen: FC<Props> = ({ route }: Props) => {
                     currentProposal.params.pairingTopic,
             )
         ) {
-            if (nav.canGoBack()) {
-                nav.goBack()
-            } else {
-                nav.navigate(Routes.HOME)
-            }
+            nav.navigate(Routes.BROWSER)
         }
     }, [currentProposal, nav, activeSessions])
 
@@ -193,7 +189,7 @@ export const ConnectAppScreen: FC<Props> = ({ route }: Props) => {
                 text1: LL.NOTIFICATION_wallet_connect_error_pairing(),
             })
         } finally {
-            nav.goBack()
+            nav.navigate(Routes.BROWSER)
             dispatch(setIsAppLoading(false))
         }
     }, [
@@ -220,14 +216,14 @@ export const ConnectAppScreen: FC<Props> = ({ route }: Props) => {
             } catch (err: unknown) {
                 error("ConnectedAppScreen:handleReject", err)
             } finally {
-                nav.goBack()
+                nav.navigate(Routes.BROWSER)
             }
         }
     }, [currentProposal, nav, rejectPendingProposal])
 
     const onPressBack = useCallback(async () => {
         await handleReject()
-        nav.goBack()
+        nav.navigate(Routes.BROWSER)
     }, [nav, handleReject])
 
     const isConfirmDisabled = useMemo(() => {

@@ -84,7 +84,7 @@ export const SignCertificateScreen: FC<Props> = ({ route }: Props) => {
     })
 
     const onClose = useCallback(() => {
-        nav.goBack()
+        nav.navigate(Routes.BROWSER)
     }, [nav])
 
     const handleAccept = useCallback(
@@ -97,7 +97,7 @@ export const SignCertificateScreen: FC<Props> = ({ route }: Props) => {
                             selectedAccount as LedgerAccountWithDevice,
                         certificate: cert,
                         //TODO: What should initialRoute be?
-                        initialRoute: Routes.HOME,
+                        initialRoute: Routes.BROWSER,
                     })
                     return
                 }

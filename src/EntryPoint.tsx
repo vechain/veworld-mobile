@@ -1,9 +1,9 @@
 import React, { useEffect } from "react"
 import {
+    AutoLockProvider,
     BaseStatusBar,
     ErrorBoundary,
     useApplicationSecurity,
-    AutoLockProvider,
 } from "~Components"
 import { SwitchStack } from "~Navigation"
 import { AppLoader } from "./AppLoader"

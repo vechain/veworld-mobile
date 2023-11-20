@@ -164,7 +164,7 @@ export const SendTransactionScreen: FC<Props> = ({ route }: Props) => {
         clauses,
         onTransactionSuccess,
         onTransactionFailure,
-        initialRoute: Routes.HOME,
+        initialRoute: Routes.BROWSER,
         options,
         requestEvent,
     })

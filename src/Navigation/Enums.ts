@@ -10,6 +10,8 @@ export enum Routes {
     CONFIRM_MNEMONIC = "Confirm_Mnemonic",
     IMPORT_MNEMONIC = "Import_Mnemonic",
 
+    BROWSER = "Browser",
+
     USER_CREATE_PASSWORD = "User_Create_Password",
     APP_SECURITY = "App_Security",
     SETTINGS = "Settings",

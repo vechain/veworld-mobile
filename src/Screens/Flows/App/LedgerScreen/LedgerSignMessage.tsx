@@ -201,9 +201,9 @@ export const LedgerSignMessage: React.FC<Props> = ({ route }) => {
             case Routes.DISCOVER:
                 nav.navigate(Routes.DISCOVER)
                 break
-            case Routes.HOME:
+            case Routes.BROWSER:
             default:
-                nav.navigate(Routes.HOME)
+                nav.navigate(Routes.BROWSER)
                 break
         }
     }, [initialRoute, nav])

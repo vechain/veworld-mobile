@@ -1,5 +1,5 @@
 import React, { useCallback, useMemo, useRef, useState } from "react"
-import { EditTokensBar, Header, TokenList, AccountCard } from "./Components"
+import { AccountCard, EditTokensBar, Header, TokenList } from "./Components"
 import {
     useBottomSheetModal,
     useCheckVersion,

@@ -6,6 +6,7 @@ export * from "./CreateWalletAppStack"
 export * from "./DiscoverStack"
 export * from "./NFTStack"
 export * from "./BuyStack"
+export * from "./BrowserStack"
 
 import { RootStackParamListOnboarding } from "./OnboardingStack"
 import { RootStackParamListHome } from "./HomeStack"
