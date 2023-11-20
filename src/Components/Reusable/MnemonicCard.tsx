@@ -1,9 +1,15 @@
 import React, { FC, useCallback, useMemo } from "react"
-import { StyleSheet, TouchableWithoutFeedback } from "react-native"
+import {
+    ImageBackground,
+    StyleSheet,
+    TouchableWithoutFeedback,
+} from "react-native"
 import { BaseIcon, BaseText, BaseView } from "~Components/Base"
 import { BlurView } from "./BlurView"
 import { useDisclosure, useTheme } from "~Hooks"
 import HapticsService from "~Services/HapticsService"
+import { MnemonicDark, MnemonicLight } from "~Assets"
+import { PlatformUtils } from "~Utils"
 
 type Props = {
     mnemonicArray: string[]
@@ -51,7 +57,7 @@ export const MnemonicCard: FC<Props> = ({ mnemonicArray }) => {
                             }. ${word}`}</BaseText>
                         ))}
 
-                        {!isShow && <BlurView />}
+                        {!isShow && <PlatformBlur isDark={theme.isDark} />}
                     </BaseView>
 
                     <BaseView
@@ -76,6 +82,26 @@ export const MnemonicCard: FC<Props> = ({ mnemonicArray }) => {
     )
 }
 
+const PlatformBlur = ({ isDark }: { isDark: boolean }) => {
+    if (PlatformUtils.isIOS()) {
+        return <BlurView />
+    }
+
+    if (PlatformUtils.isAndroid()) {
+        return (
+            <>
+                <BaseView style={styles.androidBlurContainer}>
+                    <ImageBackground
+                        style={styles.androidBlur}
+                        blurRadius={3}
+                        source={isDark ? MnemonicDark : MnemonicLight}
+                    />
+                </BaseView>
+            </>
+        )
+    }
+}
+
 const styles = StyleSheet.create({
     box: {
         borderTopLeftRadius: 16,
@@ -88,4 +114,17 @@ const styles = StyleSheet.create({
         borderBottomEndRadius: 16,
     },
     icon: { flex: 1, width: 100 },
+    androidBlurContainer: {
+        position: "absolute",
+        top: 0,
+        left: 0,
+        right: 0,
+        bottom: 0,
+    },
+    androidBlur: {
+        width: "100%",
+        height: "100%",
+        justifyContent: "center",
+        alignItems: "center",
+    },
 })
