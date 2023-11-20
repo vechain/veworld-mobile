@@ -92,6 +92,7 @@ const PlatformBlur = ({ isDark }: { isDark: boolean }) => {
             <>
                 <BaseView style={styles.androidBlurContainer}>
                     <ImageBackground
+                        resizeMode="cover"
                         style={styles.androidBlur}
                         blurRadius={3}
                         source={isDark ? MnemonicDark : MnemonicLight}
