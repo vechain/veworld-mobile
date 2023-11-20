@@ -887,7 +887,7 @@ type RootTranslation = {
 	 */
 	DEVICE_PIN: string
 	/**
-	 * T​a​p​ ​t​o​ ​v​i​e​w
+	 * T​a​p​ ​t​o​ ​v​i​e​w​ ​M​n​e​m​o​n​i​c
 	 */
 	TAP_TO_VIEW: string
 	/**
@@ -3565,7 +3565,7 @@ export type TranslationFunctions = {
 	 */
 	DEVICE_PIN: () => LocalizedString
 	/**
-	 * Tap to view
+	 * Tap to view Mnemonic
 	 */
 	TAP_TO_VIEW: () => LocalizedString
 	/**

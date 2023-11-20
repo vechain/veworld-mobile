@@ -1,15 +1,11 @@
 import React, { FC, useCallback, useMemo } from "react"
-import {
-    ImageBackground,
-    StyleSheet,
-    TouchableWithoutFeedback,
-} from "react-native"
+import { StyleSheet, TouchableWithoutFeedback } from "react-native"
 import { BaseIcon, BaseText, BaseView } from "~Components/Base"
 import { BlurView } from "./BlurView"
 import { useDisclosure, useTheme } from "~Hooks"
 import HapticsService from "~Services/HapticsService"
-import { MnemonicDark, MnemonicLight } from "~Assets"
 import { PlatformUtils } from "~Utils"
+import { useI18nContext } from "~i18n"
 
 type Props = {
     mnemonicArray: string[]
@@ -57,7 +53,7 @@ export const MnemonicCard: FC<Props> = ({ mnemonicArray }) => {
                             }. ${word}`}</BaseText>
                         ))}
 
-                        {!isShow && <PlatformBlur isDark={theme.isDark} />}
+                        {!isShow && <PlatformBlur />}
                     </BaseView>
 
                     <BaseView
@@ -82,19 +78,25 @@ export const MnemonicCard: FC<Props> = ({ mnemonicArray }) => {
     )
 }
 
-const PlatformBlur = ({ isDark }: { isDark: boolean }) => {
+const PlatformBlur = () => {
+    const theme = useTheme()
+    const { LL } = useI18nContext()
+
     if (PlatformUtils.isIOS()) {
         return <BlurView />
     } else {
         return (
             <>
-                <BaseView style={styles.androidBlurContainer}>
-                    <ImageBackground
-                        resizeMode="cover"
-                        style={styles.androidBlur}
-                        blurRadius={3}
-                        source={isDark ? MnemonicDark : MnemonicLight}
-                    />
+                <BaseView
+                    style={[
+                        styles.androidBlurContainer,
+                        { backgroundColor: theme.colors.primaryLight },
+                    ]}>
+                    <BaseText
+                        typographyFont="subTitle"
+                        color={theme.colors.textReversed}>
+                        {LL.TAP_TO_VIEW()}
+                    </BaseText>
                 </BaseView>
             </>
         )
@@ -119,6 +121,8 @@ const styles = StyleSheet.create({
         left: 0,
         right: 0,
         bottom: 0,
+        justifyContent: "center",
+        alignItems: "center",
     },
     androidBlur: {
         width: "100%",

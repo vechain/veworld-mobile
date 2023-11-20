@@ -245,7 +245,7 @@ const en: BaseTranslation = {
     PIN_CODE: "PIN Code",
     IRIS: "Iris",
     DEVICE_PIN: "Device Pin",
-    TAP_TO_VIEW: "Tap to view",
+    TAP_TO_VIEW: "Tap to view Mnemonic",
     BIOMETRICS_PROMPT: "Please use Biometrics to secure your wallet.",
     BIOMETRICS_PROMPT_UNLOCK: "Unlock VeWorld using Biometric Authentication.",
     VEWORLD: "VeWorld",
