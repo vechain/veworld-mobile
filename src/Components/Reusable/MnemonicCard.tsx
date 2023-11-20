@@ -90,11 +90,11 @@ const PlatformBlur = () => {
                 <BaseView
                     style={[
                         styles.androidBlurContainer,
-                        { backgroundColor: theme.colors.primaryLight },
+                        { backgroundColor: theme.colors.card },
                     ]}>
                     <BaseText
                         typographyFont="subTitle"
-                        color={theme.colors.textReversed}>
+                        color={theme.colors.text}>
                         {LL.TAP_TO_VIEW()}
                     </BaseText>
                 </BaseView>
