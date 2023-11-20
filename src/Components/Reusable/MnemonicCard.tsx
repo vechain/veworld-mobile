@@ -85,9 +85,7 @@ export const MnemonicCard: FC<Props> = ({ mnemonicArray }) => {
 const PlatformBlur = ({ isDark }: { isDark: boolean }) => {
     if (PlatformUtils.isIOS()) {
         return <BlurView />
-    }
-
-    if (PlatformUtils.isAndroid()) {
+    } else {
         return (
             <>
                 <BaseView style={styles.androidBlurContainer}>
