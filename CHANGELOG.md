@@ -1,5 +1,18 @@
 
 
+## [1.3.3](https://github.com/vechainfoundation/veworld-mobile/compare/1.3.0...1.3.3) (2023-11-20)
+
+
+### Bug Fixes
+
+* android blur breaks ui ([e422200](https://github.com/vechainfoundation/veworld-mobile/commit/e42220026a75508d71763d5dc4de4515729782e9))
+* android blur breaks ui ([4d3f534](https://github.com/vechainfoundation/veworld-mobile/commit/4d3f53499808082abf5625f5ffc05fe9c10871ea))
+* currency formatting, max vtho warning copy ([580dbd6](https://github.com/vechainfoundation/veworld-mobile/commit/580dbd6a418cdadc1f271a3233a1ff32801540f8))
+* e2e test, add haptics ([fc938d4](https://github.com/vechainfoundation/veworld-mobile/commit/fc938d4b1abc1da92e695ef330bce90848f86c5e))
+* failing test ([d836b6a](https://github.com/vechainfoundation/veworld-mobile/commit/d836b6aaef7e7c435ffb93ed8b776023a55ee6ef))
+* failing test ([3f730d7](https://github.com/vechainfoundation/veworld-mobile/commit/3f730d70eb51527334a42b0bac1844e22698cdfe))
+* input text color ([d97e25a](https://github.com/vechainfoundation/veworld-mobile/commit/d97e25ae9f831ef41c21e25b2ed0049b8af9c17b))
+
 ## [1.3.2](https://github.com/vechainfoundation/veworld-mobile/compare/1.3.0...1.3.2) (2023-11-17)
 
 
