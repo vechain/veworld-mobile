@@ -1,4 +1,4 @@
-import React, { useCallback, useMemo } from "react"
+import React, { useCallback, useMemo, useState } from "react"
 import { NativeStackScreenProps } from "@react-navigation/native-stack"
 import {
     useAnalyticTracking,
@@ -39,7 +39,6 @@ import { ContactType, DEVICE_TYPE } from "~Model"
 import { prepareFungibleClause } from "~Utils/TransactionUtils/TransactionUtils"
 import { Transaction } from "thor-devkit"
 import { ContactManagementBottomSheet } from "../../ContactsScreen"
-import { BigNumber } from "bignumber.js"
 
 type Props = NativeStackScreenProps<
     RootStackParamListHome & RootStackParamListDiscover,
@@ -47,8 +46,14 @@ type Props = NativeStackScreenProps<
 >
 
 export const TransactionSummarySendScreen = ({ route }: Props) => {
-    const { token, amount, address, initialRoute } = route.params
+    const {
+        token,
+        amount: userSelectedAmount,
+        address,
+        initialRoute,
+    } = route.params
 
+    const [amount, setAmount] = useState(userSelectedAmount)
     const { LL } = useI18nContext()
     const theme = useTheme()
     const dispatch = useAppDispatch()
@@ -65,18 +70,6 @@ export const TransactionSummarySendScreen = ({ route }: Props) => {
         selectPendingTx(state, token.address),
     )
 
-    const friendlyAmount = useMemo(() => {
-        return new BigNumber(amount).toFixed(2, BigNumber.ROUND_HALF_UP)
-    }, [amount])
-
-    const {
-        onAddContactPress,
-        handleSaveContact,
-        addContactSheet,
-        selectedContactAddress,
-        closeAddContactSheet,
-    } = useTransferAddContact()
-
     const formattedFiatAmount = useMemo(
         () =>
             FormattingUtils.humanNumber(
@@ -89,6 +82,14 @@ export const TransactionSummarySendScreen = ({ route }: Props) => {
             ),
         [amount, exchangeRate],
     )
+
+    const {
+        onAddContactPress,
+        handleSaveContact,
+        addContactSheet,
+        selectedContactAddress,
+        closeAddContactSheet,
+    } = useTransferAddContact()
 
     const clauses = useMemo(
         () => prepareFungibleClause(amount, token, address),
@@ -145,6 +146,8 @@ export const TransactionSummarySendScreen = ({ route }: Props) => {
         onTransactionSuccess,
         onTransactionFailure,
         initialRoute: Routes.HOME,
+        setAmount,
+        userSelectedAmount,
     })
 
     const accounts = useAppSelector(selectAccounts)
@@ -200,7 +203,7 @@ export const TransactionSummarySendScreen = ({ route }: Props) => {
                     <BaseSpacer height={6} />
                     <BaseView flexDirection="row">
                         <BaseText typographyFont="subSubTitle">
-                            {friendlyAmount} {token.symbol}
+                            {amount} {token.symbol}
                         </BaseText>
                         {exchangeRate && (
                             <BaseText typographyFont="buttonSecondary">
@@ -257,6 +260,8 @@ export const TransactionSummarySendScreen = ({ route }: Props) => {
                         isAddingContact={true}
                         checkTouched={false}
                     />
+
+                    <BaseSpacer height={12} />
                 </BaseView>
             }
             footer={SubmitButton()}

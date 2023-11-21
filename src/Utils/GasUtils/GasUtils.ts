@@ -104,7 +104,14 @@ export function gasToVtho({
         .times(gas)
 
     // transform to VTHO ex: 0.21
-    return FormattingUtils.scaleNumberDown(rawVtho, VTHO.decimals, decimals)
+    return {
+        gasFee: FormattingUtils.scaleNumberDown(
+            rawVtho,
+            VTHO.decimals,
+            decimals,
+        ),
+        gasRaw: rawVtho,
+    }
 }
 
 export default {

@@ -39,6 +39,8 @@ type Props = {
     onTransactionSuccess: (transaction: Transaction, txId: string) => void
     onTransactionFailure: (error: unknown) => void
     initialRoute: Routes
+    setAmount: React.Dispatch<React.SetStateAction<string>>
+    userSelectedAmount: string
     options?: Connex.Signer.TxOptions
     requestEvent?: PendingRequestTypes.Struct
 }
@@ -50,6 +52,8 @@ export const useTransactionScreen = ({
     initialRoute,
     options,
     requestEvent,
+    setAmount,
+    userSelectedAmount,
 }: Props) => {
     const { LL } = useI18nContext()
     const dispatch = useAppDispatch()
@@ -73,6 +77,7 @@ export const useTransactionScreen = ({
         isDelegated,
     } = useDelegation({ setGasPayer, providedUrl: options?.delegator?.url })
 
+    // Calculate gas priority fee
     const {
         isThereEnoughGas,
         vthoGasFee,
@@ -87,6 +92,8 @@ export const useTransactionScreen = ({
             selectedDelegationAccount?.address ?? selectedAccount.address,
         clauses,
         isDelegated,
+        setAmount,
+        userSelectedAmount,
     })
 
     // 3. Build transaction
@@ -227,14 +234,13 @@ export const useTransactionScreen = ({
             <FadeoutButton
                 title={LL.COMMON_BTN_CONFIRM().toUpperCase()}
                 action={onSubmit}
-                disabled={continueNotAllowed || isLoading}
-                isLoading={isLoading}
+                disabled={continueNotAllowed}
                 bottom={0}
                 mx={0}
                 width={"auto"}
             />
         ),
-        [LL, onSubmit, continueNotAllowed, isLoading],
+        [LL, onSubmit, continueNotAllowed],
     )
 
     const Delegation = useCallback(

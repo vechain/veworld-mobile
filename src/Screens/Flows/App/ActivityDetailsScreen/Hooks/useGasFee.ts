@@ -41,7 +41,7 @@ export const useGasFee = (activity: Activity) => {
         const calculateVthoFee = async () => {
             try {
                 const baseGasPrice = await GasUtils.getBaseGasPrice(thor)
-                const gasFee = GasUtils.gasToVtho({
+                const { gasFee } = GasUtils.gasToVtho({
                     gas: new BigNumber(activity.gasUsed || 0),
                     baseGasPrice: new BigNumber(baseGasPrice),
                     decimals: 2,

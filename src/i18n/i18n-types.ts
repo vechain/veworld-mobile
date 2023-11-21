@@ -2345,7 +2345,7 @@ type RootTranslation = {
 	 */
 	SEND_VTHO_WARNING_TOKEN: string
 	/**
-	 * V​e​c​h​a​i​n​ ​f​a​c​i​l​i​t​a​t​e​s​ ​t​r​a​n​s​a​c​t​i​o​n​s​ ​u​s​i​n​g​ ​V​T​H​O​ ​a​s​ ​t​h​e​ ​p​a​y​m​e​n​t​ ​m​e​d​i​u​m​ ​f​o​r​ ​t​r​a​n​s​a​c​t​i​o​n​ ​f​e​e​s​.​ ​O​u​r​ ​M​A​X​ ​c​a​l​c​u​l​a​t​i​o​n​ ​m​e​t​h​o​d​ ​d​e​d​u​c​t​s​ ​a​ ​p​r​e​d​e​f​i​n​e​d​ ​b​a​s​e​ ​f​e​e​ ​f​o​r​ ​t​r​a​n​s​a​c​t​i​o​n​ ​g​a​s​.​ ​T​h​e​ ​a​m​o​u​n​t​ ​d​i​s​p​l​a​y​e​d​ ​o​n​ ​y​o​u​r​ ​s​c​r​e​e​n​ ​r​e​p​r​e​s​e​n​t​s​ ​y​o​u​r​ ​t​o​t​a​l​ ​V​T​H​O​ ​b​a​l​a​n​c​e​ ​l​e​s​s​ ​t​h​e​ ​b​a​s​e​ ​f​e​e​ ​c​a​l​c​u​l​a​t​e​d​ ​f​o​r​ ​t​h​e​ ​t​r​a​n​s​a​c​t​i​o​n​.
+	 * V​e​c​h​a​i​n​ ​f​a​c​i​l​i​t​a​t​e​s​ ​t​r​a​n​s​a​c​t​i​o​n​s​ ​u​s​i​n​g​ ​V​T​H​O​ ​a​s​ ​t​h​e​ ​p​a​y​m​e​n​t​ ​m​e​d​i​u​m​ ​f​o​r​ ​t​r​a​n​s​a​c​t​i​o​n​ ​f​e​e​s​.​ ​O​u​r​ ​M​A​X​ ​c​a​l​c​u​l​a​t​i​o​n​ ​m​e​t​h​o​d​ ​w​i​l​l​ ​d​e​d​u​c​t​ ​a​ ​p​r​e​d​e​f​i​n​e​d​ ​b​a​s​e​ ​f​e​e​ ​f​o​r​ ​t​r​a​n​s​a​c​t​i​o​n​ ​g​a​s
 	 */
 	SEND_VTHO_WARNING_MAX: string
 	/**
@@ -4998,7 +4998,7 @@ Try reconnect your device to the internet.
 	 */
 	SEND_VTHO_WARNING_TOKEN: () => LocalizedString
 	/**
-	 * Vechain facilitates transactions using VTHO as the payment medium for transaction fees. Our MAX calculation method deducts a predefined base fee for transaction gas. The amount displayed on your screen represents your total VTHO balance less the base fee calculated for the transaction.
+	 * Vechain facilitates transactions using VTHO as the payment medium for transaction fees. Our MAX calculation method will deduct a predefined base fee for transaction gas
 	 */
 	SEND_VTHO_WARNING_MAX: () => LocalizedString
 	/**

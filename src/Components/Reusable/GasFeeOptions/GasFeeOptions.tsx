@@ -3,7 +3,6 @@ import React, { useCallback, useMemo } from "react"
 import {
     BaseButtonGroupHorizontal,
     BaseIcon,
-    BaseSkeleton,
     BaseSpacer,
     BaseText,
     BaseView,
@@ -27,7 +26,6 @@ type Props = {
 export const GasFeeOptions = ({
     setSelectedFeeOption,
     selectedDelegationOption,
-    loadingGas,
     selectedFeeOption,
     gasFeeOptions,
     isThereEnoughGas,
@@ -62,29 +60,6 @@ export const GasFeeOptions = ({
         },
         [setSelectedFeeOption],
     )
-
-    if (loadingGas) {
-        return (
-            <BaseSkeleton
-                animationDirection="horizontalLeft"
-                boneColor={theme.colors.skeletonBoneColor}
-                highlightColor={theme.colors.skeletonHighlightColor}
-                layout={[
-                    {
-                        flexDirection: "column",
-                        alignItems: "flex-start",
-                        width: "100%",
-                        children: [
-                            {
-                                width: "40%",
-                                height: 18,
-                            },
-                        ],
-                    },
-                ]}
-            />
-        )
-    }
 
     if (selectedDelegationOption === DelegationType.URL) {
         return (

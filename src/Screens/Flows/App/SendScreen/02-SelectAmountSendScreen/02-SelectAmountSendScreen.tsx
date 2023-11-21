@@ -29,12 +29,7 @@ import {
 } from "~Storage/Redux"
 import { BigNumber } from "bignumber.js"
 import { useNavigation } from "@react-navigation/native"
-import {
-    useTotalTokenBalance,
-    useTotalFiatBalance,
-    useUI,
-    useCalculateGas,
-} from "./Hooks"
+import { useTotalTokenBalance, useTotalFiatBalance, useUI } from "./Hooks"
 import { isEmpty } from "lodash"
 import Animated from "react-native-reanimated"
 import HapticsService from "~Services/HapticsService"
@@ -63,9 +58,7 @@ export const SelectAmountSendScreen = ({ route }: Props) => {
     const [isError, setIsError] = useState(false)
     const isExchangeRateAvailable = !!exchangeRate?.rate
 
-    const vthoEstimate = useCalculateGas({ token })
-
-    const { tokenTotalBalance } = useTotalTokenBalance(token, vthoEstimate)
+    const { tokenTotalBalance, tokenTotalToHuman } = useTotalTokenBalance(token)
 
     const { fiatTotalBalance } = useTotalFiatBalance(
         tokenTotalBalance,
@@ -195,11 +188,16 @@ export const SelectAmountSendScreen = ({ route }: Props) => {
         shortenedTokenName,
         animatedFontStyle,
         animatedStyleInputColor,
+        computeconvertedAmountInFooter,
     } = useUI({
         isError,
         input,
         token,
         theme,
+        isInputInFiat,
+        tokenHumanAmountFromFiat,
+        fiatHumanAmount,
+        currency,
     })
 
     return (
@@ -223,7 +221,7 @@ export const SelectAmountSendScreen = ({ route }: Props) => {
                             <BaseView flexDirection="row" mr={8}>
                                 <BaseText typographyFont="subTitleBold">
                                     {"≈ "}
-                                    {Number(tokenTotalBalance).toFixed(2)}
+                                    {tokenTotalToHuman}
                                 </BaseText>
                                 <BaseSpacer width={5} />
                                 <BaseText typographyFont="buttonSecondary">
@@ -361,15 +359,9 @@ export const SelectAmountSendScreen = ({ route }: Props) => {
                                                       color={
                                                           inputColorNotAnimated
                                                       }>
-                                                      {"≈ "}
-                                                      {isInputInFiat
-                                                          ? Number(
-                                                                tokenHumanAmountFromFiat,
-                                                            ).toFixed(2)
-                                                          : fiatHumanAmount}{" "}
-                                                      {isInputInFiat
-                                                          ? token.symbol
-                                                          : currency}
+                                                      {
+                                                          computeconvertedAmountInFooter
+                                                      }
                                                   </BaseText>
                                               ),
                                               style: styles.counterValueView,

@@ -20,16 +20,20 @@ export const useRenderGas = ({
     accountAddress,
     clauses,
     isDelegated,
+    setAmount,
+    userSelectedAmount,
 }: {
     gas: EstimateGasResult | undefined
     accountAddress: string
     clauses: Transaction.Body["clauses"]
     isDelegated: boolean
+    setAmount: React.Dispatch<React.SetStateAction<string>>
+    userSelectedAmount: string
 }) => {
     const vtho = useAppSelector(state =>
         selectVthoTokenWithBalanceByAccount(state, accountAddress),
     )
-    const [selectedFeeOption, setSelectedFeeOption] = React.useState<string>(
+    const [selectedFeeOption, _setSelectedFeeOption] = React.useState<string>(
         String(GasPriceCoefficient.REGULAR),
     )
 
@@ -48,13 +52,28 @@ export const useRenderGas = ({
         () => ({
             [GasPriceCoefficient.REGULAR]: calculateFeeByCoefficient(
                 GasPriceCoefficient.REGULAR,
-            ),
+            ).gasFee,
             [GasPriceCoefficient.MEDIUM]: calculateFeeByCoefficient(
                 GasPriceCoefficient.MEDIUM,
-            ),
+            ).gasFee,
             [GasPriceCoefficient.HIGH]: calculateFeeByCoefficient(
                 GasPriceCoefficient.HIGH,
-            ),
+            ).gasFee,
+        }),
+        [calculateFeeByCoefficient],
+    )
+
+    const _gasFeeOptions = useMemo(
+        () => ({
+            [GasPriceCoefficient.REGULAR]: calculateFeeByCoefficient(
+                GasPriceCoefficient.REGULAR,
+            ).gasRaw,
+            [GasPriceCoefficient.MEDIUM]: calculateFeeByCoefficient(
+                GasPriceCoefficient.MEDIUM,
+            ).gasRaw,
+            [GasPriceCoefficient.HIGH]: calculateFeeByCoefficient(
+                GasPriceCoefficient.HIGH,
+            ).gasRaw,
         }),
         [calculateFeeByCoefficient],
     )
@@ -62,10 +81,54 @@ export const useRenderGas = ({
     const vthoGasFee =
         gasFeeOptions[Number(selectedFeeOption) as GasPriceCoefficient]
 
+    const _vthoGasFee =
+        _gasFeeOptions[Number(selectedFeeOption) as GasPriceCoefficient]
+
     const vthoBalance = FormattingUtils.scaleNumberDown(
         vtho.balance.balance,
         vtho.decimals,
         2,
+    )
+
+    const setSelectedFeeOption = useCallback(
+        (value: string) => {
+            _setSelectedFeeOption(value)
+
+            const vthoTransferClauses = clauses.filter(
+                clause =>
+                    clause.to &&
+                    compareAddresses(clause.to, VTHO.address) &&
+                    isTokenTransferClause(clause),
+            )
+
+            let txCost = new BigNumber(isDelegated ? 0 : _vthoGasFee ?? 0)
+
+            for (const clause of vthoTransferClauses) {
+                const clauseAmount = getAmountFromClause(clause)
+
+                if (clauseAmount) {
+                    // if token to send is VTHO
+                    if (
+                        clause.to &&
+                        compareAddresses(clause.to, VTHO.address)
+                    ) {
+                        const useAmountToBN =
+                            convertFloatToBigNumber(userSelectedAmount)
+
+                        setAmount(
+                            FormattingUtils.scaleNumberDown(
+                                new BigNumber(useAmountToBN)
+                                    .minus(txCost)
+                                    .toString(),
+                                VTHO.decimals,
+                                VTHO.decimals,
+                            ),
+                        )
+                    }
+                }
+            }
+        },
+        [_vthoGasFee, clauses, isDelegated, setAmount, userSelectedAmount],
     )
 
     const isThereEnoughGas = useMemo(() => {
@@ -76,7 +139,7 @@ export const useRenderGas = ({
                 isTokenTransferClause(clause),
         )
 
-        let txCost = new BigNumber(isDelegated ? 0 : gas?.gas ?? 0)
+        let txCost = new BigNumber(isDelegated ? 0 : _vthoGasFee ?? 0)
 
         for (const clause of vthoTransferClauses) {
             const clauseAmount = getAmountFromClause(clause)
@@ -89,7 +152,7 @@ export const useRenderGas = ({
         const balance = new BigNumber(vtho.balance.balance)
 
         return balance.isGreaterThanOrEqualTo(txCost)
-    }, [clauses, isDelegated, gas?.gas, vtho.balance.balance])
+    }, [clauses, isDelegated, _vthoGasFee, vtho.balance.balance])
 
     return {
         isThereEnoughGas,
@@ -100,4 +163,50 @@ export const useRenderGas = ({
         selectedFeeOption,
         gasFeeOptions,
     }
+}
+
+/*
+    clauseAmount / can be max or not
+            if max && VTHO, gas is deducted from clauseAmount
+            if not max, gas is not factored in
+
+
+    _vthoGasFee / current gas selected option
+
+
+    balance (vtho.balance.balance) / total vtho balance
+
+
+    current calculation
+        txCost = _vthoGasFee + clauseAmount
+        balance >= txCost
+
+
+
+    if VTHO
+
+
+
+
+
+*/
+
+function convertFloatToBigNumber(value: string) {
+    // Ensure BigNumber doesn't use exponential notation
+    BigNumber.config({ EXPONENTIAL_AT: 1e9 })
+
+    // Create a BigNumber instance
+    const newBN = new BigNumber(value)
+
+    // Round the number to 18 decimal places
+    const roundedBN = newBN.decimalPlaces(18)
+
+    // Now, we want to remove the decimal places by multiplying by 10^18 to shift the decimal point
+    const scaleFactor = new BigNumber(10).pow(18)
+
+    // Multiply by the scaleFactor to shift decimal places
+    const result = roundedBN.multipliedBy(scaleFactor)
+
+    // Ensure the result is in normal (not exponential) notation and rounded to 18 decimal places
+    return result.toFixed() // This should log a big number with up to 18 decimal places
 }

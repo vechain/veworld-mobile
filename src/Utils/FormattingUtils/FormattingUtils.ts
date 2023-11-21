@@ -271,7 +271,11 @@ export const validateStringPercentages = (percentages: string[]): boolean => {
     return true
 }
 
-export function formatToHumanNumber(amount: string, decimals: number): string {
+export function formatToHumanNumber(
+    amount: string,
+    decimals: number,
+    foramtToCurrency = true,
+): string {
     // Convert the amount to a floating point number
     const numberAmount = parseFloat(amount)
     const scale = 100
@@ -283,10 +287,15 @@ export function formatToHumanNumber(amount: string, decimals: number): string {
     // Round the number to the specified decimal places
     const roundedAmount = Math.floor(numberAmount * scale) / scale
 
-    // Convert the number to a string with fixed decimal places
-    let amountString = roundedAmount
-        .toFixed(decimals)
-        .replace(/\B(?=(\d{3})+(?!\d))/g, ",")
+    let amountString = ""
+
+    if (foramtToCurrency) {
+        amountString = roundedAmount
+            .toFixed(decimals)
+            .replace(/\B(?=(\d{3})+(?!\d))/g, ",")
+    } else {
+        amountString = roundedAmount.toFixed(decimals)
+    }
 
     // switch (locale) {
     //     // Euro locales with comma for decimal and period for thousands
