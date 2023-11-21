@@ -105,6 +105,9 @@ function newResponseHandler(id) {
         addEventListener("message", event => {
             try {
                 const data = event.data
+                
+                if (data.id !== id) 
+                    return
 
                 if (data.error) {
                     reject(data.error)
