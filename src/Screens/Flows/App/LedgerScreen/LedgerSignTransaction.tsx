@@ -45,7 +45,7 @@ import { Buffer } from "buffer"
 import { Transaction } from "thor-devkit"
 import { ActivityType } from "~Model"
 import { LedgerConfig } from "~Utils/LedgerUtils/LedgerUtils"
-import { getSessionRequestAttributes } from "~Utils/WalletConnectUtils/WalletConnectUtils"
+import { useInAppBrowser } from "~Components/Providers/InAppBrowserProvider"
 
 type Props = NativeStackScreenProps<
     RootStackParamListHome &
@@ -66,7 +66,7 @@ export const LedgerSignTransaction: React.FC<Props> = ({ route }) => {
         accountWithDevice,
         transaction,
         initialRoute,
-        requestEvent,
+        dappRequest,
         delegationSignature,
     } = route.params
 
@@ -74,7 +74,8 @@ export const LedgerSignTransaction: React.FC<Props> = ({ route }) => {
     const track = useAnalyticTracking()
     const { LL } = useI18nContext()
     const dispatch = useAppDispatch()
-    const { activeSessions, processRequest } = useWalletConnect()
+    const { processRequest } = useWalletConnect()
+    const { postMessage } = useInAppBrowser()
 
     const [signature, setSignature] = useState<Buffer>()
     const [isAwaitingSignature, setIsAwaitingSignature] = useState(false)
@@ -132,25 +133,18 @@ export const LedgerSignTransaction: React.FC<Props> = ({ route }) => {
                         accountType: accountWithDevice.device.type,
                     })
 
-                    if (requestEvent) {
-                        const session = activeSessions[requestEvent.topic]
-
-                        if (session) {
-                            const { name, url } =
-                                getSessionRequestAttributes(session)
-
-                            dispatch(
-                                addPendingDappTransactionActivity(
-                                    tx,
-                                    name,
-                                    url,
-                                ),
-                            )
-                        }
+                    if (dappRequest) {
+                        dispatch(
+                            addPendingDappTransactionActivity(
+                                tx,
+                                dappRequest.appName,
+                                dappRequest.appUrl,
+                            ),
+                        )
                     }
             }
         },
-        [track, dispatch, accountWithDevice, requestEvent, activeSessions],
+        [track, dispatch, accountWithDevice, dappRequest],
     )
 
     const { sendTransaction } = useSendTransaction(onTransactionSuccess)
@@ -315,11 +309,22 @@ export const LedgerSignTransaction: React.FC<Props> = ({ route }) => {
             await removeLedger()
 
             //If DApp transaction
-            if (requestEvent) {
-                await processRequest(requestEvent, {
-                    txid: txId,
-                    signer: accountWithDevice.address,
-                })
+
+            if (dappRequest) {
+                if (dappRequest.type === "wallet-connect") {
+                    await processRequest(dappRequest.requestEvent, {
+                        txid: txId,
+                        signer: accountWithDevice.address,
+                    })
+                } else {
+                    await postMessage({
+                        id: dappRequest.id,
+                        data: {
+                            txid: txId,
+                            signer: accountWithDevice.address,
+                        },
+                    })
+                }
             }
 
             navigateOnFinish()
@@ -333,7 +338,7 @@ export const LedgerSignTransaction: React.FC<Props> = ({ route }) => {
             await Haptics.notificationAsync(
                 Haptics.NotificationFeedbackType.Error,
             )
-            if (requestEvent) {
+            if (dappRequest) {
                 nav.goBack()
             }
         } finally {
@@ -348,7 +353,8 @@ export const LedgerSignTransaction: React.FC<Props> = ({ route }) => {
         delegationSignature,
         sendTransaction,
         removeLedger,
-        requestEvent,
+        dappRequest,
+        postMessage,
         navigateOnFinish,
         LL,
         nav,

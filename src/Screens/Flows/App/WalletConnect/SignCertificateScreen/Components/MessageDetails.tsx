@@ -7,23 +7,16 @@ import {
 import { useI18nContext } from "~i18n"
 import React from "react"
 import { capitalize } from "lodash"
-import { WalletConnectUtils } from "~Utils"
-import { PendingRequestTypes, SessionTypes } from "@walletconnect/types"
 import { useTheme } from "~Hooks"
+import { CertificateRequest } from "~Model"
 
 type Props = {
-    sessionRequest: SessionTypes.Struct
-    requestEvent: PendingRequestTypes.Struct
-    message: Connex.Vendor.CertMessage
+    request: CertificateRequest
 }
 
-export const MessageDetails = ({ sessionRequest, message }: Props) => {
+export const MessageDetails = ({ request }: Props) => {
     const { LL } = useI18nContext()
     const theme = useTheme()
-
-    // Session request values
-    const { name } =
-        WalletConnectUtils.getSessionRequestAttributes(sessionRequest)
 
     return (
         <BaseView>
@@ -36,7 +29,7 @@ export const MessageDetails = ({ sessionRequest, message }: Props) => {
                 {LL.CONNECTED_APP_SELECTED_ORIGIN_LABEL()}
             </BaseText>
             <BaseSpacer height={6} />
-            <BaseText typographyFont="subSubTitle">{name}</BaseText>
+            <BaseText typographyFont="subSubTitle">{request.appName}</BaseText>
 
             <BaseSpacer height={12} />
             <BaseSpacer
@@ -51,7 +44,7 @@ export const MessageDetails = ({ sessionRequest, message }: Props) => {
             </BaseText>
             <BaseSpacer height={6} />
             <BaseText typographyFont="subSubTitle">
-                {capitalize(message.purpose)}
+                {capitalize(request.message.purpose)}
             </BaseText>
 
             <BaseSpacer height={12} />
@@ -67,7 +60,7 @@ export const MessageDetails = ({ sessionRequest, message }: Props) => {
             </BaseText>
             <BaseSpacer height={6} />
             <CompressAndExpandBaseText
-                text={message.payload.content}
+                text={request.message.payload.content}
                 typographyFont="subSubTitle"
             />
         </BaseView>

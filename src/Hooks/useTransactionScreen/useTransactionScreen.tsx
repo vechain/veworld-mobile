@@ -29,18 +29,20 @@ import {
     showWarningToast,
 } from "~Components"
 import { error } from "~Utils"
-import { DEVICE_TYPE, LedgerAccountWithDevice } from "~Model"
+import {
+    DEVICE_TYPE,
+    LedgerAccountWithDevice,
+    TransactionRequest,
+} from "~Model"
 import { DelegationType } from "~Model/Delegation"
 import { Routes } from "~Navigation"
-import { PendingRequestTypes } from "@walletconnect/types"
 
 type Props = {
     clauses: Transaction.Body["clauses"]
     onTransactionSuccess: (transaction: Transaction, txId: string) => void
     onTransactionFailure: (error: unknown) => void
     initialRoute: Routes
-    options?: Connex.Signer.TxOptions
-    requestEvent?: PendingRequestTypes.Struct
+    dappRequest?: TransactionRequest
 }
 
 export const useTransactionScreen = ({
@@ -48,8 +50,7 @@ export const useTransactionScreen = ({
     onTransactionSuccess,
     onTransactionFailure,
     initialRoute,
-    options,
-    requestEvent,
+    dappRequest,
 }: Props) => {
     const { LL } = useI18nContext()
     const dispatch = useAppDispatch()
@@ -71,7 +72,10 @@ export const useTransactionScreen = ({
         selectedDelegationAccount,
         selectedDelegationUrl,
         isDelegated,
-    } = useDelegation({ setGasPayer, providedUrl: options?.delegator?.url })
+    } = useDelegation({
+        setGasPayer,
+        providedUrl: dappRequest?.options?.delegator?.url,
+    })
 
     const {
         isThereEnoughGas,
@@ -94,8 +98,8 @@ export const useTransactionScreen = ({
         clauses,
         gas,
         isDelegated,
-        dependsOn: options?.dependsOn,
-        providedGas: options?.gas,
+        dependsOn: dappRequest?.options?.dependsOn,
+        providedGas: dappRequest?.options?.gas,
         gasPriceCoef,
     })
 
@@ -106,7 +110,7 @@ export const useTransactionScreen = ({
         selectedDelegationOption,
         selectedDelegationUrl,
         initialRoute,
-        requestEvent,
+        dappRequest,
     })
 
     // 5. Send transaction

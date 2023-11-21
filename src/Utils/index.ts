@@ -37,6 +37,7 @@ import ColorUtils from "./ColorUtils"
 
 export * from "./Logger"
 export * from "./SignMessageUtils"
+export * from "./DAppUtils"
 
 export {
     AddressUtils,

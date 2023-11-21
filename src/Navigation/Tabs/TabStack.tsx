@@ -68,9 +68,7 @@ export const TabStack = () => {
                     tabBarIcon: ({ focused }) =>
                         renderTabBarIcon(
                             focused,
-                            focused
-                                ? "image-multiple"
-                                : "image-multiple-outline",
+                            focused ? "widgets" : "widgets-outline",
                         ),
                 }}
             />

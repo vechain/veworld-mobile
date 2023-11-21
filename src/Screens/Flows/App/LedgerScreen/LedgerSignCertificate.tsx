@@ -28,6 +28,7 @@ import { useI18nContext } from "~i18n"
 import { useNavigation } from "@react-navigation/native"
 import * as Haptics from "expo-haptics"
 import { LEDGER_ERROR_CODES } from "~Constants"
+import { useInAppBrowser } from "~Components/Providers/InAppBrowserProvider"
 
 type Props = NativeStackScreenProps<
     RootStackParamListSwitch & RootStackParamListDiscover,
@@ -41,10 +42,10 @@ enum SigningStep {
 }
 
 export const LedgerSignCertificate: React.FC<Props> = ({ route }) => {
-    const { accountWithDevice, certificate, initialRoute, requestEvent } =
-        route.params
+    const { accountWithDevice, request, certificate } = route.params
 
     const { processRequest } = useWalletConnect()
+    const { postMessage } = useInAppBrowser()
 
     const { LL } = useI18nContext()
     const nav = useNavigation()
@@ -161,18 +162,15 @@ export const LedgerSignCertificate: React.FC<Props> = ({ route }) => {
     }, [ledgerErrorCode, closeConnectionErrorSheet, openConnectionErrorSheet])
 
     /** Effects */
-
     const navigateOnFinish = useCallback(() => {
-        switch (initialRoute) {
-            case Routes.DISCOVER:
-                nav.navigate(Routes.DISCOVER)
-                break
-            case Routes.BROWSER:
-            default:
-                nav.navigate(Routes.BROWSER)
-                break
+        if (request.type === "in-app") {
+            nav.navigate(Routes.BROWSER)
+        } else {
+            if (nav.canGoBack()) return nav.goBack()
+
+            nav.navigate(Routes.HOME)
         }
-    }, [initialRoute, nav])
+    }, [request.type, nav])
 
     const handleOnConfirm = useCallback(async () => {
         try {
@@ -192,7 +190,14 @@ export const LedgerSignCertificate: React.FC<Props> = ({ route }) => {
                 signature: HexUtils.addPrefix(signature.toString("hex")),
             }
 
-            await processRequest(requestEvent, certResponse)
+            if (request.type === "wallet-connect") {
+                await processRequest(request.requestEvent, certResponse)
+            } else {
+                await postMessage({
+                    id: request.id,
+                    data: certResponse,
+                })
+            }
 
             await removeLedger()
 
@@ -211,7 +216,8 @@ export const LedgerSignCertificate: React.FC<Props> = ({ route }) => {
         }
     }, [
         removeLedger,
-        requestEvent,
+        request,
+        postMessage,
         processRequest,
         LL,
         signature,

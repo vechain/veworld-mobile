@@ -30,8 +30,8 @@ import { typography } from "~Constants"
 import { AnalyticsUtils, info } from "~Utils"
 import { BottomSheetModalProvider } from "@gorhom/bottom-sheet"
 import {
-    StoreContextProvider,
     PersistedThemeProvider,
+    StoreContextProvider,
 } from "~Components/Providers"
 import {
     selectAnalyticsTrackingEnabled,
@@ -40,6 +40,7 @@ import {
 } from "~Storage/Redux"
 import * as Sentry from "@sentry/react-native"
 import "react-native-url-polyfill/auto"
+import { InAppBrowserProvider } from "~Components/Providers/InAppBrowserProvider"
 
 const { fontFamily } = typography
 
@@ -84,7 +85,9 @@ const Main = () => {
                 <NavigationProvider>
                     <BottomSheetModalProvider>
                         <WalletConnectContextProvider>
-                            <EntryPoint />
+                            <InAppBrowserProvider>
+                                <EntryPoint />
+                            </InAppBrowserProvider>
                         </WalletConnectContextProvider>
                     </BottomSheetModalProvider>
                 </NavigationProvider>

@@ -12,8 +12,7 @@ import { VET, VTHO } from "~Constants"
 import { useTheme } from "~Hooks"
 import { capitalize } from "lodash"
 import { FormattingUtils } from "~Utils"
-import { SessionTypes } from "@walletconnect/types"
-import { Network } from "~Model"
+import { Network, TransactionRequest } from "~Model"
 import {
     selectCurrency,
     selectCurrencyExchangeRate,
@@ -26,7 +25,7 @@ type Props = {
     vthoGas: string
     isThereEnoughGas: boolean
     vthoBalance: string
-    sessionRequest: SessionTypes.Struct
+    request: TransactionRequest
     network: Network
     message: Connex.Vendor.TxMessage
     options: Connex.Signer.TxOptions
@@ -37,7 +36,7 @@ export const TransactionDetails = ({
     vthoGas,
     isThereEnoughGas,
     vthoBalance,
-    sessionRequest,
+    request,
     network,
     message,
     options,
@@ -77,9 +76,7 @@ export const TransactionDetails = ({
                 {LL.CONNECTED_APP_SELECTED_ORIGIN_LABEL()}
             </BaseText>
             <BaseSpacer height={6} />
-            <BaseText typographyFont="subSubTitle">
-                {sessionRequest.peer.metadata.name}
-            </BaseText>
+            <BaseText typographyFont="subSubTitle">{request.appName}</BaseText>
 
             <BaseSpacer height={12} />
             <BaseSpacer

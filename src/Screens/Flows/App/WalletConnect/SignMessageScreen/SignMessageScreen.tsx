@@ -233,7 +233,7 @@ export const SignMessageScreen: FC<Props> = ({ route }: Props) => {
                     <BaseText>{utfMessage}</BaseText>
 
                     <UnknownAppMessage
-                        verifyContext={sessionContext.verifyContext}
+                        verifyContext={sessionContext?.verifyContext}
                         confirmed={isInvalidChecked}
                         setConfirmed={setInvalidChecked}
                     />

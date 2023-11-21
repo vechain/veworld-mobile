@@ -16,7 +16,7 @@ export const BrowserStack = () => {
 
     return (
         <Navigator
-            id="HomeStack"
+            id="BrowserStack"
             screenOptions={{ headerShown: false, animation }}>
             <Group>
                 <Screen

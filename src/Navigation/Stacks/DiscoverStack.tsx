@@ -37,7 +37,7 @@ export type RootStackParamListDiscover = {
         accountWithDevice: LedgerAccountWithDevice
         delegationSignature?: string
         transaction: Transaction
-        initialRoute: Routes
+        initialRoute?: Routes
     }
 }
 

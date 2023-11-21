@@ -9,15 +9,15 @@ import {
     SendTransactionScreen,
     SignCertificateScreen,
 } from "~Screens"
-import {
-    PendingRequestTypes,
-    SessionTypes,
-    SignClientTypes,
-} from "@walletconnect/types"
+import { PendingRequestTypes, SignClientTypes } from "@walletconnect/types"
 import { AppBlockedScreen } from "~Screens/Flows/App/AppBlockedScreen"
 import { TransferEventListener } from "../../TransferEventListener"
 import { Certificate, Transaction } from "thor-devkit"
-import { LedgerAccountWithDevice, WALLET_STATUS } from "~Model"
+import {
+    CertificateRequest,
+    LedgerAccountWithDevice,
+    WALLET_STATUS,
+} from "~Model"
 import {
     LedgerSignCertificate,
     LedgerSignTransaction,
@@ -27,6 +27,7 @@ import { BuyStack } from "./BuyStack"
 import { BUY_FEATURE_ENABLED } from "~Constants"
 import { SignMessageScreen } from "~Screens/Flows/App/WalletConnect/SignMessageScreen"
 import { LedgerSignMessage } from "~Screens/Flows/App/LedgerScreen/LedgerSignMessage"
+import { TransactionRequest } from "~Model/DApp"
 
 export type RootStackParamListSwitch = {
     OnboardingStack: undefined
@@ -39,41 +40,32 @@ export type RootStackParamListSwitch = {
         sessionProposal: SignClientTypes.EventArguments["session_proposal"]
     }
     [Routes.CONNECTED_APP_SEND_TRANSACTION_SCREEN]: {
-        requestEvent: PendingRequestTypes.Struct
-        session: SessionTypes.Struct
-        message: Connex.Vendor.TxMessage
-        options: Connex.Signer.TxOptions
+        request: TransactionRequest
     }
     [Routes.CONNECTED_APP_SIGN_CERTIFICATE_SCREEN]: {
-        requestEvent: PendingRequestTypes.Struct
-        session: SessionTypes.Struct
-        message: Connex.Vendor.CertMessage
-        options: Connex.Signer.CertOptions
+        request: CertificateRequest
     }
     [Routes.CONNECTED_APP_SIGN_MESSAGE_SCREEN]: {
         requestEvent: PendingRequestTypes.Struct
         message: string
     }
     [Routes.LEDGER_SIGN_CERTIFICATE]: {
-        requestEvent: PendingRequestTypes.Struct
+        request: CertificateRequest
         certificate: Certificate
         accountWithDevice: LedgerAccountWithDevice
-        initialRoute: Routes
     }
     [Routes.LEDGER_SIGN_TRANSACTION]: {
         accountWithDevice: LedgerAccountWithDevice
         delegationSignature?: string
         transaction: Transaction
-        initialRoute: Routes
-        requestEvent?: PendingRequestTypes.Struct
+        dappRequest?: TransactionRequest
     }
-    [Routes.BLOCKED_APP_SCREEN]: undefined
     [Routes.LEDGER_SIGN_MESSAGE]: {
         requestEvent: PendingRequestTypes.Struct
         message: string
         accountWithDevice: LedgerAccountWithDevice
-        initialRoute?: Routes
     }
+    [Routes.BLOCKED_APP_SCREEN]: undefined
 }
 const Switch = createNativeStackNavigator<RootStackParamListSwitch>()
 

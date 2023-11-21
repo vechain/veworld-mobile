@@ -45,8 +45,7 @@ enum SigningStep {
 }
 
 export const LedgerSignMessage: React.FC<Props> = ({ route }) => {
-    const { accountWithDevice, message, requestEvent, initialRoute } =
-        route.params
+    const { accountWithDevice, message, requestEvent } = route.params
 
     const { processRequest } = useWalletConnect()
 
@@ -197,16 +196,8 @@ export const LedgerSignMessage: React.FC<Props> = ({ route }) => {
     /** Effects */
 
     const navigateOnFinish = useCallback(() => {
-        switch (initialRoute) {
-            case Routes.DISCOVER:
-                nav.navigate(Routes.DISCOVER)
-                break
-            case Routes.BROWSER:
-            default:
-                nav.navigate(Routes.BROWSER)
-                break
-        }
-    }, [initialRoute, nav])
+        nav.navigate(Routes.HOME)
+    }, [nav])
 
     const handleOnConfirm = useCallback(async () => {
         try {
