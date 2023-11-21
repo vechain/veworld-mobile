@@ -6,7 +6,8 @@ Feature: The user can manage contacts
     * Open with demo account
     * The user is in the contacts management screen
 
-  Scenario: User creates a new contact
+  @contact-creation
+  Scenario Outline: User creates a new contact
     When The user adds a new contact name "<name>" and address "<address>"
     Then The user should see contact with name "<name>" in contacts list
 

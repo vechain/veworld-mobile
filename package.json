@@ -32,7 +32,7 @@
         "e2e.ios.test.d": "detox test --configuration ios.sim.debug_xcode_14.2 --parallel 4",
         "e2e.ios.test.d:trace": "detox test --configuration ios.sim.debug_xcode_14.2 --loglevel trace --record-logs all --parallel 4",
         "e2e.ios.test.d:sync": "detox test --configuration ios.sim.debug_xcode_14.2 detox test --debug-synchronization 500 --parallel 4",
-        "e2e.ios.test.d:headless": "detox test --configuration ios.sim.debug detox test --headless --parallel 4",
+        "e2e.ios.test.d:headless": "detox test --configuration ios.sim.debug --headless --parallel 4 --tags '@contacts'",
         "e2e.ios.test.r": "detox test --configuration ios.sim.release",
         "e2e.ios.r": "yarn e2e.ios.build.r && yarn e2e.ios.test.r",
         "e2e.ios.d": "yarn e2e.ios.build.d && yarn e2e.ios.test.d",
@@ -43,7 +43,9 @@
         "e2e.android.d": "yarn e2e.android.build.d && yarn e2e.android.test.d",
         "e2e.android.build.r": "detox build --configuration android.emu.release.33",
         "e2e.android.test.r": "detox test --configuration android.emu.release.33",
-        "e2e.android.r": "yarn e2e.android.build.r && yarn e2e.android.test.r"
+        "e2e.android.r": "yarn e2e.android.build.r && yarn e2e.android.test.r",
+        "bdd:preserenity": "serenity-bdd update --ignoreSSL --artifact=net.serenity-bdd:serenity-cli:jar:3.2.5",
+        "bdd:serenity": "serenity-bdd run --artifact=net.serenity-bdd:serenity-cli:jar:3.2.5 --source serenity-input --destination serenity-html"
     },
     "dependencies": {
         "@coinbase/cbpay-js": "^1.7.0",
@@ -65,6 +67,7 @@
         "@react-navigation/native-stack": "^6.9.14",
         "@reduxjs/toolkit": "^1.9.7",
         "@sentry/react-native": "^5.11.0",
+        "@serenity-js/console-reporter": "^3.13.2",
         "@shopify/flash-list": "^1.6.1",
         "@vechain/connex-driver": "^2.1.0",
         "@vechain/connex-framework": "^2.1.0",
@@ -178,6 +181,9 @@
         "@react-native/eslint-config": "^0.72.2",
         "@react-native/metro-config": "^0.72.11",
         "@release-it/conventional-changelog": "^7.0.2",
+        "@serenity-js/core": "^3.13.2",
+        "@serenity-js/cucumber": "^3.13.2",
+        "@serenity-js/serenity-bdd": "^3.13.2",
         "@testing-library/jest-native": "^5.4.2",
         "@testing-library/react-hooks": "^8.0.1",
         "@testing-library/react-native": "^12.0.0",
