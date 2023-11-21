@@ -1,11 +1,23 @@
-import { Layout } from "~Components"
+import { BaseTextInput, Layout } from "~Components"
 import { StyleSheet, View } from "react-native"
 import React, { MutableRefObject, useEffect } from "react"
 import WebView from "react-native-webview"
 import { useInAppBrowser } from "~Components/Providers/InAppBrowserProvider"
 
+export const URLInput = () => {
+    const { currentUrl, setCurrentUrl } = useInAppBrowser()
+
+    return <BaseTextInput value={currentUrl} onChangeText={setCurrentUrl} />
+}
+
 export const InAppBrowser = () => {
-    const { webviewRef, onMessage, injectVechainScript } = useInAppBrowser()
+    const {
+        webviewRef,
+        onMessage,
+        injectVechainScript,
+        onNavigationStateChange,
+        currentUrl,
+    } = useInAppBrowser()
 
     useEffect(() => {
         // set the webview ref to undefined when the component unmounts
@@ -17,7 +29,7 @@ export const InAppBrowser = () => {
 
     return (
         <Layout
-            fixedHeader={null}
+            fixedHeader={<URLInput />}
             noBackButton
             noMargin
             fixedBody={
@@ -26,8 +38,9 @@ export const InAppBrowser = () => {
                         <WebView
                             ref={webviewRef as MutableRefObject<WebView>}
                             source={{
-                                uri: "https://veworld-dapp-vecha.in",
+                                uri: currentUrl,
                             }}
+                            onNavigationStateChange={onNavigationStateChange}
                             javaScriptEnabled={true}
                             onMessage={onMessage}
                             style={styles.loginWebView}

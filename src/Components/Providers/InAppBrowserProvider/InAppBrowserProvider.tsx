@@ -1,5 +1,8 @@
-import React, { useCallback, useRef } from "react"
-import WebView, { WebViewMessageEvent } from "react-native-webview"
+import React, { Dispatch, SetStateAction, useCallback, useRef } from "react"
+import WebView, {
+    WebViewMessageEvent,
+    WebViewNavigation,
+} from "react-native-webview"
 import { WindowRequest, WindowResponse } from "./types"
 import { RequestMethods } from "~Constants"
 import { useNavigation } from "@react-navigation/native"
@@ -10,7 +13,10 @@ type ContextType = {
     webviewRef: React.MutableRefObject<WebView | undefined>
     onMessage: (event: WebViewMessageEvent) => void
     postMessage: (message: WindowResponse) => void
+    onNavigationStateChange: (navState: WebViewNavigation) => void
     injectVechainScript: string
+    currentUrl: string
+    setCurrentUrl: Dispatch<SetStateAction<string>>
 }
 
 const Context = React.createContext<ContextType>({} as ContextType)
@@ -21,6 +27,9 @@ type Props = {
 
 export const InAppBrowserProvider = ({ children }: Props) => {
     const webviewRef = useRef<WebView | undefined>()
+    const [currentUrl, setCurrentUrl] = React.useState<string>(
+        "https://apps.vechain.org/#all",
+    )
     const nav = useNavigation()
 
     const postMessage = useCallback((message: WindowResponse) => {
@@ -110,14 +119,31 @@ export const InAppBrowserProvider = ({ children }: Props) => {
         [navigateToTransactionScreen, navigateToCertificateScreen],
     )
 
+    const onNavigationStateChange = useCallback(
+        (navState: WebViewNavigation) => {
+            setCurrentUrl(navState.url)
+        },
+        [],
+    )
+
     const contextValue = React.useMemo(() => {
         return {
             webviewRef,
             onMessage,
             postMessage,
             injectVechainScript: injectedJs,
+            onNavigationStateChange,
+            currentUrl,
+            setCurrentUrl,
         }
-    }, [onMessage, postMessage, webviewRef])
+    }, [
+        onNavigationStateChange,
+        onMessage,
+        postMessage,
+        webviewRef,
+        setCurrentUrl,
+        currentUrl,
+    ])
 
     return <Context.Provider value={contextValue}>{children}</Context.Provider>
 }
