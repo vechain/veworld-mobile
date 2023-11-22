@@ -1709,6 +1709,14 @@ type RootTranslation = {
 	 */
 	BROWSER_FAVOURITES_TITLE: string
 	/**
+	 * A​d​d​ ​b​o​o​k​m​a​r​k
+	 */
+	BROWSER_ADD_BOOKMARK_TITLE: string
+	/**
+	 * A​d​d​ ​t​h​e​ ​c​u​r​r​e​n​t​ ​p​a​g​e​ ​t​o​ ​y​o​u​r​ ​b​o​o​k​m​a​r​k​s
+	 */
+	BROWSER_ADD_BOOKMARK_DESCRIPTION: string
+	/**
 	 * C​o​n​t​r​a​c​t​ ​a​d​d​r​e​s​s
 	 */
 	CONTRACT_ADDRESS: string
@@ -4373,6 +4381,14 @@ Try reconnect your device to the internet.
 	 * Favourites
 	 */
 	BROWSER_FAVOURITES_TITLE: () => LocalizedString
+	/**
+	 * Add bookmark
+	 */
+	BROWSER_ADD_BOOKMARK_TITLE: () => LocalizedString
+	/**
+	 * Add the current page to your bookmarks
+	 */
+	BROWSER_ADD_BOOKMARK_DESCRIPTION: () => LocalizedString
 	/**
 	 * Contract address
 	 */

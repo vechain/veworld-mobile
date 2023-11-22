@@ -480,6 +480,8 @@ const en: BaseTranslation = {
 
     BROWSER_TAB_MANAGEMENT_TITLE: "Tabs",
     BROWSER_FAVOURITES_TITLE: "Favourites",
+    BROWSER_ADD_BOOKMARK_TITLE: "Add bookmark",
+    BROWSER_ADD_BOOKMARK_DESCRIPTION: "Add the current page to your bookmarks",
 
     // NFT
     CONTRACT_ADDRESS: "Contract address",

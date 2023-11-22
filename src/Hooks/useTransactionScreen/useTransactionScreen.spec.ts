@@ -136,9 +136,6 @@ describe("useTransactionScreen", () => {
                         initialRoute,
                         onTransactionSuccess,
                         onTransactionFailure,
-                        options: {
-                            gas: 210000,
-                        },
                     }),
                 {
                     wrapper: TestWrapper,
@@ -177,9 +174,6 @@ describe("useTransactionScreen", () => {
                         initialRoute,
                         onTransactionSuccess,
                         onTransactionFailure,
-                        options: {
-                            gas: 210000,
-                        },
                     }),
                 {
                     wrapper: TestWrapper,
