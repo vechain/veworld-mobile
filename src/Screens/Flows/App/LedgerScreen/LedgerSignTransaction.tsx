@@ -103,17 +103,8 @@ export const LedgerSignTransaction: React.FC<Props> = ({ route }) => {
                         accountType: accountWithDevice.device.type,
                     })
 
-                    if (requestEvent) {
-                        const session = activeSessions[requestEvent.topic]
-
-                        if (session) {
-                            const { name, url } = getSessionRequestAttributes(session)
-
-                            dispatch(addPendingDappTransactionActivity(tx, name, url))
-                        }
-                        if (dappRequest) {
-                            dispatch(addPendingDappTransactionActivity(tx, dappRequest.appName, dappRequest.appUrl))
-                        }
+                    if (dappRequest) {
+                        dispatch(addPendingDappTransactionActivity(tx, dappRequest.appName, dappRequest.appUrl))
                     }
             }
         },
@@ -244,9 +235,6 @@ export const LedgerSignTransaction: React.FC<Props> = ({ route }) => {
     const navigateOnFinish = useCallback(() => {
         dispatch(setIsAppLoading(false))
         switch (initialRoute) {
-            case Routes.DISCOVER:
-                nav.navigate(Routes.DISCOVER)
-                break
             case Routes.BROWSER:
             default:
                 nav.navigate(Routes.BROWSER)

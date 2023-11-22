@@ -15,20 +15,20 @@ import {
     FadeoutButton,
     Layout,
 } from "~Components"
-import { RootStackParamListDiscover, RootStackParamListHome, Routes } from "~Navigation"
+import { RootStackParamListHome, Routes } from "~Navigation"
 import { useI18nContext } from "~i18n"
 import { COLORS, CURRENCY_SYMBOLS, typography } from "~Constants"
 import { selectCurrency, selectCurrencyExchangeRate, useAppSelector } from "~Storage/Redux"
 import { BigNumber } from "bignumber.js"
 import { useNavigation } from "@react-navigation/native"
-import { useTotalTokenBalance, useTotalFiatBalance, useUI, useCalculateGas } from "./Hooks"
+import { useCalculateGas, useTotalFiatBalance, useTotalTokenBalance, useUI } from "./Hooks"
 import { isEmpty } from "lodash"
 import Animated from "react-native-reanimated"
 import HapticsService from "~Services/HapticsService"
 
 const { defaults: defaultTypography } = typography
 
-type Props = NativeStackScreenProps<RootStackParamListHome & RootStackParamListDiscover, Routes.SELECT_AMOUNT_SEND>
+type Props = NativeStackScreenProps<RootStackParamListHome, Routes.SELECT_AMOUNT_SEND>
 
 const AnimatedTextInput = Animated.createAnimatedComponent(TextInput)
 

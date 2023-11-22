@@ -18,7 +18,7 @@ import {
     StepsProgressBar,
     useWalletConnect,
 } from "~Components"
-import { RootStackParamListDiscover, RootStackParamListSwitch, Routes } from "~Navigation"
+import { RootStackParamListSwitch, Routes } from "~Navigation"
 import { debug, error, HexUtils, LedgerUtils } from "~Utils"
 import { useI18nContext } from "~i18n"
 import { useNavigation } from "@react-navigation/native"
@@ -26,10 +26,7 @@ import * as Haptics from "expo-haptics"
 import { LEDGER_ERROR_CODES } from "~Constants"
 import { useInAppBrowser } from "~Components/Providers/InAppBrowserProvider"
 
-type Props = NativeStackScreenProps<
-    RootStackParamListSwitch & RootStackParamListDiscover,
-    Routes.LEDGER_SIGN_CERTIFICATE
->
+type Props = NativeStackScreenProps<RootStackParamListSwitch, Routes.LEDGER_SIGN_CERTIFICATE>
 
 enum SigningStep {
     CONNECTING,

@@ -24,10 +24,7 @@ import { Transaction } from "thor-devkit"
 import { ContactManagementBottomSheet } from "../../ContactsScreen"
 import { BigNumber } from "bignumber.js"
 
-type Props = NativeStackScreenProps<
-    RootStackParamListHome & RootStackParamListDiscover,
-    Routes.TRANSACTION_SUMMARY_SEND
->
+type Props = NativeStackScreenProps<RootStackParamListHome, Routes.TRANSACTION_SUMMARY_SEND>
 
 export const TransactionSummarySendScreen = ({ route }: Props) => {
     const { token, amount, address, initialRoute } = route.params
@@ -70,8 +67,8 @@ export const TransactionSummarySendScreen = ({ route }: Props) => {
             dispatch(setIsAppLoading(false))
 
             switch (initialRoute) {
-                case Routes.DISCOVER:
-                    nav.navigate(Routes.DISCOVER)
+                case Routes.BROWSER:
+                    nav.navigate(Routes.BROWSER)
                     break
                 case Routes.HOME:
                 default:
