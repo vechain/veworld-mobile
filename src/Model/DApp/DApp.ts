@@ -20,7 +20,7 @@ type BaseWcRequest = BaseRequest & {
 
 type BaseInAppRequest = BaseRequest & {
     type: "in-app"
-    id: number
+    id: string
 }
 
 type BaseCertificateRequest = {

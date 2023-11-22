@@ -1,14 +1,13 @@
-import { BaseTextInput, Layout } from "~Components"
+import { Layout } from "~Components"
 import { StyleSheet, View } from "react-native"
 import React, { MutableRefObject, useEffect } from "react"
 import WebView from "react-native-webview"
-import { useInAppBrowser } from "~Components/Providers/InAppBrowserProvider"
-
-export const URLInput = () => {
-    const { currentUrl, setCurrentUrl } = useInAppBrowser()
-
-    return <BaseTextInput value={currentUrl} onChangeText={setCurrentUrl} />
-}
+import {
+    DISCOVER_HOME_URL,
+    useInAppBrowser,
+} from "~Components/Providers/InAppBrowserProvider"
+import { URLInput } from "./Components"
+import { BrowserBottomBar } from "~Screens/Flows/App/InAppBrowser/Components/BrowserBottomBar"
 
 export const InAppBrowser = () => {
     const {
@@ -16,7 +15,7 @@ export const InAppBrowser = () => {
         onMessage,
         injectVechainScript,
         onNavigationStateChange,
-        currentUrl,
+        navigationState,
     } = useInAppBrowser()
 
     useEffect(() => {
@@ -32,13 +31,14 @@ export const InAppBrowser = () => {
             fixedHeader={<URLInput />}
             noBackButton
             noMargin
+            footer={<BrowserBottomBar />}
             fixedBody={
                 <>
                     <View style={styles.container}>
                         <WebView
                             ref={webviewRef as MutableRefObject<WebView>}
                             source={{
-                                uri: currentUrl,
+                                uri: navigationState?.url ?? DISCOVER_HOME_URL,
                             }}
                             onNavigationStateChange={onNavigationStateChange}
                             javaScriptEnabled={true}

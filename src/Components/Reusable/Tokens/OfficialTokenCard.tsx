@@ -3,7 +3,7 @@ import React, { memo } from "react"
 import { TokenWithCompleteInfo } from "~Model"
 import { BaseCard, BaseSpacer, BaseText, BaseView } from "~Components"
 import { useThemedStyles } from "~Hooks"
-import { CURRENCY, ColorThemeType } from "~Constants"
+import { ColorThemeType, CURRENCY } from "~Constants"
 import { TokenImage } from "../TokenImage"
 
 type OfficialTokenCardProps = {
@@ -13,7 +13,6 @@ type OfficialTokenCardProps = {
     iconWidth: number
     selected?: boolean
     currency?: CURRENCY
-    isPositive24hChange?: boolean
     change24h?: string
 }
 
@@ -26,10 +25,9 @@ export const OfficialTokenCard = memo(
         iconWidth,
         selected,
         currency,
-        isPositive24hChange,
         change24h,
     }: OfficialTokenCardProps & ViewProps) => {
-        const { styles, theme } = useThemedStyles(baseStyles(selected))
+        const { styles } = useThemedStyles(baseStyles(selected))
         return (
             <BaseCard
                 onPress={action}
@@ -70,16 +68,6 @@ export const OfficialTokenCard = memo(
                                     {currency}
                                 </BaseText>
                             </BaseView>
-
-                            <BaseText
-                                typographyFont="captionBold"
-                                color={
-                                    isPositive24hChange
-                                        ? theme.colors.success
-                                        : theme.colors.danger
-                                }>
-                                {change24h}
-                            </BaseText>
                         </BaseView>
                     )}
                 </BaseView>

@@ -106,6 +106,12 @@ const convertUriToUrl = (uri: string) => {
     }
 }
 
+function isValidBrowserUrl(url: string): boolean {
+    // Regular expression to check for a valid URL (including those without protocols)
+    const urlRegex = /^(https?:\/\/)?([\w-]+\.)+[\w-]+(\/[\w- ./?%&=]*)?$/
+    return urlRegex.test(url)
+}
+
 export default {
     compareURLs,
     clean,
@@ -117,4 +123,5 @@ export default {
     toNodeBeatWebsocketUrl,
     isValid,
     convertUriToUrl,
+    isValidBrowserUrl,
 }

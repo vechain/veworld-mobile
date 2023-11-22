@@ -1,4 +1,4 @@
-import React, { Dispatch, SetStateAction, useCallback, useRef } from "react"
+import React, { useCallback, useContext, useMemo, useRef } from "react"
 import WebView, {
     WebViewMessageEvent,
     WebViewNavigation,
@@ -15,22 +15,39 @@ type ContextType = {
     postMessage: (message: WindowResponse) => void
     onNavigationStateChange: (navState: WebViewNavigation) => void
     injectVechainScript: string
-    currentUrl: string
-    setCurrentUrl: Dispatch<SetStateAction<string>>
+    canGoBack: boolean
+    canGoForward: boolean
+    goBack: () => void
+    goForward: () => void
+    goHome: () => void
+    navigateToUrl: (url: string) => void
+    navigationState: WebViewNavigation | undefined
 }
 
-const Context = React.createContext<ContextType>({} as ContextType)
+const Context = React.createContext<ContextType | undefined>(undefined)
 
 type Props = {
     children: React.ReactNode
 }
 
+export const DISCOVER_HOME_URL = "https://apps.vechain.org/#all"
+
 export const InAppBrowserProvider = ({ children }: Props) => {
-    const webviewRef = useRef<WebView | undefined>()
-    const [currentUrl, setCurrentUrl] = React.useState<string>(
-        "https://apps.vechain.org/#all",
-    )
     const nav = useNavigation()
+
+    const webviewRef = useRef<WebView | undefined>()
+
+    const [navigationState, setNavigationState] = React.useState<
+        WebViewNavigation | undefined
+    >(undefined)
+
+    const canGoBack = useMemo(() => {
+        return navigationState?.canGoBack ?? false
+    }, [navigationState])
+
+    const canGoForward = useMemo(() => {
+        return navigationState?.canGoForward ?? false
+    }, [navigationState])
 
     const postMessage = useCallback((message: WindowResponse) => {
         debug("responding to dapp request", message.id)
@@ -42,6 +59,16 @@ export const InAppBrowserProvider = ({ children }: Props) => {
                 }, 1);
                 `,
         )
+    }, [])
+
+    const navigateToUrl = useCallback((url: string) => {
+        // Check if the URL starts with 'http://' or 'https://'
+        const hasProtocol = /^https?:\/\//i.test(url)
+        const finalUrl = hasProtocol ? url : `http://${url}`
+
+        webviewRef.current?.injectJavaScript(`
+            window.location.href = "${finalUrl}"
+        `)
     }, [])
 
     const navigateToTransactionScreen = useCallback(
@@ -100,7 +127,7 @@ export const InAppBrowserProvider = ({ children }: Props) => {
 
     const onMessage = useCallback(
         (event: WebViewMessageEvent) => {
-            debug("onMessage", event.nativeEvent, typeof event.nativeEvent.data)
+            debug("onMessage", event.nativeEvent.url)
 
             if (!event.nativeEvent.data) {
                 return
@@ -121,10 +148,22 @@ export const InAppBrowserProvider = ({ children }: Props) => {
 
     const onNavigationStateChange = useCallback(
         (navState: WebViewNavigation) => {
-            setCurrentUrl(navState.url)
+            setNavigationState(navState)
         },
         [],
     )
+
+    const goBack = useCallback(() => {
+        webviewRef.current?.goBack()
+    }, [])
+
+    const goForward = useCallback(() => {
+        webviewRef.current?.goForward()
+    }, [])
+
+    const goHome = useCallback(() => {
+        navigateToUrl(DISCOVER_HOME_URL)
+    }, [navigateToUrl])
 
     const contextValue = React.useMemo(() => {
         return {
@@ -133,23 +172,41 @@ export const InAppBrowserProvider = ({ children }: Props) => {
             postMessage,
             injectVechainScript: injectedJs,
             onNavigationStateChange,
-            currentUrl,
-            setCurrentUrl,
+            canGoBack,
+            canGoForward,
+            goBack,
+            goForward,
+            navigateToUrl,
+            goHome,
+            navigationState,
         }
     }, [
         onNavigationStateChange,
         onMessage,
         postMessage,
         webviewRef,
-        setCurrentUrl,
-        currentUrl,
+        canGoBack,
+        canGoForward,
+        goBack,
+        goForward,
+        navigateToUrl,
+        goHome,
+        navigationState,
     ])
 
     return <Context.Provider value={contextValue}>{children}</Context.Provider>
 }
 
 export const useInAppBrowser = () => {
-    return React.useContext(Context)
+    const context = useContext(Context)
+
+    if (!context) {
+        throw new Error(
+            "useInAppBrowser must be used within a InAppBrowserProvider",
+        )
+    }
+
+    return context
 }
 
 /**
@@ -186,15 +243,18 @@ function newResponseHandler(id) {
     })
 }
 
+function generateRandomId() {
+    return Math.random().toString(16).slice(2) + Math.random().toString(16).slice(2)
+}
+
 window.vechain = {
     isVeWorld: true,
+    
     newConnexSigner: function (genesisId) {
         return {
             signTx(message, options) {
                 const request = {
-                    id:
-                        Math.floor(Math.random() * (10000000 - 1000000 + 1)) +
-                        1000000,
+                    id: generateRandomId(),
                     method: "thor_sendTransaction",
                     origin: window.origin,
                     message,
@@ -209,9 +269,7 @@ window.vechain = {
 
             signCert(message, options) {
                 const request = {
-                    id:
-                        Math.floor(Math.random() * (10000000 - 1000000 + 1)) +
-                        1000000,
+                    id: generateRandomId(),
                     method: "thor_signCertificate",
                     origin: window.origin,
                     message,
