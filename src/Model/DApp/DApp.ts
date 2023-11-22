@@ -1,8 +1,4 @@
-import {
-    PendingRequestTypes,
-    SessionTypes,
-    SignClientTypes,
-} from "@walletconnect/types"
+import { PendingRequestTypes, SessionTypes, SignClientTypes } from "@walletconnect/types"
 
 export type DAppSourceType = "wallet-connect" | "in-app"
 

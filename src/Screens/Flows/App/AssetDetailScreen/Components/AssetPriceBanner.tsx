@@ -5,11 +5,7 @@ import { useThemedStyles } from "~Hooks"
 
 import { BaseText, BaseView } from "~Components"
 import { useI18nContext } from "~i18n"
-import {
-    useLineChartDatetime,
-    useLineChartPrice,
-    useLineChartRelativeChange,
-} from "../Hooks/usePrice"
+import { useLineChartDatetime, useLineChartPrice, useLineChartRelativeChange } from "../Hooks/usePrice"
 import { typography, ColorThemeType } from "~Constants"
 import { BaseAnimatedText } from "./AnimatedTextInput"
 import { selectChartDataIsLoading, useAppSelector } from "~Storage/Redux"
@@ -19,26 +15,17 @@ const { ...otherTypography } = typography
 
 export const AssetPriceBanner = ({ symbol }: { symbol: string }) => {
     const { LL } = useI18nContext()
-    const chartDataIsLoading = useAppSelector(state =>
-        selectChartDataIsLoading(symbol, state),
-    )
+    const chartDataIsLoading = useAppSelector(state => selectChartDataIsLoading(symbol, state))
     const datetime = useLineChartDatetime()
     const { formatted: formattedPrice } = useLineChartPrice()
-    const { value: priceChangeValue, formatted: formattedPriceChange } =
-        useLineChartRelativeChange({})
+    const { value: priceChangeValue, formatted: formattedPriceChange } = useLineChartRelativeChange({})
 
     const { styles, theme } = useThemedStyles(baseStyles)
 
-    const icon = useDerivedValue(
-        () => (priceChangeValue.value > 0 ? "+" : "-"),
-        [priceChangeValue.value],
-    )
+    const icon = useDerivedValue(() => (priceChangeValue.value > 0 ? "+" : "-"), [priceChangeValue.value])
     const changeStyles = useAnimatedStyle(
         () => ({
-            color:
-                priceChangeValue.value > 0
-                    ? theme.colors.success
-                    : theme.colors.danger,
+            color: priceChangeValue.value > 0 ? theme.colors.success : theme.colors.danger,
         }),
         [priceChangeValue.value, theme.colors.success, theme.colors.danger],
     )
@@ -53,9 +40,7 @@ export const AssetPriceBanner = ({ symbol }: { symbol: string }) => {
 
     return (
         <BaseView flexDirection="row" justifyContent="space-between" w={100}>
-            <BaseView
-                style={styles.textContainer}
-                justifyContent="space-between">
+            <BaseView style={styles.textContainer} justifyContent="space-between">
                 <BaseText typographyFont="body">{LL.COMMON_PRICE()}</BaseText>
                 <BaseView flexDirection="row" alignItems="baseline">
                     {chartDataIsLoading ? (
@@ -66,10 +51,7 @@ export const AssetPriceBanner = ({ symbol }: { symbol: string }) => {
                             style={[
                                 styles.textBigTitle,
                                 {
-                                    fontSize:
-                                        otherTypography.fontSize[
-                                            responsiveFontSize.value
-                                        ],
+                                    fontSize: otherTypography.fontSize[responsiveFontSize.value],
                                 },
                             ]}
                         />
@@ -77,27 +59,15 @@ export const AssetPriceBanner = ({ symbol }: { symbol: string }) => {
                 </BaseView>
             </BaseView>
 
-            <BaseView
-                alignItems="flex-end"
-                style={styles.textContainer}
-                justifyContent="space-between">
-                <BaseAnimatedText
-                    text={datetime.formatted}
-                    style={{ color: theme.colors.text }}
-                />
+            <BaseView alignItems="flex-end" style={styles.textContainer} justifyContent="space-between">
+                <BaseAnimatedText text={datetime.formatted} style={{ color: theme.colors.text }} />
 
                 {chartDataIsLoading ? (
                     <AssetTrendBannerSkeleton />
                 ) : (
                     <BaseView flexDirection="row">
-                        <BaseAnimatedText
-                            text={icon}
-                            style={[changeStyles, styles.textTitle]}
-                        />
-                        <BaseAnimatedText
-                            text={formattedPriceChange}
-                            style={[changeStyles, styles.textTitle]}
-                        />
+                        <BaseAnimatedText text={icon} style={[changeStyles, styles.textTitle]} />
+                        <BaseAnimatedText text={formattedPriceChange} style={[changeStyles, styles.textTitle]} />
                     </BaseView>
                 )}
             </BaseView>

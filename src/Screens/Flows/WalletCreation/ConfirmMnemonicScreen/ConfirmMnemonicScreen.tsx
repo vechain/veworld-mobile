@@ -2,18 +2,8 @@ import { useNavigation } from "@react-navigation/native"
 import React, { useCallback, useMemo, useState } from "react"
 import { useAnalyticTracking, useTheme } from "~Hooks"
 import { CryptoUtils } from "~Utils"
-import {
-    BaseButton,
-    BaseSpacer,
-    BaseText,
-    BaseView,
-    Layout,
-    showErrorToast,
-} from "~Components"
-import {
-    BaseButtonGroup,
-    Button as ButtonType,
-} from "~Components/Base/BaseButtonGroup"
+import { BaseButton, BaseSpacer, BaseText, BaseView, Layout, showErrorToast } from "~Components"
+import { BaseButtonGroup, Button as ButtonType } from "~Components/Base/BaseButtonGroup"
 import { useI18nContext } from "~i18n"
 import { Routes } from "~Navigation"
 import { getThreeRandomIndexes } from "./getThreeRandomIndexes"
@@ -28,15 +18,9 @@ export const ConfirmMnemonicScreen = () => {
     const devFeaturesEnabled = useAppSelector(selectAreDevFeaturesEnabled)
     const track = useAnalyticTracking()
 
-    const [selectedFirstWord, setSelectedFirstWord] = useState<string | null>(
-        null,
-    )
-    const [selectedSecondWord, setSelectedSecondWord] = useState<string | null>(
-        null,
-    )
-    const [selectedThirdWord, setSelectedThirdWord] = useState<string | null>(
-        null,
-    )
+    const [selectedFirstWord, setSelectedFirstWord] = useState<string | null>(null)
+    const [selectedSecondWord, setSelectedSecondWord] = useState<string | null>(null)
+    const [selectedThirdWord, setSelectedThirdWord] = useState<string | null>(null)
 
     const mnemonic = useAppSelector(selectMnemonic)
 
@@ -44,10 +28,7 @@ export const ConfirmMnemonicScreen = () => {
 
     const mnemonicArray = useMemo(() => mnemonic ?? [], [mnemonic])
 
-    const [firstIndex, secondIndex, thirdIndex] = useMemo(
-        () => getThreeRandomIndexes(),
-        [],
-    )
+    const [firstIndex, secondIndex, thirdIndex] = useMemo(() => getThreeRandomIndexes(), [])
 
     // Filter out the 3 words we are challenging the user to find
     // and shuffle the remaining words
@@ -55,12 +36,7 @@ export const ConfirmMnemonicScreen = () => {
         const updatedArray: Array<string> = []
 
         mnemonicArray.forEach((word, index) => {
-            if (
-                index !== firstIndex &&
-                index !== secondIndex &&
-                index !== thirdIndex
-            )
-                updatedArray.push(word)
+            if (index !== firstIndex && index !== secondIndex && index !== thirdIndex) updatedArray.push(word)
         })
 
         return CryptoUtils.shuffleArray(updatedArray)
@@ -162,17 +138,14 @@ export const ConfirmMnemonicScreen = () => {
         setSelectedThirdWord(button.id)
     }, [])
 
-    const isSubmitDisabled =
-        !selectedFirstWord || !selectedSecondWord || !selectedThirdWord
+    const isSubmitDisabled = !selectedFirstWord || !selectedSecondWord || !selectedThirdWord
 
     return (
         <Layout
             body={
                 <BaseView justifyContent="space-between" flexGrow={1}>
                     <BaseView justifyContent="space-between">
-                        <BaseView
-                            flexDirection="row"
-                            justifyContent="space-between">
+                        <BaseView flexDirection="row" justifyContent="space-between">
                             <BaseText align="left" typographyFont="title">
                                 {LL.TITLE_CONFIRM_MNEMONIC()}
                             </BaseText>
@@ -183,9 +156,7 @@ export const ConfirmMnemonicScreen = () => {
                                     variant="link"
                                     action={() =>
                                         userHasOnboarded
-                                            ? nav.navigate(
-                                                  Routes.WALLET_SUCCESS,
-                                              )
+                                            ? nav.navigate(Routes.WALLET_SUCCESS)
                                             : nav.navigate(Routes.APP_SECURITY)
                                     }
                                     title="DEV:SKIP"
@@ -206,9 +177,7 @@ export const ConfirmMnemonicScreen = () => {
                             buttonTestID="word-1"
                         />
                         <BaseSpacer height={valueToHP[21]} />
-                        <BaseText typographyFont="body">
-                            {LL.BD_SELECT_WORD({ number: secondIndex + 1 })}
-                        </BaseText>
+                        <BaseText typographyFont="body">{LL.BD_SELECT_WORD({ number: secondIndex + 1 })}</BaseText>
                         <BaseSpacer height={valueToHP[16]} />
                         <BaseButtonGroup
                             selectedButtonIds={[selectedSecondWord || ""]}
@@ -219,9 +188,7 @@ export const ConfirmMnemonicScreen = () => {
                             buttonTestID="word-2"
                         />
                         <BaseSpacer height={21} />
-                        <BaseText typographyFont="body">
-                            {LL.BD_SELECT_WORD({ number: thirdIndex + 1 })}
-                        </BaseText>
+                        <BaseText typographyFont="body">{LL.BD_SELECT_WORD({ number: thirdIndex + 1 })}</BaseText>
                         <BaseSpacer height={valueToHP[16]} />
                         <BaseButtonGroup
                             selectedButtonIds={[selectedThirdWord || ""]}

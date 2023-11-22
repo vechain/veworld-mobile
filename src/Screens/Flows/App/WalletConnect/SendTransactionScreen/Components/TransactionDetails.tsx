@@ -1,10 +1,4 @@
-import {
-    BaseIcon,
-    BaseSpacer,
-    BaseText,
-    BaseView,
-    CompressAndExpandBaseText,
-} from "~Components"
+import { BaseIcon, BaseSpacer, BaseText, BaseView, CompressAndExpandBaseText } from "~Components"
 import { useI18nContext } from "~i18n"
 import React, { useMemo } from "react"
 import { DelegationType } from "~Model/Delegation"
@@ -13,11 +7,7 @@ import { useTheme } from "~Hooks"
 import { capitalize } from "lodash"
 import { FormattingUtils } from "~Utils"
 import { Network, TransactionRequest } from "~Model"
-import {
-    selectCurrency,
-    selectCurrencyExchangeRate,
-    useAppSelector,
-} from "~Storage/Redux"
+import { selectCurrency, selectCurrencyExchangeRate, useAppSelector } from "~Storage/Redux"
 import { BigNumber } from "bignumber.js"
 
 type Props = {
@@ -43,9 +33,7 @@ export const TransactionDetails = ({
 }: Props) => {
     const { LL } = useI18nContext()
     const theme = useTheme()
-    const exchangeRate = useAppSelector(state =>
-        selectCurrencyExchangeRate(state),
-    )
+    const exchangeRate = useAppSelector(state => selectCurrencyExchangeRate(state))
     const currency = useAppSelector(selectCurrency)
 
     const comment = options.comment || message[0].comment
@@ -57,54 +45,32 @@ export const TransactionDetails = ({
     }, [message])
 
     const formattedFiatAmount = FormattingUtils.humanNumber(
-        FormattingUtils.convertToFiatBalance(
-            spendingAmount.toString(10) || "0",
-            exchangeRate?.rate || 1,
-            0,
-        ),
+        FormattingUtils.convertToFiatBalance(spendingAmount.toString(10) || "0", exchangeRate?.rate || 1, 0),
         spendingAmount,
     )
 
     return (
         <>
-            <BaseText typographyFont="subTitleBold">
-                {LL.SEND_DETAILS()}
-            </BaseText>
+            <BaseText typographyFont="subTitleBold">{LL.SEND_DETAILS()}</BaseText>
 
             <BaseSpacer height={24} />
-            <BaseText typographyFont="buttonSecondary">
-                {LL.CONNECTED_APP_SELECTED_ORIGIN_LABEL()}
-            </BaseText>
+            <BaseText typographyFont="buttonSecondary">{LL.CONNECTED_APP_SELECTED_ORIGIN_LABEL()}</BaseText>
             <BaseSpacer height={6} />
             <BaseText typographyFont="subSubTitle">{request.appName}</BaseText>
 
             <BaseSpacer height={12} />
-            <BaseSpacer
-                height={0.5}
-                width={"100%"}
-                background={theme.colors.textDisabled}
-            />
+            <BaseSpacer height={0.5} width={"100%"} background={theme.colors.textDisabled} />
 
             <BaseSpacer height={12} />
-            <BaseText typographyFont="buttonSecondary">
-                {LL.CONNECTED_APP_SELECTED_NETWORK_LABEL()}
-            </BaseText>
+            <BaseText typographyFont="buttonSecondary">{LL.CONNECTED_APP_SELECTED_NETWORK_LABEL()}</BaseText>
             <BaseSpacer height={6} />
-            <BaseText typographyFont="subSubTitle">
-                {capitalize(network.name)}
-            </BaseText>
+            <BaseText typographyFont="subSubTitle">{capitalize(network.name)}</BaseText>
 
             <BaseSpacer height={12} />
-            <BaseSpacer
-                height={0.5}
-                width={"100%"}
-                background={theme.colors.textDisabled}
-            />
+            <BaseSpacer height={0.5} width={"100%"} background={theme.colors.textDisabled} />
 
             <BaseSpacer height={12} />
-            <BaseText typographyFont="buttonSecondary">
-                {LL.SEND_AMOUNT()}
-            </BaseText>
+            <BaseText typographyFont="buttonSecondary">{LL.SEND_AMOUNT()}</BaseText>
             <BaseSpacer height={6} />
             <BaseView flexDirection="row">
                 <BaseText typographyFont="subSubTitle">
@@ -119,21 +85,13 @@ export const TransactionDetails = ({
             </BaseView>
 
             <BaseSpacer height={12} />
-            <BaseSpacer
-                height={0.5}
-                width={"100%"}
-                background={theme.colors.textDisabled}
-            />
+            <BaseSpacer height={0.5} width={"100%"} background={theme.colors.textDisabled} />
 
             <BaseSpacer height={12} />
-            <BaseText typographyFont="buttonSecondary">
-                {LL.SEND_GAS_FEE()}
-            </BaseText>
+            <BaseText typographyFont="buttonSecondary">{LL.SEND_GAS_FEE()}</BaseText>
             <BaseSpacer height={6} />
             {selectedDelegationOption === DelegationType.URL ? (
-                <BaseText typographyFont="subSubTitle">
-                    {LL.SEND_DELEGATED_FEES()}
-                </BaseText>
+                <BaseText typographyFont="subSubTitle">{LL.SEND_DELEGATED_FEES()}</BaseText>
             ) : (
                 <>
                     <BaseText typographyFont="subSubTitle">
@@ -143,17 +101,10 @@ export const TransactionDetails = ({
                         <>
                             <BaseSpacer height={8} />
                             <BaseView flexDirection="row">
-                                <BaseIcon
-                                    name="alert-circle-outline"
-                                    color={theme.colors.danger}
-                                    size={16}
-                                />
+                                <BaseIcon name="alert-circle-outline" color={theme.colors.danger} size={16} />
                                 <BaseSpacer width={4} />
-                                <BaseText
-                                    typographyFont="buttonSecondary"
-                                    color={theme.colors.danger}>
-                                    {LL.SEND_INSUFFICIENT_VTHO()} {vthoBalance}{" "}
-                                    {VTHO.symbol}
+                                <BaseText typographyFont="buttonSecondary" color={theme.colors.danger}>
+                                    {LL.SEND_INSUFFICIENT_VTHO()} {vthoBalance} {VTHO.symbol}
                                 </BaseText>
                             </BaseView>
                         </>
@@ -161,39 +112,20 @@ export const TransactionDetails = ({
                 </>
             )}
             <BaseSpacer height={12} />
-            <BaseSpacer
-                height={0.5}
-                width={"100%"}
-                background={theme.colors.textDisabled}
-            />
+            <BaseSpacer height={0.5} width={"100%"} background={theme.colors.textDisabled} />
             <BaseSpacer height={12} />
-            <BaseText typographyFont="buttonSecondary">
-                {LL.SEND_ESTIMATED_TIME()}
-            </BaseText>
+            <BaseText typographyFont="buttonSecondary">{LL.SEND_ESTIMATED_TIME()}</BaseText>
             <BaseSpacer height={6} />
-            <BaseText typographyFont="subSubTitle">
-                {LL.SEND_LESS_THAN_1_MIN()}
-            </BaseText>
+            <BaseText typographyFont="subSubTitle">{LL.SEND_LESS_THAN_1_MIN()}</BaseText>
 
             <BaseSpacer height={12} />
-            <BaseSpacer
-                height={0.5}
-                width={"100%"}
-                background={theme.colors.textDisabled}
-            />
+            <BaseSpacer height={0.5} width={"100%"} background={theme.colors.textDisabled} />
 
             <BaseSpacer height={12} />
-            <BaseText typographyFont="buttonSecondary">
-                {LL.CONNECTED_APP_SELECTED_MESSAGE_LABEL()}
-            </BaseText>
+            <BaseText typographyFont="buttonSecondary">{LL.CONNECTED_APP_SELECTED_MESSAGE_LABEL()}</BaseText>
             <BaseSpacer height={6} />
 
-            {comment && (
-                <CompressAndExpandBaseText
-                    text={comment}
-                    typographyFont="subSubTitle"
-                />
-            )}
+            {comment && <CompressAndExpandBaseText text={comment} typographyFont="subSubTitle" />}
         </>
     )
 }

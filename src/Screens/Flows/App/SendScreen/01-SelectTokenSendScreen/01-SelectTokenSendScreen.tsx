@@ -1,27 +1,13 @@
 import { useNavigation } from "@react-navigation/native"
 import { NativeStackScreenProps } from "@react-navigation/native-stack"
 import React, { useState } from "react"
-import {
-    BaseSearchInput,
-    BaseSpacer,
-    BaseText,
-    BaseView,
-    Layout,
-    OfficialTokenCard,
-} from "~Components"
+import { BaseSearchInput, BaseSpacer, BaseText, BaseView, Layout, OfficialTokenCard } from "~Components"
 import { FungibleTokenWithBalance } from "~Model"
-import {
-    RootStackParamListDiscover,
-    RootStackParamListHome,
-    Routes,
-} from "~Navigation"
+import { RootStackParamListDiscover, RootStackParamListHome, Routes } from "~Navigation"
 import { selectSendableTokensWithBalance, useAppSelector } from "~Storage/Redux"
 import { useI18nContext } from "~i18n"
 
-type Props = NativeStackScreenProps<
-    RootStackParamListHome & RootStackParamListDiscover,
-    Routes.SELECT_TOKEN_SEND
->
+type Props = NativeStackScreenProps<RootStackParamListHome & RootStackParamListDiscover, Routes.SELECT_TOKEN_SEND>
 
 export const SelectTokenSendScreen = ({ route }: Props) => {
     const { LL } = useI18nContext()
@@ -46,13 +32,9 @@ export const SelectTokenSendScreen = ({ route }: Props) => {
             title={LL.SEND_TOKEN_TITLE()}
             fixedHeader={
                 <BaseView>
-                    <BaseText typographyFont="button">
-                        {LL.SEND_TOKEN_SUBTITLE()}
-                    </BaseText>
+                    <BaseText typographyFont="button">{LL.SEND_TOKEN_SUBTITLE()}</BaseText>
                     <BaseSpacer height={8} />
-                    <BaseText typographyFont="body">
-                        {LL.SEND_TOKEN_SELECT_ASSET()}
-                    </BaseText>
+                    <BaseText typographyFont="body">{LL.SEND_TOKEN_SELECT_ASSET()}</BaseText>
                     <BaseSpacer height={16} />
                     <BaseSearchInput
                         value={tokenQuery}

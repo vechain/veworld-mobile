@@ -27,8 +27,7 @@ export const SignCertificateDetails: React.FC<Props> = memo(({ activity }) => {
             value: `${activity.linkUrl}`,
             typographyFont: "subSubTitleLight",
             underline: true,
-            onValuePress: async () =>
-                await Linking.openURL(activity.linkUrl ?? ""),
+            onValuePress: async () => await Linking.openURL(activity.linkUrl ?? ""),
         },
         {
             id: 3,

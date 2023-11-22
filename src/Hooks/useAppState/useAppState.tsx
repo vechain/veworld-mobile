@@ -10,22 +10,18 @@ import { AppStateStatus, AppState as _Appstate } from "react-native"
 export const useAppState = () => {
     const appState = useRef(_Appstate.currentState)
 
-    const [previousState, setPreviousState] =
-        useState<AppStateStatus>("unknown")
+    const [previousState, setPreviousState] = useState<AppStateStatus>("unknown")
     const [currentState, setCurrentState] = useState<AppStateStatus>("active")
 
     useEffect(() => {
         let previousAppState: AppStateStatus
-        const subscription = _Appstate.addEventListener(
-            "change",
-            nextAppState => {
-                previousAppState = appState.current
-                appState.current = nextAppState
+        const subscription = _Appstate.addEventListener("change", nextAppState => {
+            previousAppState = appState.current
+            appState.current = nextAppState
 
-                setCurrentState(nextAppState)
-                setPreviousState(previousAppState)
-            },
-        )
+            setCurrentState(nextAppState)
+            setPreviousState(previousAppState)
+        })
 
         return () => {
             subscription.remove()

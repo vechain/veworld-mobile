@@ -11,14 +11,11 @@ const get = async (pinCode?: string): Promise<StorageEncryptionKeys> => {
     const keys = await Keychain.get({
         key: pinCode ? PIN_CODE_STORAGE : BIOMETRIC_KEY_STORAGE,
         options: {
-            accessControl: pinCode
-                ? undefined
-                : ACCESS_CONTROL.BIOMETRY_ANY_OR_DEVICE_PASSCODE,
+            accessControl: pinCode ? undefined : ACCESS_CONTROL.BIOMETRY_ANY_OR_DEVICE_PASSCODE,
         },
     })
 
-    if (!keys)
-        throw new Error("StorageEncryptionKeyHelper -> get: No key found")
+    if (!keys) throw new Error("StorageEncryptionKeyHelper -> get: No key found")
 
     if (pinCode) {
         const salt = await SaltHelper.getSalt()
@@ -28,10 +25,7 @@ const get = async (pinCode?: string): Promise<StorageEncryptionKeys> => {
     }
 }
 
-const setWithPinCode = async (
-    encryptionKeys: StorageEncryptionKeys,
-    pinCode: string,
-) => {
+const setWithPinCode = async (encryptionKeys: StorageEncryptionKeys, pinCode: string) => {
     const salt = await SaltHelper.getSalt()
 
     const encryptedKeys = CryptoUtils.encrypt(encryptionKeys, pinCode, salt)
@@ -70,18 +64,11 @@ const validatePinCode = async (pinCode: string): Promise<boolean> => {
             key: PIN_CODE_STORAGE,
         })
 
-        if (!keys)
-            throw new Error(
-                "StorageEncryptionKeyHelper -> validatePinCode: No key found",
-            )
+        if (!keys) throw new Error("StorageEncryptionKeyHelper -> validatePinCode: No key found")
 
         const salt = await SaltHelper.getSalt()
 
-        const decryptedKeys = CryptoUtils.decrypt(
-            keys,
-            pinCode,
-            salt,
-        ) as StorageEncryptionKeys
+        const decryptedKeys = CryptoUtils.decrypt(keys, pinCode, salt) as StorageEncryptionKeys
 
         return !!decryptedKeys && !!decryptedKeys.redux
     } catch (e) {

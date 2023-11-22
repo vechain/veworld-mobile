@@ -1,26 +1,12 @@
 import React, { useCallback, useRef, useState } from "react"
-import {
-    BaseView,
-    DeviceBox,
-    Layout,
-    RequireUserPassword,
-    SwipeableRow,
-    showWarningToast,
-} from "~Components"
+import { BaseView, DeviceBox, Layout, RequireUserPassword, SwipeableRow, showWarningToast } from "~Components"
 import { BaseDevice, Device } from "~Model"
 import { setDeviceState, useAppSelector } from "~Storage/Redux"
 import { selectDevices } from "~Storage/Redux/Selectors"
-import {
-    RemoveWalletWarningBottomSheet,
-    WalletManagementHeader,
-} from "./components"
+import { RemoveWalletWarningBottomSheet, WalletManagementHeader } from "./components"
 import { useWalletDeletion } from "./hooks"
 import { StyleSheet } from "react-native"
-import {
-    useBottomSheetModal,
-    useCheckIdentity,
-    useTabBarBottomMargin,
-} from "~Hooks"
+import { useBottomSheetModal, useCheckIdentity, useTabBarBottomMargin } from "~Hooks"
 import { SwipeableItemImperativeRef } from "react-native-swipeable-item"
 import DraggableFlatList, { RenderItem } from "react-native-draggable-flatlist"
 import { useDispatch } from "react-redux"
@@ -36,15 +22,11 @@ export const WalletManagementScreen = () => {
     const { deleteWallet } = useWalletDeletion(selectedDevice)
     const { LL } = useI18nContext()
     const dispatch = useDispatch()
-    const {
-        isPasswordPromptOpen,
-        handleClosePasswordModal,
-        onPasswordSuccess,
-        checkIdentityBeforeOpening,
-    } = useCheckIdentity({
-        onIdentityConfirmed: deleteWallet,
-        allowAutoPassword: false,
-    })
+    const { isPasswordPromptOpen, handleClosePasswordModal, onPasswordSuccess, checkIdentityBeforeOpening } =
+        useCheckIdentity({
+            onIdentityConfirmed: deleteWallet,
+            allowAutoPassword: false,
+        })
 
     const {
         ref: removeWalletBottomSheetRef,
@@ -53,9 +35,7 @@ export const WalletManagementScreen = () => {
     } = useBottomSheetModal()
 
     const [isEdit, _setIsEdit] = useState(false)
-    const swipeableItemRefs = useRef<Map<string, SwipeableItemImperativeRef>>(
-        new Map(),
-    )
+    const swipeableItemRefs = useRef<Map<string, SwipeableItemImperativeRef>>(new Map())
     const closeOtherSwipeableItems = useCallback(() => {
         swipeableItemRefs?.current.forEach(ref => {
             ref?.close()
@@ -113,12 +93,7 @@ export const WalletManagementScreen = () => {
                     onPress={onDeviceSelected}
                     isDragMode={isEdit}
                     isOpen={deviceToRemove === item}>
-                    <DeviceBox
-                        device={item}
-                        isEdit={isEdit}
-                        drag={drag}
-                        isActive={isActive}
-                    />
+                    <DeviceBox device={item} isEdit={isEdit} drag={drag} isActive={isActive} />
                 </SwipeableRow>
             )
         },

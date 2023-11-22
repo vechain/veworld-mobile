@@ -13,8 +13,7 @@ export const BaseSwitch = ({ onValueChange, value, ...props }: Props) => {
             return theme.isDark ? theme.colors.text : theme.colors.textReversed
         }
 
-        if (!value)
-            return theme.isDark ? theme.colors.text : theme.colors.textReversed
+        if (!value) return theme.isDark ? theme.colors.text : theme.colors.textReversed
 
         return theme.colors.textReversed
     }, [theme, value])

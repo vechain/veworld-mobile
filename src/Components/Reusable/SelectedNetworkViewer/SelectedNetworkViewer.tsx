@@ -5,10 +5,7 @@ import { BaseIcon, BaseText, BaseTouchable, BaseView } from "~Components"
 import { ColorThemeType } from "~Constants"
 import { useThemedStyles, useBlockchainNetwork } from "~Hooks"
 import { Routes } from "~Navigation"
-import {
-    capitalize,
-    truncateTextIfSizeIsGreaterThan,
-} from "~Utils/StringUtils/StringUtils"
+import { capitalize, truncateTextIfSizeIsGreaterThan } from "~Utils/StringUtils/StringUtils"
 
 type Props = {
     showEvenIfMainnet?: boolean
@@ -38,9 +35,7 @@ export const SelectedNetworkViewer = ({ showEvenIfMainnet = false }: Props) => {
                     testID={"web"}
                     style={styles.networkViewerNetworkIcon}
                 />
-                <BaseText pl={5}>
-                    {network.name.length > 0 && formatNetworkName(network.name)}
-                </BaseText>
+                <BaseText pl={5}>{network.name.length > 0 && formatNetworkName(network.name)}</BaseText>
             </BaseView>
         </BaseTouchable>
     ) : null

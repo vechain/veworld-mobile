@@ -9,8 +9,7 @@ export const URLInput = () => {
 
     const [input, setInput] = React.useState(navigationState?.url ?? "")
 
-    const [shouldSelect, setShouldSelect] =
-        useState<TextInputProps["selection"]>(undefined)
+    const [shouldSelect, setShouldSelect] = useState<TextInputProps["selection"]>(undefined)
     const onFocus = () => {
         setShouldSelect({ start: 0, end: input.length })
     }
@@ -34,9 +33,7 @@ export const URLInput = () => {
             warn("URLInput", "onBlur", "invalid url", input)
             //navigate to google search - input should be encoded
             navigateToUrl(
-                `https://www.google.com/search?q=${encodeURIComponent(
-                    input,
-                )}&oq=${encodeURIComponent(input)}`,
+                `https://www.google.com/search?q=${encodeURIComponent(input)}&oq=${encodeURIComponent(input)}`,
             )
         }
     }, [input, navigateToUrl])

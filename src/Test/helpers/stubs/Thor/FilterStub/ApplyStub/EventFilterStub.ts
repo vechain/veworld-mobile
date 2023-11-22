@@ -6,10 +6,7 @@ import { account1D1 } from "../../../../data"
  * @param _limit
  * @returns
  */
-export function eventFilterApplyStub(
-    _offset: number,
-    _limit: number,
-): Promise<Connex.Thor.Filter.Row<"event">[]> {
+export function eventFilterApplyStub(_offset: number, _limit: number): Promise<Connex.Thor.Filter.Row<"event">[]> {
     return new Promise(r =>
         r([
             {

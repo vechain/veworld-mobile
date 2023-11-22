@@ -43,10 +43,7 @@ export const NFTView = memo(({ nft, index, collection }: Props) => {
                         flexDirection="row"
                         alignItems="center"
                         justifyContent="space-between">
-                        <BaseText
-                            typographyFont="caption"
-                            color={COLORS.WHITE}
-                            w={80}>
+                        <BaseText typographyFont="caption" color={COLORS.WHITE} w={80}>
                             {LL.ACTIVITIES_STATUS_pending()}
                         </BaseText>
                     </BaseView>

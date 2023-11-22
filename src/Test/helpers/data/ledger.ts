@@ -8,13 +8,10 @@ import { DeviceModel, DeviceModelId } from "@ledgerhq/devices"
 import { LedgerConfig } from "~Utils/LedgerUtils/LedgerUtils"
 /*eslint-disable no-console*/
 const publicKey =
+    // eslint-disable-next-line max-len
     "042e7f024c8af943a41af6b74a8be59c57daf978282fb0118674cba85cac0fe68eeca595a4a84f93f76ab8d648e40e5ec880691787cbfe6607de578a4217d4c15c"
-const chainCode =
-    "9f2e11c29c3838b32cc4160acb8c163db2d85e8a795af8844210ad81edd3eaef"
-const address = AddressUtils.getAddressFromXPub(
-    CryptoUtils.xPubFromHdNode(hdnode1),
-    0,
-)
+const chainCode = "9f2e11c29c3838b32cc4160acb8c163db2d85e8a795af8844210ad81edd3eaef"
+const address = AddressUtils.getAddressFromXPub(CryptoUtils.xPubFromHdNode(hdnode1), 0)
 export const mockLedgerAccount = {
     publicKey,
     address,
@@ -89,15 +86,10 @@ export const mockLedgerApp: VETLedgerApp = {
     signJSON: (path: string, rawJSON: Buffer): Promise<Buffer> => {
         return Promise.resolve(Buffer.from(path + rawJSON.toString()))
     },
-    signTransaction: (
-        path: string,
-        rawTransaction: Buffer,
-    ): Promise<Buffer> => {
+    signTransaction: (path: string, rawTransaction: Buffer): Promise<Buffer> => {
         return Promise.resolve(Buffer.from(path + rawTransaction.toString()))
     },
     getAppConfiguration: (): Promise<Buffer> => {
-        return Promise.resolve(
-            Buffer.from(LedgerConfig.CLAUSE_AND_CONTRACT_ENABLED, "hex"),
-        )
+        return Promise.resolve(Buffer.from(LedgerConfig.CLAUSE_AND_CONTRACT_ENABLED, "hex"))
     },
 }

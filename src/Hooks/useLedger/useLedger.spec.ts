@@ -18,11 +18,7 @@ describe("useLedger", () => {
         jest.mock("@ledgerhq/react-native-hw-transport-ble", () => ({
             default: TestHelpers.data.mockedTransport,
         }))
-        ;(
-            useLedgerSubscription as jest.MockedFunction<
-                typeof useLedgerSubscription
-            >
-        ).mockReturnValue({
+        ;(useLedgerSubscription as jest.MockedFunction<typeof useLedgerSubscription>).mockReturnValue({
             canConnect: true,
             availableDevices: [],
             unsubscribe: jest.fn(),

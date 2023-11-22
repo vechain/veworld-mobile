@@ -43,9 +43,7 @@ export const BlackListedCollectionsScreen = () => {
                     <BaseText>{LL.RESTORE_NFTS()}</BaseText>
 
                     <BaseSpacer height={32} />
-                    <BaseText typographyFont="title">
-                        {LL.COLLECTIONS()}
-                    </BaseText>
+                    <BaseText typographyFont="title">{LL.COLLECTIONS()}</BaseText>
                 </BaseView>
 
                 <BaseView justifyContent="center">
@@ -54,9 +52,7 @@ export const BlackListedCollectionsScreen = () => {
                             scrollEnabled={false}
                             data={blackListedCollections}
                             extraData={blackListedCollections}
-                            contentContainerStyle={
-                                styles.collectionListContainer
-                            }
+                            contentContainerStyle={styles.collectionListContainer}
                             numColumns={2}
                             keyExtractor={item => String(item.address)}
                             ItemSeparatorComponent={renderSeparator}
@@ -66,10 +62,7 @@ export const BlackListedCollectionsScreen = () => {
                         />
                     ) : (
                         <>
-                            <BaseView
-                                justifyContent="center"
-                                alignItems="center"
-                                py={48}>
+                            <BaseView justifyContent="center" alignItems="center" py={48}>
                                 <BaseText typographyFont="caption">
                                     {LL.NO_HIDDEN_COLLECTIONS({
                                         name: "Collections",

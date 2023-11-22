@@ -20,81 +20,65 @@ export type NativeTokenProps = {
     isBalanceVisible: boolean
 }
 
-export const AnimatedChartCard = memo(
-    ({ tokenWithInfo, isEdit, isBalanceVisible }: NativeTokenProps) => {
-        const nav = useNavigation()
-        const theme = useTheme()
-        usePollingChartData(tokenWithInfo.symbol as VeChainToken)
+export const AnimatedChartCard = memo(({ tokenWithInfo, isEdit, isBalanceVisible }: NativeTokenProps) => {
+    const nav = useNavigation()
+    const theme = useTheme()
+    usePollingChartData(tokenWithInfo.symbol as VeChainToken)
 
-        const chartData = useAppSelector(state =>
-            selectDashboardChartData(tokenWithInfo.symbol, state),
-        )
+    const chartData = useAppSelector(state => selectDashboardChartData(tokenWithInfo.symbol, state))
 
-        const animatedOuterCard = useAnimatedStyle(() => {
-            return {
-                height: withTiming(isEdit ? 62 : 162, {
-                    duration: 200,
-                }),
+    const animatedOuterCard = useAnimatedStyle(() => {
+        return {
+            height: withTiming(isEdit ? 62 : 162, {
+                duration: 200,
+            }),
 
-                backgroundColor: withTiming(
-                    isEdit ? theme.colors.neutralDisabled : theme.colors.card,
-                    {
-                        duration: 200,
-                    },
-                ),
-            }
-        }, [isEdit, theme.isDark])
+            backgroundColor: withTiming(isEdit ? theme.colors.neutralDisabled : theme.colors.card, {
+                duration: 200,
+            }),
+        }
+    }, [isEdit, theme.isDark])
 
-        const animatedInnerCard = useAnimatedStyle(() => {
-            return {
-                height: withTiming(isEdit ? 0 : HEIGHT, {
-                    duration: 200,
-                }),
+    const animatedInnerCard = useAnimatedStyle(() => {
+        return {
+            height: withTiming(isEdit ? 0 : HEIGHT, {
+                duration: 200,
+            }),
 
-                opacity: withTiming(isEdit ? 0 : 1, {
-                    duration: 200,
-                }),
-            }
-        }, [isEdit])
+            opacity: withTiming(isEdit ? 0 : 1, {
+                duration: 200,
+            }),
+        }
+    }, [isEdit])
 
-        const onVechainTokenPress = useCallback(() => {
-            HapticsService.triggerImpact({ level: "Light" })
-            if (!isEdit)
-                nav.navigate(Routes.TOKEN_DETAILS, { token: tokenWithInfo })
-        }, [isEdit, nav, tokenWithInfo])
+    const onVechainTokenPress = useCallback(() => {
+        HapticsService.triggerImpact({ level: "Light" })
+        if (!isEdit) nav.navigate(Routes.TOKEN_DETAILS, { token: tokenWithInfo })
+    }, [isEdit, nav, tokenWithInfo])
 
-        return (
-            <BaseView>
-                <TouchableOpacity
-                    activeOpacity={isEdit ? 1 : 0.6}
-                    onPress={onVechainTokenPress}>
-                    <Animated.View
-                        style={[
-                            styles.nativeTokenContainer,
-                            animatedOuterCard,
-                        ]}>
-                        <VechainTokenCard
-                            isBalanceVisible={isBalanceVisible}
-                            tokenWithInfo={tokenWithInfo}
-                            isAnimation={isEdit}
-                        />
-                        <Animated.View style={animatedInnerCard}>
-                            <LineChart.Provider data={chartData}>
-                                <LineChart height={HEIGHT}>
-                                    <LineChart.Path
-                                        color={theme.colors.primary}
-                                        width={2}>
-                                        <LineChart.Gradient />
-                                    </LineChart.Path>
-                                </LineChart>
-                            </LineChart.Provider>
-                        </Animated.View>
+    return (
+        <BaseView>
+            <TouchableOpacity activeOpacity={isEdit ? 1 : 0.6} onPress={onVechainTokenPress}>
+                <Animated.View style={[styles.nativeTokenContainer, animatedOuterCard]}>
+                    <VechainTokenCard
+                        isBalanceVisible={isBalanceVisible}
+                        tokenWithInfo={tokenWithInfo}
+                        isAnimation={isEdit}
+                    />
+                    <Animated.View style={animatedInnerCard}>
+                        <LineChart.Provider data={chartData}>
+                            <LineChart height={HEIGHT}>
+                                <LineChart.Path color={theme.colors.primary} width={2}>
+                                    <LineChart.Gradient />
+                                </LineChart.Path>
+                            </LineChart>
+                        </LineChart.Provider>
                     </Animated.View>
-                </TouchableOpacity>
-            </BaseView>
-        )
-    },
-)
+                </Animated.View>
+            </TouchableOpacity>
+        </BaseView>
+    )
+})
 
 const styles = StyleSheet.create({
     nativeTokenContainer: {

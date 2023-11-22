@@ -40,10 +40,7 @@ export interface NFTMedia {
     mediaType: NFTMediaType
 }
 
-export interface NFTMetadata
-    extends ERC721Metadata,
-        OpenSeaMetadata,
-        WorldOfVMetadata {}
+export interface NFTMetadata extends ERC721Metadata, OpenSeaMetadata, WorldOfVMetadata {}
 
 export interface WorldOfVMetadata {
     edition?: number

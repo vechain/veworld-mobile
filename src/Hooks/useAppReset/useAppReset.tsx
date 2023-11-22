@@ -1,16 +1,9 @@
 import { useCallback } from "react"
 import KeychainService from "~Services/KeychainService"
-import {
-    CACHE_NFT_MEDIA_KEY,
-    CACHE_NFT_METADATA_KEY,
-} from "~Storage/PersistedCache/constants"
+import { CACHE_NFT_MEDIA_KEY, CACHE_NFT_METADATA_KEY } from "~Storage/PersistedCache/constants"
 import { resetApp, useAppDispatch } from "~Storage/Redux"
 import { info } from "~Utils/Logger"
-import {
-    useApplicationSecurity,
-    usePersistedCache,
-    usePersistedTheme,
-} from "~Components/Providers"
+import { useApplicationSecurity, usePersistedCache, usePersistedTheme } from "~Components/Providers"
 
 export const useAppReset = () => {
     const dispatch = useAppDispatch()
@@ -44,11 +37,5 @@ export const useAppReset = () => {
         await dispatch(resetApp())
 
         info("App Reset Finished")
-    }, [
-        removeEncryptionKeysFromKeychain,
-        resetCaches,
-        resetApplication,
-        initAllCaches,
-        dispatch,
-    ])
+    }, [removeEncryptionKeysFromKeychain, resetCaches, resetApplication, initAllCaches, dispatch])
 }

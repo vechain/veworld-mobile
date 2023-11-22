@@ -11,38 +11,22 @@ export const useBiometricType = () => {
 
     const currentSecurityLevel = useMemo(() => {
         if (PlatformUtils.isIOS()) {
-            if (
-                biometrics?.currentSecurityLevel === SecurityLevelType.BIOMETRIC
-            ) {
-                if (
-                    biometrics?.authTypeAvailable ===
-                    AuthenticationType.FACIAL_RECOGNITION
-                ) {
+            if (biometrics?.currentSecurityLevel === SecurityLevelType.BIOMETRIC) {
+                if (biometrics?.authTypeAvailable === AuthenticationType.FACIAL_RECOGNITION) {
                     return LL.FACE_ID()
                 }
-                if (
-                    biometrics?.authTypeAvailable ===
-                    AuthenticationType.FINGERPRINT
-                ) {
+                if (biometrics?.authTypeAvailable === AuthenticationType.FINGERPRINT) {
                     return LL.TOUCH_ID()
                 }
             } else {
                 return LL.BIOMETRICS()
             }
         } else {
-            if (
-                biometrics?.currentSecurityLevel === SecurityLevelType.BIOMETRIC
-            ) {
-                if (
-                    biometrics?.authTypeAvailable ===
-                    AuthenticationType.FACIAL_RECOGNITION
-                ) {
+            if (biometrics?.currentSecurityLevel === SecurityLevelType.BIOMETRIC) {
+                if (biometrics?.authTypeAvailable === AuthenticationType.FACIAL_RECOGNITION) {
                     return LL.FACE_ID()
                 }
-                if (
-                    biometrics?.authTypeAvailable ===
-                    AuthenticationType.FINGERPRINT
-                ) {
+                if (biometrics?.authTypeAvailable === AuthenticationType.FINGERPRINT) {
                     return LL.FINGERPRINT()
                 }
             } else {

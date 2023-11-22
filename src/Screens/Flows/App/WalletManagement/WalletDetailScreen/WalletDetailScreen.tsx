@@ -1,11 +1,5 @@
 import React, { useCallback, useEffect, useRef, useState } from "react"
-import {
-    useBottomSheetModal,
-    useCheckIdentity,
-    useRenameWallet,
-    useSetSelectedAccount,
-    useTheme,
-} from "~Hooks"
+import { useBottomSheetModal, useCheckIdentity, useRenameWallet, useSetSelectedAccount, useTheme } from "~Hooks"
 import { AddressUtils } from "~Utils"
 import {
     BaseTextInput,
@@ -23,16 +17,8 @@ import {
 import { useI18nContext } from "~i18n"
 import { AccountDetailBox } from "./AccountDetailBox"
 import { AccountWithDevice, DEVICE_TYPE } from "~Model"
-import {
-    addAccountForDevice,
-    useAppDispatch,
-    useAppSelector,
-} from "~Storage/Redux"
-import {
-    selectAccountsByDevice,
-    selectBalanceVisible,
-    selectSelectedAccount,
-} from "~Storage/Redux/Selectors"
+import { addAccountForDevice, useAppDispatch, useAppSelector } from "~Storage/Redux"
+import { selectAccountsByDevice, selectBalanceVisible, selectSelectedAccount } from "~Storage/Redux/Selectors"
 import { COLORS } from "~Constants"
 import { NativeStackScreenProps } from "@react-navigation/native-stack"
 import { RootStackParamListHome, Routes } from "~Navigation"
@@ -41,10 +27,7 @@ import { useAccountDelete } from "./hooks"
 import { AccountUnderlay, RemoveAccountWarningBottomSheet } from "./components"
 import { SwipeableItemImperativeRef } from "react-native-swipeable-item"
 
-type Props = NativeStackScreenProps<
-    RootStackParamListHome,
-    Routes.WALLET_DETAILS
->
+type Props = NativeStackScreenProps<RootStackParamListHome, Routes.WALLET_DETAILS>
 
 export const WalletDetailScreen = ({ route: { params } }: Props) => {
     const { device } = params
@@ -56,15 +39,11 @@ export const WalletDetailScreen = ({ route: { params } }: Props) => {
 
     const { changeDeviceAlias } = useRenameWallet(device)
 
-    const swipeableItemRefs = useRef<Map<string, SwipeableItemImperativeRef>>(
-        new Map(),
-    )
+    const swipeableItemRefs = useRef<Map<string, SwipeableItemImperativeRef>>(new Map())
 
     const isBalanceVisible = useAppSelector(selectBalanceVisible)
 
-    const deviceAccounts = useAppSelector(state =>
-        selectAccountsByDevice(state, device?.rootAddress),
-    )
+    const deviceAccounts = useAppSelector(state => selectAccountsByDevice(state, device?.rootAddress))
 
     const selectedAccount = useAppSelector(selectSelectedAccount)
 
@@ -93,12 +72,7 @@ export const WalletDetailScreen = ({ route: { params } }: Props) => {
         }
     }
 
-    const {
-        setAccountToRemove,
-        deleteAccount,
-        isOnlyAccount,
-        accountToRemove,
-    } = useAccountDelete()
+    const { setAccountToRemove, deleteAccount, isOnlyAccount, accountToRemove } = useAccountDelete()
 
     const confirmRemoveAccount = useCallback(
         (account: AccountWithDevice) => {
@@ -110,12 +84,7 @@ export const WalletDetailScreen = ({ route: { params } }: Props) => {
             setAccountToRemove(account)
             openRemoveAccountWarningBottomSheet()
         },
-        [
-            setAccountToRemove,
-            LL,
-            isOnlyAccount,
-            openRemoveAccountWarningBottomSheet,
-        ],
+        [setAccountToRemove, LL, isOnlyAccount, openRemoveAccountWarningBottomSheet],
     )
 
     useEffect(() => {
@@ -125,15 +94,11 @@ export const WalletDetailScreen = ({ route: { params } }: Props) => {
     const { onSetSelectedAccount } = useSetSelectedAccount()
 
     // delete account logic
-    const {
-        isPasswordPromptOpen,
-        handleClosePasswordModal,
-        onPasswordSuccess,
-        checkIdentityBeforeOpening,
-    } = useCheckIdentity({
-        onIdentityConfirmed: deleteAccount,
-        allowAutoPassword: false,
-    })
+    const { isPasswordPromptOpen, handleClosePasswordModal, onPasswordSuccess, checkIdentityBeforeOpening } =
+        useCheckIdentity({
+            onIdentityConfirmed: deleteAccount,
+            allowAutoPassword: false,
+        })
     const closeWarningAndAskForPassword = useCallback(() => {
         closeRemoveAccountWarningBottomSheet()
         checkIdentityBeforeOpening()
@@ -144,15 +109,9 @@ export const WalletDetailScreen = ({ route: { params } }: Props) => {
             noMargin
             fixedHeader={
                 <BaseView px={20} pb={16}>
-                    <BaseView
-                        flexDirection="row"
-                        w={100}
-                        justifyContent="space-between">
+                    <BaseView flexDirection="row" w={100} justifyContent="space-between">
                         <BaseView flex={1}>
-                            <BaseText
-                                typographyFont="subTitleBold"
-                                ellipsizeMode="tail"
-                                numberOfLines={1}>
+                            <BaseText typographyFont="subTitleBold" ellipsizeMode="tail" numberOfLines={1}>
                                 {walletAlias || device?.alias || ""}
                             </BaseText>
                         </BaseView>
@@ -166,13 +125,7 @@ export const WalletDetailScreen = ({ route: { params } }: Props) => {
                                 textColor={COLORS.DARK_PURPLE}
                                 radius={30}
                                 py={10}
-                                leftIcon={
-                                    <BaseIcon
-                                        name="plus"
-                                        size={20}
-                                        color={COLORS.DARK_PURPLE}
-                                    />
-                                }>
+                                leftIcon={<BaseIcon name="plus" size={20} color={COLORS.DARK_PURPLE} />}>
                                 <BaseSpacer width={2} />
                                 {LL.ADD_ACCOUNT()}
                             </BaseButton>
@@ -180,9 +133,7 @@ export const WalletDetailScreen = ({ route: { params } }: Props) => {
                     </BaseView>
                     <BaseSpacer height={16} />
                     <BaseTextInput
-                        placeholder={
-                            device?.alias || LL.WALLET_MANAGEMENT_WALLET_NAME()
-                        }
+                        placeholder={device?.alias || LL.WALLET_MANAGEMENT_WALLET_NAME()}
                         value={walletAlias}
                         setValue={onRenameWallet}
                         maxLength={35}
@@ -199,11 +150,7 @@ export const WalletDetailScreen = ({ route: { params } }: Props) => {
                             ListHeaderComponent={<BaseSpacer height={20} />}
                             ListFooterComponent={<BaseSpacer height={20} />}
                             renderItem={({ item }) => {
-                                const isSelected =
-                                    AddressUtils.compareAddresses(
-                                        selectedAccount.address,
-                                        item.address,
-                                    )
+                                const isSelected = AddressUtils.compareAddresses(selectedAccount.address, item.address)
 
                                 return (
                                     <SwipeableRow<AccountWithDevice>
@@ -211,9 +158,7 @@ export const WalletDetailScreen = ({ route: { params } }: Props) => {
                                         item={item}
                                         itemKey={item.address}
                                         swipeableItemRefs={swipeableItemRefs}
-                                        handleTrashIconPress={() =>
-                                            confirmRemoveAccount(item)
-                                        }
+                                        handleTrashIconPress={() => confirmRemoveAccount(item)}
                                         setSelectedItem={setOpenedAccount}
                                         onPress={() => {
                                             item.visible &&
@@ -221,15 +166,10 @@ export const WalletDetailScreen = ({ route: { params } }: Props) => {
                                                     address: item.address,
                                                 })
                                         }}
-                                        isOpen={
-                                            openedAccount?.address ===
-                                            item.address
-                                        }
+                                        isOpen={openedAccount?.address === item.address}
                                         customUnderlay={
                                             <AccountUnderlay
-                                                confirmRemoveAccount={
-                                                    confirmRemoveAccount
-                                                }
+                                                confirmRemoveAccount={confirmRemoveAccount}
                                                 account={item}
                                                 isSelected={isSelected}
                                             />

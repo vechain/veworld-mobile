@@ -10,13 +10,9 @@ const WALLET_BIOMETRIC_KEY_STORAGE = "WALLET_BIOMETRIC_KEY_STORAGE"
 
 const get = async (pinCode?: string): Promise<WalletEncryptionKey> => {
     const keys = await Keychain.get({
-        key: pinCode
-            ? WALLET_ENCRYPTION_KEY_STORAGE
-            : WALLET_BIOMETRIC_KEY_STORAGE,
+        key: pinCode ? WALLET_ENCRYPTION_KEY_STORAGE : WALLET_BIOMETRIC_KEY_STORAGE,
         options: {
-            accessControl: pinCode
-                ? undefined
-                : ACCESS_CONTROL.BIOMETRY_ANY_OR_DEVICE_PASSCODE,
+            accessControl: pinCode ? undefined : ACCESS_CONTROL.BIOMETRY_ANY_OR_DEVICE_PASSCODE,
         },
     })
 
@@ -30,10 +26,7 @@ const get = async (pinCode?: string): Promise<WalletEncryptionKey> => {
     }
 }
 
-const setWithPinCode = async (
-    encryptionKeys: WalletEncryptionKey,
-    pinCode: string,
-) => {
+const setWithPinCode = async (encryptionKeys: WalletEncryptionKey, pinCode: string) => {
     const salt = await SaltHelper.getSalt()
 
     const encryptedKeys = CryptoUtils.encrypt(encryptionKeys, pinCode, salt)
@@ -65,10 +58,7 @@ const set = async (encryptionKeys: WalletEncryptionKey, pinCode?: string) => {
         await setWithBiometric(encryptionKeys)
     }
 }
-const decryptWallet = async (
-    encryptedWallet: string,
-    pinCode?: string,
-): Promise<Wallet> => {
+const decryptWallet = async (encryptedWallet: string, pinCode?: string): Promise<Wallet> => {
     const { walletKey } = await get(pinCode)
 
     return CryptoUtils.decrypt<Wallet>(encryptedWallet, walletKey)

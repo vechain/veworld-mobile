@@ -21,28 +21,17 @@ export const useDeviceUtils = () => {
      */
     const verifyDeviceDoesntExist = (device: Omit<LocalDevice, "wallet">) => {
         // Check if a device with the same root address already exists
-        const deviceAlreadyExist = devices.find(d =>
-            AddressUtils.compareAddresses(d.rootAddress, device.rootAddress),
-        )
+        const deviceAlreadyExist = devices.find(d => AddressUtils.compareAddresses(d.rootAddress, device.rootAddress))
         if (deviceAlreadyExist) throw new Error(ERRORS.ADDRESS_EXISTS)
 
         // Check if an account with the same address as the device root address already exists
-        const accountAlreadyExist = accounts.find(a =>
-            AddressUtils.compareAddresses(a.address, device.rootAddress),
-        )
+        const accountAlreadyExist = accounts.find(a => AddressUtils.compareAddresses(a.address, device.rootAddress))
         if (accountAlreadyExist) throw new Error(ERRORS.ADDRESS_EXISTS)
 
         // Check if a device exists with the same root address as the first child account
         if (device.xPub) {
             const firstChildAddress = getAddressFromXPub(device.xPub, 0)
-            if (
-                devices.find(d =>
-                    AddressUtils.compareAddresses(
-                        d.rootAddress,
-                        firstChildAddress,
-                    ),
-                )
-            )
+            if (devices.find(d => AddressUtils.compareAddresses(d.rootAddress, firstChildAddress)))
                 throw new Error(ERRORS.ADDRESS_EXISTS)
         }
     }
@@ -53,29 +42,18 @@ export const useDeviceUtils = () => {
      * @param privateKey (optional)
      */
     const createDevice = (mnemonic?: string[], privateKey?: string) => {
-        if (!mnemonic && !privateKey)
-            throw new Error(ERRORS.INVALID_IMPORT_DATA)
+        if (!mnemonic && !privateKey) throw new Error(ERRORS.INVALID_IMPORT_DATA)
 
         const deviceIndex = getNextDeviceIndex(devices)
 
         const locale = i18n.detectLocale()
-        const alias = `${i18n.i18n()[locale].WALLET_LABEL_WALLET()} ${
-            deviceIndex + 1
-        }`
+        const alias = `${i18n.i18n()[locale].WALLET_LABEL_WALLET()} ${deviceIndex + 1}`
 
         let walletAndDevice: WalletAndDevice
         if (mnemonic) {
-            walletAndDevice = DeviceUtils.generateDeviceForMnemonic(
-                mnemonic,
-                deviceIndex,
-                alias,
-            )
+            walletAndDevice = DeviceUtils.generateDeviceForMnemonic(mnemonic, deviceIndex, alias)
         } else if (privateKey) {
-            walletAndDevice = DeviceUtils.generateDeviceForPrivateKey(
-                privateKey,
-                deviceIndex,
-                alias,
-            )
+            walletAndDevice = DeviceUtils.generateDeviceForPrivateKey(privateKey, deviceIndex, alias)
         } else throw new Error(ERRORS.UNKNOWN_ERROR)
 
         verifyDeviceDoesntExist(walletAndDevice.device)
@@ -83,10 +61,7 @@ export const useDeviceUtils = () => {
         return walletAndDevice
     }
 
-    const checkCanImportDevice = (
-        mnemonic?: string[],
-        privateKey?: string,
-    ): void => {
+    const checkCanImportDevice = (mnemonic?: string[], privateKey?: string): void => {
         createDevice(mnemonic, privateKey)
     }
 

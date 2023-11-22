@@ -2,23 +2,14 @@ import { Layout } from "~Components"
 import { StyleSheet, View } from "react-native"
 import React, { MutableRefObject, useEffect } from "react"
 import WebView from "react-native-webview"
-import {
-    DISCOVER_HOME_URL,
-    useInAppBrowser,
-} from "~Components/Providers/InAppBrowserProvider"
+import { DISCOVER_HOME_URL, useInAppBrowser } from "~Components/Providers/InAppBrowserProvider"
 import { BrowserFavouritesBottomSheet, URLInput } from "./Components"
 import { BrowserBottomBar } from "~Screens/Flows/App/InAppBrowser/Components/BrowserBottomBar"
 import { useBottomSheetModal } from "~Hooks"
 import { BrowserTabsBottomSheet } from "~Screens/Flows/App/InAppBrowser/Components/BrowserTabsBottomSheet"
 
 export const InAppBrowser = () => {
-    const {
-        webviewRef,
-        onMessage,
-        injectVechainScript,
-        onNavigationStateChange,
-        navigationState,
-    } = useInAppBrowser()
+    const { webviewRef, onMessage, injectVechainScript, onNavigationStateChange, navigationState } = useInAppBrowser()
 
     const {
         ref: tabManagerSheetRef,
@@ -26,11 +17,7 @@ export const InAppBrowser = () => {
         onClose: closeTabManagerSheet,
     } = useBottomSheetModal()
 
-    const {
-        ref: onFavoritesSheetRef,
-        onOpen: openFavoritesSheet,
-        onClose: closeFavoritesSheet,
-    } = useBottomSheetModal()
+    const { ref: onFavoritesSheetRef, onOpen: openFavoritesSheet, onClose: closeFavoritesSheet } = useBottomSheetModal()
 
     useEffect(() => {
         // set the webview ref to undefined when the component unmounts
@@ -45,12 +32,7 @@ export const InAppBrowser = () => {
             fixedHeader={<URLInput />}
             noBackButton
             noMargin
-            footer={
-                <BrowserBottomBar
-                    onTabClick={openTabManagerSheet}
-                    onFavouriteClick={openFavoritesSheet}
-                />
-            }
+            footer={<BrowserBottomBar onTabClick={openTabManagerSheet} onFavouriteClick={openFavoritesSheet} />}
             fixedBody={
                 <>
                     <View style={styles.container}>
@@ -64,21 +46,13 @@ export const InAppBrowser = () => {
                             onMessage={onMessage}
                             style={styles.loginWebView}
                             scalesPageToFit={true}
-                            injectedJavaScriptBeforeContentLoaded={
-                                injectVechainScript
-                            }
+                            injectedJavaScriptBeforeContentLoaded={injectVechainScript}
                         />
                     </View>
 
-                    <BrowserTabsBottomSheet
-                        ref={tabManagerSheetRef}
-                        onClose={closeTabManagerSheet}
-                    />
+                    <BrowserTabsBottomSheet ref={tabManagerSheetRef} onClose={closeTabManagerSheet} />
 
-                    <BrowserFavouritesBottomSheet
-                        ref={onFavoritesSheetRef}
-                        onClose={closeFavoritesSheet}
-                    />
+                    <BrowserFavouritesBottomSheet ref={onFavoritesSheetRef} onClose={closeFavoritesSheet} />
                 </>
             }
         />

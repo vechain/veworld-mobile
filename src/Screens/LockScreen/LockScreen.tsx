@@ -30,12 +30,7 @@ type Titles = {
 const digitNumber = 6
 
 export const LockScreen: React.FC<Props> = memo(
-    ({
-        onSuccess,
-        scenario,
-        isValidatePassword = true,
-        isSafeView = false,
-    }) => {
+    ({ onSuccess, scenario, isValidatePassword = true, isSafeView = false }) => {
         const { LL } = useI18nContext()
 
         const track = useAnalyticTracking()
@@ -49,8 +44,7 @@ export const LockScreen: React.FC<Props> = memo(
 
         const isOldPinSameAsNewPin = useCallback(
             async (pin: string) => {
-                const isValid =
-                    await StorageEncryptionKeyHelper.validatePinCode(pin)
+                const isValid = await StorageEncryptionKeyHelper.validatePinCode(pin)
                 if (isValid) {
                     setIsError({
                         type: PinVerificationError.EDIT_PIN,
@@ -102,8 +96,7 @@ export const LockScreen: React.FC<Props> = memo(
                     return
                 }
 
-                const isValid =
-                    await StorageEncryptionKeyHelper.validatePinCode(userPin)
+                const isValid = await StorageEncryptionKeyHelper.validatePinCode(userPin)
 
                 if (isValid) {
                     track(AnalyticsEvent.APP_PIN_UNLOCKED)
@@ -116,14 +109,7 @@ export const LockScreen: React.FC<Props> = memo(
                     })
                 }
             },
-            [
-                scenario,
-                handleEditPin,
-                isOldPinSameAsNewPin,
-                isValidatePassword,
-                onSuccess,
-                track,
-            ],
+            [scenario, handleEditPin, isOldPinSameAsNewPin, isValidatePassword, onSuccess, track],
         )
 
         const { pin, onDigitPress, onDigitDelete } = useOnDigitPress({
@@ -160,9 +146,7 @@ export const LockScreen: React.FC<Props> = memo(
                 case LOCKSCREEN_SCENARIO.EDIT_NEW_PIN:
                     return {
                         title: LL.TITLE_USER_PIN(),
-                        subTitle: firstPin
-                            ? LL.SB_EDIT_NEW_PIN_CONFIRM()
-                            : LL.SB_EDIT_NEW_PIN(),
+                        subTitle: firstPin ? LL.SB_EDIT_NEW_PIN_CONFIRM() : LL.SB_EDIT_NEW_PIN(),
                     }
 
                 default:
@@ -180,9 +164,7 @@ export const LockScreen: React.FC<Props> = memo(
                         <BaseSpacer height={20} />
                         <BaseView mx={24} alignItems="center">
                             <BaseView alignSelf="flex-start">
-                                <BaseText typographyFont="title">
-                                    {title}
-                                </BaseText>
+                                <BaseText typographyFont="title">{title}</BaseText>
                                 <BaseText typographyFont="body" my={10}>
                                     {subTitle}
                                 </BaseText>
@@ -190,15 +172,8 @@ export const LockScreen: React.FC<Props> = memo(
 
                             <BaseSpacer height={isSmallScreen ? 32 : 62} />
 
-                            <PasswordPins
-                                digitNumber={digitNumber}
-                                pin={pin}
-                                isPinError={isError}
-                            />
-                            <NumPad
-                                onDigitPress={handleOnDigitPress}
-                                onDigitDelete={onDigitDelete}
-                            />
+                            <PasswordPins digitNumber={digitNumber} pin={pin} isPinError={isError} />
+                            <NumPad onDigitPress={handleOnDigitPress} onDigitDelete={onDigitDelete} />
                         </BaseView>
                     </>
                 }
@@ -208,13 +183,7 @@ export const LockScreen: React.FC<Props> = memo(
     },
 )
 
-const SafeAreaHOC = ({
-    isSafeView,
-    children,
-}: {
-    isSafeView: boolean
-    children: React.ReactNode
-}) => {
+const SafeAreaHOC = ({ isSafeView, children }: { isSafeView: boolean; children: React.ReactNode }) => {
     if (isSafeView) {
         return <BaseSafeArea grow={1}>{children}</BaseSafeArea>
     } else {

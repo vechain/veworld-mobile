@@ -1,8 +1,4 @@
-import {
-    NavigationProp,
-    NavigationState,
-    ParamListBase,
-} from "@react-navigation/native"
+import { NavigationProp, NavigationState, ParamListBase } from "@react-navigation/native"
 
 type NavigationRoute = NavigationState["routes"][number]
 

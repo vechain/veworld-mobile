@@ -107,9 +107,7 @@ jest.mock("@react-navigation/bottom-tabs", () => ({
     ...jest.requireActual("@react-navigation/bottom-tabs"),
     useBottomTabBarHeight: jest.fn(() => 10),
 }))
-;(
-    global as typeof globalThis & { ReanimatedDataMock: { now: () => number } }
-).ReanimatedDataMock = {
+;(global as typeof globalThis & { ReanimatedDataMock: { now: () => number } }).ReanimatedDataMock = {
     now: () => 0,
 }
 
@@ -153,45 +151,33 @@ jest.mock("mixpanel-react-native", () => ({
 
 jest.mock("react-native-device-info", () => mockRNDeviceInfo)
 
-jest.mock(
-    "~Components/Providers/EncryptedStorageProvider/ApplicationSecurityProvider",
-    () => ({
-        ...jest.requireActual(
-            "~Components/Providers/EncryptedStorageProvider/ApplicationSecurityProvider",
-        ),
-        useApplicationSecurity: jest.fn().mockReturnValue({
-            redux: {
-                mmkv: new MMKV({ id: "test-redux" }),
-                encryptionKey: "test-redux",
-            },
-            images: undefined,
-            metadata: undefined,
-            migrateOnboarding: jest.fn(),
-            resetApplication: jest.fn(),
-            walletStatus: WALLET_STATUS.UNLOCKED,
-            updateSecurityMethod: jest.fn(),
-            securityType: SecurityLevelType.BIOMETRIC,
-            setWalletStatus: jest.fn(),
-            isAppReady: true,
-            setIsAppReady: jest.fn(),
-            lockApplication: jest.fn(),
-        }),
+jest.mock("~Components/Providers/EncryptedStorageProvider/ApplicationSecurityProvider", () => ({
+    ...jest.requireActual("~Components/Providers/EncryptedStorageProvider/ApplicationSecurityProvider"),
+    useApplicationSecurity: jest.fn().mockReturnValue({
+        redux: {
+            mmkv: new MMKV({ id: "test-redux" }),
+            encryptionKey: "test-redux",
+        },
+        images: undefined,
+        metadata: undefined,
+        migrateOnboarding: jest.fn(),
+        resetApplication: jest.fn(),
+        walletStatus: WALLET_STATUS.UNLOCKED,
+        updateSecurityMethod: jest.fn(),
+        securityType: SecurityLevelType.BIOMETRIC,
+        setWalletStatus: jest.fn(),
+        isAppReady: true,
+        setIsAppReady: jest.fn(),
+        lockApplication: jest.fn(),
     }),
-)
-jest.mock(
-    "~Components/Providers/PersistedThemeProvider/PersistedThemeProvider",
-    () => ({
-        ...jest.requireActual(
-            "~Components/Providers/PersistedThemeProvider/PersistedThemeProvider",
-        ),
-        usePersistedTheme: jest.fn(),
-    }),
-)
+}))
+jest.mock("~Components/Providers/PersistedThemeProvider/PersistedThemeProvider", () => ({
+    ...jest.requireActual("~Components/Providers/PersistedThemeProvider/PersistedThemeProvider"),
+    usePersistedTheme: jest.fn(),
+}))
 
 jest.mock("react-native/Libraries/TurboModule/TurboModuleRegistry", () => {
-    const turboModuleRegistry = jest.requireActual(
-        "react-native/Libraries/TurboModule/TurboModuleRegistry",
-    )
+    const turboModuleRegistry = jest.requireActual("react-native/Libraries/TurboModule/TurboModuleRegistry")
     return {
         ...turboModuleRegistry,
         getEnforcing: (name: string) => {

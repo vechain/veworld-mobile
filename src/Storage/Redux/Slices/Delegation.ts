@@ -53,10 +53,7 @@ export const DelegationSlice = createSlice({
                 callbackIfAlreadyPresent()
             }
         },
-        deleteDelegationUrl: (
-            state,
-            action: PayloadAction<{ url: string; genesisId: string }>,
-        ) => {
+        deleteDelegationUrl: (state, action: PayloadAction<{ url: string; genesisId: string }>) => {
             const { url, genesisId } = action.payload
 
             if (!state[genesisId]) {
@@ -65,15 +62,10 @@ export const DelegationSlice = createSlice({
                     defaultDelegationOption: DelegationType.NONE,
                 }
             } else {
-                state[genesisId].urls = state[genesisId].urls.filter(
-                    _url => _url !== url,
-                )
+                state[genesisId].urls = state[genesisId].urls.filter(_url => _url !== url)
             }
         },
-        setDefaultDelegationOption: (
-            state,
-            action: PayloadAction<{ type: DelegationType; genesisId: string }>,
-        ) => {
+        setDefaultDelegationOption: (state, action: PayloadAction<{ type: DelegationType; genesisId: string }>) => {
             const { type, genesisId } = action.payload
 
             if (!state[genesisId]) {

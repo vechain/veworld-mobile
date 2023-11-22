@@ -23,16 +23,8 @@ export const AddContactButton: React.FC<Props> = ({ onPress }) => {
                 style={baseStyles.plusContactButton}
                 w={40}>
                 <BaseView alignItems="center">
-                    <BaseIcon
-                        my={8}
-                        size={55}
-                        name="plus"
-                        color={COLORS.DARK_PURPLE}
-                    />
-                    <BaseText
-                        py={5}
-                        typographyFont="bodyMedium"
-                        color={COLORS.DARK_PURPLE}>
+                    <BaseIcon my={8} size={55} name="plus" color={COLORS.DARK_PURPLE} />
+                    <BaseText py={5} typographyFont="bodyMedium" color={COLORS.DARK_PURPLE}>
                         {LL.BTN_CREATE_CONTACT()}
                     </BaseText>
                 </BaseView>

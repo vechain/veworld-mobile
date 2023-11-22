@@ -1,15 +1,7 @@
 import { useNavigation } from "@react-navigation/native"
 import React, { useCallback, useMemo, useState } from "react"
 import { useTheme } from "~Hooks"
-import {
-    BaseButton,
-    BaseSpacer,
-    BaseText,
-    BaseView,
-    DismissKeyboardView,
-    Layout,
-    showErrorToast,
-} from "~Components"
+import { BaseButton, BaseSpacer, BaseText, BaseView, DismissKeyboardView, Layout, showErrorToast } from "~Components"
 import { useI18nContext } from "~i18n"
 import { Routes } from "~Navigation"
 import { useAppDispatch } from "~Storage/Redux"
@@ -71,9 +63,7 @@ export const AddContactScreen = () => {
                             <BaseText typographyFont="bodyMedium" my={8}>
                                 {LL.BD_ADD_CONTACT()}
                             </BaseText>
-                            <BaseText typographyFont="caption">
-                                {LL.BD_ADD_CONTACT_DISCLAIMER()}
-                            </BaseText>
+                            <BaseText typographyFont="caption">{LL.BD_ADD_CONTACT_DISCLAIMER()}</BaseText>
 
                             <BaseSpacer height={20} />
                             <ContactForm

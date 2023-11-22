@@ -12,15 +12,9 @@ import { FungibleToken, NETWORK_TYPE, Network } from "~Model"
  * @example
  * const tokenSymbol = await getTokenSymbol(contractAddress, thor);
  */
-export const getTokenSymbol = async (
-    contractAddress: string,
-    thor: Connex.Thor,
-) => {
+export const getTokenSymbol = async (contractAddress: string, thor: Connex.Thor) => {
     try {
-        const res = await thor
-            .account(contractAddress)
-            .method(abis.VIP180.symbol)
-            .call()
+        const res = await thor.account(contractAddress).method(abis.VIP180.symbol).call()
 
         return res.decoded[0]
     } catch (e) {
@@ -38,15 +32,9 @@ export const getTokenSymbol = async (
  * @example
  * const tokenDecimals = await getTokenDecimals(contractAddress, thor);
  */
-export const getTokenDecimals = async (
-    contractAddress: string,
-    thor: Connex.Thor,
-) => {
+export const getTokenDecimals = async (contractAddress: string, thor: Connex.Thor) => {
     try {
-        const res = await thor
-            .account(contractAddress)
-            .method(abis.VIP180.decimals)
-            .call()
+        const res = await thor.account(contractAddress).method(abis.VIP180.decimals).call()
 
         return res.decoded[0]
     } catch (e) {
@@ -64,15 +52,9 @@ export const getTokenDecimals = async (
  * @example
  * const tokenName = await getTokenName(contractAddress, thor);
  */
-export const getTokenName = async (
-    contractAddress: string,
-    thor: Connex.Thor,
-) => {
+export const getTokenName = async (contractAddress: string, thor: Connex.Thor) => {
     try {
-        const res = await thor
-            .account(contractAddress)
-            .method(abis.VIP180.name)
-            .call()
+        const res = await thor.account(contractAddress).method(abis.VIP180.name).call()
 
         return res.decoded[0]
     } catch (e) {
@@ -85,26 +67,14 @@ const TOKEN_URL = "https://vechain.github.io/token-registry/"
 /**
  * Call out to our github repo and return the tokens for the given network
  */
-export const getTokensFromGithub = async ({
-    network,
-}: {
-    network: Network
-}): Promise<FungibleToken[]> => {
+export const getTokensFromGithub = async ({ network }: { network: Network }): Promise<FungibleToken[]> => {
     let tokens: FungibleToken[] = []
 
-    if (
-        network.type === NETWORK_TYPE.MAIN ||
-        network.type === NETWORK_TYPE.TEST
-    ) {
-        const rawTokens = await axios.get(
-            `${TOKEN_URL}/${
-                network.type === NETWORK_TYPE.MAIN ? "main" : "test"
-            }.json`,
-            {
-                transformResponse: data => data,
-                timeout: 30 * 1000,
-            },
-        )
+    if (network.type === NETWORK_TYPE.MAIN || network.type === NETWORK_TYPE.TEST) {
+        const rawTokens = await axios.get(`${TOKEN_URL}/${network.type === NETWORK_TYPE.MAIN ? "main" : "test"}.json`, {
+            transformResponse: data => data,
+            timeout: 30 * 1000,
+        })
 
         const tokensFromGithub = JSON.parse(rawTokens.data) as FungibleToken[]
         tokens = tokensFromGithub.map(token => {

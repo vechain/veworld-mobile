@@ -1,8 +1,4 @@
-import {
-    StyleProp,
-    TouchableWithoutFeedbackProps,
-    ViewStyle,
-} from "react-native"
+import { StyleProp, TouchableWithoutFeedbackProps, ViewStyle } from "react-native"
 
 export interface GenericTouchableProps extends TouchableWithoutFeedbackProps {
     onPress?: () => void

@@ -7,11 +7,7 @@ import { PlatformUtils } from "~Utils"
  * @info https://docs.expo.io/versions/latest/sdk/haptics/
  * @description Use for toasts, and on CTAs when it's the final step in a flow (ex: "Create Wallet")
  */
-const triggerNotification = async ({
-    level,
-}: {
-    level: "Success" | "Warning" | "Error"
-}) => {
+const triggerNotification = async ({ level }: { level: "Success" | "Warning" | "Error" }) => {
     const _level = Haptics.NotificationFeedbackType[level]
     await Haptics.notificationAsync(_level)
 }
@@ -22,11 +18,7 @@ const triggerNotification = async ({
  * @info https://docs.expo.io/versions/latest/sdk/haptics/
  * @description Use for every other user interaction (ex: "Tap"). Base level on the importance of the action. Avoid using heavy.
  */
-const triggerImpact = async ({
-    level,
-}: {
-    level: "Light" | "Medium" | "Heavy"
-}) => {
+const triggerImpact = async ({ level }: { level: "Light" | "Medium" | "Heavy" }) => {
     if (PlatformUtils.isIOS()) {
         const _level = Haptics.ImpactFeedbackStyle[level]
         await Haptics.impactAsync(_level)
@@ -39,17 +31,9 @@ const triggerHaptics = async ({
     haptics: "Light" | "Medium" | "Heavy" | "Success" | "Warning" | "Error"
 }) => {
     if (PlatformUtils.isIOS()) {
-        if (
-            haptics === "Success" ||
-            haptics === "Warning" ||
-            haptics === "Error"
-        ) {
+        if (haptics === "Success" || haptics === "Warning" || haptics === "Error") {
             await triggerNotification({ level: haptics })
-        } else if (
-            haptics === "Light" ||
-            haptics === "Medium" ||
-            haptics === "Heavy"
-        ) {
+        } else if (haptics === "Light" || haptics === "Medium" || haptics === "Heavy") {
             await triggerImpact({ level: haptics })
         }
     }

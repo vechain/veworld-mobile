@@ -21,9 +21,7 @@ export const getNFTMediaArweave = async (uri: string): Promise<NFTMedia> => {
         const buffer = Buffer.from(transaction.data)
 
         if (buffer.length > MAX_IMAGE_SIZE) {
-            throw new Error(
-                `Image size exceeds the maximum allowed size of ${MAX_IMAGE_SIZE} bytes.`,
-            )
+            throw new Error(`Image size exceeds the maximum allowed size of ${MAX_IMAGE_SIZE} bytes.`)
         }
 
         const mimeType = MediaUtils.resolveMimeTypeFromRawData(buffer)

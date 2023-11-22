@@ -22,12 +22,7 @@ import {
     setDashboardChartData,
     setSuggestedTokens,
 } from "../Slices"
-import {
-    AppThunkDispatch,
-    MarketInfoResponse,
-    RootState,
-    TokenInfoResponse,
-} from "../Types"
+import { AppThunkDispatch, MarketInfoResponse, RootState, TokenInfoResponse } from "../Types"
 import { fetchOfficialTokensOwned, getTokensFromGithub } from "~Networking"
 
 const allSettled = require("promise.allsettled")
@@ -52,17 +47,13 @@ export const fetchChartData =
         const currency = selectCurrency(getState())
         const coin = getCoinGeckoIdBySymbol[symbol]
         const coinGeckoTokens = selectCoinGeckoTokens(getState())
-        const foundCoin = coinGeckoTokens.find(
-            t => t.symbol.toLowerCase() === symbol.toLowerCase(),
-        )
+        const foundCoin = coinGeckoTokens.find(t => t.symbol.toLowerCase() === symbol.toLowerCase())
 
         dispatch(setChartDataIsLoading({ symbol, isLoading: true }))
 
         try {
             const pricesResponse = await axios.get<CoinMarketChartResponse>(
-                COINGECKO_MARKET_CHART_ENDPOINT(
-                    foundCoin ? foundCoin?.id : coin,
-                ),
+                COINGECKO_MARKET_CHART_ENDPOINT(foundCoin ? foundCoin?.id : coin),
                 {
                     ...EXCHANGE_CLIENT_AXIOS_OPTS,
                     params: {
@@ -107,15 +98,12 @@ type FetchTokensResponse = {
 }
 
 export const getTokenInfo = async (tokenId: string) => {
-    const response = await axios.get<TokenInfoResponse>(
-        COINGECKO_TOKEN_ENDPOINT(tokenId),
-        {
-            ...EXCHANGE_CLIENT_AXIOS_OPTS,
-            params: {
-                days: 1,
-            },
+    const response = await axios.get<TokenInfoResponse>(COINGECKO_TOKEN_ENDPOINT(tokenId), {
+        ...EXCHANGE_CLIENT_AXIOS_OPTS,
+        params: {
+            days: 1,
         },
-    )
+    })
     return response.data
 }
 
@@ -123,54 +111,47 @@ export const getTokenInfo = async (tokenId: string) => {
  * Fetches all tokens from CoinGecko that are on the VeChain network
  * and dispatches the results to the store
  */
-export const updateTokenPriceData =
-    () => async (dispatch: AppThunkDispatch) => {
-        try {
-            const coinGeckoTokensResponse = await axios.get<
-                FetchTokensResponse[]
-            >(COINGECKO_LIST, {
-                ...EXCHANGE_CLIENT_AXIOS_OPTS,
-                params: {
-                    days: 1,
-                },
-            })
+export const updateTokenPriceData = () => async (dispatch: AppThunkDispatch) => {
+    try {
+        const coinGeckoTokensResponse = await axios.get<FetchTokensResponse[]>(COINGECKO_LIST, {
+            ...EXCHANGE_CLIENT_AXIOS_OPTS,
+            params: {
+                days: 1,
+            },
+        })
 
-            const foundTokens = coinGeckoTokensResponse.data.filter(c =>
-                c.platforms.hasOwnProperty("vechain"),
-            )
+        const foundTokens = coinGeckoTokensResponse.data.filter(c => c.platforms.hasOwnProperty("vechain"))
 
-            const tokenPromises: Promise<TokenInfoResponse>[] = []
-            for (const token of foundTokens) {
-                if (TokenUtils.isVechainToken(token.symbol))
-                    tokenPromises.push(getTokenInfo(token.id))
-            }
-
-            const tokenResults = await allSettled(tokenPromises)
-
-            const coinGeckoTokens: TokenInfoResponse[] = tokenResults.map(
-                (result: PromiseSettledResult<TokenInfoResponse>) => {
-                    if (result.status === "fulfilled") {
-                        return result.value
-                    }
-                },
-            )
-
-            dispatch(setCoinGeckoTokens(coinGeckoTokens))
-        } catch (e) {
-            error("updateTokenPriceData", e)
+        const tokenPromises: Promise<TokenInfoResponse>[] = []
+        for (const token of foundTokens) {
+            if (TokenUtils.isVechainToken(token.symbol)) tokenPromises.push(getTokenInfo(token.id))
         }
+
+        const tokenResults = await allSettled(tokenPromises)
+
+        const coinGeckoTokens: TokenInfoResponse[] = tokenResults.map(
+            (result: PromiseSettledResult<TokenInfoResponse>) => {
+                if (result.status === "fulfilled") {
+                    return result.value
+                }
+            },
+        )
+
+        dispatch(setCoinGeckoTokens(coinGeckoTokens))
+    } catch (e) {
+        error("updateTokenPriceData", e)
     }
+}
 
 /**
  * Update official tokens from Github
  */
-export const updateOfficialTokens =
-    (network: Network) => async (dispatch: AppThunkDispatch) => {
-        const tokens = await getTokensFromGithub({
-            network,
-        })
-        dispatch(addOfficialTokens({ network: network.type, tokens }))
-    }
+export const updateOfficialTokens = (network: Network) => async (dispatch: AppThunkDispatch) => {
+    const tokens = await getTokensFromGithub({
+        network,
+    })
+    dispatch(addOfficialTokens({ network: network.type, tokens }))
+}
 
 /**
  * Update suggested tokens
@@ -179,23 +160,13 @@ export const updateOfficialTokens =
  * @param network
  */
 export const updateSuggestedTokens =
-    (
-        accountAddress: string,
-        officialTokens: FungibleToken[],
-        network: Network,
-    ) =>
+    (accountAddress: string, officialTokens: FungibleToken[], network: Network) =>
     async (dispatch: AppThunkDispatch) => {
         try {
-            const tokenAddresses = await fetchOfficialTokensOwned(
-                accountAddress,
-                network,
-            )
+            const tokenAddresses = await fetchOfficialTokensOwned(accountAddress, network)
 
             const suggestedTokens = tokenAddresses.filter(
-                tokenAddress =>
-                    officialTokens.findIndex(
-                        t => t.address === tokenAddress,
-                    ) !== -1,
+                tokenAddress => officialTokens.findIndex(t => t.address === tokenAddress) !== -1,
             )
 
             debug(`Found ${suggestedTokens.length} suggested tokens`)
@@ -213,27 +184,23 @@ export const updateSuggestedTokens =
         }
     }
 
-export const fetchVechainMarketInfo =
-    () => async (dispatch: Dispatch, getState: () => RootState) => {
-        const currency = selectCurrency(getState())
+export const fetchVechainMarketInfo = () => async (dispatch: Dispatch, getState: () => RootState) => {
+    const currency = selectCurrency(getState())
 
-        try {
-            const pricesResponse = await axios.get<MarketInfoResponse[]>(
-                COINGECKO_MARKET_INFO_ENDPOINT(
-                    [
-                        getCoinGeckoIdBySymbol[VET.symbol],
-                        getCoinGeckoIdBySymbol[VTHO.symbol],
-                    ],
-                    currency,
-                ),
-                {
-                    ...EXCHANGE_CLIENT_AXIOS_OPTS,
-                },
-            )
+    try {
+        const pricesResponse = await axios.get<MarketInfoResponse[]>(
+            COINGECKO_MARKET_INFO_ENDPOINT(
+                [getCoinGeckoIdBySymbol[VET.symbol], getCoinGeckoIdBySymbol[VTHO.symbol]],
+                currency,
+            ),
+            {
+                ...EXCHANGE_CLIENT_AXIOS_OPTS,
+            },
+        )
 
-            const marketInfo = pricesResponse.data
-            dispatch(setCoinMarketInfo({ data: marketInfo }))
-        } catch (e) {
-            error("fetchVechainMarketInfo", e)
-        }
+        const marketInfo = pricesResponse.data
+        dispatch(setCoinMarketInfo({ data: marketInfo }))
+    } catch (e) {
+        error("fetchVechainMarketInfo", e)
     }
+}

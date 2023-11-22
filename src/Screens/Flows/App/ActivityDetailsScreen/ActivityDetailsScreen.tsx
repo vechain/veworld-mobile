@@ -35,21 +35,11 @@ import {
     ConnectedAppDetails,
 } from "./Components"
 import { ContactManagementBottomSheet } from "../ContactsScreen"
-import {
-    selectActivity,
-    selectSelectedNetwork,
-    useAppSelector,
-} from "~Storage/Redux"
+import { selectActivity, selectSelectedNetwork, useAppSelector } from "~Storage/Redux"
 import { AddCustomTokenBottomSheet } from "../ManageCustomTokenScreen/BottomSheets"
-import {
-    ExplorerLinkType,
-    getExplorerLink,
-} from "~Utils/AddressUtils/AddressUtils"
+import { ExplorerLinkType, getExplorerLink } from "~Utils/AddressUtils/AddressUtils"
 
-type Props = NativeStackScreenProps<
-    RootStackParamListHome,
-    Routes.ACTIVITY_DETAILS
->
+type Props = NativeStackScreenProps<RootStackParamListHome, Routes.ACTIVITY_DETAILS>
 
 export const ActivityDetailsScreen = ({ route }: Props) => {
     const { activity, token, isSwap, decodedClauses } = route.params
@@ -60,9 +50,7 @@ export const ActivityDetailsScreen = ({ route }: Props) => {
 
     const [customTokenAddress, setCustomTokenAddress] = useState<string>()
 
-    const activityFromStore = useAppSelector(state =>
-        selectActivity(state, activity.id),
-    )
+    const activityFromStore = useAppSelector(state => selectActivity(state, activity.id))
 
     const {
         ref: addCustomTokenSheetRef,
@@ -70,26 +58,13 @@ export const ActivityDetailsScreen = ({ route }: Props) => {
         onClose: closeAddCustomTokenSheet,
     } = useBottomSheetModal()
 
-    const {
-        onAddContactPress,
-        handleSaveContact,
-        addContactSheet,
-        selectedContactAddress,
-        closeAddContactSheet,
-    } = useTransferAddContact()
+    const { onAddContactPress, handleSaveContact, addContactSheet, selectedContactAddress, closeAddContactSheet } =
+        useTransferAddContact()
 
     const swapResult = useMemo(() => {
-        if (
-            !isSwap ||
-            !decodedClauses ||
-            activity.type !== ActivityType.DAPP_TRANSACTION
-        )
-            return undefined
+        if (!isSwap || !decodedClauses || activity.type !== ActivityType.DAPP_TRANSACTION) return undefined
 
-        return TransactionUtils.decodeSwapTransferAmounts(
-            decodedClauses,
-            activity as DappTxActivity,
-        )
+        return TransactionUtils.decodeSwapTransferAmounts(decodedClauses, activity as DappTxActivity)
     }, [activity, decodedClauses, isSwap])
 
     const dateTimeActivity = useMemo(() => {
@@ -112,10 +87,7 @@ export const ActivityDetailsScreen = ({ route }: Props) => {
 
     const explorerUrl = useMemo(() => {
         if (activity.isTransaction && activity.txId)
-            return `${getExplorerLink(
-                network,
-                ExplorerLinkType.TRANSACTION,
-            )}/${HexUtils.addPrefix(activity.txId)}`
+            return `${getExplorerLink(network, ExplorerLinkType.TRANSACTION)}/${HexUtils.addPrefix(activity.txId)}`
     }, [activity, network])
 
     const renderActivityDetails = useMemo(() => {
@@ -124,51 +96,26 @@ export const ActivityDetailsScreen = ({ route }: Props) => {
             case ActivityType.VET_TRANSFER: {
                 return (
                     <FungibleTokenTransferDetails
-                        activity={
-                            (activityFromStore ??
-                                activity) as FungibleTokenActivity
-                        }
+                        activity={(activityFromStore ?? activity) as FungibleTokenActivity}
                         token={token}
                     />
                 )
             }
             case ActivityType.SIGN_CERT: {
-                return (
-                    <SignCertificateDetails
-                        activity={
-                            (activityFromStore ?? activity) as SignCertActivity
-                        }
-                    />
-                )
+                return <SignCertificateDetails activity={(activityFromStore ?? activity) as SignCertActivity} />
             }
             case ActivityType.DAPP_TRANSACTION: {
-                return (
-                    <DappTransactionDetails
-                        activity={
-                            (activityFromStore ?? activity) as DappTxActivity
-                        }
-                    />
-                )
+                return <DappTransactionDetails activity={(activityFromStore ?? activity) as DappTxActivity} />
             }
             case ActivityType.NFT_TRANSFER: {
                 return (
                     <NonFungibleTokenTransferDetails
-                        activity={
-                            (activityFromStore ??
-                                activity) as NonFungibleTokenActivity
-                        }
+                        activity={(activityFromStore ?? activity) as NonFungibleTokenActivity}
                     />
                 )
             }
             case ActivityType.CONNECTED_APP_TRANSACTION: {
-                return (
-                    <ConnectedAppDetails
-                        activity={
-                            (activityFromStore ??
-                                activity) as ConnectedAppActivity
-                        }
-                    />
-                )
+                return <ConnectedAppDetails activity={(activityFromStore ?? activity) as ConnectedAppActivity} />
             }
             default:
                 return <></>
@@ -192,20 +139,14 @@ export const ActivityDetailsScreen = ({ route }: Props) => {
                 title={getActivityTitle(activity, LL, isSwap)}
                 body={
                     <>
-                        <BaseText typographyFont="subSubTitleLight">
-                            {dateTimeActivity}
-                        </BaseText>
+                        <BaseText typographyFont="subSubTitleLight">{dateTimeActivity}</BaseText>
 
                         <BaseSpacer height={16} />
 
                         {isPendingOrFailedActivity && (
                             <>
                                 <TransactionStatusBox
-                                    status={
-                                        activityFromStore?.status ??
-                                        activity.status ??
-                                        ActivityStatus.SUCCESS
-                                    }
+                                    status={activityFromStore?.status ?? activity.status ?? ActivityStatus.SUCCESS}
                                 />
                                 <BaseSpacer height={16} />
                             </>
@@ -216,9 +157,7 @@ export const ActivityDetailsScreen = ({ route }: Props) => {
                             <SwapCard
                                 paidTokenAddress={swapResult.paidTokenAddress}
                                 paidTokenAmount={swapResult.paidAmount}
-                                receivedTokenAddress={
-                                    swapResult.receivedTokenAddress
-                                }
+                                receivedTokenAddress={swapResult.receivedTokenAddress}
                                 receivedTokenAmount={swapResult.receivedAmount}
                                 onAddCustomToken={onAddCustomToken}
                             />
@@ -237,23 +176,15 @@ export const ActivityDetailsScreen = ({ route }: Props) => {
                         {isNFTtransfer && (
                             <>
                                 <NFTTransferCard
-                                    collectionAddress={
-                                        (activity as NonFungibleTokenActivity)
-                                            .contractAddress
-                                    }
-                                    tokenId={
-                                        (activity as NonFungibleTokenActivity)
-                                            .tokenId
-                                    }
+                                    collectionAddress={(activity as NonFungibleTokenActivity).contractAddress}
+                                    tokenId={(activity as NonFungibleTokenActivity).tokenId}
                                 />
 
                                 <BaseSpacer height={20} />
                             </>
                         )}
 
-                        <BaseText typographyFont="subTitleBold">
-                            {LL.DETAILS()}
-                        </BaseText>
+                        <BaseText typographyFont="subTitleBold">{LL.DETAILS()}</BaseText>
 
                         <BaseSpacer height={2} />
 

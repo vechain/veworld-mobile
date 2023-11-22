@@ -4,11 +4,7 @@ import { useNavigation } from "@react-navigation/native"
 import { useBottomSheetModal } from "~Hooks"
 import { useAppSelector } from "~Storage/Redux"
 import { selectSelectedNetwork } from "~Storage/Redux/Selectors"
-import {
-    CustomNodes,
-    SelectNetwork,
-    SelectNetworkBottomSheet,
-} from "./Components"
+import { CustomNodes, SelectNetwork, SelectNetworkBottomSheet } from "./Components"
 import { Routes } from "~Navigation"
 
 export const ChangeNetworkScreen = () => {

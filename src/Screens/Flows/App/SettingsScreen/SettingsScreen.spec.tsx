@@ -7,8 +7,7 @@ jest.mock("@react-navigation/native", () => ({
     ...jest.requireActual("@react-navigation/native"),
     useScrollToTop: jest.fn(),
 }))
-const findElement = async () =>
-    await screen.findByTestId("settings-screen", {}, { timeout: 5000 })
+const findElement = async () => await screen.findByTestId("settings-screen", {}, { timeout: 5000 })
 
 describe("SettingsScreen", () => {
     it("should render correctly", async () => {

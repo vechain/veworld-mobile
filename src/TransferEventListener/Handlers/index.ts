@@ -17,9 +17,7 @@ export interface NFTTransferHandlerProps extends BaseTransferHandlerProps {
 }
 
 export interface TokenTransferHandlerProps extends BaseTransferHandlerProps {
-    fetchData: (
-        address: string,
-    ) => Promise<{ name: string; symbol: string; decimals: number }>
+    fetchData: (address: string) => Promise<{ name: string; symbol: string; decimals: number }>
     updateBalances: (params: { accountAddress: string }) => void
 }
 

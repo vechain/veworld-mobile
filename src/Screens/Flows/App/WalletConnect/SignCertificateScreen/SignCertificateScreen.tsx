@@ -32,10 +32,7 @@ import { MessageDetails, UnknownAppMessage } from "~Screens"
 import { AnalyticsEvent } from "~Constants"
 import { useInAppBrowser } from "~Components/Providers/InAppBrowserProvider"
 
-type Props = NativeStackScreenProps<
-    RootStackParamListSwitch,
-    Routes.CONNECTED_APP_SIGN_CERTIFICATE_SCREEN
->
+type Props = NativeStackScreenProps<RootStackParamListSwitch, Routes.CONNECTED_APP_SIGN_CERTIFICATE_SCREEN>
 
 export const SignCertificateScreen: FC<Props> = ({ route }: Props) => {
     const { request } = route.params
@@ -44,21 +41,14 @@ export const SignCertificateScreen: FC<Props> = ({ route }: Props) => {
     const { postMessage } = useInAppBrowser()
     const { LL } = useI18nContext()
     const nav = useNavigation()
-    const selectedAccount: AccountWithDevice = useAppSelector(
-        selectSelectedAccount,
-    )
+    const selectedAccount: AccountWithDevice = useAppSelector(selectSelectedAccount)
     const track = useAnalyticTracking()
     const dispatch = useAppDispatch()
 
     const [isInvalidChecked, setInvalidChecked] = React.useState(false)
 
     const sessionContext = useAppSelector(state =>
-        selectVerifyContext(
-            state,
-            request.type === "wallet-connect"
-                ? request.session.topic
-                : undefined,
-        ),
+        selectVerifyContext(state, request.type === "wallet-connect" ? request.session.topic : undefined),
     )
 
     const validConnectedApp = useMemo(() => {
@@ -97,8 +87,7 @@ export const SignCertificateScreen: FC<Props> = ({ route }: Props) => {
                 if (selectedAccount.device.type === DEVICE_TYPE.LEDGER) {
                     nav.navigate(Routes.LEDGER_SIGN_CERTIFICATE, {
                         request,
-                        accountWithDevice:
-                            selectedAccount as LedgerAccountWithDevice,
+                        accountWithDevice: selectedAccount as LedgerAccountWithDevice,
                         certificate: cert,
                     })
                     return
@@ -126,14 +115,7 @@ export const SignCertificateScreen: FC<Props> = ({ route }: Props) => {
                     postMessage({ id: request.id, data: res })
                 }
 
-                dispatch(
-                    addSignCertificateActivity(
-                        request.appName,
-                        cert.domain,
-                        cert.payload.content,
-                        cert.purpose,
-                    ),
-                )
+                dispatch(addSignCertificateActivity(request.appName, cert.domain, cert.payload.content, cert.purpose))
 
                 track(AnalyticsEvent.DAPP_CERTIFICATE_SUCCESS)
 
@@ -143,10 +125,7 @@ export const SignCertificateScreen: FC<Props> = ({ route }: Props) => {
                 error("SignMessageScreen:handleAccept", err)
 
                 if (request.type === "wallet-connect") {
-                    await failRequest(
-                        request.requestEvent,
-                        getRpcError("internal"),
-                    )
+                    await failRequest(request.requestEvent, getRpcError("internal"))
                 } else {
                     postMessage({
                         id: request.id,
@@ -178,10 +157,7 @@ export const SignCertificateScreen: FC<Props> = ({ route }: Props) => {
 
     const onReject = useCallback(async () => {
         if (request.type === "wallet-connect") {
-            await failRequest(
-                request.requestEvent,
-                getRpcError("userRejectedRequest"),
-            )
+            await failRequest(request.requestEvent, getRpcError("userRejectedRequest"))
         } else {
             postMessage({ id: request.id, error: "User rejected request" })
         }
@@ -220,29 +196,18 @@ export const SignCertificateScreen: FC<Props> = ({ route }: Props) => {
                 style={styles.scrollView}>
                 <CloseModalButton onPress={onPressBack} />
                 <BaseView mx={20} style={styles.alignLeft}>
-                    <BaseText typographyFont="title">
-                        {LL.CONNECTED_APP_REQUEST()}
-                    </BaseText>
+                    <BaseText typographyFont="title">{LL.CONNECTED_APP_REQUEST()}</BaseText>
 
                     <BaseSpacer height={32} />
-                    <BaseText typographyFont="subTitle">
-                        {LL.CONNECTED_APP_SIGN_REQUEST_TITLE()}
-                    </BaseText>
+                    <BaseText typographyFont="subTitle">{LL.CONNECTED_APP_SIGN_REQUEST_TITLE()}</BaseText>
                     <BaseSpacer height={16} />
-                    <BaseText>
-                        {LL.CONNECTED_APP_SIGN_REQUEST_DESCRIPTION()}
-                    </BaseText>
+                    <BaseText>{LL.CONNECTED_APP_SIGN_REQUEST_DESCRIPTION()}</BaseText>
 
                     <BaseSpacer height={32} />
-                    <BaseText typographyFont="subTitleBold">
-                        {LL.CONNECTED_APP_SELECTED_ACCOUNT_LABEL()}
-                    </BaseText>
+                    <BaseText typographyFont="subTitleBold">{LL.CONNECTED_APP_SELECTED_ACCOUNT_LABEL()}</BaseText>
 
                     <BaseSpacer height={16} />
-                    <AccountCard
-                        account={selectedAccount}
-                        showOpacityWhenDisabled={false}
-                    />
+                    <AccountCard account={selectedAccount} showOpacityWhenDisabled={false} />
 
                     <BaseSpacer height={32} />
 
@@ -269,10 +234,7 @@ export const SignCertificateScreen: FC<Props> = ({ route }: Props) => {
                         action={checkIdentityBeforeOpening}
                         /* We must assert that `biometrics` is not empty otherwise we don't know if the user has set biometrics or passcode, thus failing to decrypt the wallet when signing */
                         isLoading={isBiometricsEmpty}
-                        disabled={
-                            isBiometricsEmpty ||
-                            (!validConnectedApp && !isInvalidChecked)
-                        }
+                        disabled={isBiometricsEmpty || (!validConnectedApp && !isInvalidChecked)}
                     />
                     <BaseSpacer height={16} />
                     <BaseButton

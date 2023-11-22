@@ -9,10 +9,7 @@ export const DeviceSlice = createSlice({
     name: "devices",
     initialState: initialDeviceState,
     reducers: {
-        renameDevice: (
-            state,
-            action: PayloadAction<{ rootAddress: string; alias: string }>,
-        ) => {
+        renameDevice: (state, action: PayloadAction<{ rootAddress: string; alias: string }>) => {
             const { rootAddress, alias } = action.payload
             const deviceExistsIndex = state.findIndex(device =>
                 AddressUtils.compareAddresses(device.rootAddress, rootAddress),
@@ -38,10 +35,7 @@ export const DeviceSlice = createSlice({
             const deviceExistsIndex = state.findIndex(device =>
                 AddressUtils.compareAddresses(device.rootAddress, rootAddress),
             )
-            if (deviceExistsIndex === -1)
-                throw new Error(
-                    `Device with root address ${rootAddress} does not exist`,
-                )
+            if (deviceExistsIndex === -1) throw new Error(`Device with root address ${rootAddress} does not exist`)
 
             state[deviceExistsIndex] = newDeviceData
         },
@@ -50,15 +44,10 @@ export const DeviceSlice = createSlice({
 
             devicesToUpdate.forEach(device => {
                 const deviceExistsIndex = state.findIndex(existingDevice =>
-                    AddressUtils.compareAddresses(
-                        existingDevice.rootAddress,
-                        device.rootAddress,
-                    ),
+                    AddressUtils.compareAddresses(existingDevice.rootAddress, device.rootAddress),
                 )
                 if (deviceExistsIndex === -1)
-                    throw new Error(
-                        `Device with root address ${device.rootAddress} does not exist`,
-                    )
+                    throw new Error(`Device with root address ${device.rootAddress} does not exist`)
 
                 state[deviceExistsIndex] = device
             })

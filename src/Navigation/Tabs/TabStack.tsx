@@ -13,9 +13,7 @@ export const TabStack = () => {
     const theme = useTheme()
 
     const renderTabBarIcon = useCallback(
-        (focused: boolean, iconName: string) => (
-            <TabIcon focused={focused} title={iconName} />
-        ),
+        (focused: boolean, iconName: string) => <TabIcon focused={focused} title={iconName} />,
         [],
     )
     return (
@@ -35,11 +33,7 @@ export const TabStack = () => {
                 options={{
                     tabBarLabel: "Wallet",
                     tabBarTestID: "wallet-tab",
-                    tabBarIcon: ({ focused }) =>
-                        renderTabBarIcon(
-                            focused,
-                            focused ? "home" : "home-outline",
-                        ),
+                    tabBarIcon: ({ focused }) => renderTabBarIcon(focused, focused ? "home" : "home-outline"),
                 }}
             />
 
@@ -50,12 +44,7 @@ export const TabStack = () => {
                     tabBarLabel: "NFT",
                     tabBarTestID: "nft-tab",
                     tabBarIcon: ({ focused }) =>
-                        renderTabBarIcon(
-                            focused,
-                            focused
-                                ? "image-multiple"
-                                : "image-multiple-outline",
-                        ),
+                        renderTabBarIcon(focused, focused ? "image-multiple" : "image-multiple-outline"),
                 }}
             />
 
@@ -65,11 +54,7 @@ export const TabStack = () => {
                 options={{
                     tabBarLabel: "Discover",
                     tabBarTestID: "discover-tab",
-                    tabBarIcon: ({ focused }) =>
-                        renderTabBarIcon(
-                            focused,
-                            focused ? "compass" : "compass-outline",
-                        ),
+                    tabBarIcon: ({ focused }) => renderTabBarIcon(focused, focused ? "compass" : "compass-outline"),
                 }}
             />
 
@@ -79,11 +64,7 @@ export const TabStack = () => {
                 options={{
                     tabBarLabel: "Settings",
                     tabBarTestID: "settings-tab",
-                    tabBarIcon: ({ focused }) =>
-                        renderTabBarIcon(
-                            focused,
-                            focused ? "cog" : "cog-outline",
-                        ),
+                    tabBarIcon: ({ focused }) => renderTabBarIcon(focused, focused ? "cog" : "cog-outline"),
                 }}
             />
         </Tab.Navigator>

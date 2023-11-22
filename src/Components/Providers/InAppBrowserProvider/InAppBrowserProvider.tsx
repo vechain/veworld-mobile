@@ -1,8 +1,5 @@
 import React, { useCallback, useContext, useMemo, useRef } from "react"
-import WebView, {
-    WebViewMessageEvent,
-    WebViewNavigation,
-} from "react-native-webview"
+import WebView, { WebViewMessageEvent, WebViewNavigation } from "react-native-webview"
 import { WindowRequest, WindowResponse } from "./types"
 import { RequestMethods } from "~Constants"
 import { useNavigation } from "@react-navigation/native"
@@ -37,9 +34,7 @@ export const InAppBrowserProvider = ({ children }: Props) => {
 
     const webviewRef = useRef<WebView | undefined>()
 
-    const [navigationState, setNavigationState] = React.useState<
-        WebViewNavigation | undefined
-    >(undefined)
+    const [navigationState, setNavigationState] = React.useState<WebViewNavigation | undefined>(undefined)
 
     const canGoBack = useMemo(() => {
         return navigationState?.canGoBack ?? false
@@ -146,12 +141,9 @@ export const InAppBrowserProvider = ({ children }: Props) => {
         [navigateToTransactionScreen, navigateToCertificateScreen],
     )
 
-    const onNavigationStateChange = useCallback(
-        (navState: WebViewNavigation) => {
-            setNavigationState(navState)
-        },
-        [],
-    )
+    const onNavigationStateChange = useCallback((navState: WebViewNavigation) => {
+        setNavigationState(navState)
+    }, [])
 
     const goBack = useCallback(() => {
         webviewRef.current?.goBack()
@@ -201,9 +193,7 @@ export const useInAppBrowser = () => {
     const context = useContext(Context)
 
     if (!context) {
-        throw new Error(
-            "useInAppBrowser must be used within a InAppBrowserProvider",
-        )
+        throw new Error("useInAppBrowser must be used within a InAppBrowserProvider")
     }
 
     return context

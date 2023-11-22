@@ -19,10 +19,7 @@ const errorCodes = {
     chainDisconnected: { code: 4901, message: "Chain disconnected" },
 }
 
-export const getRpcError = (
-    type: keyof typeof errorCodes,
-    data?: string,
-): ErrorResponse => {
+export const getRpcError = (type: keyof typeof errorCodes, data?: string): ErrorResponse => {
     const error = errorCodes[type]
 
     return {

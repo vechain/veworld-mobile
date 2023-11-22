@@ -1,12 +1,6 @@
 import React, { useCallback, useEffect, useMemo, useState } from "react"
 import { BottomSheetModalMethods } from "@gorhom/bottom-sheet/lib/typescript/types"
-import {
-    BaseBottomSheet,
-    BaseButton,
-    BaseSpacer,
-    BaseText,
-    BaseView,
-} from "~Components"
+import { BaseBottomSheet, BaseButton, BaseSpacer, BaseText, BaseView } from "~Components"
 import { useI18nContext } from "~i18n"
 import { ContactForm } from "../../AddContactScreen/Components"
 import { useContactValidation } from "./Hooks"
@@ -23,19 +17,8 @@ type Props = {
     onSaveContact: (alias: string, address: string) => void
 }
 
-export const ContactManagementBottomSheet = React.forwardRef<
-    BottomSheetModalMethods,
-    Props
->(
-    (
-        {
-            contact,
-            isAddingContact = false,
-            checkTouched = true,
-            onSaveContact,
-        },
-        ref,
-    ) => {
+export const ContactManagementBottomSheet = React.forwardRef<BottomSheetModalMethods, Props>(
+    ({ contact, isAddingContact = false, checkTouched = true, onSaveContact }, ref) => {
         const { LL } = useI18nContext()
 
         const theme = useTheme()
@@ -47,14 +30,9 @@ export const ContactManagementBottomSheet = React.forwardRef<
         const [alias, _setAlias] = useState<string>(contact?.alias ?? "")
         const [address, _setAddress] = useState<string>(contact?.address ?? "")
         const [nameError, setNameError] = useState<string | LocalizedString>("")
-        const [addressError, setAddressError] = useState<
-            string | LocalizedString
-        >("")
+        const [addressError, setAddressError] = useState<string | LocalizedString>("")
 
-        const { validateName, validateAddress } = useContactValidation(
-            false,
-            contact,
-        )
+        const { validateName, validateAddress } = useContactValidation(false, contact)
 
         const setAlias = useCallback(
             (_alias: string) => {
@@ -81,26 +59,14 @@ export const ContactManagementBottomSheet = React.forwardRef<
             return addressError.length === 0 && nameError.length === 0
         }, [addressError.length, nameError.length])
 
-        const title = isAddingContact
-            ? LL.BTN_CREATE_CONTACT()
-            : LL.SB_EDIT_CONTACT()
+        const title = isAddingContact ? LL.BTN_CREATE_CONTACT() : LL.SB_EDIT_CONTACT()
 
         return (
             <BaseBottomSheet snapPoints={snapPoints} ref={ref}>
-                <BaseView
-                    w={100}
-                    h={100}
-                    flexGrow={1}
-                    justifyContent="space-between">
+                <BaseView w={100} h={100} flexGrow={1} justifyContent="space-between">
                     <BaseView>
-                        <BaseView
-                            flexDirection="row"
-                            justifyContent="space-between"
-                            w={100}
-                            alignItems="center">
-                            <BaseText typographyFont="subTitleBold">
-                                {title}
-                            </BaseText>
+                        <BaseView flexDirection="row" justifyContent="space-between" w={100} alignItems="center">
+                            <BaseText typographyFont="subTitleBold">{title}</BaseText>
                         </BaseView>
 
                         <BaseSpacer height={16} />

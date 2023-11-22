@@ -10,10 +10,7 @@ export const getAddressFromPrivateKey = (privateKey: string): string => {
         // The chaincode value provided here is irrelevant as we are only calculating the root address
         const hdNode = HDNode.fromPrivateKey(
             Buffer.from(HexUtils.removePrefix(privateKey), "hex"),
-            Buffer.from(
-                "51f873b803f6dd9365c8cb176bedba927f1fef1df117aa4ab8b9cf03b12c7e90",
-                "hex",
-            ),
+            Buffer.from("51f873b803f6dd9365c8cb176bedba927f1fef1df117aa4ab8b9cf03b12c7e90", "hex"),
         )
         return address.toChecksumed(hdNode.address)
     } catch (e) {
@@ -61,10 +58,7 @@ export const getAddressFromHdNode = (hdNode: HDNode, index: number): string => {
  * @param address1
  * @param address2
  */
-export const compareAddresses = (
-    address1?: string,
-    address2?: string,
-): boolean => {
+export const compareAddresses = (address1?: string, address2?: string): boolean => {
     if (!address1 || !address2) return false
 
     if (address2 === address1) {
@@ -74,26 +68,15 @@ export const compareAddresses = (
     try {
         return HexUtils.normalize(address1) === HexUtils.normalize(address2)
     } catch (e) {
-        warn(
-            "Got error:",
-            e,
-            "Trying to compare address1:",
-            address1,
-            "with address2:",
-            address2,
-        )
+        warn("Got error:", e, "Trying to compare address1:", address1, "with address2:", address2)
         return false
     }
 }
 
 export const compareListOfAddresses = (add1: string[], add2: string[]) => {
     if (add1.length !== add2.length) return false
-    const sortedAdd1 = [...add1]
-        .map(e => e.toLowerCase())
-        .sort((a, b) => a.localeCompare(b))
-    const sortedAdd2 = [...add2]
-        .map(e => e.toLowerCase())
-        .sort((a, b) => a.localeCompare(b))
+    const sortedAdd1 = [...add1].map(e => e.toLowerCase()).sort((a, b) => a.localeCompare(b))
+    const sortedAdd2 = [...add2].map(e => e.toLowerCase()).sort((a, b) => a.localeCompare(b))
 
     for (let i = 0; i < sortedAdd1.length; i++) {
         if (!compareAddresses(sortedAdd1[i], sortedAdd2[i])) return false
@@ -148,8 +131,7 @@ export const getExplorerLink = (network?: Network, type?: ExplorerLinkType) => {
             ? process.env.REACT_APP_EXPLORER_MAIN_URL
             : process.env.REACT_APP_EXPLORER_TESTNET_URL
 
-    const urlSuffix =
-        type === ExplorerLinkType.ACCOUNT ? "accounts" : "transactions"
+    const urlSuffix = type === ExplorerLinkType.ACCOUNT ? "accounts" : "transactions"
 
     return `${networkBaseUrl}/${urlSuffix}`
 }

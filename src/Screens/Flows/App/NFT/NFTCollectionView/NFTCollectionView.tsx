@@ -20,19 +20,14 @@ export const NFTCollectionView = ({ collection, index }: Props) => {
     const nav = useNavigation()
     const { LL } = useI18nContext()
 
-    const { onToggleCollection, isBlacklisted } =
-        useToggleCollection(collection)
+    const { onToggleCollection, isBlacklisted } = useToggleCollection(collection)
 
     const CollectionItem = useMemo(
         () => [
             {
-                title: isBlacklisted
-                    ? LL.SHOW_COLLECTION()
-                    : LL.HIDE_COLLECTION(),
+                title: isBlacklisted ? LL.SHOW_COLLECTION() : LL.HIDE_COLLECTION(),
 
-                subtitle: isBlacklisted
-                    ? LL.SHOW_COLLECTION_SUBTITLE()
-                    : LL.HIDE_COLLECTION_SUBTITLE(),
+                subtitle: isBlacklisted ? LL.SHOW_COLLECTION_SUBTITLE() : LL.HIDE_COLLECTION_SUBTITLE(),
 
                 systemIcon: "circle.slash", // iOS system icon name
                 destructive: true,
@@ -51,10 +46,7 @@ export const NFTCollectionView = ({ collection, index }: Props) => {
     const renderCollection = useMemo(() => {
         return (
             <BaseView style={styles.nftCollectionNameBarRadius}>
-                <NFTMedia
-                    uri={collection.image}
-                    styles={styles.nftPreviewImage}
-                />
+                <NFTMedia uri={collection.image} styles={styles.nftPreviewImage} />
 
                 <BaseView
                     style={styles.nftCollectionNameBar}
@@ -65,13 +57,8 @@ export const NFTCollectionView = ({ collection, index }: Props) => {
                         {collection.name}
                     </BaseText>
                     {collection.balanceOf && collection.balanceOf > 0 && (
-                        <BaseView
-                            style={styles.nftCounterLabel}
-                            justifyContent="center"
-                            alignItems="center">
-                            <BaseText color={COLORS.WHITE}>
-                                {collection.balanceOf}
-                            </BaseText>
+                        <BaseView style={styles.nftCounterLabel} justifyContent="center" alignItems="center">
+                            <BaseText color={COLORS.WHITE}>{collection.balanceOf}</BaseText>
                         </BaseView>
                     )}
                 </BaseView>
@@ -98,9 +85,7 @@ export const NFTCollectionView = ({ collection, index }: Props) => {
                     justifyContent: index % 2 === 0 ? "flex-start" : "flex-end",
                 },
             ]}>
-            <LongPressProvider
-                items={CollectionItem}
-                action={onToggleCollection}>
+            <LongPressProvider items={CollectionItem} action={onToggleCollection}>
                 {renderCollection}
             </LongPressProvider>
         </TouchableOpacity>

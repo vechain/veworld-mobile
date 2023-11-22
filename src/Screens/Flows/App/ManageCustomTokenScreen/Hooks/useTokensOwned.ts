@@ -2,12 +2,7 @@ import { useCallback, useEffect, useState } from "react"
 import { AddressUtils, error, info } from "~Utils"
 import { showWarningToast, useThor } from "~Components"
 import { Balance } from "~Model"
-import {
-    selectSelectedAccount,
-    selectVisibleBalances,
-    selectSelectedNetwork,
-    useAppSelector,
-} from "~Storage/Redux"
+import { selectSelectedAccount, selectVisibleBalances, selectSelectedNetwork, useAppSelector } from "~Storage/Redux"
 
 import { useI18nContext } from "~i18n"
 import { fetchTokensOwned } from "~Networking"
@@ -41,38 +36,25 @@ export const useTokensOwned = () => {
     const [tokens, setTokens] = useState<Balance[]>([]) // Current set of fetched tokens
 
     // Helper function to filter out tokens that are already selected to be shown in the home screen
-    const filterNonSelectedTokens = useCallback(
-        (tokensToFilter: Balance[], balancesList: Balance[]): Balance[] => {
-            return tokensToFilter.filter(
-                (token: Balance) =>
-                    balancesList.find((balance: Balance) =>
-                        AddressUtils.compareAddresses(
-                            token.tokenAddress,
-                            balance.tokenAddress,
-                        ),
-                    ) === undefined,
-            )
-        },
-        [],
-    )
+    const filterNonSelectedTokens = useCallback((tokensToFilter: Balance[], balancesList: Balance[]): Balance[] => {
+        return tokensToFilter.filter(
+            (token: Balance) =>
+                balancesList.find((balance: Balance) =>
+                    AddressUtils.compareAddresses(token.tokenAddress, balance.tokenAddress),
+                ) === undefined,
+        )
+    }, [])
 
     // Remove tokens that don't have a valid name, symbol or decimals
-    const filterNonValidTokens = useCallback(
-        (tokensToFilter: Balance[]): Balance[] => {
-            return tokensToFilter.filter((token: Balance) => {
-                if (
-                    isEmpty(token.tokenDecimals) ||
-                    isEmpty(token.tokenSymbol) ||
-                    isEmpty(token.tokenName)
-                ) {
-                    return
-                }
+    const filterNonValidTokens = useCallback((tokensToFilter: Balance[]): Balance[] => {
+        return tokensToFilter.filter((token: Balance) => {
+            if (isEmpty(token.tokenDecimals) || isEmpty(token.tokenSymbol) || isEmpty(token.tokenName)) {
+                return
+            }
 
-                return token
-            })
-        },
-        [],
-    )
+            return token
+        })
+    }, [])
 
     const fetchTokens = useCallback(async () => {
         info("Fetching tokens owned on page", page)
@@ -83,22 +65,14 @@ export const useTokensOwned = () => {
         if (selectedAccount) {
             try {
                 // Fetch tokens owned
-                const tokensOwned = await fetchTokensOwned(
-                    selectedAccount.address,
-                    page,
-                    thor,
-                    network,
-                )
+                const tokensOwned = await fetchTokensOwned(selectedAccount.address, page, thor, network)
 
                 if (tokensOwned.length === 0) {
                     setHasFetched(true)
                     return
                 }
 
-                const tokensNotSelected = filterNonSelectedTokens(
-                    tokensOwned,
-                    balances,
-                )
+                const tokensNotSelected = filterNonSelectedTokens(tokensOwned, balances)
 
                 const validTokens = filterNonValidTokens(tokensNotSelected)
 
@@ -124,16 +98,7 @@ export const useTokensOwned = () => {
                 setHasFetched(true)
             }
         }
-    }, [
-        page,
-        selectedAccount,
-        thor,
-        network,
-        filterNonSelectedTokens,
-        balances,
-        filterNonValidTokens,
-        LL,
-    ])
+    }, [page, selectedAccount, thor, network, filterNonSelectedTokens, balances, filterNonValidTokens, LL])
 
     // Helper function to increment page and set fetched flag
     const incrementPageAndSetFetchedFlag = () => {

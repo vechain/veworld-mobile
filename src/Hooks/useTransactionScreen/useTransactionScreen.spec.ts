@@ -11,14 +11,7 @@ import { Transaction } from "thor-devkit"
 import { selectDevice, selectSelectedAccount } from "~Storage/Redux"
 import { WalletEncryptionKeyHelper } from "~Components"
 
-const {
-    vetTransaction1,
-    account1D1,
-    device1,
-    firstLedgerAccount,
-    ledgerDevice,
-    wallet1,
-} = TestHelpers.data
+const { vetTransaction1, account1D1, device1, firstLedgerAccount, ledgerDevice, wallet1 } = TestHelpers.data
 
 const initialRoute = Routes.HOME
 
@@ -38,9 +31,7 @@ jest.mock("~Storage/Redux", () => ({
 }))
 
 jest.mock("~Components/Providers/EncryptedStorageProvider/Helpers", () => ({
-    ...jest.requireActual(
-        "~Components/Providers/EncryptedStorageProvider/Helpers",
-    ),
+    ...jest.requireActual("~Components/Providers/EncryptedStorageProvider/Helpers"),
     WalletEncryptionKeyHelper: {
         get: jest.fn(),
         set: jest.fn(),
@@ -85,9 +76,7 @@ describe("useTransactionScreen", () => {
             isWalletSecurityNone: false,
             biometrics: {},
         })
-        ;(crypto.randomFillSync as jest.Mock).mockReturnValue(
-            Buffer.from("1234abc", "hex"),
-        )
+        ;(crypto.randomFillSync as jest.Mock).mockReturnValue(Buffer.from("1234abc", "hex"))
         ;(axios.post as jest.Mock).mockResolvedValueOnce({
             data: { id: "0x1234" },
             status: 200,
@@ -97,9 +86,7 @@ describe("useTransactionScreen", () => {
             device: device1,
         })
         mockDevice(device1)
-        ;(
-            WalletEncryptionKeyHelper.decryptWallet as jest.Mock
-        ).mockResolvedValue(wallet1)
+        ;(WalletEncryptionKeyHelper.decryptWallet as jest.Mock).mockResolvedValue(wallet1)
     })
 
     it("hook should render", async () => {
@@ -167,8 +154,7 @@ describe("useTransactionScreen", () => {
                 { timeout: 10000 },
             )
 
-            const transaction: Transaction =
-                onTransactionSuccess.mock.calls[0][0]
+            const transaction: Transaction = onTransactionSuccess.mock.calls[0][0]
 
             const transactionId: string = onTransactionSuccess.mock.calls[0][1]
 
@@ -204,15 +190,12 @@ describe("useTransactionScreen", () => {
 
             await waitFor(
                 () => {
-                    expect(mockNav).toHaveBeenCalledWith(
-                        Routes.LEDGER_SIGN_TRANSACTION,
-                        {
-                            accountWithDevice: accWithDevice,
-                            transaction: expect.any(Transaction),
-                            initialRoute: expect.any(String),
-                            delegationSignature: undefined,
-                        },
-                    )
+                    expect(mockNav).toHaveBeenCalledWith(Routes.LEDGER_SIGN_TRANSACTION, {
+                        accountWithDevice: accWithDevice,
+                        transaction: expect.any(Transaction),
+                        initialRoute: expect.any(String),
+                        delegationSignature: undefined,
+                    })
                 },
                 { timeout: 10000 },
             )

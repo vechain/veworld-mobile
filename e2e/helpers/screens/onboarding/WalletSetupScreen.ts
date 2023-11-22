@@ -24,9 +24,7 @@ export const clickImportWallet = async () => {
 }
 
 export const isImportBottomSheetOpened = async () => {
-    await waitFor(
-        element(by.text("Which kind of wallet do you want to import?")),
-    )
+    await waitFor(element(by.text("Which kind of wallet do you want to import?")))
         .toExist()
         .withTimeout(LONG_TIMEOUT)
     await waitFor(element(by.text("Local wallet")))

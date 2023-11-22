@@ -12,23 +12,16 @@ import { AddressUtils, AccountUtils } from "~Utils"
 const addAccountForDevice =
     (device: BaseDevice): AppThunk<WalletAccount> =>
     (dispatch, getState) => {
-        if (!device.xPub)
-            throw new Error("This is not a valid HD wallet device")
+        if (!device.xPub) throw new Error("This is not a valid HD wallet device")
 
         const { accounts } = getState()
         const deviceAccounts = accounts.accounts.filter(account =>
-            AddressUtils.compareAddresses(
-                account.rootAddress,
-                device.rootAddress,
-            ),
+            AddressUtils.compareAddresses(account.rootAddress, device.rootAddress),
         )
 
         const nextIndex = AccountUtils.getNextIndex(deviceAccounts)
 
-        const newAccountAddress = AddressUtils.getAddressFromXPub(
-            device.xPub,
-            nextIndex,
-        )
+        const newAccountAddress = AddressUtils.getAddressFromXPub(device.xPub, nextIndex)
 
         const newAccount: WalletAccount = {
             alias: AccountUtils.nextAlias(nextIndex + 1),

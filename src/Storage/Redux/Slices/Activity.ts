@@ -3,10 +3,7 @@ import { Activity } from "~Model"
 import { AccountActivities } from "../Types"
 import { ActivityUtils } from "~Utils"
 
-type ActivityKeyType =
-    | "transactionActivitiesMainnet"
-    | "transactionActivitiesTestnet"
-    | "nonTransactionActivities"
+type ActivityKeyType = "transactionActivitiesMainnet" | "transactionActivitiesTestnet" | "nonTransactionActivities"
 
 /**
  * Represents the activities related to an account.
@@ -36,8 +33,7 @@ const upsertActivity = (
 
     if (ActivityUtils.isTransactionActivity(activity)) {
         const activityIndex = state[address][transactionActivityKey].findIndex(
-            existingActivity =>
-                existingActivity.id.toLowerCase() === activity.id.toLowerCase(),
+            existingActivity => existingActivity.id.toLowerCase() === activity.id.toLowerCase(),
         )
 
         if (activityIndex !== -1) {
@@ -47,8 +43,7 @@ const upsertActivity = (
         }
     } else {
         const activityIndex = state[address].nonTransactionActivities.findIndex(
-            existingActivity =>
-                existingActivity.id.toLowerCase() === activity.id.toLowerCase(),
+            existingActivity => existingActivity.id.toLowerCase() === activity.id.toLowerCase(),
         )
 
         if (activityIndex !== -1) {
@@ -67,14 +62,12 @@ export const ActivitiesSlice = createSlice({
          * Updates or inserts a Mainnet activity for the given address.
          * It separately handles transactional and non-transactional activities.
          */
-        upsertActivityMainnet: (state, action) =>
-            upsertActivity("transactionActivitiesMainnet", state, action),
+        upsertActivityMainnet: (state, action) => upsertActivity("transactionActivitiesMainnet", state, action),
         /**
          * Updates or inserts a Testnet activity for the given address.
          * It separately handles transactional and non-transactional activities.
          */
-        upsertActivityTestnet: (state, action) =>
-            upsertActivity("transactionActivitiesTestnet", state, action),
+        upsertActivityTestnet: (state, action) => upsertActivity("transactionActivitiesTestnet", state, action),
 
         updateTransactionActivitiesMainnet: (
             state,

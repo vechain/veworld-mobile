@@ -14,86 +14,66 @@ type Props = {
 }
 
 const MESSAGE_FAKE_PLACEHOLDER = "placeholder"
-export const StandalonePasswordPins: FC<Props> = memo(
-    ({ pin, digitNumber, isPINRetype, isPinError }) => {
-        const { value: errorValue, type: errorType } = isPinError
+export const StandalonePasswordPins: FC<Props> = memo(({ pin, digitNumber, isPINRetype, isPinError }) => {
+    const { value: errorValue, type: errorType } = isPinError
 
-        const { LL } = useI18nContext()
+    const { LL } = useI18nContext()
 
-        const isMessageVisible = useMemo(() => {
-            if (isPINRetype || errorValue) return true
-            return false
-        }, [errorValue, isPINRetype])
+    const isMessageVisible = useMemo(() => {
+        if (isPINRetype || errorValue) return true
+        return false
+    }, [errorValue, isPINRetype])
 
-        const { styles, theme } = useThemedStyles(baseStyles(isMessageVisible))
+    const { styles, theme } = useThemedStyles(baseStyles(isMessageVisible))
 
-        const getMessageText = useMemo(() => {
-            if (isPINRetype) return LL.BD_USER_PASSWORD_CONFIRM()
+    const getMessageText = useMemo(() => {
+        if (isPINRetype) return LL.BD_USER_PASSWORD_CONFIRM()
 
-            if (errorType === PinVerificationError.VALIDATE_PIN && errorValue)
-                return (
-                    <WrapTranslation
-                        message={LL.BD_USER_PASSWORD_ERROR()}
-                        renderComponent={() => (
-                            <View style={styles.messageContainer}>
-                                <Text style={styles.messageText}>!</Text>
-                            </View>
-                        )}
-                    />
-                )
-
-            if (errorType === PinVerificationError.EDIT_PIN && errorValue)
-                return LL.BD_USER_EDIT_PASSWORD_ERROR()
-
-            return MESSAGE_FAKE_PLACEHOLDER
-        }, [
-            isPINRetype,
-            LL,
-            errorType,
-            errorValue,
-            styles.messageContainer,
-            styles.messageText,
-        ])
-
-        const getMessageTextColor = useMemo(() => {
-            if (isPINRetype) return theme.colors.text
-            if (isPinError) return theme.colors.danger
-            return undefined
-        }, [isPINRetype, isPinError, theme.colors.danger, theme.colors.text])
-
-        const getPinMessage = useMemo(() => {
+        if (errorType === PinVerificationError.VALIDATE_PIN && errorValue)
             return (
-                <Text
-                    style={[styles.pinMessage, { color: getMessageTextColor }]}>
-                    {getMessageText}
-                </Text>
+                <WrapTranslation
+                    message={LL.BD_USER_PASSWORD_ERROR()}
+                    renderComponent={() => (
+                        <View style={styles.messageContainer}>
+                            <Text style={styles.messageText}>!</Text>
+                        </View>
+                    )}
+                />
             )
-        }, [styles.pinMessage, getMessageTextColor, getMessageText])
 
-        return (
-            <View style={styles.container}>
-                <View style={styles.innerContainer}>
-                    {Array.from(Array(digitNumber).keys()).map((digit, idx) => {
-                        const digitExist = pin[idx]
-                        return (
-                            <View
-                                key={digit}
-                                style={[
-                                    styles.pinBase,
-                                    ...(digitExist
-                                        ? [styles.pressed]
-                                        : [styles.notPressed]),
-                                ]}
-                            />
-                        )
-                    })}
-                </View>
+        if (errorType === PinVerificationError.EDIT_PIN && errorValue) return LL.BD_USER_EDIT_PASSWORD_ERROR()
 
-                {getPinMessage}
+        return MESSAGE_FAKE_PLACEHOLDER
+    }, [isPINRetype, LL, errorType, errorValue, styles.messageContainer, styles.messageText])
+
+    const getMessageTextColor = useMemo(() => {
+        if (isPINRetype) return theme.colors.text
+        if (isPinError) return theme.colors.danger
+        return undefined
+    }, [isPINRetype, isPinError, theme.colors.danger, theme.colors.text])
+
+    const getPinMessage = useMemo(() => {
+        return <Text style={[styles.pinMessage, { color: getMessageTextColor }]}>{getMessageText}</Text>
+    }, [styles.pinMessage, getMessageTextColor, getMessageText])
+
+    return (
+        <View style={styles.container}>
+            <View style={styles.innerContainer}>
+                {Array.from(Array(digitNumber).keys()).map((digit, idx) => {
+                    const digitExist = pin[idx]
+                    return (
+                        <View
+                            key={digit}
+                            style={[styles.pinBase, ...(digitExist ? [styles.pressed] : [styles.notPressed])]}
+                        />
+                    )
+                })}
             </View>
-        )
-    },
-)
+
+            {getPinMessage}
+        </View>
+    )
+})
 
 const baseStyles = (isMessageVisible: boolean) => (theme: ColorThemeType) =>
     StyleSheet.create({

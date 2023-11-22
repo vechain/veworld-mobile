@@ -40,19 +40,13 @@ jest.mock("expo-haptics", () => {
     }
 })
 
-const findGroupButton = async (id: string) =>
-    await screen.findByTestId(`button-${id}`, {}, { timeout: 5000 })
+const findGroupButton = async (id: string) => await screen.findByTestId(`button-${id}`, {}, { timeout: 5000 })
 
 describe("BaseButtonGroupHorizontal", () => {
     it("Should render all the buttons correctly", async () => {
-        render(
-            <BaseButtonGroupHorizontal
-                action={() => {}}
-                buttons={buttons}
-                selectedButtonIds={[]}
-            />,
-            { wrapper: TestWrapper },
-        )
+        render(<BaseButtonGroupHorizontal action={() => {}} buttons={buttons} selectedButtonIds={[]} />, {
+            wrapper: TestWrapper,
+        })
 
         for (const button of buttons) {
             const baseButton = await findGroupButton(button.id)
@@ -62,14 +56,9 @@ describe("BaseButtonGroupHorizontal", () => {
 
     it("Call the correct function for each button", async () => {
         const mockAction = jest.fn()
-        render(
-            <BaseButtonGroupHorizontal
-                action={mockAction}
-                buttons={buttons}
-                selectedButtonIds={["2"]}
-            />,
-            { wrapper: TestWrapper },
-        )
+        render(<BaseButtonGroupHorizontal action={mockAction} buttons={buttons} selectedButtonIds={["2"]} />, {
+            wrapper: TestWrapper,
+        })
         for (const button of buttons) {
             const baseButton = await findGroupButton(button.id)
             expect(baseButton).toBeVisible()
@@ -89,11 +78,7 @@ describe("BaseButtonGroupHorizontal", () => {
 
         const buttonsAndDisabledButton = [...buttons, disabledButton]
         render(
-            <BaseButtonGroupHorizontal
-                action={mockAction}
-                buttons={buttonsAndDisabledButton}
-                selectedButtonIds={[]}
-            />,
+            <BaseButtonGroupHorizontal action={mockAction} buttons={buttonsAndDisabledButton} selectedButtonIds={[]} />,
             { wrapper: TestWrapper },
         )
         for (const button of buttonsAndDisabledButton) {

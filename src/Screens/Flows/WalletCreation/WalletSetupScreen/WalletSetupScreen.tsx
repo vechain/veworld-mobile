@@ -1,13 +1,6 @@
 import { useNavigation } from "@react-navigation/native"
 import React, { useCallback, useEffect } from "react"
-import {
-    BaseIcon,
-    BaseSpacer,
-    BaseText,
-    BaseTouchableBox,
-    BaseView,
-    Layout,
-} from "~Components"
+import { BaseIcon, BaseSpacer, BaseText, BaseTouchableBox, BaseView, Layout } from "~Components"
 import { Routes } from "~Navigation"
 import { useI18nContext } from "~i18n"
 import { useAnalyticTracking, useBottomSheetModal, useTheme } from "~Hooks"
@@ -41,14 +34,9 @@ export const WalletSetupScreen = () => {
     return (
         <Layout
             body={
-                <BaseView
-                    alignItems="center"
-                    justifyContent="space-between"
-                    flexGrow={1}>
+                <BaseView alignItems="center" justifyContent="space-between" flexGrow={1}>
                     <BaseView alignSelf="flex-start" w={100}>
-                        <BaseText
-                            typographyFont="title"
-                            testID="wallet-setup-title-id">
+                        <BaseText typographyFont="title" testID="wallet-setup-title-id">
                             {LL.TITLE_CREATE_WALLET_TYPE()}
                         </BaseText>
                         <BaseText typographyFont="body" my={10}>
@@ -62,33 +50,17 @@ export const WalletSetupScreen = () => {
             footer={
                 <BaseView>
                     <BaseView alignItems="center" w={100}>
-                        <BaseTouchableBox
-                            action={createLocalWallet}
-                            py={16}
-                            haptics="Medium">
-                            <BaseIcon
-                                name="plus-circle"
-                                size={24}
-                                color={theme.colors.text}
-                            />
+                        <BaseTouchableBox action={createLocalWallet} py={16} haptics="Medium">
+                            <BaseIcon name="plus-circle" size={24} color={theme.colors.text} />
                             <BaseView flex={1} px={12}>
-                                <BaseText
-                                    align="left"
-                                    typographyFont="subSubTitle">
+                                <BaseText align="left" typographyFont="subSubTitle">
                                     {LL.BTN_CREATE_WALLET_TYPE_CREATE_NEW()}
                                 </BaseText>
-                                <BaseText
-                                    pt={4}
-                                    align="left"
-                                    typographyFont="captionRegular">
+                                <BaseText pt={4} align="left" typographyFont="captionRegular">
                                     {LL.BTN_CREATE_WALLET_TYPE_CREATE_NEW_SUBTITLE()}
                                 </BaseText>
                             </BaseView>
-                            <BaseIcon
-                                name="chevron-right"
-                                size={24}
-                                color={theme.colors.text}
-                            />
+                            <BaseIcon name="chevron-right" size={24} color={theme.colors.text} />
                         </BaseTouchableBox>
                         <BaseSpacer height={16} />
                         <BaseTouchableBox
@@ -96,29 +68,16 @@ export const WalletSetupScreen = () => {
                             action={onImportWallet}
                             py={16}
                             justifyContent="space-between">
-                            <BaseIcon
-                                name="tray-arrow-up"
-                                size={24}
-                                color={theme.colors.text}
-                            />
+                            <BaseIcon name="tray-arrow-up" size={24} color={theme.colors.text} />
                             <BaseView flex={1} px={12}>
-                                <BaseText
-                                    align="left"
-                                    typographyFont="subSubTitle">
+                                <BaseText align="left" typographyFont="subSubTitle">
                                     {LL.BTN_CREATE_WALLET_TYPE_IMPORT()}
                                 </BaseText>
-                                <BaseText
-                                    align="left"
-                                    pt={4}
-                                    typographyFont="captionRegular">
+                                <BaseText align="left" pt={4} typographyFont="captionRegular">
                                     {LL.BTN_CREATE_WALLET_TYPE_IMPORT_SUBTITLE()}
                                 </BaseText>
                             </BaseView>
-                            <BaseIcon
-                                name="chevron-right"
-                                size={24}
-                                color={theme.colors.text}
-                            />
+                            <BaseIcon name="chevron-right" size={24} color={theme.colors.text} />
                         </BaseTouchableBox>
                         <BaseSpacer height={16} />
                     </BaseView>

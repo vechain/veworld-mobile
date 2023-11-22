@@ -4,15 +4,10 @@ import { showErrorToast, showInfoToast } from "~Components"
 import { useI18nContext } from "~i18n"
 import { SessionTypes } from "@walletconnect/types"
 
-export const useWcPairing = (
-    activeSessions: Record<string, SessionTypes.Struct>,
-) => {
+export const useWcPairing = (activeSessions: Record<string, SessionTypes.Struct>) => {
     const { LL } = useI18nContext()
 
-    const activeSessionsFlat = useMemo(
-        () => Object.values(activeSessions),
-        [activeSessions],
-    )
+    const activeSessionsFlat = useMemo(() => Object.values(activeSessions), [activeSessions])
 
     /**
      * A pairing between the DApp and the wallet needs to be established in order to make
@@ -44,10 +39,7 @@ export const useWcPairing = (
                     text1: LL.NOTIFICATION_warning_wallet_connect_connection_could_delay(),
                 })
             } catch (err: unknown) {
-                if (
-                    err instanceof Error &&
-                    err.message.includes("Pairing already exists")
-                ) {
+                if (err instanceof Error && err.message.includes("Pairing already exists")) {
                     return
                 }
 

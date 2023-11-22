@@ -3,30 +3,15 @@ import Svg, { Path, SvgProps } from "react-native-svg"
 
 export const SecurityDowngradeSVG = (props: SvgProps): ReactElement => {
     return (
-        <Svg
-            width="254"
-            height="230"
-            viewBox="0 0 254 230"
-            fill="none"
-            xmlns="http://www.w3.org/2000/svg"
-            {...props}>
+        <Svg width="254" height="230" viewBox="0 0 254 230" fill="none" xmlns="http://www.w3.org/2000/svg" {...props}>
             <Path
                 opacity="0.8"
                 d="M73.0865 56.0361C134.845 32.8949 223.162 -39.806 245.572 28.6651C257.683 60.3691 255.433 114.286 247.056 150.473C237.977 188.558 222.763 208.921 192.662 217.302C132.986 232.388 24.3883 247.815 5.76749 175.972C-4.84335 141.474 0.382293 108.342 11.759 91.2636C23.8219 72.4475 42.0358 69.7096 73.0865 56.0361V56.0361Z"
                 fill="#E6F0FA"
             />
-            <Path
-                d="M185.115 163.207H158.255V172.73H185.115V163.207Z"
-                fill="#FFAB01"
-            />
-            <Path
-                d="M167.806 89.312H158.255V193.266H167.806V89.312Z"
-                fill="#FFAB01"
-            />
-            <Path
-                d="M178.554 167.96H160.199V188.793H178.554V167.96Z"
-                fill="#FFAB01"
-            />
+            <Path d="M185.115 163.207H158.255V172.73H185.115V163.207Z" fill="#FFAB01" />
+            <Path d="M167.806 89.312H158.255V193.266H167.806V89.312Z" fill="#FFAB01" />
+            <Path d="M178.554 167.96H160.199V188.793H178.554V167.96Z" fill="#FFAB01" />
             <Path
                 d="M135.277 64.0146V84.8481C135.277 89.4509 139.022 93.1774 143.638 93.1774H182.437C187.053 93.1774 190.797 89.444 190.797 84.8481V64.0146C190.797 59.4118 187.053 55.6854 182.437 55.6854H143.638C139.022 55.6854 135.277 59.4118 135.277 64.0146ZM181.246 65.2085V83.6543H144.828V65.2085H181.246Z"
                 fill="#FFAB01"
@@ -35,70 +20,18 @@ export const SecurityDowngradeSVG = (props: SvgProps): ReactElement => {
                 d="M187.205 86.0314C187.205 89.3161 184.527 91.9867 181.24 91.9867H142.441C139.153 91.9867 136.468 89.3092 136.468 86.0314V65.2048C136.468 61.9269 139.153 59.2563 142.441 59.2563H181.24C184.527 59.2563 187.205 61.9269 187.205 65.2048V86.0314ZM182.43 87.2252V64.0178H141.25V87.2252H182.43Z"
                 fill="#FEC12F"
             />
-            <Path
-                d="M185.115 179.278H158.255V188.801H185.115V179.278Z"
-                fill="#FFAB01"
-            />
-            <Path
-                d="M185.117 184.033H167.808V188.794H185.117V184.033Z"
-                fill="#FEC12F"
-            />
-            <Path
-                d="M185.117 167.96H167.808V172.721H185.117V167.96Z"
-                fill="#FEC12F"
-            />
-            <Path
-                d="M163.03 89.312H158.255V193.266H163.03V89.312Z"
-                fill="#FEC12F"
-            />
-            <Path
-                d="M87.5235 133.306L78.457 124.273"
-                stroke="#C5E1F9"
-                stroke-width="2.14849"
-                stroke-miterlimit="10"
-            />
-            <Path
-                d="M64.4424 110.297L55.3828 101.257"
-                stroke="#C5E1F9"
-                stroke-width="2.14849"
-                stroke-miterlimit="10"
-            />
-            <Path
-                d="M55.3828 133.306L64.4424 124.273"
-                stroke="#C5E1F9"
-                stroke-width="2.14849"
-                stroke-miterlimit="10"
-            />
-            <Path
-                d="M78.457 110.297L87.5235 101.257"
-                stroke="#C5E1F9"
-                stroke-width="2.14849"
-                stroke-miterlimit="10"
-            />
-            <Path
-                d="M201.31 176.705L198.867 174.263"
-                stroke="#C5E1F9"
-                stroke-width="2.14849"
-                stroke-miterlimit="10"
-            />
-            <Path
-                d="M195.088 170.497L192.646 168.055"
-                stroke="#C5E1F9"
-                stroke-width="2.14849"
-                stroke-miterlimit="10"
-            />
-            <Path
-                d="M192.646 176.705L195.088 174.263"
-                stroke="#C5E1F9"
-                stroke-width="2.14849"
-                stroke-miterlimit="10"
-            />
-            <Path
-                d="M198.867 170.497L201.31 168.055"
-                stroke="#C5E1F9"
-                stroke-width="2.14849"
-                stroke-miterlimit="10"
-            />
+            <Path d="M185.115 179.278H158.255V188.801H185.115V179.278Z" fill="#FFAB01" />
+            <Path d="M185.117 184.033H167.808V188.794H185.117V184.033Z" fill="#FEC12F" />
+            <Path d="M185.117 167.96H167.808V172.721H185.117V167.96Z" fill="#FEC12F" />
+            <Path d="M163.03 89.312H158.255V193.266H163.03V89.312Z" fill="#FEC12F" />
+            <Path d="M87.5235 133.306L78.457 124.273" stroke="#C5E1F9" stroke-width="2.14849" stroke-miterlimit="10" />
+            <Path d="M64.4424 110.297L55.3828 101.257" stroke="#C5E1F9" stroke-width="2.14849" stroke-miterlimit="10" />
+            <Path d="M55.3828 133.306L64.4424 124.273" stroke="#C5E1F9" stroke-width="2.14849" stroke-miterlimit="10" />
+            <Path d="M78.457 110.297L87.5235 101.257" stroke="#C5E1F9" stroke-width="2.14849" stroke-miterlimit="10" />
+            <Path d="M201.31 176.705L198.867 174.263" stroke="#C5E1F9" stroke-width="2.14849" stroke-miterlimit="10" />
+            <Path d="M195.088 170.497L192.646 168.055" stroke="#C5E1F9" stroke-width="2.14849" stroke-miterlimit="10" />
+            <Path d="M192.646 176.705L195.088 174.263" stroke="#C5E1F9" stroke-width="2.14849" stroke-miterlimit="10" />
+            <Path d="M198.867 170.497L201.31 168.055" stroke="#C5E1F9" stroke-width="2.14849" stroke-miterlimit="10" />
             <Path
                 d="M88.4026 84.172C88.4026 84.172 94.5968 78.9274 89.33 70.9225C86.4093 66.4853 87.3506 54.1674 96.3686 57.7972C105.387 61.427 102.791 56.7207 107.878 58.7357C112.972 60.7507 115.311 63.8975 114.778 67.3893C114.245 70.8811 114.951 77.5059 118.08 78.7135C121.208 79.9212 136.24 86.7529 127.105 95.9517C117.969 105.157 83.1495 99.2572 88.4026 84.1651V84.172Z"
                 fill="#212957"

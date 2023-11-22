@@ -1,11 +1,6 @@
 import React, { useCallback, useState } from "react"
 import { useBottomSheetModal, useDisclosure, useWalletSecurity } from "~Hooks"
-import {
-    BaseButtonGroupHorizontal,
-    BaseSpacer,
-    BaseText,
-    RequireUserPassword,
-} from "~Components"
+import { BaseButtonGroupHorizontal, BaseSpacer, BaseText, RequireUserPassword } from "~Components"
 import { useSecurityUpgrade } from "../Hooks/useSecurityUpgrade"
 import { useI18nContext } from "~i18n"
 import { useSecurityButtons } from "../Hooks/useSecurityButtons"
@@ -14,17 +9,12 @@ import { BaseButtonGroupHorizontalType, SecurityLevelType } from "~Model"
 
 export const EnableBiometrics = () => {
     // State for the current button
-    const [currentButton, setCurrentButton] =
-        useState<BaseButtonGroupHorizontalType>()
+    const [currentButton, setCurrentButton] = useState<BaseButtonGroupHorizontalType>()
 
     const runSecurityUpgrade = useSecurityUpgrade()
     const { LL } = useI18nContext()
 
-    const {
-        isOpen: isPasswordPromptOpen,
-        onOpen: openPasswordPrompt,
-        onClose: closePasswordPrompt,
-    } = useDisclosure()
+    const { isOpen: isPasswordPromptOpen, onOpen: openPasswordPrompt, onClose: closePasswordPrompt } = useDisclosure()
 
     const {
         ref: backupWarningSheetRef,
@@ -32,8 +22,7 @@ export const EnableBiometrics = () => {
         onClose: closeBackupWarningSheet,
     } = useBottomSheetModal()
 
-    const { securityButtons, shouldCallRequireBiometricsAndEnableIt } =
-        useSecurityButtons(openPasswordPrompt)
+    const { securityButtons, shouldCallRequireBiometricsAndEnableIt } = useSecurityButtons(openPasswordPrompt)
 
     const { isWalletSecurityBiometrics } = useWalletSecurity()
 
@@ -52,11 +41,7 @@ export const EnableBiometrics = () => {
 
     const onButtonPress = useCallback(
         (button: BaseButtonGroupHorizontalType) => {
-            if (
-                button.id !== SecurityLevelType.BIOMETRIC ||
-                isWalletSecurityBiometrics
-            )
-                return
+            if (button.id !== SecurityLevelType.BIOMETRIC || isWalletSecurityBiometrics) return
 
             setCurrentButton(button)
             openBackupWarningSheet()
@@ -72,12 +57,8 @@ export const EnableBiometrics = () => {
 
     return (
         <>
-            <BaseText typographyFont="bodyMedium">
-                {LL.SB_SECURITY_METHOD()}
-            </BaseText>
-            <BaseText typographyFont="caption">
-                {LL.BD_SECURITY_METHOD()}
-            </BaseText>
+            <BaseText typographyFont="bodyMedium">{LL.SB_SECURITY_METHOD()}</BaseText>
+            <BaseText typographyFont="caption">{LL.BD_SECURITY_METHOD()}</BaseText>
 
             <BaseSpacer height={24} />
 

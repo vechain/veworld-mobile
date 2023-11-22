@@ -25,23 +25,12 @@ export enum SWAP_SIDE {
 }
 
 export const SwapCard = memo(
-    ({
-        paidTokenAddress,
-        receivedTokenAddress,
-        paidTokenAmount,
-        receivedTokenAmount,
-        onAddCustomToken,
-    }: Props) => {
+    ({ paidTokenAddress, receivedTokenAddress, paidTokenAmount, receivedTokenAmount, onAddCustomToken }: Props) => {
         const { styles, theme } = useThemedStyles(baseStyles)
 
-        const { paidToken, receivedToken } = useSwappedTokens(
-            receivedTokenAddress,
-            paidTokenAddress,
-        )
+        const { paidToken, receivedToken } = useSwappedTokens(receivedTokenAddress, paidTokenAddress)
 
-        const exchangeRatePaid = useAppSelector((state: RootState) =>
-            selectCurrencyExchangeRate(state, paidToken),
-        )
+        const exchangeRatePaid = useAppSelector((state: RootState) => selectCurrencyExchangeRate(state, paidToken))
 
         const exchangeRateReceived = useAppSelector((state: RootState) =>
             selectCurrencyExchangeRate(state, receivedToken),
@@ -80,11 +69,7 @@ export const SwapCard = memo(
         const fiatValuePaid = useMemo(() => {
             if (exchangeRatePaid?.rate && paidToken)
                 return FormattingUtils.humanNumber(
-                    FormattingUtils.convertToFiatBalance(
-                        paidTokenAmount,
-                        exchangeRatePaid.rate,
-                        paidToken.decimals,
-                    ),
+                    FormattingUtils.convertToFiatBalance(paidTokenAmount, exchangeRatePaid.rate, paidToken.decimals),
                     paidAmount,
                 )
         }, [exchangeRatePaid?.rate, paidAmount, paidToken, paidTokenAmount])
@@ -99,12 +84,7 @@ export const SwapCard = memo(
                     ),
                     receivedAmount,
                 )
-        }, [
-            exchangeRateReceived?.rate,
-            receivedAmount,
-            receivedToken,
-            receivedTokenAmount,
-        ])
+        }, [exchangeRateReceived?.rate, receivedAmount, receivedToken, receivedTokenAmount])
 
         const renderPaidToken = useCallback(() => {
             return (
@@ -118,14 +98,7 @@ export const SwapCard = memo(
                     onAddCustomToken={onAddCustomToken}
                 />
             )
-        }, [
-            fiatValuePaid,
-            onAddCustomToken,
-            paidAmount,
-            paidToken,
-            paidTokenAddress,
-            paidTokenAddressShort,
-        ])
+        }, [fiatValuePaid, onAddCustomToken, paidAmount, paidToken, paidTokenAddress, paidTokenAddressShort])
 
         const renderReceivedToken = useCallback(() => {
             return (

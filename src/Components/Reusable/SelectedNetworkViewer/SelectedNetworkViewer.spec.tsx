@@ -8,12 +8,10 @@ import { TestWrapper } from "~Test"
 
 jest.mock("~Hooks/useBlockchainNetwork")
 
-const findLabel = async (label: string) =>
-    await screen.findByText(label, {}, { timeout: 5000 })
+const findLabel = async (label: string) => await screen.findByText(label, {}, { timeout: 5000 })
 
 describe("SelectedNetworkViewer", () => {
-    const mockUseBlockchainNetwork =
-        useBlockchainNetwork as jest.MockedFunction<typeof useBlockchainNetwork>
+    const mockUseBlockchainNetwork = useBlockchainNetwork as jest.MockedFunction<typeof useBlockchainNetwork>
 
     afterEach(() => {
         jest.resetAllMocks()
@@ -72,6 +70,7 @@ describe("SelectedNetworkViewer", () => {
         expect(componentNotVisibleError).not.toBeNull()
     })
 
+    // eslint-disable-next-line max-len
     it("should render the network name when the network is mainnet and the 'showEvenIfMainnet' prop is true", async () => {
         mockUseBlockchainNetwork.mockReturnValue({
             network: {

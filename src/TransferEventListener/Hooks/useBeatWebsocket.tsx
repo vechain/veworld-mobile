@@ -14,18 +14,13 @@ interface LastMessage {
 const TEN_MINUTES = 10 * 60 * 1000
 
 const BASE_PATH = "/subscriptions/beat2"
-export const useBeatWebsocket = (
-    currentNetworkUrl: string,
-    onMessage: (beat: Beat) => void,
-) => {
+export const useBeatWebsocket = (currentNetworkUrl: string, onMessage: (beat: Beat) => void) => {
     const dispatch = useAppDispatch()
     const { currentState, previousState } = useAppState()
     const ws = useRef<WebSocket>()
     const lastMessage = useRef<LastMessage>()
     const { count, increment } = useCounter()
-    const [retryTimeoutId, setRetryTimeoutId] = useState<NodeJS.Timeout | null>(
-        null,
-    )
+    const [retryTimeoutId, setRetryTimeoutId] = useState<NodeJS.Timeout | null>(null)
 
     const onOpen = useCallback(() => {
         dispatch(updateNodeError(false))
@@ -49,12 +44,7 @@ export const useBeatWebsocket = (
             error("Websocket closed", ev)
 
             if (currentState === AppStateType.ACTIVE) {
-                setRetryTimeoutId(
-                    setTimeout(
-                        () => ws.current?.close(100, "Restarting websocket"),
-                        10000,
-                    ),
-                )
+                setRetryTimeoutId(setTimeout(() => ws.current?.close(100, "Restarting websocket"), 10000))
             }
         },
         [currentState],
@@ -80,9 +70,7 @@ export const useBeatWebsocket = (
             debug("Opening websocket")
             ws.current?.close(1000, "Restarting websocket")
 
-            const url = new URL(
-                URIUtils.toWebsocketURL(currentNetworkUrl, BASE_PATH),
-            )
+            const url = new URL(URIUtils.toWebsocketURL(currentNetworkUrl, BASE_PATH))
             if (
                 lastMessage.current?.networkUrl === currentNetworkUrl &&
                 lastMessage.current?.timestamp + TEN_MINUTES > Date.now()
@@ -90,10 +78,7 @@ export const useBeatWebsocket = (
                 url.searchParams.append("pos", lastMessage.current?.messageId)
             }
             ws.current = new WebSocket(url.toString())
-        } else if (
-            currentState === AppStateType.BACKGROUND &&
-            previousState === AppStateType.ACTIVE
-        ) {
+        } else if (currentState === AppStateType.BACKGROUND && previousState === AppStateType.ACTIVE) {
             debug("Closing websocket")
             ws.current?.close(1001, "App is in background")
             if (retryTimeoutId) {

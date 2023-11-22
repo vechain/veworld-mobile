@@ -21,124 +21,106 @@ type Props = {
 
 const snapPoints = ["100%"]
 
-export const ScanBottomSheet = React.forwardRef<BottomSheetModalMethods, Props>(
-    ({ onClose, onScan, target }, ref) => {
-        const { LL } = useI18nContext()
+export const ScanBottomSheet = React.forwardRef<BottomSheetModalMethods, Props>(({ onClose, onScan, target }, ref) => {
+    const { LL } = useI18nContext()
 
-        const { isOpen, onClose: closeCamera } = useDisclosure(true)
-        const { isOpen: isCameraReady, onOpen: onCameraReady } =
-            useDisclosure(false)
+    const { isOpen, onClose: closeCamera } = useDisclosure(true)
+    const { isOpen: isCameraReady, onOpen: onCameraReady } = useDisclosure(false)
 
-        // Handles the common scan logic for all targets
-        const handleScan = useCallback(
-            (data: string) => {
-                const isAddressTarget = target.includes(ScanTarget.ADDRESS)
-                const isWalletConnectTarget = target.includes(
-                    ScanTarget.WALLET_CONNECT,
-                )
+    // Handles the common scan logic for all targets
+    const handleScan = useCallback(
+        (data: string) => {
+            const isAddressTarget = target.includes(ScanTarget.ADDRESS)
+            const isWalletConnectTarget = target.includes(ScanTarget.WALLET_CONNECT)
 
-                const isValidAddress =
-                    isAddressTarget && AddressUtils.isValid(data)
-                const isValidWalletConnectUri =
-                    isWalletConnectTarget &&
-                    WalletConnectUtils.validateUri(data).isValid
+            const isValidAddress = isAddressTarget && AddressUtils.isValid(data)
+            const isValidWalletConnectUri = isWalletConnectTarget && WalletConnectUtils.validateUri(data).isValid
 
-                if (isValidAddress || isValidWalletConnectUri) {
-                    onScan(data)
-                } else {
-                    let toastProps = {
-                        text1: LL.NOTIFICATION_TITLE_INVALID_QR(),
-                        text2: "",
-                        visibilityTime: 4000,
-                    }
-
-                    if (isWalletConnectTarget && !isAddressTarget) {
-                        // If target is only wallet connect
-                        toastProps = {
-                            ...toastProps,
-                            text2: LL.NOTIFICATION_wallet_connect_invalid_uri(),
-                        }
-                    } else if (isAddressTarget && !isWalletConnectTarget) {
-                        // If target is only address
-                        toastProps = {
-                            ...toastProps,
-                            text2: LL.ERROR_INVALID_ADDRESS(),
-                        }
-                    } else {
-                        // General error message
-                        toastProps = {
-                            ...toastProps,
-                            text2: LL.NOTIFICATION_INVALID_QR(),
-                            visibilityTime: 6000,
-                        }
-                    }
-
-                    HapticsService.triggerImpact({ level: "Light" })
-                    showWarningToast(toastProps)
+            if (isValidAddress || isValidWalletConnectUri) {
+                onScan(data)
+            } else {
+                let toastProps = {
+                    text1: LL.NOTIFICATION_TITLE_INVALID_QR(),
+                    text2: "",
+                    visibilityTime: 4000,
                 }
 
-                onClose()
-            },
-            [target, onClose, onScan, LL],
-        )
+                if (isWalletConnectTarget && !isAddressTarget) {
+                    // If target is only wallet connect
+                    toastProps = {
+                        ...toastProps,
+                        text2: LL.NOTIFICATION_wallet_connect_invalid_uri(),
+                    }
+                } else if (isAddressTarget && !isWalletConnectTarget) {
+                    // If target is only address
+                    toastProps = {
+                        ...toastProps,
+                        text2: LL.ERROR_INVALID_ADDRESS(),
+                    }
+                } else {
+                    // General error message
+                    toastProps = {
+                        ...toastProps,
+                        text2: LL.NOTIFICATION_INVALID_QR(),
+                        visibilityTime: 6000,
+                    }
+                }
 
-        const onQrScanned = useCallback(
-            (result: BarCodeScanningResult) => {
-                handleScan(result.data)
-            },
-            [handleScan],
-        )
-
-        const onPasteFromClipboard = useCallback(
-            (result: string) => {
-                handleScan(result)
-            },
-            [handleScan],
-        )
-
-        // do not render camera when component unmounts
-        useEffect(() => {
-            return () => {
-                closeCamera()
+                HapticsService.triggerImpact({ level: "Light" })
+                showWarningToast(toastProps)
             }
-        }, [closeCamera])
 
-        return (
-            <BaseBottomSheet
-                handleComponent={null}
-                noMargins={true}
-                snapPoints={snapPoints}
-                ref={ref}>
-                {isOpen && (
-                    <Camera
-                        style={baseStyles.camera}
-                        type={CameraType.back}
-                        onCameraReady={onCameraReady}
-                        barCodeScannerSettings={{
-                            barCodeTypes: [
-                                BarCodeScanner.Constants.BarCodeType.qr,
-                            ],
-                        }}
-                        onBarCodeScanned={onQrScanned}
-                        onMountError={onClose}
-                        ratio={"16:9"}>
-                        <BaseView style={baseStyles.container} w={100} h={100}>
-                            {isCameraReady && (
-                                <BaseView style={baseStyles.square} />
-                            )}
+            onClose()
+        },
+        [target, onClose, onScan, LL],
+    )
 
-                            <CameraHeader onClose={onClose} />
+    const onQrScanned = useCallback(
+        (result: BarCodeScanningResult) => {
+            handleScan(result.data)
+        },
+        [handleScan],
+    )
 
-                            {target.includes(ScanTarget.WALLET_CONNECT) && (
-                                <CameraFooter onPaste={onPasteFromClipboard} />
-                            )}
-                        </BaseView>
-                    </Camera>
-                )}
-            </BaseBottomSheet>
-        )
-    },
-)
+    const onPasteFromClipboard = useCallback(
+        (result: string) => {
+            handleScan(result)
+        },
+        [handleScan],
+    )
+
+    // do not render camera when component unmounts
+    useEffect(() => {
+        return () => {
+            closeCamera()
+        }
+    }, [closeCamera])
+
+    return (
+        <BaseBottomSheet handleComponent={null} noMargins={true} snapPoints={snapPoints} ref={ref}>
+            {isOpen && (
+                <Camera
+                    style={baseStyles.camera}
+                    type={CameraType.back}
+                    onCameraReady={onCameraReady}
+                    barCodeScannerSettings={{
+                        barCodeTypes: [BarCodeScanner.Constants.BarCodeType.qr],
+                    }}
+                    onBarCodeScanned={onQrScanned}
+                    onMountError={onClose}
+                    ratio={"16:9"}>
+                    <BaseView style={baseStyles.container} w={100} h={100}>
+                        {isCameraReady && <BaseView style={baseStyles.square} />}
+
+                        <CameraHeader onClose={onClose} />
+
+                        {target.includes(ScanTarget.WALLET_CONNECT) && <CameraFooter onPaste={onPasteFromClipboard} />}
+                    </BaseView>
+                </Camera>
+            )}
+        </BaseBottomSheet>
+    )
+})
 
 const baseStyles = StyleSheet.create({
     camera: {

@@ -40,15 +40,13 @@ export type RootStackParamListCreateWalletApp = {
     [Routes.USER_CREATE_PASSWORD]: undefined
 }
 
-const CreateWalletApp =
-    createNativeStackNavigator<RootStackParamListCreateWalletApp>()
+const CreateWalletApp = createNativeStackNavigator<RootStackParamListCreateWalletApp>()
 
 export const CreateWalletAppStack = () => {
     const { animation } = useNavAnimation()
 
     return (
-        <CreateWalletApp.Navigator
-            screenOptions={{ headerShown: false, animation }}>
+        <CreateWalletApp.Navigator screenOptions={{ headerShown: false, animation }}>
             <CreateWalletApp.Screen
                 name={Routes.WALLET_SETUP}
                 component={WalletSetupScreen}

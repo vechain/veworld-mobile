@@ -13,67 +13,41 @@ export const PaymentProviderList = () => {
 
     const paymentsProviders = usePaymentProviderList()
 
-    const handleBuyClick = useCallback(
-        () => nav.navigate(Routes.BUY_WEBVIEW),
-        [nav],
-    )
+    const handleBuyClick = useCallback(() => nav.navigate(Routes.BUY_WEBVIEW), [nav])
 
     const renderItem = useCallback(
         ({ item }: { item: PaymentProvider }) => {
             return (
                 <TouchableOpacity key={item.id} onPress={handleBuyClick}>
-                    <BaseView
-                        flexDirection="row"
-                        borderRadius={12}
-                        mb={20}
-                        style={styles.card}>
+                    <BaseView flexDirection="row" borderRadius={12} mb={20} style={styles.card}>
                         <BaseView
                             flexDirection="column"
                             alignItems="flex-start"
                             justifyContent="flex-start"
                             p={20}
                             w={90}>
-                            <BaseView
-                                flexDirection="row"
-                                justifyContent="space-between">
+                            <BaseView flexDirection="row" justifyContent="space-between">
                                 <BaseView flex={1} flexDirection="row">
                                     {item.img}
-                                    <BaseText
-                                        fontSize={18}
-                                        pl={10}
-                                        color={theme.colors.text}>
+                                    <BaseText fontSize={18} pl={10} color={theme.colors.text}>
                                         {item.name}
                                     </BaseText>
                                 </BaseView>
                                 {item.paymentMethods.map(method => (
                                     <React.Fragment key={method.id}>
                                         <BaseSpacer width={10} />
-                                        <BaseIcon
-                                            name={method.icon}
-                                            size={23}
-                                            color={theme.colors.text}
-                                        />
+                                        <BaseIcon name={method.icon} size={23} color={theme.colors.text} />
                                     </React.Fragment>
                                 ))}
                             </BaseView>
 
                             <BaseSpacer height={10} />
-                            <BaseText
-                                fontSize={14}
-                                color={theme.colors.text}
-                                py={10}>
+                            <BaseText fontSize={14} color={theme.colors.text} py={10}>
                                 {item.description}
                             </BaseText>
                         </BaseView>
-                        <BaseView
-                            style={styles.arrowBackground}
-                            flex={1}
-                            flexDirection="row"
-                            justifyContent="center">
-                            <BaseIcon
-                                color={theme.colors.textReversed}
-                                name="chevron-right"
-                            />
+                        <BaseView style={styles.arrowBackground} flex={1} flexDirection="row" justifyContent="center">
+                            <BaseIcon color={theme.colors.textReversed} name="chevron-right" />
                         </BaseView>
                     </BaseView>
                 </TouchableOpacity>
@@ -82,13 +56,7 @@ export const PaymentProviderList = () => {
         [styles, theme, handleBuyClick],
     )
 
-    return (
-        <FlatList
-            data={paymentsProviders}
-            renderItem={renderItem}
-            keyExtractor={item => item.id}
-        />
-    )
+    return <FlatList data={paymentsProviders} renderItem={renderItem} keyExtractor={item => item.id} />
 }
 
 const baseStyles = (theme: ColorThemeType) =>

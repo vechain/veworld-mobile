@@ -1,14 +1,6 @@
 import { useCallback, useEffect, useMemo, useState } from "react"
 import { PendingRequestTypes, SessionTypes } from "@walletconnect/types"
-import {
-    AddressUtils,
-    debug,
-    error,
-    HexUtils,
-    MinimizerUtils,
-    WalletConnectUtils,
-    warn,
-} from "~Utils"
+import { AddressUtils, debug, error, HexUtils, MinimizerUtils, WalletConnectUtils, warn } from "~Utils"
 import { AnalyticsEvent, RequestMethods } from "~Constants"
 import { AccountWithDevice } from "~Model"
 import {
@@ -21,12 +13,7 @@ import {
     useAppDispatch,
     useAppSelector,
 } from "~Storage/Redux"
-import {
-    ActiveSessions,
-    getRpcError,
-    showErrorToast,
-    showInfoToast,
-} from "~Components"
+import { ActiveSessions, getRpcError, showErrorToast, showInfoToast } from "~Components"
 import { Routes } from "~Navigation"
 import { useNavigation } from "@react-navigation/native"
 import { useI18nContext } from "~i18n"
@@ -36,10 +23,7 @@ import { ErrorResponse } from "@walletconnect/jsonrpc-types/dist/cjs/jsonrpc"
 
 type PendingRequests = Record<string, PendingRequestTypes.Struct>
 
-export const useWcRequest = (
-    isBlackListScreen: () => boolean,
-    activeSessions: ActiveSessions,
-) => {
+export const useWcRequest = (isBlackListScreen: () => boolean, activeSessions: ActiveSessions) => {
     const nav = useNavigation()
     const dispatch = useAppDispatch()
     const track = useAnalyticTracking()
@@ -53,33 +37,24 @@ export const useWcRequest = (
     const networks = useAppSelector(selectNetworks)
     const sessionContexts = useAppSelector(selectWcState)
 
-    const sessions = useMemo(
-        () => Object.values(activeSessions),
-        [activeSessions],
-    )
+    const sessions = useMemo(() => Object.values(activeSessions), [activeSessions])
 
     const [pendingRequests, setPendingRequests] = useState<PendingRequests>({})
 
-    const addPendingRequest = useCallback(
-        (requestEvent: PendingRequestTypes.Struct) => {
-            setPendingRequests(prev => ({
-                ...prev,
-                [requestEvent.id]: requestEvent,
-            }))
-        },
-        [],
-    )
+    const addPendingRequest = useCallback((requestEvent: PendingRequestTypes.Struct) => {
+        setPendingRequests(prev => ({
+            ...prev,
+            [requestEvent.id]: requestEvent,
+        }))
+    }, [])
 
-    const removePendingRequest = useCallback(
-        (requestEvent: PendingRequestTypes.Struct) => {
-            setPendingRequests(prev => {
-                const _prev = { ...prev }
-                delete _prev[requestEvent.id]
-                return _prev
-            })
-        },
-        [],
-    )
+    const removePendingRequest = useCallback((requestEvent: PendingRequestTypes.Struct) => {
+        setPendingRequests(prev => {
+            const _prev = { ...prev }
+            delete _prev[requestEvent.id]
+            return _prev
+        })
+    }, [])
 
     const afterRequest = useCallback(
         (requestEvent: PendingRequestTypes.Struct) => {
@@ -123,10 +98,7 @@ export const useWcRequest = (
     )
 
     const failRequest = useCallback(
-        async (
-            requestEvent: PendingRequestTypes.Struct,
-            err: ErrorResponse,
-        ) => {
+        async (requestEvent: PendingRequestTypes.Struct, err: ErrorResponse) => {
             const web3Wallet = await WalletConnectUtils.getWeb3Wallet()
 
             warn(`Responding with WC Request ${requestEvent.id}`, err)
@@ -146,11 +118,7 @@ export const useWcRequest = (
     )
 
     const goToSignCertificate = useCallback(
-        (
-            requestEvent: PendingRequestTypes.Struct,
-            session: SessionTypes.Struct,
-            signingAccount: string,
-        ) => {
+        (requestEvent: PendingRequestTypes.Struct, session: SessionTypes.Struct, signingAccount: string) => {
             const message = WalletConnectUtils.getSignCertMessage(requestEvent)
             const options = WalletConnectUtils.getSignCertOptions(requestEvent)
 
@@ -190,11 +158,7 @@ export const useWcRequest = (
     )
 
     const goToSendTransaction = useCallback(
-        (
-            requestEvent: PendingRequestTypes.Struct,
-            session: SessionTypes.Struct,
-            signingAccount: string,
-        ) => {
+        (requestEvent: PendingRequestTypes.Struct, session: SessionTypes.Struct, signingAccount: string) => {
             const message = WalletConnectUtils.getSendTxMessage(requestEvent)
             const options = WalletConnectUtils.getSendTxOptions(requestEvent)
 
@@ -244,10 +208,7 @@ export const useWcRequest = (
             }
 
             //convert hex message to utf8
-            debug(
-                "messageUtf8",
-                Buffer.from(HexUtils.removePrefix(params[0]), "hex").toString(),
-            )
+            debug("messageUtf8", Buffer.from(HexUtils.removePrefix(params[0]), "hex").toString())
 
             nav.navigate(Routes.CONNECTED_APP_SIGN_MESSAGE_SCREEN, {
                 requestEvent,
@@ -263,12 +224,10 @@ export const useWcRequest = (
 
             const namespace = Object.keys(session.namespaces)[0]
 
-            const address =
-                session.namespaces[namespace].accounts[0].split(":")[2]
-            const requestedAccount: AccountWithDevice | undefined =
-                accounts.find(acct => {
-                    return AddressUtils.compareAddresses(address, acct.address)
-                })
+            const address = session.namespaces[namespace].accounts[0].split(":")[2]
+            const requestedAccount: AccountWithDevice | undefined = accounts.find(acct => {
+                return AddressUtils.compareAddresses(address, acct.address)
+            })
             if (!requestedAccount) {
                 await web3Wallet.disconnectSession({
                     topic: session.topic,
@@ -280,12 +239,7 @@ export const useWcRequest = (
                 throw new Error("Requested account not found")
             }
 
-            if (
-                !AddressUtils.compareAddresses(
-                    requestedAccount.address,
-                    selectedAccountAddress,
-                )
-            ) {
+            if (!AddressUtils.compareAddresses(requestedAccount.address, selectedAccountAddress)) {
                 onSetSelectedAccount({ address: requestedAccount.address })
                 showInfoToast({
                     text1: LL.NOTIFICATION_WC_ACCOUNT_CHANGED({
@@ -301,10 +255,7 @@ export const useWcRequest = (
 
     const switchNetwork = useCallback(
         async (requestEvent: PendingRequestTypes.Struct) => {
-            const network = WalletConnectUtils.getNetwork(
-                requestEvent,
-                networks,
-            )
+            const network = WalletConnectUtils.getNetwork(requestEvent, networks)
 
             if (!network) {
                 return
@@ -342,14 +293,9 @@ export const useWcRequest = (
 
                 try {
                     // Get the session for this topic
-                    session = web3Wallet.engine.signClient.session.get(
-                        requestEvent.topic,
-                    )
+                    session = web3Wallet.engine.signClient.session.get(requestEvent.topic)
                 } catch (e) {
-                    warn(
-                        "Failed to get WC session for wallet: ",
-                        JSON.stringify(sessions.map(s => s.topic)),
-                    )
+                    warn("Failed to get WC session for wallet: ", JSON.stringify(sessions.map(s => s.topic)))
                     return
                 }
 
@@ -362,31 +308,17 @@ export const useWcRequest = (
                 // Show the screen based on the request method
                 switch (requestEvent.params.request.method) {
                     case RequestMethods.SIGN_CERTIFICATE:
-                        await goToSignCertificate(
-                            requestEvent,
-                            session,
-                            address,
-                        )
+                        await goToSignCertificate(requestEvent, session, address)
                         break
                     case RequestMethods.REQUEST_TRANSACTION:
-                        await goToSendTransaction(
-                            requestEvent,
-                            session,
-                            address,
-                        )
+                        await goToSendTransaction(requestEvent, session, address)
                         break
                     case RequestMethods.PERSONAL_SIGN:
                         await goToSignMessage(requestEvent)
                         break
                     default:
-                        await failRequest(
-                            requestEvent,
-                            getRpcError("methodNotSupported"),
-                        )
-                        error(
-                            "Wallet Connect Session Request Invalid Method",
-                            requestEvent.params.request.method,
-                        )
+                        await failRequest(requestEvent, getRpcError("methodNotSupported"))
+                        error("Wallet Connect Session Request Invalid Method", requestEvent.params.request.method)
                         break
                 }
             } catch (e) {

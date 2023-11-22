@@ -7,21 +7,13 @@ import { StyleProp, ViewStyle } from "react-native"
 
 const baseSkeletonTestId = "BaseSkeleton"
 
-const findBaseSkeleton = async () =>
-    await screen.findByTestId(baseSkeletonTestId, {}, { timeout: 5000 })
+const findBaseSkeleton = async () => await screen.findByTestId(baseSkeletonTestId, {}, { timeout: 5000 })
 
 describe("BaseSkeleton", () => {
     it("renders correctly with default values", async () => {
-        render(
-            <BaseSkeleton
-                testID={baseSkeletonTestId}
-                boneColor="#e1e1e1"
-                highlightColor="#f2f2f2"
-            />,
-            {
-                wrapper: TestWrapper,
-            },
-        )
+        render(<BaseSkeleton testID={baseSkeletonTestId} boneColor="#e1e1e1" highlightColor="#f2f2f2" />, {
+            wrapper: TestWrapper,
+        })
 
         const baseSkeleton = await findBaseSkeleton()
         expect(baseSkeleton).toBeVisible()

@@ -31,9 +31,7 @@ export const SettingsTransactionsScreen = () => {
         genesis: { id: genesisId },
     } = useThor()
     const selectedDelegationOption = useAppSelector(getDefaultDelegationOption)
-    const selectedDelegationAccount = useAppSelector(
-        getDefaultDelegationAccount,
-    )
+    const selectedDelegationAccount = useAppSelector(getDefaultDelegationAccount)
     const selectedDelegationUrl = useAppSelector(getDefaultDelegationUrl)
     const dispatch = useAppDispatch()
     const setNoDelegationOption = () => {
@@ -56,17 +54,11 @@ export const SettingsTransactionsScreen = () => {
             }),
         )
     }
-    const setSelectedDelegationAccount = (
-        defaultDelegationAccount?: AccountWithDevice,
-    ) => {
-        if (
-            defaultDelegationAccount &&
-            defaultDelegationAccount.device.type === DEVICE_TYPE.LOCAL_MNEMONIC
-        ) {
+    const setSelectedDelegationAccount = (defaultDelegationAccount?: AccountWithDevice) => {
+        if (defaultDelegationAccount && defaultDelegationAccount.device.type === DEVICE_TYPE.LOCAL_MNEMONIC) {
             dispatch(
                 setDefaultDelegationAccount({
-                    delegationAccount:
-                        defaultDelegationAccount as LocalAccountWithDevice,
+                    delegationAccount: defaultDelegationAccount as LocalAccountWithDevice,
                     genesisId,
                 }),
             )
@@ -85,12 +77,8 @@ export const SettingsTransactionsScreen = () => {
         }
     }
     const setSelectedDelegationUrl = (defaultDelegationUrl: string) => {
-        dispatch(
-            setDefaultDelegationOption({ type: DelegationType.URL, genesisId }),
-        )
-        dispatch(
-            setDefaultDelegationUrl({ url: defaultDelegationUrl, genesisId }),
-        )
+        dispatch(setDefaultDelegationOption({ type: DelegationType.URL, genesisId }))
+        dispatch(setDefaultDelegationUrl({ url: defaultDelegationUrl, genesisId }))
         dispatch(
             setDefaultDelegationAccount({
                 delegationAccount: undefined,
@@ -111,13 +99,9 @@ export const SettingsTransactionsScreen = () => {
             safeAreaTestID="SettingsTransactionsScreen"
             body={
                 <BaseView pt={16}>
-                    <BaseText typographyFont="title">
-                        {LL.SETTINGS_TRANSACTIONS_TITLE()}
-                    </BaseText>
+                    <BaseText typographyFont="title">{LL.SETTINGS_TRANSACTIONS_TITLE()}</BaseText>
                     <BaseSpacer height={24} />
-                    <BaseText typographyFont="button">
-                        {LL.SETTINGS_TRANSACTIONS_DEFAULT_DELEGATION()}
-                    </BaseText>
+                    <BaseText typographyFont="button">{LL.SETTINGS_TRANSACTIONS_DEFAULT_DELEGATION()}</BaseText>
                     <BaseSpacer height={8} />
                     <BaseText typographyFont="captionRegular">
                         {LL.SETTINGS_TRANSACTIONS_SELECT_DEFAULT_DELEGATION()}
@@ -143,16 +127,12 @@ export const SettingsTransactionsScreen = () => {
                         <>
                             <BaseSpacer height={16} />
                             <BaseCard>
-                                <BaseText py={8}>
-                                    {selectedDelegationUrl}
-                                </BaseText>
+                                <BaseText py={8}>{selectedDelegationUrl}</BaseText>
                             </BaseCard>
                         </>
                     )}
                     <BaseSpacer height={24} />
-                    <BaseText typographyFont="button">
-                        {LL.SETTINGS_TRANSACTIONS_SELECT_DELEGATION_URLS()}
-                    </BaseText>
+                    <BaseText typographyFont="button">{LL.SETTINGS_TRANSACTIONS_SELECT_DELEGATION_URLS()}</BaseText>
                     <BaseSpacer height={8} />
                     <BaseText typographyFont="captionRegular">
                         {LL.SETTINGS_TRANSACTIONS_SELECT_DELEGATION_URLS_BODY()}

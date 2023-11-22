@@ -4,13 +4,7 @@ import { ScanBottomSheet } from "~Components"
 import { ScanTarget } from "~Constants"
 import { Keyboard } from "react-native"
 
-export const useCameraBottomSheet = ({
-    onScan,
-    targets,
-}: {
-    onScan: (uri: string) => void
-    targets: ScanTarget[]
-}) => {
+export const useCameraBottomSheet = ({ onScan, targets }: { onScan: (uri: string) => void; targets: ScanTarget[] }) => {
     const {
         ref: scanAddressSheetRef,
         onOpen: openScanAddressSheet,

@@ -6,9 +6,6 @@ export const BuyWebviewScreen = () => {
     const selectedAccountAddress = useAppSelector(selectSelectedAccountAddress)
 
     return selectedAccountAddress ? (
-        <CoinbasePayWebView
-            currentAmount={0}
-            destinationAddress={selectedAccountAddress}
-        />
+        <CoinbasePayWebView currentAmount={0} destinationAddress={selectedAccountAddress} />
     ) : null
 }

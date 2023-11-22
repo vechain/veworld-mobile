@@ -1,31 +1,14 @@
 import React, { useCallback, useMemo, useState } from "react"
-import {
-    BaseButton,
-    BaseIcon,
-    BaseSpacer,
-    BaseText,
-    BaseView,
-    DismissKeyboardView,
-    Layout,
-} from "~Components"
+import { BaseButton, BaseIcon, BaseSpacer, BaseText, BaseView, DismissKeyboardView, Layout } from "~Components"
 import { useI18nContext } from "~i18n"
 import * as Clipboard from "expo-clipboard"
-import {
-    useAnalyticTracking,
-    useBottomSheetModal,
-    useDeviceUtils,
-    useTheme,
-} from "~Hooks"
+import { useAnalyticTracking, useBottomSheetModal, useDeviceUtils, useTheme } from "~Hooks"
 import { CryptoUtils } from "~Utils"
 import { Keyboard, StyleSheet } from "react-native"
 import { Routes } from "~Navigation"
 import { ImportWalletInput } from "./Components/ImportWalletInput"
 import { useNavigation } from "@react-navigation/native"
-import {
-    selectAreDevFeaturesEnabled,
-    useAppDispatch,
-    useAppSelector,
-} from "~Storage/Redux"
+import { selectAreDevFeaturesEnabled, useAppDispatch, useAppSelector } from "~Storage/Redux"
 import { selectHasOnboarded } from "~Storage/Redux/Selectors"
 import { setMnemonic, setPrivateKey } from "~Storage/Redux/Actions"
 import HapticsService from "~Services/HapticsService"
@@ -33,8 +16,7 @@ import { AnalyticsEvent } from "~Constants"
 import { DEVICE_CREATION_ERRORS as ERRORS, IMPORT_TYPE } from "~Model"
 import { UnlockKeystoreBottomSheet } from "./Components/UnlockKeystoreBottomSheet"
 
-const DEMO_MNEMONIC =
-    "denial kitchen pet squirrel other broom bar gas better priority spoil cross"
+const DEMO_MNEMONIC = "denial kitchen pet squirrel other broom bar gas better priority spoil cross"
 
 export const ImportLocalWallet = () => {
     const { LL } = useI18nContext()
@@ -57,10 +39,7 @@ export const ImportLocalWallet = () => {
         onClose: closeUnlockKeystoreBottomSheet,
     } = useBottomSheetModal()
 
-    const importType = useMemo(
-        () => CryptoUtils.determineKeyImportType(textValue),
-        [textValue],
-    )
+    const importType = useMemo(() => CryptoUtils.determineKeyImportType(textValue), [textValue])
 
     const processErrorMessage = useCallback(
         (err: unknown) => {
@@ -106,13 +85,7 @@ export const ImportLocalWallet = () => {
                 track(AnalyticsEvent.IMPORT_MNEMONIC_FAILED)
             }
         },
-        [
-            checkCanImportDevice,
-            dispatch,
-            track,
-            completeImport,
-            processErrorMessage,
-        ],
+        [checkCanImportDevice, dispatch, track, completeImport, processErrorMessage],
     )
 
     const importPrivateKey = useCallback(
@@ -127,22 +100,13 @@ export const ImportLocalWallet = () => {
                 track(AnalyticsEvent.IMPORT_PRIVATE_KEY_FAILED)
             }
         },
-        [
-            checkCanImportDevice,
-            dispatch,
-            track,
-            completeImport,
-            processErrorMessage,
-        ],
+        [checkCanImportDevice, dispatch, track, completeImport, processErrorMessage],
     )
 
     const onUnlockKeyStoreFile = useCallback(
         async (pwd: string) => {
             try {
-                const privateKey = await CryptoUtils.decryptKeystoreFile(
-                    textValue,
-                    pwd,
-                )
+                const privateKey = await CryptoUtils.decryptKeystoreFile(textValue, pwd)
                 checkCanImportDevice(undefined, privateKey)
                 dispatch(setPrivateKey(privateKey))
                 track(AnalyticsEvent.IMPORT_KEYSTORE_FILE_SUBMITTED)
@@ -152,14 +116,7 @@ export const ImportLocalWallet = () => {
                 track(AnalyticsEvent.IMPORT_KEYSTORE_FILE_FAILED)
             }
         },
-        [
-            textValue,
-            checkCanImportDevice,
-            dispatch,
-            track,
-            completeImport,
-            processErrorMessage,
-        ],
+        [textValue, checkCanImportDevice, dispatch, track, completeImport, processErrorMessage],
     )
 
     const onVerify = useCallback(
@@ -215,15 +172,9 @@ export const ImportLocalWallet = () => {
         setIsError("")
     }
 
-    const handleVerify = useCallback(
-        () => onVerify(textValue, importType),
-        [textValue, onVerify, importType],
-    )
+    const handleVerify = useCallback(() => onVerify(textValue, importType), [textValue, onVerify, importType])
 
-    const disabledAction = useCallback(
-        () => setIsError(LL.ERROR_INVALID_IMPORT_DATA()),
-        [LL],
-    )
+    const disabledAction = useCallback(() => setIsError(LL.ERROR_INVALID_IMPORT_DATA()), [LL])
 
     return (
         <DismissKeyboardView>
@@ -232,9 +183,7 @@ export const ImportLocalWallet = () => {
                     <BaseView justifyContent="space-between">
                         <BaseView>
                             <BaseView flexDirection="row" w={100}>
-                                <BaseText typographyFont="title">
-                                    {LL.TITLE_WALLET_IMPORT_LOCAL()}
-                                </BaseText>
+                                <BaseText typographyFont="title">{LL.TITLE_WALLET_IMPORT_LOCAL()}</BaseText>
                                 {areDevFeaturesEnabled && (
                                     <BaseButton
                                         size="md"
@@ -268,11 +217,7 @@ export const ImportLocalWallet = () => {
 
                             <BaseSpacer height={40} />
 
-                            <ImportWalletInput
-                                value={textValue}
-                                onChangeText={onChangeText}
-                                isError={!!isError}
-                            />
+                            <ImportWalletInput value={textValue} onChangeText={onChangeText} isError={!!isError} />
 
                             <UnlockKeystoreBottomSheet
                                 ref={unlockKeystoreBottomSheetRef}

@@ -32,9 +32,7 @@ export const getNFTMediaIpfs = async (uri: string): Promise<NFTMedia> => {
                 resolve({
                     image: reader.result as string,
                     mime: response.data.type,
-                    mediaType: MediaUtils.resolveMediaTypeFromMimeType(
-                        response.data.type,
-                    ),
+                    mediaType: MediaUtils.resolveMediaTypeFromMimeType(response.data.type),
                 })
             }
             reader.onerror = () => {

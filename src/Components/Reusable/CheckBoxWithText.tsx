@@ -17,15 +17,7 @@ type Props = {
     checkAction: (checked: boolean) => void
 }
 
-export const CheckBoxWithText: FC<Props> = ({
-    font,
-    fontColor,
-    text,
-    checkSize,
-    testID,
-    checkAction,
-    isChecked,
-}) => {
+export const CheckBoxWithText: FC<Props> = ({ font, fontColor, text, checkSize, testID, checkAction, isChecked }) => {
     const { styles, theme } = useThemedStyles(baseStyles)
 
     const onPress = useCallback(
@@ -44,25 +36,10 @@ export const CheckBoxWithText: FC<Props> = ({
             fillColor="transparent"
             innerIconStyle={styles.innerIcon}
             iconStyle={styles.icon}
-            iconComponent={
-                isChecked ? (
-                    <BaseIcon
-                        name="check"
-                        size={20}
-                        color={theme.colors.text}
-                    />
-                ) : (
-                    <></>
-                )
-            }
+            iconComponent={isChecked ? <BaseIcon name="check" size={20} color={theme.colors.text} /> : <></>}
             isChecked={isChecked}
             textComponent={
-                <BaseText
-                    typographyFont={font ? font : "footNote"}
-                    color={fontColor}
-                    my={14}
-                    mx={10}
-                    testID={testID}>
+                <BaseText typographyFont={font ? font : "footNote"} color={fontColor} my={14} mx={10} testID={testID}>
                     {text}
                 </BaseText>
             }

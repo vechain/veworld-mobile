@@ -8,22 +8,15 @@ export type RootStackParamListBrowser = {
     [Routes.BROWSER]: undefined
 }
 
-const { Navigator, Group, Screen } =
-    createNativeStackNavigator<RootStackParamListBrowser>()
+const { Navigator, Group, Screen } = createNativeStackNavigator<RootStackParamListBrowser>()
 
 export const DiscoverStack = () => {
     const { animation } = useNavAnimation()
 
     return (
-        <Navigator
-            id="BrowserStack"
-            screenOptions={{ headerShown: false, animation }}>
+        <Navigator id="BrowserStack" screenOptions={{ headerShown: false, animation }}>
             <Group>
-                <Screen
-                    name={Routes.BROWSER}
-                    component={InAppBrowser}
-                    options={{ headerShown: false }}
-                />
+                <Screen name={Routes.BROWSER} component={InAppBrowser} options={{ headerShown: false }} />
             </Group>
         </Navigator>
     )

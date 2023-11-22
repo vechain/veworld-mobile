@@ -16,18 +16,7 @@ type Props = {
     py?: number
 }
 
-export const PressableIcon = ({
-    title,
-    size,
-    action,
-    color,
-    m,
-    p,
-    my,
-    mx,
-    py,
-    px,
-}: Props) => {
+export const PressableIcon = ({ title, size, action, color, m, p, my, mx, py, px }: Props) => {
     const theme = useTheme()
 
     return (
@@ -41,11 +30,7 @@ export const PressableIcon = ({
                 paddingVertical: py,
                 paddingHorizontal: px,
             }}>
-            <Icon
-                name={title}
-                size={size}
-                color={color ? color : theme.colors.primary}
-            />
+            <Icon name={title} size={size} color={color ? color : theme.colors.primary} />
         </TouchableOpacity>
     )
 }

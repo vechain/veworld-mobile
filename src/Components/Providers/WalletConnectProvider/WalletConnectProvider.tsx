@@ -18,12 +18,8 @@ import { useWcDeepLinking } from "~Components/Providers/WalletConnectProvider/ho
  */
 
 type WCContext = {
-    rejectPendingProposal: ReturnType<
-        typeof useSessionProposals
-    >["rejectPendingProposal"]
-    approvePendingProposal: ReturnType<
-        typeof useSessionProposals
-    >["approvePendingProposal"]
+    rejectPendingProposal: ReturnType<typeof useSessionProposals>["rejectPendingProposal"]
+    approvePendingProposal: ReturnType<typeof useSessionProposals>["approvePendingProposal"]
     disconnectSession: ReturnType<typeof useWcSessions>["disconnectSession"]
     onPair: ReturnType<typeof useWcPairing>["onPair"]
     failRequest: ReturnType<typeof useWcRequest>["failRequest"]
@@ -34,9 +30,7 @@ type WCContext = {
 type WalletConnectContextProviderProps = { children: React.ReactNode }
 const WalletConnectContext = React.createContext<WCContext>({} as WCContext)
 
-const WalletConnectContextProvider = ({
-    children,
-}: WalletConnectContextProviderProps) => {
+const WalletConnectContextProvider = ({ children }: WalletConnectContextProviderProps) => {
     // General
     const nav = useNavigation()
 
@@ -46,31 +40,19 @@ const WalletConnectContextProvider = ({
         return !WalletConnectUtils.shouldAutoNavigate(nav.getState())
     }, [nav])
 
-    const {
-        addSessionDisconnect,
-        disconnectSession,
-        activeSessions,
-        addSession,
-    } = useWcSessions()
+    const { addSessionDisconnect, disconnectSession, activeSessions, addSession } = useWcSessions()
 
     const { onPair } = useWcPairing(activeSessions)
 
     const { pairingTopics: deepLinkPairingTopics } = useWcDeepLinking(onPair)
 
-    const {
-        addPendingProposal,
-        rejectPendingProposal,
-        approvePendingProposal,
-    } = useSessionProposals(
+    const { addPendingProposal, rejectPendingProposal, approvePendingProposal } = useSessionProposals(
         isBlackListScreen,
         addSession,
         deepLinkPairingTopics,
     )
 
-    const { addPendingRequest, failRequest, processRequest } = useWcRequest(
-        isBlackListScreen,
-        activeSessions,
-    )
+    const { addPendingRequest, failRequest, processRequest } = useWcRequest(isBlackListScreen, activeSessions)
 
     /**
      * Execute at start
@@ -79,15 +61,9 @@ const WalletConnectContextProvider = ({
         ;(async () => {
             const web3Wallet = await WalletConnectUtils.getWeb3Wallet()
 
-            for (const event of [
-                "session_proposal",
-                "session_request",
-                "session_delete",
-            ]) {
+            for (const event of ["session_proposal", "session_request", "session_delete"]) {
                 if (web3Wallet.events.listenerCount(event) > 0) {
-                    error(
-                        `Wallet Connect Provider: ${event} listener already exists`,
-                    )
+                    error(`Wallet Connect Provider: ${event} listener already exists`)
                 }
             }
 
@@ -123,19 +99,13 @@ const WalletConnectContextProvider = ({
         return <></>
     }
 
-    return (
-        <WalletConnectContext.Provider value={value}>
-            {children}
-        </WalletConnectContext.Provider>
-    )
+    return <WalletConnectContext.Provider value={value}>{children}</WalletConnectContext.Provider>
 }
 
 const useWalletConnect = () => {
     const context = React.useContext(WalletConnectContext)
     if (!context) {
-        throw new Error(
-            "useWalletConnect must be used within a WalletConnectContextProvider",
-        )
+        throw new Error("useWalletConnect must be used within a WalletConnectContextProvider")
     }
 
     return context

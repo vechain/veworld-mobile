@@ -2,11 +2,7 @@ import { error } from "~Utils"
 import { CurrencyExchangeRate } from "~Model"
 import { updateExchangeRate } from "~Storage/Redux/Slices"
 import { getExchangeRate } from "./getExchangeRate"
-import {
-    AppThunkDispatch,
-    RootState,
-    TokenInfoResponse,
-} from "~Storage/Redux/Types"
+import { AppThunkDispatch, RootState, TokenInfoResponse } from "~Storage/Redux/Types"
 import { selectCurrency } from "~Storage/Redux/Selectors"
 
 const allSettled = require("promise.allsettled")
@@ -22,9 +18,7 @@ export const fetchExchangeRates =
 
             const exchangePromises: Promise<CurrencyExchangeRate>[] = []
             for (const token of coinGeckoTokens) {
-                exchangePromises.push(
-                    getExchangeRate(currency, token.symbol, token.id),
-                )
+                exchangePromises.push(getExchangeRate(currency, token.symbol, token.id))
             }
 
             const exchangeResults = await allSettled(exchangePromises)

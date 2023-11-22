@@ -13,10 +13,7 @@ export const RequireUserPassword: React.FC<IRequireUserPassword> = memo(
         return (
             <BaseModal isOpen={isOpen} onClose={onClose}>
                 <BaseView justifyContent="flex-start">
-                    <BackButtonHeader
-                        action={onClose}
-                        hasBottomSpacer={false}
-                    />
+                    <BackButtonHeader action={onClose} hasBottomSpacer={false} />
 
                     <LockScreen
                         onSuccess={onSuccess}

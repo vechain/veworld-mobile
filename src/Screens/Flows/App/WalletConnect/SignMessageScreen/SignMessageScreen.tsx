@@ -30,10 +30,7 @@ import { AppInfo, UnknownAppMessage } from "~Screens"
 import { AnalyticsEvent } from "~Constants"
 import { getSdkError } from "@walletconnect/utils"
 
-type Props = NativeStackScreenProps<
-    RootStackParamListSwitch,
-    Routes.CONNECTED_APP_SIGN_MESSAGE_SCREEN
->
+type Props = NativeStackScreenProps<RootStackParamListSwitch, Routes.CONNECTED_APP_SIGN_MESSAGE_SCREEN>
 
 export const SignMessageScreen: FC<Props> = ({ route }: Props) => {
     const { requestEvent, message } = route.params
@@ -42,17 +39,13 @@ export const SignMessageScreen: FC<Props> = ({ route }: Props) => {
     const { processRequest, failRequest, activeSessions } = useWalletConnect()
     const { LL } = useI18nContext()
     const nav = useNavigation()
-    const selectedAccount: AccountWithDevice = useAppSelector(
-        selectSelectedAccount,
-    )
+    const selectedAccount: AccountWithDevice = useAppSelector(selectSelectedAccount)
     const track = useAnalyticTracking()
     const dispatch = useAppDispatch()
 
     const [isInvalidChecked, setInvalidChecked] = React.useState(false)
 
-    const sessionContext = useAppSelector(state =>
-        selectVerifyContext(state, requestEvent.topic),
-    )
+    const sessionContext = useAppSelector(state => selectVerifyContext(state, requestEvent.topic))
 
     const appInfo = useMemo(() => {
         const session = activeSessions[requestEvent.topic]
@@ -129,10 +122,7 @@ export const SignMessageScreen: FC<Props> = ({ route }: Props) => {
 
                 dispatch(setIsAppLoading(true))
 
-                await processRequest(
-                    requestEvent,
-                    HexUtils.addPrefix(signature.toString("hex")),
-                )
+                await processRequest(requestEvent, HexUtils.addPrefix(signature.toString("hex")))
 
                 dispatch(setIsAppLoading(false))
             } catch (err: unknown) {
@@ -192,18 +182,12 @@ export const SignMessageScreen: FC<Props> = ({ route }: Props) => {
                 style={styles.scrollView}>
                 <CloseModalButton onPress={onPressBack} />
                 <BaseView mx={20} style={styles.alignLeft}>
-                    <BaseText typographyFont="title">
-                        {LL.CONNECTED_APP_REQUEST()}
-                    </BaseText>
+                    <BaseText typographyFont="title">{LL.CONNECTED_APP_REQUEST()}</BaseText>
 
                     <BaseSpacer height={32} />
-                    <BaseText typographyFont="subTitle">
-                        {LL.CONNECTED_APP_SIGN_MESSAGE_TITLE()}
-                    </BaseText>
+                    <BaseText typographyFont="subTitle">{LL.CONNECTED_APP_SIGN_MESSAGE_TITLE()}</BaseText>
                     <BaseSpacer height={16} />
-                    <BaseText>
-                        {LL.CONNECTED_APP_SIGN_MESSAGE_REQUEST_DESCRIPTION()}
-                    </BaseText>
+                    <BaseText>{LL.CONNECTED_APP_SIGN_MESSAGE_REQUEST_DESCRIPTION()}</BaseText>
 
                     <BaseSpacer height={16} />
 
@@ -215,20 +199,13 @@ export const SignMessageScreen: FC<Props> = ({ route }: Props) => {
                     />
 
                     <BaseSpacer height={32} />
-                    <BaseText typographyFont="subTitleBold">
-                        {LL.CONNECTED_APP_SELECTED_ACCOUNT_LABEL()}
-                    </BaseText>
+                    <BaseText typographyFont="subTitleBold">{LL.CONNECTED_APP_SELECTED_ACCOUNT_LABEL()}</BaseText>
 
                     <BaseSpacer height={16} />
-                    <AccountCard
-                        account={selectedAccount}
-                        showOpacityWhenDisabled={false}
-                    />
+                    <AccountCard account={selectedAccount} showOpacityWhenDisabled={false} />
 
                     <BaseSpacer height={16} />
-                    <BaseText typographyFont="subTitle">
-                        {LL.CONNECTED_APP_MESSAGE_HEADER()}
-                    </BaseText>
+                    <BaseText typographyFont="subTitle">{LL.CONNECTED_APP_MESSAGE_HEADER()}</BaseText>
                     <BaseSpacer height={16} />
                     <BaseText>{utfMessage}</BaseText>
 
@@ -249,10 +226,7 @@ export const SignMessageScreen: FC<Props> = ({ route }: Props) => {
                         action={checkIdentityBeforeOpening}
                         /* We must assert that `biometrics` is not empty otherwise we don't know if the user has set biometrics or passcode, thus failing to decrypt the wallet when signing */
                         isLoading={isBiometricsEmpty}
-                        disabled={
-                            isBiometricsEmpty ||
-                            (!validConnectedApp && !isInvalidChecked)
-                        }
+                        disabled={isBiometricsEmpty || (!validConnectedApp && !isInvalidChecked)}
                     />
                     <BaseSpacer height={16} />
                     <BaseButton

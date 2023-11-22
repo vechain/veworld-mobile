@@ -1,18 +1,7 @@
 import React, { useCallback, useEffect, useState } from "react"
-import {
-    BaseSpacer,
-    BaseText,
-    BaseView,
-    Layout,
-    NumPad,
-    PasswordPins,
-} from "~Components"
+import { BaseSpacer, BaseText, BaseView, Layout, NumPad, PasswordPins } from "~Components"
 import { useI18nContext } from "~i18n"
-import {
-    PinVerificationError,
-    PinVerificationErrorType,
-    SecurityLevelType,
-} from "~Model"
+import { PinVerificationError, PinVerificationErrorType, SecurityLevelType } from "~Model"
 import { Routes } from "~Navigation"
 import { useNavigation } from "@react-navigation/native"
 import { useOnDigitPressWithConfirmation } from "./useOnDigitPressWithConfirmation"
@@ -43,21 +32,22 @@ export const UserCreatePasswordScreen = () => {
         [nav, track],
     )
 
-    const [isConfirmationError, setIsConfirmationError] =
-        useState<PinVerificationErrorType>({ type: undefined, value: false })
+    const [isConfirmationError, setIsConfirmationError] = useState<PinVerificationErrorType>({
+        type: undefined,
+        value: false,
+    })
 
-    const { pin, isPinRetype, onDigitPress, onDigitDelete } =
-        useOnDigitPressWithConfirmation({
-            digitNumber,
-            onFinishCallback,
-            onConfirmationError: async () => {
-                await HapticsService.triggerNotification({ level: "Error" })
-                setIsConfirmationError({
-                    type: PinVerificationError.VALIDATE_PIN,
-                    value: true,
-                })
-            },
-        })
+    const { pin, isPinRetype, onDigitPress, onDigitDelete } = useOnDigitPressWithConfirmation({
+        digitNumber,
+        onFinishCallback,
+        onConfirmationError: async () => {
+            await HapticsService.triggerNotification({ level: "Error" })
+            setIsConfirmationError({
+                type: PinVerificationError.VALIDATE_PIN,
+                value: true,
+            })
+        },
+    })
 
     const handleOnDigitPress = useCallback(
         async (digit: string) => {
@@ -83,9 +73,7 @@ export const UserCreatePasswordScreen = () => {
             body={
                 <BaseView alignItems="center" justifyContent="flex-start">
                     <BaseView alignSelf="flex-start">
-                        <BaseText typographyFont="title">
-                            {LL.TITLE_USER_PASSWORD()}
-                        </BaseText>
+                        <BaseText typographyFont="title">{LL.TITLE_USER_PASSWORD()}</BaseText>
                         <BaseText typographyFont="body" my={10}>
                             {LL.SB_USER_PASSWORD()}
                         </BaseText>
@@ -97,10 +85,7 @@ export const UserCreatePasswordScreen = () => {
                         isPINRetype={isPinRetype}
                         isPinError={isConfirmationError}
                     />
-                    <NumPad
-                        onDigitPress={handleOnDigitPress}
-                        onDigitDelete={handleOnDigitDelete}
-                    />
+                    <NumPad onDigitPress={handleOnDigitPress} onDigitDelete={handleOnDigitDelete} />
                 </BaseView>
             }
         />

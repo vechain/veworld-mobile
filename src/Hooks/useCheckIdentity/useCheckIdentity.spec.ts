@@ -32,10 +32,7 @@ describe("useCheckIdentity", () => {
                 isWalletSecurityBiometrics: true,
             })
 
-            jest.spyOn(
-                BiometricsUtils,
-                "authenticateWithBiometrics",
-            ).mockResolvedValue({
+            jest.spyOn(BiometricsUtils, "authenticateWithBiometrics").mockResolvedValue({
                 success: true,
             })
 

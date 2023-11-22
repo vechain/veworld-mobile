@@ -2,8 +2,7 @@ import SignMessageUtils from "~Utils/SignMessageUtils/SignMessageUtils"
 import { HexUtils } from "~Utils"
 import { HDNode, secp256k1 } from "thor-devkit"
 
-const mnemonic =
-    "denial kitchen pet squirrel other broom bar gas better priority spoil cross"
+const mnemonic = "denial kitchen pet squirrel other broom bar gas better priority spoil cross"
 
 const hdNode = HDNode.fromMnemonic(mnemonic.split(" "))
 

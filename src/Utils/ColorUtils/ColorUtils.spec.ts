@@ -3,17 +3,13 @@ import { ColorUtils } from "~Utils"
 describe("generateColorHash", () => {
     it("should generate the same color for the same input", () => {
         const input = "testString"
-        expect(ColorUtils.generateColorHash(input)).toBe(
-            ColorUtils.generateColorHash(input),
-        )
+        expect(ColorUtils.generateColorHash(input)).toBe(ColorUtils.generateColorHash(input))
     })
 
     it("should generate different colors for different inputs", () => {
         const input1 = "testString1"
         const input2 = "testString2"
-        expect(ColorUtils.generateColorHash(input1)).not.toBe(
-            ColorUtils.generateColorHash(input2),
-        )
+        expect(ColorUtils.generateColorHash(input1)).not.toBe(ColorUtils.generateColorHash(input2))
     })
 
     it("should return a valid hex color", () => {
@@ -26,9 +22,7 @@ describe("generateColorHash", () => {
 describe("isLightColor", () => {
     it("should throw for invalid color format", () => {
         const invalidColor = "abcd"
-        expect(() => ColorUtils.isLightColor(invalidColor)).toThrow(
-            "Invalid color format",
-        )
+        expect(() => ColorUtils.isLightColor(invalidColor)).toThrow("Invalid color format")
     })
 
     it("should return true for a light color", () => {

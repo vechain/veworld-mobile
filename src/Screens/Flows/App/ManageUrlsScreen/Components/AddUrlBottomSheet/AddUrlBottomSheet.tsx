@@ -22,10 +22,7 @@ type Props = {
     handleClose: () => void
 }
 
-export const AddUrlBottomSheet = React.forwardRef<
-    BottomSheetModalMethods,
-    Props
->(({ handleClose }, ref) => {
+export const AddUrlBottomSheet = React.forwardRef<BottomSheetModalMethods, Props>(({ handleClose }, ref) => {
     const [newUrl, setNewUrl] = useState("")
     const dispatch = useAppDispatch()
     const { LL } = useI18nContext()
@@ -51,17 +48,10 @@ export const AddUrlBottomSheet = React.forwardRef<
                 noBackButton
                 noMargin
                 fixedBody={
-                    <BaseView
-                        flex={1}
-                        style={styles.bodyContainer}
-                        justifyContent="flex-start">
-                        <BaseText typographyFont="subTitleBold">
-                            {LL.SEND_DELEGATION_ADD_URL()}
-                        </BaseText>
+                    <BaseView flex={1} style={styles.bodyContainer} justifyContent="flex-start">
+                        <BaseText typographyFont="subTitleBold">{LL.SEND_DELEGATION_ADD_URL()}</BaseText>
                         <BaseSpacer height={16} />
-                        <BaseText typographyFont="subSubTitleLight">
-                            {LL.SEND_DELEGATION_ADD_URL_SUBTITLE()}
-                        </BaseText>
+                        <BaseText typographyFont="subSubTitleLight">{LL.SEND_DELEGATION_ADD_URL_SUBTITLE()}</BaseText>
                         <BaseSpacer height={24} />
                         <BaseBottomSheetTextInput
                             value={newUrl}

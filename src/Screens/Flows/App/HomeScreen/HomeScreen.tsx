@@ -1,12 +1,6 @@
 import React, { useCallback, useMemo, useRef, useState } from "react"
 import { AccountCard, EditTokensBar, Header, TokenList } from "./Components"
-import {
-    useBottomSheetModal,
-    useCheckVersion,
-    useMemoizedAnimation,
-    useSetSelectedAccount,
-    useTheme,
-} from "~Hooks"
+import { useBottomSheetModal, useCheckVersion, useMemoizedAnimation, useSetSelectedAccount, useTheme } from "~Hooks"
 import {
     BaseIcon,
     BaseSpacer,
@@ -51,8 +45,7 @@ export const HomeScreen = () => {
         onClose: closeSelectAccountBottonSheet,
     } = useBottomSheetModal()
 
-    const { ref: QRCodeBottomSheetRef, onOpen: openQRCodeSheet } =
-        useBottomSheetModal()
+    const { ref: QRCodeBottomSheetRef, onOpen: openQRCodeSheet } = useBottomSheetModal()
 
     const accounts = useAppSelector(selectVisibleAccounts)
     const selectedAccount = useAppSelector(selectSelectedAccount)
@@ -91,13 +84,7 @@ export const HomeScreen = () => {
             actions.push({
                 name: LL.BTN_BUY(),
                 action: () => nav.navigate(Routes.BUY_FLOW),
-                icon: (
-                    <BaseIcon
-                        color={theme.colors.text}
-                        name="cart-outline"
-                        size={21}
-                    />
-                ),
+                icon: <BaseIcon color={theme.colors.text} name="cart-outline" size={21} />,
                 testID: "buyButton",
             })
         }
@@ -108,9 +95,7 @@ export const HomeScreen = () => {
                     nav.navigate(Routes.SELECT_TOKEN_SEND, {
                         initialRoute: Routes.HOME,
                     }),
-                icon: (
-                    <BaseIcon color={theme.colors.text} name="send-outline" />
-                ),
+                icon: <BaseIcon color={theme.colors.text} name="send-outline" />,
                 testID: "sendButton",
             },
             {
@@ -147,9 +132,7 @@ export const HomeScreen = () => {
                                 <BaseSpacer height={20} />
                                 <AccountCard
                                     balanceVisible={isBalanceVisible}
-                                    openSelectAccountBottomSheet={
-                                        openSelectAccountBottomSheet
-                                    }
+                                    openSelectAccountBottomSheet={openSelectAccountBottomSheet}
                                     account={selectedAccount}
                                     selectedCurrency={selectedCurrency}
                                     openQRCodeSheet={openQRCodeSheet}
@@ -160,17 +143,10 @@ export const HomeScreen = () => {
                             <FastActionsBar actions={Actions} />
 
                             <BaseSpacer height={24} />
-                            <EditTokensBar
-                                isEdit={isEdit}
-                                setIsEdit={setIsEdit}
-                            />
+                            <EditTokensBar isEdit={isEdit} setIsEdit={setIsEdit} />
                             <BaseSpacer height={24} />
 
-                            <TokenList
-                                isEdit={isEdit}
-                                isBalanceVisible={isBalanceVisible}
-                                entering={animateEntering}
-                            />
+                            <TokenList isEdit={isEdit} isBalanceVisible={isBalanceVisible} entering={animateEntering} />
                             <BaseSpacer height={24} />
                         </BaseView>
 

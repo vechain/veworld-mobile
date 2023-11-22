@@ -26,5 +26,4 @@ export const DiscoverySlice = createSlice({
     },
 })
 
-export const { addBookmark, removeBookmark, resetDiscoveryState } =
-    DiscoverySlice.actions
+export const { addBookmark, removeBookmark, resetDiscoveryState } = DiscoverySlice.actions

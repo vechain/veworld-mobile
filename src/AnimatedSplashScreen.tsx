@@ -1,11 +1,6 @@
 import React, { useEffect, useState } from "react"
 import { Image, StyleSheet, View } from "react-native"
-import Animated, {
-    runOnJS,
-    useAnimatedStyle,
-    useSharedValue,
-    withTiming,
-} from "react-native-reanimated"
+import Animated, { runOnJS, useAnimatedStyle, useSharedValue, withTiming } from "react-native-reanimated"
 import MaskedView from "@react-native-masked-view/masked-view"
 import { COLORS, ColorThemeType } from "~Constants"
 import { PlatformUtils } from "~Utils"
@@ -31,11 +26,7 @@ type Props = {
  * </AnimatedSplashScreen>
  * ```
  */
-export const AnimatedSplashScreen = ({
-    playAnimation,
-    useFadeOutAnimation,
-    children,
-}: Props): React.ReactElement => {
+export const AnimatedSplashScreen = ({ playAnimation, useFadeOutAnimation, children }: Props): React.ReactElement => {
     const loadingProgress = useSharedValue(0)
     const [animationDone, setAnimationDone] = useState(false)
 
@@ -59,12 +50,8 @@ export const AnimatedSplashScreen = ({
         }
     }, [playAnimation, loadingProgress, useFadeOutAnimation])
 
-    const colorLayer = animationDone ? null : (
-        <View style={[StyleSheet.absoluteFill, styles.colorLayer]} />
-    )
-    const whiteLayer = animationDone ? null : (
-        <View style={[StyleSheet.absoluteFill, styles.whiteLayer]} />
-    )
+    const colorLayer = animationDone ? null : <View style={[StyleSheet.absoluteFill, styles.colorLayer]} />
+    const whiteLayer = animationDone ? null : <View style={[StyleSheet.absoluteFill, styles.whiteLayer]} />
 
     const scaleOut = useAnimatedStyle(() => {
         return {
@@ -126,9 +113,7 @@ export const AnimatedSplashScreen = ({
     const animatedFadeOut = (
         <>
             {children}
-            {!animationDone && (
-                <Animated.View style={[styles.containerFadeOut, fadeOut]} />
-            )}
+            {!animationDone && <Animated.View style={[styles.containerFadeOut, fadeOut]} />}
         </>
     )
 
@@ -146,11 +131,13 @@ const baseStyles = (theme: ColorThemeType) =>
             left: 0,
             right: 0,
             bottom: 0,
-            backgroundColor: theme.colors.splashBackground, //TODO: Use themed background color instead (https://github.com/vechainfoundation/veworld-mobile/issues/1335)
+            //TODO: Use themed background color instead (https://github.com/vechainfoundation/veworld-mobile/issues/1335)
+            backgroundColor: theme.colors.splashBackground,
         },
         containerFadeOut: {
             flex: 1,
-            backgroundColor: theme.colors.background, //TODO: Use themed background color instead (https://github.com/vechainfoundation/veworld-mobile/issues/1335)
+            //TODO: Use themed background color instead (https://github.com/vechainfoundation/veworld-mobile/issues/1335)
+            backgroundColor: theme.colors.background,
         },
         innerContainer: {
             flex: 1,
@@ -161,7 +148,8 @@ const baseStyles = (theme: ColorThemeType) =>
             justifyContent: "center",
         },
         colorLayer: {
-            backgroundColor: theme.colors.splashColorLayer, //TODO: Use themed background color instead (https://github.com/vechainfoundation/veworld-mobile/issues/1335)
+            //TODO: Use themed background color instead (https://github.com/vechainfoundation/veworld-mobile/issues/1335)
+            backgroundColor: theme.colors.splashColorLayer,
         },
         whiteLayer: { backgroundColor: COLORS.WHITE },
     })

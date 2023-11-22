@@ -17,9 +17,7 @@ type Props = {
     headerStyle?: StyleProp<ViewStyle>
     headerOpenedStyle?: ViewStyle
     headerClosedStyle?: ViewStyle
-    chevronContainerStyle?: StyleProp<
-        Animated.AnimateStyle<StyleProp<ViewStyle>>
-    >
+    chevronContainerStyle?: StyleProp<Animated.AnimateStyle<StyleProp<ViewStyle>>>
     bodyComponent: React.ReactNode
     defaultIsOpen?: boolean
     extraData: number
@@ -42,9 +40,7 @@ export const BaseAccordion = ({
     const open = useSharedValue(false)
     const height = useSharedValue(0)
 
-    const progress = useDerivedValue(() =>
-        open.value ? withTiming(1) : withTiming(0),
-    )
+    const progress = useDerivedValue(() => (open.value ? withTiming(1) : withTiming(0)))
 
     const progress1 = useDerivedValue(() => withTiming(extraData))
 
@@ -78,12 +74,7 @@ export const BaseAccordion = ({
     const renderCollapseIcon = useMemo(() => {
         return (
             <Animated.View style={[dynamicStyle, chevronContainerStyle]}>
-                <BaseIcon
-                    name={"chevron-down"}
-                    color={theme.colors.text}
-                    size={36}
-                    testID={"chevron"}
-                />
+                <BaseIcon name={"chevron-down"} color={theme.colors.text} size={36} testID={"chevron"} />
             </Animated.View>
         )
     }, [dynamicStyle, chevronContainerStyle, theme])
@@ -101,18 +92,12 @@ export const BaseAccordion = ({
     return (
         <>
             <Pressable onPress={onHeaderPress}>
-                <Animated.View
-                    style={[
-                        styles.headerContainer,
-                        headerStyle,
-                        computedHeaderStyle,
-                    ]}>
+                <Animated.View style={[styles.headerContainer, headerStyle, computedHeaderStyle]}>
                     {headerComponent}
                     {renderCollapseIcon}
                 </Animated.View>
             </Pressable>
-            <Animated.View
-                style={[styles.bodyContainer, bodyContainerDynamicStyle]}>
+            <Animated.View style={[styles.bodyContainer, bodyContainerDynamicStyle]}>
                 <View ref={aref} style={styles.bodyContent} collapsable={false}>
                     {bodyComponent}
                 </View>

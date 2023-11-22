@@ -3,12 +3,7 @@ import Lottie from "lottie-react-native"
 import React, { useCallback, useEffect, useMemo, useState } from "react"
 import { StyleSheet } from "react-native"
 import { BlePairingDark } from "~Assets"
-import {
-    useAnalyticTracking,
-    useBottomSheetModal,
-    useLedger,
-    useSendTransaction,
-} from "~Hooks"
+import { useAnalyticTracking, useBottomSheetModal, useLedger, useSendTransaction } from "~Hooks"
 import {
     BackButtonHeader,
     BaseButton,
@@ -23,12 +18,7 @@ import {
     StepsProgressBar,
     useWalletConnect,
 } from "~Components"
-import {
-    RootStackParamListDiscover,
-    RootStackParamListHome,
-    RootStackParamListSwitch,
-    Routes,
-} from "~Navigation"
+import { RootStackParamListHome, RootStackParamListSwitch, Routes } from "~Navigation"
 import {
     addPendingDappTransactionActivity,
     addPendingNFTtransferTransactionActivity,
@@ -47,12 +37,7 @@ import { ActivityType } from "~Model"
 import { LedgerConfig } from "~Utils/LedgerUtils/LedgerUtils"
 import { useInAppBrowser } from "~Components/Providers/InAppBrowserProvider"
 
-type Props = NativeStackScreenProps<
-    RootStackParamListHome &
-        RootStackParamListDiscover &
-        RootStackParamListSwitch,
-    Routes.LEDGER_SIGN_TRANSACTION
->
+type Props = NativeStackScreenProps<RootStackParamListHome & RootStackParamListSwitch, Routes.LEDGER_SIGN_TRANSACTION>
 
 enum SignSteps {
     CONNECTING = 0,
@@ -62,13 +47,7 @@ enum SignSteps {
 }
 
 export const LedgerSignTransaction: React.FC<Props> = ({ route }) => {
-    const {
-        accountWithDevice,
-        transaction,
-        initialRoute,
-        dappRequest,
-        delegationSignature,
-    } = route.params
+    const { accountWithDevice, transaction, initialRoute, dappRequest, delegationSignature } = route.params
 
     const nav = useNavigation()
     const track = useAnalyticTracking()
@@ -89,14 +68,7 @@ export const LedgerSignTransaction: React.FC<Props> = ({ route }) => {
         onClose: closeConnectionErrorSheet,
     } = useBottomSheetModal()
 
-    const {
-        appOpen,
-        appConfig,
-        errorCode,
-        withTransport,
-        removeLedger,
-        tryLedgerVerification,
-    } = useLedger({
+    const { appOpen, appConfig, errorCode, withTransport, removeLedger, tryLedgerVerification } = useLedger({
         deviceId: accountWithDevice.device.deviceId,
     })
 
@@ -108,9 +80,7 @@ export const LedgerSignTransaction: React.FC<Props> = ({ route }) => {
 
     const onTransactionSuccess = useCallback(
         (tx: Transaction) => {
-            const activity = ActivityUtils.getActivityTypeFromClause(
-                tx.body.clauses,
-            )
+            const activity = ActivityUtils.getActivityTypeFromClause(tx.body.clauses)
 
             track(AnalyticsEvent.LEDGER_TX_SENT)
 
@@ -133,14 +103,17 @@ export const LedgerSignTransaction: React.FC<Props> = ({ route }) => {
                         accountType: accountWithDevice.device.type,
                     })
 
-                    if (dappRequest) {
-                        dispatch(
-                            addPendingDappTransactionActivity(
-                                tx,
-                                dappRequest.appName,
-                                dappRequest.appUrl,
-                            ),
-                        )
+                    if (requestEvent) {
+                        const session = activeSessions[requestEvent.topic]
+
+                        if (session) {
+                            const { name, url } = getSessionRequestAttributes(session)
+
+                            dispatch(addPendingDappTransactionActivity(tx, name, url))
+                        }
+                        if (dappRequest) {
+                            dispatch(addPendingDappTransactionActivity(tx, dappRequest.appName, dappRequest.appUrl))
+                        }
                     }
             }
         },
@@ -155,8 +128,7 @@ export const LedgerSignTransaction: React.FC<Props> = ({ route }) => {
 
         if (errorCode) return errorCode
 
-        if (isAwaitingSignature && !signingError)
-            return LEDGER_ERROR_CODES.WAITING_SIGNATURE
+        if (isAwaitingSignature && !signingError) return LEDGER_ERROR_CODES.WAITING_SIGNATURE
     }, [signature, errorCode, isAwaitingSignature, signingError])
 
     const Steps: Step[] = useMemo(
@@ -241,12 +213,7 @@ export const LedgerSignTransaction: React.FC<Props> = ({ route }) => {
      * Sign the transaction when the device is connected and the clauses are enabled
      */
     useEffect(() => {
-        if (
-            !userRejected &&
-            !signature &&
-            appOpen &&
-            appConfig === LedgerConfig.CLAUSE_AND_CONTRACT_ENABLED
-        ) {
+        if (!userRejected && !signature && appOpen && appConfig === LedgerConfig.CLAUSE_AND_CONTRACT_ENABLED) {
             setSigningError(false)
             signTransaction()
         } else {
@@ -295,16 +262,11 @@ export const LedgerSignTransaction: React.FC<Props> = ({ route }) => {
             dispatch(setIsAppLoading(true))
 
             transaction.signature = delegationSignature
-                ? Buffer.concat([
-                      signature,
-                      Buffer.from(delegationSignature, "hex"),
-                  ])
+                ? Buffer.concat([signature, Buffer.from(delegationSignature, "hex")])
                 : signature
 
             const txId = await sendTransaction(transaction)
-            await Haptics.notificationAsync(
-                Haptics.NotificationFeedbackType.Success,
-            )
+            await Haptics.notificationAsync(Haptics.NotificationFeedbackType.Success)
 
             await removeLedger()
 
@@ -335,9 +297,7 @@ export const LedgerSignTransaction: React.FC<Props> = ({ route }) => {
                 text2: LL.ERROR_GENERIC_OPERATION(),
             })
             track(AnalyticsEvent.LEDGER_TX_FAILED_TO_SEND)
-            await Haptics.notificationAsync(
-                Haptics.NotificationFeedbackType.Error,
-            )
+            await Haptics.notificationAsync(Haptics.NotificationFeedbackType.Error)
             if (dappRequest) {
                 nav.goBack()
             }
@@ -391,33 +351,18 @@ export const LedgerSignTransaction: React.FC<Props> = ({ route }) => {
         }
 
         return <></>
-    }, [
-        currentStep,
-        userRejected,
-        isSending,
-        LL,
-        signTransaction,
-        signature,
-        handleOnConfirm,
-    ])
+    }, [currentStep, userRejected, isSending, LL, signTransaction, signature, handleOnConfirm])
 
     return (
         <BaseSafeArea grow={1}>
             <BackButtonHeader beforeNavigating={removeLedger} />
             <BaseView alignItems="flex-start" flexGrow={1} flex={1} mx={20}>
-                <BaseText typographyFont="title">
-                    {LL.SEND_LEDGER_TITLE()}
-                </BaseText>
+                <BaseText typographyFont="title">{LL.SEND_LEDGER_TITLE()}</BaseText>
                 <BaseText typographyFont="body" my={10}>
                     {LL.SEND_LEDGER_TITLE_SB()}
                 </BaseText>
                 <BaseSpacer height={20} />
-                <Lottie
-                    source={BlePairingDark}
-                    autoPlay
-                    loop
-                    style={styles.lottie}
-                />
+                <Lottie source={BlePairingDark} autoPlay loop style={styles.lottie} />
                 <BaseSpacer height={20} />
                 <StepsProgressBar
                     steps={Steps}
@@ -425,12 +370,9 @@ export const LedgerSignTransaction: React.FC<Props> = ({ route }) => {
                     isCurrentStepError={!signature && !!signingError}
                 />
                 <BaseSpacer height={96} />
-                <BaseText typographyFont="bodyBold">
-                    {Steps[currentStep]?.title || LL.SEND_LEDGER_TX_READY()}
-                </BaseText>
+                <BaseText typographyFont="bodyBold">{Steps[currentStep]?.title || LL.SEND_LEDGER_TX_READY()}</BaseText>
                 <BaseText typographyFont="body" mt={8}>
-                    {Steps[currentStep]?.subtitle ||
-                        LL.SEND_LEDGER_TX_READY_SB()}
+                    {Steps[currentStep]?.subtitle || LL.SEND_LEDGER_TX_READY_SB()}
                 </BaseText>
             </BaseView>
             <BottomButton />

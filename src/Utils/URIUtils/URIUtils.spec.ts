@@ -3,21 +3,11 @@ import URIUtils from "./URIUtils"
 describe("URIUtils", () => {
     describe("Compare URLs", function () {
         test("should return true for same URLs", function () {
-            expect(
-                URIUtils.compareURLs(
-                    "https://www.google.com",
-                    "https://www.google.com",
-                ),
-            ).toBe(true)
+            expect(URIUtils.compareURLs("https://www.google.com", "https://www.google.com")).toBe(true)
         })
 
         test("should return false for different URLs", function () {
-            expect(
-                URIUtils.compareURLs(
-                    "https://www.google.com",
-                    "https://www.facebook.com",
-                ),
-            ).toBe(false)
+            expect(URIUtils.compareURLs("https://www.google.com", "https://www.facebook.com")).toBe(false)
         })
 
         describe("Compare world of V DApps", function () {
@@ -41,10 +31,7 @@ describe("URIUtils", () => {
 
             test("should return false for other different DApps", function () {
                 expect(
-                    URIUtils.compareURLs(
-                        "https://vereapers.worldofv.art/#/",
-                        "https://corgi-gang.worldofv.art/#/",
-                    ),
+                    URIUtils.compareURLs("https://vereapers.worldofv.art/#/", "https://corgi-gang.worldofv.art/#/"),
                 ).toBe(false)
             })
         })
@@ -52,52 +39,39 @@ describe("URIUtils", () => {
 
     describe("Clean URLs", function () {
         test("should return clean URL - no trailing slash", function () {
-            expect(URIUtils.clean("https://www.google.com")).toBe(
-                "https://www.google.com",
-            )
+            expect(URIUtils.clean("https://www.google.com")).toBe("https://www.google.com")
         })
 
         test("should return clean URL - trailing slash", function () {
-            expect(URIUtils.clean("https://www.google.com/")).toBe(
-                "https://www.google.com",
-            )
+            expect(URIUtils.clean("https://www.google.com/")).toBe("https://www.google.com")
         })
 
         test("should return clean URL - paths", function () {
-            expect(URIUtils.clean("https://www.google.com/search")).toBe(
-                "https://www.google.com/search",
-            )
+            expect(URIUtils.clean("https://www.google.com/search")).toBe("https://www.google.com/search")
         })
 
         test("should return clean URL - paths with trailing slash", function () {
-            expect(URIUtils.clean("https://www.google.com/search/")).toBe(
-                "https://www.google.com/search",
-            )
+            expect(URIUtils.clean("https://www.google.com/search/")).toBe("https://www.google.com/search")
         })
     })
 
     describe("To Websocket URL", function () {
         test("should return websocket URL - suffix ", function () {
-            expect(
-                URIUtils.toWebsocketURL(
-                    "https://www.google.com",
-                    "/subscriptions/beat2",
-                ),
-            ).toBe("wss://www.google.com/subscriptions/beat2")
+            expect(URIUtils.toWebsocketURL("https://www.google.com", "/subscriptions/beat2")).toBe(
+                "wss://www.google.com/subscriptions/beat2",
+            )
         })
 
         test("should return websocket URL - no suffix", function () {
-            expect(URIUtils.toWebsocketURL("https://www.google.com")).toBe(
-                "wss://www.google.com",
-            )
+            expect(URIUtils.toWebsocketURL("https://www.google.com")).toBe("wss://www.google.com")
         })
     })
 
     describe("toNodeBeatWebsocketUrl", function () {
         test("should return  the node beat websocket URL", function () {
-            expect(
-                URIUtils.toNodeBeatWebsocketUrl("https://www.google.com"),
-            ).toBe("wss://www.google.com/subscriptions/beat2")
+            expect(URIUtils.toNodeBeatWebsocketUrl("https://www.google.com")).toBe(
+                "wss://www.google.com/subscriptions/beat2",
+            )
         })
     })
 
@@ -181,17 +155,13 @@ describe("URIUtils", () => {
 
     describe("convertUriToUrl", () => {
         it("should return IPFS URL", () => {
-            expect(URIUtils.convertUriToUrl("ipfs://QmZ1YXJzZS5jb20")).toBe(
-                "https://api.vorj.app/ipfs/QmZ1YXJzZS5jb20",
-            )
+            expect(URIUtils.convertUriToUrl("ipfs://QmZ1YXJzZS5jb20")).toBe("https://api.vorj.app/ipfs/QmZ1YXJzZS5jb20")
         })
 
         it("should return arweave URL", () => {
-            expect(
-                URIUtils.convertUriToUrl(
-                    "ar://QmZ1YXJzZS5jb20?contentType=text/html",
-                ),
-            ).toBe("https://arweave.net/QmZ1YXJzZS5jb20?contentType=text/html")
+            expect(URIUtils.convertUriToUrl("ar://QmZ1YXJzZS5jb20?contentType=text/html")).toBe(
+                "https://arweave.net/QmZ1YXJzZS5jb20?contentType=text/html",
+            )
         })
     })
 })

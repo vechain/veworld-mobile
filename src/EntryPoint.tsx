@@ -1,10 +1,5 @@
 import React, { useEffect } from "react"
-import {
-    AutoLockProvider,
-    BaseStatusBar,
-    ErrorBoundary,
-    useApplicationSecurity,
-} from "~Components"
+import { BaseStatusBar, ErrorBoundary, useApplicationSecurity, AutoLockProvider } from "~Components"
 import { SwitchStack } from "~Navigation"
 import { AppLoader } from "./AppLoader"
 import { AnimatedSplashScreen } from "./AnimatedSplashScreen"
@@ -25,9 +20,7 @@ export const EntryPoint = () => {
             <AutoLockProvider>
                 <AnimatedSplashScreen
                     playAnimation={true}
-                    useFadeOutAnimation={
-                        securityType === SecurityLevelType.SECRET
-                    }>
+                    useFadeOutAnimation={securityType === SecurityLevelType.SECRET}>
                     <AppLoader>
                         <BaseStatusBar />
                         <SwitchStack />

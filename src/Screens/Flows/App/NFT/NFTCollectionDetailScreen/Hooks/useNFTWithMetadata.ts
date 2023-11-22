@@ -13,13 +13,9 @@ import { InteractionManager } from "react-native"
 export const useNFTWithMetadata = (
     collectionAddress: string,
     onEndReachedCalledDuringMomentum: boolean,
-    setEndReachedCalledDuringMomentum: React.Dispatch<
-        React.SetStateAction<boolean>
-    >,
+    setEndReachedCalledDuringMomentum: React.Dispatch<React.SetStateAction<boolean>>,
 ) => {
-    const nftForCollection = useAppSelector(state =>
-        selectNFTsForCollection(state, collectionAddress),
-    )
+    const nftForCollection = useAppSelector(state => selectNFTsForCollection(state, collectionAddress))
 
     const selectedAccount = useAppSelector(selectSelectedAccount)
 
@@ -27,20 +23,12 @@ export const useNFTWithMetadata = (
 
     const { loadNFTsForCollection } = useNFTs()
 
-    const nftNetworkingSideEffects = useAppSelector(
-        selectNftNetworkingSideEffects,
-    )
+    const nftNetworkingSideEffects = useAppSelector(selectNftNetworkingSideEffects)
 
-    const hasNext = useMemo(
-        () => nftForCollection?.pagination.hasNext ?? false,
-        [nftForCollection?.pagination.hasNext],
-    )
+    const hasNext = useMemo(() => nftForCollection?.pagination.hasNext ?? false, [nftForCollection?.pagination.hasNext])
 
     const fetchMoreNFTs = useCallback(async () => {
-        if (
-            onEndReachedCalledDuringMomentum &&
-            !nftNetworkingSideEffects.isLoading
-        ) {
+        if (onEndReachedCalledDuringMomentum && !nftNetworkingSideEffects.isLoading) {
             await fetchWithPagination(
                 nftForCollection?.pagination,
                 nftForCollection?.nfts?.length,

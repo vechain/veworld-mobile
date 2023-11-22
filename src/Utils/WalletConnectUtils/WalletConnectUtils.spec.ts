@@ -1,8 +1,4 @@
-import {
-    PendingRequestTypes,
-    SessionTypes,
-    SignClientTypes,
-} from "@walletconnect/types"
+import { PendingRequestTypes, SessionTypes, SignClientTypes } from "@walletconnect/types"
 import {
     getNetwork,
     getPairAttributes,
@@ -30,8 +26,7 @@ describe("WalletConnectUtils", () => {
                     expiry: 1686759476,
                     id: 1686759172436187,
                     optionalNamespaces: {},
-                    pairingTopic:
-                        "39b9a1788bc80abe3d4bd4c94bfbff873b8d4029dda0de4a65c7ca7dc018e074",
+                    pairingTopic: "39b9a1788bc80abe3d4bd4c94bfbff873b8d4029dda0de4a65c7ca7dc018e074",
                     proposer: {
                         metadata: {
                             name: "Test Name",
@@ -39,8 +34,7 @@ describe("WalletConnectUtils", () => {
                             icons: ["https://example.com/icon.png"],
                             description: "Test Description",
                         },
-                        publicKey:
-                            "f2529989de7d1980d35d65a149fe0373716eff186ea6cb57fe363e82a4e3f119",
+                        publicKey: "f2529989de7d1980d35d65a149fe0373716eff186ea6cb57fe363e82a4e3f119",
                     },
                     relays: [
                         {
@@ -64,9 +58,7 @@ describe("WalletConnectUtils", () => {
                 },
             }
 
-            const attributes = getPairAttributes(
-                proposal as SignClientTypes.EventArguments["session_proposal"],
-            )
+            const attributes = getPairAttributes(proposal as SignClientTypes.EventArguments["session_proposal"])
 
             expect(attributes).toEqual({
                 name: "Test Name",
@@ -86,9 +78,7 @@ describe("WalletConnectUtils", () => {
                 peer: {
                     metadata: {
                         name: "VeWorld Mobile Wallet",
-                        icons: [
-                            "https://avatars.githubusercontent.com/u/37784886",
-                        ],
+                        icons: ["https://avatars.githubusercontent.com/u/37784886"],
                         url: "https://walletconnect.com/",
                     },
                 },
@@ -100,9 +90,7 @@ describe("WalletConnectUtils", () => {
                 url: "https://walletconnect.com/",
             }
 
-            const attributes = getSessionRequestAttributes(
-                sessionRequest as SessionTypes.Struct,
-            )
+            const attributes = getSessionRequestAttributes(sessionRequest as SessionTypes.Struct)
 
             expect(attributes).toEqual(expectedAttributes)
         })
@@ -121,9 +109,7 @@ describe("WalletConnectUtils", () => {
                 topic: "eventTopic",
             }
 
-            const attributes = getRequestEventAttributes(
-                requestEvent as PendingRequestTypes.Struct,
-            )
+            const attributes = getRequestEventAttributes(requestEvent as PendingRequestTypes.Struct)
 
             expect(attributes).toEqual({
                 chainId: "VECHAIN",
@@ -160,8 +146,7 @@ describe("WalletConnectUtils", () => {
         })
 
         it("should return false for a URI with incorrect version", () => {
-            const incorrectVersionURI =
-                "wc:topic@1?symKey=key&relay-protocol=protocol"
+            const incorrectVersionURI = "wc:topic@1?symKey=key&relay-protocol=protocol"
 
             const result = validateUri(incorrectVersionURI)
 
@@ -187,10 +172,7 @@ describe("WalletConnectUtils", () => {
             const request = { params: { chainId } }
 
             // Call the function
-            const result = getNetwork(
-                request as PendingRequestTypes.Struct,
-                defaultNets,
-            )
+            const result = getNetwork(request as PendingRequestTypes.Struct, defaultNets)
 
             // Assertion
             expect(result?.type).toEqual(NETWORK_TYPE.MAIN)
@@ -204,10 +186,7 @@ describe("WalletConnectUtils", () => {
             const request = { params: { chainId } }
 
             // Call the function
-            const result = getNetwork(
-                request as PendingRequestTypes.Struct,
-                defaultNets,
-            )
+            const result = getNetwork(request as PendingRequestTypes.Struct, defaultNets)
 
             // Assertion
             expect(result?.type).toEqual(NETWORK_TYPE.TEST)
@@ -221,10 +200,7 @@ describe("WalletConnectUtils", () => {
             const request = { params: { chainId } }
 
             // Call the function
-            const result = getNetwork(
-                request as PendingRequestTypes.Struct,
-                defaultNets,
-            )
+            const result = getNetwork(request as PendingRequestTypes.Struct, defaultNets)
 
             // Assertion
             expect(result?.type).toBeUndefined()
@@ -234,13 +210,12 @@ describe("WalletConnectUtils", () => {
     describe("getTopicFromPairUri", () => {
         it("should return the topic from the pair uri", () => {
             const uri =
+                // eslint-disable-next-line max-len
                 "wc:f806fb3ec5966416231fa4843266c62c325dbc91ed43738c85aff5614001f12d@2?relay-protocol=irn&symKey=a595115e95bb91be8c4659c7cc97379aa519be872dacbd66c9075cb70367342f"
 
             const topic = getTopicFromPairUri(uri)
 
-            expect(topic).toEqual(
-                "f806fb3ec5966416231fa4843266c62c325dbc91ed43738c85aff5614001f12d",
-            )
+            expect(topic).toEqual("f806fb3ec5966416231fa4843266c62c325dbc91ed43738c85aff5614001f12d")
         })
 
         it("should throw an error if the uri is invalid", () => {
@@ -250,9 +225,7 @@ describe("WalletConnectUtils", () => {
         })
     })
 
-    const mockPendingRequest = (
-        params: unknown,
-    ): PendingRequestTypes.Struct => {
+    const mockPendingRequest = (params: unknown): PendingRequestTypes.Struct => {
         return {
             topic: "topic",
             id: 1,
@@ -279,9 +252,7 @@ describe("WalletConnectUtils", () => {
                 signer: "0xf077b491b355E64048cE21E3A6Fc4751eEeA77fa",
             }
 
-            const requestEvent = mockPendingRequest([
-                { options: providedOptions },
-            ])
+            const requestEvent = mockPendingRequest([{ options: providedOptions }])
 
             const extractedOptions = getSignCertOptions(requestEvent)
 
@@ -325,45 +296,32 @@ describe("WalletConnectUtils", () => {
     describe("shouldAutoNavigate", () => {
         it("should return true for a valid WalletConnect route", () => {
             const mockState = (routeName: Routes) => {
-                const navState: NavigationState<ReactNavigation.RootParamList> =
-                    {
-                        key: "key",
-                        index: 0,
-                        routeNames: [],
-                        routes: [
-                            {
-                                key: "key",
-                                // @ts-ignore
-                                name: routeName,
-                            },
-                        ],
-                        type: "type",
-                        stale: false,
-                    }
+                const navState: NavigationState<ReactNavigation.RootParamList> = {
+                    key: "key",
+                    index: 0,
+                    routeNames: [],
+                    routes: [
+                        {
+                            key: "key",
+                            // @ts-ignore
+                            name: routeName,
+                        },
+                    ],
+                    type: "type",
+                    stale: false,
+                }
 
                 return navState
             }
 
-            expect(
-                shouldAutoNavigate(mockState(Routes.CONNECT_APP_SCREEN)),
-            ).toBe(false)
+            expect(shouldAutoNavigate(mockState(Routes.CONNECT_APP_SCREEN))).toBe(false)
 
-            expect(
-                shouldAutoNavigate(
-                    mockState(Routes.CONNECTED_APP_SEND_TRANSACTION_SCREEN),
-                ),
-            ).toBe(false)
+            expect(shouldAutoNavigate(mockState(Routes.CONNECTED_APP_SEND_TRANSACTION_SCREEN))).toBe(false)
 
-            expect(
-                shouldAutoNavigate(
-                    mockState(Routes.CONNECTED_APP_SIGN_CERTIFICATE_SCREEN),
-                ),
-            ).toBe(false)
+            expect(shouldAutoNavigate(mockState(Routes.CONNECTED_APP_SIGN_CERTIFICATE_SCREEN))).toBe(false)
 
             expect(shouldAutoNavigate(mockState(Routes.BUY))).toBe(true)
-            expect(shouldAutoNavigate(mockState(Routes.APP_SECURITY))).toBe(
-                true,
-            )
+            expect(shouldAutoNavigate(mockState(Routes.APP_SECURITY))).toBe(true)
         })
 
         it("should return false for undefined ", () => {

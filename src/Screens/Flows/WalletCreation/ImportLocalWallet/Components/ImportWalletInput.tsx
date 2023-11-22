@@ -35,9 +35,7 @@ const baseStyles = (isError: boolean) => (theme: ColorThemeType) =>
             width: "100%",
             color: theme.colors.text,
             backgroundColor: theme.colors.card,
-            borderColor: isError
-                ? theme.colors.danger
-                : theme.colors.transparent,
+            borderColor: isError ? theme.colors.danger : theme.colors.transparent,
             borderWidth: 1,
             borderRadius: 8,
             paddingVertical: 20,

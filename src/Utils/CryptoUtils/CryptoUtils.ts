@@ -8,10 +8,7 @@ import { IMPORT_TYPE } from "~Model"
 import fastKeystoreDecrypt from "./Helpers/fastKeystoreDecrypt"
 import HexUtils from "~Utils/HexUtils"
 
-const N = Buffer.from(
-    "fffffffffffffffffffffffffffffffebaaedce6af48a03bbfd25e8cd0364141",
-    "hex",
-)
+const N = Buffer.from("fffffffffffffffffffffffffffffffebaaedce6af48a03bbfd25e8cd0364141", "hex")
 const ZERO = Buffer.alloc(32, 0)
 
 const xPubFromHdNode = (hdNode: HDNode): XPub => {
@@ -22,10 +19,7 @@ const xPubFromHdNode = (hdNode: HDNode): XPub => {
 }
 
 const hdNodeFromXPub = (xPub: XPub) => {
-    return HDNode.fromPublicKey(
-        Buffer.from(xPub.publicKey, "hex"),
-        Buffer.from(xPub.chainCode, "hex"),
-    )
+    return HDNode.fromPublicKey(Buffer.from(xPub.publicKey, "hex"), Buffer.from(xPub.chainCode, "hex"))
 }
 
 //Alternative to `Math.random()` that returns a cryptographically secure random number
@@ -78,19 +72,13 @@ function decryptState(data: string, key: string) {
     return txtToString
 }
 
-const decryptKeystoreFile = async (
-    ks: Keystore | string,
-    key: string,
-): Promise<string> => {
+const decryptKeystoreFile = async (ks: Keystore | string, key: string): Promise<string> => {
     try {
         const keystore: Keystore = typeof ks === "string" ? JSON.parse(ks) : ks
         if (!Keystore.wellFormed(keystore)) throw Error("Invalid keystore")
 
         // const pk = await Keystore.decrypt(keystore, key)
-        const keystoreAccount = await fastKeystoreDecrypt(
-            JSON.stringify(keystore),
-            key,
-        )
+        const keystoreAccount = await fastKeystoreDecrypt(JSON.stringify(keystore), key)
         return HexUtils.removePrefix(keystoreAccount.privateKey)
     } catch (err) {
         error("Error decrypting keystore", err)
@@ -114,12 +102,7 @@ const isValidPrivateKey = (rawImportData: string): boolean => {
     if (HexUtils.isInvalid(rawImportData)) return false
 
     const key = Buffer.from(HexUtils.removePrefix(rawImportData), "hex")
-    return (
-        Buffer.isBuffer(key) &&
-        key.length === 32 &&
-        !key.equals(ZERO) &&
-        key.compare(N) < 0
-    )
+    return Buffer.isBuffer(key) && key.length === 32 && !key.equals(ZERO) && key.compare(N) < 0
 }
 
 const isValidKeystoreFile = (fileContent: string): boolean => {
@@ -134,8 +117,7 @@ const isValidKeystoreFile = (fileContent: string): boolean => {
 const determineKeyImportType = (rawImportData: string): IMPORT_TYPE => {
     if (!rawImportData) return IMPORT_TYPE.UNKNOWN
 
-    if (Mnemonic.validate(mnemonicStringToArray(rawImportData)))
-        return IMPORT_TYPE.MNEMONIC
+    if (Mnemonic.validate(mnemonicStringToArray(rawImportData))) return IMPORT_TYPE.MNEMONIC
     if (isValidPrivateKey(rawImportData)) return IMPORT_TYPE.PRIVATE_KEY
     if (isValidKeystoreFile(rawImportData)) return IMPORT_TYPE.KEYSTORE_FILE
     return IMPORT_TYPE.UNKNOWN

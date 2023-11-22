@@ -27,20 +27,13 @@ type Props = {
  * <BaseCustomTokenIcon tokenAddress="0x1234...5678" tokenSymbol="USDT" style={{ width: 40, height: 40 }} />
  * ```
  */
-export const BaseCustomTokenIcon: React.FC<Props> = ({
-    tokenAddress,
-    tokenSymbol,
-    style,
-    testID,
-}) => {
+export const BaseCustomTokenIcon: React.FC<Props> = ({ tokenAddress, tokenSymbol, style, testID }) => {
     const [iconColor, isColorLight] = useMemo(() => {
         return ColorUtils.generateColor(tokenAddress)
     }, [tokenAddress])
 
     const shortenedTokenSymbol = useMemo(() => {
-        return tokenSymbol.length > 4
-            ? tokenSymbol.substring(0, 4).toUpperCase()
-            : tokenSymbol.toUpperCase()
+        return tokenSymbol.length > 4 ? tokenSymbol.substring(0, 4).toUpperCase() : tokenSymbol.toUpperCase()
     }, [tokenSymbol])
 
     return (

@@ -1,13 +1,6 @@
 import React, { useCallback } from "react"
 import { useCameraBottomSheet } from "~Hooks"
-import {
-    BaseIcon,
-    BaseSpacer,
-    BaseText,
-    BaseTouchable,
-    BaseView,
-    useWalletConnect,
-} from "~Components"
+import { BaseIcon, BaseSpacer, BaseText, BaseTouchable, BaseView, useWalletConnect } from "~Components"
 import { COLORS, ScanTarget } from "~Constants"
 import { useI18nContext } from "~i18n"
 import { StyleSheet } from "react-native"
@@ -42,9 +35,7 @@ export const EmptyListView = () => {
                         borderRadius={16}
                         style={baseStyles.quickNFTActions}>
                         <BaseIcon name="plus" size={55} />
-                        <BaseText
-                            color={COLORS.DARK_PURPLE}
-                            typographyFont="bodyMedium">
+                        <BaseText color={COLORS.DARK_PURPLE} typographyFont="bodyMedium">
                             {LL.ADD_APP()}
                         </BaseText>
                     </BaseView>

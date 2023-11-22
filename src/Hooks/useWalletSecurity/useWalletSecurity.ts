@@ -17,10 +17,7 @@ export const useWalletSecurity = () => {
     const biometrics = useBiometrics()
 
     const walletSecurity = useMemo(() => {
-        if (
-            biometrics?.accessControl &&
-            securityType === SecurityLevelType.BIOMETRIC
-        ) {
+        if (biometrics?.accessControl && securityType === SecurityLevelType.BIOMETRIC) {
             return WalletSecurity.BIO_UNLOCK
         }
 
@@ -31,20 +28,11 @@ export const useWalletSecurity = () => {
         return WalletSecurity.NONE
     }, [biometrics?.accessControl, securityType])
 
-    const isWalletSecurityBiometrics = useMemo(
-        () => walletSecurity === WalletSecurity.BIO_UNLOCK,
-        [walletSecurity],
-    )
+    const isWalletSecurityBiometrics = useMemo(() => walletSecurity === WalletSecurity.BIO_UNLOCK, [walletSecurity])
 
-    const isWalletSecurityPassword = useMemo(
-        () => walletSecurity === WalletSecurity.PASS_UNLOCK,
-        [walletSecurity],
-    )
+    const isWalletSecurityPassword = useMemo(() => walletSecurity === WalletSecurity.PASS_UNLOCK, [walletSecurity])
 
-    const isWalletSecurityNone = useMemo(
-        () => walletSecurity === WalletSecurity.NONE,
-        [walletSecurity],
-    )
+    const isWalletSecurityNone = useMemo(() => walletSecurity === WalletSecurity.NONE, [walletSecurity])
 
     return {
         isWalletSecurityBiometrics,

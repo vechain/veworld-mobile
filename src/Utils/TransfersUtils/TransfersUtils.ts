@@ -33,13 +33,8 @@ const getTransfers = async (params: IQueryParams): Promise<TransferLog[]> => {
  * @param params  - The query params
  * @returns {TransferLog[]} - The transfers
  */
-const getVetTransfers = async (
-    params: IQueryParams,
-): Promise<TransferLog[]> => {
-    const transferCriteria = [
-        { sender: params.accountAddress },
-        { recipient: params.accountAddress },
-    ]
+const getVetTransfers = async (params: IQueryParams): Promise<TransferLog[]> => {
+    const transferCriteria = [{ sender: params.accountAddress }, { recipient: params.accountAddress }]
 
     const filter = params.thor.filter("transfer", transferCriteria)
     const transfers = await filter
@@ -62,10 +57,7 @@ const getVetTransfers = async (
             recipient: address.toChecksumed(item.recipient),
             timestamp: item.meta.blockTimestamp,
             index: item.meta.clauseIndex,
-            direction: AddressUtils.compareAddresses(
-                item.sender,
-                params.accountAddress,
-            )
+            direction: AddressUtils.compareAddresses(item.sender, params.accountAddress)
                 ? DIRECTIONS.UP
                 : DIRECTIONS.DOWN,
         }
@@ -78,14 +70,8 @@ const getVetTransfers = async (
  * @param params  - The query params
  * @returns {TransferLog[]} - The transfers
  */
-const getTokenTransfers = async (
-    params: IQueryParams,
-): Promise<TransferLog[]> => {
-    const tokenCriteria = buildEventCriteria(
-        params.thor,
-        [params.token.address],
-        params.accountAddress,
-    )
+const getTokenTransfers = async (params: IQueryParams): Promise<TransferLog[]> => {
+    const tokenCriteria = buildEventCriteria(params.thor, [params.token.address], params.accountAddress)
     const filter = params.thor.filter("event", tokenCriteria)
 
     const events = await filter
@@ -111,10 +97,7 @@ const getTokenTransfers = async (
             recipient: decode.to,
             index: item.meta.clauseIndex,
             timestamp: item.meta.blockTimestamp,
-            direction: AddressUtils.compareAddresses(
-                decode.from,
-                params.accountAddress,
-            )
+            direction: AddressUtils.compareAddresses(decode.from, params.accountAddress)
                 ? DIRECTIONS.UP
                 : DIRECTIONS.DOWN,
         }

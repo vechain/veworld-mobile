@@ -45,10 +45,7 @@ export const isBiometricTooManyAttempts = (error: unknown) => {
     return false
 }
 
-const getPlatformError = (
-    error: object & Record<"code", unknown>,
-    errors: string[],
-) => {
+const getPlatformError = (error: object & Record<"code", unknown>, errors: string[]) => {
     if (PlatformUtils.isIOS()) {
         return errors.some(err => String(error.code).includes(err))
     }

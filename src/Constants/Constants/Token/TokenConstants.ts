@@ -1,3 +1,4 @@
+/* eslint-disable max-len */
 import { FungibleToken, Network } from "~Model"
 import { defaultMainNetwork } from "../Thor/ThorConstants"
 

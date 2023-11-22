@@ -9,24 +9,15 @@ type Props<T> = {
     loader: (payload: T) => Promise<void>
 }
 
-export const useLazyLoader = <T extends WithID & MetadataUpdated>({
-    payload,
-    loader,
-}: Props<T>) => {
+export const useLazyLoader = <T extends WithID & MetadataUpdated>({ payload, loader }: Props<T>) => {
     const [triggerRefresh, setTriggerRefresh] = useState(0)
-    const metadataLoading = useRef(
-        new Map<string, { isLoading: boolean; count: number }>(),
-    )
+    const metadataLoading = useRef(new Map<string, { isLoading: boolean; count: number }>())
 
     const triggerLoader = useCallback(
         async (item: T) => {
             if (item.updated) return
             const loadingStatus = metadataLoading.current.get(item.id)
-            if (
-                loadingStatus &&
-                (loadingStatus.isLoading || loadingStatus.count > MAX_RETRIES)
-            )
-                return
+            if (loadingStatus && (loadingStatus.isLoading || loadingStatus.count > MAX_RETRIES)) return
 
             const newStatus = {
                 isLoading: true,

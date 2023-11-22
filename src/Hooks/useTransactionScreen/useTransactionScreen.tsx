@@ -12,12 +12,7 @@ import {
     useTransactionGas,
 } from "~Hooks"
 import { useI18nContext } from "~i18n"
-import {
-    selectSelectedAccount,
-    setIsAppLoading,
-    useAppDispatch,
-    useAppSelector,
-} from "~Storage/Redux"
+import { selectSelectedAccount, setIsAppLoading, useAppDispatch, useAppSelector } from "~Storage/Redux"
 import {
     AccountCard,
     BaseCard,
@@ -29,11 +24,7 @@ import {
     showWarningToast,
 } from "~Components"
 import { error } from "~Utils"
-import {
-    DEVICE_TYPE,
-    LedgerAccountWithDevice,
-    TransactionRequest,
-} from "~Model"
+import { DEVICE_TYPE, LedgerAccountWithDevice, TransactionRequest } from "~Model"
 import { DelegationType } from "~Model/Delegation"
 import { Routes } from "~Navigation"
 
@@ -87,8 +78,7 @@ export const useTransactionScreen = ({
         gasFeeOptions,
     } = useRenderGas({
         gas,
-        accountAddress:
-            selectedDelegationAccount?.address ?? selectedAccount.address,
+        accountAddress: selectedDelegationAccount?.address ?? selectedAccount.address,
         clauses,
         isDelegated,
     })
@@ -137,8 +127,7 @@ export const useTransactionScreen = ({
     const signAndSendTransaction = useCallback(
         async (password?: string) => {
             try {
-                const transaction: SignTransactionResponse =
-                    await signTransaction(password)
+                const transaction: SignTransactionResponse = await signTransaction(password)
 
                 switch (transaction) {
                     case SignStatus.NAVIGATE_TO_LEDGER:
@@ -164,13 +153,7 @@ export const useTransactionScreen = ({
                 dispatch(setIsAppLoading(false))
             }
         },
-        [
-            sendTransactionSafe,
-            onTransactionFailure,
-            dispatch,
-            signTransaction,
-            LL,
-        ],
+        [sendTransactionSafe, onTransactionFailure, dispatch, signTransaction, LL],
     )
 
     const {
@@ -186,18 +169,11 @@ export const useTransactionScreen = ({
     })
 
     const onSubmit = useCallback(async () => {
-        if (
-            selectedAccount.device.type === DEVICE_TYPE.LEDGER &&
-            selectedDelegationOption !== DelegationType.ACCOUNT
-        ) {
+        if (selectedAccount.device.type === DEVICE_TYPE.LEDGER && selectedDelegationOption !== DelegationType.ACCOUNT) {
             const tx = buildTransaction()
 
             try {
-                await navigateToLedger(
-                    tx,
-                    selectedAccount as LedgerAccountWithDevice,
-                    undefined,
-                )
+                await navigateToLedger(tx, selectedAccount as LedgerAccountWithDevice, undefined)
             } catch (e) {
                 error("onSubmit:navigateToLedger", e)
                 onTransactionFailure(e)
@@ -215,9 +191,7 @@ export const useTransactionScreen = ({
     ])
 
     const continueNotAllowed = useMemo(
-        () =>
-            !isThereEnoughGas &&
-            selectedDelegationOption !== DelegationType.URL,
+        () => !isThereEnoughGas && selectedDelegationOption !== DelegationType.URL,
         [isThereEnoughGas, selectedDelegationOption],
     )
 

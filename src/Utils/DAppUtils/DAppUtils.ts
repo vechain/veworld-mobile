@@ -1,6 +1,4 @@
-const isValidTxMessage = (
-    message: unknown,
-): message is Connex.Vendor.TxMessage => {
+const isValidTxMessage = (message: unknown): message is Connex.Vendor.TxMessage => {
     if (!Array.isArray(message)) {
         return false
     }
@@ -30,15 +28,8 @@ const isValidTxMessage = (
     return true
 }
 
-const isValidCertMessage = (
-    message: unknown,
-): message is Connex.Vendor.CertMessage => {
-    if (
-        message === null ||
-        message === undefined ||
-        typeof message !== "object" ||
-        Array.isArray(message)
-    ) {
+const isValidCertMessage = (message: unknown): message is Connex.Vendor.CertMessage => {
+    if (message === null || message === undefined || typeof message !== "object" || Array.isArray(message)) {
         return false
     }
 
@@ -48,10 +39,7 @@ const isValidCertMessage = (
         return false
     }
 
-    if (
-        _message.purpose !== "identification" &&
-        _message.purpose !== "agreement"
-    ) {
+    if (_message.purpose !== "identification" && _message.purpose !== "agreement") {
         return false
     }
 

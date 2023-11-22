@@ -15,10 +15,7 @@ type Props = {
      */
     selectedButtonIds: string[]
     disabled?: boolean
-    renderButton?: (
-        button: BaseButtonGroupHorizontalType,
-        textColor: string,
-    ) => React.ReactNode
+    renderButton?: (button: BaseButtonGroupHorizontalType, textColor: string) => React.ReactNode
 }
 
 export const BaseButtonGroupHorizontal = ({
@@ -69,10 +66,7 @@ export const BaseButtonGroupHorizontal = ({
     )
 
     return (
-        <BaseView
-            flexDirection="row"
-            alignItems="stretch"
-            style={styles.backgroundStyle}>
+        <BaseView flexDirection="row" alignItems="stretch" style={styles.backgroundStyle}>
             {buttons.map((button, _) => {
                 const { id, label, disabled, icon } = button
                 const disabledStatus = disableAllButtons || disabled
@@ -81,11 +75,7 @@ export const BaseButtonGroupHorizontal = ({
                 const textColor = calculateTextColor(selected, disabledStatus)
 
                 return (
-                    <BaseView
-                        key={id}
-                        bg={bgColor}
-                        style={styles.buttonStyle}
-                        flex={1}>
+                    <BaseView key={id} bg={bgColor} style={styles.buttonStyle} flex={1}>
                         <TouchableOpacity
                             testID={`button-${id}`}
                             style={styles.pressable}
@@ -94,21 +84,9 @@ export const BaseButtonGroupHorizontal = ({
                             {renderButton ? (
                                 renderButton(button, textColor)
                             ) : (
-                                <BaseView
-                                    justifyContent="center"
-                                    alignItems="center"
-                                    flexDirection="row">
-                                    {icon && (
-                                        <BaseIcon
-                                            size={18}
-                                            name={icon}
-                                            color={textColor}
-                                        />
-                                    )}
-                                    <BaseText
-                                        color={textColor}
-                                        typographyFont="buttonPrimary"
-                                        px={5}>
+                                <BaseView justifyContent="center" alignItems="center" flexDirection="row">
+                                    {icon && <BaseIcon size={18} name={icon} color={textColor} />}
+                                    <BaseText color={textColor} typographyFont="buttonPrimary" px={5}>
                                         {label}
                                     </BaseText>
                                 </BaseView>

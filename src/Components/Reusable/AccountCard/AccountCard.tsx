@@ -3,21 +3,9 @@ import { StyleProp, StyleSheet, ViewStyle } from "react-native"
 import { useThemedStyles } from "~Hooks"
 import { ColorThemeType, VET, VTHO } from "~Constants"
 import { FormattingUtils } from "~Utils"
-import {
-    AccountIcon,
-    BaseIcon,
-    BaseSpacer,
-    BaseText,
-    BaseTouchableBox,
-    BaseView,
-    LedgerBadge,
-} from "~Components"
+import { AccountIcon, BaseIcon, BaseSpacer, BaseText, BaseTouchableBox, BaseView, LedgerBadge } from "~Components"
 import { AccountWithDevice, DEVICE_TYPE } from "~Model"
-import {
-    selectVetBalanceByAccount,
-    selectVthoBalanceByAccount,
-    useAppSelector,
-} from "~Storage/Redux"
+import { selectVetBalanceByAccount, selectVthoBalanceByAccount, useAppSelector } from "~Storage/Redux"
 
 type Props = {
     account: AccountWithDevice
@@ -41,12 +29,8 @@ export const AccountCard: React.FC<Props> = memo(
         isBalanceVisible = true,
     }: Props) => {
         const { styles, theme } = useThemedStyles(baseStyles)
-        const vetBalance = useAppSelector(state =>
-            selectVetBalanceByAccount(state, account.address),
-        )
-        const vthoBalance = useAppSelector(state =>
-            selectVthoBalanceByAccount(state, account.address),
-        )
+        const vetBalance = useAppSelector(state => selectVetBalanceByAccount(state, account.address))
+        const vthoBalance = useAppSelector(state => selectVthoBalanceByAccount(state, account.address))
 
         const balance = useMemo(() => {
             if (!isBalanceVisible && isVthoBalance) {
@@ -57,9 +41,7 @@ export const AccountCard: React.FC<Props> = memo(
                 return "•••• " + VET.symbol
             }
 
-            return `${isVthoBalance ? vthoBalance : vetBalance} ${
-                isVthoBalance ? VTHO.symbol : VET.symbol
-            }`
+            return `${isVthoBalance ? vthoBalance : vetBalance} ${isVthoBalance ? VTHO.symbol : VET.symbol}`
         }, [isBalanceVisible, isVthoBalance, vetBalance, vthoBalance])
 
         return (
@@ -70,10 +52,7 @@ export const AccountCard: React.FC<Props> = memo(
                     action={() => onPress?.(account)}
                     justifyContent="space-between"
                     showOpacityWhenDisabled={showOpacityWhenDisabled}
-                    containerStyle={[
-                        styles.container,
-                        selected ? styles.selectedContainer : {},
-                    ]}>
+                    containerStyle={[styles.container, selected ? styles.selectedContainer : {}]}>
                     <BaseView flexDirection="row" flex={1} pr={10}>
                         <AccountIcon address={account.address} />
                         <BaseSpacer width={12} />
@@ -82,15 +61,9 @@ export const AccountCard: React.FC<Props> = memo(
                                 {account.alias}
                             </BaseText>
                             <BaseView flexDirection="row" mt={3}>
-                                {account.device?.type ===
-                                    DEVICE_TYPE.LEDGER && (
-                                    <LedgerBadge mr={8} />
-                                )}
+                                {account.device?.type === DEVICE_TYPE.LEDGER && <LedgerBadge mr={8} />}
                                 <BaseView flex={1}>
-                                    <BaseText
-                                        style={styles.wallet}
-                                        ellipsizeMode="tail"
-                                        numberOfLines={1}>
+                                    <BaseText style={styles.wallet} ellipsizeMode="tail" numberOfLines={1}>
                                         {account.device.alias}
                                     </BaseText>
                                 </BaseView>
@@ -99,20 +72,12 @@ export const AccountCard: React.FC<Props> = memo(
                     </BaseView>
                     {showSelectAccountIcon ? (
                         <BaseView style={styles.rightSubContainer}>
-                            <BaseIcon
-                                color={theme.colors.text}
-                                size={24}
-                                name={"chevron-right"}
-                            />
+                            <BaseIcon color={theme.colors.text} size={24} name={"chevron-right"} />
                         </BaseView>
                     ) : (
                         <BaseView style={styles.rightSubContainer}>
                             <BaseText style={styles.address} fontSize={10}>
-                                {FormattingUtils.humanAddress(
-                                    account.address,
-                                    4,
-                                    6,
-                                )}
+                                {FormattingUtils.humanAddress(account.address, 4, 6)}
                             </BaseText>
                             <BaseSpacer height={4} />
                             <BaseText fontSize={10}>{balance}</BaseText>

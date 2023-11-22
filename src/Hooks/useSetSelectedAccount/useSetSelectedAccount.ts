@@ -1,9 +1,4 @@
-import {
-    selectSelectedAccountOrNull,
-    setSelectedAccount,
-    useAppDispatch,
-    useAppSelector,
-} from "~Storage/Redux"
+import { selectSelectedAccountOrNull, setSelectedAccount, useAppDispatch, useAppSelector } from "~Storage/Redux"
 import { useResetStacks } from "./useResetStacks"
 import { AddressUtils } from "~Utils"
 

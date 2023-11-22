@@ -9,16 +9,13 @@ export const filterNFTTransferEvents = (
     transfers.filter(
         t =>
             t.eventType === EventTypeResponse.NFT &&
-            !blackListedCollections
-                .map(c => c.address)
-                .includes(t.tokenAddress),
+            !blackListedCollections.map(c => c.address).includes(t.tokenAddress),
     )
 
 export const filterTransferEventsByType = (
     transfers: IncomingTransferResponse[],
     eventType: EventTypeResponse,
-): IncomingTransferResponse[] =>
-    transfers.filter(t => t.eventType === eventType)
+): IncomingTransferResponse[] => transfers.filter(t => t.eventType === eventType)
 
 export interface InvolvedAcct {
     account: AccountWithDevice
@@ -41,18 +38,12 @@ export const findFirstInvolvedAccount = (
     let foundAccount: InvolvedAcct | undefined
 
     if (priorityAccount) {
-        foundAccount = findFirstAccountInTransferResponse(
-            [priorityAccount],
-            decodedTransfer,
-        )
+        foundAccount = findFirstAccountInTransferResponse([priorityAccount], decodedTransfer)
     }
 
     // If priority account was not found or not provided, check all accounts
     if (!foundAccount) {
-        foundAccount = findFirstAccountInTransferResponse(
-            visibleAccounts,
-            decodedTransfer,
-        )
+        foundAccount = findFirstAccountInTransferResponse(visibleAccounts, decodedTransfer)
     }
 
     return foundAccount

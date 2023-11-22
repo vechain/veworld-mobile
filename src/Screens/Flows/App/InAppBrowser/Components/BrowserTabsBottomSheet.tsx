@@ -8,10 +8,7 @@ type Props = {
     onClose: () => void
 }
 
-export const BrowserTabsBottomSheet = React.forwardRef<
-    BottomSheetModalMethods,
-    Props
->(({}, ref) => {
+export const BrowserTabsBottomSheet = React.forwardRef<BottomSheetModalMethods, Props>(({}, ref) => {
     const { LL } = useI18nContext()
 
     const snapPoints = useMemo(() => {
@@ -20,20 +17,10 @@ export const BrowserTabsBottomSheet = React.forwardRef<
 
     return (
         <BaseBottomSheet snapPoints={snapPoints} ref={ref}>
-            <BaseView
-                w={100}
-                h={100}
-                flexGrow={1}
-                justifyContent="space-between">
+            <BaseView w={100} h={100} flexGrow={1} justifyContent="space-between">
                 <BaseView>
-                    <BaseView
-                        flexDirection="row"
-                        justifyContent="space-between"
-                        w={100}
-                        alignItems="center">
-                        <BaseText typographyFont="subTitleBold">
-                            {LL.BROWSER_TAB_MANAGEMENT_TITLE()}
-                        </BaseText>
+                    <BaseView flexDirection="row" justifyContent="space-between" w={100} alignItems="center">
+                        <BaseText typographyFont="subTitleBold">{LL.BROWSER_TAB_MANAGEMENT_TITLE()}</BaseText>
                     </BaseView>
                 </BaseView>
             </BaseView>

@@ -16,10 +16,8 @@ type Props = {
 
 export const useDelegation = ({ providedUrl, setGasPayer }: Props) => {
     const account = useAppSelector(selectSelectedAccount)
-    const [selectedDelegationOption, setSelectedDelegationOption] =
-        useState<DelegationType>(DelegationType.NONE)
-    const [selectedDelegationAccount, setSelectedDelegationAccount] =
-        useState<LocalAccountWithDevice>()
+    const [selectedDelegationOption, setSelectedDelegationOption] = useState<DelegationType>(DelegationType.NONE)
+    const [selectedDelegationAccount, setSelectedDelegationAccount] = useState<LocalAccountWithDevice>()
     const [selectedDelegationUrl, setSelectedDelegationUrl] = useState<string>()
     const isDelegated = selectedDelegationOption !== DelegationType.NONE
     const defaultDelegationOption = useAppSelector(getDefaultDelegationOption)
@@ -36,10 +34,7 @@ export const useDelegation = ({ providedUrl, setGasPayer }: Props) => {
         if (providedUrl) {
             setSelectedDelegationOption(DelegationType.URL)
             handleSetSelectedDelegationUrl(providedUrl)
-        } else if (
-            defaultDelegationOption === DelegationType.URL &&
-            defaultDelegationUrl
-        ) {
+        } else if (defaultDelegationOption === DelegationType.URL && defaultDelegationUrl) {
             setSelectedDelegationOption(defaultDelegationOption)
             handleSetSelectedDelegationUrl(defaultDelegationUrl)
         } else if (defaultDelegationOption === DelegationType.ACCOUNT) {
@@ -49,9 +44,7 @@ export const useDelegation = ({ providedUrl, setGasPayer }: Props) => {
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [providedUrl])
 
-    const handleSetSelectedDelegationAccount = (
-        selectedAccount: AccountWithDevice,
-    ) => {
+    const handleSetSelectedDelegationAccount = (selectedAccount: AccountWithDevice) => {
         if (selectedAccount.device.type === DEVICE_TYPE.LEDGER) return
 
         setSelectedDelegationAccount(selectedAccount as LocalAccountWithDevice)

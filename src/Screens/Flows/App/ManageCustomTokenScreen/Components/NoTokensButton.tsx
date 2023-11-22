@@ -24,15 +24,8 @@ export const NoTokensButton: React.FC<Props> = ({ onPress }) => {
                 w={40}
                 h={75}>
                 <BaseView alignItems="center" pt={10}>
-                    <BaseIcon
-                        size={32}
-                        name="arrow-down"
-                        color={COLORS.DARK_PURPLE}
-                    />
-                    <BaseText
-                        py={10}
-                        typographyFont="bodyMedium"
-                        color={COLORS.DARK_PURPLE}>
+                    <BaseIcon size={32} name="arrow-down" color={COLORS.DARK_PURPLE} />
+                    <BaseText py={10} typographyFont="bodyMedium" color={COLORS.DARK_PURPLE}>
                         {LL.MANAGE_CUSTOM_TOKENS_RECEIVE_TOKENS()}
                     </BaseText>
                 </BaseView>

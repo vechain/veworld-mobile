@@ -2,10 +2,7 @@ import React, { useMemo } from "react"
 import { StyleSheet } from "react-native"
 import { BaseIcon, BaseView } from "~Components"
 import { useTheme } from "~Hooks"
-import {
-    DISCOVER_HOME_URL,
-    useInAppBrowser,
-} from "~Components/Providers/InAppBrowserProvider"
+import { DISCOVER_HOME_URL, useInAppBrowser } from "~Components/Providers/InAppBrowserProvider"
 import { ColorThemeType } from "~Constants"
 import { selectBookmarks, useAppSelector } from "~Storage/Redux"
 
@@ -14,27 +11,15 @@ type IBrowserBottomBar = {
     onFavouriteClick: () => void
 }
 
-export const BrowserBottomBar: React.FC<IBrowserBottomBar> = ({
-    onTabClick,
-    onFavouriteClick,
-}) => {
-    const {
-        canGoBack,
-        canGoForward,
-        goBack,
-        goForward,
-        goHome,
-        navigationState,
-    } = useInAppBrowser()
+export const BrowserBottomBar: React.FC<IBrowserBottomBar> = ({ onTabClick, onFavouriteClick }) => {
+    const { canGoBack, canGoForward, goBack, goForward, goHome, navigationState } = useInAppBrowser()
     const theme = useTheme()
     const styles = createStyles(theme)
 
     const bookmarks = useAppSelector(selectBookmarks)
 
     const isBookMarked = useMemo(() => {
-        return (
-            !!navigationState?.url && bookmarks.includes(navigationState?.url)
-        )
+        return !!navigationState?.url && bookmarks.includes(navigationState?.url)
     }, [navigationState?.url, bookmarks])
 
     return (
@@ -70,12 +55,7 @@ export const BrowserBottomBar: React.FC<IBrowserBottomBar> = ({
                 style={styles.icon}
             />
 
-            <BaseIcon
-                name={"tab"}
-                onPress={onTabClick}
-                color={theme.colors.primary}
-                style={styles.icon}
-            />
+            <BaseIcon name={"tab"} onPress={onTabClick} color={theme.colors.primary} style={styles.icon} />
         </BaseView>
     )
 }

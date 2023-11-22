@@ -39,8 +39,7 @@ export const nftItemsPerContract = [
         owner: "0xf077b491b355e64048ce21e3a6fc4751eeea77fa",
         txId: "0x0f882e24d1e24b3f5811d7b2c6caceca700129ef1b9128aa3ab1975778751b26",
         blockNumber: 15389140,
-        blockId:
-            "0x00ead1d4aea9ddb6dc722f10cef25aefcfaac4338bc66e011d21520abc719146",
+        blockId: "0x00ead1d4aea9ddb6dc722f10cef25aefcfaac4338bc66e011d21520abc719146",
         blockTimestamp: 1684415400,
     },
     {
@@ -50,8 +49,7 @@ export const nftItemsPerContract = [
         owner: "0xf077b491b355e64048ce21e3a6fc4751eeea77fa",
         txId: "0xdfc6d84591c37005ab75823eda8d911f023eb4750521071dba3b9d24814d87af",
         blockNumber: 15389181,
-        blockId:
-            "0x00ead1fd093b0937f60bf2b5b980c3de7a9f6408a86156ed34ae1cb03fb96bc1",
+        blockId: "0x00ead1fd093b0937f60bf2b5b980c3de7a9f6408a86156ed34ae1cb03fb96bc1",
         blockTimestamp: 1684415810,
     },
     {
@@ -61,8 +59,7 @@ export const nftItemsPerContract = [
         owner: "0xf077b491b355e64048ce21e3a6fc4751eeea77fa",
         txId: "0xdfc6d84591c37005ab75823eda8d911f023eb4750521071dba3b9d24814d87af",
         blockNumber: 15389181,
-        blockId:
-            "0x00ead1fd093b0937f60bf2b5b980c3de7a9f6408a86156ed34ae1cb03fb96bc1",
+        blockId: "0x00ead1fd093b0937f60bf2b5b980c3de7a9f6408a86156ed34ae1cb03fb96bc1",
         blockTimestamp: 1684415810,
     },
 ]

@@ -1,14 +1,7 @@
 import React, { memo, useMemo } from "react"
 import { StyleSheet, View, ViewProps } from "react-native"
 
-import {
-    AlignItems,
-    AlignSelf,
-    FlexWrap,
-    FlexDirection,
-    JustifyContent,
-    ColorThemeType,
-} from "~Constants"
+import { AlignItems, AlignSelf, FlexWrap, FlexDirection, JustifyContent, ColorThemeType } from "~Constants"
 import { useThemedStyles } from "~Hooks"
 
 export type BaseViewProps = {

@@ -14,9 +14,7 @@ import { usePagination } from "../usePagination"
 
 export const useFetchCollections = (
     onEndReachedCalledDuringMomentum: boolean,
-    setEndReachedCalledDuringMomentum: React.Dispatch<
-        React.SetStateAction<boolean>
-    >,
+    setEndReachedCalledDuringMomentum: React.Dispatch<React.SetStateAction<boolean>>,
 ) => {
     const { loadCollections } = useNFTCollections()
     const { fetchWithPagination } = usePagination()
@@ -25,20 +23,14 @@ export const useFetchCollections = (
     const allNFTCollections = useAppSelector(selectAllNFTCollections)
     const nftCollections = useAppSelector(selectNftCollections)
 
-    const nftNetworkingSideEffects = useAppSelector(
-        selectNftNetworkingSideEffects,
-    )
+    const nftNetworkingSideEffects = useAppSelector(selectNftNetworkingSideEffects)
 
     const hasNext = useMemo(
         () =>
             !allNFTCollections?.pagination.totalElements ||
-            (allNFTCollections?.collections.length ?? 0) <
-                allNFTCollections?.pagination.totalElements,
+            (allNFTCollections?.collections.length ?? 0) < allNFTCollections?.pagination.totalElements,
 
-        [
-            allNFTCollections?.collections.length,
-            allNFTCollections?.pagination.totalElements,
-        ],
+        [allNFTCollections?.collections.length, allNFTCollections?.pagination.totalElements],
     )
 
     useEffect(() => {
@@ -48,10 +40,7 @@ export const useFetchCollections = (
     }, [network.type, registryInfo, loadCollections, allNFTCollections])
 
     const fetchMoreCollections = useCallback(async () => {
-        if (
-            onEndReachedCalledDuringMomentum &&
-            !nftNetworkingSideEffects?.isLoading
-        ) {
+        if (onEndReachedCalledDuringMomentum && !nftNetworkingSideEffects?.isLoading) {
             fetchWithPagination(
                 allNFTCollections?.pagination,
                 allNFTCollections?.collections.length ?? 0,

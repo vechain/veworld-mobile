@@ -1,7 +1,4 @@
-import {
-    isBiometricCanceled,
-    isBiometricTooManyAttempts,
-} from "./BiometricErrors"
+import { isBiometricCanceled, isBiometricTooManyAttempts } from "./BiometricErrors"
 
 describe("isBiometricCanceled", () => {
     it("should return true when error is a custom Error object with iOS cancel message", () => {

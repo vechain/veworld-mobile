@@ -26,9 +26,7 @@ const removePrefix = (hex: string): string => {
  */
 const addPrefix = (hex: string): string => {
     validate(hex)
-    return PREFIX_REGEX.test(hex)
-        ? hex.replace(PREFIX_REGEX, PREFIX)
-        : `${PREFIX}${hex}`
+    return PREFIX_REGEX.test(hex) ? hex.replace(PREFIX_REGEX, PREFIX) : `${PREFIX}${hex}`
 }
 
 /**
@@ -63,9 +61,7 @@ const generateRandom = (size: number): string => {
     const buf = Buffer.alloc(Math.ceil(size / 2))
     const randBuffer = crypto.randomFillSync(buf)
     if (!randBuffer) throw Error("Failed to generate random hex")
-    let _isValid = isValid(
-        `${PREFIX}${randBuffer.toString("hex").substring(0, size)}`,
-    )
+    let _isValid = isValid(`${PREFIX}${randBuffer.toString("hex").substring(0, size)}`)
     if (!_isValid) throw Error("Failed to validate random hex")
     return `${PREFIX}${randBuffer.toString("hex").substring(0, size)}`
 }
@@ -76,10 +72,7 @@ const normalize = (hex: string): string => {
 
 const compare = (hex1: string, hex2: string): boolean => {
     try {
-        return (
-            removePrefix(hex1).toLowerCase() ===
-            removePrefix(hex2).toLowerCase()
-        )
+        return removePrefix(hex1).toLowerCase() === removePrefix(hex2).toLowerCase()
     } catch (e) {
         return false
     }

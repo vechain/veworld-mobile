@@ -14,13 +14,7 @@ import {
 } from "~Components"
 import { useI18nContext } from "~i18n"
 import { Network, NETWORK_TYPE } from "~Model"
-import {
-    SectionList,
-    SectionListData,
-    SectionListRenderItemInfo,
-    StyleSheet,
-    ViewToken,
-} from "react-native"
+import { SectionList, SectionListData, SectionListRenderItemInfo, StyleSheet, ViewToken } from "react-native"
 import {
     handleRemoveCustomNode,
     selectCustomNetworks,
@@ -46,9 +40,7 @@ export const ManageCustomNodesScreen = () => {
 
     const dispatch = useAppDispatch()
 
-    const networkToEdit = useAppSelector(state =>
-        selectNetworkById(state, networkToEditDeleteId),
-    )
+    const networkToEdit = useAppSelector(state => selectNetworkById(state, networkToEditDeleteId))
 
     const customNetworks = useAppSelector(selectCustomNetworks)
 
@@ -70,15 +62,9 @@ export const ManageCustomNodesScreen = () => {
     }
     // variables
     const sections: Section[] = useMemo(() => {
-        const mainNetworks = customNetworks.filter(
-            network => network.type === NETWORK_TYPE.MAIN,
-        )
-        const testNetworks = customNetworks.filter(
-            network => network.type === NETWORK_TYPE.TEST,
-        )
-        const otherNetworks = customNetworks.filter(
-            network => network.type === NETWORK_TYPE.OTHER,
-        )
+        const mainNetworks = customNetworks.filter(network => network.type === NETWORK_TYPE.MAIN)
+        const testNetworks = customNetworks.filter(network => network.type === NETWORK_TYPE.TEST)
+        const otherNetworks = customNetworks.filter(network => network.type === NETWORK_TYPE.OTHER)
 
         const data: Section[] = []
 
@@ -128,20 +114,15 @@ export const ManageCustomNodesScreen = () => {
         }
     }, [closeDeleteConfirmationSheet, networkToEditDeleteId, dispatch])
 
-    const renderSectionHeader = useCallback(
-        ({ section }: { section: SectionListData<Network, Section> }) => {
-            return (
-                <BaseText mx={20} typographyFont="bodyMedium">
-                    {section.title}
-                </BaseText>
-            )
-        },
-        [],
-    )
+    const renderSectionHeader = useCallback(({ section }: { section: SectionListData<Network, Section> }) => {
+        return (
+            <BaseText mx={20} typographyFont="bodyMedium">
+                {section.title}
+            </BaseText>
+        )
+    }, [])
 
-    const swipeableItemRefs = useRef<Map<string, SwipeableItemImperativeRef>>(
-        new Map(),
-    )
+    const swipeableItemRefs = useRef<Map<string, SwipeableItemImperativeRef>>(new Map())
 
     const handleTrashIconPress = useCallback(
         (id: string) => () => {
@@ -160,26 +141,17 @@ export const ManageCustomNodesScreen = () => {
                     itemKey={item.id}
                     swipeableItemRefs={swipeableItemRefs}
                     handleTrashIconPress={handleTrashIconPress(item?.id)}
-                    setSelectedItem={(network?: Network) =>
-                        setNetworkToDelete(network?.id)
-                    }
+                    setSelectedItem={(network?: Network) => setNetworkToDelete(network?.id)}
                     onPress={onPress}
                     isOpen={networkToDelete === item.id}>
-                    <NetworkBox
-                        network={item}
-                        rightIcon="pencil-outline"
-                        flex={1}
-                    />
+                    <NetworkBox network={item} rightIcon="pencil-outline" flex={1} />
                 </SwipeableRow>
             )
         },
         [handleTrashIconPress, networkToDelete, onEditNetworkClick],
     )
 
-    const renderSectionSeparator = useCallback(
-        () => <BaseSpacer height={24} />,
-        [],
-    )
+    const renderSectionSeparator = useCallback(() => <BaseSpacer height={24} />, [])
 
     const checkViewableItems = useCallback(
         ({ viewableItems }: { viewableItems: ViewToken[] }) => {
@@ -191,19 +163,9 @@ export const ManageCustomNodesScreen = () => {
     return (
         <BaseSafeArea grow={1}>
             <BackButtonHeader />
-            <BaseView
-                flexDirection="row"
-                justifyContent="space-between"
-                mx={20}>
-                <BaseText typographyFont="subTitleBold">
-                    {LL.BD_CUSTOM_NODES()}
-                </BaseText>
-                <BaseIcon
-                    name={"plus"}
-                    size={24}
-                    bg={theme.colors.secondary}
-                    action={onAddNetworkPress}
-                />
+            <BaseView flexDirection="row" justifyContent="space-between" mx={20}>
+                <BaseText typographyFont="subTitleBold">{LL.BD_CUSTOM_NODES()}</BaseText>
+                <BaseIcon name={"plus"} size={24} bg={theme.colors.secondary} action={onAddNetworkPress} />
             </BaseView>
             <BaseSpacer height={16} />
             <BaseView flexDirection="row" style={styles.listContainer}>
@@ -235,10 +197,7 @@ export const ManageCustomNodesScreen = () => {
                 deletingElement={
                     networkToEdit && (
                         <BaseView w={100} flexDirection="row">
-                            <NetworkBox
-                                network={networkToEdit}
-                                activeOpacity={1}
-                            />
+                            <NetworkBox network={networkToEdit} activeOpacity={1} />
                         </BaseView>
                     )
                 }

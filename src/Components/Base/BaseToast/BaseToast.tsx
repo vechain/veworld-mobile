@@ -3,12 +3,7 @@ import Toast, { ToastConfigParams } from "react-native-toast-message"
 import { ColorThemeType } from "~Constants"
 import { useTheme } from "~Hooks"
 import PlatformUtils from "~Utils/PlatformUtils"
-import {
-    errorToastStyles,
-    infoToastStyles,
-    successToastStyles,
-    warningToastStyles,
-} from "./util"
+import { errorToastStyles, infoToastStyles, successToastStyles, warningToastStyles } from "./util"
 import { ToastContent } from "./components"
 import HapticsService from "~Services/HapticsService"
 
@@ -140,14 +135,7 @@ export const hideToast = () => {
 
 // Export utility functions to show success, error, warning, and info toasts:
 // showSuccessToast, showErrorToast, showWarningToast, showInfoToast
-export const showSuccessToast = ({
-    text1,
-    text2,
-    textLink,
-    visibilityTime,
-    testID,
-    onPress,
-}: CustomToastConfig) => {
+export const showSuccessToast = ({ text1, text2, textLink, visibilityTime, testID, onPress }: CustomToastConfig) => {
     Toast.show({
         type: "success",
         text1,
@@ -157,14 +145,7 @@ export const showSuccessToast = ({
     })
 }
 
-export const showErrorToast = ({
-    text1,
-    text2,
-    textLink,
-    visibilityTime,
-    testID,
-    onPress,
-}: CustomToastConfig) => {
+export const showErrorToast = ({ text1, text2, textLink, visibilityTime, testID, onPress }: CustomToastConfig) => {
     HapticsService.triggerNotification({ level: "Error" })
     Toast.show({
         type: "error",
@@ -175,14 +156,7 @@ export const showErrorToast = ({
     })
 }
 
-export const showWarningToast = ({
-    text1,
-    text2,
-    textLink,
-    visibilityTime,
-    testID,
-    onPress,
-}: CustomToastConfig) => {
+export const showWarningToast = ({ text1, text2, textLink, visibilityTime, testID, onPress }: CustomToastConfig) => {
     Toast.show({
         type: "warning",
         text1,
@@ -192,14 +166,7 @@ export const showWarningToast = ({
     })
 }
 
-export const showInfoToast = ({
-    text1,
-    text2,
-    textLink,
-    visibilityTime,
-    testID,
-    onPress,
-}: CustomToastConfig) => {
+export const showInfoToast = ({ text1, text2, textLink, visibilityTime, testID, onPress }: CustomToastConfig) => {
     Toast.show({
         type: "info",
         text1,

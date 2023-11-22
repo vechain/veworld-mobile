@@ -8,9 +8,7 @@ import {
 } from "~Storage/Redux"
 
 export const useCollectionSource = (collectionAddress: string) => {
-    const collection = useAppSelector(state =>
-        selectCollectionWithContractAddress(state, collectionAddress),
-    )
+    const collection = useAppSelector(state => selectCollectionWithContractAddress(state, collectionAddress))
 
     const blacklistedCollection = useAppSelector(state =>
         selectBlacklistedCollectionByAddress(state, collectionAddress),

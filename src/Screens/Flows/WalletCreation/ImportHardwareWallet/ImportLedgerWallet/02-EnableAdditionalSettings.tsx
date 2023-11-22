@@ -1,23 +1,12 @@
 import React, { useCallback } from "react"
-import {
-    BackButtonHeader,
-    BaseButton,
-    BaseSafeArea,
-    BaseSpacer,
-    BaseText,
-    BaseView,
-} from "~Components"
+import { BackButtonHeader, BaseButton, BaseSafeArea, BaseSpacer, BaseText, BaseView } from "~Components"
 import { useI18nContext } from "~i18n"
 
 import { StyleSheet } from "react-native"
 import { useNavigation } from "@react-navigation/native"
 
 import { NativeStackScreenProps } from "@react-navigation/native-stack"
-import {
-    RootStackParamListCreateWalletApp,
-    RootStackParamListOnboarding,
-    Routes,
-} from "~Navigation"
+import { RootStackParamListCreateWalletApp, RootStackParamListOnboarding, Routes } from "~Navigation"
 
 import { useTheme } from "~Hooks"
 
@@ -70,12 +59,7 @@ export const EnableAdditionalSettings: React.FC<Props> = ({ route }) => {
 
     const renderStep = useCallback(
         ({ item, index }: { item: Step; index: number }) => (
-            <BaseView
-                key={index}
-                flexDirection="row"
-                alignItems="center"
-                justifyContent="flex-start"
-                w={90}>
+            <BaseView key={index} flexDirection="row" alignItems="center" justifyContent="flex-start" w={90}>
                 <BaseText
                     bg={theme.colors.text}
                     color={theme.colors.textReversed}
@@ -86,9 +70,7 @@ export const EnableAdditionalSettings: React.FC<Props> = ({ route }) => {
                     {index + 1}
                 </BaseText>
                 <BaseView ml={12}>
-                    <BaseText typographyFont="subSubTitle">
-                        {item.title}
-                    </BaseText>
+                    <BaseText typographyFont="subSubTitle">{item.title}</BaseText>
                     <BaseText typographyFont="body" mt={4}>
                         {item.desc}
                     </BaseText>
@@ -101,15 +83,9 @@ export const EnableAdditionalSettings: React.FC<Props> = ({ route }) => {
     return (
         <BaseSafeArea grow={1}>
             <BackButtonHeader />
-            <BaseView
-                alignItems="center"
-                justifyContent="space-between"
-                flexGrow={1}
-                mx={20}>
+            <BaseView alignItems="center" justifyContent="space-between" flexGrow={1} mx={20}>
                 <BaseView alignSelf="flex-start" w={100}>
-                    <BaseText typographyFont="title">
-                        {LL.WALLET_LEDGER_ENABLE_ADDITION_SETTINGS_TITLE()}
-                    </BaseText>
+                    <BaseText typographyFont="title">{LL.WALLET_LEDGER_ENABLE_ADDITION_SETTINGS_TITLE()}</BaseText>
                     <BaseText typographyFont="body" my={10}>
                         {LL.WALLET_LEDGER_ENABLE_ADDITION_SETTINGS_SB()}
                     </BaseText>
@@ -129,11 +105,7 @@ export const EnableAdditionalSettings: React.FC<Props> = ({ route }) => {
                 </BaseView>
 
                 <BaseView w={100}>
-                    <BaseButton
-                        action={onConfirm}
-                        w={100}
-                        title={LL.BTN_CONTINUE()}
-                    />
+                    <BaseButton action={onConfirm} w={100} title={LL.BTN_CONTINUE()} />
                 </BaseView>
             </BaseView>
 
