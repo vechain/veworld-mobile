@@ -9,8 +9,7 @@ import { BaseView } from "./BaseView"
  */
 
 const baseStatusBarTestId = "BaseStatusBar"
-const findBaseStatusBar = async () =>
-    await screen.findByTestId(baseStatusBarTestId, {}, { timeout: 5000 })
+const findBaseStatusBar = async () => await screen.findByTestId(baseStatusBarTestId, {}, { timeout: 5000 })
 
 describe("BaseStatusBar", () => {
     it("renders correctly", async () => {

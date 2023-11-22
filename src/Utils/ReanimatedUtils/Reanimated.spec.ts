@@ -1,3 +1,4 @@
+/* eslint-disable max-len */
 import {
     Language,
     convertSmallSciNotationToDecimal,
@@ -53,9 +54,7 @@ describe("reanimated numberToLocaleStringWorklet", function () {
         const num = 1234.5
         const locale = "fr"
 
-        expect(numberToLocaleStringWorklet(num, locale)).toEqual(
-            "1\u00A0234,50",
-        )
+        expect(numberToLocaleStringWorklet(num, locale)).toEqual("1\u00A0234,50")
     })
 
     it("returns a string formatted in US style (1,234.5) when passed US", function () {
@@ -108,21 +107,15 @@ describe("reanimated numberToLocaleStringWorklet", function () {
             return numberToLocaleStringWorklet(num, locale as Language)
         }
 
-        expect(testLocale).toThrow(
-            new RangeError("Invalid language tag: " + locale),
-        )
+        expect(testLocale).toThrow(new RangeError("Invalid language tag: " + locale))
     })
 
     it("returns a string formatted in US style (1,234.5) by default", function () {
         const num = 1234.5
 
         expect(numberToLocaleStringWorklet(num)).toBe("1,234.50")
-        expect(numberToLocaleStringWorklet(num, "es" as Language)).toBe(
-            "1,234.50",
-        )
-        expect(numberToLocaleStringWorklet(num, "AU" as Language)).toBe(
-            "1,234.50",
-        )
+        expect(numberToLocaleStringWorklet(num, "es" as Language)).toBe("1,234.50")
+        expect(numberToLocaleStringWorklet(num, "AU" as Language)).toBe("1,234.50")
     })
 
     it("returns a string formatted in Hungarian style (1 234,56) by default", function () {
@@ -191,30 +184,16 @@ describe("reanimated numberToLocaleStringWorklet", function () {
     it("format percentages with rounding and zero padding", function () {
         const num = -1234.56
 
-        expect(
-            numberToPercentWorklet(num, { precision: 0, absolute: true }),
-        ).toBe("1235%")
-        expect(
-            numberToPercentWorklet(num, { precision: 1, absolute: true }),
-        ).toBe("1234.6%")
-        expect(
-            numberToPercentWorklet(num, { precision: 2, absolute: true }),
-        ).toBe("1234.56%")
-        expect(
-            numberToPercentWorklet(num, { precision: 3, absolute: true }),
-        ).toBe("1234.560%")
-        expect(
-            numberToPercentWorklet(num, { precision: 4, absolute: true }),
-        ).toBe("1234.5600%")
-        expect(
-            numberToPercentWorklet(num, { precision: 4, absolute: false }),
-        ).toBe("-1234.5600%")
+        expect(numberToPercentWorklet(num, { precision: 0, absolute: true })).toBe("1235%")
+        expect(numberToPercentWorklet(num, { precision: 1, absolute: true })).toBe("1234.6%")
+        expect(numberToPercentWorklet(num, { precision: 2, absolute: true })).toBe("1234.56%")
+        expect(numberToPercentWorklet(num, { precision: 3, absolute: true })).toBe("1234.560%")
+        expect(numberToPercentWorklet(num, { precision: 4, absolute: true })).toBe("1234.5600%")
+        expect(numberToPercentWorklet(num, { precision: 4, absolute: false })).toBe("-1234.5600%")
     })
 
     it("thrown error if precission is a negative number", function () {
-        expect(() =>
-            numberToPercentWorklet(123.12, { precision: -4, absolute: false }),
-        ).toThrow()
+        expect(() => numberToPercentWorklet(123.12, { precision: -4, absolute: false })).toThrow()
     })
 
     it("returns dash if value is undefined or NaN", function () {
@@ -234,32 +213,18 @@ describe("reanimated numberToLocaleStringWorklet", function () {
     })
 
     it("format zero value percentages with zero padding", function () {
-        expect(
-            numberToPercentWorklet(0, { precision: 0, absolute: true }),
-        ).toBe("0%")
-        expect(
-            numberToPercentWorklet(0, { precision: 1, absolute: true }),
-        ).toBe("0.0%")
-        expect(
-            numberToPercentWorklet(0, { precision: 2, absolute: true }),
-        ).toBe("0.00%")
-        expect(
-            numberToPercentWorklet(0.001, { precision: 2, absolute: true }),
-        ).toBe("0.00%")
+        expect(numberToPercentWorklet(0, { precision: 0, absolute: true })).toBe("0%")
+        expect(numberToPercentWorklet(0, { precision: 1, absolute: true })).toBe("0.0%")
+        expect(numberToPercentWorklet(0, { precision: 2, absolute: true })).toBe("0.00%")
+        expect(numberToPercentWorklet(0.001, { precision: 2, absolute: true })).toBe("0.00%")
     })
 
     it("format integer values with zero padding", function () {
         const intNum = -10
 
-        expect(
-            numberToPercentWorklet(intNum, { precision: 0, absolute: true }),
-        ).toBe("10%")
-        expect(
-            numberToPercentWorklet(intNum, { precision: 1, absolute: true }),
-        ).toBe("10.0%")
-        expect(
-            numberToPercentWorklet(intNum, { precision: 2, absolute: true }),
-        ).toBe("10.00%")
+        expect(numberToPercentWorklet(intNum, { precision: 0, absolute: true })).toBe("10%")
+        expect(numberToPercentWorklet(intNum, { precision: 1, absolute: true })).toBe("10.0%")
+        expect(numberToPercentWorklet(intNum, { precision: 2, absolute: true })).toBe("10.00%")
     })
 })
 
@@ -283,8 +248,6 @@ describe("Reaniamted convertSmallSciNotationToDecimal funciton", function () {
     */
     it("should return the correct value after precision", function () {
         const value = 0.000123456789
-        expect(convertSmallSciNotationToDecimal(value)).toBe(
-            value.toPrecision(4),
-        )
+        expect(convertSmallSciNotationToDecimal(value)).toBe(value.toPrecision(4))
     })
 })

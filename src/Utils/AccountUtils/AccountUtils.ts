@@ -20,18 +20,11 @@ export const getNextIndex = (accounts: WalletAccount[]) => {
     return index
 }
 
-export const getAccountForIndex = (
-    walletIndex: number,
-    device: BaseDevice,
-    accountId: number,
-): WalletAccount => {
+export const getAccountForIndex = (walletIndex: number, device: BaseDevice, accountId: number): WalletAccount => {
     debug(`Getting account for device, index ${walletIndex}`)
     if (!device.xPub) throw new Error("The XPub can't be null for HD devices")
 
-    const accountAddress = AddressUtils.getAddressFromXPub(
-        device.xPub,
-        walletIndex,
-    )
+    const accountAddress = AddressUtils.getAddressFromXPub(device.xPub, walletIndex)
 
     return {
         alias: nextAlias(accountId),

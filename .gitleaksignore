@@ -7,3 +7,9 @@ a216601457f7b857600ff746063fb7d4ec559469:android/sentry.properties:generic-api-k
 7a632dbe0143701d348393c1ed55fff075192515:src/Utils/BalanceUtils/BalanceUtils.spec.ts:generic-api-key:31
 336a1d257b4c6184b2646958a0c3bb64cc9d16b4:ios/Podfile.lock:generic-api-key:940
 eac8612ad907372c3347469f8057e64e29b1ef91:ios/Podfile.lock:generic-api-key:1025
+abe9fe1d2f1579ebbfe160ff9033c21f76833a3f:src/Hooks/useDeviceUtils/useDeviceUtils.spec.ts:generic-api-key:53
+abe9fe1d2f1579ebbfe160ff9033c21f76833a3f:src/Utils/CryptoUtils/CryptoUtils.spec.ts:generic-api-key:20
+abe9fe1d2f1579ebbfe160ff9033c21f76833a3f:src/Utils/DeviceUtils/DeviceUtils.spec.ts:generic-api-key:14
+abe9fe1d2f1579ebbfe160ff9033c21f76833a3f:src/Utils/TransactionUtils/TransactionUtils.spec.ts:generic-api-key:1163
+abe9fe1d2f1579ebbfe160ff9033c21f76833a3f:src/Utils/WalletConnectUtils/WalletConnectUtils.spec.ts:generic-api-key:37
+abe9fe1d2f1579ebbfe160ff9033c21f76833a3f:src/Utils/TransactionUtils/TransactionUtils.spec.ts:generic-api-key:1174

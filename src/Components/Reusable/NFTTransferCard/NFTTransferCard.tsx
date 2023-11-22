@@ -1,11 +1,6 @@
 import React, { useMemo } from "react"
 import { StyleSheet } from "react-native"
-import {
-    BaseView,
-    BaseText,
-    NFTTransferCardSkeleton,
-    NFTMedia,
-} from "~Components"
+import { BaseView, BaseText, NFTTransferCardSkeleton, NFTMedia } from "~Components"
 import { useNFTInfo, useThemedStyles } from "~Hooks"
 import { useI18nContext } from "~i18n"
 import { ColorThemeType } from "~Constants"
@@ -16,10 +11,7 @@ type Props = {
 }
 
 export const NFTTransferCard = ({ collectionAddress, tokenId }: Props) => {
-    const { isMediaLoading, tokenMetadata, collectionName } = useNFTInfo(
-        tokenId,
-        collectionAddress,
-    )
+    const { isMediaLoading, tokenMetadata, collectionName } = useNFTInfo(tokenId, collectionAddress)
 
     const { styles, theme } = useThemedStyles(baseStyles)
 
@@ -28,9 +20,7 @@ export const NFTTransferCard = ({ collectionAddress, tokenId }: Props) => {
     const validatedCollectionName = useMemo(() => {
         if (!collectionName) return LL.UNKNOWN_COLLECTION()
 
-        return collectionName.length > 13
-            ? `${collectionName.slice(0, 12)}...`
-            : collectionName
+        return collectionName.length > 13 ? `${collectionName.slice(0, 12)}...` : collectionName
     }, [LL, collectionName])
 
     const validatedTokenId = useMemo(() => {
@@ -40,12 +30,7 @@ export const NFTTransferCard = ({ collectionAddress, tokenId }: Props) => {
     const renderMedia = useMemo(() => {
         if (isMediaLoading) return <NFTTransferCardSkeleton />
 
-        return (
-            <NFTMedia
-                uri={tokenMetadata?.image ?? ""}
-                styles={styles.nftImage}
-            />
-        )
+        return <NFTMedia uri={tokenMetadata?.image ?? ""} styles={styles.nftImage} />
     }, [isMediaLoading, styles.nftImage, tokenMetadata])
 
     return (
@@ -56,9 +41,7 @@ export const NFTTransferCard = ({ collectionAddress, tokenId }: Props) => {
                     {!isMediaLoading && (
                         <BaseView flexDirection="column" flex={1}>
                             <BaseView style={styles.nftDetail}>
-                                <BaseText
-                                    typographyFont="buttonSecondary"
-                                    pb={4}>
+                                <BaseText typographyFont="buttonSecondary" pb={4}>
                                     {LL.COLLECTION_NAME()}
                                 </BaseText>
                                 <BaseText pb={8} typographyFont="subSubTitle">
@@ -66,14 +49,10 @@ export const NFTTransferCard = ({ collectionAddress, tokenId }: Props) => {
                                 </BaseText>
                             </BaseView>
                             <BaseView pt={8}>
-                                <BaseText
-                                    typographyFont="buttonSecondary"
-                                    pb={4}>
+                                <BaseText typographyFont="buttonSecondary" pb={4}>
                                     {LL.TOKEN_ID()}
                                 </BaseText>
-                                <BaseText typographyFont="subSubTitle">
-                                    #{validatedTokenId}
-                                </BaseText>
+                                <BaseText typographyFont="subSubTitle">#{validatedTokenId}</BaseText>
                             </BaseView>
                         </BaseView>
                     )}

@@ -23,12 +23,7 @@ const PersistedThemeProvider = ({ children }: ThemeProviderProps) => {
     const [theme, setTheme] = useState<ThemeEnum>()
 
     const initThemeCache = useCallback(async () => {
-        setThemeCache(
-            new SecurePersistedCache<ThemeEnum>(
-                CACHE_THEME_KEY,
-                await initEncryption(CACHE_THEME_KEY),
-            ),
-        )
+        setThemeCache(new SecurePersistedCache<ThemeEnum>(CACHE_THEME_KEY, await initEncryption(CACHE_THEME_KEY)))
     }, [])
 
     const reset = useCallback(async () => {
@@ -82,17 +77,13 @@ const PersistedThemeProvider = ({ children }: ThemeProviderProps) => {
         return <></>
     }
 
-    return (
-        <ThemeContext.Provider value={value}>{children}</ThemeContext.Provider>
-    )
+    return <ThemeContext.Provider value={value}>{children}</ThemeContext.Provider>
 }
 
 const usePersistedTheme = () => {
     const context = React.useContext(ThemeContext)
     if (!context) {
-        throw new Error(
-            "usePersistedTheme must be used within a PersistedThemeProvider",
-        )
+        throw new Error("usePersistedTheme must be used within a PersistedThemeProvider")
     }
 
     return context

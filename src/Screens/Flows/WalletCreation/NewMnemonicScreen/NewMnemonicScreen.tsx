@@ -55,36 +55,21 @@ export const NewMnemonicScreen = () => {
                         <BaseButton
                             size="sm"
                             selfAlign="flex-end"
-                            action={() =>
-                                onCopyToClipboard(
-                                    mnemonic.join(" "),
-                                    LL.TITLE_MNEMONIC(),
-                                )
-                            }
+                            action={() => onCopyToClipboard(mnemonic.join(" "), LL.TITLE_MNEMONIC())}
                             w={100}
                             title={LL.BTN_MNEMONIC_CLIPBOARD()}
                             disabled={!mnemonic}
                             rightIcon={
-                                <BaseIcon
-                                    name="content-copy"
-                                    color={theme.colors.card}
-                                    size={12}
-                                    style={styles.icon}
-                                />
+                                <BaseIcon name="content-copy" color={theme.colors.card} size={12} style={styles.icon} />
                             }
                         />
                         <BaseSpacer height={28} />
 
-                        <BaseText
-                            typographyFont="footNoteAccent"
-                            color={theme.colors.danger}
-                            my={10}>
+                        <BaseText typographyFont="footNoteAccent" color={theme.colors.danger} my={10}>
                             {LL.BD_MNEMONIC_DISCLAIMER()}
                         </BaseText>
 
-                        <BaseText typographyFont="footNote">
-                            {LL.BD_MNEMONIC_BACKUP()}
-                        </BaseText>
+                        <BaseText typographyFont="footNote">{LL.BD_MNEMONIC_BACKUP()}</BaseText>
                     </BaseView>
                 </BaseView>
             }

@@ -1,11 +1,4 @@
-import React, {
-    memo,
-    useCallback,
-    useEffect,
-    useMemo,
-    useRef,
-    useState,
-} from "react"
+import React, { memo, useCallback, useEffect, useMemo, useRef, useState } from "react"
 import { useTheme, useNFTMedia, useThemedStyles } from "~Hooks"
 import { NFTMediaType, NFTMedia as Media } from "~Model"
 import { error } from "~Utils"
@@ -45,8 +38,7 @@ export const NFTMedia = memo(
 
         const { styles: themedStyles } = useThemedStyles(baseStyles(isLoading))
 
-        const { LongPressItems, onLongPressImage, progress } =
-            useSaveMediaToPhotos(tokenMedia, nftName)
+        const { LongPressItems, onLongPressImage, progress } = useSaveMediaToPhotos(tokenMedia, nftName)
 
         const onLoadEnd = useCallback(() => {
             setIsLoading(false)
@@ -123,9 +115,7 @@ export const NFTMedia = memo(
         const RenderImageWithProvider = useMemo(() => {
             if (isUseLongPress) {
                 return (
-                    <LongPressProvider
-                        items={LongPressItems}
-                        action={onLongPressImage}>
+                    <LongPressProvider items={LongPressItems} action={onLongPressImage}>
                         {RenderNFT}
                     </LongPressProvider>
                 )
@@ -150,9 +140,7 @@ export const NFTMedia = memo(
 
                 {progress > 0 ? (
                     <>
-                        <BaseView
-                            style={themedStyles.progressOverlay}
-                            bg={theme.colors.card}>
+                        <BaseView style={themedStyles.progressOverlay} bg={theme.colors.card}>
                             <ProgressBar
                                 useNativeDriver
                                 progress={progress}

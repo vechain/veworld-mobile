@@ -1,9 +1,4 @@
-import {
-    errorToastStyles,
-    infoToastStyles,
-    successToastStyles,
-    warningToastStyles,
-} from "./BaseToastStyles"
+import { errorToastStyles, infoToastStyles, successToastStyles, warningToastStyles } from "./BaseToastStyles"
 import { COLORS, ColorTheme } from "~Constants"
 import { Dimensions } from "react-native"
 
@@ -13,13 +8,9 @@ describe("successToastStyles", () => {
 
         const styles = successToastStyles(lightTheme)
 
-        expect(styles.container.borderLeftColor).toBe(
-            lightTheme.isDark ? COLORS.PASTEL_GREEN : COLORS.DARK_GREEN_ALERT,
-        )
+        expect(styles.container.borderLeftColor).toBe(lightTheme.isDark ? COLORS.PASTEL_GREEN : COLORS.DARK_GREEN_ALERT)
         expect(styles.container.borderRadius).toBe(16)
-        expect(styles.container.backgroundColor).toBe(
-            lightTheme.isDark ? COLORS.PASTEL_GREEN : COLORS.DARK_GREEN_ALERT,
-        )
+        expect(styles.container.backgroundColor).toBe(lightTheme.isDark ? COLORS.PASTEL_GREEN : COLORS.DARK_GREEN_ALERT)
         expect(styles.container.width).toBe(Dimensions.get("window").width - 40)
 
         expect(styles.contentContainer.flexDirection).toBe("row")
@@ -32,9 +23,7 @@ describe("successToastStyles", () => {
             lightTheme.isDark ? COLORS.PASTEL_GREEN : COLORS.DARK_GREEN_ALERT,
         )
         expect(styles.contentContainer.borderRadius).toBe(16)
-        expect(styles.contentContainer.width).toBe(
-            Dimensions.get("window").width - 40,
-        )
+        expect(styles.contentContainer.width).toBe(Dimensions.get("window").width - 40)
 
         expect(styles.textContainer.flexDirection).toBe("row")
         expect(styles.textContainer.alignItems).toBe("center")
@@ -46,13 +35,9 @@ describe("successToastStyles", () => {
 
         const styles = successToastStyles(darkTheme)
 
-        expect(styles.container.borderLeftColor).toBe(
-            darkTheme.isDark ? COLORS.PASTEL_GREEN : COLORS.DARK_GREEN_ALERT,
-        )
+        expect(styles.container.borderLeftColor).toBe(darkTheme.isDark ? COLORS.PASTEL_GREEN : COLORS.DARK_GREEN_ALERT)
         expect(styles.container.borderRadius).toBe(16)
-        expect(styles.container.backgroundColor).toBe(
-            darkTheme.isDark ? COLORS.PASTEL_GREEN : COLORS.DARK_GREEN_ALERT,
-        )
+        expect(styles.container.backgroundColor).toBe(darkTheme.isDark ? COLORS.PASTEL_GREEN : COLORS.DARK_GREEN_ALERT)
         expect(styles.container.width).toBe(Dimensions.get("window").width - 40)
 
         expect(styles.contentContainer.flexDirection).toBe("row")
@@ -65,9 +50,7 @@ describe("successToastStyles", () => {
             darkTheme.isDark ? COLORS.PASTEL_GREEN : COLORS.DARK_GREEN_ALERT,
         )
         expect(styles.contentContainer.borderRadius).toBe(16)
-        expect(styles.contentContainer.width).toBe(
-            Dimensions.get("window").width - 40,
-        )
+        expect(styles.contentContainer.width).toBe(Dimensions.get("window").width - 40)
 
         expect(styles.textContainer.flexDirection).toBe("row")
         expect(styles.textContainer.alignItems).toBe("center")
@@ -81,13 +64,9 @@ describe("errorToastStyles", () => {
 
         const styles = errorToastStyles(lightTheme)
 
-        expect(styles.container.borderLeftColor).toBe(
-            lightTheme.isDark ? COLORS.PASTEL_RED : COLORS.DARK_RED_ALERT,
-        )
+        expect(styles.container.borderLeftColor).toBe(lightTheme.isDark ? COLORS.PASTEL_RED : COLORS.DARK_RED_ALERT)
         expect(styles.container.borderRadius).toBe(16)
-        expect(styles.container.backgroundColor).toBe(
-            lightTheme.isDark ? COLORS.PASTEL_RED : COLORS.DARK_RED_ALERT,
-        )
+        expect(styles.container.backgroundColor).toBe(lightTheme.isDark ? COLORS.PASTEL_RED : COLORS.DARK_RED_ALERT)
         expect(styles.container.width).toBe(Dimensions.get("window").width - 40)
 
         expect(styles.contentContainer.flexDirection).toBe("row")
@@ -100,9 +79,7 @@ describe("errorToastStyles", () => {
             lightTheme.isDark ? COLORS.PASTEL_RED : COLORS.DARK_RED_ALERT,
         )
         expect(styles.contentContainer.borderRadius).toBe(16)
-        expect(styles.contentContainer.width).toBe(
-            Dimensions.get("window").width - 40,
-        )
+        expect(styles.contentContainer.width).toBe(Dimensions.get("window").width - 40)
 
         expect(styles.textContainer.flexDirection).toBe("row")
         expect(styles.textContainer.alignItems).toBe("center")
@@ -114,13 +91,9 @@ describe("errorToastStyles", () => {
 
         const styles = errorToastStyles(darkTheme)
 
-        expect(styles.container.borderLeftColor).toBe(
-            darkTheme.isDark ? COLORS.PASTEL_RED : COLORS.DARK_RED_ALERT,
-        )
+        expect(styles.container.borderLeftColor).toBe(darkTheme.isDark ? COLORS.PASTEL_RED : COLORS.DARK_RED_ALERT)
         expect(styles.container.borderRadius).toBe(16)
-        expect(styles.container.backgroundColor).toBe(
-            darkTheme.isDark ? COLORS.PASTEL_RED : COLORS.DARK_RED_ALERT,
-        )
+        expect(styles.container.backgroundColor).toBe(darkTheme.isDark ? COLORS.PASTEL_RED : COLORS.DARK_RED_ALERT)
         expect(styles.container.width).toBe(Dimensions.get("window").width - 40)
 
         expect(styles.contentContainer.flexDirection).toBe("row")
@@ -133,9 +106,7 @@ describe("errorToastStyles", () => {
             darkTheme.isDark ? COLORS.PASTEL_RED : COLORS.DARK_RED_ALERT,
         )
         expect(styles.contentContainer.borderRadius).toBe(16)
-        expect(styles.contentContainer.width).toBe(
-            Dimensions.get("window").width - 40,
-        )
+        expect(styles.contentContainer.width).toBe(Dimensions.get("window").width - 40)
 
         expect(styles.textContainer.flexDirection).toBe("row")
         expect(styles.textContainer.alignItems).toBe("center")
@@ -168,9 +139,7 @@ describe("warningToastStyles", () => {
             lightTheme.isDark ? COLORS.PASTEL_ORANGE : COLORS.DARK_ORANGE_ALERT,
         )
         expect(styles.contentContainer.borderRadius).toBe(16)
-        expect(styles.contentContainer.width).toBe(
-            Dimensions.get("window").width - 40,
-        )
+        expect(styles.contentContainer.width).toBe(Dimensions.get("window").width - 40)
 
         expect(styles.textContainer.flexDirection).toBe("row")
         expect(styles.textContainer.alignItems).toBe("center")
@@ -201,9 +170,7 @@ describe("warningToastStyles", () => {
             darkTheme.isDark ? COLORS.PASTEL_ORANGE : COLORS.DARK_ORANGE_ALERT,
         )
         expect(styles.contentContainer.borderRadius).toBe(16)
-        expect(styles.contentContainer.width).toBe(
-            Dimensions.get("window").width - 40,
-        )
+        expect(styles.contentContainer.width).toBe(Dimensions.get("window").width - 40)
 
         expect(styles.textContainer.flexDirection).toBe("row")
         expect(styles.textContainer.alignItems).toBe("center")
@@ -217,13 +184,9 @@ describe("infoToastStyles", () => {
 
         const styles = infoToastStyles(lightTheme)
 
-        expect(styles.container.borderLeftColor).toBe(
-            lightTheme.isDark ? COLORS.WHITE : COLORS.PURPLE,
-        )
+        expect(styles.container.borderLeftColor).toBe(lightTheme.isDark ? COLORS.WHITE : COLORS.PURPLE)
         expect(styles.container.borderRadius).toBe(16)
-        expect(styles.container.backgroundColor).toBe(
-            lightTheme.isDark ? COLORS.WHITE : COLORS.PURPLE,
-        )
+        expect(styles.container.backgroundColor).toBe(lightTheme.isDark ? COLORS.WHITE : COLORS.PURPLE)
         expect(styles.container.width).toBe(Dimensions.get("window").width - 40)
 
         expect(styles.contentContainer.flexDirection).toBe("row")
@@ -232,13 +195,9 @@ describe("infoToastStyles", () => {
         expect(styles.contentContainer.paddingLeft).toBe(16)
         expect(styles.contentContainer.paddingRight).toBe(32)
         expect(styles.contentContainer.paddingVertical).toBe(16)
-        expect(styles.contentContainer.backgroundColor).toBe(
-            lightTheme.isDark ? COLORS.WHITE : COLORS.PURPLE,
-        )
+        expect(styles.contentContainer.backgroundColor).toBe(lightTheme.isDark ? COLORS.WHITE : COLORS.PURPLE)
         expect(styles.contentContainer.borderRadius).toBe(16)
-        expect(styles.contentContainer.width).toBe(
-            Dimensions.get("window").width - 40,
-        )
+        expect(styles.contentContainer.width).toBe(Dimensions.get("window").width - 40)
 
         expect(styles.textContainer.flexDirection).toBe("row")
         expect(styles.textContainer.alignItems).toBe("center")
@@ -250,13 +209,9 @@ describe("infoToastStyles", () => {
 
         const styles = infoToastStyles(darkTheme)
 
-        expect(styles.container.borderLeftColor).toBe(
-            darkTheme.isDark ? COLORS.WHITE : COLORS.PURPLE,
-        )
+        expect(styles.container.borderLeftColor).toBe(darkTheme.isDark ? COLORS.WHITE : COLORS.PURPLE)
         expect(styles.container.borderRadius).toBe(16)
-        expect(styles.container.backgroundColor).toBe(
-            darkTheme.isDark ? COLORS.WHITE : COLORS.PURPLE,
-        )
+        expect(styles.container.backgroundColor).toBe(darkTheme.isDark ? COLORS.WHITE : COLORS.PURPLE)
         expect(styles.container.width).toBe(Dimensions.get("window").width - 40)
 
         expect(styles.contentContainer.flexDirection).toBe("row")
@@ -265,13 +220,9 @@ describe("infoToastStyles", () => {
         expect(styles.contentContainer.paddingLeft).toBe(16)
         expect(styles.contentContainer.paddingRight).toBe(32)
         expect(styles.contentContainer.paddingVertical).toBe(16)
-        expect(styles.contentContainer.backgroundColor).toBe(
-            darkTheme.isDark ? COLORS.WHITE : COLORS.PURPLE,
-        )
+        expect(styles.contentContainer.backgroundColor).toBe(darkTheme.isDark ? COLORS.WHITE : COLORS.PURPLE)
         expect(styles.contentContainer.borderRadius).toBe(16)
-        expect(styles.contentContainer.width).toBe(
-            Dimensions.get("window").width - 40,
-        )
+        expect(styles.contentContainer.width).toBe(Dimensions.get("window").width - 40)
 
         expect(styles.textContainer.flexDirection).toBe("row")
         expect(styles.textContainer.alignItems).toBe("center")

@@ -23,21 +23,10 @@ const getBalanceFromBlockchain = async (
         // We get the balance differently depending on whether it's a VIP180 or VET/VTHO
         let balance: string | undefined
         if (AddressUtils.compareAddresses(tokenAddress, VET.address))
-            balance = await getVetAndVthoBalancesFromBlockchain(
-                accountAddress,
-                network,
-            ).then(res => res.balance)
+            balance = await getVetAndVthoBalancesFromBlockchain(accountAddress, network).then(res => res.balance)
         else if (AddressUtils.compareAddresses(tokenAddress, VTHO.address))
-            balance = await getVetAndVthoBalancesFromBlockchain(
-                accountAddress,
-                network,
-            ).then(res => res.energy)
-        else
-            balance = await getTokenBalanceFromBlockchain(
-                accountAddress,
-                tokenAddress,
-                thor,
-            )
+            balance = await getVetAndVthoBalancesFromBlockchain(accountAddress, network).then(res => res.energy)
+        else balance = await getTokenBalanceFromBlockchain(accountAddress, tokenAddress, thor)
 
         if (!balance) return
 
@@ -69,12 +58,7 @@ const getBalanceAndTokenInfoFromBlockchain = async (
     thor: Connex.Thor,
 ): Promise<Balance | undefined> => {
     try {
-        const balance: Balance | undefined = await getBalanceFromBlockchain(
-            tokenAddress,
-            accountAddress,
-            network,
-            thor,
-        )
+        const balance: Balance | undefined = await getBalanceFromBlockchain(tokenAddress, accountAddress, network, thor)
 
         if (!balance) return undefined
 
@@ -101,13 +85,8 @@ const getBalanceAndTokenInfoFromBlockchain = async (
  * @param network - the network to get the balances for
  * @returns balances for VET and VTHO for the given address from the blockchain
  */
-const getVetAndVthoBalancesFromBlockchain = async (
-    address: string,
-    network: Network,
-): Promise<Connex.Thor.Account> => {
-    const accountResponse = await axios.get<Connex.Thor.Account>(
-        `${network.currentUrl}/accounts/${address}`,
-    )
+const getVetAndVthoBalancesFromBlockchain = async (address: string, network: Network): Promise<Connex.Thor.Account> => {
+    const accountResponse = await axios.get<Connex.Thor.Account>(`${network.currentUrl}/accounts/${address}`)
 
     return accountResponse.data
 }
@@ -118,10 +97,7 @@ const getTokenBalanceFromBlockchain = async (
     thor: Connex.Thor,
 ): Promise<string | undefined> => {
     try {
-        const res = await thor
-            .account(tokenAddress)
-            .method(abis.VIP180.balanceOf)
-            .call(accountAddress)
+        const res = await thor.account(tokenAddress).method(abis.VIP180.balanceOf).call(accountAddress)
 
         return res.decoded[0]
     } catch (e) {
@@ -129,24 +105,13 @@ const getTokenBalanceFromBlockchain = async (
     }
 }
 
-const getFiatBalance = (
-    balance: string,
-    exchangeRate: number,
-    decimals: number,
-) =>
-    FormattingUtils.humanNumber(
-        FormattingUtils.convertToFiatBalance(balance, exchangeRate, decimals),
-        balance,
-    )
+const getFiatBalance = (balance: string, exchangeRate: number, decimals: number) =>
+    FormattingUtils.humanNumber(FormattingUtils.convertToFiatBalance(balance, exchangeRate, decimals), balance)
 
 const getTokenUnitBalance = (balance: string, decimals: number) =>
-    FormattingUtils.humanNumber(
-        FormattingUtils.convertToFiatBalance(balance, 1, decimals),
-        balance,
-    )
+    FormattingUtils.humanNumber(FormattingUtils.convertToFiatBalance(balance, 1, decimals), balance)
 
-const getIsTokenWithBalance = (token: FungibleTokenWithBalance) =>
-    !new BigNumber(token.balance.balance).isZero()
+const getIsTokenWithBalance = (token: FungibleTokenWithBalance) => !new BigNumber(token.balance.balance).isZero()
 
 export default {
     getIsTokenWithBalance,

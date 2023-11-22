@@ -1,12 +1,6 @@
 import React, { useMemo } from "react"
 import { StyleSheet } from "react-native"
-import {
-    BaseCard,
-    BaseIcon,
-    BaseSpacer,
-    BaseText,
-    BaseView,
-} from "~Components/Base"
+import { BaseCard, BaseIcon, BaseSpacer, BaseText, BaseView } from "~Components/Base"
 import { useTheme } from "~Hooks"
 
 type Props = {

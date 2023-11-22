@@ -30,10 +30,7 @@ const Alert = (
     RNAlert.alert(title, message, config)
 }
 
-const showCancelledBiometricsAlert = (
-    cancelAction: () => void,
-    buttonAction: () => void,
-) => {
+const showCancelledBiometricsAlert = (cancelAction: () => void, buttonAction: () => void) => {
     const locale = i18n.detectLocale()
     let title = i18n.i18n()[locale].TITLE_ALERT_BIOMETRICS_CANCELLED()
     let msg = i18n.i18n()[locale].BD_ALERT_BIOMETRICS_CANCELLED()
@@ -66,9 +63,4 @@ const showDefaultAlert = (
     Alert(title, msg, button, action)
 }
 
-export {
-    Alert,
-    showCancelledBiometricsAlert,
-    showGoToSettingsAlert,
-    showDefaultAlert,
-}
+export { Alert, showCancelledBiometricsAlert, showGoToSettingsAlert, showDefaultAlert }

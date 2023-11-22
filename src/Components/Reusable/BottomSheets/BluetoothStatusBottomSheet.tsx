@@ -1,11 +1,5 @@
 import React, { useCallback, useEffect, useMemo } from "react"
-import {
-    BaseButton,
-    BaseSpacer,
-    BaseText,
-    BaseView,
-    BaseBottomSheet,
-} from "~Components"
+import { BaseButton, BaseSpacer, BaseText, BaseView, BaseBottomSheet } from "~Components"
 import { useI18nContext } from "~i18n"
 import { useBluetoothStatus, useBottomSheetModal } from "~Hooks"
 import { Linking } from "react-native"
@@ -25,8 +19,7 @@ export const BluetoothStatusBottomSheet: React.FC = () => {
     const { ref, onOpen, onClose } = useBottomSheetModal()
     const nav = useNavigation()
 
-    const { status, isAuthorized, isEnabled, isUnsupported, isUpdating } =
-        useBluetoothStatus()
+    const { status, isAuthorized, isEnabled, isUnsupported, isUpdating } = useBluetoothStatus()
 
     const content = useMemo(() => {
         if (!isAuthorized) {
@@ -63,15 +56,7 @@ export const BluetoothStatusBottomSheet: React.FC = () => {
             }
         }, 100)
         return () => clearTimeout(timer)
-    }, [
-        isUnsupported,
-        isAuthorized,
-        isEnabled,
-        status,
-        onOpen,
-        onClose,
-        isUpdating,
-    ])
+    }, [isUnsupported, isAuthorized, isEnabled, status, onOpen, onClose, isUpdating])
 
     const handleOnPress = useCallback(() => {
         if (!isAuthorized) {
@@ -96,30 +81,17 @@ export const BluetoothStatusBottomSheet: React.FC = () => {
     }, [LL, isAuthorized, isEnabled, isUnsupported])
 
     return (
-        <BaseBottomSheet
-            enablePanDownToClose={false}
-            snapPoints={snapPoints}
-            ref={ref}>
-            <BaseView
-                h={100}
-                alignItems="center"
-                justifyContent="space-between"
-                flexGrow={1}>
+        <BaseBottomSheet enablePanDownToClose={false} snapPoints={snapPoints} ref={ref}>
+            <BaseView h={100} alignItems="center" justifyContent="space-between" flexGrow={1}>
                 <BaseView alignSelf="flex-start">
-                    <BaseText typographyFont="subTitleBold">
-                        {content.title}
-                    </BaseText>
+                    <BaseText typographyFont="subTitleBold">{content.title}</BaseText>
                     <BaseSpacer height={16} />
                     <BaseText typographyFont="body" my={8}>
                         {content.desc}
                     </BaseText>
                 </BaseView>
 
-                <BaseView
-                    flexDirection="row"
-                    justifyContent="space-between"
-                    w={100}
-                    alignItems="center">
+                <BaseView flexDirection="row" justifyContent="space-between" w={100} alignItems="center">
                     <BaseView alignItems="center" w={100}>
                         <BaseButton
                             variant="solid"

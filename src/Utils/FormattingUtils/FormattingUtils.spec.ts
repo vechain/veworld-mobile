@@ -102,22 +102,12 @@ describe("convertToFiatBalance", () => {
 
 describe("humanNumber", () => {
     it("should return correct decimals", () => {
-        expect(
-            humanNumber(
-                new BigNumber(100.234234234234234),
-                new BigNumber(100.234234234234234),
-                "$",
-            ),
-        ).toBe("100.23 $")
+        expect(humanNumber(new BigNumber(100.234234234234234), new BigNumber(100.234234234234234), "$")).toBe(
+            "100.23 $",
+        )
     })
     it("should return < 0.01", () => {
-        expect(
-            humanNumber(
-                new BigNumber(0.00000003),
-                new BigNumber(0.00000003),
-                "$",
-            ),
-        ).toBe("< 0.01 $")
+        expect(humanNumber(new BigNumber(0.00000003), new BigNumber(0.00000003), "$")).toBe("< 0.01 $")
     })
 })
 
@@ -132,49 +122,37 @@ describe("isZero", () => {
 
 describe("humanAddress", () => {
     it("should return correctly", () => {
-        expect(humanAddress("0x4fec365ab34c21784b05e3fed80633268e6457ff")).toBe(
-            "0x4f…268e6457ff",
-        )
+        expect(humanAddress("0x4fec365ab34c21784b05e3fed80633268e6457ff")).toBe("0x4f…268e6457ff")
     })
 })
 
 describe("humanUrl", () => {
     it("should return correctly", () => {
-        expect(
-            humanUrl(
-                "https://jestjs.io/docs/mock-function-api#mockfnmockresolvedvaluevalue",
-            ),
-        ).toBe("https://…evalue")
+        expect(humanUrl("https://jestjs.io/docs/mock-function-api#mockfnmockresolvedvaluevalue")).toBe(
+            "https://…evalue",
+        )
     })
 })
 
 describe("formatAlias", () => {
     it("should return correctly", () => {
         expect(formatAlias("short")).toBe("short")
-        expect(
-            formatAlias(
-                "this is a long long long long long long long long alias",
-            ),
-        ).toBe("this i… alias")
+        expect(formatAlias("this is a long long long long long long long long alias")).toBe("this i… alias")
     })
 })
 
 describe("removeUrlProtocolAndPath", () => {
     it("should return correctly", () => {
-        expect(
-            removeUrlProtocolAndPath(
-                "https://jestjs.io/docs/mock-function-api#mockfnmockresolvedvaluevalue",
-            ),
-        ).toBe("jestjs.io")
+        expect(removeUrlProtocolAndPath("https://jestjs.io/docs/mock-function-api#mockfnmockresolvedvaluevalue")).toBe(
+            "jestjs.io",
+        )
     })
 })
 
 describe("limit charachters to 24", () => {
     it("should return correct string length", () => {
         expect(limitChars("qwertyuiop")).toBe("qwertyuiop")
-        expect(limitChars("qwertyuiopasdfghjklzxcvbnm")).toBe(
-            "qwertyuiopasdfghjklzxcvb",
-        )
+        expect(limitChars("qwertyuiopasdfghjklzxcvbnm")).toBe("qwertyuiopasdfghjklzxcvb")
     })
 })
 

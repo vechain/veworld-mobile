@@ -15,18 +15,8 @@ type Props = {
     hasNext: boolean
 }
 
-export const NFTList = ({
-    collection,
-    nfts,
-    fetchMoreNFTs,
-    isLoading,
-    onMomentumScrollBegin,
-    hasNext,
-}: Props) => {
-    const contactsListSeparator = useCallback(
-        () => <BaseSpacer height={16} />,
-        [],
-    )
+export const NFTList = ({ collection, nfts, fetchMoreNFTs, isLoading, onMomentumScrollBegin, hasNext }: Props) => {
+    const contactsListSeparator = useCallback(() => <BaseSpacer height={16} />, [])
 
     const renderItem = useCallback(
         ({ item, index }: { item: NonFungibleToken; index: number }) => (
@@ -52,11 +42,7 @@ export const NFTList = ({
             removeClippedSubviews={true}
             ListFooterComponent={
                 <>
-                    <ListFooterView
-                        isLoading={isLoading}
-                        hasNext={hasNext}
-                        showMargin={true}
-                    />
+                    <ListFooterView isLoading={isLoading} hasNext={hasNext} showMargin={true} />
                     {!isLoading && <BaseSpacer height={16} />}
                 </>
             }

@@ -95,11 +95,7 @@ export const InformUserForIncomingToken = ({
     const locale = i18n.detectLocale()
 
     const formattedAmmount = FormattingUtils.humanNumber(
-        FormattingUtils.scaleNumberDown(
-            amount,
-            decimals,
-            FormattingUtils.ROUND_DECIMAL_DEFAULT,
-        ),
+        FormattingUtils.scaleNumberDown(amount, decimals, FormattingUtils.ROUND_DECIMAL_DEFAULT),
         amount,
     )
 
@@ -138,11 +134,7 @@ export const InformUserForOutgoingToken = ({
     const formattedTo = ""
 
     const formattedAmmount = FormattingUtils.humanNumber(
-        FormattingUtils.scaleNumberDown(
-            amount,
-            decimals,
-            FormattingUtils.ROUND_DECIMAL_DEFAULT,
-        ),
+        FormattingUtils.scaleNumberDown(amount, decimals, FormattingUtils.ROUND_DECIMAL_DEFAULT),
         amount,
     )
 
@@ -167,20 +159,11 @@ type InformUserForIncomingVETProps = {
     informUser: (params: { accountAddress: string; txId?: string }) => void
 }
 
-export const InformUserForIncomingVET = ({
-    amount,
-    alias,
-    to,
-    informUser,
-}: InformUserForIncomingVETProps) => {
+export const InformUserForIncomingVET = ({ amount, alias, to, informUser }: InformUserForIncomingVETProps) => {
     const locale = i18n.detectLocale()
 
     const formattedAmount = FormattingUtils.humanNumber(
-        FormattingUtils.scaleNumberDown(
-            amount,
-            VET.decimals,
-            FormattingUtils.ROUND_DECIMAL_DEFAULT,
-        ),
+        FormattingUtils.scaleNumberDown(amount, VET.decimals, FormattingUtils.ROUND_DECIMAL_DEFAULT),
         amount,
     )
 
@@ -207,22 +190,12 @@ type InformUserForOutgoingTokenVET = {
     informUser: (params: { accountAddress: string; txId?: string }) => void
 }
 
-export const InformUserForOutgoingVET = ({
-    txId,
-    amount,
-    to,
-    from,
-    informUser,
-}: InformUserForOutgoingTokenVET) => {
+export const InformUserForOutgoingVET = ({ txId, amount, to, from, informUser }: InformUserForOutgoingTokenVET) => {
     const locale = i18n.detectLocale()
 
     const fomattedTo = FormattingUtils.humanAddress(to, 4, 5)
     const formattedAmount = FormattingUtils.humanNumber(
-        FormattingUtils.scaleNumberDown(
-            amount,
-            VET.decimals,
-            FormattingUtils.ROUND_DECIMAL_DEFAULT,
-        ),
+        FormattingUtils.scaleNumberDown(amount, VET.decimals, FormattingUtils.ROUND_DECIMAL_DEFAULT),
         amount,
     )
 
@@ -240,13 +213,7 @@ export const InformUserForOutgoingVET = ({
 }
 
 // ~ REVERTED TRANSACTION
-export const informUserforRevertedTransaction = ({
-    txId,
-    network,
-}: {
-    txId: string
-    network: Network
-}) => {
+export const informUserforRevertedTransaction = ({ txId, network }: { txId: string; network: Network }) => {
     const locale = i18n.detectLocale()
     const formattedTxId = FormattingUtils.humanAddress(txId, 4, 5)
 
@@ -257,11 +224,7 @@ export const informUserforRevertedTransaction = ({
         }),
         textLink: i18n.i18n()[locale].SUCCESS_GENERIC_VIEW_DETAIL_LINK(),
         onPress: () => {
-            Linking.openURL(
-                `${
-                    network.explorerUrl ?? defaultMainNetwork.explorerUrl
-                }/transactions/${txId}`,
-            )
+            Linking.openURL(`${network.explorerUrl ?? defaultMainNetwork.explorerUrl}/transactions/${txId}`)
         },
     })
 }

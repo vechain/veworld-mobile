@@ -1,9 +1,5 @@
 import { useCallback, useMemo } from "react"
-import {
-    useBiometrics,
-    useBiometricsValidation,
-    useWalletSecurity,
-} from "~Hooks"
+import { useBiometrics, useBiometricsValidation, useWalletSecurity } from "~Hooks"
 import { BaseButtonGroupHorizontalType, SecurityLevelType } from "~Model"
 import { useI18nContext } from "~i18n"
 import { debug, PlatformUtils } from "~Utils"
@@ -29,16 +25,9 @@ export const useSecurityButtons = (handleOnSecurityUpgrade: () => void) => {
             buttons: [
                 {
                     id: SecurityLevelType.BIOMETRIC,
-                    label: PlatformUtils.isAndroid()
-                        ? LL.TOUCH_ID()
-                        : LL.FACE_ID(),
-                    icon: PlatformUtils.isAndroid()
-                        ? "fingerprint"
-                        : "face-recognition",
-                    disabled:
-                        !biometrics ||
-                        biometrics.currentSecurityLevel !==
-                            SecurityLevelType.BIOMETRIC,
+                    label: PlatformUtils.isAndroid() ? LL.TOUCH_ID() : LL.FACE_ID(),
+                    icon: PlatformUtils.isAndroid() ? "fingerprint" : "face-recognition",
+                    disabled: !biometrics || biometrics.currentSecurityLevel !== SecurityLevelType.BIOMETRIC,
                 },
                 {
                     id: SecurityLevelType.SECRET,
@@ -48,25 +37,16 @@ export const useSecurityButtons = (handleOnSecurityUpgrade: () => void) => {
                 },
             ],
 
-            currentSecurity: isWalletSecurityBiometrics
-                ? SecurityLevelType.BIOMETRIC
-                : SecurityLevelType.SECRET,
+            currentSecurity: isWalletSecurityBiometrics ? SecurityLevelType.BIOMETRIC : SecurityLevelType.SECRET,
         }
     }, [LL, biometrics, isWalletSecurityBiometrics])
 
     const shouldCallRequireBiometricsAndEnableIt = useCallback(
         (button: BaseButtonGroupHorizontalType) => {
-            if (
-                button.id === SecurityLevelType.BIOMETRIC &&
-                !isWalletSecurityBiometrics
-            )
+            if (button.id === SecurityLevelType.BIOMETRIC && !isWalletSecurityBiometrics)
                 authenticateBiometrics(handleOnSecurityUpgrade)
         },
-        [
-            authenticateBiometrics,
-            isWalletSecurityBiometrics,
-            handleOnSecurityUpgrade,
-        ],
+        [authenticateBiometrics, isWalletSecurityBiometrics, handleOnSecurityUpgrade],
     )
 
     return { securityButtons, shouldCallRequireBiometricsAndEnableIt }

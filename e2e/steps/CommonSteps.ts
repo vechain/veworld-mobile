@@ -27,11 +27,7 @@ Given("The app is opened", { timeout: -1 }, async () => {
                     DTXEnableVerboseSyncSystem: "YES",
                     DTXEnableVerboseSyncResources: "YES",
                     detoxPrintBusyIdleResources: "YES",
-                    detoxURLBlacklistRegex: [
-                        ".*vechain.*",
-                        ".*walletconnect.*",
-                        ".*coingecko.*",
-                    ],
+                    detoxURLBlacklistRegex: [".*vechain.*", ".*walletconnect.*", ".*coingecko.*"],
                     appUrl: "http://localhost:8081",
                 },
             })
@@ -44,8 +40,7 @@ Given("The app is opened", { timeout: -1 }, async () => {
 })
 
 Given("The user has previously onboarded", { timeout: -1 }, async function () {
-    if (!(await HomeScreen.isActive()))
-        await OnboardingFlows.completeOnboarding()
+    if (!(await HomeScreen.isActive())) await OnboardingFlows.completeOnboarding()
 })
 
 Given("Open with demo account", { timeout: -1 }, async function () {
@@ -98,18 +93,10 @@ Given("The user goes to home tab", { timeout: -1 }, async function () {
     await TabFlows.goBackToHomeTab()
 })
 
-When(
-    "The user inserts pin {string}",
-    { timeout: -1 },
-    async function (pin: string) {
-        await enterPin(pin)
-    },
-)
+When("The user inserts pin {string}", { timeout: -1 }, async function (pin: string) {
+    await enterPin(pin)
+})
 
-When(
-    "The user closes the {string} bottom sheet",
-    { timeout: -1 },
-    async (name: string) => {
-        await closeBottomSheet(name)
-    },
-)
+When("The user closes the {string} bottom sheet", { timeout: -1 }, async (name: string) => {
+    await closeBottomSheet(name)
+})

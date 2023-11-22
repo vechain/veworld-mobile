@@ -1,20 +1,9 @@
-import {
-    Dispatch,
-    SetStateAction,
-    useCallback,
-    useEffect,
-    useState,
-} from "react"
+import { Dispatch, SetStateAction, useCallback, useEffect, useState } from "react"
 import { VET } from "~Constants"
 import { useThor } from "~Components"
 import { FungibleToken, Token } from "~Model"
 import { getCustomTokenInfo } from "~Screens/Flows/App/ManageCustomTokenScreen/Utils"
-import {
-    selectSelectedNetwork,
-    selectTokensWithInfo,
-    selectVetTokenWithInfo,
-    useAppSelector,
-} from "~Storage/Redux"
+import { selectSelectedNetwork, selectTokensWithInfo, selectVetTokenWithInfo, useAppSelector } from "~Storage/Redux"
 import { AddressUtils } from "~Utils"
 
 /**
@@ -35,10 +24,7 @@ import { AddressUtils } from "~Utils"
  * it fetches the token info using the getCustomTokenInfo utility function.
  *
  */
-export const useSwappedTokens = (
-    receivedTokenAddress: string,
-    paidTokenAddress: string,
-) => {
+export const useSwappedTokens = (receivedTokenAddress: string, paidTokenAddress: string) => {
     const vetToken = useAppSelector(selectVetTokenWithInfo)
 
     const tokens = useAppSelector(selectTokensWithInfo)
@@ -47,26 +33,17 @@ export const useSwappedTokens = (
 
     const thor = useThor()
 
-    const [paidToken, setPaidToken] = useState<FungibleToken | undefined>(
-        undefined,
-    )
-    const [receivedToken, setReceivedToken] = useState<
-        FungibleToken | undefined
-    >(undefined)
+    const [paidToken, setPaidToken] = useState<FungibleToken | undefined>(undefined)
+    const [receivedToken, setReceivedToken] = useState<FungibleToken | undefined>(undefined)
 
     const getToken = useCallback(
-        async (
-            tokenAddress: string,
-            setState: Dispatch<SetStateAction<FungibleToken | undefined>>,
-        ) => {
+        async (tokenAddress: string, setState: Dispatch<SetStateAction<FungibleToken | undefined>>) => {
             if (tokenAddress === VET.address) {
                 setState(vetToken)
                 return
             }
 
-            let token = tokens.find((tkn: Token) =>
-                AddressUtils.compareAddresses(tkn.address, tokenAddress),
-            )
+            let token = tokens.find((tkn: Token) => AddressUtils.compareAddresses(tkn.address, tokenAddress))
 
             if (!token) {
                 token = await getCustomTokenInfo({
@@ -84,15 +61,7 @@ export const useSwappedTokens = (
     useEffect(() => {
         getToken(paidTokenAddress, setPaidToken)
         getToken(receivedTokenAddress, setReceivedToken)
-    }, [
-        getToken,
-        network,
-        paidTokenAddress,
-        receivedTokenAddress,
-        thor,
-        tokens,
-        vetToken,
-    ])
+    }, [getToken, network, paidTokenAddress, receivedTokenAddress, thor, tokens, vetToken])
 
     return { paidToken, receivedToken, tokens }
 }

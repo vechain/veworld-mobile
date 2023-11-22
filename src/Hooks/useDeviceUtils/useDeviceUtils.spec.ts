@@ -1,3 +1,4 @@
+/* eslint-disable max-len */
 import { renderHook } from "@testing-library/react-hooks"
 import { useDeviceUtils } from "./useDeviceUtils"
 import { selectDevices } from "~Storage/Redux/Selectors"
@@ -24,10 +25,7 @@ jest.mock("~Storage/Redux/Selectors", () => ({
 
 describe("createDevice", () => {
     it("should generate a new device from a given mnemonic", async () => {
-        ;(selectDevices as unknown as jest.Mock).mockImplementation(() => [
-            device1,
-            device2,
-        ])
+        ;(selectDevices as unknown as jest.Mock).mockImplementation(() => [device1, device2])
         const { result: hook } = renderHook(() => useDeviceUtils(), {
             wrapper: TestWrapper,
         })
@@ -47,20 +45,13 @@ describe("createDevice", () => {
     })
 
     it("should generate a new device from a given private key", async () => {
-        ;(selectDevices as unknown as jest.Mock).mockImplementation(() => [
-            device1,
-            device2,
-        ])
+        ;(selectDevices as unknown as jest.Mock).mockImplementation(() => [device1, device2])
         const { result: hook } = renderHook(() => useDeviceUtils(), {
             wrapper: TestWrapper,
         })
 
-        const privateKey =
-            "99f0500549792796c14fed62011a51081dc5b5e68fe8bd8a13b86be829c4fd36"
-        const { device, wallet } = hook.current.createDevice(
-            undefined,
-            privateKey,
-        )
+        const privateKey = "99f0500549792796c14fed62011a51081dc5b5e68fe8bd8a13b86be829c4fd36"
+        const { device, wallet } = hook.current.createDevice(undefined, privateKey)
         expect(device).toBeDefined()
         expect(wallet).toBeDefined()
         expect(device.rootAddress).toBeDefined()
@@ -77,8 +68,7 @@ describe("createDevice", () => {
                 xPub: {
                     publicKey:
                         "04fffdd97df929dd320cf5357aa8db7e28a7adff109896772542bfa7aeb01bb1c9b4f4aa4ef90a1826829350b40af7c76590bcae25e02540eedd9d35ab907f8c5b",
-                    chainCode:
-                        "51f873b803f6dd9365c8cb176bedba927f1fef1df117aa4ab8b9cf03b12c7e90",
+                    chainCode: "51f873b803f6dd9365c8cb176bedba927f1fef1df117aa4ab8b9cf03b12c7e90",
                 },
                 rootAddress: "0xf397ae6dcfb21db65ad3454c5afbb40884b78edc",
                 type: "local-mnemonic",

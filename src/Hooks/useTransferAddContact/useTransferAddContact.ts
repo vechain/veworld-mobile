@@ -5,14 +5,9 @@ import { useAppDispatch, addContact } from "~Storage/Redux"
 export const useTransferAddContact = () => {
     const dispatch = useAppDispatch()
 
-    const [selectedContactAddress, setSelectedContactAddress] =
-        useState<string>()
+    const [selectedContactAddress, setSelectedContactAddress] = useState<string>()
 
-    const {
-        ref: addContactSheet,
-        onOpen: openAddContactSheet,
-        onClose: closeAddContactSheet,
-    } = useBottomSheetModal()
+    const { ref: addContactSheet, onOpen: openAddContactSheet, onClose: closeAddContactSheet } = useBottomSheetModal()
 
     const onAddContactPress = useCallback(
         (address: string) => {

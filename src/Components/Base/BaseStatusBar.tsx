@@ -11,20 +11,13 @@ type Props = {
 export const BaseStatusBar = memo((props: Props) => {
     const theme = useTheme()
 
-    const barStyle = useMemo(
-        () => computeBarStyle(props.hero, theme.isDark),
-        [props.hero, theme.isDark],
-    )
+    const barStyle = useMemo(() => computeBarStyle(props.hero, theme.isDark), [props.hero, theme.isDark])
 
     return (
         <StatusBar
             translucent={props.hero}
             barStyle={barStyle}
-            backgroundColor={
-                props.transparent
-                    ? theme.colors.transparent
-                    : theme.colors.background
-            }
+            backgroundColor={props.transparent ? theme.colors.transparent : theme.colors.background}
             {...props}
         />
     )

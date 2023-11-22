@@ -1,10 +1,6 @@
 import { ORDER, getTransfersForBlock } from "~Constants"
 import { NETWORK_TYPE } from "~Model"
-import {
-    MAX_PAGE_SIZE,
-    FetchIncomingTransfersResponse,
-    fetchFromEndpoint,
-} from "~Networking"
+import { MAX_PAGE_SIZE, FetchIncomingTransfersResponse, fetchFromEndpoint } from "~Networking"
 import { debug } from "~Utils"
 
 /**
@@ -27,14 +23,7 @@ export const fetchTransfersForBlock = async (
     debug(`Fetching transfers for ${addresses} at block ${blockNumber}`)
     try {
         return await fetchFromEndpoint<FetchIncomingTransfersResponse>(
-            getTransfersForBlock(
-                blockNumber,
-                addresses,
-                page,
-                MAX_PAGE_SIZE,
-                ORDER.DESC,
-                networType,
-            ),
+            getTransfersForBlock(blockNumber, addresses, page, MAX_PAGE_SIZE, ORDER.DESC, networType),
         )
     } catch (error) {
         throw new Error(`Failed to fetch transfers: ${error}`)

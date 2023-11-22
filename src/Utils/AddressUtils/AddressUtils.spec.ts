@@ -1,3 +1,4 @@
+/* eslint-disable max-len */
 /* eslint-disable no-console */
 import { HDNode, mnemonic } from "thor-devkit"
 import { XPub } from "~Model/Crypto"
@@ -30,8 +31,7 @@ const validMnemonicPhrase = [
 const validXPub: XPub = {
     publicKey:
         "04705f631be98f5e982167438af4ec9bb1ada05af19ebbe0d5fba4b2152274fc6e7a8607b4e5f8d03b2d31fe67e3563d2f688fac7fda8916db18a05a9b7846e9fe",
-    chainCode:
-        "bd161611b74b0216f306c5b9adfcf2d9202e20604ed39936e437f3add301b1f1",
+    chainCode: "bd161611b74b0216f306c5b9adfcf2d9202e20604ed39936e437f3add301b1f1",
 }
 
 const address1 = "0xf077b491b355E64048cE21E3A6Fc4751eEeA77fa"
@@ -95,21 +95,15 @@ describe("compareAddresses - positive testing", () => {
     })
 
     test("1 uppercase, 1 lowercase", () => {
-        expect(
-            compareAddresses(address1.toLowerCase(), address1.toUpperCase()),
-        ).toBe(true)
+        expect(compareAddresses(address1.toLowerCase(), address1.toUpperCase())).toBe(true)
     })
 
     test("both uppercase", () => {
-        expect(
-            compareAddresses(address1.toUpperCase(), address1.toUpperCase()),
-        ).toBe(true)
+        expect(compareAddresses(address1.toUpperCase(), address1.toUpperCase())).toBe(true)
     })
 
     test("both lowercase", () => {
-        expect(
-            compareAddresses(address1.toLowerCase(), address1.toLowerCase()),
-        ).toBe(true)
+        expect(compareAddresses(address1.toLowerCase(), address1.toLowerCase())).toBe(true)
     })
 
     test("generated node", () => {
@@ -118,13 +112,9 @@ describe("compareAddresses - positive testing", () => {
 
         expect(compareAddresses(rootAddress, rootAddress)).toBe(true)
 
-        expect(compareAddresses(rootAddress, rootAddress.toUpperCase())).toBe(
-            true,
-        )
+        expect(compareAddresses(rootAddress, rootAddress.toUpperCase())).toBe(true)
 
-        expect(compareAddresses(rootAddress, rootAddress.toUpperCase())).toBe(
-            true,
-        )
+        expect(compareAddresses(rootAddress, rootAddress.toUpperCase())).toBe(true)
     })
 })
 
@@ -134,9 +124,7 @@ describe("compareAddresses - negative testing", () => {
     })
 
     test("bad length", () => {
-        expect(
-            compareAddresses(address1.slice(0, 10), address1.slice(0, 10)),
-        ).toBe(true)
+        expect(compareAddresses(address1.slice(0, 10), address1.slice(0, 10))).toBe(true)
     })
 
     test("equal strings - neither addresses", () => {
@@ -150,15 +138,11 @@ describe("compareAddresses - negative testing", () => {
 
 describe("compareListOfAddresses - positive testing", () => {
     test("same list", () => {
-        expect(
-            compareListOfAddresses([address1, address2], [address1, address2]),
-        ).toBe(true)
+        expect(compareListOfAddresses([address1, address2], [address1, address2])).toBe(true)
     })
 
     test("same list, different order", () => {
-        expect(
-            compareListOfAddresses([address1, address2], [address2, address1]),
-        ).toBe(true)
+        expect(compareListOfAddresses([address1, address2], [address2, address1])).toBe(true)
     })
 
     test("same list, different case", () => {
@@ -173,15 +157,11 @@ describe("compareListOfAddresses - positive testing", () => {
 
 describe("compareListOfAddresses - negative testing", () => {
     test("different lists", () => {
-        expect(
-            compareListOfAddresses([address1, address2], [address1, address1]),
-        ).toBe(false)
+        expect(compareListOfAddresses([address1, address2], [address1, address1])).toBe(false)
     })
 
     test("different lists, different order", () => {
-        expect(
-            compareListOfAddresses([address1, address2], [address2, address2]),
-        ).toBe(false)
+        expect(compareListOfAddresses([address1, address2], [address2, address2])).toBe(false)
     })
 
     test("different lists, different case", () => {
@@ -213,14 +193,10 @@ describe("Is Valid Address", () => {
         expect(isValid("0x0000000000000000000000000000456e6572677")).toBe(false)
     })
     test("Invalid prefix", () => {
-        expect(isValid("1x0000000000000000000000000000456e65726779")).toBe(
-            false,
-        )
+        expect(isValid("1x0000000000000000000000000000456e65726779")).toBe(false)
     })
     test("Not Hex", () => {
-        expect(isValid("0x0000000000000000000000000000456e6572677g")).toBe(
-            false,
-        )
+        expect(isValid("0x0000000000000000000000000000456e6572677g")).toBe(false)
     })
 
     test("not a string", () => {
@@ -241,9 +217,7 @@ describe("Check vechain address", () => {
     })
 
     test("Valid vechain thor token address must return true", () => {
-        expect(
-            isVechainToken("0x0000000000000000000000000000456e65726779"),
-        ).toBe(true)
+        expect(isVechainToken("0x0000000000000000000000000000456e65726779")).toBe(true)
     })
 
     test("Invalid vechain thor token address must return false", () => {
@@ -251,9 +225,7 @@ describe("Check vechain address", () => {
     })
 
     test("Should add correct padding to address", () => {
-        expect(leftPadWithZeros(address1, 64)).toBe(
-            "0x000000000000000000000000" + address1NoHex,
-        )
+        expect(leftPadWithZeros(address1, 64)).toBe("0x000000000000000000000000" + address1NoHex)
     })
 
     test("left pad with too many zeros", () => {

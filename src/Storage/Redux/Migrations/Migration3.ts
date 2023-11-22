@@ -47,9 +47,7 @@ export const Migration3 = (state: PersistedState): PersistedState => {
                     verified: {
                         origin: sessionOrApp.peer.metadata.url,
                         validation: "VALID",
-                        verifyUrl:
-                            sessionOrApp.peer.metadata.verifyUrl ||
-                            "https://verify.walletconnect.com",
+                        verifyUrl: sessionOrApp.peer.metadata.verifyUrl || "https://verify.walletconnect.com",
                     },
                 },
             })

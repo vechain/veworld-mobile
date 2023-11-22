@@ -10,10 +10,7 @@ describe("getCollectionInfo", () => {
     it("should return the collection info for the main network", async () => {
         const net = NETWORK_TYPE.MAIN
 
-        const responseData = [
-            { name: "Collection 1" },
-            { name: "Collection 2" },
-        ]
+        const responseData = [{ name: "Collection 1" }, { name: "Collection 2" }]
 
         ;(axios.get as jest.Mock).mockResolvedValueOnce({ data: responseData })
 
@@ -28,10 +25,7 @@ describe("getCollectionInfo", () => {
     it("should return the collection info for the test network", async () => {
         const net = NETWORK_TYPE.TEST
 
-        const responseData = [
-            { name: "Test Collection 1" },
-            { name: "Test Collection 2" },
-        ]
+        const responseData = [{ name: "Test Collection 1" }, { name: "Test Collection 2" }]
 
         ;(axios.get as jest.Mock).mockResolvedValueOnce({ data: responseData })
 
@@ -46,19 +40,13 @@ describe("getCollectionInfo", () => {
     it("should return the collection info for the default network", async () => {
         const net = "unknown_network"
 
-        const responseData = [
-            { name: "Default Collection 1" },
-            { name: "Default Collection 2" },
-        ]
+        const responseData = [{ name: "Default Collection 1" }, { name: "Default Collection 2" }]
 
         ;(axios.get as jest.Mock).mockResolvedValueOnce({ data: responseData })
 
         const collectionInfo = await getCollectionInfo(net as NETWORK_TYPE)
 
         expect(collectionInfo).toEqual(responseData)
-        expect(axios.get).toHaveBeenCalledWith(
-            GH_NFT_REGISTRY(net as NETWORK_TYPE),
-            { timeout: NFT_AXIOS_TIMEOUT },
-        )
+        expect(axios.get).toHaveBeenCalledWith(GH_NFT_REGISTRY(net as NETWORK_TYPE), { timeout: NFT_AXIOS_TIMEOUT })
     })
 })

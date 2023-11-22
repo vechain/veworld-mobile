@@ -17,21 +17,13 @@ export const useSearchOrScanInput = (
     const [searchText, setSearchText] = useState("")
     const [errorMessage, setErrorMessage] = useState("")
 
-    const {
-        filteredContacts,
-        filteredAccounts,
-        isAddressInContactsOrAccounts,
-        accountsAndContacts,
-        contacts,
-    } = useSearchContactsAndAccounts({ searchText, selectedAddress })
+    const { filteredContacts, filteredAccounts, isAddressInContactsOrAccounts, accountsAndContacts, contacts } =
+        useSearchContactsAndAccounts({ searchText, selectedAddress })
 
     const onSuccessfullScan = useCallback(
         (address: string) => {
             const addressExists = accountsAndContacts.some(accountOrContact =>
-                AddressUtils.compareAddresses(
-                    accountOrContact.address,
-                    address,
-                ),
+                AddressUtils.compareAddresses(accountOrContact.address, address),
             )
 
             setSearchText(address)
@@ -74,14 +66,7 @@ export const useSearchOrScanInput = (
                 onIconPress={searchText ? onTextReset : handleOnIconPress}
             />
         ),
-        [
-            LL,
-            errorMessage,
-            handleOnIconPress,
-            handleSearchChange,
-            onTextReset,
-            searchText,
-        ],
+        [LL, errorMessage, handleOnIconPress, handleSearchChange, onTextReset, searchText],
     )
 
     return {

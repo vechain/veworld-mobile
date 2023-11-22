@@ -52,9 +52,7 @@ export const AutoLockProvider = ({ children }: ProviderProps) => {
     }
 
     const stopBackgroundFetch = async () => {
-        const isRegistered = await TaskManager.isTaskRegisteredAsync(
-            AUTO_LOCK_TASK,
-        )
+        const isRegistered = await TaskManager.isTaskRegisteredAsync(AUTO_LOCK_TASK)
         if (isRegistered) {
             debug("Stopping auto lock listener")
             await BackgroundFetch.unregisterTaskAsync(AUTO_LOCK_TASK)
@@ -81,10 +79,7 @@ export const AutoLockProvider = ({ children }: ProviderProps) => {
                 // Check if the app was closed for more than 5 minutes
                 const now = Date.now()
 
-                if (
-                    inactivityStartTime > 0 &&
-                    now - inactivityStartTime > FIVE_MINUTES
-                ) {
+                if (inactivityStartTime > 0 && now - inactivityStartTime > FIVE_MINUTES) {
                     info("App was inactive for more than 5 minutes. Locking...")
                     lockApplication()
                 }
@@ -95,17 +90,7 @@ export const AutoLockProvider = ({ children }: ProviderProps) => {
                 setInactivityStartTime(0)
             }
         }
-    }, [
-        dispatch,
-        activeToBackground,
-        backgroundToActive,
-        inactivityStartTime,
-        lockApplication,
-    ])
+    }, [dispatch, activeToBackground, backgroundToActive, inactivityStartTime, lockApplication])
 
-    return (
-        <AutoLockContext.Provider value={null}>
-            {children}
-        </AutoLockContext.Provider>
-    )
+    return <AutoLockContext.Provider value={null}>{children}</AutoLockContext.Provider>
 }

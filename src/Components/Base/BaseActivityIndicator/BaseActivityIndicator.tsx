@@ -9,11 +9,7 @@ type Props = {
     isVisible: boolean
     onHide?: () => void
 }
-export const BaseActivityIndicator: React.FC<Props> = ({
-    text,
-    isVisible,
-    onHide = () => null,
-}) => {
+export const BaseActivityIndicator: React.FC<Props> = ({ text, isVisible, onHide = () => null }) => {
     return (
         <BaseModal
             animationType="fade"

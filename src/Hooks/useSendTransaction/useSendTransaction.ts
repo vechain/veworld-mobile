@@ -22,9 +22,7 @@ import moment from "moment"
  * @param onSuccess the function to handle success
  * @returns {sendTransactionAndPerformUpdates} the function to send the transaction and perform updates
  */
-export const useSendTransaction = (
-    onSuccess: (transaction: Transaction, id: string) => Promise<void> | void,
-) => {
+export const useSendTransaction = (onSuccess: (transaction: Transaction, id: string) => Promise<void> | void) => {
     const dispatch = useAppDispatch()
     const thorClient = useThor()
     const { LL } = useI18nContext()
@@ -32,9 +30,7 @@ export const useSendTransaction = (
     const selectedNetwork = useAppSelector(selectSelectedNetwork)
     const lastReviewTimestamp = useAppSelector(selectLastReviewTimestamp)
 
-    const sendTransaction = async (
-        signedTransaction: Transaction,
-    ): Promise<string> => {
+    const sendTransaction = async (signedTransaction: Transaction): Promise<string> => {
         dispatch(setIsAppLoading(true))
 
         const encodedRawTx = {
@@ -44,18 +40,12 @@ export const useSendTransaction = (
         let response: AxiosResponse
 
         try {
-            response = await axios.post(
-                `${selectedNetwork.currentUrl}/transactions`,
-                encodedRawTx,
-            )
+            response = await axios.post(`${selectedNetwork.currentUrl}/transactions`, encodedRawTx)
         } catch (e) {
             if (e instanceof AxiosError) {
                 const axiosError = e as AxiosError
 
-                error(
-                    "sendTransaction error",
-                    JSON.stringify(axiosError.toJSON()),
-                )
+                error("sendTransaction error", JSON.stringify(axiosError.toJSON()))
 
                 error(axiosError.response?.data)
             } else {
@@ -75,10 +65,7 @@ export const useSendTransaction = (
             textLink: LL.SUCCESS_GENERIC_VIEW_DETAIL_LINK(),
             onPress: async () => {
                 await Linking.openURL(
-                    `${
-                        selectedNetwork.explorerUrl ??
-                        defaultMainNetwork.explorerUrl
-                    }/transactions/${id}`,
+                    `${selectedNetwork.explorerUrl ?? defaultMainNetwork.explorerUrl}/transactions/${id}`,
                 )
             },
             visibilityTime: 4000,
@@ -99,9 +86,7 @@ export const useSendTransaction = (
                 })
         }
 
-        await dispatch(
-            updateAccountBalances(thorClient, selectedAccount.address),
-        )
+        await dispatch(updateAccountBalances(thorClient, selectedAccount.address))
 
         return id
     }

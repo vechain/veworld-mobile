@@ -16,11 +16,7 @@ describe("BaseBottomSheet", () => {
             },
         )
 
-        const baseView = await screen.findByTestId(
-            "BaseView",
-            {},
-            { timeout: 10000 },
-        )
+        const baseView = await screen.findByTestId("BaseView", {}, { timeout: 10000 })
         expect(baseView).toBeVisible()
     })
 })

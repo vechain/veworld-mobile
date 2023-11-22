@@ -1,10 +1,4 @@
-import {
-    BaseIcon,
-    BaseSpacer,
-    BaseText,
-    BaseView,
-    CheckBoxWithText,
-} from "~Components"
+import { BaseIcon, BaseSpacer, BaseText, BaseView, CheckBoxWithText } from "~Components"
 import React, { useMemo } from "react"
 import { Verify } from "@walletconnect/types/dist/types/core/verify"
 import { COLORS } from "~Constants"
@@ -17,23 +11,13 @@ type Props = {
     confirmed: boolean
     setConfirmed: (confirmed: boolean) => void
 }
-export const UnknownAppMessage: React.FC<Props> = ({
-    verifyContext,
-    confirmed,
-    setConfirmed,
-}) => {
+export const UnknownAppMessage: React.FC<Props> = ({ verifyContext, confirmed, setConfirmed }) => {
     const { LL } = useI18nContext()
 
     const theme = useTheme()
 
-    const isUnverified = useMemo(
-        () => verifyContext?.validation === "INVALID",
-        [verifyContext],
-    )
-    const isUnknown = useMemo(
-        () => verifyContext?.validation === "UNKNOWN",
-        [verifyContext],
-    )
+    const isUnverified = useMemo(() => verifyContext?.validation === "INVALID", [verifyContext])
+    const isUnknown = useMemo(() => verifyContext?.validation === "UNKNOWN", [verifyContext])
 
     const bgColor = useMemo(() => {
         if (theme.isDark) {
@@ -58,24 +42,14 @@ export const UnknownAppMessage: React.FC<Props> = ({
             <BaseView justifyContent="center" alignItems="center">
                 <BaseSpacer height={24} />
 
-                <BaseView
-                    bg={bgColor}
-                    flexDirection={"row"}
-                    alignItems={"center"}
-                    style={baseStyles.warningBackground}>
+                <BaseView bg={bgColor} flexDirection={"row"} alignItems={"center"} style={baseStyles.warningBackground}>
                     <BaseView style={baseStyles.icon}>
-                        <BaseIcon
-                            size={40}
-                            name="alert-outline"
-                            color={iconColor}
-                        />
+                        <BaseIcon size={40} name="alert-outline" color={iconColor} />
                     </BaseView>
 
                     <BaseView style={baseStyles.text}>
                         <BaseText color={theme.colors.text}>
-                            {isUnverified
-                                ? LL.APP_VERIFICATION_INVALID()
-                                : LL.APP_VERIFICATION_UNKNOWN()}
+                            {isUnverified ? LL.APP_VERIFICATION_INVALID() : LL.APP_VERIFICATION_UNKNOWN()}
                         </BaseText>
                     </BaseView>
                 </BaseView>

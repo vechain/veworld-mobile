@@ -1,3 +1,5 @@
+/* eslint-disable max-len */
+
 // NOTE:
 // Trace - Only when I would be "tracing" the code and trying to find one part of a function specifically.
 // Debug - Information that is diagnostically helpful to people more than just developers (IT, sysadmins, etc.).
@@ -15,9 +17,7 @@ const LOG_LEVELS = {
 const logLevel = process.env.REACT_APP_LOG_LEVEL || "warn"
 import * as Sentry from "@sentry/react-native"
 
-const checkLogLevelHOC = (
-    logID: keyof typeof LOG_LEVELS,
-): ((...args: unknown[]) => void) => {
+const checkLogLevelHOC = (logID: keyof typeof LOG_LEVELS): ((...args: unknown[]) => void) => {
     if (LOG_LEVELS[logID] === LOG_LEVELS.error) {
         return (...args: unknown[]) => {
             // eslint-disable-next-line no-console

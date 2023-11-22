@@ -1,9 +1,5 @@
 import { TransactionOrigin } from "~Model"
-import {
-    NFTTransferHandlerProps,
-    TokenTransferHandlerProps,
-    VETTransferHandlerProps,
-} from "./index"
+import { NFTTransferHandlerProps, TokenTransferHandlerProps, VETTransferHandlerProps } from "./index"
 import { getName } from "~Networking"
 import {
     InformUserForIncomingToken,
@@ -27,13 +23,8 @@ export const handleNFTTransfers = async ({
     if (transfers.length === 0) return
 
     // Update NFTs for accounts that have been changed
-    const changedAccounts = uniq([
-        ...transfers.map(t => t.to),
-        ...transfers.map(t => t.from),
-    ])
-    changedAccounts.forEach(accountAddress =>
-        updateNFTs({ network: network.type, accountAddress }),
-    )
+    const changedAccounts = uniq([...transfers.map(t => t.to), ...transfers.map(t => t.from)])
+    changedAccounts.forEach(accountAddress => updateNFTs({ network: network.type, accountAddress }))
 
     // Send one message. Only one will be displayed on screen so don't send multiple messages
     const transfer = transfers[0]
@@ -73,14 +64,9 @@ export const handleTokenTransfers = async ({
     if (transfers.length === 0) return
 
     // Update Balances for accounts that have been changed
-    const changedAccounts = uniq([
-        ...transfers.map(t => t.to),
-        ...transfers.map(t => t.from),
-    ])
+    const changedAccounts = uniq([...transfers.map(t => t.to), ...transfers.map(t => t.from)])
 
-    changedAccounts.forEach(accountAddress =>
-        updateBalances({ accountAddress }),
-    )
+    changedAccounts.forEach(accountAddress => updateBalances({ accountAddress }))
 
     // Send one message. Only one will be displayed on screen so don't send multiple messages
     const transfer = transfers[0]
@@ -123,14 +109,9 @@ export const handleVETTransfers = ({
     if (transfers.length === 0) return
 
     // Update Balances for accounts that have been changed
-    const changedAccounts = uniq([
-        ...transfers.map(t => t.to),
-        ...transfers.map(t => t.from),
-    ])
+    const changedAccounts = uniq([...transfers.map(t => t.to), ...transfers.map(t => t.from)])
 
-    changedAccounts.forEach(accountAddress =>
-        updateBalances({ accountAddress }),
-    )
+    changedAccounts.forEach(accountAddress => updateBalances({ accountAddress }))
 
     // Send one message. Only one will be displayed on screen so don't send multiple messages
     const transfer = transfers[0]

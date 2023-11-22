@@ -1,27 +1,10 @@
 import React, { useCallback, useMemo, useState } from "react"
 import { NativeStackScreenProps } from "@react-navigation/native-stack"
-import {
-    useAnalyticTracking,
-    useTheme,
-    useTransactionScreen,
-    useTransferAddContact,
-} from "~Hooks"
+import { useAnalyticTracking, useTheme, useTransactionScreen, useTransferAddContact } from "~Hooks"
 import { AddressUtils, FormattingUtils } from "~Utils"
 import { AnalyticsEvent, COLORS } from "~Constants"
-import {
-    BaseSpacer,
-    BaseText,
-    BaseView,
-    GasFeeOptions,
-    Layout,
-    RequireUserPassword,
-    TransferCard,
-} from "~Components"
-import {
-    RootStackParamListDiscover,
-    RootStackParamListHome,
-    Routes,
-} from "~Navigation"
+import { BaseSpacer, BaseText, BaseView, GasFeeOptions, Layout, RequireUserPassword, TransferCard } from "~Components"
+import { RootStackParamListDiscover, RootStackParamListHome, Routes } from "~Navigation"
 import {
     addPendingTransferTransactionActivity,
     selectAccounts,
@@ -46,12 +29,7 @@ type Props = NativeStackScreenProps<
 >
 
 export const TransactionSummarySendScreen = ({ route }: Props) => {
-    const {
-        token,
-        amount: userSelectedAmount,
-        address,
-        initialRoute,
-    } = route.params
+    const { token, amount: userSelectedAmount, address, initialRoute } = route.params
 
     const [amount, setAmount] = useState(userSelectedAmount)
     const { LL } = useI18nContext()
@@ -63,38 +41,22 @@ export const TransactionSummarySendScreen = ({ route }: Props) => {
     // TODO (Vas) (https://github.com/vechainfoundation/veworld-mobile/issues/763) refactor to a new hook
     const account = useAppSelector(selectSelectedAccount)
     const currency = useAppSelector(selectCurrency)
-    const exchangeRate = useAppSelector(state =>
-        selectCurrencyExchangeRate(state, token),
-    )
-    const pendingTransaction = useAppSelector(state =>
-        selectPendingTx(state, token.address),
-    )
+    const exchangeRate = useAppSelector(state => selectCurrencyExchangeRate(state, token))
+    const pendingTransaction = useAppSelector(state => selectPendingTx(state, token.address))
 
     const formattedFiatAmount = useMemo(
         () =>
             FormattingUtils.humanNumber(
-                FormattingUtils.convertToFiatBalance(
-                    amount || "0",
-                    exchangeRate?.rate || 1,
-                    0,
-                ),
+                FormattingUtils.convertToFiatBalance(amount || "0", exchangeRate?.rate || 1, 0),
                 amount,
             ),
         [amount, exchangeRate],
     )
 
-    const {
-        onAddContactPress,
-        handleSaveContact,
-        addContactSheet,
-        selectedContactAddress,
-        closeAddContactSheet,
-    } = useTransferAddContact()
+    const { onAddContactPress, handleSaveContact, addContactSheet, selectedContactAddress, closeAddContactSheet } =
+        useTransferAddContact()
 
-    const clauses = useMemo(
-        () => prepareFungibleClause(amount, token, address),
-        [amount, token, address],
-    )
+    const clauses = useMemo(() => prepareFungibleClause(amount, token, address), [amount, token, address])
 
     const onFinish = useCallback(
         (success: boolean) => {
@@ -151,9 +113,7 @@ export const TransactionSummarySendScreen = ({ route }: Props) => {
     })
 
     const accounts = useAppSelector(selectAccounts)
-    const receiverIsAccount = accounts.find(_account =>
-        AddressUtils.compareAddresses(_account.address, address),
-    )
+    const receiverIsAccount = accounts.find(_account => AddressUtils.compareAddresses(_account.address, address))
 
     return (
         <Layout
@@ -166,21 +126,14 @@ export const TransactionSummarySendScreen = ({ route }: Props) => {
                         fromAddress={account.address}
                         toAddresses={[address]}
                         onAddContactPress={onAddContactPress}
-                        isFromAccountLedger={
-                            account.device?.type === DEVICE_TYPE.LEDGER
-                        }
-                        isToAccountLedger={
-                            receiverIsAccount?.device.type ===
-                            DEVICE_TYPE.LEDGER
-                        }
+                        isFromAccountLedger={account.device?.type === DEVICE_TYPE.LEDGER}
+                        isToAccountLedger={receiverIsAccount?.device.type === DEVICE_TYPE.LEDGER}
                     />
                     {!!pendingTransaction && (
                         <>
                             <BaseSpacer height={24} />
 
-                            <BaseText color={COLORS.DARK_RED_ALERT}>
-                                {LL.SEND_PENDING_TX_REVERT_ALERT()}
-                            </BaseText>
+                            <BaseText color={COLORS.DARK_RED_ALERT}>{LL.SEND_PENDING_TX_REVERT_ALERT()}</BaseText>
                         </>
                     )}
 
@@ -193,13 +146,9 @@ export const TransactionSummarySendScreen = ({ route }: Props) => {
                     {Delegation()}
 
                     <BaseSpacer height={24} />
-                    <BaseText typographyFont="subTitleBold">
-                        {LL.SEND_DETAILS()}
-                    </BaseText>
+                    <BaseText typographyFont="subTitleBold">{LL.SEND_DETAILS()}</BaseText>
                     <BaseSpacer height={16} />
-                    <BaseText typographyFont="buttonSecondary">
-                        {LL.SEND_AMOUNT()}
-                    </BaseText>
+                    <BaseText typographyFont="buttonSecondary">{LL.SEND_AMOUNT()}</BaseText>
                     <BaseSpacer height={6} />
                     <BaseView flexDirection="row">
                         <BaseText typographyFont="subSubTitle">
@@ -213,15 +162,9 @@ export const TransactionSummarySendScreen = ({ route }: Props) => {
                         )}
                     </BaseView>
                     <BaseSpacer height={12} />
-                    <BaseSpacer
-                        height={0.5}
-                        width={"100%"}
-                        background={theme.colors.textDisabled}
-                    />
+                    <BaseSpacer height={0.5} width={"100%"} background={theme.colors.textDisabled} />
                     <BaseSpacer height={12} />
-                    <BaseText typographyFont="buttonSecondary">
-                        {LL.SEND_GAS_FEE()}
-                    </BaseText>
+                    <BaseText typographyFont="buttonSecondary">{LL.SEND_GAS_FEE()}</BaseText>
                     <BaseSpacer height={6} />
 
                     <GasFeeOptions
@@ -235,19 +178,11 @@ export const TransactionSummarySendScreen = ({ route }: Props) => {
                     />
 
                     <BaseSpacer height={12} />
-                    <BaseSpacer
-                        height={0.5}
-                        width={"100%"}
-                        background={theme.colors.textDisabled}
-                    />
+                    <BaseSpacer height={0.5} width={"100%"} background={theme.colors.textDisabled} />
                     <BaseSpacer height={12} />
-                    <BaseText typographyFont="buttonSecondary">
-                        {LL.SEND_ESTIMATED_TIME()}
-                    </BaseText>
+                    <BaseText typographyFont="buttonSecondary">{LL.SEND_ESTIMATED_TIME()}</BaseText>
                     <BaseSpacer height={6} />
-                    <BaseText typographyFont="subSubTitle">
-                        {LL.SEND_LESS_THAN_1_MIN()}
-                    </BaseText>
+                    <BaseText typographyFont="subSubTitle">{LL.SEND_LESS_THAN_1_MIN()}</BaseText>
                     <ContactManagementBottomSheet
                         ref={addContactSheet}
                         contact={{

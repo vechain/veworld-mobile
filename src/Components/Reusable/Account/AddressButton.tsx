@@ -14,10 +14,7 @@ export const AddressButton: React.FC<Props> = memo(({ address }) => {
 
     const { onCopyToClipboard } = useCopyClipboard()
 
-    const color = useMemo(
-        () => (theme.isDark ? theme.colors.text : theme.colors.primary),
-        [theme],
-    )
+    const color = useMemo(() => (theme.isDark ? theme.colors.text : theme.colors.primary), [theme])
     return (
         <BaseButton
             textColor={color}
@@ -27,14 +24,7 @@ export const AddressButton: React.FC<Props> = memo(({ address }) => {
             bgColor={theme.colors.primaryReversed}
             title={FormattingUtils.humanAddress(address, 5, 4)}
             action={() => onCopyToClipboard(address, LL.COMMON_LBL_ADDRESS())}
-            rightIcon={
-                <BaseIcon
-                    name="content-copy"
-                    color={color}
-                    size={12}
-                    style={baseStyles.marginLeft}
-                />
-            }
+            rightIcon={<BaseIcon name="content-copy" color={color} size={12} style={baseStyles.marginLeft} />}
         />
     )
 })

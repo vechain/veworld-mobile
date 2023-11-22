@@ -55,11 +55,7 @@ export const useCreateWallet = () => {
             try {
                 const { device, wallet } = createDevice(mnemonic, privateKey)
 
-                const encryptedWallet =
-                    await WalletEncryptionKeyHelper.encryptWallet(
-                        wallet,
-                        userPassword,
-                    )
+                const encryptedWallet = await WalletEncryptionKeyHelper.encryptWallet(wallet, userPassword)
 
                 const newAccount = dispatch(
                     addDeviceAndAccounts({
@@ -68,10 +64,7 @@ export const useCreateWallet = () => {
                     }),
                 )
 
-                if (!selectedAccount)
-                    dispatch(
-                        setSelectedAccount({ address: newAccount.address }),
-                    )
+                if (!selectedAccount) dispatch(setSelectedAccount({ address: newAccount.address }))
 
                 dispatch(setMnemonic(undefined))
                 dispatch(setPrivateKey(undefined))
@@ -95,24 +88,13 @@ export const useCreateWallet = () => {
      * @returns void
      */
     const createLedgerWallet = useCallback(
-        async ({
-            newLedger,
-            onError,
-        }: {
-            newLedger: NewLedgerDevice
-            onError?: (error: unknown) => void
-        }) => {
+        async ({ newLedger, onError }: { newLedger: NewLedgerDevice; onError?: (error: unknown) => void }) => {
             try {
-                const { accounts } = await dispatch(
-                    addLedgerDeviceAndAccounts(newLedger),
-                ).unwrap()
+                const { accounts } = await dispatch(addLedgerDeviceAndAccounts(newLedger)).unwrap()
 
                 dispatch(setNewLedgerDevice(undefined))
 
-                if (!selectedAccount)
-                    dispatch(
-                        setSelectedAccount({ address: accounts[0]?.address }),
-                    )
+                if (!selectedAccount) dispatch(setSelectedAccount({ address: accounts[0]?.address }))
 
                 setIsComplete(true)
                 track(AnalyticsEvent.WALLET_ADD_LEDGER_SUCCESS)

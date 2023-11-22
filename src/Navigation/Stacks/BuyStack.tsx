@@ -9,8 +9,7 @@ export type RootStackParamListBuy = {
     [Routes.BUY_WEBVIEW]: undefined
 }
 
-const { Navigator, Group, Screen } =
-    createNativeStackNavigator<RootStackParamListBuy>()
+const { Navigator, Group, Screen } = createNativeStackNavigator<RootStackParamListBuy>()
 
 export const BuyStack = () => {
     const { animation } = useNavAnimation()
@@ -19,10 +18,7 @@ export const BuyStack = () => {
         <Navigator screenOptions={{ headerShown: false, animation }}>
             <Group>
                 <Screen name={Routes.BUY} component={BuyScreen} />
-                <Screen
-                    name={Routes.BUY_WEBVIEW}
-                    component={BuyWebviewScreen}
-                />
+                <Screen name={Routes.BUY_WEBVIEW} component={BuyWebviewScreen} />
             </Group>
         </Navigator>
     )

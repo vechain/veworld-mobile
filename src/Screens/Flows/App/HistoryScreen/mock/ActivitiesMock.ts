@@ -1,3 +1,4 @@
+/* eslint-disable max-len */
 import { VET, VTHO, DIRECTIONS } from "~Constants"
 import {
     Activity,
@@ -21,8 +22,7 @@ const FUNGIBLE_TOKEN_ACTIVITIES: FungibleTokenActivity[] = [
         id: "0x6a05ecf6a1305ec61fb8ea65bf077589998149fa10d44c80464df6d93cffaf01",
         blockNumber: 123456,
         isTransaction: true,
-        genesisId:
-            "0x00000000851caf3cfdb6e899cf5958bfb1ac3413d346d43539627e6be7ec1b4a",
+        genesisId: "0x00000000851caf3cfdb6e899cf5958bfb1ac3413d346d43539627e6be7ec1b4a",
         type: ActivityType.VET_TRANSFER,
         timestamp: 1382337919000,
         gasUsed: 21000,
@@ -49,8 +49,7 @@ const FUNGIBLE_TOKEN_ACTIVITIES: FungibleTokenActivity[] = [
         id: "0x6a05ecf6a1305ec61fb8ea65bf077589998149fa10d44c80464df6d93cffaz01",
         blockNumber: 123456,
         isTransaction: true,
-        genesisId:
-            "0x00000000851caf3cfdb6e899cf5958bfb1ac3413d346d43539627e6be7ec1b4a",
+        genesisId: "0x00000000851caf3cfdb6e899cf5958bfb1ac3413d346d43539627e6be7ec1b4a",
         type: ActivityType.FUNGIBLE_TOKEN,
         timestamp: 1482337919000,
         gasUsed: 36518,
@@ -77,8 +76,7 @@ const FUNGIBLE_TOKEN_ACTIVITIES: FungibleTokenActivity[] = [
         id: "0x04f14b921d634d491769dc4310f2e61cf5027fdc0216d97b256b9656b32cba82",
         blockNumber: 15181772,
         isTransaction: true,
-        genesisId:
-            "0x00000000851caf3cfdb6e899cf5958bfb1ac3413d346d43539627e6be7ec1b4a",
+        genesisId: "0x00000000851caf3cfdb6e899cf5958bfb1ac3413d346d43539627e6be7ec1b4a",
         type: ActivityType.FUNGIBLE_TOKEN,
         timestamp: 1482337912000,
         gasUsed: 36518,
@@ -105,8 +103,7 @@ const FUNGIBLE_TOKEN_ACTIVITIES: FungibleTokenActivity[] = [
         id: "0x3468fe89d76559a1e05302629dbf7df7acdb0aa075376ead8b52b2836ffc0179",
         blockNumber: 15181772,
         isTransaction: true,
-        genesisId:
-            "0x00000000851caf3cfdb6e899cf5958bfb1ac3413d346d43539627e6be7ec1b4a",
+        genesisId: "0x00000000851caf3cfdb6e899cf5958bfb1ac3413d346d43539627e6be7ec1b4a",
         type: ActivityType.VET_TRANSFER,
         timestamp: 1382337919000,
         gasUsed: 21000,
@@ -133,8 +130,7 @@ const FUNGIBLE_TOKEN_ACTIVITIES: FungibleTokenActivity[] = [
         id: "0x19be7cdcc6b3c70235923334ecb018093499c5d50787d1eaff41374a6a6ebf15",
         blockNumber: 15181772,
         isTransaction: true,
-        genesisId:
-            "0x00000000851caf3cfdb6e899cf5958bfb1ac3413d346d43539627e6be7ec1b4a",
+        genesisId: "0x00000000851caf3cfdb6e899cf5958bfb1ac3413d346d43539627e6be7ec1b4a",
         type: ActivityType.VET_TRANSFER,
         timestamp: 1482337912000,
         gasUsed: 36518,
@@ -161,8 +157,7 @@ const FUNGIBLE_TOKEN_ACTIVITIES: FungibleTokenActivity[] = [
         id: "0x3468fe89d76559a1e05302629dbf7df7acdb0aa075376ead8b52b2866ffc0179",
         blockNumber: 15181775,
         isTransaction: true,
-        genesisId:
-            "0x00000000851caf3cfdb6e899cf5958bfb1ac3413d346d43539627e6be7ec1b4a",
+        genesisId: "0x00000000851caf3cfdb6e899cf5958bfb1ac3413d346d43539627e6be7ec1b4a",
         type: ActivityType.VET_TRANSFER,
         timestamp: 1382337919000,
         gasUsed: 67435,
@@ -189,8 +184,7 @@ const FUNGIBLE_TOKEN_ACTIVITIES: FungibleTokenActivity[] = [
         id: "0x3468fe89d76559a1e05302629dbf7df7acdb0aa075376egd8b52b2866ffc0179",
         blockNumber: 15181775,
         isTransaction: true,
-        genesisId:
-            "0x00000000851caf3cfdb6e899cf5958bfb1ac3413d346d43539627e6be7ec1b4a",
+        genesisId: "0x00000000851caf3cfdb6e899cf5958bfb1ac3413d346d43539627e6be7ec1b4a",
         type: ActivityType.VET_TRANSFER,
         timestamp: 1382337919000,
         gasUsed: 67435,
@@ -226,8 +220,7 @@ const CONNECTED_APP_ACTIVITIES: DappTxActivity[] = [
         id: "0x56189da678b222a32e26510617b37ef4de83370aa1149b08a98b51e9ef15f0bh",
         blockNumber: 15181775,
         isTransaction: true,
-        genesisId:
-            "0x00000000851caf3cfdb6e899cf5958bfb1ac3413d346d43539627e6be7ec1b4a",
+        genesisId: "0x00000000851caf3cfdb6e899cf5958bfb1ac3413d346d43539627e6be7ec1b4a",
         type: ActivityType.DAPP_TRANSACTION,
         timestamp: 1382337919000,
         gasUsed: 154645,
@@ -281,8 +274,7 @@ const CONNECTED_APP_ACTIVITIES: DappTxActivity[] = [
         id: "0x56189da678b222a32e26510617b37ef4de83370aa1149b08a98b51e9ef15f0bb",
         blockNumber: 15181775,
         isTransaction: true,
-        genesisId:
-            "0x00000000851caf3cfdb6e899cf5958bfb1ac3413d346d43539627e6be7ec1b4a",
+        genesisId: "0x00000000851caf3cfdb6e899cf5958bfb1ac3413d346d43539627e6be7ec1b4a",
         type: ActivityType.DAPP_TRANSACTION,
         timestamp: 1382337919000,
         gasUsed: 154645,
@@ -345,8 +337,7 @@ const SIGN_CERT_ACTIVITIES: SignCertActivity[] = [
         id: "0x56189da678b222a32e26510kfn537ef4de83370aa1149b08a98b51e9ef15f0bb",
         blockNumber: 15181775,
         isTransaction: true,
-        genesisId:
-            "0x00000000851caf3cfdb6e899cf5958bfb1ac3413d346d43539627e6be7ec1b4a",
+        genesisId: "0x00000000851caf3cfdb6e899cf5958bfb1ac3413d346d43539627e6be7ec1b4a",
         type: ActivityType.SIGN_CERT,
         timestamp: 1382337919000,
         gasUsed: 154645,
@@ -365,8 +356,7 @@ const SIGN_CERT_ACTIVITIES: SignCertActivity[] = [
         id: "0x56189da678b222a32e26516h47b37ef4de83370aa1149b08a98b51e9ef15f0bb",
         blockNumber: 15181775,
         isTransaction: true,
-        genesisId:
-            "0x00000000851caf3cfdb6e899cf5958bfb1ac3413d346d43539627e6be7ec1b4a",
+        genesisId: "0x00000000851caf3cfdb6e899cf5958bfb1ac3413d346d43539627e6be7ec1b4a",
         type: ActivityType.SIGN_CERT,
         timestamp: 1382337919000,
         gasUsed: 154645,
@@ -388,8 +378,7 @@ const DELEGATED_TRANSACTION_ACTIVITIES: DelegatedTransactionActivity[] = [
         id: "0x56189da678b222a32e26510kfn537ef4de83370aa9d49b08a98b51e9ef15f0bb",
         blockNumber: 15181775,
         isTransaction: true,
-        genesisId:
-            "0x00000000851caf3cfdb6e899cf5958bfb1ac3413d346d43539627e6be7ec1b4a",
+        genesisId: "0x00000000851caf3cfdb6e899cf5958bfb1ac3413d346d43539627e6be7ec1b4a",
         type: ActivityType.DELEGATED_TRANSACTION,
         timestamp: 1382337919000,
         gasUsed: 154645,
@@ -406,8 +395,7 @@ const DELEGATED_TRANSACTION_ACTIVITIES: DelegatedTransactionActivity[] = [
         id: "0x56189da678b222a32e26510kfn537ef4de83370jg1149b08a98b51e9ef15f0bb",
         blockNumber: 15181775,
         isTransaction: true,
-        genesisId:
-            "0x00000000851caf3cfdb6e899cf5958bfb1ac3413d346d43539627e6be7ec1b4a",
+        genesisId: "0x00000000851caf3cfdb6e899cf5958bfb1ac3413d346d43539627e6be7ec1b4a",
         type: ActivityType.DELEGATED_TRANSACTION,
         timestamp: 1382337919000,
         gasUsed: 154645,

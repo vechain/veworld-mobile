@@ -10,21 +10,14 @@ export const selectCurrencyExchangeRate = createSelector(
     (currency, token) => {
         if (
             // if fake token is named VET don't get rates
-            (token?.symbol.toLowerCase() === "vet" &&
-                token.address !== VET.address) ||
+            (token?.symbol.toLowerCase() === "vet" && token.address !== VET.address) ||
             // if fake token is named VTHO don't get rates
-            (token?.symbol.toLowerCase() === "vtho" &&
-                token.address !== VTHO.address)
+            (token?.symbol.toLowerCase() === "vtho" && token.address !== VTHO.address)
         )
             return
 
-        return currency.exchangeRates?.find(
-            rate => rate?.symbol?.toLowerCase() === token?.symbol.toLowerCase(),
-        )
+        return currency.exchangeRates?.find(rate => rate?.symbol?.toLowerCase() === token?.symbol.toLowerCase())
     },
 )
 
-export const selectAllExchangeRates = createSelector(
-    getCurrency,
-    state => state.exchangeRates,
-)
+export const selectAllExchangeRates = createSelector(getCurrency, state => state.exchangeRates)

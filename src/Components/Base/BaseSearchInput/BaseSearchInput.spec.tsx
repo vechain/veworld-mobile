@@ -7,8 +7,7 @@ const customPlaceholder = "CustomPlaceholder"
 
 const findTextInput = async (placeholder: string = "Search") =>
     await screen.findByPlaceholderText(placeholder, {}, { timeout: 5000 })
-const findMagnifyIcon = async () =>
-    screen.findByTestId("magnify", {}, { timeout: 5000 })
+const findMagnifyIcon = async () => screen.findByTestId("magnify", {}, { timeout: 5000 })
 
 describe("BaseSearchInput", () => {
     it("renders correctly", async () => {

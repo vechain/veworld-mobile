@@ -1,14 +1,7 @@
 import React, { memo } from "react"
 import { StyleProp, ViewStyle, StyleSheet } from "react-native"
 import { COLORS } from "~Constants"
-import {
-    BaseText,
-    BaseCard,
-    BaseSpacer,
-    BaseView,
-    BaseCustomTokenIcon,
-    BaseImage,
-} from "~Components"
+import { BaseText, BaseCard, BaseSpacer, BaseView, BaseCustomTokenIcon, BaseImage } from "~Components"
 import { FungibleToken } from "~Model"
 import { address } from "thor-devkit"
 
@@ -31,10 +24,7 @@ export const CustomTokenCard = memo(({ token, containerStyle }: Props) => {
                         },
                     ]}
                     containerStyle={styles.imageShadow}>
-                    <BaseImage
-                        source={{ uri: token?.icon }}
-                        style={styles.image}
-                    />
+                    <BaseImage source={{ uri: token?.icon }} style={styles.image} />
                 </BaseCard>
             )}
             {!hasIcon && (
@@ -46,15 +36,10 @@ export const CustomTokenCard = memo(({ token, containerStyle }: Props) => {
             )}
             <BaseSpacer width={8} />
             <BaseView flexDirection="column" justifyContent="center" w={75}>
-                <BaseText
-                    typographyFont="buttonPrimary"
-                    numberOfLines={1}
-                    ellipsizeMode="tail">
+                <BaseText typographyFont="buttonPrimary" numberOfLines={1} ellipsizeMode="tail">
                     {token?.name}
                 </BaseText>
-                <BaseText typographyFont="captionRegular">
-                    {token?.symbol}
-                </BaseText>
+                <BaseText typographyFont="captionRegular">{token?.symbol}</BaseText>
             </BaseView>
         </BaseCard>
     )

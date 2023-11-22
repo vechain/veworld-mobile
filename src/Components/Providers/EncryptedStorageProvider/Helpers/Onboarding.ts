@@ -10,12 +10,7 @@ type IMigrateState = {
 
 const ROOT_STATE_KEY = "persist:root"
 
-const migrateState = ({
-    onboardingStorage,
-    encryptedStorage,
-    onboardingKey,
-    encryptionKey,
-}: IMigrateState) => {
+const migrateState = ({ onboardingStorage, encryptedStorage, onboardingKey, encryptionKey }: IMigrateState) => {
     const persistedState = onboardingStorage.getString(ROOT_STATE_KEY)
 
     if (!persistedState) {

@@ -45,9 +45,7 @@ const BaseTextInputComponent = forwardRef<TextInput, BaseTextInputProps>(
     ) => {
         const { styles, theme } = useThemedStyles(baseStyles(!!errorMessage))
 
-        const placeholderColor = theme.isDark
-            ? COLORS.WHITE_DISABLED
-            : COLORS.DARK_PURPLE_DISABLED
+        const placeholderColor = theme.isDark ? COLORS.WHITE_DISABLED : COLORS.DARK_PURPLE_DISABLED
 
         return (
             <BaseView style={containerStyle}>
@@ -62,9 +60,7 @@ const BaseTextInputComponent = forwardRef<TextInput, BaseTextInputProps>(
                         style={[
                             styles.input,
                             {
-                                color: otherProps.editable
-                                    ? theme.colors.text
-                                    : theme.colors.textDisabled,
+                                color: otherProps.editable ? theme.colors.text : theme.colors.textDisabled,
                             },
                             style,
                         ]}
@@ -91,20 +87,9 @@ const BaseTextInputComponent = forwardRef<TextInput, BaseTextInputProps>(
                     )}
                 </BaseView>
                 {errorMessage && (
-                    <BaseView
-                        pt={10}
-                        flexDirection="row"
-                        justifyContent="flex-start"
-                        style={styles.errorContainer}>
-                        <BaseIcon
-                            name={"alert-circle-outline"}
-                            size={20}
-                            color={theme.colors.danger}
-                        />
-                        <BaseText
-                            px={7}
-                            color={theme.colors.danger}
-                            typographyFont="caption">
+                    <BaseView pt={10} flexDirection="row" justifyContent="flex-start" style={styles.errorContainer}>
+                        <BaseIcon name={"alert-circle-outline"} size={20} color={theme.colors.danger} />
+                        <BaseText px={7} color={theme.colors.danger} typographyFont="caption">
                             {errorMessage || " "}
                         </BaseText>
                     </BaseView>
@@ -120,9 +105,7 @@ const baseStyles = (isError: boolean) => (theme: ColorThemeType) =>
             width: "100%",
             flexDirection: "row",
             alignItems: "center",
-            borderColor: isError
-                ? theme.colors.danger
-                : theme.colors.transparent,
+            borderColor: isError ? theme.colors.danger : theme.colors.transparent,
             borderWidth: 1,
             borderRadius: 16,
             backgroundColor: theme.colors.card,

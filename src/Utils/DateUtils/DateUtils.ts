@@ -37,15 +37,9 @@ export const isValidTimezone = (timezone: string): boolean => {
  * @returns {string} The formatted date and time string.
  * @throws {Error} If the provided locale or timezone is invalid.
  */
-export const formatDateTime = (
-    timestamp: number,
-    locale: string,
-    timezone: string,
-): string => {
-    if (!isValidDateLocale(locale))
-        throw new Error(`Invalid locale: ${locale}.`)
-    if (!isValidTimezone(timezone))
-        throw new Error(`Invalid timezone: ${timezone}.`)
+export const formatDateTime = (timestamp: number, locale: string, timezone: string): string => {
+    if (!isValidDateLocale(locale)) throw new Error(`Invalid locale: ${locale}.`)
+    if (!isValidTimezone(timezone)) throw new Error(`Invalid timezone: ${timezone}.`)
 
     const date: Date = new Date(timestamp)
 
@@ -67,10 +61,7 @@ export const formatDateTime = (
     const formattedTime = timeFormatter.format(date)
     const timeSuffix = formattedTime.includes("AM") ? " am" : " pm"
 
-    return `${formattedDate} - ${formattedTime.replace(
-        / (AM|PM)/,
-        "",
-    )}${timeSuffix}`
+    return `${formattedDate} - ${formattedTime.replace(/ (AM|PM)/, "")}${timeSuffix}`
 }
 
 export const DEFAULT_TIMEZONE = "UTC"

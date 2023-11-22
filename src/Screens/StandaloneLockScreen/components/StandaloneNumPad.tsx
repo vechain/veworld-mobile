@@ -5,20 +5,7 @@ import { widthPercentageToDP as wp } from "react-native-responsive-screen"
 import Icon from "react-native-vector-icons/MaterialCommunityIcons"
 import { useThemedStyles } from "~Hooks"
 
-const numPad = [
-    "1",
-    "2",
-    "3",
-    "4",
-    "5",
-    "6",
-    "7",
-    "8",
-    "9",
-    "blank",
-    "0",
-    "canc",
-]
+const numPad = ["1", "2", "3", "4", "5", "6", "7", "8", "9", "blank", "0", "canc"]
 
 type Props = {
     onDigitPress: (digit: string) => void
@@ -39,28 +26,17 @@ export const StandaloneNumPad = ({ onDigitPress, onDigitDelete }: Props) => {
         <View style={styles.container}>
             {numPad.map(digit => {
                 const isDeleteKey = digit === "canc"
-                const onPress = isDeleteKey
-                    ? onDigitDelete
-                    : handleOnDigitPress(digit)
+                const onPress = isDeleteKey ? onDigitDelete : handleOnDigitPress(digit)
                 return (
                     <View style={styles.width} key={digit}>
                         {digit !== "blank" ? (
                             <Pressable
-                                style={({ pressed }) => [
-                                    styles.pressable,
-                                    { opacity: pressed ? 0.5 : 1.0 },
-                                ]}
+                                style={({ pressed }) => [styles.pressable, { opacity: pressed ? 0.5 : 1.0 }]}
                                 onPress={onPress}>
                                 {digit !== "canc" ? (
-                                    <Text style={styles.digitText}>
-                                        {digit}
-                                    </Text>
+                                    <Text style={styles.digitText}>{digit}</Text>
                                 ) : (
-                                    <Icon
-                                        size={22}
-                                        name="backspace-outline"
-                                        color={theme.colors.text}
-                                    />
+                                    <Icon size={22} name="backspace-outline" color={theme.colors.text} />
                                 )}
                             </Pressable>
                         ) : null}

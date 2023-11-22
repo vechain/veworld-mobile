@@ -60,21 +60,19 @@ export const fetchTokensOwned = async (
     network: Network,
     officialTokensOnly: boolean = false,
 ): Promise<Balance[]> => {
-    const tokenAddresses: FetchFungibleTokensContractsResponse =
-        await fetchFungibleTokensContracts(
-            accountAddress,
-            page,
-            network,
-            officialTokensOnly,
-        )
+    const tokenAddresses: FetchFungibleTokensContractsResponse = await fetchFungibleTokensContracts(
+        accountAddress,
+        page,
+        network,
+        officialTokensOnly,
+    )
 
-    const fungibleTokens: Balance[] =
-        await getTokenBalancesAndInfoFromTokenAddresses(
-            tokenAddresses.data,
-            accountAddress,
-            network,
-            thor,
-        )
+    const fungibleTokens: Balance[] = await getTokenBalancesAndInfoFromTokenAddresses(
+        tokenAddresses.data,
+        accountAddress,
+        network,
+        thor,
+    )
 
     return fungibleTokens
 }
@@ -83,25 +81,15 @@ export const fetchTokensOwned = async (
  * Fetches all official tokens owned
  *
  */
-export const fetchOfficialTokensOwned = async (
-    accountAddress: string,
-    network: Network,
-): Promise<string[]> => {
+export const fetchOfficialTokensOwned = async (accountAddress: string, network: Network): Promise<string[]> => {
     const tokenAddresses: string[] = []
     let page = 0
     let hasNextPage = true
 
     while (hasNextPage) {
-        const tokenAddressesResponse = await fetchFungibleTokensContracts(
-            accountAddress,
-            page,
-            network,
-            true,
-        )
+        const tokenAddressesResponse = await fetchFungibleTokensContracts(accountAddress, page, network, true)
 
-        tokenAddresses.push(
-            ...tokenAddressesResponse.data.map(t => HexUtils.normalize(t)),
-        )
+        tokenAddresses.push(...tokenAddressesResponse.data.map(t => HexUtils.normalize(t)))
 
         hasNextPage = tokenAddressesResponse.pagination.hasNext
         page++

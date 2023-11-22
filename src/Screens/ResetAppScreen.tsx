@@ -1,12 +1,6 @@
 import React, { useState } from "react"
 import { useAppReset, useTheme } from "~Hooks"
-import {
-    BaseButton,
-    BaseText,
-    BaseView,
-    CheckBoxWithText,
-    Layout,
-} from "~Components"
+import { BaseButton, BaseText, BaseView, CheckBoxWithText, Layout } from "~Components"
 import { useI18nContext } from "~i18n"
 
 export const ResetAppScreen = () => {
@@ -21,9 +15,7 @@ export const ResetAppScreen = () => {
             body={
                 <BaseView alignItems="center" justifyContent="space-between">
                     <BaseView alignSelf="flex-start">
-                        <BaseText typographyFont="title">
-                            {LL.TITLE_RESET_APP()}
-                        </BaseText>
+                        <BaseText typographyFont="title">{LL.TITLE_RESET_APP()}</BaseText>
 
                         <BaseText typographyFont="bodyMedium" my={10}>
                             {LL.BD_CONFIRM_RESET()}
@@ -37,10 +29,7 @@ export const ResetAppScreen = () => {
                             {LL.BD_RESET_APP_02()}
                         </BaseText>
 
-                        <BaseText
-                            typographyFont="body"
-                            my={10}
-                            color={theme.colors.danger}>
+                        <BaseText typographyFont="body" my={10} color={theme.colors.danger}>
                             {LL.BD_RESET_APP_DISCLAIMER()}
                         </BaseText>
                     </BaseView>

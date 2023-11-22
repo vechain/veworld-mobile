@@ -1,9 +1,6 @@
 import React, { MutableRefObject, ReactNode, useCallback } from "react"
 import { BaseView } from "~Components/Base"
-import SwipeableItem, {
-    OpenDirection,
-    SwipeableItemImperativeRef,
-} from "react-native-swipeable-item"
+import SwipeableItem, { OpenDirection, SwipeableItemImperativeRef } from "react-native-swipeable-item"
 import { DeleteUnderlay } from "../DeleteUnderlay"
 import { TouchableOpacity } from "react-native-gesture-handler"
 import { Pressable, StyleSheet } from "react-native"
@@ -102,11 +99,7 @@ export const SwipeableRow = <T,>({
                 }}
                 swipeEnabled={swipeEnabled}
                 item={item}
-                renderUnderlayLeft={() =>
-                    customUnderlay || (
-                        <DeleteUnderlay onPress={onTrashIconPress} />
-                    )
-                }
+                renderUnderlayLeft={() => customUnderlay || <DeleteUnderlay onPress={onTrashIconPress} />}
                 snapPointsLeft={snapPointsLeft || [58]}
                 onChange={handleSwipe}>
                 <BaseView style={styles.touchableContainer}>

@@ -2,21 +2,10 @@ import React from "react"
 import { Token } from "~Model"
 import { SWAP_SIDE } from "../SwapCard"
 import { useI18nContext } from "~i18n"
-import {
-    selectVisibleCustomTokens,
-    selectCurrency,
-    selectTokensWithInfo,
-    useAppSelector,
-} from "~Storage/Redux"
+import { selectVisibleCustomTokens, selectCurrency, selectTokensWithInfo, useAppSelector } from "~Storage/Redux"
 import { SCREEN_WIDTH, VET, currencySymbolMap, COLORS } from "~Constants"
 import DropShadow from "react-native-drop-shadow"
-import {
-    BaseCard,
-    BaseIcon,
-    BaseImage,
-    BaseText,
-    BaseView,
-} from "~Components/Base"
+import { BaseCard, BaseIcon, BaseImage, BaseText, BaseView } from "~Components/Base"
 import { useTheme } from "~Hooks"
 import { StyleSheet } from "react-native"
 
@@ -43,8 +32,7 @@ export const TokenBox = ({
 
     const theme = useTheme()
 
-    const provenanceText =
-        provenance === SWAP_SIDE.PAID ? LL.PAID() : LL.RECEIVED()
+    const provenanceText = provenance === SWAP_SIDE.PAID ? LL.PAID() : LL.RECEIVED()
 
     const customTokens = useAppSelector(selectVisibleCustomTokens)
 
@@ -61,35 +49,19 @@ export const TokenBox = ({
             <BaseView flexDirection="column" alignItems="center">
                 {token?.icon ? (
                     <BaseCard
-                        style={[
-                            baseStyles.imageContainer,
-                            { backgroundColor: COLORS.WHITE },
-                        ]}
+                        style={[baseStyles.imageContainer, { backgroundColor: COLORS.WHITE }]}
                         containerStyle={baseStyles.imageShadow}>
-                        <BaseImage
-                            source={{ uri: token.icon }}
-                            style={baseStyles.tokenIcon}
-                        />
+                        <BaseImage source={{ uri: token.icon }} style={baseStyles.tokenIcon} />
                     </BaseCard>
                 ) : (
-                    <BaseIcon
-                        name="help"
-                        size={22}
-                        color={COLORS.DARK_PURPLE}
-                        bg={COLORS.WHITE}
-                        iconPadding={4}
-                    />
+                    <BaseIcon name="help" size={22} color={COLORS.DARK_PURPLE} bg={COLORS.WHITE} iconPadding={4} />
                 )}
             </BaseView>
         </DropShadow>
     )
 
     return (
-        <BaseView
-            py={12}
-            px={16}
-            style={{ width: SCREEN_WIDTH - 40 }}
-            alignItems="flex-start">
+        <BaseView py={12} px={16} style={{ width: SCREEN_WIDTH - 40 }} alignItems="flex-start">
             <BaseText typographyFont="buttonPrimary">{provenanceText}</BaseText>
             <BaseView flexDirection="row" py={8}>
                 {tokenIcon}
@@ -97,9 +69,7 @@ export const TokenBox = ({
                     {token ? (
                         <>
                             <BaseView flexDirection="row">
-                                <BaseText typographyFont="subSubTitle">
-                                    {token.name}
-                                </BaseText>
+                                <BaseText typographyFont="subSubTitle">{token.name}</BaseText>
                                 <BaseText typographyFont="subSubTitleLight">
                                     {" ("}
                                     {token.symbol}
@@ -107,26 +77,18 @@ export const TokenBox = ({
                                 </BaseText>
                             </BaseView>
                             <BaseView pt={3} flexDirection="row">
-                                <BaseText typographyFont="captionRegular">
-                                    {amount}
-                                </BaseText>
-                                <BaseText typographyFont="captionRegular">
-                                    {" "}
-                                    {token.symbol}
-                                </BaseText>
+                                <BaseText typographyFont="captionRegular">{amount}</BaseText>
+                                <BaseText typographyFont="captionRegular"> {token.symbol}</BaseText>
                                 {fiatValue && (
                                     <BaseText typographyFont="captionRegular">
                                         {" ≈ "}
-                                        {fiatValue}{" "}
-                                        {currencySymbolMap[currency]}
+                                        {fiatValue} {currencySymbolMap[currency]}
                                     </BaseText>
                                 )}
                             </BaseView>
                         </>
                     ) : (
-                        <BaseText typographyFont="button">
-                            {addressShort}
-                        </BaseText>
+                        <BaseText typographyFont="button">{addressShort}</BaseText>
                     )}
                 </BaseView>
                 {!isTokenAdded && (

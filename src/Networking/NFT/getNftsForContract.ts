@@ -34,13 +34,7 @@ export const getNftsForContract = async (
     page: number = 0,
 ): Promise<NftForContractResponse> => {
     const response = await axios.get(
-        NFTS_OWNED_PER_CONTRACT(
-            networkType,
-            ownerAddress,
-            contractAddress,
-            resultsPerPage,
-            page,
-        ),
+        NFTS_OWNED_PER_CONTRACT(networkType, ownerAddress, contractAddress, resultsPerPage, page),
         { timeout: NFT_AXIOS_TIMEOUT },
     )
 

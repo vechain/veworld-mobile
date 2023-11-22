@@ -27,17 +27,11 @@ type Props = {
  * @param providedGas - the gas to use for the transaction
  * @param providedGasPayer - the gas payer to use for the transaction
  */
-export const useTransactionGas = ({
-    clauses,
-    providedGas,
-    providedGasPayer,
-}: Props): UseTransactionReturnProps => {
+export const useTransactionGas = ({ clauses, providedGas, providedGasPayer }: Props): UseTransactionReturnProps => {
     const [loadingGas, setLoadingGas] = useState<boolean>(true)
     const [gas, setGas] = useState<EstimateGasResult>()
     const account = useAppSelector(selectSelectedAccount)
-    const [gasPayer, setGasPayer] = useState<string>(
-        providedGasPayer ?? account.address,
-    )
+    const [gasPayer, setGasPayer] = useState<string>(providedGasPayer ?? account.address)
     const thorClient = useThor()
 
     const estimateGas = useCallback(

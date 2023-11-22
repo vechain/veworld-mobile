@@ -5,12 +5,7 @@ import { useThemedStyles } from "~Hooks"
 import { COLORS, ColorThemeType } from "~Constants"
 import { BaseText, BaseView } from "~Components"
 
-export const TopTabbar = ({
-    state,
-    descriptors,
-    navigation,
-    position,
-}: MaterialTopTabBarProps) => {
+export const TopTabbar = ({ state, descriptors, navigation, position }: MaterialTopTabBarProps) => {
     const { styles } = useThemedStyles(baseStyles)
 
     return (
@@ -51,9 +46,7 @@ export const TopTabbar = ({
                         onPress={onPress}
                         style={styles.buttonContainer}>
                         <BaseView alignItems="center">
-                            <BaseText typographyFont={"subTitleLight"}>
-                                {route.name}
-                            </BaseText>
+                            <BaseText typographyFont={"subTitleLight"}>{route.name}</BaseText>
 
                             <Animated.Text
                                 style={{

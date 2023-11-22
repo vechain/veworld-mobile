@@ -21,16 +21,8 @@ import {
     selectNonVechainTokensWithBalances,
     selectSelectedNetwork,
 } from "~Storage/Redux/Selectors"
-import {
-    addTokenBalance,
-    removeTokenBalance,
-    setIsAppLoading,
-} from "~Storage/Redux/Slices"
-import {
-    updateAccountBalances,
-    useAppDispatch,
-    useAppSelector,
-} from "~Storage/Redux"
+import { addTokenBalance, removeTokenBalance, setIsAppLoading } from "~Storage/Redux/Slices"
+import { updateAccountBalances, useAppDispatch, useAppSelector } from "~Storage/Redux"
 import { useNavigation } from "@react-navigation/native"
 import { Routes } from "~Navigation"
 import { AddCustomTokenBottomSheet } from "../ManageCustomTokenScreen/BottomSheets"
@@ -68,19 +60,11 @@ export const ManageTokenScreen = () => {
 
     const filteredTokens = tokens.filter(
         token =>
-            token.name
-                .toLocaleLowerCase()
-                .includes(tokenQuery.toLocaleLowerCase()) ||
-            token.symbol
-                .toLocaleLowerCase()
-                .includes(tokenQuery.toLocaleLowerCase()),
+            token.name.toLocaleLowerCase().includes(tokenQuery.toLocaleLowerCase()) ||
+            token.symbol.toLocaleLowerCase().includes(tokenQuery.toLocaleLowerCase()),
     )
-    const selectedTokens = filteredTokens.filter(token =>
-        selectedTokenSymbols.includes(token.symbol),
-    )
-    const unselectedTokens = filteredTokens.filter(
-        token => !selectedTokenSymbols.includes(token.symbol),
-    )
+    const selectedTokens = filteredTokens.filter(token => selectedTokenSymbols.includes(token.symbol))
+    const unselectedTokens = filteredTokens.filter(token => !selectedTokenSymbols.includes(token.symbol))
     const thorClient = useThor()
 
     const selectToken = async (token: FungibleToken) => {
@@ -105,9 +89,7 @@ export const ManageTokenScreen = () => {
         track(AnalyticsEvent.TOKENS_CUSTOM_TOKEN_ADDED)
     }
     const unselectToken = (token: FungibleToken) => {
-        setSelectedTokenSymbols(tokenSymbols =>
-            tokenSymbols.filter(tokenSymbol => tokenSymbol !== token.symbol),
-        )
+        setSelectedTokenSymbols(tokenSymbols => tokenSymbols.filter(tokenSymbol => tokenSymbol !== token.symbol))
         dispatch(
             removeTokenBalance({
                 network: currentNetwork.type,
@@ -148,9 +130,7 @@ export const ManageTokenScreen = () => {
                                 alignItems="center"
                                 w={100}
                                 pt={16}>
-                                <BaseText
-                                    typographyFont="title"
-                                    testID="contacts-screen-title">
+                                <BaseText typographyFont="title" testID="contacts-screen-title">
                                     {LL.MANAGE_TOKEN_TITLE()}
                                 </BaseText>
                                 <BaseIcon
@@ -163,19 +143,14 @@ export const ManageTokenScreen = () => {
                                 />
                             </BaseView>
                             <BaseSpacer height={8} />
-                            <BaseText typographyFont="body">
-                                {LL.MANAGE_TOKEN_SELECT_YOUR_TOKEN_BODY()}
-                            </BaseText>
+                            <BaseText typographyFont="body">{LL.MANAGE_TOKEN_SELECT_YOUR_TOKEN_BODY()}</BaseText>
                             <BaseSpacer height={16} />
 
                             <BaseTouchableBox
                                 haptics="Light"
                                 action={navigateManageCustomTokenScreen}
                                 justifyContent="center">
-                                <BaseIcon
-                                    name="tune"
-                                    color={theme.colors.primary}
-                                />
+                                <BaseIcon name="tune" color={theme.colors.primary} />
                                 <BaseSpacer width={8} />
                                 <BaseText typographyFont="bodyMedium">
                                     {LL.MANAGE_TOKEN_VIEW_CUSTOM_TOKENS_OWNED()}
@@ -196,9 +171,7 @@ export const ManageTokenScreen = () => {
                             <>
                                 {!!selectedTokens.length && (
                                     <>
-                                        <BaseText typographyFont="subSubTitle">
-                                            {LL.MANAGE_TOKEN_SELECTED()}
-                                        </BaseText>
+                                        <BaseText typographyFont="subSubTitle">{LL.MANAGE_TOKEN_SELECTED()}</BaseText>
                                         <BaseSpacer height={16} />
                                         {selectedTokens.map(token => (
                                             <OfficialTokenCard
@@ -215,9 +188,7 @@ export const ManageTokenScreen = () => {
                                 )}
                                 {!!unselectedTokens.length && (
                                     <>
-                                        <BaseText typographyFont="subSubTitle">
-                                            {LL.MANAGE_TOKEN_UNSELECTED()}
-                                        </BaseText>
+                                        <BaseText typographyFont="subSubTitle">{LL.MANAGE_TOKEN_UNSELECTED()}</BaseText>
                                         <BaseSpacer height={16} />
                                         {unselectedTokens.map(token => (
                                             <OfficialTokenCard
@@ -235,10 +206,7 @@ export const ManageTokenScreen = () => {
                             <BaseText m={20}>{LL.BD_NO_TOKEN_FOUND()}</BaseText>
                         )}
 
-                        <AddCustomTokenBottomSheet
-                            ref={addCustomTokenSheetRef}
-                            onClose={closeAddCustomTokenSheet}
-                        />
+                        <AddCustomTokenBottomSheet ref={addCustomTokenSheetRef} onClose={closeAddCustomTokenSheet} />
                     </>
                 }
             />

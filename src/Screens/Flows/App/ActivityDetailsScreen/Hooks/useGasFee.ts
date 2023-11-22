@@ -58,18 +58,12 @@ export const useGasFee = (activity: Activity) => {
         calculateVthoFee()
     }, [LL, activity.gasUsed, thor])
 
-    const VTHOexchangeRate = useAppSelector((state: RootState) =>
-        selectCurrencyExchangeRate(state, VTHO),
-    )
+    const VTHOexchangeRate = useAppSelector((state: RootState) => selectCurrencyExchangeRate(state, VTHO))
 
     const fiatValueGasFeeSpent = useMemo(() => {
         if (VTHOexchangeRate?.rate && vthoGasFee) {
             return FormattingUtils.humanNumber(
-                FormattingUtils.convertToFiatBalance(
-                    vthoGasFee,
-                    VTHOexchangeRate.rate,
-                    VTHO.decimals,
-                ),
+                FormattingUtils.convertToFiatBalance(vthoGasFee, VTHOexchangeRate.rate, VTHO.decimals),
                 vthoGasFee,
             )
         }

@@ -20,9 +20,7 @@ export const NftSkeleton = ({
     const renderChildren = useMemo(() => {
         const children = []
 
-        const _numberOfChildren = renderExtra
-            ? numberOfChildren + 2
-            : numberOfChildren
+        const _numberOfChildren = renderExtra ? numberOfChildren + 2 : numberOfChildren
 
         for (let i = 0; i < _numberOfChildren; i++) {
             const isLast = i === _numberOfChildren - 1

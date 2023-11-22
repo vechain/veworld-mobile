@@ -18,11 +18,7 @@ type Props = {
     isCurrentStepError?: boolean
 }
 
-export const StepsProgressBar: React.FC<Props> = ({
-    steps,
-    currentStep,
-    isCurrentStepError,
-}) => {
+export const StepsProgressBar: React.FC<Props> = ({ steps, currentStep, isCurrentStepError }) => {
     const theme = useTheme()
 
     const [progress, setProgress] = useState(0)
@@ -44,18 +40,8 @@ export const StepsProgressBar: React.FC<Props> = ({
     const trackColor = theme.isDark ? COLORS.DARK_PURPLE_DISABLED : COLORS.WHITE
     return (
         <BaseView bg={trackColor} w={100} h={2} mt={20} borderRadius={8}>
-            <BaseView
-                w={progress}
-                flexDirection="row"
-                h={100}
-                bg={theme.colors.primary}
-                borderRadius={8}
-            />
-            <BaseView
-                style={styles.stepsContainer}
-                w={100}
-                flexDirection="row"
-                justifyContent="space-around">
+            <BaseView w={progress} flexDirection="row" h={100} bg={theme.colors.primary} borderRadius={8} />
+            <BaseView style={styles.stepsContainer} w={100} flexDirection="row" justifyContent="space-around">
                 {steps.map((step, index) => {
                     const isActive = index === currentStep
                     const isNext = index > currentStep
@@ -78,19 +64,10 @@ export const StepsProgressBar: React.FC<Props> = ({
                         ? step.isDoneText
                         : step.isActiveText
 
-                    const icon = isError
-                        ? "close"
-                        : isDone
-                        ? "check"
-                        : isNext
-                        ? "dots-horizontal"
-                        : "circle"
+                    const icon = isError ? "close" : isDone ? "check" : isNext ? "dots-horizontal" : "circle"
 
                     return (
-                        <BaseView
-                            key={index}
-                            justifyContent="flex-start"
-                            alignItems="center">
+                        <BaseView key={index} justifyContent="flex-start" alignItems="center">
                             {isActive && !isError ? (
                                 <BaseView bg={bgColor} borderRadius={100} p={5}>
                                     <ActivityIndicator
@@ -102,24 +79,13 @@ export const StepsProgressBar: React.FC<Props> = ({
                                     />
                                 </BaseView>
                             ) : isNext ? (
-                                <BaseView
-                                    bg={bgColor}
-                                    borderRadius={100}
-                                    py={5}
-                                    px={10}>
-                                    <BaseText
-                                        color={theme.colors.textReversed}
-                                        typographyFont="bodyBold">
+                                <BaseView bg={bgColor} borderRadius={100} py={5} px={10}>
+                                    <BaseText color={theme.colors.textReversed} typographyFont="bodyBold">
                                         {index + 1}
                                     </BaseText>
                                 </BaseView>
                             ) : (
-                                <BaseIcon
-                                    bg={bgColor}
-                                    name={icon}
-                                    size={20}
-                                    borderRadius={100}
-                                />
+                                <BaseIcon bg={bgColor} name={icon} size={20} borderRadius={100} />
                             )}
 
                             <BaseText

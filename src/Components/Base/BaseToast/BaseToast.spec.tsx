@@ -1,12 +1,5 @@
 import { act } from "@testing-library/react-native"
-import {
-    hideToast,
-    showErrorToast,
-    showInfoToast,
-    showSuccessToast,
-    showWarningToast,
-    toastConfig,
-} from "./BaseToast"
+import { hideToast, showErrorToast, showInfoToast, showSuccessToast, showWarningToast, toastConfig } from "./BaseToast"
 import Toast from "react-native-toast-message"
 import { ColorTheme, ColorThemeType } from "~Constants"
 

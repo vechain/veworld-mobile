@@ -25,8 +25,7 @@ export const scaleNumberUp = (
 ): string => {
     try {
         if (scaleDecimal === 0) return new BigNumber(val).toFixed()
-        if (scaleDecimal < 0)
-            throw Error("Decimal value must be greater than or equal to 0")
+        if (scaleDecimal < 0) throw Error("Decimal value must be greater than or equal to 0")
         const valBn = new BigNumber(val)
         if (valBn.isNaN()) throw Error("The value provided is NaN.")
 
@@ -58,8 +57,7 @@ export const scaleNumberDown = (
 ): string => {
     try {
         if (scaleDecimal === 0) return new BigNumber(val).toFixed()
-        if (scaleDecimal < 0)
-            throw Error("Decimal value must be greater than or equal to 0")
+        if (scaleDecimal < 0) throw Error("Decimal value must be greater than or equal to 0")
 
         const valBn = new BigNumber(val)
         if (valBn.isNaN()) throw Error("The value provided is NaN.")
@@ -83,20 +81,10 @@ export const scaleNumberDown = (
  * @param decimals - the number of decimals for token
  * @returns the formatted time
  */
-export const convertToFiatBalance = (
-    balance: string,
-    rate: number,
-    decimals: number,
-    roundDecimals: number = 2,
-) => {
+export const convertToFiatBalance = (balance: string, rate: number, decimals: number, roundDecimals: number = 2) => {
     const fiatBalance = new BigNumber(balance).multipliedBy(rate)
 
-    return scaleNumberDown(
-        fiatBalance,
-        decimals,
-        roundDecimals,
-        BigNumber.ROUND_DOWN,
-    )
+    return scaleNumberDown(fiatBalance, decimals, roundDecimals, BigNumber.ROUND_DOWN)
 }
 
 export type DateType = "short" | "full" | "long" | "medium" | undefined
@@ -111,15 +99,10 @@ export type DateType = "short" | "full" | "long" | "medium" | undefined
 
 function roundDownSignificantDigits(numbers: number, decimals: number = 0) {
     if (typeof numbers !== "number" || typeof decimals !== "number") {
-        throw new Error(
-            "Invalid input: number and decimals must be of type number",
-        )
+        throw new Error("Invalid input: number and decimals must be of type number")
     }
 
-    const significantDigits = parseInt(
-        numbers.toExponential().split("e-")[1] || "0",
-        10,
-    )
+    const significantDigits = parseInt(numbers.toExponential().split("e-")[1] || "0", 10)
 
     const effectiveDecimals = Math.max(0, decimals + significantDigits)
     const scaleFactor = Math.pow(10, effectiveDecimals)
@@ -136,13 +119,10 @@ export const humanNumber = (
 
     let formatter = new Intl.NumberFormat("en", {
         style: "decimal",
-        minimumFractionDigits:
-            Number.parseFloat(formattedValue.toString()) % 1 === 0 ? 0 : 2,
+        minimumFractionDigits: Number.parseFloat(formattedValue.toString()) % 1 === 0 ? 0 : 2,
     })
 
-    let value = formatter.format(
-        roundDownSignificantDigits(Number(formattedValue), 2),
-    )
+    let value = formatter.format(roundDownSignificantDigits(Number(formattedValue), 2))
 
     //If the original number got scaled down to 0
     if (!isZero(originalValue) && isZero(value)) {
@@ -164,11 +144,7 @@ export const isZero = (value?: BigNumber.Value) => {
  * @param lengthAfter - (optional, default 4) the characters to show after the dots
  * @returns the formatted address
  */
-export const humanAddress = (
-    address: string,
-    lengthBefore = 4,
-    lengthAfter = 10,
-) => {
+export const humanAddress = (address: string, lengthBefore = 4, lengthAfter = 10) => {
     const before = address.substring(0, lengthBefore)
     const after = address.substring(address.length - lengthAfter)
     return `${before}…${after}`
@@ -180,12 +156,7 @@ export const humanUrl = (url: string, lengthBefore = 8, lengthAfter = 6) => {
     return `${before}…${after}`
 }
 
-export const formatAlias = (
-    alias: string,
-    maxLength = 18,
-    lengthBefore = 6,
-    lengthAfter = 6,
-) => {
+export const formatAlias = (alias: string, maxLength = 18, lengthBefore = 6, lengthAfter = 6) => {
     if (alias.length <= maxLength) return alias
     const before = alias.substring(0, lengthBefore)
     const after = alias.substring(alias.length - lengthAfter)
@@ -271,11 +242,7 @@ export const validateStringPercentages = (percentages: string[]): boolean => {
     return true
 }
 
-export function formatToHumanNumber(
-    amount: string,
-    decimals: number,
-    foramtToCurrency = true,
-): string {
+export function formatToHumanNumber(amount: string, decimals: number, foramtToCurrency = true): string {
     // Convert the amount to a floating point number
     const numberAmount = parseFloat(amount)
     const scale = 100
@@ -290,9 +257,7 @@ export function formatToHumanNumber(
     let amountString = ""
 
     if (foramtToCurrency) {
-        amountString = roundedAmount
-            .toFixed(decimals)
-            .replace(/\B(?=(\d{3})+(?!\d))/g, ",")
+        amountString = roundedAmount.toFixed(decimals).replace(/\B(?=(\d{3})+(?!\d))/g, ",")
     } else {
         amountString = roundedAmount.toFixed(decimals)
     }

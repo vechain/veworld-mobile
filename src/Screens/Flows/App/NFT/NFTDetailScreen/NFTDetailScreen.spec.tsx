@@ -4,27 +4,16 @@ import { NFTDetailScreen } from "./NFTDetailScreen"
 import { render, screen } from "@testing-library/react-native"
 import { RootStackParamListNFT } from "~Navigation/Stacks/NFTStack"
 import { Routes } from "~Navigation"
-import {
-    NativeStackNavigationProp,
-    NativeStackScreenProps,
-} from "@react-navigation/native-stack"
+import { NativeStackNavigationProp, NativeStackScreenProps } from "@react-navigation/native-stack"
 import { RouteProp } from "@react-navigation/native"
 
-type NavigationScreenPropAlias = NativeStackScreenProps<
-    RootStackParamListNFT,
-    Routes.NFT_DETAILS
->
+type NavigationScreenPropAlias = NativeStackScreenProps<RootStackParamListNFT, Routes.NFT_DETAILS>
 
-type NavigationType = NativeStackNavigationProp<
-    RootStackParamListNFT,
-    Routes.NFT_DETAILS,
-    undefined
->
+type NavigationType = NativeStackNavigationProp<RootStackParamListNFT, Routes.NFT_DETAILS, undefined>
 
 type RouteType = RouteProp<RootStackParamListNFT, Routes.NFT_DETAILS>
 
-const findElement = async () =>
-    await screen.findByTestId("NFT_Detail_Screen", {}, { timeout: 5000 })
+const findElement = async () => await screen.findByTestId("NFT_Detail_Screen", {}, { timeout: 5000 })
 
 const route = {
     key: "string",

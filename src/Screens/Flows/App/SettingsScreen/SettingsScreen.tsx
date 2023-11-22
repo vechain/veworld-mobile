@@ -15,20 +15,13 @@ export const SettingsScreen = () => {
 
     const devFeaturesEnabled = useAppSelector(selectAreDevFeaturesEnabled)
 
-    const SCREEN_LIST = useMemo(
-        () => getList(LL, devFeaturesEnabled),
-        [devFeaturesEnabled, LL],
-    )
+    const SCREEN_LIST = useMemo(() => getList(LL, devFeaturesEnabled), [devFeaturesEnabled, LL])
 
     const { styles: themedStyles } = useThemedStyles(baseStyles)
 
     const renderItem = useCallback(
         ({ item }: { item: RowProps }) => (
-            <SettingsRow
-                title={item.title}
-                screenName={item.screenName}
-                icon={item.icon}
-            />
+            <SettingsRow title={item.title} screenName={item.screenName} icon={item.icon} />
         ),
         [],
     )
@@ -38,11 +31,7 @@ export const SettingsScreen = () => {
 
     return (
         <BaseSafeArea>
-            <BaseText
-                mx={24}
-                typographyFont="largeTitle"
-                testID="settings-screen"
-                pb={16}>
+            <BaseText mx={24} typographyFont="largeTitle" testID="settings-screen" pb={16}>
                 {LL.TITLE_SETTINGS()}
             </BaseText>
 

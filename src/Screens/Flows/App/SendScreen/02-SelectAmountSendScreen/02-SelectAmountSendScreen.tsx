@@ -15,18 +15,10 @@ import {
     FadeoutButton,
     Layout,
 } from "~Components"
-import {
-    RootStackParamListDiscover,
-    RootStackParamListHome,
-    Routes,
-} from "~Navigation"
+import { RootStackParamListDiscover, RootStackParamListHome, Routes } from "~Navigation"
 import { useI18nContext } from "~i18n"
 import { COLORS, CURRENCY_SYMBOLS, typography } from "~Constants"
-import {
-    selectCurrency,
-    selectCurrencyExchangeRate,
-    useAppSelector,
-} from "~Storage/Redux"
+import { selectCurrency, selectCurrencyExchangeRate, useAppSelector } from "~Storage/Redux"
 import { BigNumber } from "bignumber.js"
 import { useNavigation } from "@react-navigation/native"
 import { useTotalTokenBalance, useTotalFiatBalance, useUI } from "./Hooks"
@@ -36,10 +28,7 @@ import HapticsService from "~Services/HapticsService"
 
 const { defaults: defaultTypography } = typography
 
-type Props = NativeStackScreenProps<
-    RootStackParamListHome & RootStackParamListDiscover,
-    Routes.SELECT_AMOUNT_SEND
->
+type Props = NativeStackScreenProps<RootStackParamListHome & RootStackParamListDiscover, Routes.SELECT_AMOUNT_SEND>
 
 const AnimatedTextInput = Animated.createAnimatedComponent(TextInput)
 
@@ -50,9 +39,7 @@ export const SelectAmountSendScreen = ({ route }: Props) => {
     const { LL } = useI18nContext()
     const nav = useNavigation()
     const { input, setInput } = useAmountInput()
-    const exchangeRate = useAppSelector(state =>
-        selectCurrencyExchangeRate(state, token),
-    )
+    const exchangeRate = useAppSelector(state => selectCurrencyExchangeRate(state, token))
     const currency = useAppSelector(selectCurrency)
     const [isInputInFiat, setIsInputInFiat] = useState(false)
     const [isError, setIsError] = useState(false)
@@ -60,21 +47,14 @@ export const SelectAmountSendScreen = ({ route }: Props) => {
 
     const { tokenTotalBalance, tokenTotalToHuman } = useTotalTokenBalance(token)
 
-    const { fiatTotalBalance } = useTotalFiatBalance(
-        tokenTotalBalance,
-        exchangeRate,
-    )
+    const { fiatTotalBalance } = useTotalFiatBalance(tokenTotalBalance, exchangeRate)
 
     /**
      * FIAT selected balance calculated fron TOKEN input in human readable format (correct value is when TOKEN is active)
      * Example "53.54"
      */
     const fiatHumanAmount = FormattingUtils.formatToHumanNumber(
-        FormattingUtils.convertToFiatBalance(
-            !isEmpty(input) ? input : "0",
-            exchangeRate?.rate ?? 1,
-            0,
-        ),
+        FormattingUtils.convertToFiatBalance(!isEmpty(input) ? input : "0", exchangeRate?.rate ?? 1, 0),
         2,
     )
 
@@ -113,16 +93,10 @@ export const SelectAmountSendScreen = ({ route }: Props) => {
         (newValue: string) => {
             // Get the correct token amount from the FIAT input
             const controlValue = isInputInFiat
-                ? FormattingUtils.convertToFiatBalance(
-                      newValue || "0",
-                      1 / (exchangeRate?.rate ?? 1),
-                      0,
-                      0,
-                  )
+                ? FormattingUtils.convertToFiatBalance(newValue || "0", 1 / (exchangeRate?.rate ?? 1), 0, 0)
                 : newValue
 
-            let roundDownValue =
-                Math.floor(parseFloat(controlValue) * 10000) / 10000
+            let roundDownValue = Math.floor(parseFloat(controlValue) * 10000) / 10000
 
             if (new BigNumber(roundDownValue).gt(tokenTotalBalance)) {
                 setIsError(true)
@@ -141,33 +115,18 @@ export const SelectAmountSendScreen = ({ route }: Props) => {
      * Sets the input value to the max available balance (in TOKEN or FIAT)
      */
     const handleOnMaxPress = useCallback(() => {
-        setInput(
-            isInputInFiat
-                ? FormattingUtils.formatToHumanNumber(fiatTotalBalance, 2)
-                : tokenTotalBalance,
-        )
+        setInput(isInputInFiat ? FormattingUtils.formatToHumanNumber(fiatTotalBalance, 2) : tokenTotalBalance)
 
         let roundUpforPrecission =
             Math.round(
                 parseFloat(
-                    FormattingUtils.convertToFiatBalance(
-                        fiatTotalBalance,
-                        1 / (exchangeRate?.rate ?? 1),
-                        0,
-                        0,
-                    ),
+                    FormattingUtils.convertToFiatBalance(fiatTotalBalance, 1 / (exchangeRate?.rate ?? 1), 0, 0),
                 ) * Math.pow(10, 4),
             ) / Math.pow(10, 4)
 
         setTokenAmountFromFiat(roundUpforPrecission.toString())
         setIsError(false)
-    }, [
-        exchangeRate?.rate,
-        fiatTotalBalance,
-        isInputInFiat,
-        setInput,
-        tokenTotalBalance,
-    ])
+    }, [exchangeRate?.rate, fiatTotalBalance, isInputInFiat, setInput, tokenTotalBalance])
 
     /**
      * Navigate to the next screen
@@ -208,40 +167,26 @@ export const SelectAmountSendScreen = ({ route }: Props) => {
             body={
                 <DismissKeyboardView>
                     <BaseView>
-                        <BaseText typographyFont="button">
-                            {LL.SEND_CURRENT_BALANCE()}
-                        </BaseText>
+                        <BaseText typographyFont="button">{LL.SEND_CURRENT_BALANCE()}</BaseText>
                         <BaseSpacer height={8} />
 
                         {/* [START] - HEADER */}
-                        <BaseView
-                            flexDirection="row"
-                            alignItems="baseline"
-                            style={styles.budget}>
+                        <BaseView flexDirection="row" alignItems="baseline" style={styles.budget}>
                             <BaseView flexDirection="row" mr={8}>
                                 <BaseText typographyFont="subTitleBold">
                                     {"≈ "}
                                     {tokenTotalToHuman}
                                 </BaseText>
                                 <BaseSpacer width={5} />
-                                <BaseText typographyFont="buttonSecondary">
-                                    {token.symbol}
-                                </BaseText>
+                                <BaseText typographyFont="buttonSecondary">{token.symbol}</BaseText>
                             </BaseView>
 
                             {isError && (
                                 <BaseView>
                                     <BaseView flexDirection="row">
-                                        <BaseIcon
-                                            name={"alert-circle-outline"}
-                                            size={20}
-                                            color={theme.colors.danger}
-                                        />
+                                        <BaseIcon name={"alert-circle-outline"} size={20} color={theme.colors.danger} />
                                         <BaseSpacer width={8} />
-                                        <BaseText
-                                            typographyFont="body"
-                                            fontSize={12}
-                                            color={theme.colors.danger}>
+                                        <BaseText typographyFont="body" fontSize={12} color={theme.colors.danger}>
                                             {LL.SEND_INSUFFICIENT_BALANCE()}
                                         </BaseText>
                                     </BaseView>
@@ -259,34 +204,18 @@ export const SelectAmountSendScreen = ({ route }: Props) => {
                             views={[
                                 {
                                     children: (
-                                        <BaseView
-                                            flex={1}
-                                            style={styles.amountContainer}>
-                                            <BaseView
-                                                flexDirection="row"
-                                                style={styles.inputHeader}
-                                                p={6}>
+                                        <BaseView flex={1} style={styles.amountContainer}>
+                                            <BaseView flexDirection="row" style={styles.inputHeader} p={6}>
                                                 <BaseText typographyFont="captionBold">
-                                                    {isInputInFiat
-                                                        ? currency
-                                                        : shortenedTokenName}
+                                                    {isInputInFiat ? currency : shortenedTokenName}
                                                 </BaseText>
 
                                                 {isInputInFiat ? (
-                                                    <BaseText
-                                                        typographyFont="subTitleBold"
-                                                        mx={4}>
-                                                        {
-                                                            CURRENCY_SYMBOLS[
-                                                                currency
-                                                            ]
-                                                        }
+                                                    <BaseText typographyFont="subTitleBold" mx={4}>
+                                                        {CURRENCY_SYMBOLS[currency]}
                                                     </BaseText>
                                                 ) : (
-                                                    <BaseImage
-                                                        uri={token.icon}
-                                                        style={styles.logoIcon}
-                                                    />
+                                                    <BaseImage uri={token.icon} style={styles.logoIcon} />
                                                 )}
                                             </BaseView>
 
@@ -294,9 +223,7 @@ export const SelectAmountSendScreen = ({ route }: Props) => {
 
                                             <AnimatedTextInput
                                                 contextMenuHidden
-                                                cursorColor={
-                                                    theme.colors.secondary
-                                                }
+                                                cursorColor={theme.colors.secondary}
                                                 autoFocus
                                                 placeholder="0"
                                                 style={[
@@ -305,9 +232,7 @@ export const SelectAmountSendScreen = ({ route }: Props) => {
                                                     animatedFontStyle,
                                                     animatedStyleInputColor,
                                                 ]}
-                                                placeholderTextColor={
-                                                    placeholderColor
-                                                }
+                                                placeholderTextColor={placeholderColor}
                                                 keyboardType="numeric"
                                                 value={input}
                                                 onChangeText={onChangeTextInput}
@@ -319,28 +244,18 @@ export const SelectAmountSendScreen = ({ route }: Props) => {
                                                     <BaseIcon
                                                         name={"autorenew"}
                                                         size={20}
-                                                        color={
-                                                            COLORS.DARK_PURPLE
-                                                        }
+                                                        color={COLORS.DARK_PURPLE}
                                                         bg={COLORS.LIME_GREEN}
                                                         style={styles.icon}
                                                         haptics="Light"
-                                                        action={
-                                                            handleToggleInputMode
-                                                        }
+                                                        action={handleToggleInputMode}
                                                     />
 
                                                     <BaseTouchable
                                                         haptics="Light"
-                                                        action={
-                                                            handleOnMaxPress
-                                                        }
+                                                        action={handleOnMaxPress}
                                                         style={styles.iconMax}>
-                                                        <BaseText
-                                                            color={
-                                                                COLORS.COINBASE_BACKGROUND_DARK
-                                                            }
-                                                            fontSize={10}>
+                                                        <BaseText color={COLORS.COINBASE_BACKGROUND_DARK} fontSize={10}>
                                                             MAX
                                                         </BaseText>
                                                     </BaseTouchable>
@@ -354,14 +269,8 @@ export const SelectAmountSendScreen = ({ route }: Props) => {
                                     ? [
                                           {
                                               children: (
-                                                  <BaseText
-                                                      typographyFont="captionBold"
-                                                      color={
-                                                          inputColorNotAnimated
-                                                      }>
-                                                      {
-                                                          computeconvertedAmountInFooter
-                                                      }
+                                                  <BaseText typographyFont="captionBold" color={inputColorNotAnimated}>
+                                                      {computeconvertedAmountInFooter}
                                                   </BaseText>
                                               ),
                                               style: styles.counterValueView,
@@ -374,17 +283,11 @@ export const SelectAmountSendScreen = ({ route }: Props) => {
                         <BaseSpacer height={16} />
 
                         {token.symbol.toLowerCase() === "vtho" ? (
-                            <BaseText
-                                typographyFont="caption"
-                                px={4}
-                                color={theme.colors.textDisabled}>
+                            <BaseText typographyFont="caption" px={4} color={theme.colors.textDisabled}>
                                 {LL.SEND_VTHO_WARNING_MAX()}
                             </BaseText>
                         ) : (
-                            <BaseText
-                                typographyFont="caption"
-                                px={4}
-                                color={theme.colors.textDisabled}>
+                            <BaseText typographyFont="caption" px={4} color={theme.colors.textDisabled}>
                                 {LL.SEND_VTHO_WARNING_TOKEN()}
                             </BaseText>
                         )}
@@ -396,9 +299,7 @@ export const SelectAmountSendScreen = ({ route }: Props) => {
             footer={
                 <FadeoutButton
                     title={LL.COMMON_BTN_NEXT()}
-                    disabled={
-                        isError || input === "" || new BigNumber(input).isZero()
-                    }
+                    disabled={isError || input === "" || new BigNumber(input).isZero()}
                     action={goToInsertAddress}
                     bottom={0}
                     mx={0}

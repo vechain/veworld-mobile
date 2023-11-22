@@ -24,8 +24,7 @@ const tokenWithBalance = {
     balance: {
         accountAddress: "0xf077b491b355e64048ce21e3a6fc4751eeea77fa",
         balance: "0",
-        genesisId:
-            "0x000000000b2bce3c70bc649a02749e8687721b09ed2e15997f466536b20bb127",
+        genesisId: "0x000000000b2bce3c70bc649a02749e8687721b09ed2e15997f466536b20bb127",
         position: 2,
         timeUpdated: "2023-08-14T13:18:27.544Z",
         tokenAddress: "0x645d2019ed39e58db76af602317d177b53ba8b9d",
@@ -34,8 +33,7 @@ const tokenWithBalance = {
     custom: false,
     decimals: 18,
     desc: "Plair is a decentralized gaming ecosystem disrupting the amateur gaming market",
-    genesisId:
-        "0x000000000b2bce3c70bc649a02749e8687721b09ed2e15997f466536b20bb127",
+    genesisId: "0x000000000b2bce3c70bc649a02749e8687721b09ed2e15997f466536b20bb127",
     icon: "https://vechain.github.io/token-registry//assets/dfe7a792d85cfd1483b03228fd1d51a383a3c7b5.png",
     name: "Plair",
     symbol: "PLA",
@@ -54,9 +52,7 @@ describe("BalanceUtils", () => {
     })
 
     it("VET - should return the correct balance", async () => {
-        mock.onGet(
-            `${mainNetwork.currentUrl}/accounts/${account1D1.address}`,
-        ).reply(200, mockedBalance)
+        mock.onGet(`${mainNetwork.currentUrl}/accounts/${account1D1.address}`).reply(200, mockedBalance)
 
         const balance = await BalanceUtils.getBalanceFromBlockchain(
             VET.address,
@@ -69,9 +65,7 @@ describe("BalanceUtils", () => {
     })
 
     it("VTHO - should return the correct balance", async () => {
-        mock.onGet(
-            `${mainNetwork.currentUrl}/accounts/${account1D1.address}`,
-        ).reply(200, mockedBalance)
+        mock.onGet(`${mainNetwork.currentUrl}/accounts/${account1D1.address}`).reply(200, mockedBalance)
 
         const balance = await BalanceUtils.getBalanceFromBlockchain(
             VTHO.address,
@@ -84,21 +78,12 @@ describe("BalanceUtils", () => {
     })
 
     it("VTHO - should throw network error", async () => {
-        mock.onGet(
-            `${mainNetwork.currentUrl}/accounts/${account1D1.address}`,
-        ).networkError()
+        mock.onGet(`${mainNetwork.currentUrl}/accounts/${account1D1.address}`).networkError()
 
         const balanceRequest = async () =>
-            await BalanceUtils.getBalanceFromBlockchain(
-                VTHO.address,
-                account1D1.address,
-                mainNetwork,
-                thorClient,
-            )
+            await BalanceUtils.getBalanceFromBlockchain(VTHO.address, account1D1.address, mainNetwork, thorClient)
 
-        await expect(balanceRequest).rejects.toThrowError(
-            "Failed to get balance from external service",
-        )
+        await expect(balanceRequest).rejects.toThrowError("Failed to get balance from external service")
     })
 
     it("PLA Token - should return the correct balance", async () => {
@@ -134,8 +119,7 @@ describe("BalanceUtils", () => {
     })
 
     it("should return the correct indication for token balance", async () => {
-        const isTokenWithBalance =
-            BalanceUtils.getIsTokenWithBalance(tokenWithBalance)
+        const isTokenWithBalance = BalanceUtils.getIsTokenWithBalance(tokenWithBalance)
 
         expect(isTokenWithBalance).toEqual(false)
 

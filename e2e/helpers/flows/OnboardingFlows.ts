@@ -1,12 +1,7 @@
 import { waitFor, element } from "detox"
 import assert from "assert"
 import { WalletSetupScreen, WelcomeScreen } from "../screens"
-import {
-    DEFAULT_TIMEOUT,
-    SHORT_TIMEOUT,
-    TEST_MNEMONIC,
-    TEST_PIN,
-} from "../constants"
+import { DEFAULT_TIMEOUT, SHORT_TIMEOUT, TEST_MNEMONIC, TEST_PIN } from "../constants"
 import { clickByText } from "../common"
 
 export const skipToCreateLocalWallet = async () => {
@@ -51,10 +46,7 @@ export const enterPin = async (pin: string) => {
     }
 }
 
-export const chooseAndConfirmPassword = async (
-    pin: string,
-    confirmPin: string,
-) => {
+export const chooseAndConfirmPassword = async (pin: string, confirmPin: string) => {
     await enterPin(pin)
     await enterPin(confirmPin)
 }
@@ -108,10 +100,7 @@ export const matchBiometrics = async () => {
     if (element(by.text("Use Touch ID"))) await detox.device.matchFinger()
 }
 
-export const completeOnboarding = async (
-    mnemonic?: string,
-    password?: string,
-) => {
+export const completeOnboarding = async (mnemonic?: string, password?: string) => {
     await skipToImportLocalWallet()
 
     mnemonic = mnemonic || TEST_MNEMONIC

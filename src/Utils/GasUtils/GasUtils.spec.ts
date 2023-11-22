@@ -7,15 +7,13 @@ const thor = TestHelpers.thor.mockThorInstance({})
 const thorExplainExecuteVmError = TestHelpers.thor.mockThorInstance({
     explain: (clauses: Connex.VM.Clause[]) => ({
         ...TestHelpers.thor.stubs.explain.explain(clauses),
-        execute:
-            TestHelpers.thor.stubs.explain.stubs.execute.vmErrorExecuteStub,
+        execute: TestHelpers.thor.stubs.explain.stubs.execute.vmErrorExecuteStub,
     }),
 })
 const thorExplainExecuteReverts = TestHelpers.thor.mockThorInstance({
     explain: (clauses: Connex.VM.Clause[]) => ({
         ...TestHelpers.thor.stubs.explain.explain(clauses),
-        execute:
-            TestHelpers.thor.stubs.explain.stubs.execute.revertingExecuteStub,
+        execute: TestHelpers.thor.stubs.explain.stubs.execute.revertingExecuteStub,
     }),
 })
 
@@ -31,8 +29,7 @@ describe("GasUtils", () => {
                 reverted: false,
                 revertReason: "",
                 vmError: "",
-                baseGasPrice:
-                    "0x000000000000000000000000000000000000000000000000000009184e72a000",
+                baseGasPrice: "0x000000000000000000000000000000000000000000000000000009184e72a000",
             })
         })
 
@@ -55,8 +52,7 @@ describe("GasUtils", () => {
                 reverted: false,
                 revertReason: "",
                 vmError: "",
-                baseGasPrice:
-                    "0x000000000000000000000000000000000000000000000000000009184e72a000",
+                baseGasPrice: "0x000000000000000000000000000000000000000000000000000009184e72a000",
             })
         })
 
@@ -74,8 +70,7 @@ describe("GasUtils", () => {
                 reverted: false,
                 revertReason: "",
                 vmError: "",
-                baseGasPrice:
-                    "0x000000000000000000000000000000000000000000000000000009184e72a000",
+                baseGasPrice: "0x000000000000000000000000000000000000000000000000000009184e72a000",
             })
         })
 
@@ -93,8 +88,7 @@ describe("GasUtils", () => {
                 reverted: true,
                 revertReason: "revertReason",
                 vmError: "",
-                baseGasPrice:
-                    "0x000000000000000000000000000000000000000000000000000009184e72a000",
+                baseGasPrice: "0x000000000000000000000000000000000000000000000000000009184e72a000",
             })
         })
 
@@ -112,8 +106,7 @@ describe("GasUtils", () => {
                 reverted: false,
                 revertReason: "vmError",
                 vmError: "vmError",
-                baseGasPrice:
-                    "0x000000000000000000000000000000000000000000000000000009184e72a000",
+                baseGasPrice: "0x000000000000000000000000000000000000000000000000000009184e72a000",
             })
         })
         it("should run correctly with suggested gas", async () => {
@@ -130,8 +123,7 @@ describe("GasUtils", () => {
                 reverted: false,
                 revertReason: "vmError",
                 vmError: "vmError",
-                baseGasPrice:
-                    "0x000000000000000000000000000000000000000000000000000009184e72a000",
+                baseGasPrice: "0x000000000000000000000000000000000000000000000000000009184e72a000",
             })
         })
     })

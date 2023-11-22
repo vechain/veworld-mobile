@@ -13,38 +13,26 @@ import {
 } from "ethers/lib/utils"
 import { ExternallyOwnedAccount } from "@ethersproject/abstract-signer"
 import { isKeystoreWallet } from "@ethersproject/json-wallets"
-import {
-    _KeystoreAccount,
-    KeystoreAccount,
-} from "@ethersproject/json-wallets/lib/keystore"
+import { _KeystoreAccount, KeystoreAccount } from "@ethersproject/json-wallets/lib/keystore"
 import aes from "aes-js"
 const Buffer = require("@craftzdog/react-native-buffer").Buffer
 import scrypt from "react-native-scrypt"
 import { DEVICE_CREATION_ERRORS as ERRORS } from "~Model"
 import { error } from "~Utils/Logger"
 
-const fastKeystoreDecrypt = async (
-    json: string,
-    password: string,
-): Promise<Wallet> => {
+const fastKeystoreDecrypt = async (json: string, password: string): Promise<Wallet> => {
     const account = await decryptJsonWallet(json, password)
     return new Wallet(account)
 }
 
-function decryptJsonWallet(
-    json: string,
-    password: string,
-): Promise<ExternallyOwnedAccount> {
+function decryptJsonWallet(json: string, password: string): Promise<ExternallyOwnedAccount> {
     if (isKeystoreWallet(json)) {
         return decrypt(json, password)
     }
     return Promise.reject(new Error("invalid JSON wallet"))
 }
 
-async function decrypt(
-    json: string,
-    password: string,
-): Promise<KeystoreAccount> {
+async function decrypt(json: string, password: string): Promise<KeystoreAccount> {
     const data = JSON.parse(json)
 
     const key: Uint8Array | undefined = await _computeKdfKey(data, password)
@@ -69,9 +57,7 @@ async function _computeKdfKey(data: any, password: string) {
         }
 
         if (kdf.toLowerCase() === "scrypt") {
-            const salt = looseArrayify(
-                searchPath(data, "crypto/kdfparams/salt")!,
-            )
+            const salt = looseArrayify(searchPath(data, "crypto/kdfparams/salt")!)
 
             const N = parseInt(searchPath(data, "crypto/kdfparams/n")!, 10)
             const r = parseInt(searchPath(data, "crypto/kdfparams/r")!, 10)
@@ -88,10 +74,7 @@ async function _computeKdfKey(data: any, password: string) {
                 throwError("N", N)
             }
 
-            const dkLen = parseInt(
-                searchPath(data, "crypto/kdfparams/dklen")!,
-                10,
-            )
+            const dkLen = parseInt(searchPath(data, "crypto/kdfparams/dklen")!, 10)
             if (dkLen !== 32) {
                 throwError("dklen", dkLen)
             }
@@ -114,9 +97,7 @@ async function _computeKdfKey(data: any, password: string) {
 function _getAccount(data: any, key: Uint8Array): KeystoreAccount {
     const ciphertext = looseArrayify(searchPath(data, "crypto/ciphertext")!)
 
-    const computedMAC = hexlify(
-        keccak256(concat([key.slice(16, 32), ciphertext])),
-    ).substring(2)
+    const computedMAC = hexlify(keccak256(concat([key.slice(16, 32), ciphertext]))).substring(2)
 
     if (computedMAC !== searchPath(data, "crypto/mac")?.toLowerCase()) {
         throw new Error(ERRORS.INCORRECT_PASSWORD)
@@ -125,13 +106,9 @@ function _getAccount(data: any, key: Uint8Array): KeystoreAccount {
     const privateKey = _decrypt(data, key.slice(0, 16), ciphertext)
 
     if (!privateKey) {
-        logger.throwError(
-            "unsupported cipher",
-            Logger.errors.UNSUPPORTED_OPERATION,
-            {
-                operation: "decrypt",
-            },
-        )
+        logger.throwError("unsupported cipher", Logger.errors.UNSUPPORTED_OPERATION, {
+            operation: "decrypt",
+        })
     }
 
     const mnemonicKey = key.slice(32, 64)
@@ -157,18 +134,11 @@ function _getAccount(data: any, key: Uint8Array): KeystoreAccount {
 
     // Version 0.1 x-ethers metadata must contain an encrypted mnemonic phrase
     if (searchPath(data, "x-ethers/version") === "0.1") {
-        const mnemonicCiphertext = looseArrayify(
-            searchPath(data, "x-ethers/mnemonicCiphertext")!,
-        )
-        const mnemonicIv = looseArrayify(
-            searchPath(data, "x-ethers/mnemonicCounter")!,
-        )
+        const mnemonicCiphertext = looseArrayify(searchPath(data, "x-ethers/mnemonicCiphertext")!)
+        const mnemonicIv = looseArrayify(searchPath(data, "x-ethers/mnemonicCounter")!)
 
         const mnemonicCounter = new aes.Counter(mnemonicIv)
-        const mnemonicAesCtr = new aes.ModeOfOperation.ctr(
-            mnemonicKey,
-            mnemonicCounter,
-        )
+        const mnemonicAesCtr = new aes.ModeOfOperation.ctr(mnemonicKey, mnemonicCounter)
 
         const path = searchPath(data, "x-ethers/path") ?? defaultPath
         const locale = searchPath(data, "x-ethers/locale") ?? "en"
@@ -177,11 +147,7 @@ function _getAccount(data: any, key: Uint8Array): KeystoreAccount {
 
         try {
             const mnemonic = entropyToMnemonic(entropy, locale)
-            const node = HDNode.fromMnemonic(
-                mnemonic,
-                undefined,
-                locale,
-            ).derivePath(path)
+            const node = HDNode.fromMnemonic(mnemonic, undefined, locale).derivePath(path)
 
             if (node.privateKey !== account.privateKey) {
                 throw new Error("mnemonic mismatch")
@@ -242,11 +208,7 @@ function searchPath(object: any, path: string): string | null {
     return currentChild
 }
 
-function _decrypt(
-    data: any,
-    key: Uint8Array,
-    ciphertext: Uint8Array,
-): Uint8Array | undefined {
+function _decrypt(data: any, key: Uint8Array, ciphertext: Uint8Array): Uint8Array | undefined {
     const cipher = searchPath(data, "crypto/cipher")
     if (cipher === "aes-128-ctr") {
         const iv = looseArrayify(searchPath(data, "crypto/cipherparams/iv")!)

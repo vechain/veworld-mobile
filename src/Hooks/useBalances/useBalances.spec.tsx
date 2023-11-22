@@ -16,10 +16,7 @@ const token: TokenWithCompleteInfo = {
     custom: false,
     decimals: 18,
     links: {
-        blockchain_site: [
-            "https://vechainstats.com/",
-            "https://explore.vechain.org",
-        ],
+        blockchain_site: ["https://vechainstats.com/", "https://explore.vechain.org"],
         homepage: ["https://www.vechain.org", "https://www.vechain.com"],
     },
     name: "VeChain",

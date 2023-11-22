@@ -3,25 +3,13 @@ import { createNativeStackNavigator } from "@react-navigation/native-stack"
 import { TabStack } from "~Navigation/Tabs"
 import { OnboardingStack } from "./OnboardingStack"
 import { CreateWalletAppStack, Routes } from "~Navigation"
-import {
-    BlackListedCollectionsScreen,
-    ConnectAppScreen,
-    SendTransactionScreen,
-    SignCertificateScreen,
-} from "~Screens"
-import {
-    PendingRequestTypes,
-    SessionTypes,
-    SignClientTypes,
-} from "@walletconnect/types"
+import { BlackListedCollectionsScreen, ConnectAppScreen, SendTransactionScreen, SignCertificateScreen } from "~Screens"
+import { PendingRequestTypes, SessionTypes, SignClientTypes } from "@walletconnect/types"
 import { AppBlockedScreen } from "~Screens/Flows/App/AppBlockedScreen"
 import { TransferEventListener } from "../../TransferEventListener"
 import { Certificate, Transaction } from "thor-devkit"
 import { LedgerAccountWithDevice, WALLET_STATUS } from "~Model"
-import {
-    LedgerSignCertificate,
-    LedgerSignTransaction,
-} from "~Screens/Flows/App/LedgerScreen"
+import { LedgerSignCertificate, LedgerSignTransaction } from "~Screens/Flows/App/LedgerScreen"
 import { useWalletStatus } from "~Components"
 import { BuyStack } from "./BuyStack"
 import { BUY_FEATURE_ENABLED } from "~Constants"
@@ -82,31 +70,18 @@ export const SwitchStack = () => {
 
     const RenderStacks = useMemo(() => {
         if (walletStatus === WALLET_STATUS.FIRST_TIME_ACCESS) {
-            return (
-                <Switch.Screen
-                    name="OnboardingStack"
-                    component={OnboardingStack}
-                    options={{ headerShown: false }}
-                />
-            )
+            return <Switch.Screen name="OnboardingStack" component={OnboardingStack} options={{ headerShown: false }} />
         } else {
             return (
                 <>
-                    <Switch.Screen
-                        name="TabStack"
-                        component={AppContainer}
-                        options={{ headerShown: false }}
-                    />
+                    <Switch.Screen name="TabStack" component={AppContainer} options={{ headerShown: false }} />
 
                     {/* Full screen modals */}
                     <Switch.Group
                         screenOptions={{
                             headerShown: false,
                         }}>
-                        <Switch.Screen
-                            name={Routes.CREATE_WALLET_FLOW}
-                            component={CreateWalletAppStack}
-                        />
+                        <Switch.Screen name={Routes.CREATE_WALLET_FLOW} component={CreateWalletAppStack} />
 
                         <Switch.Screen
                             name={Routes.BLACKLISTED_COLLECTIONS}
@@ -116,10 +91,7 @@ export const SwitchStack = () => {
                             }}
                         />
 
-                        <Switch.Screen
-                            name={Routes.CONNECT_APP_SCREEN}
-                            component={ConnectAppScreen}
-                        />
+                        <Switch.Screen name={Routes.CONNECT_APP_SCREEN} component={ConnectAppScreen} />
 
                         <Switch.Screen
                             name={Routes.CONNECTED_APP_SEND_TRANSACTION_SCREEN}
@@ -131,30 +103,15 @@ export const SwitchStack = () => {
                             component={SignCertificateScreen}
                         />
 
-                        <Switch.Screen
-                            name={Routes.CONNECTED_APP_SIGN_MESSAGE_SCREEN}
-                            component={SignMessageScreen}
-                        />
+                        <Switch.Screen name={Routes.CONNECTED_APP_SIGN_MESSAGE_SCREEN} component={SignMessageScreen} />
 
-                        <Switch.Screen
-                            name={Routes.BLOCKED_APP_SCREEN}
-                            component={AppBlockedScreen}
-                        />
+                        <Switch.Screen name={Routes.BLOCKED_APP_SCREEN} component={AppBlockedScreen} />
 
-                        <Switch.Screen
-                            name={Routes.LEDGER_SIGN_CERTIFICATE}
-                            component={LedgerSignCertificate}
-                        />
+                        <Switch.Screen name={Routes.LEDGER_SIGN_CERTIFICATE} component={LedgerSignCertificate} />
 
-                        <Switch.Screen
-                            name={Routes.LEDGER_SIGN_TRANSACTION}
-                            component={LedgerSignTransaction}
-                        />
+                        <Switch.Screen name={Routes.LEDGER_SIGN_TRANSACTION} component={LedgerSignTransaction} />
 
-                        <Switch.Screen
-                            name={Routes.LEDGER_SIGN_MESSAGE}
-                            component={LedgerSignMessage}
-                        />
+                        <Switch.Screen name={Routes.LEDGER_SIGN_MESSAGE} component={LedgerSignMessage} />
 
                         {BUY_FEATURE_ENABLED && (
                             <Switch.Screen

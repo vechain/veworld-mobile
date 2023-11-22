@@ -4,12 +4,10 @@ import { render, fireEvent, screen } from "@testing-library/react-native"
 import { BaseTouchable } from "./BaseTouchable"
 
 const baseTouchableTestId = "BaseTouchable"
-const findBaseTouchable = async () =>
-    await screen.findByTestId(baseTouchableTestId, {}, { timeout: 5000 })
+const findBaseTouchable = async () => await screen.findByTestId(baseTouchableTestId, {}, { timeout: 5000 })
 
 const title = "Touch me"
-const findBaseTouchableByTitle = async () =>
-    await screen.findByText(title, {}, { timeout: 5000 })
+const findBaseTouchableByTitle = async () => await screen.findByText(title, {}, { timeout: 5000 })
 
 jest.mock("expo-haptics", () => {
     return {
@@ -31,16 +29,9 @@ jest.mock("expo-haptics", () => {
 describe("BaseTouchable", () => {
     it("renders correctly with title", async () => {
         const onPress = jest.fn()
-        render(
-            <BaseTouchable
-                title={title}
-                testID={baseTouchableTestId}
-                action={onPress}
-            />,
-            {
-                wrapper: TestWrapper,
-            },
-        )
+        render(<BaseTouchable title={title} testID={baseTouchableTestId} action={onPress} />, {
+            wrapper: TestWrapper,
+        })
 
         const baseTouchable = await findBaseTouchable()
         expect(baseTouchable).toBeVisible()
@@ -51,17 +42,9 @@ describe("BaseTouchable", () => {
 
     it("calls action when pressed", async () => {
         const onPress = jest.fn()
-        render(
-            <BaseTouchable
-                title={title}
-                testID={baseTouchableTestId}
-                underlined
-                action={onPress}
-            />,
-            {
-                wrapper: TestWrapper,
-            },
-        )
+        render(<BaseTouchable title={title} testID={baseTouchableTestId} underlined action={onPress} />, {
+            wrapper: TestWrapper,
+        })
 
         const baseTouchable = await findBaseTouchable()
         expect(baseTouchable).toBeVisible()

@@ -17,8 +17,7 @@ export const accountStub =
                 return {
                     asCriteria(): Connex.Thor.Filter.Criteria<"event"> {
                         return {
-                            address:
-                                "0x9652aead889e8df7b5717ed984f147c132f85a69",
+                            address: "0x9652aead889e8df7b5717ed984f147c132f85a69",
                             topic0: "0xddf252ad1be2c89b69c2b068fc378daa952ba7f163c4a11628f55a4df523b3ef",
                             topic1: undefined,
                             topic2: undefined,
@@ -53,19 +52,13 @@ export const accountStub =
             },
             method(_abi: object): Connex.Thor.Account.Method {
                 return {
-                    asClause(
-                        ..._args: any[]
-                    ): Connex.Thor.Transaction["clauses"][0] {
+                    asClause(..._args: any[]): Connex.Thor.Transaction["clauses"][0] {
                         throw Error("Not implemented")
                     },
                     cache(_hints: string[]) {
                         return this
                     },
-                    call(
-                        ..._args: any[]
-                    ): Promise<
-                        Connex.VM.Output & Connex.Thor.Account.WithDecoded
-                    > {
+                    call(..._args: any[]): Promise<Connex.VM.Output & Connex.Thor.Account.WithDecoded> {
                         if (shouldCallError) throw new Error("Error")
 
                         return Promise.resolve({

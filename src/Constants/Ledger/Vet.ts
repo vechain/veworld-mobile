@@ -30,22 +30,11 @@ export class VETLedgerApp {
 
     constructor(transport: Transport, scrambleKey = "V3T") {
         this.transport = transport
-        transport.decorateAppAPIMethods(
-            this,
-            ["getAppConfiguration", "getAddress", "signTransaction"],
-            scrambleKey,
-        )
+        transport.decorateAppAPIMethods(this, ["getAppConfiguration", "getAddress", "signTransaction"], scrambleKey)
     }
 
     async getAppConfiguration(): Promise<Buffer> {
-        const response = await this.transport.send(
-            0xe0,
-            0x06,
-            0x00,
-            0x00,
-            Buffer.alloc(0),
-            [StatusCodes.OK],
-        )
+        const response = await this.transport.send(0xe0, 0x06, 0x00, 0x00, Buffer.alloc(0), [StatusCodes.OK])
 
         return response.subarray(0, 1)
     }
@@ -87,25 +76,17 @@ export class VETLedgerApp {
         const publicKeyLength = response[0]
         const addressLength = response[1 + publicKeyLength]
         const acc: VETLedgerAccount = {
-            publicKey: response
-                .subarray(1, 1 + publicKeyLength)
-                .toString("hex"),
+            publicKey: response.subarray(1, 1 + publicKeyLength).toString("hex"),
             address:
                 "0x" +
                 response
-                    .subarray(
-                        1 + publicKeyLength + 1,
-                        1 + publicKeyLength + 1 + addressLength,
-                    )
+                    .subarray(1 + publicKeyLength + 1, 1 + publicKeyLength + 1 + addressLength)
                     .toString("ascii")
                     .toLowerCase(),
         }
         if (chainCode) {
             acc.chainCode = response
-                .subarray(
-                    1 + publicKeyLength + 1 + addressLength,
-                    1 + publicKeyLength + 1 + addressLength + 32,
-                )
+                .subarray(1 + publicKeyLength + 1 + addressLength, 1 + publicKeyLength + 1 + addressLength + 32)
                 .toString("hex")
         }
         return acc
@@ -123,15 +104,7 @@ export class VETLedgerApp {
         onIsAwaitingForSignature?: () => void,
         onProgressUpdate?: (percent: number) => void,
     ) {
-        return await this.sign(
-            path,
-            rawTx,
-            true,
-            0xe0,
-            0x04,
-            onIsAwaitingForSignature,
-            onProgressUpdate,
-        )
+        return await this.sign(path, rawTx, true, 0xe0, 0x04, onIsAwaitingForSignature, onProgressUpdate)
     }
 
     public async signJSON(path: string, rawJSON: Buffer) {
@@ -158,8 +131,7 @@ export class VETLedgerApp {
 
         for (let i = 0; i < buffers.length; i++) {
             const isAfterSecondLast = i >= buffers.length - 1
-            if (isAfterSecondLast && onIsAwaitingForSignature)
-                onIsAwaitingForSignature()
+            if (isAfterSecondLast && onIsAwaitingForSignature) onIsAwaitingForSignature()
 
             const percent = Math.round((i / buffers.length) * 100)
             debug(`Ledger progress: ${percent}%`)
@@ -171,11 +143,9 @@ export class VETLedgerApp {
             const p2 = 0x00
 
             responses.push(
-                await this.transport
-                    .send(cla, ins, p1, p2, data, [StatusCodes.OK])
-                    .catch(e => {
-                        throw remapTransactionRelatedErrors(e)
-                    }),
+                await this.transport.send(cla, ins, p1, p2, data, [StatusCodes.OK]).catch(e => {
+                    throw remapTransactionRelatedErrors(e)
+                }),
             )
         }
 

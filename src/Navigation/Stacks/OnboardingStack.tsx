@@ -51,11 +51,7 @@ export const OnboardingStack = () => {
     return (
         <Onboarding.Navigator screenOptions={{ headerShown: false, animation }}>
             <Onboarding.Group>
-                <Onboarding.Screen
-                    name={Routes.WELCOME}
-                    component={WelcomeScreen}
-                    options={{ headerShown: false }}
-                />
+                <Onboarding.Screen name={Routes.WELCOME} component={WelcomeScreen} options={{ headerShown: false }} />
 
                 <Onboarding.Screen
                     name={Routes.WALLET_SETUP}

@@ -11,23 +11,20 @@ export const selectActivitiesState = (state: RootState) => state.activities
  * Gets all activities for ALL accounts
  * @param state
  */
-export const selectAllActivities = createSelector(
-    selectActivitiesState,
-    state => {
-        let allActivities: Activity[] = []
+export const selectAllActivities = createSelector(selectActivitiesState, state => {
+    let allActivities: Activity[] = []
 
-        Object.values(state).forEach(activities => {
-            allActivities = [
-                ...allActivities,
-                ...activities.transactionActivitiesMainnet,
-                ...activities.transactionActivitiesTestnet,
-                ...activities.nonTransactionActivities,
-            ]
-        })
+    Object.values(state).forEach(activities => {
+        allActivities = [
+            ...allActivities,
+            ...activities.transactionActivitiesMainnet,
+            ...activities.transactionActivitiesTestnet,
+            ...activities.nonTransactionActivities,
+        ]
+    })
 
-        return allActivities
-    },
-)
+    return allActivities
+})
 
 /**
  * select a specific activity by txId
@@ -35,16 +32,10 @@ export const selectAllActivities = createSelector(
  * @returns {Activity | undefined} - The activity with the specified txId, or undefined if not found.
  */
 export const selectActivity = createSelector(
-    [
-        selectAllActivities,
-        selectSelectedNetwork,
-        (state: RootState, txId: string) => txId,
-    ],
+    [selectAllActivities, selectSelectedNetwork, (state: RootState, txId: string) => txId],
     (activities, network, txId) => {
         return activities.find(
-            act =>
-                act.id.toLowerCase() === txId.toLowerCase() &&
-                act.genesisId === network.genesis.id,
+            act => act.id.toLowerCase() === txId.toLowerCase() && act.genesisId === network.genesis.id,
         )
     },
 )
@@ -71,15 +62,11 @@ export const selectCurrentTransactionActivities = createSelector(
     (activitiesState, network, account) => {
         if (account.address && activitiesState[account.address.toLowerCase()]) {
             if (network.genesis.id === genesisesId.main)
-                return activitiesState[
-                    account.address.toLowerCase()
-                ].transactionActivitiesMainnet.filter(
+                return activitiesState[account.address.toLowerCase()].transactionActivitiesMainnet.filter(
                     act => act.genesisId === network.genesis.id,
                 )
             else
-                return activitiesState[
-                    account.address.toLowerCase()
-                ].transactionActivitiesTestnet.filter(
+                return activitiesState[account.address.toLowerCase()].transactionActivitiesTestnet.filter(
                     act => act.genesisId === network.genesis.id,
                 )
         }
@@ -98,9 +85,7 @@ export const selectCurrentActivities = createSelector(
     selectCurrentTransactionActivities,
     (activitiesState, network, account, currentTransactionActivities) => {
         if (account.address && activitiesState[account.address.toLowerCase()]) {
-            return activitiesState[
-                account.address.toLowerCase()
-            ].nonTransactionActivities
+            return activitiesState[account.address.toLowerCase()].nonTransactionActivities
                 .concat(currentTransactionActivities)
                 .sort((a, b) => b.timestamp - a.timestamp)
         }
@@ -112,25 +97,15 @@ export const selectCurrentActivities = createSelector(
 /**
  * Get all activities that aren't finalised
  */
-export const selectActivitiesWithoutFinality = createSelector(
-    selectCurrentActivities,
-    activities =>
-        activities.filter(
-            activity =>
-                activity.isTransaction &&
-                activity.status === ActivityStatus.PENDING,
-        ),
+export const selectActivitiesWithoutFinality = createSelector(selectCurrentActivities, activities =>
+    activities.filter(activity => activity.isTransaction && activity.status === ActivityStatus.PENDING),
 )
 
 /**
  * Get all activities with type ActivityType.FUNGIBLE_TOKEN or ActivityType.VET_TRANSFER for current account
  */
-export const selectCurrentFungibleTokenActivities = createSelector(
-    selectCurrentActivities,
-    currentActivities =>
-        currentActivities.filter(
-            activity =>
-                activity.type === ActivityType.VET_TRANSFER ||
-                activity.type === ActivityType.FUNGIBLE_TOKEN,
-        ),
+export const selectCurrentFungibleTokenActivities = createSelector(selectCurrentActivities, currentActivities =>
+    currentActivities.filter(
+        activity => activity.type === ActivityType.VET_TRANSFER || activity.type === ActivityType.FUNGIBLE_TOKEN,
+    ),
 )

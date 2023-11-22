@@ -1,12 +1,6 @@
 import React, { useCallback, useMemo } from "react"
 
-import {
-    BaseButtonGroupHorizontal,
-    BaseIcon,
-    BaseSpacer,
-    BaseText,
-    BaseView,
-} from "~Components"
+import { BaseButtonGroupHorizontal, BaseIcon, BaseSpacer, BaseText, BaseView } from "~Components"
 import { GasPriceCoefficient, VTHO } from "~Constants"
 import { useTheme } from "~Hooks"
 import { useI18nContext } from "~i18n"
@@ -62,11 +56,7 @@ export const GasFeeOptions = ({
     )
 
     if (selectedDelegationOption === DelegationType.URL) {
-        return (
-            <BaseText typographyFont="subSubTitle">
-                {LL.SEND_DELEGATED_FEES()}
-            </BaseText>
-        )
+        return <BaseText typographyFont="subSubTitle">{LL.SEND_DELEGATED_FEES()}</BaseText>
     } else {
         return (
             <>
@@ -76,35 +66,15 @@ export const GasFeeOptions = ({
                         buttons={gasFeeButtons}
                         action={handleSelectFeeOption}
                         renderButton={(button, textColor) => (
-                            <BaseView
-                                justifyContent="center"
-                                alignItems="center"
-                                flexDirection="row">
-                                {button.icon && (
-                                    <BaseIcon
-                                        size={18}
-                                        name={button.icon}
-                                        color={textColor}
-                                    />
-                                )}
+                            <BaseView justifyContent="center" alignItems="center" flexDirection="row">
+                                {button.icon && <BaseIcon size={18} name={button.icon} color={textColor} />}
                                 <BaseView px={5}>
-                                    <BaseText
-                                        color={textColor}
-                                        typographyFont="smallButtonPrimary">
+                                    <BaseText color={textColor} typographyFont="smallButtonPrimary">
                                         {button.label}
                                     </BaseText>
                                     <BaseSpacer height={4} />
-                                    <BaseText
-                                        color={textColor}
-                                        typographyFont="smallCaptionMedium">
-                                        {
-                                            gasFeeOptions[
-                                                Number(
-                                                    button.id,
-                                                ) as GasPriceCoefficient
-                                            ]
-                                        }{" "}
-                                        {VTHO.symbol}
+                                    <BaseText color={textColor} typographyFont="smallCaptionMedium">
+                                        {gasFeeOptions[Number(button.id) as GasPriceCoefficient]} {VTHO.symbol}
                                     </BaseText>
                                 </BaseView>
                             </BaseView>
@@ -116,17 +86,10 @@ export const GasFeeOptions = ({
                     <>
                         <BaseSpacer height={10} />
                         <BaseView flexDirection="row">
-                            <BaseIcon
-                                name="alert-circle-outline"
-                                color={theme.colors.danger}
-                                size={16}
-                            />
+                            <BaseIcon name="alert-circle-outline" color={theme.colors.danger} size={16} />
                             <BaseSpacer width={4} />
-                            <BaseText
-                                typographyFont="buttonSecondary"
-                                color={theme.colors.danger}>
-                                {LL.SEND_INSUFFICIENT_VTHO()} {vthoBalance}{" "}
-                                {VTHO.symbol}
+                            <BaseText typographyFont="buttonSecondary" color={theme.colors.danger}>
+                                {LL.SEND_INSUFFICIENT_VTHO()} {vthoBalance} {VTHO.symbol}
                             </BaseText>
                         </BaseView>
                     </>

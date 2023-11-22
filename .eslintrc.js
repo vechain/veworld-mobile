@@ -15,6 +15,7 @@ module.exports = {
                 semi: "off",
                 curly: "off",
                 quotes: [2, "double", { avoidEscape: true }],
+                "max-len": ["error", { code: 120, comments: 220 }],
                 "i18next/no-literal-string": "error",
                 "no-console": "error",
                 "no-duplicate-imports": "error",
@@ -22,6 +23,12 @@ module.exports = {
                 "no-useless-escape": "error",
                 "react-native/no-inline-styles": "error",
                 "es/no-numeric-separators": "error",
+            },
+        },
+        {
+            files: ["./src//Assets/**/*"],
+            rules: {
+                "max-len": "off",
             },
         },
     ],

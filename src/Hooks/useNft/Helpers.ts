@@ -1,11 +1,6 @@
 import { GithubCollectionResponse } from "~Networking"
 import { NFTPlaceholderDark, NFTPlaceHolderLight } from "~Assets"
-import {
-    NETWORK_TYPE,
-    NftCollection,
-    NFTMediaType,
-    NonFungibleToken,
-} from "~Model"
+import { NETWORK_TYPE, NftCollection, NFTMediaType, NonFungibleToken } from "~Model"
 
 export const initCollectionMetadataFromRegistry = (
     network: NETWORK_TYPE,

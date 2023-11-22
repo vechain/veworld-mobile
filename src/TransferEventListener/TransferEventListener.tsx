@@ -19,11 +19,7 @@ import { EventTypeResponse } from "~Networking"
 import { fetchTransfersForBlock } from "~Networking/Transfers"
 import { useThor } from "~Components"
 import { filterNFTTransferEvents, filterTransferEventsByType } from "./Helpers"
-import {
-    handleNFTTransfers,
-    handleTokenTransfers,
-    handleVETTransfers,
-} from "./Handlers"
+import { handleNFTTransfers, handleTokenTransfers, handleVETTransfers } from "./Handlers"
 
 export const TransferEventListener: React.FC = () => {
     const selectedAccount = useAppSelector(selectSelectedAccount)
@@ -53,9 +49,7 @@ export const TransferEventListener: React.FC = () => {
         async (activities: Activity[]) => {
             const updatedActs: Activity[] = []
             for (const activity of activities) {
-                const updated = await dispatch(
-                    validateAndUpsertActivity({ activity, thor }),
-                ).unwrap()
+                const updated = await dispatch(validateAndUpsertActivity({ activity, thor })).unwrap()
                 updatedActs.push(updated)
             }
             return updatedActs
@@ -68,11 +62,7 @@ export const TransferEventListener: React.FC = () => {
             try {
                 // Filter out accounts we are not interested in
                 const relevantAccounts = visibleAccounts.filter(acc =>
-                    BloomUtils.testBloomForAddress(
-                        beat.bloom,
-                        beat.k,
-                        acc.address,
-                    ),
+                    BloomUtils.testBloomForAddress(beat.bloom, beat.k, acc.address),
                 )
 
                 // Update the pending transactions cache
@@ -94,17 +84,12 @@ export const TransferEventListener: React.FC = () => {
                     network.type,
                 )
 
-                debug(
-                    `Found ${transfers.pagination.totalElements} transfers in block ${beat.number}`,
-                )
+                debug(`Found ${transfers.pagination.totalElements} transfers in block ${beat.number}`)
 
                 if (transfers.pagination.totalElements === 0) return
 
                 // ~ NFT TRANSFER
-                const nftTransfers = filterNFTTransferEvents(
-                    transfers.data,
-                    blackListedCollections,
-                )
+                const nftTransfers = filterNFTTransferEvents(transfers.data, blackListedCollections)
                 await handleNFTTransfers({
                     selectedAccount,
                     visibleAccounts: relevantAccounts,
@@ -116,10 +101,7 @@ export const TransferEventListener: React.FC = () => {
                 })
 
                 // ~ FUNGIBLE TOKEN TRANSFER
-                const tokenTransfers = filterTransferEventsByType(
-                    transfers.data,
-                    EventTypeResponse.FUNGIBLE_TOKEN,
-                )
+                const tokenTransfers = filterTransferEventsByType(transfers.data, EventTypeResponse.FUNGIBLE_TOKEN)
 
                 await handleTokenTransfers({
                     selectedAccount,
@@ -131,10 +113,7 @@ export const TransferEventListener: React.FC = () => {
                 })
 
                 // ~  VET TRANSFERS
-                const vetTransfers = filterTransferEventsByType(
-                    transfers.data,
-                    EventTypeResponse.VET,
-                )
+                const vetTransfers = filterTransferEventsByType(transfers.data, EventTypeResponse.VET)
                 handleVETTransfers({
                     selectedAccount,
                     transfers: vetTransfers,

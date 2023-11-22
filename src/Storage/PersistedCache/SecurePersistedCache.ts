@@ -32,9 +32,7 @@ export default class SecurePersistedCache<T> implements SynchronousCache<T> {
         if (!value) return undefined
 
         try {
-            const decryptedItem = JSON.parse(
-                CryptoUtils.decryptState(value, this.encryptionKey),
-            )
+            const decryptedItem = JSON.parse(CryptoUtils.decryptState(value, this.encryptionKey))
             return decryptedItem as T
         } catch (e) {
             error(`Error getting item ${key}`, e)
@@ -43,10 +41,7 @@ export default class SecurePersistedCache<T> implements SynchronousCache<T> {
     }
     public setItem(key: string, item: T): void {
         if (!this.encryptionKey) throw Error("Encryption key not set")
-        this._cache.set(
-            createKey(key),
-            CryptoUtils.encryptState<T>(item, this.encryptionKey),
-        )
+        this._cache.set(createKey(key), CryptoUtils.encryptState<T>(item, this.encryptionKey))
     }
     public removeItem(key: string): void {
         if (!this.encryptionKey) throw Error("Encryption key not set")

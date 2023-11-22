@@ -60,66 +60,42 @@ export const goBack = async () => {
     await clickById("BackButtonHeader-BaseIcon-backButton")
 }
 
-export const idShouldExist = async (
-    id: string,
-    options?: { timeout?: number },
-) =>
+export const idShouldExist = async (id: string, options?: { timeout?: number }) =>
     await waitFor(element(by.id(id)))
         .toExist()
         .withTimeout(options?.timeout ?? DEFAULT_TIMEOUT)
 
-export const idShouldNotExist = async (
-    id: string,
-    options?: { timeout?: number },
-) =>
+export const idShouldNotExist = async (id: string, options?: { timeout?: number }) =>
     await waitFor(element(by.id(id)))
         .not.toExist()
         .withTimeout(options?.timeout ?? DEFAULT_TIMEOUT)
 
-export const textShouldExist = async (
-    text: string,
-    options?: { timeout?: number },
-) =>
+export const textShouldExist = async (text: string, options?: { timeout?: number }) =>
     await waitFor(element(by.text(text)))
         .toExist()
         .withTimeout(options?.timeout ?? DEFAULT_TIMEOUT)
 
-export const textShouldNotExist = async (
-    text: string,
-    options?: { timeout?: number },
-) =>
+export const textShouldNotExist = async (text: string, options?: { timeout?: number }) =>
     await waitFor(element(by.text(text)))
         .not.toExist()
         .withTimeout(options?.timeout ?? DEFAULT_TIMEOUT)
 
-export const idShouldBeVisible = async (
-    text: string,
-    options?: { timeout?: number },
-) =>
+export const idShouldBeVisible = async (text: string, options?: { timeout?: number }) =>
     await waitFor(element(by.id(text)))
         .toBeVisible()
         .withTimeout(options?.timeout ?? DEFAULT_TIMEOUT)
 
-export const idShouldNotBeVisible = async (
-    text: string,
-    options?: { timeout?: number },
-) =>
+export const idShouldNotBeVisible = async (text: string, options?: { timeout?: number }) =>
     await waitFor(element(by.id(text)))
         .not.toBeVisible()
         .withTimeout(options?.timeout ?? DEFAULT_TIMEOUT)
 
-export const textShouldBeVisible = async (
-    text: string,
-    options?: { timeout?: number },
-) =>
+export const textShouldBeVisible = async (text: string, options?: { timeout?: number }) =>
     await waitFor(element(by.text(text)))
         .toBeVisible()
         .withTimeout(options?.timeout ?? DEFAULT_TIMEOUT)
 
-export const textShouldNotBeVisible = async (
-    text: string,
-    options?: { timeout?: number },
-) =>
+export const textShouldNotBeVisible = async (text: string, options?: { timeout?: number }) =>
     await waitFor(element(by.text(text)))
         .not.toBeVisible()
         .withTimeout(options?.timeout ?? DEFAULT_TIMEOUT)
@@ -146,10 +122,7 @@ export const swipeLeftByText = async (text: string) => {
     await element(by.text(text)).swipe("left", "slow", 0.4)
 }
 
-export const isPresentText = async (
-    text: string,
-    options?: { timeout?: number },
-) => {
+export const isPresentText = async (text: string, options?: { timeout?: number }) => {
     try {
         await waitFor(element(by.text(text)))
             .toExist()
@@ -160,10 +133,7 @@ export const isPresentText = async (
     }
 }
 
-export const isPresentId = async (
-    id: string,
-    options?: { timeout?: number },
-) => {
+export const isPresentId = async (id: string, options?: { timeout?: number }) => {
     try {
         await waitFor(element(by.id(id)))
             .toExist()

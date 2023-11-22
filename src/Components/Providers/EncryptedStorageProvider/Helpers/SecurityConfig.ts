@@ -11,8 +11,7 @@ const SecurityStore = new MMKV({
 
 const SECURITY_CONFIG_KEY = "SECURITY_CONFIG_KEY"
 
-const set = (type: SecurityLevelType) =>
-    SecurityStore.set(SECURITY_CONFIG_KEY, type)
+const set = (type: SecurityLevelType) => SecurityStore.set(SECURITY_CONFIG_KEY, type)
 
 const get = (): SecurityLevelType => {
     const type = SecurityStore.getString(SECURITY_CONFIG_KEY)

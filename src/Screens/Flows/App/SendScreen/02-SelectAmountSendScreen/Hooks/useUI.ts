@@ -29,9 +29,7 @@ export const useUI = ({
     fiatHumanAmount: string
     currency: CURRENCY
 }) => {
-    const inputColorNotAnimated = isError
-        ? theme.colors.danger
-        : theme.colors.text
+    const inputColorNotAnimated = isError ? theme.colors.danger : theme.colors.text
 
     const colorProgress = useDerivedValue(() => {
         return withTiming(isError ? 1 : 0, {
@@ -40,25 +38,17 @@ export const useUI = ({
     })
 
     const animatedStyleInputColor = useAnimatedStyle(() => {
-        let color = interpolateColor(
-            colorProgress.value,
-            [0, 1],
-            [theme.colors.text, theme.colors.danger],
-        )
+        let color = interpolateColor(colorProgress.value, [0, 1], [theme.colors.text, theme.colors.danger])
 
         return {
             color,
         }
     }, [isError, theme.isDark])
 
-    const placeholderColor = theme.isDark
-        ? COLORS.WHITE_DISABLED
-        : COLORS.DARK_PURPLE_DISABLED
+    const placeholderColor = theme.isDark ? COLORS.WHITE_DISABLED : COLORS.DARK_PURPLE_DISABLED
 
     const shortenedTokenName = useMemo(() => {
-        return token.name.length > 30
-            ? `${token.name.slice(0, 29)}...`
-            : token.name
+        return token.name.length > 30 ? `${token.name.slice(0, 29)}...` : token.name
     }, [token.name])
 
     const inputTextSize = useSharedValue(38)
@@ -83,12 +73,7 @@ export const useUI = ({
 
     const computeconvertedAmountInFooter = useMemo(() => {
         if (isInputInFiat) {
-            return (
-                "≈ " +
-                Number(tokenHumanAmountFromFiat).toFixed(2) +
-                " " +
-                token.symbol
-            )
+            return "≈ " + Number(tokenHumanAmountFromFiat).toFixed(2) + " " + token.symbol
         } else {
             if (fiatHumanAmount.includes("<")) {
                 return fiatHumanAmount
@@ -96,13 +81,7 @@ export const useUI = ({
                 return "≈ " + fiatHumanAmount + " " + currency
             }
         }
-    }, [
-        currency,
-        fiatHumanAmount,
-        isInputInFiat,
-        token.symbol,
-        tokenHumanAmountFromFiat,
-    ])
+    }, [currency, fiatHumanAmount, isInputInFiat, token.symbol, tokenHumanAmountFromFiat])
 
     return {
         placeholderColor,

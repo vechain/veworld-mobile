@@ -1,11 +1,6 @@
 import { Alert as RNAlert } from "react-native"
 import { AlertButtonStyle } from "./enums"
-import {
-    Alert,
-    showCancelledBiometricsAlert,
-    showGoToSettingsAlert,
-    showDefaultAlert,
-} from "./Alert"
+import { Alert, showCancelledBiometricsAlert, showGoToSettingsAlert, showDefaultAlert } from "./Alert"
 import { LocalizedString } from "typesafe-i18n"
 
 jest.mock("react-native", () => ({
@@ -25,19 +20,12 @@ describe("Alert", () => {
         const buttonTitle = "OK"
         const buttonAction = jest.fn()
 
-        Alert(
-            title as LocalizedString,
-            message as LocalizedString,
-            buttonTitle as LocalizedString,
-            buttonAction,
-        )
+        Alert(title as LocalizedString, message as LocalizedString, buttonTitle as LocalizedString, buttonAction)
 
         expect(RNAlert.alert).toHaveBeenCalledWith(
             title,
             message,
-            expect.arrayContaining([
-                { text: buttonTitle, onPress: buttonAction },
-            ]),
+            expect.arrayContaining([{ text: buttonTitle, onPress: buttonAction }]),
         )
     })
 
@@ -90,12 +78,7 @@ describe("showGoToSettingsAlert", () => {
         const buttonAction = jest.fn()
         const title = "Alert Title"
         const message = "Alert Message"
-        showGoToSettingsAlert(
-            title as LocalizedString,
-            message as LocalizedString,
-            cancelAction,
-            buttonAction,
-        )
+        showGoToSettingsAlert(title as LocalizedString, message as LocalizedString, cancelAction, buttonAction)
         expect(RNAlert.alert).toHaveBeenCalled()
     })
 })
@@ -105,11 +88,7 @@ describe("showDefaultAlert", () => {
         const title = "Alert Title"
         const message = "Alert Message"
         const buttonTitle = "OK"
-        showDefaultAlert(
-            title as LocalizedString,
-            message as LocalizedString,
-            buttonTitle as LocalizedString,
-        )
+        showDefaultAlert(title as LocalizedString, message as LocalizedString, buttonTitle as LocalizedString)
         expect(RNAlert.alert).toHaveBeenCalled()
     })
     it("should show the default alert - action", () => {

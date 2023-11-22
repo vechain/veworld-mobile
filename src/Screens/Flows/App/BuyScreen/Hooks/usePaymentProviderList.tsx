@@ -2,11 +2,7 @@ import React from "react"
 import { useTheme } from "~Hooks"
 import { useI18nContext } from "~i18n"
 import { COLORS } from "~Constants"
-import {
-    PaymentMethod,
-    PaymentMethodsIds,
-    PaymentMethodsList,
-} from "./constants"
+import { PaymentMethod, PaymentMethodsIds, PaymentMethodsList } from "./constants"
 import { CoinbaseLogoSmallSvg } from "~Assets"
 
 export type PaymentProvider = {
@@ -28,11 +24,7 @@ export const usePaymentProviderList = () => {
             description: LL.BD_BUY_DESCRIPTION_COINBASE(),
             img: (
                 <CoinbaseLogoSmallSvg
-                    fill={
-                        theme.isDark
-                            ? COLORS.COINBASE_BACKGROUND_DARK
-                            : COLORS.COINBASE_BACKGROUND_BLUE
-                    }
+                    fill={theme.isDark ? COLORS.COINBASE_BACKGROUND_DARK : COLORS.COINBASE_BACKGROUND_BLUE}
                     width={22}
                 />
             ),

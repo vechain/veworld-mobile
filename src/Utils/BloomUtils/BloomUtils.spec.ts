@@ -21,11 +21,7 @@ describe("BloomUtils", () => {
                 newFilter: mockedNewFilter(),
             }))
 
-            const isInBloom = BloomUtils.testBloomForAddress(
-                "0x123",
-                3,
-                "0x456",
-            )
+            const isInBloom = BloomUtils.testBloomForAddress("0x123", 3, "0x456")
             expect(isInBloom).toBe(false)
         })
     })

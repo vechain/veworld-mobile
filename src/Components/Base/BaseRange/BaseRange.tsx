@@ -12,21 +12,11 @@ type Props = {
     testID?: string
 }
 
-export const BaseRange = ({
-    value,
-    onChange,
-    marks = [0, 25, 50, 75, 100],
-    maximumValue = 100,
-    testID,
-}: Props) => {
+export const BaseRange = ({ value, onChange, marks = [0, 25, 50, 75, 100], maximumValue = 100, testID }: Props) => {
     const theme = useTheme()
 
     return (
-        <BaseView
-            flex={1}
-            flexDirection="row"
-            style={styles.container}
-            testID={testID}>
+        <BaseView flex={1} flexDirection="row" style={styles.container} testID={testID}>
             {marks.map((markValue: number, index: number) => {
                 let percentage = (markValue / maximumValue) * 100
                 let left: DimensionValue = `${percentage}%`

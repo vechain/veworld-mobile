@@ -4,10 +4,7 @@ import { CurrencyExchangeRate } from "~Model"
 import FiatExchangeClients from "./fiat"
 
 //ALWAYS put CoinGecko first
-const exchangeProviders = [
-    FiatExchangeClients.CoinGecko,
-    FiatExchangeClients.CoinBase,
-]
+const exchangeProviders = [FiatExchangeClients.CoinGecko, FiatExchangeClients.CoinBase]
 
 export const getExchangeRate = async (
     fiatSymbol: CURRENCY,
@@ -16,11 +13,7 @@ export const getExchangeRate = async (
 ): Promise<CurrencyExchangeRate> => {
     for (const provider of exchangeProviders) {
         try {
-            const exchange = await provider.getExchangeRate(
-                fiatSymbol,
-                symbol,
-                coinGeckoId,
-            )
+            const exchange = await provider.getExchangeRate(fiatSymbol, symbol, coinGeckoId)
 
             return exchange
         } catch (e) {

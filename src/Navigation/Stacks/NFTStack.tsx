@@ -35,28 +35,17 @@ export type RootStackParamListNFT = {
     }
 }
 
-const { Navigator, Group, Screen } =
-    createNativeStackNavigator<RootStackParamListNFT>()
+const { Navigator, Group, Screen } = createNativeStackNavigator<RootStackParamListNFT>()
 
 export const NFTStack = () => {
     const { animation } = useNavAnimation()
 
     return (
-        <Navigator
-            id="HomeStack"
-            screenOptions={{ headerShown: false, animation }}>
+        <Navigator id="HomeStack" screenOptions={{ headerShown: false, animation }}>
             <Group>
-                <Screen
-                    name={Routes.NFTS}
-                    component={NFTScreen}
-                    options={{ headerShown: false }}
-                />
+                <Screen name={Routes.NFTS} component={NFTScreen} options={{ headerShown: false }} />
 
-                <Screen
-                    name={Routes.NFT_DETAILS}
-                    component={NFTDetailScreen}
-                    options={{ headerShown: false }}
-                />
+                <Screen name={Routes.NFT_DETAILS} component={NFTDetailScreen} options={{ headerShown: false }} />
 
                 <Screen
                     name={Routes.NFT_COLLECTION_DETAILS}
@@ -70,11 +59,7 @@ export const NFTStack = () => {
                     options={{ headerShown: false }}
                 />
 
-                <Screen
-                    name={Routes.SEND_NFT_RECAP}
-                    component={SendNFTRecapScreen}
-                    options={{ headerShown: false }}
-                />
+                <Screen name={Routes.SEND_NFT_RECAP} component={SendNFTRecapScreen} options={{ headerShown: false }} />
             </Group>
         </Navigator>
     )

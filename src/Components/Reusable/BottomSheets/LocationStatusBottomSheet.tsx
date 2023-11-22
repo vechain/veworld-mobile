@@ -1,11 +1,5 @@
 import React, { useCallback, useEffect } from "react"
-import {
-    BaseButton,
-    BaseSpacer,
-    BaseText,
-    BaseView,
-    BaseBottomSheet,
-} from "~Components"
+import { BaseButton, BaseSpacer, BaseText, BaseView, BaseBottomSheet } from "~Components"
 import { useI18nContext } from "~i18n"
 import { useBottomSheetModal } from "~Hooks"
 import DeviceInfo from "react-native-device-info"
@@ -66,38 +60,19 @@ export const LocationStatusBottomSheet: React.FC = () => {
     }, [onClose])
 
     return (
-        <BaseBottomSheet
-            enablePanDownToClose={false}
-            snapPoints={snapPoints}
-            ref={ref}>
-            <BaseView
-                h={100}
-                alignItems="center"
-                justifyContent="space-between"
-                flexGrow={1}>
+        <BaseBottomSheet enablePanDownToClose={false} snapPoints={snapPoints} ref={ref}>
+            <BaseView h={100} alignItems="center" justifyContent="space-between" flexGrow={1}>
                 <BaseView alignSelf="flex-start">
-                    <BaseText typographyFont="subTitleBold">
-                        {LL.ALERT_TITLE_ENABLE_LOCATION()}
-                    </BaseText>
+                    <BaseText typographyFont="subTitleBold">{LL.ALERT_TITLE_ENABLE_LOCATION()}</BaseText>
                     <BaseSpacer height={16} />
                     <BaseText typographyFont="body" my={8}>
                         {LL.ALERT_MSG_ENABLE_LOCATION()}
                     </BaseText>
                 </BaseView>
 
-                <BaseView
-                    flexDirection="row"
-                    justifyContent="space-between"
-                    w={100}
-                    alignItems="center">
+                <BaseView flexDirection="row" justifyContent="space-between" w={100} alignItems="center">
                     <BaseView alignItems="center" w={100}>
-                        <BaseButton
-                            variant="solid"
-                            action={handleOnPress}
-                            w={100}
-                            my={10}
-                            title={LL.BTN_ENABLE()}
-                        />
+                        <BaseButton variant="solid" action={handleOnPress} w={100} my={10} title={LL.BTN_ENABLE()} />
                     </BaseView>
                 </BaseView>
             </BaseView>

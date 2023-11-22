@@ -55,51 +55,32 @@ export const TokenSlice = createSlice({
             }
 
             // Merge tokens with the same address
-            const mergedTokens = mergeArrays(
-                state.tokens[network].custom[accountAddress],
-                newTokens,
-                "address",
-            )
+            const mergedTokens = mergeArrays(state.tokens[network].custom[accountAddress], newTokens, "address")
 
             state.tokens[network].custom[accountAddress] = mergedTokens
         },
 
-        setDashboardChartData: (
-            state,
-            action: PayloadAction<{ symbol: string; data: number[][] }>,
-        ) => {
+        setDashboardChartData: (state, action: PayloadAction<{ symbol: string; data: number[][] }>) => {
             const { symbol, data } = action.payload
             state.dashboardChartData[symbol] = data
         },
 
-        setAssertDetailChartData: (
-            state,
-            action: PayloadAction<{ symbol: string; data: number[][] }>,
-        ) => {
+        setAssertDetailChartData: (state, action: PayloadAction<{ symbol: string; data: number[][] }>) => {
             const { symbol, data } = action.payload
             state.assetDetailChartData[symbol] = data
         },
 
-        setChartDataIsLoading: (
-            state,
-            action: PayloadAction<{ symbol: string; isLoading: boolean }>,
-        ) => {
+        setChartDataIsLoading: (state, action: PayloadAction<{ symbol: string; isLoading: boolean }>) => {
             const { symbol, isLoading } = action.payload
             state.chartDataIsLoading[symbol.toUpperCase()] = isLoading
         },
 
-        setCoinMarketInfo: (
-            state,
-            action: PayloadAction<{ data: CoinMarketInfo[] }>,
-        ) => {
+        setCoinMarketInfo: (state, action: PayloadAction<{ data: CoinMarketInfo[] }>) => {
             const { data } = action.payload
-            state.coinMarketInfo = data.reduce(
-                (acc: { [key: string]: CoinMarketInfo }, obj) => {
-                    acc[obj.symbol] = obj
-                    return acc
-                },
-                {},
-            )
+            state.coinMarketInfo = data.reduce((acc: { [key: string]: CoinMarketInfo }, obj) => {
+                acc[obj.symbol] = obj
+                return acc
+            }, {})
         },
 
         addOfficialTokens: (
@@ -114,11 +95,7 @@ export const TokenSlice = createSlice({
             normaliseAddresses(tokens)
 
             // Merge tokens with the same address
-            const mergedTokens = mergeArrays(
-                state.tokens[network].officialTokens,
-                tokens,
-                "address",
-            )
+            const mergedTokens = mergeArrays(state.tokens[network].officialTokens, tokens, "address")
 
             state.tokens[network].officialTokens = mergedTokens
         },
@@ -131,23 +108,13 @@ export const TokenSlice = createSlice({
             }>,
         ) => {
             const { network, tokens } = action.payload
-            const normalisedTokens = tokens.map(token =>
-                HexUtils.normalize(token),
-            )
+            const normalisedTokens = tokens.map(token => HexUtils.normalize(token))
             // Only update the state if there is an actual change
-            if (
-                !compareListOfAddresses(
-                    state.tokens[network].suggestedTokens,
-                    normalisedTokens,
-                )
-            )
+            if (!compareListOfAddresses(state.tokens[network].suggestedTokens, normalisedTokens))
                 state.tokens[network].suggestedTokens = normalisedTokens
         },
 
-        setCoinGeckoTokens: (
-            state,
-            action: PayloadAction<TokenInfoResponse[]>,
-        ) => {
+        setCoinGeckoTokens: (state, action: PayloadAction<TokenInfoResponse[]>) => {
             state.coinGeckoTokens = action.payload
         },
 

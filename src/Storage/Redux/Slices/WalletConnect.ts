@@ -60,9 +60,5 @@ export const WalletConnectSessionsSlice = createSlice({
     },
 })
 
-export const {
-    insertContext,
-    deleteContext,
-    resetWalletConnectState,
-    cleanContexts,
-} = WalletConnectSessionsSlice.actions
+export const { insertContext, deleteContext, resetWalletConnectState, cleanContexts } =
+    WalletConnectSessionsSlice.actions

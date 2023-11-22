@@ -7,11 +7,7 @@ type Props = {
     isScrollEnabled?: boolean
 }
 
-export const ScrollViewWithFooter = ({
-    children,
-    footer,
-    isScrollEnabled = true,
-}: Props) => {
+export const ScrollViewWithFooter = ({ children, footer, isScrollEnabled = true }: Props) => {
     return (
         <BaseView flex={1} alignItems={"stretch"}>
             <BaseScrollView scrollEnabled={isScrollEnabled}>

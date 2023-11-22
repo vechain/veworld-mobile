@@ -55,61 +55,41 @@ describe("useFormattedMarketInfo", () => {
     })
 
     it("should display the correct circulatingSupply", async () => {
-        ;(selectCurrency as unknown as jest.Mock).mockImplementation(
-            () => CURRENCY.USD,
-        )
+        ;(selectCurrency as unknown as jest.Mock).mockImplementation(() => CURRENCY.USD)
 
-        const { result } = renderHook(
-            () => useFormattedMarketInfo(marketInfo, VET.symbol),
-            {
-                wrapper: TestWrapper,
-            },
-        )
+        const { result } = renderHook(() => useFormattedMarketInfo(marketInfo, VET.symbol), {
+            wrapper: TestWrapper,
+        })
 
         expect(result.current.circulatingSupply).toBe(results.circulatingSupply)
     })
 
     it("should display the correct marketCap", async () => {
-        ;(selectCurrency as unknown as jest.Mock).mockImplementation(
-            () => CURRENCY.USD,
-        )
+        ;(selectCurrency as unknown as jest.Mock).mockImplementation(() => CURRENCY.USD)
 
-        const { result } = renderHook(
-            () => useFormattedMarketInfo(marketInfo, "USD"),
-            {
-                wrapper: TestWrapper,
-            },
-        )
+        const { result } = renderHook(() => useFormattedMarketInfo(marketInfo, "USD"), {
+            wrapper: TestWrapper,
+        })
 
         expect(result.current.marketCap).toBe(results.marketCap)
     })
 
     it("should display the correct totalSupply", async () => {
-        ;(selectCurrency as unknown as jest.Mock).mockImplementation(
-            () => CURRENCY.USD,
-        )
+        ;(selectCurrency as unknown as jest.Mock).mockImplementation(() => CURRENCY.USD)
 
-        const { result } = renderHook(
-            () => useFormattedMarketInfo(marketInfo, VET.symbol),
-            {
-                wrapper: TestWrapper,
-            },
-        )
+        const { result } = renderHook(() => useFormattedMarketInfo(marketInfo, VET.symbol), {
+            wrapper: TestWrapper,
+        })
 
         expect(result.current.totalSupply).toBe(results.totalSupply)
     })
 
     it("should display the correct totalVolume", async () => {
-        ;(selectCurrency as unknown as jest.Mock).mockImplementation(
-            () => CURRENCY.USD,
-        )
+        ;(selectCurrency as unknown as jest.Mock).mockImplementation(() => CURRENCY.USD)
 
-        const { result } = renderHook(
-            () => useFormattedMarketInfo(marketInfo, "USD"),
-            {
-                wrapper: TestWrapper,
-            },
-        )
+        const { result } = renderHook(() => useFormattedMarketInfo(marketInfo, "USD"), {
+            wrapper: TestWrapper,
+        })
 
         expect(result.current.totalVolume).toBe(results.totalVolume)
     })

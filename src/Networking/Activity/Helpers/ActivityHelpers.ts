@@ -12,11 +12,7 @@ import {
     NonFungibleTokenActivity,
     SignCertActivity,
 } from "~Model"
-import {
-    EventTypeResponse,
-    IncomingTransferResponse,
-    TransactionsResponse,
-} from "~Networking"
+import { EventTypeResponse, IncomingTransferResponse, TransactionsResponse } from "~Networking"
 import { Transaction } from "thor-devkit"
 
 /**
@@ -35,10 +31,7 @@ const createBaseActivityFromTx = (tx: Transaction) => {
 
     return {
         from: origin ?? "",
-        to: clauses.map(
-            (clause: Transaction.Clause) =>
-                ActivityUtils.getDestinationAddressFromClause(clause) ?? "",
-        ),
+        to: clauses.map((clause: Transaction.Clause) => ActivityUtils.getDestinationAddressFromClause(clause) ?? ""),
         id: id ?? "",
         txId: id ?? "",
         genesisId: chainTagToGenesisId[chainTag],
@@ -80,15 +73,10 @@ const getAddressFromClause = (clause: Transaction.Clause) => {
  * @throws {Error} If the token address cannot be extracted from the transaction.
  * @throws {Error} If the amount cannot be extracted from the transaction.
  */
-export const createPendingTransferActivityFromTx = (
-    tx: Transaction,
-): FungibleTokenActivity => {
+export const createPendingTransferActivityFromTx = (tx: Transaction): FungibleTokenActivity => {
     const baseActivity = createBaseActivityFromTx(tx)
 
-    if (
-        baseActivity.type !== ActivityType.VET_TRANSFER &&
-        baseActivity.type !== ActivityType.FUNGIBLE_TOKEN
-    )
+    if (baseActivity.type !== ActivityType.VET_TRANSFER && baseActivity.type !== ActivityType.FUNGIBLE_TOKEN)
         throw new Error("Invalid transaction type")
 
     const tokenAddress = getAddressFromClause(baseActivity.clauses[0])
@@ -117,20 +105,14 @@ export const createPendingTransferActivityFromTx = (
  * @throws {Error} If the contract address cannot be extracted from the transaction.
  * @throws {Error} If the NFT token Id cannot be decoded from the transaction clause.
  */
-export const createPendingNFTTransferActivityFromTx = (
-    tx: Transaction,
-): NonFungibleTokenActivity => {
+export const createPendingNFTTransferActivityFromTx = (tx: Transaction): NonFungibleTokenActivity => {
     const baseActivity = createBaseActivityFromTx(tx)
 
-    if (baseActivity.type !== ActivityType.NFT_TRANSFER)
-        throw new Error("Invalid transaction type")
+    if (baseActivity.type !== ActivityType.NFT_TRANSFER) throw new Error("Invalid transaction type")
 
     const contractAddress = getAddressFromClause(baseActivity.clauses[0])
 
-    const decodedTransfer =
-        TransactionUtils.decodeNonFungibleTokenTransferClause(
-            baseActivity.clauses[0],
-        )
+    const decodedTransfer = TransactionUtils.decodeNonFungibleTokenTransferClause(baseActivity.clauses[0])
 
     if (!decodedTransfer?.tokenId) throw new Error("Invalid tokenId")
 
@@ -167,22 +149,12 @@ export const createIncomingTransfer = (
     tokenAddress: string,
     thor: Connex.Thor,
 ): FungibleTokenActivity => {
-    const activityType =
-        tokenAddress === VET.address
-            ? ActivityType.VET_TRANSFER
-            : ActivityType.FUNGIBLE_TOKEN
+    const activityType = tokenAddress === VET.address ? ActivityType.VET_TRANSFER : ActivityType.FUNGIBLE_TOKEN
 
-    const encodedClause = createTransferClauseFromIncomingTransfer(
-        recipient,
-        amount,
-        tokenAddress,
-        activityType,
-    )
+    const encodedClause = createTransferClauseFromIncomingTransfer(recipient, amount, tokenAddress, activityType)
 
     if (!encodedClause) {
-        throw new Error(
-            "Invalid encoded clause. Can't create incoming transfer activity from TransferLog",
-        )
+        throw new Error("Invalid encoded clause. Can't create incoming transfer activity from TransferLog")
     }
 
     const clauses: Connex.VM.Clause[] = [encodedClause]
@@ -275,20 +247,10 @@ export const createSignCertificateActivity = (
  *
  * @returns A new pending DApp transaction activity object.
  */
-export const createPendingDappTransactionActivity = (
-    tx: Transaction,
-    name?: string,
-    linkUrl?: string,
-): Activity => {
+export const createPendingDappTransactionActivity = (tx: Transaction, name?: string, linkUrl?: string): Activity => {
     const baseActivity = createBaseActivityFromTx(tx)
 
-    return processActivity(
-        baseActivity,
-        tx.body.clauses[0],
-        DIRECTIONS.UP,
-        name,
-        linkUrl,
-    )
+    return processActivity(baseActivity, tx.body.clauses[0], DIRECTIONS.UP, name, linkUrl)
 }
 
 /**
@@ -298,27 +260,13 @@ export const createPendingDappTransactionActivity = (
  * @param transaction - The transaction response from which to create the activity.
  * @returns An activity created from the transaction response.
  */
-export const createBaseActivityFromTransactionResponse = (
-    transaction: TransactionsResponse,
-): Activity => {
+export const createBaseActivityFromTransactionResponse = (transaction: TransactionsResponse): Activity => {
     // Destructure needed properties from transaction
-    const {
-        origin,
-        id,
-        blockNumber,
-        chainTag,
-        gasUsed,
-        gasPayer,
-        clauses,
-        blockTimestamp,
-    } = transaction
+    const { origin, id, blockNumber, chainTag, gasUsed, gasPayer, clauses, blockTimestamp } = transaction
 
     return {
         from: origin,
-        to: clauses.map(
-            (clause: Connex.VM.Clause) =>
-                ActivityUtils.getDestinationAddressFromClause(clause) ?? "",
-        ),
+        to: clauses.map((clause: Connex.VM.Clause) => ActivityUtils.getDestinationAddressFromClause(clause) ?? ""),
         id,
         txId: id,
         blockNumber,
@@ -329,9 +277,7 @@ export const createBaseActivityFromTransactionResponse = (
         gasUsed,
         gasPayer,
         delegated: gasPayer !== origin,
-        status: transaction.reverted
-            ? ActivityStatus.REVERTED
-            : ActivityStatus.SUCCESS,
+        status: transaction.reverted ? ActivityStatus.REVERTED : ActivityStatus.SUCCESS,
         clauses,
         outputs: transaction.outputs,
     }
@@ -356,28 +302,15 @@ export const createTransferClauseFromIncomingTransfer = (
     tokenId?: number,
 ): Connex.VM.Clause | undefined => {
     if (type === ActivityType.VET_TRANSFER) {
-        return TransactionUtils.encodeTransferFungibleTokenClause(
-            to,
-            value,
-            VET.address,
-        )
+        return TransactionUtils.encodeTransferFungibleTokenClause(to, value, VET.address)
     }
 
     if (type === ActivityType.FUNGIBLE_TOKEN) {
-        return TransactionUtils.encodeTransferFungibleTokenClause(
-            to,
-            value,
-            contractAddress,
-        )
+        return TransactionUtils.encodeTransferFungibleTokenClause(to, value, contractAddress)
     }
 
     if (type === ActivityType.NFT_TRANSFER && from && tokenId) {
-        return TransactionUtils.encodeTransferNonFungibleTokenClause(
-            from,
-            to,
-            contractAddress,
-            tokenId,
-        )
+        return TransactionUtils.encodeTransferNonFungibleTokenClause(from, to, contractAddress, tokenId)
     }
 }
 
@@ -388,9 +321,7 @@ export const createTransferClauseFromIncomingTransfer = (
  *
  * @returns The corresponding ActivityType, or undefined if the eventType does not map to any known ActivityType.
  */
-export const eventTypeToActivityType = (
-    eventType: EventTypeResponse,
-): ActivityType | undefined => {
+export const eventTypeToActivityType = (eventType: EventTypeResponse): ActivityType | undefined => {
     switch (eventType) {
         case EventTypeResponse.VET:
             return ActivityType.VET_TRANSFER
@@ -402,10 +333,7 @@ export const eventTypeToActivityType = (
             return ActivityType.NFT_TRANSFER
 
         default:
-            debug(
-                "Received not yet supported incoming transfer event type: ",
-                eventType,
-            )
+            debug("Received not yet supported incoming transfer event type: ", eventType)
     }
 }
 
@@ -423,31 +351,14 @@ export const createBaseActivityFromIncomingTransfer = (
 ): Activity | null => {
     // Destructure needed properties from transaction
 
-    const {
-        blockNumber,
-        blockTimestamp,
-        from,
-        id,
-        txId,
-        to,
-        value,
-        tokenAddress,
-        eventType,
-        tokenId,
-    } = incomingTransfer
+    const { blockNumber, blockTimestamp, from, id, txId, to, value, tokenAddress, eventType, tokenId } =
+        incomingTransfer
 
     const activityType = eventTypeToActivityType(eventType)
 
     if (!activityType) return null
 
-    const encodedClause = createTransferClauseFromIncomingTransfer(
-        to,
-        value,
-        tokenAddress,
-        activityType,
-        from,
-        tokenId,
-    )
+    const encodedClause = createTransferClauseFromIncomingTransfer(to, value, tokenAddress, activityType, from, tokenId)
 
     if (!encodedClause) return null
 
@@ -548,12 +459,7 @@ export const enrichActivityWithVetTransfer = (
     clause: Connex.VM.Clause,
     direction: DIRECTIONS,
 ): FungibleTokenActivity => {
-    return createFungibleTokenActivity(
-        activity as FungibleTokenActivity,
-        VET.address,
-        Number(clause.value),
-        direction,
-    )
+    return createFungibleTokenActivity(activity as FungibleTokenActivity, VET.address, Number(clause.value), direction)
 }
 
 /**
@@ -570,8 +476,7 @@ export const enrichActivityWithNFTData = (
     direction: DIRECTIONS,
 ): NonFungibleTokenActivity => {
     // Decode NFT transfer clause
-    const nftData =
-        TransactionUtils.decodeNonFungibleTokenTransferClause(clause)
+    const nftData = TransactionUtils.decodeNonFungibleTokenTransferClause(clause)
 
     if (!nftData) {
         debug("Unable to decode NFT transfer clause", clause)
@@ -595,11 +500,7 @@ export const enrichActivityWithNFTData = (
  * @param appUrl - The URL of the DApp (optional).
  * @returns A new activity object enriched with DApp data.
  */
-export const enrichActivityWithDappData = (
-    activity: Activity,
-    appName?: string,
-    appUrl?: string,
-): DappTxActivity => {
+export const enrichActivityWithDappData = (activity: Activity, appName?: string, appUrl?: string): DappTxActivity => {
     return {
         ...activity,
         type: ActivityType.DAPP_TRANSACTION,
@@ -642,12 +543,9 @@ const processActivity = (
  * @param transactions - An array of transactions from which to create activities.
  * @returns An array of activities created from the transactions.
  */
-export const getActivitiesFromTransactions = (
-    transactions: TransactionsResponse[],
-): Activity[] => {
+export const getActivitiesFromTransactions = (transactions: TransactionsResponse[]): Activity[] => {
     return transactions.map(transaction => {
-        let activity: Activity =
-            createBaseActivityFromTransactionResponse(transaction)
+        let activity: Activity = createBaseActivityFromTransactionResponse(transaction)
 
         return processActivity(activity, transaction.clauses[0], DIRECTIONS.UP)
     })
@@ -665,26 +563,13 @@ export const getActivitiesFromIncomingTransfers = (
     incomingTransfers: IncomingTransferResponse[],
     network: Network,
 ): Activity[] => {
-    return incomingTransfers.reduce(
-        (activities: Activity[], incomingTransfer) => {
-            let activity: Activity | null =
-                createBaseActivityFromIncomingTransfer(
-                    incomingTransfer,
-                    network,
-                )
+    return incomingTransfers.reduce((activities: Activity[], incomingTransfer) => {
+        let activity: Activity | null = createBaseActivityFromIncomingTransfer(incomingTransfer, network)
 
-            if (activity?.clauses) {
-                activities.push(
-                    processActivity(
-                        activity,
-                        activity.clauses[0],
-                        DIRECTIONS.DOWN,
-                    ),
-                )
-            }
+        if (activity?.clauses) {
+            activities.push(processActivity(activity, activity.clauses[0], DIRECTIONS.DOWN))
+        }
 
-            return activities
-        },
-        [],
-    )
+        return activities
+    }, [])
 }

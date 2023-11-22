@@ -8,19 +8,12 @@ import { TokenCard } from "./TokenCard"
 import { FungibleTokenWithBalance } from "~Model"
 import HapticsService from "~Services/HapticsService"
 
-interface IAnimatedTokenCard
-    extends RenderItemParams<FungibleTokenWithBalance> {
+interface IAnimatedTokenCard extends RenderItemParams<FungibleTokenWithBalance> {
     isEdit: boolean
     isBalanceVisible: boolean
 }
 
-export const AnimatedTokenCard = ({
-    item,
-    drag,
-    isActive,
-    isEdit,
-    isBalanceVisible,
-}: IAnimatedTokenCard) => {
+export const AnimatedTokenCard = ({ item, drag, isActive, isEdit, isBalanceVisible }: IAnimatedTokenCard) => {
     const { styles, theme } = useThemedStyles(baseStyles(isActive))
 
     useEffect(() => {
@@ -34,18 +27,10 @@ export const AnimatedTokenCard = ({
                     disabled={isActive}
                     style={[styles.animatedInnerContainer]}
                     onPressIn={isEdit ? drag : undefined}>
-                    <BaseIcon
-                        color={theme.colors.text}
-                        name={"drag"}
-                        size={30}
-                    />
+                    <BaseIcon color={theme.colors.text} name={"drag"} size={30} />
                 </Pressable>
             )}
-            <TokenCard
-                tokenWithBalance={item}
-                isEdit={isEdit}
-                isBalanceVisible={isBalanceVisible}
-            />
+            <TokenCard tokenWithBalance={item} isEdit={isEdit} isBalanceVisible={isBalanceVisible} />
         </BaseView>
     )
 }

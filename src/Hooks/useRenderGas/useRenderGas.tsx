@@ -2,17 +2,11 @@ import React, { useCallback, useMemo } from "react"
 import { FormattingUtils, GasUtils } from "~Utils"
 import { GasPriceCoefficient, VTHO } from "~Constants"
 
-import {
-    selectVthoTokenWithBalanceByAccount,
-    useAppSelector,
-} from "~Storage/Redux"
+import { selectVthoTokenWithBalanceByAccount, useAppSelector } from "~Storage/Redux"
 import { EstimateGasResult } from "~Model"
 import { BigNumber } from "bignumber.js"
 import { compareAddresses } from "~Utils/AddressUtils/AddressUtils"
-import {
-    getAmountFromClause,
-    isTokenTransferClause,
-} from "~Utils/TransactionUtils/TransactionUtils"
+import { getAmountFromClause, isTokenTransferClause } from "~Utils/TransactionUtils/TransactionUtils"
 import { Transaction } from "thor-devkit"
 
 export const useRenderGas = ({
@@ -30,12 +24,8 @@ export const useRenderGas = ({
     setAmount: React.Dispatch<React.SetStateAction<string>>
     userSelectedAmount: string
 }) => {
-    const vtho = useAppSelector(state =>
-        selectVthoTokenWithBalanceByAccount(state, accountAddress),
-    )
-    const [selectedFeeOption, _setSelectedFeeOption] = React.useState<string>(
-        String(GasPriceCoefficient.REGULAR),
-    )
+    const vtho = useAppSelector(state => selectVthoTokenWithBalanceByAccount(state, accountAddress))
+    const [selectedFeeOption, _setSelectedFeeOption] = React.useState<string>(String(GasPriceCoefficient.REGULAR))
 
     const calculateFeeByCoefficient = useCallback(
         (coefficient: GasPriceCoefficient) =>
@@ -50,55 +40,34 @@ export const useRenderGas = ({
 
     const gasFeeOptions = useMemo(
         () => ({
-            [GasPriceCoefficient.REGULAR]: calculateFeeByCoefficient(
-                GasPriceCoefficient.REGULAR,
-            ).gasFee,
-            [GasPriceCoefficient.MEDIUM]: calculateFeeByCoefficient(
-                GasPriceCoefficient.MEDIUM,
-            ).gasFee,
-            [GasPriceCoefficient.HIGH]: calculateFeeByCoefficient(
-                GasPriceCoefficient.HIGH,
-            ).gasFee,
+            [GasPriceCoefficient.REGULAR]: calculateFeeByCoefficient(GasPriceCoefficient.REGULAR).gasFee,
+            [GasPriceCoefficient.MEDIUM]: calculateFeeByCoefficient(GasPriceCoefficient.MEDIUM).gasFee,
+            [GasPriceCoefficient.HIGH]: calculateFeeByCoefficient(GasPriceCoefficient.HIGH).gasFee,
         }),
         [calculateFeeByCoefficient],
     )
 
     const _gasFeeOptions = useMemo(
         () => ({
-            [GasPriceCoefficient.REGULAR]: calculateFeeByCoefficient(
-                GasPriceCoefficient.REGULAR,
-            ).gasRaw,
-            [GasPriceCoefficient.MEDIUM]: calculateFeeByCoefficient(
-                GasPriceCoefficient.MEDIUM,
-            ).gasRaw,
-            [GasPriceCoefficient.HIGH]: calculateFeeByCoefficient(
-                GasPriceCoefficient.HIGH,
-            ).gasRaw,
+            [GasPriceCoefficient.REGULAR]: calculateFeeByCoefficient(GasPriceCoefficient.REGULAR).gasRaw,
+            [GasPriceCoefficient.MEDIUM]: calculateFeeByCoefficient(GasPriceCoefficient.MEDIUM).gasRaw,
+            [GasPriceCoefficient.HIGH]: calculateFeeByCoefficient(GasPriceCoefficient.HIGH).gasRaw,
         }),
         [calculateFeeByCoefficient],
     )
 
-    const vthoGasFee =
-        gasFeeOptions[Number(selectedFeeOption) as GasPriceCoefficient]
+    const vthoGasFee = gasFeeOptions[Number(selectedFeeOption) as GasPriceCoefficient]
 
-    const _vthoGasFee =
-        _gasFeeOptions[Number(selectedFeeOption) as GasPriceCoefficient]
+    const _vthoGasFee = _gasFeeOptions[Number(selectedFeeOption) as GasPriceCoefficient]
 
-    const vthoBalance = FormattingUtils.scaleNumberDown(
-        vtho.balance.balance,
-        vtho.decimals,
-        2,
-    )
+    const vthoBalance = FormattingUtils.scaleNumberDown(vtho.balance.balance, vtho.decimals, 2)
 
     const setSelectedFeeOption = useCallback(
         (value: string) => {
             _setSelectedFeeOption(value)
 
             const vthoTransferClauses = clauses.filter(
-                clause =>
-                    clause.to &&
-                    compareAddresses(clause.to, VTHO.address) &&
-                    isTokenTransferClause(clause),
+                clause => clause.to && compareAddresses(clause.to, VTHO.address) && isTokenTransferClause(clause),
             )
 
             let txCost = new BigNumber(isDelegated ? 0 : _vthoGasFee ?? 0)
@@ -108,18 +77,12 @@ export const useRenderGas = ({
 
                 if (clauseAmount) {
                     // if token to send is VTHO
-                    if (
-                        clause.to &&
-                        compareAddresses(clause.to, VTHO.address)
-                    ) {
-                        const useAmountToBN =
-                            convertFloatToBigNumber(userSelectedAmount)
+                    if (clause.to && compareAddresses(clause.to, VTHO.address)) {
+                        const useAmountToBN = convertFloatToBigNumber(userSelectedAmount)
 
                         setAmount(
                             FormattingUtils.scaleNumberDown(
-                                new BigNumber(useAmountToBN)
-                                    .minus(txCost)
-                                    .toString(),
+                                new BigNumber(useAmountToBN).minus(txCost).toString(),
                                 VTHO.decimals,
                                 VTHO.decimals,
                             ),
@@ -133,10 +96,7 @@ export const useRenderGas = ({
 
     const isThereEnoughGas = useMemo(() => {
         const vthoTransferClauses = clauses.filter(
-            clause =>
-                clause.to &&
-                compareAddresses(clause.to, VTHO.address) &&
-                isTokenTransferClause(clause),
+            clause => clause.to && compareAddresses(clause.to, VTHO.address) && isTokenTransferClause(clause),
         )
 
         let txCost = new BigNumber(isDelegated ? 0 : _vthoGasFee ?? 0)

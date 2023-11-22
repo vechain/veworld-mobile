@@ -33,9 +33,7 @@ export const NFTList = ({
     const renderSeparator = useCallback(() => <BaseSpacer height={16} />, [])
 
     const renderNftCollection = useCallback(
-        ({ item, index }: NFTListProps) => (
-            <NFTCollectionView collection={item} index={index} />
-        ),
+        ({ item, index }: NFTListProps) => <NFTCollectionView collection={item} index={index} />,
         [],
     )
 

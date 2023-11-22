@@ -2,11 +2,7 @@ import React, { useEffect } from "react"
 import { Image, StyleSheet } from "react-native"
 import { useApplicationSecurity } from "~Components/Providers"
 import { SCREEN_HEIGHT } from "~Constants"
-import Animated, {
-    useAnimatedStyle,
-    useSharedValue,
-    withTiming,
-} from "react-native-reanimated"
+import Animated, { useAnimatedStyle, useSharedValue, withTiming } from "react-native-reanimated"
 
 type Props = {
     children: React.ReactNode
@@ -40,11 +36,7 @@ export const SplashScreen = ({ children }: Props): React.ReactElement => {
         <>
             {!isAppReady && (
                 <Animated.View style={[styles.container, animatedStyle]}>
-                    <Image
-                        source={require("../bootsplash_logo_white.png")}
-                        style={styles.logo}
-                        resizeMode="contain"
-                    />
+                    <Image source={require("../bootsplash_logo_white.png")} style={styles.logo} resizeMode="contain" />
                 </Animated.View>
             )}
             {children}

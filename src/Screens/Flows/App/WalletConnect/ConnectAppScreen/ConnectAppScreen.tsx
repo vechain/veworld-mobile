@@ -36,18 +36,14 @@ import { AppConnectionRequests, AppInfo, UnknownAppMessage } from "~Screens"
 import { useSetSelectedAccount } from "~Hooks/useSetSelectedAccount"
 import { distinctValues } from "~Utils/ArrayUtils"
 
-type Props = NativeStackScreenProps<
-    RootStackParamListSwitch,
-    Routes.CONNECT_APP_SCREEN
->
+type Props = NativeStackScreenProps<RootStackParamListSwitch, Routes.CONNECT_APP_SCREEN>
 
 export const ConnectAppScreen: FC<Props> = ({ route }: Props) => {
     const currentProposal = route.params.sessionProposal
 
     const { onSetSelectedAccount } = useSetSelectedAccount()
 
-    const { approvePendingProposal, rejectPendingProposal, activeSessions } =
-        useWalletConnect()
+    const { approvePendingProposal, rejectPendingProposal, activeSessions } = useWalletConnect()
 
     const nav = useNavigation()
     const dispatch = useAppDispatch()
@@ -63,13 +59,7 @@ export const ConnectAppScreen: FC<Props> = ({ route }: Props) => {
     useEffect(() => {
         const sessions = Object.values(activeSessions)
 
-        if (
-            sessions.some(
-                _session =>
-                    _session.pairingTopic ===
-                    currentProposal.params.pairingTopic,
-            )
-        ) {
+        if (sessions.some(_session => _session.pairingTopic === currentProposal.params.pairingTopic)) {
             if (nav.canGoBack()) {
                 nav.goBack()
             } else {
@@ -103,10 +93,7 @@ export const ConnectAppScreen: FC<Props> = ({ route }: Props) => {
             const requestedChain = chains[0]
 
             const requestedNetwork = networks.find(net =>
-                HexUtils.compare(
-                    net.genesis.id.slice(-32),
-                    requestedChain.split(":")[1],
-                ),
+                HexUtils.compare(net.genesis.id.slice(-32), requestedChain.split(":")[1]),
             )
 
             if (requestedNetwork) {
@@ -128,20 +115,13 @@ export const ConnectAppScreen: FC<Props> = ({ route }: Props) => {
 
         const namespaces: SessionTypes.Namespaces = {}
 
-        const addNamespaces = (
-            proposedNamespaces: Record<
-                string,
-                ProposalTypes.BaseRequiredNamespace
-            >,
-        ) => {
+        const addNamespaces = (proposedNamespaces: Record<string, ProposalTypes.BaseRequiredNamespace>) => {
             for (const key of Object.keys(proposedNamespaces)) {
                 warn(proposedNamespaces[key])
 
                 const _chains =
                     proposedNamespaces[key].chains ??
-                    networks.map(
-                        network => `vechain:${network.genesis.id.slice(-32)}`,
-                    )
+                    networks.map(network => `vechain:${network.genesis.id.slice(-32)}`)
 
                 const accounts = _chains.map((scope: string) => {
                     return `${scope}:${selectedAccount.address}`
@@ -149,18 +129,9 @@ export const ConnectAppScreen: FC<Props> = ({ route }: Props) => {
 
                 if (namespaces[key]) {
                     namespaces[key] = {
-                        methods: distinctValues([
-                            ...namespaces[key].methods,
-                            ...proposedNamespaces[key].methods,
-                        ]),
-                        events: distinctValues([
-                            ...namespaces[key].events,
-                            ...proposedNamespaces[key].events,
-                        ]),
-                        accounts: distinctValues([
-                            ...namespaces[key].accounts,
-                            ...accounts,
-                        ]),
+                        methods: distinctValues([...namespaces[key].methods, ...proposedNamespaces[key].methods]),
+                        events: distinctValues([...namespaces[key].events, ...proposedNamespaces[key].events]),
+                        accounts: distinctValues([...namespaces[key].accounts, ...accounts]),
                     }
                 } else {
                     namespaces[key] = {
@@ -250,23 +221,14 @@ export const ConnectAppScreen: FC<Props> = ({ route }: Props) => {
                 style={styles.scrollView}>
                 <CloseModalButton onPress={onPressBack} />
                 <BaseView mx={20} style={styles.alignLeft}>
-                    <BaseText typographyFont="title">
-                        {LL.CONNECTED_APP_TITLE()}
-                    </BaseText>
+                    <BaseText typographyFont="title">{LL.CONNECTED_APP_TITLE()}</BaseText>
 
                     <BaseSpacer height={24} />
-                    <BaseText typographyFont="subTitle">
-                        {LL.CONNECTED_APP_REQUEST()}
-                    </BaseText>
+                    <BaseText typographyFont="subTitle">{LL.CONNECTED_APP_REQUEST()}</BaseText>
 
                     <BaseSpacer height={16} />
 
-                    <AppInfo
-                        name={name}
-                        url={url}
-                        icon={icon}
-                        description={description}
-                    />
+                    <AppInfo name={name} url={url} icon={icon} description={description} />
 
                     <BaseSpacer height={30} />
                     <AppConnectionRequests name={name} methods={methods} />
@@ -274,9 +236,7 @@ export const ConnectAppScreen: FC<Props> = ({ route }: Props) => {
 
                 <BaseView mx={20}>
                     <BaseSpacer height={24} />
-                    <BaseText typographyFont="subTitleBold">
-                        {LL.COMMON_SELECT_ACCOUNT()}
-                    </BaseText>
+                    <BaseText typographyFont="subTitleBold">{LL.COMMON_SELECT_ACCOUNT()}</BaseText>
                     <BaseSpacer height={16} />
                     <AccountCard
                         account={selectedAccount}

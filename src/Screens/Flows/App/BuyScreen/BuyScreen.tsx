@@ -1,11 +1,5 @@
 import React from "react"
-import {
-    BackButtonHeader,
-    BaseSpacer,
-    BaseText,
-    BaseView,
-    Layout,
-} from "~Components"
+import { BackButtonHeader, BaseSpacer, BaseText, BaseView, Layout } from "~Components"
 import { useI18nContext } from "~i18n"
 import { StatusBar } from "react-native"
 import { PlatformUtils } from "~Utils"
@@ -33,10 +27,7 @@ export const BuyScreen = () => {
                     mt={StatusBar.currentHeight ?? 0}
                     pt={PlatformUtils.isIOS() ? 40 : 12}
                     mx={24}>
-                    <BaseText
-                        fontSize={24}
-                        fontWeight="bold"
-                        typographyFont="title">
+                    <BaseText fontSize={24} fontWeight="bold" typographyFont="title">
                         {LL.TITLE_BUY()}
                     </BaseText>
                     <BaseSpacer height={10} />

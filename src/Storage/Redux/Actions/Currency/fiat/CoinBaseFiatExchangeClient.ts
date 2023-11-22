@@ -43,10 +43,7 @@ interface ExchangeRateResponse {
 }
 
 const getCurrencies = async (): Promise<string[]> => {
-    const currencies = await axios.get<CurrenciesResponse>(
-        `${COINBASE_URL}/currencies`,
-        EXCHANGE_CLIENT_AXIOS_OPTS,
-    )
+    const currencies = await axios.get<CurrenciesResponse>(`${COINBASE_URL}/currencies`, EXCHANGE_CLIENT_AXIOS_OPTS)
 
     //Sort alphabetically
     return currencies.data.data
@@ -56,10 +53,7 @@ const getCurrencies = async (): Promise<string[]> => {
         .sort((a, b) => a.localeCompare(b))
 }
 
-const getExchangeRate = async (
-    fiatSymbol: string,
-    symbol: string,
-): Promise<CurrencyExchangeRate> => {
+const getExchangeRate = async (fiatSymbol: string, symbol: string): Promise<CurrencyExchangeRate> => {
     const exchangeRates = await axios.get<ExchangeRateResponse>(
         `${COINBASE_URL}/exchange-rates?currency=${symbol}`,
         EXCHANGE_CLIENT_AXIOS_OPTS,

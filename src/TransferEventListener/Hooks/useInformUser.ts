@@ -14,11 +14,7 @@ export const useInformUser = ({ network }: { network: Network }) => {
         async (params: { accountAddress: string; txId?: string }) => {
             // Outgoing transactions
             if (params.txId) {
-                Linking.openURL(
-                    `${
-                        network.explorerUrl ?? defaultMainNetwork.explorerUrl
-                    }/transactions/${params.txId}`,
-                )
+                Linking.openURL(`${network.explorerUrl ?? defaultMainNetwork.explorerUrl}/transactions/${params.txId}`)
             } else {
                 // received token/VET
                 nav.navigate(Routes.HOME)
@@ -36,11 +32,7 @@ export const useInformUser = ({ network }: { network: Network }) => {
         async (params: { accountAddress: string; txId?: string }) => {
             if (params?.txId) {
                 // Outgoing transactions
-                Linking.openURL(
-                    `${
-                        network.explorerUrl ?? defaultMainNetwork.explorerUrl
-                    }/transactions/${params.txId}`,
-                )
+                Linking.openURL(`${network.explorerUrl ?? defaultMainNetwork.explorerUrl}/transactions/${params.txId}`)
             } else {
                 // 1. User received NFT
                 nav.navigate(Routes.NFTS)

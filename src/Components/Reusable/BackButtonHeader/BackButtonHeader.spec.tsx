@@ -9,8 +9,7 @@ import { TestWrapper } from "~Test"
 import { BackButtonHeader } from "./BackButtonHeader"
 
 const backButtonTestId = "backButtontestId"
-const findBackButton = async () =>
-    await screen.findByTestId(backButtonTestId, {}, { timeout: 5000 })
+const findBackButton = async () => await screen.findByTestId(backButtonTestId, {}, { timeout: 5000 })
 
 jest.mock("expo-haptics", () => {
     return {

@@ -56,12 +56,7 @@ const generateToastStyles = (
  * @returns {ToastStyles} The generated success toast styles object.
  */
 export const successToastStyles = (theme: ColorThemeType): ToastStyles =>
-    generateToastStyles(
-        theme,
-        COLORS.PASTEL_GREEN,
-        COLORS.DARK_GREEN_ALERT,
-        theme.colors.successMedium,
-    )
+    generateToastStyles(theme, COLORS.PASTEL_GREEN, COLORS.DARK_GREEN_ALERT, theme.colors.successMedium)
 
 /**
  * Generates error toast styles based on the color theme.
@@ -70,12 +65,7 @@ export const successToastStyles = (theme: ColorThemeType): ToastStyles =>
  * @returns {ToastStyles} The generated error toast styles object.
  */
 export const errorToastStyles = (theme: ColorThemeType): ToastStyles =>
-    generateToastStyles(
-        theme,
-        COLORS.PASTEL_RED,
-        COLORS.DARK_RED_ALERT,
-        theme.colors.error,
-    )
+    generateToastStyles(theme, COLORS.PASTEL_RED, COLORS.DARK_RED_ALERT, theme.colors.error)
 
 /**
  * Generates warning toast styles based on the color theme.
@@ -84,12 +74,7 @@ export const errorToastStyles = (theme: ColorThemeType): ToastStyles =>
  * @returns {ToastStyles} The generated warning toast styles object.
  */
 export const warningToastStyles = (theme: ColorThemeType): ToastStyles =>
-    generateToastStyles(
-        theme,
-        COLORS.PASTEL_ORANGE,
-        COLORS.DARK_ORANGE_ALERT,
-        theme.colors.warning,
-    )
+    generateToastStyles(theme, COLORS.PASTEL_ORANGE, COLORS.DARK_ORANGE_ALERT, theme.colors.warning)
 
 /**
  * Generates info toast styles based on the color theme.

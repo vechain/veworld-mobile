@@ -3,13 +3,7 @@ import Svg, { Path, SvgProps } from "react-native-svg"
 
 export const HistoryReceiveNFTIconSVG = (props: SvgProps): ReactElement => {
     return (
-        <Svg
-            width={24}
-            height={24}
-            viewBox="0 0 12 12"
-            fill="none"
-            xmlns="http://www.w3.org/2000/svg"
-            {...props}>
+        <Svg width={24} height={24} viewBox="0 0 12 12" fill="none" xmlns="http://www.w3.org/2000/svg" {...props}>
             <Path
                 d="M6.44444 9.11111C6.44444 9.42222 6.50222 9.72 6.6 10H2.88889C2.4 10 2 9.60444 2 9.11111V2.88889C2 2.4 2.4 2 2.88889 2H9.11111C9.60444 2 10 2.4 10 2.88889V6.6C9.72 6.50222 9.42222 6.44444 9.11111 6.44444V2.88889H2.88889V9.11111H6.44444ZM6.87111 6.12889L5.64889 7.70222L4.77778 6.65333L3.55556 8.22222H6.6C6.77778 7.72444 7.09778 7.29333 7.51111 6.98222L6.87111 6.12889Z"
                 fill="#0B0043"

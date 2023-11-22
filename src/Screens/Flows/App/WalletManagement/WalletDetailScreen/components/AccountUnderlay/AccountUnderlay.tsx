@@ -12,11 +12,7 @@ type Props = {
     account: AccountWithDevice
     isSelected: boolean
 }
-export const AccountUnderlay: React.FC<Props> = ({
-    confirmRemoveAccount,
-    account,
-    isSelected,
-}) => {
+export const AccountUnderlay: React.FC<Props> = ({ confirmRemoveAccount, account, isSelected }) => {
     const { styles, theme } = useThemedStyles(baseStyles)
     const dispatch = useDispatch()
 
@@ -32,11 +28,7 @@ export const AccountUnderlay: React.FC<Props> = ({
         <BaseView style={styles.underlayContainer} flexDirection="row">
             <BaseTouchable
                 action={toggleVisibility}
-                style={[
-                    styles.underlayItem,
-                    styles.eyeUnderlay,
-                    isSelected ? styles.disabledButton : {},
-                ]}
+                style={[styles.underlayItem, styles.eyeUnderlay, isSelected ? styles.disabledButton : {}]}
                 disabled={isSelected}>
                 <BaseIcon
                     size={24}
@@ -49,11 +41,7 @@ export const AccountUnderlay: React.FC<Props> = ({
             </BaseTouchable>
             <BaseTouchable
                 action={deleteAccount}
-                style={[
-                    styles.underlayItem,
-                    styles.deleteUnderlay,
-                    isSelected ? styles.disabledButton : {},
-                ]}
+                style={[styles.underlayItem, styles.deleteUnderlay, isSelected ? styles.disabledButton : {}]}
                 disabled={isSelected}>
                 <BaseIcon
                     name={"delete"}

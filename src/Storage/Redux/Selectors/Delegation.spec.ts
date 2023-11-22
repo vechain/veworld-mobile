@@ -28,10 +28,7 @@ describe("Delegation Slice Selectors", () => {
 
     describe("selectDelegationUrls", () => {
         it("should select the urls array from the delegation slice", () => {
-            expect(selectDelegationUrls(state)).toEqual([
-                "https://example.com",
-                "https://test.com",
-            ])
+            expect(selectDelegationUrls(state)).toEqual(["https://example.com", "https://test.com"])
         })
     })
 })

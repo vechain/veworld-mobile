@@ -1,16 +1,9 @@
-import {
-    selectSelectedAccount,
-    selectSelectedNetwork,
-    selectBalancesForAccount,
-} from "~Storage/Redux/Selectors"
+import { selectSelectedAccount, selectSelectedNetwork, selectBalancesForAccount } from "~Storage/Redux/Selectors"
 import { RootState } from "~Storage/Redux/Types"
 import { Dispatch } from "@reduxjs/toolkit"
 import { debug, error } from "~Utils/Logger"
 import { BalanceUtils } from "~Utils"
-import {
-    setIsTokensOwnedLoading,
-    updateTokenBalances,
-} from "~Storage/Redux/Slices"
+import { setIsTokensOwnedLoading, updateTokenBalances } from "~Storage/Redux/Slices"
 import { Balance, Network } from "~Model"
 import { VET, VTHO } from "~Constants"
 
@@ -19,12 +12,7 @@ export const upsertTokenBalance =
     async (dispatch: Dispatch, getState: () => RootState) => {
         const network = selectSelectedNetwork(getState())
 
-        const balance = await BalanceUtils.getBalanceFromBlockchain(
-            tokenAddress,
-            accountAddress,
-            network,
-            thorClient,
-        )
+        const balance = await BalanceUtils.getBalanceFromBlockchain(tokenAddress, accountAddress, network, thorClient)
 
         if (!balance) return
 
@@ -42,14 +30,10 @@ export const upsertTokenBalance =
  * @param accountAddress - the account address for this balance
  */
 export const updateAccountBalances =
-    (thorClient: Connex.Thor, accountAddress: string) =>
-    async (dispatch: Dispatch, getState: () => RootState) => {
+    (thorClient: Connex.Thor, accountAddress: string) => async (dispatch: Dispatch, getState: () => RootState) => {
         dispatch(setIsTokensOwnedLoading(true))
 
-        const accountBalances = selectBalancesForAccount(
-            getState(),
-            accountAddress,
-        )
+        const accountBalances = selectBalancesForAccount(getState(), accountAddress)
 
         if (accountBalances.length === 0) return
 
@@ -89,12 +73,7 @@ export const updateAccountBalances =
     }
 
 export const autoSelectSuggestTokens =
-    (
-        accountAddress: string,
-        suggestedTokens: string[],
-        network: Network,
-        thorClient: Connex.Thor,
-    ) =>
+    (accountAddress: string, suggestedTokens: string[], network: Network, thorClient: Connex.Thor) =>
     async (dispatch: Dispatch) => {
         const officialTokensBalances: Balance[] = []
 
@@ -126,10 +105,7 @@ export const autoSelectSuggestTokens =
         }
     }
 
-export const resetTokenBalances = async (
-    dispatch: Dispatch,
-    getState: () => RootState,
-) => {
+export const resetTokenBalances = async (dispatch: Dispatch, getState: () => RootState) => {
     const account = selectSelectedAccount(getState())
     const network = selectSelectedNetwork(getState())
 

@@ -4,15 +4,7 @@ import { FlatList, StyleSheet, ViewToken } from "react-native"
 import { ColorThemeType, SCREEN_WIDTH, COLORS } from "~Constants"
 import { FormattingUtils } from "~Utils"
 import { useThemedStyles } from "~Hooks"
-import {
-    BaseIcon,
-    BaseSpacer,
-    BaseText,
-    BaseView,
-    LedgerBadge,
-    PaginatedDot,
-    PicassoAddressIcon,
-} from "~Components"
+import { BaseIcon, BaseSpacer, BaseText, BaseView, LedgerBadge, PaginatedDot, PicassoAddressIcon } from "~Components"
 import { Contact, WalletAccount } from "~Model"
 import {
     selectContactByAddress,
@@ -36,26 +28,16 @@ enum PROVENANCE {
 }
 
 export const TransferCard = memo(
-    ({
-        fromAddress,
-        toAddresses,
-        onAddContactPress,
-        isFromAccountLedger,
-        isToAccountLedger,
-    }: Props) => {
+    ({ fromAddress, toAddresses, onAddContactPress, isFromAccountLedger, isToAccountLedger }: Props) => {
         const { LL } = useI18nContext()
 
         const { styles, theme } = useThemedStyles(baseStyles)
 
         const accounts = useAppSelector(selectVisibleAccounts)
 
-        const fromContact = useAppSelector(state =>
-            selectContactByAddress(state, fromAddress),
-        )
+        const fromContact = useAppSelector(state => selectContactByAddress(state, fromAddress))
 
-        const toContacts = useAppSelector(state =>
-            selectContactsByAddresses(state, toAddresses),
-        )
+        const toContacts = useAppSelector(state => selectContactsByAddresses(state, toAddresses))
 
         const [activeIndex, setActiveIndex] = useState(0)
 
@@ -65,8 +47,7 @@ export const TransferCard = memo(
             if (fromContact) return fromContact.alias
 
             const account = accounts.find(
-                (acc: WalletAccount) =>
-                    acc.address.toLowerCase() === fromAddress.toLowerCase(),
+                (acc: WalletAccount) => acc.address.toLowerCase() === fromAddress.toLowerCase(),
             )
 
             if (account) return account.alias
@@ -80,17 +61,13 @@ export const TransferCard = memo(
 
             toAddresses?.map((_address: string) => {
                 const contactFound = toContacts.find(
-                    (contact: Contact) =>
-                        contact.address.toLowerCase() ===
-                        _address.toLowerCase(),
+                    (contact: Contact) => contact.address.toLowerCase() === _address.toLowerCase(),
                 )
                 if (contactFound) {
                     names.push(contactFound.alias)
                 } else {
                     const account = accounts.find(
-                        (acc: WalletAccount) =>
-                            acc.address.toLowerCase() ===
-                            _address.toLowerCase(),
+                        (acc: WalletAccount) => acc.address.toLowerCase() === _address.toLowerCase(),
                     )
 
                     account ? names.push(account.alias) : names.push(undefined)
@@ -107,9 +84,7 @@ export const TransferCard = memo(
         const toAddressesShort = useMemo(() => {
             const shortenedAddresses: Array<string> = []
             toAddresses?.map((_address: string) => {
-                shortenedAddresses.push(
-                    FormattingUtils.humanAddress(_address, 4, 6),
-                )
+                shortenedAddresses.push(FormattingUtils.humanAddress(_address, 4, 6))
             })
 
             return shortenedAddresses
@@ -123,8 +98,7 @@ export const TransferCard = memo(
                 contactName?: string,
                 isLedger?: boolean,
             ) => {
-                const provenanceText =
-                    provenance === PROVENANCE.FROM ? LL.FROM() : LL.TO()
+                const provenanceText = provenance === PROVENANCE.FROM ? LL.FROM() : LL.TO()
                 return (
                     <BaseView
                         py={12}
@@ -132,17 +106,11 @@ export const TransferCard = memo(
                         key={_address}
                         style={{ width: SCREEN_WIDTH - 40 }}
                         alignItems="flex-start">
-                        <BaseText typographyFont="buttonPrimary">
-                            {provenanceText}
-                        </BaseText>
+                        <BaseText typographyFont="buttonPrimary">{provenanceText}</BaseText>
                         <BaseView flexDirection="row" py={8}>
                             <PicassoAddressIcon address={_address} size={40} />
                             <BaseView flexDirection="column" pl={12}>
-                                {contactName && (
-                                    <BaseText typographyFont="subSubTitle">
-                                        {contactName}
-                                    </BaseText>
-                                )}
+                                {contactName && <BaseText typographyFont="subSubTitle">{contactName}</BaseText>}
                                 <BaseView flexDirection="row" mt={3}>
                                     {isLedger && (
                                         <>
@@ -150,12 +118,7 @@ export const TransferCard = memo(
                                             <BaseSpacer width={8} />
                                         </>
                                     )}
-                                    <BaseText
-                                        typographyFont={
-                                            contactName
-                                                ? "captionRegular"
-                                                : "button"
-                                        }>
+                                    <BaseText typographyFont={contactName ? "captionRegular" : "button"}>
                                         {addressShort}
                                     </BaseText>
                                 </BaseView>
@@ -169,9 +132,7 @@ export const TransferCard = memo(
                                         bg={COLORS.LIME_GREEN}
                                         iconPadding={3}
                                         color={COLORS.DARK_PURPLE}
-                                        action={() =>
-                                            onAddContactPress(_address)
-                                        }
+                                        action={() => onAddContactPress(_address)}
                                     />
                                 </BaseView>
                             )}
@@ -187,20 +148,8 @@ export const TransferCard = memo(
             const addressShort = fromAddressShort
             const contactName = fromContactName
 
-            return renderAccount(
-                PROVENANCE.FROM,
-                _address,
-                addressShort,
-                contactName,
-                isFromAccountLedger,
-            )
-        }, [
-            fromAddress,
-            fromAddressShort,
-            fromContactName,
-            isFromAccountLedger,
-            renderAccount,
-        ])
+            return renderAccount(PROVENANCE.FROM, _address, addressShort, contactName, isFromAccountLedger)
+        }, [fromAddress, fromAddressShort, fromContactName, isFromAccountLedger, renderAccount])
 
         const renderToAccount = useCallback(
             ({ index }: { index: number }) => {
@@ -208,31 +157,16 @@ export const TransferCard = memo(
                 const contactName = toContactNames[index]
                 const _address = toAddresses![index]
 
-                return renderAccount(
-                    PROVENANCE.TO,
-                    _address,
-                    addressShort,
-                    contactName,
-                    isToAccountLedger,
-                )
+                return renderAccount(PROVENANCE.TO, _address, addressShort, contactName, isToAccountLedger)
             },
-            [
-                isToAccountLedger,
-                renderAccount,
-                toAddresses,
-                toAddressesShort,
-                toContactNames,
-            ],
+            [isToAccountLedger, renderAccount, toAddresses, toAddressesShort, toContactNames],
         )
 
-        const onViewableItemsChanged = useCallback(
-            ({ viewableItems }: { viewableItems: ViewToken[] }) => {
-                const activeIdx = viewableItems[0].index
+        const onViewableItemsChanged = useCallback(({ viewableItems }: { viewableItems: ViewToken[] }) => {
+            const activeIdx = viewableItems[0].index
 
-                setActiveIndex(activeIdx ?? 0)
-            },
-            [],
-        )
+            setActiveIndex(activeIdx ?? 0)
+        }, [])
 
         return (
             <BaseView style={[styles.container]}>
@@ -260,10 +194,7 @@ export const TransferCard = memo(
                             {toAddresses.length > 1 && (
                                 <>
                                     <BaseIcon
-                                        style={[
-                                            styles.icon,
-                                            { marginTop: -35 },
-                                        ]}
+                                        style={[styles.icon, { marginTop: -35 }]}
                                         name={"arrow-down"}
                                         color={COLORS.WHITE}
                                         size={24}
@@ -272,12 +203,8 @@ export const TransferCard = memo(
                                     />
                                     <BaseView alignItems="center" w={100}>
                                         <PaginatedDot
-                                            activeDotColor={
-                                                theme.colors.primary
-                                            }
-                                            inactiveDotColor={
-                                                theme.colors.primary
-                                            }
+                                            activeDotColor={theme.colors.primary}
+                                            inactiveDotColor={theme.colors.primary}
                                             pageIdx={activeIndex}
                                             maxPage={toAddresses.length}
                                         />
@@ -288,10 +215,7 @@ export const TransferCard = memo(
                             {toAddresses.length === 1 && (
                                 <>
                                     <BaseIcon
-                                        style={[
-                                            styles.icon,
-                                            { marginTop: -20 },
-                                        ]}
+                                        style={[styles.icon, { marginTop: -20 }]}
                                         name={"arrow-down"}
                                         color={COLORS.WHITE}
                                         size={24}

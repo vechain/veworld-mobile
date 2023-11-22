@@ -1,11 +1,5 @@
 import React, { useCallback, useEffect, useMemo, useState } from "react"
-import {
-    BaseSearchInput,
-    BaseSpacer,
-    BaseText,
-    BaseView,
-    OfficialTokenCardWithExchangeRate,
-} from "~Components"
+import { BaseSearchInput, BaseSpacer, BaseText, BaseView, OfficialTokenCardWithExchangeRate } from "~Components"
 import { useI18nContext } from "~i18n"
 import { StyleSheet, ScrollView } from "react-native"
 import { useThemedStyles } from "~Hooks"
@@ -53,12 +47,8 @@ export const DiscoverAssets = () => {
         () =>
             tokensWithCurrency.filter(
                 token =>
-                    token.name
-                        .toLocaleLowerCase()
-                        .includes(tokenQuery.toLocaleLowerCase()) ||
-                    token.symbol
-                        .toLocaleLowerCase()
-                        .includes(tokenQuery.toLocaleLowerCase()),
+                    token.name.toLocaleLowerCase().includes(tokenQuery.toLocaleLowerCase()) ||
+                    token.symbol.toLocaleLowerCase().includes(tokenQuery.toLocaleLowerCase()),
             ),
         [tokenQuery, tokensWithCurrency],
     )
@@ -110,9 +100,7 @@ export const DiscoverAssets = () => {
                     showsVerticalScrollIndicator={false}
                     showsHorizontalScrollIndicator={false}
                     contentInsetAdjustmentBehavior="automatic"
-                    contentContainerStyle={
-                        themedStyles.contentContainerStyle_SCROLLVIEW
-                    }
+                    contentContainerStyle={themedStyles.contentContainerStyle_SCROLLVIEW}
                     style={themedStyles.styles_SCROLLVIEW}>
                     {filteredTokens.map(token => (
                         <OfficialTokenCardWithExchangeRate
@@ -123,11 +111,7 @@ export const DiscoverAssets = () => {
                     ))}
                 </ScrollView>
             ) : (
-                <BaseView
-                    flexGrow={1}
-                    justifyContent="center"
-                    alignItems="center"
-                    pb={60}>
+                <BaseView flexGrow={1} justifyContent="center" alignItems="center" pb={60}>
                     <BaseText>{LL.ERROR_NO_ASSETS_FOUND()}</BaseText>
                 </BaseView>
             )}

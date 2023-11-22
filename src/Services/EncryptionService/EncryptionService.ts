@@ -9,8 +9,7 @@ export interface EncryptTransformConfig {
     onError?: (err: Error) => void
 }
 
-const makeError = (message: string) =>
-    new Error(`redux-persist-transform-encrypt: ${message}`)
+const makeError = (message: string) => new Error(`redux-persist-transform-encrypt: ${message}`)
 
 export const encryptTransform = <HSS, S = any, RS = any>(
     config: EncryptTransformConfig,
@@ -29,21 +28,15 @@ export const encryptTransform = <HSS, S = any, RS = any>(
     const onError = typeof config.onError === "function" ? config.onError : warn
 
     return createTransform<HSS, string, S, RS>(
-        (inboundState, _key) =>
-            CryptoUtils.encryptState<HSS>(inboundState, secretKey),
+        (inboundState, _key) => CryptoUtils.encryptState<HSS>(inboundState, secretKey),
 
         (outboundState, _key) => {
             if (typeof outboundState !== "string") {
-                return onError(
-                    makeError("Expected outbound state to be a string."),
-                )
+                return onError(makeError("Expected outbound state to be a string."))
             }
 
             try {
-                const decryptedString = CryptoUtils.decryptState(
-                    outboundState,
-                    secretKey,
-                )
+                const decryptedString = CryptoUtils.decryptState(outboundState, secretKey)
 
                 if (!decryptedString) {
                     throw new Error("Decrypted string is empty.")
@@ -56,9 +49,7 @@ export const encryptTransform = <HSS, S = any, RS = any>(
                 }
             } catch {
                 return onError(
-                    makeError(
-                        "Could not decrypt state. Please verify that you are using the correct secret key.",
-                    ),
+                    makeError("Could not decrypt state. Please verify that you are using the correct secret key."),
                 )
             }
         },

@@ -27,19 +27,8 @@ export const usePercentge = ({
     const percentage = useMemo(() => {
         if (new BigNumber(tokenTotalBalance).isZero()) return 0
 
-        if (isInputInFiat)
-            return (
-                new BigNumber(input)
-                    .div(fiatTotalBalance)
-                    .multipliedBy(100)
-                    .toNumber() || 0
-            )
-        return (
-            new BigNumber(input)
-                .div(tokenTotalBalance)
-                .multipliedBy(100)
-                .toNumber() || 0
-        )
+        if (isInputInFiat) return new BigNumber(input).div(fiatTotalBalance).multipliedBy(100).toNumber() || 0
+        return new BigNumber(input).div(tokenTotalBalance).multipliedBy(100).toNumber() || 0
     }, [input, tokenTotalBalance, fiatTotalBalance, isInputInFiat])
 
     /**
@@ -47,23 +36,14 @@ export const usePercentge = ({
      * @param value position value from the range slider
      */
     const onChangePercentage = (value: number) => {
-        const newTokenInput = new BigNumber(tokenTotalBalance)
-            .div(100)
-            .multipliedBy(value)
-            .toString()
+        const newTokenInput = new BigNumber(tokenTotalBalance).div(100).multipliedBy(value).toString()
 
         validateSufficientBalance(
             isInputInFiat
                 ? Number(
-                      FormattingUtils.convertToFiatBalance(
-                          newTokenInput || "0",
-                          exchangeRate?.rate ?? 1,
-                          0,
-                      ),
+                      FormattingUtils.convertToFiatBalance(newTokenInput || "0", exchangeRate?.rate ?? 1, 0),
                   ).toFixed(2)
-                : new BigNumber(newTokenInput)
-                      .decimalPlaces(2, BigNumber.ROUND_DOWN)
-                      .toString(),
+                : new BigNumber(newTokenInput).decimalPlaces(2, BigNumber.ROUND_DOWN).toString(),
         )
     }
 

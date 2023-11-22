@@ -11,20 +11,12 @@ type Props = {
     isSelected?: boolean
 }
 
-export const LedgerDeviceBox: React.FC<Props> = ({
-    device,
-    onPress,
-    isSelected,
-}) => {
+export const LedgerDeviceBox: React.FC<Props> = ({ device, onPress, isSelected }) => {
     const { styles: themedStyles } = useThemedStyles(baseStyles)
     const style = isSelected ? themedStyles.selected : themedStyles.notSelected
 
     return (
-        <BaseTouchableBox
-            innerContainerStyle={style}
-            action={onPress}
-            flexDirection="column"
-            alignItems="flex-start">
+        <BaseTouchableBox innerContainerStyle={style} action={onPress} flexDirection="column" alignItems="flex-start">
             <BaseText typographyFont="subSubTitle">{device.localName}</BaseText>
             <BaseSpacer height={6} />
             <BaseText typographyFont="captionRegular">{device.id}</BaseText>

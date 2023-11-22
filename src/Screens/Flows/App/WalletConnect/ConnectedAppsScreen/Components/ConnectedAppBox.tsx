@@ -11,28 +11,16 @@ type Props = {
 export const ConnectedAppBox: React.FC<Props> = memo(({ session }: Props) => {
     return (
         <BaseCard style={styles.container}>
-            <BaseView
-                w={100}
-                flexDirection="row"
-                style={styles.innerContainer}
-                justifyContent="space-between">
+            <BaseView w={100} flexDirection="row" style={styles.innerContainer} justifyContent="space-between">
                 <BaseView flexDirection="row">
                     <BaseView flexDirection="column" alignItems="center">
-                        <BaseImage
-                            uri={session.peer.metadata.icons[0]}
-                            style={styles.image as StyleProp<ImageStyle>}
-                        />
+                        <BaseImage uri={session.peer.metadata.icons[0]} style={styles.image as StyleProp<ImageStyle>} />
                     </BaseView>
 
                     <BaseView flexDirection="column" alignItems="center">
                         <BaseView pl={12}>
-                            <BaseView
-                                flexDirection="row"
-                                alignItems="center"
-                                justifyContent="flex-start">
-                                <BaseText
-                                    typographyFont="subSubTitle"
-                                    fontSize={14}>
+                            <BaseView flexDirection="row" alignItems="center" justifyContent="flex-start">
+                                <BaseText typographyFont="subSubTitle" fontSize={14}>
                                     {session.peer?.metadata?.name}
                                 </BaseText>
                             </BaseView>

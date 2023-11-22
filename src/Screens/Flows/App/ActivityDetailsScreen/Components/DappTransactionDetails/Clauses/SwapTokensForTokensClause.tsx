@@ -18,18 +18,13 @@ export const SwapTokensForTokensClause: React.FC<Props> = memo(({ clause }) => {
 
     return (
         <BaseView style={{ width: SCREEN_WIDTH - 80 }}>
-            <ClauseDetail
-                title={LL.TYPE()}
-                value={LL.CONNECTED_APP_swap_tokens_for_tokens()}
-            />
+            <ClauseDetail title={LL.TYPE()} value={LL.CONNECTED_APP_swap_tokens_for_tokens()} />
 
             <ClauseDetail
                 title={LL.CONTRACT_DATA()}
                 value={FormattingUtils.humanAddress(clause.data, 7, 9)}
                 border={false}
-                onValuePress={() =>
-                    onCopyToClipboard(clause.to ?? "", LL.COMMON_LBL_DATA())
-                }
+                onValuePress={() => onCopyToClipboard(clause.to ?? "", LL.COMMON_LBL_DATA())}
                 valueIcon="content-copy"
             />
         </BaseView>

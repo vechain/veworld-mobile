@@ -1,13 +1,7 @@
-import {
-    StorageEncryptionKeys,
-    WalletEncryptionKey,
-} from "~Components/Providers/EncryptedStorageProvider/Model"
+import { StorageEncryptionKeys, WalletEncryptionKey } from "~Components/Providers/EncryptedStorageProvider/Model"
 import { Keychain } from "~Storage"
 import { CryptoUtils, debug, error } from "~Utils"
-import {
-    StorageEncryptionKeyHelper,
-    WalletEncryptionKeyHelper,
-} from "~Components"
+import { StorageEncryptionKeyHelper, WalletEncryptionKeyHelper } from "~Components"
 import SaltHelper from "./SaltHelper"
 
 const BACKUP_KEY_STORAGE = "BACKUP_KEY_STORAGE"
@@ -72,10 +66,7 @@ const handleSecurityUpgradeFailure = async (oldPin: string) => {
  * @param currentPinCode
  * @param newPinCode
  */
-const updateSecurityMethod = async (
-    currentPinCode: string,
-    newPinCode?: string,
-): Promise<boolean> => {
+const updateSecurityMethod = async (currentPinCode: string, newPinCode?: string): Promise<boolean> => {
     let wallet
     let storage
 

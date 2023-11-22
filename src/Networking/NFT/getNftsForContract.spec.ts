@@ -27,24 +27,12 @@ describe("getNftsForContract", () => {
         ]
         ;(axios.get as jest.Mock).mockResolvedValueOnce({ data: responseData })
 
-        const nfts = await getNftsForContract(
-            NETWORK_TYPE.MAIN,
-            contractAddress,
-            ownerAddress,
-            resultsPerPage,
-            page,
-        )
+        const nfts = await getNftsForContract(NETWORK_TYPE.MAIN, contractAddress, ownerAddress, resultsPerPage, page)
 
         expect(nfts).toEqual(responseData)
 
         expect(axios.get).toHaveBeenCalledWith(
-            NFTS_OWNED_PER_CONTRACT(
-                NETWORK_TYPE.MAIN,
-                ownerAddress,
-                contractAddress,
-                resultsPerPage,
-                page,
-            ),
+            NFTS_OWNED_PER_CONTRACT(NETWORK_TYPE.MAIN, ownerAddress, contractAddress, resultsPerPage, page),
             { timeout: NFT_AXIOS_TIMEOUT },
         )
     })

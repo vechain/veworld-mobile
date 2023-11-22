@@ -34,18 +34,10 @@ import { Transaction } from "thor-devkit"
 import { TransactionDetails, UnknownAppMessage } from "~Screens"
 import { AnalyticsEvent } from "~Constants"
 
-type Props = NativeStackScreenProps<
-    RootStackParamListSwitch,
-    Routes.CONNECTED_APP_SEND_TRANSACTION_SCREEN
->
+type Props = NativeStackScreenProps<RootStackParamListSwitch, Routes.CONNECTED_APP_SEND_TRANSACTION_SCREEN>
 
 export const SendTransactionScreen: FC<Props> = ({ route }: Props) => {
-    const {
-        requestEvent,
-        session: sessionRequest,
-        message,
-        options,
-    } = route.params
+    const { requestEvent, session: sessionRequest, message, options } = route.params
 
     const dispatch = useAppDispatch()
     const { LL } = useI18nContext()
@@ -60,19 +52,14 @@ export const SendTransactionScreen: FC<Props> = ({ route }: Props) => {
     const selectedAccount = useAppSelector(selectSelectedAccount)
     const tokens = useAppSelector(selectTokensWithInfo)
 
-    const { topic } = useMemo(
-        () => WalletConnectUtils.getRequestEventAttributes(requestEvent),
-        [requestEvent],
-    )
+    const { topic } = useMemo(() => WalletConnectUtils.getRequestEventAttributes(requestEvent), [requestEvent])
 
     const { name, url } = useMemo(
         () => WalletConnectUtils.getSessionRequestAttributes(sessionRequest),
         [sessionRequest],
     )
 
-    const sessionContext = useAppSelector(state =>
-        selectVerifyContext(state, topic),
-    )
+    const sessionContext = useAppSelector(state => selectVerifyContext(state, topic))
 
     const validConnectedApp = useMemo(() => {
         if (!sessionContext) return true
@@ -80,10 +67,7 @@ export const SendTransactionScreen: FC<Props> = ({ route }: Props) => {
         return sessionContext.verifyContext.validation === "VALID"
     }, [sessionContext])
 
-    const clausesMetadata = useMemo(
-        () => TransactionUtils.interpretClauses(message, tokens),
-        [message, tokens],
-    )
+    const clausesMetadata = useMemo(() => TransactionUtils.interpretClauses(message, tokens), [message, tokens])
 
     const clauses = useMemo(() => {
         return message.map(clause => ({
@@ -116,15 +100,7 @@ export const SendTransactionScreen: FC<Props> = ({ route }: Props) => {
 
             onFinish(true)
         },
-        [
-            onFinish,
-            url,
-            requestEvent,
-            processRequest,
-            selectedAccount.address,
-            dispatch,
-            name,
-        ],
+        [onFinish, url, requestEvent, processRequest, selectedAccount.address, dispatch, name],
     )
 
     const onTransactionFailure = useCallback(async () => {
@@ -180,30 +156,19 @@ export const SendTransactionScreen: FC<Props> = ({ route }: Props) => {
                 <CloseModalButton onPress={onReject} />
 
                 <BaseView mx={20} style={styles.alignLeft}>
-                    <BaseText typographyFont="title">
-                        {LL.CONNECTED_APP_REQUEST()}
-                    </BaseText>
+                    <BaseText typographyFont="title">{LL.CONNECTED_APP_REQUEST()}</BaseText>
 
                     <BaseSpacer height={32} />
-                    <BaseText typographyFont="subTitle">
-                        {LL.CONNECTED_APP_SIGN_TRANSACTION_REQUEST_TITLE()}
-                    </BaseText>
+                    <BaseText typographyFont="subTitle">{LL.CONNECTED_APP_SIGN_TRANSACTION_REQUEST_TITLE()}</BaseText>
                     <BaseSpacer height={16} />
-                    <BaseText>
-                        {LL.CONNECTED_APP_SIGN_TRANSACTION_REQUEST_DESCRIPTION()}
-                    </BaseText>
+                    <BaseText>{LL.CONNECTED_APP_SIGN_TRANSACTION_REQUEST_DESCRIPTION()}</BaseText>
                 </BaseView>
 
                 <BaseSpacer height={24} />
                 <BaseView mx={20}>
-                    <BaseText typographyFont="subTitleBold">
-                        {LL.CONNECTED_APP_SELECTED_ACCOUNT_LABEL()}
-                    </BaseText>
+                    <BaseText typographyFont="subTitleBold">{LL.CONNECTED_APP_SELECTED_ACCOUNT_LABEL()}</BaseText>
                     <BaseSpacer height={16} />
-                    <AccountCard
-                        account={selectedAccount}
-                        showOpacityWhenDisabled={false}
-                    />
+                    <AccountCard account={selectedAccount} showOpacityWhenDisabled={false} />
                 </BaseView>
 
                 <BaseSpacer height={24} />
@@ -223,9 +188,7 @@ export const SendTransactionScreen: FC<Props> = ({ route }: Props) => {
                     />
 
                     <BaseSpacer height={44} />
-                    {!!clausesMetadata.length && (
-                        <ClausesCarousel clausesMetadata={clausesMetadata} />
-                    )}
+                    {!!clausesMetadata.length && <ClausesCarousel clausesMetadata={clausesMetadata} />}
 
                     <BaseSpacer height={30} />
 
@@ -243,11 +206,7 @@ export const SendTransactionScreen: FC<Props> = ({ route }: Props) => {
                         haptics="Light"
                         title={LL.COMMON_BTN_SIGN_AND_SEND()}
                         action={onSubmit}
-                        disabled={
-                            isLoading ||
-                            continueNotAllowed ||
-                            (!validConnectedApp && !isInvalidChecked)
-                        }
+                        disabled={isLoading || continueNotAllowed || (!validConnectedApp && !isInvalidChecked)}
                         isLoading={isLoading}
                     />
                     <BaseSpacer height={16} />

@@ -7,8 +7,7 @@ import TestData from "../../Test/helpers"
 import { LedgerDevice, LocalDevice, WalletAccount } from "~Model"
 import { WalletEncryptionKeyHelper } from "~Components"
 
-const { firstLedgerAccount, ledgerDevice, account1D1, device1, wallet1 } =
-    TestData.data
+const { firstLedgerAccount, ledgerDevice, account1D1, device1, wallet1 } = TestData.data
 
 jest.mock("axios")
 
@@ -27,14 +26,10 @@ jest.mock("~Storage/Redux", () => ({
 
 jest.mock("~Services/KeychainService/KeychainService", () => ({
     ...jest.requireActual("~Services/KeychainService/KeychainService"),
-    getDeviceEncryptionKey: jest
-        .fn()
-        .mockResolvedValue("ac4a45eaa86188615088082c1dee1547"),
+    getDeviceEncryptionKey: jest.fn().mockResolvedValue("ac4a45eaa86188615088082c1dee1547"),
 }))
 jest.mock("~Components/Providers/EncryptedStorageProvider/Helpers", () => ({
-    ...jest.requireActual(
-        "~Components/Providers/EncryptedStorageProvider/Helpers",
-    ),
+    ...jest.requireActual("~Components/Providers/EncryptedStorageProvider/Helpers"),
     WalletEncryptionKeyHelper: {
         get: jest.fn(),
         set: jest.fn(),
@@ -59,9 +54,7 @@ const messageToSign = blake2b256("message to sign")
 describe("useSignMessage", () => {
     beforeEach(() => {
         jest.clearAllMocks()
-        ;(
-            WalletEncryptionKeyHelper.decryptWallet as jest.Mock
-        ).mockResolvedValue(wallet1)
+        ;(WalletEncryptionKeyHelper.decryptWallet as jest.Mock).mockResolvedValue(wallet1)
     })
 
     it("should render correctly", async () => {
@@ -100,9 +93,7 @@ describe("useSignMessage", () => {
             signMessage: expect.any(Function),
         })
 
-        await expect(result.current.signMessage()).rejects.toThrow(
-            "Ledger devices not supported in this hook",
-        )
+        await expect(result.current.signMessage()).rejects.toThrow("Ledger devices not supported in this hook")
     })
 
     it("no wallet should throw error", async () => {
@@ -125,8 +116,6 @@ describe("useSignMessage", () => {
             signMessage: expect.any(Function),
         })
 
-        await expect(result.current.signMessage()).rejects.toThrow(
-            "The device doesn't have a wallet",
-        )
+        await expect(result.current.signMessage()).rejects.toThrow("The device doesn't have a wallet")
     })
 })

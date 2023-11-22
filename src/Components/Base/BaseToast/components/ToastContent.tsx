@@ -14,15 +14,7 @@ type Props = {
     testID?: string
 }
 
-export const ToastContent = ({
-    styles,
-    text1,
-    icon,
-    text2,
-    text3,
-    onPress,
-    testID,
-}: Props) => {
+export const ToastContent = ({ styles, text1, icon, text2, text3, onPress, testID }: Props) => {
     const theme = useTheme()
 
     const handleOnPress = useCallback(() => {
@@ -38,14 +30,10 @@ export const ToastContent = ({
                 <BaseIcon name={icon} size={20} color={styles.iconColor} />
                 <BaseView>
                     <BaseView style={styles.textContainer} pl={12}>
-                        <BaseText
-                            color={theme.colors.textReversed}
-                            typographyFont="buttonPrimary">
+                        <BaseText color={theme.colors.textReversed} typographyFont="buttonPrimary">
                             {text1}{" "}
                         </BaseText>
-                        <BaseText
-                            color={theme.colors.textReversed}
-                            typographyFont="body">
+                        <BaseText color={theme.colors.textReversed} typographyFont="body">
                             {text2}{" "}
                         </BaseText>
                         <BaseText

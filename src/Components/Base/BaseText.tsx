@@ -34,32 +34,18 @@ type Props = {
     bg?: string
     borderRadius?: number
     alignContainer?: FlexAlignType
-    justifyContainer?:
-        | "flex-start"
-        | "flex-end"
-        | "center"
-        | "space-between"
-        | "space-around"
-        | "space-evenly"
+    justifyContainer?: "flex-start" | "flex-end" | "center" | "space-between" | "space-around" | "space-evenly"
 } & TextProps
 
 export const BaseText = (props: Props) => {
-    const {
-        style,
-        typographyFont,
-        fontSize,
-        fontWeight,
-        fontFamily,
-        ...otherProps
-    } = props
+    const { style, typographyFont, fontSize, fontWeight, fontFamily, ...otherProps } = props
     const theme = useTheme()
 
     const computedFontSize = useMemo(
         () =>
             fontSize ??
             (((typographyFont &&
-                defaultTypography[typographyFont]
-                    .fontSize) as keyof typeof otherTypography.fontSize) ||
+                defaultTypography[typographyFont].fontSize) as keyof typeof otherTypography.fontSize) ||
                 14),
         [typographyFont, fontSize],
     )
@@ -68,8 +54,7 @@ export const BaseText = (props: Props) => {
         () =>
             fontWeight ??
             (((typographyFont &&
-                defaultTypography[typographyFont]
-                    .fontWeight) as keyof typeof otherTypography.fontWeight) ||
+                defaultTypography[typographyFont].fontWeight) as keyof typeof otherTypography.fontWeight) ||
                 "500"),
         [typographyFont, fontWeight],
     )
@@ -78,8 +63,7 @@ export const BaseText = (props: Props) => {
         () =>
             fontFamily ??
             (((typographyFont &&
-                defaultTypography[typographyFont]
-                    .fontFamily) as keyof typeof otherTypography.fontFamily) ||
+                defaultTypography[typographyFont].fontFamily) as keyof typeof otherTypography.fontFamily) ||
                 "Inter-Regular"),
         [typographyFont, fontFamily],
     )
@@ -113,12 +97,8 @@ export const BaseText = (props: Props) => {
                         fontWeight: computedFontWeight,
                         textAlign: props.align,
                         fontStyle: props.italic ? "italic" : "normal",
-                        textDecorationLine: props.underline
-                            ? "underline"
-                            : "none",
-                        lineHeight: typographyFont
-                            ? defaultTypography[typographyFont].lineHeight
-                            : undefined,
+                        textDecorationLine: props.underline ? "underline" : "none",
+                        lineHeight: typographyFont ? defaultTypography[typographyFont].lineHeight : undefined,
                     },
                     style,
                 ]}

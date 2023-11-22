@@ -1,14 +1,6 @@
 import React from "react"
 import { BottomSheetModalMethods } from "@gorhom/bottom-sheet/lib/typescript/types"
-import {
-    BaseButton,
-    BaseIcon,
-    BaseSpacer,
-    BaseText,
-    BaseView,
-    MnemonicCard,
-    BaseBottomSheet,
-} from "~Components"
+import { BaseButton, BaseIcon, BaseSpacer, BaseText, BaseView, MnemonicCard, BaseBottomSheet } from "~Components"
 import { useI18nContext } from "~i18n"
 import { useCopyClipboard, useThemedStyles } from "~Hooks"
 import { StyleSheet } from "react-native"
@@ -21,10 +13,7 @@ type Props = {
 
 const snapPoints = isSmallScreen ? ["55%"] : ["45%"]
 
-export const BackupMnemonicBottomSheet = React.forwardRef<
-    BottomSheetModalMethods,
-    Props
->(({ mnemonicArray }, ref) => {
+export const BackupMnemonicBottomSheet = React.forwardRef<BottomSheetModalMethods, Props>(({ mnemonicArray }, ref) => {
     const { LL } = useI18nContext()
 
     const { styles, theme } = useThemedStyles(baseStyles)
@@ -34,9 +23,7 @@ export const BackupMnemonicBottomSheet = React.forwardRef<
     return (
         <BaseBottomSheet snapPoints={snapPoints} ref={ref}>
             <BaseView flexDirection="row" w={100}>
-                <BaseText typographyFont="subTitleBold">
-                    {LL.BTN_BACKUP_MENMONIC()}
-                </BaseText>
+                <BaseText typographyFont="subTitleBold">{LL.BTN_BACKUP_MENMONIC()}</BaseText>
             </BaseView>
 
             <BaseSpacer height={24} />
@@ -49,22 +36,10 @@ export const BackupMnemonicBottomSheet = React.forwardRef<
                 <BaseButton
                     size="sm"
                     selfAlign="flex-end"
-                    action={() =>
-                        onCopyToClipboard(
-                            mnemonicArray.join(" "),
-                            LL.TITLE_MNEMONIC(),
-                        )
-                    }
+                    action={() => onCopyToClipboard(mnemonicArray.join(" "), LL.TITLE_MNEMONIC())}
                     title={LL.BTN_MNEMONIC_CLIPBOARD()}
                     disabled={!mnemonicArray.length}
-                    rightIcon={
-                        <BaseIcon
-                            name="content-copy"
-                            color={theme.colors.card}
-                            size={12}
-                            style={styles.icon}
-                        />
-                    }
+                    rightIcon={<BaseIcon name="content-copy" color={theme.colors.card} size={12} style={styles.icon} />}
                 />
             </BaseView>
         </BaseBottomSheet>

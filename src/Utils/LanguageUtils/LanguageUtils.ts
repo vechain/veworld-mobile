@@ -11,8 +11,10 @@ export const getSupportedLanguages = () => {
     const supportedLanguages: Array<string> = []
 
     locales.forEach(locale => {
-        const languageCode = locale.split("-")[0] // extract language code from locale string (e.g. "en-US" -> "en")
-        const languageName: string = languageMap[languageCode] || locale // use language name from languageMap, or `locale` string if not available
+        // extract language code from locale string (e.g. "en-US" -> "en")
+        const languageCode = locale.split("-")[0]
+        // use language name from languageMap, or `locale` string if not available
+        const languageName: string = languageMap[languageCode] || locale
         supportedLanguages.push(languageName)
     })
 

@@ -1,21 +1,8 @@
 import React, { useCallback, useRef } from "react"
 import { FlatList, ListRenderItem, StyleSheet, View } from "react-native"
 import { useTheme } from "~Hooks"
-import {
-    BaseCard,
-    BaseIcon,
-    BaseSpacer,
-    BaseText,
-    BaseView,
-    SwipeableRow,
-    useThor,
-} from "~Components"
-import {
-    deleteDelegationUrl,
-    selectDelegationUrls,
-    useAppDispatch,
-    useAppSelector,
-} from "~Storage/Redux"
+import { BaseCard, BaseIcon, BaseSpacer, BaseText, BaseView, SwipeableRow, useThor } from "~Components"
+import { deleteDelegationUrl, selectDelegationUrls, useAppDispatch, useAppSelector } from "~Storage/Redux"
 import { useI18nContext } from "~i18n"
 import { SwipeableItemImperativeRef } from "react-native-swipeable-item"
 
@@ -38,9 +25,7 @@ export const ManageUrls = ({ openAddUrl }: Props) => {
         [dispatch, thor.genesis.id],
     )
 
-    const swipeableItemRefs = useRef<Map<string, SwipeableItemImperativeRef>>(
-        new Map(),
-    )
+    const swipeableItemRefs = useRef<Map<string, SwipeableItemImperativeRef>>(new Map())
 
     const renderItem: ListRenderItem<string> = useCallback(
         ({ item, index }) => {
@@ -65,14 +50,8 @@ export const ManageUrls = ({ openAddUrl }: Props) => {
 
     return (
         <BaseView h={100}>
-            <BaseView
-                flexDirection="row"
-                justifyContent="space-between"
-                alignItems="center"
-                mx={20}>
-                <BaseText typographyFont="subTitleBold">
-                    {LL.SEND_DELEGATION_MANAGE_URL()}
-                </BaseText>
+            <BaseView flexDirection="row" justifyContent="space-between" alignItems="center" mx={20}>
+                <BaseText typographyFont="subTitleBold">{LL.SEND_DELEGATION_MANAGE_URL()}</BaseText>
                 <BaseIcon
                     haptics="Light"
                     name={"plus"}
@@ -83,11 +62,7 @@ export const ManageUrls = ({ openAddUrl }: Props) => {
             </BaseView>
             <BaseSpacer height={16} />
             <View style={styles.flatListContainer}>
-                <FlatList
-                    keyExtractor={url => url}
-                    data={delegationUrls}
-                    renderItem={renderItem}
-                />
+                <FlatList keyExtractor={url => url} data={delegationUrls} renderItem={renderItem} />
             </View>
         </BaseView>
     )

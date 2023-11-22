@@ -1,9 +1,5 @@
 import { DelegationType } from "~Model/Delegation"
-import {
-    addDelegationUrl,
-    DelegationSlice,
-    DelegationState,
-} from "./Delegation"
+import { addDelegationUrl, DelegationSlice, DelegationState } from "./Delegation"
 import { defaultMainNetwork } from "~Constants"
 
 describe("DelegationSlice", () => {
