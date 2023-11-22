@@ -27,9 +27,7 @@ const defaultProps = {
 }
 
 jest.mock("~Components/Providers/EncryptedStorageProvider/Helpers", () => ({
-    ...jest.requireActual(
-        "~Components/Providers/EncryptedStorageProvider/Helpers",
-    ),
+    ...jest.requireActual("~Components/Providers/EncryptedStorageProvider/Helpers"),
     WalletEncryptionKeyHelper: {
         get: jest.fn(),
         set: jest.fn(),
@@ -42,9 +40,7 @@ jest.mock("~Components/Providers/EncryptedStorageProvider/Helpers", () => ({
 describe("useSignTransaction", () => {
     beforeEach(() => {
         jest.clearAllMocks()
-        ;(
-            WalletEncryptionKeyHelper.decryptWallet as jest.Mock
-        ).mockResolvedValue(wallet1)
+        ;(WalletEncryptionKeyHelper.decryptWallet as jest.Mock).mockResolvedValue(wallet1)
     })
 
     it("should render correctly", async () => {
@@ -61,9 +57,7 @@ describe("useSignTransaction", () => {
     })
 
     it("signAndSendTransaction - throws error (not mocked decryptWallet)", async () => {
-        ;(
-            WalletEncryptionKeyHelper.decryptWallet as jest.Mock
-        ).mockImplementation(() => {
+        ;(WalletEncryptionKeyHelper.decryptWallet as jest.Mock).mockImplementation(() => {
             throw new Error("Error")
         })
 
@@ -92,8 +86,7 @@ describe("useSignTransaction", () => {
             navigateToLedger: expect.any(Function),
         })
 
-        const signedTransaction =
-            (await result.current.signTransaction()) as Transaction
+        const signedTransaction = (await result.current.signTransaction()) as Transaction
 
         expect(signedTransaction).toBeInstanceOf(Transaction)
         expect(signedTransaction.signature).toBeInstanceOf(Buffer)
@@ -122,8 +115,7 @@ describe("useSignTransaction", () => {
                 navigateToLedger: expect.any(Function),
             })
 
-            const signedTransaction =
-                (await result.current.signTransaction()) as Transaction
+            const signedTransaction = (await result.current.signTransaction()) as Transaction
 
             expect(signedTransaction).toBeInstanceOf(Transaction)
             expect(signedTransaction.signature).toBeInstanceOf(Buffer)
@@ -172,12 +164,12 @@ describe("useSignTransaction", () => {
             ;(axios.post as jest.Mock).mockResolvedValueOnce({
                 data: {
                     signature:
+                        // eslint-disable-next-line max-len
                         "0x5b977f9e1a383e6e277c3e1745d9334da966cd9028f5d1f4f98a00dafb1975614edcb547635ca6fcd49114d02b1c1b4de8106fb89ae32b8e7cf02a6e62af53fb01",
                 },
             })
 
-            const signedTransaction =
-                (await result.current.signTransaction()) as Transaction
+            const signedTransaction = (await result.current.signTransaction()) as Transaction
 
             expect(signedTransaction).toBeInstanceOf(Transaction)
             expect(signedTransaction.signature).toBeInstanceOf(Buffer)

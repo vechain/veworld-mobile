@@ -132,56 +132,31 @@ describe("MergeUtils", () => {
     })
 
     it("Merge two different arrays - mixed ordering - custom field asc", () => {
-        const result = mergeArrays(
-            [person2, person4],
-            [person1, person3],
-            "id",
-            [],
-            [["age", "asc"]],
-        )
+        const result = mergeArrays([person2, person4], [person1, person3], "id", [], [["age", "asc"]])
 
         expect(result).toEqual([person4, person3, person2, person1])
     })
 
     it("Merge two different arrays - mixed ordering - custom field desc", () => {
-        const result = mergeArrays(
-            [person2, person4],
-            [person1, person3],
-            "id",
-            [],
-            [["age", "desc"]],
-        )
+        const result = mergeArrays([person2, person4], [person1, person3], "id", [], [["age", "desc"]])
 
         expect(result).toEqual([person1, person2, person3, person4])
     })
 
     it("Merge two arrays with a common element", () => {
-        const result = mergeArrays<Person>(
-            [person1, person2],
-            [person2, person3],
-            "id",
-        )
+        const result = mergeArrays<Person>([person1, person2], [person2, person3], "id")
 
         expect(result).toEqual([person1, person2, person3])
     })
 
     it("Merge two arrays with a common element and updated value", () => {
-        const result = mergeArrays(
-            [person1, person2],
-            [{ ...person2, age: 999 }, person3],
-            "id",
-        )
+        const result = mergeArrays([person1, person2], [{ ...person2, age: 999 }, person3], "id")
 
         expect(result).toEqual([person1, { ...person2, age: 999 }, person3])
     })
 
     it("Merge two arrays with a common element and ignored fields", () => {
-        const result = mergeArrays(
-            [person1, person2],
-            [{ ...person2, age: 999 }, person3],
-            "id",
-            ["age"],
-        )
+        const result = mergeArrays([person1, person2], [{ ...person2, age: 999 }, person3], "id", ["age"])
 
         expect(result).toEqual([person1, person2, person3])
     })
@@ -205,38 +180,19 @@ describe("MergeUtils", () => {
     })
 
     it("Merge two collection arrays", () => {
-        const result = mergeNftCollections(
-            [collection1, collection2],
-            [collection3, collection4],
-        )
+        const result = mergeNftCollections([collection1, collection2], [collection3, collection4])
 
-        expect(result).toEqual([
-            collection1,
-            collection2,
-            collection3,
-            collection4,
-        ])
+        expect(result).toEqual([collection1, collection2, collection3, collection4])
     })
 
     it("Merge two collection arrays - mixed order - should retain the order", () => {
-        const result = mergeNftCollections(
-            [collection3, collection4],
-            [collection1, collection2],
-        )
+        const result = mergeNftCollections([collection3, collection4], [collection1, collection2])
 
-        expect(result).toEqual([
-            collection3,
-            collection4,
-            collection1,
-            collection2,
-        ])
+        expect(result).toEqual([collection3, collection4, collection1, collection2])
     })
 
     it("Merge two collection arrays - common element", () => {
-        const result = mergeNftCollections(
-            [collection1, collection2],
-            [collection2, collection3],
-        )
+        const result = mergeNftCollections([collection1, collection2], [collection2, collection3])
 
         expect(result).toEqual([collection1, collection2, collection3])
     })
@@ -247,23 +203,12 @@ describe("MergeUtils", () => {
             [{ ...collection2, balanceOf: 999 }, collection3],
         )
 
-        expect(result).toEqual([
-            collection1,
-            { ...collection2, balanceOf: 999 },
-            collection3,
-        ])
+        expect(result).toEqual([collection1, { ...collection2, balanceOf: 999 }, collection3])
     })
 
     it("Merge two collection arrays - normalize address", () => {
-        const result = mergeNftCollections(
-            [collection1, collection2],
-            [collection5],
-        )
+        const result = mergeNftCollections([collection1, collection2], [collection5])
 
-        expect(result).toEqual([
-            collection1,
-            collection2,
-            { ...collection5, address: "0x5aaaa1" },
-        ])
+        expect(result).toEqual([collection1, collection2, { ...collection5, address: "0x5aaaa1" }])
     })
 })

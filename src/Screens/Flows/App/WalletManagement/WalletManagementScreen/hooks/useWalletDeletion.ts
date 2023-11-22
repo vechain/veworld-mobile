@@ -24,21 +24,13 @@ export const useWalletDeletion = (device?: BaseDevice) => {
 
         const { rootAddress } = device
 
-        if (devices.length <= 1)
-            throw new Error("Cannot delete the last device!")
+        if (devices.length <= 1) throw new Error("Cannot delete the last device!")
 
-        const isSelectedAccountInDevice = AddressUtils.compareAddresses(
-            rootAddress,
-            selectedAccount.rootAddress,
-        )
+        const isSelectedAccountInDevice = AddressUtils.compareAddresses(rootAddress, selectedAccount.rootAddress)
 
         if (isSelectedAccountInDevice) {
             const otherAccount = allAccounts.filter(
-                account =>
-                    !AddressUtils.compareAddresses(
-                        account.rootAddress,
-                        rootAddress,
-                    ),
+                account => !AddressUtils.compareAddresses(account.rootAddress, rootAddress),
             )
 
             onSetSelectedAccount(otherAccount[0])
@@ -47,14 +39,7 @@ export const useWalletDeletion = (device?: BaseDevice) => {
         dispatch(removeAccountsByDevice({ rootAddress }))
 
         dispatch(removeDevice(device))
-    }, [
-        onSetSelectedAccount,
-        device,
-        devices,
-        allAccounts,
-        selectedAccount,
-        dispatch,
-    ])
+    }, [onSetSelectedAccount, device, devices, allAccounts, selectedAccount, dispatch])
 
     return {
         deleteWallet,

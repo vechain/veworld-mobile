@@ -35,16 +35,10 @@ export const resolveMimeTypeFromRawData = (buffer: Buffer): string | null => {
     if (Buffer.from(magicBytes2).equals(bmpMagic)) {
         return "image/bmp"
     }
-    if (
-        Buffer.from(magicBytes4).equals(tiffLittleEndianMagic) ||
-        Buffer.from(magicBytes4).equals(tiffBigEndianMagic)
-    ) {
+    if (Buffer.from(magicBytes4).equals(tiffLittleEndianMagic) || Buffer.from(magicBytes4).equals(tiffBigEndianMagic)) {
         return "image/tiff"
     }
-    if (
-        Buffer.from(magicBytes4).equals(webpMagic) &&
-        buffer.subarray(8, 12).toString() === "WEBP"
-    ) {
+    if (Buffer.from(magicBytes4).equals(webpMagic) && buffer.subarray(8, 12).toString() === "WEBP") {
         return "image/webp"
     }
 
@@ -88,24 +82,19 @@ const resolveMimeTypeFromUri = async (resource: string) => {
 }
 
 const resolveMediaTypeFromMimeType = (mimeType: string): NFTMediaType => {
-    if (isValidMimeType(mimeType, [NFTMediaType.IMAGE]))
-        return NFTMediaType.IMAGE
-    else if (isValidMimeType(mimeType, [NFTMediaType.VIDEO]))
-        return NFTMediaType.VIDEO
+    if (isValidMimeType(mimeType, [NFTMediaType.IMAGE])) return NFTMediaType.IMAGE
+    else if (isValidMimeType(mimeType, [NFTMediaType.VIDEO])) return NFTMediaType.VIDEO
 
     return NFTMediaType.UNKNOWN
 }
 
-const resolveMediaTypeFromUri = async (
-    imageUrl: string,
-): Promise<NFTMediaType> => {
+const resolveMediaTypeFromUri = async (imageUrl: string): Promise<NFTMediaType> => {
     const mime = await resolveMimeTypeFromUri(imageUrl)
 
     return resolveMediaTypeFromMimeType(mime)
 }
 
-const isDefaultImage = (image: string): boolean =>
-    image === NFTPlaceholderDark || image === NFTPlaceHolderLight
+const isDefaultImage = (image: string): boolean => image === NFTPlaceholderDark || image === NFTPlaceHolderLight
 
 export default {
     isValidMimeType,

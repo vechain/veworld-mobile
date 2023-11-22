@@ -29,17 +29,10 @@ export const ConnectedAppsHeader = ({ showAddButton = true }: Props) => {
 
     return (
         <BaseView flexDirection="row" justifyContent="space-between" w={100}>
-            <BaseText typographyFont="title">
-                {LL.CONNECTED_APPS_SCREEN_TITLE()}
-            </BaseText>
+            <BaseText typographyFont="title">{LL.CONNECTED_APPS_SCREEN_TITLE()}</BaseText>
             {showAddButton && (
                 <BaseView flexDirection="row">
-                    <BaseIcon
-                        size={24}
-                        name="plus"
-                        bg={theme.colors.secondary}
-                        action={handleOpenCamera}
-                    />
+                    <BaseIcon size={24} name="plus" bg={theme.colors.secondary} action={handleOpenCamera} />
                 </BaseView>
             )}
 

@@ -11,13 +11,7 @@ export function transactionStub(txId: string): Connex.Thor.Transaction.Visitor {
         allowPending: () => {
             throw new Error("not implemented")
         },
-        get: () =>
-            Promise.resolve(
-                txId === existingTxId ? connexTransactionStub : null,
-            ),
-        getReceipt: () =>
-            Promise.resolve(
-                txId === existingTxId ? connexTransactioReceiptStub : null,
-            ),
+        get: () => Promise.resolve(txId === existingTxId ? connexTransactionStub : null),
+        getReceipt: () => Promise.resolve(txId === existingTxId ? connexTransactioReceiptStub : null),
     }
 }

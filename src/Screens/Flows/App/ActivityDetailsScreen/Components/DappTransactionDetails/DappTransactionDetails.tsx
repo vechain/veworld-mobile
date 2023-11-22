@@ -3,11 +3,7 @@ import { VTHO, currencySymbolMap, genesisesId } from "~Constants"
 import { FormattingUtils, TransactionUtils } from "~Utils"
 import { BaseSpacer } from "~Components"
 import { useCopyClipboard } from "~Hooks"
-import {
-    selectCurrency,
-    selectTokensWithInfo,
-    useAppSelector,
-} from "~Storage/Redux"
+import { selectCurrency, selectTokensWithInfo, useAppSelector } from "~Storage/Redux"
 import { useI18nContext } from "~i18n"
 import { ActivityStatus, DappTxActivity } from "~Model"
 import { ActivityDetail } from "../../Type"
@@ -24,9 +20,7 @@ export const DappTransactionDetails: React.FC<Props> = memo(({ activity }) => {
     const { LL } = useI18nContext()
 
     const network = useMemo(() => {
-        return activity.genesisId === genesisesId.main
-            ? LL.NETWORK_LABEL_MAINNET()
-            : LL.NETWORK_LABEL_TESTNET()
+        return activity.genesisId === genesisesId.main ? LL.NETWORK_LABEL_MAINNET() : LL.NETWORK_LABEL_TESTNET()
     }, [LL, activity.genesisId])
 
     const currency = useAppSelector(selectCurrency)
@@ -35,10 +29,7 @@ export const DappTransactionDetails: React.FC<Props> = memo(({ activity }) => {
 
     const tokens = useAppSelector(selectTokensWithInfo)
 
-    const clausesMetadata = TransactionUtils.interpretClauses(
-        activity.clauses ?? [],
-        tokens,
-    )
+    const clausesMetadata = TransactionUtils.interpretClauses(activity.clauses ?? [], tokens)
 
     const transactionIDshort = useMemo(() => {
         return FormattingUtils.humanAddress(activity.txId ?? "", 7, 9)
@@ -76,8 +67,7 @@ export const DappTransactionDetails: React.FC<Props> = memo(({ activity }) => {
             value: activity.linkUrl ?? "",
             typographyFont: "subSubTitleLight",
             underline: true,
-            onValuePress: async () =>
-                await Linking.openURL(activity.linkUrl ?? ""),
+            onValuePress: async () => await Linking.openURL(activity.linkUrl ?? ""),
         },
         {
             id: 3,
@@ -100,9 +90,7 @@ export const DappTransactionDetails: React.FC<Props> = memo(({ activity }) => {
             value: `${vthoGasFee} ${VTHO.symbol}`,
             typographyFont: "subSubTitle",
             underline: false,
-            valueAdditional: fiatValueGasFeeSpent
-                ? `≈ ${fiatValueGasFeeSpent} ${currencySymbolMap[currency]}`
-                : "",
+            valueAdditional: fiatValueGasFeeSpent ? `≈ ${fiatValueGasFeeSpent} ${currencySymbolMap[currency]}` : "",
         },
         {
             id: 6,
@@ -111,8 +99,7 @@ export const DappTransactionDetails: React.FC<Props> = memo(({ activity }) => {
             typographyFont: "subSubTitle",
             underline: false,
             icon: "content-copy",
-            onValuePress: () =>
-                onCopyToClipboard(activity.id, LL.COMMON_LBL_ADDRESS()),
+            onValuePress: () => onCopyToClipboard(activity.id, LL.COMMON_LBL_ADDRESS()),
         },
         {
             id: 7,
@@ -145,9 +132,7 @@ export const DappTransactionDetails: React.FC<Props> = memo(({ activity }) => {
 
             <BaseSpacer height={16} />
 
-            {!!clausesMetadata.length && (
-                <ClausesCarousel clausesMetadata={clausesMetadata} />
-            )}
+            {!!clausesMetadata.length && <ClausesCarousel clausesMetadata={clausesMetadata} />}
 
             <BaseSpacer height={16} />
         </>

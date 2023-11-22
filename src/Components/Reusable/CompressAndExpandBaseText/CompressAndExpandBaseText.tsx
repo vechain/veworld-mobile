@@ -62,13 +62,8 @@ export const CompressAndExpandBaseText = ({
                 {text}
             </BaseText>
             {lengthMore ? (
-                <BaseText
-                    onPress={toggleNumberOfLines}
-                    typographyFont="subSubTitle"
-                    underline={true}>
-                    {textShown
-                        ? LL.COMMON_LBL_READ_LESS()
-                        : LL.COMMON_LBL_READ_MORE()}
+                <BaseText onPress={toggleNumberOfLines} typographyFont="subSubTitle" underline={true}>
+                    {textShown ? LL.COMMON_LBL_READ_LESS() : LL.COMMON_LBL_READ_MORE()}
                 </BaseText>
             ) : null}
         </>

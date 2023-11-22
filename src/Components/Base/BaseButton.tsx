@@ -1,10 +1,5 @@
 /* eslint-disable react-native/no-inline-styles */
-import {
-    TouchableOpacity,
-    TouchableOpacityProps,
-    FlexAlignType,
-    StyleSheet,
-} from "react-native"
+import { TouchableOpacity, TouchableOpacityProps, FlexAlignType, StyleSheet } from "react-native"
 import React, { useCallback, useMemo } from "react"
 import { ColorThemeType, typography, TFonts } from "~Constants"
 import { useThemedStyles } from "~Hooks"
@@ -49,13 +44,7 @@ type Props = {
     darkLoader?: boolean
     flex?: number
     activeOpacity?: number
-    disabledActionHaptics?:
-        | "Success"
-        | "Warning"
-        | "Error"
-        | "Light"
-        | "Medium"
-        | "Heavy"
+    disabledActionHaptics?: "Success" | "Warning" | "Error" | "Light" | "Medium" | "Heavy"
 } & TouchableOpacityProps
 
 export const BaseButton = ({
@@ -97,9 +86,7 @@ export const BaseButton = ({
         selfAlign,
         title,
     } = otherProps
-    const { styles: themedStyles, theme } = useThemedStyles(
-        baseStyles(variant === "link"),
-    )
+    const { styles: themedStyles, theme } = useThemedStyles(baseStyles(variant === "link"))
 
     const onButtonPress = useCallback(() => {
         if (disabled) {
@@ -167,10 +154,7 @@ export const BaseButton = ({
     ])
 
     const calculateTextColor = useMemo(() => {
-        return (
-            textColor ??
-            (isSolidButton ? theme.colors.background : theme.colors.text)
-        )
+        return textColor ?? (isSolidButton ? theme.colors.background : theme.colors.text)
     }, [isSolidButton, textColor, theme.colors.background, theme.colors.text])
 
     return (
@@ -180,9 +164,7 @@ export const BaseButton = ({
             style={[
                 {
                     backgroundColor: calculateBackgroundColor,
-                    borderColor: isOutlineButton
-                        ? backgroundColor
-                        : theme.colors.transparent,
+                    borderColor: isOutlineButton ? backgroundColor : theme.colors.transparent,
                     width: w && `${w}%`,
                     height: h && `${h}%`,
                     margin: m,
@@ -215,12 +197,7 @@ export const BaseButton = ({
                     {children}
                 </BaseText>
             ) : (
-                <Lottie
-                    source={lottieSource}
-                    autoPlay
-                    loop
-                    style={{ ...themedStyles.lottie, ...loaderStyle }}
-                />
+                <Lottie source={lottieSource} autoPlay loop style={{ ...themedStyles.lottie, ...loaderStyle }} />
             )}
 
             {rightIcon}

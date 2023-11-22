@@ -11,28 +11,14 @@ import {
     showErrorToast,
 } from "~Components"
 import { useI18nContext } from "~i18n"
-import {
-    useAnalyticTracking,
-    useBottomSheetModal,
-    useLedger,
-    useThemedStyles,
-} from "~Hooks"
-import {
-    AnalyticsEvent,
-    ColorThemeType,
-    VET,
-    VETLedgerAccount,
-} from "~Constants"
+import { useAnalyticTracking, useBottomSheetModal, useLedger, useThemedStyles } from "~Hooks"
+import { AnalyticsEvent, ColorThemeType, VET, VETLedgerAccount } from "~Constants"
 import { FormattingUtils, LedgerUtils } from "~Utils"
 import { StyleSheet } from "react-native"
 import { useNavigation } from "@react-navigation/native"
 
 import { NativeStackScreenProps } from "@react-navigation/native-stack"
-import {
-    RootStackParamListCreateWalletApp,
-    RootStackParamListOnboarding,
-    Routes,
-} from "~Navigation"
+import { RootStackParamListCreateWalletApp, RootStackParamListOnboarding, Routes } from "~Navigation"
 
 import {
     selectHasOnboarded,
@@ -86,9 +72,7 @@ export const SelectLedgerAccounts: React.FC<Props> = ({ route }) => {
 
     const [ledgerAccounts, setLedgerAccounts] = useState<LedgerAccount[]>([])
     const [ledgerAccountsLoading, setLedgerAccountsLoading] = useState(false)
-    const [selectedAccountsIndex, setSelectedAccountsIndex] = useState<
-        number[]
-    >([])
+    const [selectedAccountsIndex, setSelectedAccountsIndex] = useState<number[]>([])
     const [isScrollable, setIsScrollable] = useState(false)
 
     const navigateNext = useCallback(async () => {
@@ -121,15 +105,7 @@ export const SelectLedgerAccounts: React.FC<Props> = ({ route }) => {
             Haptics.notificationAsync(Haptics.NotificationFeedbackType.Error)
             showErrorToast({ text1: e as string })
         }
-    }, [
-        track,
-        selectedAccountsIndex,
-        rootAcc,
-        dispatch,
-        device.id,
-        device.localName,
-        navigateNext,
-    ])
+    }, [track, selectedAccountsIndex, rootAcc, dispatch, device.id, device.localName, navigateNext])
 
     /**
      * When the root account changes, fetch the accounts and balances
@@ -138,11 +114,7 @@ export const SelectLedgerAccounts: React.FC<Props> = ({ route }) => {
         const getLedgerAccounts = async () => {
             if (rootAcc) {
                 setLedgerAccountsLoading(true)
-                const accounts = await LedgerUtils.getAccountsWithBalances(
-                    rootAcc,
-                    selectedNetwork,
-                    10,
-                )
+                const accounts = await LedgerUtils.getAccountsWithBalances(rootAcc, selectedNetwork, 10)
                 setLedgerAccounts(accounts)
             }
             setLedgerAccountsLoading(false)
@@ -150,18 +122,10 @@ export const SelectLedgerAccounts: React.FC<Props> = ({ route }) => {
         getLedgerAccounts()
     }, [rootAcc, selectedNetwork])
 
-    const renderItem = ({
-        item,
-        index,
-    }: {
-        item: LedgerAccount
-        index: number
-    }) => {
+    const renderItem = ({ item, index }: { item: LedgerAccount; index: number }) => {
         const isSelected = selectedAccountsIndex.some(ind => ind === index)
 
-        const style = isSelected
-            ? themedStyles.selected
-            : themedStyles.notSelected
+        const style = isSelected ? themedStyles.selected : themedStyles.notSelected
 
         const onAccountClick = () => {
             setSelectedAccountsIndex(prev => {
@@ -186,9 +150,7 @@ export const SelectLedgerAccounts: React.FC<Props> = ({ route }) => {
                         {LL.WALLET_LABEL_ACCOUNT()} {index + 1}
                     </BaseText>
                     <BaseSpacer height={6} />
-                    <BaseText typographyFont="captionRegular">
-                        {FormattingUtils.humanAddress(item.address)}
-                    </BaseText>
+                    <BaseText typographyFont="captionRegular">{FormattingUtils.humanAddress(item.address)}</BaseText>
                 </BaseView>
                 <BaseText typographyFont="captionRegular">
                     {item.balance &&
@@ -220,9 +182,7 @@ export const SelectLedgerAccounts: React.FC<Props> = ({ route }) => {
             fixedHeader={
                 <BaseView>
                     <BaseView flexDirection="row" w={100}>
-                        <BaseText typographyFont="title">
-                            {LL.WALLET_LEDGER_SELECT_DEVICE_TITLE()}
-                        </BaseText>
+                        <BaseText typographyFont="title">{LL.WALLET_LEDGER_SELECT_DEVICE_TITLE()}</BaseText>
                     </BaseView>
                     <BaseText typographyFont="body" my={10}>
                         {LL.WALLET_LEDGER_SELECT_DEVICE_SB()}
@@ -239,11 +199,7 @@ export const SelectLedgerAccounts: React.FC<Props> = ({ route }) => {
             }
             fixedBody={
                 <>
-                    <ConnectionErrorBottomSheet
-                        ref={ref}
-                        onDismiss={onClose}
-                        error={ledgerErrorCode}
-                    />
+                    <ConnectionErrorBottomSheet ref={ref} onDismiss={onClose} error={ledgerErrorCode} />
                     <BaseActivityIndicator isVisible={ledgerAccountsLoading} />
                     <BaseView flexGrow={1} mx={24}>
                         {!!ledgerAccounts.length && (
@@ -260,13 +216,9 @@ export const SelectLedgerAccounts: React.FC<Props> = ({ route }) => {
                                 estimatedItemSize={100}
                                 estimatedListSize={{
                                     height: 184,
-                                    width:
-                                        152 * ledgerAccounts.length +
-                                        (ledgerAccounts.length - 1) * 16,
+                                    width: 152 * ledgerAccounts.length + (ledgerAccounts.length - 1) * 16,
                                 }}
-                                contentContainerStyle={
-                                    themedStyles.flashListContent
-                                }
+                                contentContainerStyle={themedStyles.flashListContent}
                             />
                         )}
                     </BaseView>

@@ -2,20 +2,11 @@ import { useNavigation } from "@react-navigation/native"
 import React, { memo, useCallback } from "react"
 import { useTheme } from "~Hooks"
 import { COLORS } from "~Constants"
-import {
-    BaseButton,
-    BaseIcon,
-    BaseSpacer,
-    BaseText,
-    BaseView,
-} from "~Components"
+import { BaseButton, BaseIcon, BaseSpacer, BaseText, BaseView } from "~Components"
 import { useI18nContext } from "~i18n"
 import { Routes } from "~Navigation"
 import { StyleSheet } from "react-native"
-import {
-    selectNonVechainTokensWithBalances,
-    useAppSelector,
-} from "~Storage/Redux"
+import { selectNonVechainTokensWithBalances, useAppSelector } from "~Storage/Redux"
 
 type Props = {
     isEdit: boolean
@@ -76,35 +67,16 @@ export const EditTokensBar = memo(({ isEdit, setIsEdit }: Props) => {
                 textColor={COLORS.DARK_PURPLE}
                 radius={30}
                 py={10}
-                leftIcon={
-                    <BaseIcon
-                        name="check"
-                        size={20}
-                        color={COLORS.DARK_PURPLE}
-                    />
-                }>
+                leftIcon={<BaseIcon name="check" size={20} color={COLORS.DARK_PURPLE} />}>
                 <BaseSpacer width={8} />
                 {LL.COMMON_BTN_SAVE()}
             </BaseButton>
         )
-    }, [
-        isEdit,
-        tokenBalances.length,
-        onButtonPress,
-        theme.colors.text,
-        handleManageToken,
-        LL,
-    ])
+    }, [isEdit, tokenBalances.length, onButtonPress, theme.colors.text, handleManageToken, LL])
 
     return (
-        <BaseView
-            flexDirection="row"
-            justifyContent="space-between"
-            alignItems="center"
-            px={20}>
-            <BaseText typographyFont="subTitleBold">
-                {LL.SB_YOUR_TOKENS()}
-            </BaseText>
+        <BaseView flexDirection="row" justifyContent="space-between" alignItems="center" px={20}>
+            <BaseText typographyFont="subTitleBold">{LL.SB_YOUR_TOKENS()}</BaseText>
 
             {getActionsButtons()}
         </BaseView>

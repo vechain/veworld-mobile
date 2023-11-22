@@ -1,18 +1,7 @@
 import React, { useCallback } from "react"
-import {
-    BaseSpacer,
-    BaseText,
-    BaseView,
-    EnableFeature,
-    Layout,
-} from "~Components"
+import { BaseSpacer, BaseText, BaseView, EnableFeature, Layout } from "~Components"
 import { useI18nContext } from "~i18n"
-import {
-    ChangeCurrency,
-    ChangeLanguage,
-    ChangeTheme,
-    SelectLanguageBottomSheet,
-} from "./Components"
+import { ChangeCurrency, ChangeLanguage, ChangeTheme, SelectLanguageBottomSheet } from "./Components"
 import { useBottomSheetModal } from "~Hooks"
 import { LANGUAGE } from "~Constants"
 import {
@@ -51,9 +40,7 @@ export const GeneralScreen = () => {
         [dispatch],
     )
 
-    const hideTokensWithNoBalance = useAppSelector(
-        selectHideTokensWithNoBalance,
-    )
+    const hideTokensWithNoBalance = useAppSelector(selectHideTokensWithNoBalance)
 
     const toggleTokensHiddenSwitch = useCallback(
         (newValue: boolean) => {
@@ -76,17 +63,13 @@ export const GeneralScreen = () => {
             safeAreaTestID="General_Screen"
             body={
                 <BaseView pt={16}>
-                    <BaseText typographyFont="title">
-                        {LL.TITLE_GENERAL()}
-                    </BaseText>
+                    <BaseText typographyFont="title">{LL.TITLE_GENERAL()}</BaseText>
                     <BaseSpacer height={20} />
 
                     <BaseText typographyFont="bodyMedium" my={8}>
                         {LL.BD_CONVERSION_CURRENCY()}
                     </BaseText>
-                    <BaseText typographyFont="caption">
-                        {LL.BD_CONVERSION_CURRENCY_DISCLAIMER()}
-                    </BaseText>
+                    <BaseText typographyFont="caption">{LL.BD_CONVERSION_CURRENCY_DISCLAIMER()}</BaseText>
 
                     <BaseSpacer height={20} />
 
@@ -98,9 +81,7 @@ export const GeneralScreen = () => {
                     <BaseText typographyFont="bodyMedium" my={8}>
                         {LL.BD_APP_THEME()}
                     </BaseText>
-                    <BaseText typographyFont="caption">
-                        {LL.BD_APP_THEME_DISCLAIMER()}
-                    </BaseText>
+                    <BaseText typographyFont="caption">{LL.BD_APP_THEME_DISCLAIMER()}</BaseText>
 
                     <BaseSpacer height={20} />
 
@@ -110,9 +91,7 @@ export const GeneralScreen = () => {
                     <BaseText typographyFont="bodyMedium" my={8}>
                         {LL.BD_RESET()}
                     </BaseText>
-                    <BaseText typographyFont="caption">
-                        {LL.BD_RESET_DISCLAIMER()}
-                    </BaseText>
+                    <BaseText typographyFont="caption">{LL.BD_RESET_DISCLAIMER()}</BaseText>
 
                     <BaseSpacer height={16} />
                     <Reset />
@@ -149,16 +128,11 @@ export const GeneralScreen = () => {
                             <BaseText typographyFont="bodyMedium" my={8}>
                                 {LL.BD_APP_LANGUAGE()}
                             </BaseText>
-                            <BaseText typographyFont="caption">
-                                {LL.BD_APP_LANGUAGE_DISCLAIMER()}
-                            </BaseText>
+                            <BaseText typographyFont="caption">{LL.BD_APP_LANGUAGE_DISCLAIMER()}</BaseText>
 
                             <BaseSpacer height={20} />
 
-                            <ChangeLanguage
-                                language={selectedLanguage}
-                                onPress={openSelectLanguageSheet}
-                            />
+                            <ChangeLanguage language={selectedLanguage} onPress={openSelectLanguageSheet} />
                         </>
                     )}
 

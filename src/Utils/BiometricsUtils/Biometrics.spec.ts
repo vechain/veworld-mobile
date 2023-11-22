@@ -1,3 +1,4 @@
+/* eslint-disable max-len */
 import * as LocalAuthentication from "expo-local-authentication"
 import { AuthenticationType, SecurityLevelType, WALLET_STATUS } from "~Model"
 import PlatformUtils from "../PlatformUtils"
@@ -18,10 +19,7 @@ describe("authentication functions", () => {
         it("should return the enrolled security level of the device", async () => {
             const mockLevel = LocalAuthentication.SecurityLevel.BIOMETRIC
 
-            jest.spyOn(
-                LocalAuthentication,
-                "getEnrolledLevelAsync",
-            ).mockResolvedValueOnce(mockLevel)
+            jest.spyOn(LocalAuthentication, "getEnrolledLevelAsync").mockResolvedValueOnce(mockLevel)
 
             const result = await getDeviceEnrolledLevel()
 
@@ -33,10 +31,7 @@ describe("authentication functions", () => {
         it("should return a boolean indicating whether the device has biometric hardware", async () => {
             const mockHasHardware = true
 
-            jest.spyOn(
-                LocalAuthentication,
-                "hasHardwareAsync",
-            ).mockResolvedValueOnce(mockHasHardware)
+            jest.spyOn(LocalAuthentication, "hasHardwareAsync").mockResolvedValueOnce(mockHasHardware)
 
             const result = await getDeviceHasHardware()
 
@@ -47,10 +42,7 @@ describe("authentication functions", () => {
     describe("getIsDeviceEnrolled", () => {
         it("should return a boolean indicating whether the device has enrolled biometric data", async () => {
             const mockIsEnrolled = true
-            jest.spyOn(
-                LocalAuthentication,
-                "isEnrolledAsync",
-            ).mockResolvedValueOnce(mockIsEnrolled)
+            jest.spyOn(LocalAuthentication, "isEnrolledAsync").mockResolvedValueOnce(mockIsEnrolled)
 
             const result = await getIsDeviceEnrolled()
 
@@ -60,14 +52,9 @@ describe("authentication functions", () => {
 
     describe("getBiometricTypeAvailable", () => {
         it("should return the available biometric authentication type on the device", async () => {
-            const mockType = [
-                LocalAuthentication.AuthenticationType.FINGERPRINT,
-            ]
+            const mockType = [LocalAuthentication.AuthenticationType.FINGERPRINT]
 
-            jest.spyOn(
-                LocalAuthentication,
-                "supportedAuthenticationTypesAsync",
-            ).mockResolvedValueOnce(mockType)
+            jest.spyOn(LocalAuthentication, "supportedAuthenticationTypesAsync").mockResolvedValueOnce(mockType)
 
             const result = await getBiometricTypeAvailable()
 
@@ -79,10 +66,7 @@ describe("authentication functions", () => {
         it("should authenticate the user with the biometric authentication type available on the device", async () => {
             const mockResult = { success: true, error: "" }
 
-            jest.spyOn(
-                LocalAuthentication,
-                "authenticateAsync",
-            ).mockResolvedValueOnce(mockResult)
+            jest.spyOn(LocalAuthentication, "authenticateAsync").mockResolvedValueOnce(mockResult)
 
             const result = await authenticateWithBiometrics()
 
@@ -95,10 +79,7 @@ describe("authentication functions", () => {
 
             ;(PlatformUtils.isAndroid as jest.Mock).mockReturnValue(true)
 
-            jest.spyOn(
-                LocalAuthentication,
-                "authenticateAsync",
-            ).mockResolvedValueOnce(mockResult)
+            jest.spyOn(LocalAuthentication, "authenticateAsync").mockResolvedValueOnce(mockResult)
 
             const result = await authenticateWithBiometrics()
             expect(result).toBe(mockResult)
@@ -111,14 +92,9 @@ describe("authentication functions", () => {
             const newLevel: SecurityLevelType = SecurityLevelType.SECRET
             const userHasOnboarded = true
             const isAppLockActive = true
-            const appLockStatusActive =
-                WALLET_STATUS.LOCKED && userHasOnboarded && isAppLockActive
+            const appLockStatusActive = WALLET_STATUS.LOCKED && userHasOnboarded && isAppLockActive
 
-            const result = isSecurityDowngrade(
-                oldLevel,
-                newLevel,
-                appLockStatusActive,
-            )
+            const result = isSecurityDowngrade(oldLevel, newLevel, appLockStatusActive)
 
             expect(result).toBe(true)
         })
@@ -128,14 +104,9 @@ describe("authentication functions", () => {
             const newLevel: SecurityLevelType = SecurityLevelType.BIOMETRIC
             const userHasOnboarded = true
             const isAppLockActive = true
-            const appLockStatusActive =
-                WALLET_STATUS.LOCKED && userHasOnboarded && isAppLockActive
+            const appLockStatusActive = WALLET_STATUS.LOCKED && userHasOnboarded && isAppLockActive
 
-            const result = isSecurityDowngrade(
-                oldLevel,
-                newLevel,
-                appLockStatusActive,
-            )
+            const result = isSecurityDowngrade(oldLevel, newLevel, appLockStatusActive)
 
             expect(result).toBe(false)
         })
@@ -145,14 +116,9 @@ describe("authentication functions", () => {
             const newLevel: SecurityLevelType = SecurityLevelType.BIOMETRIC
             const userHasOnboarded = true
             const isAppLockActive = true
-            const appLockStatusActive =
-                WALLET_STATUS.LOCKED && userHasOnboarded && isAppLockActive
+            const appLockStatusActive = WALLET_STATUS.LOCKED && userHasOnboarded && isAppLockActive
 
-            const result = isSecurityDowngrade(
-                oldLevel,
-                newLevel,
-                appLockStatusActive,
-            )
+            const result = isSecurityDowngrade(oldLevel, newLevel, appLockStatusActive)
 
             expect(result).toBe(false)
         })
@@ -162,14 +128,9 @@ describe("authentication functions", () => {
             const newLevel: SecurityLevelType = SecurityLevelType.NONE
             const userHasOnboarded = true
             const isAppLockActive = true
-            const appLockStatusActive =
-                WALLET_STATUS.LOCKED && !userHasOnboarded && isAppLockActive
+            const appLockStatusActive = WALLET_STATUS.LOCKED && !userHasOnboarded && isAppLockActive
 
-            const result = isSecurityDowngrade(
-                oldLevel,
-                newLevel,
-                appLockStatusActive,
-            )
+            const result = isSecurityDowngrade(oldLevel, newLevel, appLockStatusActive)
 
             expect(result).toBe(false)
         })
@@ -181,14 +142,9 @@ describe("authentication functions", () => {
             const newLevel: SecurityLevelType = SecurityLevelType.BIOMETRIC
             const userHasOnboarded = true
             const isAppLockActive = true
-            const appLockStatusActive =
-                WALLET_STATUS.LOCKED && userHasOnboarded && isAppLockActive
+            const appLockStatusActive = WALLET_STATUS.LOCKED && userHasOnboarded && isAppLockActive
 
-            const result = isSecurityUpgrade(
-                oldLevel,
-                newLevel,
-                appLockStatusActive,
-            )
+            const result = isSecurityUpgrade(oldLevel, newLevel, appLockStatusActive)
 
             expect(result).toBe(true)
         })
@@ -198,14 +154,9 @@ describe("authentication functions", () => {
             const newLevel: SecurityLevelType = SecurityLevelType.SECRET
             const userHasOnboarded = true
             const isAppLockActive = true
-            const appLockStatusActive =
-                WALLET_STATUS.LOCKED && userHasOnboarded && isAppLockActive
+            const appLockStatusActive = WALLET_STATUS.LOCKED && userHasOnboarded && isAppLockActive
 
-            const result = isSecurityUpgrade(
-                oldLevel,
-                newLevel,
-                appLockStatusActive,
-            )
+            const result = isSecurityUpgrade(oldLevel, newLevel, appLockStatusActive)
 
             expect(result).toBe(false)
         })
@@ -215,14 +166,9 @@ describe("authentication functions", () => {
             const newLevel: SecurityLevelType = SecurityLevelType.NONE
             const userHasOnboarded = true
             const isAppLockActive = true
-            const appLockStatusActive =
-                WALLET_STATUS.LOCKED && userHasOnboarded && isAppLockActive
+            const appLockStatusActive = WALLET_STATUS.LOCKED && userHasOnboarded && isAppLockActive
 
-            const result = isSecurityUpgrade(
-                oldLevel,
-                newLevel,
-                appLockStatusActive,
-            )
+            const result = isSecurityUpgrade(oldLevel, newLevel, appLockStatusActive)
 
             expect(result).toBe(false)
         })

@@ -5,13 +5,7 @@ import { BaseSpacer, BaseText, BaseTouchable, BaseView } from "~Components"
 import { FastAction } from "~Model"
 
 export const FastActionsBar = memo(
-    ({
-        actions,
-        actionItemWidth = 60,
-    }: {
-        actions: FastAction[]
-        actionItemWidth?: number
-    }) => {
+    ({ actions, actionItemWidth = 60 }: { actions: FastAction[]; actionItemWidth?: number }) => {
         const theme = useTheme()
 
         const { styles } = useThemedStyles(baseStyles(actionItemWidth))
@@ -28,9 +22,7 @@ export const FastActionsBar = memo(
                         <BaseView flexDirection="column" alignItems="center">
                             {action.icon}
                             <BaseSpacer height={6} />
-                            <BaseText typographyFont="smallButtonPrimary">
-                                {action.name}
-                            </BaseText>
+                            <BaseText typographyFont="smallButtonPrimary">{action.name}</BaseText>
                         </BaseView>
                     </BaseTouchable>
                 )

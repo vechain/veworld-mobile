@@ -37,9 +37,7 @@ export const useNFTs = () => {
 
             debug(`Lazy loading metadata for NFT ${nft.id}`)
 
-            const tokenURI =
-                nft.tokenURI ??
-                (await getTokenURI(nft.tokenId, nft.address, thor))
+            const tokenURI = nft.tokenURI ?? (await getTokenURI(nft.tokenId, nft.address, thor))
             const tokenMetadata = await fetchMetadata(tokenURI)
             const image = tokenMetadata?.image ?? nft.image
 
@@ -49,8 +47,7 @@ export const useNFTs = () => {
                 tokenURI,
                 updated: true,
                 name: tokenMetadata?.name ?? LL.COMMON_NOT_AVAILABLE(),
-                description:
-                    tokenMetadata?.description ?? LL.COMMON_NOT_AVAILABLE(),
+                description: tokenMetadata?.description ?? LL.COMMON_NOT_AVAILABLE(),
             }
             dispatch(
                 updateNFT({
@@ -69,11 +66,7 @@ export const useNFTs = () => {
     })
 
     const loadNFTsForCollection = useCallback(
-        async (
-            contractAddress: string,
-            _page: number,
-            _resultsPerPage: number = NFT_PAGE_SIZE,
-        ) => {
+        async (contractAddress: string, _page: number, _resultsPerPage: number = NFT_PAGE_SIZE) => {
             if (!currentAddress) return
             dispatch(
                 setNetworkingSideEffects({
@@ -93,12 +86,7 @@ export const useNFTs = () => {
                 )
 
                 const nfts: NonFungibleToken[] = nftResponse.data.map(nft => {
-                    return initialiseNFTMetadata(
-                        nft.tokenId,
-                        nft.contractAddress,
-                        nft.owner,
-                        theme.isDark,
-                    )
+                    return initialiseNFTMetadata(nft.tokenId, nft.contractAddress, nft.owner, theme.isDark)
                 })
 
                 dispatch(

@@ -5,16 +5,11 @@ type SignMessageChain = "vechain" | "eip155"
 
 const hashMessage = (message: string, chain: SignMessageChain): Buffer => {
     const messageBuffer = Buffer.from(message)
-    const prefix =
-        chain === "vechain"
-            ? "\u0019VeChain Signed Message:\n"
-            : "\u0019Ethereum Signed Message:\n"
+    const prefix = chain === "vechain" ? "\u0019VeChain Signed Message:\n" : "\u0019Ethereum Signed Message:\n"
     const prefixBuffer = Buffer.from(prefix + message.length.toString())
     const prefixedMessage = Buffer.concat([prefixBuffer, messageBuffer])
 
-    return chain === "vechain"
-        ? blake2b256(prefixedMessage)
-        : keccak256(prefixedMessage)
+    return chain === "vechain" ? blake2b256(prefixedMessage) : keccak256(prefixedMessage)
 }
 
 type IRecover = {

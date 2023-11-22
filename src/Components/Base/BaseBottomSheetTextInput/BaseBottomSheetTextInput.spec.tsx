@@ -15,8 +15,7 @@ const onChangeText = jest.fn()
 const onBlur = jest.fn()
 const onFocus = jest.fn()
 
-const findTextByID = async () =>
-    await screen.findByTestId(testId, {}, { timeout: 5000 })
+const findTextByID = async () => await screen.findByTestId(testId, {}, { timeout: 5000 })
 
 describe("BaseCard", () => {
     it("renders correctly - onFocus and onBlur", async () => {

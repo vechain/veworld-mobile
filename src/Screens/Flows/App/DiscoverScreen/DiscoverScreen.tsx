@@ -1,11 +1,5 @@
 import React from "react"
-import {
-    BaseSafeArea,
-    BaseSpacer,
-    BaseText,
-    BaseView,
-    ChangeAccountButtonPill,
-} from "~Components"
+import { BaseSafeArea, BaseSpacer, BaseText, BaseView, ChangeAccountButtonPill } from "~Components"
 import { useI18nContext } from "~i18n"
 import { createMaterialTopTabNavigator } from "@react-navigation/material-top-tabs"
 import { Dimensions } from "react-native"
@@ -26,17 +20,11 @@ export const DiscoverScreen = () => {
     return (
         <BaseSafeArea grow={1}>
             <BaseView flexDirection="row" mx={20}>
-                <BaseText typographyFont="largeTitle">
-                    {LL.TITLE_DISCOVER()}
-                </BaseText>
+                <BaseText typographyFont="largeTitle">{LL.TITLE_DISCOVER()}</BaseText>
 
                 <ChangeAccountButtonPill
                     title={selectedAccount.alias ?? LL.WALLET_LABEL_ACCOUNT()}
-                    text={FormattingUtils.humanAddress(
-                        selectedAccount.address ?? "",
-                        5,
-                        4,
-                    )}
+                    text={FormattingUtils.humanAddress(selectedAccount.address ?? "", 5, 4)}
                     action={onChangeAccountPress}
                 />
             </BaseView>
@@ -50,14 +38,8 @@ export const DiscoverScreen = () => {
                 }}
                 tabBar={TopTabbar}
                 screenOptions={{ animationEnabled: PlatformUtils.isIOS() }}>
-                <Tab.Screen
-                    name={LL.COMMON_ASSETS()}
-                    component={DiscoverAssets}
-                />
-                <Tab.Screen
-                    name={LL.COMMON_DAPPS()}
-                    component={DiscoverDApps}
-                />
+                <Tab.Screen name={LL.COMMON_ASSETS()} component={DiscoverAssets} />
+                <Tab.Screen name={LL.COMMON_DAPPS()} component={DiscoverDApps} />
             </Tab.Navigator>
         </BaseSafeArea>
     )

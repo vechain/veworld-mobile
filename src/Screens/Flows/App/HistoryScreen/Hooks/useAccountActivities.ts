@@ -60,11 +60,7 @@ export const useAccountActivities = () => {
         if (selectedAccount) {
             try {
                 // Fetch transaction activities
-                const txActivities = await fetchAccountTransactionActivities(
-                    selectedAccount.address,
-                    page,
-                    network,
-                )
+                const txActivities = await fetchAccountTransactionActivities(selectedAccount.address, page, network)
 
                 // If first page, update Redux state and set activities state
                 if (page === 0) {
@@ -84,19 +80,14 @@ export const useAccountActivities = () => {
                 // Merge previous activities and new ones, avoiding duplicates
                 setActivities(prevActivities => {
                     const activitiesMap = new Map<string, Activity>()
-                    const concatenatedActivities = [
-                        ...prevActivities,
-                        ...txActivities,
-                    ]
+                    const concatenatedActivities = [...prevActivities, ...txActivities]
 
-                    concatenatedActivities.forEach(activity =>
-                        activitiesMap.set(activity.id, activity),
-                    )
+                    concatenatedActivities.forEach(activity => activitiesMap.set(activity.id, activity))
 
                     // Sort activities by timestamp and return
-                    const sortedActivities = Array.from(
-                        activitiesMap.values(),
-                    ).sort((a, b) => b.timestamp - a.timestamp)
+                    const sortedActivities = Array.from(activitiesMap.values()).sort(
+                        (a, b) => b.timestamp - a.timestamp,
+                    )
 
                     return sortedActivities
                 })

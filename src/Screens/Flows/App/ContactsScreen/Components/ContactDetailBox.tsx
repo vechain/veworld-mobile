@@ -22,11 +22,7 @@ export const ContactDetailBox: React.FC<Props> = memo(({ contact }) => {
                 </BaseText>
             </BaseView>
             <BaseView style={styles.rightSubContainer}>
-                <BaseIcon
-                    color={theme.colors.primary}
-                    size={24}
-                    name={"pencil"}
-                />
+                <BaseIcon color={theme.colors.primary} size={24} name={"pencil"} />
             </BaseView>
         </BaseCard>
     )

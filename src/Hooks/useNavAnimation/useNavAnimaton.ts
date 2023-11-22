@@ -3,9 +3,7 @@ import { StackAnimationTypes } from "react-native-screens"
 import { DeviceUtils, PlatformUtils } from "~Utils"
 
 export const useNavAnimation = () => {
-    const [animation, setAnimation] = useState<
-        StackAnimationTypes | undefined
-    >()
+    const [animation, setAnimation] = useState<StackAnimationTypes | undefined>()
 
     useEffect(() => {
         async function init() {

@@ -30,17 +30,17 @@ function SelectDeviceBottomSheetInner<T extends BaseDevice = BaseDevice>(
 
     const [snapIndex, setSnapIndex] = useState<number>(0)
 
-    const { isListScrollable, viewabilityConfig, onViewableItemsChanged } =
-        useScrollableList(devices, snapIndex, snapPoints.length)
+    const { isListScrollable, viewabilityConfig, onViewableItemsChanged } = useScrollableList(
+        devices,
+        snapIndex,
+        snapPoints.length,
+    )
 
     const handleSheetChanges = useCallback((index: number) => {
         setSnapIndex(index)
     }, [])
 
-    const accountsListSeparator = useCallback(
-        () => <BaseSpacer height={16} />,
-        [],
-    )
+    const accountsListSeparator = useCallback(() => <BaseSpacer height={16} />, [])
 
     const onDeviceSelected = useCallback(
         (device: BaseDevice) => () => {
@@ -50,14 +50,9 @@ function SelectDeviceBottomSheetInner<T extends BaseDevice = BaseDevice>(
     )
 
     return (
-        <BaseBottomSheet
-            snapPoints={snapPoints}
-            onChange={handleSheetChanges}
-            ref={ref}>
+        <BaseBottomSheet snapPoints={snapPoints} onChange={handleSheetChanges} ref={ref}>
             <BaseView flexDirection="row" w={100}>
-                <BaseText typographyFont="subTitleBold">
-                    {LL.TITLE_EDIT_WALLET()}
-                </BaseText>
+                <BaseText typographyFont="subTitleBold">{LL.TITLE_EDIT_WALLET()}</BaseText>
             </BaseView>
 
             <BaseSpacer height={24} />
@@ -71,13 +66,7 @@ function SelectDeviceBottomSheetInner<T extends BaseDevice = BaseDevice>(
                         onViewableItemsChanged={onViewableItemsChanged}
                         viewabilityConfig={viewabilityConfig}
                         renderItem={({ item }) => {
-                            return (
-                                <DeviceBox
-                                    device={item}
-                                    onDeviceSelected={onDeviceSelected}
-                                    isIconVisible={false}
-                                />
-                            )
+                            return <DeviceBox device={item} onDeviceSelected={onDeviceSelected} isIconVisible={false} />
                         }}
                         scrollEnabled={isListScrollable}
                         showsVerticalScrollIndicator={false}
@@ -95,6 +84,4 @@ const baseStyles = StyleSheet.create({
     },
 })
 
-export const SelectDeviceBottomSheet = React.forwardRef(
-    SelectDeviceBottomSheetInner,
-)
+export const SelectDeviceBottomSheet = React.forwardRef(SelectDeviceBottomSheetInner)

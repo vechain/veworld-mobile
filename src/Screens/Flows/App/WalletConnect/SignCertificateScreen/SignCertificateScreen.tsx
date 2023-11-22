@@ -31,10 +31,7 @@ import { useNavigation } from "@react-navigation/native"
 import { MessageDetails, UnknownAppMessage } from "~Screens"
 import { AnalyticsEvent } from "~Constants"
 
-type Props = NativeStackScreenProps<
-    RootStackParamListSwitch,
-    Routes.CONNECTED_APP_SIGN_CERTIFICATE_SCREEN
->
+type Props = NativeStackScreenProps<RootStackParamListSwitch, Routes.CONNECTED_APP_SIGN_CERTIFICATE_SCREEN>
 
 export const SignCertificateScreen: FC<Props> = ({ route }: Props) => {
     const { requestEvent, session, message } = route.params
@@ -42,9 +39,7 @@ export const SignCertificateScreen: FC<Props> = ({ route }: Props) => {
     const { processRequest, failRequest } = useWalletConnect()
     const { LL } = useI18nContext()
     const nav = useNavigation()
-    const selectedAccount: AccountWithDevice = useAppSelector(
-        selectSelectedAccount,
-    )
+    const selectedAccount: AccountWithDevice = useAppSelector(selectSelectedAccount)
     const track = useAnalyticTracking()
     const dispatch = useAppDispatch()
 
@@ -53,9 +48,7 @@ export const SignCertificateScreen: FC<Props> = ({ route }: Props) => {
     // Request values
     const { url } = WalletConnectUtils.getSessionRequestAttributes(session)
 
-    const sessionContext = useAppSelector(state =>
-        selectVerifyContext(state, requestEvent.topic),
-    )
+    const sessionContext = useAppSelector(state => selectVerifyContext(state, requestEvent.topic))
 
     const validConnectedApp = useMemo(() => {
         if (!sessionContext) return true
@@ -93,8 +86,7 @@ export const SignCertificateScreen: FC<Props> = ({ route }: Props) => {
                 if (selectedAccount.device.type === DEVICE_TYPE.LEDGER) {
                     nav.navigate(Routes.LEDGER_SIGN_CERTIFICATE, {
                         requestEvent,
-                        accountWithDevice:
-                            selectedAccount as LedgerAccountWithDevice,
+                        accountWithDevice: selectedAccount as LedgerAccountWithDevice,
                         certificate: cert,
                         //TODO: What should initialRoute be?
                         initialRoute: Routes.HOME,
@@ -194,36 +186,21 @@ export const SignCertificateScreen: FC<Props> = ({ route }: Props) => {
                 style={styles.scrollView}>
                 <CloseModalButton onPress={onPressBack} />
                 <BaseView mx={20} style={styles.alignLeft}>
-                    <BaseText typographyFont="title">
-                        {LL.CONNECTED_APP_REQUEST()}
-                    </BaseText>
+                    <BaseText typographyFont="title">{LL.CONNECTED_APP_REQUEST()}</BaseText>
 
                     <BaseSpacer height={32} />
-                    <BaseText typographyFont="subTitle">
-                        {LL.CONNECTED_APP_SIGN_REQUEST_TITLE()}
-                    </BaseText>
+                    <BaseText typographyFont="subTitle">{LL.CONNECTED_APP_SIGN_REQUEST_TITLE()}</BaseText>
                     <BaseSpacer height={16} />
-                    <BaseText>
-                        {LL.CONNECTED_APP_SIGN_REQUEST_DESCRIPTION()}
-                    </BaseText>
+                    <BaseText>{LL.CONNECTED_APP_SIGN_REQUEST_DESCRIPTION()}</BaseText>
 
                     <BaseSpacer height={32} />
-                    <BaseText typographyFont="subTitleBold">
-                        {LL.CONNECTED_APP_SELECTED_ACCOUNT_LABEL()}
-                    </BaseText>
+                    <BaseText typographyFont="subTitleBold">{LL.CONNECTED_APP_SELECTED_ACCOUNT_LABEL()}</BaseText>
 
                     <BaseSpacer height={16} />
-                    <AccountCard
-                        account={selectedAccount}
-                        showOpacityWhenDisabled={false}
-                    />
+                    <AccountCard account={selectedAccount} showOpacityWhenDisabled={false} />
 
                     <BaseSpacer height={32} />
-                    <MessageDetails
-                        sessionRequest={session}
-                        requestEvent={requestEvent}
-                        message={message}
-                    />
+                    <MessageDetails sessionRequest={session} requestEvent={requestEvent} message={message} />
 
                     <BaseSpacer height={30} />
 
@@ -246,10 +223,7 @@ export const SignCertificateScreen: FC<Props> = ({ route }: Props) => {
                         action={checkIdentityBeforeOpening}
                         /* We must assert that `biometrics` is not empty otherwise we don't know if the user has set biometrics or passcode, thus failing to decrypt the wallet when signing */
                         isLoading={isBiometricsEmpty}
-                        disabled={
-                            isBiometricsEmpty ||
-                            (!validConnectedApp && !isInvalidChecked)
-                        }
+                        disabled={isBiometricsEmpty || (!validConnectedApp && !isInvalidChecked)}
                     />
                     <BaseSpacer height={16} />
                     <BaseButton

@@ -19,10 +19,7 @@ export const sponsorTransaction = async (
         if (e instanceof AxiosError) {
             const axiosError = e as AxiosError
 
-            error(
-                "sponsorTransaction error",
-                JSON.stringify(axiosError.toJSON()),
-            )
+            error("sponsorTransaction error", JSON.stringify(axiosError.toJSON()))
         } else {
             error("sponsorTransaction error", e)
         }

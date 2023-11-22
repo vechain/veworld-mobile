@@ -13,12 +13,7 @@ import { Routes } from "~Navigation"
 import { VeWorldLogoSVG } from "~Assets"
 import { useI18nContext } from "~i18n"
 import { Linking } from "react-native"
-import {
-    selectAreDevFeaturesEnabled,
-    setIsAppLoading,
-    useAppDispatch,
-    useAppSelector,
-} from "~Storage/Redux"
+import { selectAreDevFeaturesEnabled, setIsAppLoading, useAppDispatch, useAppSelector } from "~Storage/Redux"
 import { useCreateWallet } from "~Hooks"
 import { error } from "~Utils"
 import { SecurityLevelType } from "~Model"
@@ -49,10 +44,7 @@ export const WelcomeScreen = () => {
 
     const onDemoOnboarding = useCallback(async () => {
         dispatch(setIsAppLoading(true))
-        const mnemonic =
-            "denial kitchen pet squirrel other broom bar gas better priority spoil cross".split(
-                " ",
-            )
+        const mnemonic = "denial kitchen pet squirrel other broom bar gas better priority spoil cross".split(" ")
         const userPassword = "111111"
         await WalletEncryptionKeyHelper.init(userPassword)
         await createWallet({
@@ -71,14 +63,10 @@ export const WelcomeScreen = () => {
             fixedBody={
                 <BaseView alignItems="center" flex={1} mx={24}>
                     <BaseView flexDirection="row" mt={20}>
-                        <BaseText
-                            typographyFont="largeTitle"
-                            testID="welcome-title-id">
+                        <BaseText typographyFont="largeTitle" testID="welcome-title-id">
                             {LL.TITLE_WELCOME_TO()}
                         </BaseText>
-                        <BaseText typographyFont="largeTitle">
-                            {LL.VEWORLD()}
-                        </BaseText>
+                        <BaseText typographyFont="largeTitle">{LL.VEWORLD()}</BaseText>
                     </BaseView>
 
                     <BaseSpacer height={40} />
@@ -86,10 +74,7 @@ export const WelcomeScreen = () => {
 
                     <BaseView alignItems="center" w={100}>
                         <BaseSpacer height={40} />
-                        <BaseText
-                            align="center"
-                            typographyFont="buttonSecondary"
-                            py={20}>
+                        <BaseText align="center" typographyFont="buttonSecondary" py={20}>
                             {LL.BD_WELCOME_SCREEN()}
                         </BaseText>
                     </BaseView>
@@ -106,22 +91,14 @@ export const WelcomeScreen = () => {
                         <BaseText typographyFont="body" align="center">
                             {LL.BD_CREATE_WALLET_TYPE_USER_ACCEPTS()}
                         </BaseText>
-                        <BaseText
-                            typographyFont="bodyMedium"
-                            underline
-                            align="center"
-                            onPress={goToTermsAndConditions}>
+                        <BaseText typographyFont="bodyMedium" underline align="center" onPress={goToTermsAndConditions}>
                             {LL.COMMON_LBL_TERMS_AND_CONDITIONS()}
                         </BaseText>
                         <BaseText typographyFont="body" align="center">
                             {" "}
                             {LL.COMMON_LBL_AND()}{" "}
                         </BaseText>
-                        <BaseText
-                            typographyFont="bodyMedium"
-                            underline
-                            align="center"
-                            onPress={goToPrivacyPolicy}>
+                        <BaseText typographyFont="bodyMedium" underline align="center" onPress={goToPrivacyPolicy}>
                             {LL.COMMON_LBL_PRIVACY_POLICY()}
                         </BaseText>
                     </BaseView>
@@ -134,12 +111,7 @@ export const WelcomeScreen = () => {
                         haptics="Medium"
                     />
                     {devFeaturesEnabled && (
-                        <BaseButton
-                            size="md"
-                            variant="link"
-                            action={onDemoOnboarding}
-                            title="DEV:DEMO"
-                        />
+                        <BaseButton size="md" variant="link" action={onDemoOnboarding} title="DEV:DEMO" />
                     )}
                 </BaseView>
             }

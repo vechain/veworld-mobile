@@ -34,27 +34,22 @@ export type GithubCollectionResponse = {
     }
 }
 
-export const getCollectionInfo = async (
-    net: NETWORK_TYPE,
-): Promise<GithubCollectionResponse[]> => {
+export const getCollectionInfo = async (net: NETWORK_TYPE): Promise<GithubCollectionResponse[]> => {
     switch (net) {
         case NETWORK_TYPE.MAIN:
-            const resMain = await axios.get<GithubCollectionResponse[]>(
-                GH_NFT_REGISTRY(net),
-                { timeout: NFT_AXIOS_TIMEOUT },
-            )
+            const resMain = await axios.get<GithubCollectionResponse[]>(GH_NFT_REGISTRY(net), {
+                timeout: NFT_AXIOS_TIMEOUT,
+            })
             return resMain.data
         case NETWORK_TYPE.TEST:
-            const resTest = await axios.get<GithubCollectionResponse[]>(
-                GH_NFT_REGISTRY(net),
-                { timeout: NFT_AXIOS_TIMEOUT },
-            )
+            const resTest = await axios.get<GithubCollectionResponse[]>(GH_NFT_REGISTRY(net), {
+                timeout: NFT_AXIOS_TIMEOUT,
+            })
             return resTest.data
         default:
-            const resDefault = await axios.get<GithubCollectionResponse[]>(
-                GH_NFT_REGISTRY(NETWORK_TYPE.MAIN),
-                { timeout: NFT_AXIOS_TIMEOUT },
-            )
+            const resDefault = await axios.get<GithubCollectionResponse[]>(GH_NFT_REGISTRY(NETWORK_TYPE.MAIN), {
+                timeout: NFT_AXIOS_TIMEOUT,
+            })
             return resDefault.data
     }
 }

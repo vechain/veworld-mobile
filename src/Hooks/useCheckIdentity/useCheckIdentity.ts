@@ -12,11 +12,7 @@ type Props = {
 /**
  * hook used to handle reusable identity flow
  */
-export const useCheckIdentity = ({
-    onIdentityConfirmed,
-    onCancel,
-    allowAutoPassword,
-}: Props) => {
+export const useCheckIdentity = ({ onIdentityConfirmed, onCancel, allowAutoPassword }: Props) => {
     const { isWalletSecurityBiometrics, biometrics } = useWalletSecurity()
 
     const selectedAccount = useAppSelector(selectSelectedAccountOrNull)
@@ -25,11 +21,7 @@ export const useCheckIdentity = ({
         return isEmpty(biometrics)
     }, [biometrics])
 
-    const {
-        isOpen: isPasswordPromptOpen,
-        onOpen: openPasswordPrompt,
-        onClose: closePasswordPrompt,
-    } = useDisclosure()
+    const { isOpen: isPasswordPromptOpen, onOpen: openPasswordPrompt, onClose: closePasswordPrompt } = useDisclosure()
 
     /*
      * This function checks if the user has enabled biometrics and if so, it will
@@ -41,22 +33,12 @@ export const useCheckIdentity = ({
         // If: we're using biometrics, or we allow auto access to ledger
         // Else If: the pin code is stored in the app
         // Else: Open the password prompt
-        if (
-            isWalletSecurityBiometrics ||
-            (allowAutoPassword &&
-                selectedAccount?.device.type === DEVICE_TYPE.LEDGER)
-        ) {
+        if (isWalletSecurityBiometrics || (allowAutoPassword && selectedAccount?.device.type === DEVICE_TYPE.LEDGER)) {
             onIdentityConfirmed()
         } else {
             openPasswordPrompt()
         }
-    }, [
-        selectedAccount,
-        allowAutoPassword,
-        isWalletSecurityBiometrics,
-        openPasswordPrompt,
-        onIdentityConfirmed,
-    ])
+    }, [selectedAccount, allowAutoPassword, isWalletSecurityBiometrics, openPasswordPrompt, onIdentityConfirmed])
 
     /*
      * This function is called when the user enters the correct password. It will

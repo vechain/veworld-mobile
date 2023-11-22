@@ -1,23 +1,13 @@
 import { DIRECTIONS } from "~Constants"
 import { warn } from "~Utils"
-import {
-    Activity,
-    ActivityType,
-    FungibleTokenActivity,
-    NonFungibleTokenActivity,
-} from "~Model"
+import { Activity, ActivityType, FungibleTokenActivity, NonFungibleTokenActivity } from "~Model"
 import { TranslationFunctions } from "~i18n"
 
-export const getActivityTitle = (
-    activity: Activity,
-    LL: TranslationFunctions,
-    isSwap?: boolean,
-) => {
+export const getActivityTitle = (activity: Activity, LL: TranslationFunctions, isSwap?: boolean) => {
     switch (activity.type) {
         case ActivityType.FUNGIBLE_TOKEN:
         case ActivityType.VET_TRANSFER: {
-            return (activity as FungibleTokenActivity).direction ===
-                DIRECTIONS.UP
+            return (activity as FungibleTokenActivity).direction === DIRECTIONS.UP
                 ? LL.BTN_SEND()
                 : LL.RECEIVE_ACTIVITY()
         }
@@ -26,10 +16,7 @@ export const getActivityTitle = (
         case ActivityType.DAPP_TRANSACTION:
             return isSwap ? LL.SWAP() : LL.DAPP_TRANSACTION()
         case ActivityType.NFT_TRANSFER:
-            return (activity as NonFungibleTokenActivity).direction ===
-                DIRECTIONS.UP
-                ? LL.NFT_SEND()
-                : LL.NFT_RECEIVE()
+            return (activity as NonFungibleTokenActivity).direction === DIRECTIONS.UP ? LL.NFT_SEND() : LL.NFT_RECEIVE()
         case ActivityType.CONNECTED_APP_TRANSACTION:
             return LL.CONNECTED_APP_TITLE()
         default:

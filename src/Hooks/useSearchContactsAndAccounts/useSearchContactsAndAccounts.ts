@@ -1,9 +1,5 @@
 import { useMemo } from "react"
-import {
-    selectKnownContacts,
-    selectOtherAccounts,
-    useAppSelector,
-} from "~Storage/Redux"
+import { selectKnownContacts, selectOtherAccounts, useAppSelector } from "~Storage/Redux"
 import { AddressUtils } from "~Utils"
 
 export const useSearchContactsAndAccounts = ({
@@ -23,17 +19,9 @@ export const useSearchContactsAndAccounts = ({
         if (!searchText) return contacts
         return contacts.filter(
             contact =>
-                (!!selectedAddress &&
-                    AddressUtils.compareAddresses(
-                        contact.address,
-                        selectedAddress,
-                    )) ||
-                contact.alias
-                    .toLowerCase()
-                    .includes(searchText.toLowerCase()) ||
-                contact.address
-                    .toLowerCase()
-                    .includes(searchText.toLowerCase()),
+                (!!selectedAddress && AddressUtils.compareAddresses(contact.address, selectedAddress)) ||
+                contact.alias.toLowerCase().includes(searchText.toLowerCase()) ||
+                contact.address.toLowerCase().includes(searchText.toLowerCase()),
         )
     }, [selectedAddress, contacts, searchText])
 
@@ -41,27 +29,16 @@ export const useSearchContactsAndAccounts = ({
         if (!searchText) return accounts
         return accounts.filter(
             account =>
-                (!!selectedAddress &&
-                    AddressUtils.compareAddresses(
-                        account.address,
-                        selectedAddress,
-                    )) ||
-                account.alias
-                    .toLowerCase()
-                    .includes(searchText.toLowerCase()) ||
-                account.address
-                    .toLowerCase()
-                    .includes(searchText.toLowerCase()),
+                (!!selectedAddress && AddressUtils.compareAddresses(account.address, selectedAddress)) ||
+                account.alias.toLowerCase().includes(searchText.toLowerCase()) ||
+                account.address.toLowerCase().includes(searchText.toLowerCase()),
         )
     }, [selectedAddress, accounts, searchText])
 
     const isAddressInContactsOrAccounts = useMemo(() => {
         if (!selectedAddress) return false
         return accountsAndContacts.some(accountOrContact =>
-            AddressUtils.compareAddresses(
-                accountOrContact.address,
-                selectedAddress,
-            ),
+            AddressUtils.compareAddresses(accountOrContact.address, selectedAddress),
         )
     }, [accountsAndContacts, selectedAddress])
 

@@ -15,8 +15,7 @@ import axios from "axios"
     }
 })
 
-const findElement = async () =>
-    await screen.findByTestId("History_Screen", {}, { timeout: 5000 })
+const findElement = async () => await screen.findByTestId("History_Screen", {}, { timeout: 5000 })
 
 const TX_Mock = [
     {

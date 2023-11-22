@@ -25,5 +25,11 @@ module.exports = {
                 "es/no-numeric-separators": "error",
             },
         },
+        {
+            files: ["./src//Assets/**/*"],
+            rules: {
+                "max-len": "off",
+            },
+        },
     ],
 }

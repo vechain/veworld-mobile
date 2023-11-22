@@ -3,11 +3,7 @@ import { useBalances, useTheme } from "~Hooks"
 import { TokenWithCompleteInfo } from "~Model"
 import { BaseSkeleton, BaseSpacer, BaseText, BaseView } from "~Components"
 import { useI18nContext } from "~i18n"
-import {
-    selectCurrency,
-    selectIsTokensOwnedLoading,
-    useAppSelector,
-} from "~Storage/Redux"
+import { selectCurrency, selectIsTokensOwnedLoading, useAppSelector } from "~Storage/Redux"
 
 export const BalanceView = ({
     token,
@@ -27,9 +23,7 @@ export const BalanceView = ({
     return (
         <BaseView w={100}>
             <BaseView flexDirection="row" alignItems="flex-end">
-                <BaseText typographyFont="bodyBold">
-                    {LL.BD_YOUR_BALANCE()}
-                </BaseText>
+                <BaseText typographyFont="bodyBold">{LL.BD_YOUR_BALANCE()}</BaseText>
                 <BaseSpacer width={4} />
                 {isTokensOwnedLoading ? (
                     <BaseView flexDirection="row" alignItems="center">
@@ -62,9 +56,7 @@ export const BalanceView = ({
                         />
                     </BaseView>
                 ) : (
-                    <BaseText>
-                        {isBalanceVisible ? tokenUnitBalance : "•••••"}
-                    </BaseText>
+                    <BaseText>{isBalanceVisible ? tokenUnitBalance : "•••••"}</BaseText>
                 )}
                 <BaseSpacer width={4} />
                 <BaseText typographyFont="bodyBold">{token.symbol}</BaseText>

@@ -6,10 +6,7 @@ import sortBy from "lodash/sortBy"
 const selectAll = (state: RootState) => state
 const selectDevicesStateUnsorted = (state: RootState) => state.devices
 
-export const selectDevicesState = createSelector(
-    selectDevicesStateUnsorted,
-    state => sortBy(state, "position"),
-)
+export const selectDevicesState = createSelector(selectDevicesStateUnsorted, state => sortBy(state, "position"))
 
 /**
  *

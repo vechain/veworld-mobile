@@ -1,9 +1,6 @@
 import React, { ReactNode } from "react"
 import { StyleProp, View, ViewStyle } from "react-native"
-import {
-    SafeAreaViewProps,
-    useSafeAreaInsets,
-} from "react-native-safe-area-context"
+import { SafeAreaViewProps, useSafeAreaInsets } from "react-native-safe-area-context"
 
 type SafeAreaProps = {
     disableBottomSafeArea?: boolean

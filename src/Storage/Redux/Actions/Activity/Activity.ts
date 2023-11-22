@@ -41,37 +41,25 @@ import { genesisesId } from "~Constants"
  */
 export const validateAndUpsertActivity = createAppAsyncThunk(
     "activity/upsertTransactionDetails",
-    async (
-        { activity, thor }: { activity: Activity; thor: Connex.Thor },
-        { dispatch },
-    ) => {
+    async ({ activity, thor }: { activity: Activity; thor: Connex.Thor }, { dispatch }) => {
         let updatedActivity = { ...activity }
 
         // If the activity is a transaction, we need to fetch the transaction from the chain
         if (updatedActivity.isTransaction) {
-            const txReceipt = await thor
-                .transaction(updatedActivity.txId?.toLowerCase() ?? "")
-                .getReceipt()
+            const txReceipt = await thor.transaction(updatedActivity.txId?.toLowerCase() ?? "").getReceipt()
 
             updatedActivity.blockNumber = txReceipt?.meta.blockNumber ?? 0
 
             if (!txReceipt) updatedActivity.status = ActivityStatus.PENDING
             else {
-                updatedActivity.timestamp = !txReceipt
-                    ? Date.now()
-                    : txReceipt.meta.blockTimestamp * 1000
+                updatedActivity.timestamp = !txReceipt ? Date.now() : txReceipt.meta.blockTimestamp * 1000
 
-                updatedActivity.status = txReceipt.reverted
-                    ? ActivityStatus.REVERTED
-                    : ActivityStatus.SUCCESS
+                updatedActivity.status = txReceipt.reverted ? ActivityStatus.REVERTED : ActivityStatus.SUCCESS
             }
         }
 
         // If the activity has been pending for more than 2 minutes, mark it as failed
-        if (
-            Date.now() - updatedActivity.timestamp > 120000 &&
-            updatedActivity.status === ActivityStatus.PENDING
-        )
+        if (Date.now() - updatedActivity.timestamp > 120000 && updatedActivity.status === ActivityStatus.PENDING)
             updatedActivity.status = ActivityStatus.REVERTED
 
         thor.genesis.id === genesisesId.main
@@ -108,8 +96,7 @@ export const addPendingTransferTransactionActivity =
         // Ensure selectedAccount is not undefined and outgoingTx has a transaction ID
         if (!selectedAccount || !outgoingTx.id) return
 
-        const pendingActivity: FungibleTokenActivity =
-            createPendingTransferActivityFromTx(outgoingTx)
+        const pendingActivity: FungibleTokenActivity = createPendingTransferActivityFromTx(outgoingTx)
 
         selectedNetwork.type === NETWORK_TYPE.MAIN
             ? dispatch(
@@ -146,8 +133,7 @@ export const addPendingNFTtransferTransactionActivity =
         // Ensure selectedAccount is not undefined and outgoingTx has a transaction ID
         if (!selectedAccount || !outgoingTx.id) return
 
-        const pendingActivity: NonFungibleTokenActivity =
-            createPendingNFTTransferActivityFromTx(outgoingTx)
+        const pendingActivity: NonFungibleTokenActivity = createPendingNFTTransferActivityFromTx(outgoingTx)
 
         selectedNetwork.type === NETWORK_TYPE.MAIN
             ? dispatch(
@@ -227,12 +213,7 @@ export const addIncomingTokenTransfer =
  * @returns An asynchronous thunk action that, when dispatched, adds a new connected app activity to the Redux store.
  */
 export const addConnectedAppActivity =
-    (
-        name?: string,
-        linkUrl?: string,
-        description?: string,
-        methods?: string[],
-    ): AppThunk<void> =>
+    (name?: string, linkUrl?: string, description?: string, methods?: string[]): AppThunk<void> =>
     (dispatch, getState) => {
         const selectedAccount = selectSelectedAccount(getState())
         const selectedNetwork = selectSelectedNetwork(getState())
@@ -240,14 +221,13 @@ export const addConnectedAppActivity =
         // Ensure selectedAccount is not undefined
         if (!selectedAccount) return
 
-        const connectedAppActivity: ConnectedAppActivity =
-            createConnectedAppActivity(
-                selectedAccount.address,
-                name,
-                linkUrl,
-                description,
-                methods,
-            )
+        const connectedAppActivity: ConnectedAppActivity = createConnectedAppActivity(
+            selectedAccount.address,
+            name,
+            linkUrl,
+            description,
+            methods,
+        )
 
         selectedNetwork.type === NETWORK_TYPE.MAIN
             ? dispatch(
@@ -275,12 +255,7 @@ export const addConnectedAppActivity =
  * @returns An asynchronous thunk action that, when dispatched, adds a new sign certificate activity to the Redux store.
  */
 export const addSignCertificateActivity =
-    (
-        name?: string,
-        linkUrl?: string,
-        content?: string,
-        purpose?: string,
-    ): AppThunk<void> =>
+    (name?: string, linkUrl?: string, content?: string, purpose?: string): AppThunk<void> =>
     (dispatch, getState) => {
         const selectedAccount = selectSelectedAccount(getState())
         const selectedNetwork = selectSelectedNetwork(getState())
@@ -288,14 +263,13 @@ export const addSignCertificateActivity =
         // Ensure selectedAccount is not undefined
         if (!selectedAccount) return
 
-        const connectedAppActivity: SignCertActivity =
-            createSignCertificateActivity(
-                selectedAccount.address,
-                name,
-                linkUrl,
-                content,
-                purpose,
-            )
+        const connectedAppActivity: SignCertActivity = createSignCertificateActivity(
+            selectedAccount.address,
+            name,
+            linkUrl,
+            content,
+            purpose,
+        )
 
         selectedNetwork.type === NETWORK_TYPE.MAIN
             ? dispatch(
@@ -330,8 +304,7 @@ export const addPendingDappTransactionActivity =
         // Ensure selectedAccount is not undefined
         if (!selectedAccount) return
 
-        const pendingDappActivity: Activity =
-            createPendingDappTransactionActivity(tx, name, linkUrl)
+        const pendingDappActivity: Activity = createPendingDappTransactionActivity(tx, name, linkUrl)
 
         selectedNetwork.type === NETWORK_TYPE.MAIN
             ? dispatch(
@@ -366,9 +339,7 @@ export const updateAccountTransactionActivities =
         if (!selectedAccount) return
 
         // Existing transaction activities for the account
-        const existingActivities = selectCurrentTransactionActivities(
-            getState(),
-        )
+        const existingActivities = selectCurrentTransactionActivities(getState())
 
         let newTransactionActivities = existingActivities
 
@@ -377,17 +348,13 @@ export const updateAccountTransactionActivities =
                 act => act.id.toLowerCase() === activity.id.toLowerCase(),
             )
 
-            if (existingActivityIndex !== -1)
-                newTransactionActivities[existingActivityIndex] = activity
+            if (existingActivityIndex !== -1) newTransactionActivities[existingActivityIndex] = activity
             else newTransactionActivities.push(activity)
         })
 
         // Sort the activities and slice to the default page size
         newTransactionActivities.sort((a, b) => b.timestamp - a.timestamp)
-        newTransactionActivities = newTransactionActivities.slice(
-            0,
-            DEFAULT_PAGE_SIZE * 2,
-        )
+        newTransactionActivities = newTransactionActivities.slice(0, DEFAULT_PAGE_SIZE * 2)
 
         selectedNetwork.type === NETWORK_TYPE.MAIN
             ? dispatch(

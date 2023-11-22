@@ -12,12 +12,7 @@ import {
 } from "~Components"
 import { URIUtils, warn } from "~Utils"
 import { useNavigation } from "@react-navigation/native"
-import {
-    selectCustomNetworks,
-    useAppDispatch,
-    useAppSelector,
-    validateAndAddCustomNode,
-} from "~Storage/Redux"
+import { selectCustomNetworks, useAppDispatch, useAppSelector, validateAndAddCustomNode } from "~Storage/Redux"
 import * as Haptics from "expo-haptics"
 
 export const AddCustomNodeScreen = () => {
@@ -48,15 +43,11 @@ export const AddCustomNodeScreen = () => {
                 }),
             ).unwrap()
 
-            await Haptics.notificationAsync(
-                Haptics.NotificationFeedbackType.Success,
-            )
+            await Haptics.notificationAsync(Haptics.NotificationFeedbackType.Success)
             goBack()
         } catch (e) {
             warn("onAddNetworkPress", e)
-            await Haptics.notificationAsync(
-                Haptics.NotificationFeedbackType.Error,
-            )
+            await Haptics.notificationAsync(Haptics.NotificationFeedbackType.Error)
             showErrorToast({ text1: e as string })
         }
         setIsSubmitting(false)
@@ -68,9 +59,7 @@ export const AddCustomNodeScreen = () => {
 
             if (!URIUtils.isAllowed(value)) return LL.ERROR_URL_NOT_VALID()
 
-            const urlAlreadyExist = customNodes.find(
-                net => net.currentUrl === value,
-            )
+            const urlAlreadyExist = customNodes.find(net => net.currentUrl === value)
             if (urlAlreadyExist) return LL.ERROR_URL_ALREADY_USED()
 
             return ""
@@ -91,16 +80,12 @@ export const AddCustomNodeScreen = () => {
             body={
                 <BaseView flexGrow={1} justifyContent="space-between">
                     <BaseView>
-                        <BaseText typographyFont="title">
-                            {LL.BTN_ADD_CUSTOM_NODE()}
-                        </BaseText>
+                        <BaseText typographyFont="title">{LL.BTN_ADD_CUSTOM_NODE()}</BaseText>
                         <BaseSpacer height={24} />
                         <BaseText typographyFont="button" pb={8}>
                             {LL.NETWORK_ADD_CUSTOM_NODE_SB()}
                         </BaseText>
-                        <BaseText typographyFont="captionRegular">
-                            {LL.NETWORK_ADD_CUSTOM_NODE_SB_DESC()}
-                        </BaseText>
+                        <BaseText typographyFont="captionRegular">{LL.NETWORK_ADD_CUSTOM_NODE_SB_DESC()}</BaseText>
                         <BaseSpacer height={24} />
                         <BaseTextInput
                             placeholder={LL.COMMON_LBL_ENTER_THE({

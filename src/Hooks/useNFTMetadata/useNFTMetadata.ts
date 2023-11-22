@@ -9,9 +9,7 @@ import { debug, warn } from "~Utils"
 export const useNFTMetadata = () => {
     const { metadataCache } = usePersistedCache()
 
-    const fetchMetadata = async (
-        uri: string,
-    ): Promise<NFTMetadata | undefined> => {
+    const fetchMetadata = async (uri: string): Promise<NFTMetadata | undefined> => {
         try {
             const protocol = uri?.split(":")[0].trim()
             let tokenMetadata: NFTMetadata | undefined
@@ -27,9 +25,7 @@ export const useNFTMetadata = () => {
 
                     debug(`Fetching metadata for ${uri}`)
                     const retrievedData =
-                        URIProtocol.IPFS === protocol
-                            ? await getNFTMetadataIpfs(uri)
-                            : await getNFTMetadataArweave(uri)
+                        URIProtocol.IPFS === protocol ? await getNFTMetadataIpfs(uri) : await getNFTMetadataArweave(uri)
 
                     metadataCache?.setItem(uri, retrievedData)
                     tokenMetadata = retrievedData
@@ -49,17 +45,14 @@ export const useNFTMetadata = () => {
                 }
 
                 default:
-                    warn(
-                        `Unable to detect protocol ${protocol} for metadata URI ${uri}`,
-                    )
+                    warn(`Unable to detect protocol ${protocol} for metadata URI ${uri}`)
                     return undefined
             }
             // transform all metadata keys to lowercase avoiding case sensitive issues
             return (
                 tokenMetadata &&
                 (Object.keys(tokenMetadata).reduce((acc: any, key) => {
-                    acc[key.toLowerCase()] =
-                        tokenMetadata?.[key as keyof NFTMetadata]
+                    acc[key.toLowerCase()] = tokenMetadata?.[key as keyof NFTMetadata]
                     return acc
                 }, {}) as NFTMetadata)
             )

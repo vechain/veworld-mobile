@@ -11,10 +11,7 @@ export const useSecurityUpdate = () => {
     return useCallback(
         async (pinCode: string, newPinCode?: string) => {
             try {
-                const updateSuccess = await updateSecurityMethod(
-                    pinCode,
-                    newPinCode,
-                )
+                const updateSuccess = await updateSecurityMethod(pinCode, newPinCode)
 
                 if (!updateSuccess) {
                     showErrorToast({

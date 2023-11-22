@@ -65,13 +65,9 @@ describe("useSendTransaction", () => {
         expect(result.current).toEqual({
             sendTransaction: expect.any(Function),
         })
-        ;(axios.post as jest.Mock).mockRejectedValue(
-            new AxiosError("Not enough gas"),
-        )
+        ;(axios.post as jest.Mock).mockRejectedValue(new AxiosError("Not enough gas"))
 
-        await expect(
-            result.current.sendTransaction(vetTransaction1),
-        ).rejects.toEqual(new AxiosError("Not enough gas"))
+        await expect(result.current.sendTransaction(vetTransaction1)).rejects.toEqual(new AxiosError("Not enough gas"))
     })
 
     it("axios throws unknown error", async () => {
@@ -81,12 +77,8 @@ describe("useSendTransaction", () => {
         expect(result.current).toEqual({
             sendTransaction: expect.any(Function),
         })
-        ;(axios.post as jest.Mock).mockRejectedValue(
-            new Error("Not enough gas"),
-        )
+        ;(axios.post as jest.Mock).mockRejectedValue(new Error("Not enough gas"))
 
-        await expect(
-            result.current.sendTransaction(vetTransaction1),
-        ).rejects.toEqual(new Error("Not enough gas"))
+        await expect(result.current.sendTransaction(vetTransaction1)).rejects.toEqual(new Error("Not enough gas"))
     })
 })

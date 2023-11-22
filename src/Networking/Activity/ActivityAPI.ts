@@ -1,14 +1,7 @@
 import { debug } from "~Utils"
-import {
-    getActivitiesFromIncomingTransfers,
-    getActivitiesFromTransactions,
-} from "./Helpers"
+import { getActivitiesFromIncomingTransfers, getActivitiesFromTransactions } from "./Helpers"
 import { Activity, NETWORK_TYPE, Network } from "~Model"
-import {
-    ORDER,
-    getIncomingTransfersOrigin,
-    getTransactionsOrigin,
-} from "~Constants"
+import { ORDER, getIncomingTransfersOrigin, getTransactionsOrigin } from "~Constants"
 import {
     DEFAULT_PAGE_SIZE,
     FetchIncomingTransfersResponse,
@@ -36,13 +29,7 @@ export const fetchTransactions = async (
 
     try {
         return await fetchFromEndpoint<FetchTransactionsResponse>(
-            getTransactionsOrigin(
-                networkType,
-                address,
-                page,
-                DEFAULT_PAGE_SIZE,
-                ORDER.DESC,
-            ),
+            getTransactionsOrigin(networkType, address, page, DEFAULT_PAGE_SIZE, ORDER.DESC),
         )
     } catch (error) {
         throw new Error(`Failed to fetch transactions: ${error}`)
@@ -69,13 +56,7 @@ export const fetchIncomingTransfers = async (
 
     try {
         return await fetchFromEndpoint<FetchIncomingTransfersResponse>(
-            getIncomingTransfersOrigin(
-                networkType,
-                address,
-                page,
-                DEFAULT_PAGE_SIZE,
-                ORDER.DESC,
-            ),
+            getIncomingTransfersOrigin(networkType, address, page, DEFAULT_PAGE_SIZE, ORDER.DESC),
         )
     } catch (error) {
         throw new Error(`Failed to fetch incoming transfers: ${error}`)
@@ -113,30 +94,17 @@ export const fetchAccountTransactionActivities = async (
     network: Network,
 ): Promise<Activity[]> => {
     // Fetch transactions for the account address
-    const transactions: FetchTransactionsResponse = await fetchTransactions(
-        address,
-        page,
-        network.type,
-    )
+    const transactions: FetchTransactionsResponse = await fetchTransactions(address, page, network.type)
 
-    const incomingTransfers: FetchIncomingTransfersResponse =
-        await fetchIncomingTransfers(address, page, network.type)
+    const incomingTransfers: FetchIncomingTransfersResponse = await fetchIncomingTransfers(address, page, network.type)
 
     let activitiesFetched: Activity[] = []
 
-    const transactionActivities = getActivitiesFromTransactions(
-        transactions.data,
-    )
+    const transactionActivities = getActivitiesFromTransactions(transactions.data)
 
-    const incomingTransferActivities = getActivitiesFromIncomingTransfers(
-        incomingTransfers.data,
-        network,
-    )
+    const incomingTransferActivities = getActivitiesFromIncomingTransfers(incomingTransfers.data, network)
 
-    activitiesFetched = [
-        ...incomingTransferActivities,
-        ...transactionActivities,
-    ]
+    activitiesFetched = [...incomingTransferActivities, ...transactionActivities]
 
     return activitiesFetched.sort((a, b) => b.timestamp - a.timestamp)
 }

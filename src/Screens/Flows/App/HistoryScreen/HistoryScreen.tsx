@@ -4,14 +4,7 @@ import { FlatList, RefreshControl, StyleSheet } from "react-native"
 import { useBottomSheetModal, useSetSelectedAccount, useTheme } from "~Hooks"
 import { SCREEN_WIDTH } from "~Constants"
 import { FormattingUtils, TransactionUtils } from "~Utils"
-import {
-    BaseText,
-    BaseView,
-    ChangeAccountButtonPill,
-    BaseSpacer,
-    SelectAccountBottomSheet,
-    Layout,
-} from "~Components"
+import { BaseText, BaseView, ChangeAccountButtonPill, BaseSpacer, SelectAccountBottomSheet, Layout } from "~Components"
 import {
     selectBalanceVisible,
     selectSelectedAccount,
@@ -72,8 +65,7 @@ export const HistoryScreen = () => {
     // Pull down to refresh
     const [refreshing, setRefreshing] = React.useState(false)
 
-    const { fetchActivities, activities, hasFetched, page, setPage } =
-        useAccountActivities()
+    const { fetchActivities, activities, hasFetched, page, setPage } = useAccountActivities()
 
     const nav = useNavigation()
 
@@ -93,12 +85,7 @@ export const HistoryScreen = () => {
     )
 
     const onActivityPress = useCallback(
-        (
-            activity: Activity,
-            token?: FungibleToken,
-            isSwap?: boolean,
-            decodedClauses?: TransactionOutcomes,
-        ) => {
+        (activity: Activity, token?: FungibleToken, isSwap?: boolean, decodedClauses?: TransactionOutcomes) => {
             nav.navigate(Routes.ACTIVITY_DETAILS, {
                 activity,
                 token,
@@ -151,13 +138,9 @@ export const HistoryScreen = () => {
                         />
                     )
                 case ActivityType.DAPP_TRANSACTION:
-                    const decodedClauses = TransactionUtils.interpretClauses(
-                        activity.clauses ?? [],
-                        tokens,
-                    )
+                    const decodedClauses = TransactionUtils.interpretClauses(activity.clauses ?? [], tokens)
 
-                    const isSwap =
-                        TransactionUtils.isSwapTransaction(decodedClauses)
+                    const isSwap = TransactionUtils.isSwapTransaction(decodedClauses)
 
                     return isSwap ? (
                         <SwapTransactionActivityBox
@@ -211,11 +194,7 @@ export const HistoryScreen = () => {
                             )
                         }
                         renderItem={({ item: activity, index }) => {
-                            return (
-                                <BaseView mx={20}>
-                                    {renderActivity(activity, index)}
-                                </BaseView>
-                            )
+                            return <BaseView mx={20}>{renderActivity(activity, index)}</BaseView>
                         }}
                         showsVerticalScrollIndicator={false}
                         showsHorizontalScrollIndicator={false}
@@ -238,16 +217,7 @@ export const HistoryScreen = () => {
                 </BaseView>
             </>
         )
-    }, [
-        activities,
-        hasFetched,
-        onEndReached,
-        onRefresh,
-        onScroll,
-        refreshing,
-        renderActivity,
-        theme.colors.border,
-    ])
+    }, [activities, hasFetched, onEndReached, onRefresh, onScroll, refreshing, renderActivity, theme.colors.border])
 
     const renderSkeletonList = useMemo(() => {
         return (
@@ -274,11 +244,7 @@ export const HistoryScreen = () => {
 
     const renderNoActivitiesButton = useMemo(() => {
         return (
-            <BaseView
-                justifyContent="center"
-                alignItems="center"
-                w={100}
-                style={baseStyles.noActivitiesButton}>
+            <BaseView justifyContent="center" alignItems="center" w={100} style={baseStyles.noActivitiesButton}>
                 <NoActivitiesButton onPress={onStartTransactingPress} />
             </BaseView>
         )
@@ -289,23 +255,12 @@ export const HistoryScreen = () => {
             safeAreaTestID="History_Screen"
             fixedHeader={
                 <>
-                    <BaseView
-                        flexDirection="row"
-                        justifyContent="space-between">
-                        <BaseText typographyFont="title">
-                            {LL.BTN_HISTORY()}
-                        </BaseText>
+                    <BaseView flexDirection="row" justifyContent="space-between">
+                        <BaseText typographyFont="title">{LL.BTN_HISTORY()}</BaseText>
 
                         <ChangeAccountButtonPill
-                            title={
-                                selectedAccount.alias ??
-                                LL.WALLET_LABEL_ACCOUNT()
-                            }
-                            text={FormattingUtils.humanAddress(
-                                selectedAccount.address ?? "",
-                                5,
-                                4,
-                            )}
+                            title={selectedAccount.alias ?? LL.WALLET_LABEL_ACCOUNT()}
+                            text={FormattingUtils.humanAddress(selectedAccount.address ?? "", 5, 4)}
                             action={openSelectAccountBottomSheet}
                         />
                     </BaseView>
@@ -315,17 +270,13 @@ export const HistoryScreen = () => {
             fixedBody={
                 <>
                     {/* Activities List */}
-                    {!!activities.length &&
-                        (page !== 0 || hasFetched) &&
-                        renderActivitiesList}
+                    {!!activities.length && (page !== 0 || hasFetched) && renderActivitiesList}
 
                     {/* Fetching Activities shows skeleton */}
                     {!hasFetched && page === 0 && renderSkeletonList}
 
                     {/* No Activities */}
-                    {!activities.length &&
-                        hasFetched &&
-                        renderNoActivitiesButton}
+                    {!activities.length && hasFetched && renderNoActivitiesButton}
 
                     <SelectAccountBottomSheet
                         closeBottomSheet={closeSelectAccountBottonSheet}

@@ -8,11 +8,7 @@ import { useI18nContext } from "~i18n"
 import { TransferClause } from "./Clauses/TransferClause"
 import { DeployContractClause } from "./Clauses/DeployContractClause"
 import { ContractCallClause } from "./Clauses/ContractCallClause"
-import {
-    SwapTokensForTokensClause,
-    SwapTokensForVetClause,
-    SwapVetForTokensClause,
-} from "./Clauses"
+import { SwapTokensForTokensClause, SwapTokensForVetClause, SwapVetForTokensClause } from "./Clauses"
 
 type Props = {
     clausesMetadata: ClauseWithMetadata[]
@@ -25,50 +21,39 @@ export const ClausesCarousel: React.FC<Props> = memo(({ clausesMetadata }) => {
 
     const [activeIndex, setActiveIndex] = useState(0)
 
-    const renderClause = useCallback(
-        ({ item }: { item: ClauseWithMetadata }) => {
-            switch (item.type) {
-                case ClauseType.TRANSFER:
-                    return <TransferClause clause={item} />
-                case ClauseType.CONTRACT_CALL:
-                    return <ContractCallClause clause={item} />
-                case ClauseType.DEPLOY_CONTRACT:
-                    return <DeployContractClause clause={item} />
-                case ClauseType.SWAP_VET_FOR_TOKENS:
-                    return <SwapVetForTokensClause clause={item} />
-                case ClauseType.SWAP_TOKENS_FOR_VET:
-                    return <SwapTokensForVetClause clause={item} />
-                case ClauseType.SWAP_TOKENS_FOR_TOKENS:
-                    return <SwapTokensForTokensClause clause={item} />
-                default:
-                    return <></>
-            }
-        },
-        [],
-    )
+    const renderClause = useCallback(({ item }: { item: ClauseWithMetadata }) => {
+        switch (item.type) {
+            case ClauseType.TRANSFER:
+                return <TransferClause clause={item} />
+            case ClauseType.CONTRACT_CALL:
+                return <ContractCallClause clause={item} />
+            case ClauseType.DEPLOY_CONTRACT:
+                return <DeployContractClause clause={item} />
+            case ClauseType.SWAP_VET_FOR_TOKENS:
+                return <SwapVetForTokensClause clause={item} />
+            case ClauseType.SWAP_TOKENS_FOR_VET:
+                return <SwapTokensForVetClause clause={item} />
+            case ClauseType.SWAP_TOKENS_FOR_TOKENS:
+                return <SwapTokensForTokensClause clause={item} />
+            default:
+                return <></>
+        }
+    }, [])
 
-    const onViewableItemsChanged = useCallback(
-        ({ viewableItems }: { viewableItems: ViewToken[] }) => {
-            const activeIdx = viewableItems[0].index
+    const onViewableItemsChanged = useCallback(({ viewableItems }: { viewableItems: ViewToken[] }) => {
+        const activeIdx = viewableItems[0].index
 
-            setActiveIndex(activeIdx ?? 0)
-        },
-        [],
-    )
+        setActiveIndex(activeIdx ?? 0)
+    }, [])
 
     return (
         <BaseView style={[styles.container]}>
             <BaseView bg={theme.colors.card} style={styles.view}>
                 <BaseView w={100} pt={16} pb={8} alignItems="center">
-                    <BaseText typographyFont="subSubTitle">
-                        {LL.OUTCOMES()}
-                    </BaseText>
+                    <BaseText typographyFont="subSubTitle">{LL.OUTCOMES()}</BaseText>
                 </BaseView>
                 <BaseView mx={20} pb={8}>
-                    <BaseView
-                        flexDirection="row"
-                        style={styles.container}
-                        justifyContent="flex-start">
+                    <BaseView flexDirection="row" style={styles.container} justifyContent="flex-start">
                         <FlatList
                             data={clausesMetadata}
                             renderItem={renderClause}

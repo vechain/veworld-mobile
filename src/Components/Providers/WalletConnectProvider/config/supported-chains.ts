@@ -5,13 +5,7 @@ import { ErrorResponse } from "@walletconnect/jsonrpc-types/dist/cjs/jsonrpc"
 
 export const WCSupportedChains: ProposalTypes.RequiredNamespaces = {
     eip155: {
-        events: [
-            "chainChanged",
-            "accountsChanged",
-            "message",
-            "disconnect",
-            "connect",
-        ],
+        events: ["chainChanged", "accountsChanged", "message", "disconnect", "connect"],
         methods: [
             "eth_accounts",
             "eth_requestAccounts",
@@ -55,11 +49,7 @@ export const validateRequestNamespaces = (
         const requiredMethods = namespaces[requiredNamespace].methods
 
         for (const requiredMethod of requiredMethods) {
-            if (
-                !WCSupportedChains[requiredNamespace].methods.includes(
-                    requiredMethod,
-                )
-            ) {
+            if (!WCSupportedChains[requiredNamespace].methods.includes(requiredMethod)) {
                 return getSdkError("UNSUPPORTED_METHODS")
             }
         }
@@ -68,11 +58,7 @@ export const validateRequestNamespaces = (
         const requiredEvents = namespaces[requiredNamespace].events
 
         for (const requiredEvent of requiredEvents) {
-            if (
-                !WCSupportedChains[requiredNamespace].events.includes(
-                    requiredEvent,
-                )
-            ) {
+            if (!WCSupportedChains[requiredNamespace].events.includes(requiredEvent)) {
                 return getSdkError("UNSUPPORTED_EVENTS")
             }
         }

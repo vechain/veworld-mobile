@@ -32,25 +32,16 @@ export const AppSecurityScreen = () => {
         return isDark ? (
             <Lottie source={ProtectWalletDark} autoPlay style={styles.lottie} />
         ) : (
-            <Lottie
-                source={ProtectWalletLight}
-                autoPlay
-                style={styles.lottie}
-            />
+            <Lottie source={ProtectWalletLight} autoPlay style={styles.lottie} />
         )
     }, [isDark])
 
     return (
         <Layout
             body={
-                <BaseView
-                    alignItems="center"
-                    justifyContent="space-between"
-                    flexGrow={1}>
+                <BaseView alignItems="center" justifyContent="space-between" flexGrow={1}>
                     <BaseView alignSelf="flex-start">
-                        <BaseText typographyFont="title">
-                            {LL.TITLE_SECURITY()}
-                        </BaseText>
+                        <BaseText typographyFont="title">{LL.TITLE_SECURITY()}</BaseText>
                     </BaseView>
                     <BaseSpacer height={24} />
                     {protectWalletImage}
@@ -66,10 +57,7 @@ export const AppSecurityScreen = () => {
                     <BaseButton
                         haptics="Medium"
                         action={onBiometricsPress}
-                        disabled={
-                            !biometrics ||
-                            biometrics.currentSecurityLevel !== "BIOMETRIC"
-                        }
+                        disabled={!biometrics || biometrics.currentSecurityLevel !== "BIOMETRIC"}
                         w={100}
                         mx={20}
                         my={20}

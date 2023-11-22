@@ -9,10 +9,7 @@ type Props = {
 
 export const ListSlide = ({ item }: Props) => {
     return (
-        <BaseView
-            alignItems="center"
-            justifyContent="flex-start"
-            style={baseStyles.view}>
+        <BaseView alignItems="center" justifyContent="flex-start" style={baseStyles.view}>
             {item.icon}
 
             <BaseSpacer height={24} />

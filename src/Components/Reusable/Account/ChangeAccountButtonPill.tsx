@@ -14,10 +14,7 @@ export const ChangeAccountButtonPill = ({ title, text, action }: Props) => {
     const { styles: themedStyles, theme } = useThemedStyles(baseStyles)
 
     return (
-        <BaseTouchable
-            action={action}
-            style={themedStyles.container}
-            haptics="Light">
+        <BaseTouchable action={action} style={themedStyles.container} haptics="Light">
             <BaseView w={85} px={15}>
                 <BaseText
                     color={theme.colors.textReversed}
@@ -38,10 +35,7 @@ export const ChangeAccountButtonPill = ({ title, text, action }: Props) => {
             <View style={themedStyles.seperator} />
 
             <BaseView w={35}>
-                <BaseIcon
-                    name="account-sync-outline"
-                    color={theme.colors.textReversed}
-                />
+                <BaseIcon name="account-sync-outline" color={theme.colors.textReversed} />
             </BaseView>
         </BaseTouchable>
     )

@@ -32,9 +32,7 @@ describe("useFungibleTokenInfo", () => {
         ;(useThor as jest.Mock).mockReturnValue(thor)
         ;(getTokenName as jest.Mock).mockResolvedValue(nameMock)
 
-        const { result, waitForNextUpdate } = renderHook(() =>
-            useFungibleTokenInfo(tokenAddress),
-        )
+        const { result, waitForNextUpdate } = renderHook(() => useFungibleTokenInfo(tokenAddress))
 
         await waitForNextUpdate({ timeout: 10000 })
 
@@ -69,9 +67,7 @@ describe("useFungibleTokenInfo", () => {
 
         const consoleErrorSpy = jest.spyOn(logger, "error")
 
-        const { result, waitForNextUpdate } = renderHook(() =>
-            useFungibleTokenInfo(tokenAddress),
-        )
+        const { result, waitForNextUpdate } = renderHook(() => useFungibleTokenInfo(tokenAddress))
 
         await waitForNextUpdate({ timeout: 10000 })
 

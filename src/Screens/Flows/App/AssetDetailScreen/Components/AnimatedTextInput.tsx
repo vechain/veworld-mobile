@@ -1,10 +1,6 @@
 import React from "react"
 import Animated, { useAnimatedProps } from "react-native-reanimated"
-import {
-    TextInputProps,
-    TextInput,
-    TextProps as RNTextProps,
-} from "react-native"
+import { TextInputProps, TextInput, TextProps as RNTextProps } from "react-native"
 
 // base animated text component using a TextInput
 // forked from https://github.com/wcandillon/react-native-redash/blob/master/src/ReText.tsx

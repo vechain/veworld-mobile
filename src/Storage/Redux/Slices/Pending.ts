@@ -24,11 +24,8 @@ export const PendingSlice = createSlice({
                 id: string
             }>,
         ) => {
-            const foundIndex = state.pendingTransactions.findIndex(
-                tx => tx.txId === action.payload.txId,
-            )
-            if (foundIndex === -1)
-                state.pendingTransactions.push(action.payload)
+            const foundIndex = state.pendingTransactions.findIndex(tx => tx.txId === action.payload.txId)
+            if (foundIndex === -1) state.pendingTransactions.push(action.payload)
 
             return state
         },
@@ -39,12 +36,9 @@ export const PendingSlice = createSlice({
                 txId: string
             }>,
         ) => {
-            const foundIndex = state.pendingTransactions.findIndex(
-                tx => tx.txId === action.payload.txId,
-            )
+            const foundIndex = state.pendingTransactions.findIndex(tx => tx.txId === action.payload.txId)
 
-            if (foundIndex !== -1)
-                state.pendingTransactions.splice(foundIndex, 1)
+            if (foundIndex !== -1) state.pendingTransactions.splice(foundIndex, 1)
 
             return state
         },
@@ -55,8 +49,4 @@ export const PendingSlice = createSlice({
     },
 })
 
-export const {
-    setPendingTransaction,
-    removePendingTransaction,
-    resetPendingState,
-} = PendingSlice.actions
+export const { setPendingTransaction, removePendingTransaction, resetPendingState } = PendingSlice.actions

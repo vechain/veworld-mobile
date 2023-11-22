@@ -15,16 +15,8 @@ import { useBackupMnemonic } from "./Hooks/useBackupMnemonic"
 import { useI18nContext } from "~i18n"
 import { BackupMnemonicBottomSheet, EnableBiometrics } from "./Components"
 import { DEVICE_TYPE, LocalDevice } from "~Model"
-import {
-    selectAreDevFeaturesEnabled,
-    selectSelectedAccount,
-    useAppDispatch,
-    useAppSelector,
-} from "~Storage/Redux"
-import {
-    selectAnalyticsTrackingEnabled,
-    selectLocalDevices,
-} from "~Storage/Redux/Selectors"
+import { selectAreDevFeaturesEnabled, selectSelectedAccount, useAppDispatch, useAppSelector } from "~Storage/Redux"
+import { selectAnalyticsTrackingEnabled, selectLocalDevices } from "~Storage/Redux/Selectors"
 
 import { setAnalyticsTrackingEnabled } from "~Storage/Redux/Actions"
 import { useEditPin } from "./Hooks/useEditPin"
@@ -39,9 +31,7 @@ export const PrivacyScreen = () => {
 
     const devFeaturesEnabled = useAppSelector(selectAreDevFeaturesEnabled)
 
-    const isAnalyticsTrackingEnabled = useAppSelector(
-        selectAnalyticsTrackingEnabled,
-    )
+    const isAnalyticsTrackingEnabled = useAppSelector(selectAnalyticsTrackingEnabled)
     const devices = useAppSelector(selectLocalDevices) as LocalDevice[]
 
     const selectedAccount = useAppSelector(selectSelectedAccount)
@@ -60,18 +50,9 @@ export const PrivacyScreen = () => {
         onClose: closeWalletMgmtSheet,
     } = useBottomSheetModal()
 
-    const {
-        isOpen: isPasswordPromptOpen,
-        onOpen: openPasswordPrompt,
-        onClose: closePasswordPrompt,
-    } = useDisclosure()
+    const { isOpen: isPasswordPromptOpen, onOpen: openPasswordPrompt, onClose: closePasswordPrompt } = useDisclosure()
 
-    const {
-        onPasswordSuccess,
-        checkSecurityBeforeOpening,
-        handleOnSelectedWallet,
-        mnemonicArray,
-    } = useBackupMnemonic({
+    const { onPasswordSuccess, checkSecurityBeforeOpening, handleOnSelectedWallet, mnemonicArray } = useBackupMnemonic({
         closePasswordPrompt,
         openBackupPhraseSheetWithDelay,
         openWalletMgmtSheetWithDelay,
@@ -128,9 +109,7 @@ export const PrivacyScreen = () => {
             body={
                 <>
                     <BaseView pt={16}>
-                        <BaseText typographyFont="title">
-                            {LL.TITLE_PRIVACY()}
-                        </BaseText>
+                        <BaseText typographyFont="title">{LL.TITLE_PRIVACY()}</BaseText>
                         <BaseSpacer height={24} />
 
                         {/*TODO: https://github.com/vechainfoundation/veworld-mobile/issues/1339*/}
@@ -181,9 +160,7 @@ export const PrivacyScreen = () => {
                                 <EnableFeature
                                     title={LL.SB_ANALYTICS_TRACKING()}
                                     subtitle={LL.BD_ANALYTICS_TRACKING()}
-                                    onValueChange={
-                                        toggleAnalyticsTrackingSwitch
-                                    }
+                                    onValueChange={toggleAnalyticsTrackingSwitch}
                                     value={isAnalyticsTrackingEnabled}
                                 />
                             </>

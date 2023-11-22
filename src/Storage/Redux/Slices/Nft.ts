@@ -105,11 +105,7 @@ export const NftSlice = createSlice({
         ) => {
             const { currentAccountAddress, collection } = action.payload
 
-            const existing = findExistingCollection(
-                state,
-                currentAccountAddress,
-                collection.address,
-            )
+            const existing = findExistingCollection(state, currentAccountAddress, collection.address)
 
             if (existing) {
                 Object.assign(existing, collection)
@@ -144,12 +140,9 @@ export const NftSlice = createSlice({
         ) => {
             const { network, collection, accountAddress } = action.payload
 
-            const currentBlackList =
-                state.blackListedCollections[network][accountAddress]
+            const currentBlackList = state.blackListedCollections[network][accountAddress]
 
-            const isBlackListed =
-                currentBlackList?.addresses.includes(collection.address) ??
-                false
+            const isBlackListed = currentBlackList?.addresses.includes(collection.address) ?? false
 
             if (isBlackListed) {
                 currentBlackList.addresses = currentBlackList.addresses.filter(
@@ -157,9 +150,7 @@ export const NftSlice = createSlice({
                 )
             } else {
                 if (currentBlackList) {
-                    state.blackListedCollections[network][
-                        accountAddress
-                    ].addresses.push(collection.address)
+                    state.blackListedCollections[network][accountAddress].addresses.push(collection.address)
                 } else {
                     state.blackListedCollections[network][accountAddress] = {
                         addresses: [collection.address],
@@ -179,8 +170,7 @@ export const NftSlice = createSlice({
                 pagination: PaginationResponse
             }>,
         ) => {
-            const { address, collectionAddress, nfts, pagination } =
-                action.payload
+            const { address, collectionAddress, nfts, pagination } = action.payload
 
             const normalizedAcct = HexUtils.normalize(address)
             const normalizedCollection = HexUtils.normalize(collectionAddress)
@@ -215,11 +205,7 @@ export const NftSlice = createSlice({
                 }
             }
 
-            const mergedNfts = mergeArrays(
-                state.nfts[normalizedAcct][normalizedCollection].nfts,
-                nfts,
-                "id",
-            )
+            const mergedNfts = mergeArrays(state.nfts[normalizedAcct][normalizedCollection].nfts, nfts, "id")
 
             state.nfts[normalizedAcct][normalizedCollection] = {
                 nfts: mergedNfts,
@@ -243,9 +229,7 @@ export const NftSlice = createSlice({
             const normalizedCollection = HexUtils.normalize(collectionAddress)
 
             if (state.nfts[normalizedAcct] !== undefined) {
-                const existing = state.nfts[normalizedAcct][
-                    normalizedCollection
-                ]?.nfts?.find(
+                const existing = state.nfts[normalizedAcct][normalizedCollection]?.nfts?.find(
                     n => n.tokenId === nft.tokenId,
                 ) as NonFungibleToken
 

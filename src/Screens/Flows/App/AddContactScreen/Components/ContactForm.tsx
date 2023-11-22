@@ -1,10 +1,6 @@
 import React, { memo, useCallback, useMemo, useState } from "react"
 import { useCameraBottomSheet } from "~Hooks"
-import {
-    BaseBottomSheetTextInput,
-    BaseSpacer,
-    BaseTextInput,
-} from "~Components"
+import { BaseBottomSheetTextInput, BaseSpacer, BaseTextInput } from "~Components"
 import { ScanTarget } from "~Constants"
 import { Keyboard } from "react-native"
 import HapticsService from "~Services/HapticsService"
@@ -85,8 +81,7 @@ export const ContactForm: React.FC<Props> = memo(
                 editable: !nameFieldDisabled,
                 testID: "Contact-Name-Input",
             }
-            if (inBottomSheet)
-                return <BaseBottomSheetTextInput {...commonProps} />
+            if (inBottomSheet) return <BaseBottomSheetTextInput {...commonProps} />
             return <BaseTextInput {...commonProps} />
         }, [
             inBottomSheet,
@@ -118,8 +113,7 @@ export const ContactForm: React.FC<Props> = memo(
                 editable: !addressFieldDisabled,
             }
 
-            if (inBottomSheet)
-                return <BaseBottomSheetTextInput {...commonProps} />
+            if (inBottomSheet) return <BaseBottomSheetTextInput {...commonProps} />
             return <BaseTextInput {...commonProps} />
         }, [
             inBottomSheet,

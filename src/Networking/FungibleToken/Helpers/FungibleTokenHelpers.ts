@@ -20,13 +20,12 @@ export const getTokenBalancesAndInfoFromTokenAddresses = async (
     const tokenBalances: Balance[] = []
 
     for (const tokenAddress of tokenAddresses) {
-        const tokenBalance =
-            await BalanceUtils.getBalanceAndTokenInfoFromBlockchain(
-                tokenAddress,
-                accountAddress,
-                network,
-                thorClient,
-            )
+        const tokenBalance = await BalanceUtils.getBalanceAndTokenInfoFromBlockchain(
+            tokenAddress,
+            accountAddress,
+            network,
+            thorClient,
+        )
 
         if (!tokenBalance) continue
 

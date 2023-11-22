@@ -44,16 +44,7 @@ export const useTransactionBuilder = ({
         }
 
         return TransactionUtils.fromBody(txBody, isDelegated)
-    }, [
-        providedGas,
-        gas?.gas,
-        thor.genesis.id,
-        thor.status.head.id,
-        clauses,
-        gasPriceCoef,
-        dependsOn,
-        isDelegated,
-    ])
+    }, [providedGas, gas?.gas, thor.genesis.id, thor.status.head.id, clauses, gasPriceCoef, dependsOn, isDelegated])
 
     return {
         buildTransaction,

@@ -6,16 +6,13 @@ import { fireEvent, render, screen } from "@testing-library/react-native"
 import { BaseTouchableBox } from "./BaseTouchableBox"
 
 const baseTouchableBoxTestId = "BaseTouchableBox"
-const findBaseTouchableBox = async () =>
-    screen.findByTestId(baseTouchableBoxTestId, {}, { timeout: 5000 })
+const findBaseTouchableBox = async () => screen.findByTestId(baseTouchableBoxTestId, {}, { timeout: 5000 })
 
 describe("BaseTouchableBox component", () => {
     it("should call action function when clicked", async () => {
         const mockAction = jest.fn()
         render(
-            <BaseTouchableBox
-                testID={baseTouchableBoxTestId}
-                action={mockAction}>
+            <BaseTouchableBox testID={baseTouchableBoxTestId} action={mockAction}>
                 <Text>Click me</Text>
             </BaseTouchableBox>,
             { wrapper: TestWrapper },
@@ -58,10 +55,7 @@ describe("BaseTouchableBox component", () => {
     it("should be disabled when 'disabled' prop is true", async () => {
         const mockAction = jest.fn()
         render(
-            <BaseTouchableBox
-                testID={baseTouchableBoxTestId}
-                action={mockAction}
-                disabled={true}>
+            <BaseTouchableBox testID={baseTouchableBoxTestId} action={mockAction} disabled={true}>
                 <Text>Disabled</Text>
             </BaseTouchableBox>,
             { wrapper: TestWrapper },

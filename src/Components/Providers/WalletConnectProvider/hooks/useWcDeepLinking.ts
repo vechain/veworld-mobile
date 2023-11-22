@@ -22,9 +22,7 @@ type IUseWcDeepLinking = {
  * @returns IUseWcDeepLinking
  */
 
-export const useWcDeepLinking = (
-    onPair: (uri: string) => Promise<void>,
-): IUseWcDeepLinking => {
+export const useWcDeepLinking = (onPair: (uri: string) => Promise<void>): IUseWcDeepLinking => {
     const [deepLinkUris, setDeepLinkUris] = useState<string[]>([])
     const [pairingTopics, setPairingTopics] = useState<string[]>([])
     const { walletStatus } = useApplicationSecurity()
@@ -93,10 +91,7 @@ export const useWcDeepLinking = (
     }, [])
 
     useEffect(() => {
-        if (
-            deepLinkUris.length > 0 &&
-            walletStatus === WALLET_STATUS.UNLOCKED
-        ) {
+        if (deepLinkUris.length > 0 && walletStatus === WALLET_STATUS.UNLOCKED) {
             const firstUrl = deepLinkUris[0]
 
             setDeepLinkUris(prev => prev.filter(url => url !== firstUrl))

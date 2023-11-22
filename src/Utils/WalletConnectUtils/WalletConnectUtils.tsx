@@ -1,10 +1,5 @@
 import { Core } from "@walletconnect/core"
-import {
-    ICore,
-    PendingRequestTypes,
-    SessionTypes,
-    SignClientTypes,
-} from "@walletconnect/types"
+import { ICore, PendingRequestTypes, SessionTypes, SignClientTypes } from "@walletconnect/types"
 import { IWeb3Wallet, Web3Wallet } from "@walletconnect/web3wallet"
 import { Network } from "~Model"
 import { debug, error, warn } from "~Utils/Logger"
@@ -48,23 +43,16 @@ export async function getWeb3Wallet(): Promise<IWeb3Wallet> {
 
             return _web3wallet
         } catch (e) {
-            error(
-                "Failed to initialize Web3Wallet",
-                ErrorMessageUtils.getErrorMessage(e),
-            )
+            error("Failed to initialize Web3Wallet", ErrorMessageUtils.getErrorMessage(e))
             throw e
         }
     })
 }
 
-export function getPairAttributes(
-    proposal: SignClientTypes.EventArguments["session_proposal"],
-) {
+export function getPairAttributes(proposal: SignClientTypes.EventArguments["session_proposal"]) {
     const { requiredNamespaces, optionalNamespaces } = proposal.params
 
-    const firstNamespace =
-        Object.values(requiredNamespaces)[0] ??
-        Object.values(optionalNamespaces)[0]
+    const firstNamespace = Object.values(requiredNamespaces)[0] ?? Object.values(optionalNamespaces)[0]
 
     let events: string[] | undefined
     let methods: string[] | undefined
@@ -92,9 +80,7 @@ export function getPairAttributes(
     }
 }
 
-export function getRequestEventAttributes(
-    requestEvent: PendingRequestTypes.Struct,
-) {
+export function getRequestEventAttributes(requestEvent: PendingRequestTypes.Struct) {
     const chainId = requestEvent.params.chainId.toUpperCase()
     const method = requestEvent.params.request.method
     const params = requestEvent.params.request.params[0]
@@ -108,9 +94,7 @@ export function getRequestEventAttributes(
     }
 }
 
-export function getSessionRequestAttributes(
-    sessionRequest: SessionTypes.Struct,
-) {
+export function getSessionRequestAttributes(sessionRequest: SessionTypes.Struct) {
     const name = sessionRequest.peer.metadata.name
     const icon = sessionRequest.peer.metadata.icons[0]
     const url = sessionRequest.peer.metadata.url
@@ -124,9 +108,7 @@ export function getSessionRequestAttributes(
     }
 }
 
-export function shouldAutoNavigate(
-    navState: NavigationState<ReactNavigation.RootParamList>,
-) {
+export function shouldAutoNavigate(navState: NavigationState<ReactNavigation.RootParamList>) {
     if (!navState || !navState.routes) return false
 
     return !navState.routes.some(
@@ -139,9 +121,7 @@ export function shouldAutoNavigate(
     )
 }
 
-export function getSignCertOptions(
-    requestEvent: PendingRequestTypes.Struct,
-): Connex.Signer.CertOptions {
+export function getSignCertOptions(requestEvent: PendingRequestTypes.Struct): Connex.Signer.CertOptions {
     try {
         return requestEvent.params.request.params[0].options || {}
     } catch (e) {
@@ -150,22 +130,14 @@ export function getSignCertOptions(
     }
 }
 
-export function getSignCertMessage(
-    requestEvent: PendingRequestTypes.Struct,
-): Connex.Vendor.CertMessage | undefined {
+export function getSignCertMessage(requestEvent: PendingRequestTypes.Struct): Connex.Vendor.CertMessage | undefined {
     try {
-        const { purpose, payload } =
-            requestEvent.params.request.params[0].message
+        const { purpose, payload } = requestEvent.params.request.params[0].message
 
-        if (!purpose)
-            throw new Error(`Invalid purpose for sign cert request: ${purpose}`)
+        if (!purpose) throw new Error(`Invalid purpose for sign cert request: ${purpose}`)
 
         if (!payload || !payload.type || !payload.content)
-            throw new Error(
-                `Invalid payload for sign cert request: ${JSON.stringify(
-                    purpose,
-                )}`,
-            )
+            throw new Error(`Invalid payload for sign cert request: ${JSON.stringify(purpose)}`)
 
         return {
             purpose,
@@ -176,21 +148,14 @@ export function getSignCertMessage(
     }
 }
 
-export function getSendTxMessage(
-    requestEvent: PendingRequestTypes.Struct,
-): Connex.Vendor.TxMessage | undefined {
+export function getSendTxMessage(requestEvent: PendingRequestTypes.Struct): Connex.Vendor.TxMessage | undefined {
     try {
-        const message: Connex.Vendor.TxMessage =
-            requestEvent.params.request.params[0].message
+        const message: Connex.Vendor.TxMessage = requestEvent.params.request.params[0].message
 
-        if (!message || message.length < 1)
-            throw new Error(`Invalid message for send tx request: ${message}`)
+        if (!message || message.length < 1) throw new Error(`Invalid message for send tx request: ${message}`)
 
         return message.map(clause => {
-            if (
-                HexUtils.isInvalid(clause?.to) &&
-                HexUtils.isInvalid(clause?.data)
-            )
+            if (HexUtils.isInvalid(clause?.to) && HexUtils.isInvalid(clause?.data))
                 throw new Error(`Invalid clause: ${JSON.stringify(clause)}`)
 
             clause.data = clause.data || "0x"
@@ -204,9 +169,7 @@ export function getSendTxMessage(
     }
 }
 
-export function getSendTxOptions(
-    requestEvent: PendingRequestTypes.Struct,
-): Connex.Signer.TxOptions {
+export function getSendTxOptions(requestEvent: PendingRequestTypes.Struct): Connex.Signer.TxOptions {
     try {
         return requestEvent.params.request.params[0].options || {}
     } catch (e) {
@@ -245,9 +208,7 @@ export type InValidURI = {
     isValid: false
 }
 
-export function validateUri(
-    providedUri: string | null | undefined,
-): ValidURI | InValidURI {
+export function validateUri(providedUri: string | null | undefined): ValidURI | InValidURI {
     if (!providedUri) return { isValid: false }
 
     try {
@@ -282,18 +243,11 @@ export function validateUri(
     }
 }
 
-export function getNetwork(
-    requestEvent: PendingRequestTypes.Struct,
-    allNetworks: Network[],
-): Network | undefined {
+export function getNetwork(requestEvent: PendingRequestTypes.Struct, allNetworks: Network[]): Network | undefined {
     const networkIdentifier = requestEvent.params.chainId.split(":")[1]
 
     // Switch to the requested network
-    return allNetworks.find(
-        net =>
-            net.genesis.id.slice(-32).toLowerCase() ===
-            networkIdentifier.toLowerCase(),
-    )
+    return allNetworks.find(net => net.genesis.id.slice(-32).toLowerCase() === networkIdentifier.toLowerCase())
 }
 
 export function getTopicFromPairUri(uri: string) {

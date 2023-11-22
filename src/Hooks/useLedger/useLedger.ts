@@ -40,24 +40,19 @@ export const useLedger = ({
 
     const mutex = useRef<Mutex>(new Mutex())
 
-    const { canConnect, unsubscribe, timedOut, setCanConnect } =
-        useLedgerSubscription({
-            deviceId,
-            timeout: 5000,
-        })
+    const { canConnect, unsubscribe, timedOut, setCanConnect } = useLedgerSubscription({
+        deviceId,
+        timeout: 5000,
+    })
 
     const transport = useRef<BleTransport | undefined>()
     const [appOpen, setAppOpen] = useState<boolean>(false)
-    const [appConfig, setAppConfig] = useState<LedgerConfig>(
-        LedgerConfig.UNKNOWN,
-    )
+    const [appConfig, setAppConfig] = useState<LedgerConfig>(LedgerConfig.UNKNOWN)
     const [removed, setRemoved] = useState<boolean>(false)
     const [disconnected, setDisconnected] = useState<boolean>(false)
     const [isConnecting, setIsConnecting] = useState<boolean>(false)
     const [rootAccount, setRootAccount] = useState<VETLedgerAccount>()
-    const [errorCode, setErrorCode] = useState<LEDGER_ERROR_CODES | undefined>(
-        undefined,
-    )
+    const [errorCode, setErrorCode] = useState<LEDGER_ERROR_CODES | undefined>(undefined)
 
     useEffect(() => {
         if (timedOut) {
@@ -123,20 +118,14 @@ export const useLedger = ({
     const onConnectionConfirmed = useCallback(async () => {
         debug("[Ledger] - onConnectionConfirmed")
         if (transport.current) {
-            const res = await LedgerUtils.verifyTransport(
-                withTransport(transport.current),
-            )
+            const res = await LedgerUtils.verifyTransport(withTransport(transport.current))
 
             debug("[Ledger] - verifyTransport", res)
 
             if (res.success) {
                 setAppOpen(true)
                 setRootAccount(res.payload.rootAccount)
-                setConfig(
-                    res.payload.appConfig
-                        .toString()
-                        .slice(0, 2) as LedgerConfig,
-                )
+                setConfig(res.payload.appConfig.toString().slice(0, 2) as LedgerConfig)
             } else {
                 await setErrorCode(res.err as LEDGER_ERROR_CODES)
             }
@@ -191,9 +180,7 @@ export const useLedger = ({
 
         if (autoConnect && canConnect) {
             debug("[Ledger] - Attempting to auto connect")
-            attemptBleConnection().catch(e =>
-                warn("[Ledger] - Auto connect error:", e),
-            )
+            attemptBleConnection().catch(e => warn("[Ledger] - Auto connect error:", e))
         }
     }, [autoConnect, canConnect, attemptBleConnection])
 

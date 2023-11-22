@@ -18,10 +18,8 @@ export const useNFTMedia = () => {
                     case URIProtocol.DATA:
                     case URIProtocol.HTTPS:
                     case URIProtocol.HTTP: {
-                        const mimeType =
-                            await MediaUtils.resolveMimeTypeFromUri(uri)
-                        const mediaType =
-                            MediaUtils.resolveMediaTypeFromMimeType(mimeType)
+                        const mimeType = await MediaUtils.resolveMimeTypeFromUri(uri)
+                        const mediaType = MediaUtils.resolveMediaTypeFromMimeType(mimeType)
                         return {
                             image: uri,
                             mime: mimeType,
@@ -39,9 +37,7 @@ export const useNFTMedia = () => {
 
                         debug(`Fetching media for ${uri}`)
                         const media =
-                            URIProtocol.IPFS === protocol
-                                ? await getNFTMediaIpfs(uri)
-                                : await getNFTMediaArweave(uri)
+                            URIProtocol.IPFS === protocol ? await getNFTMediaIpfs(uri) : await getNFTMediaArweave(uri)
 
                         mediaCache?.setItem(uri, media)
 
@@ -49,9 +45,7 @@ export const useNFTMedia = () => {
                     }
 
                     default:
-                        warn(
-                            `Unable to detect protocol ${protocol} for image URI ${uri}`,
-                        )
+                        warn(`Unable to detect protocol ${protocol} for image URI ${uri}`)
                 }
             } catch (e) {
                 warn(`Error fetching image ${uri}`, e)

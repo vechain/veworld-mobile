@@ -6,9 +6,7 @@ describe("useScrollableList", () => {
         const data = [1, 2, 3, 4, 5]
         const snapIndex = 2
         const snapPointsLength = 5
-        const { result } = renderHook(() =>
-            useScrollableList(data, snapIndex, snapPointsLength),
-        )
+        const { result } = renderHook(() => useScrollableList(data, snapIndex, snapPointsLength))
 
         expect(result.current.isListScrollable).toBe(false)
         expect(result.current.viewabilityConfig).toEqual({
@@ -26,9 +24,7 @@ describe("useScrollableList", () => {
         const data = [1, 2, 3, 4, 5]
         const snapIndex = 4
         const snapPointsLength = 5
-        const { result } = renderHook(() =>
-            useScrollableList(data, snapIndex, snapPointsLength),
-        )
+        const { result } = renderHook(() => useScrollableList(data, snapIndex, snapPointsLength))
         act(() =>
             result.current.onViewableItemsChanged({
                 viewableItems: [],

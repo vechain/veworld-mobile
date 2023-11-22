@@ -1,10 +1,5 @@
 import React, { useCallback, useMemo, useRef, useState } from "react"
-import {
-    BaseView,
-    Layout,
-    QRCodeBottomSheet,
-    SelectAccountBottomSheet,
-} from "~Components"
+import { BaseView, Layout, QRCodeBottomSheet, SelectAccountBottomSheet } from "~Components"
 import { NftScreenHeader } from "./Components"
 import { AccountWithDevice } from "~Model"
 import { isEmpty } from "lodash"
@@ -30,16 +25,12 @@ export const NFTScreen = () => {
     useNFTRegistry()
     const { onSetSelectedAccount } = useSetSelectedAccount()
 
-    const [
+    const [onEndReachedCalledDuringMomentum, setEndReachedCalledDuringMomentum] = useState(true)
+
+    const { fetchMoreCollections, isLoading, collections, error, hasNext } = useFetchCollections(
         onEndReachedCalledDuringMomentum,
         setEndReachedCalledDuringMomentum,
-    ] = useState(true)
-
-    const { fetchMoreCollections, isLoading, collections, error, hasNext } =
-        useFetchCollections(
-            onEndReachedCalledDuringMomentum,
-            setEndReachedCalledDuringMomentum,
-        )
+    )
 
     const blackListedCollections = useAppSelector(selectBlackListedCollections)
 
@@ -57,10 +48,7 @@ export const NFTScreen = () => {
         setEndReachedCalledDuringMomentum(true)
     }, [])
 
-    const onGoToBlackListed = useCallback(
-        () => nav.navigate(Routes.BLACKLISTED_COLLECTIONS),
-        [nav],
-    )
+    const onGoToBlackListed = useCallback(() => nav.navigate(Routes.BLACKLISTED_COLLECTIONS), [nav])
 
     const {
         ref: selectAccountBottomSheetRef,
@@ -68,12 +56,10 @@ export const NFTScreen = () => {
         onClose: closeSelectAccountBottonSheet,
     } = useBottomSheetModal()
 
-    const { ref: QRCodeBottomSheetRef, onOpen: openQRCodeSheet } =
-        useBottomSheetModal()
+    const { ref: QRCodeBottomSheetRef, onOpen: openQRCodeSheet } = useBottomSheetModal()
 
     const renderImportNftView = useMemo(() => {
-        if (isShowImportNFTs)
-            return <ImportNFTView onImportPress={openQRCodeSheet} />
+        if (isShowImportNFTs) return <ImportNFTView onImportPress={openQRCodeSheet} />
     }, [isShowImportNFTs, openQRCodeSheet])
 
     const flatListRef = useRef(null)
@@ -116,11 +102,7 @@ export const NFTScreen = () => {
 
     return (
         <Layout
-            fixedHeader={
-                <NftScreenHeader
-                    openSelectAccountBottomSheet={openSelectAccountBottomSheet}
-                />
-            }
+            fixedHeader={<NftScreenHeader openSelectAccountBottomSheet={openSelectAccountBottomSheet} />}
             noBackButton
             noMargin
             fixedBody={

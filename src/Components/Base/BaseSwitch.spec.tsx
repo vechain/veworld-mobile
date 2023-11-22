@@ -4,20 +4,14 @@ import { render, fireEvent, act, screen } from "@testing-library/react-native"
 import { BaseSwitch } from "./BaseSwitch"
 
 const baseSwitchTestId = "BaseSwitch"
-const findBaseSwitch = async () =>
-    screen.findByTestId(baseSwitchTestId, {}, { timeout: 5000 })
+const findBaseSwitch = async () => screen.findByTestId(baseSwitchTestId, {}, { timeout: 5000 })
 
 describe("BaseSwitch component", () => {
     it("renders switch component", async () => {
         const onValueChange = jest.fn()
-        render(
-            <BaseSwitch
-                value={true}
-                onValueChange={onValueChange}
-                testID={baseSwitchTestId}
-            />,
-            { wrapper: TestWrapper },
-        )
+        render(<BaseSwitch value={true} onValueChange={onValueChange} testID={baseSwitchTestId} />, {
+            wrapper: TestWrapper,
+        })
         const baseSwitch = await findBaseSwitch()
 
         expect(baseSwitch).toBeVisible()
@@ -25,13 +19,7 @@ describe("BaseSwitch component", () => {
 
     it("renders switch without value", async () => {
         const onValueChange = jest.fn()
-        render(
-            <BaseSwitch
-                onValueChange={onValueChange}
-                testID={baseSwitchTestId}
-            />,
-            { wrapper: TestWrapper },
-        )
+        render(<BaseSwitch onValueChange={onValueChange} testID={baseSwitchTestId} />, { wrapper: TestWrapper })
         const baseSwitch = await findBaseSwitch()
 
         expect(baseSwitch).toBeVisible()
@@ -39,14 +27,9 @@ describe("BaseSwitch component", () => {
 
     it("handles onValueChange callback", async () => {
         const onValueChange = jest.fn()
-        render(
-            <BaseSwitch
-                value={true}
-                onValueChange={onValueChange}
-                testID={baseSwitchTestId}
-            />,
-            { wrapper: TestWrapper },
-        )
+        render(<BaseSwitch value={true} onValueChange={onValueChange} testID={baseSwitchTestId} />, {
+            wrapper: TestWrapper,
+        })
         const baseSwitch = await findBaseSwitch()
 
         expect(baseSwitch).toBeVisible()

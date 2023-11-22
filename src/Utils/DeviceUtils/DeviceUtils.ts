@@ -11,11 +11,7 @@ import HexUtils from "~Utils/HexUtils"
  * @param deviceIndex
  * @returns
  */
-export const generateDeviceForMnemonic = (
-    mnemonic: string[],
-    deviceIndex: number,
-    alias: string,
-): WalletAndDevice => {
+export const generateDeviceForMnemonic = (mnemonic: string[], deviceIndex: number, alias: string): WalletAndDevice => {
     const hdNode = HDNode.fromMnemonic(mnemonic)
 
     const wallet: Wallet = {
@@ -48,9 +44,7 @@ export const generateDeviceForPrivateKey = (
     alias: string,
 ): WalletAndDevice => {
     const normalizedKey = HexUtils.normalize(privateKey)
-    const rootAddress = HexUtils.normalize(
-        AddressUtils.getAddressFromPrivateKey(normalizedKey),
-    )
+    const rootAddress = HexUtils.normalize(AddressUtils.getAddressFromPrivateKey(normalizedKey))
 
     const wallet: Wallet = {
         privateKey: normalizedKey,
@@ -74,14 +68,16 @@ export const isSlowDevice = async () => {
     const isLowRamDevice = DeviceInfo.isLowRamDevice()
 
     /*
-        A process can typically not exceed this limit, so it is useful to know if you are experiencing memory issues with react-native. This limit can be increased by setting largeHeap=true in the android manifest.
+        A process can typically not exceed this limit, so it is useful to know if you are experiencing memory issues with react-native. 
+        This limit can be increased by setting largeHeap=true in the android manifest.
         https://developer.android.com/reference/android/app/ActivityManager.html#getLargeMemoryClass()
         https://stackoverflow.com/questions/2630158/detect-application-heap-size-in-android
     */
     const getMaxMemory = await DeviceInfo.getMaxMemory()
 
     /*
-        Returns the total amount of RAM installed on the device. On iOS this is the physical amount of memory on the device. On Android this is the physical amount of memory, minus some critical memory reserved for below kernel fixed allocations, like DMA buffers, RAM for the baseband CPU, etc.
+        Returns the total amount of RAM installed on the device. On iOS this is the physical amount of memory on the device. 
+        On Android this is the physical amount of memory, minus some critical memory reserved for below kernel fixed allocations, like DMA buffers, RAM for the baseband CPU, etc.
         https://developer.apple.com/documentation/foundation/nsprocessinfo/1408211-physicalmemory?language=objc
         https://developer.android.com/reference/android/app/ActivityManager.MemoryInfo.html#totalMem
     */

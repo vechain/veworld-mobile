@@ -1,18 +1,11 @@
 import { TestWrapper } from "~Test"
 import React from "react"
-import {
-    render,
-    fireEvent,
-    screen,
-    act,
-    waitFor,
-} from "@testing-library/react-native"
+import { render, fireEvent, screen, act, waitFor } from "@testing-library/react-native"
 import { BaseButton } from "./BaseButton"
 import { BaseIcon } from "./BaseIcon"
 
 const buttonTitle = "Button"
-const findButton = async () =>
-    await screen.findByText(buttonTitle, {}, { timeout: 5000 })
+const findButton = async () => await screen.findByText(buttonTitle, {}, { timeout: 5000 })
 
 describe("BaseButton", () => {
     const mockAction = jest.fn()

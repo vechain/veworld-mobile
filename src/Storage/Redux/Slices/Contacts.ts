@@ -17,24 +17,15 @@ export const ContactsSlice = createSlice({
     reducers: {
         insertContact: (state, action: PayloadAction<Contact>) => {
             const contactExists = state.contacts.find(contact =>
-                AddressUtils.compareAddresses(
-                    contact.address,
-                    action.payload.address,
-                ),
+                AddressUtils.compareAddresses(contact.address, action.payload.address),
             )
             if (!contactExists) {
                 state.contacts.push(action.payload)
             }
         },
-        deleteContact: (
-            state,
-            action: PayloadAction<{ contactAddress: string }>,
-        ) => {
+        deleteContact: (state, action: PayloadAction<{ contactAddress: string }>) => {
             const contactExistsIndex = state.contacts.findIndex(contact =>
-                AddressUtils.compareAddresses(
-                    contact.address,
-                    action.payload.contactAddress,
-                ),
+                AddressUtils.compareAddresses(contact.address, action.payload.contactAddress),
             )
 
             if (contactExistsIndex !== -1) {
@@ -56,8 +47,7 @@ export const ContactsSlice = createSlice({
             )
 
             if (contactExistsIndex !== -1) {
-                state.contacts[contactExistsIndex].address =
-                    addressThor.toChecksumed(address)
+                state.contacts[contactExistsIndex].address = addressThor.toChecksumed(address)
                 state.contacts[contactExistsIndex].alias = alias
             }
         },
@@ -65,9 +55,4 @@ export const ContactsSlice = createSlice({
     },
 })
 
-export const {
-    insertContact,
-    deleteContact,
-    updateContact,
-    resetContactsState,
-} = ContactsSlice.actions
+export const { insertContact, deleteContact, updateContact, resetContactsState } = ContactsSlice.actions

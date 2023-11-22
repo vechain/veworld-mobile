@@ -14,25 +14,11 @@ import { useNavigation } from "@react-navigation/native"
 import { VeWorldLogoSVG } from "~Assets"
 import { useI18nContext } from "~i18n"
 import { SecurityLevelType } from "~Model"
-import {
-    useAnalyticTracking,
-    useCheckIdentity,
-    useCreateWallet,
-    useTheme,
-} from "~Hooks"
+import { useAnalyticTracking, useCheckIdentity, useCreateWallet, useTheme } from "~Hooks"
 import { NativeStackScreenProps } from "@react-navigation/native-stack"
-import {
-    RootStackParamListCreateWalletApp,
-    RootStackParamListOnboarding,
-    Routes,
-} from "~Navigation"
+import { RootStackParamListCreateWalletApp, RootStackParamListOnboarding, Routes } from "~Navigation"
 import { setIsAppLoading, useAppDispatch, useAppSelector } from "~Storage/Redux"
-import {
-    selectHasOnboarded,
-    selectMnemonic,
-    selectNewLedgerDevice,
-    selectPrivateKey,
-} from "~Storage/Redux/Selectors"
+import { selectHasOnboarded, selectMnemonic, selectNewLedgerDevice, selectPrivateKey } from "~Storage/Redux/Selectors"
 import HapticsService from "~Services/HapticsService"
 import { AnalyticsEvent } from "~Constants"
 import { BiometricsUtils } from "~Utils"
@@ -69,11 +55,7 @@ export const WalletSuccessScreen: FC<Props> = ({ route }) => {
                 return
             }
 
-            if (
-                BiometricsUtils.BiometricErrors.isBiometricTooManyAttempts(
-                    _error,
-                )
-            ) {
+            if (BiometricsUtils.BiometricErrors.isBiometricTooManyAttempts(_error)) {
                 HapticsService.triggerNotification({ level: "Error" })
                 setIsError(LL.ERROR_TOO_MANY_BIOMETRICS_AUTH_ATTEMPTS())
                 showErrorToast({
@@ -104,9 +86,7 @@ export const WalletSuccessScreen: FC<Props> = ({ route }) => {
     const onIdentityConfirmed = useCallback(
         async (userPassword?: string) => {
             if (!mnemonic && !privateKey && !newLedger)
-                throw new Error(
-                    "Wrong/corrupted data. No device available in store",
-                )
+                throw new Error("Wrong/corrupted data. No device available in store")
 
             if (mnemonic || privateKey) {
                 await createLocalWallet({
@@ -126,15 +106,7 @@ export const WalletSuccessScreen: FC<Props> = ({ route }) => {
 
             navigateNext()
         },
-        [
-            mnemonic,
-            privateKey,
-            createLocalWallet,
-            onWalletCreationError,
-            navigateNext,
-            newLedger,
-            createLedgerWallet,
-        ],
+        [mnemonic, privateKey, createLocalWallet, onWalletCreationError, navigateNext, newLedger, createLedgerWallet],
     )
 
     const {
@@ -154,12 +126,9 @@ export const WalletSuccessScreen: FC<Props> = ({ route }) => {
             if (userHasOnboarded) return
 
             if (!mnemonic && !privateKey && !newLedger)
-                throw new Error(
-                    "Wrong/corrupted data. No device available in store",
-                )
+                throw new Error("Wrong/corrupted data. No device available in store")
 
-            if (!params?.securityLevelSelected)
-                throw new Error("Security level is not available")
+            if (!params?.securityLevelSelected) throw new Error("Security level is not available")
 
             dispatch(setIsAppLoading(true))
 
@@ -172,10 +141,7 @@ export const WalletSuccessScreen: FC<Props> = ({ route }) => {
 
             const securityLevelSelected = params.securityLevelSelected
 
-            let pinCode =
-                securityLevelSelected === SecurityLevelType.SECRET
-                    ? params?.userPin
-                    : undefined
+            let pinCode = securityLevelSelected === SecurityLevelType.SECRET ? params?.userPin : undefined
 
             await WalletEncryptionKeyHelper.init(pinCode)
 
@@ -194,9 +160,7 @@ export const WalletSuccessScreen: FC<Props> = ({ route }) => {
                         onError: onWalletCreationError,
                     })
                 } else {
-                    throw new Error(
-                        `Security level ${securityLevelSelected} is not valid`,
-                    )
+                    throw new Error(`Security level ${securityLevelSelected} is not valid`)
                 }
             }
 
@@ -223,21 +187,12 @@ export const WalletSuccessScreen: FC<Props> = ({ route }) => {
 
     const onButtonPress = useCallback(async () => {
         if (!mnemonic && !privateKey && !newLedger)
-            throw new Error(
-                "Wrong/corrupted data. No device available in store",
-            )
+            throw new Error("Wrong/corrupted data. No device available in store")
 
         if (userHasOnboarded) {
             await checkIdentityBeforeOpening()
         } else await onboardingCreateWallet()
-    }, [
-        checkIdentityBeforeOpening,
-        onboardingCreateWallet,
-        userHasOnboarded,
-        privateKey,
-        mnemonic,
-        newLedger,
-    ])
+    }, [checkIdentityBeforeOpening, onboardingCreateWallet, userHasOnboarded, privateKey, mnemonic, newLedger])
 
     useEffect(() => {
         track(AnalyticsEvent.COMPLETED_WALLET_SCREEN)
@@ -255,18 +210,12 @@ export const WalletSuccessScreen: FC<Props> = ({ route }) => {
 
                 <BaseView alignItems="center" mx={20} flexGrow={1}>
                     <BaseView flexDirection="row" flexWrap="wrap">
-                        <BaseText typographyFont="title">
-                            {LL.TITLE_CREATE_WALLET_SUCCESS()}
-                        </BaseText>
+                        <BaseText typographyFont="title">{LL.TITLE_CREATE_WALLET_SUCCESS()}</BaseText>
                     </BaseView>
 
                     <BaseSpacer height={120} />
 
-                    <BaseView
-                        alignItems="center"
-                        justifyContent="space-between"
-                        w={100}
-                        flexGrow={1}>
+                    <BaseView alignItems="center" justifyContent="space-between" w={100} flexGrow={1}>
                         <BaseView alignItems="center">
                             <VeWorldLogoSVG height={200} width={200} />
                             <BaseText align="center" py={20}>

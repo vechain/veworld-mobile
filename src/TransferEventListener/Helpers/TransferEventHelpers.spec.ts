@@ -1,16 +1,6 @@
 import { EventTypeResponse, IncomingTransferResponse } from "~Networking"
-import {
-    DEVICE_TYPE,
-    LocalDevice,
-    NFTMediaType,
-    NftCollection,
-    TransactionOrigin,
-} from "~Model"
-import {
-    filterNFTTransferEvents,
-    filterTransferEventsByType,
-    findFirstInvolvedAccount,
-} from "./TransferEventHelpers"
+import { DEVICE_TYPE, LocalDevice, NFTMediaType, NftCollection, TransactionOrigin } from "~Model"
+import { filterNFTTransferEvents, filterTransferEventsByType, findFirstInvolvedAccount } from "./TransferEventHelpers"
 
 const BASE_TRANSFER: IncomingTransferResponse = {
     eventType: EventTypeResponse.NFT,
@@ -141,9 +131,7 @@ describe("TransferEventHelpers", () => {
                     tokenAddress: "0x3",
                 },
             ]
-            expect(
-                filterNFTTransferEvents(transfers, [NFT_COLLECTION]),
-            ).toEqual([
+            expect(filterNFTTransferEvents(transfers, [NFT_COLLECTION])).toEqual([
                 {
                     ...BASE_TRANSFER,
                     eventType: EventTypeResponse.NFT,
@@ -160,9 +148,7 @@ describe("TransferEventHelpers", () => {
 
     describe("filterTransferEventsByType", () => {
         it("empty list", () => {
-            expect(
-                filterTransferEventsByType([], EventTypeResponse.NFT),
-            ).toEqual([])
+            expect(filterTransferEventsByType([], EventTypeResponse.NFT)).toEqual([])
         })
 
         it("all same type", () => {
@@ -183,9 +169,7 @@ describe("TransferEventHelpers", () => {
                     tokenAddress: "0x3",
                 },
             ]
-            expect(
-                filterTransferEventsByType(transfers, EventTypeResponse.NFT),
-            ).toEqual(transfers)
+            expect(filterTransferEventsByType(transfers, EventTypeResponse.NFT)).toEqual(transfers)
         })
 
         it("all different type", () => {
@@ -206,9 +190,7 @@ describe("TransferEventHelpers", () => {
                     tokenAddress: "0x3",
                 },
             ]
-            expect(
-                filterTransferEventsByType(transfers, EventTypeResponse.NFT),
-            ).toEqual([])
+            expect(filterTransferEventsByType(transfers, EventTypeResponse.NFT)).toEqual([])
         })
 
         it("mixed type", () => {
@@ -229,9 +211,7 @@ describe("TransferEventHelpers", () => {
                     tokenAddress: "0x3",
                 },
             ]
-            expect(
-                filterTransferEventsByType(transfers, EventTypeResponse.NFT),
-            ).toEqual([
+            expect(filterTransferEventsByType(transfers, EventTypeResponse.NFT)).toEqual([
                 {
                     ...BASE_TRANSFER,
                     eventType: EventTypeResponse.NFT,
@@ -243,9 +223,7 @@ describe("TransferEventHelpers", () => {
 
     describe("findFirstInvolvedAccount", () => {
         it("empty list", () => {
-            expect(findFirstInvolvedAccount([], BASE_TRANSFER)).toEqual(
-                undefined,
-            )
+            expect(findFirstInvolvedAccount([], BASE_TRANSFER)).toEqual(undefined)
         })
 
         it("no account", () => {
@@ -358,9 +336,7 @@ describe("TransferEventHelpers", () => {
                 index: 0,
                 visible: true,
             }
-            expect(
-                findFirstInvolvedAccount([toAccount, fromAccount], transfer),
-            ).toEqual({
+            expect(findFirstInvolvedAccount([toAccount, fromAccount], transfer)).toEqual({
                 account: toAccount,
                 origin: TransactionOrigin.TO,
             })
@@ -389,13 +365,7 @@ describe("TransferEventHelpers", () => {
                 index: 0,
                 visible: true,
             }
-            expect(
-                findFirstInvolvedAccount(
-                    [toAccount, fromAccount],
-                    transfer,
-                    fromAccount,
-                ),
-            ).toEqual({
+            expect(findFirstInvolvedAccount([toAccount, fromAccount], transfer, fromAccount)).toEqual({
                 account: fromAccount,
                 origin: TransactionOrigin.FROM,
             })
@@ -432,13 +402,7 @@ describe("TransferEventHelpers", () => {
                 index: 0,
                 visible: true,
             }
-            expect(
-                findFirstInvolvedAccount(
-                    [toAccount, fromAccount, otherAccount],
-                    transfer,
-                    otherAccount,
-                ),
-            ).toEqual({
+            expect(findFirstInvolvedAccount([toAccount, fromAccount, otherAccount], transfer, otherAccount)).toEqual({
                 account: toAccount,
                 origin: TransactionOrigin.TO,
             })

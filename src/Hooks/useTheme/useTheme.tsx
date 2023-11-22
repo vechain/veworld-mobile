@@ -26,9 +26,7 @@ export const useTheme = (): ColorThemeType => {
     return ColorTheme(getThemeColor())
 }
 
-export const useThemedStyles = <T,>(
-    styles: (theme: ColorThemeType) => StyleSheet.NamedStyles<T>,
-) => {
+export const useThemedStyles = <T,>(styles: (theme: ColorThemeType) => StyleSheet.NamedStyles<T>) => {
     const theme = useTheme()
     return { styles: styles(theme), theme }
 }

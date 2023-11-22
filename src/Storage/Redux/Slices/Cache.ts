@@ -34,10 +34,7 @@ export const CacheSlice = createSlice({
         setMnemonic: (state, action: PayloadAction<string[] | undefined>) => {
             state.mnemonic = action.payload
         },
-        setNewLedgerDevice: (
-            state,
-            action: PayloadAction<NewLedgerDevice | undefined>,
-        ) => {
+        setNewLedgerDevice: (state, action: PayloadAction<NewLedgerDevice | undefined>) => {
             state.newLedgerDevice = action.payload
         },
         setIsAppLoading: (state, action: PayloadAction<boolean>) => {

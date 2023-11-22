@@ -6,11 +6,7 @@ export class CustomNet extends SimpleNet {
         super(baseURL, timeout, wsTimeout)
     }
 
-    public override async http(
-        method: "GET" | "POST",
-        path: string,
-        params?: Net.Params,
-    ): Promise<any> {
+    public override async http(method: "GET" | "POST", path: string, params?: Net.Params): Promise<any> {
         if (!params) params = {}
 
         params.headers = {

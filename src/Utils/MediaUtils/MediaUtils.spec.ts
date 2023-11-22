@@ -9,17 +9,13 @@ describe("isValidMimeType", () => {
     it("should return true for valid mime types", () => {
         const mime = "image/png"
         const type = ["image"]
-        expect(MediaUtils.isValidMimeType(mime, type as NFTMediaType[])).toBe(
-            true,
-        )
+        expect(MediaUtils.isValidMimeType(mime, type as NFTMediaType[])).toBe(true)
     })
 
     it("should return false for invalid mime types", () => {
         const mime = "video/mp4"
         const type = ["image"]
-        expect(MediaUtils.isValidMimeType(mime, type as NFTMediaType[])).toBe(
-            false,
-        )
+        expect(MediaUtils.isValidMimeType(mime, type as NFTMediaType[])).toBe(false)
     })
 })
 
@@ -42,9 +38,7 @@ describe("resolveMimeTypeFromUri", () => {
 
     it("should return a default mime type when failed to resolve", async () => {
         const resource = "https://example.com/image.jpg"
-        ;(axios.head as jest.Mock).mockRejectedValueOnce(
-            new Error("Network Error"),
-        )
+        ;(axios.head as jest.Mock).mockRejectedValueOnce(new Error("Network Error"))
         const mime = await MediaUtils.resolveMimeTypeFromUri(resource)
         expect(mime).toBe("image/png")
     })
@@ -91,13 +85,7 @@ describe("isDefaultImage", () => {
     })
 
     it("should return false if the image is not a default placeholder", () => {
-        expect(MediaUtils.isDefaultImage("https://example.com/image.jpg")).toBe(
-            false,
-        )
-        expect(
-            MediaUtils.isDefaultImage(
-                "data:image/png;base64,iVBORw0KGgoAAAANS...",
-            ),
-        ).toBe(false)
+        expect(MediaUtils.isDefaultImage("https://example.com/image.jpg")).toBe(false)
+        expect(MediaUtils.isDefaultImage("data:image/png;base64,iVBORw0KGgoAAAANS...")).toBe(false)
     })
 })

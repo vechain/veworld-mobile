@@ -9,15 +9,13 @@ type AccountIconProps = {
     size?: number
 }
 
-export const AccountIcon: React.FC<AccountIconProps> = memo(
-    ({ address, size }) => {
-        return (
-            <BaseView>
-                <PicassoAddressIcon address={address} size={size} />
-            </BaseView>
-        )
-    },
-)
+export const AccountIcon: React.FC<AccountIconProps> = memo(({ address, size }) => {
+    return (
+        <BaseView>
+            <PicassoAddressIcon address={address} size={size} />
+        </BaseView>
+    )
+})
 
 type PicassoAddressIconProps = {
     address: string
@@ -30,10 +28,7 @@ export const PicassoAddressIcon: React.FC<PicassoAddressIconProps> = memo(
         const uri = PicassoUtils.getPicassoImgSrc(address).toString()
 
         return (
-            <BaseView
-                borderRadius={borderRadius}
-                {...otherProps}
-                style={[picassoIconStyles.view, style]}>
+            <BaseView borderRadius={borderRadius} {...otherProps} style={[picassoIconStyles.view, style]}>
                 <SvgXml xml={uri} width={size} height={size} />
             </BaseView>
         )

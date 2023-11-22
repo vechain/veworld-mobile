@@ -2,8 +2,7 @@
 import { HDNode, mnemonic } from "thor-devkit"
 import { Wallet } from "~Model"
 
-const defaultWallet =
-    "denial kitchen pet squirrel other broom bar gas better priority spoil cross"
+const defaultWallet = "denial kitchen pet squirrel other broom bar gas better priority spoil cross"
 
 //defaultMnemonicPhrase should have VET/VTHO on test networks
 export const defaultMnemonicPhrase = defaultWallet.split(" ")

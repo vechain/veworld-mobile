@@ -5,10 +5,8 @@ import { render, screen } from "@testing-library/react-native"
 import { BaseCardGroup } from "./BaseCardGroup"
 import { BaseText } from "../BaseText"
 
-const findFirstView = async () =>
-    await screen.findByTestId("first", {}, { timeout: 5000 })
-const findSecondView = async () =>
-    await screen.findByTestId("second", {}, { timeout: 5000 })
+const findFirstView = async () => await screen.findByTestId("first", {}, { timeout: 5000 })
+const findSecondView = async () => await screen.findByTestId("second", {}, { timeout: 5000 })
 
 describe("BaseCardGroup", () => {
     it("renders correctly", async () => {
@@ -16,19 +14,11 @@ describe("BaseCardGroup", () => {
             <BaseCardGroup
                 views={[
                     {
-                        children: (
-                            <BaseText typographyFont="buttonSecondary">
-                                first
-                            </BaseText>
-                        ),
+                        children: <BaseText typographyFont="buttonSecondary">first</BaseText>,
                         testID: "first",
                     },
                     {
-                        children: (
-                            <BaseText typographyFont="buttonSecondary">
-                                second
-                            </BaseText>
-                        ),
+                        children: <BaseText typographyFont="buttonSecondary">second</BaseText>,
                         testID: "second",
                     },
                 ]}

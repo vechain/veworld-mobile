@@ -1,10 +1,5 @@
 import React from "react"
-import {
-    BaseSpacer,
-    BaseText,
-    BaseView,
-    CompressAndExpandBaseText,
-} from "~Components"
+import { BaseSpacer, BaseText, BaseView, CompressAndExpandBaseText } from "~Components"
 import { StyleSheet, Image } from "react-native"
 
 type Props = {
@@ -15,13 +10,7 @@ type Props = {
     hanldeOnReadMore?: (isDescriptionExpanded: boolean) => void
 }
 
-export const AppInfo = ({
-    name,
-    description,
-    url,
-    icon,
-    hanldeOnReadMore,
-}: Props) => {
+export const AppInfo = ({ name, description, url, icon, hanldeOnReadMore }: Props) => {
     return (
         <BaseView>
             <Image

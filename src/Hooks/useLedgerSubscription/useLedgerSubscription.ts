@@ -1,18 +1,9 @@
 import { debug, warn } from "~Utils"
 import { ConnectedLedgerDevice } from "~Model"
-import {
-    MutableRefObject,
-    useCallback,
-    useEffect,
-    useRef,
-    useState,
-} from "react"
+import { MutableRefObject, useCallback, useEffect, useRef, useState } from "react"
 import { Device } from "react-native-ble-plx"
 import { DeviceModel } from "@ledgerhq/devices"
-import {
-    Observer as TransportObserver,
-    Subscription as TransportSubscription,
-} from "@ledgerhq/hw-transport"
+import { Observer as TransportObserver, Subscription as TransportSubscription } from "@ledgerhq/hw-transport"
 import { Platform } from "react-native"
 import { HwTransportError } from "@ledgerhq/errors"
 import BleTransport from "@ledgerhq/react-native-hw-transport-ble"
@@ -29,22 +20,13 @@ type SubscriptionEvent = {
     descriptor: Device | null
     deviceModel: DeviceModel
 }
-export const useLedgerSubscription = ({
-    deviceId,
-    onDevice,
-    readyToScan = true,
-    timeout,
-}: Props) => {
+export const useLedgerSubscription = ({ deviceId, onDevice, readyToScan = true, timeout }: Props) => {
     const subscription = useRef<TransportSubscription>()
     const [timedOut, setTimedOut] = useState<boolean>(false)
     const [canConnect, setCanConnect] = useState<boolean>(false)
-    const [availableDevices, setAvailableDevices] = useState<
-        ConnectedLedgerDevice[]
-    >([])
+    const [availableDevices, setAvailableDevices] = useState<ConnectedLedgerDevice[]>([])
 
-    const bleObserver: MutableRefObject<
-        TransportObserver<any, HwTransportError>
-    > = useRef({
+    const bleObserver: MutableRefObject<TransportObserver<any, HwTransportError>> = useRef({
         complete: () => {
             debug("useLedgerSubscription - observer - complete")
         },
@@ -102,9 +84,7 @@ export const useLedgerSubscription = ({
                 setAvailableDevices(prev => {
                     if (!prev.some(d => d.id === deviceId)) {
                         setTimedOut(true)
-                        debug(
-                            "useLedgerSubscription - timedOut waiting for device",
-                        )
+                        debug("useLedgerSubscription - timedOut waiting for device")
                     }
 
                     return prev

@@ -1,11 +1,6 @@
 /* eslint-disable react-native/no-inline-styles */
 import React, { memo, useCallback, useMemo } from "react"
-import {
-    TouchableOpacity,
-    TouchableOpacityProps,
-    View,
-    ViewProps,
-} from "react-native"
+import { TouchableOpacity, TouchableOpacityProps, View, ViewProps } from "react-native"
 import { useTheme } from "~Hooks"
 import Icon from "react-native-vector-icons/MaterialCommunityIcons"
 import { IconProps } from "react-native-vector-icons/Icon"
@@ -24,13 +19,7 @@ type Props =
           py?: number
           borderRadius?: number
           iconPadding?: number
-          haptics?:
-              | "Success"
-              | "Warning"
-              | "Error"
-              | "Light"
-              | "Medium"
-              | "Heavy"
+          haptics?: "Success" | "Warning" | "Error" | "Light" | "Medium" | "Heavy"
       } & IconProps &
           TouchableOpacityProps &
           ViewProps
@@ -40,9 +29,7 @@ export const BaseIcon: React.FC<Props> = memo(props => {
     const theme = useTheme()
 
     const iconColor = useMemo(
-        () =>
-            color ||
-            (theme.isDark ? theme.colors.tertiary : theme.colors.primary),
+        () => color || (theme.isDark ? theme.colors.tertiary : theme.colors.primary),
         [theme, color],
     )
     return (
@@ -66,16 +53,7 @@ export const BaseIcon: React.FC<Props> = memo(props => {
 
 type BaseIconWrapperProps = Props & { children: React.ReactNode }
 const BaseIconWrapper: React.FC<BaseIconWrapperProps> = memo(
-    ({
-        style,
-        bg,
-        borderRadius,
-        size,
-        children,
-        action,
-        haptics,
-        ...props
-    }) => {
+    ({ style, bg, borderRadius, size, children, action, haptics, ...props }) => {
         const onButtonPress = useCallback(() => {
             if (!action) return
             action()
@@ -91,8 +69,7 @@ const BaseIconWrapper: React.FC<BaseIconWrapperProps> = memo(
                             justifyContent: "center",
                             alignItems: "center",
                             backgroundColor: bg,
-                            borderRadius:
-                                borderRadius || (size ? size + 10 / 2 : 50),
+                            borderRadius: borderRadius || (size ? size + 10 / 2 : 50),
                             opacity: props.disabled ? 0.5 : 1,
                             margin: props.m,
                             marginVertical: props.my,
@@ -115,8 +92,7 @@ const BaseIconWrapper: React.FC<BaseIconWrapperProps> = memo(
                         alignItems: "center",
                         backgroundColor: bg,
                         padding: bg ? 5 : 0,
-                        borderRadius:
-                            borderRadius || (size ? size + 10 / 2 : 50),
+                        borderRadius: borderRadius || (size ? size + 10 / 2 : 50),
                         opacity: props.disabled ? 0.5 : 1,
                     },
                     style,

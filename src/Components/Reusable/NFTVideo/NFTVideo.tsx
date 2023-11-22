@@ -1,11 +1,5 @@
 import React, { memo, useCallback, useEffect, useRef } from "react"
-import {
-    Audio,
-    Video,
-    ResizeMode,
-    InterruptionModeAndroid,
-    InterruptionModeIOS,
-} from "expo-av"
+import { Audio, Video, ResizeMode, InterruptionModeAndroid, InterruptionModeIOS } from "expo-av"
 import { BaseView } from "~Components/Base"
 import { useTheme } from "~Hooks"
 

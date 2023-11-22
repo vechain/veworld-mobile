@@ -1,15 +1,9 @@
 import { useEffect } from "react"
 import { fetchChartData, useAppDispatch } from "~Storage/Redux"
 
-const CHART_DATA_SYNC_PERIOD = Number(
-    process.env.REACT_APP_CHART_DATA_SYNC_PERIOD ?? "300000",
-)
+const CHART_DATA_SYNC_PERIOD = Number(process.env.REACT_APP_CHART_DATA_SYNC_PERIOD ?? "300000")
 
-export const usePollingChartData = (
-    symbol: string,
-    days: string | number = 7,
-    interval: string = "daily",
-) => {
+export const usePollingChartData = (symbol: string, days: string | number = 7, interval: string = "daily") => {
     const dispatch = useAppDispatch()
 
     useEffect(() => {
@@ -19,10 +13,7 @@ export const usePollingChartData = (
 
         updateHistoricalData()
 
-        const _interval = setInterval(
-            updateHistoricalData,
-            CHART_DATA_SYNC_PERIOD,
-        )
+        const _interval = setInterval(updateHistoricalData, CHART_DATA_SYNC_PERIOD)
         return () => clearInterval(_interval)
     }, [days, dispatch, interval, symbol])
 }

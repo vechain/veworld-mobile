@@ -1,3 +1,4 @@
+/* eslint-disable max-len */
 import {
     ActivityStatus,
     ActivityType,
@@ -59,10 +60,7 @@ const swapTxOutcomes: TransactionOutcomes = [
         to: "0x3CA506F873e5819388aa3CE0b1c4FC77b6db0048",
         value: "0x",
         type: ClauseType.SWAP_TOKENS_FOR_VET,
-        path: [
-            "0x170f4ba8e7acf6510f55db26047c83d13498af8a",
-            "0xd8ccdd85abdbf68dfec95f06c973e87b1b5a9997",
-        ],
+        path: ["0x170f4ba8e7acf6510f55db26047c83d13498af8a", "0xd8ccdd85abdbf68dfec95f06c973e87b1b5a9997"],
     },
     {
         data: "0x9b60cc9700000000000000000000000000000000000000000000000000000000773751940000000000000000000000004167d527340afa546bb88d5d83afb6272e48b40e00000000000000000000000000000000000000000000000000000000000003c2",
@@ -101,9 +99,7 @@ const txEventsIncludingSwap: Connex.VM.Event[] = [
     },
     {
         address: "0x25491130a43d43ab0951d66cdf7ddac7b1db681b",
-        topics: [
-            "0x1c411e9a96e071241c2f21f7726b17ae89e3cab4c78be50e062b03a9fffbbad1",
-        ],
+        topics: ["0x1c411e9a96e071241c2f21f7726b17ae89e3cab4c78be50e062b03a9fffbbad1"],
         data: "0x0000000000000000000000000000000000000000000000000000001b9044f3c700000000000000000000000000000000000000000004b41c0178a834ac695906",
     },
     {
@@ -214,12 +210,7 @@ describe("TransactionUtils", () => {
                 value: "0x",
             }
 
-            expect(
-                TransactionUtils.decodeAsTokenTransferClause(
-                    clause,
-                    YEET_TOKEN,
-                ),
-            ).toEqual({
+            expect(TransactionUtils.decodeAsTokenTransferClause(clause, YEET_TOKEN)).toEqual({
                 to: "0x3ca506f873e5819388aa3ce0b1c4fc77b6db0048",
                 amount: "60000000000000000000",
             })
@@ -230,12 +221,7 @@ describe("TransactionUtils", () => {
                 data: "0xa9059cbb0000000000000000000000003ca506f873e5819388aa3ce0b1c4fc77b6db004800000000000000000000000000000000000000000000000340aad21b3b700000",
                 value: "0x",
             }
-            expect(
-                TransactionUtils.decodeAsTokenTransferClause(
-                    clause,
-                    YEET_TOKEN,
-                ),
-            ).toBe(null)
+            expect(TransactionUtils.decodeAsTokenTransferClause(clause, YEET_TOKEN)).toBe(null)
         })
 
         it("should log error when fails to decode token transfer clause", () => {
@@ -247,14 +233,9 @@ describe("TransactionUtils", () => {
                 value: "0x",
             }
 
-            expect(TransactionUtils.decodeTokenTransferClause(clause)).toBe(
-                null,
-            )
+            expect(TransactionUtils.decodeTokenTransferClause(clause)).toBe(null)
 
-            expect(debugSpy).toHaveBeenCalledWith(
-                "Failed to decode parameters",
-                expect.any(Error),
-            )
+            expect(debugSpy).toHaveBeenCalledWith("Failed to decode parameters", expect.any(Error))
 
             // Restore the original function
             debugSpy.mockRestore()
@@ -271,17 +252,12 @@ describe("TransactionUtils", () => {
                 value: "0x",
             }
 
-            expect(
-                TransactionUtils.decodeSwapExactVETForTokensClause(clause),
-            ).toEqual({
+            expect(TransactionUtils.decodeSwapExactVETForTokensClause(clause)).toEqual({
                 ...clause,
                 to: "0x3ca506f873e5819388aa3ce0b1c4fc77b6db0048",
                 type: ClauseType.SWAP_VET_FOR_TOKENS,
                 data: clauseData,
-                path: [
-                    "0xd8ccdd85abdbf68dfec95f06c973e87b1b5a9997",
-                    "0x170f4ba8e7acf6510f55db26047c83d13498af8a",
-                ],
+                path: ["0xd8ccdd85abdbf68dfec95f06c973e87b1b5a9997", "0x170f4ba8e7acf6510f55db26047c83d13498af8a"],
             })
         })
 
@@ -292,9 +268,7 @@ describe("TransactionUtils", () => {
                 to: "0x",
                 value: "0x",
             }
-            expect(
-                TransactionUtils.decodeSwapExactVETForTokensClause(clause),
-            ).toBe(null)
+            expect(TransactionUtils.decodeSwapExactVETForTokensClause(clause)).toBe(null)
         })
 
         it("should return null if data is empty", () => {
@@ -303,9 +277,7 @@ describe("TransactionUtils", () => {
                 to: "0x",
                 value: "0x",
             }
-            expect(
-                TransactionUtils.decodeSwapExactVETForTokensClause(clause),
-            ).toBe(null)
+            expect(TransactionUtils.decodeSwapExactVETForTokensClause(clause)).toBe(null)
         })
 
         it("should log error when fails to decode SWAP EXACT VET FOR TOKENS clause", () => {
@@ -316,13 +288,8 @@ describe("TransactionUtils", () => {
                 value: "0x",
             }
 
-            expect(
-                TransactionUtils.decodeSwapExactVETForTokensClause(clause),
-            ).toBe(null)
-            expect(debugSpy).toHaveBeenCalledWith(
-                "Failed to decode parameters",
-                expect.any(Error),
-            )
+            expect(TransactionUtils.decodeSwapExactVETForTokensClause(clause)).toBe(null)
+            expect(debugSpy).toHaveBeenCalledWith("Failed to decode parameters", expect.any(Error))
 
             // Restore the original function
             debugSpy.mockRestore()
@@ -337,17 +304,12 @@ describe("TransactionUtils", () => {
                 value: "0x",
             }
 
-            expect(
-                TransactionUtils.decodeSwapExactETHForTokensClause(clause),
-            ).toEqual({
+            expect(TransactionUtils.decodeSwapExactETHForTokensClause(clause)).toEqual({
                 ...clause,
                 to: "0x4f4e906d3de39a7f2952d3d9cf84c0ca4cb476b1",
                 type: ClauseType.SWAP_VET_FOR_TOKENS,
                 data: clauseData,
-                path: [
-                    "0x45429a2255e7248e57fce99e7239aed3f84b7a53",
-                    "0x89827f7bb951fd8a56f8ef13c5bfee38522f2e1f",
-                ],
+                path: ["0x45429a2255e7248e57fce99e7239aed3f84b7a53", "0x89827f7bb951fd8a56f8ef13c5bfee38522f2e1f"],
             })
         })
 
@@ -358,9 +320,7 @@ describe("TransactionUtils", () => {
                 to: "0x",
                 value: "0x",
             }
-            expect(
-                TransactionUtils.decodeSwapExactETHForTokensClause(clause),
-            ).toBe(null)
+            expect(TransactionUtils.decodeSwapExactETHForTokensClause(clause)).toBe(null)
         })
 
         it("should return null if data is empty for decodeSwapExactETHForTokensClause", () => {
@@ -369,9 +329,7 @@ describe("TransactionUtils", () => {
                 to: "0x",
                 value: "0x",
             }
-            expect(
-                TransactionUtils.decodeSwapExactETHForTokensClause(clause),
-            ).toBe(null)
+            expect(TransactionUtils.decodeSwapExactETHForTokensClause(clause)).toBe(null)
         })
 
         it("should log error when fails to decode SWAP EXACT VET FOR TOKENS clause with SWAP_EXACT_ETH_FOR_TOKENS_SIG", () => {
@@ -382,13 +340,8 @@ describe("TransactionUtils", () => {
                 value: "0x",
             }
 
-            expect(
-                TransactionUtils.decodeSwapExactETHForTokensClause(clause),
-            ).toBe(null)
-            expect(debugSpy).toHaveBeenCalledWith(
-                "Failed to decode parameters",
-                expect.any(Error),
-            )
+            expect(TransactionUtils.decodeSwapExactETHForTokensClause(clause)).toBe(null)
+            expect(debugSpy).toHaveBeenCalledWith("Failed to decode parameters", expect.any(Error))
 
             // Restore the original function
             debugSpy.mockRestore()
@@ -405,17 +358,12 @@ describe("TransactionUtils", () => {
                 value: "0x",
             }
 
-            expect(
-                TransactionUtils.decodeSwapTokensForExactVETClause(clause),
-            ).toEqual({
+            expect(TransactionUtils.decodeSwapTokensForExactVETClause(clause)).toEqual({
                 ...clause,
                 to: "0x3ca506f873e5819388aa3ce0b1c4fc77b6db0048",
                 type: ClauseType.SWAP_TOKENS_FOR_VET,
                 data: clauseData,
-                path: [
-                    "0x170f4ba8e7acf6510f55db26047c83d13498af8a",
-                    "0xd8ccdd85abdbf68dfec95f06c973e87b1b5a9997",
-                ],
+                path: ["0x170f4ba8e7acf6510f55db26047c83d13498af8a", "0xd8ccdd85abdbf68dfec95f06c973e87b1b5a9997"],
             })
         })
 
@@ -426,9 +374,7 @@ describe("TransactionUtils", () => {
                 to: "0x",
                 value: "0x",
             }
-            expect(
-                TransactionUtils.decodeSwapTokensForExactVETClause(clause),
-            ).toBe(null)
+            expect(TransactionUtils.decodeSwapTokensForExactVETClause(clause)).toBe(null)
         })
 
         it("should return null if data is empty", () => {
@@ -437,9 +383,7 @@ describe("TransactionUtils", () => {
                 to: "0x",
                 value: "0x",
             }
-            expect(
-                TransactionUtils.decodeSwapTokensForExactVETClause(clause),
-            ).toBe(null)
+            expect(TransactionUtils.decodeSwapTokensForExactVETClause(clause)).toBe(null)
         })
 
         it("should log error when fails to decode SWAP EXACT TOKENS FOR VET clause", () => {
@@ -450,13 +394,8 @@ describe("TransactionUtils", () => {
                 value: "0x",
             }
 
-            expect(
-                TransactionUtils.decodeSwapTokensForExactVETClause(clause),
-            ).toBe(null)
-            expect(debugSpy).toHaveBeenCalledWith(
-                "Failed to decode parameters",
-                expect.any(Error),
-            )
+            expect(TransactionUtils.decodeSwapTokensForExactVETClause(clause)).toBe(null)
+            expect(debugSpy).toHaveBeenCalledWith("Failed to decode parameters", expect.any(Error))
 
             // Restore the original function
             debugSpy.mockRestore()
@@ -471,17 +410,12 @@ describe("TransactionUtils", () => {
                 value: "0x",
             }
 
-            expect(
-                TransactionUtils.decodeSwapExactTokensForETHClause(clause),
-            ).toEqual({
+            expect(TransactionUtils.decodeSwapExactTokensForETHClause(clause)).toEqual({
                 ...clause,
                 to: "0xb42cd3d05ab10be78ef9165661ff11cd6f29b313",
                 type: ClauseType.SWAP_TOKENS_FOR_VET,
                 data: clauseData,
-                path: [
-                    "0x0000000000000000000000000000456e65726779",
-                    "0x45429a2255e7248e57fce99e7239aed3f84b7a53",
-                ],
+                path: ["0x0000000000000000000000000000456e65726779", "0x45429a2255e7248e57fce99e7239aed3f84b7a53"],
             })
         })
 
@@ -492,9 +426,7 @@ describe("TransactionUtils", () => {
                 to: "0x",
                 value: "0x",
             }
-            expect(
-                TransactionUtils.decodeSwapExactTokensForETHClause(clause),
-            ).toBe(null)
+            expect(TransactionUtils.decodeSwapExactTokensForETHClause(clause)).toBe(null)
         })
 
         it("should return null if data is empty for decodeSwapExactTokensForETHClause", () => {
@@ -503,9 +435,7 @@ describe("TransactionUtils", () => {
                 to: "0x",
                 value: "0x",
             }
-            expect(
-                TransactionUtils.decodeSwapExactTokensForETHClause(clause),
-            ).toBe(null)
+            expect(TransactionUtils.decodeSwapExactTokensForETHClause(clause)).toBe(null)
         })
 
         it("should log error when fails to decode SWAP EXACT TOKENS FOR VET clause for decodeSwapExactTokensForETHClause", () => {
@@ -516,13 +446,8 @@ describe("TransactionUtils", () => {
                 value: "0x",
             }
 
-            expect(
-                TransactionUtils.decodeSwapExactTokensForETHClause(clause),
-            ).toBe(null)
-            expect(debugSpy).toHaveBeenCalledWith(
-                "Failed to decode parameters",
-                expect.any(Error),
-            )
+            expect(TransactionUtils.decodeSwapExactTokensForETHClause(clause)).toBe(null)
+            expect(debugSpy).toHaveBeenCalledWith("Failed to decode parameters", expect.any(Error))
 
             // Restore the original function
             debugSpy.mockRestore()
@@ -539,9 +464,7 @@ describe("TransactionUtils", () => {
                 value: "0x",
             }
 
-            expect(
-                TransactionUtils.decodeSwapExactTokensForTokensClause(clause),
-            ).toEqual({
+            expect(TransactionUtils.decodeSwapExactTokensForTokensClause(clause)).toEqual({
                 ...clause,
                 to: "0x3ca506f873e5819388aa3ce0b1c4fc77b6db0048",
                 type: ClauseType.SWAP_TOKENS_FOR_TOKENS,
@@ -561,9 +484,7 @@ describe("TransactionUtils", () => {
                 to: "0x",
                 value: "0x",
             }
-            expect(
-                TransactionUtils.decodeSwapExactTokensForTokensClause(clause),
-            ).toBe(null)
+            expect(TransactionUtils.decodeSwapExactTokensForTokensClause(clause)).toBe(null)
         })
 
         it("should return null if data is empty", () => {
@@ -572,9 +493,7 @@ describe("TransactionUtils", () => {
                 to: "0x",
                 value: "0x",
             }
-            expect(
-                TransactionUtils.decodeSwapExactTokensForTokensClause(clause),
-            ).toBe(null)
+            expect(TransactionUtils.decodeSwapExactTokensForTokensClause(clause)).toBe(null)
         })
 
         it("should log error when fails to decode SWAP EXACT TOKENS FOR TOKENS clause", () => {
@@ -585,13 +504,8 @@ describe("TransactionUtils", () => {
                 value: "0x",
             }
 
-            expect(
-                TransactionUtils.decodeSwapExactTokensForTokensClause(clause),
-            ).toBe(null)
-            expect(debugSpy).toHaveBeenCalledWith(
-                "Failed to decode parameters",
-                expect.any(Error),
-            )
+            expect(TransactionUtils.decodeSwapExactTokensForTokensClause(clause)).toBe(null)
+            expect(debugSpy).toHaveBeenCalledWith("Failed to decode parameters", expect.any(Error))
 
             // Restore the original function
             debugSpy.mockRestore()
@@ -608,17 +522,12 @@ describe("TransactionUtils", () => {
                 value: "0x",
             }
 
-            expect(
-                TransactionUtils.decodeSwapVETForExactTokensClause(clause),
-            ).toEqual({
+            expect(TransactionUtils.decodeSwapVETForExactTokensClause(clause)).toEqual({
                 ...clause,
                 to: "0x4f4e906d3de39a7f2952d3d9cf84c0ca4cb476b1",
                 type: ClauseType.SWAP_VET_FOR_TOKENS,
                 data: clauseData,
-                path: [
-                    "0xd8ccdd85abdbf68dfec95f06c973e87b1b5a9997",
-                    "0x170f4ba8e7acf6510f55db26047c83d13498af8a",
-                ],
+                path: ["0xd8ccdd85abdbf68dfec95f06c973e87b1b5a9997", "0x170f4ba8e7acf6510f55db26047c83d13498af8a"],
             })
         })
 
@@ -629,9 +538,7 @@ describe("TransactionUtils", () => {
                 to: "0x",
                 value: "0x",
             }
-            expect(
-                TransactionUtils.decodeSwapVETForExactTokensClause(clause),
-            ).toBe(null)
+            expect(TransactionUtils.decodeSwapVETForExactTokensClause(clause)).toBe(null)
         })
 
         it("should return null if data is empty", () => {
@@ -640,9 +547,7 @@ describe("TransactionUtils", () => {
                 to: "0x",
                 value: "0x",
             }
-            expect(
-                TransactionUtils.decodeSwapVETForExactTokensClause(clause),
-            ).toBe(null)
+            expect(TransactionUtils.decodeSwapVETForExactTokensClause(clause)).toBe(null)
         })
 
         it("should log error when fails to decode SWAP EXACT TOKENS FOR TOKENS clause", () => {
@@ -653,13 +558,8 @@ describe("TransactionUtils", () => {
                 value: "0x",
             }
 
-            expect(
-                TransactionUtils.decodeSwapVETForExactTokensClause(clause),
-            ).toBe(null)
-            expect(debugSpy).toHaveBeenCalledWith(
-                "Failed to decode parameters",
-                expect.any(Error),
-            )
+            expect(TransactionUtils.decodeSwapVETForExactTokensClause(clause)).toBe(null)
+            expect(debugSpy).toHaveBeenCalledWith("Failed to decode parameters", expect.any(Error))
 
             // Restore the original function
             debugSpy.mockRestore()
@@ -676,17 +576,12 @@ describe("TransactionUtils", () => {
                 value: "0x",
             }
 
-            expect(
-                TransactionUtils.decodeSwapExactTokensForVETClause(clause),
-            ).toEqual({
+            expect(TransactionUtils.decodeSwapExactTokensForVETClause(clause)).toEqual({
                 ...clause,
                 to: "0xc8be491cf06b53fd5e401d2d57cb58b84b478836",
                 type: ClauseType.SWAP_TOKENS_FOR_VET,
                 data: clauseData,
-                path: [
-                    "0x0000000000000000000000000000456e65726779",
-                    "0xd8ccdd85abdbf68dfec95f06c973e87b1b5a9997",
-                ],
+                path: ["0x0000000000000000000000000000456e65726779", "0xd8ccdd85abdbf68dfec95f06c973e87b1b5a9997"],
             })
         })
 
@@ -697,9 +592,7 @@ describe("TransactionUtils", () => {
                 to: "0x",
                 value: "0x",
             }
-            expect(
-                TransactionUtils.decodeSwapExactTokensForVETClause(clause),
-            ).toBe(null)
+            expect(TransactionUtils.decodeSwapExactTokensForVETClause(clause)).toBe(null)
         })
 
         it("should return null if data is empty", () => {
@@ -708,9 +601,7 @@ describe("TransactionUtils", () => {
                 to: "0x",
                 value: "0x",
             }
-            expect(
-                TransactionUtils.decodeSwapExactTokensForVETClause(clause),
-            ).toBe(null)
+            expect(TransactionUtils.decodeSwapExactTokensForVETClause(clause)).toBe(null)
         })
 
         it("should log error when fails to decode SWAP EXACT TOKENS FOR TOKENS clause", () => {
@@ -721,13 +612,8 @@ describe("TransactionUtils", () => {
                 value: "0x",
             }
 
-            expect(
-                TransactionUtils.decodeSwapExactTokensForVETClause(clause),
-            ).toBe(null)
-            expect(debugSpy).toHaveBeenCalledWith(
-                "Failed to decode parameters",
-                expect.any(Error),
-            )
+            expect(TransactionUtils.decodeSwapExactTokensForVETClause(clause)).toBe(null)
+            expect(debugSpy).toHaveBeenCalledWith("Failed to decode parameters", expect.any(Error))
 
             // Restore the original function
             debugSpy.mockRestore()
@@ -773,9 +659,7 @@ describe("TransactionUtils", () => {
                     ],
                 },
             ]
-            expect(TransactionUtils.interpretClauses(clause, tokens)).toEqual(
-                expected,
-            )
+            expect(TransactionUtils.interpretClauses(clause, tokens)).toEqual(expected)
         })
         it("should interpret clauses correctly with VET transfer", () => {
             const swapTokensForTokensClauseData =
@@ -821,9 +705,7 @@ describe("TransactionUtils", () => {
                 },
             ]
 
-            expect(TransactionUtils.interpretClauses(clause, [])).toEqual(
-                expected,
-            )
+            expect(TransactionUtils.interpretClauses(clause, [])).toEqual(expected)
         })
     })
 
@@ -842,9 +724,7 @@ describe("TransactionUtils", () => {
                     type: ClauseType.CONTRACT_CALL,
                 },
             ]
-            expect(TransactionUtils.interpretContractCall(clause, [])).toEqual(
-                expected,
-            )
+            expect(TransactionUtils.interpretContractCall(clause, [])).toEqual(expected)
         })
     })
 
@@ -864,9 +744,7 @@ describe("TransactionUtils", () => {
                 },
             ]
 
-            expect(
-                TransactionUtils.interpretContractClause(clause, []),
-            ).toEqual(expected)
+            expect(TransactionUtils.interpretContractClause(clause, [])).toEqual(expected)
         })
 
         it("should interpret contract calls clause correctly", () => {
@@ -887,9 +765,7 @@ describe("TransactionUtils", () => {
                 },
             ]
 
-            expect(
-                TransactionUtils.interpretContractClause(clause, tokens),
-            ).toEqual(expected)
+            expect(TransactionUtils.interpretContractClause(clause, tokens)).toEqual(expected)
         })
         it("should use default data if data is not provided", () => {
             const clause = {
@@ -906,9 +782,7 @@ describe("TransactionUtils", () => {
                 },
             ]
 
-            expect(
-                TransactionUtils.interpretContractClause(clause, []),
-            ).toEqual(expected)
+            expect(TransactionUtils.interpretContractClause(clause, [])).toEqual(expected)
         })
     })
 
@@ -922,9 +796,7 @@ describe("TransactionUtils", () => {
 
             const expected = "0x0"
 
-            expect(
-                TransactionUtils.getContractAddressFromClause(clause),
-            ).toEqual(expected)
+            expect(TransactionUtils.getContractAddressFromClause(clause)).toEqual(expected)
         })
         it("should return token address from fungible token transfer clause", () => {
             const clause = {
@@ -935,9 +807,7 @@ describe("TransactionUtils", () => {
 
             const expected = "0x576da7124c7bb65a692d95848276367e5a844d95"
 
-            expect(
-                TransactionUtils.getContractAddressFromClause(clause),
-            ).toEqual(expected)
+            expect(TransactionUtils.getContractAddressFromClause(clause)).toEqual(expected)
         })
         it("should return undefined if clause is not a token transfer", () => {
             const clause = {
@@ -948,9 +818,7 @@ describe("TransactionUtils", () => {
 
             const expected = undefined
 
-            expect(
-                TransactionUtils.getContractAddressFromClause(clause),
-            ).toEqual(expected)
+            expect(TransactionUtils.getContractAddressFromClause(clause)).toEqual(expected)
         })
     })
 
@@ -964,9 +832,7 @@ describe("TransactionUtils", () => {
 
             const expected = "1193046"
 
-            expect(TransactionUtils.getAmountFromClause(clause)).toEqual(
-                expected,
-            )
+            expect(TransactionUtils.getAmountFromClause(clause)).toEqual(expected)
         })
         it("should return amount from fungible token transfer clause", () => {
             const clause = {
@@ -977,9 +843,7 @@ describe("TransactionUtils", () => {
 
             const expected = "60000000000000000000"
 
-            expect(TransactionUtils.getAmountFromClause(clause)).toEqual(
-                expected,
-            )
+            expect(TransactionUtils.getAmountFromClause(clause)).toEqual(expected)
         })
         it("should return undefined if clause is not a token transfer", () => {
             const clause = {
@@ -990,9 +854,7 @@ describe("TransactionUtils", () => {
 
             const expected = undefined
 
-            expect(TransactionUtils.getAmountFromClause(clause)).toEqual(
-                expected,
-            )
+            expect(TransactionUtils.getAmountFromClause(clause)).toEqual(expected)
         })
     })
 
@@ -1005,9 +867,7 @@ describe("TransactionUtils", () => {
                 type: ClauseType.SWAP_TOKENS_FOR_TOKENS,
             }
 
-            expect(TransactionUtils.isSwapClause(clauseWithMetadata)).toEqual(
-                true,
-            )
+            expect(TransactionUtils.isSwapClause(clauseWithMetadata)).toEqual(true)
         })
         it("should return true if clause is a swap tokens for vet clause", () => {
             const clauseWithMetadata: ClauseWithMetadata = {
@@ -1017,9 +877,7 @@ describe("TransactionUtils", () => {
                 type: ClauseType.SWAP_TOKENS_FOR_VET,
             }
 
-            expect(TransactionUtils.isSwapClause(clauseWithMetadata)).toEqual(
-                true,
-            )
+            expect(TransactionUtils.isSwapClause(clauseWithMetadata)).toEqual(true)
         })
         it("should return true if clause is a swap vet for tokens clause", () => {
             const clauseWithMetadata: ClauseWithMetadata = {
@@ -1029,9 +887,7 @@ describe("TransactionUtils", () => {
                 type: ClauseType.SWAP_VET_FOR_TOKENS,
             }
 
-            expect(TransactionUtils.isSwapClause(clauseWithMetadata)).toEqual(
-                true,
-            )
+            expect(TransactionUtils.isSwapClause(clauseWithMetadata)).toEqual(true)
         })
         it("should return false if clause is not a swap clause", () => {
             const clauseWithMetadata: ClauseWithMetadata = {
@@ -1041,17 +897,13 @@ describe("TransactionUtils", () => {
                 type: ClauseType.NFT_APPROVE,
             }
 
-            expect(TransactionUtils.isSwapClause(clauseWithMetadata)).toEqual(
-                false,
-            )
+            expect(TransactionUtils.isSwapClause(clauseWithMetadata)).toEqual(false)
         })
     })
 
     describe("isSwapTransaction", () => {
         it("should return true if transaction is a swap transaction", () => {
-            expect(TransactionUtils.isSwapTransaction(swapTxOutcomes)).toEqual(
-                true,
-            )
+            expect(TransactionUtils.isSwapTransaction(swapTxOutcomes)).toEqual(true)
         })
         it("should return false if transaction is not a swap transaction", () => {
             const txOutcomes: TransactionOutcomes = [
@@ -1075,9 +927,7 @@ describe("TransactionUtils", () => {
                 },
             ]
 
-            expect(TransactionUtils.isSwapTransaction(txOutcomes)).toEqual(
-                false,
-            )
+            expect(TransactionUtils.isSwapTransaction(txOutcomes)).toEqual(false)
         })
     })
 
@@ -1094,9 +944,7 @@ describe("TransactionUtils", () => {
                 },
             ]
 
-            expect(
-                TransactionUtils.findAndDecodeSwapEvents(txEventsIncludingSwap),
-            ).toEqual(decodedSwapEvent)
+            expect(TransactionUtils.findAndDecodeSwapEvents(txEventsIncludingSwap)).toEqual(decodedSwapEvent)
         })
 
         it("should return decoded swap event for swap tokens for tokens", () => {
@@ -1123,9 +971,7 @@ describe("TransactionUtils", () => {
                 },
             ]
 
-            expect(
-                TransactionUtils.findAndDecodeSwapEvents(txEventsWithSwapEvent),
-            ).toEqual(decodedSwapEvent)
+            expect(TransactionUtils.findAndDecodeSwapEvents(txEventsWithSwapEvent)).toEqual(decodedSwapEvent)
         })
 
         it("should throw if decoding swap event fails", () => {
@@ -1143,16 +989,9 @@ describe("TransactionUtils", () => {
                 },
             ]
 
-            expect(
-                TransactionUtils.decodeSwapEvent(
-                    txEventsIncludingCorruptedSwapEvent[0],
-                ),
-            ).toBe(null)
+            expect(TransactionUtils.decodeSwapEvent(txEventsIncludingCorruptedSwapEvent[0])).toBe(null)
 
-            expect(debugSpy).toHaveBeenCalledWith(
-                "Failed to decode parameters",
-                expect.any(Error),
-            )
+            expect(debugSpy).toHaveBeenCalledWith("Failed to decode parameters", expect.any(Error))
 
             // Restore the original function
             debugSpy.mockRestore()
@@ -1171,9 +1010,7 @@ describe("TransactionUtils", () => {
                 },
             ]
 
-            expect(
-                TransactionUtils.findAndDecodeSwapEvents(txEventsWithSwapEvent),
-            ).toEqual([])
+            expect(TransactionUtils.findAndDecodeSwapEvents(txEventsWithSwapEvent)).toEqual([])
         })
     })
 
@@ -1184,10 +1021,7 @@ describe("TransactionUtils", () => {
                 value: "0x1234",
                 data: "0x1352",
                 type: ClauseType.SWAP_VET_FOR_TOKENS,
-                path: [
-                    "0xd8ccdd85abdbf68dfec95f06c973e87b1b5a9997",
-                    "0x170f4ba8e7acf6510f55db26047c83d13498af8a",
-                ],
+                path: ["0xd8ccdd85abdbf68dfec95f06c973e87b1b5a9997", "0x170f4ba8e7acf6510f55db26047c83d13498af8a"],
             },
         ]
 
@@ -1197,12 +1031,10 @@ describe("TransactionUtils", () => {
             clauses: decodedClauses,
             outputs: [
                 {
-                    contractAddress:
-                        "0xD86bed355d9d6A4c951e96755Dd0c3cf004d6CD0",
+                    contractAddress: "0xD86bed355d9d6A4c951e96755Dd0c3cf004d6CD0",
                     events: [
                         {
-                            address:
-                                "0xD86bed355d9d6A4c951e96755Dd0c3cf004d6CD0",
+                            address: "0xD86bed355d9d6A4c951e96755Dd0c3cf004d6CD0",
                             topics: [
                                 "0xd78ad95fa46c994b6551d0da85fc275fe613ce37657fb8d5e3d130840159d822",
                                 "0x0000000000000000000000006c0a6e1d922e0e63901301573370b932ae20dadb",
@@ -1222,12 +1054,10 @@ describe("TransactionUtils", () => {
             clauses: decodedClauses,
             outputs: [
                 {
-                    contractAddress:
-                        "0x0000000000000000000000000000456e65726779",
+                    contractAddress: "0x0000000000000000000000000000456e65726779",
                     events: [
                         {
-                            address:
-                                "0xae4c53b120cba91a44832f875107cbc8fbee185c",
+                            address: "0xae4c53b120cba91a44832f875107cbc8fbee185c",
                             topics: [
                                 "0xddf252ad1be2c89b69c2b068fc378daa952ba7f163c4a11628f55a4df523b3ef",
                                 "0x0000000000000000000000003ca506f873e5819388aa3ce0b1c4fc77b6db0048",
@@ -1236,8 +1066,7 @@ describe("TransactionUtils", () => {
                             data: "0x00000000000000000000000000000000000000000000008cf23f909c0fa00000",
                         },
                         {
-                            address:
-                                "0x516eCA119f673f6747c81189Bef4F14367c0c2B7",
+                            address: "0x516eCA119f673f6747c81189Bef4F14367c0c2B7",
                             topics: [
                                 "0xd78ad95fa46c994b6551d0da85fc275fe613ce37657fb8d5e3d130840159d822",
                                 "0x0000000000000000000000006c0a6e1d922e0e63901301573370b932ae20dadb",
@@ -1246,8 +1075,7 @@ describe("TransactionUtils", () => {
                             data: "0x00000000000000000000000000000000000000000000008cf23f909c0fa000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000c376359de51004678",
                         },
                         {
-                            address:
-                                "0xa14A5bDD5AB3D51062c5B243a2e6Fb0949fee2F3",
+                            address: "0xa14A5bDD5AB3D51062c5B243a2e6Fb0949fee2F3",
                             topics: [
                                 "0xd78ad95fa46c994b6551d0da85fc275fe613ce37657fb8d5e3d130840159d822",
                                 "0x0000000000000000000000006c0a6e1d922e0e63901301573370b932ae20dadb",
@@ -1268,10 +1096,7 @@ describe("TransactionUtils", () => {
                     value: "0x",
                     data: "0xfa64746f00000000000000000000000000000000000000000000006c6b935b8bbd400000000000000000000000000000000000000000000000000009f0ee3e6a913c48e100000000000000000000000000000000000000000000000000000000000000a00000000000000000000000003ca506f873e5819388aa3ce0b1c4fc77b6db004800000000000000000000000000000000000000000000000000000000633107dc0000000000000000000000000000000000000000000000000000000000000002000000000000000000000000170f4ba8e7acf6510f55db26047c83d13498af8a000000000000000000000000d8ccdd85abdbf68dfec95f06c973e87b1b5a9997",
                     type: ClauseType.SWAP_TOKENS_FOR_VET,
-                    path: [
-                        "0x170f4ba8e7acf6510f55db26047c83d13498af8a",
-                        "0xd8ccdd85abdbf68dfec95f06c973e87b1b5a9997",
-                    ],
+                    path: ["0x170f4ba8e7acf6510f55db26047c83d13498af8a", "0xd8ccdd85abdbf68dfec95f06c973e87b1b5a9997"],
                 },
             ]
 
@@ -1281,12 +1106,10 @@ describe("TransactionUtils", () => {
                 clauses: decodedClauses,
                 outputs: [
                     {
-                        contractAddress:
-                            "0x0000000000000000000000000000456e65726779",
+                        contractAddress: "0x0000000000000000000000000000456e65726779",
                         events: [
                             {
-                                address:
-                                    "0xD86bed355d9d6A4c951e96755Dd0c3cf004d6CD0",
+                                address: "0xD86bed355d9d6A4c951e96755Dd0c3cf004d6CD0",
                                 topics: [
                                     "0xd78ad95fa46c994b6551d0da85fc275fe613ce37657fb8d5e3d130840159d822",
                                     "0x0000000000000000000000006c0a6e1d922e0e63901301573370b932ae20dadb",
@@ -1300,11 +1123,10 @@ describe("TransactionUtils", () => {
                 ],
             }
 
-            const decodedTransferAmounts =
-                TransactionUtils.decodeSwapTransferAmounts(
-                    decodedClausesSwapTokensForVet,
-                    activitySwapTokensForVet,
-                )
+            const decodedTransferAmounts = TransactionUtils.decodeSwapTransferAmounts(
+                decodedClausesSwapTokensForVet,
+                activitySwapTokensForVet,
+            )
 
             expect(decodedTransferAmounts).toEqual({
                 paidAmount: "2000000000000000000000",
@@ -1329,34 +1151,27 @@ describe("TransactionUtils", () => {
                 },
             ]
 
-            const decodedTransferAmounts =
-                TransactionUtils.decodeSwapTransferAmounts(
-                    decodedClausesSwapTokensForVet,
-                    activitySwapTokensForTokens,
-                )
+            const decodedTransferAmounts = TransactionUtils.decodeSwapTransferAmounts(
+                decodedClausesSwapTokensForVet,
+                activitySwapTokensForTokens,
+            )
 
             expect(decodedTransferAmounts).toEqual({
                 paidAmount: "2600000000000000000000",
                 paidTokenAddress: "0xae4c53b120cba91a44832f875107cbc8fbee185c",
                 receivedAmount: "7358643873888054794883",
-                receivedTokenAddress:
-                    "0x5db3c8a942333f6468176a870db36eef120a34dc",
+                receivedTokenAddress: "0x5db3c8a942333f6468176a870db36eef120a34dc",
             })
         })
 
         it("should return decoded swap transfer amounts if transaction is a swap transaction", () => {
-            const decodedTransferAmounts =
-                TransactionUtils.decodeSwapTransferAmounts(
-                    decodedClauses,
-                    activity,
-                )
+            const decodedTransferAmounts = TransactionUtils.decodeSwapTransferAmounts(decodedClauses, activity)
 
             expect(decodedTransferAmounts).toEqual({
                 paidAmount: "375316213155726505126",
                 paidTokenAddress: VET.address,
                 receivedAmount: "7039991383490426942486",
-                receivedTokenAddress:
-                    "0x170f4ba8e7acf6510f55db26047c83d13498af8a",
+                receivedTokenAddress: "0x170f4ba8e7acf6510f55db26047c83d13498af8a",
             })
         })
 
@@ -1364,24 +1179,18 @@ describe("TransactionUtils", () => {
             let clausesWithoutSwap = JSON.parse(JSON.stringify(decodedClauses))
             clausesWithoutSwap[0].type = ClauseType.TRANSFER
 
-            expect(() =>
-                TransactionUtils.decodeSwapTransferAmounts(
-                    clausesWithoutSwap,
-                    activity,
-                ),
-            ).toThrow("Transaction is not a swap transaction")
+            expect(() => TransactionUtils.decodeSwapTransferAmounts(clausesWithoutSwap, activity)).toThrow(
+                "Transaction is not a swap transaction",
+            )
         })
 
         it("should throw an error if no swap event was found or decoded", () => {
             let activityWithoutSwap = JSON.parse(JSON.stringify(activity))
             activityWithoutSwap.outputs = []
 
-            expect(() =>
-                TransactionUtils.decodeSwapTransferAmounts(
-                    decodedClauses,
-                    activityWithoutSwap,
-                ),
-            ).toThrow("Could not find or decode swap event")
+            expect(() => TransactionUtils.decodeSwapTransferAmounts(decodedClauses, activityWithoutSwap)).toThrow(
+                "Could not find or decode swap event",
+            )
         })
 
         it("should throw an error if path inputs is invalid", () => {
@@ -1394,20 +1203,14 @@ describe("TransactionUtils", () => {
                     path: ["0xd8ccdd85abdbf68dfec95f06c973e87b1b5a9997"],
                 },
             ]
-            expect(() =>
-                TransactionUtils.decodeSwapTransferAmounts(
-                    clauseWithInvalidPath,
-                    activity,
-                ),
-            ).toThrow("Invalid swap clause path")
+            expect(() => TransactionUtils.decodeSwapTransferAmounts(clauseWithInvalidPath, activity)).toThrow(
+                "Invalid swap clause path",
+            )
         })
 
         it("should throw an error if decodedSwaps length is invalid", () => {
             expect(() =>
-                TransactionUtils.decodeSwapTransferAmounts(
-                    decodedClauses,
-                    activitySwapTokensForTokens,
-                ),
+                TransactionUtils.decodeSwapTransferAmounts(decodedClauses, activitySwapTokensForTokens),
             ).toThrow("Invalid swap event count, expected 1")
         })
         // Add more test cases for other edge cases and error cases...
@@ -1425,12 +1228,7 @@ describe("TransactionUtils", () => {
                 data: "0x",
             }
 
-            const encodedClause =
-                TransactionUtils.encodeTransferFungibleTokenClause(
-                    to,
-                    value,
-                    tokenAddress,
-                )
+            const encodedClause = TransactionUtils.encodeTransferFungibleTokenClause(to, value, tokenAddress)
 
             expect(encodedClause).toEqual(result)
         })
@@ -1446,12 +1244,7 @@ describe("TransactionUtils", () => {
                 data: "0xa9059cbb00000000000000000000000063792f9baef181e44fc5f81918809fb98e4f71c5000000000000000000000000000000000000000000002de8c065905eef800000",
             }
 
-            const encodedClause =
-                TransactionUtils.encodeTransferFungibleTokenClause(
-                    to,
-                    value,
-                    tokenAddress,
-                )
+            const encodedClause = TransactionUtils.encodeTransferFungibleTokenClause(to, value, tokenAddress)
 
             expect(encodedClause).toEqual(result)
         })
@@ -1462,8 +1255,7 @@ describe("TransactionUtils", () => {
             const from = "0xCF130b42Ae31C4931298B4B1c0F1D974B8732957"
             const to = "0xf077b491b355E64048cE21E3A6Fc4751eEeA77fa"
             const tokenId = 3605
-            const nftContractAddress =
-                "0xC8ebceCb1438b9A00eA1003c956C3e0b83aa0EC3"
+            const nftContractAddress = "0xC8ebceCb1438b9A00eA1003c956C3e0b83aa0EC3"
 
             const result = {
                 to: nftContractAddress,
@@ -1471,13 +1263,12 @@ describe("TransactionUtils", () => {
                 data: "0x23b872dd000000000000000000000000cf130b42ae31c4931298b4b1c0f1d974b8732957000000000000000000000000f077b491b355e64048ce21e3a6fc4751eeea77fa0000000000000000000000000000000000000000000000000000000000000e15",
             }
 
-            const encodedClause =
-                TransactionUtils.encodeTransferNonFungibleTokenClause(
-                    from,
-                    to,
-                    nftContractAddress,
-                    tokenId,
-                )
+            const encodedClause = TransactionUtils.encodeTransferNonFungibleTokenClause(
+                from,
+                to,
+                nftContractAddress,
+                tokenId,
+            )
 
             expect(encodedClause).toEqual(result)
         })
@@ -1503,8 +1294,7 @@ describe("Decode Transfer Event", () => {
             address: "0xb1b9d40758cc3d90f1b2899dfb7a64e5d0235c61",
             data: "0x",
             meta: {
-                blockID:
-                    "0x00f162dc3d566f3d88329b1d46130dd7c6b5ce78307bd3d304f66b8cc6e986f9",
+                blockID: "0x00f162dc3d566f3d88329b1d46130dd7c6b5ce78307bd3d304f66b8cc6e986f9",
                 blockNumber: 15819484,
                 blockTimestamp: 1688718950,
                 clauseIndex: 0,
@@ -1535,8 +1325,7 @@ describe("Decode Transfer Event", () => {
             address: "0x0000000000000000000000000000456e65726779",
             data: "0x000000000000000000000000000000000000000000000915a5dd9b2a9ade0c4a",
             meta: {
-                blockID:
-                    "0x00f162e0980187cf922b8304f28512629c5fbbb3700eb22c6a1b7d5f4ee194ad",
+                blockID: "0x00f162e0980187cf922b8304f28512629c5fbbb3700eb22c6a1b7d5f4ee194ad",
                 blockNumber: 15819488,
                 blockTimestamp: 1688718990,
                 clauseIndex: 0,
@@ -1600,14 +1389,9 @@ describe("Decode Transfer Event", () => {
                 value: "0x",
             }
 
-            expect(
-                TransactionUtils.decodeNonFungibleTokenTransferClause(clause),
-            ).toBe(null)
+            expect(TransactionUtils.decodeNonFungibleTokenTransferClause(clause)).toBe(null)
 
-            expect(debugSpy).toHaveBeenCalledWith(
-                "Failed to decode parameters",
-                expect.any(Error),
-            )
+            expect(debugSpy).toHaveBeenCalledWith("Failed to decode parameters", expect.any(Error))
 
             // Restore the original function
             debugSpy.mockRestore()

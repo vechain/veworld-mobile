@@ -42,13 +42,7 @@ export const Header = memo(() => {
     }, [nav])
 
     return (
-        <BaseView
-            w={100}
-            px={20}
-            pb={8}
-            flexDirection="row"
-            alignItems="center"
-            justifyContent="space-between">
+        <BaseView w={100} px={20} pb={8} flexDirection="row" alignItems="center" justifyContent="space-between">
             <BaseView alignItems="flex-start" alignSelf="flex-start">
                 <BaseText typographyFont="largeTitle" testID="veworld-homepage">
                     {LL.VEWORLD()}

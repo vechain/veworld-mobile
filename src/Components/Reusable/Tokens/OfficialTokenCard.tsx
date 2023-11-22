@@ -31,9 +31,7 @@ export const OfficialTokenCard = memo(
     }: OfficialTokenCardProps & ViewProps) => {
         const { styles, theme } = useThemedStyles(baseStyles(selected))
         return (
-            <BaseCard
-                onPress={action}
-                containerStyle={[styles.container, style]}>
+            <BaseCard onPress={action} containerStyle={[styles.container, style]}>
                 <BaseView flexDirection="row" justifyContent="flex-start">
                     <TokenImage
                         icon={token.icon}
@@ -43,41 +41,23 @@ export const OfficialTokenCard = memo(
                         symbol={token.symbol}
                     />
                     <BaseSpacer width={16} />
-                    <BaseView
-                        flexDirection="column"
-                        style={{ width: Dimensions.get("window").width - 140 }}>
-                        <BaseText
-                            typographyFont="buttonPrimary"
-                            ellipsizeMode="tail"
-                            numberOfLines={1}>
+                    <BaseView flexDirection="column" style={{ width: Dimensions.get("window").width - 140 }}>
+                        <BaseText typographyFont="buttonPrimary" ellipsizeMode="tail" numberOfLines={1}>
                             {token.name}
                         </BaseText>
-                        <BaseText typographyFont="captionRegular">
-                            {token.symbol}
-                        </BaseText>
+                        <BaseText typographyFont="captionRegular">{token.symbol}</BaseText>
                     </BaseView>
 
                     {change24h && currency && token.rate && (
-                        <BaseView
-                            flexDirection="column"
-                            alignItems="flex-end"
-                            flexGrow={1}>
+                        <BaseView flexDirection="column" alignItems="flex-end" flexGrow={1}>
                             <BaseView flexDirection="row" alignItems="baseline">
-                                <BaseText typographyFont="subTitleBold">
-                                    {token.rate?.toFixed(4)}{" "}
-                                </BaseText>
-                                <BaseText typographyFont="captionRegular">
-                                    {currency}
-                                </BaseText>
+                                <BaseText typographyFont="subTitleBold">{token.rate?.toFixed(4)} </BaseText>
+                                <BaseText typographyFont="captionRegular">{currency}</BaseText>
                             </BaseView>
 
                             <BaseText
                                 typographyFont="captionBold"
-                                color={
-                                    isPositive24hChange
-                                        ? theme.colors.success
-                                        : theme.colors.danger
-                                }>
+                                color={isPositive24hChange ? theme.colors.success : theme.colors.danger}>
                                 {change24h}
                             </BaseText>
                         </BaseView>

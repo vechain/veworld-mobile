@@ -1,19 +1,7 @@
 import React, { useCallback } from "react"
-import {
-    DimensionValue,
-    StyleProp,
-    StyleSheet,
-    TouchableOpacityProps,
-    ViewStyle,
-    TouchableOpacity,
-} from "react-native"
+import { DimensionValue, StyleProp, StyleSheet, TouchableOpacityProps, ViewStyle, TouchableOpacity } from "react-native"
 
-import {
-    AlignItems,
-    ColorThemeType,
-    FlexDirection,
-    JustifyContent,
-} from "~Constants"
+import { AlignItems, ColorThemeType, FlexDirection, JustifyContent } from "~Constants"
 import { useThemedStyles } from "~Hooks"
 import { GenericTouchableProps } from "./Types"
 import { BaseView } from "../BaseView"

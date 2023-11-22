@@ -1,11 +1,6 @@
 import { useCallback, useEffect, useMemo, useState } from "react"
 import { debug, WalletConnectUtils, warn } from "~Utils"
-import {
-    getRpcError,
-    SessionProposal,
-    SessionProposalState,
-    showErrorToast,
-} from "~Components"
+import { getRpcError, SessionProposal, SessionProposalState, showErrorToast } from "~Components"
 import { Routes } from "~Navigation"
 import { useNavigation } from "@react-navigation/native"
 import { ErrorResponse } from "@walletconnect/jsonrpc-types/dist/cjs/jsonrpc"
@@ -24,12 +19,8 @@ export const useSessionProposals = (
 
     const dispatch = useAppDispatch()
 
-    const [sessionProposals, setSessionProposals] =
-        useState<SessionProposalState>({})
-    const proposalList = useMemo(
-        () => Object.values(sessionProposals),
-        [sessionProposals],
-    )
+    const [sessionProposals, setSessionProposals] = useState<SessionProposalState>({})
+    const proposalList = useMemo(() => Object.values(sessionProposals), [sessionProposals])
 
     /**
      * DO NOT add any dependencies to this callback, otherwise the listener will be added multiple times
@@ -67,10 +58,7 @@ export const useSessionProposals = (
         async (proposal: SessionProposal) => {
             if (proposal.verifyContext.verified.validation !== "VALID")
                 //So we can see invalid proposals in dev mode
-                warn(
-                    "onSessionProposal - session not valid",
-                    proposal.verifyContext,
-                )
+                warn("onSessionProposal - session not valid", proposal.verifyContext)
 
             const validationError =
                 validateRequestNamespaces(proposal.params.requiredNamespaces) ??
@@ -92,10 +80,7 @@ export const useSessionProposals = (
     )
 
     const approvePendingProposal = useCallback(
-        async (
-            proposal: SessionProposal,
-            namespaces: SessionTypes.Namespaces,
-        ): Promise<SessionTypes.Struct> => {
+        async (proposal: SessionProposal, namespaces: SessionTypes.Namespaces): Promise<SessionTypes.Struct> => {
             const web3Wallet = await WalletConnectUtils.getWeb3Wallet()
 
             const relays = proposal.params.relays[0]
@@ -108,9 +93,7 @@ export const useSessionProposals = (
 
             addSession(session)
 
-            const isDeepLinkSession = deepLinkPairingTopics.includes(
-                session.pairingTopic,
-            )
+            const isDeepLinkSession = deepLinkPairingTopics.includes(session.pairingTopic)
 
             dispatch(
                 insertContext({
@@ -164,12 +147,7 @@ export const useSessionProposals = (
         }
 
         return () => clearTimeout(timer)
-    }, [
-        proposalList,
-        isBlackListScreen,
-        sessionProposals,
-        handlePendingProposal,
-    ])
+    }, [proposalList, isBlackListScreen, sessionProposals, handlePendingProposal])
 
     useEffect(() => {
         debug(

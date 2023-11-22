@@ -4,11 +4,7 @@ import LottieView from "lottie-react-native"
 import { AppLoader as NftLoaderAnimation } from "~Assets"
 
 import { ColorThemeType, SCREEN_WIDTH } from "~Constants"
-import Animated, {
-    useAnimatedStyle,
-    useSharedValue,
-    withTiming,
-} from "react-native-reanimated"
+import Animated, { useAnimatedStyle, useSharedValue, withTiming } from "react-native-reanimated"
 import { BaseView } from "~Components"
 import { useThemedStyles } from "~Hooks"
 
@@ -35,18 +31,12 @@ export const NftLoader = ({ children, isLoading }: Props) => {
     return (
         <View style={StyleSheet.absoluteFill}>
             {children}
-            <Animated.View
-                style={[themedStyles.overlay, animatedStyle]}
-                pointerEvents={isLoading ? "auto" : "none"}>
-                <BaseView
-                    style={[
-                        themedStyles.overlay,
-                        themedStyles.opacityBackground,
-                    ]}
-                />
+            <Animated.View style={[themedStyles.overlay, animatedStyle]} pointerEvents={isLoading ? "auto" : "none"}>
+                <BaseView style={[themedStyles.overlay, themedStyles.opacityBackground]} />
 
                 <LottieView
-                    source={NftLoaderAnimation} // TODO: Replace with the actual animation once it's ready (https://github.com/vechainfoundation/veworld-mobile/issues/999)
+                    // TODO: Replace with the actual animation once it's ready (https://github.com/vechainfoundation/veworld-mobile/issues/999)
+                    source={NftLoaderAnimation}
                     autoPlay={isLoading} // Prevent the animation from playing when it's not visible
                     loop
                     style={themedStyles.lottie}

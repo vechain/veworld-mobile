@@ -1,8 +1,4 @@
-import {
-    isBiometricLockFlow,
-    isLockScreenFlow,
-    isHideSplash,
-} from "./LockScreenUtils"
+import { isBiometricLockFlow, isLockScreenFlow, isHideSplash } from "./LockScreenUtils"
 
 describe("isLockScreenFlow", () => {
     it("should return false if isWalletSecurityPassword is false", () => {

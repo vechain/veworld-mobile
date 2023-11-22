@@ -13,18 +13,10 @@ jest.mock("~Utils/BiometricsUtils", () => ({
 
 describe("useBiometrics", () => {
     it("should initialize biometrics state on mount", async () => {
-        ;(
-            BiometricsUtils.getDeviceEnrolledLevel as jest.Mock
-        ).mockResolvedValue(SecurityLevelType.BIOMETRIC)
-        ;(BiometricsUtils.getDeviceHasHardware as jest.Mock).mockResolvedValue(
-            true,
-        )
-        ;(BiometricsUtils.getIsDeviceEnrolled as jest.Mock).mockResolvedValue(
-            true,
-        )
-        ;(
-            BiometricsUtils.getBiometricTypeAvailable as jest.Mock
-        ).mockResolvedValue("touch")
+        ;(BiometricsUtils.getDeviceEnrolledLevel as jest.Mock).mockResolvedValue(SecurityLevelType.BIOMETRIC)
+        ;(BiometricsUtils.getDeviceHasHardware as jest.Mock).mockResolvedValue(true)
+        ;(BiometricsUtils.getIsDeviceEnrolled as jest.Mock).mockResolvedValue(true)
+        ;(BiometricsUtils.getBiometricTypeAvailable as jest.Mock).mockResolvedValue("touch")
 
         const { result, waitForNextUpdate } = renderHook(() => useBiometrics())
 
@@ -40,18 +32,10 @@ describe("useBiometrics", () => {
     })
 
     it("should update biometrics state when app state changes", async () => {
-        ;(
-            BiometricsUtils.getDeviceEnrolledLevel as jest.Mock
-        ).mockResolvedValue(SecurityLevelType.BIOMETRIC)
-        ;(BiometricsUtils.getDeviceHasHardware as jest.Mock).mockResolvedValue(
-            true,
-        )
-        ;(BiometricsUtils.getIsDeviceEnrolled as jest.Mock).mockResolvedValue(
-            true,
-        )
-        ;(
-            BiometricsUtils.getBiometricTypeAvailable as jest.Mock
-        ).mockResolvedValue("touch")
+        ;(BiometricsUtils.getDeviceEnrolledLevel as jest.Mock).mockResolvedValue(SecurityLevelType.BIOMETRIC)
+        ;(BiometricsUtils.getDeviceHasHardware as jest.Mock).mockResolvedValue(true)
+        ;(BiometricsUtils.getIsDeviceEnrolled as jest.Mock).mockResolvedValue(true)
+        ;(BiometricsUtils.getBiometricTypeAvailable as jest.Mock).mockResolvedValue("touch")
 
         const mockUseAppState = jest.fn(() => {
             return {

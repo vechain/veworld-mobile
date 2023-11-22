@@ -1,19 +1,5 @@
-import React, {
-    JSXElementConstructor,
-    ReactElement,
-    ReactNode,
-    Ref,
-    useCallback,
-    useMemo,
-    useState,
-} from "react"
-import {
-    BaseSafeArea,
-    BaseScrollView,
-    BaseSpacer,
-    BaseText,
-    BaseView,
-} from "~Components/Base"
+import React, { JSXElementConstructor, ReactElement, ReactNode, Ref, useCallback, useMemo, useState } from "react"
+import { BaseSafeArea, BaseScrollView, BaseSpacer, BaseText, BaseView } from "~Components/Base"
 import { BackButtonHeader } from "../BackButtonHeader"
 import { RefreshControlProps, ScrollView, StyleSheet } from "react-native"
 import { useTabBarBottomMargin, useTheme } from "~Hooks"
@@ -33,10 +19,7 @@ type Props = {
     showSelectedNetwork?: boolean
     onTouchBody?: () => void
     _iosOnlyTabBarBottomMargin?: number
-    refreshControl?: ReactElement<
-        RefreshControlProps,
-        string | JSXElementConstructor<any>
-    >
+    refreshControl?: ReactElement<RefreshControlProps, string | JSXElementConstructor<any>>
     noStaticBottomPadding?: boolean
     scrollViewRef?: Ref<ScrollView>
     onGoBack?: () => void
@@ -57,20 +40,21 @@ export const Layout = ({
     _iosOnlyTabBarBottomMargin,
     showSelectedNetwork = false,
     refreshControl,
-    noStaticBottomPadding = false, // this is often used with components with FadeoutButton (that have padding to show the fade effect)
+    // this is often used with components with FadeoutButton (that have padding to show the fade effect)
+    noStaticBottomPadding = false,
     scrollViewRef,
     onGoBack,
     hasSafeArea = true,
 }: Props) => {
     const theme = useTheme()
-    const { androidOnlyTabBarBottomMargin, tabBarBottomMargin } =
-        useTabBarBottomMargin()
+    const { androidOnlyTabBarBottomMargin, tabBarBottomMargin } = useTabBarBottomMargin()
 
     // this value is for automate bottom padding instead of having to set a custom padding
     let STATIC_BOTTOM_PADDING = useMemo(() => {
         if (noStaticBottomPadding) return 0
 
-        return tabBarBottomMargin ? 24 : 40 // this is because when the bottom tab bar is not present the device bottom line takes space (the one to come back home)
+        // this is because when the bottom tab bar is not present the device bottom line takes space (the one to come back home)
+        return tabBarBottomMargin ? 24 : 40
     }, [noStaticBottomPadding, tabBarBottomMargin])
 
     const Title = useCallback(
@@ -91,10 +75,7 @@ export const Layout = ({
                 <BaseView>
                     {!noBackButton && (
                         <>
-                            <BackButtonHeader
-                                hasBottomSpacer={false}
-                                onGoBack={onGoBack}
-                            />
+                            <BackButtonHeader hasBottomSpacer={false} onGoBack={onGoBack} />
                             <BaseSpacer height={8} />
                         </>
                     )}
@@ -114,9 +95,7 @@ export const Layout = ({
                     )}
                 </BaseView>
                 {/* Separator from header to body */}
-                {(!noBackButton || fixedHeader) && (
-                    <BaseSpacer height={1} background={theme.colors.card} />
-                )}
+                {(!noBackButton || fixedHeader) && <BaseSpacer height={1} background={theme.colors.card} />}
 
                 {body && (
                     <BaseScrollView
@@ -130,15 +109,11 @@ export const Layout = ({
                         ref={scrollViewRef}
                         refreshControl={refreshControl}
                         testID={scrollViewTestID || "Layout_ScrollView"}
-                        scrollEnabled={
-                            scrollViewContentHeight > scrollViewHeight
-                        }
+                        scrollEnabled={scrollViewContentHeight > scrollViewHeight}
                         style={noMargin ? {} : styles.scrollView}
                         // eslint-disable-next-line react-native/no-inline-styles
                         contentContainerStyle={{
-                            paddingBottom: isAndroid()
-                                ? androidOnlyTabBarBottomMargin
-                                : _iosOnlyTabBarBottomMargin,
+                            paddingBottom: isAndroid() ? androidOnlyTabBarBottomMargin : _iosOnlyTabBarBottomMargin,
                             paddingTop: noMargin ? 0 : 16,
                         }}>
                         {!fixedHeader && title && <Title />}
@@ -153,12 +128,7 @@ export const Layout = ({
                 )}
                 {footer && (
                     <BaseView
-                        mb={
-                            noMargin
-                                ? 0
-                                : Number(androidOnlyTabBarBottomMargin) +
-                                  STATIC_BOTTOM_PADDING
-                        }
+                        mb={noMargin ? 0 : Number(androidOnlyTabBarBottomMargin) + STATIC_BOTTOM_PADDING}
                         mx={noMargin ? 0 : 20}>
                         {footer}
                     </BaseView>
@@ -190,10 +160,7 @@ export const Layout = ({
 
     if (hasSafeArea) {
         return (
-            <BaseSafeArea
-                grow={1}
-                testID={safeAreaTestID}
-                onTouchStart={onTouchBody}>
+            <BaseSafeArea grow={1} testID={safeAreaTestID} onTouchStart={onTouchBody}>
                 {renderContent}
             </BaseSafeArea>
         )

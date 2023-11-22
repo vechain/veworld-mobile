@@ -1,22 +1,9 @@
 import { HDNode, secp256k1, Transaction } from "thor-devkit"
 import { HexUtils, warn } from "~Utils"
-import {
-    showErrorToast,
-    showWarningToast,
-    WalletEncryptionKeyHelper,
-} from "~Components"
-import {
-    selectDevice,
-    selectSelectedAccount,
-    useAppSelector,
-} from "~Storage/Redux"
+import { showErrorToast, showWarningToast, WalletEncryptionKeyHelper } from "~Components"
+import { selectDevice, selectSelectedAccount, useAppSelector } from "~Storage/Redux"
 import { useI18nContext } from "~i18n"
-import {
-    AccountWithDevice,
-    DEVICE_TYPE,
-    LedgerAccountWithDevice,
-    Wallet,
-} from "~Model"
+import { AccountWithDevice, DEVICE_TYPE, LedgerAccountWithDevice, Wallet } from "~Model"
 import { DelegationType } from "~Model/Delegation"
 import { sponsorTransaction } from "~Networking"
 import { Routes } from "~Navigation"
@@ -58,9 +45,7 @@ export const useSignTransaction = ({
 }: Props) => {
     const { LL } = useI18nContext()
     const account = useAppSelector(selectSelectedAccount)
-    const senderDevice = useAppSelector(state =>
-        selectDevice(state, account.rootAddress),
-    )
+    const senderDevice = useAppSelector(state => selectDevice(state, account.rootAddress))
     const nav = useNavigation()
 
     const getSignature = async (
@@ -69,8 +54,7 @@ export const useSignTransaction = ({
         delegateFor?: string,
         signatureAccount: AccountWithDevice = account,
     ): Promise<Buffer> => {
-        if (!wallet.mnemonic && !wallet.privateKey)
-            throw new Error("Either mnemonic or privateKey must be provided")
+        if (!wallet.mnemonic && !wallet.privateKey) throw new Error("Either mnemonic or privateKey must be provided")
 
         if (wallet.mnemonic) {
             if (!signatureAccount.index && signatureAccount.index !== 0)
@@ -83,10 +67,7 @@ export const useSignTransaction = ({
             const hash = transaction.signingHash(delegateFor?.toLowerCase())
             return secp256k1.sign(hash, privateKey)
         } else {
-            const privateKey = Buffer.from(
-                HexUtils.removePrefix(wallet.privateKey!),
-                "hex",
-            )
+            const privateKey = Buffer.from(HexUtils.removePrefix(wallet.privateKey!), "hex")
             const hash = transaction.signingHash(delegateFor?.toLowerCase())
             return secp256k1.sign(hash, privateKey)
         }
@@ -97,15 +78,11 @@ export const useSignTransaction = ({
     ): Promise<Buffer | SignStatus.DELEGATION_FAILURE> => {
         try {
             if (!selectedDelegationUrl) {
-                throw new Error(
-                    "Delegation url not found when requesting delegation signature",
-                )
+                throw new Error("Delegation url not found when requesting delegation signature")
             }
 
             // build hex encoded version of the transaction for signing request
-            const rawTransaction = HexUtils.addPrefix(
-                transaction.encode().toString("hex"),
-            )
+            const rawTransaction = HexUtils.addPrefix(transaction.encode().toString("hex"))
 
             // request to send for sponsorship/fee delegation
             const sponsorRequest = {
@@ -113,10 +90,7 @@ export const useSignTransaction = ({
                 raw: rawTransaction,
             }
 
-            const signature = await sponsorTransaction(
-                selectedDelegationUrl,
-                sponsorRequest,
-            )
+            const signature = await sponsorTransaction(selectedDelegationUrl, sponsorRequest)
 
             if (!signature) {
                 throw new Error("Error getting delegator signature")
@@ -135,10 +109,7 @@ export const useSignTransaction = ({
     ): Promise<Buffer | SignStatus.DELEGATION_FAILURE> => {
         try {
             const delegationDevice = selectedDelegationAccount?.device
-            if (!delegationDevice)
-                throw new Error(
-                    "Delegation device not found when sending transaction",
-                )
+            if (!delegationDevice) throw new Error("Delegation device not found when sending transaction")
 
             if (delegationDevice.type === DEVICE_TYPE.LEDGER) {
                 showWarningToast({
@@ -148,18 +119,9 @@ export const useSignTransaction = ({
                 throw new Error("Delegated hardware wallet not supported yet")
             }
 
-            const delegationWallet =
-                await WalletEncryptionKeyHelper.decryptWallet(
-                    delegationDevice.wallet,
-                    password,
-                )
+            const delegationWallet = await WalletEncryptionKeyHelper.decryptWallet(delegationDevice.wallet, password)
 
-            return await getSignature(
-                transaction,
-                delegationWallet,
-                account.address,
-                selectedDelegationAccount,
-            )
+            return await getSignature(transaction, delegationWallet, account.address, selectedDelegationAccount)
         } catch (e) {
             warn("Error getting account delegator signature", e)
             return SignStatus.DELEGATION_FAILURE
@@ -174,10 +136,7 @@ export const useSignTransaction = ({
             case DelegationType.URL:
                 return await getUrlDelegationSignature(transaction)
             case DelegationType.ACCOUNT:
-                return await getAccountDelegationSignature(
-                    transaction,
-                    password,
-                )
+                return await getAccountDelegationSignature(transaction, password)
         }
     }
 
@@ -186,10 +145,7 @@ export const useSignTransaction = ({
         ledgerAccount: LedgerAccountWithDevice,
         password?: string,
     ) => {
-        const delegationSignature = await getDelegationSignature(
-            transaction,
-            password,
-        )
+        const delegationSignature = await getDelegationSignature(transaction, password)
 
         if (delegationSignature === SignStatus.DELEGATION_FAILURE) {
             showErrorToast({
@@ -211,19 +167,13 @@ export const useSignTransaction = ({
     /**
      * sign transaction with user's wallet
      */
-    const signTransaction = async (
-        password?: string,
-    ): Promise<SignTransactionResponse> => {
+    const signTransaction = async (password?: string): Promise<SignTransactionResponse> => {
         if (!senderDevice) throw new Error("Sender device not found")
 
         const transaction = buildTransaction()
 
         if (senderDevice.type === DEVICE_TYPE.LEDGER) {
-            await navigateToLedger(
-                transaction,
-                account as LedgerAccountWithDevice,
-                password,
-            )
+            await navigateToLedger(transaction, account as LedgerAccountWithDevice, password)
             return SignStatus.NAVIGATE_TO_LEDGER
         }
 
@@ -232,23 +182,14 @@ export const useSignTransaction = ({
             throw new Error("Hardware wallet not supported yet")
         }
 
-        const senderWallet = await WalletEncryptionKeyHelper.decryptWallet(
-            senderDevice.wallet,
-            password,
-        )
+        const senderWallet = await WalletEncryptionKeyHelper.decryptWallet(senderDevice.wallet, password)
 
         const senderSignature = await getSignature(transaction, senderWallet)
-        const delegationResult = await getDelegationSignature(
-            transaction,
-            password,
-        )
+        const delegationResult = await getDelegationSignature(transaction, password)
 
-        if (delegationResult === SignStatus.DELEGATION_FAILURE)
-            return delegationResult
+        if (delegationResult === SignStatus.DELEGATION_FAILURE) return delegationResult
 
-        transaction.signature = delegationResult
-            ? Buffer.concat([senderSignature, delegationResult])
-            : senderSignature
+        transaction.signature = delegationResult ? Buffer.concat([senderSignature, delegationResult]) : senderSignature
 
         return transaction
     }

@@ -8,20 +8,13 @@ type Props = {
     value: boolean
 }
 
-export const EnableFeature = ({
-    title,
-    subtitle,
-    onValueChange,
-    value,
-}: Props) => {
+export const EnableFeature = ({ title, subtitle, onValueChange, value }: Props) => {
     return (
         <>
             <BaseText typographyFont="bodyMedium" my={8}>
                 {title}
             </BaseText>
-            {subtitle && (
-                <BaseText typographyFont="caption">{subtitle}</BaseText>
-            )}
+            {subtitle && <BaseText typographyFont="caption">{subtitle}</BaseText>}
             <BaseSpacer height={20} />
             <BaseSwitch onValueChange={onValueChange} value={value} />
         </>

@@ -10,11 +10,7 @@ import {
     TransactionSummarySendScreen,
 } from "~Screens"
 import { Routes } from "~Navigation/Enums"
-import {
-    FungibleTokenWithBalance,
-    LedgerAccountWithDevice,
-    TokenWithCompleteInfo,
-} from "~Model"
+import { FungibleTokenWithBalance, LedgerAccountWithDevice, TokenWithCompleteInfo } from "~Model"
 import { Transaction } from "thor-devkit"
 import { useNavAnimation } from "~Hooks"
 
@@ -41,8 +37,7 @@ export type RootStackParamListDiscover = {
     }
 }
 
-const { Navigator, Group, Screen } =
-    createNativeStackNavigator<RootStackParamListDiscover>()
+const { Navigator, Group, Screen } = createNativeStackNavigator<RootStackParamListDiscover>()
 
 export const DiscoverStack = () => {
     const { animation } = useNavAnimation()
@@ -50,22 +45,10 @@ export const DiscoverStack = () => {
     return (
         <Navigator screenOptions={{ headerShown: false, animation }}>
             <Group>
-                <Screen
-                    name={Routes.DISCOVER}
-                    component={DiscoverScreen}
-                    options={{ headerShown: false }}
-                />
+                <Screen name={Routes.DISCOVER} component={DiscoverScreen} options={{ headerShown: false }} />
 
-                <Screen
-                    name={Routes.TOKEN_DETAILS}
-                    component={AssetDetailScreen}
-                    options={{ headerShown: false }}
-                />
-                <Screen
-                    name={Routes.SWAP}
-                    component={SwapScreen}
-                    options={{ headerShown: false }}
-                />
+                <Screen name={Routes.TOKEN_DETAILS} component={AssetDetailScreen} options={{ headerShown: false }} />
+                <Screen name={Routes.SWAP} component={SwapScreen} options={{ headerShown: false }} />
 
                 <Screen
                     name={Routes.SELECT_TOKEN_SEND}

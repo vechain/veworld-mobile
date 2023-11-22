@@ -48,10 +48,7 @@ import { MMKV } from "react-native-mmkv"
  *
  * @returns A `Promise` that resolves with the configuration object for a Redux Persistor.
  */
-export const getPersistorConfig = async (
-    mmkv: MMKV,
-    encryptionKey: string,
-): Promise<PersistConfig<RootState>> => {
+export const getPersistorConfig = async (mmkv: MMKV, encryptionKey: string): Promise<PersistConfig<RootState>> => {
     let encryptor = encryptTransform({
         secretKey: encryptionKey,
         onError: function (error) {

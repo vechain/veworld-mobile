@@ -9,19 +9,8 @@ export const CameraHeader = ({ onClose }: { onClose: () => void }) => {
     const { LL } = useI18nContext()
 
     return (
-        <BaseView
-            flexDirection="row"
-            style={baseStyles.container}
-            alignItems="center"
-            justifyContent="center"
-            w={100}>
-            <BaseIcon
-                name="close"
-                action={onClose}
-                haptics="Light"
-                color={COLORS.WHITE}
-                style={baseStyles.icon}
-            />
+        <BaseView flexDirection="row" style={baseStyles.container} alignItems="center" justifyContent="center" w={100}>
+            <BaseIcon name="close" action={onClose} haptics="Light" color={COLORS.WHITE} style={baseStyles.icon} />
 
             <BaseText typographyFont="subTitle" color="white">
                 {LL.TITLE_SCAN_QRCODE()}

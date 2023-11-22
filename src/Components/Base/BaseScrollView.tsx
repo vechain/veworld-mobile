@@ -1,11 +1,5 @@
 import React from "react"
-import {
-    ScrollView,
-    ScrollViewProps,
-    StyleProp,
-    StyleSheet,
-    ViewStyle,
-} from "react-native"
+import { ScrollView, ScrollViewProps, StyleProp, StyleSheet, ViewStyle } from "react-native"
 import { useTheme } from "~Hooks"
 import { BaseView } from "./BaseView"
 
@@ -24,21 +18,14 @@ export const BaseScrollView = React.forwardRef<ScrollView, Props>(
         const theme = useTheme()
 
         return (
-            <BaseView
-                h={h}
-                w={w}
-                style={[styles.scrollViewContainer, containerStyle]}>
+            <BaseView h={h} w={w} style={[styles.scrollViewContainer, containerStyle]}>
                 <ScrollView
                     ref={ref}
                     showsVerticalScrollIndicator={false}
                     showsHorizontalScrollIndicator={false}
                     contentContainerStyle={styles.contentContainerStyle}
                     contentInsetAdjustmentBehavior="automatic"
-                    style={[
-                        styles.scrollView,
-                        { backgroundColor: theme.colors.background },
-                        style,
-                    ]}
+                    style={[styles.scrollView, { backgroundColor: theme.colors.background }, style]}
                     {...otherProps}
                 />
             </BaseView>

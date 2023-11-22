@@ -25,15 +25,9 @@ export const useTabBarBottomMargin = () => {
         [padding],
     )
 
-    const iosOnlyTabBarBottomMargin: number = useMemo(
-        () => getPadding(PlatformType.IOS),
-        [getPadding],
-    )
+    const iosOnlyTabBarBottomMargin: number = useMemo(() => getPadding(PlatformType.IOS), [getPadding])
 
-    const androidOnlyTabBarBottomMargin: number = useMemo(
-        () => getPadding(PlatformType.ANDROID),
-        [getPadding],
-    )
+    const androidOnlyTabBarBottomMargin: number = useMemo(() => getPadding(PlatformType.ANDROID), [getPadding])
 
     const tabBarBottomMargin: number = useMemo(() => getPadding(), [getPadding])
 

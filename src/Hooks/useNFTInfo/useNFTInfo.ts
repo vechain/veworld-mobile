@@ -24,9 +24,7 @@ import { error } from "~Utils"
  */
 export const useNFTInfo = (tokenId: string, contractAddress: string) => {
     const { fetchMetadata } = useNFTMetadata()
-    const [tokenMetadata, setTokenMetadata] = useState<
-        NFTMetadata | undefined
-    >()
+    const [tokenMetadata, setTokenMetadata] = useState<NFTMetadata | undefined>()
     const [collectionName, setCollectionName] = useState<string | undefined>()
 
     const [isMediaLoading, setIsMediaLoading] = useState<boolean>(true)
@@ -44,9 +42,7 @@ export const useNFTInfo = (tokenId: string, contractAddress: string) => {
 
                 setTokenMetadata(metadata)
             } catch (e) {
-                error(
-                    `Failed to load NFT token info ${tokenId} of collection ${contractAddress}`,
-                )
+                error(`Failed to load NFT token info ${tokenId} of collection ${contractAddress}`)
             } finally {
                 setIsMediaLoading(false)
             }

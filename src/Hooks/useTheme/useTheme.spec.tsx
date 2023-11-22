@@ -13,9 +13,7 @@ describe("useTheme", () => {
         } as Partial<RootState>
         const { result } = renderHook(() => useTheme(), {
             wrapper: ({ children }: { children: React.ReactNode }) => (
-                <TestWrapper preloadedState={preloadedState}>
-                    {children}
-                </TestWrapper>
+                <TestWrapper preloadedState={preloadedState}>{children}</TestWrapper>
             ),
         })
 

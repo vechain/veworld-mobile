@@ -14,19 +14,12 @@ import {
     FadeoutButton,
     Layout,
 } from "~Components"
-import {
-    RootStackParamListHome,
-    RootStackParamListNFT,
-    Routes,
-} from "~Navigation"
+import { RootStackParamListHome, RootStackParamListNFT, Routes } from "~Navigation"
 import { useI18nContext } from "~i18n"
 import { CreateContactBottomSheet } from "./Components"
 import { address as addressThor } from "thor-devkit"
 
-type Props = NativeStackScreenProps<
-    RootStackParamListHome | RootStackParamListNFT,
-    Routes.INSERT_ADDRESS_SEND
->
+type Props = NativeStackScreenProps<RootStackParamListHome | RootStackParamListNFT, Routes.INSERT_ADDRESS_SEND>
 
 const CONTACT_CARD_DEFAULT_HIGHT = 73
 const ACCOUNT_CARD_DEFAULT_HIGHT = 86
@@ -51,8 +44,7 @@ export const InsertAddressSendScreen = ({ route }: Props) => {
                         | RootStackParamListNFT[Routes.INSERT_ADDRESS_SEND]
                 ).hasOwnProperty("token")
             ) {
-                const params =
-                    route.params as RootStackParamListHome[Routes.INSERT_ADDRESS_SEND]
+                const params = route.params as RootStackParamListHome[Routes.INSERT_ADDRESS_SEND]
 
                 nav.navigate(Routes.TRANSACTION_SUMMARY_SEND, {
                     token: params.token!,
@@ -61,8 +53,7 @@ export const InsertAddressSendScreen = ({ route }: Props) => {
                     initialRoute: params.initialRoute ?? Routes.HOME,
                 })
             } else {
-                const params =
-                    route.params as RootStackParamListNFT[Routes.INSERT_ADDRESS_SEND]
+                const params = route.params as RootStackParamListNFT[Routes.INSERT_ADDRESS_SEND]
 
                 nav.navigate(Routes.SEND_NFT_RECAP, {
                     contractAddress: params.contractAddress!,
@@ -98,12 +89,7 @@ export const InsertAddressSendScreen = ({ route }: Props) => {
             Keyboard.dismiss()
             openCreateContactSheet()
         }
-    }, [
-        isAddressInContactsOrAccounts,
-        selectedAddress,
-        navigateNext,
-        openCreateContactSheet,
-    ])
+    }, [isAddressInContactsOrAccounts, selectedAddress, navigateNext, openCreateContactSheet])
 
     return (
         <Layout
@@ -128,8 +114,7 @@ export const InsertAddressSendScreen = ({ route }: Props) => {
                             headerComponent={
                                 <BaseView flexDirection="row">
                                     <BaseText>
-                                        {LL.SEND_INSERT_CONTACTS()} (
-                                        {filteredContacts.length})
+                                        {LL.SEND_INSERT_CONTACTS()} ({filteredContacts.length})
                                     </BaseText>
                                 </BaseView>
                             }
@@ -138,20 +123,14 @@ export const InsertAddressSendScreen = ({ route }: Props) => {
                                     {filteredContacts.map(contact => {
                                         const isSelected =
                                             !!selectedAddress &&
-                                            AddressUtils.compareAddresses(
-                                                contact.address,
-                                                selectedAddress,
-                                            )
+                                            AddressUtils.compareAddresses(contact.address, selectedAddress)
 
-                                        const onPress = () =>
-                                            setSelectedAddress(contact.address)
+                                        const onPress = () => setSelectedAddress(contact.address)
 
                                         return (
                                             <ContactCard
                                                 key={contact.address}
-                                                containerStyle={
-                                                    baseStyles.contactCard
-                                                }
+                                                containerStyle={baseStyles.contactCard}
                                                 contact={contact}
                                                 onPress={onPress}
                                                 selected={isSelected}
@@ -170,8 +149,7 @@ export const InsertAddressSendScreen = ({ route }: Props) => {
                             headerComponent={
                                 <BaseView flexDirection="row">
                                     <BaseText>
-                                        {LL.SEND_INSERT_ACCOUNTS()} (
-                                        {filteredAccounts.length})
+                                        {LL.SEND_INSERT_ACCOUNTS()} ({filteredAccounts.length})
                                     </BaseText>
                                 </BaseView>
                             }
@@ -180,18 +158,12 @@ export const InsertAddressSendScreen = ({ route }: Props) => {
                                     {filteredAccounts.map(account => {
                                         const isSelected =
                                             !!selectedAddress &&
-                                            AddressUtils.compareAddresses(
-                                                account.address,
-                                                selectedAddress,
-                                            )
-                                        const onPress = () =>
-                                            setSelectedAddress(account.address)
+                                            AddressUtils.compareAddresses(account.address, selectedAddress)
+                                        const onPress = () => setSelectedAddress(account.address)
                                         return (
                                             <AccountCard
                                                 key={account.address}
-                                                containerStyle={
-                                                    baseStyles.accountCard
-                                                }
+                                                containerStyle={baseStyles.accountCard}
                                                 account={account}
                                                 onPress={onPress}
                                                 selected={isSelected}
@@ -203,17 +175,12 @@ export const InsertAddressSendScreen = ({ route }: Props) => {
                         />
                     )}
 
-                    {filteredAccounts.length === 0 &&
-                        filteredContacts.length === 0 && (
-                            <BaseView w={100} alignItems="center">
-                                <BaseText typographyFont="body">
-                                    {LL.SEND_NO_CONTACTS_OR_ACCOUNTS_FOUND()}
-                                </BaseText>
-                                <BaseText typographyFont="body">
-                                    {LL.SEND_PLEASE_TYPE_ADDRESS()}
-                                </BaseText>
-                            </BaseView>
-                        )}
+                    {filteredAccounts.length === 0 && filteredContacts.length === 0 && (
+                        <BaseView w={100} alignItems="center">
+                            <BaseText typographyFont="body">{LL.SEND_NO_CONTACTS_OR_ACCOUNTS_FOUND()}</BaseText>
+                            <BaseText typographyFont="body">{LL.SEND_PLEASE_TYPE_ADDRESS()}</BaseText>
+                        </BaseView>
+                    )}
                 </BaseView>
             }
             footer={
