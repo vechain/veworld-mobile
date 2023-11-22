@@ -1,13 +1,7 @@
 import { waitFor, element } from "detox"
 import { LONG_TIMEOUT } from "../constants"
 import { ContactsScreen } from "../screens"
-import {
-    clickById,
-    clickByText,
-    idShouldBeVisible,
-    idShouldExist,
-    textShouldExist,
-} from "../common"
+import { clickById, clickByText, idShouldBeVisible, idShouldExist, textShouldExist } from "../common"
 
 export const goToAddContactScreen = async () => {
     if (await ContactsScreen.isContactsListEmpty()) {
@@ -40,11 +34,7 @@ export const deleteContact = async (name: string) => {
     await clickByText("REMOVE", { timeout: LONG_TIMEOUT })
 }
 
-export const editContact = async (
-    name: string,
-    newName: string,
-    newAddress: string,
-) => {
+export const editContact = async (name: string, newName: string, newAddress: string) => {
     await clickByText(name)
 
     await clickById("Contact-Name-Input")

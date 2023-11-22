@@ -6,20 +6,12 @@ module.exports = {
     preset: "jest-expo",
     setupFiles: ["./node_modules/react-native-gesture-handler/jestSetup.js"],
     setupFilesAfterEnv: ["<rootDir>/jest.setup.ts"],
-    coverageReporters: [
-        "json",
-        "lcov",
-        "text",
-        "text-summary",
-        "clover",
-        "json-summary",
-    ],
+    coverageReporters: ["json", "lcov", "text", "text-summary", "clover", "json-summary"],
     testTimeout: 10000,
     transform: {
         "^.+\\.jsx$": "babel-jest",
         "^.+\\.tsx?$": "ts-jest",
-        ".+\\.(css|styl|less|sass|scss|png|jpg|ttf|woff|woff2)$":
-            "jest-transform-stub",
+        ".+\\.(css|styl|less|sass|scss|png|jpg|ttf|woff|woff2)$": "jest-transform-stub",
     },
     transformIgnorePatterns: [
         "node_modules/(?!((jest-)?react-native|@react-native(-community)?)" +
