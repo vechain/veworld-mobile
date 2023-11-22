@@ -8,11 +8,7 @@ import { SHORT_TIMEOUT } from "../../constants"
  * @returns {Promise<void>} - Resolves when the mnemonic has been successfully verified.
  */
 export const verifyMnemonic = async (mnemonic: string[]) => {
-    const buttonGroupIds = [
-        "first-word-button-group",
-        "second-word-button-group",
-        "third-word-button-group",
-    ]
+    const buttonGroupIds = ["first-word-button-group", "second-word-button-group", "third-word-button-group"]
 
     let currentButtonGroupIndex = 0
 
@@ -23,13 +19,7 @@ export const verifyMnemonic = async (mnemonic: string[]) => {
             .then(async () => {
                 // eslint-disable-next-line no-console
                 console.log(`Selecting word ${i + 1}: ${mnemonic[i]}`)
-                await element(
-                    by
-                        .text(mnemonic[i])
-                        .withAncestor(
-                            by.id(buttonGroupIds[currentButtonGroupIndex]),
-                        ),
-                ).tap()
+                await element(by.text(mnemonic[i]).withAncestor(by.id(buttonGroupIds[currentButtonGroupIndex]))).tap()
 
                 currentButtonGroupIndex++
             })

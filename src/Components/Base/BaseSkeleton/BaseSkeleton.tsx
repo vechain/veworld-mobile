@@ -45,7 +45,7 @@ type Props = {
  * @param {string} boneColor - The color of the skeleton bone. This is the base color of the loading component.
  * @param {string} highlightColor - The highlight color of the skeleton.
  * @param {StyleProp<ViewStyle>} [containerStyle] - The style object to apply to the skeleton container.
- * @param {"horizontalLeft" | "horizontalRight" | "verticalTop" | "verticalDown" | "diagonalDownLeft" | "diagonalDownRight" | "diagonalTopLeft" | "diagonalTopRight"} [animationDirection] - The animation direction of the skeleton.
+ * @param {"horizontalLeft" | "horizontalRight" | "verticalTop" | "verticalDown" | "diagonalDownLeft" | "diagonalDownRight" | "diagonalTopLeft" | "diagonalTopRight"}
  * @param {ICustomViewStyle[]} [layout] - The layout structure for the skeleton. It can be customized to different shapes and sizes.
  * @param {number} [height=20] - The height of the skeleton line. Default is 20.
  * @param {number} [width] - The width of the skeleton container.

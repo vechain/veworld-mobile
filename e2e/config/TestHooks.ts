@@ -1,19 +1,8 @@
 /* eslint-disable no-console */
 
-import {
-    Before,
-    BeforeAll,
-    AfterAll,
-    After,
-    ITestCaseHookParameter,
-} from "@cucumber/cucumber"
+import { Before, BeforeAll, AfterAll, After, ITestCaseHookParameter } from "@cucumber/cucumber"
 import detox from "detox/internals"
-import {
-    GeneralSettingsFlow,
-    HomeFlows,
-    SettingsFlows,
-    isPresentId,
-} from "../helpers"
+import { GeneralSettingsFlow, HomeFlows, SettingsFlows, isPresentId } from "../helpers"
 
 BeforeAll({ timeout: 600 * 1000 }, async () => {
     console.log("Starting a new Detox test session...")

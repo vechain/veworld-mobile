@@ -29,15 +29,8 @@ import {
 import { typography } from "~Constants"
 import { AnalyticsUtils, info } from "~Utils"
 import { BottomSheetModalProvider } from "@gorhom/bottom-sheet"
-import {
-    StoreContextProvider,
-    PersistedThemeProvider,
-} from "~Components/Providers"
-import {
-    selectAnalyticsTrackingEnabled,
-    selectSentryTrackingEnabled,
-    useAppSelector,
-} from "~Storage/Redux"
+import { StoreContextProvider, PersistedThemeProvider } from "~Components/Providers"
+import { selectAnalyticsTrackingEnabled, selectSentryTrackingEnabled, useAppSelector } from "~Storage/Redux"
 import * as Sentry from "@sentry/react-native"
 import "react-native-url-polyfill/auto"
 
@@ -108,9 +101,7 @@ const NavigationProvider = ({ children }) => {
     )
 
     return (
-        <NavigationContainer
-            onReady={() => setReady(true)}
-            theme={navigationTheme}>
+        <NavigationContainer onReady={() => setReady(true)} theme={navigationTheme}>
             {ready ? children : null}
         </NavigationContainer>
     )
@@ -159,9 +150,7 @@ const ReduxWrappedMain = () => {
 AppRegistry.registerComponent(appName, () => ReduxWrappedMain)
 
 if (__DEV__) {
-    const ignoreWarns = [
-        "VirtualizedLists should never be nested inside plain ScrollViews",
-    ]
+    const ignoreWarns = ["VirtualizedLists should never be nested inside plain ScrollViews"]
 
     const errorWarn = global.console.error
     global.console.error = (...arg) => {

@@ -1,3 +1,4 @@
+/* eslint-disable max-len */
 import { genesises } from "~Constants"
 import { Network, NETWORK_TYPE } from "~Model"
 
