@@ -7,15 +7,17 @@ import {
     useInAppBrowser,
 } from "~Components/Providers/InAppBrowserProvider"
 import { ColorThemeType } from "~Constants"
-import {
-    addBookmark,
-    removeBookmark,
-    selectBookmarks,
-    useAppSelector,
-} from "~Storage/Redux"
-import { useDispatch } from "react-redux"
+import { selectBookmarks, useAppSelector } from "~Storage/Redux"
 
-export const BrowserBottomBar: React.FC = () => {
+type IBrowserBottomBar = {
+    onTabClick: () => void
+    onFavouriteClick: () => void
+}
+
+export const BrowserBottomBar: React.FC<IBrowserBottomBar> = ({
+    onTabClick,
+    onFavouriteClick,
+}) => {
     const {
         canGoBack,
         canGoForward,
@@ -26,7 +28,6 @@ export const BrowserBottomBar: React.FC = () => {
     } = useInAppBrowser()
     const theme = useTheme()
     const styles = createStyles(theme)
-    const dispatch = useDispatch()
 
     const bookmarks = useAppSelector(selectBookmarks)
 
@@ -35,16 +36,6 @@ export const BrowserBottomBar: React.FC = () => {
             !!navigationState?.url && bookmarks.includes(navigationState?.url)
         )
     }, [navigationState?.url, bookmarks])
-
-    const onBookMarkPress = () => {
-        if (navigationState?.url) {
-            if (!isBookMarked) {
-                dispatch(addBookmark(navigationState.url))
-            } else {
-                dispatch(removeBookmark(navigationState.url))
-            }
-        }
-    }
 
     return (
         <BaseView style={styles.bottomBar}>
@@ -74,8 +65,15 @@ export const BrowserBottomBar: React.FC = () => {
 
             <BaseIcon
                 color={theme.colors.primary}
-                onPress={onBookMarkPress}
+                onPress={onFavouriteClick}
                 name={isBookMarked ? "star" : "star-outline"}
+                style={styles.icon}
+            />
+
+            <BaseIcon
+                name={"tab"}
+                onPress={onTabClick}
+                color={theme.colors.primary}
                 style={styles.icon}
             />
         </BaseView>
@@ -90,10 +88,8 @@ const createStyles = (theme: ColorThemeType) =>
             alignItems: "center",
             backgroundColor: theme.colors.background,
             paddingVertical: 10,
-            paddingHorizontal: 20,
+            height: 60,
             borderTopWidth: 1,
-            borderTopColor: theme.colors.border,
-            borderRadius: 20, // Added rounded corners
         },
         icon: {
             fontSize: 24,

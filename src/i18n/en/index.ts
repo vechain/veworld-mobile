@@ -477,6 +477,10 @@ const en: BaseTranslation = {
     CONNECTED_APP_CONNECTION_REQUESTS: "Connection requests",
     CONNECTED_APP_DESCRIPTION: "Description",
 
+
+    BROWSER_TAB_MANAGEMENT_TITLE: "Tabs",
+    BROWSER_FAVOURITES_TITLE: "Favourites",
+
     // NFT
     CONTRACT_ADDRESS: "Contract address",
     NFT_ATTRIBUTES: "Attributes",

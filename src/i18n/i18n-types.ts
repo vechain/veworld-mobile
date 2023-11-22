@@ -1701,6 +1701,14 @@ type RootTranslation = {
 	 */
 	CONNECTED_APP_DESCRIPTION: string
 	/**
+	 * T​a​b​s
+	 */
+	BROWSER_TAB_MANAGEMENT_TITLE: string
+	/**
+	 * F​a​v​o​u​r​i​t​e​s
+	 */
+	BROWSER_FAVOURITES_TITLE: string
+	/**
 	 * C​o​n​t​r​a​c​t​ ​a​d​d​r​e​s​s
 	 */
 	CONTRACT_ADDRESS: string
@@ -4357,6 +4365,14 @@ Try reconnect your device to the internet.
 	 * Description
 	 */
 	CONNECTED_APP_DESCRIPTION: () => LocalizedString
+	/**
+	 * Tabs
+	 */
+	BROWSER_TAB_MANAGEMENT_TITLE: () => LocalizedString
+	/**
+	 * Favourites
+	 */
+	BROWSER_FAVOURITES_TITLE: () => LocalizedString
 	/**
 	 * Contract address
 	 */

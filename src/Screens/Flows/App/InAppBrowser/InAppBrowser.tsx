@@ -6,8 +6,10 @@ import {
     DISCOVER_HOME_URL,
     useInAppBrowser,
 } from "~Components/Providers/InAppBrowserProvider"
-import { URLInput } from "./Components"
+import { BrowserFavouritesBottomSheet, URLInput } from "./Components"
 import { BrowserBottomBar } from "~Screens/Flows/App/InAppBrowser/Components/BrowserBottomBar"
+import { useBottomSheetModal } from "~Hooks"
+import { BrowserTabsBottomSheet } from "~Screens/Flows/App/InAppBrowser/Components/BrowserTabsBottomSheet"
 
 export const InAppBrowser = () => {
     const {
@@ -17,6 +19,18 @@ export const InAppBrowser = () => {
         onNavigationStateChange,
         navigationState,
     } = useInAppBrowser()
+
+    const {
+        ref: tabManagerSheetRef,
+        onOpen: openTabManagerSheet,
+        onClose: closeTabManagerSheet,
+    } = useBottomSheetModal()
+
+    const {
+        ref: onFavoritesSheetRef,
+        onOpen: openFavoritesSheet,
+        onClose: closeFavoritesSheet,
+    } = useBottomSheetModal()
 
     useEffect(() => {
         // set the webview ref to undefined when the component unmounts
@@ -31,7 +45,12 @@ export const InAppBrowser = () => {
             fixedHeader={<URLInput />}
             noBackButton
             noMargin
-            footer={<BrowserBottomBar />}
+            footer={
+                <BrowserBottomBar
+                    onTabClick={openTabManagerSheet}
+                    onFavouriteClick={openFavoritesSheet}
+                />
+            }
             fixedBody={
                 <>
                     <View style={styles.container}>
@@ -50,6 +69,16 @@ export const InAppBrowser = () => {
                             }
                         />
                     </View>
+
+                    <BrowserTabsBottomSheet
+                        ref={tabManagerSheetRef}
+                        onClose={closeTabManagerSheet}
+                    />
+
+                    <BrowserFavouritesBottomSheet
+                        ref={onFavoritesSheetRef}
+                        onClose={closeFavoritesSheet}
+                    />
                 </>
             }
         />
