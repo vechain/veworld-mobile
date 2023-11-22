@@ -472,27 +472,41 @@ function TotalSendAmountView({ amount, symbol, token, txCostTotal }: ITotalSendA
                 <BaseText typographyFont="body" mx={4}>
                     {symbol}
                 </BaseText>
-            </BaseView>
 
-            <BaseSpacer height={12} />
-
-            <BaseText typographyFont="caption">{"Total Cost"}</BaseText>
-
-            <BaseView flexDirection="row">
-                <Animated.Text style={[baseStyles.coloredText, animatedStyle]}>
-                    {FormattingUtils.scaleNumberDown(txCostTotal, token.decimals, token.decimals, BigNumber.ROUND_DOWN)}
-                </Animated.Text>
-                <BaseText typographyFont="body" mx={4}>
-                    {symbol}
-                </BaseText>
-
-                {exchangeRate && (
+                {exchangeRate && token.symbol.toLowerCase() !== "vtho" && (
                     <BaseText typographyFont="buttonSecondary">
                         {"≈ "}
                         {formattedFiatAmount} {currency}
                     </BaseText>
                 )}
             </BaseView>
+
+            {token.symbol.toLowerCase() === "vtho" && (
+                <>
+                    <BaseSpacer height={12} />
+                    <BaseText typographyFont="caption">{"Total Cost"}</BaseText>
+                    <BaseView flexDirection="row">
+                        <Animated.Text style={[baseStyles.coloredText, animatedStyle]}>
+                            {FormattingUtils.scaleNumberDown(
+                                txCostTotal,
+                                token.decimals,
+                                token.decimals,
+                                BigNumber.ROUND_DOWN,
+                            )}
+                        </Animated.Text>
+                        <BaseText typographyFont="body" mx={4}>
+                            {symbol}
+                        </BaseText>
+
+                        {exchangeRate && (
+                            <BaseText typographyFont="buttonSecondary">
+                                {"≈ "}
+                                {formattedFiatAmount} {currency}
+                            </BaseText>
+                        )}
+                    </BaseView>
+                </>
+            )}
         </>
     )
 }
