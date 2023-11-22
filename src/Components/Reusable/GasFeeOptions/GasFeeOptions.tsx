@@ -1,5 +1,6 @@
 import React, { useCallback, useMemo } from "react"
-
+import { ViewProps } from "react-native"
+import Animated, { AnimatedProps, FadeIn, FadeOut } from "react-native-reanimated"
 import { BaseButtonGroupHorizontal, BaseIcon, BaseSpacer, BaseText, BaseView } from "~Components"
 import { GasPriceCoefficient, VTHO } from "~Constants"
 import { useTheme } from "~Hooks"
@@ -14,7 +15,6 @@ type Props = {
     selectedFeeOption: string
     gasFeeOptions: Record<GasPriceCoefficient, string>
     isThereEnoughGas: boolean
-    vthoBalance: string
 }
 
 export const GasFeeOptions = ({
@@ -23,7 +23,6 @@ export const GasFeeOptions = ({
     selectedFeeOption,
     gasFeeOptions,
     isThereEnoughGas,
-    vthoBalance,
 }: Props) => {
     const theme = useTheme()
     const { LL } = useI18nContext()
@@ -56,10 +55,30 @@ export const GasFeeOptions = ({
     )
 
     if (selectedDelegationOption === DelegationType.URL) {
-        return <BaseText typographyFont="subSubTitle">{LL.SEND_DELEGATED_FEES()}</BaseText>
+        return (
+            <>
+                <BaseView flexDirection="row">
+                    <GasDetailsView />
+                    <BaseText typographyFont="subSubTitle">{LL.SEND_DELEGATED_FEES()}</BaseText>
+                </BaseView>
+            </>
+        )
     } else {
         return (
             <>
+                <BaseSpacer height={12} />
+                <BaseSpacer height={0.5} width={"100%"} background={theme.colors.textDisabled} />
+                <BaseSpacer height={12} />
+
+                <BaseView flexDirection="row" justifyContent="space-between">
+                    <GasDetailsView />
+                    {!isThereEnoughGas && (
+                        <GasWarningView entering={FadeIn.duration(300)} exiting={FadeOut.duration(300)} />
+                    )}
+                </BaseView>
+
+                <BaseSpacer height={6} />
+
                 <BaseView pt={8}>
                     <BaseButtonGroupHorizontal
                         selectedButtonIds={[selectedFeeOption]}
@@ -82,19 +101,38 @@ export const GasFeeOptions = ({
                     />
                 </BaseView>
 
-                {!isThereEnoughGas && (
-                    <>
-                        <BaseSpacer height={10} />
-                        <BaseView flexDirection="row">
-                            <BaseIcon name="alert-circle-outline" color={theme.colors.danger} size={16} />
-                            <BaseSpacer width={4} />
-                            <BaseText typographyFont="buttonSecondary" color={theme.colors.danger}>
-                                {LL.SEND_INSUFFICIENT_VTHO()} {vthoBalance} {VTHO.symbol}
-                            </BaseText>
-                        </BaseView>
-                    </>
-                )}
+                {/* {!isThereEnoughGas && <GasWarningView entering={FadeInUp} exiting={FadeOutUp} />} */}
             </>
         )
     }
+}
+
+interface IGasWarningView extends AnimatedProps<ViewProps> {}
+
+function GasWarningView(_props: IGasWarningView) {
+    const { ...animatedViewProps } = _props
+    const theme = useTheme()
+    const { LL } = useI18nContext()
+
+    return (
+        <Animated.View {...animatedViewProps}>
+            <BaseView flexDirection="row">
+                <BaseIcon name="alert-circle-outline" color={theme.colors.danger} size={16} />
+                <BaseSpacer width={4} />
+                <BaseText typographyFont="buttonSecondary" color={theme.colors.danger}>
+                    {LL.SEND_INSUFFICIENT_VTHO()}
+                    {"PLACEHOLDER"}
+                </BaseText>
+            </BaseView>
+        </Animated.View>
+    )
+}
+
+function GasDetailsView() {
+    const { LL } = useI18nContext()
+    return (
+        <BaseView mr={4}>
+            <BaseText typographyFont="buttonSecondary">{LL.SEND_GAS_FEE()}</BaseText>
+        </BaseView>
+    )
 }

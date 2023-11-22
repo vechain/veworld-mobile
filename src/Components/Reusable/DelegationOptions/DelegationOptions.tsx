@@ -13,17 +13,17 @@ type Props = {
     setSelectedDelegationUrl: (url: string) => void
     selectedDelegationOption: DelegationType
     setNoDelegation: () => void
-    setSelectedAccount: (account: AccountWithDevice) => void
-    selectedAccount?: LocalAccountWithDevice
+    setSelectedDelegationAccount: (account: AccountWithDevice) => void
+    selectedDelegationAccount?: LocalAccountWithDevice
     disabled?: boolean
 }
 
 // this component shows delegation options
 export const DelegationOptions = ({
     selectedDelegationOption,
-    setSelectedAccount,
+    setSelectedDelegationAccount,
     setNoDelegation,
-    selectedAccount,
+    selectedDelegationAccount,
     selectedDelegationUrl,
     setSelectedDelegationUrl,
     disabled,
@@ -89,8 +89,8 @@ export const DelegationOptions = ({
                 onClose={closeSelectAccountBottonSheet}
                 ref={selectAccountBottomSheetRef}
                 setNoDelegation={setNoDelegation}
-                setSelectedAccount={setSelectedAccount}
-                selectedAccount={selectedAccount}
+                setSelectedAccount={setSelectedDelegationAccount}
+                selectedAccount={selectedDelegationAccount}
                 selectedDelegationOption={selectedDelegationOption}
                 accounts={accounts}
             />

@@ -19,7 +19,6 @@ import {
     BaseSpacer,
     BaseText,
     DelegationOptions,
-    FadeoutButton,
     showErrorToast,
     showWarningToast,
 } from "~Components"
@@ -197,28 +196,9 @@ export const useTransactionScreen = ({
         checkIdentityBeforeOpening,
     ])
 
-    const continueNotAllowed = useMemo(
-        () => !isThereEnoughGas && selectedDelegationOption !== DelegationType.URL,
-        [isThereEnoughGas, selectedDelegationOption],
-    )
-
     const isLoading = useMemo(
         () => loading || loadingGas || isBiometricsEmpty,
         [loading, loadingGas, isBiometricsEmpty],
-    )
-
-    const SubmitButton = useCallback(
-        () => (
-            <FadeoutButton
-                title={LL.COMMON_BTN_CONFIRM().toUpperCase()}
-                action={onSubmit}
-                disabled={continueNotAllowed}
-                bottom={0}
-                mx={0}
-                width={"auto"}
-            />
-        ),
-        [LL, onSubmit, continueNotAllowed],
     )
 
     const Delegation = useCallback(
@@ -260,7 +240,6 @@ export const useTransactionScreen = ({
 
     return {
         Delegation,
-        SubmitButton,
         selectedDelegationOption,
         loadingGas,
         vthoGasFee,
@@ -268,7 +247,6 @@ export const useTransactionScreen = ({
         isThereEnoughGas,
         onSubmit,
         isLoading,
-        continueNotAllowed,
         isPasswordPromptOpen,
         handleClosePasswordModal,
         onPasswordSuccess,
