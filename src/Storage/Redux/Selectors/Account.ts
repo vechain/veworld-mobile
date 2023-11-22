@@ -10,39 +10,28 @@ export const selectAccountsState = (state: RootState) => state.accounts
 /**
  * @returns all the accounts
  */
-export const selectAccounts = createSelector(
-    selectAccountsState,
-    selectDevicesState,
-    (state, devices) => {
-        return sortBy(
-            state.accounts.map(account => {
-                const device = devices.find(
-                    _device => _device.rootAddress === account.rootAddress,
-                )
-                if (!device) {
-                    throw new Error(
-                        `No device found for account ${account.address}`,
-                    )
-                }
-                return {
-                    ...account,
-                    device,
-                }
-            }) as AccountWithDevice[],
-            account => account.device.position,
-        )
-    },
-)
+export const selectAccounts = createSelector(selectAccountsState, selectDevicesState, (state, devices) => {
+    return sortBy(
+        state.accounts.map(account => {
+            const device = devices.find(_device => _device.rootAddress === account.rootAddress)
+            if (!device) {
+                throw new Error(`No device found for account ${account.address}`)
+            }
+            return {
+                ...account,
+                device,
+            }
+        }) as AccountWithDevice[],
+        account => account.device.position,
+    )
+})
 
 /**
  * @returns all the accounts
  */
-export const selectSelectedAccountAddress = createSelector(
-    selectAccountsState,
-    state => {
-        return state.selectedAccount
-    },
-)
+export const selectSelectedAccountAddress = createSelector(selectAccountsState, state => {
+    return state.selectedAccount
+})
 
 /**
  * @returns the selected account if there is one
@@ -52,10 +41,7 @@ export const selectSelectedAccountOrNull = createSelector(
     selectSelectedAccountAddress,
     (accounts, selectedAccountAddress) => {
         const selectedAccount = accounts.find(account =>
-            AddressUtils.compareAddresses(
-                selectedAccountAddress,
-                account.address,
-            ),
+            AddressUtils.compareAddresses(selectedAccountAddress, account.address),
         )
 
         if (!selectedAccount && accounts.length > 0) {
@@ -70,27 +56,19 @@ export const selectSelectedAccountOrNull = createSelector(
  * @returns the selected account
  * @throws if there is no selected account
  */
-export const selectSelectedAccount = createSelector(
-    selectSelectedAccountOrNull,
-    selectedAccount => {
-        if (!selectedAccount) {
-            throw new Error("Failed to find selected account")
-        }
-        return selectedAccount
-    },
-)
+export const selectSelectedAccount = createSelector(selectSelectedAccountOrNull, selectedAccount => {
+    if (!selectedAccount) {
+        throw new Error("Failed to find selected account")
+    }
+    return selectedAccount
+})
 
 export const selectSelectedDevice = createSelector(
     selectDevicesState,
     selectSelectedAccount,
     (devices, selectedAccount) => {
         if (!selectedAccount) return null
-        return devices.find(device =>
-            AddressUtils.compareAddresses(
-                device.rootAddress,
-                selectedAccount.rootAddress,
-            ),
-        )
+        return devices.find(device => AddressUtils.compareAddresses(device.rootAddress, selectedAccount.rootAddress))
     },
 )
 
@@ -98,25 +76,16 @@ export const selectOtherAccounts = createSelector(
     selectAccounts,
     selectSelectedAccount,
     (allAccounts, currentAccount) => {
-        return allAccounts.filter(
-            _account =>
-                !AddressUtils.compareAddresses(
-                    _account.address,
-                    currentAccount.address,
-                ),
-        )
+        return allAccounts.filter(_account => !AddressUtils.compareAddresses(_account.address, currentAccount.address))
     },
 )
 
 /**
  * @returns all the visibile accounts
  */
-export const selectVisibleAccounts = createSelector(
-    selectAccounts,
-    accounts => {
-        return accounts.filter(account => account.visible)
-    },
-)
+export const selectVisibleAccounts = createSelector(selectAccounts, accounts => {
+    return accounts.filter(account => account.visible)
+})
 
 /**
  * @returns all the visibile accounts but the selected one
@@ -124,13 +93,7 @@ export const selectVisibleAccounts = createSelector(
 export const selectVisibleAccountsButSelected = createSelector(
     [selectVisibleAccounts, selectSelectedAccountAddress],
     (accounts, selectedAccountAddress) => {
-        return accounts.filter(
-            account =>
-                !AddressUtils.compareAddresses(
-                    selectedAccountAddress,
-                    account.address,
-                ),
-        )
+        return accounts.filter(account => !AddressUtils.compareAddresses(selectedAccountAddress, account.address))
     },
 )
 
@@ -140,10 +103,7 @@ export const selectDelegationAccounts = createSelector(
         return accounts.filter(
             account =>
                 account.device.type === DEVICE_TYPE.LOCAL_MNEMONIC &&
-                !AddressUtils.compareAddresses(
-                    selectedAccountAddress,
-                    account.address,
-                ),
+                !AddressUtils.compareAddresses(selectedAccountAddress, account.address),
         ) as LocalAccountWithDevice[]
     },
 )
@@ -156,8 +116,6 @@ export const selectDelegationAccounts = createSelector(
 export const selectAccountsByDevice = createSelector(
     [selectAccounts, (state: RootState, rootAddress?: string) => rootAddress],
     (accounts, rootAddress) => {
-        return accounts.filter(account =>
-            AddressUtils.compareAddresses(rootAddress, account.rootAddress),
-        )
+        return accounts.filter(account => AddressUtils.compareAddresses(rootAddress, account.rootAddress))
     },
 )

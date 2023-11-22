@@ -12,11 +12,7 @@ const getBaseGasPrice = async (thor: Connex.Thor): Promise<string> => {
         return paramsCache[k]
     } else {
         const address = "0x0000000000000000000000000000506172616d73"
-        const result = await thor
-            .account(address)
-            .method(abis.paramsGet)
-            .cache([address])
-            .call(BASE_GAS_PRICE)
+        const result = await thor.account(address).method(abis.paramsGet).cache([address]).call(BASE_GAS_PRICE)
 
         paramsCache[k] = result.data
         return result.data
@@ -39,9 +35,7 @@ const estimateGas = async (
             }
         }),
     )
-    const offeredGas = suggestedGas
-        ? Math.max(suggestedGas - intrinsicGas, 1)
-        : 2000 * 10000
+    const offeredGas = suggestedGas ? Math.max(suggestedGas - intrinsicGas, 1) : 2000 * 10000
     const explainer = thor.explain(clauses).caller(caller).gas(offeredGas)
 
     if (gasPayer) {

@@ -28,21 +28,16 @@ export const useMemoizedAnimation = <T extends ComplexAnimationBuilder>({
     const animateEntering = useMemo(
         () =>
             enteringAnimation && firstLoad
-                ? enteringAnimation
-                      .delay(enteringDelay)
-                      .duration(enteringDuration)
-                : enteringAnimation &&
-                  enteringAnimation.duration(enteringDuration),
+                ? enteringAnimation.delay(enteringDelay).duration(enteringDuration)
+                : enteringAnimation && enteringAnimation.duration(enteringDuration),
         [firstLoad, enteringAnimation, enteringDelay, enteringDuration],
     )
 
     const animateExiting = useMemo(
         () =>
             firstLoad
-                ? exitingAnimation &&
-                  exitingAnimation.delay(exitingDelay).duration(exitingDuration)
-                : exitingAnimation &&
-                  exitingAnimation.duration(exitingDuration),
+                ? exitingAnimation && exitingAnimation.delay(exitingDelay).duration(exitingDuration)
+                : exitingAnimation && exitingAnimation.duration(exitingDuration),
         [firstLoad, exitingAnimation, exitingDelay, exitingDuration],
     )
 

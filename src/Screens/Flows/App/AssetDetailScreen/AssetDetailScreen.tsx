@@ -13,12 +13,7 @@ import {
     showWarningToast,
 } from "~Components"
 import { RootStackParamListDiscover, Routes } from "~Navigation"
-import {
-    AssetHeader,
-    AssetChart,
-    BalanceView,
-    MarketInfoView,
-} from "./Components"
+import { AssetHeader, AssetChart, BalanceView, MarketInfoView } from "./Components"
 import { useI18nContext } from "~i18n"
 import { FastAction } from "~Model"
 import { striptags } from "striptags"
@@ -33,22 +28,16 @@ import {
 import { ScrollView } from "react-native-gesture-handler"
 import { InteractionManager, StyleSheet } from "react-native"
 
-type Props = NativeStackScreenProps<
-    RootStackParamListDiscover,
-    Routes.TOKEN_DETAILS
->
+type Props = NativeStackScreenProps<RootStackParamListDiscover, Routes.TOKEN_DETAILS>
 
 export const AssetDetailScreen = ({ route }: Props) => {
     const token = route.params.token
     const { styles, theme } = useThemedStyles(baseStyles)
     const nav = useNavigation()
     const { LL } = useI18nContext()
-    const marketInfo = useAppSelector(state =>
-        selectMarketInfoFor(token.symbol, state),
-    )
+    const marketInfo = useAppSelector(state => selectMarketInfoFor(token.symbol, state))
 
-    const { ref: QRCodeBottomSheetRef, onOpen: openQRCodeSheet } =
-        useBottomSheetModal()
+    const { ref: QRCodeBottomSheetRef, onOpen: openQRCodeSheet } = useBottomSheetModal()
 
     const isBalanceVisible = useAppSelector(selectBalanceVisible)
 
@@ -85,9 +74,7 @@ export const AssetDetailScreen = ({ route }: Props) => {
                         })
                     }
                 },
-                icon: (
-                    <BaseIcon color={theme.colors.text} name="send-outline" />
-                ),
+                icon: <BaseIcon color={theme.colors.text} name="send-outline" />,
                 testID: "sendButton",
             },
 
@@ -107,35 +94,23 @@ export const AssetDetailScreen = ({ route }: Props) => {
             fixedBody={
                 <ScrollView>
                     <BaseView style={styles.assetDetailsHeader}>
-                        <AssetHeader
-                            name={token.name}
-                            symbol={token.symbol}
-                            icon={token.icon}
-                        />
+                        <AssetHeader name={token.name} symbol={token.symbol} icon={token.icon} />
 
                         <BaseSpacer height={24} />
                         <AssetChart token={token} />
                     </BaseView>
 
-                    <BaseView
-                        alignItems="center"
-                        style={styles.assetDetailsBody}>
+                    <BaseView alignItems="center" style={styles.assetDetailsBody}>
                         <BaseSpacer height={24} />
                         <FastActionsBar actions={Actions} />
 
                         <BaseSpacer height={24} />
 
-                        <BalanceView
-                            token={token}
-                            isBalanceVisible={isBalanceVisible}
-                        />
+                        <BalanceView token={token} isBalanceVisible={isBalanceVisible} />
 
                         <BaseSpacer height={24} />
 
-                        <MarketInfoView
-                            marketInfo={marketInfo}
-                            tokenSymbol={token.symbol}
-                        />
+                        <MarketInfoView marketInfo={marketInfo} tokenSymbol={token.symbol} />
 
                         <BaseSpacer height={24} />
 

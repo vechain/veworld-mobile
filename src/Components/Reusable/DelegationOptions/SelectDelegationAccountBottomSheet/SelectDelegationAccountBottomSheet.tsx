@@ -15,28 +15,12 @@ type Props = {
 }
 
 // component to select an account for delegation
-export const SelectDelegationAccountBottomSheet = React.forwardRef<
-    BottomSheetModalMethods,
-    Props
->(
-    (
-        {
-            onClose,
-            setSelectedAccount,
-            selectedAccount,
-            selectedDelegationOption,
-            setNoDelegation,
-            accounts,
-        },
-        ref,
-    ) => {
+export const SelectDelegationAccountBottomSheet = React.forwardRef<BottomSheetModalMethods, Props>(
+    ({ onClose, setSelectedAccount, selectedAccount, selectedDelegationOption, setNoDelegation, accounts }, ref) => {
         const isBalanceVisible = useAppSelector(selectBalanceVisible)
 
         const onDismiss = () => {
-            if (
-                selectedDelegationOption === DelegationType.ACCOUNT &&
-                !selectedAccount
-            ) {
+            if (selectedDelegationOption === DelegationType.ACCOUNT && !selectedAccount) {
                 setNoDelegation()
             }
         }

@@ -28,9 +28,7 @@ const trackEvent =
     (event: string, properties?: AnalyticsProperties): AppThunk<void> =>
     (_, getState) => {
         try {
-            const isAnalyticsEnabled = selectAnalyticsTrackingEnabled(
-                getState(),
-            )
+            const isAnalyticsEnabled = selectAnalyticsTrackingEnabled(getState())
             if (mixpanel && isInitialized && isAnalyticsEnabled) {
                 mixpanel.track(event, properties)
             }

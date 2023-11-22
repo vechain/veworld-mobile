@@ -5,14 +5,10 @@ import { FastActionsBar } from "./FastActionsBar"
 import { BaseIcon } from "~Components/Base"
 import { FastAction } from "~Model"
 
-const getBuyButton = async () =>
-    await screen.findByTestId("buyButton", {}, { timeout: 50000 })
-const getSendButton = async () =>
-    await screen.findByTestId("sendButton", {}, { timeout: 50000 })
-const getSwapButton = async () =>
-    await screen.findByTestId("swapButton", {}, { timeout: 50000 })
-const getHistoryButton = async () =>
-    await screen.findByTestId("historyButton", {}, { timeout: 50000 })
+const getBuyButton = async () => await screen.findByTestId("buyButton", {}, { timeout: 50000 })
+const getSendButton = async () => await screen.findByTestId("sendButton", {}, { timeout: 50000 })
+const getSwapButton = async () => await screen.findByTestId("swapButton", {}, { timeout: 50000 })
+const getHistoryButton = async () => await screen.findByTestId("historyButton", {}, { timeout: 50000 })
 
 const mocked_action_buy = jest.fn()
 const mocked_action_send = jest.fn()

@@ -1,12 +1,5 @@
 import React, { useCallback } from "react"
-import {
-    BaseCard,
-    BaseIcon,
-    BaseSpacer,
-    BaseText,
-    BaseView,
-    Layout,
-} from "~Components"
+import { BaseCard, BaseIcon, BaseSpacer, BaseText, BaseView, Layout } from "~Components"
 import { useI18nContext } from "~i18n"
 import DeviceInfo from "react-native-device-info"
 import { VeWorldLogoSVG } from "~Assets"
@@ -39,11 +32,7 @@ export const AboutScreen = () => {
     ]
 
     const renderLinks = useCallback(
-        (link: {
-            title: LocalizedString
-            subtitle: LocalizedString
-            url: string
-        }) => (
+        (link: { title: LocalizedString; subtitle: LocalizedString; url: string }) => (
             <BaseView w={100} py={8} key={link.title + link.subtitle}>
                 <BaseCard
                     key={link.url}
@@ -52,26 +41,14 @@ export const AboutScreen = () => {
                         HapticsService.triggerImpact({ level: "Light" })
                         Linking.openURL(link.url)
                     }}>
-                    <BaseView
-                        flex={1}
-                        flexDirection="row"
-                        justifyContent="space-between"
-                        alignItems="center">
+                    <BaseView flex={1} flexDirection="row" justifyContent="space-between" alignItems="center">
                         <BaseView>
-                            <BaseText typographyFont="subTitleBold">
-                                {link.title}
-                            </BaseText>
+                            <BaseText typographyFont="subTitleBold">{link.title}</BaseText>
                             <BaseSpacer height={8} />
-                            <BaseText typographyFont="captionRegular">
-                                {link.subtitle}
-                            </BaseText>
+                            <BaseText typographyFont="captionRegular">{link.subtitle}</BaseText>
                         </BaseView>
                         <BaseView>
-                            <BaseIcon
-                                name="chevron-right"
-                                size={25}
-                                color={theme.colors.text}
-                            />
+                            <BaseIcon name="chevron-right" size={25} color={theme.colors.text} />
                         </BaseView>
                     </BaseView>
                 </BaseCard>
@@ -96,13 +73,12 @@ export const AboutScreen = () => {
                             <VeWorldLogoSVG width={90} height={62} />
                         </BaseCard>
                         <BaseSpacer height={16} />
-                        <BaseText typographyFont="subTitleBold">
-                            {LL.VEWORLD()}
-                        </BaseText>
+                        <BaseText typographyFont="subTitleBold">{LL.VEWORLD()}</BaseText>
                         <BaseSpacer height={8} />
                         <BaseText typographyFont="captionRegular">
                             {LL.SETTINGS_ABOUT_APP_VERSION({
-                                version: DeviceInfo.getVersion(), // NOTE: this can be taken from package.json too, but this seems more reliable
+                                // NOTE: this can be taken from package.json too, but this seems more reliable
+                                version: DeviceInfo.getVersion(),
                             })}
                         </BaseText>
                         <BaseSpacer height={48} />

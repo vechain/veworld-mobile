@@ -18,12 +18,7 @@ export const CameraFooter = ({ onPaste }: Props) => {
     }
 
     return (
-        <BaseView
-            flexDirection="row"
-            style={baseStyles.container}
-            justifyContent="center"
-            w={100}
-            alignItems="center">
+        <BaseView flexDirection="row" style={baseStyles.container} justifyContent="center" w={100} alignItems="center">
             <BaseTouchable action={() => onPress()}>
                 <BaseText typographyFont="subTitle" color="white">
                     {"Paste from clipboard"}

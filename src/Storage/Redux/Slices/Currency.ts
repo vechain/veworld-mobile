@@ -14,10 +14,7 @@ export const CurrencySlice = createSlice({
         updateCurrency: (_, action: PayloadAction<CurrencyState>) => {
             return action.payload
         },
-        updateExchangeRate: (
-            state,
-            action: PayloadAction<CurrencyExchangeRate[]>,
-        ) => {
+        updateExchangeRate: (state, action: PayloadAction<CurrencyExchangeRate[]>) => {
             state.exchangeRates = action.payload
         },
         updateAvailableCurrencies: (state, action: PayloadAction<string[]>) => {
@@ -30,10 +27,5 @@ export const CurrencySlice = createSlice({
     },
 })
 
-export const {
-    updateCurrency,
-    updateExchangeRate,
-    clearExchangeRate,
-    updateAvailableCurrencies,
-    resetCurrencyState,
-} = CurrencySlice.actions
+export const { updateCurrency, updateExchangeRate, clearExchangeRate, updateAvailableCurrencies, resetCurrencyState } =
+    CurrencySlice.actions

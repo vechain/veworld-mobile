@@ -1,3 +1,4 @@
+/* eslint-disable max-len */
 import { renderHook } from "@testing-library/react-hooks/native"
 import { AppStateType } from "~Model"
 import { useAppStateTransitions } from "./useAppStateTransitions"
@@ -6,9 +7,7 @@ import { useAppState } from "../useAppState"
 jest.mock("../useAppState")
 
 describe("useAppStateTransitions", () => {
-    const mockUseAppState = useAppState as jest.MockedFunction<
-        typeof useAppState
-    >
+    const mockUseAppState = useAppState as jest.MockedFunction<typeof useAppState>
 
     beforeEach(() => {
         mockUseAppState.mockReturnValue({

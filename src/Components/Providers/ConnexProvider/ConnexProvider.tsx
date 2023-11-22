@@ -7,9 +7,7 @@ import { CustomNet } from "~Components/Providers/ConnexProvider/CustomNet"
 import { Network } from "~Model"
 
 type ConnexContextProviderProps = { children: React.ReactNode }
-export const ConnexContext = React.createContext<Connex.Thor | undefined>(
-    undefined,
-)
+export const ConnexContext = React.createContext<Connex.Thor | undefined>(undefined)
 
 const ConnexContextProvider = ({ children }: ConnexContextProviderProps) => {
     const selectedNetwork = useAppSelector(selectSelectedNetwork)
@@ -42,22 +40,15 @@ const ConnexContextProvider = ({ children }: ConnexContextProviderProps) => {
         }
     }, [thor, status])
 
-    return (
-        <ConnexContext.Provider value={value}>
-            {children}
-        </ConnexContext.Provider>
-    )
+    return <ConnexContext.Provider value={value}>{children}</ConnexContext.Provider>
 }
 
-const createDriver = (network: Network) =>
-    new Driver(new CustomNet(network.currentUrl), network.genesis)
+const createDriver = (network: Network) => new Driver(new CustomNet(network.currentUrl), network.genesis)
 
 const useThor = () => {
     const context = React.useContext(ConnexContext)
     if (!context) {
-        throw new Error(
-            "useThorContext must be used within a UserContextProvider",
-        )
+        throw new Error("useThorContext must be used within a UserContextProvider")
     }
 
     return context

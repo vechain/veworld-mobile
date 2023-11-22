@@ -1,29 +1,11 @@
 import React, { ReactElement } from "react"
-import Svg, {
-    Defs,
-    LinearGradient,
-    Stop,
-    Path,
-    SvgProps,
-} from "react-native-svg"
+import Svg, { Defs, LinearGradient, Stop, Path, SvgProps } from "react-native-svg"
 
 export const VeChainVetLogoSVG = (props: SvgProps): ReactElement => {
     return (
-        <Svg
-            width={215}
-            height={196}
-            viewBox="0 0 321 292"
-            fill="none"
-            xmlns="http://www.w3.org/2000/svg"
-            {...props}>
+        <Svg width={215} height={196} viewBox="0 0 321 292" fill="none" xmlns="http://www.w3.org/2000/svg" {...props}>
             <Defs>
-                <LinearGradient
-                    id="a"
-                    x1={0.38}
-                    y1={145.62}
-                    x2={320.07}
-                    y2={145.62}
-                    gradientUnits="userSpaceOnUse">
+                <LinearGradient id="a" x1={0.38} y1={145.62} x2={320.07} y2={145.62} gradientUnits="userSpaceOnUse">
                     <Stop offset={0.13} stopColor="#270089" stopOpacity={1} />
                     <Stop offset={0.6} stopColor="#00bed6" stopOpacity={1} />
                     <Stop offset={1} stopColor="#80bc00" stopOpacity={1} />

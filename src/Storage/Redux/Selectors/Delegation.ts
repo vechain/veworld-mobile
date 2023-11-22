@@ -28,13 +28,11 @@ export const getDefaultDelegationOption = createSelector(
 export const getDefaultDelegationAccount = createSelector(
     selectSelectedNetwork,
     selectDelegationState,
-    (network, delegation) =>
-        delegation[network.genesis.id]?.defaultDelegationAccount,
+    (network, delegation) => delegation[network.genesis.id]?.defaultDelegationAccount,
 )
 
 export const getDefaultDelegationUrl = createSelector(
     selectSelectedNetwork,
     selectDelegationState,
-    (network, delegation) =>
-        delegation[network.genesis.id]?.defaultDelegationUrl,
+    (network, delegation) => delegation[network.genesis.id]?.defaultDelegationUrl,
 )

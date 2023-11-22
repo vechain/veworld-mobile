@@ -1,12 +1,7 @@
 import { LedgerDevice, Network, Response } from "~Model"
 import { Certificate, HDNode, Transaction } from "thor-devkit"
 import { AddressUtils, BalanceUtils } from "~Utils"
-import {
-    LEDGER_ERROR_CODES,
-    VET_DERIVATION_PATH,
-    VETLedgerAccount,
-    VETLedgerApp,
-} from "~Constants"
+import { LEDGER_ERROR_CODES, VET_DERIVATION_PATH, VETLedgerAccount, VETLedgerApp } from "~Constants"
 import { debug, error, warn } from "~Utils/Logger"
 import { Buffer } from "buffer"
 
@@ -27,10 +22,7 @@ export enum LedgerConfig {
  * Parses ledger errors based on common issues
  */
 export const ledgerErrorHandler = (err: unknown): LEDGER_ERROR_CODES => {
-    if (
-        typeof err === "string" &&
-        Object.values(LEDGER_ERROR_CODES).includes(err as LEDGER_ERROR_CODES)
-    ) {
+    if (typeof err === "string" && Object.values(LEDGER_ERROR_CODES).includes(err as LEDGER_ERROR_CODES)) {
         return err as LEDGER_ERROR_CODES
     }
 
@@ -80,9 +72,7 @@ type VerifyTransportResponse = {
 type VerifyResponse = Promise<Response<VerifyTransportResponse>>
 
 export const verifyTransport = async (
-    withTransport: (
-        func: (t: BleTransport) => VerifyResponse,
-    ) => VerifyResponse,
+    withTransport: (func: (t: BleTransport) => VerifyResponse) => VerifyResponse,
 ): VerifyResponse => {
     const res = async (transport: BleTransport): VerifyResponse => {
         const app = new VETLedgerApp(transport)
@@ -90,14 +80,8 @@ export const verifyTransport = async (
         try {
             const config = await app.getAppConfiguration()
 
-            const appConfig: LedgerConfig = config.toString(
-                "hex",
-            ) as LedgerConfig
-            const rootAccount: VETLedgerAccount = await app.getAddress(
-                VET_DERIVATION_PATH,
-                false,
-                true,
-            )
+            const appConfig: LedgerConfig = config.toString("hex") as LedgerConfig
+            const rootAccount: VETLedgerAccount = await app.getAddress(VET_DERIVATION_PATH, false, true)
 
             return {
                 success: true,
@@ -133,17 +117,10 @@ type ISignMessage = {
     index: number
     message: Buffer
     device: LedgerDevice
-    withTransport: (
-        func: (t: BleTransport) => MessageResponse,
-    ) => MessageResponse
+    withTransport: (func: (t: BleTransport) => MessageResponse) => MessageResponse
 }
 
-const signMessage = async ({
-    index,
-    message,
-    device,
-    withTransport,
-}: ISignMessage): MessageResponse => {
+const signMessage = async ({ index, message, device, withTransport }: ISignMessage): MessageResponse => {
     debug("Signing message")
 
     const res = async (transport: BleTransport): MessageResponse => {
@@ -293,8 +270,7 @@ const getAccountsWithBalances = async (
 
     if (numberOfAccounts < 1) throw new Error("Must get at least 1 account")
 
-    if (!rootAccount.publicKey || !rootAccount.chainCode)
-        throw new Error("Failed to get public key/ chaincode")
+    if (!rootAccount.publicKey || !rootAccount.chainCode) throw new Error("Failed to get public key/ chaincode")
 
     const publicKey = Buffer.from(rootAccount.publicKey, "hex")
     const chainCode = Buffer.from(rootAccount.chainCode, "hex")
@@ -307,11 +283,7 @@ const getAccountsWithBalances = async (
         const childNode = hdNode.derive(i)
 
         try {
-            const balance =
-                await BalanceUtils.getVetAndVthoBalancesFromBlockchain(
-                    childNode.address,
-                    network,
-                )
+            const balance = await BalanceUtils.getVetAndVthoBalancesFromBlockchain(childNode.address, network)
 
             accounts.push({
                 address: childNode.address,
@@ -333,16 +305,9 @@ const getAccountsWithBalances = async (
  *
  * @throws an error if the ledger does not contain the expected account
  */
-const validateRootAddress = async (
-    rootAddress: string,
-    vetLedger: VETLedgerApp,
-) => {
+const validateRootAddress = async (rootAddress: string, vetLedger: VETLedgerApp) => {
     debug("Validating root address")
-    const rootAccount = await vetLedger.getAddress(
-        VET_DERIVATION_PATH,
-        false,
-        false,
-    )
+    const rootAccount = await vetLedger.getAddress(VET_DERIVATION_PATH, false, false)
 
     if (!AddressUtils.compareAddresses(rootAddress, rootAccount.address)) {
         throw LEDGER_ERROR_CODES.WRONG_ROOT_ACCOUNT

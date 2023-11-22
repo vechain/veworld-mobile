@@ -82,9 +82,7 @@ export const useWcSessions = () => {
 
             setActiveSessions(_activeSessions)
 
-            dispatch(
-                cleanContexts({ activeTopics: Object.keys(_activeSessions) }),
-            )
+            dispatch(cleanContexts({ activeTopics: Object.keys(_activeSessions) }))
         })
         //eslint-disable-next-line react-hooks/exhaustive-deps
     }, [])

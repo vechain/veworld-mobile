@@ -7,11 +7,7 @@ import { useI18nContext } from "~i18n"
 /**
  * hook to check and request camera permissions
  */
-export const useCameraPermissions = ({
-    onCanceled,
-}: {
-    onCanceled: () => void
-}) => {
+export const useCameraPermissions = ({ onCanceled }: { onCanceled: () => void }) => {
     const { LL } = useI18nContext()
 
     const requestPermissions = useCallback(async (): Promise<boolean> => {

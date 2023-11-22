@@ -1,25 +1,17 @@
 import { useCallback, useEffect, useMemo, useRef, useState } from "react"
 import { useI18nContext } from "~i18n"
-import ReactNativeBlobUtil, {
-    FetchBlobResponse,
-    StatefulPromise,
-} from "react-native-blob-util"
+import ReactNativeBlobUtil, { FetchBlobResponse, StatefulPromise } from "react-native-blob-util"
 
 import { CameraRoll } from "@react-native-camera-roll/camera-roll"
 import { AlertUtils, PlatformUtils, debug } from "~Utils"
 import { NFTMedia } from "~Model"
 import { hasAndroidPermission } from "./Helpers"
 
-export const useSaveMediaToPhotos = (
-    image?: NFTMedia,
-    nftName: string = "VeWorld NFT",
-) => {
+export const useSaveMediaToPhotos = (image?: NFTMedia, nftName: string = "VeWorld NFT") => {
     const { LL } = useI18nContext()
     const [progress, setProgress] = useState(0)
     const imageToFlush = useRef<FetchBlobResponse | undefined>()
-    const [task, setTask] = useState<
-        StatefulPromise<FetchBlobResponse> | undefined
-    >()
+    const [task, setTask] = useState<StatefulPromise<FetchBlobResponse> | undefined>()
 
     const LongPressItems = useMemo(
         () => [
@@ -92,11 +84,7 @@ export const useSaveMediaToPhotos = (
             // let er = error as IRCTPromiseRejectBlock
 
             // if (er?.code === "E_UNABLE_TO_SAVE") {
-            AlertUtils.showDefaultAlert(
-                LL.SAVE_MEDIA_ERROR_TITLE(),
-                LL.SAVE_MEDIA_ERROR_SUBTITLE(),
-                LL.COMMON_BTN_OK(),
-            )
+            AlertUtils.showDefaultAlert(LL.SAVE_MEDIA_ERROR_TITLE(), LL.SAVE_MEDIA_ERROR_SUBTITLE(), LL.COMMON_BTN_OK())
             // }
 
             imageToFlush.current?.flush()

@@ -101,15 +101,11 @@ describe("HexUtils tests", () => {
     })
 
     test("Validate - hex uppercase has prefix uppercase", () => {
-        expect(() =>
-            HexUtils.validate(hexUppercaseHasPrefixUppercase),
-        ).not.toThrow()
+        expect(() => HexUtils.validate(hexUppercaseHasPrefixUppercase)).not.toThrow()
     })
 
     test("Validate - hex uppercase has prefix lowercase", () => {
-        expect(() =>
-            HexUtils.validate(hexUppercaseHasPrefixLowercase),
-        ).not.toThrow()
+        expect(() => HexUtils.validate(hexUppercaseHasPrefixLowercase)).not.toThrow()
     })
 
     test("Validate - hex uppercase no prefix", () => {
@@ -191,57 +187,35 @@ describe("HexUtils tests", () => {
 
     describe("compare", () => {
         test("compare - hex lowercase has prefix", () => {
-            expect(
-                HexUtils.compare(hexLowercaseHasPrefix, hexLowercaseHasPrefix),
-            ).toBeTruthy()
+            expect(HexUtils.compare(hexLowercaseHasPrefix, hexLowercaseHasPrefix)).toBeTruthy()
         })
 
         test("compare - hex lowercase no prefix", () => {
-            expect(
-                HexUtils.compare(hexLowercaseNoPrefix, hexLowercaseNoPrefix),
-            ).toBeTruthy()
+            expect(HexUtils.compare(hexLowercaseNoPrefix, hexLowercaseNoPrefix)).toBeTruthy()
         })
 
         test("compare - hex uppercase has prefix uppercase", () => {
-            expect(
-                HexUtils.compare(
-                    hexUppercaseHasPrefixUppercase,
-                    hexUppercaseHasPrefixUppercase,
-                ),
-            ).toBeTruthy()
+            expect(HexUtils.compare(hexUppercaseHasPrefixUppercase, hexUppercaseHasPrefixUppercase)).toBeTruthy()
         })
 
         test("compare - hex uppercase has prefix lowercase", () => {
-            expect(
-                HexUtils.compare(
-                    hexUppercaseHasPrefixLowercase,
-                    hexUppercaseHasPrefixLowercase,
-                ),
-            ).toBeTruthy()
+            expect(HexUtils.compare(hexUppercaseHasPrefixLowercase, hexUppercaseHasPrefixLowercase)).toBeTruthy()
         })
 
         test("compare - hex uppercase no prefix", () => {
-            expect(
-                HexUtils.compare(hexUppercaseNoPrefix, hexUppercaseNoPrefix),
-            ).toBeTruthy()
+            expect(HexUtils.compare(hexUppercaseNoPrefix, hexUppercaseNoPrefix)).toBeTruthy()
         })
 
         test("compare - hex mixedcase has prefix", () => {
-            expect(
-                HexUtils.compare(hexMixedcaseHasPrefix, hexMixedcaseHasPrefix),
-            ).toBeTruthy()
+            expect(HexUtils.compare(hexMixedcaseHasPrefix, hexMixedcaseHasPrefix)).toBeTruthy()
         })
 
         test("compare - hex mixedcase no prefix", () => {
-            expect(
-                HexUtils.compare(hexMixedcaseNoPrefix, hexMixedcaseNoPrefix),
-            ).toBeTruthy()
+            expect(HexUtils.compare(hexMixedcaseNoPrefix, hexMixedcaseNoPrefix)).toBeTruthy()
         })
 
         test("compare - hex lowercase mix prefix", () => {
-            expect(
-                HexUtils.compare(hexLowercaseHasPrefix, hexLowercaseNoPrefix),
-            ).toBeTruthy()
+            expect(HexUtils.compare(hexLowercaseHasPrefix, hexLowercaseNoPrefix)).toBeTruthy()
         })
 
         test("compare hex with non hex", () => {

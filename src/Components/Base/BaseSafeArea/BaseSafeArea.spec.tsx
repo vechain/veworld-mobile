@@ -6,8 +6,7 @@ import { BaseSafeArea } from "./BaseSafeArea"
 import { Text } from "react-native"
 
 const baseSafeAreaTestId = "BaseSafeArea"
-const findBaseSafeArea = async () =>
-    screen.findByTestId(baseSafeAreaTestId, {}, { timeout: 5000 })
+const findBaseSafeArea = async () => screen.findByTestId(baseSafeAreaTestId, {}, { timeout: 5000 })
 
 describe("BaseSafeArea", () => {
     beforeEach(() => {

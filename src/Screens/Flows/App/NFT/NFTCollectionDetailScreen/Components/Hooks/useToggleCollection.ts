@@ -12,9 +12,7 @@ import {
 export const useToggleCollection = (collection: NftCollection) => {
     const dispatch = useAppDispatch()
     const network = useAppSelector(selectSelectedNetwork)
-    const isBlacklisted = useAppSelector(state =>
-        isBlacklistedCollection(state, collection.address),
-    )
+    const isBlacklisted = useAppSelector(state => isBlacklistedCollection(state, collection.address))
     const selectedAccount = useAppSelector(selectSelectedAccount)
 
     const onToggleCollection = useCallback(

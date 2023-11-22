@@ -1,11 +1,7 @@
 import React, { useMemo } from "react"
 import { BaseButtonGroupHorizontal, BaseSpacer, BaseText } from "~Components"
 import { useI18nContext } from "~i18n"
-import {
-    AccountWithDevice,
-    BaseButtonGroupHorizontalType,
-    LocalAccountWithDevice,
-} from "~Model"
+import { AccountWithDevice, BaseButtonGroupHorizontalType, LocalAccountWithDevice } from "~Model"
 import { DelegationType } from "~Model/Delegation"
 import { useBottomSheetModal } from "~Hooks"
 import { selectDelegationAccounts, useAppSelector } from "~Storage/Redux"
@@ -66,9 +62,7 @@ export const DelegationOptions = ({
     }, [LL, accounts.length])
 
     // this function is called when a delegation option is selected
-    const handleSelectDelegationOption = (
-        button: BaseButtonGroupHorizontalType,
-    ) => {
+    const handleSelectDelegationOption = (button: BaseButtonGroupHorizontalType) => {
         if (button.id === DelegationType.NONE) {
             setNoDelegation()
         } else if (button.id === DelegationType.ACCOUNT) {
@@ -81,9 +75,7 @@ export const DelegationOptions = ({
     return (
         <>
             <BaseSpacer height={24} />
-            <BaseText typographyFont="subTitleBold">
-                {LL.SEND_DELEGATION_TITLE()}
-            </BaseText>
+            <BaseText typographyFont="subTitleBold">{LL.SEND_DELEGATION_TITLE()}</BaseText>
             <BaseSpacer height={15} />
 
             <BaseButtonGroupHorizontal

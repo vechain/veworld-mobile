@@ -26,15 +26,9 @@ export const fetchFromEndpoint = async <T>(url: string) => {
     } catch (error) {
         // Verify if 'error' is an instance of an Error before accessing 'error.message'
         if (error instanceof Error) {
-            throw new Error(
-                `Failed to fetch from endpoint ${url}: ${error.message}`,
-            )
+            throw new Error(`Failed to fetch from endpoint ${url}: ${error.message}`)
         } else {
-            throw new Error(
-                `Failed to fetch from endpoint ${url}: ${JSON.stringify(
-                    error,
-                )}`,
-            )
+            throw new Error(`Failed to fetch from endpoint ${url}: ${JSON.stringify(error)}`)
         }
     }
 }

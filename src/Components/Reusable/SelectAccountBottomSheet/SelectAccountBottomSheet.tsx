@@ -29,10 +29,7 @@ const ItemSeparatorComponent = () => <BaseSpacer height={16} />
 const snapPoints = ["50%", "75%", "90%"]
 
 // component to select an account
-export const SelectAccountBottomSheet = React.forwardRef<
-    BottomSheetModalMethods,
-    Props
->(
+export const SelectAccountBottomSheet = React.forwardRef<BottomSheetModalMethods, Props>(
     (
         {
             closeBottomSheet,
@@ -52,8 +49,10 @@ export const SelectAccountBottomSheet = React.forwardRef<
             if (closeBottomSheet) closeBottomSheet()
         }
 
-        const { flatListScrollProps, handleSheetChangePosition } =
-            useScrollableBottomSheet({ data: accounts, snapPoints })
+        const { flatListScrollProps, handleSheetChangePosition } = useScrollableBottomSheet({
+            data: accounts,
+            snapPoints,
+        })
 
         return (
             <BaseBottomSheet
@@ -61,9 +60,7 @@ export const SelectAccountBottomSheet = React.forwardRef<
                 ref={ref}
                 onChange={handleSheetChangePosition}
                 onDismiss={onDismiss}>
-                <BaseText typographyFont="subTitleBold">
-                    {LL.COMMON_SELECT_ACCOUNT()}
-                </BaseText>
+                <BaseText typographyFont="subTitleBold">{LL.COMMON_SELECT_ACCOUNT()}</BaseText>
                 <BaseSpacer height={12} />
                 <BottomSheetFlatList
                     data={accounts}

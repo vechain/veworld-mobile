@@ -46,9 +46,7 @@ describe("useCameraPermissions", () => {
     })
 
     it("should return an object with the correct shape", async () => {
-        const { result } = renderHook(() =>
-            useCameraPermissions({ onCanceled }),
-        )
+        const { result } = renderHook(() => useCameraPermissions({ onCanceled }))
 
         expect(result.current).toEqual(
             expect.objectContaining({
@@ -57,24 +55,20 @@ describe("useCameraPermissions", () => {
         )
     })
 
+    // eslint-disable-next-line max-len
     it("should request camera permissions when checkPermissions is called and the permissions have not been granted", async () => {
-        const { result } = renderHook(() =>
-            useCameraPermissions({ onCanceled }),
-        )
+        const { result } = renderHook(() => useCameraPermissions({ onCanceled }))
 
         ;(Camera.getCameraPermissionsAsync as jest.Mock).mockResolvedValueOnce({
             granted: false,
             canAskAgain: true,
         })
-        ;(
-            Camera.requestCameraPermissionsAsync as jest.Mock
-        ).mockResolvedValueOnce({
+        ;(Camera.requestCameraPermissionsAsync as jest.Mock).mockResolvedValueOnce({
             granted: true,
         })
 
         await act(async () => {
-            const checkPermissionsResult =
-                await result.current.checkPermissions()
+            const checkPermissionsResult = await result.current.checkPermissions()
             expect(checkPermissionsResult).toBe(true)
         })
 
@@ -83,9 +77,7 @@ describe("useCameraPermissions", () => {
     })
 
     it("should check if it has already permissions", async () => {
-        const { result } = renderHook(() =>
-            useCameraPermissions({ onCanceled }),
-        )
+        const { result } = renderHook(() => useCameraPermissions({ onCanceled }))
 
         ;(Camera.getCameraPermissionsAsync as jest.Mock).mockResolvedValueOnce({
             granted: true,
@@ -93,8 +85,7 @@ describe("useCameraPermissions", () => {
         })
 
         await act(async () => {
-            const checkPermissionsResult =
-                await result.current.checkPermissions()
+            const checkPermissionsResult = await result.current.checkPermissions()
             expect(checkPermissionsResult).toBe(true)
         })
 
@@ -102,21 +93,17 @@ describe("useCameraPermissions", () => {
     })
 
     it("should show an alert when the user has denied camera permissions and cannot be prompted again", async () => {
-        const { result } = renderHook(() =>
-            useCameraPermissions({ onCanceled }),
-        )
+        const { result } = renderHook(() => useCameraPermissions({ onCanceled }))
         ;(Camera.getCameraPermissionsAsync as jest.Mock).mockResolvedValueOnce({
             granted: false,
             canAskAgain: false,
         })
         let successFn: () => void = () => {}
         let cancelFn: () => void = () => {}
-        ;(AlertUtils.showGoToSettingsAlert as jest.Mock).mockImplementation(
-            (_title, _message, _cancel, _success) => {
-                cancelFn = _cancel
-                successFn = _success
-            },
-        )
+        ;(AlertUtils.showGoToSettingsAlert as jest.Mock).mockImplementation((_title, _message, _cancel, _success) => {
+            cancelFn = _cancel
+            successFn = _success
+        })
         await act(async () => {
             await result.current.checkPermissions()
         })
@@ -130,10 +117,9 @@ describe("useCameraPermissions", () => {
         expect(Linking.openSettings).toHaveBeenCalled()
     })
 
+    // eslint-disable-next-line max-len
     it("should show an alert prompting the user to go to settings when camera permissions have been denied but can be prompted again", async () => {
-        const { result } = renderHook(() =>
-            useCameraPermissions({ onCanceled }),
-        )
+        const { result } = renderHook(() => useCameraPermissions({ onCanceled }))
 
         ;(Camera.getCameraPermissionsAsync as jest.Mock).mockResolvedValueOnce({
             granted: false,
@@ -141,8 +127,7 @@ describe("useCameraPermissions", () => {
         })
 
         await act(async () => {
-            const checkPermissionsResult =
-                await result.current.checkPermissions()
+            const checkPermissionsResult = await result.current.checkPermissions()
             expect(checkPermissionsResult).toBe(false)
         })
 
@@ -153,13 +138,10 @@ describe("useCameraPermissions", () => {
     })
 
     it("should show run checkPermissions", async () => {
-        const { result } = renderHook(() =>
-            useCameraPermissions({ onCanceled }),
-        )
+        const { result } = renderHook(() => useCameraPermissions({ onCanceled }))
         jest.spyOn(result.current, "checkPermissions")
         await act(async () => {
-            const checkPermissionsResult =
-                await result.current.checkPermissions()
+            const checkPermissionsResult = await result.current.checkPermissions()
             expect(checkPermissionsResult).toBe(false)
         })
         expect(result.current.checkPermissions).toHaveBeenCalled()

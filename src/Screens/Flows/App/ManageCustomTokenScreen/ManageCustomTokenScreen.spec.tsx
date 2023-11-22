@@ -25,11 +25,9 @@ const driver = new Driver(net, genesises.main, {
     txsFeatures: 0,
 })
 
-jest.spyOn(Driver, "connect").mockImplementation(
-    (_net: Net, _wallet?: Wallet): Promise<Driver> => {
-        return Promise.resolve(driver)
-    },
-)
+jest.spyOn(Driver, "connect").mockImplementation((_net: Net, _wallet?: Wallet): Promise<Driver> => {
+    return Promise.resolve(driver)
+})
 
 describe("ManageCustomTokenScreen", () => {
     afterEach(() => {

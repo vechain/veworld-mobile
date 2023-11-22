@@ -5,17 +5,13 @@ const compareURLs = (url1?: string, url2?: string) => {
 
     const parsedURL1 = new URL(url1)
     const parsedURL2 = new URL(url2)
-    return (
-        parsedURL1.origin === parsedURL2.origin &&
-        parsedURL1.pathname === parsedURL2.pathname
-    )
+    return parsedURL1.origin === parsedURL2.origin && parsedURL1.pathname === parsedURL2.pathname
 }
 
 const clean = (url: string) => {
     const parsedURL = new URL(url.trim())
 
-    if (parsedURL.pathname.endsWith("/"))
-        return parsedURL.origin + parsedURL.pathname.slice(0, -1)
+    if (parsedURL.pathname.endsWith("/")) return parsedURL.origin + parsedURL.pathname.slice(0, -1)
 
     return parsedURL.origin + parsedURL.pathname
 }
@@ -28,8 +24,7 @@ const toWebsocketURL = (url: string, suffix?: string) => {
 }
 
 // Returns the default websocket url for the node (beat2)
-const toNodeBeatWebsocketUrl = (url: string) =>
-    toWebsocketURL(url, "/subscriptions/beat2")
+const toNodeBeatWebsocketUrl = (url: string) => toWebsocketURL(url, "/subscriptions/beat2")
 
 const isHttps = (url: string) => {
     try {
@@ -43,10 +38,7 @@ const isHttps = (url: string) => {
 const isLocalHost = (url: string) => {
     try {
         const parsedURL = new URL(url)
-        return (
-            parsedURL.hostname === "localhost" ||
-            parsedURL.hostname === "127.0.0.1"
-        )
+        return parsedURL.hostname === "localhost" || parsedURL.hostname === "127.0.0.1"
     } catch (e) {
         return false
     }
@@ -93,8 +85,7 @@ const convertUriToUrl = (uri: string) => {
 
     switch (protocol) {
         case "ipfs":
-            if (!validateIpfsUri(uri))
-                throw new Error(`Invalid IPFS URI ${uri}`)
+            if (!validateIpfsUri(uri)) throw new Error(`Invalid IPFS URI ${uri}`)
 
             // Check cache for IPFS document
 

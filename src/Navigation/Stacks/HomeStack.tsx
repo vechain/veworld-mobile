@@ -73,22 +73,15 @@ export type RootStackParamListHome = {
     [Routes.SETTINGS_CONNECTED_APPS]: undefined
 }
 
-const { Navigator, Group, Screen } =
-    createNativeStackNavigator<RootStackParamListHome>()
+const { Navigator, Group, Screen } = createNativeStackNavigator<RootStackParamListHome>()
 
 export const HomeStack = () => {
     const { animation } = useNavAnimation()
 
     return (
-        <Navigator
-            id="HomeStack"
-            screenOptions={{ headerShown: false, animation }}>
+        <Navigator id="HomeStack" screenOptions={{ headerShown: false, animation }}>
             <Group>
-                <Screen
-                    name={Routes.HOME}
-                    component={HomeScreen}
-                    options={{ headerShown: false }}
-                />
+                <Screen name={Routes.HOME} component={HomeScreen} options={{ headerShown: false }} />
                 <Screen
                     name={Routes.SELECT_TOKEN_SEND}
                     component={SelectTokenSendScreen}
@@ -114,42 +107,26 @@ export const HomeStack = () => {
                     component={LedgerSignTransaction}
                     options={{ headerShown: false }}
                 />
-                <Screen
-                    name={Routes.SWAP}
-                    component={SwapScreen}
-                    options={{ headerShown: false }}
-                />
+                <Screen name={Routes.SWAP} component={SwapScreen} options={{ headerShown: false }} />
                 <Screen
                     name={Routes.SETTINGS_CONNECTED_APPS}
                     component={ConnectedAppsScreen}
                     options={{ headerShown: false }}
                 />
-                <Screen
-                    name={Routes.HISTORY}
-                    component={HistoryScreen}
-                    options={{ headerShown: false }}
-                />
+                <Screen name={Routes.HISTORY} component={HistoryScreen} options={{ headerShown: false }} />
                 <Screen
                     name={Routes.ACTIVITY_DETAILS}
                     component={ActivityDetailsScreen}
                     options={{ headerShown: false }}
                 />
-                <Screen
-                    name={Routes.MANAGE_TOKEN}
-                    component={ManageTokenScreen}
-                    options={{ headerShown: false }}
-                />
+                <Screen name={Routes.MANAGE_TOKEN} component={ManageTokenScreen} options={{ headerShown: false }} />
                 <Screen
                     name={Routes.MANAGE_CUSTOM_TOKEN}
                     component={ManageCustomTokenScreen}
                     options={{ headerShown: false }}
                 />
 
-                <Screen
-                    name={Routes.TOKEN_DETAILS}
-                    component={AssetDetailScreen}
-                    options={{ headerShown: false }}
-                />
+                <Screen name={Routes.TOKEN_DETAILS} component={AssetDetailScreen} options={{ headerShown: false }} />
             </Group>
 
             <Group>
@@ -158,11 +135,7 @@ export const HomeStack = () => {
                     component={WalletManagementScreen}
                     options={{ headerShown: false }}
                 />
-                <Screen
-                    name={Routes.WALLET_DETAILS}
-                    component={WalletDetailScreen}
-                    options={{ headerShown: false }}
-                />
+                <Screen name={Routes.WALLET_DETAILS} component={WalletDetailScreen} options={{ headerShown: false }} />
             </Group>
         </Navigator>
     )

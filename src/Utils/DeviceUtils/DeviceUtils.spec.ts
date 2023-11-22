@@ -1,9 +1,5 @@
 import DeviceInfo from "react-native-device-info"
-import {
-    generateDeviceForMnemonic,
-    generateDeviceForPrivateKey,
-    isSlowDevice,
-} from "./DeviceUtils" // Replace with the actual path to your module
+import { generateDeviceForMnemonic, generateDeviceForPrivateKey, isSlowDevice } from "./DeviceUtils"
 import { HDNode } from "thor-devkit"
 import { CryptoUtils, HexUtils } from "~Utils"
 import { DEVICE_TYPE } from "~Model"
@@ -15,8 +11,7 @@ jest.mock("react-native-device-info", () => ({
     getTotalMemory: jest.fn(),
 }))
 
-const PRIVATE_KEY =
-    "0x99f0500549792796c14fed62011a51081dc5b5e68fe8bd8a13b86be829c4fd36"
+const PRIVATE_KEY = "0x99f0500549792796c14fed62011a51081dc5b5e68fe8bd8a13b86be829c4fd36"
 
 describe("generateDeviceForMnemonic", () => {
     it("valid menemonic phrase", () => {
@@ -41,11 +36,7 @@ describe("generateDeviceForMnemonic", () => {
         const hdNode = HDNode.fromMnemonic(mnemonicPhrase)
         const expectedXPub = CryptoUtils.xPubFromHdNode(hdNode)
 
-        const result = generateDeviceForMnemonic(
-            mnemonicPhrase,
-            deviceIndex,
-            "Wallet 3",
-        )
+        const result = generateDeviceForMnemonic(mnemonicPhrase, deviceIndex, "Wallet 3")
 
         expect(result.wallet.mnemonic).toEqual(mnemonicPhrase)
         expect(result.wallet.privateKey).toBeUndefined()
@@ -63,26 +54,16 @@ describe("generateDeviceForPrivateKey", () => {
     it("valid private key - hex prefix", () => {
         const deviceIndex = 1
 
-        const result = generateDeviceForPrivateKey(
-            PRIVATE_KEY,
-            deviceIndex,
-            "Wallet 3",
-        )
+        const result = generateDeviceForPrivateKey(PRIVATE_KEY, deviceIndex, "Wallet 3")
 
         expect(result.wallet.mnemonic).toBeUndefined()
-        expect(result.wallet.privateKey).toEqual(
-            HexUtils.normalize(PRIVATE_KEY),
-        )
+        expect(result.wallet.privateKey).toEqual(HexUtils.normalize(PRIVATE_KEY))
         expect(result.wallet.nonce).toHaveLength(258)
-        expect(result.wallet.rootAddress).toEqual(
-            "0xf077b491b355e64048ce21e3a6fc4751eeea77fa",
-        )
+        expect(result.wallet.rootAddress).toEqual("0xf077b491b355e64048ce21e3a6fc4751eeea77fa")
 
         expect(result.device.alias).toEqual("Wallet 3")
         expect(result.device.xPub).toBeUndefined()
-        expect(result.device.rootAddress).toEqual(
-            "0xf077b491b355e64048ce21e3a6fc4751eeea77fa",
-        )
+        expect(result.device.rootAddress).toEqual("0xf077b491b355e64048ce21e3a6fc4751eeea77fa")
         expect(result.device.type).toEqual(DEVICE_TYPE.LOCAL_PRIVATE_KEY)
         expect(result.device.index).toEqual(deviceIndex)
     })
@@ -90,26 +71,16 @@ describe("generateDeviceForPrivateKey", () => {
     it("valid private key - hex prefix and upper case", () => {
         const deviceIndex = 1
 
-        const result = generateDeviceForPrivateKey(
-            PRIVATE_KEY.toUpperCase(),
-            deviceIndex,
-            "Wallet 3",
-        )
+        const result = generateDeviceForPrivateKey(PRIVATE_KEY.toUpperCase(), deviceIndex, "Wallet 3")
 
         expect(result.wallet.mnemonic).toBeUndefined()
-        expect(result.wallet.privateKey).toEqual(
-            HexUtils.normalize(PRIVATE_KEY),
-        )
+        expect(result.wallet.privateKey).toEqual(HexUtils.normalize(PRIVATE_KEY))
         expect(result.wallet.nonce).toHaveLength(258)
-        expect(result.wallet.rootAddress).toEqual(
-            "0xf077b491b355e64048ce21e3a6fc4751eeea77fa",
-        )
+        expect(result.wallet.rootAddress).toEqual("0xf077b491b355e64048ce21e3a6fc4751eeea77fa")
 
         expect(result.device.alias).toEqual("Wallet 3")
         expect(result.device.xPub).toBeUndefined()
-        expect(result.device.rootAddress).toEqual(
-            "0xf077b491b355e64048ce21e3a6fc4751eeea77fa",
-        )
+        expect(result.device.rootAddress).toEqual("0xf077b491b355e64048ce21e3a6fc4751eeea77fa")
         expect(result.device.type).toEqual(DEVICE_TYPE.LOCAL_PRIVATE_KEY)
         expect(result.device.index).toEqual(deviceIndex)
     })
@@ -117,26 +88,16 @@ describe("generateDeviceForPrivateKey", () => {
     it("valid private key - no hex prefix", () => {
         const deviceIndex = 1
 
-        const result = generateDeviceForPrivateKey(
-            HexUtils.removePrefix(PRIVATE_KEY),
-            deviceIndex,
-            "Wallet 3",
-        )
+        const result = generateDeviceForPrivateKey(HexUtils.removePrefix(PRIVATE_KEY), deviceIndex, "Wallet 3")
 
         expect(result.wallet.mnemonic).toBeUndefined()
-        expect(result.wallet.privateKey).toEqual(
-            HexUtils.normalize(PRIVATE_KEY),
-        )
+        expect(result.wallet.privateKey).toEqual(HexUtils.normalize(PRIVATE_KEY))
         expect(result.wallet.nonce).toHaveLength(258)
-        expect(result.wallet.rootAddress).toEqual(
-            "0xf077b491b355e64048ce21e3a6fc4751eeea77fa",
-        )
+        expect(result.wallet.rootAddress).toEqual("0xf077b491b355e64048ce21e3a6fc4751eeea77fa")
 
         expect(result.device.alias).toEqual("Wallet 3")
         expect(result.device.xPub).toBeUndefined()
-        expect(result.device.rootAddress).toEqual(
-            "0xf077b491b355e64048ce21e3a6fc4751eeea77fa",
-        )
+        expect(result.device.rootAddress).toEqual("0xf077b491b355e64048ce21e3a6fc4751eeea77fa")
         expect(result.device.type).toEqual(DEVICE_TYPE.LOCAL_PRIVATE_KEY)
         expect(result.device.index).toEqual(deviceIndex)
     })
@@ -151,19 +112,13 @@ describe("generateDeviceForPrivateKey", () => {
         )
 
         expect(result.wallet.mnemonic).toBeUndefined()
-        expect(result.wallet.privateKey).toEqual(
-            HexUtils.normalize(PRIVATE_KEY),
-        )
+        expect(result.wallet.privateKey).toEqual(HexUtils.normalize(PRIVATE_KEY))
         expect(result.wallet.nonce).toHaveLength(258)
-        expect(result.wallet.rootAddress).toEqual(
-            "0xf077b491b355e64048ce21e3a6fc4751eeea77fa",
-        )
+        expect(result.wallet.rootAddress).toEqual("0xf077b491b355e64048ce21e3a6fc4751eeea77fa")
 
         expect(result.device.alias).toEqual("Wallet 3")
         expect(result.device.xPub).toBeUndefined()
-        expect(result.device.rootAddress).toEqual(
-            "0xf077b491b355e64048ce21e3a6fc4751eeea77fa",
-        )
+        expect(result.device.rootAddress).toEqual("0xf077b491b355e64048ce21e3a6fc4751eeea77fa")
         expect(result.device.type).toEqual(DEVICE_TYPE.LOCAL_PRIVATE_KEY)
         expect(result.device.index).toEqual(deviceIndex)
     })
@@ -172,11 +127,7 @@ describe("generateDeviceForPrivateKey", () => {
         const deviceIndex = 1
 
         expect(() => {
-            generateDeviceForPrivateKey(
-                "invalid_private_key",
-                deviceIndex,
-                "Wallet 3",
-            )
+            generateDeviceForPrivateKey("invalid_private_key", deviceIndex, "Wallet 3")
         }).toThrow("Provided hex value is not valid")
     })
 
@@ -205,9 +156,7 @@ describe("isSlowDevice", () => {
 
     it("should return true for low VM allocation", async () => {
         ;(DeviceInfo.isLowRamDevice as jest.Mock).mockReturnValue(false)
-        ;(DeviceInfo.getMaxMemory as jest.Mock).mockResolvedValue(
-            300 * 1024 * 1024,
-        ) // 300 MB
+        ;(DeviceInfo.getMaxMemory as jest.Mock).mockResolvedValue(300 * 1024 * 1024) // 300 MB
 
         const result = await isSlowDevice()
 
@@ -216,12 +165,8 @@ describe("isSlowDevice", () => {
 
     it("should return true for a device with less than 6GB of RAM", async () => {
         ;(DeviceInfo.isLowRamDevice as jest.Mock).mockReturnValue(false)
-        ;(DeviceInfo.getMaxMemory as jest.Mock).mockResolvedValue(
-            6000 * 1024 * 1024,
-        )
-        ;(DeviceInfo.getTotalMemory as jest.Mock).mockResolvedValue(
-            5500 * 1024 * 1024,
-        ) // 5500 MB
+        ;(DeviceInfo.getMaxMemory as jest.Mock).mockResolvedValue(6000 * 1024 * 1024)
+        ;(DeviceInfo.getTotalMemory as jest.Mock).mockResolvedValue(5500 * 1024 * 1024) // 5500 MB
 
         const result = await isSlowDevice()
 
@@ -230,12 +175,8 @@ describe("isSlowDevice", () => {
 
     it("should return false for a normal device", async () => {
         ;(DeviceInfo.isLowRamDevice as jest.Mock).mockReturnValue(false)
-        ;(DeviceInfo.getMaxMemory as jest.Mock).mockResolvedValue(
-            7000 * 1024 * 1024,
-        )
-        ;(DeviceInfo.getTotalMemory as jest.Mock).mockResolvedValue(
-            8000 * 1024 * 1024,
-        ) // 8000 MB
+        ;(DeviceInfo.getMaxMemory as jest.Mock).mockResolvedValue(7000 * 1024 * 1024)
+        ;(DeviceInfo.getTotalMemory as jest.Mock).mockResolvedValue(8000 * 1024 * 1024) // 8000 MB
 
         const result = await isSlowDevice()
 
@@ -244,9 +185,7 @@ describe("isSlowDevice", () => {
 
     it("should throw an error for non-numeric bytes", async () => {
         ;(DeviceInfo.isLowRamDevice as jest.Mock).mockReturnValue(false)
-        ;(DeviceInfo.getMaxMemory as jest.Mock).mockResolvedValue(
-            "invalid_bytes",
-        ) // Non-numeric
+        ;(DeviceInfo.getMaxMemory as jest.Mock).mockResolvedValue("invalid_bytes") // Non-numeric
 
         await expect(isSlowDevice()).rejects.toThrow("Input must be a number")
     })

@@ -38,11 +38,7 @@ export const NFTDetailImage = ({ nft }: Props) => {
                 style={baseStyles.nftContainer}
                 bg={theme.isDark ? COLORS.LIGHT_PURPLE : COLORS.DARK_PURPLE}>
                 <BaseView>
-                    <BaseText
-                        mb={4}
-                        numberOfLines={1}
-                        typographyFont="subTitleBold"
-                        color={COLORS.WHITE}>
+                    <BaseText mb={4} numberOfLines={1} typographyFont="subTitleBold" color={COLORS.WHITE}>
                         {nft.name}
                     </BaseText>
                     <BaseText color={COLORS.WHITE}># {nft.tokenId}</BaseText>

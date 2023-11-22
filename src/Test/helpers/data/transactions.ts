@@ -1,3 +1,4 @@
+/* eslint-disable max-len */
 import { Transaction } from "thor-devkit"
 
 export const connexTransactioReceiptStub: Connex.Thor.Transaction.Receipt = {
@@ -7,8 +8,7 @@ export const connexTransactioReceiptStub: Connex.Thor.Transaction.Receipt = {
     reward: "0xd640ece71d588000",
     reverted: false,
     meta: {
-        blockID:
-            "0x0002456fe81e6df0548a327faa3c1764eff7c3b7ce5cf1d1d27264818e78ea8c",
+        blockID: "0x0002456fe81e6df0548a327faa3c1764eff7c3b7ce5cf1d1d27264818e78ea8c",
         blockNumber: 148847,
         blockTimestamp: 1529917460,
         txID: "0x255576013fd61fa52f69d5d89af8751731d5e9e17215b0dd6c33af51bfe28710",
@@ -68,8 +68,7 @@ export const connexTransactionStub: Connex.Thor.Transaction = {
     dependsOn: null,
     size: 224,
     meta: {
-        blockID:
-            "0x0002456fe81e6df0548a327faa3c1764eff7c3b7ce5cf1d1d27264818e78ea8c",
+        blockID: "0x0002456fe81e6df0548a327faa3c1764eff7c3b7ce5cf1d1d27264818e78ea8c",
         blockNumber: 148847,
         blockTimestamp: 1529917460,
     },

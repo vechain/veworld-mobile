@@ -35,8 +35,7 @@ const findTextInput = async (placeholder = mandatoryProps.placeholder) =>
 const findErrorMessage = async (errorMessage = customErrorMessage) =>
     await screen.findByText(errorMessage, {}, { timeout: 5000 })
 
-const findLabel = async (label = customLabel) =>
-    await screen.findByText(label, {}, { timeout: 5000 })
+const findLabel = async (label = customLabel) => await screen.findByText(label, {}, { timeout: 5000 })
 
 describe("BaseTextInput", () => {
     it("renders correctly with mandatory props", async () => {
@@ -69,14 +68,9 @@ describe("BaseTextInput", () => {
     it("updates value correctly", async () => {
         const mockSetValue = jest.fn()
 
-        render(
-            <BaseTextInput
-                {...mandatoryProps}
-                value={customValue}
-                setValue={mockSetValue}
-            />,
-            { wrapper: TestWrapper },
-        )
+        render(<BaseTextInput {...mandatoryProps} value={customValue} setValue={mockSetValue} />, {
+            wrapper: TestWrapper,
+        })
 
         const textInput = await findTextInput()
         expect(textInput.props.value).toEqual(customValue)
@@ -89,13 +83,7 @@ describe("BaseTextInput", () => {
     })
 
     it("renders error message correctly", async () => {
-        render(
-            <BaseTextInput
-                {...mandatoryProps}
-                errorMessage={customErrorMessage}
-            />,
-            { wrapper: TestWrapper },
-        )
+        render(<BaseTextInput {...mandatoryProps} errorMessage={customErrorMessage} />, { wrapper: TestWrapper })
 
         const errorMessage = await findErrorMessage()
         expect(errorMessage).toBeVisible()
@@ -104,14 +92,7 @@ describe("BaseTextInput", () => {
     it("renders the correct value prop", async () => {
         const value = "Initial value"
 
-        render(
-            <BaseTextInput
-                {...mandatoryProps}
-                value={value}
-                setValue={() => {}}
-            />,
-            { wrapper: TestWrapper },
-        )
+        render(<BaseTextInput {...mandatoryProps} value={value} setValue={() => {}} />, { wrapper: TestWrapper })
 
         const textInput = await findTextInput()
         expect(textInput.props.value).toEqual(value)
@@ -133,13 +114,7 @@ describe("BaseTextInput", () => {
     })
 
     it("renders error message when errorMessage prop is provided", async () => {
-        render(
-            <BaseTextInput
-                {...mandatoryProps}
-                errorMessage={customErrorMessage}
-            />,
-            { wrapper: TestWrapper },
-        )
+        render(<BaseTextInput {...mandatoryProps} errorMessage={customErrorMessage} />, { wrapper: TestWrapper })
 
         const errorMessage = await findErrorMessage()
         expect(errorMessage).toBeVisible()
@@ -158,16 +133,9 @@ describe("BaseTextInput", () => {
         const rightIconName = "qrcode-scan"
         const rightIconTestID = "right-icon-test-id"
 
-        render(
-            <BaseTextInput
-                {...mandatoryProps}
-                rightIcon={rightIconName}
-                rightIconTestID={rightIconTestID}
-            />,
-            {
-                wrapper: TestWrapper,
-            },
-        )
+        render(<BaseTextInput {...mandatoryProps} rightIcon={rightIconName} rightIconTestID={rightIconTestID} />, {
+            wrapper: TestWrapper,
+        })
 
         const rightIcon = await screen.findByTestId(rightIconTestID)
         expect(rightIcon).toBeVisible()

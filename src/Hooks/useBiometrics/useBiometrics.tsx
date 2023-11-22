@@ -4,12 +4,7 @@ import BiometricsUtils from "~Utils/BiometricsUtils"
 import { AppStateType, BiometricState, SecurityLevelType } from "~Model"
 import { isEqual } from "lodash"
 
-const {
-    getDeviceEnrolledLevel,
-    getDeviceHasHardware,
-    getIsDeviceEnrolled,
-    getBiometricTypeAvailable,
-} = BiometricsUtils
+const { getDeviceEnrolledLevel, getDeviceHasHardware, getIsDeviceEnrolled, getBiometricTypeAvailable } = BiometricsUtils
 
 /**
  * hook that returns the biometrics state
@@ -25,8 +20,7 @@ export const useBiometrics = (): BiometricState | undefined => {
         const isEnrolled = await getIsDeviceEnrolled()
         const typeAvailable = await getBiometricTypeAvailable()
 
-        const accessControl =
-            isEnrolled && isHardware && level === SecurityLevelType.BIOMETRIC
+        const accessControl = isEnrolled && isHardware && level === SecurityLevelType.BIOMETRIC
 
         const obj: BiometricState = {
             currentSecurityLevel: level,
@@ -43,10 +37,7 @@ export const useBiometrics = (): BiometricState | undefined => {
     }, [biometrics])
 
     useEffect(() => {
-        if (
-            currentState === AppStateType.ACTIVE &&
-            previousState !== AppStateType.INACTIVE
-        ) {
+        if (currentState === AppStateType.ACTIVE && previousState !== AppStateType.INACTIVE) {
             init()
         }
     }, [currentState, init, previousState])

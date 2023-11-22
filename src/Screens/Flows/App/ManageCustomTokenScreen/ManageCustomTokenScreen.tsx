@@ -1,21 +1,10 @@
 import React, { useCallback, useMemo, useState } from "react"
 import { useBottomSheetModal, useScrollableList, useTheme } from "~Hooks"
-import {
-    BaseCard,
-    BaseSpacer,
-    BaseText,
-    BaseView,
-    Layout,
-    QRCodeBottomSheet,
-} from "~Components"
+import { BaseCard, BaseSpacer, BaseText, BaseView, Layout, QRCodeBottomSheet } from "~Components"
 import { useI18nContext } from "~i18n"
 import { FlatList, RefreshControl, StyleSheet } from "react-native"
 import { FlashList } from "@shopify/flash-list"
-import {
-    CustomTokenBox,
-    NoTokensButton,
-    SkeletonCustomTokenBox,
-} from "./Components"
+import { CustomTokenBox, NoTokensButton, SkeletonCustomTokenBox } from "./Components"
 import { AddCustomTokenBottomSheet } from "./BottomSheets"
 import { useTokensOwned } from "./Hooks"
 import { FungibleToken } from "~Model"
@@ -39,8 +28,8 @@ export const ManageCustomTokenScreen = () => {
 
     const { tokens, hasFetched, page, setPage, fetchTokens } = useTokensOwned()
 
-    const { isListScrollable, viewabilityConfig, onViewableItemsChanged } =
-        useScrollableList(tokens, 1, 2) // 1 and 2 are to simulate snapIndex fully expanded.
+    // 1 and 2 are to simulate snapIndex fully expanded.
+    const { isListScrollable, viewabilityConfig, onViewableItemsChanged } = useScrollableList(tokens, 1, 2)
 
     const {
         ref: addCustomTokenSheetRef,
@@ -48,8 +37,7 @@ export const ManageCustomTokenScreen = () => {
         onClose: closeAddCustomTokenSheet,
     } = useBottomSheetModal()
 
-    const { ref: QRCodeBottomSheetRef, onOpen: openQRCodeSheet } =
-        useBottomSheetModal()
+    const { ref: QRCodeBottomSheetRef, onOpen: openQRCodeSheet } = useBottomSheetModal()
 
     const onAddCustomToken = useCallback(
         (token: FungibleToken) => {
@@ -79,10 +67,7 @@ export const ManageCustomTokenScreen = () => {
         setRefreshing(false)
     }, [setPage])
 
-    const tokensListSeparator = useCallback(
-        () => <BaseSpacer height={16} />,
-        [],
-    )
+    const tokensListSeparator = useCallback(() => <BaseSpacer height={16} />, [])
 
     const renderCustomTokensList = useMemo(() => {
         return (
@@ -103,9 +88,7 @@ export const ManageCustomTokenScreen = () => {
                                 <BaseView mx={20} pt={8}>
                                     <BaseCard
                                         style={styles.skeletonContainer}
-                                        containerStyle={
-                                            styles.skeletonCardContainer
-                                        }>
+                                        containerStyle={styles.skeletonCardContainer}>
                                         <SkeletonCustomTokenBox />
                                     </BaseCard>
                                 </BaseView>
@@ -116,10 +99,7 @@ export const ManageCustomTokenScreen = () => {
 
                             return (
                                 <BaseView mx={20} testID={tokenId}>
-                                    <CustomTokenBox
-                                        tokenBalance={token}
-                                        onTogglePress={onAddCustomToken}
-                                    />
+                                    <CustomTokenBox tokenBalance={token} onTogglePress={onAddCustomToken} />
                                 </BaseView>
                             )
                         }}
@@ -173,9 +153,7 @@ export const ManageCustomTokenScreen = () => {
                                 <BaseView mx={20}>
                                     <BaseCard
                                         style={styles.skeletonContainer}
-                                        containerStyle={
-                                            styles.skeletonCardContainer
-                                        }>
+                                        containerStyle={styles.skeletonCardContainer}>
                                         <SkeletonCustomTokenBox />
                                     </BaseCard>
                                 </BaseView>
@@ -191,11 +169,7 @@ export const ManageCustomTokenScreen = () => {
 
     const renderNoTokensButton = useMemo(() => {
         return (
-            <BaseView
-                justifyContent="center"
-                alignItems="center"
-                w={100}
-                style={styles.noTokensButton}>
+            <BaseView justifyContent="center" alignItems="center" w={100} style={styles.noTokensButton}>
                 <NoTokensButton onPress={openQRCodeSheet} />
             </BaseView>
         )
@@ -217,9 +191,7 @@ export const ManageCustomTokenScreen = () => {
             fixedBody={
                 <>
                     {/* Tokens List */}
-                    {!!tokens.length &&
-                        (page !== 0 || hasFetched) &&
-                        renderCustomTokensList}
+                    {!!tokens.length && (page !== 0 || hasFetched) && renderCustomTokensList}
 
                     {/* Fetching Tokens shows skeleton */}
                     {!hasFetched && page === 0 && renderSkeletonList}

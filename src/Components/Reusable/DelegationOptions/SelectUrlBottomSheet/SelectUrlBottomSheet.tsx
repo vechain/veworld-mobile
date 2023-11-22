@@ -16,39 +16,21 @@ type Props = {
 }
 
 // component to select an account for delegation
-export const SelectUrlBottomSheet = React.forwardRef<
-    BottomSheetModalMethods,
-    Props
->(
-    (
-        {
-            setSelectedDelegationUrl,
-            selectedDelegationUrl,
-            selectedDelegationOption,
-            setNoDelegation,
-            onClose,
-        },
-        ref,
-    ) => {
+export const SelectUrlBottomSheet = React.forwardRef<BottomSheetModalMethods, Props>(
+    ({ setSelectedDelegationUrl, selectedDelegationUrl, selectedDelegationOption, setNoDelegation, onClose }, ref) => {
         const [addUrlMode, setAddUrlMode] = useState(false)
         const [newUrl, setNewUrl] = useState("")
         const delegationUrls = useAppSelector(selectDelegationUrls)
         const onDismiss = () => {
             setAddUrlMode(false)
             setNewUrl("")
-            if (
-                selectedDelegationOption === DelegationType.URL &&
-                !selectedDelegationUrl
-            ) {
+            if (selectedDelegationOption === DelegationType.URL && !selectedDelegationUrl) {
                 setNoDelegation()
             }
         }
 
         return (
-            <BaseBottomSheet
-                snapPoints={snapPoints}
-                ref={ref}
-                onDismiss={onDismiss}>
+            <BaseBottomSheet snapPoints={snapPoints} ref={ref} onDismiss={onDismiss}>
                 {delegationUrls.length === 0 || addUrlMode ? (
                     <AddUrl
                         setSelectedDelegationUrl={setSelectedDelegationUrl}

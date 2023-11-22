@@ -3,13 +3,7 @@ import { ViewProps, StyleSheet } from "react-native"
 import { CURRENCY, ColorThemeType } from "~Constants"
 import { useThemedStyles } from "~Hooks"
 import { FormattingUtils } from "~Utils"
-import {
-    AccountIcon,
-    BaseSpacer,
-    BaseText,
-    BaseView,
-    LedgerBadge,
-} from "~Components"
+import { AccountIcon, BaseSpacer, BaseText, BaseView, LedgerBadge } from "~Components"
 import { AccountWithDevice, DEVICE_TYPE } from "~Model"
 import { useAppDispatch } from "~Storage/Redux"
 import { setBalanceVisible } from "~Storage/Redux/Actions"
@@ -25,12 +19,7 @@ interface Props extends ViewProps {
 }
 
 export const AccountCard: React.FC<Props> = memo(props => {
-    const {
-        account,
-        openSelectAccountBottomSheet,
-        balanceVisible,
-        openQRCodeSheet,
-    } = props
+    const { account, openSelectAccountBottomSheet, balanceVisible, openQRCodeSheet } = props
 
     const dispatch = useAppDispatch()
 
@@ -52,10 +41,7 @@ export const AccountCard: React.FC<Props> = memo(props => {
                 py={20}
                 px={20}
                 style={styles.container}>
-                <BaseView
-                    flexDirection="row"
-                    justifyContent="space-between"
-                    alignItems="center">
+                <BaseView flexDirection="row" justifyContent="space-between" alignItems="center">
                     <BaseView flexDirection="row" alignItems="center" flex={1}>
                         <AccountIcon address={account.address} size={45} />
                         <BaseView px={8} alignItems="flex-start" flex={1}>
@@ -68,8 +54,7 @@ export const AccountCard: React.FC<Props> = memo(props => {
                             </BaseText>
                             <BaseSpacer height={6} />
                             <BaseView flexDirection="row">
-                                {account.device?.type ===
-                                    DEVICE_TYPE.LEDGER && (
+                                {account.device?.type === DEVICE_TYPE.LEDGER && (
                                     <LedgerBadge
                                         bg={theme.colors.textReversed}
                                         mr={8}
@@ -91,20 +76,12 @@ export const AccountCard: React.FC<Props> = memo(props => {
                         </BaseView>
                     </BaseView>
                     <AccountAddressButtonPill
-                        text={FormattingUtils.humanAddress(
-                            account.address,
-                            6,
-                            3,
-                        )}
+                        text={FormattingUtils.humanAddress(account.address, 6, 3)}
                         openQRCodeSheet={openQRCodeSheet}
                         switchAccount={openSelectAccountBottomSheet}
                     />
                 </BaseView>
-                <Balance
-                    account={account}
-                    isVisible={balanceVisible}
-                    toggleVisible={toggleBalanceVisibility}
-                />
+                <Balance account={account} isVisible={balanceVisible} toggleVisible={toggleBalanceVisibility} />
             </BaseView>
         </BaseView>
     )

@@ -45,12 +45,7 @@ describe("Helpers - initCollectionMetadataFromRegistry", () => {
         const selectedAccount = "0x123"
         const collection = "0x456"
 
-        const result = initCollectionMetadataFromRegistry(
-            network,
-            selectedAccount,
-            collection,
-            regInfo,
-        )
+        const result = initCollectionMetadataFromRegistry(network, selectedAccount, collection, regInfo)
         expect(result).toEqual({
             id: "0x456",
             address: "0x456",
@@ -77,12 +72,7 @@ describe("Helpers - initCollectionMetadataWithoutRegistry", () => {
         const selectedAccount = "0x123"
         const collection = "0x456"
 
-        const result = initCollectionMetadataWithoutRegistry(
-            network,
-            selectedAccount,
-            collection,
-            "notAvailable",
-        )
+        const result = initCollectionMetadataWithoutRegistry(network, selectedAccount, collection, "notAvailable")
         expect(result).toEqual({
             id: "0x456",
             address: "0x456",
@@ -113,12 +103,7 @@ describe("Helpers - initialiseNFTMetadata", () => {
             blockId: "0x34745",
         }
 
-        const result = initialiseNFTMetadata(
-            nft.tokenId,
-            nft.contractAddress,
-            nft.owner,
-            false,
-        )
+        const result = initialiseNFTMetadata(nft.tokenId, nft.contractAddress, nft.owner, false)
 
         expect(result).toEqual({
             address: "0x0032",

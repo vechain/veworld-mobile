@@ -40,10 +40,7 @@ const initialState: UserPreferenceState = {
     isSentryTrackingEnabled: true,
     devFeaturesEnabled: __DEV__,
     // this will ask the user to review the app after 3 days the first time
-    lastReviewTimestamp: moment()
-        .subtract(3, "weeks")
-        .add(3, "days")
-        .toISOString(),
+    lastReviewTimestamp: moment().subtract(3, "weeks").add(3, "days").toISOString(),
     lastVersionCheck: moment().toISOString(),
 }
 
@@ -75,10 +72,7 @@ export const UserPreferencesSlice = createSlice({
             state.language = action.payload
         },
 
-        setAnalyticsTrackingEnabled: (
-            state,
-            action: PayloadAction<boolean>,
-        ) => {
+        setAnalyticsTrackingEnabled: (state, action: PayloadAction<boolean>) => {
             state.isAnalyticsTrackingEnabled = action.payload
         },
 

@@ -14,13 +14,7 @@ type TokenChartData = {
     value: number
 }
 
-export const ChartView = ({
-    chartData,
-    token,
-}: {
-    chartData: TokenChartData[]
-    token: TokenWithCompleteInfo
-}) => {
+export const ChartView = ({ chartData, token }: { chartData: TokenChartData[]; token: TokenWithCompleteInfo }) => {
     const { LL } = useI18nContext()
 
     const invokeHaptic = () => {
@@ -42,10 +36,7 @@ export const ChartView = ({
                             <LineChart.Gradient lastGradientValue={0} />
                         </LineChart.Path>
 
-                        <LineChart.CursorCrosshair
-                            onActivated={invokeHaptic}
-                            onEnded={invokeHaptic}
-                        />
+                        <LineChart.CursorCrosshair onActivated={invokeHaptic} onEnded={invokeHaptic} />
 
                         <LineChart.CursorLine />
                     </LineChart>
@@ -53,22 +44,14 @@ export const ChartView = ({
             )
         } else {
             return (
-                <BaseView
-                    justifyContent="center"
-                    alignItems="center"
-                    style={[styles.negativeMargin, styles.container]}>
+                <BaseView justifyContent="center" alignItems="center" style={[styles.negativeMargin, styles.container]}>
                     <BaseView>
                         <LineChart height={120} style={styles.opacity}>
-                            <LineChart.Path
-                                color={theme.colors.primary}
-                                width={0}>
+                            <LineChart.Path color={theme.colors.primary} width={0}>
                                 <LineChart.Gradient lastGradientValue={0} />
                             </LineChart.Path>
                         </LineChart>
-                        <BaseView
-                            style={styles.absolutePosition}
-                            justifyContent="center"
-                            alignItems="center">
+                        <BaseView style={styles.absolutePosition} justifyContent="center" alignItems="center">
                             <BaseText typographyFont="bodyBold">
                                 {LL.COMMON_LBL_NO_TOKEN_DATA({
                                     tokenName: token.name,
@@ -92,10 +75,7 @@ export const ChartView = ({
 
     return (
         <>
-            <BaseView
-                flexDirection="row"
-                justifyContent="space-between"
-                w={100}>
+            <BaseView flexDirection="row" justifyContent="space-between" w={100}>
                 <AssetPriceBanner symbol={token.symbol} />
             </BaseView>
 

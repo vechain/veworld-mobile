@@ -12,26 +12,14 @@ type Props = {
     symbol?: string
 }
 
-export const TokenImage = ({
-    height,
-    width,
-    icon,
-    tokenAddress,
-    symbol,
-}: Props) => {
+export const TokenImage = ({ height, width, icon, tokenAddress, symbol }: Props) => {
     return (
         <>
             {icon ? (
                 <BaseCard
-                    style={[
-                        styles.imageContainer,
-                        { backgroundColor: COLORS.WHITE },
-                    ]}
+                    style={[styles.imageContainer, { backgroundColor: COLORS.WHITE }]}
                     containerStyle={styles.imageShadow}>
-                    <BaseImage
-                        uri={icon}
-                        style={{ height: height, width: width }}
-                    />
+                    <BaseImage uri={icon} style={{ height: height, width: width }} />
                 </BaseCard>
             ) : (
                 <BaseCustomTokenIcon

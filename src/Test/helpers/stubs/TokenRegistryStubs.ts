@@ -2,13 +2,8 @@ import MockAdapter from "axios-mock-adapter"
 import { VTHO } from "~Constants"
 import { Action } from "./consts"
 
-export const mockTokenRegistry = (
-    mockAdapter: MockAdapter,
-    action = Action.SUCCESS,
-) => {
-    const matcher = mockAdapter.onGet(
-        "https://vechain.github.io/token-registry/test.json",
-    )
+export const mockTokenRegistry = (mockAdapter: MockAdapter, action = Action.SUCCESS) => {
+    const matcher = mockAdapter.onGet("https://vechain.github.io/token-registry/test.json")
 
     if (action === Action.SUCCESS) matcher.reply(200, JSON.stringify([VTHO]))
     else if (action === Action.ABORT) matcher.abortRequest()

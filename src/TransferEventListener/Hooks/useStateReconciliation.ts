@@ -1,10 +1,6 @@
 import { useCallback } from "react"
 import { useThor } from "~Components"
-import {
-    refreshNFTs,
-    updateAccountBalances,
-    useAppDispatch,
-} from "~Storage/Redux"
+import { refreshNFTs, updateAccountBalances, useAppDispatch } from "~Storage/Redux"
 
 export const useStateReconciliation = () => {
     const dispatch = useAppDispatch()

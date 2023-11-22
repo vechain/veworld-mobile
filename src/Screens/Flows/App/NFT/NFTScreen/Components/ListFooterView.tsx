@@ -16,43 +16,31 @@ type Props = {
 }
 
 export const ListFooterView = memo(
-    ({
-        onGoToBlackListed,
-        isLoading,
-        hasNext,
-        renderExtraSkeleton,
-        showMargin = false,
-    }: Props) => {
+    ({ onGoToBlackListed, isLoading, hasNext, renderExtraSkeleton, showMargin = false }: Props) => {
         const { LL } = useI18nContext()
-        const blackListedCollections = useAppSelector(
-            selectBlackListedCollections,
-        )
+        const blackListedCollections = useAppSelector(selectBlackListedCollections)
 
         return (
             <>
-                {!isEmpty(blackListedCollections) &&
-                    onGoToBlackListed &&
-                    !hasNext && (
-                        <BaseTouchableBox
-                            containerStyle={baseStyles.marginVertical}
-                            action={onGoToBlackListed}
-                            children={
-                                <>
-                                    <BaseView
-                                        w={100}
-                                        h={100}
-                                        flexDirection="row"
-                                        justifyContent="center"
-                                        alignItems="center">
-                                        <BaseText typographyFont="bodyBold">
-                                            {LL.HIDDEN_COLLECTIONS()}
-                                        </BaseText>
-                                        <BaseIcon name="chevron-down" />
-                                    </BaseView>
-                                </>
-                            }
-                        />
-                    )}
+                {!isEmpty(blackListedCollections) && onGoToBlackListed && !hasNext && (
+                    <BaseTouchableBox
+                        containerStyle={baseStyles.marginVertical}
+                        action={onGoToBlackListed}
+                        children={
+                            <>
+                                <BaseView
+                                    w={100}
+                                    h={100}
+                                    flexDirection="row"
+                                    justifyContent="center"
+                                    alignItems="center">
+                                    <BaseText typographyFont="bodyBold">{LL.HIDDEN_COLLECTIONS()}</BaseText>
+                                    <BaseIcon name="chevron-down" />
+                                </BaseView>
+                            </>
+                        }
+                    />
+                )}
 
                 {isLoading && (
                     <NftSkeleton

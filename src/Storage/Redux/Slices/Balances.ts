@@ -22,11 +22,7 @@ export const initialState: BalanceState = {
     [NETWORK_TYPE.OTHER]: {},
 }
 
-const ensureBalanceSlotExists = (
-    state: Draft<BalanceState>,
-    network: NETWORK_TYPE,
-    accountAddress: string,
-) => {
+const ensureBalanceSlotExists = (state: Draft<BalanceState>, network: NETWORK_TYPE, accountAddress: string) => {
     if (!state[network]) state[network] = {}
 
     if (!state[network][accountAddress]) state[network][accountAddress] = []
@@ -51,20 +47,9 @@ export const BalanceSlice = createSlice({
 
             ensureBalanceSlotExists(state, network, normAccountAddress)
 
-            if (
-                state[network][normAccountAddress]
-                    .map(row => row.tokenAddress)
-                    .includes(balance.tokenAddress)
-            ) {
-                state[network][normAccountAddress] = state[network][
-                    normAccountAddress
-                ].map(_balance => {
-                    if (
-                        AddressUtils.compareAddresses(
-                            balance.tokenAddress,
-                            _balance.tokenAddress,
-                        )
-                    ) {
+            if (state[network][normAccountAddress].map(row => row.tokenAddress).includes(balance.tokenAddress)) {
+                state[network][normAccountAddress] = state[network][normAccountAddress].map(_balance => {
+                    if (AddressUtils.compareAddresses(balance.tokenAddress, _balance.tokenAddress)) {
                         debug("balance already present showing it", _balance)
                         return {
                             ..._balance,
@@ -100,12 +85,7 @@ export const BalanceSlice = createSlice({
             const existingBalances = state[network][normAccountAddress]
 
             // Merge existing balances with new balances
-            const mergedBalances = mergeArrays(
-                existingBalances,
-                newBalances,
-                "tokenAddress",
-                ["isHidden"],
-            )
+            const mergedBalances = mergeArrays(existingBalances, newBalances, "tokenAddress", ["isHidden"])
 
             // Add new balances
             state[network][normAccountAddress] = mergedBalances
@@ -125,15 +105,8 @@ export const BalanceSlice = createSlice({
 
             ensureBalanceSlotExists(state, network, accountAddress)
 
-            state[network][normAccountAddress] = state[network][
-                normAccountAddress
-            ].map(balance => {
-                if (
-                    AddressUtils.compareAddresses(
-                        balance.tokenAddress,
-                        normTokenAddress,
-                    )
-                ) {
+            state[network][normAccountAddress] = state[network][normAccountAddress].map(balance => {
+                if (AddressUtils.compareAddresses(balance.tokenAddress, normTokenAddress)) {
                     debug(`Removing balance ${balance.tokenAddress}`)
                     return {
                         ...balance,
@@ -152,21 +125,14 @@ export const BalanceSlice = createSlice({
                 updatedAccountBalances: Balance[]
             }>,
         ) => {
-            const { network, accountAddress, updatedAccountBalances } =
-                action.payload
+            const { network, accountAddress, updatedAccountBalances } = action.payload
 
             const normAccountAddress = HexUtils.normalize(accountAddress)
             ensureBalanceSlotExists(state, network, normAccountAddress)
 
-            state[network][normAccountAddress] = state[network][
-                normAccountAddress
-            ].map(balance => {
-                const updatedBalance = updatedAccountBalances.find(
-                    updatedAccountBalance =>
-                        AddressUtils.compareAddresses(
-                            balance.tokenAddress,
-                            updatedAccountBalance.tokenAddress,
-                        ),
+            state[network][normAccountAddress] = state[network][normAccountAddress].map(balance => {
+                const updatedBalance = updatedAccountBalances.find(updatedAccountBalance =>
+                    AddressUtils.compareAddresses(balance.tokenAddress, updatedAccountBalance.tokenAddress),
                 )
                 return updatedBalance ? updatedBalance : balance
             })
@@ -176,10 +142,5 @@ export const BalanceSlice = createSlice({
     },
 })
 
-export const {
-    addTokenBalance,
-    updateTokenBalances,
-    removeTokenBalance,
-    changeBalancePosition,
-    resetBalancesState,
-} = BalanceSlice.actions
+export const { addTokenBalance, updateTokenBalances, removeTokenBalance, changeBalancePosition, resetBalancesState } =
+    BalanceSlice.actions

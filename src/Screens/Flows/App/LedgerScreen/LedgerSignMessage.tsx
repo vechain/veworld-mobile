@@ -19,24 +19,14 @@ import {
     useWalletConnect,
 } from "~Components"
 import { RootStackParamListSwitch, Routes } from "~Navigation"
-import {
-    debug,
-    error,
-    HexUtils,
-    LedgerUtils,
-    SignMessageUtils,
-    warn,
-} from "~Utils"
+import { debug, error, HexUtils, LedgerUtils, SignMessageUtils, warn } from "~Utils"
 import { useI18nContext } from "~i18n"
 import { useNavigation } from "@react-navigation/native"
 import * as Haptics from "expo-haptics"
 import { LEDGER_ERROR_CODES } from "~Constants"
 import { compareAddresses } from "~Utils/AddressUtils/AddressUtils"
 
-type Props = NativeStackScreenProps<
-    RootStackParamListSwitch,
-    Routes.LEDGER_SIGN_MESSAGE
->
+type Props = NativeStackScreenProps<RootStackParamListSwitch, Routes.LEDGER_SIGN_MESSAGE>
 
 enum SigningStep {
     CONNECTING,
@@ -45,8 +35,7 @@ enum SigningStep {
 }
 
 export const LedgerSignMessage: React.FC<Props> = ({ route }) => {
-    const { accountWithDevice, message, requestEvent, initialRoute } =
-        route.params
+    const { accountWithDevice, message, requestEvent, initialRoute } = route.params
 
     const { processRequest } = useWalletConnect()
 
@@ -88,8 +77,7 @@ export const LedgerSignMessage: React.FC<Props> = ({ route }) => {
     const ledgerErrorCode = useMemo(() => {
         if (errorCode) return errorCode
 
-        if (isAwaitingSignature && !signingError)
-            return LEDGER_ERROR_CODES.WAITING_SIGNATURE
+        if (isAwaitingSignature && !signingError) return LEDGER_ERROR_CODES.WAITING_SIGNATURE
     }, [errorCode, isAwaitingSignature, signingError])
 
     const Steps: Step[] = useMemo(
@@ -144,16 +132,8 @@ export const LedgerSignMessage: React.FC<Props> = ({ route }) => {
                     chain: "vechain",
                 })
 
-                if (
-                    compareAddresses(
-                        recoveredAddress,
-                        accountWithDevice.address,
-                    )
-                ) {
-                    error(
-                        "LedgerSignMessage:signMessage",
-                        "Recovered address does not match",
-                    )
+                if (compareAddresses(recoveredAddress, accountWithDevice.address)) {
+                    error("LedgerSignMessage:signMessage", "Recovered address does not match")
                 }
 
                 setSignature(res.payload)
@@ -213,14 +193,9 @@ export const LedgerSignMessage: React.FC<Props> = ({ route }) => {
             if (!signature) return
             setIsSending(true)
 
-            await Haptics.notificationAsync(
-                Haptics.NotificationFeedbackType.Success,
-            )
+            await Haptics.notificationAsync(Haptics.NotificationFeedbackType.Success)
 
-            await processRequest(
-                requestEvent,
-                HexUtils.addPrefix(signature.toString("hex")),
-            )
+            await processRequest(requestEvent, HexUtils.addPrefix(signature.toString("hex")))
 
             await removeLedger()
 
@@ -231,20 +206,11 @@ export const LedgerSignMessage: React.FC<Props> = ({ route }) => {
                 text1: LL.ERROR(),
                 text2: LL.ERROR_GENERIC_OPERATION(),
             })
-            await Haptics.notificationAsync(
-                Haptics.NotificationFeedbackType.Error,
-            )
+            await Haptics.notificationAsync(Haptics.NotificationFeedbackType.Error)
         } finally {
             setIsSending(false)
         }
-    }, [
-        removeLedger,
-        requestEvent,
-        processRequest,
-        LL,
-        signature,
-        navigateOnFinish,
-    ])
+    }, [removeLedger, requestEvent, processRequest, LL, signature, navigateOnFinish])
 
     const BottomButton = useCallback(() => {
         if (currentStep === SigningStep.SIGNING && userRejected) {
@@ -275,46 +241,24 @@ export const LedgerSignMessage: React.FC<Props> = ({ route }) => {
         }
 
         return <></>
-    }, [
-        currentStep,
-        userRejected,
-        isSending,
-        LL,
-        signMessage,
-        signature,
-        handleOnConfirm,
-    ])
+    }, [currentStep, userRejected, isSending, LL, signMessage, signature, handleOnConfirm])
 
     return (
         <BaseSafeArea grow={1}>
             <BackButtonHeader beforeNavigating={removeLedger} />
             <BaseView alignItems="flex-start" flexGrow={1} flex={1} mx={20}>
-                <BaseText typographyFont="title">
-                    {LL.SEND_LEDGER_TITLE()}
-                </BaseText>
+                <BaseText typographyFont="title">{LL.SEND_LEDGER_TITLE()}</BaseText>
                 <BaseText typographyFont="body" my={10}>
                     {LL.LEDGER_MESSAGE_TITLE_SB()}
                 </BaseText>
                 <BaseSpacer height={20} />
-                <Lottie
-                    source={BlePairingDark}
-                    autoPlay
-                    loop
-                    style={styles.lottie}
-                />
+                <Lottie source={BlePairingDark} autoPlay loop style={styles.lottie} />
                 <BaseSpacer height={20} />
-                <StepsProgressBar
-                    steps={Steps}
-                    currentStep={currentStep}
-                    isCurrentStepError={!!signingError}
-                />
+                <StepsProgressBar steps={Steps} currentStep={currentStep} isCurrentStepError={!!signingError} />
                 <BaseSpacer height={96} />
-                <BaseText typographyFont="bodyBold">
-                    {Steps[currentStep]?.title || LL.LEDGER_MESSAGE_READY()}
-                </BaseText>
+                <BaseText typographyFont="bodyBold">{Steps[currentStep]?.title || LL.LEDGER_MESSAGE_READY()}</BaseText>
                 <BaseText typographyFont="body" mt={8}>
-                    {Steps[currentStep]?.subtitle ||
-                        LL.LEDGER_MESSAGE_READ_SB()}
+                    {Steps[currentStep]?.subtitle || LL.LEDGER_MESSAGE_READ_SB()}
                 </BaseText>
             </BaseView>
             <BottomButton />

@@ -11,10 +11,7 @@ import { useColorScheme } from "~Hooks"
 import { Routes } from "~Navigation"
 import { COLORS } from "~Constants"
 
-export const CoinbasePayWebView = (props: {
-    currentAmount: number
-    destinationAddress: string
-}) => {
+export const CoinbasePayWebView = (props: { currentAmount: number; destinationAddress: string }) => {
     const nav = useNavigation()
     const [isLoading, setIsLoading] = useState(true)
     const systemColorScheme = useColorScheme()
@@ -47,15 +44,9 @@ export const CoinbasePayWebView = (props: {
             <StatusBar
                 animated={true}
                 backgroundColor={
-                    systemColorScheme === "dark"
-                        ? COLORS.COINBASE_BACKGROUND_DARK
-                        : COLORS.COINBASE_BACKGROUND_LIGHT
+                    systemColorScheme === "dark" ? COLORS.COINBASE_BACKGROUND_DARK : COLORS.COINBASE_BACKGROUND_LIGHT
                 }
-                barStyle={
-                    systemColorScheme === "dark"
-                        ? "light-content"
-                        : "dark-content"
-                }
+                barStyle={systemColorScheme === "dark" ? "light-content" : "dark-content"}
             />
         )
     }, [systemColorScheme])

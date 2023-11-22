@@ -12,10 +12,7 @@ export const ChangeLanguage: React.FC<Props> = ({ language, onPress }) => {
     const theme = useTheme()
 
     return (
-        <BaseTouchableBox
-            action={onPress}
-            justifyContent="space-between"
-            haptics="Light">
+        <BaseTouchableBox action={onPress} justifyContent="space-between" haptics="Light">
             <BaseText typographyFont="smallButtonPrimary">{language}</BaseText>
             <BaseIcon name={"web"} color={theme.colors.text} size={24} />
         </BaseTouchableBox>

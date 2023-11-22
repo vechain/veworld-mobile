@@ -38,17 +38,11 @@ export const useEditPin = () => {
 
     const updateSecurityMethod = useSecurityUpdate()
 
-    const [lockScreenScenario, setScenario] = useState(
-        LOCKSCREEN_SCENARIO.EDIT_OLD_PIN,
-    )
+    const [lockScreenScenario, setScenario] = useState(LOCKSCREEN_SCENARIO.EDIT_OLD_PIN)
 
     const [oldPin, setOldPin] = useState("")
 
-    const {
-        isOpen: isEditPinPromptOpen,
-        onOpen: openPasswordPrompt,
-        onClose: closeEditPinPrompt,
-    } = useDisclosure()
+    const { isOpen: isEditPinPromptOpen, onOpen: openPasswordPrompt, onClose: closeEditPinPrompt } = useDisclosure()
 
     // [END] - Hooks
 

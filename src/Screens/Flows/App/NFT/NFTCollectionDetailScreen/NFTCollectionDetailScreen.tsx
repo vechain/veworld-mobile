@@ -11,27 +11,18 @@ import { NetworkErrorView } from "../NFTScreen/Components/NetworkErrorView"
 import { useCollectionSource } from "./Hooks/useCollectionSource"
 import { NftLoader } from "../NFTScreen/Components/NftLoader"
 
-type Props = NativeStackScreenProps<
-    RootStackParamListNFT,
-    Routes.NFT_COLLECTION_DETAILS
->
+type Props = NativeStackScreenProps<RootStackParamListNFT, Routes.NFT_COLLECTION_DETAILS>
 
 export const NFTCollectionDetailScreen = ({ route }: Props) => {
-    const [
+    const [onEndReachedCalledDuringMomentum, setEndReachedCalledDuringMomentum] = useState(true)
+
+    const { anyCollection } = useCollectionSource(route.params.collectionAddress)
+
+    const { nfts, fetchMoreNFTs, isLoading, error, hasNext } = useNFTWithMetadata(
+        route.params.collectionAddress,
         onEndReachedCalledDuringMomentum,
         setEndReachedCalledDuringMomentum,
-    ] = useState(true)
-
-    const { anyCollection } = useCollectionSource(
-        route.params.collectionAddress,
     )
-
-    const { nfts, fetchMoreNFTs, isLoading, error, hasNext } =
-        useNFTWithMetadata(
-            route.params.collectionAddress,
-            onEndReachedCalledDuringMomentum,
-            setEndReachedCalledDuringMomentum,
-        )
 
     const onMomentumScrollBegin = useCallback(() => {
         setEndReachedCalledDuringMomentum(true)
@@ -50,23 +41,12 @@ export const NFTCollectionDetailScreen = ({ route }: Props) => {
                 />
             )
         }
-    }, [
-        nfts,
-        anyCollection,
-        isLoading,
-        fetchMoreNFTs,
-        onMomentumScrollBegin,
-        hasNext,
-    ])
+    }, [nfts, anyCollection, isLoading, fetchMoreNFTs, onMomentumScrollBegin, hasNext])
 
     const renderContent = useMemo(() => {
         if (!isEmpty(error) && isEmpty(nfts)) return <NetworkErrorView />
 
-        return (
-            <NftLoader isLoading={isLoading && isEmpty(nfts)}>
-                {renderNftList}
-            </NftLoader>
-        )
+        return <NftLoader isLoading={isLoading && isEmpty(nfts)}>{renderNftList}</NftLoader>
     }, [error, isLoading, nfts, renderNftList])
 
     return (

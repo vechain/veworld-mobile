@@ -18,16 +18,9 @@ import { useI18nContext } from "~i18n"
 import { Routes } from "~Navigation"
 import { useAppDispatch, useAppSelector } from "~Storage/Redux"
 import { editContact, removeContact } from "~Storage/Redux/Actions/Contacts"
-import {
-    selectContactByAddress,
-    selectContacts,
-} from "~Storage/Redux/Selectors"
+import { selectContactByAddress, selectContacts } from "~Storage/Redux/Selectors"
 import { SwipeableItemImperativeRef } from "react-native-swipeable-item"
-import {
-    AddContactButton,
-    ContactDetailBox,
-    ContactManagementBottomSheet,
-} from "./Components"
+import { AddContactButton, ContactDetailBox, ContactManagementBottomSheet } from "./Components"
 import { Contact } from "~Model"
 
 export const ContactsScreen = () => {
@@ -39,9 +32,7 @@ export const ContactsScreen = () => {
     const { LL } = useI18nContext()
 
     // Keep track of the swipeable items refs
-    const swipeableItemRefs = useRef<Map<string, SwipeableItemImperativeRef>>(
-        new Map(),
-    )
+    const swipeableItemRefs = useRef<Map<string, SwipeableItemImperativeRef>>(new Map())
 
     /* Bottom Sheets */
     const {
@@ -58,27 +49,21 @@ export const ContactsScreen = () => {
 
     const contacts = useAppSelector(selectContacts)
 
-    const { isListScrollable, viewabilityConfig, onViewableItemsChanged } =
-        useScrollableList(contacts, 1, 2) // 1 and 2 are to simulate snapIndex fully expanded.
+    // 1 and 2 are to simulate snapIndex fully expanded.
+    const { isListScrollable, viewabilityConfig, onViewableItemsChanged } = useScrollableList(contacts, 1, 2)
 
     const dispatch = useAppDispatch()
 
-    const [selectedContactAddress, setSelectedContactAddress] =
-        useState<string>()
+    const [selectedContactAddress, setSelectedContactAddress] = useState<string>()
     const [contactToRemove, setContactToRemove] = useState<string>()
 
-    const selectedContact = useAppSelector(state =>
-        selectContactByAddress(state, selectedContactAddress),
-    )
+    const selectedContact = useAppSelector(state => selectContactByAddress(state, selectedContactAddress))
 
     // [End] Hooks
 
     // [Start] Methods
 
-    const onAddContactPress = useCallback(
-        () => nav.navigate(Routes.SETTINGS_ADD_CONTACT),
-        [nav],
-    )
+    const onAddContactPress = useCallback(() => nav.navigate(Routes.SETTINGS_ADD_CONTACT), [nav])
 
     const closeOtherSwipeableItems = useCallback((currentAddress: string) => {
         swipeableItemRefs?.current.forEach((ref, address) => {
@@ -126,11 +111,7 @@ export const ContactsScreen = () => {
 
     const renderAddContactButton = useMemo(() => {
         return (
-            <BaseView
-                justifyContent="center"
-                alignItems="center"
-                h={50}
-                w={100}>
+            <BaseView justifyContent="center" alignItems="center" h={50} w={100}>
                 <AddContactButton onPress={onAddContactPress} />
             </BaseView>
         )
@@ -155,9 +136,7 @@ export const ContactsScreen = () => {
                     itemKey={item.address}
                     swipeableItemRefs={swipeableItemRefs}
                     handleTrashIconPress={handleTrashIconPress(item.address)}
-                    setSelectedItem={(contact?: Contact) =>
-                        setContactToRemove(contact?.address)
-                    }
+                    setSelectedItem={(contact?: Contact) => setContactToRemove(contact?.address)}
                     onPress={onEditContactPress}
                     isOpen={contactToRemove === item.address}>
                     <ContactDetailBox contact={item} />
@@ -174,14 +153,8 @@ export const ContactsScreen = () => {
             safeAreaTestID="ContactsScreen"
             fixedHeader={
                 <BaseView pb={16}>
-                    <BaseView
-                        flexDirection="row"
-                        justifyContent="space-between"
-                        alignItems="center"
-                        w={100}>
-                        <BaseText
-                            typographyFont="title"
-                            testID="contacts-screen-title">
+                    <BaseView flexDirection="row" justifyContent="space-between" alignItems="center" w={100}>
+                        <BaseText typographyFont="title" testID="contacts-screen-title">
                             {LL.TITLE_CONTACTS()}
                         </BaseText>
                         {contacts.length > 0 && (
@@ -200,9 +173,7 @@ export const ContactsScreen = () => {
                     <BaseText typographyFont="bodyMedium" my={8}>
                         {LL.BD_CONTACTS_LIST()}
                     </BaseText>
-                    <BaseText typographyFont="caption">
-                        {LL.BD_CONTACTS_LIST_DISCLAIMER()}
-                    </BaseText>
+                    <BaseText typographyFont="caption">{LL.BD_CONTACTS_LIST_DISCLAIMER()}</BaseText>
                 </BaseView>
             }
             fixedBody={
@@ -249,13 +220,9 @@ export const ContactsScreen = () => {
                                     containerStyle={baseStyles.contactContainer}
                                     activeOpacity={1}>
                                     <BaseView flexDirection="column">
-                                        <BaseText typographyFont="button">
-                                            {selectedContact?.alias}
-                                        </BaseText>
+                                        <BaseText typographyFont="button">{selectedContact?.alias}</BaseText>
                                         <BaseSpacer height={4} />
-                                        <BaseText
-                                            fontSize={10}
-                                            typographyFont="smallCaptionRegular">
+                                        <BaseText fontSize={10} typographyFont="smallCaptionRegular">
                                             {formattedAddress}
                                         </BaseText>
                                     </BaseView>

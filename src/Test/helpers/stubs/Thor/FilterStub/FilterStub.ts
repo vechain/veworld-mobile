@@ -24,7 +24,6 @@ export function filterStub(
             return this
         },
 
-        apply:
-            kind === "event" ? eventFilterApplyStub : transferFilterApplyStub,
+        apply: kind === "event" ? eventFilterApplyStub : transferFilterApplyStub,
     }
 }

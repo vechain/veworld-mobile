@@ -12,11 +12,7 @@ import { address } from "thor-devkit"
  * @param {ContactType} _type - The type of the contact (KNOWN or CACHE).
  * @returns {Contact} - A Contact object with the specified properties.
  */
-const createContact = (
-    _alias: string,
-    _address: string,
-    _type: ContactType,
-): Contact => {
+const createContact = (_alias: string, _address: string, _type: ContactType): Contact => {
     const contact: Contact = {
         alias: _alias,
         address: _address ? address.toChecksumed(_address) : "",
@@ -42,19 +38,11 @@ const addContact =
 
         const checksumedAddress = address.toChecksumed(_address)
 
-        const contactExists = FormUtils.alreadyExists(
-            checksumedAddress,
-            contactsState.contacts,
-            "address",
-        )
+        const contactExists = FormUtils.alreadyExists(checksumedAddress, contactsState.contacts, "address")
 
         if (contactExists) throw new Error("Contact already exists!")
 
-        const contact: Contact = createContact(
-            _alias,
-            _address,
-            ContactType.KNOWN,
-        )
+        const contact: Contact = createContact(_alias, _address, ContactType.KNOWN)
 
         dispatch(insertContact(contact))
 
@@ -76,11 +64,7 @@ const addCachedContact =
 
         const checksumedAddress = address.toChecksumed(_address)
 
-        const contactExists = FormUtils.alreadyExists(
-            checksumedAddress,
-            contactsState.contacts,
-            "address",
-        )
+        const contactExists = FormUtils.alreadyExists(checksumedAddress, contactsState.contacts, "address")
 
         if (contactExists) throw new Error("Contact already exists!")
 
@@ -105,11 +89,7 @@ const removeContact =
 
         const checksumedAddress = address.toChecksumed(_address)
 
-        const contactExists = FormUtils.alreadyExists(
-            checksumedAddress,
-            contactsState.contacts,
-            "address",
-        )
+        const contactExists = FormUtils.alreadyExists(checksumedAddress, contactsState.contacts, "address")
 
         if (!contactExists) throw new Error("Contact does not exist!")
 
@@ -135,11 +115,7 @@ const editContact =
         const checksumedAddress = address.toChecksumed(_address)
         const checksumedPreviousAddress = address.toChecksumed(_previousAddress)
 
-        const contactExists = FormUtils.alreadyExists(
-            checksumedPreviousAddress,
-            contactsState.contacts,
-            "address",
-        )
+        const contactExists = FormUtils.alreadyExists(checksumedPreviousAddress, contactsState.contacts, "address")
 
         if (!contactExists) throw new Error("Contact does not exist!")
 
@@ -152,10 +128,4 @@ const editContact =
         )
     }
 
-export {
-    addContact,
-    addCachedContact,
-    removeContact,
-    editContact,
-    createContact,
-}
+export { addContact, addCachedContact, removeContact, editContact, createContact }

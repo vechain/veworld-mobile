@@ -11,11 +11,7 @@ import {
 } from "~Components/Providers"
 
 import { useAppState, useBiometrics } from "~Hooks"
-import {
-    StandaloneAppBlockedScreen,
-    StandaloneLockScreen,
-    InternetDownScreen,
-} from "~Screens"
+import { StandaloneAppBlockedScreen, StandaloneLockScreen, InternetDownScreen } from "~Screens"
 import { AnimatedSplashScreen } from "../../../AnimatedSplashScreen"
 import Onboarding from "./Helpers/Onboarding"
 import NetInfo from "@react-native-community/netinfo"
@@ -45,16 +41,10 @@ type IApplicationSecurity = {
     redux?: EncryptedStorage
     images?: EncryptedStorage
     metadata?: EncryptedStorage
-    migrateOnboarding: (
-        type: SecurityLevelType,
-        pinCode?: string,
-    ) => Promise<void>
+    migrateOnboarding: (type: SecurityLevelType, pinCode?: string) => Promise<void>
     resetApplication: () => Promise<void>
     walletStatus: WALLET_STATUS
-    updateSecurityMethod: (
-        currentPinCode: string,
-        newPinCode?: string,
-    ) => Promise<boolean>
+    updateSecurityMethod: (currentPinCode: string, newPinCode?: string) => Promise<boolean>
     securityType: SecurityLevelType
     setWalletStatus: (status: WALLET_STATUS) => void
     isAppReady: boolean
@@ -63,22 +53,14 @@ type IApplicationSecurity = {
     triggerAutoLock: () => void
 }
 
-const ApplicationSecurityContext = React.createContext<
-    IApplicationSecurity | undefined
->(undefined)
+const ApplicationSecurityContext = React.createContext<IApplicationSecurity | undefined>(undefined)
 
 type ApplicationSecurityContextProviderProps = { children: React.ReactNode }
-export const ApplicationSecurityProvider = ({
-    children,
-}: ApplicationSecurityContextProviderProps) => {
+export const ApplicationSecurityProvider = ({ children }: ApplicationSecurityContextProviderProps) => {
     const [autoLock, setAutoLock] = useState(false)
-    const [walletStatus, setWalletStatus] = useState<WALLET_STATUS>(
-        WALLET_STATUS.NOT_INITIALISED,
-    )
+    const [walletStatus, setWalletStatus] = useState<WALLET_STATUS>(WALLET_STATUS.NOT_INITIALISED)
     const { currentState } = useAppState()
-    const [securityType, setSecurityType] = useState<SecurityLevelType>(
-        SecurityLevelType.NONE,
-    )
+    const [securityType, setSecurityType] = useState<SecurityLevelType>(SecurityLevelType.NONE)
     const [reduxStorage, setReduxStorage] = useState<EncryptedStorage>()
     const [imageStorage, setImageStorage] = useState<EncryptedStorage>()
     const [metadataStorage, setMetadataStorage] = useState<EncryptedStorage>()
@@ -95,17 +77,14 @@ export const ApplicationSecurityProvider = ({
         setAutoLock(true)
     }
 
-    const updateSecurityType = useCallback(
-        (type: SecurityLevelType | undefined) => {
-            if (!type) {
-                SecurityConfig.remove()
-            } else {
-                SecurityConfig.set(type)
-            }
-            setSecurityType(type ?? SecurityLevelType.NONE)
-        },
-        [],
-    )
+    const updateSecurityType = useCallback((type: SecurityLevelType | undefined) => {
+        if (!type) {
+            SecurityConfig.remove()
+        } else {
+            SecurityConfig.set(type)
+        }
+        setSecurityType(type ?? SecurityLevelType.NONE)
+    }, [])
 
     /**
      * Reset the application state
@@ -150,9 +129,7 @@ export const ApplicationSecurityProvider = ({
         let keys
 
         try {
-            keys =
-                backUpKeys?.storage ??
-                (await StorageEncryptionKeyHelper.get(pinCode))
+            keys = backUpKeys?.storage ?? (await StorageEncryptionKeyHelper.get(pinCode))
         } catch (e) {
             // handle cases when  the user cancels the biometric prompt and the keychain returns it as an error
             if (BiometricsUtils.BiometricErrors.isBiometricCanceled(e)) {
@@ -199,9 +176,7 @@ export const ApplicationSecurityProvider = ({
 
                 const { isDeviceEnrolled, currentSecurityLevel } = _biometrics
 
-                const biometricsDisabled =
-                    !isDeviceEnrolled ||
-                    currentSecurityLevel !== SecurityLevelType.BIOMETRIC
+                const biometricsDisabled = !isDeviceEnrolled || currentSecurityLevel !== SecurityLevelType.BIOMETRIC
 
                 if (biometricsDisabled) {
                     setUserDisabledBiometrics(true)
@@ -250,9 +225,7 @@ export const ApplicationSecurityProvider = ({
         async (type: SecurityLevelType, pinCode?: string): Promise<void> => {
             updateSecurityType(type)
 
-            const encryptionKeys = await StorageEncryptionKeyHelper.init(
-                pinCode,
-            )
+            const encryptionKeys = await StorageEncryptionKeyHelper.init(pinCode)
 
             try {
                 await Onboarding.migrateState({
@@ -292,14 +265,9 @@ export const ApplicationSecurityProvider = ({
      */
     const updateSecurityMethod = useCallback(
         async (currentPinCode: string, newPinCode?: string) => {
-            const type = newPinCode
-                ? SecurityLevelType.SECRET
-                : SecurityLevelType.BIOMETRIC
+            const type = newPinCode ? SecurityLevelType.SECRET : SecurityLevelType.BIOMETRIC
 
-            const success = await SecurityUpgradeBackup.updateSecurityMethod(
-                currentPinCode,
-                newPinCode,
-            )
+            const success = await SecurityUpgradeBackup.updateSecurityMethod(currentPinCode, newPinCode)
 
             if (success) {
                 updateSecurityType(type)
@@ -322,11 +290,7 @@ export const ApplicationSecurityProvider = ({
      * Initialise the app
      */
     useEffect(() => {
-        if (
-            biometrics &&
-            currentState === "active" &&
-            walletStatus === WALLET_STATUS.NOT_INITIALISED
-        ) {
+        if (biometrics && currentState === "active" && walletStatus === WALLET_STATUS.NOT_INITIALISED) {
             intialiseApp(biometrics)
                 .then(() => {
                     debug("App state initialised app")
@@ -341,10 +305,7 @@ export const ApplicationSecurityProvider = ({
     useEffect(() => {
         if (autoLock) {
             try {
-                if (
-                    walletStatus === WALLET_STATUS.UNLOCKED &&
-                    currentState !== "active"
-                ) {
+                if (walletStatus === WALLET_STATUS.UNLOCKED && currentState !== "active") {
                     lockApplication()
                 }
             } catch (e) {
@@ -356,8 +317,7 @@ export const ApplicationSecurityProvider = ({
     }, [autoLock, setAutoLock, walletStatus, currentState, lockApplication])
 
     const value: IApplicationSecurity | undefined = useMemo(() => {
-        if (!reduxStorage || walletStatus === WALLET_STATUS.NOT_INITIALISED)
-            return
+        if (!reduxStorage || walletStatus === WALLET_STATUS.NOT_INITIALISED) return
 
         return {
             redux: reduxStorage,
@@ -415,9 +375,7 @@ export const ApplicationSecurityProvider = ({
 
             if (securityType !== SecurityLevelType.SECRET) return <></>
             return (
-                <AnimatedSplashScreen
-                    playAnimation={true}
-                    useFadeOutAnimation={false}>
+                <AnimatedSplashScreen playAnimation={true} useFadeOutAnimation={false}>
                     <StandaloneLockScreen onPinInserted={unlock} />
                 </AnimatedSplashScreen>
             )
@@ -428,9 +386,7 @@ export const useApplicationSecurity = () => {
     const context = React.useContext(ApplicationSecurityContext)
 
     if (!context) {
-        throw new Error(
-            "useApplicationSecurity must be used within a ApplicationSecurityContext",
-        )
+        throw new Error("useApplicationSecurity must be used within a ApplicationSecurityContext")
     }
 
     return context

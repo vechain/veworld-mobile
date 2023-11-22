@@ -22,10 +22,7 @@ import {
     useAppSelector,
 } from "~Storage/Redux"
 import { debug, error, warn } from "~Utils"
-import {
-    initCollectionMetadataFromRegistry,
-    initCollectionMetadataWithoutRegistry,
-} from "./Helpers"
+import { initCollectionMetadataFromRegistry, initCollectionMetadataWithoutRegistry } from "./Helpers"
 import { useI18nContext } from "~i18n"
 import { NFT_PAGE_SIZE } from "~Constants/Constants/NFT"
 import { compareAddresses } from "~Utils/AddressUtils/AddressUtils"
@@ -63,18 +60,12 @@ export const useNFTCollections = () => {
                 // Exit if currentAddress.address is not set
                 if (!currentAddress) return
 
-                debug(
-                    `Lazy loading metadata for collection ${collection.address}`,
-                )
+                debug(`Lazy loading metadata for collection ${collection.address}`)
 
                 let balanceOf: number | undefined
 
                 try {
-                    balanceOf = await getNftBalanceOf(
-                        currentAddress,
-                        collection.address,
-                        thor,
-                    )
+                    balanceOf = await getNftBalanceOf(currentAddress, collection.address, thor)
                 } catch (e) {
                     warn(" useNFTCollections - failed to get balanceO", e)
                 }
@@ -83,18 +74,8 @@ export const useNFTCollections = () => {
                 let description = collection.description
 
                 if (!collection.fromRegistry) {
-                    const { data } = await getNftsForContract(
-                        network.type,
-                        collection.address,
-                        currentAddress,
-                        1,
-                        0,
-                    )
-                    const tokenURI = await getTokenURI(
-                        data[0].tokenId,
-                        collection.address,
-                        thor,
-                    )
+                    const { data } = await getNftsForContract(network.type, collection.address, currentAddress, 1, 0)
+                    const tokenURI = await getTokenURI(data[0].tokenId, collection.address, thor)
                     const tokenMetadata = await fetchMetadata(tokenURI)
 
                     if (tokenMetadata) {
@@ -110,10 +91,7 @@ export const useNFTCollections = () => {
                     description,
                     updated: true,
                     symbol: await getSymbol(collection.address, thor),
-                    totalSupply: await getTokenTotalSupply(
-                        collection.address,
-                        thor,
-                    ),
+                    totalSupply: await getTokenTotalSupply(collection.address, thor),
                 }
 
                 dispatch(
@@ -135,54 +113,37 @@ export const useNFTCollections = () => {
     })
 
     const loadCollections = useCallback(
-        async (
-            registryInfo: GithubCollectionResponse[],
-            _page: number,
-            _resultsPerPage: number = NFT_PAGE_SIZE,
-        ) => {
+        async (registryInfo: GithubCollectionResponse[], _page: number, _resultsPerPage: number = NFT_PAGE_SIZE) => {
             if (!currentAddress) return
-            dispatch(
-                setNetworkingSideEffects({ isLoading: true, error: undefined }),
-            )
+            dispatch(setNetworkingSideEffects({ isLoading: true, error: undefined }))
             let err
 
             try {
                 // Get contract addresses for nfts owned by selected account
-                const { data: contractsForNFTs, pagination } =
-                    await getContractAddresses(
-                        network.type,
-                        currentAddress,
-                        _resultsPerPage,
-                        _page,
-                    )
+                const { data: contractsForNFTs, pagination } = await getContractAddresses(
+                    network.type,
+                    currentAddress,
+                    _resultsPerPage,
+                    _page,
+                )
 
                 // exit early if there are no more pages to fetch
-                if (pagination.totalPages && _page >= pagination.totalPages)
-                    return
+                if (pagination.totalPages && _page >= pagination.totalPages) return
 
                 // Parse collection metadata from registry info or the chain if needed
-                const _nftCollections: NftCollection[] = contractsForNFTs.map(
-                    collection => {
-                        const regInfo = registryInfo.find(col =>
-                            compareAddresses(col.address, collection),
+                const _nftCollections: NftCollection[] = contractsForNFTs.map(collection => {
+                    const regInfo = registryInfo.find(col => compareAddresses(col.address, collection))
+                    if (regInfo) {
+                        return initCollectionMetadataFromRegistry(network.type, currentAddress, collection, regInfo)
+                    } else {
+                        return initCollectionMetadataWithoutRegistry(
+                            network.type,
+                            currentAddress,
+                            collection,
+                            LL.COMMON_NOT_AVAILABLE(),
                         )
-                        if (regInfo) {
-                            return initCollectionMetadataFromRegistry(
-                                network.type,
-                                currentAddress,
-                                collection,
-                                regInfo,
-                            )
-                        } else {
-                            return initCollectionMetadataWithoutRegistry(
-                                network.type,
-                                currentAddress,
-                                collection,
-                                LL.COMMON_NOT_AVAILABLE(),
-                            )
-                        }
-                    },
-                )
+                    }
+                })
 
                 // set collections to store
                 dispatch(

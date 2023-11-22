@@ -13,37 +13,27 @@ type Props = {
     testID?: string
 }
 
-export const BaseSearchInput = memo(
-    ({ placeholder = "Search", value, setValue, testID }: Props) => {
-        const { styles } = useThemedStyles(baseStyles)
+export const BaseSearchInput = memo(({ placeholder = "Search", value, setValue, testID }: Props) => {
+    const { styles } = useThemedStyles(baseStyles)
 
-        const theme = useTheme()
+    const theme = useTheme()
 
-        const placeholderColor = theme.isDark
-            ? COLORS.WHITE_DISABLED
-            : COLORS.DARK_PURPLE_DISABLED
+    const placeholderColor = theme.isDark ? COLORS.WHITE_DISABLED : COLORS.DARK_PURPLE_DISABLED
 
-        return (
-            <BaseView style={styles.container}>
-                <TextInput
-                    style={styles.input}
-                    placeholder={placeholder}
-                    placeholderTextColor={placeholderColor}
-                    onChangeText={setValue}
-                    value={value}
-                    testID={testID}
-                />
-                <BaseIcon
-                    name="magnify"
-                    size={24}
-                    color={theme.colors.text}
-                    style={styles.icon}
-                    testID="magnify"
-                />
-            </BaseView>
-        )
-    },
-)
+    return (
+        <BaseView style={styles.container}>
+            <TextInput
+                style={styles.input}
+                placeholder={placeholder}
+                placeholderTextColor={placeholderColor}
+                onChangeText={setValue}
+                value={value}
+                testID={testID}
+            />
+            <BaseIcon name="magnify" size={24} color={theme.colors.text} style={styles.icon} testID="magnify" />
+        </BaseView>
+    )
+})
 
 const baseStyles = (theme: ColorThemeType) =>
     StyleSheet.create({

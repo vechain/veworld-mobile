@@ -16,17 +16,11 @@ import { ViewToken } from "react-native"
  *   onViewableItemsChanged: (info: { viewableItems: ViewToken[]; changed: ViewToken[] }) => void;
  * }} The state and configuration for the scrollable list.
  */
-export const useScrollableList = <T>(
-    data: T[],
-    snapIndex: number,
-    snapPointsLength: number,
-) => {
+export const useScrollableList = <T>(data: T[], snapIndex: number, snapPointsLength: number) => {
     const [visibleItemsCount, setVisibleItemsCount] = useState<number>(0)
 
     const isListScrollable = useMemo(
-        () =>
-            snapIndex === snapPointsLength - 1 &&
-            visibleItemsCount < data.length,
+        () => snapIndex === snapPointsLength - 1 && visibleItemsCount < data.length,
         [visibleItemsCount, data.length, snapIndex, snapPointsLength],
     )
 
@@ -37,12 +31,9 @@ export const useScrollableList = <T>(
         [],
     )
 
-    const onViewableItemsChanged = useCallback(
-        (info: { viewableItems: ViewToken[]; changed: ViewToken[] }) => {
-            setVisibleItemsCount(info.viewableItems.length)
-        },
-        [],
-    )
+    const onViewableItemsChanged = useCallback((info: { viewableItems: ViewToken[]; changed: ViewToken[] }) => {
+        setVisibleItemsCount(info.viewableItems.length)
+    }, [])
 
     return {
         visibleItemsCount,

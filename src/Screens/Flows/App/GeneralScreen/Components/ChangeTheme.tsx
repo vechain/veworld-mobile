@@ -49,11 +49,5 @@ export const ChangeTheme: React.FC = () => {
         [changeTheme],
     )
 
-    return (
-        <BaseButtonGroupHorizontal
-            selectedButtonIds={[themePref]}
-            buttons={themes}
-            action={handleSelectTheme}
-        />
-    )
+    return <BaseButtonGroupHorizontal selectedButtonIds={[themePref]} buttons={themes} action={handleSelectTheme} />
 }

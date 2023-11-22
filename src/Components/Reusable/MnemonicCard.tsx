@@ -16,10 +16,7 @@ export const MnemonicCard: FC<Props> = ({ mnemonicArray }) => {
 
     const theme = useTheme()
 
-    const iconColor = useMemo(
-        () => (theme.isDark ? theme.colors.tertiary : theme.colors.card),
-        [theme],
-    )
+    const iconColor = useMemo(() => (theme.isDark ? theme.colors.tertiary : theme.colors.card), [theme])
 
     const onPress = useCallback(async () => {
         HapticsService.triggerImpact({ level: "Light" })
@@ -29,11 +26,7 @@ export const MnemonicCard: FC<Props> = ({ mnemonicArray }) => {
     return (
         <BaseView>
             <TouchableWithoutFeedback onPress={onPress}>
-                <BaseView
-                    flexDirection="row"
-                    w={100}
-                    borderRadius={16}
-                    bg={theme.colors.card}>
+                <BaseView flexDirection="row" w={100} borderRadius={16} bg={theme.colors.card}>
                     <BaseView
                         px={16}
                         py={12}
@@ -48,9 +41,7 @@ export const MnemonicCard: FC<Props> = ({ mnemonicArray }) => {
                                 key={`word${index}`}
                                 my={8}
                                 w={33}
-                                testID={`word-${index}`}>{`${
-                                index + 1
-                            }. ${word}`}</BaseText>
+                                testID={`word-${index}`}>{`${index + 1}. ${word}`}</BaseText>
                         ))}
 
                         {!isShow && <PlatformBlur />}
@@ -87,14 +78,8 @@ const PlatformBlur = () => {
     } else {
         return (
             <>
-                <BaseView
-                    style={[
-                        styles.androidBlurContainer,
-                        { backgroundColor: theme.colors.card },
-                    ]}>
-                    <BaseText
-                        typographyFont="subTitle"
-                        color={theme.colors.text}>
+                <BaseView style={[styles.androidBlurContainer, { backgroundColor: theme.colors.card }]}>
+                    <BaseText typographyFont="subTitle" color={theme.colors.text}>
                         {LL.TAP_TO_VIEW()}
                     </BaseText>
                 </BaseView>

@@ -52,11 +52,7 @@ export const BaseSafeArea = ({
 
     return (
         <SafeAreaView
-            style={[
-                isAndroid() ? themedStyles.androidTopPadding : {},
-                themedStyles.container,
-                style,
-            ]}
+            style={[isAndroid() ? themedStyles.androidTopPadding : {}, themedStyles.container, style]}
             {...otherProps}>
             {children}
         </SafeAreaView>
@@ -72,21 +68,13 @@ type BaseStylesProps = {
 }
 
 const baseStyles =
-    ({
-        isTab,
-        iosOnlyTabBarBottomMargin,
-        flexGrow,
-        bgTransparent,
-        bg,
-    }: BaseStylesProps) =>
+    ({ isTab, iosOnlyTabBarBottomMargin, flexGrow, bgTransparent, bg }: BaseStylesProps) =>
     (theme: ColorThemeType) =>
         StyleSheet.create({
             container: {
                 paddingBottom: isTab ? iosOnlyTabBarBottomMargin : 0,
                 flexGrow,
-                backgroundColor: bgTransparent
-                    ? "transparent"
-                    : bg || theme.colors.background,
+                backgroundColor: bgTransparent ? "transparent" : bg || theme.colors.background,
             },
             androidTopPadding: {
                 paddingTop: 12,

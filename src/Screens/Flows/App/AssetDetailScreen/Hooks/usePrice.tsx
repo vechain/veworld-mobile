@@ -38,14 +38,10 @@ export function useLineChartPrice(): ValueAndFormatted {
     })
 
     const priceFormatted = useDerivedValue(() => {
-        return ReanimatedUtils.numberToLocaleStringWorklet(
-            price.value,
-            langTag,
-            {
-                style: "currency",
-                currency,
-            },
-        )
+        return ReanimatedUtils.numberToLocaleStringWorklet(price.value, langTag, {
+            style: "currency",
+            currency,
+        })
     })
 
     return {
@@ -105,15 +101,9 @@ export function useLineChartRelativeChange({
 
         // scrubbing: close price is active price
         // not scrubbing: close price is period end price
-        const closePrice = isActive.value
-            ? data[currentIndex.value]?.value
-            : data[data.length - 1]?.value
+        const closePrice = isActive.value ? data[currentIndex.value]?.value : data[data.length - 1]?.value
 
-        if (
-            openPrice === undefined ||
-            closePrice === undefined ||
-            openPrice === 0
-        ) {
+        if (openPrice === undefined || closePrice === undefined || openPrice === 0) {
             return 0
         }
 

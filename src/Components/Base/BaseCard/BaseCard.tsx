@@ -35,9 +35,7 @@ export const BaseCard = memo(
         return (
             <BaseView
                 style={[
-                    selected
-                        ? styles.selectedContainer
-                        : styles.unselectedContainer,
+                    selected ? styles.selectedContainer : styles.unselectedContainer,
                     styles.container,
                     containerStyle,
                 ]}>
@@ -45,9 +43,7 @@ export const BaseCard = memo(
                     <TouchableOpacity
                         onPress={onPress}
                         containerStyle={styles.touchableContainer}
-                        activeOpacity={
-                            disableOpacityOnPressing || !onPress ? 1 : 0.2
-                        }>
+                        activeOpacity={disableOpacityOnPressing || !onPress ? 1 : 0.2}>
                         {renderChildren}
                     </TouchableOpacity>
                 ) : (

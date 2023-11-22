@@ -17,31 +17,18 @@ export const SettingsRow = ({ title, screenName, icon }: RowProps) => {
 
     const theme = useTheme()
 
-    const onPress = useCallback(
-        () => nav.navigate(screenName),
-        [screenName, nav],
-    )
+    const onPress = useCallback(() => nav.navigate(screenName), [screenName, nav])
 
     return (
-        <BaseTouchable
-            action={onPress}
-            style={baseStyles.container}
-            haptics="Light">
+        <BaseTouchable action={onPress} style={baseStyles.container} haptics="Light">
             <BaseView flexDirection="row">
                 <BaseIcon color={theme.colors.text} name={icon} size={24} />
-                <BaseText
-                    mx={14}
-                    typographyFont="button"
-                    color={theme.colors.text}>
+                <BaseText mx={14} typographyFont="button" color={theme.colors.text}>
                     {title}
                 </BaseText>
             </BaseView>
 
-            <BaseIcon
-                color={theme.colors.text}
-                name={"chevron-right"}
-                size={24}
-            />
+            <BaseIcon color={theme.colors.text} name={"chevron-right"} size={24} />
         </BaseTouchable>
     )
 }

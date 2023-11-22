@@ -3,13 +3,7 @@ import { StyleSheet } from "react-native"
 import { useThemedStyles } from "~Hooks"
 import { ColorThemeType } from "~Constants"
 import { StringUtils } from "~Utils"
-import {
-    BaseCard,
-    BaseIcon,
-    BaseText,
-    BaseTouchableBox,
-    BaseView,
-} from "~Components"
+import { BaseCard, BaseIcon, BaseText, BaseTouchableBox, BaseView } from "~Components"
 import { Network } from "~Model"
 import { useI18nContext } from "~i18n"
 
@@ -21,41 +15,22 @@ type Props = {
     flex?: number
     activeOpacity?: number
 }
-export const NetworkBox: React.FC<Props> = ({
-    network,
-    onPress,
-    rightIcon,
-    isSelected = false,
-}) => {
+export const NetworkBox: React.FC<Props> = ({ network, onPress, rightIcon, isSelected = false }) => {
     const { LL } = useI18nContext()
     const { theme, styles } = useThemedStyles(baseStyles)
     const style = isSelected ? styles.selected : styles.notSelected
 
-    const handleOnPress = useCallback(
-        () => !!onPress && onPress(network),
-        [onPress, network],
-    )
+    const handleOnPress = useCallback(() => !!onPress && onPress(network), [onPress, network])
 
     const networkBoxBody = useCallback(
         () => (
-            <BaseView
-                flexDirection="row"
-                justifyContent="space-between"
-                alignItems="center"
-                flex={1}>
+            <BaseView flexDirection="row" justifyContent="space-between" alignItems="center" flex={1}>
                 <BaseView
                     flexDirection="column"
                     alignItems="flex-start"
-                    style={
-                        rightIcon
-                            ? styles.NetworkInfoRightIcon
-                            : styles.NetworkInfoNoRightIcon
-                    }>
+                    style={rightIcon ? styles.NetworkInfoRightIcon : styles.NetworkInfoNoRightIcon}>
                     <BaseView flexDirection="row">
-                        <BaseText
-                            typographyFont="button"
-                            ellipsizeMode="tail"
-                            numberOfLines={1}>
+                        <BaseText typographyFont="button" ellipsizeMode="tail" numberOfLines={1}>
                             {StringUtils.capitalize(network.name)}
                         </BaseText>
                         {network.defaultNet && (
@@ -68,9 +43,7 @@ export const NetworkBox: React.FC<Props> = ({
                         {network.currentUrl}
                     </BaseText>
                 </BaseView>
-                {rightIcon && (
-                    <BaseIcon name={rightIcon} color={theme.colors.text} />
-                )}
+                {rightIcon && <BaseIcon name={rightIcon} color={theme.colors.text} />}
             </BaseView>
         ),
         [
@@ -87,10 +60,7 @@ export const NetworkBox: React.FC<Props> = ({
 
     return onPress ? (
         <BaseView style={styles.touchableContainer} flexDirection="row">
-            <BaseTouchableBox
-                haptics="Light"
-                action={handleOnPress}
-                innerContainerStyle={style}>
+            <BaseTouchableBox haptics="Light" action={handleOnPress} innerContainerStyle={style}>
                 {networkBoxBody()}
             </BaseTouchableBox>
         </BaseView>

@@ -20,9 +20,7 @@ import { useCallback, useEffect } from "react"
 import BigNumber from "bignumber.js"
 
 // If the env variable isn't set, use the default
-const EXCHANGE_RATE_SYNC_PERIOD = new BigNumber(
-    process.env.REACT_APP_EXCHANGE_RATE_SYNC_PERIOD ?? "120000",
-).toNumber()
+const EXCHANGE_RATE_SYNC_PERIOD = new BigNumber(process.env.REACT_APP_EXCHANGE_RATE_SYNC_PERIOD ?? "120000").toNumber()
 
 /**
  * This hook is responsible for keeping the available tokens, balances and exchange rates data up to date.
@@ -47,20 +45,12 @@ export const useTokenBalances = () => {
     const updateBalances = useCallback(async () => {
         // Update balances
         if (balances.length > 0) {
-            await dispatch(
-                updateAccountBalances(thorClient, selectedAccount.address),
-            )
+            await dispatch(updateAccountBalances(thorClient, selectedAccount.address))
         }
     }, [balances.length, dispatch, selectedAccount.address, thorClient])
 
     const updateSuggested = useCallback(async () => {
-        await dispatch(
-            updateSuggestedTokens(
-                selectedAccount.address,
-                officialTokens,
-                network,
-            ),
-        )
+        await dispatch(updateSuggestedTokens(selectedAccount.address, officialTokens, network))
     }, [dispatch, network, officialTokens, selectedAccount.address])
 
     // fetch official tokens from github
@@ -74,12 +64,7 @@ export const useTokenBalances = () => {
 
         updateSuggested()
         // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [
-        dispatch,
-        network.genesis.id,
-        selectedAccount.address,
-        officialTokens.length,
-    ])
+    }, [dispatch, network.genesis.id, selectedAccount.address, officialTokens.length])
 
     // auto select suggested tokens if they don't exist already
     useEffect(() => {
@@ -90,14 +75,7 @@ export const useTokenBalances = () => {
         )
             return
 
-        dispatch(
-            autoSelectSuggestTokens(
-                selectedAccount.address,
-                missingSuggestedTokens,
-                network,
-                thorClient,
-            ),
-        )
+        dispatch(autoSelectSuggestTokens(selectedAccount.address, missingSuggestedTokens, network, thorClient))
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [
         dispatch,
@@ -127,13 +105,7 @@ export const useTokenBalances = () => {
 
         updateBalances()
         // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [
-        thorClient.genesis.id,
-        network.genesis.id,
-        balances.length,
-        dispatch,
-        selectedAccount.address,
-    ])
+    }, [thorClient.genesis.id, network.genesis.id, balances.length, dispatch, selectedAccount.address])
 
     /**
      * update token price data
@@ -152,10 +124,7 @@ export const useTokenBalances = () => {
 
         updateVechainExchangeRates()
 
-        const interval = setInterval(
-            updateVechainExchangeRates,
-            EXCHANGE_RATE_SYNC_PERIOD,
-        )
+        const interval = setInterval(updateVechainExchangeRates, EXCHANGE_RATE_SYNC_PERIOD)
         return () => clearInterval(interval)
     }, [dispatch, coinGeckoTokens])
 

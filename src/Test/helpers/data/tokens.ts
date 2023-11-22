@@ -1,9 +1,5 @@
-import {
-    FungibleTokenWithBalance,
-    NFTMediaType,
-    NonFungibleToken,
-    Token,
-} from "~Model"
+/* eslint-disable max-len */
+import { FungibleTokenWithBalance, NFTMediaType, NonFungibleToken, Token } from "~Model"
 import { VET, VTHO } from "~Constants"
 
 export const VETWithBalance: FungibleTokenWithBalance = {

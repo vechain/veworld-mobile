@@ -8,8 +8,6 @@ describe("capitalize", () => {
 
 describe("truncateTextIfSizeIsGreaterThan", () => {
     it("should return correctly", () => {
-        expect(truncateTextIfSizeIsGreaterThan(5, "foooooo bar")).toBe(
-            "foooo...",
-        )
+        expect(truncateTextIfSizeIsGreaterThan(5, "foooooo bar")).toBe("foooo...")
     })
 })

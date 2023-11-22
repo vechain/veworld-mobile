@@ -102,10 +102,7 @@ describe("BaseButtonGroup", () => {
 
         for (const button of buttons) {
             const baseButton = await findBaseButtonInGroup(button.id)
-            expect(
-                (baseButton.children[0] as ReactTestInstance).props
-                    .typographyFont,
-            ).toBe("captionMedium")
+            expect((baseButton.children[0] as ReactTestInstance).props.typographyFont).toBe("captionMedium")
         }
     })
 })

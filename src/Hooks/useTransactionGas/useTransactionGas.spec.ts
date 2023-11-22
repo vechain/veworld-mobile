@@ -1,24 +1,16 @@
 import { useTransactionGas } from "./useTransactionGas"
 import { renderHook } from "@testing-library/react-hooks"
 import { TestHelpers, TestWrapper } from "~Test"
-import {
-    prepareFungibleClause,
-    prepareNonFungibleClause,
-} from "~Utils/TransactionUtils/TransactionUtils"
+import { prepareFungibleClause, prepareNonFungibleClause } from "~Utils/TransactionUtils/TransactionUtils"
 
-const { account1D1, account2D1, VETWithBalance, VTHOWithBalance, NFT_Mock } =
-    TestHelpers.data
+const { account1D1, account2D1, VETWithBalance, VTHOWithBalance, NFT_Mock } = TestHelpers.data
 
 describe("useTransaction", () => {
     it("VET - should render correctly", async () => {
         const { result } = renderHook(
             () =>
                 useTransactionGas({
-                    clauses: prepareFungibleClause(
-                        "1",
-                        VETWithBalance,
-                        account1D1.address,
-                    ),
+                    clauses: prepareFungibleClause("1", VETWithBalance, account1D1.address),
                 }),
             { wrapper: TestWrapper },
         )
@@ -29,11 +21,7 @@ describe("useTransaction", () => {
         const { result } = renderHook(
             () =>
                 useTransactionGas({
-                    clauses: prepareFungibleClause(
-                        "1",
-                        VTHOWithBalance,
-                        account1D1.address,
-                    ),
+                    clauses: prepareFungibleClause("1", VTHOWithBalance, account1D1.address),
                 }),
             { wrapper: TestWrapper },
         )
@@ -45,11 +33,7 @@ describe("useTransaction", () => {
         const { result } = renderHook(
             () =>
                 useTransactionGas({
-                    clauses: prepareNonFungibleClause(
-                        account1D1.address,
-                        account2D1.address,
-                        NFT_Mock,
-                    ),
+                    clauses: prepareNonFungibleClause(account1D1.address, account2D1.address, NFT_Mock),
                 }),
             { wrapper: TestWrapper },
         )

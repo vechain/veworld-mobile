@@ -30,15 +30,13 @@ export const SelectLedgerDevice = () => {
     const nav = useNavigation()
     const track = useAnalyticTracking()
 
-    const [selectedDevice, setSelectedDevice] =
-        useState<ConnectedLedgerDevice>()
+    const [selectedDevice, setSelectedDevice] = useState<ConnectedLedgerDevice>()
 
     const onDeviceSelect = useCallback((device: ConnectedLedgerDevice) => {
         setSelectedDevice(device)
     }, [])
 
-    const { androidPermissionsGranted, checkPermissions } =
-        LedgerAndroidPermissions()
+    const { androidPermissionsGranted, checkPermissions } = LedgerAndroidPermissions()
 
     const onDevice = useCallback(
         (device: ConnectedLedgerDevice) => {
@@ -105,31 +103,17 @@ export const SelectLedgerDevice = () => {
         <DismissKeyboardView>
             <BaseSafeArea grow={1}>
                 <BackButtonHeader beforeNavigating={unsubscribe} />
-                <BaseView
-                    alignItems="center"
-                    justifyContent="space-between"
-                    flexGrow={1}
-                    mx={20}>
+                <BaseView alignItems="center" justifyContent="space-between" flexGrow={1} mx={20}>
                     <BaseView alignSelf="flex-start" w={100}>
-                        <BaseText typographyFont="title">
-                            {LL.WALLET_LEDGER_SELECT_DEVICE_TITLE()}
-                        </BaseText>
+                        <BaseText typographyFont="title">{LL.WALLET_LEDGER_SELECT_DEVICE_TITLE()}</BaseText>
                         <BaseText typographyFont="body" my={10}>
                             {LL.WALLET_LEDGER_SELECT_DEVICE_SB()}
                         </BaseText>
 
                         <BaseSpacer height={20} />
-                        <Lottie
-                            source={BlePairingDark}
-                            autoPlay
-                            loop
-                            style={styles.lottie}
-                        />
+                        <Lottie source={BlePairingDark} autoPlay loop style={styles.lottie} />
                         <BaseSpacer height={20} />
-                        <BaseText
-                            align="center"
-                            typographyFont="subTitleBold"
-                            my={10}>
+                        <BaseText align="center" typographyFont="subTitleBold" my={10}>
                             {devicesFoundMessage}
                         </BaseText>
                         {availableDevices.length > 0 && (
@@ -148,9 +132,7 @@ export const SelectLedgerDevice = () => {
                     </BaseView>
                     {Platform.OS === "android" && !androidPermissionsGranted ? (
                         <BaseView w={100}>
-                            <BaseText>
-                                {LL.WALLET_LEDGER_ASK_PERMISSIONS_MESSAGE()}
-                            </BaseText>
+                            <BaseText>{LL.WALLET_LEDGER_ASK_PERMISSIONS_MESSAGE()}</BaseText>
                             <BaseSpacer height={16} />
                             <BaseButton
                                 action={checkPermissions}

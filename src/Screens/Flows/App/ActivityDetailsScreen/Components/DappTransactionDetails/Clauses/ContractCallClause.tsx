@@ -18,20 +18,12 @@ export const ContractCallClause: React.FC<Props> = memo(({ clause }) => {
 
     return (
         <BaseView style={{ width: SCREEN_WIDTH - 88 }}>
-            <ClauseDetail
-                title={LL.TYPE()}
-                value={LL.CONNECTED_APP_contract_call()}
-            />
+            <ClauseDetail title={LL.TYPE()} value={LL.CONNECTED_APP_contract_call()} />
             {clause.to && (
                 <ClauseDetail
                     title={LL.TO()}
                     value={FormattingUtils.humanAddress(clause.to, 7, 9)}
-                    onValuePress={() =>
-                        onCopyToClipboard(
-                            clause.to ?? "",
-                            LL.COMMON_LBL_ADDRESS(),
-                        )
-                    }
+                    onValuePress={() => onCopyToClipboard(clause.to ?? "", LL.COMMON_LBL_ADDRESS())}
                     valueIcon="content-copy"
                 />
             )}
@@ -40,9 +32,7 @@ export const ContractCallClause: React.FC<Props> = memo(({ clause }) => {
                 title={LL.CONTRACT_DATA()}
                 value={FormattingUtils.humanAddress(clause.data, 7, 9)}
                 border={false}
-                onValuePress={() =>
-                    onCopyToClipboard(clause.to ?? "", LL.COMMON_LBL_DATA())
-                }
+                onValuePress={() => onCopyToClipboard(clause.to ?? "", LL.COMMON_LBL_DATA())}
                 valueIcon="content-copy"
             />
         </BaseView>

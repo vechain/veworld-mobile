@@ -5,29 +5,20 @@
  * * and https://github.com/Uniswap/wallet
  */
 
-function replaceSeparators(
-    sNum: string,
-    separators: { decimal: string; thousands: string },
-): string {
+function replaceSeparators(sNum: string, separators: { decimal: string; thousands: string }): string {
     "worklet"
     const sNumParts = sNum.split(".")
     if (separators && separators.thousands && sNumParts[0]) {
         // every three digits, replace it with the digits + the thousands separator
         // \B is used to match non-word boundaries to prevent unnecessary backtracking
-        sNumParts[0] = sNumParts[0].replace(
-            /\B(?=(\d{3})+(?!\d))/g,
-            separators.thousands,
-        )
+        sNumParts[0] = sNumParts[0].replace(/\B(?=(\d{3})+(?!\d))/g, separators.thousands)
     }
     sNum = sNumParts.join(separators.decimal)
 
     return sNum
 }
 
-function renderFormat(
-    template: string,
-    options: Record<string, string> & { num?: string; code?: string },
-): string {
+function renderFormat(template: string, options: Record<string, string> & { num?: string; code?: string }): string {
     "worklet"
     for (const [option, value] of Object.entries(options)) {
         let updatedValue = value
@@ -60,9 +51,7 @@ export const round = (value: number, precision = 0): number => {
 
 function mapMatch(
     map: {
-        [key in Language]:
-            | string
-            | ((key: string, options?: OptionsType) => string)
+        [key in Language]: string | ((key: string, options?: OptionsType) => string)
     },
     locale: Language,
 ): string | ((key: string, options?: OptionsType) => string) {
@@ -166,10 +155,7 @@ const currencyFormatMap = {
     "nb-NO": "post",
 }
 
-export type Language =
-    | keyof typeof currencyFormatMap
-    | keyof typeof transformForLocale
-    | string
+export type Language = keyof typeof currencyFormatMap | keyof typeof transformForLocale | string
 
 const currencySymbols: { [key: string]: string } = {
     afn: "؋",
@@ -342,21 +328,15 @@ export function numberToLocaleStringWorklet(
         sNum = value.toFixed(2)
     }
 
-    sNum = (<(key: string, options?: OptionsType) => string>(
-        mapMatch(transformForLocale, locale)
-    ))(sNum, options)
+    sNum = (<(key: string, options?: OptionsType) => string>mapMatch(transformForLocale, locale))(sNum, options)
 
     if (options?.currency && options?.style === "currency") {
-        const format =
-            currencyFormats[<string>mapMatch(currencyFormatMap, locale)]
+        const format = currencyFormats[<string>mapMatch(currencyFormatMap, locale)]
         const symbol = currencySymbols[options.currency.toLowerCase()]
         if (format) {
             sNum = renderFormat(format, {
                 num: sNum,
-                code:
-                    options.currencyDisplay === "code" || !symbol
-                        ? options.currency.toUpperCase()
-                        : symbol,
+                code: options.currencyDisplay === "code" || !symbol ? options.currency.toUpperCase() : symbol,
             })
         }
     }
@@ -379,9 +359,7 @@ export function numberToPercentWorklet(
     const { precision, absolute } = options
 
     if (precision < 0) {
-        throw new Error(
-            "numberToPercentWorklet does not handle negative precision values",
-        )
+        throw new Error("numberToPercentWorklet does not handle negative precision values")
     }
 
     if (value === undefined || isNaN(value)) {

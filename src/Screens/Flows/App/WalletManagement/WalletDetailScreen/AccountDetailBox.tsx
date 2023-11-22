@@ -15,13 +15,7 @@ type Props = {
     isEditable?: boolean
 }
 export const AccountDetailBox: React.FC<Props> = memo(
-    ({
-        account,
-        isSelected,
-        isBalanceVisible,
-        isDisabled,
-        isEditable = true,
-    }) => {
+    ({ account, isSelected, isBalanceVisible, isDisabled, isEditable = true }) => {
         const { styles, theme } = useThemedStyles(baseStyles)
 
         const { changeAccountAlias } = useRenameAccount(account)
@@ -40,9 +34,7 @@ export const AccountDetailBox: React.FC<Props> = memo(
             }
         }
 
-        const vetBalance = useAppSelector(state =>
-            selectVetBalanceByAccount(state, account.address),
-        )
+        const vetBalance = useAppSelector(state => selectVetBalanceByAccount(state, account.address))
 
         const balance = useMemo(() => {
             if (!isBalanceVisible) {
@@ -52,29 +44,20 @@ export const AccountDetailBox: React.FC<Props> = memo(
             return `${vetBalance} ${VET.symbol}`
         }, [isBalanceVisible, vetBalance])
 
-        const handleFocus = useCallback(
-            () => setBackupAlias(accountAlias),
-            [accountAlias],
-        )
+        const handleFocus = useCallback(() => setBackupAlias(accountAlias), [accountAlias])
 
         const cardBgColor = useMemo(
             () => (isDisabled ? theme.colors.neutralDisabled : undefined),
             [isDisabled, theme.colors.neutralDisabled],
         )
-        const cardOpacity = useMemo(
-            () => (isDisabled ? 0.7 : undefined),
-            [isDisabled],
-        )
+        const cardOpacity = useMemo(() => (isDisabled ? 0.7 : undefined), [isDisabled])
 
         return (
             <BaseView
                 flexDirection="row"
                 justifyContent="space-between"
                 bg={cardBgColor}
-                style={[
-                    isSelected ? styles.selected : styles.notSelected,
-                    styles.container,
-                ]}>
+                style={[isSelected ? styles.selected : styles.notSelected, styles.container]}>
                 <BaseView style={styles.aliasContainer}>
                     <BaseTextInput
                         disabled={!isEditable}
@@ -96,10 +79,7 @@ export const AccountDetailBox: React.FC<Props> = memo(
                         maxLength={20}
                     />
                 </BaseView>
-                <BaseView
-                    style={
-                        (styles.rightSubContainer, { opacity: cardOpacity })
-                    }>
+                <BaseView style={(styles.rightSubContainer, { opacity: cardOpacity })}>
                     <BaseText style={styles.address} fontSize={10}>
                         {FormattingUtils.humanAddress(account.address, 4, 6)}
                     </BaseText>

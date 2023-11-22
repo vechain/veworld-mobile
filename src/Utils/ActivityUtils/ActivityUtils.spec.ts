@@ -1,3 +1,4 @@
+/* eslint-disable max-len */
 import { Activity, ActivityStatus, ActivityType, Token } from "~Model"
 import ActivityUtils from "./index"
 import { genesises } from "~Constants"
@@ -108,21 +109,18 @@ describe("getDestinationAddressFromClause", () => {
             amount: 60000000000000000000,
         }
 
-        const address =
-            ActivityUtils.getDestinationAddressFromClause(tokenTransferClause2)
+        const address = ActivityUtils.getDestinationAddressFromClause(tokenTransferClause2)
         expect(address).toBe(tokenData?.to)
     })
 
     test("should return the destination address of the clause", () => {
-        const address =
-            ActivityUtils.getDestinationAddressFromClause(contractCallClause)
+        const address = ActivityUtils.getDestinationAddressFromClause(contractCallClause)
 
         expect(address).toBe(contractCallClause.to)
     })
 
     test("should return the destination address of nft transfer", () => {
-        const address =
-            ActivityUtils.getDestinationAddressFromClause(nftTransferClause)
+        const address = ActivityUtils.getDestinationAddressFromClause(nftTransferClause)
 
         const expectedAddress = "0xf077b491b355e64048ce21e3a6fc4751eeea77fa"
 

@@ -60,9 +60,7 @@ describe("useNFTInfo", () => {
         fetchMetadata.mockResolvedValue(nftMetaMock)
         ;(useThor as jest.Mock).mockReturnValue(thor)
 
-        const { result, waitForNextUpdate } = renderHook(() =>
-            useNFTInfo(tokenId, address),
-        )
+        const { result, waitForNextUpdate } = renderHook(() => useNFTInfo(tokenId, address))
 
         await waitForNextUpdate({ timeout: 10000 })
 
@@ -87,9 +85,7 @@ describe("useNFTInfo", () => {
 
         const consoleErrorSpy = jest.spyOn(logger, "error")
 
-        const { result, waitForNextUpdate } = renderHook(() =>
-            useNFTInfo(tokenId, contractAddress),
-        )
+        const { result, waitForNextUpdate } = renderHook(() => useNFTInfo(tokenId, contractAddress))
 
         await waitForNextUpdate({ timeout: 10000 })
 
@@ -113,9 +109,7 @@ describe("useNFTInfo", () => {
         fetchMetadata.mockRejectedValueOnce(new Error("Error"))
         ;(useThor as jest.Mock).mockReturnValue(thor)
 
-        const { result, waitForNextUpdate } = renderHook(() =>
-            useNFTInfo(tokenId, contractAddress),
-        )
+        const { result, waitForNextUpdate } = renderHook(() => useNFTInfo(tokenId, contractAddress))
 
         await waitForNextUpdate({ timeout: 10000 })
 

@@ -4,11 +4,7 @@ import LottieView from "lottie-react-native"
 import { AppLoader as AppLoaderAnimation } from "~Assets"
 import { BaseView, BlurView } from "~Components"
 import { SCREEN_HEIGHT, SCREEN_WIDTH } from "~Constants"
-import Animated, {
-    useAnimatedStyle,
-    useSharedValue,
-    withTiming,
-} from "react-native-reanimated"
+import Animated, { useAnimatedStyle, useSharedValue, withTiming } from "react-native-reanimated"
 import { useAppSelector, selectIsAppLoading } from "~Storage/Redux"
 import { isAndroid } from "~Utils/PlatformUtils/PlatformUtils"
 import { useTheme } from "~Hooks"
@@ -81,24 +77,17 @@ export const AppLoader = ({ children }: Props) => {
                 />
             )
 
-        return (
-            <BlurView
-                style={StyleSheet.absoluteFill}
-                blurAmount={2}
-                blurType={theme.isDark ? "dark" : "light"}
-            />
-        )
+        return <BlurView style={StyleSheet.absoluteFill} blurAmount={2} blurType={theme.isDark ? "dark" : "light"} />
     }, [theme.colors.background, theme.isDark])
 
     return (
         <View style={StyleSheet.absoluteFill}>
             {children}
-            <Animated.View
-                style={[styles.overlay, animatedStyle]}
-                pointerEvents={isAppLoading ? "auto" : "none"}>
+            <Animated.View style={[styles.overlay, animatedStyle]} pointerEvents={isAppLoading ? "auto" : "none"}>
                 {RenderBackdrop}
                 <LottieView
-                    source={AppLoaderAnimation} // TODO: Replace with the actual animation once it's ready (https://github.com/vechainfoundation/veworld-mobile/issues/999)
+                    // TODO: Replace with the actual animation once it's ready (https://github.com/vechainfoundation/veworld-mobile/issues/999)
+                    source={AppLoaderAnimation}
                     autoPlay={isAppLoading} // Prevent the animation from playing when it's not visible
                     loop
                     style={styles.lottie}

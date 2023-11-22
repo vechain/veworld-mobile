@@ -18,11 +18,7 @@ import {
     StepsProgressBar,
     useWalletConnect,
 } from "~Components"
-import {
-    RootStackParamListDiscover,
-    RootStackParamListSwitch,
-    Routes,
-} from "~Navigation"
+import { RootStackParamListDiscover, RootStackParamListSwitch, Routes } from "~Navigation"
 import { debug, error, HexUtils, LedgerUtils } from "~Utils"
 import { useI18nContext } from "~i18n"
 import { useNavigation } from "@react-navigation/native"
@@ -41,8 +37,7 @@ enum SigningStep {
 }
 
 export const LedgerSignCertificate: React.FC<Props> = ({ route }) => {
-    const { accountWithDevice, certificate, initialRoute, requestEvent } =
-        route.params
+    const { accountWithDevice, certificate, initialRoute, requestEvent } = route.params
 
     const { processRequest } = useWalletConnect()
 
@@ -75,8 +70,7 @@ export const LedgerSignCertificate: React.FC<Props> = ({ route }) => {
     const ledgerErrorCode = useMemo(() => {
         if (errorCode) return errorCode
 
-        if (isAwaitingSignature && !signingError)
-            return LEDGER_ERROR_CODES.WAITING_SIGNATURE
+        if (isAwaitingSignature && !signingError) return LEDGER_ERROR_CODES.WAITING_SIGNATURE
     }, [errorCode, isAwaitingSignature, signingError])
 
     const Steps: Step[] = useMemo(
@@ -179,9 +173,7 @@ export const LedgerSignCertificate: React.FC<Props> = ({ route }) => {
             if (!signature) return
             setIsSending(true)
 
-            await Haptics.notificationAsync(
-                Haptics.NotificationFeedbackType.Success,
-            )
+            await Haptics.notificationAsync(Haptics.NotificationFeedbackType.Success)
 
             const certResponse: Connex.Vendor.CertResponse = {
                 annex: {
@@ -203,21 +195,11 @@ export const LedgerSignCertificate: React.FC<Props> = ({ route }) => {
                 text1: LL.ERROR(),
                 text2: LL.ERROR_GENERIC_OPERATION(),
             })
-            await Haptics.notificationAsync(
-                Haptics.NotificationFeedbackType.Error,
-            )
+            await Haptics.notificationAsync(Haptics.NotificationFeedbackType.Error)
         } finally {
             setIsSending(false)
         }
-    }, [
-        removeLedger,
-        requestEvent,
-        processRequest,
-        LL,
-        signature,
-        certificate,
-        navigateOnFinish,
-    ])
+    }, [removeLedger, requestEvent, processRequest, LL, signature, certificate, navigateOnFinish])
 
     const BottomButton = useCallback(() => {
         if (currentStep === SigningStep.SIGNING && userRejected) {
@@ -248,46 +230,26 @@ export const LedgerSignCertificate: React.FC<Props> = ({ route }) => {
         }
 
         return <></>
-    }, [
-        currentStep,
-        userRejected,
-        isSending,
-        LL,
-        signCertificate,
-        signature,
-        handleOnConfirm,
-    ])
+    }, [currentStep, userRejected, isSending, LL, signCertificate, signature, handleOnConfirm])
 
     return (
         <BaseSafeArea grow={1}>
             <BackButtonHeader beforeNavigating={removeLedger} />
             <BaseView alignItems="flex-start" flexGrow={1} flex={1} mx={20}>
-                <BaseText typographyFont="title">
-                    {LL.SEND_LEDGER_TITLE()}
-                </BaseText>
+                <BaseText typographyFont="title">{LL.SEND_LEDGER_TITLE()}</BaseText>
                 <BaseText typographyFont="body" my={10}>
                     {LL.LEDGER_CERT_TITLE_SB()}
                 </BaseText>
                 <BaseSpacer height={20} />
-                <Lottie
-                    source={BlePairingDark}
-                    autoPlay
-                    loop
-                    style={styles.lottie}
-                />
+                <Lottie source={BlePairingDark} autoPlay loop style={styles.lottie} />
                 <BaseSpacer height={20} />
-                <StepsProgressBar
-                    steps={Steps}
-                    currentStep={currentStep}
-                    isCurrentStepError={!!signingError}
-                />
+                <StepsProgressBar steps={Steps} currentStep={currentStep} isCurrentStepError={!!signingError} />
                 <BaseSpacer height={96} />
                 <BaseText typographyFont="bodyBold">
                     {Steps[currentStep]?.title || LL.LEDGER_CERTIFICATE_READ()}
                 </BaseText>
                 <BaseText typographyFont="body" mt={8}>
-                    {Steps[currentStep]?.subtitle ||
-                        LL.LEDGER_CERTIFICATE_READ_SB()}
+                    {Steps[currentStep]?.subtitle || LL.LEDGER_CERTIFICATE_READ_SB()}
                 </BaseText>
             </BaseView>
             <BottomButton />

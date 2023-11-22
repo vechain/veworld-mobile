@@ -1,11 +1,5 @@
 import React, { useCallback, useEffect, useRef, useState } from "react"
-import {
-    getPersistorConfig,
-    newStorage,
-    NftSlice,
-    NftSliceState,
-    reducer,
-} from "~Storage/Redux"
+import { getPersistorConfig, newStorage, NftSlice, NftSliceState, reducer } from "~Storage/Redux"
 import { RootState } from "~Storage/Redux/Types"
 import {
     FLUSH,
@@ -22,10 +16,7 @@ import reduxReset from "redux-reset"
 import { configureStore } from "@reduxjs/toolkit"
 import { Provider } from "react-redux"
 import { PersistGate } from "redux-persist/integration/react"
-import {
-    PersistedCacheProvider,
-    useApplicationSecurity,
-} from "~Components/Providers"
+import { PersistedCacheProvider, useApplicationSecurity } from "~Components/Providers"
 import { Reducer } from "redux"
 import { warn } from "~Utils"
 import { MMKV } from "react-native-mmkv"
@@ -44,8 +35,7 @@ const StoreContextProvider = ({ children }: StoreContextProviderProps) => {
     const [persistor, setPersistor] = useState<Persistor | undefined>()
 
     const initStore = useCallback(async (mmkv: MMKV, encryptionKey: string) => {
-        const persistConfig: PersistConfig<RootState> =
-            await getPersistorConfig(mmkv, encryptionKey)
+        const persistConfig: PersistConfig<RootState> = await getPersistorConfig(mmkv, encryptionKey)
 
         const nftPersistence: PersistConfig<NftSliceState> = {
             key: NftSlice.name,
@@ -53,10 +43,7 @@ const StoreContextProvider = ({ children }: StoreContextProviderProps) => {
             whitelist: ["blackListedCollections"],
         }
 
-        const persistedReducer: Reducer = persistReducer<RootState>(
-            persistConfig,
-            reducer(nftPersistence),
-        )
+        const persistedReducer: Reducer = persistReducer<RootState>(persistConfig, reducer(nftPersistence))
 
         if (store.current) {
             warn("Replacing store")
@@ -73,14 +60,7 @@ const StoreContextProvider = ({ children }: StoreContextProviderProps) => {
                 middleware: getDefaultMiddleware =>
                     getDefaultMiddleware({
                         serializableCheck: {
-                            ignoredActions: [
-                                FLUSH,
-                                REHYDRATE,
-                                PAUSE,
-                                PERSIST,
-                                PURGE,
-                                REGISTER,
-                            ],
+                            ignoredActions: [FLUSH, REHYDRATE, PAUSE, PERSIST, PURGE, REGISTER],
                         },
                         thunk: {
                             extraArgument: {},
@@ -96,8 +76,7 @@ const StoreContextProvider = ({ children }: StoreContextProviderProps) => {
     }, [])
 
     useEffect(() => {
-        if (reduxStorage)
-            initStore(reduxStorage.mmkv, reduxStorage.encryptionKey)
+        if (reduxStorage) initStore(reduxStorage.mmkv, reduxStorage.encryptionKey)
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [reduxStorage])
 
@@ -110,9 +89,7 @@ const StoreContextProvider = ({ children }: StoreContextProviderProps) => {
             <StoreContext.Provider value={undefined}>
                 <Provider store={store.current}>
                     <PersistGate loading={null} persistor={persistor}>
-                        <PersistedCacheProvider>
-                            {children}
-                        </PersistedCacheProvider>
+                        <PersistedCacheProvider>{children}</PersistedCacheProvider>
                     </PersistGate>
                 </Provider>
             </StoreContext.Provider>

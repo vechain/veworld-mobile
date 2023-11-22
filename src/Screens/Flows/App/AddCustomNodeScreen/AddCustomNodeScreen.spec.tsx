@@ -3,8 +3,7 @@ import { TestWrapper } from "~Test"
 import { AddCustomNodeScreen } from "./AddCustomNodeScreen"
 import { render, screen } from "@testing-library/react-native"
 
-const findElement = async () =>
-    await screen.findByText("Add a custom node", {}, { timeout: 5000 })
+const findElement = async () => await screen.findByText("Add a custom node", {}, { timeout: 5000 })
 
 describe("AddCustomNodeScreen", () => {
     it("should render correctly", async () => {

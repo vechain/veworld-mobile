@@ -18,9 +18,7 @@ describe("TransfersUtils", () => {
             size: 10,
         })
 
-        expect(transfers.length).toEqual(
-            (await filterStub("transfer", []).apply(0, 0)).length,
-        )
+        expect(transfers.length).toEqual((await filterStub("transfer", []).apply(0, 0)).length)
     })
 
     it("VET - account === item.sender,  should return the correct amount of transfers", async () => {
@@ -34,9 +32,7 @@ describe("TransfersUtils", () => {
             size: 10,
         })
 
-        expect(transfers.length).toEqual(
-            (await filterStub("transfer", []).apply(0, 0)).length,
-        )
+        expect(transfers.length).toEqual((await filterStub("transfer", []).apply(0, 0)).length)
     })
 
     it("Other token - should return the correct amount of transfers", async () => {
@@ -50,8 +46,6 @@ describe("TransfersUtils", () => {
             size: 10,
         })
 
-        expect(transfers.length).toEqual(
-            (await filterStub("event", []).apply(0, 0)).length,
-        )
+        expect(transfers.length).toEqual((await filterStub("event", []).apply(0, 0)).length)
     })
 })

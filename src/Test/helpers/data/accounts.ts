@@ -13,10 +13,7 @@ export const ACCOUNT_WITH_NFTS = "0x3ca506f873e5819388aa3ce0b1c4fc77b6db0048"
 export const account1D1: WalletAccount = {
     alias: "Account 0",
     rootAddress: device1.rootAddress,
-    address: AddressUtils.getAddressFromXPub(
-        CryptoUtils.xPubFromHdNode(hdnode1),
-        0,
-    ),
+    address: AddressUtils.getAddressFromXPub(CryptoUtils.xPubFromHdNode(hdnode1), 0),
     index: 0,
     visible: true,
 }
@@ -24,10 +21,7 @@ export const account1D1: WalletAccount = {
 export const account2D1: WalletAccount = {
     alias: "D1 - Account 2",
     rootAddress: device1.rootAddress,
-    address: AddressUtils.getAddressFromXPub(
-        CryptoUtils.xPubFromHdNode(hdnode1),
-        1,
-    ),
+    address: AddressUtils.getAddressFromXPub(CryptoUtils.xPubFromHdNode(hdnode1), 1),
     index: 1,
     visible: true,
 }
@@ -35,10 +29,7 @@ export const account2D1: WalletAccount = {
 export const account3D1NotVisible: WalletAccount = {
     alias: "D1 - Account 3 - not visible",
     rootAddress: device1.rootAddress,
-    address: AddressUtils.getAddressFromXPub(
-        CryptoUtils.xPubFromHdNode(hdnode1),
-        2,
-    ),
+    address: AddressUtils.getAddressFromXPub(CryptoUtils.xPubFromHdNode(hdnode1), 2),
     index: 2,
     visible: false,
 }
@@ -46,10 +37,7 @@ export const account3D1NotVisible: WalletAccount = {
 export const account4D1: WalletAccount = {
     alias: "D1 - Account 4",
     rootAddress: device1.rootAddress,
-    address: AddressUtils.getAddressFromXPub(
-        CryptoUtils.xPubFromHdNode(hdnode1),
-        3,
-    ),
+    address: AddressUtils.getAddressFromXPub(CryptoUtils.xPubFromHdNode(hdnode1), 3),
     index: 3,
     visible: true,
 }
@@ -57,10 +45,7 @@ export const account4D1: WalletAccount = {
 export const account1D2: WalletAccount = {
     alias: "D2 - Account 1",
     rootAddress: device2.rootAddress,
-    address: AddressUtils.getAddressFromXPub(
-        CryptoUtils.xPubFromHdNode(hdnode2),
-        0,
-    ),
+    address: AddressUtils.getAddressFromXPub(CryptoUtils.xPubFromHdNode(hdnode2), 0),
     index: 0,
     visible: true,
 }
@@ -68,10 +53,7 @@ export const account1D2: WalletAccount = {
 export const account2D2NotVisible: WalletAccount = {
     alias: "D2 - Account 2 - not visible",
     rootAddress: device2.rootAddress,
-    address: AddressUtils.getAddressFromXPub(
-        CryptoUtils.xPubFromHdNode(hdnode2),
-        1,
-    ),
+    address: AddressUtils.getAddressFromXPub(CryptoUtils.xPubFromHdNode(hdnode2), 1),
     index: 1,
     visible: false,
 }
@@ -79,10 +61,7 @@ export const account2D2NotVisible: WalletAccount = {
 export const account3D2NotVisible: WalletAccount = {
     alias: "D2 - Account 3 - not visible",
     rootAddress: device2.rootAddress,
-    address: AddressUtils.getAddressFromXPub(
-        CryptoUtils.xPubFromHdNode(hdnode2),
-        2,
-    ),
+    address: AddressUtils.getAddressFromXPub(CryptoUtils.xPubFromHdNode(hdnode2), 2),
     index: 2,
     visible: false,
 }

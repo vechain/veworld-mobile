@@ -16,8 +16,7 @@ jest.mock("~i18n", () => ({
     useI18nContext: jest.fn(() => ({
         LL: {
             SUCCESS_GENERIC: () => "Success",
-            NOTIFICATION_COPIED_CLIPBOARD: ({ name }: { name: string }) =>
-                `${name} copied to clipboard`,
+            NOTIFICATION_COPIED_CLIPBOARD: ({ name }: { name: string }) => `${name} copied to clipboard`,
         },
     })),
 }))
@@ -38,9 +37,7 @@ describe("useCopyClipboard", () => {
     })
 
     it("should handle error when copying to clipboard fails", async () => {
-        const debugSpy = jest
-            .spyOn(logger, "debug")
-            .mockImplementation(() => {})
+        const debugSpy = jest.spyOn(logger, "debug").mockImplementation(() => {})
 
         const error = new Error("Failed to copy")
 

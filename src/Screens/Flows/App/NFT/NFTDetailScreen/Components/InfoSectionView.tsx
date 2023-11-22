@@ -3,13 +3,7 @@ import { StyleSheet } from "react-native"
 import { isArray, isString } from "lodash"
 import { useTheme } from "~Hooks"
 import { COLORS } from "~Constants"
-import {
-    BaseIcon,
-    BaseSpacer,
-    BaseText,
-    BaseTouchable,
-    BaseView,
-} from "~Components"
+import { BaseIcon, BaseSpacer, BaseText, BaseTouchable, BaseView } from "~Components"
 import { useI18nContext } from "~i18n"
 
 interface NFTAttributeData {
@@ -27,9 +21,7 @@ type Props<T> = {
     isDanger?: boolean
 }
 
-export const InfoSectionView = <
-    T extends NFTAttributeData[] | string | React.JSX.Element,
->({
+export const InfoSectionView = <T extends NFTAttributeData[] | string | React.JSX.Element>({
     title,
     data,
     isLastInList,
@@ -42,14 +34,7 @@ export const InfoSectionView = <
 
     const renderData = useMemo(() => {
         if (action && isString(data)) {
-            return (
-                <BaseTouchable
-                    title={data}
-                    underlined
-                    action={action}
-                    font={"subSubTitle"}
-                />
-            )
+            return <BaseTouchable title={data} underlined action={action} font={"subSubTitle"} />
         }
 
         if (isArray(data)) {
@@ -58,23 +43,15 @@ export const InfoSectionView = <
                     {data.map(_data => (
                         <BaseView
                             key={_data.trait_type}
-                            bg={
-                                theme.isDark
-                                    ? COLORS.DARK_PURPLE_DISABLED
-                                    : COLORS.WHITE
-                            }
+                            bg={theme.isDark ? COLORS.DARK_PURPLE_DISABLED : COLORS.WHITE}
                             py={8}
                             px={12}
                             mr={8}
                             mb={8}
                             borderRadius={16}
                             justifyContent="space-between">
-                            <BaseText typographyFont="smallCaption">
-                                {_data.trait_type}
-                            </BaseText>
-                            <BaseText typographyFont="captionBold">
-                                {_data.value}
-                            </BaseText>
+                            <BaseText typographyFont="smallCaption">{_data.trait_type}</BaseText>
+                            <BaseText typographyFont="captionBold">{_data.value}</BaseText>
                         </BaseView>
                     ))}
                 </BaseView>
@@ -86,15 +63,9 @@ export const InfoSectionView = <
                 <>
                     {isDanger ? (
                         <BaseView flexDirection="row">
-                            <BaseIcon
-                                name="alert-circle-outline"
-                                color={COLORS.DARK_RED}
-                                size={16}
-                            />
+                            <BaseIcon name="alert-circle-outline" color={COLORS.DARK_RED} size={16} />
                             <BaseSpacer width={4} />
-                            <BaseText
-                                typographyFont="buttonSecondary"
-                                color={COLORS.DARK_RED}>
+                            <BaseText typographyFont="buttonSecondary" color={COLORS.DARK_RED}>
                                 {LL.SEND_INSUFFICIENT_VTHO()} {data}
                             </BaseText>
                         </BaseView>

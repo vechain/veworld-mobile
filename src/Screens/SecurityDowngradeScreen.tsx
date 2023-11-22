@@ -1,11 +1,5 @@
 import React, { useCallback } from "react"
-import {
-    BaseButton,
-    BaseSafeArea,
-    BaseSpacer,
-    BaseText,
-    BaseView,
-} from "~Components"
+import { BaseButton, BaseSafeArea, BaseSpacer, BaseText, BaseView } from "~Components"
 import { SecurityDowngradeSVG } from "~Assets"
 import { useI18nContext } from "~i18n"
 import { Linking } from "react-native"
@@ -22,11 +16,7 @@ export const SecurityDowngradeScreen = () => {
         <BaseSafeArea grow={1}>
             <BaseSpacer height={20} />
 
-            <BaseView
-                alignItems="flex-start"
-                justifyContent="space-between"
-                flexGrow={1}
-                mx={20}>
+            <BaseView alignItems="flex-start" justifyContent="space-between" flexGrow={1} mx={20}>
                 <BaseView alignItems="flex-start">
                     <BaseText typographyFont="title" align="left">
                         {LL.TITLE_SECURITY_DOWNGRADE()}

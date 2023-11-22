@@ -2,10 +2,7 @@ import React, { useCallback, useEffect, useMemo, useState } from "react"
 import { NFTMedia, NFTMetadata } from "~Model"
 import { initEncryption } from "~Services/EncryptionService"
 import SecurePersistedCache from "~Storage/PersistedCache/SecurePersistedCache"
-import {
-    CACHE_NFT_MEDIA_KEY,
-    CACHE_NFT_METADATA_KEY,
-} from "~Storage/PersistedCache/constants"
+import { CACHE_NFT_MEDIA_KEY, CACHE_NFT_METADATA_KEY } from "~Storage/PersistedCache/constants"
 import { SynchronousCache } from "~Storage/PersistedCache/interface"
 
 type CacheProvider = {
@@ -20,25 +17,18 @@ const CacheContext = React.createContext<CacheProvider | undefined>(undefined)
 type PersistedCacheProviderProps = { children: React.ReactNode }
 
 const PersistedCacheProvider = ({ children }: PersistedCacheProviderProps) => {
-    const [metadataCache, setMetadataCache] =
-        useState<SynchronousCache<NFTMetadata>>()
+    const [metadataCache, setMetadataCache] = useState<SynchronousCache<NFTMetadata>>()
     const [mediaCache, setMediaCache] = useState<SynchronousCache<NFTMedia>>()
 
     const initNFTMetadataCache = useCallback(async () => {
         setMetadataCache(
-            new SecurePersistedCache<NFTMetadata>(
-                CACHE_NFT_METADATA_KEY,
-                await initEncryption(CACHE_NFT_METADATA_KEY),
-            ),
+            new SecurePersistedCache<NFTMetadata>(CACHE_NFT_METADATA_KEY, await initEncryption(CACHE_NFT_METADATA_KEY)),
         )
     }, [])
 
     const initNFTMediaCache = useCallback(async () => {
         setMediaCache(
-            new SecurePersistedCache<NFTMedia>(
-                CACHE_NFT_MEDIA_KEY,
-                await initEncryption(CACHE_NFT_MEDIA_KEY),
-            ),
+            new SecurePersistedCache<NFTMedia>(CACHE_NFT_MEDIA_KEY, await initEncryption(CACHE_NFT_MEDIA_KEY)),
         )
     }, [])
 
@@ -73,17 +63,13 @@ const PersistedCacheProvider = ({ children }: PersistedCacheProviderProps) => {
         return <></>
     }
 
-    return (
-        <CacheContext.Provider value={value}>{children}</CacheContext.Provider>
-    )
+    return <CacheContext.Provider value={value}>{children}</CacheContext.Provider>
 }
 
 const usePersistedCache = () => {
     const context = React.useContext(CacheContext)
     if (!context) {
-        throw new Error(
-            "usePersistedCache must be used within a PersistedCacheProvider",
-        )
+        throw new Error("usePersistedCache must be used within a PersistedCacheProvider")
     }
 
     return context

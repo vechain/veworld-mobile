@@ -62,13 +62,9 @@ export const AddUrl = ({
     return (
         <BaseView w={100} h={100} flexGrow={1} justifyContent="space-between">
             <BaseView>
-                <BaseText typographyFont="subTitleBold">
-                    {LL.SEND_DELEGATION_ADD_URL()}
-                </BaseText>
+                <BaseText typographyFont="subTitleBold">{LL.SEND_DELEGATION_ADD_URL()}</BaseText>
                 <BaseSpacer height={16} />
-                <BaseText typographyFont="subSubTitleLight">
-                    {LL.SEND_DELEGATION_ADD_URL_SUBTITLE()}
-                </BaseText>
+                <BaseText typographyFont="subSubTitleLight">{LL.SEND_DELEGATION_ADD_URL_SUBTITLE()}</BaseText>
                 <BaseSpacer height={24} />
                 <BaseBottomSheetTextInput
                     value={newUrl}
@@ -80,12 +76,7 @@ export const AddUrl = ({
             <BaseView flexDirection="row" pb={32}>
                 {addUrlMode && (
                     <>
-                        <BaseButton
-                            title={LL.COMMON_BTN_CANCEL()}
-                            action={closeAddMode}
-                            variant="outline"
-                            flex={1}
-                        />
+                        <BaseButton title={LL.COMMON_BTN_CANCEL()} action={closeAddMode} variant="outline" flex={1} />
                         <BaseSpacer width={16} />
                     </>
                 )}

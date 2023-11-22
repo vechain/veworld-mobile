@@ -5,20 +5,7 @@ import { useTheme, useThemedStyles } from "~Hooks"
 import { ColorThemeType, valueToHP } from "~Constants"
 import { widthPercentageToDP as wp } from "react-native-responsive-screen"
 
-const numPad = [
-    "1",
-    "2",
-    "3",
-    "4",
-    "5",
-    "6",
-    "7",
-    "8",
-    "9",
-    "blank",
-    "0",
-    "canc",
-]
+const numPad = ["1", "2", "3", "4", "5", "6", "7", "8", "9", "blank", "0", "canc"]
 
 type Props = {
     onDigitPress: (digit: string) => void
@@ -41,29 +28,19 @@ export const NumPad = ({ onDigitPress, onDigitDelete }: Props) => {
         <BaseView flexDirection="row" flexWrap="wrap" w={100}>
             {numPad.map((digit, index) => {
                 const isDeleteKey = digit === "canc"
-                const onPress = isDeleteKey
-                    ? onDigitDelete
-                    : handleOnDigitPress(digit)
+                const onPress = isDeleteKey ? onDigitDelete : handleOnDigitPress(digit)
                 return (
                     <BaseView style={styles.width} key={index}>
                         {digit !== "blank" ? (
                             <Pressable
-                                style={({ pressed }) => [
-                                    styles.pressable,
-                                    { opacity: pressed ? 0.5 : 1.0 },
-                                ]}
+                                style={({ pressed }) => [styles.pressable, { opacity: pressed ? 0.5 : 1.0 }]}
                                 onPress={onPress}>
                                 {digit !== "canc" ? (
-                                    <BaseText
-                                        typographyFont="largeTitleAccent"
-                                        alignContainer="center">
+                                    <BaseText typographyFont="largeTitleAccent" alignContainer="center">
                                         {digit}
                                     </BaseText>
                                 ) : (
-                                    <BaseIcon
-                                        name="backspace-outline"
-                                        color={theme.colors.text}
-                                    />
+                                    <BaseIcon name="backspace-outline" color={theme.colors.text} />
                                 )}
                             </Pressable>
                         ) : null}

@@ -12,13 +12,11 @@ const mockedChainStatus: Connex.Thor.Status = {
         id: "0x00ce27a27f982a6df6a1c679d22b416feb3f2a13a41188be8b862abd4316f9c5",
         number: 13510562,
         timestamp: 1665136970,
-        parentID:
-            "0x00ce27a1e9047dbd8c8679830a12ee23f56908879be1b32943e4a3f83072b6da",
+        parentID: "0x00ce27a1e9047dbd8c8679830a12ee23f56908879be1b32943e4a3f83072b6da",
         txsFeatures: 1,
         gasLimit: 30000000,
     },
-    finalized:
-        "0x00ce27a27f982a6df6a1c679d22b416feb3f2a13a41188be8b862abd4316f9c5",
+    finalized: "0x00ce27a27f982a6df6a1c679d22b416feb3f2a13a41188be8b862abd4316f9c5",
 }
 interface MockThorInstanceOptions {
     genesis?: Connex.Thor.Block

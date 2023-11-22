@@ -35,10 +35,7 @@ export const BaseButtonGroup = ({
 }: Props) => {
     const theme = useTheme()
 
-    const onPress = useCallback(
-        (button: Button) => () => action(button),
-        [action],
-    )
+    const onPress = useCallback((button: Button) => () => action(button), [action])
 
     return (
         <BaseView testID={buttonGroupTestID}>
@@ -48,12 +45,8 @@ export const BaseButtonGroup = ({
 
                 const borderTopRadius = index === 0 ? 16 : 0
                 const borderBottomRadius = index === buttons.length - 1 ? 16 : 0
-                const bgColor = selected
-                    ? selectedColor || theme.colors.primary
-                    : theme.colors.card
-                const textColor = selected
-                    ? theme.colors.textReversed
-                    : theme.colors.text
+                const bgColor = selected ? selectedColor || theme.colors.primary : theme.colors.card
+                const textColor = selected ? theme.colors.textReversed : theme.colors.text
                 return (
                     <>
                         <BaseButton
@@ -74,9 +67,7 @@ export const BaseButtonGroup = ({
                             }}
                             testID={`${buttonTestID}-${id}`}
                         />
-                        {index !== buttons.length - 1 && (
-                            <BaseSpacer height={1} />
-                        )}
+                        {index !== buttons.length - 1 && <BaseSpacer height={1} />}
                     </>
                 )
             })}

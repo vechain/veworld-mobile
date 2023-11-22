@@ -35,10 +35,7 @@ export const AssetChart = ({ token }: Props) => {
 
             <BaseSpacer height={8} />
 
-            <PressableWithUnderline
-                onPress={onTimelineButtonPress}
-                data={timelineDays}
-            />
+            <PressableWithUnderline onPress={onTimelineButtonPress} data={timelineDays} />
         </>
     )
 }

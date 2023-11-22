@@ -3,10 +3,7 @@ import { ViewToken } from "react-native"
 import { useScrollableList } from "~Hooks/useScrollableList"
 
 export type FlatListScrollPropsType = {
-    onViewableItemsChanged: (info: {
-        viewableItems: ViewToken[]
-        changed: ViewToken[]
-    }) => void
+    onViewableItemsChanged: (info: { viewableItems: ViewToken[]; changed: ViewToken[] }) => void
     viewabilityConfig: {
         itemVisiblePercentThreshold: number
     }
@@ -31,8 +28,11 @@ export const useScrollableBottomSheet = ({
         setSnapIndex(index)
     }, [])
 
-    const { isListScrollable, viewabilityConfig, onViewableItemsChanged } =
-        useScrollableList(data, snapIndex, snapPoints.length)
+    const { isListScrollable, viewabilityConfig, onViewableItemsChanged } = useScrollableList(
+        data,
+        snapIndex,
+        snapPoints.length,
+    )
 
     return {
         handleSheetChangePosition,

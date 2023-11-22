@@ -2,14 +2,7 @@ import React, { useCallback, useMemo } from "react"
 import { NativeStackScreenProps } from "@react-navigation/native-stack"
 import { RootStackParamListNFT } from "~Navigation/Stacks/NFTStack"
 import { Routes } from "~Navigation"
-import {
-    BaseSpacer,
-    BaseView,
-    FadeoutButton,
-    Layout,
-    TransactionStatusBox,
-    showErrorToast,
-} from "~Components"
+import { BaseSpacer, BaseView, FadeoutButton, Layout, TransactionStatusBox, showErrorToast } from "~Components"
 import { Linking } from "react-native"
 import { useCopyClipboard, useTabBarBottomMargin } from "~Hooks"
 import { useI18nContext } from "~i18n"
@@ -40,23 +33,14 @@ export const NFTDetailScreen = ({ route }: Props) => {
     const { iosOnlyTabBarBottomMargin } = useTabBarBottomMargin()
 
     const collection = useAppSelector(state =>
-        selectCollectionWithContractAddress(
-            state,
-            route.params.collectionAddress!,
-        ),
+        selectCollectionWithContractAddress(state, route.params.collectionAddress!),
     )
 
     const nft = useAppSelector(state =>
-        selectNFTWithAddressAndTokenId(
-            state,
-            route.params.collectionAddress!,
-            route.params.nftTokenId,
-        ),
+        selectNFTWithAddressAndTokenId(state, route.params.collectionAddress!, route.params.nftTokenId),
     )
 
-    const isPendingTx = useAppSelector(state =>
-        selectPendingTx(state, nft?.id!),
-    )
+    const isPendingTx = useAppSelector(state => selectPendingTx(state, nft?.id!))
 
     const onSendPress = useCallback(
         () =>
@@ -99,30 +83,16 @@ export const NFTDetailScreen = ({ route }: Props) => {
                     <BaseSpacer height={26} />
 
                     {isPendingTx && (
-                        <TransactionStatusBox
-                            status={
-                                isPendingTx
-                                    ? ActivityStatus.PENDING
-                                    : ActivityStatus.SUCCESS
-                            }
-                        />
+                        <TransactionStatusBox status={isPendingTx ? ActivityStatus.PENDING : ActivityStatus.SUCCESS} />
                     )}
 
                     <BaseSpacer height={26} />
 
                     {!!nft?.attributes?.length && (
-                        <InfoSectionView<NFTAttributeData[]>
-                            title={LL.NFT_ATTRIBUTES()}
-                            data={nft?.attributes}
-                        />
+                        <InfoSectionView<NFTAttributeData[]> title={LL.NFT_ATTRIBUTES()} data={nft?.attributes} />
                     )}
 
-                    {collection?.name && (
-                        <InfoSectionView<string>
-                            title={LL.BD_COLLECTION()}
-                            data={collection?.name}
-                        />
-                    )}
+                    {collection?.name && <InfoSectionView<string> title={LL.BD_COLLECTION()} data={collection?.name} />}
 
                     {collection?.totalSupply && (
                         <InfoSectionView<string>
@@ -141,17 +111,11 @@ export const NFTDetailScreen = ({ route }: Props) => {
                     )}
 
                     {collection?.creator && (
-                        <InfoSectionView<string>
-                            title={LL.NFT_DETAIL_CREATOR()}
-                            data={collection?.creator}
-                        />
+                        <InfoSectionView<string> title={LL.NFT_DETAIL_CREATOR()} data={collection?.creator} />
                     )}
 
                     {nft?.edition && (
-                        <InfoSectionView<string>
-                            title={LL.NFT_DETAIL_EDITION()}
-                            data={nft?.edition.toString()}
-                        />
+                        <InfoSectionView<string> title={LL.NFT_DETAIL_EDITION()} data={nft?.edition.toString()} />
                     )}
 
                     {nft?.external_url && (
@@ -168,45 +132,27 @@ export const NFTDetailScreen = ({ route }: Props) => {
                             data={DateUtils.formatDateTime(
                                 nft?.date,
                                 locale,
-                                getCalendars()[0].timeZone ??
-                                    DateUtils.DEFAULT_TIMEZONE,
+                                getCalendars()[0].timeZone ?? DateUtils.DEFAULT_TIMEZONE,
                             )}
                         />
                     )}
 
-                    {nft?.rank && (
-                        <InfoSectionView<string>
-                            title={LL.NFT_DETAIL_RANK()}
-                            data={nft?.rank.toString()}
-                        />
-                    )}
+                    {nft?.rank && <InfoSectionView<string> title={LL.NFT_DETAIL_RANK()} data={nft?.rank.toString()} />}
 
                     {nft?.rarity && nft?.rarity !== 0 ? (
-                        <InfoSectionView<string>
-                            title={LL.NFT_DETAIL_RARITY()}
-                            data={nft?.rarity?.toString()}
-                        />
+                        <InfoSectionView<string> title={LL.NFT_DETAIL_RARITY()} data={nft?.rarity?.toString()} />
                     ) : null}
 
                     {!!nft?.scores?.length && (
-                        <InfoSectionView<NFTAttributeData[]>
-                            title={LL.NFT_DETAIL_SCORES()}
-                            data={nft?.scores}
-                        />
+                        <InfoSectionView<NFTAttributeData[]> title={LL.NFT_DETAIL_SCORES()} data={nft?.scores} />
                     )}
 
                     {collection?.address && (
                         <InfoSectionView<string>
-                            action={() =>
-                                onCopyToClipboardPress(collection.address)
-                            }
+                            action={() => onCopyToClipboardPress(collection.address)}
                             isLastInList
                             title={LL.CONTRACT_ADDRESS()}
-                            data={FormattingUtils.humanAddress(
-                                collection?.address ?? "",
-                                5,
-                                4,
-                            )}
+                            data={FormattingUtils.humanAddress(collection?.address ?? "", 5, 4)}
                         />
                     )}
                 </BaseView>

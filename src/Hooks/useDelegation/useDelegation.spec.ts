@@ -2,11 +2,7 @@ import { renderHook } from "@testing-library/react-hooks"
 import { useDelegation } from "~Hooks"
 import { TestHelpers, TestWrapper } from "~Test"
 import { DelegationType } from "~Model/Delegation"
-import {
-    getDefaultDelegationAccount,
-    getDefaultDelegationOption,
-    getDefaultDelegationUrl,
-} from "~Storage/Redux"
+import { getDefaultDelegationAccount, getDefaultDelegationOption, getDefaultDelegationUrl } from "~Storage/Redux"
 
 const { account1D1, device1 } = TestHelpers.data
 const setGasPayer = jest.fn()
@@ -22,9 +18,7 @@ describe("useDelegation", () => {
     beforeEach(() => {
         jest.resetAllMocks()
         // @ts-ignore
-        ;(getDefaultDelegationOption as jest.Mock).mockReturnValue(
-            DelegationType.NONE,
-        )
+        ;(getDefaultDelegationOption as jest.Mock).mockReturnValue(DelegationType.NONE)
         // @ts-ignore
         ;(getDefaultDelegationAccount as jest.Mock).mockReturnValue(undefined)
 
@@ -58,9 +52,7 @@ describe("useDelegation", () => {
         await result.current.setSelectedDelegationUrl(url)
 
         expect(result.current.isDelegated).toBeTruthy()
-        expect(result.current.selectedDelegationOption).toEqual(
-            DelegationType.URL,
-        )
+        expect(result.current.selectedDelegationOption).toEqual(DelegationType.URL)
         expect(result.current.selectedDelegationUrl).toEqual(url)
     })
 
@@ -80,9 +72,7 @@ describe("useDelegation", () => {
         })
 
         expect(result.current.isDelegated).toBeTruthy()
-        expect(result.current.selectedDelegationOption).toEqual(
-            DelegationType.ACCOUNT,
-        )
+        expect(result.current.selectedDelegationOption).toEqual(DelegationType.ACCOUNT)
         expect(result.current.selectedDelegationAccount).toEqual(account)
     })
 
@@ -101,9 +91,7 @@ describe("useDelegation", () => {
         await result.current.setSelectedDelegationAccount(account)
 
         expect(result.current.isDelegated).toBeTruthy()
-        expect(result.current.selectedDelegationOption).toEqual(
-            DelegationType.ACCOUNT,
-        )
+        expect(result.current.selectedDelegationOption).toEqual(DelegationType.ACCOUNT)
         expect(result.current.selectedDelegationAccount).toEqual(account)
         expect(result.current.selectedDelegationUrl).toBeUndefined()
     })
@@ -111,17 +99,12 @@ describe("useDelegation", () => {
     it("using provided URL should automatically set delegation option", async () => {
         const url = "https://test.com"
 
-        const { result } = renderHook(
-            () => useDelegation({ setGasPayer, providedUrl: url }),
-            {
-                wrapper: TestWrapper,
-            },
-        )
+        const { result } = renderHook(() => useDelegation({ setGasPayer, providedUrl: url }), {
+            wrapper: TestWrapper,
+        })
 
         expect(result.current.isDelegated).toBeTruthy()
-        expect(result.current.selectedDelegationOption).toEqual(
-            DelegationType.URL,
-        )
+        expect(result.current.selectedDelegationOption).toEqual(DelegationType.URL)
         expect(result.current.selectedDelegationUrl).toEqual(url)
     })
 
@@ -138,9 +121,7 @@ describe("useDelegation", () => {
         result.current.setNoDelegation()
 
         expect(result.current.isDelegated).toBeFalsy()
-        expect(result.current.selectedDelegationOption).toEqual(
-            DelegationType.NONE,
-        )
+        expect(result.current.selectedDelegationOption).toEqual(DelegationType.NONE)
         expect(result.current.selectedDelegationAccount).toBeUndefined()
         expect(result.current.selectedDelegationUrl).toBeUndefined()
     })
@@ -154,18 +135,14 @@ describe("useDelegation", () => {
         // @ts-ignore
         ;(getDefaultDelegationAccount as jest.Mock).mockReturnValue(account)
         // @ts-ignore
-        ;(getDefaultDelegationOption as jest.Mock).mockReturnValue(
-            DelegationType.ACCOUNT,
-        )
+        ;(getDefaultDelegationOption as jest.Mock).mockReturnValue(DelegationType.ACCOUNT)
 
         const { result } = renderHook(() => useDelegation({ setGasPayer }), {
             wrapper: TestWrapper,
         })
 
         expect(result.current.isDelegated).toBeTruthy()
-        expect(result.current.selectedDelegationOption).toEqual(
-            DelegationType.ACCOUNT,
-        )
+        expect(result.current.selectedDelegationOption).toEqual(DelegationType.ACCOUNT)
         expect(result.current.selectedDelegationAccount).toEqual(account)
     })
 
@@ -175,18 +152,14 @@ describe("useDelegation", () => {
         // @ts-ignore
         ;(getDefaultDelegationUrl as jest.Mock).mockReturnValue(url)
         // @ts-ignore
-        ;(getDefaultDelegationOption as jest.Mock).mockReturnValue(
-            DelegationType.URL,
-        )
+        ;(getDefaultDelegationOption as jest.Mock).mockReturnValue(DelegationType.URL)
 
         const { result } = renderHook(() => useDelegation({ setGasPayer }), {
             wrapper: TestWrapper,
         })
 
         expect(result.current.isDelegated).toBeTruthy()
-        expect(result.current.selectedDelegationOption).toEqual(
-            DelegationType.URL,
-        )
+        expect(result.current.selectedDelegationOption).toEqual(DelegationType.URL)
         expect(result.current.selectedDelegationUrl).toEqual(url)
     })
 })

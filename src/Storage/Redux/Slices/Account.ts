@@ -21,10 +21,7 @@ export const AccountSlice = createSlice({
     name: "accounts",
     initialState: initialAccountState,
     reducers: {
-        setSelectedAccount: (
-            state,
-            action: PayloadAction<{ address: string }>,
-        ) => {
+        setSelectedAccount: (state, action: PayloadAction<{ address: string }>) => {
             const { address } = action.payload
             const accountExists = state.accounts.find(account =>
                 AddressUtils.compareAddresses(account.address, address),
@@ -50,16 +47,9 @@ export const AccountSlice = createSlice({
             }
 
             //Change the selected account if the selected account is the one being removed
-            if (
-                state.selectedAccount &&
-                AddressUtils.compareAddresses(state.selectedAccount, address)
-            ) {
+            if (state.selectedAccount && AddressUtils.compareAddresses(state.selectedAccount, address)) {
                 const otherAccounts = state.accounts.filter(
-                    account =>
-                        !AddressUtils.compareAddresses(
-                            account.address,
-                            address,
-                        ),
+                    account => !AddressUtils.compareAddresses(account.address, address),
                 )
                 state.selectedAccount = otherAccounts[0].address
             }
@@ -73,10 +63,7 @@ export const AccountSlice = createSlice({
                 state.accounts.splice(accountExistsIndex, 1)
             }
         },
-        addAccount: (
-            state,
-            action: PayloadAction<WalletAccount | WalletAccount[]>,
-        ) => {
+        addAccount: (state, action: PayloadAction<WalletAccount | WalletAccount[]>) => {
             const newAccounts: WalletAccount[] = []
             if (!Array.isArray(action.payload)) newAccounts.push(action.payload)
             else newAccounts.push(...action.payload)
@@ -90,33 +77,20 @@ export const AccountSlice = createSlice({
             const accountsToInsert: WalletAccount[] = []
             newNormalizedAccounts.forEach(newAcc => {
                 const accountExists = state.accounts.find(account =>
-                    AddressUtils.compareAddresses(
-                        account.address,
-                        newAcc.address,
-                    ),
+                    AddressUtils.compareAddresses(account.address, newAcc.address),
                 )
                 if (!accountExists) accountsToInsert.push(newAcc)
             })
             state.accounts.push(...accountsToInsert)
             state.selectedAccount = accountsToInsert[0].address
         },
-        removeAccountsByDevice: (
-            state,
-            action: PayloadAction<{ rootAddress: string }>,
-        ) => {
+        removeAccountsByDevice: (state, action: PayloadAction<{ rootAddress: string }>) => {
             const { rootAddress } = action.payload
             const updatedAccounts = state.accounts.filter(
-                account =>
-                    !AddressUtils.compareAddresses(
-                        rootAddress,
-                        account.rootAddress,
-                    ),
+                account => !AddressUtils.compareAddresses(rootAddress, account.rootAddress),
             )
             const selectedExists = updatedAccounts.find(account =>
-                AddressUtils.compareAddresses(
-                    state.selectedAccount,
-                    account.address,
-                ),
+                AddressUtils.compareAddresses(state.selectedAccount, account.address),
             )
             if (!selectedExists) {
                 throw new Error("Cannot delete the selected account!")
@@ -124,10 +98,7 @@ export const AccountSlice = createSlice({
             state.accounts = updatedAccounts
         },
 
-        renameAccount: (
-            state,
-            action: PayloadAction<{ address: string; alias: string }>,
-        ) => {
+        renameAccount: (state, action: PayloadAction<{ address: string; alias: string }>) => {
             const { address, alias } = action.payload
             const accountExistsIndex = state.accounts.findIndex(account =>
                 AddressUtils.compareAddresses(account.address, address),
@@ -139,10 +110,7 @@ export const AccountSlice = createSlice({
             state.accounts[accountExistsIndex].alias = alias
         },
 
-        setAccountVisibility: (
-            state,
-            action: PayloadAction<{ address: string; visibile: boolean }>,
-        ) => {
+        setAccountVisibility: (state, action: PayloadAction<{ address: string; visibile: boolean }>) => {
             const { address, visibile } = action.payload
             const accountExistsIndex = state.accounts.findIndex(account =>
                 AddressUtils.compareAddresses(account.address, address),
@@ -151,17 +119,13 @@ export const AccountSlice = createSlice({
                 state.accounts[accountExistsIndex].visible = visibile
             }
         },
-        toggleAccountVisibility: (
-            state,
-            action: PayloadAction<{ address: string }>,
-        ) => {
+        toggleAccountVisibility: (state, action: PayloadAction<{ address: string }>) => {
             const { address } = action.payload
             const accountExistsIndex = state.accounts.findIndex(account =>
                 AddressUtils.compareAddresses(account.address, address),
             )
             if (accountExistsIndex !== -1) {
-                state.accounts[accountExistsIndex].visible =
-                    !state.accounts[accountExistsIndex].visible
+                state.accounts[accountExistsIndex].visible = !state.accounts[accountExistsIndex].visible
             }
         },
         resetAccountState: () => initialAccountState,

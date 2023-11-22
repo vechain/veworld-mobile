@@ -1,19 +1,7 @@
 import { AccountUtils, AddressUtils, debug, error } from "~Utils"
-import {
-    BaseDevice,
-    DEVICE_TYPE,
-    LedgerDevice,
-    LocalDevice,
-    NewLedgerDevice,
-    WalletAccount,
-} from "~Model"
+import { BaseDevice, DEVICE_TYPE, LedgerDevice, LocalDevice, NewLedgerDevice, WalletAccount } from "~Model"
 import { selectDevices } from "../Selectors"
-import {
-    addDevice,
-    bulkUpdateDevices,
-    renameDevice,
-    updateDevice,
-} from "../Slices/Device"
+import { addDevice, bulkUpdateDevices, renameDevice, updateDevice } from "../Slices/Device"
 import { AppThunk, createAppAsyncThunk } from "../Types"
 import { addAccountForDevice } from "./Account"
 import { addAccount } from "../Slices"
@@ -56,24 +44,15 @@ export const getNextDeviceIndex = (devices: BaseDevice[]) => {
 
 const addLedgerDeviceAndAccounts = createAppAsyncThunk(
     "device/addLedgerDeviceAndAccounts",
-    async (
-        { deviceId, rootAccount, alias, accounts }: NewLedgerDevice,
-        { dispatch, getState, rejectWithValue },
-    ) => {
+    async ({ deviceId, rootAccount, alias, accounts }: NewLedgerDevice, { dispatch, getState, rejectWithValue }) => {
         debug("Adding a ledger device")
 
         const devices = selectDevices(getState())
 
         try {
-            if (!rootAccount.chainCode)
-                throw new Error(
-                    "Failed to extract chaincode from ledger device",
-                )
+            if (!rootAccount.chainCode) throw new Error("Failed to extract chaincode from ledger device")
             const deviceExists = devices.find(device =>
-                AddressUtils.compareAddresses(
-                    device.rootAddress,
-                    rootAccount.address,
-                ),
+                AddressUtils.compareAddresses(device.rootAddress, rootAccount.address),
             )
 
             if (deviceExists) return { device: deviceExists, accounts: [] }
@@ -95,11 +74,7 @@ const addLedgerDeviceAndAccounts = createAppAsyncThunk(
             dispatch(addDevice(newDevice))
 
             const newAccounts = accounts.map(accountIndex =>
-                AccountUtils.getAccountForIndex(
-                    accountIndex,
-                    newDevice,
-                    accountIndex + 1,
-                ),
+                AccountUtils.getAccountForIndex(accountIndex, newDevice, accountIndex + 1),
             )
 
             dispatch(addAccount(newAccounts))
@@ -112,10 +87,4 @@ const addLedgerDeviceAndAccounts = createAppAsyncThunk(
     },
 )
 
-export {
-    renameDevice,
-    addDeviceAndAccounts,
-    addLedgerDeviceAndAccounts,
-    updateDevice,
-    bulkUpdateDevices,
-}
+export { renameDevice, addDeviceAndAccounts, addLedgerDeviceAndAccounts, updateDevice, bulkUpdateDevices }

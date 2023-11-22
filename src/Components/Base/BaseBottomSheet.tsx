@@ -80,9 +80,7 @@ export const BaseBottomSheet = React.forwardRef<BottomSheetModalMethods, Props>(
         )
 
         const renderHandle = useCallback(
-            (props_: BottomSheetHandleProps) => (
-                <BaseView {...props_} style={styles.handleStyle} />
-            ),
+            (props_: BottomSheetHandleProps) => <BaseView {...props_} style={styles.handleStyle} />,
             [styles],
         )
 
@@ -98,17 +96,9 @@ export const BaseBottomSheet = React.forwardRef<BottomSheetModalMethods, Props>(
          * the minimum snap point is at least 60% of the screen height.
          */
         const snappoints = useMemo(() => {
-            if (
-                !snapPoints ||
-                !FormattingUtils.validateStringPercentages(snapPoints)
-            )
-                return ["60%"]
+            if (!snapPoints || !FormattingUtils.validateStringPercentages(snapPoints)) return ["60%"]
 
-            if (
-                isSmallScreen &&
-                !ignoreMinimumSnapPoint &&
-                Number(snapPoints[0].slice(0, -1)) < 60
-            ) {
+            if (isSmallScreen && !ignoreMinimumSnapPoint && Number(snapPoints[0].slice(0, -1)) < 60) {
                 snapPoints[0] = "55%"
             }
 
@@ -136,18 +126,11 @@ export const BaseBottomSheet = React.forwardRef<BottomSheetModalMethods, Props>(
                     flexGrow={1}
                     alignItems="stretch"
                     style={contentStyle}>
-                    {title && (
-                        <BaseText typographyFont="title">{title}</BaseText>
-                    )}
+                    {title && <BaseText typographyFont="title">{title}</BaseText>}
                     {children}
                 </BaseView>
                 {footer && (
-                    <BaseView
-                        w={100}
-                        px={24}
-                        alignItems="center"
-                        justifyContent="center"
-                        style={footerStyle}>
+                    <BaseView w={100} px={24} alignItems="center" justifyContent="center" style={footerStyle}>
                         {footer}
                     </BaseView>
                 )}

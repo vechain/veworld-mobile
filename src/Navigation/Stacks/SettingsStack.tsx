@@ -48,11 +48,7 @@ export const SettingsStack = () => {
     return (
         <Settings.Navigator screenOptions={{ headerShown: false, animation }}>
             <Settings.Group>
-                <Settings.Screen
-                    name={Routes.SETTINGS}
-                    component={SettingsScreen}
-                    options={{ headerShown: false }}
-                />
+                <Settings.Screen name={Routes.SETTINGS} component={SettingsScreen} options={{ headerShown: false }} />
                 <Settings.Screen
                     name={Routes.SETTINGS_NETWORK}
                     component={ChangeNetworkScreen}
@@ -123,11 +119,7 @@ export const SettingsStack = () => {
                     options={{ headerShown: false }}
                 />
 
-                <Settings.Screen
-                    name={Routes.RESET_APP}
-                    component={ResetAppScreen}
-                    options={{ headerShown: false }}
-                />
+                <Settings.Screen name={Routes.RESET_APP} component={ResetAppScreen} options={{ headerShown: false }} />
 
                 <Settings.Screen
                     name={Routes.SETTINGS_CONNECTED_APPS}

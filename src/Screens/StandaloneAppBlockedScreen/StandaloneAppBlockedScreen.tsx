@@ -18,30 +18,17 @@ export const StandaloneAppBlockedScreen = () => {
 
     const { styles, theme } = useThemedStyles(baseStyles)
 
-    const lottieSource = useMemo(
-        () => (theme.isDark ? BlockedAppDark : BlockedAppLight),
-        [theme],
-    )
+    const lottieSource = useMemo(() => (theme.isDark ? BlockedAppDark : BlockedAppLight), [theme])
 
     return (
-        <SafeAreaView
-            style={[
-                PlatformUtils.isAndroid() ? styles.androidTopPadding : {},
-                styles.safeArea,
-            ]}>
+        <SafeAreaView style={[PlatformUtils.isAndroid() ? styles.androidTopPadding : {}, styles.safeArea]}>
             <View style={styles.innerContainer}>
                 <View style={styles.title}>
-                    <Text style={styles.titleText}>
-                        {LL.TITLE_SECURITY_DOWNGRADE()}
-                    </Text>
+                    <Text style={styles.titleText}>{LL.TITLE_SECURITY_DOWNGRADE()}</Text>
                 </View>
 
                 <View style={styles.imageContainer}>
-                    <LottieView
-                        source={lottieSource}
-                        autoPlay
-                        style={styles.lottie}
-                    />
+                    <LottieView source={lottieSource} autoPlay style={styles.lottie} />
                     <Text style={styles.bodyText}>{LL.BD_APP_BLOCKED()}</Text>
                 </View>
             </View>

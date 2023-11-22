@@ -8,10 +8,7 @@ import {
 import { CurrencyExchangeRate } from "~Model"
 
 const getCurrencies = async (): Promise<string[]> => {
-    const currencies = await axios.get<string[]>(
-        COINGECKO_SUPPORTED_CURRENCIES_ENDPOINT,
-        EXCHANGE_CLIENT_AXIOS_OPTS,
-    )
+    const currencies = await axios.get<string[]>(COINGECKO_SUPPORTED_CURRENCIES_ENDPOINT, EXCHANGE_CLIENT_AXIOS_OPTS)
 
     //Sort alphabetically
     return currencies.data.sort((a, b) => a.localeCompare(b))
@@ -26,16 +23,13 @@ const getExchangeRate = async (
     symbol: string,
     coinGeckoId: string,
 ): Promise<CurrencyExchangeRate> => {
-    const pricesResponse = await axios.get<PriceChangeResponse>(
-        COINGECKO_MARKET_CHART_ENDPOINT(coinGeckoId),
-        {
-            ...EXCHANGE_CLIENT_AXIOS_OPTS,
-            params: {
-                days: 1,
-                vs_currency: fiatSymbol,
-            },
+    const pricesResponse = await axios.get<PriceChangeResponse>(COINGECKO_MARKET_CHART_ENDPOINT(coinGeckoId), {
+        ...EXCHANGE_CLIENT_AXIOS_OPTS,
+        params: {
+            days: 1,
+            vs_currency: fiatSymbol,
         },
-    )
+    })
 
     const prices = pricesResponse.data.prices
 

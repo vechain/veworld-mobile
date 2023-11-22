@@ -49,20 +49,8 @@ export const authenticateWithBiometrics = async () => {
     return isAuth
 }
 
-export const isSecurityDowngrade = (
-    oldLevel: string,
-    newLevel: SecurityLevelType,
-    appLockStatusActive: boolean,
-) =>
-    oldLevel === SecurityLevelType.BIOMETRIC &&
-    newLevel !== SecurityLevelType.BIOMETRIC &&
-    appLockStatusActive
+export const isSecurityDowngrade = (oldLevel: string, newLevel: SecurityLevelType, appLockStatusActive: boolean) =>
+    oldLevel === SecurityLevelType.BIOMETRIC && newLevel !== SecurityLevelType.BIOMETRIC && appLockStatusActive
 
-export const isSecurityUpgrade = (
-    oldLevel: string,
-    newLevel: SecurityLevelType,
-    appLockStatusActive: boolean,
-) =>
-    oldLevel !== SecurityLevelType.BIOMETRIC &&
-    newLevel === SecurityLevelType.BIOMETRIC &&
-    appLockStatusActive
+export const isSecurityUpgrade = (oldLevel: string, newLevel: SecurityLevelType, appLockStatusActive: boolean) =>
+    oldLevel !== SecurityLevelType.BIOMETRIC && newLevel === SecurityLevelType.BIOMETRIC && appLockStatusActive

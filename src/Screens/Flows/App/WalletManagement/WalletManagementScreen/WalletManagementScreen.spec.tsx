@@ -4,8 +4,7 @@ import { WalletManagementScreen } from "./WalletManagementScreen"
 import { render, screen } from "@testing-library/react-native"
 import { useCheckIdentity } from "~Hooks"
 
-const findElement = async () =>
-    await screen.findByText("Wallets", {}, { timeout: 5000 })
+const findElement = async () => await screen.findByText("Wallets", {}, { timeout: 5000 })
 
 jest.mock("~Hooks/useCheckIdentity", () => ({
     useCheckIdentity: jest.fn(),

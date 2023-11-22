@@ -7,11 +7,8 @@ import TransactionUtils from "../TransactionUtils"
  * @param clauses - The clauses to interpret.
  * @returns The type of the activity.
  */
-export const getActivityTypeFromClause = (
-    clauses: Connex.VM.Clause[],
-): ActivityType => {
-    if (clauses.length > 1 || clauses.length === 0)
-        return ActivityType.DAPP_TRANSACTION
+export const getActivityTypeFromClause = (clauses: Connex.VM.Clause[]): ActivityType => {
+    if (clauses.length > 1 || clauses.length === 0) return ActivityType.DAPP_TRANSACTION
 
     if (TransactionUtils.isTokenTransferClause(clauses[0])) {
         return ActivityType.FUNGIBLE_TOKEN
@@ -42,8 +39,7 @@ export const getDestinationAddressFromClause = (clause: Connex.VM.Clause) => {
     }
 
     if (TransactionUtils.isNFTTransferClause(clause)) {
-        const nftData =
-            TransactionUtils.decodeNonFungibleTokenTransferClause(clause)
+        const nftData = TransactionUtils.decodeNonFungibleTokenTransferClause(clause)
 
         return nftData?.to
     }

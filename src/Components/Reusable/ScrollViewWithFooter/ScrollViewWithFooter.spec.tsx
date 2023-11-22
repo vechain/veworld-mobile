@@ -13,17 +13,9 @@ describe("ScrollViewWithFooter component", () => {
         render(<ScrollViewWithFooter children={children} footer={footer} />, {
             wrapper: TestWrapper,
         })
-        const childrenEle = await screen.findByText(
-            "children",
-            {},
-            { timeout: 10000 },
-        )
+        const childrenEle = await screen.findByText("children", {}, { timeout: 10000 })
         expect(childrenEle).toBeTruthy()
-        const footerEle = await screen.findByText(
-            "footer",
-            {},
-            { timeout: 10000 },
-        )
+        const footerEle = await screen.findByText("footer", {}, { timeout: 10000 })
         expect(footerEle).toBeTruthy()
     })
 })
