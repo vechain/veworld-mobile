@@ -29,13 +29,13 @@ export const selectAllDapps = createSelector(
     (favorites, featured, custom) => {
         const dapps = [...favorites]
 
-        for (const dapp of featured) {
+        for (const dapp of custom) {
             if (!dapps.find(d => d.id === dapp.id)) {
                 dapps.push(dapp)
             }
         }
 
-        for (const dapp of custom) {
+        for (const dapp of featured) {
             if (!dapps.find(d => d.id === dapp.id)) {
                 dapps.push(dapp)
             }
