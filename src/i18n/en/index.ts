@@ -188,7 +188,6 @@ const en: BaseTranslation = {
     TITLE_ADD_TOKEN: "Add Token",
     TITLE_EDIT_WALLET: "Edit wallet",
     TITLE_SECURITY_DOWNGRADE: "Your app is blocked",
-    TITLE_DISCOVER: "Discover",
     TITLE_BACKUP_YOUR_PHRASE: "Backup your phrase",
     TITLE_QR_CODE_FOR_ACCOUNT: "Your QR Code for {accountAlias: string}",
     TITLE_RENAME: "Rename {type: string}",
@@ -477,6 +476,9 @@ const en: BaseTranslation = {
     CONNECTED_APP_CONNECTION_REQUESTS: "Connection requests",
     CONNECTED_APP_DESCRIPTION: "Description",
 
+
+    DISCOVER_TITLE: "Discover",
+    DISCOVER_SUB_TITLE: "Discover applications in the vechain ecosystem",
 
     BROWSER_TAB_MANAGEMENT_TITLE: "Tabs",
     BROWSER_FAVOURITES_TITLE: "Favourites",

@@ -676,10 +676,6 @@ type RootTranslation = {
 	 */
 	TITLE_SECURITY_DOWNGRADE: string
 	/**
-	 * D​i​s​c​o​v​e​r
-	 */
-	TITLE_DISCOVER: string
-	/**
 	 * B​a​c​k​u​p​ ​y​o​u​r​ ​p​h​r​a​s​e
 	 */
 	TITLE_BACKUP_YOUR_PHRASE: string
@@ -1700,6 +1696,14 @@ type RootTranslation = {
 	 * D​e​s​c​r​i​p​t​i​o​n
 	 */
 	CONNECTED_APP_DESCRIPTION: string
+	/**
+	 * D​i​s​c​o​v​e​r
+	 */
+	DISCOVER_TITLE: string
+	/**
+	 * D​i​s​c​o​v​e​r​ ​a​p​p​l​i​c​a​t​i​o​n​s​ ​i​n​ ​t​h​e​ ​v​e​c​h​a​i​n​ ​e​c​o​s​y​s​t​e​m
+	 */
+	DISCOVER_SUB_TITLE: string
 	/**
 	 * T​a​b​s
 	 */
@@ -3373,10 +3377,6 @@ export type TranslationFunctions = {
 	 */
 	TITLE_SECURITY_DOWNGRADE: () => LocalizedString
 	/**
-	 * Discover
-	 */
-	TITLE_DISCOVER: () => LocalizedString
-	/**
 	 * Backup your phrase
 	 */
 	TITLE_BACKUP_YOUR_PHRASE: () => LocalizedString
@@ -4373,6 +4373,14 @@ Try reconnect your device to the internet.
 	 * Description
 	 */
 	CONNECTED_APP_DESCRIPTION: () => LocalizedString
+	/**
+	 * Discover
+	 */
+	DISCOVER_TITLE: () => LocalizedString
+	/**
+	 * Discover applications in the vechain ecosystem
+	 */
+	DISCOVER_SUB_TITLE: () => LocalizedString
 	/**
 	 * Tabs
 	 */

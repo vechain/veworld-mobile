@@ -1,4 +1,5 @@
 import SettingsConstants from "./Settings"
+
 export * from "./Thor"
 export * from "./Token"
 export * from "./axios"
@@ -9,5 +10,6 @@ export * from "./VechainIndexer"
 export * from "./NftRegistry"
 export * from "./Api"
 export * from "./feature"
+export * from "./DApps/CompatibleDApps"
 
 export { SettingsConstants }

@@ -47,7 +47,7 @@ enum SignSteps {
 }
 
 export const LedgerSignTransaction: React.FC<Props> = ({ route }) => {
-    const { accountWithDevice, transaction, initialRoute, dappRequest, delegationSignature } = route.params
+    const { accountWithDevice, transaction, dappRequest, delegationSignature } = route.params
 
     const nav = useNavigation()
     const track = useAnalyticTracking()
@@ -234,13 +234,12 @@ export const LedgerSignTransaction: React.FC<Props> = ({ route }) => {
 
     const navigateOnFinish = useCallback(() => {
         dispatch(setIsAppLoading(false))
-        switch (initialRoute) {
-            case Routes.BROWSER:
-            default:
-                nav.navigate(Routes.BROWSER)
-                break
-        }
-    }, [dispatch, initialRoute, nav])
+        error(nav.getState())
+
+        if (nav.canGoBack()) return nav.goBack()
+
+        nav.navigate(Routes.DISCOVER)
+    }, [dispatch, nav])
 
     const handleOnConfirm = useCallback(async () => {
         try {

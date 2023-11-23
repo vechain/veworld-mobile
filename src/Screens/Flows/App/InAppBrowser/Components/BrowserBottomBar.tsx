@@ -2,25 +2,36 @@ import React, { useMemo } from "react"
 import { StyleSheet } from "react-native"
 import { BaseIcon, BaseView } from "~Components"
 import { useTheme } from "~Hooks"
-import { DISCOVER_HOME_URL, useInAppBrowser } from "~Components/Providers/InAppBrowserProvider"
+import { useInAppBrowser } from "~Components/Providers/InAppBrowserProvider"
 import { ColorThemeType } from "~Constants"
 import { selectBookmarks, useAppSelector } from "~Storage/Redux"
+import { useNavigation } from "@react-navigation/native"
+import { Routes } from "~Navigation"
 
 type IBrowserBottomBar = {
     onTabClick: () => void
     onFavouriteClick: () => void
 }
 
-export const BrowserBottomBar: React.FC<IBrowserBottomBar> = ({ onTabClick, onFavouriteClick }) => {
-    const { canGoBack, canGoForward, goBack, goForward, goHome, navigationState } = useInAppBrowser()
+export const BrowserBottomBar: React.FC<IBrowserBottomBar> = ({ onFavouriteClick }) => {
+    const { canGoBack, canGoForward, goBack, goForward, navigationState, webviewRef } = useInAppBrowser()
     const theme = useTheme()
     const styles = createStyles(theme)
+    const nav = useNavigation()
 
     const bookmarks = useAppSelector(selectBookmarks)
 
     const isBookMarked = useMemo(() => {
         return !!navigationState?.url && bookmarks.includes(navigationState?.url)
     }, [navigationState?.url, bookmarks])
+
+    const navBack = () => {
+        if (nav.canGoBack()) {
+            nav.goBack()
+        } else {
+            nav.navigate(Routes.DISCOVER)
+        }
+    }
 
     return (
         <BaseView style={styles.bottomBar}>
@@ -40,13 +51,7 @@ export const BrowserBottomBar: React.FC<IBrowserBottomBar> = ({ onTabClick, onFa
                 disabled={!canGoForward}
             />
 
-            <BaseIcon
-                color={theme.colors.primary}
-                onPress={goHome}
-                name="home"
-                style={styles.icon}
-                disabled={navigationState?.url === DISCOVER_HOME_URL}
-            />
+            <BaseIcon color={theme.colors.primary} onPress={navBack} name="home" style={styles.icon} />
 
             <BaseIcon
                 color={theme.colors.primary}
@@ -55,7 +60,12 @@ export const BrowserBottomBar: React.FC<IBrowserBottomBar> = ({ onTabClick, onFa
                 style={styles.icon}
             />
 
-            <BaseIcon name={"tab"} onPress={onTabClick} color={theme.colors.primary} style={styles.icon} />
+            <BaseIcon
+                name={"refresh"}
+                onPress={webviewRef.current?.reload}
+                color={theme.colors.primary}
+                style={styles.icon}
+            />
         </BaseView>
     )
 }

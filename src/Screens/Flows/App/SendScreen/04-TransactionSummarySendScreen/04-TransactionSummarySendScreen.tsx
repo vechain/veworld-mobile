@@ -1,7 +1,7 @@
 import React, { useCallback, useMemo } from "react"
 import { NativeStackScreenProps } from "@react-navigation/native-stack"
 import { useAnalyticTracking, useTheme, useTransactionScreen, useTransferAddContact } from "~Hooks"
-import { AddressUtils, FormattingUtils } from "~Utils"
+import { AddressUtils, error, FormattingUtils } from "~Utils"
 import { AnalyticsEvent, COLORS } from "~Constants"
 import { BaseSpacer, BaseText, BaseView, GasFeeOptions, Layout, RequireUserPassword, TransferCard } from "~Components"
 import { RootStackParamListHome, Routes } from "~Navigation"
@@ -21,13 +21,13 @@ import { useNavigation } from "@react-navigation/native"
 import { ContactType, DEVICE_TYPE } from "~Model"
 import { prepareFungibleClause } from "~Utils/TransactionUtils/TransactionUtils"
 import { Transaction } from "thor-devkit"
-import { ContactManagementBottomSheet } from "../../ContactsScreen"
+import { ContactManagementBottomSheet } from "~Screens"
 import { BigNumber } from "bignumber.js"
 
 type Props = NativeStackScreenProps<RootStackParamListHome, Routes.TRANSACTION_SUMMARY_SEND>
 
 export const TransactionSummarySendScreen = ({ route }: Props) => {
-    const { token, amount, address, initialRoute } = route.params
+    const { token, amount, address } = route.params
 
     const { LL } = useI18nContext()
     const theme = useTheme()
@@ -59,6 +59,14 @@ export const TransactionSummarySendScreen = ({ route }: Props) => {
 
     const clauses = useMemo(() => prepareFungibleClause(amount, token, address), [amount, token, address])
 
+    const navBack = useCallback(() => {
+        error(nav.getState())
+
+        if (nav.canGoBack()) return nav.goBack()
+
+        nav.navigate(Routes.DISCOVER)
+    }, [nav])
+
     const onFinish = useCallback(
         (success: boolean) => {
             if (success) track(AnalyticsEvent.SEND_FUNGIBLE_SENT)
@@ -66,17 +74,9 @@ export const TransactionSummarySendScreen = ({ route }: Props) => {
 
             dispatch(setIsAppLoading(false))
 
-            switch (initialRoute) {
-                case Routes.BROWSER:
-                    nav.navigate(Routes.BROWSER)
-                    break
-                case Routes.HOME:
-                default:
-                    nav.navigate(Routes.HOME)
-                    break
-            }
+            navBack()
         },
-        [track, dispatch, nav, initialRoute],
+        [track, dispatch, navBack],
     )
 
     const onTransactionSuccess = useCallback(

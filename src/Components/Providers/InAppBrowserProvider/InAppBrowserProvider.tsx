@@ -19,6 +19,7 @@ type ContextType = {
     goHome: () => void
     navigateToUrl: (url: string) => void
     navigationState: WebViewNavigation | undefined
+    resetWebViewState: () => void
 }
 
 const Context = React.createContext<ContextType | undefined>(undefined)
@@ -157,6 +158,12 @@ export const InAppBrowserProvider = ({ children }: Props) => {
         navigateToUrl(DISCOVER_HOME_URL)
     }, [navigateToUrl])
 
+    const resetWebViewState = useCallback(() => {
+        warn("resetting webview state")
+        setNavigationState(undefined)
+        webviewRef.current = undefined
+    }, [])
+
     const contextValue = React.useMemo(() => {
         return {
             webviewRef,
@@ -171,6 +178,7 @@ export const InAppBrowserProvider = ({ children }: Props) => {
             navigateToUrl,
             goHome,
             navigationState,
+            resetWebViewState,
         }
     }, [
         onNavigationStateChange,
@@ -184,6 +192,7 @@ export const InAppBrowserProvider = ({ children }: Props) => {
         navigateToUrl,
         goHome,
         navigationState,
+        resetWebViewState,
     ])
 
     return <Context.Provider value={contextValue}>{children}</Context.Provider>

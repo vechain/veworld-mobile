@@ -78,7 +78,12 @@ export const SignCertificateScreen: FC<Props> = ({ route }: Props) => {
     })
 
     const onClose = useCallback(() => {
-        nav.navigate(Routes.BROWSER)
+        if (nav.canGoBack()) {
+            nav.goBack()
+            return
+        } else {
+            nav.navigate(Routes.DISCOVER)
+        }
     }, [nav])
 
     const handleAccept = useCallback(

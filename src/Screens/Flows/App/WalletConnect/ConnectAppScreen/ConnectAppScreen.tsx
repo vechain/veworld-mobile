@@ -53,6 +53,15 @@ export const ConnectAppScreen: FC<Props> = ({ route }: Props) => {
     const selectedAccount = useAppSelector(selectSelectedAccount)
     const networks = useAppSelector(selectNetworks)
 
+    const navBack = useCallback(() => {
+        error(nav.getState())
+        if (nav.canGoBack()) {
+            nav.goBack()
+        } else {
+            nav.navigate(Routes.DISCOVER)
+        }
+    }, [nav])
+
     /**
      * Navigates back if we have already processed the request
      */
@@ -60,9 +69,9 @@ export const ConnectAppScreen: FC<Props> = ({ route }: Props) => {
         const sessions = Object.values(activeSessions)
 
         if (sessions.some(_session => _session.pairingTopic === currentProposal.params.pairingTopic)) {
-            nav.navigate(Routes.BROWSER)
+            navBack()
         }
-    }, [currentProposal, nav, activeSessions])
+    }, [currentProposal, navBack, activeSessions])
 
     const [isInvalidChecked, setInvalidChecked] = React.useState(false)
 
@@ -160,13 +169,13 @@ export const ConnectAppScreen: FC<Props> = ({ route }: Props) => {
                 text1: LL.NOTIFICATION_wallet_connect_error_pairing(),
             })
         } finally {
-            nav.navigate(Routes.BROWSER)
+            navBack()
+
             dispatch(setIsAppLoading(false))
         }
     }, [
         currentProposal,
         approvePendingProposal,
-        nav,
         LL,
         networks,
         selectedAccount.address,
@@ -175,6 +184,7 @@ export const ConnectAppScreen: FC<Props> = ({ route }: Props) => {
         url,
         description,
         methods,
+        navBack,
     ])
 
     /**
@@ -187,15 +197,15 @@ export const ConnectAppScreen: FC<Props> = ({ route }: Props) => {
             } catch (err: unknown) {
                 error("ConnectedAppScreen:handleReject", err)
             } finally {
-                nav.navigate(Routes.BROWSER)
+                navBack()
             }
         }
-    }, [currentProposal, nav, rejectPendingProposal])
+    }, [currentProposal, navBack, rejectPendingProposal])
 
     const onPressBack = useCallback(async () => {
         await handleReject()
-        nav.navigate(Routes.BROWSER)
-    }, [nav, handleReject])
+        navBack()
+    }, [navBack, handleReject])
 
     const isConfirmDisabled = useMemo(() => {
         const { validation } = currentProposal.verifyContext.verified

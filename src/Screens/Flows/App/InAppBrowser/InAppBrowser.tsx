@@ -2,14 +2,33 @@ import { Layout } from "~Components"
 import { StyleSheet, View } from "react-native"
 import React, { MutableRefObject, useEffect } from "react"
 import WebView from "react-native-webview"
-import { DISCOVER_HOME_URL, useInAppBrowser } from "~Components/Providers/InAppBrowserProvider"
+import { useInAppBrowser } from "~Components/Providers/InAppBrowserProvider"
 import { BrowserFavouritesBottomSheet, URLInput } from "./Components"
 import { BrowserBottomBar } from "~Screens/Flows/App/InAppBrowser/Components/BrowserBottomBar"
 import { useBottomSheetModal } from "~Hooks"
 import { BrowserTabsBottomSheet } from "~Screens/Flows/App/InAppBrowser/Components/BrowserTabsBottomSheet"
+import { NativeStackScreenProps } from "@react-navigation/native-stack"
+import { RootStackParamListBrowser, Routes } from "~Navigation"
 
-export const InAppBrowser = () => {
-    const { webviewRef, onMessage, injectVechainScript, onNavigationStateChange, navigationState } = useInAppBrowser()
+type Props = NativeStackScreenProps<RootStackParamListBrowser, Routes.BROWSER>
+
+export const InAppBrowser: React.FC<Props> = ({ route }) => {
+    const {
+        webviewRef,
+        onMessage,
+        injectVechainScript,
+        onNavigationStateChange,
+        navigationState,
+        navigateToUrl,
+        resetWebViewState,
+    } = useInAppBrowser()
+
+    useEffect(() => {
+        if (webviewRef.current) {
+            navigateToUrl(route.params.initialUrl)
+        }
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [])
 
     const {
         ref: tabManagerSheetRef,
@@ -22,7 +41,7 @@ export const InAppBrowser = () => {
     useEffect(() => {
         // set the webview ref to undefined when the component unmounts
         return () => {
-            webviewRef.current = undefined
+            resetWebViewState()
         }
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [])
@@ -39,7 +58,7 @@ export const InAppBrowser = () => {
                         <WebView
                             ref={webviewRef as MutableRefObject<WebView>}
                             source={{
-                                uri: navigationState?.url ?? DISCOVER_HOME_URL,
+                                uri: navigationState?.url ?? route.params.initialUrl,
                             }}
                             onNavigationStateChange={onNavigationStateChange}
                             javaScriptEnabled={true}
