@@ -10,6 +10,7 @@ type Props = {
     clauses: Transaction.Clause[]
     isDelegated: boolean
     vtho: any
+    amount: string
 }
 
 export const calculateIsEnoughGas = ({ gas, selectedFeeOption, clauses, isDelegated, vtho }: Props) => {
@@ -28,7 +29,12 @@ export const calculateIsEnoughGas = ({ gas, selectedFeeOption, clauses, isDelega
     }
 
     const vthoGasFeeRaw = gasFeeOptionsRaw[Number(selectedFeeOption) as GasPriceCoefficient]
+    const { isGas, txCostTotal } = calculateVthoGas(clauses, vthoGasFeeRaw, isDelegated, vtho)
 
+    return { isGas, txCostTotal }
+}
+
+const calculateVthoGas = (clauses: Transaction.Clause[], vthoGasFeeRaw: BigNumber, isDelegated: boolean, vtho: any) => {
     const vthoTransferClauses = clauses.filter(
         clause =>
             clause.to &&
@@ -47,24 +53,18 @@ export const calculateIsEnoughGas = ({ gas, selectedFeeOption, clauses, isDelega
         if (clauseAmount) {
             txCostTotal = txCostTotal.plus(clauseAmount)
         }
-
-        // Get total balance of VTHO
-        const totalBalance = new BigNumber(vtho.balance.balance)
-        // Check if the total cost of the transaction is less than or equal to the total balance of VTHO
-        isEnoughGas = totalBalance.isGreaterThanOrEqualTo(txCostTotal)
     }
+
+    // Get total balance of VTHO
+    const totalBalance = new BigNumber(vtho.balance.balance)
+    // Check if the total cost of the transaction is less than or equal to the total balance of VTHO
+    isEnoughGas = totalBalance.isGreaterThanOrEqualTo(txCostTotal)
 
     return { isGas: isEnoughGas, txCostTotal }
 }
 
-/*
-    if(amount + fee > vtho balance){
-        amount = Math.max(vtho balance - fee, 0)
-    }
-*/
-
-// // Helper function to convert a float to a BigNumber
-// function convertFloatToBigNumber(value: string) {
+// Helper function to convert a float to a BigNumber
+// const convertStringToBigNumber = (value: string) => {
 //     // Ensure BigNumber doesn't use exponential notation
 //     BigNumber.config({ EXPONENTIAL_AT: 1e9 })
 //     // Create a BigNumber instance

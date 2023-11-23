@@ -62,6 +62,7 @@ import { calculateIsEnoughGas } from "./Helpers"
 import Animated, { interpolateColor, useAnimatedStyle, useSharedValue, withTiming } from "react-native-reanimated"
 import { StyleSheet } from "react-native"
 import { BigNumber } from "bignumber.js"
+import { ethers } from "ethers"
 
 type Props = NativeStackScreenProps<
     RootStackParamListHome & RootStackParamListDiscover,
@@ -121,7 +122,7 @@ export const TransactionSummarySendScreen = ({ route }: Props) => {
         onFinish(false)
     }, [onFinish])
 
-    // 1. Gas
+    // 1. Base Gas
     const { gas, loadingGas, setGasPayer } = useTransactionGas({
         clauses,
     })
@@ -265,11 +266,12 @@ export const TransactionSummarySendScreen = ({ route }: Props) => {
             clauses,
             isDelegated,
             vtho,
+            amount,
         })
 
         setIsEnoughGas(isGas)
         setTxCostTotal(_txCostTotal)
-    }, [clauses, gas, isDelegated, selectedFeeOption, vtho])
+    }, [clauses, gas, isDelegated, selectedFeeOption, vtho, amount])
 
     return (
         <Layout
@@ -313,6 +315,7 @@ export const TransactionSummarySendScreen = ({ route }: Props) => {
                         symbol={token.symbol}
                         token={token}
                         txCostTotal={txCostTotal}
+                        isDelegated={selectedDelegationOption === DelegationType.URL}
                     />
 
                     <GasFeeOptions
@@ -322,6 +325,8 @@ export const TransactionSummarySendScreen = ({ route }: Props) => {
                         selectedFeeOption={selectedFeeOption}
                         gasFeeOptions={gasFeeOptions}
                         isThereEnoughGas={isEnoughGas}
+                        totalBalance={vtho.balance.balance}
+                        txCostTotal={txCostTotal}
                     />
 
                     <EstimatedTimeDetailsView />
@@ -421,9 +426,10 @@ interface ITotalSendAmountView {
     symbol: string
     token: FungibleTokenWithBalance
     txCostTotal: BigNumber
+    isDelegated: boolean
 }
 
-function TotalSendAmountView({ amount, symbol, token, txCostTotal }: ITotalSendAmountView) {
+function TotalSendAmountView({ amount, symbol, token, txCostTotal, isDelegated }: ITotalSendAmountView) {
     const currency = useAppSelector(selectCurrency)
     const exchangeRate = useAppSelector(state => selectCurrencyExchangeRate(state, token))
     const theme = useTheme()
@@ -432,8 +438,8 @@ function TotalSendAmountView({ amount, symbol, token, txCostTotal }: ITotalSendA
     const animationProgress = useSharedValue(0)
 
     useEffect(() => {
-        animationProgress.value = withTiming(1, { duration: 600 }, () => {
-            animationProgress.value = withTiming(0, { duration: 600 })
+        animationProgress.value = withTiming(1, { duration: 400 }, () => {
+            animationProgress.value = withTiming(0, { duration: 400 })
         })
     }, [txCostTotal, animationProgress])
 
@@ -446,7 +452,7 @@ function TotalSendAmountView({ amount, symbol, token, txCostTotal }: ITotalSendA
             FormattingUtils.humanNumber(
                 FormattingUtils.convertToFiatBalance(
                     FormattingUtils.scaleNumberDown(
-                        txCostTotal,
+                        token.symbol.toLowerCase() === "vtho" ? txCostTotal : amount,
                         token.decimals,
                         token.decimals,
                         BigNumber.ROUND_DOWN,
@@ -454,9 +460,14 @@ function TotalSendAmountView({ amount, symbol, token, txCostTotal }: ITotalSendA
                     exchangeRate?.rate || 1,
                     0,
                 ),
-                FormattingUtils.scaleNumberDown(txCostTotal, token.decimals, token.decimals, BigNumber.ROUND_DOWN),
+                FormattingUtils.scaleNumberDown(
+                    token.symbol.toLowerCase() === "vtho" ? txCostTotal : amount,
+                    token.decimals,
+                    token.decimals,
+                    BigNumber.ROUND_DOWN,
+                ),
             ),
-        [txCostTotal, token.decimals, exchangeRate?.rate],
+        [token.symbol, token.decimals, amount, txCostTotal, exchangeRate?.rate],
     )
 
     return (
@@ -481,18 +492,14 @@ function TotalSendAmountView({ amount, symbol, token, txCostTotal }: ITotalSendA
                 )}
             </BaseView>
 
-            {token.symbol.toLowerCase() === "vtho" && (
+            {/* Show total tx cost if the token is VTHO and the gas fee is not delegated */}
+            {token.symbol.toLowerCase() === "vtho" && !isDelegated ? (
                 <>
                     <BaseSpacer height={12} />
                     <BaseText typographyFont="caption">{"Total Cost"}</BaseText>
                     <BaseView flexDirection="row">
                         <Animated.Text style={[baseStyles.coloredText, animatedStyle]}>
-                            {FormattingUtils.scaleNumberDown(
-                                txCostTotal,
-                                token.decimals,
-                                token.decimals,
-                                BigNumber.ROUND_DOWN,
-                            )}
+                            {ethers.utils.formatEther(txCostTotal.toString())}
                         </Animated.Text>
                         <BaseText typographyFont="body" mx={4}>
                             {symbol}
@@ -506,7 +513,7 @@ function TotalSendAmountView({ amount, symbol, token, txCostTotal }: ITotalSendA
                         )}
                     </BaseView>
                 </>
-            )}
+            ) : null}
         </>
     )
 }
@@ -518,3 +525,5 @@ const baseStyles = StyleSheet.create({
         fontWeight: "700",
     },
 })
+
+// https://sponsor-testnet.vechain.energy/by/296
