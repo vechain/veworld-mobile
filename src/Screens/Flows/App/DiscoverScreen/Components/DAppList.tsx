@@ -64,23 +64,31 @@ export const DAppList: React.FC<Props> = ({ onDAppPress, filteredSearch, setTab,
 
     if (filteredSearch && filteredDapps.length === 0) {
         return (
-            <EmptyResults
-                onClick={() => navigateToBrowser(filteredSearch)}
-                title={LL.DISCOVER_SEARCH()}
-                subtitle={LL.DISCOVER_EMPTY_SEARCH()}
-                icon={"search"}
-            />
+            <>
+                {/*TODO remove spacer and put the below in the middle*/}
+                <BaseSpacer height={40} />
+                <EmptyResults
+                    onClick={() => navigateToBrowser(filteredSearch)}
+                    title={LL.DISCOVER_SEARCH()}
+                    subtitle={LL.DISCOVER_EMPTY_SEARCH()}
+                    icon={"search"}
+                />
+            </>
         )
     }
 
     if (dapps.length === 0 && tab !== "featured") {
         return (
-            <EmptyResults
-                onClick={() => setTab("featured")}
-                title={LL.DISCOVER_NO_DAPPS_FOUND()}
-                subtitle={LL.DISCOVER_EMPTY_FAVOURITES_SUBTITLE()}
-                icon={"search"}
-            />
+            <>
+                {/*TODO remove spacer and put the below in the middle*/}
+                <BaseSpacer height={40} />
+                <EmptyResults
+                    onClick={() => setTab("featured")}
+                    title={LL.DISCOVER_NO_DAPPS_FOUND()}
+                    subtitle={LL.DISCOVER_EMPTY_FAVOURITES_SUBTITLE()}
+                    icon={"search"}
+                />
+            </>
         )
     }
 
