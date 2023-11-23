@@ -1,8 +1,16 @@
-import React, { memo } from "react"
+import React, { memo, useMemo } from "react"
 import { Image, StyleProp, StyleSheet, ViewStyle } from "react-native"
 import { useThemedStyles } from "~Hooks"
 import { ColorThemeType, CompatibleDApp } from "~Constants"
-import { BaseSpacer, BaseText, BaseTouchableBox, BaseView } from "~Components"
+import { BaseIcon, BaseSpacer, BaseText, BaseTouchableBox, BaseView } from "~Components"
+import {
+    addBookmark,
+    removeBookmark,
+    selectCustomDapps,
+    selectFavoritesDapps,
+    useAppDispatch,
+    useAppSelector,
+} from "~Storage/Redux"
 
 type Props = {
     dapp: CompatibleDApp
@@ -11,7 +19,23 @@ type Props = {
 }
 
 export const DAppCard: React.FC<Props> = memo(({ onPress, dapp, containerStyle }: Props) => {
-    const { styles } = useThemedStyles(baseStyles)
+    const { styles, theme } = useThemedStyles(baseStyles)
+
+    const favourites = useAppSelector(selectFavoritesDapps)
+    const custom = useAppSelector(selectCustomDapps)
+    const dispatch = useAppDispatch()
+
+    const isBookMarked = useMemo(() => {
+        return favourites.some(fav => fav.href === dapp.href) || custom.some(fav => fav.href === dapp.href)
+    }, [favourites, custom, dapp])
+
+    const onBookmarkPress = () => {
+        if (isBookMarked) {
+            dispatch(removeBookmark(dapp))
+        } else {
+            dispatch(addBookmark(dapp))
+        }
+    }
 
     return (
         <BaseView w={100} flexDirection="row" style={containerStyle}>
@@ -30,6 +54,13 @@ export const DAppCard: React.FC<Props> = memo(({ onPress, dapp, containerStyle }
                     </BaseView>
                 </BaseView>
             </BaseTouchableBox>
+            <BaseSpacer width={12} />
+            <BaseIcon
+                onPress={onBookmarkPress}
+                name={isBookMarked ? "bookmark" : "bookmark-outline"}
+                color={theme.colors.text}
+                size={24}
+            />
         </BaseView>
     )
 })
@@ -58,14 +89,17 @@ const baseStyles = (theme: ColorThemeType) =>
     })
 
 type IconProps = {
-    imageSource: object
+    imageSource: object | string
     size?: number
 }
 
 const DAppIcon: React.FC<IconProps> = memo(({ imageSource, size }: IconProps) => {
     return (
         <BaseView>
-            <Image source={imageSource} style={{ height: size, width: size }} />
+            <Image
+                source={typeof imageSource === "string" ? { uri: imageSource } : imageSource}
+                style={{ height: size, width: size }}
+            />
         </BaseView>
     )
 })

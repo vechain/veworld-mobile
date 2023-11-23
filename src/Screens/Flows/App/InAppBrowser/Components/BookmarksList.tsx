@@ -4,9 +4,10 @@ import React, { useCallback } from "react"
 import { BaseSpacer, BaseText, BaseTouchableBox, BaseView } from "~Components"
 import { BottomSheetFlatList } from "@gorhom/bottom-sheet"
 import { StyleSheet } from "react-native"
+import { CompatibleDApp } from "~Constants"
 
 type IBookmarksList = {
-    bookmarks: string[]
+    bookmarks: CompatibleDApp[]
     onClose: () => void
     snapPoints: string[]
     snapIndex: number
@@ -16,18 +17,9 @@ export const BookmarksList = ({ bookmarks, onClose, snapPoints, snapIndex }: IBo
     const { navigateToUrl } = useInAppBrowser()
     const theme = useTheme()
 
-    const onPressBookmark = (bookmark: string) => {
-        navigateToUrl(bookmark)
+    const onPressBookmark = (bookmark: CompatibleDApp) => {
+        navigateToUrl(bookmark.href)
         onClose()
-    }
-
-    const formatBookmark = (bookmark: string) => {
-        try {
-            const url = new URL(bookmark)
-            return url.hostname
-        } catch (e) {
-            return bookmark
-        }
     }
 
     const { isListScrollable, viewabilityConfig, onViewableItemsChanged } = useScrollableList(
@@ -42,7 +34,7 @@ export const BookmarksList = ({ bookmarks, onClose, snapPoints, snapIndex }: IBo
         <BaseView flexDirection="row" style={baseStyles.list}>
             <BottomSheetFlatList
                 data={bookmarks}
-                keyExtractor={bookmark => bookmark}
+                keyExtractor={bookmark => bookmark.id}
                 ItemSeparatorComponent={languagesListSeparator}
                 onViewableItemsChanged={onViewableItemsChanged}
                 viewabilityConfig={viewabilityConfig}
@@ -55,7 +47,7 @@ export const BookmarksList = ({ bookmarks, onClose, snapPoints, snapIndex }: IBo
                             innerContainerStyle={{
                                 backgroundColor: theme.colors.card,
                             }}>
-                            <BaseText color={theme.colors.text}>{formatBookmark(item)}</BaseText>
+                            <BaseText color={theme.colors.text}>{item.name}</BaseText>
                         </BaseTouchableBox>
                     )
                 }}

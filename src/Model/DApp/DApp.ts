@@ -51,3 +51,5 @@ export type CertificateRequest = WcCertRequest | InAppCertRequest
 export type TransactionRequest = WcTxRequest | InAppTxRequest
 
 export type ConnectAppRequest = WcConnectAppRequest | InAppConnectAppRequest
+
+export type DAppTabType = "favourites" | "featured" | "custom" | "all"

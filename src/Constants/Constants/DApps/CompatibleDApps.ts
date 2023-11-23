@@ -3,14 +3,16 @@
 export type CompatibleDApp = {
     name: string
     href: string
-    desc: string
-    category: string
-    tags: string[]
+    desc?: string
+    category?: string
+    tags?: string[]
     contracts?: string[]
     repo?: string
     id: string
     createAt: number
-    image: object
+    image: object | string
+    isCustom: boolean
+    amountOfNavigations: number
 }
 
 const CompatibleDApps: CompatibleDApp[] = [
@@ -24,6 +26,8 @@ const CompatibleDApps: CompatibleDApp[] = [
         id: "org.vechain.rewards.app",
         createAt: 1694444477000,
         image: require("./images/org.vechain.rewards.app.png"),
+        isCustom: false,
+        amountOfNavigations: 0,
     },
     {
         name: "WorldOfV NFT Marketplace",
@@ -34,6 +38,8 @@ const CompatibleDApps: CompatibleDApp[] = [
         id: "com.worldofv.marketplace-nft",
         createAt: 1637639264000,
         image: require("./images/com.worldofv.marketplace-nft.png"),
+        isCustom: false,
+        amountOfNavigations: 0,
     },
     {
         name: "VeSea Marketplace",
@@ -44,6 +50,8 @@ const CompatibleDApps: CompatibleDApp[] = [
         id: "io.vesea",
         createAt: 1633530911000,
         image: require("./images/io.vesea.png"),
+        isCustom: false,
+        amountOfNavigations: 0,
     },
     {
         name: "vechain.energy · blockchain development platform",
@@ -54,6 +62,8 @@ const CompatibleDApps: CompatibleDApp[] = [
         id: "energy.vechain",
         createAt: 1611544407000,
         image: require("./images/energy.vechain.png"),
+        isCustom: false,
+        amountOfNavigations: 0,
     },
     {
         name: "Fiat On-Ramp",
@@ -64,6 +74,8 @@ const CompatibleDApps: CompatibleDApp[] = [
         id: "energy.vechain.ramp",
         createAt: 1691736378000,
         image: require("./images/energy.vechain.ramp.png"),
+        isCustom: false,
+        amountOfNavigations: 0,
     },
     {
         name: "Token Swap / Exchange",
@@ -74,6 +86,8 @@ const CompatibleDApps: CompatibleDApp[] = [
         id: "energy.vechain.swap",
         createAt: 1690983864000,
         image: require("./images/energy.vechain.swap.png"),
+        isCustom: false,
+        amountOfNavigations: 0,
     },
     {
         name: "OceanEx NFT Marketplace",
@@ -84,6 +98,8 @@ const CompatibleDApps: CompatibleDApp[] = [
         id: "pro.oceanex.nft",
         createAt: 1670903394000,
         image: require("./images/pro.oceanex.nft.png"),
+        isCustom: false,
+        amountOfNavigations: 0,
     },
     {
         name: "VeVote",
@@ -96,6 +112,8 @@ const CompatibleDApps: CompatibleDApp[] = [
         id: "com.vechain.vevote",
         createAt: 1575613895000,
         image: require("./images/com.vechain.vevote.png"),
+        isCustom: false,
+        amountOfNavigations: 0,
     },
     {
         name: "VTHO Exchange",
@@ -106,6 +124,8 @@ const CompatibleDApps: CompatibleDApp[] = [
         id: "exchange.vtho",
         createAt: 1695719391000,
         image: require("./images/exchange.vtho.png"),
+        isCustom: false,
+        amountOfNavigations: 0,
     },
     {
         name: "Token Transfer",
@@ -116,6 +136,8 @@ const CompatibleDApps: CompatibleDApp[] = [
         id: "app.vercel.vet-token-transfer",
         createAt: 1684139476000,
         image: require("./images/app.vercel.vet-token-transfer.png"),
+        isCustom: false,
+        amountOfNavigations: 0,
     },
     {
         name: "Non FungiBulls",
@@ -126,6 +148,8 @@ const CompatibleDApps: CompatibleDApp[] = [
         id: "com.non-fungibulls",
         createAt: 1675842196000,
         image: require("./images/com.non-fungibulls.png"),
+        isCustom: false,
+        amountOfNavigations: 0,
     },
     {
         name: "Defi Bet Club",
@@ -136,6 +160,8 @@ const CompatibleDApps: CompatibleDApp[] = [
         id: "com.defibetclub",
         createAt: 1675318630000,
         image: require("./images/com.defibetclub.png"),
+        isCustom: false,
+        amountOfNavigations: 0,
     },
     {
         name: "3DAbles",
@@ -146,6 +172,8 @@ const CompatibleDApps: CompatibleDApp[] = [
         id: "com.smuzzies.3dables",
         createAt: 1668394330000,
         image: require("./images/com.smuzzies.3dables.png"),
+        isCustom: false,
+        amountOfNavigations: 0,
     },
     {
         name: "VeFam",
@@ -169,6 +197,8 @@ const CompatibleDApps: CompatibleDApp[] = [
         id: "com.vefam",
         createAt: 1666668513000,
         image: require("./images/com.vefam.png"),
+        isCustom: false,
+        amountOfNavigations: 0,
     },
     {
         name: "VeRocket (ZumoSwap)",
@@ -179,6 +209,8 @@ const CompatibleDApps: CompatibleDApp[] = [
         id: "com.verocket.app",
         createAt: 1644245405000,
         image: require("./images/com.verocket.app.png"),
+        isCustom: false,
+        amountOfNavigations: 0,
     },
     {
         name: "BlackVeMarket",
@@ -189,6 +221,8 @@ const CompatibleDApps: CompatibleDApp[] = [
         id: "com.blackvemarket",
         createAt: 1641010398000,
         image: require("./images/com.blackvemarket.png"),
+        isCustom: false,
+        amountOfNavigations: 0,
     },
 
     {
@@ -201,6 +235,8 @@ const CompatibleDApps: CompatibleDApp[] = [
         id: "com.vechain.inspector",
         createAt: 1552446522000,
         image: require("./images/com.vechain.inspector.png"),
+        isCustom: false,
+        amountOfNavigations: 0,
     },
 ]
 

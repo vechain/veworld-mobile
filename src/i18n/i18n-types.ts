@@ -1705,6 +1705,50 @@ type RootTranslation = {
 	 */
 	DISCOVER_SUB_TITLE: string
 	/**
+	 * S​e​a​r​c​h
+	 */
+	DISCOVER_SEARCH: string
+	/**
+	 * N​o​ ​r​e​s​u​l​t​s​ ​f​o​u​n​d​ ​f​o​r​ ​y​o​u​r​ ​s​e​a​r​c​h
+	 */
+	DISCOVER_EMPTY_SEARCH: string
+	/**
+	 * F​a​v​o​u​r​i​t​e​s
+	 */
+	DISCOVER_TAB_FAVOURITES: string
+	/**
+	 * F​e​a​t​u​r​e​d
+	 */
+	DISCOVER_TAB_FEATURED: string
+	/**
+	 * C​u​s​t​o​m
+	 */
+	DISCOVER_TAB_CUSTOM: string
+	/**
+	 * A​l​l
+	 */
+	DISCOVER_TAB_ALL: string
+	/**
+	 * N​o​ ​a​p​p​s​ ​f​o​u​n​d
+	 */
+	DISCOVER_NO_DAPPS_FOUND: string
+	/**
+	 * N​o​ ​f​a​v​o​u​r​i​t​e​s​ ​a​d​d​e​d
+	 */
+	DISCOVER_EMPTY_FAVOURITES: string
+	/**
+	 * Y​o​u​ ​c​a​n​ ​b​o​o​k​m​a​r​k​ ​y​o​u​r​ ​f​a​v​o​u​r​i​t​e​ ​a​p​p​s​ ​i​n​ ​t​h​e​ ​f​e​a​t​u​r​e​d​ ​t​a​b
+	 */
+	DISCOVER_EMPTY_FAVOURITES_SUBTITLE: string
+	/**
+	 * N​o​ ​c​u​s​t​o​m​ ​a​p​p​s​ ​a​d​d​e​d
+	 */
+	DISCOVER_EMPTY_CUSTOM_NODES: string
+	/**
+	 * Y​o​u​ ​c​a​n​ ​a​d​d​ ​y​o​u​r​ ​c​u​s​t​o​m​ ​a​p​p​s​ ​b​y​ ​b​o​o​k​m​a​r​k​i​n​g​ ​t​h​e​m​ ​i​n​ ​t​h​e​ ​b​r​o​w​s​e​r
+	 */
+	DISCOVER_EMPTY_CUSTOM_NODES_SUBTITLE: string
+	/**
 	 * T​a​b​s
 	 */
 	BROWSER_TAB_MANAGEMENT_TITLE: string
@@ -4381,6 +4425,50 @@ Try reconnect your device to the internet.
 	 * Discover applications in the vechain ecosystem
 	 */
 	DISCOVER_SUB_TITLE: () => LocalizedString
+	/**
+	 * Search
+	 */
+	DISCOVER_SEARCH: () => LocalizedString
+	/**
+	 * No results found for your search
+	 */
+	DISCOVER_EMPTY_SEARCH: () => LocalizedString
+	/**
+	 * Favourites
+	 */
+	DISCOVER_TAB_FAVOURITES: () => LocalizedString
+	/**
+	 * Featured
+	 */
+	DISCOVER_TAB_FEATURED: () => LocalizedString
+	/**
+	 * Custom
+	 */
+	DISCOVER_TAB_CUSTOM: () => LocalizedString
+	/**
+	 * All
+	 */
+	DISCOVER_TAB_ALL: () => LocalizedString
+	/**
+	 * No apps found
+	 */
+	DISCOVER_NO_DAPPS_FOUND: () => LocalizedString
+	/**
+	 * No favourites added
+	 */
+	DISCOVER_EMPTY_FAVOURITES: () => LocalizedString
+	/**
+	 * You can bookmark your favourite apps in the featured tab
+	 */
+	DISCOVER_EMPTY_FAVOURITES_SUBTITLE: () => LocalizedString
+	/**
+	 * No custom apps added
+	 */
+	DISCOVER_EMPTY_CUSTOM_NODES: () => LocalizedString
+	/**
+	 * You can add your custom apps by bookmarking them in the browser
+	 */
+	DISCOVER_EMPTY_CUSTOM_NODES_SUBTITLE: () => LocalizedString
 	/**
 	 * Tabs
 	 */

@@ -2,11 +2,12 @@ import React, { useCallback, useMemo, useState } from "react"
 import { BaseBottomSheet, BaseIcon, BaseSpacer, BaseText, BaseView } from "~Components"
 import { BottomSheetModalMethods } from "@gorhom/bottom-sheet/lib/typescript/types"
 import { useI18nContext } from "~i18n"
-import { addBookmark, selectBookmarks, useAppDispatch, useAppSelector } from "~Storage/Redux"
+import { addBookmark, selectBookmarkedDapps, useAppDispatch, useAppSelector } from "~Storage/Redux"
 import { useInAppBrowser } from "~Components/Providers/InAppBrowserProvider"
 import { useTheme } from "~Hooks"
 import { BookmarksList } from "./BookmarksList"
 import { EmptyBookmarks } from "./EmptyBookmarks"
+import { CompatibleDApp } from "~Constants"
 
 type Props = {
     onClose: () => void
@@ -18,7 +19,7 @@ export const BrowserFavouritesBottomSheet = React.forwardRef<BottomSheetModalMet
     const { LL } = useI18nContext()
 
     const theme = useTheme()
-    const bookmarks = useAppSelector(selectBookmarks)
+    const bookmarks = useAppSelector(selectBookmarkedDapps)
 
     const snapPoints = useMemo(() => {
         return ["50%", "75%", "90%"]
@@ -33,7 +34,19 @@ export const BrowserFavouritesBottomSheet = React.forwardRef<BottomSheetModalMet
     const handleAddBookmark = () => {
         if (!navigationState?.url) return
 
-        dispatch(addBookmark(navigationState.url))
+        const url = new URL(navigationState.url)
+
+        const compatibleDapp: CompatibleDApp = {
+            href: navigationState.url,
+            name: url.host,
+            image: `http://${url.host}/favicon.ico`,
+            isCustom: true,
+            createAt: new Date().getTime(),
+            id: url.href,
+            amountOfNavigations: 1,
+        }
+
+        dispatch(addBookmark(compatibleDapp))
 
         onClose()
     }

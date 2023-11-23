@@ -4,7 +4,7 @@ import { BaseIcon, BaseView } from "~Components"
 import { useTheme } from "~Hooks"
 import { useInAppBrowser } from "~Components/Providers/InAppBrowserProvider"
 import { ColorThemeType } from "~Constants"
-import { selectBookmarks, useAppSelector } from "~Storage/Redux"
+import { selectBookmarkedDapps, useAppSelector } from "~Storage/Redux"
 import { useNavigation } from "@react-navigation/native"
 import { Routes } from "~Navigation"
 
@@ -19,11 +19,11 @@ export const BrowserBottomBar: React.FC<IBrowserBottomBar> = ({ onFavouriteClick
     const styles = createStyles(theme)
     const nav = useNavigation()
 
-    const bookmarks = useAppSelector(selectBookmarks)
+    const dapps = useAppSelector(selectBookmarkedDapps)
 
     const isBookMarked = useMemo(() => {
-        return !!navigationState?.url && bookmarks.includes(navigationState?.url)
-    }, [navigationState?.url, bookmarks])
+        return !!navigationState?.url && dapps.some(bookmark => bookmark.href === navigationState?.url)
+    }, [navigationState?.url, dapps])
 
     const navBack = () => {
         if (nav.canGoBack()) {
