@@ -1,5 +1,5 @@
-import React, { useCallback, useMemo, useRef } from "react"
-import { BaseButton, BaseIcon, BaseSafeArea, BaseSpacer, BaseText, BaseTextInput, BaseView } from "~Components"
+import React, { useCallback, useRef } from "react"
+import { BaseIcon, BaseSafeArea, BaseSpacer, BaseText, BaseTextInput, BaseView } from "~Components"
 import { useI18nContext } from "~i18n"
 import { ColorThemeType, DiscoveryDApp } from "~Constants"
 import { useBrowserSearch, useThemedStyles } from "~Hooks"
@@ -7,19 +7,14 @@ import { NativeSyntheticEvent, StyleSheet, TextInputChangeEventData } from "reac
 import { useNavigation, useScrollToTop } from "@react-navigation/native"
 import { Routes } from "~Navigation"
 import { DAppList } from "~Screens/Flows/App/DiscoverScreen/Components/DAppList"
-import { DAppTabType } from "~Model"
-import { selectAllDapps, selectCustomDapps, selectFavoritesDapps, selectFeaturedDapps } from "~Storage/Redux"
+import { selectCustomDapps, selectFavoritesDapps, selectFeaturedDapps } from "~Storage/Redux"
+import { createMaterialTopTabNavigator } from "@react-navigation/material-top-tabs"
+import { TabBar } from "./Components/TabBar"
 
-type TabButton = {
-    isActive: boolean
-    title: string
-    onPress: () => void
-}
 export const DiscoverScreen: React.FC = () => {
-    const { styles: themedStyles, theme } = useThemedStyles(baseStyles)
+    const { theme } = useThemedStyles(baseStyles)
     const { LL } = useI18nContext()
     const nav = useNavigation()
-    const [tab, setTab] = React.useState<DAppTabType>("favourites")
     const [filteredSearch, setFilteredSearch] = React.useState<string>()
 
     const flatListRef = useRef(null)
@@ -46,61 +41,41 @@ export const DiscoverScreen: React.FC = () => {
         setFilteredSearch(undefined)
     }, [filteredSearch, navigateToBrowser, setFilteredSearch])
 
-    const tabButtons: TabButton[] = useMemo(() => {
-        return [
-            {
-                isActive: tab === "favourites",
-                title: LL.DISCOVER_TAB_FAVOURITES(),
-                onPress: () => setTab("favourites"),
-            },
-            {
-                isActive: tab === "featured",
-                title: LL.DISCOVER_TAB_FEATURED(),
-                onPress: () => setTab("featured"),
-            },
-            {
-                isActive: tab === "custom",
-                title: LL.DISCOVER_TAB_CUSTOM(),
-                onPress: () => setTab("custom"),
-            },
-            {
-                isActive: tab === "all",
-                title: LL.DISCOVER_TAB_ALL(),
-                onPress: () => setTab("all"),
-            },
-        ]
-    }, [tab, LL, setTab])
+    const Tab = createMaterialTopTabNavigator()
 
-    const renderContent = useCallback(() => {
-        let selector: (...state: any) => DiscoveryDApp[]
-
-        switch (tab) {
-            case "favourites":
-                selector = selectFavoritesDapps
-                break
-            case "featured":
-                selector = selectFeaturedDapps
-                break
-            case "custom":
-                selector = selectCustomDapps
-                break
-            case "all":
-                selector = selectAllDapps
-                break
-            default:
-                return <></>
-        }
-
-        return (
+    const FeaturedScreen = useCallback(
+        () => (
             <DAppList
                 onDAppPress={onDAppPress}
-                setTab={setTab}
                 filteredSearch={filteredSearch}
-                tab={tab}
-                selector={selector}
+                selector={selectFeaturedDapps}
+                setFilteredSearch={setFilteredSearch}
             />
-        )
-    }, [tab, onDAppPress, setTab, filteredSearch])
+        ),
+        [filteredSearch, onDAppPress],
+    )
+    const FavouriteScreen = useCallback(
+        () => (
+            <DAppList
+                onDAppPress={onDAppPress}
+                filteredSearch={filteredSearch}
+                selector={selectFavoritesDapps}
+                setFilteredSearch={setFilteredSearch}
+            />
+        ),
+        [filteredSearch, onDAppPress],
+    )
+    const PersonalScreen = useCallback(
+        () => (
+            <DAppList
+                onDAppPress={onDAppPress}
+                filteredSearch={filteredSearch}
+                selector={selectCustomDapps}
+                setFilteredSearch={setFilteredSearch}
+            />
+        ),
+        [filteredSearch, onDAppPress],
+    )
 
     return (
         <BaseSafeArea>
@@ -119,29 +94,24 @@ export const DiscoverScreen: React.FC = () => {
 
             <BaseSpacer height={16} />
 
-            {/*Tab Bar*/}
-            <BaseView w={100} flexDirection="row" px={24} style={themedStyles.tabBar}>
-                {tabButtons.map((tabButton, index) => {
-                    return (
-                        <BaseView key={index}>
-                            <BaseButton
-                                style={
-                                    tabButton.isActive
-                                        ? themedStyles.selectedTabButton
-                                        : themedStyles.unselectedTabButton
-                                }
-                                action={tabButton.onPress}
-                                title={tabButton.title}
-                            />
-                        </BaseView>
-                    )
-                })}
-            </BaseView>
-
-            <BaseSpacer height={16} />
-
-            {/* Content */}
-            <BaseView style={[themedStyles.list]}>{renderContent()}</BaseView>
+            {/*Tab Navigator*/}
+            <Tab.Navigator tabBar={TabBar}>
+                <Tab.Screen
+                    name={Routes.DISCOVER_FEATURED}
+                    options={{ title: LL.DISCOVER_TAB_FEATURED() }}
+                    component={FeaturedScreen}
+                />
+                <Tab.Screen
+                    name={Routes.DISCOVER_FAVOURITES}
+                    options={{ title: LL.DISCOVER_TAB_FAVOURITES() }}
+                    component={FavouriteScreen}
+                />
+                <Tab.Screen
+                    name={Routes.DISCOVER_PERSONAL}
+                    options={{ title: LL.DISCOVER_TAB_PERSONAL() }}
+                    component={PersonalScreen}
+                />
+            </Tab.Navigator>
         </BaseSafeArea>
     )
 }
@@ -150,9 +120,15 @@ const baseStyles = (theme: ColorThemeType) =>
     StyleSheet.create({
         tabBar: {
             flexDirection: "row",
-            justifyContent: "space-evenly",
             alignItems: "center",
             backgroundColor: theme.colors.background,
+            whiteSpace: "nowrap",
+            overflowX: "auto",
+        },
+        menuItemTick: {
+            height: 2,
+            width: 15,
+            backgroundColor: theme.colors.secondary,
         },
         selectedTabButton: {
             backgroundColor: theme.colors.primary,

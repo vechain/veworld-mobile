@@ -9,6 +9,9 @@ export type RootStackParamListBrowser = {
     [Routes.BROWSER]: {
         initialUrl: string
     }
+    [Routes.DISCOVER_FAVOURITES]: undefined
+    [Routes.DISCOVER_FEATURED]: undefined
+    [Routes.DISCOVER_PERSONAL]: undefined
 }
 
 const { Navigator, Group, Screen } = createNativeStackNavigator<RootStackParamListBrowser>()
