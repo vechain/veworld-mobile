@@ -1,8 +1,8 @@
 /**
  * The beat object received at each wss message from the node
  * @param number - The block number
- * @param hostname - The block hostname
- * @param parentID - The parent block hostname
+ * @param id - The block id
+ * @param parentID - The parent block id
  * @param timestamp - The block timestamp
  * @param gasLimit - The block gas limit
  * @param bloom - The block bloom filter
