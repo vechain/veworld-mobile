@@ -1,13 +1,19 @@
 import React, { useCallback, useRef } from "react"
 import { BaseIcon, BaseSafeArea, BaseSpacer, BaseText, BaseTextInput, BaseView } from "~Components"
 import { useI18nContext } from "~i18n"
-import { ColorThemeType, CompatibleDApp } from "~Constants"
+import { ColorThemeType, DiscoveryDApp } from "~Constants"
 import { useBrowserSearch, useThemedStyles } from "~Hooks"
 import { NativeSyntheticEvent, StyleSheet, TextInputChangeEventData } from "react-native"
 import { useNavigation, useScrollToTop } from "@react-navigation/native"
 import { Routes } from "~Navigation"
 import { DAppList } from "~Screens/Flows/App/DiscoverScreen/Components/DAppList"
-import { selectCustomDapps, selectFavoritesDapps, selectFeaturedDapps } from "~Storage/Redux"
+import {
+    addNavigationToDApp,
+    selectCustomDapps,
+    selectFavoritesDapps,
+    selectFeaturedDapps,
+    useAppDispatch,
+} from "~Storage/Redux"
 import { createMaterialTopTabNavigator } from "@react-navigation/material-top-tabs"
 import { TabBar } from "./Components/TabBar"
 
@@ -22,16 +28,24 @@ export const DiscoverScreen: React.FC = () => {
 
     const { navigateToBrowser } = useBrowserSearch()
 
+    const dispatch = useAppDispatch()
+
     const onTextChange = (e: NativeSyntheticEvent<TextInputChangeEventData>) => {
         setFilteredSearch(e.nativeEvent.text)
     }
 
     const onDAppPress = useCallback(
-        (dapp: CompatibleDApp) => {
+        (dapp: DiscoveryDApp) => {
             nav.navigate(Routes.BROWSER, { initialUrl: dapp.href })
             setFilteredSearch(undefined)
+
+            if (dapp.isCustom) return
+
+            setTimeout(() => {
+                dispatch(addNavigationToDApp({ href: dapp.href, isCustom: dapp.isCustom }))
+            }, 1000)
         },
-        [nav, setFilteredSearch],
+        [dispatch, nav, setFilteredSearch],
     )
 
     const onSearch = useCallback(() => {
@@ -44,15 +58,36 @@ export const DiscoverScreen: React.FC = () => {
     const Tab = createMaterialTopTabNavigator()
 
     const FeaturedScreen = useCallback(
-        () => <DAppList onDAppPress={onDAppPress} filteredSearch={filteredSearch} selector={selectFeaturedDapps} />,
+        () => (
+            <DAppList
+                onDAppPress={onDAppPress}
+                filteredSearch={filteredSearch}
+                selector={selectFeaturedDapps}
+                setFilteredSearch={setFilteredSearch}
+            />
+        ),
         [filteredSearch, onDAppPress],
     )
     const FavouriteScreen = useCallback(
-        () => <DAppList onDAppPress={onDAppPress} filteredSearch={filteredSearch} selector={selectFavoritesDapps} />,
+        () => (
+            <DAppList
+                onDAppPress={onDAppPress}
+                filteredSearch={filteredSearch}
+                selector={selectFavoritesDapps}
+                setFilteredSearch={setFilteredSearch}
+            />
+        ),
         [filteredSearch, onDAppPress],
     )
     const PersonalScreen = useCallback(
-        () => <DAppList onDAppPress={onDAppPress} filteredSearch={filteredSearch} selector={selectCustomDapps} />,
+        () => (
+            <DAppList
+                onDAppPress={onDAppPress}
+                filteredSearch={filteredSearch}
+                selector={selectCustomDapps}
+                setFilteredSearch={setFilteredSearch}
+            />
+        ),
         [filteredSearch, onDAppPress],
     )
 

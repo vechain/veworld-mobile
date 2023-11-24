@@ -2,9 +2,10 @@ import { useI18nContext } from "~i18n"
 import { addBookmark, useAppDispatch } from "~Storage/Redux"
 import { useInAppBrowser } from "~Components/Providers/InAppBrowserProvider"
 import { BaseIcon, BaseSpacer, BaseText, BaseTouchable, BaseView } from "~Components"
-import { COLORS, CompatibleDApp } from "~Constants"
+import { COLORS, DiscoveryDApp } from "~Constants"
 import { StyleSheet } from "react-native"
 import React from "react"
+import { URIUtils } from "~Utils"
 
 type EmptyBookmarksProps = {
     onClose: () => void
@@ -20,13 +21,12 @@ export const EmptyBookmarks = ({ onClose }: EmptyBookmarksProps) => {
 
         const url = new URL(navigationState.url)
 
-        const compatibleDapp: CompatibleDApp = {
-            href: navigationState.url,
+        const compatibleDapp: DiscoveryDApp = {
+            href: URIUtils.clean(navigationState.url),
             name: url.host,
             image: `http://${url.host}/favicon.ico`,
             isCustom: true,
             createAt: new Date().getTime(),
-            id: url.href,
             amountOfNavigations: 1,
         }
 

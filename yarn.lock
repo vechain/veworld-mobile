@@ -3235,7 +3235,7 @@
   resolved "https://registry.yarnpkg.com/@react-navigation/elements/-/elements-1.3.21.tgz#debac6becc6b6692da09ec30e705e476a780dfe1"
   integrity sha512-eyS2C6McNR8ihUoYfc166O1D8VYVh9KIl0UQPI8/ZJVsStlfSTgeEEh+WXge6+7SFPnZ4ewzEJdSAHH+jzcEfg==
 
-"@react-navigation/material-top-tabs@^6.6.4":
+"@react-navigation/material-top-tabs@^6.6.5":
   version "6.6.5"
   resolved "https://registry.yarnpkg.com/@react-navigation/material-top-tabs/-/material-top-tabs-6.6.5.tgz#5cfc33e0d02f2dcd1a0654284704f4eef1d16697"
   integrity sha512-ovKc+ltWYJwu3ju5sw1txBTMemlRM85/JceSrkqU++QnL9l0TAPiPxDlO+wJddR1iwi+P6zj5/+QkXR5Ku+trw==
@@ -3377,9 +3377,9 @@
     localforage "^1.8.1"
 
 "@sentry/react-native@^5.11.0":
-  version "5.14.0"
-  resolved "https://registry.yarnpkg.com/@sentry/react-native/-/react-native-5.14.0.tgz#741dce01ddf4a61558036ee75fec482f316b3774"
-  integrity sha512-QpG3OWQ5eWwFOE5sNtsOkbFaqCBJB7z9W92CxnD08WUwIPtt+5YcHs4aBi3bVqQAhwmC0VMwxCqCAgxt6VNf5Q==
+  version "5.14.1"
+  resolved "https://registry.yarnpkg.com/@sentry/react-native/-/react-native-5.14.1.tgz#a9e5ff933ebd87d6e3a34b0acca1adc9df29aa80"
+  integrity sha512-qeQC72HMFJX7WEDF5rUT/8OZOkx64O6lZZWds8qGuwcDK0FeHBxt4IPJb6YGBTSW20q7mdK/c2hM8Q2ey13h2A==
   dependencies:
     "@sentry/browser" "7.81.1"
     "@sentry/cli" "2.21.3"
@@ -3834,9 +3834,9 @@
   integrity sha512-nG96G3Wp6acyAgJqGasjODb+acrI7KltPiRxzHPXnP3NgI28bpQDRv53olbqGXbfcgF5aiiHmO3xpwEpS5Ld9g==
 
 "@types/node@*":
-  version "20.9.4"
-  resolved "https://registry.yarnpkg.com/@types/node/-/node-20.9.4.tgz#cc8f970e869c26834bdb7ed480b30ede622d74c7"
-  integrity sha512-wmyg8HUhcn6ACjsn8oKYjkN/zUzQeNtMy44weTJSM6p4MMzEOuKbA3OjJ267uPCOW7Xex9dyrNTful8XTQYoDA==
+  version "20.10.0"
+  resolved "https://registry.yarnpkg.com/@types/node/-/node-20.10.0.tgz#16ddf9c0a72b832ec4fcce35b8249cf149214617"
+  integrity sha512-D0WfRmU9TQ8I9PFx9Yc+EBHw+vSpIub4IDvQivcp26PtPrdMGAq5SDcpXEo/epqa/DXotVpekHiLNTg3iaKXBQ==
   dependencies:
     undici-types "~5.26.4"
 
@@ -6876,9 +6876,9 @@ ee-first@1.1.1:
   integrity sha512-WMwm9LhRUo+WUaRN+vRuETqG89IgZphVSNkdFgeb6sS/E4OrDIN7t48CAewSHXc6C8lefD8KKfr5vY61brQlow==
 
 electron-to-chromium@^1.4.535:
-  version "1.4.592"
-  resolved "https://registry.yarnpkg.com/electron-to-chromium/-/electron-to-chromium-1.4.592.tgz#1ffd49ba3da3da3077ea20014b066c910d50c913"
-  integrity sha512-D3NOkROIlF+d5ixnz7pAf3Lu/AuWpd6AYgI9O67GQXMXTcCP1gJQRotOq35eQy5Sb4hez33XH1YdTtILA7Udww==
+  version "1.4.593"
+  resolved "https://registry.yarnpkg.com/electron-to-chromium/-/electron-to-chromium-1.4.593.tgz#f71b157f7382f3d3a164f73ff2da772d4b3fd984"
+  integrity sha512-c7+Hhj87zWmdpmjDONbvNKNo24tvmD4mjal1+qqTYTrlF0/sNpAcDlU0Ki84ftA/5yj3BF2QhSGEC0Rky6larg==
 
 elliptic@6.5.4, elliptic@^6.5.3, elliptic@^6.5.4:
   version "6.5.4"
@@ -12603,9 +12603,9 @@ react-native-flipper@0.163.0:
   integrity sha512-RG0yMlEMe/fYqaoUkhvW2HrqBuRYtq1K3me9y52RBFwPWooZTmUlWjIWGKT9VYVS9T2GGrUV9tpBA8pY9g7CSg==
 
 react-native-gesture-handler@^2.13.1:
-  version "2.13.4"
-  resolved "https://registry.yarnpkg.com/react-native-gesture-handler/-/react-native-gesture-handler-2.13.4.tgz#6a99384330278c4488bcfc7f1814be3e0d7401fd"
-  integrity sha512-smpYOVbvWABpq2H+lmDnfOLCTH934aUPO1w2/pQXvm1j+M/vmGQmvgRDJOpXcks17HLtNNKXD6tcODf3aPqDfA==
+  version "2.14.0"
+  resolved "https://registry.yarnpkg.com/react-native-gesture-handler/-/react-native-gesture-handler-2.14.0.tgz#d6aec0d8b2e55c67557fd6107e828c0a1a248be8"
+  integrity sha512-cOmdaqbpzjWrOLUpX3hdSjsMby5wq3PIEdMq7okJeg9DmCzanysHSrktw1cXWNc/B5MAgxAn9J7Km0/4UIqKAQ==
   dependencies:
     "@egjs/hammerjs" "^2.0.17"
     hoist-non-react-statics "^3.3.0"

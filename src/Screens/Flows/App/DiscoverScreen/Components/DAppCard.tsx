@@ -1,7 +1,7 @@
 import React, { memo, useMemo } from "react"
 import { Image, StyleProp, StyleSheet, ViewStyle } from "react-native"
 import { useThemedStyles } from "~Hooks"
-import { ColorThemeType, CompatibleDApp } from "~Constants"
+import { DiscoveryDApp } from "~Constants"
 import { BaseIcon, BaseSpacer, BaseText, BaseTouchableBox, BaseView } from "~Components"
 import {
     addBookmark,
@@ -13,8 +13,8 @@ import {
 } from "~Storage/Redux"
 
 type Props = {
-    dapp: CompatibleDApp
-    onPress: (dapp: CompatibleDApp) => void
+    dapp: DiscoveryDApp
+    onPress: (dapp: DiscoveryDApp) => void
     containerStyle?: StyleProp<ViewStyle>
 }
 
@@ -44,12 +44,17 @@ export const DAppCard: React.FC<Props> = memo(({ onPress, dapp, containerStyle }
                 action={() => onPress(dapp)}
                 justifyContent="space-between"
                 containerStyle={styles.container}>
-                <BaseView flexDirection="row" flex={1} pr={10}>
-                    <DAppIcon imageSource={dapp.image} size={50} />
+                <BaseView flexDirection="row" style={styles.card} flex={1} pr={10}>
+                    {dapp.image && <DAppIcon imageSource={dapp.image} size={40} />}
+
                     <BaseSpacer width={12} />
                     <BaseView flex={1}>
-                        <BaseText ellipsizeMode="tail" numberOfLines={1}>
+                        <BaseText ellipsizeMode="tail" numberOfLines={1} style={styles.nameText}>
                             {dapp.name}
+                        </BaseText>
+                        <BaseSpacer height={4} />
+                        <BaseText ellipsizeMode="tail" numberOfLines={2} style={styles.description}>
+                            {dapp.desc ? dapp.desc : dapp.href}
                         </BaseText>
                     </BaseView>
                 </BaseView>
@@ -65,40 +70,38 @@ export const DAppCard: React.FC<Props> = memo(({ onPress, dapp, containerStyle }
     )
 })
 
-const baseStyles = (theme: ColorThemeType) =>
+const baseStyles = () =>
     StyleSheet.create({
-        wallet: {
-            opacity: 0.7,
-        },
-        address: {
-            opacity: 0.7,
-        },
         container: {
             flex: 1,
         },
-        selectedContainer: {
-            borderWidth: 1,
-            borderRadius: 16,
-            borderColor: theme.colors.text,
+        card: {
+            height: 60,
         },
-        rightSubContainer: {
-            flexDirection: "column",
-            alignItems: "flex-end",
+        nameText: {
+            fontWeight: "bold",
+            fontSize: 16,
         },
-        eyeIcon: { marginLeft: 16, flex: 0.1 },
+        description: {
+            fontSize: 12,
+            color: "gray",
+        },
     })
 
 type IconProps = {
-    imageSource: object | string
-    size?: number
+    imageSource: object
+    size: number
 }
 
 const DAppIcon: React.FC<IconProps> = memo(({ imageSource, size }: IconProps) => {
     return (
         <BaseView>
             <Image
-                source={typeof imageSource === "string" ? { uri: imageSource } : imageSource}
-                style={{ height: size, width: size }}
+                source={imageSource}
+                style={{
+                    height: size,
+                    width: size,
+                }}
             />
         </BaseView>
     )

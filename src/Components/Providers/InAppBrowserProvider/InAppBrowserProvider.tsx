@@ -159,7 +159,6 @@ export const InAppBrowserProvider = ({ children }: Props) => {
     }, [navigateToUrl])
 
     const resetWebViewState = useCallback(() => {
-        warn("resetting webview state")
         setNavigationState(undefined)
         webviewRef.current = undefined
     }, [])

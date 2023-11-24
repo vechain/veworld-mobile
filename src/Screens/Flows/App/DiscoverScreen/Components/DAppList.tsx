@@ -1,5 +1,5 @@
 import React, { useCallback, useRef } from "react"
-import { CompatibleDApp } from "~Constants"
+import { DiscoveryDApp } from "~Constants"
 import { FlatList } from "react-native-gesture-handler"
 import { DAppCard } from "~Screens/Flows/App/DiscoverScreen/Components/DAppCard"
 import { useNavigation, useRoute, useScrollToTop } from "@react-navigation/native"
@@ -8,16 +8,10 @@ import { BaseSpacer } from "~Components"
 import { EmptyResults } from "./EmptyResults"
 import { useI18nContext } from "~i18n"
 import { useBrowserSearch } from "~Hooks"
-import {
-    selectAllDapps,
-    selectCustomDapps,
-    selectFavoritesDapps,
-    selectFeaturedDapps,
-    useAppSelector,
-} from "~Storage/Redux"
+import { useAppSelector } from "~Storage/Redux"
 import { Routes } from "~Navigation"
 
-const filterDapps = (dapps: CompatibleDApp[], searchText: string) => {
+const filterDapps = (dapps: DiscoveryDApp[], searchText: string) => {
     return dapps.filter(dapp => {
         return (
             dapp.name.toLowerCase().includes(searchText.toLowerCase()) ||
@@ -27,16 +21,13 @@ const filterDapps = (dapps: CompatibleDApp[], searchText: string) => {
 }
 
 type Props = {
-    onDAppPress: (dapp: CompatibleDApp) => void
+    onDAppPress: (dapp: DiscoveryDApp) => void
     filteredSearch?: string
-    selector:
-        | typeof selectFavoritesDapps
-        | typeof selectFeaturedDapps
-        | typeof selectCustomDapps
-        | typeof selectAllDapps
+    selector: (...state: any) => DiscoveryDApp[]
+    setFilteredSearch: (search: string | undefined) => void
 }
 
-export const DAppList: React.FC<Props> = ({ onDAppPress, filteredSearch, selector }: Props) => {
+export const DAppList: React.FC<Props> = ({ onDAppPress, filteredSearch, selector, setFilteredSearch }: Props) => {
     const { LL } = useI18nContext()
     const flatListRef = useRef(null)
     useScrollToTop(flatListRef)
@@ -48,19 +39,26 @@ export const DAppList: React.FC<Props> = ({ onDAppPress, filteredSearch, selecto
     const { navigateToBrowser } = useBrowserSearch()
 
     const renderItem = useCallback(
-        ({ item }: { item: CompatibleDApp }) => {
+        ({ item }: { item: DiscoveryDApp }) => {
             return <DAppCard dapp={item} onPress={onDAppPress} />
         },
         [onDAppPress],
     )
 
-    const dapps: CompatibleDApp[] = useAppSelector(selector)
+    const dapps: DiscoveryDApp[] = useAppSelector(selector)
 
     const filteredDapps = React.useMemo(() => {
         if (!filteredSearch) return dapps
 
         return filterDapps(dapps, filteredSearch)
     }, [dapps, filteredSearch])
+
+    const navigateToSearch = useCallback(() => {
+        if (!filteredSearch) return
+
+        navigateToBrowser(filteredSearch)
+        setFilteredSearch(undefined)
+    }, [filteredSearch, navigateToBrowser, setFilteredSearch])
 
     const renderSeparator = useCallback(() => <BaseSpacer height={16} />, [])
 
@@ -70,10 +68,10 @@ export const DAppList: React.FC<Props> = ({ onDAppPress, filteredSearch, selecto
                 {/*TODO remove spacer and put the below in the middle*/}
                 <BaseSpacer height={40} />
                 <EmptyResults
-                    onClick={() => navigateToBrowser(filteredSearch)}
+                    onClick={navigateToSearch}
                     title={LL.DISCOVER_SEARCH()}
                     subtitle={LL.DISCOVER_EMPTY_SEARCH()}
-                    icon={"search"}
+                    icon={"search-web"}
                 />
             </>
         )
@@ -114,7 +112,7 @@ export const DAppList: React.FC<Props> = ({ onDAppPress, filteredSearch, selecto
             contentContainerStyle={styles.container}
             ItemSeparatorComponent={renderSeparator}
             scrollEnabled={true}
-            keyExtractor={item => item.id}
+            keyExtractor={item => item.href}
             showsVerticalScrollIndicator={false}
             showsHorizontalScrollIndicator={false}
             renderItem={renderItem}

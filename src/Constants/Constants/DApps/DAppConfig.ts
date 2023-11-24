@@ -1,6 +1,6 @@
 /* eslint-disable max-len*/
 
-export type CompatibleDApp = {
+export type DiscoveryDApp = {
     name: string
     href: string
     desc?: string
@@ -8,22 +8,22 @@ export type CompatibleDApp = {
     tags?: string[]
     contracts?: string[]
     repo?: string
-    id: string
     createAt: number
-    image: object | string
+    image?: object
     isCustom: boolean
     amountOfNavigations: number
 }
 
-const CompatibleDApps: CompatibleDApp[] = [
+// hostname should be the URL hostname of the dapp
+
+const DAppConfig: DiscoveryDApp[] = [
     {
         name: "vechain Rewards dApp",
-        href: "https://app.rewards.vechain.org",
+        href: "https://app.rewards.vechain.org/dashboard",
         desc: "Explore the Official vechain Rewards dApp - Your solution to effortlessly manage x-nodes, claim rewards and track your reward history. Get started now!",
         category: "defi",
         tags: ["nft", "vip181", "rewards", "staking", "x-nodes", "defi"],
         contracts: ["0xb81e9c5f9644dec9e5e3cac86b4461a222072302"],
-        id: "org.vechain.rewards.app",
         createAt: 1694444477000,
         image: require("./images/org.vechain.rewards.app.png"),
         isCustom: false,
@@ -35,7 +35,6 @@ const CompatibleDApps: CompatibleDApp[] = [
         desc: "The first gas-free, green NFT platform built on the VeChain blockchain",
         category: "marketplaces",
         tags: ["WOV", "World Of V NFTs'", "NFTs", "Digital Art", "Phygital", "Artists"],
-        id: "com.worldofv.marketplace-nft",
         createAt: 1637639264000,
         image: require("./images/com.worldofv.marketplace-nft.png"),
         isCustom: false,
@@ -47,7 +46,6 @@ const CompatibleDApps: CompatibleDApp[] = [
         desc: "A peer-to-peer marketplace for NFTs, rare digital items and crypto collectibles on the VeChain blockchain.",
         category: "marketplaces",
         tags: ["nft", "vekings", "vesea", "market", "buy", "sell", "bid", "trade", "marketplace"],
-        id: "io.vesea",
         createAt: 1633530911000,
         image: require("./images/io.vesea.png"),
         isCustom: false,
@@ -59,7 +57,6 @@ const CompatibleDApps: CompatibleDApp[] = [
         desc: "Simplify and streamline your blockchain development with our platform. No more web3 or gas fees, access blockchains as easily as a regular backend. Complex transactions made easy through our sponsorship services, improve your application today.",
         category: "utilities",
         tags: ["developer", "vtho", "api"],
-        id: "energy.vechain",
         createAt: 1611544407000,
         image: require("./images/energy.vechain.png"),
         isCustom: false,
@@ -71,7 +68,6 @@ const CompatibleDApps: CompatibleDApp[] = [
         desc: "Buy VET using Fiat from many different currencies. Also available as dApp implementation.",
         category: "defi",
         tags: ["vet", "fiat", "ramp", "developer"],
-        id: "energy.vechain.ramp",
         createAt: 1691736378000,
         image: require("./images/energy.vechain.ramp.png"),
         isCustom: false,
@@ -83,7 +79,6 @@ const CompatibleDApps: CompatibleDApp[] = [
         desc: "Swap Tokens from other Networks to Vechain. Also available as dApp implementation.",
         category: "defi",
         tags: ["vet", "swap", "exchange", "developer", "vtho"],
-        id: "energy.vechain.swap",
         createAt: 1690983864000,
         image: require("./images/energy.vechain.swap.png"),
         isCustom: false,
@@ -95,7 +90,6 @@ const CompatibleDApps: CompatibleDApp[] = [
         desc: "The markeplace for trading NFTs and crypto collections built on the VeChain blockchain and powered by OceanEx.",
         category: "marketplaces",
         tags: ["NFT", "OceanEx", "vip181"],
-        id: "pro.oceanex.nft",
         createAt: 1670903394000,
         image: require("./images/pro.oceanex.nft.png"),
         isCustom: false,
@@ -109,7 +103,6 @@ const CompatibleDApps: CompatibleDApp[] = [
         tags: ["voting"],
         repo: "https://github.com/vechain/vevote-contracts",
         contracts: ["0xa6416a72f816d3a69f33d0814700545c8e3fe4be", "0x7e54f0790153647ec0651c35ced28171adb5d44a"],
-        id: "com.vechain.vevote",
         createAt: 1575613895000,
         image: require("./images/com.vechain.vevote.png"),
         isCustom: false,
@@ -121,7 +114,6 @@ const CompatibleDApps: CompatibleDApp[] = [
         desc: "Automatically Swap generated VTHO into other Tokens.",
         category: "defi",
         tags: ["vet", "vtho", "swap", "exchange", "vtho"],
-        id: "exchange.vtho",
         createAt: 1695719391000,
         image: require("./images/exchange.vtho.png"),
         isCustom: false,
@@ -133,7 +125,6 @@ const CompatibleDApps: CompatibleDApp[] = [
         desc: "Transfer any of the VIP-180 tokens in the vechain ecosystem!",
         category: "utilities",
         tags: ["transfer", "tokens", "tool", "utility"],
-        id: "app.vercel.vet-token-transfer",
         createAt: 1684139476000,
         image: require("./images/app.vercel.vet-token-transfer.png"),
         isCustom: false,
@@ -145,7 +136,6 @@ const CompatibleDApps: CompatibleDApp[] = [
         desc: "Non FungiBulls is a collection of 1,450 NFTs on the VechainThor blockchain. It is a community based utility collection and a support token for our main project, Non Fungible News.",
         category: "collectibles",
         tags: ["NFT", "non fungibulls", "Collectibles", "VNFT", "Non Fungible News"],
-        id: "com.non-fungibulls",
         createAt: 1675842196000,
         image: require("./images/com.non-fungibulls.png"),
         isCustom: false,
@@ -157,7 +147,6 @@ const CompatibleDApps: CompatibleDApp[] = [
         desc: "A fun, safe private members club built on VeChain for sports betting enthusiasts!",
         category: "games",
         tags: ["NFT", "Bets", "Sports", "VIP-181", "Collectibles", "Gambling"],
-        id: "com.defibetclub",
         createAt: 1675318630000,
         image: require("./images/com.defibetclub.png"),
         isCustom: false,
@@ -169,7 +158,6 @@ const CompatibleDApps: CompatibleDApp[] = [
         desc: "3DAbles is a collection of user generated artwork spanning the entire VeChainThor ecosystem and is a product of the Smuzzies development team.",
         category: "collectibles",
         tags: ["Smuzzies", "VIP-181", "Collectibles", "VNFT", "NFT"],
-        id: "com.smuzzies.3dables",
         createAt: 1668394330000,
         image: require("./images/com.smuzzies.3dables.png"),
         isCustom: false,
@@ -177,7 +165,7 @@ const CompatibleDApps: CompatibleDApp[] = [
     },
     {
         name: "VeFam",
-        href: "https://vefam.com/#/?network=vechain&from=apphub",
+        href: "https://vefam.com/#/home",
         desc: "VeFam distributes and incubates NFT games, GameFi projects, including unique NFT collections and highly entertaining games.",
         category: "games",
         tags: [
@@ -194,7 +182,6 @@ const CompatibleDApps: CompatibleDApp[] = [
             "VIP-181",
             "VIP-210",
         ],
-        id: "com.vefam",
         createAt: 1666668513000,
         image: require("./images/com.vefam.png"),
         isCustom: false,
@@ -206,7 +193,6 @@ const CompatibleDApps: CompatibleDApp[] = [
         desc: "Fast token swap service built for VeChain (formerly ZumoSwap)",
         category: "defi",
         tags: ["tool", "tokens", "VIP-180"],
-        id: "com.verocket.app",
         createAt: 1644245405000,
         image: require("./images/com.verocket.app.png"),
         isCustom: false,
@@ -218,7 +204,6 @@ const CompatibleDApps: CompatibleDApp[] = [
         desc: "Discover Limitless NFT Experiences with BlackVeMarket: Where the VeFam Unites! Join our Vibrant Community and Explore the Boundless World of Digital Collectibles, Trading, and Creativity. Embrace the Future of NFTs and Unleash Your Imagination with BlackVeMarket!",
         category: "marketplaces",
         tags: ["NFT", "Marketplace", "VIP-181", "Collectibles", "VNFT", "BlackVe"],
-        id: "com.blackvemarket",
         createAt: 1641010398000,
         image: require("./images/com.blackvemarket.png"),
         isCustom: false,
@@ -227,12 +212,11 @@ const CompatibleDApps: CompatibleDApp[] = [
 
     {
         name: "Inspector",
-        href: "https://inspector.vecha.in",
+        href: "https://inspector.vecha.in/#/contracts",
         desc: "A tool that allows you to deploy and interact with the contract",
         category: "utilities",
         tags: ["contract", "deploy", "tool"],
         repo: "https://github.com/vechain/inspector-app",
-        id: "com.vechain.inspector",
         createAt: 1552446522000,
         image: require("./images/com.vechain.inspector.png"),
         isCustom: false,
@@ -240,4 +224,4 @@ const CompatibleDApps: CompatibleDApp[] = [
     },
 ]
 
-export { CompatibleDApps }
+export { DAppConfig }
