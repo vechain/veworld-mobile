@@ -1,7 +1,7 @@
 import React, { memo, useMemo } from "react"
-import { Image, ImageSourcePropType, StyleProp, StyleSheet, ViewStyle } from "react-native"
+import { Image, StyleProp, StyleSheet, ViewStyle } from "react-native"
 import { useThemedStyles } from "~Hooks"
-import { ColorThemeType, DiscoveryDApp } from "~Constants"
+import { DiscoveryDApp } from "~Constants"
 import { BaseIcon, BaseSpacer, BaseText, BaseTouchableBox, BaseView } from "~Components"
 import {
     addBookmark,
@@ -44,14 +44,16 @@ export const DAppCard: React.FC<Props> = memo(({ onPress, dapp, containerStyle }
                 action={() => onPress(dapp)}
                 justifyContent="space-between"
                 containerStyle={styles.container}>
-                <BaseView flexDirection="row" flex={1} pr={10}>
-                    <DAppIcon imageSource={dapp.image} href={dapp.href} />
+                <BaseView flexDirection="row" style={styles.card} flex={1} pr={10}>
+                    {dapp.image && <DAppIcon imageSource={dapp.image} size={40} />}
+
                     <BaseSpacer width={12} />
                     <BaseView flex={1}>
-                        <BaseText ellipsizeMode="tail" numberOfLines={1}>
+                        <BaseText ellipsizeMode="tail" numberOfLines={1} style={styles.nameText}>
                             {dapp.name}
                         </BaseText>
-                        <BaseText ellipsizeMode="tail" numberOfLines={1}>
+                        <BaseSpacer height={4} />
+                        <BaseText ellipsizeMode="tail" numberOfLines={2} style={styles.description}>
                             {dapp.desc ? dapp.desc : dapp.href}
                         </BaseText>
                     </BaseView>
@@ -68,67 +70,39 @@ export const DAppCard: React.FC<Props> = memo(({ onPress, dapp, containerStyle }
     )
 })
 
-const baseStyles = (theme: ColorThemeType) =>
+const baseStyles = () =>
     StyleSheet.create({
-        wallet: {
-            opacity: 0.7,
-        },
-        address: {
-            opacity: 0.7,
-        },
         container: {
             flex: 1,
         },
-        selectedContainer: {
-            borderWidth: 1,
-            borderRadius: 16,
-            borderColor: theme.colors.text,
+        card: {
+            height: 60,
         },
-        rightSubContainer: {
-            flexDirection: "column",
-            alignItems: "flex-end",
+        nameText: {
+            fontWeight: "bold",
+            fontSize: 16,
         },
-        eyeIcon: { marginLeft: 16, flex: 0.1 },
+        description: {
+            fontSize: 12,
+            color: "gray",
+        },
     })
 
 type IconProps = {
-    imageSource?: object
-    href: string
+    imageSource: object
+    size: number
 }
 
-const DAppIcon: React.FC<IconProps> = memo(({ imageSource, href }: IconProps) => {
-    const source: ImageSourcePropType = useMemo(() => {
-        if (imageSource) return imageSource
-
-        try {
-            const url = new URL(href)
-
-            return {
-                uri: `https://www.google.com/s2/favicons?domain_url=${encodeURIComponent("https://" + url.hostname)}`,
-            }
-        } catch {
-            return {
-                uri: "",
-            }
-        }
-    }, [imageSource, href])
-
-    const imageStyle = useMemo(() => {
-        if (imageSource)
-            return {
-                height: 50,
-                width: 50,
-            }
-
-        return {
-            height: 16,
-            width: 16,
-        }
-    }, [imageSource])
-
+const DAppIcon: React.FC<IconProps> = memo(({ imageSource, size }: IconProps) => {
     return (
         <BaseView>
-            <Image source={source} style={imageStyle} />
+            <Image
+                source={imageSource}
+                style={{
+                    height: size,
+                    width: size,
+                }}
+            />
         </BaseView>
     )
 })

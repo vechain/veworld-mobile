@@ -3,30 +3,15 @@ import { StyleSheet, View } from "react-native"
 import React, { MutableRefObject, useEffect } from "react"
 import WebView from "react-native-webview"
 import { useInAppBrowser } from "~Components/Providers/InAppBrowserProvider"
-import { URLInput } from "./Components"
-import { BrowserBottomBar } from "~Screens/Flows/App/InAppBrowser/Components/BrowserBottomBar"
+import { BrowserBottomBar, URLInput } from "./Components"
 import { NativeStackScreenProps } from "@react-navigation/native-stack"
-import { RootStackParamListBrowser, Routes } from "~Navigation"
+import { RootStackParamListSwitch, Routes } from "~Navigation"
 
-type Props = NativeStackScreenProps<RootStackParamListBrowser, Routes.BROWSER>
+type Props = NativeStackScreenProps<RootStackParamListSwitch, Routes.BROWSER>
 
 export const InAppBrowser: React.FC<Props> = ({ route }) => {
-    const {
-        webviewRef,
-        onMessage,
-        injectVechainScript,
-        onNavigationStateChange,
-        navigationState,
-        navigateToUrl,
-        resetWebViewState,
-    } = useInAppBrowser()
-
-    useEffect(() => {
-        if (webviewRef.current) {
-            navigateToUrl(route.params.initialUrl)
-        }
-        // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [])
+    const { webviewRef, onMessage, injectVechainScript, onNavigationStateChange, navigationState, resetWebViewState } =
+        useInAppBrowser()
 
     useEffect(() => {
         // set the webview ref to undefined when the component unmounts

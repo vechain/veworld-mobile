@@ -41,6 +41,8 @@ type Props = NativeStackScreenProps<RootStackParamListSwitch, Routes.CONNECT_APP
 export const ConnectAppScreen: FC<Props> = ({ route }: Props) => {
     const currentProposal = route.params.sessionProposal
 
+    const hasNavigatedBack = React.useRef(false)
+
     const { onSetSelectedAccount } = useSetSelectedAccount()
 
     const { approvePendingProposal, rejectPendingProposal, activeSessions } = useWalletConnect()
@@ -54,7 +56,9 @@ export const ConnectAppScreen: FC<Props> = ({ route }: Props) => {
     const networks = useAppSelector(selectNetworks)
 
     const navBack = useCallback(() => {
-        error(nav.getState())
+        if (hasNavigatedBack.current) return
+
+        hasNavigatedBack.current = true
         if (nav.canGoBack()) {
             nav.goBack()
         } else {

@@ -1,7 +1,7 @@
 import React, { useCallback, useEffect, useState } from "react"
 import { useInAppBrowser } from "~Components/Providers/InAppBrowserProvider"
 import { BaseTextInput, BaseView } from "~Components"
-import { URIUtils, warn } from "~Utils"
+import { URIUtils } from "~Utils"
 import { StyleSheet, TextInputProps } from "react-native"
 
 export const URLInput = () => {
@@ -30,7 +30,6 @@ export const URLInput = () => {
         if (isValid) {
             navigateToUrl(input)
         } else {
-            warn("URLInput", "onBlur", "invalid url", input)
             //navigate to google search - input should be encoded
             navigateToUrl(
                 `https://www.google.com/search?q=${encodeURIComponent(input)}&oq=${encodeURIComponent(input)}`,
