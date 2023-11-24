@@ -22,7 +22,7 @@ export const EmptyResults = ({ onClick, title, subtitle, icon }: EmptyResultsPro
                         alignItems="center"
                         borderRadius={16}
                         style={styles.icon}>
-                        <BaseIcon name={icon} size={55} />
+                        <BaseIcon name={icon} size={45} />
                         <BaseText color={COLORS.DARK_PURPLE} typographyFont="bodyMedium">
                             {title}
                         </BaseText>
@@ -39,7 +39,7 @@ export const EmptyResults = ({ onClick, title, subtitle, icon }: EmptyResultsPro
 
 const styles = StyleSheet.create({
     icon: {
-        width: 140,
+        width: 200,
         height: 100,
     },
 })

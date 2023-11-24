@@ -1721,15 +1721,11 @@ type RootTranslation = {
 	 */
 	DISCOVER_TAB_FEATURED: string
 	/**
-	 * C​u​s​t​o​m
+	 * P​e​r​s​o​n​a​l
 	 */
-	DISCOVER_TAB_CUSTOM: string
+	DISCOVER_TAB_PERSONAL: string
 	/**
-	 * A​l​l
-	 */
-	DISCOVER_TAB_ALL: string
-	/**
-	 * N​o​ ​a​p​p​s​ ​f​o​u​n​d
+	 * N​o​ ​D​a​p​p​ ​f​o​u​n​d
 	 */
 	DISCOVER_NO_DAPPS_FOUND: string
 	/**
@@ -1741,11 +1737,11 @@ type RootTranslation = {
 	 */
 	DISCOVER_EMPTY_FAVOURITES_SUBTITLE: string
 	/**
-	 * N​o​ ​c​u​s​t​o​m​ ​a​p​p​s​ ​a​d​d​e​d
+	 * N​o​ ​p​e​r​s​o​n​a​l​ ​D​a​p​p​ ​a​d​d​e​d
 	 */
 	DISCOVER_EMPTY_CUSTOM_NODES: string
 	/**
-	 * Y​o​u​ ​c​a​n​ ​a​d​d​ ​y​o​u​r​ ​c​u​s​t​o​m​ ​a​p​p​s​ ​b​y​ ​b​o​o​k​m​a​r​k​i​n​g​ ​t​h​e​m​ ​i​n​ ​t​h​e​ ​b​r​o​w​s​e​r
+	 * Y​o​u​ ​c​a​n​ ​a​d​d​ ​y​o​u​r​ ​p​e​r​s​o​n​a​l​ ​D​a​p​p​s​ ​b​y​ ​b​o​o​k​m​a​r​k​i​n​g​ ​t​h​e​m​ ​i​n​ ​t​h​e​ ​b​r​o​w​s​e​r
 	 */
 	DISCOVER_EMPTY_CUSTOM_NODES_SUBTITLE: string
 	/**
@@ -4442,15 +4438,11 @@ Try reconnect your device to the internet.
 	 */
 	DISCOVER_TAB_FEATURED: () => LocalizedString
 	/**
-	 * Custom
+	 * Personal
 	 */
-	DISCOVER_TAB_CUSTOM: () => LocalizedString
+	DISCOVER_TAB_PERSONAL: () => LocalizedString
 	/**
-	 * All
-	 */
-	DISCOVER_TAB_ALL: () => LocalizedString
-	/**
-	 * No apps found
+	 * No Dapp found
 	 */
 	DISCOVER_NO_DAPPS_FOUND: () => LocalizedString
 	/**
@@ -4462,11 +4454,11 @@ Try reconnect your device to the internet.
 	 */
 	DISCOVER_EMPTY_FAVOURITES_SUBTITLE: () => LocalizedString
 	/**
-	 * No custom apps added
+	 * No personal Dapp added
 	 */
 	DISCOVER_EMPTY_CUSTOM_NODES: () => LocalizedString
 	/**
-	 * You can add your custom apps by bookmarking them in the browser
+	 * You can add your personal Dapps by bookmarking them in the browser
 	 */
 	DISCOVER_EMPTY_CUSTOM_NODES_SUBTITLE: () => LocalizedString
 	/**
