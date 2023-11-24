@@ -5,8 +5,8 @@ import {
     BaseText,
     BaseView,
     Layout,
-    WalletEncryptionKeyHelper,
     useApplicationSecurity,
+    WalletEncryptionKeyHelper,
 } from "~Components"
 import { useNavigation } from "@react-navigation/native"
 import { Routes } from "~Navigation"
@@ -63,7 +63,7 @@ export const WelcomeScreen = () => {
             fixedBody={
                 <BaseView alignItems="center" flex={1} mx={24}>
                     <BaseView flexDirection="row" mt={20}>
-                        <BaseText typographyFont="largeTitle" testID="welcome-title-hostname">
+                        <BaseText typographyFont="largeTitle" testID="welcome-title-id">
                             {LL.TITLE_WELCOME_TO()}
                         </BaseText>
                         <BaseText typographyFont="largeTitle">{LL.VEWORLD()}</BaseText>

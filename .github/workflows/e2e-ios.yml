@@ -6,139 +6,139 @@ on:
     # Runs at 00:00 UTC every Monday to Friday
     - cron: '0 0 * * 1-5'
   release:
-    types: [published] # run on release published events
+    types: [ published ] # run on release published events
 
 jobs:
-    build-e2e-test-ios:
-        name: Detox Build & Test iOS Debug
-        runs-on: macos-latest-xl
+  build-e2e-test-ios:
+    name: Detox Build & Test iOS Debug
+    runs-on: macos-latest-xl
 
-        # Proceed only if it's either not a release event or it's a pre-release.
-        if: ${{ github.event_name != 'release' || (github.event_name == 'release' && github.event.release.prerelease) }}
+    # Proceed only if it's either not a release event or it's a pre-release.
+    if: ${{ github.event_name != 'release' || (github.event_name == 'release' && github.event.release.prerelease) }}
 
-        steps:
-            - name: Checkout repository
-              uses: actions/checkout@v3
-              with:
-                # If it's a pre-release, check out the tag corresponding to the pre-release; otherwise, use the main branch.
-                ref: ${{ github.event_name == 'release' && github.event.release.prerelease && github.event.release.tag_name || 'main' }}
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v3
+        with:
+          # If it's a pre-release, check out the tag corresponding to the pre-release; otherwise, use the main branch.
+          ref: ${{ github.event_name == 'release' && github.event.release.prerelease && github.event.release.tag_name || 'main' }}
 
 
-            # Install Homebrew and applesimutils for Detox
-            - name: Install macOS dependencies
-              run: |
-                  brew tap wix/brew
-                  brew install applesimutils
-              env:
-                  HOMEBREW_NO_AUTO_UPDATE: 1
-                  HOMEBREW_NO_INSTALL_CLEANUP: 1
+      # Install Homebrew and applesimutils for Detox
+      - name: Install macOS dependencies
+        run: |
+          brew tap wix/brew
+          brew install applesimutils
+        env:
+          HOMEBREW_NO_AUTO_UPDATE: 1
+          HOMEBREW_NO_INSTALL_CLEANUP: 1
 
-            # Setup Ruby
-            - name: Setup Ruby
-              uses: ruby/setup-ruby@v1
-              with:
-                  bundler-cache: true
+      # Setup Ruby
+      - name: Setup Ruby
+        uses: ruby/setup-ruby@v1
+        with:
+          bundler-cache: true
 
-            # Setup Node.js
-            - name: Setup Node
-              uses: actions/setup-node@v3
-              with:
-                  node-version-file: .nvmrc
-                  cache: "yarn"
+      # Setup Node.js
+      - name: Setup Node
+        uses: actions/setup-node@v3
+        with:
+          node-version-file: .nvmrc
+          cache: "yarn"
 
-            # install dependencies with yarn
-            - name: Install & Patch packages
-              run: yarn install --frozen-lockfile --network-timeout 300000
+      # install dependencies with yarn
+      - name: Install & Patch packages
+        run: yarn install --frozen-lockfile --network-timeout 300000
 
-            # Restore Pods cache
-            #- name: Restore Pods cache
-            #  uses: actions/cache/restore@v3
-            #  hostname: pods-cache-restore
-            #  with:
-            #      path: ios/Pods
-            #      key: ${{ runner.os }}-pods-${{ hashFiles('ios/Podfile.lock') }}
+      # Restore Pods cache
+      #- name: Restore Pods cache
+      #  uses: actions/cache/restore@v3
+      #  id: pods-cache-restore
+      #  with:
+      #      path: ios/Pods
+      #      key: ${{ runner.os }}-pods-${{ hashFiles('ios/Podfile.lock') }}
 
-            # Install CocoaPods
-            - name: Install CocoaPods
-              if: steps.pods-cache-restore.outputs.cache-hit != 'true'
-              run: npx pod-install
+      # Install CocoaPods
+      - name: Install CocoaPods
+        if: steps.pods-cache-restore.outputs.cache-hit != 'true'
+        run: npx pod-install
 
-            # Save Pods cache
-            #- name: Save Pods cache
-            #  uses: actions/cache/save@v3
-            #  hostname: pods-cache
-            #  if: always()
-            #  with:
-            #      path: ios/Pods
-            #      key: ${{ runner.os }}-pods-${{ hashFiles('ios/Podfile.lock') }}
+      # Save Pods cache
+      #- name: Save Pods cache
+      #  uses: actions/cache/save@v3
+      #  id: pods-cache
+      #  if: always()
+      #  with:
+      #      path: ios/Pods
+      #      key: ${{ runner.os }}-pods-${{ hashFiles('ios/Podfile.lock') }}
 
-            # Install Detox CLI
-            - name: Rebuild Detox Framework
-              run: yarn detox clean-framework-cache && yarn detox build-framework-cache
+      # Install Detox CLI
+      - name: Rebuild Detox Framework
+        run: yarn detox clean-framework-cache && yarn detox build-framework-cache
 
-            # Start Metro Bundler
-            - name: Start Metro Bundler
-              run: REACT_APP_UI_LOG=false yarn react-native start &> metro-bundler.log &
+      # Start Metro Bundler
+      - name: Start Metro Bundler
+        run: REACT_APP_UI_LOG=false yarn react-native start &> metro-bundler.log &
 
-            # Restore Detox build cache
-            # - name: Restore Detox build
-            #   hostname: detox-cache-restore
-            #   uses: actions/cache/restore@v3
-            #   with:
-            #       path: ios/build
-            #       key: ${{ runner.os }}-detox-build-${{ hashFiles('ios/Podfile.lock') }}
+      # Restore Detox build cache
+      # - name: Restore Detox build
+      #   id: detox-cache-restore
+      #   uses: actions/cache/restore@v3
+      #   with:
+      #       path: ios/build
+      #       key: ${{ runner.os }}-detox-build-${{ hashFiles('ios/Podfile.lock') }}
 
-            # Build iOS app
-            - name: Detox build iOS Debug
-              # if: steps.detox-cache-restore.outputs.cache-hit != 'true'
-              timeout-minutes: 60
-              run: SKIP_SENTRY=true yarn detox build --configuration ios.sim.debug_xcode_14.2 # GH macos-latest has Xcode 14.2
+      # Build iOS app
+      - name: Detox build iOS Debug
+        # if: steps.detox-cache-restore.outputs.cache-hit != 'true'
+        timeout-minutes: 60
+        run: SKIP_SENTRY=true yarn detox build --configuration ios.sim.debug_xcode_14.2 # GH macos-latest has Xcode 14.2
 
-            # Save Detox build cache
-            # - name: Save Detox build
-            #   hostname: detox-cache
-            #   uses: actions/cache/save@v3
-            #   if: always()
-            #   with:
-            #       path: ios/build
-            #       key: ${{ runner.os }}-detox-build-${{ hashFiles('ios/Podfile.lock') }}
+      # Save Detox build cache
+      # - name: Save Detox build
+      #   id: detox-cache
+      #   uses: actions/cache/save@v3
+      #   if: always()
+      #   with:
+      #       path: ios/build
+      #       key: ${{ runner.os }}-detox-build-${{ hashFiles('ios/Podfile.lock') }}
 
-            # Test with Detox
-            - name: Detox test iOS Debug
-              timeout-minutes: 100
-              run: yarn detox test --configuration ios.sim.debug_xcode_14.2 --cleanup --headless --record-logs all
+      # Test with Detox
+      - name: Detox test iOS Debug
+        timeout-minutes: 100
+        run: yarn detox test --configuration ios.sim.debug_xcode_14.2 --cleanup --headless --record-logs all
 
-            # Upload artifacts Detox
-            - name: Upload detox fail artifacts
-              if: failure()
-              uses: actions/upload-artifact@v3
-              with:
-                  name: detox-fail-artifacts
-                  path: artifacts
+      # Upload artifacts Detox
+      - name: Upload detox fail artifacts
+        if: failure()
+        uses: actions/upload-artifact@v3
+        with:
+          name: detox-fail-artifacts
+          path: artifacts
 
-            - name: Upload Metro Bundler logs
-              if: failure()
-              uses: actions/upload-artifact@v2
-              with:
-                  name: metro-bundler-logs
-                  path: metro-bundler.log
+      - name: Upload Metro Bundler logs
+        if: failure()
+        uses: actions/upload-artifact@v2
+        with:
+          name: metro-bundler-logs
+          path: metro-bundler.log
 
-            - name: Post to a Slack channel
-              if: always()
-              id: slack
-              uses: slackapi/slack-github-action@v1.24.0
-              with:
-                # Slack channel hostname, channel name, or user hostname to post message.
-                # See also: https://api.slack.com/methods/chat.postMessage#channels
-                # You can pass in multiple channels to post to by providing a comma-delimited list of channel IDs.
-                channel-id: ${{ secrets.SLACK_VEWORLD_CHANNEL_ID }}
-                slack-message: |
-                    🚀 E2E Testing - iOS Result: *${{ job.status }}*
-                    📦 Repository: *${{ github.repository }}*
-                    🌿 Branch: *${{ github.ref_name }}*
-                    🔨 Commit: *${{ github.actor }}* [${{ github.sha.short }}](${{ github.event.head_commit.url }})
-                    🔗 View Run: ${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}
-                    ${{ (github.event_name == 'release' && github.event.release.prerelease) && '🔴 THIS IS A PRE-RELEASE!' || '' }}
-                    ${{ (github.event_name == 'release') && ('🏷 Pre-Release Tag: ' || '') }} ${{ github.event.release.tag_name }}
-              env:
-                SLACK_BOT_TOKEN: ${{ secrets.SLACK_VEWORLD_BOT_TOKEN }}
+      - name: Post to a Slack channel
+        if: always()
+        id: slack
+        uses: slackapi/slack-github-action@v1.24.0
+        with:
+          # Slack channel hostname, channel name, or user hostname to post message.
+          # See also: https://api.slack.com/methods/chat.postMessage#channels
+          # You can pass in multiple channels to post to by providing a comma-delimited list of channel IDs.
+          channel-id: ${{ secrets.SLACK_VEWORLD_CHANNEL_ID }}
+          slack-message: |
+            🚀 E2E Testing - iOS Result: *${{ job.status }}*
+            📦 Repository: *${{ github.repository }}*
+            🌿 Branch: *${{ github.ref_name }}*
+            🔨 Commit: *${{ github.actor }}* [${{ github.sha.short }}](${{ github.event.head_commit.url }})
+            🔗 View Run: ${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}
+            ${{ (github.event_name == 'release' && github.event.release.prerelease) && '🔴 THIS IS A PRE-RELEASE!' || '' }}
+            ${{ (github.event_name == 'release') && ('🏷 Pre-Release Tag: ' || '') }} ${{ github.event.release.tag_name }}
+        env:
+          SLACK_BOT_TOKEN: ${{ secrets.SLACK_VEWORLD_BOT_TOKEN }}

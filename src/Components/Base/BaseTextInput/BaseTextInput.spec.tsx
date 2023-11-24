@@ -1,6 +1,6 @@
 import { TestWrapper } from "~Test"
 import React from "react"
-import { render, screen, fireEvent } from "@testing-library/react-native"
+import { fireEvent, render, screen } from "@testing-library/react-native"
 import { BaseTextInput } from "./BaseTextInput"
 
 const mandatoryProps = {
@@ -131,7 +131,7 @@ describe("BaseTextInput", () => {
 
     it("renders rightIcon correctly when rightIcon prop is provided", async () => {
         const rightIconName = "qrcode-scan"
-        const rightIconTestID = "right-icon-test-hostname"
+        const rightIconTestID = "right-icon-test-id"
 
         render(<BaseTextInput {...mandatoryProps} rightIcon={rightIconName} rightIconTestID={rightIconTestID} />, {
             wrapper: TestWrapper,
@@ -143,7 +143,7 @@ describe("BaseTextInput", () => {
 
     it("calls onIconPress prop when rightIcon is pressed", async () => {
         const rightIconName = "qrcode-scan"
-        const rightIconTestID = "right-icon-test-hostname"
+        const rightIconTestID = "right-icon-test-id"
         const mockOnIconPress = jest.fn()
 
         render(

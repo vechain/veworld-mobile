@@ -1,8 +1,8 @@
-import { waitFor, element } from "detox"
+import { element, waitFor } from "detox"
 import { DEFAULT_TIMEOUT, LONG_TIMEOUT } from "../../constants"
 
 export const isActive = async (): Promise<boolean> => {
-    return await waitFor(element(by.id("welcome-title-hostname")))
+    return await waitFor(element(by.id("welcome-title-id")))
         .toBeVisible()
         .withTimeout(LONG_TIMEOUT)
         .then(() => true)

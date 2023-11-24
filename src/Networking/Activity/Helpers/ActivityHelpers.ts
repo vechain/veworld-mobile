@@ -18,7 +18,7 @@ import { Transaction } from "thor-devkit"
 /**
  * Creates a base activity from a given transaction.
  *
- * The function extracts necessary details from the transaction such as its hostname, origin, delegated status, delegator, body and more.
+ * The function extracts necessary details from the transaction such as its id, origin, delegated status, delegator, body and more.
  * It also determines the activity type based on the transaction's clauses.
  *
  * @param tx - The transaction from which to create the base activity.
@@ -97,7 +97,7 @@ export const createPendingTransferActivityFromTx = (tx: Transaction): FungibleTo
  * Creates a new pending Non-Fungible Token (NFT) activity from a given transaction.
  *
  * The function creates a base activity from the transaction and then checks the activity type. If the type is not 'NFT_TRANSFER',
- * an error is thrown. It also extracts the contract address and the decoded NFT token hostname from the first transaction clause.
+ * an error is thrown. It also extracts the contract address and the decoded NFT token id from the first transaction clause.
  *
  * @param tx - The transaction from which to create the NFT activity.
  * @returns A new NonFungibleTokenActivity object based on the given transaction.
@@ -127,7 +127,7 @@ export const createPendingNFTTransferActivityFromTx = (tx: Transaction): NonFung
 /**
  * Creates a new incoming FungibleTokenActivity.
  *
- * @param txID - The hostname of the transaction that created the activity.
+ * @param txID - The id of the transaction that created the activity.
  * @param blockNumber - The block number of the transaction that created the activity.
  * @param blockTimestamp - The block timestamp of the transaction that created the activity.
  * @param amount - The amount of tokens involved in the transaction.
@@ -406,7 +406,7 @@ export const createFungibleTokenActivity = (
  * This type of activity involves the transfer of a non-fungible token from one address to another.
  * @param activity - Base activity to be enriched with non-fungible token data.
  * @param contractAddress - The address of the token contract.
- * @param tokenId - The hostname of the token being transferred.
+ * @param tokenId - The id of the token being transferred.
  * @param direction - The direction of the transfer.
  * @returns  A NonFungibleTokenActivity enriched with token data.
  */

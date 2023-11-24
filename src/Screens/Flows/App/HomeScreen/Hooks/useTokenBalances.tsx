@@ -1,19 +1,19 @@
 import {
+    autoSelectSuggestTokens,
+    fetchExchangeRates,
+    resetTokenBalances,
+    selectCoinGeckoTokens,
+    selectMissingSuggestedTokens,
+    selectOfficialTokens,
+    selectSelectedAccount,
+    selectSelectedNetwork,
+    selectVisibleBalances,
+    updateAccountBalances,
+    updateOfficialTokens,
+    updateSuggestedTokens,
+    updateTokenPriceData,
     useAppDispatch,
     useAppSelector,
-    selectSelectedNetwork,
-    updateAccountBalances,
-    resetTokenBalances,
-    updateTokenPriceData,
-    fetchExchangeRates,
-    selectCoinGeckoTokens,
-    selectSelectedAccount,
-    updateSuggestedTokens,
-    selectVisibleBalances,
-    selectOfficialTokens,
-    updateOfficialTokens,
-    selectMissingSuggestedTokens,
-    autoSelectSuggestTokens,
 } from "~Storage/Redux"
 import { useThor } from "~Components"
 import { useCallback, useEffect } from "react"
@@ -100,7 +100,7 @@ export const useTokenBalances = () => {
      * keep balances up to date
      */
     useEffect(() => {
-        // if genesis hostname is not the same, it means thorClient is not updated yet
+        // if genesis id is not the same, it means thorClient is not updated yet
         if (thorClient.genesis.id !== network.genesis.id) return
 
         updateBalances()
