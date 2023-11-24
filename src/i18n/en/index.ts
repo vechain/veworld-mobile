@@ -479,7 +479,7 @@ const en: BaseTranslation = {
 
     DISCOVER_TITLE: "Discover",
     DISCOVER_SUB_TITLE: "Discover applications in the vechain ecosystem",
-    DISCOVER_SEARCH: "Search",
+    DISCOVER_SEARCH: "Search by URL or name..",
     DISCOVER_EMPTY_SEARCH: "No results found for your search",
     DISCOVER_TAB_FAVOURITES: "Favourites",
     DISCOVER_TAB_FEATURED: "Featured",

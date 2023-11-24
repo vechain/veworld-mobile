@@ -9,7 +9,7 @@ export type DiscoveryState = {
 }
 
 export const initialDiscoverState: DiscoveryState = {
-    featured: DAppConfig,
+    featured: [...DAppConfig],
     favorites: [],
     custom: [],
 }
@@ -33,8 +33,36 @@ export const DiscoverySlice = createSlice({
                 state.favorites = state.favorites.filter(dapp => !URIUtils.compareURLs(dapp.href, href))
             }
         },
+        addNavigationToDApp: (state, action: PayloadAction<{ href: string; isCustom: boolean }>) => {
+            const { payload } = action
+
+            if (payload.isCustom) {
+                const existingDApp = state.custom.find(dapp => URIUtils.compareURLs(dapp.href, payload.href))
+
+                if (existingDApp) {
+                    existingDApp.amountOfNavigations += 1
+                }
+
+                //sort by amount of navigations
+                state.custom = state.custom.sort((a, b) => b.amountOfNavigations - a.amountOfNavigations)
+            } else {
+                const favourite = state.favorites.find(dapp => URIUtils.compareURLs(dapp.href, payload.href))
+
+                if (favourite) {
+                    favourite.amountOfNavigations += 1
+                    state.favorites = state.favorites.sort((a, b) => b.amountOfNavigations - a.amountOfNavigations)
+                }
+
+                const featured = state.featured.find(dapp => URIUtils.compareURLs(dapp.href, payload.href))
+
+                if (featured) {
+                    featured.amountOfNavigations += 1
+                    state.featured = state.featured.sort((a, b) => b.amountOfNavigations - a.amountOfNavigations)
+                }
+            }
+        },
         resetDiscoveryState: () => initialDiscoverState,
     },
 })
 
-export const { addBookmark, removeBookmark, resetDiscoveryState } = DiscoverySlice.actions
+export const { addBookmark, removeBookmark, resetDiscoveryState, addNavigationToDApp } = DiscoverySlice.actions

@@ -89,7 +89,7 @@ export const BrowserBottomBar: React.FC = () => {
             <BaseIcon
                 color={theme.colors.primary}
                 onPress={toggleBookmark}
-                name={isBookMarked ? "star" : "star-outline"}
+                name={isBookMarked ? "bookmark" : "bookmark-outline"}
                 style={styles.icon}
             />
 

@@ -1705,7 +1705,7 @@ type RootTranslation = {
 	 */
 	DISCOVER_SUB_TITLE: string
 	/**
-	 * S​e​a​r​c​h
+	 * S​e​a​r​c​h​ ​b​y​ ​U​R​L​ ​o​r​ ​n​a​m​e​.​.
 	 */
 	DISCOVER_SEARCH: string
 	/**
@@ -4422,7 +4422,7 @@ Try reconnect your device to the internet.
 	 */
 	DISCOVER_SUB_TITLE: () => LocalizedString
 	/**
-	 * Search
+	 * Search by URL or name..
 	 */
 	DISCOVER_SEARCH: () => LocalizedString
 	/**

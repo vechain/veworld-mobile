@@ -7,7 +7,13 @@ import { NativeSyntheticEvent, StyleSheet, TextInputChangeEventData } from "reac
 import { useNavigation, useScrollToTop } from "@react-navigation/native"
 import { Routes } from "~Navigation"
 import { DAppList } from "~Screens/Flows/App/DiscoverScreen/Components/DAppList"
-import { selectCustomDapps, selectFavoritesDapps, selectFeaturedDapps } from "~Storage/Redux"
+import {
+    addNavigationToDApp,
+    selectCustomDapps,
+    selectFavoritesDapps,
+    selectFeaturedDapps,
+    useAppDispatch,
+} from "~Storage/Redux"
 import { createMaterialTopTabNavigator } from "@react-navigation/material-top-tabs"
 import { TabBar } from "./Components/TabBar"
 
@@ -22,6 +28,8 @@ export const DiscoverScreen: React.FC = () => {
 
     const { navigateToBrowser } = useBrowserSearch()
 
+    const dispatch = useAppDispatch()
+
     const onTextChange = (e: NativeSyntheticEvent<TextInputChangeEventData>) => {
         setFilteredSearch(e.nativeEvent.text)
     }
@@ -30,8 +38,14 @@ export const DiscoverScreen: React.FC = () => {
         (dapp: DiscoveryDApp) => {
             nav.navigate(Routes.BROWSER, { initialUrl: dapp.href })
             setFilteredSearch(undefined)
+
+            if (dapp.isCustom) return
+
+            setTimeout(() => {
+                dispatch(addNavigationToDApp({ href: dapp.href, isCustom: dapp.isCustom }))
+            }, 1000)
         },
-        [nav, setFilteredSearch],
+        [dispatch, nav, setFilteredSearch],
     )
 
     const onSearch = useCallback(() => {
