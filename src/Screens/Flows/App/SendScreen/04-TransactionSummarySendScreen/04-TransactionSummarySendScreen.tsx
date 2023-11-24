@@ -62,7 +62,7 @@ import { calculateIsEnoughGas } from "./Helpers"
 import Animated, { interpolateColor, useAnimatedStyle, useSharedValue, withTiming } from "react-native-reanimated"
 import { StyleSheet } from "react-native"
 import { BigNumber } from "bignumber.js"
-import { ethers } from "ethers"
+import pive from "../02-SelectAmountSendScreen/Hooks/VWBN"
 
 type Props = NativeStackScreenProps<
     RootStackParamListHome & RootStackParamListDiscover,
@@ -70,7 +70,8 @@ type Props = NativeStackScreenProps<
 >
 
 export const TransactionSummarySendScreen = ({ route }: Props) => {
-    const { token, amount, address, initialRoute } = route.params
+    const { token, amount: selectedAmount, address, initialRoute } = route.params
+    let amount = pive(selectedAmount).addTrailingZeros(token.decimals).toString
 
     const { LL } = useI18nContext()
     const dispatch = useAppDispatch()
@@ -266,7 +267,6 @@ export const TransactionSummarySendScreen = ({ route }: Props) => {
             clauses,
             isDelegated,
             vtho,
-            amount,
         })
 
         setIsEnoughGas(isGas)
@@ -499,7 +499,7 @@ function TotalSendAmountView({ amount, symbol, token, txCostTotal, isDelegated }
                     <BaseText typographyFont="caption">{"Total Cost"}</BaseText>
                     <BaseView flexDirection="row">
                         <Animated.Text style={[baseStyles.coloredText, animatedStyle]}>
-                            {ethers.utils.formatEther(txCostTotal.toString())}
+                            {txCostTotal.toString()}
                         </Animated.Text>
                         <BaseText typographyFont="body" mx={4}>
                             {symbol}

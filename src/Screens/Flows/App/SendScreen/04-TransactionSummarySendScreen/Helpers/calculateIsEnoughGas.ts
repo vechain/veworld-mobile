@@ -3,6 +3,7 @@ import { AddressUtils, GasUtils, TransactionUtils } from "~Utils"
 import { BigNumber } from "bignumber.js"
 import { EstimateGasResult } from "~Model"
 import { Transaction } from "thor-devkit"
+import pive from "../../02-SelectAmountSendScreen/Hooks/VWBN"
 
 type Props = {
     gas: EstimateGasResult | undefined
@@ -10,15 +11,21 @@ type Props = {
     clauses: Transaction.Clause[]
     isDelegated: boolean
     vtho: any
-    amount: string
 }
 
 export const calculateIsEnoughGas = ({ gas, selectedFeeOption, clauses, isDelegated, vtho }: Props) => {
-    const calculateFeeByCoefficient = (coefficient: GasPriceCoefficient) =>
+    const vthoGasFeeRaw = getGasByCoefficient(selectedFeeOption, gas)
+    const { isGas, txCostTotal, gasCost } = calculateVthoGas(clauses, vthoGasFeeRaw, isDelegated, vtho)
+
+    return { isGas, txCostTotal, gasCost }
+}
+
+export const getGasByCoefficient = (selectedFeeOption: string, gas: EstimateGasResult | undefined) => {
+    const calculateFeeByCoefficient = (_coefficient: GasPriceCoefficient) =>
         GasUtils.gasToVtho({
             gas: new BigNumber(gas?.gas || 0),
             baseGasPrice: new BigNumber(gas?.baseGasPrice || "0"),
-            gasPriceCoefficient: coefficient,
+            gasPriceCoefficient: _coefficient,
             decimals: 2,
         })
 
@@ -28,10 +35,7 @@ export const calculateIsEnoughGas = ({ gas, selectedFeeOption, clauses, isDelega
         [GasPriceCoefficient.HIGH]: calculateFeeByCoefficient(GasPriceCoefficient.HIGH).gasRaw,
     }
 
-    const vthoGasFeeRaw = gasFeeOptionsRaw[Number(selectedFeeOption) as GasPriceCoefficient]
-    const { isGas, txCostTotal } = calculateVthoGas(clauses, vthoGasFeeRaw, isDelegated, vtho)
-
-    return { isGas, txCostTotal }
+    return gasFeeOptionsRaw[Number(selectedFeeOption) as GasPriceCoefficient]
 }
 
 const calculateVthoGas = (clauses: Transaction.Clause[], vthoGasFeeRaw: BigNumber, isDelegated: boolean, vtho: any) => {
@@ -51,7 +55,7 @@ const calculateVthoGas = (clauses: Transaction.Clause[], vthoGasFeeRaw: BigNumbe
 
         // Get totl cost of transaction (amount + fee)
         if (clauseAmount) {
-            txCostTotal = txCostTotal.plus(clauseAmount)
+            txCostTotal = txCostTotal.plus(pive(clauseAmount).toHuman(18).toString)
         }
     }
 
@@ -60,21 +64,5 @@ const calculateVthoGas = (clauses: Transaction.Clause[], vthoGasFeeRaw: BigNumbe
     // Check if the total cost of the transaction is less than or equal to the total balance of VTHO
     isEnoughGas = totalBalance.isGreaterThanOrEqualTo(txCostTotal)
 
-    return { isGas: isEnoughGas, txCostTotal }
+    return { isGas: isEnoughGas, txCostTotal, gasCost: vthoGasFeeRaw }
 }
-
-// Helper function to convert a float to a BigNumber
-// const convertStringToBigNumber = (value: string) => {
-//     // Ensure BigNumber doesn't use exponential notation
-//     BigNumber.config({ EXPONENTIAL_AT: 1e9 })
-//     // Create a BigNumber instance
-//     const newBN = new BigNumber(value)
-//     // Round the number to 18 decimal places
-//     const roundedBN = newBN.decimalPlaces(18)
-//     // Now, we want to remove the decimal places by multiplying by 10^18 to shift the decimal point
-//     const scaleFactor = new BigNumber(10).pow(18)
-//     // Multiply by the scaleFactor to shift decimal places
-//     const result = roundedBN.multipliedBy(scaleFactor)
-//     // Ensure the result is in normal (not exponential) notation and rounded to 18 decimal places
-//     return result.toFixed() // This should log a big number with up to 18 decimal places
-// }

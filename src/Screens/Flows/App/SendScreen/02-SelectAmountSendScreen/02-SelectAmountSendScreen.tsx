@@ -2,7 +2,6 @@ import { NativeStackScreenProps } from "@react-navigation/native-stack"
 import React, { useCallback, useState } from "react"
 import { StyleSheet, TextInput } from "react-native"
 import { useAmountInput, useTheme } from "~Hooks"
-import { FormattingUtils } from "~Utils"
 import {
     BaseCardGroup,
     BaseIcon,
@@ -21,8 +20,7 @@ import { COLORS, CURRENCY_SYMBOLS, typography } from "~Constants"
 import { selectCurrency, selectCurrencyExchangeRate, useAppSelector } from "~Storage/Redux"
 import { BigNumber } from "bignumber.js"
 import { useNavigation } from "@react-navigation/native"
-import { useTotalTokenBalance, useTotalFiatBalance, useUI } from "./Hooks"
-import { isEmpty } from "lodash"
+import pive, { useTotalTokenBalance, useTotalFiatBalance, useUI, useCalculateGas } from "./Hooks"
 import Animated from "react-native-reanimated"
 import HapticsService from "~Services/HapticsService"
 
@@ -45,18 +43,17 @@ export const SelectAmountSendScreen = ({ route }: Props) => {
     const [isError, setIsError] = useState(false)
     const isExchangeRateAvailable = !!exchangeRate?.rate
 
-    const { tokenTotalBalance, tokenTotalToHuman } = useTotalTokenBalance(token)
+    const { gas } = useCalculateGas({ token })
 
-    const { fiatTotalBalance } = useTotalFiatBalance(tokenTotalBalance, exchangeRate)
+    const { tokenTotalBalance, tokenTotalToHuman, tokenBalanceMinusProjectedFees } = useTotalTokenBalance(token, gas)
+
+    const { fiatTotalBalance } = useTotalFiatBalance(tokenTotalToHuman, exchangeRate)
 
     /**
      * FIAT selected balance calculated fron TOKEN input in human readable format (correct value is when TOKEN is active)
      * Example "53.54"
      */
-    const fiatHumanAmount = FormattingUtils.formatToHumanNumber(
-        FormattingUtils.convertToFiatBalance(!isEmpty(input) ? input : "0", exchangeRate?.rate ?? 1, 0),
-        2,
-    )
+    const fiatHumanAmount = pive().toCurrencyConversion(input, exchangeRate).toCurrencyFormat(2).toString
 
     /**
      * TOKEN selected balance in raw-ish format (with decimals) (correct value is when FIAT is active)
@@ -68,12 +65,7 @@ export const SelectAmountSendScreen = ({ route }: Props) => {
      * TOKEN selected balance in human readable format (correct value is when FIAT is active)
      * Example "2,472.771"
      */
-    const tokenHumanAmountFromFiat = FormattingUtils.scaleNumberDown(
-        tokenAmountFromFiat || "0",
-        0,
-        undefined,
-        BigNumber.ROUND_DOWN,
-    )
+    const tokenHumanAmountFromFiat = pive(tokenAmountFromFiat).toCurrencyFormat(4).toString
 
     /**
      * Toggle between FIAT and TOKEN input (and update the input value)
@@ -92,13 +84,10 @@ export const SelectAmountSendScreen = ({ route }: Props) => {
     const onChangeTextInput = useCallback(
         (newValue: string) => {
             // Get the correct token amount from the FIAT input
-            const controlValue = isInputInFiat
-                ? FormattingUtils.convertToFiatBalance(newValue || "0", 1 / (exchangeRate?.rate ?? 1), 0, 0)
-                : newValue
+            const controlValue = isInputInFiat ? pive().toTokenConversion(newValue, exchangeRate).toString : newValue
+            let roundDownValue = pive(controlValue).decimals(4).toString
 
-            let roundDownValue = Math.floor(parseFloat(controlValue) * 10000) / 10000
-
-            if (new BigNumber(roundDownValue).gt(tokenTotalBalance)) {
+            if (new BigNumber(controlValue).gt(tokenTotalBalance)) {
                 setIsError(true)
                 HapticsService.triggerNotification({ level: "Error" })
             } else {
@@ -108,25 +97,19 @@ export const SelectAmountSendScreen = ({ route }: Props) => {
             setInput(newValue)
             setTokenAmountFromFiat(roundDownValue.toString())
         },
-        [exchangeRate?.rate, isInputInFiat, setInput, tokenTotalBalance],
+        [exchangeRate, isInputInFiat, setInput, tokenTotalBalance],
     )
 
     /**
      * Sets the input value to the max available balance (in TOKEN or FIAT)
      */
     const handleOnMaxPress = useCallback(() => {
-        setInput(isInputInFiat ? FormattingUtils.formatToHumanNumber(fiatTotalBalance, 2) : tokenTotalBalance)
-
-        let roundUpforPrecission =
-            Math.round(
-                parseFloat(
-                    FormattingUtils.convertToFiatBalance(fiatTotalBalance, 1 / (exchangeRate?.rate ?? 1), 0, 0),
-                ) * Math.pow(10, 4),
-            ) / Math.pow(10, 4)
-
-        setTokenAmountFromFiat(roundUpforPrecission.toString())
+        setInput(isInputInFiat ? pive(fiatTotalBalance).toCurrencyFormat(2).toString : tokenBalanceMinusProjectedFees)
+        let conv = pive().toTokenConversion(fiatTotalBalance, exchangeRate).toString
+        let scaleDownforPrecission = pive(conv).decimals(4).toString
+        setTokenAmountFromFiat(scaleDownforPrecission)
         setIsError(false)
-    }, [exchangeRate?.rate, fiatTotalBalance, isInputInFiat, setInput, tokenTotalBalance])
+    }, [exchangeRate, fiatTotalBalance, isInputInFiat, setInput, tokenBalanceMinusProjectedFees])
 
     /**
      * Navigate to the next screen
@@ -173,10 +156,7 @@ export const SelectAmountSendScreen = ({ route }: Props) => {
                         {/* [START] - HEADER */}
                         <BaseView flexDirection="row" alignItems="baseline" style={styles.budget}>
                             <BaseView flexDirection="row" mr={8}>
-                                <BaseText typographyFont="subTitleBold">
-                                    {"≈ "}
-                                    {tokenTotalToHuman}
-                                </BaseText>
+                                <BaseText typographyFont="subTitleBold">{tokenTotalToHuman}</BaseText>
                                 <BaseSpacer width={5} />
                                 <BaseText typographyFont="buttonSecondary">{token.symbol}</BaseText>
                             </BaseView>
