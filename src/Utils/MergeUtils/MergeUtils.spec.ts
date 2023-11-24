@@ -42,7 +42,7 @@ const collection1: NftCollection = {
     description: "collection 1 description",
     image: "collection 1 image",
     mediaType: NFTMediaType.IMAGE,
-    id: "collection 1 hostname",
+    id: "collection 1 id",
     fromRegistry: false,
 }
 
@@ -57,7 +57,7 @@ const collection2: NftCollection = {
     description: "collection 2 description",
     image: "collection 2 image",
     mediaType: NFTMediaType.VIDEO,
-    id: "collection 2 hostname",
+    id: "collection 2 id",
     fromRegistry: false,
 }
 

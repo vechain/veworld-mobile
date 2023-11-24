@@ -6,7 +6,7 @@ const COINBASE_URL = process.env.REACT_APP_COINBASE_URL
 
 /**
  * The currency object returned from CoinBase
- * @field `hostname` - The 3 letter symbol
+ * @field `id` - The 3 letter symbol
  * @field `name` - The friendly name of the currency
  */
 interface Currency {

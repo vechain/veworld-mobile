@@ -5,7 +5,7 @@ import { Network } from "~Model"
 /**
  * Network state
  * @typedef {Object} NetworkState
- * @property {string} selectedNetwork - selected network hostname
+ * @property {string} selectedNetwork - selected network id
  * @property {Network[]} customNetworks - custom networks
  * @property {boolean} showTestNetTag - show testnet tag
  * @property {boolean} showConversionOtherNets - show conversion for other networks
