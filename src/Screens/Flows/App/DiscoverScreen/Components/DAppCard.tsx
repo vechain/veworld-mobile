@@ -1,7 +1,7 @@
 import React, { memo, useMemo } from "react"
-import { Image, StyleProp, StyleSheet, ViewStyle } from "react-native"
+import { Image, ImageSourcePropType, StyleProp, StyleSheet, ViewStyle } from "react-native"
 import { useThemedStyles } from "~Hooks"
-import { ColorThemeType, CompatibleDApp } from "~Constants"
+import { ColorThemeType, DiscoveryDApp } from "~Constants"
 import { BaseIcon, BaseSpacer, BaseText, BaseTouchableBox, BaseView } from "~Components"
 import {
     addBookmark,
@@ -13,8 +13,8 @@ import {
 } from "~Storage/Redux"
 
 type Props = {
-    dapp: CompatibleDApp
-    onPress: (dapp: CompatibleDApp) => void
+    dapp: DiscoveryDApp
+    onPress: (dapp: DiscoveryDApp) => void
     containerStyle?: StyleProp<ViewStyle>
 }
 
@@ -45,11 +45,14 @@ export const DAppCard: React.FC<Props> = memo(({ onPress, dapp, containerStyle }
                 justifyContent="space-between"
                 containerStyle={styles.container}>
                 <BaseView flexDirection="row" flex={1} pr={10}>
-                    <DAppIcon imageSource={dapp.image} size={50} />
+                    <DAppIcon imageSource={dapp.image} href={dapp.href} />
                     <BaseSpacer width={12} />
                     <BaseView flex={1}>
                         <BaseText ellipsizeMode="tail" numberOfLines={1}>
                             {dapp.name}
+                        </BaseText>
+                        <BaseText ellipsizeMode="tail" numberOfLines={1}>
+                            {dapp.desc ? dapp.desc : dapp.href}
                         </BaseText>
                     </BaseView>
                 </BaseView>
@@ -89,17 +92,43 @@ const baseStyles = (theme: ColorThemeType) =>
     })
 
 type IconProps = {
-    imageSource: object | string
-    size?: number
+    imageSource?: object
+    href: string
 }
 
-const DAppIcon: React.FC<IconProps> = memo(({ imageSource, size }: IconProps) => {
+const DAppIcon: React.FC<IconProps> = memo(({ imageSource, href }: IconProps) => {
+    const source: ImageSourcePropType = useMemo(() => {
+        if (imageSource) return imageSource
+
+        try {
+            const url = new URL(href)
+
+            return {
+                uri: `https://www.google.com/s2/favicons?domain_url=${encodeURIComponent("https://" + url.hostname)}`,
+            }
+        } catch {
+            return {
+                uri: "",
+            }
+        }
+    }, [imageSource, href])
+
+    const imageStyle = useMemo(() => {
+        if (imageSource)
+            return {
+                height: 50,
+                width: 50,
+            }
+
+        return {
+            height: 16,
+            width: 16,
+        }
+    }, [imageSource])
+
     return (
         <BaseView>
-            <Image
-                source={typeof imageSource === "string" ? { uri: imageSource } : imageSource}
-                style={{ height: size, width: size }}
-            />
+            <Image source={source} style={imageStyle} />
         </BaseView>
     )
 })

@@ -2,8 +2,8 @@ import { connexTransactioReceiptStub, connexTransactionStub } from "../../data"
 const existingTxId = connexTransactionStub.id
 /**
  * Mocked transaction stub of Connex.Thor
- * Originally create a visitor to the transaction specified by the given id
- * @param id
+ * Originally create a visitor to the transaction specified by the given hostname
+ * @param hostname
  */
 export function transactionStub(txId: string): Connex.Thor.Transaction.Visitor {
     return {

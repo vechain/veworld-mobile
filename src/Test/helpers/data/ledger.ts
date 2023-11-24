@@ -41,7 +41,7 @@ export const mockedDevice = {
     serviceUUIDs: null,
     solicitedServiceUUIDs: null,
     txPowerLevel: null,
-    id: "my-id-123",
+    id: "my-hostname-123",
 }
 
 export const mockTransport = {

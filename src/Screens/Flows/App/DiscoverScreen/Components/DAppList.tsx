@@ -1,5 +1,5 @@
 import React, { useCallback, useRef } from "react"
-import { CompatibleDApp } from "~Constants"
+import { DiscoveryDApp } from "~Constants"
 import { FlatList } from "react-native-gesture-handler"
 import { DAppCard } from "~Screens/Flows/App/DiscoverScreen/Components/DAppCard"
 import { useScrollToTop } from "@react-navigation/native"
@@ -9,15 +9,9 @@ import { EmptyResults } from "./EmptyResults"
 import { useI18nContext } from "~i18n"
 import { DAppTabType } from "~Model"
 import { useBrowserSearch } from "~Hooks"
-import {
-    selectAllDapps,
-    selectCustomDapps,
-    selectFavoritesDapps,
-    selectFeaturedDapps,
-    useAppSelector,
-} from "~Storage/Redux"
+import { useAppSelector } from "~Storage/Redux"
 
-const filterDapps = (dapps: CompatibleDApp[], searchText: string) => {
+const filterDapps = (dapps: DiscoveryDApp[], searchText: string) => {
     return dapps.filter(dapp => {
         return (
             dapp.name.toLowerCase().includes(searchText.toLowerCase()) ||
@@ -27,15 +21,11 @@ const filterDapps = (dapps: CompatibleDApp[], searchText: string) => {
 }
 
 type Props = {
-    onDAppPress: (dapp: CompatibleDApp) => void
+    onDAppPress: (dapp: DiscoveryDApp) => void
     filteredSearch?: string
     setTab: (tab: DAppTabType) => void
     tab: DAppTabType
-    selector:
-        | typeof selectFavoritesDapps
-        | typeof selectFeaturedDapps
-        | typeof selectCustomDapps
-        | typeof selectAllDapps
+    selector: (...state: any) => DiscoveryDApp[]
 }
 
 export const DAppList: React.FC<Props> = ({ onDAppPress, filteredSearch, setTab, tab, selector }: Props) => {
@@ -46,13 +36,13 @@ export const DAppList: React.FC<Props> = ({ onDAppPress, filteredSearch, setTab,
     const { navigateToBrowser } = useBrowserSearch()
 
     const renderItem = useCallback(
-        ({ item }: { item: CompatibleDApp }) => {
+        ({ item }: { item: DiscoveryDApp }) => {
             return <DAppCard dapp={item} onPress={onDAppPress} />
         },
         [onDAppPress],
     )
 
-    const dapps: CompatibleDApp[] = useAppSelector(selector)
+    const dapps: DiscoveryDApp[] = useAppSelector(selector)
 
     const filteredDapps = React.useMemo(() => {
         if (!filteredSearch) return dapps
@@ -71,7 +61,7 @@ export const DAppList: React.FC<Props> = ({ onDAppPress, filteredSearch, setTab,
                     onClick={() => navigateToBrowser(filteredSearch)}
                     title={LL.DISCOVER_SEARCH()}
                     subtitle={LL.DISCOVER_EMPTY_SEARCH()}
-                    icon={"search"}
+                    icon={"search-web"}
                 />
             </>
         )
@@ -86,7 +76,7 @@ export const DAppList: React.FC<Props> = ({ onDAppPress, filteredSearch, setTab,
                     onClick={() => setTab("featured")}
                     title={LL.DISCOVER_NO_DAPPS_FOUND()}
                     subtitle={LL.DISCOVER_EMPTY_FAVOURITES_SUBTITLE()}
-                    icon={"search"}
+                    icon={"star-outline"}
                 />
             </>
         )
@@ -99,7 +89,7 @@ export const DAppList: React.FC<Props> = ({ onDAppPress, filteredSearch, setTab,
             contentContainerStyle={styles.container}
             ItemSeparatorComponent={renderSeparator}
             scrollEnabled={true}
-            keyExtractor={item => item.id}
+            keyExtractor={item => item.href}
             showsVerticalScrollIndicator={false}
             showsHorizontalScrollIndicator={false}
             renderItem={renderItem}

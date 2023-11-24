@@ -131,7 +131,7 @@ describe("BaseTextInput", () => {
 
     it("renders rightIcon correctly when rightIcon prop is provided", async () => {
         const rightIconName = "qrcode-scan"
-        const rightIconTestID = "right-icon-test-id"
+        const rightIconTestID = "right-icon-test-hostname"
 
         render(<BaseTextInput {...mandatoryProps} rightIcon={rightIconName} rightIconTestID={rightIconTestID} />, {
             wrapper: TestWrapper,
@@ -143,7 +143,7 @@ describe("BaseTextInput", () => {
 
     it("calls onIconPress prop when rightIcon is pressed", async () => {
         const rightIconName = "qrcode-scan"
-        const rightIconTestID = "right-icon-test-id"
+        const rightIconTestID = "right-icon-test-hostname"
         const mockOnIconPress = jest.fn()
 
         render(

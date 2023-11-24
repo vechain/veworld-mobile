@@ -42,7 +42,7 @@ const collection1: NftCollection = {
     description: "collection 1 description",
     image: "collection 1 image",
     mediaType: NFTMediaType.IMAGE,
-    id: "collection 1 id",
+    id: "collection 1 hostname",
     fromRegistry: false,
 }
 
@@ -57,7 +57,7 @@ const collection2: NftCollection = {
     description: "collection 2 description",
     image: "collection 2 image",
     mediaType: NFTMediaType.VIDEO,
-    id: "collection 2 id",
+    id: "collection 2 hostname",
     fromRegistry: false,
 }
 
@@ -72,7 +72,7 @@ const collection3: NftCollection = {
     description: "collection 3 description",
     image: "collection 3 image",
     mediaType: NFTMediaType.UNKNOWN,
-    id: "collection 3 id",
+    id: "collection 3 hostname",
     fromRegistry: false,
 }
 
@@ -87,7 +87,7 @@ const collection4: NftCollection = {
     description: "collection 4 description",
     image: "collection 4 image",
     mediaType: NFTMediaType.IMAGE,
-    id: "collection 4 id",
+    id: "collection 4 hostname",
     fromRegistry: false,
 }
 
@@ -102,7 +102,7 @@ const collection5: NftCollection = {
     description: "collection 5 description",
     image: "collection 5 image",
     mediaType: NFTMediaType.IMAGE,
-    id: "collection 5 id",
+    id: "collection 5 hostname",
     fromRegistry: true,
 }
 

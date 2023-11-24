@@ -1,12 +1,12 @@
-import { CompatibleDApp } from "~Constants"
+import { DiscoveryDApp } from "~Constants"
 import React from "react"
 import { BaseTextInput, BaseView } from "~Components"
 import { useI18nContext } from "~i18n"
 import { NativeSyntheticEvent, TextInputChangeEventData } from "react-native"
 
 type Props = {
-    dapps: CompatibleDApp[]
-    onFilteredDApps: (dapps: CompatibleDApp[]) => void
+    dapps: DiscoveryDApp[]
+    onFilteredDApps: (dapps: DiscoveryDApp[]) => void
 }
 
 export const DiscoverSearch: React.FC<Props> = ({ dapps, onFilteredDApps }) => {

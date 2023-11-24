@@ -3,7 +3,7 @@ import { VETLedgerAccount } from "~Constants"
 
 /**
  * Represent a ledger device that is connected to the device via bluetooth
- *  - id: The device id
+ *  - hostname: The device hostname
  * - isConnectable: Whether the device is connectable
  * - localName: The local name of the device
  * - productName: The product name of the device

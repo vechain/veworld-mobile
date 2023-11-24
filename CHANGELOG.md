@@ -720,7 +720,7 @@
 * feat: configure mixpanel (#977) (c71800a8)
 * fix(send): don't ask to add existing account as contact (#1003) (415e3c9c)
 * fix: not using connex for head info as it is not kept up to date (#1000) (38a7fb53)
-* chore(node): setting x-project-id for the node (#998) (4101da4a)
+* chore(node): setting x-project-hostname for the node (#998) (4101da4a)
 * refactor(settings): move advanced to general (#991) (b5acc836)
 * version: build artifacts version-0.0.2 (#993) (989468a6)
 * fix(Style): Ledger wallet import steps view width & Switch colors (#992) (238258c3)

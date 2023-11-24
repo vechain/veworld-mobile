@@ -2,7 +2,7 @@ import { waitFor, element } from "detox"
 import { DEFAULT_TIMEOUT, LONG_TIMEOUT } from "../../constants"
 
 export const isActive = async (): Promise<boolean> => {
-    return await waitFor(element(by.id("welcome-title-id")))
+    return await waitFor(element(by.id("welcome-title-hostname")))
         .toBeVisible()
         .withTimeout(LONG_TIMEOUT)
         .then(() => true)

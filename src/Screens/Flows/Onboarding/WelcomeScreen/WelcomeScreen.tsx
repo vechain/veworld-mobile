@@ -63,7 +63,7 @@ export const WelcomeScreen = () => {
             fixedBody={
                 <BaseView alignItems="center" flex={1} mx={24}>
                     <BaseView flexDirection="row" mt={20}>
-                        <BaseText typographyFont="largeTitle" testID="welcome-title-id">
+                        <BaseText typographyFont="largeTitle" testID="welcome-title-hostname">
                             {LL.TITLE_WELCOME_TO()}
                         </BaseText>
                         <BaseText typographyFont="largeTitle">{LL.VEWORLD()}</BaseText>

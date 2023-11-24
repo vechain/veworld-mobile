@@ -1,14 +1,15 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit"
-import { CompatibleDApp, CompatibleDApps } from "~Constants"
+import { DAppConfig, DiscoveryDApp } from "~Constants"
+import { URIUtils } from "~Utils"
 
 export type DiscoveryState = {
-    featured: CompatibleDApp[]
-    favorites: CompatibleDApp[]
-    custom: CompatibleDApp[]
+    featured: DiscoveryDApp[]
+    favorites: DiscoveryDApp[]
+    custom: DiscoveryDApp[]
 }
 
 export const initialDiscoverState: DiscoveryState = {
-    featured: CompatibleDApps,
+    featured: DAppConfig,
     favorites: [],
     custom: [],
 }
@@ -16,22 +17,20 @@ export const DiscoverySlice = createSlice({
     name: "discovery",
     initialState: initialDiscoverState,
     reducers: {
-        addBookmark: (state, action: PayloadAction<CompatibleDApp>) => {
+        addBookmark: (state, action: PayloadAction<DiscoveryDApp>) => {
             const { payload } = action
             if (payload.isCustom) {
                 state.custom.push(payload)
             } else {
                 state.favorites.push(payload)
-                state.featured = state.featured.filter(dapp => dapp.id !== payload.id)
             }
         },
-        removeBookmark: (state, action: PayloadAction<CompatibleDApp>) => {
-            const { isCustom, id } = action.payload
+        removeBookmark: (state, action: PayloadAction<DiscoveryDApp>) => {
+            const { isCustom, href } = action.payload
             if (isCustom) {
-                state.custom = state.custom.filter(dapp => dapp.id !== id)
+                state.custom = state.custom.filter(dapp => !URIUtils.compareURLs(dapp.href, href))
             } else {
-                state.favorites = state.favorites.filter(dapp => dapp.id !== id)
-                state.featured.unshift(action.payload)
+                state.favorites = state.favorites.filter(dapp => !URIUtils.compareURLs(dapp.href, href))
             }
         },
         resetDiscoveryState: () => initialDiscoverState,

@@ -1,26 +1,34 @@
 import { RootState } from "../Types"
 import { createSelector } from "@reduxjs/toolkit"
-import { CompatibleDApps } from "~Constants"
+import { DiscoveryDApp } from "~Constants"
+import { URIUtils } from "~Utils"
 
 const getDiscoveryState = (state: RootState) => state.discovery
 
-export const selectFavoritesDapps = createSelector(getDiscoveryState, discovery => discovery.favorites)
+export const selectFavoritesDapps = createSelector(
+    getDiscoveryState,
+    (discovery): DiscoveryDApp[] => discovery.favorites,
+)
 
-export const selectFeaturedDapps = createSelector(getDiscoveryState, () => CompatibleDApps)
+export const selectFeaturedDapps = createSelector(getDiscoveryState, (discovery): DiscoveryDApp[] => discovery.featured)
 
-export const selectCustomDapps = createSelector(getDiscoveryState, discovery => discovery.custom)
+export const selectCustomDapps = createSelector(getDiscoveryState, (discovery): DiscoveryDApp[] => discovery.custom)
 
-export const selectBookmarkedDapps = createSelector(selectFavoritesDapps, selectCustomDapps, (favorites, custom) => {
-    const dapps = [...favorites]
+export const selectBookmarkedDapps = createSelector(
+    selectFavoritesDapps,
+    selectCustomDapps,
+    (favorites, custom): DiscoveryDApp[] => {
+        const dapps = [...favorites]
 
-    for (const dapp of custom) {
-        if (!dapps.find(d => d.id === dapp.id)) {
-            dapps.push(dapp)
+        for (const dapp of custom) {
+            if (!dapps.find(d => URIUtils.compareURLs(d.href, dapp.href))) {
+                dapps.push(dapp)
+            }
         }
-    }
 
-    return dapps
-})
+        return dapps
+    },
+)
 
 export const selectAllDapps = createSelector(
     selectFavoritesDapps,
@@ -30,13 +38,13 @@ export const selectAllDapps = createSelector(
         const dapps = [...favorites]
 
         for (const dapp of custom) {
-            if (!dapps.find(d => d.id === dapp.id)) {
+            if (!dapps.find(d => URIUtils.compareURLs(d.href, dapp.href))) {
                 dapps.push(dapp)
             }
         }
 
         for (const dapp of featured) {
-            if (!dapps.find(d => d.id === dapp.id)) {
+            if (!dapps.find(d => URIUtils.compareURLs(d.href, dapp.href))) {
                 dapps.push(dapp)
             }
         }

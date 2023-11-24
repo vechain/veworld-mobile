@@ -1,7 +1,7 @@
 import React, { useCallback, useMemo, useRef } from "react"
 import { BaseButton, BaseIcon, BaseSafeArea, BaseSpacer, BaseText, BaseTextInput, BaseView } from "~Components"
 import { useI18nContext } from "~i18n"
-import { ColorThemeType, CompatibleDApp } from "~Constants"
+import { ColorThemeType, DiscoveryDApp } from "~Constants"
 import { useBrowserSearch, useThemedStyles } from "~Hooks"
 import { NativeSyntheticEvent, StyleSheet, TextInputChangeEventData } from "react-native"
 import { useNavigation, useScrollToTop } from "@react-navigation/native"
@@ -32,7 +32,7 @@ export const DiscoverScreen: React.FC = () => {
     }
 
     const onDAppPress = useCallback(
-        (dapp: CompatibleDApp) => {
+        (dapp: DiscoveryDApp) => {
             nav.navigate(Routes.BROWSER, { initialUrl: dapp.href })
             setFilteredSearch(undefined)
         },
@@ -72,11 +72,7 @@ export const DiscoverScreen: React.FC = () => {
     }, [tab, LL, setTab])
 
     const renderContent = useCallback(() => {
-        let selector:
-            | typeof selectFavoritesDapps
-            | typeof selectFeaturedDapps
-            | typeof selectCustomDapps
-            | typeof selectAllDapps
+        let selector: (...state: any) => DiscoveryDApp[]
 
         switch (tab) {
             case "favourites":

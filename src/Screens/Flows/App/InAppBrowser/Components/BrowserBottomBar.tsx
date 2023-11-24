@@ -3,26 +3,30 @@ import { StyleSheet } from "react-native"
 import { BaseIcon, BaseView } from "~Components"
 import { useTheme } from "~Hooks"
 import { useInAppBrowser } from "~Components/Providers/InAppBrowserProvider"
-import { ColorThemeType } from "~Constants"
-import { selectBookmarkedDapps, useAppSelector } from "~Storage/Redux"
+import { ColorThemeType, DiscoveryDApp } from "~Constants"
+import { addBookmark, removeBookmark, selectBookmarkedDapps, useAppDispatch, useAppSelector } from "~Storage/Redux"
 import { useNavigation } from "@react-navigation/native"
 import { Routes } from "~Navigation"
+import axios from "axios"
+import { URIUtils } from "~Utils"
 
-type IBrowserBottomBar = {
-    onTabClick: () => void
-    onFavouriteClick: () => void
-}
-
-export const BrowserBottomBar: React.FC<IBrowserBottomBar> = ({ onFavouriteClick }) => {
+export const BrowserBottomBar: React.FC = () => {
     const { canGoBack, canGoForward, goBack, goForward, navigationState, webviewRef } = useInAppBrowser()
     const theme = useTheme()
     const styles = createStyles(theme)
     const nav = useNavigation()
+    const dispatch = useAppDispatch()
 
-    const dapps = useAppSelector(selectBookmarkedDapps)
+    const dapps: DiscoveryDApp[] = useAppSelector(selectBookmarkedDapps)
 
     const isBookMarked = useMemo(() => {
-        return !!navigationState?.url && dapps.some(bookmark => bookmark.href === navigationState?.url)
+        if (!navigationState?.url) return false
+
+        try {
+            return dapps.some(bookmark => URIUtils.compareURLs(bookmark.href, URIUtils.clean(navigationState.url)))
+        } catch {
+            return false
+        }
     }, [navigationState?.url, dapps])
 
     const navBack = () => {
@@ -30,6 +34,35 @@ export const BrowserBottomBar: React.FC<IBrowserBottomBar> = ({ onFavouriteClick
             nav.goBack()
         } else {
             nav.navigate(Routes.DISCOVER)
+        }
+    }
+
+    const toggleBookmark = async () => {
+        if (!navigationState?.url) return
+
+        if (isBookMarked) {
+            const dapp = dapps.find(bookmark =>
+                URIUtils.compareURLs(bookmark.href, URIUtils.clean(navigationState.url)),
+            )
+
+            if (dapp) dispatch(removeBookmark(dapp))
+        } else {
+            const url = new URL(navigationState.url)
+
+            const websiteHtml = await axios.get<string>(url.origin)
+
+            const titleMatch = websiteHtml.data.match(/<title[^>]*>([^<]+)<\/title>/)
+
+            const bookmark: DiscoveryDApp = {
+                name: titleMatch ? titleMatch[1] : url.hostname,
+                href: navigationState.url,
+                desc: "",
+                isCustom: true,
+                createAt: new Date().getTime(),
+                amountOfNavigations: 1,
+            }
+
+            dispatch(addBookmark(bookmark))
         }
     }
 
@@ -55,7 +88,7 @@ export const BrowserBottomBar: React.FC<IBrowserBottomBar> = ({ onFavouriteClick
 
             <BaseIcon
                 color={theme.colors.primary}
-                onPress={onFavouriteClick}
+                onPress={toggleBookmark}
                 name={isBookMarked ? "star" : "star-outline"}
                 style={styles.icon}
             />

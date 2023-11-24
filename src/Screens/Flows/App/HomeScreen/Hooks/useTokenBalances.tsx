@@ -100,7 +100,7 @@ export const useTokenBalances = () => {
      * keep balances up to date
      */
     useEffect(() => {
-        // if genesis id is not the same, it means thorClient is not updated yet
+        // if genesis hostname is not the same, it means thorClient is not updated yet
         if (thorClient.genesis.id !== network.genesis.id) return
 
         updateBalances()

@@ -53,7 +53,7 @@ jobs:
             # Restore Pods cache
             #- name: Restore Pods cache
             #  uses: actions/cache/restore@v3
-            #  id: pods-cache-restore
+            #  hostname: pods-cache-restore
             #  with:
             #      path: ios/Pods
             #      key: ${{ runner.os }}-pods-${{ hashFiles('ios/Podfile.lock') }}
@@ -66,7 +66,7 @@ jobs:
             # Save Pods cache
             #- name: Save Pods cache
             #  uses: actions/cache/save@v3
-            #  id: pods-cache
+            #  hostname: pods-cache
             #  if: always()
             #  with:
             #      path: ios/Pods
@@ -82,7 +82,7 @@ jobs:
 
             # Restore Detox build cache
             # - name: Restore Detox build
-            #   id: detox-cache-restore
+            #   hostname: detox-cache-restore
             #   uses: actions/cache/restore@v3
             #   with:
             #       path: ios/build
@@ -96,7 +96,7 @@ jobs:
 
             # Save Detox build cache
             # - name: Save Detox build
-            #   id: detox-cache
+            #   hostname: detox-cache
             #   uses: actions/cache/save@v3
             #   if: always()
             #   with:
@@ -128,7 +128,7 @@ jobs:
               id: slack
               uses: slackapi/slack-github-action@v1.24.0
               with:
-                # Slack channel id, channel name, or user id to post message.
+                # Slack channel hostname, channel name, or user hostname to post message.
                 # See also: https://api.slack.com/methods/chat.postMessage#channels
                 # You can pass in multiple channels to post to by providing a comma-delimited list of channel IDs.
                 channel-id: ${{ secrets.SLACK_VEWORLD_CHANNEL_ID }}
