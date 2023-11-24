@@ -106,13 +106,12 @@ const convertUriToUrl = (uri: string) => {
 }
 
 function isValidBrowserUrl(url: string): boolean {
-    // Regular expression to check for a valid URL (including those without protocols), should accept id addresses, with ports as well as localhost
-    const regex = new RegExp(
-        "^((http|https)://)?([a-z0-9]+:[a-z0-9]+@)?([a-z0-9]+:)?[a-z0-9]+(:[0-9]+)?(/[a-z0-9]+)*$",
-        "i",
-    )
-
-    return regex.test(url)
+    try {
+        new URL(url)
+        return true
+    } catch (e) {
+        return false
+    }
 }
 
 export default {
