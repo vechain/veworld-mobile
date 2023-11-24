@@ -4,7 +4,7 @@ const existingTxId = connexTransactionStub.id
 
 /**
  * Mocked transaction stub of Connex.Thor
- * Originally create a visitor to the transaction specified by the given hostname
+ * Originally create a visitor to the transaction specified by the given id
  * @param id
  */
 export function transactionStub(txId: string): Connex.Thor.Transaction.Visitor {
