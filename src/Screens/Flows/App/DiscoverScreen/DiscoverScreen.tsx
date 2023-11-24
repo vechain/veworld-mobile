@@ -44,36 +44,15 @@ export const DiscoverScreen: React.FC = () => {
     const Tab = createMaterialTopTabNavigator()
 
     const FeaturedScreen = useCallback(
-        ({ navigation }) => (
-            <DAppList
-                onDAppPress={onDAppPress}
-                filteredSearch={filteredSearch}
-                selector={selectFeaturedDapps}
-                navigation={navigation}
-            />
-        ),
+        () => <DAppList onDAppPress={onDAppPress} filteredSearch={filteredSearch} selector={selectFeaturedDapps} />,
         [filteredSearch, onDAppPress],
     )
     const FavouriteScreen = useCallback(
-        ({ navigation }) => (
-            <DAppList
-                onDAppPress={onDAppPress}
-                filteredSearch={filteredSearch}
-                selector={selectFavoritesDapps}
-                navigation={navigation}
-            />
-        ),
+        () => <DAppList onDAppPress={onDAppPress} filteredSearch={filteredSearch} selector={selectFavoritesDapps} />,
         [filteredSearch, onDAppPress],
     )
     const PersonalScreen = useCallback(
-        ({ navigation }) => (
-            <DAppList
-                onDAppPress={onDAppPress}
-                filteredSearch={filteredSearch}
-                selector={selectCustomDapps}
-                navigation={navigation}
-            />
-        ),
+        () => <DAppList onDAppPress={onDAppPress} filteredSearch={filteredSearch} selector={selectCustomDapps} />,
         [filteredSearch, onDAppPress],
     )
 
