@@ -14,7 +14,7 @@ import {
     useTransactionGas,
     useTransferAddContact,
 } from "~Hooks"
-import { AddressUtils, FormattingUtils, error } from "~Utils"
+import { AddressUtils, TransactionUtils, error } from "~Utils"
 import { AnalyticsEvent, COLORS } from "~Constants"
 import {
     AccountCard,
@@ -54,14 +54,12 @@ import {
     LedgerAccountWithDevice,
     LocalAccountWithDevice,
 } from "~Model"
-import { prepareFungibleClause } from "~Utils/TransactionUtils/TransactionUtils"
 import { Transaction } from "thor-devkit"
 import { ContactManagementBottomSheet } from "../../ContactsScreen"
 import { DelegationType } from "~Model/Delegation"
 import { calculateIsEnoughGas } from "./Helpers"
 import Animated, { interpolateColor, useAnimatedStyle, useSharedValue, withTiming } from "react-native-reanimated"
 import { StyleSheet } from "react-native"
-import { BigNumber } from "bignumber.js"
 import pive from "../02-SelectAmountSendScreen/Hooks/VWBN"
 
 type Props = NativeStackScreenProps<
@@ -70,8 +68,7 @@ type Props = NativeStackScreenProps<
 >
 
 export const TransactionSummarySendScreen = ({ route }: Props) => {
-    const { token, amount: selectedAmount, address, initialRoute } = route.params
-    let amount = pive(selectedAmount).addTrailingZeros(token.decimals).toString
+    const { token, amount, address, initialRoute } = route.params
 
     const { LL } = useI18nContext()
     const dispatch = useAppDispatch()
@@ -79,11 +76,14 @@ export const TransactionSummarySendScreen = ({ route }: Props) => {
     const nav = useNavigation()
 
     const [isEnoughGas, setIsEnoughGas] = useState(true)
-    const [txCostTotal, setTxCostTotal] = useState(new BigNumber("0"))
+    const [txCostTotal, setTxCostTotal] = useState("0")
 
     const selectedAccount = useAppSelector(selectSelectedAccount)
     const pendingTransaction = useAppSelector(state => selectPendingTx(state, token.address))
-    const clauses = useMemo(() => prepareFungibleClause(amount, token, address), [amount, token, address])
+    const clauses = useMemo(
+        () => TransactionUtils.prepareFungibleClause(amount, token, address),
+        [amount, token, address],
+    )
 
     const accounts = useAppSelector(selectAccounts)
     const receiverIsAccount = accounts.find(_account => AddressUtils.compareAddresses(_account.address, address))
@@ -270,7 +270,7 @@ export const TransactionSummarySendScreen = ({ route }: Props) => {
         })
 
         setIsEnoughGas(isGas)
-        setTxCostTotal(_txCostTotal)
+        setTxCostTotal(_txCostTotal.toString)
     }, [clauses, gas, isDelegated, selectedFeeOption, vtho, amount])
 
     return (
@@ -425,7 +425,7 @@ interface ITotalSendAmountView {
     amount: string
     symbol: string
     token: FungibleTokenWithBalance
-    txCostTotal: BigNumber
+    txCostTotal: string
     isDelegated: boolean
 }
 
@@ -447,27 +447,17 @@ function TotalSendAmountView({ amount, symbol, token, txCostTotal, isDelegated }
         return { color: interpolateColor(animationProgress.value, [0, 1], [theme.colors.text, theme.colors.danger]) }
     }, [theme.isDark])
 
+    const formattedTotalCost = useMemo(
+        () => pive(txCostTotal).toHuman(token.decimals).toString,
+        [token.decimals, txCostTotal],
+    )
+
     const formattedFiatAmount = useMemo(
         () =>
-            FormattingUtils.humanNumber(
-                FormattingUtils.convertToFiatBalance(
-                    FormattingUtils.scaleNumberDown(
-                        token.symbol.toLowerCase() === "vtho" ? txCostTotal : amount,
-                        token.decimals,
-                        token.decimals,
-                        BigNumber.ROUND_DOWN,
-                    ) || "0",
-                    exchangeRate?.rate || 1,
-                    0,
-                ),
-                FormattingUtils.scaleNumberDown(
-                    token.symbol.toLowerCase() === "vtho" ? txCostTotal : amount,
-                    token.decimals,
-                    token.decimals,
-                    BigNumber.ROUND_DOWN,
-                ),
-            ),
-        [token.symbol, token.decimals, amount, txCostTotal, exchangeRate?.rate],
+            pive()
+                .toCurrencyConversion(token.symbol.toLowerCase() === "vtho" ? formattedTotalCost : amount, exchangeRate)
+                .toCurrencyFormat(2).toString,
+        [amount, exchangeRate, formattedTotalCost, token.symbol],
     )
 
     return (
@@ -499,7 +489,7 @@ function TotalSendAmountView({ amount, symbol, token, txCostTotal, isDelegated }
                     <BaseText typographyFont="caption">{"Total Cost"}</BaseText>
                     <BaseView flexDirection="row">
                         <Animated.Text style={[baseStyles.coloredText, animatedStyle]}>
-                            {txCostTotal.toString()}
+                            {formattedTotalCost}
                         </Animated.Text>
                         <BaseText typographyFont="body" mx={4}>
                             {symbol}

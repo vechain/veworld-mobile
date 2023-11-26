@@ -38,6 +38,18 @@ export const getGasByCoefficient = (selectedFeeOption: string, gas: EstimateGasR
     return gasFeeOptionsRaw[Number(selectedFeeOption) as GasPriceCoefficient]
 }
 
+/**
+ * Example:
+ * clauseAmount     = 7453891335000000000
+ * vthoGasFeeRaw    = 665820000000000000
+ * txCostTotal      = 8119711335000000000
+ * @param clauses
+ * @param vthoGasFeeRaw
+ * @param isDelegated
+ * @param vtho
+ * @returns
+ */
+
 const calculateVthoGas = (clauses: Transaction.Clause[], vthoGasFeeRaw: BigNumber, isDelegated: boolean, vtho: any) => {
     const vthoTransferClauses = clauses.filter(
         clause =>
@@ -46,7 +58,7 @@ const calculateVthoGas = (clauses: Transaction.Clause[], vthoGasFeeRaw: BigNumbe
             TransactionUtils.isTokenTransferClause(clause),
     )
 
-    let txCostTotal = new BigNumber(isDelegated ? 0 : vthoGasFeeRaw ?? 0)
+    let txCostTotal = pive(isDelegated ? "0" : vthoGasFeeRaw.toString() ?? "0")
     let isEnoughGas = true
 
     for (const clause of vthoTransferClauses) {
@@ -55,14 +67,14 @@ const calculateVthoGas = (clauses: Transaction.Clause[], vthoGasFeeRaw: BigNumbe
 
         // Get totl cost of transaction (amount + fee)
         if (clauseAmount) {
-            txCostTotal = txCostTotal.plus(pive(clauseAmount).toHuman(18).toString)
+            txCostTotal = txCostTotal.plus(clauseAmount)
         }
     }
 
     // Get total balance of VTHO
-    const totalBalance = new BigNumber(vtho.balance.balance)
+    const totalBalance = pive(vtho.balance.balance)
     // Check if the total cost of the transaction is less than or equal to the total balance of VTHO
-    isEnoughGas = totalBalance.isGreaterThanOrEqualTo(txCostTotal)
+    isEnoughGas = totalBalance.isBiggerThan(txCostTotal.toString)
 
     return { isGas: isEnoughGas, txCostTotal, gasCost: vthoGasFeeRaw }
 }

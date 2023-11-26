@@ -2,10 +2,11 @@ import { BigNumber } from "bignumber.js"
 import { useEffect, useMemo, useState } from "react"
 
 import { useTransactionGas } from "~Hooks"
-import { FungibleTokenWithBalance } from "~Model"
+import { EstimateGasResult, FungibleTokenWithBalance } from "~Model"
 import { TransactionUtils } from "~Utils"
 import { calculateIsEnoughGas } from "../../04-TransactionSummarySendScreen/Helpers"
 import { useIsFocused } from "@react-navigation/native"
+import pive from "./VWBN"
 
 const address = "0x0000000000000000000000000000506172616d73"
 
@@ -21,9 +22,15 @@ export const useCalculateGas = ({ token }: { token: FungibleTokenWithBalance }) 
 
     useEffect(() => {
         if (isFocus) {
+            //! fake add a bit of gas to the gas cost to make sure it's enough
+            const inflatedGas = {
+                ...gas,
+                gas: gas?.gas ? pive(gas.gas).plus(10000).toNumber : 0,
+            } as EstimateGasResult
+
             const { gasCost } = calculateIsEnoughGas({
                 selectedFeeOption: "0",
-                gas,
+                gas: inflatedGas,
                 clauses,
                 isDelegated: false,
                 vtho: token,

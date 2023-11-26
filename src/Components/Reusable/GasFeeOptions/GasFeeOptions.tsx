@@ -7,8 +7,8 @@ import { useTheme } from "~Hooks"
 import { useI18nContext } from "~i18n"
 import { BaseButtonGroupHorizontalType } from "~Model"
 import { DelegationType } from "~Model/Delegation"
-import { BigNumber } from "bignumber.js"
 import { FormattingUtils } from "~Utils"
+import pive, { Pive } from "~Screens/Flows/App/SendScreen/02-SelectAmountSendScreen/Hooks/VWBN"
 
 type Props = {
     setSelectedFeeOption: (option: string) => void
@@ -17,7 +17,7 @@ type Props = {
     selectedFeeOption: string
     gasFeeOptions: Record<GasPriceCoefficient, string>
     isThereEnoughGas: boolean
-    txCostTotal: BigNumber
+    txCostTotal: string
     totalBalance: string
 }
 
@@ -60,7 +60,7 @@ export const GasFeeOptions = ({
         [setSelectedFeeOption],
     )
 
-    const computedGasDifference = useMemo(() => txCostTotal.minus(totalBalance), [txCostTotal, totalBalance])
+    const computedGasDifference = useMemo(() => pive(txCostTotal).minus(totalBalance), [txCostTotal, totalBalance])
 
     if (selectedDelegationOption === DelegationType.URL) {
         return (
@@ -135,7 +135,7 @@ export const GasFeeOptions = ({
 
 interface IGasWarningView extends AnimatedProps<ViewProps> {
     isDelegattion?: boolean
-    computedGasDifference?: BigNumber
+    computedGasDifference?: Pive
 }
 
 function GasWarningView(props: IGasWarningView) {
@@ -147,7 +147,7 @@ function GasWarningView(props: IGasWarningView) {
         () =>
             LL.SEND_INSUFFICIENT_VTHO() +
             " " +
-            FormattingUtils.scaleNumberDown(props.computedGasDifference ?? "0", VTHO.decimals, 18),
+            FormattingUtils.scaleNumberDown(props.computedGasDifference?.toString ?? "0", VTHO.decimals, 18),
         [LL, props.computedGasDifference],
     )
 
