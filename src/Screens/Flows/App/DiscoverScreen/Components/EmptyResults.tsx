@@ -13,6 +13,10 @@ export type EmptyResultsProps = {
 export const EmptyResults = ({ onClick, title, subtitle, icon }: EmptyResultsProps) => {
     return (
         <BaseView mx={20} justifyContent="center" alignItems="center">
+            <BaseText mx={20} typographyFont="body" align="center">
+                {subtitle}
+            </BaseText>
+            <BaseSpacer height={16} />
             <BaseView flexDirection="row" justifyContent="space-evenly" w={100}>
                 <BaseTouchable action={onClick}>
                     <BaseView
@@ -29,10 +33,6 @@ export const EmptyResults = ({ onClick, title, subtitle, icon }: EmptyResultsPro
                     </BaseView>
                 </BaseTouchable>
             </BaseView>
-            <BaseSpacer height={16} />
-            <BaseText mx={20} typographyFont="body" align="center">
-                {subtitle}
-            </BaseText>
         </BaseView>
     )
 }

@@ -28,22 +28,20 @@ export const InAppBrowser: React.FC<Props> = ({ route }) => {
             noMargin
             footer={<BrowserBottomBar />}
             fixedBody={
-                <>
-                    <View style={styles.container}>
-                        <WebView
-                            ref={webviewRef as MutableRefObject<WebView>}
-                            source={{
-                                uri: navigationState?.url ?? route.params.initialUrl,
-                            }}
-                            onNavigationStateChange={onNavigationStateChange}
-                            javaScriptEnabled={true}
-                            onMessage={onMessage}
-                            style={styles.loginWebView}
-                            scalesPageToFit={true}
-                            injectedJavaScriptBeforeContentLoaded={injectVechainScript}
-                        />
-                    </View>
-                </>
+                <View style={styles.container}>
+                    <WebView
+                        ref={webviewRef as MutableRefObject<WebView>}
+                        source={{
+                            uri: navigationState?.url ?? route.params.initialUrl,
+                        }}
+                        onNavigationStateChange={onNavigationStateChange}
+                        javaScriptEnabled={true}
+                        onMessage={onMessage}
+                        style={styles.loginWebView}
+                        scalesPageToFit={true}
+                        injectedJavaScriptBeforeContentLoaded={injectVechainScript}
+                    />
+                </View>
             }
         />
     )

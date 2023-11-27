@@ -1,5 +1,5 @@
 import React, { useCallback } from "react"
-import { StyleSheet, View, ViewProps } from "react-native"
+import { StyleProp, StyleSheet, View, ViewProps } from "react-native"
 import { BaseIcon, BaseSpacer } from "~Components/Base"
 import { useNavigation } from "@react-navigation/native"
 import { useTheme } from "~Hooks"
@@ -11,6 +11,7 @@ type Props = {
     beforeNavigating?: () => Promise<void> | void
     action?: () => void
     onGoBack?: () => void
+    iconStyle?: StyleProp<ViewProps>
 } & ViewProps
 
 export const BackButtonHeader = ({
@@ -20,6 +21,7 @@ export const BackButtonHeader = ({
     beforeNavigating,
     onGoBack,
     action,
+    iconStyle,
     ...otherProps
 }: Props) => {
     const nav = useNavigation()
@@ -40,7 +42,7 @@ export const BackButtonHeader = ({
         <View {...otherProps}>
             <BaseIcon
                 haptics="Light"
-                style={backButtonHeaderStyle.backButton}
+                style={[backButtonHeaderStyle.backButton, iconStyle]}
                 size={36}
                 name="chevron-left"
                 color={iconColor ? iconColor : theme.colors.text}

@@ -19,12 +19,15 @@ import {
 } from "~Storage/Redux"
 import { createMaterialTopTabNavigator } from "@react-navigation/material-top-tabs"
 import { TabBar } from "./Components/TabBar"
+import Animated, { useSharedValue, withDelay, withSpring, withTiming } from "react-native-reanimated"
 
 export const DiscoverScreen: React.FC = () => {
-    const { theme } = useThemedStyles(baseStyles)
+    const { theme, styles } = useThemedStyles(baseStyles)
     const { LL } = useI18nContext()
     const nav = useNavigation()
     const [filteredSearch, setFilteredSearch] = React.useState<string>()
+    const animatedIconOpacity = useSharedValue(0)
+    const animatedIconRightPosition = useSharedValue(-20)
 
     const flatListRef = useRef(null)
     useScrollToTop(flatListRef)
@@ -44,6 +47,16 @@ export const DiscoverScreen: React.FC = () => {
             dispatch(setDiscoverySectionOpened())
         }
     }, [track, hasOpenedDiscovery, dispatch])
+
+    useEffect(() => {
+        if (filteredSearch?.length) {
+            animatedIconOpacity.value = withDelay(100, withTiming(1, { duration: 200 }))
+            animatedIconRightPosition.value = withSpring(2.5)
+        } else {
+            animatedIconOpacity.value = withTiming(0, { duration: 150 })
+            animatedIconRightPosition.value = withSpring(-20)
+        }
+    }, [animatedIconOpacity, animatedIconRightPosition, filteredSearch])
 
     const onTextChange = (e: NativeSyntheticEvent<TextInputChangeEventData>) => {
         setFilteredSearch(e.nativeEvent.text)
@@ -83,7 +96,7 @@ export const DiscoverScreen: React.FC = () => {
                 setFilteredSearch={setFilteredSearch}
             />
         ),
-        [filteredSearch, onDAppPress],
+        [filteredSearch, onDAppPress, setFilteredSearch],
     )
     const FavouriteScreen = useCallback(
         () => (
@@ -94,7 +107,7 @@ export const DiscoverScreen: React.FC = () => {
                 setFilteredSearch={setFilteredSearch}
             />
         ),
-        [filteredSearch, onDAppPress],
+        [filteredSearch, onDAppPress, setFilteredSearch],
     )
     const PersonalScreen = useCallback(
         () => (
@@ -105,7 +118,7 @@ export const DiscoverScreen: React.FC = () => {
                 setFilteredSearch={setFilteredSearch}
             />
         ),
-        [filteredSearch, onDAppPress],
+        [filteredSearch, onDAppPress, setFilteredSearch],
     )
 
     return (
@@ -117,10 +130,29 @@ export const DiscoverScreen: React.FC = () => {
             {/*Search Bar*/}
             <BaseView w={100} flexDirection="row" px={24}>
                 <BaseView flex={1}>
-                    <BaseTextInput placeholder={LL.DISCOVER_SEARCH()} onChange={onTextChange} value={filteredSearch} />
+                    <BaseTextInput
+                        placeholder={LL.DISCOVER_SEARCH()}
+                        onChange={onTextChange}
+                        value={filteredSearch}
+                        style={styles.searchBar}
+                    />
+                    <Animated.View
+                        style={[
+                            styles.searchIconContainer,
+                            {
+                                opacity: animatedIconOpacity,
+                                right: animatedIconRightPosition,
+                            },
+                        ]}>
+                        <BaseIcon
+                            name={"search-web"}
+                            size={25}
+                            action={onSearch}
+                            color={theme.colors.primary}
+                            borderRadius={20}
+                        />
+                    </Animated.View>
                 </BaseView>
-                <BaseSpacer width={12} />
-                <BaseIcon name={"search-web"} size={30} onPress={onSearch} color={theme.colors.primary} />
             </BaseView>
 
             <BaseSpacer height={16} />
@@ -149,37 +181,18 @@ export const DiscoverScreen: React.FC = () => {
 
 const baseStyles = (theme: ColorThemeType) =>
     StyleSheet.create({
-        tabBar: {
-            flexDirection: "row",
+        searchBar: {
+            paddingRight: 40,
+        },
+        searchIconContainer: {
+            borderColor: theme.colors.text,
+            position: "absolute",
+            right: 2.5,
+            top: 2.5,
+            bottom: 2.5,
+            justifyContent: "center",
             alignItems: "center",
-            backgroundColor: theme.colors.background,
-            whiteSpace: "nowrap",
-            overflowX: "auto",
+            width: 40,
+            height: 40,
         },
-        menuItemTick: {
-            height: 2,
-            width: 15,
-            backgroundColor: theme.colors.secondary,
-        },
-        selectedTabButton: {
-            backgroundColor: theme.colors.primary,
-        },
-        unselectedTabButton: {
-            backgroundColor: theme.colors.info,
-        },
-        contentContainerStyle: {
-            paddingHorizontal: 24,
-        },
-        searchContainer: {
-            flex: 1,
-        },
-        image: {
-            width: 60,
-            height: 60,
-        },
-        separator: {
-            backgroundColor: theme.colors.text,
-            height: 5,
-        },
-        list: { flex: 1 },
     })

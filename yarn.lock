@@ -1784,10 +1784,10 @@
     mv "~2"
     safe-json-stringify "~1"
 
-"@expo/cli@0.10.15":
-  version "0.10.15"
-  resolved "https://registry.yarnpkg.com/@expo/cli/-/cli-0.10.15.tgz#565da50e3d516cdbf0f5dcdd5b19ce87bca20469"
-  integrity sha512-CIpfIB5oB/s/op6Ke5M7TI4/yOi5raTR9ps9UD+ExazonTDAzEtXANVWmAR7Z4+wUyqycniWxTpICcaxri2a3A==
+"@expo/cli@0.10.16":
+  version "0.10.16"
+  resolved "https://registry.yarnpkg.com/@expo/cli/-/cli-0.10.16.tgz#42f9aaf08884f70f3a671b7d6b4f138ad39192d7"
+  integrity sha512-EwgnRN5AMElg0JJjFLJTPk5hYkVXxnNMLIvZBiTfGoCq+rDw6u7Mg5l2Bbm/geSHOoplaHyPZ/Wr23FAuZWehA==
   dependencies:
     "@babel/runtime" "^7.20.0"
     "@expo/code-signing-certificates" "0.0.5"
@@ -2561,54 +2561,54 @@
   resolved "https://registry.yarnpkg.com/@klarna/react-native-vector-drawable/-/react-native-vector-drawable-0.4.0.tgz#b1f9bc0f8119ab3502c488941f11672a04e30651"
   integrity sha512-jm1rVTZY2l58tJPtnwOmjl+dhhel+nlJSqihd0SENf85fo5F1QNdROGO2/DF9PF9p3pb5v/tRhFPdwW819alwA==
 
-"@ledgerhq/devices@^8.0.8":
-  version "8.0.8"
-  resolved "https://registry.yarnpkg.com/@ledgerhq/devices/-/devices-8.0.8.tgz#cd233eb54a044913160c9183be9fb22adae4e071"
-  integrity sha512-0j7E8DY2jeSSATc8IJk+tXDZ9u+Z7tXxB8I4TzXrfV/8A5exMh/K1IwX6Jt1zlw1wre4CT9MV4mzUs3M/TE7lg==
+"@ledgerhq/devices@^8.1.0":
+  version "8.1.0"
+  resolved "https://registry.yarnpkg.com/@ledgerhq/devices/-/devices-8.1.0.tgz#39b12feabe1c7a99b86667bedf2eafbd125cf217"
+  integrity sha512-Vsdv84Nwzee0qhObdwVzhkxW1+h2cFoD1AWuU8N1V/2OJKiVS35A1qloSCF0oHapg+KTJvim8tr5rRvlkCYyzQ==
   dependencies:
-    "@ledgerhq/errors" "^6.15.0"
-    "@ledgerhq/logs" "^6.11.0"
+    "@ledgerhq/errors" "^6.16.0"
+    "@ledgerhq/logs" "^6.12.0"
     rxjs "^7.8.1"
     semver "^7.3.5"
 
-"@ledgerhq/errors@^6.15.0":
-  version "6.15.0"
-  resolved "https://registry.yarnpkg.com/@ledgerhq/errors/-/errors-6.15.0.tgz#45cda73915f695cc072cb8a99650830bc5dc6668"
-  integrity sha512-6xaw5/mgoht62TnL3rXsaQYEFwpnXyNDk1AOSJksIjFHx9bHUnkyVmrnGQDj0JLzi+E7bHEgTrpCs8wpeDh9jA==
+"@ledgerhq/errors@^6.16.0":
+  version "6.16.0"
+  resolved "https://registry.yarnpkg.com/@ledgerhq/errors/-/errors-6.16.0.tgz#0aaf16bbf649a3b43867746781b2e3adebf7fe3a"
+  integrity sha512-vnew6lf4jN6E+WI0DFhD4WY0uM8LYL8HCumtUr86hNwvmEfebi7LxxpJGmYfVQD5TgEC7NibYnQ+2q9XWAc02A==
 
 "@ledgerhq/hw-transport-mocker@^6.27.15":
-  version "6.27.20"
-  resolved "https://registry.yarnpkg.com/@ledgerhq/hw-transport-mocker/-/hw-transport-mocker-6.27.20.tgz#d2b5f82797fad20544995220bb080a527f125198"
-  integrity sha512-o5nGuMLs/akXUvgD1f2u1DqhiC7Ii8x3fCmdE5KExCMo3dVWYkeeV3LTUzx+bp+daJFeYNKOa9+Z7XpqIuEJtA==
+  version "6.28.0"
+  resolved "https://registry.yarnpkg.com/@ledgerhq/hw-transport-mocker/-/hw-transport-mocker-6.28.0.tgz#a664220338b56d62c8aca0a10c98e28484e4a889"
+  integrity sha512-svUgIRdoc69b49MHncKikoRgWIqn7ZR3IHP+nq4TCTYn2nm5LILJYyf8osnCg8brsXdEY68z++fr++GyF9vUIw==
   dependencies:
-    "@ledgerhq/hw-transport" "^6.29.0"
-    "@ledgerhq/logs" "^6.11.0"
+    "@ledgerhq/hw-transport" "^6.30.0"
+    "@ledgerhq/logs" "^6.12.0"
     rxjs "^7.8.1"
 
-"@ledgerhq/hw-transport@^6.29.0":
-  version "6.29.0"
-  resolved "https://registry.yarnpkg.com/@ledgerhq/hw-transport/-/hw-transport-6.29.0.tgz#2b85f39d90b093930f0c7bfc513b29eb47ba97fa"
-  integrity sha512-WQfzxt3EnnbOmzZVYiCgSmNsqafBOFQn40awvUPY2IZviJRs23/1ANPHAo76bzPV88+Qk0+1wZlcnIanGN6fFA==
+"@ledgerhq/hw-transport@^6.30.0":
+  version "6.30.0"
+  resolved "https://registry.yarnpkg.com/@ledgerhq/hw-transport/-/hw-transport-6.30.0.tgz#9c8a8f2c8281fbc4a3db1d1f3ac44a456b38281a"
+  integrity sha512-wrAwn/wCAaGP2Yuy78cLyqmQNzbuDvUv4gJYF/UO4djvUz0jjvD2w5kxRWxF/W93vyKT+/RplRtFk3CJzD3e3A==
   dependencies:
-    "@ledgerhq/devices" "^8.0.8"
-    "@ledgerhq/errors" "^6.15.0"
-    "@ledgerhq/logs" "^6.11.0"
+    "@ledgerhq/devices" "^8.1.0"
+    "@ledgerhq/errors" "^6.16.0"
+    "@ledgerhq/logs" "^6.12.0"
     events "^3.3.0"
 
-"@ledgerhq/logs@^6.11.0":
-  version "6.11.0"
-  resolved "https://registry.yarnpkg.com/@ledgerhq/logs/-/logs-6.11.0.tgz#0d28e7edcf71548506f4304686cba480ba91bbcf"
-  integrity sha512-HHK9y4GGe4X7CXbRUCh7z8Mp+WggpJn1dmUjmuk1rNugESF6o8nAOnXA+BxwtRRNV3CgNJR3Wxdos4J9qV0Zsg==
+"@ledgerhq/logs@^6.12.0":
+  version "6.12.0"
+  resolved "https://registry.yarnpkg.com/@ledgerhq/logs/-/logs-6.12.0.tgz#ad903528bf3687a44da435d7b2479d724d374f5d"
+  integrity sha512-ExDoj1QV5eC6TEbMdLUMMk9cfvNKhhv5gXol4SmULRVCx/3iyCPhJ74nsb3S0Vb+/f+XujBEj3vQn5+cwS0fNA==
 
 "@ledgerhq/react-native-hw-transport-ble@^6.29.5":
-  version "6.30.0"
-  resolved "https://registry.yarnpkg.com/@ledgerhq/react-native-hw-transport-ble/-/react-native-hw-transport-ble-6.30.0.tgz#a5201cef9c4b3dae40674560c97b4e83a31824cf"
-  integrity sha512-GE3zaGfrpnADmmqS23z/IZWHEBJ4qHUhgc8yBD+czzg/kbGlNpWF3h/kH8dqPov2Vp4Vzvo+5Sxn5TCLzvIKRA==
+  version "6.31.0"
+  resolved "https://registry.yarnpkg.com/@ledgerhq/react-native-hw-transport-ble/-/react-native-hw-transport-ble-6.31.0.tgz#10b4972999125b13c671374045dd82166427000d"
+  integrity sha512-BlpJrKwSe7OdK9vmEDJZ5SQ94JuRd4LeogZcvVVt90E1j4qIKmhEWzrnryiGXZLI0TZHprWkEiT2TLH7j9IvFg==
   dependencies:
-    "@ledgerhq/devices" "^8.0.8"
-    "@ledgerhq/errors" "^6.15.0"
-    "@ledgerhq/hw-transport" "^6.29.0"
-    "@ledgerhq/logs" "^6.11.0"
+    "@ledgerhq/devices" "^8.1.0"
+    "@ledgerhq/errors" "^6.16.0"
+    "@ledgerhq/hw-transport" "^6.30.0"
+    "@ledgerhq/logs" "^6.12.0"
     react-native-ble-plx "2.0.3"
     rxjs "^7.8.1"
 
@@ -5506,9 +5506,9 @@ camelcase@^7.0.1:
   integrity sha512-xlx1yCK2Oc1APsPXDL2LdlNP6+uu8OCDdhOBSVT279M/S+y75O30C2VuD8T2ogdePBBl7PfPF4504tnLgX3zfw==
 
 caniuse-lite@^1.0.30001541:
-  version "1.0.30001564"
-  resolved "https://registry.yarnpkg.com/caniuse-lite/-/caniuse-lite-1.0.30001564.tgz#eaa8bbc58c0cbccdcb7b41186df39dd2ba591889"
-  integrity sha512-DqAOf+rhof+6GVx1y+xzbFPeOumfQnhYzVnZD6LAXijR77yPtm9mfOcqOnT3mpnJiZVT+kwLAFnRlZcIz+c6bg==
+  version "1.0.30001565"
+  resolved "https://registry.yarnpkg.com/caniuse-lite/-/caniuse-lite-1.0.30001565.tgz#a528b253c8a2d95d2b415e11d8b9942acc100c4f"
+  integrity sha512-xrE//a3O7TP0vaJ8ikzkD2c2NgcVUvsEe2IvFTntV4Yd1Z9FVzh+gW+enX96L0psrbaFMcVcH2l90xNuGDWc8w==
 
 capital-case@^1.0.4:
   version "1.0.4"
@@ -5677,9 +5677,9 @@ cli-cursor@^4.0.0:
     restore-cursor "^4.0.0"
 
 cli-spinners@^2.0.0, cli-spinners@^2.5.0, cli-spinners@^2.9.0:
-  version "2.9.1"
-  resolved "https://registry.yarnpkg.com/cli-spinners/-/cli-spinners-2.9.1.tgz#9c0b9dad69a6d47cbb4333c14319b060ed395a35"
-  integrity sha512-jHgecW0pxkonBJdrKsqxgRX9AcG+u/5k0Q7WPDfi8AogLAdwxEkyYYNWwZ5GvVFoFx2uiY1eNcSK00fh+1+FyQ==
+  version "2.9.2"
+  resolved "https://registry.yarnpkg.com/cli-spinners/-/cli-spinners-2.9.2.tgz#1773a8f4b9c4d6ac31563df53b3fc1d79462fe41"
+  integrity sha512-ywqV+5MmyL4E7ybXgKys4DugZbX0FC6LnwrhjuykIjnK9k8OQacQ7axGKnjDXWNhns0xot3bZI5h55H8yo9cJg==
 
 cli-table3@0.6.3:
   version "0.6.3"
@@ -6876,9 +6876,9 @@ ee-first@1.1.1:
   integrity sha512-WMwm9LhRUo+WUaRN+vRuETqG89IgZphVSNkdFgeb6sS/E4OrDIN7t48CAewSHXc6C8lefD8KKfr5vY61brQlow==
 
 electron-to-chromium@^1.4.535:
-  version "1.4.593"
-  resolved "https://registry.yarnpkg.com/electron-to-chromium/-/electron-to-chromium-1.4.593.tgz#f71b157f7382f3d3a164f73ff2da772d4b3fd984"
-  integrity sha512-c7+Hhj87zWmdpmjDONbvNKNo24tvmD4mjal1+qqTYTrlF0/sNpAcDlU0Ki84ftA/5yj3BF2QhSGEC0Rky6larg==
+  version "1.4.594"
+  resolved "https://registry.yarnpkg.com/electron-to-chromium/-/electron-to-chromium-1.4.594.tgz#f69f207fba80735a44a988df42f3f439115d0515"
+  integrity sha512-xT1HVAu5xFn7bDfkjGQi9dNpMqGchUkebwf1GL7cZN32NSwwlHRPMSDJ1KN6HkS0bWUtndbSQZqvpQftKG2uFQ==
 
 elliptic@6.5.4, elliptic@^6.5.3, elliptic@^6.5.4:
   version "6.5.4"
@@ -7644,12 +7644,12 @@ expo-task-manager@~11.3.0:
     unimodules-app-loader "~4.2.0"
 
 expo@^49.0.0:
-  version "49.0.20"
-  resolved "https://registry.yarnpkg.com/expo/-/expo-49.0.20.tgz#dc7ed91c649dc32f3e926d1917ef2a124b41fa3e"
-  integrity sha512-2j3GjnGlaLqpk7tzCnII9Ywxb64YZSp73n2U7TrZIWFxC5kwPCdejEYSqIYX+5ZzTJ1m8wmi23aB2BrH3Nzmzw==
+  version "49.0.21"
+  resolved "https://registry.yarnpkg.com/expo/-/expo-49.0.21.tgz#32a66b32d0a233879ec3afdec35fb63d2cc8a4c3"
+  integrity sha512-JpHL6V0yt8/fzsmkAdPdtsah+lU6Si4ac7MDklLYvzEil7HAFEsN/pf06wQ21ax4C+BL27hI6JJoD34tzXUCJA==
   dependencies:
     "@babel/runtime" "^7.20.0"
-    "@expo/cli" "0.10.15"
+    "@expo/cli" "0.10.16"
     "@expo/config" "8.1.2"
     "@expo/config-plugins" "7.2.5"
     "@expo/vector-icons" "^13.0.0"
@@ -12562,9 +12562,9 @@ react-native-bouncy-checkbox@^3.0.7:
   integrity sha512-776TgMGt9wTpOQA1TcvFjL5VUn6o945wFYf3Ztqva62/vT2o3JAezLiP7hYh2Svd+PewfWBYSPMs4jeaSoS8Sg==
 
 react-native-context-menu-view@^1.11.0:
-  version "1.11.0"
-  resolved "https://registry.yarnpkg.com/react-native-context-menu-view/-/react-native-context-menu-view-1.11.0.tgz#942e1436898930eab63ae28aa4bfda39d418a455"
-  integrity sha512-2ztIsQtb/sYStjq5Zn4cKvqAfTp44w+0gdI4nSQ0+PVXUTvn7Q9QCeTijj2GH8elYAtjvuJvr0ORc91whDhyCg==
+  version "1.12.0"
+  resolved "https://registry.yarnpkg.com/react-native-context-menu-view/-/react-native-context-menu-view-1.12.0.tgz#3e3273e3bac2be1f1e54db2a34297b2f482d68f5"
+  integrity sha512-n+Mxcnhp5RKS6cWcIpHlwVHvGktGs1Wg0+8nRMZCOSatu/ojDsBfQIgsllw0s0r8gGAqATKFVIcWCDXCvEFvZA==
 
 react-native-device-info@^10.11.0:
   version "10.11.0"
