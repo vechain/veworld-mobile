@@ -126,7 +126,7 @@ export const BrowserBottomBar: React.FC = () => {
             {IconConfig.map((config, index) => {
                 return (
                     <BaseTouchable key={`${config.name}-${index}`} style={styles.container} onPress={config.onPress}>
-                        <BaseIcon color={config.color} name={config.name} style={config.style} />
+                        <BaseIcon color={config.color} name={config.name} style={config.style} size={32} />
                     </BaseTouchable>
                 )
             })}
@@ -142,22 +142,22 @@ const createStyles = (theme: ColorThemeType) =>
             alignItems: "center",
             backgroundColor: theme.colors.background,
             paddingBottom: 10,
-            height: 70,
+            height: 85,
             borderTopWidth: 1,
         },
         icon: {
-            fontSize: 24,
+            fontSize: 40,
             color: theme.colors.primary,
             elevation: 3, // Add shadow for depth (Android)
         },
         disabledIcon: {
-            fontSize: 24,
+            fontSize: 40,
             color: theme.colors.disabled,
             opacity: 0.5,
         },
         container: {
             borderRadius: 10,
             paddingHorizontal: 12,
-            paddingVertical: 8.5,
+            paddingBottom: 25,
         },
     })
