@@ -480,18 +480,21 @@ const en: BaseTranslation = {
     DISCOVER_TITLE: "Discover",
     DISCOVER_SUB_TITLE: "Discover applications in the vechain ecosystem",
     DISCOVER_SEARCH: "Search or type a URL",
+    DISCOVER_SEARCH_CTA: "Search in the browser",
     DISCOVER_EMPTY_SEARCH: "No results found for your search",
     DISCOVER_TAB_FAVOURITES: "Favourites",
     DISCOVER_TAB_FEATURED: "Featured",
     DISCOVER_TAB_PERSONAL: "Personal",
 
     DISCOVER_NO_DAPPS_FOUND: "No Dapp found",
-    DISCOVER_EMPTY_FAVOURITES: "No favourites added",
-    DISCOVER_EMPTY_FAVOURITES_SUBTITLE: "You can bookmark your favourite apps in the featured tab",
+    DISCOVER_EMPTY_FAVOURITES: "Add from Featured Dapps",
+    DISCOVER_EMPTY_FAVOURITES_SUBTITLE: "No favourites added",
 
 
-    DISCOVER_EMPTY_CUSTOM_NODES: "No personal Dapp added",
-    DISCOVER_EMPTY_CUSTOM_NODES_SUBTITLE: "You can add your personal Dapps by bookmarking them in the browser",
+    DISCOVER_EMPTY_CUSTOM_NODES: "Add bookmarks",
+    DISCOVER_EMPTY_CUSTOM_NODES_SUBTITLE: "No personal Dapp added",
+
+    DISCOVER_CREATE_YOUR_DAPP: "Create your own DApp",
 
     BROWSER_TAB_MANAGEMENT_TITLE: "Tabs",
     BROWSER_FAVOURITES_TITLE: "Favourites",
