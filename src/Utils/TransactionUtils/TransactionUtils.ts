@@ -17,7 +17,7 @@ import { BigNumber } from "bignumber.js"
 import { abis, VET } from "~Constants"
 import HexUtils from "~Utils/HexUtils"
 import axios from "axios"
-import pive from "~Screens/Flows/App/SendScreen/02-SelectAmountSendScreen/Hooks/VWBN"
+import BigNumberUtils from "~Utils/BigNumberUtils"
 
 export const TRANSFER_SIG = new abi.Function(abis.VIP180.transfer).signature
 
@@ -736,7 +736,7 @@ export const prepareFungibleClause = (
     _token: FungibleTokenWithBalance,
     addressTo: string,
 ): Transaction.Body["clauses"] => {
-    let _amount = pive(amount).addTrailingZeros(_token.decimals).toHex
+    let _amount = BigNumberUtils(amount).addTrailingZeros(_token.decimals).toHex
     const scaledAmount = "0x" + _amount
 
     // if vet

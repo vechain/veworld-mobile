@@ -6,7 +6,6 @@ import {
     useAnalyticTracking,
     useCheckIdentity,
     useDelegation,
-    useRenderGas,
     useSendTransaction,
     useSignTransaction,
     useTheme,
@@ -14,8 +13,8 @@ import {
     useTransactionGas,
     useTransferAddContact,
 } from "~Hooks"
-import { AddressUtils, TransactionUtils, error } from "~Utils"
-import { AnalyticsEvent, COLORS } from "~Constants"
+import { AddressUtils, BigNumberUtils, GasUtils, TransactionUtils, error } from "~Utils"
+import { AnalyticsEvent, COLORS, GasPriceCoefficient } from "~Constants"
 import {
     AccountCard,
     BaseCard,
@@ -57,10 +56,8 @@ import {
 import { Transaction } from "thor-devkit"
 import { ContactManagementBottomSheet } from "../../ContactsScreen"
 import { DelegationType } from "~Model/Delegation"
-import { calculateIsEnoughGas } from "./Helpers"
 import Animated, { interpolateColor, useAnimatedStyle, useSharedValue, withTiming } from "react-native-reanimated"
 import { StyleSheet } from "react-native"
-import pive from "../02-SelectAmountSendScreen/Hooks/VWBN"
 
 type Props = NativeStackScreenProps<
     RootStackParamListHome & RootStackParamListDiscover,
@@ -77,17 +74,13 @@ export const TransactionSummarySendScreen = ({ route }: Props) => {
 
     const [isEnoughGas, setIsEnoughGas] = useState(true)
     const [txCostTotal, setTxCostTotal] = useState("0")
+    const [selectedFeeOption, setSelectedFeeOption] = useState(String(GasPriceCoefficient.REGULAR))
 
     const selectedAccount = useAppSelector(selectSelectedAccount)
     const pendingTransaction = useAppSelector(state => selectPendingTx(state, token.address))
-    const clauses = useMemo(
-        () => TransactionUtils.prepareFungibleClause(amount, token, address),
-        [amount, token, address],
-    )
 
     const accounts = useAppSelector(selectAccounts)
     const receiverIsAccount = accounts.find(_account => AddressUtils.compareAddresses(_account.address, address))
-
     const { onAddContactPress, handleSaveContact, addContactSheet, selectedContactAddress, closeAddContactSheet } =
         useTransferAddContact()
 
@@ -123,6 +116,12 @@ export const TransactionSummarySendScreen = ({ route }: Props) => {
         onFinish(false)
     }, [onFinish])
 
+    // 0. Create clauses
+    const clauses = useMemo(
+        () => TransactionUtils.prepareFungibleClause(amount, token, address),
+        [amount, token, address],
+    )
+
     // 1. Base Gas
     const { gas, loadingGas, setGasPayer } = useTransactionGas({
         clauses,
@@ -142,10 +141,14 @@ export const TransactionSummarySendScreen = ({ route }: Props) => {
         // providedUrl: options?.delegator?.url
     })
 
-    // Calculate gas priority fee
-    const { gasPriceCoef, setSelectedFeeOption, selectedFeeOption, gasFeeOptions } = useRenderGas({
-        gas,
-    })
+    const { gasPriceCoef, priorityFees, gasFeeOptions } = useMemo(
+        () =>
+            GasUtils.getGasByCoefficient({
+                gas,
+                selectedFeeOption,
+            }),
+        [gas, selectedFeeOption],
+    )
 
     // 3. Build transaction
     const { buildTransaction } = useTransactionBuilder({
@@ -261,17 +264,16 @@ export const TransactionSummarySendScreen = ({ route }: Props) => {
      * Calculate the amount to send without the gas fee
      */
     useEffect(() => {
-        const { isGas, txCostTotal: _txCostTotal } = calculateIsEnoughGas({
-            selectedFeeOption,
-            gas,
+        const { isGas, txCostTotal: _txCostTotal } = GasUtils.calculateIsEnoughGas({
             clauses,
             isDelegated,
             vtho,
+            priorityFees,
         })
 
         setIsEnoughGas(isGas)
         setTxCostTotal(_txCostTotal.toString)
-    }, [clauses, gas, isDelegated, selectedFeeOption, vtho, amount])
+    }, [clauses, gas, isDelegated, selectedFeeOption, vtho, selectedAccount, priorityFees])
 
     return (
         <Layout
@@ -315,7 +317,7 @@ export const TransactionSummarySendScreen = ({ route }: Props) => {
                         symbol={token.symbol}
                         token={token}
                         txCostTotal={txCostTotal}
-                        isDelegated={selectedDelegationOption === DelegationType.URL}
+                        isDelegated={isDelegated}
                     />
 
                     <GasFeeOptions
@@ -448,13 +450,13 @@ function TotalSendAmountView({ amount, symbol, token, txCostTotal, isDelegated }
     }, [theme.isDark])
 
     const formattedTotalCost = useMemo(
-        () => pive(txCostTotal).toHuman(token.decimals).toString,
+        () => BigNumberUtils(txCostTotal).toHuman(token.decimals).toString,
         [token.decimals, txCostTotal],
     )
 
     const formattedFiatAmount = useMemo(
         () =>
-            pive()
+            BigNumberUtils()
                 .toCurrencyConversion(token.symbol.toLowerCase() === "vtho" ? formattedTotalCost : amount, exchangeRate)
                 .toCurrencyFormat(2).toString,
         [amount, exchangeRate, formattedTotalCost, token.symbol],

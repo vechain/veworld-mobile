@@ -1,6 +1,6 @@
 import { NativeStackScreenProps } from "@react-navigation/native-stack"
 import React, { useCallback, useState } from "react"
-import { StyleSheet, TextInput } from "react-native"
+import { StyleSheet, TextInput, ViewProps } from "react-native"
 import { useAmountInput, useTheme } from "~Hooks"
 import {
     BaseCardGroup,
@@ -18,11 +18,11 @@ import { RootStackParamListDiscover, RootStackParamListHome, Routes } from "~Nav
 import { useI18nContext } from "~i18n"
 import { COLORS, CURRENCY_SYMBOLS, typography } from "~Constants"
 import { selectCurrency, selectCurrencyExchangeRate, useAppSelector } from "~Storage/Redux"
-import { BigNumber } from "bignumber.js"
 import { useNavigation } from "@react-navigation/native"
-import pive, { useTotalTokenBalance, useTotalFiatBalance, useUI, useCalculateGas } from "./Hooks"
-import Animated from "react-native-reanimated"
+import { useTotalTokenBalance, useTotalFiatBalance, useUI, useCalculateGas } from "./Hooks"
+import Animated, { AnimatedProps, FadeInRight, FadeOut } from "react-native-reanimated"
 import HapticsService from "~Services/HapticsService"
+import { BigNumberUtils } from "~Utils"
 
 const { defaults: defaultTypography } = typography
 
@@ -45,7 +45,7 @@ export const SelectAmountSendScreen = ({ route }: Props) => {
 
     const { gas } = useCalculateGas({ token })
 
-    const { tokenTotalBalance, tokenTotalToHuman, tokenBalanceMinusProjectedFees } = useTotalTokenBalance(token, gas)
+    const { tokenTotalBalance, tokenTotalToHuman } = useTotalTokenBalance(token, gas, setIsError)
 
     const { fiatTotalBalance } = useTotalFiatBalance(tokenTotalToHuman, exchangeRate)
 
@@ -53,7 +53,7 @@ export const SelectAmountSendScreen = ({ route }: Props) => {
      * FIAT selected balance calculated fron TOKEN input in human readable format (correct value is when TOKEN is active)
      * Example "53.54"
      */
-    const fiatHumanAmount = pive().toCurrencyConversion(input, exchangeRate).toCurrencyFormat(2).toString
+    const fiatHumanAmount = BigNumberUtils().toCurrencyConversion(input, exchangeRate).toCurrencyFormat(2).toString
 
     /**
      * TOKEN selected balance in raw-ish format (with decimals) (correct value is when FIAT is active)
@@ -65,7 +65,7 @@ export const SelectAmountSendScreen = ({ route }: Props) => {
      * TOKEN selected balance in human readable format (correct value is when FIAT is active)
      * Example "2,472.771"
      */
-    const tokenHumanAmountFromFiat = pive(tokenAmountFromFiat).toCurrencyFormat(4).toString
+    const tokenHumanAmountFromFiat = BigNumberUtils(tokenAmountFromFiat).toCurrencyFormat(4).toString
 
     /**
      * Toggle between FIAT and TOKEN input (and update the input value)
@@ -84,10 +84,13 @@ export const SelectAmountSendScreen = ({ route }: Props) => {
     const onChangeTextInput = useCallback(
         (newValue: string) => {
             // Get the correct token amount from the FIAT input
-            const controlValue = isInputInFiat ? pive().toTokenConversion(newValue, exchangeRate).toString : newValue
-            let roundDownValue = pive(controlValue).decimals(4).toString
+            const controlValue = isInputInFiat
+                ? BigNumberUtils().toTokenConversion(newValue, exchangeRate)
+                : BigNumberUtils(newValue).addTrailingZeros(token.decimals)
 
-            if (new BigNumber(controlValue).gt(tokenTotalBalance)) {
+            let roundDownValue = controlValue.decimals(4)
+
+            if (controlValue.isBiggerThan(tokenTotalBalance)) {
                 setIsError(true)
                 HapticsService.triggerNotification({ level: "Error" })
             } else {
@@ -95,21 +98,26 @@ export const SelectAmountSendScreen = ({ route }: Props) => {
             }
 
             setInput(newValue)
-            setTokenAmountFromFiat(roundDownValue.toString())
+            setTokenAmountFromFiat(roundDownValue.toString)
         },
-        [exchangeRate, isInputInFiat, setInput, tokenTotalBalance],
+        [exchangeRate, isInputInFiat, setInput, token.decimals, tokenTotalBalance],
     )
 
     /**
      * Sets the input value to the max available balance (in TOKEN or FIAT)
      */
     const handleOnMaxPress = useCallback(() => {
-        setInput(isInputInFiat ? pive(fiatTotalBalance).toCurrencyFormat(2).toString : tokenBalanceMinusProjectedFees)
-        let conv = pive().toTokenConversion(fiatTotalBalance, exchangeRate).toString
-        let scaleDownforPrecission = pive(conv).decimals(4).toString
+        // setInput(isInputInFiat ? BigNumberUtils(fiatTotalBalance).toCurrencyFormat(2).toString : tokenBalanceMinusProjectedFees)
+        setInput(
+            isInputInFiat
+                ? BigNumberUtils(fiatTotalBalance).toCurrencyFormat(2).toString
+                : BigNumberUtils(tokenTotalBalance).toHuman(token.decimals).toString,
+        )
+        let conv = BigNumberUtils().toTokenConversion(fiatTotalBalance, exchangeRate).toString
+        let scaleDownforPrecission = BigNumberUtils(conv).decimals(4).toString
         setTokenAmountFromFiat(scaleDownforPrecission)
         setIsError(false)
-    }, [exchangeRate, fiatTotalBalance, isInputInFiat, setInput, tokenBalanceMinusProjectedFees])
+    }, [exchangeRate, fiatTotalBalance, isInputInFiat, setInput, token.decimals, tokenTotalBalance])
 
     /**
      * Navigate to the next screen
@@ -162,15 +170,10 @@ export const SelectAmountSendScreen = ({ route }: Props) => {
                             </BaseView>
 
                             {isError && (
-                                <BaseView>
-                                    <BaseView flexDirection="row">
-                                        <BaseIcon name={"alert-circle-outline"} size={20} color={theme.colors.danger} />
-                                        <BaseSpacer width={8} />
-                                        <BaseText typographyFont="body" fontSize={12} color={theme.colors.danger}>
-                                            {LL.SEND_INSUFFICIENT_BALANCE()}
-                                        </BaseText>
-                                    </BaseView>
-                                </BaseView>
+                                <BalanceWarningView
+                                    entering={FadeInRight.springify(300).mass(1)}
+                                    exiting={FadeOut.springify(300).mass(1)}
+                                />
                             )}
                         </BaseView>
                         {/* [END] - HEADER */}
@@ -279,7 +282,10 @@ export const SelectAmountSendScreen = ({ route }: Props) => {
             footer={
                 <FadeoutButton
                     title={LL.COMMON_BTN_NEXT()}
-                    disabled={isError || input === "" || new BigNumber(input).isZero()}
+                    disabled={
+                        isError || input === "" || BigNumberUtils(input).isZero
+                        // isError || input === "" || BigNumberUtils(input).isZero || BigNumberUtils(tokenBalanceMinusProjectedFees).isZero
+                    }
                     action={goToInsertAddress}
                     bottom={0}
                     mx={0}
@@ -337,3 +343,23 @@ const styles = StyleSheet.create({
         zIndex: 1,
     },
 })
+
+interface IBalanceWarningView extends AnimatedProps<ViewProps> {}
+
+function BalanceWarningView(props: IBalanceWarningView) {
+    const { ...animatedViewProps } = props
+    const theme = useTheme()
+    const { LL } = useI18nContext()
+
+    return (
+        <Animated.View {...animatedViewProps}>
+            <BaseView flexDirection="row">
+                <BaseIcon name={"alert-circle-outline"} size={20} color={theme.colors.danger} />
+                <BaseSpacer width={8} />
+                <BaseText typographyFont="body" fontSize={12} color={theme.colors.danger}>
+                    {LL.SEND_INSUFFICIENT_BALANCE()}
+                </BaseText>
+            </BaseView>
+        </Animated.View>
+    )
+}

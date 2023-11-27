@@ -2,26 +2,33 @@ import { BigNumber as BN } from "bignumber.js"
 import { isEmpty } from "lodash"
 import { CurrencyExchangeRate as IRate } from "~Model"
 
-interface IVWBN {
-    // Methods
-    toHuman(decimals: number, callback?: (result: BN) => void): Pive
-    decimals(decimals: number, callback?: (result: BN) => void): Pive
-    minus(value: string | number | BN, callback?: (result: BN) => void): Pive
+interface IBigNumberUtils {
+    // utility Methods
+    toHuman(decimals: number, callback?: (result: BN) => void): BigNumberUtilsType
+    decimals(decimals: number, callback?: (result: BN) => void): BigNumberUtilsType
+    toCurrencyFormat(decimals: number, callback?: (result: BN) => void): BigNumberUtilsType
+    toCurrencyConversion(balance: string, rate?: IRate, callback?: (result: BN) => void): BigNumberUtilsType
+    toTokenConversion(balance: string, rate?: IRate, callback?: (result: BN) => void): BigNumberUtilsType
+    addTrailingZeros(decimals: number, callback?: (result: BN) => void): BigNumberUtilsType
+
+    // Math Methods
+    minus(value: string | number | BN, callback?: (result: BN) => void): BigNumberUtilsType
+    plus(value: string | number | BN, callback?: (result: BN) => void): BigNumberUtilsType
+    times(value: string | number | BN, callback?: (result: BN) => void): BigNumberUtilsType
+    idiv(value: string | number | BN, callback?: (result: BN) => void): BigNumberUtilsType
+
+    // Comparison Methods
     isLessThan(value: string | number | BN): boolean
-    toCurrencyFormat(decimals: number, callback?: (result: BN) => void): Pive
-    toCurrencyConversion(balance: string, rate?: IRate, callback?: (result: BN) => void): Pive
-    toTokenConversion(balance: string, rate?: IRate, callback?: (result: BN) => void): Pive
-    addTrailingZeros(decimals: number, callback?: (result: BN) => void): Pive
-    plus(value: string | number | BN, callback?: (result: BN) => void): Pive
     isBiggerThan(value: string | number | BN): boolean
 
     // Properties
     toString: string
     toNumber: number
     toHex: string
+    isZero: boolean
 }
 
-class Pive implements IVWBN {
+class BigNumberUtilsType implements IBigNumberUtils {
     private data: BN
 
     constructor(input: string | number | BN) {
@@ -30,7 +37,7 @@ class Pive implements IVWBN {
 
     // custom initializer
     static init() {
-        return new Pive("0")
+        return new BigNumberUtilsType("0")
     }
 
     // Properties
@@ -44,6 +51,10 @@ class Pive implements IVWBN {
 
     get toHex(): string {
         return this.data.toString(16)
+    }
+
+    get isZero(): boolean {
+        return this.data.isZero()
     }
 
     // Methods
@@ -78,6 +89,26 @@ class Pive implements IVWBN {
 
     plus(value: string | number | BN, callback?: (result: BN) => void): this {
         this.data = this.data.plus(value)
+
+        if (callback) {
+            callback(this.data)
+        }
+
+        return this
+    }
+
+    times(value: string | number | BN, callback?: (result: BN) => void): this {
+        this.data = this.data.times(value)
+
+        if (callback) {
+            callback(this.data)
+        }
+
+        return this
+    }
+
+    idiv(value: string | number | BN, callback?: (result: BN) => void): this {
+        this.data = this.data.idiv(value)
 
         if (callback) {
             callback(this.data)
@@ -141,13 +172,13 @@ class Pive implements IVWBN {
     }
 }
 
-function pive(input?: string | number | BN): Pive {
+function BigNumberUtils(input?: string | number | BN): BigNumberUtilsType {
     if (input) {
-        return new Pive(input)
+        return new BigNumberUtilsType(input)
     } else {
-        return Pive.init()
+        return BigNumberUtilsType.init()
     }
 }
 
-export { Pive }
-export default pive
+export { BigNumberUtilsType }
+export default BigNumberUtils
