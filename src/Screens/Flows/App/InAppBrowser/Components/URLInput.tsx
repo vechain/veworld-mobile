@@ -1,8 +1,8 @@
-import React, { useCallback, useEffect, useState } from "react"
+import React, { useCallback, useEffect } from "react"
 import { useInAppBrowser } from "~Components/Providers/InAppBrowserProvider"
 import { BaseIcon, BaseTextInput, BaseView } from "~Components"
 import { URIUtils } from "~Utils"
-import { StyleSheet, TextInputProps } from "react-native"
+import { StyleSheet } from "react-native"
 import { useNavigation } from "@react-navigation/native"
 import { useTheme } from "~Hooks"
 
@@ -10,11 +10,6 @@ export const URLInput = () => {
     const { navigationState, navigateToUrl } = useInAppBrowser()
 
     const [input, setInput] = React.useState(navigationState?.url ?? "")
-
-    const [shouldSelect, setShouldSelect] = useState<TextInputProps["selection"]>(undefined)
-    const onFocus = () => {
-        setShouldSelect({ start: 0, end: input.length })
-    }
 
     useEffect(() => {
         setInput(prev => {
@@ -49,13 +44,7 @@ export const URLInput = () => {
     return (
         <BaseView style={styles.inputContainer}>
             <BaseView flex={1}>
-                <BaseTextInput
-                    onBlur={onBlur}
-                    value={input}
-                    onChangeText={setInput}
-                    onFocus={onFocus}
-                    selection={shouldSelect}
-                />
+                <BaseTextInput onBlur={onBlur} value={input} onChangeText={setInput} />
             </BaseView>
             <BaseIcon
                 haptics="Light"
