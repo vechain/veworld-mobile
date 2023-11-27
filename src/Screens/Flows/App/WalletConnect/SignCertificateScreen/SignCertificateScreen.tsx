@@ -29,7 +29,7 @@ import { RootStackParamListSwitch, Routes } from "~Navigation"
 import { NativeStackScreenProps } from "@react-navigation/native-stack"
 import { useNavigation } from "@react-navigation/native"
 import { MessageDetails, UnknownAppMessage } from "~Screens"
-import { AnalyticsEvent } from "~Constants"
+import { AnalyticsEvent, RequestMethods } from "~Constants"
 import { useInAppBrowser } from "~Components/Providers/InAppBrowserProvider"
 
 type Props = NativeStackScreenProps<RootStackParamListSwitch, Routes.CONNECTED_APP_SIGN_CERTIFICATE_SCREEN>
@@ -117,7 +117,7 @@ export const SignCertificateScreen: FC<Props> = ({ route }: Props) => {
                 if (request.type === "wallet-connect") {
                     await processRequest(request.requestEvent, res)
                 } else {
-                    postMessage({ id: request.id, data: res })
+                    postMessage({ id: request.id, data: res, method: RequestMethods.SIGN_CERTIFICATE })
                 }
 
                 dispatch(addSignCertificateActivity(request.appName, cert.domain, cert.payload.content, cert.purpose))
@@ -135,6 +135,7 @@ export const SignCertificateScreen: FC<Props> = ({ route }: Props) => {
                     postMessage({
                         id: request.id,
                         error: "Internal error",
+                        method: RequestMethods.SIGN_CERTIFICATE,
                     })
                 }
 
@@ -164,7 +165,7 @@ export const SignCertificateScreen: FC<Props> = ({ route }: Props) => {
         if (request.type === "wallet-connect") {
             await failRequest(request.requestEvent, getRpcError("userRejectedRequest"))
         } else {
-            postMessage({ id: request.id, error: "User rejected request" })
+            postMessage({ id: request.id, error: "User rejected request", method: RequestMethods.REQUEST_TRANSACTION })
         }
 
         track(AnalyticsEvent.DAPP_CERTIFICATE_REJECTED)

@@ -32,7 +32,7 @@ import { useNavigation } from "@react-navigation/native"
 import { ClausesCarousel } from "../../ActivityDetailsScreen/Components"
 import { Transaction } from "thor-devkit"
 import { TransactionDetails, UnknownAppMessage } from "~Screens"
-import { AnalyticsEvent } from "~Constants"
+import { AnalyticsEvent, RequestMethods } from "~Constants"
 import { useInAppBrowser } from "~Components/Providers/InAppBrowserProvider"
 
 type Props = NativeStackScreenProps<RootStackParamListSwitch, Routes.CONNECTED_APP_SEND_TRANSACTION_SCREEN>
@@ -103,6 +103,7 @@ export const SendTransactionScreen: FC<Props> = ({ route }: Props) => {
                         txid: id,
                         signer: selectedAccount.address,
                     },
+                    method: RequestMethods.REQUEST_TRANSACTION,
                 })
             }
 
@@ -120,6 +121,7 @@ export const SendTransactionScreen: FC<Props> = ({ route }: Props) => {
             postMessage({
                 id: request.id,
                 error: "There was an error processing the transaction",
+                method: RequestMethods.REQUEST_TRANSACTION,
             })
         }
 
@@ -137,6 +139,7 @@ export const SendTransactionScreen: FC<Props> = ({ route }: Props) => {
                 postMessage({
                     id: request.id,
                     error: "User rejected the request",
+                    method: RequestMethods.REQUEST_TRANSACTION,
                 })
             }
         } catch (e) {

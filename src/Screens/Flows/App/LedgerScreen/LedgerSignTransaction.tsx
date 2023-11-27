@@ -30,7 +30,7 @@ import { ActivityUtils, debug, error, LedgerUtils } from "~Utils"
 import { useI18nContext } from "~i18n"
 import { useNavigation } from "@react-navigation/native"
 import * as Haptics from "expo-haptics"
-import { AnalyticsEvent, LEDGER_ERROR_CODES } from "~Constants"
+import { AnalyticsEvent, LEDGER_ERROR_CODES, RequestMethods } from "~Constants"
 import { Buffer } from "buffer"
 import { Transaction } from "thor-devkit"
 import { ActivityType } from "~Model"
@@ -272,6 +272,7 @@ export const LedgerSignTransaction: React.FC<Props> = ({ route }) => {
                             txid: txId,
                             signer: accountWithDevice.address,
                         },
+                        method: RequestMethods.REQUEST_TRANSACTION,
                     })
                 }
             }

@@ -6,12 +6,14 @@ export type DiscoveryState = {
     featured: DiscoveryDApp[]
     favorites: DiscoveryDApp[]
     custom: DiscoveryDApp[]
+    hasOpenedDiscovery: boolean
 }
 
 export const initialDiscoverState: DiscoveryState = {
     featured: [...DAppConfig],
     favorites: [],
     custom: [],
+    hasOpenedDiscovery: false,
 }
 
 const sortByAmountOfNavigations = (dapps: DiscoveryDApp[]) => {
@@ -70,8 +72,12 @@ export const DiscoverySlice = createSlice({
                 }
             }
         },
+        setDiscoverySectionOpened: state => {
+            state.hasOpenedDiscovery = true
+        },
         resetDiscoveryState: () => initialDiscoverState,
     },
 })
 
-export const { addBookmark, removeBookmark, resetDiscoveryState, addNavigationToDApp } = DiscoverySlice.actions
+export const { addBookmark, removeBookmark, resetDiscoveryState, addNavigationToDApp, setDiscoverySectionOpened } =
+    DiscoverySlice.actions

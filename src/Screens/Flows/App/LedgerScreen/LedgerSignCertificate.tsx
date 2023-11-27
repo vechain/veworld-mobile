@@ -23,7 +23,7 @@ import { debug, error, HexUtils, LedgerUtils } from "~Utils"
 import { useI18nContext } from "~i18n"
 import { useNavigation } from "@react-navigation/native"
 import * as Haptics from "expo-haptics"
-import { LEDGER_ERROR_CODES } from "~Constants"
+import { LEDGER_ERROR_CODES, RequestMethods } from "~Constants"
 import { useInAppBrowser } from "~Components/Providers/InAppBrowserProvider"
 
 type Props = NativeStackScreenProps<RootStackParamListSwitch, Routes.LEDGER_SIGN_CERTIFICATE>
@@ -183,6 +183,7 @@ export const LedgerSignCertificate: React.FC<Props> = ({ route }) => {
                 await postMessage({
                     id: request.id,
                     data: certResponse,
+                    method: RequestMethods.SIGN_CERTIFICATE,
                 })
             }
 

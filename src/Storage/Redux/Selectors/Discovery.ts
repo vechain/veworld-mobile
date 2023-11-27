@@ -52,3 +52,8 @@ export const selectAllDapps = createSelector(
         return dapps
     },
 )
+
+export const selectHasUserOpenedDiscovery = createSelector(
+    getDiscoveryState,
+    (discovery): boolean => discovery.hasOpenedDiscovery,
+)

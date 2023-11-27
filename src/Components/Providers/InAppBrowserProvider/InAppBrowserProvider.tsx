@@ -1,10 +1,11 @@
 import React, { useCallback, useContext, useMemo, useRef } from "react"
 import WebView, { WebViewMessageEvent, WebViewNavigation } from "react-native-webview"
 import { WindowRequest, WindowResponse } from "./types"
-import { RequestMethods } from "~Constants"
+import { AnalyticsEvent, RequestMethods } from "~Constants"
 import { useNavigation } from "@react-navigation/native"
 import { DAppUtils, debug, warn } from "~Utils"
 import { Routes } from "~Navigation"
+import { useAnalyticTracking } from "~Hooks"
 
 type ContextType = {
     webviewRef: React.MutableRefObject<WebView | undefined>
@@ -33,6 +34,7 @@ export const DISCOVER_HOME_URL = "https://apps.vechain.org/#all"
 export const InAppBrowserProvider = ({ children }: Props) => {
     const nav = useNavigation()
 
+    const track = useAnalyticTracking()
     const webviewRef = useRef<WebView | undefined>()
 
     const [navigationState, setNavigationState] = React.useState<WebViewNavigation | undefined>(undefined)
@@ -45,17 +47,47 @@ export const InAppBrowserProvider = ({ children }: Props) => {
         return navigationState?.canGoForward ?? false
     }, [navigationState])
 
-    const postMessage = useCallback((message: WindowResponse) => {
-        debug("responding to dapp request", message.id)
+    const postMessage = useCallback(
+        (message: WindowResponse) => {
+            debug("responding to dapp request", message.id)
 
-        webviewRef.current?.injectJavaScript(
-            `
+            webviewRef.current?.injectJavaScript(
+                `
                 setTimeout(function() { 
                    postMessage(${JSON.stringify(message)}, "*")
                 }, 1);
                 `,
-        )
-    }, [])
+            )
+
+            /**
+             * Track the success / failure rates against the dapp URL
+             */
+            let analyticEvent: AnalyticsEvent | undefined
+
+            if (message.method === RequestMethods.REQUEST_TRANSACTION) {
+                if ("err" in message) {
+                    analyticEvent = AnalyticsEvent.DISCOVERY_TRANSACTION_ERROR
+                } else {
+                    analyticEvent = AnalyticsEvent.DISCOVERY_TRANSACTION_SUCCESS
+                }
+            }
+
+            if (message.method === RequestMethods.SIGN_CERTIFICATE) {
+                if ("err" in message) {
+                    analyticEvent = AnalyticsEvent.DISCOVERY_CERTIFICATE_ERROR
+                } else {
+                    analyticEvent = AnalyticsEvent.DISCOVERY_CERTIFICATE_SUCCESS
+                }
+            }
+
+            if (analyticEvent) {
+                track(analyticEvent, {
+                    dapp: navigationState?.url ? new URL(navigationState.url).hostname : undefined,
+                })
+            }
+        },
+        [navigationState, track],
+    )
 
     const navigateToUrl = useCallback((url: string) => {
         // Check if the URL starts with 'http://' or 'https://'
@@ -71,12 +103,17 @@ export const InAppBrowserProvider = ({ children }: Props) => {
         (request: WindowRequest, event: WebViewMessageEvent) => {
             const message = request.message
 
+            track(AnalyticsEvent.DISCOVERY_TRANSACTION_REQUESTED, {
+                dapp: navigationState?.url,
+            })
+
             const isValid = DAppUtils.isValidTxMessage(message)
 
             if (!isValid) {
                 return postMessage({
                     id: request.id,
                     error: "Invalid transaction",
+                    method: RequestMethods.REQUEST_TRANSACTION,
                 })
             }
 
@@ -91,12 +128,16 @@ export const InAppBrowserProvider = ({ children }: Props) => {
                 },
             })
         },
-        [nav, postMessage],
+        [navigationState, track, nav, postMessage],
     )
 
     const navigateToCertificateScreen = useCallback(
         (request: WindowRequest, event: WebViewMessageEvent) => {
             const message = request.message
+
+            track(AnalyticsEvent.DISCOVERY_CERTIFICATE_REQUESTED, {
+                dapp: navigationState?.url,
+            })
 
             const isValid = DAppUtils.isValidCertMessage(message)
 
@@ -104,6 +145,7 @@ export const InAppBrowserProvider = ({ children }: Props) => {
                 return postMessage({
                     id: request.id,
                     error: "Invalid certificate message",
+                    method: RequestMethods.SIGN_CERTIFICATE,
                 })
             }
 
@@ -118,7 +160,7 @@ export const InAppBrowserProvider = ({ children }: Props) => {
                 },
             })
         },
-        [nav, postMessage],
+        [navigationState, track, nav, postMessage],
     )
 
     const onMessage = useCallback(

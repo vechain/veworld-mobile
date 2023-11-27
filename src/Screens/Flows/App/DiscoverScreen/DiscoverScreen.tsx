@@ -1,8 +1,8 @@
-import React, { useCallback, useRef } from "react"
+import React, { useCallback, useEffect, useRef } from "react"
 import { BaseIcon, BaseSafeArea, BaseSpacer, BaseText, BaseTextInput, BaseView } from "~Components"
 import { useI18nContext } from "~i18n"
-import { ColorThemeType, DiscoveryDApp } from "~Constants"
-import { useBrowserSearch, useThemedStyles } from "~Hooks"
+import { AnalyticsEvent, ColorThemeType, DiscoveryDApp } from "~Constants"
+import { useAnalyticTracking, useBrowserSearch, useThemedStyles } from "~Hooks"
 import { NativeSyntheticEvent, StyleSheet, TextInputChangeEventData } from "react-native"
 import { useNavigation, useScrollToTop } from "@react-navigation/native"
 import { Routes } from "~Navigation"
@@ -12,7 +12,10 @@ import {
     selectCustomDapps,
     selectFavoritesDapps,
     selectFeaturedDapps,
+    selectHasUserOpenedDiscovery,
+    setDiscoverySectionOpened,
     useAppDispatch,
+    useAppSelector,
 } from "~Storage/Redux"
 import { createMaterialTopTabNavigator } from "@react-navigation/material-top-tabs"
 import { TabBar } from "./Components/TabBar"
@@ -27,8 +30,20 @@ export const DiscoverScreen: React.FC = () => {
     useScrollToTop(flatListRef)
 
     const { navigateToBrowser } = useBrowserSearch()
-
     const dispatch = useAppDispatch()
+
+    /**
+     * For metrics on discovery screen
+     */
+    const hasOpenedDiscovery = useAppSelector(selectHasUserOpenedDiscovery)
+    const track = useAnalyticTracking()
+
+    useEffect(() => {
+        if (!hasOpenedDiscovery) {
+            track(AnalyticsEvent.DISCOVERY_SECTION_OPENED)
+            dispatch(setDiscoverySectionOpened())
+        }
+    }, [track, hasOpenedDiscovery, dispatch])
 
     const onTextChange = (e: NativeSyntheticEvent<TextInputChangeEventData>) => {
         setFilteredSearch(e.nativeEvent.text)
@@ -39,11 +54,15 @@ export const DiscoverScreen: React.FC = () => {
             nav.navigate(Routes.BROWSER, { initialUrl: dapp.href })
             setFilteredSearch(undefined)
 
+            track(AnalyticsEvent.DISCOVERY_USER_OPENED_DAPP, {
+                url: dapp.href,
+            })
+
             setTimeout(() => {
                 dispatch(addNavigationToDApp({ href: dapp.href, isCustom: dapp.isCustom }))
             }, 1000)
         },
-        [dispatch, nav, setFilteredSearch],
+        [track, dispatch, nav, setFilteredSearch],
     )
 
     const onSearch = useCallback(() => {

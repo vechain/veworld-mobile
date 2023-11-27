@@ -3,11 +3,13 @@ import { RequestMethods } from "~Constants"
 type ErrorResponse = {
     id: string
     error: string
+    method: RequestMethods.REQUEST_TRANSACTION | RequestMethods.SIGN_CERTIFICATE
 }
 
 type SuccessResponse = {
     id: string
     data: Connex.Vendor.CertResponse | Connex.Vendor.TxResponse
+    method: RequestMethods.REQUEST_TRANSACTION | RequestMethods.SIGN_CERTIFICATE
 }
 
 export type WindowResponse = ErrorResponse | SuccessResponse
