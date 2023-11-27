@@ -1705,7 +1705,7 @@ type RootTranslation = {
 	 */
 	DISCOVER_SUB_TITLE: string
 	/**
-	 * S​e​a​r​c​h​ ​b​y​ ​U​R​L​ ​o​r​ ​n​a​m​e​.​.
+	 * S​e​a​r​c​h​ ​o​r​ ​t​y​p​e​ ​a​ ​U​R​L
 	 */
 	DISCOVER_SEARCH: string
 	/**
@@ -1724,6 +1724,10 @@ type RootTranslation = {
 	 * P​e​r​s​o​n​a​l
 	 */
 	DISCOVER_TAB_PERSONAL: string
+	/**
+	 * N​F​T​s
+	 */
+	DISCOVER_TAB_NFTS: string
 	/**
 	 * N​o​ ​D​a​p​p​ ​f​o​u​n​d
 	 */
@@ -4422,7 +4426,7 @@ Try reconnect your device to the internet.
 	 */
 	DISCOVER_SUB_TITLE: () => LocalizedString
 	/**
-	 * Search by URL or name..
+	 * Search or type a URL
 	 */
 	DISCOVER_SEARCH: () => LocalizedString
 	/**
@@ -4441,6 +4445,10 @@ Try reconnect your device to the internet.
 	 * Personal
 	 */
 	DISCOVER_TAB_PERSONAL: () => LocalizedString
+	/**
+	 * NFTs
+	 */
+	DISCOVER_TAB_NFTS: () => LocalizedString
 	/**
 	 * No Dapp found
 	 */

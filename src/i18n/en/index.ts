@@ -484,6 +484,7 @@ const en: BaseTranslation = {
     DISCOVER_TAB_FAVOURITES: "Favourites",
     DISCOVER_TAB_FEATURED: "Featured",
     DISCOVER_TAB_PERSONAL: "Personal",
+    DISCOVER_TAB_NFTS: "Collectibles",
 
     DISCOVER_NO_DAPPS_FOUND: "No Dapp found",
     DISCOVER_EMPTY_FAVOURITES: "No favourites added",

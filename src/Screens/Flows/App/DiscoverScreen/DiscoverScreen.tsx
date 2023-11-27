@@ -16,6 +16,7 @@ import {
 } from "~Storage/Redux"
 import { createMaterialTopTabNavigator } from "@react-navigation/material-top-tabs"
 import { TabBar } from "./Components/TabBar"
+import { NFTList } from "./Components/NFTList"
 
 export const DiscoverScreen: React.FC = () => {
     const { theme } = useThemedStyles(baseStyles)
@@ -91,6 +92,11 @@ export const DiscoverScreen: React.FC = () => {
         [filteredSearch, onDAppPress],
     )
 
+    const NFTScreen = useCallback(
+        () => <NFTList filteredSearch={filteredSearch} setFilteredSearch={setFilteredSearch} />,
+        [filteredSearch, setFilteredSearch],
+    )
+
     return (
         <BaseSafeArea>
             <BaseText mx={24} typographyFont="largeTitle" testID="settings-screen" pb={16}>
@@ -124,6 +130,12 @@ export const DiscoverScreen: React.FC = () => {
                     name={Routes.DISCOVER_PERSONAL}
                     options={{ title: LL.DISCOVER_TAB_PERSONAL() }}
                     component={PersonalScreen}
+                />
+
+                <Tab.Screen
+                    name={Routes.DISCOVER_NFTS}
+                    options={{ title: LL.DISCOVER_TAB_NFTS() }}
+                    component={NFTScreen}
                 />
             </Tab.Navigator>
         </BaseSafeArea>

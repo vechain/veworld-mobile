@@ -12,9 +12,8 @@ import { URIUtils } from "~Utils"
 type IconProps = {
     name: string
     onPress: () => void
-    color: string
-    style: any
-    disabled: boolean
+    style?: any
+    disabled?: boolean
 }
 
 export const BrowserBottomBar: React.FC = () => {
@@ -74,37 +73,26 @@ export const BrowserBottomBar: React.FC = () => {
             {
                 name: "arrow-left-thick",
                 onPress: goBack,
-                color: theme.colors.primary,
                 style: canGoBack ? styles.icon : styles.disabledIcon,
                 disabled: !canGoBack,
             },
             {
                 name: "arrow-right-thick",
                 onPress: goForward,
-                color: theme.colors.primary,
                 style: canGoForward ? styles.icon : styles.disabledIcon,
                 disabled: !canGoForward,
             },
             {
                 name: "home",
                 onPress: navBack,
-                color: theme.colors.primary,
-                style: styles.icon,
-                disabled: false,
             },
             {
                 name: isBookMarked ? "bookmark" : "bookmark-outline",
                 onPress: toggleBookmark,
-                color: theme.colors.primary,
-                style: styles.icon,
-                disabled: false,
             },
             {
                 name: "refresh",
                 onPress: () => webviewRef.current?.reload(),
-                color: theme.colors.primary,
-                style: styles.icon,
-                disabled: false,
             },
         ]
     }, [
@@ -116,7 +104,6 @@ export const BrowserBottomBar: React.FC = () => {
         navBack,
         styles.disabledIcon,
         styles.icon,
-        theme.colors.primary,
         toggleBookmark,
         webviewRef,
     ])
@@ -125,8 +112,17 @@ export const BrowserBottomBar: React.FC = () => {
         <BaseView style={styles.bottomBar}>
             {IconConfig.map((config, index) => {
                 return (
-                    <BaseTouchable key={`${config.name}-${index}`} style={styles.container} onPress={config.onPress}>
-                        <BaseIcon color={config.color} name={config.name} style={config.style} size={32} />
+                    <BaseTouchable
+                        key={`${config.name}-${index}`}
+                        style={styles.container}
+                        onPress={config.onPress}
+                        disabled={config.disabled}>
+                        <BaseIcon
+                            color={theme.colors.primary}
+                            name={config.name}
+                            style={config.style ? config.style : styles.icon}
+                            size={32}
+                        />
                     </BaseTouchable>
                 )
             })}
@@ -148,7 +144,6 @@ const createStyles = (theme: ColorThemeType) =>
         icon: {
             fontSize: 40,
             color: theme.colors.primary,
-            elevation: 3, // Add shadow for depth (Android)
         },
         disabledIcon: {
             fontSize: 40,
