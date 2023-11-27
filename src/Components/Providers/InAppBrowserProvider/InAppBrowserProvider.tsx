@@ -3,9 +3,22 @@ import WebView, { WebViewMessageEvent, WebViewNavigation } from "react-native-we
 import { WindowRequest, WindowResponse } from "./types"
 import { AnalyticsEvent, RequestMethods } from "~Constants"
 import { useNavigation } from "@react-navigation/native"
-import { DAppUtils, debug, warn } from "~Utils"
+import { AddressUtils, DAppUtils, debug, warn } from "~Utils"
 import { Routes } from "~Navigation"
-import { useAnalyticTracking } from "~Hooks"
+import { useAnalyticTracking, useSetSelectedAccount } from "~Hooks"
+import {
+    changeSelectedNetwork,
+    selectAccounts,
+    selectNetworks,
+    selectSelectedAccountAddress,
+    selectSelectedNetwork,
+    useAppDispatch,
+    useAppSelector,
+} from "~Storage/Redux"
+import { AccountWithDevice } from "~Model"
+import { compareAddresses } from "~Utils/AddressUtils/AddressUtils"
+import { showInfoToast } from "~Components"
+import { useI18nContext } from "~i18n"
 
 type ContextType = {
     webviewRef: React.MutableRefObject<WebView | undefined>
@@ -33,6 +46,15 @@ export const DISCOVER_HOME_URL = "https://apps.vechain.org/#all"
 
 export const InAppBrowserProvider = ({ children }: Props) => {
     const nav = useNavigation()
+
+    const selectedNetwork = useAppSelector(selectSelectedNetwork)
+    const networks = useAppSelector(selectNetworks)
+    const accounts = useAppSelector(selectAccounts)
+    const { onSetSelectedAccount } = useSetSelectedAccount()
+    const { LL } = useI18nContext()
+    const selectedAccountAddress = useAppSelector(selectSelectedAccountAddress)
+
+    const dispatch = useAppDispatch()
 
     const track = useAnalyticTracking()
     const webviewRef = useRef<WebView | undefined>()
@@ -99,6 +121,68 @@ export const InAppBrowserProvider = ({ children }: Props) => {
         `)
     }, [])
 
+    const switchNetwork = useCallback(
+        (request: WindowRequest) => {
+            if (selectedNetwork.genesis.id === request.genesisId) {
+                return
+            }
+
+            const network = networks.find(n => n.genesis.id === request.genesisId)
+
+            if (!network) {
+                postMessage({
+                    id: request.id,
+                    error: "Invalid network",
+                    method: request.method,
+                })
+
+                throw new Error("Invalid network")
+            }
+
+            showInfoToast({
+                text1: LL.NOTIFICATION_WC_NETWORK_CHANGED({
+                    network: network.name,
+                }),
+            })
+
+            dispatch(changeSelectedNetwork(network))
+        },
+        [LL, selectedNetwork, dispatch, postMessage, networks],
+    )
+
+    const switchAccount = useCallback(
+        (request: WindowRequest) => {
+            if (!request.options.signer) return
+
+            if (compareAddresses(selectedAccountAddress, request.options.signer)) {
+                return
+            }
+
+            const requestedAccount: AccountWithDevice | undefined = accounts.find(acct => {
+                return AddressUtils.compareAddresses(request.options.signer, acct.address)
+            })
+
+            if (!requestedAccount) {
+                postMessage({
+                    id: request.id,
+                    error: "Invalid account",
+                    method: request.method,
+                })
+
+                throw new Error("Invalid account")
+            }
+
+            onSetSelectedAccount(requestedAccount)
+
+            showInfoToast({
+                text1: LL.NOTIFICATION_WC_ACCOUNT_CHANGED({
+                    account: requestedAccount.alias,
+                }),
+            })
+        },
+        [LL, postMessage, accounts, onSetSelectedAccount, selectedAccountAddress],
+    )
+
     const navigateToTransactionScreen = useCallback(
         (request: WindowRequest, event: WebViewMessageEvent) => {
             const message = request.message
@@ -117,6 +201,13 @@ export const InAppBrowserProvider = ({ children }: Props) => {
                 })
             }
 
+            try {
+                switchAccount(request)
+                switchNetwork(request)
+            } catch {
+                return
+            }
+
             nav.navigate(Routes.CONNECTED_APP_SEND_TRANSACTION_SCREEN, {
                 request: {
                     id: request.id,
@@ -128,7 +219,7 @@ export const InAppBrowserProvider = ({ children }: Props) => {
                 },
             })
         },
-        [navigationState, track, nav, postMessage],
+        [navigationState, track, nav, postMessage, switchAccount, switchNetwork],
     )
 
     const navigateToCertificateScreen = useCallback(
@@ -149,6 +240,13 @@ export const InAppBrowserProvider = ({ children }: Props) => {
                 })
             }
 
+            try {
+                switchAccount(request)
+                switchNetwork(request)
+            } catch {
+                return
+            }
+
             nav.navigate(Routes.CONNECTED_APP_SIGN_CERTIFICATE_SCREEN, {
                 request: {
                     id: request.id,
@@ -160,7 +258,7 @@ export const InAppBrowserProvider = ({ children }: Props) => {
                 },
             })
         },
-        [navigationState, track, nav, postMessage],
+        [navigationState, track, nav, postMessage, switchAccount, switchNetwork],
     )
 
     const onMessage = useCallback(
