@@ -13,6 +13,15 @@ export const initialDiscoverState: DiscoveryState = {
     favorites: [],
     custom: [],
 }
+
+const sortByAmountOfNavigations = (dapps: DiscoveryDApp[]) => {
+    return dapps.sort((a, b) => b.amountOfNavigations - a.amountOfNavigations)
+}
+
+const findByHref = (dapps: DiscoveryDApp[], href: string) => {
+    return dapps.find(dapp => URIUtils.compareURLs(dapp.href, href))
+}
+
 export const DiscoverySlice = createSlice({
     name: "discovery",
     initialState: initialDiscoverState,
@@ -37,27 +46,27 @@ export const DiscoverySlice = createSlice({
             const { payload } = action
 
             if (payload.isCustom) {
-                const existingDApp = state.custom.find(dapp => URIUtils.compareURLs(dapp.href, payload.href))
+                const existingDApp = findByHref(state.custom, payload.href)
 
                 if (existingDApp) {
                     existingDApp.amountOfNavigations += 1
                 }
 
                 //sort by amount of navigations
-                state.custom = state.custom.sort((a, b) => b.amountOfNavigations - a.amountOfNavigations)
+                state.custom = sortByAmountOfNavigations(state.custom)
             } else {
-                const favourite = state.favorites.find(dapp => URIUtils.compareURLs(dapp.href, payload.href))
+                const favourite = findByHref(state.favorites, payload.href)
 
                 if (favourite) {
                     favourite.amountOfNavigations += 1
-                    state.favorites = state.favorites.sort((a, b) => b.amountOfNavigations - a.amountOfNavigations)
+                    state.favorites = sortByAmountOfNavigations(state.favorites)
                 }
 
-                const featured = state.featured.find(dapp => URIUtils.compareURLs(dapp.href, payload.href))
+                const featured = findByHref(state.featured, payload.href)
 
                 if (featured) {
                     featured.amountOfNavigations += 1
-                    state.featured = state.featured.sort((a, b) => b.amountOfNavigations - a.amountOfNavigations)
+                    state.featured = sortByAmountOfNavigations(state.featured)
                 }
             }
         },

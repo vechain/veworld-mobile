@@ -39,8 +39,6 @@ export const DiscoverScreen: React.FC = () => {
             nav.navigate(Routes.BROWSER, { initialUrl: dapp.href })
             setFilteredSearch(undefined)
 
-            if (dapp.isCustom) return
-
             setTimeout(() => {
                 dispatch(addNavigationToDApp({ href: dapp.href, isCustom: dapp.isCustom }))
             }, 1000)
