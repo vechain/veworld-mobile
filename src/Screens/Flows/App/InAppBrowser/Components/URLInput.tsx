@@ -1,8 +1,10 @@
 import React, { useCallback, useEffect, useState } from "react"
 import { useInAppBrowser } from "~Components/Providers/InAppBrowserProvider"
-import { BaseTextInput, BaseView } from "~Components"
+import { BaseIcon, BaseTextInput, BaseView } from "~Components"
 import { URIUtils } from "~Utils"
 import { StyleSheet, TextInputProps } from "react-native"
+import { useNavigation } from "@react-navigation/native"
+import { useTheme } from "~Hooks"
 
 export const URLInput = () => {
     const { navigationState, navigateToUrl } = useInAppBrowser()
@@ -37,17 +39,32 @@ export const URLInput = () => {
         }
     }, [input, navigateToUrl])
 
+    const nav = useNavigation()
+    const theme = useTheme()
+
+    const onClosePress = useCallback(async () => {
+        nav.goBack()
+    }, [nav])
+
     return (
         <BaseView style={styles.inputContainer}>
-            <BaseTextInput
-                onBlur={onBlur}
-                value={input}
-                onChangeText={setInput}
-                onFocus={onFocus}
-                selection={shouldSelect}
+            <BaseView flex={1}>
+                <BaseTextInput
+                    onBlur={onBlur}
+                    value={input}
+                    onChangeText={setInput}
+                    onFocus={onFocus}
+                    selection={shouldSelect}
+                />
+            </BaseView>
+            <BaseIcon
+                haptics="Light"
+                style={[styles.closeButton]}
+                size={25}
+                name="close"
+                color={theme.colors.text}
+                action={onClosePress}
             />
-
-            {/* TODO <BaseIcon name={"refresh"} />*/}
         </BaseView>
     )
 }
@@ -59,5 +76,9 @@ const styles = StyleSheet.create({
         paddingHorizontal: 20,
         paddingVertical: 3,
         alignItems: "center",
+        flexDirection: "row",
+    },
+    closeButton: {
+        marginLeft: 10,
     },
 })
