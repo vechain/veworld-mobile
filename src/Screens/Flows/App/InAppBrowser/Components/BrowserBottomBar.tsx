@@ -4,7 +4,14 @@ import { BaseIcon, BaseTouchable, BaseView } from "~Components"
 import { useTheme } from "~Hooks"
 import { useInAppBrowser } from "~Components/Providers/InAppBrowserProvider"
 import { ColorThemeType, DiscoveryDApp } from "~Constants"
-import { addBookmark, removeBookmark, selectBookmarkedDapps, useAppDispatch, useAppSelector } from "~Storage/Redux"
+import {
+    addBookmark,
+    removeBookmark,
+    selectAllDapps,
+    selectBookmarkedDapps,
+    useAppDispatch,
+    useAppSelector,
+} from "~Storage/Redux"
 import { useNavigation } from "@react-navigation/native"
 import { Routes } from "~Navigation"
 import { URIUtils } from "~Utils"
@@ -12,9 +19,7 @@ import { URIUtils } from "~Utils"
 type IconProps = {
     name: string
     onPress: () => void
-    color: string
-    style: any
-    disabled: boolean
+    disabled?: boolean
 }
 
 export const BrowserBottomBar: React.FC = () => {
@@ -24,17 +29,24 @@ export const BrowserBottomBar: React.FC = () => {
     const nav = useNavigation()
     const dispatch = useAppDispatch()
 
-    const dapps: DiscoveryDApp[] = useAppSelector(selectBookmarkedDapps)
+    const bookmarkedDapps: DiscoveryDApp[] = useAppSelector(selectBookmarkedDapps)
+    const allDApps = useAppSelector(selectAllDapps)
 
-    const isBookMarked = useMemo(() => {
-        if (!navigationState?.url) return false
+    const existingBookmark = useMemo(() => {
+        if (!navigationState?.url) return undefined
 
         try {
-            return dapps.some(bookmark => URIUtils.compareURLs(bookmark.href, URIUtils.clean(navigationState.url)))
+            return bookmarkedDapps.find(bookmark =>
+                URIUtils.compareURLs(URIUtils.clean(bookmark.href), URIUtils.clean(navigationState.url)),
+            )
         } catch {
-            return false
+            return undefined
         }
-    }, [navigationState?.url, dapps])
+    }, [bookmarkedDapps, navigationState])
+
+    const isBookMarked = useMemo(() => {
+        return !!existingBookmark
+    }, [existingBookmark])
 
     const navBack = useCallback(() => {
         if (nav.canGoBack()) {
@@ -47,86 +59,69 @@ export const BrowserBottomBar: React.FC = () => {
     const toggleBookmark = useCallback(async () => {
         if (!navigationState?.url) return
 
-        if (isBookMarked) {
-            const dapp = dapps.find(bookmark =>
-                URIUtils.compareURLs(bookmark.href, URIUtils.clean(navigationState.url)),
+        if (existingBookmark) {
+            dispatch(removeBookmark(existingBookmark))
+        } else {
+            const existingDApp = allDApps.find(dapp =>
+                URIUtils.compareURLs(URIUtils.clean(dapp.href), URIUtils.clean(navigationState.url)),
             )
 
-            if (dapp) dispatch(removeBookmark(dapp))
-        } else {
-            const url = new URL(navigationState.url)
+            if (existingDApp) {
+                return dispatch(addBookmark(existingDApp))
+            } else {
+                const url = new URL(navigationState.url)
 
-            const bookmark: DiscoveryDApp = {
-                name: navigationState.title,
-                href: URIUtils.clean(url.href),
-                desc: "",
-                isCustom: true,
-                createAt: new Date().getTime(),
-                amountOfNavigations: 1,
+                const bookmark: DiscoveryDApp = {
+                    name: navigationState.title,
+                    href: URIUtils.clean(url.href),
+                    desc: "",
+                    isCustom: true,
+                    createAt: new Date().getTime(),
+                    amountOfNavigations: 1,
+                }
+
+                dispatch(addBookmark(bookmark))
             }
-
-            dispatch(addBookmark(bookmark))
         }
-    }, [dispatch, dapps, isBookMarked, navigationState])
+    }, [dispatch, existingBookmark, navigationState, allDApps])
 
     const IconConfig: IconProps[] = useMemo(() => {
         return [
             {
                 name: "arrow-left-thick",
                 onPress: goBack,
-                color: theme.colors.primary,
-                style: canGoBack ? styles.icon : styles.disabledIcon,
                 disabled: !canGoBack,
             },
             {
                 name: "arrow-right-thick",
                 onPress: goForward,
-                color: theme.colors.primary,
-                style: canGoForward ? styles.icon : styles.disabledIcon,
                 disabled: !canGoForward,
             },
             {
-                name: "home",
+                name: "home-outline",
                 onPress: navBack,
-                color: theme.colors.primary,
-                style: styles.icon,
-                disabled: false,
             },
             {
                 name: isBookMarked ? "bookmark" : "bookmark-outline",
                 onPress: toggleBookmark,
-                color: theme.colors.primary,
-                style: styles.icon,
-                disabled: false,
             },
             {
                 name: "refresh",
                 onPress: () => webviewRef.current?.reload(),
-                color: theme.colors.primary,
-                style: styles.icon,
-                disabled: false,
             },
         ]
-    }, [
-        canGoBack,
-        canGoForward,
-        goBack,
-        goForward,
-        isBookMarked,
-        navBack,
-        styles.disabledIcon,
-        styles.icon,
-        theme.colors.primary,
-        toggleBookmark,
-        webviewRef,
-    ])
+    }, [canGoBack, canGoForward, goBack, goForward, isBookMarked, navBack, toggleBookmark, webviewRef])
 
     return (
         <BaseView style={styles.bottomBar}>
             {IconConfig.map((config, index) => {
                 return (
-                    <BaseTouchable key={`${config.name}-${index}`} style={styles.container} onPress={config.onPress}>
-                        <BaseIcon color={config.color} name={config.name} style={config.style} size={32} />
+                    <BaseTouchable
+                        disabled={config.disabled}
+                        key={`${config.name}-${index}`}
+                        style={styles.container}
+                        onPress={config.onPress}>
+                        <BaseIcon disabled={config.disabled} name={config.name} style={styles.icon} size={32} />
                     </BaseTouchable>
                 )
             })}
