@@ -147,7 +147,7 @@ export const DiscoverScreen: React.FC = () => {
                         <BaseIcon
                             name={"search-web"}
                             size={25}
-                            onPress={onSearch}
+                            action={onSearch}
                             color={theme.colors.primary}
                             borderRadius={20}
                         />
