@@ -136,10 +136,15 @@ export const useWcRequest = (isBlackListScreen: () => boolean, activeSessions: A
             if (message) {
                 track(AnalyticsEvent.DAPP_REQUEST_CERTIFICATE)
                 nav.navigate(Routes.CONNECTED_APP_SIGN_CERTIFICATE_SCREEN, {
-                    requestEvent,
-                    session,
-                    message,
-                    options,
+                    request: {
+                        type: "wallet-connect",
+                        requestEvent,
+                        session,
+                        message,
+                        options,
+                        appName: session.peer.metadata.name,
+                        appUrl: session.peer.metadata.url,
+                    },
                 })
             } else {
                 showErrorToast({
@@ -171,10 +176,15 @@ export const useWcRequest = (isBlackListScreen: () => boolean, activeSessions: A
             if (message) {
                 track(AnalyticsEvent.DAPP_TX_REQUESTED)
                 nav.navigate(Routes.CONNECTED_APP_SEND_TRANSACTION_SCREEN, {
-                    requestEvent,
-                    session,
-                    message,
-                    options,
+                    request: {
+                        type: "wallet-connect",
+                        requestEvent,
+                        session,
+                        message,
+                        options,
+                        appName: session.peer.metadata.name,
+                        appUrl: session.peer.metadata.url,
+                    },
                 })
             } else {
                 showErrorToast({

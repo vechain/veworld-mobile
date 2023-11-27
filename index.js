@@ -29,10 +29,11 @@ import {
 import { typography } from "~Constants"
 import { AnalyticsUtils, info } from "~Utils"
 import { BottomSheetModalProvider } from "@gorhom/bottom-sheet"
-import { StoreContextProvider, PersistedThemeProvider } from "~Components/Providers"
+import { PersistedThemeProvider, StoreContextProvider } from "~Components/Providers"
 import { selectAnalyticsTrackingEnabled, selectSentryTrackingEnabled, useAppSelector } from "~Storage/Redux"
 import * as Sentry from "@sentry/react-native"
 import "react-native-url-polyfill/auto"
+import { InAppBrowserProvider } from "~Components/Providers/InAppBrowserProvider"
 
 const { fontFamily } = typography
 
@@ -75,11 +76,13 @@ const Main = () => {
         <GestureHandlerRootView style={{ flex: 1 }}>
             <ConnexContextProvider>
                 <NavigationProvider>
-                    <BottomSheetModalProvider>
-                        <WalletConnectContextProvider>
-                            <EntryPoint />
-                        </WalletConnectContextProvider>
-                    </BottomSheetModalProvider>
+                    <WalletConnectContextProvider>
+                        <InAppBrowserProvider>
+                            <BottomSheetModalProvider>
+                                <EntryPoint />
+                            </BottomSheetModalProvider>
+                        </InAppBrowserProvider>
+                    </WalletConnectContextProvider>
                 </NavigationProvider>
                 <BaseToast />
             </ConnexContextProvider>

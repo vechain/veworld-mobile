@@ -18,17 +18,15 @@ import {
     StepsProgressBar,
     useWalletConnect,
 } from "~Components"
-import { RootStackParamListDiscover, RootStackParamListSwitch, Routes } from "~Navigation"
+import { RootStackParamListSwitch, Routes } from "~Navigation"
 import { debug, error, HexUtils, LedgerUtils } from "~Utils"
 import { useI18nContext } from "~i18n"
 import { useNavigation } from "@react-navigation/native"
 import * as Haptics from "expo-haptics"
-import { LEDGER_ERROR_CODES } from "~Constants"
+import { LEDGER_ERROR_CODES, RequestMethods } from "~Constants"
+import { useInAppBrowser } from "~Components/Providers/InAppBrowserProvider"
 
-type Props = NativeStackScreenProps<
-    RootStackParamListSwitch & RootStackParamListDiscover,
-    Routes.LEDGER_SIGN_CERTIFICATE
->
+type Props = NativeStackScreenProps<RootStackParamListSwitch, Routes.LEDGER_SIGN_CERTIFICATE>
 
 enum SigningStep {
     CONNECTING,
@@ -37,9 +35,10 @@ enum SigningStep {
 }
 
 export const LedgerSignCertificate: React.FC<Props> = ({ route }) => {
-    const { accountWithDevice, certificate, initialRoute, requestEvent } = route.params
+    const { accountWithDevice, request, certificate } = route.params
 
     const { processRequest } = useWalletConnect()
+    const { postMessage } = useInAppBrowser()
 
     const { LL } = useI18nContext()
     const nav = useNavigation()
@@ -154,19 +153,13 @@ export const LedgerSignCertificate: React.FC<Props> = ({ route }) => {
         }
     }, [ledgerErrorCode, closeConnectionErrorSheet, openConnectionErrorSheet])
 
-    /** Effects */
-
     const navigateOnFinish = useCallback(() => {
-        switch (initialRoute) {
-            case Routes.DISCOVER:
-                nav.navigate(Routes.DISCOVER)
-                break
-            case Routes.HOME:
-            default:
-                nav.navigate(Routes.HOME)
-                break
-        }
-    }, [initialRoute, nav])
+        error(nav.getState())
+
+        if (nav.canGoBack()) return nav.goBack()
+
+        nav.navigate(Routes.DISCOVER)
+    }, [nav])
 
     const handleOnConfirm = useCallback(async () => {
         try {
@@ -184,7 +177,15 @@ export const LedgerSignCertificate: React.FC<Props> = ({ route }) => {
                 signature: HexUtils.addPrefix(signature.toString("hex")),
             }
 
-            await processRequest(requestEvent, certResponse)
+            if (request.type === "wallet-connect") {
+                await processRequest(request.requestEvent, certResponse)
+            } else {
+                await postMessage({
+                    id: request.id,
+                    data: certResponse,
+                    method: RequestMethods.SIGN_CERTIFICATE,
+                })
+            }
 
             await removeLedger()
 
@@ -199,7 +200,7 @@ export const LedgerSignCertificate: React.FC<Props> = ({ route }) => {
         } finally {
             setIsSending(false)
         }
-    }, [removeLedger, requestEvent, processRequest, LL, signature, certificate, navigateOnFinish])
+    }, [removeLedger, request, postMessage, processRequest, LL, signature, certificate, navigateOnFinish])
 
     const BottomButton = useCallback(() => {
         if (currentStep === SigningStep.SIGNING && userRejected) {

@@ -3,7 +3,7 @@ import { useBiometrics, useTransactionScreen, useWalletSecurity } from "~Hooks"
 import { TestHelpers, TestWrapper } from "~Test"
 import { Routes } from "~Navigation"
 import { DelegationType } from "~Model/Delegation"
-import { AccountWithDevice, BaseDevice, SecurityLevelType } from "~Model"
+import { AccountWithDevice, BaseDevice, SecurityLevelType, TransactionRequest } from "~Model"
 import crypto from "react-native-quick-crypto"
 import axios from "axios"
 import { waitFor } from "@testing-library/react-native"
@@ -136,8 +136,15 @@ describe("useTransactionScreen", () => {
                         initialRoute,
                         onTransactionSuccess,
                         onTransactionFailure,
-                        options: {
-                            gas: 210000,
+                        dappRequest: {
+                            id: "1234",
+                            type: "in-app",
+                            message: [],
+                            options: {
+                                gas: 210000,
+                            },
+                            appUrl: "https://example.com",
+                            appName: "Example",
                         },
                     }),
                 {
@@ -170,6 +177,17 @@ describe("useTransactionScreen", () => {
 
             mockAccount(accWithDevice)
 
+            const dappRequest: TransactionRequest = {
+                id: "1234",
+                type: "in-app",
+                message: [],
+                options: {
+                    gas: 210000,
+                },
+                appUrl: "https://example.com",
+                appName: "Example",
+            }
+
             const { result } = renderHook(
                 () =>
                     useTransactionScreen({
@@ -177,9 +195,7 @@ describe("useTransactionScreen", () => {
                         initialRoute,
                         onTransactionSuccess,
                         onTransactionFailure,
-                        options: {
-                            gas: 210000,
-                        },
+                        dappRequest: dappRequest,
                     }),
                 {
                     wrapper: TestWrapper,
@@ -195,6 +211,7 @@ describe("useTransactionScreen", () => {
                         transaction: expect.any(Transaction),
                         initialRoute: expect.any(String),
                         delegationSignature: undefined,
+                        dappRequest,
                     })
                 },
                 { timeout: 10000 },

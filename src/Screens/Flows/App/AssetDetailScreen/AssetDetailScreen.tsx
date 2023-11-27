@@ -12,8 +12,8 @@ import {
     QRCodeBottomSheet,
     showWarningToast,
 } from "~Components"
-import { RootStackParamListDiscover, Routes } from "~Navigation"
-import { AssetHeader, AssetChart, BalanceView, MarketInfoView } from "./Components"
+import { RootStackParamListHome, Routes } from "~Navigation"
+import { AssetChart, AssetHeader, BalanceView, MarketInfoView } from "./Components"
 import { useI18nContext } from "~i18n"
 import { FastAction } from "~Model"
 import { striptags } from "striptags"
@@ -28,7 +28,7 @@ import {
 import { ScrollView } from "react-native-gesture-handler"
 import { InteractionManager, StyleSheet } from "react-native"
 
-type Props = NativeStackScreenProps<RootStackParamListDiscover, Routes.TOKEN_DETAILS>
+type Props = NativeStackScreenProps<RootStackParamListHome, Routes.TOKEN_DETAILS>
 
 export const AssetDetailScreen = ({ route }: Props) => {
     const token = route.params.token

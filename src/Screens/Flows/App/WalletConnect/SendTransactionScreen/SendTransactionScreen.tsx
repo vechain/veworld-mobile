@@ -23,7 +23,7 @@ import {
     useAppDispatch,
     useAppSelector,
 } from "~Storage/Redux"
-import { TransactionUtils, WalletConnectUtils } from "~Utils"
+import { TransactionUtils } from "~Utils"
 import { useAnalyticTracking, useTransactionScreen } from "~Hooks"
 import { useI18nContext } from "~i18n"
 import { RootStackParamListSwitch, Routes } from "~Navigation"
@@ -32,12 +32,13 @@ import { useNavigation } from "@react-navigation/native"
 import { ClausesCarousel } from "../../ActivityDetailsScreen/Components"
 import { Transaction } from "thor-devkit"
 import { TransactionDetails, UnknownAppMessage } from "~Screens"
-import { AnalyticsEvent } from "~Constants"
+import { AnalyticsEvent, RequestMethods } from "~Constants"
+import { useInAppBrowser } from "~Components/Providers/InAppBrowserProvider"
 
 type Props = NativeStackScreenProps<RootStackParamListSwitch, Routes.CONNECTED_APP_SEND_TRANSACTION_SCREEN>
 
 export const SendTransactionScreen: FC<Props> = ({ route }: Props) => {
-    const { requestEvent, session: sessionRequest, message, options } = route.params
+    const { request } = route.params
 
     const dispatch = useAppDispatch()
     const { LL } = useI18nContext()
@@ -45,6 +46,7 @@ export const SendTransactionScreen: FC<Props> = ({ route }: Props) => {
     const track = useAnalyticTracking()
 
     const { processRequest, failRequest } = useWalletConnect()
+    const { postMessage } = useInAppBrowser()
 
     const [isInvalidChecked, setInvalidChecked] = React.useState(false)
 
@@ -52,14 +54,9 @@ export const SendTransactionScreen: FC<Props> = ({ route }: Props) => {
     const selectedAccount = useAppSelector(selectSelectedAccount)
     const tokens = useAppSelector(selectTokensWithInfo)
 
-    const { topic } = useMemo(() => WalletConnectUtils.getRequestEventAttributes(requestEvent), [requestEvent])
-
-    const { name, url } = useMemo(
-        () => WalletConnectUtils.getSessionRequestAttributes(sessionRequest),
-        [sessionRequest],
+    const sessionContext = useAppSelector(state =>
+        selectVerifyContext(state, request.type === "wallet-connect" ? request.session.topic : undefined),
     )
-
-    const sessionContext = useAppSelector(state => selectVerifyContext(state, topic))
 
     const validConnectedApp = useMemo(() => {
         if (!sessionContext) return true
@@ -67,15 +64,18 @@ export const SendTransactionScreen: FC<Props> = ({ route }: Props) => {
         return sessionContext.verifyContext.validation === "VALID"
     }, [sessionContext])
 
-    const clausesMetadata = useMemo(() => TransactionUtils.interpretClauses(message, tokens), [message, tokens])
+    const clausesMetadata = useMemo(
+        () => TransactionUtils.interpretClauses(request.message, tokens),
+        [request.message, tokens],
+    )
 
     const clauses = useMemo(() => {
-        return message.map(clause => ({
+        return request.message.map(clause => ({
             to: clause.to,
             value: clause.value,
             data: clause.data || "0x",
         }))
-    }, [message])
+    }, [request.message])
 
     const onFinish = useCallback(
         (sucess: boolean) => {
@@ -91,30 +91,57 @@ export const SendTransactionScreen: FC<Props> = ({ route }: Props) => {
 
     const onTransactionSuccess = useCallback(
         async (transaction: Transaction, id: string) => {
-            await processRequest(requestEvent, {
-                txid: id,
-                signer: selectedAccount.address,
-            })
+            if (request.type === "wallet-connect") {
+                await processRequest(request.requestEvent, {
+                    txid: id,
+                    signer: selectedAccount.address,
+                })
+            } else {
+                postMessage({
+                    id: request.id,
+                    data: {
+                        txid: id,
+                        signer: selectedAccount.address,
+                    },
+                    method: RequestMethods.REQUEST_TRANSACTION,
+                })
+            }
 
-            dispatch(addPendingDappTransactionActivity(transaction, name, url))
+            dispatch(addPendingDappTransactionActivity(transaction, request.appName, request.appUrl))
 
             onFinish(true)
         },
-        [onFinish, url, requestEvent, processRequest, selectedAccount.address, dispatch, name],
+        [request, processRequest, selectedAccount.address, postMessage, dispatch, onFinish],
     )
 
     const onTransactionFailure = useCallback(async () => {
-        await failRequest(requestEvent, getRpcError("internal"))
+        if (request.type === "wallet-connect") {
+            await failRequest(request.requestEvent, getRpcError("internal"))
+        } else {
+            postMessage({
+                id: request.id,
+                error: "There was an error processing the transaction",
+                method: RequestMethods.REQUEST_TRANSACTION,
+            })
+        }
 
         onFinish(false)
-    }, [requestEvent, failRequest, onFinish])
+    }, [postMessage, request, failRequest, onFinish])
 
     /**
      * Rejects the request and closes the modal
      */
     const onReject = useCallback(async () => {
         try {
-            await failRequest(requestEvent, getRpcError("userRejectedRequest"))
+            if (request.type === "wallet-connect") {
+                await failRequest(request.requestEvent, getRpcError("userRejectedRequest"))
+            } else {
+                postMessage({
+                    id: request.id,
+                    error: "User rejected the request",
+                    method: RequestMethods.REQUEST_TRANSACTION,
+                })
+            }
         } catch (e) {
             showErrorToast({
                 text1: LL.NOTIFICATION_wallet_connect_matching_error(),
@@ -122,7 +149,7 @@ export const SendTransactionScreen: FC<Props> = ({ route }: Props) => {
         } finally {
             nav.goBack()
         }
-    }, [requestEvent, failRequest, LL, nav])
+    }, [request, failRequest, postMessage, nav, LL])
 
     const {
         Delegation,
@@ -140,9 +167,8 @@ export const SendTransactionScreen: FC<Props> = ({ route }: Props) => {
         clauses,
         onTransactionSuccess,
         onTransactionFailure,
-        initialRoute: Routes.HOME,
-        options,
-        requestEvent,
+        initialRoute: Routes.DISCOVER,
+        dappRequest: request,
     })
 
     return (
@@ -181,10 +207,10 @@ export const SendTransactionScreen: FC<Props> = ({ route }: Props) => {
                         vthoGas={vthoGasFee}
                         isThereEnoughGas={isThereEnoughGas || false}
                         vthoBalance={vthoBalance}
-                        sessionRequest={sessionRequest}
+                        request={request}
                         network={network}
-                        message={message}
-                        options={options}
+                        message={request.message}
+                        options={request.options}
                     />
 
                     <BaseSpacer height={44} />
@@ -192,11 +218,13 @@ export const SendTransactionScreen: FC<Props> = ({ route }: Props) => {
 
                     <BaseSpacer height={30} />
 
-                    <UnknownAppMessage
-                        verifyContext={sessionContext.verifyContext}
-                        confirmed={isInvalidChecked}
-                        setConfirmed={setInvalidChecked}
-                    />
+                    {sessionContext && (
+                        <UnknownAppMessage
+                            verifyContext={sessionContext.verifyContext}
+                            confirmed={isInvalidChecked}
+                            setConfirmed={setInvalidChecked}
+                        />
+                    )}
                 </BaseView>
 
                 <BaseSpacer height={40} />

@@ -1,4 +1,4 @@
-import { waitFor, element } from "detox"
+import { element, waitFor } from "detox"
 import { DEFAULT_TIMEOUT, LONG_TIMEOUT } from "../../constants"
 
 export const isActive = async (): Promise<boolean> => {

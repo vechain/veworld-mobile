@@ -18,7 +18,7 @@ import {
     StepsProgressBar,
     useWalletConnect,
 } from "~Components"
-import { RootStackParamListDiscover, RootStackParamListHome, RootStackParamListSwitch, Routes } from "~Navigation"
+import { RootStackParamListHome, RootStackParamListSwitch, Routes } from "~Navigation"
 import {
     addPendingDappTransactionActivity,
     addPendingNFTtransferTransactionActivity,
@@ -30,17 +30,14 @@ import { ActivityUtils, debug, error, LedgerUtils } from "~Utils"
 import { useI18nContext } from "~i18n"
 import { useNavigation } from "@react-navigation/native"
 import * as Haptics from "expo-haptics"
-import { AnalyticsEvent, LEDGER_ERROR_CODES } from "~Constants"
+import { AnalyticsEvent, LEDGER_ERROR_CODES, RequestMethods } from "~Constants"
 import { Buffer } from "buffer"
 import { Transaction } from "thor-devkit"
 import { ActivityType } from "~Model"
 import { LedgerConfig } from "~Utils/LedgerUtils/LedgerUtils"
-import { getSessionRequestAttributes } from "~Utils/WalletConnectUtils/WalletConnectUtils"
+import { useInAppBrowser } from "~Components/Providers/InAppBrowserProvider"
 
-type Props = NativeStackScreenProps<
-    RootStackParamListHome & RootStackParamListDiscover & RootStackParamListSwitch,
-    Routes.LEDGER_SIGN_TRANSACTION
->
+type Props = NativeStackScreenProps<RootStackParamListHome & RootStackParamListSwitch, Routes.LEDGER_SIGN_TRANSACTION>
 
 enum SignSteps {
     CONNECTING = 0,
@@ -50,13 +47,14 @@ enum SignSteps {
 }
 
 export const LedgerSignTransaction: React.FC<Props> = ({ route }) => {
-    const { accountWithDevice, transaction, initialRoute, requestEvent, delegationSignature } = route.params
+    const { accountWithDevice, transaction, dappRequest, delegationSignature } = route.params
 
     const nav = useNavigation()
     const track = useAnalyticTracking()
     const { LL } = useI18nContext()
     const dispatch = useAppDispatch()
-    const { activeSessions, processRequest } = useWalletConnect()
+    const { processRequest } = useWalletConnect()
+    const { postMessage } = useInAppBrowser()
 
     const [signature, setSignature] = useState<Buffer>()
     const [isAwaitingSignature, setIsAwaitingSignature] = useState(false)
@@ -105,18 +103,12 @@ export const LedgerSignTransaction: React.FC<Props> = ({ route }) => {
                         accountType: accountWithDevice.device.type,
                     })
 
-                    if (requestEvent) {
-                        const session = activeSessions[requestEvent.topic]
-
-                        if (session) {
-                            const { name, url } = getSessionRequestAttributes(session)
-
-                            dispatch(addPendingDappTransactionActivity(tx, name, url))
-                        }
+                    if (dappRequest) {
+                        dispatch(addPendingDappTransactionActivity(tx, dappRequest.appName, dappRequest.appUrl))
                     }
             }
         },
-        [track, dispatch, accountWithDevice, requestEvent, activeSessions],
+        [track, dispatch, accountWithDevice, dappRequest],
     )
 
     const { sendTransaction } = useSendTransaction(onTransactionSuccess)
@@ -242,16 +234,12 @@ export const LedgerSignTransaction: React.FC<Props> = ({ route }) => {
 
     const navigateOnFinish = useCallback(() => {
         dispatch(setIsAppLoading(false))
-        switch (initialRoute) {
-            case Routes.DISCOVER:
-                nav.navigate(Routes.DISCOVER)
-                break
-            case Routes.HOME:
-            default:
-                nav.navigate(Routes.HOME)
-                break
-        }
-    }, [dispatch, initialRoute, nav])
+        error(nav.getState())
+
+        if (nav.canGoBack()) return nav.goBack()
+
+        nav.navigate(Routes.DISCOVER)
+    }, [dispatch, nav])
 
     const handleOnConfirm = useCallback(async () => {
         try {
@@ -270,11 +258,23 @@ export const LedgerSignTransaction: React.FC<Props> = ({ route }) => {
             await removeLedger()
 
             //If DApp transaction
-            if (requestEvent) {
-                await processRequest(requestEvent, {
-                    txid: txId,
-                    signer: accountWithDevice.address,
-                })
+
+            if (dappRequest) {
+                if (dappRequest.type === "wallet-connect") {
+                    await processRequest(dappRequest.requestEvent, {
+                        txid: txId,
+                        signer: accountWithDevice.address,
+                    })
+                } else {
+                    await postMessage({
+                        id: dappRequest.id,
+                        data: {
+                            txid: txId,
+                            signer: accountWithDevice.address,
+                        },
+                        method: RequestMethods.REQUEST_TRANSACTION,
+                    })
+                }
             }
 
             navigateOnFinish()
@@ -286,7 +286,7 @@ export const LedgerSignTransaction: React.FC<Props> = ({ route }) => {
             })
             track(AnalyticsEvent.LEDGER_TX_FAILED_TO_SEND)
             await Haptics.notificationAsync(Haptics.NotificationFeedbackType.Error)
-            if (requestEvent) {
+            if (dappRequest) {
                 nav.goBack()
             }
         } finally {
@@ -301,7 +301,8 @@ export const LedgerSignTransaction: React.FC<Props> = ({ route }) => {
         delegationSignature,
         sendTransaction,
         removeLedger,
-        requestEvent,
+        dappRequest,
+        postMessage,
         navigateOnFinish,
         LL,
         nav,
