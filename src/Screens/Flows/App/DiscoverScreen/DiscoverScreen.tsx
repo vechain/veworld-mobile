@@ -2,7 +2,7 @@ import React, { useCallback, useEffect, useRef } from "react"
 import { BaseIcon, BaseSafeArea, BaseSpacer, BaseText, BaseTextInput, BaseView } from "~Components"
 import { useI18nContext } from "~i18n"
 import { AnalyticsEvent, ColorThemeType, DiscoveryDApp } from "~Constants"
-import { useAnalyticTracking, useBrowserSearch, useThemedStyles } from "~Hooks"
+import { useAnalyticTracking, useBrowserSearch, useTabBarBottomMargin, useThemedStyles } from "~Hooks"
 import { NativeSyntheticEvent, StyleSheet, TextInputChangeEventData } from "react-native"
 import { useNavigation, useScrollToTop } from "@react-navigation/native"
 import { Routes } from "~Navigation"
@@ -28,6 +28,7 @@ export const DiscoverScreen: React.FC = () => {
     const [filteredSearch, setFilteredSearch] = React.useState<string>()
     const animatedIconOpacity = useSharedValue(0)
     const animatedIconRightPosition = useSharedValue(-20)
+    const { androidOnlyTabBarBottomMargin } = useTabBarBottomMargin()
 
     const flatListRef = useRef(null)
     useScrollToTop(flatListRef)
@@ -175,6 +176,7 @@ export const DiscoverScreen: React.FC = () => {
                     component={PersonalScreen}
                 />
             </Tab.Navigator>
+            <BaseSpacer height={androidOnlyTabBarBottomMargin || 1} />
         </BaseSafeArea>
     )
 }
@@ -182,14 +184,15 @@ export const DiscoverScreen: React.FC = () => {
 const baseStyles = (theme: ColorThemeType) =>
     StyleSheet.create({
         searchBar: {
-            paddingRight: 40,
+            paddingVertical: 12,
+            height: 40,
         },
         searchIconContainer: {
             borderColor: theme.colors.text,
             position: "absolute",
-            right: 2.5,
-            top: 2.5,
-            bottom: 2.5,
+            right: 0,
+            top: 0,
+            bottom: 0,
             justifyContent: "center",
             alignItems: "center",
             width: 40,
