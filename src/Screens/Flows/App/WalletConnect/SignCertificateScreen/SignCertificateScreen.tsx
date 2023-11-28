@@ -10,6 +10,7 @@ import {
     CloseModalButton,
     getRpcError,
     RequireUserPassword,
+    SelectAccountBottomSheet,
     useWalletConnect,
 } from "~Components"
 import { blake2b256, Certificate } from "thor-devkit"
@@ -17,12 +18,19 @@ import {
     addSignCertificateActivity,
     selectSelectedAccount,
     selectVerifyContext,
+    selectVisibleAccounts,
     setIsAppLoading,
     useAppDispatch,
     useAppSelector,
 } from "~Storage/Redux"
 import { debug, error, HexUtils } from "~Utils"
-import { useAnalyticTracking, useCheckIdentity, useSignMessage } from "~Hooks"
+import {
+    useAnalyticTracking,
+    useBottomSheetModal,
+    useCheckIdentity,
+    useSetSelectedAccount,
+    useSignMessage,
+} from "~Hooks"
 import { AccountWithDevice, DEVICE_TYPE, LedgerAccountWithDevice } from "~Model"
 import { useI18nContext } from "~i18n"
 import { RootStackParamListSwitch, Routes } from "~Navigation"
@@ -42,10 +50,23 @@ export const SignCertificateScreen: FC<Props> = ({ route }: Props) => {
     const { LL } = useI18nContext()
     const nav = useNavigation()
     const selectedAccount: AccountWithDevice = useAppSelector(selectSelectedAccount)
+    const { onSetSelectedAccount } = useSetSelectedAccount()
     const track = useAnalyticTracking()
     const dispatch = useAppDispatch()
 
     const [isInvalidChecked, setInvalidChecked] = React.useState(false)
+
+    const visibleAccounts = useAppSelector(selectVisibleAccounts)
+
+    const {
+        ref: selectAccountBottomSheetRef,
+        onOpen: openSelectAccountBottomSheet,
+        onClose: closeSelectAccountBottonSheet,
+    } = useBottomSheetModal()
+
+    const setSelectedAccount = (account: AccountWithDevice) => {
+        onSetSelectedAccount({ address: account.address })
+    }
 
     const sessionContext = useAppSelector(state =>
         selectVerifyContext(state, request.type === "wallet-connect" ? request.session.topic : undefined),
@@ -56,6 +77,12 @@ export const SignCertificateScreen: FC<Props> = ({ route }: Props) => {
 
         return sessionContext.verifyContext.validation === "VALID"
     }, [sessionContext])
+
+    const onAccountCardPress = useCallback(() => {
+        if (!request.options.signer) {
+            openSelectAccountBottomSheet()
+        }
+    }, [openSelectAccountBottomSheet, request.options.signer])
 
     // Prepare certificate to sign
     const cert: Certificate = useMemo(() => {
@@ -213,7 +240,11 @@ export const SignCertificateScreen: FC<Props> = ({ route }: Props) => {
                     <BaseText typographyFont="subTitleBold">{LL.CONNECTED_APP_SELECTED_ACCOUNT_LABEL()}</BaseText>
 
                     <BaseSpacer height={16} />
-                    <AccountCard account={selectedAccount} showOpacityWhenDisabled={false} />
+                    <AccountCard
+                        account={selectedAccount}
+                        showOpacityWhenDisabled={false}
+                        onPress={onAccountCardPress}
+                    />
 
                     <BaseSpacer height={32} />
 
@@ -257,6 +288,14 @@ export const SignCertificateScreen: FC<Props> = ({ route }: Props) => {
                 isOpen={isPasswordPromptOpen}
                 onClose={handleClosePasswordModal}
                 onSuccess={onPasswordSuccess}
+            />
+
+            <SelectAccountBottomSheet
+                closeBottomSheet={closeSelectAccountBottonSheet}
+                accounts={visibleAccounts}
+                setSelectedAccount={setSelectedAccount}
+                selectedAccount={selectedAccount}
+                ref={selectAccountBottomSheetRef}
             />
         </BaseSafeArea>
     )

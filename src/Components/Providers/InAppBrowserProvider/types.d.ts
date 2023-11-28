@@ -18,7 +18,7 @@ export type TxRequest = {
     id: string
     method: RequestMethods.REQUEST_TRANSACTION
     message: Connex.Vendor.TxMessage
-    options: Connex.Driver.TxOptions
+    options: Connex.Signer.TxOptions
     genesisId: string
 }
 
@@ -26,7 +26,7 @@ export type CertRequest = {
     id: string
     method: RequestMethods.SIGN_CERTIFICATE
     message: Connex.Vendor.CertMessage
-    options: Connex.Driver.CertOptions
+    options: Connex.Signer.CertOptions
     genesisId: string
 }
 
