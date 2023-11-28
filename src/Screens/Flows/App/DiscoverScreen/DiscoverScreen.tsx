@@ -149,7 +149,7 @@ export const DiscoverScreen: React.FC = () => {
                             name={"search-web"}
                             size={25}
                             action={onSearch}
-                            color={theme.colors.primary}
+                            color={theme.colors.text}
                             borderRadius={20}
                         />
                     </Animated.View>

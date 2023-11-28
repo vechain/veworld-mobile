@@ -86,44 +86,34 @@ export const DAppList: React.FC<Props> = ({ onDAppPress, filteredSearch, selecto
 
     if (filteredSearch && filteredDapps.length === 0) {
         return (
-            <>
-                {/*TODO remove spacer and put the below in the middle*/}
-                <BaseSpacer height={40} />
-                <EmptyResults
-                    onClick={navigateToSearch}
-                    title={LL.DISCOVER_SEARCH_CTA()}
-                    subtitle={LL.DISCOVER_EMPTY_SEARCH()}
-                    icon={"search-web"}
-                />
-            </>
+            <EmptyResults
+                onClick={navigateToSearch}
+                title={LL.DISCOVER_SEARCH_CTA()}
+                subtitle={LL.DISCOVER_EMPTY_SEARCH()}
+                icon={"search-web"}
+            />
         )
     }
 
     if (dapps.length === 0 && tab === Routes.DISCOVER_PERSONAL) {
         return (
-            <>
-                <BaseSpacer height={40} />
-                <EmptyResults
-                    onClick={() => navigateToBrowser("")}
-                    title={LL.DISCOVER_EMPTY_CUSTOM_NODES()}
-                    subtitle={LL.DISCOVER_EMPTY_CUSTOM_NODES_SUBTITLE()}
-                    icon={"magnify"}
-                />
-            </>
+            <EmptyResults
+                onClick={() => navigateToBrowser("")}
+                title={LL.DISCOVER_EMPTY_CUSTOM_NODES()}
+                subtitle={LL.DISCOVER_EMPTY_CUSTOM_NODES_SUBTITLE()}
+                icon={"magnify"}
+            />
         )
     }
 
     if (dapps.length === 0 && tab === Routes.DISCOVER_FAVOURITES) {
         return (
-            <>
-                <BaseSpacer height={40} />
-                <EmptyResults
-                    onClick={() => setTab(Routes.DISCOVER_FEATURED)}
-                    title={LL.DISCOVER_EMPTY_FAVOURITES()}
-                    subtitle={LL.DISCOVER_EMPTY_FAVOURITES_SUBTITLE()}
-                    icon={"heart"}
-                />
-            </>
+            <EmptyResults
+                onClick={() => setTab(Routes.DISCOVER_FEATURED)}
+                title={LL.DISCOVER_EMPTY_FAVOURITES()}
+                subtitle={LL.DISCOVER_EMPTY_FAVOURITES_SUBTITLE()}
+                icon={"heart"}
+            />
         )
     }
 

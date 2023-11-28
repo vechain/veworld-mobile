@@ -84,7 +84,6 @@ const baseStyles = () =>
         },
         description: {
             fontSize: 12,
-            color: "gray",
         },
     })
 

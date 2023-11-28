@@ -108,6 +108,7 @@ export const BrowserBottomBar: React.FC = () => {
                         name={config.name}
                         style={styles.icon}
                         size={32}
+                        color={theme.colors.text}
                     />
                 )
             })}
@@ -128,7 +129,6 @@ const createStyles = (theme: ColorThemeType) =>
         },
         icon: {
             fontSize: 40,
-            color: theme.colors.primary,
             borderRadius: 10,
             paddingHorizontal: 12,
             paddingBottom: 25,
