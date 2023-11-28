@@ -74,7 +74,7 @@ const PlatformBlur = () => {
     const { LL } = useI18nContext()
 
     if (PlatformUtils.isIOS()) {
-        return <BlurView />
+        return <BlurView style={StyleSheet.absoluteFill} />
     } else {
         return (
             <>

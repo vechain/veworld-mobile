@@ -13,6 +13,7 @@ import {
     useAppSelector,
 } from "~Storage/Redux"
 import { URIUtils } from "~Utils"
+import { isIOS } from "~Utils/PlatformUtils/PlatformUtils"
 
 type IconProps = {
     name: string
@@ -97,7 +98,7 @@ export const BrowserBottomBar: React.FC = () => {
         ]
     }, [canGoBack, canGoForward, goBack, goForward, isBookMarked, toggleBookmark, webviewRef])
 
-    return (
+    return navigationState?.url ? (
         <BaseView style={styles.bottomBar}>
             {IconConfig.map((config, index) => {
                 return (
@@ -113,25 +114,26 @@ export const BrowserBottomBar: React.FC = () => {
                 )
             })}
         </BaseView>
-    )
+    ) : null
 }
 
 const createStyles = (theme: ColorThemeType) =>
     StyleSheet.create({
         bottomBar: {
+            display: "flex",
             flexDirection: "row",
             justifyContent: "space-evenly",
             alignItems: "center",
             backgroundColor: theme.colors.background,
-            paddingBottom: 10,
-            height: 85,
+            borderTopColor: theme.colors.card,
             borderTopWidth: 1,
+            paddingTop: 10,
+            paddingBottom: isIOS() ? 40 : 10,
         },
         icon: {
             fontSize: 40,
             borderRadius: 10,
             paddingHorizontal: 12,
-            paddingBottom: 25,
         },
         disabledIcon: {
             fontSize: 40,

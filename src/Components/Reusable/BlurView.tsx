@@ -15,9 +15,9 @@ export const BlurView = (props: Props) => {
 
     return (
         <BV
-            style={[StyleSheet.absoluteFill, styles.blurView, props.style]}
+            style={[styles.blurView, props.style]}
             // if we use "dark" the text will be too dark, that's why we use "light" and we add an overlay with a dark color and alpha
-            blurType="light"
+            blurType="dark"
             blurAmount={blurAmount}
             reducedTransparencyFallbackColor="white"
             {...props}

@@ -5,10 +5,10 @@ import { Routes } from "~Navigation"
 export const useBrowserSearch = () => {
     const nav = useNavigation()
 
-    const navigateToBrowser = (searchStr: string) => {
+    const navigateToBrowser = async (searchStr: string) => {
         const isValid =
-            URIUtils.isValidBrowserUrl(searchStr.toLowerCase()) ||
-            URIUtils.isValidBrowserUrl(`https://${searchStr.toLowerCase()}`)
+            (await URIUtils.isValidBrowserUrl(searchStr.toLowerCase())) ||
+            (await URIUtils.isValidBrowserUrl(`https://${searchStr.toLowerCase()}`))
 
         if (isValid) {
             let navInput = searchStr
