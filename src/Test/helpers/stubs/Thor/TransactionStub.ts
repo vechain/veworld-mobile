@@ -1,5 +1,7 @@
-import { connexTransactioReceiptStub, connexTransactionStub } from "../../data"
+import { connexTransactionStub, connexTransactioReceiptStub } from "../../data"
+
 const existingTxId = connexTransactionStub.id
+
 /**
  * Mocked transaction stub of Connex.Thor
  * Originally create a visitor to the transaction specified by the given id

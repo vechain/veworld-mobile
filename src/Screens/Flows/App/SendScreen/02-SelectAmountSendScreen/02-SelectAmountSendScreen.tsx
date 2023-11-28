@@ -14,7 +14,7 @@ import {
     FadeoutButton,
     Layout,
 } from "~Components"
-import { RootStackParamListDiscover, RootStackParamListHome, Routes } from "~Navigation"
+import { RootStackParamListHome, Routes } from "~Navigation"
 import { useI18nContext } from "~i18n"
 import { COLORS, CURRENCY_SYMBOLS, typography } from "~Constants"
 import { selectCurrency, selectCurrencyExchangeRate, useAppSelector } from "~Storage/Redux"
@@ -26,7 +26,7 @@ import { BigNumberUtils } from "~Utils"
 
 const { defaults: defaultTypography } = typography
 
-type Props = NativeStackScreenProps<RootStackParamListHome & RootStackParamListDiscover, Routes.SELECT_AMOUNT_SEND>
+type Props = NativeStackScreenProps<RootStackParamListHome, Routes.SELECT_AMOUNT_SEND>
 
 const AnimatedTextInput = Animated.createAnimatedComponent(TextInput)
 

@@ -5,8 +5,8 @@ import {
     BaseText,
     BaseView,
     Layout,
-    WalletEncryptionKeyHelper,
     useApplicationSecurity,
+    WalletEncryptionKeyHelper,
 } from "~Components"
 import { useNavigation } from "@react-navigation/native"
 import { Routes } from "~Navigation"

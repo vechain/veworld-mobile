@@ -676,10 +676,6 @@ type RootTranslation = {
 	 */
 	TITLE_SECURITY_DOWNGRADE: string
 	/**
-	 * D​i​s​c​o​v​e​r
-	 */
-	TITLE_DISCOVER: string
-	/**
 	 * B​a​c​k​u​p​ ​y​o​u​r​ ​p​h​r​a​s​e
 	 */
 	TITLE_BACKUP_YOUR_PHRASE: string
@@ -1700,6 +1696,70 @@ type RootTranslation = {
 	 * D​e​s​c​r​i​p​t​i​o​n
 	 */
 	CONNECTED_APP_DESCRIPTION: string
+	/**
+	 * D​i​s​c​o​v​e​r
+	 */
+	DISCOVER_TITLE: string
+	/**
+	 * D​i​s​c​o​v​e​r​ ​a​p​p​l​i​c​a​t​i​o​n​s​ ​i​n​ ​t​h​e​ ​v​e​c​h​a​i​n​ ​e​c​o​s​y​s​t​e​m
+	 */
+	DISCOVER_SUB_TITLE: string
+	/**
+	 * S​e​a​r​c​h​ ​o​r​ ​t​y​p​e​ ​a​ ​U​R​L
+	 */
+	DISCOVER_SEARCH: string
+	/**
+	 * N​o​ ​r​e​s​u​l​t​s​ ​f​o​u​n​d​ ​f​o​r​ ​y​o​u​r​ ​s​e​a​r​c​h
+	 */
+	DISCOVER_EMPTY_SEARCH: string
+	/**
+	 * F​a​v​o​u​r​i​t​e​s
+	 */
+	DISCOVER_TAB_FAVOURITES: string
+	/**
+	 * F​e​a​t​u​r​e​d
+	 */
+	DISCOVER_TAB_FEATURED: string
+	/**
+	 * P​e​r​s​o​n​a​l
+	 */
+	DISCOVER_TAB_PERSONAL: string
+	/**
+	 * N​o​ ​D​a​p​p​ ​f​o​u​n​d
+	 */
+	DISCOVER_NO_DAPPS_FOUND: string
+	/**
+	 * N​o​ ​f​a​v​o​u​r​i​t​e​s​ ​a​d​d​e​d
+	 */
+	DISCOVER_EMPTY_FAVOURITES: string
+	/**
+	 * Y​o​u​ ​c​a​n​ ​b​o​o​k​m​a​r​k​ ​y​o​u​r​ ​f​a​v​o​u​r​i​t​e​ ​a​p​p​s​ ​i​n​ ​t​h​e​ ​f​e​a​t​u​r​e​d​ ​t​a​b
+	 */
+	DISCOVER_EMPTY_FAVOURITES_SUBTITLE: string
+	/**
+	 * N​o​ ​p​e​r​s​o​n​a​l​ ​D​a​p​p​ ​a​d​d​e​d
+	 */
+	DISCOVER_EMPTY_CUSTOM_NODES: string
+	/**
+	 * Y​o​u​ ​c​a​n​ ​a​d​d​ ​y​o​u​r​ ​p​e​r​s​o​n​a​l​ ​D​a​p​p​s​ ​b​y​ ​b​o​o​k​m​a​r​k​i​n​g​ ​t​h​e​m​ ​i​n​ ​t​h​e​ ​b​r​o​w​s​e​r
+	 */
+	DISCOVER_EMPTY_CUSTOM_NODES_SUBTITLE: string
+	/**
+	 * T​a​b​s
+	 */
+	BROWSER_TAB_MANAGEMENT_TITLE: string
+	/**
+	 * F​a​v​o​u​r​i​t​e​s
+	 */
+	BROWSER_FAVOURITES_TITLE: string
+	/**
+	 * A​d​d​ ​b​o​o​k​m​a​r​k
+	 */
+	BROWSER_ADD_BOOKMARK_TITLE: string
+	/**
+	 * A​d​d​ ​t​h​e​ ​c​u​r​r​e​n​t​ ​p​a​g​e​ ​t​o​ ​y​o​u​r​ ​b​o​o​k​m​a​r​k​s
+	 */
+	BROWSER_ADD_BOOKMARK_DESCRIPTION: string
 	/**
 	 * C​o​n​t​r​a​c​t​ ​a​d​d​r​e​s​s
 	 */
@@ -3357,10 +3417,6 @@ export type TranslationFunctions = {
 	 */
 	TITLE_SECURITY_DOWNGRADE: () => LocalizedString
 	/**
-	 * Discover
-	 */
-	TITLE_DISCOVER: () => LocalizedString
-	/**
 	 * Backup your phrase
 	 */
 	TITLE_BACKUP_YOUR_PHRASE: () => LocalizedString
@@ -4357,6 +4413,70 @@ Try reconnect your device to the internet.
 	 * Description
 	 */
 	CONNECTED_APP_DESCRIPTION: () => LocalizedString
+	/**
+	 * Discover
+	 */
+	DISCOVER_TITLE: () => LocalizedString
+	/**
+	 * Discover applications in the vechain ecosystem
+	 */
+	DISCOVER_SUB_TITLE: () => LocalizedString
+	/**
+	 * Search or type a URL
+	 */
+	DISCOVER_SEARCH: () => LocalizedString
+	/**
+	 * No results found for your search
+	 */
+	DISCOVER_EMPTY_SEARCH: () => LocalizedString
+	/**
+	 * Favourites
+	 */
+	DISCOVER_TAB_FAVOURITES: () => LocalizedString
+	/**
+	 * Featured
+	 */
+	DISCOVER_TAB_FEATURED: () => LocalizedString
+	/**
+	 * Personal
+	 */
+	DISCOVER_TAB_PERSONAL: () => LocalizedString
+	/**
+	 * No Dapp found
+	 */
+	DISCOVER_NO_DAPPS_FOUND: () => LocalizedString
+	/**
+	 * No favourites added
+	 */
+	DISCOVER_EMPTY_FAVOURITES: () => LocalizedString
+	/**
+	 * You can bookmark your favourite apps in the featured tab
+	 */
+	DISCOVER_EMPTY_FAVOURITES_SUBTITLE: () => LocalizedString
+	/**
+	 * No personal Dapp added
+	 */
+	DISCOVER_EMPTY_CUSTOM_NODES: () => LocalizedString
+	/**
+	 * You can add your personal Dapps by bookmarking them in the browser
+	 */
+	DISCOVER_EMPTY_CUSTOM_NODES_SUBTITLE: () => LocalizedString
+	/**
+	 * Tabs
+	 */
+	BROWSER_TAB_MANAGEMENT_TITLE: () => LocalizedString
+	/**
+	 * Favourites
+	 */
+	BROWSER_FAVOURITES_TITLE: () => LocalizedString
+	/**
+	 * Add bookmark
+	 */
+	BROWSER_ADD_BOOKMARK_TITLE: () => LocalizedString
+	/**
+	 * Add the current page to your bookmarks
+	 */
+	BROWSER_ADD_BOOKMARK_DESCRIPTION: () => LocalizedString
 	/**
 	 * Contract address
 	 */

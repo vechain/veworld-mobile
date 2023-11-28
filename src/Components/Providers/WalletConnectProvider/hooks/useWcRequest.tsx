@@ -1,6 +1,6 @@
 import { useCallback, useEffect, useMemo, useState } from "react"
 import { PendingRequestTypes, SessionTypes } from "@walletconnect/types"
-import { AddressUtils, debug, error, HexUtils, MinimizerUtils, WalletConnectUtils, warn } from "~Utils"
+import { AddressUtils, debug, error, HexUtils, WalletConnectUtils, warn } from "~Utils"
 import { AnalyticsEvent, RequestMethods } from "~Constants"
 import { AccountWithDevice } from "~Model"
 import {
@@ -9,7 +9,6 @@ import {
     selectSelectedAccountAddress,
     selectSelectedNetwork,
     selectVisibleAccounts,
-    selectWcState,
     useAppDispatch,
     useAppSelector,
 } from "~Storage/Redux"
@@ -35,7 +34,6 @@ export const useWcRequest = (isBlackListScreen: () => boolean, activeSessions: A
     const selectedNetwork = useAppSelector(selectSelectedNetwork)
     const accounts = useAppSelector(selectVisibleAccounts)
     const networks = useAppSelector(selectNetworks)
-    const sessionContexts = useAppSelector(selectWcState)
 
     const sessions = useMemo(() => Object.values(activeSessions), [activeSessions])
 
@@ -59,16 +57,8 @@ export const useWcRequest = (isBlackListScreen: () => boolean, activeSessions: A
     const afterRequest = useCallback(
         (requestEvent: PendingRequestTypes.Struct) => {
             removePendingRequest(requestEvent)
-
-            const context = sessionContexts[requestEvent.topic]
-
-            if (context?.isDeepLink) {
-                setTimeout(() => {
-                    MinimizerUtils.goBack()
-                }, 1000)
-            }
         },
-        [removePendingRequest, sessionContexts],
+        [removePendingRequest],
     )
 
     const processRequest = useCallback(
@@ -136,10 +126,15 @@ export const useWcRequest = (isBlackListScreen: () => boolean, activeSessions: A
             if (message) {
                 track(AnalyticsEvent.DAPP_REQUEST_CERTIFICATE)
                 nav.navigate(Routes.CONNECTED_APP_SIGN_CERTIFICATE_SCREEN, {
-                    requestEvent,
-                    session,
-                    message,
-                    options,
+                    request: {
+                        type: "wallet-connect",
+                        requestEvent,
+                        session,
+                        message,
+                        options,
+                        appName: session.peer.metadata.name,
+                        appUrl: session.peer.metadata.url,
+                    },
                 })
             } else {
                 showErrorToast({
@@ -171,10 +166,15 @@ export const useWcRequest = (isBlackListScreen: () => boolean, activeSessions: A
             if (message) {
                 track(AnalyticsEvent.DAPP_TX_REQUESTED)
                 nav.navigate(Routes.CONNECTED_APP_SEND_TRANSACTION_SCREEN, {
-                    requestEvent,
-                    session,
-                    message,
-                    options,
+                    request: {
+                        type: "wallet-connect",
+                        requestEvent,
+                        session,
+                        message,
+                        options,
+                        appName: session.peer.metadata.name,
+                        appUrl: session.peer.metadata.url,
+                    },
                 })
             } else {
                 showErrorToast({

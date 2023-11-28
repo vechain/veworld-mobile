@@ -30,7 +30,7 @@ import {
     showErrorToast,
     showWarningToast,
 } from "~Components"
-import { RootStackParamListDiscover, RootStackParamListHome, Routes } from "~Navigation"
+import { RootStackParamListHome, Routes } from "~Navigation"
 import {
     addPendingTransferTransactionActivity,
     selectAccounts,
@@ -59,13 +59,10 @@ import { DelegationType } from "~Model/Delegation"
 import Animated, { interpolateColor, useAnimatedStyle, useSharedValue, withTiming } from "react-native-reanimated"
 import { StyleSheet } from "react-native"
 
-type Props = NativeStackScreenProps<
-    RootStackParamListHome & RootStackParamListDiscover,
-    Routes.TRANSACTION_SUMMARY_SEND
->
+type Props = NativeStackScreenProps<RootStackParamListHome, Routes.TRANSACTION_SUMMARY_SEND>
 
 export const TransactionSummarySendScreen = ({ route }: Props) => {
-    const { token, amount, address, initialRoute } = route.params
+    const { token, amount, address } = route.params
 
     const { LL } = useI18nContext()
     const dispatch = useAppDispatch()
@@ -84,6 +81,14 @@ export const TransactionSummarySendScreen = ({ route }: Props) => {
     const { onAddContactPress, handleSaveContact, addContactSheet, selectedContactAddress, closeAddContactSheet } =
         useTransferAddContact()
 
+    const navBack = useCallback(() => {
+        error(nav.getState())
+
+        if (nav.canGoBack()) return nav.goBack()
+
+        nav.navigate(Routes.DISCOVER)
+    }, [nav])
+
     const onFinish = useCallback(
         (success: boolean) => {
             if (success) track(AnalyticsEvent.SEND_FUNGIBLE_SENT)
@@ -91,17 +96,9 @@ export const TransactionSummarySendScreen = ({ route }: Props) => {
 
             dispatch(setIsAppLoading(false))
 
-            switch (initialRoute) {
-                case Routes.DISCOVER:
-                    nav.navigate(Routes.DISCOVER)
-                    break
-                case Routes.HOME:
-                default:
-                    nav.navigate(Routes.HOME)
-                    break
-            }
+            navBack()
         },
-        [track, dispatch, nav, initialRoute],
+        [track, dispatch, navBack],
     )
 
     const onTransactionSuccess = useCallback(
@@ -166,7 +163,7 @@ export const TransactionSummarySendScreen = ({ route }: Props) => {
         selectedDelegationAccount,
         selectedDelegationOption,
         selectedDelegationUrl,
-        initialRoute,
+        // initialRoute,
         // requestEvent,
     })
 

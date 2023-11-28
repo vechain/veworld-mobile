@@ -9,6 +9,7 @@ import {
     CurrencySlice,
     DelegationSlice,
     DeviceSlice,
+    DiscoverySlice,
     NetworkSlice,
     NftSlice,
     NftSliceState,
@@ -37,4 +38,5 @@ export const reducer = (nftPersistConfig: PersistConfig<NftSliceState>) =>
         [WalletConnectSessionsSlice.name]: WalletConnectSessionsSlice.reducer,
         [PendingSlice.name]: PendingSlice.reducer,
         [BeatSlice.name]: BeatSlice.reducer,
+        [DiscoverySlice.name]: DiscoverySlice.reducer,
     })

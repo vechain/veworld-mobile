@@ -1,5 +1,5 @@
 import React, { useEffect } from "react"
-import { BaseStatusBar, ErrorBoundary, useApplicationSecurity, AutoLockProvider } from "~Components"
+import { AutoLockProvider, BaseStatusBar, ErrorBoundary, useApplicationSecurity } from "~Components"
 import { SwitchStack } from "~Navigation"
 import { AppLoader } from "./AppLoader"
 import { AnimatedSplashScreen } from "./AnimatedSplashScreen"

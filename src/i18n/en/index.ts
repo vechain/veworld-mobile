@@ -188,7 +188,6 @@ const en: BaseTranslation = {
     TITLE_ADD_TOKEN: "Add Token",
     TITLE_EDIT_WALLET: "Edit wallet",
     TITLE_SECURITY_DOWNGRADE: "Your app is blocked",
-    TITLE_DISCOVER: "Discover",
     TITLE_BACKUP_YOUR_PHRASE: "Backup your phrase",
     TITLE_QR_CODE_FOR_ACCOUNT: "Your QR Code for {accountAlias: string}",
     TITLE_RENAME: "Rename {type: string}",
@@ -476,6 +475,28 @@ const en: BaseTranslation = {
     CONNECTED_APP_DETAILS_ACCOUNT_LABEL: "Connected with",
     CONNECTED_APP_CONNECTION_REQUESTS: "Connection requests",
     CONNECTED_APP_DESCRIPTION: "Description",
+
+
+    DISCOVER_TITLE: "Discover",
+    DISCOVER_SUB_TITLE: "Discover applications in the vechain ecosystem",
+    DISCOVER_SEARCH: "Search or type a URL",
+    DISCOVER_EMPTY_SEARCH: "No results found for your search",
+    DISCOVER_TAB_FAVOURITES: "Favourites",
+    DISCOVER_TAB_FEATURED: "Featured",
+    DISCOVER_TAB_PERSONAL: "Personal",
+
+    DISCOVER_NO_DAPPS_FOUND: "No Dapp found",
+    DISCOVER_EMPTY_FAVOURITES: "No favourites added",
+    DISCOVER_EMPTY_FAVOURITES_SUBTITLE: "You can bookmark your favourite apps in the featured tab",
+
+
+    DISCOVER_EMPTY_CUSTOM_NODES: "No personal Dapp added",
+    DISCOVER_EMPTY_CUSTOM_NODES_SUBTITLE: "You can add your personal Dapps by bookmarking them in the browser",
+
+    BROWSER_TAB_MANAGEMENT_TITLE: "Tabs",
+    BROWSER_FAVOURITES_TITLE: "Favourites",
+    BROWSER_ADD_BOOKMARK_TITLE: "Add bookmark",
+    BROWSER_ADD_BOOKMARK_DESCRIPTION: "Add the current page to your bookmarks",
 
     // NFT
     CONTRACT_ADDRESS: "Contract address",

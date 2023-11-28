@@ -3,11 +3,11 @@ import { NativeStackScreenProps } from "@react-navigation/native-stack"
 import React, { useState } from "react"
 import { BaseSearchInput, BaseSpacer, BaseText, BaseView, Layout, OfficialTokenCard } from "~Components"
 import { FungibleTokenWithBalance } from "~Model"
-import { RootStackParamListDiscover, RootStackParamListHome, Routes } from "~Navigation"
+import { RootStackParamListHome, Routes } from "~Navigation"
 import { selectSendableTokensWithBalance, useAppSelector } from "~Storage/Redux"
 import { useI18nContext } from "~i18n"
 
-type Props = NativeStackScreenProps<RootStackParamListHome & RootStackParamListDiscover, Routes.SELECT_TOKEN_SEND>
+type Props = NativeStackScreenProps<RootStackParamListHome, Routes.SELECT_TOKEN_SEND>
 
 export const SelectTokenSendScreen = ({ route }: Props) => {
     const { LL } = useI18nContext()

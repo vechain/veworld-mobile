@@ -38,6 +38,7 @@ import BigNumberUtils, { BigNumberUtilsType } from "./BigNumberUtils"
 
 export * from "./Logger"
 export * from "./SignMessageUtils"
+export * from "./DAppUtils"
 
 export {
     AddressUtils,

@@ -21,7 +21,7 @@ import {
     useAppDispatch,
     useAppSelector,
 } from "~Storage/Redux"
-import { debug, error, HexUtils, WalletConnectUtils } from "~Utils"
+import { debug, error, HexUtils } from "~Utils"
 import { useAnalyticTracking, useCheckIdentity, useSignMessage } from "~Hooks"
 import { AccountWithDevice, DEVICE_TYPE, LedgerAccountWithDevice } from "~Model"
 import { useI18nContext } from "~i18n"
@@ -29,14 +29,16 @@ import { RootStackParamListSwitch, Routes } from "~Navigation"
 import { NativeStackScreenProps } from "@react-navigation/native-stack"
 import { useNavigation } from "@react-navigation/native"
 import { MessageDetails, UnknownAppMessage } from "~Screens"
-import { AnalyticsEvent } from "~Constants"
+import { AnalyticsEvent, RequestMethods } from "~Constants"
+import { useInAppBrowser } from "~Components/Providers/InAppBrowserProvider"
 
 type Props = NativeStackScreenProps<RootStackParamListSwitch, Routes.CONNECTED_APP_SIGN_CERTIFICATE_SCREEN>
 
 export const SignCertificateScreen: FC<Props> = ({ route }: Props) => {
-    const { requestEvent, session, message } = route.params
+    const { request } = route.params
 
     const { processRequest, failRequest } = useWalletConnect()
+    const { postMessage } = useInAppBrowser()
     const { LL } = useI18nContext()
     const nav = useNavigation()
     const selectedAccount: AccountWithDevice = useAppSelector(selectSelectedAccount)
@@ -45,10 +47,9 @@ export const SignCertificateScreen: FC<Props> = ({ route }: Props) => {
 
     const [isInvalidChecked, setInvalidChecked] = React.useState(false)
 
-    // Request values
-    const { url } = WalletConnectUtils.getSessionRequestAttributes(session)
-
-    const sessionContext = useAppSelector(state => selectVerifyContext(state, requestEvent.topic))
+    const sessionContext = useAppSelector(state =>
+        selectVerifyContext(state, request.type === "wallet-connect" ? request.session.topic : undefined),
+    )
 
     const validConnectedApp = useMemo(() => {
         if (!sessionContext) return true
@@ -59,13 +60,13 @@ export const SignCertificateScreen: FC<Props> = ({ route }: Props) => {
     // Prepare certificate to sign
     const cert: Certificate = useMemo(() => {
         return {
-            purpose: message.purpose,
-            payload: message.payload,
+            purpose: request.message.purpose,
+            payload: request.message.payload,
             timestamp: Math.round(Date.now() / 1000),
-            domain: new URL(url).hostname,
+            domain: new URL(request.appUrl).hostname,
             signer: selectedAccount?.address ?? "",
         }
-    }, [message, selectedAccount, url])
+    }, [request.message, selectedAccount, request.appUrl])
 
     const payloadToSign = useMemo(() => {
         return blake2b256(Certificate.encode(cert))
@@ -77,7 +78,12 @@ export const SignCertificateScreen: FC<Props> = ({ route }: Props) => {
     })
 
     const onClose = useCallback(() => {
-        nav.goBack()
+        if (nav.canGoBack()) {
+            nav.goBack()
+            return
+        } else {
+            nav.navigate(Routes.DISCOVER)
+        }
     }, [nav])
 
     const handleAccept = useCallback(
@@ -85,11 +91,9 @@ export const SignCertificateScreen: FC<Props> = ({ route }: Props) => {
             try {
                 if (selectedAccount.device.type === DEVICE_TYPE.LEDGER) {
                     nav.navigate(Routes.LEDGER_SIGN_CERTIFICATE, {
-                        requestEvent,
+                        request,
                         accountWithDevice: selectedAccount as LedgerAccountWithDevice,
                         certificate: cert,
-                        //TODO: What should initialRoute be?
-                        initialRoute: Routes.HOME,
                     })
                     return
                 }
@@ -101,23 +105,22 @@ export const SignCertificateScreen: FC<Props> = ({ route }: Props) => {
 
                 dispatch(setIsAppLoading(true))
 
-                await processRequest(requestEvent, {
+                const res: Connex.Vendor.CertResponse = {
                     signature: HexUtils.addPrefix(signature.toString("hex")),
                     annex: {
                         domain: cert.domain,
                         timestamp: cert.timestamp,
                         signer: cert.signer,
                     },
-                })
+                }
 
-                dispatch(
-                    addSignCertificateActivity(
-                        session.peer.metadata.name,
-                        cert.domain,
-                        cert.payload.content,
-                        cert.purpose,
-                    ),
-                )
+                if (request.type === "wallet-connect") {
+                    await processRequest(request.requestEvent, res)
+                } else {
+                    postMessage({ id: request.id, data: res, method: RequestMethods.SIGN_CERTIFICATE })
+                }
+
+                dispatch(addSignCertificateActivity(request.appName, cert.domain, cert.payload.content, cert.purpose))
 
                 track(AnalyticsEvent.DAPP_CERTIFICATE_SUCCESS)
 
@@ -126,7 +129,15 @@ export const SignCertificateScreen: FC<Props> = ({ route }: Props) => {
                 track(AnalyticsEvent.DAPP_CERTIFICATE_FAILED)
                 error("SignMessageScreen:handleAccept", err)
 
-                await failRequest(requestEvent, getRpcError("internal"))
+                if (request.type === "wallet-connect") {
+                    await failRequest(request.requestEvent, getRpcError("internal"))
+                } else {
+                    postMessage({
+                        id: request.id,
+                        error: "Internal error",
+                        method: RequestMethods.SIGN_CERTIFICATE,
+                    })
+                }
 
                 dispatch(setIsAppLoading(false))
             } finally {
@@ -136,25 +147,30 @@ export const SignCertificateScreen: FC<Props> = ({ route }: Props) => {
             onClose()
         },
         [
+            postMessage,
             onClose,
             selectedAccount,
             signMessage,
-            requestEvent,
+            request,
             failRequest,
             processRequest,
             cert,
             dispatch,
-            session.peer.metadata.name,
             track,
             nav,
         ],
     )
 
     const onReject = useCallback(async () => {
-        await failRequest(requestEvent, getRpcError("userRejectedRequest"))
+        if (request.type === "wallet-connect") {
+            await failRequest(request.requestEvent, getRpcError("userRejectedRequest"))
+        } else {
+            postMessage({ id: request.id, error: "User rejected request", method: RequestMethods.REQUEST_TRANSACTION })
+        }
+
         track(AnalyticsEvent.DAPP_CERTIFICATE_REJECTED)
         onClose()
-    }, [requestEvent, track, onClose, failRequest])
+    }, [postMessage, request, track, onClose, failRequest])
 
     const {
         isPasswordPromptOpen,
@@ -200,7 +216,8 @@ export const SignCertificateScreen: FC<Props> = ({ route }: Props) => {
                     <AccountCard account={selectedAccount} showOpacityWhenDisabled={false} />
 
                     <BaseSpacer height={32} />
-                    <MessageDetails sessionRequest={session} requestEvent={requestEvent} message={message} />
+
+                    <MessageDetails request={request} />
 
                     <BaseSpacer height={30} />
 

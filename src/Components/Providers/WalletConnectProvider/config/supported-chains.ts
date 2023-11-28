@@ -4,28 +4,6 @@ import { getSdkError } from "@walletconnect/utils"
 import { ErrorResponse } from "@walletconnect/jsonrpc-types/dist/cjs/jsonrpc"
 
 export const WCSupportedChains: ProposalTypes.RequiredNamespaces = {
-    eip155: {
-        events: ["chainChanged", "accountsChanged", "message", "disconnect", "connect"],
-        methods: [
-            "eth_accounts",
-            "eth_requestAccounts",
-            "eth_sendRawTransaction",
-            "eth_sign",
-            "eth_signTransaction",
-            "eth_signTypedData",
-            "eth_signTypedData_v3",
-            "eth_signTypedData_v4",
-            "eth_sendTransaction",
-            "personal_sign",
-            "wallet_switchEthereumChain",
-            "wallet_addEthereumChain",
-            "wallet_getPermissions",
-            "wallet_requestPermissions",
-            "wallet_registerOnboarding",
-            "wallet_watchAsset",
-            "wallet_scanQRCode",
-        ],
-    },
     vechain: {
         methods: Object.values(RequestMethods),
         events: [],

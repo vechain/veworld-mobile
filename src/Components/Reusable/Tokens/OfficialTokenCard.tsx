@@ -2,8 +2,8 @@ import { Dimensions, StyleSheet, ViewProps } from "react-native"
 import React, { memo } from "react"
 import { TokenWithCompleteInfo } from "~Model"
 import { BaseCard, BaseSpacer, BaseText, BaseView } from "~Components"
-import { useThemedStyles } from "~Hooks"
-import { CURRENCY, ColorThemeType } from "~Constants"
+import { useTheme, useThemedStyles } from "~Hooks"
+import { ColorThemeType, CURRENCY } from "~Constants"
 import { TokenImage } from "../TokenImage"
 
 type OfficialTokenCardProps = {
@@ -13,8 +13,8 @@ type OfficialTokenCardProps = {
     iconWidth: number
     selected?: boolean
     currency?: CURRENCY
-    isPositive24hChange?: boolean
     change24h?: string
+    isPositive24hChange?: boolean
 }
 
 export const OfficialTokenCard = memo(
@@ -26,10 +26,11 @@ export const OfficialTokenCard = memo(
         iconWidth,
         selected,
         currency,
-        isPositive24hChange,
         change24h,
+        isPositive24hChange,
     }: OfficialTokenCardProps & ViewProps) => {
-        const { styles, theme } = useThemedStyles(baseStyles(selected))
+        const { styles } = useThemedStyles(baseStyles(selected))
+        const theme = useTheme()
         return (
             <BaseCard onPress={action} containerStyle={[styles.container, style]}>
                 <BaseView flexDirection="row" justifyContent="flex-start">
