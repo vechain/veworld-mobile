@@ -18,6 +18,7 @@ type Props = {
     isThereEnoughGas: boolean
     txCostTotal: string
     totalBalance: string
+    isDelegated?: boolean
 }
 
 export const GasFeeOptions = ({
@@ -28,6 +29,7 @@ export const GasFeeOptions = ({
     isThereEnoughGas,
     txCostTotal,
     totalBalance,
+    isDelegated,
 }: Props) => {
     const theme = useTheme()
     const { LL } = useI18nContext()
@@ -92,19 +94,21 @@ export const GasFeeOptions = ({
                 <BaseSpacer height={12} />
 
                 <BaseView flexDirection="row" justifyContent="space-between">
-                    {isThereEnoughGas && (
+                    {/* Show when there is enough gas OR when the user is delegating to another account*/}
+                    {isThereEnoughGas || isDelegated ? (
                         <GasDetailsView
                             entering={FadeInLeft.springify(300).mass(1)}
                             exiting={FadeOut.springify(300).mass(1)}
                         />
-                    )}
-                    {!isThereEnoughGas && (
+                    ) : null}
+                    {/* Show when there is not enough gas AND the user is not delegating to another account*/}
+                    {!isThereEnoughGas && !isDelegated ? (
                         <GasWarningView
                             entering={FadeInRight.springify(300).mass(1)}
                             exiting={FadeOut.springify(300).mass(1)}
                             computedGasDifference={computedGasDifference}
                         />
-                    )}
+                    ) : null}
                 </BaseView>
 
                 <BaseSpacer height={6} />

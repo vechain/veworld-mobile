@@ -6,7 +6,7 @@ import { BigNumberUtils } from "~Utils"
 export const useTotalTokenBalance = (
     token: FungibleTokenWithBalance,
     vthoEstimate: string,
-    setIsError: React.Dispatch<React.SetStateAction<boolean>>,
+    // setIsError: React.Dispatch<React.SetStateAction<boolean>>,
 ) => {
     const { decimals } = token
 
@@ -21,7 +21,8 @@ export const useTotalTokenBalance = (
             let newTotal = BigNumberUtils(token.balance.balance).minus(vthoEstimate)
 
             if (newTotal.isLessThan(0)) {
-                setIsError(true)
+                //! this should br reinstated when tokenBalanceMinusProjectedFees will be in use again
+                // setIsError(true)
                 newTotal = BigNumberUtils("0")
             }
 
@@ -31,7 +32,7 @@ export const useTotalTokenBalance = (
         }
 
         return total
-    }, [decimals, setIsError, token.balance.balance, token?.symbol, tokenTotalBalance, vthoEstimate])
+    }, [decimals, token.balance.balance, token?.symbol, tokenTotalBalance, vthoEstimate])
 
     const tokenTotalToHuman = useMemo(() => {
         return BigNumberUtils(tokenTotalBalance).toHuman(decimals).toString

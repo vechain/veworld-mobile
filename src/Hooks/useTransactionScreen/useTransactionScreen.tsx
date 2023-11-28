@@ -211,10 +211,7 @@ export const useTransactionScreen = ({
         setTxCostTotal(_txCostTotal.toString)
     }, [clauses, gas, isDelegated, selectedFeeOption, vtho, selectedAccount, priorityFees])
 
-    const isDissabledButtonState = useMemo(
-        () => !isEnoughGas && selectedDelegationOption !== DelegationType.URL,
-        [isEnoughGas, selectedDelegationOption],
-    )
+    const isDissabledButtonState = useMemo(() => !isEnoughGas && !isDelegated, [isEnoughGas, isDelegated])
 
     return {
         selectedDelegationOption,

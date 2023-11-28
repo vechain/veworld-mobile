@@ -167,6 +167,7 @@ export const TransactionSummarySendScreen = ({ route }: Props) => {
                         isThereEnoughGas={isEnoughGas}
                         totalBalance={vtho.balance.balance}
                         txCostTotal={txCostTotal}
+                        isDelegated={isDelegated}
                     />
 
                     <EstimatedTimeDetailsView />

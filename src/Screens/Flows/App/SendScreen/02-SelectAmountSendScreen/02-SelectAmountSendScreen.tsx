@@ -45,7 +45,7 @@ export const SelectAmountSendScreen = ({ route }: Props) => {
 
     const { gas } = useCalculateGas({ token })
 
-    const { tokenTotalBalance, tokenTotalToHuman } = useTotalTokenBalance(token, gas, setIsError)
+    const { tokenTotalBalance, tokenTotalToHuman } = useTotalTokenBalance(token, gas)
 
     const { fiatTotalBalance } = useTotalFiatBalance(tokenTotalToHuman, exchangeRate)
 
