@@ -6,7 +6,8 @@ interface IBigNumberUtils {
     // utility Methods
     toHuman(decimals: number, callback?: (result: BN) => void): BigNumberUtilsType
     decimals(decimals: number, callback?: (result: BN) => void): BigNumberUtilsType
-    toCurrencyFormat(decimals: number, callback?: (result: BN) => void): BigNumberUtilsType
+    toCurrencyFormat_string(decimals: number): string
+    toTokenFormat_string(decimals: number): string
     toCurrencyConversion(balance: string, rate?: IRate, callback?: (result: BN) => void): BigNumberUtilsType
     toTokenConversion(balance: string, rate?: IRate, callback?: (result: BN) => void): BigNumberUtilsType
     addTrailingZeros(decimals: number, callback?: (result: BN) => void): BigNumberUtilsType
@@ -125,16 +126,34 @@ class BigNumberUtilsType implements IBigNumberUtils {
         return this.data.isGreaterThan(value)
     }
 
-    toCurrencyFormat(decimals: number, callback?: (result: BN) => void): this {
-        BN.config({ FORMAT: { decimalSeparator: ".", groupSeparator: "," } })
-        let _data = this.data.toFormat(decimals, BN.ROUND_DOWN)
-        this.data = new BN(_data)
+    toCurrencyFormat_string(decimals: number): string {
+        let format = { decimalSeparator: ".", groupSeparator: ",", suffix: "" }
+        BN.config({ FORMAT: format })
 
-        if (callback) {
-            callback(this.data)
+        let _data = ""
+
+        if (this.data.isLessThan("0.01") && !this.data.isZero()) {
+            _data = "< 0.01"
+        } else {
+            _data = this.data.toFormat(decimals, BN.ROUND_DOWN)
         }
 
-        return this
+        return _data
+    }
+
+    toTokenFormat_string(decimals: number): string {
+        let format = { decimalSeparator: ".", groupSeparator: ",", suffix: "" }
+        BN.config({ FORMAT: format })
+
+        let _data = ""
+
+        if (this.data.isLessThan("0.0001") && !this.data.isZero()) {
+            _data = "< 0.0001"
+        } else {
+            _data = this.data.toFormat(decimals, BN.ROUND_DOWN)
+        }
+
+        return _data
     }
 
     toCurrencyConversion(balance: string, rate?: IRate, callback?: (result: BN) => void) {

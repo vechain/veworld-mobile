@@ -1,31 +1,29 @@
 import { Transaction } from "thor-devkit"
-import React, { useCallback, useMemo, useState } from "react"
+import { useCallback, useEffect, useMemo, useState } from "react"
 import {
     SignStatus,
     SignTransactionResponse,
     useCheckIdentity,
     useDelegation,
-    useRenderGas,
     useSendTransaction,
     useSignTransaction,
     useTransactionBuilder,
     useTransactionGas,
 } from "~Hooks"
 import { useI18nContext } from "~i18n"
-import { selectSelectedAccount, setIsAppLoading, useAppDispatch, useAppSelector } from "~Storage/Redux"
 import {
-    AccountCard,
-    BaseCard,
-    BaseSpacer,
-    BaseText,
-    DelegationOptions,
-    showErrorToast,
-    showWarningToast,
-} from "~Components"
-import { error } from "~Utils"
+    selectSelectedAccount,
+    selectVthoTokenWithBalanceByAccount,
+    setIsAppLoading,
+    useAppDispatch,
+    useAppSelector,
+} from "~Storage/Redux"
+import { showErrorToast, showWarningToast } from "~Components"
+import { GasUtils, error } from "~Utils"
 import { DEVICE_TYPE, LedgerAccountWithDevice, TransactionRequest } from "~Model"
 import { DelegationType } from "~Model/Delegation"
 import { Routes } from "~Navigation"
+import { GasPriceCoefficient } from "~Constants"
 
 type Props = {
     clauses: Transaction.Body["clauses"]
@@ -47,6 +45,13 @@ export const useTransactionScreen = ({
     const selectedAccount = useAppSelector(selectSelectedAccount)
 
     const [loading, setLoading] = useState(false)
+    const [selectedFeeOption, setSelectedFeeOption] = useState(String(GasPriceCoefficient.REGULAR))
+    const [isEnoughGas, setIsEnoughGas] = useState(true)
+    const [txCostTotal, setTxCostTotal] = useState("0")
+
+    const vtho = useAppSelector(state =>
+        selectVthoTokenWithBalanceByAccount(state, selectedDelegationAccount?.address ?? selectedAccount.address),
+    )
 
     // 1. Gas
     const { gas, loadingGas, setGasPayer } = useTransactionGas({
@@ -67,23 +72,14 @@ export const useTransactionScreen = ({
         providedUrl: dappRequest?.options?.delegator?.url,
     })
 
-    // Calculate gas priority fee
-    const {
-        isThereEnoughGas,
-        vthoGasFee,
-        vthoBalance,
-        gasPriceCoef,
-        setSelectedFeeOption,
-        selectedFeeOption,
-        gasFeeOptions,
-    } = useRenderGas({
-        gas,
-        accountAddress: selectedDelegationAccount?.address ?? selectedAccount.address,
-        clauses,
-        isDelegated,
-        setAmount,
-        userSelectedAmount,
-    })
+    const { gasPriceCoef, priorityFees, gasFeeOptions } = useMemo(
+        () =>
+            GasUtils.getGasByCoefficient({
+                gas,
+                selectedFeeOption,
+            }),
+        [gas, selectedFeeOption],
+    )
 
     // 3. Build transaction
     const { buildTransaction } = useTransactionBuilder({
@@ -197,50 +193,30 @@ export const useTransactionScreen = ({
         [loading, loadingGas, isBiometricsEmpty],
     )
 
-    const Delegation = useCallback(
-        () => (
-            <>
-                <DelegationOptions
-                    setNoDelegation={setNoDelegation}
-                    selectedDelegationOption={selectedDelegationOption}
-                    setSelectedAccount={setSelectedDelegationAccount}
-                    selectedAccount={selectedDelegationAccount}
-                    selectedDelegationUrl={selectedDelegationUrl}
-                    setSelectedDelegationUrl={setSelectedDelegationUrl}
-                />
-                {selectedDelegationAccount && (
-                    <>
-                        <BaseSpacer height={16} />
-                        <AccountCard account={selectedDelegationAccount} />
-                    </>
-                )}
-                {selectedDelegationUrl && (
-                    <>
-                        <BaseSpacer height={16} />
-                        <BaseCard>
-                            <BaseText py={8}>{selectedDelegationUrl}</BaseText>
-                        </BaseCard>
-                    </>
-                )}
-            </>
-        ),
-        [
-            selectedDelegationAccount,
-            selectedDelegationOption,
-            selectedDelegationUrl,
-            setNoDelegation,
-            setSelectedDelegationAccount,
-            setSelectedDelegationUrl,
-        ],
+    /**
+     * Check if the user has enough funds to send the transaction
+     * Calculate the amount to send without the gas fee
+     */
+    useEffect(() => {
+        const { isGas, txCostTotal: _txCostTotal } = GasUtils.calculateIsEnoughGas({
+            clauses,
+            isDelegated,
+            vtho,
+            priorityFees,
+        })
+
+        setIsEnoughGas(isGas)
+        setTxCostTotal(_txCostTotal.toString)
+    }, [clauses, gas, isDelegated, selectedFeeOption, vtho, selectedAccount, priorityFees])
+
+    const isDissabledButtonState = useMemo(
+        () => !isEnoughGas && selectedDelegationOption !== DelegationType.URL,
+        [isEnoughGas, selectedDelegationOption],
     )
 
     return {
-        Delegation,
         selectedDelegationOption,
         loadingGas,
-        vthoGasFee,
-        vthoBalance,
-        isThereEnoughGas,
         onSubmit,
         isLoading,
         isPasswordPromptOpen,
@@ -249,5 +225,16 @@ export const useTransactionScreen = ({
         setSelectedFeeOption,
         selectedFeeOption,
         gasFeeOptions,
+        setNoDelegation,
+        setSelectedDelegationAccount,
+        setSelectedDelegationUrl,
+        isEnoughGas,
+        txCostTotal,
+        isDelegated,
+        selectedDelegationAccount,
+        selectedDelegationUrl,
+        vtho,
+        isDissabledButtonState,
+        priorityFees,
     }
 }

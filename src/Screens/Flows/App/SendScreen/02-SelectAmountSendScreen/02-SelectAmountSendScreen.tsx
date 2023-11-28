@@ -53,7 +53,7 @@ export const SelectAmountSendScreen = ({ route }: Props) => {
      * FIAT selected balance calculated fron TOKEN input in human readable format (correct value is when TOKEN is active)
      * Example "53.54"
      */
-    const fiatHumanAmount = BigNumberUtils().toCurrencyConversion(input, exchangeRate).toCurrencyFormat(2).toString
+    const fiatHumanAmount = BigNumberUtils().toCurrencyConversion(input, exchangeRate).toCurrencyFormat_string(2)
 
     /**
      * TOKEN selected balance in raw-ish format (with decimals) (correct value is when FIAT is active)
@@ -65,7 +65,7 @@ export const SelectAmountSendScreen = ({ route }: Props) => {
      * TOKEN selected balance in human readable format (correct value is when FIAT is active)
      * Example "2,472.771"
      */
-    const tokenHumanAmountFromFiat = BigNumberUtils(tokenAmountFromFiat).toCurrencyFormat(4).toString
+    const tokenHumanAmountFromFiat = BigNumberUtils(tokenAmountFromFiat).toTokenFormat_string(4)
 
     /**
      * Toggle between FIAT and TOKEN input (and update the input value)
@@ -107,10 +107,10 @@ export const SelectAmountSendScreen = ({ route }: Props) => {
      * Sets the input value to the max available balance (in TOKEN or FIAT)
      */
     const handleOnMaxPress = useCallback(() => {
-        // setInput(isInputInFiat ? BigNumberUtils(fiatTotalBalance).toCurrencyFormat(2).toString : tokenBalanceMinusProjectedFees)
+        // setInput(isInputInFiat ? BigNumberUtils(fiatTotalBalance).toCurrencyFormatString(2).toString : tokenBalanceMinusProjectedFees)
         setInput(
             isInputInFiat
-                ? BigNumberUtils(fiatTotalBalance).toCurrencyFormat(2).toString
+                ? BigNumberUtils(fiatTotalBalance).toCurrencyFormat_string(2)
                 : BigNumberUtils(tokenTotalBalance).toHuman(token.decimals).toString,
         )
         let conv = BigNumberUtils().toTokenConversion(fiatTotalBalance, exchangeRate).toString

@@ -73,12 +73,16 @@ export const useUI = ({
 
     const computeconvertedAmountInFooter = useMemo(() => {
         if (isInputInFiat) {
-            return "≈ " + Number(tokenHumanAmountFromFiat).toFixed(2) + " " + token.symbol
+            if (tokenHumanAmountFromFiat.includes("<")) {
+                return `${tokenHumanAmountFromFiat} ${token.symbol}`
+            } else {
+                return `≈ ${tokenHumanAmountFromFiat} ${token.symbol}`
+            }
         } else {
             if (fiatHumanAmount.includes("<")) {
-                return fiatHumanAmount
+                return `${fiatHumanAmount} ${currency}`
             } else {
-                return "≈ " + fiatHumanAmount + " " + currency
+                return `≈ ${fiatHumanAmount} ${currency}`
             }
         }
     }, [currency, fiatHumanAmount, isInputInFiat, token.symbol, tokenHumanAmountFromFiat])
