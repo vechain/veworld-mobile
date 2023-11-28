@@ -54,9 +54,7 @@ export const TransactionSummarySendScreen = ({ route }: Props) => {
 
     const navBack = useCallback(() => {
         error(nav.getState())
-
         if (nav.canGoBack()) return nav.goBack()
-
         nav.navigate(Routes.DISCOVER)
     }, [nav])
 
@@ -66,7 +64,6 @@ export const TransactionSummarySendScreen = ({ route }: Props) => {
             else track(AnalyticsEvent.SEND_FUNGIBLE_FAILED_TO_SEND)
 
             dispatch(setIsAppLoading(false))
-
             navBack()
         },
         [track, dispatch, navBack],
@@ -309,5 +306,3 @@ const baseStyles = StyleSheet.create({
         fontWeight: "700",
     },
 })
-
-// https://sponsor-testnet.vechain.energy/by/296

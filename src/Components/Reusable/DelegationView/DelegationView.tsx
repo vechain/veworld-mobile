@@ -1,4 +1,4 @@
-import React from "react"
+import React, { useMemo } from "react"
 import { AccountWithDevice, LocalAccountWithDevice } from "~Model"
 import { DelegationType } from "~Model/Delegation"
 import { DelegationOptions } from "../DelegationOptions"
@@ -22,6 +22,26 @@ export function DelegationView({
     selectedDelegationUrl,
     setSelectedDelegationUrl,
 }: IDelegationView) {
+    const RenderDelegationTypeViews = useMemo(() => {
+        if (selectedDelegationAccount)
+            return (
+                <>
+                    <BaseSpacer height={16} />
+                    <AccountCard account={selectedDelegationAccount} />
+                </>
+            )
+
+        if (selectedDelegationUrl)
+            return (
+                <>
+                    <BaseSpacer height={16} />
+                    <BaseCard>
+                        <BaseText py={8}>{selectedDelegationUrl}</BaseText>
+                    </BaseCard>
+                </>
+            )
+    }, [selectedDelegationAccount, selectedDelegationUrl])
+
     return (
         <>
             <DelegationOptions
@@ -32,20 +52,7 @@ export function DelegationView({
                 selectedDelegationUrl={selectedDelegationUrl}
                 setSelectedDelegationUrl={setSelectedDelegationUrl}
             />
-            {selectedDelegationAccount && (
-                <>
-                    <BaseSpacer height={16} />
-                    <AccountCard account={selectedDelegationAccount} />
-                </>
-            )}
-            {selectedDelegationUrl && (
-                <>
-                    <BaseSpacer height={16} />
-                    <BaseCard>
-                        <BaseText py={8}>{selectedDelegationUrl}</BaseText>
-                    </BaseCard>
-                </>
-            )}
+            {RenderDelegationTypeViews}
         </>
     )
 }

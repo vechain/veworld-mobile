@@ -1,4 +1,4 @@
-import React from "react"
+import React, { useCallback } from "react"
 import { BottomSheetFlatList } from "@gorhom/bottom-sheet"
 import { BottomSheetModalMethods } from "@gorhom/bottom-sheet/lib/typescript/types"
 import { useScrollableBottomSheet } from "~Hooks"
@@ -44,10 +44,13 @@ export const SelectAccountBottomSheet = React.forwardRef<BottomSheetModalMethods
     ) => {
         const { LL } = useI18nContext()
 
-        const handlePress = (account: AccountWithDevice) => {
-            setSelectedAccount(account)
-            if (closeBottomSheet) closeBottomSheet()
-        }
+        const handlePress = useCallback(
+            (account: AccountWithDevice) => {
+                setSelectedAccount(account)
+                if (closeBottomSheet) closeBottomSheet()
+            },
+            [closeBottomSheet, setSelectedAccount],
+        )
 
         const { flatListScrollProps, handleSheetChangePosition } = useScrollableBottomSheet({
             data: accounts,

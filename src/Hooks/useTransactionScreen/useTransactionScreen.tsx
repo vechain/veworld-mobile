@@ -72,6 +72,7 @@ export const useTransactionScreen = ({
         providedUrl: dappRequest?.options?.delegator?.url,
     })
 
+    // 3. Priority fees
     const { gasPriceCoef, priorityFees, gasFeeOptions } = useMemo(
         () =>
             GasUtils.getGasByCoefficient({
@@ -81,7 +82,7 @@ export const useTransactionScreen = ({
         [gas, selectedFeeOption],
     )
 
-    // 3. Build transaction
+    // 4. Build transaction
     const { buildTransaction } = useTransactionBuilder({
         clauses,
         gas,
@@ -91,7 +92,7 @@ export const useTransactionScreen = ({
         gasPriceCoef,
     })
 
-    // 4. Sign transaction
+    // 5. Sign transaction
     const { signTransaction, navigateToLedger } = useSignTransaction({
         buildTransaction,
         selectedDelegationAccount,
@@ -101,7 +102,7 @@ export const useTransactionScreen = ({
         dappRequest,
     })
 
-    // 5. Send transaction
+    // 6. Send transaction
     const { sendTransaction } = useSendTransaction(onTransactionSuccess)
 
     const sendTransactionSafe = useCallback(
@@ -124,6 +125,8 @@ export const useTransactionScreen = ({
      */
     const signAndSendTransaction = useCallback(
         async (password?: string) => {
+            setLoading(true)
+
             try {
                 const transaction: SignTransactionResponse = await signTransaction(password)
 
@@ -145,10 +148,9 @@ export const useTransactionScreen = ({
                     text1: LL.ERROR(),
                     text2: LL.SIGN_TRANSACTION_ERROR(),
                 })
-                onTransactionFailure(e)
-            } finally {
                 setLoading(false)
                 dispatch(setIsAppLoading(false))
+                onTransactionFailure(e)
             }
         },
         [sendTransactionSafe, onTransactionFailure, dispatch, signTransaction, LL],
