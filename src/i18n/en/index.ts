@@ -641,6 +641,8 @@ const en: BaseTranslation = {
     SEND_GAS_FEE: "Gas fee",
     SEND_ESTIMATED_TIME: "Estimated time",
     SEND_LESS_THAN_1_MIN: "Less than 1 min",
+    SEND_LESS_THAN_30_SECONDS:  "Less than 30 seconds",
+    SEND_LESS_THAN_A_MOMENT: "A few seconds",
     SEND_DELEGATED_FEES: "None, paid by delegator",
     SEND_INSUFFICIENT_VTHO: "Insufficient Gas -",
     SEND_DELEGATION_TITLE: "Select delegation",

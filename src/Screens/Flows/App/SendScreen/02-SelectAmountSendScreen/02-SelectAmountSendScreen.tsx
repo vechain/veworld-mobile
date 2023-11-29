@@ -19,10 +19,10 @@ import { useI18nContext } from "~i18n"
 import { COLORS, CURRENCY_SYMBOLS, typography } from "~Constants"
 import { selectCurrency, selectCurrencyExchangeRate, useAppSelector } from "~Storage/Redux"
 import { useNavigation } from "@react-navigation/native"
-import { useTotalTokenBalance, useTotalFiatBalance, useUI, useCalculateGas } from "./Hooks"
+import { useTotalTokenBalance, useUI, useCalculateGas } from "./Hooks"
 import Animated, { AnimatedProps, FadeInRight, FadeOut } from "react-native-reanimated"
 import HapticsService from "~Services/HapticsService"
-import { BigNumberUtils } from "~Utils"
+import { BigNutils } from "~Utils"
 
 const { defaults: defaultTypography } = typography
 
@@ -47,13 +47,17 @@ export const SelectAmountSendScreen = ({ route }: Props) => {
 
     const { tokenTotalBalance, tokenTotalToHuman } = useTotalTokenBalance(token, gas)
 
-    const { fiatTotalBalance } = useTotalFiatBalance(tokenTotalToHuman, exchangeRate)
+    /**
+     * TOKEN total balance in FIAT in raw-ish format (with decimals)
+     * Example "53.497751509681790983423610572503055269"
+     */
+    const fiatTotalBalance = BigNutils().toCurrencyConversion(tokenTotalBalance, exchangeRate).toString
 
     /**
      * FIAT selected balance calculated fron TOKEN input in human readable format (correct value is when TOKEN is active)
      * Example "53.54"
      */
-    const fiatHumanAmount = BigNumberUtils().toCurrencyConversion(input, exchangeRate).toCurrencyFormat_string(2)
+    const fiatHumanAmount = BigNutils().toCurrencyConversion(input, exchangeRate).toCurrencyFormat_string(2)
 
     /**
      * TOKEN selected balance in raw-ish format (with decimals) (correct value is when FIAT is active)
@@ -65,7 +69,7 @@ export const SelectAmountSendScreen = ({ route }: Props) => {
      * TOKEN selected balance in human readable format (correct value is when FIAT is active)
      * Example "2,472.771"
      */
-    const tokenHumanAmountFromFiat = BigNumberUtils(tokenAmountFromFiat).toTokenFormat_string(4)
+    const tokenHumanAmountFromFiat = BigNutils(tokenAmountFromFiat).toTokenFormat_string(4)
 
     /**
      * Toggle between FIAT and TOKEN input (and update the input value)
@@ -85,8 +89,8 @@ export const SelectAmountSendScreen = ({ route }: Props) => {
         (newValue: string) => {
             // Get the correct token amount from the FIAT input
             const controlValue = isInputInFiat
-                ? BigNumberUtils().toTokenConversion(newValue, exchangeRate)
-                : BigNumberUtils(newValue).addTrailingZeros(token.decimals)
+                ? BigNutils().toTokenConversion(newValue, exchangeRate)
+                : BigNutils(newValue).addTrailingZeros(token.decimals)
 
             let roundDownValue = controlValue.decimals(4)
 
@@ -107,14 +111,14 @@ export const SelectAmountSendScreen = ({ route }: Props) => {
      * Sets the input value to the max available balance (in TOKEN or FIAT)
      */
     const handleOnMaxPress = useCallback(() => {
-        // setInput(isInputInFiat ? BigNumberUtils(fiatTotalBalance).toCurrencyFormatString(2).toString : tokenBalanceMinusProjectedFees)
+        // setInput(isInputInFiat ? BigNutils(fiatTotalBalance).toCurrencyFormatString(2).toString : tokenBalanceMinusProjectedFees)
         setInput(
             isInputInFiat
-                ? BigNumberUtils(fiatTotalBalance).toCurrencyFormat_string(2)
-                : BigNumberUtils(tokenTotalBalance).toHuman(token.decimals).toString,
+                ? BigNutils(fiatTotalBalance).toCurrencyFormat_string(2)
+                : BigNutils(tokenTotalBalance).toHuman(token.decimals).toString,
         )
-        let conv = BigNumberUtils().toTokenConversion(fiatTotalBalance, exchangeRate).toString
-        let scaleDownforPrecission = BigNumberUtils(conv).decimals(4).toString
+        let conv = BigNutils().toTokenConversion(fiatTotalBalance, exchangeRate).toString
+        let scaleDownforPrecission = BigNutils(conv).decimals(4).toString
         setTokenAmountFromFiat(scaleDownforPrecission)
         setIsError(false)
     }, [exchangeRate, fiatTotalBalance, isInputInFiat, setInput, token.decimals, tokenTotalBalance])
@@ -248,6 +252,7 @@ export const SelectAmountSendScreen = ({ route }: Props) => {
                                     ),
                                     style: styles.amountView,
                                 },
+
                                 ...(isExchangeRateAvailable
                                     ? [
                                           {
@@ -260,20 +265,38 @@ export const SelectAmountSendScreen = ({ route }: Props) => {
                                           },
                                       ]
                                     : []),
+
+                                ...(token.symbol.toLowerCase() === "vtho"
+                                    ? [
+                                          {
+                                              children: (
+                                                  <>
+                                                      <BaseText
+                                                          typographyFont="caption"
+                                                          px={4}
+                                                          color={theme.colors.textDisabled}>
+                                                          {LL.SEND_VTHO_WARNING_MAX()}
+                                                      </BaseText>
+                                                  </>
+                                              ),
+                                          },
+                                      ]
+                                    : [
+                                          {
+                                              children: (
+                                                  <>
+                                                      <BaseText
+                                                          typographyFont="caption"
+                                                          px={4}
+                                                          color={theme.colors.textDisabled}>
+                                                          {LL.SEND_VTHO_WARNING_TOKEN()}
+                                                      </BaseText>
+                                                  </>
+                                              ),
+                                          },
+                                      ]),
                             ]}
                         />
-
-                        <BaseSpacer height={16} />
-
-                        {token.symbol.toLowerCase() === "vtho" ? (
-                            <BaseText typographyFont="caption" px={4} color={theme.colors.textDisabled}>
-                                {LL.SEND_VTHO_WARNING_MAX()}
-                            </BaseText>
-                        ) : (
-                            <BaseText typographyFont="caption" px={4} color={theme.colors.textDisabled}>
-                                {LL.SEND_VTHO_WARNING_TOKEN()}
-                            </BaseText>
-                        )}
 
                         {/* [END] - INPUT */}
                     </BaseView>
@@ -283,8 +306,8 @@ export const SelectAmountSendScreen = ({ route }: Props) => {
                 <FadeoutButton
                     title={LL.COMMON_BTN_NEXT()}
                     disabled={
-                        isError || input === "" || BigNumberUtils(input).isZero
-                        // isError || input === "" || BigNumberUtils(input).isZero || BigNumberUtils(tokenBalanceMinusProjectedFees).isZero
+                        isError || input === "" || BigNutils(input).isZero
+                        // isError || input === "" || BigNutils(input).isZero || BigNutils(tokenBalanceMinusProjectedFees).isZero
                     }
                     action={goToInsertAddress}
                     bottom={0}

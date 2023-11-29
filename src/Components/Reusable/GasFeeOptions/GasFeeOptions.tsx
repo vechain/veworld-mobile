@@ -7,7 +7,7 @@ import { useTheme } from "~Hooks"
 import { useI18nContext } from "~i18n"
 import { BaseButtonGroupHorizontalType } from "~Model"
 import { DelegationType } from "~Model/Delegation"
-import { BigNumberUtils, BigNumberUtilsType, FormattingUtils } from "~Utils"
+import { BigNutils, BigNumberUtils } from "~Utils"
 
 type Props = {
     setSelectedFeeOption: (option: string) => void
@@ -61,10 +61,7 @@ export const GasFeeOptions = ({
         [setSelectedFeeOption],
     )
 
-    const computedGasDifference = useMemo(
-        () => BigNumberUtils(txCostTotal).minus(totalBalance),
-        [txCostTotal, totalBalance],
-    )
+    const computedGasDifference = useMemo(() => BigNutils(txCostTotal).minus(totalBalance), [txCostTotal, totalBalance])
 
     if (selectedDelegationOption === DelegationType.URL) {
         return (
@@ -141,7 +138,7 @@ export const GasFeeOptions = ({
 
 interface IGasWarningView extends AnimatedProps<ViewProps> {
     isDelegattion?: boolean
-    computedGasDifference?: BigNumberUtilsType
+    computedGasDifference?: BigNumberUtils
 }
 
 function GasWarningView(props: IGasWarningView) {
@@ -153,7 +150,7 @@ function GasWarningView(props: IGasWarningView) {
         () =>
             LL.SEND_INSUFFICIENT_VTHO() +
             " " +
-            FormattingUtils.scaleNumberDown(props.computedGasDifference?.toString ?? "0", VTHO.decimals, 18),
+            BigNutils(props.computedGasDifference?.toString ?? "0").toHuman(VTHO.decimals).toString,
         [LL, props.computedGasDifference],
     )
 

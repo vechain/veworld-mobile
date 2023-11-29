@@ -1,4 +1,4 @@
-import BigNumberUtils, { BigNumberUtilsType } from "./BigNumberUtils"
+import BigNutils, { BigNumberUtils } from "./BigNumberUtils"
 
-export default BigNumberUtils
-export { BigNumberUtilsType }
+export default BigNutils
+export { BigNumberUtils }

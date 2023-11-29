@@ -4,19 +4,19 @@ import { CurrencyExchangeRate as IRate } from "~Model"
 
 interface IBigNumberUtils {
     // utility Methods
-    toHuman(decimals: number, callback?: (result: BN) => void): BigNumberUtilsType
-    decimals(decimals: number, callback?: (result: BN) => void): BigNumberUtilsType
+    toHuman(decimals: number, callback?: (result: BN) => void): BigNumberUtils
+    decimals(decimals: number, callback?: (result: BN) => void): BigNumberUtils
     toCurrencyFormat_string(decimals: number): string
     toTokenFormat_string(decimals: number): string
-    toCurrencyConversion(balance: string, rate?: IRate, callback?: (result: BN) => void): BigNumberUtilsType
-    toTokenConversion(balance: string, rate?: IRate, callback?: (result: BN) => void): BigNumberUtilsType
-    addTrailingZeros(decimals: number, callback?: (result: BN) => void): BigNumberUtilsType
+    toCurrencyConversion(balance: string, rate?: IRate, callback?: (result: BN) => void): BigNumberUtils
+    toTokenConversion(balance: string, rate?: IRate, callback?: (result: BN) => void): BigNumberUtils
+    addTrailingZeros(decimals: number, callback?: (result: BN) => void): BigNumberUtils
 
     // Math Methods
-    minus(value: string | number | BN, callback?: (result: BN) => void): BigNumberUtilsType
-    plus(value: string | number | BN, callback?: (result: BN) => void): BigNumberUtilsType
-    times(value: string | number | BN, callback?: (result: BN) => void): BigNumberUtilsType
-    idiv(value: string | number | BN, callback?: (result: BN) => void): BigNumberUtilsType
+    minus(value: string | number | BN, callback?: (result: BN) => void): BigNumberUtils
+    plus(value: string | number | BN, callback?: (result: BN) => void): BigNumberUtils
+    times(value: string | number | BN, callback?: (result: BN) => void): BigNumberUtils
+    idiv(value: string | number | BN, callback?: (result: BN) => void): BigNumberUtils
 
     // Comparison Methods
     isLessThan(value: string | number | BN): boolean
@@ -29,7 +29,7 @@ interface IBigNumberUtils {
     isZero: boolean
 }
 
-class BigNumberUtilsType implements IBigNumberUtils {
+class BigNumberUtils implements IBigNumberUtils {
     private data: BN
 
     constructor(input: string | number | BN) {
@@ -38,7 +38,7 @@ class BigNumberUtilsType implements IBigNumberUtils {
 
     // custom initializer
     static init() {
-        return new BigNumberUtilsType("0")
+        return new BigNumberUtils("0")
     }
 
     // Properties
@@ -191,13 +191,13 @@ class BigNumberUtilsType implements IBigNumberUtils {
     }
 }
 
-function BigNumberUtils(input?: string | number | BN): BigNumberUtilsType {
+function BigNutils(input?: string | number | BN): BigNumberUtils {
     if (input) {
-        return new BigNumberUtilsType(input)
+        return new BigNumberUtils(input)
     } else {
-        return BigNumberUtilsType.init()
+        return BigNumberUtils.init()
     }
 }
 
-export { BigNumberUtilsType }
-export default BigNumberUtils
+export { BigNumberUtils }
+export default BigNutils

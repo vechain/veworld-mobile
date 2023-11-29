@@ -1,4 +1,4 @@
-import { BigNumberUtilsType } from "~Utils"
+import { BigNumberUtils } from "~Utils"
 
 export enum GasPriceCoefficient {
     REGULAR = 0,
@@ -8,5 +8,5 @@ export enum GasPriceCoefficient {
 
 export interface GasFeeOption {
     gasFee: string
-    gasRaw: BigNumberUtilsType
+    gasRaw: BigNumberUtils
 }

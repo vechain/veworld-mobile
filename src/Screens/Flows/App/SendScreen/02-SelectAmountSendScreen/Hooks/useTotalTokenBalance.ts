@@ -1,7 +1,7 @@
 import { FungibleTokenWithBalance } from "~Model"
 import { useMemo } from "react"
 import { VTHO } from "~Constants"
-import { BigNumberUtils } from "~Utils"
+import { BigNutils } from "~Utils"
 
 export const useTotalTokenBalance = (
     token: FungibleTokenWithBalance,
@@ -11,31 +11,31 @@ export const useTotalTokenBalance = (
     const { decimals } = token
 
     const tokenTotalBalance = useMemo(() => {
-        return BigNumberUtils(token.balance.balance).toString
+        return BigNutils(token.balance.balance).toString
     }, [token.balance.balance])
 
     const tokenBalanceMinusProjectedFees = useMemo(() => {
         let total = ""
 
         if (token?.symbol?.toLowerCase() === VTHO.symbol.toLowerCase()) {
-            let newTotal = BigNumberUtils(token.balance.balance).minus(vthoEstimate)
+            let newTotal = BigNutils(token.balance.balance).minus(vthoEstimate)
 
             if (newTotal.isLessThan(0)) {
                 //! this should br reinstated when tokenBalanceMinusProjectedFees will be in use again
                 // setIsError(true)
-                newTotal = BigNumberUtils("0")
+                newTotal = BigNutils("0")
             }
 
             total = newTotal.toHuman(decimals).toString
         } else {
-            total = BigNumberUtils(tokenTotalBalance).toHuman(decimals).toString
+            total = BigNutils(tokenTotalBalance).toHuman(decimals).toString
         }
 
         return total
     }, [decimals, token.balance.balance, token?.symbol, tokenTotalBalance, vthoEstimate])
 
     const tokenTotalToHuman = useMemo(() => {
-        return BigNumberUtils(tokenTotalBalance).toHuman(decimals).toString
+        return BigNutils(tokenTotalBalance).toHuman(decimals).toString
     }, [decimals, tokenTotalBalance])
 
     return { tokenTotalBalance, tokenTotalToHuman, tokenBalanceMinusProjectedFees }

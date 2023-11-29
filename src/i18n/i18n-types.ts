@@ -2216,6 +2216,14 @@ type RootTranslation = {
 	 */
 	SEND_LESS_THAN_1_MIN: string
 	/**
+	 * L​e​s​s​ ​t​h​a​n​ ​3​0​ ​s​e​c​o​n​d​s
+	 */
+	SEND_LESS_THAN_30_SECONDS: string
+	/**
+	 * A​ ​f​e​w​ ​s​e​c​o​n​d​s
+	 */
+	SEND_LESS_THAN_A_MOMENT: string
+	/**
 	 * N​o​n​e​,​ ​p​a​i​d​ ​b​y​ ​d​e​l​e​g​a​t​o​r
 	 */
 	SEND_DELEGATED_FEES: string
@@ -4929,6 +4937,14 @@ Try reconnect your device to the internet.
 	 * Less than 1 min
 	 */
 	SEND_LESS_THAN_1_MIN: () => LocalizedString
+	/**
+	 * Less than 30 seconds
+	 */
+	SEND_LESS_THAN_30_SECONDS: () => LocalizedString
+	/**
+	 * A few seconds
+	 */
+	SEND_LESS_THAN_A_MOMENT: () => LocalizedString
 	/**
 	 * None, paid by delegator
 	 */

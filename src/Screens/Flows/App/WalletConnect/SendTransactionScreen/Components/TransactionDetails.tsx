@@ -5,7 +5,7 @@ import { DelegationType } from "~Model/Delegation"
 import { VET, VTHO } from "~Constants"
 import { useTheme } from "~Hooks"
 import { capitalize } from "lodash"
-import { BigNumberUtils, FormattingUtils } from "~Utils"
+import { BigNutils, FormattingUtils } from "~Utils"
 import { Network, TransactionRequest } from "~Model"
 import { selectCurrency, selectCurrencyExchangeRate, useAppSelector } from "~Storage/Redux"
 import { BigNumber } from "bignumber.js"
@@ -45,7 +45,7 @@ export const TransactionDetails = ({
     }, [message])
 
     const vthoBalance = useMemo(
-        () => BigNumberUtils(vtho.balance.balance).toHuman(18).decimals(2).toString,
+        () => BigNutils(vtho.balance.balance).toHuman(18).decimals(2).toString,
         [vtho.balance.balance],
     )
 

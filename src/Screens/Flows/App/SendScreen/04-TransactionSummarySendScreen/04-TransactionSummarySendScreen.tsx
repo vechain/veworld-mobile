@@ -1,8 +1,8 @@
 import React, { useCallback, useEffect, useMemo } from "react"
 import { NativeStackScreenProps } from "@react-navigation/native-stack"
 import { useAnalyticTracking, useTheme, useTransactionScreen, useTransferAddContact } from "~Hooks"
-import { AddressUtils, BigNumberUtils, TransactionUtils, error } from "~Utils"
-import { AnalyticsEvent, COLORS } from "~Constants"
+import { AddressUtils, BigNutils, TransactionUtils } from "~Utils"
+import { AnalyticsEvent, COLORS, GasPriceCoefficient } from "~Constants"
 import {
     BaseSpacer,
     BaseText,
@@ -52,21 +52,15 @@ export const TransactionSummarySendScreen = ({ route }: Props) => {
     const { onAddContactPress, handleSaveContact, addContactSheet, selectedContactAddress, closeAddContactSheet } =
         useTransferAddContact()
 
-    const navBack = useCallback(() => {
-        error(nav.getState())
-        if (nav.canGoBack()) return nav.goBack()
-        nav.navigate(Routes.DISCOVER)
-    }, [nav])
-
     const onFinish = useCallback(
         (success: boolean) => {
             if (success) track(AnalyticsEvent.SEND_FUNGIBLE_SENT)
             else track(AnalyticsEvent.SEND_FUNGIBLE_FAILED_TO_SEND)
 
+            nav.navigate(Routes.HOME)
             dispatch(setIsAppLoading(false))
-            navBack()
         },
-        [track, dispatch, navBack],
+        [track, dispatch, nav],
     )
 
     const onTransactionSuccess = useCallback(
@@ -110,7 +104,6 @@ export const TransactionSummarySendScreen = ({ route }: Props) => {
         clauses,
         onTransactionSuccess,
         onTransactionFailure,
-        initialRoute: Routes.HOME,
     })
 
     return (
@@ -170,7 +163,7 @@ export const TransactionSummarySendScreen = ({ route }: Props) => {
                         isDelegated={isDelegated}
                     />
 
-                    <EstimatedTimeDetailsView />
+                    <EstimatedTimeDetailsView selectedFeeOption={selectedFeeOption} />
 
                     <ContactManagementBottomSheet
                         ref={addContactSheet}
@@ -202,9 +195,23 @@ export const TransactionSummarySendScreen = ({ route }: Props) => {
     )
 }
 
-function EstimatedTimeDetailsView() {
+function EstimatedTimeDetailsView({ selectedFeeOption }: { selectedFeeOption: string }) {
     const { LL } = useI18nContext()
     const theme = useTheme()
+
+    const computeEstimatedTime = useMemo(() => {
+        switch (selectedFeeOption) {
+            case GasPriceCoefficient.REGULAR.toString():
+                return LL.SEND_LESS_THAN_1_MIN()
+            case GasPriceCoefficient.MEDIUM.toString():
+                return LL.SEND_LESS_THAN_30_SECONDS()
+            case GasPriceCoefficient.HIGH.toString():
+                return LL.SEND_LESS_THAN_A_MOMENT()
+            default:
+                return LL.SEND_LESS_THAN_1_MIN()
+        }
+    }, [LL, selectedFeeOption])
+
     return (
         <>
             <BaseSpacer height={12} />
@@ -212,7 +219,7 @@ function EstimatedTimeDetailsView() {
             <BaseSpacer height={12} />
             <BaseText typographyFont="buttonSecondary">{LL.SEND_ESTIMATED_TIME()}</BaseText>
             <BaseSpacer height={6} />
-            <BaseText typographyFont="subSubTitle">{LL.SEND_LESS_THAN_1_MIN()}</BaseText>
+            <BaseText typographyFont="subSubTitle">{computeEstimatedTime}</BaseText>
         </>
     )
 }
@@ -244,12 +251,12 @@ function TotalSendAmountView({ amount, symbol, token, txCostTotal, isDelegated }
     }, [theme.isDark])
 
     const formattedTotalCost = useMemo(
-        () => BigNumberUtils(txCostTotal).toHuman(token.decimals).toString,
+        () => BigNutils(txCostTotal).toHuman(token.decimals).toString,
         [token.decimals, txCostTotal],
     )
 
     const formattedFiatAmount = useMemo(() => {
-        const _amount = BigNumberUtils()
+        const _amount = BigNutils()
             .toCurrencyConversion(token.symbol.toLowerCase() === "vtho" ? formattedTotalCost : amount, exchangeRate)
             .toCurrencyFormat_string(2)
 

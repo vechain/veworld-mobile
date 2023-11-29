@@ -34,7 +34,7 @@ import MediaUtils from "./MediaUtils"
 import MathUtils from "./MathUtils"
 import AnalyticsUtils from "./AnalyticsUtils"
 import ColorUtils from "./ColorUtils"
-import BigNumberUtils, { BigNumberUtilsType } from "./BigNumberUtils"
+import BigNutils, { BigNumberUtils } from "./BigNumberUtils"
 
 export * from "./Logger"
 export * from "./SignMessageUtils"
@@ -76,7 +76,7 @@ export {
     AnalyticsUtils,
     ColorUtils,
     DeviceUtils,
-    BigNumberUtils,
+    BigNutils,
 }
 
-export { BigNumberUtilsType }
+export { BigNumberUtils }

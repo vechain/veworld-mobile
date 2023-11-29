@@ -172,7 +172,6 @@ export const SendTransactionScreen: FC<Props> = ({ route }: Props) => {
         clauses,
         onTransactionSuccess,
         onTransactionFailure,
-        initialRoute: Routes.HOME,
         dappRequest: request,
     })
 

@@ -22,24 +22,16 @@ import { showErrorToast, showWarningToast } from "~Components"
 import { GasUtils, error } from "~Utils"
 import { DEVICE_TYPE, LedgerAccountWithDevice, TransactionRequest } from "~Model"
 import { DelegationType } from "~Model/Delegation"
-import { Routes } from "~Navigation"
 import { GasPriceCoefficient } from "~Constants"
 
 type Props = {
     clauses: Transaction.Body["clauses"]
     onTransactionSuccess: (transaction: Transaction, txId: string) => void
     onTransactionFailure: (error: unknown) => void
-    initialRoute: Routes
     dappRequest?: TransactionRequest
 }
 
-export const useTransactionScreen = ({
-    clauses,
-    onTransactionSuccess,
-    onTransactionFailure,
-    initialRoute,
-    dappRequest,
-}: Props) => {
+export const useTransactionScreen = ({ clauses, onTransactionSuccess, onTransactionFailure, dappRequest }: Props) => {
     const { LL } = useI18nContext()
     const dispatch = useAppDispatch()
     const selectedAccount = useAppSelector(selectSelectedAccount)
@@ -98,7 +90,6 @@ export const useTransactionScreen = ({
         selectedDelegationAccount,
         selectedDelegationOption,
         selectedDelegationUrl,
-        initialRoute,
         dappRequest,
     })
 
