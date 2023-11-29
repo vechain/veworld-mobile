@@ -305,6 +305,7 @@ const en: BaseTranslation = {
     COMMON_RECEIVE: "Receive",
     COMMON_OOPS: "Oops!",
     COMMON_PROCEED: "Proceed",
+    COMMON_OR: "Or",
 
 
     // Alerts
@@ -476,7 +477,6 @@ const en: BaseTranslation = {
     CONNECTED_APP_CONNECTION_REQUESTS: "Connection requests",
     CONNECTED_APP_DESCRIPTION: "Description",
 
-
     DISCOVER_TITLE: "Discover",
     DISCOVER_SUB_TITLE: "Discover applications in the vechain ecosystem",
     DISCOVER_SEARCH: "Search or type a URL",
@@ -484,18 +484,11 @@ const en: BaseTranslation = {
     DISCOVER_EMPTY_SEARCH: "No results found for your search",
     DISCOVER_TAB_FAVOURITES: "Favourites",
     DISCOVER_TAB_FEATURED: "Featured",
-    DISCOVER_TAB_PERSONAL: "Personal",
-
     DISCOVER_NO_DAPPS_FOUND: "No Dapp found",
     DISCOVER_EMPTY_FAVOURITES: "Add from Featured Dapps",
     DISCOVER_EMPTY_FAVOURITES_SUBTITLE: "No favourites added",
-
-
-    DISCOVER_EMPTY_CUSTOM_NODES: "Add bookmarks",
-    DISCOVER_EMPTY_CUSTOM_NODES_SUBTITLE: "No personal Dapp added",
-
+    DISCOVER_EMPTY_CUSTOM_NODES: "Add bookmarks in the browser",
     DISCOVER_CREATE_YOUR_DAPP: "Create your own DApp",
-
     BROWSER_TAB_MANAGEMENT_TITLE: "Tabs",
     BROWSER_FAVOURITES_TITLE: "Favourites",
     BROWSER_ADD_BOOKMARK_TITLE: "Add bookmark",
