@@ -1109,6 +1109,10 @@ type RootTranslation = {
 	 */
 	COMMON_PROCEED: string
 	/**
+	 * O​r
+	 */
+	COMMON_OR: string
+	/**
 	 * B​i​o​m​e​t​r​i​c​s​ ​n​o​t​ ​a​v​a​i​l​a​b​l​e
 	 */
 	ALERT_TITLE_NOT_ENROLLED: string
@@ -1725,10 +1729,6 @@ type RootTranslation = {
 	 */
 	DISCOVER_TAB_FEATURED: string
 	/**
-	 * P​e​r​s​o​n​a​l
-	 */
-	DISCOVER_TAB_PERSONAL: string
-	/**
 	 * N​o​ ​D​a​p​p​ ​f​o​u​n​d
 	 */
 	DISCOVER_NO_DAPPS_FOUND: string
@@ -1741,13 +1741,9 @@ type RootTranslation = {
 	 */
 	DISCOVER_EMPTY_FAVOURITES_SUBTITLE: string
 	/**
-	 * A​d​d​ ​b​o​o​k​m​a​r​k​s
+	 * A​d​d​ ​b​o​o​k​m​a​r​k​s​ ​i​n​ ​t​h​e​ ​b​r​o​w​s​e​r
 	 */
 	DISCOVER_EMPTY_CUSTOM_NODES: string
-	/**
-	 * N​o​ ​p​e​r​s​o​n​a​l​ ​D​a​p​p​ ​a​d​d​e​d
-	 */
-	DISCOVER_EMPTY_CUSTOM_NODES_SUBTITLE: string
 	/**
 	 * C​r​e​a​t​e​ ​y​o​u​r​ ​o​w​n​ ​D​A​p​p
 	 */
@@ -3861,6 +3857,10 @@ export type TranslationFunctions = {
 	 */
 	COMMON_PROCEED: () => LocalizedString
 	/**
+	 * Or
+	 */
+	COMMON_OR: () => LocalizedString
+	/**
 	 * Biometrics not available
 	 */
 	ALERT_TITLE_NOT_ENROLLED: () => LocalizedString
@@ -4458,10 +4458,6 @@ Try reconnect your device to the internet.
 	 */
 	DISCOVER_TAB_FEATURED: () => LocalizedString
 	/**
-	 * Personal
-	 */
-	DISCOVER_TAB_PERSONAL: () => LocalizedString
-	/**
 	 * No Dapp found
 	 */
 	DISCOVER_NO_DAPPS_FOUND: () => LocalizedString
@@ -4474,13 +4470,9 @@ Try reconnect your device to the internet.
 	 */
 	DISCOVER_EMPTY_FAVOURITES_SUBTITLE: () => LocalizedString
 	/**
-	 * Add bookmarks
+	 * Add bookmarks in the browser
 	 */
 	DISCOVER_EMPTY_CUSTOM_NODES: () => LocalizedString
-	/**
-	 * No personal Dapp added
-	 */
-	DISCOVER_EMPTY_CUSTOM_NODES_SUBTITLE: () => LocalizedString
 	/**
 	 * Create your own DApp
 	 */

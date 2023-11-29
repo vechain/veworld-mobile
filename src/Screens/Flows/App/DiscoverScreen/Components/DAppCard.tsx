@@ -1,8 +1,9 @@
 import React, { memo } from "react"
-import { Image, StyleProp, StyleSheet, ViewStyle } from "react-native"
+import { StyleProp, StyleSheet, ViewStyle } from "react-native"
 import { useDappBookmarking, useThemedStyles } from "~Hooks"
 import { DiscoveryDApp } from "~Constants"
 import { BaseIcon, BaseSpacer, BaseText, BaseTouchableBox, BaseView } from "~Components"
+import { DAppIcon } from "./DAppIcon"
 
 type Props = {
     dapp: DiscoveryDApp
@@ -23,8 +24,13 @@ export const DAppCard: React.FC<Props> = memo(({ onPress, dapp, containerStyle }
                 justifyContent="space-between"
                 containerStyle={styles.container}>
                 <BaseView flexDirection="row" style={styles.card} flex={1} pr={10}>
-                    {dapp.image && <DAppIcon imageSource={dapp.image} size={40} />}
-
+                    <DAppIcon
+                        imageSource={
+                            dapp.image ?? {
+                                uri: `${process.env.REACT_APP_GOOGLE_FAVICON_URL}${dapp.href}`,
+                            }
+                        }
+                    />
                     <BaseSpacer width={12} />
                     <BaseView flex={1}>
                         <BaseText ellipsizeMode="tail" numberOfLines={1} style={styles.nameText}>
@@ -64,22 +70,3 @@ const baseStyles = () =>
             fontSize: 12,
         },
     })
-
-type IconProps = {
-    imageSource: object
-    size: number
-}
-
-const DAppIcon: React.FC<IconProps> = memo(({ imageSource, size }: IconProps) => {
-    return (
-        <BaseView>
-            <Image
-                source={imageSource}
-                style={{
-                    height: size,
-                    width: size,
-                }}
-            />
-        </BaseView>
-    )
-})

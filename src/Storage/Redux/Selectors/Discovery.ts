@@ -18,9 +18,9 @@ export const selectBookmarkedDapps = createSelector(
     selectFavoritesDapps,
     selectCustomDapps,
     (favorites, custom): DiscoveryDApp[] => {
-        const dapps = [...favorites]
+        const dapps = [...custom]
 
-        for (const dapp of custom) {
+        for (const dapp of favorites) {
             if (!dapps.find(d => URIUtils.compareURLs(d.href, dapp.href))) {
                 dapps.push(dapp)
             }

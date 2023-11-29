@@ -4,10 +4,10 @@ import { FlatList } from "react-native-gesture-handler"
 import { DAppCard } from "~Screens/Flows/App/DiscoverScreen/Components/DAppCard"
 import { useNavigation, useRoute, useScrollToTop } from "@react-navigation/native"
 import { Linking, StyleSheet } from "react-native"
-import { BaseButton, BaseSpacer } from "~Components"
+import { BaseButton, BaseIcon, BaseSpacer, BaseText, BaseView } from "~Components"
 import { EmptyResults } from "./EmptyResults"
 import { useI18nContext } from "~i18n"
-import { useBrowserSearch } from "~Hooks"
+import { useBrowserSearch, useTheme } from "~Hooks"
 import { useAppSelector } from "~Storage/Redux"
 import { Routes } from "~Navigation"
 import { error } from "~Utils"
@@ -38,6 +38,7 @@ export const DAppList: React.FC<Props> = ({ onDAppPress, filteredSearch, selecto
         navigation.navigate(newTab)
     }
     const { navigateToBrowser } = useBrowserSearch()
+    const theme = useTheme()
 
     const renderItem = useCallback(
         ({ item }: { item: DiscoveryDApp }) => {
@@ -95,25 +96,33 @@ export const DAppList: React.FC<Props> = ({ onDAppPress, filteredSearch, selecto
         )
     }
 
-    if (dapps.length === 0 && tab === Routes.DISCOVER_PERSONAL) {
-        return (
-            <EmptyResults
-                onClick={() => navigateToBrowser("")}
-                title={LL.DISCOVER_EMPTY_CUSTOM_NODES()}
-                subtitle={LL.DISCOVER_EMPTY_CUSTOM_NODES_SUBTITLE()}
-                icon={"magnify"}
-            />
-        )
-    }
-
     if (dapps.length === 0 && tab === Routes.DISCOVER_FAVOURITES) {
         return (
-            <EmptyResults
-                onClick={() => setTab(Routes.DISCOVER_FEATURED)}
-                title={LL.DISCOVER_EMPTY_FAVOURITES()}
-                subtitle={LL.DISCOVER_EMPTY_FAVOURITES_SUBTITLE()}
-                icon={"heart"}
-            />
+            <BaseView justifyContent="center" alignItems="center" flex={1}>
+                <BaseIcon name={"heart"} size={30} color={theme.colors.text} />
+                <BaseSpacer height={8} />
+                <BaseText mx={24} typographyFont="body" align="center">
+                    {LL.DISCOVER_EMPTY_FAVOURITES_SUBTITLE()}
+                </BaseText>
+                <BaseSpacer height={40} />
+                <BaseView flexDirection="row" justifyContent="space-evenly" w={100}>
+                    <BaseButton
+                        action={() => setTab(Routes.DISCOVER_FEATURED)}
+                        title={LL.DISCOVER_EMPTY_FAVOURITES()}
+                        haptics="Light"
+                    />
+                </BaseView>
+                <BaseText mx={24} my={16} typographyFont="body" align="center">
+                    {LL.COMMON_OR()}
+                </BaseText>
+                <BaseView flexDirection="row" justifyContent="space-evenly" w={100}>
+                    <BaseButton
+                        action={() => navigateToBrowser("")}
+                        title={LL.DISCOVER_EMPTY_CUSTOM_NODES()}
+                        haptics="Light"
+                    />
+                </BaseView>
+            </BaseView>
         )
     }
 
