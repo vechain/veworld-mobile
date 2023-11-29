@@ -1,5 +1,5 @@
 import React, { useCallback, useEffect, useRef } from "react"
-import { BaseIcon, BaseSafeArea, BaseSpacer, BaseText, BaseTextInput, BaseView } from "~Components"
+import { BaseIcon, BaseSpacer, BaseText, BaseTextInput, BaseView, Layout } from "~Components"
 import { useI18nContext } from "~i18n"
 import { AnalyticsEvent, ColorThemeType, DiscoveryDApp } from "~Constants"
 import { useAnalyticTracking, useBrowserSearch, useTabBarBottomMargin, useThemedStyles } from "~Hooks"
@@ -9,8 +9,7 @@ import { Routes } from "~Navigation"
 import { DAppList } from "~Screens/Flows/App/DiscoverScreen/Components/DAppList"
 import {
     addNavigationToDApp,
-    selectCustomDapps,
-    selectFavoritesDapps,
+    selectBookmarkedDapps,
     selectFeaturedDapps,
     selectHasUserOpenedDiscovery,
     setDiscoverySectionOpened,
@@ -104,18 +103,7 @@ export const DiscoverScreen: React.FC = () => {
             <DAppList
                 onDAppPress={onDAppPress}
                 filteredSearch={filteredSearch}
-                selector={selectFavoritesDapps}
-                setFilteredSearch={setFilteredSearch}
-            />
-        ),
-        [filteredSearch, onDAppPress, setFilteredSearch],
-    )
-    const PersonalScreen = useCallback(
-        () => (
-            <DAppList
-                onDAppPress={onDAppPress}
-                filteredSearch={filteredSearch}
-                selector={selectCustomDapps}
+                selector={selectBookmarkedDapps}
                 setFilteredSearch={setFilteredSearch}
             />
         ),
@@ -123,61 +111,61 @@ export const DiscoverScreen: React.FC = () => {
     )
 
     return (
-        <BaseSafeArea>
-            <BaseText mx={24} typographyFont="largeTitle" testID="settings-screen" pb={16}>
-                {LL.DISCOVER_TITLE()}
-            </BaseText>
+        <Layout
+            noBackButton
+            fixedBody={
+                <>
+                    <BaseText mx={24} typographyFont="largeTitle" testID="settings-screen" pb={16}>
+                        {LL.DISCOVER_TITLE()}
+                    </BaseText>
 
-            {/*Search Bar*/}
-            <BaseView w={100} flexDirection="row" px={24}>
-                <BaseView flex={1}>
-                    <BaseTextInput
-                        placeholder={LL.DISCOVER_SEARCH()}
-                        onChange={onTextChange}
-                        value={filteredSearch}
-                        style={styles.searchBar}
-                    />
-                    <Animated.View
-                        style={[
-                            styles.searchIconContainer,
-                            {
-                                opacity: animatedIconOpacity,
-                                right: animatedIconRightPosition,
-                            },
-                        ]}>
-                        <BaseIcon
-                            name={"search-web"}
-                            size={25}
-                            action={onSearch}
-                            color={theme.colors.text}
-                            borderRadius={20}
+                    {/*Search Bar*/}
+                    <BaseView w={100} flexDirection="row" px={24}>
+                        <BaseView flex={1}>
+                            <BaseTextInput
+                                placeholder={LL.DISCOVER_SEARCH()}
+                                onChange={onTextChange}
+                                value={filteredSearch}
+                                style={styles.searchBar}
+                            />
+                            <Animated.View
+                                style={[
+                                    styles.searchIconContainer,
+                                    {
+                                        opacity: animatedIconOpacity,
+                                        right: animatedIconRightPosition,
+                                    },
+                                ]}>
+                                <BaseIcon
+                                    name={"search-web"}
+                                    size={25}
+                                    action={onSearch}
+                                    color={theme.colors.text}
+                                    borderRadius={20}
+                                />
+                            </Animated.View>
+                        </BaseView>
+                    </BaseView>
+
+                    <BaseSpacer height={16} />
+
+                    {/*Tab Navigator*/}
+                    <Tab.Navigator tabBar={TabBar}>
+                        <Tab.Screen
+                            name={Routes.DISCOVER_FAVOURITES}
+                            options={{ title: LL.DISCOVER_TAB_FAVOURITES() }}
+                            component={FavouriteScreen}
                         />
-                    </Animated.View>
-                </BaseView>
-            </BaseView>
-
-            <BaseSpacer height={16} />
-
-            {/*Tab Navigator*/}
-            <Tab.Navigator tabBar={TabBar}>
-                <Tab.Screen
-                    name={Routes.DISCOVER_FEATURED}
-                    options={{ title: LL.DISCOVER_TAB_FEATURED() }}
-                    component={FeaturedScreen}
-                />
-                <Tab.Screen
-                    name={Routes.DISCOVER_FAVOURITES}
-                    options={{ title: LL.DISCOVER_TAB_FAVOURITES() }}
-                    component={FavouriteScreen}
-                />
-                <Tab.Screen
-                    name={Routes.DISCOVER_PERSONAL}
-                    options={{ title: LL.DISCOVER_TAB_PERSONAL() }}
-                    component={PersonalScreen}
-                />
-            </Tab.Navigator>
-            <BaseSpacer height={androidOnlyTabBarBottomMargin || 1} />
-        </BaseSafeArea>
+                        <Tab.Screen
+                            name={Routes.DISCOVER_FEATURED}
+                            options={{ title: LL.DISCOVER_TAB_FEATURED() }}
+                            component={FeaturedScreen}
+                        />
+                    </Tab.Navigator>
+                    <BaseSpacer height={androidOnlyTabBarBottomMargin || 1} />
+                </>
+            }
+        />
     )
 }
 
