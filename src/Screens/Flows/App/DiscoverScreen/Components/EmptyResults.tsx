@@ -1,7 +1,6 @@
-import { BaseIcon, BaseSpacer, BaseText, BaseTouchable, BaseView } from "~Components"
-import { COLORS } from "~Constants"
-import { StyleSheet } from "react-native"
+import { BaseButton, BaseIcon, BaseSpacer, BaseText, BaseView } from "~Components"
 import React from "react"
+import { useTheme } from "~Hooks"
 
 export type EmptyResultsProps = {
     onClick: () => void
@@ -11,35 +10,18 @@ export type EmptyResultsProps = {
 }
 
 export const EmptyResults = ({ onClick, title, subtitle, icon }: EmptyResultsProps) => {
+    const theme = useTheme()
     return (
-        <BaseView mx={20} justifyContent="center" alignItems="center">
-            <BaseView flexDirection="row" justifyContent="space-evenly" w={100}>
-                <BaseTouchable action={onClick}>
-                    <BaseView
-                        my={16}
-                        bg={COLORS.LIME_GREEN}
-                        justifyContent="center"
-                        alignItems="center"
-                        borderRadius={16}
-                        style={styles.icon}>
-                        <BaseIcon name={icon} size={45} />
-                        <BaseText color={COLORS.DARK_PURPLE} typographyFont="bodyMedium">
-                            {title}
-                        </BaseText>
-                    </BaseView>
-                </BaseTouchable>
-            </BaseView>
-            <BaseSpacer height={16} />
+        <BaseView justifyContent="center" alignItems="center" flex={1}>
+            <BaseIcon name={icon} size={45} color={theme.colors.text} />
+            <BaseSpacer height={8} />
             <BaseText mx={20} typographyFont="body" align="center">
                 {subtitle}
             </BaseText>
+            <BaseSpacer height={16} />
+            <BaseView flexDirection="row" justifyContent="space-evenly" w={100}>
+                <BaseButton action={onClick} title={title} haptics="Light" />
+            </BaseView>
         </BaseView>
     )
 }
-
-const styles = StyleSheet.create({
-    icon: {
-        width: 200,
-        height: 100,
-    },
-})

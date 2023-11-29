@@ -3,13 +3,14 @@ import { DiscoveryDApp } from "~Constants"
 import { FlatList } from "react-native-gesture-handler"
 import { DAppCard } from "~Screens/Flows/App/DiscoverScreen/Components/DAppCard"
 import { useNavigation, useRoute, useScrollToTop } from "@react-navigation/native"
-import { StyleSheet } from "react-native"
-import { BaseSpacer } from "~Components"
+import { Linking, StyleSheet } from "react-native"
+import { BaseButton, BaseSpacer } from "~Components"
 import { EmptyResults } from "./EmptyResults"
 import { useI18nContext } from "~i18n"
 import { useBrowserSearch } from "~Hooks"
 import { useAppSelector } from "~Storage/Redux"
 import { Routes } from "~Navigation"
+import { error } from "~Utils"
 
 const filterDapps = (dapps: DiscoveryDApp[], searchText: string) => {
     return dapps.filter(dapp => {
@@ -40,18 +41,39 @@ export const DAppList: React.FC<Props> = ({ onDAppPress, filteredSearch, selecto
 
     const renderItem = useCallback(
         ({ item }: { item: DiscoveryDApp }) => {
+            if (item.href === "add-compatible-dapp")
+                return (
+                    <BaseButton
+                        action={() => {
+                            const url = process.env.REACT_APP_CREATE_YOUR_VECHAIN_DAPP_URL
+                            if (url) {
+                                Linking.openURL(url)
+                            } else {
+                                error("No REACT_APP_CREATE_YOUR_VECHAIN_DAPP_URL url found")
+                            }
+                        }}
+                        title={LL.DISCOVER_CREATE_YOUR_DAPP()}
+                        variant="outline"
+                        haptics="Medium"
+                    />
+                )
             return <DAppCard dapp={item} onPress={onDAppPress} />
         },
-        [onDAppPress],
+        [LL, onDAppPress],
     )
 
     const dapps: DiscoveryDApp[] = useAppSelector(selector)
 
     const filteredDapps = React.useMemo(() => {
-        if (!filteredSearch) return dapps
+        if (!filteredSearch) {
+            if (tab === Routes.DISCOVER_FEATURED) {
+                return [...dapps, { href: "add-compatible-dapp" } as DiscoveryDApp]
+            }
+            return dapps
+        }
 
         return filterDapps(dapps, filteredSearch)
-    }, [dapps, filteredSearch])
+    }, [dapps, filteredSearch, tab])
 
     const navigateToSearch = useCallback(() => {
         if (!filteredSearch) return
@@ -64,44 +86,34 @@ export const DAppList: React.FC<Props> = ({ onDAppPress, filteredSearch, selecto
 
     if (filteredSearch && filteredDapps.length === 0) {
         return (
-            <>
-                {/*TODO remove spacer and put the below in the middle*/}
-                <BaseSpacer height={40} />
-                <EmptyResults
-                    onClick={navigateToSearch}
-                    title={LL.DISCOVER_SEARCH()}
-                    subtitle={LL.DISCOVER_EMPTY_SEARCH()}
-                    icon={"search-web"}
-                />
-            </>
+            <EmptyResults
+                onClick={navigateToSearch}
+                title={LL.DISCOVER_SEARCH_CTA()}
+                subtitle={LL.DISCOVER_EMPTY_SEARCH()}
+                icon={"search-web"}
+            />
         )
     }
 
     if (dapps.length === 0 && tab === Routes.DISCOVER_PERSONAL) {
         return (
-            <>
-                <BaseSpacer height={40} />
-                <EmptyResults
-                    onClick={() => navigateToBrowser("")}
-                    title={LL.DISCOVER_EMPTY_CUSTOM_NODES()}
-                    subtitle={LL.DISCOVER_EMPTY_CUSTOM_NODES_SUBTITLE()}
-                    icon={"magnify"}
-                />
-            </>
+            <EmptyResults
+                onClick={() => navigateToBrowser("")}
+                title={LL.DISCOVER_EMPTY_CUSTOM_NODES()}
+                subtitle={LL.DISCOVER_EMPTY_CUSTOM_NODES_SUBTITLE()}
+                icon={"magnify"}
+            />
         )
     }
 
     if (dapps.length === 0 && tab === Routes.DISCOVER_FAVOURITES) {
         return (
-            <>
-                <BaseSpacer height={40} />
-                <EmptyResults
-                    onClick={() => setTab(Routes.DISCOVER_FEATURED)}
-                    title={LL.DISCOVER_EMPTY_FAVOURITES()}
-                    subtitle={LL.DISCOVER_EMPTY_FAVOURITES_SUBTITLE()}
-                    icon={"heart"}
-                />
-            </>
+            <EmptyResults
+                onClick={() => setTab(Routes.DISCOVER_FEATURED)}
+                title={LL.DISCOVER_EMPTY_FAVOURITES()}
+                subtitle={LL.DISCOVER_EMPTY_FAVOURITES_SUBTITLE()}
+                icon={"heart"}
+            />
         )
     }
 

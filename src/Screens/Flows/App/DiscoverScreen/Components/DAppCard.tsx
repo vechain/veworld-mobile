@@ -1,16 +1,8 @@
-import React, { memo, useMemo } from "react"
+import React, { memo } from "react"
 import { Image, StyleProp, StyleSheet, ViewStyle } from "react-native"
-import { useThemedStyles } from "~Hooks"
+import { useDappBookmarking, useThemedStyles } from "~Hooks"
 import { DiscoveryDApp } from "~Constants"
 import { BaseIcon, BaseSpacer, BaseText, BaseTouchableBox, BaseView } from "~Components"
-import {
-    addBookmark,
-    removeBookmark,
-    selectCustomDapps,
-    selectFavoritesDapps,
-    useAppDispatch,
-    useAppSelector,
-} from "~Storage/Redux"
 
 type Props = {
     dapp: DiscoveryDApp
@@ -21,21 +13,7 @@ type Props = {
 export const DAppCard: React.FC<Props> = memo(({ onPress, dapp, containerStyle }: Props) => {
     const { styles, theme } = useThemedStyles(baseStyles)
 
-    const favourites = useAppSelector(selectFavoritesDapps)
-    const custom = useAppSelector(selectCustomDapps)
-    const dispatch = useAppDispatch()
-
-    const isBookMarked = useMemo(() => {
-        return favourites.some(fav => fav.href === dapp.href) || custom.some(fav => fav.href === dapp.href)
-    }, [favourites, custom, dapp])
-
-    const onBookmarkPress = () => {
-        if (isBookMarked) {
-            dispatch(removeBookmark(dapp))
-        } else {
-            dispatch(addBookmark(dapp))
-        }
-    }
+    const { isBookMarked, toggleBookmark } = useDappBookmarking(dapp.href, dapp?.name)
 
     return (
         <BaseView w={100} flexDirection="row" style={containerStyle}>
@@ -61,7 +39,7 @@ export const DAppCard: React.FC<Props> = memo(({ onPress, dapp, containerStyle }
             </BaseTouchableBox>
             <BaseSpacer width={12} />
             <BaseIcon
-                onPress={onBookmarkPress}
+                onPress={toggleBookmark}
                 name={isBookMarked ? "bookmark" : "bookmark-outline"}
                 color={theme.colors.text}
                 size={24}
@@ -84,7 +62,6 @@ const baseStyles = () =>
         },
         description: {
             fontSize: 12,
-            color: "gray",
         },
     })
 

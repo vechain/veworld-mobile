@@ -1,3 +1,4 @@
+import axios from "axios"
 import { validateIpfsUri } from "~Utils/IPFSUtils/IPFSUtils"
 
 // A helper function to normalize the URL by removing 'www.'
@@ -105,9 +106,16 @@ const convertUriToUrl = (uri: string) => {
     }
 }
 
-function isValidBrowserUrl(url: string): boolean {
+async function isValidBrowserUrl(url: string): Promise<boolean> {
     try {
         new URL(url)
+
+        let navInput = url
+        if (!url.toLowerCase().startsWith("http")) {
+            navInput = `https://${url}`
+        }
+
+        await axios.get(navInput)
         return true
     } catch (e) {
         return false

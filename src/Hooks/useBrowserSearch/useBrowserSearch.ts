@@ -5,11 +5,19 @@ import { Routes } from "~Navigation"
 export const useBrowserSearch = () => {
     const nav = useNavigation()
 
-    const navigateToBrowser = (searchStr: string) => {
-        const isValid = URIUtils.isValidBrowserUrl(searchStr)
+    const navigateToBrowser = async (searchStr: string) => {
+        const isValid =
+            (await URIUtils.isValidBrowserUrl(searchStr.toLowerCase())) ||
+            (await URIUtils.isValidBrowserUrl(`https://${searchStr.toLowerCase()}`))
 
         if (isValid) {
-            nav.navigate(Routes.BROWSER, { initialUrl: searchStr })
+            let navInput = searchStr
+
+            if (!searchStr.toLowerCase().startsWith("http")) {
+                navInput = `https://${searchStr}`
+            }
+
+            nav.navigate(Routes.BROWSER, { initialUrl: navInput })
         } else {
             nav.navigate(Routes.BROWSER, {
                 initialUrl: `https://www.google.com/search?q=${encodeURIComponent(searchStr)}&oq=${encodeURIComponent(

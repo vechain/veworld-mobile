@@ -11,6 +11,7 @@ import {
     DelegationView,
     getRpcError,
     RequireUserPassword,
+    SelectAccountBottomSheet,
     showErrorToast,
     useWalletConnect,
 } from "~Components"
@@ -20,12 +21,13 @@ import {
     selectSelectedNetwork,
     selectTokensWithInfo,
     selectVerifyContext,
+    selectVisibleAccounts,
     setIsAppLoading,
     useAppDispatch,
     useAppSelector,
 } from "~Storage/Redux"
 import { TransactionUtils } from "~Utils"
-import { useAnalyticTracking, useTransactionScreen } from "~Hooks"
+import { useAnalyticTracking, useBottomSheetModal, useSetSelectedAccount, useTransactionScreen } from "~Hooks"
 import { useI18nContext } from "~i18n"
 import { RootStackParamListSwitch, Routes } from "~Navigation"
 import { NativeStackScreenProps } from "@react-navigation/native-stack"
@@ -35,6 +37,7 @@ import { Transaction } from "thor-devkit"
 import { TransactionDetails, UnknownAppMessage } from "~Screens"
 import { AnalyticsEvent, RequestMethods } from "~Constants"
 import { useInAppBrowser } from "~Components/Providers/InAppBrowserProvider"
+import { AccountWithDevice } from "~Model"
 
 type Props = NativeStackScreenProps<RootStackParamListSwitch, Routes.CONNECTED_APP_SEND_TRANSACTION_SCREEN>
 
@@ -77,6 +80,26 @@ export const SendTransactionScreen: FC<Props> = ({ route }: Props) => {
             data: clause.data || "0x",
         }))
     }, [request.message])
+
+    const { onSetSelectedAccount } = useSetSelectedAccount()
+
+    const visibleAccounts = useAppSelector(selectVisibleAccounts)
+
+    const {
+        ref: selectAccountBottomSheetRef,
+        onOpen: openSelectAccountBottomSheet,
+        onClose: closeSelectAccountBottonSheet,
+    } = useBottomSheetModal()
+
+    const setSelectedAccount = (account: AccountWithDevice) => {
+        onSetSelectedAccount({ address: account.address })
+    }
+
+    const onAccountCardPress = useCallback(() => {
+        if (!request.options.signer) {
+            openSelectAccountBottomSheet()
+        }
+    }, [openSelectAccountBottomSheet, request.options.signer])
 
     const onFinish = useCallback(
         (sucess: boolean) => {
@@ -198,7 +221,11 @@ export const SendTransactionScreen: FC<Props> = ({ route }: Props) => {
                 <BaseView mx={20}>
                     <BaseText typographyFont="subTitleBold">{LL.CONNECTED_APP_SELECTED_ACCOUNT_LABEL()}</BaseText>
                     <BaseSpacer height={16} />
-                    <AccountCard account={selectedAccount} showOpacityWhenDisabled={false} />
+                    <AccountCard
+                        account={selectedAccount}
+                        showOpacityWhenDisabled={false}
+                        onPress={onAccountCardPress}
+                    />
                 </BaseView>
 
                 <BaseSpacer height={24} />
@@ -260,6 +287,14 @@ export const SendTransactionScreen: FC<Props> = ({ route }: Props) => {
 
                 <BaseSpacer height={16} />
             </ScrollView>
+
+            <SelectAccountBottomSheet
+                closeBottomSheet={closeSelectAccountBottonSheet}
+                accounts={visibleAccounts}
+                setSelectedAccount={setSelectedAccount}
+                selectedAccount={selectedAccount}
+                ref={selectAccountBottomSheetRef}
+            />
 
             <RequireUserPassword
                 isOpen={isPasswordPromptOpen}

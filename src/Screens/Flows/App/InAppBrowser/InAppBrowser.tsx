@@ -3,7 +3,7 @@ import { StyleSheet, View } from "react-native"
 import React, { MutableRefObject, useEffect } from "react"
 import WebView from "react-native-webview"
 import { useInAppBrowser } from "~Components/Providers/InAppBrowserProvider"
-import { BrowserBottomBar, URLInput } from "./Components"
+import { BrowserBottomBar, URLBar } from "./Components"
 import { NativeStackScreenProps } from "@react-navigation/native-stack"
 import { RootStackParamListSwitch, Routes } from "~Navigation"
 
@@ -23,27 +23,25 @@ export const InAppBrowser: React.FC<Props> = ({ route }) => {
 
     return (
         <Layout
-            fixedHeader={<URLInput />}
+            fixedHeader={<URLBar />}
             noBackButton
             noMargin
             footer={<BrowserBottomBar />}
             fixedBody={
-                <>
-                    <View style={styles.container}>
-                        <WebView
-                            ref={webviewRef as MutableRefObject<WebView>}
-                            source={{
-                                uri: navigationState?.url ?? route.params.initialUrl,
-                            }}
-                            onNavigationStateChange={onNavigationStateChange}
-                            javaScriptEnabled={true}
-                            onMessage={onMessage}
-                            style={styles.loginWebView}
-                            scalesPageToFit={true}
-                            injectedJavaScriptBeforeContentLoaded={injectVechainScript}
-                        />
-                    </View>
-                </>
+                <View style={styles.container}>
+                    <WebView
+                        ref={webviewRef as MutableRefObject<WebView>}
+                        source={{
+                            uri: navigationState?.url ?? route.params.initialUrl,
+                        }}
+                        onNavigationStateChange={onNavigationStateChange}
+                        javaScriptEnabled={true}
+                        onMessage={onMessage}
+                        style={styles.loginWebView}
+                        scalesPageToFit={true}
+                        injectedJavaScriptBeforeContentLoaded={injectVechainScript}
+                    />
+                </View>
             }
         />
     )
