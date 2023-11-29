@@ -184,7 +184,8 @@ export const DiscoverScreen: React.FC = () => {
 const baseStyles = (theme: ColorThemeType) =>
     StyleSheet.create({
         searchBar: {
-            paddingVertical: 12,
+            paddingVertical: 10,
+            paddingRight: 35,
             height: 40,
         },
         searchIconContainer: {

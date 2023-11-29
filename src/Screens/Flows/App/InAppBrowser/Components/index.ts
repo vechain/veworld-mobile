@@ -1,2 +1,2 @@
-export * from "./URLInput"
+export * from "./URLBar"
 export * from "./BrowserBottomBar"
