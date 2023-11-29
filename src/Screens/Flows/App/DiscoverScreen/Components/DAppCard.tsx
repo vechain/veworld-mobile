@@ -30,7 +30,6 @@ export const DAppCard: React.FC<Props> = memo(({ onPress, dapp, containerStyle }
                                 uri: `${process.env.REACT_APP_GOOGLE_FAVICON_URL}${dapp.href}`,
                             }
                         }
-                        size={40}
                     />
                     <BaseSpacer width={12} />
                     <BaseView flex={1}>
