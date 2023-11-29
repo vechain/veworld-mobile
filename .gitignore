@@ -91,3 +91,12 @@ main.jsbundle.map
 main.jsbundle.hbc.map
 main.jsbundle.packager.map
 ```
+
+# cucumber
+cucumber-report.html
+
+# local files
+env.local
+env.production.local
+ios/fastlane/env
+ios/fastlane/env.default
