@@ -48,7 +48,6 @@ export type RootStackParamListHome = {
         token: FungibleTokenWithBalance
         amount: string
         address: string
-        initialRoute: Routes
     }
     [Routes.LEDGER_SIGN_TRANSACTION]: {
         accountWithDevice: LedgerAccountWithDevice

@@ -50,7 +50,6 @@ export const InsertAddressSendScreen = ({ route }: Props) => {
                     token: params.token!,
                     amount: params.amount!,
                     address,
-                    initialRoute: params.initialRoute ?? Routes.HOME,
                 })
             } else {
                 const params = route.params as RootStackParamListNFT[Routes.INSERT_ADDRESS_SEND]

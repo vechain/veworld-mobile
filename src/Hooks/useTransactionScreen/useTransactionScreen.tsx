@@ -41,10 +41,6 @@ export const useTransactionScreen = ({ clauses, onTransactionSuccess, onTransact
     const [isEnoughGas, setIsEnoughGas] = useState(true)
     const [txCostTotal, setTxCostTotal] = useState("0")
 
-    const vtho = useAppSelector(state =>
-        selectVthoTokenWithBalanceByAccount(state, selectedDelegationAccount?.address ?? selectedAccount.address),
-    )
-
     // 1. Gas
     const { gas, loadingGas, setGasPayer } = useTransactionGas({
         clauses,
@@ -109,6 +105,10 @@ export const useTransactionScreen = ({ clauses, onTransactionSuccess, onTransact
             }
         },
         [sendTransaction, onTransactionFailure, LL],
+    )
+
+    const vtho = useAppSelector(state =>
+        selectVthoTokenWithBalanceByAccount(state, selectedDelegationAccount?.address ?? selectedAccount.address),
     )
 
     /**
