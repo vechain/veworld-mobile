@@ -1,6 +1,6 @@
 import React, { useCallback, useMemo } from "react"
 import { useInAppBrowser } from "~Components/Providers/InAppBrowserProvider"
-import { BaseIcon, BaseText, BaseTouchableBox, BaseView } from "~Components"
+import { BaseIcon, BaseText, BaseView } from "~Components"
 import { StyleSheet } from "react-native"
 import { useTheme } from "~Hooks"
 import { Routes } from "~Navigation"
@@ -40,42 +40,40 @@ export const URLBar = () => {
 
     const theme = useTheme()
 
-    return (
+    return navigationState?.url ? (
         <BaseView style={styles.inputContainer}>
-            {navigationState?.url && (
-                <>
-                    {/* Icon on the left */}
-                    <BaseIcon
-                        haptics="Light"
-                        size={20}
-                        style={[styles.icon]}
-                        name={isSecure ? "lock-check-outline" : "lock-open-outline"}
-                        color={isSecure ? theme.colors.text : theme.colors.alertRedMedium}
-                    />
+            {/* Icon on the left */}
+            <BaseIcon
+                haptics="Light"
+                size={20}
+                style={[styles.icon]}
+                name={isSecure ? "lock-check-outline" : "lock-open-outline"}
+                color={isSecure ? theme.colors.text : theme.colors.alertRedMedium}
+            />
 
-                    {/* URL Text centered */}
-                    <BaseText
-                        color={theme.colors.text}
-                        fontSize={14}
-                        fontWeight="500"
-                        style={[styles.urlText]}
-                        numberOfLines={1}
-                        ellipsizeMode="tail">
-                        {urlText}
-                    </BaseText>
+            {/* URL Text centered */}
+            <BaseView flex={1}>
+                <BaseText
+                    w={100}
+                    color={theme.colors.text}
+                    fontSize={14}
+                    fontWeight="500"
+                    style={[styles.urlText]}
+                    numberOfLines={1}
+                    ellipsizeMode="tail">
+                    {urlText}
+                </BaseText>
+            </BaseView>
 
-                    <BaseTouchableBox style={styles.pressableIcon} onPress={navBackToDiscover}>
-                        <BaseIcon
-                            haptics="Light"
-                            style={[styles.icon]}
-                            name="close"
-                            color={isSecure ? theme.colors.text : theme.colors.alertRedMedium}
-                        />
-                    </BaseTouchableBox>
-                </>
-            )}
+            <BaseIcon
+                action={navBackToDiscover}
+                haptics="Light"
+                style={[styles.icon]}
+                name="close"
+                color={isSecure ? theme.colors.text : theme.colors.alertRedMedium}
+            />
         </BaseView>
-    )
+    ) : null
 }
 
 const styles = StyleSheet.create({
@@ -88,7 +86,6 @@ const styles = StyleSheet.create({
         justifyContent: "space-between",
     },
     urlText: {
-        flex: 1, // takes the available space
         textAlign: "center", // centers the text
         marginHorizontal: 10, // adds space around the text
         marginVertical: 10,
