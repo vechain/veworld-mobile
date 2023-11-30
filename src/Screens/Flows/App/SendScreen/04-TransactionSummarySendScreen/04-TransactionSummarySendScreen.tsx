@@ -259,7 +259,7 @@ function TotalSendAmountView({ amount, symbol, token, txCostTotal, isDelegated, 
     }, [theme.isDark, isEnoughGas])
 
     const formattedTotalCost = useMemo(
-        () => BigNutils(txCostTotal).toHuman(token.decimals).toString,
+        () => BigNutils(txCostTotal).toHuman(token.decimals).decimals(4).toString,
         [token.decimals, txCostTotal],
     )
 

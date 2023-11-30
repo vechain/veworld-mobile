@@ -35,7 +35,7 @@ export const useTotalTokenBalance = (
     }, [decimals, token.balance.balance, token?.symbol, tokenTotalBalance, vthoEstimate])
 
     const tokenTotalToHuman = useMemo(() => {
-        return BigNutils(tokenTotalBalance).toHuman(decimals).toString
+        return BigNutils(tokenTotalBalance).toHuman(decimals).decimals(4).toString
     }, [decimals, tokenTotalBalance])
 
     return { tokenTotalBalance, tokenTotalToHuman, tokenBalanceMinusProjectedFees }

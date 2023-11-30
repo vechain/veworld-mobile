@@ -49,9 +49,9 @@ export const SelectAmountSendScreen = ({ route }: Props) => {
 
     /**
      * TOKEN total balance in FIAT in raw-ish format (with decimals)
-     * Example "53.497751509681790983423610572503055269"
+     * Example "147031782362332055578.377092605442914032"
      */
-    const fiatTotalBalance = BigNutils().toCurrencyConversion(tokenTotalBalance, exchangeRate).toString
+    const fiatTotalBalance = BigNutils().toCurrencyConversion(tokenTotalToHuman, exchangeRate).toString
 
     /**
      * FIAT selected balance calculated fron TOKEN input in human readable format (correct value is when TOKEN is active)
@@ -92,7 +92,7 @@ export const SelectAmountSendScreen = ({ route }: Props) => {
                 ? BigNutils().toTokenConversion(newValue, exchangeRate)
                 : BigNutils(newValue).addTrailingZeros(token.decimals)
 
-            let roundDownValue = controlValue.decimals(4)
+            let roundDownValue = controlValue.decimals(6)
 
             if (controlValue.isBiggerThan(tokenTotalBalance)) {
                 setIsError(true)
@@ -115,7 +115,7 @@ export const SelectAmountSendScreen = ({ route }: Props) => {
         setInput(
             isInputInFiat
                 ? BigNutils(fiatTotalBalance).toCurrencyFormat_string(2)
-                : BigNutils(tokenTotalBalance).toHuman(token.decimals).toString,
+                : BigNutils(tokenTotalBalance).toHuman(token.decimals).decimals(4).toString,
         )
         let conv = BigNutils().toTokenConversion(fiatTotalBalance, exchangeRate).toString
         let scaleDownforPrecission = BigNutils(conv).decimals(4).toString

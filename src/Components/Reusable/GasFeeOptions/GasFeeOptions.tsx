@@ -61,7 +61,7 @@ export const GasFeeOptions = ({
         [setSelectedFeeOption],
     )
 
-    const computedGasDifference = useMemo(() => BigNutils(txCostTotal).minus(totalBalance), [txCostTotal, totalBalance])
+    const computedGasDifference = useMemo(() => BigNutils(txCostTotal).minus(totalBalance), [totalBalance, txCostTotal])
 
     if (selectedDelegationOption === DelegationType.URL) {
         return (
@@ -150,7 +150,9 @@ function GasWarningView(props: IGasWarningView) {
         () =>
             LL.SEND_INSUFFICIENT_VTHO() +
             " " +
-            BigNutils(props.computedGasDifference?.toString ?? "0").toHuman(VTHO.decimals).toString,
+            BigNutils(props.computedGasDifference?.toString ?? "0")
+                .toHuman(VTHO.decimals)
+                .decimals(8).toString,
         [LL, props.computedGasDifference],
     )
 

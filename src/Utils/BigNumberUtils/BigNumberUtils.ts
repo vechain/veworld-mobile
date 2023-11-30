@@ -1,4 +1,5 @@
 import { BigNumber as BN } from "bignumber.js"
+// import { BigNumber as EtherBN } from "ethers"
 import { isEmpty } from "lodash"
 import { CurrencyExchangeRate as IRate } from "~Model"
 
@@ -34,6 +35,7 @@ class BigNumberUtils implements IBigNumberUtils {
     private data: BN
 
     constructor(input: string | number | BN) {
+        BN.config({ EXPONENTIAL_AT: 1e9 })
         this.data = new BN(input)
     }
 
@@ -71,7 +73,7 @@ class BigNumberUtils implements IBigNumberUtils {
     }
 
     decimals(value: number, callback?: (result: BN) => void): this {
-        this.data = new BN(this.data.toFixed(value))
+        this.data = new BN(this.data.toFixed(value, BN.ROUND_DOWN))
 
         if (callback) {
             callback(this.data)
@@ -192,9 +194,7 @@ class BigNumberUtils implements IBigNumberUtils {
     }
 
     addTrailingZeros(decimals: number, callback?: (result: BN) => void): this {
-        let sanatized = this.data.toString().replace(/,/g, "").replace(/\./g, "").replace(/,/g, ".")
-        let newAmount = new BN(sanatized)
-        this.data = newAmount.multipliedBy(new BN(10).pow(decimals))
+        this.data = this.data.multipliedBy(new BN(10).pow(decimals))
 
         if (callback) {
             callback(this.data)
