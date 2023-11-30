@@ -17,6 +17,7 @@ interface IBigNumberUtils {
     plus(value: string | number | BN, callback?: (result: BN) => void): BigNumberUtils
     times(value: string | number | BN, callback?: (result: BN) => void): BigNumberUtils
     idiv(value: string | number | BN, callback?: (result: BN) => void): BigNumberUtils
+    multiply(value: string | number | BN, callback?: (result: BN) => void): BigNumberUtils
 
     // Comparison Methods
     isLessThan(value: string | number | BN): boolean
@@ -80,6 +81,16 @@ class BigNumberUtils implements IBigNumberUtils {
 
     minus(value: string | number | BN, callback?: (result: BN) => void): this {
         this.data = this.data.minus(value)
+
+        if (callback) {
+            callback(this.data)
+        }
+
+        return this
+    }
+
+    multiply(value: string | number | BN, callback?: (result: BN) => void): this {
+        this.data = this.data.multipliedBy(value)
 
         if (callback) {
             callback(this.data)
@@ -181,7 +192,9 @@ class BigNumberUtils implements IBigNumberUtils {
     }
 
     addTrailingZeros(decimals: number, callback?: (result: BN) => void): this {
-        this.data = this.data.multipliedBy(new BN(10).pow(decimals))
+        let sanatized = this.data.toString().replace(/,/g, "").replace(/\./g, "").replace(/,/g, ".")
+        let newAmount = new BN(sanatized)
+        this.data = newAmount.multipliedBy(new BN(10).pow(decimals))
 
         if (callback) {
             callback(this.data)

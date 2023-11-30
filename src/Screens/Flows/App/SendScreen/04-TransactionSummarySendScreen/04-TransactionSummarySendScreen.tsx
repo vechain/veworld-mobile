@@ -149,6 +149,7 @@ export const TransactionSummarySendScreen = ({ route }: Props) => {
                         token={token}
                         txCostTotal={txCostTotal}
                         isDelegated={isDelegated}
+                        isEnoughGas={isEnoughGas}
                     />
 
                     <GasFeeOptions
@@ -230,9 +231,10 @@ interface ITotalSendAmountView {
     token: FungibleTokenWithBalance
     txCostTotal: string
     isDelegated: boolean
+    isEnoughGas: boolean
 }
 
-function TotalSendAmountView({ amount, symbol, token, txCostTotal, isDelegated }: ITotalSendAmountView) {
+function TotalSendAmountView({ amount, symbol, token, txCostTotal, isDelegated, isEnoughGas }: ITotalSendAmountView) {
     const currency = useAppSelector(selectCurrency)
     const exchangeRate = useAppSelector(state => selectCurrencyExchangeRate(state, token))
     const theme = useTheme()
@@ -247,8 +249,14 @@ function TotalSendAmountView({ amount, symbol, token, txCostTotal, isDelegated }
     }, [txCostTotal, animationProgress])
 
     const animatedStyle = useAnimatedStyle(() => {
-        return { color: interpolateColor(animationProgress.value, [0, 1], [theme.colors.text, theme.colors.danger]) }
-    }, [theme.isDark])
+        return {
+            color: interpolateColor(
+                animationProgress.value,
+                [0, 1],
+                [theme.colors.text, isEnoughGas ? theme.colors.success : theme.colors.danger],
+            ),
+        }
+    }, [theme.isDark, isEnoughGas])
 
     const formattedTotalCost = useMemo(
         () => BigNutils(txCostTotal).toHuman(token.decimals).toString,

@@ -737,21 +737,21 @@ export const prepareFungibleClause = (
     addressTo: string,
 ): Transaction.Body["clauses"] => {
     let _amount = BigNutils(amount).addTrailingZeros(_token.decimals).toHex
-    const scaledAmount = "0x" + _amount
+    const amountWithPrefix = "0x" + _amount
 
     // if vet
     if (_token.symbol === VET.symbol) {
         return [
             {
                 to: addressTo,
-                value: scaledAmount,
+                value: amountWithPrefix,
                 data: "0x",
             },
         ]
     }
 
     const func = new abi.Function(abis.VIP180.transfer)
-    const data = func.encode(addressTo, scaledAmount)
+    const data = func.encode(addressTo, amountWithPrefix)
 
     return [
         {
