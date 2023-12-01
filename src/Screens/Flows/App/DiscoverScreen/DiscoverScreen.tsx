@@ -1,8 +1,8 @@
-import React, { useCallback, useEffect, useRef } from "react"
+import React, { useCallback, useEffect, useMemo, useRef } from "react"
 import { BaseIcon, BaseSpacer, BaseText, BaseTextInput, BaseView, Layout } from "~Components"
 import { useI18nContext } from "~i18n"
 import { AnalyticsEvent, ColorThemeType, DiscoveryDApp } from "~Constants"
-import { useAnalyticTracking, useBrowserSearch, useTabBarBottomMargin, useThemedStyles } from "~Hooks"
+import { useAnalyticTracking, useBrowserSearch, useThemedStyles } from "~Hooks"
 import { NativeSyntheticEvent, StyleSheet, TextInputChangeEventData } from "react-native"
 import { useNavigation, useScrollToTop } from "@react-navigation/native"
 import { Routes } from "~Navigation"
@@ -27,7 +27,6 @@ export const DiscoverScreen: React.FC = () => {
     const [filteredSearch, setFilteredSearch] = React.useState<string>()
     const animatedIconOpacity = useSharedValue(0)
     const animatedIconRightPosition = useSharedValue(-20)
-    const { androidOnlyTabBarBottomMargin } = useTabBarBottomMargin()
 
     const flatListRef = useRef(null)
     useScrollToTop(flatListRef)
@@ -110,6 +109,16 @@ export const DiscoverScreen: React.FC = () => {
         [filteredSearch, onDAppPress, setFilteredSearch],
     )
 
+    const bookmarkedDApps = useAppSelector(selectBookmarkedDapps)
+
+    const initialRoute = useMemo(() => {
+        if (bookmarkedDApps.length > 0) {
+            return Routes.DISCOVER_FAVOURITES
+        }
+
+        return Routes.DISCOVER_FEATURED
+    }, [bookmarkedDApps])
+
     return (
         <Layout
             noBackButton
@@ -150,7 +159,7 @@ export const DiscoverScreen: React.FC = () => {
                     <BaseSpacer height={16} />
 
                     {/*Tab Navigator*/}
-                    <Tab.Navigator tabBar={TabBar}>
+                    <Tab.Navigator tabBar={TabBar} initialRouteName={initialRoute}>
                         <Tab.Screen
                             name={Routes.DISCOVER_FAVOURITES}
                             options={{ title: LL.DISCOVER_TAB_FAVOURITES() }}
@@ -162,7 +171,6 @@ export const DiscoverScreen: React.FC = () => {
                             component={FeaturedScreen}
                         />
                     </Tab.Navigator>
-                    <BaseSpacer height={androidOnlyTabBarBottomMargin || 1} />
                 </>
             }
         />
