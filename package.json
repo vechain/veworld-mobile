@@ -35,6 +35,7 @@
     "e2e.ios.test.d:trace": "detox test --configuration ios.sim.debug_xcode_14.2 --loglevel trace --record-logs all --parallel 4",
     "e2e.ios.test.d:sync": "detox test --configuration ios.sim.debug_xcode_14.2 detox test --debug-synchronization 500 --parallel 4",
     "e2e.ios.test.d:headless": "detox test --configuration ios.sim.debug detox test --headless --parallel 4",
+    "e2e.ios.test.d:headless:screenshots": "detox test --configuration ios.sim.debug detox test --headless --take-screenshots failing --parallel 4",
     "e2e.ios.test.r": "detox test --configuration ios.sim.release",
     "e2e.ios.r": "yarn e2e.ios.build.r && yarn e2e.ios.test.r",
     "e2e.ios.d": "yarn e2e.ios.build.d && yarn e2e.ios.test.d",
