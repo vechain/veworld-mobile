@@ -2,7 +2,7 @@ import React, { useCallback, useEffect, useMemo, useRef } from "react"
 import { BaseIcon, BaseSpacer, BaseText, BaseTextInput, BaseView, Layout } from "~Components"
 import { useI18nContext } from "~i18n"
 import { AnalyticsEvent, ColorThemeType, DiscoveryDApp } from "~Constants"
-import { useAnalyticTracking, useBrowserSearch, useTabBarBottomMargin, useThemedStyles } from "~Hooks"
+import { useAnalyticTracking, useBrowserSearch, useThemedStyles } from "~Hooks"
 import { NativeSyntheticEvent, StyleSheet, TextInputChangeEventData } from "react-native"
 import { useNavigation, useScrollToTop } from "@react-navigation/native"
 import { Routes } from "~Navigation"
@@ -27,7 +27,6 @@ export const DiscoverScreen: React.FC = () => {
     const [filteredSearch, setFilteredSearch] = React.useState<string>()
     const animatedIconOpacity = useSharedValue(0)
     const animatedIconRightPosition = useSharedValue(-20)
-    const { androidOnlyTabBarBottomMargin } = useTabBarBottomMargin()
 
     const flatListRef = useRef(null)
     useScrollToTop(flatListRef)
@@ -172,7 +171,6 @@ export const DiscoverScreen: React.FC = () => {
                             component={FeaturedScreen}
                         />
                     </Tab.Navigator>
-                    <BaseSpacer height={androidOnlyTabBarBottomMargin || 1} />
                 </>
             }
         />
