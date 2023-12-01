@@ -234,12 +234,19 @@ export const LedgerSignTransaction: React.FC<Props> = ({ route }) => {
 
     const navigateOnFinish = useCallback(() => {
         dispatch(setIsAppLoading(false))
-        error(nav.getState())
 
-        if (nav.canGoBack()) return nav.goBack()
+        if (dappRequest) {
+            // nav back to SendTransaction Screen
+            nav.goBack()
+            // nav back to original screen
+            nav.goBack()
+            return
+        } else {
+            if (nav.canGoBack()) return nav.goBack()
 
-        nav.navigate(Routes.DISCOVER)
-    }, [dispatch, nav])
+            nav.navigate(Routes.HOME)
+        }
+    }, [dappRequest, dispatch, nav])
 
     const handleOnConfirm = useCallback(async () => {
         try {
