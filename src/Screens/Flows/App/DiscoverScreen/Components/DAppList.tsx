@@ -3,14 +3,13 @@ import { DiscoveryDApp } from "~Constants"
 import { FlatList } from "react-native-gesture-handler"
 import { DAppCard } from "~Screens/Flows/App/DiscoverScreen/Components/DAppCard"
 import { useNavigation, useRoute, useScrollToTop } from "@react-navigation/native"
-import { Linking, StyleSheet } from "react-native"
+import { StyleSheet } from "react-native"
 import { BaseButton, BaseIcon, BaseSpacer, BaseText, BaseView } from "~Components"
 import { EmptyResults } from "./EmptyResults"
 import { useI18nContext } from "~i18n"
 import { useBrowserSearch, useTheme } from "~Hooks"
 import { useAppSelector } from "~Storage/Redux"
 import { Routes } from "~Navigation"
-import { error } from "~Utils"
 
 const filterDapps = (dapps: DiscoveryDApp[], searchText: string) => {
     return dapps.filter(dapp => {
@@ -42,39 +41,20 @@ export const DAppList: React.FC<Props> = ({ onDAppPress, filteredSearch, selecto
 
     const renderItem = useCallback(
         ({ item }: { item: DiscoveryDApp }) => {
-            if (item.href === "add-compatible-dapp")
-                return (
-                    <BaseButton
-                        action={() => {
-                            const url = process.env.REACT_APP_CREATE_YOUR_VECHAIN_DAPP_URL
-                            if (url) {
-                                Linking.openURL(url)
-                            } else {
-                                error("No REACT_APP_CREATE_YOUR_VECHAIN_DAPP_URL url found")
-                            }
-                        }}
-                        title={LL.DISCOVER_CREATE_YOUR_DAPP()}
-                        variant="outline"
-                        haptics="Medium"
-                    />
-                )
             return <DAppCard dapp={item} onPress={onDAppPress} />
         },
-        [LL, onDAppPress],
+        [onDAppPress],
     )
 
     const dapps: DiscoveryDApp[] = useAppSelector(selector)
 
     const filteredDapps = React.useMemo(() => {
         if (!filteredSearch) {
-            if (tab === Routes.DISCOVER_FEATURED) {
-                return [...dapps, { href: "add-compatible-dapp" } as DiscoveryDApp]
-            }
             return dapps
         }
 
         return filterDapps(dapps, filteredSearch)
-    }, [dapps, filteredSearch, tab])
+    }, [dapps, filteredSearch])
 
     const navigateToSearch = useCallback(() => {
         if (!filteredSearch) return
