@@ -15,30 +15,6 @@ For _fastlane_ installation instructions, see [Installing _fastlane_](https://do
 
 ## Android
 
-### android create_changelog
-
-```sh
-[bundle exec] fastlane android create_changelog
-```
-
-Create changelog
-
-### android gh_setup_before
-
-```sh
-[bundle exec] fastlane android gh_setup_before
-```
-
-Create Release Branch on GitHub for Beta
-
-### android gh_setup_after
-
-```sh
-[bundle exec] fastlane android gh_setup_after
-```
-
-Commit latest artifacts to GitHub
-
 ### android validate
 
 ```sh
@@ -46,14 +22,6 @@ Commit latest artifacts to GitHub
 ```
 
 Validate the keystore and credentials
-
-### android set_version_code
-
-```sh
-[bundle exec] fastlane android set_version_code
-```
-
-Get last version codes
 
 ### android build_android
 
