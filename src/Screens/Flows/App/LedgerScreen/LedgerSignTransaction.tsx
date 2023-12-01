@@ -36,7 +36,6 @@ import { Transaction } from "thor-devkit"
 import { ActivityType } from "~Model"
 import { LedgerConfig } from "~Utils/LedgerUtils/LedgerUtils"
 import { useInAppBrowser } from "~Components/Providers/InAppBrowserProvider"
-import { useResetStacks } from "~Hooks/useSetSelectedAccount/useResetStacks"
 
 type Props = NativeStackScreenProps<RootStackParamListHome & RootStackParamListSwitch, Routes.LEDGER_SIGN_TRANSACTION>
 
@@ -48,7 +47,7 @@ enum SignSteps {
 }
 
 export const LedgerSignTransaction: React.FC<Props> = ({ route }) => {
-    const { accountWithDevice, transaction, dappRequest, delegationSignature } = route.params
+    const { accountWithDevice, transaction, dappRequest, delegationSignature, initialRoute } = route.params
 
     const nav = useNavigation()
     const track = useAnalyticTracking()
@@ -231,8 +230,6 @@ export const LedgerSignTransaction: React.FC<Props> = ({ route }) => {
         }
     }, [ledgerErrorCode, closeConnectionErrorSheet, openConnectionErrorSheet])
 
-    const { resetStacks } = useResetStacks()
-
     /** Effects */
 
     const navigateOnFinish = useCallback(() => {
@@ -245,10 +242,13 @@ export const LedgerSignTransaction: React.FC<Props> = ({ route }) => {
             nav.goBack()
             return
         } else {
-            resetStacks()
-            nav.navigate(Routes.HOME)
+            if (initialRoute) {
+                nav.navigate(initialRoute)
+            } else {
+                nav.navigate(Routes.HOME)
+            }
         }
-    }, [dappRequest, dispatch, nav, resetStacks])
+    }, [initialRoute, dappRequest, dispatch, nav])
 
     const handleOnConfirm = useCallback(async () => {
         try {

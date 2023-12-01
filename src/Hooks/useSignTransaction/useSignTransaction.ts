@@ -3,7 +3,7 @@ import { HexUtils, warn } from "~Utils"
 import { showErrorToast, showWarningToast, WalletEncryptionKeyHelper } from "~Components"
 import { selectDevice, selectSelectedAccount, useAppSelector } from "~Storage/Redux"
 import { useI18nContext } from "~i18n"
-import { AccountWithDevice, DEVICE_TYPE, LedgerAccountWithDevice, Wallet, TransactionRequest } from "~Model"
+import { AccountWithDevice, DEVICE_TYPE, LedgerAccountWithDevice, TransactionRequest, Wallet } from "~Model"
 import { DelegationType } from "~Model/Delegation"
 import { sponsorTransaction } from "~Networking"
 import { Routes } from "~Navigation"
@@ -13,7 +13,7 @@ type Props = {
     selectedDelegationAccount?: AccountWithDevice
     selectedDelegationOption: DelegationType
     selectedDelegationUrl?: string
-    initialRoute?: Routes
+    initialRoute?: Routes.NFTS | Routes.HOME
     buildTransaction: () => Transaction
     dappRequest?: TransactionRequest
 }
@@ -40,7 +40,7 @@ export const useSignTransaction = ({
     selectedDelegationUrl,
     buildTransaction,
     dappRequest,
-    initialRoute = Routes.HOME,
+    initialRoute,
 }: Props) => {
     const { LL } = useI18nContext()
     const account = useAppSelector(selectSelectedAccount)

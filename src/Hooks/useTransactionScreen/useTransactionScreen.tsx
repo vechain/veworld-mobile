@@ -32,7 +32,7 @@ type Props = {
     clauses: Transaction.Body["clauses"]
     onTransactionSuccess: (transaction: Transaction, txId: string) => void
     onTransactionFailure: (error: unknown) => void
-    initialRoute: Routes
+    initialRoute?: Routes.HOME | Routes.NFTS
     dappRequest?: TransactionRequest
 }
 
