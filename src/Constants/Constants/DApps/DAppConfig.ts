@@ -18,7 +18,7 @@ export type DiscoveryDApp = {
 
 const DAppConfig: DiscoveryDApp[] = [
     {
-        name: "vechain Rewards dApp",
+        name: "Vechain Rewards",
         href: "https://app.rewards.vechain.org/dashboard",
         desc: "Explore the Official vechain Rewards dApp - Your solution to effortlessly manage x-nodes, claim rewards and track your reward history. Get started now!",
         category: "defi",

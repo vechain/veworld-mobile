@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect, useRef } from "react"
+import React, { useCallback, useEffect, useMemo, useRef } from "react"
 import { BaseIcon, BaseSpacer, BaseText, BaseTextInput, BaseView, Layout } from "~Components"
 import { useI18nContext } from "~i18n"
 import { AnalyticsEvent, ColorThemeType, DiscoveryDApp } from "~Constants"
@@ -110,6 +110,16 @@ export const DiscoverScreen: React.FC = () => {
         [filteredSearch, onDAppPress, setFilteredSearch],
     )
 
+    const bookmarkedDApps = useAppSelector(selectBookmarkedDapps)
+
+    const initialRoute = useMemo(() => {
+        if (bookmarkedDApps.length > 0) {
+            return Routes.DISCOVER_FAVOURITES
+        }
+
+        return Routes.DISCOVER_FEATURED
+    }, [bookmarkedDApps])
+
     return (
         <Layout
             noBackButton
@@ -150,7 +160,7 @@ export const DiscoverScreen: React.FC = () => {
                     <BaseSpacer height={16} />
 
                     {/*Tab Navigator*/}
-                    <Tab.Navigator tabBar={TabBar}>
+                    <Tab.Navigator tabBar={TabBar} initialRouteName={initialRoute}>
                         <Tab.Screen
                             name={Routes.DISCOVER_FAVOURITES}
                             options={{ title: LL.DISCOVER_TAB_FAVOURITES() }}

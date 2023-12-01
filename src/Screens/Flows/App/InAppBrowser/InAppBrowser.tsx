@@ -6,12 +6,19 @@ import { useInAppBrowser } from "~Components/Providers/InAppBrowserProvider"
 import { BrowserBottomBar, URLBar } from "./Components"
 import { NativeStackScreenProps } from "@react-navigation/native-stack"
 import { RootStackParamListSwitch, Routes } from "~Navigation"
+import DeviceInfo from "react-native-device-info"
 
 type Props = NativeStackScreenProps<RootStackParamListSwitch, Routes.BROWSER>
 
 export const InAppBrowser: React.FC<Props> = ({ route }) => {
     const { webviewRef, onMessage, injectVechainScript, onNavigationStateChange, navigationState, resetWebViewState } =
         useInAppBrowser()
+
+    const [userAgent, setUserAgent] = React.useState<string | undefined>(undefined)
+
+    useEffect(() => {
+        DeviceInfo.getUserAgent().then(setUserAgent)
+    }, [])
 
     useEffect(() => {
         // set the webview ref to undefined when the component unmounts
@@ -29,18 +36,21 @@ export const InAppBrowser: React.FC<Props> = ({ route }) => {
             footer={<BrowserBottomBar />}
             fixedBody={
                 <View style={styles.container}>
-                    <WebView
-                        ref={webviewRef as MutableRefObject<WebView>}
-                        source={{
-                            uri: navigationState?.url ?? route.params.initialUrl,
-                        }}
-                        onNavigationStateChange={onNavigationStateChange}
-                        javaScriptEnabled={true}
-                        onMessage={onMessage}
-                        style={styles.loginWebView}
-                        scalesPageToFit={true}
-                        injectedJavaScriptBeforeContentLoaded={injectVechainScript}
-                    />
+                    {userAgent && (
+                        <WebView
+                            ref={webviewRef as MutableRefObject<WebView>}
+                            source={{
+                                uri: navigationState?.url ?? route.params.initialUrl,
+                            }}
+                            userAgent={userAgent}
+                            onNavigationStateChange={onNavigationStateChange}
+                            javaScriptEnabled={true}
+                            onMessage={onMessage}
+                            style={styles.loginWebView}
+                            scalesPageToFit={true}
+                            injectedJavaScriptBeforeContentLoaded={injectVechainScript}
+                        />
+                    )}
                 </View>
             }
         />
