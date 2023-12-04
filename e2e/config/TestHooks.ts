@@ -34,13 +34,14 @@ After({ timeout: 600 * 1000 }, async (message: ITestCaseHookParameter) => {
     } catch (error) {
         device.takeScreenshot("testFailure")
         throw error
+    } finally {
+        await detox.onTestDone({
+            title: pickle.uri,
+            fullName: pickle.name,
+            status: result ? "passed" : "failed",
+        })
+        await device.terminateApp()
     }
-    await detox.onTestDone({
-        title: pickle.uri,
-        fullName: pickle.name,
-        status: result ? "passed" : "failed",
-    })
-    await device.terminateApp()
 })
 
 AfterAll({ timeout: 600 * 1000 }, async () => {
