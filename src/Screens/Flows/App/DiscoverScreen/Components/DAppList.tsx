@@ -99,6 +99,7 @@ export const DAppList: React.FC<Props> = ({ onDAppPress, filteredSearch, selecto
                     <BaseButton
                         action={() => navigateToBrowser("")}
                         title={LL.DISCOVER_EMPTY_CUSTOM_NODES()}
+                        variant={"outline"}
                         haptics="Light"
                     />
                 </BaseView>

@@ -245,6 +245,7 @@ describe("useTransactionScreen", () => {
                         onTransactionSuccess,
                         onTransactionFailure,
                         dappRequest: dappRequest,
+                        initialRoute: Routes.HOME,
                     }),
                 {
                     wrapper: TestWrapper,
