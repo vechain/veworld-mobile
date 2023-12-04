@@ -56,6 +56,7 @@ export type RootStackParamListSwitch = {
         delegationSignature?: string
         transaction: Transaction
         dappRequest?: TransactionRequest
+        initialRoute?: Routes.HOME | Routes.NFTS
     }
     [Routes.LEDGER_SIGN_MESSAGE]: {
         requestEvent: PendingRequestTypes.Struct

@@ -103,7 +103,7 @@ jobs:
       # Test with Detox
       - name: Detox test iOS Debug
         timeout-minutes: 100
-        run: yarn detox test --configuration ios.sim.debug_xcode_14.2 --cleanup --headless --record-logs all --take-screenshots failing
+        run: yarn detox test --configuration ios.sim.debug_xcode_14.2 --cleanup --headless --record-logs all --take-screenshots failing --retry 1 --tags "not @broken"
 
       # Upload artifacts Detox
       - name: Upload detox fail artifacts

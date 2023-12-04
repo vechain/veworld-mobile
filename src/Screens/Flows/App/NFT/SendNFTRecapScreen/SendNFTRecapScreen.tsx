@@ -96,6 +96,7 @@ export const SendNFTRecapScreen = ({ route }: Props) => {
         clauses,
         onTransactionSuccess,
         onTransactionFailure,
+        initialRoute: Routes.NFTS,
     })
 
     const { onAddContactPress, handleSaveContact, addContactSheet, selectedContactAddress, closeAddContactSheet } =

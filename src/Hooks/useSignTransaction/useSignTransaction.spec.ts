@@ -22,7 +22,7 @@ const defaultProps = {
     buildTransaction: () => {
         return vetTransaction1
     },
-    initialRoute: Routes.HOME,
+    initialRoute: Routes.NFTS,
     selectedDelegationOption: DelegationType.NONE,
 }
 
@@ -44,7 +44,7 @@ describe("useSignTransaction", () => {
     })
 
     it("should render correctly", async () => {
-        const { result } = renderHook(() => useSignTransaction(defaultProps), {
+        const { result } = renderHook(() => useSignTransaction({ ...defaultProps, initialRoute: Routes.NFTS }), {
             wrapper: TestWrapper,
         })
 
@@ -61,7 +61,7 @@ describe("useSignTransaction", () => {
             throw new Error("Error")
         })
 
-        const { result } = renderHook(() => useSignTransaction(defaultProps), {
+        const { result } = renderHook(() => useSignTransaction({ ...defaultProps, initialRoute: Routes.NFTS }), {
             wrapper: TestWrapper,
         })
         expect(result.current).toEqual({
@@ -75,7 +75,7 @@ describe("useSignTransaction", () => {
     })
 
     it("signAndSendTransaction - no delegation works as expected", async () => {
-        const { result } = renderHook(() => useSignTransaction(defaultProps), {
+        const { result } = renderHook(() => useSignTransaction({ ...defaultProps, initialRoute: Routes.NFTS }), {
             wrapper: TestWrapper,
         })
 
@@ -104,6 +104,7 @@ describe("useSignTransaction", () => {
                             ...account1D1,
                             device: device1,
                         },
+                        initialRoute: Routes.HOME,
                     }),
                 { wrapper: TestWrapper },
             )
@@ -128,6 +129,7 @@ describe("useSignTransaction", () => {
                     useSignTransaction({
                         ...defaultProps,
                         selectedDelegationOption: DelegationType.ACCOUNT,
+                        initialRoute: Routes.HOME,
                     }),
                 { wrapper: TestWrapper },
             )
@@ -151,6 +153,7 @@ describe("useSignTransaction", () => {
                         ...defaultProps,
                         selectedDelegationOption: DelegationType.URL,
                         selectedDelegationUrl: "https://vechainstats.com",
+                        initialRoute: Routes.HOME,
                     }),
                 { wrapper: TestWrapper },
             )
@@ -182,6 +185,7 @@ describe("useSignTransaction", () => {
                     useSignTransaction({
                         ...defaultProps,
                         selectedDelegationOption: DelegationType.URL,
+                        initialRoute: Routes.HOME,
                     }),
                 { wrapper: TestWrapper },
             )

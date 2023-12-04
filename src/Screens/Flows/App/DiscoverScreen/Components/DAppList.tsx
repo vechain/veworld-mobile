@@ -87,6 +87,7 @@ export const DAppList: React.FC<Props> = ({ onDAppPress, filteredSearch, selecto
                 <BaseSpacer height={40} />
                 <BaseView flexDirection="row" justifyContent="space-evenly" w={100}>
                     <BaseButton
+                        style={styles.emptyListButton}
                         action={() => setTab(Routes.DISCOVER_FEATURED)}
                         title={LL.DISCOVER_EMPTY_FAVOURITES()}
                         haptics="Light"
@@ -97,8 +98,10 @@ export const DAppList: React.FC<Props> = ({ onDAppPress, filteredSearch, selecto
                 </BaseText>
                 <BaseView flexDirection="row" justifyContent="space-evenly" w={100}>
                     <BaseButton
+                        style={styles.emptyListButton}
                         action={() => navigateToBrowser("")}
                         title={LL.DISCOVER_EMPTY_CUSTOM_NODES()}
+                        variant={"outline"}
                         haptics="Light"
                     />
                 </BaseView>
@@ -125,5 +128,8 @@ const styles = StyleSheet.create({
     container: {
         paddingHorizontal: 24,
         paddingBottom: 24,
+    },
+    emptyListButton: {
+        width: 250,
     },
 })
