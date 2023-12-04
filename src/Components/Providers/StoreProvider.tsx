@@ -22,6 +22,7 @@ import { warn } from "~Utils"
 import { MMKV } from "react-native-mmkv"
 import { SplashScreen } from "../../../src/SplashScreen"
 import { PersistConfig } from "redux-persist/es/types"
+import Reactotron from "../../../ReactotronConfig"
 
 const StoreContext = React.createContext<undefined>(undefined)
 
@@ -51,8 +52,7 @@ const StoreContextProvider = ({ children }: StoreContextProviderProps) => {
         } else {
             let middlewares: any[] = []
             if (process.env.NODE_ENV !== "production") {
-                const createDebugger = require("redux-flipper").default
-                middlewares.push(createDebugger())
+                middlewares.push()
             }
 
             store.current = configureStore({
@@ -66,7 +66,9 @@ const StoreContextProvider = ({ children }: StoreContextProviderProps) => {
                             extraArgument: {},
                         },
                     }).concat(middlewares),
-                enhancers: [reduxReset()],
+
+                // @ts-ignore
+                enhancers: [reduxReset(), __DEV__ ? Reactotron.createEnhancer!() : null],
                 devTools: process.env.NODE_ENV !== "production",
             })
         }

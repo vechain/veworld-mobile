@@ -7,6 +7,8 @@
 // Warn - Anything that can potentially cause application oddities, but for which I am automatically recovering. (Such as switching from a primary to backup server, retrying an operation, missing secondary data, etc.)
 // Error - Any error
 
+import Reactotron from "reactotron-react-native"
+
 const LOG_LEVELS = {
     trace: 0,
     debug: 1,
@@ -22,6 +24,14 @@ const checkLogLevelHOC = (logID: keyof typeof LOG_LEVELS): ((...args: unknown[])
         return (...args: unknown[]) => {
             // eslint-disable-next-line no-console
             console.error(...args)
+
+            Reactotron.display({
+                name: logID.toUpperCase(),
+                preview: args[0],
+                value: JSON.stringify(args),
+                important: true,
+            })
+
             try {
                 const stringifiedArgs = JSON.stringify(args)
                 Sentry.captureException(stringifiedArgs)
@@ -30,6 +40,7 @@ const checkLogLevelHOC = (logID: keyof typeof LOG_LEVELS): ((...args: unknown[])
             }
         }
     }
+
     if (LOG_LEVELS[logID] >= LOG_LEVELS[logLevel as keyof typeof LOG_LEVELS]) {
         // eslint-disable-next-line no-console
         return console[logID]

@@ -16,7 +16,7 @@ import { AnimatedSplashScreen } from "../../../AnimatedSplashScreen"
 import Onboarding from "./Helpers/Onboarding"
 import NetInfo from "@react-native-community/netinfo"
 
-const UserEncryptedStorage = new MMKV({
+export const UserEncryptedStorage = new MMKV({
     id: "user_encrypted_storage",
 })
 
@@ -346,13 +346,6 @@ export const ApplicationSecurityProvider = ({ children }: ApplicationSecurityCon
         securityType,
         lockApplication,
     ])
-
-    useEffect(() => {
-        debug({
-            walletStatus,
-            securityType,
-        })
-    }, [walletStatus, securityType])
 
     const { isConnected } = NetInfo.useNetInfo()
 

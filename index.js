@@ -37,16 +37,16 @@ import { InAppBrowserProvider } from "~Components/Providers/InAppBrowserProvider
 
 const { fontFamily } = typography
 
-if (__DEV__) {
-    require("basil-ws-flipper").wsDebugPlugin
-}
-
 const isHermes = () => !!global.HermesInternal
 info("is Hermes active : ", isHermes())
 
 if (__DEV__ && process.env.REACT_APP_UI_LOG === "false") {
     // hide all ui logs
     LogBox.ignoreAllLogs()
+}
+
+if (__DEV__) {
+    import("./ReactotronConfig").then(() => info("Reactotron Configured"))
 }
 
 const Main = () => {
