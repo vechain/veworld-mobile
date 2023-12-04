@@ -1,35 +1,43 @@
 import React from "react"
 import { BaseSpacer, BaseText, BaseView, CompressAndExpandBaseText } from "~Components"
-import { StyleSheet, Image } from "react-native"
+import { Image, StyleSheet } from "react-native"
 
 type Props = {
     name: string
-    description: string
+    description?: string
     url: string
-    icon: string
+    icon?: string | object
     hanldeOnReadMore?: (isDescriptionExpanded: boolean) => void
 }
 
 export const AppInfo = ({ name, description, url, icon, hanldeOnReadMore }: Props) => {
     return (
         <BaseView>
-            <Image
-                style={styles.dappLogo}
-                source={{
-                    uri: icon,
-                }}
-            />
-            <BaseSpacer height={16} />
+            {icon ? (
+                <>
+                    <Image style={styles.dappLogo} source={typeof icon === "string" ? { uri: icon } : icon} />
+                    <BaseSpacer height={16} />
+                </>
+            ) : (
+                <BaseSpacer height={60} />
+            )}
+
             <BaseText typographyFont="subTitleBold">{name}</BaseText>
 
             <BaseSpacer height={8} />
-            <CompressAndExpandBaseText
-                text={description}
-                numberOfLines={2}
-                typographyFont="bodyMedium"
-                onReadMore={hanldeOnReadMore}
-            />
-            <BaseSpacer height={8} />
+
+            {description && (
+                <>
+                    <CompressAndExpandBaseText
+                        text={description}
+                        numberOfLines={2}
+                        typographyFont="bodyMedium"
+                        onReadMore={hanldeOnReadMore}
+                    />
+                    <BaseSpacer height={8} />
+                </>
+            )}
+
             <BaseText>{url}</BaseText>
         </BaseView>
     )

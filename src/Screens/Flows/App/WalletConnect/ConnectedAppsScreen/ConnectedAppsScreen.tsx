@@ -1,8 +1,14 @@
 import React, { Fragment, useCallback, useMemo, useRef, useState } from "react"
 import { BaseSpacer, BaseText, BaseView, Layout, SwipeableRow, useWalletConnect } from "~Components"
-import { selectAccounts, useAppSelector } from "~Storage/Redux"
+import {
+    ConnectedDiscoveryApp,
+    removeConnectedDiscoveryApp,
+    selectConnectedDiscoverDApps,
+    selectFeaturedImages,
+    useAppDispatch,
+    useAppSelector,
+} from "~Storage/Redux"
 import { SessionTypes } from "@walletconnect/types"
-import { isEmpty } from "lodash"
 import {
     AppDetailsBottomSheet,
     ConfirmDisconnectBottomSheet,
@@ -14,39 +20,68 @@ import { useI18nContext } from "~i18n"
 import { SwipeableItemImperativeRef } from "react-native-swipeable-item"
 import { useBottomSheetModal } from "~Hooks"
 
+type DiscoveryConnectedApp = {
+    app: ConnectedDiscoveryApp
+    type: "in-app"
+    image?: object
+}
+type WCConnectedApp = {
+    type: "wallet-connect"
+    session: SessionTypes.Struct
+}
+
+export type ConnectedApp = DiscoveryConnectedApp | WCConnectedApp
+
+const generateAppKey = (app: ConnectedApp) => {
+    if (app.type === "in-app") {
+        return app.app.href
+    }
+
+    return app.session.topic
+}
+
 export const ConnectedAppsScreen = () => {
-    const accounts = useAppSelector(selectAccounts)
     const { LL } = useI18nContext()
     const { disconnectSession, activeSessions } = useWalletConnect()
-    const [sessionToDelete, setSessionToDelete] = useState<SessionTypes.Struct>()
+    const connectedDiscoveryApps = useAppSelector(selectConnectedDiscoverDApps)
+    const dappImages = useAppSelector(selectFeaturedImages)
+    const [selectedApp, setSelectedApp] = useState<ConnectedApp>()
+    const dispatch = useAppDispatch()
 
     // Keep track of the swipeable items refs
     const swipeableItemRefs = useRef<Map<string, SwipeableItemImperativeRef>>(new Map())
 
-    const totalSessions = useMemo(() => {
-        return Object.keys(activeSessions).length
-    }, [activeSessions])
+    const connectedApps: ConnectedApp[] = useMemo(() => {
+        const sessions = Object.values(activeSessions)
 
-    const connectedApps = useMemo(() => {
-        const _apps: Record<string, SessionTypes.Struct[]> = {}
-
-        for (const key of Object.keys(activeSessions)) {
-            const session = activeSessions[key]
-
-            const namespaceKey = Object.keys(session.namespaces)[0]
+        const discoveryDApps = connectedDiscoveryApps.map(app => {
+            let imageId: string
 
             try {
-                const address = session.namespaces[namespaceKey].accounts[0].split(":")[2]
+                imageId = new URL(app.href).hostname
+            } catch {
+                imageId = app.href
+            }
 
-                if (!_apps[address]) {
-                    _apps[address] = [session]
-                } else {
-                    _apps[address].push(session)
-                }
-            } catch (e) {}
-        }
+            return {
+                type: "in-app" as const,
+                app,
+                image: dappImages[imageId],
+            }
+        })
 
-        return _apps
+        const wcApps: ConnectedApp[] = sessions.map(session => {
+            return {
+                type: "wallet-connect" as const,
+                session,
+            }
+        })
+
+        return [...discoveryDApps, ...wcApps]
+    }, [dappImages, activeSessions, connectedDiscoveryApps])
+
+    const totalSessions = useMemo(() => {
+        return Object.keys(activeSessions).length
     }, [activeSessions])
 
     const {
@@ -62,11 +97,27 @@ export const ConnectedAppsScreen = () => {
     } = useBottomSheetModal()
 
     const disconnect = useCallback(
-        async (topic: string) => {
-            await disconnectSession(topic)
+        async (connectedApp: ConnectedApp) => {
+            if (connectedApp.type === "in-app") {
+                await dispatch(removeConnectedDiscoveryApp(connectedApp.app))
+            } else {
+                await disconnectSession(connectedApp.session.topic)
+            }
+
             closeConfirmDisconnectDetailsSheet()
         },
-        [closeConfirmDisconnectDetailsSheet, disconnectSession],
+        [dispatch, closeConfirmDisconnectDetailsSheet, disconnectSession],
+    )
+
+    const onClick = useCallback(
+        (connectedApp: ConnectedApp) => {
+            setSelectedApp(connectedApp)
+            //TODO: Why does the bottom sheet not open if called immediately?
+            setTimeout(() => {
+                openConnectedAppDetailsSheet()
+            }, 20)
+        },
+        [openConnectedAppDetailsSheet],
     )
 
     return (
@@ -85,62 +136,50 @@ export const ConnectedAppsScreen = () => {
 
                         <BaseSpacer height={22} />
 
-                        {totalSessions === 0 && (
+                        {connectedApps.length === 0 && (
                             <>
                                 <BaseSpacer height={60} />
                                 <EmptyListView />
                             </>
                         )}
                     </BaseView>
-                    {accounts.map((account, index) => {
-                        if (account.address in connectedApps && !isEmpty(connectedApps[account.address])) {
-                            const accountSessions = connectedApps[account.address]
+                    {connectedApps.map((connectedApp, index) => {
+                        const key = generateAppKey(connectedApp)
 
-                            return (
-                                <BaseView key={account.address}>
-                                    <BaseView mx={20}>
-                                        {index > 0 && <BaseSpacer height={16} />}
-
-                                        <BaseText typographyFont="subSubTitle">{account.alias}</BaseText>
-                                        <BaseSpacer height={16} />
-                                    </BaseView>
-                                    {accountSessions.map(session => {
-                                        return (
-                                            <Fragment key={session.topic}>
-                                                <SwipeableRow
-                                                    item={session}
-                                                    itemKey={session.topic}
-                                                    swipeableItemRefs={swipeableItemRefs}
-                                                    handleTrashIconPress={openConfirmDisconnectDetailsSheet}
-                                                    setSelectedItem={setSessionToDelete}
-                                                    onPress={(_session?: SessionTypes.Struct) => {
-                                                        setSessionToDelete(_session)
-                                                        openConnectedAppDetailsSheet()
-                                                    }}
-                                                    isOpen={sessionToDelete === session}>
-                                                    <ConnectedAppBox key={session.topic} session={session} />
-                                                </SwipeableRow>
-                                                <AppDetailsBottomSheet
-                                                    ref={connectedAppDetailsBottomSheetRef}
-                                                    onClose={closeConnectedAppDetailsSheet}
-                                                    session={session}
-                                                    account={account}
-                                                    onDisconnect={openConfirmDisconnectDetailsSheet}
-                                                />
-                                            </Fragment>
-                                        )
-                                    })}
-                                    <ConfirmDisconnectBottomSheet
-                                        ref={confirmDisconnectBottomSheetRef}
-                                        onCancel={closeConfirmDisconnectDetailsSheet}
-                                        onConfirm={disconnect}
-                                        session={sessionToDelete!}
-                                        account={account}
-                                    />
-                                </BaseView>
-                            )
-                        }
+                        return (
+                            <BaseView key={`base-view-${key}-${index}`}>
+                                <Fragment key={key}>
+                                    <SwipeableRow
+                                        item={connectedApp}
+                                        itemKey={`swipeable-row-${key}`}
+                                        swipeableItemRefs={swipeableItemRefs}
+                                        handleTrashIconPress={openConfirmDisconnectDetailsSheet}
+                                        setSelectedItem={setSelectedApp}
+                                        onPress={onClick}
+                                        isOpen={selectedApp && key === generateAppKey(selectedApp)}>
+                                        <ConnectedAppBox key={key} connectedApp={connectedApp} />
+                                    </SwipeableRow>
+                                </Fragment>
+                            </BaseView>
+                        )
                     })}
+
+                    {selectedApp && (
+                        <>
+                            <ConfirmDisconnectBottomSheet
+                                ref={confirmDisconnectBottomSheetRef}
+                                connectedApp={selectedApp}
+                                onConfirm={disconnect}
+                                onCancel={closeConfirmDisconnectDetailsSheet}
+                            />
+                            <AppDetailsBottomSheet
+                                ref={connectedAppDetailsBottomSheetRef}
+                                onClose={closeConnectedAppDetailsSheet}
+                                connectedApp={selectedApp}
+                                onDisconnect={openConfirmDisconnectDetailsSheet}
+                            />
+                        </>
+                    )}
                 </BaseView>
             }
         />

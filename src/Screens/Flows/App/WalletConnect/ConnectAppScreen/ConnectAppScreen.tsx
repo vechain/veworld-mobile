@@ -1,6 +1,6 @@
 import { useNavigation } from "@react-navigation/native"
 import { NativeStackScreenProps } from "@react-navigation/native-stack"
-import { ProposalTypes, SessionTypes } from "@walletconnect/types"
+import { ProposalTypes, SessionTypes, SignClientTypes } from "@walletconnect/types"
 import React, { FC, useCallback, useEffect, useMemo } from "react"
 import { ScrollView, StyleSheet } from "react-native"
 import {
@@ -30,22 +30,25 @@ import {
     useAppDispatch,
     useAppSelector,
 } from "~Storage/Redux"
-import { error, HexUtils, WalletConnectUtils, warn } from "~Utils"
+import { error, HexUtils, warn } from "~Utils"
 import { useI18nContext } from "~i18n"
 import { AppConnectionRequests, AppInfo, UnknownAppMessage } from "~Screens"
 import { useSetSelectedAccount } from "~Hooks/useSetSelectedAccount"
 import { distinctValues } from "~Utils/ArrayUtils"
+import { useInAppBrowser } from "~Components/Providers/InAppBrowserProvider"
+import { RequestMethods } from "~Constants"
 
 type Props = NativeStackScreenProps<RootStackParamListSwitch, Routes.CONNECT_APP_SCREEN>
 
 export const ConnectAppScreen: FC<Props> = ({ route }: Props) => {
-    const currentProposal = route.params.sessionProposal
+    const { request } = route.params
 
     const hasNavigatedBack = React.useRef(false)
 
     const { onSetSelectedAccount } = useSetSelectedAccount()
 
     const { approvePendingProposal, rejectPendingProposal, activeSessions } = useWalletConnect()
+    const { postMessage, addAppAndNavToRequest } = useInAppBrowser()
 
     const nav = useNavigation()
     const dispatch = useAppDispatch()
@@ -70,12 +73,13 @@ export const ConnectAppScreen: FC<Props> = ({ route }: Props) => {
      * Navigates back if we have already processed the request
      */
     useEffect(() => {
+        if (request.type !== "wallet-connect") return
         const sessions = Object.values(activeSessions)
 
-        if (sessions.some(_session => _session.pairingTopic === currentProposal.params.pairingTopic)) {
+        if (sessions.some(_session => _session.pairingTopic === request.proposal.params.pairingTopic)) {
             navBack()
         }
-    }, [currentProposal, navBack, activeSessions])
+    }, [request, navBack, activeSessions])
 
     const [isInvalidChecked, setInvalidChecked] = React.useState(false)
 
@@ -89,15 +93,30 @@ export const ConnectAppScreen: FC<Props> = ({ route }: Props) => {
         onSetSelectedAccount({ address: account.address })
     }
 
-    const { name, url, methods, icon, description, chains } = useMemo(
-        () => WalletConnectUtils.getPairAttributes(currentProposal),
-        [currentProposal],
-    )
+    const { appName, appUrl, iconUrl, description } = request
+
+    const methods = useMemo(() => {
+        if (request.type === "in-app") {
+            return [RequestMethods.REQUEST_TRANSACTION, RequestMethods.SIGN_CERTIFICATE]
+        } else {
+            const namespace = request.proposal.params.requiredNamespaces.vechain
+
+            if (!namespace) return []
+
+            return namespace.methods
+        }
+    }, [request])
 
     /**
      * If the dApp requests ONLY one chain, switch to that chain
      */
     useEffect(() => {
+        if (request.type !== "wallet-connect") return
+
+        if (!request.proposal.params.requiredNamespaces.vechain) return
+
+        const chains = request.proposal.params.requiredNamespaces.vechain.chains
+
         if (chains && chains.length === 1) {
             const requestedChain = chains[0]
 
@@ -114,97 +133,104 @@ export const ConnectAppScreen: FC<Props> = ({ route }: Props) => {
                 })
             }
         }
-    }, [networks, LL, dispatch, chains])
+    }, [networks, LL, dispatch, request])
 
     /**
      * Handle session proposal
      */
-    const processProposal = useCallback(async () => {
-        const { params } = currentProposal
+    const processProposal = useCallback(
+        async (proposal: SignClientTypes.EventArguments["session_proposal"]) => {
+            const { params } = proposal
 
-        const namespaces: SessionTypes.Namespaces = {}
+            const namespaces: SessionTypes.Namespaces = {}
 
-        const addNamespaces = (proposedNamespaces: Record<string, ProposalTypes.BaseRequiredNamespace>) => {
-            for (const key of Object.keys(proposedNamespaces)) {
-                warn(proposedNamespaces[key])
+            const addNamespaces = (proposedNamespaces: Record<string, ProposalTypes.BaseRequiredNamespace>) => {
+                for (const key of Object.keys(proposedNamespaces)) {
+                    warn(proposedNamespaces[key])
 
-                const _chains =
-                    proposedNamespaces[key].chains ??
-                    networks.map(network => `vechain:${network.genesis.id.slice(-32)}`)
+                    const _chains =
+                        proposedNamespaces[key].chains ??
+                        networks.map(network => `vechain:${network.genesis.id.slice(-32)}`)
 
-                const accounts = _chains.map((scope: string) => {
-                    return `${scope}:${selectedAccount.address}`
-                })
+                    const accounts = _chains.map((scope: string) => {
+                        return `${scope}:${selectedAccount.address}`
+                    })
 
-                if (namespaces[key]) {
-                    namespaces[key] = {
-                        methods: distinctValues([...namespaces[key].methods, ...proposedNamespaces[key].methods]),
-                        events: distinctValues([...namespaces[key].events, ...proposedNamespaces[key].events]),
-                        accounts: distinctValues([...namespaces[key].accounts, ...accounts]),
-                    }
-                } else {
-                    namespaces[key] = {
-                        methods: proposedNamespaces[key].methods,
-                        events: proposedNamespaces[key].events,
-                        accounts,
+                    if (namespaces[key]) {
+                        namespaces[key] = {
+                            methods: distinctValues([...namespaces[key].methods, ...proposedNamespaces[key].methods]),
+                            events: distinctValues([...namespaces[key].events, ...proposedNamespaces[key].events]),
+                            accounts: distinctValues([...namespaces[key].accounts, ...accounts]),
+                        }
+                    } else {
+                        namespaces[key] = {
+                            methods: proposedNamespaces[key].methods,
+                            events: proposedNamespaces[key].events,
+                            accounts,
+                        }
                     }
                 }
             }
-        }
 
-        addNamespaces(params.requiredNamespaces)
-        addNamespaces(params.optionalNamespaces)
+            addNamespaces(params.requiredNamespaces)
+            addNamespaces(params.optionalNamespaces)
 
-        dispatch(setIsAppLoading(true))
+            dispatch(setIsAppLoading(true))
 
-        try {
-            await approvePendingProposal(currentProposal, namespaces)
+            try {
+                await approvePendingProposal(proposal, namespaces)
 
-            dispatch(addConnectedAppActivity(name, url, description, methods))
+                dispatch(addConnectedAppActivity(appName, appUrl, description))
 
-            showSuccessToast({
-                text1: LL.NOTIFICATION_wallet_connect_successfull_connection({
-                    name,
-                }),
-            })
-        } catch (err: unknown) {
-            error("ConnectedAppScreen:handleAccept", err)
-            showErrorToast({
-                text1: LL.NOTIFICATION_wallet_connect_error_pairing(),
-            })
-        } finally {
-            navBack()
+                showSuccessToast({
+                    text1: LL.NOTIFICATION_wallet_connect_successfull_connection({
+                        name: appName,
+                    }),
+                })
+            } catch (err: unknown) {
+                error("ConnectedAppScreen:handleAccept", err)
+                showErrorToast({
+                    text1: LL.NOTIFICATION_wallet_connect_error_pairing(),
+                })
+            } finally {
+                navBack()
 
-            dispatch(setIsAppLoading(false))
-        }
-    }, [
-        currentProposal,
-        approvePendingProposal,
-        LL,
-        networks,
-        selectedAccount.address,
-        dispatch,
-        name,
-        url,
-        description,
-        methods,
-        navBack,
-    ])
+                dispatch(setIsAppLoading(false))
+            }
+        },
+        [
+            appName,
+            appUrl,
+            approvePendingProposal,
+            LL,
+            networks,
+            selectedAccount.address,
+            dispatch,
+            description,
+            navBack,
+        ],
+    )
 
     /**
      * Handle session rejection
      */
     const handleReject = useCallback(async () => {
-        if (currentProposal) {
+        if (request.type === "wallet-connect") {
             try {
-                await rejectPendingProposal(currentProposal)
+                await rejectPendingProposal(request.proposal)
             } catch (err: unknown) {
                 error("ConnectedAppScreen:handleReject", err)
             } finally {
                 navBack()
             }
+        } else {
+            postMessage({
+                id: request.initialRequest.id,
+                error: "User rejected the request",
+                method: request.initialRequest.method,
+            })
         }
-    }, [currentProposal, navBack, rejectPendingProposal])
+    }, [postMessage, request, navBack, rejectPendingProposal])
 
     const onPressBack = useCallback(async () => {
         await handleReject()
@@ -212,14 +238,24 @@ export const ConnectAppScreen: FC<Props> = ({ route }: Props) => {
     }, [navBack, handleReject])
 
     const isConfirmDisabled = useMemo(() => {
-        const { validation } = currentProposal.verifyContext.verified
+        if (request.type !== "wallet-connect") return false
+
+        const { validation } = request.proposal.verifyContext.verified
 
         if (validation === "UNKNOWN" && !isInvalidChecked) {
             return true
         }
 
         return validation === "INVALID"
-    }, [currentProposal, isInvalidChecked])
+    }, [request, isInvalidChecked])
+
+    const handleAccept = useCallback(async () => {
+        if (request.type === "wallet-connect") {
+            await processProposal(request.proposal)
+        } else {
+            addAppAndNavToRequest(request.initialRequest)
+        }
+    }, [processProposal, request, addAppAndNavToRequest])
 
     return (
         <BaseSafeArea grow={1}>
@@ -238,10 +274,10 @@ export const ConnectAppScreen: FC<Props> = ({ route }: Props) => {
 
                     <BaseSpacer height={16} />
 
-                    <AppInfo name={name} url={url} icon={icon} description={description} />
+                    <AppInfo name={appName} url={appUrl} icon={iconUrl} description={description} />
 
                     <BaseSpacer height={30} />
-                    <AppConnectionRequests name={name} methods={methods} />
+                    <AppConnectionRequests name={appName} methods={methods} />
                 </BaseView>
 
                 <BaseView mx={20}>
@@ -254,11 +290,13 @@ export const ConnectAppScreen: FC<Props> = ({ route }: Props) => {
                         showSelectAccountIcon={true}
                     />
 
-                    <UnknownAppMessage
-                        verifyContext={currentProposal.verifyContext.verified}
-                        confirmed={isInvalidChecked}
-                        setConfirmed={setInvalidChecked}
-                    />
+                    {request.type === "wallet-connect" && (
+                        <UnknownAppMessage
+                            verifyContext={request.proposal.verifyContext.verified}
+                            confirmed={isInvalidChecked}
+                            setConfirmed={setInvalidChecked}
+                        />
+                    )}
                 </BaseView>
 
                 <BaseView mx={20}>
@@ -267,7 +305,7 @@ export const ConnectAppScreen: FC<Props> = ({ route }: Props) => {
                         w={100}
                         haptics="Light"
                         title={LL.COMMON_BTN_CONNECT()}
-                        action={processProposal}
+                        action={handleAccept}
                         disabled={isConfirmDisabled}
                     />
                     <BaseSpacer height={16} />

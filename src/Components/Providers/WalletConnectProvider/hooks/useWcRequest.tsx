@@ -127,6 +127,7 @@ export const useWcRequest = (isBlackListScreen: () => boolean, activeSessions: A
                 track(AnalyticsEvent.DAPP_REQUEST_CERTIFICATE)
                 nav.navigate(Routes.CONNECTED_APP_SIGN_CERTIFICATE_SCREEN, {
                     request: {
+                        method: "thor_signCertificate",
                         type: "wallet-connect",
                         requestEvent,
                         session,
@@ -167,6 +168,7 @@ export const useWcRequest = (isBlackListScreen: () => boolean, activeSessions: A
                 track(AnalyticsEvent.DAPP_TX_REQUESTED)
                 nav.navigate(Routes.CONNECTED_APP_SEND_TRANSACTION_SCREEN, {
                     request: {
+                        method: "thor_sendTransaction",
                         type: "wallet-connect",
                         requestEvent,
                         session,

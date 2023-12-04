@@ -73,7 +73,14 @@ export const useSessionProposals = (
             }
 
             nav.navigate(Routes.CONNECT_APP_SCREEN, {
-                sessionProposal: proposal,
+                request: {
+                    type: "wallet-connect",
+                    appName: proposal.params.proposer.metadata.name,
+                    appUrl: proposal.params.proposer.metadata.url,
+                    iconUrl: proposal.params.proposer.metadata.icons[0],
+                    description: proposal.params.proposer.metadata.description,
+                    proposal,
+                },
             })
         },
         [LL, nav, respondInvalidSession],

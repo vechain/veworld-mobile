@@ -57,3 +57,20 @@ export const selectHasUserOpenedDiscovery = createSelector(
     getDiscoveryState,
     (discovery): boolean => discovery.hasOpenedDiscovery,
 )
+
+export const selectConnectedDiscoverDApps = createSelector(getDiscoveryState, discovery => discovery.connectedApps)
+
+export const selectFeaturedImages = createSelector(getDiscoveryState, discovery => {
+    // domain -> image
+    const images: Record<string, object | undefined> = {}
+
+    for (const dapp of discovery.featured) {
+        if (!dapp.image) continue
+
+        try {
+            images[new URL(dapp.href).host] = dapp.image
+        } catch {}
+    }
+
+    return images
+})
