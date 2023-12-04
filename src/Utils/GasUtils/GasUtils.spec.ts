@@ -131,43 +131,43 @@ describe("GasUtils", () => {
     describe("gasToVtho", () => {
         describe("when the gas coefficient is regular", () => {
             it("should return the regular fee", async () => {
-                const fee = await GasUtils.gasToVtho({
+                const { gasFee } = await GasUtils.gasToVtho({
                     gas: new BigNumber(21000),
                     baseGasPrice: new BigNumber("10000000000000"),
                     gasPriceCoefficient: GasPriceCoefficient.REGULAR,
                 })
-                expect(fee.toString()).toStrictEqual("0.21")
+                expect(gasFee).toStrictEqual("0.21")
             })
         })
         describe("when the gas coefficient is medium", () => {
             it("should return the medium fee", async () => {
-                const fee = await GasUtils.gasToVtho({
+                const { gasFee } = await GasUtils.gasToVtho({
                     gas: new BigNumber(21000),
                     baseGasPrice: new BigNumber("10000000000000"),
                     gasPriceCoefficient: GasPriceCoefficient.MEDIUM,
                 })
-                expect(fee.toString()).toStrictEqual("0.314588235294102")
+                expect(gasFee).toStrictEqual("0.314588235294102")
             })
         })
         describe("when the gas coefficient is high", () => {
             it("should return the medium fee", async () => {
-                const fee = await GasUtils.gasToVtho({
+                const { gasFee } = await GasUtils.gasToVtho({
                     gas: new BigNumber(21000),
                     baseGasPrice: new BigNumber("10000000000000"),
                     gasPriceCoefficient: GasPriceCoefficient.HIGH,
                 })
-                expect(fee.toString()).toStrictEqual("0.42")
+                expect(gasFee).toStrictEqual("0.42")
             })
         })
         describe("when the gas coefficient is medium and decimals are 2", () => {
             it("should return the medium fee with 2 decimals", async () => {
-                const fee = await GasUtils.gasToVtho({
+                const { gasFee } = await GasUtils.gasToVtho({
                     gas: new BigNumber(21000),
                     baseGasPrice: new BigNumber("10000000000000"),
                     gasPriceCoefficient: GasPriceCoefficient.MEDIUM,
                     decimals: 2,
                 })
-                expect(fee.toString()).toStrictEqual("0.31")
+                expect(gasFee).toStrictEqual("0.31")
             })
         })
     })

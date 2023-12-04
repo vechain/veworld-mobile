@@ -5,6 +5,8 @@ import { Routes } from "~Navigation"
 import {
     BaseSpacer,
     BaseView,
+    DelegationView,
+    FadeoutButton,
     GasFeeOptions,
     Layout,
     NFTTransferCard,
@@ -72,18 +74,24 @@ export const SendNFTRecapScreen = ({ route }: Props) => {
     const onTransactionFailure = useCallback(() => onFinish(false), [onFinish])
 
     const {
-        Delegation,
-        SubmitButton,
+        selectedDelegationOption,
+        loadingGas,
+        onSubmit,
         isPasswordPromptOpen,
         handleClosePasswordModal,
         onPasswordSuccess,
         setSelectedFeeOption,
-        selectedDelegationOption,
-        loadingGas,
         selectedFeeOption,
         gasFeeOptions,
-        isThereEnoughGas,
-        vthoBalance,
+        setNoDelegation,
+        setSelectedDelegationAccount,
+        setSelectedDelegationUrl,
+        isEnoughGas,
+        txCostTotal,
+        selectedDelegationAccount,
+        selectedDelegationUrl,
+        vtho,
+        isDissabledButtonState,
     } = useTransactionScreen({
         clauses,
         onTransactionSuccess,
@@ -119,7 +127,14 @@ export const SendNFTRecapScreen = ({ route }: Props) => {
 
                         {nft && <NFTTransferCard collectionAddress={nft.address} tokenId={nft.tokenId} />}
 
-                        {Delegation()}
+                        <DelegationView
+                            setNoDelegation={setNoDelegation}
+                            selectedDelegationOption={selectedDelegationOption}
+                            setSelectedDelegationAccount={setSelectedDelegationAccount}
+                            selectedDelegationAccount={selectedDelegationAccount}
+                            selectedDelegationUrl={selectedDelegationUrl}
+                            setSelectedDelegationUrl={setSelectedDelegationUrl}
+                        />
 
                         <BaseSpacer height={24} />
 
@@ -133,8 +148,9 @@ export const SendNFTRecapScreen = ({ route }: Props) => {
                                     loadingGas={loadingGas}
                                     selectedFeeOption={selectedFeeOption}
                                     gasFeeOptions={gasFeeOptions}
-                                    isThereEnoughGas={isThereEnoughGas}
-                                    vthoBalance={vthoBalance}
+                                    isThereEnoughGas={isEnoughGas}
+                                    totalBalance={vtho.balance.balance}
+                                    txCostTotal={txCostTotal}
                                 />
                             }
                         />
@@ -164,7 +180,16 @@ export const SendNFTRecapScreen = ({ route }: Props) => {
                     />
                 </>
             }
-            footer={SubmitButton()}
+            footer={
+                <FadeoutButton
+                    title={LL.COMMON_BTN_CONFIRM().toUpperCase()}
+                    action={onSubmit}
+                    disabled={isDissabledButtonState}
+                    bottom={0}
+                    mx={0}
+                    width={"auto"}
+                />
+            }
         />
     )
 }

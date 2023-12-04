@@ -1,32 +1,28 @@
 import { Transaction } from "thor-devkit"
-import React, { useCallback, useMemo, useState } from "react"
+import { useCallback, useEffect, useMemo, useState } from "react"
 import {
     SignStatus,
     SignTransactionResponse,
     useCheckIdentity,
     useDelegation,
-    useRenderGas,
     useSendTransaction,
     useSignTransaction,
     useTransactionBuilder,
     useTransactionGas,
 } from "~Hooks"
 import { useI18nContext } from "~i18n"
-import { selectSelectedAccount, setIsAppLoading, useAppDispatch, useAppSelector } from "~Storage/Redux"
 import {
-    AccountCard,
-    BaseCard,
-    BaseSpacer,
-    BaseText,
-    DelegationOptions,
-    FadeoutButton,
-    showErrorToast,
-    showWarningToast,
-} from "~Components"
-import { error } from "~Utils"
+    selectSelectedAccount,
+    selectVthoTokenWithBalanceByAccount,
+    setIsAppLoading,
+    useAppDispatch,
+    useAppSelector,
+} from "~Storage/Redux"
+import { showErrorToast, showWarningToast } from "~Components"
+import { GasUtils, error } from "~Utils"
 import { DEVICE_TYPE, LedgerAccountWithDevice, TransactionRequest } from "~Model"
 import { DelegationType } from "~Model/Delegation"
-import { Routes } from "~Navigation"
+import { GasPriceCoefficient } from "~Constants"
 
 type Props = {
     clauses: Transaction.Body["clauses"]
@@ -36,18 +32,15 @@ type Props = {
     dappRequest?: TransactionRequest
 }
 
-export const useTransactionScreen = ({
-    clauses,
-    onTransactionSuccess,
-    onTransactionFailure,
-    initialRoute,
-    dappRequest,
-}: Props) => {
+export const useTransactionScreen = ({ clauses, onTransactionSuccess, onTransactionFailure, dappRequest }: Props) => {
     const { LL } = useI18nContext()
     const dispatch = useAppDispatch()
     const selectedAccount = useAppSelector(selectSelectedAccount)
 
     const [loading, setLoading] = useState(false)
+    const [selectedFeeOption, setSelectedFeeOption] = useState(String(GasPriceCoefficient.REGULAR))
+    const [isEnoughGas, setIsEnoughGas] = useState(true)
+    const [txCostTotal, setTxCostTotal] = useState("0")
 
     // 1. Gas
     const { gas, loadingGas, setGasPayer } = useTransactionGas({
@@ -68,22 +61,17 @@ export const useTransactionScreen = ({
         providedUrl: dappRequest?.options?.delegator?.url,
     })
 
-    const {
-        isThereEnoughGas,
-        vthoGasFee,
-        vthoBalance,
-        gasPriceCoef,
-        setSelectedFeeOption,
-        selectedFeeOption,
-        gasFeeOptions,
-    } = useRenderGas({
-        gas,
-        accountAddress: selectedDelegationAccount?.address ?? selectedAccount.address,
-        clauses,
-        isDelegated,
-    })
+    // 3. Priority fees
+    const { gasPriceCoef, priorityFees, gasFeeOptions } = useMemo(
+        () =>
+            GasUtils.getGasByCoefficient({
+                gas,
+                selectedFeeOption,
+            }),
+        [gas, selectedFeeOption],
+    )
 
-    // 3. Build transaction
+    // 4. Build transaction
     const { buildTransaction } = useTransactionBuilder({
         clauses,
         gas,
@@ -93,17 +81,16 @@ export const useTransactionScreen = ({
         gasPriceCoef,
     })
 
-    // 4. Sign transaction
+    // 5. Sign transaction
     const { signTransaction, navigateToLedger } = useSignTransaction({
         buildTransaction,
         selectedDelegationAccount,
         selectedDelegationOption,
         selectedDelegationUrl,
-        initialRoute,
         dappRequest,
     })
 
-    // 5. Send transaction
+    // 6. Send transaction
     const { sendTransaction } = useSendTransaction(onTransactionSuccess)
 
     const sendTransactionSafe = useCallback(
@@ -121,11 +108,17 @@ export const useTransactionScreen = ({
         [sendTransaction, onTransactionFailure, LL],
     )
 
+    const vtho = useAppSelector(state =>
+        selectVthoTokenWithBalanceByAccount(state, selectedDelegationAccount?.address ?? selectedAccount.address),
+    )
+
     /**
      * Signs the transaction and sends it to the blockchain
      */
     const signAndSendTransaction = useCallback(
         async (password?: string) => {
+            setLoading(true)
+
             try {
                 const transaction: SignTransactionResponse = await signTransaction(password)
 
@@ -147,10 +140,9 @@ export const useTransactionScreen = ({
                     text1: LL.ERROR(),
                     text2: LL.SIGN_TRANSACTION_ERROR(),
                 })
-                onTransactionFailure(e)
-            } finally {
                 setLoading(false)
                 dispatch(setIsAppLoading(false))
+                onTransactionFailure(e)
             }
         },
         [sendTransactionSafe, onTransactionFailure, dispatch, signTransaction, LL],
@@ -190,84 +182,50 @@ export const useTransactionScreen = ({
         checkIdentityBeforeOpening,
     ])
 
-    const continueNotAllowed = useMemo(
-        () => !isThereEnoughGas && selectedDelegationOption !== DelegationType.URL,
-        [isThereEnoughGas, selectedDelegationOption],
-    )
-
     const isLoading = useMemo(
         () => loading || loadingGas || isBiometricsEmpty,
         [loading, loadingGas, isBiometricsEmpty],
     )
 
-    const SubmitButton = useCallback(
-        () => (
-            <FadeoutButton
-                title={LL.COMMON_BTN_CONFIRM().toUpperCase()}
-                action={onSubmit}
-                disabled={continueNotAllowed || isLoading}
-                isLoading={isLoading}
-                bottom={0}
-                mx={0}
-                width={"auto"}
-            />
-        ),
-        [LL, onSubmit, continueNotAllowed, isLoading],
-    )
+    /**
+     * Check if the user has enough funds to send the transaction
+     * Calculate the amount to send without the gas fee
+     */
+    useEffect(() => {
+        const { isGas, txCostTotal: _txCostTotal } = GasUtils.calculateIsEnoughGas({
+            clauses,
+            isDelegated,
+            vtho,
+            priorityFees,
+        })
 
-    const Delegation = useCallback(
-        () => (
-            <>
-                <DelegationOptions
-                    setNoDelegation={setNoDelegation}
-                    selectedDelegationOption={selectedDelegationOption}
-                    setSelectedAccount={setSelectedDelegationAccount}
-                    selectedAccount={selectedDelegationAccount}
-                    selectedDelegationUrl={selectedDelegationUrl}
-                    setSelectedDelegationUrl={setSelectedDelegationUrl}
-                />
-                {selectedDelegationAccount && (
-                    <>
-                        <BaseSpacer height={16} />
-                        <AccountCard account={selectedDelegationAccount} />
-                    </>
-                )}
-                {selectedDelegationUrl && (
-                    <>
-                        <BaseSpacer height={16} />
-                        <BaseCard>
-                            <BaseText py={8}>{selectedDelegationUrl}</BaseText>
-                        </BaseCard>
-                    </>
-                )}
-            </>
-        ),
-        [
-            selectedDelegationAccount,
-            selectedDelegationOption,
-            selectedDelegationUrl,
-            setNoDelegation,
-            setSelectedDelegationAccount,
-            setSelectedDelegationUrl,
-        ],
-    )
+        setIsEnoughGas(isGas)
+        setTxCostTotal(_txCostTotal.toString)
+    }, [clauses, gas, isDelegated, selectedFeeOption, vtho, selectedAccount, priorityFees])
+
+    const isDissabledButtonState = useMemo(() => !isEnoughGas && !isDelegated, [isEnoughGas, isDelegated])
 
     return {
-        Delegation,
-        SubmitButton,
         selectedDelegationOption,
         loadingGas,
-        vthoGasFee,
-        vthoBalance,
-        isThereEnoughGas,
         onSubmit,
         isLoading,
-        continueNotAllowed,
         isPasswordPromptOpen,
         handleClosePasswordModal,
         onPasswordSuccess,
         setSelectedFeeOption,
         selectedFeeOption,
         gasFeeOptions,
+        setNoDelegation,
+        setSelectedDelegationAccount,
+        setSelectedDelegationUrl,
+        isEnoughGas,
+        txCostTotal,
+        isDelegated,
+        selectedDelegationAccount,
+        selectedDelegationUrl,
+        vtho,
+        isDissabledButtonState,
+        priorityFees,
     }
 }

@@ -1,9 +1,19 @@
-import React, { useCallback, useMemo } from "react"
+import React, { useCallback, useEffect, useMemo } from "react"
 import { NativeStackScreenProps } from "@react-navigation/native-stack"
 import { useAnalyticTracking, useTheme, useTransactionScreen, useTransferAddContact } from "~Hooks"
-import { AddressUtils, error, FormattingUtils } from "~Utils"
-import { AnalyticsEvent, COLORS } from "~Constants"
-import { BaseSpacer, BaseText, BaseView, GasFeeOptions, Layout, RequireUserPassword, TransferCard } from "~Components"
+import { AddressUtils, BigNutils, TransactionUtils } from "~Utils"
+import { AnalyticsEvent, COLORS, GasPriceCoefficient } from "~Constants"
+import {
+    BaseSpacer,
+    BaseText,
+    BaseView,
+    DelegationView,
+    FadeoutButton,
+    GasFeeOptions,
+    Layout,
+    RequireUserPassword,
+    TransferCard,
+} from "~Components"
 import { RootStackParamListHome, Routes } from "~Navigation"
 import {
     addPendingTransferTransactionActivity,
@@ -18,11 +28,11 @@ import {
 } from "~Storage/Redux"
 import { useI18nContext } from "~i18n"
 import { useNavigation } from "@react-navigation/native"
-import { ContactType, DEVICE_TYPE } from "~Model"
-import { prepareFungibleClause } from "~Utils/TransactionUtils/TransactionUtils"
+import { ContactType, DEVICE_TYPE, FungibleTokenWithBalance } from "~Model"
 import { Transaction } from "thor-devkit"
-import { ContactManagementBottomSheet } from "~Screens"
-import { BigNumber } from "bignumber.js"
+import { ContactManagementBottomSheet } from "../../ContactsScreen"
+import Animated, { interpolateColor, useAnimatedStyle, useSharedValue, withTiming } from "react-native-reanimated"
+import { StyleSheet } from "react-native"
 
 type Props = NativeStackScreenProps<RootStackParamListHome, Routes.TRANSACTION_SUMMARY_SEND>
 
@@ -30,53 +40,27 @@ export const TransactionSummarySendScreen = ({ route }: Props) => {
     const { token, amount, address } = route.params
 
     const { LL } = useI18nContext()
-    const theme = useTheme()
     const dispatch = useAppDispatch()
     const track = useAnalyticTracking()
     const nav = useNavigation()
 
-    // TODO (Vas) (https://github.com/vechainfoundation/veworld-mobile/issues/763) refactor to a new hook
-    const account = useAppSelector(selectSelectedAccount)
-    const currency = useAppSelector(selectCurrency)
-    const exchangeRate = useAppSelector(state => selectCurrencyExchangeRate(state, token))
+    const selectedAccount = useAppSelector(selectSelectedAccount)
     const pendingTransaction = useAppSelector(state => selectPendingTx(state, token.address))
 
-    const friendlyAmount = useMemo(() => {
-        return new BigNumber(amount).toFixed(2, BigNumber.ROUND_HALF_UP)
-    }, [amount])
-
+    const accounts = useAppSelector(selectAccounts)
+    const receiverIsAccount = accounts.find(_account => AddressUtils.compareAddresses(_account.address, address))
     const { onAddContactPress, handleSaveContact, addContactSheet, selectedContactAddress, closeAddContactSheet } =
         useTransferAddContact()
-
-    const formattedFiatAmount = useMemo(
-        () =>
-            FormattingUtils.humanNumber(
-                FormattingUtils.convertToFiatBalance(amount || "0", exchangeRate?.rate || 1, 0),
-                amount,
-            ),
-        [amount, exchangeRate],
-    )
-
-    const clauses = useMemo(() => prepareFungibleClause(amount, token, address), [amount, token, address])
-
-    const navBack = useCallback(() => {
-        error(nav.getState())
-
-        if (nav.canGoBack()) return nav.goBack()
-
-        nav.navigate(Routes.DISCOVER)
-    }, [nav])
 
     const onFinish = useCallback(
         (success: boolean) => {
             if (success) track(AnalyticsEvent.SEND_FUNGIBLE_SENT)
             else track(AnalyticsEvent.SEND_FUNGIBLE_FAILED_TO_SEND)
 
+            nav.navigate(Routes.HOME)
             dispatch(setIsAppLoading(false))
-
-            navBack()
         },
-        [track, dispatch, navBack],
+        [track, dispatch, nav],
     )
 
     const onTransactionSuccess = useCallback(
@@ -91,28 +75,36 @@ export const TransactionSummarySendScreen = ({ route }: Props) => {
         onFinish(false)
     }, [onFinish])
 
+    const clauses = useMemo(
+        () => TransactionUtils.prepareFungibleClause(amount, token, address),
+        [amount, token, address],
+    )
+
     const {
+        selectedDelegationOption,
+        loadingGas,
+        onSubmit,
         isPasswordPromptOpen,
         handleClosePasswordModal,
         onPasswordSuccess,
-        Delegation,
-        SubmitButton,
         setSelectedFeeOption,
-        selectedDelegationOption,
-        loadingGas,
         selectedFeeOption,
         gasFeeOptions,
-        isThereEnoughGas,
-        vthoBalance,
+        setNoDelegation,
+        setSelectedDelegationAccount,
+        setSelectedDelegationUrl,
+        isEnoughGas,
+        txCostTotal,
+        isDelegated,
+        selectedDelegationAccount,
+        selectedDelegationUrl,
+        vtho,
+        isDissabledButtonState,
     } = useTransactionScreen({
         clauses,
         onTransactionSuccess,
         onTransactionFailure,
-        initialRoute: Routes.HOME,
     })
-
-    const accounts = useAppSelector(selectAccounts)
-    const receiverIsAccount = accounts.find(_account => AddressUtils.compareAddresses(_account.address, address))
 
     return (
         <Layout
@@ -122,16 +114,16 @@ export const TransactionSummarySendScreen = ({ route }: Props) => {
             body={
                 <BaseView mb={80} mt={8}>
                     <TransferCard
-                        fromAddress={account.address}
+                        fromAddress={selectedAccount.address}
                         toAddresses={[address]}
                         onAddContactPress={onAddContactPress}
-                        isFromAccountLedger={account.device?.type === DEVICE_TYPE.LEDGER}
+                        isFromAccountLedger={selectedAccount.device?.type === DEVICE_TYPE.LEDGER}
                         isToAccountLedger={receiverIsAccount?.device.type === DEVICE_TYPE.LEDGER}
                     />
+
                     {!!pendingTransaction && (
                         <>
                             <BaseSpacer height={24} />
-
                             <BaseText color={COLORS.DARK_RED_ALERT}>{LL.SEND_PENDING_TX_REVERT_ALERT()}</BaseText>
                         </>
                     )}
@@ -142,29 +134,23 @@ export const TransactionSummarySendScreen = ({ route }: Props) => {
                         onSuccess={onPasswordSuccess}
                     />
 
-                    {Delegation()}
+                    <DelegationView
+                        setNoDelegation={setNoDelegation}
+                        selectedDelegationOption={selectedDelegationOption}
+                        setSelectedDelegationAccount={setSelectedDelegationAccount}
+                        selectedDelegationAccount={selectedDelegationAccount}
+                        selectedDelegationUrl={selectedDelegationUrl}
+                        setSelectedDelegationUrl={setSelectedDelegationUrl}
+                    />
 
-                    <BaseSpacer height={24} />
-                    <BaseText typographyFont="subTitleBold">{LL.SEND_DETAILS()}</BaseText>
-                    <BaseSpacer height={16} />
-                    <BaseText typographyFont="buttonSecondary">{LL.SEND_AMOUNT()}</BaseText>
-                    <BaseSpacer height={6} />
-                    <BaseView flexDirection="row">
-                        <BaseText typographyFont="subSubTitle">
-                            {friendlyAmount} {token.symbol}
-                        </BaseText>
-                        {exchangeRate && (
-                            <BaseText typographyFont="buttonSecondary">
-                                {" ≈ "}
-                                {formattedFiatAmount} {currency}
-                            </BaseText>
-                        )}
-                    </BaseView>
-                    <BaseSpacer height={12} />
-                    <BaseSpacer height={0.5} width={"100%"} background={theme.colors.textDisabled} />
-                    <BaseSpacer height={12} />
-                    <BaseText typographyFont="buttonSecondary">{LL.SEND_GAS_FEE()}</BaseText>
-                    <BaseSpacer height={6} />
+                    <TotalSendAmountView
+                        amount={amount}
+                        symbol={token.symbol}
+                        token={token}
+                        txCostTotal={txCostTotal}
+                        isDelegated={isDelegated}
+                        isEnoughGas={isEnoughGas}
+                    />
 
                     <GasFeeOptions
                         setSelectedFeeOption={setSelectedFeeOption}
@@ -172,16 +158,14 @@ export const TransactionSummarySendScreen = ({ route }: Props) => {
                         loadingGas={loadingGas}
                         selectedFeeOption={selectedFeeOption}
                         gasFeeOptions={gasFeeOptions}
-                        isThereEnoughGas={isThereEnoughGas}
-                        vthoBalance={vthoBalance}
+                        isThereEnoughGas={isEnoughGas}
+                        totalBalance={vtho.balance.balance}
+                        txCostTotal={txCostTotal}
+                        isDelegated={isDelegated}
                     />
 
-                    <BaseSpacer height={12} />
-                    <BaseSpacer height={0.5} width={"100%"} background={theme.colors.textDisabled} />
-                    <BaseSpacer height={12} />
-                    <BaseText typographyFont="buttonSecondary">{LL.SEND_ESTIMATED_TIME()}</BaseText>
-                    <BaseSpacer height={6} />
-                    <BaseText typographyFont="subSubTitle">{LL.SEND_LESS_THAN_1_MIN()}</BaseText>
+                    <EstimatedTimeDetailsView selectedFeeOption={selectedFeeOption} />
+
                     <ContactManagementBottomSheet
                         ref={addContactSheet}
                         contact={{
@@ -194,9 +178,147 @@ export const TransactionSummarySendScreen = ({ route }: Props) => {
                         isAddingContact={true}
                         checkTouched={false}
                     />
+
+                    <BaseSpacer height={12} />
                 </BaseView>
             }
-            footer={SubmitButton()}
+            footer={
+                <FadeoutButton
+                    title={LL.COMMON_BTN_CONFIRM().toUpperCase()}
+                    action={onSubmit}
+                    disabled={isDissabledButtonState}
+                    bottom={0}
+                    mx={0}
+                    width={"auto"}
+                />
+            }
         />
     )
 }
+
+function EstimatedTimeDetailsView({ selectedFeeOption }: { selectedFeeOption: string }) {
+    const { LL } = useI18nContext()
+    const theme = useTheme()
+
+    const computeEstimatedTime = useMemo(() => {
+        switch (selectedFeeOption) {
+            case GasPriceCoefficient.REGULAR.toString():
+                return LL.SEND_LESS_THAN_1_MIN()
+            case GasPriceCoefficient.MEDIUM.toString():
+                return LL.SEND_LESS_THAN_30_SECONDS()
+            case GasPriceCoefficient.HIGH.toString():
+                return LL.SEND_LESS_THAN_A_MOMENT()
+            default:
+                return LL.SEND_LESS_THAN_1_MIN()
+        }
+    }, [LL, selectedFeeOption])
+
+    return (
+        <>
+            <BaseSpacer height={12} />
+            <BaseSpacer height={0.5} width={"100%"} background={theme.colors.textDisabled} />
+            <BaseSpacer height={12} />
+            <BaseText typographyFont="buttonSecondary">{LL.SEND_ESTIMATED_TIME()}</BaseText>
+            <BaseSpacer height={6} />
+            <BaseText typographyFont="subSubTitle">{computeEstimatedTime}</BaseText>
+        </>
+    )
+}
+
+interface ITotalSendAmountView {
+    amount: string
+    symbol: string
+    token: FungibleTokenWithBalance
+    txCostTotal: string
+    isDelegated: boolean
+    isEnoughGas: boolean
+}
+
+function TotalSendAmountView({ amount, symbol, token, txCostTotal, isDelegated, isEnoughGas }: ITotalSendAmountView) {
+    const currency = useAppSelector(selectCurrency)
+    const exchangeRate = useAppSelector(state => selectCurrencyExchangeRate(state, token))
+    const theme = useTheme()
+    const { LL } = useI18nContext()
+
+    const animationProgress = useSharedValue(0)
+
+    useEffect(() => {
+        animationProgress.value = withTiming(1, { duration: 400 }, () => {
+            animationProgress.value = withTiming(0, { duration: 400 })
+        })
+    }, [txCostTotal, animationProgress])
+
+    const animatedStyle = useAnimatedStyle(() => {
+        return {
+            color: interpolateColor(
+                animationProgress.value,
+                [0, 1],
+                [theme.colors.text, isEnoughGas ? theme.colors.success : theme.colors.danger],
+            ),
+        }
+    }, [theme.isDark, isEnoughGas])
+
+    const formattedTotalCost = useMemo(
+        () => BigNutils(txCostTotal).toHuman(token.decimals).decimals(4).toString,
+        [token.decimals, txCostTotal],
+    )
+
+    const formattedFiatAmount = useMemo(() => {
+        const _amount = BigNutils()
+            .toCurrencyConversion(token.symbol.toLowerCase() === "vtho" ? formattedTotalCost : amount, exchangeRate)
+            .toCurrencyFormat_string(2)
+
+        if (_amount.includes("<")) {
+            return `${_amount} ${currency}`
+        } else {
+            return `≈ ${_amount} ${currency}`
+        }
+    }, [amount, currency, exchangeRate, formattedTotalCost, token.symbol])
+
+    return (
+        <>
+            <BaseSpacer height={24} />
+            <BaseText typographyFont="subTitleBold">{LL.SEND_DETAILS()}</BaseText>
+
+            <BaseSpacer height={12} />
+            <BaseText typographyFont="caption">{LL.SEND_AMOUNT()}</BaseText>
+
+            <BaseView flexDirection="row">
+                <BaseText typographyFont="subSubTitle">{amount}</BaseText>
+                <BaseText typographyFont="body" mx={4}>
+                    {symbol}
+                </BaseText>
+
+                {exchangeRate && token.symbol.toLowerCase() !== "vtho" && (
+                    <BaseText typographyFont="buttonSecondary">{formattedFiatAmount}</BaseText>
+                )}
+            </BaseView>
+
+            {/* Show total tx cost if the token is VTHO and the gas fee is not delegated */}
+            {token.symbol.toLowerCase() === "vtho" && !isDelegated ? (
+                <>
+                    <BaseSpacer height={12} />
+                    <BaseText typographyFont="caption">{"Total Cost"}</BaseText>
+                    <BaseView flexDirection="row">
+                        <Animated.Text style={[baseStyles.coloredText, animatedStyle]}>
+                            {formattedTotalCost}
+                        </Animated.Text>
+                        <BaseText typographyFont="body" mx={4}>
+                            {symbol}
+                        </BaseText>
+
+                        {exchangeRate && <BaseText typographyFont="buttonSecondary">{formattedFiatAmount}</BaseText>}
+                    </BaseView>
+                </>
+            ) : null}
+        </>
+    )
+}
+
+const baseStyles = StyleSheet.create({
+    coloredText: {
+        fontFamily: "Inter-Bold",
+        fontSize: 16,
+        fontWeight: "700",
+    },
+})

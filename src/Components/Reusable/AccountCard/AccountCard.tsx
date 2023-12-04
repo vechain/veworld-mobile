@@ -34,7 +34,7 @@ export const AccountCard: React.FC<Props> = memo(
 
         const balance = useMemo(() => {
             if (!isBalanceVisible && isVthoBalance) {
-                return "••••" + VTHO.symbol
+                return "•••• " + VTHO.symbol
             }
 
             if (!isBalanceVisible && !isVthoBalance) {
@@ -43,6 +43,8 @@ export const AccountCard: React.FC<Props> = memo(
 
             return `${isVthoBalance ? vthoBalance : vetBalance} ${isVthoBalance ? VTHO.symbol : VET.symbol}`
         }, [isBalanceVisible, isVthoBalance, vetBalance, vthoBalance])
+
+        const humanAddress = useMemo(() => FormattingUtils.humanAddress(account.address, 4, 6), [account.address])
 
         return (
             <BaseView w={100} flexDirection="row" style={containerStyle}>
@@ -77,7 +79,7 @@ export const AccountCard: React.FC<Props> = memo(
                     ) : (
                         <BaseView style={styles.rightSubContainer}>
                             <BaseText style={styles.address} fontSize={10}>
-                                {FormattingUtils.humanAddress(account.address, 4, 6)}
+                                {humanAddress}
                             </BaseText>
                             <BaseSpacer height={4} />
                             <BaseText fontSize={10}>{balance}</BaseText>

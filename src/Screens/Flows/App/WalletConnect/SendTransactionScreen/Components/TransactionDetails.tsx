@@ -5,7 +5,7 @@ import { DelegationType } from "~Model/Delegation"
 import { VET, VTHO } from "~Constants"
 import { useTheme } from "~Hooks"
 import { capitalize } from "lodash"
-import { FormattingUtils } from "~Utils"
+import { BigNutils, FormattingUtils } from "~Utils"
 import { Network, TransactionRequest } from "~Model"
 import { selectCurrency, selectCurrencyExchangeRate, useAppSelector } from "~Storage/Redux"
 import { BigNumber } from "bignumber.js"
@@ -14,7 +14,7 @@ type Props = {
     selectedDelegationOption: DelegationType
     vthoGas: string
     isThereEnoughGas: boolean
-    vthoBalance: string
+    vtho: any
     request: TransactionRequest
     network: Network
     message: Connex.Vendor.TxMessage
@@ -25,7 +25,7 @@ export const TransactionDetails = ({
     selectedDelegationOption,
     vthoGas,
     isThereEnoughGas,
-    vthoBalance,
+    vtho,
     request,
     network,
     message,
@@ -43,6 +43,11 @@ export const TransactionDetails = ({
             return acc.plus(clause.value || "0")
         }, new BigNumber(0))
     }, [message])
+
+    const vthoBalance = useMemo(
+        () => BigNutils(vtho.balance.balance).toHuman(18).decimals(2).toString,
+        [vtho.balance.balance],
+    )
 
     const formattedFiatAmount = FormattingUtils.humanNumber(
         FormattingUtils.convertToFiatBalance(spendingAmount.toString(10) || "0", exchangeRate?.rate || 1, 0),

@@ -1,30 +1,35 @@
 import React, { useCallback, useMemo } from "react"
-
-import { BaseButtonGroupHorizontal, BaseIcon, BaseSkeleton, BaseSpacer, BaseText, BaseView } from "~Components"
-import { GasPriceCoefficient, VTHO } from "~Constants"
+import { StyleSheet, ViewProps } from "react-native"
+import Animated, { AnimatedProps, FadeIn, FadeInLeft, FadeInRight, FadeOut } from "react-native-reanimated"
+import { BaseButtonGroupHorizontal, BaseIcon, BaseSpacer, BaseText, BaseView } from "~Components"
+import { GasFeeOption, GasPriceCoefficient, VTHO } from "~Constants"
 import { useTheme } from "~Hooks"
 import { useI18nContext } from "~i18n"
 import { BaseButtonGroupHorizontalType } from "~Model"
 import { DelegationType } from "~Model/Delegation"
+import { BigNutils, BigNumberUtils } from "~Utils"
 
 type Props = {
     setSelectedFeeOption: (option: string) => void
     selectedDelegationOption: DelegationType
     loadingGas: boolean
     selectedFeeOption: string
-    gasFeeOptions: Record<GasPriceCoefficient, string>
+    gasFeeOptions: Record<GasPriceCoefficient, GasFeeOption>
     isThereEnoughGas: boolean
-    vthoBalance: string
+    txCostTotal: string
+    totalBalance: string
+    isDelegated?: boolean
 }
 
 export const GasFeeOptions = ({
     setSelectedFeeOption,
     selectedDelegationOption,
-    loadingGas,
     selectedFeeOption,
     gasFeeOptions,
     isThereEnoughGas,
-    vthoBalance,
+    txCostTotal,
+    totalBalance,
+    isDelegated,
 }: Props) => {
     const theme = useTheme()
     const { LL } = useI18nContext()
@@ -56,34 +61,55 @@ export const GasFeeOptions = ({
         [setSelectedFeeOption],
     )
 
-    if (loadingGas) {
-        return (
-            <BaseSkeleton
-                animationDirection="horizontalLeft"
-                boneColor={theme.colors.skeletonBoneColor}
-                highlightColor={theme.colors.skeletonHighlightColor}
-                layout={[
-                    {
-                        flexDirection: "column",
-                        alignItems: "flex-start",
-                        width: "100%",
-                        children: [
-                            {
-                                width: "40%",
-                                height: 18,
-                            },
-                        ],
-                    },
-                ]}
-            />
-        )
-    }
+    const computedGasDifference = useMemo(() => BigNutils(txCostTotal).minus(totalBalance), [totalBalance, txCostTotal])
 
     if (selectedDelegationOption === DelegationType.URL) {
-        return <BaseText typographyFont="subSubTitle">{LL.SEND_DELEGATED_FEES()}</BaseText>
+        return (
+            <>
+                <BaseSpacer height={12} />
+                <BaseSpacer height={0.5} width={"100%"} background={theme.colors.textDisabled} />
+                <BaseSpacer height={12} />
+
+                <BaseView flexDirection="row" justifyContent="space-between">
+                    <GasDetailsView />
+
+                    <GasWarningView
+                        entering={FadeIn.duration(300)}
+                        exiting={FadeOut.duration(300)}
+                        isDelegattion={selectedDelegationOption === DelegationType.URL}
+                    />
+                </BaseView>
+
+                <BaseSpacer height={6} />
+            </>
+        )
     } else {
         return (
             <>
+                <BaseSpacer height={12} />
+                <BaseSpacer height={0.5} width={"100%"} background={theme.colors.textDisabled} />
+                <BaseSpacer height={12} />
+
+                <BaseView flexDirection="row" justifyContent="space-between">
+                    {/* Show when there is enough gas OR when the user is delegating to another account*/}
+                    {isThereEnoughGas || isDelegated ? (
+                        <GasDetailsView
+                            entering={FadeInLeft.springify(300).mass(1)}
+                            exiting={FadeOut.springify(300).mass(1)}
+                        />
+                    ) : null}
+                    {/* Show when there is not enough gas AND the user is not delegating to another account*/}
+                    {!isThereEnoughGas && !isDelegated ? (
+                        <GasWarningView
+                            entering={FadeInRight.springify(300).mass(1)}
+                            exiting={FadeOut.springify(300).mass(1)}
+                            computedGasDifference={computedGasDifference}
+                        />
+                    ) : null}
+                </BaseView>
+
+                <BaseSpacer height={6} />
+
                 <BaseView pt={8}>
                     <BaseButtonGroupHorizontal
                         selectedButtonIds={[selectedFeeOption]}
@@ -98,27 +124,72 @@ export const GasFeeOptions = ({
                                     </BaseText>
                                     <BaseSpacer height={4} />
                                     <BaseText color={textColor} typographyFont="smallCaptionMedium">
-                                        {gasFeeOptions[Number(button.id) as GasPriceCoefficient]} {VTHO.symbol}
+                                        {gasFeeOptions[Number(button.id) as GasPriceCoefficient].gasFee} {VTHO.symbol}
                                     </BaseText>
                                 </BaseView>
                             </BaseView>
                         )}
                     />
                 </BaseView>
-
-                {!isThereEnoughGas && (
-                    <>
-                        <BaseSpacer height={10} />
-                        <BaseView flexDirection="row">
-                            <BaseIcon name="alert-circle-outline" color={theme.colors.danger} size={16} />
-                            <BaseSpacer width={4} />
-                            <BaseText typographyFont="buttonSecondary" color={theme.colors.danger}>
-                                {LL.SEND_INSUFFICIENT_VTHO()} {vthoBalance} {VTHO.symbol}
-                            </BaseText>
-                        </BaseView>
-                    </>
-                )}
             </>
         )
     }
 }
+
+interface IGasWarningView extends AnimatedProps<ViewProps> {
+    isDelegattion?: boolean
+    computedGasDifference?: BigNumberUtils
+}
+
+function GasWarningView(props: IGasWarningView) {
+    const { ...animatedViewProps } = props
+    const theme = useTheme()
+    const { LL } = useI18nContext()
+
+    const notEnoughGasWarning = useMemo(
+        () =>
+            LL.SEND_INSUFFICIENT_VTHO() +
+            " " +
+            BigNutils(props.computedGasDifference?.toString ?? "0")
+                .toHuman(VTHO.decimals)
+                .decimals(8).toString,
+        [LL, props.computedGasDifference],
+    )
+
+    return (
+        <Animated.View {...animatedViewProps}>
+            <BaseView flexDirection="row">
+                <BaseIcon
+                    name="alert-circle-outline"
+                    color={props.isDelegattion ? theme.colors.success : theme.colors.danger}
+                    size={16}
+                />
+                <BaseSpacer width={4} />
+                <BaseText
+                    typographyFont="buttonSecondary"
+                    color={props.isDelegattion ? theme.colors.success : theme.colors.danger}>
+                    {props.isDelegattion ? LL.SEND_DELEGATED_FEES() : notEnoughGasWarning}
+                </BaseText>
+            </BaseView>
+        </Animated.View>
+    )
+}
+
+interface IGasDetailsView extends AnimatedProps<ViewProps> {}
+
+function GasDetailsView(props: IGasDetailsView) {
+    const { ...animatedViewProps } = props
+
+    const { LL } = useI18nContext()
+    return (
+        <Animated.View style={baseStyles.animatedViewCOntainer} {...animatedViewProps}>
+            <BaseText typographyFont="buttonSecondary">{LL.SEND_GAS_FEE()}</BaseText>
+        </Animated.View>
+    )
+}
+
+const baseStyles = StyleSheet.create({
+    animatedViewCOntainer: {
+        marginRight: 4,
+    },
+})

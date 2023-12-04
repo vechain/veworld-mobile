@@ -637,6 +637,8 @@ const en: BaseTranslation = {
     SEND_GAS_FEE: "Gas fee",
     SEND_ESTIMATED_TIME: "Estimated time",
     SEND_LESS_THAN_1_MIN: "Less than 1 min",
+    SEND_LESS_THAN_30_SECONDS:  "Less than 30 seconds",
+    SEND_LESS_THAN_A_MOMENT: "A few seconds",
     SEND_DELEGATED_FEES: "None, paid by delegator",
     SEND_INSUFFICIENT_VTHO: "Insufficient Gas -",
     SEND_DELEGATION_TITLE: "Select delegation",
@@ -684,7 +686,7 @@ const en: BaseTranslation = {
     SIGN_TRANSACTION_ERROR: "Error signing transaction",
     SEND_TRANSACTION_ERROR: "There was an error sending the transaction. This may be due to a lack of funds",
     SEND_VTHO_WARNING_TOKEN: "Vechain uses VTHO for settling transaction fees. To ensure smooth transactions, it's essential to maintain a minimal amount of VTHO in your wallet.",
-    SEND_VTHO_WARNING_MAX: "Vechain facilitates transactions using VTHO as the payment medium for transaction fees. Our MAX calculation method deducts a predefined base fee for transaction gas. The amount displayed on your screen represents your total VTHO balance less the base fee calculated for the transaction.",
+    SEND_VTHO_WARNING_MAX: "Vechain facilitates transactions using VTHO as the payment medium for transaction fees. Our MAX calculation method will deduct a predefined base fee for transaction gas",
 
     LEDGER_CONNECTING: "Connecting",
     LEDGER_CONNECT: "Connect",

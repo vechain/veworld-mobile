@@ -22,20 +22,24 @@ Before({ timeout: 600 * 1000 }, async (message: ITestCaseHookParameter) => {
 
 After({ timeout: 600 * 1000 }, async (message: ITestCaseHookParameter) => {
     const { pickle, result } = message
+    try {
+        // reset app after each test
+        if (await isPresentId("settings-tab")) {
+            await HomeFlows.goToSettings()
+            await SettingsFlows.goToGeneralSettings()
+            await GeneralSettingsFlow.resetApp()
+        } else {
+            console.log("Cannot reset app for test: " + pickle.name)
+        }
+    } catch (error) {
+        device.takeScreenshot("testFailure")
+        throw error
+    }
     await detox.onTestDone({
         title: pickle.uri,
         fullName: pickle.name,
         status: result ? "passed" : "failed",
     })
-    // reset app after each test
-    if (await isPresentId("settings-tab")) {
-        await HomeFlows.goToSettings()
-        await SettingsFlows.goToGeneralSettings()
-        await GeneralSettingsFlow.resetApp()
-    } else {
-        console.log("Cannot reset app for test: " + pickle.name)
-    }
-
     await device.terminateApp()
 })
 

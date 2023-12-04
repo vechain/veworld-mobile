@@ -111,9 +111,9 @@ export const SettingsTransactionsScreen = () => {
 
                     <DelegationOptions
                         selectedDelegationOption={selectedDelegationOption}
-                        setSelectedAccount={setSelectedDelegationAccount}
+                        setSelectedDelegationAccount={setSelectedDelegationAccount}
                         setNoDelegation={setNoDelegationOption}
-                        selectedAccount={selectedDelegationAccount}
+                        selectedDelegationAccount={selectedDelegationAccount}
                         selectedDelegationUrl={selectedDelegationUrl}
                         setSelectedDelegationUrl={setSelectedDelegationUrl}
                     />

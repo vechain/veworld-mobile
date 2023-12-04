@@ -1,4 +1,4 @@
-import React, { useMemo } from "react"
+import React, { useCallback, useMemo } from "react"
 import { BaseButtonGroupHorizontal, BaseSpacer, BaseText } from "~Components"
 import { useI18nContext } from "~i18n"
 import { AccountWithDevice, BaseButtonGroupHorizontalType, LocalAccountWithDevice } from "~Model"
@@ -13,17 +13,17 @@ type Props = {
     setSelectedDelegationUrl: (url: string) => void
     selectedDelegationOption: DelegationType
     setNoDelegation: () => void
-    setSelectedAccount: (account: AccountWithDevice) => void
-    selectedAccount?: LocalAccountWithDevice
+    setSelectedDelegationAccount: (account: AccountWithDevice) => void
+    selectedDelegationAccount?: LocalAccountWithDevice
     disabled?: boolean
 }
 
 // this component shows delegation options
 export const DelegationOptions = ({
     selectedDelegationOption,
-    setSelectedAccount,
+    setSelectedDelegationAccount,
     setNoDelegation,
-    selectedAccount,
+    selectedDelegationAccount,
     selectedDelegationUrl,
     setSelectedDelegationUrl,
     disabled,
@@ -62,15 +62,18 @@ export const DelegationOptions = ({
     }, [LL, accounts.length])
 
     // this function is called when a delegation option is selected
-    const handleSelectDelegationOption = (button: BaseButtonGroupHorizontalType) => {
-        if (button.id === DelegationType.NONE) {
-            setNoDelegation()
-        } else if (button.id === DelegationType.ACCOUNT) {
-            openSelectAccountBottomSheet()
-        } else if (button.id === DelegationType.URL) {
-            openSelectDelegationUrlBottomSheet()
-        }
-    }
+    const handleSelectDelegationOption = useCallback(
+        (button: BaseButtonGroupHorizontalType) => {
+            if (button.id === DelegationType.NONE) {
+                setNoDelegation()
+            } else if (button.id === DelegationType.ACCOUNT) {
+                openSelectAccountBottomSheet()
+            } else if (button.id === DelegationType.URL) {
+                openSelectDelegationUrlBottomSheet()
+            }
+        },
+        [openSelectAccountBottomSheet, openSelectDelegationUrlBottomSheet, setNoDelegation],
+    )
 
     return (
         <>
@@ -89,8 +92,8 @@ export const DelegationOptions = ({
                 onClose={closeSelectAccountBottonSheet}
                 ref={selectAccountBottomSheetRef}
                 setNoDelegation={setNoDelegation}
-                setSelectedAccount={setSelectedAccount}
-                selectedAccount={selectedAccount}
+                setSelectedAccount={setSelectedDelegationAccount}
+                selectedAccount={selectedDelegationAccount}
                 selectedDelegationOption={selectedDelegationOption}
                 accounts={accounts}
             />

@@ -1,8 +1,7 @@
 import { NativeStackScreenProps } from "@react-navigation/native-stack"
 import React, { useCallback, useState } from "react"
-import { StyleSheet, TextInput } from "react-native"
+import { StyleSheet, TextInput, ViewProps } from "react-native"
 import { useAmountInput, useTheme } from "~Hooks"
-import { FormattingUtils } from "~Utils"
 import {
     BaseCardGroup,
     BaseIcon,
@@ -19,12 +18,11 @@ import { RootStackParamListHome, Routes } from "~Navigation"
 import { useI18nContext } from "~i18n"
 import { COLORS, CURRENCY_SYMBOLS, typography } from "~Constants"
 import { selectCurrency, selectCurrencyExchangeRate, useAppSelector } from "~Storage/Redux"
-import { BigNumber } from "bignumber.js"
 import { useNavigation } from "@react-navigation/native"
-import { useCalculateGas, useTotalFiatBalance, useTotalTokenBalance, useUI } from "./Hooks"
-import { isEmpty } from "lodash"
-import Animated from "react-native-reanimated"
+import { useTotalTokenBalance, useUI, useCalculateGas } from "./Hooks"
+import Animated, { AnimatedProps, FadeInRight, FadeOut } from "react-native-reanimated"
 import HapticsService from "~Services/HapticsService"
+import { BigNutils } from "~Utils"
 
 const { defaults: defaultTypography } = typography
 
@@ -45,20 +43,21 @@ export const SelectAmountSendScreen = ({ route }: Props) => {
     const [isError, setIsError] = useState(false)
     const isExchangeRateAvailable = !!exchangeRate?.rate
 
-    const vthoEstimate = useCalculateGas({ token })
+    const { gas } = useCalculateGas({ token })
 
-    const { tokenTotalBalance } = useTotalTokenBalance(token, vthoEstimate)
+    const { tokenTotalBalance, tokenTotalToHuman } = useTotalTokenBalance(token, gas)
 
-    const { fiatTotalBalance } = useTotalFiatBalance(tokenTotalBalance, exchangeRate)
+    /**
+     * TOKEN total balance in FIAT in raw-ish format (with decimals)
+     * Example "147031782362332055578.377092605442914032"
+     */
+    const fiatTotalBalance = BigNutils().toCurrencyConversion(tokenTotalToHuman, exchangeRate).toString
 
     /**
      * FIAT selected balance calculated fron TOKEN input in human readable format (correct value is when TOKEN is active)
      * Example "53.54"
      */
-    const fiatHumanAmount = FormattingUtils.formatToHumanNumber(
-        FormattingUtils.convertToFiatBalance(!isEmpty(input) ? input : "0", exchangeRate?.rate ?? 1, 0),
-        2,
-    )
+    const fiatHumanAmount = BigNutils().toCurrencyConversion(input, exchangeRate).toCurrencyFormat_string(2)
 
     /**
      * TOKEN selected balance in raw-ish format (with decimals) (correct value is when FIAT is active)
@@ -70,12 +69,7 @@ export const SelectAmountSendScreen = ({ route }: Props) => {
      * TOKEN selected balance in human readable format (correct value is when FIAT is active)
      * Example "2,472.771"
      */
-    const tokenHumanAmountFromFiat = FormattingUtils.scaleNumberDown(
-        tokenAmountFromFiat || "0",
-        0,
-        undefined,
-        BigNumber.ROUND_DOWN,
-    )
+    const tokenHumanAmountFromFiat = BigNutils(tokenAmountFromFiat).toTokenFormat_string(4)
 
     /**
      * Toggle between FIAT and TOKEN input (and update the input value)
@@ -95,12 +89,12 @@ export const SelectAmountSendScreen = ({ route }: Props) => {
         (newValue: string) => {
             // Get the correct token amount from the FIAT input
             const controlValue = isInputInFiat
-                ? FormattingUtils.convertToFiatBalance(newValue || "0", 1 / (exchangeRate?.rate ?? 1), 0, 0)
-                : newValue
+                ? BigNutils().toTokenConversion(newValue, exchangeRate)
+                : BigNutils(newValue).addTrailingZeros(token.decimals)
 
-            let roundDownValue = Math.floor(parseFloat(controlValue) * 10000) / 10000
+            let roundDownValue = controlValue.decimals(6)
 
-            if (new BigNumber(roundDownValue).gt(tokenTotalBalance)) {
+            if (controlValue.isBiggerThan(tokenTotalBalance)) {
                 setIsError(true)
                 HapticsService.triggerNotification({ level: "Error" })
             } else {
@@ -108,27 +102,26 @@ export const SelectAmountSendScreen = ({ route }: Props) => {
             }
 
             setInput(newValue)
-            setTokenAmountFromFiat(roundDownValue.toString())
+            setTokenAmountFromFiat(roundDownValue.toString)
         },
-        [exchangeRate?.rate, isInputInFiat, setInput, tokenTotalBalance],
+        [exchangeRate, isInputInFiat, setInput, token.decimals, tokenTotalBalance],
     )
 
     /**
      * Sets the input value to the max available balance (in TOKEN or FIAT)
      */
     const handleOnMaxPress = useCallback(() => {
-        setInput(isInputInFiat ? FormattingUtils.formatToHumanNumber(fiatTotalBalance, 2) : tokenTotalBalance)
-
-        let roundUpforPrecission =
-            Math.round(
-                parseFloat(
-                    FormattingUtils.convertToFiatBalance(fiatTotalBalance, 1 / (exchangeRate?.rate ?? 1), 0, 0),
-                ) * Math.pow(10, 4),
-            ) / Math.pow(10, 4)
-
-        setTokenAmountFromFiat(roundUpforPrecission.toString())
+        // setInput(isInputInFiat ? BigNutils(fiatTotalBalance).toCurrencyFormatString(2).toString : tokenBalanceMinusProjectedFees)
+        setInput(
+            isInputInFiat
+                ? BigNutils(fiatTotalBalance).toCurrencyFormat_string(2)
+                : BigNutils(tokenTotalBalance).toHuman(token.decimals).decimals(4).toString,
+        )
+        let conv = BigNutils().toTokenConversion(fiatTotalBalance, exchangeRate).toString
+        let scaleDownforPrecission = BigNutils(conv).decimals(4).toString
+        setTokenAmountFromFiat(scaleDownforPrecission)
         setIsError(false)
-    }, [exchangeRate?.rate, fiatTotalBalance, isInputInFiat, setInput, tokenTotalBalance])
+    }, [exchangeRate, fiatTotalBalance, isInputInFiat, setInput, token.decimals, tokenTotalBalance])
 
     /**
      * Navigate to the next screen
@@ -143,13 +136,23 @@ export const SelectAmountSendScreen = ({ route }: Props) => {
         })
     }
 
-    const { inputColorNotAnimated, placeholderColor, shortenedTokenName, animatedFontStyle, animatedStyleInputColor } =
-        useUI({
-            isError,
-            input,
-            token,
-            theme,
-        })
+    const {
+        inputColorNotAnimated,
+        placeholderColor,
+        shortenedTokenName,
+        animatedFontStyle,
+        animatedStyleInputColor,
+        computeconvertedAmountInFooter,
+    } = useUI({
+        isError,
+        input,
+        token,
+        theme,
+        isInputInFiat,
+        tokenHumanAmountFromFiat,
+        fiatHumanAmount,
+        currency,
+    })
 
     return (
         <Layout
@@ -165,24 +168,16 @@ export const SelectAmountSendScreen = ({ route }: Props) => {
                         {/* [START] - HEADER */}
                         <BaseView flexDirection="row" alignItems="baseline" style={styles.budget}>
                             <BaseView flexDirection="row" mr={8}>
-                                <BaseText typographyFont="subTitleBold">
-                                    {"≈ "}
-                                    {Number(tokenTotalBalance).toFixed(2)}
-                                </BaseText>
+                                <BaseText typographyFont="subTitleBold">{tokenTotalToHuman}</BaseText>
                                 <BaseSpacer width={5} />
                                 <BaseText typographyFont="buttonSecondary">{token.symbol}</BaseText>
                             </BaseView>
 
                             {isError && (
-                                <BaseView>
-                                    <BaseView flexDirection="row">
-                                        <BaseIcon name={"alert-circle-outline"} size={20} color={theme.colors.danger} />
-                                        <BaseSpacer width={8} />
-                                        <BaseText typographyFont="body" fontSize={12} color={theme.colors.danger}>
-                                            {LL.SEND_INSUFFICIENT_BALANCE()}
-                                        </BaseText>
-                                    </BaseView>
-                                </BaseView>
+                                <BalanceWarningView
+                                    entering={FadeInRight.springify(300).mass(1)}
+                                    exiting={FadeOut.springify(300).mass(1)}
+                                />
                             )}
                         </BaseView>
                         {/* [END] - HEADER */}
@@ -257,36 +252,51 @@ export const SelectAmountSendScreen = ({ route }: Props) => {
                                     ),
                                     style: styles.amountView,
                                 },
+
                                 ...(isExchangeRateAvailable
                                     ? [
                                           {
                                               children: (
                                                   <BaseText typographyFont="captionBold" color={inputColorNotAnimated}>
-                                                      {"≈ "}
-                                                      {isInputInFiat
-                                                          ? Number(tokenHumanAmountFromFiat).toFixed(2)
-                                                          : fiatHumanAmount}{" "}
-                                                      {isInputInFiat ? token.symbol : currency}
+                                                      {computeconvertedAmountInFooter}
                                                   </BaseText>
                                               ),
                                               style: styles.counterValueView,
                                           },
                                       ]
                                     : []),
+
+                                ...(token.symbol.toLowerCase() === "vtho"
+                                    ? [
+                                          {
+                                              children: (
+                                                  <>
+                                                      <BaseText
+                                                          typographyFont="caption"
+                                                          px={4}
+                                                          color={theme.colors.textDisabled}>
+                                                          {LL.SEND_VTHO_WARNING_MAX()}
+                                                      </BaseText>
+                                                  </>
+                                              ),
+                                          },
+                                      ]
+                                    : [
+                                          {
+                                              children: (
+                                                  <>
+                                                      <BaseText
+                                                          typographyFont="caption"
+                                                          px={4}
+                                                          color={theme.colors.textDisabled}>
+                                                          {LL.SEND_VTHO_WARNING_TOKEN()}
+                                                      </BaseText>
+                                                  </>
+                                              ),
+                                          },
+                                      ]),
                             ]}
                         />
-
-                        <BaseSpacer height={16} />
-
-                        {token.symbol.toLowerCase() === "vtho" ? (
-                            <BaseText typographyFont="caption" px={4} color={theme.colors.textDisabled}>
-                                {LL.SEND_VTHO_WARNING_MAX()}
-                            </BaseText>
-                        ) : (
-                            <BaseText typographyFont="caption" px={4} color={theme.colors.textDisabled}>
-                                {LL.SEND_VTHO_WARNING_TOKEN()}
-                            </BaseText>
-                        )}
 
                         {/* [END] - INPUT */}
                     </BaseView>
@@ -295,7 +305,10 @@ export const SelectAmountSendScreen = ({ route }: Props) => {
             footer={
                 <FadeoutButton
                     title={LL.COMMON_BTN_NEXT()}
-                    disabled={isError || input === "" || new BigNumber(input).isZero()}
+                    disabled={
+                        isError || input === "" || BigNutils(input).isZero
+                        // isError || input === "" || BigNutils(input).isZero || BigNutils(tokenBalanceMinusProjectedFees).isZero
+                    }
                     action={goToInsertAddress}
                     bottom={0}
                     mx={0}
@@ -353,3 +366,23 @@ const styles = StyleSheet.create({
         zIndex: 1,
     },
 })
+
+interface IBalanceWarningView extends AnimatedProps<ViewProps> {}
+
+function BalanceWarningView(props: IBalanceWarningView) {
+    const { ...animatedViewProps } = props
+    const theme = useTheme()
+    const { LL } = useI18nContext()
+
+    return (
+        <Animated.View {...animatedViewProps}>
+            <BaseView flexDirection="row">
+                <BaseIcon name={"alert-circle-outline"} size={20} color={theme.colors.danger} />
+                <BaseSpacer width={8} />
+                <BaseText typographyFont="body" fontSize={12} color={theme.colors.danger}>
+                    {LL.SEND_INSUFFICIENT_BALANCE()}
+                </BaseText>
+            </BaseView>
+        </Animated.View>
+    )
+}

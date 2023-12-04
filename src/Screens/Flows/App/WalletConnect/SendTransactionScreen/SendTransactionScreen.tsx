@@ -8,6 +8,7 @@ import {
     BaseText,
     BaseView,
     CloseModalButton,
+    DelegationView,
     getRpcError,
     RequireUserPassword,
     SelectAccountBottomSheet,
@@ -175,17 +176,21 @@ export const SendTransactionScreen: FC<Props> = ({ route }: Props) => {
     }, [request, failRequest, postMessage, nav, LL])
 
     const {
-        Delegation,
-        onSubmit,
-        vthoBalance,
         selectedDelegationOption,
-        isThereEnoughGas,
-        vthoGasFee,
-        continueNotAllowed,
-        isLoading,
+        onSubmit,
         isPasswordPromptOpen,
         handleClosePasswordModal,
         onPasswordSuccess,
+        setNoDelegation,
+        setSelectedDelegationAccount,
+        setSelectedDelegationUrl,
+        isEnoughGas,
+        selectedDelegationAccount,
+        selectedDelegationUrl,
+        vtho,
+        isDissabledButtonState,
+        isLoading,
+        priorityFees,
     } = useTransactionScreen({
         clauses,
         onTransactionSuccess,
@@ -225,14 +230,21 @@ export const SendTransactionScreen: FC<Props> = ({ route }: Props) => {
 
                 <BaseSpacer height={24} />
                 <BaseView mx={20}>
-                    {Delegation()}
+                    <DelegationView
+                        setNoDelegation={setNoDelegation}
+                        selectedDelegationOption={selectedDelegationOption}
+                        setSelectedDelegationAccount={setSelectedDelegationAccount}
+                        selectedDelegationAccount={selectedDelegationAccount}
+                        selectedDelegationUrl={selectedDelegationUrl}
+                        setSelectedDelegationUrl={setSelectedDelegationUrl}
+                    />
 
                     <BaseSpacer height={44} />
                     <TransactionDetails
                         selectedDelegationOption={selectedDelegationOption}
-                        vthoGas={vthoGasFee}
-                        isThereEnoughGas={isThereEnoughGas || false}
-                        vthoBalance={vthoBalance}
+                        vthoGas={priorityFees.gasFee}
+                        isThereEnoughGas={isEnoughGas || false}
+                        vtho={vtho}
                         request={request}
                         network={network}
                         message={request.message}
@@ -260,7 +272,7 @@ export const SendTransactionScreen: FC<Props> = ({ route }: Props) => {
                         haptics="Light"
                         title={LL.COMMON_BTN_SIGN_AND_SEND()}
                         action={onSubmit}
-                        disabled={isLoading || continueNotAllowed || (!validConnectedApp && !isInvalidChecked)}
+                        disabled={isLoading || isDissabledButtonState || (!validConnectedApp && !isInvalidChecked)}
                         isLoading={isLoading}
                     />
                     <BaseSpacer height={16} />

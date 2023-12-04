@@ -1,33 +1,42 @@
 import { FungibleTokenWithBalance } from "~Model"
-import { FormattingUtils } from "~Utils"
-import { BigNumber } from "bignumber.js"
 import { useMemo } from "react"
+import { VTHO } from "~Constants"
+import { BigNutils } from "~Utils"
 
-export const useTotalTokenBalance = (token: FungibleTokenWithBalance, vthoEstimate: BigNumber) => {
-    /**
-     * TOKEN total balance in raw-ish format (with decimals)
-     * Example "2490.000029999996009823"
-     */
+export const useTotalTokenBalance = (
+    token: FungibleTokenWithBalance,
+    vthoEstimate: string,
+    // setIsError: React.Dispatch<React.SetStateAction<boolean>>,
+) => {
+    const { decimals } = token
+
     const tokenTotalBalance = useMemo(() => {
+        return BigNutils(token.balance.balance).toString
+    }, [token.balance.balance])
+
+    const tokenBalanceMinusProjectedFees = useMemo(() => {
         let total = ""
 
-        if (token?.symbol?.toLowerCase() === "vtho") {
-            let newTotal: BigNumber | string = new BigNumber(token.balance.balance).minus(vthoEstimate)
+        if (token?.symbol?.toLowerCase() === VTHO.symbol.toLowerCase()) {
+            let newTotal = BigNutils(token.balance.balance).minus(vthoEstimate)
 
-            newTotal = newTotal.isLessThan(0) ? "0" : newTotal
+            if (newTotal.isLessThan(0)) {
+                //! this should br reinstated when tokenBalanceMinusProjectedFees will be in use again
+                // setIsError(true)
+                newTotal = BigNutils("0")
+            }
 
-            total = FormattingUtils.scaleNumberDown(newTotal, token.decimals, token.decimals, BigNumber.ROUND_DOWN)
+            total = newTotal.toHuman(decimals).toString
         } else {
-            total = FormattingUtils.scaleNumberDown(
-                token.balance.balance,
-                token.decimals,
-                token.decimals,
-                BigNumber.ROUND_DOWN,
-            )
+            total = BigNutils(tokenTotalBalance).toHuman(decimals).toString
         }
 
         return total
-    }, [token.balance.balance, token.decimals, token.symbol, vthoEstimate])
+    }, [decimals, token.balance.balance, token?.symbol, tokenTotalBalance, vthoEstimate])
 
-    return { tokenTotalBalance }
+    const tokenTotalToHuman = useMemo(() => {
+        return BigNutils(tokenTotalBalance).toHuman(decimals).decimals(4).toString
+    }, [decimals, tokenTotalBalance])
+
+    return { tokenTotalBalance, tokenTotalToHuman, tokenBalanceMinusProjectedFees }
 }

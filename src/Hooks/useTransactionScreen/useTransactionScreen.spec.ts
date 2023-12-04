@@ -2,18 +2,16 @@ import { act, renderHook } from "@testing-library/react-hooks"
 import { useBiometrics, useTransactionScreen, useWalletSecurity } from "~Hooks"
 import { TestHelpers, TestWrapper } from "~Test"
 import { Routes } from "~Navigation"
-import { DelegationType } from "~Model/Delegation"
 import { AccountWithDevice, BaseDevice, SecurityLevelType, TransactionRequest } from "~Model"
 import crypto from "react-native-quick-crypto"
 import axios from "axios"
 import { waitFor } from "@testing-library/react-native"
 import { Transaction } from "thor-devkit"
-import { selectDevice, selectSelectedAccount } from "~Storage/Redux"
+import { selectDevice, selectSelectedAccount, selectVthoTokenWithBalanceByAccount } from "~Storage/Redux"
 import { WalletEncryptionKeyHelper } from "~Components"
+import { BigNutils } from "~Utils"
 
 const { vetTransaction1, account1D1, device1, firstLedgerAccount, ledgerDevice, wallet1 } = TestHelpers.data
-
-const initialRoute = Routes.HOME
 
 const onTransactionSuccess = jest.fn()
 const onTransactionFailure = jest.fn()
@@ -27,6 +25,7 @@ jest.mock("~Storage/Redux", () => ({
     ...jest.requireActual("~Storage/Redux"),
     selectSelectedAccount: jest.fn(),
     selectDevice: jest.fn(),
+    selectVthoTokenWithBalanceByAccount: jest.fn(),
     getDefaultDelegationUrl: jest.fn().mockReturnValue("https://example.com"),
 }))
 
@@ -50,9 +49,30 @@ jest.mock("@react-navigation/native", () => ({
     }),
 }))
 
+const mockedVtho = {
+    balance: {
+        balance: "0.00",
+        accountAddress: "0x0000000000000000000000000000456e65726779",
+        tokenAddress: "0x0000000000000000000000000000456e65726779",
+        isCustomToken: false,
+    },
+    decimals: 18,
+    name: "VTHO",
+    symbol: "VTHO",
+    address: "0x0000000000000000000000000000456e65726779",
+    icon: "string",
+    custom: false,
+    desc: undefined,
+}
+
 const mockAccount = (accountWithDevice: AccountWithDevice) => {
     // @ts-ignore
     ;(selectSelectedAccount as jest.Mock).mockReturnValue(accountWithDevice)
+}
+
+const mockVTHO = (_mockedVtho: any) => {
+    // @ts-ignore
+    ;(selectVthoTokenWithBalanceByAccount as jest.Mock).mockReturnValue(_mockedVtho)
 }
 
 const mockDevice = (device: BaseDevice) => {
@@ -85,6 +105,7 @@ describe("useTransactionScreen", () => {
             ...account1D1,
             device: device1,
         })
+        mockVTHO(mockedVtho)
         mockDevice(device1)
         ;(WalletEncryptionKeyHelper.decryptWallet as jest.Mock).mockResolvedValue(wallet1)
     })
@@ -94,7 +115,6 @@ describe("useTransactionScreen", () => {
             () =>
                 useTransactionScreen({
                     clauses: vetTransaction1.body.clauses,
-                    initialRoute,
                     onTransactionSuccess,
                     onTransactionFailure,
                 }),
@@ -104,26 +124,57 @@ describe("useTransactionScreen", () => {
         )
 
         expect(result.current).toEqual({
-            Delegation: expect.any(Function),
-            SubmitButton: expect.any(Function),
-            selectedDelegationOption: DelegationType.NONE,
-            vthoGasFee: "0.00",
-            vthoBalance: "0.00",
-            isThereEnoughGas: true,
+            selectedDelegationOption: "NONE",
+            loadingGas: true,
             onSubmit: expect.any(Function),
             isLoading: true,
-            continueNotAllowed: false,
-            handleClosePasswordModal: expect.any(Function),
             isPasswordPromptOpen: false,
+            handleClosePasswordModal: expect.any(Function),
             onPasswordSuccess: expect.any(Function),
-            gasFeeOptions: {
-                "0": "0.00",
-                "127": "0.00",
-                "255": "0.00",
-            },
-            loadingGas: true,
-            selectedFeeOption: "0",
             setSelectedFeeOption: expect.any(Function),
+            selectedFeeOption: "0",
+            gasFeeOptions: {
+                "0": {
+                    gasFee: "0.00",
+                    gasRaw: BigNutils("0"),
+                },
+                "127": {
+                    gasFee: "0.00",
+                    gasRaw: BigNutils("0"),
+                },
+                "255": {
+                    gasFee: "0.00",
+                    gasRaw: BigNutils("0"),
+                },
+            },
+            setNoDelegation: expect.any(Function),
+            setSelectedDelegationAccount: expect.any(Function),
+            setSelectedDelegationUrl: expect.any(Function),
+            isEnoughGas: false,
+            txCostTotal: "0",
+            isDelegated: false,
+            selectedDelegationAccount: undefined,
+            selectedDelegationUrl: undefined,
+            vtho: {
+                address: "0x0000000000000000000000000000456e65726779",
+                balance: {
+                    accountAddress: "0x0000000000000000000000000000456e65726779",
+                    balance: "0.00",
+                    isCustomToken: false,
+                    tokenAddress: "0x0000000000000000000000000000456e65726779",
+                },
+                custom: false,
+                decimals: 18,
+                desc: undefined,
+                icon: "string",
+                name: "VTHO",
+                symbol: "VTHO",
+            },
+            isDissabledButtonState: true,
+            priorityFees: {
+                gasFee: "0.00",
+                gasRaw: BigNutils("0"),
+            },
         })
     })
 
@@ -133,7 +184,6 @@ describe("useTransactionScreen", () => {
                 () =>
                     useTransactionScreen({
                         clauses: vetTransaction1.body.clauses,
-                        initialRoute,
                         onTransactionSuccess,
                         onTransactionFailure,
                         dappRequest: {
@@ -192,7 +242,6 @@ describe("useTransactionScreen", () => {
                 () =>
                     useTransactionScreen({
                         clauses: vetTransaction1.body.clauses,
-                        initialRoute,
                         onTransactionSuccess,
                         onTransactionFailure,
                         dappRequest: dappRequest,
@@ -208,8 +257,25 @@ describe("useTransactionScreen", () => {
                 () => {
                     expect(mockNav).toHaveBeenCalledWith(Routes.LEDGER_SIGN_TRANSACTION, {
                         accountWithDevice: accWithDevice,
-                        transaction: expect.any(Transaction),
-                        initialRoute: expect.any(String),
+                        initialRoute: "Home",
+                        transaction: {
+                            body: {
+                                blockRef: "0x00ce27a27f982a6d",
+                                chainTag: 39,
+                                clauses: [
+                                    {
+                                        data: "0x",
+                                        to: "0x435933c8064b4Ae76bE665428e0307eF2cCFBD68",
+                                        value: "300000000000000000000",
+                                    },
+                                ],
+                                dependsOn: null,
+                                expiration: 30,
+                                gas: 210000,
+                                gasPriceCoef: 0,
+                                nonce: "0x1234ab",
+                            },
+                        },
                         delegationSignature: undefined,
                         dappRequest,
                     })
