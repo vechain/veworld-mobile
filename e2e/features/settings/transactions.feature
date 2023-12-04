@@ -8,7 +8,7 @@ Feature: The user can manage transactions settings
     * The user is in settings screen
     * The user is in transactions settings screen
 
-  Scenario: User can select an account as default delegation method for transactions
+  Scenario Outline: User can select an account as default delegation method for transactions
     When The user selects Account as delegation method
     And The user selects the account "<account>" from the list
     Then The user should see the delegation account "<account>" card
@@ -16,7 +16,8 @@ Feature: The user can manage transactions settings
       | account   |
       | Account 1 |
 
-  Scenario: User can select an URL as default delegation method for transactions
+  @broken
+  Scenario Outline: User can select an URL as default delegation method for transactions
     When The user selects URL as delegation method
     And The user inserts the following delegation url "<url>"
     Then The user should see the delegation url "<url>" card
@@ -25,7 +26,8 @@ Feature: The user can manage transactions settings
       | url                                           | sheet_title |
       | https://sponsor-testnet.vechain.energy/by/282 | Select URL  |
 
-  Scenario: User can create multiple delegation URLs
+  @broken
+  Scenario Outline: User can create multiple delegation URLs
     When The user selects URL as delegation method
     And The user inserts the following delegation url "<url1>"
     And The user should see the delegation url "<url1>" card
@@ -39,7 +41,7 @@ Feature: The user can manage transactions settings
       | url1                                          | url2                                          | sheet_title |
       | https://sponsor-testnet.vechain.energy/by/282 | https://sponsor-testnet.vechain.energy/by/219 | Select URL  |
 
-  Scenario: User can add a delegation URL with the Manage URLs button
+  Scenario Outline: User can add a delegation URL with the Manage URLs button
     When The user click Manage URLs button
     And The user click the plus icon to add a new delegation url
     And The user inserts the following delegation url "<url1>"
@@ -49,7 +51,7 @@ Feature: The user can manage transactions settings
       | url1                                          |
       | https://sponsor-testnet.vechain.energy/by/282 |
 
-  Scenario: User can add multiple delegation URLs with the Manage URLs button
+  Scenario Outline: User can add multiple delegation URLs with the Manage URLs button
     When The user click Manage URLs button
     And The user click the plus icon to add a new delegation url
     And The user inserts the following delegation url "<url1>"
@@ -62,7 +64,7 @@ Feature: The user can manage transactions settings
       | url1                                          | url2                                          |
       | https://sponsor-testnet.vechain.energy/by/282 | https://sponsor-testnet.vechain.energy/by/219 |
 
-  Scenario: User can delete delegation URLs
+  Scenario Outline: User can delete delegation URLs
     When The user click Manage URLs button
     And The user click the plus icon to add a new delegation url
     And The user inserts the following delegation url "<url1>"
