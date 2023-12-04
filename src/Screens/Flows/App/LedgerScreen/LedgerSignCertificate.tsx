@@ -154,11 +154,10 @@ export const LedgerSignCertificate: React.FC<Props> = ({ route }) => {
     }, [ledgerErrorCode, closeConnectionErrorSheet, openConnectionErrorSheet])
 
     const navigateOnFinish = useCallback(() => {
-        error(nav.getState())
-
-        if (nav.canGoBack()) return nav.goBack()
-
-        nav.navigate(Routes.DISCOVER)
+        // nav back to SignCertificate Screen
+        nav.goBack()
+        // nav back to original screen
+        nav.goBack()
     }, [nav])
 
     const handleOnConfirm = useCallback(async () => {

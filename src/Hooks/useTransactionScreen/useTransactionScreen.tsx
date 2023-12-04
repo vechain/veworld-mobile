@@ -19,19 +19,27 @@ import {
     useAppSelector,
 } from "~Storage/Redux"
 import { showErrorToast, showWarningToast } from "~Components"
-import { GasUtils, error } from "~Utils"
+import { error, GasUtils } from "~Utils"
 import { DEVICE_TYPE, LedgerAccountWithDevice, TransactionRequest } from "~Model"
 import { DelegationType } from "~Model/Delegation"
 import { GasPriceCoefficient } from "~Constants"
+import { Routes } from "~Navigation"
 
 type Props = {
     clauses: Transaction.Body["clauses"]
     onTransactionSuccess: (transaction: Transaction, txId: string) => void
     onTransactionFailure: (error: unknown) => void
+    initialRoute?: Routes.HOME | Routes.NFTS
     dappRequest?: TransactionRequest
 }
 
-export const useTransactionScreen = ({ clauses, onTransactionSuccess, onTransactionFailure, dappRequest }: Props) => {
+export const useTransactionScreen = ({
+    clauses,
+    onTransactionSuccess,
+    onTransactionFailure,
+    dappRequest,
+    initialRoute,
+}: Props) => {
     const { LL } = useI18nContext()
     const dispatch = useAppDispatch()
     const selectedAccount = useAppSelector(selectSelectedAccount)
@@ -87,6 +95,7 @@ export const useTransactionScreen = ({ clauses, onTransactionSuccess, onTransact
         selectedDelegationOption,
         selectedDelegationUrl,
         dappRequest,
+        initialRoute,
     })
 
     // 6. Send transaction
