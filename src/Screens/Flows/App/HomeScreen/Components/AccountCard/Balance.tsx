@@ -24,7 +24,7 @@ export const Balance: React.FC<Props> = memo(({ isVisible, toggleVisible, accoun
 
     const renderBalance = useMemo(() => {
         if (isVisible) return FormattingUtils.humanNumber(balance, balance)
-        return Array.from(Array(FormattingUtils.humanNumber(balance).length).keys()).map(_value => "•")
+        return "•••••"
     }, [balance, isVisible])
 
     const computeFonts = useMemo(() => (renderBalance.length > 9 ? "title" : "largeTitle"), [renderBalance.length])
