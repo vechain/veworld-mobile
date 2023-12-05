@@ -3,7 +3,7 @@ module.exports = {
         paths: ["e2e/features/**/*.feature"],
         require: ["e2e/**/*.ts"],
         requireModule: ["ts-node/register"],
-        format: ["progress-bar", ["html", "cucumber-report.html"]],
+        format: ["progress-bar", ["html", "cucumber-report.html"], ["junit", "cucumber.xml"]],
         formatOptions: {
             snippetInterface: "synchronous",
         },
