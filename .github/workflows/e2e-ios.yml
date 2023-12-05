@@ -73,6 +73,15 @@ jobs:
       - name: Rebuild Detox Framework
         run: yarn detox clean-framework-cache && yarn detox build-framework-cache
 
+      # Install sentry properties
+      - name: Sentry properties
+        uses: mobiledevops/secret-to-file-action@v1
+        with:
+            base64-encoded-secret: ${{ secrets.SENTRY_PROPERTIES }}
+            filename: "sentry.properties"
+            is-executable: false
+            working-directory: "./ios"
+
       # Start Metro Bundler
       - name: Start Metro Bundler
         run: REACT_APP_UI_LOG=false yarn react-native start &> metro-bundler.log &
