@@ -187,6 +187,8 @@ describe("useTransactionScreen", () => {
                         onTransactionSuccess,
                         onTransactionFailure,
                         dappRequest: {
+                            isFirstRequest: true,
+                            method: "thor_sendTransaction",
                             id: "1234",
                             type: "in-app",
                             message: [],
@@ -228,6 +230,8 @@ describe("useTransactionScreen", () => {
             mockAccount(accWithDevice)
 
             const dappRequest: TransactionRequest = {
+                isFirstRequest: true,
+                method: "thor_sendTransaction",
                 id: "1234",
                 type: "in-app",
                 message: [],
