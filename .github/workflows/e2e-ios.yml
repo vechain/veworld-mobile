@@ -87,6 +87,7 @@ jobs:
 
       # Build iOS app
       - name: Detox build iOS Debug
+        id: build_app
         # if: steps.detox-cache-restore.outputs.cache-hit != 'true'
         timeout-minutes: 60
         run: SKIP_SENTRY=true yarn detox build --configuration ios.sim.debug_xcode_14.2 # GH macos-latest has Xcode 14.2
@@ -102,27 +103,45 @@ jobs:
 
       # Test with Detox
       - name: Detox test iOS Debug
+        id: test_app
         timeout-minutes: 100
-        run: yarn detox test --configuration ios.sim.debug_xcode_14.2 --cleanup --headless --record-logs all --take-screenshots failing --retry 1 --tags "not @broken"
+        run: yarn detox test --configuration ios.sim.debug_xcode_14.2 --cleanup --headless --record-logs all --take-screenshots failing --retry 1 --tags "not @broken" --publish
 
       # Upload artifacts Detox
       - name: Upload detox fail artifacts
-        if: failure()
+        if: always() && steps.test_app.outcome == 'failure'
         uses: actions/upload-artifact@v3
         with:
           name: detox-fail-artifacts
           path: artifacts
 
       - name: Upload Metro Bundler logs
-        if: failure()
+        if: always() && steps.build_app.outcome == 'failure'
         uses: actions/upload-artifact@v2
         with:
           name: metro-bundler-logs
           path: metro-bundler.log
+      
+      # Create test report
+      - name: Create test report
+        id: test_report
+        uses: dorny/test-reporter@v1
+        if: always() && steps.test_app.outcome != 'skipped'
+        with:
+          name: BDD test report
+          path: cucumber.xml
+          reporter: java-junit
+      
+      # Get cucumber published url
+      - name: Parse report URL
+        id: parse_report_url
+        if: always() && steps.test_app.outcome != 'skipped'
+        run: |
+          echo report_url=$(cat logs/cucumber.log | grep -Eo "https://reports.cucumber.io/reports/[a-zA-Z0-9-]+") >> "$GITHUB_OUTPUT"
 
+      # Post results to slack
       - name: Post to a Slack channel
         if: always()
-        id: slack
         uses: slackapi/slack-github-action@v1.24.0
         with:
           # Slack channel id, channel name, or user id to post message.
@@ -130,12 +149,14 @@ jobs:
           # You can pass in multiple channels to post to by providing a comma-delimited list of channel IDs.
           channel-id: ${{ secrets.SLACK_VEWORLD_CHANNEL_ID }}
           slack-message: |
-            🚀 E2E Testing - iOS Result: *${{ job.status }}*
+            🧱 Build Status - iOS Result: *${{ steps.build_app.outcome }}*
+            🚀 E2E Testing - iOS Result: *${{ steps.test_app.outcome }}*
             📦 Repository: *${{ github.repository }}*
             🌿 Branch: *${{ github.ref_name }}*
             🔨 Commit: *${{ github.actor }}* [${{ github.sha.short }}](${{ github.event.head_commit.url }})
             🔗 View Run: ${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}
             ${{ (github.event_name == 'release' && github.event.release.prerelease) && '🔴 THIS IS A PRE-RELEASE!' || '' }}
             ${{ (github.event_name == 'release') && ('🏷 Pre-Release Tag: ' || '') }} ${{ github.event.release.tag_name }}
+            📈 Cucumber Report: ${{ steps.parse_report_url.outputs.report_url || 'Not found.' }}
         env:
           SLACK_BOT_TOKEN: ${{ secrets.SLACK_VEWORLD_BOT_TOKEN }}
