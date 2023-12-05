@@ -234,7 +234,6 @@ export const LedgerSignTransaction: React.FC<Props> = ({ route }) => {
 
     const navigateOnFinish = useCallback(() => {
         dispatch(setIsAppLoading(false))
-        error(nav.getState())
 
         if (dappRequest) {
             // Requires an extra goBack if it's the first request from the dapp
@@ -244,7 +243,6 @@ export const LedgerSignTransaction: React.FC<Props> = ({ route }) => {
             nav.goBack()
             // nav back to original screen
             nav.goBack()
-            return
         } else {
             if (initialRoute) {
                 nav.navigate(initialRoute)
