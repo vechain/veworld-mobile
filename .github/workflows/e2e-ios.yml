@@ -164,8 +164,8 @@ jobs:
             🌿 Branch: *${{ github.ref_name }}*
             🔨 Commit: *${{ github.actor }}* [${{ github.sha.short }}](${{ github.event.head_commit.url }})
             🔗 View Run: ${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}
-            ${{ (github.event_name == 'release' && github.event.release.prerelease) && '🔴 THIS IS A PRE-RELEASE!' || '' }}
-            ${{ (github.event_name == 'release') && ('🏷 Pre-Release Tag: ' || '') }} ${{ github.event.release.tag_name }}
+            🗒️ Release Type: ${{ (github.event_name == 'release' && github.event.release.prerelease) && '🔴 THIS IS A PRE-RELEASE!' || 'Not a pre-release' }}
+            🏷️ Release Tag: ${{ (github.event_name == 'release') && ('Pre-Release Tag: ' || '') }} ${{ github.event.release.tag_name }}
             📈 Cucumber Report: ${{ steps.parse_report_url.outputs.report_url || 'Not found.' }}
         env:
           SLACK_BOT_TOKEN: ${{ secrets.SLACK_VEWORLD_BOT_TOKEN }}
