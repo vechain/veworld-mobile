@@ -7,15 +7,17 @@ import { AddressUtils, DAppUtils, debug, warn } from "~Utils"
 import { Routes } from "~Navigation"
 import { useAnalyticTracking, useSetSelectedAccount } from "~Hooks"
 import {
+    addConnectedDiscoveryApp,
     changeSelectedNetwork,
     selectAccounts,
+    selectConnectedDiscoverDApps,
     selectNetworks,
     selectSelectedAccountAddress,
     selectSelectedNetwork,
     useAppDispatch,
     useAppSelector,
 } from "~Storage/Redux"
-import { AccountWithDevice } from "~Model"
+import { AccountWithDevice, CertificateRequest, InAppRequest, TransactionRequest } from "~Model"
 import { compareAddresses } from "~Utils/AddressUtils/AddressUtils"
 import { showInfoToast } from "~Components"
 import { useI18nContext } from "~i18n"
@@ -34,6 +36,7 @@ type ContextType = {
     navigateToUrl: (url: string) => void
     navigationState: WebViewNavigation | undefined
     resetWebViewState: () => void
+    addAppAndNavToRequest: (request: InAppRequest) => void
 }
 
 const Context = React.createContext<ContextType | undefined>(undefined)
@@ -53,6 +56,7 @@ export const InAppBrowserProvider = ({ children }: Props) => {
     const { onSetSelectedAccount } = useSetSelectedAccount()
     const { LL } = useI18nContext()
     const selectedAccountAddress = useAppSelector(selectSelectedAccountAddress)
+    const connectedDiscoveryApps = useAppSelector(selectConnectedDiscoverDApps)
 
     const dispatch = useAppDispatch()
 
@@ -184,7 +188,7 @@ export const InAppBrowserProvider = ({ children }: Props) => {
     )
 
     const navigateToTransactionScreen = useCallback(
-        (request: WindowRequest, event: WebViewMessageEvent) => {
+        (request: WindowRequest, appUrl: string, appName: string) => {
             const message = request.message
 
             track(AnalyticsEvent.DISCOVERY_TRANSACTION_REQUESTED, {
@@ -208,22 +212,39 @@ export const InAppBrowserProvider = ({ children }: Props) => {
                 return
             }
 
-            nav.navigate(Routes.CONNECTED_APP_SEND_TRANSACTION_SCREEN, {
-                request: {
-                    id: request.id,
-                    type: "in-app",
-                    message: message,
-                    options: request.options,
-                    appUrl: event.nativeEvent.url,
-                    appName: event.nativeEvent.title,
-                },
-            })
+            const isAlreadyConnected = !!connectedDiscoveryApps.find(app => app.href === new URL(appUrl).hostname)
+
+            const req: TransactionRequest = {
+                method: request.method,
+                id: request.id,
+                type: "in-app",
+                message: message,
+                options: request.options,
+                appUrl,
+                appName,
+                isFirstRequest: !isAlreadyConnected,
+            }
+
+            if (isAlreadyConnected) {
+                nav.navigate(Routes.CONNECTED_APP_SEND_TRANSACTION_SCREEN, {
+                    request: req,
+                })
+            } else {
+                nav.navigate(Routes.CONNECT_APP_SCREEN, {
+                    request: {
+                        type: "in-app",
+                        initialRequest: req,
+                        appUrl,
+                        appName,
+                    },
+                })
+            }
         },
-        [navigationState, track, nav, postMessage, switchAccount, switchNetwork],
+        [connectedDiscoveryApps, navigationState, track, nav, postMessage, switchAccount, switchNetwork],
     )
 
     const navigateToCertificateScreen = useCallback(
-        (request: WindowRequest, event: WebViewMessageEvent) => {
+        (request: WindowRequest, appUrl: string, appName: string) => {
             const message = request.message
 
             track(AnalyticsEvent.DISCOVERY_CERTIFICATE_REQUESTED, {
@@ -247,18 +268,60 @@ export const InAppBrowserProvider = ({ children }: Props) => {
                 return
             }
 
-            nav.navigate(Routes.CONNECTED_APP_SIGN_CERTIFICATE_SCREEN, {
-                request: {
-                    id: request.id,
-                    type: "in-app",
-                    message: message,
-                    options: request.options,
-                    appUrl: event.nativeEvent.url,
-                    appName: event.nativeEvent.title,
-                },
-            })
+            const isAlreadyConnected = !!connectedDiscoveryApps.find(app => app.href === new URL(appUrl).hostname)
+
+            const req: CertificateRequest = {
+                method: request.method,
+                id: request.id,
+                type: "in-app",
+                message: message,
+                options: request.options,
+                appUrl,
+                appName,
+                isFirstRequest: !isAlreadyConnected,
+            }
+
+            if (isAlreadyConnected) {
+                nav.navigate(Routes.CONNECTED_APP_SIGN_CERTIFICATE_SCREEN, {
+                    request: req,
+                })
+            } else {
+                nav.navigate(Routes.CONNECT_APP_SCREEN, {
+                    request: {
+                        type: "in-app",
+                        initialRequest: req,
+                        appUrl,
+                        appName,
+                    },
+                })
+            }
         },
-        [navigationState, track, nav, postMessage, switchAccount, switchNetwork],
+        [connectedDiscoveryApps, navigationState, track, nav, postMessage, switchAccount, switchNetwork],
+    )
+
+    const addAppAndNavToRequest = useCallback(
+        (request: InAppRequest) => {
+            dispatch(
+                addConnectedDiscoveryApp({
+                    name: request.appName,
+                    href: new URL(request.appUrl).hostname,
+                    connectedTime: Date.now(),
+                }),
+            )
+
+            if (request.method === "thor_sendTransaction") {
+                nav.navigate(Routes.CONNECTED_APP_SEND_TRANSACTION_SCREEN, {
+                    request: request,
+                })
+            }
+
+            if (request.method === "thor_signCertificate") {
+                nav.navigate(Routes.CONNECTED_APP_SIGN_CERTIFICATE_SCREEN, {
+                    request,
+                })
+            }
+        },
+        [dispatch, nav],
     )
 
     const onMessage = useCallback(
@@ -272,9 +335,9 @@ export const InAppBrowserProvider = ({ children }: Props) => {
             const data: WindowRequest = JSON.parse(event.nativeEvent.data)
 
             if (data.method === RequestMethods.REQUEST_TRANSACTION) {
-                return navigateToTransactionScreen(data, event)
+                return navigateToTransactionScreen(data, event.nativeEvent.url, event.nativeEvent.title)
             } else if (data.method === RequestMethods.SIGN_CERTIFICATE) {
-                return navigateToCertificateScreen(data, event)
+                return navigateToCertificateScreen(data, event.nativeEvent.url, event.nativeEvent.title)
             } else {
                 warn("Unknown method", event.nativeEvent)
             }
@@ -318,6 +381,7 @@ export const InAppBrowserProvider = ({ children }: Props) => {
             goHome,
             navigationState,
             resetWebViewState,
+            addAppAndNavToRequest,
         }
     }, [
         onNavigationStateChange,
@@ -332,6 +396,7 @@ export const InAppBrowserProvider = ({ children }: Props) => {
         goHome,
         navigationState,
         resetWebViewState,
+        addAppAndNavToRequest,
     ])
 
     return <Context.Provider value={contextValue}>{children}</Context.Provider>

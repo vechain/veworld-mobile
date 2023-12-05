@@ -1,51 +1,42 @@
 import { BottomSheetModalMethods } from "@gorhom/bottom-sheet/lib/typescript/types"
-import { SessionTypes } from "@walletconnect/types"
 import React from "react"
-import { BaseButton, BaseView, BaseText, BaseSpacer, BaseBottomSheet } from "~Components"
-import { AccountWithDevice } from "~Model"
-import { WalletConnectUtils } from "~Utils"
+import { BaseBottomSheet, BaseButton, BaseSpacer, BaseText, BaseView } from "~Components"
 import { useI18nContext } from "~i18n"
 import { useTheme } from "~Hooks"
 import { ConnectedAppBox } from "./ConnectedAppBox"
+import { ConnectedApp } from "~Screens"
 
 const snapPoints = ["50%", "70%"]
 
 type Props = {
-    onConfirm: (topic: string) => void
+    onConfirm: (topic: ConnectedApp) => void
     onCancel: () => void
-    session: SessionTypes.Struct
-    account: AccountWithDevice
+    connectedApp: ConnectedApp
 }
 
 export const ConfirmDisconnectBottomSheet = React.forwardRef<BottomSheetModalMethods, Props>(
-    ({ onConfirm, onCancel, session, account }, ref) => {
+    ({ onConfirm, onCancel, connectedApp }, ref) => {
         const { LL } = useI18nContext()
         const theme = useTheme()
 
-        if (!session) return null
-
-        const { name } = WalletConnectUtils.getSessionRequestAttributes(session)
+        const confirm = () => {
+            onConfirm(connectedApp)
+            onCancel()
+        }
 
         return (
             <BaseBottomSheet snapPoints={snapPoints} ref={ref} onDismiss={onCancel}>
                 <BaseView>
                     <BaseText typographyFont="subTitleBold">{LL.SB_CONFIRM_OPERATION()}</BaseText>
-                    <BaseSpacer height={16} />
-                    <BaseText typographyFont="body">
-                        {LL.CONNECTED_APPS_CONFIRM_DISCONNECT_MESSAGE({
-                            name,
-                            alias: account.alias,
-                        })}
-                    </BaseText>
 
                     <BaseSpacer height={24} />
-                    <ConnectedAppBox session={session} />
+                    <ConnectedAppBox connectedApp={connectedApp} />
 
                     <BaseSpacer height={48} />
                     <BaseButton
                         w={100}
                         px={20}
-                        action={() => onConfirm(session.topic)}
+                        action={confirm}
                         title={LL.COMMON_BTN_CONFIRM().toUpperCase()}
                         bgColor={theme.colors.primary}
                     />

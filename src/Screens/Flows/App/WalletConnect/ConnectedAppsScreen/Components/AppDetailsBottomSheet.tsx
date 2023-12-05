@@ -1,36 +1,47 @@
 import { BottomSheetModalMethods } from "@gorhom/bottom-sheet/lib/typescript/types"
-import { SessionTypes } from "@walletconnect/types"
-import React, { useCallback, useState } from "react"
-import {
-    BaseButton,
-    BaseView,
-    BaseText,
-    BaseSpacer,
-    BaseBottomSheet,
-    AccountCard,
-    ScrollViewWithFooter,
-} from "~Components"
-import { AccountWithDevice } from "~Model"
-import { WalletConnectUtils } from "~Utils"
+import React, { useCallback, useMemo, useState } from "react"
+import { BaseBottomSheet, BaseButton, BaseSpacer, BaseView, ScrollViewWithFooter } from "~Components"
 import { useI18nContext } from "~i18n"
 import { AppInfo } from "../../Components"
-
-const snapPoints = ["65%"]
+import { ConnectedApp } from "~Screens"
 
 type Props = {
     onClose: () => void
-    session: SessionTypes.Struct
-    account: AccountWithDevice
+    connectedApp: ConnectedApp
     onDisconnect: () => void
 }
 
+const snapPoints = ["50%"]
 export const AppDetailsBottomSheet = React.forwardRef<BottomSheetModalMethods, Props>(
-    ({ onClose, session, account, onDisconnect }, ref) => {
+    ({ onClose, connectedApp, onDisconnect }, ref) => {
         const [isScrollEnabled, setIsScrollEnabled] = useState(true)
 
         const { LL } = useI18nContext()
 
-        const { name, description, url, icon } = WalletConnectUtils.getSessionRequestAttributes(session)
+        const icon = useMemo(() => {
+            if (connectedApp.type === "in-app") {
+                return connectedApp.image
+            } else
+                return {
+                    uri: connectedApp.session.peer.metadata.icons[0],
+                }
+        }, [connectedApp])
+
+        const { name, description, url } = useMemo(() => {
+            if (connectedApp.type === "in-app") {
+                return {
+                    name: connectedApp.app.name,
+                    url: connectedApp.app.href,
+                }
+            } else {
+                return {
+                    name: connectedApp.session.peer.metadata.name,
+                    icon: connectedApp.session.peer.metadata.icons[0],
+                    description: connectedApp.session.peer.metadata.description,
+                    url: connectedApp.session.peer.metadata.url,
+                }
+            }
+        }, [connectedApp])
 
         const disconnectSession = useCallback(() => {
             onClose()
@@ -55,13 +66,6 @@ export const AppDetailsBottomSheet = React.forwardRef<BottomSheetModalMethods, P
                             description={description}
                             hanldeOnReadMore={hanldeOnReadMore}
                         />
-
-                        <BaseSpacer height={24} />
-                        <BaseText typographyFont="subSubTitle">{LL.CONNECTED_APP_DETAILS_ACCOUNT_LABEL()}</BaseText>
-                        <BaseSpacer height={8} />
-                        <AccountCard account={account} showOpacityWhenDisabled={false} />
-
-                        <BaseSpacer height={40} />
                     </BaseView>
                 </ScrollViewWithFooter>
             </BaseBottomSheet>

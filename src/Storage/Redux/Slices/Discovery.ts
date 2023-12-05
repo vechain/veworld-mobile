@@ -2,11 +2,18 @@ import { createSlice, PayloadAction } from "@reduxjs/toolkit"
 import { DAppConfig, DiscoveryDApp } from "~Constants"
 import { URIUtils } from "~Utils"
 
+export type ConnectedDiscoveryApp = {
+    name: string
+    href: string
+    connectedTime: number
+}
+
 export type DiscoveryState = {
     featured: DiscoveryDApp[]
     favorites: DiscoveryDApp[]
     custom: DiscoveryDApp[]
     hasOpenedDiscovery: boolean
+    connectedApps: ConnectedDiscoveryApp[]
 }
 
 export const initialDiscoverState: DiscoveryState = {
@@ -14,6 +21,7 @@ export const initialDiscoverState: DiscoveryState = {
     favorites: [],
     custom: [],
     hasOpenedDiscovery: false,
+    connectedApps: [],
 }
 
 const sortByAmountOfNavigations = (dapps: DiscoveryDApp[]) => {
@@ -72,6 +80,17 @@ export const DiscoverySlice = createSlice({
                 }
             }
         },
+        addConnectedDiscoveryApp: (state, action: PayloadAction<ConnectedDiscoveryApp>) => {
+            if (!state.connectedApps) state.connectedApps = [action.payload]
+            else if (state.connectedApps.find(app => app.href === action.payload.href)) return
+            else {
+                state.connectedApps.push(action.payload)
+            }
+        },
+        removeConnectedDiscoveryApp: (state, action: PayloadAction<ConnectedDiscoveryApp>) => {
+            if (!state.connectedApps) return
+            state.connectedApps = state.connectedApps.filter(app => app.href !== action.payload.href)
+        },
         setDiscoverySectionOpened: state => {
             state.hasOpenedDiscovery = true
         },
@@ -79,5 +98,12 @@ export const DiscoverySlice = createSlice({
     },
 })
 
-export const { addBookmark, removeBookmark, resetDiscoveryState, addNavigationToDApp, setDiscoverySectionOpened } =
-    DiscoverySlice.actions
+export const {
+    addBookmark,
+    removeBookmark,
+    resetDiscoveryState,
+    addNavigationToDApp,
+    setDiscoverySectionOpened,
+    addConnectedDiscoveryApp,
+    removeConnectedDiscoveryApp,
+} = DiscoverySlice.actions

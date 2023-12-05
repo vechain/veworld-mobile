@@ -101,6 +101,13 @@ export const SendTransactionScreen: FC<Props> = ({ route }: Props) => {
         }
     }, [openSelectAccountBottomSheet, request.options.signer])
 
+    const goBack = useCallback(() => {
+        // Requires an extra goBack if it's the first request from the dapp
+        if (request.type === "in-app" && request.isFirstRequest) nav.goBack()
+
+        nav.goBack()
+    }, [nav, request])
+
     const onFinish = useCallback(
         (sucess: boolean) => {
             if (sucess) track(AnalyticsEvent.DAPP_TX_SENT)
@@ -108,9 +115,9 @@ export const SendTransactionScreen: FC<Props> = ({ route }: Props) => {
 
             dispatch(setIsAppLoading(false))
 
-            nav.goBack()
+            goBack()
         },
-        [nav, track, dispatch],
+        [goBack, track, dispatch],
     )
 
     const onTransactionSuccess = useCallback(
@@ -171,9 +178,9 @@ export const SendTransactionScreen: FC<Props> = ({ route }: Props) => {
                 text1: LL.NOTIFICATION_wallet_connect_matching_error(),
             })
         } finally {
-            nav.goBack()
+            goBack()
         }
-    }, [request, failRequest, postMessage, nav, LL])
+    }, [request, failRequest, postMessage, goBack, LL])
 
     const {
         selectedDelegationOption,
