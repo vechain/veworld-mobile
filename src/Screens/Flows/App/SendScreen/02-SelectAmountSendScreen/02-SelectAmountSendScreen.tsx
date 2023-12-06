@@ -1,7 +1,7 @@
 import { NativeStackScreenProps } from "@react-navigation/native-stack"
 import React, { useCallback, useState } from "react"
 import { StyleSheet, TextInput, ViewProps } from "react-native"
-import { useAmountInput, useTheme } from "~Hooks"
+import { useAmountInput, useTheme, useThemedStyles } from "~Hooks"
 import {
     BaseCardGroup,
     BaseIcon,
@@ -33,7 +33,6 @@ const AnimatedTextInput = Animated.createAnimatedComponent(TextInput)
 export const SelectAmountSendScreen = ({ route }: Props) => {
     const { initialRoute, token } = route.params
 
-    const theme = useTheme()
     const { LL } = useI18nContext()
     const nav = useNavigation()
     const { input, setInput } = useAmountInput()
@@ -42,6 +41,8 @@ export const SelectAmountSendScreen = ({ route }: Props) => {
     const [isInputInFiat, setIsInputInFiat] = useState(false)
     const [isError, setIsError] = useState(false)
     const isExchangeRateAvailable = !!exchangeRate?.rate
+
+    const { styles, theme } = useThemedStyles(baseStyles(isExchangeRateAvailable))
 
     const { gas } = useCalculateGas({ token })
 
@@ -202,12 +203,11 @@ export const SelectAmountSendScreen = ({ route }: Props) => {
                                                         {CURRENCY_SYMBOLS[currency]}
                                                     </BaseText>
                                                 ) : (
+                                                    // @ts-ignore
                                                     <BaseImage uri={token.icon} style={styles.logoIcon} />
                                                 )}
                                             </BaseView>
-
                                             <BaseSpacer width={16} />
-
                                             <AnimatedTextInput
                                                 contextMenuHidden
                                                 cursorColor={theme.colors.secondary}
@@ -226,6 +226,15 @@ export const SelectAmountSendScreen = ({ route }: Props) => {
                                                 testID="SendScreen_amountInput"
                                             />
 
+                                            <BaseTouchable
+                                                haptics="Light"
+                                                action={handleOnMaxPress}
+                                                style={styles.iconMax}>
+                                                <BaseText color={COLORS.COINBASE_BACKGROUND_DARK} fontSize={10}>
+                                                    MAX
+                                                </BaseText>
+                                            </BaseTouchable>
+
                                             {isExchangeRateAvailable && (
                                                 <>
                                                     <BaseIcon
@@ -237,15 +246,6 @@ export const SelectAmountSendScreen = ({ route }: Props) => {
                                                         haptics="Light"
                                                         action={handleToggleInputMode}
                                                     />
-
-                                                    <BaseTouchable
-                                                        haptics="Light"
-                                                        action={handleOnMaxPress}
-                                                        style={styles.iconMax}>
-                                                        <BaseText color={COLORS.COINBASE_BACKGROUND_DARK} fontSize={10}>
-                                                            MAX
-                                                        </BaseText>
-                                                    </BaseTouchable>
                                                 </>
                                             )}
                                         </BaseView>
@@ -274,6 +274,7 @@ export const SelectAmountSendScreen = ({ route }: Props) => {
                                                       <BaseText
                                                           typographyFont="caption"
                                                           px={4}
+                                                          style={styles.infoTextStyle}
                                                           color={theme.colors.textDisabled}>
                                                           {LL.SEND_VTHO_WARNING_MAX()}
                                                       </BaseText>
@@ -288,6 +289,7 @@ export const SelectAmountSendScreen = ({ route }: Props) => {
                                                       <BaseText
                                                           typographyFont="caption"
                                                           px={4}
+                                                          style={styles.infoTextStyle}
                                                           color={theme.colors.textDisabled}>
                                                           {LL.SEND_VTHO_WARNING_TOKEN()}
                                                       </BaseText>
@@ -319,53 +321,57 @@ export const SelectAmountSendScreen = ({ route }: Props) => {
     )
 }
 
-const styles = StyleSheet.create({
-    inputContainer: {
-        height: 160,
-    },
-    input: {
-        ...defaultTypography.largeTitle,
-        flex: 1,
-    },
-    budget: {
-        justifyContent: "flex-start",
-    },
-    logoIcon: {
-        height: 20,
-        width: 20,
-    },
-    amountContainer: {
-        overflow: "visible",
-        height: 100,
-    },
-    inputHeader: {
-        height: 32,
-    },
-    icon: {
-        position: "absolute",
-        right: 16,
-        bottom: -32,
-        padding: 8,
-    },
-    iconMax: {
-        position: "absolute",
-        right: 66,
-        bottom: -32,
-        padding: 6,
-        width: 36,
-        height: 36,
-        borderRadius: 20,
-        backgroundColor: COLORS.LIME_GREEN,
-        justifyContent: "center",
-        alignItems: "center",
-    },
-    amountView: {
-        zIndex: 2,
-    },
-    counterValueView: {
-        zIndex: 1,
-    },
-})
+const baseStyles = (isExchangeRateAvailable: boolean) => () =>
+    StyleSheet.create({
+        inputContainer: {
+            height: 160,
+        },
+        input: {
+            ...defaultTypography.largeTitle,
+            flex: 1,
+        },
+        budget: {
+            justifyContent: "flex-start",
+        },
+        logoIcon: {
+            height: 20,
+            width: 20,
+        },
+        amountContainer: {
+            overflow: "visible",
+            height: 100,
+        },
+        inputHeader: {
+            height: 32,
+        },
+        icon: {
+            position: "absolute",
+            right: 72,
+            bottom: -32,
+            padding: 8,
+        },
+        iconMax: {
+            position: "absolute",
+            right: 16,
+            bottom: -32,
+            padding: 8,
+            width: 36,
+            height: 36,
+            borderRadius: 20,
+            backgroundColor: COLORS.LIME_GREEN,
+            justifyContent: "center",
+            alignItems: "center",
+        },
+        infoTextStyle: {
+            paddingTop: !isExchangeRateAvailable ? 16 : undefined,
+        },
+        amountView: {
+            zIndex: 2,
+        },
+        counterValueView: {
+            zIndex: 1,
+        },
+    })
 
 interface IBalanceWarningView extends AnimatedProps<ViewProps> {}
 
