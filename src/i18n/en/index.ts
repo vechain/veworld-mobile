@@ -493,6 +493,13 @@ const en: BaseTranslation = {
     BROWSER_FAVOURITES_TITLE: "Favourites",
     BROWSER_ADD_BOOKMARK_TITLE: "Add bookmark",
     BROWSER_ADD_BOOKMARK_DESCRIPTION: "Add the current page to your bookmarks",
+    BROWSER_CHANGE_ACCOUNT_NETWORK_TITLE: "Account and network change",
+    BROWSER_CHANGE_ACCOUNT_NETWORK_DESC: "Are you sure about switching to account \"{account}\" and network \"{network}\"?",
+    BROWSER_CHANGE_ACCOUNT_TITLE: "Account change",
+    BROWSER_CHANGE_ACCOUNT_DESC: "Are you sure about switching to account \"{account}\"?",
+    BROWSER_CHANGE_NETWORK_TITLE: "Network change",
+    BROWSER_CHANGE_NETWORK_DESC: "Are you sure about switching to network \"{network}\"?",
+    BROWSER_CHANGE_ACCOUNT_NETWORK_WARNING: "We can't proceed with the operation with the current account and network",
 
     // NFT
     CONTRACT_ADDRESS: "Contract address",

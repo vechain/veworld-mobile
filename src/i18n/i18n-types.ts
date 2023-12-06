@@ -1765,6 +1765,38 @@ type RootTranslation = {
 	 */
 	BROWSER_ADD_BOOKMARK_DESCRIPTION: string
 	/**
+	 * A​c​c​o​u​n​t​ ​a​n​d​ ​n​e​t​w​o​r​k​ ​c​h​a​n​g​e
+	 */
+	BROWSER_CHANGE_ACCOUNT_NETWORK_TITLE: string
+	/**
+	 * A​r​e​ ​y​o​u​ ​s​u​r​e​ ​a​b​o​u​t​ ​s​w​i​t​c​h​i​n​g​ ​t​o​ ​a​c​c​o​u​n​t​ ​"​{​a​c​c​o​u​n​t​}​"​ ​a​n​d​ ​n​e​t​w​o​r​k​ ​"​{​n​e​t​w​o​r​k​}​"​?
+	 * @param {unknown} account
+	 * @param {unknown} network
+	 */
+	BROWSER_CHANGE_ACCOUNT_NETWORK_DESC: RequiredParams<'account' | 'network'>
+	/**
+	 * A​c​c​o​u​n​t​ ​c​h​a​n​g​e
+	 */
+	BROWSER_CHANGE_ACCOUNT_TITLE: string
+	/**
+	 * A​r​e​ ​y​o​u​ ​s​u​r​e​ ​a​b​o​u​t​ ​s​w​i​t​c​h​i​n​g​ ​t​o​ ​a​c​c​o​u​n​t​ ​"​{​a​c​c​o​u​n​t​}​"​?
+	 * @param {unknown} account
+	 */
+	BROWSER_CHANGE_ACCOUNT_DESC: RequiredParams<'account'>
+	/**
+	 * N​e​t​w​o​r​k​ ​c​h​a​n​g​e
+	 */
+	BROWSER_CHANGE_NETWORK_TITLE: string
+	/**
+	 * A​r​e​ ​y​o​u​ ​s​u​r​e​ ​a​b​o​u​t​ ​s​w​i​t​c​h​i​n​g​ ​t​o​ ​n​e​t​w​o​r​k​ ​"​{​n​e​t​w​o​r​k​}​"​?
+	 * @param {unknown} network
+	 */
+	BROWSER_CHANGE_NETWORK_DESC: RequiredParams<'network'>
+	/**
+	 * W​e​ ​c​a​n​'​t​ ​p​r​o​c​e​e​d​ ​w​i​t​h​ ​t​h​e​ ​o​p​e​r​a​t​i​o​n​ ​w​i​t​h​ ​t​h​e​ ​c​u​r​r​e​n​t​ ​a​c​c​o​u​n​t​ ​a​n​d​ ​n​e​t​w​o​r​k
+	 */
+	BROWSER_CHANGE_ACCOUNT_NETWORK_WARNING: string
+	/**
 	 * C​o​n​t​r​a​c​t​ ​a​d​d​r​e​s​s
 	 */
 	CONTRACT_ADDRESS: string
@@ -4493,6 +4525,34 @@ Try reconnect your device to the internet.
 	 * Add the current page to your bookmarks
 	 */
 	BROWSER_ADD_BOOKMARK_DESCRIPTION: () => LocalizedString
+	/**
+	 * Account and network change
+	 */
+	BROWSER_CHANGE_ACCOUNT_NETWORK_TITLE: () => LocalizedString
+	/**
+	 * Are you sure about switching to account "{account}" and network "{network}"?
+	 */
+	BROWSER_CHANGE_ACCOUNT_NETWORK_DESC: (arg: { account: unknown, network: unknown }) => LocalizedString
+	/**
+	 * Account change
+	 */
+	BROWSER_CHANGE_ACCOUNT_TITLE: () => LocalizedString
+	/**
+	 * Are you sure about switching to account "{account}"?
+	 */
+	BROWSER_CHANGE_ACCOUNT_DESC: (arg: { account: unknown }) => LocalizedString
+	/**
+	 * Network change
+	 */
+	BROWSER_CHANGE_NETWORK_TITLE: () => LocalizedString
+	/**
+	 * Are you sure about switching to network "{network}"?
+	 */
+	BROWSER_CHANGE_NETWORK_DESC: (arg: { network: unknown }) => LocalizedString
+	/**
+	 * We can't proceed with the operation with the current account and network
+	 */
+	BROWSER_CHANGE_ACCOUNT_NETWORK_WARNING: () => LocalizedString
 	/**
 	 * Contract address
 	 */

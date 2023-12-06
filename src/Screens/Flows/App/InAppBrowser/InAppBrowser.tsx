@@ -7,12 +7,24 @@ import { BrowserBottomBar, URLBar } from "./Components"
 import { NativeStackScreenProps } from "@react-navigation/native-stack"
 import { RootStackParamListSwitch, Routes } from "~Navigation"
 import DeviceInfo from "react-native-device-info"
+import { ChangeAccountNetworkBottomSheet } from "./Components/ChangeAccountNetworkBottomSheet"
 
 type Props = NativeStackScreenProps<RootStackParamListSwitch, Routes.BROWSER>
 
 export const InAppBrowser: React.FC<Props> = ({ route }) => {
-    const { webviewRef, onMessage, injectVechainScript, onNavigationStateChange, navigationState, resetWebViewState } =
-        useInAppBrowser()
+    const {
+        webviewRef,
+        onMessage,
+        injectVechainScript,
+        onNavigationStateChange,
+        navigationState,
+        resetWebViewState,
+        targetAccount,
+        targetNetwork,
+        handleCloseChangeAccountNetworkBottomSheet,
+        handleConfirmChangeAccountNetworkBottomSheet,
+        ChangeAccountNetworkBottomSheetRef,
+    } = useInAppBrowser()
 
     const [userAgent, setUserAgent] = React.useState<string | undefined>(undefined)
 
@@ -51,6 +63,13 @@ export const InAppBrowser: React.FC<Props> = ({ route }) => {
                             injectedJavaScriptBeforeContentLoaded={injectVechainScript}
                         />
                     )}
+                    <ChangeAccountNetworkBottomSheet
+                        targetAccount={targetAccount}
+                        targetNetwork={targetNetwork}
+                        ref={ChangeAccountNetworkBottomSheetRef}
+                        onClose={handleCloseChangeAccountNetworkBottomSheet}
+                        onConfirm={handleConfirmChangeAccountNetworkBottomSheet}
+                    />
                 </View>
             }
         />
