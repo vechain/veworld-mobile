@@ -17,7 +17,7 @@ import {
     useAppDispatch,
     useAppSelector,
 } from "~Storage/Redux"
-import { AccountWithDevice, CertificateRequest, InAppRequest, TransactionRequest } from "~Model"
+import { AccountWithDevice, CertificateRequest, InAppRequest, Network, TransactionRequest } from "~Model"
 import { compareAddresses } from "~Utils/AddressUtils/AddressUtils"
 import { showInfoToast, showWarningToast } from "~Components"
 import { useI18nContext } from "~i18n"
@@ -38,8 +38,8 @@ type ContextType = {
     navigationState: WebViewNavigation | undefined
     resetWebViewState: () => void
     addAppAndNavToRequest: (request: InAppRequest) => void
-    targetAccount?: string
-    targetNetwork?: string
+    targetAccount?: AccountWithDevice
+    targetNetwork?: Network
     handleCloseChangeAccountNetworkBottomSheet: () => void
     handleConfirmChangeAccountNetworkBottomSheet: () => void
     ChangeAccountNetworkBottomSheetRef: React.RefObject<BottomSheetModalMethods>
@@ -68,8 +68,8 @@ export const InAppBrowserProvider = ({ children }: Props) => {
         onOpen: openChangeAccountNetworkBottomSheet,
         onClose: closeChangeAccountNetworkBottomSheet,
     } = useBottomSheetModal()
-    const [targetAccount, setTargetAccount] = useState<string>()
-    const [targetNetwork, setTargetNetwork] = useState<string>()
+    const [targetAccount, setTargetAccount] = useState<AccountWithDevice>()
+    const [targetNetwork, setTargetNetwork] = useState<Network>()
     const [navigateToOperation, setNavigateToOperation] = useState<Function>()
 
     const handleCloseChangeAccountNetworkBottomSheet = useCallback(() => {
@@ -223,14 +223,14 @@ export const InAppBrowserProvider = ({ children }: Props) => {
                 const requestedAccount: AccountWithDevice | undefined = accounts.find(acct => {
                     return AddressUtils.compareAddresses(request.options.signer, acct.address)
                 })
-                setTargetAccount(requestedAccount?.alias)
+                setTargetAccount(requestedAccount)
             }
 
             if (selectedNetwork.genesis.id === request.genesisId) {
                 setTargetNetwork(undefined)
             } else {
                 const network = networks.find(n => n.genesis.id === request.genesisId)
-                setTargetNetwork(network?.name)
+                setTargetNetwork(network)
             }
             openChangeAccountNetworkBottomSheet()
         },

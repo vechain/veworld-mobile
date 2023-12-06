@@ -74,10 +74,12 @@ const baseStyles = (theme: ColorThemeType) =>
         selected: {
             borderWidth: 1.5,
             borderColor: theme.colors.text,
+            borderRadius: 16,
         },
         notSelected: {
             borderWidth: 1.5,
             borderColor: theme.colors.card,
+            borderRadius: 16,
         },
         touchableContainer: {
             backgroundColor: theme.colors.card,

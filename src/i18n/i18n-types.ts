@@ -1769,29 +1769,21 @@ type RootTranslation = {
 	 */
 	BROWSER_CHANGE_ACCOUNT_NETWORK_TITLE: string
 	/**
-	 * A​r​e​ ​y​o​u​ ​s​u​r​e​ ​a​b​o​u​t​ ​s​w​i​t​c​h​i​n​g​ ​t​o​ ​a​c​c​o​u​n​t​ ​"​{​a​c​c​o​u​n​t​}​"​ ​a​n​d​ ​n​e​t​w​o​r​k​ ​"​{​n​e​t​w​o​r​k​}​"​?
-	 * @param {unknown} account
-	 * @param {unknown} network
-	 */
-	BROWSER_CHANGE_ACCOUNT_NETWORK_DESC: RequiredParams<'account' | 'network'>
-	/**
 	 * A​c​c​o​u​n​t​ ​c​h​a​n​g​e
 	 */
 	BROWSER_CHANGE_ACCOUNT_TITLE: string
 	/**
-	 * A​r​e​ ​y​o​u​ ​s​u​r​e​ ​a​b​o​u​t​ ​s​w​i​t​c​h​i​n​g​ ​t​o​ ​a​c​c​o​u​n​t​ ​"​{​a​c​c​o​u​n​t​}​"​?
-	 * @param {unknown} account
+	 * A​c​c​o​u​n​t​ ​w​i​l​l​ ​c​h​a​n​g​e​ ​t​o​ ​t​h​i​s​ ​o​n​e​:
 	 */
-	BROWSER_CHANGE_ACCOUNT_DESC: RequiredParams<'account'>
+	BROWSER_CHANGE_ACCOUNT_DESC: string
 	/**
 	 * N​e​t​w​o​r​k​ ​c​h​a​n​g​e
 	 */
 	BROWSER_CHANGE_NETWORK_TITLE: string
 	/**
-	 * A​r​e​ ​y​o​u​ ​s​u​r​e​ ​a​b​o​u​t​ ​s​w​i​t​c​h​i​n​g​ ​t​o​ ​n​e​t​w​o​r​k​ ​"​{​n​e​t​w​o​r​k​}​"​?
-	 * @param {unknown} network
+	 * N​e​t​w​o​r​k​ ​w​i​l​l​ ​c​h​a​n​g​e​ ​t​o​ ​t​h​i​s​ ​o​n​e​:
 	 */
-	BROWSER_CHANGE_NETWORK_DESC: RequiredParams<'network'>
+	BROWSER_CHANGE_NETWORK_DESC: string
 	/**
 	 * W​e​ ​c​a​n​'​t​ ​p​r​o​c​e​e​d​ ​w​i​t​h​ ​t​h​e​ ​o​p​e​r​a​t​i​o​n​ ​w​i​t​h​ ​t​h​e​ ​c​u​r​r​e​n​t​ ​a​c​c​o​u​n​t​ ​a​n​d​ ​n​e​t​w​o​r​k
 	 */
@@ -4530,25 +4522,21 @@ Try reconnect your device to the internet.
 	 */
 	BROWSER_CHANGE_ACCOUNT_NETWORK_TITLE: () => LocalizedString
 	/**
-	 * Are you sure about switching to account "{account}" and network "{network}"?
-	 */
-	BROWSER_CHANGE_ACCOUNT_NETWORK_DESC: (arg: { account: unknown, network: unknown }) => LocalizedString
-	/**
 	 * Account change
 	 */
 	BROWSER_CHANGE_ACCOUNT_TITLE: () => LocalizedString
 	/**
-	 * Are you sure about switching to account "{account}"?
+	 * Account will change to this one:
 	 */
-	BROWSER_CHANGE_ACCOUNT_DESC: (arg: { account: unknown }) => LocalizedString
+	BROWSER_CHANGE_ACCOUNT_DESC: () => LocalizedString
 	/**
 	 * Network change
 	 */
 	BROWSER_CHANGE_NETWORK_TITLE: () => LocalizedString
 	/**
-	 * Are you sure about switching to network "{network}"?
+	 * Network will change to this one:
 	 */
-	BROWSER_CHANGE_NETWORK_DESC: (arg: { network: unknown }) => LocalizedString
+	BROWSER_CHANGE_NETWORK_DESC: () => LocalizedString
 	/**
 	 * We can't proceed with the operation with the current account and network
 	 */

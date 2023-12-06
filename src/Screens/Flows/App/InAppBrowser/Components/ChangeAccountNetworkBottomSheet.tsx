@@ -1,16 +1,24 @@
 import React, { useMemo } from "react"
 import { BottomSheetModalMethods } from "@gorhom/bottom-sheet/lib/typescript/types"
-import { BaseBottomSheet, BaseButton, BaseSpacer, BaseText, BaseView, Layout } from "~Components"
+import {
+    AccountCard,
+    BaseBottomSheet,
+    BaseButton,
+    BaseSpacer,
+    BaseText,
+    BaseView,
+    Layout,
+    NetworkBox,
+} from "~Components"
 import { useI18nContext } from "~i18n"
+import { AccountWithDevice, Network } from "~Model"
 
 type Props = {
-    targetAccount?: string
-    targetNetwork?: string
+    targetAccount?: AccountWithDevice
+    targetNetwork?: Network
     onConfirm: () => void
     onClose: () => void
 }
-
-const snapPoints = ["60%"]
 
 export const ChangeAccountNetworkBottomSheet = React.forwardRef<BottomSheetModalMethods, Props>(
     ({ onConfirm, onClose, targetAccount, targetNetwork }, ref) => {
@@ -28,24 +36,59 @@ export const ChangeAccountNetworkBottomSheet = React.forwardRef<BottomSheetModal
             }
         }, [LL, targetAccount, targetNetwork])
 
-        const description = useMemo(() => {
+        const body = useMemo(() => {
             if (targetAccount && targetNetwork) {
-                return LL.BROWSER_CHANGE_ACCOUNT_NETWORK_DESC({
-                    network: targetNetwork.toUpperCase(),
-                    account: targetAccount.toUpperCase(),
-                })
+                return (
+                    <BaseView>
+                        <BaseText typographyFont="subSubTitleLight" pt={12}>
+                            {LL.BROWSER_CHANGE_ACCOUNT_DESC()}
+                        </BaseText>
+                        <BaseSpacer height={16} />
+                        <AccountCard account={targetAccount} showOpacityWhenDisabled={false} />
+                        <BaseSpacer height={24} />
+                        <BaseText typographyFont="subSubTitleLight" pt={12}>
+                            {LL.BROWSER_CHANGE_NETWORK_DESC()}
+                        </BaseText>
+                        <BaseSpacer height={16} />
+                        <NetworkBox network={targetNetwork} />
+                    </BaseView>
+                )
             }
             if (targetAccount) {
-                return LL.BROWSER_CHANGE_ACCOUNT_DESC({
-                    account: targetAccount.toUpperCase(),
-                })
+                return (
+                    <BaseView>
+                        <BaseText typographyFont="subSubTitleLight" pt={12}>
+                            {LL.BROWSER_CHANGE_ACCOUNT_DESC()}
+                        </BaseText>
+                        <BaseSpacer height={16} />
+                        <AccountCard account={targetAccount} showOpacityWhenDisabled={false} />
+                    </BaseView>
+                )
             }
             if (targetNetwork) {
-                return LL.BROWSER_CHANGE_NETWORK_DESC({
-                    network: targetNetwork.toUpperCase(),
-                })
+                return (
+                    <BaseView>
+                        <BaseText typographyFont="subSubTitleLight" pt={12}>
+                            {LL.BROWSER_CHANGE_NETWORK_DESC()}
+                        </BaseText>
+                        <BaseSpacer height={16} />
+                        <NetworkBox network={targetNetwork} />
+                    </BaseView>
+                )
             }
         }, [LL, targetAccount, targetNetwork])
+
+        const snapPoints = useMemo(() => {
+            if (targetAccount && targetNetwork) {
+                return ["70%"]
+            }
+            if (targetAccount) {
+                return ["600%"]
+            }
+            if (targetNetwork) {
+                return ["600%"]
+            }
+        }, [targetAccount, targetNetwork])
 
         return (
             <BaseBottomSheet snapPoints={snapPoints} ref={ref} noMargins>
@@ -57,13 +100,7 @@ export const ChangeAccountNetworkBottomSheet = React.forwardRef<BottomSheetModal
                             {title}
                         </BaseText>
                     }
-                    body={
-                        <BaseView>
-                            <BaseText typographyFont="subSubTitleLight" pt={12}>
-                                {description}
-                            </BaseText>
-                        </BaseView>
-                    }
+                    body={body}
                     footer={
                         <BaseView mb={40}>
                             <BaseSpacer height={16} />
