@@ -1765,6 +1765,30 @@ type RootTranslation = {
 	 */
 	BROWSER_ADD_BOOKMARK_DESCRIPTION: string
 	/**
+	 * A​c​c​o​u​n​t​ ​a​n​d​ ​n​e​t​w​o​r​k​ ​c​h​a​n​g​e
+	 */
+	BROWSER_CHANGE_ACCOUNT_NETWORK_TITLE: string
+	/**
+	 * A​c​c​o​u​n​t​ ​c​h​a​n​g​e
+	 */
+	BROWSER_CHANGE_ACCOUNT_TITLE: string
+	/**
+	 * Y​o​u​r​ ​a​c​c​o​u​n​t​ ​w​i​l​l​ ​c​h​a​n​g​e​ ​t​o​:
+	 */
+	BROWSER_CHANGE_ACCOUNT_DESC: string
+	/**
+	 * N​e​t​w​o​r​k​ ​c​h​a​n​g​e
+	 */
+	BROWSER_CHANGE_NETWORK_TITLE: string
+	/**
+	 * T​h​e​ ​n​e​t​w​o​r​k​ ​w​i​l​l​ ​c​h​a​n​g​e​ ​t​o​:
+	 */
+	BROWSER_CHANGE_NETWORK_DESC: string
+	/**
+	 * W​e​ ​c​a​n​'​t​ ​p​r​o​c​e​e​d​ ​w​i​t​h​ ​t​h​e​ ​o​p​e​r​a​t​i​o​n​ ​w​i​t​h​ ​t​h​e​ ​c​u​r​r​e​n​t​ ​a​c​c​o​u​n​t​ ​a​n​d​ ​n​e​t​w​o​r​k
+	 */
+	BROWSER_CHANGE_ACCOUNT_NETWORK_WARNING: string
+	/**
 	 * C​o​n​t​r​a​c​t​ ​a​d​d​r​e​s​s
 	 */
 	CONTRACT_ADDRESS: string
@@ -4493,6 +4517,30 @@ Try reconnect your device to the internet.
 	 * Add the current page to your bookmarks
 	 */
 	BROWSER_ADD_BOOKMARK_DESCRIPTION: () => LocalizedString
+	/**
+	 * Account and network change
+	 */
+	BROWSER_CHANGE_ACCOUNT_NETWORK_TITLE: () => LocalizedString
+	/**
+	 * Account change
+	 */
+	BROWSER_CHANGE_ACCOUNT_TITLE: () => LocalizedString
+	/**
+	 * Your account will change to:
+	 */
+	BROWSER_CHANGE_ACCOUNT_DESC: () => LocalizedString
+	/**
+	 * Network change
+	 */
+	BROWSER_CHANGE_NETWORK_TITLE: () => LocalizedString
+	/**
+	 * The network will change to:
+	 */
+	BROWSER_CHANGE_NETWORK_DESC: () => LocalizedString
+	/**
+	 * We can't proceed with the operation with the current account and network
+	 */
+	BROWSER_CHANGE_ACCOUNT_NETWORK_WARNING: () => LocalizedString
 	/**
 	 * Contract address
 	 */

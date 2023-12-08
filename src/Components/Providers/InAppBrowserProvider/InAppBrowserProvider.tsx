@@ -1,11 +1,11 @@
-import React, { useCallback, useContext, useMemo, useRef } from "react"
+import React, { useCallback, useContext, useMemo, useRef, useState } from "react"
 import WebView, { WebViewMessageEvent, WebViewNavigation } from "react-native-webview"
 import { WindowRequest, WindowResponse } from "./types"
 import { AnalyticsEvent, RequestMethods } from "~Constants"
 import { useNavigation } from "@react-navigation/native"
 import { AddressUtils, DAppUtils, debug, warn } from "~Utils"
 import { Routes } from "~Navigation"
-import { useAnalyticTracking, useSetSelectedAccount } from "~Hooks"
+import { useAnalyticTracking, useBottomSheetModal, useSetSelectedAccount } from "~Hooks"
 import {
     addConnectedDiscoveryApp,
     changeSelectedNetwork,
@@ -17,10 +17,11 @@ import {
     useAppDispatch,
     useAppSelector,
 } from "~Storage/Redux"
-import { AccountWithDevice, CertificateRequest, InAppRequest, TransactionRequest } from "~Model"
+import { AccountWithDevice, CertificateRequest, InAppRequest, Network, TransactionRequest } from "~Model"
 import { compareAddresses } from "~Utils/AddressUtils/AddressUtils"
-import { showInfoToast } from "~Components"
+import { showInfoToast, showWarningToast } from "~Components"
 import { useI18nContext } from "~i18n"
+import { BottomSheetModalMethods } from "@gorhom/bottom-sheet/lib/typescript/types"
 
 type ContextType = {
     webviewRef: React.MutableRefObject<WebView | undefined>
@@ -37,6 +38,11 @@ type ContextType = {
     navigationState: WebViewNavigation | undefined
     resetWebViewState: () => void
     addAppAndNavToRequest: (request: InAppRequest) => void
+    targetAccount?: AccountWithDevice
+    targetNetwork?: Network
+    handleCloseChangeAccountNetworkBottomSheet: () => void
+    handleConfirmChangeAccountNetworkBottomSheet: () => void
+    ChangeAccountNetworkBottomSheetRef: React.RefObject<BottomSheetModalMethods>
 }
 
 const Context = React.createContext<ContextType | undefined>(undefined)
@@ -57,13 +63,35 @@ export const InAppBrowserProvider = ({ children }: Props) => {
     const { LL } = useI18nContext()
     const selectedAccountAddress = useAppSelector(selectSelectedAccountAddress)
     const connectedDiscoveryApps = useAppSelector(selectConnectedDiscoverDApps)
+    const {
+        ref: ChangeAccountNetworkBottomSheetRef,
+        onOpen: openChangeAccountNetworkBottomSheet,
+        onClose: closeChangeAccountNetworkBottomSheet,
+    } = useBottomSheetModal()
+    const [targetAccount, setTargetAccount] = useState<AccountWithDevice>()
+    const [targetNetwork, setTargetNetwork] = useState<Network>()
+    const [navigateToOperation, setNavigateToOperation] = useState<Function>()
+
+    const handleCloseChangeAccountNetworkBottomSheet = useCallback(() => {
+        closeChangeAccountNetworkBottomSheet()
+        setTargetAccount(undefined)
+        setTargetNetwork(undefined)
+        showWarningToast({ text1: LL.BROWSER_CHANGE_ACCOUNT_NETWORK_WARNING() })
+    }, [LL, closeChangeAccountNetworkBottomSheet])
+
+    const handleConfirmChangeAccountNetworkBottomSheet = useCallback(() => {
+        closeChangeAccountNetworkBottomSheet()
+        setTargetAccount(undefined)
+        setTargetNetwork(undefined)
+        navigateToOperation?.()
+    }, [closeChangeAccountNetworkBottomSheet, navigateToOperation])
 
     const dispatch = useAppDispatch()
 
     const track = useAnalyticTracking()
     const webviewRef = useRef<WebView | undefined>()
 
-    const [navigationState, setNavigationState] = React.useState<WebViewNavigation | undefined>(undefined)
+    const [navigationState, setNavigationState] = useState<WebViewNavigation | undefined>(undefined)
 
     const canGoBack = useMemo(() => {
         return navigationState?.canGoBack ?? false
@@ -187,23 +215,31 @@ export const InAppBrowserProvider = ({ children }: Props) => {
         [LL, postMessage, accounts, onSetSelectedAccount, selectedAccountAddress],
     )
 
+    const initAndOpenChangeAccountNetworkBottomSheet = useCallback(
+        (request: WindowRequest) => {
+            if (!request.options.signer || compareAddresses(selectedAccountAddress, request.options.signer)) {
+                setTargetAccount(undefined)
+            } else {
+                const requestedAccount: AccountWithDevice | undefined = accounts.find(acct => {
+                    return AddressUtils.compareAddresses(request.options.signer, acct.address)
+                })
+                setTargetAccount(requestedAccount)
+            }
+
+            if (selectedNetwork.genesis.id === request.genesisId) {
+                setTargetNetwork(undefined)
+            } else {
+                const network = networks.find(n => n.genesis.id === request.genesisId)
+                setTargetNetwork(network)
+            }
+            openChangeAccountNetworkBottomSheet()
+        },
+        [accounts, networks, openChangeAccountNetworkBottomSheet, selectedAccountAddress, selectedNetwork.genesis.id],
+    )
+
     const navigateToTransactionScreen = useCallback(
         (request: WindowRequest, appUrl: string, appName: string) => {
-            const message = request.message
-
-            track(AnalyticsEvent.DISCOVERY_TRANSACTION_REQUESTED, {
-                dapp: navigationState?.url,
-            })
-
-            const isValid = DAppUtils.isValidTxMessage(message)
-
-            if (!isValid) {
-                return postMessage({
-                    id: request.id,
-                    error: "Invalid transaction",
-                    method: RequestMethods.REQUEST_TRANSACTION,
-                })
-            }
+            const message = request.message as Connex.Vendor.TxMessage
 
             try {
                 switchAccount(request)
@@ -212,7 +248,7 @@ export const InAppBrowserProvider = ({ children }: Props) => {
                 return
             }
 
-            const isAlreadyConnected = !!connectedDiscoveryApps.find(app => app.href === new URL(appUrl).hostname)
+            const isAlreadyConnected = !!connectedDiscoveryApps?.find(app => app.href === new URL(appUrl).hostname)
 
             const req: TransactionRequest = {
                 method: request.method,
@@ -240,27 +276,51 @@ export const InAppBrowserProvider = ({ children }: Props) => {
                 })
             }
         },
-        [connectedDiscoveryApps, navigationState, track, nav, postMessage, switchAccount, switchNetwork],
+        [connectedDiscoveryApps, nav, switchAccount, switchNetwork],
     )
 
-    const navigateToCertificateScreen = useCallback(
+    const validateTxMessage = useCallback(
         (request: WindowRequest, appUrl: string, appName: string) => {
             const message = request.message
 
-            track(AnalyticsEvent.DISCOVERY_CERTIFICATE_REQUESTED, {
+            track(AnalyticsEvent.DISCOVERY_TRANSACTION_REQUESTED, {
                 dapp: navigationState?.url,
             })
 
-            const isValid = DAppUtils.isValidCertMessage(message)
+            const isValid = DAppUtils.isValidTxMessage(message)
 
             if (!isValid) {
                 return postMessage({
                     id: request.id,
-                    error: "Invalid certificate message",
-                    method: RequestMethods.SIGN_CERTIFICATE,
+                    error: "Invalid transaction",
+                    method: RequestMethods.REQUEST_TRANSACTION,
                 })
             }
 
+            if (
+                (!request.options.signer || compareAddresses(selectedAccountAddress, request.options.signer)) &&
+                selectedNetwork.genesis.id === request.genesisId
+            ) {
+                return navigateToTransactionScreen(request, appUrl, appName)
+            }
+
+            setNavigateToOperation(() => () => navigateToTransactionScreen(request, appUrl, appName))
+            initAndOpenChangeAccountNetworkBottomSheet(request)
+        },
+        [
+            track,
+            navigationState?.url,
+            selectedAccountAddress,
+            selectedNetwork.genesis.id,
+            initAndOpenChangeAccountNetworkBottomSheet,
+            postMessage,
+            navigateToTransactionScreen,
+        ],
+    )
+
+    const navigateToCertificateScreen = useCallback(
+        (request: WindowRequest, appUrl: string, appName: string) => {
+            const message = request.message as Connex.Vendor.CertMessage
             try {
                 switchAccount(request)
                 switchNetwork(request)
@@ -268,7 +328,7 @@ export const InAppBrowserProvider = ({ children }: Props) => {
                 return
             }
 
-            const isAlreadyConnected = !!connectedDiscoveryApps.find(app => app.href === new URL(appUrl).hostname)
+            const isAlreadyConnected = !!connectedDiscoveryApps?.find(app => app.href === new URL(appUrl).hostname)
 
             const req: CertificateRequest = {
                 method: request.method,
@@ -296,7 +356,46 @@ export const InAppBrowserProvider = ({ children }: Props) => {
                 })
             }
         },
-        [connectedDiscoveryApps, navigationState, track, nav, postMessage, switchAccount, switchNetwork],
+        [connectedDiscoveryApps, nav, switchAccount, switchNetwork],
+    )
+
+    const validateCertMessage = useCallback(
+        (request: WindowRequest, appUrl: string, appName: string) => {
+            const message = request.message
+
+            track(AnalyticsEvent.DISCOVERY_CERTIFICATE_REQUESTED, {
+                dapp: navigationState?.url,
+            })
+
+            const isValid = DAppUtils.isValidCertMessage(message)
+
+            if (!isValid) {
+                return postMessage({
+                    id: request.id,
+                    error: "Invalid certificate message",
+                    method: RequestMethods.SIGN_CERTIFICATE,
+                })
+            }
+
+            if (
+                (!request.options.signer || compareAddresses(selectedAccountAddress, request.options.signer)) &&
+                selectedNetwork.genesis.id === request.genesisId
+            ) {
+                return navigateToCertificateScreen(request, appUrl, appName)
+            }
+
+            setNavigateToOperation(() => () => navigateToCertificateScreen(request, appUrl, appName))
+            initAndOpenChangeAccountNetworkBottomSheet(request)
+        },
+        [
+            initAndOpenChangeAccountNetworkBottomSheet,
+            navigateToCertificateScreen,
+            navigationState?.url,
+            postMessage,
+            selectedAccountAddress,
+            selectedNetwork.genesis.id,
+            track,
+        ],
     )
 
     const addAppAndNavToRequest = useCallback(
@@ -335,14 +434,14 @@ export const InAppBrowserProvider = ({ children }: Props) => {
             const data: WindowRequest = JSON.parse(event.nativeEvent.data)
 
             if (data.method === RequestMethods.REQUEST_TRANSACTION) {
-                return navigateToTransactionScreen(data, event.nativeEvent.url, event.nativeEvent.title)
+                return validateTxMessage(data, event.nativeEvent.url, event.nativeEvent.title)
             } else if (data.method === RequestMethods.SIGN_CERTIFICATE) {
-                return navigateToCertificateScreen(data, event.nativeEvent.url, event.nativeEvent.title)
+                return validateCertMessage(data, event.nativeEvent.url, event.nativeEvent.title)
             } else {
                 warn("Unknown method", event.nativeEvent)
             }
         },
-        [navigateToTransactionScreen, navigateToCertificateScreen],
+        [validateTxMessage, validateCertMessage],
     )
 
     const onNavigationStateChange = useCallback((navState: WebViewNavigation) => {
@@ -382,12 +481,16 @@ export const InAppBrowserProvider = ({ children }: Props) => {
             navigationState,
             resetWebViewState,
             addAppAndNavToRequest,
+            targetAccount,
+            targetNetwork,
+            handleCloseChangeAccountNetworkBottomSheet,
+            handleConfirmChangeAccountNetworkBottomSheet,
+            ChangeAccountNetworkBottomSheetRef,
         }
     }, [
-        onNavigationStateChange,
         onMessage,
         postMessage,
-        webviewRef,
+        onNavigationStateChange,
         canGoBack,
         canGoForward,
         goBack,
@@ -397,6 +500,11 @@ export const InAppBrowserProvider = ({ children }: Props) => {
         navigationState,
         resetWebViewState,
         addAppAndNavToRequest,
+        targetAccount,
+        targetNetwork,
+        handleCloseChangeAccountNetworkBottomSheet,
+        handleConfirmChangeAccountNetworkBottomSheet,
+        ChangeAccountNetworkBottomSheetRef,
     ])
 
     return <Context.Provider value={contextValue}>{children}</Context.Provider>

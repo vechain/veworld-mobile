@@ -493,6 +493,12 @@ const en: BaseTranslation = {
     BROWSER_FAVOURITES_TITLE: "Favourites",
     BROWSER_ADD_BOOKMARK_TITLE: "Add bookmark",
     BROWSER_ADD_BOOKMARK_DESCRIPTION: "Add the current page to your bookmarks",
+    BROWSER_CHANGE_ACCOUNT_NETWORK_TITLE: "Account and network change",
+    BROWSER_CHANGE_ACCOUNT_TITLE: "Account change",
+    BROWSER_CHANGE_ACCOUNT_DESC: "Your account will change to:",
+    BROWSER_CHANGE_NETWORK_TITLE: "Network change",
+    BROWSER_CHANGE_NETWORK_DESC: "The network will change to:",
+    BROWSER_CHANGE_ACCOUNT_NETWORK_WARNING: "We can't proceed with the operation with the current account and network",
 
     // NFT
     CONTRACT_ADDRESS: "Contract address",
@@ -637,7 +643,7 @@ const en: BaseTranslation = {
     SEND_GAS_FEE: "Gas fee",
     SEND_ESTIMATED_TIME: "Estimated time",
     SEND_LESS_THAN_1_MIN: "Less than 1 min",
-    SEND_LESS_THAN_30_SECONDS:  "Less than 30 seconds",
+    SEND_LESS_THAN_30_SECONDS: "Less than 30 seconds",
     SEND_LESS_THAN_A_MOMENT: "A few seconds",
     SEND_DELEGATED_FEES: "None, paid by delegator",
     SEND_INSUFFICIENT_VTHO: "Insufficient Gas -",
