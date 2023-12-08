@@ -68,7 +68,7 @@ jobs:
                   force-avd-creation: false
                   disable-animations: true
                   avd-name: ${{ steps.device-name.outputs.AVD_NAME }}
-                  script: yarn detox test --configuration android.emu.debug.31 --headless --record-logs all --take-screenshots failing --tags "not @broken" --publish
+                  script: yarn detox test --configuration android.emu.debug.31 --headless --record-logs all --take-screenshots failing --tags "not @broken and not @notAndroid" --publish
 
             - name: Upload artifacts
               if: failure() || cancelled()

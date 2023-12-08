@@ -1,4 +1,3 @@
-/* eslint-disable no-console */
 import { Given, Then, When } from "@cucumber/cucumber"
 import { waitFor, element } from "detox"
 import {
@@ -15,83 +14,16 @@ import {
     HomeScreen,
     textShouldBeVisible,
     clickByText,
+    launchAppWithBioAuth,
+    launchAppWithBioUnAuth,
 } from "../helpers"
 
 Given("The app is opened and is iOS and has biometrics authorization", { timeout: -1 }, async () => {
-    if (detox.device.getPlatform() !== "ios") return "skipped"
-
-    // Enroll in Face ID
-    await detox.device.setBiometricEnrollment(true)
-
-    let retries: number = 5
-    while (retries-- > 0) {
-        try {
-            await detox.device.launchApp({
-                newInstance: true,
-                permissions: { faceid: "YES" },
-                launchArgs: {
-                    DTXEnableVerboseSyncSystem: "YES",
-                    DTXEnableVerboseSyncResources: "YES",
-                    detoxPrintBusyIdleResources: "YES",
-                    detoxURLBlacklistRegex: [".*vechain.*", ".*walletconnect.*", ".*coingecko.*"],
-                    appUrl: "http://localhost:8081",
-                },
-            })
-            break
-        } catch (error) {
-            console.log("Error while launching app: " + error)
-        }
-    }
-    if (retries === 0) return "skipped"
+    await launchAppWithBioAuth()
 })
 
 Given("The app is opened and is iOS and does not have biometrics authorization", { timeout: -1 }, async () => {
-    if (detox.device.getPlatform() !== "ios") return "skipped"
-
-    let retries: number = 5
-    while (retries-- > 0) {
-        try {
-            await detox.device.launchApp({
-                newInstance: true,
-                permissions: { faceid: "NO" },
-                launchArgs: {
-                    DTXEnableVerboseSyncSystem: "YES",
-                    DTXEnableVerboseSyncResources: "YES",
-                    detoxPrintBusyIdleResources: "YES",
-                    detoxURLBlacklistRegex: [".*vechain.*", ".*walletconnect.*", ".*coingecko.*"],
-                    appUrl: "http://localhost:8081",
-                },
-            })
-            break
-        } catch (error) {
-            console.log("Error while launching app: " + error)
-        }
-    }
-    if (retries === 0) return "skipped"
-})
-
-Given("The app is opened and is iOS", { timeout: -1 }, async () => {
-    if (detox.device.getPlatform() !== "ios") return "skipped"
-
-    let retries: number = 5
-    while (retries-- > 0) {
-        try {
-            await detox.device.launchApp({
-                newInstance: true,
-                launchArgs: {
-                    DTXEnableVerboseSyncSystem: "YES",
-                    DTXEnableVerboseSyncResources: "YES",
-                    detoxPrintBusyIdleResources: "YES",
-                    detoxURLBlacklistRegex: [".*vechain.*", ".*walletconnect.*", ".*coingecko.*"],
-                    appUrl: "http://localhost:8081",
-                },
-            })
-            break
-        } catch (error) {
-            console.log("Error while launching app: " + error)
-        }
-    }
-    if (retries === 0) return "skipped"
+    await launchAppWithBioUnAuth()
 })
 
 Given("The user is in the onboarding welcome screen", { timeout: -1 }, async () => {
@@ -144,9 +76,10 @@ When(
 When(
     "The user chooses to protect the wallet with a pin {string} and confirms with {string}",
     { timeout: -1 },
-    async (password: string, confirmPassword: string) => {
+    async function (password: string, confirmPassword: string) {
         await element(by.text("Create password")).tap()
         await OnboardingFlows.chooseAndConfirmPassword(password, confirmPassword)
+        this.pin = password // save pin for later use
     },
 )
 

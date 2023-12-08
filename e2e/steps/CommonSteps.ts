@@ -1,5 +1,3 @@
-/* eslint-disable no-console */
-
 import { Given, When } from "@cucumber/cucumber"
 import {
     HomeFlows,
@@ -13,30 +11,13 @@ import {
     closeBottomSheet,
     goBack,
     idShouldExist,
+    launchApp,
 } from "../helpers"
 import { isPinRequested } from "../helpers/flows/HomeFlows"
 import { enterPin } from "../helpers/flows/OnboardingFlows"
 
 Given("The app is opened", { timeout: -1 }, async () => {
-    let retries: number = 5
-    while (retries-- > 0) {
-        try {
-            await detox.device.launchApp({
-                newInstance: true,
-                launchArgs: {
-                    DTXEnableVerboseSyncSystem: "YES",
-                    DTXEnableVerboseSyncResources: "YES",
-                    detoxPrintBusyIdleResources: "YES",
-                    detoxURLBlacklistRegex: [".*vechain.*", ".*walletconnect.*", ".*coingecko.*"],
-                    appUrl: "http://localhost:8081",
-                },
-            })
-            break
-        } catch (error) {
-            console.log("Error while launching app: " + error)
-        }
-    }
-    if (retries === 0) return "skipped"
+    await launchApp()
 })
 
 Given("The user has previously onboarded", { timeout: -1 }, async function () {
@@ -49,6 +30,7 @@ Given("Open with demo account", { timeout: -1 }, async function () {
     } else {
         if (!(await HomeScreen.isActive())) await clickByText("DEV:DEMO")
     }
+    this.pin = TEST_PIN // save pin for later use
 })
 
 Given("The user has more than one account", { timeout: -1 }, async function () {

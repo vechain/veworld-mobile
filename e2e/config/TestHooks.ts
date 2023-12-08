@@ -2,14 +2,23 @@
 
 import { Before, BeforeAll, AfterAll, After, ITestCaseHookParameter } from "@cucumber/cucumber"
 import detox from "detox/internals"
-import { GeneralSettingsFlow, HomeFlows, SettingsFlows, isPresentId } from "../helpers"
+import { launchApp, resetApp } from "../helpers"
+import { PickleTagFilter } from "@cucumber/cucumber/lib/pickle_filter"
 
+/**
+ * Before all scenarios
+ * - initialize the Detox test session
+ */
 BeforeAll({ timeout: 600 * 1000 }, async () => {
     console.log("Starting a new Detox test session...")
     await detox.init()
     console.log("Detox test session started!")
 })
 
+/**
+ * Before each scenario
+ * - launch the app
+ */
 Before({ timeout: 600 * 1000 }, async (message: ITestCaseHookParameter) => {
     const { pickle } = message
     console.log("Starting Detox test: " + pickle.name)
@@ -18,22 +27,21 @@ Before({ timeout: 600 * 1000 }, async (message: ITestCaseHookParameter) => {
         fullName: pickle.name,
         status: "running",
     })
+    await launchApp()
 })
 
-After({ timeout: 600 * 1000 }, async (message: ITestCaseHookParameter) => {
+/**
+ * After each scenario
+ * - reset the app to the initial state - can be skipped with @noReset tag
+ * - terminate the app
+ */
+After({ timeout: 600 * 1000 }, async function (message: ITestCaseHookParameter) {
     const { pickle, result } = message
     try {
-        // reset app after each test
-        if (await isPresentId("settings-tab")) {
-            await HomeFlows.goToSettings()
-            await SettingsFlows.goToGeneralSettings()
-            await GeneralSettingsFlow.resetApp()
-        } else {
-            console.log("Cannot reset app for test: " + pickle.name)
+        const noResetTags = new PickleTagFilter("@noReset")
+        if (!noResetTags.matchesAllTagExpressions(pickle)) {
+            await resetApp(this.pin)
         }
-    } catch (error) {
-        device.takeScreenshot("testFailure")
-        throw error
     } finally {
         await detox.onTestDone({
             title: pickle.uri,
@@ -44,6 +52,10 @@ After({ timeout: 600 * 1000 }, async (message: ITestCaseHookParameter) => {
     }
 })
 
+/**
+ * After all scenarios
+ * - cleanup the Detox test session
+ */
 AfterAll({ timeout: 600 * 1000 }, async () => {
     console.log("Starting cleanup Detox test session...")
     await detox.cleanup()

@@ -5,6 +5,10 @@ on:
 
   workflow_call:
 
+  push:
+    branches:
+      - chore/fix-report-reset-app
+
 jobs:
   build-e2e-test-ios:
     name: Detox Build & Test iOS Debug
@@ -47,27 +51,10 @@ jobs:
       - name: Install & Patch packages
         run: yarn install --frozen-lockfile --network-timeout 300000
 
-      # Restore Pods cache
-      #- name: Restore Pods cache
-      #  uses: actions/cache/restore@v3
-      #  id: pods-cache-restore
-      #  with:
-      #      path: ios/Pods
-      #      key: ${{ runner.os }}-pods-${{ hashFiles('ios/Podfile.lock') }}
-
       # Install CocoaPods
       - name: Install CocoaPods
         if: steps.pods-cache-restore.outputs.cache-hit != 'true'
         run: npx pod-install
-
-      # Save Pods cache
-      #- name: Save Pods cache
-      #  uses: actions/cache/save@v3
-      #  id: pods-cache
-      #  if: always()
-      #  with:
-      #      path: ios/Pods
-      #      key: ${{ runner.os }}-pods-${{ hashFiles('ios/Podfile.lock') }}
 
       # Install Detox CLI
       - name: Rebuild Detox Framework
@@ -86,14 +73,6 @@ jobs:
       - name: Start Metro Bundler
         run: REACT_APP_UI_LOG=false yarn react-native start &> metro-bundler.log &
 
-      # Restore Detox build cache
-      # - name: Restore Detox build
-      #   id: detox-cache-restore
-      #   uses: actions/cache/restore@v3
-      #   with:
-      #       path: ios/build
-      #       key: ${{ runner.os }}-detox-build-${{ hashFiles('ios/Podfile.lock') }}
-
       # Build iOS app
       - name: Detox build iOS Debug
         id: build_app
@@ -101,28 +80,29 @@ jobs:
         timeout-minutes: 60
         run: SKIP_SENTRY=true yarn detox build --configuration ios.sim.debug_xcode_14.2 # GH macos-latest has Xcode 14.2
 
-      # Save Detox build cache
-      # - name: Save Detox build
-      #   id: detox-cache
-      #   uses: actions/cache/save@v3
-      #   if: always()
-      #   with:
-      #       path: ios/build
-      #       key: ${{ runner.os }}-detox-build-${{ hashFiles('ios/Podfile.lock') }}
-
       # Test with Detox
       - name: Detox test iOS Debug
         id: test_app
         timeout-minutes: 100
-        run: yarn detox test --configuration ios.sim.debug_xcode_14.2 --cleanup --headless --record-logs all --take-screenshots failing --retry 1 --tags "not @broken" --publish
+        run: yarn detox test --configuration ios.sim.debug_xcode_14.2 --cleanup --headless --record-logs all --take-screenshots failing --retry 1 --tags "not @broken" --publish |& tee cucumber.log
 
-      # Upload artifacts Detox
-      - name: Upload detox fail artifacts
+      # Upload test artifacts from Detox
+      - name: Upload detox artifacts
         if: always() && steps.test_app.outcome == 'failure'
         uses: actions/upload-artifact@v3
         with:
           name: detox-fail-artifacts
           path: artifacts
+
+      # Upload cucumber artifacts
+      - name: Upload cucumber artifacts
+        if: always() && steps.test_app.outcome == 'failure'
+        uses: actions/upload-artifact@v3
+        with:
+          name: cucumber-fail-artifacts
+          path: |
+            cucumber.log
+            cucumber-report.html
 
       - name: Upload Metro Bundler logs
         if: always() && steps.build_app.outcome == 'failure'
@@ -146,7 +126,7 @@ jobs:
         id: parse_report_url
         if: always() && steps.test_app.outcome != 'skipped'
         run: |
-          echo report_url=$(cat logs/cucumber.log | grep -Eo "https://reports.cucumber.io/reports/[a-zA-Z0-9-]+") >> "$GITHUB_OUTPUT"
+          echo report_url=$(cat cucumber.log | grep -Eo "https://reports.cucumber.io/reports/[a-zA-Z0-9-]+") >> "$GITHUB_OUTPUT"
 
       # Post results to slack
       - name: Post to a Slack channel
