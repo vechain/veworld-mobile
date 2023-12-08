@@ -82,7 +82,7 @@ jobs:
       - name: Detox test iOS Debug
         id: test_app
         timeout-minutes: 100
-        run: yarn detox test --configuration ios.sim.debug_xcode_14.2 --cleanup --headless --record-logs all --take-screenshots failing --retry 1 --tags "not @broken" --parallel 2 --publish > cucumber.log
+        run: yarn detox test --configuration ios.sim.debug_xcode_14.2 --cleanup --headless --record-logs all --take-screenshots all --retry 1 --tags "not @broken and @contacts" --parallel 4 --publish > cucumber.log
 
       # Upload test artifacts from Detox
       - name: Upload detox artifacts
@@ -116,6 +116,7 @@ jobs:
         if: always() && steps.test_app.outcome != 'skipped'
         run: |
           echo report_url=$(cat cucumber.log | grep -Eo "https://reports.cucumber.io/reports/[a-zA-Z0-9-]+") >> "$GITHUB_OUTPUT"
+          echo $GITHUB_OUTPUT
 
       # Post results to slack
       - name: Post to a Slack channel
