@@ -95,6 +95,7 @@ main.jsbundle.packager.map
 # cucumber
 cucumber-report.html
 cucumber.xml
+cucumber.log
 
 # local files
 env.local
