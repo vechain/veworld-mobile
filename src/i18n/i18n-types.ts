@@ -1773,7 +1773,7 @@ type RootTranslation = {
 	 */
 	BROWSER_CHANGE_ACCOUNT_TITLE: string
 	/**
-	 * A​c​c​o​u​n​t​ ​w​i​l​l​ ​c​h​a​n​g​e​ ​t​o​ ​t​h​i​s​ ​o​n​e​:
+	 * Y​o​u​r​ ​a​c​c​o​u​n​t​ ​w​i​l​l​ ​c​h​a​n​g​e​ ​t​o​:
 	 */
 	BROWSER_CHANGE_ACCOUNT_DESC: string
 	/**
@@ -1781,7 +1781,7 @@ type RootTranslation = {
 	 */
 	BROWSER_CHANGE_NETWORK_TITLE: string
 	/**
-	 * N​e​t​w​o​r​k​ ​w​i​l​l​ ​c​h​a​n​g​e​ ​t​o​ ​t​h​i​s​ ​o​n​e​:
+	 * T​h​e​ ​n​e​t​w​o​r​k​ ​w​i​l​l​ ​c​h​a​n​g​e​ ​t​o​:
 	 */
 	BROWSER_CHANGE_NETWORK_DESC: string
 	/**
@@ -4526,7 +4526,7 @@ Try reconnect your device to the internet.
 	 */
 	BROWSER_CHANGE_ACCOUNT_TITLE: () => LocalizedString
 	/**
-	 * Account will change to this one:
+	 * Your account will change to:
 	 */
 	BROWSER_CHANGE_ACCOUNT_DESC: () => LocalizedString
 	/**
@@ -4534,7 +4534,7 @@ Try reconnect your device to the internet.
 	 */
 	BROWSER_CHANGE_NETWORK_TITLE: () => LocalizedString
 	/**
-	 * Network will change to this one:
+	 * The network will change to:
 	 */
 	BROWSER_CHANGE_NETWORK_DESC: () => LocalizedString
 	/**
