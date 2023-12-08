@@ -84,7 +84,7 @@ jobs:
       - name: Detox test iOS Debug
         id: test_app
         timeout-minutes: 100
-        run: yarn detox test --configuration ios.sim.debug_xcode_14.2 --cleanup --headless --record-logs all --take-screenshots failing --retry 1 --tags "not @broken" --publish > cucumber.log
+        run: yarn detox test --configuration ios.sim.debug_xcode_14.2 --cleanup --headless --record-logs all --take-screenshots failing --retry 1 --tags "not @broken" --parallel 4 --publish > cucumber.log
 
       # Upload test artifacts from Detox
       - name: Upload detox artifacts
@@ -110,16 +110,6 @@ jobs:
         with:
           name: metro-bundler-logs
           path: metro-bundler.log
-      
-      # Create test report
-      - name: Create test report
-        id: test_report
-        uses: dorny/test-reporter@v1
-        if: always() && steps.test_app.outcome != 'skipped'
-        with:
-          name: BDD test report
-          path: cucumber.xml
-          reporter: java-junit
       
       # Get cucumber published url
       - name: Parse report URL
