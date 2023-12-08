@@ -1,0 +1,19 @@
+yarn run v1.22.19
+$ /Users/claytonneal/Documents/github/veworld-mobile/node_modules/.bin/detox test --configuration ios.sim.debug --cleanup --headless --record-logs all --take-screenshots failing --retry 1 --tags 'not @broken' --publish
+13:23:31.775 detox[10827] B cucumber-js --retry 1 --tags not\ @broken --publish
+Cannot use 'progress-bar' formatter for output to 'stdout' as not a TTY. Switching to 'progress' formatter.
+13:23:32.977 detox[10828] i Starting a new Detox test session...
+13:23:39.277 detox[10828] i Detox test session started!
+13:23:39.326 detox[10828] i Starting Detox test: User creates a new contact
+13:23:41.293 detox[10828] i org.vechain.veworld.app launched. To watch simulator logs, run:
+        /usr/bin/xcrun simctl spawn C90D6CCE-5D8F-4D4B-9FAC-E229A7A3C85E log stream --level debug --style compact --predicate 'process == "VeWorld"'
+.13:24:02.879 detox[10828] i org.vechain.veworld.app launched. To watch simulator logs, run:
+        /usr/bin/xcrun simctl spawn C90D6CCE-5D8F-4D4B-9FAC-E229A7A3C85E log stream --level debug --style compact --predicate 'process == "VeWorld"'
+......13:24:41.218 detox[10828] i Starting Detox test: User attempts to create a new contact with an invalid address
+13:24:43.118 detox[10828] i org.vechain.veworld.app launched. To watch simulator logs, run:
+        /usr/bin/xcrun simctl spawn C90D6CCE-5D8F-4D4B-9FAC-E229A7A3C85E log stream --level debug --style compact --predicate 'process == "VeWorld"'
+.13:24:47.281 detox[10828] i org.vechain.veworld.app launched. To watch simulator logs, run:
+        /usr/bin/xcrun simctl spawn C90D6CCE-5D8F-4D4B-9FAC-E229A7A3C85E log stream --level debug --style compact --predicate 'process == "VeWorld"'
+......13:25:26.883 detox[10828] i Starting Detox test: User attempts to create a new contact with an address of an existing contact
+13:25:28.814 detox[10828] i org.vechain.veworld.app launched. To watch simulator logs, run:
+        /usr/bin/xcrun simctl spawn C90D6CCE-5D8F-4D4B-9FAC-E229A7A3C85E log stream --level debug --style compact --predicate 'process == "VeWorld"'
