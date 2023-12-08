@@ -53,12 +53,11 @@ jobs:
 
       # Install CocoaPods
       - name: Install CocoaPods
-        if: steps.pods-cache-restore.outputs.cache-hit != 'true'
         run: npx pod-install
 
       # Install Detox CLI
-      - name: Rebuild Detox Framework
-        run: yarn detox clean-framework-cache && yarn detox build-framework-cache
+      - name: Setup Detox
+        run: yarn detox clean-framework-cache && yarn detox build-framework-cache && yarn detox reset-lock-file
 
       # Install sentry properties
       - name: Sentry properties
@@ -76,7 +75,6 @@ jobs:
       # Build iOS app
       - name: Detox build iOS Debug
         id: build_app
-        # if: steps.detox-cache-restore.outputs.cache-hit != 'true'
         timeout-minutes: 60
         run: SKIP_SENTRY=true yarn detox build --configuration ios.sim.debug_xcode_14.2 # GH macos-latest has Xcode 14.2
 
@@ -84,7 +82,7 @@ jobs:
       - name: Detox test iOS Debug
         id: test_app
         timeout-minutes: 100
-        run: yarn detox test --configuration ios.sim.debug_xcode_14.2 --cleanup --headless --record-logs all --take-screenshots failing --retry 1 --tags "not @broken" --parallel 4 --publish > cucumber.log
+        run: yarn detox test --configuration ios.sim.debug_xcode_14.2 --cleanup --headless --record-logs all --take-screenshots failing --retry 1 --tags "not @broken" --parallel 2 --publish > cucumber.log
 
       # Upload test artifacts from Detox
       - name: Upload detox artifacts
@@ -104,6 +102,7 @@ jobs:
             cucumber.log
             cucumber-report.html
 
+      # Upload Metro Bundler logs
       - name: Upload Metro Bundler logs
         if: always() && steps.build_app.outcome == 'failure'
         uses: actions/upload-artifact@v2
@@ -120,7 +119,7 @@ jobs:
 
       # Post results to slack
       - name: Post to a Slack channel
-        if: always()
+        if: cancelled()
         uses: slackapi/slack-github-action@v1.24.0
         with:
           # Slack channel id, channel name, or user id to post message.
