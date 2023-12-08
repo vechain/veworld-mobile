@@ -82,7 +82,7 @@ jobs:
       - name: Detox test iOS Debug
         id: test_app
         timeout-minutes: 100
-        run: yarn detox test --configuration ios.sim.debug_xcode_14.2 --cleanup --headless --record-logs all --take-screenshots all --retry 1 --tags "not @broken and @contacts" --parallel 4 --publish > cucumber.log
+        run: yarn detox test --configuration ios.sim.debug_xcode_14.2 --cleanup --headless --record-logs all --take-screenshots all --retry 1 --tags "not @broken and @contacts" --parallel 2 --publish > cucumber.log
 
       # Upload test artifacts from Detox
       - name: Upload detox artifacts
