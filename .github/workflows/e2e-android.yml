@@ -47,7 +47,7 @@ jobs:
                 working-directory: "./android"
             
             # Install keystore properties
-            - name: Sentry properties
+            - name: Keystore properties
               uses: mobiledevops/secret-to-file-action@v1
               with:
                 base64-encoded-secret: ${{ secrets.ANDROID_KEYSTORE_PROPERTIES }}
@@ -67,7 +67,7 @@ jobs:
 
             - name: Detox test Android release
               uses: reactivecircus/android-emulator-runner@v2
-              timeout-minutes: 30
+              timeout-minutes: 90
               with:
                   api-level: 31
                   arch: x86_64
