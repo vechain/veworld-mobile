@@ -59,12 +59,14 @@ export const NFTDetailImage = ({ nft, isBlacklisted }: Props) => {
                     <BaseText color={COLORS.WHITE}># {nft.tokenId}</BaseText>
                 </BaseView>
 
-                <BaseIcon
-                    name={!removeBlur ? "eye-outline" : "eye-off-outline"}
-                    size={32}
-                    color={"white"}
-                    action={onRemoveBlurMomentarily}
-                />
+                {isBlacklisted ? (
+                    <BaseIcon
+                        name={!removeBlur ? "eye-outline" : "eye-off-outline"}
+                        size={32}
+                        color={"white"}
+                        action={onRemoveBlurMomentarily}
+                    />
+                ) : null}
             </BaseView>
         </BaseView>
     )
