@@ -9,6 +9,7 @@ import { useI18nContext } from "~i18n"
 import { DateUtils, FormattingUtils } from "~Utils"
 import { InfoSectionView, NFTDetailImage } from "./Components"
 import {
+    isBlacklistedCollection,
     selectCollectionWithContractAddress,
     selectNFTWithAddressAndTokenId,
     selectPendingTx,
@@ -35,6 +36,8 @@ export const NFTDetailScreen = ({ route }: Props) => {
     const collection = useAppSelector(state =>
         selectCollectionWithContractAddress(state, route.params.collectionAddress!),
     )
+
+    const isBlacklisted = useAppSelector(state => isBlacklistedCollection(state, route.params.collectionAddress!))
 
     const nft = useAppSelector(state =>
         selectNFTWithAddressAndTokenId(state, route.params.collectionAddress!, route.params.nftTokenId),
@@ -78,7 +81,7 @@ export const NFTDetailScreen = ({ route }: Props) => {
             noStaticBottomPadding
             body={
                 <BaseView flex={1}>
-                    {nft && <NFTDetailImage nft={nft} />}
+                    {nft && <NFTDetailImage nft={nft} isBlacklisted={isBlacklisted} />}
 
                     <BaseSpacer height={26} />
 

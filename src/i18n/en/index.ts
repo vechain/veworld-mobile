@@ -515,6 +515,8 @@ const en: BaseTranslation = {
     NFT_DOWNLOAD_ERROR: "Woops! There was an error trying to get your NFTs. Please try again in a while.",
     SHOW_COLLECTION: "Show collection",
     SHOW_COLLECTION_SUBTITLE: "Bring back your hidden collection",
+    SHOW_NFT: "Show NFT",
+    HIDE_NFT: "Hide NFT",
     HIDE_COLLECTION: "Hide collection",
     HIDE_COLLECTION_SUBTITLE: "Hide unwanted collections.",
     SAVE_IMAGE_ON_DEVICE: "Save image on device",

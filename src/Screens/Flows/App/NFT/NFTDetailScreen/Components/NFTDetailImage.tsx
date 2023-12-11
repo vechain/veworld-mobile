@@ -1,16 +1,19 @@
-import React, { useMemo } from "react"
+import React, { useCallback, useMemo, useState } from "react"
 import { StyleSheet } from "react-native"
 import { useTheme } from "~Hooks"
 import { SCREEN_WIDTH, COLORS } from "~Constants"
-import { BaseText, BaseView, NFTMedia } from "~Components"
+import { BaseIcon, BaseText, BaseView, NFTMedia, PlatformBlur } from "~Components"
 import { NonFungibleToken } from "~Model"
+import { useI18nContext } from "~i18n"
 
 type Props = {
     nft: NonFungibleToken
+    isBlacklisted: boolean
 }
 
-export const NFTDetailImage = ({ nft }: Props) => {
+export const NFTDetailImage = ({ nft, isBlacklisted }: Props) => {
     const theme = useTheme()
+    const { LL } = useI18nContext()
 
     const renderMedia = useMemo(() => {
         return (
@@ -25,9 +28,21 @@ export const NFTDetailImage = ({ nft }: Props) => {
         )
     }, [nft.image, nft.name])
 
+    const [removeBlur, setRemoveBlur] = useState(false)
+    const onRemoveBlurMomentarily = useCallback(() => {
+        if (!isBlacklisted) return
+
+        setRemoveBlur(prevState => !prevState)
+    }, [isBlacklisted])
+
     return (
         <BaseView>
-            <BaseView style={baseStyles.nftImage}>{renderMedia}</BaseView>
+            <BaseView style={baseStyles.nftImage}>
+                {renderMedia}
+                {isBlacklisted && !removeBlur ? (
+                    <PlatformBlur blurAmount={10} text={LL.SHOW_NFT()} backgroundColor={theme.colors.card} />
+                ) : null}
+            </BaseView>
 
             <BaseView
                 flexDirection="row"
@@ -43,6 +58,13 @@ export const NFTDetailImage = ({ nft }: Props) => {
                     </BaseText>
                     <BaseText color={COLORS.WHITE}># {nft.tokenId}</BaseText>
                 </BaseView>
+
+                <BaseIcon
+                    name={!removeBlur ? "eye-outline" : "eye-off-outline"}
+                    size={32}
+                    color={"white"}
+                    action={onRemoveBlurMomentarily}
+                />
             </BaseView>
         </BaseView>
     )
