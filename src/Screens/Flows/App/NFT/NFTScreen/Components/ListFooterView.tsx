@@ -6,6 +6,7 @@ import { NftSkeleton } from "./NftSkeleton"
 import { NFT_PAGE_SIZE } from "~Constants/Constants/NFT"
 import { selectBlackListedCollections, useAppSelector } from "~Storage/Redux"
 import { isEmpty } from "lodash"
+import { useTheme } from "~Hooks"
 
 type Props = {
     onGoToBlackListed?: () => void
@@ -19,6 +20,7 @@ export const ListFooterView = memo(
     ({ onGoToBlackListed, isLoading, hasNext, renderExtraSkeleton, showMargin = false }: Props) => {
         const { LL } = useI18nContext()
         const blackListedCollections = useAppSelector(selectBlackListedCollections)
+        const theme = useTheme()
 
         return (
             <>
@@ -35,7 +37,7 @@ export const ListFooterView = memo(
                                     justifyContent="center"
                                     alignItems="center">
                                     <BaseText typographyFont="bodyBold">{LL.HIDDEN_COLLECTIONS()}</BaseText>
-                                    <BaseIcon name="chevron-down" />
+                                    <BaseIcon name="chevron-down" color={theme.colors.text} />
                                 </BaseView>
                             </>
                         }

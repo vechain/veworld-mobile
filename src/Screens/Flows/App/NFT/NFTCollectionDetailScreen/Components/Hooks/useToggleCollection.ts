@@ -7,6 +7,7 @@ import {
     useAppDispatch,
     useAppSelector,
     isBlacklistedCollection,
+    setIsAppLoading,
 } from "~Storage/Redux"
 
 export const useToggleCollection = (collection: NftCollection) => {
@@ -15,17 +16,20 @@ export const useToggleCollection = (collection: NftCollection) => {
     const isBlacklisted = useAppSelector(state => isBlacklistedCollection(state, collection.address))
     const selectedAccount = useAppSelector(selectSelectedAccount)
 
-    const onToggleCollection = useCallback(
-        () =>
+    const onToggleCollection = useCallback(() => {
+        dispatch(setIsAppLoading(true))
+
+        setTimeout(() => {
             dispatch(
                 toggleBlackListCollection({
                     network: network.type,
                     collection,
                     accountAddress: selectedAccount.address,
                 }),
-            ),
-        [collection, network, dispatch, selectedAccount.address],
-    )
+            )
+            dispatch(setIsAppLoading(false))
+        }, 250)
+    }, [collection, network, dispatch, selectedAccount.address])
 
     return { onToggleCollection, isBlacklisted }
 }

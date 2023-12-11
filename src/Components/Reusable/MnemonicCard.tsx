@@ -1,10 +1,9 @@
 import React, { FC, useCallback, useMemo } from "react"
 import { StyleSheet, TouchableWithoutFeedback } from "react-native"
 import { BaseIcon, BaseText, BaseView } from "~Components/Base"
-import { BlurView } from "./BlurView"
 import { useDisclosure, useTheme } from "~Hooks"
 import HapticsService from "~Services/HapticsService"
-import { PlatformUtils } from "~Utils"
+import { PlatformBlur } from "./PlatformBlur"
 import { useI18nContext } from "~i18n"
 
 type Props = {
@@ -15,6 +14,7 @@ export const MnemonicCard: FC<Props> = ({ mnemonicArray }) => {
     const { isOpen: isShow, onToggle: toggleShow } = useDisclosure()
 
     const theme = useTheme()
+    const { LL } = useI18nContext()
 
     const iconColor = useMemo(() => (theme.isDark ? theme.colors.tertiary : theme.colors.card), [theme])
 
@@ -44,7 +44,7 @@ export const MnemonicCard: FC<Props> = ({ mnemonicArray }) => {
                                 testID={`word-${index}`}>{`${index + 1}. ${word}`}</BaseText>
                         ))}
 
-                        {!isShow && <PlatformBlur />}
+                        {!isShow && <PlatformBlur backgroundColor={theme.colors.card} text={LL.TAP_TO_VIEW()} />}
                     </BaseView>
 
                     <BaseView
@@ -69,25 +69,6 @@ export const MnemonicCard: FC<Props> = ({ mnemonicArray }) => {
     )
 }
 
-const PlatformBlur = () => {
-    const theme = useTheme()
-    const { LL } = useI18nContext()
-
-    if (PlatformUtils.isIOS()) {
-        return <BlurView style={StyleSheet.absoluteFill} />
-    } else {
-        return (
-            <>
-                <BaseView style={[styles.androidBlurContainer, { backgroundColor: theme.colors.card }]}>
-                    <BaseText typographyFont="subTitle" color={theme.colors.text}>
-                        {LL.TAP_TO_VIEW()}
-                    </BaseText>
-                </BaseView>
-            </>
-        )
-    }
-}
-
 const styles = StyleSheet.create({
     box: {
         borderTopLeftRadius: 16,
@@ -101,11 +82,6 @@ const styles = StyleSheet.create({
     },
     icon: { flex: 1, width: 100 },
     androidBlurContainer: {
-        position: "absolute",
-        top: 0,
-        left: 0,
-        right: 0,
-        bottom: 0,
         justifyContent: "center",
         alignItems: "center",
     },

@@ -2,13 +2,15 @@ import { useNavigation } from "@react-navigation/native"
 import React, { memo, useCallback, useMemo } from "react"
 import { TouchableOpacity, StyleSheet } from "react-native"
 import { COLORS, SCREEN_WIDTH } from "~Constants"
-import { BaseText, BaseView, NFTMedia } from "~Components"
+import { BaseText, BaseView, NFTMedia, PlatformBlur } from "~Components"
 import { NonFungibleToken, NftCollection } from "~Model"
 import { Routes } from "~Navigation"
 import { selectPendingTx, useAppSelector } from "~Storage/Redux"
 import { useI18nContext } from "~i18n"
 import HapticsService from "~Services/HapticsService"
 import { useThemedStyles } from "~Hooks"
+import { useToggleCollection } from "../NFTCollectionDetailScreen/Components/Hooks/useToggleCollection"
+import { PlatformUtils } from "~Utils"
 
 type Props = {
     nft: NonFungibleToken
@@ -17,9 +19,11 @@ type Props = {
 }
 
 export const NFTView = memo(({ nft, index, collection }: Props) => {
-    const { styles } = useThemedStyles(baseStyles)
+    const { styles, theme } = useThemedStyles(baseStyles)
     const nav = useNavigation()
     const { LL } = useI18nContext()
+
+    const { isBlacklisted } = useToggleCollection(collection)
 
     const isPendingTx = useAppSelector(state => selectPendingTx(state, nft.id))
 
@@ -35,6 +39,14 @@ export const NFTView = memo(({ nft, index, collection }: Props) => {
         return (
             <BaseView style={styles.nftCollectionNameBarRadius}>
                 <NFTMedia uri={nft.image} styles={styles.nftPreviewImage} />
+                {isBlacklisted ? (
+                    <PlatformBlur
+                        backgroundColor={theme.colors.card}
+                        blurAmount={10}
+                        text={LL.SHOW_NFT()}
+                        paddingBottom={22}
+                    />
+                ) : null}
 
                 {isPendingTx && (
                     <BaseView
@@ -61,19 +73,21 @@ export const NFTView = memo(({ nft, index, collection }: Props) => {
             </BaseView>
         )
     }, [
-        nft.image,
-        nft.tokenId,
         styles.nftCollectionNameBarRadius,
         styles.nftPreviewImage,
         styles.nftPendingLabel,
         styles.nftCollectionNameBar,
-        isPendingTx,
+        nft.image,
+        nft.tokenId,
+        isBlacklisted,
+        theme.colors.card,
         LL,
+        isPendingTx,
     ])
 
     return (
         <TouchableOpacity
-            activeOpacity={0.6}
+            activeOpacity={PlatformUtils.isIOS() ? 0.6 : 1}
             // Workaround -> https://github.com/mpiannucci/react-native-context-menu-view/issues/60#issuecomment-1453864955
             onLongPress={() => {}}
             onPress={onNftPress}
