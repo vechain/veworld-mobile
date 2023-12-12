@@ -37,6 +37,7 @@ Before({ timeout: 600 * 1000 }, async (message: ITestCaseHookParameter) => {
  */
 After({ timeout: 600 * 1000 }, async function (message: ITestCaseHookParameter) {
     const { pickle, result } = message
+    const status = result?.status === "PASSED" ? "passed" : "failed"
     try {
         const noResetTags = new PickleTagFilter("@noReset")
         if (!noResetTags.matchesAllTagExpressions(pickle)) {
@@ -46,7 +47,7 @@ After({ timeout: 600 * 1000 }, async function (message: ITestCaseHookParameter) 
         await detox.onTestDone({
             title: pickle.uri,
             fullName: pickle.name,
-            status: result ? "passed" : "failed",
+            status,
         })
         await device.terminateApp()
     }
