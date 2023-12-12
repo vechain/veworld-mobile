@@ -1,15 +1,20 @@
 name: E2E Testing Overnight
 
 on:
-  workflow_dispatch:
-  schedule:
-    # Runs at 00:00 UTC every Monday to Friday
-    - cron: '0 0 * * 1-5'
+    workflow_dispatch:
+    schedule:
+        # Runs at 00:00 UTC every Monday to Friday
+        - cron: '0 0 * * 1-5'
+
+    push:
+        branches:
+            - chore/android-gha
 
 jobs:
     e2e-ios:
-        uses: ./.github/workflows/e2e-ios.yml
+        uses: ./.github/workflows/e2e.yml
+        with:
+            platform: ios
         secrets: inherit
-    e2e-android:
-        uses: ./.github/workflows/e2e-android.yml
-        secrets: inherit
+
+    
