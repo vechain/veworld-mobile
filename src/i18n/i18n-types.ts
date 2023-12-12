@@ -1846,6 +1846,14 @@ type RootTranslation = {
 	 */
 	SHOW_COLLECTION_SUBTITLE: string
 	/**
+	 * S​h​o​w​ ​N​F​T
+	 */
+	SHOW_NFT: string
+	/**
+	 * H​i​d​e​ ​N​F​T
+	 */
+	HIDE_NFT: string
+	/**
 	 * H​i​d​e​ ​c​o​l​l​e​c​t​i​o​n
 	 */
 	HIDE_COLLECTION: string
@@ -4597,6 +4605,14 @@ Try reconnect your device to the internet.
 	 * Bring back your hidden collection
 	 */
 	SHOW_COLLECTION_SUBTITLE: () => LocalizedString
+	/**
+	 * Show NFT
+	 */
+	SHOW_NFT: () => LocalizedString
+	/**
+	 * Hide NFT
+	 */
+	HIDE_NFT: () => LocalizedString
 	/**
 	 * Hide collection
 	 */
