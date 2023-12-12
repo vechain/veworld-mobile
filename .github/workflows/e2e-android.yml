@@ -4,10 +4,6 @@ on:
     workflow_dispatch:
     
     workflow_call:
-  
-    push:
-        branches:
-            - chore/android-gha
 
 jobs:
     build-test-android:
