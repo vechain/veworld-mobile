@@ -7,8 +7,8 @@ on:
                 description: 'The platform to run the tests on'
                 required: true
                 type: string
-                default: 'ios'
-    
+                default: ios
+
     push:
         branches:
             - chore/android-gha
@@ -17,8 +17,6 @@ env:
     IOS_CONFIGURATION: ios.sim.debug_xcode_14.2
     ANDROID_CONFIGURATION: android.emu.debug.31
     ANDROID_AVD_NAME: Pixel_6_Pro_API_31
-    TEST_TIMEOUT: ${{ 100 }}
-    BUILD_TIMEOUT: ${{ 60 }}
     CUCUMBER_PARALLEL: ${{ 2 }}
 
 jobs:
@@ -106,13 +104,14 @@ jobs:
             - name: Detox build iOS
               if: ${{ github.event.inputs.platform == 'ios' }}
               id: build_app_ios
-              timeout-minutes: ${{ env.TEST_TIMEOUT }}
+              timeout-minutes: 100
               run: SKIP_SENTRY=true yarn detox build --configuration ${{ env.IOS_CONFIGURATION }}
 
             # Build Android app
             - name: Detox build Android
               if: ${{ github.event.inputs.platform == 'android' }}
               id: build_app_android
+              timeout-minutes: 100
               run: yarn detox build --configuration ${{ env.ANDROID_CONFIGURATION }}
 
             # Run Android tests
@@ -120,7 +119,7 @@ jobs:
               if: ${{ github.event.inputs.platform == 'android' }}
               id: test_android
               uses: reactivecircus/android-emulator-runner@v2
-              timeout-minutes: ${{ env.TEST_TIMEOUT }}
+              timeout-minutes: 100
               with:
                   api-level: 31
                   arch: x86_64
@@ -132,7 +131,7 @@ jobs:
             # Run iOS tests
             - name: Detox test iOS
               id: test_app_ios
-              timeout-minutes: ${{ env.TEST_TIMEOUT }}
+              timeout-minutes: 100
               run: yarn detox test --configuration ${{ env.IOS_CONFIGURATION }} --cleanup --headless --record-logs all --take-screenshots all --retry 1 --tags "not @broken" --parallel ${{ env.CUCUMBER_PARALLEL }} --publish &> cucumber.log
 
             # Upload test artifacts from Detox
