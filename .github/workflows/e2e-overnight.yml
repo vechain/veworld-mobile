@@ -15,6 +15,13 @@ jobs:
         uses: ./.github/workflows/e2e.yml
         with:
             platform: ios
+            parallel: 2
+        secrets: inherit
+    e2e-android:
+        uses: ./.github/workflows/e2e.yml
+        with:
+            platform: android
+            parallel: 1
         secrets: inherit
 
     
