@@ -17,9 +17,9 @@ env:
     IOS_CONFIGURATION: ios.sim.debug_xcode_14.2
     ANDROID_CONFIGURATION: android.emu.debug.31
     ANDROID_AVD_NAME: Pixel_6_Pro_API_31
-    TEST_TIMEOUT: 100
-    BUILD_TIMEOUT: 60
-    CUCUMBER_PARALLEL: 2
+    TEST_TIMEOUT: ${{ 100 }}
+    BUILD_TIMEOUT: ${{ 60 }}
+    CUCUMBER_PARALLEL: ${{ 2 }}
 
 jobs:
     run-e2e-tests:
@@ -106,7 +106,7 @@ jobs:
             - name: Detox build iOS
               if: ${{ github.event.inputs.platform == 'ios' }}
               id: build_app_ios
-              timeout-minutes: 60
+              timeout-minutes: ${{ env.TEST_TIMEOUT }}
               run: SKIP_SENTRY=true yarn detox build --configuration ${{ env.IOS_CONFIGURATION }}
 
             # Build Android app
@@ -170,7 +170,7 @@ jobs:
             
             # Post results to slack
             - name: Post to a Slack channel
-              if: always()
+              if: cancelled()
               uses: slackapi/slack-github-action@v1.24.0
               with:
                 # Slack channel id, channel name, or user id to post message.
