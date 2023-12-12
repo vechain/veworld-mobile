@@ -133,13 +133,13 @@ jobs:
                   force-avd-creation: false
                   disable-animations: true
                   avd-name: ${{ env.ANDROID_AVD_NAME }}
-                  script: yarn detox test --configuration ${{ env.ANDROID_CONFIGURATION }} --headless --record-logs all --take-screenshots all --tags "not @broken and not @notAndroid" --parallel ${{ inputs.parallel }} --publish &> cucumber.log
+                  script: yarn detox test --configuration ${{ env.ANDROID_CONFIGURATION }} --headless --record-logs all --take-screenshots failing --tags "not @broken and not @notAndroid" --parallel ${{ inputs.parallel }} --publish &> cucumber.log
 
             # Run iOS tests
             - name: iOS - Detox test
               id: test_app_ios
               timeout-minutes: 100
-              run: yarn detox test --configuration ${{ env.IOS_CONFIGURATION }} --cleanup --headless --record-logs all --take-screenshots all --retry 1 --tags "not @broken" --parallel ${{ inputs.parallel }} --publish &> cucumber.log
+              run: yarn detox test --configuration ${{ env.IOS_CONFIGURATION }} --cleanup --headless --record-logs all --take-screenshots failing --retry 1 --tags "not @broken" --parallel ${{ inputs.parallel }} --publish &> cucumber.log
 
             # Upload test artifacts from Detox
             - name: Upload detox artifacts
@@ -209,8 +209,8 @@ jobs:
                 channel-id: ${{ secrets.SLACK_VEWORLD_CHANNEL_ID }}
                 slack-message: |
                     🖥️ Platform: *${{ inputs.platform }}*
-                    🧱 Build Status - iOS Result: *${{ steps.combine_build_statuses.outputs.STATUS }}*
-                    🚀 E2E Status - iOS Result: *${{ steps.combine_test_statuses.outputs.STATUS }}*
+                    🧱 Build Status: *${{ steps.combine_build_statuses.outputs.STATUS }}*
+                    🚀 E2E Status: *${{ steps.combine_test_statuses.outputs.STATUS }}*
                     🌿 Branch: *${{ github.ref_name }}*
                     🔨 Commit: *${{ github.actor }}* [${{ github.sha.short }}](${{ github.event.head_commit.url }})
                     🔗 Run: ${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}
