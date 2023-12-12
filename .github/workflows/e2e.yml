@@ -9,10 +9,6 @@ on:
                 type: string
                 default: ios
 
-    push:
-        branches:
-            - chore/android-gha
-
 env:
     IOS_CONFIGURATION: ios.sim.debug_xcode_14.2
     ANDROID_CONFIGURATION: android.emu.debug.31
