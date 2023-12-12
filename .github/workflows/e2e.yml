@@ -34,7 +34,7 @@ jobs:
 
             # Setup Java for Android
             - name: Setup Java for Android
-              if: ${{ github.event.inputs.platform == 'android' }}
+              if: ${{ inputs.platform == 'android' }}
               uses: actions/setup-java@v3
               with:
                   cache: gradle
@@ -43,7 +43,7 @@ jobs:
         
             # Install Homebrew and applesimutils for iOS
             - name: Install macOS dependencies for iOS
-              if: ${{ github.event.inputs.platform == 'ios' }}
+              if: ${{ inputs.platform == 'ios' }}
               run: |
                 brew tap wix/brew
                 brew install applesimutils
@@ -53,7 +53,7 @@ jobs:
          
             # Setup Ruby for iOS
             - name: Setup Ruby for iOS
-              if: ${{ github.event.inputs.platform == 'ios' }}
+              if: ${{ inputs.platform == 'ios' }}
               uses: ruby/setup-ruby@v1
               with:
                 bundler-cache: true
@@ -64,7 +64,7 @@ jobs:
 
             # Install sentry properties for android
             - name: Sentry properties for Android
-              if: ${{ github.event.inputs.platform == 'android' }}
+              if: ${{ inputs.platform == 'android' }}
               uses: mobiledevops/secret-to-file-action@v1
               with:
                 base64-encoded-secret: ${{ secrets.ANDROID_SENTRY_PROPERTIES }}
@@ -74,7 +74,7 @@ jobs:
         
             # Install sentry properties for iOS
             - name: Sentry properties for iOS
-              if: ${{ github.event.inputs.platform == 'ios' }}
+              if: ${{ inputs.platform == 'ios' }}
               uses: mobiledevops/secret-to-file-action@v1
               with:
                 base64-encoded-secret: ${{ secrets.SENTRY_PROPERTIES }}
@@ -84,7 +84,7 @@ jobs:
         
             # Install keystore properties for Android
             - name: Keystore properties for Android
-              if: ${{ github.event.inputs.platform == 'android' }}
+              if: ${{ inputs.platform == 'android' }}
               uses: mobiledevops/secret-to-file-action@v1
               with:
                 base64-encoded-secret: ${{ secrets.ANDROID_KEYSTORE_PROPERTIES }}
@@ -98,21 +98,21 @@ jobs:
 
             # Build iOS app
             - name: Detox build iOS
-              if: ${{ github.event.inputs.platform == 'ios' }}
+              if: ${{ inputs.platform == 'ios' }}
               id: build_app_ios
               timeout-minutes: 100
               run: SKIP_SENTRY=true yarn detox build --configuration ${{ env.IOS_CONFIGURATION }}
 
             # Build Android app
             - name: Detox build Android
-              if: ${{ github.event.inputs.platform == 'android' }}
+              if: ${{ inputs.platform == 'android' }}
               id: build_app_android
               timeout-minutes: 100
               run: yarn detox build --configuration ${{ env.ANDROID_CONFIGURATION }}
 
             # Run Android tests
             - name: Detox test Android
-              if: ${{ github.event.inputs.platform == 'android' }}
+              if: ${{ inputs.platform == 'android' }}
               id: test_android
               uses: reactivecircus/android-emulator-runner@v2
               timeout-minutes: 100
@@ -173,7 +173,7 @@ jobs:
                 # You can pass in multiple channels to post to by providing a comma-delimited list of channel IDs.
                 channel-id: ${{ secrets.SLACK_VEWORLD_CHANNEL_ID }}
                 slack-message: |
-                    🖥️ Platform: *${{ github.event.inputs.platform }}*
+                    🖥️ Platform: *${{ inputs.platform }}*
                     🧱 Build Status - iOS Result: *${{ steps.build_app.outcome }}*
                     🚀 E2E Status - iOS Result: *${{ steps.test_app.outcome }}*
                     🌿 Branch: *${{ github.ref_name }}*
