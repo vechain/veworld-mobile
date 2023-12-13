@@ -1,10 +1,15 @@
-import { selectSelectedAccount, selectSelectedNetwork, selectBalancesForAccount } from "~Storage/Redux/Selectors"
+import {
+    selectSelectedAccount,
+    selectSelectedNetwork,
+    selectBalancesForAccount,
+    selectNetworks,
+} from "~Storage/Redux/Selectors"
 import { RootState } from "~Storage/Redux/Types"
 import { Dispatch } from "@reduxjs/toolkit"
 import { debug, error } from "~Utils/Logger"
 import { BalanceUtils } from "~Utils"
 import { setIsTokensOwnedLoading, updateTokenBalances } from "~Storage/Redux/Slices"
-import { Balance, Network } from "~Model"
+import { Balance, NETWORK_TYPE, Network } from "~Model"
 import { VET, VTHO } from "~Constants"
 
 export const upsertTokenBalance =
@@ -37,32 +42,55 @@ export const updateAccountBalances =
 
         if (accountBalances.length === 0) return
 
-        debug(`Updating ${accountBalances.length} account balances`)
+        const balancesMain: Balance[] = []
+        const balancesTest: Balance[] = []
 
-        const network = selectSelectedNetwork(getState())
-
-        const balances: Balance[] = []
+        const main = selectNetworks(getState()).find((net: Network) => net.type === NETWORK_TYPE.MAIN)
+        const test = selectNetworks(getState()).find((net: Network) => net.type === NETWORK_TYPE.TEST)
+        if (!main || !test) throw new Error("Networks not found")
 
         try {
             for (const accountBalance of accountBalances) {
-                const balance = await BalanceUtils.getBalanceFromBlockchain(
+                const balanceMain = await BalanceUtils.getBalanceFromBlockchain(
                     accountBalance.tokenAddress,
                     accountAddress,
-                    network,
+                    main,
                     thorClient,
                 )
 
-                if (!balance) continue
+                const balanceTest = await BalanceUtils.getBalanceFromBlockchain(
+                    accountBalance.tokenAddress,
+                    accountAddress,
+                    test,
+                    thorClient,
+                )
 
-                balances.push({
-                    ...balance,
-                })
+                if (balanceMain) {
+                    balancesMain.push({
+                        ...balanceMain,
+                    })
+                }
+
+                if (balanceTest) {
+                    balancesTest.push({
+                        ...balanceTest,
+                    })
+                }
             }
+
             dispatch(
                 updateTokenBalances({
-                    network: network.type,
+                    network: main.type,
                     accountAddress,
-                    newBalances: balances,
+                    newBalances: balancesMain,
+                }),
+            )
+
+            dispatch(
+                updateTokenBalances({
+                    network: test.type,
+                    accountAddress,
+                    newBalances: balancesTest,
                 }),
             )
         } catch (e) {
