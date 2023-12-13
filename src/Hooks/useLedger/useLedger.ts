@@ -68,7 +68,7 @@ export const useLedger = ({
             unsubscribe()
             if (transport.current) {
                 try {
-                    await BleTransport.disconnect(deviceId)
+                    await BleTransport.disconnectDevice(deviceId)
                 } catch (e) {
                     error("ledger:close", e)
                 }
