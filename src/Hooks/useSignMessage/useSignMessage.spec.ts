@@ -7,7 +7,7 @@ import TestData from "../../Test/helpers"
 import { LedgerDevice, LocalDevice, WalletAccount } from "~Model"
 import { WalletEncryptionKeyHelper } from "~Components"
 
-const { firstLedgerAccount, ledgerDevice, account1D1, device1, wallet1 } = TestData.data
+const { firstLedgerAccount, ledgerDevice, account1D1, device1, wallet1, keystoreDevice } = TestData.data
 
 jest.mock("axios")
 
@@ -59,7 +59,27 @@ describe("useSignMessage", () => {
 
     it("should render correctly", async () => {
         mockAccount(account1D1)
-        mockDevice(device1)
+        mockDevice(keystoreDevice)
+
+        const { result } = renderHook(
+            () =>
+                useSignMessage({
+                    hash: messageToSign,
+                }),
+            { wrapper: TestWrapper },
+        )
+        expect(result.current).toEqual({
+            signMessage: expect.any(Function),
+        })
+
+        const signature = await result.current.signMessage()
+
+        await expect(signature?.length).toBe(65)
+    })
+
+    it("should work with keystore wallet", async () => {
+        mockAccount(account1D1)
+        mockDevice(keystoreDevice)
 
         const { result } = renderHook(
             () =>
