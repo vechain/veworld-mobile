@@ -7,15 +7,16 @@ import { VECHAIN_BLOCKCHAIN } from "./Constants"
 import { PlatformUtils, debug, ErrorMessageUtils } from "~Utils"
 import { BaseActivityIndicator, BaseView } from "~Components"
 import { StatusBar, StyleSheet } from "react-native"
-import { useColorScheme } from "~Hooks"
+import { useAnalyticTracking, useColorScheme } from "~Hooks"
 import { Routes } from "~Navigation"
-import { COLORS } from "~Constants"
+import { AnalyticsEvent, COLORS } from "~Constants"
 
 export const CoinbasePayWebView = (props: { currentAmount: number; destinationAddress: string }) => {
     const nav = useNavigation()
     const [isLoading, setIsLoading] = useState(true)
     const systemColorScheme = useColorScheme()
     const styles = baseStyles(isLoading)
+    const track = useAnalyticTracking()
 
     const coinbaseURL = useMemo(() => {
         const options = {
@@ -55,6 +56,12 @@ export const CoinbasePayWebView = (props: { currentAmount: number; destinationAd
         (event: WebViewMessageEvent) => {
             try {
                 const { data } = JSON.parse(event.nativeEvent.data)
+
+                // if successfully completed buy process
+                if (data.eventName === "success") {
+                    track(AnalyticsEvent.BUY_CRYPTO_SUCCESSFULLY_COMPLETED)
+                }
+
                 if (data.eventName === "exit") {
                     setIsLoading(true)
                     nav.navigate(Routes.HOME)
@@ -63,7 +70,7 @@ export const CoinbasePayWebView = (props: { currentAmount: number; destinationAd
                 debug(ErrorMessageUtils.getErrorMessage(error))
             }
         },
-        [nav],
+        [nav, track],
     )
 
     return (
