@@ -1,7 +1,7 @@
 import React, { useCallback } from "react"
 import { FlatList, StyleSheet, TouchableOpacity } from "react-native"
-import { ColorThemeType } from "~Constants"
-import { useThemedStyles } from "~Hooks"
+import { AnalyticsEvent, ColorThemeType } from "~Constants"
+import { useAnalyticTracking, useThemedStyles } from "~Hooks"
 import { BaseIcon, BaseSpacer, BaseText, BaseView } from "~Components"
 import { useNavigation } from "@react-navigation/native"
 import { Routes } from "~Navigation"
@@ -10,13 +10,16 @@ import { PaymentProvider, usePaymentProviderList } from "../../Hooks"
 export const PaymentProviderList = () => {
     const { styles, theme } = useThemedStyles(baseStyles)
     const nav = useNavigation()
+    const track = useAnalyticTracking()
 
     const paymentsProviders = usePaymentProviderList()
 
-    const handleBuyClick = useCallback(() => nav.navigate(Routes.BUY_WEBVIEW), [nav])
-
     const renderItem = useCallback(
         ({ item }: { item: PaymentProvider }) => {
+            const handleBuyClick = () => {
+                nav.navigate(Routes.BUY_WEBVIEW)
+                track(AnalyticsEvent.BUY_CRYPTO_PROVIDER_SELECTED, { provider: item.id })
+            }
             return (
                 <TouchableOpacity key={item.id} onPress={handleBuyClick}>
                     <BaseView flexDirection="row" borderRadius={12} mb={20} style={styles.card}>
@@ -53,7 +56,7 @@ export const PaymentProviderList = () => {
                 </TouchableOpacity>
             )
         },
-        [styles, theme, handleBuyClick],
+        [nav, styles.arrowBackground, styles.card, theme.colors.text, theme.colors.textReversed, track],
     )
 
     return <FlatList data={paymentsProviders} renderItem={renderItem} keyExtractor={item => item.id} />
