@@ -5,14 +5,13 @@ import { StyleSheet } from "react-native"
 import { BlePairingDark } from "~Assets"
 import { useAnalyticTracking, useBottomSheetModal, useLedger, useSendTransaction } from "~Hooks"
 import {
-    BackButtonHeader,
     BaseButton,
-    BaseSafeArea,
     BaseSpacer,
     BaseText,
     BaseView,
     BluetoothStatusBottomSheet,
     ConnectionErrorBottomSheet,
+    Layout,
     showErrorToast,
     Step,
     StepsProgressBar,
@@ -325,7 +324,6 @@ export const LedgerSignTransaction: React.FC<Props> = ({ route }) => {
         if (currentStep === SignSteps.SIGNING && userRejected) {
             return (
                 <BaseButton
-                    style={styles.button}
                     mx={24}
                     haptics="Light"
                     title={LL.BTN_RETRY()}
@@ -338,7 +336,6 @@ export const LedgerSignTransaction: React.FC<Props> = ({ route }) => {
         if (currentStep === SignSteps.DONE) {
             return (
                 <BaseButton
-                    style={styles.button}
                     mx={24}
                     haptics="Light"
                     title={LL.COMMON_BTN_CONFIRM()}
@@ -353,36 +350,40 @@ export const LedgerSignTransaction: React.FC<Props> = ({ route }) => {
     }, [currentStep, userRejected, isSending, LL, signTransaction, signature, handleOnConfirm])
 
     return (
-        <BaseSafeArea grow={1}>
-            <BackButtonHeader beforeNavigating={removeLedger} />
-            <BaseView alignItems="flex-start" flexGrow={1} flex={1} mx={20}>
-                <BaseText typographyFont="title">{LL.SEND_LEDGER_TITLE()}</BaseText>
-                <BaseText typographyFont="body" my={10}>
-                    {LL.SEND_LEDGER_TITLE_SB()}
-                </BaseText>
-                <BaseSpacer height={20} />
-                <Lottie source={BlePairingDark} autoPlay loop style={styles.lottie} />
-                <BaseSpacer height={20} />
-                <StepsProgressBar
-                    steps={Steps}
-                    currentStep={currentStep}
-                    isCurrentStepError={!signature && !!signingError}
-                />
-                <BaseSpacer height={96} />
-                <BaseText typographyFont="bodyBold">{Steps[currentStep]?.title || LL.SEND_LEDGER_TX_READY()}</BaseText>
-                <BaseText typographyFont="body" mt={8}>
-                    {Steps[currentStep]?.subtitle || LL.SEND_LEDGER_TX_READY_SB()}
-                </BaseText>
-            </BaseView>
-            <BottomButton />
-            <BluetoothStatusBottomSheet />
-            <ConnectionErrorBottomSheet
-                ref={connectionErrorSheetRef}
-                onDismiss={closeConnectionErrorSheet}
-                error={ledgerErrorCode}
-                onRetry={tryLedgerVerification}
-            />
-        </BaseSafeArea>
+        <Layout
+            beforeNavigating={removeLedger}
+            body={
+                <BaseView style={styles.container}>
+                    <BaseText typographyFont="title">{LL.SEND_LEDGER_TITLE()}</BaseText>
+                    <BaseText typographyFont="body" my={10}>
+                        {LL.SEND_LEDGER_TITLE_SB()}
+                    </BaseText>
+                    <BaseSpacer height={20} />
+                    <Lottie source={BlePairingDark} autoPlay loop style={styles.lottie} />
+                    <BaseSpacer height={20} />
+                    <StepsProgressBar
+                        steps={Steps}
+                        currentStep={currentStep}
+                        isCurrentStepError={!signature && !!signingError}
+                    />
+                    <BaseSpacer height={96} />
+                    <BaseText typographyFont="bodyBold">
+                        {Steps[currentStep]?.title || LL.SEND_LEDGER_TX_READY()}
+                    </BaseText>
+                    <BaseText typographyFont="body" mt={8}>
+                        {Steps[currentStep]?.subtitle || LL.SEND_LEDGER_TX_READY_SB()}
+                    </BaseText>
+                    <BluetoothStatusBottomSheet />
+                    <ConnectionErrorBottomSheet
+                        ref={connectionErrorSheetRef}
+                        onDismiss={closeConnectionErrorSheet}
+                        error={ledgerErrorCode}
+                        onRetry={tryLedgerVerification}
+                    />
+                </BaseView>
+            }
+            footer={<BottomButton />}
+        />
     )
 }
 
@@ -394,8 +395,5 @@ const styles = StyleSheet.create({
     lottie: {
         width: "100%",
         height: 100,
-    },
-    button: {
-        marginBottom: 70,
     },
 })
