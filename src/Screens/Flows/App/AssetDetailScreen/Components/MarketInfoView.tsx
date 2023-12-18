@@ -1,5 +1,5 @@
 import React, { useMemo } from "react"
-import { BaseText, BaseView } from "~Components"
+import { BaseSpacer, BaseText, BaseView } from "~Components"
 import { useThemedStyles } from "~Hooks"
 import { ColorThemeType } from "~Constants"
 import { StyleSheet } from "react-native"
@@ -44,42 +44,82 @@ export const MarketInfoView = ({ tokenSymbol }: { tokenSymbol: string }) => {
                 style={styles.container}>
                 <BaseView w={50} p={12} style={styles.borderMarketCap}>
                     <BaseText>{LL.COMMON_MARKET_CAP()}</BaseText>
-                    <BaseText
-                        typographyFont="bodyBold"
-                        py={4}
-                        numberOfLines={1}>
-                        {marketCap ?? "N/A"}
-                    </BaseText>
+                    <BaseView flexDirection="row">
+                        <BaseText
+                            typographyFont="bodyBold"
+                            py={4}
+                            numberOfLines={1}>
+                            {marketCap ?? "N/A"}
+                        </BaseText>
+                        {!!marketCap && (
+                            <>
+                                <BaseSpacer width={4} />
+                                <BaseText typographyFont="captionRegular">
+                                    {currency}
+                                </BaseText>
+                            </>
+                        )}
+                    </BaseView>
                 </BaseView>
 
                 <BaseView w={50} p={12} style={styles.borderTotalSupply}>
                     <BaseText>{LL.COMMON_TOTAL_SUPPLY()}</BaseText>
-                    <BaseText
-                        typographyFont="bodyBold"
-                        py={4}
-                        numberOfLines={1}>
-                        {totalSupply ?? "N/A"}
-                    </BaseText>
+                    <BaseView flexDirection="row">
+                        <BaseText
+                            typographyFont="bodyBold"
+                            py={4}
+                            numberOfLines={1}>
+                            {totalSupply ?? "N/A"}
+                        </BaseText>
+                        {!!totalSupply && (
+                            <>
+                                <BaseSpacer width={4} />
+                                <BaseText typographyFont="captionRegular">
+                                    {tokenSymbol}
+                                </BaseText>
+                            </>
+                        )}
+                    </BaseView>
                 </BaseView>
 
                 <BaseView w={50} p={12} style={styles.borderTotalVolume}>
                     <BaseText>{LL.COMMON_24H_VOLUME()}</BaseText>
-                    <BaseText
-                        typographyFont="bodyBold"
-                        py={4}
-                        numberOfLines={1}>
-                        {totalVolume ?? "N/A"}
-                    </BaseText>
+                    <BaseView flexDirection="row">
+                        <BaseText
+                            typographyFont="bodyBold"
+                            py={4}
+                            numberOfLines={1}>
+                            {totalVolume ?? "N/A"}
+                        </BaseText>
+                        {!!totalVolume && (
+                            <>
+                                <BaseSpacer width={4} />
+                                <BaseText typographyFont="captionRegular">
+                                    {currency}
+                                </BaseText>
+                            </>
+                        )}
+                    </BaseView>
                 </BaseView>
 
                 <BaseView w={50} p={12} style={styles.borderCirculatingSupply}>
                     <BaseText>{LL.COMMON_CIRCULATING_SUPPLY()}</BaseText>
-                    <BaseText
-                        typographyFont="bodyBold"
-                        py={4}
-                        numberOfLines={1}>
-                        {circulatingSupply ?? "N/A"}
-                    </BaseText>
+                    <BaseView flexDirection="row">
+                        <BaseText
+                            typographyFont="bodyBold"
+                            py={4}
+                            numberOfLines={1}>
+                            {circulatingSupply ?? "N/A"}
+                        </BaseText>
+                        {!!circulatingSupply && (
+                            <>
+                                <BaseSpacer width={4} />
+                                <BaseText typographyFont="captionRegular">
+                                    {tokenSymbol}
+                                </BaseText>
+                            </>
+                        )}
+                    </BaseView>
                 </BaseView>
             </BaseView>
         </BaseView>

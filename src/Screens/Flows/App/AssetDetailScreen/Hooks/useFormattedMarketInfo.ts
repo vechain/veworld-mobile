@@ -1,8 +1,6 @@
 import { useMemo } from "react"
 import { FormattingUtils } from "~Utils"
 
-import { selectCurrency, useAppSelector } from "~Storage/Redux"
-
 export type MarketInfo = {
     marketCap: number
     totalSupply: number
@@ -17,39 +15,21 @@ export const useFormattedMarketInfo = ({
     marketInfo?: MarketInfo
     tokenSymbol: string
 }) => {
-    const currency = useAppSelector(selectCurrency)
-
     const marketCap = useMemo(() => {
-        return FormattingUtils.humanNumber(
-            marketInfo?.marketCap ?? 0,
-            undefined,
-            currency,
-        )
-    }, [currency, marketInfo?.marketCap])
+        return FormattingUtils.humanNumber(marketInfo?.marketCap ?? 0)
+    }, [marketInfo?.marketCap])
 
     const totalSupply = useMemo(() => {
-        return FormattingUtils.humanNumber(
-            marketInfo?.totalSupply ?? 0,
-            undefined,
-            tokenSymbol,
-        )
-    }, [tokenSymbol, marketInfo?.totalSupply])
+        return FormattingUtils.humanNumber(marketInfo?.totalSupply ?? 0)
+    }, [marketInfo?.totalSupply])
 
     const totalVolume = useMemo(() => {
-        return FormattingUtils.humanNumber(
-            marketInfo?.totalVolume ?? 0,
-            undefined,
-            currency,
-        )
-    }, [currency, marketInfo?.totalVolume])
+        return FormattingUtils.humanNumber(marketInfo?.totalVolume ?? 0)
+    }, [marketInfo?.totalVolume])
 
     const circulatingSupply = useMemo(() => {
-        return FormattingUtils.humanNumber(
-            marketInfo?.circulatingSupply ?? 0,
-            undefined,
-            tokenSymbol,
-        )
-    }, [tokenSymbol, marketInfo?.circulatingSupply])
+        return FormattingUtils.humanNumber(marketInfo?.circulatingSupply ?? 0)
+    }, [marketInfo?.circulatingSupply])
 
     return {
         marketCap: marketCap === "< 0.01 USD" ? "N/A" : marketCap,
