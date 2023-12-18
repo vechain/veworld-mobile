@@ -1,11 +1,14 @@
-import React from "react"
+import React, { useMemo } from "react"
 import { BaseText, BaseView } from "~Components"
 import { useThemedStyles } from "~Hooks"
 import { ColorThemeType } from "~Constants"
 import { StyleSheet } from "react-native"
 import { useI18nContext } from "~i18n"
-import { useFormattedMarketInfo } from "../Hooks/useFormattedMarketInfo"
-import { getCoinGeckoIdBySymbol, useMarketInfo } from "~Api"
+import {
+    MarketInfo,
+    useFormattedMarketInfo,
+} from "../Hooks/useFormattedMarketInfo"
+import { getCoinGeckoIdBySymbol, useTokenInfo } from "~Api"
 import { selectCurrency, useAppSelector } from "~Storage/Redux"
 
 export const MarketInfoView = ({ tokenSymbol }: { tokenSymbol: string }) => {
@@ -14,10 +17,21 @@ export const MarketInfoView = ({ tokenSymbol }: { tokenSymbol: string }) => {
 
     const currency = useAppSelector(selectCurrency)
 
-    const { data: marketInfo } = useMarketInfo({
+    const { data: tokenInfo } = useTokenInfo({
         id: getCoinGeckoIdBySymbol[tokenSymbol],
-        vs_currency: currency,
     })
+
+    const marketInfo: MarketInfo | undefined = useMemo(() => {
+        if (!tokenInfo) return undefined
+        return {
+            marketCap:
+                tokenInfo?.market_data?.market_cap[currency.toLowerCase()],
+            totalSupply: tokenInfo?.market_data?.total_supply,
+            totalVolume:
+                tokenInfo?.market_data?.total_volume[currency.toLowerCase()],
+            circulatingSupply: tokenInfo?.market_data?.circulating_supply,
+        }
+    }, [tokenInfo, currency])
 
     const { marketCap, totalSupply, totalVolume, circulatingSupply } =
         useFormattedMarketInfo({ marketInfo, tokenSymbol })
