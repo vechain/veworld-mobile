@@ -7,6 +7,7 @@ import { ChartView } from "./ChartView"
 import HapticsService from "~Services/HapticsService"
 import { MarketChartResponse, useMarketChart } from "~Api"
 import { getCoinGeckoIdBySymbol } from "~Constants"
+import { selectCurrency, useAppSelector } from "~Storage/Redux"
 
 type Props = {
     token: TokenWithCompleteInfo
@@ -17,9 +18,10 @@ export const AssetChart = ({ token }: Props) => {
     const [selectedTimeframe, setSelectedTimeframe] =
         useState<number>(defaultTimeframe)
 
+    const currency = useAppSelector(selectCurrency)
     const { data: chartData } = useMarketChart({
         id: getCoinGeckoIdBySymbol[token.symbol],
-        vs_currency: "usd",
+        vs_currency: currency,
         days: selectedTimeframe,
         placeholderData: mock_cart_data,
     })
