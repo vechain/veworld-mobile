@@ -58,7 +58,7 @@ export const ChartView = ({
                     alignItems="center"
                     style={[styles.negativeMargin, styles.container]}>
                     <BaseView>
-                        <LineChart height={120} style={styles.opacity}>
+                        <LineChart height={180} style={styles.opacity}>
                             <LineChart.Path
                                 color={theme.colors.primary}
                                 width={0}>
