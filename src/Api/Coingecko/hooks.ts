@@ -3,87 +3,40 @@ import {
     MarketChartResponse,
     VETHOR_COINGECKO_ID,
     VET_COINGECKO_ID,
-    getCoinGeckoIdBySymbol,
-    getExchangeRate,
+    getCoingeckoVechainTokenList,
     getMarketChart,
-    getMarketInfo,
+    getTokenInfo,
 } from "./endpoints"
 
-const getExchangeRateQueryKey = ({
-    id,
-    vs_currency,
-}: {
-    id?: string
-    vs_currency: string
-}) => ["EXCHANGE_RATE", id, vs_currency]
-/**
- *  Get the exchange rate of a coin
- * @param id  the id of the coin
- * @param vs_currencies  the currencies to compare
- * @returns  the exchange rate
- */
-export const useExchangeRate = ({
-    id,
-    vs_currency,
-}: {
-    id?: string
-    vs_currency: string
-}) => {
-    return useQuery({
-        queryKey: getExchangeRateQueryKey({ id, vs_currency }),
-        queryFn: () => getExchangeRate({ coinGeckoId: id, vs_currency }),
-        enabled: !!id,
-    })
-}
-
-const getMarketsInfoQueryKey = ({ vs_currency }: { vs_currency: string }) => [
-    "MARKET_INFO",
-    vs_currency,
+const getCoingeckoVechainTokenListQueryKey = () => [
+    "COINGECKO_VECHAIN_TOKEN_LIST",
 ]
 
 /**
- * Get the market info of all supported coins for a given currency (getCoinGeckoIdBySymbol)
- * @param vs_currency  the currency to compare
- * @returns  the market info
+ * Get the list of tokens supported by CoinGecko
+ * @returns  the list of tokens
  */
-export const useMarketsInfo = ({ vs_currency }: { vs_currency: string }) => {
-    const coinGeckoIds = Object.values(getCoinGeckoIdBySymbol)
+export const useCoingeckoVechainTokenList = () => {
     return useQuery({
-        queryKey: getMarketsInfoQueryKey({ vs_currency }),
-        queryFn: () => getMarketInfo({ coinGeckoIds, vs_currency }),
+        queryKey: getCoingeckoVechainTokenListQueryKey(),
+        queryFn: () => getCoingeckoVechainTokenList(),
         staleTime: Infinity,
     })
 }
 
-const getMarketInfoQueryKey = ({
-    id,
-    vs_currency,
-}: {
-    id: string | number
-    vs_currency: string
-}) => ["MARKET_INFO", vs_currency, id]
+const getTokenInfoQueryKey = ({ id }: { id?: string }) => ["TOKEN_INFO", id]
 
 /**
- * Get the market info of a coin for a given currency
+ * Get the token info of a coin
  * @param id  the id of the coin
- * @param vs_currency  the currency to compare
- * @returns  the market info
+ * @returns  the token info
  */
-export const useMarketInfo = ({
-    id,
-    vs_currency,
-}: {
-    id: string | number
-    vs_currency: string
-}) => {
-    const { data: marketsInfo } = useMarketsInfo({ vs_currency })
+export const useTokenInfo = ({ id }: { id?: string }) => {
     return useQuery({
-        queryKey: getMarketInfoQueryKey({ id, vs_currency }),
-        queryFn: () => {
-            return marketsInfo?.find(market => market.id === id)
-        },
-        staleTime: Infinity,
-        enabled: !!marketsInfo,
+        queryKey: getTokenInfoQueryKey({ id }),
+        queryFn: () => getTokenInfo(id),
+        enabled: !!id,
+        staleTime: 1000 * 60 * 2,
     })
 }
 
@@ -143,34 +96,57 @@ export const useMarketChart = ({
     })
 }
 
+const getExchangeRateQueryKey = ({
+    id,
+    vs_currency,
+}: {
+    id?: string
+    vs_currency: string
+}) => ["EXCHANGE_RATE", id, vs_currency]
 /**
- *  Get the exchange rate of VET
+ *  Get the exchange rate of a coin reusing the token info
+ * @param id  the id of the coin
  * @param vs_currencies  the currencies to compare
  * @returns  the exchange rate
  */
-export const useVetExchangeRate = (vs_currency: string) => {
+export const useExchangeRate = ({
+    id,
+    vs_currency,
+}: {
+    id?: string
+    vs_currency: string
+}) => {
+    const { data: tokenInfo } = useTokenInfo({ id })
+
     return useQuery({
-        queryKey: getExchangeRateQueryKey({
-            id: VET_COINGECKO_ID,
-            vs_currency,
-        }),
+        queryKey: getExchangeRateQueryKey({ id, vs_currency }),
         queryFn: () =>
-            getExchangeRate({ coinGeckoId: VET_COINGECKO_ID, vs_currency }),
+            tokenInfo ? tokenInfo.market_data.current_price[vs_currency] : null,
+        enabled: !!tokenInfo,
+        staleTime: 1000 * 60 * 2,
+    })
+}
+
+/**
+ *  Get the exchange rate of VET
+ * @param vs_currency  the currencies to compare
+ * @returns  the exchange rate
+ */
+export const useVetExchangeRate = (vs_currency: string) => {
+    return useExchangeRate({
+        id: VET_COINGECKO_ID,
+        vs_currency,
     })
 }
 
 /**
  *  Get the exchange rate of VTHO
- * @param vs_currencies  the currencies to compare
+ * @param vs_currency  the currencies to compare
  * @returns  the exchange rate
  */
 export const useVthoExchangeRate = (vs_currency: string) => {
-    return useQuery({
-        queryKey: getExchangeRateQueryKey({
-            id: VETHOR_COINGECKO_ID,
-            vs_currency,
-        }),
-        queryFn: () =>
-            getExchangeRate({ coinGeckoId: VETHOR_COINGECKO_ID, vs_currency }),
+    return useExchangeRate({
+        id: VETHOR_COINGECKO_ID,
+        vs_currency,
     })
 }

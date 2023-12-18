@@ -1,11 +1,11 @@
 import axios from "axios"
 import { VET, VTHO } from "~Constants"
 import { CurrencyExchangeRate } from "~Model"
-import { error } from "~Utils"
+import { TokenUtils, error } from "~Utils"
 
 export const COINGECKO_URL = process.env.REACT_APP_COINGECKO_URL
 const timeout = Number(
-    process.env.REACT_APP_EXCHANGE_CLIENT_AXIOS_TIMEOUT || "5000",
+    process.env.REACT_APP_EXCHANGE_CLIENT_AXIOS_TIMEOUT ?? "5000",
 )
 const axiosInstance = axios.create({
     timeout,
@@ -19,6 +19,39 @@ export const VETHOR_COINGECKO_ID: string = "vethor-token"
 export const getCoinGeckoIdBySymbol = {
     [VET.symbol]: VET_COINGECKO_ID,
     [VTHO.symbol]: VETHOR_COINGECKO_ID,
+}
+
+type FetchTokensResponse = {
+    id: string
+    symbol: string
+    name: string
+    platforms: {
+        vechain: string
+    }
+}
+
+export const getCoingeckoVechainTokenList = async () => {
+    try {
+        const tokens = await axiosInstance.get<FetchTokensResponse[]>(
+            "/coins/list",
+            {
+                params: {
+                    include_platform: true,
+                },
+            },
+        )
+
+        const vechainTokens = tokens.data.filter(c =>
+            c.platforms.hasOwnProperty("vechain"),
+        )
+        //TODO: We're returning only VET and VTHO. All other tokens are disabled
+        return vechainTokens.filter(token =>
+            TokenUtils.isVechainToken(token.symbol),
+        )
+    } catch (e) {
+        error("getCoingeckoTokenList", e)
+        throw e
+    }
 }
 
 export const getCoingeckoCurrencies = async (): Promise<string[]> => {
@@ -35,70 +68,59 @@ export const getCoingeckoCurrencies = async (): Promise<string[]> => {
     }
 }
 
-export interface MarketInfoResponse {
+export type TokenInfoMarketData = {
+    total_supply: number
+    max_supply: number
+    circulating_supply: number
+    last_updated: string
+    price_change_percentage_24h: number
+    current_price: { [key: string]: number }
+    market_cap: { [key: string]: number }
+    total_volume: { [key: string]: number }
+}
+export type TokenInfoResponse = {
     id: string
     symbol: string
     name: string
-    image: string
-    current_price: number
-    market_cap: number
-    market_cap_rank: number
-    fully_diluted_valuation: number
-    total_volume: number
-    high_24h: number
-    low_24h: number
-    price_change_24h: number
-    price_change_percentage_24h: number
-    market_cap_change_24h: number
-    market_cap_change_percentage_24h: number
-    circulating_supply: number
-    total_supply: number
-    max_supply: number
-    ath: number
-    ath_change_percentage: number
-    ath_date: string
-    atl: number
-    atl_change_percentage: number
-    atl_date: string
-    roi: {
-        times: number
-        currency: string
-        percentage: number
+    detail_platforms: {
+        vechain: {
+            decimal_place: number
+            contract_address: string
+        }
     }
-    last_updated: string
+    image: {
+        thumb: string
+        small: string
+        large: string
+    }
+    description: { [key: string]: string }
+    links: {
+        blockchain_site: string[]
+        homepage: string[]
+    }
+    market_data: TokenInfoMarketData
 }
 
-export const getMarketInfo = async ({
-    coinGeckoIds,
-    vs_currency,
-}: {
-    coinGeckoIds?: string[]
-    vs_currency: string
-}) => {
+export const getTokenInfo = async (coinGeckoId?: string) => {
     try {
-        const pricesResponse = await axiosInstance.get<MarketInfoResponse[]>(
-            "/coins/markets",
+        // Just for better react-query support. We'll never reach this point if used via react-query hooks
+        if (!coinGeckoId) throw new Error("CoinGecko ID is not defined")
+        const response = await axiosInstance.get<TokenInfoResponse>(
+            `/coins/${coinGeckoId}`,
             {
                 params: {
-                    ids: coinGeckoIds,
-                    vs_currency,
-                    order: "market_cap_desc",
-                    per_page: 100,
-                    page: 1,
+                    localization: false,
+                    tickers: false,
+                    market_data: true,
+                    community_data: false,
+                    developer_data: false,
                     sparkline: false,
-                    locale: "en",
-                },
-                paramsSerializer: params => {
-                    return Object.entries(params)
-                        .map(([key, value]) => `${key}=${value}`)
-                        .join("&")
                 },
             },
         )
-
-        return pricesResponse.data
+        return response.data
     } catch (e) {
-        error("getMarketInfo", e)
+        error("getTokenInfo", e)
         throw e
     }
 }
