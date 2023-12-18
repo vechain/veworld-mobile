@@ -118,9 +118,11 @@ export const useExchangeRate = ({
 }) => {
     const { data: tokenInfo } = useTokenInfo({ id })
 
+    const currency = vs_currency.toLowerCase()
+
     return useQuery({
         queryKey: getExchangeRateQueryKey({ id, vs_currency }),
-        queryFn: () => tokenInfo?.market_data.current_price[vs_currency],
+        queryFn: () => tokenInfo?.market_data.current_price[currency],
         enabled: !!tokenInfo,
         staleTime: 1000 * 60 * 2,
     })
