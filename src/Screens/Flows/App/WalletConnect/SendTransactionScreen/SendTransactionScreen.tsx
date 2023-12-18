@@ -14,9 +14,9 @@ import {
 } from "~Components"
 import {
     addPendingDappTransactionActivity,
+    selectAllTokens,
     selectSelectedAccount,
     selectSelectedNetwork,
-    selectTokensWithInfo,
     setIsAppLoading,
     useAppDispatch,
     useAppSelector,
@@ -58,7 +58,7 @@ export const SendTransactionScreen: FC<Props> = ({ route }: Props) => {
 
     const network = useAppSelector(selectSelectedNetwork)
     const selectedAccount = useAppSelector(selectSelectedAccount)
-    const tokens = useAppSelector(selectTokensWithInfo)
+    const tokens = useAppSelector(selectAllTokens)
 
     const { topic } = useMemo(
         () => WalletConnectUtils.getRequestEventAttributes(requestEvent),

@@ -3,11 +3,7 @@ import { VTHO, currencySymbolMap, genesisesId } from "~Constants"
 import { FormattingUtils, TransactionUtils } from "~Utils"
 import { BaseSpacer } from "~Components"
 import { useCopyClipboard } from "~Hooks"
-import {
-    selectCurrency,
-    selectTokensWithInfo,
-    useAppSelector,
-} from "~Storage/Redux"
+import { selectAllTokens, selectCurrency, useAppSelector } from "~Storage/Redux"
 import { useI18nContext } from "~i18n"
 import { ActivityStatus, DappTxActivity } from "~Model"
 import { ActivityDetail } from "../../Type"
@@ -34,7 +30,7 @@ export const DappTransactionDetails: React.FC<Props> = memo(({ activity }) => {
     const { gasFeeInVTHOHumanReadable, fiatValueGasFeeSpent } =
         useGasFee(activity)
 
-    const tokens = useAppSelector(selectTokensWithInfo)
+    const tokens = useAppSelector(selectAllTokens)
 
     const clausesMetadata = TransactionUtils.interpretClauses(
         activity.clauses ?? [],

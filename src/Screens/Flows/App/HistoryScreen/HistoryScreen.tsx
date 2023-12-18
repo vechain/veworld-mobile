@@ -13,9 +13,9 @@ import {
     Layout,
 } from "~Components"
 import {
+    selectAllTokens,
     selectBalanceVisible,
     selectSelectedAccount,
-    selectTokensWithInfo,
     selectVisibleAccounts,
     useAppSelector,
 } from "~Storage/Redux"
@@ -79,7 +79,7 @@ export const HistoryScreen = () => {
 
     const theme = useTheme()
 
-    const tokens = useAppSelector(selectTokensWithInfo)
+    const tokens = useAppSelector(selectAllTokens)
 
     // To prevent fetching next page of activities on FlashList mount
     const [hasScrolled, setHasScrolled] = useState(false)
@@ -150,7 +150,7 @@ export const HistoryScreen = () => {
                             onPress={onActivityPress}
                         />
                     )
-                case ActivityType.DAPP_TRANSACTION:
+                case ActivityType.DAPP_TRANSACTION: {
                     const decodedClauses = TransactionUtils.interpretClauses(
                         activity.clauses ?? [],
                         tokens,
@@ -173,6 +173,7 @@ export const HistoryScreen = () => {
                             onPress={onActivityPress}
                         />
                     )
+                }
                 case ActivityType.SIGN_CERT:
                     return (
                         <SignedCertificateActivityBox
@@ -196,47 +197,45 @@ export const HistoryScreen = () => {
 
     const renderActivitiesList = useMemo(() => {
         return (
-            <>
-                <BaseView flexDirection="row" style={baseStyles.list}>
-                    <FlashList
-                        data={activities}
-                        keyExtractor={activity => activity.id}
-                        ListFooterComponent={
-                            hasFetched ? (
-                                <BaseSpacer height={20} />
-                            ) : (
-                                <BaseView mx={20}>
-                                    <SkeletonActivityBox />
-                                </BaseView>
-                            )
-                        }
-                        renderItem={({ item: activity, index }) => {
-                            return (
-                                <BaseView mx={20}>
-                                    {renderActivity(activity, index)}
-                                </BaseView>
-                            )
-                        }}
-                        showsVerticalScrollIndicator={false}
-                        showsHorizontalScrollIndicator={false}
-                        estimatedItemSize={80}
-                        estimatedListSize={{
-                            height: 80 * activities.length,
-                            width: SCREEN_WIDTH,
-                        }}
-                        onScroll={onScroll}
-                        onEndReachedThreshold={0.5}
-                        onEndReached={onEndReached}
-                        refreshControl={
-                            <RefreshControl
-                                refreshing={refreshing}
-                                onRefresh={onRefresh}
-                                tintColor={theme.colors.border}
-                            />
-                        }
-                    />
-                </BaseView>
-            </>
+            <BaseView flexDirection="row" style={baseStyles.list}>
+                <FlashList
+                    data={activities}
+                    keyExtractor={activity => activity.id}
+                    ListFooterComponent={
+                        hasFetched ? (
+                            <BaseSpacer height={20} />
+                        ) : (
+                            <BaseView mx={20}>
+                                <SkeletonActivityBox />
+                            </BaseView>
+                        )
+                    }
+                    renderItem={({ item: activity, index }) => {
+                        return (
+                            <BaseView mx={20}>
+                                {renderActivity(activity, index)}
+                            </BaseView>
+                        )
+                    }}
+                    showsVerticalScrollIndicator={false}
+                    showsHorizontalScrollIndicator={false}
+                    estimatedItemSize={80}
+                    estimatedListSize={{
+                        height: 80 * activities.length,
+                        width: SCREEN_WIDTH,
+                    }}
+                    onScroll={onScroll}
+                    onEndReachedThreshold={0.5}
+                    onEndReached={onEndReached}
+                    refreshControl={
+                        <RefreshControl
+                            refreshing={refreshing}
+                            onRefresh={onRefresh}
+                            tintColor={theme.colors.border}
+                        />
+                    }
+                />
+            </BaseView>
         )
     }, [
         activities,
@@ -251,24 +250,22 @@ export const HistoryScreen = () => {
 
     const renderSkeletonList = useMemo(() => {
         return (
-            <>
-                <BaseView flexDirection="row" style={baseStyles.list}>
-                    <FlatList
-                        data={[...Array(SKELETON_COUNT)]}
-                        keyExtractor={(_, index) => `skeleton-${index}`}
-                        ListFooterComponent={<BaseSpacer height={20} />}
-                        renderItem={() => {
-                            return (
-                                <BaseView mx={20}>
-                                    <SkeletonActivityBox />
-                                </BaseView>
-                            )
-                        }}
-                        showsVerticalScrollIndicator={false}
-                        showsHorizontalScrollIndicator={false}
-                    />
-                </BaseView>
-            </>
+            <BaseView flexDirection="row" style={baseStyles.list}>
+                <FlatList
+                    data={[...Array(SKELETON_COUNT)]}
+                    keyExtractor={(_, index) => `skeleton-${index}`}
+                    ListFooterComponent={<BaseSpacer height={20} />}
+                    renderItem={() => {
+                        return (
+                            <BaseView mx={20}>
+                                <SkeletonActivityBox />
+                            </BaseView>
+                        )
+                    }}
+                    showsVerticalScrollIndicator={false}
+                    showsHorizontalScrollIndicator={false}
+                />
+            </BaseView>
         )
     }, [])
 

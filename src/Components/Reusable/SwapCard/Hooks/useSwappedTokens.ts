@@ -10,8 +10,8 @@ import { useThor } from "~Components"
 import { FungibleToken, Token } from "~Model"
 import { getCustomTokenInfo } from "~Screens/Flows/App/ManageCustomTokenScreen/Utils"
 import {
+    selectAllTokens,
     selectSelectedNetwork,
-    selectTokensWithInfo,
     selectVetTokenWithInfo,
     useAppSelector,
 } from "~Storage/Redux"
@@ -41,7 +41,7 @@ export const useSwappedTokens = (
 ) => {
     const vetToken = useAppSelector(selectVetTokenWithInfo)
 
-    const tokens = useAppSelector(selectTokensWithInfo)
+    const tokens = useAppSelector(selectAllTokens)
 
     const network = useAppSelector(selectSelectedNetwork)
 

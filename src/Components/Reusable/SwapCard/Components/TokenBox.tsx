@@ -5,10 +5,10 @@ import { useI18nContext } from "~i18n"
 import {
     selectVisibleCustomTokens,
     selectCurrency,
-    selectTokensWithInfo,
     useAppSelector,
+    selectOfficialTokens,
 } from "~Storage/Redux"
-import { SCREEN_WIDTH, VET, currencySymbolMap, COLORS } from "~Constants"
+import { SCREEN_WIDTH, currencySymbolMap, COLORS } from "~Constants"
 import DropShadow from "react-native-drop-shadow"
 import { BaseCard, BaseIcon, BaseText, BaseView } from "~Components/Base"
 import { useTheme } from "~Hooks"
@@ -40,13 +40,13 @@ export const TokenBox = ({
     const provenanceText =
         provenance === SWAP_SIDE.PAID ? LL.PAID() : LL.RECEIVED()
 
-    const customTokens = useAppSelector(selectVisibleCustomTokens)
+    const visibleCustomTokens = useAppSelector(selectVisibleCustomTokens)
 
-    const tokens = useAppSelector(selectTokensWithInfo)
+    const officialTokens = useAppSelector(selectOfficialTokens)
 
     const currency = useAppSelector(selectCurrency)
 
-    const isTokenAdded = [...customTokens, ...tokens, VET]
+    const isTokenAdded = [...visibleCustomTokens, ...officialTokens]
         .map(tkn => tkn.address.toLowerCase())
         .includes(addressFull.toLowerCase())
 
