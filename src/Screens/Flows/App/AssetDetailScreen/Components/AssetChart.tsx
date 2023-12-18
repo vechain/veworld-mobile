@@ -14,7 +14,6 @@ type Props = {
 
 const defaultTimeframe = timelineDays[0].value
 export const AssetChart = ({ token }: Props) => {
-    // const { chartData, getChartData } = useChartData(token.symbol)
     const [selectedTimeframe, setSelectedTimeframe] =
         useState<number>(defaultTimeframe)
 
@@ -22,7 +21,7 @@ export const AssetChart = ({ token }: Props) => {
         id: getCoinGeckoIdBySymbol[token.symbol],
         vs_currency: "usd",
         days: selectedTimeframe,
-        initialData: mock_cart_data,
+        placeholderData: mock_cart_data,
     })
 
     const invokeHaptic = useCallback(async () => {

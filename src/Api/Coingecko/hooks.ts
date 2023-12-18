@@ -125,18 +125,18 @@ export const useMarketChart = ({
     id,
     vs_currency,
     days,
-    initialData,
+    placeholderData,
 }: {
     id?: string
     vs_currency: string
     days: number
-    initialData?: MarketChartResponse
+    placeholderData?: MarketChartResponse
 }) => {
     return useQuery({
         queryKey: getMarketChartQueryKey({ id, vs_currency, days }),
         queryFn: () => getMarketChart({ coinGeckoId: id, vs_currency, days }),
         enabled: !!id,
-        initialData,
+        placeholderData,
         staleTime: Number(
             process.env.REACT_APP_CHART_DATA_SYNC_PERIOD ?? 1000 * 60 * 5,
         ),

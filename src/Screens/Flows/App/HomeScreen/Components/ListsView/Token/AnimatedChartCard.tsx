@@ -11,7 +11,6 @@ import { BaseView } from "~Components"
 import HapticsService from "~Services/HapticsService"
 import {
     DEFAULT_CHART_DATA,
-    MarketChartResponse,
     getCoinGeckoIdBySymbol,
     useMarketChart,
 } from "~Api"
@@ -36,7 +35,7 @@ export const AnimatedChartCard = memo(
             id: getCoinGeckoIdBySymbol[tokenWithInfo.symbol],
             vs_currency: currency,
             days: 7,
-            initialData: DEFAULT_CHART_DATA,
+            placeholderData: DEFAULT_CHART_DATA,
         })
 
         const animatedOuterCard = useAnimatedStyle(() => {
@@ -90,7 +89,7 @@ export const AnimatedChartCard = memo(
                         <Animated.View style={animatedInnerCard}>
                             {/* chartData is always defined because we passed initalData to useMarketChart */}
                             <LineChart.Provider
-                                data={chartData as MarketChartResponse}>
+                                data={chartData ?? DEFAULT_CHART_DATA}>
                                 <LineChart height={HEIGHT}>
                                     <LineChart.Path
                                         color={theme.colors.primary}
