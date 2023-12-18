@@ -76,7 +76,7 @@ export const getMarketInfo = async ({
     vs_currency: string
 }) => {
     try {
-        const pricesResponse = await axios.get<MarketInfoResponse[]>(
+        const pricesResponse = await axiosInstance.get<MarketInfoResponse[]>(
             "/coins/markets",
             {
                 params: {
@@ -88,12 +88,17 @@ export const getMarketInfo = async ({
                     sparkline: false,
                     locale: "en",
                 },
+                paramsSerializer: params => {
+                    return Object.entries(params)
+                        .map(([key, value]) => `${key}=${value}`)
+                        .join("&")
+                },
             },
         )
 
         return pricesResponse.data
     } catch (e) {
-        error("fetchVechainMarketInfo", e)
+        error("getMarketInfo", e)
         throw e
     }
 }
