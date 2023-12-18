@@ -1,90 +1,20 @@
-import { Dispatch } from "@reduxjs/toolkit"
 import axios from "axios"
 import {
     COINGECKO_LIST,
-    COINGECKO_MARKET_CHART_ENDPOINT,
-    COINGECKO_MARKET_INFO_ENDPOINT,
     COINGECKO_TOKEN_ENDPOINT,
     EXCHANGE_CLIENT_AXIOS_OPTS,
-    getCoinGeckoIdBySymbol,
-    VET,
-    VTHO,
 } from "~Constants"
 import { debug, error, TokenUtils } from "~Utils"
 import { FungibleToken, Network } from "~Model"
-import { selectCoinGeckoTokens, selectCurrency } from "../Selectors"
 import {
     addOfficialTokens,
-    setAssertDetailChartData,
     setCoinGeckoTokens,
-    setCoinMarketInfo,
-    setDashboardChartData,
     setSuggestedTokens,
 } from "../Slices"
-import {
-    AppThunkDispatch,
-    MarketInfoResponse,
-    RootState,
-    TokenInfoResponse,
-} from "../Types"
+import { AppThunkDispatch, TokenInfoResponse } from "../Types"
 import { fetchOfficialTokensOwned, getTokensFromGithub } from "~Networking"
 
 const allSettled = require("promise.allsettled")
-
-type CoinMarketChartResponse = {
-    prices: number[][]
-}
-
-export const fetchChartData =
-    ({
-        symbol,
-        days,
-        interval,
-        isFixedInterval = true,
-    }: {
-        symbol: string
-        days: string | number
-        interval: string
-        isFixedInterval?: boolean
-    }) =>
-    async (dispatch: Dispatch, getState: () => RootState) => {
-        const currency = selectCurrency(getState())
-        const coin = getCoinGeckoIdBySymbol[symbol]
-        const coinGeckoTokens = selectCoinGeckoTokens(getState())
-        const foundCoin = coinGeckoTokens.find(
-            t => t.symbol.toLowerCase() === symbol.toLowerCase(),
-        )
-
-        try {
-            const pricesResponse = await axios.get<CoinMarketChartResponse>(
-                COINGECKO_MARKET_CHART_ENDPOINT(
-                    foundCoin ? foundCoin?.id : coin,
-                ),
-                {
-                    ...EXCHANGE_CLIENT_AXIOS_OPTS,
-                    params: {
-                        days,
-                        interval,
-                        vs_currency: currency,
-                    },
-                },
-            )
-
-            const prices = pricesResponse.data.prices
-            if (isFixedInterval) {
-                dispatch(setDashboardChartData({ symbol, data: prices }))
-            } else {
-                dispatch(setAssertDetailChartData({ symbol, data: prices }))
-            }
-
-            // this will run only the first time ever
-            if (!coinGeckoTokens.length) {
-                dispatch(setAssertDetailChartData({ symbol, data: prices }))
-            }
-        } catch (e) {
-            error("fetchChartData", e)
-        }
-    }
 
 type FetchTokensResponse = {
     id: string
@@ -199,30 +129,5 @@ export const updateSuggestedTokens =
             )
         } catch (e) {
             error("updateSuggestedTokens", e)
-        }
-    }
-
-export const fetchVechainMarketInfo =
-    () => async (dispatch: Dispatch, getState: () => RootState) => {
-        const currency = selectCurrency(getState())
-
-        try {
-            const pricesResponse = await axios.get<MarketInfoResponse[]>(
-                COINGECKO_MARKET_INFO_ENDPOINT(
-                    [
-                        getCoinGeckoIdBySymbol[VET.symbol],
-                        getCoinGeckoIdBySymbol[VTHO.symbol],
-                    ],
-                    currency,
-                ),
-                {
-                    ...EXCHANGE_CLIENT_AXIOS_OPTS,
-                },
-            )
-
-            const marketInfo = pricesResponse.data
-            dispatch(setCoinMarketInfo({ data: marketInfo }))
-        } catch (e) {
-            error("fetchVechainMarketInfo", e)
         }
     }

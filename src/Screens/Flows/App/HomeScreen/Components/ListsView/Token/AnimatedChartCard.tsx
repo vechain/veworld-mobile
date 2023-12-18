@@ -4,13 +4,18 @@ import { useTheme } from "~Hooks"
 import { VechainTokenCard } from "./VechainTokenCard"
 import Animated, { useAnimatedStyle, withTiming } from "react-native-reanimated"
 import { LineChart } from "react-native-wagmi-charts"
-import { usePollingChartData } from "../../../Hooks"
-import { TokenWithCompleteInfo, VeChainToken } from "~Model"
-import { selectDashboardChartData, useAppSelector } from "~Storage/Redux"
+import { TokenWithCompleteInfo } from "~Model"
 import { useNavigation } from "@react-navigation/native"
 import { Routes } from "~Navigation"
 import { BaseView } from "~Components"
 import HapticsService from "~Services/HapticsService"
+import {
+    DEFAULT_CHART_DATA,
+    MarketChartResponse,
+    getCoinGeckoIdBySymbol,
+    useMarketChart,
+} from "~Api"
+import { selectCurrency, useAppSelector } from "~Storage/Redux"
 
 const HEIGHT = 100
 
@@ -24,11 +29,15 @@ export const AnimatedChartCard = memo(
     ({ tokenWithInfo, isEdit, isBalanceVisible }: NativeTokenProps) => {
         const nav = useNavigation()
         const theme = useTheme()
-        usePollingChartData(tokenWithInfo.symbol as VeChainToken)
 
-        const chartData = useAppSelector(state =>
-            selectDashboardChartData(tokenWithInfo.symbol, state),
-        )
+        const currency = useAppSelector(selectCurrency)
+
+        const { data: chartData } = useMarketChart({
+            id: getCoinGeckoIdBySymbol[tokenWithInfo.symbol],
+            vs_currency: currency,
+            days: 7,
+            initialData: DEFAULT_CHART_DATA,
+        })
 
         const animatedOuterCard = useAnimatedStyle(() => {
             return {
@@ -79,7 +88,9 @@ export const AnimatedChartCard = memo(
                             isAnimation={isEdit}
                         />
                         <Animated.View style={animatedInnerCard}>
-                            <LineChart.Provider data={chartData}>
+                            {/* chartData is always defined because we passed initalData to useMarketChart */}
+                            <LineChart.Provider
+                                data={chartData as MarketChartResponse}>
                                 <LineChart height={HEIGHT}>
                                     <LineChart.Path
                                         color={theme.colors.primary}

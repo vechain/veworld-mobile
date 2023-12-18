@@ -1,36 +1,49 @@
-import React, { useCallback } from "react"
+import React, { useCallback, useState } from "react"
 import { LineChart } from "react-native-wagmi-charts"
 import { BaseSpacer, PressableWithUnderline } from "~Components"
-import { useChartData } from "../Hooks/useChartData"
 import { TokenWithCompleteInfo } from "~Model"
 import { mock_cart_data, timelineDays } from "../Mock_Chart_Data"
 import { ChartView } from "./ChartView"
 import HapticsService from "~Services/HapticsService"
+import { MarketChartResponse, useMarketChart } from "~Api"
+import { getCoinGeckoIdBySymbol } from "~Constants"
 
 type Props = {
     token: TokenWithCompleteInfo
 }
 
+const defaultTimeframe = timelineDays[0].value
 export const AssetChart = ({ token }: Props) => {
-    const { chartData, getChartData } = useChartData(token.symbol)
+    // const { chartData, getChartData } = useChartData(token.symbol)
+    const [selectedTimeframe, setSelectedTimeframe] =
+        useState<number>(defaultTimeframe)
+
+    const { data: chartData } = useMarketChart({
+        id: getCoinGeckoIdBySymbol[token.symbol],
+        vs_currency: "usd",
+        days: selectedTimeframe,
+        initialData: mock_cart_data,
+    })
+
     const invokeHaptic = useCallback(async () => {
         await HapticsService.triggerImpact({ level: "Light" })
     }, [])
 
-    const onTimelineButtonPress = useCallback(
-        (button: string) => {
-            const foundData = timelineDays.find(o => o.label === button)
-            getChartData(foundData?.value, foundData?.secondaryValue)
-        },
-        [getChartData],
-    )
+    const onTimelineButtonPress = useCallback((button: string) => {
+        const foundData = timelineDays.find(o => o.label === button)
+        setSelectedTimeframe(foundData?.value ?? defaultTimeframe)
+    }, [])
 
     return (
         <>
             <LineChart.Provider
                 data={chartData?.length ? chartData : mock_cart_data}
                 onCurrentIndexChange={invokeHaptic}>
-                <ChartView chartData={chartData} token={token} />
+                {/* chartData is always defined because we are passing initalData */}
+                <ChartView
+                    chartData={chartData as MarketChartResponse}
+                    token={token}
+                />
             </LineChart.Provider>
 
             <BaseSpacer height={8} />
