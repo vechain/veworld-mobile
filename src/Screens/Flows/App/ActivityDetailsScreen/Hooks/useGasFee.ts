@@ -1,12 +1,11 @@
-import { selectCurrencyExchangeRate } from "./../../../../../Storage/Redux/Selectors/Currency"
 import { useEffect, useMemo, useState } from "react"
 import { BigNumber } from "bignumber.js"
 import { Activity } from "~Model"
 import { useThor, showInfoToast } from "~Components"
 import { VTHO, DEFAULT_GAS_COEFFICIENT } from "~Constants"
 import { FormattingUtils, GasUtils } from "~Utils"
-import { RootState } from "~Storage/Redux/Types"
-import { useAppSelector } from "~Storage/Redux"
+import { selectCurrency, useAppSelector } from "~Storage/Redux"
+import { useVthoExchangeRate } from "~Api"
 
 /**
  * `useGasFee` is a custom React Hook that calculates the gas fee for a specific activity (transaction).
@@ -28,6 +27,7 @@ export const useGasFee = (activity: Activity) => {
     const thor = useThor()
 
     const [gasFeeInVTHO, setFeeInVTHO] = useState<BigNumber>()
+    const currency = useAppSelector(selectCurrency)
 
     /**
      * Effect hook to calculate the gas fee for a transaction.
@@ -44,9 +44,7 @@ export const useGasFee = (activity: Activity) => {
             .catch(() => showInfoToast("Info", "Gas fee may not be accurate."))
     }, [activity.gasUsed, thor])
 
-    const VTHOexchangeRate = useAppSelector((state: RootState) =>
-        selectCurrencyExchangeRate(state, VTHO.symbol),
-    )
+    const { data: vthoExchangeRate } = useVthoExchangeRate(currency)
 
     /**
      * Converts the gas fee from wei to a human-readable format in VTHO.
@@ -62,17 +60,17 @@ export const useGasFee = (activity: Activity) => {
     }, [gasFeeInVTHO])
 
     const fiatValueGasFeeSpent = useMemo(() => {
-        if (VTHOexchangeRate?.rate && gasFeeInVTHOHumanReadable) {
+        if (vthoExchangeRate && gasFeeInVTHOHumanReadable) {
             return FormattingUtils.humanNumber(
                 FormattingUtils.convertToFiatBalance(
                     gasFeeInVTHOHumanReadable,
-                    VTHOexchangeRate.rate,
+                    vthoExchangeRate,
                     VTHO.decimals,
                 ),
                 gasFeeInVTHOHumanReadable,
             )
         }
-    }, [VTHOexchangeRate?.rate, gasFeeInVTHOHumanReadable])
+    }, [vthoExchangeRate, gasFeeInVTHOHumanReadable])
 
     return { gasFeeInVTHO, gasFeeInVTHOHumanReadable, fiatValueGasFeeSpent }
 }

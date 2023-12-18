@@ -3,7 +3,6 @@ import { FormattingUtils } from "~Utils"
 import { selectSelectedAccount } from "./Account"
 import { VET, VTHO } from "~Constants"
 import { RootState } from "~Storage/Redux/Types"
-import { selectCurrencyExchangeRate } from "./Currency"
 import { BigNumber } from "bignumber.js"
 import { selectSelectedNetwork } from "./Network"
 import { FungibleToken, FungibleTokenWithBalance } from "~Model"
@@ -189,32 +188,6 @@ export const selectSendableTokensWithBalance = createSelector(
                 tokenWithBalance &&
                 !new BigNumber(tokenWithBalance.balance.balance).isZero(),
         ) as FungibleTokenWithBalance[]
-    },
-)
-
-export const selectFiatBalance = createSelector(
-    [
-        selectVetTokenWithBalance,
-        state => selectCurrencyExchangeRate(state, "VET"),
-        selectVthoTokenWithBalance,
-        state => selectCurrencyExchangeRate(state, "VTHO"),
-    ],
-    (vetBalance, vetExchangeRate, vthoBalance, vthoExchangeRate) => {
-        return new BigNumber(
-            FormattingUtils.convertToFiatBalance(
-                vetBalance?.balance.balance ?? "0",
-                vetExchangeRate?.rate ?? 0,
-                VET.decimals,
-            ),
-        )
-            .plus(
-                FormattingUtils.convertToFiatBalance(
-                    vthoBalance?.balance.balance ?? "0",
-                    vthoExchangeRate?.rate ?? 0,
-                    VTHO.decimals,
-                ),
-            )
-            .toString()
     },
 )
 

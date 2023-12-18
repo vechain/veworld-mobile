@@ -2,7 +2,12 @@ import React, { memo, useMemo } from "react"
 import { StyleSheet } from "react-native"
 import { useFungibleTokenInfo, useTheme, useThemedStyles } from "~Hooks"
 import { DateUtils, FormattingUtils } from "~Utils"
-import { COLORS, ColorThemeType, DIRECTIONS } from "~Constants"
+import {
+    COLORS,
+    ColorThemeType,
+    DIRECTIONS,
+    getCoinGeckoIdBySymbol,
+} from "~Constants"
 import { BaseIcon, BaseText, BaseTouchable, BaseView } from "~Components"
 import {
     Activity,
@@ -16,11 +21,10 @@ import {
     selectOfficialTokens,
     useAppSelector,
 } from "~Storage/Redux"
-import { selectCurrencyExchangeRate } from "~Storage/Redux/Selectors/Currency"
-import { RootState } from "~Storage/Redux/Types"
 import { useI18nContext } from "~i18n"
 import { getCalendars } from "expo-localization"
 import { ActivityStatusIndicator } from "./ActivityStatusIndicator"
+import { useExchangeRate } from "~Api"
 
 type Props = {
     activity: FungibleTokenActivity
@@ -51,11 +55,11 @@ export const FungibleTokenActivityBox: React.FC<Props> = memo(
             [activity.tokenAddress, allTokens],
         )
 
-        const exchangeRate = useAppSelector((state: RootState) =>
-            selectCurrencyExchangeRate(state, token?.symbol ?? symbol ?? ""),
-        )
-
         const currency = useAppSelector(selectCurrency)
+        const { data: exchangeRate } = useExchangeRate({
+            id: getCoinGeckoIdBySymbol[token?.symbol ?? symbol ?? ""],
+            vs_currency: currency,
+        })
 
         const amountTransferred = useMemo(() => {
             const humanReadable = FormattingUtils.humanNumber(
@@ -73,12 +77,12 @@ export const FungibleTokenActivityBox: React.FC<Props> = memo(
         }, [activity.amount, decimals, token])
 
         const fiatValueTransferred = useMemo(() => {
-            if (!token || !exchangeRate?.rate) return undefined
+            if (!token || !exchangeRate) return undefined
 
             return FormattingUtils.humanNumber(
                 FormattingUtils.convertToFiatBalance(
                     activity.amount as string,
-                    exchangeRate.rate,
+                    exchangeRate,
                     token.decimals,
                 ),
                 activity.amount,

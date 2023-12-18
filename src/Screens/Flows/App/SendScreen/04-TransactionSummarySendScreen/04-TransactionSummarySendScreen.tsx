@@ -7,7 +7,7 @@ import {
     useTransferAddContact,
 } from "~Hooks"
 import { AddressUtils, FormattingUtils } from "~Utils"
-import { AnalyticsEvent, COLORS } from "~Constants"
+import { AnalyticsEvent, COLORS, getCoinGeckoIdBySymbol } from "~Constants"
 import {
     BaseSpacer,
     BaseText,
@@ -25,7 +25,6 @@ import {
     addPendingTransferTransactionActivity,
     selectAccounts,
     selectCurrency,
-    selectCurrencyExchangeRate,
     selectPendingTx,
     selectSelectedAccount,
     setIsAppLoading,
@@ -38,6 +37,7 @@ import { ContactType, DEVICE_TYPE } from "~Model"
 import { prepareFungibleClause } from "~Utils/TransactionUtils/TransactionUtils"
 import { Transaction } from "thor-devkit"
 import { ContactManagementBottomSheet } from "../../ContactsScreen"
+import { useExchangeRate } from "~Api"
 
 type Props = NativeStackScreenProps<
     RootStackParamListHome & RootStackParamListDiscover,
@@ -56,9 +56,11 @@ export const TransactionSummarySendScreen = ({ route }: Props) => {
     // TODO (Vas) (https://github.com/vechainfoundation/veworld-mobile/issues/763) refactor to a new hook
     const account = useAppSelector(selectSelectedAccount)
     const currency = useAppSelector(selectCurrency)
-    const exchangeRate = useAppSelector(state =>
-        selectCurrencyExchangeRate(state, token.symbol),
-    )
+
+    const { data: exchangeRate } = useExchangeRate({
+        id: getCoinGeckoIdBySymbol[token.symbol],
+        vs_currency: currency,
+    })
     const pendingTransaction = useAppSelector(state =>
         selectPendingTx(state, token.address),
     )
@@ -75,8 +77,8 @@ export const TransactionSummarySendScreen = ({ route }: Props) => {
         () =>
             FormattingUtils.humanNumber(
                 FormattingUtils.convertToFiatBalance(
-                    amount || "0",
-                    exchangeRate?.rate || 1,
+                    amount ?? "0",
+                    exchangeRate ?? 1,
                     0,
                 ),
                 amount,

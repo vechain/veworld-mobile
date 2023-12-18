@@ -3,16 +3,12 @@ import { VTHO, currencySymbolMap, genesisesId } from "~Constants"
 import { useCopyClipboard, useFungibleTokenInfo } from "~Hooks"
 import { FormattingUtils } from "~Utils"
 import { FungibleToken, FungibleTokenActivity } from "~Model"
-import {
-    selectCurrency,
-    selectCurrencyExchangeRate,
-    useAppSelector,
-} from "~Storage/Redux"
-import { RootState } from "~Storage/Redux/Types"
+import { selectCurrency, useAppSelector } from "~Storage/Redux"
 import { useI18nContext } from "~i18n"
 import { ActivityDetail } from "../Type"
 import { useGasFee } from "../Hooks"
 import { ActivityDetailItem } from "./ActivityDetailItem"
+import { getCoinGeckoIdBySymbol, useExchangeRate } from "~Api"
 
 type Props = {
     activity: FungibleTokenActivity
@@ -51,22 +47,23 @@ export const FungibleTokenTransferDetails: React.FC<Props> = memo(
             )
         }, [activity.amount, decimals, token])
 
-        const exchangeRate = useAppSelector((state: RootState) =>
-            selectCurrencyExchangeRate(state, token?.symbol ?? ""),
-        )
+        const { data: exchangeRate } = useExchangeRate({
+            id: getCoinGeckoIdBySymbol[token?.symbol ?? ""],
+            vs_currency: currency,
+        })
 
         const fiatValueTransferred = useMemo(() => {
-            if (exchangeRate?.rate && token) {
+            if (exchangeRate && token) {
                 return FormattingUtils.humanNumber(
                     FormattingUtils.convertToFiatBalance(
                         activity.amount as string,
-                        exchangeRate.rate,
+                        exchangeRate,
                         token.decimals,
                     ),
                     activity.amount,
                 )
             }
-        }, [activity.amount, exchangeRate?.rate, token])
+        }, [activity.amount, exchangeRate, token])
 
         const transactionIDshort = useMemo(() => {
             return FormattingUtils.humanAddress(activity.txId ?? "", 7, 9)

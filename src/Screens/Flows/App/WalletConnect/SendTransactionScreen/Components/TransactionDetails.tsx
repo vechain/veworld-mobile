@@ -14,12 +14,9 @@ import { capitalize } from "lodash"
 import { FormattingUtils } from "~Utils"
 import { SessionTypes } from "@walletconnect/types"
 import { Network } from "~Model"
-import {
-    selectCurrency,
-    selectCurrencyExchangeRate,
-    useAppSelector,
-} from "~Storage/Redux"
+import { selectCurrency, useAppSelector } from "~Storage/Redux"
 import { BigNumber } from "bignumber.js"
+import { getCoinGeckoIdBySymbol, useExchangeRate } from "~Api"
 
 type Props = {
     selectedDelegationOption: DelegationType
@@ -44,10 +41,13 @@ export const TransactionDetails = ({
 }: Props) => {
     const { LL } = useI18nContext()
     const theme = useTheme()
-    const exchangeRate = useAppSelector(state =>
-        selectCurrencyExchangeRate(state, ""),
-    )
+
+    //TODO: which token??
     const currency = useAppSelector(selectCurrency)
+    const { data: exchangeRate } = useExchangeRate({
+        id: getCoinGeckoIdBySymbol[""],
+        vs_currency: currency,
+    })
 
     const comment = options.comment || message[0].comment
 
@@ -60,7 +60,7 @@ export const TransactionDetails = ({
     const formattedFiatAmount = FormattingUtils.humanNumber(
         FormattingUtils.convertToFiatBalance(
             spendingAmount.toString(10) || "0",
-            exchangeRate?.rate || 1,
+            exchangeRate || 1,
             0,
         ),
         spendingAmount,

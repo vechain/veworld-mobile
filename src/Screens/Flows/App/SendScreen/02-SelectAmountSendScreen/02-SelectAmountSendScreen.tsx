@@ -23,15 +23,12 @@ import {
 } from "~Navigation"
 import { useI18nContext } from "~i18n"
 import { COLORS, CURRENCY_SYMBOLS, typography } from "~Constants"
-import {
-    selectCurrency,
-    selectCurrencyExchangeRate,
-    useAppSelector,
-} from "~Storage/Redux"
+import { selectCurrency, useAppSelector } from "~Storage/Redux"
 import { BigNumber } from "bignumber.js"
 import { useNavigation } from "@react-navigation/native"
 import { throttle } from "lodash"
 import { useMaxAmount } from "./Hooks/useMaxAmount"
+import { getCoinGeckoIdBySymbol, useExchangeRate } from "~Api"
 
 const { defaults: defaultTypography } = typography
 
@@ -47,11 +44,13 @@ export const SelectAmountSendScreen = ({ route }: Props) => {
     const { LL } = useI18nContext()
     const nav = useNavigation()
     const { input, setInput } = useAmountInput()
-    const exchangeRate = useAppSelector(state =>
-        selectCurrencyExchangeRate(state, token.symbol),
-    )
 
     const currency = useAppSelector(selectCurrency)
+
+    const { data: exchangeRate } = useExchangeRate({
+        id: getCoinGeckoIdBySymbol[token.symbol],
+        vs_currency: currency,
+    })
 
     const [isInputInFiat, setIsInputInFiat] = useState(false)
     const [isError, setIsError] = useState(false)
@@ -70,23 +69,23 @@ export const SelectAmountSendScreen = ({ route }: Props) => {
     )
 
     const rawTokenBalanceinFiat = FormattingUtils.convertToFiatBalance(
-        rawTokenBalance || "0",
-        exchangeRate?.rate || 1,
+        rawTokenBalance ?? "0",
+        exchangeRate ?? 1,
         0,
     )
 
-    const isExchangeRateAvailable = !!exchangeRate?.rate
+    const isExchangeRateAvailable = !!exchangeRate
     const formattedFiatInput = FormattingUtils.humanNumber(
         FormattingUtils.convertToFiatBalance(
-            input || "0",
-            exchangeRate?.rate ?? 1,
+            input ?? "0",
+            exchangeRate ?? 1,
             0,
         ),
-        input || "0",
+        input ?? "0",
     )
     const rawTokenInput = FormattingUtils.convertToFiatBalance(
-        input || "0",
-        1 / (exchangeRate?.rate ?? 1),
+        input ?? "0",
+        1 / (exchangeRate ?? 1),
         0,
     )
     const formattedTokenInput = FormattingUtils.humanNumber(
@@ -127,7 +126,7 @@ export const SelectAmountSendScreen = ({ route }: Props) => {
                 ? Number(
                       FormattingUtils.convertToFiatBalance(
                           newTokenInput || "0",
-                          exchangeRate?.rate ?? 1,
+                          exchangeRate ?? 1,
                           0,
                       ),
                   ).toFixed(2)

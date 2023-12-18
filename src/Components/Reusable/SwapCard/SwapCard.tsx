@@ -6,10 +6,11 @@ import { useThemedStyles } from "~Hooks"
 import { FormattingUtils } from "~Utils"
 import { COLORS, ColorThemeType } from "~Constants"
 import { BaseIcon, BaseView } from "~Components"
-import { selectCurrencyExchangeRate, useAppSelector } from "~Storage/Redux"
-import { RootState } from "~Storage/Redux/Types"
+
 import { useSwappedTokens } from "./Hooks"
 import { TokenBox } from "./Components"
+import { getCoinGeckoIdBySymbol, useExchangeRate } from "~Api"
+import { selectCurrency, useAppSelector } from "~Storage/Redux"
 
 type Props = {
     paidTokenAddress: string
@@ -39,13 +40,17 @@ export const SwapCard = memo(
             paidTokenAddress,
         )
 
-        const exchangeRatePaid = useAppSelector((state: RootState) =>
-            selectCurrencyExchangeRate(state, paidToken?.symbol ?? ""),
-        )
+        const currency = useAppSelector(selectCurrency)
 
-        const exchangeRateReceived = useAppSelector((state: RootState) =>
-            selectCurrencyExchangeRate(state, receivedToken?.symbol ?? ""),
-        )
+        const { data: exchangeRatePaid } = useExchangeRate({
+            id: getCoinGeckoIdBySymbol[paidToken?.symbol ?? ""],
+            vs_currency: currency,
+        })
+
+        const { data: exchangeRateReceived } = useExchangeRate({
+            id: getCoinGeckoIdBySymbol[receivedToken?.symbol ?? ""],
+            vs_currency: currency,
+        })
 
         const paidTokenAddressShort = useMemo(() => {
             return FormattingUtils.humanAddress(paidTokenAddress, 4, 6)
@@ -78,29 +83,29 @@ export const SwapCard = memo(
         }, [receivedTokenAmount, receivedToken])
 
         const fiatValuePaid = useMemo(() => {
-            if (exchangeRatePaid?.rate && paidToken)
+            if (exchangeRatePaid && paidToken)
                 return FormattingUtils.humanNumber(
                     FormattingUtils.convertToFiatBalance(
                         paidTokenAmount,
-                        exchangeRatePaid.rate,
+                        exchangeRatePaid,
                         paidToken.decimals,
                     ),
                     paidAmount,
                 )
-        }, [exchangeRatePaid?.rate, paidAmount, paidToken, paidTokenAmount])
+        }, [exchangeRatePaid, paidAmount, paidToken, paidTokenAmount])
 
         const fiatValueReceived = useMemo(() => {
-            if (exchangeRateReceived?.rate && receivedToken)
+            if (exchangeRateReceived && receivedToken)
                 return FormattingUtils.humanNumber(
                     FormattingUtils.convertToFiatBalance(
                         receivedTokenAmount,
-                        exchangeRateReceived.rate,
+                        exchangeRateReceived,
                         receivedToken.decimals,
                     ),
                     receivedAmount,
                 )
         }, [
-            exchangeRateReceived?.rate,
+            exchangeRateReceived,
             receivedAmount,
             receivedToken,
             receivedTokenAmount,
