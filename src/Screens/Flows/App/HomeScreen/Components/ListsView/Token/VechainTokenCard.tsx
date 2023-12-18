@@ -163,6 +163,7 @@ export const VechainTokenCard = memo(
                                     {isBalanceVisible ? fiatBalance : "••••"}
                                 </BaseText>
                                 <BaseText typographyFont="captionRegular">
+                                    {" "}
                                     {exchangeRateCurrency}
                                 </BaseText>
                             </>

@@ -42,6 +42,30 @@ export const BalanceView = ({
                 <BaseText typographyFont="bodyBold">
                     {LL.BD_YOUR_BALANCE()}
                 </BaseText>
+            </BaseView>
+
+            <BaseSpacer height={4} />
+
+            <BaseView flexDirection="row" justifyContent="space-between">
+                <BaseView flexDirection="row">
+                    {isTokensOwnedLoading ? (
+                        <BaseSkeleton
+                            animationDirection="horizontalLeft"
+                            boneColor={theme.colors.skeletonBoneColor}
+                            highlightColor={theme.colors.skeletonHighlightColor}
+                            height={14}
+                            width={60}
+                        />
+                    ) : (
+                        <BaseText typographyFont="bodyMedium">
+                            {isBalanceVisible ? tokenUnitBalance : "•••••"}
+                        </BaseText>
+                    )}
+                    <BaseSpacer width={4} />
+                    <BaseText typographyFont="captionRegular">
+                        {token.symbol}
+                    </BaseText>
+                </BaseView>
                 <BaseSpacer width={4} />
                 {isLoading ? (
                     <BaseView flexDirection="row" alignItems="center">
@@ -54,36 +78,21 @@ export const BalanceView = ({
                         />
                     </BaseView>
                 ) : priceFeedNotAvailable ? (
-                    <BaseText typographyFont="caption">
+                    <BaseText typographyFont="bodyMedium">
                         {LL.ERROR_PRICE_FEED_NOT_AVAILABLE()}
                     </BaseText>
                 ) : (
-                    <BaseText typographyFont="caption">{`${
-                        isBalanceVisible ? fiatBalance : "•••"
-                    } ${currency}`}</BaseText>
-                )}
-            </BaseView>
-
-            <BaseSpacer height={4} />
-
-            <BaseView flexDirection="row">
-                {isTokensOwnedLoading ? (
-                    <BaseView flexDirection="row" alignItems="center">
-                        <BaseSkeleton
-                            animationDirection="horizontalLeft"
-                            boneColor={theme.colors.skeletonBoneColor}
-                            highlightColor={theme.colors.skeletonHighlightColor}
-                            height={14}
-                            width={60}
-                        />
+                    <BaseView flexDirection="row">
+                        <BaseText typographyFont="subTitleBold">
+                            {isBalanceVisible ? fiatBalance : "••••"}
+                        </BaseText>
+                        <BaseSpacer width={4} />
+                        <BaseText typographyFont="captionRegular">
+                            {" "}
+                            {currency}
+                        </BaseText>
                     </BaseView>
-                ) : (
-                    <BaseText>
-                        {isBalanceVisible ? tokenUnitBalance : "•••••"}
-                    </BaseText>
                 )}
-                <BaseSpacer width={4} />
-                <BaseText typographyFont="bodyBold">{token.symbol}</BaseText>
             </BaseView>
         </BaseView>
     )
