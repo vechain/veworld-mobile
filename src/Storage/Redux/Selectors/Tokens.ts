@@ -75,7 +75,7 @@ export const selectTokensWithInfo = createSelector(
         const tokens: TokenWithCompleteInfo[] = githubTokens.map(
             (token: FungibleToken) => {
                 const foundToken = coinGeckoTokens.find(t =>
-                    compareSymbols(t.symbol, token.symbol),
+                    compareSymbols(t?.symbol, token.symbol),
                 )
 
                 if (!foundToken) return token as TokenWithCompleteInfo

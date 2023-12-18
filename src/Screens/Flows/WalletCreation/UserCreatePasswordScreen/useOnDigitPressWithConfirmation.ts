@@ -30,7 +30,7 @@ export const useOnDigitPressWithConfirmation = ({
         if (finishedConfirmationPin === pin.join(""))
             onFinishCallback(finishedConfirmationPin)
         else {
-            onConfirmationError && onConfirmationError()
+            onConfirmationError?.()
             setTimeout(() => {
                 setPin([])
                 setConfirmationPin([])
