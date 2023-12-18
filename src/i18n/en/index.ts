@@ -316,6 +316,7 @@ const en: BaseTranslation = {
 
 
     // Errors
+    ERROR_PRICE_FEED_NOT_AVAILABLE: "Price feed not available",
     ERROR_GENERIC_SUBTITLE: "Something went wrong!",
     ERROR_GENERIC_BODY: "We apologise for the inconvenience.\nPlease, try again later.",
     ERROR_INCORRECT_MNEMONIC: "Incorrect mnemonic phrase",
@@ -673,7 +674,7 @@ const en: BaseTranslation = {
     WALLET_LEDGER_ERROR_UNKNOWN_DESC: "An unknown error occurred. Please try again",
     WALLET_LEDGER_NO_DEVICES: "No devices found",
     WALLET_LEDGER_NO_DEVICES_DESC: "We couldn't find any Ledger devices to connect to",
-    
+
     // Transaction Labels
 
     // Unlock

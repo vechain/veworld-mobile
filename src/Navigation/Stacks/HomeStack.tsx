@@ -23,7 +23,6 @@ import {
     FungibleToken,
     FungibleTokenWithBalance,
     LedgerAccountWithDevice,
-    TokenWithCompleteInfo,
     TransactionOutcomes,
 } from "~Model"
 import { Transaction } from "thor-devkit"
@@ -68,7 +67,7 @@ export type RootStackParamListHome = {
         isSwap?: boolean
         decodedClauses?: TransactionOutcomes
     }
-    [Routes.TOKEN_DETAILS]: { token: TokenWithCompleteInfo }
+    [Routes.TOKEN_DETAILS]: { token: FungibleToken }
     [Routes.SETTINGS_CONNECTED_APPS]: undefined
 }
 

@@ -12,16 +12,16 @@ import {
 } from "~Screens"
 import { Routes } from "~Navigation/Enums"
 import {
+    FungibleToken,
     FungibleTokenWithBalance,
     LedgerAccountWithDevice,
-    TokenWithCompleteInfo,
 } from "~Model"
 import { Transaction } from "thor-devkit"
 import { PlatformUtils } from "~Utils"
 
 export type RootStackParamListDiscover = {
     [Routes.DISCOVER]: undefined
-    [Routes.TOKEN_DETAILS]: { token: TokenWithCompleteInfo }
+    [Routes.TOKEN_DETAILS]: { token: FungibleToken }
     [Routes.BUY]: undefined
     [Routes.SWAP]: undefined
     [Routes.SELECT_TOKEN_SEND]: { initialRoute: Routes }

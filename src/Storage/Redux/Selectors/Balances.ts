@@ -6,19 +6,13 @@ import { RootState } from "~Storage/Redux/Types"
 import { selectCurrencyExchangeRate } from "./Currency"
 import { BigNumber } from "bignumber.js"
 import { selectSelectedNetwork } from "./Network"
-import {
-    FungibleToken,
-    FungibleTokenWithBalance,
-    TokenWithCompleteInfo,
-} from "~Model"
+import { FungibleToken, FungibleTokenWithBalance } from "~Model"
 import {
     selectAllTokens,
     selectCustomTokens,
     selectSuggestedTokens,
-    selectTokensWithInfo,
 } from "./Tokens"
 import { compareAddresses } from "~Utils/AddressUtils/AddressUtils"
-import { compareSymbols } from "~Utils/TokenUtils/TokenUtils"
 import sortBy from "lodash/sortBy"
 
 export const selectBalancesState = (state: RootState) => state.balances
@@ -331,39 +325,5 @@ export const selectMissingSuggestedTokens = createSelector(
                     compareAddresses(balance.tokenAddress, tokenAddress),
                 ),
         )
-    },
-)
-
-export const selectVetTokenWithInfo = createSelector(
-    selectTokensWithInfo,
-    selectVetBalance,
-    (tokens, balance) => {
-        const tokenWithInfo = tokens.find(t =>
-            compareSymbols(t.symbol, VET.symbol),
-        )
-
-        if (!tokenWithInfo) return VET as TokenWithCompleteInfo
-
-        return {
-            ...tokenWithInfo,
-            balance,
-        }
-    },
-)
-
-export const selectVthoTokenWithInfo = createSelector(
-    selectTokensWithInfo,
-    selectVthoBalance,
-    (tokens, balance) => {
-        const tokenWithInfo = tokens.find(t =>
-            compareAddresses(t.address, VTHO.address),
-        )
-
-        if (!tokenWithInfo) return VTHO as TokenWithCompleteInfo
-
-        return {
-            ...tokenWithInfo,
-            balance: balance,
-        }
     },
 )

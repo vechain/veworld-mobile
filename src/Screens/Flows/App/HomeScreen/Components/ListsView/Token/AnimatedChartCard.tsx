@@ -4,7 +4,7 @@ import { useTheme } from "~Hooks"
 import { VechainTokenCard } from "./VechainTokenCard"
 import Animated, { useAnimatedStyle, withTiming } from "react-native-reanimated"
 import { LineChart } from "react-native-wagmi-charts"
-import { TokenWithCompleteInfo } from "~Model"
+import { FungibleToken } from "~Model"
 import { useNavigation } from "@react-navigation/native"
 import { Routes } from "~Navigation"
 import { BaseView } from "~Components"
@@ -19,20 +19,20 @@ import { selectCurrency, useAppSelector } from "~Storage/Redux"
 const HEIGHT = 100
 
 export type NativeTokenProps = {
-    tokenWithInfo: TokenWithCompleteInfo
+    token: FungibleToken
     isEdit: boolean
     isBalanceVisible: boolean
 }
 
 export const AnimatedChartCard = memo(
-    ({ tokenWithInfo, isEdit, isBalanceVisible }: NativeTokenProps) => {
+    ({ token, isEdit, isBalanceVisible }: NativeTokenProps) => {
         const nav = useNavigation()
         const theme = useTheme()
 
         const currency = useAppSelector(selectCurrency)
 
         const { data: chartData } = useMarketChart({
-            id: getCoinGeckoIdBySymbol[tokenWithInfo.symbol],
+            id: getCoinGeckoIdBySymbol[token.symbol],
             vs_currency: currency,
             days: 7,
             placeholderData: DEFAULT_CHART_DATA,
@@ -67,9 +67,8 @@ export const AnimatedChartCard = memo(
 
         const onVechainTokenPress = useCallback(() => {
             HapticsService.triggerImpact({ level: "Light" })
-            if (!isEdit)
-                nav.navigate(Routes.TOKEN_DETAILS, { token: tokenWithInfo })
-        }, [isEdit, nav, tokenWithInfo])
+            if (!isEdit) nav.navigate(Routes.TOKEN_DETAILS, { token: token })
+        }, [isEdit, nav, token])
 
         return (
             <BaseView>
@@ -83,7 +82,7 @@ export const AnimatedChartCard = memo(
                         ]}>
                         <VechainTokenCard
                             isBalanceVisible={isBalanceVisible}
-                            tokenWithInfo={tokenWithInfo}
+                            token={token}
                             isAnimation={isEdit}
                         />
                         <Animated.View style={animatedInnerCard}>

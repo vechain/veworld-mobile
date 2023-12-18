@@ -36,7 +36,7 @@ type Props = NativeStackScreenProps<
 >
 
 export const AssetDetailScreen = ({ route }: Props) => {
-    const token = route.params.token
+    const paramsToken = route.params.token
     const { styles, theme } = useThemedStyles(baseStyles)
     const nav = useNavigation()
     const { LL } = useI18nContext()
@@ -47,10 +47,18 @@ export const AssetDetailScreen = ({ route }: Props) => {
     const isBalanceVisible = useAppSelector(selectBalanceVisible)
 
     const tokens = useAppSelector(selectSendableTokensWithBalance)
-    const foundToken = tokens.filter(
-        t =>
-            t.name?.toLowerCase().includes(token.name.toLowerCase()) ||
-            t.symbol?.toLowerCase().includes(token.symbol.toLowerCase()),
+    const token = useMemo(
+        () =>
+            tokens.find(
+                t =>
+                    t.name
+                        ?.toLowerCase()
+                        .includes(paramsToken?.name.toLowerCase()) ||
+                    t.symbol
+                        ?.toLowerCase()
+                        .includes(paramsToken?.symbol.toLowerCase()),
+            ),
+        [tokens, paramsToken],
     )
 
     const Actions: FastAction[] = useMemo(
@@ -58,16 +66,16 @@ export const AssetDetailScreen = ({ route }: Props) => {
             {
                 name: LL.BTN_SEND(),
                 action: () => {
-                    if (foundToken.length) {
+                    if (token) {
                         nav.navigate(Routes.SELECT_AMOUNT_SEND, {
-                            token: foundToken[0],
+                            token: token,
                             initialRoute: Routes.HOME,
                         })
                     } else {
                         showWarningToast(
                             LL.HEADS_UP(),
                             LL.SEND_ERROR_TOKEN_NOT_FOUND({
-                                tokenName: token.symbol,
+                                tokenName: paramsToken?.symbol,
                             }),
                         )
                     }
@@ -85,9 +93,17 @@ export const AssetDetailScreen = ({ route }: Props) => {
                 testID: "reciveButton",
             },
         ],
-        [LL, foundToken, nav, openQRCodeSheet, theme.colors.text, token.symbol],
+        [
+            LL,
+            token,
+            nav,
+            openQRCodeSheet,
+            theme.colors.text,
+            paramsToken?.symbol,
+        ],
     )
 
+    if (!token) return null
     return (
         <Layout
             noMargin

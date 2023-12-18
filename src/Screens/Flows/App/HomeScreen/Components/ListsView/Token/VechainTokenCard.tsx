@@ -8,48 +8,47 @@ import {
     BaseSkeleton,
 } from "~Components"
 import Animated, { useAnimatedStyle, withTiming } from "react-native-reanimated"
-import { useBalances, useTheme } from "~Hooks"
+import { useTheme, useTokenWithCompleteInfo } from "~Hooks"
 import { FormattingUtils } from "~Utils"
-import { selectCurrencyExchangeRate } from "~Storage/Redux/Selectors/Currency"
-import {
-    selectCurrency,
-    selectIsTokensOwnedLoading,
-} from "~Storage/Redux/Selectors"
-import { TokenWithCompleteInfo } from "~Model"
+import { selectIsTokensOwnedLoading } from "~Storage/Redux/Selectors"
+import { FungibleToken } from "~Model"
 import { useAppSelector } from "~Storage/Redux"
 import { COLORS } from "~Constants"
+import { useI18nContext } from "~i18n"
 
 type Props = {
-    tokenWithInfo: TokenWithCompleteInfo
+    token: FungibleToken
     isAnimation: boolean
     isBalanceVisible: boolean
 }
 
 export const VechainTokenCard = memo(
-    ({ tokenWithInfo, isAnimation, isBalanceVisible }: Props) => {
+    ({ token, isAnimation, isBalanceVisible }: Props) => {
+        const { LL } = useI18nContext()
         const theme = useTheme()
 
-        const exchangeRate = useAppSelector(state =>
-            selectCurrencyExchangeRate(state, tokenWithInfo.symbol as string),
-        )
-
-        const currency = useAppSelector(selectCurrency)
+        const {
+            fiatBalance,
+            tokenUnitBalance,
+            tokenInfo,
+            // tokenInfoLoading,
+            exchangeRate,
+            exchangeRateCurrency,
+            exchangeRateLoading,
+        } = useTokenWithCompleteInfo(token)
 
         const isTokensOwnedLoading = useAppSelector(selectIsTokensOwnedLoading)
 
-        const isPositive24hChange = (exchangeRate?.change ?? 0) > 0
+        const isPositive24hChange =
+            (tokenInfo?.market_data.price_change_percentage_24h ?? 0) > 0
 
         const change24h =
             (isPositive24hChange ? "+" : "") +
             FormattingUtils.humanNumber(
-                exchangeRate?.change ?? 0,
-                exchangeRate?.change ?? 0,
+                tokenInfo?.market_data.price_change_percentage_24h ?? 0,
+                tokenInfo?.market_data.price_change_percentage_24h ?? 0,
             ) +
             "%"
-
-        const { fiatBalance, tokenUnitBalance } = useBalances({
-            token: tokenWithInfo,
-        })
 
         const animatedOpacityReverse = useAnimatedStyle(() => {
             return {
@@ -63,6 +62,9 @@ export const VechainTokenCard = memo(
             ? COLORS.WHITE_DISABLED
             : COLORS.DARK_PURPLE_DISABLED
 
+        const isLoading = isTokensOwnedLoading || exchangeRateLoading
+        const priceFeedNotAvailable = !exchangeRate
+
         return (
             <Animated.View style={[baseStyles.innerRow]}>
                 <BaseView flexDirection="row">
@@ -73,20 +75,20 @@ export const VechainTokenCard = memo(
                         ]}
                         containerStyle={baseStyles.imageShadow}>
                         <Image
-                            source={{ uri: tokenWithInfo.icon }}
+                            source={{ uri: token.icon }}
                             style={baseStyles.image}
                         />
                     </BaseCard>
                     <BaseSpacer width={16} />
                     <BaseView>
                         <BaseText typographyFont="subTitleBold">
-                            {tokenWithInfo.name}
+                            {token.name}
                         </BaseText>
                         <BaseView
                             flexDirection="row"
                             alignItems="baseline"
                             justifyContent="flex-start">
-                            {isTokensOwnedLoading ? (
+                            {isLoading ? (
                                 <BaseView
                                     flexDirection="row"
                                     alignItems="center">
@@ -107,7 +109,7 @@ export const VechainTokenCard = memo(
                                         typographyFont="captionRegular"
                                         color={tokenValueLabelColor}
                                         pl={4}>
-                                        {tokenWithInfo.symbol}
+                                        {token.symbol}
                                     </BaseText>
                                 </BaseView>
                             ) : (
@@ -124,7 +126,7 @@ export const VechainTokenCard = memo(
                                     <BaseText
                                         typographyFont="captionRegular"
                                         color={tokenValueLabelColor}>
-                                        {tokenWithInfo.symbol}
+                                        {token.symbol}
                                     </BaseText>
                                 </BaseView>
                             )}
@@ -137,7 +139,7 @@ export const VechainTokenCard = memo(
                         baseStyles.balancesContainer,
                     ]}>
                     <BaseView flexDirection="row" alignItems="center">
-                        {isTokensOwnedLoading ? (
+                        {isLoading ? (
                             <BaseView flexDirection="row" alignItems="center">
                                 <BaseSkeleton
                                     containerStyle={
@@ -151,19 +153,25 @@ export const VechainTokenCard = memo(
                                     height={18}
                                 />
                             </BaseView>
-                        ) : (
-                            <BaseText typographyFont="subTitleBold">
-                                {isBalanceVisible ? fiatBalance : "••••"}
+                        ) : priceFeedNotAvailable ? (
+                            <BaseText typographyFont="caption">
+                                {LL.ERROR_PRICE_FEED_NOT_AVAILABLE()}
                             </BaseText>
+                        ) : (
+                            <>
+                                <BaseText typographyFont="subTitleBold">
+                                    {isBalanceVisible ? fiatBalance : "••••"}
+                                </BaseText>
+                                <BaseText typographyFont="captionRegular">
+                                    {exchangeRateCurrency}
+                                </BaseText>
+                            </>
                         )}
-                        <BaseText typographyFont="captionRegular">
-                            {" "}
-                            {currency}
-                        </BaseText>
                     </BaseView>
 
                     <BaseSpacer height={3} />
 
+                    {/* //TODO: add skeleton */}
                     <BaseText
                         typographyFont="captionBold"
                         color={

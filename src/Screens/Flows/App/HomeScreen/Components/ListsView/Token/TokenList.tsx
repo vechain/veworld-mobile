@@ -8,7 +8,7 @@ import Animated, { AnimateProps } from "react-native-reanimated"
 import { SwipeableRow } from "~Components"
 import { AnimatedTokenCard } from "./AnimatedTokenCard"
 import { useBottomSheetModal, useThemedStyles } from "~Hooks"
-import { ColorThemeType } from "~Constants"
+import { ColorThemeType, VET, VTHO } from "~Constants"
 import {
     changeBalancePosition,
     removeTokenBalance,
@@ -19,8 +19,6 @@ import {
     selectNonVechainTokensWithBalances,
     selectSelectedAccount,
     selectSelectedNetwork,
-    selectVetTokenWithInfo,
-    selectVthoTokenWithInfo,
 } from "~Storage/Redux/Selectors"
 import { AnimatedChartCard } from "./AnimatedChartCard"
 import { FungibleTokenWithBalance } from "~Model"
@@ -37,7 +35,6 @@ export const TokenList = memo(
         const dispatch = useAppDispatch()
         const network = useAppSelector(selectSelectedNetwork)
         const tokenBalances = useAppSelector(selectNonVechainTokensWithBalances)
-        const tokenWithInfoVET = useAppSelector(selectVetTokenWithInfo)
 
         // Keep track of the swipeable items refs
         const swipeableItemRefs = useRef<
@@ -54,8 +51,6 @@ export const TokenList = memo(
             onOpen: openRemoveCustomTokenBottomSheet,
             onClose: closeRemoveCustomTokenBottomSheet,
         } = useBottomSheetModal()
-
-        const tokenWithInfoVTHO = useAppSelector(selectVthoTokenWithInfo)
 
         const { styles } = useThemedStyles(baseStyles)
 
@@ -125,12 +120,12 @@ export const TokenList = memo(
             <>
                 <Animated.View style={styles.container} {...animatedViewProps}>
                     <AnimatedChartCard
-                        tokenWithInfo={tokenWithInfoVET}
+                        token={VET}
                         isEdit={isEdit}
                         isBalanceVisible={isBalanceVisible}
                     />
                     <AnimatedChartCard
-                        tokenWithInfo={tokenWithInfoVTHO}
+                        token={VTHO}
                         isEdit={isEdit}
                         isBalanceVisible={isBalanceVisible}
                     />
