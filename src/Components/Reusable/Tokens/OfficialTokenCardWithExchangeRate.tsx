@@ -1,29 +1,21 @@
 import { ViewProps } from "react-native"
-import React, { memo, useMemo } from "react"
-import { FormattingUtils } from "~Utils"
-import { selectCurrency, useAppSelector } from "~Storage/Redux"
+import React, { memo } from "react"
 import { OfficialTokenCard } from "./OfficialTokenCard"
-import { TokenWithCompleteInfo } from "~Model"
+import { FungibleToken } from "~Model"
+import { useTokenWithCompleteInfo } from "~Hooks"
 
 type OfficialTokenCardWithExchangeRateProps = {
-    token: TokenWithCompleteInfo
+    token: FungibleToken
     action: () => void
 } & ViewProps
 
 export const OfficialTokenCardWithExchangeRate = memo(
     ({ token, style, action }: OfficialTokenCardWithExchangeRateProps) => {
-        const currency = useAppSelector(selectCurrency)
-        const isPositive24hChange = useMemo(
-            () => (token.change || 0) > 0,
-            [token.change],
-        )
-        const change24h = useMemo(
-            () =>
-                (isPositive24hChange ? "+" : "") +
-                FormattingUtils.humanNumber(token.change || 0, token.change) +
-                "%",
-            [isPositive24hChange, token.change],
-        )
+        const { exchangeRateCurrency, tokenInfo } =
+            useTokenWithCompleteInfo(token)
+
+        const change24h = tokenInfo?.market_data.price_change_percentage_24h
+        const isPositive24hChange = (change24h ?? 0) > 0
 
         return (
             <OfficialTokenCard
@@ -32,8 +24,8 @@ export const OfficialTokenCardWithExchangeRate = memo(
                 iconHeight={20}
                 iconWidth={20}
                 style={style}
-                currency={currency}
-                change24h={change24h}
+                currency={exchangeRateCurrency}
+                change24h={change24h?.toString()}
                 isPositive24hChange={isPositive24hChange}
             />
         )

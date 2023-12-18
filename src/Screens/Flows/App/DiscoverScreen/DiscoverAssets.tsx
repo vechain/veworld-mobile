@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect, useMemo, useState } from "react"
+import React, { useCallback, useMemo, useState } from "react"
 import {
     BaseSearchInput,
     BaseSpacer,
@@ -11,15 +11,9 @@ import { StyleSheet, ScrollView } from "react-native"
 import { useThemedStyles } from "~Hooks"
 import { ColorThemeType } from "~Constants"
 import { useBottomTabBarHeight } from "@react-navigation/bottom-tabs"
-import {
-    fetchExchangeRates,
-    selectCoinGeckoTokens,
-    selectTokensWithInfo,
-    useAppDispatch,
-    useAppSelector,
-} from "~Storage/Redux"
+import { selectOfficialTokens, useAppSelector } from "~Storage/Redux"
 import { TokenWithCompleteInfo } from "~Model"
-import { useIsFocused, useNavigation } from "@react-navigation/native"
+import { useNavigation } from "@react-navigation/native"
 import { Routes } from "~Navigation"
 
 // import { FlashList } from "@shopify/flash-list"
@@ -31,15 +25,8 @@ import { Routes } from "~Navigation"
 export const DiscoverAssets = () => {
     const { LL } = useI18nContext()
     const paddingBottom = useBottomTabBarHeight()
-    const tokensWithCurrency = useAppSelector(selectTokensWithInfo)
-    const coinGeckoTokens = useAppSelector(selectCoinGeckoTokens)
+    const officialTokens = useAppSelector(selectOfficialTokens)
     const nav = useNavigation()
-    const dispatch = useAppDispatch()
-    const isFocus = useIsFocused()
-
-    useEffect(() => {
-        isFocus && dispatch(fetchExchangeRates({ coinGeckoTokens }))
-    }, [coinGeckoTokens, dispatch, isFocus])
 
     const { styles: themedStyles } = useThemedStyles(
         baseStyles({
@@ -51,7 +38,7 @@ export const DiscoverAssets = () => {
 
     const filteredTokens = useMemo(
         () =>
-            tokensWithCurrency.filter(
+            officialTokens.filter(
                 token =>
                     token.name
                         .toLocaleLowerCase()
@@ -60,7 +47,7 @@ export const DiscoverAssets = () => {
                         .toLocaleLowerCase()
                         .includes(tokenQuery.toLocaleLowerCase()),
             ),
-        [tokenQuery, tokensWithCurrency],
+        [tokenQuery, officialTokens],
     )
 
     const handleClickToken = useCallback(
