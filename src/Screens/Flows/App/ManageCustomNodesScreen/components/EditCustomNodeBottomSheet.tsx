@@ -12,7 +12,7 @@ import {
 } from "~Components"
 import { useI18nContext } from "~i18n"
 
-import { isSmallScreen } from "~Constants"
+import { ERROR_EVENTS, isSmallScreen } from "~Constants"
 import { URIUtils, warn } from "~Utils"
 import { Network } from "~Model"
 import { selectCustomNetworks, useAppDispatch, useAppSelector, validateAndUpdateCustomNode } from "~Storage/Redux"
@@ -58,7 +58,7 @@ export const EditCustomNodeBottomSheet = React.forwardRef<BottomSheetModalMethod
 
                 await Haptics.notificationAsync(Haptics.NotificationFeedbackType.Success)
             } catch (e) {
-                warn("onEditNetworkPress", e)
+                warn(ERROR_EVENTS.SETTINGS, "onEditNetworkPress", e)
                 await Haptics.notificationAsync(Haptics.NotificationFeedbackType.Error)
                 showErrorToast({ text1: e as string })
             }

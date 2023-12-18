@@ -1,6 +1,7 @@
 import { MMKV } from "react-native-mmkv"
 import { warn } from "~Utils"
 import KeychainService from "~Services/KeychainService"
+import { ERROR_EVENTS } from "~Constants"
 
 const OLD_REDUX_KEY = "VeWorld_Redux_key"
 
@@ -14,13 +15,11 @@ const clearOldStorage = async () => {
             return
         }
 
-        warn("previousKeys", previousKeys)
-
         previousStorage.clearAll()
 
         await KeychainService.deleteKey(OLD_REDUX_KEY)
     } catch (e) {
-        warn("Failed to delete previous storage", e)
+        warn(ERROR_EVENTS.SECURTIY, "Failed to delete previous storage", e)
     }
 }
 

@@ -26,7 +26,7 @@ import {
     Mono_Light,
     Mono_Regular,
 } from "~Assets"
-import { typography } from "~Constants"
+import { ERROR_EVENTS, typography } from "~Constants"
 import { AnalyticsUtils, info } from "~Utils"
 import { BottomSheetModalProvider } from "@gorhom/bottom-sheet"
 import { PersistedThemeProvider, StoreContextProvider } from "~Components/Providers"
@@ -42,7 +42,7 @@ if (__DEV__) {
 }
 
 const isHermes = () => !!global.HermesInternal
-info("is Hermes active : ", isHermes())
+info(ERROR_EVENTS.APP, "is Hermes active : ", isHermes())
 
 if (__DEV__ && process.env.REACT_APP_UI_LOG === "false") {
     // hide all ui logs
@@ -117,13 +117,13 @@ const SentryInitialedMain = () => {
     const [initializedSentry, setInitializedSentry] = React.useState(false)
 
     useEffect(() => {
-        if (sentryTrackingEnabled) {
+        if (true) {
             Sentry.init({
                 dsn: process.env.REACT_APP_SENTRY_DSN,
                 // Set tracesSampleRate to 1.0 to capture 100% of transactions for performance monitoring.
                 // We recommend adjusting this value in production.
                 tracesSampleRate: 1.0,
-                environment: process.env.NODE_ENV,
+                // environment: process.env.NODE_ENV,
             })
             setInitializedSentry(true)
         } else {

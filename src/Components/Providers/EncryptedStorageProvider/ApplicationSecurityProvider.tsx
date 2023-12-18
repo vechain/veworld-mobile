@@ -15,6 +15,7 @@ import { StandaloneAppBlockedScreen, StandaloneLockScreen, InternetDownScreen } 
 import { AnimatedSplashScreen } from "../../../AnimatedSplashScreen"
 import Onboarding from "./Helpers/Onboarding"
 import NetInfo from "@react-native-community/netinfo"
+import { ERROR_EVENTS } from "~Constants"
 
 const UserEncryptedStorage = new MMKV({
     id: "user_encrypted_storage",
@@ -186,7 +187,7 @@ export const ApplicationSecurityProvider = ({ children }: ApplicationSecurityCon
 
                 await unlock()
             } catch (e) {
-                error("Failed to get encryption keys", e)
+                error(ERROR_EVENTS.SECURTIY, "Failed to get encryption keys", e)
             }
         },
         [unlock],
@@ -200,7 +201,7 @@ export const ApplicationSecurityProvider = ({ children }: ApplicationSecurityCon
             const encryptedStorageKeys = UserEncryptedStorage.getAllKeys()
 
             if (encryptedStorageKeys.length === 0) {
-                info("No keys found in encrypted storage, user is onboarding")
+                info(ERROR_EVENTS.SECURTIY, "No keys found in encrypted storage, user is onboarding")
 
                 await PreviousInstallation.clearOldStorage()
 
@@ -251,7 +252,7 @@ export const ApplicationSecurityProvider = ({ children }: ApplicationSecurityCon
                 })
                 setWalletStatus(WALLET_STATUS.UNLOCKED)
             } catch (e) {
-                error("Failed migrating onboarding", e)
+                error(ERROR_EVENTS.SECURTIY, e)
                 SecurityConfig.remove()
                 await resetApplication()
             }
@@ -293,10 +294,10 @@ export const ApplicationSecurityProvider = ({ children }: ApplicationSecurityCon
         if (biometrics && currentState === "active" && walletStatus === WALLET_STATUS.NOT_INITIALISED) {
             intialiseApp(biometrics)
                 .then(() => {
-                    debug("App state initialised app")
+                    debug(ERROR_EVENTS.SECURTIY, "App state initialised app")
                 })
                 .catch(e => {
-                    error("App state failed to initialise app", e)
+                    error(ERROR_EVENTS.SECURTIY, e)
                 })
         }
     }, [walletStatus, currentState, biometrics, intialiseApp])
@@ -309,7 +310,7 @@ export const ApplicationSecurityProvider = ({ children }: ApplicationSecurityCon
                     lockApplication()
                 }
             } catch (e) {
-                error("Error locking application", e)
+                error(ERROR_EVENTS.SECURTIY, e)
             } finally {
                 setAutoLock(false)
             }
@@ -346,13 +347,6 @@ export const ApplicationSecurityProvider = ({ children }: ApplicationSecurityCon
         securityType,
         lockApplication,
     ])
-
-    useEffect(() => {
-        debug({
-            walletStatus,
-            securityType,
-        })
-    }, [walletStatus, securityType])
 
     const { isConnected } = NetInfo.useNetInfo()
 

@@ -1,9 +1,10 @@
 import { useEffect, useState } from "react"
 import { useThor } from "~Components"
+import { ERROR_EVENTS } from "~Constants"
 import { useNFTMetadata } from "~Hooks"
 import { NFTMetadata } from "~Model"
 import { getName, getTokenURI } from "~Networking"
-import { error } from "~Utils"
+import { warn } from "~Utils"
 
 /**
  * `useNFTInfo` is a hook for fetching and managing non-fungible token (NFT) information.
@@ -42,7 +43,7 @@ export const useNFTInfo = (tokenId: string, contractAddress: string) => {
 
                 setTokenMetadata(metadata)
             } catch (e) {
-                error(`Failed to load NFT token info ${tokenId} of collection ${contractAddress}`)
+                warn(ERROR_EVENTS.NFT, `Failed to load NFT token info ${tokenId} of collection ${contractAddress}`)
             } finally {
                 setIsMediaLoading(false)
             }

@@ -1,4 +1,4 @@
-import { CURRENCY } from "~Constants"
+import { CURRENCY, ERROR_EVENTS } from "~Constants"
 import { error } from "~Utils"
 import { CurrencyExchangeRate } from "~Model"
 import FiatExchangeClients from "./fiat"
@@ -17,7 +17,7 @@ export const getExchangeRate = async (
 
             return exchange
         } catch (e) {
-            error("getExchangeRate", e)
+            error(ERROR_EVENTS.TOKENS, e)
         }
     }
     throw new Error("Failed to get exchange rate from any provider")

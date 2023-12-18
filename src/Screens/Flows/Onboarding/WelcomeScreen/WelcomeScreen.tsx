@@ -15,8 +15,9 @@ import { useI18nContext } from "~i18n"
 import { Linking } from "react-native"
 import { selectAreDevFeaturesEnabled, setIsAppLoading, useAppDispatch, useAppSelector } from "~Storage/Redux"
 import { useCreateWallet } from "~Hooks"
-import { error } from "~Utils"
+import { debug } from "~Utils"
 import { SecurityLevelType } from "~Model"
+import { ERROR_EVENTS } from "~Constants"
 
 export const WelcomeScreen = () => {
     const nav = useNavigation()
@@ -49,7 +50,7 @@ export const WelcomeScreen = () => {
         await WalletEncryptionKeyHelper.init(userPassword)
         await createWallet({
             userPassword,
-            onError: e => error(e),
+            onError: e => debug(ERROR_EVENTS.APP, e),
             mnemonic,
         })
         await migrateOnboarding(SecurityLevelType.SECRET, userPassword)

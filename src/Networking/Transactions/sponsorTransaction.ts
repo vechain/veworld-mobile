@@ -1,4 +1,5 @@
 import axios, { AxiosError, AxiosResponse } from "axios"
+import { ERROR_EVENTS } from "~Constants"
 import { error } from "~Utils"
 
 /**
@@ -19,9 +20,9 @@ export const sponsorTransaction = async (
         if (e instanceof AxiosError) {
             const axiosError = e as AxiosError
 
-            error("sponsorTransaction error", JSON.stringify(axiosError.toJSON()))
+            error(ERROR_EVENTS.SEND, JSON.stringify(axiosError.toJSON()))
         } else {
-            error("sponsorTransaction error", e)
+            error(ERROR_EVENTS.SEND, e)
         }
 
         throw e

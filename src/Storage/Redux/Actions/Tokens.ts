@@ -5,12 +5,13 @@ import {
     COINGECKO_MARKET_CHART_ENDPOINT,
     COINGECKO_MARKET_INFO_ENDPOINT,
     COINGECKO_TOKEN_ENDPOINT,
+    ERROR_EVENTS,
     EXCHANGE_CLIENT_AXIOS_OPTS,
     getCoinGeckoIdBySymbol,
     VET,
     VTHO,
 } from "~Constants"
-import { debug, error, TokenUtils } from "~Utils"
+import { error, TokenUtils } from "~Utils"
 import { FungibleToken, Network } from "~Model"
 import { selectCoinGeckoTokens, selectCurrency } from "../Selectors"
 import {
@@ -84,7 +85,7 @@ export const fetchChartData =
             setTimeout(() => {
                 dispatch(setChartDataIsLoading({ symbol, isLoading: false }))
             }, 200)
-            error("fetchChartData", e)
+            error(ERROR_EVENTS.TOKENS, e)
         }
     }
 
@@ -139,7 +140,7 @@ export const updateTokenPriceData = () => async (dispatch: AppThunkDispatch) => 
 
         dispatch(setCoinGeckoTokens(coinGeckoTokens))
     } catch (e) {
-        error("updateTokenPriceData", e)
+        error(ERROR_EVENTS.TOKENS, e)
     }
 }
 
@@ -169,8 +170,6 @@ export const updateSuggestedTokens =
                 tokenAddress => officialTokens.findIndex(t => t.address === tokenAddress) !== -1,
             )
 
-            debug(`Found ${suggestedTokens.length} suggested tokens`)
-
             if (suggestedTokens.length === 0) return
 
             dispatch(
@@ -180,7 +179,7 @@ export const updateSuggestedTokens =
                 }),
             )
         } catch (e) {
-            error("updateSuggestedTokens", e)
+            error(ERROR_EVENTS.TOKENS, e)
         }
     }
 
@@ -201,6 +200,6 @@ export const fetchVechainMarketInfo = () => async (dispatch: Dispatch, getState:
         const marketInfo = pricesResponse.data
         dispatch(setCoinMarketInfo({ data: marketInfo }))
     } catch (e) {
-        error("fetchVechainMarketInfo", e)
+        error(ERROR_EVENTS.TOKENS, e)
     }
 }

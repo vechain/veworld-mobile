@@ -4,6 +4,7 @@ import { updateExchangeRate } from "~Storage/Redux/Slices"
 import { getExchangeRate } from "./getExchangeRate"
 import { AppThunkDispatch, RootState, TokenInfoResponse } from "~Storage/Redux/Types"
 import { selectCurrency } from "~Storage/Redux/Selectors"
+import { ERROR_EVENTS } from "~Constants"
 
 const allSettled = require("promise.allsettled")
 
@@ -33,6 +34,6 @@ export const fetchExchangeRates =
 
             dispatch(updateExchangeRate(exchangeRates))
         } catch (e) {
-            error("fetchExchangeRate", e)
+            error(ERROR_EVENTS.TOKENS, e)
         }
     }

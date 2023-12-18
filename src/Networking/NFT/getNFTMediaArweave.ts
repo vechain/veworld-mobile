@@ -3,6 +3,7 @@ import { error } from "~Utils/Logger"
 import { MAX_IMAGE_SIZE, NFT_AXIOS_TIMEOUT } from "~Constants/Constants/NFT"
 import { MediaUtils } from "~Utils"
 import { NFTMedia } from "~Model"
+import { ERROR_EVENTS } from "~Constants"
 
 const arweave = Arweave.init({
     host: "arweave.net",
@@ -36,7 +37,7 @@ export const getNFTMediaArweave = async (uri: string): Promise<NFTMedia> => {
             mediaType: MediaUtils.resolveMediaTypeFromMimeType(mimeType),
         }
     } catch (err) {
-        error("Error fetching the image:", err)
+        error(ERROR_EVENTS.NFT, err)
         throw err
     }
 }

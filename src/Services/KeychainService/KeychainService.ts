@@ -2,6 +2,7 @@ import { Keychain } from "~Storage"
 import { error } from "~Utils/Logger"
 import { ACCESSIBLE, Options } from "react-native-keychain"
 import * as i18n from "~i18n"
+import { ERROR_EVENTS } from "~Constants"
 
 const deleteKey = async (key: string) => {
     const options: Options = {
@@ -12,7 +13,7 @@ const deleteKey = async (key: string) => {
     try {
         await Keychain.deleteItem({ options, key })
     } catch (err) {
-        error("deleteKey", err)
+        error(ERROR_EVENTS.ENCRYPTION, err)
     }
 }
 
@@ -30,7 +31,7 @@ const getKey = async (key: string) => {
     try {
         return await Keychain.get({ options, key })
     } catch (err) {
-        error("getKey", err)
+        error(ERROR_EVENTS.ENCRYPTION, err)
     }
 }
 
@@ -48,7 +49,7 @@ const setKey = async (key: string, value: string) => {
     try {
         await Keychain.set({ options, key, value })
     } catch (err) {
-        error("setKey", err)
+        error(ERROR_EVENTS.ENCRYPTION, err)
     }
 }
 

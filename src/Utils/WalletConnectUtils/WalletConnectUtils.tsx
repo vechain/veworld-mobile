@@ -8,6 +8,7 @@ import { Routes } from "~Navigation"
 import HexUtils from "~Utils/HexUtils"
 import { ErrorMessageUtils } from "~Utils"
 import { Mutex } from "async-mutex"
+import { ERROR_EVENTS } from "~Constants"
 
 let _web3wallet: IWeb3Wallet
 
@@ -22,11 +23,10 @@ const walletInitializer = new Mutex()
 export async function getWeb3Wallet(): Promise<IWeb3Wallet> {
     return await walletInitializer.runExclusive(async () => {
         if (_web3wallet) {
-            debug("Web3Wallet already initialized")
             return _web3wallet
         }
 
-        debug("Initializing Web3Wallet")
+        debug(ERROR_EVENTS.WALLET_CONNECT, "Initializing Web3Wallet")
 
         try {
             _web3wallet = await Web3Wallet.init({
@@ -39,11 +39,11 @@ export async function getWeb3Wallet(): Promise<IWeb3Wallet> {
                 },
             })
 
-            debug("Web3Wallet initialized")
+            debug(ERROR_EVENTS.WALLET_CONNECT, "Web3Wallet initialized")
 
             return _web3wallet
         } catch (e) {
-            error("Failed to initialize Web3Wallet", ErrorMessageUtils.getErrorMessage(e))
+            error(ERROR_EVENTS.WALLET_CONNECT, "Failed to initialize Web3Wallet", ErrorMessageUtils.getErrorMessage(e))
             throw e
         }
     })
@@ -125,7 +125,7 @@ export function getSignCertOptions(requestEvent: PendingRequestTypes.Struct): Co
     try {
         return requestEvent.params.request.params[0].options || {}
     } catch (e) {
-        warn("Failed to extract sign cert options", requestEvent, e)
+        warn(ERROR_EVENTS.WALLET_CONNECT, "Failed to extract sign cert options", requestEvent, e)
         return {}
     }
 }
@@ -144,7 +144,7 @@ export function getSignCertMessage(requestEvent: PendingRequestTypes.Struct): Co
             payload,
         }
     } catch (e) {
-        warn("Failed to extract sign cert message parameters", requestEvent, e)
+        warn(ERROR_EVENTS.WALLET_CONNECT, "Failed to extract sign cert message parameters", requestEvent, e)
     }
 }
 
@@ -165,7 +165,7 @@ export function getSendTxMessage(requestEvent: PendingRequestTypes.Struct): Conn
             return clause
         })
     } catch (e) {
-        error("Failed to extract send tx message parameters", e)
+        error(ERROR_EVENTS.WALLET_CONNECT, "Failed to extract send tx message parameters", e)
     }
 }
 
@@ -173,7 +173,7 @@ export function getSendTxOptions(requestEvent: PendingRequestTypes.Struct): Conn
     try {
         return requestEvent.params.request.params[0].options || {}
     } catch (e) {
-        warn("Failed to extract send tx options", e)
+        warn(ERROR_EVENTS.WALLET_CONNECT, "Failed to extract send tx options", e)
         return {}
     }
 }

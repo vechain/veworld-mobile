@@ -37,6 +37,7 @@ import { PersistConfig } from "redux-persist/es/types"
 import { RootState } from "~Storage/Redux/Types"
 import { newStorage } from "~Storage/Redux/Storage"
 import { MMKV } from "react-native-mmkv"
+import { ERROR_EVENTS } from "~Constants"
 
 // export const nftPersistConfig = {
 //     key: NftSlice.name,
@@ -54,7 +55,7 @@ export const getPersistorConfig = async (mmkv: MMKV, encryptionKey: string): Pro
     let encryptor = encryptTransform({
         secretKey: encryptionKey,
         onError: function (error) {
-            warn("encryptor", error)
+            warn(ERROR_EVENTS.ENCRYPTION, error)
         },
     })
 

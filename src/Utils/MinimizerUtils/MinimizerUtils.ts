@@ -1,4 +1,5 @@
 import { NativeModules } from "react-native"
+import { ERROR_EVENTS } from "~Constants"
 import { error } from "~Utils"
 
 const { Minimizer } = NativeModules
@@ -8,7 +9,7 @@ const SafeMinimizer = {
         try {
             Minimizer.goBack()
         } catch (e) {
-            error("SafeMinimizer", e)
+            error(ERROR_EVENTS.UTILS, e)
         }
     },
 }

@@ -36,7 +36,7 @@ import { AppConnectionRequests, AppInfo, UnknownAppMessage } from "~Screens"
 import { useSetSelectedAccount } from "~Hooks/useSetSelectedAccount"
 import { distinctValues } from "~Utils/ArrayUtils"
 import { useInAppBrowser } from "~Components/Providers/InAppBrowserProvider"
-import { RequestMethods } from "~Constants"
+import { ERROR_EVENTS, RequestMethods } from "~Constants"
 
 type Props = NativeStackScreenProps<RootStackParamListSwitch, Routes.CONNECT_APP_SCREEN>
 
@@ -146,7 +146,7 @@ export const ConnectAppScreen: FC<Props> = ({ route }: Props) => {
 
             const addNamespaces = (proposedNamespaces: Record<string, ProposalTypes.BaseRequiredNamespace>) => {
                 for (const key of Object.keys(proposedNamespaces)) {
-                    warn(proposedNamespaces[key])
+                    warn(ERROR_EVENTS.WALLET_CONNECT, proposedNamespaces[key])
 
                     const _chains =
                         proposedNamespaces[key].chains ??
@@ -188,7 +188,7 @@ export const ConnectAppScreen: FC<Props> = ({ route }: Props) => {
                     }),
                 })
             } catch (err: unknown) {
-                error("ConnectedAppScreen:handleAccept", err)
+                error(ERROR_EVENTS.WALLET_CONNECT, err)
                 showErrorToast({
                     text1: LL.NOTIFICATION_wallet_connect_error_pairing(),
                 })
@@ -219,7 +219,7 @@ export const ConnectAppScreen: FC<Props> = ({ route }: Props) => {
             try {
                 await rejectPendingProposal(request.proposal)
             } catch (err: unknown) {
-                error("ConnectedAppScreen:handleReject", err)
+                error(ERROR_EVENTS.WALLET_CONNECT, err)
             } finally {
                 navBack()
             }

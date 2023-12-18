@@ -1,5 +1,6 @@
 import axios from "axios"
 import { usePersistedCache } from "~Components/Providers"
+import { ERROR_EVENTS } from "~Constants"
 import { NFT_AXIOS_TIMEOUT } from "~Constants/Constants/NFT"
 import { URIProtocol } from "~Constants/Enums/URIProtocol"
 import { NFTMetadata } from "~Model"
@@ -19,11 +20,11 @@ export const useNFTMetadata = () => {
                 case URIProtocol.ARWEAVE: {
                     const cachedData = metadataCache?.getItem(uri)
                     if (cachedData) {
-                        debug(`Using cached metadata for ${uri}`)
+                        debug(ERROR_EVENTS.NFT, `Using cached metadata for ${uri}`)
                         return cachedData
                     }
 
-                    debug(`Fetching metadata for ${uri}`)
+                    debug(ERROR_EVENTS.NFT, `Fetching metadata for ${uri}`)
                     const retrievedData =
                         URIProtocol.IPFS === protocol ? await getNFTMetadataIpfs(uri) : await getNFTMetadataArweave(uri)
 
@@ -34,7 +35,7 @@ export const useNFTMetadata = () => {
 
                 case URIProtocol.HTTPS:
                 case URIProtocol.HTTP: {
-                    debug(`Fetching metadata for ${uri}`)
+                    debug(ERROR_EVENTS.NFT, `Fetching metadata for ${uri}`)
                     tokenMetadata =
                         (
                             await axios.get<NFTMetadata>(uri, {
@@ -45,7 +46,7 @@ export const useNFTMetadata = () => {
                 }
 
                 default:
-                    warn(`Unable to detect protocol ${protocol} for metadata URI ${uri}`)
+                    warn(ERROR_EVENTS.NFT, `Unable to detect protocol ${protocol} for metadata URI ${uri}`)
                     return undefined
             }
             // transform all metadata keys to lowercase avoiding case sensitive issues
@@ -57,7 +58,7 @@ export const useNFTMetadata = () => {
                 }, {}) as NFTMetadata)
             )
         } catch (e) {
-            warn(`Error fetching metadata ${uri}`, e)
+            warn(ERROR_EVENTS.NFT, `Error fetching metadata ${uri}`, e)
         }
     }
 

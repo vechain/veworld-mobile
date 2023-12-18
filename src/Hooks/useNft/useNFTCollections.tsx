@@ -21,13 +21,14 @@ import {
     useAppDispatch,
     useAppSelector,
 } from "~Storage/Redux"
-import { debug, error, warn } from "~Utils"
+import { debug, warn } from "~Utils"
 import { initCollectionMetadataFromRegistry, initCollectionMetadataWithoutRegistry } from "./Helpers"
 import { useI18nContext } from "~i18n"
 import { NFT_PAGE_SIZE } from "~Constants/Constants/NFT"
 import { compareAddresses } from "~Utils/AddressUtils/AddressUtils"
 import { useNFTMetadata } from "~Hooks"
 import { useLazyLoader } from "./useLazyLoader"
+import { ERROR_EVENTS } from "~Constants"
 
 /**
  * `useNFTCollections` is a React hook that facilitates the fetching and management of NFT collections for a selected account.
@@ -60,14 +61,14 @@ export const useNFTCollections = () => {
                 // Exit if currentAddress.address is not set
                 if (!currentAddress) return
 
-                debug(`Lazy loading metadata for collection ${collection.address}`)
+                debug(ERROR_EVENTS.NFT, `Lazy loading metadata for collection ${collection.address}`)
 
                 let balanceOf: number | undefined
 
                 try {
                     balanceOf = await getNftBalanceOf(currentAddress, collection.address, thor)
                 } catch (e) {
-                    warn(" useNFTCollections - failed to get balanceO", e)
+                    warn(ERROR_EVENTS.NFT, "failed to get balance", e)
                 }
 
                 let image = collection.image
@@ -101,7 +102,7 @@ export const useNFTCollections = () => {
                     }),
                 )
             } catch (e) {
-                error("Error: useNFTCollections", e)
+                warn(ERROR_EVENTS.NFT, e)
             }
         },
         [currentAddress, dispatch, fetchMetadata, network.type, thor],
@@ -164,7 +165,7 @@ export const useNFTCollections = () => {
                 )
             } catch (e: unknown) {
                 err = e?.toString() as string
-                error("useNFTCollections", e)
+                warn(ERROR_EVENTS.NFT, e)
             } finally {
                 dispatch(
                     setNetworkingSideEffects({

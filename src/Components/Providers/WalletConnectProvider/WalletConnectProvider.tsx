@@ -1,11 +1,12 @@
 import React, { useCallback, useEffect, useMemo } from "react"
-import { error, WalletConnectUtils } from "~Utils"
+import { WalletConnectUtils, warn } from "~Utils"
 import { useNavigation } from "@react-navigation/native"
 import { useWcRequest } from "./hooks"
 import { useSessionProposals } from "~Components/Providers/WalletConnectProvider/hooks/useSessionProposals"
 import { useWcSessions } from "~Components/Providers/WalletConnectProvider/hooks/useWcSessions"
 import { useWcPairing } from "~Components/Providers/WalletConnectProvider/hooks/useWcPairing"
 import { useWcDeepLinking } from "~Components/Providers/WalletConnectProvider/hooks/useWcDeepLinking"
+import { ERROR_EVENTS } from "~Constants"
 
 /**
  * Wallet Connect Flow:
@@ -63,7 +64,7 @@ const WalletConnectContextProvider = ({ children }: WalletConnectContextProvider
 
             for (const event of ["session_proposal", "session_request", "session_delete"]) {
                 if (web3Wallet.events.listenerCount(event) > 0) {
-                    error(`Wallet Connect Provider: ${event} listener already exists`)
+                    warn(ERROR_EVENTS.WALLET_CONNECT, `Wallet Connect Provider: ${event} listener already exists`)
                 }
             }
 

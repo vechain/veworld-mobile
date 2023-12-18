@@ -8,6 +8,7 @@ import { useI18nContext } from "~i18n"
 import { fetchTokensOwned } from "~Networking"
 import { isEmpty } from "lodash"
 import { InteractionManager } from "react-native"
+import { ERROR_EVENTS } from "~Constants"
 
 /**
  * React hook to manage fetching and storing token balances owned by an account.
@@ -57,7 +58,7 @@ export const useTokensOwned = () => {
     }, [])
 
     const fetchTokens = useCallback(async () => {
-        info("Fetching tokens owned on page", page)
+        info(ERROR_EVENTS.TOKENS, "Fetching tokens owned on page", page)
         // Reset hasFetched flag
         setHasFetched(false)
         // Proceed if address exists
@@ -87,7 +88,7 @@ export const useTokensOwned = () => {
                 incrementPageAndSetFetchedFlag()
             } catch (e) {
                 // In case of error, log and show warning toast
-                error("fetchTokens", e)
+                error(ERROR_EVENTS.TOKENS, e)
 
                 showWarningToast({
                     text1: LL.HEADS_UP(),

@@ -7,6 +7,7 @@ import { Observer as TransportObserver, Subscription as TransportSubscription } 
 import { Platform } from "react-native"
 import { HwTransportError } from "@ledgerhq/errors"
 import BleTransport from "@ledgerhq/react-native-hw-transport-ble"
+import { ERROR_EVENTS } from "~Constants"
 
 type Props = {
     readyToScan?: boolean
@@ -28,13 +29,13 @@ export const useLedgerSubscription = ({ deviceId, onDevice, readyToScan = true, 
 
     const bleObserver: MutableRefObject<TransportObserver<any, HwTransportError>> = useRef({
         complete: () => {
-            debug("useLedgerSubscription - observer - complete")
+            debug(ERROR_EVENTS.LEDGER, "useLedgerSubscription - observer - complete")
         },
         error: err => {
-            warn("useLedgerSubscription - observer", { err })
+            warn(ERROR_EVENTS.LEDGER, "useLedgerSubscription - observer", { err })
         },
         next: (e: SubscriptionEvent) => {
-            debug("useLedgerSubscription:next", e)
+            debug(ERROR_EVENTS.LEDGER, "useLedgerSubscription:next", e)
 
             if (e.type === "add") {
                 const { descriptor, deviceModel } = e
@@ -65,7 +66,7 @@ export const useLedgerSubscription = ({ deviceId, onDevice, readyToScan = true, 
                     setCanConnect(true)
                 }
             } else {
-                debug("ledger - not 'add': ", e)
+                debug(ERROR_EVENTS.LEDGER, "ledger - not 'add': ", e)
             }
         },
     })
@@ -73,7 +74,7 @@ export const useLedgerSubscription = ({ deviceId, onDevice, readyToScan = true, 
     useEffect(() => {
         if (!readyToScan) return
 
-        debug("useLedgerSubscription - startSubscription")
+        debug(ERROR_EVENTS.LEDGER, "useLedgerSubscription - startSubscription")
 
         subscription.current = BleTransport.listen(bleObserver.current)
     }, [readyToScan])
@@ -84,7 +85,7 @@ export const useLedgerSubscription = ({ deviceId, onDevice, readyToScan = true, 
                 setAvailableDevices(prev => {
                     if (!prev.some(d => d.id === deviceId)) {
                         setTimedOut(true)
-                        debug("useLedgerSubscription - timedOut waiting for device")
+                        debug(ERROR_EVENTS.LEDGER, "useLedgerSubscription - timedOut waiting for device")
                     }
 
                     return prev
@@ -95,7 +96,7 @@ export const useLedgerSubscription = ({ deviceId, onDevice, readyToScan = true, 
     }, [])
 
     const unsubscribe = useCallback(() => {
-        debug("useLedgerSubscription - unsubscribe")
+        debug(ERROR_EVENTS.LEDGER, "useLedgerSubscription - unsubscribe")
         subscription.current?.unsubscribe()
         subscription.current = undefined
     }, [])

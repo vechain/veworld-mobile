@@ -6,6 +6,7 @@ import { getNFTMediaIpfs } from "~Networking/NFT/getNFTMediaIpfs"
 import { MediaUtils, URIUtils, debug, warn } from "~Utils"
 import { useCallback } from "react"
 import { usePersistedCache } from "~Components/Providers/PersistedCacheProvider"
+import { ERROR_EVENTS } from "~Constants"
 
 export const useNFTMedia = () => {
     const { mediaCache } = usePersistedCache()
@@ -31,11 +32,11 @@ export const useNFTMedia = () => {
                     case URIProtocol.ARWEAVE: {
                         const cachedData = mediaCache?.getItem(uri)
                         if (cachedData) {
-                            debug(`Using cached media for ${uri}`)
+                            debug(ERROR_EVENTS.NFT, `Using cached media for ${uri}`)
                             return cachedData
                         }
 
-                        debug(`Fetching media for ${uri}`)
+                        debug(ERROR_EVENTS.NFT, `Fetching media for ${uri}`)
                         const media =
                             URIProtocol.IPFS === protocol ? await getNFTMediaIpfs(uri) : await getNFTMediaArweave(uri)
 
@@ -45,10 +46,10 @@ export const useNFTMedia = () => {
                     }
 
                     default:
-                        warn(`Unable to detect protocol ${protocol} for image URI ${uri}`)
+                        warn(ERROR_EVENTS.NFT, `Unable to detect protocol ${protocol} for image URI ${uri}`)
                 }
             } catch (e) {
-                warn(`Error fetching image ${uri}`, e)
+                warn(ERROR_EVENTS.NFT, `Error fetching image ${uri}`, e)
             }
             return {
                 image: URIUtils.convertUriToUrl(uri),
