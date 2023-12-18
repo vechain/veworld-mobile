@@ -1,6 +1,6 @@
 import { useNavigation } from "@react-navigation/native"
 import { NativeStackScreenProps } from "@react-navigation/native-stack"
-import React, { useEffect, useMemo } from "react"
+import React, { useMemo } from "react"
 import { useBottomSheetModal, useThemedStyles } from "~Hooks"
 import {
     BaseIcon,
@@ -23,11 +23,8 @@ import { useI18nContext } from "~i18n"
 import { FastAction } from "~Model"
 import { striptags } from "striptags"
 import {
-    fetchVechainMarketInfo,
     selectBalanceVisible,
-    selectMarketInfoFor,
     selectSendableTokensWithBalance,
-    useAppDispatch,
     useAppSelector,
 } from "~Storage/Redux"
 import { ScrollView } from "react-native-gesture-handler"
@@ -43,9 +40,6 @@ export const AssetDetailScreen = ({ route }: Props) => {
     const { styles, theme } = useThemedStyles(baseStyles)
     const nav = useNavigation()
     const { LL } = useI18nContext()
-    const marketInfo = useAppSelector(state =>
-        selectMarketInfoFor(token.symbol, state),
-    )
 
     const { ref: QRCodeBottomSheetRef, onOpen: openQRCodeSheet } =
         useBottomSheetModal()
@@ -58,11 +52,6 @@ export const AssetDetailScreen = ({ route }: Props) => {
             t.name?.toLowerCase().includes(token.name.toLowerCase()) ||
             t.symbol?.toLowerCase().includes(token.symbol.toLowerCase()),
     )
-
-    const dispatch = useAppDispatch()
-    useEffect(() => {
-        dispatch(fetchVechainMarketInfo())
-    }, [dispatch])
 
     const Actions: FastAction[] = useMemo(
         () => [
@@ -130,10 +119,7 @@ export const AssetDetailScreen = ({ route }: Props) => {
 
                         <BaseSpacer height={24} />
 
-                        <MarketInfoView
-                            marketInfo={marketInfo}
-                            tokenSymbol={token.symbol}
-                        />
+                        <MarketInfoView tokenSymbol={token.symbol} />
 
                         <BaseSpacer height={24} />
 

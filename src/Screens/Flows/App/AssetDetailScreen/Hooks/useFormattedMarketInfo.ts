@@ -1,17 +1,21 @@
 import { useMemo } from "react"
 import { FormattingUtils } from "~Utils"
-import { CoinMarketInfo } from "~Storage/Redux/Types"
-import { selectCurrency, useAppSelector } from "~Storage/Redux"
 
-export const useFormattedMarketInfo = (
-    marketInfo: CoinMarketInfo,
-    tokenSymbol: string,
-) => {
+import { selectCurrency, useAppSelector } from "~Storage/Redux"
+import { MarketInfoResponse } from "~Api"
+
+export const useFormattedMarketInfo = ({
+    marketInfo,
+    tokenSymbol,
+}: {
+    marketInfo?: MarketInfoResponse
+    tokenSymbol: string
+}) => {
     const currency = useAppSelector(selectCurrency)
 
     const marketCap = useMemo(() => {
         return FormattingUtils.humanNumber(
-            marketInfo?.market_cap || 0,
+            marketInfo?.market_cap ?? 0,
             undefined,
             currency,
         )
@@ -19,7 +23,7 @@ export const useFormattedMarketInfo = (
 
     const totalSupply = useMemo(() => {
         return FormattingUtils.humanNumber(
-            marketInfo?.total_supply || 0,
+            marketInfo?.total_supply ?? 0,
             undefined,
             tokenSymbol,
         )
@@ -27,7 +31,7 @@ export const useFormattedMarketInfo = (
 
     const totalVolume = useMemo(() => {
         return FormattingUtils.humanNumber(
-            marketInfo?.total_volume || 0,
+            marketInfo?.total_volume ?? 0,
             undefined,
             currency,
         )
@@ -35,7 +39,7 @@ export const useFormattedMarketInfo = (
 
     const circulatingSupply = useMemo(() => {
         return FormattingUtils.humanNumber(
-            marketInfo?.circulating_supply || 0,
+            marketInfo?.circulating_supply ?? 0,
             undefined,
             tokenSymbol,
         )

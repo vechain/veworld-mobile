@@ -1,23 +1,26 @@
 import React from "react"
-import { CoinMarketInfo } from "~Storage/Redux/Types"
 import { BaseText, BaseView } from "~Components"
 import { useThemedStyles } from "~Hooks"
 import { ColorThemeType } from "~Constants"
 import { StyleSheet } from "react-native"
 import { useI18nContext } from "~i18n"
 import { useFormattedMarketInfo } from "../Hooks/useFormattedMarketInfo"
+import { getCoinGeckoIdBySymbol, useMarketInfo } from "~Api"
+import { selectCurrency, useAppSelector } from "~Storage/Redux"
 
-export const MarketInfoView = ({
-    marketInfo,
-    tokenSymbol,
-}: {
-    marketInfo: CoinMarketInfo
-    tokenSymbol: string
-}) => {
+export const MarketInfoView = ({ tokenSymbol }: { tokenSymbol: string }) => {
     const { styles } = useThemedStyles(baseStyles)
     const { LL } = useI18nContext()
+
+    const currency = useAppSelector(selectCurrency)
+
+    const { data: marketInfo } = useMarketInfo({
+        id: getCoinGeckoIdBySymbol[tokenSymbol],
+        vs_currency: currency,
+    })
+
     const { marketCap, totalSupply, totalVolume, circulatingSupply } =
-        useFormattedMarketInfo(marketInfo, tokenSymbol)
+        useFormattedMarketInfo({ marketInfo, tokenSymbol })
 
     return (
         <BaseView>
