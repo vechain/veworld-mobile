@@ -3,7 +3,7 @@ import { useBalances } from "~Hooks/useBalances"
 import { FungibleToken } from "~Model"
 import { selectBalanceForToken, selectCurrency, useAppSelector } from "~Storage/Redux"
 
-type TokenWithCompleteInfo = FungibleToken & {
+export type TokenWithCompleteInfo = FungibleToken & {
     fiatBalance: string
     tokenUnitBalance: string
     exchangeRate?: number

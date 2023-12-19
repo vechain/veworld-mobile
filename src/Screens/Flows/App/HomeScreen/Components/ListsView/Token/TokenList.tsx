@@ -4,15 +4,13 @@ import { NestableDraggableFlatList, RenderItem } from "react-native-draggable-fl
 import Animated, { AnimateProps } from "react-native-reanimated"
 import { SwipeableRow } from "~Components"
 import { AnimatedTokenCard } from "./AnimatedTokenCard"
-import { useBottomSheetModal, useThemedStyles } from "~Hooks"
-import { ColorThemeType } from "~Constants"
+import { useBottomSheetModal, useThemedStyles, useTokenWithCompleteInfo } from "~Hooks"
+import { ColorThemeType, VET, VTHO } from "~Constants"
 import { changeBalancePosition, removeTokenBalance, useAppDispatch, useAppSelector } from "~Storage/Redux"
 import {
     selectNonVechainTokensWithBalances,
     selectSelectedAccount,
     selectSelectedNetwork,
-    selectVetTokenWithInfo,
-    selectVthoTokenWithInfo,
 } from "~Storage/Redux/Selectors"
 import { AnimatedChartCard } from "./AnimatedChartCard"
 import { FungibleTokenWithBalance } from "~Model"
@@ -31,7 +29,6 @@ export const TokenList = memo(({ isEdit, isBalanceVisible, ...animatedViewProps 
     const dispatch = useAppDispatch()
     const network = useAppSelector(selectSelectedNetwork)
     const tokenBalances = useAppSelector(selectNonVechainTokensWithBalances)
-    const tokenWithInfoVET = useAppSelector(selectVetTokenWithInfo)
 
     // Keep track of the swipeable items refs
     const swipeableItemRefs = useRef<Map<string, SwipeableItemImperativeRef>>(new Map())
@@ -48,7 +45,8 @@ export const TokenList = memo(({ isEdit, isBalanceVisible, ...animatedViewProps 
         onClose: closeRemoveCustomTokenBottomSheet,
     } = useBottomSheetModal()
 
-    const tokenWithInfoVTHO = useAppSelector(selectVthoTokenWithInfo)
+    const tokenWithInfoVET = useTokenWithCompleteInfo(VET)
+    const tokenWithInfoVTHO = useTokenWithCompleteInfo(VTHO)
 
     const { styles } = useThemedStyles(baseStyles)
 

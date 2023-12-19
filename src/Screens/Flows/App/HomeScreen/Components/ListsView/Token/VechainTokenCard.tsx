@@ -2,11 +2,9 @@ import { Image, StyleSheet } from "react-native"
 import React, { memo, useMemo } from "react"
 import { BaseText, BaseCard, BaseView, BaseSpacer, BaseSkeleton } from "~Components"
 import Animated, { useAnimatedStyle, withTiming } from "react-native-reanimated"
-import { useBalances, useTheme } from "~Hooks"
+import { TokenWithCompleteInfo, useTheme } from "~Hooks"
 import { FormattingUtils } from "~Utils"
-import { selectCurrencyExchangeRate } from "~Storage/Redux/Selectors/Currency"
 import { selectCurrency, selectIsTokensOwnedLoading } from "~Storage/Redux/Selectors"
-import { TokenWithCompleteInfo } from "~Model"
 import { useAppSelector } from "~Storage/Redux"
 import { COLORS } from "~Constants"
 
@@ -19,22 +17,20 @@ type Props = {
 export const VechainTokenCard = memo(({ tokenWithInfo, isAnimation, isBalanceVisible }: Props) => {
     const theme = useTheme()
 
-    const exchangeRate = useAppSelector(state => selectCurrencyExchangeRate(state, tokenWithInfo))
-
     const currency = useAppSelector(selectCurrency)
 
     const isTokensOwnedLoading = useAppSelector(selectIsTokensOwnedLoading)
 
-    const isPositive24hChange = (exchangeRate?.change ?? 0) > 0
+    const { tokenInfo, tokenInfoLoading, fiatBalance, tokenUnitBalance } = tokenWithInfo
 
+    const isPositive24hChange = (tokenInfo?.market_data.price_change_percentage_24h ?? 0) >= 0
     const change24h =
         (isPositive24hChange ? "+" : "") +
-        FormattingUtils.humanNumber(exchangeRate?.change ?? 0, exchangeRate?.change ?? 0) +
+        FormattingUtils.humanNumber(
+            tokenInfo?.market_data.price_change_percentage_24h ?? 0,
+            tokenInfo?.market_data.price_change_percentage_24h ?? 0,
+        ) +
         "%"
-
-    const { fiatBalance, tokenUnitBalance } = useBalances({
-        token: tokenWithInfo,
-    })
 
     const animatedOpacityReverse = useAnimatedStyle(() => {
         return {
@@ -48,6 +44,8 @@ export const VechainTokenCard = memo(({ tokenWithInfo, isAnimation, isBalanceVis
 
     const computeFonts = useMemo(() => (fiatBalance.length > 6 ? "body" : "subTitleBold"), [fiatBalance.length])
 
+    const isLoading = tokenInfoLoading || isTokensOwnedLoading
+
     return (
         <Animated.View style={[baseStyles.innerRow]}>
             <BaseView flexDirection="row">
@@ -60,7 +58,7 @@ export const VechainTokenCard = memo(({ tokenWithInfo, isAnimation, isBalanceVis
                 <BaseView>
                     <BaseText typographyFont="subTitleBold">{tokenWithInfo.name}</BaseText>
                     <BaseView flexDirection="row" alignItems="baseline" justifyContent="flex-start">
-                        {isTokensOwnedLoading ? (
+                        {isLoading ? (
                             <BaseView flexDirection="row" alignItems="center">
                                 <BaseSkeleton
                                     containerStyle={baseStyles.skeletonBalance}
@@ -88,7 +86,7 @@ export const VechainTokenCard = memo(({ tokenWithInfo, isAnimation, isBalanceVis
             </BaseView>
             <Animated.View style={[animatedOpacityReverse, baseStyles.balancesContainer]}>
                 <BaseView flexDirection="row" alignItems="center">
-                    {isTokensOwnedLoading ? (
+                    {isLoading ? (
                         <BaseView flexDirection="row" alignItems="center">
                             <BaseSkeleton
                                 containerStyle={baseStyles.skeletonBalanceValue}
