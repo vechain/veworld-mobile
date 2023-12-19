@@ -16,14 +16,16 @@ export const BalanceView = ({
 
     const isTokensOwnedLoading = useAppSelector(selectIsTokensOwnedLoading)
 
-    const { symbol, fiatBalance, exchangeRateCurrency, tokenUnitBalance } = tokenWithInfo
+    const { symbol, fiatBalance, exchangeRateCurrency, tokenUnitBalance, exchangeRateLoading } = tokenWithInfo
+
+    const isLoading = exchangeRateLoading || isTokensOwnedLoading
 
     return (
         <BaseView w={100}>
             <BaseView flexDirection="row" alignItems="flex-end">
                 <BaseText typographyFont="bodyBold">{LL.BD_YOUR_BALANCE()}</BaseText>
                 <BaseSpacer width={4} />
-                {isTokensOwnedLoading ? (
+                {isLoading ? (
                     <BaseView flexDirection="row" alignItems="center">
                         <BaseSkeleton
                             animationDirection="horizontalLeft"
