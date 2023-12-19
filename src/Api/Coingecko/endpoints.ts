@@ -1,5 +1,4 @@
 import axios from "axios"
-import { VET, VTHO } from "~Constants"
 import { error } from "~Utils"
 
 export const COINGECKO_URL = process.env.REACT_APP_COINGECKO_URL
@@ -8,15 +7,6 @@ const axiosInstance = axios.create({
     timeout,
     baseURL: COINGECKO_URL,
 })
-
-export const VET_COINGECKO_ID: string = "vechain"
-
-export const VETHOR_COINGECKO_ID: string = "vethor-token"
-
-export const getCoinGeckoIdBySymbol = {
-    [VET.symbol]: VET_COINGECKO_ID,
-    [VTHO.symbol]: VETHOR_COINGECKO_ID,
-}
 
 export type TokenInfoMarketData = {
     total_supply: number

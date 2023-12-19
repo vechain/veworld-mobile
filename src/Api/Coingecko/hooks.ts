@@ -1,6 +1,9 @@
 import { useQuery } from "@tanstack/react-query"
-import { MarketChartResponse, VETHOR_COINGECKO_ID, VET_COINGECKO_ID, getMarketChart, getTokenInfo } from "./endpoints"
+import { MarketChartResponse, getMarketChart, getTokenInfo } from "./endpoints"
 import BigNumber from "bignumber.js"
+import { max } from "lodash"
+import { marketChartTimeframes } from "./constants"
+import { VETHOR_COINGECKO_ID, VET_COINGECKO_ID } from "~Constants"
 
 const EXCHANGE_RATE_SYNC_PERIOD = new BigNumber(process.env.REACT_APP_EXCHANGE_RATE_SYNC_PERIOD ?? "120000").toNumber()
 const CHART_DATA_SYNC_PERIOD = new BigNumber(process.env.REACT_APP_CHART_DATA_SYNC_PERIOD ?? "300000").toNumber()
@@ -52,6 +55,47 @@ export const useMarketChart = ({
         enabled: !!id,
         placeholderData,
         staleTime: CHART_DATA_SYNC_PERIOD,
+    })
+}
+
+/**
+ * Similar to useMarketChart but tries to reuse the highest resolution chart available (6 months) to derive the smaller intervals
+ * This allows us to avoid making multiple requests for the same data, but works only for charts with a resolution > 1 day with daily interval
+ * @param id  the id of the coin
+ * @param vs_currency  the currency to compare
+ * @param days  the number of days to get the market chart for
+ * @returns  the market chart array of arrays of [timestamp, price]
+ */
+
+export const useCachedMarketChart = ({
+    id,
+    vs_currency,
+    days,
+    placeholderData,
+}: {
+    id?: string
+    vs_currency: string
+    days: number
+    placeholderData?: MarketChartResponse
+}) => {
+    const { data: highestResolutionMarketChartData } = useMarketChart({
+        id,
+        vs_currency,
+        days: max(marketChartTimeframes.map(timeframe => timeframe.value)) ?? 180,
+    })
+
+    return useQuery({
+        queryKey: getMarketChartQueryKey({ id, vs_currency, days }),
+        queryFn: () => {
+            if (!highestResolutionMarketChartData) throw new Error("No cached market chart data available")
+            const startIndex = highestResolutionMarketChartData.findIndex(
+                entry => entry.timestamp >= Date.now() - days * 24 * 60 * 60 * 1000,
+            )
+            return highestResolutionMarketChartData.slice(startIndex)
+        },
+        enabled: !!highestResolutionMarketChartData,
+        staleTime: CHART_DATA_SYNC_PERIOD,
+        placeholderData,
     })
 }
 

@@ -3,10 +3,11 @@ import React, { useCallback, useState } from "react"
 import { BaseText, BaseTouchable, BaseView } from "~Components/Base"
 import { useThemedStyles } from "~Hooks"
 import { COLORS, ColorThemeType } from "~Constants"
+import { MarketChartTimeFrame } from "~Api/Coingecko"
 
 type Props = {
     onPress: (button: string) => void
-    data: { label: string; value: any; secondaryValue: any }[]
+    data: MarketChartTimeFrame[]
 }
 
 export const PressableWithUnderline = (props: Props) => {
