@@ -32,12 +32,12 @@ export const SwapCard = memo(
 
         const currency = useAppSelector(selectCurrency)
 
-        const exchangeRateReceived = useExchangeRate({
+        const { data: exchangeRateReceived } = useExchangeRate({
             id: getCoinGeckoIdBySymbol[receivedToken?.symbol ?? ""],
             vs_currency: currency,
         })
 
-        const exchangeRatePaid = useExchangeRate({
+        const { data: exchangeRatePaid } = useExchangeRate({
             id: getCoinGeckoIdBySymbol[paidToken?.symbol ?? ""],
             vs_currency: currency,
         })
@@ -73,24 +73,24 @@ export const SwapCard = memo(
         }, [receivedTokenAmount, receivedToken])
 
         const fiatValuePaid = useMemo(() => {
-            if (exchangeRatePaid?.rate && paidToken)
+            if (exchangeRatePaid && paidToken)
                 return FormattingUtils.humanNumber(
-                    FormattingUtils.convertToFiatBalance(paidTokenAmount, exchangeRatePaid.rate, paidToken.decimals),
+                    FormattingUtils.convertToFiatBalance(paidTokenAmount, exchangeRatePaid, paidToken.decimals),
                     paidAmount,
                 )
-        }, [exchangeRatePaid?.rate, paidAmount, paidToken, paidTokenAmount])
+        }, [exchangeRatePaid, paidAmount, paidToken, paidTokenAmount])
 
         const fiatValueReceived = useMemo(() => {
-            if (exchangeRateReceived?.rate && receivedToken)
+            if (exchangeRateReceived && receivedToken)
                 return FormattingUtils.humanNumber(
                     FormattingUtils.convertToFiatBalance(
                         receivedTokenAmount,
-                        exchangeRateReceived.rate,
+                        exchangeRateReceived,
                         receivedToken.decimals,
                     ),
                     receivedAmount,
                 )
-        }, [exchangeRateReceived?.rate, receivedAmount, receivedToken, receivedTokenAmount])
+        }, [exchangeRateReceived, receivedAmount, receivedToken, receivedTokenAmount])
 
         const renderPaidToken = useCallback(() => {
             return (
