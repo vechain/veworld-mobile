@@ -13,6 +13,13 @@ export const wallet1: Wallet = {
     rootAddress: hdnode1.address,
     nonce: "nonce",
 }
+
+export const keystoreWallet: Wallet = {
+    nonce: "nonce",
+    privateKey: "0x99f0500549792796c14fed62011a51081dc5b5e68fe8bd8a13b86be829c4fd36",
+    rootAddress: "0xf077b491b355e64048ce21e3a6fc4751eeea77fa",
+}
+
 export const mnemonicPhrase2 = mnemonic.generate()
 export const wallet2: Wallet = {
     mnemonic: mnemonicPhrase2,

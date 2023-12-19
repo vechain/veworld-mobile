@@ -2,13 +2,14 @@ import { useNavigation } from "@react-navigation/native"
 import React, { useCallback, useMemo } from "react"
 import { StyleSheet, TouchableOpacity } from "react-native"
 import { COLORS, SCREEN_WIDTH } from "~Constants"
-import { BaseText, BaseView, LongPressProvider, NFTMedia } from "~Components"
+import { BaseText, BaseView, LongPressProvider, NFTMedia, PlatformBlur } from "~Components"
 import { NftCollection } from "~Model"
 import { Routes } from "~Navigation"
 import HapticsService from "~Services/HapticsService"
 import { useToggleCollection } from "../NFTCollectionDetailScreen/Components/Hooks/useToggleCollection"
 import { useThemedStyles } from "~Hooks"
 import { useI18nContext } from "~i18n"
+import { PlatformUtils } from "~Utils"
 
 type Props = {
     collection: NftCollection
@@ -16,7 +17,7 @@ type Props = {
 }
 
 export const NFTCollectionView = ({ collection, index }: Props) => {
-    const { styles } = useThemedStyles(baseStyles)
+    const { styles, theme } = useThemedStyles(baseStyles)
     const nav = useNavigation()
     const { LL } = useI18nContext()
 
@@ -47,6 +48,14 @@ export const NFTCollectionView = ({ collection, index }: Props) => {
         return (
             <BaseView style={styles.nftCollectionNameBarRadius}>
                 <NFTMedia uri={collection.image} styles={styles.nftPreviewImage} />
+                {isBlacklisted ? (
+                    <PlatformBlur
+                        backgroundColor={theme.colors.card}
+                        blurAmount={10}
+                        text={LL.SHOW_COLLECTION()}
+                        paddingBottom={22}
+                    />
+                ) : null}
 
                 <BaseView
                     style={styles.nftCollectionNameBar}
@@ -65,16 +74,21 @@ export const NFTCollectionView = ({ collection, index }: Props) => {
             </BaseView>
         )
     }, [
-        collection,
-        styles.nftCollectionNameBar,
         styles.nftCollectionNameBarRadius,
-        styles.nftCounterLabel,
         styles.nftPreviewImage,
+        styles.nftCollectionNameBar,
+        styles.nftCounterLabel,
+        collection.image,
+        collection.name,
+        collection.balanceOf,
+        isBlacklisted,
+        theme.colors.card,
+        LL,
     ])
 
     return (
         <TouchableOpacity
-            activeOpacity={0.6}
+            activeOpacity={PlatformUtils.isIOS() ? 0.6 : 1}
             // Workaround -> https://github.com/mpiannucci/react-native-context-menu-view/issues/60#issuecomment-1453864955
             onLongPress={() => {}}
             onPress={collection.updated ? onCollectionPress : undefined}

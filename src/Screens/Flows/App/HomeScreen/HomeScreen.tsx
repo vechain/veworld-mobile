@@ -1,6 +1,13 @@
 import React, { useCallback, useMemo, useRef, useState } from "react"
 import { AccountCard, EditTokensBar, Header, TokenList } from "./Components"
-import { useBottomSheetModal, useCheckVersion, useMemoizedAnimation, useSetSelectedAccount, useTheme } from "~Hooks"
+import {
+    useAnalyticTracking,
+    useBottomSheetModal,
+    useCheckVersion,
+    useMemoizedAnimation,
+    useSetSelectedAccount,
+    useTheme,
+} from "~Hooks"
 import {
     BaseIcon,
     BaseSpacer,
@@ -25,9 +32,10 @@ import { RefreshControl } from "react-native"
 import { useNavigation, useScrollToTop } from "@react-navigation/native"
 import { NestableScrollContainer } from "react-native-draggable-flatlist"
 import { Routes } from "~Navigation"
-import { BUY_FEATURE_ENABLED } from "~Constants"
+import { AnalyticsEvent, BUY_FEATURE_ENABLED } from "~Constants"
 
 export const HomeScreen = () => {
+    const track = useAnalyticTracking()
     const { updateBalances, updateSuggested } = useTokenBalances()
 
     const { onSetSelectedAccount } = useSetSelectedAccount()
@@ -83,7 +91,10 @@ export const HomeScreen = () => {
         if (BUY_FEATURE_ENABLED) {
             actions.push({
                 name: LL.BTN_BUY(),
-                action: () => nav.navigate(Routes.BUY_FLOW),
+                action: () => {
+                    nav.navigate(Routes.BUY_FLOW)
+                    track(AnalyticsEvent.BUY_CRYPTO_BUTTON_CLICKED)
+                },
                 icon: <BaseIcon color={theme.colors.text} name="cart-outline" size={21} />,
                 testID: "buyButton",
             })
@@ -107,7 +118,7 @@ export const HomeScreen = () => {
         )
 
         return actions
-    }, [LL, nav, theme.colors.text])
+    }, [LL, nav, theme.colors.text, track])
     const selectedCurrency = useAppSelector(selectCurrency)
 
     return (

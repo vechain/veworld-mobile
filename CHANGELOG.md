@@ -1,5 +1,99 @@
 
 
+## [1.5.0](https://github.com/vechainfoundation/veworld-mobile/compare/1.3.0...1.5.0) (2023-12-15)
+
+
+### Features
+
+* add confirm bottom sheet to network and account change ([#1705](https://github.com/vechainfoundation/veworld-mobile/issues/1705)) ([9b1c4c0](https://github.com/vechainfoundation/veworld-mobile/commit/9b1c4c0cb25d2b38e69f288a9cd40f49446b6828))
+* add favicon to dapps && remove custom dapps ([#1652](https://github.com/vechainfoundation/veworld-mobile/issues/1652)) ([aefaa4d](https://github.com/vechainfoundation/veworld-mobile/commit/aefaa4d0316784516342c9314c5308df6ae24fcb))
+
+
+### Bug Fixes
+
+* account balances not showing on network change ([0c809d9](https://github.com/vechainfoundation/veworld-mobile/commit/0c809d9035404f559a8223e403f81f269ea8fa39))
+* account delegattion bug ([38f45df](https://github.com/vechainfoundation/veworld-mobile/commit/38f45df3a881fad2c90138252a1693b9d21fa698))
+* add animation, fix gas calculations, add delegator cases ([1b0e26b](https://github.com/vechainfoundation/veworld-mobile/commit/1b0e26ba56cb174db19f6b0d0807aa49aa880ca7))
+* add blured view on blacklisted NFTs and collections ([316f8fd](https://github.com/vechainfoundation/veworld-mobile/commit/316f8fdc61867f264d6a451d13e76e4e349e8c84))
+* amount formattig bug ([b466ced](https://github.com/vechainfoundation/veworld-mobile/commit/b466cedff8e857012c2d29f508b6f6ebe814d907))
+* android blur breaks ui ([05fa1c1](https://github.com/vechainfoundation/veworld-mobile/commit/05fa1c19eea3cb85847b16282c0e6706bafe338c))
+* android blur breaks ui ([00b4a6f](https://github.com/vechainfoundation/veworld-mobile/commit/00b4a6f3bb39a3195fcd53e2c3cd9193fa599bcc))
+* android blur breaks ui ([e422200](https://github.com/vechainfoundation/veworld-mobile/commit/e42220026a75508d71763d5dc4de4515729782e9))
+* android blur breaks ui ([4d3f534](https://github.com/vechainfoundation/veworld-mobile/commit/4d3f53499808082abf5625f5ffc05fe9c10871ea))
+* android closes app after WC in browser request ([#1641](https://github.com/vechainfoundation/veworld-mobile/issues/1641)) ([f5a9ece](https://github.com/vechainfoundation/veworld-mobile/commit/f5a9ecea879f9106233910f624a0f1428dbc5640))
+* blur button visible on whitelisted collection ([422eda9](https://github.com/vechainfoundation/veworld-mobile/commit/422eda9adc1a4d476bdc5cc7e0cf0a511187f5dd))
+* broken cert signing for keystore ([#1731](https://github.com/vechainfoundation/veworld-mobile/issues/1731)) ([57f3739](https://github.com/vechainfoundation/veworld-mobile/commit/57f3739c5919a9dbf8ad9461ee55c944bd967aae))
+* change gas calculation SOT ([2805146](https://github.com/vechainfoundation/veworld-mobile/commit/2805146f0a8e3f45f2ca932f8a6f582a8e200077))
+* currency formatting, max vtho warning copy ([580dbd6](https://github.com/vechainfoundation/veworld-mobile/commit/580dbd6a418cdadc1f271a3233a1ff32801540f8))
+* discovery bugs ([#1647](https://github.com/vechainfoundation/veworld-mobile/issues/1647)) ([27503e2](https://github.com/vechainfoundation/veworld-mobile/commit/27503e2447f167e2e0a6abfa97a439c5daa06d86))
+* e2e test, add haptics ([fc938d4](https://github.com/vechainfoundation/veworld-mobile/commit/fc938d4b1abc1da92e695ef330bce90848f86c5e))
+* failing test ([d836b6a](https://github.com/vechainfoundation/veworld-mobile/commit/d836b6aaef7e7c435ffb93ed8b776023a55ee6ef))
+* failing test ([3f730d7](https://github.com/vechainfoundation/veworld-mobile/commit/3f730d70eb51527334a42b0bac1844e22698cdfe))
+* failing unit tests ([3e2cb7c](https://github.com/vechainfoundation/veworld-mobile/commit/3e2cb7c3e9597e6b6d8d0c8bbce4efa661c5af91))
+* fix android fastlane, add apk creation ([998d608](https://github.com/vechainfoundation/veworld-mobile/commit/998d6080c81a7f668deecee609bb0ef5e66228e8))
+* fix balance placeholder reveal amount length ([b2ce4ea](https://github.com/vechainfoundation/veworld-mobile/commit/b2ce4ea774dbd3ee2c66da0df3b24f318fce5af9))
+* fix gas checker, refactor ui, add animations ([af54ec7](https://github.com/vechainfoundation/veworld-mobile/commit/af54ec753c85100342fd49c4323cb2f8938dac51))
+* fix gas inconsistencies, refactor foramtting functions, add animations ([a28c0df](https://github.com/vechainfoundation/veworld-mobile/commit/a28c0df4c3bff071f83ac57a07f5b44cb7585a4b))
+* fix incompatible gas formats, add inflated gas to hotfix gas error ([71a31e1](https://github.com/vechainfoundation/veworld-mobile/commit/71a31e1e88fcf4620fde998c890defa838b3c75e))
+* fix sort mnemonic edge case ([2889b97](https://github.com/vechainfoundation/veworld-mobile/commit/2889b978cff29e6037f707c516ea60f2b5d0c937))
+* fixes bn formatting, add pive util class ([9304a19](https://github.com/vechainfoundation/veworld-mobile/commit/9304a19ae6ecd91d0e7a9af7e86c102f5d753875))
+* improve discover section ux ([#1644](https://github.com/vechainfoundation/veworld-mobile/issues/1644)) ([fc08f5c](https://github.com/vechainfoundation/veworld-mobile/commit/fc08f5cd9c2691a30ec7864fda3344f7f757d9fc))
+* input text color ([d97e25a](https://github.com/vechainfoundation/veworld-mobile/commit/d97e25ae9f831ef41c21e25b2ed0049b8af9c17b))
+* ledger sign transaction layout ([a8e8145](https://github.com/vechainfoundation/veworld-mobile/commit/a8e8145a558623321270550e27464591442ee611))
+* max amount button not visible when token has no exchange rate data ([eb055ea](https://github.com/vechainfoundation/veworld-mobile/commit/eb055eabc4b36f290e8ca881ed53de9963ed0b5a))
+* merge hook and regfactored logic, fix ui bugs ([f2e5ccb](https://github.com/vechainfoundation/veworld-mobile/commit/f2e5ccbf180fc25a8325be726f40bad4a9897880))
+* minor ui fixes ([a03148e](https://github.com/vechainfoundation/veworld-mobile/commit/a03148e5627704894d37deddfa977bb5419d2059))
+* navigating for ledger ([#1667](https://github.com/vechainfoundation/veworld-mobile/issues/1667)) ([725ad11](https://github.com/vechainfoundation/veworld-mobile/commit/725ad11ddb4777cbf7caffe1d0e65852cd625f82))
+* remove bad console log ([#1678](https://github.com/vechainfoundation/veworld-mobile/issues/1678)) ([d74310a](https://github.com/vechainfoundation/veworld-mobile/commit/d74310aaa7dc3e4fc13bb5ac531aabbf4b95de05))
+* tests ([54b6a08](https://github.com/vechainfoundation/veworld-mobile/commit/54b6a0862e7fded572f6381967877ead23a67ef4))
+* UI issues on delegation ([a03e8a6](https://github.com/vechainfoundation/veworld-mobile/commit/a03e8a68d7d40c43361b28ffd1e424b854927b09))
+* UI issues, rename bn utils, fix anvigation ([448493a](https://github.com/vechainfoundation/veworld-mobile/commit/448493af34e9dc1ce32eb68bc64424d65561b812))
+* ui on vet token ([7072f2c](https://github.com/vechainfoundation/veworld-mobile/commit/7072f2ce7e58eab75a0c74f5bcba0c58a14966c0))
+
+## [1.5.0](https://github.com/vechainfoundation/veworld-mobile/compare/1.3.0...1.5.0) (2023-12-11)
+
+
+### Features
+
+* add confirm bottom sheet to network and account change ([#1705](https://github.com/vechainfoundation/veworld-mobile/issues/1705)) ([9b1c4c0](https://github.com/vechainfoundation/veworld-mobile/commit/9b1c4c0cb25d2b38e69f288a9cd40f49446b6828))
+* add favicon to dapps && remove custom dapps ([#1652](https://github.com/vechainfoundation/veworld-mobile/issues/1652)) ([aefaa4d](https://github.com/vechainfoundation/veworld-mobile/commit/aefaa4d0316784516342c9314c5308df6ae24fcb))
+
+
+### Bug Fixes
+
+* account delegattion bug ([38f45df](https://github.com/vechainfoundation/veworld-mobile/commit/38f45df3a881fad2c90138252a1693b9d21fa698))
+* add animation, fix gas calculations, add delegator cases ([1b0e26b](https://github.com/vechainfoundation/veworld-mobile/commit/1b0e26ba56cb174db19f6b0d0807aa49aa880ca7))
+* amount formattig bug ([b466ced](https://github.com/vechainfoundation/veworld-mobile/commit/b466cedff8e857012c2d29f508b6f6ebe814d907))
+* android blur breaks ui ([05fa1c1](https://github.com/vechainfoundation/veworld-mobile/commit/05fa1c19eea3cb85847b16282c0e6706bafe338c))
+* android blur breaks ui ([00b4a6f](https://github.com/vechainfoundation/veworld-mobile/commit/00b4a6f3bb39a3195fcd53e2c3cd9193fa599bcc))
+* android blur breaks ui ([e422200](https://github.com/vechainfoundation/veworld-mobile/commit/e42220026a75508d71763d5dc4de4515729782e9))
+* android blur breaks ui ([4d3f534](https://github.com/vechainfoundation/veworld-mobile/commit/4d3f53499808082abf5625f5ffc05fe9c10871ea))
+* android closes app after WC in browser request ([#1641](https://github.com/vechainfoundation/veworld-mobile/issues/1641)) ([f5a9ece](https://github.com/vechainfoundation/veworld-mobile/commit/f5a9ecea879f9106233910f624a0f1428dbc5640))
+* change gas calculation SOT ([2805146](https://github.com/vechainfoundation/veworld-mobile/commit/2805146f0a8e3f45f2ca932f8a6f582a8e200077))
+* currency formatting, max vtho warning copy ([580dbd6](https://github.com/vechainfoundation/veworld-mobile/commit/580dbd6a418cdadc1f271a3233a1ff32801540f8))
+* discovery bugs ([#1647](https://github.com/vechainfoundation/veworld-mobile/issues/1647)) ([27503e2](https://github.com/vechainfoundation/veworld-mobile/commit/27503e2447f167e2e0a6abfa97a439c5daa06d86))
+* e2e test, add haptics ([fc938d4](https://github.com/vechainfoundation/veworld-mobile/commit/fc938d4b1abc1da92e695ef330bce90848f86c5e))
+* failing test ([d836b6a](https://github.com/vechainfoundation/veworld-mobile/commit/d836b6aaef7e7c435ffb93ed8b776023a55ee6ef))
+* failing test ([3f730d7](https://github.com/vechainfoundation/veworld-mobile/commit/3f730d70eb51527334a42b0bac1844e22698cdfe))
+* fix android fastlane, add apk creation ([998d608](https://github.com/vechainfoundation/veworld-mobile/commit/998d6080c81a7f668deecee609bb0ef5e66228e8))
+* fix balance placeholder reveal amount length ([b2ce4ea](https://github.com/vechainfoundation/veworld-mobile/commit/b2ce4ea774dbd3ee2c66da0df3b24f318fce5af9))
+* fix gas checker, refactor ui, add animations ([af54ec7](https://github.com/vechainfoundation/veworld-mobile/commit/af54ec753c85100342fd49c4323cb2f8938dac51))
+* fix gas inconsistencies, refactor foramtting functions, add animations ([a28c0df](https://github.com/vechainfoundation/veworld-mobile/commit/a28c0df4c3bff071f83ac57a07f5b44cb7585a4b))
+* fix incompatible gas formats, add inflated gas to hotfix gas error ([71a31e1](https://github.com/vechainfoundation/veworld-mobile/commit/71a31e1e88fcf4620fde998c890defa838b3c75e))
+* fix sort mnemonic edge case ([2889b97](https://github.com/vechainfoundation/veworld-mobile/commit/2889b978cff29e6037f707c516ea60f2b5d0c937))
+* fixes bn formatting, add pive util class ([9304a19](https://github.com/vechainfoundation/veworld-mobile/commit/9304a19ae6ecd91d0e7a9af7e86c102f5d753875))
+* improve discover section ux ([#1644](https://github.com/vechainfoundation/veworld-mobile/issues/1644)) ([fc08f5c](https://github.com/vechainfoundation/veworld-mobile/commit/fc08f5cd9c2691a30ec7864fda3344f7f757d9fc))
+* input text color ([d97e25a](https://github.com/vechainfoundation/veworld-mobile/commit/d97e25ae9f831ef41c21e25b2ed0049b8af9c17b))
+* max amount button not visible when token has no exchange rate data ([eb055ea](https://github.com/vechainfoundation/veworld-mobile/commit/eb055eabc4b36f290e8ca881ed53de9963ed0b5a))
+* merge hook and regfactored logic, fix ui bugs ([f2e5ccb](https://github.com/vechainfoundation/veworld-mobile/commit/f2e5ccbf180fc25a8325be726f40bad4a9897880))
+* minor ui fixes ([a03148e](https://github.com/vechainfoundation/veworld-mobile/commit/a03148e5627704894d37deddfa977bb5419d2059))
+* navigating for ledger ([#1667](https://github.com/vechainfoundation/veworld-mobile/issues/1667)) ([725ad11](https://github.com/vechainfoundation/veworld-mobile/commit/725ad11ddb4777cbf7caffe1d0e65852cd625f82))
+* remove bad console log ([#1678](https://github.com/vechainfoundation/veworld-mobile/issues/1678)) ([d74310a](https://github.com/vechainfoundation/veworld-mobile/commit/d74310aaa7dc3e4fc13bb5ac531aabbf4b95de05))
+* tests ([54b6a08](https://github.com/vechainfoundation/veworld-mobile/commit/54b6a0862e7fded572f6381967877ead23a67ef4))
+* UI issues on delegation ([a03e8a6](https://github.com/vechainfoundation/veworld-mobile/commit/a03e8a68d7d40c43361b28ffd1e424b854927b09))
+* UI issues, rename bn utils, fix anvigation ([448493a](https://github.com/vechainfoundation/veworld-mobile/commit/448493af34e9dc1ce32eb68bc64424d65561b812))
+* ui on vet token ([7072f2c](https://github.com/vechainfoundation/veworld-mobile/commit/7072f2ce7e58eab75a0c74f5bcba0c58a14966c0))
+
 ## [1.5.0](https://github.com/vechainfoundation/veworld-mobile/compare/1.3.0...1.5.0) (2023-12-05)
 
 
