@@ -11,7 +11,6 @@ import {
     updateAccountBalances,
     updateOfficialTokens,
     updateSuggestedTokens,
-    updateTokenPriceData,
     useAppDispatch,
     useAppSelector,
 } from "~Storage/Redux"
@@ -106,13 +105,6 @@ export const useTokenBalances = () => {
         updateBalances()
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [thorClient.genesis.id, network.genesis.id, balances.length, dispatch, selectedAccount.address])
-
-    /**
-     * update token price data
-     */
-    useEffect(() => {
-        dispatch(updateTokenPriceData())
-    }, [dispatch])
 
     /**
      * keeps exchange rates up to date
