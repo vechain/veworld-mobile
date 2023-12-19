@@ -26,7 +26,7 @@ const checkLogLevelHOC = (logID: LogLevelKey): ((eventKey: ErrorEventKey, ...arg
     return (eventKey, ...args) => {
         if (LOG_LEVELS[logID] === LOG_LEVELS.error) {
             // eslint-disable-next-line no-console
-            console.error(`[-- ${ERROR_EVENTS[eventKey]} --]`, ...args)
+            console.error(`\n [-- ${ERROR_EVENTS[eventKey]} --]`, ...args)
 
             const concatenatedString = args.reduce((accumulator, currentValue) => {
                 return accumulator + currentValue!.toString()
@@ -39,7 +39,7 @@ const checkLogLevelHOC = (logID: LogLevelKey): ((eventKey: ErrorEventKey, ...arg
             }
         } else if (LOG_LEVELS[logID] >= LOG_LEVELS[logLevel as LogLevelKey]) {
             // eslint-disable-next-line no-console
-            console[logID](`[-- ${ERROR_EVENTS[eventKey]} --]`, ...args)
+            console[logID](`\n [-- ${ERROR_EVENTS[eventKey]} --]`, ...args)
         }
     }
 }
