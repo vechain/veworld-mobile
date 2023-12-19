@@ -17,9 +17,9 @@ import {
 } from "~Components"
 import {
     addPendingDappTransactionActivity,
+    selectOfficialTokens,
     selectSelectedAccount,
     selectSelectedNetwork,
-    selectTokensWithInfo,
     selectVerifyContext,
     selectVisibleAccounts,
     setIsAppLoading,
@@ -56,7 +56,7 @@ export const SendTransactionScreen: FC<Props> = ({ route }: Props) => {
 
     const network = useAppSelector(selectSelectedNetwork)
     const selectedAccount = useAppSelector(selectSelectedAccount)
-    const tokens = useAppSelector(selectTokensWithInfo)
+    const tokens = useAppSelector(selectOfficialTokens)
 
     const sessionContext = useAppSelector(state =>
         selectVerifyContext(state, request.type === "wallet-connect" ? request.session.topic : undefined),

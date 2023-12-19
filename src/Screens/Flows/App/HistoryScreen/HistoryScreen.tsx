@@ -7,8 +7,8 @@ import { FormattingUtils, TransactionUtils } from "~Utils"
 import { BaseText, BaseView, ChangeAccountButtonPill, BaseSpacer, SelectAccountBottomSheet, Layout } from "~Components"
 import {
     selectBalanceVisible,
+    selectOfficialTokens,
     selectSelectedAccount,
-    selectTokensWithInfo,
     selectVisibleAccounts,
     useAppSelector,
 } from "~Storage/Redux"
@@ -71,7 +71,7 @@ export const HistoryScreen = () => {
 
     const theme = useTheme()
 
-    const tokens = useAppSelector(selectTokensWithInfo)
+    const tokens = useAppSelector(selectOfficialTokens)
 
     // To prevent fetching next page of activities on FlashList mount
     const [hasScrolled, setHasScrolled] = useState(false)

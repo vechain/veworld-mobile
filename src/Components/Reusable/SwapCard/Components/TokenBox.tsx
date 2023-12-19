@@ -2,8 +2,8 @@ import React from "react"
 import { Token } from "~Model"
 import { SWAP_SIDE } from "../SwapCard"
 import { useI18nContext } from "~i18n"
-import { selectVisibleCustomTokens, selectCurrency, selectTokensWithInfo, useAppSelector } from "~Storage/Redux"
-import { SCREEN_WIDTH, VET, currencySymbolMap, COLORS } from "~Constants"
+import { selectVisibleCustomTokens, selectCurrency, useAppSelector, selectOfficialTokens } from "~Storage/Redux"
+import { SCREEN_WIDTH, currencySymbolMap, COLORS } from "~Constants"
 import DropShadow from "react-native-drop-shadow"
 import { BaseCard, BaseIcon, BaseImage, BaseText, BaseView } from "~Components/Base"
 import { useTheme } from "~Hooks"
@@ -36,11 +36,11 @@ export const TokenBox = ({
 
     const customTokens = useAppSelector(selectVisibleCustomTokens)
 
-    const tokens = useAppSelector(selectTokensWithInfo)
+    const officialTokens = useAppSelector(selectOfficialTokens)
 
     const currency = useAppSelector(selectCurrency)
 
-    const isTokenAdded = [...customTokens, ...tokens, VET]
+    const isTokenAdded = [...customTokens, ...officialTokens]
         .map(tkn => tkn.address.toLowerCase())
         .includes(addressFull.toLowerCase())
 
