@@ -25,7 +25,6 @@ export const initialTokenState: TokensState = {
         [NETWORK_TYPE.OTHER]: { ...emptyTokenState },
     },
     dashboardChartData: {},
-    assetDetailChartData: {},
     coinMarketInfo: {},
     coinGeckoTokens: [],
     chartDataIsLoading: {
@@ -63,11 +62,6 @@ export const TokenSlice = createSlice({
         setDashboardChartData: (state, action: PayloadAction<{ symbol: string; data: number[][] }>) => {
             const { symbol, data } = action.payload
             state.dashboardChartData[symbol] = data
-        },
-
-        setAssertDetailChartData: (state, action: PayloadAction<{ symbol: string; data: number[][] }>) => {
-            const { symbol, data } = action.payload
-            state.assetDetailChartData[symbol] = data
         },
 
         setChartDataIsLoading: (state, action: PayloadAction<{ symbol: string; isLoading: boolean }>) => {

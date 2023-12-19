@@ -9,7 +9,6 @@ export type TokensState = {
         }
     }
     dashboardChartData: { [key: string]: number[][] }
-    assetDetailChartData: { [key: string]: number[][] }
     coinMarketInfo: { [key: string]: CoinMarketInfo }
     coinGeckoTokens: TokenInfoResponse[]
     chartDataIsLoading: { [key: string]: boolean }

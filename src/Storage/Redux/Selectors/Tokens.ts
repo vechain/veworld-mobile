@@ -57,15 +57,6 @@ export const selectChartDataIsLoading = createSelector(
     (tokens, symbol) => tokens.chartDataIsLoading?.[symbol] ?? false,
 )
 
-export const selectAssetDetailChartData = createSelector(
-    [(_, state) => selectTokenState(state), symbol => symbol],
-    (tokens, symbol) =>
-        tokens.assetDetailChartData?.[symbol]?.map(el => ({
-            timestamp: el[0],
-            value: el[1],
-        })),
-)
-
 export const selectCoinGeckoTokens = createSelector(selectTokenState, state => state.coinGeckoTokens)
 
 export const selectOfficialTokens = createSelector(selectTokensForNetwork, state =>
