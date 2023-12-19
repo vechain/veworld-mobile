@@ -6,6 +6,7 @@ import { Buffer } from "buffer"
 
 import { VechainAppPleaseEnableContractDataAndMultiClause } from "./errors"
 import { debug } from "~Utils/Logger"
+import { ERROR_EVENTS } from "~Constants/Enums"
 
 const remapTransactionRelatedErrors = (e: any) => {
     if (e && e.statusCode === 0x6a80) {
@@ -127,14 +128,14 @@ export class VETLedgerApp {
         const buffers = splitRaw(path, raw, isTransaction)
         const responses = [] as Buffer[]
 
-        debug(`Ledger sign: ${buffers.length} chunks`)
+        debug(ERROR_EVENTS.LEDGER, `Ledger sign: ${buffers.length} chunks`)
 
         for (let i = 0; i < buffers.length; i++) {
             const isAfterSecondLast = i >= buffers.length - 1
             if (isAfterSecondLast && onIsAwaitingForSignature) onIsAwaitingForSignature()
 
             const percent = Math.round((i / buffers.length) * 100)
-            debug(`Ledger progress: ${percent}%`)
+            debug(ERROR_EVENTS.LEDGER, `Ledger progress: ${percent}%`)
             onProgressUpdate?.(percent)
 
             //this point could exit the loop way before. Here i am building the transaction data
@@ -149,14 +150,14 @@ export class VETLedgerApp {
             )
         }
 
-        debug("Ledger progress: 100%")
+        debug(ERROR_EVENTS.LEDGER, "Ledger progress: 100%")
 
         const lastResponse = responses[responses.length - 1]
         if (lastResponse.length < 65) {
             throw new Error("invalid signature")
         }
 
-        debug("Device signature received")
+        debug(ERROR_EVENTS.LEDGER, "Device signature received")
 
         return lastResponse.subarray(0, 65)
     }

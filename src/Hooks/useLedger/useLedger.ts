@@ -32,12 +32,6 @@ export const useLedger = ({
     deviceId: string
     autoConnect?: boolean
 }): UseLedgerProps => {
-    // useEffect(() => {
-    //     listen(log => {
-    //         debug("ledger:log", log)
-    //     })
-    // }, [])
-
     const mutex = useRef<Mutex>(new Mutex())
 
     const { canConnect, unsubscribe, timedOut, setCanConnect } = useLedgerSubscription({

@@ -1,4 +1,4 @@
-import { warn } from "~Utils"
+import { error } from "~Utils"
 import { encryptTransform } from "../../Services/EncryptionService/EncryptionService"
 import {
     AccountSlice,
@@ -54,8 +54,8 @@ import { ERROR_EVENTS } from "~Constants"
 export const getPersistorConfig = async (mmkv: MMKV, encryptionKey: string): Promise<PersistConfig<RootState>> => {
     let encryptor = encryptTransform({
         secretKey: encryptionKey,
-        onError: function (error) {
-            warn(ERROR_EVENTS.ENCRYPTION, error)
+        onError: function (err) {
+            error(ERROR_EVENTS.ENCRYPTION, err)
         },
     })
 

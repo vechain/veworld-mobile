@@ -6,6 +6,7 @@ import { CameraRoll } from "@react-native-camera-roll/camera-roll"
 import { AlertUtils, PlatformUtils, debug } from "~Utils"
 import { NFTMedia } from "~Model"
 import { hasAndroidPermission } from "./Helpers"
+import { ERROR_EVENTS } from "~Constants"
 
 export const useSaveMediaToPhotos = (image?: NFTMedia, nftName: string = "VeWorld NFT") => {
     const { LL } = useI18nContext()
@@ -100,7 +101,7 @@ export const useSaveMediaToPhotos = (image?: NFTMedia, nftName: string = "VeWorl
         // cancel download task when component unmount
         return () => {
             if (task) {
-                task.cancel(err => debug(err))
+                task.cancel(err => debug(ERROR_EVENTS.NFT, err))
             }
         }
     }, [task])

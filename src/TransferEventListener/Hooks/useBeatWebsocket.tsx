@@ -42,7 +42,7 @@ export const useBeatWebsocket = (currentNetworkUrl: string, onMessage: (beat: Be
 
     const onClose = useCallback(
         (ev: CloseEvent) => {
-            warn(ERROR_EVENTS.SEND, "Websocket closed", ev)
+            warn(ERROR_EVENTS.APP, "Websocket closed", ev)
 
             if (currentState === AppStateType.ACTIVE) {
                 setRetryTimeoutId(setTimeout(() => ws.current?.close(100, "Restarting websocket"), 10000))
