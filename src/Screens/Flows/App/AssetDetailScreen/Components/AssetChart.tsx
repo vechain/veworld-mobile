@@ -9,7 +9,7 @@ import {
     MOCK_LINE_CHART_DATA,
     getCoinGeckoIdBySymbol,
     marketChartTimeframes,
-    useCachedMarketChart,
+    useSmartMarketChart,
 } from "~Api/Coingecko"
 
 type Props = {
@@ -21,7 +21,7 @@ export const AssetChart = ({ token }: Props) => {
     const [selectedTimeframe, setSelectedTimeframe] = useState<number>(defaultTimeframe)
 
     const currency = useAppSelector(selectCurrency)
-    const { data: chartData, isLoading } = useCachedMarketChart({
+    const { data: chartData, isLoading } = useSmartMarketChart({
         id: getCoinGeckoIdBySymbol[token.symbol],
         vs_currency: currency,
         days: selectedTimeframe,

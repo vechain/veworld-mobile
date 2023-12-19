@@ -67,7 +67,7 @@ export const useMarketChart = ({
  * @returns  the market chart array of arrays of [timestamp, price]
  */
 
-export const useCachedMarketChart = ({
+export const useSmartMarketChart = ({
     id,
     vs_currency,
     days,
