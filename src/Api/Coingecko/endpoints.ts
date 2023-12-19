@@ -18,6 +18,64 @@ export const getCoinGeckoIdBySymbol = {
     [VTHO.symbol]: VETHOR_COINGECKO_ID,
 }
 
+export type TokenInfoMarketData = {
+    total_supply: number
+    max_supply: number
+    circulating_supply: number
+    last_updated: string
+    price_change_percentage_24h: number
+    current_price: { [key: string]: number }
+    market_cap: { [key: string]: number }
+    total_volume: { [key: string]: number }
+}
+export type TokenInfoResponse = {
+    id: string
+    symbol: string
+    name: string
+    detail_platforms: {
+        vechain: {
+            decimal_place: number
+            contract_address: string
+        }
+    }
+    image: {
+        thumb: string
+        small: string
+        large: string
+    }
+    description: { [key: string]: string }
+    links: {
+        blockchain_site: string[]
+        homepage: string[]
+    }
+    market_data: TokenInfoMarketData
+}
+
+/**
+ *  Get the token info for a given coinGeckoId, including market data
+ * @param coinGeckoId - The CoinGecko ID of the coin
+ * @returns  the token info
+ */
+export const getTokenInfo = async (coinGeckoId?: string) => {
+    try {
+        // Just for better react-query support. We'll never reach this point if used via react-query hooks
+        if (!coinGeckoId) throw new Error("CoinGecko ID is not defined")
+        const response = await axiosInstance.get<TokenInfoResponse>(`/coins/${coinGeckoId}`, {
+            params: {
+                localization: false,
+                tickers: false,
+                market_data: true,
+                community_data: false,
+                developer_data: false,
+                sparkline: false,
+            },
+        })
+        return response.data
+    } catch (e) {
+        error("getTokenInfo", e)
+        throw e
+    }
+}
 export type MarketChartResponse = {
     timestamp: number
     value: number
