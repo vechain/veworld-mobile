@@ -1,7 +1,6 @@
 import { BigNumber as BN } from "bignumber.js"
 // import { BigNumber as EtherBN } from "ethers"
 import { isEmpty } from "lodash"
-import { CurrencyExchangeRate as IRate } from "~Model"
 
 interface IBigNumberUtils {
     // utility Methods
@@ -9,8 +8,8 @@ interface IBigNumberUtils {
     decimals(decimals: number, callback?: (result: BN) => void): BigNumberUtils
     toCurrencyFormat_string(decimals: number): string
     toTokenFormat_string(decimals: number): string
-    toCurrencyConversion(balance: string, rate?: IRate, callback?: (result: BN) => void): BigNumberUtils
-    toTokenConversion(balance: string, rate?: IRate, callback?: (result: BN) => void): BigNumberUtils
+    toCurrencyConversion(balance: string, rate?: number, callback?: (result: BN) => void): BigNumberUtils
+    toTokenConversion(balance: string, rate?: number, callback?: (result: BN) => void): BigNumberUtils
     addTrailingZeros(decimals: number, callback?: (result: BN) => void): BigNumberUtils
 
     // Math Methods
@@ -169,9 +168,9 @@ class BigNumberUtils implements IBigNumberUtils {
         return _data
     }
 
-    toCurrencyConversion(balance: string, rate?: IRate, callback?: (result: BN) => void) {
+    toCurrencyConversion(balance: string, rate?: number, callback?: (result: BN) => void) {
         let _balance = !isEmpty(balance) ? balance : "0"
-        let _rate = rate?.rate ?? 1
+        let _rate = rate ?? 1
         this.data = new BN(_balance).multipliedBy(_rate)
 
         if (callback) {
@@ -181,9 +180,9 @@ class BigNumberUtils implements IBigNumberUtils {
         return this
     }
 
-    toTokenConversion(balance: string, rate?: IRate, callback?: (result: BN) => void) {
+    toTokenConversion(balance: string, rate?: number, callback?: (result: BN) => void) {
         let _balance = !isEmpty(balance) ? balance : "0"
-        let _rate = 1 / (rate?.rate ?? 1)
+        let _rate = 1 / (rate ?? 1)
         this.data = new BN(_balance).multipliedBy(_rate)
 
         if (callback) {

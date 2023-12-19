@@ -4,12 +4,12 @@ import { StyleSheet } from "react-native"
 import DropShadow from "react-native-drop-shadow"
 import { useThemedStyles } from "~Hooks"
 import { FormattingUtils } from "~Utils"
-import { COLORS, ColorThemeType } from "~Constants"
+import { COLORS, ColorThemeType, getCoinGeckoIdBySymbol } from "~Constants"
 import { BaseIcon, BaseView } from "~Components"
-import { selectCurrencyExchangeRate, useAppSelector } from "~Storage/Redux"
-import { RootState } from "~Storage/Redux/Types"
+import { selectCurrency, useAppSelector } from "~Storage/Redux"
 import { useSwappedTokens } from "./Hooks"
 import { TokenBox } from "./Components"
+import { useExchangeRate } from "~Api/Coingecko"
 
 type Props = {
     paidTokenAddress: string
@@ -30,11 +30,17 @@ export const SwapCard = memo(
 
         const { paidToken, receivedToken } = useSwappedTokens(receivedTokenAddress, paidTokenAddress)
 
-        const exchangeRatePaid = useAppSelector((state: RootState) => selectCurrencyExchangeRate(state, paidToken))
+        const currency = useAppSelector(selectCurrency)
 
-        const exchangeRateReceived = useAppSelector((state: RootState) =>
-            selectCurrencyExchangeRate(state, receivedToken),
-        )
+        const exchangeRateReceived = useExchangeRate({
+            id: getCoinGeckoIdBySymbol[receivedToken?.symbol ?? ""],
+            vs_currency: currency,
+        })
+
+        const exchangeRatePaid = useExchangeRate({
+            id: getCoinGeckoIdBySymbol[paidToken?.symbol ?? ""],
+            vs_currency: currency,
+        })
 
         const paidTokenAddressShort = useMemo(() => {
             return FormattingUtils.humanAddress(paidTokenAddress, 4, 6)
