@@ -39,7 +39,8 @@ import * as Sentry from "@sentry/react-native"
 import { InternetDownScreen } from "~Screens"
 import NetInfo from "@react-native-community/netinfo"
 import "react-native-url-polyfill/auto"
-import { QueryClient, QueryClientProvider } from "@tanstack/react-query"
+import { PersistQueryClientProvider } from "@tanstack/react-query-persist-client"
+import { clientPersister, queryClient } from "~Api/QueryProvider"
 
 const { fontFamily } = typography
 
@@ -53,21 +54,6 @@ if (__DEV__ && process.env.REACT_APP_UI_LOG === "false") {
     // hide all ui logs
     LogBox.ignoreAllLogs()
 }
-
-export const queryClient = new QueryClient({
-    defaultOptions: {
-        queries: {
-            retry: 0,
-            staleTime: 30000,
-            refetchOnWindowFocus: true,
-            refetchOnMount: true,
-            refetchOnReconnect: true,
-            refetchInterval: false,
-            refetchIntervalInBackground: false,
-            cacheTime: 60000,
-        },
-    },
-})
 
 const Main = () => {
     const { isConnected } = NetInfo.useNetInfo()
@@ -99,7 +85,11 @@ const Main = () => {
             <TranslationProvider>
                 {isConnected ? (
                     <ConnexContextProvider>
-                        <QueryClientProvider client={queryClient}>
+                        <PersistQueryClientProvider
+                            client={queryClient}
+                            persistOptions={{
+                                persister: clientPersister,
+                            }}>
                             <SafeAreaProvider>
                                 <NavigationProvider>
                                     <BottomSheetModalProvider>
@@ -110,7 +100,7 @@ const Main = () => {
                                 </NavigationProvider>
                                 <BaseToast />
                             </SafeAreaProvider>
-                        </QueryClientProvider>
+                        </PersistQueryClientProvider>
                     </ConnexContextProvider>
                 ) : (
                     <InternetDownScreen />
