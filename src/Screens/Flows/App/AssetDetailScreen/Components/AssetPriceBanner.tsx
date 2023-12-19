@@ -8,14 +8,16 @@ import { useI18nContext } from "~i18n"
 import { useLineChartDatetime, useLineChartPrice, useLineChartRelativeChange } from "../Hooks/usePrice"
 import { typography, ColorThemeType } from "~Constants"
 import { BaseAnimatedText } from "./AnimatedTextInput"
-import { selectChartDataIsLoading, useAppSelector } from "~Storage/Redux"
 import { AssetTrendBannerSkeleton } from "./AssetTrendBannerSkeleton"
 import { AssetPriceBannerSkeleton } from "./AssetPriceBannerSkeleton"
 const { ...otherTypography } = typography
 
-export const AssetPriceBanner = ({ symbol }: { symbol: string }) => {
+type Props = {
+    symbol: string
+    isChartDataLoading: boolean
+}
+export const AssetPriceBanner = ({ symbol, isChartDataLoading }: Props) => {
     const { LL } = useI18nContext()
-    const chartDataIsLoading = useAppSelector(state => selectChartDataIsLoading(symbol, state))
     const datetime = useLineChartDatetime()
     const { formatted: formattedPrice } = useLineChartPrice()
     const { value: priceChangeValue, formatted: formattedPriceChange } = useLineChartRelativeChange({})
@@ -43,7 +45,7 @@ export const AssetPriceBanner = ({ symbol }: { symbol: string }) => {
             <BaseView style={styles.textContainer} justifyContent="space-between">
                 <BaseText typographyFont="body">{LL.COMMON_PRICE()}</BaseText>
                 <BaseView flexDirection="row" alignItems="baseline">
-                    {chartDataIsLoading ? (
+                    {isChartDataLoading ? (
                         <AssetPriceBannerSkeleton symbol={symbol} />
                     ) : (
                         <BaseAnimatedText
@@ -62,7 +64,7 @@ export const AssetPriceBanner = ({ symbol }: { symbol: string }) => {
             <BaseView alignItems="flex-end" style={styles.textContainer} justifyContent="space-between">
                 <BaseAnimatedText text={datetime.formatted} style={{ color: theme.colors.text }} />
 
-                {chartDataIsLoading ? (
+                {isChartDataLoading ? (
                     <AssetTrendBannerSkeleton />
                 ) : (
                     <BaseView flexDirection="row">

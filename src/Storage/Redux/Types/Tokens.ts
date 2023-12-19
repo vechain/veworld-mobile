@@ -8,10 +8,8 @@ export type TokensState = {
             suggestedTokens: string[]
         }
     }
-    dashboardChartData: { [key: string]: number[][] }
     coinMarketInfo: { [key: string]: CoinMarketInfo }
     coinGeckoTokens: TokenInfoResponse[]
-    chartDataIsLoading: { [key: string]: boolean }
 }
 
 export type TokenInfoResponse = {

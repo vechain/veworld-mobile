@@ -17,7 +17,7 @@ export const AssetChart = ({ token }: Props) => {
     const [selectedTimeframe, setSelectedTimeframe] = useState<number>(defaultTimeframe)
 
     const currency = useAppSelector(selectCurrency)
-    const { data: chartData } = useMarketChart({
+    const { data: chartData, isLoading } = useMarketChart({
         id: getCoinGeckoIdBySymbol[token.symbol],
         vs_currency: currency,
         days: selectedTimeframe,
@@ -38,7 +38,7 @@ export const AssetChart = ({ token }: Props) => {
             <LineChart.Provider
                 data={chartData?.length ? chartData : MOCK_LINE_CHART_DATA}
                 onCurrentIndexChange={invokeHaptic}>
-                <ChartView chartData={chartData ?? MOCK_LINE_CHART_DATA} token={token} />
+                <ChartView chartData={chartData ?? MOCK_LINE_CHART_DATA} token={token} isChartDataLoading={isLoading} />
             </LineChart.Provider>
 
             <BaseSpacer height={8} />

@@ -24,13 +24,8 @@ export const initialTokenState: TokensState = {
         [NETWORK_TYPE.SOLO]: { ...emptyTokenState },
         [NETWORK_TYPE.OTHER]: { ...emptyTokenState },
     },
-    dashboardChartData: {},
     coinMarketInfo: {},
     coinGeckoTokens: [],
-    chartDataIsLoading: {
-        VET: false,
-        VTHO: false,
-    },
 }
 
 export const TokenSlice = createSlice({
@@ -57,16 +52,6 @@ export const TokenSlice = createSlice({
             const mergedTokens = mergeArrays(state.tokens[network].custom[accountAddress], newTokens, "address")
 
             state.tokens[network].custom[accountAddress] = mergedTokens
-        },
-
-        setDashboardChartData: (state, action: PayloadAction<{ symbol: string; data: number[][] }>) => {
-            const { symbol, data } = action.payload
-            state.dashboardChartData[symbol] = data
-        },
-
-        setChartDataIsLoading: (state, action: PayloadAction<{ symbol: string; isLoading: boolean }>) => {
-            const { symbol, isLoading } = action.payload
-            state.chartDataIsLoading[symbol.toUpperCase()] = isLoading
         },
 
         setCoinMarketInfo: (state, action: PayloadAction<{ data: CoinMarketInfo[] }>) => {
@@ -118,12 +103,9 @@ export const TokenSlice = createSlice({
 
 export const {
     addOrUpdateCustomTokens,
-    setDashboardChartData,
     addOfficialTokens,
-    setAssertDetailChartData,
     setCoinGeckoTokens,
     setSuggestedTokens,
     resetTokensState,
     setCoinMarketInfo,
-    setChartDataIsLoading,
 } = TokenSlice.actions
