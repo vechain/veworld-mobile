@@ -56,13 +56,6 @@ export const selectNonVechainFungibleTokens = createSelector(selectOfficialToken
     ),
 )
 
-export const selectMarketInfoFor = createSelector(
-    [(_, state) => selectTokenState(state), symbol => symbol],
-    (tokens, symbol) => {
-        return tokens.coinMarketInfo[symbol.toLowerCase()]
-    },
-)
-
 export const selectTokensWithInfo = createSelector(
     [selectCoinGeckoTokens, selectOfficialTokens, selectAllExchangeRates],
     (coinGeckoTokens, githubTokens, exchangeRates) => {

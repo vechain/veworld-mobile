@@ -1,6 +1,6 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit"
 import { FungibleToken, NETWORK_TYPE, TokenWithCompleteInfo } from "~Model"
-import { CoinMarketInfo, TokenInfoResponse, TokensState } from "../Types"
+import { TokenInfoResponse, TokensState } from "../Types"
 import { mergeArrays } from "~Utils/MergeUtils/MergeUtils"
 import { HexUtils } from "~Utils"
 import { compareListOfAddresses } from "~Utils/AddressUtils/AddressUtils"
@@ -24,7 +24,6 @@ export const initialTokenState: TokensState = {
         [NETWORK_TYPE.SOLO]: { ...emptyTokenState },
         [NETWORK_TYPE.OTHER]: { ...emptyTokenState },
     },
-    coinMarketInfo: {},
     coinGeckoTokens: [],
 }
 
@@ -52,14 +51,6 @@ export const TokenSlice = createSlice({
             const mergedTokens = mergeArrays(state.tokens[network].custom[accountAddress], newTokens, "address")
 
             state.tokens[network].custom[accountAddress] = mergedTokens
-        },
-
-        setCoinMarketInfo: (state, action: PayloadAction<{ data: CoinMarketInfo[] }>) => {
-            const { data } = action.payload
-            state.coinMarketInfo = data.reduce((acc: { [key: string]: CoinMarketInfo }, obj) => {
-                acc[obj.symbol] = obj
-                return acc
-            }, {})
         },
 
         addOfficialTokens: (
@@ -101,11 +92,5 @@ export const TokenSlice = createSlice({
     },
 })
 
-export const {
-    addOrUpdateCustomTokens,
-    addOfficialTokens,
-    setCoinGeckoTokens,
-    setSuggestedTokens,
-    resetTokensState,
-    setCoinMarketInfo,
-} = TokenSlice.actions
+export const { addOrUpdateCustomTokens, addOfficialTokens, setCoinGeckoTokens, setSuggestedTokens, resetTokensState } =
+    TokenSlice.actions

@@ -1,12 +1,25 @@
 import { useQuery } from "@tanstack/react-query"
-import { MarketChartResponse, getMarketChart } from "./endpoints"
+import { MarketChartResponse, getMarketChart, getTokenInfo } from "./endpoints"
 import BigNumber from "bignumber.js"
 
-// const EXCHANGE_RATE_SYNC_PERIOD = new BigNumber(
-//     process.env.REACT_APP_EXCHANGE_RATE_SYNC_PERIOD ?? "120000",
-// ).toNumber()
+const EXCHANGE_RATE_SYNC_PERIOD = new BigNumber(process.env.REACT_APP_EXCHANGE_RATE_SYNC_PERIOD ?? "120000").toNumber()
 const CHART_DATA_SYNC_PERIOD = new BigNumber(process.env.REACT_APP_CHART_DATA_SYNC_PERIOD ?? "300000").toNumber()
 
+const getTokenInfoQueryKey = ({ id }: { id?: string }) => ["TOKEN_INFO", id]
+
+/**
+ * Get the token info of a coin
+ * @param id  the id of the coin
+ * @returns  the token info
+ */
+export const useTokenInfo = ({ id }: { id?: string }) => {
+    return useQuery({
+        queryKey: getTokenInfoQueryKey({ id }),
+        queryFn: () => getTokenInfo(id),
+        enabled: !!id,
+        staleTime: EXCHANGE_RATE_SYNC_PERIOD,
+    })
+}
 const getMarketChartQueryKey = ({ id, vs_currency, days }: { id?: string; vs_currency: string; days: number }) => [
     "MARKET_CHART",
     id,
