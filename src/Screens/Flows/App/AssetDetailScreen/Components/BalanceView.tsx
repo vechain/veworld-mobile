@@ -40,7 +40,6 @@ export const BalanceView = ({
         return (
             <BaseView flexDirection="row">
                 <BaseText typographyFont="subTitleBold">{isBalanceVisible ? fiatBalance : "••••"}</BaseText>
-                <BaseSpacer width={4} />
                 <BaseText typographyFont="captionRegular"> {exchangeRateCurrency}</BaseText>
             </BaseView>
         )

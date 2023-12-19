@@ -7,6 +7,7 @@ import { FormattingUtils } from "~Utils"
 import { selectCurrency, selectIsTokensOwnedLoading } from "~Storage/Redux/Selectors"
 import { useAppSelector } from "~Storage/Redux"
 import { COLORS } from "~Constants"
+import { useI18nContext } from "~i18n"
 
 type Props = {
     tokenWithInfo: TokenWithCompleteInfo
@@ -16,12 +17,13 @@ type Props = {
 
 export const VechainTokenCard = memo(({ tokenWithInfo, isAnimation, isBalanceVisible }: Props) => {
     const theme = useTheme()
+    const { LL } = useI18nContext()
 
     const currency = useAppSelector(selectCurrency)
 
     const isTokensOwnedLoading = useAppSelector(selectIsTokensOwnedLoading)
 
-    const { tokenInfo, tokenInfoLoading, fiatBalance, tokenUnitBalance } = tokenWithInfo
+    const { tokenInfo, tokenInfoLoading, fiatBalance, tokenUnitBalance, exchangeRate } = tokenWithInfo
 
     const isPositive24hChange = (tokenInfo?.market_data.price_change_percentage_24h ?? 0) >= 0
     const change24h =
@@ -40,9 +42,31 @@ export const VechainTokenCard = memo(({ tokenWithInfo, isAnimation, isBalanceVis
         }
     }, [isAnimation])
 
-    const tokenValueLabelColor = theme.isDark ? COLORS.WHITE_DISABLED : COLORS.DARK_PURPLE_DISABLED
-
     const computeFonts = useMemo(() => (fiatBalance.length > 6 ? "body" : "subTitleBold"), [fiatBalance.length])
+
+    const renderFiatBalance = useMemo(() => {
+        if (isTokensOwnedLoading)
+            return (
+                <BaseView flexDirection="row" alignItems="center">
+                    <BaseSkeleton
+                        animationDirection="horizontalLeft"
+                        boneColor={theme.colors.skeletonBoneColor}
+                        highlightColor={theme.colors.skeletonHighlightColor}
+                        height={14}
+                        width={60}
+                    />
+                </BaseView>
+            )
+        if (!exchangeRate) return <BaseText typographyFont="bodyMedium">{LL.ERROR_PRICE_FEED_NOT_AVAILABLE()}</BaseText>
+        return (
+            <BaseView flexDirection="row">
+                <BaseText typographyFont={computeFonts}>{isBalanceVisible ? fiatBalance : "••••"}</BaseText>
+                <BaseText typographyFont="captionRegular"> {currency}</BaseText>
+            </BaseView>
+        )
+    }, [fiatBalance, computeFonts, exchangeRate, isBalanceVisible, isTokensOwnedLoading, LL, theme.colors, currency])
+
+    const tokenValueLabelColor = theme.isDark ? COLORS.WHITE_DISABLED : COLORS.DARK_PURPLE_DISABLED
 
     const isLoading = tokenInfoLoading || isTokensOwnedLoading
 
@@ -86,24 +110,12 @@ export const VechainTokenCard = memo(({ tokenWithInfo, isAnimation, isBalanceVis
             </BaseView>
             <Animated.View style={[animatedOpacityReverse, baseStyles.balancesContainer]}>
                 <BaseView flexDirection="row" alignItems="center">
-                    {isLoading ? (
-                        <BaseView flexDirection="row" alignItems="center">
-                            <BaseSkeleton
-                                containerStyle={baseStyles.skeletonBalanceValue}
-                                animationDirection="horizontalLeft"
-                                boneColor={theme.colors.skeletonBoneColor}
-                                highlightColor={theme.colors.skeletonHighlightColor}
-                                height={18}
-                            />
-                        </BaseView>
-                    ) : (
-                        <BaseText typographyFont={computeFonts}>{isBalanceVisible ? fiatBalance : "••••"}</BaseText>
-                    )}
-                    <BaseText typographyFont="captionRegular"> {currency}</BaseText>
+                    {renderFiatBalance}
                 </BaseView>
 
                 <BaseSpacer height={3} />
 
+                {/* //TODO: add skeleton */}
                 <BaseText
                     typographyFont="captionBold"
                     color={isPositive24hChange ? theme.colors.success : theme.colors.danger}>
