@@ -5,8 +5,6 @@ import {
     updateAccountBalances,
     resetTokenBalances,
     updateTokenPriceData,
-    fetchExchangeRates,
-    selectCoinGeckoTokens,
     selectSelectedAccount,
     updateSuggestedTokens,
     selectVisibleBalances,
@@ -17,12 +15,6 @@ import {
 } from "~Storage/Redux"
 import { useThor } from "~Components"
 import { useCallback, useEffect } from "react"
-import BigNumber from "bignumber.js"
-
-// If the env variable isn't set, use the default
-const EXCHANGE_RATE_SYNC_PERIOD = new BigNumber(
-    process.env.REACT_APP_EXCHANGE_RATE_SYNC_PERIOD ?? "120000",
-).toNumber()
 
 /**
  * This hook is responsible for keeping the available tokens, balances and exchange rates data up to date.
@@ -41,8 +33,6 @@ export const useTokenBalances = () => {
     const balances = useAppSelector(selectVisibleBalances)
 
     const thorClient = useThor()
-
-    const coinGeckoTokens = useAppSelector(selectCoinGeckoTokens)
 
     const updateBalances = useCallback(async () => {
         // Update balances
@@ -141,23 +131,6 @@ export const useTokenBalances = () => {
     useEffect(() => {
         dispatch(updateTokenPriceData())
     }, [dispatch])
-
-    /**
-     * keeps exchange rates up to date
-     */
-    useEffect(() => {
-        const updateVechainExchangeRates = () => {
-            dispatch(fetchExchangeRates({ coinGeckoTokens }))
-        }
-
-        updateVechainExchangeRates()
-
-        const interval = setInterval(
-            updateVechainExchangeRates,
-            EXCHANGE_RATE_SYNC_PERIOD,
-        )
-        return () => clearInterval(interval)
-    }, [dispatch, coinGeckoTokens])
 
     return {
         updateBalances,

@@ -7,6 +7,12 @@ import {
     getMarketChart,
     getTokenInfo,
 } from "./endpoints"
+import BigNumber from "bignumber.js"
+
+// If the env variable isn't set, use the default
+const EXCHANGE_RATE_SYNC_PERIOD = new BigNumber(
+    process.env.REACT_APP_EXCHANGE_RATE_SYNC_PERIOD ?? "120000",
+).toNumber()
 
 const getCoingeckoVechainTokenListQueryKey = () => [
     "COINGECKO_VECHAIN_TOKEN_LIST",
@@ -36,7 +42,7 @@ export const useTokenInfo = ({ id }: { id?: string }) => {
         queryKey: getTokenInfoQueryKey({ id }),
         queryFn: () => getTokenInfo(id),
         enabled: !!id,
-        staleTime: 1000 * 60 * 2,
+        staleTime: EXCHANGE_RATE_SYNC_PERIOD,
     })
 }
 
@@ -124,7 +130,7 @@ export const useExchangeRate = ({
         queryKey: getExchangeRateQueryKey({ id, vs_currency }),
         queryFn: () => tokenInfo?.market_data.current_price[currency],
         enabled: !!tokenInfo,
-        staleTime: 1000 * 60 * 2,
+        staleTime: EXCHANGE_RATE_SYNC_PERIOD,
     })
 }
 
