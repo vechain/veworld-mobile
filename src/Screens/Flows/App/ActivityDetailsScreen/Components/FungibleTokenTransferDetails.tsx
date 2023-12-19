@@ -44,7 +44,7 @@ export const FungibleTokenTransferDetails: React.FC<Props> = memo(({ activity, t
     }, [activity.amount, decimals, token])
 
     const { data: exchangeRate } = useExchangeRate({
-        id: getCoinGeckoIdBySymbol[symbol ?? ""],
+        id: getCoinGeckoIdBySymbol[symbol ?? token?.symbol ?? ""],
         vs_currency: currency,
     })
 
