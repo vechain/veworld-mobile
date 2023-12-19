@@ -27,45 +27,6 @@ export const selectCustomTokens = createSelector(
     },
 )
 
-const DEFAULT_CHART_DATA = [
-    { timestamp: 0, value: 1 },
-    { timestamp: 1, value: 1 },
-    { timestamp: 2, value: 1 },
-    { timestamp: 3, value: 1 },
-    { timestamp: 4, value: 1 },
-    { timestamp: 5, value: 1 },
-    { timestamp: 6, value: 1 },
-    { timestamp: 7, value: 1 },
-    { timestamp: 8, value: 1 },
-    { timestamp: 9, value: 1 },
-    { timestamp: 10, value: 1 },
-    { timestamp: 11, value: 1 },
-    { timestamp: 12, value: 1 },
-]
-
-export const selectDashboardChartData = createSelector(
-    [(_, state) => selectTokenState(state), symbol => symbol],
-    (tokens, symbol) =>
-        tokens.dashboardChartData?.[symbol]?.map(el => ({
-            timestamp: el[0],
-            value: el[1],
-        })) || DEFAULT_CHART_DATA,
-)
-
-export const selectChartDataIsLoading = createSelector(
-    [(_, state) => selectTokenState(state), (symbol: string) => symbol],
-    (tokens, symbol) => tokens.chartDataIsLoading?.[symbol] ?? false,
-)
-
-export const selectAssetDetailChartData = createSelector(
-    [(_, state) => selectTokenState(state), symbol => symbol],
-    (tokens, symbol) =>
-        tokens.assetDetailChartData?.[symbol]?.map(el => ({
-            timestamp: el[0],
-            value: el[1],
-        })),
-)
-
 export const selectCoinGeckoTokens = createSelector(selectTokenState, state => state.coinGeckoTokens)
 
 export const selectOfficialTokens = createSelector(selectTokensForNetwork, state =>
@@ -93,13 +54,6 @@ export const selectNonVechainFungibleTokens = createSelector(selectOfficialToken
         (token: FungibleToken) =>
             !compareAddresses(token.address, VET.address) && !compareAddresses(token.address, VTHO.address),
     ),
-)
-
-export const selectMarketInfoFor = createSelector(
-    [(_, state) => selectTokenState(state), symbol => symbol],
-    (tokens, symbol) => {
-        return tokens.coinMarketInfo[symbol.toLowerCase()]
-    },
 )
 
 export const selectTokensWithInfo = createSelector(

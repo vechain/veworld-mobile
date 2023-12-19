@@ -1,6 +1,6 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit"
 import { FungibleToken, NETWORK_TYPE, TokenWithCompleteInfo } from "~Model"
-import { CoinMarketInfo, TokenInfoResponse, TokensState } from "../Types"
+import { TokenInfoResponse, TokensState } from "../Types"
 import { mergeArrays } from "~Utils/MergeUtils/MergeUtils"
 import { HexUtils } from "~Utils"
 import { compareListOfAddresses } from "~Utils/AddressUtils/AddressUtils"
@@ -24,14 +24,7 @@ export const initialTokenState: TokensState = {
         [NETWORK_TYPE.SOLO]: { ...emptyTokenState },
         [NETWORK_TYPE.OTHER]: { ...emptyTokenState },
     },
-    dashboardChartData: {},
-    assetDetailChartData: {},
-    coinMarketInfo: {},
     coinGeckoTokens: [],
-    chartDataIsLoading: {
-        VET: false,
-        VTHO: false,
-    },
 }
 
 export const TokenSlice = createSlice({
@@ -58,29 +51,6 @@ export const TokenSlice = createSlice({
             const mergedTokens = mergeArrays(state.tokens[network].custom[accountAddress], newTokens, "address")
 
             state.tokens[network].custom[accountAddress] = mergedTokens
-        },
-
-        setDashboardChartData: (state, action: PayloadAction<{ symbol: string; data: number[][] }>) => {
-            const { symbol, data } = action.payload
-            state.dashboardChartData[symbol] = data
-        },
-
-        setAssertDetailChartData: (state, action: PayloadAction<{ symbol: string; data: number[][] }>) => {
-            const { symbol, data } = action.payload
-            state.assetDetailChartData[symbol] = data
-        },
-
-        setChartDataIsLoading: (state, action: PayloadAction<{ symbol: string; isLoading: boolean }>) => {
-            const { symbol, isLoading } = action.payload
-            state.chartDataIsLoading[symbol.toUpperCase()] = isLoading
-        },
-
-        setCoinMarketInfo: (state, action: PayloadAction<{ data: CoinMarketInfo[] }>) => {
-            const { data } = action.payload
-            state.coinMarketInfo = data.reduce((acc: { [key: string]: CoinMarketInfo }, obj) => {
-                acc[obj.symbol] = obj
-                return acc
-            }, {})
         },
 
         addOfficialTokens: (
@@ -122,14 +92,5 @@ export const TokenSlice = createSlice({
     },
 })
 
-export const {
-    addOrUpdateCustomTokens,
-    setDashboardChartData,
-    addOfficialTokens,
-    setAssertDetailChartData,
-    setCoinGeckoTokens,
-    setSuggestedTokens,
-    resetTokensState,
-    setCoinMarketInfo,
-    setChartDataIsLoading,
-} = TokenSlice.actions
+export const { addOrUpdateCustomTokens, addOfficialTokens, setCoinGeckoTokens, setSuggestedTokens, resetTokensState } =
+    TokenSlice.actions
