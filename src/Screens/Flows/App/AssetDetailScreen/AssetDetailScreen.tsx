@@ -20,6 +20,7 @@ import { striptags } from "striptags"
 import { selectBalanceVisible, selectSendableTokensWithBalance, useAppSelector } from "~Storage/Redux"
 import { ScrollView } from "react-native-gesture-handler"
 import { StyleSheet } from "react-native"
+import { getCoinGeckoIdBySymbol, useTokenInfo } from "~Api/Coingecko"
 
 type Props = NativeStackScreenProps<RootStackParamListHome, Routes.TOKEN_DETAILS>
 
@@ -27,27 +28,38 @@ export const AssetDetailScreen = ({ route }: Props) => {
     const token = route.params.token
     const { styles, theme } = useThemedStyles(baseStyles)
     const nav = useNavigation()
-    const { LL } = useI18nContext()
+    const { LL, locale } = useI18nContext()
 
     const { ref: QRCodeBottomSheetRef, onOpen: openQRCodeSheet } = useBottomSheetModal()
 
     const isBalanceVisible = useAppSelector(selectBalanceVisible)
 
     const tokens = useAppSelector(selectSendableTokensWithBalance)
-    const foundToken = tokens.filter(
+    const foundToken = tokens.find(
         t =>
             t.name?.toLowerCase().includes(token.name.toLowerCase()) ||
             t.symbol?.toLowerCase().includes(token.symbol.toLowerCase()),
     )
+
+    const { data: tokenInfo } = useTokenInfo({
+        id: getCoinGeckoIdBySymbol[foundToken?.symbol ?? ""],
+    })
+
+    // render description based on locale. NB: at the moment only EN is supported
+    const description = useMemo(() => {
+        if (!tokenInfo?.description) return ""
+
+        return tokenInfo.description[locale] ?? tokenInfo.description.en
+    }, [tokenInfo?.description, locale])
 
     const Actions: FastAction[] = useMemo(
         () => [
             {
                 name: LL.BTN_SEND(),
                 action: () => {
-                    if (foundToken.length) {
+                    if (foundToken) {
                         nav.navigate(Routes.SELECT_AMOUNT_SEND, {
-                            token: foundToken[0],
+                            token: foundToken,
                             initialRoute: Routes.HOME,
                         })
                     } else {
@@ -99,7 +111,8 @@ export const AssetDetailScreen = ({ route }: Props) => {
 
                         <BaseSpacer height={24} />
 
-                        {token.desc && (
+                        {/* TODO: handle loading/skeleton */}
+                        {!!description && (
                             <>
                                 <BaseText
                                     typographyFont="bodyBold"
@@ -111,7 +124,7 @@ export const AssetDetailScreen = ({ route }: Props) => {
                                 </BaseText>
 
                                 <BaseText mb={25}>
-                                    {striptags(token.desc.trim(), {
+                                    {striptags(description.trim(), {
                                         allowedTags: new Set(["strong"]),
                                     })}
                                 </BaseText>
