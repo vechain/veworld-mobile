@@ -2,7 +2,6 @@ import { Dispatch } from "@reduxjs/toolkit"
 import axios from "axios"
 import {
     COINGECKO_LIST,
-    COINGECKO_MARKET_CHART_ENDPOINT,
     COINGECKO_MARKET_INFO_ENDPOINT,
     COINGECKO_TOKEN_ENDPOINT,
     EXCHANGE_CLIENT_AXIOS_OPTS,
@@ -12,81 +11,12 @@ import {
 } from "~Constants"
 import { debug, error, TokenUtils } from "~Utils"
 import { FungibleToken, Network } from "~Model"
-import { selectCoinGeckoTokens, selectCurrency } from "../Selectors"
-import {
-    addOfficialTokens,
-    setAssertDetailChartData,
-    setChartDataIsLoading,
-    setCoinGeckoTokens,
-    setCoinMarketInfo,
-    setDashboardChartData,
-    setSuggestedTokens,
-} from "../Slices"
+import { selectCurrency } from "../Selectors"
+import { addOfficialTokens, setCoinGeckoTokens, setCoinMarketInfo, setSuggestedTokens } from "../Slices"
 import { AppThunkDispatch, MarketInfoResponse, RootState, TokenInfoResponse } from "../Types"
 import { fetchOfficialTokensOwned, getTokensFromGithub } from "~Networking"
 
 const allSettled = require("promise.allsettled")
-
-type CoinMarketChartResponse = {
-    prices: number[][]
-}
-
-export const fetchChartData =
-    ({
-        symbol,
-        days,
-        interval,
-        isFixedInterval = true,
-    }: {
-        symbol: string
-        days: string | number
-        interval: string
-        isFixedInterval?: boolean
-    }) =>
-    async (dispatch: Dispatch, getState: () => RootState) => {
-        const currency = selectCurrency(getState())
-        const coin = getCoinGeckoIdBySymbol[symbol]
-        const coinGeckoTokens = selectCoinGeckoTokens(getState())
-        const foundCoin = coinGeckoTokens.find(t => t.symbol.toLowerCase() === symbol.toLowerCase())
-
-        dispatch(setChartDataIsLoading({ symbol, isLoading: true }))
-
-        try {
-            const pricesResponse = await axios.get<CoinMarketChartResponse>(
-                COINGECKO_MARKET_CHART_ENDPOINT(foundCoin ? foundCoin?.id : coin),
-                {
-                    ...EXCHANGE_CLIENT_AXIOS_OPTS,
-                    params: {
-                        days,
-                        interval,
-                        vs_currency: currency,
-                    },
-                },
-            )
-
-            const prices = pricesResponse.data.prices
-            if (isFixedInterval) {
-                dispatch(setDashboardChartData({ symbol, data: prices }))
-            } else {
-                dispatch(setAssertDetailChartData({ symbol, data: prices }))
-            }
-
-            // this will run only the first time ever
-            if (!coinGeckoTokens.length) {
-                dispatch(setAssertDetailChartData({ symbol, data: prices }))
-            }
-
-            // timeout to prevent flickering on the component
-            setTimeout(() => {
-                dispatch(setChartDataIsLoading({ symbol, isLoading: false }))
-            }, 200)
-        } catch (e) {
-            setTimeout(() => {
-                dispatch(setChartDataIsLoading({ symbol, isLoading: false }))
-            }, 200)
-            error("fetchChartData", e)
-        }
-    }
 
 type FetchTokensResponse = {
     id: string

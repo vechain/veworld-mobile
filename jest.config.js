@@ -30,6 +30,7 @@ module.exports = {
             ")",
     ],
     moduleNameMapper: {
+        "^~Api(.*)": ["<rootDir>/src/Api$1"],
         "^~Storage(.*)": ["<rootDir>/src/Storage$1"],
         "^~Model(.*)": ["<rootDir>/src/Model$1"],
         "^~Services(.*)": ["<rootDir>/src/Services$1"],

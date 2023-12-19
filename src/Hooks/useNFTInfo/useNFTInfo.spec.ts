@@ -29,13 +29,17 @@ jest.mock("~Utils/Logger/Logger", () => ({
     error: jest.fn(),
 }))
 
-jest.mock("axios", () => ({
-    head: jest.fn().mockResolvedValue({
-        headers: {
-            "content-type": "image/jpg",
-        },
-    }),
-}))
+jest.mock("axios", () => {
+    const original = jest.requireActual("axios") // Step 2.
+    return {
+        ...original,
+        head: jest.fn().mockResolvedValue({
+            headers: {
+                "content-type": "image/jpg",
+            },
+        }),
+    }
+})
 
 describe("useNFTInfo", () => {
     afterEach(() => {
