@@ -1,0 +1,219 @@
+name: Run E2E Tests
+
+on:
+    workflow_call:
+        inputs:
+            platform:
+                description: 'The platform to run the tests on'
+                required: true
+                type: string
+                default: ios
+            parallel:
+                description: 'The number of parallel tests to run'
+                required: false
+                type: number
+                default: 1
+
+env:
+    IOS_CONFIGURATION: ios.sim.debug_xcode_14.2
+    ANDROID_CONFIGURATION: android.emu.debug.31
+    ANDROID_AVD_NAME: Pixel_6_Pro_API_31
+
+jobs:
+    run-e2e-tests:
+        runs-on: macos-latest-xl
+        steps:
+
+            # Checkout repository
+            - name: Checkout repository
+              uses: actions/checkout@v3
+
+            # Setup Node
+            - name: Setup Node
+              uses: actions/setup-node@v3
+              with:
+                  node-version-file: .nvmrc
+                  cache: "yarn"
+            
+            - name: Install & Patch packages
+              run: yarn install --frozen-lockfile --network-timeout 300000
+
+            # Setup Java for Android
+            - name: Android - Setup Java
+              if: ${{ inputs.platform == 'android' }}
+              uses: actions/setup-java@v3
+              with:
+                  cache: gradle
+                  distribution: "zulu"
+                  java-version: "11"
+        
+            # Install Homebrew and applesimutils for iOS
+            - name: iOS - Install macOS dependencies
+              if: ${{ inputs.platform == 'ios' }}
+              run: |
+                brew tap wix/brew
+                brew install applesimutils
+              env:
+                HOMEBREW_NO_AUTO_UPDATE: 1
+                HOMEBREW_NO_INSTALL_CLEANUP: 1
+
+            # Install CocoaPods for iOS
+            - name: iOS - Install CocoaPods
+              if: ${{ inputs.platform == 'ios' }}
+              run: npx pod-install
+         
+            # Setup Ruby for iOS
+            - name: iOS - Setup Ruby
+              if: ${{ inputs.platform == 'ios' }}
+              uses: ruby/setup-ruby@v1
+              with:
+                bundler-cache: true
+
+            # Install Detox CLI
+            - name: Setup Detox
+              run: yarn detox clean-framework-cache && yarn detox build-framework-cache && yarn detox reset-lock-file
+
+            # Install sentry properties for android
+            - name: Android - Sentry properties
+              if: ${{ inputs.platform == 'android' }}
+              uses: mobiledevops/secret-to-file-action@v1
+              with:
+                base64-encoded-secret: ${{ secrets.ANDROID_SENTRY_PROPERTIES }}
+                filename: "sentry.properties"
+                is-executable: false
+                working-directory: "./android"
+        
+            # Install sentry properties for iOS
+            - name: iOS - Sentry properties
+              if: ${{ inputs.platform == 'ios' }}
+              uses: mobiledevops/secret-to-file-action@v1
+              with:
+                base64-encoded-secret: ${{ secrets.SENTRY_PROPERTIES }}
+                filename: "sentry.properties"
+                is-executable: false
+                working-directory: "./ios"
+        
+            # Install keystore properties for Android
+            - name: Android - Keystore properties
+              if: ${{ inputs.platform == 'android' }}
+              uses: mobiledevops/secret-to-file-action@v1
+              with:
+                base64-encoded-secret: ${{ secrets.ANDROID_KEYSTORE_PROPERTIES }}
+                filename: "keystore.properties"
+                is-executable: false
+                working-directory: "./android"
+        
+            # Start Metro Bundler
+            - name: Start Metro Bundler
+              run: REACT_APP_UI_LOG=false yarn react-native start &> metro-bundler.log &
+
+            # Build iOS app
+            - name: iOS - Detox build
+              if: ${{ inputs.platform == 'ios' }}
+              id: build_app_ios
+              timeout-minutes: 100
+              run: SKIP_SENTRY=true yarn detox build --configuration ${{ env.IOS_CONFIGURATION }}
+
+            # Build Android app
+            - name: Android - Detox build
+              if: ${{ inputs.platform == 'android' }}
+              id: build_app_android
+              timeout-minutes: 100
+              run: yarn detox build --configuration ${{ env.ANDROID_CONFIGURATION }}
+
+            # Run Android tests
+            - name: Android - Detox test
+              if: ${{ inputs.platform == 'android' }}
+              id: test_app_android
+              uses: reactivecircus/android-emulator-runner@v2
+              timeout-minutes: 100
+              with:
+                  api-level: 31
+                  arch: x86_64
+                  force-avd-creation: false
+                  disable-animations: true
+                  avd-name: ${{ env.ANDROID_AVD_NAME }}
+                  script: yarn detox test --configuration ${{ env.ANDROID_CONFIGURATION }} --headless --record-logs all --take-screenshots failing --tags "not @broken and not @notAndroid" --parallel ${{ inputs.parallel }} --publish &> cucumber.log
+
+            # Run iOS tests
+            - name: iOS - Detox test
+              id: test_app_ios
+              timeout-minutes: 100
+              run: yarn detox test --configuration ${{ env.IOS_CONFIGURATION }} --cleanup --headless --record-logs all --take-screenshots failing --retry 1 --tags "not @broken" --parallel ${{ inputs.parallel }} --publish &> cucumber.log
+
+            # Upload test artifacts from Detox
+            - name: Upload detox artifacts
+              if: always() && (steps.test_app_ios.outcome == 'failure' || steps.test_app_android.outcome == 'failure')
+              uses: actions/upload-artifact@v3
+              with:
+                name: detox-fail-artifacts
+                path: artifacts
+
+            # Upload cucumber artifacts
+            - name: Upload cucumber artifacts
+              if: always() && (steps.test_app_ios.outcome == 'failure' || steps.test_app_android.outcome == 'failure')
+              uses: actions/upload-artifact@v3
+              with:
+                name: cucumber-fail-artifacts
+                path: |
+                    cucumber.log
+                    cucumber-report.html
+            
+            # Upload Metro Bundler logs
+            - name: Upload Metro Bundler logs
+              if: always() && (steps.build_app_ios.outcome == 'failure' || steps.build_app_android.outcome == 'failure')
+              uses: actions/upload-artifact@v2
+              with:
+                name: metro-bundler-logs
+                path: metro-bundler.log
+
+            # Get cucumber published url
+            - name: Parse cucumber report URL
+              id: parse_report_url
+              if: always() && (steps.test_app_ios.outcome != 'skipped' || steps.test_app_android.outcome != 'skipped')
+              run: |
+                echo report_url=$(cat cucumber.log | grep -Eo "https://reports.cucumber.io/reports/[a-zA-Z0-9-]+") >> "$GITHUB_OUTPUT"
+
+            # Combine build statuses
+            - name: Combine build statuses
+              if: always()
+              id: combine_build_statuses
+              run: |
+                if [[ "${{ inputs.platform }}" == "ios" ]]
+                then
+                  echo "STATUS=${{ steps.build_app_ios.outcome }}" >> "$GITHUB_OUTPUT"
+                else
+                  echo "STATUS=${{ steps.build_app_android.outcome }}" >> "$GITHUB_OUTPUT"
+                fi
+            
+            # Combine test statuses
+            - name: Combine test statuses
+              if: always()
+              id: combine_test_statuses
+              run: |
+                if [[ "${{ inputs.platform }}" == "ios" ]]
+                then
+                  echo "STATUS=${{ steps.test_app_ios.outcome }}" >> "$GITHUB_OUTPUT"
+                else
+                  echo "STATUS=${{ steps.test_app_android.outcome }}" >> "$GITHUB_OUTPUT"
+                fi
+            
+            # Post results to slack
+            - name: Post to a Slack channel
+              if: always()
+              uses: slackapi/slack-github-action@v1.24.0
+              with:
+                # Slack channel id, channel name, or user id to post message.
+                # See also: https://api.slack.com/methods/chat.postMessage#channels
+                # You can pass in multiple channels to post to by providing a comma-delimited list of channel IDs.
+                channel-id: ${{ secrets.SLACK_VEWORLD_CHANNEL_ID }}
+                slack-message: |
+                    🖥️ Platform: *${{ inputs.platform }}*
+                    🧱 Build Status: *${{ steps.combine_build_statuses.outputs.STATUS }}*
+                    🚀 E2E Status: *${{ steps.combine_test_statuses.outputs.STATUS }}*
+                    🌿 Branch: *${{ github.ref_name }}*
+                    🔨 Commit: *${{ github.actor }}* [${{ github.sha.short }}](${{ github.event.head_commit.url }})
+                    🔗 Run: ${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}
+                    📈 Cucumber Report: ${{ steps.parse_report_url.outputs.report_url || 'Not found.' }}
+              env:
+                SLACK_BOT_TOKEN: ${{ secrets.SLACK_VEWORLD_BOT_TOKEN }}

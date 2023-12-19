@@ -34,19 +34,25 @@ Before({ timeout: 600 * 1000 }, async (message: ITestCaseHookParameter) => {
  * After each scenario
  * - reset the app to the initial state - can be skipped with @noReset tag
  * - terminate the app
+ * - the detox test is marked as passed or failed
+ * - a failed app reset is marked as failed test --> this is so screenshots can be kept
  */
 After({ timeout: 600 * 1000 }, async function (message: ITestCaseHookParameter) {
     const { pickle, result } = message
+    const status = result?.status === "PASSED" ? "passed" : "failed"
+    let resetSuccessful = false
     try {
         const noResetTags = new PickleTagFilter("@noReset")
         if (!noResetTags.matchesAllTagExpressions(pickle)) {
             await resetApp(this.pin)
         }
+        resetSuccessful = true
     } finally {
+        const finalStatus = resetSuccessful ? status : "failed"
         await detox.onTestDone({
             title: pickle.uri,
             fullName: pickle.name,
-            status: result ? "passed" : "failed",
+            status: finalStatus,
         })
         await device.terminateApp()
     }
