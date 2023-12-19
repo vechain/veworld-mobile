@@ -34,8 +34,8 @@ import { selectAnalyticsTrackingEnabled, selectSentryTrackingEnabled, useAppSele
 import * as Sentry from "@sentry/react-native"
 import "react-native-url-polyfill/auto"
 import { InAppBrowserProvider } from "~Components/Providers/InAppBrowserProvider"
-import { QueryClientProvider } from "@tanstack/react-query"
-import { queryClient } from "~Api/QueryProvider"
+import { PersistQueryClientProvider } from "@tanstack/react-query-persist-client"
+import { clientPersister, queryClient } from "~Api/QueryProvider"
 
 const { fontFamily } = typography
 
@@ -77,7 +77,11 @@ const Main = () => {
     return (
         <GestureHandlerRootView style={{ flex: 1 }}>
             <ConnexContextProvider>
-                <QueryClientProvider client={queryClient}>
+                <PersistQueryClientProvider
+                    client={queryClient}
+                    persistOptions={{
+                        persister: clientPersister,
+                    }}>
                     <NavigationProvider>
                         <WalletConnectContextProvider>
                             <InAppBrowserProvider>
@@ -88,7 +92,7 @@ const Main = () => {
                         </WalletConnectContextProvider>
                     </NavigationProvider>
                     <BaseToast />
-                </QueryClientProvider>
+                </PersistQueryClientProvider>
             </ConnexContextProvider>
         </GestureHandlerRootView>
     )
