@@ -24,11 +24,6 @@ export const selectCustomTokens = createSelector(
     },
 )
 
-export const selectCoinGeckoTokens = createSelector(
-    selectTokenState,
-    state => state.coinGeckoTokens,
-)
-
 export const selectOfficialTokens = createSelector(
     selectTokensForNetwork,
     state =>

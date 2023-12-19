@@ -4,7 +4,6 @@ import {
     selectSelectedNetwork,
     updateAccountBalances,
     resetTokenBalances,
-    updateTokenPriceData,
     selectSelectedAccount,
     updateSuggestedTokens,
     selectVisibleBalances,
@@ -124,13 +123,6 @@ export const useTokenBalances = () => {
         dispatch,
         selectedAccount.address,
     ])
-
-    /**
-     * update token price data
-     */
-    useEffect(() => {
-        dispatch(updateTokenPriceData())
-    }, [dispatch])
 
     return {
         updateBalances,

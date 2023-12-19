@@ -1,6 +1,6 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit"
 import { FungibleToken, NETWORK_TYPE, TokenWithCompleteInfo } from "~Model"
-import { TokenInfoResponse, TokensState } from "../Types"
+import { TokensState } from "../Types"
 import { mergeArrays } from "~Utils/MergeUtils/MergeUtils"
 import { HexUtils } from "~Utils"
 import { compareListOfAddresses } from "~Utils/AddressUtils/AddressUtils"
@@ -24,7 +24,6 @@ export const initialTokenState: TokensState = {
         [NETWORK_TYPE.SOLO]: { ...emptyTokenState },
         [NETWORK_TYPE.OTHER]: { ...emptyTokenState },
     },
-    coinGeckoTokens: [],
 }
 
 export const TokenSlice = createSlice({
@@ -99,13 +98,6 @@ export const TokenSlice = createSlice({
                 state.tokens[network].suggestedTokens = normalisedTokens
         },
 
-        setCoinGeckoTokens: (
-            state,
-            action: PayloadAction<TokenInfoResponse[]>,
-        ) => {
-            state.coinGeckoTokens = action.payload
-        },
-
         resetTokensState: () => initialTokenState,
     },
 })
@@ -113,7 +105,6 @@ export const TokenSlice = createSlice({
 export const {
     addOrUpdateCustomTokens,
     addOfficialTokens,
-    setCoinGeckoTokens,
     setSuggestedTokens,
     resetTokensState,
 } = TokenSlice.actions
