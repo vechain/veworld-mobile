@@ -8,13 +8,7 @@ export type MarketInfo = {
     circulatingSupply: number
 }
 
-export const useFormattedMarketInfo = ({
-    marketInfo,
-    tokenSymbol,
-}: {
-    marketInfo?: MarketInfo
-    tokenSymbol: string
-}) => {
+export const useFormattedMarketInfo = ({ marketInfo }: { marketInfo?: MarketInfo }) => {
     const marketCap = useMemo(() => {
         return FormattingUtils.humanNumber(marketInfo?.marketCap ?? 0)
     }, [marketInfo?.marketCap])
@@ -32,9 +26,9 @@ export const useFormattedMarketInfo = ({
     }, [marketInfo?.circulatingSupply])
 
     return {
-        marketCap: marketCap === "< 0.01 USD" ? "N/A" : marketCap,
-        totalSupply: totalSupply === `< 0.01 ${tokenSymbol}` ? "N/A" : totalSupply,
-        totalVolume: totalVolume === "< 0.01 USD" ? "N/A" : totalVolume,
-        circulatingSupply: circulatingSupply === `< 0.01 ${tokenSymbol}` ? "N/A" : circulatingSupply,
+        marketCap: marketCap === "< 0.01" ? null : marketCap,
+        totalSupply: totalSupply === "< 0.01" ? null : totalSupply,
+        totalVolume: totalVolume === "< 0.01" ? null : totalVolume,
+        circulatingSupply: circulatingSupply === "< 0.01" ? null : circulatingSupply,
     }
 }

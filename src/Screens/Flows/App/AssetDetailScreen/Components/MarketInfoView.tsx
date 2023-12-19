@@ -30,7 +30,6 @@ export const MarketInfoView = ({ tokenSymbol }: { tokenSymbol: string }) => {
 
     const { marketCap, totalSupply, totalVolume, circulatingSupply } = useFormattedMarketInfo({
         marketInfo,
-        tokenSymbol,
     })
 
     return (
