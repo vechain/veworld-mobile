@@ -15,7 +15,7 @@ type TokenChartData = {
 }
 
 type Props = {
-    chartData: TokenChartData[]
+    chartData?: TokenChartData[]
     isChartDataLoading: boolean
     token: TokenWithCompleteInfo
 }
