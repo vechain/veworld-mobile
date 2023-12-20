@@ -25,6 +25,7 @@ const defaultTimeframe = marketChartTimeframes[0].value
 export const AssetChart = ({ token }: Props) => {
     const queryClient = useQueryClient()
     const [selectedTimeframe, setSelectedTimeframe] = useState<number>(defaultTimeframe)
+    const [fakeLoading, setFakeLoading] = useState<boolean>(false)
 
     const currency = useAppSelector(selectCurrency)
     const { data: chartData, isLoading } = useSmartMarketChart({
@@ -38,11 +39,16 @@ export const AssetChart = ({ token }: Props) => {
     }, [])
 
     const onTimelineButtonPress = useCallback((button: string) => {
+        setFakeLoading(true)
         const foundData = marketChartTimeframes.find(o => o.label === button)
         setSelectedTimeframe(foundData?.value ?? defaultTimeframe)
+        //to avoid flickerings and errors in AssetPriceBanner, which is using the chartData
+        setTimeout(() => {
+            setFakeLoading(false)
+        }, 400)
     }, [])
 
-    const isLoaded = chartData && !isLoading
+    const isLoaded = chartData && !isLoading && !fakeLoading
 
     //prefetch the other timeframes (locally derived) when the timeframe changes
     //prefetching does nothing if the data is already cached
