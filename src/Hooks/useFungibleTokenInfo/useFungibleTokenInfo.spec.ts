@@ -43,16 +43,14 @@ describe("useFungibleTokenInfo", () => {
         expect(getTokenName).toHaveBeenCalledWith(tokenAddress, thor)
     })
 
-    it("should not fetch token symbol and decimals if token address is VET", () => {
+    it("should return vet token when token is VET", () => {
         const tokenAddress = VET.address
 
         const { result } = renderHook(() => useFungibleTokenInfo(tokenAddress))
 
-        expect(result.current.symbol).toBeUndefined()
-        expect(result.current.decimals).toBeUndefined()
-        expect(getTokenSymbol).not.toHaveBeenCalled()
-        expect(getTokenDecimals).not.toHaveBeenCalled()
-        expect(getTokenName).not.toHaveBeenCalled()
+        expect(result.current.address).toEqual(VET.address)
+        expect(result.current.symbol).toEqual(VET.symbol)
+        expect(result.current.decimals).toEqual(VET.decimals)
     })
 
     it("should handle error when fetching token info", async () => {

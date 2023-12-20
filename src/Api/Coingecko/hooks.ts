@@ -1,6 +1,9 @@
 import { useQuery } from "@tanstack/react-query"
-import { MarketChartResponse, VETHOR_COINGECKO_ID, VET_COINGECKO_ID, getMarketChart, getTokenInfo } from "./endpoints"
+import { MarketChartResponse, getMarketChart, getSmartMarketChart, getTokenInfo } from "./endpoints"
 import BigNumber from "bignumber.js"
+import { max } from "lodash"
+import { marketChartTimeframes } from "./constants"
+import { VETHOR_COINGECKO_ID, VET_COINGECKO_ID } from "~Constants"
 
 const EXCHANGE_RATE_SYNC_PERIOD = new BigNumber(process.env.REACT_APP_EXCHANGE_RATE_SYNC_PERIOD ?? "120000").toNumber()
 const CHART_DATA_SYNC_PERIOD = new BigNumber(process.env.REACT_APP_CHART_DATA_SYNC_PERIOD ?? "300000").toNumber()
@@ -20,12 +23,15 @@ export const useTokenInfo = ({ id }: { id?: string }) => {
         staleTime: EXCHANGE_RATE_SYNC_PERIOD,
     })
 }
-const getMarketChartQueryKey = ({ id, vs_currency, days }: { id?: string; vs_currency: string; days: number }) => [
-    "MARKET_CHART",
+export const getMarketChartQueryKey = ({
     id,
     vs_currency,
     days,
-]
+}: {
+    id?: string
+    vs_currency: string
+    days: number
+}) => ["MARKET_CHART", id, vs_currency, days]
 
 /**
  *  Get the market chart of a coin for a given number of days and currency
@@ -52,6 +58,42 @@ export const useMarketChart = ({
         enabled: !!id,
         placeholderData,
         staleTime: CHART_DATA_SYNC_PERIOD,
+    })
+}
+
+/**
+ * Similar to useMarketChart but tries to reuse the highest resolution chart available (6 months) to derive the smaller intervals
+ * This allows us to avoid making multiple requests for the same data, but works only for charts with a resolution > 1 day with daily interval
+ * @param id  the id of the coin
+ * @param vs_currency  the currency to compare
+ * @param days  the number of days to get the market chart for
+ * @returns  the market chart array of arrays of [timestamp, price]
+ */
+
+export const useSmartMarketChart = ({
+    id,
+    vs_currency,
+    days,
+    placeholderData,
+}: {
+    id?: string
+    vs_currency: string
+    days: number
+    placeholderData?: MarketChartResponse
+}) => {
+    const highestResolutionTimeframeDays = max(marketChartTimeframes.map(timeframe => timeframe.value)) ?? 180
+    const { data: highestResolutionMarketChartData } = useMarketChart({
+        id,
+        vs_currency,
+        days: highestResolutionTimeframeDays,
+    })
+
+    return useQuery({
+        queryKey: getMarketChartQueryKey({ id, vs_currency, days }),
+        queryFn: () => getSmartMarketChart({ highestResolutionMarketChartData, days }),
+        enabled: !!highestResolutionMarketChartData,
+        staleTime: CHART_DATA_SYNC_PERIOD,
+        placeholderData,
     })
 }
 

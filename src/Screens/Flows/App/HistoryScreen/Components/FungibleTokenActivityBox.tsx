@@ -34,7 +34,7 @@ export const FungibleTokenActivityBox: React.FC<Props> = memo(({ activity, onPre
 
     // TODO: handle loading state
     const { data: exchangeRate } = useExchangeRate({
-        id: getCoinGeckoIdBySymbol[symbol ?? ""],
+        id: getCoinGeckoIdBySymbol[symbol ?? token?.symbol ?? ""],
         vs_currency: currency,
     })
 
@@ -81,23 +81,21 @@ export const FungibleTokenActivityBox: React.FC<Props> = memo(({ activity, onPre
         const tokenSymbol = token?.symbol ?? symbol
 
         return (
-            <>
-                <BaseView flexDirection="column" alignItems="center">
-                    <BaseView alignItems="flex-end">
-                        <BaseView flexDirection="row" pb={5}>
-                            <BaseText typographyFont="subTitleBold">{amountTransferred} </BaseText>
-                            <BaseView flexDirection="row" alignItems="flex-end" h={100}>
-                                <BaseText typographyFont="captionRegular">{tokenSymbol?.toUpperCase()}</BaseText>
-                            </BaseView>
+            <BaseView flexDirection="column" alignItems="center">
+                <BaseView alignItems="flex-end">
+                    <BaseView flexDirection="row" pb={5}>
+                        <BaseText typographyFont="subTitleBold">{amountTransferred} </BaseText>
+                        <BaseView flexDirection="row" alignItems="flex-end" h={100}>
+                            <BaseText typographyFont="captionRegular">{tokenSymbol?.toUpperCase()}</BaseText>
                         </BaseView>
-                        {fiatValueTransferred && (
-                            <BaseText typographyFont="smallCaptionMedium" color={theme.colors.success}>
-                                {fiatValueTransferred} {currency}
-                            </BaseText>
-                        )}
                     </BaseView>
+                    {fiatValueTransferred && (
+                        <BaseText typographyFont="smallCaptionMedium" color={theme.colors.success}>
+                            {fiatValueTransferred} {currency}
+                        </BaseText>
+                    )}
                 </BaseView>
-            </>
+            </BaseView>
         )
     }, [amountTransferred, currency, fiatValueTransferred, symbol, theme.colors.success, token?.symbol])
 

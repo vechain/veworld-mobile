@@ -32,6 +32,10 @@ export const VechainTokenCard = memo(({ tokenWithInfo, isAnimation, isBalanceVis
             tokenInfo?.market_data.price_change_percentage_24h ?? 0,
             tokenInfo?.market_data.price_change_percentage_24h ?? 0,
         ) +
+        FormattingUtils.humanNumber(
+            tokenInfo?.market_data.price_change_percentage_24h ?? 0,
+            tokenInfo?.market_data.price_change_percentage_24h ?? 0,
+        ) +
         "%"
 
     const animatedOpacityReverse = useAnimatedStyle(() => {
