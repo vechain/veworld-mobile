@@ -1,16 +1,15 @@
 import React, { memo, useCallback } from "react"
 import { StyleSheet, TouchableOpacity } from "react-native"
-import { useTheme } from "~Hooks"
+import { TokenWithCompleteInfo, useTheme } from "~Hooks"
 import { VechainTokenCard } from "./VechainTokenCard"
 import Animated, { useAnimatedStyle, withTiming } from "react-native-reanimated"
 import { LineChart } from "react-native-wagmi-charts"
-import { usePollingChartData } from "../../../Hooks"
-import { TokenWithCompleteInfo, VeChainToken } from "~Model"
-import { selectDashboardChartData, useAppSelector } from "~Storage/Redux"
+import { selectCurrency, useAppSelector } from "~Storage/Redux"
 import { useNavigation } from "@react-navigation/native"
 import { Routes } from "~Navigation"
 import { BaseView } from "~Components"
 import HapticsService from "~Services/HapticsService"
+import { DEFAULT_LINE_CHART_DATA, getCoinGeckoIdBySymbol, useSmartMarketChart } from "~Api/Coingecko"
 
 const HEIGHT = 100
 
@@ -23,9 +22,15 @@ export type NativeTokenProps = {
 export const AnimatedChartCard = memo(({ tokenWithInfo, isEdit, isBalanceVisible }: NativeTokenProps) => {
     const nav = useNavigation()
     const theme = useTheme()
-    usePollingChartData(tokenWithInfo.symbol as VeChainToken)
 
-    const chartData = useAppSelector(state => selectDashboardChartData(tokenWithInfo.symbol, state))
+    const currency = useAppSelector(selectCurrency)
+
+    const { data: chartData } = useSmartMarketChart({
+        id: getCoinGeckoIdBySymbol[tokenWithInfo.symbol],
+        vs_currency: currency,
+        days: 7,
+        placeholderData: DEFAULT_LINE_CHART_DATA,
+    })
 
     const animatedOuterCard = useAnimatedStyle(() => {
         return {
@@ -66,7 +71,7 @@ export const AnimatedChartCard = memo(({ tokenWithInfo, isEdit, isBalanceVisible
                         isAnimation={isEdit}
                     />
                     <Animated.View style={animatedInnerCard}>
-                        <LineChart.Provider data={chartData}>
+                        <LineChart.Provider data={chartData ?? DEFAULT_LINE_CHART_DATA}>
                             <LineChart height={HEIGHT}>
                                 <LineChart.Path color={theme.colors.primary} width={2}>
                                     <LineChart.Gradient />

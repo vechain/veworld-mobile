@@ -1,4 +1,20 @@
-export const mock_cart_data = [
+export const DEFAULT_LINE_CHART_DATA = [
+    { timestamp: 0, value: 1 },
+    { timestamp: 1, value: 1 },
+    { timestamp: 2, value: 1 },
+    { timestamp: 3, value: 1 },
+    { timestamp: 4, value: 1 },
+    { timestamp: 5, value: 1 },
+    { timestamp: 6, value: 1 },
+    { timestamp: 7, value: 1 },
+    { timestamp: 8, value: 1 },
+    { timestamp: 9, value: 1 },
+    { timestamp: 10, value: 1 },
+    { timestamp: 11, value: 1 },
+    { timestamp: 12, value: 1 },
+]
+
+export const MOCK_LINE_CHART_DATA = [
     { timestamp: 1683032421633, value: 0.019349861570659335 },
     { timestamp: 1683036009799, value: 0.019047589039687847 },
     { timestamp: 1683039618474, value: 0.019240154201019585 },
@@ -24,11 +40,4 @@ export const mock_cart_data = [
     { timestamp: 1683111649385, value: 0.018715042714513665 },
     { timestamp: 1683115207072, value: 0.018673063138328092 },
     { timestamp: 1683117062000, value: 0.01854461381874342 },
-]
-
-export const timelineDays = [
-    { label: "1W", value: 7, secondaryValue: "daily" },
-    { label: "1M", value: 30, secondaryValue: "daily" },
-    { label: "3M", value: 90, secondaryValue: "daily" },
-    { label: "6M", value: 180, secondaryValue: "daily" },
 ]

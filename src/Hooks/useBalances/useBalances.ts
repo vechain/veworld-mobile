@@ -1,11 +1,15 @@
 import { useMemo } from "react"
 import { BalanceUtils } from "~Utils"
-import { TokenWithCompleteInfo } from "~Model"
+import { Balance, FungibleToken } from "~Model"
 
-export const useBalances = ({ token }: { token: TokenWithCompleteInfo }) => {
+type Props = {
+    token: FungibleToken & { balance?: Balance }
+    exchangeRate?: number
+}
+export const useBalances = ({ token, exchangeRate }: Props) => {
     const fiatBalance = useMemo(
-        () => BalanceUtils.getFiatBalance(token?.balance?.balance ?? "0", token?.rate || 0, token.decimals),
-        [token?.balance?.balance, token.decimals, token?.rate],
+        () => BalanceUtils.getFiatBalance(token?.balance?.balance ?? "0", exchangeRate ?? 0, token.decimals),
+        [token?.balance?.balance, token.decimals, exchangeRate],
     )
 
     const tokenUnitBalance = useMemo(

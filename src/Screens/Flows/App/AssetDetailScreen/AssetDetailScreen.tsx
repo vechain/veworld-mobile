@@ -1,6 +1,6 @@
 import { useNavigation } from "@react-navigation/native"
 import { NativeStackScreenProps } from "@react-navigation/native-stack"
-import React, { useEffect, useMemo } from "react"
+import React, { useMemo } from "react"
 import { useBottomSheetModal, useThemedStyles } from "~Hooks"
 import {
     BaseIcon,
@@ -17,16 +17,9 @@ import { AssetChart, AssetHeader, BalanceView, MarketInfoView } from "./Componen
 import { useI18nContext } from "~i18n"
 import { FastAction } from "~Model"
 import { striptags } from "striptags"
-import {
-    fetchVechainMarketInfo,
-    selectBalanceVisible,
-    selectMarketInfoFor,
-    selectSendableTokensWithBalance,
-    useAppDispatch,
-    useAppSelector,
-} from "~Storage/Redux"
+import { selectBalanceVisible, selectSendableTokensWithBalance, useAppSelector } from "~Storage/Redux"
 import { ScrollView } from "react-native-gesture-handler"
-import { InteractionManager, StyleSheet } from "react-native"
+import { StyleSheet } from "react-native"
 
 type Props = NativeStackScreenProps<RootStackParamListHome, Routes.TOKEN_DETAILS>
 
@@ -34,35 +27,34 @@ export const AssetDetailScreen = ({ route }: Props) => {
     const token = route.params.token
     const { styles, theme } = useThemedStyles(baseStyles)
     const nav = useNavigation()
-    const { LL } = useI18nContext()
-    const marketInfo = useAppSelector(state => selectMarketInfoFor(token.symbol, state))
+    const { LL, locale } = useI18nContext()
 
     const { ref: QRCodeBottomSheetRef, onOpen: openQRCodeSheet } = useBottomSheetModal()
 
     const isBalanceVisible = useAppSelector(selectBalanceVisible)
 
     const tokens = useAppSelector(selectSendableTokensWithBalance)
-    const foundToken = tokens.filter(
+    const foundToken = tokens.find(
         t =>
             t.name?.toLowerCase().includes(token.name.toLowerCase()) ||
             t.symbol?.toLowerCase().includes(token.symbol.toLowerCase()),
     )
 
-    const dispatch = useAppDispatch()
-    useEffect(() => {
-        InteractionManager.runAfterInteractions(() => {
-            dispatch(fetchVechainMarketInfo())
-        })
-    }, [dispatch])
+    // render description based on locale. NB: at the moment only EN is supported
+    const description = useMemo(() => {
+        if (!token?.tokenInfo?.description) return ""
+
+        return token?.tokenInfo?.description[locale] ?? token?.tokenInfo?.description.en
+    }, [token?.tokenInfo?.description, locale])
 
     const Actions: FastAction[] = useMemo(
         () => [
             {
                 name: LL.BTN_SEND(),
                 action: () => {
-                    if (foundToken.length) {
+                    if (foundToken) {
                         nav.navigate(Routes.SELECT_AMOUNT_SEND, {
-                            token: foundToken[0],
+                            token: foundToken,
                             initialRoute: Routes.HOME,
                         })
                     } else {
@@ -106,15 +98,16 @@ export const AssetDetailScreen = ({ route }: Props) => {
 
                         <BaseSpacer height={24} />
 
-                        <BalanceView token={token} isBalanceVisible={isBalanceVisible} />
+                        <BalanceView tokenWithInfo={token} isBalanceVisible={isBalanceVisible} />
 
                         <BaseSpacer height={24} />
 
-                        <MarketInfoView marketInfo={marketInfo} tokenSymbol={token.symbol} />
+                        <MarketInfoView tokenSymbol={token.symbol} />
 
                         <BaseSpacer height={24} />
 
-                        {token.desc && (
+                        {/* TODO: handle loading/skeleton */}
+                        {!!description && (
                             <>
                                 <BaseText
                                     typographyFont="bodyBold"
@@ -126,7 +119,7 @@ export const AssetDetailScreen = ({ route }: Props) => {
                                 </BaseText>
 
                                 <BaseText mb={25}>
-                                    {striptags(token.desc.trim(), {
+                                    {striptags(description.trim(), {
                                         allowedTags: new Set(["strong"]),
                                     })}
                                 </BaseText>

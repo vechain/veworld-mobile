@@ -330,6 +330,7 @@ const en: BaseTranslation = {
 
 
     // Errors
+    ERROR_PRICE_FEED_NOT_AVAILABLE: "Price feed not available",
     ERROR_GENERIC_SUBTITLE: "Something went wrong!",
     ERROR_GENERIC_BODY_01: "We apologise for the inconvenience.",
     ERROR_GENERIC_BODY_02: "Please, try closing and reopening the app.",

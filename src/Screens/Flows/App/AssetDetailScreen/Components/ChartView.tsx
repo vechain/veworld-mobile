@@ -14,7 +14,13 @@ type TokenChartData = {
     value: number
 }
 
-export const ChartView = ({ chartData, token }: { chartData: TokenChartData[]; token: TokenWithCompleteInfo }) => {
+type Props = {
+    chartData?: TokenChartData[]
+    isChartDataLoading: boolean
+    token: TokenWithCompleteInfo
+}
+
+export const ChartView = ({ chartData, token, isChartDataLoading }: Props) => {
     const { LL } = useI18nContext()
 
     const invokeHaptic = () => {
@@ -46,7 +52,7 @@ export const ChartView = ({ chartData, token }: { chartData: TokenChartData[]; t
             return (
                 <BaseView justifyContent="center" alignItems="center" style={[styles.negativeMargin, styles.container]}>
                     <BaseView>
-                        <LineChart height={120} style={styles.opacity}>
+                        <LineChart height={180} style={styles.opacity}>
                             <LineChart.Path color={theme.colors.primary} width={0}>
                                 <LineChart.Gradient lastGradientValue={0} />
                             </LineChart.Path>
@@ -76,7 +82,7 @@ export const ChartView = ({ chartData, token }: { chartData: TokenChartData[]; t
     return (
         <>
             <BaseView flexDirection="row" justifyContent="space-between" w={100}>
-                <AssetPriceBanner symbol={token.symbol} />
+                <AssetPriceBanner symbol={token.symbol} isChartDataLoading={isChartDataLoading} />
             </BaseView>
 
             <BaseSpacer height={24} />

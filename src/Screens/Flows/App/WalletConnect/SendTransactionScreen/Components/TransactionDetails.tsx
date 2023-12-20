@@ -7,8 +7,9 @@ import { useTheme } from "~Hooks"
 import { capitalize } from "lodash"
 import { BigNutils, FormattingUtils } from "~Utils"
 import { Network, TransactionRequest } from "~Model"
-import { selectCurrency, selectCurrencyExchangeRate, useAppSelector } from "~Storage/Redux"
+import { selectCurrency, useAppSelector } from "~Storage/Redux"
 import { BigNumber } from "bignumber.js"
+import { useExchangeRate } from "~Api/Coingecko"
 
 type Props = {
     selectedDelegationOption: DelegationType
@@ -33,10 +34,14 @@ export const TransactionDetails = ({
 }: Props) => {
     const { LL } = useI18nContext()
     const theme = useTheme()
-    const exchangeRate = useAppSelector(state => selectCurrencyExchangeRate(state))
-    const currency = useAppSelector(selectCurrency)
 
-    const comment = options.comment || message[0].comment
+    const currency = useAppSelector(selectCurrency)
+    //TODO: is this correct no token was specified
+    const { data: exchangeRate } = useExchangeRate({
+        vs_currency: currency,
+    })
+
+    const comment = options.comment ?? message[0].comment
 
     const spendingAmount = useMemo(() => {
         return message.reduce((acc: BigNumber, clause: Connex.VM.Clause) => {
@@ -50,7 +55,7 @@ export const TransactionDetails = ({
     )
 
     const formattedFiatAmount = FormattingUtils.humanNumber(
-        FormattingUtils.convertToFiatBalance(spendingAmount.toString(10) || "0", exchangeRate?.rate || 1, 0),
+        FormattingUtils.convertToFiatBalance(spendingAmount.toString(10) || "0", exchangeRate || 1, 0),
         spendingAmount,
     )
 

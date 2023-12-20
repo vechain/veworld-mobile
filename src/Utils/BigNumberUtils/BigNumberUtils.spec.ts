@@ -78,12 +78,12 @@ describe("BigNumberUtils class", () => {
 
     // Test conversion methods
     test("toCurrencyConversion should convert correctly", () => {
-        bigNumUtils.toCurrencyConversion("100", { rate: 1.5 })
+        bigNumUtils.toCurrencyConversion("100", 1.5)
         expect(bigNumUtils.toString).toBe("150")
     })
 
     test("toTokenConversion should convert correctly", () => {
-        bigNumUtils.toTokenConversion("100", { rate: 2 })
+        bigNumUtils.toTokenConversion("100", 2)
         expect(bigNumUtils.toString).toBe("50")
     })
 

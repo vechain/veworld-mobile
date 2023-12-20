@@ -34,9 +34,13 @@ export const useFungibleTokenInfo = (tokenAddress?: string) => {
     const thor = useThor()
 
     useEffect(() => {
-        if (tokenAddress === VET.address) return
-
         const fetchData = async () => {
+            if (tokenAddress === VET.address) {
+                setSymbol(VET.symbol)
+                setDecimals(VET.decimals)
+                setName(VET.name)
+                return
+            }
             try {
                 const resDecimals = await getTokenDecimals(tokenAddress!, thor)
                 setDecimals(resDecimals)
