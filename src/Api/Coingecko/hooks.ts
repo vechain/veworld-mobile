@@ -1,5 +1,5 @@
 import { useQuery } from "@tanstack/react-query"
-import { MarketChartResponse, getMarketChart, getTokenInfo } from "./endpoints"
+import { MarketChartResponse, getMarketChart, getSmartMarketChart, getTokenInfo } from "./endpoints"
 import BigNumber from "bignumber.js"
 import { max } from "lodash"
 import { marketChartTimeframes } from "./constants"
@@ -23,12 +23,15 @@ export const useTokenInfo = ({ id }: { id?: string }) => {
         staleTime: EXCHANGE_RATE_SYNC_PERIOD,
     })
 }
-const getMarketChartQueryKey = ({ id, vs_currency, days }: { id?: string; vs_currency: string; days: number }) => [
-    "MARKET_CHART",
+export const getMarketChartQueryKey = ({
     id,
     vs_currency,
     days,
-]
+}: {
+    id?: string
+    vs_currency: string
+    days: number
+}) => ["MARKET_CHART", id, vs_currency, days]
 
 /**
  *  Get the market chart of a coin for a given number of days and currency
@@ -78,21 +81,16 @@ export const useSmartMarketChart = ({
     days: number
     placeholderData?: MarketChartResponse
 }) => {
+    const highestResolutionTimeframeDays = max(marketChartTimeframes.map(timeframe => timeframe.value)) ?? 180
     const { data: highestResolutionMarketChartData } = useMarketChart({
         id,
         vs_currency,
-        days: max(marketChartTimeframes.map(timeframe => timeframe.value)) ?? 180,
+        days: highestResolutionTimeframeDays,
     })
 
     return useQuery({
         queryKey: getMarketChartQueryKey({ id, vs_currency, days }),
-        queryFn: () => {
-            if (!highestResolutionMarketChartData) throw new Error("No cached market chart data available")
-            const startIndex = highestResolutionMarketChartData.findIndex(
-                entry => entry.timestamp >= Date.now() - days * 24 * 60 * 60 * 1000,
-            )
-            return highestResolutionMarketChartData.slice(startIndex)
-        },
+        queryFn: () => getSmartMarketChart({ highestResolutionMarketChartData, days }),
         enabled: !!highestResolutionMarketChartData,
         staleTime: CHART_DATA_SYNC_PERIOD,
         placeholderData,

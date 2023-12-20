@@ -1,4 +1,4 @@
-import React, { useCallback, useState } from "react"
+import React, { useCallback, useEffect, useState } from "react"
 import { LineChart } from "react-native-wagmi-charts"
 import { BaseSpacer, PressableWithUnderline } from "~Components"
 import { TokenWithCompleteInfo } from "~Model"
@@ -7,10 +7,15 @@ import HapticsService from "~Services/HapticsService"
 import { selectCurrency, useAppSelector } from "~Storage/Redux"
 import {
     MOCK_LINE_CHART_DATA,
+    MarketChartResponse,
     getCoinGeckoIdBySymbol,
+    getMarketChartQueryKey,
+    getSmartMarketChart,
     marketChartTimeframes,
     useSmartMarketChart,
 } from "~Api/Coingecko"
+import { useQueryClient } from "@tanstack/react-query"
+import { max } from "lodash"
 
 type Props = {
     token: TokenWithCompleteInfo
@@ -18,6 +23,7 @@ type Props = {
 
 const defaultTimeframe = marketChartTimeframes[0].value
 export const AssetChart = ({ token }: Props) => {
+    const queryClient = useQueryClient()
     const [selectedTimeframe, setSelectedTimeframe] = useState<number>(defaultTimeframe)
 
     const currency = useAppSelector(selectCurrency)
@@ -37,6 +43,38 @@ export const AssetChart = ({ token }: Props) => {
     }, [])
 
     const isLoaded = chartData && !isLoading
+
+    //prefetch the other timeframes (locally derived) when the timeframe changes
+    //prefetching does nothing if the data is already cached
+    useEffect(() => {
+        const prefetchTimeframesData = async () => {
+            const highestResolutionTimeframeDays = max(marketChartTimeframes.map(timeframe => timeframe.value)) ?? 180
+            const highestTimeframeData = queryClient.getQueryData<MarketChartResponse>(
+                getMarketChartQueryKey({
+                    id: getCoinGeckoIdBySymbol[token.symbol],
+                    vs_currency: currency,
+                    days: highestResolutionTimeframeDays,
+                }),
+            )
+            for (const timeframe of marketChartTimeframes) {
+                if (timeframe.value !== selectedTimeframe) {
+                    await queryClient.prefetchQuery({
+                        queryKey: getMarketChartQueryKey({
+                            id: getCoinGeckoIdBySymbol[token.symbol],
+                            vs_currency: currency,
+                            days: timeframe.value,
+                        }),
+                        queryFn: () =>
+                            getSmartMarketChart({
+                                highestResolutionMarketChartData: highestTimeframeData,
+                                days: timeframe.value,
+                            }),
+                    })
+                }
+            }
+        }
+        prefetchTimeframesData()
+    }, [chartData, queryClient, currency, token.symbol, selectedTimeframe])
 
     return (
         <>

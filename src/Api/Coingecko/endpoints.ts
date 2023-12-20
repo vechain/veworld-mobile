@@ -113,3 +113,24 @@ export const getMarketChart = async ({
         throw e
     }
 }
+
+/**
+ * Derive lower resolution market chart data from the highest resolution market chart data
+ * This allows us to avoid making multiple requests for the same data, but works only for charts with a resolution > 1 day with daily interval
+ * @param highestResolutionMarketChartData  the highest resolution market chart data
+ * @param days  the number of days to get the market chart for (must be <= the number of days of the highest resolution market chart data)
+ * @returns the market chart array of arrays of [timestamp, price]
+ */
+export const getSmartMarketChart = ({
+    highestResolutionMarketChartData,
+    days,
+}: {
+    highestResolutionMarketChartData?: MarketChartResponse
+    days: number
+}) => {
+    if (!highestResolutionMarketChartData) throw new Error("No cached market chart data available")
+    const startIndex = highestResolutionMarketChartData.findIndex(
+        entry => entry.timestamp >= Date.now() - days * 24 * 60 * 60 * 1000,
+    )
+    return highestResolutionMarketChartData.slice(startIndex)
+}
