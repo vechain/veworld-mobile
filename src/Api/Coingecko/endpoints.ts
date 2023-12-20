@@ -1,5 +1,4 @@
 import axios from "axios"
-import { VET, VTHO } from "~Constants"
 import { error } from "~Utils"
 
 export const COINGECKO_URL = process.env.REACT_APP_COINGECKO_URL
@@ -8,15 +7,6 @@ const axiosInstance = axios.create({
     timeout,
     baseURL: COINGECKO_URL,
 })
-
-export const VET_COINGECKO_ID: string = "vechain"
-
-export const VETHOR_COINGECKO_ID: string = "vethor-token"
-
-export const getCoinGeckoIdBySymbol = {
-    [VET.symbol]: VET_COINGECKO_ID,
-    [VTHO.symbol]: VETHOR_COINGECKO_ID,
-}
 
 export type TokenInfoMarketData = {
     total_supply: number
@@ -122,4 +112,25 @@ export const getMarketChart = async ({
         error("getMarketChart", e)
         throw e
     }
+}
+
+/**
+ * Derive lower resolution market chart data from the highest resolution market chart data
+ * This allows us to avoid making multiple requests for the same data, but works only for charts with a resolution > 1 day with daily interval
+ * @param highestResolutionMarketChartData  the highest resolution market chart data
+ * @param days  the number of days to get the market chart for (must be <= the number of days of the highest resolution market chart data)
+ * @returns the market chart array of arrays of [timestamp, price]
+ */
+export const getSmartMarketChart = ({
+    highestResolutionMarketChartData,
+    days,
+}: {
+    highestResolutionMarketChartData?: MarketChartResponse
+    days: number
+}) => {
+    if (!highestResolutionMarketChartData) throw new Error("No cached market chart data available")
+    const startIndex = highestResolutionMarketChartData.findIndex(
+        entry => entry.timestamp >= Date.now() - days * 24 * 60 * 60 * 1000,
+    )
+    return highestResolutionMarketChartData.slice(startIndex)
 }
