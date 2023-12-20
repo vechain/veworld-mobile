@@ -27,7 +27,7 @@ import { RootStackParamListSwitch, Routes } from "~Navigation"
 import { NativeStackScreenProps } from "@react-navigation/native-stack"
 import { useNavigation } from "@react-navigation/native"
 import { AppInfo, UnknownAppMessage } from "~Screens"
-import { AnalyticsEvent } from "~Constants"
+import { AnalyticsEvent, ERROR_EVENTS } from "~Constants"
 import { getSdkError } from "@walletconnect/utils"
 
 type Props = NativeStackScreenProps<RootStackParamListSwitch, Routes.CONNECTED_APP_SIGN_MESSAGE_SCREEN>
@@ -71,7 +71,7 @@ export const SignMessageScreen: FC<Props> = ({ route }: Props) => {
         try {
             return Buffer.from(HexUtils.removePrefix(message), "hex").toString()
         } catch (e) {
-            warn("SignMessageScreen: utfMessage", e)
+            warn(ERROR_EVENTS.WALLET_CONNECT, e)
             return message
         }
     }, [message])
@@ -127,7 +127,7 @@ export const SignMessageScreen: FC<Props> = ({ route }: Props) => {
                 dispatch(setIsAppLoading(false))
             } catch (err: unknown) {
                 track(AnalyticsEvent.DAPP_CERTIFICATE_FAILED)
-                error("SignMessageScreen:handleAccept", err)
+                error(ERROR_EVENTS.WALLET_CONNECT, err)
 
                 await failRequest(requestEvent, getRpcError("internal"))
 

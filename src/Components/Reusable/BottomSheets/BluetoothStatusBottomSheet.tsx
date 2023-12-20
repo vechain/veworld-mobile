@@ -5,6 +5,7 @@ import { useBluetoothStatus, useBottomSheetModal } from "~Hooks"
 import { Linking } from "react-native"
 import { useNavigation } from "@react-navigation/native"
 import { PlatformUtils, debug } from "~Utils"
+import { ERROR_EVENTS } from "~Constants"
 
 const snapPoints = ["55%"]
 
@@ -51,7 +52,7 @@ export const BluetoothStatusBottomSheet: React.FC = () => {
             if (!isUpdating && (isUnsupported || !isAuthorized || !isEnabled)) {
                 onOpen()
             } else {
-                debug("Closing bluetooth bottom sheet")
+                debug(ERROR_EVENTS.LEDGER, "Closing bluetooth bottom sheet")
                 onClose()
             }
         }, 100)

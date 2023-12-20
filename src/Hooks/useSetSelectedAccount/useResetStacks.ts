@@ -1,5 +1,6 @@
 import { useNavigation } from "@react-navigation/native"
 import { useCallback } from "react"
+import { ERROR_EVENTS } from "~Constants"
 import { Routes } from "~Navigation"
 import { warn } from "~Utils"
 
@@ -33,7 +34,7 @@ export const useResetStacks = () => {
                 })
             }
         } catch (e) {
-            warn("useResetStack, Routes.HOME", e)
+            warn(ERROR_EVENTS.APP, "Routes.HOME", e)
         }
         // If the "Routes.NFTS" route is not found at the top of the stack, reset the stack to have only "Routes.NFTS" route
         try {
@@ -44,7 +45,7 @@ export const useResetStacks = () => {
                 })
             }
         } catch (e) {
-            warn("useResetStacks, Routes.NFTS", e)
+            warn(ERROR_EVENTS.APP, "Routes.NFTS", e)
         }
     }, [nav])
 

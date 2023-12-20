@@ -1,6 +1,7 @@
 import { debug } from "~Utils/Logger"
 import { BaseDevice, WalletAccount } from "~Model"
 import AddressUtils from "../AddressUtils"
+import { ERROR_EVENTS } from "~Constants"
 
 export const rootAlias = "Root Account"
 
@@ -21,7 +22,7 @@ export const getNextIndex = (accounts: WalletAccount[]) => {
 }
 
 export const getAccountForIndex = (walletIndex: number, device: BaseDevice, accountId: number): WalletAccount => {
-    debug(`Getting account for device, index ${walletIndex}`)
+    debug(ERROR_EVENTS.UTILS, `Getting account for device, index ${walletIndex}`)
     if (!device.xPub) throw new Error("The XPub can't be null for HD devices")
 
     const accountAddress = AddressUtils.getAddressFromXPub(device.xPub, walletIndex)

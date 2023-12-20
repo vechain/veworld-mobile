@@ -12,10 +12,10 @@ import {
     useAppSelector,
 } from "~Storage/Redux"
 import { selectAccountsState } from "~Storage/Redux/Selectors"
-import { error } from "~Utils/Logger"
+import { warn } from "~Utils/Logger"
 import { useBiometrics } from "../useBiometrics"
 import { useAnalyticTracking } from "~Hooks/useAnalyticTracking"
-import { AnalyticsEvent } from "~Constants"
+import { AnalyticsEvent, ERROR_EVENTS } from "~Constants"
 import { WalletEncryptionKeyHelper } from "~Components"
 
 /**
@@ -71,7 +71,7 @@ export const useCreateWallet = () => {
                 setIsComplete(true)
                 track(AnalyticsEvent.WALLET_ADD_LOCAL_SUCCESS)
             } catch (e) {
-                error("CREATE WALLET ERROR : ", e)
+                warn(ERROR_EVENTS.WALLET_CREATION, e)
                 track(AnalyticsEvent.WALLET_ADD_LOCAL_ERROR)
                 onError?.(e)
                 throw e
@@ -99,7 +99,7 @@ export const useCreateWallet = () => {
                 setIsComplete(true)
                 track(AnalyticsEvent.WALLET_ADD_LEDGER_SUCCESS)
             } catch (e) {
-                error("CREATE HW WALLET ERROR : ", e)
+                warn(ERROR_EVENTS.WALLET_CREATION, e)
                 track(AnalyticsEvent.WALLET_ADD_LEDGER_ERROR)
                 onError?.(e)
                 throw e

@@ -1,6 +1,7 @@
 import { warn } from "~Utils"
 import { Network } from "~Model"
 import { getTokenDecimals, getTokenName, getTokenSymbol } from "~Networking"
+import { ERROR_EVENTS } from "~Constants"
 
 export const getCustomTokenInfo = async ({
     tokenAddress,
@@ -11,8 +12,6 @@ export const getCustomTokenInfo = async ({
     thorClient: Connex.Thor
     network: Network
 }) => {
-    // info("Get custom token infos")
-
     try {
         const tokenName = await getTokenName(tokenAddress, thorClient)
         const tokenSymbol = await getTokenSymbol(tokenAddress, thorClient)
@@ -28,6 +27,6 @@ export const getCustomTokenInfo = async ({
             icon: "",
         }
     } catch (e) {
-        warn("getCustomTokenInfo", e)
+        warn(ERROR_EVENTS.TOKENS, e)
     }
 }

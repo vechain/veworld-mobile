@@ -1,8 +1,8 @@
 import { LedgerDevice, Network, Response } from "~Model"
 import { Certificate, HDNode, Transaction } from "thor-devkit"
 import { AddressUtils, BalanceUtils } from "~Utils"
-import { LEDGER_ERROR_CODES, VET_DERIVATION_PATH, VETLedgerAccount, VETLedgerApp } from "~Constants"
-import { debug, error, warn } from "~Utils/Logger"
+import { ERROR_EVENTS, LEDGER_ERROR_CODES, VET_DERIVATION_PATH, VETLedgerAccount, VETLedgerApp } from "~Constants"
+import { debug, error } from "~Utils/Logger"
 import { Buffer } from "buffer"
 
 import BleTransport from "@ledgerhq/react-native-hw-transport-ble"
@@ -53,7 +53,7 @@ export const ledgerErrorHandler = (err: unknown): LEDGER_ERROR_CODES => {
         return LEDGER_ERROR_CODES.USER_REJECTED
     }
 
-    error("[Ledger] - Unknown Error", err)
+    error(ERROR_EVENTS.LEDGER, err)
     return LEDGER_ERROR_CODES.UNKNOWN
 }
 
@@ -121,7 +121,7 @@ type ISignMessage = {
 }
 
 const signMessage = async ({ index, message, device, withTransport }: ISignMessage): MessageResponse => {
-    debug("Signing message")
+    debug(ERROR_EVENTS.LEDGER, "Signing message")
 
     const res = async (transport: BleTransport): MessageResponse => {
         try {
@@ -137,7 +137,7 @@ const signMessage = async ({ index, message, device, withTransport }: ISignMessa
                 payload: signature,
             }
         } catch (e) {
-            warn("Error signing message", e)
+            error(ERROR_EVENTS.LEDGER, "Error signing message", e)
 
             return {
                 success: false,
@@ -167,7 +167,7 @@ const signCertificate = async (
     device: LedgerDevice,
     withTransport: (func: (t: BleTransport) => CertResponse) => CertResponse,
 ): CertResponse => {
-    debug("Signing certificate")
+    debug(ERROR_EVENTS.LEDGER, "Signing certificate")
 
     const res = async (transport: BleTransport): CertResponse => {
         try {
@@ -185,7 +185,7 @@ const signCertificate = async (
                 payload: signature,
             }
         } catch (e) {
-            warn("Error signing transaction", e)
+            error(ERROR_EVENTS.LEDGER, "Error signing transaction", e)
 
             return {
                 success: false,
@@ -218,7 +218,7 @@ const signTransaction = async (
     onIsAwaitingForSignature: () => void,
     onProgressUpdate?: (progress: number) => void,
 ): TxResponse => {
-    debug("Signing transaction")
+    debug(ERROR_EVENTS.LEDGER, "Signing transaction")
 
     const res = async (transport: BleTransport): TxResponse => {
         const vetLedger = new VETLedgerApp(transport)
@@ -238,7 +238,7 @@ const signTransaction = async (
                 payload: signature,
             }
         } catch (e) {
-            warn("Error signing transaction", e)
+            error(ERROR_EVENTS.LEDGER, "Error signing transaction", e)
 
             return {
                 success: false,
@@ -266,7 +266,7 @@ const getAccountsWithBalances = async (
     network: Network,
     numberOfAccounts = 6,
 ): Promise<LedgerAccount[]> => {
-    debug("Getting accounts with balances")
+    debug(ERROR_EVENTS.LEDGER, "Getting accounts with balances")
 
     if (numberOfAccounts < 1) throw new Error("Must get at least 1 account")
 
@@ -306,7 +306,7 @@ const getAccountsWithBalances = async (
  * @throws an error if the ledger does not contain the expected account
  */
 const validateRootAddress = async (rootAddress: string, vetLedger: VETLedgerApp) => {
-    debug("Validating root address")
+    debug(ERROR_EVENTS.LEDGER, "Validating root address")
     const rootAccount = await vetLedger.getAddress(VET_DERIVATION_PATH, false, false)
 
     if (!AddressUtils.compareAddresses(rootAddress, rootAccount.address)) {

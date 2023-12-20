@@ -8,15 +8,15 @@ describe("useRenderCounter", () => {
         const { rerender } = renderHook(() => useRenderCounter("Test View"))
 
         expect(debugSpy).toHaveBeenCalledTimes(1)
-        expect(debugSpy).toHaveBeenCalledWith("Test View has rendered : 0 times.")
+        expect(debugSpy).toHaveBeenCalledWith("APP", "Test View has rendered : 0 times.")
 
         rerender()
         expect(debugSpy).toHaveBeenCalledTimes(2)
-        expect(debugSpy).toHaveBeenCalledWith("Test View has rendered : 1 times.")
+        expect(debugSpy).toHaveBeenCalledWith("APP", "Test View has rendered : 1 times.")
 
         rerender()
         expect(debugSpy).toHaveBeenCalledTimes(3)
-        expect(debugSpy).toHaveBeenCalledWith("Test View has rendered : 2 times.")
+        expect(debugSpy).toHaveBeenCalledWith("APP", "Test View has rendered : 2 times.")
 
         debugSpy.mockRestore()
     })

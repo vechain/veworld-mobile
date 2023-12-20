@@ -2,7 +2,7 @@ import { useEffect, useMemo, useState } from "react"
 import { BigNumber } from "bignumber.js"
 import { Activity } from "~Model"
 import { useThor, showInfoToast } from "~Components"
-import { VTHO } from "~Constants"
+import { ERROR_EVENTS, VTHO } from "~Constants"
 import { FormattingUtils, GasUtils, warn } from "~Utils"
 import { selectCurrency, useAppSelector } from "~Storage/Redux"
 import { useI18nContext } from "~i18n"
@@ -47,7 +47,7 @@ export const useGasFee = (activity: Activity) => {
                 })
                 setVthoGasFee(gasFee)
             } catch (e) {
-                warn(e)
+                warn(ERROR_EVENTS.SEND, e)
                 showInfoToast({
                     text1: LL.HEADS_UP(),
                     text2: LL.NOTIFICATION_GAS_FEE_INACCURATE(),

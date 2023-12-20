@@ -6,7 +6,7 @@ import { useAnalyticTracking, useTheme } from "~Hooks"
 import { debug } from "~Utils"
 import { useNavigation } from "@react-navigation/native"
 import { Routes } from "~Navigation"
-import { AnalyticsEvent, isSmallScreen } from "~Constants"
+import { AnalyticsEvent, ERROR_EVENTS, isSmallScreen } from "~Constants"
 
 type Props = {
     onClose: () => void
@@ -20,7 +20,7 @@ export const ImportWalletBottomSheet = React.forwardRef<BottomSheetModalMethods,
     const track = useAnalyticTracking()
 
     const handleSheetChanges = useCallback((index: number) => {
-        debug("ImportWalletBottomSheet position changed", index)
+        debug(ERROR_EVENTS.WALLET_CREATION, "ImportWalletBottomSheet position changed", index)
     }, [])
 
     const navigateToImportLocalWallet = useCallback(() => {

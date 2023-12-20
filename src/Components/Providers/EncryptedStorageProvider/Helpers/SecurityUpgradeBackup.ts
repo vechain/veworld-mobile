@@ -3,6 +3,7 @@ import { Keychain } from "~Storage"
 import { CryptoUtils, debug, error } from "~Utils"
 import { StorageEncryptionKeyHelper, WalletEncryptionKeyHelper } from "~Components"
 import SaltHelper from "./SaltHelper"
+import { ERROR_EVENTS } from "~Constants"
 
 const BACKUP_KEY_STORAGE = "BACKUP_KEY_STORAGE"
 
@@ -27,7 +28,7 @@ const get = async (pinCode: string): Promise<BackupKeys | null> => {
     })
 
     if (!keys) {
-        debug("Backup: No keys found")
+        debug(ERROR_EVENTS.SECURTIY, "Backup: No keys found")
         return null
     }
 
@@ -47,16 +48,14 @@ const clear = async () => {
 const handleSecurityUpgradeFailure = async (oldPin: string) => {
     try {
         const keys = await get(oldPin)
-
         if (!keys) {
-            error("CRITICAL: Security upgrade failed, no backup keys found")
-            throw new Error("No backup keys found")
+            throw new Error("No backup keys found - CRITICAL: Security upgrade failed, no backup keys found")
         }
         await WalletEncryptionKeyHelper.set(keys.wallet, oldPin)
         await StorageEncryptionKeyHelper.set(keys.storage, oldPin)
         await clear()
     } catch (e) {
-        error("CRITICAL: Security upgrade failed", e)
+        error(ERROR_EVENTS.SECURTIY, "CRITICAL: Security upgrade failed", e, { oldPin })
         throw e
     }
 }
@@ -81,7 +80,7 @@ const updateSecurityMethod = async (currentPinCode: string, newPinCode?: string)
 
         await _store(backup, currentPinCode)
     } catch (e) {
-        error("Failed to back up current keys", e)
+        error(ERROR_EVENTS.SECURTIY, "Failed to back up current keys", e)
         return false
     }
 
@@ -96,7 +95,7 @@ const updateSecurityMethod = async (currentPinCode: string, newPinCode?: string)
 
         return true
     } catch (e) {
-        error("Failed to update security method", e)
+        error(ERROR_EVENTS.SECURTIY, "Failed to update security method", e)
         await handleSecurityUpgradeFailure(currentPinCode)
         return false
     }

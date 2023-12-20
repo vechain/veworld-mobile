@@ -1,5 +1,5 @@
 import { useCallback, useEffect, useMemo, useRef, useState } from "react"
-import { LEDGER_ERROR_CODES, VETLedgerAccount } from "~Constants"
+import { ERROR_EVENTS, LEDGER_ERROR_CODES, VETLedgerAccount } from "~Constants"
 
 import { debug, error, warn } from "~Utils/Logger"
 import BleTransport from "@ledgerhq/react-native-hw-transport-ble"
@@ -32,12 +32,6 @@ export const useLedger = ({
     deviceId: string
     autoConnect?: boolean
 }): UseLedgerProps => {
-    // useEffect(() => {
-    //     listen(log => {
-    //         debug("ledger:log", log)
-    //     })
-    // }, [])
-
     const mutex = useRef<Mutex>(new Mutex())
 
     const { canConnect, unsubscribe, timedOut, setCanConnect } = useLedgerSubscription({
@@ -62,7 +56,7 @@ export const useLedger = ({
 
     const removeLedger = useCallback(async () => {
         if (!removed) {
-            debug("[Ledger] - removeLedger")
+            debug(ERROR_EVENTS.LEDGER, "removeLedger")
 
             setRemoved(true)
             unsubscribe()
@@ -70,7 +64,7 @@ export const useLedger = ({
                 try {
                     await BleTransport.disconnectDevice(deviceId)
                 } catch (e) {
-                    error("ledger:close", e)
+                    error(ERROR_EVENTS.LEDGER, e)
                 }
             }
 
@@ -116,11 +110,11 @@ export const useLedger = ({
     }, [])
 
     const onConnectionConfirmed = useCallback(async () => {
-        debug("[Ledger] - onConnectionConfirmed")
+        debug(ERROR_EVENTS.LEDGER, "onConnectionConfirmed")
         if (transport.current) {
             const res = await LedgerUtils.verifyTransport(withTransport(transport.current))
 
-            debug("[Ledger] - verifyTransport", res)
+            debug(ERROR_EVENTS.LEDGER, "verifyTransport", res)
 
             if (res.success) {
                 setAppOpen(true)
@@ -133,17 +127,17 @@ export const useLedger = ({
     }, [setConfig, withTransport])
 
     const openBleConnection = useCallback(async () => {
-        debug("[Ledger] - openBleConnection")
+        debug(ERROR_EVENTS.LEDGER, "openBleConnection")
 
         transport.current = await BleTransport.open(deviceId).catch(e => {
-            error("[Ledger] - openBleConnection", e)
+            error(ERROR_EVENTS.LEDGER, "openBleConnection", e)
             throw e
         })
 
-        debug("[Ledger] - connection successful")
+        debug(ERROR_EVENTS.LEDGER, "connection successful")
 
         transport.current.on("disconnect", () => {
-            warn("[Ledger] - on disconnect")
+            warn(ERROR_EVENTS.LEDGER, "on disconnect")
             setDisconnected(true)
             setRootAccount(undefined)
             setAppOpen(false)
@@ -156,31 +150,26 @@ export const useLedger = ({
     }, [setCanConnect, onConnectionConfirmed, deviceId])
 
     const attemptBleConnection = useCallback(async () => {
-        debug("[Ledger] - attemptAutoConnect")
+        debug(ERROR_EVENTS.LEDGER, "attemptAutoConnect")
         setIsConnecting(true)
 
         try {
-            debug("[Ledger] - Attempting to open connection")
+            debug(ERROR_EVENTS.LEDGER, "Attempting to open connection")
             await openBleConnection()
-            debug("[Ledger] - Opened connection")
+            debug(ERROR_EVENTS.LEDGER, "Opened connection")
         } catch (e) {
-            warn("[Ledger] - Error opening connection", e)
+            warn(ERROR_EVENTS.LEDGER, "Error opening connection", e)
             setErrorCode(LEDGER_ERROR_CODES.UNKNOWN)
         }
 
-        debug("[Ledger] - Finished attempting to open connection")
+        debug(ERROR_EVENTS.LEDGER, "Finished attempting to open connection")
         setIsConnecting(false)
     }, [openBleConnection])
 
     useEffect(() => {
-        debug("[Ledger] - useLedger - useEffect - autoConnect", {
-            autoConnect,
-            canConnect,
-        })
-
         if (autoConnect && canConnect) {
-            debug("[Ledger] - Attempting to auto connect")
-            attemptBleConnection().catch(e => warn("[Ledger] - Auto connect error:", e))
+            debug(ERROR_EVENTS.LEDGER, "Attempting to auto connect")
+            attemptBleConnection().catch(e => warn(ERROR_EVENTS.LEDGER, "Auto connect error:", e))
         }
     }, [autoConnect, canConnect, attemptBleConnection])
 

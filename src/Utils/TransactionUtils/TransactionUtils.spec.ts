@@ -235,7 +235,7 @@ describe("TransactionUtils", () => {
 
             expect(TransactionUtils.decodeTokenTransferClause(clause)).toBe(null)
 
-            expect(debugSpy).toHaveBeenCalledWith("Failed to decode parameters", expect.any(Error))
+            expect(debugSpy).toHaveBeenCalledWith("UTILS", "Failed to decode parameters", expect.any(Error))
 
             // Restore the original function
             debugSpy.mockRestore()
@@ -289,7 +289,7 @@ describe("TransactionUtils", () => {
             }
 
             expect(TransactionUtils.decodeSwapExactVETForTokensClause(clause)).toBe(null)
-            expect(debugSpy).toHaveBeenCalledWith("Failed to decode parameters", expect.any(Error))
+            expect(debugSpy).toHaveBeenCalledWith("UTILS", "Failed to decode parameters", expect.any(Error))
 
             // Restore the original function
             debugSpy.mockRestore()
@@ -341,7 +341,7 @@ describe("TransactionUtils", () => {
             }
 
             expect(TransactionUtils.decodeSwapExactETHForTokensClause(clause)).toBe(null)
-            expect(debugSpy).toHaveBeenCalledWith("Failed to decode parameters", expect.any(Error))
+            expect(debugSpy).toHaveBeenCalledWith("UTILS", "Failed to decode parameters", expect.any(Error))
 
             // Restore the original function
             debugSpy.mockRestore()
@@ -395,7 +395,7 @@ describe("TransactionUtils", () => {
             }
 
             expect(TransactionUtils.decodeSwapTokensForExactVETClause(clause)).toBe(null)
-            expect(debugSpy).toHaveBeenCalledWith("Failed to decode parameters", expect.any(Error))
+            expect(debugSpy).toHaveBeenCalledWith("UTILS", "Failed to decode parameters", expect.any(Error))
 
             // Restore the original function
             debugSpy.mockRestore()
@@ -447,7 +447,7 @@ describe("TransactionUtils", () => {
             }
 
             expect(TransactionUtils.decodeSwapExactTokensForETHClause(clause)).toBe(null)
-            expect(debugSpy).toHaveBeenCalledWith("Failed to decode parameters", expect.any(Error))
+            expect(debugSpy).toHaveBeenCalledWith("UTILS", "Failed to decode parameters", expect.any(Error))
 
             // Restore the original function
             debugSpy.mockRestore()
@@ -505,7 +505,7 @@ describe("TransactionUtils", () => {
             }
 
             expect(TransactionUtils.decodeSwapExactTokensForTokensClause(clause)).toBe(null)
-            expect(debugSpy).toHaveBeenCalledWith("Failed to decode parameters", expect.any(Error))
+            expect(debugSpy).toHaveBeenCalledWith("UTILS", "Failed to decode parameters", expect.any(Error))
 
             // Restore the original function
             debugSpy.mockRestore()
@@ -559,7 +559,7 @@ describe("TransactionUtils", () => {
             }
 
             expect(TransactionUtils.decodeSwapVETForExactTokensClause(clause)).toBe(null)
-            expect(debugSpy).toHaveBeenCalledWith("Failed to decode parameters", expect.any(Error))
+            expect(debugSpy).toHaveBeenCalledWith("UTILS", "Failed to decode parameters", expect.any(Error))
 
             // Restore the original function
             debugSpy.mockRestore()
@@ -613,7 +613,7 @@ describe("TransactionUtils", () => {
             }
 
             expect(TransactionUtils.decodeSwapExactTokensForVETClause(clause)).toBe(null)
-            expect(debugSpy).toHaveBeenCalledWith("Failed to decode parameters", expect.any(Error))
+            expect(debugSpy).toHaveBeenCalledWith("UTILS", "Failed to decode parameters", expect.any(Error))
 
             // Restore the original function
             debugSpy.mockRestore()
@@ -991,7 +991,7 @@ describe("TransactionUtils", () => {
 
             expect(TransactionUtils.decodeSwapEvent(txEventsIncludingCorruptedSwapEvent[0])).toBe(null)
 
-            expect(debugSpy).toHaveBeenCalledWith("Failed to decode parameters", expect.any(Error))
+            expect(debugSpy).toHaveBeenCalledWith("UTILS", "Failed to decode parameters", expect.any(Error))
 
             // Restore the original function
             debugSpy.mockRestore()
@@ -1391,7 +1391,7 @@ describe("Decode Transfer Event", () => {
 
             expect(TransactionUtils.decodeNonFungibleTokenTransferClause(clause)).toBe(null)
 
-            expect(debugSpy).toHaveBeenCalledWith("Failed to decode parameters", expect.any(Error))
+            expect(debugSpy).toHaveBeenCalledWith("UTILS", "Failed to decode parameters", expect.any(Error))
 
             // Restore the original function
             debugSpy.mockRestore()

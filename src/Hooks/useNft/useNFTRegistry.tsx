@@ -1,7 +1,8 @@
 import { useEffect } from "react"
+import { ERROR_EVENTS } from "~Constants"
 import { getCollectionInfo } from "~Networking"
 import { selectSelectedNetwork, setCollectionRegistryInfo, useAppDispatch, useAppSelector } from "~Storage/Redux"
-import { error } from "~Utils"
+import { warn } from "~Utils"
 
 export const useNFTRegistry = () => {
     const dispatch = useAppDispatch()
@@ -18,7 +19,7 @@ export const useNFTRegistry = () => {
                 )
             })
             .catch(e => {
-                error("useNFTRegistry", e)
+                warn(ERROR_EVENTS.NFT, e)
             })
     }, [dispatch, network])
 }

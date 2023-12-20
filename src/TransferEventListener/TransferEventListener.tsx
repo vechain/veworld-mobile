@@ -20,6 +20,7 @@ import { fetchTransfersForBlock } from "~Networking/Transfers"
 import { useThor } from "~Components"
 import { filterNFTTransferEvents, filterTransferEventsByType } from "./Helpers"
 import { handleNFTTransfers, handleTokenTransfers, handleVETTransfers } from "./Handlers"
+import { ERROR_EVENTS } from "~Constants"
 
 export const TransferEventListener: React.FC = () => {
     const selectedAccount = useAppSelector(selectSelectedAccount)
@@ -84,7 +85,10 @@ export const TransferEventListener: React.FC = () => {
                     network.type,
                 )
 
-                debug(`Found ${transfers.pagination.totalElements} transfers in block ${beat.number}`)
+                debug(
+                    ERROR_EVENTS.TOKENS,
+                    `Found ${transfers.pagination.totalElements} transfers in block ${beat.number}`,
+                )
 
                 if (transfers.pagination.totalElements === 0) return
 
@@ -122,7 +126,7 @@ export const TransferEventListener: React.FC = () => {
                     informUser: forTokens,
                 })
             } catch (e) {
-                error("onBeatMessage", e)
+                error(ERROR_EVENTS.TOKENS, e)
             }
         },
         [

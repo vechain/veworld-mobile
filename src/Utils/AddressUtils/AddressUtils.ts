@@ -1,7 +1,7 @@
 import { address, HDNode } from "thor-devkit"
 import { Network, NETWORK_TYPE, XPub } from "~Model"
 import { error, warn } from "~Utils/Logger"
-import { VET, VTHO } from "~Constants"
+import { ERROR_EVENTS, VET, VTHO } from "~Constants"
 import CryptoUtils from "../CryptoUtils"
 import HexUtils from "../HexUtils"
 
@@ -14,7 +14,7 @@ export const getAddressFromPrivateKey = (privateKey: string): string => {
         )
         return address.toChecksumed(hdNode.address)
     } catch (e) {
-        error("getAddressFromPrivateKey", e)
+        error(ERROR_EVENTS.UTILS, e)
         throw new Error("getAddressFromPrivateKey: Invalid private key")
     }
 }
@@ -29,7 +29,7 @@ export const getAddressFromXPub = (xPub: XPub, index: number): string => {
         const hdNode = CryptoUtils.hdNodeFromXPub(xPub)
         return getAddressFromHdNode(hdNode, index)
     } catch (e) {
-        error("getAddressFromXPub", e)
+        error(ERROR_EVENTS.UTILS, e)
         throw new Error("getAddressFromXPub: Invalid XPub")
     }
 }
@@ -45,7 +45,7 @@ export const getAddressFromHdNode = (hdNode: HDNode, index: number): string => {
         const account = hdNode.derive(index)
         return address.toChecksumed(account.address)
     } catch (e) {
-        error("getAddressFromHdNode", e)
+        error(ERROR_EVENTS.UTILS, e)
         throw new Error("getAddressFromHdNode: Invalid XPub")
     }
 }
@@ -68,7 +68,7 @@ export const compareAddresses = (address1?: string, address2?: string): boolean 
     try {
         return HexUtils.normalize(address1) === HexUtils.normalize(address2)
     } catch (e) {
-        warn("Got error:", e, "Trying to compare address1:", address1, "with address2:", address2)
+        warn(ERROR_EVENTS.UTILS, e, "Trying to compare address1:", address1, "with address2:", address2)
         return false
     }
 }
@@ -95,7 +95,7 @@ export const isValid = (addr: string | undefined | null): boolean => {
         address.toChecksumed(HexUtils.addPrefix(addr))
         return true
     } catch (e) {
-        warn("AddressUtils:isValid", e)
+        warn(ERROR_EVENTS.UTILS, e)
         return false
     }
 }

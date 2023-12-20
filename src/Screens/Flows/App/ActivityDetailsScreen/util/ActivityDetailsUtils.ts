@@ -1,4 +1,4 @@
-import { DIRECTIONS } from "~Constants"
+import { DIRECTIONS, ERROR_EVENTS } from "~Constants"
 import { warn } from "~Utils"
 import { Activity, ActivityType, FungibleTokenActivity, NonFungibleTokenActivity } from "~Model"
 import { TranslationFunctions } from "~i18n"
@@ -20,6 +20,6 @@ export const getActivityTitle = (activity: Activity, LL: TranslationFunctions, i
         case ActivityType.CONNECTED_APP_TRANSACTION:
             return LL.CONNECTED_APP_TITLE()
         default:
-            warn("Unknown activity type")
+            warn(ERROR_EVENTS.ACTIVITIES, "Unknown activity type")
     }
 }

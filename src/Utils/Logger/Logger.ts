@@ -7,6 +7,10 @@
 // Warn - Anything that can potentially cause application oddities, but for which I am automatically recovering. (Such as switching from a primary to backup server, retrying an operation, missing secondary data, etc.)
 // Error - Any error
 
+const logLevel = process.env.REACT_APP_LOG_LEVEL || "warn"
+import * as Sentry from "@sentry/react-native"
+import { ERROR_EVENTS } from "~Constants"
+
 const LOG_LEVELS = {
     trace: 0,
     debug: 1,
@@ -14,27 +18,30 @@ const LOG_LEVELS = {
     warn: 3,
     error: 4,
 }
-const logLevel = process.env.REACT_APP_LOG_LEVEL || "warn"
-import * as Sentry from "@sentry/react-native"
 
-const checkLogLevelHOC = (logID: keyof typeof LOG_LEVELS): ((...args: unknown[]) => void) => {
-    if (LOG_LEVELS[logID] === LOG_LEVELS.error) {
-        return (...args: unknown[]) => {
+type LogLevelKey = keyof typeof LOG_LEVELS
+type ErrorEventKey = keyof typeof ERROR_EVENTS
+
+const checkLogLevelHOC = (logID: LogLevelKey): ((eventKey: ErrorEventKey, ...args: unknown[]) => void) => {
+    return (eventKey, ...args) => {
+        if (LOG_LEVELS[logID] === LOG_LEVELS.error) {
             // eslint-disable-next-line no-console
-            console.error(...args)
+            console.error(`[-- ${ERROR_EVENTS[eventKey]} --]`, ...args)
+
+            const concatenatedString = args.reduce((accumulator, currentValue) => {
+                return accumulator + currentValue!.toString()
+            }, "")
+
             try {
-                const stringifiedArgs = JSON.stringify(args)
-                Sentry.captureException(stringifiedArgs)
+                Sentry.captureException(concatenatedString, { tags: { Feature_Tag: ERROR_EVENTS[eventKey] } })
             } catch {
                 Sentry.captureException(args)
             }
+        } else if (LOG_LEVELS[logID] >= LOG_LEVELS[logLevel as LogLevelKey]) {
+            // eslint-disable-next-line no-console
+            console[logID](`[-- ${ERROR_EVENTS[eventKey]} --]`, ...args)
         }
     }
-    if (LOG_LEVELS[logID] >= LOG_LEVELS[logLevel as keyof typeof LOG_LEVELS]) {
-        // eslint-disable-next-line no-console
-        return console[logID]
-    }
-    return () => {}
 }
 
 export const trace = checkLogLevelHOC("trace")

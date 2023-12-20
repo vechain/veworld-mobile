@@ -1,4 +1,4 @@
-import { ORDER, getFungibleTokensContracts } from "~Constants"
+import { ERROR_EVENTS, ORDER, getFungibleTokensContracts } from "~Constants"
 import { Balance, Network } from "~Model"
 import {
     DEFAULT_PAGE_SIZE,
@@ -24,7 +24,7 @@ export const fetchFungibleTokensContracts = async (
     network: Network,
     officialTokensOnly: boolean = false,
 ) => {
-    debug(`Fetching token addresses for ${accountAddress} page ${page}`)
+    debug(ERROR_EVENTS.TOKENS, `Fetching token addresses for ${accountAddress} page ${page}`)
 
     try {
         return await fetchFromEndpoint<FetchFungibleTokensContractsResponse>(

@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react"
 import { BleManager, State } from "react-native-ble-plx"
+import { ERROR_EVENTS } from "~Constants"
 import { debug } from "~Utils/Logger"
 
 //An hook returning if BLE is supported and its current status
@@ -9,7 +10,7 @@ export const useBluetoothStatus = () => {
     useEffect(() => {
         const manager = new BleManager()
         manager.onStateChange(state => {
-            debug("BLE state changed", state)
+            debug(ERROR_EVENTS.LEDGER, "BLE state changed", state)
             setStatus(state)
         })
 

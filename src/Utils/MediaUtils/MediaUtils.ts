@@ -1,5 +1,6 @@
 import axios from "axios"
 import { NFTPlaceholderDark, NFTPlaceHolderLight } from "~Assets"
+import { ERROR_EVENTS } from "~Constants"
 import { NFT_MIME_TYPE_AXIOS_TIMEOUT } from "~Constants/Constants/NFT"
 import { NFTMediaType } from "~Model"
 import { warn } from "~Utils/Logger"
@@ -76,7 +77,7 @@ const resolveMimeTypeFromUri = async (resource: string) => {
         const contentType = res.headers["content-type"]
         return contentType ?? "image/png"
     } catch (err) {
-        warn(`Failed to resolve mime type for ${resource}`, err)
+        warn(ERROR_EVENTS.NFT, `Failed to resolve mime type for ${resource}`, err)
     }
     return "image/png"
 }

@@ -2,7 +2,7 @@ import { AppThunk, createAppAsyncThunk } from "../Types"
 
 import { addCustomNetwork, changeSelectedNetwork, removeCustomNetwork, updateCustomNetwork } from "../Slices/Network"
 import { debug, ConnectionUtils, URIUtils } from "~Utils"
-import { genesises } from "~Constants"
+import { ERROR_EVENTS, genesises } from "~Constants"
 import axios from "axios"
 import { selectCustomNetworks, selectDefaultNetworks, selectSelectedNetwork } from "../Selectors"
 import { Network } from "~Model"
@@ -19,7 +19,7 @@ const validateCustomNode = async ({ url, name }: { url: string; name: string }) 
         //Test the Websocket connection for the user's URL - throws an error if it fails
         await ConnectionUtils.verifyWebSocketConnection(url)
 
-        debug("Websocket connection verified")
+        debug(ERROR_EVENTS.SETTINGS, "Websocket connection verified")
 
         //Get the genesis block
         const blockResponse = await axios.get<Connex.Thor.Block>(`${url}/blocks/0`)
@@ -46,7 +46,7 @@ const validateCustomNode = async ({ url, name }: { url: string; name: string }) 
 export const validateAndAddCustomNode = createAppAsyncThunk(
     "network/validateAndAddCustomNode",
     async ({ url, name }: { url: string; name: string }, { dispatch, getState, rejectWithValue }) => {
-        debug("Attempting to add a custom network")
+        debug(ERROR_EVENTS.SETTINGS, "Attempting to add a custom network")
 
         try {
             const network = await validateCustomNode({ url, name })
@@ -72,7 +72,7 @@ export const validateAndUpdateCustomNode = createAppAsyncThunk(
         { networkToUpdateId, url, name }: { networkToUpdateId: string; url: string; name: string },
         { dispatch, getState, rejectWithValue },
     ) => {
-        debug("Attempting to update a custom network")
+        debug(ERROR_EVENTS.SETTINGS, "Attempting to update a custom network")
 
         try {
             const network = await validateCustomNode({ url, name })

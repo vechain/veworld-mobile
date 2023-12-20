@@ -2,6 +2,7 @@ import { MMKV, MMKVConfiguration } from "react-native-mmkv"
 import { SynchronousCache } from "./interface"
 import { createKey } from "~Utils/CacheKeyUtils/CacheKeyUtils"
 import { CryptoUtils, error } from "~Utils"
+import { ERROR_EVENTS } from "~Constants"
 
 export default class SecurePersistedCache<T> implements SynchronousCache<T> {
     readonly _cache: MMKV
@@ -35,7 +36,7 @@ export default class SecurePersistedCache<T> implements SynchronousCache<T> {
             const decryptedItem = JSON.parse(CryptoUtils.decryptState(value, this.encryptionKey))
             return decryptedItem as T
         } catch (e) {
-            error(`Error getting item ${key}`, e)
+            error(ERROR_EVENTS.ENCRYPTION, `Error getting item ${key}`, e)
             return undefined
         }
     }

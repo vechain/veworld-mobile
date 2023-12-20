@@ -1,10 +1,11 @@
 import { useCallback, useEffect, useState } from "react"
-import { debug, error, WalletConnectUtils } from "~Utils"
+import { debug, WalletConnectUtils, warn } from "~Utils"
 import { getSdkError } from "@walletconnect/utils"
 import { ActiveSessions, showInfoToast, showSuccessToast } from "~Components"
 import { useI18nContext } from "~i18n"
 import { SessionTypes, SignClientTypes } from "@walletconnect/types"
 import { cleanContexts, deleteContext, useAppDispatch } from "~Storage/Redux"
+import { ERROR_EVENTS } from "~Constants"
 
 type SessionDelete = Omit<SignClientTypes.BaseEventArgs, "params">
 type SessionDeleteState = Record<string, SessionDelete>
@@ -28,7 +29,7 @@ export const useWcSessions = () => {
 
     const disconnectSession = useCallback(
         async (topic: string, fromRemote = false) => {
-            debug("Disconnecting session", topic, fromRemote)
+            debug(ERROR_EVENTS.WALLET_CONNECT, "Disconnecting session", topic, fromRemote)
 
             setActiveSessions(prev => {
                 const _prev = { ...prev }
@@ -44,7 +45,7 @@ export const useWcSessions = () => {
                     reason: getSdkError("USER_DISCONNECTED"),
                 })
             } catch (err: unknown) {
-                error("WalletConnectProvider:disconnect", err)
+                warn(ERROR_EVENTS.WALLET_CONNECT, "WalletConnectProvider:disconnect", err)
             } finally {
                 dispatch(deleteContext({ topic }))
                 if (fromRemote) {
@@ -71,7 +72,7 @@ export const useWcSessions = () => {
     useEffect(() => {
         Object.values(sessionDeletes).forEach(sessionDelete => {
             disconnectSession(sessionDelete.topic, true).catch(err => {
-                error("WalletConnectProvider:disconnect", err)
+                warn(ERROR_EVENTS.WALLET_CONNECT, "WalletConnectProvider:disconnect", err)
             })
         })
     }, [disconnectSession, sessionDeletes])
@@ -89,6 +90,7 @@ export const useWcSessions = () => {
 
     useEffect(() => {
         debug(
+            ERROR_EVENTS.WALLET_CONNECT,
             "activeSessions",
             Object.values(activeSessions).map(s => s.topic),
         )

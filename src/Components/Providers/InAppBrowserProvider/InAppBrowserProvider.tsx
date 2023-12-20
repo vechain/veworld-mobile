@@ -1,7 +1,7 @@
 import React, { useCallback, useContext, useMemo, useRef, useState } from "react"
 import WebView, { WebViewMessageEvent, WebViewNavigation } from "react-native-webview"
 import { WindowRequest, WindowResponse } from "./types"
-import { AnalyticsEvent, RequestMethods } from "~Constants"
+import { AnalyticsEvent, ERROR_EVENTS, RequestMethods } from "~Constants"
 import { useNavigation } from "@react-navigation/native"
 import { AddressUtils, DAppUtils, debug, warn } from "~Utils"
 import { Routes } from "~Navigation"
@@ -103,7 +103,7 @@ export const InAppBrowserProvider = ({ children }: Props) => {
 
     const postMessage = useCallback(
         (message: WindowResponse) => {
-            debug("responding to dapp request", message.id)
+            debug(ERROR_EVENTS.DAPP, "responding to dapp request", message.id)
 
             webviewRef.current?.injectJavaScript(
                 `
@@ -425,7 +425,7 @@ export const InAppBrowserProvider = ({ children }: Props) => {
 
     const onMessage = useCallback(
         (event: WebViewMessageEvent) => {
-            debug("onMessage", event.nativeEvent.url)
+            debug(ERROR_EVENTS.DAPP, event.nativeEvent.url)
 
             if (!event.nativeEvent.data) {
                 return
@@ -438,7 +438,7 @@ export const InAppBrowserProvider = ({ children }: Props) => {
             } else if (data.method === RequestMethods.SIGN_CERTIFICATE) {
                 return validateCertMessage(data, event.nativeEvent.url, event.nativeEvent.title)
             } else {
-                warn("Unknown method", event.nativeEvent)
+                warn(ERROR_EVENTS.DAPP, "Unknown method", event.nativeEvent)
             }
         },
         [validateTxMessage, validateCertMessage],

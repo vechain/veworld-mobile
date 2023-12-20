@@ -5,6 +5,7 @@ import { error, GasUtils } from "~Utils"
 import { useThor } from "~Components"
 import { EstimateGasResult } from "~Model"
 import { selectSelectedAccount, useAppSelector } from "~Storage/Redux"
+import { ERROR_EVENTS } from "~Constants"
 
 type UseTransactionReturnProps = {
     gas?: EstimateGasResult
@@ -48,7 +49,7 @@ export const useTransactionGas = ({ clauses, providedGas, providedGasPayer }: Pr
 
                 setGas(estimatedGas)
             } catch (e) {
-                error("estimateGas", e)
+                error(ERROR_EVENTS.SEND, e)
             } finally {
                 setLoadingGas(false)
             }

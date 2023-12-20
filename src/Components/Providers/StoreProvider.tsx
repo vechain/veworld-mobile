@@ -18,7 +18,6 @@ import { Provider } from "react-redux"
 import { PersistGate } from "redux-persist/integration/react"
 import { PersistedCacheProvider, useApplicationSecurity } from "~Components/Providers"
 import { Reducer } from "redux"
-import { warn } from "~Utils"
 import { MMKV } from "react-native-mmkv"
 import { SplashScreen } from "../../../src/SplashScreen"
 import { PersistConfig } from "redux-persist/es/types"
@@ -46,7 +45,6 @@ const StoreContextProvider = ({ children }: StoreContextProviderProps) => {
         const persistedReducer: Reducer = persistReducer<RootState>(persistConfig, reducer(nftPersistence))
 
         if (store.current) {
-            warn("Replacing store")
             store.current.replaceReducer(persistedReducer)
         } else {
             let middlewares: any[] = []

@@ -1,8 +1,8 @@
 import { useCallback, useEffect, useState } from "react"
 import { useThor } from "~Components"
-import { VET } from "~Constants"
+import { ERROR_EVENTS, VET } from "~Constants"
 import { getTokenDecimals, getTokenName, getTokenSymbol } from "~Networking"
-import { error as loggerError } from "~Utils"
+import { warn } from "~Utils"
 
 /**
  * A custom hook that fetches basic information about fungible tokens.
@@ -50,7 +50,7 @@ export const useFungibleTokenInfo = (tokenAddress?: string) => {
                 setName(resName)
             } catch (err) {
                 setError(err as Error)
-                loggerError("Error getting token info", err)
+                warn(ERROR_EVENTS.TOKENS, err)
             }
         }
 

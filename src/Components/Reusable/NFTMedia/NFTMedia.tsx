@@ -1,7 +1,7 @@
 import React, { memo, useCallback, useEffect, useMemo, useRef, useState } from "react"
 import { useTheme, useNFTMedia, useThemedStyles } from "~Hooks"
 import { NFTMediaType, NFTMedia as Media } from "~Model"
-import { error } from "~Utils"
+import { warn } from "~Utils"
 import { NFTVideo } from "../NFTVideo"
 import { StyleSheet } from "react-native"
 import { BaseView } from "~Components/Base"
@@ -11,6 +11,7 @@ import { LongPressProvider } from "../LongPressProvider"
 // @ts-ignore
 import ProgressBar from "react-native-progress/Bar"
 import { useSaveMediaToPhotos } from "./Hooks"
+import { ERROR_EVENTS } from "~Constants"
 
 type Props = {
     uri?: string
@@ -60,9 +61,7 @@ export const NFTMedia = memo(
                 .then(media => {
                     setTokenMedia(media)
                 })
-                .catch(e => {
-                    error(e)
-                })
+                .catch(e => warn(ERROR_EVENTS.NFT, e))
         }, [fetchMedia, uri])
 
         useEffect(() => {
