@@ -1,9 +1,8 @@
 import { Dispatch, SetStateAction, useCallback, useEffect, useState } from "react"
-import { VET } from "~Constants"
 import { useThor } from "~Components"
 import { FungibleToken, Token } from "~Model"
 import { getCustomTokenInfo } from "~Screens/Flows/App/ManageCustomTokenScreen/Utils"
-import { selectSelectedNetwork, selectTokensWithInfo, selectVetTokenWithInfo, useAppSelector } from "~Storage/Redux"
+import { selectOfficialTokens, selectSelectedNetwork, useAppSelector } from "~Storage/Redux"
 import { AddressUtils } from "~Utils"
 
 /**
@@ -25,9 +24,7 @@ import { AddressUtils } from "~Utils"
  *
  */
 export const useSwappedTokens = (receivedTokenAddress: string, paidTokenAddress: string) => {
-    const vetToken = useAppSelector(selectVetTokenWithInfo)
-
-    const tokens = useAppSelector(selectTokensWithInfo)
+    const tokens = useAppSelector(selectOfficialTokens)
 
     const network = useAppSelector(selectSelectedNetwork)
 
@@ -38,11 +35,6 @@ export const useSwappedTokens = (receivedTokenAddress: string, paidTokenAddress:
 
     const getToken = useCallback(
         async (tokenAddress: string, setState: Dispatch<SetStateAction<FungibleToken | undefined>>) => {
-            if (tokenAddress === VET.address) {
-                setState(vetToken)
-                return
-            }
-
             let token = tokens.find((tkn: Token) => AddressUtils.compareAddresses(tkn.address, tokenAddress))
 
             if (!token) {
@@ -55,13 +47,13 @@ export const useSwappedTokens = (receivedTokenAddress: string, paidTokenAddress:
 
             setState(token)
         },
-        [network, thor, tokens, vetToken],
+        [network, thor, tokens],
     )
 
     useEffect(() => {
         getToken(paidTokenAddress, setPaidToken)
         getToken(receivedTokenAddress, setReceivedToken)
-    }, [getToken, network, paidTokenAddress, receivedTokenAddress, thor, tokens, vetToken])
+    }, [getToken, network, paidTokenAddress, receivedTokenAddress, thor, tokens])
 
     return { paidToken, receivedToken, tokens }
 }

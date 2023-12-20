@@ -15,7 +15,7 @@ type TokenChartData = {
 }
 
 type Props = {
-    chartData: TokenChartData[]
+    chartData?: TokenChartData[]
     isChartDataLoading: boolean
     token: TokenWithCompleteInfo
 }
@@ -52,7 +52,7 @@ export const ChartView = ({ chartData, token, isChartDataLoading }: Props) => {
             return (
                 <BaseView justifyContent="center" alignItems="center" style={[styles.negativeMargin, styles.container]}>
                     <BaseView>
-                        <LineChart height={120} style={styles.opacity}>
+                        <LineChart height={180} style={styles.opacity}>
                             <LineChart.Path color={theme.colors.primary} width={0}>
                                 <LineChart.Gradient lastGradientValue={0} />
                             </LineChart.Path>

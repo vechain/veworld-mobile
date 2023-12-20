@@ -8,7 +8,6 @@ export type TokensState = {
             suggestedTokens: string[]
         }
     }
-    coinGeckoTokens: TokenInfoResponse[]
 }
 
 export type TokenInfoResponse = {

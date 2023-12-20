@@ -1,5 +1,5 @@
 import { useQuery } from "@tanstack/react-query"
-import { MarketChartResponse, getMarketChart, getTokenInfo } from "./endpoints"
+import { MarketChartResponse, VETHOR_COINGECKO_ID, VET_COINGECKO_ID, getMarketChart, getTokenInfo } from "./endpoints"
 import BigNumber from "bignumber.js"
 
 const EXCHANGE_RATE_SYNC_PERIOD = new BigNumber(process.env.REACT_APP_EXCHANGE_RATE_SYNC_PERIOD ?? "120000").toNumber()
@@ -52,5 +52,53 @@ export const useMarketChart = ({
         enabled: !!id,
         placeholderData,
         staleTime: CHART_DATA_SYNC_PERIOD,
+    })
+}
+
+const getExchangeRateQueryKey = ({ id, vs_currency }: { id?: string; vs_currency: string }) => [
+    "EXCHANGE_RATE",
+    id,
+    vs_currency,
+]
+/**
+ *  Get the exchange rate of a coin reusing the token info
+ * @param id  the id of the coin
+ * @param vs_currencies  the currencies to compare
+ * @returns  the exchange rate
+ */
+export const useExchangeRate = ({ id, vs_currency }: { id?: string; vs_currency: string }) => {
+    const { data: tokenInfo } = useTokenInfo({ id })
+
+    const currency = vs_currency.toLowerCase()
+
+    return useQuery({
+        queryKey: getExchangeRateQueryKey({ id, vs_currency }),
+        queryFn: () => tokenInfo?.market_data.current_price[currency],
+        enabled: !!tokenInfo,
+        staleTime: EXCHANGE_RATE_SYNC_PERIOD,
+    })
+}
+
+/**
+ *  Get the exchange rate of VET
+ * @param vs_currency  the currencies to compare
+ * @returns  the exchange rate
+ */
+export const useVetExchangeRate = (vs_currency: string) => {
+    return useExchangeRate({
+        id: VET_COINGECKO_ID,
+        vs_currency,
+    })
+}
+
+/**
+ *  Get the exchange rate of VTHO
+ * @param vs_currency  the currencies to compare
+ * @returns  the exchange rate
+ */
+export const useVthoExchangeRate = (vs_currency: string) => {
+    return useExchangeRate({
+        id: VETHOR_COINGECKO_ID,
+        vs_currency,
     })
 }

@@ -1,31 +1,31 @@
 import React from "react"
-import { useBalances, useTheme } from "~Hooks"
-import { TokenWithCompleteInfo } from "~Model"
+import { TokenWithCompleteInfo, useTheme } from "~Hooks"
 import { BaseSkeleton, BaseSpacer, BaseText, BaseView } from "~Components"
 import { useI18nContext } from "~i18n"
-import { selectCurrency, selectIsTokensOwnedLoading, useAppSelector } from "~Storage/Redux"
+import { selectIsTokensOwnedLoading, useAppSelector } from "~Storage/Redux"
 
 export const BalanceView = ({
-    token,
+    tokenWithInfo,
     isBalanceVisible,
 }: {
-    token: TokenWithCompleteInfo
+    tokenWithInfo: TokenWithCompleteInfo
     isBalanceVisible: boolean
 }) => {
     const { LL } = useI18nContext()
-    const { fiatBalance, tokenUnitBalance } = useBalances({ token })
-    const currency = useAppSelector(selectCurrency)
-
     const theme = useTheme()
 
     const isTokensOwnedLoading = useAppSelector(selectIsTokensOwnedLoading)
+
+    const { symbol, fiatBalance, exchangeRateCurrency, tokenUnitBalance, exchangeRateLoading } = tokenWithInfo
+
+    const isLoading = exchangeRateLoading || isTokensOwnedLoading
 
     return (
         <BaseView w={100}>
             <BaseView flexDirection="row" alignItems="flex-end">
                 <BaseText typographyFont="bodyBold">{LL.BD_YOUR_BALANCE()}</BaseText>
                 <BaseSpacer width={4} />
-                {isTokensOwnedLoading ? (
+                {isLoading ? (
                     <BaseView flexDirection="row" alignItems="center">
                         <BaseSkeleton
                             animationDirection="horizontalLeft"
@@ -38,7 +38,7 @@ export const BalanceView = ({
                 ) : (
                     <BaseText typographyFont="caption">{`${
                         isBalanceVisible ? fiatBalance : "•••"
-                    } ${currency}`}</BaseText>
+                    } ${exchangeRateCurrency}`}</BaseText>
                 )}
             </BaseView>
 
@@ -59,7 +59,7 @@ export const BalanceView = ({
                     <BaseText>{isBalanceVisible ? tokenUnitBalance : "•••••"}</BaseText>
                 )}
                 <BaseSpacer width={4} />
-                <BaseText typographyFont="bodyBold">{token.symbol}</BaseText>
+                <BaseText typographyFont="bodyBold">{symbol}</BaseText>
             </BaseView>
         </BaseView>
     )
