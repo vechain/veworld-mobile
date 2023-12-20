@@ -10,7 +10,8 @@ import { LedgerConfig, VerifyTransportResponse } from "~Utils/LedgerUtils/Ledger
 import { Success } from "~Model"
 // import { listen } from "@ledgerhq/logs"
 
-let pollingInterval: NodeJS.Timeout | undefined
+let pollingStatusInterval: NodeJS.Timeout | undefined
+let pollingCorrectSettingsInterval: NodeJS.Timeout | undefined
 const CHECK_LEDGER_STATUS_INTERVAL = 4000
 
 /**
@@ -70,6 +71,7 @@ export const useLedger = ({
 
             setRemoved(true)
             unsubscribe()
+
             if (transport.current) {
                 try {
                     await BleTransport.disconnectDevice(deviceId)
@@ -120,9 +122,9 @@ export const useLedger = ({
     }, [])
 
     const stopPollingDeviceStatus = useCallback(() => {
-        if (pollingInterval) {
-            clearInterval(pollingInterval)
-            pollingInterval = undefined
+        if (pollingStatusInterval) {
+            clearInterval(pollingStatusInterval)
+            pollingStatusInterval = undefined
         }
     }, [])
 
@@ -152,12 +154,41 @@ export const useLedger = ({
     }, [withTransport, onDeviceAvailable])
 
     const pollingLedgerStatus = useCallback(async () => {
-        if (pollingInterval) {
+        if (pollingStatusInterval) {
             return
         }
         checkLedgerStatus()
-        pollingInterval = setInterval(checkLedgerStatus, CHECK_LEDGER_STATUS_INTERVAL)
+        pollingStatusInterval = setInterval(checkLedgerStatus, CHECK_LEDGER_STATUS_INTERVAL)
     }, [checkLedgerStatus])
+
+    const stopPollingCorrectSettings = useCallback(() => {
+        if (pollingCorrectSettingsInterval) {
+            clearInterval(pollingCorrectSettingsInterval)
+            pollingCorrectSettingsInterval = undefined
+        }
+    }, [])
+
+    const checkLedgerCorrectSettings = useCallback(async () => {
+        if (transport.current) {
+            debug("[Ledger] - checkLedgerCorrectSettings")
+            const res = await LedgerUtils.verifyTransport(withTransport(transport.current))
+
+            if (res.success) {
+                if (res?.payload?.appConfig === LedgerConfig.CLAUSE_AND_CONTRACT_ENABLED) {
+                    stopPollingCorrectSettings()
+                }
+                setConfig(res.payload.appConfig.toString().slice(0, 2) as LedgerConfig)
+            }
+        }
+    }, [withTransport, stopPollingCorrectSettings, setConfig])
+
+    const pollingCorrectSettings = useCallback(async () => {
+        if (pollingCorrectSettingsInterval) {
+            return
+        }
+        checkLedgerCorrectSettings()
+        pollingCorrectSettingsInterval = setInterval(checkLedgerCorrectSettings, CHECK_LEDGER_STATUS_INTERVAL)
+    }, [checkLedgerCorrectSettings])
 
     const openBleConnection = useCallback(async () => {
         debug("[Ledger] - openBleConnection")
@@ -234,6 +265,8 @@ export const useLedger = ({
         withTransport: externalWithTransport,
         tryLedgerConnection: attemptBleConnection,
         tryLedgerVerification: checkLedgerStatus,
+        pollingLedgerStatus,
+        pollingCorrectSettings,
     }
 }
 
@@ -257,4 +290,6 @@ interface UseLedgerProps {
     isConnecting: boolean
     removeLedger: () => Promise<void>
     withTransport?: <T>(func: (t: BleTransport) => Promise<T>) => Promise<T>
+    pollingLedgerStatus: () => Promise<void>
+    pollingCorrectSettings: () => Promise<void>
 }

@@ -67,7 +67,7 @@ export const LedgerSignTransaction: React.FC<Props> = ({ route }) => {
         onClose: closeConnectionErrorSheet,
     } = useBottomSheetModal()
 
-    const { appOpen, appConfig, errorCode, withTransport, removeLedger } = useLedger({
+    const { appOpen, appConfig, errorCode, withTransport, removeLedger, pollingCorrectSettings } = useLedger({
         deviceId: accountWithDevice.device.deviceId,
     })
 
@@ -208,8 +208,9 @@ export const LedgerSignTransaction: React.FC<Props> = ({ route }) => {
             signTransaction()
         } else {
             debug("LedgerSignTransaction:signTransaction:skipped")
+            pollingCorrectSettings()
         }
-    }, [userRejected, appOpen, appConfig, signature, signTransaction])
+    }, [userRejected, appOpen, appConfig, signature, signTransaction, pollingCorrectSettings])
 
     useEffect(() => {
         if (currentStep >= SignSteps.SIGNING) {
