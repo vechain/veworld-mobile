@@ -2,15 +2,14 @@ import React, { memo, useMemo } from "react"
 import { StyleSheet } from "react-native"
 import { useFungibleTokenInfo, useTheme } from "~Hooks"
 import { DateUtils, FormattingUtils } from "~Utils"
-import { COLORS, DIRECTIONS } from "~Constants"
+import { COLORS, DIRECTIONS, getCoinGeckoIdBySymbol } from "~Constants"
 import { BaseIcon, BaseText, BaseTouchable, BaseView } from "~Components"
 import { Activity, ActivityStatus, FungibleToken, FungibleTokenActivity } from "~Model"
 import { selectCurrency, selectCustomTokens, selectOfficialTokens, useAppSelector } from "~Storage/Redux"
-import { selectCurrencyExchangeRate } from "~Storage/Redux/Selectors/Currency"
-import { RootState } from "~Storage/Redux/Types"
 import { useI18nContext } from "~i18n"
 import { getCalendars } from "expo-localization"
 import { ActivityStatusIndicator } from "./ActivityStatusIndicator"
+import { useExchangeRate } from "~Api/Coingecko"
 
 type Props = {
     activity: FungibleTokenActivity
@@ -24,28 +23,20 @@ export const FungibleTokenActivityBox: React.FC<Props> = memo(({ activity, onPre
 
     const allTokens = [useAppSelector(selectCustomTokens), useAppSelector(selectOfficialTokens)].flat()
 
-    const { symbol, decimals, name, address } = useFungibleTokenInfo(activity.tokenAddress)
+    const { symbol, decimals } = useFungibleTokenInfo(activity.tokenAddress)
 
     const token = useMemo(
         () => allTokens.find((_token: FungibleToken) => _token.address === activity.tokenAddress),
         [activity.tokenAddress, allTokens],
     )
 
-    const exchangeRate = useAppSelector((state: RootState) =>
-        selectCurrencyExchangeRate(
-            state,
-            token ?? {
-                symbol: symbol ?? "",
-                decimals: decimals ?? 0,
-                name: name ?? "",
-                address: address ?? "",
-                icon: "",
-                custom: false,
-            },
-        ),
-    )
-
     const currency = useAppSelector(selectCurrency)
+
+    // TODO: handle loading state
+    const { data: exchangeRate } = useExchangeRate({
+        id: getCoinGeckoIdBySymbol[symbol ?? token?.symbol ?? ""],
+        vs_currency: currency,
+    })
 
     const amountTransferred = useMemo(() => {
         const humanReadable = FormattingUtils.humanNumber(
@@ -61,10 +52,10 @@ export const FungibleTokenActivityBox: React.FC<Props> = memo(({ activity, onPre
     }, [activity.amount, decimals, token])
 
     const fiatValueTransferred = useMemo(() => {
-        if (!token || !exchangeRate?.rate) return undefined
+        if (!token || !exchangeRate) return undefined
 
         return FormattingUtils.humanNumber(
-            FormattingUtils.convertToFiatBalance(activity.amount as string, exchangeRate.rate, token.decimals),
+            FormattingUtils.convertToFiatBalance(activity.amount as string, exchangeRate, token.decimals),
             activity.amount,
         )
     }, [activity.amount, exchangeRate, token])
@@ -90,23 +81,21 @@ export const FungibleTokenActivityBox: React.FC<Props> = memo(({ activity, onPre
         const tokenSymbol = token?.symbol ?? symbol
 
         return (
-            <>
-                <BaseView flexDirection="column" alignItems="center">
-                    <BaseView alignItems="flex-end">
-                        <BaseView flexDirection="row" pb={5}>
-                            <BaseText typographyFont="subTitleBold">{amountTransferred} </BaseText>
-                            <BaseView flexDirection="row" alignItems="flex-end" h={100}>
-                                <BaseText typographyFont="captionRegular">{tokenSymbol?.toUpperCase()}</BaseText>
-                            </BaseView>
+            <BaseView flexDirection="column" alignItems="center">
+                <BaseView alignItems="flex-end">
+                    <BaseView flexDirection="row" pb={5}>
+                        <BaseText typographyFont="subTitleBold">{amountTransferred} </BaseText>
+                        <BaseView flexDirection="row" alignItems="flex-end" h={100}>
+                            <BaseText typographyFont="captionRegular">{tokenSymbol?.toUpperCase()}</BaseText>
                         </BaseView>
-                        {fiatValueTransferred && (
-                            <BaseText typographyFont="smallCaptionMedium" color={theme.colors.success}>
-                                {fiatValueTransferred} {currency}
-                            </BaseText>
-                        )}
                     </BaseView>
+                    {fiatValueTransferred && (
+                        <BaseText typographyFont="smallCaptionMedium" color={theme.colors.success}>
+                            {fiatValueTransferred} {currency}
+                        </BaseText>
+                    )}
                 </BaseView>
-            </>
+            </BaseView>
         )
     }, [amountTransferred, currency, fiatValueTransferred, symbol, theme.colors.success, token?.symbol])
 

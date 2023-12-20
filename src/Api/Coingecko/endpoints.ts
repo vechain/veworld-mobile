@@ -91,10 +91,12 @@ export const getMarketChart = async ({
     coinGeckoId,
     vs_currency,
     days,
+    interval = "daily",
 }: {
     coinGeckoId?: string
     vs_currency: string
     days: number
+    interval?: string
 }): Promise<MarketChartResponse> => {
     try {
         // Just for better react-query support. We'll never reach this point if used via react-query hooks
@@ -108,6 +110,7 @@ export const getMarketChart = async ({
             params: {
                 days,
                 vs_currency,
+                interval,
             },
         })
 

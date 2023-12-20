@@ -17,6 +17,7 @@ import { PersistConfig } from "redux-persist/es/types"
 import { MMKV } from "react-native-mmkv"
 import { SecurePersistedCache } from "~Storage/PersistedCache"
 import { ThemeEnum } from "~Constants"
+import { QueryClient, QueryClientProvider } from "@tanstack/react-query"
 
 export { default as TestHelpers } from "./helpers"
 
@@ -120,18 +121,29 @@ export const TestWrapper = ({
         changeTheme: jest.fn(),
     })
 
+    const queryClient = new QueryClient({
+        defaultOptions: {
+            queries: {
+                // ✅ turns retries off
+                retry: false,
+            },
+        },
+    })
+
     return (
         <Provider store={getStore(preloadedState)}>
-            <GestureHandlerRootView>
-                <ConnexContext.Provider value={TestHelpers.thor.mockThorInstance({})}>
-                    <BottomSheetModalProvider>
-                        <NavigationProvider>
-                            <TestTranslationProvider>{children}</TestTranslationProvider>
-                        </NavigationProvider>
-                    </BottomSheetModalProvider>
-                    <BaseToast />
-                </ConnexContext.Provider>
-            </GestureHandlerRootView>
+            <QueryClientProvider client={queryClient}>
+                <GestureHandlerRootView>
+                    <ConnexContext.Provider value={TestHelpers.thor.mockThorInstance({})}>
+                        <BottomSheetModalProvider>
+                            <NavigationProvider>
+                                <TestTranslationProvider>{children}</TestTranslationProvider>
+                            </NavigationProvider>
+                        </BottomSheetModalProvider>
+                        <BaseToast />
+                    </ConnexContext.Provider>
+                </GestureHandlerRootView>
+            </QueryClientProvider>
         </Provider>
     )
 }

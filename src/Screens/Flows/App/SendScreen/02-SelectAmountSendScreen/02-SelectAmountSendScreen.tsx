@@ -17,12 +17,13 @@ import {
 import { RootStackParamListHome, Routes } from "~Navigation"
 import { useI18nContext } from "~i18n"
 import { COLORS, CURRENCY_SYMBOLS, typography } from "~Constants"
-import { selectCurrency, selectCurrencyExchangeRate, useAppSelector } from "~Storage/Redux"
+import { selectCurrency, useAppSelector } from "~Storage/Redux"
 import { useNavigation } from "@react-navigation/native"
 import { useTotalTokenBalance, useUI, useCalculateGas } from "./Hooks"
 import Animated, { AnimatedProps, FadeInRight, FadeOut } from "react-native-reanimated"
 import HapticsService from "~Services/HapticsService"
 import { BigNutils } from "~Utils"
+import { getCoinGeckoIdBySymbol, useExchangeRate } from "~Api/Coingecko"
 
 const { defaults: defaultTypography } = typography
 
@@ -36,11 +37,17 @@ export const SelectAmountSendScreen = ({ route }: Props) => {
     const { LL } = useI18nContext()
     const nav = useNavigation()
     const { input, setInput } = useAmountInput()
-    const exchangeRate = useAppSelector(state => selectCurrencyExchangeRate(state, token))
+
     const currency = useAppSelector(selectCurrency)
+
+    const { data: exchangeRate } = useExchangeRate({
+        id: getCoinGeckoIdBySymbol[token.symbol],
+        vs_currency: currency,
+    })
+
     const [isInputInFiat, setIsInputInFiat] = useState(false)
     const [isError, setIsError] = useState(false)
-    const isExchangeRateAvailable = !!exchangeRate?.rate
+    const isExchangeRateAvailable = !!exchangeRate
 
     const { styles, theme } = useThemedStyles(baseStyles(isExchangeRateAvailable))
 

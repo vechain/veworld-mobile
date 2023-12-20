@@ -21,7 +21,6 @@ export const AssetChart = ({ token }: Props) => {
         id: getCoinGeckoIdBySymbol[token.symbol],
         vs_currency: currency,
         days: selectedTimeframe,
-        placeholderData: MOCK_LINE_CHART_DATA,
     })
 
     const invokeHaptic = useCallback(async () => {
@@ -33,12 +32,14 @@ export const AssetChart = ({ token }: Props) => {
         setSelectedTimeframe(foundData?.value ?? defaultTimeframe)
     }, [])
 
+    const isLoaded = chartData && !isLoading
+
     return (
         <>
             <LineChart.Provider
                 data={chartData?.length ? chartData : MOCK_LINE_CHART_DATA}
                 onCurrentIndexChange={invokeHaptic}>
-                <ChartView chartData={chartData ?? MOCK_LINE_CHART_DATA} token={token} isChartDataLoading={isLoading} />
+                <ChartView chartData={chartData} token={token} isChartDataLoading={!isLoaded} />
             </LineChart.Provider>
 
             <BaseSpacer height={8} />

@@ -20,7 +20,6 @@ import { striptags } from "striptags"
 import { selectBalanceVisible, selectSendableTokensWithBalance, useAppSelector } from "~Storage/Redux"
 import { ScrollView } from "react-native-gesture-handler"
 import { StyleSheet } from "react-native"
-import { getCoinGeckoIdBySymbol, useTokenInfo } from "~Api/Coingecko"
 
 type Props = NativeStackScreenProps<RootStackParamListHome, Routes.TOKEN_DETAILS>
 
@@ -41,16 +40,12 @@ export const AssetDetailScreen = ({ route }: Props) => {
             t.symbol?.toLowerCase().includes(token.symbol.toLowerCase()),
     )
 
-    const { data: tokenInfo } = useTokenInfo({
-        id: getCoinGeckoIdBySymbol[foundToken?.symbol ?? ""],
-    })
-
     // render description based on locale. NB: at the moment only EN is supported
     const description = useMemo(() => {
-        if (!tokenInfo?.description) return ""
+        if (!token?.tokenInfo?.description) return ""
 
-        return tokenInfo.description[locale] ?? tokenInfo.description.en
-    }, [tokenInfo?.description, locale])
+        return token?.tokenInfo?.description[locale] ?? token?.tokenInfo?.description.en
+    }, [token?.tokenInfo?.description, locale])
 
     const Actions: FastAction[] = useMemo(
         () => [
@@ -103,7 +98,7 @@ export const AssetDetailScreen = ({ route }: Props) => {
 
                         <BaseSpacer height={24} />
 
-                        <BalanceView token={token} isBalanceVisible={isBalanceVisible} />
+                        <BalanceView tokenWithInfo={token} isBalanceVisible={isBalanceVisible} />
 
                         <BaseSpacer height={24} />
 

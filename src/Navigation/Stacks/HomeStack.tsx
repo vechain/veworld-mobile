@@ -24,11 +24,10 @@ import {
     FungibleToken,
     FungibleTokenWithBalance,
     LedgerAccountWithDevice,
-    TokenWithCompleteInfo,
     TransactionOutcomes,
 } from "~Model"
 import { Transaction } from "thor-devkit"
-import { useNavAnimation } from "~Hooks"
+import { TokenWithCompleteInfo, useNavAnimation } from "~Hooks"
 
 export type RootStackParamListHome = {
     [Routes.HOME]: undefined
