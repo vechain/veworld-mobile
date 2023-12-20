@@ -43,12 +43,12 @@ export const DAppList: React.FC<Props> = ({ onDAppPress, filteredSearch, selecto
     const renderCreateDappButton = useCallback(() => {
         return (
             <BaseButton
-                action={() => {
+                action={async () => {
                     const url = process.env.REACT_APP_CREATE_YOUR_VECHAIN_DAPP_URL
-                    if (url) {
+                    if (url && (await Linking.canOpenURL(url))) {
                         Linking.openURL(url)
                     } else {
-                        error("No REACT_APP_CREATE_YOUR_VECHAIN_DAPP_URL url found")
+                        error("No REACT_APP_CREATE_YOUR_VECHAIN_DAPP_URL url found", url)
                     }
                 }}
                 title={LL.DISCOVER_CREATE_YOUR_DAPP()}
