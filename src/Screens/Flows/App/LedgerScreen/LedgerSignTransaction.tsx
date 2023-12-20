@@ -67,7 +67,7 @@ export const LedgerSignTransaction: React.FC<Props> = ({ route }) => {
         onClose: closeConnectionErrorSheet,
     } = useBottomSheetModal()
 
-    const { appOpen, appConfig, errorCode, withTransport, removeLedger, tryLedgerVerification } = useLedger({
+    const { appOpen, appConfig, errorCode, withTransport, removeLedger } = useLedger({
         deviceId: accountWithDevice.device.deviceId,
     })
 
@@ -378,7 +378,6 @@ export const LedgerSignTransaction: React.FC<Props> = ({ route }) => {
                         ref={connectionErrorSheetRef}
                         onDismiss={closeConnectionErrorSheet}
                         error={ledgerErrorCode}
-                        onRetry={tryLedgerVerification}
                     />
                 </BaseView>
             }

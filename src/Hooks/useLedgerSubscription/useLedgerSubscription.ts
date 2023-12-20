@@ -1,4 +1,4 @@
-import { debug, warn } from "~Utils"
+import { debug, error, warn } from "~Utils"
 import { ConnectedLedgerDevice } from "~Model"
 import { MutableRefObject, useCallback, useEffect, useRef, useState } from "react"
 import { Device } from "react-native-ble-plx"
@@ -11,7 +11,7 @@ import BleTransport from "@ledgerhq/react-native-hw-transport-ble"
 type Props = {
     readyToScan?: boolean
     deviceId?: string
-    onDevice?: (device: ConnectedLedgerDevice) => void
+    onAddDevice?: (device: ConnectedLedgerDevice) => void
     timeout?: number
 }
 
@@ -20,7 +20,12 @@ type SubscriptionEvent = {
     descriptor: Device | null
     deviceModel: DeviceModel
 }
-export const useLedgerSubscription = ({ deviceId, onDevice, readyToScan = true, timeout }: Props) => {
+
+/**
+ * hook for scan available ledger devices
+ */
+
+export const useLedgerSubscription = ({ deviceId, onAddDevice, readyToScan = true, timeout }: Props) => {
     const subscription = useRef<TransportSubscription>()
     const [timedOut, setTimedOut] = useState<boolean>(false)
     const [canConnect, setCanConnect] = useState<boolean>(false)
@@ -34,8 +39,6 @@ export const useLedgerSubscription = ({ deviceId, onDevice, readyToScan = true, 
             warn("useLedgerSubscription - observer", { err })
         },
         next: (e: SubscriptionEvent) => {
-            debug("useLedgerSubscription:next", e)
-
             if (e.type === "add") {
                 const { descriptor, deviceModel } = e
 
@@ -54,7 +57,7 @@ export const useLedgerSubscription = ({ deviceId, onDevice, readyToScan = true, 
                         return [...prev, device]
                     })
 
-                if (onDevice) onDevice(device)
+                if (onAddDevice) onAddDevice(device)
 
                 const isConnectable = Platform.select({
                     ios: descriptor?.isConnectable,
@@ -65,7 +68,7 @@ export const useLedgerSubscription = ({ deviceId, onDevice, readyToScan = true, 
                     setCanConnect(true)
                 }
             } else {
-                debug("ledger - not 'add': ", e)
+                error("[Ledger] - ledger added a new event, please handle it!", e)
             }
         },
     })

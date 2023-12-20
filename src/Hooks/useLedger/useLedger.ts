@@ -6,8 +6,12 @@ import BleTransport from "@ledgerhq/react-native-hw-transport-ble"
 import { LedgerUtils } from "~Utils"
 import { useLedgerSubscription } from "~Hooks"
 import { Mutex } from "async-mutex"
-import { LedgerConfig } from "~Utils/LedgerUtils/LedgerUtils"
+import { LedgerConfig, VerifyTransportResponse } from "~Utils/LedgerUtils/LedgerUtils"
+import { Success } from "~Model"
 // import { listen } from "@ledgerhq/logs"
+
+let pollingInterval: NodeJS.Timeout | undefined
+const CHECK_LEDGER_STATUS_INTERVAL = 3000
 
 /**
  * useLedger is a custom react hook for interacting with ledger devices
@@ -115,22 +119,43 @@ export const useLedger = ({
         }
     }, [])
 
-    const onConnectionConfirmed = useCallback(async () => {
-        debug("[Ledger] - onConnectionConfirmed")
-        if (transport.current) {
-            const res = await LedgerUtils.verifyTransport(withTransport(transport.current))
-
-            debug("[Ledger] - verifyTransport", res)
-
-            if (res.success) {
-                setAppOpen(true)
-                setRootAccount(res.payload.rootAccount)
-                setConfig(res.payload.appConfig.toString().slice(0, 2) as LedgerConfig)
-            } else {
-                await setErrorCode(res.err as LEDGER_ERROR_CODES)
-            }
+    const stopPollingDeviceStatus = useCallback(() => {
+        if (pollingInterval) {
+            clearInterval(pollingInterval)
+            pollingInterval = undefined
         }
-    }, [setConfig, withTransport])
+    }, [])
+
+    // when the device is available
+    const onDeviceAvailable = useCallback(
+        (res: Success<VerifyTransportResponse>) => {
+            setAppOpen(true)
+            setRootAccount(res.payload.rootAccount)
+            setConfig(res.payload.appConfig.toString().slice(0, 2) as LedgerConfig)
+            stopPollingDeviceStatus()
+        },
+        [setConfig, stopPollingDeviceStatus],
+    )
+
+    // this one checks for ledger status, locked, available, and polls until it is available
+    const checkLedgerStatus = useCallback(async () => {
+        if (pollingInterval) {
+            return
+        }
+        pollingInterval = setInterval(async () => {
+            if (transport.current) {
+                debug("[Ledger] - checkLedgerStatus")
+                const res = await LedgerUtils.verifyTransport(withTransport(transport.current))
+
+                if (res.success) {
+                    onDeviceAvailable(res)
+                } else {
+                    debug("[Ledger] - checkLedgerStatus - error", res)
+                    await setErrorCode(res.err as LEDGER_ERROR_CODES)
+                }
+            }
+        }, CHECK_LEDGER_STATUS_INTERVAL)
+    }, [onDeviceAvailable, withTransport])
 
     const openBleConnection = useCallback(async () => {
         debug("[Ledger] - openBleConnection")
@@ -152,10 +177,14 @@ export const useLedger = ({
             transport.current = undefined
         })
 
-        await onConnectionConfirmed()
-    }, [setCanConnect, onConnectionConfirmed, deviceId])
+        await checkLedgerStatus()
+    }, [setCanConnect, checkLedgerStatus, deviceId])
 
     const attemptBleConnection = useCallback(async () => {
+        if (isConnecting) {
+            debug("[Ledger] - attemptBleConnection - already connecting")
+            return
+        }
         debug("[Ledger] - attemptAutoConnect")
         setIsConnecting(true)
 
@@ -170,25 +199,21 @@ export const useLedger = ({
 
         debug("[Ledger] - Finished attempting to open connection")
         setIsConnecting(false)
-    }, [openBleConnection])
+    }, [isConnecting, openBleConnection])
 
     useEffect(() => {
-        debug("[Ledger] - useLedger - useEffect - autoConnect", {
-            autoConnect,
-            canConnect,
-        })
-
         if (autoConnect && canConnect) {
             debug("[Ledger] - Attempting to auto connect")
-            attemptBleConnection().catch(e => warn("[Ledger] - Auto connect error:", e))
+            attemptBleConnection()
         }
     }, [autoConnect, canConnect, attemptBleConnection])
 
     useEffect(() => {
         if (!removed && disconnected) {
-            openBleConnection().finally(() => setDisconnected(false))
+            debug("[Ledger] - Attempting to auto connect when disconnected")
+            attemptBleConnection().finally(() => setDisconnected(false))
         }
-    }, [removed, disconnected, openBleConnection])
+    }, [removed, disconnected, attemptBleConnection])
 
     const externalWithTransport = useMemo(() => {
         if (!transport.current || !appOpen) return undefined
@@ -204,7 +229,7 @@ export const useLedger = ({
         removeLedger,
         withTransport: externalWithTransport,
         tryLedgerConnection: attemptBleConnection,
-        tryLedgerVerification: onConnectionConfirmed,
+        tryLedgerVerification: checkLedgerStatus,
     }
 }
 

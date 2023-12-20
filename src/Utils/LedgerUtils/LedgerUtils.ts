@@ -63,7 +63,7 @@ export const ledgerErrorHandler = (err: unknown): LEDGER_ERROR_CODES => {
  * @property error - The error if there is one
  * @property response - The response, which should be defined, only if there is no error
  */
-type VerifyTransportResponse = {
+export type VerifyTransportResponse = {
     appConfig: LedgerConfig
     rootAccount: VETLedgerAccount
     app: VETLedgerApp

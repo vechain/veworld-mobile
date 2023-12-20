@@ -38,7 +38,7 @@ export const SelectLedgerDevice = () => {
 
     const { androidPermissionsGranted, checkPermissions } = LedgerAndroidPermissions()
 
-    const onDevice = useCallback(
+    const onAddDevice = useCallback(
         (device: ConnectedLedgerDevice) => {
             if (!selectedDevice) setSelectedDevice(device)
         },
@@ -52,7 +52,7 @@ export const SelectLedgerDevice = () => {
     }, [androidPermissionsGranted])
 
     const { availableDevices, unsubscribe } = useLedgerSubscription({
-        onDevice,
+        onAddDevice,
         readyToScan,
     })
 
