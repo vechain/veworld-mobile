@@ -8,11 +8,14 @@ import { Platform } from "react-native"
 import { HwTransportError } from "@ledgerhq/errors"
 import BleTransport from "@ledgerhq/react-native-hw-transport-ble"
 
+let OutsideRenderLoopAvailableDevices = [] as ConnectedLedgerDevice[]
+
 type Props = {
-    readyToScan?: boolean
     deviceId?: string
+    readyToScan?: boolean
     onAddDevice?: (device: ConnectedLedgerDevice) => void
     timeout?: number
+    connectDevice?: () => void
 }
 
 type SubscriptionEvent = {
@@ -25,10 +28,14 @@ type SubscriptionEvent = {
  * hook for scan available ledger devices
  */
 
-export const useLedgerSubscription = ({ deviceId, onAddDevice, readyToScan = true, timeout }: Props) => {
+export const useLedgerSubscription = ({
+    deviceId,
+    onAddDevice,
+    readyToScan = true,
+    timeout = 5000,
+    connectDevice,
+}: Props) => {
     const subscription = useRef<TransportSubscription>()
-    const [timedOut, setTimedOut] = useState<boolean>(false)
-    const [canConnect, setCanConnect] = useState<boolean>(false)
     const [availableDevices, setAvailableDevices] = useState<ConnectedLedgerDevice[]>([])
 
     const bleObserver: MutableRefObject<TransportObserver<any, HwTransportError>> = useRef({
@@ -53,7 +60,11 @@ export const useLedgerSubscription = ({ deviceId, onAddDevice, readyToScan = tru
 
                 if (device)
                     setAvailableDevices(prev => {
-                        if (prev.find(d => d.id === device.id)) return prev
+                        if (prev.find(d => d.id === device.id)) {
+                            OutsideRenderLoopAvailableDevices = [...prev]
+                            return prev
+                        }
+                        OutsideRenderLoopAvailableDevices = [...prev, device]
                         return [...prev, device]
                     })
 
@@ -65,7 +76,7 @@ export const useLedgerSubscription = ({ deviceId, onAddDevice, readyToScan = tru
                 })
 
                 if (deviceId === device.id && !!isConnectable) {
-                    setCanConnect(true)
+                    connectDevice?.()
                 }
             } else {
                 error("[Ledger] - ledger added a new event, please handle it!", e)
@@ -73,40 +84,53 @@ export const useLedgerSubscription = ({ deviceId, onAddDevice, readyToScan = tru
         },
     })
 
-    useEffect(() => {
-        if (!readyToScan) return
-
-        debug("useLedgerSubscription - startSubscription")
-
-        subscription.current = BleTransport.listen(bleObserver.current)
-    }, [readyToScan])
-
-    useEffect(() => {
-        let interval: NodeJS.Timeout | undefined
-        if (timeout && deviceId) {
-            interval = setInterval(() => {
-                if (!availableDevices.some(d => d.id === deviceId)) {
-                    setTimedOut(true)
-                    debug("useLedgerSubscription - timedOut waiting for device")
-                }
-            }, timeout)
-        }
-        return () => {
-            interval && clearInterval(interval)
-        }
-    }, [availableDevices, deviceId, timeout])
-
     const unsubscribe = useCallback(() => {
         debug("useLedgerSubscription - unsubscribe")
         subscription.current?.unsubscribe()
         subscription.current = undefined
     }, [])
 
+    const scanForDevices = useCallback(() => {
+        if (!readyToScan) {
+            debug("useLedgerSubscription - skipping listening because not readyToScan")
+            return
+        }
+        if (subscription.current) {
+            subscription.current?.unsubscribe()
+            subscription.current = undefined
+        }
+
+        debug("useLedgerSubscription - startSubscription")
+
+        subscription.current = BleTransport.listen(bleObserver.current)
+    }, [readyToScan])
+
+    // polling to search for the devices
+    // if deviceId is present it searches for related device, if not found, it unsubscribes and scans again
+    const checkDevicePresence = useCallback(() => {
+        const isPresent = OutsideRenderLoopAvailableDevices.some(d => d.id === deviceId)
+        if (isPresent) {
+            connectDevice?.()
+        } else {
+            debug("useLedgerSubscription - timedOut waiting for device", {
+                deviceId,
+                OutsideRenderLoopAvailableDevices,
+            })
+            scanForDevices()
+            setTimeout(checkDevicePresence, timeout)
+        }
+    }, [connectDevice, deviceId, scanForDevices, timeout])
+
+    useEffect(() => {
+        if (deviceId) {
+            checkDevicePresence()
+        } else {
+            scanForDevices()
+        }
+    }, [checkDevicePresence, deviceId, scanForDevices])
+
     return {
         availableDevices,
-        canConnect,
-        setCanConnect,
         unsubscribe,
-        timedOut,
     }
 }

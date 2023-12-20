@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useMemo, useRef, useState } from "react"
+import { useCallback, useMemo, useRef, useState } from "react"
 import { LEDGER_ERROR_CODES, VETLedgerAccount } from "~Constants"
 
 import { debug, error, warn } from "~Utils/Logger"
@@ -8,11 +8,13 @@ import { useLedgerSubscription } from "~Hooks"
 import { Mutex } from "async-mutex"
 import { LedgerConfig, VerifyTransportResponse } from "~Utils/LedgerUtils/LedgerUtils"
 import { Success } from "~Model"
-// import { listen } from "@ledgerhq/logs"
 
+const TRY_RECONNECT_DEVICE_INTERVAL = 3000
+const CHECK_LEDGER_STATUS_INTERVAL = 4000
 let pollingStatusInterval: NodeJS.Timeout | undefined
 let pollingCorrectSettingsInterval: NodeJS.Timeout | undefined
-const CHECK_LEDGER_STATUS_INTERVAL = 4000
+let outsideRenderLoopIsConnecting: boolean = false
+let outsideRenderLoopIsConnected: boolean = false
 
 /**
  * useLedger is a custom react hook for interacting with ledger devices
@@ -30,61 +32,15 @@ const CHECK_LEDGER_STATUS_INTERVAL = 4000
  * @returns {@link UseLedgerProps}
  * - "removeLedger" must be invoked after the ledger action is finished
  */
-export const useLedger = ({
-    deviceId,
-    autoConnect = true,
-}: {
-    deviceId: string
-    autoConnect?: boolean
-}): UseLedgerProps => {
-    // useEffect(() => {
-    //     listen(log => {
-    //         debug("ledger:log", log)
-    //     })
-    // }, [])
-
+export const useLedger = ({ deviceId }: { deviceId: string }): UseLedgerProps => {
     const mutex = useRef<Mutex>(new Mutex())
-
-    const { canConnect, unsubscribe, timedOut, setCanConnect } = useLedgerSubscription({
-        deviceId,
-        timeout: 5000,
-    })
 
     const transport = useRef<BleTransport | undefined>()
     const [appOpen, setAppOpen] = useState<boolean>(false)
     const [appConfig, setAppConfig] = useState<LedgerConfig>(LedgerConfig.UNKNOWN)
-    const [removed, setRemoved] = useState<boolean>(false)
-    const [disconnected, setDisconnected] = useState<boolean>(false)
     const [isConnecting, setIsConnecting] = useState<boolean>(false)
     const [rootAccount, setRootAccount] = useState<VETLedgerAccount>()
     const [errorCode, setErrorCode] = useState<LEDGER_ERROR_CODES | undefined>(undefined)
-
-    useEffect(() => {
-        if (timedOut) {
-            setErrorCode(LEDGER_ERROR_CODES.DEVICE_NOT_FOUND)
-        }
-    }, [timedOut])
-
-    const removeLedger = useCallback(async () => {
-        if (!removed) {
-            debug("[Ledger] - removeLedger")
-
-            setRemoved(true)
-            unsubscribe()
-
-            if (transport.current) {
-                try {
-                    await BleTransport.disconnectDevice(deviceId)
-                } catch (e) {
-                    error("ledger:close", e)
-                }
-            }
-
-            setRootAccount(undefined)
-            setErrorCode(undefined)
-            transport.current = undefined
-        }
-    }, [removed, unsubscribe, deviceId])
 
     /**
      * @param bleTransport - the transport to use
@@ -190,70 +146,80 @@ export const useLedger = ({
         pollingCorrectSettingsInterval = setInterval(checkLedgerCorrectSettings, CHECK_LEDGER_STATUS_INTERVAL)
     }, [checkLedgerCorrectSettings])
 
-    const openBleConnection = useCallback(async () => {
-        debug("[Ledger] - openBleConnection")
+    const connectDevice = useCallback(async () => {
+        if (outsideRenderLoopIsConnected) {
+            debug("[Ledger] - skipping - device already connected")
+            return
+        }
+        if (outsideRenderLoopIsConnecting) {
+            debug("[Ledger] - skipping - device is connecting in another render loop")
+            return
+        }
 
-        transport.current = await BleTransport.open(deviceId).catch(e => {
-            error("[Ledger] - openBleConnection", e)
-            throw e
-        })
-
-        debug("[Ledger] - connection successful")
-
-        transport.current.on("disconnect", () => {
+        const reconnectDevice = () => {
             warn("[Ledger] - on disconnect")
-            setDisconnected(true)
+            outsideRenderLoopIsConnected = false
             setRootAccount(undefined)
             setAppOpen(false)
-            setCanConnect(false)
             setErrorCode(LEDGER_ERROR_CODES.DISCONNECTED)
             transport.current = undefined
-        })
+            connectDevice()
+        }
 
-        await pollingLedgerStatus()
-    }, [setCanConnect, pollingLedgerStatus, deviceId])
-
-    const attemptBleConnection = useCallback(async () => {
-        debug("[Ledger] - attemptAutoConnect")
+        debug("[Ledger] - connectDevice")
         setIsConnecting(true)
+        outsideRenderLoopIsConnecting = true
 
         try {
             debug("[Ledger] - Attempting to open connection")
-            await openBleConnection()
-            debug("[Ledger] - Opened connection")
+            transport.current = await BleTransport.open(deviceId)
+
+            if (transport.current.isConnected) {
+                debug("[Ledger] - connection successful")
+                outsideRenderLoopIsConnected = true
+                await pollingLedgerStatus()
+                transport.current.on("disconnect", reconnectDevice)
+            } else {
+                setTimeout(reconnectDevice, TRY_RECONNECT_DEVICE_INTERVAL)
+            }
         } catch (e) {
             warn("[Ledger] - Error opening connection", e)
             setErrorCode(LEDGER_ERROR_CODES.UNKNOWN)
+            outsideRenderLoopIsConnected = false
+            setTimeout(reconnectDevice, TRY_RECONNECT_DEVICE_INTERVAL)
+        } finally {
+            setIsConnecting(false)
+            outsideRenderLoopIsConnecting = false
         }
-
-        debug("[Ledger] - Finished attempting to open connection")
-        setIsConnecting(false)
-    }, [openBleConnection])
-
-    // used to connect when the hook is first rendered and autoconnect is enabled
-    useEffect(() => {
-        const isAutoConnectEnabled = autoConnect && canConnect
-        if (isAutoConnectEnabled) {
-            attemptBleConnection()
-        }
-    }, [attemptBleConnection, autoConnect, canConnect])
-
-    // used to connect when we lose connection to the ledger
-    useEffect(() => {
-        const isDisconnected = !removed && disconnected
-        const canTryReconnection = isDisconnected && !isConnecting
-        if (canTryReconnection) {
-            openBleConnection().finally(() => {
-                debug("[Ledger] - Finished attempting to auto connect")
-                setDisconnected(false)
-            })
-        }
-    }, [openBleConnection, isConnecting, removed, disconnected])
+    }, [deviceId, pollingLedgerStatus])
 
     const externalWithTransport = useMemo(() => {
         if (!transport.current || !appOpen) return undefined
         return withTransport(transport.current)
     }, [appOpen, withTransport])
+
+    const { unsubscribe } = useLedgerSubscription({
+        deviceId,
+        connectDevice,
+    })
+
+    const removeLedger = useCallback(async () => {
+        debug("[Ledger] - removeLedger")
+
+        if (transport.current) {
+            try {
+                await BleTransport.disconnectDevice(deviceId)
+            } catch (e) {
+                error("ledger:close", e)
+            }
+        }
+
+        unsubscribe()
+
+        setRootAccount(undefined)
+        setErrorCode(undefined)
+        transport.current = undefined
+    }, [unsubscribe, deviceId])
 
     return {
         appOpen,
@@ -263,7 +229,7 @@ export const useLedger = ({
         errorCode,
         removeLedger,
         withTransport: externalWithTransport,
-        tryLedgerConnection: attemptBleConnection,
+        tryLedgerConnection: connectDevice,
         tryLedgerVerification: checkLedgerStatus,
         pollingLedgerStatus,
         pollingCorrectSettings,
@@ -275,7 +241,7 @@ export const useLedger = ({
  * @field rootAccount - The root VET account on the ledger (with chaincode). This can be used to derive further accounts
  * @field errorCode - the last error code that was encountered when attempting to connect to the ledger
  * @field openOrFinalizeConnection - a function that can be used to manually attempt to connect to the ledger - does not recreate transport if already exists
- * openBleConnection - a function that can be used to manually attempt to connect to the ledger - recreate transport if already exists
+ * connectDevice - a function that can be used to manually attempt to connect to the ledger - recreate transport if already exists
  * @field isConnecting - a boolean that indicates if the ledger is currently attempting to connect
  * @field setTimerEnabled - a function that can be used to enable/disable the timer that attempts to connect to the ledger
  * @field transport - the current transport that is being used to connect to the ledger

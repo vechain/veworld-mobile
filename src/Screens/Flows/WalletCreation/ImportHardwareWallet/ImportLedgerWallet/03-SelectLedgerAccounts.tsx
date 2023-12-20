@@ -44,12 +44,14 @@ export const SelectLedgerAccounts: React.FC<Props> = ({ route }) => {
     const { styles: themedStyles } = useThemedStyles(styles)
     const selectedNetwork = useAppSelector(selectSelectedNetwork)
     const userHasOnboarded = useAppSelector(selectHasOnboarded)
-    const [rootAcc, setRootAcc] = useState<VETLedgerAccount>()
     const track = useAnalyticTracking()
 
     const { errorCode, rootAccount, removeLedger } = useLedger({
         deviceId: device.id,
     })
+    const [rootAcc, setRootAcc] = useState<VETLedgerAccount | undefined>(
+        rootAccount ? ({ ...rootAccount } as VETLedgerAccount) : undefined,
+    )
 
     useEffect(() => {
         // root account will be undefined if the user disconnects. We don't care abet that, we only want to read it
@@ -178,7 +180,7 @@ export const SelectLedgerAccounts: React.FC<Props> = ({ route }) => {
 
     return (
         <Layout
-            onGoBack={removeLedger}
+            beforeNavigating={removeLedger}
             fixedHeader={
                 <BaseView>
                     <BaseView flexDirection="row" w={100}>
