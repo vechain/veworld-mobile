@@ -11,7 +11,7 @@ import { Success } from "~Model"
 // import { listen } from "@ledgerhq/logs"
 
 let pollingInterval: NodeJS.Timeout | undefined
-const CHECK_LEDGER_STATUS_INTERVAL = 3000
+const CHECK_LEDGER_STATUS_INTERVAL = 4000
 
 /**
  * useLedger is a custom react hook for interacting with ledger devices
@@ -137,25 +137,27 @@ export const useLedger = ({
         [setConfig, stopPollingDeviceStatus],
     )
 
-    // this one checks for ledger status, locked, available, and polls until it is available
     const checkLedgerStatus = useCallback(async () => {
+        if (transport.current) {
+            debug("[Ledger] - checkLedgerStatus")
+            const res = await LedgerUtils.verifyTransport(withTransport(transport.current))
+
+            if (res.success) {
+                onDeviceAvailable(res)
+            } else {
+                debug("[Ledger] - checkLedgerStatus - error", res)
+                await setErrorCode(res.err as LEDGER_ERROR_CODES)
+            }
+        }
+    }, [withTransport, onDeviceAvailable])
+
+    const pollingLedgerStatus = useCallback(async () => {
         if (pollingInterval) {
             return
         }
-        pollingInterval = setInterval(async () => {
-            if (transport.current) {
-                debug("[Ledger] - checkLedgerStatus")
-                const res = await LedgerUtils.verifyTransport(withTransport(transport.current))
-
-                if (res.success) {
-                    onDeviceAvailable(res)
-                } else {
-                    debug("[Ledger] - checkLedgerStatus - error", res)
-                    await setErrorCode(res.err as LEDGER_ERROR_CODES)
-                }
-            }
-        }, CHECK_LEDGER_STATUS_INTERVAL)
-    }, [onDeviceAvailable, withTransport])
+        checkLedgerStatus()
+        pollingInterval = setInterval(checkLedgerStatus, CHECK_LEDGER_STATUS_INTERVAL)
+    }, [checkLedgerStatus])
 
     const openBleConnection = useCallback(async () => {
         debug("[Ledger] - openBleConnection")
@@ -177,14 +179,10 @@ export const useLedger = ({
             transport.current = undefined
         })
 
-        await checkLedgerStatus()
-    }, [setCanConnect, checkLedgerStatus, deviceId])
+        await pollingLedgerStatus()
+    }, [setCanConnect, pollingLedgerStatus, deviceId])
 
     const attemptBleConnection = useCallback(async () => {
-        if (isConnecting) {
-            debug("[Ledger] - attemptBleConnection - already connecting")
-            return
-        }
         debug("[Ledger] - attemptAutoConnect")
         setIsConnecting(true)
 
@@ -199,21 +197,27 @@ export const useLedger = ({
 
         debug("[Ledger] - Finished attempting to open connection")
         setIsConnecting(false)
-    }, [isConnecting, openBleConnection])
+    }, [openBleConnection])
 
+    // used to connect when the hook is first rendered and autoconnect is enabled
     useEffect(() => {
-        if (autoConnect && canConnect) {
-            debug("[Ledger] - Attempting to auto connect")
+        const isAutoConnectEnabled = autoConnect && canConnect
+        if (isAutoConnectEnabled) {
             attemptBleConnection()
         }
-    }, [autoConnect, canConnect, attemptBleConnection])
+    }, [attemptBleConnection, autoConnect, canConnect])
 
+    // used to connect when we lose connection to the ledger
     useEffect(() => {
-        if (!removed && disconnected) {
-            debug("[Ledger] - Attempting to auto connect when disconnected")
-            attemptBleConnection().finally(() => setDisconnected(false))
+        const isDisconnected = !removed && disconnected
+        const canTryReconnection = isDisconnected && !isConnecting
+        if (canTryReconnection) {
+            openBleConnection().finally(() => {
+                debug("[Ledger] - Finished attempting to auto connect")
+                setDisconnected(false)
+            })
         }
-    }, [removed, disconnected, attemptBleConnection])
+    }, [openBleConnection, isConnecting, removed, disconnected])
 
     const externalWithTransport = useMemo(() => {
         if (!transport.current || !appOpen) return undefined

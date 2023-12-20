@@ -82,20 +82,19 @@ export const useLedgerSubscription = ({ deviceId, onAddDevice, readyToScan = tru
     }, [readyToScan])
 
     useEffect(() => {
+        let interval: NodeJS.Timeout | undefined
         if (timeout && deviceId) {
-            setInterval(() => {
-                setAvailableDevices(prev => {
-                    if (!prev.some(d => d.id === deviceId)) {
-                        setTimedOut(true)
-                        debug("useLedgerSubscription - timedOut waiting for device")
-                    }
-
-                    return prev
-                })
+            interval = setInterval(() => {
+                if (!availableDevices.some(d => d.id === deviceId)) {
+                    setTimedOut(true)
+                    debug("useLedgerSubscription - timedOut waiting for device")
+                }
             }, timeout)
         }
-        // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [])
+        return () => {
+            interval && clearInterval(interval)
+        }
+    }, [availableDevices, deviceId, timeout])
 
     const unsubscribe = useCallback(() => {
         debug("useLedgerSubscription - unsubscribe")
