@@ -11,8 +11,6 @@ import { Success } from "~Model"
 
 const TRY_RECONNECT_DEVICE_INTERVAL = 3000
 const CHECK_LEDGER_STATUS_INTERVAL = 4000
-let pollingStatusInterval: NodeJS.Timeout | undefined
-let pollingCorrectSettingsInterval: NodeJS.Timeout | undefined
 let outsideRenderLoopIsConnecting: boolean = false
 let outsideRenderLoopIsConnected: boolean = false
 let outsideRenderLoopDisconnectedOnPurpose: boolean = false
@@ -41,6 +39,8 @@ export const useLedger = ({ deviceId }: { deviceId: string }): UseLedgerProps =>
     const [isConnecting, setIsConnecting] = useState<boolean>(false)
     const [rootAccount, setRootAccount] = useState<VETLedgerAccount>()
     const [errorCode, setErrorCode] = useState<LEDGER_ERROR_CODES | undefined>(undefined)
+    const pollingStatusInterval = useRef<NodeJS.Timeout | undefined>()
+    const pollingCorrectSettingsInterval = useRef<NodeJS.Timeout | undefined>()
 
     /**
      * @param bleTransport - the transport to use
@@ -78,9 +78,9 @@ export const useLedger = ({ deviceId }: { deviceId: string }): UseLedgerProps =>
     }, [])
 
     const stopPollingDeviceStatus = useCallback(() => {
-        if (pollingStatusInterval) {
-            clearInterval(pollingStatusInterval)
-            pollingStatusInterval = undefined
+        if (pollingStatusInterval.current) {
+            clearInterval(pollingStatusInterval.current)
+            pollingStatusInterval.current = undefined
         }
     }, [])
 
@@ -111,17 +111,18 @@ export const useLedger = ({ deviceId }: { deviceId: string }): UseLedgerProps =>
     }, [withTransport, onDeviceAvailable])
 
     const pollingLedgerStatus = useCallback(async () => {
-        if (pollingStatusInterval) {
+        if (pollingStatusInterval.current) {
             return
         }
+        debug(ERROR_EVENTS.LEDGER, "[useLedger] - pollingLedgerStatus")
         checkLedgerStatus()
-        pollingStatusInterval = setInterval(checkLedgerStatus, CHECK_LEDGER_STATUS_INTERVAL)
+        pollingStatusInterval.current = setInterval(checkLedgerStatus, CHECK_LEDGER_STATUS_INTERVAL)
     }, [checkLedgerStatus])
 
     const stopPollingCorrectSettings = useCallback(() => {
-        if (pollingCorrectSettingsInterval) {
-            clearInterval(pollingCorrectSettingsInterval)
-            pollingCorrectSettingsInterval = undefined
+        if (pollingCorrectSettingsInterval.current) {
+            clearInterval(pollingCorrectSettingsInterval.current)
+            pollingCorrectSettingsInterval.current = undefined
         }
     }, [])
 
@@ -132,19 +133,27 @@ export const useLedger = ({ deviceId }: { deviceId: string }): UseLedgerProps =>
 
             if (res.success) {
                 if (res?.payload?.appConfig === LedgerConfig.CLAUSE_AND_CONTRACT_ENABLED) {
+                    debug(ERROR_EVENTS.LEDGER, "[useLedger] - clause and contract correctly enabled")
                     stopPollingCorrectSettings()
+                } else {
+                    debug(ERROR_EVENTS.LEDGER, "[useLedger] - still missing clause or contract")
                 }
                 setConfig(res.payload.appConfig.toString().slice(0, 2) as LedgerConfig)
+            } else {
+                debug(ERROR_EVENTS.LEDGER, "[useLedger] - incorrect device status")
+                stopPollingCorrectSettings()
+                pollingLedgerStatus()
             }
         }
-    }, [withTransport, stopPollingCorrectSettings, setConfig])
+    }, [withTransport, setConfig, stopPollingCorrectSettings, pollingLedgerStatus])
 
     const pollingCorrectSettings = useCallback(async () => {
-        if (pollingCorrectSettingsInterval) {
+        if (pollingCorrectSettingsInterval.current) {
             return
         }
+        debug(ERROR_EVENTS.LEDGER, "[useLedger] - polling correct settings")
         checkLedgerCorrectSettings()
-        pollingCorrectSettingsInterval = setInterval(checkLedgerCorrectSettings, CHECK_LEDGER_STATUS_INTERVAL)
+        pollingCorrectSettingsInterval.current = setInterval(checkLedgerCorrectSettings, CHECK_LEDGER_STATUS_INTERVAL)
     }, [checkLedgerCorrectSettings])
 
     const { unsubscribe, scanForDevices, availableDevices } = useScanLedgerDevices({})
@@ -228,7 +237,7 @@ export const useLedger = ({ deviceId }: { deviceId: string }): UseLedgerProps =>
             try {
                 await BleTransport.disconnectDevice(deviceId)
             } catch (e) {
-                error(ERROR_EVENTS.LEDGER, "ledger:close", e)
+                error(ERROR_EVENTS.LEDGER, "[useLedger] - removeLedger error: ", e)
             }
         }
 

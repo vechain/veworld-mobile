@@ -127,7 +127,7 @@ export const LedgerSignTransaction: React.FC<Props> = ({ route }) => {
                 isActiveText: LL.LEDGER_CONNECTING(),
                 isNextText: LL.LEDGER_CONNECT(),
                 isDoneText: LL.LEDGER_CONNECTED(),
-                progressPercentage: 25,
+                progressPercentage: 15,
                 title: LL.SEND_LEDGER_CHECK_CONNECTION(),
                 subtitle: LL.SEND_LEDGER_CHECK_CONNECTION_SB(),
             },
@@ -143,12 +143,12 @@ export const LedgerSignTransaction: React.FC<Props> = ({ route }) => {
                 isActiveText: LL.LEDGER_SIGNING(),
                 isNextText: LL.LEDGER_SIGN_DATA(),
                 isDoneText: LL.LEDGER_DATA_SIGNED(),
-                progressPercentage: 75,
-                title: LL.SEND_LEDGER_SIGN_DATA(),
-                subtitle: LL.SEND_LEDGER_SIGN_DATA_SB(),
+                progressPercentage: 85,
+                title: userRejected ? LL.SEND_LEDGER_REJECTED_TRANSACTION() : LL.SEND_LEDGER_SIGN_DATA(),
+                subtitle: userRejected ? LL.SEND_LEDGER_REJECTED_TRANSACTION_SB() : LL.SEND_LEDGER_SIGN_DATA_SB(),
             },
         ],
-        [LL],
+        [LL, userRejected],
     )
 
     const currentStep = useMemo(() => {
@@ -206,7 +206,7 @@ export const LedgerSignTransaction: React.FC<Props> = ({ route }) => {
             setSigningError(false)
             signTransaction()
         } else {
-            debug(ERROR_EVENTS.LEDGER, "LedgerSignTransaction:signTransaction:skipped")
+            debug(ERROR_EVENTS.LEDGER, "[LedgerSignTransaction] - skipping signTransaction")
             pollingCorrectSettings()
         }
     }, [userRejected, appOpen, appConfig, signature, signTransaction, pollingCorrectSettings])
@@ -319,6 +319,11 @@ export const LedgerSignTransaction: React.FC<Props> = ({ route }) => {
         processRequest,
     ])
 
+    const handleOnRetry = useCallback(() => {
+        // this will trigger the useEffect to sign the transaction again
+        setUserRejected(false)
+    }, [])
+
     const BottomButton = useCallback(() => {
         if (currentStep === SignSteps.SIGNING && userRejected) {
             return (
@@ -327,7 +332,7 @@ export const LedgerSignTransaction: React.FC<Props> = ({ route }) => {
                     haptics="Light"
                     title={LL.BTN_RETRY()}
                     isLoading={isSending}
-                    action={signTransaction}
+                    action={handleOnRetry}
                 />
             )
         }
@@ -346,7 +351,7 @@ export const LedgerSignTransaction: React.FC<Props> = ({ route }) => {
         }
 
         return <></>
-    }, [currentStep, userRejected, isSending, LL, signTransaction, signature, handleOnConfirm])
+    }, [currentStep, userRejected, isSending, LL, handleOnRetry, signature, handleOnConfirm])
 
     return (
         <Layout

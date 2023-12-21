@@ -57,7 +57,6 @@ export const LedgerSignCertificate: React.FC<Props> = ({ route }) => {
 
     const { appOpen, errorCode, withTransport, removeLedger } = useLedger({
         deviceId: accountWithDevice.device.deviceId,
-        autoConnect: true,
     })
 
     useEffect(() => {
@@ -87,11 +86,11 @@ export const LedgerSignCertificate: React.FC<Props> = ({ route }) => {
                 isNextText: LL.LEDGER_SIGN_DATA(),
                 isDoneText: LL.LEDGER_DATA_SIGNED(),
                 progressPercentage: 75,
-                title: LL.CERT_LEDGER_SIGN_DATA(),
-                subtitle: LL.CERT_LEDGER_SIGN_DATA_SB(),
+                title: userRejected ? LL.CERT_LEDGER_REJECTED() : LL.CERT_LEDGER_SIGN_DATA(),
+                subtitle: userRejected ? LL.CERT_LEDGER_REJECTED_SB() : LL.CERT_LEDGER_SIGN_DATA_SB(),
             },
         ],
-        [LL],
+        [LL, userRejected],
     )
 
     const currentStep = useMemo(() => {
@@ -202,6 +201,11 @@ export const LedgerSignCertificate: React.FC<Props> = ({ route }) => {
         }
     }, [removeLedger, request, postMessage, processRequest, LL, signature, certificate, navigateOnFinish])
 
+    const handleOnRetry = useCallback(() => {
+        // this will trigger the useEffect to sign the transaction again
+        setUserRejected(false)
+    }, [])
+
     const BottomButton = useCallback(() => {
         if (currentStep === SigningStep.SIGNING && userRejected) {
             return (
@@ -211,7 +215,7 @@ export const LedgerSignCertificate: React.FC<Props> = ({ route }) => {
                     haptics="Light"
                     title={LL.BTN_RETRY()}
                     isLoading={isSending}
-                    action={signCertificate}
+                    action={handleOnRetry}
                 />
             )
         }
@@ -231,7 +235,7 @@ export const LedgerSignCertificate: React.FC<Props> = ({ route }) => {
         }
 
         return <></>
-    }, [currentStep, userRejected, isSending, LL, signCertificate, signature, handleOnConfirm])
+    }, [currentStep, userRejected, LL, isSending, handleOnRetry, signature, handleOnConfirm])
 
     return (
         <BaseSafeArea grow={1}>

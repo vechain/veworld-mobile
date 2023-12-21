@@ -93,7 +93,6 @@ export const verifyTransport = async (
                 },
             }
         } catch (e) {
-            debug(ERROR_EVENTS.LEDGER, "[verifyTransport] - error getting configuration", e)
             return {
                 success: false,
                 err: ledgerErrorHandler(e as Error),

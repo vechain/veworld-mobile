@@ -40,7 +40,6 @@ export class VETLedgerApp {
             debug(ERROR_EVENTS.LEDGER, "[getAppConfiguration] - response", response)
             return response.subarray(0, 1)
         } catch (e) {
-            debug(ERROR_EVENTS.LEDGER, "[getAppConfiguration] - error", e)
             throw e
         }
     }
