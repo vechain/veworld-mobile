@@ -1,4 +1,4 @@
-import { useLedgerSubscription } from "~Hooks"
+import { useScanLedgerDevices } from "~Hooks"
 import { renderHook } from "@testing-library/react-hooks"
 import { TestHelpers } from "~Test"
 import BleTransport from "@ledgerhq/react-native-hw-transport-ble"
@@ -7,7 +7,7 @@ const { mockedDevice, mockDeviceModel } = TestHelpers.data
 
 const listenFunction = jest.fn()
 
-describe("useLedgerSubscription", () => {
+describe("useScanLedgerDevices", () => {
     beforeEach(() => {
         jest.clearAllMocks()
         jest.mock("@ledgerhq/react-native-hw-transport-ble", () => ({
@@ -17,7 +17,7 @@ describe("useLedgerSubscription", () => {
     })
 
     it("can scan for devices", async () => {
-        const { result } = renderHook(() => useLedgerSubscription({}))
+        const { result } = renderHook(() => useScanLedgerDevices({}))
 
         expect(result.current.canConnect).toEqual(false)
 
@@ -32,7 +32,7 @@ describe("useLedgerSubscription", () => {
 
     it("can connect", async () => {
         const { result } = renderHook(() =>
-            useLedgerSubscription({
+            useScanLedgerDevices({
                 deviceId: mockedDevice.id,
             }),
         )

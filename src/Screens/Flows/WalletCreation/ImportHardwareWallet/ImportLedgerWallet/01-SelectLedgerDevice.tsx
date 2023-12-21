@@ -21,7 +21,7 @@ import Lottie from "lottie-react-native"
 import { BlePairingDark } from "~Assets/Lottie"
 import * as Haptics from "expo-haptics"
 import { LedgerAndroidPermissions } from "../Hooks/LedgerAndroidPermissions"
-import { useAnalyticTracking, useLedgerSubscription } from "~Hooks"
+import { useAnalyticTracking, useScanLedgerDevices } from "~Hooks"
 import { AnalyticsEvent } from "~Constants"
 import { PlatformUtils } from "~Utils"
 
@@ -51,7 +51,7 @@ export const SelectLedgerDevice = () => {
         } else return true
     }, [androidPermissionsGranted])
 
-    const { availableDevices, unsubscribe } = useLedgerSubscription({
+    const { availableDevices, unsubscribe, scanForDevices } = useScanLedgerDevices({
         onAddDevice,
         readyToScan,
     })
@@ -94,6 +94,10 @@ export const SelectLedgerDevice = () => {
             count: availableDevices.length,
         })
     }, [LL, availableDevices.length])
+
+    useEffect(() => {
+        scanForDevices()
+    }, [scanForDevices])
 
     useEffect(() => {
         track(AnalyticsEvent.IMPORT_HW_PAGE_LOADED)

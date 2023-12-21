@@ -4,11 +4,11 @@ import { useLedger } from "."
 import { TestHelpers } from "~Test"
 import { act } from "@testing-library/react-native"
 import BleTransport from "@ledgerhq/react-native-hw-transport-ble"
-import { useLedgerSubscription } from "~Hooks"
+import { useScanLedgerDevices } from "~Hooks"
 import { LedgerConfig } from "~Utils/LedgerUtils/LedgerUtils"
 import { LEDGER_ERROR_CODES } from "~Constants"
 
-jest.mock("~Hooks/useLedgerSubscription/useLedgerSubscription")
+jest.mock("~Hooks/useScanLedgerDevices/useScanLedgerDevices")
 
 const deviceId = "testDeviceId"
 
@@ -18,7 +18,7 @@ describe("useLedger", () => {
         jest.mock("@ledgerhq/react-native-hw-transport-ble", () => ({
             default: TestHelpers.data.mockedTransport,
         }))
-        ;(useLedgerSubscription as jest.MockedFunction<typeof useLedgerSubscription>).mockReturnValue({
+        ;(useScanLedgerDevices as jest.MockedFunction<typeof useScanLedgerDevices>).mockReturnValue({
             canConnect: true,
             availableDevices: [],
             unsubscribe: jest.fn(),

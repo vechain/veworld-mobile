@@ -46,12 +46,16 @@ export const SelectLedgerAccounts: React.FC<Props> = ({ route }) => {
     const userHasOnboarded = useAppSelector(selectHasOnboarded)
     const track = useAnalyticTracking()
 
-    const { errorCode, rootAccount, removeLedger } = useLedger({
+    const { errorCode, rootAccount, removeLedger, scanAndConnectToDeviceIfPresent } = useLedger({
         deviceId: device.id,
     })
     const [rootAcc, setRootAcc] = useState<VETLedgerAccount | undefined>(
         rootAccount ? ({ ...rootAccount } as VETLedgerAccount) : undefined,
     )
+
+    useEffect(() => {
+        scanAndConnectToDeviceIfPresent()
+    }, [scanAndConnectToDeviceIfPresent])
 
     useEffect(() => {
         // root account will be undefined if the user disconnects. We don't care abet that, we only want to read it
@@ -114,15 +118,15 @@ export const SelectLedgerAccounts: React.FC<Props> = ({ route }) => {
      */
     useEffect(() => {
         const getLedgerAccounts = async () => {
-            if (rootAcc) {
+            if (rootAccount) {
                 setLedgerAccountsLoading(true)
-                const accounts = await LedgerUtils.getAccountsWithBalances(rootAcc, selectedNetwork, 10)
+                const accounts = await LedgerUtils.getAccountsWithBalances(rootAccount, selectedNetwork, 10)
                 setLedgerAccounts(accounts)
             }
             setLedgerAccountsLoading(false)
         }
         getLedgerAccounts()
-    }, [rootAcc, selectedNetwork])
+    }, [rootAccount, selectedNetwork])
 
     const renderItem = ({ item, index }: { item: LedgerAccount; index: number }) => {
         const isSelected = selectedAccountsIndex.some(ind => ind === index)
