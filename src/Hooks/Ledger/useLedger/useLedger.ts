@@ -1,4 +1,4 @@
-import { useCallback, useMemo, useRef, useState } from "react"
+import { useCallback, useEffect, useMemo, useRef, useState } from "react"
 import { ERROR_EVENTS, LEDGER_ERROR_CODES, VETLedgerAccount } from "~Constants"
 
 import { debug, error, warn } from "~Utils/Logger"
@@ -244,6 +244,10 @@ export const useLedger = ({ deviceId }: { deviceId: string }): UseLedgerProps =>
         outsideRenderLoopDisconnectedOnPurpose = false
         await checkDevicePresence(connectDevice)
     }, [checkDevicePresence, connectDevice])
+
+    useEffect(() => {
+        scanAndConnectToDeviceIfPresent()
+    }, [scanAndConnectToDeviceIfPresent])
 
     return {
         appOpen,

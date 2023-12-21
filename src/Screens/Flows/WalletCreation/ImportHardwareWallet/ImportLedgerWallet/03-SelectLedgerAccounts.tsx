@@ -46,16 +46,12 @@ export const SelectLedgerAccounts: React.FC<Props> = ({ route }) => {
     const userHasOnboarded = useAppSelector(selectHasOnboarded)
     const track = useAnalyticTracking()
 
-    const { errorCode, rootAccount, removeLedger, scanAndConnectToDeviceIfPresent } = useLedger({
+    const { errorCode, rootAccount, removeLedger } = useLedger({
         deviceId: device.id,
     })
     const [rootAcc, setRootAcc] = useState<VETLedgerAccount | undefined>(
         rootAccount ? ({ ...rootAccount } as VETLedgerAccount) : undefined,
     )
-
-    useEffect(() => {
-        scanAndConnectToDeviceIfPresent()
-    }, [scanAndConnectToDeviceIfPresent])
 
     useEffect(() => {
         // root account will be undefined if the user disconnects. We don't care abet that, we only want to read it
