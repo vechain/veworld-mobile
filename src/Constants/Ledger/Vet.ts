@@ -35,9 +35,14 @@ export class VETLedgerApp {
     }
 
     async getAppConfiguration(): Promise<Buffer> {
-        const response = await this.transport.send(0xe0, 0x06, 0x00, 0x00, Buffer.alloc(0), [StatusCodes.OK])
-
-        return response.subarray(0, 1)
+        try {
+            const response = await this.transport.send(0xe0, 0x06, 0x00, 0x00, Buffer.alloc(0), [StatusCodes.OK])
+            debug(ERROR_EVENTS.LEDGER, "[getAppConfiguration] - response", response)
+            return response.subarray(0, 1)
+        } catch (e) {
+            debug(ERROR_EVENTS.LEDGER, "[getAppConfiguration] - error", e)
+            throw e
+        }
     }
 
     /**

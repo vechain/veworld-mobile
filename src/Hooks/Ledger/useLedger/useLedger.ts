@@ -18,24 +18,23 @@ let outsideRenderLoopIsConnected: boolean = false
 let outsideRenderLoopDisconnectedOnPurpose: boolean = false
 
 /**
- * useLedger is a custom react hook for interacting with ledger devices
- *
- * Since ledger security depends on user clicks, it will only attempt to
- * connect (& get the root account) when the component is rendered. (As done so by the user)
- *
- * A function is provided to manually make another attempt.
- * Eg. when the user has "Confirmed" the app is open, we can try again
- *
- * This will allow us to detect if the user has disconnected or exited the VET app before making subsequent requests
- *
- * @param onDisconnect (optional) - a callback that is invoked when a "disconnect" is detected
- *
- * @returns {@link UseLedgerProps}
+ * ***** IMPORTANT *****
+ * - every time you enter/exit from an app, the ledger will disconnect, but it handles it and try to reconnect
  * - "removeLedger" must be invoked after the ledger action is finished
  */
+
+/**
+ * DEBUG INTERNAL LEDGER LOGS:
+ * import { listen } from "@ledgerhq/logs"
+ * useEffect(() => {
+ *     listen(log => {
+ *         console.log("[LOG] - ", log)
+ *     })
+ * }, [])
+ */
+
 export const useLedger = ({ deviceId }: { deviceId: string }): UseLedgerProps => {
     const mutex = useRef<Mutex>(new Mutex())
-
     const transport = useRef<BleTransport | undefined>()
     const [appOpen, setAppOpen] = useState<boolean>(false)
     const [appConfig, setAppConfig] = useState<LedgerConfig>(LedgerConfig.UNKNOWN)
@@ -181,17 +180,17 @@ export const useLedger = ({ deviceId }: { deviceId: string }): UseLedgerProps =>
         }
 
         const reconnectDevice = async () => {
-            debug(ERROR_EVENTS.LEDGER, "[useLedger] - triggered reconnectDevice")
+            debug(ERROR_EVENTS.LEDGER, "[useLedger] - device disconnected")
             outsideRenderLoopIsConnected = false
             setRootAccount(undefined)
             setAppOpen(false)
-            setErrorCode(LEDGER_ERROR_CODES.DISCONNECTED)
+            setErrorCode(LEDGER_ERROR_CODES.CONNECTING)
             transport.current = undefined
             if (!outsideRenderLoopDisconnectedOnPurpose) {
-                debug(ERROR_EVENTS.LEDGER, "[useLedger] - trying to connect after disconnected")
+                debug(ERROR_EVENTS.LEDGER, "[useLedger] - trying reconnecting...")
                 await checkDevicePresence(connectDevice)
             } else {
-                debug(ERROR_EVENTS.LEDGER, "[useLedger] - not connected because disconnected on purpose")
+                debug(ERROR_EVENTS.LEDGER, "[useLedger] - not reconnecting because disconnected on purpose")
             }
         }
 
@@ -208,7 +207,7 @@ export const useLedger = ({ deviceId }: { deviceId: string }): UseLedgerProps =>
             await pollingLedgerStatus()
         } catch (e) {
             warn(ERROR_EVENTS.LEDGER, "[useLedger] - Error opening connection", e)
-            setErrorCode(LEDGER_ERROR_CODES.UNKNOWN)
+            setErrorCode(LEDGER_ERROR_CODES.CONNECTING)
             outsideRenderLoopIsConnected = false
             setTimeout(reconnectDevice, TRY_RECONNECT_DEVICE_INTERVAL)
         } finally {

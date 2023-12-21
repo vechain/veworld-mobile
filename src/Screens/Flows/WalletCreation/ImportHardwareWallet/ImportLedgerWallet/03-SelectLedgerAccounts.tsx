@@ -62,15 +62,19 @@ export const SelectLedgerAccounts: React.FC<Props> = ({ route }) => {
 
     const ledgerErrorCode = useMemo(() => {
         if (rootAcc) return undefined
-
+        if (!errorCode) return undefined
         return errorCode
     }, [errorCode, rootAcc])
 
     const { ref, onOpen, onClose } = useBottomSheetModal()
 
     useEffect(() => {
-        if (ledgerErrorCode) onOpen()
-    }, [ledgerErrorCode, onOpen])
+        if (ledgerErrorCode) {
+            onOpen()
+        } else {
+            onClose()
+        }
+    }, [ledgerErrorCode, onClose, onOpen])
 
     const [ledgerAccounts, setLedgerAccounts] = useState<LedgerAccount[]>([])
     const [ledgerAccountsLoading, setLedgerAccountsLoading] = useState(false)

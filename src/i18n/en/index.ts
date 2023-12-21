@@ -747,6 +747,8 @@ const en: BaseTranslation = {
     WALLET_LEDGER_ERROR_UNLOCK_LEDGER_DESC: "Please, turn on and unlock your ledger device to continue",
     WALLET_LEDGER_ERROR_OPEN_APP: "Open VET app",
     WALLET_LEDGER_ERROR_OPEN_APP_DESC: "Please, open the VET app to continue",
+    WALLET_LEDGER_ERROR_CONNECTING: "Connecting...",
+    WALLET_LEDGER_ERROR_CONNECTING_DESC: "Connecting to the ledger device, please wait",
     WALLET_LEDGER_ERROR_VALIDATE_SIGNATURE: "Validate signature",
     WALLET_LEDGER_ERROR_VALIDATE_SIGNATURE_DESC: "We've sent a signature request to your ledger, please validate it to continue",
     WALLET_LEDGER_ERROR_CLAUSES_AND_CONTRACT_DATA_DISABLED: "Enable additional settings",

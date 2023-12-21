@@ -2586,6 +2586,14 @@ type RootTranslation = {
 	 */
 	WALLET_LEDGER_ERROR_OPEN_APP_DESC: string
 	/**
+	 * C​o​n​n​e​c​t​i​n​g​.​.​.
+	 */
+	WALLET_LEDGER_ERROR_CONNECTING: string
+	/**
+	 * C​o​n​n​e​c​t​i​n​g​ ​t​o​ ​t​h​e​ ​l​e​d​g​e​r​ ​d​e​v​i​c​e​,​ ​p​l​e​a​s​e​ ​w​a​i​t
+	 */
+	WALLET_LEDGER_ERROR_CONNECTING_DESC: string
+	/**
 	 * V​a​l​i​d​a​t​e​ ​s​i​g​n​a​t​u​r​e
 	 */
 	WALLET_LEDGER_ERROR_VALIDATE_SIGNATURE: string
@@ -5345,6 +5353,14 @@ Try reconnect your device to the internet.
 	 * Please, open the VET app to continue
 	 */
 	WALLET_LEDGER_ERROR_OPEN_APP_DESC: () => LocalizedString
+	/**
+	 * Connecting...
+	 */
+	WALLET_LEDGER_ERROR_CONNECTING: () => LocalizedString
+	/**
+	 * Connecting to the ledger device, please wait
+	 */
+	WALLET_LEDGER_ERROR_CONNECTING_DESC: () => LocalizedString
 	/**
 	 * Validate signature
 	 */
