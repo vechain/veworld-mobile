@@ -3,6 +3,7 @@ import { error } from "~Utils/Logger"
 import { NFTMetadata } from "~Model/Nft/Nft"
 import { NFT_AXIOS_TIMEOUT } from "~Constants/Constants/NFT"
 import { URIUtils } from "~Utils"
+import { ERROR_EVENTS } from "~Constants"
 
 const arweave = Arweave.init({
     host: "arweave.net",
@@ -22,7 +23,7 @@ export const getNFTMetadataArweave = async (uri: string) => {
         const response = await arweave.api.get<NFTMetadata>(id)
         return response.data
     } catch (e) {
-        error("getNFTMetadataArweave", e)
+        error(ERROR_EVENTS.NFT, e)
         throw e
     }
 }

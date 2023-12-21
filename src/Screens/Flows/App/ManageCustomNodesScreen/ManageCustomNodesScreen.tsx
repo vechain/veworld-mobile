@@ -28,6 +28,7 @@ import { useNavigation } from "@react-navigation/native"
 import { EditCustomNodeBottomSheet } from "./components"
 import * as Haptics from "expo-haptics"
 import { SwipeableItemImperativeRef } from "react-native-swipeable-item"
+import { ERROR_EVENTS } from "~Constants"
 
 export const ManageCustomNodesScreen = () => {
     const { LL } = useI18nContext()
@@ -109,7 +110,7 @@ export const ManageCustomNodesScreen = () => {
             closeDeleteConfirmationSheet()
             Haptics.notificationAsync(Haptics.NotificationFeedbackType.Success)
         } catch (e) {
-            error("onDeleteNetworkConfirm", e)
+            error(ERROR_EVENTS.SETTINGS, e)
             Haptics.notificationAsync(Haptics.NotificationFeedbackType.Error)
         }
     }, [closeDeleteConfirmationSheet, networkToEditDeleteId, dispatch])

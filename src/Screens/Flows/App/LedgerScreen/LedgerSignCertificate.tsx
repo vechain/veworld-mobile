@@ -23,7 +23,7 @@ import { debug, error, HexUtils, LedgerUtils } from "~Utils"
 import { useI18nContext } from "~i18n"
 import { useNavigation } from "@react-navigation/native"
 import * as Haptics from "expo-haptics"
-import { LEDGER_ERROR_CODES, RequestMethods } from "~Constants"
+import { ERROR_EVENTS, LEDGER_ERROR_CODES, RequestMethods } from "~Constants"
 import { useInAppBrowser } from "~Components/Providers/InAppBrowserProvider"
 
 type Props = NativeStackScreenProps<RootStackParamListSwitch, Routes.LEDGER_SIGN_CERTIFICATE>
@@ -112,7 +112,7 @@ export const LedgerSignCertificate: React.FC<Props> = ({ route }) => {
                 accountWithDevice.device,
                 withTransport,
             )
-            debug("Signature OK")
+            debug(ERROR_EVENTS.LEDGER, "Signature OK")
 
             if (res.success) {
                 setSignature(res.payload)
@@ -124,7 +124,7 @@ export const LedgerSignCertificate: React.FC<Props> = ({ route }) => {
                 }
             }
         } catch (e) {
-            error("LedgerSignCertificate:signCertificate", e)
+            error(ERROR_EVENTS.LEDGER, e)
             setSigningError(true)
         } finally {
             setIsAwaitingSignature(false)
@@ -145,7 +145,6 @@ export const LedgerSignCertificate: React.FC<Props> = ({ route }) => {
      * Open the connection error sheet when the error code is not null
      */
     useEffect(() => {
-        debug({ ledgerErrorCode })
         if (ledgerErrorCode) {
             openConnectionErrorSheet()
         } else {
@@ -192,7 +191,7 @@ export const LedgerSignCertificate: React.FC<Props> = ({ route }) => {
 
             navigateOnFinish()
         } catch (e) {
-            error("LedgerSignCertificate:handleOnConfirm", e)
+            error(ERROR_EVENTS.LEDGER, e)
             showErrorToast({
                 text1: LL.ERROR(),
                 text2: LL.ERROR_GENERIC_OPERATION(),

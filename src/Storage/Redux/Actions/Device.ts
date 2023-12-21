@@ -5,6 +5,7 @@ import { addDevice, bulkUpdateDevices, renameDevice, updateDevice } from "../Sli
 import { AppThunk, createAppAsyncThunk } from "../Types"
 import { addAccountForDevice } from "./Account"
 import { addAccount } from "../Slices"
+import { ERROR_EVENTS } from "~Constants"
 
 /**
  *  Add a device and its first account
@@ -45,7 +46,7 @@ export const getNextDeviceIndex = (devices: BaseDevice[]) => {
 const addLedgerDeviceAndAccounts = createAppAsyncThunk(
     "device/addLedgerDeviceAndAccounts",
     async ({ deviceId, rootAccount, alias, accounts }: NewLedgerDevice, { dispatch, getState, rejectWithValue }) => {
-        debug("Adding a ledger device")
+        debug(ERROR_EVENTS.LEDGER, "Adding a ledger device")
 
         const devices = selectDevices(getState())
 
@@ -81,7 +82,7 @@ const addLedgerDeviceAndAccounts = createAppAsyncThunk(
 
             return { device: newDevice, accounts: newAccounts }
         } catch (e) {
-            error("addLedgerDeviceAndAccounts", e)
+            error(ERROR_EVENTS.LEDGER, e)
             return rejectWithValue("Failed to add ledger device")
         }
     },

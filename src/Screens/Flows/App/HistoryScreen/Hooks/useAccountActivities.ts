@@ -13,6 +13,7 @@ import {
 import { fetchAccountTransactionActivities } from "~Networking"
 import { useI18nContext } from "~i18n"
 import { InteractionManager } from "react-native"
+import { ERROR_EVENTS } from "~Constants"
 
 /**
  * Custom React hook to fetch and manage account activities.
@@ -53,7 +54,7 @@ export const useAccountActivities = () => {
      * Utilizes useCallback for memoization to prevent unnecessary re-renders.
      */
     const fetchActivities = useCallback(async () => {
-        info("Fetching activities on page", page)
+        info(ERROR_EVENTS.ACTIVITIES, "Fetching activities on page", page)
         // Reset hasFetched flag
         setHasFetched(false)
         // Proceed if address exists
@@ -95,7 +96,7 @@ export const useAccountActivities = () => {
                 incrementPageAndSetFetchedFlag()
             } catch (e) {
                 // In case of error, log and show warning toast
-                error("fetchActivities", e)
+                error(ERROR_EVENTS.ACTIVITIES, e)
 
                 showWarningToast({
                     text1: LL.HEADS_UP(),

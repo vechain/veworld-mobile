@@ -7,6 +7,7 @@ import { error } from "~Utils/Logger"
 import { IMPORT_TYPE } from "~Model"
 import fastKeystoreDecrypt from "./Helpers/fastKeystoreDecrypt"
 import HexUtils from "~Utils/HexUtils"
+import { ERROR_EVENTS } from "~Constants"
 
 const N = Buffer.from("fffffffffffffffffffffffffffffffebaaedce6af48a03bbfd25e8cd0364141", "hex")
 const ZERO = Buffer.alloc(32, 0)
@@ -81,7 +82,7 @@ const decryptKeystoreFile = async (ks: Keystore | string, key: string): Promise<
         const keystoreAccount = await fastKeystoreDecrypt(JSON.stringify(keystore), key)
         return HexUtils.removePrefix(keystoreAccount.privateKey)
     } catch (err) {
-        error("Error decrypting keystore", err)
+        error(ERROR_EVENTS.ENCRYPTION, err)
         throw err
     }
 }

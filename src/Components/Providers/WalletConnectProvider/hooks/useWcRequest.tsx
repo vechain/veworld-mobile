@@ -1,7 +1,7 @@
 import { useCallback, useEffect, useMemo, useState } from "react"
 import { PendingRequestTypes, SessionTypes } from "@walletconnect/types"
 import { AddressUtils, debug, error, HexUtils, WalletConnectUtils, warn } from "~Utils"
-import { AnalyticsEvent, RequestMethods } from "~Constants"
+import { AnalyticsEvent, ERROR_EVENTS, RequestMethods } from "~Constants"
 import { AccountWithDevice } from "~Model"
 import {
     changeSelectedNetwork,
@@ -71,7 +71,7 @@ export const useWcRequest = (isBlackListScreen: () => boolean, activeSessions: A
         ) => {
             const web3Wallet = await WalletConnectUtils.getWeb3Wallet()
 
-            debug(`Responding with WC Request ${requestEvent.id}`, result)
+            debug(ERROR_EVENTS.WALLET_CONNECT, `Responding with WC Request ${requestEvent.id}`, result)
 
             await web3Wallet.respondSessionRequest({
                 topic: requestEvent.topic,
@@ -91,7 +91,7 @@ export const useWcRequest = (isBlackListScreen: () => boolean, activeSessions: A
         async (requestEvent: PendingRequestTypes.Struct, err: ErrorResponse) => {
             const web3Wallet = await WalletConnectUtils.getWeb3Wallet()
 
-            warn(`Responding with WC Request ${requestEvent.id}`, err)
+            warn(ERROR_EVENTS.WALLET_CONNECT, `Responding with WC Request ${requestEvent.id}`, err)
 
             await web3Wallet.respondSessionRequest({
                 topic: requestEvent.topic,
@@ -199,9 +199,6 @@ export const useWcRequest = (isBlackListScreen: () => boolean, activeSessions: A
                 return failRequest(requestEvent, getRpcError("invalidParams"))
             }
 
-            //convert hex message to utf8
-            debug("messageUtf8", Buffer.from(HexUtils.removePrefix(params[0]), "hex").toString())
-
             nav.navigate(Routes.CONNECTED_APP_SIGN_MESSAGE_SCREEN, {
                 requestEvent,
                 message: params[0],
@@ -270,6 +267,7 @@ export const useWcRequest = (isBlackListScreen: () => boolean, activeSessions: A
     const onSessionRequest = useCallback(
         async (requestEvent: PendingRequestTypes.Struct) => {
             debug(
+                ERROR_EVENTS.WALLET_CONNECT,
                 "Session request: ",
                 JSON.stringify({
                     id: requestEvent.id,
@@ -287,7 +285,11 @@ export const useWcRequest = (isBlackListScreen: () => boolean, activeSessions: A
                     // Get the session for this topic
                     session = web3Wallet.engine.signClient.session.get(requestEvent.topic)
                 } catch (e) {
-                    warn("Failed to get WC session for wallet: ", JSON.stringify(sessions.map(s => s.topic)))
+                    warn(
+                        ERROR_EVENTS.WALLET_CONNECT,
+                        "Failed to get WC session for wallet: ",
+                        JSON.stringify(sessions.map(s => s.topic)),
+                    )
                     return
                 }
 
@@ -310,7 +312,11 @@ export const useWcRequest = (isBlackListScreen: () => boolean, activeSessions: A
                         break
                     default:
                         await failRequest(requestEvent, getRpcError("methodNotSupported"))
-                        error("Wallet Connect Session Request Invalid Method", requestEvent.params.request.method)
+                        error(
+                            ERROR_EVENTS.WALLET_CONNECT,
+                            "Wallet Connect Session Request Invalid Method",
+                            requestEvent.params.request.method,
+                        )
                         break
                 }
             } catch (e) {
@@ -367,6 +373,7 @@ export const useWcRequest = (isBlackListScreen: () => boolean, activeSessions: A
 
     useEffect(() => {
         debug(
+            ERROR_EVENTS.WALLET_CONNECT,
             "pendingRequests",
             Object.values(pendingRequests).map(s => s.id),
         )

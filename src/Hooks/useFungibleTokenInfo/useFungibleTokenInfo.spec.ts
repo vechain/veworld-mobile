@@ -63,7 +63,7 @@ describe("useFungibleTokenInfo", () => {
         ;(getTokenName as jest.Mock).mockRejectedValue(errorMock)
         ;(useThor as jest.Mock).mockReturnValue(thor)
 
-        const consoleErrorSpy = jest.spyOn(logger, "error")
+        const consoleErrorSpy = jest.spyOn(logger, "warn")
 
         const { result, waitForNextUpdate } = renderHook(() => useFungibleTokenInfo(tokenAddress))
 

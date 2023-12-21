@@ -3,9 +3,10 @@ import { useCallback, useEffect } from "react"
 import { Alert, Linking } from "react-native"
 import DeviceInfo from "react-native-device-info"
 import checkVersion from "react-native-store-version"
+import { ERROR_EVENTS } from "~Constants"
 import { useLocale } from "~Hooks/useLocale"
 import { selectLastVersionCheck, setLastVersionCheck, useAppDispatch, useAppSelector } from "~Storage/Redux"
-import { PlatformUtils, error, warn } from "~Utils"
+import { PlatformUtils, warn } from "~Utils"
 import { useI18nContext } from "~i18n"
 
 export const useCheckVersion = () => {
@@ -46,10 +47,15 @@ export const useCheckVersion = () => {
                         ])
                     }
                 } catch (e) {
-                    error("useCheckVersion", `regionCode = ${regionCode} and countryCode = ${countryCode}`, e)
+                    warn(
+                        ERROR_EVENTS.APP,
+                        "useCheckVersion",
+                        `regionCode = ${regionCode} and countryCode = ${countryCode}`,
+                        e,
+                    )
                 }
             } else {
-                warn("useCheckVersion", "countryCode is undefined")
+                warn(ERROR_EVENTS.APP, "useCheckVersion", "countryCode is undefined")
             }
         }
     }, [isTimeForANewCheck, dispatch, countryCode, APPLE_STORE_URL, LL, regionCode])

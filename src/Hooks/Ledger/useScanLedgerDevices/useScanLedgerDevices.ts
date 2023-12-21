@@ -7,6 +7,7 @@ import { Observer as TransportObserver, Subscription as TransportSubscription } 
 import { HwTransportError } from "@ledgerhq/errors"
 import BleTransport from "@ledgerhq/react-native-hw-transport-ble"
 import { Platform } from "react-native"
+import { ERROR_EVENTS } from "~Constants"
 
 type SubscriptionEvent = {
     type: string
@@ -30,10 +31,10 @@ export const useScanLedgerDevices = ({ onAddDevice, readyToScan = true }: Props)
 
     const bleObserver: MutableRefObject<TransportObserver<any, HwTransportError>> = useRef({
         complete: () => {
-            debug("useScanLedgerDevices - observer - complete")
+            debug(ERROR_EVENTS.LEDGER, "[useScanLedgerDevices] - observer - complete")
         },
         error: err => {
-            warn("useScanLedgerDevices - observer", { err })
+            warn(ERROR_EVENTS.LEDGER, "[useScanLedgerDevices] - observer", { err })
         },
         next: (e: SubscriptionEvent) => {
             if (e.type === "add") {
@@ -62,20 +63,20 @@ export const useScanLedgerDevices = ({ onAddDevice, readyToScan = true }: Props)
 
                 if (onAddDevice) onAddDevice(device)
             } else {
-                error("[Ledger] - ledger added a new event, please handle it!", e)
+                error(ERROR_EVENTS.LEDGER, "[useScanLedgerDevices] - ledger added a new event, please handle it!", e)
             }
         },
     })
 
     const unsubscribe = useCallback(() => {
-        debug("useScanLedgerDevices - unsubscribe")
+        debug(ERROR_EVENTS.LEDGER, "[useScanLedgerDevices] - unsubscribe")
         subscription.current?.unsubscribe()
         subscription.current = undefined
     }, [])
 
     const scanForDevices = useCallback(() => {
         if (!readyToScan) {
-            debug("useScanLedgerDevices - skipping listening because not readyToScan")
+            debug(ERROR_EVENTS.LEDGER, "[useScanLedgerDevices] - skipping listening because not readyToScan")
             return
         }
         if (subscription.current) {
@@ -83,7 +84,7 @@ export const useScanLedgerDevices = ({ onAddDevice, readyToScan = true }: Props)
             subscription.current = undefined
         }
 
-        debug("useScanLedgerDevices - startSubscription")
+        debug(ERROR_EVENTS.LEDGER, "[useScanLedgerDevices] - startSubscription")
 
         subscription.current = BleTransport.listen(bleObserver.current)
     }, [readyToScan])

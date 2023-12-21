@@ -23,7 +23,7 @@ import {
     useAppDispatch,
     useAppSelector,
 } from "~Storage/Redux"
-import { debug, error, HexUtils } from "~Utils"
+import { error, HexUtils } from "~Utils"
 import {
     useAnalyticTracking,
     useBottomSheetModal,
@@ -37,7 +37,7 @@ import { RootStackParamListSwitch, Routes } from "~Navigation"
 import { NativeStackScreenProps } from "@react-navigation/native-stack"
 import { useNavigation } from "@react-navigation/native"
 import { MessageDetails, UnknownAppMessage } from "~Screens"
-import { AnalyticsEvent, RequestMethods } from "~Constants"
+import { AnalyticsEvent, ERROR_EVENTS, RequestMethods } from "~Constants"
 import { useInAppBrowser } from "~Components/Providers/InAppBrowserProvider"
 
 type Props = NativeStackScreenProps<RootStackParamListSwitch, Routes.CONNECTED_APP_SIGN_CERTIFICATE_SCREEN>
@@ -156,7 +156,7 @@ export const SignCertificateScreen: FC<Props> = ({ route }: Props) => {
                 dispatch(setIsAppLoading(false))
             } catch (err: unknown) {
                 track(AnalyticsEvent.DAPP_CERTIFICATE_FAILED)
-                error("SignMessageScreen:handleAccept", err)
+                error(ERROR_EVENTS.WALLET_CONNECT, err)
 
                 if (request.type === "wallet-connect") {
                     await failRequest(request.requestEvent, getRpcError("internal"))
@@ -215,11 +215,6 @@ export const SignCertificateScreen: FC<Props> = ({ route }: Props) => {
     const onPressBack = useCallback(async () => {
         await onReject()
     }, [onReject])
-
-    debug({
-        isInvalidChecked,
-        validConnectedApp,
-    })
 
     return (
         <BaseSafeArea>

@@ -5,7 +5,7 @@ import { BaseIcon, BaseText, BaseView, useWalletConnect } from "~Components"
 import { useI18nContext } from "~i18n"
 import { Routes } from "~Navigation"
 import HapticsService from "~Services/HapticsService"
-import { ScanTarget } from "~Constants"
+import { ERROR_EVENTS, ScanTarget } from "~Constants"
 import { SelectedNetworkViewer } from "~Components/Reusable/SelectedNetworkViewer"
 import { AddressUtils, debug, WalletConnectUtils } from "~Utils"
 
@@ -26,7 +26,7 @@ export const Header = memo(() => {
             } else if (AddressUtils.isValid(qrData)) {
                 onCopyToClipboard(qrData, LL.COMMON_LBL_ADDRESS())
             } else {
-                debug("Header:onScan - Invalid QR: ", qrData)
+                debug(ERROR_EVENTS.APP, qrData)
             }
         },
         [LL, onCopyToClipboard, onPair],

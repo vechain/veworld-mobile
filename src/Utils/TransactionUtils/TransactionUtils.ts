@@ -14,7 +14,7 @@ import {
     TransferEventResult,
 } from "~Model"
 import { BigNumber } from "bignumber.js"
-import { abis, VET } from "~Constants"
+import { abis, ERROR_EVENTS, VET } from "~Constants"
 import HexUtils from "~Utils/HexUtils"
 import axios from "axios"
 import BigNutils from "~Utils/BigNumberUtils"
@@ -192,7 +192,7 @@ export const decodeTokenTransferClause = (clause: Connex.VM.Clause): { to: strin
                 amount: decoded.amount,
             }
         } catch (e) {
-            debug("Failed to decode parameters", e)
+            debug(ERROR_EVENTS.UTILS, "Failed to decode parameters", e)
         }
     }
 
@@ -228,7 +228,7 @@ export const decodeNonFungibleTokenTransferClause = (
                 tokenId: decoded.tokenId,
             }
         } catch (e) {
-            debug("Failed to decode parameters", e)
+            debug(ERROR_EVENTS.UTILS, "Failed to decode parameters", e)
         }
     }
 
@@ -261,7 +261,7 @@ export const decodeAMMClause = (
                 path: decoded.path,
             }
         } catch (e) {
-            debug("Failed to decode parameters", e)
+            debug(ERROR_EVENTS.UTILS, "Failed to decode parameters", e)
         }
     }
 
@@ -282,7 +282,7 @@ export const decodeSwapEvent = (event: Connex.VM.Event): SwapEvent | null => {
                 to: decoded.to,
             }
         } catch (e) {
-            debug("Failed to decode parameters", e)
+            debug(ERROR_EVENTS.UTILS, "Failed to decode parameters", e)
         }
     }
 
@@ -799,7 +799,7 @@ export const decodeTransferEvent = (event: Connex.VM.Event): TransferEventResult
                 }
             }
         } catch (e) {
-            debug("Failed to decode parameters", e)
+            debug(ERROR_EVENTS.UTILS, "Failed to decode parameters", e)
         }
     }
 

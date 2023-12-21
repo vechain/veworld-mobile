@@ -1,4 +1,4 @@
-import { abis, VET, VTHO } from "~Constants"
+import { abis, ERROR_EVENTS, VET, VTHO } from "~Constants"
 import axios from "axios"
 import { error } from "~Utils/Logger"
 import { Balance, FungibleTokenWithBalance, Network } from "~Model"
@@ -37,7 +37,7 @@ const getBalanceFromBlockchain = async (
             isHidden: false,
         }
     } catch (e) {
-        error("getBalanceFromBlockchain", e)
+        error(ERROR_EVENTS.TOKENS, e)
         throw new Error("Failed to get balance from external service")
     }
 }
@@ -75,7 +75,7 @@ const getBalanceAndTokenInfoFromBlockchain = async (
             tokenDecimals,
         }
     } catch (e) {
-        error("Failed to get balance and token info from external service", e)
+        error(ERROR_EVENTS.TOKENS, e)
     }
 }
 
@@ -101,7 +101,7 @@ const getTokenBalanceFromBlockchain = async (
 
         return res.decoded[0]
     } catch (e) {
-        error("getTokenBalanceFromBlockchain", e)
+        error(ERROR_EVENTS.TOKENS, e)
     }
 }
 

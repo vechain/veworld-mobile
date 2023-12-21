@@ -22,6 +22,7 @@ import { setAnalyticsTrackingEnabled } from "~Storage/Redux/Actions"
 import { useEditPin } from "./Hooks/useEditPin"
 import { BackupWarningBottomSheet } from "./Components/BackupWarningBottomSheet"
 import { warn } from "~Utils"
+import { ERROR_EVENTS } from "~Constants"
 
 export const PrivacyScreen = () => {
     // [START] - Hooks setup
@@ -91,7 +92,7 @@ export const PrivacyScreen = () => {
 
     // [START] - Internal Methods
     const toggleAppLockSwitch = useCallback((newValue: boolean) => {
-        warn("toggleAppLockSwitch", newValue)
+        warn(ERROR_EVENTS.SETTINGS, newValue)
     }, [])
 
     const toggleAnalyticsTrackingSwitch = useCallback(

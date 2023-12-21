@@ -8,6 +8,7 @@ import { useI18nContext } from "~i18n"
 import { SessionTypes } from "@walletconnect/types"
 import { insertContext, useAppDispatch } from "~Storage/Redux"
 import { validateRequestNamespaces } from "~Components/Providers/WalletConnectProvider/config/supported-chains"
+import { ERROR_EVENTS } from "~Constants"
 
 export const useSessionProposals = (
     isBlackListScreen: () => boolean,
@@ -58,14 +59,14 @@ export const useSessionProposals = (
         async (proposal: SessionProposal) => {
             if (proposal.verifyContext.verified.validation !== "VALID")
                 //So we can see invalid proposals in dev mode
-                warn("onSessionProposal - session not valid", proposal.verifyContext)
+                warn(ERROR_EVENTS.WALLET_CONNECT, "onSessionProposal - session not valid", proposal.verifyContext)
 
             const validationError =
                 validateRequestNamespaces(proposal.params.requiredNamespaces) ??
                 validateRequestNamespaces(proposal.params.optionalNamespaces)
 
             if (validationError) {
-                warn("onSessionProposal - session not valid", validationError)
+                warn(ERROR_EVENTS.WALLET_CONNECT, "onSessionProposal - session not valid", validationError)
                 showErrorToast({
                     text1: LL.NOTIFICATION_wallet_connect_incompatible_dapp(),
                 })
@@ -158,6 +159,7 @@ export const useSessionProposals = (
 
     useEffect(() => {
         debug(
+            ERROR_EVENTS.WALLET_CONNECT,
             "sessionProposals",
             Object.values(sessionProposals).map(s => s.id),
         )

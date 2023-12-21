@@ -29,7 +29,7 @@ import { ActivityUtils, debug, error, LedgerUtils } from "~Utils"
 import { useI18nContext } from "~i18n"
 import { useNavigation } from "@react-navigation/native"
 import * as Haptics from "expo-haptics"
-import { AnalyticsEvent, LEDGER_ERROR_CODES, RequestMethods } from "~Constants"
+import { AnalyticsEvent, ERROR_EVENTS, LEDGER_ERROR_CODES, RequestMethods } from "~Constants"
 import { Buffer } from "buffer"
 import { Transaction } from "thor-devkit"
 import { ActivityType } from "~Model"
@@ -178,7 +178,6 @@ export const LedgerSignTransaction: React.FC<Props> = ({ route }) => {
                 withTransport,
                 () => setIsAwaitingSignature(true),
             )
-            debug("Signature OK")
 
             if (res.success) {
                 setSignature(res.payload)
@@ -190,7 +189,7 @@ export const LedgerSignTransaction: React.FC<Props> = ({ route }) => {
                 }
             }
         } catch (e) {
-            error("LedgerSignTransaction:signTransaction", e)
+            error(ERROR_EVENTS.LEDGER, e)
             setSigningError(true)
         } finally {
             setIsAwaitingSignature(false)
@@ -207,7 +206,7 @@ export const LedgerSignTransaction: React.FC<Props> = ({ route }) => {
             setSigningError(false)
             signTransaction()
         } else {
-            debug("LedgerSignTransaction:signTransaction:skipped")
+            debug(ERROR_EVENTS.LEDGER, "LedgerSignTransaction:signTransaction:skipped")
             pollingCorrectSettings()
         }
     }, [userRejected, appOpen, appConfig, signature, signTransaction, pollingCorrectSettings])
@@ -222,7 +221,6 @@ export const LedgerSignTransaction: React.FC<Props> = ({ route }) => {
      * Open the connection error sheet when the error code is not null
      */
     useEffect(() => {
-        debug({ ledgerErrorCode })
         if (ledgerErrorCode) {
             openConnectionErrorSheet()
         } else {
@@ -290,7 +288,7 @@ export const LedgerSignTransaction: React.FC<Props> = ({ route }) => {
 
             navigateOnFinish()
         } catch (e) {
-            error("LedgerSignTransaction:handleOnConfirm", e)
+            error(ERROR_EVENTS.LEDGER, e)
             showErrorToast({
                 text1: LL.ERROR(),
                 text2: LL.ERROR_GENERIC_OPERATION(),

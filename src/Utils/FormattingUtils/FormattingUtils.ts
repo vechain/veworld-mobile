@@ -2,6 +2,7 @@ import { BigNumber } from "bignumber.js"
 import { error } from "../Logger"
 import { isFinite } from "lodash"
 import RoundingMode = BigNumber.RoundingMode
+import { ERROR_EVENTS } from "~Constants"
 
 export const ROUND_DECIMAL_ZERO = 0
 export const ROUND_DECIMAL_DEFAULT = 2
@@ -35,7 +36,7 @@ export const scaleNumberUp = (
 
         return amount.toFixed(roundDecimal, roundingStrategy)
     } catch (e) {
-        error("scaleNumberUp", e)
+        error(ERROR_EVENTS.UTILS, e)
         throw e
         // throw VeWorldErrors.internal(`Failed to scale number up (${val})`, e)
     }
@@ -68,7 +69,7 @@ export const scaleNumberDown = (
 
         return amount.toFixed(roundDecimal, roundingStrategy)
     } catch (e) {
-        error("scaleNumberDown", e)
+        error(ERROR_EVENTS.UTILS, e)
         throw e
         // throw VeWorldErrors.internal(`Failed to scale number down (${val})`, e)
     }

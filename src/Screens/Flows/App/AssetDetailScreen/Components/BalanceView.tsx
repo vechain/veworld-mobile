@@ -1,4 +1,4 @@
-import React from "react"
+import React, { useCallback } from "react"
 import { TokenWithCompleteInfo, useTheme } from "~Hooks"
 import { BaseSkeleton, BaseSpacer, BaseText, BaseView } from "~Components"
 import { useI18nContext } from "~i18n"
@@ -16,37 +16,46 @@ export const BalanceView = ({
 
     const isTokensOwnedLoading = useAppSelector(selectIsTokensOwnedLoading)
 
-    const { symbol, fiatBalance, exchangeRateCurrency, tokenUnitBalance, exchangeRateLoading } = tokenWithInfo
+    const { symbol, fiatBalance, exchangeRateCurrency, exchangeRate, tokenUnitBalance, exchangeRateLoading } =
+        tokenWithInfo
 
     const isLoading = exchangeRateLoading || isTokensOwnedLoading
+    const priceFeedNotAvailable = !exchangeRate || isLoading
+
+    const renderFiatBalance = useCallback(() => {
+        if (isLoading)
+            return (
+                <BaseView flexDirection="row" alignItems="center">
+                    <BaseSkeleton
+                        animationDirection="horizontalLeft"
+                        boneColor={theme.colors.skeletonBoneColor}
+                        highlightColor={theme.colors.skeletonHighlightColor}
+                        height={14}
+                        width={60}
+                    />
+                </BaseView>
+            )
+        if (priceFeedNotAvailable)
+            return <BaseText typographyFont="bodyMedium">{LL.ERROR_PRICE_FEED_NOT_AVAILABLE()}</BaseText>
+        return (
+            <BaseView flexDirection="row">
+                <BaseText typographyFont="subTitleBold">{isBalanceVisible ? fiatBalance : "••••"}</BaseText>
+                <BaseText typographyFont="captionRegular"> {exchangeRateCurrency}</BaseText>
+            </BaseView>
+        )
+    }, [fiatBalance, exchangeRateCurrency, LL, isBalanceVisible, isLoading, priceFeedNotAvailable, theme.colors])
 
     return (
         <BaseView w={100}>
             <BaseView flexDirection="row" alignItems="flex-end">
                 <BaseText typographyFont="bodyBold">{LL.BD_YOUR_BALANCE()}</BaseText>
-                <BaseSpacer width={4} />
-                {isLoading ? (
-                    <BaseView flexDirection="row" alignItems="center">
-                        <BaseSkeleton
-                            animationDirection="horizontalLeft"
-                            boneColor={theme.colors.skeletonBoneColor}
-                            highlightColor={theme.colors.skeletonHighlightColor}
-                            height={14}
-                            width={60}
-                        />
-                    </BaseView>
-                ) : (
-                    <BaseText typographyFont="caption">{`${
-                        isBalanceVisible ? fiatBalance : "•••"
-                    } ${exchangeRateCurrency}`}</BaseText>
-                )}
             </BaseView>
 
             <BaseSpacer height={4} />
 
-            <BaseView flexDirection="row">
-                {isTokensOwnedLoading ? (
-                    <BaseView flexDirection="row" alignItems="center">
+            <BaseView flexDirection="row" justifyContent="space-between">
+                <BaseView flexDirection="row">
+                    {isTokensOwnedLoading ? (
                         <BaseSkeleton
                             animationDirection="horizontalLeft"
                             boneColor={theme.colors.skeletonBoneColor}
@@ -54,12 +63,14 @@ export const BalanceView = ({
                             height={14}
                             width={60}
                         />
-                    </BaseView>
-                ) : (
-                    <BaseText>{isBalanceVisible ? tokenUnitBalance : "•••••"}</BaseText>
-                )}
+                    ) : (
+                        <BaseText typographyFont="bodyMedium">{isBalanceVisible ? tokenUnitBalance : "•••••"}</BaseText>
+                    )}
+                    <BaseSpacer width={4} />
+                    <BaseText typographyFont="captionRegular">{symbol}</BaseText>
+                </BaseView>
                 <BaseSpacer width={4} />
-                <BaseText typographyFont="bodyBold">{symbol}</BaseText>
+                {renderFiatBalance()}
             </BaseView>
         </BaseView>
     )

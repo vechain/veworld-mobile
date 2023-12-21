@@ -22,7 +22,7 @@ import { showErrorToast, showWarningToast } from "~Components"
 import { error, GasUtils } from "~Utils"
 import { DEVICE_TYPE, LedgerAccountWithDevice, TransactionRequest } from "~Model"
 import { DelegationType } from "~Model/Delegation"
-import { GasPriceCoefficient } from "~Constants"
+import { ERROR_EVENTS, GasPriceCoefficient } from "~Constants"
 import { Routes } from "~Navigation"
 
 type Props = {
@@ -143,7 +143,7 @@ export const useTransactionScreen = ({
                         await sendTransactionSafe(transaction)
                 }
             } catch (e) {
-                error("signAndSendTransaction", e)
+                error(ERROR_EVENTS.SIGN, e)
                 showErrorToast({
                     text1: LL.ERROR(),
                     text2: LL.SIGN_TRANSACTION_ERROR(),
@@ -175,7 +175,7 @@ export const useTransactionScreen = ({
             try {
                 await navigateToLedger(tx, selectedAccount as LedgerAccountWithDevice, undefined)
             } catch (e) {
-                error("onSubmit:navigateToLedger", e)
+                error(ERROR_EVENTS.SEND, e)
                 onTransactionFailure(e)
             }
         } else {

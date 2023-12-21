@@ -1,8 +1,9 @@
-import { debug, error } from "~Utils"
+import { error } from "~Utils"
 import { FungibleToken, Network } from "~Model"
 import { addOfficialTokens, setSuggestedTokens } from "../Slices"
 import { AppThunkDispatch } from "../Types"
 import { fetchOfficialTokensOwned, getTokensFromGithub } from "~Networking"
+import { ERROR_EVENTS } from "~Constants"
 
 /**
  * Update official tokens from Github
@@ -30,8 +31,6 @@ export const updateSuggestedTokens =
                 tokenAddress => officialTokens.findIndex(t => t.address === tokenAddress) !== -1,
             )
 
-            debug(`Found ${suggestedTokens.length} suggested tokens`)
-
             if (suggestedTokens.length === 0) return
 
             dispatch(
@@ -41,6 +40,6 @@ export const updateSuggestedTokens =
                 }),
             )
         } catch (e) {
-            error("updateSuggestedTokens", e)
+            error(ERROR_EVENTS.TOKENS, e)
         }
     }

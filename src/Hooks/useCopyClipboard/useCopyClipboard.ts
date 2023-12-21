@@ -4,6 +4,7 @@ import * as Clipboard from "expo-clipboard"
 import { debug } from "~Utils"
 import { showInfoToast } from "~Components"
 import HapticsService from "~Services/HapticsService"
+import { ERROR_EVENTS } from "~Constants"
 
 /**
  * `useCopyClipboard` is a custom React Hook that provides the ability to copy a string to the system clipboard.
@@ -33,7 +34,7 @@ export const useCopyClipboard = () => {
                     })
                 })
                 .catch(error => {
-                    debug(error)
+                    debug(ERROR_EVENTS.APP, error)
                 })
         },
         [LL],

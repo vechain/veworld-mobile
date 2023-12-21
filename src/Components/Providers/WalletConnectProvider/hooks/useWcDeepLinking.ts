@@ -4,6 +4,7 @@ import { debug, error, WalletConnectUtils } from "~Utils"
 import { WALLET_STATUS } from "~Model"
 import { useApplicationSecurity } from "~Components"
 import { ValidURI } from "~Utils/WalletConnectUtils/WalletConnectUtils"
+import { ERROR_EVENTS } from "~Constants"
 
 /**
  * @param pairingTopics - list of pairing topics from deep links
@@ -64,7 +65,7 @@ export const useWcDeepLinking = (onPair: (uri: string) => Promise<void>): IUseWc
                     return pair(wcUri, uriValidation)
                 }
             } catch (e) {
-                error("WalletConnectProvider:handleLinkingUrl", e)
+                error(ERROR_EVENTS.WALLET_CONNECT, "WalletConnectProvider:handleLinkingUrl", e)
             }
         },
         [pair],
@@ -72,7 +73,7 @@ export const useWcDeepLinking = (onPair: (uri: string) => Promise<void>): IUseWc
 
     useEffect(() => {
         Linking.getInitialURL().then(url => {
-            debug("WalletConnectProvider:Linking.getInitialURL", url)
+            debug(ERROR_EVENTS.WALLET_CONNECT, "WalletConnectProvider:Linking.getInitialURL", url)
             if (url) {
                 setDeepLinkUris(prev => [...prev, url])
             }
@@ -85,7 +86,7 @@ export const useWcDeepLinking = (onPair: (uri: string) => Promise<void>): IUseWc
      */
     useEffect(() => {
         Linking.addListener("url", event => {
-            debug("WalletConnectProvider:Linking.addListener", event)
+            debug(ERROR_EVENTS.WALLET_CONNECT, "WalletConnectProvider:Linking.addListener", event)
             setDeepLinkUris(prev => [...prev, event.url])
         })
     }, [])

@@ -1,5 +1,5 @@
 import { useCallback, useMemo, useRef, useState } from "react"
-import { LEDGER_ERROR_CODES, VETLedgerAccount } from "~Constants"
+import { ERROR_EVENTS, LEDGER_ERROR_CODES, VETLedgerAccount } from "~Constants"
 
 import { debug, error, warn } from "~Utils/Logger"
 import BleTransport from "@ledgerhq/react-native-hw-transport-ble"
@@ -98,14 +98,14 @@ export const useLedger = ({ deviceId }: { deviceId: string }): UseLedgerProps =>
 
     const checkLedgerStatus = useCallback(async () => {
         if (transport.current) {
-            debug("[useLedger] - checkLedgerStatus")
+            debug(ERROR_EVENTS.LEDGER, "[useLedger] - checkLedgerStatus")
             const res = await LedgerUtils.verifyTransport(withTransport(transport.current))
 
             if (res.success) {
-                debug("[useLedger] - device available to do actions")
+                debug(ERROR_EVENTS.LEDGER, "[useLedger] - device available to do actions")
                 onDeviceAvailable(res)
             } else {
-                debug("[useLedger] - checkLedgerStatus - error", res)
+                debug(ERROR_EVENTS.LEDGER, "[useLedger] - checkLedgerStatus - error", res)
                 await setErrorCode(res.err as LEDGER_ERROR_CODES)
             }
         }
@@ -128,7 +128,7 @@ export const useLedger = ({ deviceId }: { deviceId: string }): UseLedgerProps =>
 
     const checkLedgerCorrectSettings = useCallback(async () => {
         if (transport.current) {
-            debug("[useLedger] - checkLedgerCorrectSettings")
+            debug(ERROR_EVENTS.LEDGER, "[useLedger] - checkLedgerCorrectSettings")
             const res = await LedgerUtils.verifyTransport(withTransport(transport.current))
 
             if (res.success) {
@@ -157,13 +157,13 @@ export const useLedger = ({ deviceId }: { deviceId: string }): UseLedgerProps =>
             const ledgerDevice = availableDevices.find(d => d.id === deviceId)
             if (ledgerDevice) {
                 if (ledgerDevice.isConnectable) {
-                    debug("[useLedger] - device found, attempting to connect")
+                    debug(ERROR_EVENTS.LEDGER, "[useLedger] - device found, attempting to connect")
                     await connectDevice()
                 } else {
-                    debug("[useLedger] - device found, but not connectable")
+                    debug(ERROR_EVENTS.LEDGER, "[useLedger] - device found, but not connectable")
                 }
             } else {
-                debug("[useLedger] - device not found, scanning again")
+                debug(ERROR_EVENTS.LEDGER, "[useLedger] - device not found, scanning again")
                 scanForDevices()
             }
         },
@@ -172,26 +172,26 @@ export const useLedger = ({ deviceId }: { deviceId: string }): UseLedgerProps =>
 
     const connectDevice = useCallback(async () => {
         if (outsideRenderLoopIsConnected) {
-            debug("[useLedger] - skipping - device already connected")
+            debug(ERROR_EVENTS.LEDGER, "[useLedger] - skipping - device already connected")
             return
         }
         if (outsideRenderLoopIsConnecting) {
-            debug("[useLedger] - skipping - device is connecting in another render loop")
+            debug(ERROR_EVENTS.LEDGER, "[useLedger] - skipping - device is connecting in another render loop")
             return
         }
 
         const reconnectDevice = async () => {
-            debug("[useLedger] - triggered reconnectDevice")
+            debug(ERROR_EVENTS.LEDGER, "[useLedger] - triggered reconnectDevice")
             outsideRenderLoopIsConnected = false
             setRootAccount(undefined)
             setAppOpen(false)
             setErrorCode(LEDGER_ERROR_CODES.DISCONNECTED)
             transport.current = undefined
             if (!outsideRenderLoopDisconnectedOnPurpose) {
-                debug("[useLedger] - trying to connect after disconnected")
+                debug(ERROR_EVENTS.LEDGER, "[useLedger] - trying to connect after disconnected")
                 await checkDevicePresence(connectDevice)
             } else {
-                debug("[useLedger] - not connected because disconnected on purpose")
+                debug(ERROR_EVENTS.LEDGER, "[useLedger] - not connected because disconnected on purpose")
             }
         }
 
@@ -199,15 +199,15 @@ export const useLedger = ({ deviceId }: { deviceId: string }): UseLedgerProps =>
         outsideRenderLoopIsConnecting = true
 
         try {
-            debug("[useLedger] - Attempting to open connection")
+            debug(ERROR_EVENTS.LEDGER, "[useLedger] - Attempting to open connection")
             transport.current = await BleTransport.open(deviceId)
 
-            debug("[useLedger] - connection successful")
+            debug(ERROR_EVENTS.LEDGER, "[useLedger] - connection successful")
             outsideRenderLoopIsConnected = true
             transport.current.on("disconnect", reconnectDevice)
             await pollingLedgerStatus()
         } catch (e) {
-            warn("[useLedger] - Error opening connection", e)
+            warn(ERROR_EVENTS.LEDGER, "[useLedger] - Error opening connection", e)
             setErrorCode(LEDGER_ERROR_CODES.UNKNOWN)
             outsideRenderLoopIsConnected = false
             setTimeout(reconnectDevice, TRY_RECONNECT_DEVICE_INTERVAL)
@@ -223,13 +223,13 @@ export const useLedger = ({ deviceId }: { deviceId: string }): UseLedgerProps =>
     }, [appOpen, withTransport])
 
     const removeLedger = useCallback(async () => {
-        debug("[useLedger] - removeLedger")
+        debug(ERROR_EVENTS.LEDGER, "[useLedger] - removeLedger")
         outsideRenderLoopDisconnectedOnPurpose = true
         if (transport.current) {
             try {
                 await BleTransport.disconnectDevice(deviceId)
             } catch (e) {
-                error("ledger:close", e)
+                error(ERROR_EVENTS.LEDGER, "ledger:close", e)
             }
         }
 

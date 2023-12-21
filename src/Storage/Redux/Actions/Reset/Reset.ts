@@ -1,3 +1,4 @@
+import { ERROR_EVENTS } from "~Constants"
 import { resetActions } from "~Storage/Redux"
 import { AppThunk } from "~Storage/Redux/Types"
 import { error } from "~Utils"
@@ -16,7 +17,7 @@ export const resetApp = (): AppThunk<Promise<boolean>> => async dispatch => {
 
         return Promise.resolve(true)
     } catch (e) {
-        error("Failed to reset the application state")
+        error(ERROR_EVENTS.SECURTIY, "Failed to reset the application state")
         return Promise.resolve(false)
     }
 }

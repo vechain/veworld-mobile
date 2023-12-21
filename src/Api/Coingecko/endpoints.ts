@@ -1,4 +1,5 @@
 import axios from "axios"
+import { ERROR_EVENTS } from "~Constants"
 import { error } from "~Utils"
 
 export const COINGECKO_URL = process.env.REACT_APP_COINGECKO_URL
@@ -62,7 +63,7 @@ export const getTokenInfo = async (coinGeckoId?: string) => {
         })
         return response.data
     } catch (e) {
-        error("getTokenInfo", e)
+        error(ERROR_EVENTS.TOKENS, e)
         throw e
     }
 }
@@ -109,7 +110,7 @@ export const getMarketChart = async ({
             value: entry[1],
         }))
     } catch (e) {
-        error("getMarketChart", e)
+        error(ERROR_EVENTS.TOKENS, e)
         throw e
     }
 }

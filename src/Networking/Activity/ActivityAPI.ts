@@ -1,7 +1,7 @@
 import { debug } from "~Utils"
 import { getActivitiesFromIncomingTransfers, getActivitiesFromTransactions } from "./Helpers"
 import { Activity, NETWORK_TYPE, Network } from "~Model"
-import { ORDER, getIncomingTransfersOrigin, getTransactionsOrigin } from "~Constants"
+import { ERROR_EVENTS, ORDER, getIncomingTransfersOrigin, getTransactionsOrigin } from "~Constants"
 import {
     DEFAULT_PAGE_SIZE,
     FetchIncomingTransfersResponse,
@@ -25,7 +25,7 @@ export const fetchTransactions = async (
     page: number,
     networkType: NETWORK_TYPE,
 ): Promise<FetchTransactionsResponse> => {
-    debug(`Fetching transactions for ${address}`)
+    debug(ERROR_EVENTS.ACTIVITIES, `Fetching transactions for ${address}`)
 
     try {
         return await fetchFromEndpoint<FetchTransactionsResponse>(
@@ -52,7 +52,7 @@ export const fetchIncomingTransfers = async (
     page: number,
     networkType: NETWORK_TYPE,
 ): Promise<FetchIncomingTransfersResponse> => {
-    debug(`Fetching incoming transfers for ${address}`)
+    debug(ERROR_EVENTS.ACTIVITIES, `Fetching incoming transfers for ${address}`)
 
     try {
         return await fetchFromEndpoint<FetchIncomingTransfersResponse>(
@@ -72,7 +72,7 @@ export const fetchIncomingTransfers = async (
  * @returns A Promise that resolves to the requested block, or null if the block does not exist.
  */
 export const fetchBlock = async (blockId: string, thor: Connex.Thor) => {
-    debug(`Fetching block ${blockId}`)
+    debug(ERROR_EVENTS.ACTIVITIES, `Fetching block ${blockId}`)
 
     const block: Connex.Thor.Block | null = await thor.block(blockId).get()
 

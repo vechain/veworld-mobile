@@ -3,6 +3,7 @@ import { useBiometrics, useBiometricsValidation, useWalletSecurity } from "~Hook
 import { BaseButtonGroupHorizontalType, SecurityLevelType } from "~Model"
 import { useI18nContext } from "~i18n"
 import { debug, PlatformUtils } from "~Utils"
+import { ERROR_EVENTS } from "~Constants"
 
 export type SecurityButtons = {
     buttons: BaseButtonGroupHorizontalType[]
@@ -19,7 +20,7 @@ export const useSecurityButtons = (handleOnSecurityUpgrade: () => void) => {
     const securityButtons: SecurityButtons = useMemo(() => {
         const { authTypeAvailable } = biometrics || {}
 
-        debug({ authTypeAvailable })
+        debug(ERROR_EVENTS.SECURTIY, { authTypeAvailable })
 
         return {
             buttons: [

@@ -9,7 +9,7 @@ import { BaseActivityIndicator, BaseView } from "~Components"
 import { StatusBar, StyleSheet } from "react-native"
 import { useAnalyticTracking, useColorScheme } from "~Hooks"
 import { Routes } from "~Navigation"
-import { AnalyticsEvent, COLORS } from "~Constants"
+import { AnalyticsEvent, COLORS, ERROR_EVENTS } from "~Constants"
 
 export const CoinbasePayWebView = (props: { currentAmount: number; destinationAddress: string }) => {
     const nav = useNavigation()
@@ -67,7 +67,7 @@ export const CoinbasePayWebView = (props: { currentAmount: number; destinationAd
                     nav.navigate(Routes.HOME)
                 }
             } catch (error) {
-                debug(ErrorMessageUtils.getErrorMessage(error))
+                debug(ERROR_EVENTS.BUY, ErrorMessageUtils.getErrorMessage(error))
             }
         },
         [nav, track],

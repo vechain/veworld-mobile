@@ -1,4 +1,4 @@
-import { warn } from "~Utils"
+import { error } from "~Utils"
 import { encryptTransform } from "../../Services/EncryptionService/EncryptionService"
 import {
     AccountSlice,
@@ -37,6 +37,7 @@ import { PersistConfig } from "redux-persist/es/types"
 import { RootState } from "~Storage/Redux/Types"
 import { newStorage } from "~Storage/Redux/Storage"
 import { MMKV } from "react-native-mmkv"
+import { ERROR_EVENTS } from "~Constants"
 
 // export const nftPersistConfig = {
 //     key: NftSlice.name,
@@ -53,8 +54,8 @@ import { MMKV } from "react-native-mmkv"
 export const getPersistorConfig = async (mmkv: MMKV, encryptionKey: string): Promise<PersistConfig<RootState>> => {
     let encryptor = encryptTransform({
         secretKey: encryptionKey,
-        onError: function (error) {
-            warn("encryptor", error)
+        onError: function (err) {
+            error(ERROR_EVENTS.ENCRYPTION, err)
         },
     })
 
@@ -63,7 +64,7 @@ export const getPersistorConfig = async (mmkv: MMKV, encryptionKey: string): Pro
     return {
         key: "root",
         storage,
-        version: 3,
+        version: 4,
         blacklist: [NftSlice.name, PendingSlice.name],
         whitelist: [
             CurrencySlice.name,

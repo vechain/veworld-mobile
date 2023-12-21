@@ -3,6 +3,7 @@ import { debug, error, WalletConnectUtils } from "~Utils"
 import { showErrorToast, showInfoToast } from "~Components"
 import { useI18nContext } from "~i18n"
 import { SessionTypes } from "@walletconnect/types"
+import { ERROR_EVENTS } from "~Constants"
 
 export const useWcPairing = (activeSessions: Record<string, SessionTypes.Struct>) => {
     const { LL } = useI18nContext()
@@ -19,7 +20,7 @@ export const useWcPairing = (activeSessions: Record<string, SessionTypes.Struct>
      */
     const onPair = useCallback(
         async (uri: string) => {
-            debug("WalletConnectProvider:onPair", uri)
+            debug(ERROR_EVENTS.WALLET_CONNECT, "WalletConnectProvider:onPair", uri)
 
             const topic = WalletConnectUtils.getTopicFromPairUri(uri)
 
@@ -43,7 +44,7 @@ export const useWcPairing = (activeSessions: Record<string, SessionTypes.Struct>
                     return
                 }
 
-                error("WalletConnectProvider:onPair - err", err)
+                error(ERROR_EVENTS.WALLET_CONNECT, "WalletConnectProvider:onPair - err", err)
 
                 showErrorToast({
                     text1: LL.NOTIFICATION_wallet_connect_error_pairing(),

@@ -1,5 +1,6 @@
-import { debug, error, warn } from "~Utils/Logger"
+import { error, info } from "~Utils/Logger"
 import URIUtils from "../URIUtils"
+import { ERROR_EVENTS } from "~Constants"
 
 /**
  * Verify a websocket connection for a given URL.
@@ -15,26 +16,24 @@ import URIUtils from "../URIUtils"
  * @throws a VeWorldError if the connection fails (defaults to 5 seconds)
  */
 const verifyWebSocketConnection = async (url: string, timeout = 5000) => {
-    debug("Verifying websocket connection")
-
     await new Promise<void>(function (resolve, reject) {
         setTimeout(() => reject("Node timed out"), timeout)
         const wsUrl = URIUtils.toNodeBeatWebsocketUrl(url)
         const webSocket = new WebSocket(wsUrl)
 
         webSocket.onopen = () => {
-            debug("Websocket opened")
+            info(ERROR_EVENTS.APP, "Websocket opened")
             resolve()
             webSocket.close()
         }
 
         webSocket.onerror = () => {
-            error("Websocket errored")
+            error(ERROR_EVENTS.APP, "Websocket errored")
             reject("Failed to test WS connection")
             webSocket.close()
         }
 
-        webSocket.onclose = e => warn("Websocket closed", e)
+        webSocket.onclose = e => info(ERROR_EVENTS.APP, "Websocket closed", e)
     })
 }
 

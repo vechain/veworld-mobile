@@ -1,6 +1,7 @@
 import { useCallback, useEffect, useRef, useState } from "react"
+import { ERROR_EVENTS } from "~Constants"
 import { WithID, MetadataUpdated } from "~Model"
-import { error } from "~Utils"
+import { warn } from "~Utils"
 
 const MAX_RETRIES = 10
 
@@ -37,7 +38,7 @@ export const useLazyLoader = <T extends WithID & MetadataUpdated>({ payload, loa
                     isLoading: false,
                     count: newStatus.count,
                 })
-                error("lazyLoadMetadata", e)
+                warn(ERROR_EVENTS.NFT, "lazyLoadMetadata", e)
             }
         },
         [loader],

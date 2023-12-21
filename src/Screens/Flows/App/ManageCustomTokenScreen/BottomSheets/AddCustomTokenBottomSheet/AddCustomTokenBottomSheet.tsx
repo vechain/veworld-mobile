@@ -27,7 +27,7 @@ import { FungibleToken } from "~Model"
 import { useAnalyticTracking, useCameraBottomSheet } from "~Hooks"
 import { AddressUtils, debug, warn } from "~Utils"
 import { getCustomTokenInfo } from "../../Utils"
-import { AnalyticsEvent, ScanTarget } from "~Constants"
+import { AnalyticsEvent, ERROR_EVENTS, ScanTarget } from "~Constants"
 import { isEmpty } from "lodash"
 
 type Props = {
@@ -95,11 +95,11 @@ export const AddCustomTokenBottomSheet = React.forwardRef<BottomSheetModalMethod
                             setErrorMessage(LL.MANAGE_CUSTOM_TOKENS_ERROR_WRONG_ADDRESS())
                         }
                     } catch (e) {
-                        warn("handleValueChange", e)
+                        warn(ERROR_EVENTS.TOKENS, "handleValueChange", e)
                         setErrorMessage(LL.MANAGE_CUSTOM_TOKENS_ERROR_WRONG_ADDRESS())
                     }
                 } else {
-                    debug("Address not valid yet")
+                    debug(ERROR_EVENTS.TOKENS, "Address not valid yet")
                 }
             },
             [LL, customTokens, network, officialTokens, setNewCustomToken, thorClient],
