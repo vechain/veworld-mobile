@@ -13,7 +13,7 @@ import {
 import { error, HexUtils } from "~Utils"
 import axios, { AxiosError, AxiosResponse } from "axios"
 import { Linking } from "react-native"
-import { defaultMainNetwork } from "~Constants"
+import { ERROR_EVENTS, defaultMainNetwork } from "~Constants"
 import { useI18nContext } from "~i18n"
 import InAppReview from "react-native-in-app-review"
 import moment from "moment"
@@ -45,11 +45,12 @@ export const useSendTransaction = (onSuccess: (transaction: Transaction, id: str
             if (e instanceof AxiosError) {
                 const axiosError = e as AxiosError
 
-                error("sendTransaction error", JSON.stringify(axiosError.toJSON()))
-
-                error(axiosError.response?.data)
+                error(ERROR_EVENTS.SEND, {
+                    axiosErros: JSON.stringify(axiosError.toJSON()),
+                    data: axiosError.response?.data,
+                })
             } else {
-                error("sendTransaction error", e)
+                error(ERROR_EVENTS.SEND, e)
             }
 
             throw e
@@ -82,7 +83,7 @@ export const useSendTransaction = (onSuccess: (transaction: Transaction, id: str
                     dispatch(setLastReviewTimestamp(new Date().toISOString()))
                 })
                 .catch(inAppReviewError => {
-                    error(`InAppReview error: ${inAppReviewError}`)
+                    error(ERROR_EVENTS.SEND, `InAppReview error: ${inAppReviewError}`)
                 })
         }
 

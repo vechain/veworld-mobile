@@ -1187,6 +1187,10 @@ type RootTranslation = {
 	 */
 	ALERT_OPTION_ASK_ME_LATER: string
 	/**
+	 * P​r​i​c​e​ ​f​e​e​d​ ​n​o​t​ ​a​v​a​i​l​a​b​l​e
+	 */
+	ERROR_PRICE_FEED_NOT_AVAILABLE: string
+	/**
 	 * S​o​m​e​t​h​i​n​g​ ​w​e​n​t​ ​w​r​o​n​g​!
 	 */
 	ERROR_GENERIC_SUBTITLE: string
@@ -3965,6 +3969,10 @@ Try reconnect your device to the internet.
 	 * Ask me later
 	 */
 	ALERT_OPTION_ASK_ME_LATER: () => LocalizedString
+	/**
+	 * Price feed not available
+	 */
+	ERROR_PRICE_FEED_NOT_AVAILABLE: () => LocalizedString
 	/**
 	 * Something went wrong!
 	 */

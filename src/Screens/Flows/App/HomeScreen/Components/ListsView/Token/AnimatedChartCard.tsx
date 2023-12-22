@@ -1,16 +1,15 @@
 import React, { memo, useCallback } from "react"
 import { StyleSheet, TouchableOpacity } from "react-native"
-import { useTheme } from "~Hooks"
+import { TokenWithCompleteInfo, useTheme } from "~Hooks"
 import { VechainTokenCard } from "./VechainTokenCard"
 import Animated, { useAnimatedStyle, withTiming } from "react-native-reanimated"
 import { LineChart } from "react-native-wagmi-charts"
-import { TokenWithCompleteInfo } from "~Model"
 import { selectCurrency, useAppSelector } from "~Storage/Redux"
 import { useNavigation } from "@react-navigation/native"
 import { Routes } from "~Navigation"
 import { BaseView } from "~Components"
 import HapticsService from "~Services/HapticsService"
-import { DEFAULT_LINE_CHART_DATA, getCoinGeckoIdBySymbol, useMarketChart } from "~Api/Coingecko"
+import { DEFAULT_LINE_CHART_DATA, getCoinGeckoIdBySymbol, useSmartMarketChart } from "~Api/Coingecko"
 
 const HEIGHT = 100
 
@@ -26,7 +25,7 @@ export const AnimatedChartCard = memo(({ tokenWithInfo, isEdit, isBalanceVisible
 
     const currency = useAppSelector(selectCurrency)
 
-    const { data: chartData } = useMarketChart({
+    const { data: chartData } = useSmartMarketChart({
         id: getCoinGeckoIdBySymbol[tokenWithInfo.symbol],
         vs_currency: currency,
         days: 7,

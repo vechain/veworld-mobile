@@ -5,6 +5,7 @@ import * as TaskManager from "expo-task-manager"
 import { useApplicationSecurity } from "../EncryptedStorageProvider"
 import { setIsAppLoading, useAppDispatch } from "~Storage/Redux"
 import { useAppStateTransitions } from "~Hooks"
+import { ERROR_EVENTS } from "~Constants"
 
 type ProviderProps = { children: React.ReactNode }
 
@@ -21,15 +22,15 @@ export const AutoLockProvider = ({ children }: ProviderProps) => {
 
     const registerAutoLockTask = useCallback(() => {
         if (triggerAutoLock) {
-            debug("Registering auto lock task")
+            debug(ERROR_EVENTS.SECURTIY, "Registering auto lock task")
             // Register auto lock task.
             TaskManager.defineTask(AUTO_LOCK_TASK, () => {
                 try {
-                    debug("Trigging auto lock")
+                    debug(ERROR_EVENTS.SECURTIY, "Trigging auto lock")
                     triggerAutoLock()
                     return BackgroundFetch.BackgroundFetchResult.NewData
                 } catch (err) {
-                    error("Error registering auto lock task", err)
+                    error(ERROR_EVENTS.SECURTIY, err)
                     return BackgroundFetch.BackgroundFetchResult.Failed
                 }
             })
@@ -40,21 +41,21 @@ export const AutoLockProvider = ({ children }: ProviderProps) => {
     const configureBackgroundFetch = async () => {
         try {
             await stopBackgroundFetch()
-            debug("Starting auto lock listener")
+            debug(ERROR_EVENTS.SECURTIY, "Starting auto lock listener")
             await BackgroundFetch.registerTaskAsync(AUTO_LOCK_TASK, {
                 minimumInterval: 600,
                 stopOnTerminate: false,
                 startOnBoot: true,
             })
         } catch (err) {
-            error("Error registering auto lock task", err)
+            error(ERROR_EVENTS.SECURTIY, err)
         }
     }
 
     const stopBackgroundFetch = async () => {
         const isRegistered = await TaskManager.isTaskRegisteredAsync(AUTO_LOCK_TASK)
         if (isRegistered) {
-            debug("Stopping auto lock listener")
+            debug(ERROR_EVENTS.SECURTIY, "Stopping auto lock listener")
             await BackgroundFetch.unregisterTaskAsync(AUTO_LOCK_TASK)
         }
     }
@@ -80,11 +81,11 @@ export const AutoLockProvider = ({ children }: ProviderProps) => {
                 const now = Date.now()
 
                 if (inactivityStartTime > 0 && now - inactivityStartTime > FIVE_MINUTES) {
-                    info("App was inactive for more than 5 minutes. Locking...")
+                    info(ERROR_EVENTS.SECURTIY, "App was inactive for more than 5 minutes. Locking...")
                     lockApplication()
                 }
             } catch (err) {
-                error("Error checking inactivity time", err)
+                error(ERROR_EVENTS.SECURTIY, "Error checking inactivity time", err)
             } finally {
                 dispatch(setIsAppLoading(false))
                 setInactivityStartTime(0)

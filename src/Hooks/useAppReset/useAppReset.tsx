@@ -4,6 +4,7 @@ import { CACHE_NFT_MEDIA_KEY, CACHE_NFT_METADATA_KEY } from "~Storage/PersistedC
 import { resetApp, useAppDispatch } from "~Storage/Redux"
 import { info } from "~Utils/Logger"
 import { useApplicationSecurity, usePersistedCache, usePersistedTheme } from "~Components/Providers"
+import { ERROR_EVENTS } from "~Constants"
 
 export const useAppReset = () => {
     const dispatch = useAppDispatch()
@@ -36,6 +37,6 @@ export const useAppReset = () => {
 
         await dispatch(resetApp())
 
-        info("App Reset Finished")
+        info(ERROR_EVENTS.SECURTIY, "App Reset Finished")
     }, [removeEncryptionKeysFromKeychain, resetCaches, resetApplication, initAllCaches, dispatch])
 }

@@ -14,6 +14,7 @@ import { URIUtils, warn } from "~Utils"
 import { useNavigation } from "@react-navigation/native"
 import { selectCustomNetworks, useAppDispatch, useAppSelector, validateAndAddCustomNode } from "~Storage/Redux"
 import * as Haptics from "expo-haptics"
+import { ERROR_EVENTS } from "~Constants"
 
 export const AddCustomNodeScreen = () => {
     const { LL } = useI18nContext()
@@ -46,7 +47,7 @@ export const AddCustomNodeScreen = () => {
             await Haptics.notificationAsync(Haptics.NotificationFeedbackType.Success)
             goBack()
         } catch (e) {
-            warn("onAddNetworkPress", e)
+            warn(ERROR_EVENTS.SETTINGS, "onAddNetworkPress", e)
             await Haptics.notificationAsync(Haptics.NotificationFeedbackType.Error)
             showErrorToast({ text1: e as string })
         }

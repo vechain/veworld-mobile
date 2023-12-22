@@ -19,7 +19,6 @@ import {
     addPendingTransferTransactionActivity,
     selectAccounts,
     selectCurrency,
-    selectCurrencyExchangeRate,
     selectPendingTx,
     selectSelectedAccount,
     setIsAppLoading,
@@ -33,6 +32,7 @@ import { Transaction } from "thor-devkit"
 import { ContactManagementBottomSheet } from "../../ContactsScreen"
 import Animated, { interpolateColor, useAnimatedStyle, useSharedValue, withTiming } from "react-native-reanimated"
 import { StyleSheet } from "react-native"
+import { getCoinGeckoIdBySymbol, useExchangeRate } from "~Api/Coingecko"
 
 type Props = NativeStackScreenProps<RootStackParamListHome, Routes.TRANSACTION_SUMMARY_SEND>
 
@@ -236,7 +236,12 @@ interface ITotalSendAmountView {
 
 function TotalSendAmountView({ amount, symbol, token, txCostTotal, isDelegated, isEnoughGas }: ITotalSendAmountView) {
     const currency = useAppSelector(selectCurrency)
-    const exchangeRate = useAppSelector(state => selectCurrencyExchangeRate(state, token))
+
+    const { data: exchangeRate } = useExchangeRate({
+        id: getCoinGeckoIdBySymbol[token.symbol],
+        vs_currency: currency,
+    })
+
     const theme = useTheme()
     const { LL } = useI18nContext()
 

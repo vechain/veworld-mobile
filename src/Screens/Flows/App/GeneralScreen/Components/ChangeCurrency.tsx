@@ -2,8 +2,8 @@ import React, { useCallback } from "react"
 import { CURRENCY, currencyConfig } from "~Constants"
 import { BaseButtonGroupHorizontal } from "~Components"
 import { useAppDispatch, useAppSelector } from "~Storage/Redux"
-import { selectCoinGeckoTokens, selectCurrency } from "~Storage/Redux/Selectors"
-import { fetchExchangeRates, setCurrency } from "~Storage/Redux/Actions"
+import { selectCurrency } from "~Storage/Redux/Selectors"
+import { setCurrency } from "~Storage/Redux/Actions"
 import { BaseButtonGroupHorizontalType } from "~Model"
 
 const currencies: Array<BaseButtonGroupHorizontalType> = currencyConfig.map(currency => ({
@@ -13,7 +13,6 @@ const currencies: Array<BaseButtonGroupHorizontalType> = currencyConfig.map(curr
 }))
 
 export const ChangeCurrency: React.FC = () => {
-    const coinGeckoTokens = useAppSelector(selectCoinGeckoTokens)
     const selectedCurrency = useAppSelector(selectCurrency)
 
     const dispatch = useAppDispatch()
@@ -21,9 +20,8 @@ export const ChangeCurrency: React.FC = () => {
     const handleSelectCurrency = useCallback(
         async (button: BaseButtonGroupHorizontalType) => {
             dispatch(setCurrency(button.id as CURRENCY))
-            await dispatch(fetchExchangeRates({ coinGeckoTokens }))
         },
-        [coinGeckoTokens, dispatch],
+        [dispatch],
     )
 
     return (

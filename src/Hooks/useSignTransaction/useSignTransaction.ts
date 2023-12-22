@@ -8,6 +8,7 @@ import { DelegationType } from "~Model/Delegation"
 import { sponsorTransaction } from "~Networking"
 import { Routes } from "~Navigation"
 import { useNavigation } from "@react-navigation/native"
+import { ERROR_EVENTS } from "~Constants"
 
 type Props = {
     selectedDelegationAccount?: AccountWithDevice
@@ -97,7 +98,7 @@ export const useSignTransaction = ({
 
             return Buffer.from(signature.substr(2), "hex")
         } catch (e) {
-            warn("Error getting URL delegator signature", e)
+            warn(ERROR_EVENTS.SIGN, "Error getting URL delegator signature", e)
             return SignStatus.DELEGATION_FAILURE
         }
     }
@@ -122,7 +123,7 @@ export const useSignTransaction = ({
 
             return await getSignature(transaction, delegationWallet, account.address, selectedDelegationAccount)
         } catch (e) {
-            warn("Error getting account delegator signature", e)
+            warn(ERROR_EVENTS.SIGN, "Error getting account delegator signature", e)
             return SignStatus.DELEGATION_FAILURE
         }
     }

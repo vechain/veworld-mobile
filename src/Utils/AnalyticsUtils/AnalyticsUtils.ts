@@ -1,4 +1,5 @@
 import { Mixpanel } from "mixpanel-react-native"
+import { ERROR_EVENTS } from "~Constants"
 import { selectAnalyticsTrackingEnabled } from "~Storage/Redux"
 import { AppThunk } from "~Storage/Redux/Types"
 import { info, warn } from "~Utils/Logger"
@@ -18,9 +19,9 @@ const initialize = () => {
         mixpanel = new Mixpanel(MIX_PANEL_TOKEN as string, trackAutomaticEvents)
         mixpanel.init()
         isInitialized = true
-        info("Mixpanel initialized")
+        info(ERROR_EVENTS.APP, "Mixpanel initialized")
     } else {
-        warn("Analytics token not found")
+        warn(ERROR_EVENTS.APP, "Analytics token not found")
     }
 }
 
@@ -33,7 +34,7 @@ const trackEvent =
                 mixpanel.track(event, properties)
             }
         } catch (e) {
-            warn("Error tracking event", e)
+            warn(ERROR_EVENTS.APP, "Error tracking event", e)
         }
     }
 

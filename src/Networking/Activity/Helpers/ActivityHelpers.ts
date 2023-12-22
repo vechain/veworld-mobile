@@ -1,5 +1,5 @@
 import uuid from "react-native-uuid"
-import { chainTagToGenesisId, DIRECTIONS, VET } from "~Constants"
+import { chainTagToGenesisId, DIRECTIONS, ERROR_EVENTS, VET } from "~Constants"
 import { ActivityUtils, debug, TransactionUtils } from "~Utils"
 import {
     Activity,
@@ -333,7 +333,7 @@ export const eventTypeToActivityType = (eventType: EventTypeResponse): ActivityT
             return ActivityType.NFT_TRANSFER
 
         default:
-            debug("Received not yet supported incoming transfer event type: ", eventType)
+            debug(ERROR_EVENTS.ACTIVITIES, "Received not yet supported incoming transfer event type: ", eventType)
     }
 }
 
@@ -479,7 +479,7 @@ export const enrichActivityWithNFTData = (
     const nftData = TransactionUtils.decodeNonFungibleTokenTransferClause(clause)
 
     if (!nftData) {
-        debug("Unable to decode NFT transfer clause", clause)
+        debug(ERROR_EVENTS.ACTIVITIES, "Unable to decode NFT transfer clause", clause)
         return activity as NonFungibleTokenActivity
     }
 

@@ -2,6 +2,7 @@ import { createSlice, Draft, PayloadAction } from "@reduxjs/toolkit"
 import { AddressUtils, debug, HexUtils } from "~Utils"
 import { Balance, NETWORK_TYPE } from "~Model"
 import { mergeArrays } from "~Utils/MergeUtils/MergeUtils"
+import { ERROR_EVENTS } from "~Constants"
 
 export type BalanceState = {
     [network in NETWORK_TYPE]: {
@@ -50,7 +51,7 @@ export const BalanceSlice = createSlice({
             if (state[network][normAccountAddress].map(row => row.tokenAddress).includes(balance.tokenAddress)) {
                 state[network][normAccountAddress] = state[network][normAccountAddress].map(_balance => {
                     if (AddressUtils.compareAddresses(balance.tokenAddress, _balance.tokenAddress)) {
-                        debug("balance already present showing it", _balance)
+                        debug(ERROR_EVENTS.TOKENS, "balance already present showing it", _balance)
                         return {
                             ..._balance,
                             isHidden: false,
@@ -60,7 +61,7 @@ export const BalanceSlice = createSlice({
                 })
                 return
             } else {
-                debug("creating balance ", balance)
+                debug(ERROR_EVENTS.TOKENS, "creating balance ", balance)
                 state[network][normAccountAddress].push({
                     ...balance,
                     position: state[network][normAccountAddress].length,
@@ -107,7 +108,7 @@ export const BalanceSlice = createSlice({
 
             state[network][normAccountAddress] = state[network][normAccountAddress].map(balance => {
                 if (AddressUtils.compareAddresses(balance.tokenAddress, normTokenAddress)) {
-                    debug(`Removing balance ${balance.tokenAddress}`)
+                    debug(ERROR_EVENTS.TOKENS, `Removing balance ${balance.tokenAddress}`)
                     return {
                         ...balance,
                         isHidden: true,

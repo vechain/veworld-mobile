@@ -19,11 +19,11 @@ import {
     useWalletConnect,
 } from "~Components"
 import { RootStackParamListSwitch, Routes } from "~Navigation"
-import { debug, error, HexUtils, LedgerUtils, SignMessageUtils, warn } from "~Utils"
+import { error, HexUtils, LedgerUtils, SignMessageUtils, warn } from "~Utils"
 import { useI18nContext } from "~i18n"
 import { useNavigation } from "@react-navigation/native"
 import * as Haptics from "expo-haptics"
-import { LEDGER_ERROR_CODES } from "~Constants"
+import { ERROR_EVENTS, LEDGER_ERROR_CODES } from "~Constants"
 import { compareAddresses } from "~Utils/AddressUtils/AddressUtils"
 
 type Props = NativeStackScreenProps<RootStackParamListSwitch, Routes.LEDGER_SIGN_MESSAGE>
@@ -58,7 +58,7 @@ export const LedgerSignMessage: React.FC<Props> = ({ route }) => {
         try {
             return Buffer.from(HexUtils.removePrefix(message), "hex").toString()
         } catch (e) {
-            warn("SignMessageScreen: utfMessage", e)
+            warn(ERROR_EVENTS.LEDGER, "SignMessageScreen: utfMessage", e)
             return message
         }
     }, [message])
@@ -123,8 +123,6 @@ export const LedgerSignMessage: React.FC<Props> = ({ route }) => {
                 withTransport,
             })
 
-            debug("Signature OK")
-
             if (res.success) {
                 const recoveredAddress = SignMessageUtils.recover({
                     message: _message,
@@ -133,7 +131,7 @@ export const LedgerSignMessage: React.FC<Props> = ({ route }) => {
                 })
 
                 if (compareAddresses(recoveredAddress, accountWithDevice.address)) {
-                    error("LedgerSignMessage:signMessage", "Recovered address does not match")
+                    error(ERROR_EVENTS.LEDGER, "Recovered address does not match")
                 }
 
                 setSignature(res.payload)
@@ -145,7 +143,7 @@ export const LedgerSignMessage: React.FC<Props> = ({ route }) => {
                 }
             }
         } catch (e) {
-            error("LedgerSignMessage:signMessage", e)
+            error(ERROR_EVENTS.LEDGER, e)
             setSigningError(true)
         } finally {
             setIsAwaitingSignature(false)
@@ -166,7 +164,6 @@ export const LedgerSignMessage: React.FC<Props> = ({ route }) => {
      * Open the connection error sheet when the error code is not null
      */
     useEffect(() => {
-        debug({ ledgerErrorCode })
         if (ledgerErrorCode) {
             openConnectionErrorSheet()
         } else {
@@ -193,7 +190,7 @@ export const LedgerSignMessage: React.FC<Props> = ({ route }) => {
 
             navigateOnFinish()
         } catch (e) {
-            error("LedgerSignMessage:handleOnConfirm", e)
+            error(ERROR_EVENTS.LEDGER, e)
             showErrorToast({
                 text1: LL.ERROR(),
                 text2: LL.ERROR_GENERIC_OPERATION(),

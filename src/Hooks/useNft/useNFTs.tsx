@@ -18,6 +18,7 @@ import { useI18nContext } from "~i18n"
 import { initialiseNFTMetadata } from "./Helpers"
 import { useTheme, useNFTMetadata } from "~Hooks"
 import { useLazyLoader } from "./useLazyLoader"
+import { ERROR_EVENTS } from "~Constants"
 
 //  Note: To test this hook, replace `selectedAccount.address` with `ACCOUNT_WITH_NFTS` to get an account with numerous NFT collections and NFTs.
 export const useNFTs = () => {
@@ -35,7 +36,7 @@ export const useNFTs = () => {
         async (nft: NonFungibleToken) => {
             if (!currentAddress) return
 
-            debug(`Lazy loading metadata for NFT ${nft.id}`)
+            debug(ERROR_EVENTS.NFT, `Lazy loading metadata for NFT ${nft.id}`)
 
             const tokenURI = nft.tokenURI ?? (await getTokenURI(nft.tokenId, nft.address, thor))
             const tokenMetadata = await fetchMetadata(tokenURI)
@@ -100,7 +101,7 @@ export const useNFTs = () => {
                 )
             } catch (e) {
                 err = e?.toString() as string
-                error("useNFTs", e)
+                error(ERROR_EVENTS.NFT, e)
             } finally {
                 dispatch(
                     setNetworkingSideEffects({

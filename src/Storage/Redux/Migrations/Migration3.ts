@@ -1,6 +1,7 @@
 import { SessionTypes } from "@walletconnect/types"
 import { Verify } from "@walletconnect/types/dist/types/core/verify"
 import { PersistedState } from "redux-persist/es/types"
+import { ERROR_EVENTS } from "~Constants"
 import { debug } from "~Utils"
 
 type ConnectedApp = {
@@ -18,7 +19,7 @@ type OldState = Record<string, Array<SessionTypes.Struct>>
  */
 
 export const Migration3 = (state: PersistedState): PersistedState => {
-    debug("Performing migration 3")
+    debug(ERROR_EVENTS.SECURTIY, "Performing migration 3")
 
     // @ts-ignore
     const currentState: OldState = state.sessions

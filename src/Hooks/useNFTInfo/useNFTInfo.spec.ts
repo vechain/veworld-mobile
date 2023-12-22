@@ -26,7 +26,7 @@ jest.mock("~Components", () => ({
 }))
 
 jest.mock("~Utils/Logger/Logger", () => ({
-    error: jest.fn(),
+    warn: jest.fn(),
 }))
 
 jest.mock("axios", () => {
@@ -87,7 +87,7 @@ describe("useNFTInfo", () => {
         fetchMetadata.mockResolvedValue(errorMock)
         ;(useThor as jest.Mock).mockReturnValue(thor)
 
-        const consoleErrorSpy = jest.spyOn(logger, "error")
+        const consoleErrorSpy = jest.spyOn(logger, "warn")
 
         const { result, waitForNextUpdate } = renderHook(() => useNFTInfo(tokenId, contractAddress))
 
@@ -106,7 +106,7 @@ describe("useNFTInfo", () => {
         const tokenUriMock = "http://token.uri"
         const nameMock = "NFT Collection"
 
-        const consoleErrorSpy = jest.spyOn(logger, "error")
+        const consoleErrorSpy = jest.spyOn(logger, "warn")
 
         ;(getTokenURI as jest.Mock).mockResolvedValue(tokenUriMock)
         ;(getName as jest.Mock).mockResolvedValue(nameMock)

@@ -1,8 +1,8 @@
 import { renderHook } from "@testing-library/react-hooks"
 import { useBalances } from "./useBalances"
-import { TokenWithCompleteInfo } from "~Model"
+import { Balance, FungibleToken } from "~Model"
 
-const token: TokenWithCompleteInfo = {
+const token: FungibleToken & { balance: Balance } = {
     address: "",
     icon: "fake icon string",
     balance: {
@@ -11,18 +11,13 @@ const token: TokenWithCompleteInfo = {
         tokenAddress: "VET",
         isHidden: false,
     },
-    change: -1.46,
-    coinGeckoId: "vechain",
-    custom: false,
     decimals: 18,
-    links: {
-        blockchain_site: ["https://vechainstats.com/", "https://explore.vechain.org"],
-        homepage: ["https://www.vechain.org", "https://www.vechain.com"],
-    },
+    custom: false,
     name: "VeChain",
-    rate: 0.01946639767987759,
     symbol: "VET",
 }
+
+const exchangeRate = 0.01946639767987759
 
 describe("useMarketInfo", () => {
     beforeEach(() => {
@@ -30,12 +25,12 @@ describe("useMarketInfo", () => {
     })
 
     it("should return the correct fiatBalance", async () => {
-        const { result } = renderHook(() => useBalances({ token }))
+        const { result } = renderHook(() => useBalances({ token, exchangeRate }))
         expect(result.current.fiatBalance).toBe("23.72")
     })
 
     it("should return the correct tokenUnitBalance", async () => {
-        const { result } = renderHook(() => useBalances({ token }))
+        const { result } = renderHook(() => useBalances({ token, exchangeRate }))
         expect(result.current.tokenUnitBalance).toBe("1,218.69")
     })
 })

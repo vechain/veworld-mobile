@@ -10,7 +10,7 @@ import { debug, error } from "~Utils/Logger"
 import { BalanceUtils } from "~Utils"
 import { setIsTokensOwnedLoading, updateTokenBalances } from "~Storage/Redux/Slices"
 import { Balance, NETWORK_TYPE, Network } from "~Model"
-import { VET, VTHO } from "~Constants"
+import { ERROR_EVENTS, VET, VTHO } from "~Constants"
 
 export const upsertTokenBalance =
     (thorClient: Connex.Thor, accountAddress: string, tokenAddress: string) =>
@@ -119,7 +119,7 @@ export const autoSelectSuggestTokens =
                 officialTokensBalances.push(balance)
             }
 
-            debug(`Auto adding ${officialTokensBalances.length} token balances`)
+            debug(ERROR_EVENTS.TOKENS, `Auto adding ${officialTokensBalances.length} token balances`)
 
             dispatch(
                 updateTokenBalances({
@@ -155,6 +155,6 @@ export const resetTokenBalances = async (dispatch: Dispatch, getState: () => Roo
             }),
         )
     } else {
-        error("Is not possible to init balances")
+        error(ERROR_EVENTS.TOKENS, "Is not possible to init balances")
     }
 }

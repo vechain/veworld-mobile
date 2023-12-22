@@ -19,6 +19,7 @@ const Buffer = require("@craftzdog/react-native-buffer").Buffer
 import scrypt from "react-native-scrypt"
 import { DEVICE_CREATION_ERRORS as ERRORS } from "~Model"
 import { error } from "~Utils/Logger"
+import { ERROR_EVENTS } from "~Constants"
 
 const fastKeystoreDecrypt = async (json: string, password: string): Promise<Wallet> => {
     const account = await decryptJsonWallet(json, password)
@@ -158,7 +159,7 @@ function _getAccount(data: any, key: Uint8Array): KeystoreAccount {
             // If we don't have the locale wordlist installed to
             // read this mnemonic, just bail and don't set the
             // mnemonic
-            error(err)
+            error(ERROR_EVENTS.ENCRYPTION, err)
         }
     }
 

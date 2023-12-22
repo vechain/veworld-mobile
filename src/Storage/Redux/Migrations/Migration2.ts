@@ -1,4 +1,4 @@
-import { defaultMainNetwork, defaultTestNetwork } from "~Constants"
+import { ERROR_EVENTS, defaultMainNetwork, defaultTestNetwork } from "~Constants"
 import { DelegationType } from "~Model/Delegation"
 import { debug } from "~Utils"
 import { PersistedState } from "redux-persist/es/types"
@@ -10,7 +10,7 @@ import { LocalAccountWithDevice } from "~Model"
  */
 
 export const Migration2 = (state: PersistedState): PersistedState => {
-    debug("Performing migration 2")
+    debug(ERROR_EVENTS.SECURTIY, "Performing migration 2")
 
     const updatedDelegation: DelegationStateV2 = {
         [defaultMainNetwork.genesis.id]: {

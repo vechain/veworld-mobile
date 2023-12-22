@@ -1,13 +1,12 @@
-import { selectCurrencyExchangeRate } from "./../../../../../Storage/Redux/Selectors/Currency"
 import { useEffect, useMemo, useState } from "react"
 import { BigNumber } from "bignumber.js"
 import { Activity } from "~Model"
 import { useThor, showInfoToast } from "~Components"
-import { VTHO } from "~Constants"
+import { ERROR_EVENTS, VTHO } from "~Constants"
 import { FormattingUtils, GasUtils, warn } from "~Utils"
-import { RootState } from "~Storage/Redux/Types"
-import { useAppSelector } from "~Storage/Redux"
+import { selectCurrency, useAppSelector } from "~Storage/Redux"
 import { useI18nContext } from "~i18n"
+import { useVthoExchangeRate } from "~Api/Coingecko"
 
 /**
  * `useGasFee` is a custom React Hook that calculates the gas fee for a specific activity (transaction).
@@ -48,7 +47,7 @@ export const useGasFee = (activity: Activity) => {
                 })
                 setVthoGasFee(gasFee)
             } catch (e) {
-                warn(e)
+                warn(ERROR_EVENTS.SEND, e)
                 showInfoToast({
                     text1: LL.HEADS_UP(),
                     text2: LL.NOTIFICATION_GAS_FEE_INACCURATE(),
@@ -58,16 +57,17 @@ export const useGasFee = (activity: Activity) => {
         calculateVthoFee()
     }, [LL, activity.gasUsed, thor])
 
-    const VTHOexchangeRate = useAppSelector((state: RootState) => selectCurrencyExchangeRate(state, VTHO))
+    const currency = useAppSelector(selectCurrency)
+    const { data: VTHOexchangeRate } = useVthoExchangeRate(currency)
 
     const fiatValueGasFeeSpent = useMemo(() => {
-        if (VTHOexchangeRate?.rate && vthoGasFee) {
+        if (VTHOexchangeRate && vthoGasFee) {
             return FormattingUtils.humanNumber(
-                FormattingUtils.convertToFiatBalance(vthoGasFee, VTHOexchangeRate.rate, VTHO.decimals),
+                FormattingUtils.convertToFiatBalance(vthoGasFee, VTHOexchangeRate, VTHO.decimals),
                 vthoGasFee,
             )
         }
-    }, [VTHOexchangeRate?.rate, vthoGasFee])
+    }, [VTHOexchangeRate, vthoGasFee])
 
     return { vthoGasFee, fiatValueGasFeeSpent }
 }
