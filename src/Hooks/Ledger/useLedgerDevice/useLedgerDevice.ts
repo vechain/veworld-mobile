@@ -11,7 +11,7 @@ import { useLedgerAppConfig } from "../useLedgerAppConfig"
 import { usePollingDeviceStatus } from "../usePollingDeviceStatus"
 import { usePollingCorrectDeviceSettings } from "../usePollingCorrectDeviceSettings"
 
-const TRY_RECONNECT_DEVICE_INTERVAL = 3000
+const RECONNECT_DEVICE_INTERVAL = 3000
 let outsideRenderLoopIsConnecting: boolean = false
 let outsideRenderLoopIsConnected: boolean = false
 let outsideRenderLoopDisconnectedOnPurpose: boolean = false
@@ -57,7 +57,7 @@ export const useLedgerDevice = ({ deviceId }: { deviceId: string }): UseLedgerDe
     const onDeviceAvailable = useCallback(
         (res: Success<VerifyTransportResponse>, stopPollingDeviceStatus: () => void) => {
             setAppOpen(true)
-            setRootAccount(res.payload.rootAccount)
+            setRootAccount({ ...res.payload.rootAccount })
             setAppConfig(res.payload.appConfig.toString().slice(0, 2) as LedgerConfig)
             stopPollingDeviceStatus()
         },
@@ -141,7 +141,7 @@ export const useLedgerDevice = ({ deviceId }: { deviceId: string }): UseLedgerDe
             warn(ERROR_EVENTS.LEDGER, "[useLedgerDevice] - Error opening connection", e)
             setErrorCode(LEDGER_ERROR_CODES.CONNECTING)
             outsideRenderLoopIsConnected = false
-            setTimeout(() => reconnectLedger(connectLedger), TRY_RECONNECT_DEVICE_INTERVAL)
+            setTimeout(() => reconnectLedger(connectLedger), RECONNECT_DEVICE_INTERVAL)
         } finally {
             setIsConnecting(false)
             outsideRenderLoopIsConnecting = false

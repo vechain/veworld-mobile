@@ -321,9 +321,10 @@ export const LedgerSignTransaction: React.FC<Props> = ({ route }) => {
     ])
 
     const handleOnRetry = useCallback(() => {
+        startPollingCorrectDeviceSettings()
         // this will trigger the useEffect to sign the transaction again
         setUserRejected(false)
-    }, [])
+    }, [startPollingCorrectDeviceSettings])
 
     const BottomButton = useCallback(() => {
         if (currentStep === SignSteps.SIGNING && userRejected) {

@@ -63,7 +63,7 @@ export const LedgerSignMessage: React.FC<Props> = ({ route }) => {
         }
     }, [message])
 
-    const { appOpen, errorCode, withTransport, disconnectLedger } = useLedgerDevice({
+    const { appOpen, errorCode, withTransport, disconnectLedger, startPollingCorrectDeviceSettings } = useLedgerDevice({
         deviceId: accountWithDevice.device.deviceId,
     })
 
@@ -201,9 +201,10 @@ export const LedgerSignMessage: React.FC<Props> = ({ route }) => {
     }, [disconnectLedger, requestEvent, processRequest, LL, signature, navigateOnFinish])
 
     const handleOnRetry = useCallback(() => {
+        startPollingCorrectDeviceSettings()
         // this will trigger the useEffect to sign the transaction again
         setUserRejected(false)
-    }, [])
+    }, [startPollingCorrectDeviceSettings])
 
     const BottomButton = useCallback(() => {
         if (currentStep === SigningStep.SIGNING && userRejected) {
