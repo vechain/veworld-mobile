@@ -66,9 +66,8 @@ export const LedgerSignCertificate: React.FC<Props> = ({ route }) => {
     }, [openConnectionErrorSheet, errorCode])
 
     const ledgerErrorCode = useMemo(() => {
-        if (errorCode) return errorCode
-
         if (isAwaitingSignature && !signingError) return LEDGER_ERROR_CODES.WAITING_SIGNATURE
+        if (errorCode) return errorCode
     }, [errorCode, isAwaitingSignature, signingError])
 
     const Steps: Step[] = useMemo(
