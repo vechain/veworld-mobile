@@ -40,6 +40,8 @@ interface UseLedgerDeviceProps {
     disconnectLedger: () => Promise<void>
     withTransport?: <T>(func: (t: BleTransport) => Promise<T>) => Promise<T>
     startPollingCorrectDeviceSettings: () => Promise<void>
+    stopPollingCorrectDeviceSettings: () => void
+    stopPollingDeviceStatus: () => void
 }
 
 export const useLedgerDevice = ({ deviceId }: { deviceId: string }): UseLedgerDeviceProps => {
@@ -65,16 +67,17 @@ export const useLedgerDevice = ({ deviceId }: { deviceId: string }): UseLedgerDe
         [setAppConfig],
     )
 
-    const { startPollingDeviceStatus } = usePollingDeviceStatus({
+    const { startPollingDeviceStatus, stopPollingDeviceStatus } = usePollingDeviceStatus({
         onDeviceAvailable,
         setErrorCode,
         transport,
     })
 
-    const { startPollingCorrectDeviceSettings } = usePollingCorrectDeviceSettings({
+    const { startPollingCorrectDeviceSettings, stopPollingCorrectDeviceSettings } = usePollingCorrectDeviceSettings({
         transport,
         setAppConfig,
         startPollingDeviceStatus,
+        detachedDisconnectedOnPurpose,
     })
 
     const { unsubscribe, scanForDevices, availableDevices } = useScanLedgerDevices({})
@@ -153,6 +156,8 @@ export const useLedgerDevice = ({ deviceId }: { deviceId: string }): UseLedgerDe
 
     const disconnectLedger = useCallback(async () => {
         debug(ERROR_EVENTS.LEDGER, "[useLedgerDevice] - disconnectLedger")
+        stopPollingDeviceStatus()
+        stopPollingCorrectDeviceSettings()
         detachedDisconnectedOnPurpose.current = true
         if (transport.current) {
             try {
@@ -167,7 +172,7 @@ export const useLedgerDevice = ({ deviceId }: { deviceId: string }): UseLedgerDe
         setRootAccount(undefined)
         setErrorCode(undefined)
         transport.current = undefined
-    }, [unsubscribe, deviceId])
+    }, [stopPollingDeviceStatus, stopPollingCorrectDeviceSettings, unsubscribe, deviceId])
 
     const externalWithTransport = useMemo(() => {
         if (!transport.current || !appOpen) return undefined
@@ -192,5 +197,7 @@ export const useLedgerDevice = ({ deviceId }: { deviceId: string }): UseLedgerDe
         withTransport: externalWithTransport,
         connectLedger,
         startPollingCorrectDeviceSettings,
+        stopPollingCorrectDeviceSettings,
+        stopPollingDeviceStatus,
     }
 }

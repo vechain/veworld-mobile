@@ -26,6 +26,8 @@ import * as Haptics from "expo-haptics"
 import { ERROR_EVENTS, LEDGER_ERROR_CODES, RequestMethods } from "~Constants"
 import { useInAppBrowser } from "~Components/Providers/InAppBrowserProvider"
 
+const MUTEX_TIMEOUT = 1000
+
 type Props = NativeStackScreenProps<RootStackParamListSwitch, Routes.LEDGER_SIGN_CERTIFICATE>
 
 enum SigningStep {
@@ -55,7 +57,14 @@ export const LedgerSignCertificate: React.FC<Props> = ({ route }) => {
         onClose: closeConnectionErrorSheet,
     } = useBottomSheetModal()
 
-    const { appOpen, errorCode, withTransport, disconnectLedger, startPollingCorrectDeviceSettings } = useLedgerDevice({
+    const {
+        appOpen,
+        errorCode,
+        withTransport,
+        disconnectLedger,
+        stopPollingCorrectDeviceSettings,
+        stopPollingDeviceStatus,
+    } = useLedgerDevice({
         deviceId: accountWithDevice.device.deviceId,
     })
 
@@ -66,6 +75,13 @@ export const LedgerSignCertificate: React.FC<Props> = ({ route }) => {
     }, [openConnectionErrorSheet, errorCode])
 
     const ledgerErrorCode = useMemo(() => {
+        if (
+            errorCode === LEDGER_ERROR_CODES.CLAUSES_DISABLED ||
+            errorCode === LEDGER_ERROR_CODES.CONTRACT_DISABLED ||
+            errorCode === LEDGER_ERROR_CODES.CONTRACT_AND_CLAUSES_DISABLED
+        ) {
+            return undefined
+        }
         if (isAwaitingSignature && !signingError) return LEDGER_ERROR_CODES.WAITING_SIGNATURE
         if (errorCode) return errorCode
     }, [errorCode, isAwaitingSignature, signingError])
@@ -136,8 +152,11 @@ export const LedgerSignCertificate: React.FC<Props> = ({ route }) => {
      */
     useEffect(() => {
         if (!appOpen || userRejected) return
-        signCertificate()
-    }, [userRejected, signCertificate, appOpen])
+        stopPollingCorrectDeviceSettings()
+        stopPollingDeviceStatus()
+        // setTimeout is an hack to avoid mutex error
+        setTimeout(() => signCertificate(), MUTEX_TIMEOUT)
+    }, [userRejected, signCertificate, appOpen, stopPollingCorrectDeviceSettings, stopPollingDeviceStatus])
 
     /**
      * Open the connection error sheet when the error code is not null
@@ -201,10 +220,10 @@ export const LedgerSignCertificate: React.FC<Props> = ({ route }) => {
     }, [disconnectLedger, request, postMessage, processRequest, LL, signature, certificate, navigateOnFinish])
 
     const handleOnRetry = useCallback(() => {
-        startPollingCorrectDeviceSettings()
         // this will trigger the useEffect to sign the transaction again
-        setUserRejected(false)
-    }, [startPollingCorrectDeviceSettings])
+        // setTimeout is an hack to avoid mutex error
+        setTimeout(() => setUserRejected(false), MUTEX_TIMEOUT)
+    }, [])
 
     const BottomButton = useCallback(() => {
         if (currentStep === SigningStep.SIGNING && userRejected) {

@@ -41,6 +41,8 @@ describe("useLedgerDevice", () => {
                 isConnecting: false,
                 disconnectLedger: expect.any(Function),
                 startPollingCorrectDeviceSettings: expect.any(Function),
+                stopPollingCorrectDeviceSettings: expect.any(Function),
+                stopPollingDeviceStatus: expect.any(Function),
                 withTransport: undefined,
             })
         })
@@ -70,6 +72,8 @@ describe("useLedgerDevice", () => {
                 isConnecting: false,
                 disconnectLedger: expect.any(Function),
                 startPollingCorrectDeviceSettings: expect.any(Function),
+                stopPollingCorrectDeviceSettings: expect.any(Function),
+                stopPollingDeviceStatus: expect.any(Function),
                 withTransport: undefined,
             })
         })
@@ -98,6 +102,8 @@ describe("useLedgerDevice", () => {
                 isConnecting: false,
                 disconnectLedger: expect.any(Function),
                 startPollingCorrectDeviceSettings: expect.any(Function),
+                stopPollingCorrectDeviceSettings: expect.any(Function),
+                stopPollingDeviceStatus: expect.any(Function),
                 withTransport: undefined,
             })
         })

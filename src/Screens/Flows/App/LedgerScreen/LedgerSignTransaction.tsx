@@ -36,6 +36,8 @@ import { ActivityType } from "~Model"
 import { LedgerConfig } from "~Utils/LedgerUtils/LedgerUtils"
 import { useInAppBrowser } from "~Components/Providers/InAppBrowserProvider"
 
+const MUTEX_TIMEOUT = 1000
+
 type Props = NativeStackScreenProps<RootStackParamListHome & RootStackParamListSwitch, Routes.LEDGER_SIGN_TRANSACTION>
 
 enum SignSteps {
@@ -67,10 +69,18 @@ export const LedgerSignTransaction: React.FC<Props> = ({ route }) => {
         onClose: closeConnectionErrorSheet,
     } = useBottomSheetModal()
 
-    const { appOpen, appConfig, errorCode, withTransport, disconnectLedger, startPollingCorrectDeviceSettings } =
-        useLedgerDevice({
-            deviceId: accountWithDevice.device.deviceId,
-        })
+    const {
+        appOpen,
+        appConfig,
+        errorCode,
+        withTransport,
+        disconnectLedger,
+        startPollingCorrectDeviceSettings,
+        stopPollingCorrectDeviceSettings,
+        stopPollingDeviceStatus,
+    } = useLedgerDevice({
+        deviceId: accountWithDevice.device.deviceId,
+    })
 
     useEffect(() => {
         if (errorCode) {
@@ -202,13 +212,25 @@ export const LedgerSignTransaction: React.FC<Props> = ({ route }) => {
      */
     useEffect(() => {
         if (!userRejected && !signature && appOpen && appConfig === LedgerConfig.CLAUSE_AND_CONTRACT_ENABLED) {
+            stopPollingCorrectDeviceSettings()
+            stopPollingDeviceStatus()
             setSigningError(false)
-            signTransaction()
+            // setTimeout is an hack to avoid mutex error
+            setTimeout(() => signTransaction(), MUTEX_TIMEOUT)
         } else {
             debug(ERROR_EVENTS.LEDGER, "[LedgerSignTransaction] - skipping signTransaction")
             startPollingCorrectDeviceSettings()
         }
-    }, [userRejected, appOpen, appConfig, signature, signTransaction, startPollingCorrectDeviceSettings])
+    }, [
+        userRejected,
+        appOpen,
+        appConfig,
+        signature,
+        signTransaction,
+        startPollingCorrectDeviceSettings,
+        stopPollingCorrectDeviceSettings,
+        stopPollingDeviceStatus,
+    ])
 
     useEffect(() => {
         if (currentStep >= SignSteps.SIGNING) {
@@ -274,7 +296,7 @@ export const LedgerSignTransaction: React.FC<Props> = ({ route }) => {
                         signer: accountWithDevice.address,
                     })
                 } else {
-                    await postMessage({
+                    postMessage({
                         id: dappRequest.id,
                         data: {
                             txid: txId,
@@ -321,7 +343,8 @@ export const LedgerSignTransaction: React.FC<Props> = ({ route }) => {
     const handleOnRetry = useCallback(() => {
         startPollingCorrectDeviceSettings()
         // this will trigger the useEffect to sign the transaction again
-        setUserRejected(false)
+        // setTimeout is an hack to avoid mutex error
+        setTimeout(() => setUserRejected(false), MUTEX_TIMEOUT)
     }, [startPollingCorrectDeviceSettings])
 
     const BottomButton = useCallback(() => {
