@@ -8,7 +8,7 @@ import { useScanLedgerDevices } from "~Hooks"
 import { LedgerConfig } from "~Utils/LedgerUtils/LedgerUtils"
 import { LEDGER_ERROR_CODES } from "~Constants"
 
-jest.mock("~Hooks/useScanLedgerDevices/useScanLedgerDevices")
+jest.mock("~Hooks/Ledger/useScanLedgerDevices/useScanLedgerDevices")
 
 const deviceId = "testDeviceId"
 
@@ -40,11 +40,12 @@ describe("useLedgerDevice", () => {
                 connectLedger: expect.any(Function),
                 isConnecting: false,
                 disconnectLedger: expect.any(Function),
+                startPollingCorrectDeviceSettings: expect.any(Function),
                 withTransport: undefined,
             })
         })
 
-        it("call openOrFinalizeConnection - disconnected", async () => {
+        it("call openOrFinalizeConnection - connecting", async () => {
             jest.spyOn(BleTransport, "open").mockImplementation(async () => {
                 throw new Error("test error")
             })
@@ -64,14 +65,15 @@ describe("useLedgerDevice", () => {
                 appOpen: false,
                 appConfig: LedgerConfig.UNKNOWN,
                 rootAccount: undefined,
-                errorCode: LEDGER_ERROR_CODES.UNKNOWN,
+                errorCode: LEDGER_ERROR_CODES.CONNECTING,
                 connectLedger: expect.any(Function),
                 isConnecting: false,
                 disconnectLedger: expect.any(Function),
+                startPollingCorrectDeviceSettings: expect.any(Function),
                 withTransport: undefined,
             })
         })
-        it("call openOrFinalizeConnection - unknown error on getAppConfig", async () => {
+        it("call openOrFinalizeConnection - connecting error on getAppConfig", async () => {
             jest.spyOn(BleTransport, "open").mockImplementation(async () => {
                 return TestHelpers.data.mockedTransport
             })
@@ -91,10 +93,11 @@ describe("useLedgerDevice", () => {
                 appOpen: false,
                 appConfig: LedgerConfig.UNKNOWN,
                 rootAccount: undefined,
-                errorCode: LEDGER_ERROR_CODES.UNKNOWN,
+                errorCode: LEDGER_ERROR_CODES.CONNECTING,
                 connectLedger: expect.any(Function),
                 isConnecting: false,
                 disconnectLedger: expect.any(Function),
+                startPollingCorrectDeviceSettings: expect.any(Function),
                 withTransport: undefined,
             })
         })

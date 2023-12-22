@@ -1,5 +1,5 @@
 import { useScanLedgerDevices } from "~Hooks"
-import { renderHook } from "@testing-library/react-hooks"
+import { act, renderHook } from "@testing-library/react-hooks"
 import { TestHelpers } from "~Test"
 import BleTransport from "@ledgerhq/react-native-hw-transport-ble"
 
@@ -19,6 +19,10 @@ describe("useScanLedgerDevices", () => {
     it("can scan for devices", async () => {
         const { result } = renderHook(() => useScanLedgerDevices({}))
 
+        act(() => {
+            result.current.scanForDevices()
+        })
+
         listenFunction.mock.calls[0][0].next({
             type: "add",
             descriptor: mockedDevice,
@@ -30,6 +34,10 @@ describe("useScanLedgerDevices", () => {
 
     it("can connect", async () => {
         const { result } = renderHook(() => useScanLedgerDevices({}))
+
+        act(() => {
+            result.current.scanForDevices()
+        })
 
         const descriptor = {
             ...mockedDevice,
