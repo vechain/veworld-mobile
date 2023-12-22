@@ -26,26 +26,28 @@ export const usePollingCorrectDeviceSettings = ({
     }, [])
 
     const checkLedgerCorrectDeviceSettings = useCallback(async () => {
-        if (transport.current) {
-            debug(ERROR_EVENTS.LEDGER, "[usePollingCorrectDeviceSettings] - checkLedgerCorrectDeviceSettings")
-            const res = await LedgerUtils.verifyTransport(withTransport(transport.current))
+        if (!transport.current) {
+            debug(
+                ERROR_EVENTS.LEDGER,
+                "[usePollingCorrectDeviceSettings] - checkLedgerCorrectDeviceSettings - no transport found",
+            )
+            return
+        }
+        debug(ERROR_EVENTS.LEDGER, "[usePollingCorrectDeviceSettings] - checkLedgerCorrectDeviceSettings")
+        const res = await LedgerUtils.verifyTransport(withTransport(transport.current))
 
-            if (res.success) {
-                if (res?.payload?.appConfig === LedgerConfig.CLAUSE_AND_CONTRACT_ENABLED) {
-                    debug(
-                        ERROR_EVENTS.LEDGER,
-                        "[usePollingCorrectDeviceSettings] - clause and contract correctly enabled",
-                    )
-                    stopPollingCorrectDeviceSettings()
-                } else {
-                    debug(ERROR_EVENTS.LEDGER, "[usePollingCorrectDeviceSettings] - still missing clause or contract")
-                }
-                setAppConfig(res.payload.appConfig.toString().slice(0, 2) as LedgerConfig)
-            } else {
-                debug(ERROR_EVENTS.LEDGER, "[usePollingCorrectDeviceSettings] - incorrect device status")
+        if (res.success) {
+            if (res?.payload?.appConfig === LedgerConfig.CLAUSE_AND_CONTRACT_ENABLED) {
+                debug(ERROR_EVENTS.LEDGER, "[usePollingCorrectDeviceSettings] - clause and contract correctly enabled")
                 stopPollingCorrectDeviceSettings()
-                startPollingDeviceStatus()
+            } else {
+                debug(ERROR_EVENTS.LEDGER, "[usePollingCorrectDeviceSettings] - still missing clause or contract")
             }
+            setAppConfig(res.payload.appConfig.toString().slice(0, 2) as LedgerConfig)
+        } else {
+            debug(ERROR_EVENTS.LEDGER, "[usePollingCorrectDeviceSettings] - incorrect device status")
+            stopPollingCorrectDeviceSettings()
+            startPollingDeviceStatus()
         }
     }, [transport, withTransport, setAppConfig, stopPollingCorrectDeviceSettings, startPollingDeviceStatus])
 

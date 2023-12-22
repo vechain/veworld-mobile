@@ -327,7 +327,7 @@ export const LedgerSignTransaction: React.FC<Props> = ({ route }) => {
     }, [startPollingCorrectDeviceSettings])
 
     const BottomButton = useCallback(() => {
-        if (currentStep === SignSteps.SIGNING && userRejected) {
+        if (currentStep === SignSteps.SIGNING && (userRejected || signingError)) {
             return (
                 <BaseButton
                     mx={24}
@@ -353,7 +353,7 @@ export const LedgerSignTransaction: React.FC<Props> = ({ route }) => {
         }
 
         return <></>
-    }, [currentStep, userRejected, isSending, LL, handleOnRetry, signature, handleOnConfirm])
+    }, [currentStep, userRejected, signingError, LL, isSending, handleOnRetry, signature, handleOnConfirm])
 
     return (
         <Layout

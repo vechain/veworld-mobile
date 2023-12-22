@@ -12,9 +12,7 @@ import { usePollingDeviceStatus } from "../usePollingDeviceStatus"
 import { usePollingCorrectDeviceSettings } from "../usePollingCorrectDeviceSettings"
 
 const RECONNECT_DEVICE_INTERVAL = 3000
-let outsideRenderLoopIsConnecting: boolean = false
-let outsideRenderLoopIsConnected: boolean = false
-let outsideRenderLoopDisconnectedOnPurpose: boolean = false
+const DISCONNECTED_DEVICE_TIMEOUT = 5000
 
 /**
  * ***** IMPORTANT *****
@@ -52,6 +50,9 @@ export const useLedgerDevice = ({ deviceId }: { deviceId: string }): UseLedgerDe
     const [errorCode, setErrorCode] = useState<LEDGER_ERROR_CODES | undefined>(undefined)
     const withTransport = useWithTransport()
     const { appConfig, setAppConfig } = useLedgerAppConfig({ setErrorCode })
+    const detachedIsConnecting = useRef<boolean>(false)
+    const detachedIsConnected = useRef<boolean>(false)
+    const detachedDisconnectedOnPurpose = useRef<boolean>(false)
 
     // when the device is available
     const onDeviceAvailable = useCallback(
@@ -92,7 +93,9 @@ export const useLedgerDevice = ({ deviceId }: { deviceId: string }): UseLedgerDe
                 }
             } else {
                 debug(ERROR_EVENTS.LEDGER, "[useLedgerDevice] - device not found, scanning again")
-                scanForDevices()
+                setTimeout(() => {
+                    scanForDevices()
+                }, DISCONNECTED_DEVICE_TIMEOUT)
             }
         },
         [availableDevices, deviceId, scanForDevices],
@@ -101,12 +104,12 @@ export const useLedgerDevice = ({ deviceId }: { deviceId: string }): UseLedgerDe
     const reconnectLedger = useCallback(
         async (connectLedger: () => Promise<void>) => {
             debug(ERROR_EVENTS.LEDGER, "[useLedgerDevice] - device disconnected")
-            outsideRenderLoopIsConnected = false
+            detachedIsConnected.current = false
             setRootAccount(undefined)
             setAppOpen(false)
             setErrorCode(LEDGER_ERROR_CODES.CONNECTING)
             transport.current = undefined
-            if (!outsideRenderLoopDisconnectedOnPurpose) {
+            if (!detachedDisconnectedOnPurpose.current) {
                 debug(ERROR_EVENTS.LEDGER, "[useLedgerDevice] - trying reconnecting...")
                 await checkDevicePresence(connectLedger)
             } else {
@@ -117,40 +120,40 @@ export const useLedgerDevice = ({ deviceId }: { deviceId: string }): UseLedgerDe
     )
 
     const connectLedger = useCallback(async () => {
-        if (outsideRenderLoopIsConnected) {
+        if (detachedIsConnected.current) {
             debug(ERROR_EVENTS.LEDGER, "[useLedgerDevice] - skipping - device already connected")
             return
         }
-        if (outsideRenderLoopIsConnecting) {
+        if (detachedIsConnecting.current) {
             debug(ERROR_EVENTS.LEDGER, "[useLedgerDevice] - skipping - device is connecting in another render loop")
             return
         }
 
         setIsConnecting(true)
-        outsideRenderLoopIsConnecting = true
+        detachedIsConnecting.current = true
 
         try {
             debug(ERROR_EVENTS.LEDGER, "[useLedgerDevice] - Attempting to open connection")
             transport.current = await BleTransport.open(deviceId)
 
             debug(ERROR_EVENTS.LEDGER, "[useLedgerDevice] - connection successful")
-            outsideRenderLoopIsConnected = true
+            detachedIsConnected.current = true
             transport.current.on("disconnect", () => reconnectLedger(connectLedger))
             await startPollingDeviceStatus()
         } catch (e) {
             warn(ERROR_EVENTS.LEDGER, "[useLedgerDevice] - Error opening connection", e)
             setErrorCode(LEDGER_ERROR_CODES.CONNECTING)
-            outsideRenderLoopIsConnected = false
+            detachedIsConnected.current = false
             setTimeout(() => reconnectLedger(connectLedger), RECONNECT_DEVICE_INTERVAL)
         } finally {
             setIsConnecting(false)
-            outsideRenderLoopIsConnecting = false
+            detachedIsConnecting.current = false
         }
     }, [deviceId, reconnectLedger, startPollingDeviceStatus])
 
     const disconnectLedger = useCallback(async () => {
         debug(ERROR_EVENTS.LEDGER, "[useLedgerDevice] - disconnectLedger")
-        outsideRenderLoopDisconnectedOnPurpose = true
+        detachedDisconnectedOnPurpose.current = true
         if (transport.current) {
             try {
                 await BleTransport.disconnectDevice(deviceId)
@@ -173,7 +176,7 @@ export const useLedgerDevice = ({ deviceId }: { deviceId: string }): UseLedgerDe
 
     useEffect(() => {
         const scanAndConnectToLedgerIfPresent = async () => {
-            outsideRenderLoopDisconnectedOnPurpose = false
+            detachedDisconnectedOnPurpose.current = false
             await checkDevicePresence(connectLedger)
         }
         scanAndConnectToLedgerIfPresent()

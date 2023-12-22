@@ -28,17 +28,19 @@ export const usePollingDeviceStatus = ({
     }, [])
 
     const checkLedgerStatus = useCallback(async () => {
-        if (transport.current) {
-            debug(ERROR_EVENTS.LEDGER, "[usePollingDeviceStatus] - checkLedgerStatus")
-            const res = await LedgerUtils.verifyTransport(withTransport(transport.current))
+        if (!transport.current) {
+            debug(ERROR_EVENTS.LEDGER, "[usePollingCorrectDeviceSettings] - checkLedgerStatus - no transport found")
+            return
+        }
+        debug(ERROR_EVENTS.LEDGER, "[usePollingDeviceStatus] - checkLedgerStatus")
+        const res = await LedgerUtils.verifyTransport(withTransport(transport.current))
 
-            if (res.success) {
-                debug(ERROR_EVENTS.LEDGER, "[usePollingDeviceStatus] - device available to do actions")
-                onDeviceAvailable(res, stopPollingDeviceStatus)
-            } else {
-                debug(ERROR_EVENTS.LEDGER, "[usePollingDeviceStatus] - checkLedgerStatus - error", res)
-                setErrorCode(res.err as LEDGER_ERROR_CODES)
-            }
+        if (res.success) {
+            debug(ERROR_EVENTS.LEDGER, "[usePollingDeviceStatus] - device available to do actions")
+            onDeviceAvailable(res, stopPollingDeviceStatus)
+        } else {
+            debug(ERROR_EVENTS.LEDGER, "[usePollingDeviceStatus] - checkLedgerStatus - error", res)
+            setErrorCode(res.err as LEDGER_ERROR_CODES)
         }
     }, [transport, withTransport, onDeviceAvailable, stopPollingDeviceStatus, setErrorCode])
 
@@ -48,7 +50,7 @@ export const usePollingDeviceStatus = ({
         }
         debug(ERROR_EVENTS.LEDGER, "[usePollingDeviceStatus] - startPollingDeviceStatus")
         checkLedgerStatus()
-        pollingStatusInterval.current = setInterval(checkLedgerStatus, CHECK_LEDGER_STATUS_INTERVAL)
+        pollingStatusInterval.current = setInterval(() => checkLedgerStatus(), CHECK_LEDGER_STATUS_INTERVAL)
     }, [checkLedgerStatus])
 
     return {
