@@ -3,7 +3,7 @@ import Lottie from "lottie-react-native"
 import React, { useCallback, useEffect, useMemo, useState } from "react"
 import { StyleSheet } from "react-native"
 import { BlePairingDark } from "~Assets"
-import { useAnalyticTracking, useBottomSheetModal, useLedger, useSendTransaction } from "~Hooks"
+import { useAnalyticTracking, useBottomSheetModal, useLedgerDevice, useSendTransaction } from "~Hooks"
 import {
     BaseButton,
     BaseSpacer,
@@ -67,9 +67,10 @@ export const LedgerSignTransaction: React.FC<Props> = ({ route }) => {
         onClose: closeConnectionErrorSheet,
     } = useBottomSheetModal()
 
-    const { appOpen, appConfig, errorCode, withTransport, removeLedger, pollingCorrectSettings } = useLedger({
-        deviceId: accountWithDevice.device.deviceId,
-    })
+    const { appOpen, appConfig, errorCode, withTransport, disconnectLedger, startPollingCorrectDeviceSettings } =
+        useLedgerDevice({
+            deviceId: accountWithDevice.device.deviceId,
+        })
 
     useEffect(() => {
         if (errorCode) {
@@ -207,9 +208,9 @@ export const LedgerSignTransaction: React.FC<Props> = ({ route }) => {
             signTransaction()
         } else {
             debug(ERROR_EVENTS.LEDGER, "[LedgerSignTransaction] - skipping signTransaction")
-            pollingCorrectSettings()
+            startPollingCorrectDeviceSettings()
         }
-    }, [userRejected, appOpen, appConfig, signature, signTransaction, pollingCorrectSettings])
+    }, [userRejected, appOpen, appConfig, signature, signTransaction, startPollingCorrectDeviceSettings])
 
     useEffect(() => {
         if (currentStep >= SignSteps.SIGNING) {
@@ -264,7 +265,7 @@ export const LedgerSignTransaction: React.FC<Props> = ({ route }) => {
             const txId = await sendTransaction(transaction)
             await Haptics.notificationAsync(Haptics.NotificationFeedbackType.Success)
 
-            await removeLedger()
+            await disconnectLedger()
 
             //If DApp transaction
 
@@ -309,7 +310,7 @@ export const LedgerSignTransaction: React.FC<Props> = ({ route }) => {
         transaction,
         delegationSignature,
         sendTransaction,
-        removeLedger,
+        disconnectLedger,
         dappRequest,
         postMessage,
         navigateOnFinish,
@@ -355,7 +356,7 @@ export const LedgerSignTransaction: React.FC<Props> = ({ route }) => {
 
     return (
         <Layout
-            beforeNavigating={removeLedger}
+            beforeNavigating={disconnectLedger}
             body={
                 <BaseView style={styles.container}>
                     <BaseText typographyFont="title">{LL.SEND_LEDGER_TITLE()}</BaseText>

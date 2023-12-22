@@ -19,8 +19,6 @@ describe("useScanLedgerDevices", () => {
     it("can scan for devices", async () => {
         const { result } = renderHook(() => useScanLedgerDevices({}))
 
-        expect(result.current.canConnect).toEqual(false)
-
         listenFunction.mock.calls[0][0].next({
             type: "add",
             descriptor: mockedDevice,
@@ -31,18 +29,12 @@ describe("useScanLedgerDevices", () => {
     })
 
     it("can connect", async () => {
-        const { result } = renderHook(() =>
-            useScanLedgerDevices({
-                deviceId: mockedDevice.id,
-            }),
-        )
+        const { result } = renderHook(() => useScanLedgerDevices({}))
 
         const descriptor = {
             ...mockedDevice,
             isConnectable: true,
         }
-
-        expect(result.current.canConnect).toEqual(false)
 
         listenFunction.mock.calls[0][0].next({
             type: "add",
@@ -51,6 +43,5 @@ describe("useScanLedgerDevices", () => {
         })
 
         expect(result.current.availableDevices).toHaveLength(1)
-        expect(result.current.canConnect).toBeTruthy()
     })
 })

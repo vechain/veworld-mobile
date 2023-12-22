@@ -11,7 +11,7 @@ import {
     showErrorToast,
 } from "~Components"
 import { useI18nContext } from "~i18n"
-import { useAnalyticTracking, useBottomSheetModal, useLedger, useThemedStyles } from "~Hooks"
+import { useAnalyticTracking, useBottomSheetModal, useLedgerDevice, useThemedStyles } from "~Hooks"
 import { AnalyticsEvent, ColorThemeType, VET, VETLedgerAccount } from "~Constants"
 import { FormattingUtils, LedgerUtils } from "~Utils"
 import { StyleSheet } from "react-native"
@@ -46,7 +46,7 @@ export const SelectLedgerAccounts: React.FC<Props> = ({ route }) => {
     const userHasOnboarded = useAppSelector(selectHasOnboarded)
     const track = useAnalyticTracking()
 
-    const { errorCode, rootAccount, removeLedger } = useLedger({
+    const { errorCode, rootAccount, disconnectLedger } = useLedgerDevice({
         deviceId: device.id,
     })
     const [rootAcc, setRootAcc] = useState<VETLedgerAccount | undefined>(
@@ -82,14 +82,14 @@ export const SelectLedgerAccounts: React.FC<Props> = ({ route }) => {
     const [isScrollable, setIsScrollable] = useState(false)
 
     const navigateNext = useCallback(async () => {
-        await removeLedger()
+        await disconnectLedger()
 
         if (userHasOnboarded) {
             nav.navigate(Routes.WALLET_SUCCESS)
         } else {
             nav.navigate(Routes.APP_SECURITY)
         }
-    }, [removeLedger, nav, userHasOnboarded])
+    }, [disconnectLedger, nav, userHasOnboarded])
 
     const onConfirm = useCallback(async () => {
         try {
@@ -184,7 +184,7 @@ export const SelectLedgerAccounts: React.FC<Props> = ({ route }) => {
 
     return (
         <Layout
-            beforeNavigating={removeLedger}
+            beforeNavigating={disconnectLedger}
             fixedHeader={
                 <BaseView>
                     <BaseView flexDirection="row" w={100}>

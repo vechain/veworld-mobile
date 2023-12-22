@@ -1,2 +1,2 @@
-export * from "./useLedger"
+export * from "./useLedgerDevice"
 export * from "./useScanLedgerDevices"

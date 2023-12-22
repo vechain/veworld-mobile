@@ -3,7 +3,7 @@ import Lottie from "lottie-react-native"
 import React, { useCallback, useEffect, useMemo, useState } from "react"
 import { StyleSheet } from "react-native"
 import { BlePairingDark } from "~Assets"
-import { useBottomSheetModal, useLedger } from "~Hooks"
+import { useBottomSheetModal, useLedgerDevice } from "~Hooks"
 import {
     BackButtonHeader,
     BaseButton,
@@ -55,7 +55,7 @@ export const LedgerSignCertificate: React.FC<Props> = ({ route }) => {
         onClose: closeConnectionErrorSheet,
     } = useBottomSheetModal()
 
-    const { appOpen, errorCode, withTransport, removeLedger } = useLedger({
+    const { appOpen, errorCode, withTransport, disconnectLedger } = useLedgerDevice({
         deviceId: accountWithDevice.device.deviceId,
     })
 
@@ -186,7 +186,7 @@ export const LedgerSignCertificate: React.FC<Props> = ({ route }) => {
                 })
             }
 
-            await removeLedger()
+            await disconnectLedger()
 
             navigateOnFinish()
         } catch (e) {
@@ -199,7 +199,7 @@ export const LedgerSignCertificate: React.FC<Props> = ({ route }) => {
         } finally {
             setIsSending(false)
         }
-    }, [removeLedger, request, postMessage, processRequest, LL, signature, certificate, navigateOnFinish])
+    }, [disconnectLedger, request, postMessage, processRequest, LL, signature, certificate, navigateOnFinish])
 
     const handleOnRetry = useCallback(() => {
         // this will trigger the useEffect to sign the transaction again
@@ -239,7 +239,7 @@ export const LedgerSignCertificate: React.FC<Props> = ({ route }) => {
 
     return (
         <BaseSafeArea grow={1}>
-            <BackButtonHeader beforeNavigating={removeLedger} />
+            <BackButtonHeader beforeNavigating={disconnectLedger} />
             <BaseView alignItems="flex-start" flexGrow={1} flex={1} mx={20}>
                 <BaseText typographyFont="title">{LL.SEND_LEDGER_TITLE()}</BaseText>
                 <BaseText typographyFont="body" my={10}>
