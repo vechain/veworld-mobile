@@ -91,7 +91,7 @@ export const SendNFTRecapScreen = ({ route }: Props) => {
         selectedDelegationAccount,
         selectedDelegationUrl,
         vtho,
-        isDissabledButtonState,
+        isDisabledButtonState,
     } = useTransactionScreen({
         clauses,
         onTransactionSuccess,
@@ -184,7 +184,7 @@ export const SendNFTRecapScreen = ({ route }: Props) => {
                 <FadeoutButton
                     title={LL.COMMON_BTN_CONFIRM().toUpperCase()}
                     action={onSubmit}
-                    disabled={isDissabledButtonState}
+                    disabled={isDisabledButtonState}
                     bottom={0}
                     mx={0}
                     width={"auto"}

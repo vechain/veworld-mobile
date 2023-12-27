@@ -45,8 +45,8 @@ export const ledgerErrorHandler = (err: unknown): LEDGER_ERROR_CODES => {
     ) {
         return LEDGER_ERROR_CODES.OFF_OR_LOCKED
     }
-    if (err.name.includes("Disconnected")) {
-        return LEDGER_ERROR_CODES.DISCONNECTED
+    if (err.name.includes("Disconnected") || err.name.includes("disconnected")) {
+        return LEDGER_ERROR_CODES.CONNECTING
     }
 
     if (err.message.includes("0x6985")) {
@@ -63,7 +63,7 @@ export const ledgerErrorHandler = (err: unknown): LEDGER_ERROR_CODES => {
  * @property error - The error if there is one
  * @property response - The response, which should be defined, only if there is no error
  */
-type VerifyTransportResponse = {
+export type VerifyTransportResponse = {
     appConfig: LedgerConfig
     rootAccount: VETLedgerAccount
     app: VETLedgerApp
@@ -78,9 +78,10 @@ export const verifyTransport = async (
         const app = new VETLedgerApp(transport)
 
         try {
+            debug(ERROR_EVENTS.LEDGER, "[verifyTransport] - getting configuration")
             const config = await app.getAppConfiguration()
-
             const appConfig: LedgerConfig = config.toString("hex") as LedgerConfig
+            debug(ERROR_EVENTS.LEDGER, "[verifyTransport] - getting root address")
             const rootAccount: VETLedgerAccount = await app.getAddress(VET_DERIVATION_PATH, false, true)
 
             return {

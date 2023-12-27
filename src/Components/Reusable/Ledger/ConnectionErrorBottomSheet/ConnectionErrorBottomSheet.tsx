@@ -49,6 +49,12 @@ export const ConnectionErrorBottomSheet = React.forwardRef<BottomSheetModalMetho
                         desc: LL.WALLET_LEDGER_ERROR_OPEN_APP_DESC(),
                         image: <Lottie source={OpenAppDark} autoPlay style={styles.lottie} />,
                     }
+                case LEDGER_ERROR_CODES.CONNECTING:
+                    return {
+                        title: LL.WALLET_LEDGER_ERROR_CONNECTING(),
+                        desc: LL.WALLET_LEDGER_ERROR_CONNECTING_DESC(),
+                        image: <Lottie source={OpenAppDark} autoPlay style={styles.lottie} />,
+                    }
                 case LEDGER_ERROR_CODES.WAITING_SIGNATURE:
                     return {
                         title: LL.WALLET_LEDGER_ERROR_VALIDATE_SIGNATURE(),

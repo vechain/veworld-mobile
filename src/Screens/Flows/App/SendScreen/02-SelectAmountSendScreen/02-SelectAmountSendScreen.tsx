@@ -238,7 +238,7 @@ export const SelectAmountSendScreen = ({ route }: Props) => {
                                                 action={handleOnMaxPress}
                                                 style={styles.iconMax}>
                                                 <BaseText color={COLORS.COINBASE_BACKGROUND_DARK} fontSize={10}>
-                                                    MAX
+                                                    {LL.SEND_RANGE_MAX()}
                                                 </BaseText>
                                             </BaseTouchable>
 
@@ -361,7 +361,6 @@ const baseStyles = (isExchangeRateAvailable: boolean) => () =>
             position: "absolute",
             right: 16,
             bottom: -32,
-            padding: 8,
             width: 36,
             height: 36,
             borderRadius: 20,

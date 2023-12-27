@@ -2388,21 +2388,45 @@ type RootTranslation = {
 	 */
 	SEND_LEDGER_SIGN_DATA_SB: string
 	/**
+	 * Y​o​u​ ​h​a​v​e​ ​r​e​j​e​c​t​e​d​ ​t​h​e​ ​t​r​a​n​s​a​c​t​i​o​n
+	 */
+	SEND_LEDGER_REJECTED_TRANSACTION: string
+	/**
+	 * Y​o​u​ ​h​a​v​e​ ​r​e​j​e​c​t​e​d​ ​t​h​e​ ​t​r​a​n​s​a​c​t​i​o​n​ ​o​n​ ​y​o​u​r​ ​L​e​d​g​e​r​,​ ​p​l​e​a​s​e​ ​c​o​n​f​i​r​m​ ​t​h​e​ ​t​r​a​n​s​a​c​t​i​o​n​ ​o​n​ ​y​o​u​r​ ​d​e​v​i​c​e​ ​w​h​e​n​ ​r​e​q​u​i​r​e​d
+	 */
+	SEND_LEDGER_REJECTED_TRANSACTION_SB: string
+	/**
 	 * W​e​ ​a​r​e​ ​s​i​g​n​i​n​g​ ​y​o​u​r​ ​c​e​r​t​i​f​i​c​a​t​e
 	 */
 	CERT_LEDGER_SIGN_DATA: string
-	/**
-	 * W​e​ ​a​r​e​ ​s​i​g​n​i​n​g​ ​y​o​u​r​ ​m​e​s​s​a​g​e
-	 */
-	MESSAGE_LEDGER_SIGN_DATA: string
 	/**
 	 * W​e​ ​a​r​e​ ​s​i​g​n​i​n​g​ ​y​o​u​r​ ​c​e​r​t​i​f​i​c​a​t​e​ ​w​i​t​h​ ​y​o​u​r​ ​L​e​d​g​e​r​,​ ​p​l​e​a​s​e​ ​c​o​n​f​i​r​m​ ​t​h​e​ ​s​i​g​n​a​t​u​r​e​ ​o​n​ ​y​o​u​r​ ​d​e​v​i​c​e​ ​w​h​e​n​ ​r​e​q​u​i​r​e​d
 	 */
 	CERT_LEDGER_SIGN_DATA_SB: string
 	/**
+	 * Y​o​u​ ​h​a​v​e​ ​r​e​j​e​c​t​e​d​ ​t​h​e​ ​c​e​r​t​i​f​i​c​a​t​e
+	 */
+	CERT_LEDGER_REJECTED: string
+	/**
+	 * Y​o​u​ ​h​a​v​e​ ​r​e​j​e​c​t​e​d​ ​t​h​e​ ​c​e​r​t​i​f​i​c​a​t​e​ ​o​n​ ​y​o​u​r​ ​L​e​d​g​e​r​,​ ​p​l​e​a​s​e​ ​c​o​n​f​i​r​m​ ​o​n​ ​y​o​u​r​ ​d​e​v​i​c​e​ ​w​h​e​n​ ​r​e​q​u​i​r​e​d
+	 */
+	CERT_LEDGER_REJECTED_SB: string
+	/**
+	 * W​e​ ​a​r​e​ ​s​i​g​n​i​n​g​ ​y​o​u​r​ ​m​e​s​s​a​g​e
+	 */
+	MESSAGE_LEDGER_SIGN_DATA: string
+	/**
 	 * W​e​ ​a​r​e​ ​s​i​g​n​i​n​g​ ​y​o​u​r​ ​m​e​s​s​a​g​e​ ​w​i​t​h​ ​y​o​u​r​ ​L​e​d​g​e​r​,​ ​p​l​e​a​s​e​ ​c​o​n​f​i​r​m​ ​t​h​e​ ​s​i​g​n​a​t​u​r​e​ ​o​n​ ​y​o​u​r​ ​d​e​v​i​c​e​ ​w​h​e​n​ ​r​e​q​u​i​r​e​d
 	 */
 	MESSAGE_LEDGER_SIGN_DATA_SB: string
+	/**
+	 * Y​o​u​ ​h​a​v​e​ ​r​e​j​e​c​t​e​d​ ​t​h​e​ ​m​e​s​s​a​g​e
+	 */
+	MESSAGE_LEDGER_REJECTED: string
+	/**
+	 * Y​o​u​ ​h​a​v​e​ ​r​e​j​e​c​t​e​d​ ​t​h​e​ ​m​e​s​s​a​g​e​ ​o​n​ ​y​o​u​r​ ​L​e​d​g​e​r​,​ ​p​l​e​a​s​e​ ​c​o​n​f​i​r​m​ ​o​n​ ​y​o​u​r​ ​d​e​v​i​c​e​ ​w​h​e​n​ ​r​e​q​u​i​r​e​d
+	 */
+	MESSAGE_LEDGER_REJECTED_SB: string
 	/**
 	 * T​r​a​n​s​a​c​t​i​o​n​ ​i​s​ ​r​e​a​d​y
 	 */
@@ -2585,6 +2609,14 @@ type RootTranslation = {
 	 * P​l​e​a​s​e​,​ ​o​p​e​n​ ​t​h​e​ ​V​E​T​ ​a​p​p​ ​t​o​ ​c​o​n​t​i​n​u​e
 	 */
 	WALLET_LEDGER_ERROR_OPEN_APP_DESC: string
+	/**
+	 * C​o​n​n​e​c​t​i​n​g​.​.​.
+	 */
+	WALLET_LEDGER_ERROR_CONNECTING: string
+	/**
+	 * C​o​n​n​e​c​t​i​n​g​ ​t​o​ ​t​h​e​ ​l​e​d​g​e​r​ ​d​e​v​i​c​e​,​ ​p​l​e​a​s​e​ ​w​a​i​t
+	 */
+	WALLET_LEDGER_ERROR_CONNECTING_DESC: string
 	/**
 	 * V​a​l​i​d​a​t​e​ ​s​i​g​n​a​t​u​r​e
 	 */
@@ -5150,21 +5182,45 @@ Try reconnect your device to the internet.
 	 */
 	SEND_LEDGER_SIGN_DATA_SB: () => LocalizedString
 	/**
+	 * You have rejected the transaction
+	 */
+	SEND_LEDGER_REJECTED_TRANSACTION: () => LocalizedString
+	/**
+	 * You have rejected the transaction on your Ledger, please confirm the transaction on your device when required
+	 */
+	SEND_LEDGER_REJECTED_TRANSACTION_SB: () => LocalizedString
+	/**
 	 * We are signing your certificate
 	 */
 	CERT_LEDGER_SIGN_DATA: () => LocalizedString
-	/**
-	 * We are signing your message
-	 */
-	MESSAGE_LEDGER_SIGN_DATA: () => LocalizedString
 	/**
 	 * We are signing your certificate with your Ledger, please confirm the signature on your device when required
 	 */
 	CERT_LEDGER_SIGN_DATA_SB: () => LocalizedString
 	/**
+	 * You have rejected the certificate
+	 */
+	CERT_LEDGER_REJECTED: () => LocalizedString
+	/**
+	 * You have rejected the certificate on your Ledger, please confirm on your device when required
+	 */
+	CERT_LEDGER_REJECTED_SB: () => LocalizedString
+	/**
+	 * We are signing your message
+	 */
+	MESSAGE_LEDGER_SIGN_DATA: () => LocalizedString
+	/**
 	 * We are signing your message with your Ledger, please confirm the signature on your device when required
 	 */
 	MESSAGE_LEDGER_SIGN_DATA_SB: () => LocalizedString
+	/**
+	 * You have rejected the message
+	 */
+	MESSAGE_LEDGER_REJECTED: () => LocalizedString
+	/**
+	 * You have rejected the message on your Ledger, please confirm on your device when required
+	 */
+	MESSAGE_LEDGER_REJECTED_SB: () => LocalizedString
 	/**
 	 * Transaction is ready
 	 */
@@ -5345,6 +5401,14 @@ Try reconnect your device to the internet.
 	 * Please, open the VET app to continue
 	 */
 	WALLET_LEDGER_ERROR_OPEN_APP_DESC: () => LocalizedString
+	/**
+	 * Connecting...
+	 */
+	WALLET_LEDGER_ERROR_CONNECTING: () => LocalizedString
+	/**
+	 * Connecting to the ledger device, please wait
+	 */
+	WALLET_LEDGER_ERROR_CONNECTING_DESC: () => LocalizedString
 	/**
 	 * Validate signature
 	 */

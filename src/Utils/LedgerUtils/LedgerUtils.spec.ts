@@ -44,9 +44,9 @@ describe("LedgerUtils", () => {
             const error = new Error("busy")
             expect(LedgerUtils.ledgerErrorHandler(error)).toBe(LEDGER_ERROR_CODES.OFF_OR_LOCKED)
         })
-        it("Disconnected - should return DISCONNECTED", () => {
+        it("Disconnected - should return CONNECTING", () => {
             const error = new DisconnectedDeviceDuringOperation("Disconnected")
-            expect(LedgerUtils.ledgerErrorHandler(error)).toBe(LEDGER_ERROR_CODES.DISCONNECTED)
+            expect(LedgerUtils.ledgerErrorHandler(error)).toBe(LEDGER_ERROR_CODES.CONNECTING)
         })
         it("Unknown Error - should return UNKNOWN", () => {
             const error = new Error("Unknown Error")
@@ -62,9 +62,7 @@ describe("LedgerUtils", () => {
         })
 
         it("LEDGER_ERROR_CODES should return LEDGER_ERROR_CODES", () => {
-            expect(LedgerUtils.ledgerErrorHandler(LEDGER_ERROR_CODES.DISCONNECTED)).toBe(
-                LEDGER_ERROR_CODES.DISCONNECTED,
-            )
+            expect(LedgerUtils.ledgerErrorHandler(LEDGER_ERROR_CODES.CONNECTING)).toBe(LEDGER_ERROR_CODES.CONNECTING)
         })
 
         it("0x6985 - should return USER_REJECTED", () => {
