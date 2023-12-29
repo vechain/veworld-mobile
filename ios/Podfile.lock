@@ -458,7 +458,7 @@ PODS:
     - React-Core
   - react-native-cameraroll (5.10.0):
     - React-Core
-  - react-native-compat (2.10.6):
+  - react-native-compat (2.11.0):
     - RCT-Folly (= 2021.07.22.00)
     - React-Core
   - react-native-context-menu-view (1.14.1):
@@ -484,7 +484,7 @@ PODS:
     - React
     - React-callinvoker
     - React-Core
-  - react-native-safe-area-context (4.8.1):
+  - react-native-safe-area-context (4.8.2):
     - React-Core
   - react-native-slider (4.5.0):
     - RCT-Folly (= 2021.07.22.00)
@@ -601,7 +601,7 @@ PODS:
     - React-jsi (= 0.72.6)
     - React-logger (= 0.72.6)
     - React-perflogger (= 0.72.6)
-  - RNBootSplash (5.1.4):
+  - RNBootSplash (5.2.0):
     - React-Core
   - RNCAsyncStorage (1.21.0):
     - React-Core
@@ -656,7 +656,7 @@ PODS:
     - React-Core
   - RNScrypt (1.2.1):
     - React
-  - RNSentry (5.15.1):
+  - RNSentry (5.15.2):
     - hermes-engine
     - React-Core
     - React-hermes
@@ -1082,7 +1082,7 @@ SPEC CHECKSUMS:
   react-native-blob-util: 30a6c9fd067aadf9177e61a998f2c7efb670598d
   react-native-blur: cfdad7b3c01d725ab62a8a729f42ea463998afa2
   react-native-cameraroll: 4701ae7c3dbcd3f5e9e150ca17f250a276154b35
-  react-native-compat: 93e985034a6b30e74781b5e0986b130fc7c63acc
+  react-native-compat: d411b454141009ceca781cd1ca44132cace77c45
   react-native-context-menu-view: ea9e2d0f86859a143f1fd73a96a062ced5159567
   react-native-flipper: 2d552a8178d839ef378220101fb7f0cd5b2a8003
   react-native-get-random-values: 384787fd76976f5aec9465aff6fa9e9129af1e74
@@ -1092,7 +1092,7 @@ SPEC CHECKSUMS:
   react-native-pager-view: e26d35e382d86950c936f8917e3beb9188115ccc
   react-native-quick-base64: 777057ea4286f806b00259ede65dc79c7c706320
   react-native-quick-crypto: 455c1b411db006dba1026a30681ececb19180187
-  react-native-safe-area-context: cd1169d797a2ef722a00bfc5af10748d5b6c94f9
+  react-native-safe-area-context: 0ee144a6170530ccc37a0fd9388e28d06f516a89
   react-native-slider: cc89964e1432fa31aa9db7a0fa9b21e26b5d5152
   react-native-webview: 88293a0f23eca8465c0433c023ec632930e644d0
   React-NativeModulesApple: 02e35e9a51e10c6422f04f5e4076a7c02243fff2
@@ -1112,7 +1112,7 @@ SPEC CHECKSUMS:
   React-runtimescheduler: f23e337008403341177fc52ee4ca94e442c17ede
   React-utils: fa59c9a3375fb6f4aeb66714fd3f7f76b43a9f16
   ReactCommon: dd03c17275c200496f346af93a7b94c53f3093a4
-  RNBootSplash: 578bffadc64719c710d30780ec6ace905b0daf07
+  RNBootSplash: a4e3ae9e08ba15465f59e033592919b7091f79cb
   RNCAsyncStorage: 618d03a5f52fbccb3d7010076bc54712844c18ef
   RNCMaskedView: 090213d32d8b3bb83a4dcb7d12c18f0152591906
   RNDeviceInfo: db5c64a060e66e5db3102d041ebe3ef307a85120
@@ -1124,7 +1124,7 @@ SPEC CHECKSUMS:
   RNReanimated: ab2e96c6d5591c3dfbb38a464f54c8d17fb34a87
   RNScreens: 3c5b9f4a9dcde752466854b6109b79c0e205dad3
   RNScrypt: 95fdef077b482e9fdf8a761120cb69d129ef4016
-  RNSentry: a6202c19ca31b69969dface2ea0db093e36c97a3
+  RNSentry: b7f4f53bb7076f119558f8898fca901b48213f12
   RNSVG: d00c8f91c3cbf6d476451313a18f04d220d4f396
   SDWebImage: a7f831e1a65eb5e285e3fb046a23fcfbf08e696d
   SDWebImageWebPCoder: 908b83b6adda48effe7667cd2b7f78c897e5111d

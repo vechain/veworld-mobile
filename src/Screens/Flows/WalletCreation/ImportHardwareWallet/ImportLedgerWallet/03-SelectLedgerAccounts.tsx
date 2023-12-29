@@ -11,7 +11,7 @@ import {
     showErrorToast,
 } from "~Components"
 import { useI18nContext } from "~i18n"
-import { useAnalyticTracking, useBottomSheetModal, useLedger, useThemedStyles } from "~Hooks"
+import { useAnalyticTracking, useBottomSheetModal, useLedgerDevice, useThemedStyles } from "~Hooks"
 import { AnalyticsEvent, ColorThemeType, VET, VETLedgerAccount } from "~Constants"
 import { FormattingUtils, LedgerUtils } from "~Utils"
 import { StyleSheet } from "react-native"
@@ -44,12 +44,14 @@ export const SelectLedgerAccounts: React.FC<Props> = ({ route }) => {
     const { styles: themedStyles } = useThemedStyles(styles)
     const selectedNetwork = useAppSelector(selectSelectedNetwork)
     const userHasOnboarded = useAppSelector(selectHasOnboarded)
-    const [rootAcc, setRootAcc] = useState<VETLedgerAccount>()
     const track = useAnalyticTracking()
 
-    const { errorCode, rootAccount, removeLedger } = useLedger({
+    const { errorCode, rootAccount, disconnectLedger } = useLedgerDevice({
         deviceId: device.id,
     })
+    const [rootAcc, setRootAcc] = useState<VETLedgerAccount | undefined>(
+        rootAccount ? ({ ...rootAccount } as VETLedgerAccount) : undefined,
+    )
 
     useEffect(() => {
         // root account will be undefined if the user disconnects. We don't care abet that, we only want to read it
@@ -60,15 +62,19 @@ export const SelectLedgerAccounts: React.FC<Props> = ({ route }) => {
 
     const ledgerErrorCode = useMemo(() => {
         if (rootAcc) return undefined
-
+        if (!errorCode) return undefined
         return errorCode
     }, [errorCode, rootAcc])
 
     const { ref, onOpen, onClose } = useBottomSheetModal()
 
     useEffect(() => {
-        if (ledgerErrorCode) onOpen()
-    }, [ledgerErrorCode, onOpen])
+        if (ledgerErrorCode) {
+            onOpen()
+        } else {
+            onClose()
+        }
+    }, [ledgerErrorCode, onClose, onOpen])
 
     const [ledgerAccounts, setLedgerAccounts] = useState<LedgerAccount[]>([])
     const [ledgerAccountsLoading, setLedgerAccountsLoading] = useState(false)
@@ -76,14 +82,14 @@ export const SelectLedgerAccounts: React.FC<Props> = ({ route }) => {
     const [isScrollable, setIsScrollable] = useState(false)
 
     const navigateNext = useCallback(async () => {
-        await removeLedger()
+        await disconnectLedger()
 
         if (userHasOnboarded) {
             nav.navigate(Routes.WALLET_SUCCESS)
         } else {
             nav.navigate(Routes.APP_SECURITY)
         }
-    }, [removeLedger, nav, userHasOnboarded])
+    }, [disconnectLedger, nav, userHasOnboarded])
 
     const onConfirm = useCallback(async () => {
         try {
@@ -112,15 +118,15 @@ export const SelectLedgerAccounts: React.FC<Props> = ({ route }) => {
      */
     useEffect(() => {
         const getLedgerAccounts = async () => {
-            if (rootAcc) {
+            if (rootAccount) {
                 setLedgerAccountsLoading(true)
-                const accounts = await LedgerUtils.getAccountsWithBalances(rootAcc, selectedNetwork, 10)
+                const accounts = await LedgerUtils.getAccountsWithBalances(rootAccount, selectedNetwork, 10)
                 setLedgerAccounts(accounts)
             }
             setLedgerAccountsLoading(false)
         }
         getLedgerAccounts()
-    }, [rootAcc, selectedNetwork])
+    }, [rootAccount, selectedNetwork])
 
     const renderItem = ({ item, index }: { item: LedgerAccount; index: number }) => {
         const isSelected = selectedAccountsIndex.some(ind => ind === index)
@@ -178,7 +184,7 @@ export const SelectLedgerAccounts: React.FC<Props> = ({ route }) => {
 
     return (
         <Layout
-            onGoBack={removeLedger}
+            beforeNavigating={disconnectLedger}
             fixedHeader={
                 <BaseView>
                     <BaseView flexDirection="row" w={100}>

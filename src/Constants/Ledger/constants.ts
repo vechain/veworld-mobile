@@ -11,7 +11,7 @@ export enum LEDGER_ERROR_CODES {
     NO_VET_APP = "no_vet_app",
     UNKNOWN = "unknown",
     WRONG_ROOT_ACCOUNT = "wrong_root_account",
-    DISCONNECTED = "disconnected",
+    CONNECTING = "connecting",
     WAITING_SIGNATURE = "waiting_signature",
     CONTRACT_AND_CLAUSES_DISABLED = "contracts_and_clauses_disabled",
     CONTRACT_DISABLED = "contract_disabled",

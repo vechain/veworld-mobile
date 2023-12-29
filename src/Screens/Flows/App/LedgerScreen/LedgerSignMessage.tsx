@@ -3,7 +3,7 @@ import Lottie from "lottie-react-native"
 import React, { useCallback, useEffect, useMemo, useState } from "react"
 import { StyleSheet } from "react-native"
 import { BlePairingDark } from "~Assets"
-import { useBottomSheetModal, useLedger } from "~Hooks"
+import { useBottomSheetModal, useLedgerDevice } from "~Hooks"
 import {
     BackButtonHeader,
     BaseButton,
@@ -63,9 +63,8 @@ export const LedgerSignMessage: React.FC<Props> = ({ route }) => {
         }
     }, [message])
 
-    const { appOpen, errorCode, withTransport, removeLedger } = useLedger({
+    const { appOpen, errorCode, withTransport, disconnectLedger } = useLedgerDevice({
         deviceId: accountWithDevice.device.deviceId,
-        autoConnect: true,
     })
 
     useEffect(() => {
@@ -75,9 +74,8 @@ export const LedgerSignMessage: React.FC<Props> = ({ route }) => {
     }, [openConnectionErrorSheet, errorCode])
 
     const ledgerErrorCode = useMemo(() => {
-        if (errorCode) return errorCode
-
         if (isAwaitingSignature && !signingError) return LEDGER_ERROR_CODES.WAITING_SIGNATURE
+        if (errorCode) return errorCode
     }, [errorCode, isAwaitingSignature, signingError])
 
     const Steps: Step[] = useMemo(
@@ -95,11 +93,11 @@ export const LedgerSignMessage: React.FC<Props> = ({ route }) => {
                 isNextText: LL.LEDGER_SIGN_DATA(),
                 isDoneText: LL.LEDGER_DATA_SIGNED(),
                 progressPercentage: 75,
-                title: LL.MESSAGE_LEDGER_SIGN_DATA(),
-                subtitle: LL.MESSAGE_LEDGER_SIGN_DATA_SB(),
+                title: userRejected ? LL.MESSAGE_LEDGER_REJECTED() : LL.MESSAGE_LEDGER_SIGN_DATA(),
+                subtitle: userRejected ? LL.MESSAGE_LEDGER_REJECTED_SB() : LL.MESSAGE_LEDGER_SIGN_DATA_SB(),
             },
         ],
-        [LL],
+        [LL, userRejected],
     )
 
     const currentStep = useMemo(() => {
@@ -186,7 +184,7 @@ export const LedgerSignMessage: React.FC<Props> = ({ route }) => {
 
             await processRequest(requestEvent, HexUtils.addPrefix(signature.toString("hex")))
 
-            await removeLedger()
+            await disconnectLedger()
 
             navigateOnFinish()
         } catch (e) {
@@ -199,7 +197,12 @@ export const LedgerSignMessage: React.FC<Props> = ({ route }) => {
         } finally {
             setIsSending(false)
         }
-    }, [removeLedger, requestEvent, processRequest, LL, signature, navigateOnFinish])
+    }, [disconnectLedger, requestEvent, processRequest, LL, signature, navigateOnFinish])
+
+    const handleOnRetry = useCallback(() => {
+        // this will trigger the useEffect to sign the transaction again
+        setUserRejected(false)
+    }, [])
 
     const BottomButton = useCallback(() => {
         if (currentStep === SigningStep.SIGNING && userRejected) {
@@ -210,7 +213,7 @@ export const LedgerSignMessage: React.FC<Props> = ({ route }) => {
                     haptics="Light"
                     title={LL.BTN_RETRY()}
                     isLoading={isSending}
-                    action={signMessage}
+                    action={handleOnRetry}
                 />
             )
         }
@@ -230,11 +233,11 @@ export const LedgerSignMessage: React.FC<Props> = ({ route }) => {
         }
 
         return <></>
-    }, [currentStep, userRejected, isSending, LL, signMessage, signature, handleOnConfirm])
+    }, [currentStep, userRejected, LL, isSending, handleOnRetry, signature, handleOnConfirm])
 
     return (
         <BaseSafeArea grow={1}>
-            <BackButtonHeader beforeNavigating={removeLedger} />
+            <BackButtonHeader beforeNavigating={disconnectLedger} />
             <BaseView alignItems="flex-start" flexGrow={1} flex={1} mx={20}>
                 <BaseText typographyFont="title">{LL.SEND_LEDGER_TITLE()}</BaseText>
                 <BaseText typographyFont="body" my={10}>

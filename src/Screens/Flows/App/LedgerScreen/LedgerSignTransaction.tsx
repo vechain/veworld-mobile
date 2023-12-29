@@ -3,7 +3,7 @@ import Lottie from "lottie-react-native"
 import React, { useCallback, useEffect, useMemo, useState } from "react"
 import { StyleSheet } from "react-native"
 import { BlePairingDark } from "~Assets"
-import { useAnalyticTracking, useBottomSheetModal, useLedger, useSendTransaction } from "~Hooks"
+import { useAnalyticTracking, useBottomSheetModal, useLedgerDevice, useSendTransaction } from "~Hooks"
 import {
     BaseButton,
     BaseSpacer,
@@ -36,6 +36,8 @@ import { ActivityType } from "~Model"
 import { LedgerConfig } from "~Utils/LedgerUtils/LedgerUtils"
 import { useInAppBrowser } from "~Components/Providers/InAppBrowserProvider"
 
+const MUTEX_TIMEOUT = 1000
+
 type Props = NativeStackScreenProps<RootStackParamListHome & RootStackParamListSwitch, Routes.LEDGER_SIGN_TRANSACTION>
 
 enum SignSteps {
@@ -67,7 +69,16 @@ export const LedgerSignTransaction: React.FC<Props> = ({ route }) => {
         onClose: closeConnectionErrorSheet,
     } = useBottomSheetModal()
 
-    const { appOpen, appConfig, errorCode, withTransport, removeLedger, tryLedgerVerification } = useLedger({
+    const {
+        appOpen,
+        appConfig,
+        errorCode,
+        withTransport,
+        disconnectLedger,
+        startPollingCorrectDeviceSettings,
+        stopPollingCorrectDeviceSettings,
+        stopPollingDeviceStatus,
+    } = useLedgerDevice({
         deviceId: accountWithDevice.device.deviceId,
     })
 
@@ -115,10 +126,8 @@ export const LedgerSignTransaction: React.FC<Props> = ({ route }) => {
     // errorCode + validate signature
     const ledgerErrorCode = useMemo(() => {
         if (signature) return
-
-        if (errorCode) return errorCode
-
         if (isAwaitingSignature && !signingError) return LEDGER_ERROR_CODES.WAITING_SIGNATURE
+        if (errorCode) return errorCode
     }, [signature, errorCode, isAwaitingSignature, signingError])
 
     const Steps: Step[] = useMemo(
@@ -127,7 +136,7 @@ export const LedgerSignTransaction: React.FC<Props> = ({ route }) => {
                 isActiveText: LL.LEDGER_CONNECTING(),
                 isNextText: LL.LEDGER_CONNECT(),
                 isDoneText: LL.LEDGER_CONNECTED(),
-                progressPercentage: 25,
+                progressPercentage: 15,
                 title: LL.SEND_LEDGER_CHECK_CONNECTION(),
                 subtitle: LL.SEND_LEDGER_CHECK_CONNECTION_SB(),
             },
@@ -143,12 +152,12 @@ export const LedgerSignTransaction: React.FC<Props> = ({ route }) => {
                 isActiveText: LL.LEDGER_SIGNING(),
                 isNextText: LL.LEDGER_SIGN_DATA(),
                 isDoneText: LL.LEDGER_DATA_SIGNED(),
-                progressPercentage: 75,
-                title: LL.SEND_LEDGER_SIGN_DATA(),
-                subtitle: LL.SEND_LEDGER_SIGN_DATA_SB(),
+                progressPercentage: 85,
+                title: userRejected ? LL.SEND_LEDGER_REJECTED_TRANSACTION() : LL.SEND_LEDGER_SIGN_DATA(),
+                subtitle: userRejected ? LL.SEND_LEDGER_REJECTED_TRANSACTION_SB() : LL.SEND_LEDGER_SIGN_DATA_SB(),
             },
         ],
-        [LL],
+        [LL, userRejected],
     )
 
     const currentStep = useMemo(() => {
@@ -203,12 +212,25 @@ export const LedgerSignTransaction: React.FC<Props> = ({ route }) => {
      */
     useEffect(() => {
         if (!userRejected && !signature && appOpen && appConfig === LedgerConfig.CLAUSE_AND_CONTRACT_ENABLED) {
+            stopPollingCorrectDeviceSettings()
+            stopPollingDeviceStatus()
             setSigningError(false)
-            signTransaction()
+            // setTimeout is an hack to avoid mutex error
+            setTimeout(() => signTransaction(), MUTEX_TIMEOUT)
         } else {
-            debug(ERROR_EVENTS.LEDGER, "LedgerSignTransaction:signTransaction:skipped")
+            debug(ERROR_EVENTS.LEDGER, "[LedgerSignTransaction] - skipping signTransaction")
+            startPollingCorrectDeviceSettings()
         }
-    }, [userRejected, appOpen, appConfig, signature, signTransaction])
+    }, [
+        userRejected,
+        appOpen,
+        appConfig,
+        signature,
+        signTransaction,
+        startPollingCorrectDeviceSettings,
+        stopPollingCorrectDeviceSettings,
+        stopPollingDeviceStatus,
+    ])
 
     useEffect(() => {
         if (currentStep >= SignSteps.SIGNING) {
@@ -263,7 +285,7 @@ export const LedgerSignTransaction: React.FC<Props> = ({ route }) => {
             const txId = await sendTransaction(transaction)
             await Haptics.notificationAsync(Haptics.NotificationFeedbackType.Success)
 
-            await removeLedger()
+            await disconnectLedger()
 
             //If DApp transaction
 
@@ -274,7 +296,7 @@ export const LedgerSignTransaction: React.FC<Props> = ({ route }) => {
                         signer: accountWithDevice.address,
                     })
                 } else {
-                    await postMessage({
+                    postMessage({
                         id: dappRequest.id,
                         data: {
                             txid: txId,
@@ -308,7 +330,7 @@ export const LedgerSignTransaction: React.FC<Props> = ({ route }) => {
         transaction,
         delegationSignature,
         sendTransaction,
-        removeLedger,
+        disconnectLedger,
         dappRequest,
         postMessage,
         navigateOnFinish,
@@ -318,15 +340,22 @@ export const LedgerSignTransaction: React.FC<Props> = ({ route }) => {
         processRequest,
     ])
 
+    const handleOnRetry = useCallback(() => {
+        startPollingCorrectDeviceSettings()
+        // this will trigger the useEffect to sign the transaction again
+        // setTimeout is an hack to avoid mutex error
+        setTimeout(() => setUserRejected(false), MUTEX_TIMEOUT)
+    }, [startPollingCorrectDeviceSettings])
+
     const BottomButton = useCallback(() => {
-        if (currentStep === SignSteps.SIGNING && userRejected) {
+        if (currentStep === SignSteps.SIGNING && (userRejected || signingError)) {
             return (
                 <BaseButton
                     mx={24}
                     haptics="Light"
                     title={LL.BTN_RETRY()}
                     isLoading={isSending}
-                    action={signTransaction}
+                    action={handleOnRetry}
                 />
             )
         }
@@ -345,11 +374,11 @@ export const LedgerSignTransaction: React.FC<Props> = ({ route }) => {
         }
 
         return <></>
-    }, [currentStep, userRejected, isSending, LL, signTransaction, signature, handleOnConfirm])
+    }, [currentStep, userRejected, signingError, LL, isSending, handleOnRetry, signature, handleOnConfirm])
 
     return (
         <Layout
-            beforeNavigating={removeLedger}
+            beforeNavigating={disconnectLedger}
             body={
                 <BaseView style={styles.container}>
                     <BaseText typographyFont="title">{LL.SEND_LEDGER_TITLE()}</BaseText>
@@ -376,7 +405,6 @@ export const LedgerSignTransaction: React.FC<Props> = ({ route }) => {
                         ref={connectionErrorSheetRef}
                         onDismiss={closeConnectionErrorSheet}
                         error={ledgerErrorCode}
-                        onRetry={tryLedgerVerification}
                     />
                 </BaseView>
             }

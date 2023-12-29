@@ -170,7 +170,7 @@ describe("useTransactionScreen", () => {
                 name: "VTHO",
                 symbol: "VTHO",
             },
-            isDissabledButtonState: true,
+            isDisabledButtonState: true,
             priorityFees: {
                 gasFee: "0.00",
                 gasRaw: BigNutils("0"),
