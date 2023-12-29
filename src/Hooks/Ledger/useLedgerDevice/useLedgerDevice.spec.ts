@@ -1,37 +1,34 @@
 import { renderHook } from "@testing-library/react-hooks"
-import { useLedger } from "."
+import { useLedgerDevice } from "."
 
 import { TestHelpers } from "~Test"
 import { act } from "@testing-library/react-native"
 import BleTransport from "@ledgerhq/react-native-hw-transport-ble"
-import { useLedgerSubscription } from "~Hooks"
+import { useScanLedgerDevices } from "~Hooks"
 import { LedgerConfig } from "~Utils/LedgerUtils/LedgerUtils"
 import { LEDGER_ERROR_CODES } from "~Constants"
 
-jest.mock("~Hooks/useLedgerSubscription/useLedgerSubscription")
+jest.mock("~Hooks/Ledger/useScanLedgerDevices/useScanLedgerDevices")
 
 const deviceId = "testDeviceId"
 
-describe("useLedger", () => {
+describe("useLedgerDevice", () => {
     beforeEach(() => {
         jest.clearAllMocks()
         jest.mock("@ledgerhq/react-native-hw-transport-ble", () => ({
             default: TestHelpers.data.mockedTransport,
         }))
-        ;(useLedgerSubscription as jest.MockedFunction<typeof useLedgerSubscription>).mockReturnValue({
-            canConnect: true,
+        ;(useScanLedgerDevices as jest.MockedFunction<typeof useScanLedgerDevices>).mockReturnValue({
             availableDevices: [],
             unsubscribe: jest.fn(),
-            timedOut: false,
-            setCanConnect: jest.fn(),
+            scanForDevices: jest.fn(),
         })
     })
     describe("waitFirstManualConnection", () => {
         it("works correctly on first call", async () => {
             const { result } = renderHook(() =>
-                useLedger({
+                useLedgerDevice({
                     deviceId,
-                    autoConnect: false,
                 }),
             )
 
@@ -40,28 +37,29 @@ describe("useLedger", () => {
                 appConfig: LedgerConfig.UNKNOWN,
                 rootAccount: undefined,
                 errorCode: undefined,
-                tryLedgerConnection: expect.any(Function),
-                tryLedgerVerification: expect.any(Function),
+                connectLedger: expect.any(Function),
                 isConnecting: false,
-                removeLedger: expect.any(Function),
+                disconnectLedger: expect.any(Function),
+                startPollingCorrectDeviceSettings: expect.any(Function),
+                stopPollingCorrectDeviceSettings: expect.any(Function),
+                stopPollingDeviceStatus: expect.any(Function),
                 withTransport: undefined,
             })
         })
 
-        it("call openOrFinalizeConnection - disconnected", async () => {
+        it("call openOrFinalizeConnection - connecting", async () => {
             jest.spyOn(BleTransport, "open").mockImplementation(async () => {
                 throw new Error("test error")
             })
 
             const { result, waitForNextUpdate } = renderHook(() =>
-                useLedger({
+                useLedgerDevice({
                     deviceId,
-                    autoConnect: false,
                 }),
             )
 
             act(async () => {
-                await result.current.tryLedgerConnection()
+                await result.current.connectLedger()
             })
             await waitForNextUpdate({ timeout: 5000 })
 
@@ -69,28 +67,29 @@ describe("useLedger", () => {
                 appOpen: false,
                 appConfig: LedgerConfig.UNKNOWN,
                 rootAccount: undefined,
-                errorCode: LEDGER_ERROR_CODES.UNKNOWN,
-                tryLedgerConnection: expect.any(Function),
-                tryLedgerVerification: expect.any(Function),
+                errorCode: LEDGER_ERROR_CODES.CONNECTING,
+                connectLedger: expect.any(Function),
                 isConnecting: false,
-                removeLedger: expect.any(Function),
+                disconnectLedger: expect.any(Function),
+                startPollingCorrectDeviceSettings: expect.any(Function),
+                stopPollingCorrectDeviceSettings: expect.any(Function),
+                stopPollingDeviceStatus: expect.any(Function),
                 withTransport: undefined,
             })
         })
-        it("call openOrFinalizeConnection - unknown error on getAppConfig", async () => {
+        it("call openOrFinalizeConnection - connecting error on getAppConfig", async () => {
             jest.spyOn(BleTransport, "open").mockImplementation(async () => {
                 return TestHelpers.data.mockedTransport
             })
 
             const { result, waitForNextUpdate } = renderHook(() =>
-                useLedger({
+                useLedgerDevice({
                     deviceId,
-                    autoConnect: false,
                 }),
             )
 
             act(async () => {
-                await result.current.tryLedgerConnection()
+                await result.current.connectLedger()
             })
             await waitForNextUpdate({ timeout: 5000 })
 
@@ -98,11 +97,13 @@ describe("useLedger", () => {
                 appOpen: false,
                 appConfig: LedgerConfig.UNKNOWN,
                 rootAccount: undefined,
-                errorCode: LEDGER_ERROR_CODES.UNKNOWN,
-                tryLedgerConnection: expect.any(Function),
-                tryLedgerVerification: expect.any(Function),
+                errorCode: LEDGER_ERROR_CODES.CONNECTING,
+                connectLedger: expect.any(Function),
                 isConnecting: false,
-                removeLedger: expect.any(Function),
+                disconnectLedger: expect.any(Function),
+                startPollingCorrectDeviceSettings: expect.any(Function),
+                stopPollingCorrectDeviceSettings: expect.any(Function),
+                stopPollingDeviceStatus: expect.any(Function),
                 withTransport: undefined,
             })
         })

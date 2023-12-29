@@ -59,7 +59,14 @@ export const PaymentProviderList = () => {
         [nav, styles.arrowBackground, styles.card, theme.colors.text, theme.colors.textReversed, track],
     )
 
-    return <FlatList data={paymentsProviders} renderItem={renderItem} keyExtractor={item => item.id} />
+    return (
+        <FlatList
+            showsVerticalScrollIndicator={false}
+            data={paymentsProviders}
+            renderItem={renderItem}
+            keyExtractor={item => item.id}
+        />
+    )
 }
 
 const baseStyles = (theme: ColorThemeType) =>

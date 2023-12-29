@@ -195,7 +195,7 @@ export const SendTransactionScreen: FC<Props> = ({ route }: Props) => {
         selectedDelegationAccount,
         selectedDelegationUrl,
         vtho,
-        isDissabledButtonState,
+        isDisabledButtonState,
         isLoading,
         priorityFees,
     } = useTransactionScreen({
@@ -279,7 +279,7 @@ export const SendTransactionScreen: FC<Props> = ({ route }: Props) => {
                         haptics="Light"
                         title={LL.COMMON_BTN_SIGN_AND_SEND()}
                         action={onSubmit}
-                        disabled={isLoading || isDissabledButtonState || (!validConnectedApp && !isInvalidChecked)}
+                        disabled={isLoading || isDisabledButtonState || (!validConnectedApp && !isInvalidChecked)}
                         isLoading={isLoading}
                     />
                     <BaseSpacer height={16} />
