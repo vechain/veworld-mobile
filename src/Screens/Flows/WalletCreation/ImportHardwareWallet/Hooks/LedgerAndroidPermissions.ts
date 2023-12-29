@@ -1,5 +1,6 @@
 import { useCallback, useEffect, useState } from "react"
 import { Linking, PermissionsAndroid, Platform } from "react-native"
+import DeviceInfo from "react-native-device-info"
 
 export const LedgerAndroidPermissions = () => {
     const [androidPermissionsGranted, setAndroidPermissionsGranted] = useState(false)
@@ -8,11 +9,20 @@ export const LedgerAndroidPermissions = () => {
     const checkPermissions = useCallback(
         async (fromUseEffect = false) => {
             if (Platform.OS === "android") {
-                const permissionResponses = await PermissionsAndroid.requestMultiple([
-                    PermissionsAndroid.PERMISSIONS.ACCESS_FINE_LOCATION,
-                    PermissionsAndroid.PERMISSIONS.BLUETOOTH_CONNECT,
-                    PermissionsAndroid.PERMISSIONS.BLUETOOTH_SCAN,
-                ])
+                let permissionResponses = {}
+
+                /*
+                    No need to request permissions if the api is lower than 33
+                */
+                // https://stackoverflow.com/a/76321476/7977491
+                if (DeviceInfo.getApiLevelSync() > 32) {
+                    permissionResponses = await PermissionsAndroid.requestMultiple([
+                        PermissionsAndroid.PERMISSIONS.BLUETOOTH_CONNECT,
+                        PermissionsAndroid.PERMISSIONS.ACCESS_FINE_LOCATION,
+                        PermissionsAndroid.PERMISSIONS.BLUETOOTH_SCAN,
+                    ])
+                }
+
                 const permissionStatuses = Object.values(permissionResponses)
                 const allGranted = permissionStatuses.every(status => status === PermissionsAndroid.RESULTS.GRANTED)
 
