@@ -33,6 +33,8 @@ public class MainActivity extends ReactActivity {
     super.onCreate(null);
 
     SentryAndroid.init(this, options -> {
+      // https://forum.sentry.io/t/how-does-sentry-prevent-spammers/8188
+
       options.setDsn("https://d9f6366fe78846b88450241b1bc23e05@o4505487555297280.ingest.sentry.io/4505487558508544");
       // Add a callback that will be used before the event is sent to Sentry.
       // With this callback, you can modify the event or, when returning null, also discard the event.
