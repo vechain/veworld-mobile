@@ -20,7 +20,7 @@ export const BuyScreen = () => {
                     <BaseSpacer height={8} />
                 </>
             }
-            body={
+            fixedBody={
                 <BaseView
                     flex={1}
                     flexDirection="column"
