@@ -87,6 +87,14 @@ Commit latest artifacts to GitHub
 
 
 
+### ios create_tags_gh
+
+```sh
+[bundle exec] fastlane ios create_tags_gh
+```
+
+
+
 ### ios build
 
 ```sh

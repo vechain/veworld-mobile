@@ -155,6 +155,17 @@ platform :ios do
     end
   end
 
+  lane :create_tags_gh do |values|
+    build = values[:build]
+    version = values[:version]
+
+    add_git_tag(
+      tag: "v#{version}-#{build}"
+    )
+
+    push_git_tags
+  end
+
 
 
 
@@ -235,11 +246,7 @@ platform :ios do
 
       create_changelog(version:version)
 
-      add_git_tag(
-        tag: "v#{version}-#{build}"
-      )
-
-      push_git_tags
+      create_tags_gh(build:build, version:version)
 
       upload_source_maps_to_sentry(build:build, version:version)
 
