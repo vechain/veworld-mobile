@@ -1,3 +1,7 @@
+plugins {
+  id "io.sentry.android.gradle" version "4.1.1"
+}
+
 apply plugin: "com.android.application"
 apply plugin: "com.facebook.react"
 apply plugin: "kotlin-android"
@@ -140,6 +144,8 @@ dependencies {
     implementation("com.facebook.react:react-android")
 
     implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:1.9.0"
+
+     implementation 'io.sentry:sentry-android:7.1.0'
 
     debugImplementation("com.facebook.flipper:flipper:${FLIPPER_VERSION}")
     debugImplementation("com.facebook.flipper:flipper-network-plugin:${FLIPPER_VERSION}") {
