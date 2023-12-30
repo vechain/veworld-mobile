@@ -2,15 +2,10 @@ package org.vechain.veworld.app;
 import expo.modules.ReactActivityDelegateWrapper;
 
 import android.os.Bundle;
-import android.util.Log;
 
 import com.zoontek.rnbootsplash.RNBootSplash;
 
 import com.facebook.react.ReactActivity;
-
-import io.sentry.Sentry;
-import io.sentry.SentryLevel;
-import io.sentry.android.core.SentryAndroid;
 
 import com.facebook.react.ReactActivityDelegate;
 import com.facebook.react.defaults.DefaultNewArchitectureEntryPoint;
@@ -31,34 +26,6 @@ public class MainActivity extends ReactActivity {
   protected void onCreate(Bundle savedInstanceState) {
     RNBootSplash.init(this, R.style.BootTheme);
     super.onCreate(null);
-
-    SentryAndroid.init(this, options -> {
-      // https://forum.sentry.io/t/how-does-sentry-prevent-spammers/8188
-
-      options.setDsn("https://d9f6366fe78846b88450241b1bc23e05@o4505487555297280.ingest.sentry.io/4505487558508544");
-      // Add a callback that will be used before the event is sent to Sentry.
-      // With this callback, you can modify the event or, when returning null, also discard the event.
-      options.setBeforeSend((event, hint) -> {
-
-        event.setTag("Feature_Tag", "NATIVE_ANDROID");
-
-        if (SentryLevel.DEBUG.equals(event.getLevel()))
-          return null;
-        else {
-          return event;
-        }
-      });
-    });
-
-
-    /*
-      try {
-        throw new CustomException("Custom exception occurred");
-      } catch(Exception e) {
-        Sentry.captureMessage("Something went wrong");
-        Sentry.captureException(e);
-      }
-    */
   }
 
   /**
