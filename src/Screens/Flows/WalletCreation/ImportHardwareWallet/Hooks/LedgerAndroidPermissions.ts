@@ -21,6 +21,10 @@ export const LedgerAndroidPermissions = () => {
                         PermissionsAndroid.PERMISSIONS.ACCESS_FINE_LOCATION,
                         PermissionsAndroid.PERMISSIONS.BLUETOOTH_SCAN,
                     ])
+                } else {
+                    permissionResponses = await PermissionsAndroid.requestMultiple([
+                        PermissionsAndroid.PERMISSIONS.ACCESS_FINE_LOCATION,
+                    ])
                 }
 
                 const permissionStatuses = Object.values(permissionResponses)

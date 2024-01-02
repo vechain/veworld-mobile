@@ -3663,39 +3663,39 @@
   dependencies:
     defer-to-connect "^2.0.1"
 
-"@tanstack/query-core@5.15.5":
-  version "5.15.5"
-  resolved "https://registry.yarnpkg.com/@tanstack/query-core/-/query-core-5.15.5.tgz#4e2b065abce6c7e9a00b2e5441c93c9762273646"
-  integrity sha512-GDwVfu8RPswqVu27+zuIkZINru6CN++zzBbBK+OnAgzxK8N4Obdi+sG2P0EO8rJAOw0fLyQTsO4GCZ1djwaUCg==
+"@tanstack/query-core@5.17.0":
+  version "5.17.0"
+  resolved "https://registry.yarnpkg.com/@tanstack/query-core/-/query-core-5.17.0.tgz#3fd41e8557de9904c76e92b3820f62407223c990"
+  integrity sha512-LoBaPtbMY26kRS+ohII4thTsWkJJsXKGitOLikTo2aqPA4yy7cfFJITs8DRnuERT7tLF5xfG9Lnm33Vp/38Vmw==
 
-"@tanstack/query-persist-client-core@5.15.5":
-  version "5.15.5"
-  resolved "https://registry.yarnpkg.com/@tanstack/query-persist-client-core/-/query-persist-client-core-5.15.5.tgz#97c12b934588bcabc5c4683a9369ca3193068cb9"
-  integrity sha512-g59mynjwyYmrCcid5mcCdEZCpXqiOQakenUlVinjCSIdS2sqYnH8tDCGOGdZo+HNNHtpLI5jaKRjVHPsgICvxg==
+"@tanstack/query-persist-client-core@5.17.0":
+  version "5.17.0"
+  resolved "https://registry.yarnpkg.com/@tanstack/query-persist-client-core/-/query-persist-client-core-5.17.0.tgz#476598fc388d599250bf2f7635549c883cccbac1"
+  integrity sha512-aUcdQ52+/dx+MJXphCfC74NzvPnJPn7qzRH/3Pc1cFFyT7LvEvlbpf0tsVDaLvXsLa8gDWwd4BXwJltAIfrewA==
   dependencies:
-    "@tanstack/query-core" "5.15.5"
+    "@tanstack/query-core" "5.17.0"
 
 "@tanstack/query-sync-storage-persister@^5.14.1":
-  version "5.15.5"
-  resolved "https://registry.yarnpkg.com/@tanstack/query-sync-storage-persister/-/query-sync-storage-persister-5.15.5.tgz#5b8894c4002fb21ab6ffee71ba835d3bdb323c72"
-  integrity sha512-OKYiVzZtH+55QRufwGXs7WMREREA6H1D0oyoNpF7pDv4Uue+xlptrxk/ioCxQ2M/mhA/a2Qw7TdVtXLXZJuIog==
+  version "5.17.0"
+  resolved "https://registry.yarnpkg.com/@tanstack/query-sync-storage-persister/-/query-sync-storage-persister-5.17.0.tgz#e656a22bbceaff0c57885e6aaddb58ca71c9a3f8"
+  integrity sha512-7XFlW7bhiWQzxBwEJxewdR+a22HJfSQ5fGdFIen0lg3VvXIJivG6ISCKtryKseybhi+i8uwYzc1ZE3cg5T7jgg==
   dependencies:
-    "@tanstack/query-core" "5.15.5"
-    "@tanstack/query-persist-client-core" "5.15.5"
+    "@tanstack/query-core" "5.17.0"
+    "@tanstack/query-persist-client-core" "5.17.0"
 
 "@tanstack/react-query-persist-client@^5.14.1":
-  version "5.15.5"
-  resolved "https://registry.yarnpkg.com/@tanstack/react-query-persist-client/-/react-query-persist-client-5.15.5.tgz#2c4fd00aa662fd8264fdd1d96f1094a65b443c2b"
-  integrity sha512-3ODhXfMFzMvKvmQoOJMxQOYg3E1D3onV4QjjTrkz9HfEA60HCATMYfeUuq9G/YtYKoEgni79/u62mtgKmqYelw==
+  version "5.17.0"
+  resolved "https://registry.yarnpkg.com/@tanstack/react-query-persist-client/-/react-query-persist-client-5.17.0.tgz#0a0f9b7459a66b4bd97a38232f18a681a5773fe4"
+  integrity sha512-fN3wBzhu+oBnrw043DnaZTfuf8wR/TCGdBmQFKEQbap3UhX/kSNvRVtma7MP0Au5V3RYc44/P81fAhxKVzxPfw==
   dependencies:
-    "@tanstack/query-persist-client-core" "5.15.5"
+    "@tanstack/query-persist-client-core" "5.17.0"
 
 "@tanstack/react-query@^5.14.1":
-  version "5.15.5"
-  resolved "https://registry.yarnpkg.com/@tanstack/react-query/-/react-query-5.15.5.tgz#c8709de9fc28b0caa6aed4f70fefbf0f116d991d"
-  integrity sha512-JSPpzsJPqpNySgjMhAvBpF3gVhtlI/0bZrBmwmcD/ewYYOExll+tIz13gkgnCfNA1qTJQnbv7vdc2gw594vq9Q==
+  version "5.17.0"
+  resolved "https://registry.yarnpkg.com/@tanstack/react-query/-/react-query-5.17.0.tgz#3a50e2eb2310cfb560ddf97fd4ffac1da092a586"
+  integrity sha512-iNSn6ZA7mHUjrT0a271eKoa1oR1HznlrGbb475awft1kuP3zrhyUCrI8tlGowOr7zRoAxJholjwxO+gfz1IObw==
   dependencies:
-    "@tanstack/query-core" "5.15.5"
+    "@tanstack/query-core" "5.17.0"
 
 "@teppeis/multimaps@3.0.0":
   version "3.0.0"
@@ -8036,9 +8036,9 @@ flow-parser@^0.206.0:
   integrity sha512-HVzoK3r6Vsg+lKvlIZzaWNBVai+FXTX1wdYhz/wVlH13tb/gOdLXmlTqy6odmTBhT5UoWUbq0k8263Qhr9d88w==
 
 follow-redirects@^1.14.0, follow-redirects@^1.15.0:
-  version "1.15.3"
-  resolved "https://registry.yarnpkg.com/follow-redirects/-/follow-redirects-1.15.3.tgz#fe2f3ef2690afce7e82ed0b44db08165b207123a"
-  integrity sha512-1VzOtuEM8pC9SFU1E+8KfTjZyMztRsgEfwQl44z8A25uy13jSzTj6dyK2Df52iV0vgHCfBwLhDWevLn95w5v6Q==
+  version "1.15.4"
+  resolved "https://registry.yarnpkg.com/follow-redirects/-/follow-redirects-1.15.4.tgz#cdc7d308bf6493126b17ea2191ea0ccf3e535adf"
+  integrity sha512-Cr4D/5wlrb0z9dgERpUL3LrmPKVDsETIJhaCMeDfuFYcqa5bldGV6wBsAN6X/vxlXQtFBMrXdXxdL8CbDTGniw==
 
 fontfaceobserver@^2.1.0:
   version "2.3.0"
@@ -10602,9 +10602,9 @@ loose-envify@^1.0.0, loose-envify@^1.1.0, loose-envify@^1.4.0:
     js-tokens "^3.0.0 || ^4.0.0"
 
 lottie-react-native@^6.3.1:
-  version "6.4.1"
-  resolved "https://registry.yarnpkg.com/lottie-react-native/-/lottie-react-native-6.4.1.tgz#0b3202a0fb914db4f236c4b0658f21b97cb997d7"
-  integrity sha512-DPsUPSxLc3ZffeRQ/AtKtcUl4PzmJEEPt965tNpWSE4vhDkoGFxRe0TPZ45xX8/3HbGsUl48aMdLlAu28MEDsQ==
+  version "6.5.0"
+  resolved "https://registry.yarnpkg.com/lottie-react-native/-/lottie-react-native-6.5.0.tgz#53be58688d0ef047e7f4c3df99c5ed23df6ad88f"
+  integrity sha512-5KA5eAlMYsvcczR5JbJp1JjK3i56Oeilb/5RPs/QmFcn99HVHK+FzxrzGQxyxowaO/jkZkIwR8ccyu0fIsemBA==
 
 lower-case@^2.0.2:
   version "2.0.2"
