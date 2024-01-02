@@ -1,5 +1,4 @@
 {
     "name": "VeWorld",
-    "displayName": "VeWorld",
-    "plugins": ["expo-localization"]
+    "displayName": "VeWorld"
 }
