@@ -57,6 +57,6 @@
             <data android:scheme="veworld" />
         </intent-filter>
         
-      </activity>
+      </activity>       
     </application>
 </manifest>
