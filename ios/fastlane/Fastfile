@@ -207,6 +207,9 @@ platform :ios do
       version = get_version_number(xcodeproj: "VeWorld.xcodeproj")
     end
 
+
+    clear_derived_data
+
     # update yarn packages and pods
     Dir.chdir "../.." do
       sh("yarn purge && yarn install:all")
