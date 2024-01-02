@@ -1,5 +1,19 @@
 
 
+## [1.5.0](https://github.com/vechainfoundation/veworld-mobile/compare/v1.5.0-47...v1.5.0) (2024-01-02)
+
+
+### Features
+
+* add create dapp button ([#1737](https://github.com/vechainfoundation/veworld-mobile/issues/1737)) ([8493040](https://github.com/vechainfoundation/veworld-mobile/commit/8493040b07592ee2b2df30da68d1ef5e578c8803))
+
+
+### Bug Fixes
+
+* Add DeviceInfo dependency and conditionally request permissions on Android ([#1762](https://github.com/vechainfoundation/veworld-mobile/issues/1762)) ([253ad73](https://github.com/vechainfoundation/veworld-mobile/commit/253ad733585314f16cf8902f9a1c2c6ea76d453e))
+* extract github tag script from main script on fastlane ([#1757](https://github.com/vechainfoundation/veworld-mobile/issues/1757)) ([2bd8a87](https://github.com/vechainfoundation/veworld-mobile/commit/2bd8a872f99625654850499787266de60a5c03bb))
+* payment provider list height ([#1766](https://github.com/vechainfoundation/veworld-mobile/issues/1766)) ([8df6ddb](https://github.com/vechainfoundation/veworld-mobile/commit/8df6ddb840c25b4b5c306507b2fa96f7999c3906))
+
 ## [1.5.0](https://github.com/vechainfoundation/veworld-mobile/compare/1.3.0...1.5.0) (2023-12-15)
 
 
