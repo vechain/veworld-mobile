@@ -163,6 +163,7 @@
         "stream-http": "^3.2.0",
         "striptags": "^4.0.0-alpha.4",
         "thor-devkit": "^2.0.9",
+        "ts-retry-promise": "^0.7.1",
         "typesafe-i18n": "^5.26.2",
         "url": "^0.11.3",
         "util": "^0.12.5",

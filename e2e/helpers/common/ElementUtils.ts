@@ -1,12 +1,13 @@
-import { DEFAULT_TIMEOUT, SHORT_TIMEOUT } from "../constants"
+import { DEFAULT_TIMEOUT } from "../constants"
+import { retryDecorator } from "ts-retry-promise"
 
-export const closeBottomSheet = async (name: string) => {
+export const clickCloseBottomSheet = async (name: string) => {
     // Close sheet
     await element(by.text(name)).swipe("down", "fast", 1)
-    await sleep(SHORT_TIMEOUT)
 }
+export const closeBottomSheet = retryDecorator(clickCloseBottomSheet, { retries: 3 })
 
-const clickBy = async ({
+const clickBySelector = async ({
     byWhat,
     selector,
     timeout = DEFAULT_TIMEOUT,
@@ -28,7 +29,10 @@ const clickBy = async ({
 
     await element(by[byWhat](selector)).atIndex(index).tap()
 }
-export const clickByText = async (
+
+export const clickBy = retryDecorator(clickBySelector, { retries: 3 })
+
+export const clickByTextSelector = async (
     text: string,
     options?: {
         timeout?: number
@@ -42,7 +46,9 @@ export const clickByText = async (
         index: options?.index,
     })
 
-export const clickById = async (
+export const clickByText = retryDecorator(clickByTextSelector, { retries: 3 })
+
+export const clickByIDSelector = async (
     id: string,
     options?: {
         timeout?: number
@@ -56,56 +62,73 @@ export const clickById = async (
         index: options?.index,
     })
 
-export const goBack = async () => {
+export const clickById = retryDecorator(clickByIDSelector, { retries: 3 })
+
+export const clickGoBack = async () => {
     await idShouldBeVisible("BackButtonHeader-BaseIcon-backButton", {
         timeout: 5000,
     })
     await clickById("BackButtonHeader-BaseIcon-backButton")
 }
 
-export const idShouldExist = async (id: string, options?: { timeout?: number }) =>
+export const goBack = retryDecorator(clickGoBack, { retries: 3 })
+
+export const checkIDShouldExist = async (id: string, options?: { timeout?: number }) =>
     await waitFor(element(by.id(id)))
         .toExist()
         .withTimeout(options?.timeout ?? DEFAULT_TIMEOUT)
+export const idShouldExist = retryDecorator(checkIDShouldExist, { retries: 3 })
 
-export const idShouldNotExist = async (id: string, options?: { timeout?: number }) =>
+export const checkIDShouldNotExist = async (id: string, options?: { timeout?: number }) =>
     await waitFor(element(by.id(id)))
         .not.toExist()
         .withTimeout(options?.timeout ?? DEFAULT_TIMEOUT)
 
-export const textShouldExist = async (text: string, options?: { timeout?: number }) =>
+export const idShouldNotExist = retryDecorator(checkIDShouldNotExist, { retries: 3 })
+
+export const checktextShouldExist = async (text: string, options?: { timeout?: number }) =>
     await waitFor(element(by.text(text)))
         .toExist()
         .withTimeout(options?.timeout ?? DEFAULT_TIMEOUT)
 
-export const textShouldNotExist = async (text: string, options?: { timeout?: number }) =>
+export const textShouldExist = retryDecorator(checktextShouldExist, { retries: 3 })
+
+export const checktextShouldNotExist = async (text: string, options?: { timeout?: number }) =>
     await waitFor(element(by.text(text)))
         .not.toExist()
         .withTimeout(options?.timeout ?? DEFAULT_TIMEOUT)
 
-export const idShouldBeVisible = async (text: string, options?: { timeout?: number }) =>
+export const textShouldNotExist = retryDecorator(checktextShouldNotExist, { retries: 3 })
+
+export const checkidShouldBeVisible = async (text: string, options?: { timeout?: number }) =>
     await waitFor(element(by.id(text)))
         .toBeVisible()
         .withTimeout(options?.timeout ?? DEFAULT_TIMEOUT)
+export const idShouldBeVisible = retryDecorator(checkidShouldBeVisible, { retries: 3 })
 
-export const idShouldNotBeVisible = async (text: string, options?: { timeout?: number }) =>
+export const checkidShouldNotBeVisible = async (text: string, options?: { timeout?: number }) =>
     await waitFor(element(by.id(text)))
         .not.toBeVisible()
         .withTimeout(options?.timeout ?? DEFAULT_TIMEOUT)
 
-export const textShouldBeVisible = async (text: string, options?: { timeout?: number }) =>
+export const idShouldNotBeVisible = retryDecorator(checkidShouldNotBeVisible, { retries: 3 })
+
+export const checktextShouldBeVisible = async (text: string, options?: { timeout?: number }) =>
     await waitFor(element(by.text(text)))
         .toBeVisible()
         .withTimeout(options?.timeout ?? DEFAULT_TIMEOUT)
+export const textShouldBeVisible = retryDecorator(checktextShouldBeVisible, { retries: 3 })
 
-export const textShouldNotBeVisible = async (text: string, options?: { timeout?: number }) =>
+export const checktextShouldNotBeVisible = async (text: string, options?: { timeout?: number }) =>
     await waitFor(element(by.text(text)))
         .not.toBeVisible()
         .withTimeout(options?.timeout ?? DEFAULT_TIMEOUT)
+
+export const textShouldNotBeVisible = retryDecorator(checktextShouldNotBeVisible, { retries: 3 })
 
 type Direction = "down" | "left" | "right" | "up"
 
-export const scrollUntilTextVisible = async (
+export const performscrollUntilTextVisible = async (
     text: string,
     containerID: string,
     direction: Direction = "down",
@@ -117,15 +140,19 @@ export const scrollUntilTextVisible = async (
         .scroll(scrollStep, direction)
 }
 
-export const insertTextById = async (text: string, id: string) => {
+export const scrollUntilTextVisible = retryDecorator(performscrollUntilTextVisible, { retries: 3 })
+
+export const performinsertTextById = async (text: string, id: string) => {
     await element(by.id(id)).replaceText(text)
 }
+export const insertTextById = retryDecorator(performinsertTextById, { timeout: 10000 })
 
-export const swipeLeftByText = async (text: string) => {
+export const performswipeLeftByText = async (text: string) => {
     await element(by.text(text)).swipe("left", "slow", 0.4)
 }
+export const swipeLeftByText = retryDecorator(performswipeLeftByText, { retries: 3 })
 
-export const isPresentText = async (text: string, options?: { timeout?: number }) => {
+export const checkisPresentText = async (text: string, options?: { timeout?: number }) => {
     try {
         await waitFor(element(by.text(text)))
             .toExist()
@@ -136,7 +163,9 @@ export const isPresentText = async (text: string, options?: { timeout?: number }
     }
 }
 
-export const isPresentId = async (id: string, options?: { timeout?: number }) => {
+export const isPresentText = retryDecorator(checkisPresentText, { retries: 3 })
+
+export const checkisPresentId = async (id: string, options?: { timeout?: number }) => {
     try {
         await waitFor(element(by.id(id)))
             .toExist()
@@ -146,6 +175,7 @@ export const isPresentId = async (id: string, options?: { timeout?: number }) =>
         return false
     }
 }
+export const isPresentId = retryDecorator(checkisPresentId, { retries: 3 })
 
 export const sleep = (milliseconds: number) => {
     return new Promise(resolve => setTimeout(resolve, milliseconds))

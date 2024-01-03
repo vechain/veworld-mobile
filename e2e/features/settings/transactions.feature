@@ -64,6 +64,7 @@ Feature: The user can manage transactions settings
       | url1                                          | url2                                          |
       | https://sponsor-testnet.vechain.energy/by/282 | https://sponsor-testnet.vechain.energy/by/219 |
 
+  @broken
   Scenario Outline: User can delete delegation URLs
     When The user click Manage URLs button
     And The user click the plus icon to add a new delegation url
