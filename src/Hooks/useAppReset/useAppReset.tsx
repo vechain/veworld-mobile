@@ -5,12 +5,15 @@ import { resetApp, useAppDispatch } from "~Storage/Redux"
 import { info } from "~Utils/Logger"
 import { useApplicationSecurity, usePersistedCache, usePersistedTheme } from "~Components/Providers"
 import { ERROR_EVENTS } from "~Constants"
+import { useQueryClient } from "@tanstack/react-query"
 
 export const useAppReset = () => {
     const dispatch = useAppDispatch()
     const { resetAllCaches, initAllCaches } = usePersistedCache()
     const { resetApplication } = useApplicationSecurity()
     const { resetThemeCache } = usePersistedTheme()
+
+    const queryClient = useQueryClient()
 
     // for every device delete the encryption keys from keychain
     const removeEncryptionKeysFromKeychain = useCallback(async () => {
@@ -32,11 +35,13 @@ export const useAppReset = () => {
 
         await resetApplication()
 
+        queryClient.removeQueries()
+
         // TODO: Move this to a more appropriate place
         await initAllCaches()
 
         await dispatch(resetApp())
 
         info(ERROR_EVENTS.SECURTIY, "App Reset Finished")
-    }, [removeEncryptionKeysFromKeychain, resetCaches, resetApplication, initAllCaches, dispatch])
+    }, [removeEncryptionKeysFromKeychain, resetCaches, resetApplication, queryClient, initAllCaches, dispatch])
 }

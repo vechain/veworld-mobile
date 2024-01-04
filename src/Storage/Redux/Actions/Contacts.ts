@@ -1,9 +1,10 @@
 import { AppThunk } from "../Types"
 import { Contact, ContactType } from "~Model"
 import { deleteContact, insertContact } from "../Slices"
-import { FormUtils } from "~Utils"
+import { FormUtils, error } from "~Utils"
 import { updateContact } from "../Slices/Contacts"
 import { address } from "thor-devkit"
+import { ERROR_EVENTS } from "~Constants"
 
 /**
  * createContact: A utility function to create a Contact object.
@@ -32,7 +33,7 @@ const createContact = (_alias: string, _address: string, _type: ContactType): Co
  * @returns {AppThunk<Contact>} - A Redux thunk that dispatches the action.
  */
 const addContact =
-    (_alias: string, _address: string): AppThunk<Contact> =>
+    (_alias: string, _address: string): AppThunk =>
     (dispatch, getState) => {
         const { contacts: contactsState } = getState()
 
@@ -40,39 +41,13 @@ const addContact =
 
         const contactExists = FormUtils.alreadyExists(checksumedAddress, contactsState.contacts, "address")
 
-        if (contactExists) throw new Error("Contact already exists!")
+        if (contactExists) {
+            error(ERROR_EVENTS.SETTINGS, "Contact already exists!")
+            return
+        }
 
         const contact: Contact = createContact(_alias, _address, ContactType.KNOWN)
-
         dispatch(insertContact(contact))
-
-        return contact
-    }
-
-/**
- * The `addCachedContact` action adds a new cached contact with the given
- * address to the contacts state. Throws an error if the contact already
- * exists.
- *
- * @param {_address: string} - The address of the new cached contact.
- * @returns {AppThunk<Contact>} - A Redux thunk that dispatches the action.
- */
-const addCachedContact =
-    (_address: string): AppThunk<Contact> =>
-    (dispatch, getState) => {
-        const { contacts: contactsState } = getState()
-
-        const checksumedAddress = address.toChecksumed(_address)
-
-        const contactExists = FormUtils.alreadyExists(checksumedAddress, contactsState.contacts, "address")
-
-        if (contactExists) throw new Error("Contact already exists!")
-
-        const contact: Contact = createContact("", _address, ContactType.CACHE)
-
-        dispatch(insertContact(contact))
-
-        return contact
     }
 
 /**
@@ -128,4 +103,4 @@ const editContact =
         )
     }
 
-export { addContact, addCachedContact, removeContact, editContact, createContact }
+export { addContact, removeContact, editContact, createContact }
