@@ -3,8 +3,9 @@ import { BaseButton, BaseSpacer, BaseText, BaseView, BaseBottomSheet } from "~Co
 import { useI18nContext } from "~i18n"
 import { useBottomSheetModal } from "~Hooks"
 import DeviceInfo from "react-native-device-info"
-import RNAndroidLocationEnabler from "react-native-android-location-enabler"
+import { promptForEnableLocationIfNeeded } from "react-native-android-location-enabler"
 import { Linking } from "react-native"
+import { PlatformUtils } from "~Utils"
 
 const snapPoints = ["55%"]
 
@@ -32,31 +33,31 @@ export const LocationStatusBottomSheet: React.FC = () => {
         return () => clearTimeout(timer)
     }, [onOpen, onClose])
 
-    const handleOnPress = useCallback(() => {
-        RNAndroidLocationEnabler.promptForEnableLocationIfNeeded({
-            interval: 10000,
-            waitForAccurate: true,
-        })
-            .then(() => {
+    const handleOnPress = useCallback(async () => {
+        if (PlatformUtils.isAndroid()) {
+            try {
+                await promptForEnableLocationIfNeeded()
                 // The user has accepted to enable the location services
-                // (data) =>  can be :
+                // data can be :
                 //  - "already-enabled" if the location services has been already enabled
                 //  - "enabled" if user has clicked on OK button in the popup
                 onClose()
-            })
-            .catch(err => {
-                // The user has not accepted to enable the location services or something went wrong during the process
-                // "err" : { "code" : "ERR00|ERR01|ERR02|ERR03", "message" : "message"}
-                // codes :
-                //  - ERR00 : The user has clicked on Cancel button in the popup
-                //  - ERR01 : If the Settings change are unavailable
-                //  - ERR02 : If the popup has failed to open
-                //  - ERR03 : Internal error
-                if (err.includes(["ERR01", "ERR02", "ERR03"])) {
-                    Linking.openSettings()
-                    onClose()
+            } catch (error: unknown) {
+                if (error instanceof Error) {
+                    // The user has not accepted to enable the location services or something went wrong during the process
+                    // "err" : { "code" : "ERR00|ERR01|ERR02|ERR03", "message" : "message"}
+                    // codes :
+                    //  - ERR00 : The user has clicked on Cancel button in the popup
+                    //  - ERR01 : If the Settings change are unavailable
+                    //  - ERR02 : If the popup has failed to open
+                    //  - ERR03 : Internal error
+                    if (error.message === ("ERR01" || "ERR02" || "ERR03")) {
+                        Linking.openSettings()
+                        onClose()
+                    }
                 }
-            })
+            }
+        }
     }, [onClose])
 
     return (
