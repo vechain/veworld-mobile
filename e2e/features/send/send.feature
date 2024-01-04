@@ -11,8 +11,6 @@ Feature: The user send tokens in test net
     * The user goes to home tab
     * The user is in the send screen
 
-  @broken
-    # Error: All retries failed. Last error: DetoxRuntimeError: Test Failed: No elements found for “MATCHER(id == “InsertAddressSendScreen_addressInput”)”
   Scenario Outline: User should be able to send tokens
     When The user selects "<token>" token to be sent
     And The user inserts the amount "<amount>" to be sent
