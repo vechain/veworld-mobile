@@ -80,11 +80,9 @@ Feature: The user send tokens in test net
     Then The user should see successfully sent message for the token "<token>"
 
     Examples:
-      | token | amount | address                                    | tokenAddress                               | pin    |
-      | CARP  | 10     | 0x435933c8064b4Ae76bE665428e0307eF2cCFBD68 | 0x8a9844e4750f5ce5f7988c4d1e04c278c718feea | 111111 |
+      | token     | amount | address                                    | tokenAddress                               | pin    |
+      | CarpToken | 10     | 0x435933c8064b4Ae76bE665428e0307eF2cCFBD68 | 0x8a9844e4750f5ce5f7988c4d1e04c278c718feea | 111111 |
 
-    @return
-    # Error: All retries failed. Last error: DetoxRuntimeError: Test Failed: No elements found for “MATCHER(id == “InsertAddressSendScreen_addressInput”)”
   Scenario Outline: Give back tokens to account 1
     When The user clicks back button
     And The user selects Account 2

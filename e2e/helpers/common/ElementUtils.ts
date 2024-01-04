@@ -57,7 +57,7 @@ export const clickByIDSelector = async (
 ) =>
     await clickBy({
         selector: id,
-        timeout: options?.timeout,
+        timeout: 10000,
         byWhat: "id",
         index: options?.index,
     })
@@ -71,7 +71,7 @@ export const clickGoBack = async () => {
     await clickById("BackButtonHeader-BaseIcon-backButton")
 }
 
-export const goBack = retryDecorator(clickGoBack, { retries: 3 })
+export const goBack = retryDecorator(clickGoBack, { timeout: 10000 })
 
 export const checkIDShouldExist = async (id: string, options?: { timeout?: number }) =>
     await waitFor(element(by.id(id)))
