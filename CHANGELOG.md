@@ -1,5 +1,15 @@
 
 
+## [1.4.2](https://github.com/vechainfoundation/veworld-mobile/compare/v1.5.2-51...v1.4.2) (2024-01-05)
+
+
+### Bug Fixes
+
+* android crash on location enabler ([#1782](https://github.com/vechainfoundation/veworld-mobile/issues/1782)) ([2501402](https://github.com/vechainfoundation/veworld-mobile/commit/250140289368be95a9de1e7450d9cae22d748afb))
+* app crash with Contact already exists ([#1783](https://github.com/vechainfoundation/veworld-mobile/issues/1783)) ([191f167](https://github.com/vechainfoundation/veworld-mobile/commit/191f167ba7d70cc0e380561e79b06e9b67d82b9f))
+* remove pressable from network banner ([#1786](https://github.com/vechainfoundation/veworld-mobile/issues/1786)) ([7bb6d24](https://github.com/vechainfoundation/veworld-mobile/commit/7bb6d242e37d865b0c6e47601716ab486fe75e4b))
+* replaces expo-localization ([#1784](https://github.com/vechainfoundation/veworld-mobile/issues/1784)) ([46372e8](https://github.com/vechainfoundation/veworld-mobile/commit/46372e89f41e02a34d248d783174cdb718bae64d))
+
 ## [1.5.0](https://github.com/vechainfoundation/veworld-mobile/compare/v1.5.0-47...v1.5.0) (2024-01-02)
 
 
