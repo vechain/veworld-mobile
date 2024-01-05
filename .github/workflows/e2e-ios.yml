@@ -17,7 +17,7 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v3
         with:
-          # If it's a pre-release, check out the tag corresponding to the pre-release; 
+          # If it's a pre-release, check out the tag corresponding to the pre-release;
           # otherwise, use the triggering branch unless it's a non-pre-release event.
           ref: ${{ (github.event_name == 'release' && github.event.release.prerelease && github.event.release.tag_name) || github.ref }}
 
@@ -79,7 +79,7 @@ jobs:
       - name: Detox test iOS Debug
         id: test_app
         timeout-minutes: 100
-        run: yarn detox test --configuration ios.sim.debug_xcode_14.2 --cleanup --headless --record-logs all --take-screenshots all --tags "not @broken" --publish &> cucumber.log
+        run: yarn detox test --configuration ios.sim.debug_xcode_14.2 --cleanup --headless --record-logs all --take-screenshots all --tags "not @broken" --parallel 2 --publish &> cucumber.log
 
       # Upload test artifacts from Detox
       - name: Upload detox artifacts
