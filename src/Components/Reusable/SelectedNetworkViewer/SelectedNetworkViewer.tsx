@@ -1,10 +1,9 @@
-import { useNavigation } from "@react-navigation/native"
-import React, { useCallback } from "react"
+import React from "react"
 import { StyleSheet } from "react-native"
-import { BaseIcon, BaseText, BaseTouchable, BaseView } from "~Components"
+import { BaseIcon, BaseText, BaseView } from "~Components"
 import { ColorThemeType } from "~Constants"
 import { useThemedStyles, useBlockchainNetwork } from "~Hooks"
-import { Routes } from "~Navigation"
+
 import { capitalize, truncateTextIfSizeIsGreaterThan } from "~Utils/StringUtils/StringUtils"
 
 type Props = {
@@ -12,21 +11,11 @@ type Props = {
 }
 
 export const SelectedNetworkViewer = ({ showEvenIfMainnet = false }: Props) => {
-    const nav = useNavigation()
     const { network, isMainnet } = useBlockchainNetwork()
     const { styles, theme } = useThemedStyles(selectedNetworkViewerStyle)
 
-    const onBannerPress = useCallback(() => {
-        nav.navigate(
-            "SettingsStack" as any,
-            {
-                screen: Routes.SETTINGS_NETWORK,
-            } as any,
-        )
-    }, [nav])
-
     return showEvenIfMainnet || !isMainnet ? (
-        <BaseTouchable style={styles.networkViewer} onPress={onBannerPress}>
+        <BaseView style={styles.networkViewer}>
             <BaseView style={styles.networkViewerIconText}>
                 <BaseIcon
                     name={"web"}
@@ -37,7 +26,7 @@ export const SelectedNetworkViewer = ({ showEvenIfMainnet = false }: Props) => {
                 />
                 <BaseText pl={5}>{network.name.length > 0 && formatNetworkName(network.name)}</BaseText>
             </BaseView>
-        </BaseTouchable>
+        </BaseView>
     ) : null
 }
 
