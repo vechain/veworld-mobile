@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react"
 import { Locales, TypesafeI18n, isLocale, loadLocale_sync } from "~i18n"
-import * as Localization from "expo-localization"
+import { getLocales } from "react-native-localize"
 import "~Utils/polyfill"
 import { AppStateType } from "~Model"
 import { useAppState } from "~Hooks"
@@ -16,7 +16,7 @@ export const TranslationProvider = ({ children }: Props) => {
     useEffect(() => {
         async function init() {
             const DEFAULT_LOCALE =
-                Localization.getLocales()
+                getLocales()
                     .map(loc => loc.languageCode)
                     .find(isLocale) ?? "en"
 

@@ -4,15 +4,15 @@ import { Alert, Linking } from "react-native"
 import DeviceInfo from "react-native-device-info"
 import checkVersion from "react-native-store-version"
 import { ERROR_EVENTS } from "~Constants"
-import { useLocale } from "~Hooks/useLocale"
 import { selectLastVersionCheck, setLastVersionCheck, useAppDispatch, useAppSelector } from "~Storage/Redux"
 import { PlatformUtils, warn } from "~Utils"
 import { useI18nContext } from "~i18n"
+import { getCountry } from "react-native-localize"
 
 export const useCheckVersion = () => {
     const { LL } = useI18nContext()
-    const { regionCode } = useLocale()
-    const countryCode = regionCode?.toLowerCase()
+    const countryCode = getCountry()?.toLowerCase()
+
     const APPLE_STORE_URL = `https://apps.apple.com/${countryCode}/app/veworld/id6446854569`
     const GOOGLE_STORE_URL = "https://play.google.com/store/apps/details?id=org.vechain.veworld.app"
     const lastVersionCheck = useAppSelector(selectLastVersionCheck)
@@ -50,7 +50,7 @@ export const useCheckVersion = () => {
                     warn(
                         ERROR_EVENTS.APP,
                         "useCheckVersion",
-                        `regionCode = ${regionCode} and countryCode = ${countryCode}`,
+                        `regionCode = ${countryCode} and countryCode = ${countryCode}`,
                         e,
                     )
                 }
@@ -58,7 +58,7 @@ export const useCheckVersion = () => {
                 warn(ERROR_EVENTS.APP, "useCheckVersion", "countryCode is undefined")
             }
         }
-    }, [isTimeForANewCheck, dispatch, countryCode, APPLE_STORE_URL, LL, regionCode])
+    }, [isTimeForANewCheck, dispatch, countryCode, APPLE_STORE_URL, LL])
 
     useEffect(() => {
         init()

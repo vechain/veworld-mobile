@@ -6,7 +6,7 @@ import { COLORS } from "~Constants"
 import { BaseIcon, BaseText, BaseTouchable, BaseView } from "~Components"
 import { Activity, ActivityStatus, ConnectedAppActivity } from "~Model"
 import { useI18nContext } from "~i18n"
-import { getCalendars } from "expo-localization"
+import { getTimeZone } from "react-native-localize"
 import { ActivityStatusIndicator } from "./ActivityStatusIndicator"
 
 type Props = {
@@ -21,11 +21,7 @@ export const ConnectedAppActivityBox: React.FC<Props> = memo(({ activity, onPres
 
     const dateTimeActivity = useMemo(() => {
         return activity.timestamp
-            ? DateUtils.formatDateTime(
-                  activity.timestamp,
-                  locale,
-                  getCalendars()[0].timeZone ?? DateUtils.DEFAULT_TIMEZONE,
-              )
+            ? DateUtils.formatDateTime(activity.timestamp, locale, getTimeZone() ?? DateUtils.DEFAULT_TIMEZONE)
             : LL.DATE_NOT_AVAILABLE()
     }, [LL, activity.timestamp, locale])
 

@@ -7,7 +7,7 @@ import { BaseIcon, BaseText, BaseTouchable, BaseView } from "~Components"
 import { Activity, ActivityStatus, FungibleToken, FungibleTokenActivity } from "~Model"
 import { selectCurrency, selectCustomTokens, selectOfficialTokens, useAppSelector } from "~Storage/Redux"
 import { useI18nContext } from "~i18n"
-import { getCalendars } from "expo-localization"
+import { getTimeZone } from "react-native-localize"
 import { ActivityStatusIndicator } from "./ActivityStatusIndicator"
 import { useExchangeRate } from "~Api/Coingecko"
 
@@ -62,11 +62,7 @@ export const FungibleTokenActivityBox: React.FC<Props> = memo(({ activity, onPre
 
     const dateTimeTransfer = useMemo(() => {
         return activity.timestamp
-            ? DateUtils.formatDateTime(
-                  activity.timestamp,
-                  locale,
-                  getCalendars()[0].timeZone ?? DateUtils.DEFAULT_TIMEZONE,
-              )
+            ? DateUtils.formatDateTime(activity.timestamp, locale, getTimeZone() ?? DateUtils.DEFAULT_TIMEZONE)
             : LL.DATE_NOT_AVAILABLE()
     }, [LL, activity.timestamp, locale])
 
