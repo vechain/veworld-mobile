@@ -1,5 +1,5 @@
-import * as Localization from "expo-localization"
+import { getLocales } from "react-native-localize"
 
 export const useLocale = () => {
-    return Localization.getLocales()[0]
+    return getLocales()[0]
 }

@@ -37,8 +37,6 @@ PODS:
     - ExpoModulesCore
   - ExpoLocalAuthentication (13.4.1):
     - ExpoModulesCore
-  - ExpoLocalization (14.3.0):
-    - ExpoModulesCore
   - ExpoModulesCore (1.5.12):
     - RCT-Folly (= 2021.07.22.00)
     - React-Core
@@ -135,7 +133,7 @@ PODS:
   - libwebp/webp (1.3.2):
     - libwebp/sharpyuv
   - lottie-ios (4.3.4)
-  - lottie-react-native (6.5.0):
+  - lottie-react-native (6.5.1):
     - lottie-ios (~> 4.3.3)
     - React-Core
   - Mixpanel-swift (4.2.0):
@@ -621,6 +619,8 @@ PODS:
     - React-Core
   - RNKeychain (8.1.2):
     - React-Core
+  - RNLocalize (3.0.4):
+    - React-Core
   - RNReactNativeHapticFeedback (2.2.0):
     - React-Core
   - RNReanimated (3.5.4):
@@ -702,7 +702,6 @@ DEPENDENCIES:
   - ExpoHaptics (from `../node_modules/expo-haptics/ios`)
   - ExpoKeepAwake (from `../node_modules/expo-keep-awake/ios`)
   - ExpoLocalAuthentication (from `../node_modules/expo-local-authentication/ios`)
-  - ExpoLocalization (from `../node_modules/expo-localization/ios`)
   - ExpoModulesCore (from `../node_modules/expo-modules-core`)
   - ExpoSecureStore (from `../node_modules/expo-secure-store/ios`)
   - EXTaskManager (from `../node_modules/expo-task-manager/ios`)
@@ -794,6 +793,7 @@ DEPENDENCIES:
   - "RNFlashList (from `../node_modules/@shopify/flash-list`)"
   - RNGestureHandler (from `../node_modules/react-native-gesture-handler`)
   - RNKeychain (from `../node_modules/react-native-keychain`)
+  - RNLocalize (from `../node_modules/react-native-localize`)
   - RNReactNativeHapticFeedback (from `../node_modules/react-native-haptic-feedback`)
   - RNReanimated (from `../node_modules/react-native-reanimated`)
   - RNScreens (from `../node_modules/react-native-screens`)
@@ -866,8 +866,6 @@ EXTERNAL SOURCES:
     :path: "../node_modules/expo-keep-awake/ios"
   ExpoLocalAuthentication:
     :path: "../node_modules/expo-local-authentication/ios"
-  ExpoLocalization:
-    :path: "../node_modules/expo-localization/ios"
   ExpoModulesCore:
     :path: "../node_modules/expo-modules-core"
   ExpoSecureStore:
@@ -1001,6 +999,8 @@ EXTERNAL SOURCES:
     :path: "../node_modules/react-native-gesture-handler"
   RNKeychain:
     :path: "../node_modules/react-native-keychain"
+  RNLocalize:
+    :path: "../node_modules/react-native-localize"
   RNReactNativeHapticFeedback:
     :path: "../node_modules/react-native-haptic-feedback"
   RNReanimated:
@@ -1037,7 +1037,6 @@ SPEC CHECKSUMS:
   ExpoHaptics: 360af6898407ee4e8265d30a1a8fb16491a660eb
   ExpoKeepAwake: be4cbd52d9b177cde0fd66daa1913afa3161fc1d
   ExpoLocalAuthentication: bd9d9037a96a11ccc456e327ddb404df02da10ca
-  ExpoLocalization: be37fdd0b5930c6a49cd307b4542f4b426d6134c
   ExpoModulesCore: c480fd4e3c7c8e81f0a6ba3a7c56869f25fe016d
   ExpoSecureStore: 57db3b6da8b59046e2057e95bf7738a8027b47c3
   EXTaskManager: f1730c315eb6fe457a3a2ee4ed899a51d717f302
@@ -1057,7 +1056,7 @@ SPEC CHECKSUMS:
   libevent: 4049cae6c81cdb3654a443be001fb9bdceff7913
   libwebp: 1786c9f4ff8a279e4dac1e8f385004d5fc253009
   lottie-ios: 3d98679b41fa6fd6aff2352b3953dbd3df8a397e
-  lottie-react-native: 9a3b9fa5780b96b421dce9d7ad8f8532406a7a85
+  lottie-react-native: cdeae481649c11d586084b8662f03251c4dd8249
   Mixpanel-swift: e5dd85295923e6a875acf17ccbab8d2ecb10ea65
   MixpanelReactNative: 9e83f45fdcb6c2d83e97226d2dff79a780f882b4
   MMKV: f21593c0af4b3f2a0ceb8f820f28bb639ea22bb7
@@ -1121,6 +1120,7 @@ SPEC CHECKSUMS:
   RNFlashList: 4b4b6b093afc0df60ae08f9cbf6ccd4c836c667a
   RNGestureHandler: 32a01c29ecc9bb0b5bf7bc0a33547f61b4dc2741
   RNKeychain: a65256b6ca6ba6976132cc4124b238a5b13b3d9c
+  RNLocalize: 1ce4263770515f53d3de442ce7657b3661b16a37
   RNReactNativeHapticFeedback: ec56a5f81c3941206fd85625fa669ffc7b4545f9
   RNReanimated: ab2e96c6d5591c3dfbb38a464f54c8d17fb34a87
   RNScreens: 3c5b9f4a9dcde752466854b6109b79c0e205dad3

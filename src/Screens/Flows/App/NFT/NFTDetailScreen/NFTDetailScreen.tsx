@@ -17,7 +17,7 @@ import {
 } from "~Storage/Redux"
 import { striptags } from "striptags"
 import { useNavigation } from "@react-navigation/native"
-import { getCalendars } from "expo-localization"
+import { getTimeZone } from "react-native-localize"
 import { ActivityStatus } from "~Model"
 
 interface NFTAttributeData {
@@ -135,7 +135,7 @@ export const NFTDetailScreen = ({ route }: Props) => {
                             data={DateUtils.formatDateTime(
                                 nft?.date,
                                 locale,
-                                getCalendars()[0].timeZone ?? DateUtils.DEFAULT_TIMEZONE,
+                                getTimeZone() ?? DateUtils.DEFAULT_TIMEZONE,
                             )}
                         />
                     )}

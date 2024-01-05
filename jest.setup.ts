@@ -64,10 +64,11 @@ jest.mock("expo-haptics", () => ({
     },
     impactAsync: jest.fn(),
 }))
-jest.mock("expo-localization", () => ({
-    getLocales: jest.fn(() => [{ languageCode: "en", languageTag: "en-US" }]),
-    getCalendars: jest.fn(() => [{ timeZone: "America/New_York" }]),
-}))
+
+import localizeMock from "react-native-localize/mock"
+
+jest.mock("react-native-localize", () => localizeMock)
+
 jest.mock("expo-clipboard", () => {})
 jest.mock("react-native-linear-gradient", () => "LinearGradient")
 jest.mock("react-native-draggable-flatlist", () => ({

@@ -16,7 +16,8 @@ import { useBottomSheetModal, useTransferAddContact } from "~Hooks"
 import { DateUtils, HexUtils, TransactionUtils } from "~Utils"
 import { useI18nContext } from "~i18n"
 import { getActivityTitle } from "./util"
-import { getCalendars } from "expo-localization"
+import { getTimeZone } from "react-native-localize"
+
 import {
     ActivityStatus,
     ActivityType,
@@ -68,11 +69,7 @@ export const ActivityDetailsScreen = ({ route }: Props) => {
     }, [activity, decodedClauses, isSwap])
 
     const dateTimeActivity = useMemo(() => {
-        return DateUtils.formatDateTime(
-            activity.timestamp ?? 0,
-            locale,
-            getCalendars()[0].timeZone ?? DateUtils.DEFAULT_TIMEZONE,
-        )
+        return DateUtils.formatDateTime(activity.timestamp ?? 0, locale, getTimeZone() ?? DateUtils.DEFAULT_TIMEZONE)
     }, [activity.timestamp, locale])
 
     const isPendingOrFailedActivity = useMemo(() => {
