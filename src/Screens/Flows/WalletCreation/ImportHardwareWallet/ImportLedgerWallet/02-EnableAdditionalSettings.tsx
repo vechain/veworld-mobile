@@ -1,5 +1,5 @@
 import React, { useCallback } from "react"
-import { BackButtonHeader, BaseButton, BaseSafeArea, BaseSpacer, BaseText, BaseView } from "~Components"
+import { BaseButton, BaseSpacer, BaseText, BaseView, Layout } from "~Components"
 import { useI18nContext } from "~i18n"
 
 import { StyleSheet } from "react-native"
@@ -81,36 +81,30 @@ export const EnableAdditionalSettings: React.FC<Props> = ({ route }) => {
     )
 
     return (
-        <BaseSafeArea grow={1}>
-            <BackButtonHeader />
-            <BaseView alignItems="center" justifyContent="space-between" flexGrow={1} mx={20}>
-                <BaseView alignSelf="flex-start" w={100}>
+        <Layout
+            fixedHeader={
+                <BaseView alignSelf="flex-start">
                     <BaseText typographyFont="title">{LL.WALLET_LEDGER_ENABLE_ADDITION_SETTINGS_TITLE()}</BaseText>
                     <BaseText typographyFont="body" my={10}>
                         {LL.WALLET_LEDGER_ENABLE_ADDITION_SETTINGS_SB()}
                     </BaseText>
                 </BaseView>
-                <BaseView w={100}>
-                    <FlatList
-                        style={styles.container}
-                        data={Steps}
-                        numColumns={1}
-                        horizontal={false}
-                        renderItem={renderStep}
-                        nestedScrollEnabled={false}
-                        showsVerticalScrollIndicator={false}
-                        ItemSeparatorComponent={renderSeparator}
-                        keyExtractor={(_item, index) => index.toString()}
-                    />
-                </BaseView>
-
-                <BaseView w={100}>
-                    <BaseButton action={onConfirm} w={100} title={LL.BTN_CONTINUE()} />
-                </BaseView>
-            </BaseView>
-
-            <BaseSpacer height={40} />
-        </BaseSafeArea>
+            }
+            body={
+                <FlatList
+                    style={styles.container}
+                    data={Steps}
+                    numColumns={1}
+                    horizontal={false}
+                    renderItem={renderStep}
+                    nestedScrollEnabled={false}
+                    showsVerticalScrollIndicator={false}
+                    ItemSeparatorComponent={renderSeparator}
+                    keyExtractor={(_item, index) => index.toString()}
+                />
+            }
+            footer={<BaseButton action={onConfirm} title={LL.BTN_CONTINUE()} />}
+        />
     )
 }
 
