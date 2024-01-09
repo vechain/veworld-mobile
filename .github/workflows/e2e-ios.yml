@@ -17,8 +17,9 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v3
         with:
-          # If it's a pre-release, check out the tag corresponding to the pre-release; otherwise, use the main branch.
-          ref: ${{ github.event_name == 'release' && github.event.release.prerelease && github.event.release.tag_name || 'main' }}
+          # If it's a pre-release, check out the tag corresponding to the pre-release;
+          # otherwise, use the triggering branch unless it's a non-pre-release event.
+          ref: ${{ (github.event_name == 'release' && github.event.release.prerelease && github.event.release.tag_name) || github.ref }}
 
 
       # Install Homebrew and applesimutils for Detox
@@ -78,7 +79,7 @@ jobs:
       - name: Detox test iOS Debug
         id: test_app
         timeout-minutes: 100
-        run: yarn detox test --configuration ios.sim.debug_xcode_14.2 --cleanup --headless --record-logs all --take-screenshots all --retry 1 --tags "not @broken" --parallel 2 --publish &> cucumber.log
+        run: yarn detox test --configuration ios.sim.debug_xcode_14.2 --cleanup --headless --record-logs all --take-screenshots all --tags "not @broken" --parallel 2 --publish &> cucumber.log
 
       # Upload test artifacts from Detox
       - name: Upload detox artifacts
@@ -105,7 +106,7 @@ jobs:
         with:
           name: metro-bundler-logs
           path: metro-bundler.log
-      
+
       # Get cucumber published url
       - name: Parse report URL
         id: parse_report_url
