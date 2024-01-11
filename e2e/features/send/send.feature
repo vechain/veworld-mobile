@@ -82,7 +82,7 @@ Feature: The user send tokens in test net
 
     Examples:
       | token | amount | address                                    | tokenAddress                               | pin    |
-      | CARP  | 10     | 0x435933c8064b4Ae76bE665428e0307eF2cCFBD68 | 0x8a9844e4750f5ce5f7988c4d1e04c278c718feea | 111111 |
+      | CarpToken  | 10     | 0x435933c8064b4Ae76bE665428e0307eF2cCFBD68 | 0x8a9844e4750f5ce5f7988c4d1e04c278c718feea | 111111 |
 
   @flaky
   Scenario Outline: Give back tokens to account 1
