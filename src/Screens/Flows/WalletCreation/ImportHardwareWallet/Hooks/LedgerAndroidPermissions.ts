@@ -15,7 +15,7 @@ export const LedgerAndroidPermissions = () => {
                     No need to request permissions if the api is lower than 33
                 */
                 // https://stackoverflow.com/a/76321476/7977491
-                if (DeviceInfo.getApiLevelSync() > 32) {
+                if (DeviceInfo.getApiLevelSync() > 30) {
                     permissionResponses = await PermissionsAndroid.requestMultiple([
                         PermissionsAndroid.PERMISSIONS.BLUETOOTH_CONNECT,
                         PermissionsAndroid.PERMISSIONS.ACCESS_FINE_LOCATION,
