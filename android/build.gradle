@@ -38,5 +38,15 @@ allprojects {
             url("$rootDir/../node_modules/detox/Detox-android")
         }
     }
+
+    afterEvaluate {
+        if (it.hasProperty('android')){
+            android {
+                defaultConfig {
+                    minSdkVersion 21
+                }
+            }
+        }
+    }
 }
 
