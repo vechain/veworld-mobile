@@ -41,12 +41,12 @@ export const clickByTextSelector = async (
 ) =>
     await clickBy({
         selector: text,
-        timeout: options?.timeout,
+        timeout: 10000,
         byWhat: "text",
         index: options?.index,
     })
 
-export const clickByText = retryDecorator(clickByTextSelector, { retries: 3 })
+export const clickByText = retryDecorator(clickByTextSelector, { timeout: 10000 })
 
 export const clickByIDSelector = async (
     id: string,
@@ -62,7 +62,7 @@ export const clickByIDSelector = async (
         index: options?.index,
     })
 
-export const clickById = retryDecorator(clickByIDSelector, { retries: 3 })
+export const clickById = retryDecorator(clickByIDSelector, { timeout: 10000 })
 
 export const clickGoBack = async () => {
     await idShouldBeVisible("BackButtonHeader-BaseIcon-backButton", {
