@@ -2,13 +2,18 @@ name: E2E Testing - Android
 
 on:
     workflow_dispatch:
-    
+
     workflow_call:
+
+# Allow one concurrent run
+concurrency:
+  group: ${{ github.head_ref || github.ref_name }}-android-e2e
+  cancel-in-progress: true
 
 jobs:
     build-test-android:
         name: Detox Build & Test Android Release
-        runs-on: macos-latest
+        runs-on: veworld-android-e2e
 
         steps:
             - name: Checkout repository
@@ -41,7 +46,7 @@ jobs:
                 filename: "sentry.properties"
                 is-executable: false
                 working-directory: "./android"
-            
+
             # Install keystore properties
             - name: Keystore properties
               uses: mobiledevops/secret-to-file-action@v1
