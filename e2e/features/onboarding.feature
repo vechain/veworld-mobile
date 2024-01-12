@@ -91,7 +91,7 @@ Feature: User Onboarding
       | mnemonicOrPk                                                                |
       | denial kitchen pet squirrel other broom bar gas better priority spoil cross |
 
-  @notAndroid
+  @notAndroid @failsInParallel
   Scenario Outline: The user attempts to use biometrics when device is not enrolled
     Given The user onboards with an imported mnemonic or private key "<mnemonicOrPk>"
     And The user chooses to protect the wallet with biometrics and does not enroll
