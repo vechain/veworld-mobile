@@ -81,6 +81,13 @@ export const SelectLedgerAccounts: React.FC<Props> = ({ route }) => {
     const [selectedAccountsIndex, setSelectedAccountsIndex] = useState<number[]>([])
     const [isScrollable, setIsScrollable] = useState(false)
 
+    useEffect(() => {
+        // Disconnect ledger when the component unmounts to avoid crashing the app when a user navigates back
+        return () => {
+            disconnectLedger()
+        }
+    }, [disconnectLedger])
+
     const navigateNext = useCallback(async () => {
         await disconnectLedger()
 
