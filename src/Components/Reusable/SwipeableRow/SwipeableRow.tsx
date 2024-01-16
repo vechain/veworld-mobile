@@ -69,7 +69,7 @@ export const SwipeableRow = <T,>({
     }
 
     const onTrashIconPress = useCallback(() => {
-        closeOtherSwipeableItems() // close all swipeable items
+        closeOtherSwipeableItems() // close all swipeable items except the current one
         handleTrashIconPress(item)
     }, [closeOtherSwipeableItems, handleTrashIconPress, item])
 
