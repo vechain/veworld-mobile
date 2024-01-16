@@ -1,28 +1,48 @@
 import { AppThunk, createAppAsyncThunk } from "../Types"
 
-import { addCustomNetwork, changeSelectedNetwork, removeCustomNetwork, updateCustomNetwork } from "../Slices/Network"
-import { debug, ConnectionUtils, URIUtils } from "~Utils"
-import { ERROR_EVENTS, genesises } from "~Constants"
+import {
+    addCustomNetwork,
+    changeSelectedNetwork,
+    removeCustomNetwork,
+    updateCustomNetwork,
+} from "../Slices/Network"
+import { ConnectionUtils, debug, URLUtils, veWorldErrors } from "~Common"
+import { genesises } from "~Common/Constant/Thor/ThorConstants"
 import axios from "axios"
-import { selectCustomNetworks, selectDefaultNetworks, selectSelectedNetwork } from "../Selectors"
+import {
+    selectCustomNetworks,
+    selectDefaultNetworks,
+    selectSelectedNetwork,
+} from "../Selectors"
 import { Network } from "~Model"
 import uuid from "react-native-uuid"
 
 export * from "../Slices/Network"
 
-const validateCustomNode = async ({ url, name }: { url: string; name: string }) => {
-    if (!URIUtils.isAllowed(url)) throw new Error("URL must be secure (https or localhost)")
+const validateCustomNode = async ({
+    url,
+    name,
+}: {
+    url: string
+    name: string
+}) => {
+    if (!URLUtils.isAllowed(url))
+        throw veWorldErrors.rpc.invalidParams({
+            message: "URL must be secure (https or localhost)",
+        })
     try {
         //Clean the URL
-        url = URIUtils.clean(url)
+        url = URLUtils.clean(url)
 
         //Test the Websocket connection for the user's URL - throws an error if it fails
         await ConnectionUtils.verifyWebSocketConnection(url)
 
-        debug(ERROR_EVENTS.SETTINGS, "Websocket connection verified")
+        debug("Websocket connection verified")
 
         //Get the genesis block
-        const blockResponse = await axios.get<Connex.Thor.Block>(`${url}/blocks/0`)
+        const blockResponse = await axios.get<Connex.Thor.Block>(
+            `${url}/blocks/0`,
+        )
         const block = blockResponse.data
 
         //Check if this is a network that we know
@@ -45,8 +65,11 @@ const validateCustomNode = async ({ url, name }: { url: string; name: string }) 
 
 export const validateAndAddCustomNode = createAppAsyncThunk(
     "network/validateAndAddCustomNode",
-    async ({ url, name }: { url: string; name: string }, { dispatch, getState, rejectWithValue }) => {
-        debug(ERROR_EVENTS.SETTINGS, "Attempting to add a custom network")
+    async (
+        { url, name }: { url: string; name: string },
+        { dispatch, getState, rejectWithValue },
+    ) => {
+        debug("Attempting to add a custom network")
 
         try {
             const network = await validateCustomNode({ url, name })
@@ -55,13 +78,21 @@ export const validateAndAddCustomNode = createAppAsyncThunk(
 
             //Check if the custom network already exists
             customNetworks.forEach(net => {
-                if (net.urls.some(u => URIUtils.compareURLs(u, url))) throw new Error("Network already exists")
+                if (net.urls.some(u => URLUtils.compareURLs(u, url)))
+                    throw veWorldErrors.rpc.invalidRequest({
+                        message: "Network already exists",
+                    })
             })
 
             dispatch(addCustomNetwork(network))
             dispatch(changeSelectedNetwork(network))
         } catch (e) {
-            return rejectWithValue("Failed to add custom network")
+            return rejectWithValue(
+                veWorldErrors.rpc.internal({
+                    message: "Failed to add custom network",
+                    error: e,
+                }).message,
+            )
         }
     },
 )
@@ -69,10 +100,14 @@ export const validateAndAddCustomNode = createAppAsyncThunk(
 export const validateAndUpdateCustomNode = createAppAsyncThunk(
     "network/validateAndUpdateCustomNode",
     async (
-        { networkToUpdateId, url, name }: { networkToUpdateId: string; url: string; name: string },
+        {
+            networkToUpdateId,
+            url,
+            name,
+        }: { networkToUpdateId: string; url: string; name: string },
         { dispatch, getState, rejectWithValue },
     ) => {
-        debug(ERROR_EVENTS.SETTINGS, "Attempting to update a custom network")
+        debug("Attempting to update a custom network")
 
         try {
             const network = await validateCustomNode({ url, name })
@@ -82,7 +117,10 @@ export const validateAndUpdateCustomNode = createAppAsyncThunk(
             //Check if the custom network already exists and is not the one being updated
             customNetworks.forEach(net => {
                 if (net.id !== networkToUpdateId)
-                    if (net.urls.some(u => URIUtils.compareURLs(u, url))) throw new Error("Network already exists")
+                    if (net.urls.some(u => URLUtils.compareURLs(u, url)))
+                        throw veWorldErrors.rpc.invalidRequest({
+                            message: "Network already exists",
+                        })
             })
 
             dispatch(
@@ -92,7 +130,12 @@ export const validateAndUpdateCustomNode = createAppAsyncThunk(
                 }),
             )
         } catch (e) {
-            return rejectWithValue("Failed to add update network")
+            return rejectWithValue(
+                veWorldErrors.rpc.internal({
+                    message: "Failed to add update network",
+                    error: e,
+                }).message,
+            )
         }
     },
 )
@@ -104,13 +147,19 @@ export const handleRemoveCustomNode =
         const selectedNetwork = selectSelectedNetwork(getState())
         const customNodeExists = customNetworks.some(net => net.id === id)
 
-        if (!customNodeExists) throw new Error("Network does not exist")
+        if (!customNodeExists)
+            throw veWorldErrors.rpc.invalidRequest({
+                message: "Network does not exist",
+            })
 
         //if the selected network is the one being removed, change the selected network to the default network
         if (selectedNetwork.id === id) {
             const defaultNetworks = selectDefaultNetworks(getState())
             //find the default network that matches the type of the network being removed
-            const defaultNetwork = defaultNetworks.find(net => net.type === selectedNetwork.type) || defaultNetworks[0]
+            const defaultNetwork =
+                defaultNetworks.find(
+                    net => net.type === selectedNetwork.type,
+                ) || defaultNetworks[0]
 
             if (defaultNetwork) {
                 dispatch(changeSelectedNetwork(defaultNetwork))

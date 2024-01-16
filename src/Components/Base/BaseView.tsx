@@ -1,10 +1,16 @@
 import React, { memo, useMemo } from "react"
 import { StyleSheet, View, ViewProps } from "react-native"
+import {
+    AlignItems,
+    AlignSelf,
+    FlexWrap,
+    FlexDirection,
+    JustifyContent,
+    ColorThemeType,
+    useThemedStyles,
+} from "~Common"
 
-import { AlignItems, AlignSelf, FlexWrap, FlexDirection, JustifyContent, ColorThemeType } from "~Constants"
-import { useThemedStyles } from "~Hooks"
-
-export type BaseViewProps = {
+type Props = {
     w?: number // NOTE: this is a number in percentage
     h?: number // NOTE: this is a number in percentage
     bg?: string
@@ -61,16 +67,16 @@ export const BaseView = memo(
         mb,
         mt,
         ...otherProps
-    }: BaseViewProps) => {
+    }: Props) => {
         const computedAlignItems = useMemo(() => {
             if (alignItems) return alignItems
             if (flexDirection === "row") return "center"
-            return "stretch"
+            return "flex-start"
         }, [flexDirection, alignItems])
 
         const computedJustifyContent = useMemo(() => {
             if (justifyContent) return justifyContent
-            if (flexDirection === "row") return "flex-start"
+            if (flexDirection === "row") return "space-between"
             return "flex-start"
         }, [flexDirection, justifyContent])
 

@@ -1,33 +1,40 @@
 import React from "react"
 import { Modal, ModalProps } from "react-native"
-import { BaseSafeArea } from "./BaseSafeArea/BaseSafeArea"
+import { SafeAreaView } from "react-native-safe-area-context"
+import { BaseSafeArea } from "./BaseSafeArea"
 import { BaseView } from "./BaseView"
-import { SafeAreaProvider } from "react-native-safe-area-context"
 
 export interface IBaseModal extends ModalProps {
     isOpen: boolean
     onClose: () => void
     children: React.ReactNode
 }
-export const BaseModal: React.FC<IBaseModal> = ({ isOpen, onClose, children, transparent = false, ...otherProps }) => {
+export const BaseModal: React.FC<IBaseModal> = ({
+    isOpen,
+    onClose,
+    children,
+    ...otherProps
+}) => {
     return (
         <>
             <Modal
                 visible={isOpen}
                 animationType="slide"
-                transparent={transparent}
+                transparent={false}
                 hardwareAccelerated
                 presentationStyle="fullScreen"
                 onDismiss={onClose}
                 onRequestClose={onClose}
                 {...otherProps}>
-                <SafeAreaProvider>
-                    <BaseSafeArea bg={transparent ? "transparent" : undefined} grow={1}>
-                        <BaseView alignItems="center" justifyContent="flex-start" flexGrow={1}>
-                            {children}
-                        </BaseView>
-                    </BaseSafeArea>
-                </SafeAreaProvider>
+                <BaseSafeArea grow={1}>
+                    <SafeAreaView style={{ flex: 1 }} />
+                    <BaseView
+                        alignItems="center"
+                        justifyContent="flex-start"
+                        flexGrow={1}>
+                        {children}
+                    </BaseView>
+                </BaseSafeArea>
             </Modal>
         </>
     )

@@ -1,4 +1,4 @@
-import { genesises } from "~Constants/Constants/Thor/ThorConstants"
+import { genesises } from "~Common/Constant/Thor/ThorConstants"
 import { NETWORK_TYPE } from "./enums"
 
 /**
@@ -17,6 +17,5 @@ export type Network = {
     type: NETWORK_TYPE
     currentUrl: string
     urls: string[]
-    explorerUrl?: string
     genesis: typeof genesises.main
 }

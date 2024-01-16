@@ -7,7 +7,10 @@ interface WrapTranslationPropsType {
 }
 
 // creates a component that handles the translated message
-export function WrapTranslation({ message, renderComponent }: WrapTranslationPropsType) {
+export function WrapTranslation({
+    message,
+    renderComponent,
+}: WrapTranslationPropsType) {
     // define a split character, in this case '<>'
     let [prefix, infix, postfix] = message.split("<>") as LocalizedString[]
 

@@ -1,337 +1,56 @@
+# This file contains the fastlane.tools configuration
+# You can find the documentation at https://docs.fastlane.tools
+#
+# For a list of all available actions, check out
+#
+#     https://docs.fastlane.tools/actions
+#
+# For a list of all available plugins, check out
+#
+#     https://docs.fastlane.tools/plugins/available-plugins
+#
+
 # Uncomment the line if you want fastlane to automatically update itself
 # update_fastlane
-
-fastlane_require "dotenv"
-
-before_all do
-	Dotenv.load ".env"
-end
-
 
 default_platform(:ios)
 
 platform :ios do
-
-  desc "Revoke certificates from Apple Developer Portal" # CAUTION!!! This lane will prompt you to choose which sertificate to revoke. Make sure you choose the right one.
-  lane :nuke_appstore_certificates do
-    match_nuke( # https://docs.fastlane.tools/actions/match_nuke/
-      type: "appstore", # The type of code signing identity to revoke.
-      app_identifier: ENV["APP_IDENTIFIER"], # The app identifier of your app.
-      readonly: false, # If true, will only print out the commands it would run, without actually running them.
-    )
-  end
-
-  desc "Remove certificates from GitHub"
-  lane :remove_certificates_from_gh do
-    Dir.chdir "../../.." do # Navigate to outside of the project as not have conflicts with this git repo. 
-      puts Dir.pwd # Print the current working directory.
-
-      repo_name = ENV['CERTIFICATES_REPO']
-      sh("git clone #{repo_name}") # Clone the repo with the certificates.
-      Dir.chdir "veworld-mobile-ios-cert" # Navigate to the repo with the certificates.
-
-      puts Dir.pwd # Print the current working directory.
-
-      sh("rm -rf certs/distribution/*") # Remove the certificates.
-      sh("rm -rf profiles/appstore/*") # Remove the profiles.
-      sh("git add --all") # Add the changes.
-      sh("git commit -a -m 'chore: remove certificates'") # Commit the changes.
-      sh("git push -u origin main") # Push the changes to GitHub.
-
-      Dir.chdir ".." # Navigate back outside of the repo.
-      sh("rm -rf veworld-mobile-ios-cert") # Remove the repo folder.
-    end  
-  end
-
-  desc "Generate new certificates"
-  lane :generate_new_certificates do
-    sync_code_signing( # https://docs.fastlane.tools/actions/sync_code_signing/
-      type: "appstore", # The type of code signing identity to generate.
-      app_identifier: ENV["APP_IDENTIFIER"], # The app identifier of your app.
-      force_for_new_devices: true, # If true, will revoke and recreate all provisioning profiles if there are new devices added to the account.
-      readonly: false, # If true, will only print out the commands it would run, without actually running them.
-      git_branch: "main", # The branch to commit the code signing files to.
-      skip_docs: true, # If true, will skip the creation of a README.md file.
-      verbose: true # If true, will print out extra information and debugging info.
-    )
-  end
-
-  desc "Get certificates"
-  lane :fetch_certificates_from_gh do # Get the certificates from GitHub.
-    sync_code_signing( # https://docs.fastlane.tools/actions/sync_code_signing/
-      type: "appstore", # The type of code signing identity to generate.
-      app_identifier: ENV["APP_IDENTIFIER"], # The app identifier of your app.
-      readonly: true, # If true, will only print out the commands it would run, without actually running them.
-      git_branch: "main", # The branch to commit the code signing files to.
-      verbose: true # If true, will print out extra information and debugging info.
-    )
-  end
-
-
-
-  desc "Rotate certificates"
-  lane :rotate_certificates do
-    sh("./rotate_match_password.sh") # Generate new password for the certificates.
-    nuke_appstore_certificates # CAUTION!!! This lane will prompt you to choose which sertificate to revoke. Make sure you choose the right one.
-    remove_certificates_from_gh # Remove the certificates from GitHub.
-    # Before the next step - Need to run fastlane match change_password and use the new password generated in the previous step.
-    generate_new_certificates # Generate new certificates.
-  end
-
-
-
-  desc "Create changelog"
-  lane :create_changelog do |values|
-
-    Dir.chdir "../.." do # Navigate to the root
-      sh("yarn release:ci")
-    end
-
-    version = values[:version]
-
-    package_json = JSON.parse(File.read("../../package.json"))
-    package_json["version"] = version
-    File.write("../../package.json", JSON.pretty_generate(package_json))
-  end
-
-
-
-  desc "Create Release Branch on GitHub for Beta"
-  lane :gh_setup_before do |values|
-
-    github_token = values[:github_token]
-    github_username = values[:github_username]
-    build_number = values[:build_number]
-    version_number = values[:version_number]
-    branch_name = "release-build"
-
-    # Create and push the branch locally
-    sh("git checkout -b #{branch_name}-#{build_number}-#{version_number}")
-
-    # Set the GitHub remote URL with credentials
-    remote_url = "https://#{github_username}:#{github_token}@github.com/vechainfoundation/veworld-mobile.git"
-    sh("git remote set-url origin #{remote_url}")
-    sh("git commit -a -m 'build: init'")
-
-    # Push the branch to GitHub
-    sh("git push -u origin #{branch_name}-#{build_number}-#{version_number}")
-  end
-
-
-
-  desc "Commit latest artifacts to GitHub"
-  lane :gh_setup_after do |values|
-    sh("git add --all")
-    sh("git commit -a -m 'build: complete'")
-    # Push the branch to GitHub
-    sh("git push")
-  end
-
-
-
-  lane :upload_source_maps_to_sentry do |values|
-    build = values[:build]
-    version = values[:version]
-
-    Dir.chdir "../.." do # Navigate to the root of the project where the Detox files are placed.
-
-      sentry_check_cli_installed
-
-      # generate source maps for sentry
-      sh("npx react-native bundle --platform ios --dev false --entry-file index.js --reset-cache --bundle-output main.jsbundle --sourcemap-output main.jsbundle.map --minify false")
-      #compile source maps
-      sh("ios/Pods/hermes-engine/destroot/bin/hermesc -O -emit-binary -output-source-map -out=main.jsbundle.hbc main.jsbundle")
-      sh("rm -f main.jsbundle")
-      sh("mv main.jsbundle.hbc main.jsbundle")
-
-      # merge the two source maps
-      sh("mv main.jsbundle.map main.jsbundle.packager.map")
-      sh("node node_modules/react-native/scripts/compose-source-maps.js main.jsbundle.packager.map main.jsbundle.hbc.map -o main.jsbundle.map")
-
-      # upload source maps to sentry with cli - handled by xcode build phase?
-
-      sh("node_modules/@sentry/cli/bin/sentry-cli releases files #{ENV["APP_IDENTIFIER"]}@#{version}+#{build} upload-sourcemaps --dist #{build} --strip-prefix ../../ main.jsbundle main.jsbundle.map --org 'vechain-foundation' --project 'veworld-mobile' --log-level=info")
-
-    end
-  end
-
-  lane :create_tags_gh do |values|
-    build = values[:build]
-    version = values[:version]
-
-    add_git_tag(
-      tag: "v#{version}-#{build}"
-    )
-
-    push_git_tags
-  end
-
-
-
-
-  # Builds the app using specified options.
-  #
-  # @param {string} options[:username] - The GitHub username for authentication.
-  # @param {string} options[:token] - The GitHub personal token for authentication.
-  # @param optional {string} options[:version] - The version type for the build (e.g., "patch", "minor", "major").
-  #
   desc "Push a new beta build to TestFlight"
-  lane :build do |options|
-    github_username = options[:username]
-    github_token = options[:token]
-    versionType = options[:version]
-    buildNumber = options[:build]
+  lane :beta do
+    increment_build_number(xcodeproj: "VeWorld.xcodeproj")
 
-    # clean build artifacts if any
-    clean_build_artifacts
+    get_certificates( # Create or get certificate, and install it
+      output_path: "./builds" # Download certificate in the build folder (you don't need to create the folder)
+    )
 
-    # check if spceicifed build number
-    if !buildNumber.nil? 
-      build = increment_build_number_in_plist(build_number: buildNumber, xcodeproj: "VeWorld.xcodeproj")
-              increment_build_number_in_xcodeproj(build_number: buildNumber, xcodeproj: "VeWorld.xcodeproj")
-    else
-      build = increment_build_number_in_plist(xcodeproj: "VeWorld.xcodeproj")
-              increment_build_number_in_xcodeproj(xcodeproj: "VeWorld.xcodeproj")
-    end
+    get_provisioning_profile( # Create or get provisioning profile
+      output_path: "./builds",  # Download provisioning profile in the build folder
+      filename: "provisioning.mobileprovision" # Rename the local provisioning profile
+    )
 
-    # check if spceicifed version number
-    if !versionType.nil? 
-      if versionType.downcase != "patch" && versionType.downcase != "minor" && versionType.downcase != "major"
-        version = increment_version_number_in_plist(version_number: versionType.downcase, xcodeproj: "VeWorld.xcodeproj")
-                  increment_version_number_in_xcodeproj(version_number: versionType.downcase, xcodeproj: "VeWorld.xcodeproj")
-      else 
-        version = increment_version_number_in_plist(bump_type: versionType.downcase, xcodeproj: "VeWorld.xcodeproj")
-                  increment_version_number_in_xcodeproj(version_number: versionType.downcase, xcodeproj: "VeWorld.xcodeproj")
-      end
-    else
-      version = get_version_number(xcodeproj: "VeWorld.xcodeproj")
-    end
+    update_project_provisioning( # Set the project provisioning profile (related in Xcode to the General > Signing Release section)
+      xcodeproj: "VeWorld.xcodeproj",
+      target_filter: "VeWorld", # Name of your project
+      profile: "./builds/provisioning.mobileprovision",
+      build_configuration: "Release"
+    )
 
+    update_project_team( # Set the right team on your project
+      teamid: CredentialsManager::AppfileConfig.try_fetch_value(:team_id)
+    )
 
-    clear_derived_data
-
-    # update yarn packages and pods
-    Dir.chdir "../.." do
-      sh("yarn purge && yarn install:all")
-    end
-
-
-    # begin -> rescure == try -> catch
-    begin
+    build_app(workspace: "VeWorld.xcworkspace", scheme: "VeWorld", 
+      clean: true,
+      export_method: "app-store",
+      export_options: {
+        provisioningProfiles: {
+            CredentialsManager::AppfileConfig.try_fetch_value(:app_identifier) => CredentialsManager::AppfileConfig.try_fetch_value(:app_identifier) + " AppStore" # Value of this parameter is the name of the Provisioning Profile. By default, it will be "{bundleId} AppStore"
+        }
+      },
+      build_path: "./builds",
+      output_directory: "./builds")
       
-
-      # create new branch and push to github
-      gh_setup_before(
-        github_username:github_username, 
-        github_token:github_token,
-        build_number: build,
-        version_number: version,
-      )
-
-      fetch_certificates_from_gh
-
-      # build app
-      build_app(
-        workspace: "VeWorld.xcworkspace", 
-        scheme: "VeWorld", 
-        export_method: "app-store",
-        clean: true,
-        build_path: "./build",
-        output_directory: "./build",
-      )
-        
-      # upload to testflight
-      upload_to_testflight(
-        skip_waiting_for_build_processing: true, 
-        apple_id: "6446854569",
-        ipa: "./build/VeWorld.ipa",
-      )
-
-      create_changelog(version:version)
-
-      create_tags_gh(build:build, version:version)
-
-      upload_source_maps_to_sentry(build:build, version:version)
-
-      gh_setup_after
-
-      # create pull request
-      create_pull_request(
-        api_token: github_token,
-        repo: "vechainfoundation/veworld-mobile",
-        title: versionType.nil? ? "build: build artifacts build-#{build} [iOS]" : "version: build artifacts version-#{version} [iOS]", 
-        base: "main",
-        api_url: "https://api.github.com"
-      )
-
-      # send slack message
-      slack(
-        message: versionType.nil? ? "VeWorld build number: #{build} was successfully released! [iOS]" : "VeWorld version number: #{version} was successfully released! [iOS]",
-        slack_url: ENV["SLACK_WEBHOOK"],
-        success: true,
-        payload: {
-          "Build Date" => Time.new.strftime("%d/%m/%Y %H:%M"),
-          "Built by" => github_username,
-        },
-      )
-
-      # clean build artifacts if any
-      clean_build_artifacts
-
-
-    rescue => exception # catch
-      puts exception
-
-      # send slack message
-      slack(
-        message: versionType.nil? ? "Error releasing VeWorld build number: #{build} [iOS]" : "Error releasing VeWorld version number: #{version} [iOS]",
-        slack_url: ENV["SLACK_WEBHOOK"],
-        success: false,
-        payload: {
-          "Build Date" => Time.new.strftime("%d/%m/%Y %H:%M"),
-          "Built by" => github_username,
-        },
-      )
-
-      # clean build artifacts if any
-      clean_build_artifacts
-
-      # checkout main
-      sh("git checkout main")
-
-      # delete branch locally
-      sh("git branch -D release-build-#{build}-#{version}")
-      
-      # delete branch remotely
-      sh("git push origin --delete release-build-#{build}-#{version}")
-
-      if git_tag_exists(tag: "v#{version}-#{build}")
-        # delete tag locally
-        sh("git tag -d v#{version}-#{build}") 
-        # delete tag remotely
-        sh("git push --delete origin v#{version}-#{build}") 
-      end
-    end
+    upload_to_testflight
   end
 end
-
-
-
-
-
-
-
-
-=begin
-  desc "Run e2e tests"
-  lane :e2e do
-    Dir.chdir "../.." do # Navigate to the root of the project where the Detox files are placed.
-      sh("detox build --configuration ios.sim.debug")
-      sh("detox test --configuration ios.sim.debug --record-logs all")
-    end
-  end
-=end
-
-
-# upload source maps to sentry      
-# upload_source_maps_to_sentry(build:build)

@@ -1,5 +1,12 @@
 import React, { ReactElement } from "react"
-import Svg, { Defs, Image, Pattern, SvgProps, Use, Rect } from "react-native-svg"
+import Svg, {
+    Defs,
+    Image,
+    Pattern,
+    SvgProps,
+    Use,
+    Rect,
+} from "react-native-svg"
 
 export const PlaceholderSVG = (props: SvgProps): ReactElement => {
     return (
@@ -13,8 +20,15 @@ export const PlaceholderSVG = (props: SvgProps): ReactElement => {
             {...props}>
             <Rect width={24} height={24} rx={12} fill="url(#pattern0)" />
             <Defs>
-                <Pattern id="pattern0" patternContentUnits="objectBoundingBox" width={1} height={1}>
-                    <Use xlinkHref="#image0_3395_25833" transform="scale(.0125)" />
+                <Pattern
+                    id="pattern0"
+                    patternContentUnits="objectBoundingBox"
+                    width={1}
+                    height={1}>
+                    <Use
+                        xlinkHref="#image0_3395_25833"
+                        transform="scale(.0125)"
+                    />
                 </Pattern>
                 <Image
                     id="image0_3395_25833"

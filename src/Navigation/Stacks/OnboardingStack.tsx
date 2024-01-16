@@ -1,44 +1,36 @@
 import React from "react"
 import { createNativeStackNavigator } from "@react-navigation/native-stack"
 import {
-    AppSecurityScreen,
-    ConfirmMnemonicScreen,
-    EnableAdditionalSettings,
-    ImportLocalWallet,
-    NewMnemonicScreen,
-    SelectLedgerAccounts,
-    SelectLedgerDevice,
-    UserCreatePasswordScreen,
-    WalletSetupScreen,
-    WalletSuccessScreen,
+    OnboardingScreen,
     WelcomeScreen,
+    NewMnemonicScreen,
+    TutorialScreen,
+    WalletTypeSelectionScreen,
+    ConfirmMnemonicScreen,
+    AppSecurityScreen,
+    UserCreatePasswordScreen,
+    ImportWalletTypeSelectionScreen,
+    ImportMnemonicScreen,
+    WalletSuccessScreen,
 } from "~Screens"
 import { Routes } from "~Navigation/Enums"
-import { ConnectedLedgerDevice, SecurityLevelType } from "~Model"
-import { useNavAnimation } from "~Hooks"
+import { SecurityLevelType } from "~Model"
 
 export type RootStackParamListOnboarding = {
     [Routes.WELCOME]: undefined
-    [Routes.WALLET_SETUP]: undefined
+    [Routes.ONBOARDING]: undefined
+    [Routes.WALLET_TUTORIAL]: undefined
+    [Routes.WALLET_TYPE_CREATION]: undefined
+    [Routes.WALLET_TYPE_IMPORT]: undefined
     [Routes.NEW_MNEMONIC]: undefined
     [Routes.CONFIRM_MNEMONIC]: undefined
     [Routes.IMPORT_MNEMONIC]: undefined
     [Routes.USER_CREATE_PASSWORD]: undefined
     [Routes.APP_SECURITY]: undefined
-    [Routes.IMPORT_HW_LEDGER_SELECT_DEVICE]: undefined
-    [Routes.IMPORT_HW_LEDGER_ENABLE_ADDITIONAL_SETTINGS]: {
-        device: ConnectedLedgerDevice
-    }
-    [Routes.IMPORT_HW_LEDGER_SELECT_ACCOUNTS]: {
-        device: ConnectedLedgerDevice
-    }
     [Routes.WALLET_SUCCESS]:
         | {
-              securityLevelSelected: SecurityLevelType.BIOMETRIC
-          }
-        | {
-              securityLevelSelected: SecurityLevelType.SECRET
-              userPin: string
+              securityLevelSelected?: SecurityLevelType
+              userPin?: string
           }
         | undefined
 }
@@ -46,16 +38,36 @@ export type RootStackParamListOnboarding = {
 const Onboarding = createNativeStackNavigator<RootStackParamListOnboarding>()
 
 export const OnboardingStack = () => {
-    const { animation } = useNavAnimation()
-
     return (
-        <Onboarding.Navigator screenOptions={{ headerShown: false, animation }}>
+        <Onboarding.Navigator screenOptions={{ headerShown: false }}>
             <Onboarding.Group>
-                <Onboarding.Screen name={Routes.WELCOME} component={WelcomeScreen} options={{ headerShown: false }} />
+                <Onboarding.Screen
+                    name={Routes.WELCOME}
+                    component={WelcomeScreen}
+                    options={{ headerShown: false }}
+                />
 
                 <Onboarding.Screen
-                    name={Routes.WALLET_SETUP}
-                    component={WalletSetupScreen}
+                    name={Routes.ONBOARDING}
+                    component={OnboardingScreen}
+                    options={{ headerShown: false }}
+                />
+
+                <Onboarding.Screen
+                    name={Routes.WALLET_TYPE_CREATION}
+                    component={WalletTypeSelectionScreen}
+                    options={{ headerShown: false }}
+                />
+
+                <Onboarding.Screen
+                    name={Routes.WALLET_TYPE_IMPORT}
+                    component={ImportWalletTypeSelectionScreen}
+                    options={{ headerShown: false }}
+                />
+
+                <Onboarding.Screen
+                    name={Routes.WALLET_TUTORIAL}
+                    component={TutorialScreen}
                     options={{ headerShown: false }}
                 />
 
@@ -73,7 +85,7 @@ export const OnboardingStack = () => {
 
                 <Onboarding.Screen
                     name={Routes.IMPORT_MNEMONIC}
-                    component={ImportLocalWallet}
+                    component={ImportMnemonicScreen}
                     options={{ headerShown: false }}
                 />
 
@@ -89,23 +101,6 @@ export const OnboardingStack = () => {
                     options={{ headerShown: false }}
                 />
 
-                <Onboarding.Screen
-                    name={Routes.IMPORT_HW_LEDGER_SELECT_DEVICE}
-                    component={SelectLedgerDevice}
-                    options={{ headerShown: false }}
-                />
-
-                <Onboarding.Screen
-                    name={Routes.IMPORT_HW_LEDGER_ENABLE_ADDITIONAL_SETTINGS}
-                    component={EnableAdditionalSettings}
-                    options={{ headerShown: false }}
-                />
-
-                <Onboarding.Screen
-                    name={Routes.IMPORT_HW_LEDGER_SELECT_ACCOUNTS}
-                    component={SelectLedgerAccounts}
-                    options={{ headerShown: false }}
-                />
                 <Onboarding.Screen
                     name={Routes.WALLET_SUCCESS}
                     component={WalletSuccessScreen}

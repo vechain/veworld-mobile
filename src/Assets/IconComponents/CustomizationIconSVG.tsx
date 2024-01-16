@@ -3,7 +3,13 @@ import Svg, { Path, SvgProps } from "react-native-svg"
 
 export const CustomizationIconSVG = (props: SvgProps): ReactElement => {
     return (
-        <Svg width={329} height={220} viewBox="0 0 329 220" fill="none" xmlns="http://www.w3.org/2000/svg" {...props}>
+        <Svg
+            width={329}
+            height={220}
+            viewBox="0 0 329 220"
+            fill="none"
+            xmlns="http://www.w3.org/2000/svg"
+            {...props}>
             <Path
                 d="M179.009 2.932c-36.289.833-70.13 16.127-93.537 34.646-23.628 18.856-36.814 40.936-36.89 63.099-.077 22.379 12.47 42.341 30.354 61.509 18.075 18.824 41.481 36.853 67.613 47.41 50.642 22.5 104.974-5.437 127.03-74.546 22.1-68.695-20.11-135.902-94.57-132.118z"
                 fill="#EAF4FE"

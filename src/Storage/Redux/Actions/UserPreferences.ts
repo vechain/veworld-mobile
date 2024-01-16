@@ -1,19 +1,19 @@
 import {
-    setAnalyticsTrackingEnabled,
+    setTheme,
+    setIsAppLockActive,
     setBalanceVisible,
-    setCurrency,
     setHideTokensWithNoBalance,
     setLanguage,
-    setSentryTrackingEnabled,
-    setTheme,
+    setCurrency,
+    setAnalyticsTrackingEnabled,
 } from "../Slices/UserPreferences"
 
 export {
     setTheme,
+    setIsAppLockActive,
     setBalanceVisible,
     setHideTokensWithNoBalance,
     setLanguage,
     setCurrency,
     setAnalyticsTrackingEnabled,
-    setSentryTrackingEnabled,
 }

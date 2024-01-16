@@ -35,12 +35,6 @@ module.exports = {
         simulator: {
             type: "ios.simulator",
             device: {
-                type: "iPhone 15 Pro",
-            },
-        },
-        simulator_14_2: {
-            type: "ios.simulator",
-            device: {
                 type: "iPhone 14 Pro",
             },
         },
@@ -66,10 +60,6 @@ module.exports = {
     configurations: {
         "ios.sim.debug": {
             device: "simulator",
-            app: "ios.debug",
-        },
-        "ios.sim.debug_xcode_14.2": {
-            device: "simulator_14_2",
             app: "ios.debug",
         },
         "ios.sim.release": {

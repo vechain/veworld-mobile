@@ -1,8 +1,8 @@
-import React, { memo, useMemo } from "react"
-import { useCopyClipboard, useTheme } from "~Hooks"
-import { FormattingUtils } from "~Utils"
+import React, { memo, useCallback, useMemo } from "react"
+import { FormattingUtils, useTheme } from "~Common"
 import { BaseButton, BaseIcon } from "~Components/Base"
-import { StyleSheet } from "react-native"
+import { Alert, StyleSheet } from "react-native"
+import * as Clipboard from "expo-clipboard"
 import { useI18nContext } from "~i18n"
 
 type Props = {
@@ -12,9 +12,18 @@ export const AddressButton: React.FC<Props> = memo(({ address }) => {
     const theme = useTheme()
     const { LL } = useI18nContext()
 
-    const { onCopyToClipboard } = useCopyClipboard()
+    const onCopyToClipboard = useCallback(async () => {
+        await Clipboard.setStringAsync(address)
+        Alert.alert(
+            LL.COMMON_LBL_SUCCESS(),
+            LL.NOTIFICATION_COPIED_CLIPBOARD({ name: LL.COMMON_LBL_ADDRESS() }),
+        )
+    }, [address, LL])
 
-    const color = useMemo(() => (theme.isDark ? theme.colors.text : theme.colors.primary), [theme])
+    const color = useMemo(
+        () => (theme.isDark ? theme.colors.text : theme.colors.primary),
+        [theme],
+    )
     return (
         <BaseButton
             textColor={color}
@@ -23,8 +32,15 @@ export const AddressButton: React.FC<Props> = memo(({ address }) => {
             fontSize={10}
             bgColor={theme.colors.primaryReversed}
             title={FormattingUtils.humanAddress(address, 5, 4)}
-            action={() => onCopyToClipboard(address, LL.COMMON_LBL_ADDRESS())}
-            rightIcon={<BaseIcon name="content-copy" color={color} size={12} style={baseStyles.marginLeft} />}
+            action={onCopyToClipboard}
+            rightIcon={
+                <BaseIcon
+                    name="content-copy"
+                    color={color}
+                    size={12}
+                    style={baseStyles.marginLeft}
+                />
+            }
         />
     )
 })

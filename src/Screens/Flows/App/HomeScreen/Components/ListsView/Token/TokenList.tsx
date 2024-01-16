@@ -1,178 +1,98 @@
-import React, { memo, useCallback, useRef, useState } from "react"
+import React, { memo, useCallback } from "react"
 import { StyleSheet, ViewProps } from "react-native"
-import { NestableDraggableFlatList, RenderItem } from "react-native-draggable-flatlist"
+import { NestableDraggableFlatList } from "react-native-draggable-flatlist"
 import Animated, { AnimateProps } from "react-native-reanimated"
-import { SwipeableRow } from "~Components"
+import { BaseSpacer } from "~Components"
 import { AnimatedTokenCard } from "./AnimatedTokenCard"
-import { useBottomSheetModal, useThemedStyles, useTokenWithCompleteInfo } from "~Hooks"
-import { ColorThemeType, VET, VTHO } from "~Constants"
-import { changeBalancePosition, removeTokenBalance, useAppDispatch, useAppSelector } from "~Storage/Redux"
+import { ColorThemeType, useThemedStyles } from "~Common"
 import {
-    selectNonVechainTokensWithBalances,
-    selectSelectedAccount,
-    selectSelectedNetwork,
+    changeBalancePosition,
+    useAppDispatch,
+    useAppSelector,
+} from "~Storage/Redux"
+import {
+    getVetDenormalizedAccountTokenBalances,
+    getVthoDenormalizedAccountTokenBalances,
+    selectNonVechainDenormalizedAccountTokenBalances,
 } from "~Storage/Redux/Selectors"
+import { DenormalizedAccountTokenBalance } from "~Storage/Redux/Types"
 import { AnimatedChartCard } from "./AnimatedChartCard"
-import { FungibleTokenWithBalance } from "~Model"
-import { RemoveCustomTokenBottomSheet } from "../../RemoveCustomTokenBottomSheet"
-import { SwipeableItemImperativeRef } from "react-native-swipeable-item"
-import { BalanceUtils } from "~Utils"
-import { Routes } from "~Navigation"
-import { useNavigation } from "@react-navigation/native"
 
 interface Props extends AnimateProps<ViewProps> {
     isEdit: boolean
-    isBalanceVisible: boolean
+    visibleHeightRef: number
 }
 
-export const TokenList = memo(({ isEdit, isBalanceVisible, ...animatedViewProps }: Props) => {
-    const dispatch = useAppDispatch()
-    const network = useAppSelector(selectSelectedNetwork)
-    const tokenBalances = useAppSelector(selectNonVechainTokensWithBalances)
-
-    // Keep track of the swipeable items refs
-    const swipeableItemRefs = useRef<Map<string, SwipeableItemImperativeRef>>(new Map())
-
-    const selectedAccount = useAppSelector(selectSelectedAccount)
-
-    const [selectedToken, setSelectedToken] = useState<FungibleTokenWithBalance>()
-
-    const tokenToRemove = useRef<FungibleTokenWithBalance | null>(null)
-
-    const {
-        ref: removeCustomTokenBottomSheetRef,
-        onOpen: openRemoveCustomTokenBottomSheet,
-        onClose: closeRemoveCustomTokenBottomSheet,
-    } = useBottomSheetModal()
-
-    const tokenWithInfoVET = useTokenWithCompleteInfo(VET)
-    const tokenWithInfoVTHO = useTokenWithCompleteInfo(VTHO)
-
-    const { styles } = useThemedStyles(baseStyles)
-
-    const onConfirmRemoveToken = useCallback(() => {
-        if (tokenToRemove.current) {
-            dispatch(
-                removeTokenBalance({
-                    network: network.type,
-                    accountAddress: selectedAccount.address,
-                    tokenAddress: tokenToRemove.current.address,
-                }),
-            )
-            swipeableItemRefs?.current.delete(tokenToRemove.current.address)
-            closeRemoveCustomTokenBottomSheet()
-        }
-    }, [tokenToRemove, dispatch, network.type, selectedAccount.address, closeRemoveCustomTokenBottomSheet])
-
-    const handleDragEnd = ({ data }: { data: FungibleTokenWithBalance[] }) => {
-        dispatch(
-            changeBalancePosition({
-                network: network.type,
-                accountAddress: selectedAccount.address,
-                updatedAccountBalances: data.map(({ balance }, index) => ({
-                    ...balance,
-                    position: index,
-                })),
-            }),
+export const TokenList = memo(
+    ({ isEdit, visibleHeightRef, ...animatedViewProps }: Props) => {
+        const dispatch = useAppDispatch()
+        const tokenBalances: DenormalizedAccountTokenBalance[] = useAppSelector(
+            selectNonVechainDenormalizedAccountTokenBalances,
         )
-    }
+        const vetBalance: DenormalizedAccountTokenBalance | undefined =
+            useAppSelector(getVetDenormalizedAccountTokenBalances)
+        const vthoBalance: DenormalizedAccountTokenBalance | undefined =
+            useAppSelector(getVthoDenormalizedAccountTokenBalances)
 
-    const nav = useNavigation()
+        const { styles } = useThemedStyles(baseStyles)
 
-    const closeOtherSwipeableItems = useCallback(() => {
-        swipeableItemRefs?.current.forEach(ref => {
-            ref?.close()
-        })
-    }, [swipeableItemRefs])
+        const renderSeparator = useCallback(
+            () => <BaseSpacer height={16} />,
+            [],
+        )
 
-    const onTokenPress = useCallback(
-        (token: FungibleTokenWithBalance) => {
-            const isTokenBalance = BalanceUtils.getIsTokenWithBalance(token)
-
-            if (!isEdit && isTokenBalance) {
-                closeOtherSwipeableItems()
-                nav.navigate(Routes.SELECT_AMOUNT_SEND, {
-                    token,
-                    initialRoute: Routes.HOME,
-                })
-            }
-        },
-        [nav, closeOtherSwipeableItems, isEdit],
-    )
-
-    const handleTrashIconPress = useCallback(
-        (item: FungibleTokenWithBalance) => () => {
-            setSelectedToken(item)
-            openRemoveCustomTokenBottomSheet()
-        },
-        [openRemoveCustomTokenBottomSheet],
-    )
-
-    const renderItem: RenderItem<FungibleTokenWithBalance> = useCallback(
-        ({ item, getIndex, isActive, drag }) => {
-            return (
-                <SwipeableRow
-                    item={item}
-                    itemKey={item.address}
-                    swipeableItemRefs={swipeableItemRefs}
-                    handleTrashIconPress={handleTrashIconPress(item)}
-                    setSelectedItem={() => (tokenToRemove.current = item)}
-                    swipeEnabled={!isEdit}
-                    onPress={onTokenPress}
-                    isDragMode={isEdit}
-                    isOpen={tokenToRemove.current?.address === item.address}>
-                    <AnimatedTokenCard
-                        item={item}
-                        isActive={isActive}
-                        getIndex={getIndex}
-                        drag={drag}
-                        isEdit={isEdit}
-                        isBalanceVisible={isBalanceVisible}
-                    />
-                </SwipeableRow>
+        const handleDragEnd = ({
+            data,
+        }: {
+            data: DenormalizedAccountTokenBalance[]
+        }) => {
+            dispatch(
+                changeBalancePosition(
+                    // eslint-disable-next-line @typescript-eslint/no-unused-vars
+                    data.map(({ token, ...otherAttributes }, index) => ({
+                        ...otherAttributes,
+                        position: index,
+                    })),
+                ),
             )
-        },
-        [handleTrashIconPress, isBalanceVisible, isEdit, onTokenPress, tokenToRemove],
-    )
+        }
 
-    return (
-        <>
+        return (
             <Animated.View style={styles.container} {...animatedViewProps}>
-                <AnimatedChartCard
-                    tokenWithInfo={tokenWithInfoVET}
-                    isEdit={isEdit}
-                    isBalanceVisible={isBalanceVisible}
-                />
-                <AnimatedChartCard
-                    tokenWithInfo={tokenWithInfoVTHO}
-                    isEdit={isEdit}
-                    isBalanceVisible={isBalanceVisible}
-                />
+                {vetBalance && (
+                    <AnimatedChartCard token={vetBalance} isEdit={isEdit} />
+                )}
+                {vthoBalance && (
+                    <AnimatedChartCard token={vthoBalance} isEdit={isEdit} />
+                )}
 
                 <NestableDraggableFlatList
                     data={tokenBalances}
                     extraData={isEdit}
                     onDragEnd={handleDragEnd}
-                    keyExtractor={item => item.address}
-                    renderItem={renderItem}
+                    keyExtractor={item => item.tokenAddress}
+                    renderItem={itemParams => (
+                        <AnimatedTokenCard {...itemParams} isEdit={isEdit} />
+                    )}
+                    activationDistance={40}
                     showsVerticalScrollIndicator={false}
-                    activationDistance={30}
+                    autoscrollThreshold={visibleHeightRef}
+                    ItemSeparatorComponent={renderSeparator}
+                    contentContainerStyle={styles.paddingTop}
                 />
             </Animated.View>
-
-            <RemoveCustomTokenBottomSheet
-                ref={removeCustomTokenBottomSheetRef}
-                tokenToRemove={selectedToken}
-                onConfirmRemoveToken={onConfirmRemoveToken}
-                onClose={closeRemoveCustomTokenBottomSheet}
-            />
-        </>
-    )
-})
+        )
+    },
+)
 
 const baseStyles = (theme: ColorThemeType) =>
     StyleSheet.create({
         container: {
             backgroundColor: theme.colors.background,
+        },
+
+        paddingTop: {
+            paddingBottom: 24,
+            paddingTop: 16,
         },
     })

@@ -1,57 +1,31 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit"
-import { NewLedgerDevice } from "~Model"
+import { PURGE } from "redux-persist"
+import { WALLET_STATUS } from "~Model"
 
-/**
- * A state which is not persisted to storage usually used to share data between screens
- * @field `mnemonic` - the mnemonic just imported/generated
- * @field `newLedgerDevice` - the ledger device just imported
- * @field `appLockStatus` - the status of the app lock
- *
- */
 export interface CacheState {
-    mnemonic?: string[]
-    privateKey?: string
-    newLedgerDevice?: NewLedgerDevice
-    isAppLoading: boolean
-    isTokensOwnedLoading: boolean
+    mnemonic?: string
+    appLockStatus: WALLET_STATUS
 }
 
 const initialState: CacheState = {
     mnemonic: undefined,
-    privateKey: undefined,
-    newLedgerDevice: undefined,
-    isAppLoading: false,
-    isTokensOwnedLoading: false,
+    appLockStatus: WALLET_STATUS.LOCKED,
 }
 
 export const CacheSlice = createSlice({
-    name: "cache",
+    name: "Cache",
     initialState,
     reducers: {
-        setPrivateKey: (state, action: PayloadAction<string | undefined>) => {
-            state.privateKey = action.payload
-        },
-        setMnemonic: (state, action: PayloadAction<string[] | undefined>) => {
+        setMnemonic: (state, action: PayloadAction<string | undefined>) => {
             state.mnemonic = action.payload
         },
-        setNewLedgerDevice: (state, action: PayloadAction<NewLedgerDevice | undefined>) => {
-            state.newLedgerDevice = action.payload
+        setAppLockStatus: (state, action: PayloadAction<WALLET_STATUS>) => {
+            state.appLockStatus = action.payload
         },
-        setIsAppLoading: (state, action: PayloadAction<boolean>) => {
-            state.isAppLoading = action.payload
-        },
-        setIsTokensOwnedLoading: (state, action: PayloadAction<boolean>) => {
-            state.isTokensOwnedLoading = action.payload
-        },
-        resetCacheState: () => initialState,
+    },
+    extraReducers: builder => {
+        builder.addCase(PURGE, () => initialState)
     },
 })
 
-export const {
-    setMnemonic,
-    setPrivateKey,
-    setNewLedgerDevice,
-    setIsAppLoading,
-    setIsTokensOwnedLoading,
-    resetCacheState,
-} = CacheSlice.actions
+export const { setMnemonic, setAppLockStatus } = CacheSlice.actions

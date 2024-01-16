@@ -12,9 +12,6 @@ fastlane/test_output
 
 # fastlane builds
 builds/*
-build/*
 *.xcarchive
 
 .env
-.env.secret
-.env.default

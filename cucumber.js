@@ -1,11 +1,11 @@
 module.exports = {
     default: {
         paths: ["e2e/features/**/*.feature"],
-        require: ["e2e/**/*.ts"],
+        require: ["e2e/**/*.ts", "tests.setup.js"],
         requireModule: ["ts-node/register"],
-        format: ["progress-bar", ["html", "cucumber-report.html"]],
         formatOptions: {
             snippetInterface: "synchronous",
         },
+        publishQuiet: true,
     },
 }

@@ -1,14 +1,14 @@
 import { useNavigation } from "@react-navigation/native"
 import React, { useCallback } from "react"
 import { StyleSheet } from "react-native"
+import { Pressable } from "react-native"
 import { LocalizedString } from "typesafe-i18n"
-import { useTheme } from "~Hooks"
-import { BaseIcon, BaseText, BaseTouchable, BaseView } from "~Components"
-import { RootStackParamListSettings, Routes } from "~Navigation"
+import { useTheme } from "~Common"
+import { BaseIcon, BaseText, BaseView } from "~Components"
 
 export type RowProps = {
     title: LocalizedString
-    screenName: keyof Omit<RootStackParamListSettings, Routes.WALLET_DETAILS>
+    screenName: string
     icon: string
 }
 
@@ -17,19 +17,30 @@ export const SettingsRow = ({ title, screenName, icon }: RowProps) => {
 
     const theme = useTheme()
 
-    const onPress = useCallback(() => nav.navigate(screenName), [screenName, nav])
+    const onPress = useCallback(
+        // Todo: types
+        () => nav.navigate(screenName as any),
+        [screenName, nav],
+    )
 
     return (
-        <BaseTouchable action={onPress} style={baseStyles.container} haptics="Light">
+        <Pressable onPress={onPress} style={baseStyles.container}>
             <BaseView flexDirection="row">
                 <BaseIcon color={theme.colors.text} name={icon} size={24} />
-                <BaseText mx={14} typographyFont="button" color={theme.colors.text}>
+                <BaseText
+                    mx={14}
+                    typographyFont="button"
+                    color={theme.colors.text}>
                     {title}
                 </BaseText>
             </BaseView>
 
-            <BaseIcon color={theme.colors.text} name={"chevron-right"} size={24} />
-        </BaseTouchable>
+            <BaseIcon
+                color={theme.colors.text}
+                name={"chevron-right"}
+                size={24}
+            />
+        </Pressable>
     )
 }
 

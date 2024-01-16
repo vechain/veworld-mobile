@@ -1,31 +1,26 @@
-import { StyleSheet, TextProps, TouchableOpacity, TouchableOpacityProps } from "react-native"
-import React, { useCallback } from "react"
+import {
+    StyleSheet,
+    TouchableOpacity,
+    TouchableOpacityProps,
+} from "react-native"
+import React from "react"
 import { BaseText } from "./BaseText"
-import { TFonts } from "~Constants"
-import HapticsService from "~Services/HapticsService"
 
 type Props = {
     title?: string
-    action?: () => void
+    action: () => void
     underlined?: boolean
-    font?: TFonts
-    haptics?: "Success" | "Warning" | "Error" | "Light" | "Medium" | "Heavy"
-} & TouchableOpacityProps &
-    TextProps
+} & TouchableOpacityProps
 
 export const BaseTouchable = (props: Props) => {
-    const { action, title, underlined, style, children, font = "bodyMedium", haptics, ...otherProps } = props
-
-    const onButtonPress = useCallback(() => {
-        if (!action) return
-        action()
-        haptics && HapticsService.triggerHaptics({ haptics })
-    }, [action, haptics])
+    const { action, title, underlined, style, children, ...otherProps } = props
 
     return (
-        <TouchableOpacity onPress={onButtonPress} style={style} {...otherProps}>
+        <TouchableOpacity onPress={action} style={style} {...otherProps}>
             {title && (
-                <BaseText typographyFont={font} style={underlined && baseStyles.underline}>
+                <BaseText
+                    typographyFont="bodyMedium"
+                    style={underlined && baseStyles.underline}>
                     {title}
                 </BaseText>
             )}

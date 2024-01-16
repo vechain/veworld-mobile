@@ -1,17 +1,28 @@
 import { StyleSheet } from "react-native"
 import React, { memo } from "react"
-import Animated, { Extrapolation, interpolate, useAnimatedStyle } from "react-native-reanimated"
+import Animated, {
+    Extrapolation,
+    interpolate,
+    useAnimatedStyle,
+} from "react-native-reanimated"
 
-export const FadableSafeAreaTop = memo(({ scrollValue }: { scrollValue: Animated.SharedValue<number> }) => {
-    const animStyle = useAnimatedStyle(() => {
-        const opacity = interpolate(scrollValue.value, [-59, 15], [0, 0.85], {
-            extrapolateRight: Extrapolation.CLAMP,
-        })
-        return { opacity: opacity }
-    }, [])
+export const FadableSafeAreaTop = memo(
+    ({ scrollValue }: { scrollValue: Animated.SharedValue<number> }) => {
+        const animStyle = useAnimatedStyle(() => {
+            const opacity = interpolate(
+                scrollValue.value,
+                [-59, 15],
+                [0, 0.85],
+                {
+                    extrapolateRight: Extrapolation.CLAMP,
+                },
+            )
+            return { opacity: opacity }
+        }, [])
 
-    return <Animated.View style={[baseStyles.container, animStyle]} />
-})
+        return <Animated.View style={[baseStyles.container, animStyle]} />
+    },
+)
 
 const baseStyles = StyleSheet.create({
     container: {

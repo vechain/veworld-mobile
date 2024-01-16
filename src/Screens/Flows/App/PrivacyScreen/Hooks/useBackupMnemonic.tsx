@@ -1,6 +1,6 @@
 import { useCallback, useEffect, useState } from "react"
-import { LocalDevice } from "~Model"
-import { WalletEncryptionKeyHelper } from "~Components"
+import { CryptoUtils } from "~Common"
+import { Device } from "~Model"
 
 type Props = {
     closePasswordPrompt: () => void
@@ -8,7 +8,7 @@ type Props = {
     openBackupPhraseSheetWithDelay: (delay: number) => void
     openPasswordPrompt: () => void
     closeWalletMgmtSheet: () => void
-    devices: LocalDevice[]
+    devices: Device[]
     isWalletSecurityBiometrics: boolean
 }
 
@@ -38,9 +38,11 @@ export const useBackupMnemonic = ({
             if (devices.length > 1) {
                 openWalletMgmtSheetWithDelay(300)
             } else {
-                const wallet = await WalletEncryptionKeyHelper.decryptWallet(devices[0].wallet)
-                if (wallet?.mnemonic) {
-                    setMnemonicArray(wallet.mnemonic)
+                const { decryptedWallet } = await CryptoUtils.decryptWallet(
+                    devices[0],
+                )
+                if (decryptedWallet) {
+                    setMnemonicArray(decryptedWallet.mnemonic)
                     openBackupPhraseSheetWithDelay(300)
                 }
             }
@@ -69,15 +71,23 @@ export const useBackupMnemonic = ({
             if (devices.length > 1) {
                 openWalletMgmtSheetWithDelay(300)
             } else {
-                const wallet = await WalletEncryptionKeyHelper.decryptWallet(devices[0].wallet, password)
+                const { decryptedWallet } = await CryptoUtils.decryptWallet(
+                    devices[0],
+                    password,
+                )
 
-                if (wallet?.mnemonic) {
-                    setMnemonicArray(wallet.mnemonic)
+                if (decryptedWallet) {
+                    setMnemonicArray(decryptedWallet.mnemonic)
                     openBackupPhraseSheetWithDelay(300)
                 }
             }
         },
-        [closePasswordPrompt, devices, openBackupPhraseSheetWithDelay, openWalletMgmtSheetWithDelay],
+        [
+            closePasswordPrompt,
+            devices,
+            openBackupPhraseSheetWithDelay,
+            openWalletMgmtSheetWithDelay,
+        ],
     )
 
     /*
@@ -86,13 +96,16 @@ export const useBackupMnemonic = ({
      * the wallet using the user's PIN if exists.
      */
     const handleOnSelectedWallet = useCallback(
-        async (device: LocalDevice) => {
+        async (device: Device) => {
             closeWalletMgmtSheet()
 
-            const wallet = await WalletEncryptionKeyHelper.decryptWallet(device.wallet, userPin)
+            const { decryptedWallet } = await CryptoUtils.decryptWallet(
+                device,
+                userPin,
+            )
 
-            if (wallet?.mnemonic) {
-                setMnemonicArray(wallet.mnemonic)
+            if (decryptedWallet) {
+                setMnemonicArray(decryptedWallet.mnemonic)
                 openBackupPhraseSheetWithDelay(300)
             }
         },

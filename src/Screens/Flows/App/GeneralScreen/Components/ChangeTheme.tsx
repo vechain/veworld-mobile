@@ -1,11 +1,16 @@
 import React, { useCallback, useMemo } from "react"
-import { ThemeEnum } from "~Constants"
-import { BaseButtonGroupHorizontal, usePersistedTheme } from "~Components"
+import { ThemeEnum } from "~Common"
+import { BaseButtonGroupHorizontal } from "~Components"
 import { useI18nContext } from "~i18n"
 import { BaseButtonGroupHorizontalType } from "~Model"
+import { useAppDispatch, useAppSelector } from "~Storage/Redux"
+import { setTheme } from "~Storage/Redux/Actions"
+import { selectTheme } from "~Storage/Redux/Selectors"
 
 export const ChangeTheme: React.FC = () => {
-    const { theme: themePref, changeTheme } = usePersistedTheme()
+    const dispatch = useAppDispatch()
+
+    const themePref = useAppSelector(selectTheme)
 
     const { LL } = useI18nContext()
 
@@ -44,10 +49,16 @@ export const ChangeTheme: React.FC = () => {
                     break
             }
 
-            changeTheme(mode)
+            dispatch(setTheme(mode))
         },
-        [changeTheme],
+        [dispatch],
     )
 
-    return <BaseButtonGroupHorizontal selectedButtonIds={[themePref]} buttons={themes} action={handleSelectTheme} />
+    return (
+        <BaseButtonGroupHorizontal
+            selectedButtonIds={[themePref]}
+            buttons={themes}
+            action={handleSelectTheme}
+        />
+    )
 }

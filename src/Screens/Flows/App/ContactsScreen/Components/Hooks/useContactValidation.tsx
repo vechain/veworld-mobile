@@ -1,5 +1,5 @@
 import { useCallback } from "react"
-import { AddressUtils, FormUtils } from "~Utils"
+import { AddressUtils, FormUtils } from "~Common"
 import { selectContacts, useAppSelector } from "~Storage/Redux"
 import { useI18nContext } from "~i18n"
 import { address as thorAddress } from "thor-devkit"
@@ -7,7 +7,10 @@ import { Contact } from "~Model"
 
 const MAX_INPUT_LENGTH = 19
 
-export const useContactValidation = (checkNameExists?: boolean, exclude?: Contact) => {
+export const useContactValidation = (
+    checkNameExists?: boolean,
+    exclude?: Contact,
+) => {
     const { LL } = useI18nContext()
 
     const contacts = useAppSelector(selectContacts)
@@ -20,7 +23,10 @@ export const useContactValidation = (checkNameExists?: boolean, exclude?: Contac
             if (contactName.length > MAX_INPUT_LENGTH) {
                 return LL.ERROR_MAX_INPUT_LENGTH()
             }
-            if (checkNameExists && FormUtils.alreadyExists(contactName, contacts, "alias", exclude)) {
+            if (
+                checkNameExists &&
+                FormUtils.alreadyExists(contactName, contacts, "alias", exclude)
+            ) {
                 return LL.ERROR_NAME_ALREADY_EXISTS()
             }
             return ""
@@ -36,7 +42,14 @@ export const useContactValidation = (checkNameExists?: boolean, exclude?: Contac
             if (!AddressUtils.isValid(contactAddress)) {
                 return LL.ERROR_ADDRESS_INVALID()
             }
-            if (FormUtils.alreadyExists(thorAddress.toChecksumed(contactAddress), contacts, "address", exclude)) {
+            if (
+                FormUtils.alreadyExists(
+                    thorAddress.toChecksumed(contactAddress),
+                    contacts,
+                    "address",
+                    exclude,
+                )
+            ) {
                 return LL.ERROR_ADDRESS_EXISTS()
             }
             return ""

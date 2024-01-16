@@ -34,13 +34,3 @@ export enum DEVICE_TYPE {
     LOCAL_PRIVATE_KEY = "local-pk",
     LEDGER = "ledger",
 }
-
-/**
- * The wallet import method
- */
-export enum IMPORT_TYPE {
-    UNKNOWN = "unknown",
-    MNEMONIC = "mnemonic",
-    PRIVATE_KEY = "private-key",
-    KEYSTORE_FILE = "keystore-file",
-}

@@ -1,29 +1,20 @@
 import { useEffect, useState } from "react"
 import { InteractionManager } from "react-native"
 import { mnemonic as thorMnemonic } from "thor-devkit"
-import { setIsAppLoading, useAppDispatch } from "~Storage/Redux"
 
 export const useGenerateMnemonic = () => {
-    const [mnemonic, setMnemonic] = useState<string[]>(Array.from({ length: 12 }))
-    const dispatch = useAppDispatch()
+    const [mnemonic, _setMnemonic] = useState<string>("")
+    const [mnemonicArray, setMnemonicArray] = useState<string[]>(
+        Array.from({ length: 12 }),
+    )
 
     useEffect(() => {
         InteractionManager.runAfterInteractions(() => {
-            function init() {
-                dispatch(setIsAppLoading(true))
-                const seed = thorMnemonic.generate()
-
-                if (seed.length === 12) {
-                    setMnemonic(seed)
-                    dispatch(setIsAppLoading(false))
-                } else {
-                    init()
-                }
-            }
-
-            init()
+            let seed = thorMnemonic.generate()
+            _setMnemonic(seed.join(" "))
+            setMnemonicArray(seed)
         })
-    }, [dispatch])
+    }, [])
 
-    return { mnemonic }
+    return { mnemonic, mnemonicArray }
 }

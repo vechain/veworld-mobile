@@ -1,11 +1,12 @@
 import { TestWrapper } from "~Test"
 import React from "react"
-import { render, fireEvent, screen, act, waitFor } from "@testing-library/react-native"
+import { render, fireEvent, screen, act } from "@testing-library/react-native"
 import { BaseButton } from "./BaseButton"
 import { BaseIcon } from "./BaseIcon"
 
 const buttonTitle = "Button"
-const findButton = async () => await screen.findByText(buttonTitle, {}, { timeout: 5000 })
+const findButton = async () =>
+    await screen.findByText(buttonTitle, {}, { timeout: 5000 })
 
 describe("BaseButton", () => {
     const mockAction = jest.fn()
@@ -56,7 +57,7 @@ describe("BaseButton", () => {
                 action={mockAction}
                 title={buttonTitle}
                 variant="outline"
-                haptics="Light"
+                haptics="light"
                 w={10}
                 h={10}
                 size={"sm"}
@@ -72,12 +73,7 @@ describe("BaseButton", () => {
             fireEvent.press(button)
         })
 
-        await waitFor(
-            () => {
-                expect(mockAction).toHaveBeenCalled()
-            },
-            { timeout: 5000 },
-        )
+        expect(mockAction).toHaveBeenCalled()
 
         render(
             <BaseButton
@@ -85,7 +81,7 @@ describe("BaseButton", () => {
                 title={buttonTitle}
                 textColor="#FF0000"
                 variant="outline"
-                haptics="Medium"
+                haptics="medium"
                 size={"md"}
             />,
             { wrapper: TestWrapper },
@@ -98,19 +94,14 @@ describe("BaseButton", () => {
             fireEvent.press(button)
         })
 
-        await waitFor(
-            () => {
-                expect(mockAction).toHaveBeenCalled()
-            },
-            { timeout: 5000 },
-        )
+        expect(mockAction).toHaveBeenCalled()
         render(
             <BaseButton
                 action={mockAction}
                 title={buttonTitle}
                 textColor="#FF0000"
                 variant="link"
-                haptics="Heavy"
+                haptics="heavy"
                 px={10}
                 py={10}
                 typographyFont={"body"}
@@ -125,11 +116,6 @@ describe("BaseButton", () => {
             fireEvent.press(button)
         })
 
-        await waitFor(
-            () => {
-                expect(mockAction).toHaveBeenCalled()
-            },
-            { timeout: 5000 },
-        )
+        expect(mockAction).toHaveBeenCalled()
     })
 })

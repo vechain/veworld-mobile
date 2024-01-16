@@ -1,14 +1,11 @@
-import React, { FC, useCallback } from "react"
+import React, { FC } from "react"
 import BouncyCheckbox from "react-native-bouncy-checkbox"
-import { BaseIcon, BaseText } from "~Components/Base"
-import { useThemedStyles } from "~Hooks"
+import { BaseText } from "~Components/Base"
+import { useTheme } from "~Common"
 import { LocalizedString } from "typesafe-i18n"
-import { ColorThemeType, TFonts } from "~Constants"
-import HapticsService from "~Services/HapticsService"
-import { StyleSheet } from "react-native"
+import { TFonts } from "~Common/Theme"
 
 type Props = {
-    isChecked: boolean
     font?: TFonts
     fontColor?: string
     text: LocalizedString | string
@@ -17,45 +14,31 @@ type Props = {
     checkAction: (checked: boolean) => void
 }
 
-export const CheckBoxWithText: FC<Props> = ({ font, fontColor, text, checkSize, testID, checkAction, isChecked }) => {
-    const { styles, theme } = useThemedStyles(baseStyles)
-
-    const onPress = useCallback(
-        async (checked: boolean) => {
-            await HapticsService.triggerImpact({ level: "Light" })
-            checkAction(checked)
-        },
-        [checkAction],
-    )
+export const CheckBoxWithText: FC<Props> = ({
+    font,
+    fontColor,
+    text,
+    checkSize,
+    testID,
+    checkAction,
+}) => {
+    const theme = useTheme()
 
     return (
         <BouncyCheckbox
-            onPress={onPress}
+            onPress={checkAction}
             size={checkSize ?? 22}
-            unfillColor="transparent"
-            fillColor="transparent"
-            innerIconStyle={styles.innerIcon}
-            iconStyle={styles.icon}
-            iconComponent={isChecked ? <BaseIcon name="check" size={20} color={theme.colors.text} /> : <></>}
-            isChecked={isChecked}
+            fillColor={theme.colors.primary}
             textComponent={
-                <BaseText typographyFont={font ? font : "footNote"} color={fontColor} my={14} mx={10} testID={testID}>
+                <BaseText
+                    typographyFont={font ? font : "footNote"}
+                    color={fontColor}
+                    my={14}
+                    mx={10}
+                    testID={testID}>
                     {text}
                 </BaseText>
             }
         />
     )
 }
-
-const baseStyles = (theme: ColorThemeType) =>
-    StyleSheet.create({
-        innerIcon: {
-            borderColor: theme.colors.text,
-            borderRadius: 6,
-            color: theme.colors.text,
-        },
-        icon: {
-            borderRadius: 6,
-            color: theme.colors.text,
-        },
-    })

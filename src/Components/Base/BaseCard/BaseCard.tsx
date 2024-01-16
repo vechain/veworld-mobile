@@ -1,79 +1,44 @@
-import React, { memo, useMemo } from "react"
+import React, { memo } from "react"
 import { StyleProp, StyleSheet, ViewProps, ViewStyle } from "react-native"
-import { useThemedStyles } from "~Hooks"
-import { ColorThemeType } from "~Constants"
+import DropShadow from "react-native-drop-shadow"
+import { useTheme } from "~Common"
 import { BaseView } from "../BaseView"
-import { TouchableOpacity } from "react-native-gesture-handler"
 
 type Props = {
     containerStyle?: StyleProp<ViewStyle>
-    selected?: boolean
-    onPress?: () => void
-    disableOpacityOnPressing?: boolean
 }
 
 export const BaseCard = memo(
-    ({
-        children,
-        testID,
-        style,
-        containerStyle,
-        selected,
-        onPress,
-        disableOpacityOnPressing = false,
-    }: ViewProps & Props) => {
-        const { styles } = useThemedStyles(baseStyles)
-
-        const renderChildren = useMemo(() => {
-            return (
-                <BaseView style={[styles.view, style]} testID={testID}>
+    ({ children, testID, style, containerStyle }: ViewProps & Props) => {
+        const theme = useTheme()
+        return (
+            <DropShadow
+                style={[theme.shadows.card, styles.container, containerStyle]}>
+                <BaseView
+                    style={[
+                        styles.view,
+                        {
+                            backgroundColor: theme.colors.card,
+                        },
+                        style,
+                    ]}
+                    testID={testID}>
                     {children}
                 </BaseView>
-            )
-        }, [children, style, styles.view, testID])
-
-        return (
-            <BaseView
-                style={[
-                    selected ? styles.selectedContainer : styles.unselectedContainer,
-                    styles.container,
-                    containerStyle,
-                ]}>
-                {onPress ? (
-                    <TouchableOpacity
-                        onPress={onPress}
-                        containerStyle={styles.touchableContainer}
-                        activeOpacity={disableOpacityOnPressing || !onPress ? 1 : 0.2}>
-                        {renderChildren}
-                    </TouchableOpacity>
-                ) : (
-                    renderChildren
-                )}
-            </BaseView>
+            </DropShadow>
         )
     },
 )
 
-const baseStyles = (theme: ColorThemeType) =>
-    StyleSheet.create({
-        touchableContainer: {
-            borderRadius: 16,
-            overflow: "hidden",
-        },
-        container: {
-            width: "100%",
-            backgroundColor: theme.colors.card,
-            borderWidth: 1,
-            borderRadius: 16,
-        },
-        selectedContainer: {
-            borderColor: theme.colors.text,
-        },
-        unselectedContainer: {
-            borderColor: theme.colors.card,
-        },
-        view: {
-            flexDirection: "row",
-            padding: 12,
-        },
-    })
+const styles = StyleSheet.create({
+    container: {
+        width: "100%",
+    },
+    view: {
+        flexDirection: "row",
+        alignItems: "center",
+        backgroundColor: "#fff",
+        borderRadius: 16,
+        padding: 12,
+    },
+})

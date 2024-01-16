@@ -1,130 +1,71 @@
 import React from "react"
 import { createNativeStackNavigator } from "@react-navigation/native-stack"
 import {
-    ActivityDetailsScreen,
-    AssetDetailScreen,
-    ConnectedAppsScreen,
+    ManageTokenScreen,
+    BuyScreen,
     HistoryScreen,
     HomeScreen,
-    InsertAddressSendScreen,
-    LedgerSignTransaction,
-    ManageCustomTokenScreen,
-    ManageTokenScreen,
-    SelectAmountSendScreen,
-    SelectTokenSendScreen,
+    SendScreen,
     SwapScreen,
-    TransactionSummarySendScreen,
-    WalletDetailScreen,
     WalletManagementScreen,
+    ManageCustomTokenScreen,
 } from "~Screens"
 import { Routes } from "~Navigation/Enums"
-import {
-    Activity,
-    Device,
-    FungibleToken,
-    FungibleTokenWithBalance,
-    LedgerAccountWithDevice,
-    TransactionOutcomes,
-} from "~Model"
-import { Transaction } from "thor-devkit"
-import { TokenWithCompleteInfo, useNavAnimation } from "~Hooks"
 
 export type RootStackParamListHome = {
     [Routes.HOME]: undefined
-    [Routes.SELECT_TOKEN_SEND]: { initialRoute: Routes }
-    [Routes.SELECT_AMOUNT_SEND]: {
-        token: FungibleTokenWithBalance
-        initialRoute: Routes
-    }
-    [Routes.INSERT_ADDRESS_SEND]: {
-        token?: FungibleTokenWithBalance
-        amount?: string
-        initialRoute?: Routes
-        contractAddress?: string
-        tokenId?: string
-    }
-    [Routes.TRANSACTION_SUMMARY_SEND]: {
-        token: FungibleTokenWithBalance
-        amount: string
-        address: string
-    }
-    [Routes.LEDGER_SIGN_TRANSACTION]: {
-        accountWithDevice: LedgerAccountWithDevice
-        delegationSignature?: string
-        transaction: Transaction
-        initialRoute?: Routes.HOME | Routes.NFTS
-    }
+    [Routes.BUY]: undefined
+    [Routes.SEND]: undefined
     [Routes.SWAP]: undefined
     [Routes.HISTORY]: undefined
     [Routes.MANAGE_TOKEN]: undefined
     [Routes.MANAGE_CUSTOM_TOKEN]: undefined
     [Routes.WALLET_MANAGEMENT]: undefined
-    [Routes.WALLET_DETAILS]: { device: Device }
     [Routes.CREATE_WALLET_FLOW]: undefined
-    [Routes.ACTIVITY_DETAILS]: {
-        activity: Activity
-        token?: FungibleToken
-        isSwap?: boolean
-        decodedClauses?: TransactionOutcomes
-    }
-    [Routes.TOKEN_DETAILS]: { token: TokenWithCompleteInfo }
-    [Routes.SETTINGS_CONNECTED_APPS]: undefined
 }
 
-const { Navigator, Group, Screen } = createNativeStackNavigator<RootStackParamListHome>()
+const { Navigator, Group, Screen } =
+    createNativeStackNavigator<RootStackParamListHome>()
 
 export const HomeStack = () => {
-    const { animation } = useNavAnimation()
-
     return (
-        <Navigator id="HomeStack" screenOptions={{ headerShown: false, animation }}>
+        <Navigator>
             <Group>
-                <Screen name={Routes.HOME} component={HomeScreen} options={{ headerShown: false }} />
                 <Screen
-                    name={Routes.SELECT_TOKEN_SEND}
-                    component={SelectTokenSendScreen}
+                    name={Routes.HOME}
+                    component={HomeScreen}
                     options={{ headerShown: false }}
                 />
                 <Screen
-                    name={Routes.SELECT_AMOUNT_SEND}
-                    component={SelectAmountSendScreen}
+                    name={Routes.BUY}
+                    component={BuyScreen}
                     options={{ headerShown: false }}
                 />
                 <Screen
-                    name={Routes.INSERT_ADDRESS_SEND}
-                    component={InsertAddressSendScreen}
+                    name={Routes.SEND}
+                    component={SendScreen}
                     options={{ headerShown: false }}
                 />
                 <Screen
-                    name={Routes.TRANSACTION_SUMMARY_SEND}
-                    component={TransactionSummarySendScreen}
+                    name={Routes.SWAP}
+                    component={SwapScreen}
                     options={{ headerShown: false }}
                 />
                 <Screen
-                    name={Routes.LEDGER_SIGN_TRANSACTION}
-                    component={LedgerSignTransaction}
+                    name={Routes.HISTORY}
+                    component={HistoryScreen}
                     options={{ headerShown: false }}
                 />
-                <Screen name={Routes.SWAP} component={SwapScreen} options={{ headerShown: false }} />
                 <Screen
-                    name={Routes.SETTINGS_CONNECTED_APPS}
-                    component={ConnectedAppsScreen}
+                    name={Routes.MANAGE_TOKEN}
+                    component={ManageTokenScreen}
                     options={{ headerShown: false }}
                 />
-                <Screen name={Routes.HISTORY} component={HistoryScreen} options={{ headerShown: false }} />
-                <Screen
-                    name={Routes.ACTIVITY_DETAILS}
-                    component={ActivityDetailsScreen}
-                    options={{ headerShown: false }}
-                />
-                <Screen name={Routes.MANAGE_TOKEN} component={ManageTokenScreen} options={{ headerShown: false }} />
                 <Screen
                     name={Routes.MANAGE_CUSTOM_TOKEN}
                     component={ManageCustomTokenScreen}
                     options={{ headerShown: false }}
                 />
-
-                <Screen name={Routes.TOKEN_DETAILS} component={AssetDetailScreen} options={{ headerShown: false }} />
             </Group>
 
             <Group>
@@ -133,7 +74,6 @@ export const HomeStack = () => {
                     component={WalletManagementScreen}
                     options={{ headerShown: false }}
                 />
-                <Screen name={Routes.WALLET_DETAILS} component={WalletDetailScreen} options={{ headerShown: false }} />
             </Group>
         </Navigator>
     )

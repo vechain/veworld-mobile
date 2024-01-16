@@ -1,7 +1,6 @@
-import { warn } from "~Utils"
+import { error, info, ThorConstants } from "~Common"
+import { address } from "thor-devkit"
 import { Network } from "~Model"
-import { getTokenDecimals, getTokenName, getTokenSymbol } from "~Networking"
-import { ERROR_EVENTS } from "~Constants"
 
 export const getCustomTokenInfo = async ({
     tokenAddress,
@@ -12,21 +11,32 @@ export const getCustomTokenInfo = async ({
     thorClient: Connex.Thor
     network: Network
 }) => {
+    info("Get custom token infos")
+
     try {
-        const tokenName = await getTokenName(tokenAddress, thorClient)
-        const tokenSymbol = await getTokenSymbol(tokenAddress, thorClient)
-        const decimals = await getTokenDecimals(tokenAddress, thorClient)
+        const addr = address.toChecksumed(tokenAddress)
+        const contract = thorClient.account(addr)
+
+        const tokenName = await contract
+            .method(ThorConstants.abis.vip180.name)
+            .call()
+        const tokenSymbol = await contract
+            .method(ThorConstants.abis.vip180.symbol)
+            .call()
+        const decimals = await contract
+            .method(ThorConstants.abis.vip180.decimals)
+            .call()
 
         return {
             genesisId: network.genesis.id,
-            address: tokenAddress,
-            decimals,
-            name: tokenName,
-            symbol: tokenSymbol,
+            address: addr,
+            decimals: decimals.decoded[0],
+            name: tokenName.decoded[0],
+            symbol: tokenSymbol.decoded[0],
             custom: true,
             icon: "",
         }
     } catch (e) {
-        warn(ERROR_EVENTS.TOKENS, e)
+        error(e)
     }
 }

@@ -1,7 +1,7 @@
 import React from "react"
 import { TouchableOpacity } from "react-native"
 import Icon from "react-native-vector-icons/Ionicons"
-import { useTheme } from "~Hooks"
+import { useTheme } from "~Common"
 
 type Props = {
     title: string
@@ -16,7 +16,18 @@ type Props = {
     py?: number
 }
 
-export const PressableIcon = ({ title, size, action, color, m, p, my, mx, py, px }: Props) => {
+export const PressableIcon = ({
+    title,
+    size,
+    action,
+    color,
+    m,
+    p,
+    my,
+    mx,
+    py,
+    px,
+}: Props) => {
     const theme = useTheme()
 
     return (
@@ -30,7 +41,11 @@ export const PressableIcon = ({ title, size, action, color, m, p, my, mx, py, px
                 paddingVertical: py,
                 paddingHorizontal: px,
             }}>
-            <Icon name={title} size={size} color={color ? color : theme.colors.primary} />
+            <Icon
+                name={title}
+                size={size}
+                color={color ? color : theme.colors.primary}
+            />
         </TouchableOpacity>
     )
 }

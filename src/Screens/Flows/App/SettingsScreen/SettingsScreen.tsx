@@ -1,52 +1,64 @@
-import React, { useCallback, useMemo, useRef } from "react"
-import { BaseSafeArea, BaseText, BaseView } from "~Components"
+import React, { useCallback, useMemo, useState } from "react"
+import { BaseSafeArea, BaseSpacer, BaseText } from "~Components"
 import { TranslationFunctions, useI18nContext } from "~i18n"
 import { Routes } from "~Navigation"
-import { StyleSheet } from "react-native"
+import { FlashList } from "@shopify/flash-list"
+import { StyleSheet, View, ViewToken } from "react-native"
 import { RowProps, SettingsRow } from "./Components/SettingsRow"
-import { useThemedStyles } from "~Hooks"
-import { ColorThemeType, isSmallScreen } from "~Constants"
-import { selectAreDevFeaturesEnabled, useAppSelector } from "~Storage/Redux"
-import { useScrollToTop } from "@react-navigation/native"
-import { FlatList } from "react-native-gesture-handler"
+import { ColorThemeType, useThemedStyles } from "~Common"
 
 export const SettingsScreen = () => {
     const { LL } = useI18nContext()
 
-    const devFeaturesEnabled = useAppSelector(selectAreDevFeaturesEnabled)
+    const SCREEN_LIST = useMemo(() => getList(LL), [LL])
 
-    const SCREEN_LIST = useMemo(() => getList(LL, devFeaturesEnabled), [devFeaturesEnabled, LL])
+    const [isScrollable, setIsScrollable] = useState(false)
 
     const { styles: themedStyles } = useThemedStyles(baseStyles)
 
+    const renderSeparator = useCallback(
+        () => <View style={themedStyles.separator} />,
+        [themedStyles],
+    )
+
+    const checkViewableItems = useCallback(
+        ({ viewableItems }: { viewableItems: ViewToken[] }) => {
+            setIsScrollable(viewableItems.length < SCREEN_LIST.length)
+        },
+        [SCREEN_LIST.length],
+    )
+
     const renderItem = useCallback(
         ({ item }: { item: RowProps }) => (
-            <SettingsRow title={item.title} screenName={item.screenName} icon={item.icon} />
+            <SettingsRow
+                title={item.title}
+                screenName={item.screenName}
+                icon={item.icon}
+            />
         ),
         [],
     )
-    const flatListRef = useRef(null)
-
-    useScrollToTop(flatListRef)
 
     return (
-        <BaseSafeArea>
-            <BaseText mx={24} typographyFont="largeTitle" testID="settings-screen" pb={16}>
+        <BaseSafeArea grow={1}>
+            <BaseText typographyFont="largeTitle" mx={20}>
                 {LL.TITLE_SETTINGS()}
             </BaseText>
 
-            <BaseView style={[themedStyles.list]}>
-                <FlatList
-                    ref={flatListRef}
-                    data={SCREEN_LIST}
-                    contentContainerStyle={themedStyles.contentContainerStyle}
-                    scrollEnabled={isSmallScreen}
-                    keyExtractor={item => item.screenName}
-                    showsVerticalScrollIndicator={false}
-                    showsHorizontalScrollIndicator={false}
-                    renderItem={renderItem}
-                />
-            </BaseView>
+            <BaseSpacer height={20} />
+
+            <FlashList
+                data={SCREEN_LIST}
+                contentContainerStyle={themedStyles.contentContainerStyle}
+                ItemSeparatorComponent={renderSeparator}
+                estimatedItemSize={56}
+                scrollEnabled={isScrollable}
+                keyExtractor={item => item.screenName}
+                onViewableItemsChanged={checkViewableItems}
+                renderItem={renderItem}
+            />
+
+            <BaseSpacer height={40} />
         </BaseSafeArea>
     )
 }
@@ -54,67 +66,63 @@ export const SettingsScreen = () => {
 const baseStyles = (theme: ColorThemeType) =>
     StyleSheet.create({
         contentContainerStyle: {
-            paddingHorizontal: 24,
+            paddingHorizontal: 20,
         },
         separator: {
-            backgroundColor: theme.colors.text,
-            height: 0.5,
+            borderBottomColor: theme.colors.text,
+            borderBottomWidth: 0.5,
         },
-        list: { flex: 1 },
     })
 
-const getList = (LL: TranslationFunctions, devEnabled: boolean) => {
-    const settingsList: RowProps[] = [
-        {
-            title: LL.TITLE_GENERAL(),
-            screenName: Routes.SETTINGS_GENERAL,
-            icon: "cog-outline",
-        },
-        {
-            title: LL.TITLE_MANAGE_WALLET(),
-            screenName: Routes.WALLET_MANAGEMENT,
-            icon: "wallet-outline",
-        },
-        {
-            title: LL.TITLE_TRANSACTIONS(),
-            screenName: Routes.SETTINGS_TRANSACTIONS,
-            icon: "currency-usd",
-        },
-        {
-            title: LL.TITLE_NETWORKS(),
-            screenName: Routes.SETTINGS_NETWORK,
-            icon: "web",
-        },
-        {
-            title: LL.TITLE_CONTACTS(),
-            screenName: Routes.SETTINGS_CONTACTS,
-            icon: "book-outline",
-        },
-        {
-            title: LL.TITLE_PRIVACY(),
-            screenName: Routes.SETTINGS_PRIVACY,
-            icon: "shield-check-outline",
-        },
-
-        {
-            title: LL.TITLE_CONNECTED_APPS(),
-            screenName: Routes.SETTINGS_CONNECTED_APPS,
-            icon: "widgets-outline",
-        },
-        {
-            title: LL.TITLE_ABOUT(),
-            screenName: Routes.SETTINGS_ABOUT,
-            icon: "information-outline",
-        },
-    ]
-
-    if (devEnabled) {
-        settingsList.push({
-            title: LL.TITLE_ALERTS(),
-            screenName: Routes.SETTINGS_ALERTS,
-            icon: "bell-outline",
-        })
-    }
-
-    return settingsList
-}
+const getList = (LL: TranslationFunctions) => [
+    {
+        title: LL.TITLE_GENERAL(),
+        screenName: Routes.SETTINGS_GENERAL,
+        icon: "cog-outline",
+    },
+    {
+        title: LL.TITLE_ADVANCED(),
+        screenName: Routes.SETTINGS_ADVANCED,
+        icon: "format-list-bulleted",
+    },
+    {
+        title: LL.TITLE_MANAGE_WALLET(),
+        screenName: Routes.WALLET_MANAGEMENT,
+        icon: "wallet-outline",
+    },
+    {
+        title: LL.TITLE_NFT(),
+        screenName: Routes.SETTINGS_NFT,
+        icon: "image-multiple-outline",
+    },
+    {
+        title: LL.TITLE_NETWORKS(),
+        screenName: Routes.SETTINGS_NETWORK,
+        icon: "web",
+    },
+    {
+        title: LL.TITLE_CONTACTS(),
+        screenName: Routes.SETTINGS_CONTACTS,
+        icon: "book-outline",
+    },
+    {
+        title: LL.TITLE_PRIVACY(),
+        screenName: Routes.SETTINGS_PRIVACY,
+        icon: "shield-check-outline",
+    },
+    {
+        title: LL.TITLE_ALERTS(),
+        screenName: Routes.SETTINGS_ALERTS,
+        icon: "bell-outline",
+    },
+    {
+        title: LL.TITLE_CONNECTED_APPS(),
+        screenName: Routes.SETTINGS_CONNECTED_APPS,
+        icon: "widgets-outline",
+    },
+    {
+        title: LL.TITLE_ABOUT(),
+        screenName: Routes.SETTINGS_ABOUT,
+        icon: "information-outline",
+    },
+]

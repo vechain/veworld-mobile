@@ -1,17 +1,14 @@
-/** @type {import("jest").Config} */
 const { defaults: tsjPreset } = require("ts-jest/presets")
 
 module.exports = {
     ...tsjPreset,
-    preset: "jest-expo",
-    setupFiles: ["./node_modules/react-native-gesture-handler/jestSetup.js"],
+    preset: "react-native",
     setupFilesAfterEnv: ["<rootDir>/jest.setup.ts"],
-    coverageReporters: ["json", "lcov", "text", "text-summary", "clover", "json-summary"],
-    testTimeout: 10000,
     transform: {
         "^.+\\.jsx$": "babel-jest",
         "^.+\\.tsx?$": "ts-jest",
-        ".+\\.(css|styl|less|sass|scss|png|jpg|ttf|woff|woff2)$": "jest-transform-stub",
+        ".+\\.(css|styl|less|sass|scss|png|jpg|ttf|woff|woff2)$":
+            "jest-transform-stub",
     },
     transformIgnorePatterns: [
         "node_modules/(?!((jest-)?react-native|@react-native(-community)?)" +
@@ -26,47 +23,40 @@ module.exports = {
             "|stream-browserify" +
             "|@craftzdog/react-native-buffer" +
             "|react-native-svg" +
-            "|mixpanel-react-native" +
             ")",
     ],
     moduleNameMapper: {
-        "^~Api(.*)": ["<rootDir>/src/Api$1"],
         "^~Storage(.*)": ["<rootDir>/src/Storage$1"],
         "^~Model(.*)": ["<rootDir>/src/Model$1"],
         "^~Services(.*)": ["<rootDir>/src/Services$1"],
         "^~Screens(.*)": ["<rootDir>/src/Screens$1"],
         "^~Navigation(.*)": ["<rootDir>/src/Navigation$1"],
-        "^~Constants(.*)": ["<rootDir>/src/Constants$1"],
-        "^~Hooks(.*)": ["<rootDir>/src/Hooks$1"],
-        "^~Utils(.*)": ["<rootDir>/src/Utils$1"],
+        "^~Common(.*)": ["<rootDir>/src/Common$1"],
         "^~Components(.*)": ["<rootDir>/src/Components$1"],
-        "^~Events(.*)": ["<rootDir>/src/Events$1"],
         "^~i18n(.*)": ["<rootDir>/src/i18n$1"],
         "^~Assets(.*)": ["<rootDir>/src/Assets$1"],
         "^~Test$": ["<rootDir>/src/Test/index.tsx"],
-        "^~Networking(.*)": ["<rootDir>/src/Networking$1"],
-
-        Intl: "<rootDir>/node_modules/intl/",
     },
     moduleFileExtensions: ["ts", "tsx", "js", "jsx", "json", "node"],
     testMatch: ["**/*.(spec|test).(ts|tsx|js|jsx)"],
-
-    collectCoverageFrom: ["src/Utils/**/*.{js,jsx,ts,tsx}"],
-    coveragePathIgnorePatterns: [
-        "index.ts",
-        "<rootDir>/src/Utils/ConnectionUtils/ConnectionUtils.ts",
-        "<rootDir>/src/Utils/AnalyticsUtils/AnalyticsUtils.ts",
-        "<rootDir>/src/Utils/MinimizerUtils/MinimizerUtils.ts",
+    /*
+     * COVERAGE PARAMS:
+     * this is currently checking just utils and base components, it should be extended in the future
+     */
+    collectCoverageFrom: [
+        "src/Common/Utils/**/*.{js,jsx,ts,tsx}",
+        "src/Components/Base/**/*.{js,jsx,ts,tsx}",
     ],
+    coveragePathIgnorePatterns: [
+        "<rootDir>/src/Common/Utils/ConnectionUtils/ConnectionUtils.ts",
+    ],
+
     coverageThreshold: {
         global: {
-            statements: 90,
-            branches: 80,
-            functions: 90,
-            lines: 89.85,
+            statements: 95,
+            branches: 85,
+            functions: 95,
+            lines: 94,
         },
     },
-    maxWorkers: 2,
-    workerIdleMemoryLimit: "1GB",
-    reporters: ["default", "jest-junit"],
 }

@@ -1,24 +1,33 @@
-import React, { useCallback, useState } from "react"
+import { StyleSheet } from "react-native"
+import React, { useCallback, useEffect, useState } from "react"
 import { useI18nContext } from "~i18n"
 import {
     BaseButton,
+    BaseIcon,
+    BaseSafeArea,
     BaseSpacer,
     BaseText,
     BaseTextInput,
     BaseView,
-    Layout,
     hideToast,
     showErrorToast,
 } from "~Components"
-import { URIUtils, warn } from "~Utils"
+import { error, URLUtils, useTheme } from "~Common"
 import { useNavigation } from "@react-navigation/native"
-import { selectCustomNetworks, useAppDispatch, useAppSelector, validateAndAddCustomNode } from "~Storage/Redux"
+import { useBottomTabBarHeight } from "@react-navigation/bottom-tabs"
+import {
+    selectCustomNetworks,
+    useAppDispatch,
+    useAppSelector,
+    validateAndAddCustomNode,
+} from "~Storage/Redux"
 import * as Haptics from "expo-haptics"
-import { ERROR_EVENTS } from "~Constants"
 
 export const AddCustomNodeScreen = () => {
     const { LL } = useI18nContext()
+    const theme = useTheme()
     const nav = useNavigation()
+    const tabBarHeight = useBottomTabBarHeight()
     const customNodes = useAppSelector(selectCustomNetworks)
     const dispatch = useAppDispatch()
 
@@ -44,12 +53,12 @@ export const AddCustomNodeScreen = () => {
                 }),
             ).unwrap()
 
-            await Haptics.notificationAsync(Haptics.NotificationFeedbackType.Success)
+            Haptics.notificationAsync(Haptics.NotificationFeedbackType.Success)
             goBack()
         } catch (e) {
-            warn(ERROR_EVENTS.SETTINGS, "onAddNetworkPress", e)
-            await Haptics.notificationAsync(Haptics.NotificationFeedbackType.Error)
-            showErrorToast({ text1: e as string })
+            error(e)
+            Haptics.notificationAsync(Haptics.NotificationFeedbackType.Error)
+            showErrorToast(e as string)
         }
         setIsSubmitting(false)
     }, [setIsSubmitting, dispatch, isSubmitDisabled, nodeName, nodeUrl, goBack])
@@ -58,9 +67,11 @@ export const AddCustomNodeScreen = () => {
         (value: string): string => {
             if (!value) return LL.ERROR_ENTER_VALID_URL()
 
-            if (!URIUtils.isAllowed(value)) return LL.ERROR_URL_NOT_VALID()
+            if (!URLUtils.isAllowed(value)) return LL.ERROR_URL_NOT_VALID()
 
-            const urlAlreadyExist = customNodes.find(net => net.currentUrl === value)
+            const urlAlreadyExist = customNodes.find(
+                net => net.currentUrl === value,
+            )
             if (urlAlreadyExist) return LL.ERROR_URL_ALREADY_USED()
 
             return ""
@@ -68,50 +79,60 @@ export const AddCustomNodeScreen = () => {
         [customNodes, LL],
     )
 
-    const handleChangeUrl = useCallback(
-        (url: string) => {
-            setNodeUrl(url)
-            setNodeUrlError(validateUrlInput(url))
-        },
-        [validateUrlInput],
-    )
+    useEffect(() => {
+        if (nodeUrl) {
+            setNodeUrlError(validateUrlInput(nodeUrl))
+        }
+    }, [nodeUrl, validateUrlInput])
 
     return (
-        <Layout
-            body={
-                <BaseView flexGrow={1} justifyContent="space-between">
-                    <BaseView>
-                        <BaseText typographyFont="title">{LL.BTN_ADD_CUSTOM_NODE()}</BaseText>
-                        <BaseSpacer height={24} />
-                        <BaseText typographyFont="button" pb={8}>
-                            {LL.NETWORK_ADD_CUSTOM_NODE_SB()}
-                        </BaseText>
-                        <BaseText typographyFont="captionRegular">{LL.NETWORK_ADD_CUSTOM_NODE_SB_DESC()}</BaseText>
-                        <BaseSpacer height={24} />
-                        <BaseTextInput
-                            placeholder={LL.COMMON_LBL_ENTER_THE({
-                                name: LL.COMMON_LBL_NAME(),
-                            })}
-                            label={LL.NETWORK_ADD_CUSTOM_NODE_NAME()}
-                            value={nodeName}
-                            setValue={setNodeName}
-                        />
-                        <BaseSpacer height={16} />
-                        <BaseTextInput
-                            placeholder={LL.COMMON_LBL_ENTER_THE({
-                                name: LL.COMMON_LBL_URL(),
-                            })}
-                            label={LL.COMMON_LBL_URL()}
-                            value={nodeUrl}
-                            setValue={handleChangeUrl}
-                            errorMessage={nodeUrlError}
-                        />
-                    </BaseView>
+        <BaseSafeArea grow={1}>
+            <BaseIcon
+                style={baseStyles.backIcon}
+                size={36}
+                name="chevron-left"
+                color={theme.colors.text}
+                action={goBack}
+            />
+            <BaseSpacer height={12} />
+            <BaseView
+                mx={20}
+                flexGrow={1}
+                justifyContent="space-between"
+                alignItems="center"
+                pb={tabBarHeight}>
+                <BaseView>
+                    <BaseText typographyFont="title">
+                        {LL.BTN_ADD_CUSTOM_NODE()}
+                    </BaseText>
+                    <BaseSpacer height={24} />
+                    <BaseText typographyFont="button" pb={8}>
+                        {LL.NETWORK_ADD_CUSTOM_NODE_SB()}
+                    </BaseText>
+                    <BaseText typographyFont="captionRegular">
+                        {LL.NETWORK_ADD_CUSTOM_NODE_SB_DESC()}
+                    </BaseText>
+                    <BaseSpacer height={24} />
+                    <BaseTextInput
+                        placeholder={LL.COMMON_LBL_ENTER_THE({
+                            name: LL.COMMON_LBL_NAME(),
+                        })}
+                        label={LL.NETWORK_ADD_CUSTOM_NODE_NAME()}
+                        value={nodeName}
+                        setValue={setNodeName}
+                    />
+                    <BaseSpacer height={16} />
+                    <BaseTextInput
+                        placeholder={LL.COMMON_LBL_ENTER_THE({
+                            name: LL.COMMON_LBL_URL(),
+                        })}
+                        label={LL.COMMON_LBL_URL()}
+                        value={nodeUrl}
+                        setValue={setNodeUrl}
+                        errorMessage={nodeUrlError}
+                    />
                 </BaseView>
-            }
-            footer={
                 <BaseButton
-                    haptics="Light"
                     action={onAddNetworkPress}
                     w={100}
                     px={20}
@@ -120,7 +141,14 @@ export const AddCustomNodeScreen = () => {
                     disabled={isSubmitting || isSubmitDisabled}
                     radius={16}
                 />
-            }
-        />
+            </BaseView>
+        </BaseSafeArea>
     )
 }
+
+const baseStyles = StyleSheet.create({
+    backIcon: {
+        marginHorizontal: 8,
+        alignSelf: "flex-start",
+    },
+})
