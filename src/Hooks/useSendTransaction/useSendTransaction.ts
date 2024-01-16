@@ -50,7 +50,7 @@ export const useSendTransaction = (onSuccess: (transaction: Transaction, id: str
                     data: axiosError.response?.data,
                 })
             } else {
-                error(ERROR_EVENTS.SEND, e)
+                error(ERROR_EVENTS.SEND, JSON.stringify(e))
             }
 
             throw e
