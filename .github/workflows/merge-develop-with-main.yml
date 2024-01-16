@@ -44,4 +44,3 @@ jobs:
         git pull origin main
         git merge develop -m "Merge develop into main - $(date +"%Y-%m-%d %H:%M:%S")"
         git push origin main
-    
