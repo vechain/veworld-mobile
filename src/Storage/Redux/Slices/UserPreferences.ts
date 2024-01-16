@@ -1,29 +1,51 @@
-import { LANGUAGE } from "./../../../Common/Enums/LanguageEnum"
+import { LANGUAGE } from "../../../Constants/Enums/LanguageEnum"
 import { createSlice, PayloadAction } from "@reduxjs/toolkit"
-import { PURGE } from "redux-persist"
-import { CURRENCY, ThemeEnum } from "~Common/Enums"
+import moment from "moment"
+import { CURRENCY, ThemeEnum } from "~Constants"
+
+/**
+ * @typedef {Object} UserPreferenceState
+ * @property {ThemeEnum} theme
+ * @property {boolean} hideTokensWithNoBalance
+ * @property {boolean} isPinCodeRequired - whether the pin code is required to decrypt the wallets. Pin code will be stored in the PinCodeProvider if not.
+ * @property {boolean} balanceVisible
+ * @property {CURRENCY} currency
+ * @property {LANGUAGE} language
+ * @property {boolean} isAnalyticsTrackingEnabled
+ * @property {boolean} isSentryTrackingEnabled
+ */
+
 export interface UserPreferenceState {
     theme: ThemeEnum
     hideTokensWithNoBalance: boolean
-    isAppLockActive: boolean
+    isPinCodeRequired: boolean
     balanceVisible: boolean
     currency: CURRENCY
     language: LANGUAGE
     isAnalyticsTrackingEnabled: boolean
+    isSentryTrackingEnabled: boolean
+    devFeaturesEnabled: boolean
+    lastReviewTimestamp: string
+    lastVersionCheck: string
 }
 
 const initialState: UserPreferenceState = {
     theme: ThemeEnum.SYSTEM,
     hideTokensWithNoBalance: false,
-    isAppLockActive: process.env.NODE_ENV !== "development",
+    isPinCodeRequired: true,
     balanceVisible: true,
     currency: CURRENCY.USD,
     language: LANGUAGE.ENGLISH,
-    isAnalyticsTrackingEnabled: false,
+    isAnalyticsTrackingEnabled: true, // this is enabled by default because otherwise onboarding events won't be tracked
+    isSentryTrackingEnabled: true,
+    devFeaturesEnabled: __DEV__,
+    // this will ask the user to review the app after 3 days the first time
+    lastReviewTimestamp: moment().subtract(3, "weeks").add(3, "days").toISOString(),
+    lastVersionCheck: moment().toISOString(),
 }
 
 export const UserPreferencesSlice = createSlice({
-    name: "UserPreferences",
+    name: "userPreferences",
     initialState,
     reducers: {
         setTheme: (state, action: PayloadAction<ThemeEnum>) => {
@@ -34,8 +56,8 @@ export const UserPreferencesSlice = createSlice({
             state.hideTokensWithNoBalance = action.payload
         },
 
-        setIsAppLockActive: (state, action: PayloadAction<boolean>) => {
-            state.isAppLockActive = action.payload
+        setIsPinCodeRequired: (state, action: PayloadAction<boolean>) => {
+            state.isPinCodeRequired = action.payload
         },
 
         setBalanceVisible: (state, action: PayloadAction<boolean>) => {
@@ -49,24 +71,37 @@ export const UserPreferencesSlice = createSlice({
         setLanguage: (state, action: PayloadAction<LANGUAGE>) => {
             state.language = action.payload
         },
-        setAnalyticsTrackingEnabled: (
-            state,
-            action: PayloadAction<boolean>,
-        ) => {
+
+        setAnalyticsTrackingEnabled: (state, action: PayloadAction<boolean>) => {
             state.isAnalyticsTrackingEnabled = action.payload
         },
-    },
-    extraReducers: builder => {
-        builder.addCase(PURGE, () => initialState)
+
+        setSentryTrackingEnabled: (state, action: PayloadAction<boolean>) => {
+            state.isSentryTrackingEnabled = action.payload
+        },
+
+        setLastReviewTimestamp: (state, action: PayloadAction<string>) => {
+            state.lastReviewTimestamp = action.payload
+        },
+
+        setLastVersionCheck: (state, action: PayloadAction<string>) => {
+            state.lastVersionCheck = action.payload
+        },
+
+        resetUserPreferencesState: () => initialState,
     },
 })
 
 export const {
     setTheme,
     setHideTokensWithNoBalance,
-    setIsAppLockActive,
+    setIsPinCodeRequired,
     setBalanceVisible,
     setCurrency,
     setLanguage,
     setAnalyticsTrackingEnabled,
+    setSentryTrackingEnabled,
+    resetUserPreferencesState,
+    setLastReviewTimestamp,
+    setLastVersionCheck,
 } = UserPreferencesSlice.actions

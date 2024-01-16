@@ -1,6 +1,12 @@
 module.exports = {
     presets: ["module:metro-react-native-babel-preset"],
 
+    env: {
+        production: {
+            plugins: ["transform-remove-console"],
+        },
+    },
+
     plugins: [
         ["module:react-native-dotenv"],
         [
@@ -8,17 +14,22 @@ module.exports = {
             {
                 root: ["./src"],
                 alias: {
+                    "~Api": "./src/Api",
                     "~Storage": "./src/Storage",
                     "~Model": "./src/Model",
                     "~Services": "./src/Services",
                     "~Screens": "./src/Screens",
                     "~Navigation": "./src/Navigation",
-                    "~Common": "./src/Common",
+                    "~Constants": "./src/Constants",
+                    "~Hooks": "./src/Hooks",
+                    "~Utils": "./src/Utils",
                     "~Components": "./src/Components",
                     "~i18n": "./src/i18n",
                     "~Assets": "./src/Assets",
                     "~Selectors": "./src/Selectors",
                     "~Test": "./src/Test/index.tsx",
+                    "~Networking": "./src/Networking",
+                    "~Events": "./src/Events",
                     http: "stream-http",
                     https: "https-browserify",
                     crypto: "react-native-quick-crypto",

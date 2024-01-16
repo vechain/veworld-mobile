@@ -4,8 +4,7 @@ import { render, screen } from "@testing-library/react-native"
 import { BaseView } from "./BaseView"
 
 const baseViewTestId = "BaseView"
-const findBaseView = async () =>
-    screen.findByTestId(baseViewTestId, {}, { timeout: 5000 })
+const findBaseView = async () => screen.findByTestId(baseViewTestId, {}, { timeout: 5000 })
 
 describe("BaseView component", () => {
     it("should render correctly with default props", async () => {
@@ -17,18 +16,9 @@ describe("BaseView component", () => {
     })
 
     it("should render with custom style props", async () => {
-        render(
-            <BaseView
-                testID={baseViewTestId}
-                bg="red"
-                w={100}
-                h={50}
-                borderRadius={8}
-            />,
-            {
-                wrapper: TestWrapper,
-            },
-        )
+        render(<BaseView testID={baseViewTestId} bg="red" w={100} h={50} borderRadius={8} />, {
+            wrapper: TestWrapper,
+        })
         const baseView = await findBaseView()
         expect(baseView).toBeVisible()
 
@@ -49,7 +39,7 @@ describe("BaseView component", () => {
 
         expect(baseView).toHaveStyle({
             flexDirection: "row",
-            justifyContent: "space-between",
+            justifyContent: "flex-start",
             alignItems: "center",
         })
     })
@@ -62,7 +52,7 @@ describe("BaseView component", () => {
         const baseView = await findBaseView()
         expect(baseView).toBeVisible()
 
-        expect(baseView).toHaveStyle({ alignItems: "flex-start" })
+        expect(baseView).toHaveStyle({ alignItems: "stretch" })
     })
 
     it("should set default justifyContent when none is provided", async () => {

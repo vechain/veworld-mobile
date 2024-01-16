@@ -1,64 +1,63 @@
-import React, { useCallback } from "react"
-import {
-    BaseButton,
-    BaseSafeArea,
-    BaseSpacer,
-    BaseText,
-    BaseView,
-} from "~Components"
-import {
-    useBiometricType,
-    useBiometricsValidation,
-    useCreateWalletWithBiometrics,
-} from "~Common"
+import React, { useCallback, useMemo } from "react"
+import { BaseButton, BaseSpacer, BaseText, BaseView, Layout } from "~Components"
+import { useBiometrics, useBiometricType, useTheme } from "~Hooks"
 import { useI18nContext } from "~i18n"
 import { useNavigation } from "@react-navigation/native"
 import { Routes } from "~Navigation"
 import { SecurityLevelType } from "~Model"
+import { StyleSheet } from "react-native"
+import Lottie from "lottie-react-native"
+import { ProtectWalletDark, ProtectWalletLight } from "~Assets"
 
 export const AppSecurityScreen = () => {
     const { LL } = useI18nContext()
     const nav = useNavigation()
 
     const { currentSecurityLevel } = useBiometricType()
-    useCreateWalletWithBiometrics()
-    const { authenticateBiometrics } = useBiometricsValidation()
+    const biometrics = useBiometrics()
 
     const onBiometricsPress = useCallback(async () => {
-        authenticateBiometrics(() => {
-            nav.navigate(Routes.WALLET_SUCCESS, {
-                securityLevelSelected: SecurityLevelType.BIOMETRIC,
-            })
+        nav.navigate(Routes.WALLET_SUCCESS, {
+            securityLevelSelected: SecurityLevelType.BIOMETRIC,
         })
-    }, [authenticateBiometrics, nav])
+    }, [nav])
 
     const onPasswordPress = useCallback(() => {
         nav.navigate(Routes.USER_CREATE_PASSWORD)
     }, [nav])
 
+    const { isDark } = useTheme()
+
+    const protectWalletImage = useMemo(() => {
+        return isDark ? (
+            <Lottie source={ProtectWalletDark} autoPlay style={styles.lottie} />
+        ) : (
+            <Lottie source={ProtectWalletLight} autoPlay style={styles.lottie} />
+        )
+    }, [isDark])
+
     return (
-        <BaseSafeArea grow={1}>
-            <BaseSpacer height={20} />
-            <BaseView
-                alignItems="center"
-                justifyContent="space-between"
-                flexGrow={1}
-                mx={20}>
-                <BaseView alignSelf="flex-start">
-                    <BaseText typographyFont="largeTitle">
-                        {LL.TITLE_SECURITY()}
-                    </BaseText>
-
-                    <BaseText typographyFont="body" my={10}>
-                        Lorem ipsum dolor sit amet, consectetur adipiscing elit,
-                        sed do eiusmod tempor incididunt ut labore et dolore
-                        magna aliqua.
-                    </BaseText>
+        <Layout
+            body={
+                <BaseView alignItems="center" justifyContent="space-between" flexGrow={1}>
+                    <BaseView alignSelf="flex-start">
+                        <BaseText typographyFont="title">{LL.TITLE_SECURITY()}</BaseText>
+                    </BaseView>
+                    <BaseSpacer height={24} />
+                    {protectWalletImage}
+                    <BaseView alignSelf="flex-start">
+                        <BaseText typographyFont="body" my={10}>
+                            {LL.SB_SECURITY()}
+                        </BaseText>
+                    </BaseView>
                 </BaseView>
-
+            }
+            footer={
                 <BaseView alignItems="center" w={100}>
                     <BaseButton
+                        haptics="Medium"
                         action={onBiometricsPress}
+                        disabled={!biometrics || biometrics.currentSecurityLevel !== "BIOMETRIC"}
                         w={100}
                         mx={20}
                         my={20}
@@ -68,6 +67,7 @@ export const AppSecurityScreen = () => {
                     />
 
                     <BaseButton
+                        haptics="Medium"
                         variant="outline"
                         action={onPasswordPress}
                         w={100}
@@ -75,9 +75,14 @@ export const AppSecurityScreen = () => {
                         title={LL.BTN_SECURITY_CREATE_PASSWORD()}
                     />
                 </BaseView>
-            </BaseView>
-
-            <BaseSpacer height={40} />
-        </BaseSafeArea>
+            }
+        />
     )
 }
+
+const styles = StyleSheet.create({
+    lottie: {
+        width: "100%",
+        height: 300,
+    },
+})

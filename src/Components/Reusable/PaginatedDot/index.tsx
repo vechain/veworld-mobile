@@ -1,14 +1,8 @@
 import React, { useCallback, useEffect, useMemo, useRef } from "react"
-import {
-    ScrollView,
-    View,
-    ViewStyle,
-    StyleProp,
-    StyleSheet,
-} from "react-native"
+import { ScrollView, View, ViewStyle, StyleProp, StyleSheet } from "react-native"
 import Dot from "./Dot"
 import EmptyDot, { defaultEmptyDotSize } from "./EmptyDot"
-import { usePrevious } from "~Common"
+import { usePrevious } from "~Hooks"
 import { BaseView } from "~Components"
 
 type Props = {
@@ -44,10 +38,7 @@ export const PaginatedDot: React.FC<Props> = (props: Props) => {
             const FIRST_EMPTY_DOT_SPACE = ONE_EMPTY_DOT_SIZE * 2
             const MOVE_DISTANCE = ONE_EMPTY_DOT_SIZE * sizeRatio
 
-            const moveTo = Math.max(
-                0,
-                FIRST_EMPTY_DOT_SPACE + (index - 4) * MOVE_DISTANCE,
-            )
+            const moveTo = Math.max(0, FIRST_EMPTY_DOT_SPACE + (index - 4) * MOVE_DISTANCE)
 
             //scroll to the given coordinates
             refScrollView.current.scrollTo({

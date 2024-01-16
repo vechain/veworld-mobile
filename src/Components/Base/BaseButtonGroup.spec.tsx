@@ -1,7 +1,25 @@
 import React from "react"
-import { render, fireEvent, screen } from "@testing-library/react-native"
+import { fireEvent, render, screen } from "@testing-library/react-native"
 import { BaseButtonGroup } from "./BaseButtonGroup"
 import { TestWrapper } from "~Test"
+import { ReactTestInstance } from "react-test-renderer"
+
+jest.mock("expo-haptics", () => {
+    return {
+        NotificationFeedbackType: {
+            Success: 0,
+            Warning: 1,
+            Error: 2,
+        },
+        ImpactFeedbackStyle: {
+            Light: 0,
+            Medium: 1,
+            Heavy: 2,
+        },
+        notificationAsync: jest.fn(),
+        impactAsync: jest.fn(),
+    }
+})
 
 const baseButtonGroupTestId = "BaseButtonGroup"
 const findBaseButtonInGroup = async (id: string) =>
@@ -9,7 +27,7 @@ const findBaseButtonInGroup = async (id: string) =>
         `${baseButtonGroupTestId}-${id}`,
         {},
         {
-            timeout: 5000,
+            timeout: 10000,
         },
     )
 
@@ -63,6 +81,28 @@ describe("BaseButtonGroup", () => {
                 fireEvent.press(baseButton)
                 expect(mockAction).toHaveBeenCalledWith(button)
             }
+        }
+    })
+
+    it("uses the correct typographyFont", async () => {
+        const mockAction = jest.fn()
+
+        render(
+            <BaseButtonGroup
+                action={mockAction}
+                buttons={buttons}
+                selectedButtonIds={selectedButtonIds}
+                buttonTestID={baseButtonGroupTestId}
+                typographyFont="captionMedium"
+            />,
+            {
+                wrapper: TestWrapper,
+            },
+        )
+
+        for (const button of buttons) {
+            const baseButton = await findBaseButtonInGroup(button.id)
+            expect((baseButton.children[0] as ReactTestInstance).props.typographyFont).toBe("captionMedium")
         }
     })
 })

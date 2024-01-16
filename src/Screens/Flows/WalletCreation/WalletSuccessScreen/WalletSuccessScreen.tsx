@@ -6,30 +6,22 @@ import {
     BaseText,
     BaseView,
     RequireUserPassword,
+    showErrorToast,
+    useApplicationSecurity,
+    WalletEncryptionKeyHelper,
 } from "~Components"
 import { useNavigation } from "@react-navigation/native"
-import { VeChainVetLogoSVG } from "~Assets"
+import { VeWorldLogoSVG } from "~Assets"
 import { useI18nContext } from "~i18n"
-import { SecurityLevelType, UserSelectedSecurityLevel } from "~Model"
-import {
-    BiometricsUtils,
-    useCreateWalletWithBiometrics,
-    useCreateWalletWithPassword,
-    useDisclosure,
-    useTheme,
-} from "~Common"
+import { SecurityLevelType } from "~Model"
+import { useAnalyticTracking, useCheckIdentity, useCreateWallet, useTheme } from "~Hooks"
 import { NativeStackScreenProps } from "@react-navigation/native-stack"
-import {
-    RootStackParamListCreateWalletApp,
-    RootStackParamListOnboarding,
-    Routes,
-} from "~Navigation"
-import { useAppDispatch, useAppSelector } from "~Storage/Redux"
-import {
-    selectMnemonic,
-    selectHasOnboarded,
-    selectUserSelectedSecurity,
-} from "~Storage/Redux/Selectors"
+import { RootStackParamListCreateWalletApp, RootStackParamListOnboarding, Routes } from "~Navigation"
+import { setIsAppLoading, useAppDispatch, useAppSelector } from "~Storage/Redux"
+import { selectHasOnboarded, selectMnemonic, selectNewLedgerDevice, selectPrivateKey } from "~Storage/Redux/Selectors"
+import HapticsService from "~Services/HapticsService"
+import { AnalyticsEvent } from "~Constants"
+import { BiometricsUtils } from "~Utils"
 
 type Props = {} & NativeStackScreenProps<
     RootStackParamListOnboarding & RootStackParamListCreateWalletApp,
@@ -47,148 +39,187 @@ export const WalletSuccessScreen: FC<Props> = ({ route }) => {
 
     //we have a device and a selected account
     const userHasOnboarded = useAppSelector(selectHasOnboarded)
-    const userSelectedSecurity = useAppSelector(selectUserSelectedSecurity)
+    const track = useAnalyticTracking()
 
     const mnemonic = useAppSelector(selectMnemonic)
+    const privateKey = useAppSelector(selectPrivateKey)
+    const newLedger = useAppSelector(selectNewLedgerDevice)
 
-    const {
-        onCreateWallet: createWalletWithBiometrics,
-        isComplete: isWalletCreatedWithBiometrics,
-    } = useCreateWalletWithBiometrics()
-    const {
-        onCreateWallet: createWalletWithPassword,
-        isComplete: isWalletCreatedWithPassword,
-    } = useCreateWalletWithPassword()
+    const { migrateOnboarding } = useApplicationSecurity()
 
-    const {
-        isOpen: isPasswordPromptOpen,
-        onOpen: openPasswordPrompt,
-        onClose: closePasswordPrompt,
-    } = useDisclosure()
+    const { createLocalWallet, createLedgerWallet } = useCreateWallet()
 
     const onWalletCreationError = useCallback(
         (_error: unknown) => {
-            setIsError("Error creating wallet")
-            closePasswordPrompt()
+            if (BiometricsUtils.BiometricErrors.isBiometricCanceled(_error)) {
+                return
+            }
+
+            if (BiometricsUtils.BiometricErrors.isBiometricTooManyAttempts(_error)) {
+                HapticsService.triggerNotification({ level: "Error" })
+                setIsError(LL.ERROR_TOO_MANY_BIOMETRICS_AUTH_ATTEMPTS())
+                showErrorToast({
+                    text1: LL.ERROR_TOO_MANY_BIOMETRICS_AUTH_ATTEMPTS(),
+                })
+                nav.reset({
+                    index: 0,
+                    routes: [{ name: Routes.WELCOME }],
+                })
+            } else {
+                HapticsService.triggerNotification({ level: "Error" })
+                setIsError(LL.ERROR_CREATING_WALLET())
+                showErrorToast({ text1: LL.ERROR_CREATING_WALLET() })
+            }
         },
-        [setIsError, closePasswordPrompt],
+        [LL, nav],
     )
 
-    const onButtonPress = useCallback(async () => {
-        let params = route.params
-
-        if (!mnemonic) throw new Error("Mnemonic is not available")
-
-        if (userHasOnboarded) {
-            if (userSelectedSecurity === UserSelectedSecurityLevel.BIOMETRIC) {
-                // todo.vas -> replace with authenticateWithBiometrics new hook?
-                let { success } =
-                    await BiometricsUtils.authenticateWithBiometric()
-                if (success) {
-                    await createWalletWithBiometrics({
-                        mnemonic,
-                        onError: onWalletCreationError,
-                    })
-                }
-            } else {
-                return openPasswordPrompt()
+    const navigateNext = useCallback(() => {
+        const parent = nav.getParent()
+        if (parent) {
+            if (parent.canGoBack()) {
+                parent.goBack()
             }
-        } else {
-            if (params?.securityLevelSelected === SecurityLevelType.BIOMETRIC) {
-                await createWalletWithBiometrics({ mnemonic })
-            } else if (
-                params?.securityLevelSelected === SecurityLevelType.SECRET
-            ) {
-                await createWalletWithPassword({
-                    userPassword: params?.userPin!,
+        }
+    }, [nav])
+
+    const onIdentityConfirmed = useCallback(
+        async (userPassword?: string) => {
+            if (!mnemonic && !privateKey && !newLedger)
+                throw new Error("Wrong/corrupted data. No device available in store")
+
+            if (mnemonic || privateKey) {
+                await createLocalWallet({
+                    mnemonic: mnemonic,
+                    privateKey: privateKey,
+                    userPassword: userPassword,
                     onError: onWalletCreationError,
-                    mnemonic,
                 })
             }
-        }
-    }, [
-        route.params,
-        userHasOnboarded,
-        userSelectedSecurity,
-        createWalletWithBiometrics,
-        onWalletCreationError,
-        openPasswordPrompt,
-        createWalletWithPassword,
-        mnemonic,
-    ])
 
-    const onPasswordSuccess = useCallback(
-        async (password: string) => {
-            if (!mnemonic) throw new Error("Mnemonic is not available")
+            if (newLedger) {
+                await createLedgerWallet({
+                    newLedger,
+                    onError: onWalletCreationError,
+                })
+            }
 
-            await createWalletWithPassword({
-                userPassword: password,
-                mnemonic,
-                onError: onWalletCreationError,
-            })
+            navigateNext()
         },
-        [createWalletWithPassword, onWalletCreationError, mnemonic],
+        [mnemonic, privateKey, createLocalWallet, onWalletCreationError, navigateNext, newLedger, createLedgerWallet],
     )
 
-    useEffect(() => {
-        if (isWalletCreatedWithBiometrics || isWalletCreatedWithPassword) {
-            if (userHasOnboarded) {
-                closePasswordPrompt()
+    const {
+        isPasswordPromptOpen,
+        handleClosePasswordModal,
+        onPasswordSuccess,
+        checkIdentityBeforeOpening,
+        isBiometricsEmpty,
+    } = useCheckIdentity({ onIdentityConfirmed, allowAutoPassword: false })
+    /**
+     * On first onboarding, create the wallet and set the security type selected by the user (biometric or secret)
+     */
+    const onboardingCreateWallet = useCallback(async () => {
+        try {
+            let params = route.params
 
-                if (!isPasswordPromptOpen) {
-                    /*
-                    Navigate to parent stack (where the CreateWalletAppStack is declared)
-                    and close the modal.
-                    */
-                    let parent = nav.getParent()
-                    if (parent) {
-                        let isBack = parent.canGoBack()
-                        if (isBack) {
-                            parent.goBack()
-                        }
-                    }
+            if (userHasOnboarded) return
+
+            if (!mnemonic && !privateKey && !newLedger)
+                throw new Error("Wrong/corrupted data. No device available in store")
+
+            if (!params?.securityLevelSelected) throw new Error("Security level is not available")
+
+            dispatch(setIsAppLoading(true))
+
+            if (newLedger) {
+                await createLedgerWallet({
+                    newLedger,
+                    onError: onWalletCreationError,
+                })
+            }
+
+            const securityLevelSelected = params.securityLevelSelected
+
+            let pinCode = securityLevelSelected === SecurityLevelType.SECRET ? params?.userPin : undefined
+
+            await WalletEncryptionKeyHelper.init(pinCode)
+
+            if (mnemonic || privateKey) {
+                if (securityLevelSelected === SecurityLevelType.BIOMETRIC) {
+                    await createLocalWallet({
+                        mnemonic: mnemonic,
+                        privateKey: privateKey,
+                        onError: onWalletCreationError,
+                    })
+                } else if (securityLevelSelected === SecurityLevelType.SECRET) {
+                    await createLocalWallet({
+                        mnemonic: mnemonic,
+                        privateKey: privateKey,
+                        userPassword: params?.userPin,
+                        onError: onWalletCreationError,
+                    })
+                } else {
+                    throw new Error(`Security level ${securityLevelSelected} is not valid`)
                 }
             }
+
+            if (securityLevelSelected === SecurityLevelType.BIOMETRIC) {
+                await migrateOnboarding(securityLevelSelected)
+            } else {
+                await migrateOnboarding(securityLevelSelected, params.userPin)
+            }
+        } finally {
+            dispatch(setIsAppLoading(false))
         }
     }, [
-        closePasswordPrompt,
-        dispatch,
-        isPasswordPromptOpen,
+        migrateOnboarding,
+        newLedger,
+        mnemonic,
+        privateKey,
         userHasOnboarded,
-        isWalletCreatedWithBiometrics,
-        isWalletCreatedWithPassword,
-        nav,
+        route.params,
+        createLocalWallet,
+        createLedgerWallet,
+        dispatch,
+        onWalletCreationError,
     ])
+
+    const onButtonPress = useCallback(async () => {
+        if (!mnemonic && !privateKey && !newLedger)
+            throw new Error("Wrong/corrupted data. No device available in store")
+
+        if (userHasOnboarded) {
+            await checkIdentityBeforeOpening()
+        } else await onboardingCreateWallet()
+    }, [checkIdentityBeforeOpening, onboardingCreateWallet, userHasOnboarded, privateKey, mnemonic, newLedger])
+
+    useEffect(() => {
+        track(AnalyticsEvent.COMPLETED_WALLET_SCREEN)
+    }, []) // eslint-disable-line react-hooks/exhaustive-deps
 
     return (
         <>
             <RequireUserPassword
                 isOpen={isPasswordPromptOpen}
-                onClose={closePasswordPrompt}
+                onClose={handleClosePasswordModal}
                 onSuccess={onPasswordSuccess}
             />
-
             <BaseSafeArea grow={1}>
                 <BaseSpacer height={20} />
 
                 <BaseView alignItems="center" mx={20} flexGrow={1}>
                     <BaseView flexDirection="row" flexWrap="wrap">
-                        <BaseText typographyFont="title">
-                            {LL.TITLE_WALLET_SUCCESS()}
-                        </BaseText>
+                        <BaseText typographyFont="title">{LL.TITLE_CREATE_WALLET_SUCCESS()}</BaseText>
                     </BaseView>
 
                     <BaseSpacer height={120} />
 
-                    <BaseView
-                        alignItems="center"
-                        justifyContent="space-between"
-                        w={100}
-                        flexGrow={1}>
+                    <BaseView alignItems="center" justifyContent="space-between" w={100} flexGrow={1}>
                         <BaseView alignItems="center">
-                            <VeChainVetLogoSVG />
+                            <VeWorldLogoSVG height={200} width={200} />
                             <BaseText align="center" py={20}>
-                                {LL.BD_WALLET_SUCCESS()}
+                                {LL.BD_CREATE_WALLET_SUCCESS()}
                             </BaseText>
                         </BaseView>
 
@@ -198,16 +229,18 @@ export const WalletSuccessScreen: FC<Props> = ({ route }) => {
                                     {isError}
                                 </BaseText>
                             )}
+
                             <BaseButton
                                 action={onButtonPress}
                                 w={100}
-                                title={LL.BTN_WALLET_SUCCESS()}
+                                title={LL.BTN_CREATE_WALLET_SUCCESS()}
                                 testID="GET_STARTED_BTN"
-                                haptics="medium"
+                                haptics="Success"
+                                isLoading={isBiometricsEmpty}
+                                disabled={isBiometricsEmpty}
                             />
                         </BaseView>
                     </BaseView>
-
                     <BaseSpacer height={40} />
                 </BaseView>
             </BaseSafeArea>

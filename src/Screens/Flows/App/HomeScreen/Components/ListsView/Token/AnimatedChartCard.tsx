@@ -1,37 +1,36 @@
-import React, { memo } from "react"
-import { StyleSheet } from "react-native"
-import DropShadow from "react-native-drop-shadow"
-import { ColorThemeType, useThemedStyles } from "~Common"
+import React, { memo, useCallback } from "react"
+import { StyleSheet, TouchableOpacity } from "react-native"
+import { TokenWithCompleteInfo, useTheme } from "~Hooks"
 import { VechainTokenCard } from "./VechainTokenCard"
 import Animated, { useAnimatedStyle, withTiming } from "react-native-reanimated"
 import { LineChart } from "react-native-wagmi-charts"
-import { DenormalizedAccountTokenBalance } from "~Storage/Redux/Types"
+import { selectCurrency, useAppSelector } from "~Storage/Redux"
+import { useNavigation } from "@react-navigation/native"
+import { Routes } from "~Navigation"
+import { BaseView } from "~Components"
+import HapticsService from "~Services/HapticsService"
+import { DEFAULT_LINE_CHART_DATA, getCoinGeckoIdBySymbol, useSmartMarketChart } from "~Api/Coingecko"
 
 const HEIGHT = 100
 
 export type NativeTokenProps = {
-    token: DenormalizedAccountTokenBalance
+    tokenWithInfo: TokenWithCompleteInfo
     isEdit: boolean
+    isBalanceVisible: boolean
 }
 
-const CHART_DATA = [
-    { timestamp: 0, value: 12 },
-    { timestamp: 1, value: 8 },
-    { timestamp: 2, value: 6 },
-    { timestamp: 3, value: 9 },
-    { timestamp: 4, value: 11 },
-    { timestamp: 5, value: 10 },
-    { timestamp: 6, value: 10.4 },
-    { timestamp: 7, value: 7 },
-    { timestamp: 8, value: 8 },
-    { timestamp: 9, value: 12 },
-    { timestamp: 10, value: 14 },
-    { timestamp: 11, value: 12 },
-    { timestamp: 12, value: 13.5 },
-]
+export const AnimatedChartCard = memo(({ tokenWithInfo, isEdit, isBalanceVisible }: NativeTokenProps) => {
+    const nav = useNavigation()
+    const theme = useTheme()
 
-export const AnimatedChartCard = memo(({ token, isEdit }: NativeTokenProps) => {
-    const { styles, theme } = useThemedStyles(baseStyles)
+    const currency = useAppSelector(selectCurrency)
+
+    const { data: chartData } = useSmartMarketChart({
+        id: getCoinGeckoIdBySymbol[tokenWithInfo.symbol],
+        vs_currency: currency,
+        days: 7,
+        placeholderData: DEFAULT_LINE_CHART_DATA,
+    })
 
     const animatedOuterCard = useAnimatedStyle(() => {
         return {
@@ -39,12 +38,9 @@ export const AnimatedChartCard = memo(({ token, isEdit }: NativeTokenProps) => {
                 duration: 200,
             }),
 
-            backgroundColor: withTiming(
-                isEdit ? theme.colors.neutralDisabled : theme.colors.card,
-                {
-                    duration: 200,
-                },
-            ),
+            backgroundColor: withTiming(isEdit ? theme.colors.neutralDisabled : theme.colors.card, {
+                duration: 200,
+            }),
         }
     }, [isEdit, theme.isDark])
 
@@ -60,36 +56,42 @@ export const AnimatedChartCard = memo(({ token, isEdit }: NativeTokenProps) => {
         }
     }, [isEdit])
 
+    const onVechainTokenPress = useCallback(() => {
+        HapticsService.triggerImpact({ level: "Light" })
+        if (!isEdit) nav.navigate(Routes.TOKEN_DETAILS, { token: tokenWithInfo })
+    }, [isEdit, nav, tokenWithInfo])
+
     return (
-        <DropShadow style={styles.cardShadow}>
-            <Animated.View
-                style={[styles.nativeTokenContainer, animatedOuterCard]}>
-                <VechainTokenCard token={token} isAnimation={isEdit} />
-                <Animated.View style={[styles.fullWidth, animatedInnerCard]}>
-                    <LineChart.Provider data={CHART_DATA}>
-                        <LineChart height={HEIGHT}>
-                            <LineChart.Path color={theme.colors.primary}>
-                                <LineChart.Gradient />
-                            </LineChart.Path>
-                        </LineChart>
-                    </LineChart.Provider>
+        <BaseView>
+            <TouchableOpacity activeOpacity={isEdit ? 1 : 0.6} onPress={onVechainTokenPress}>
+                <Animated.View style={[styles.nativeTokenContainer, animatedOuterCard]}>
+                    <VechainTokenCard
+                        isBalanceVisible={isBalanceVisible}
+                        tokenWithInfo={tokenWithInfo}
+                        isAnimation={isEdit}
+                    />
+                    <Animated.View style={animatedInnerCard}>
+                        <LineChart.Provider data={chartData ?? DEFAULT_LINE_CHART_DATA}>
+                            <LineChart height={HEIGHT}>
+                                <LineChart.Path color={theme.colors.primary} width={2}>
+                                    <LineChart.Gradient />
+                                </LineChart.Path>
+                            </LineChart>
+                        </LineChart.Provider>
+                    </Animated.View>
                 </Animated.View>
-            </Animated.View>
-        </DropShadow>
+            </TouchableOpacity>
+        </BaseView>
     )
 })
 
-const baseStyles = (theme: ColorThemeType) =>
-    StyleSheet.create({
-        nativeTokenContainer: {
-            justifyContent: "flex-end",
-            alignItems: "center",
-            marginBottom: 10,
-            borderRadius: 16,
-            overflow: "hidden",
-            marginHorizontal: 20,
-        },
-
-        fullWidth: { width: "100%" },
-        cardShadow: theme.shadows.card,
-    })
+const styles = StyleSheet.create({
+    nativeTokenContainer: {
+        justifyContent: "flex-end",
+        alignItems: "center",
+        marginBottom: 10,
+        borderRadius: 16,
+        overflow: "hidden",
+        marginHorizontal: 20,
+    },
+})

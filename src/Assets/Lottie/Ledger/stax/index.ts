@@ -1,0 +1,6 @@
+export const StaxAllowConnection = require("./allowConnection.json")
+export const StaxConfirmLockScreen = require("./confirmLockscreen.json")
+export const StaxEnterPin = require("./enterPIN.json")
+export const StaxLockScreenConfirmation = require("./lockscreenConfirmation.json")
+export const StaxSignTransaction = require("./signTransaction.json")
+export const StaxVerifyAddress = require("./verifyAddress.json")

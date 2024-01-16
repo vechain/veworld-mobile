@@ -1,61 +1,74 @@
-import React, { ReactElement, useCallback } from "react"
-import { ViewProps } from "react-native"
-import RNRestart from "react-native-restart"
-import { useTheme } from "~Common"
-import {
-    BaseButton,
-    BaseIcon,
-    BaseSafeArea,
-    BaseSpacer,
-    BaseText,
-    BaseView,
-} from "~Components/Base"
+import React, { useCallback, useState } from "react"
+import { StyleSheet, ViewProps } from "react-native"
+import { useAppReset, useTheme } from "~Hooks"
+import { BaseButton, BaseIcon, BaseSafeArea, BaseSpacer, BaseText, BaseView, CheckBoxWithText } from "~Components"
 import { useI18nContext } from "~i18n"
 
-const Error = (): ReactElement => {
+const ErrorView = ({ resetErrorState }: { resetErrorState: () => void }) => {
+    const appReset = useAppReset()
     const { LL } = useI18nContext()
     const theme = useTheme()
-    const handleBackToSignIn = useCallback(() => {
-        // restart app
-        RNRestart.Restart()
-    }, [])
+
+    const [isChecked, setIsChecked] = useState(false)
+
+    const onButtnPress = useCallback(() => {
+        appReset()
+        setTimeout(() => {
+            resetErrorState()
+        }, 200)
+    }, [appReset, resetErrorState])
+
     return (
         <BaseSafeArea grow={1}>
-            <BaseView flexGrow={1} px={24} justifyContent="space-between">
+            <BaseView flexGrow={1} px={24} pt={40} pb={70} justifyContent="space-between">
                 <BaseView>
-                    <BaseSpacer height={90} />
-                    <BaseText typographyFont="title">
-                        {LL.COMMON_LBL_ERROR()}
-                    </BaseText>
-                    <BaseSpacer height={30} />
-                    <BaseIcon
-                        name={"close-circle-outline"}
-                        size={70}
-                        color={theme.colors.primary}
-                        style={{ alignItems: "flex-start" }}
-                    />
+                    <BaseText typographyFont="title">{LL.COMMON_LBL_ERROR()}</BaseText>
+
                     <BaseSpacer height={24} />
-                    <BaseText typographyFont="subSubTitle">
-                        {LL.ERROR_GENERIC_SUBTITLE()}
+
+                    <BaseIcon name={"close-circle-outline"} size={70} color={theme.colors.danger} style={styles.icon} />
+
+                    <BaseSpacer height={24} />
+
+                    <BaseText typographyFont="subSubTitle">{LL.ERROR_GENERIC_SUBTITLE()}</BaseText>
+
+                    <BaseText typographyFont="body" my={10}>
+                        {LL.ERROR_GENERIC_BODY_01()}
                     </BaseText>
-                    <BaseSpacer height={8} />
-                    <BaseText typographyFont="body">
-                        {LL.ERROR_GENERIC_BODY()}
-                    </BaseText>
+
+                    <BaseText typographyFont="bodyBold">{LL.ERROR_GENERIC_BODY_02()}</BaseText>
                 </BaseView>
-                <BaseButton
-                    title={"Restart"}
-                    action={handleBackToSignIn}
-                    my={24}
-                    radius={16}
-                />
+
+                <BaseView>
+                    <BaseText typographyFont="body">{LL.BD_RESET_APP_02()}</BaseText>
+
+                    <BaseText typographyFont="body" color={theme.colors.danger} my={10}>
+                        {LL.BD_RESET_APP_DISCLAIMER()}
+                    </BaseText>
+
+                    <CheckBoxWithText
+                        isChecked={isChecked}
+                        text={LL.BTN_RESET_APP_CHECKBOX()}
+                        checkAction={setIsChecked}
+                        testID="reset-app-checkbox"
+                    />
+
+                    <BaseButton
+                        title={LL.BTN_RESET_APP().toUpperCase()}
+                        action={onButtnPress}
+                        disabled={!isChecked}
+                        haptics="Warning"
+                    />
+                </BaseView>
             </BaseView>
         </BaseSafeArea>
     )
 }
 
-// TODO: show the correct error screen
-// NOTE: we don't need to log on the console or send to sentry because the error is intercepted by errorHandler.js
+const styles = StyleSheet.create({
+    icon: { alignItems: "flex-start" },
+})
+
 export class ErrorBoundary extends React.Component<ViewProps> {
     state = {
         hasError: false,
@@ -67,7 +80,15 @@ export class ErrorBoundary extends React.Component<ViewProps> {
         return { hasError: true }
     }
 
-    componentDidCatch(error: any, errorInfo: any) {
+    onResetErrorState = () => {
+        this.setState({
+            hasError: false,
+            error: null,
+            errorInfo: null,
+        })
+    }
+
+    componentDidCatch(error: Error, errorInfo: any) {
         this.setState({
             error,
             errorInfo,
@@ -76,7 +97,7 @@ export class ErrorBoundary extends React.Component<ViewProps> {
 
     render() {
         if (this.state.hasError) {
-            return <Error />
+            return <ErrorView resetErrorState={this.onResetErrorState} />
         } else {
             return this.props.children
         }

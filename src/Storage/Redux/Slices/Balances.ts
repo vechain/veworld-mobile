@@ -1,9 +1,33 @@
 import { createSlice, Draft, PayloadAction } from "@reduxjs/toolkit"
-import { DEFAULT_VECHAIN_TOKENS_MAP, VET, VTHO } from "~Common"
-import { Account, Network } from "~Model"
-import { BalanceState, TokenBalance } from "../Types/Balances"
+import { AddressUtils, debug, HexUtils } from "~Utils"
+import { Balance, NETWORK_TYPE } from "~Model"
+import { mergeArrays } from "~Utils/MergeUtils/MergeUtils"
+import { ERROR_EVENTS } from "~Constants"
 
-export const initialState: BalanceState = []
+export type BalanceState = {
+    [network in NETWORK_TYPE]: {
+        [accountAddress: string]: Balance[]
+    }
+}
+
+const normaliseAddresses = (balances: Balance[]) => {
+    balances.forEach(balance => {
+        balance.tokenAddress = HexUtils.normalize(balance.tokenAddress)
+    })
+}
+
+export const initialState: BalanceState = {
+    [NETWORK_TYPE.MAIN]: {},
+    [NETWORK_TYPE.TEST]: {},
+    [NETWORK_TYPE.SOLO]: {},
+    [NETWORK_TYPE.OTHER]: {},
+}
+
+const ensureBalanceSlotExists = (state: Draft<BalanceState>, network: NETWORK_TYPE, accountAddress: string) => {
+    if (!state[network]) state[network] = {}
+
+    if (!state[network][accountAddress]) state[network][accountAddress] = []
+}
 
 export const BalanceSlice = createSlice({
     name: "balances",
@@ -11,88 +35,113 @@ export const BalanceSlice = createSlice({
     reducers: {
         addTokenBalance: (
             state: Draft<BalanceState>,
-            action: PayloadAction<TokenBalance>,
+            action: PayloadAction<{
+                network: NETWORK_TYPE
+                accountAddress: string
+                balance: Balance
+            }>,
         ) => {
-            state.push(action.payload)
+            const { network, accountAddress, balance } = action.payload
+
+            const normAccountAddress = HexUtils.normalize(accountAddress)
+            normaliseAddresses([balance])
+
+            ensureBalanceSlotExists(state, network, normAccountAddress)
+
+            if (state[network][normAccountAddress].map(row => row.tokenAddress).includes(balance.tokenAddress)) {
+                state[network][normAccountAddress] = state[network][normAccountAddress].map(_balance => {
+                    if (AddressUtils.compareAddresses(balance.tokenAddress, _balance.tokenAddress)) {
+                        debug(ERROR_EVENTS.TOKENS, "balance already present showing it", _balance)
+                        return {
+                            ..._balance,
+                            isHidden: false,
+                        }
+                    }
+                    return _balance
+                })
+                return
+            } else {
+                debug(ERROR_EVENTS.TOKENS, "creating balance ", balance)
+                state[network][normAccountAddress].push({
+                    ...balance,
+                    position: state[network][normAccountAddress].length,
+                })
+            }
+        },
+        updateTokenBalances: (
+            state: Draft<BalanceState>,
+            action: PayloadAction<{
+                network: NETWORK_TYPE
+                accountAddress: string
+                newBalances: Balance[]
+            }>,
+        ) => {
+            const { network, accountAddress, newBalances } = action.payload
+
+            normaliseAddresses(newBalances)
+            const normAccountAddress = HexUtils.normalize(accountAddress)
+
+            ensureBalanceSlotExists(state, network, normAccountAddress)
+
+            const existingBalances = state[network][normAccountAddress]
+
+            // Merge existing balances with new balances
+            const mergedBalances = mergeArrays(existingBalances, newBalances, "tokenAddress", ["isHidden"])
+
+            // Add new balances
+            state[network][normAccountAddress] = mergedBalances
         },
         removeTokenBalance: (
             state: Draft<BalanceState>,
             action: PayloadAction<{
+                network: NETWORK_TYPE
                 accountAddress: string
                 tokenAddress: string
             }>,
         ) => {
-            const { accountAddress, tokenAddress } = action.payload
+            const { network, accountAddress, tokenAddress } = action.payload
 
-            let position = 0
-            return state
-                .filter(
-                    // remove deleted element
-                    balance =>
-                        balance.tokenAddress !== tokenAddress ||
-                        balance.accountAddress !== accountAddress,
-                )
-                .map(balance => {
-                    //recalculate positions
-                    if (
-                        balance.tokenAddress === tokenAddress &&
-                        balance.accountAddress === accountAddress &&
-                        balance.accountAddress !== VET.address &&
-                        balance.accountAddress !== VTHO.address
-                    ) {
-                        const newBalance = {
-                            ...balance,
-                            position,
-                        }
-                        position++
-                        return newBalance
+            const normAccountAddress = HexUtils.normalize(accountAddress)
+            const normTokenAddress = HexUtils.normalize(tokenAddress)
+
+            ensureBalanceSlotExists(state, network, accountAddress)
+
+            state[network][normAccountAddress] = state[network][normAccountAddress].map(balance => {
+                if (AddressUtils.compareAddresses(balance.tokenAddress, normTokenAddress)) {
+                    debug(ERROR_EVENTS.TOKENS, `Removing balance ${balance.tokenAddress}`)
+                    return {
+                        ...balance,
+                        isHidden: true,
                     }
-                    return balance
-                })
+                }
+                return balance
+            })
         },
+
         changeBalancePosition: (
             state: Draft<BalanceState>,
-            action: PayloadAction<TokenBalance[]>, // tokenBalances with updated position fields
+            action: PayloadAction<{
+                network: NETWORK_TYPE
+                accountAddress: string
+                updatedAccountBalances: Balance[]
+            }>,
         ) => {
-            const updatedAccountBalances = action.payload
-            return state.map(balance => {
-                const updatedBalance = updatedAccountBalances.find(
-                    updatedAccountBalance =>
-                        balance.tokenAddress ===
-                            updatedAccountBalance.tokenAddress &&
-                        balance.accountAddress ===
-                            updatedAccountBalance.accountAddress,
+            const { network, accountAddress, updatedAccountBalances } = action.payload
+
+            const normAccountAddress = HexUtils.normalize(accountAddress)
+            ensureBalanceSlotExists(state, network, normAccountAddress)
+
+            state[network][normAccountAddress] = state[network][normAccountAddress].map(balance => {
+                const updatedBalance = updatedAccountBalances.find(updatedAccountBalance =>
+                    AddressUtils.compareAddresses(balance.tokenAddress, updatedAccountBalance.tokenAddress),
                 )
                 return updatedBalance ? updatedBalance : balance
             })
         },
-        setTokenBalances: (
-            state: Draft<BalanceState>,
-            action: PayloadAction<TokenBalance[]>,
-        ) => {
-            return action.payload
-        },
-        resetTokenBalances: (
-            state: Draft<BalanceState>,
-            action: PayloadAction<{ network: Network; account: Account }>,
-        ) => {
-            const { network, account } = action.payload
-            const defaultTokens = DEFAULT_VECHAIN_TOKENS_MAP.get(network.type)
-            return defaultTokens!!.map(token => ({
-                accountAddress: account?.address,
-                tokenAddress: token.address,
-                balance: "0",
-                timeUpdated: new Date().toISOString(),
-                networkGenesisId: network.genesis.id,
-            }))
-        },
+
+        resetBalancesState: () => initialState,
     },
 })
 
-export const {
-    addTokenBalance,
-    setTokenBalances,
-    removeTokenBalance,
-    changeBalancePosition,
-    resetTokenBalances,
-} = BalanceSlice.actions
+export const { addTokenBalance, updateTokenBalances, removeTokenBalance, changeBalancePosition, resetBalancesState } =
+    BalanceSlice.actions

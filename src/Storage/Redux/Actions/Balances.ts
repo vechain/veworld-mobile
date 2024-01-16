@@ -1,73 +1,160 @@
 import {
-    selectAccountBalances,
+    selectSelectedAccount,
     selectSelectedNetwork,
+    selectBalancesForAccount,
+    selectNetworks,
 } from "~Storage/Redux/Selectors"
-import { RootState, TokenBalance } from "~Storage/Redux/Types"
+import { RootState } from "~Storage/Redux/Types"
 import { Dispatch } from "@reduxjs/toolkit"
-import { AddressUtils } from "~Common"
-import { VET, VTHO } from "~Common/Constant"
-import axios from "axios"
-import { abis } from "~Common/Constant/Thor/ThorConstants"
-import { setTokenBalances } from "~Storage/Redux/Slices"
+import { debug, error } from "~Utils/Logger"
+import { BalanceUtils } from "~Utils"
+import { setIsTokensOwnedLoading, updateTokenBalances } from "~Storage/Redux/Slices"
+import { Balance, NETWORK_TYPE, Network } from "~Model"
+import { ERROR_EVENTS, VET, VTHO } from "~Constants"
+
+export const upsertTokenBalance =
+    (thorClient: Connex.Thor, accountAddress: string, tokenAddress: string) =>
+    async (dispatch: Dispatch, getState: () => RootState) => {
+        const network = selectSelectedNetwork(getState())
+
+        const balance = await BalanceUtils.getBalanceFromBlockchain(tokenAddress, accountAddress, network, thorClient)
+
+        if (!balance) return
+
+        dispatch(
+            updateTokenBalances({
+                network: network.type,
+                accountAddress,
+                newBalances: [balance],
+            }),
+        )
+    }
 
 /**
  * Updates all balances for an account
- * @param accountAddress - the acccount address for this balance
+ * @param accountAddress - the account address for this balance
  */
 export const updateAccountBalances =
-    (thorClient: Connex.Thor) =>
-    async (dispatch: Dispatch, getState: () => RootState) => {
-        const accountBalances = selectAccountBalances(getState())
-        const network = selectSelectedNetwork(getState())
-        const balances: TokenBalance[] = []
+    (thorClient: Connex.Thor, accountAddress: string) => async (dispatch: Dispatch, getState: () => RootState) => {
+        dispatch(setIsTokensOwnedLoading(true))
+
+        const accountBalances = selectBalancesForAccount(getState(), accountAddress)
+
+        if (accountBalances.length === 0) return
+
+        const balancesMain: Balance[] = []
+        const balancesTest: Balance[] = []
+
+        const main = selectNetworks(getState()).find((net: Network) => net.type === NETWORK_TYPE.MAIN)
+        const test = selectNetworks(getState()).find((net: Network) => net.type === NETWORK_TYPE.TEST)
+        if (!main || !test) throw new Error("Networks not found")
+
         try {
             for (const accountBalance of accountBalances) {
-                let balance: string
+                const balanceMain = await BalanceUtils.getBalanceFromBlockchain(
+                    accountBalance.tokenAddress,
+                    accountAddress,
+                    main,
+                    thorClient,
+                )
 
-                if (
-                    AddressUtils.compareAddresses(
-                        accountBalance.tokenAddress,
-                        VET.address,
-                    ) ||
-                    AddressUtils.compareAddresses(
-                        accountBalance.tokenAddress,
-                        VTHO.address,
-                    )
-                ) {
-                    const accountResponse =
-                        await axios.get<Connex.Thor.Account>(
-                            `${network.currentUrl}/accounts/${accountBalance.accountAddress}`,
-                        )
-                    if (
-                        AddressUtils.compareAddresses(
-                            accountBalance.tokenAddress,
-                            VET.address,
-                        )
-                    ) {
-                        balance = accountResponse.data.balance
-                    } else {
-                        balance = accountResponse.data.energy
-                    }
-                } else {
-                    const res = await thorClient
-                        .account(accountBalance.tokenAddress)
-                        .method(abis.vip180.balanceOf)
-                        .call(accountBalance.accountAddress)
+                const balanceTest = await BalanceUtils.getBalanceFromBlockchain(
+                    accountBalance.tokenAddress,
+                    accountAddress,
+                    test,
+                    thorClient,
+                )
 
-                    balance = res.decoded[0]
+                if (balanceMain) {
+                    balancesMain.push({
+                        ...balanceMain,
+                    })
                 }
 
-                balances.push({
-                    accountAddress: accountBalance.accountAddress,
-                    tokenAddress: accountBalance.tokenAddress,
-                    balance,
-                    timeUpdated: new Date().toISOString(),
-                    position: accountBalance.position,
-                    networkGenesisId: network.genesis.id,
-                })
+                if (balanceTest) {
+                    balancesTest.push({
+                        ...balanceTest,
+                    })
+                }
             }
-            dispatch(setTokenBalances(balances))
+
+            dispatch(
+                updateTokenBalances({
+                    network: main.type,
+                    accountAddress,
+                    newBalances: balancesMain,
+                }),
+            )
+
+            dispatch(
+                updateTokenBalances({
+                    network: test.type,
+                    accountAddress,
+                    newBalances: balancesTest,
+                }),
+            )
         } catch (e) {
-            throw new Error("Failed to get balance from external service")
+            throw new Error(`Failed to get balance from external service: ${e}`)
+        } finally {
+            dispatch(setIsTokensOwnedLoading(false))
         }
     }
+
+export const autoSelectSuggestTokens =
+    (accountAddress: string, suggestedTokens: string[], network: Network, thorClient: Connex.Thor) =>
+    async (dispatch: Dispatch) => {
+        const officialTokensBalances: Balance[] = []
+
+        try {
+            for (const tokenAddress of suggestedTokens) {
+                const balance = await BalanceUtils.getBalanceFromBlockchain(
+                    tokenAddress,
+                    accountAddress,
+                    network,
+                    thorClient,
+                )
+
+                if (!balance || balance.balance === "0") continue
+
+                officialTokensBalances.push(balance)
+            }
+
+            debug(ERROR_EVENTS.TOKENS, `Auto adding ${officialTokensBalances.length} token balances`)
+
+            dispatch(
+                updateTokenBalances({
+                    network: network.type,
+                    accountAddress,
+                    newBalances: officialTokensBalances,
+                }),
+            )
+        } catch (e) {
+            throw Error(`Failed to get balances of official tokens: ${e}`)
+        }
+    }
+
+export const resetTokenBalances = async (dispatch: Dispatch, getState: () => RootState) => {
+    const account = selectSelectedAccount(getState())
+    const network = selectSelectedNetwork(getState())
+
+    const defaultTokens = [{ ...VET }, { ...VTHO }]
+    if (account) {
+        dispatch(
+            updateTokenBalances({
+                network: network.type,
+                accountAddress: account.address,
+                newBalances: defaultTokens.map(token => ({
+                    accountAddress: account.address,
+                    tokenAddress: token.address,
+                    balance: "0",
+                    timeUpdated: new Date().toISOString(),
+                    isCustomToken: false,
+                    isHidden: false,
+                    position: undefined,
+                })),
+            }),
+        )
+    } else {
+        error(ERROR_EVENTS.TOKENS, "Is not possible to init balances")
+    }
+}

@@ -19,7 +19,7 @@ iOS:
 Download Xcode form the Mac AppStore
 
 ```
-- Xcode - v14.2
+- Xcode - v15
 ```
 
 **Android**
@@ -31,30 +31,51 @@ Download Xcode form the Mac AppStore
 
 # Run the project
 
-The first time you clone the repo you need to do:
+The first time you clone the repo you need to:
 
-```js
-- yarn install
-- npx pod-install
+copy env files into the repo
+
+then install all the dependencies and pods:
+
+```bash
+- yarn install:all
 ```
 
-then on every other time:
+### Run the metro bundler
+
+```bash
+- yarn start
+```
+
+or run it with i18n compiler
+
+```bash
+- yarn start:i18n
+```
 
 ### iOS
 
-```js
-- yarn start
+```bash
 - yarn ios
 ```
 
 ### Android
 
-```js
-- yarn start
+```bash
 - yarn android
 ```
 
-Follow the official React Native [documentation](https://reactnative.dev/docs/environment-setup) for detailed explenation and additional steps.
+Follow the official React Native [documentation](https://reactnative.dev/docs/environment-setup) for detailed explanation and additional steps.
+
+# MAC OS X - M2 Processors additional setup
+
+When configuring the WeWorld mobile app for Android on a MAC with an M2 processor, you should also make sure that Rosetta 2 is installed.
+
+If Rosetta is not installed, you can install it by running:
+
+```
+softwareupdate --install-rosetta
+```
 
 #
 
@@ -62,9 +83,25 @@ Follow the official React Native [documentation](https://reactnative.dev/docs/en
 
 ### Convential commits
 
-Read more [here](./docs/conventioanl_commits.md)
+Read more [here](./docs/conventional_commits.md)
 
 # Testing
+
+### Unit test
+
+to run unit tests:
+
+```bash
+yarn test
+```
+
+to check unit test coverage:
+
+```bash
+yarn test:coverage
+```
+
+### E2E
 
 This project uses [Detox](https://wix.github.io/Detox/docs/introduction/getting-started/) for E2E tests. Read more [here](./docs/detox.md)
 
@@ -74,17 +111,31 @@ This project uses [Detox](https://wix.github.io/Detox/docs/introduction/getting-
 
 -   To add a new language add a new directory in `src/i18n` and name the folder with the desired language code i.e. `src/i18n/es` for spanish.
 
-# Archive the Project
+to watch i18n changes run:
 
-There is a workaround that needs to be done in order to archive a project.
+```bash
+yarn i18n
+```
 
--   Go to the target's `General` tab
+to watch i18n changes and starting the metro bundler:
 
--   On `Frameworks, Libraries and Embeded Content` click on the `+` icon to add a Framework
-    ![Architecture](docs/img/click-plus.png)
+```bash
+yarn start:i18n
+```
 
--   Look for `OpenSSL.xcFramework` and add it.
-    ![Architecture](docs/img/openssl.png)
-    ![Architecture](docs/img/openssl-add.png)
+# Deploy
 
--   Remove it after archiving the project (Debug will not build with the framework embeded).
+### Release
+
+the release process is automated via Fastlane:
+
+[IOS build](./ios/fastlane/BUILD_README.md)
+
+[Android build](./android/fastlane/BUILD_README.md)
+
+# Troubleshooting
+
+-   **dlopen failed: library "libexpo-av.so" not found (Android)**: This error can rise when node has not been installed using either Brew or NVM. To solve the issue, reinstall node using one of these two methods and build again the app.
+-   **NDK at ~/Library/Android/sdk/ndk did not have a source.properties file (Android)**: To solve this error just delete the NDK folders in the above path and run the build again. The NDKs will be downloaded and read properly.
+
+

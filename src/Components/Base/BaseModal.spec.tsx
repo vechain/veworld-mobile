@@ -6,16 +6,12 @@ import { BaseModal } from "./BaseModal"
 import { Text } from "react-native"
 
 const baseModalTestId = "BaseModal"
-const findBaseModal = async () =>
-    await screen.findByTestId(baseModalTestId, {}, { timeout: 5000 })
+const findBaseModal = async () => await screen.findByTestId(baseModalTestId, {}, { timeout: 5000 })
 
 describe("BaseModal", () => {
     it("renders the children when isOpen is true", async () => {
         render(
-            <BaseModal
-                isOpen={true}
-                onClose={() => {}}
-                testID={baseModalTestId}>
+            <BaseModal isOpen={true} onClose={() => {}} testID={baseModalTestId}>
                 <Text>Test</Text>
             </BaseModal>,
             {

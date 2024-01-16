@@ -31,6 +31,8 @@ local.properties
 *.iml
 *.hprof
 .cxx/
+android/app/src/main/assets
+android/app/src/main/res/raw
 
 # node.js
 #
@@ -73,4 +75,30 @@ coverage
 .env.local
 .env.development.local
 .env.production.local
+.env.production
 .env.test.local
+.env.secret
+
+junit.xml
+
+artifacts
+keystore.properties
+sentry.properties
+
+
+main.jsbundle
+main.jsbundle.map
+main.jsbundle.hbc.map
+main.jsbundle.packager.map
+```
+
+# cucumber
+cucumber-report.html
+cucumber.xml
+cucumber.log
+
+# local files
+env.local
+env.production.local
+ios/fastlane/env
+ios/fastlane/env.default

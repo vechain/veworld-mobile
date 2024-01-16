@@ -1,4 +1,4 @@
-import { useState } from "react"
+import { useEffect, useState } from "react"
 
 export const useOnDigitPress = ({
     digitNumber,
@@ -10,6 +10,12 @@ export const useOnDigitPress = ({
     resetPinOnFinishTimer?: number
 }) => {
     const [pin, setPin] = useState<string[]>([])
+
+    useEffect(() => {
+        return () => {
+            setPin([])
+        }
+    }, [])
 
     const onDigitDelete = () => {
         setPin(prev => {
@@ -31,12 +37,16 @@ export const useOnDigitPress = ({
         setPin(updatedPin)
 
         if (updatedPin.length === digitNumber) {
-            onFinishCallback && onFinishCallback(updatedPin.join(""))
-            if (resetPinOnFinishTimer) {
-                setTimeout(() => {
-                    setPin([])
-                }, resetPinOnFinishTimer)
-            }
+            // this timeout is a workaround to render the last digit before calling the callback
+            // otherwise the last digit is not rendered and it feels a little bit buggy (especially on android)
+            setTimeout(() => {
+                onFinishCallback && onFinishCallback(updatedPin.join(""))
+                if (resetPinOnFinishTimer) {
+                    setTimeout(() => {
+                        setPin([])
+                    }, resetPinOnFinishTimer)
+                }
+            }, 0)
         }
     }
 

@@ -1,6 +1,6 @@
 import React, { useEffect, useMemo, useState } from "react"
 import { Animated } from "react-native"
-import { usePrevious } from "~Common"
+import { usePrevious } from "~Hooks"
 import EmptyDot from "./EmptyDot"
 import { getDotStyle } from "./DotUtils"
 
@@ -12,8 +12,7 @@ const Dot: React.FC<{
     inactiveDotColor?: string
     sizeRatio: number
 }> = props => {
-    const { idx, pageIdx, maxPage, activeColor, inactiveDotColor, sizeRatio } =
-        props
+    const { idx, pageIdx, maxPage, activeColor, inactiveDotColor, sizeRatio } = props
 
     const [animVal] = useState(new Animated.Value(0))
     const [animate, setAnimate] = useState(false)
@@ -50,9 +49,7 @@ const Dot: React.FC<{
             maxPage: maxPage,
         })
 
-        const nextAnimate =
-            nextType.size !== (prevType?.size || 3) ||
-            nextType.opacity !== (prevType?.opacity || 0.2)
+        const nextAnimate = nextType.size !== (prevType?.size || 3) || nextType.opacity !== (prevType?.opacity || 0.2)
 
         if (pageIdx === idx) {
             setDotColor(activeColor)
@@ -62,15 +59,7 @@ const Dot: React.FC<{
 
         setType(nextType)
         setAnimate(nextAnimate)
-    }, [
-        prevType?.opacity,
-        prevType?.size,
-        activeColor,
-        pageIdx,
-        idx,
-        inactiveDotColor,
-        maxPage,
-    ])
+    }, [prevType?.opacity, prevType?.size, activeColor, pageIdx, idx, inactiveDotColor, maxPage])
 
     useEffect(() => {
         if (!animate) return
@@ -86,21 +75,14 @@ const Dot: React.FC<{
     const animStyle = useMemo(() => {
         const sizeHeight = animVal.interpolate({
             inputRange: [0, 1],
-            outputRange: [
-                (prevType?.size || 3) * sizeRatio,
-                type.size * sizeRatio,
-            ],
+            outputRange: [(prevType?.size || 3) * sizeRatio, type.size * sizeRatio],
         })
 
         const sizeWidth = animVal.interpolate({
             inputRange: [0, 1],
             outputRange: [
-                pageIdx === idx
-                    ? (prevType?.size || 3) * sizeRatio * 1
-                    : (prevType?.size || 3) * sizeRatio,
-                pageIdx === idx
-                    ? type.size * sizeRatio * 1
-                    : type.size * sizeRatio,
+                pageIdx === idx ? (prevType?.size || 3) * sizeRatio * 1 : (prevType?.size || 3) * sizeRatio,
+                pageIdx === idx ? type.size * sizeRatio * 1 : type.size * sizeRatio,
             ],
         })
 
@@ -115,10 +97,7 @@ const Dot: React.FC<{
             backgroundColor,
             borderRadius: animVal.interpolate({
                 inputRange: [0, 1],
-                outputRange: [
-                    (prevType?.size || 3) * sizeRatio * 0.5,
-                    type.size * sizeRatio * 0.5,
-                ],
+                outputRange: [(prevType?.size || 3) * sizeRatio * 0.5, type.size * sizeRatio * 0.5],
             }),
             opacity: animVal.interpolate({
                 inputRange: [0, 1],

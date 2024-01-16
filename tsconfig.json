@@ -6,20 +6,64 @@
         "experimentalDecorators": true,
         "jsx": "react",
         "skipLibCheck": true,
-        "types": ["node", "jest"],
-        "typeRoots": ["./node_modules/@types", "./src/@types"],
+        "types": [
+            "node",
+            "jest"
+        ],
+        "esModuleInterop": true,
+        "typeRoots": [
+            "./node_modules/@types",
+            "./src/@types"
+        ],
         "paths": {
-            "~*": ["./src/*"],
-            "~Storage/*": ["./src/Storage/*"],
-            "~Model/*": ["./src/Model/*"],
-            "~Services/*": ["./src/Services/*"],
-            "~Screens/*": ["./src/Screens/*"],
-            "~Navigation/*": ["./src/Navigation/*"],
-            "~Common/*": ["./src/Common/*"],
-            "~Components/*": ["./src/Components/*"],
-            "~i18n/*": ["./src/i18n/*"],
-            "~Assets/*": ["./src/Assets/*"],
-            "~Test": ["./src/Test/index.tsx"]
+            "~*": [
+                "./src/*"
+            ],
+            "~Api/*": [
+                "./src/Api/*"
+            ],
+            "~Storage/*": [
+                "./src/Storage/*"
+            ],
+            "~Model/*": [
+                "./src/Model/*"
+            ],
+            "~Services/*": [
+                "./src/Services/*"
+            ],
+            "~Screens/*": [
+                "./src/Screens/*"
+            ],
+            "~Navigation/*": [
+                "./src/Navigation/*"
+            ],
+            "~Constants/*": [
+                "./src/Constants/*"
+            ],
+            "~Hooks/*": [
+                "./src/Hooks/*"
+            ],
+            "~Utils/*": [
+                "./src/Utils/*"
+            ],
+            "~Components/*": [
+                "./src/Components/*"
+            ],
+            "~i18n/*": [
+                "./src/i18n/*"
+            ],
+            "~Assets/*": [
+                "./src/Assets/*"
+            ],
+            "~Networking/*": [
+                "./src/Networking/*"
+            ],
+            "~Events/*": [
+                "./src/Events/*"
+            ],
+            "~Test": [
+                "./src/Test/index.tsx"
+            ]
         }
     }
 }

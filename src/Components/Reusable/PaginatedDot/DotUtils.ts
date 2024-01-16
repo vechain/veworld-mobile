@@ -41,11 +41,7 @@ export type getDotStylePayload = {
  * @param {Object} getDotStylePayload - Object containing the current dot index, current page number, maximum page number, and an enum for different types of dots.
  * @returns {Object} - The style object for the dot.
  */
-export const getDotStyle = ({
-    idx,
-    pageIdx,
-    maxPage,
-}: getDotStylePayload): IDotStyle => {
+export const getDotStyle = ({ idx, pageIdx, maxPage }: getDotStylePayload): IDotStyle => {
     let type = EnumDotType.SMALL
 
     const lessThan5Pages: boolean = maxPage < 5
@@ -55,9 +51,7 @@ export const getDotStyle = ({
     const indexLessThanCurrentPage: boolean = idx < pageIdx
 
     if (lessThan5Pages) {
-        return DotStyle[
-            idx === pageIdx ? EnumDotType.ACTIVE : EnumDotType.INACTIVE
-        ]
+        return DotStyle[idx === pageIdx ? EnumDotType.ACTIVE : EnumDotType.INACTIVE]
     }
 
     if (firstThreePages) {
@@ -121,10 +115,7 @@ const handleFourthPage = (idx: number, pageIdx: number): EnumDotType => {
     return type
 }
 
-const handleIndexGreaterThanCurrentPage = (
-    idx: number,
-    pageIdx: number,
-): EnumDotType => {
+const handleIndexGreaterThanCurrentPage = (idx: number, pageIdx: number): EnumDotType => {
     let type = EnumDotType.SMALL
     if (idx === pageIdx + 1) {
         type = EnumDotType.MEDIUM
@@ -133,10 +124,7 @@ const handleIndexGreaterThanCurrentPage = (
     return type
 }
 
-const handleIndexLessThanCurrentPage = (
-    idx: number,
-    pageIdx: number,
-): EnumDotType => {
+const handleIndexLessThanCurrentPage = (idx: number, pageIdx: number): EnumDotType => {
     let type = EnumDotType.SMALL
     if (idx >= pageIdx - 2) {
         type = EnumDotType.INACTIVE

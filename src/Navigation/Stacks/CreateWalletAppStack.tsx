@@ -2,82 +2,91 @@ import React from "react"
 import { createNativeStackNavigator } from "@react-navigation/native-stack"
 import {
     ConfirmMnemonicScreen,
-    ImportMnemonicScreen,
-    ImportWalletTypeSelectionScreen,
+    EnableAdditionalSettings,
+    ImportLocalWallet,
     NewMnemonicScreen,
-    TutorialScreen,
+    SelectLedgerAccounts,
+    SelectLedgerDevice,
     UserCreatePasswordScreen,
+    WalletSetupScreen,
     WalletSuccessScreen,
-    WalletTypeSelectionScreen,
 } from "~Screens"
 import { Routes } from "~Navigation/Enums"
-import { SecurityLevelType } from "~Model"
+import { ConnectedLedgerDevice, SecurityLevelType } from "~Model"
+import { useNavAnimation } from "~Hooks"
 
 export type RootStackParamListCreateWalletApp = {
     Home: undefined
+    [Routes.WALLET_SETUP]: undefined
     [Routes.NEW_MNEMONIC]: undefined
-    [Routes.WALLET_TYPE_CREATION]: undefined
-    [Routes.WALLET_TYPE_IMPORT]: undefined
-    [Routes.WALLET_TUTORIAL]: undefined
     [Routes.CONFIRM_MNEMONIC]: undefined
     [Routes.IMPORT_MNEMONIC]: undefined
+    [Routes.IMPORT_HW_LEDGER_SELECT_DEVICE]: undefined
+    [Routes.IMPORT_HW_LEDGER_ENABLE_ADDITIONAL_SETTINGS]: {
+        device: ConnectedLedgerDevice
+    }
+    [Routes.IMPORT_HW_LEDGER_SELECT_ACCOUNTS]: {
+        device: ConnectedLedgerDevice
+    }
     [Routes.WALLET_SUCCESS]:
         | {
-              securityLevelSelected?: SecurityLevelType
-              userPin?: string
+              securityLevelSelected: SecurityLevelType.BIOMETRIC
+          }
+        | {
+              securityLevelSelected: SecurityLevelType.SECRET
+              userPin: string
           }
         | undefined
     [Routes.USER_CREATE_PASSWORD]: undefined
 }
 
-const CreateWalletApp =
-    createNativeStackNavigator<RootStackParamListCreateWalletApp>()
+const CreateWalletApp = createNativeStackNavigator<RootStackParamListCreateWalletApp>()
 
 export const CreateWalletAppStack = () => {
+    const { animation } = useNavAnimation()
+
     return (
-        <CreateWalletApp.Navigator screenOptions={{ headerShown: false }}>
+        <CreateWalletApp.Navigator screenOptions={{ headerShown: false, animation }}>
             <CreateWalletApp.Screen
-                name={Routes.WALLET_TYPE_CREATION}
-                component={WalletTypeSelectionScreen}
+                name={Routes.WALLET_SETUP}
+                component={WalletSetupScreen}
                 options={{ headerShown: false }}
             />
-
-            <CreateWalletApp.Screen
-                name={Routes.WALLET_TYPE_IMPORT}
-                component={ImportWalletTypeSelectionScreen}
-                options={{ headerShown: false }}
-            />
-
-            <CreateWalletApp.Screen
-                name={Routes.WALLET_TUTORIAL}
-                component={TutorialScreen}
-                options={{ headerShown: false }}
-            />
-
             <CreateWalletApp.Screen
                 name={Routes.NEW_MNEMONIC}
                 component={NewMnemonicScreen}
                 options={{ headerShown: false }}
             />
-
             <CreateWalletApp.Screen
                 name={Routes.CONFIRM_MNEMONIC}
                 component={ConfirmMnemonicScreen}
                 options={{ headerShown: false }}
             />
-
             <CreateWalletApp.Screen
                 name={Routes.WALLET_SUCCESS}
                 component={WalletSuccessScreen}
                 options={{ headerShown: false }}
             />
-
             <CreateWalletApp.Screen
                 name={Routes.IMPORT_MNEMONIC}
-                component={ImportMnemonicScreen}
+                component={ImportLocalWallet}
                 options={{ headerShown: false }}
             />
-
+            <CreateWalletApp.Screen
+                name={Routes.IMPORT_HW_LEDGER_SELECT_DEVICE}
+                component={SelectLedgerDevice}
+                options={{ headerShown: false }}
+            />
+            <CreateWalletApp.Screen
+                name={Routes.IMPORT_HW_LEDGER_ENABLE_ADDITIONAL_SETTINGS}
+                component={EnableAdditionalSettings}
+                options={{ headerShown: false }}
+            />
+            <CreateWalletApp.Screen
+                name={Routes.IMPORT_HW_LEDGER_SELECT_ACCOUNTS}
+                component={SelectLedgerAccounts}
+                options={{ headerShown: false }}
+            />
             <CreateWalletApp.Screen
                 name={Routes.USER_CREATE_PASSWORD}
                 component={UserCreatePasswordScreen}

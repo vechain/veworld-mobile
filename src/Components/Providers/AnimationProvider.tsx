@@ -6,9 +6,6 @@ interface Props extends AnimateProps<ViewProps> {
     children: React.ReactNode
 }
 
-export const AnimationProvider = ({
-    children,
-    ...animatedViewProps
-}: Props) => {
+export const AnimationProvider = ({ children, ...animatedViewProps }: Props) => {
     return <Animated.View {...animatedViewProps}>{children}</Animated.View>
 }

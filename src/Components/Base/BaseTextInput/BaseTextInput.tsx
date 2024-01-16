@@ -1,79 +1,100 @@
-import React, { memo } from "react"
-import {
-    TextInput,
-    StyleSheet,
-    TextInputProps,
-    StyleProp,
-    ViewStyle,
-} from "react-native"
-import DropShadow from "react-native-drop-shadow"
-import { ColorThemeType, useThemedStyles } from "~Common"
-import { COLORS, typography } from "~Common/Theme"
+import React, { forwardRef, memo } from "react"
+import { StyleSheet, TextInputProps, StyleProp, ViewStyle } from "react-native"
+import { useThemedStyles } from "~Hooks"
+import { COLORS, typography, ColorThemeType } from "~Constants"
 import { BaseIcon, BaseText } from "~Components"
 import { BaseView } from "../BaseView"
+import { TextInput } from "react-native-gesture-handler"
 const { defaults: defaultTypography } = typography
 
-type Props = {
+export type BaseTextInputProps = {
     placeholder?: string
     label?: string
     value?: string
     errorMessage?: string
+    testID?: string
+    rightIcon?: string
+    rightIconTestID?: string
+    onIconPress?: () => void
     containerStyle?: StyleProp<ViewStyle>
+    inputContainerStyle?: StyleProp<ViewStyle>
     setValue?: (s: string) => void
+    disabled?: boolean
+    inBottomSheet?: boolean
 } & TextInputProps
 
-export const BaseTextInput = memo(
-    ({
-        placeholder,
-        label,
-        value,
-        errorMessage,
-        setValue,
-        containerStyle,
-        ...otherProps
-    }: Props) => {
+const BaseTextInputComponent = forwardRef<TextInput, BaseTextInputProps>(
+    (
+        {
+            placeholder,
+            label,
+            value,
+            errorMessage,
+            testID,
+            rightIcon,
+            rightIconTestID,
+            onIconPress,
+            setValue,
+            containerStyle,
+            inputContainerStyle,
+            disabled,
+            style,
+            ...otherProps
+        },
+        ref,
+    ) => {
         const { styles, theme } = useThemedStyles(baseStyles(!!errorMessage))
 
-        const placeholderColor = theme.isDark
-            ? COLORS.WHITE_DISABLED
-            : COLORS.DARK_PURPLE_DISABLED
+        const placeholderColor = theme.isDark ? COLORS.WHITE_DISABLED : COLORS.DARK_PURPLE_DISABLED
 
         return (
-            <DropShadow style={containerStyle}>
+            <BaseView style={containerStyle}>
                 {label && (
                     <BaseText typographyFont="bodyMedium" mb={8}>
                         {label}
                     </BaseText>
                 )}
-                <BaseView style={styles.container}>
+                <BaseView style={[styles.container, inputContainerStyle]}>
                     <TextInput
-                        style={styles.input}
+                        ref={ref}
+                        style={[
+                            styles.input,
+                            {
+                                color: otherProps.editable ? theme.colors.text : theme.colors.textDisabled,
+                            },
+                            style,
+                        ]}
                         placeholder={placeholder}
                         placeholderTextColor={placeholderColor}
                         onChangeText={setValue}
                         value={value}
                         autoCapitalize="none"
+                        testID={testID}
+                        editable={!disabled}
+                        selectTextOnFocus={disabled}
                         {...otherProps}
                     />
+                    {rightIcon && (
+                        <BaseIcon
+                            haptics="Light"
+                            action={onIconPress}
+                            name={rightIcon}
+                            size={24}
+                            color={theme.colors.text}
+                            style={styles.rightIconStyle}
+                            testID={rightIconTestID}
+                        />
+                    )}
                 </BaseView>
-                <BaseView
-                    pt={10}
-                    flexDirection="row"
-                    justifyContent="flex-start"
-                    style={styles.errorContainer}>
-                    <BaseIcon
-                        name={"alert-circle-outline"}
-                        size={20}
-                        color={theme.colors.danger}
-                    />
-                    <BaseText
-                        px={7}
-                        color={theme.colors.danger}
-                        typographyFont="caption">
-                        {errorMessage || " "}
-                    </BaseText>
-                </BaseView>
-            </DropShadow>
+                {errorMessage && (
+                    <BaseView pt={10} flexDirection="row" justifyContent="flex-start" style={styles.errorContainer}>
+                        <BaseIcon name={"alert-circle-outline"} size={20} color={theme.colors.danger} />
+                        <BaseText px={7} color={theme.colors.danger} typographyFont="caption">
+                            {errorMessage || " "}
+                        </BaseText>
+                    </BaseView>
+                )}
+            </BaseView>
         )
     },
 )
@@ -81,18 +102,16 @@ export const BaseTextInput = memo(
 const baseStyles = (isError: boolean) => (theme: ColorThemeType) =>
     StyleSheet.create({
         container: {
-            ...theme.shadows.card,
             width: "100%",
             flexDirection: "row",
             alignItems: "center",
-            borderColor: theme.colors.transparent,
+            borderColor: isError ? theme.colors.danger : theme.colors.transparent,
             borderWidth: 1,
             borderRadius: 16,
             backgroundColor: theme.colors.card,
         },
         input: {
             flex: 1,
-            color: theme.colors.text,
             backgroundColor: theme.colors.card,
             borderColor: theme.colors.transparent,
             borderWidth: 1,
@@ -103,7 +122,13 @@ const baseStyles = (isError: boolean) => (theme: ColorThemeType) =>
             paddingLeft: 16,
             paddingRight: 8,
         },
+        rightIconStyle: {
+            marginRight: 16,
+        },
         errorContainer: {
             opacity: isError ? 1 : 0,
         },
     })
+
+export const BaseTextInput = memo(BaseTextInputComponent)
+BaseTextInput.displayName = "BaseTextInput"

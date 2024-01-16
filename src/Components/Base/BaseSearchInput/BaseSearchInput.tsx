@@ -1,50 +1,43 @@
 import React, { memo } from "react"
-import { TextInput, View, StyleSheet } from "react-native"
-import DropShadow from "react-native-drop-shadow"
-import { ColorThemeType, useTheme, useThemedStyles } from "~Common"
-import { typography } from "~Common/Theme"
+import { TextInput, StyleSheet } from "react-native"
+import { useTheme, useThemedStyles } from "~Hooks"
+import { typography, ColorThemeType, COLORS } from "~Constants"
 import { BaseIcon } from "../BaseIcon"
+import { BaseView } from "../BaseView"
 const { defaults: defaultTypography } = typography
 
 type Props = {
     placeholder?: string
     value?: string
     setValue?: (s: string) => void
+    testID?: string
 }
 
-export const BaseSearchInput = memo(
-    ({ placeholder = "Search", value, setValue }: Props) => {
-        const { styles } = useThemedStyles(baseStyles)
+export const BaseSearchInput = memo(({ placeholder = "Search", value, setValue, testID }: Props) => {
+    const { styles } = useThemedStyles(baseStyles)
 
-        const theme = useTheme()
+    const theme = useTheme()
 
-        return (
-            <DropShadow>
-                <View style={styles.container}>
-                    <TextInput
-                        style={styles.input}
-                        placeholder={placeholder}
-                        placeholderTextColor={theme.colors.text}
-                        onChangeText={setValue}
-                        value={value}
-                    />
-                    <BaseIcon
-                        name="magnify"
-                        size={24}
-                        color={theme.colors.text}
-                        style={styles.icon}
-                        testID="magnify"
-                    />
-                </View>
-            </DropShadow>
-        )
-    },
-)
+    const placeholderColor = theme.isDark ? COLORS.WHITE_DISABLED : COLORS.DARK_PURPLE_DISABLED
+
+    return (
+        <BaseView style={styles.container}>
+            <TextInput
+                style={styles.input}
+                placeholder={placeholder}
+                placeholderTextColor={placeholderColor}
+                onChangeText={setValue}
+                value={value}
+                testID={testID}
+            />
+            <BaseIcon name="magnify" size={24} color={theme.colors.text} style={styles.icon} testID="magnify" />
+        </BaseView>
+    )
+})
 
 const baseStyles = (theme: ColorThemeType) =>
     StyleSheet.create({
         container: {
-            ...theme.shadows.card,
             width: "100%",
             flexDirection: "row",
             alignItems: "center",

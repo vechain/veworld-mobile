@@ -1,7 +1,6 @@
-import { AddressUtils } from "~Common"
-import { Device, WalletAccount } from "~Model"
+import { BaseDevice, WalletAccount } from "~Model"
 import {
-    selectAccount,
+    setSelectedAccount,
     renameAccount,
     removeAccountsByDevice,
     setAccountVisibility,
@@ -9,44 +8,23 @@ import {
     addAccount,
 } from "../Slices/Account"
 import { AppThunk } from "../Types"
-
-const nextAlias = (accountId: number) => `Account ${accountId}`
-
-/**
- *  Find the next index for a new account based on the current accounts
- * @param accounts
- * @returns
- */
-const getNextIndex = (accounts: WalletAccount[]) => {
-    let index = 0
-    const accountsIndex = accounts.map(acc => acc.index)
-    while (accountsIndex.includes(index)) {
-        index++
-    }
-    return index
-}
+import { AddressUtils, AccountUtils } from "~Utils"
 const addAccountForDevice =
-    (device: Device): AppThunk<WalletAccount> =>
+    (device: BaseDevice): AppThunk<WalletAccount> =>
     (dispatch, getState) => {
-        if (!device.xPub)
-            throw new Error("Cannot add account for device without xPub")
+        if (!device.xPub) throw new Error("This is not a valid HD wallet device")
+
         const { accounts } = getState()
         const deviceAccounts = accounts.accounts.filter(account =>
-            AddressUtils.compareAddresses(
-                account.rootAddress,
-                device.rootAddress,
-            ),
+            AddressUtils.compareAddresses(account.rootAddress, device.rootAddress),
         )
 
-        const nextIndex = getNextIndex(deviceAccounts)
+        const nextIndex = AccountUtils.getNextIndex(deviceAccounts)
 
-        const newAccountAddress = AddressUtils.getAddressFromXPub(
-            device.xPub,
-            nextIndex,
-        )
+        const newAccountAddress = AddressUtils.getAddressFromXPub(device.xPub, nextIndex)
 
         const newAccount: WalletAccount = {
-            alias: nextAlias(nextIndex + 1),
+            alias: AccountUtils.nextAlias(nextIndex + 1),
             address: newAccountAddress,
             rootAddress: device.rootAddress,
             index: nextIndex,
@@ -57,7 +35,7 @@ const addAccountForDevice =
     }
 
 export {
-    selectAccount,
+    setSelectedAccount,
     renameAccount,
     removeAccountsByDevice,
     setAccountVisibility,

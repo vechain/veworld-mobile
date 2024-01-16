@@ -1,19 +1,44 @@
 diff --git a/node_modules/react-native-wagmi-charts/src/charts/line/Gradient.tsx b/node_modules/react-native-wagmi-charts/src/charts/line/Gradient.tsx
-index eca4232..d95e48b 100644
+index eca4232..907e73f 100644
 --- a/node_modules/react-native-wagmi-charts/src/charts/line/Gradient.tsx
 +++ b/node_modules/react-native-wagmi-charts/src/charts/line/Gradient.tsx
-@@ -64,9 +64,11 @@ export function LineChartGradient({
+@@ -11,6 +11,7 @@ const AnimatedPath = Animated.createAnimatedComponent(Path);
+ export type LineChartGradientProps = Animated.AnimateProps<PathProps> & {
+   color?: string;
+   children?: React.ReactNode;
++  lastGradientValue?: number
+ };
+ 
+ let id = 0;
+@@ -20,6 +21,7 @@ LineChartGradient.displayName = 'LineChartGradient';
+ export function LineChartGradient({
+   color: overrideColor = undefined,
+   children,
++  lastGradientValue = 0.1,
+   ...props
+ }: LineChartGradientProps) {
+   const { area } = React.useContext(LineChartDimensionsContext);
+@@ -41,6 +43,8 @@ export function LineChartGradient({
+ 
+   ////////////////////////////////////////////////
+ 
++
++
+   return (
+     <>
+       {children ? (
+@@ -64,9 +68,11 @@ export function LineChartGradient({
              y1="0"
              y2="100%"
            >
 -            <Stop offset="20%" stopColor={color} stopOpacity={0.15} />
 -            <Stop offset="40%" stopColor={color} stopOpacity={0.05} />
 -            <Stop offset="100%" stopColor={color} stopOpacity={0} />
-+            <Stop offset="10%" stopColor={color} stopOpacity={0.8} />
-+            <Stop offset="20%" stopColor={color} stopOpacity={0.7} />
-+            <Stop offset="40%" stopColor={color} stopOpacity={0.5} />
-+            <Stop offset="70%" stopColor={color} stopOpacity={0.3} />
-+            <Stop offset="100%" stopColor={color} stopOpacity={0.1} />
++              <Stop offset="10%" stopColor={color} stopOpacity={0.8} />
++              <Stop offset="20%" stopColor={color} stopOpacity={0.7} />
++              <Stop offset="40%" stopColor={color} stopOpacity={0.5} />
++              <Stop offset="70%" stopColor={color} stopOpacity={0.3} />
++              <Stop offset="98%" stopColor={color} stopOpacity={lastGradientValue} />
            </LinearGradient>
          </Defs>
        )}

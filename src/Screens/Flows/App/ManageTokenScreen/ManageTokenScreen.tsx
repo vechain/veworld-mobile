@@ -1,50 +1,57 @@
-import React, { useState } from "react"
-import { StyleSheet } from "react-native"
-import { useBottomSheetModal, useTheme } from "~Common"
+import React, { useEffect, useState } from "react"
+import { useAnalyticTracking, useBottomSheetModal, useTheme } from "~Hooks"
 import {
-    BackButtonHeader,
     BaseIcon,
-    BaseSafeArea,
-    BaseScrollView,
     BaseSearchInput,
     BaseSpacer,
     BaseText,
     BaseTouchableBox,
     BaseView,
+    DismissKeyboardView,
+    Layout,
+    OfficialTokenCard,
+    useThor,
 } from "~Components"
 
 import { useI18nContext } from "~i18n"
-import { OfficialTokenCard } from "./Components/OfficialTokenCard"
 import { FungibleToken } from "~Model"
 import {
     selectNonVechainFungibleTokens,
     selectSelectedAccount,
-    selectNonVechainDenormalizedAccountTokenBalances,
+    selectNonVechainTokensWithBalances,
     selectSelectedNetwork,
-    selectCustomTokens,
 } from "~Storage/Redux/Selectors"
-import { addTokenBalance, removeTokenBalance } from "~Storage/Redux/Slices"
-import { useAppDispatch, useAppSelector } from "~Storage/Redux"
+import { addTokenBalance, removeTokenBalance, setIsAppLoading } from "~Storage/Redux/Slices"
+import { updateAccountBalances, useAppDispatch, useAppSelector } from "~Storage/Redux"
 import { useNavigation } from "@react-navigation/native"
 import { Routes } from "~Navigation"
 import { AddCustomTokenBottomSheet } from "../ManageCustomTokenScreen/BottomSheets"
+import { AnalyticsEvent } from "~Constants"
 
 export const ManageTokenScreen = () => {
     const theme = useTheme()
+
     const nav = useNavigation()
+
     const { LL } = useI18nContext()
+
     const dispatch = useAppDispatch()
+
     const account = useAppSelector(selectSelectedAccount)
-    const [tokenQuery, setTokenQuery] = useState<string>("")
+
+    const tokenBalances = useAppSelector(selectNonVechainTokensWithBalances)
+
     const tokens = useAppSelector(selectNonVechainFungibleTokens)
-    const tokenBalances = useAppSelector(
-        selectNonVechainDenormalizedAccountTokenBalances,
-    )
-    const [selectedTokenSymbols, setSelectedTokenSymbols] = useState<string[]>(
-        tokenBalances.map(({ token }) => token.symbol),
-    )
+
     const currentNetwork = useAppSelector(selectSelectedNetwork)
-    const customTokens = useAppSelector(selectCustomTokens)
+
+    const track = useAnalyticTracking()
+
+    const [tokenQuery, setTokenQuery] = useState<string>("")
+    const [selectedTokenSymbols, setSelectedTokenSymbols] = useState<string[]>(
+        tokenBalances.map(tokenWithBalance => tokenWithBalance.symbol),
+    )
+
     const {
         ref: addCustomTokenSheetRef,
         onOpen: openAddCustomTokenSheet,
@@ -53,60 +60,43 @@ export const ManageTokenScreen = () => {
 
     const filteredTokens = tokens.filter(
         token =>
-            token.name
-                .toLocaleLowerCase()
-                .includes(tokenQuery.toLocaleLowerCase()) ||
-            token.symbol
-                .toLocaleLowerCase()
-                .includes(tokenQuery.toLocaleLowerCase()),
+            token.name.toLocaleLowerCase().includes(tokenQuery.toLocaleLowerCase()) ||
+            token.symbol.toLocaleLowerCase().includes(tokenQuery.toLocaleLowerCase()),
     )
-    const selectedTokens = filteredTokens.filter(token =>
-        selectedTokenSymbols.includes(token.symbol),
-    )
-    const unselectedTokens = filteredTokens.filter(
-        token => !selectedTokenSymbols.includes(token.symbol),
-    )
+    const selectedTokens = filteredTokens.filter(token => selectedTokenSymbols.includes(token.symbol))
+    const unselectedTokens = filteredTokens.filter(token => !selectedTokenSymbols.includes(token.symbol))
+    const thorClient = useThor()
 
-    const selectToken = (token: FungibleToken) => {
-        if (account?.address) {
-            setSelectedTokenSymbols(tokenSymbols => [
-                ...tokenSymbols,
-                token.symbol,
-            ])
-            dispatch(
-                addTokenBalance({
+    const selectToken = async (token: FungibleToken) => {
+        setSelectedTokenSymbols(tokenSymbols => [...tokenSymbols, token.symbol])
+
+        dispatch(
+            addTokenBalance({
+                network: currentNetwork.type,
+                accountAddress: account.address,
+                balance: {
                     balance: "0",
-                    accountAddress: account.address,
                     tokenAddress: token.address,
                     timeUpdated: new Date().toISOString(),
-                    position: selectedTokenSymbols.length,
-                    networkGenesisId: currentNetwork.genesis.id,
-                }),
-            )
-        } else {
-            throw new Error(
-                "Trying to select an official token without an account selected",
-            )
-        }
+                    isCustomToken: false,
+                    isHidden: false,
+                },
+            }),
+        )
+
+        dispatch(updateAccountBalances(thorClient, account.address))
+
+        track(AnalyticsEvent.TOKENS_CUSTOM_TOKEN_ADDED)
     }
     const unselectToken = (token: FungibleToken) => {
-        if (account?.address) {
-            setSelectedTokenSymbols(tokenSymbols =>
-                tokenSymbols.filter(
-                    tokenSymbol => tokenSymbol !== token.symbol,
-                ),
-            )
-            dispatch(
-                removeTokenBalance({
-                    accountAddress: account.address,
-                    tokenAddress: token.address,
-                }),
-            )
-        } else {
-            throw new Error(
-                "Trying to unselect an official token without an account selected",
-            )
-        }
+        setSelectedTokenSymbols(tokenSymbols => tokenSymbols.filter(tokenSymbol => tokenSymbol !== token.symbol))
+        dispatch(
+            removeTokenBalance({
+                network: currentNetwork.type,
+                accountAddress: account.address,
+                tokenAddress: token.address,
+            }),
+        )
     }
 
     const handleClickToken = (token: FungibleToken) => () => {
@@ -121,132 +111,105 @@ export const ManageTokenScreen = () => {
         nav.navigate(Routes.MANAGE_CUSTOM_TOKEN)
     }
 
+    useEffect(() => {
+        setTimeout(() => {
+            dispatch(setIsAppLoading(false))
+        }, 300)
+    }, [dispatch])
+
     return (
-        <BaseSafeArea grow={1}>
-            <BackButtonHeader />
-            <BaseView mx={20}>
-                <BaseText typographyFont="title">
-                    {LL.MANAGE_TOKEN_TITLE()}
-                </BaseText>
-                <BaseSpacer height={24} />
-                <BaseText typographyFont="button">
-                    {LL.MANAGE_TOKEN_SELECT_YOUR_TOKEN_SUBTITLE()}
-                </BaseText>
-                <BaseSpacer height={8} />
-                <BaseText typographyFont="body">
-                    {LL.MANAGE_TOKEN_SELECT_YOUR_TOKEN_BODY()}
-                </BaseText>
-                <BaseSpacer height={16} />
-                {customTokens.length ? (
-                    <BaseTouchableBox
-                        action={navigateManageCustomTokenScreen}
-                        justifyContent="center">
-                        <BaseIcon
-                            name="tune"
-                            size={16}
-                            color={theme.colors.text}
-                        />
-                        <BaseSpacer width={10} />
-                        <BaseText py={3}>
-                            {LL.MANAGE_TOKEN_MANAGE_CUSTOM()}
-                        </BaseText>
-                        <BaseSpacer width={10} />
-                        <BaseView
-                            bg={theme.colors.primary}
-                            style={styles.counter}>
-                            <BaseText
-                                color={theme.colors.textReversed}
-                                typographyFont="bodyMedium">
-                                {customTokens.length}
-                            </BaseText>
-                        </BaseView>
-                    </BaseTouchableBox>
-                ) : (
-                    <BaseTouchableBox
-                        action={openAddCustomTokenSheet}
-                        justifyContent="center">
-                        <BaseIcon
-                            name="plus"
-                            size={20}
-                            color={theme.colors.primary}
-                        />
-                        <BaseSpacer width={10} />
-                        <BaseText py={3}>
-                            {LL.MANAGE_TOKEN_ADD_CUSTOM()}
-                        </BaseText>
-                    </BaseTouchableBox>
-                )}
-                <BaseSpacer height={16} />
-                <BaseSearchInput
-                    value={tokenQuery}
-                    setValue={setTokenQuery}
-                    placeholder={LL.MANAGE_TOKEN_SEARCH_TOKEN()}
-                />
-                <BaseSpacer height={16} />
-            </BaseView>
-            <BaseScrollView
-                containerStyle={styles.scrollViewContainer}
-                style={styles.scrollView}>
-                {filteredTokens.length ? (
+        <DismissKeyboardView>
+            <Layout
+                safeAreaTestID="Manage_Tokens_Screen"
+                body={
                     <>
-                        {!!selectedTokens.length && (
-                            <>
-                                <BaseText typographyFont="body">
-                                    {LL.MANAGE_TOKEN_SELECTED()}
+                        <BaseView>
+                            <BaseView
+                                flexDirection="row"
+                                justifyContent="space-between"
+                                alignItems="center"
+                                w={100}
+                                pt={16}>
+                                <BaseText typographyFont="title" testID="contacts-screen-title">
+                                    {LL.MANAGE_TOKEN_TITLE()}
                                 </BaseText>
-                                <BaseSpacer height={16} />
-                                {selectedTokens.map(token => (
-                                    <OfficialTokenCard
-                                        selected
-                                        key={token.address}
-                                        token={token}
-                                        action={handleClickToken(token)}
-                                    />
-                                ))}
-                                <BaseSpacer height={24} />
-                            </>
-                        )}
-                        {!!unselectedTokens.length && (
-                            <>
-                                <BaseText typographyFont="body">
-                                    {LL.MANAGE_TOKEN_UNSELECTED()}
+                                <BaseIcon
+                                    haptics="Light"
+                                    name={"plus"}
+                                    size={24}
+                                    bg={theme.colors.secondary}
+                                    action={openAddCustomTokenSheet}
+                                    testID="ManageTokenScreen_AddCustomToken_Button"
+                                />
+                            </BaseView>
+                            <BaseSpacer height={8} />
+                            <BaseText typographyFont="body">{LL.MANAGE_TOKEN_SELECT_YOUR_TOKEN_BODY()}</BaseText>
+                            <BaseSpacer height={16} />
+
+                            <BaseTouchableBox
+                                haptics="Light"
+                                action={navigateManageCustomTokenScreen}
+                                justifyContent="center">
+                                <BaseIcon name="tune" color={theme.colors.primary} />
+                                <BaseSpacer width={8} />
+                                <BaseText typographyFont="bodyMedium">
+                                    {LL.MANAGE_TOKEN_VIEW_CUSTOM_TOKENS_OWNED()}
                                 </BaseText>
-                                <BaseSpacer height={16} />
-                                {unselectedTokens.map(token => (
-                                    <OfficialTokenCard
-                                        key={token.address}
-                                        token={token}
-                                        action={handleClickToken(token)}
-                                    />
-                                ))}
+                                <BaseSpacer width={8} />
+                            </BaseTouchableBox>
+                            <BaseSpacer height={16} />
+                            <BaseSearchInput
+                                value={tokenQuery}
+                                setValue={setTokenQuery}
+                                placeholder={LL.MANAGE_TOKEN_SEARCH_TOKEN()}
+                                testID="ManageTokenScreen_SearchInput_searchTokenInput"
+                            />
+                        </BaseView>
+                        <BaseSpacer height={24} />
+
+                        {filteredTokens.length ? (
+                            <>
+                                {!!selectedTokens.length && (
+                                    <>
+                                        <BaseText typographyFont="subSubTitle">{LL.MANAGE_TOKEN_SELECTED()}</BaseText>
+                                        <BaseSpacer height={16} />
+                                        {selectedTokens.map(token => (
+                                            <OfficialTokenCard
+                                                iconHeight={20}
+                                                iconWidth={20}
+                                                selected
+                                                key={token.address}
+                                                token={token}
+                                                action={handleClickToken(token)}
+                                            />
+                                        ))}
+                                        <BaseSpacer height={17} />
+                                    </>
+                                )}
+                                {!!unselectedTokens.length && (
+                                    <>
+                                        <BaseText typographyFont="subSubTitle">{LL.MANAGE_TOKEN_UNSELECTED()}</BaseText>
+                                        <BaseSpacer height={16} />
+                                        {unselectedTokens.map(token => (
+                                            <OfficialTokenCard
+                                                iconHeight={20}
+                                                iconWidth={20}
+                                                key={token.address}
+                                                token={token}
+                                                action={handleClickToken(token)}
+                                            />
+                                        ))}
+                                    </>
+                                )}
                             </>
+                        ) : (
+                            <BaseText m={20}>{LL.BD_NO_TOKEN_FOUND()}</BaseText>
                         )}
+
+                        <AddCustomTokenBottomSheet ref={addCustomTokenSheetRef} onClose={closeAddCustomTokenSheet} />
                     </>
-                ) : (
-                    <BaseText m={20}>{LL.BD_NO_TOKEN_FOUND()}</BaseText>
-                )}
-            </BaseScrollView>
-            <AddCustomTokenBottomSheet
-                ref={addCustomTokenSheetRef}
-                onClose={closeAddCustomTokenSheet}
+                }
             />
-        </BaseSafeArea>
+        </DismissKeyboardView>
     )
 }
-
-const styles = StyleSheet.create({
-    scrollViewContainer: {
-        flex: 1,
-        width: "100%",
-        marginBottom: 60,
-    },
-    scrollView: {
-        paddingHorizontal: 20,
-        width: "100%",
-    },
-    counter: {
-        borderRadius: 6,
-        paddingVertical: 2,
-        paddingHorizontal: 4,
-    },
-})

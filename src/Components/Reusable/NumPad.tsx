@@ -1,11 +1,11 @@
-import { Dimensions, Pressable, StyleSheet } from "react-native"
+import { Pressable, StyleSheet } from "react-native"
 import React, { useCallback } from "react"
-import { BaseText, BaseView } from "~Components"
-import * as Haptics from "expo-haptics"
-import { ColorThemeType, useThemedStyles } from "~Common"
-import DropShadow from "react-native-drop-shadow"
+import { BaseIcon, BaseText, BaseView } from "~Components"
+import { useTheme, useThemedStyles } from "~Hooks"
+import { ColorThemeType, valueToHP } from "~Constants"
+import { widthPercentageToDP as wp } from "react-native-responsive-screen"
 
-const numPad = ["1", "2", "3", "4", "5", "6", "7", "8", "9", "blank", "0", "*"]
+const numPad = ["1", "2", "3", "4", "5", "6", "7", "8", "9", "blank", "0", "canc"]
 
 type Props = {
     onDigitPress: (digit: string) => void
@@ -13,39 +13,36 @@ type Props = {
 }
 
 export const NumPad = ({ onDigitPress, onDigitDelete }: Props) => {
-    const { theme, styles } = useThemedStyles(baseStyles)
+    const { styles } = useThemedStyles(baseStyles)
+
     const handleOnDigitPress = useCallback(
         (digit: string) => () => {
             onDigitPress(digit)
-            Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light)
         },
         [onDigitPress],
     )
 
+    const theme = useTheme()
+
     return (
         <BaseView flexDirection="row" flexWrap="wrap" w={100}>
             {numPad.map((digit, index) => {
-                const isDeleteKey = digit === "*"
-                const onPress = isDeleteKey
-                    ? onDigitDelete
-                    : handleOnDigitPress(digit)
+                const isDeleteKey = digit === "canc"
+                const onPress = isDeleteKey ? onDigitDelete : handleOnDigitPress(digit)
                 return (
                     <BaseView style={styles.width} key={index}>
                         {digit !== "blank" ? (
-                            <DropShadow style={theme.shadows.card}>
-                                <Pressable
-                                    style={({ pressed }) => [
-                                        styles.pressable,
-                                        { opacity: pressed ? 0.5 : 1.0 },
-                                    ]}
-                                    onPress={onPress}>
-                                    <BaseText
-                                        typographyFont="largeTitleAccent"
-                                        alignContainer="center">
+                            <Pressable
+                                style={({ pressed }) => [styles.pressable, { opacity: pressed ? 0.5 : 1.0 }]}
+                                onPress={onPress}>
+                                {digit !== "canc" ? (
+                                    <BaseText typographyFont="largeTitleAccent" alignContainer="center">
                                         {digit}
                                     </BaseText>
-                                </Pressable>
-                            </DropShadow>
+                                ) : (
+                                    <BaseIcon name="backspace-outline" color={theme.colors.text} />
+                                )}
+                            </Pressable>
                         ) : null}
                     </BaseView>
                 )
@@ -60,12 +57,14 @@ const baseStyles = (theme: ColorThemeType) =>
             width: "33%",
             justifyContent: "center",
             alignItems: "center",
-            paddingVertical: 22,
+            paddingVertical: valueToHP[22],
         },
         pressable: {
-            paddingVertical: 12,
-            paddingHorizontal: 24,
+            width: wp("18%"),
+            height: wp("18%"),
+            justifyContent: "center",
+            alignItems: "center",
             backgroundColor: theme.colors.card,
-            borderRadius: Dimensions.get("window").width * 0.5,
+            borderRadius: wp("9%"),
         },
     })

@@ -2,9 +2,9 @@ import React, { useCallback } from "react"
 import { StyleSheet } from "react-native"
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs"
 import { TabIcon } from "~Components"
-import { useTheme } from "~Common"
-import PlatformUtils from "~Common/Utils/PlatformUtils"
-import { HomeStack, SettingsStack } from "~Navigation/Stacks"
+import { useTheme } from "~Hooks"
+import PlatformUtils from "~Utils/PlatformUtils"
+import { DiscoverStack, HomeStack, SettingsStack } from "~Navigation/Stacks"
 import { NFTStack } from "~Navigation/Stacks/NFTStack"
 
 const Tab = createBottomTabNavigator()
@@ -13,9 +13,7 @@ export const TabStack = () => {
     const theme = useTheme()
 
     const renderTabBarIcon = useCallback(
-        (focused: boolean, iconName: string) => (
-            <TabIcon focused={focused} title={iconName} />
-        ),
+        (focused: boolean, iconName: string) => <TabIcon focused={focused} title={iconName} />,
         [],
     )
     return (
@@ -34,8 +32,8 @@ export const TabStack = () => {
                 component={HomeStack}
                 options={{
                     tabBarLabel: "Wallet",
-                    tabBarIcon: ({ focused }) =>
-                        renderTabBarIcon(focused, "home"),
+                    tabBarTestID: "wallet-tab",
+                    tabBarIcon: ({ focused }) => renderTabBarIcon(focused, focused ? "home" : "home-outline"),
                 }}
             />
 
@@ -44,8 +42,19 @@ export const TabStack = () => {
                 component={NFTStack}
                 options={{
                     tabBarLabel: "NFT",
+                    tabBarTestID: "nft-tab",
                     tabBarIcon: ({ focused }) =>
-                        renderTabBarIcon(focused, "image-multiple-outline"),
+                        renderTabBarIcon(focused, focused ? "image-multiple" : "image-multiple-outline"),
+                }}
+            />
+
+            <Tab.Screen
+                name="DiscoverStack"
+                component={DiscoverStack}
+                options={{
+                    tabBarLabel: "Discover",
+                    tabBarTestID: "discover-tab",
+                    tabBarIcon: ({ focused }) => renderTabBarIcon(focused, focused ? "compass" : "compass-outline"),
                 }}
             />
 
@@ -54,8 +63,8 @@ export const TabStack = () => {
                 component={SettingsStack}
                 options={{
                     tabBarLabel: "Settings",
-                    tabBarIcon: ({ focused }) =>
-                        renderTabBarIcon(focused, "cog"),
+                    tabBarTestID: "settings-tab",
+                    tabBarIcon: ({ focused }) => renderTabBarIcon(focused, focused ? "cog" : "cog-outline"),
                 }}
             />
         </Tab.Navigator>

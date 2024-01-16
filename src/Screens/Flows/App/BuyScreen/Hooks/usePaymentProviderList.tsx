@@ -1,0 +1,37 @@
+import React from "react"
+import { useTheme } from "~Hooks"
+import { useI18nContext } from "~i18n"
+import { COLORS } from "~Constants"
+import { PaymentMethod, PaymentMethodsIds, PaymentMethodsList } from "./constants"
+import { CoinbaseLogoSmallSvg } from "~Assets"
+
+export type PaymentProvider = {
+    id: string
+    name: string
+    description: string
+    img: React.ReactNode
+    paymentMethods: PaymentMethod[]
+}
+
+export const usePaymentProviderList = () => {
+    const { LL } = useI18nContext()
+    const theme = useTheme()
+
+    return [
+        {
+            id: "coinbase-pay",
+            name: "Coinbase",
+            description: LL.BD_BUY_DESCRIPTION_COINBASE(),
+            img: (
+                <CoinbaseLogoSmallSvg
+                    fill={theme.isDark ? COLORS.COINBASE_BACKGROUND_DARK : COLORS.COINBASE_BACKGROUND_BLUE}
+                    width={22}
+                />
+            ),
+            paymentMethods: [
+                PaymentMethodsList[PaymentMethodsIds.CreditCard],
+                PaymentMethodsList[PaymentMethodsIds.BankAccount],
+            ],
+        },
+    ]
+}

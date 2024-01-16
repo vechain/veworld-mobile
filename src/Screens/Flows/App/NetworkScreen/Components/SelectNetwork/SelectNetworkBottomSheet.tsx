@@ -1,22 +1,14 @@
 import React, { useCallback, useMemo, useState } from "react"
 import { BottomSheetModalMethods } from "@gorhom/bottom-sheet/lib/typescript/types"
-import { BaseSpacer, BaseText, BaseView, BaseBottomSheet } from "~Components"
+import { BaseSpacer, BaseText, BaseView, BaseBottomSheet, NetworkBox } from "~Components"
 import { useI18nContext } from "~i18n"
-import { useAppDispatch, useAppSelector } from "~Storage/Redux"
+import { clearNFTCache, useAppDispatch, useAppSelector } from "~Storage/Redux"
 import { changeSelectedNetwork } from "~Storage/Redux/Actions"
 import { Network, NETWORK_TYPE } from "~Model"
-import {
-    selectNetworksByType,
-    selectSelectedNetwork,
-} from "~Storage/Redux/Selectors"
-import { NetworkBox } from "./NetworkBox"
+import { selectNetworksByType, selectSelectedNetwork } from "~Storage/Redux/Selectors"
 import { BottomSheetSectionList } from "@gorhom/bottom-sheet"
-import {
-    SectionListData,
-    SectionListRenderItemInfo,
-    StyleSheet,
-} from "react-native"
-import { info } from "~Common"
+import { SectionListData, SectionListRenderItemInfo, StyleSheet } from "react-native"
+import { useSetSelectedAccount } from "~Hooks"
 
 type Props = {
     onClose: () => void
@@ -24,20 +16,16 @@ type Props = {
 
 const snapPoints = ["50%", "90%"]
 
-export const SelectNetworkBottomSheet = React.forwardRef<
-    BottomSheetModalMethods,
-    Props
->(({ onClose }, ref) => {
+export const SelectNetworkBottomSheet = React.forwardRef<BottomSheetModalMethods, Props>(({ onClose }, ref) => {
     const { LL } = useI18nContext()
     const dispatch = useAppDispatch()
+    const { onSetSelectedAccount } = useSetSelectedAccount()
 
     const selectedNetwork = useAppSelector(selectSelectedNetwork)
 
     const mainNetworks = useAppSelector(selectNetworksByType(NETWORK_TYPE.MAIN))
     const testNetworks = useAppSelector(selectNetworksByType(NETWORK_TYPE.TEST))
-    const otherNetworks = useAppSelector(
-        selectNetworksByType(NETWORK_TYPE.OTHER),
-    )
+    const otherNetworks = useAppSelector(selectNetworksByType(NETWORK_TYPE.OTHER))
 
     type Section = {
         title: string
@@ -69,67 +57,43 @@ export const SelectNetworkBottomSheet = React.forwardRef<
 
     const onPress = useCallback(
         (network: Network) => {
+            onSetSelectedAccount({})
+            dispatch(clearNFTCache())
             dispatch(changeSelectedNetwork(network))
             onClose()
         },
-        [onClose, dispatch],
+        [onSetSelectedAccount, dispatch, onClose],
     )
 
-    const renderSectionHeader = useCallback(
-        ({ section }: { section: SectionListData<Network, Section> }) => {
-            return (
-                <BaseText typographyFont="bodyMedium">{section.title}</BaseText>
-            )
-        },
-        [],
-    )
+    const renderSectionHeader = useCallback(({ section }: { section: SectionListData<Network, Section> }) => {
+        return <BaseText typographyFont="bodyMedium">{section.title}</BaseText>
+    }, [])
 
     const renderItem = useCallback(
         ({ item }: SectionListRenderItemInfo<Network, Section>) => {
             const isSelected = selectedNetwork.id === item.id
-            return (
-                <NetworkBox
-                    network={item}
-                    isSelected={isSelected}
-                    onPress={() => onPress(item)}
-                />
-            )
+            return <NetworkBox network={item} isSelected={isSelected} onPress={() => onPress(item)} flex={1} />
         },
         [selectedNetwork, onPress],
     )
 
-    const renderItemSeparator = useCallback(
-        () => <BaseSpacer height={16} />,
-        [],
-    )
+    const renderItemSeparator = useCallback(() => <BaseSpacer height={16} />, [])
 
-    const renderSectionSeparator = useCallback(
-        () => <BaseSpacer height={24} />,
-        [],
-    )
+    const renderSectionSeparator = useCallback(() => <BaseSpacer height={24} />, [])
 
     const [snapIndex, setSnapIndex] = useState<number>(0)
 
     // The list is scrollable when the bottom sheet is fully expanded
-    const isListScrollable = useMemo(
-        () => snapIndex === snapPoints.length - 1,
-        [snapIndex],
-    )
+    const isListScrollable = useMemo(() => snapIndex === snapPoints.length - 1, [snapIndex])
 
     const handleSheetChanges = useCallback((index: number) => {
-        info("walletManagementSheet position changed", index)
         setSnapIndex(index)
     }, [])
 
     return (
-        <BaseBottomSheet
-            snapPoints={snapPoints}
-            ref={ref}
-            onChange={handleSheetChanges}>
+        <BaseBottomSheet snapPoints={snapPoints} ref={ref} onChange={handleSheetChanges}>
             <BaseView flexDirection="column" w={100}>
-                <BaseText typographyFont="subTitleBold">
-                    {LL.BD_SELECT_NETWORK()}
-                </BaseText>
+                <BaseText typographyFont="subTitleBold">{LL.BD_SELECT_NETWORK()}</BaseText>
             </BaseView>
 
             <BaseSpacer height={16} />

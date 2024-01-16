@@ -1,12 +1,11 @@
-// import { OnboardStage } from "./enum"
+export enum PinVerificationError {
+    EDIT_PIN = "EDIT_PIN",
+    VALIDATE_PIN = "VALIDATE_PIN",
+}
 
-// /**
-//  * Current state on the onboard process
-//  *
-//  * @field 'password' - The password that will be used to encrypt the app
-//  * @field 'stage' - The current stage on the onboard process
-//  */
-// export interface OnboardState {
-//     password?: string
-//     stage: OnboardStage
-// }
+type PinErrorType = `${PinVerificationError}`
+
+export type PinVerificationErrorType = {
+    type: PinErrorType | undefined
+    value: boolean
+}

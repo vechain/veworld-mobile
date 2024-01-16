@@ -1,19 +1,18 @@
 import React, { memo } from "react"
-import { StyleSheet } from "react-native"
+import { StyleSheet, ViewProps } from "react-native"
 import { SvgXml } from "react-native-svg"
-import { PicassoUtils } from "~Common"
+import { PicassoUtils } from "~Utils"
 import { BaseView } from "~Components/Base"
-import { Account } from "~Model"
 
 type AccountIconProps = {
-    account: Account
-    showDeviceIcon?: boolean
+    address: string
+    size?: number
 }
 
-export const AccountIcon: React.FC<AccountIconProps> = memo(({ account }) => {
+export const AccountIcon: React.FC<AccountIconProps> = memo(({ address, size }) => {
     return (
         <BaseView>
-            <PicassoAddressIcon address={account.address} />
+            <PicassoAddressIcon address={address} size={size} />
         </BaseView>
     )
 })
@@ -21,13 +20,15 @@ export const AccountIcon: React.FC<AccountIconProps> = memo(({ account }) => {
 type PicassoAddressIconProps = {
     address: string
     size?: number
-}
-const PicassoAddressIcon: React.FC<PicassoAddressIconProps> = memo(
-    ({ address, size = 50 }) => {
+    borderRadius?: number
+} & ViewProps
+
+export const PicassoAddressIcon: React.FC<PicassoAddressIconProps> = memo(
+    ({ address, size = 50, borderRadius = 8, style, ...otherProps }) => {
         const uri = PicassoUtils.getPicassoImgSrc(address).toString()
 
         return (
-            <BaseView borderRadius={8} style={picassoIconStyles.view}>
+            <BaseView borderRadius={borderRadius} {...otherProps} style={[picassoIconStyles.view, style]}>
                 <SvgXml xml={uri} width={size} height={size} />
             </BaseView>
         )

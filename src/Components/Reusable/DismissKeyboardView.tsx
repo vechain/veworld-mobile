@@ -1,10 +1,5 @@
 import React, { ReactNode } from "react"
-import {
-    TouchableWithoutFeedback,
-    Keyboard,
-    ViewProps,
-    ScrollViewProps,
-} from "react-native"
+import { Keyboard, ViewProps, ScrollViewProps, TouchableWithoutFeedback } from "react-native"
 
 type Props = {
     children: ReactNode

@@ -1,17 +1,32 @@
-import React from "react"
-import { BaseStatusBar, SecurityProvider } from "~Components"
+import React, { useEffect } from "react"
+import { AutoLockProvider, BaseStatusBar, ErrorBoundary, useApplicationSecurity } from "~Components"
 import { SwitchStack } from "~Navigation"
-import ErrorBoundary from "~Components/Providers/ErrorBoundary"
+import { AppLoader } from "./AppLoader"
+import { AnimatedSplashScreen } from "./AnimatedSplashScreen"
+import RNBootSplash from "react-native-bootsplash"
+import { SecurityLevelType } from "~Model"
 
 export const EntryPoint = () => {
+    const { setIsAppReady, securityType } = useApplicationSecurity()
+
+    useEffect(() => {
+        RNBootSplash.hide({ fade: false })
+        setIsAppReady(true)
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [])
+
     return (
         <ErrorBoundary>
-            <SecurityProvider>
-                <>
-                    <BaseStatusBar />
-                    <SwitchStack />
-                </>
-            </SecurityProvider>
+            <AutoLockProvider>
+                <AnimatedSplashScreen
+                    playAnimation={true}
+                    useFadeOutAnimation={securityType === SecurityLevelType.SECRET}>
+                    <AppLoader>
+                        <BaseStatusBar />
+                        <SwitchStack />
+                    </AppLoader>
+                </AnimatedSplashScreen>
+            </AutoLockProvider>
         </ErrorBoundary>
     )
 }

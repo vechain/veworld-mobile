@@ -1,84 +1,92 @@
-// import { FungibleToken } from "../Token"
-// import { ClauseWithMetadata } from "../Transaction"
-// import { ActivityType } from "./enum"
-// import { StorageData } from "../StorageData"
-// import { DIRECTIONS } from "~Common"
-// import { Certificate } from "thor-devkit"
+import { DIRECTIONS } from "~Constants"
+import { ActivityStatus, ActivityType } from "./enum"
 
-// /**
-//  * A model for fungible token transfer activities that occur on this wallet
-//  * @field `amount` - the number of tokens transfered
-//  * @field `token` - the fungible token transfered
-//  * @field `type` - the type of activity - always ActivityType.FUNGIBLE_TOKEN
-//  */
-// export interface FungibleTokenActivity extends Activity {
-//     amount: string | number
-//     token: FungibleToken
-//     type: ActivityType.FUNGIBLE_TOKEN
-//     direction: DIRECTIONS
-// }
+export type OutputResponse = {
+    contractAddress: string
+    events: Connex.VM.Event[]
+    transfers: Connex.VM.Transfer[]
+}
 
-// export enum ActivityStatus {
-//     PENDING = "PENDING",
-//     REVERTED = "REVERTED",
-//     SUCCESS = "SUCCESS",
-// }
+/**
+ * The Activity interface represents a blockchain activity with necessary transaction metadata.
+ */
+export interface Activity {
+    isTransaction: boolean
+    timestamp: number
+    type: ActivityType
+    id: string
+    txId?: string
+    from: string
+    to?: string[]
+    blockNumber?: number
+    genesisId?: string
+    status?: ActivityStatus
+    clauses?: Connex.VM.Clause[]
+    gasUsed?: number
+    gasPayer?: string
+    delegated?: boolean
+    outputs?: OutputResponse[]
+}
 
-// /**
-//  * A base activity model
-//  * @field `from` - the address that this activity originated from
-//  * @field `to` - the target of this activity
-//  * @field `id` - May be the ID of the transaction or the ID of the activity
-//  * @field `network` - the network that this activity happened on
-//  * @field `type` - the type of activity
-//  * @field `timestamp` - The time that the activity was created
-//  * @field `transaction` - The transaction details. This should be immediately available after sending
-//  * @field `txReceipt` - The transaction receipt. This should be available after the transaction is mined
-//  * @field `status` - The current status of the activity
-//  * @field `finality` - Whether the activity is final or not
-//  */
-// export interface Activity {
-//     from: string
-//     to?: string[]
-//     id: string
-//     isTransaction: boolean
-//     networkId?: string
-//     type: ActivityType
-//     timestamp?: number
-//     transaction?: Connex.Thor.Transaction | null
-//     txReceipt?: Connex.Thor.Transaction.Receipt | null
-//     status: ActivityStatus
-//     finality?: boolean
-// }
+export interface NonTransactionalActivity {
+    type: ActivityType.CONNECTED_APP_TRANSACTION | ActivityType.SIGN_CERT
+    timestamp: number
+}
 
-// /**
-//  * The model for all activities in chrome storage
-//  * @field `accounts` - An array of activities in storage
-//  */
-// export interface ActivityStorageData extends StorageData {
-//     activities: Activity[]
-// }
+/**
+ * The FungibleTokenActivity interface represents a blockchain activity specifically for fungible token transactions.
+ */
+export interface FungibleTokenActivity extends Activity {
+    amount: string | number
+    tokenAddress: string
+    type: ActivityType.FUNGIBLE_TOKEN | ActivityType.VET_TRANSFER
+    direction: DIRECTIONS
+}
 
-// /**
-//  * A model for ConnectedApp transaction activities that occur on this wallet
-//  * @field `clauseMetadata` - the clauses created based off the transaction details
-//  * @field `type` - the type of activity - always ActivityType.CONNECTED_APP_TRANSACTION
-//  */
-// export interface ConnectedAppTxActivity extends Activity {
-//     clauseMetadata: ClauseWithMetadata[]
-//     type: ActivityType.CONNECTED_APP_TRANSACTION
-//     delegated?: boolean
-//     txMessage: Connex.Vendor.TxMessage
-//     txOptions?: Connex.Driver.TxOptions
-//     linkUrl?: string
-//     sender: string
-// }
+/**
+ * The NonFungibleTokenActivity interface represents a blockchain activity specifically for non-fungible token transactions.
+ */
+export interface NonFungibleTokenActivity extends Activity {
+    tokenId: string
+    contractAddress: string
+    type: ActivityType.NFT_TRANSFER
+    direction: DIRECTIONS
+}
 
-// export interface SignCertActivity extends Activity {
-//     type: ActivityType.SIGN_CERT
-//     certMessage?: Connex.Vendor.CertMessage
-//     certOptions?: Connex.Driver.TxOptions
-//     certificate: Certificate
-//     linkUrl?: string
-//     sender: string
-// }
+/**
+ * The DappTxActivity interface represents a blockchain activity and is a transaction on-chain.
+ */
+export interface DappTxActivity extends Activity {
+    type: ActivityType.DAPP_TRANSACTION
+    name?: string
+    linkUrl?: string
+}
+
+/**
+ * The ConnectedAppActivity interface represents a blockchain activity related to transactions from connected applications.
+ */
+export interface ConnectedAppActivity extends Activity {
+    type: ActivityType.CONNECTED_APP_TRANSACTION
+    name?: string
+    linkUrl?: string
+    description?: string
+    methods?: string[]
+}
+
+/**
+ * The SignCertActivity interface represents a blockchain activity related to certificate signings.
+ */
+export interface SignCertActivity extends Activity {
+    type: ActivityType.SIGN_CERT
+    name?: string
+    content?: string
+    purpose?: string
+    linkUrl?: string
+}
+
+/**
+ * The DelegatedTransactionActivity interface represents a blockchain activity related to delegated transactions.
+ */
+export interface DelegatedTransactionActivity extends Activity {
+    type: ActivityType.DELEGATED_TRANSACTION
+}

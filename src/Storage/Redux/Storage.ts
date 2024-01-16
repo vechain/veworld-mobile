@@ -1,19 +1,17 @@
 import { Storage } from "redux-persist"
 import { MMKV } from "react-native-mmkv"
 
-export const _storage = new MMKV()
-
-export const storage: Storage = {
+export const newStorage = (mmkv: MMKV): Storage => ({
     setItem: (key, value) => {
-        _storage.set(key, value)
+        mmkv.set(key, value)
         return Promise.resolve(true)
     },
     getItem: key => {
-        const value = _storage.getString(key)
+        const value = mmkv.getString(key)
         return Promise.resolve(value)
     },
-    removeItem: key => {
-        _storage.delete(key)
+    removeItem(key: string): any {
+        mmkv.delete(key)
         return Promise.resolve()
     },
-}
+})

@@ -1,31 +1,57 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit"
-import { PURGE } from "redux-persist"
-import { WALLET_STATUS } from "~Model"
+import { NewLedgerDevice } from "~Model"
 
+/**
+ * A state which is not persisted to storage usually used to share data between screens
+ * @field `mnemonic` - the mnemonic just imported/generated
+ * @field `newLedgerDevice` - the ledger device just imported
+ * @field `appLockStatus` - the status of the app lock
+ *
+ */
 export interface CacheState {
-    mnemonic?: string
-    appLockStatus: WALLET_STATUS
+    mnemonic?: string[]
+    privateKey?: string
+    newLedgerDevice?: NewLedgerDevice
+    isAppLoading: boolean
+    isTokensOwnedLoading: boolean
 }
 
 const initialState: CacheState = {
     mnemonic: undefined,
-    appLockStatus: WALLET_STATUS.LOCKED,
+    privateKey: undefined,
+    newLedgerDevice: undefined,
+    isAppLoading: false,
+    isTokensOwnedLoading: false,
 }
 
 export const CacheSlice = createSlice({
-    name: "Cache",
+    name: "cache",
     initialState,
     reducers: {
-        setMnemonic: (state, action: PayloadAction<string | undefined>) => {
+        setPrivateKey: (state, action: PayloadAction<string | undefined>) => {
+            state.privateKey = action.payload
+        },
+        setMnemonic: (state, action: PayloadAction<string[] | undefined>) => {
             state.mnemonic = action.payload
         },
-        setAppLockStatus: (state, action: PayloadAction<WALLET_STATUS>) => {
-            state.appLockStatus = action.payload
+        setNewLedgerDevice: (state, action: PayloadAction<NewLedgerDevice | undefined>) => {
+            state.newLedgerDevice = action.payload
         },
-    },
-    extraReducers: builder => {
-        builder.addCase(PURGE, () => initialState)
+        setIsAppLoading: (state, action: PayloadAction<boolean>) => {
+            state.isAppLoading = action.payload
+        },
+        setIsTokensOwnedLoading: (state, action: PayloadAction<boolean>) => {
+            state.isTokensOwnedLoading = action.payload
+        },
+        resetCacheState: () => initialState,
     },
 })
 
-export const { setMnemonic, setAppLockStatus } = CacheSlice.actions
+export const {
+    setMnemonic,
+    setPrivateKey,
+    setNewLedgerDevice,
+    setIsAppLoading,
+    setIsTokensOwnedLoading,
+    resetCacheState,
+} = CacheSlice.actions

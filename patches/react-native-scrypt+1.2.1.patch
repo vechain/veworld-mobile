@@ -1,0 +1,35 @@
+diff --git a/node_modules/react-native-scrypt/android/build.gradle b/node_modules/react-native-scrypt/android/build.gradle
+index dac9cc5..8575880 100644
+--- a/node_modules/react-native-scrypt/android/build.gradle
++++ b/node_modules/react-native-scrypt/android/build.gradle
+@@ -27,6 +27,7 @@ android {
+ 
+     defaultConfig {
+         minSdkVersion safeExtGet('minSdkVersion', 16)
++        compileSdkVersion safeExtGet('compileSdkVersion', 23)
+         targetSdkVersion safeExtGet('targetSdkVersion', 23)
+         versionCode 1
+         versionName "1.0"
+@@ -54,6 +55,6 @@ repositories {
+ }
+ 
+ dependencies {
+-    compile 'com.facebook.react:react-native:+'
++    implementation 'com.facebook.react:react-native:+'
+ }
+ 
+diff --git a/node_modules/react-native-scrypt/ios/RNScrypt.h b/node_modules/react-native-scrypt/ios/RNScrypt.h
+index 2daa63d..a546b30 100644
+--- a/node_modules/react-native-scrypt/ios/RNScrypt.h
++++ b/node_modules/react-native-scrypt/ios/RNScrypt.h
+@@ -6,8 +6,8 @@
+ //  Copyright © 2017 Crypho AS. All rights reserved.
+ //
+ 
+-#if __has_include("RCTBridgeModule.h")
+-#import "RCTBridgeModule.h"
++#if __has_include(<React/RCTBridgeModule.h>)
++#import <React/RCTBridgeModule.h>
+ #else
+ #import <React/RCTBridgeModule.h>
+ #endif

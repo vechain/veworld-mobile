@@ -1,36 +1,23 @@
-import { useNavigation, useTheme } from "@react-navigation/native"
 import React, { useCallback } from "react"
-import { StyleSheet } from "react-native"
-import {
-    BaseIcon,
-    BaseSafeArea,
-    BaseSpacer,
-    BaseText,
-    BaseView,
-    EnableFeature,
-} from "~Components"
+import { BaseSpacer, BaseText, BaseView, EnableFeature, Layout } from "~Components"
 import { useI18nContext } from "~i18n"
+import { ChangeCurrency, ChangeLanguage, ChangeTheme, SelectLanguageBottomSheet } from "./Components"
+import { useBottomSheetModal } from "~Hooks"
+import { LANGUAGE } from "~Constants"
 import {
-    ChangeTheme,
-    ChangeCurrency,
-    ChangeLanguage,
-    SelectLanguageBottomSheet,
-} from "./Components"
-import { LANGUAGE, useBottomSheetModal } from "~Common"
-import {
-    useAppDispatch,
-    useAppSelector,
+    selectAreDevFeaturesEnabled,
     selectHideTokensWithNoBalance,
     selectLangauge,
+    selectSentryTrackingEnabled,
     setHideTokensWithNoBalance,
     setLanguage,
+    setSentryTrackingEnabled,
+    useAppDispatch,
+    useAppSelector,
 } from "~Storage/Redux"
+import { Reset } from "~Screens/Flows/App/GeneralScreen/Components/Reset"
 
 export const GeneralScreen = () => {
-    const nav = useNavigation()
-
-    const theme = useTheme()
-
     const { LL } = useI18nContext()
 
     const {
@@ -42,11 +29,19 @@ export const GeneralScreen = () => {
     const dispatch = useAppDispatch()
 
     const selectedLanguage = useAppSelector(selectLangauge)
+    const devFeaturesEnabled = useAppSelector(selectAreDevFeaturesEnabled)
 
-    const hideTokensWithNoBalance = useAppSelector(
-        selectHideTokensWithNoBalance,
+    const sentryTrackingEnabled = useAppSelector(selectSentryTrackingEnabled)
+
+    const toggleSentryTrackingSwitch = useCallback(
+        (newValue: boolean) => {
+            dispatch(setSentryTrackingEnabled(newValue))
+        },
+        [dispatch],
     )
-    const goBack = useCallback(() => nav.goBack(), [nav])
+
+    const hideTokensWithNoBalance = useAppSelector(selectHideTokensWithNoBalance)
+
     const toggleTokensHiddenSwitch = useCallback(
         (newValue: boolean) => {
             dispatch(setHideTokensWithNoBalance(newValue))
@@ -64,83 +59,93 @@ export const GeneralScreen = () => {
     )
 
     return (
-        <BaseSafeArea grow={1}>
-            <BaseIcon
-                style={baseStyles.backIcon}
-                size={36}
-                name="chevron-left"
-                color={theme.colors.text}
-                action={goBack}
-            />
-            <BaseSpacer height={12} />
-            <BaseView mx={20}>
-                <BaseText typographyFont="title">{LL.TITLE_GENERAL()}</BaseText>
-                <BaseSpacer height={20} />
+        <Layout
+            safeAreaTestID="General_Screen"
+            body={
+                <BaseView pt={16}>
+                    <BaseText typographyFont="title">{LL.TITLE_GENERAL()}</BaseText>
+                    <BaseSpacer height={20} />
 
-                <BaseText typographyFont="bodyMedium" my={8}>
-                    {LL.BD_CONVERSION_CURRENCY()}
-                </BaseText>
-                <BaseText typographyFont="caption">
-                    {LL.BD_CONVERSION_CURRENCY_DISCLAIMER()}
-                </BaseText>
+                    <BaseText typographyFont="bodyMedium" my={8}>
+                        {LL.BD_CONVERSION_CURRENCY()}
+                    </BaseText>
+                    <BaseText typographyFont="caption">{LL.BD_CONVERSION_CURRENCY_DISCLAIMER()}</BaseText>
 
-                <BaseSpacer height={20} />
+                    <BaseSpacer height={20} />
 
-                <ChangeCurrency />
-                <BaseSpacer height={20} />
+                    <ChangeCurrency />
+                    <BaseSpacer height={20} />
 
-                <BaseSpacer height={20} />
+                    <BaseSpacer height={20} />
 
-                <BaseText typographyFont="bodyMedium" my={8}>
-                    {LL.BD_APP_THEME()}
-                </BaseText>
-                <BaseText typographyFont="caption">
-                    {LL.BD_APP_THEME_DISCLAIMER()}
-                </BaseText>
+                    <BaseText typographyFont="bodyMedium" my={8}>
+                        {LL.BD_APP_THEME()}
+                    </BaseText>
+                    <BaseText typographyFont="caption">{LL.BD_APP_THEME_DISCLAIMER()}</BaseText>
 
-                <BaseSpacer height={20} />
+                    <BaseSpacer height={20} />
 
-                <ChangeTheme />
+                    <ChangeTheme />
 
-                <BaseSpacer height={20} />
+                    <BaseSpacer height={24} />
+                    <BaseText typographyFont="bodyMedium" my={8}>
+                        {LL.BD_RESET()}
+                    </BaseText>
+                    <BaseText typographyFont="caption">{LL.BD_RESET_DISCLAIMER()}</BaseText>
 
-                <EnableFeature
-                    title={LL.BD_HIDE_TOKENS()}
-                    subtitle={LL.BD_HIDE_TOKENS_DISCLAIMER()}
-                    onValueChange={toggleTokensHiddenSwitch}
-                    value={hideTokensWithNoBalance}
-                />
+                    <BaseSpacer height={16} />
+                    <Reset />
 
-                <BaseSpacer height={20} />
+                    {devFeaturesEnabled && (
+                        <>
+                            <BaseSpacer height={24} />
+                            <EnableFeature
+                                title={LL.BD_HELP_IMPROVE()}
+                                subtitle={LL.BD_HELP_IMPROVE_DISCLAIMER()}
+                                onValueChange={toggleSentryTrackingSwitch}
+                                value={sentryTrackingEnabled}
+                            />
+                        </>
+                    )}
 
-                <BaseText typographyFont="bodyMedium" my={8}>
-                    {LL.BD_APP_LANGUAGE()}
-                </BaseText>
-                <BaseText typographyFont="caption">
-                    {LL.BD_APP_LANGUAGE_DISCLAIMER()}
-                </BaseText>
+                    <BaseSpacer height={20} />
 
-                <BaseSpacer height={20} />
+                    {devFeaturesEnabled && (
+                        <>
+                            <EnableFeature
+                                title={LL.BD_HIDE_TOKENS()}
+                                subtitle={LL.BD_HIDE_TOKENS_DISCLAIMER()}
+                                onValueChange={toggleTokensHiddenSwitch}
+                                value={hideTokensWithNoBalance}
+                            />
 
-                <ChangeLanguage
-                    language={selectedLanguage}
-                    onPress={openSelectLanguageSheet}
-                />
+                            <BaseSpacer height={20} />
+                        </>
+                    )}
 
-                <SelectLanguageBottomSheet
-                    ref={selectLanguageSheetRef}
-                    onClose={closeSelectLanguageSheet}
-                    selectedLanguage={selectedLanguage}
-                    handleSelectLanguage={handleSelectLanguage}
-                />
-            </BaseView>
-        </BaseSafeArea>
+                    {devFeaturesEnabled && (
+                        <>
+                            <BaseText typographyFont="bodyMedium" my={8}>
+                                {LL.BD_APP_LANGUAGE()}
+                            </BaseText>
+                            <BaseText typographyFont="caption">{LL.BD_APP_LANGUAGE_DISCLAIMER()}</BaseText>
+
+                            <BaseSpacer height={20} />
+
+                            <ChangeLanguage language={selectedLanguage} onPress={openSelectLanguageSheet} />
+                        </>
+                    )}
+
+                    <SelectLanguageBottomSheet
+                        ref={selectLanguageSheetRef}
+                        onClose={closeSelectLanguageSheet}
+                        selectedLanguage={selectedLanguage}
+                        handleSelectLanguage={handleSelectLanguage}
+                    />
+
+                    <BaseSpacer height={20} />
+                </BaseView>
+            }
+        />
     )
 }
-
-const baseStyles = StyleSheet.create({
-    backIcon: {
-        marginHorizontal: 8,
-        alignSelf: "flex-start",
-    },
-})

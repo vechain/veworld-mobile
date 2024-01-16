@@ -1,36 +1,36 @@
-import React, { FC, useMemo } from "react"
+import React, { FC, useCallback, useMemo } from "react"
 import { StyleSheet, TouchableWithoutFeedback } from "react-native"
 import { BaseIcon, BaseText, BaseView } from "~Components/Base"
-import { BlurView } from "./BlurView"
-import { PlatformUtils, useDisclosure, useTheme } from "~Common"
-import { HideView } from "./HideView"
-import DropShadow from "react-native-drop-shadow"
+import { useDisclosure, useTheme } from "~Hooks"
+import HapticsService from "~Services/HapticsService"
+import { PlatformBlur } from "./PlatformBlur"
+import { useI18nContext } from "~i18n"
 
 type Props = {
     mnemonicArray: string[]
 }
 
 export const MnemonicCard: FC<Props> = ({ mnemonicArray }) => {
-    const theme = useTheme()
-
     const { isOpen: isShow, onToggle: toggleShow } = useDisclosure()
 
-    const iconColor = useMemo(
-        () => (theme.isDark ? theme.colors.tertiary : theme.colors.card),
-        [theme],
-    )
+    const theme = useTheme()
+    const { LL } = useI18nContext()
+
+    const iconColor = useMemo(() => (theme.isDark ? theme.colors.tertiary : theme.colors.card), [theme])
+
+    const onPress = useCallback(async () => {
+        HapticsService.triggerImpact({ level: "Light" })
+        toggleShow()
+    }, [toggleShow])
+
     return (
-        <DropShadow style={[theme.shadows.card]}>
-            <TouchableWithoutFeedback onPress={toggleShow}>
-                <BaseView
-                    flexDirection="row"
-                    w={100}
-                    borderRadius={16}
-                    bg={theme.colors.card}>
+        <BaseView>
+            <TouchableWithoutFeedback onPress={onPress}>
+                <BaseView flexDirection="row" w={100} borderRadius={16} bg={theme.colors.card}>
                     <BaseView
                         px={16}
                         py={12}
-                        style={baseStyles.box}
+                        style={[styles.box]}
                         flexDirection="row"
                         flexWrap="wrap"
                         w={92}
@@ -41,22 +41,17 @@ export const MnemonicCard: FC<Props> = ({ mnemonicArray }) => {
                                 key={`word${index}`}
                                 my={8}
                                 w={33}
-                                testID={`word-${index}`}>{`${
-                                index + 1
-                            }. ${word}`}</BaseText>
+                                testID={`word-${index}`}>{`${index + 1}. ${word}`}</BaseText>
                         ))}
 
-                        {!isShow && PlatformUtils.isIOS() && <BlurView />}
-                        {!isShow && PlatformUtils.isAndroid() && (
-                            <HideView background={theme.colors.background} />
-                        )}
+                        {!isShow && <PlatformBlur backgroundColor={theme.colors.card} text={LL.TAP_TO_VIEW()} />}
                     </BaseView>
 
                     <BaseView
                         w={8}
                         px={16}
                         py={12}
-                        style={baseStyles.button}
+                        style={styles.button}
                         justifyContent="center"
                         alignItems="center"
                         bg={theme.colors.primary}>
@@ -64,17 +59,17 @@ export const MnemonicCard: FC<Props> = ({ mnemonicArray }) => {
                             name={isShow ? "eye-off-outline" : "eye-outline"}
                             size={18}
                             color={iconColor}
-                            style={baseStyles.icon}
+                            style={styles.icon}
                             testID="toggle-mnemonic-visibility"
                         />
                     </BaseView>
                 </BaseView>
             </TouchableWithoutFeedback>
-        </DropShadow>
+        </BaseView>
     )
 }
 
-const baseStyles = StyleSheet.create({
+const styles = StyleSheet.create({
     box: {
         borderTopLeftRadius: 16,
         borderBottomStartRadius: 16,
@@ -86,4 +81,14 @@ const baseStyles = StyleSheet.create({
         borderBottomEndRadius: 16,
     },
     icon: { flex: 1, width: 100 },
+    androidBlurContainer: {
+        justifyContent: "center",
+        alignItems: "center",
+    },
+    androidBlur: {
+        width: "100%",
+        height: "100%",
+        justifyContent: "center",
+        alignItems: "center",
+    },
 })
