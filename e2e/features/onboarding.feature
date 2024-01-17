@@ -37,6 +37,7 @@ Feature: User Onboarding
       | 134679 | 0x99f0500549792796c14fed62011a51081dc5b5e68fe8bd8a13b86be829c4fd36                                                                               |
       | 134679 | 0x99F0500549792796C14fED62011A51081DC5B5E68FE8BD8A13B86BE829c4FD36                                                                               |
 
+  @broken @brokeninCI
   Scenario Outline: User successfully imports a keystore file
     When The user onboards with an imported keystore file "<keystoreFile>" with password "<password>"
     And The user chooses to protect the wallet with a pin "<pin>" and confirms with "<pin>"

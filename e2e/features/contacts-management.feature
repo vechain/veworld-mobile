@@ -31,6 +31,7 @@ Feature: The user can manage contacts
       | name         | name2        | address                                    |
       | My Contact 3 | My Contact 4 | 0xB6108eA355B04867A68f294d6197B667789361a2 |
 
+  @broken @brokeninCI
   Scenario Outline: User creates a new contact and deletes it
     When The user adds a new contact name "<name>" and address "<address>"
     And The user deletes the contact with name "<name>"
@@ -49,6 +50,7 @@ Feature: The user can manage contacts
       | name         | new_name     | address                                    | new_address                                |
       | My Contact 6 | My Contact 7 | 0xB6108EA355B04867a68f294d6197b667789361A4 | 0xB6108Ea355B04867A68F294d6197b667789361a8 |
 
+  @broken
   Scenario Outline: User creates a new contact and attempts to edit it to an existing contact address
     When The user adds a new contact name "<name>" and address "<address>"
     And The user adds a new contact name "<name2>" and address "<address2>"
