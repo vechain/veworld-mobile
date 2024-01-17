@@ -55,6 +55,7 @@ jobs:
       #  git push origin main
     - name: Checkout develop and merge dev-test
       run: |
+        git fetch origin develop
         git checkout develop
         git pull origin develop
         git merge dev-test -m "Merge dev-test into develop - $(date +"%Y-%m-%d %H:%M:%S")"
