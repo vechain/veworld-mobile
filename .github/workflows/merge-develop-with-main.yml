@@ -22,7 +22,9 @@ jobs:
     - name: Check for changes
       run: |
         git fetch origin develop
+        git checkout develop
         git fetch origin dev-test
+        git checkout dev-test
         changes=$(git rev-list --count develop..dev-test)
         if [ "$changes" -eq 0 ]; then
             echo "No changes to merge. Exiting workflow."
