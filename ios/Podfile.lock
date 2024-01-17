@@ -614,7 +614,7 @@ PODS:
     - SDWebImageWebPCoder (~> 0.8.4)
   - RNFlashList (1.6.3):
     - React-Core
-  - RNGestureHandler (2.14.0):
+  - RNGestureHandler (2.14.1):
     - RCT-Folly (= 2021.07.22.00)
     - React-Core
   - RNKeychain (8.1.2):
@@ -657,7 +657,7 @@ PODS:
     - React-Core
   - RNScrypt (1.2.1):
     - React
-  - RNSentry (5.15.2):
+  - RNSentry (5.16.0):
     - hermes-engine
     - React-Core
     - React-hermes
@@ -1118,14 +1118,14 @@ SPEC CHECKSUMS:
   RNDeviceInfo: db5c64a060e66e5db3102d041ebe3ef307a85120
   RNFastImage: 5c9c9fed9c076e521b3f509fe79e790418a544e8
   RNFlashList: 4b4b6b093afc0df60ae08f9cbf6ccd4c836c667a
-  RNGestureHandler: 32a01c29ecc9bb0b5bf7bc0a33547f61b4dc2741
+  RNGestureHandler: fe2be3be5598dc74329b211c58c9f2d231461769
   RNKeychain: a65256b6ca6ba6976132cc4124b238a5b13b3d9c
   RNLocalize: 1ce4263770515f53d3de442ce7657b3661b16a37
   RNReactNativeHapticFeedback: ec56a5f81c3941206fd85625fa669ffc7b4545f9
   RNReanimated: ab2e96c6d5591c3dfbb38a464f54c8d17fb34a87
   RNScreens: 3c5b9f4a9dcde752466854b6109b79c0e205dad3
   RNScrypt: 95fdef077b482e9fdf8a761120cb69d129ef4016
-  RNSentry: b7f4f53bb7076f119558f8898fca901b48213f12
+  RNSentry: 9a8aebd354d3b47c428c72ec7264b7822cf4f3c2
   RNSVG: d00c8f91c3cbf6d476451313a18f04d220d4f396
   SDWebImage: a7f831e1a65eb5e285e3fb046a23fcfbf08e696d
   SDWebImageWebPCoder: 908b83b6adda48effe7667cd2b7f78c897e5111d
