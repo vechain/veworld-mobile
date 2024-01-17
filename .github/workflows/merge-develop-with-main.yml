@@ -26,6 +26,7 @@ jobs:
         git fetch origin dev-test
         git checkout dev-test
         changes=$(git rev-list --count develop..dev-test)
+        echo "Number of changes between develop and dev-test: $changes"
         if [ "$changes" -eq 0 ]; then
             echo "No changes to merge. Exiting workflow."
             exit 0
@@ -37,7 +38,8 @@ jobs:
     - name: Run E2E Test
       uses: ./.github/workflows/e2e.yml 
 
-  merge-develop-into-main:
+  #merge-develop-into-main:
+  merge-dev-test-into-develop:
     runs-on: ubuntu-latest
     needs: e2e-test
 
