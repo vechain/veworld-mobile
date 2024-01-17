@@ -43,10 +43,10 @@ export const SwipeableRow = <T,>({
 }: Props<T>) => {
     const { styles } = useThemedStyles(baseStyles)
 
-    const closeOtherSwipeableItems = useCallback(
-        (all = false) => {
+    const closeSwipeableItems = useCallback(
+        (closeCurrentOne = false) => {
             swipeableItemRefs?.current.forEach((ref, id) => {
-                if (all) {
+                if (closeCurrentOne) {
                     ref?.close()
                 } else {
                     if (id !== itemKey) {
@@ -60,7 +60,7 @@ export const SwipeableRow = <T,>({
 
     const handleSwipe = ({ openDirection }: { openDirection: string }) => {
         if (openDirection === OpenDirection.LEFT) {
-            closeOtherSwipeableItems()
+            closeSwipeableItems()
             setSelectedItem?.(item)
         }
         if (openDirection === OpenDirection.NONE) {
@@ -69,9 +69,9 @@ export const SwipeableRow = <T,>({
     }
 
     const onTrashIconPress = useCallback(() => {
-        closeOtherSwipeableItems(true) // close all swipeable items
+        closeSwipeableItems(true) // close all swipeable items
         handleTrashIconPress(item)
-    }, [closeOtherSwipeableItems, handleTrashIconPress, item])
+    }, [closeSwipeableItems, handleTrashIconPress, item])
 
     const handleLongPress = useCallback(() => {
         const element = swipeableItemRefs.current.get(itemKey)
@@ -107,7 +107,7 @@ export const SwipeableRow = <T,>({
                         disabled={isDragMode}
                         onPress={() => onPress?.(item)}
                         onPressIn={() => {
-                            closeOtherSwipeableItems(false)
+                            closeSwipeableItems(false)
                         }}
                         onLongPress={handleLongPress}>
                         <BaseView>{children}</BaseView>

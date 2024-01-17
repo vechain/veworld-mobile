@@ -46,6 +46,7 @@ export const ConnectedAppsScreen = () => {
     const connectedDiscoveryApps = useAppSelector(selectConnectedDiscoverDApps)
     const dappImages = useAppSelector(selectFeaturedImages)
     const [selectedApp, setSelectedApp] = useState<ConnectedApp>()
+
     const dispatch = useAppDispatch()
 
     // Keep track of the swipeable items refs
@@ -120,6 +121,16 @@ export const ConnectedAppsScreen = () => {
         [openConnectedAppDetailsSheet],
     )
 
+    const handleTrashIconPress = useCallback(
+        (item: ConnectedApp) => {
+            setSelectedApp(item)
+            setTimeout(() => {
+                openConnectedAppDetailsSheet()
+            }, 20)
+        },
+        [openConnectedAppDetailsSheet],
+    )
+
     return (
         <Layout
             safeAreaTestID="ConnectedAppsScreen"
@@ -153,8 +164,7 @@ export const ConnectedAppsScreen = () => {
                                         item={connectedApp}
                                         itemKey={`swipeable-row-${key}`}
                                         swipeableItemRefs={swipeableItemRefs}
-                                        handleTrashIconPress={openConfirmDisconnectDetailsSheet}
-                                        setSelectedItem={setSelectedApp}
+                                        handleTrashIconPress={handleTrashIconPress}
                                         onPress={onClick}
                                         isOpen={selectedApp && key === generateAppKey(selectedApp)}>
                                         <ConnectedAppBox key={key} connectedApp={connectedApp} />
