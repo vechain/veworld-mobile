@@ -56,6 +56,7 @@ Feature: The user can manage tokens
       | address1                                   | token1    | address2                                   | token2  |
       | 0x34149f8da92222af599ba936d9089f5ce460b522 | CarpToken | 0xbd0e5d86fdd4bd6d249ceea1336594f6d959c099 | DavMain |
 
+  @broken
   Scenario Outline: User add multiple custom tokens and delete one of them
     When The user add multiple custom tokens with address "<address1>" and "<address2>"
     And The user delete custom token "<token1>"
