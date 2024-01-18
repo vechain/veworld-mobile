@@ -55,6 +55,8 @@ jobs:
       #  git push origin main
     - name: Checkout develop and merge dev-test
       run: |
+        git config user.name "GitHub Actions Bot"
+        git config user.email "<>"
         git fetch origin dev-test
         git checkout dev-test
         git fetch origin develop
