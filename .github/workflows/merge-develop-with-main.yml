@@ -55,6 +55,8 @@ jobs:
       #  git push origin main
     - name: Checkout develop and merge dev-test
       run: |
+        git fetch origin dev-test
+        git checkout dev-test
         git fetch origin develop
         git checkout develop
         git pull origin develop
