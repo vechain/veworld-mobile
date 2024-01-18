@@ -2,7 +2,7 @@ import axios from "axios"
 import { ERROR_EVENTS } from "~Constants"
 import { MAX_IMAGE_SIZE } from "~Constants/Constants/NFT"
 import { NFTMedia } from "~Model"
-import { MediaUtils, URIUtils, error } from "~Utils"
+import { MediaUtils, URIUtils, debug } from "~Utils"
 
 export const getNFTMediaIpfs = async (uri: string): Promise<NFTMedia> => {
     try {
@@ -41,7 +41,7 @@ export const getNFTMediaIpfs = async (uri: string): Promise<NFTMedia> => {
             }
         })
     } catch (err) {
-        error(ERROR_EVENTS.NFT, JSON.stringify(err))
+        debug(ERROR_EVENTS.NFT, JSON.stringify(err))
         throw err
     }
 }
