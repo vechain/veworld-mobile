@@ -5,6 +5,7 @@ import { updateNodeError, useAppDispatch } from "~Storage/Redux"
 import { useAppState, useCounter } from "~Hooks"
 import { AppStateType, Beat } from "~Model"
 import { ERROR_EVENTS } from "~Constants"
+import NetInfo from "@react-native-community/netinfo"
 
 interface LastMessage {
     networkUrl: string
@@ -22,6 +23,7 @@ export const useBeatWebsocket = (currentNetworkUrl: string, onMessage: (beat: Be
     const lastMessage = useRef<LastMessage>()
     const { count, increment } = useCounter()
     const [retryTimeoutId, setRetryTimeoutId] = useState<NodeJS.Timeout | null>(null)
+    const { isConnected } = NetInfo.useNetInfo()
 
     const onOpen = useCallback(() => {
         dispatch(updateNodeError(false))
@@ -53,7 +55,8 @@ export const useBeatWebsocket = (currentNetworkUrl: string, onMessage: (beat: Be
 
     const onError = useCallback(
         (ev: ErrorEvent) => {
-            error(ERROR_EVENTS.APP, "Error in Beat WebSocket ", ev)
+            // ONly send a sentry log if the websocket fails but it's not an internet connection issue
+            if (isConnected) error(ERROR_EVENTS.APP, "Error in Beat WebSocket ", ev)
 
             if (count > 3) {
                 warn(ERROR_EVENTS.SEND, "Trouble connecting to useBeatWebsocket.")
@@ -62,7 +65,7 @@ export const useBeatWebsocket = (currentNetworkUrl: string, onMessage: (beat: Be
                 increment()
             }
         },
-        [count, dispatch, increment],
+        [count, dispatch, increment, isConnected],
     )
 
     // Effect for opening and closing WebSocket connection
@@ -79,7 +82,10 @@ export const useBeatWebsocket = (currentNetworkUrl: string, onMessage: (beat: Be
                 url.searchParams.append("pos", lastMessage.current?.messageId)
             }
             ws.current = new WebSocket(url.toString())
-        } else if (currentState === AppStateType.BACKGROUND && previousState === AppStateType.ACTIVE) {
+        } else if (
+            currentState === AppStateType.INACTIVE &&
+            (previousState === AppStateType.UNKNOWN || previousState === AppStateType.ACTIVE)
+        ) {
             debug(ERROR_EVENTS.APP, "Closing websocket")
             ws.current?.close(1001, "App is in background")
             if (retryTimeoutId) {
