@@ -1,7 +1,6 @@
 import Arweave from "arweave"
-import { error } from "~Utils/Logger"
 import { MAX_IMAGE_SIZE, NFT_AXIOS_TIMEOUT } from "~Constants/Constants/NFT"
-import { MediaUtils } from "~Utils"
+import { MediaUtils, debug } from "~Utils"
 import { NFTMedia } from "~Model"
 import { ERROR_EVENTS } from "~Constants"
 
@@ -37,7 +36,7 @@ export const getNFTMediaArweave = async (uri: string): Promise<NFTMedia> => {
             mediaType: MediaUtils.resolveMediaTypeFromMimeType(mimeType),
         }
     } catch (err) {
-        error(ERROR_EVENTS.NFT, err)
+        debug(ERROR_EVENTS.NFT, err)
         throw err
     }
 }
