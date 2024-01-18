@@ -53,10 +53,14 @@ jobs:
       # git pull origin main
       #  git merge develop -m "Merge develop into main - $(date +"%Y-%m-%d %H:%M:%S")"
       #  git push origin main
+    - name: Set up Git
+      run: |
+        git config --global user.email "actions@github.com"
+        git config --global user.name "GitHub Actions"
+        git config --global credential.helper store
+    
     - name: Checkout develop and merge dev-test
       run: |
-        git config user.name "GitHub Actions Bot"
-        git config user.email "<>"
         git fetch origin dev-test
         git checkout dev-test
         git fetch origin develop
