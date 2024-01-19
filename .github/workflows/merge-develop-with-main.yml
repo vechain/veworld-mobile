@@ -57,8 +57,9 @@ jobs:
       #  git push origin main
     - name: Set up Git
       run: |
-        git config user.name
-
+        git config --global user.email "shaun.kavanagh@vechain.org"
+        git config --global user.name "ShaunKav"
+        git config --global credential.helper store
     
     - name: Checkout develop and merge dev-test
       run: |
