@@ -55,7 +55,8 @@ const baseStyles = (actionItemWidth: number) => () =>
         },
         action: {
             paddingVertical: 12,
-            width: actionItemWidth,
+            minWidth: actionItemWidth,
+            paddingHorizontal: 6,
         },
         actionsContainer: {
             paddingHorizontal: 16,
