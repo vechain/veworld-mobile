@@ -64,5 +64,5 @@ jobs:
         git fetch origin dev-test
         git fetch origin develop
         git checkout develop
-        git merge dev-test --no-ff -m "Merge dev-test into develop - $(date +"%Y-%m-%d %H:%M:%S")"
+        git merge origin/dev-test --no-ff -m "Merge dev-test into develop - $(date +"%Y-%m-%d %H:%M:%S")"
         git push origin develop
