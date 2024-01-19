@@ -12,7 +12,7 @@ on:
             description: 'Manually trigger the workflow'
             default: 'false'
 permissions: 
-    contents: read # This is required for actions/checkout
+    contents: write # This is required for actions/checkout
     pull-requests: write # This is required for pull request comments
 jobs:
   check-for-changes:
@@ -62,7 +62,6 @@ jobs:
         git config --global user.name "GitHub Actions"
         git config --global credential.helper store
         git fetch origin dev-test
-        git checkout dev-test
         git fetch origin develop
         git checkout develop
         git merge dev-test --no-ff -m "Merge dev-test into develop - $(date +"%Y-%m-%d %H:%M:%S")"
