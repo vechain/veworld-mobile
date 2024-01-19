@@ -11,7 +11,9 @@ on:
         manual-trigger:
             description: 'Manually trigger the workflow'
             default: 'false'
-
+permissions: 
+    contents: read # This is required for actions/checkout
+    pull-requests: write # This is required for pull request comments
 jobs:
   check-for-changes:
     runs-on: ubuntu-latest
