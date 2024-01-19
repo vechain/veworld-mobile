@@ -54,19 +54,16 @@ jobs:
       #  git checkout main
       # git pull origin main
       #  git merge develop -m "Merge develop into main - $(date +"%Y-%m-%d %H:%M:%S")"
-      #  git push origin main
-    - name: Set up Git
-      run: |
-        git config --global user.email "shaun.kavanagh@vechain.org"
-        git config --global user.name "ShaunKav"
-        git config --global credential.helper store
+      #  git push origin main        
     
     - name: Checkout develop and merge dev-test
       run: |
+        git config --global user.email "actions@github.com"
+        git config --global user.name "GitHub Actions"
+        git config --global credential.helper store
         git fetch origin dev-test
         git checkout dev-test
         git fetch origin develop
         git checkout develop
-        git pull origin develop
         git merge dev-test --no-ff -m "Merge dev-test into develop - $(date +"%Y-%m-%d %H:%M:%S")"
         git push origin develop
