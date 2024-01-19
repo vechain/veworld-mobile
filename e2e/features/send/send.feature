@@ -11,7 +11,6 @@ Feature: The user send tokens in test net
     * The user goes to home tab
     * The user is in the send screen
 
-  @flaky
   Scenario Outline: User should be able to send tokens
     When The user selects "<token>" token to be sent
     And The user inserts the amount "<amount>" to be sent
@@ -27,7 +26,6 @@ Feature: The user send tokens in test net
       | VET   | 1      | 0x435933c8064b4Ae76bE665428e0307eF2cCFBD68 | 111111 |
       | VTHO  | 1      | 0x435933c8064b4Ae76bE665428e0307eF2cCFBD68 | 111111 |
 
-  @flaky
   Scenario Outline: User should be able to send tokens delegating with account method
     When The user selects "<token>" token to be sent
     And The user inserts the amount "<amount>" to be sent
@@ -64,7 +62,6 @@ Feature: The user send tokens in test net
       | VET   | 1      | 0x435933c8064b4Ae76bE665428e0307eF2cCFBD68 | 111111 | https://sponsor-testnet.vechain.energy/by/282 | Select URL  |
       | VTHO  | 1      | 0x435933c8064b4Ae76bE665428e0307eF2cCFBD68 | 111111 | https://sponsor-testnet.vechain.energy/by/282 | Select URL  |
 
-  @flaky
   Scenario Outline: User should be able to send custom tokens
     When The user clicks back button
     When The user go to tokens management screen
@@ -81,10 +78,9 @@ Feature: The user send tokens in test net
     Then The user should see successfully sent message for the token "<token>"
 
     Examples:
-      | token | amount | address                                    | tokenAddress                               | pin    |
-      | CARP  | 10     | 0x435933c8064b4Ae76bE665428e0307eF2cCFBD68 | 0x8a9844e4750f5ce5f7988c4d1e04c278c718feea | 111111 |
+      | token     | amount | address                                    | tokenAddress                               | pin    |
+      | CarpToken | 10     | 0x435933c8064b4Ae76bE665428e0307eF2cCFBD68 | 0x8a9844e4750f5ce5f7988c4d1e04c278c718feea | 111111 |
 
-  @flaky
   Scenario Outline: Give back tokens to account 1
     When The user clicks back button
     And The user selects Account 2

@@ -36,6 +36,8 @@ import "react-native-url-polyfill/auto"
 import { InAppBrowserProvider } from "~Components/Providers/InAppBrowserProvider"
 import { PersistQueryClientProvider } from "@tanstack/react-query-persist-client"
 import { clientPersister, queryClient } from "~Api/QueryProvider"
+import NetInfo from "@react-native-community/netinfo"
+import { onlineManager } from "@tanstack/react-query"
 
 const { fontFamily } = typography
 
@@ -61,6 +63,14 @@ const Main = () => {
         [fontFamily["Mono-Bold"]]: Mono_Bold,
         [fontFamily["Mono-Regular"]]: Mono_Regular,
         [fontFamily["Mono-Light"]]: Mono_Light,
+    })
+
+    // Online status management
+    // https://tanstack.com/query/v4/docs/react/react-native#online-status-management
+    onlineManager.setEventListener(setOnline => {
+        return NetInfo.addEventListener(state => {
+            setOnline(!!state.isConnected)
+        })
     })
 
     const isAnalyticsEnabled = useAppSelector(selectAnalyticsTrackingEnabled)

@@ -190,12 +190,11 @@ export const SelectAmountSendScreen = ({ route }: Props) => {
                         </BaseView>
                         {/* [END] - HEADER */}
 
-                        <BaseSpacer height={16} />
+                        <BaseSpacer height={18} />
 
                         {/* [START] - INPUT */}
 
                         <BaseCardGroup
-                            containerStyle={styles.inputContainer}
                             views={[
                                 {
                                     children: (
@@ -214,7 +213,7 @@ export const SelectAmountSendScreen = ({ route }: Props) => {
                                                     <BaseImage uri={token.icon} style={styles.logoIcon} />
                                                 )}
                                             </BaseView>
-                                            <BaseSpacer width={16} />
+                                            <BaseSpacer width={18} />
                                             <AnimatedTextInput
                                                 contextMenuHidden
                                                 cursorColor={theme.colors.secondary}
@@ -330,9 +329,6 @@ export const SelectAmountSendScreen = ({ route }: Props) => {
 
 const baseStyles = (isExchangeRateAvailable: boolean) => () =>
     StyleSheet.create({
-        inputContainer: {
-            height: 160,
-        },
         input: {
             ...defaultTypography.largeTitle,
             flex: 1,
@@ -346,7 +342,6 @@ const baseStyles = (isExchangeRateAvailable: boolean) => () =>
         },
         amountContainer: {
             overflow: "visible",
-            height: 100,
         },
         inputHeader: {
             height: 32,
