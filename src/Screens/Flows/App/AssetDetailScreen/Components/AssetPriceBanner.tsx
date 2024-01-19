@@ -10,6 +10,7 @@ import { typography, ColorThemeType } from "~Constants"
 import { BaseAnimatedText } from "./AnimatedTextInput"
 import { AssetTrendBannerSkeleton } from "./AssetTrendBannerSkeleton"
 import { AssetPriceBannerSkeleton } from "./AssetPriceBannerSkeleton"
+import { isIOS } from "~Utils/PlatformUtils/PlatformUtils"
 const { ...otherTypography } = typography
 
 type Props = {
@@ -42,7 +43,7 @@ export const AssetPriceBanner = ({ symbol, isChartDataLoading }: Props) => {
 
     return (
         <BaseView flexDirection="row" justifyContent="space-between" w={100}>
-            <BaseView style={styles.textContainer} justifyContent="space-between">
+            <BaseView style={isIOS() ? styles.textContainer : undefined} justifyContent="space-between">
                 <BaseText typographyFont="body">{LL.COMMON_PRICE()}</BaseText>
                 <BaseView flexDirection="row" alignItems="baseline">
                     {isChartDataLoading ? (
