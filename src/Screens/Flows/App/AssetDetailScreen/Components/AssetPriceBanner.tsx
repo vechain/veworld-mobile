@@ -1,4 +1,4 @@
-import React from "react"
+import React, { useMemo } from "react"
 import { useAnimatedStyle, useDerivedValue } from "react-native-reanimated"
 import { StyleSheet } from "react-native"
 import { useThemedStyles } from "~Hooks"
@@ -10,6 +10,7 @@ import { typography, ColorThemeType } from "~Constants"
 import { BaseAnimatedText } from "./AnimatedTextInput"
 import { AssetTrendBannerSkeleton } from "./AssetTrendBannerSkeleton"
 import { AssetPriceBannerSkeleton } from "./AssetPriceBannerSkeleton"
+import { isIOS } from "~Utils/PlatformUtils/PlatformUtils"
 const { ...otherTypography } = typography
 
 type Props = {
@@ -40,9 +41,13 @@ export const AssetPriceBanner = ({ symbol, isChartDataLoading }: Props) => {
         }
     })
 
+    const applyPriceContainerStyle = useMemo(() => {
+        return isIOS() ? styles.textContainer : undefined
+    }, [styles.textContainer])
+
     return (
         <BaseView flexDirection="row" justifyContent="space-between" w={100}>
-            <BaseView style={styles.textContainer} justifyContent="space-between">
+            <BaseView style={applyPriceContainerStyle} justifyContent="space-between">
                 <BaseText typographyFont="body">{LL.COMMON_PRICE()}</BaseText>
                 <BaseView flexDirection="row" alignItems="baseline">
                     {isChartDataLoading ? (
