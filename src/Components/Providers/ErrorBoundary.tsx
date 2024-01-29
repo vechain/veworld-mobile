@@ -3,6 +3,8 @@ import { StyleSheet, ViewProps } from "react-native"
 import { useAppReset, useTheme } from "~Hooks"
 import { BaseButton, BaseIcon, BaseSafeArea, BaseSpacer, BaseText, BaseView, CheckBoxWithText } from "~Components"
 import { useI18nContext } from "~i18n"
+import * as Sentry from "@sentry/react-native"
+import { ERROR_EVENTS } from "~Constants"
 
 const ErrorView = ({ resetErrorState }: { resetErrorState: () => void }) => {
     const appReset = useAppReset()
@@ -89,6 +91,15 @@ export class ErrorBoundary extends React.Component<ViewProps> {
     }
 
     componentDidCatch(error: Error, errorInfo: any) {
+        try {
+            let concatenatedString = JSON.stringify(error) + JSON.stringify(errorInfo)
+            Sentry.captureException(concatenatedString, { tags: { Feature_Tag: ERROR_EVENTS.BOUNDARY } })
+        } catch (_) {
+            Sentry.captureException(`${ERROR_EVENTS.BOUNDARY} - ${error} - ${errorInfo}`, {
+                tags: { Feature_Tag: ERROR_EVENTS.BOUNDARY },
+            })
+        }
+
         this.setState({
             error,
             errorInfo,
