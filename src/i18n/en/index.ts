@@ -38,6 +38,7 @@ const en: BaseTranslation = {
     BTN_RETRY: "Retry",
     BTN_DOWNLOAD_LOGS: "Download logs",
     BTN_RESET_APP: "Reset App",
+    BTN_CLOSE_APP: "Close App",
     BTN_BUY: "Buy",
     BTN_SEND: "Send",
     BTN_SWAP: "Swap",

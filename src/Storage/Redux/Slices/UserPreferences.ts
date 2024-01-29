@@ -27,6 +27,7 @@ export interface UserPreferenceState {
     devFeaturesEnabled: boolean
     lastReviewTimestamp: string
     lastVersionCheck: string
+    appResetTimestamp?: string
 }
 
 const initialState: UserPreferenceState = {
@@ -42,6 +43,7 @@ const initialState: UserPreferenceState = {
     // this will ask the user to review the app after 3 days the first time
     lastReviewTimestamp: moment().subtract(3, "weeks").add(3, "days").toISOString(),
     lastVersionCheck: moment().toISOString(),
+    appResetTimestamp: undefined,
 }
 
 export const UserPreferencesSlice = createSlice({
@@ -88,6 +90,10 @@ export const UserPreferencesSlice = createSlice({
             state.lastVersionCheck = action.payload
         },
 
+        setAppResetTimestamp: (state, action: PayloadAction<string | undefined>) => {
+            state.appResetTimestamp = action.payload
+        },
+
         resetUserPreferencesState: () => initialState,
     },
 })
@@ -104,4 +110,5 @@ export const {
     resetUserPreferencesState,
     setLastReviewTimestamp,
     setLastVersionCheck,
+    setAppResetTimestamp,
 } = UserPreferencesSlice.actions

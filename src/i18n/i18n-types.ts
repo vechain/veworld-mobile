@@ -143,6 +143,10 @@ type RootTranslation = {
 	 */
 	BTN_RESET_APP: string
 	/**
+	 * C​l​o​s​e​ ​A​p​p
+	 */
+	BTN_CLOSE_APP: string
+	/**
 	 * B​u​y
 	 */
 	BTN_BUY: string
@@ -2964,6 +2968,10 @@ export type TranslationFunctions = {
 	 * Reset App
 	 */
 	BTN_RESET_APP: () => LocalizedString
+	/**
+	 * Close App
+	 */
+	BTN_CLOSE_APP: () => LocalizedString
 	/**
 	 * Buy
 	 */
