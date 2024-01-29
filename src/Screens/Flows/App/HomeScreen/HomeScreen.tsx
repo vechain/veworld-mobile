@@ -1,4 +1,4 @@
-import React, { useCallback, useMemo, useRef, useState } from "react"
+import React, { useCallback, useEffect, useMemo, useRef, useState } from "react"
 import { AccountCard, EditTokensBar, Header, TokenList } from "./Components"
 import {
     useAnalyticTracking,
@@ -24,6 +24,8 @@ import {
     selectCurrency,
     selectSelectedAccount,
     selectVisibleAccounts,
+    setAppResetTimestamp,
+    useAppDispatch,
     useAppSelector,
 } from "~Storage/Redux"
 import { AccountWithDevice, FastAction } from "~Model"
@@ -39,6 +41,16 @@ export const HomeScreen = () => {
     const { updateBalances, updateSuggested } = useTokenBalances()
 
     const { onSetSelectedAccount } = useSetSelectedAccount()
+
+    /*
+        This is used to reset the state of the app when the user presses the reload button
+        on the error boundary. This is needed because the error boundary will not unmount
+        and we're left with a wrong state.
+    */
+    const dispatch = useAppDispatch()
+    useEffect(() => {
+        dispatch(setAppResetTimestamp())
+    }, [dispatch])
 
     const { LL } = useI18nContext()
     // Pull down to refresh

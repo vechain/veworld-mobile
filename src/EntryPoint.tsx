@@ -12,6 +12,7 @@ export const EntryPoint = () => {
     useEffect(() => {
         RNBootSplash.hide({ fade: false })
         setIsAppReady(true)
+
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [])
 

@@ -1,24 +1,80 @@
-import React, { useCallback, useState } from "react"
+import React, { useCallback, useMemo, useState } from "react"
 import { StyleSheet, ViewProps } from "react-native"
 import { useAppReset, useTheme } from "~Hooks"
 import { BaseButton, BaseIcon, BaseSafeArea, BaseSpacer, BaseText, BaseView, CheckBoxWithText } from "~Components"
 import { useI18nContext } from "~i18n"
 import * as Sentry from "@sentry/react-native"
 import { ERROR_EVENTS } from "~Constants"
+import { selectAppResetTimestamp, setAppResetTimestamp, useAppDispatch, useAppSelector } from "~Storage/Redux"
+import moment from "moment"
+import RNRestart from "react-native-restart"
+import { useQueryClient } from "@tanstack/react-query"
 
 const ErrorView = ({ resetErrorState }: { resetErrorState: () => void }) => {
     const appReset = useAppReset()
     const { LL } = useI18nContext()
     const theme = useTheme()
+    const dispatch = useAppDispatch()
+    const queryClient = useQueryClient()
+
+    const appResetTimeStamp = useAppSelector(selectAppResetTimestamp)
 
     const [isChecked, setIsChecked] = useState(false)
+    const [isTimestampChanged, setIsTimestampChanged] = useState(false)
 
-    const onButtnPress = useCallback(() => {
+    const onResetAppPress = useCallback(() => {
         appReset()
+        dispatch(setAppResetTimestamp())
         setTimeout(() => {
             resetErrorState()
         }, 200)
-    }, [appReset, resetErrorState])
+    }, [appReset, dispatch, resetErrorState])
+
+    const onReloadAppPress = useCallback(() => {
+        setIsTimestampChanged(true)
+        queryClient.removeQueries()
+        dispatch(setAppResetTimestamp(moment().toISOString()))
+        setTimeout(() => {
+            RNRestart.restart()
+        }, 300)
+    }, [dispatch, queryClient])
+
+    const RenderResetActionUI = useMemo(() => {
+        const time = moment().subtract(3, "minutes")
+        const checkShowResetUI = moment(appResetTimeStamp).isBetween(time, moment())
+
+        if (checkShowResetUI && !isTimestampChanged) {
+            return (
+                <BaseView>
+                    <BaseText typographyFont="body">{LL.BD_RESET_APP_02()}</BaseText>
+
+                    <BaseText typographyFont="body" color={theme.colors.danger} my={10}>
+                        {LL.BD_RESET_APP_DISCLAIMER()}
+                    </BaseText>
+
+                    <CheckBoxWithText
+                        isChecked={isChecked}
+                        text={LL.BTN_RESET_APP_CHECKBOX()}
+                        checkAction={setIsChecked}
+                        testID="reset-app-checkbox"
+                    />
+
+                    <BaseButton
+                        title={LL.BTN_RESET_APP().toUpperCase()}
+                        action={onResetAppPress}
+                        disabled={!isChecked}
+                        haptics="Warning"
+                    />
+                </BaseView>
+            )
+        } else {
+            return (
+                <BaseView>
+                    <BaseButton title={LL.BTN_CLOSE_APP().toUpperCase()} action={onReloadAppPress} haptics="Warning" />
+                </BaseView>
+            )
+        }
+    }, [LL, appResetTimeStamp, isChecked, isTimestampChanged, onReloadAppPress, onResetAppPress, theme.colors.danger])
 
     return (
         <BaseSafeArea grow={1}>
@@ -41,27 +97,7 @@ const ErrorView = ({ resetErrorState }: { resetErrorState: () => void }) => {
                     <BaseText typographyFont="bodyBold">{LL.ERROR_GENERIC_BODY_02()}</BaseText>
                 </BaseView>
 
-                <BaseView>
-                    <BaseText typographyFont="body">{LL.BD_RESET_APP_02()}</BaseText>
-
-                    <BaseText typographyFont="body" color={theme.colors.danger} my={10}>
-                        {LL.BD_RESET_APP_DISCLAIMER()}
-                    </BaseText>
-
-                    <CheckBoxWithText
-                        isChecked={isChecked}
-                        text={LL.BTN_RESET_APP_CHECKBOX()}
-                        checkAction={setIsChecked}
-                        testID="reset-app-checkbox"
-                    />
-
-                    <BaseButton
-                        title={LL.BTN_RESET_APP().toUpperCase()}
-                        action={onButtnPress}
-                        disabled={!isChecked}
-                        haptics="Warning"
-                    />
-                </BaseView>
+                {RenderResetActionUI}
             </BaseView>
         </BaseSafeArea>
     )
