@@ -229,6 +229,7 @@ export const ConnectAppScreen: FC<Props> = ({ route }: Props) => {
                 error: "User rejected the request",
                 method: request.initialRequest.method,
             })
+            navBack()
         }
     }, [postMessage, request, navBack, rejectPendingProposal])
 
