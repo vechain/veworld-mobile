@@ -109,7 +109,7 @@ platform :ios do
     sh("git checkout -b #{branch_name}-#{build_number}-#{version_number}")
 
     # Set the GitHub remote URL with credentials
-    remote_url = "https://#{github_username}:#{github_token}@github.com/vechainfoundation/veworld-mobile.git"
+    remote_url = "https://#{github_username}:#{github_token}@github.com/vechain/veworld-mobile.git"
     sh("git remote set-url origin #{remote_url}")
     sh("git commit -a -m 'build: init'")
 
@@ -258,7 +258,7 @@ platform :ios do
       # create pull request
       create_pull_request(
         api_token: github_token,
-        repo: "vechainfoundation/veworld-mobile",
+        repo: "vechain/veworld-mobile",
         title: versionType.nil? ? "build: build artifacts build-#{build} [iOS]" : "version: build artifacts version-#{version} [iOS]", 
         base: "main",
         api_url: "https://api.github.com"
