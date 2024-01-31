@@ -67,9 +67,9 @@
     semver "^6.3.1"
 
 "@babel/eslint-parser@^7.20.0":
-  version "7.23.9"
-  resolved "https://registry.yarnpkg.com/@babel/eslint-parser/-/eslint-parser-7.23.9.tgz#052c13b39144e21fdd1e03fc9b67e98976a1ebfc"
-  integrity sha512-xPndlO7qxiJbn0ATvfXQBjCS7qApc9xmKHArgI/FTEFxXas5dnjC/VqM37lfZun9dclRYcn+YQAr6uDFy0bB2g==
+  version "7.23.10"
+  resolved "https://registry.yarnpkg.com/@babel/eslint-parser/-/eslint-parser-7.23.10.tgz#2d4164842d6db798873b40e0c4238827084667a2"
+  integrity sha512-3wSYDPZVnhseRnxRJH6ZVTNknBz76AEnyC+AYYhasjP3Yy23qz0ERR7Fcd2SHmYuSFJ2kY9gaaDd3vyqU09eSw==
   dependencies:
     "@nicolo-ribaudo/eslint-scope-5-internals" "5.1.1-v1"
     eslint-visitor-keys "^2.1.0"
@@ -111,9 +111,9 @@
     semver "^6.3.1"
 
 "@babel/helper-create-class-features-plugin@^7.18.6", "@babel/helper-create-class-features-plugin@^7.22.15", "@babel/helper-create-class-features-plugin@^7.23.6", "@babel/helper-create-class-features-plugin@^7.23.9":
-  version "7.23.9"
-  resolved "https://registry.yarnpkg.com/@babel/helper-create-class-features-plugin/-/helper-create-class-features-plugin-7.23.9.tgz#fddfdf51fca28f23d16b9e3935a4732690acfad6"
-  integrity sha512-B2L9neXTIyPQoXDm+NtovPvG6VOLWnaXu3BIeVDWwdKFgG30oNa6CqVGiJPDWQwIAK49t9gnQI9c6K6RzabiKw==
+  version "7.23.10"
+  resolved "https://registry.yarnpkg.com/@babel/helper-create-class-features-plugin/-/helper-create-class-features-plugin-7.23.10.tgz#25d55fafbaea31fd0e723820bb6cc3df72edf7ea"
+  integrity sha512-2XpP2XhkXzgxecPNEEK8Vz8Asj9aRxt08oKOqtiZoqV2UGZ5T+EkyP9sXQ9nwMxBIG34a7jmasVqoMop7VdPUw==
   dependencies:
     "@babel/helper-annotate-as-pure" "^7.22.5"
     "@babel/helper-environment-visitor" "^7.22.20"
@@ -2602,18 +2602,18 @@
   integrity sha512-4D4wKecGzQpIu7sx03Sg4uE1e8g1oZUndWgw9gw776H8h9ov9c5TxPaldTn2j6orPECAERViLf7LTO4L5pE2Cw==
 
 "@ledgerhq/hw-transport-mocker@^6.27.15":
-  version "6.28.2"
-  resolved "https://registry.yarnpkg.com/@ledgerhq/hw-transport-mocker/-/hw-transport-mocker-6.28.2.tgz#af65a6b4c83f53c5baa6f98be24ac7d49ffe532a"
-  integrity sha512-sR/J+yDOM1uFdoTUpUWFVwsv8DQpbFxshYqb6gjp/lwOosSCZyztDc0i8+CwLAe+fze2QqKlsqie6bnGNE35NQ==
+  version "6.28.3"
+  resolved "https://registry.yarnpkg.com/@ledgerhq/hw-transport-mocker/-/hw-transport-mocker-6.28.3.tgz#d1020727d4d7d5fb6c5feeb876af79daba75aff0"
+  integrity sha512-V5hf6oPytSgoBx+3eaCMoSZGFHXwEP+89g3somX1paGwJXwnzNX1+ADVr0a/xYQE+l7j3Os8TdVmEj0eF0U75A==
   dependencies:
-    "@ledgerhq/hw-transport" "^6.30.2"
+    "@ledgerhq/hw-transport" "^6.30.3"
     "@ledgerhq/logs" "^6.12.0"
     rxjs "^7.8.1"
 
-"@ledgerhq/hw-transport@^6.30.2":
-  version "6.30.2"
-  resolved "https://registry.yarnpkg.com/@ledgerhq/hw-transport/-/hw-transport-6.30.2.tgz#de988b3ba8df4ca0ae97f7b7f99327bd61a535ee"
-  integrity sha512-iTB0cwQaISvUXwrnPOLAmPoAOMvW14XmtKsuQce0qYJZC/1/eUPNFu6sOD8X0qUBbMfWhre8X9AmMuWTPQH3lA==
+"@ledgerhq/hw-transport@^6.30.3":
+  version "6.30.3"
+  resolved "https://registry.yarnpkg.com/@ledgerhq/hw-transport/-/hw-transport-6.30.3.tgz#5904adb57ac4459e219551aa97ce2d0772393f2b"
+  integrity sha512-eqtTCGy8wFCxl+hZSEpjVqn1EDjQhFCne/qUyY0aA36efhWUF6bCRAhkq1e5i7g2P6TbxcIM5P5PW67dILuqIQ==
   dependencies:
     "@ledgerhq/devices" "^8.2.0"
     "@ledgerhq/errors" "^6.16.1"
@@ -2626,13 +2626,13 @@
   integrity sha512-ExDoj1QV5eC6TEbMdLUMMk9cfvNKhhv5gXol4SmULRVCx/3iyCPhJ74nsb3S0Vb+/f+XujBEj3vQn5+cwS0fNA==
 
 "@ledgerhq/react-native-hw-transport-ble@^6.29.5":
-  version "6.32.1"
-  resolved "https://registry.yarnpkg.com/@ledgerhq/react-native-hw-transport-ble/-/react-native-hw-transport-ble-6.32.1.tgz#dcb722db3044d35597998718dbdf377fe2f5af27"
-  integrity sha512-rBNZki3COGj/odAalbN6ZJX15XT62GDauMEDB3xShd5allyEDA3vrwaGwDQGE5Tx3J4Wk8OOIUxUj/ovZhhaBg==
+  version "6.32.2"
+  resolved "https://registry.yarnpkg.com/@ledgerhq/react-native-hw-transport-ble/-/react-native-hw-transport-ble-6.32.2.tgz#4114e29615486d3b3e8792540151ebf4bae15b21"
+  integrity sha512-CfgAB4LPD5bmGIcXt9IapJvW0tHa0D1XOs3GLQyeCrsuB1d/whXA00XJ2XH2zvkQRlUJS4NQ0bPn5YJGf7g+6g==
   dependencies:
     "@ledgerhq/devices" "^8.2.0"
     "@ledgerhq/errors" "^6.16.1"
-    "@ledgerhq/hw-transport" "^6.30.2"
+    "@ledgerhq/hw-transport" "^6.30.3"
     "@ledgerhq/logs" "^6.12.0"
     react-native-ble-plx "2.0.3"
     rxjs "^7.8.1"
@@ -3935,9 +3935,9 @@
   integrity sha512-nG96G3Wp6acyAgJqGasjODb+acrI7KltPiRxzHPXnP3NgI28bpQDRv53olbqGXbfcgF5aiiHmO3xpwEpS5Ld9g==
 
 "@types/node@*":
-  version "20.11.11"
-  resolved "https://registry.yarnpkg.com/@types/node/-/node-20.11.11.tgz#6dbe0e5a94b94bb23bf56fca26be3ade2a714efd"
-  integrity sha512-PlJCXfb57Jrman0H1BxO2+Q7qwih2Mwk7T6Gvixj+SK4mqs4RWOGMMoP6p/LFa3UrP2CZOO6ai6otd7J/TB6Ug==
+  version "20.11.13"
+  resolved "https://registry.yarnpkg.com/@types/node/-/node-20.11.13.tgz#188263ee2c8d590e181d3f5bfa7e485a932957cb"
+  integrity sha512-5G4zQwdiQBSWYTDAH1ctw2eidqdhMJaNsiIDKHFr55ihz5Trl2qqR8fdrT732yPBho5gkNxXm67OxWFBqX9aPg==
   dependencies:
     undici-types "~5.26.4"
 
@@ -12839,9 +12839,9 @@ react-native-progress@^5.0.0:
     prop-types "^15.7.2"
 
 react-native-qrcode-svg@^6.2.0:
-  version "6.2.0"
-  resolved "https://registry.yarnpkg.com/react-native-qrcode-svg/-/react-native-qrcode-svg-6.2.0.tgz#62b62c5997ff23ba22544e289a6112a08f8ea306"
-  integrity sha512-rb2PgUwT8QpQyReVYNvzRY84AHsMh81354Tnkfp6MfqRbcdJURhnBWLBOO11pLMS6eXiwlq4SkcQxy88hRq+Dw==
+  version "6.3.0"
+  resolved "https://registry.yarnpkg.com/react-native-qrcode-svg/-/react-native-qrcode-svg-6.3.0.tgz#2b03826b7bd0c95d9c3fb669cb0fb5091f98d687"
+  integrity sha512-DUjgCRs2vaHSoLMVYoc7Oc8cL7CNUdvQmvtSmIurp/VBJ1DJkJlTQjeSxMoMWAjnnK4oFjjjA9+F4AJQL2f5Zw==
   dependencies:
     prop-types "^15.8.0"
     qrcode "^1.5.1"
