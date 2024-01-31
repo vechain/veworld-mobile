@@ -25,12 +25,12 @@ export const VechainTokenCard = memo(({ tokenWithInfo, isAnimation, isBalanceVis
 
     const { tokenInfo, tokenInfoLoading, fiatBalance, tokenUnitBalance, exchangeRate } = tokenWithInfo
 
-    const isPositive24hChange = (tokenInfo?.market_data.price_change_percentage_24h ?? 0) >= 0
+    const isPositive24hChange = (tokenInfo?.market_data?.price_change_percentage_24h ?? 0) >= 0
     const change24h =
         (isPositive24hChange ? "+" : "") +
         FormattingUtils.humanNumber(
-            tokenInfo?.market_data.price_change_percentage_24h ?? 0,
-            tokenInfo?.market_data.price_change_percentage_24h ?? 0,
+            tokenInfo?.market_data?.price_change_percentage_24h ?? 0,
+            tokenInfo?.market_data?.price_change_percentage_24h ?? 0,
         ) +
         "%"
 
