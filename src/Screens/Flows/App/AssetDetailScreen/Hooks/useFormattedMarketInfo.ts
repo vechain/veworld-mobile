@@ -3,7 +3,7 @@ import { FormattingUtils } from "~Utils"
 
 export type MarketInfo = {
     marketCap: number
-    totalSupply: number
+    totalSupply: number | null
     totalVolume: number
     circulatingSupply: number
 }
