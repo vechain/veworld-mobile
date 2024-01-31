@@ -17,7 +17,7 @@ export const resetApp = (): AppThunk<Promise<boolean>> => async dispatch => {
 
         return Promise.resolve(true)
     } catch (e) {
-        error(ERROR_EVENTS.SECURTIY, "Failed to reset the application state")
+        error(ERROR_EVENTS.SECURITY, "Failed to reset the application state")
         return Promise.resolve(false)
     }
 }

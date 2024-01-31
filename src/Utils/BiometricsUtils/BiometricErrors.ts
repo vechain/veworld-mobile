@@ -23,7 +23,7 @@ export const isBiometricCanceled = (error: unknown) => {
         "code" in error &&
         getPlatformError(error as Record<"code", unknown>, errors)
     ) {
-        debug(ERROR_EVENTS.SECURTIY, "User Cancelled Biometric Operation")
+        debug(ERROR_EVENTS.SECURITY, "User Cancelled Biometric Operation")
         return true
     }
 
@@ -39,7 +39,7 @@ export const isBiometricTooManyAttempts = (error: unknown) => {
         "code" in error &&
         getPlatformError(error as Record<"code", unknown>, errors)
     ) {
-        debug(ERROR_EVENTS.SECURTIY, "User Failed Biometric AUthentication Too Many Times")
+        debug(ERROR_EVENTS.SECURITY, "User Failed Biometric AUthentication Too Many Times")
         return true
     }
 

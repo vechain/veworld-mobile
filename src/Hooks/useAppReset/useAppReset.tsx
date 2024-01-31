@@ -42,6 +42,6 @@ export const useAppReset = () => {
 
         await dispatch(resetApp())
 
-        info(ERROR_EVENTS.SECURTIY, "App Reset Finished")
+        info(ERROR_EVENTS.SECURITY, "App Reset Finished")
     }, [removeEncryptionKeysFromKeychain, resetCaches, resetApplication, queryClient, initAllCaches, dispatch])
 }

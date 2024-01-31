@@ -22,15 +22,15 @@ export const AutoLockProvider = ({ children }: ProviderProps) => {
 
     const registerAutoLockTask = useCallback(() => {
         if (triggerAutoLock) {
-            debug(ERROR_EVENTS.SECURTIY, "Registering auto lock task")
+            debug(ERROR_EVENTS.SECURITY, "Registering auto lock task")
             // Register auto lock task.
             TaskManager.defineTask(AUTO_LOCK_TASK, () => {
                 try {
-                    debug(ERROR_EVENTS.SECURTIY, "Trigging auto lock")
+                    debug(ERROR_EVENTS.SECURITY, "Trigging auto lock")
                     triggerAutoLock()
                     return BackgroundFetch.BackgroundFetchResult.NewData
                 } catch (err) {
-                    error(ERROR_EVENTS.SECURTIY, err)
+                    error(ERROR_EVENTS.SECURITY, err)
                     return BackgroundFetch.BackgroundFetchResult.Failed
                 }
             })
@@ -41,21 +41,21 @@ export const AutoLockProvider = ({ children }: ProviderProps) => {
     const configureBackgroundFetch = async () => {
         try {
             await stopBackgroundFetch()
-            debug(ERROR_EVENTS.SECURTIY, "Starting auto lock listener")
+            debug(ERROR_EVENTS.SECURITY, "Starting auto lock listener")
             await BackgroundFetch.registerTaskAsync(AUTO_LOCK_TASK, {
                 minimumInterval: 600,
                 stopOnTerminate: false,
                 startOnBoot: true,
             })
         } catch (err) {
-            error(ERROR_EVENTS.SECURTIY, err)
+            error(ERROR_EVENTS.SECURITY, err)
         }
     }
 
     const stopBackgroundFetch = async () => {
         const isRegistered = await TaskManager.isTaskRegisteredAsync(AUTO_LOCK_TASK)
         if (isRegistered) {
-            debug(ERROR_EVENTS.SECURTIY, "Stopping auto lock listener")
+            debug(ERROR_EVENTS.SECURITY, "Stopping auto lock listener")
             await BackgroundFetch.unregisterTaskAsync(AUTO_LOCK_TASK)
         }
     }
@@ -81,11 +81,11 @@ export const AutoLockProvider = ({ children }: ProviderProps) => {
                 const now = Date.now()
 
                 if (inactivityStartTime > 0 && now - inactivityStartTime > FIVE_MINUTES) {
-                    info(ERROR_EVENTS.SECURTIY, "App was inactive for more than 5 minutes. Locking...")
+                    info(ERROR_EVENTS.SECURITY, "App was inactive for more than 5 minutes. Locking...")
                     lockApplication()
                 }
             } catch (err) {
-                error(ERROR_EVENTS.SECURTIY, "Error checking inactivity time", err)
+                error(ERROR_EVENTS.SECURITY, "Error checking inactivity time", err)
             } finally {
                 dispatch(setIsAppLoading(false))
                 setInactivityStartTime(0)
