@@ -20,7 +20,7 @@ export const useSecurityButtons = (handleOnSecurityUpgrade: () => void) => {
     const securityButtons: SecurityButtons = useMemo(() => {
         const { authTypeAvailable } = biometrics || {}
 
-        debug(ERROR_EVENTS.SECURTIY, { authTypeAvailable })
+        debug(ERROR_EVENTS.SECURITY, { authTypeAvailable })
 
         return {
             buttons: [

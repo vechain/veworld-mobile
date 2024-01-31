@@ -19,7 +19,7 @@ const clearOldStorage = async () => {
 
         await KeychainService.deleteKey(OLD_REDUX_KEY)
     } catch (e) {
-        warn(ERROR_EVENTS.SECURTIY, "Failed to delete previous storage", e)
+        warn(ERROR_EVENTS.SECURITY, "Failed to delete previous storage", e)
     }
 }
 

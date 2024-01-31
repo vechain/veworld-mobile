@@ -28,7 +28,7 @@ const get = async (pinCode: string): Promise<BackupKeys | null> => {
     })
 
     if (!keys) {
-        debug(ERROR_EVENTS.SECURTIY, "Backup: No keys found")
+        debug(ERROR_EVENTS.SECURITY, "Backup: No keys found")
         return null
     }
 
@@ -55,7 +55,7 @@ const handleSecurityUpgradeFailure = async (oldPin: string) => {
         await StorageEncryptionKeyHelper.set(keys.storage, oldPin)
         await clear()
     } catch (e) {
-        error(ERROR_EVENTS.SECURTIY, "CRITICAL: Security upgrade failed", e, { oldPin })
+        error(ERROR_EVENTS.SECURITY, "CRITICAL: Security upgrade failed", e, { oldPin })
         throw e
     }
 }
@@ -80,7 +80,7 @@ const updateSecurityMethod = async (currentPinCode: string, newPinCode?: string)
 
         await _store(backup, currentPinCode)
     } catch (e) {
-        error(ERROR_EVENTS.SECURTIY, "Failed to back up current keys", e)
+        error(ERROR_EVENTS.SECURITY, "Failed to back up current keys", e)
         return false
     }
 
@@ -95,7 +95,7 @@ const updateSecurityMethod = async (currentPinCode: string, newPinCode?: string)
 
         return true
     } catch (e) {
-        error(ERROR_EVENTS.SECURTIY, "Failed to update security method", e)
+        error(ERROR_EVENTS.SECURITY, "Failed to update security method", e)
         await handleSecurityUpgradeFailure(currentPinCode)
         return false
     }

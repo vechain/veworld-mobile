@@ -187,7 +187,7 @@ export const ApplicationSecurityProvider = ({ children }: ApplicationSecurityCon
 
                 await unlock()
             } catch (e) {
-                error(ERROR_EVENTS.SECURTIY, "Failed to get encryption keys", e)
+                error(ERROR_EVENTS.SECURITY, "Failed to get encryption keys", e)
             }
         },
         [unlock],
@@ -201,7 +201,7 @@ export const ApplicationSecurityProvider = ({ children }: ApplicationSecurityCon
             const encryptedStorageKeys = UserEncryptedStorage.getAllKeys()
 
             if (encryptedStorageKeys.length === 0) {
-                info(ERROR_EVENTS.SECURTIY, "No keys found in encrypted storage, user is onboarding")
+                info(ERROR_EVENTS.SECURITY, "No keys found in encrypted storage, user is onboarding")
 
                 await PreviousInstallation.clearOldStorage()
 
@@ -252,7 +252,7 @@ export const ApplicationSecurityProvider = ({ children }: ApplicationSecurityCon
                 })
                 setWalletStatus(WALLET_STATUS.UNLOCKED)
             } catch (e) {
-                error(ERROR_EVENTS.SECURTIY, e)
+                error(ERROR_EVENTS.SECURITY, e)
                 SecurityConfig.remove()
                 await resetApplication()
             }
@@ -294,10 +294,10 @@ export const ApplicationSecurityProvider = ({ children }: ApplicationSecurityCon
         if (biometrics && currentState === "active" && walletStatus === WALLET_STATUS.NOT_INITIALISED) {
             intialiseApp(biometrics)
                 .then(() => {
-                    debug(ERROR_EVENTS.SECURTIY, "App state initialised app")
+                    debug(ERROR_EVENTS.SECURITY, "App state initialised app")
                 })
                 .catch(e => {
-                    error(ERROR_EVENTS.SECURTIY, e)
+                    error(ERROR_EVENTS.SECURITY, e)
                 })
         }
     }, [walletStatus, currentState, biometrics, intialiseApp])
@@ -310,7 +310,7 @@ export const ApplicationSecurityProvider = ({ children }: ApplicationSecurityCon
                     lockApplication()
                 }
             } catch (e) {
-                error(ERROR_EVENTS.SECURTIY, e)
+                error(ERROR_EVENTS.SECURITY, e)
             } finally {
                 setAutoLock(false)
             }

@@ -19,7 +19,7 @@ type OldState = Record<string, Array<SessionTypes.Struct>>
  */
 
 export const Migration3 = (state: PersistedState): PersistedState => {
-    debug(ERROR_EVENTS.SECURTIY, "Performing migration 3")
+    debug(ERROR_EVENTS.SECURITY, "Performing migration 3")
 
     // @ts-ignore
     const currentState: OldState = state.sessions

@@ -8,7 +8,7 @@ import { debug } from "~Utils"
  */
 
 export const Migration4 = (state: PersistedState): PersistedState => {
-    debug(ERROR_EVENTS.SECURTIY, "Performing migration 3")
+    debug(ERROR_EVENTS.SECURITY, "Performing migration 3")
 
     // @ts-ignore
     const currentState = state.currencies
