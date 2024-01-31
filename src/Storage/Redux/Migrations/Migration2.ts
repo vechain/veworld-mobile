@@ -10,7 +10,7 @@ import { LocalAccountWithDevice } from "~Model"
  */
 
 export const Migration2 = (state: PersistedState): PersistedState => {
-    debug(ERROR_EVENTS.SECURTIY, "Performing migration 2")
+    debug(ERROR_EVENTS.SECURITY, "Performing migration 2")
 
     const updatedDelegation: DelegationStateV2 = {
         [defaultMainNetwork.genesis.id]: {
