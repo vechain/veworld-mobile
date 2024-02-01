@@ -16,6 +16,8 @@ import {
     clickByText,
     launchAppWithBioAuth,
     launchAppWithBioUnAuth,
+    goBack,
+    WalletSetupScreen,
 } from "../helpers"
 
 Given("The app is opened and is iOS and has biometrics authorization", { timeout: -1 }, async () => {
@@ -52,6 +54,19 @@ When("The user onboards with a new local wallet", { timeout: -1 }, async () => {
     const mnemonic = await MnemonicScreen.backupMnemonicAndContinue()
 
     await ConfirmMnemonicScreen.verifyMnemonic(mnemonic)
+})
+
+Then("We want to check multiple mnemonics", { timeout: -1 }, async () => {
+    await OnboardingFlows.skipToCreateLocalWallet()
+    for (let i = 0; i < 5; i++) {
+        const mnemonic = await MnemonicScreen.backupMnemonicAndContinue()
+
+        await ConfirmMnemonicScreen.verifyMnemonic(mnemonic)
+        await goBack()
+        await goBack()
+        await goBack()
+        await WalletSetupScreen.clickCreateWallet()
+    }
 })
 
 When(
