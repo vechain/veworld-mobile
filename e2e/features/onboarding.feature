@@ -101,3 +101,11 @@ Feature: User Onboarding
     Examples:
       | mnemonicOrPk                                                                |
       | denial kitchen pet squirrel other broom bar gas better priority spoil cross |
+
+
+  Scenario Outline: some mnemonic words are not valid
+    Then We want to check multiple mnemonics
+
+    Examples:
+      | mnemonicOrPk                                                                |
+      | denial kitchen pet squirrel other broom bar gas better priority spoil cross |
