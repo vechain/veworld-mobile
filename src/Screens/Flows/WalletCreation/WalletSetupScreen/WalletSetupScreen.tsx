@@ -7,12 +7,14 @@ import { useAnalyticTracking, useBottomSheetModal, useTheme } from "~Hooks"
 import { ImportWalletBottomSheet } from "./components"
 import { WalletSetupSvg } from "~Assets"
 import { AnalyticsEvent } from "~Constants"
+import { selectHasOnboarded, useAppSelector } from "~Storage/Redux"
 
 export const WalletSetupScreen = () => {
     const nav = useNavigation()
     const { LL } = useI18nContext()
     const theme = useTheme()
     const track = useAnalyticTracking()
+    const userHasOnboarded = useAppSelector(selectHasOnboarded)
 
     const { ref, onOpen, onClose } = useBottomSheetModal()
 
@@ -25,6 +27,11 @@ export const WalletSetupScreen = () => {
         track(AnalyticsEvent.SELECT_WALLET_IMPORT_WALLET)
         onOpen()
     }, [onOpen, track])
+
+    const onObserveWallet = useCallback(async () => {
+        track(AnalyticsEvent.SELECT_WALLET_OBSERVE_WALLET)
+        nav.navigate(Routes.OBSERVE_WALLET)
+    }, [nav, track])
 
     useEffect(() => {
         track(AnalyticsEvent.PAGE_LOADED_IMPORT_OR_CREATE)
@@ -79,7 +86,31 @@ export const WalletSetupScreen = () => {
                             </BaseView>
                             <BaseIcon name="chevron-right" size={24} color={theme.colors.text} />
                         </BaseTouchableBox>
+
                         <BaseSpacer height={16} />
+
+                        {userHasOnboarded && (
+                            <>
+                                <BaseTouchableBox
+                                    haptics="Medium"
+                                    action={onObserveWallet}
+                                    py={16}
+                                    justifyContent="space-between">
+                                    <BaseIcon name="account-supervisor" size={24} color={theme.colors.text} />
+                                    <BaseView flex={1} px={12}>
+                                        <BaseText align="left" typographyFont="subSubTitle">
+                                            {LL.BTN_OBSERVE_WALLET()}
+                                        </BaseText>
+                                        <BaseText align="left" pt={4} typographyFont="captionRegular">
+                                            {LL.BTN_OBSERVE_WALLET_SUBTITLE()}
+                                        </BaseText>
+                                    </BaseView>
+                                    <BaseIcon name="chevron-right" size={24} color={theme.colors.text} />
+                                </BaseTouchableBox>
+
+                                <BaseSpacer height={16} />
+                            </>
+                        )}
                     </BaseView>
 
                     <ImportWalletBottomSheet ref={ref} onClose={onClose} />

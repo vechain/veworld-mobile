@@ -31,6 +31,7 @@ export enum WALLET_MODE {
  */
 export enum DEVICE_TYPE {
     LOCAL_MNEMONIC = "local-mnemonic",
+    LOCAL_WATCHED = "local-watched",
     LOCAL_PRIVATE_KEY = "local-pk",
     LEDGER = "ledger",
 }

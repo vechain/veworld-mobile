@@ -1,10 +1,10 @@
-import React, { memo, useCallback } from "react"
+import React, { memo, useCallback, useMemo } from "react"
 import { ViewProps, StyleSheet } from "react-native"
 import { CURRENCY, ColorThemeType } from "~Constants"
 import { useThemedStyles } from "~Hooks"
-import { FormattingUtils } from "~Utils"
-import { AccountIcon, BaseSpacer, BaseText, BaseView, LedgerBadge } from "~Components"
-import { AccountWithDevice, DEVICE_TYPE } from "~Model"
+import { AccountUtils, FormattingUtils } from "~Utils"
+import { AccountIcon, BaseSpacer, BaseText, BaseView, LedgerBadge, WatchedAccountBadge } from "~Components"
+import { AccountWithDevice, DEVICE_TYPE, WatchedAccount } from "~Model"
 import { useAppDispatch } from "~Storage/Redux"
 import { setBalanceVisible } from "~Storage/Redux/Actions"
 import { Balance } from "./Balance"
@@ -28,6 +28,18 @@ export const AccountCard: React.FC<Props> = memo(props => {
     const toggleBalanceVisibility = useCallback(() => {
         dispatch(setBalanceVisible(!balanceVisible))
     }, [balanceVisible, dispatch])
+
+    const accountWithDevice = useMemo(() => {
+        if (!AccountUtils.isObservedAccount(account)) {
+            return account as AccountWithDevice
+        }
+    }, [account])
+
+    const watchedAccount = useMemo(() => {
+        if (AccountUtils.isObservedAccount(account)) {
+            return account as WatchedAccount
+        }
+    }, [account])
 
     return (
         <BaseView px={20} w={100} flexDirection="row">
@@ -54,7 +66,7 @@ export const AccountCard: React.FC<Props> = memo(props => {
                             </BaseText>
                             <BaseSpacer height={6} />
                             <BaseView flexDirection="row">
-                                {account.device?.type === DEVICE_TYPE.LEDGER && (
+                                {accountWithDevice?.device?.type === DEVICE_TYPE.LEDGER && (
                                     <LedgerBadge
                                         bg={theme.colors.textReversed}
                                         mr={8}
@@ -63,6 +75,9 @@ export const AccountCard: React.FC<Props> = memo(props => {
                                         }}
                                     />
                                 )}
+
+                                {watchedAccount?.type === DEVICE_TYPE.LOCAL_WATCHED && <WatchedAccountBadge />}
+
                                 <BaseView flex={1}>
                                     <BaseText
                                         ellipsizeMode="tail"

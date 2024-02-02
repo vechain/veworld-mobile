@@ -1,5 +1,5 @@
 import { createSelector } from "@reduxjs/toolkit"
-import { AddressUtils } from "~Utils"
+import { AccountUtils, AddressUtils } from "~Utils"
 import { RootState } from "../Types"
 import { selectDevicesState } from "./Device"
 import { AccountWithDevice, DEVICE_TYPE, LocalAccountWithDevice } from "~Model"
@@ -14,15 +14,21 @@ export const selectAccounts = createSelector(selectAccountsState, selectDevicesS
     return sortBy(
         state.accounts.map(account => {
             const device = devices.find(_device => _device.rootAddress === account.rootAddress)
-            if (!device) {
-                throw new Error(`No device found for account ${account.address}`)
-            }
-            return {
-                ...account,
-                device,
+
+            if (AccountUtils.isObservedAccount(account)) {
+                return account
+            } else {
+                if (!device) {
+                    throw new Error(`No device found for account ${account.address}`)
+                }
+                return {
+                    ...account,
+                    device,
+                }
             }
         }) as AccountWithDevice[],
-        account => account.device.position,
+        // Sort by device position else if account is observe only place last
+        account => account?.device?.position ?? state.accounts.length,
     )
 })
 
@@ -63,15 +69,6 @@ export const selectSelectedAccount = createSelector(selectSelectedAccountOrNull,
     return selectedAccount
 })
 
-export const selectSelectedDevice = createSelector(
-    selectDevicesState,
-    selectSelectedAccount,
-    (devices, selectedAccount) => {
-        if (!selectedAccount) return null
-        return devices.find(device => AddressUtils.compareAddresses(device.rootAddress, selectedAccount.rootAddress))
-    },
-)
-
 export const selectOtherAccounts = createSelector(
     selectAccounts,
     selectSelectedAccount,
@@ -100,7 +97,9 @@ export const selectVisibleAccountsButSelected = createSelector(
 export const selectDelegationAccounts = createSelector(
     [selectAccounts, selectSelectedAccountAddress],
     (accounts, selectedAccountAddress) => {
-        return accounts.filter(
+        let accountsWithoutObservedAccounts = accounts.filter(account => !AccountUtils.isObservedAccount(account))
+
+        return accountsWithoutObservedAccounts.filter(
             account =>
                 account.device.type === DEVICE_TYPE.LOCAL_MNEMONIC &&
                 !AddressUtils.compareAddresses(selectedAccountAddress, account.address),

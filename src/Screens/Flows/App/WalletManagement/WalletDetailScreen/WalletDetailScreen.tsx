@@ -104,6 +104,9 @@ export const WalletDetailScreen = ({ route: { params } }: Props) => {
         checkIdentityBeforeOpening()
     }, [checkIdentityBeforeOpening, closeRemoveAccountWarningBottomSheet])
 
+    const showButton = device?.type === DEVICE_TYPE.LEDGER || device?.type === DEVICE_TYPE.LOCAL_MNEMONIC
+    const showWalletNameInpout = device?.type !== DEVICE_TYPE.LOCAL_MNEMONIC
+
     return (
         <Layout
             noMargin
@@ -116,7 +119,7 @@ export const WalletDetailScreen = ({ route: { params } }: Props) => {
                             </BaseText>
                         </BaseView>
                         <BaseSpacer width={4} />
-                        {device?.type !== DEVICE_TYPE.LOCAL_PRIVATE_KEY && (
+                        {showButton && (
                             <BaseButton
                                 testID="WalletDetailScreen_addAccountButton"
                                 haptics="Light"
@@ -132,12 +135,14 @@ export const WalletDetailScreen = ({ route: { params } }: Props) => {
                         )}
                     </BaseView>
                     <BaseSpacer height={16} />
-                    <BaseTextInput
-                        placeholder={device?.alias || LL.WALLET_MANAGEMENT_WALLET_NAME()}
-                        value={walletAlias}
-                        setValue={onRenameWallet}
-                        maxLength={35}
-                    />
+                    {!showWalletNameInpout && (
+                        <BaseTextInput
+                            placeholder={device?.alias || LL.WALLET_MANAGEMENT_WALLET_NAME()}
+                            value={walletAlias}
+                            setValue={onRenameWallet}
+                            maxLength={35}
+                        />
+                    )}
                 </BaseView>
             }
             fixedBody={

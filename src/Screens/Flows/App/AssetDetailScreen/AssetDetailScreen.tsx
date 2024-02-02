@@ -17,9 +17,15 @@ import { AssetChart, AssetHeader, BalanceView, MarketInfoView } from "./Componen
 import { useI18nContext } from "~i18n"
 import { FastAction } from "~Model"
 import { striptags } from "striptags"
-import { selectBalanceVisible, selectSendableTokensWithBalance, useAppSelector } from "~Storage/Redux"
+import {
+    selectBalanceVisible,
+    selectSelectedAccount,
+    selectSendableTokensWithBalance,
+    useAppSelector,
+} from "~Storage/Redux"
 import { ScrollView } from "react-native-gesture-handler"
 import { StyleSheet } from "react-native"
+import { AccountUtils } from "~Utils"
 
 type Props = NativeStackScreenProps<RootStackParamListHome, Routes.TOKEN_DETAILS>
 
@@ -28,6 +34,8 @@ export const AssetDetailScreen = ({ route }: Props) => {
     const { styles, theme } = useThemedStyles(baseStyles)
     const nav = useNavigation()
     const { LL, locale } = useI18nContext()
+
+    const selectedAccount = useAppSelector(selectSelectedAccount)
 
     const { ref: QRCodeBottomSheetRef, onOpen: openQRCodeSheet } = useBottomSheetModal()
 
@@ -80,6 +88,8 @@ export const AssetDetailScreen = ({ route }: Props) => {
         [LL, foundToken, nav, openQRCodeSheet, theme.colors.text, token.symbol],
     )
 
+    const showActions = useMemo(() => !AccountUtils.isObservedAccount(selectedAccount), [selectedAccount])
+
     return (
         <Layout
             noMargin
@@ -94,9 +104,13 @@ export const AssetDetailScreen = ({ route }: Props) => {
 
                     <BaseView alignItems="center" style={styles.assetDetailsBody}>
                         <BaseSpacer height={24} />
-                        <FastActionsBar actions={Actions} />
 
-                        <BaseSpacer height={24} />
+                        {showActions && (
+                            <>
+                                <FastActionsBar actions={Actions} />
+                                <BaseSpacer height={24} />
+                            </>
+                        )}
 
                         <BalanceView tokenWithInfo={token} isBalanceVisible={isBalanceVisible} />
 

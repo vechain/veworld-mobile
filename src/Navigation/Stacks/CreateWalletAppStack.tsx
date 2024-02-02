@@ -5,6 +5,8 @@ import {
     EnableAdditionalSettings,
     ImportLocalWallet,
     NewMnemonicScreen,
+    ObserveWalletScreen,
+    ObserveWalletSuccesScreen,
     SelectLedgerAccounts,
     SelectLedgerDevice,
     UserCreatePasswordScreen,
@@ -12,7 +14,7 @@ import {
     WalletSuccessScreen,
 } from "~Screens"
 import { Routes } from "~Navigation/Enums"
-import { ConnectedLedgerDevice, SecurityLevelType } from "~Model"
+import { ConnectedLedgerDevice, SecurityLevelType, WatchedAccount } from "~Model"
 import { useNavAnimation } from "~Hooks"
 
 export type RootStackParamListCreateWalletApp = {
@@ -38,6 +40,8 @@ export type RootStackParamListCreateWalletApp = {
           }
         | undefined
     [Routes.USER_CREATE_PASSWORD]: undefined
+    [Routes.OBSERVE_WALLET]: undefined
+    [Routes.OBSERVE_WALLET_CONFIRMATION]: { account: WatchedAccount }
 }
 
 const CreateWalletApp = createNativeStackNavigator<RootStackParamListCreateWalletApp>()
@@ -90,6 +94,18 @@ export const CreateWalletAppStack = () => {
             <CreateWalletApp.Screen
                 name={Routes.USER_CREATE_PASSWORD}
                 component={UserCreatePasswordScreen}
+                options={{ headerShown: false }}
+            />
+
+            <CreateWalletApp.Screen
+                name={Routes.OBSERVE_WALLET}
+                component={ObserveWalletScreen}
+                options={{ headerShown: false }}
+            />
+
+            <CreateWalletApp.Screen
+                name={Routes.OBSERVE_WALLET_CONFIRMATION}
+                component={ObserveWalletSuccesScreen}
                 options={{ headerShown: false }}
             />
         </CreateWalletApp.Navigator>

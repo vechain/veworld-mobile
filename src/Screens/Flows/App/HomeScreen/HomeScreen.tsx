@@ -35,8 +35,10 @@ import { useNavigation, useScrollToTop } from "@react-navigation/native"
 import { NestableScrollContainer } from "react-native-draggable-flatlist"
 import { Routes } from "~Navigation"
 import { AnalyticsEvent, BUY_FEATURE_ENABLED } from "~Constants"
+import { AccountUtils } from "~Utils"
 
 export const HomeScreen = () => {
+    const selectedCurrency = useAppSelector(selectCurrency)
     const track = useAnalyticTracking()
     const { updateBalances, updateSuggested } = useTokenBalances()
 
@@ -111,8 +113,10 @@ export const HomeScreen = () => {
                 testID: "buyButton",
             })
         }
-        actions.push(
-            {
+
+        // If the account is observed, we don't want to show the send button as it's not possible to send from an observed account
+        if (!AccountUtils.isObservedAccount(selectedAccount)) {
+            actions.push({
                 name: LL.BTN_SEND(),
                 action: () =>
                     nav.navigate(Routes.SELECT_TOKEN_SEND, {
@@ -120,18 +124,18 @@ export const HomeScreen = () => {
                     }),
                 icon: <BaseIcon color={theme.colors.text} name="send-outline" />,
                 testID: "sendButton",
-            },
-            {
-                name: LL.BTN_HISTORY(),
-                action: () => nav.navigate(Routes.HISTORY),
-                icon: <BaseIcon color={theme.colors.text} name="history" />,
-                testID: "historyButton",
-            },
-        )
+            })
+        }
+
+        actions.push({
+            name: LL.BTN_HISTORY(),
+            action: () => nav.navigate(Routes.HISTORY),
+            icon: <BaseIcon color={theme.colors.text} name="history" />,
+            testID: "historyButton",
+        })
 
         return actions
-    }, [LL, nav, theme.colors.text, track])
-    const selectedCurrency = useAppSelector(selectCurrency)
+    }, [LL, nav, selectedAccount, theme.colors.text, track])
 
     return (
         <Layout

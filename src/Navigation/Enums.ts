@@ -65,4 +65,6 @@ export enum Routes {
     CONNECTED_APP_SIGN_CERTIFICATE_SCREEN = "Connected_App_Sign_Certificate_Screen",
     CONNECTED_APP_SIGN_MESSAGE_SCREEN = "Connected_App_Sign_Message_Screen",
     BLOCKED_APP_SCREEN = "Blocked_App_Screen",
+    OBSERVE_WALLET = "Observe_Wallet",
+    OBSERVE_WALLET_CONFIRMATION = "Observe_Wallet_Confirmation",
 }
