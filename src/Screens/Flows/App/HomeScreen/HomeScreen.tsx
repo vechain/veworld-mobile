@@ -28,7 +28,7 @@ import {
     useAppDispatch,
     useAppSelector,
 } from "~Storage/Redux"
-import { AccountWithDevice, FastAction } from "~Model"
+import { AccountWithDevice, FastAction, WatchedAccount } from "~Model"
 import { useI18nContext } from "~i18n"
 import { RefreshControl } from "react-native"
 import { useNavigation, useScrollToTop } from "@react-navigation/native"
@@ -72,7 +72,7 @@ export const HomeScreen = () => {
     const accounts = useAppSelector(selectVisibleAccounts)
     const selectedAccount = useAppSelector(selectSelectedAccount)
 
-    const setSelectedAccount = (account: AccountWithDevice) => {
+    const setSelectedAccount = (account: AccountWithDevice | WatchedAccount) => {
         onSetSelectedAccount({ address: account.address })
     }
 

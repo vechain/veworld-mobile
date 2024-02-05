@@ -35,6 +35,7 @@ import {
     NonFungibleTokenActivity,
     SignCertActivity,
     TransactionOutcomes,
+    WatchedAccount,
 } from "~Model"
 import { Routes } from "~Navigation"
 import { useAccountActivities } from "./Hooks"
@@ -52,7 +53,7 @@ export const HistoryScreen = () => {
     const accounts = useAppSelector(selectVisibleAccounts)
     const selectedAccount = useAppSelector(selectSelectedAccount)
 
-    const setSelectedAccount = (account: AccountWithDevice) => {
+    const setSelectedAccount = (account: AccountWithDevice | WatchedAccount) => {
         onSetSelectedAccount({ address: account.address })
     }
 

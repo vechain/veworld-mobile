@@ -18,7 +18,7 @@ import {
     useWalletConnect,
 } from "~Components"
 import { useBottomSheetModal } from "~Hooks"
-import { AccountWithDevice } from "~Model"
+import { AccountWithDevice, WatchedAccount } from "~Model"
 import { RootStackParamListSwitch, Routes } from "~Navigation"
 import {
     addConnectedAppActivity,
@@ -100,7 +100,7 @@ export const ConnectAppScreen: FC<Props> = ({ route }: Props) => {
         }
     }, [openSelectAccountBottomSheet, selectedAccount])
 
-    const setSelectedAccount = (account: AccountWithDevice) => {
+    const setSelectedAccount = (account: AccountWithDevice | WatchedAccount) => {
         onSetSelectedAccount({ address: account.address })
     }
 

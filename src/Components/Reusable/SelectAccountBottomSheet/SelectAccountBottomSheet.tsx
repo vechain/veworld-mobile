@@ -3,7 +3,7 @@ import { BottomSheetFlatList } from "@gorhom/bottom-sheet"
 import { BottomSheetModalMethods } from "@gorhom/bottom-sheet/lib/typescript/types"
 import { useScrollableBottomSheet } from "~Hooks"
 import { AccountCard, BaseBottomSheet, BaseSpacer, BaseText } from "~Components"
-import { AccountWithDevice } from "~Model"
+import { AccountWithDevice, WatchedAccount } from "~Model"
 import { useI18nContext } from "~i18n"
 
 /**
@@ -18,7 +18,7 @@ type Props = {
     onDismiss?: () => void
     closeBottomSheet?: () => void
     accounts: AccountWithDevice[]
-    setSelectedAccount: (account: AccountWithDevice) => void
+    setSelectedAccount: (account: AccountWithDevice | WatchedAccount) => void
     selectedAccount?: AccountWithDevice
     isVthoBalance?: boolean
     isBalanceVisible?: boolean
@@ -45,7 +45,7 @@ export const SelectAccountBottomSheet = React.forwardRef<BottomSheetModalMethods
         const { LL } = useI18nContext()
 
         const handlePress = useCallback(
-            (account: AccountWithDevice) => {
+            (account: AccountWithDevice | WatchedAccount) => {
                 setSelectedAccount(account)
                 if (closeBottomSheet) closeBottomSheet()
             },
