@@ -9,7 +9,7 @@ import {
     selectSelectedAccount,
     useAppSelector,
 } from "~Storage/Redux"
-import { AddressUtils } from "~Utils"
+import { AccountUtils, AddressUtils } from "~Utils"
 import { useSetSelectedAccount } from "~Hooks"
 
 export const useWalletDeletion = (device?: BaseDevice) => {
@@ -19,12 +19,9 @@ export const useWalletDeletion = (device?: BaseDevice) => {
     const { onSetSelectedAccount } = useSetSelectedAccount()
     const dispatch = useDispatch()
 
-    const deleteWallet = useCallback(() => {
+    const removeFromStorage = useCallback(() => {
         if (!device?.rootAddress) return
-
         const { rootAddress } = device
-
-        if (devices.length <= 1) throw new Error("Cannot delete the last device!")
 
         const isSelectedAccountInDevice = AddressUtils.compareAddresses(rootAddress, selectedAccount.rootAddress)
 
@@ -39,7 +36,18 @@ export const useWalletDeletion = (device?: BaseDevice) => {
         dispatch(removeAccountsByDevice({ rootAddress }))
 
         dispatch(removeDevice(device))
-    }, [onSetSelectedAccount, device, devices, allAccounts, selectedAccount, dispatch])
+    }, [allAccounts, device, dispatch, onSetSelectedAccount, selectedAccount.rootAddress])
+
+    const deleteWallet = useCallback(() => {
+        if (!device?.rootAddress) return
+
+        if (AccountUtils.isObservedAccount(device)) {
+            removeFromStorage()
+        } else {
+            if (devices.length <= 1) throw new Error("Cannot delete the last device!")
+            removeFromStorage()
+        }
+    }, [device, removeFromStorage, devices.length])
 
     return {
         deleteWallet,

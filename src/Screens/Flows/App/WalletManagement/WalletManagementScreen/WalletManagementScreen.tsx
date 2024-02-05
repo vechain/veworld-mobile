@@ -24,6 +24,7 @@ export const WalletManagementScreen = () => {
     const { deleteWallet } = useWalletDeletion(selectedDevice)
     const { LL } = useI18nContext()
     const dispatch = useDispatch()
+
     const { isPasswordPromptOpen, handleClosePasswordModal, onPasswordSuccess, checkIdentityBeforeOpening } =
         useCheckIdentity({
             onIdentityConfirmed: deleteWallet,
@@ -82,13 +83,18 @@ export const WalletManagementScreen = () => {
 
     const onTrashIconPress = useCallback(
         (item: Device) => () => {
-            if (devices.length > 1) {
+            if (AccountUtils.isObservedAccount(item)) {
                 setSelectedDevice(item)
                 openRemoveWalletBottomSheet()
             } else {
-                showWarningToast({
-                    text1: LL.WALLET_MANAGEMENT_NOTIFICATION_LAST_WALLET(),
-                })
+                if (devices.length > 1) {
+                    setSelectedDevice(item)
+                    openRemoveWalletBottomSheet()
+                } else {
+                    showWarningToast({
+                        text1: LL.WALLET_MANAGEMENT_NOTIFICATION_LAST_WALLET(),
+                    })
+                }
             }
         },
         [LL, devices.length, openRemoveWalletBottomSheet],

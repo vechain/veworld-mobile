@@ -76,7 +76,9 @@ export const AccountCard: React.FC<Props> = memo(props => {
                                     />
                                 )}
 
-                                {watchedAccount?.type === DEVICE_TYPE.LOCAL_WATCHED && <WatchedAccountBadge />}
+                                {watchedAccount?.type === DEVICE_TYPE.LOCAL_WATCHED && (
+                                    <WatchedAccountBadge bg={theme.colors.background} textColor={theme.colors.text} />
+                                )}
 
                                 <BaseView flex={1}>
                                     <BaseText

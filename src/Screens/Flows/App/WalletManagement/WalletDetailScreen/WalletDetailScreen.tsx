@@ -105,7 +105,7 @@ export const WalletDetailScreen = ({ route: { params } }: Props) => {
     }, [checkIdentityBeforeOpening, closeRemoveAccountWarningBottomSheet])
 
     const showButton = device?.type === DEVICE_TYPE.LEDGER || device?.type === DEVICE_TYPE.LOCAL_MNEMONIC
-    const showWalletNameInpout = device?.type !== DEVICE_TYPE.LOCAL_MNEMONIC
+    const showWalletNameInput = device?.type !== DEVICE_TYPE.LOCAL_MNEMONIC
 
     return (
         <Layout
@@ -135,7 +135,7 @@ export const WalletDetailScreen = ({ route: { params } }: Props) => {
                         )}
                     </BaseView>
                     <BaseSpacer height={16} />
-                    {!showWalletNameInpout && (
+                    {!showWalletNameInput && (
                         <BaseTextInput
                             placeholder={device?.alias || LL.WALLET_MANAGEMENT_WALLET_NAME()}
                             value={walletAlias}

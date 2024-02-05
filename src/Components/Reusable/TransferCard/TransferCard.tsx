@@ -4,7 +4,16 @@ import { FlatList, StyleSheet, ViewToken } from "react-native"
 import { ColorThemeType, SCREEN_WIDTH, COLORS } from "~Constants"
 import { FormattingUtils } from "~Utils"
 import { useThemedStyles } from "~Hooks"
-import { BaseIcon, BaseSpacer, BaseText, BaseView, LedgerBadge, PaginatedDot, PicassoAddressIcon } from "~Components"
+import {
+    BaseIcon,
+    BaseSpacer,
+    BaseText,
+    BaseView,
+    LedgerBadge,
+    PaginatedDot,
+    PicassoAddressIcon,
+    WatchedAccountBadge,
+} from "~Components"
 import { Contact, WalletAccount } from "~Model"
 import {
     selectContactByAddress,
@@ -20,6 +29,7 @@ type Props = {
     onAddContactPress?: (address: string) => void
     isFromAccountLedger?: boolean
     isToAccountLedger?: boolean
+    isObservedWallet?: boolean
 }
 
 enum PROVENANCE {
@@ -28,7 +38,14 @@ enum PROVENANCE {
 }
 
 export const TransferCard = memo(
-    ({ fromAddress, toAddresses, onAddContactPress, isFromAccountLedger, isToAccountLedger }: Props) => {
+    ({
+        fromAddress,
+        toAddresses,
+        onAddContactPress,
+        isFromAccountLedger,
+        isToAccountLedger,
+        isObservedWallet,
+    }: Props) => {
         const { LL } = useI18nContext()
 
         const { styles, theme } = useThemedStyles(baseStyles)
@@ -97,6 +114,7 @@ export const TransferCard = memo(
                 addressShort: string,
                 contactName?: string,
                 isLedger?: boolean,
+                _isObservedWallet?: boolean,
             ) => {
                 const provenanceText = provenance === PROVENANCE.FROM ? LL.FROM() : LL.TO()
                 return (
@@ -115,6 +133,12 @@ export const TransferCard = memo(
                                     {isLedger && (
                                         <>
                                             <LedgerBadge />
+                                            <BaseSpacer width={8} />
+                                        </>
+                                    )}
+                                    {_isObservedWallet && (
+                                        <>
+                                            <WatchedAccountBadge />
                                             <BaseSpacer width={8} />
                                         </>
                                     )}
@@ -157,9 +181,16 @@ export const TransferCard = memo(
                 const contactName = toContactNames[index]
                 const _address = toAddresses![index]
 
-                return renderAccount(PROVENANCE.TO, _address, addressShort, contactName, isToAccountLedger)
+                return renderAccount(
+                    PROVENANCE.TO,
+                    _address,
+                    addressShort,
+                    contactName,
+                    isToAccountLedger,
+                    isObservedWallet,
+                )
             },
-            [isToAccountLedger, renderAccount, toAddresses, toAddressesShort, toContactNames],
+            [isToAccountLedger, renderAccount, toAddresses, toAddressesShort, toContactNames, isObservedWallet],
         )
 
         const onViewableItemsChanged = useCallback(({ viewableItems }: { viewableItems: ViewToken[] }) => {

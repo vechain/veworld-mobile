@@ -31,7 +31,7 @@ import { Transaction } from "thor-devkit"
 import { AnalyticsEvent } from "~Constants"
 import { ContactType, DEVICE_TYPE } from "~Model"
 import { ContactManagementBottomSheet } from "../../ContactsScreen"
-import { AddressUtils } from "~Utils"
+import { AccountUtils, AddressUtils } from "~Utils"
 
 type Props = NativeStackScreenProps<RootStackParamListNFT, Routes.SEND_NFT_RECAP>
 
@@ -120,7 +120,13 @@ export const SendNFTRecapScreen = ({ route }: Props) => {
                             toAddresses={[route.params.receiverAddress]}
                             onAddContactPress={onAddContactPress}
                             isFromAccountLedger={selectedAccount.device?.type === DEVICE_TYPE.LEDGER}
-                            isToAccountLedger={receiverAccount?.device.type === DEVICE_TYPE.LEDGER}
+                            isToAccountLedger={
+                                receiverAccount?.device && receiverAccount?.device.type === DEVICE_TYPE.LEDGER
+                            }
+                            isObservedWallet={
+                                AccountUtils.isObservedAccount(receiverAccount) &&
+                                receiverAccount?.type === DEVICE_TYPE.LOCAL_WATCHED
+                            }
                         />
 
                         <BaseSpacer height={24} />

@@ -17,7 +17,7 @@ import { useNavigation } from "@react-navigation/native"
 import { Keyboard } from "react-native"
 import { useBottomSheetModal, useCameraBottomSheet } from "~Hooks"
 import HapticsService from "~Services/HapticsService"
-import { AddressUtils, BalanceUtils, BigNutils } from "~Utils"
+import { AccountUtils, AddressUtils, BalanceUtils, BigNutils } from "~Utils"
 import { ScanTarget, VET } from "~Constants"
 import { Routes } from "~Navigation"
 import { DEVICE_TYPE, WatchedAccount } from "~Model"
@@ -46,9 +46,17 @@ export const ObserveWalletScreen = () => {
 
     const findWalletOnChain = useCallback(
         async (_address: string) => {
+            let accountIndex = 1
+
+            for (const account of accounts) {
+                if (AccountUtils.isObservedAccount(account)) {
+                    accountIndex++
+                }
+            }
+
             const account: WatchedAccount = {
                 address: _address,
-                alias: "Observed Wallet 1",
+                alias: `Wallet ${accountIndex}`,
                 visible: true,
                 type: DEVICE_TYPE.LOCAL_WATCHED,
                 rootAddress: _address,
@@ -63,7 +71,7 @@ export const ObserveWalletScreen = () => {
             setWatchedAccount(account)
             openSelectAccountBottomSheet()
         },
-        [openSelectAccountBottomSheet, selectedNetwork, thor],
+        [accounts, openSelectAccountBottomSheet, selectedNetwork, thor],
     )
 
     const handleConfirmAccount = useCallback(() => {

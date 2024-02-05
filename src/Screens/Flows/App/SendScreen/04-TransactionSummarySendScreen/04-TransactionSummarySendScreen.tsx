@@ -1,7 +1,7 @@
 import React, { useCallback, useEffect, useMemo } from "react"
 import { NativeStackScreenProps } from "@react-navigation/native-stack"
 import { useAnalyticTracking, useTheme, useTransactionScreen, useTransferAddContact } from "~Hooks"
-import { AddressUtils, BigNutils, TransactionUtils } from "~Utils"
+import { AccountUtils, AddressUtils, BigNutils, TransactionUtils } from "~Utils"
 import { AnalyticsEvent, COLORS, GasPriceCoefficient } from "~Constants"
 import {
     BaseSpacer,
@@ -118,7 +118,13 @@ export const TransactionSummarySendScreen = ({ route }: Props) => {
                         toAddresses={[address]}
                         onAddContactPress={onAddContactPress}
                         isFromAccountLedger={selectedAccount.device?.type === DEVICE_TYPE.LEDGER}
-                        isToAccountLedger={receiverIsAccount?.device.type === DEVICE_TYPE.LEDGER}
+                        isToAccountLedger={
+                            receiverIsAccount?.device && receiverIsAccount?.device.type === DEVICE_TYPE.LEDGER
+                        }
+                        isObservedWallet={
+                            AccountUtils.isObservedAccount(receiverIsAccount) &&
+                            receiverIsAccount?.type === DEVICE_TYPE.LOCAL_WATCHED
+                        }
                     />
 
                     {!!pendingTransaction && (

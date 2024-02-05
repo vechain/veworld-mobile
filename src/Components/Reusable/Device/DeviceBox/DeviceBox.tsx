@@ -1,7 +1,7 @@
 import React, { useCallback } from "react"
 import { useThemedStyles } from "~Hooks"
 
-import { BaseCard, BaseIcon, BaseSpacer, BaseText, BaseView, LedgerBadge } from "~Components"
+import { BaseCard, BaseIcon, BaseSpacer, BaseText, BaseView, LedgerBadge, WatchedAccountBadge } from "~Components"
 import { BaseDevice, DEVICE_TYPE } from "~Model"
 import { Pressable, StyleSheet, ViewStyle } from "react-native"
 import { ColorThemeType } from "~Constants"
@@ -50,6 +50,13 @@ export const DeviceBox: React.FC<Props> = ({
                     {device?.type === DEVICE_TYPE.LEDGER && (
                         <>
                             <LedgerBadge />
+                            <BaseSpacer width={8} />
+                        </>
+                    )}
+
+                    {device?.type === DEVICE_TYPE.LOCAL_WATCHED && (
+                        <>
+                            <WatchedAccountBadge />
                             <BaseSpacer width={8} />
                         </>
                     )}
