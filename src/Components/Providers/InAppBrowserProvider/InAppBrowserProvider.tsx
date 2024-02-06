@@ -164,9 +164,11 @@ export const InAppBrowserProvider = ({ children }: Props) => {
 
             //TODO Check if discoverUrl is a valid URL
 
-            nav.navigate(Routes.BROWSER, {
-                initialUrl: discoverUrl ?? url,
-            })
+            if (discoverUrl) {
+                nav.navigate(Routes.BROWSER, {
+                    initialUrl: discoverUrl,
+                })
+            }
         } catch (e) {
             warn(ERROR_EVENTS.DAPP, "Invalid deep link", url)
         }
