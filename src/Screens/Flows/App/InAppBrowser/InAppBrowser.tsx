@@ -52,7 +52,7 @@ export const InAppBrowser: React.FC<Props> = ({ route }) => {
                         <WebView
                             ref={webviewRef as MutableRefObject<WebView>}
                             source={{
-                                uri: navigationState?.url ?? route.params.initialUrl,
+                                uri: navigationState?.url ?? route?.params?.initialUrl,
                             }}
                             userAgent={userAgent}
                             onNavigationStateChange={onNavigationStateChange}

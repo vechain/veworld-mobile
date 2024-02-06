@@ -4,7 +4,7 @@ import { BaseIcon, BaseText, BaseView } from "~Components"
 import { StyleSheet } from "react-native"
 import { useTheme } from "~Hooks"
 import { Routes } from "~Navigation"
-import { useNavigation } from "@react-navigation/native"
+import { StackActions, useNavigation } from "@react-navigation/native"
 
 export const URLBar = () => {
     const { navigationState } = useInAppBrowser()
@@ -34,7 +34,13 @@ export const URLBar = () => {
         if (nav.canGoBack()) {
             nav.goBack()
         } else {
-            nav.navigate(Routes.DISCOVER)
+            nav.dispatch({
+                ...StackActions.replace("TabStack", {
+                    screen: Routes.DISCOVER,
+                }),
+                source: undefined,
+                target: nav.getState().key,
+            })
         }
     }, [nav])
 

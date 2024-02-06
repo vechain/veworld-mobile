@@ -9,6 +9,7 @@ import { SafeAreaProvider } from "react-native-safe-area-context"
 import { useTheme } from "~Hooks"
 import {
     ApplicationSecurityProvider,
+    BaseText,
     BaseToast,
     ConnexContextProvider,
     TranslationProvider,
@@ -108,6 +109,20 @@ const Main = () => {
     )
 }
 
+const linking = {
+    prefixes: ["veworld://"],
+    config: {
+        screens: {
+            Browser: {
+                path: "discovery/:initialUrl",
+                parse: {
+                    initialUrl: url => `https://${url}`,
+                },
+            },
+        },
+    },
+}
+
 const NavigationProvider = ({ children }) => {
     const theme = useTheme()
 
@@ -122,7 +137,11 @@ const NavigationProvider = ({ children }) => {
     )
 
     return (
-        <NavigationContainer onReady={() => setReady(true)} theme={navigationTheme}>
+        <NavigationContainer
+            linking={linking}
+            onReady={() => setReady(true)}
+            theme={navigationTheme}
+            fallback={<BaseText>Loading...</BaseText>}>
             {ready ? children : null}
         </NavigationContainer>
     )

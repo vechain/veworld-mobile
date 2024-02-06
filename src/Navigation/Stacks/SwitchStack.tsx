@@ -118,7 +118,10 @@ export const SwitchStack = () => {
                         <Switch.Screen
                             name={Routes.BROWSER}
                             component={InAppBrowser}
-                            options={{ headerShown: false }}
+                            options={{
+                                headerShown: false,
+                                presentation: "fullScreenModal",
+                            }}
                         />
 
                         {BUY_FEATURE_ENABLED && (
