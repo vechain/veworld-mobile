@@ -1,4 +1,4 @@
-import React, { useCallback, useContext, useMemo, useRef, useState } from "react"
+import React, { useCallback, useContext, useEffect, useMemo, useRef, useState } from "react"
 import WebView, { WebViewMessageEvent, WebViewNavigation } from "react-native-webview"
 import { WindowRequest, WindowResponse } from "./types"
 import { AnalyticsEvent, ERROR_EVENTS, RequestMethods } from "~Constants"
@@ -22,6 +22,7 @@ import { compareAddresses } from "~Utils/AddressUtils/AddressUtils"
 import { showInfoToast, showWarningToast } from "~Components"
 import { useI18nContext } from "~i18n"
 import { BottomSheetModalMethods } from "@gorhom/bottom-sheet/lib/typescript/types"
+import { Linking } from "react-native"
 
 type ContextType = {
     webviewRef: React.MutableRefObject<WebView | undefined>
@@ -152,6 +153,34 @@ export const InAppBrowserProvider = ({ children }: Props) => {
             window.location.href = "${finalUrl}"
         `)
     }, [])
+
+    const handleDeepLink = useCallback((url: string | null) => {
+        if (!url) return
+
+        try {
+            const _url = new URL(url)
+
+            const discoverUrl = _url.searchParams.get("discoverUrl")
+
+            //TODO Check if discoverUrl is a valid URL
+
+            nav.navigate(Routes.BROWSER, {
+                initialUrl: discoverUrl ?? url,
+            })
+        } catch (e) {
+            warn(ERROR_EVENTS.DAPP, "Invalid deep link", url)
+        }
+    }, [])
+
+    useEffect(() => {
+        Linking.addListener("url", handleDeepLink)
+    }, [handleDeepLink])
+
+    useEffect(() => {
+        return () => {
+            Linking.getInitialURL().then(handleDeepLink)
+        }
+    }, [handleDeepLink])
 
     const switchNetwork = useCallback(
         (request: WindowRequest) => {
