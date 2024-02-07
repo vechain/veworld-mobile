@@ -102,7 +102,8 @@ export const HomeScreen = () => {
 
     const Actions: FastAction[] = useMemo(() => {
         let actions: FastAction[] = []
-        if (BUY_FEATURE_ENABLED) {
+        // account must not be observed to show the buy button
+        if (!AccountUtils.isObservedAccount(selectedAccount) && BUY_FEATURE_ENABLED) {
             actions.push({
                 name: LL.BTN_BUY(),
                 action: () => {
