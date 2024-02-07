@@ -1,4 +1,5 @@
 import { BaseDevice, LedgerDevice, LocalDevice } from "~Model/Device"
+import { DEVICE_TYPE } from "~Model/Wallet"
 
 /**
  * The model for an Account in the wallet
@@ -14,11 +15,16 @@ export interface Account {
     alias: string
     address: string
 }
+
 export interface WalletAccount extends Account {
     rootAddress: string
     index: number
     path?: string
     visible: boolean
+}
+
+export interface WatchedAccount extends WalletAccount {
+    type: DEVICE_TYPE.LOCAL_WATCHED
 }
 
 export interface AccountWithDevice extends WalletAccount {

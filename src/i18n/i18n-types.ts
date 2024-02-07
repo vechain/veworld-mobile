@@ -67,6 +67,18 @@ type RootTranslation = {
 	 */
 	BTN_CREATE_WALLET_TYPE_CREATE_NEW_SUBTITLE: string
 	/**
+	 * O​b​s​e​r​v​e​ ​w​a​l​l​e​t
+	 */
+	BTN_OBSERVE_WALLET: string
+	/**
+	 * O​b​s​e​r​v​e​d
+	 */
+	BTN_OBSERVED: string
+	/**
+	 * I​m​p​o​r​t​ ​a​ ​w​a​l​l​e​t​ ​a​d​d​r​e​s​s​ ​t​o​ ​o​n​l​y​ ​o​b​s​e​r​v​e​ ​t​h​i​s​ ​w​a​l​l​e​t
+	 */
+	BTN_OBSERVE_WALLET_SUBTITLE: string
+	/**
 	 * I​m​p​o​r​t​ ​w​a​l​l​e​t
 	 */
 	BTN_CREATE_WALLET_TYPE_IMPORT: string
@@ -290,6 +302,10 @@ type RootTranslation = {
 	 * Y​o​u​ ​c​a​n​c​e​l​l​e​d​ ​u​s​i​n​g​ ​F​a​c​e​ ​I​D​ ​t​o​ ​a​u​t​h​e​n​t​i​c​a​t​e​.​ ​Y​o​u​ ​m​u​s​t​ ​b​e​ ​a​u​t​h​e​n​t​i​c​a​t​e​d​ ​t​o​ ​u​s​e​ ​V​e​W​a​l​l​e​t​.​ ​D​o​ ​y​o​u​ ​w​a​n​t​ ​t​o​ ​l​o​g​ ​o​u​t​,​ ​o​r​ ​r​e​t​r​y​ ​a​u​t​h​e​n​t​i​c​a​t​i​n​g​?
 	 */
 	BD_ALERT_FACE_ID_CANCELLED: string
+	/**
+	 * Y​o​u​ ​c​a​n​ ​o​b​s​e​r​v​e​ ​a​ ​w​a​l​l​e​t​ ​b​y​ ​a​d​d​i​n​g​ ​i​t​s​ ​a​d​d​r​e​s​s​.​ ​T​h​i​s​ ​w​i​l​l​ ​a​l​l​o​w​ ​y​o​u​ ​t​o​ ​v​i​e​w​ ​t​h​e​ ​w​a​l​l​e​t​'​s​ ​b​a​l​a​n​c​e​ ​a​n​d​ ​t​r​a​n​s​a​c​t​i​o​n​s​.
+	 */
+	BD_OBSERVE_WALLET: string
 	/**
 	 * Y​o​u​ ​c​a​n​c​e​l​l​e​d​ ​u​s​i​n​g​ ​B​i​o​m​e​t​r​i​c​s​ ​t​o​ ​a​u​t​h​e​n​t​i​c​a​t​e​.​ ​Y​o​u​ ​m​u​s​t​ ​b​e​ ​a​u​t​h​e​n​t​i​c​a​t​e​d​ ​t​o​ ​u​s​e​ ​V​e​W​o​r​l​d​.​ ​D​o​ ​y​o​u​ ​w​a​n​t​ ​t​o​ ​R​e​s​e​t​ ​t​h​e​ ​W​a​l​l​e​t​,​ ​o​r​ ​R​e​t​r​y​ ​a​u​t​h​e​n​t​i​c​a​t​i​n​g​?
 	 */
@@ -575,6 +591,10 @@ type RootTranslation = {
 	 * I​m​p​o​r​t​ ​L​o​c​a​l​ ​W​a​l​l​e​t
 	 */
 	TITLE_WALLET_IMPORT_LOCAL: string
+	/**
+	 * O​b​s​e​r​v​e​ ​W​a​l​l​e​t
+	 */
+	TITLE_OBSERVE_WALLET: string
 	/**
 	 * F​a​c​e​ ​I​D​ ​C​a​n​c​e​l​l​e​d
 	 */
@@ -2893,6 +2913,18 @@ export type TranslationFunctions = {
 	 */
 	BTN_CREATE_WALLET_TYPE_CREATE_NEW_SUBTITLE: () => LocalizedString
 	/**
+	 * Observe wallet
+	 */
+	BTN_OBSERVE_WALLET: () => LocalizedString
+	/**
+	 * Observed
+	 */
+	BTN_OBSERVED: () => LocalizedString
+	/**
+	 * Import a wallet address to only observe this wallet
+	 */
+	BTN_OBSERVE_WALLET_SUBTITLE: () => LocalizedString
+	/**
 	 * Import wallet
 	 */
 	BTN_CREATE_WALLET_TYPE_IMPORT: () => LocalizedString
@@ -3116,6 +3148,10 @@ export type TranslationFunctions = {
 	 * You cancelled using Face ID to authenticate. You must be authenticated to use VeWallet. Do you want to log out, or retry authenticating?
 	 */
 	BD_ALERT_FACE_ID_CANCELLED: () => LocalizedString
+	/**
+	 * You can observe a wallet by adding its address. This will allow you to view the wallet's balance and transactions.
+	 */
+	BD_OBSERVE_WALLET: () => LocalizedString
 	/**
 	 * You cancelled using Biometrics to authenticate. You must be authenticated to use VeWorld. Do you want to Reset the Wallet, or Retry authenticating?
 	 */
@@ -3400,6 +3436,10 @@ export type TranslationFunctions = {
 	 * Import Local Wallet
 	 */
 	TITLE_WALLET_IMPORT_LOCAL: () => LocalizedString
+	/**
+	 * Observe Wallet
+	 */
+	TITLE_OBSERVE_WALLET: () => LocalizedString
 	/**
 	 * Face ID Cancelled
 	 */

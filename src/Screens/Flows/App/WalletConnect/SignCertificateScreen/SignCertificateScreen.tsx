@@ -31,7 +31,7 @@ import {
     useSetSelectedAccount,
     useSignMessage,
 } from "~Hooks"
-import { AccountWithDevice, DEVICE_TYPE, LedgerAccountWithDevice } from "~Model"
+import { AccountWithDevice, DEVICE_TYPE, LedgerAccountWithDevice, WatchedAccount } from "~Model"
 import { useI18nContext } from "~i18n"
 import { RootStackParamListSwitch, Routes } from "~Navigation"
 import { NativeStackScreenProps } from "@react-navigation/native-stack"
@@ -64,7 +64,7 @@ export const SignCertificateScreen: FC<Props> = ({ route }: Props) => {
         onClose: closeSelectAccountBottonSheet,
     } = useBottomSheetModal()
 
-    const setSelectedAccount = (account: AccountWithDevice) => {
+    const setSelectedAccount = (account: AccountWithDevice | WatchedAccount) => {
         onSetSelectedAccount({ address: account.address })
     }
 

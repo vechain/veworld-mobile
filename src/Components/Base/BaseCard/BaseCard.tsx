@@ -21,6 +21,7 @@ export const BaseCard = memo(
         selected,
         onPress,
         disableOpacityOnPressing = false,
+        ...otherProps
     }: ViewProps & Props) => {
         const { styles } = useThemedStyles(baseStyles)
 
@@ -34,6 +35,7 @@ export const BaseCard = memo(
 
         return (
             <BaseView
+                {...otherProps}
                 style={[
                     selected ? styles.selectedContainer : styles.unselectedContainer,
                     styles.container,

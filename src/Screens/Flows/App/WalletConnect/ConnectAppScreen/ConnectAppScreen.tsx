@@ -18,7 +18,7 @@ import {
     useWalletConnect,
 } from "~Components"
 import { useBottomSheetModal } from "~Hooks"
-import { AccountWithDevice } from "~Model"
+import { AccountWithDevice, WatchedAccount } from "~Model"
 import { RootStackParamListSwitch, Routes } from "~Navigation"
 import {
     addConnectedAppActivity,
@@ -30,7 +30,7 @@ import {
     useAppDispatch,
     useAppSelector,
 } from "~Storage/Redux"
-import { error, HexUtils, warn } from "~Utils"
+import { AccountUtils, error, HexUtils, warn } from "~Utils"
 import { useI18nContext } from "~i18n"
 import { AppConnectionRequests, AppInfo, UnknownAppMessage } from "~Screens"
 import { useSetSelectedAccount } from "~Hooks/useSetSelectedAccount"
@@ -57,6 +57,11 @@ export const ConnectAppScreen: FC<Props> = ({ route }: Props) => {
     const visibleAccounts = useAppSelector(selectVisibleAccounts)
     const selectedAccount = useAppSelector(selectSelectedAccount)
     const networks = useAppSelector(selectNetworks)
+
+    const validVisibleAccounts = useMemo(
+        () => visibleAccounts.filter(account => !AccountUtils.isObservedAccount(account)),
+        [visibleAccounts],
+    )
 
     const navBack = useCallback(() => {
         if (hasNavigatedBack.current) return
@@ -89,7 +94,13 @@ export const ConnectAppScreen: FC<Props> = ({ route }: Props) => {
         onClose: closeSelectAccountBottonSheet,
     } = useBottomSheetModal()
 
-    const setSelectedAccount = (account: AccountWithDevice) => {
+    useEffect(() => {
+        if (AccountUtils.isObservedAccount(selectedAccount)) {
+            openSelectAccountBottomSheet()
+        }
+    }, [openSelectAccountBottomSheet, selectedAccount])
+
+    const setSelectedAccount = (account: AccountWithDevice | WatchedAccount) => {
         onSetSelectedAccount({ address: account.address })
     }
 
@@ -251,12 +262,17 @@ export const ConnectAppScreen: FC<Props> = ({ route }: Props) => {
     }, [request, isInvalidChecked])
 
     const handleAccept = useCallback(async () => {
+        if (AccountUtils.isObservedAccount(selectedAccount)) {
+            openSelectAccountBottomSheet()
+            return
+        }
+
         if (request.type === "wallet-connect") {
             await processProposal(request.proposal)
         } else {
             addAppAndNavToRequest(request.initialRequest)
         }
-    }, [processProposal, request, addAppAndNavToRequest])
+    }, [processProposal, request, addAppAndNavToRequest, selectedAccount, openSelectAccountBottomSheet])
 
     return (
         <BaseSafeArea grow={1}>
@@ -322,7 +338,7 @@ export const ConnectAppScreen: FC<Props> = ({ route }: Props) => {
 
             <SelectAccountBottomSheet
                 closeBottomSheet={closeSelectAccountBottonSheet}
-                accounts={visibleAccounts}
+                accounts={validVisibleAccounts}
                 setSelectedAccount={setSelectedAccount}
                 selectedAccount={selectedAccount}
                 ref={selectAccountBottomSheetRef}

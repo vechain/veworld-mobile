@@ -1,9 +1,10 @@
 import { BottomSheetModalMethods } from "@gorhom/bottom-sheet/lib/typescript/types"
-import React from "react"
+import React, { useCallback } from "react"
 import { SelectAccountBottomSheet } from "~Components"
-import { AccountWithDevice, LocalAccountWithDevice } from "~Model"
+import { AccountWithDevice, LocalAccountWithDevice, WatchedAccount } from "~Model"
 import { DelegationType } from "~Model/Delegation"
 import { selectBalanceVisible, useAppSelector } from "~Storage/Redux"
+import { AccountUtils } from "~Utils"
 
 type Props = {
     onClose: () => void
@@ -25,13 +26,22 @@ export const SelectDelegationAccountBottomSheet = React.forwardRef<BottomSheetMo
             }
         }
 
+        const onAccountIsSelected = useCallback(
+            (account: AccountWithDevice | WatchedAccount) => {
+                // Just a type fallabck check. We should never get a WatchedAccount here since the filtering is coming from the store
+                if (AccountUtils.isObservedAccount(account)) return
+                setSelectedAccount(account)
+            },
+            [setSelectedAccount],
+        )
+
         return (
             <SelectAccountBottomSheet
                 onDismiss={onDismiss}
                 closeBottomSheet={onClose}
                 accounts={accounts}
-                setSelectedAccount={setSelectedAccount}
-                selectedAccount={selectedAccount}
+                setSelectedAccount={onAccountIsSelected}
+                selectedAccount={selectedAccount as AccountWithDevice}
                 ref={ref}
                 isVthoBalance
                 isBalanceVisible={isBalanceVisible}

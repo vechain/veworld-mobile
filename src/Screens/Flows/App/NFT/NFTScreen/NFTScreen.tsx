@@ -1,7 +1,7 @@
 import React, { useCallback, useMemo, useRef, useState } from "react"
 import { BaseView, Layout, QRCodeBottomSheet, SelectAccountBottomSheet } from "~Components"
 import { NftScreenHeader } from "./Components"
-import { AccountWithDevice } from "~Model"
+import { AccountWithDevice, WatchedAccount } from "~Model"
 import { isEmpty } from "lodash"
 import { NftLoader } from "./Components/NftLoader"
 import { useBottomSheetModal, useSetSelectedAccount } from "~Hooks"
@@ -40,7 +40,7 @@ export const NFTScreen = () => {
 
     const selectedAccount = useAppSelector(selectSelectedAccount)
 
-    const setSelectedAccount = (account: AccountWithDevice) => {
+    const setSelectedAccount = (account: AccountWithDevice | WatchedAccount) => {
         onSetSelectedAccount({ address: account.address })
     }
 

@@ -1,22 +1,33 @@
 import React, { memo, useMemo } from "react"
-import { StyleProp, StyleSheet, ViewStyle } from "react-native"
+import { StyleProp, StyleSheet, ViewProps, ViewStyle } from "react-native"
 import { useThemedStyles } from "~Hooks"
 import { ColorThemeType, VET, VTHO } from "~Constants"
-import { FormattingUtils } from "~Utils"
-import { AccountIcon, BaseIcon, BaseSpacer, BaseText, BaseTouchableBox, BaseView, LedgerBadge } from "~Components"
-import { AccountWithDevice, DEVICE_TYPE } from "~Model"
+import { AccountUtils, FormattingUtils } from "~Utils"
+import {
+    AccountIcon,
+    BaseIcon,
+    BaseSpacer,
+    BaseText,
+    BaseTouchableBox,
+    BaseView,
+    LedgerBadge,
+    WatchedAccountBadge,
+} from "~Components"
+import { AccountWithDevice, DEVICE_TYPE, WatchedAccount } from "~Model"
 import { selectVetBalanceByAccount, selectVthoBalanceByAccount, useAppSelector } from "~Storage/Redux"
 
 type Props = {
-    account: AccountWithDevice
-    onPress?: (account: AccountWithDevice) => void
+    account: AccountWithDevice | WatchedAccount
+    onPress?: (account: AccountWithDevice | WatchedAccount) => void
     selected?: boolean
     containerStyle?: StyleProp<ViewStyle>
     showOpacityWhenDisabled?: boolean
     showSelectAccountIcon?: boolean
     isVthoBalance?: boolean
     isBalanceVisible?: boolean
-}
+    formattedBalance?: string
+} & ViewProps
+
 export const AccountCard: React.FC<Props> = memo(
     ({
         account,
@@ -27,6 +38,8 @@ export const AccountCard: React.FC<Props> = memo(
         showSelectAccountIcon = false,
         isVthoBalance = false,
         isBalanceVisible = true,
+        formattedBalance,
+        testID,
     }: Props) => {
         const { styles, theme } = useThemedStyles(baseStyles)
         const vetBalance = useAppSelector(state => selectVetBalanceByAccount(state, account.address))
@@ -41,14 +54,29 @@ export const AccountCard: React.FC<Props> = memo(
                 return "•••• " + VET.symbol
             }
 
-            return `${isVthoBalance ? vthoBalance : vetBalance} ${isVthoBalance ? VTHO.symbol : VET.symbol}`
-        }, [isBalanceVisible, isVthoBalance, vetBalance, vthoBalance])
+            const computedVetBalance = formattedBalance ? formattedBalance : vetBalance
+
+            return `${isVthoBalance ? vthoBalance : computedVetBalance} ${isVthoBalance ? VTHO.symbol : VET.symbol}`
+        }, [isBalanceVisible, isVthoBalance, vetBalance, vthoBalance, formattedBalance])
 
         const humanAddress = useMemo(() => FormattingUtils.humanAddress(account.address, 4, 6), [account.address])
+
+        const accountWithDevice = useMemo(() => {
+            if (!AccountUtils.isObservedAccount(account)) {
+                return account as AccountWithDevice
+            }
+        }, [account])
+
+        const watchedAccount = useMemo(() => {
+            if (AccountUtils.isObservedAccount(account)) {
+                return account as WatchedAccount
+            }
+        }, [account])
 
         return (
             <BaseView w={100} flexDirection="row" style={containerStyle}>
                 <BaseTouchableBox
+                    testID={testID}
                     haptics="Light"
                     disabled={!onPress}
                     action={() => onPress?.(account)}
@@ -63,10 +91,11 @@ export const AccountCard: React.FC<Props> = memo(
                                 {account.alias}
                             </BaseText>
                             <BaseView flexDirection="row" mt={3}>
-                                {account.device?.type === DEVICE_TYPE.LEDGER && <LedgerBadge mr={8} />}
+                                {accountWithDevice?.device?.type === DEVICE_TYPE.LEDGER && <LedgerBadge mr={8} />}
+                                {watchedAccount?.type === DEVICE_TYPE.LOCAL_WATCHED && <WatchedAccountBadge />}
                                 <BaseView flex={1}>
                                     <BaseText style={styles.wallet} ellipsizeMode="tail" numberOfLines={1}>
-                                        {account.device.alias}
+                                        {accountWithDevice?.device.alias}
                                     </BaseText>
                                 </BaseView>
                             </BaseView>

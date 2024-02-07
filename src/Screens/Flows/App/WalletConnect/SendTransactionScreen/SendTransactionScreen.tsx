@@ -37,7 +37,7 @@ import { Transaction } from "thor-devkit"
 import { TransactionDetails, UnknownAppMessage } from "~Screens"
 import { AnalyticsEvent, RequestMethods } from "~Constants"
 import { useInAppBrowser } from "~Components/Providers/InAppBrowserProvider"
-import { AccountWithDevice } from "~Model"
+import { AccountWithDevice, WatchedAccount } from "~Model"
 
 type Props = NativeStackScreenProps<RootStackParamListSwitch, Routes.CONNECTED_APP_SEND_TRANSACTION_SCREEN>
 
@@ -91,7 +91,7 @@ export const SendTransactionScreen: FC<Props> = ({ route }: Props) => {
         onClose: closeSelectAccountBottonSheet,
     } = useBottomSheetModal()
 
-    const setSelectedAccount = (account: AccountWithDevice) => {
+    const setSelectedAccount = (account: AccountWithDevice | WatchedAccount) => {
         onSetSelectedAccount({ address: account.address })
     }
 

@@ -31,3 +31,7 @@ export const goToSend = async () => {
 export const isPinRequested = async () => {
     return await isPresentText("Insert your 6-digit PIN")
 }
+
+export const goToWalletManagement = async () => {
+    await clickById("HomeScreen_WalletManagementButton")
+}

@@ -97,7 +97,6 @@ export const AccountSlice = createSlice({
             }
             state.accounts = updatedAccounts
         },
-
         renameAccount: (state, action: PayloadAction<{ address: string; alias: string }>) => {
             const { address, alias } = action.payload
             const accountExistsIndex = state.accounts.findIndex(account =>
@@ -109,7 +108,6 @@ export const AccountSlice = createSlice({
 
             state.accounts[accountExistsIndex].alias = alias
         },
-
         setAccountVisibility: (state, action: PayloadAction<{ address: string; visibile: boolean }>) => {
             const { address, visibile } = action.payload
             const accountExistsIndex = state.accounts.findIndex(account =>
@@ -128,6 +126,7 @@ export const AccountSlice = createSlice({
                 state.accounts[accountExistsIndex].visible = !state.accounts[accountExistsIndex].visible
             }
         },
+
         resetAccountState: () => initialAccountState,
     },
 })

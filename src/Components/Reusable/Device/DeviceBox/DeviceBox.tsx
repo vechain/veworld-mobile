@@ -1,7 +1,7 @@
 import React, { useCallback } from "react"
 import { useThemedStyles } from "~Hooks"
 
-import { BaseCard, BaseIcon, BaseSpacer, BaseText, BaseView, LedgerBadge } from "~Components"
+import { BaseCard, BaseIcon, BaseSpacer, BaseText, BaseView, LedgerBadge, WatchedAccountBadge } from "~Components"
 import { BaseDevice, DEVICE_TYPE } from "~Model"
 import { Pressable, StyleSheet, ViewStyle } from "react-native"
 import { ColorThemeType } from "~Constants"
@@ -15,6 +15,7 @@ type Props = {
     drag?: () => void
     isActive?: boolean
     cardStyle?: ViewStyle
+    testID?: string
 }
 
 export const DeviceBox: React.FC<Props> = ({
@@ -25,6 +26,7 @@ export const DeviceBox: React.FC<Props> = ({
     drag,
     isActive = true,
     cardStyle,
+    testID,
 }) => {
     const { styles, theme } = useThemedStyles(baseStyles)
 
@@ -37,7 +39,7 @@ export const DeviceBox: React.FC<Props> = ({
 
     const deviceBoxBody = useCallback(
         () => (
-            <BaseCard style={[styles.card, cardStyle]}>
+            <BaseCard style={[styles.card, cardStyle]} testID="DeviceBox">
                 <BaseView flexDirection="row" flex={1}>
                     {isEdit && (
                         <>
@@ -50,6 +52,13 @@ export const DeviceBox: React.FC<Props> = ({
                     {device?.type === DEVICE_TYPE.LEDGER && (
                         <>
                             <LedgerBadge />
+                            <BaseSpacer width={8} />
+                        </>
+                    )}
+
+                    {device?.type === DEVICE_TYPE.LOCAL_WATCHED && (
+                        <>
+                            <WatchedAccountBadge />
                             <BaseSpacer width={8} />
                         </>
                     )}
@@ -69,6 +78,7 @@ export const DeviceBox: React.FC<Props> = ({
     return onDeviceSelected ? (
         <BaseView style={styles.touchableContainer}>
             <PressableComponent
+                testID={testID}
                 disabled={!isActive}
                 style={styles.deviceBoxPressable}
                 onPress={isEdit ? undefined : onDeviceSelected?.(device!)}>

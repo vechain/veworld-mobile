@@ -4,8 +4,8 @@ import { useThemedStyles } from "~Hooks"
 import { ColorThemeType } from "~Constants"
 import { BaseIcon, BaseTouchable, BaseView } from "~Components/Base"
 
-type Props = { onPress?: () => void }
-export const DeleteUnderlay: React.FC<Props> = ({ onPress }) => {
+type Props = { onPress?: () => void; isObservable: boolean }
+export const DeleteUnderlay: React.FC<Props> = ({ onPress, isObservable }) => {
     const { styles, theme } = useThemedStyles(baseStyles)
 
     return (
@@ -17,7 +17,7 @@ export const DeleteUnderlay: React.FC<Props> = ({ onPress }) => {
                     bg={theme.colors.danger}
                     color={theme.colors.card}
                     style={styles.deleteIcon}
-                    testID="DeleteUnderlay_DeleteIcon"
+                    testID={isObservable ? "DeleteUnderlay_DeleteIcon_observable" : "DeleteUnderlay_DeleteIcon"}
                 />
             </BaseTouchable>
         </BaseView>

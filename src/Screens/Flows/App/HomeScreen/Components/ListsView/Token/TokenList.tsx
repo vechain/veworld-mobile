@@ -16,7 +16,7 @@ import { AnimatedChartCard } from "./AnimatedChartCard"
 import { FungibleTokenWithBalance } from "~Model"
 import { RemoveCustomTokenBottomSheet } from "../../RemoveCustomTokenBottomSheet"
 import { SwipeableItemImperativeRef } from "react-native-swipeable-item"
-import { BalanceUtils } from "~Utils"
+import { AccountUtils, BalanceUtils } from "~Utils"
 import { Routes } from "~Navigation"
 import { useNavigation } from "@react-navigation/native"
 
@@ -91,13 +91,16 @@ export const TokenList = memo(({ isEdit, isBalanceVisible, ...animatedViewProps 
 
             if (!isEdit && isTokenBalance) {
                 closeOtherSwipeableItems()
+
+                if (AccountUtils.isObservedAccount(selectedAccount)) return
+
                 nav.navigate(Routes.SELECT_AMOUNT_SEND, {
                     token,
                     initialRoute: Routes.HOME,
                 })
             }
         },
-        [nav, closeOtherSwipeableItems, isEdit],
+        [isEdit, closeOtherSwipeableItems, selectedAccount, nav],
     )
 
     const handleTrashIconPress = useCallback(

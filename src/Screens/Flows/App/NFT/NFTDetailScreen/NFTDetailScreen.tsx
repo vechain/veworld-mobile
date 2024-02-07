@@ -6,13 +6,14 @@ import { BaseSpacer, BaseView, FadeoutButton, Layout, TransactionStatusBox, show
 import { Linking } from "react-native"
 import { useCopyClipboard, useTabBarBottomMargin } from "~Hooks"
 import { useI18nContext } from "~i18n"
-import { DateUtils, FormattingUtils } from "~Utils"
+import { AccountUtils, DateUtils, FormattingUtils } from "~Utils"
 import { InfoSectionView, NFTDetailImage } from "./Components"
 import {
     isBlacklistedCollection,
     selectCollectionWithContractAddress,
     selectNFTWithAddressAndTokenId,
     selectPendingTx,
+    selectSelectedAccount,
     useAppSelector,
 } from "~Storage/Redux"
 import { striptags } from "striptags"
@@ -32,6 +33,8 @@ export const NFTDetailScreen = ({ route }: Props) => {
     const nav = useNavigation()
     const { onCopyToClipboard } = useCopyClipboard()
     const { iosOnlyTabBarBottomMargin } = useTabBarBottomMargin()
+
+    const selectedAccount = useAppSelector(selectSelectedAccount)
 
     const collection = useAppSelector(state =>
         selectCollectionWithContractAddress(state, route.params.collectionAddress!),
@@ -74,6 +77,25 @@ export const NFTDetailScreen = ({ route }: Props) => {
         },
         [LL, onCopyToClipboard],
     )
+
+    const RenderSendButton = useMemo(() => {
+        const isObserved = !!AccountUtils.isObservedAccount(selectedAccount)
+
+        if (!isObserved) {
+            return (
+                <FadeoutButton
+                    disabled={!!isPendingTx}
+                    title={LL.SEND_TOKEN_TITLE().toUpperCase()}
+                    action={onSendPress}
+                    bottom={0}
+                    mx={0}
+                    width={"auto"}
+                />
+            )
+        } else {
+            return null
+        }
+    }, [LL, isPendingTx, onSendPress, selectedAccount])
 
     return (
         <Layout
@@ -161,16 +183,7 @@ export const NFTDetailScreen = ({ route }: Props) => {
                 </BaseView>
             }
             _iosOnlyTabBarBottomMargin={iosOnlyTabBarBottomMargin}
-            footer={
-                <FadeoutButton
-                    disabled={!!isPendingTx}
-                    title={LL.SEND_TOKEN_TITLE().toUpperCase()}
-                    action={onSendPress}
-                    bottom={0}
-                    mx={0}
-                    width={"auto"}
-                />
-            }
+            footer={RenderSendButton}
         />
     )
 }

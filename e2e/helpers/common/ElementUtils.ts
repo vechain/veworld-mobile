@@ -187,3 +187,11 @@ export const isPresentId = retryDecorator(
 export const sleep = (milliseconds: number) => {
     return new Promise(resolve => setTimeout(resolve, milliseconds))
 }
+
+export const idShouldBeVisibleTapped = retryDecorator(
+    async (text: string, options?: { timeout?: number }) =>
+        await waitFor(element(by.id(text)))
+            .toBeVisible()
+            .withTimeout(options?.timeout ?? DEFAULT_TIMEOUT),
+    { retries: 3 },
+)

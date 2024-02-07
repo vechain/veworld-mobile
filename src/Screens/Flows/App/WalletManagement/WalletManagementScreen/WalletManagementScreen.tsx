@@ -1,8 +1,8 @@
-import React, { useCallback, useRef, useState } from "react"
+import React, { useCallback, useMemo, useRef, useState } from "react"
 import { BaseView, DeviceBox, Layout, RequireUserPassword, SwipeableRow, showWarningToast } from "~Components"
 import { BaseDevice, Device } from "~Model"
 import { setDeviceState, useAppSelector } from "~Storage/Redux"
-import { selectDevices } from "~Storage/Redux/Selectors"
+import { selectAccounts, selectDevices } from "~Storage/Redux/Selectors"
 import { RemoveWalletWarningBottomSheet, WalletManagementHeader } from "./components"
 import { useWalletDeletion } from "./hooks"
 import { StyleSheet } from "react-native"
@@ -13,15 +13,18 @@ import { useDispatch } from "react-redux"
 import { useI18nContext } from "~i18n"
 import { useNavigation } from "@react-navigation/native"
 import { Routes } from "~Navigation"
+import { AccountUtils } from "~Utils"
 
 export const WalletManagementScreen = () => {
     const { tabBarBottomMargin } = useTabBarBottomMargin()
     const devices = useAppSelector(selectDevices)
+    const accounts = useAppSelector(selectAccounts)
     const [selectedDevice, setSelectedDevice] = useState<Device>()
     const [deviceToRemove, setDeviceToRemove] = useState<Device>()
     const { deleteWallet } = useWalletDeletion(selectedDevice)
     const { LL } = useI18nContext()
     const dispatch = useDispatch()
+
     const { isPasswordPromptOpen, handleClosePasswordModal, onPasswordSuccess, checkIdentityBeforeOpening } =
         useCheckIdentity({
             onIdentityConfirmed: deleteWallet,
@@ -41,6 +44,18 @@ export const WalletManagementScreen = () => {
             ref?.close()
         })
     }, [swipeableItemRefs])
+
+    const allDevicesAndObservedAccounts = useMemo(() => {
+        let allDevices: Device[] = [...devices]
+
+        for (const account of accounts) {
+            if (AccountUtils.isObservedAccount(account)) {
+                allDevices.push({ ...account, wallet: "", position: -1 })
+            }
+        }
+
+        return allDevices
+    }, [accounts, devices])
 
     const setIsEdit = useCallback(
         (_isEdit: boolean) => {
@@ -68,13 +83,18 @@ export const WalletManagementScreen = () => {
 
     const onTrashIconPress = useCallback(
         (item: Device) => () => {
-            if (devices.length > 1) {
+            if (AccountUtils.isObservedAccount(item)) {
                 setSelectedDevice(item)
                 openRemoveWalletBottomSheet()
             } else {
-                showWarningToast({
-                    text1: LL.WALLET_MANAGEMENT_NOTIFICATION_LAST_WALLET(),
-                })
+                if (devices.length > 1) {
+                    setSelectedDevice(item)
+                    openRemoveWalletBottomSheet()
+                } else {
+                    showWarningToast({
+                        text1: LL.WALLET_MANAGEMENT_NOTIFICATION_LAST_WALLET(),
+                    })
+                }
             }
         },
         [LL, devices.length, openRemoveWalletBottomSheet],
@@ -131,7 +151,7 @@ export const WalletManagementScreen = () => {
             fixedBody={
                 <BaseView style={styles.view} mb={tabBarBottomMargin}>
                     <DraggableFlatList<Device>
-                        data={devices}
+                        data={allDevicesAndObservedAccounts}
                         extraData={isEdit}
                         onDragEnd={handleDragEnd}
                         keyExtractor={device => device.rootAddress}
