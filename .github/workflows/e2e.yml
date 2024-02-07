@@ -21,7 +21,7 @@ env:
 
 jobs:
     run-e2e-tests:
-        runs-on: macos-latest-xl
+        runs-on: macos
         steps:
 
             # Checkout repository
@@ -197,23 +197,3 @@ jobs:
                 else
                   echo "STATUS=${{ steps.test_app_android.outcome }}" >> "$GITHUB_OUTPUT"
                 fi
-            
-            # Post results to slack
-            - name: Post to a Slack channel
-              if: always()
-              uses: slackapi/slack-github-action@v1.24.0
-              with:
-                # Slack channel id, channel name, or user id to post message.
-                # See also: https://api.slack.com/methods/chat.postMessage#channels
-                # You can pass in multiple channels to post to by providing a comma-delimited list of channel IDs.
-                channel-id: ${{ secrets.SLACK_VEWORLD_CHANNEL_ID }}
-                slack-message: |
-                    🖥️ Platform: *${{ inputs.platform }}*
-                    🧱 Build Status: *${{ steps.combine_build_statuses.outputs.STATUS }}*
-                    🚀 E2E Status: *${{ steps.combine_test_statuses.outputs.STATUS }}*
-                    🌿 Branch: *${{ github.ref_name }}*
-                    🔨 Commit: *${{ github.actor }}* [${{ github.sha.short }}](${{ github.event.head_commit.url }})
-                    🔗 Run: ${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}
-                    📈 Cucumber Report: ${{ steps.parse_report_url.outputs.report_url || 'Not found.' }}
-              env:
-                SLACK_BOT_TOKEN: ${{ secrets.SLACK_VEWORLD_BOT_TOKEN }}
