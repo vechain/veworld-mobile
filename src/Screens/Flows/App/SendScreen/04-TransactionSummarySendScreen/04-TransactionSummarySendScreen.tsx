@@ -34,6 +34,8 @@ import Animated, { interpolateColor, useAnimatedStyle, useSharedValue, withTimin
 import { StyleSheet } from "react-native"
 import { getCoinGeckoIdBySymbol, useExchangeRate } from "~Api/Coingecko"
 
+import { NotEnoughGasModal } from "./Modal/NotEnoughGasModal"
+
 type Props = NativeStackScreenProps<RootStackParamListHome, Routes.TRANSACTION_SUMMARY_SEND>
 
 export const TransactionSummarySendScreen = ({ route }: Props) => {
@@ -186,6 +188,7 @@ export const TransactionSummarySendScreen = ({ route }: Props) => {
                     />
 
                     <BaseSpacer height={12} />
+                    <NotEnoughGasModal isVisible={!isEnoughGas} />
                 </BaseView>
             }
             footer={
