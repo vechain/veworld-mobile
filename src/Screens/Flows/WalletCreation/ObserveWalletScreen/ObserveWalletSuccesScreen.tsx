@@ -54,7 +54,7 @@ export const ObserveWalletSuccesScreen: FC<Props> = ({ route }) => {
                                 action={onButtonPress}
                                 w={100}
                                 title={LL.BTN_CREATE_WALLET_SUCCESS()}
-                                testID="GET_STARTED_BTN"
+                                testID="observe-wallet-confirm-operation"
                                 haptics="Success"
                             />
                         </BaseView>

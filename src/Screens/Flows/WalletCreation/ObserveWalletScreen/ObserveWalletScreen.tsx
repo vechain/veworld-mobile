@@ -150,6 +150,7 @@ export const ObserveWalletScreen = () => {
                                 <BaseSpacer height={20} />
 
                                 <BaseTextInput
+                                    testID="observe-wallet-address-input"
                                     placeholder="0x..."
                                     label={LL.SEND_PLEASE_TYPE_ADDRESS()}
                                     errorMessage={error}
@@ -178,6 +179,7 @@ export const ObserveWalletScreen = () => {
                     <>
                         <BaseView w={100}>
                             <BaseButton
+                                testID="observe-wallet-confirm-button"
                                 action={onImport}
                                 disabled={!address || !!error}
                                 w={100}

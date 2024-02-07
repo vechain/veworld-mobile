@@ -31,6 +31,7 @@ export const SelectWatchedAccountBottomSheet = React.forwardRef<BottomSheetModal
                 <BaseSpacer height={12} />
                 {!!account && (
                     <AccountCard
+                        testID="observe-wallet-account-card"
                         account={account}
                         onPress={handlePress}
                         isBalanceVisible={isBalanceVisible}

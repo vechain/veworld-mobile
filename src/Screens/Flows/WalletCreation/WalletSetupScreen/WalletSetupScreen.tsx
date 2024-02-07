@@ -92,6 +92,7 @@ export const WalletSetupScreen = () => {
                         {userHasOnboarded && (
                             <>
                                 <BaseTouchableBox
+                                    testID="import-observe-wallet-button"
                                     haptics="Medium"
                                     action={onObserveWallet}
                                     py={16}

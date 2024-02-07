@@ -15,6 +15,7 @@ type Props = {
     drag?: () => void
     isActive?: boolean
     cardStyle?: ViewStyle
+    testID?: string
 }
 
 export const DeviceBox: React.FC<Props> = ({
@@ -25,6 +26,7 @@ export const DeviceBox: React.FC<Props> = ({
     drag,
     isActive = true,
     cardStyle,
+    testID,
 }) => {
     const { styles, theme } = useThemedStyles(baseStyles)
 
@@ -37,7 +39,7 @@ export const DeviceBox: React.FC<Props> = ({
 
     const deviceBoxBody = useCallback(
         () => (
-            <BaseCard style={[styles.card, cardStyle]}>
+            <BaseCard style={[styles.card, cardStyle]} testID="DeviceBox">
                 <BaseView flexDirection="row" flex={1}>
                     {isEdit && (
                         <>
@@ -76,6 +78,7 @@ export const DeviceBox: React.FC<Props> = ({
     return onDeviceSelected ? (
         <BaseView style={styles.touchableContainer}>
             <PressableComponent
+                testID={testID}
                 disabled={!isActive}
                 style={styles.deviceBoxPressable}
                 onPress={isEdit ? undefined : onDeviceSelected?.(device!)}>

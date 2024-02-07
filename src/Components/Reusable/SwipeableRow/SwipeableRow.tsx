@@ -6,6 +6,7 @@ import { TouchableOpacity } from "react-native-gesture-handler"
 import { Pressable, StyleSheet } from "react-native"
 import { useThemedStyles } from "~Hooks"
 import { ColorThemeType } from "~Constants"
+import { DEVICE_TYPE } from "~Model"
 
 type Props<T> = {
     item: T
@@ -99,7 +100,14 @@ export const SwipeableRow = <T,>({
                 }}
                 swipeEnabled={swipeEnabled}
                 item={item}
-                renderUnderlayLeft={() => customUnderlay || <DeleteUnderlay onPress={onTrashIconPress} />}
+                renderUnderlayLeft={() =>
+                    customUnderlay || (
+                        <DeleteUnderlay
+                            onPress={onTrashIconPress}
+                            isObservable={(item as { type: string })?.type === DEVICE_TYPE.LOCAL_WATCHED}
+                        />
+                    )
+                }
                 snapPointsLeft={snapPointsLeft || [58]}
                 onChange={handleSwipe}>
                 <BaseView style={styles.touchableContainer}>

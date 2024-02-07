@@ -1,5 +1,5 @@
 import React, { memo, useMemo } from "react"
-import { StyleProp, StyleSheet, ViewStyle } from "react-native"
+import { StyleProp, StyleSheet, ViewProps, ViewStyle } from "react-native"
 import { useThemedStyles } from "~Hooks"
 import { ColorThemeType, VET, VTHO } from "~Constants"
 import { AccountUtils, FormattingUtils } from "~Utils"
@@ -26,7 +26,8 @@ type Props = {
     isVthoBalance?: boolean
     isBalanceVisible?: boolean
     formattedBalance?: string
-}
+} & ViewProps
+
 export const AccountCard: React.FC<Props> = memo(
     ({
         account,
@@ -38,6 +39,7 @@ export const AccountCard: React.FC<Props> = memo(
         isVthoBalance = false,
         isBalanceVisible = true,
         formattedBalance,
+        testID,
     }: Props) => {
         const { styles, theme } = useThemedStyles(baseStyles)
         const vetBalance = useAppSelector(state => selectVetBalanceByAccount(state, account.address))
@@ -74,6 +76,7 @@ export const AccountCard: React.FC<Props> = memo(
         return (
             <BaseView w={100} flexDirection="row" style={containerStyle}>
                 <BaseTouchableBox
+                    testID={testID}
                     haptics="Light"
                     disabled={!onPress}
                     action={() => onPress?.(account)}

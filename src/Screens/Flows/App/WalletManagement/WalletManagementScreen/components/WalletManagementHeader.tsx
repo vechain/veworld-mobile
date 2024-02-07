@@ -47,6 +47,7 @@ export const WalletManagementHeader = ({ isEdit, setIsEdit, goToCreateWalletFlow
                         )}
 
                         <BaseButton
+                            testID="add-wallet-button"
                             haptics="Light"
                             action={goToCreateWalletFlow}
                             bgColor={theme.colors.secondary}
