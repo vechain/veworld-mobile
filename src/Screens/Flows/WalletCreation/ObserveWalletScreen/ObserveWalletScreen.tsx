@@ -80,27 +80,35 @@ export const ObserveWalletScreen = () => {
         !!_watchedAccount && nav.navigate(Routes.OBSERVE_WALLET_CONFIRMATION, { account: _watchedAccount })
     }, [LL, _watchedAccount, nav])
 
-    const onImport = useCallback(() => {
-        // Try to close the keyboard. Might come in handy if the user is using the camera to scan a QR code
-        Keyboard.dismiss()
+    const onImport = useCallback(
+        (_address?: string) => {
+            // Try to close the keyboard. Might come in handy if the user is using the camera to scan a QR code
+            Keyboard.dismiss()
 
-        // check if wallet is already observed - imported - if so, show error message
-        let isWalletAlreadyImported = false
-
-        for (const account of accounts) {
-            if (AddressUtils.compareAddresses(account.address, address)) {
-                isWalletAlreadyImported = true
-                break
+            const addressIsValid = AddressUtils.isValid(_address ?? address)
+            if (!addressIsValid) {
+                showErrorToast({ text1: LL.ERROR_INVALID_ADDRESS() })
             }
-        }
 
-        if (isWalletAlreadyImported) {
-            showErrorToast({ text1: LL.ERROR_WALLET_ALREADY_EXISTS() })
-        } else {
-            // find wallet in the network and present the wallet details
-            findWalletOnChain(address)
-        }
-    }, [LL, accounts, address, findWalletOnChain])
+            // check if wallet is already observed - imported - if so, show error message
+            let isWalletAlreadyImported = false
+
+            for (const account of accounts) {
+                if (AddressUtils.compareAddresses(account.address, address)) {
+                    isWalletAlreadyImported = true
+                    break
+                }
+            }
+
+            if (isWalletAlreadyImported) {
+                showErrorToast({ text1: LL.ERROR_WALLET_ALREADY_EXISTS() })
+            } else {
+                // find wallet in the network and present the wallet details
+                findWalletOnChain(_address ?? address)
+            }
+        },
+        [LL, accounts, address, findWalletOnChain],
+    )
 
     const { RenderCameraModal, handleOpenCamera } = useCameraBottomSheet({
         onScan: onImport,
@@ -129,7 +137,6 @@ export const ObserveWalletScreen = () => {
     }, [])
 
     const handleOnIconPress = useCallback(() => {
-        Keyboard.dismiss()
         handleOpenCamera()
     }, [handleOpenCamera])
 
@@ -157,7 +164,7 @@ export const ObserveWalletScreen = () => {
                                     setValue={handleOnSetAddress}
                                     value={address}
                                     autoFocus
-                                    onIconPress={() => (address ? onClearAddress() : handleOnIconPress)}
+                                    onIconPress={() => (address ? onClearAddress() : handleOnIconPress())}
                                     rightIcon={address ? "close" : "qrcode-scan"}
                                 />
 
