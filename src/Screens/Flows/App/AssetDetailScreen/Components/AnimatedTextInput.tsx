@@ -23,7 +23,10 @@ export const BaseAnimatedText = (props: TextProps): JSX.Element => {
 
     return (
         <AnimatedTextInput
+            // workarounds for android crashing when using the keyboard
             editable={false}
+            keyboardType="email-address"
+            autoCorrect={false}
             style={[style || undefined]}
             underlineColorAndroid="transparent"
             value={text.value}
