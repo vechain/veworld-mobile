@@ -23,6 +23,9 @@ export const BaseSearchInput = memo(({ placeholder = "Search", value, setValue, 
     return (
         <BaseView style={styles.container}>
             <TextInput
+                // workarounds for android crashing when using the keyboard
+                keyboardType="email-address"
+                autoCorrect={false}
                 style={styles.input}
                 placeholder={placeholder}
                 placeholderTextColor={placeholderColor}

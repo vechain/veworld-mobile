@@ -64,6 +64,9 @@ const BaseTextInputComponent = forwardRef<TextInput, BaseTextInputProps>(
                             },
                             style,
                         ]}
+                        // workarounds for android crashing when using the keyboard
+                        keyboardType="email-address"
+                        autoCorrect={false}
                         placeholder={placeholder}
                         placeholderTextColor={placeholderColor}
                         onChangeText={setValue}
