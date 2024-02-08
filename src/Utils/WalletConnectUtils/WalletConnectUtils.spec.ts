@@ -24,6 +24,7 @@ describe("WalletConnectUtils", () => {
                 id: 1686759172436187,
                 params: {
                     expiry: 1686759476,
+                    expiryTimestamp: 1686759476,
                     id: 1686759172436187,
                     optionalNamespaces: {},
                     pairingTopic: "39b9a1788bc80abe3d4bd4c94bfbff873b8d4029dda0de4a65c7ca7dc018e074",

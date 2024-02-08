@@ -2384,6 +2384,18 @@ type RootTranslation = {
 	 */
 	SEND_LEDGER_TITLE_SB: string
 	/**
+	 * I​N​S​U​F​F​I​C​I​E​N​T​ ​G​A​S
+	 */
+	SEND_ACCEPT_NO_GAS_TITLE: string
+	/**
+	 * I​ ​U​N​D​E​R​S​T​A​N​D
+	 */
+	SEND_ACCEPT_NO_GAS_ACCEPT: string
+	/**
+	 * V​T​H​O​ ​i​s​ ​t​h​e​ ​g​a​s​ ​t​o​k​e​n​ ​(​n​o​t​ ​V​E​T​)​.​ ​B​u​y​ ​o​r​ ​t​r​a​n​s​f​e​r​ ​s​o​m​e​ ​V​T​H​O​ ​i​n​t​o​ ​y​o​u​r​ ​a​c​c​o​u​n​t​ ​t​o​ ​p​e​r​f​o​r​m​ ​t​h​i​s​ ​t​r​a​n​s​a​c​t​i​o​n​.
+	 */
+	SEND_ACCEPT_NO_GAS_MESSAGE: string
+	/**
 	 * P​l​e​a​s​e​ ​f​o​l​l​o​w​ ​t​h​e​ ​i​n​s​t​r​u​c​t​i​o​n​s​ ​b​e​l​o​w​ ​t​o​ ​s​i​g​n​ ​t​h​e​ ​c​e​r​t​i​f​i​c​a​t​e​ ​w​i​t​h​ ​y​o​u​r​ ​L​e​d​g​e​r
 	 */
 	LEDGER_CERT_TITLE_SB: string
@@ -5201,6 +5213,18 @@ Try reconnect your device to the internet.
 	 * Please follow the instructions below to sign the transaction with your Ledger
 	 */
 	SEND_LEDGER_TITLE_SB: () => LocalizedString
+	/**
+	 * INSUFFICIENT GAS
+	 */
+	SEND_ACCEPT_NO_GAS_TITLE: () => LocalizedString
+	/**
+	 * I UNDERSTAND
+	 */
+	SEND_ACCEPT_NO_GAS_ACCEPT: () => LocalizedString
+	/**
+	 * VTHO is the gas token (not VET). Buy or transfer some VTHO into your account to perform this transaction.
+	 */
+	SEND_ACCEPT_NO_GAS_MESSAGE: () => LocalizedString
 	/**
 	 * Please follow the instructions below to sign the certificate with your Ledger
 	 */

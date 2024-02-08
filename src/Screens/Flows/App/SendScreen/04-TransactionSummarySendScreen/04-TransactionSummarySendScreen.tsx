@@ -33,6 +33,7 @@ import { ContactManagementBottomSheet } from "../../ContactsScreen"
 import Animated, { interpolateColor, useAnimatedStyle, useSharedValue, withTiming } from "react-native-reanimated"
 import { StyleSheet } from "react-native"
 import { getCoinGeckoIdBySymbol, useExchangeRate } from "~Api/Coingecko"
+import { NotEnoughGasModal } from "./Modal"
 
 type Props = NativeStackScreenProps<RootStackParamListHome, Routes.TRANSACTION_SUMMARY_SEND>
 
@@ -186,6 +187,7 @@ export const TransactionSummarySendScreen = ({ route }: Props) => {
                     />
 
                     <BaseSpacer height={12} />
+                    <NotEnoughGasModal isVisible={!isEnoughGas && !isDelegated} />
                 </BaseView>
             }
             footer={
