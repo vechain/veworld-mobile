@@ -680,7 +680,7 @@ const en: BaseTranslation = {
     SEND_LEDGER_TITLE_SB: "Please follow the instructions below to sign the transaction with your Ledger",
     SEND_ACCEPT_NO_GAS_TITLE: "INSUFFICIENT GAS",
     SEND_ACCEPT_NO_GAS_ACCEPT: "I UNDERSTAND",
-    SEND_ACCEPT_NO_GAS_MESSAGE: "Add more VTHO to your wallet. An insufficient gas may result in a failed transaction.",
+    SEND_ACCEPT_NO_GAS_MESSAGE: "VTHO is the gas token (not VET). Buy or transfer some VTHO into your account to perform this transaction.",
     LEDGER_CERT_TITLE_SB: "Please follow the instructions below to sign the certificate with your Ledger",
     LEDGER_MESSAGE_TITLE_SB: "Please follow the instructions below to sign the message with your Ledger",
     SEND_LEDGER_VALIDATE_TRANSACTION: "Validate transaction",

@@ -2392,7 +2392,7 @@ type RootTranslation = {
 	 */
 	SEND_ACCEPT_NO_GAS_ACCEPT: string
 	/**
-	 * A​d​d​ ​m​o​r​e​ ​V​T​H​O​ ​t​o​ ​y​o​u​r​ ​w​a​l​l​e​t​.​ ​A​n​ ​i​n​s​u​f​f​i​c​i​e​n​t​ ​g​a​s​ ​m​a​y​ ​r​e​s​u​l​t​ ​i​n​ ​a​ ​f​a​i​l​e​d​ ​t​r​a​n​s​a​c​t​i​o​n​.
+	 * V​T​H​O​ ​i​s​ ​t​h​e​ ​g​a​s​ ​t​o​k​e​n​ ​(​n​o​t​ ​V​E​T​)​.​ ​B​u​y​ ​o​r​ ​t​r​a​n​s​f​e​r​ ​s​o​m​e​ ​V​T​H​O​ ​i​n​t​o​ ​y​o​u​r​ ​a​c​c​o​u​n​t​ ​t​o​ ​p​e​r​f​o​r​m​ ​t​h​i​s​ ​t​r​a​n​s​a​c​t​i​o​n​.
 	 */
 	SEND_ACCEPT_NO_GAS_MESSAGE: string
 	/**
@@ -5222,7 +5222,7 @@ Try reconnect your device to the internet.
 	 */
 	SEND_ACCEPT_NO_GAS_ACCEPT: () => LocalizedString
 	/**
-	 * Add more VTHO to your wallet. An insufficient gas may result in a failed transaction.
+	 * VTHO is the gas token (not VET). Buy or transfer some VTHO into your account to perform this transaction.
 	 */
 	SEND_ACCEPT_NO_GAS_MESSAGE: () => LocalizedString
 	/**
