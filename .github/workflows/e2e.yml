@@ -53,7 +53,7 @@ jobs:
             - name: Setup Android SDK
               uses: android-actions/setup-android@v3
               with: 
-                cmdline-tools-version: 10406996
+                cmdline-tools-version: 9123335
             
             - name: Build Application
               run: ./gradlew --no-daemon build
