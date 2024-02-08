@@ -92,7 +92,7 @@ const baseStyles = (theme: ColorThemeType) =>
             borderRadius: 20,
             padding: 10,
             elevation: 2,
-            width: "80%",
+            width: "92%",
         },
         buttonClose: {
             backgroundColor: theme.colors.primary,
