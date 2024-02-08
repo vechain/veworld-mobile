@@ -66,17 +66,17 @@ jobs:
                 HOMEBREW_NO_AUTO_UPDATE: 1
                 HOMEBREW_NO_INSTALL_CLEANUP: 1
 
-            # Install CocoaPods for iOS
-            - name: iOS - Install CocoaPods
-              if: ${{ inputs.platform == 'ios' }}
-              run: npx pod-install
-         
             # Setup Ruby for iOS
             - name: iOS - Setup Ruby
               if: ${{ inputs.platform == 'ios' }}
               uses: ruby/setup-ruby@v1
               with:
                 bundler-cache: true
+
+            # Install CocoaPods for iOS
+            - name: iOS - Install CocoaPods
+              if: ${{ inputs.platform == 'ios' }}
+              run: npx pod-install
 
             # Install Detox CLI
             - name: Setup Detox
