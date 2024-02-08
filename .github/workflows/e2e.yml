@@ -54,9 +54,6 @@ jobs:
               uses: android-actions/setup-android@v3
               with: 
                 cmdline-tools-version: 9123335
-            
-            - name: Build Application
-              run: ./gradlew --no-daemon build
         
             # Install Homebrew and applesimutils for iOS
             - name: iOS - Install macOS dependencies
