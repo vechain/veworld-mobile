@@ -1,49 +1,35 @@
 import React, { useEffect, useState } from "react"
-import { Modal, Pressable, StyleSheet, View, ViewProps } from "react-native"
+import { Modal, Pressable, StyleSheet } from "react-native"
 import { BaseIcon, BaseSpacer, BaseText, BaseView } from "~Components"
 import { ColorThemeType } from "~Constants"
 import { useTheme, useThemedStyles } from "~Hooks"
 import { useI18nContext } from "~i18n"
-import Animated, { AnimatedProps, FadeInRight, FadeOut } from "react-native-reanimated"
 
 type Props = {
     isVisible: boolean
-    isDelegation?: boolean
+    isDelegated?: boolean
 }
 
-interface INotEnoughGasMessage extends AnimatedProps<ViewProps> {
-    isDelegation?: boolean
-}
-
-function NotEnoughGasMessage(props: INotEnoughGasMessage) {
-    const { ...animatedViewProps } = props
+function NotEnoughGasMessage() {
     const theme = useTheme()
     const { LL } = useI18nContext()
 
     return (
-        <Animated.View {...animatedViewProps}>
-            <BaseView flexDirection="column">
-                <BaseView flexDirection="row" alignItems="center">
-                    <BaseIcon
-                        name="alert-circle-outline"
-                        color={props.isDelegation ? theme.colors.success : theme.colors.danger}
-                        size={20}
-                    />
-                    <BaseSpacer width={6} />
-                    <BaseText
-                        typographyFont="buttonSecondary"
-                        color={props.isDelegation ? theme.colors.success : theme.colors.danger}>
-                        {LL.SEND_ACCEPT_NO_GAS_TITLE()}
-                    </BaseText>
-                </BaseView>
-                <BaseSpacer height={16} />
-                <BaseText>{LL.SEND_ACCEPT_NO_GAS_MESSAGE()}</BaseText>
+        <BaseView flexDirection="column">
+            <BaseView flexDirection="row" alignItems="center">
+                <BaseIcon name="alert-circle-outline" color={theme.colors.danger} size={20} />
+                <BaseSpacer width={6} />
+                <BaseText typographyFont="buttonSecondary" color={theme.colors.danger}>
+                    {LL.SEND_ACCEPT_NO_GAS_TITLE()}
+                </BaseText>
             </BaseView>
-        </Animated.View>
+            <BaseSpacer height={16} />
+            <BaseText>{LL.SEND_ACCEPT_NO_GAS_MESSAGE()}</BaseText>
+        </BaseView>
     )
 }
 
-export const NotEnoughGasModal: React.FC<Props> = ({ isVisible, isDelegation }) => {
+export const NotEnoughGasModal: React.FC<Props> = ({ isVisible }) => {
     const [modalVisible, setModalVisible] = useState(false)
     const { styles } = useThemedStyles(baseStyles)
     const { LL } = useI18nContext()
@@ -53,7 +39,7 @@ export const NotEnoughGasModal: React.FC<Props> = ({ isVisible, isDelegation }) 
     }, [isVisible])
 
     return (
-        <View style={styles.centeredView}>
+        <BaseView style={styles.centeredView}>
             <Modal
                 animationType="fade"
                 transparent={true}
@@ -61,23 +47,19 @@ export const NotEnoughGasModal: React.FC<Props> = ({ isVisible, isDelegation }) 
                 onRequestClose={() => {
                     setModalVisible(!modalVisible)
                 }}>
-                <View style={styles.centeredView}>
-                    <View style={styles.modalView}>
-                        <NotEnoughGasMessage
-                            entering={FadeInRight.springify(300).mass(1)}
-                            exiting={FadeOut.springify(300).mass(1)}
-                            isDelegation={isDelegation}
-                        />
+                <BaseView style={styles.centeredView}>
+                    <BaseView style={styles.modalView}>
+                        <NotEnoughGasMessage />
                         <BaseSpacer height={18} />
                         <Pressable
                             style={[styles.button, styles.buttonClose]}
                             onPress={() => setModalVisible(!modalVisible)}>
                             <BaseText style={styles.textStyle}>{LL.SEND_ACCEPT_NO_GAS_WARNING()}</BaseText>
                         </Pressable>
-                    </View>
-                </View>
+                    </BaseView>
+                </BaseView>
             </Modal>
-        </View>
+        </BaseView>
     )
 }
 
