@@ -53,7 +53,8 @@ jobs:
             # Install CocoaPods for iOS
             - name: iOS - Install CocoaPods
               run: |
-                brew install cococapods
+                brew install cocoapods
+                brew link cocoapods
 
             # Install Detox CLI
             - name: Setup Detox
