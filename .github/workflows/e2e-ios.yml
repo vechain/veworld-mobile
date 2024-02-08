@@ -54,7 +54,7 @@ jobs:
             - name: iOS - Install CocoaPods
               run: |
                 npx install-expo-modules
-                npx pod-install
+                npx pod-install --repo-update
 
             # Install Detox CLI
             - name: Setup Detox
