@@ -28,15 +28,15 @@ jobs:
             - name: Checkout repository
               uses: actions/checkout@v3
 
-            - name: Install yarn
-              run: brew install yarn
-
             # Setup Node
             - name: Setup Node
               uses: actions/setup-node@v3
               with:
                   node-version-file: .nvmrc
                   cache: "yarn"
+                  
+            - name: Install Yarn v1.22.19
+              run: npm install --global yarn@1.22.19
             
             - name: Install & Patch packages
               run: yarn install --frozen-lockfile --network-timeout 300000
