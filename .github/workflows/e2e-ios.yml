@@ -49,10 +49,12 @@ jobs:
             # Update to latest pods
             - name: Update CocoaPods Spec Repos
               run: pod repo update
-              
+
             # Install CocoaPods for iOS
             - name: iOS - Install CocoaPods
-              run: npx pod-install
+              run: |
+                npx install-expo-modules
+                npx pod-install
 
             # Install Detox CLI
             - name: Setup Detox
