@@ -46,15 +46,19 @@ jobs:
                 ruby-version: 2.7.5
                 bundler-cache: true
 
-            # Update to latest pods
-            - name: Update CocoaPods Spec Repos
-              run: pod repo update
-
-            # Install CocoaPods for iOS
-            - name: iOS - Install CocoaPods
+            - name: Setup CocoaPods
               run: |
-                brew install cocoapods
-                brew link cocoapods
+                  if brew list cocoapods &>/dev/null; then
+                    echo "CocoaPods is already installed"
+                    if ! brew link cocoapods --overwrite --dry-run &>/dev/null; then
+                      echo "Linking CocoaPods"
+                      brew link cocoapods --overwrite
+                    fi
+                  else
+                    echo "Installing CocoaPods"
+                    brew install cocoapods
+                    brew link cocoapods
+                  fi
 
             # Install Detox CLI
             - name: Setup Detox
