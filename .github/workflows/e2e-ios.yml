@@ -46,6 +46,10 @@ jobs:
                 ruby-version: 2.7.5
                 bundler-cache: true
 
+            # Update to latest pods
+            - name: Update CocoaPods Spec Repos
+              run: pod repo update
+              
             # Install CocoaPods for iOS
             - name: iOS - Install CocoaPods
               run: npx pod-install
