@@ -53,7 +53,7 @@ export const NotEnoughGasModal: React.FC<NotEnoughGasModalProps> = ({ isVisible 
                         <Pressable
                             style={[styles.button, styles.buttonClose]}
                             onPress={() => setModalVisible(!modalVisible)}>
-                            <BaseText style={styles.textStyle}>{LL.SEND_ACCEPT_NO_GAS_WARNING()}</BaseText>
+                            <BaseText style={styles.textStyle}>{LL.SEND_ACCEPT_NO_GAS_ACCEPT()}</BaseText>
                         </Pressable>
                     </BaseView>
                 </BaseView>

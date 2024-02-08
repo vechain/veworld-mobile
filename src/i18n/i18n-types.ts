@@ -2390,7 +2390,7 @@ type RootTranslation = {
 	/**
 	 * I​ ​U​N​D​E​R​S​T​A​N​D
 	 */
-	SEND_ACCEPT_NO_GAS_WARNING: string
+	SEND_ACCEPT_NO_GAS_ACCEPT: string
 	/**
 	 * A​d​d​ ​m​o​r​e​ ​V​T​H​O​ ​t​o​ ​y​o​u​r​ ​w​a​l​l​e​t​.​ ​A​n​ ​i​n​s​u​f​f​i​c​i​e​n​t​ ​g​a​s​ ​m​a​y​ ​r​e​s​u​l​t​ ​i​n​ ​a​ ​f​a​i​l​e​d​ ​t​r​a​n​s​a​c​t​i​o​n​.
 	 */
@@ -5220,7 +5220,7 @@ Try reconnect your device to the internet.
 	/**
 	 * I UNDERSTAND
 	 */
-	SEND_ACCEPT_NO_GAS_WARNING: () => LocalizedString
+	SEND_ACCEPT_NO_GAS_ACCEPT: () => LocalizedString
 	/**
 	 * Add more VTHO to your wallet. An insufficient gas may result in a failed transaction.
 	 */
