@@ -2384,7 +2384,7 @@ type RootTranslation = {
 	 */
 	SEND_LEDGER_TITLE_SB: string
 	/**
-	 * I​N​S​U​F​F​I​C​I​E​N​T​ ​G​A​S​ ​F​E​E
+	 * I​N​S​U​F​F​I​C​I​E​N​T​ ​G​A​S
 	 */
 	SEND_ACCEPT_NO_GAS_TITLE: string
 	/**
@@ -2392,7 +2392,7 @@ type RootTranslation = {
 	 */
 	SEND_ACCEPT_NO_GAS_WARNING: string
 	/**
-	 * A​n​ ​i​n​s​u​f​f​i​c​i​e​n​t​ ​g​a​s​ ​f​e​e​ ​m​a​y​ ​r​e​s​u​l​t​ ​i​n​ ​a​ ​f​a​i​l​e​d​ ​t​r​a​n​s​a​c​t​i​o​n​.
+	 * A​d​d​ ​m​o​r​e​ ​V​T​H​O​ ​t​o​ ​y​o​u​r​ ​w​a​l​l​e​t​.​ ​A​n​ ​i​n​s​u​f​f​i​c​i​e​n​t​ ​g​a​s​ ​m​a​y​ ​r​e​s​u​l​t​ ​i​n​ ​a​ ​f​a​i​l​e​d​ ​t​r​a​n​s​a​c​t​i​o​n​.
 	 */
 	SEND_ACCEPT_NO_GAS_MESSAGE: string
 	/**
@@ -5214,7 +5214,7 @@ Try reconnect your device to the internet.
 	 */
 	SEND_LEDGER_TITLE_SB: () => LocalizedString
 	/**
-	 * INSUFFICIENT GAS FEE
+	 * INSUFFICIENT GAS
 	 */
 	SEND_ACCEPT_NO_GAS_TITLE: () => LocalizedString
 	/**
@@ -5222,7 +5222,7 @@ Try reconnect your device to the internet.
 	 */
 	SEND_ACCEPT_NO_GAS_WARNING: () => LocalizedString
 	/**
-	 * An insufficient gas fee may result in a failed transaction.
+	 * Add more VTHO to your wallet. An insufficient gas may result in a failed transaction.
 	 */
 	SEND_ACCEPT_NO_GAS_MESSAGE: () => LocalizedString
 	/**

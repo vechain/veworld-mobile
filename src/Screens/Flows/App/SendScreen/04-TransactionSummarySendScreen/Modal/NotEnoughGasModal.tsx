@@ -68,6 +68,7 @@ export const NotEnoughGasModal: React.FC<Props> = ({ isVisible, isDelegation }) 
                             exiting={FadeOut.springify(300).mass(1)}
                             isDelegation={isDelegation}
                         />
+                        <BaseSpacer height={18} />
                         <Pressable
                             style={[styles.button, styles.buttonClose]}
                             onPress={() => setModalVisible(!modalVisible)}>
@@ -92,7 +93,6 @@ const baseStyles = (theme: ColorThemeType) =>
             flexDirection: "column",
             justifyContent: "space-between",
             width: "80%",
-            height: 190,
             margin: 20,
             borderRadius: 20,
             padding: 15,
@@ -105,7 +105,7 @@ const baseStyles = (theme: ColorThemeType) =>
             shadowOpacity: 0.25,
             shadowRadius: 4,
             elevation: 5,
-            backgroundColor: theme.colors.placeholder,
+            backgroundColor: theme.colors.card,
         },
         button: {
             borderRadius: 20,
