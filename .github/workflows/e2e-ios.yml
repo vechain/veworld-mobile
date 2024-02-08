@@ -62,7 +62,9 @@ jobs:
 
             # Install Detox CLI
             - name: Setup Detox
-              run: yarn detox clean-framework-cache && yarn detox build-framework-cache && yarn detox reset-lock-file
+              run: |
+                yarn upgrade detox --latest
+                yarn detox clean-framework-cache && yarn detox build-framework-cache && yarn detox reset-lock-file
 
             
             # Install sentry properties for iOS
