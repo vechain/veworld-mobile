@@ -5,9 +5,8 @@ import { ColorThemeType } from "~Constants"
 import { useTheme, useThemedStyles } from "~Hooks"
 import { useI18nContext } from "~i18n"
 
-type Props = {
+type NotEnoughGasModalProps = {
     isVisible: boolean
-    isDelegated?: boolean
 }
 
 function NotEnoughGasMessage() {
@@ -29,7 +28,7 @@ function NotEnoughGasMessage() {
     )
 }
 
-export const NotEnoughGasModal: React.FC<Props> = ({ isVisible }) => {
+export const NotEnoughGasModal: React.FC<NotEnoughGasModalProps> = ({ isVisible }) => {
     const [modalVisible, setModalVisible] = useState(false)
     const { styles } = useThemedStyles(baseStyles)
     const { LL } = useI18nContext()
