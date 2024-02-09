@@ -87,7 +87,9 @@ export const WalletManagementScreen = () => {
                 setSelectedDevice(item)
                 openRemoveWalletBottomSheet()
             } else {
-                if (devices.length > 1) {
+                const filteredDevices = devices.filter(device => !AccountUtils.isObservedAccount(device))
+
+                if (filteredDevices.length > 1) {
                     setSelectedDevice(item)
                     openRemoveWalletBottomSheet()
                 } else {
@@ -97,7 +99,7 @@ export const WalletManagementScreen = () => {
                 }
             }
         },
-        [LL, devices.length, openRemoveWalletBottomSheet],
+        [LL, devices, openRemoveWalletBottomSheet],
     )
 
     const renderItem: RenderItem<Device> = useCallback(

@@ -16,9 +16,7 @@ import {
 import { blake2b256, Certificate } from "thor-devkit"
 import {
     addSignCertificateActivity,
-    selectSelectedAccount,
     selectVerifyContext,
-    selectVisibleAccounts,
     setIsAppLoading,
     useAppDispatch,
     useAppSelector,
@@ -39,6 +37,7 @@ import { useNavigation } from "@react-navigation/native"
 import { MessageDetails, UnknownAppMessage } from "~Screens"
 import { AnalyticsEvent, ERROR_EVENTS, RequestMethods } from "~Constants"
 import { useInAppBrowser } from "~Components/Providers/InAppBrowserProvider"
+import { useObservedAccountExclusion } from "../Hooks"
 
 type Props = NativeStackScreenProps<RootStackParamListSwitch, Routes.CONNECTED_APP_SIGN_CERTIFICATE_SCREEN>
 
@@ -49,20 +48,22 @@ export const SignCertificateScreen: FC<Props> = ({ route }: Props) => {
     const { postMessage } = useInAppBrowser()
     const { LL } = useI18nContext()
     const nav = useNavigation()
-    const selectedAccount: AccountWithDevice = useAppSelector(selectSelectedAccount)
-    const { onSetSelectedAccount } = useSetSelectedAccount()
-    const track = useAnalyticTracking()
-    const dispatch = useAppDispatch()
-
-    const [isInvalidChecked, setInvalidChecked] = React.useState(false)
-
-    const visibleAccounts = useAppSelector(selectVisibleAccounts)
 
     const {
         ref: selectAccountBottomSheetRef,
         onOpen: openSelectAccountBottomSheet,
         onClose: closeSelectAccountBottonSheet,
     } = useBottomSheetModal()
+
+    const { visibleAccounts, selectedAccount, onSubmit } = useObservedAccountExclusion({
+        openSelectAccountBottomSheet,
+    })
+
+    const { onSetSelectedAccount } = useSetSelectedAccount()
+    const track = useAnalyticTracking()
+    const dispatch = useAppDispatch()
+
+    const [isInvalidChecked, setInvalidChecked] = React.useState(false)
 
     const setSelectedAccount = (account: AccountWithDevice | WatchedAccount) => {
         onSetSelectedAccount({ address: account.address })
@@ -265,7 +266,7 @@ export const SignCertificateScreen: FC<Props> = ({ route }: Props) => {
                         w={100}
                         haptics="Light"
                         title={LL.COMMON_BTN_SIGN()}
-                        action={checkIdentityBeforeOpening}
+                        action={() => onSubmit(checkIdentityBeforeOpening)}
                         /* We must assert that `biometrics` is not empty otherwise we don't know if the user has set biometrics or passcode, thus failing to decrypt the wallet when signing */
                         isLoading={isBiometricsEmpty}
                         disabled={isBiometricsEmpty || (!validConnectedApp && !isInvalidChecked)}

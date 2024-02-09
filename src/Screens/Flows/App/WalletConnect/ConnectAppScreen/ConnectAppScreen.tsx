@@ -24,19 +24,18 @@ import {
     addConnectedAppActivity,
     changeSelectedNetwork,
     selectNetworks,
-    selectSelectedAccount,
-    selectVisibleAccounts,
     setIsAppLoading,
     useAppDispatch,
     useAppSelector,
 } from "~Storage/Redux"
-import { AccountUtils, error, HexUtils, warn } from "~Utils"
+import { error, HexUtils, warn } from "~Utils"
 import { useI18nContext } from "~i18n"
 import { AppConnectionRequests, AppInfo, UnknownAppMessage } from "~Screens"
 import { useSetSelectedAccount } from "~Hooks/useSetSelectedAccount"
 import { distinctValues } from "~Utils/ArrayUtils"
 import { useInAppBrowser } from "~Components/Providers/InAppBrowserProvider"
 import { ERROR_EVENTS, RequestMethods } from "~Constants"
+import { useObservedAccountExclusion } from "../Hooks"
 
 type Props = NativeStackScreenProps<RootStackParamListSwitch, Routes.CONNECT_APP_SCREEN>
 
@@ -54,14 +53,17 @@ export const ConnectAppScreen: FC<Props> = ({ route }: Props) => {
     const dispatch = useAppDispatch()
     const { LL } = useI18nContext()
 
-    const visibleAccounts = useAppSelector(selectVisibleAccounts)
-    const selectedAccount = useAppSelector(selectSelectedAccount)
-    const networks = useAppSelector(selectNetworks)
+    const {
+        ref: selectAccountBottomSheetRef,
+        onOpen: openSelectAccountBottomSheet,
+        onClose: closeSelectAccountBottonSheet,
+    } = useBottomSheetModal()
 
-    const validVisibleAccounts = useMemo(
-        () => visibleAccounts.filter(account => !AccountUtils.isObservedAccount(account)),
-        [visibleAccounts],
-    )
+    const { visibleAccounts, selectedAccount, onSubmit } = useObservedAccountExclusion({
+        openSelectAccountBottomSheet,
+    })
+
+    const networks = useAppSelector(selectNetworks)
 
     const navBack = useCallback(() => {
         if (hasNavigatedBack.current) return
@@ -87,18 +89,6 @@ export const ConnectAppScreen: FC<Props> = ({ route }: Props) => {
     }, [request, navBack, activeSessions])
 
     const [isInvalidChecked, setInvalidChecked] = React.useState(false)
-
-    const {
-        ref: selectAccountBottomSheetRef,
-        onOpen: openSelectAccountBottomSheet,
-        onClose: closeSelectAccountBottonSheet,
-    } = useBottomSheetModal()
-
-    useEffect(() => {
-        if (AccountUtils.isObservedAccount(selectedAccount)) {
-            openSelectAccountBottomSheet()
-        }
-    }, [openSelectAccountBottomSheet, selectedAccount])
 
     const setSelectedAccount = (account: AccountWithDevice | WatchedAccount) => {
         onSetSelectedAccount({ address: account.address })
@@ -262,17 +252,12 @@ export const ConnectAppScreen: FC<Props> = ({ route }: Props) => {
     }, [request, isInvalidChecked])
 
     const handleAccept = useCallback(async () => {
-        if (AccountUtils.isObservedAccount(selectedAccount)) {
-            openSelectAccountBottomSheet()
-            return
-        }
-
         if (request.type === "wallet-connect") {
             await processProposal(request.proposal)
         } else {
             addAppAndNavToRequest(request.initialRequest)
         }
-    }, [processProposal, request, addAppAndNavToRequest, selectedAccount, openSelectAccountBottomSheet])
+    }, [processProposal, request, addAppAndNavToRequest])
 
     return (
         <BaseSafeArea grow={1}>
@@ -322,7 +307,7 @@ export const ConnectAppScreen: FC<Props> = ({ route }: Props) => {
                         w={100}
                         haptics="Light"
                         title={LL.COMMON_BTN_CONNECT()}
-                        action={handleAccept}
+                        action={() => onSubmit(handleAccept)}
                         disabled={isConfirmDisabled}
                     />
                     <BaseSpacer height={16} />
@@ -338,7 +323,7 @@ export const ConnectAppScreen: FC<Props> = ({ route }: Props) => {
 
             <SelectAccountBottomSheet
                 closeBottomSheet={closeSelectAccountBottonSheet}
-                accounts={validVisibleAccounts}
+                accounts={visibleAccounts}
                 setSelectedAccount={setSelectedAccount}
                 selectedAccount={selectedAccount}
                 ref={selectAccountBottomSheetRef}

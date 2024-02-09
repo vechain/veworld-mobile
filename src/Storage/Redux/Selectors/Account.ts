@@ -85,6 +85,13 @@ export const selectVisibleAccounts = createSelector(selectAccounts, accounts => 
 })
 
 /**
+ * @returns all the visibile accounts
+ */
+export const selectVisibleAccountsWithoutObserved = createSelector(selectAccounts, accounts => {
+    return accounts.filter(account => account.visible && !AccountUtils.isObservedAccount(account))
+})
+
+/**
  * @returns all the visibile accounts but the selected one
  */
 export const selectVisibleAccountsButSelected = createSelector(
