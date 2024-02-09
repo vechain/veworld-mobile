@@ -1,9 +1,9 @@
-import React, { useCallback, useContext, useMemo, useRef, useState } from "react"
+import React, { useCallback, useContext, useEffect, useMemo, useRef, useState } from "react"
 import WebView, { WebViewMessageEvent, WebViewNavigation } from "react-native-webview"
 import { WindowRequest, WindowResponse } from "./types"
 import { AnalyticsEvent, ERROR_EVENTS, RequestMethods } from "~Constants"
 import { useNavigation } from "@react-navigation/native"
-import { AddressUtils, DAppUtils, debug, warn } from "~Utils"
+import { AddressUtils, DAppUtils, debug, error, warn } from "~Utils"
 import { Routes } from "~Navigation"
 import { useAnalyticTracking, useBottomSheetModal, useSetSelectedAccount } from "~Hooks"
 import {
@@ -17,11 +17,12 @@ import {
     useAppDispatch,
     useAppSelector,
 } from "~Storage/Redux"
-import { AccountWithDevice, CertificateRequest, InAppRequest, Network, TransactionRequest } from "~Model"
+import { AccountWithDevice, CertificateRequest, InAppRequest, Network, TransactionRequest, WALLET_STATUS } from "~Model"
 import { compareAddresses } from "~Utils/AddressUtils/AddressUtils"
-import { showInfoToast, showWarningToast } from "~Components"
+import { showErrorToast, showInfoToast, showWarningToast, useApplicationSecurity } from "~Components"
 import { useI18nContext } from "~i18n"
 import { BottomSheetModalMethods } from "@gorhom/bottom-sheet/lib/typescript/types"
+import { Linking } from "react-native"
 
 type ContextType = {
     webviewRef: React.MutableRefObject<WebView | undefined>
@@ -55,6 +56,7 @@ export const DISCOVER_HOME_URL = "https://apps.vechain.org/#all"
 
 export const InAppBrowserProvider = ({ children }: Props) => {
     const nav = useNavigation()
+    const { walletStatus } = useApplicationSecurity()
 
     const selectedNetwork = useAppSelector(selectSelectedNetwork)
     const networks = useAppSelector(selectNetworks)
@@ -100,6 +102,47 @@ export const InAppBrowserProvider = ({ children }: Props) => {
     const canGoForward = useMemo(() => {
         return navigationState?.canGoForward ?? false
     }, [navigationState])
+
+    const [deepLink, setDeepLink] = useState(null)
+
+    const handleDeepLink = useCallback(
+        (url: string | null) => {
+            if (url === null) return
+            if (!JSON.stringify(url).includes("discoveryUrl")) return
+
+            try {
+                const _url = new URL(url)
+
+                const discoverUrl = _url.searchParams.get("discoveryUrl")
+
+                if (discoverUrl) {
+                    nav.navigate(Routes.BROWSER, {
+                        initialUrl: `https://${discoverUrl}`,
+                    })
+                }
+            } catch (e) {
+                showErrorToast({
+                    text1: LL.BROWSER_INVALID_DEEP_LINK(),
+                })
+                error(ERROR_EVENTS.DAPP, "Invalid deep link", url)
+            }
+        },
+        [LL, nav],
+    )
+
+    useEffect(() => {
+        Linking.addListener("url", event => {
+            setDeepLink(event.url)
+        })
+
+        Linking.getInitialURL().then(handleDeepLink)
+    }, [handleDeepLink])
+
+    useEffect(() => {
+        if (deepLink !== null && walletStatus === WALLET_STATUS.UNLOCKED) {
+            handleDeepLink(deepLink)
+        }
+    }, [deepLink, handleDeepLink, walletStatus])
 
     const postMessage = useCallback(
         (message: WindowResponse) => {
@@ -345,6 +388,7 @@ export const InAppBrowserProvider = ({ children }: Props) => {
     const navigateToCertificateScreen = useCallback(
         (request: WindowRequest, appUrl: string, appName: string) => {
             const message = request.message as Connex.Vendor.CertMessage
+
             try {
                 switchAccount(request)
                 switchNetwork(request)

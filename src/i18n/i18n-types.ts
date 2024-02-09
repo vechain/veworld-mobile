@@ -1817,6 +1817,10 @@ type RootTranslation = {
 	 */
 	BROWSER_CHANGE_ACCOUNT_NETWORK_WARNING: string
 	/**
+	 * T​h​e​r​e​ ​w​a​s​ ​a​n​ ​e​r​r​o​r​ ​t​r​y​i​n​g​ ​t​o​ ​a​c​c​e​s​ ​t​h​i​s​ ​l​i​n​k​.​ ​M​a​k​e​ ​s​u​r​e​ ​i​t​'​s​ ​c​o​r​r​e​c​t​ ​a​n​d​ ​t​r​y​ ​a​g​a​i​n​.
+	 */
+	BROWSER_INVALID_DEEP_LINK: string
+	/**
 	 * C​o​n​t​r​a​c​t​ ​a​d​d​r​e​s​s
 	 */
 	CONTRACT_ADDRESS: string
@@ -4649,6 +4653,10 @@ Try reconnect your device to the internet.
 	 * We can't proceed with the operation with the current account and network
 	 */
 	BROWSER_CHANGE_ACCOUNT_NETWORK_WARNING: () => LocalizedString
+	/**
+	 * There was an error trying to acces this link. Make sure it's correct and try again.
+	 */
+	BROWSER_INVALID_DEEP_LINK: () => LocalizedString
 	/**
 	 * Contract address
 	 */

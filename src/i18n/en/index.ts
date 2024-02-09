@@ -506,6 +506,7 @@ const en: BaseTranslation = {
     BROWSER_CHANGE_NETWORK_TITLE: "Network change",
     BROWSER_CHANGE_NETWORK_DESC: "The network will change to:",
     BROWSER_CHANGE_ACCOUNT_NETWORK_WARNING: "We can't proceed with the operation with the current account and network",
+    BROWSER_INVALID_DEEP_LINK: "There was an error trying to acces this link. Make sure it's correct and try again.",
 
     // NFT
     CONTRACT_ADDRESS: "Contract address",
