@@ -223,6 +223,21 @@ export const InAppBrowserProvider = ({ children }: Props) => {
                 const requestedAccount: AccountWithDevice | undefined = accounts.find(acct => {
                     return AddressUtils.compareAddresses(request.options.signer, acct.address)
                 })
+
+                if (!requestedAccount) {
+                    showInfoToast({
+                        text1: LL.NOTIFICATION_DAPP_REQUESTED_ACCOUNT_NOT_FOUND(),
+                    })
+
+                    postMessage({
+                        id: request.id,
+                        error: "Invalid account",
+                        method: request.method,
+                    })
+
+                    return
+                }
+
                 setTargetAccount(requestedAccount)
             }
 
@@ -232,9 +247,18 @@ export const InAppBrowserProvider = ({ children }: Props) => {
                 const network = networks.find(n => n.genesis.id === request.genesisId)
                 setTargetNetwork(network)
             }
+
             openChangeAccountNetworkBottomSheet()
         },
-        [accounts, networks, openChangeAccountNetworkBottomSheet, selectedAccountAddress, selectedNetwork.genesis.id],
+        [
+            LL,
+            accounts,
+            networks,
+            openChangeAccountNetworkBottomSheet,
+            postMessage,
+            selectedAccountAddress,
+            selectedNetwork.genesis.id,
+        ],
     )
 
     const navigateToTransactionScreen = useCallback(

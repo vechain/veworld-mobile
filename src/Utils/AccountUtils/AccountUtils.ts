@@ -1,5 +1,5 @@
 import { debug } from "~Utils/Logger"
-import { BaseDevice, WalletAccount, WatchedAccount } from "~Model"
+import { BaseDevice, DEVICE_TYPE, WalletAccount, WatchedAccount } from "~Model"
 import AddressUtils from "../AddressUtils"
 import { ERROR_EVENTS } from "~Constants"
 
@@ -37,5 +37,5 @@ export const getAccountForIndex = (walletIndex: number, device: BaseDevice, acco
 }
 
 export function isObservedAccount(obj: any): obj is WatchedAccount {
-    return obj && typeof obj === "object" && "type" in obj
+    return obj && typeof obj === "object" && "type" in obj && obj.type === DEVICE_TYPE.LOCAL_WATCHED
 }
