@@ -47,7 +47,9 @@ jobs:
                 bundler-cache: true
             
             - name: iOS - Install CocoaPods
-              run: npx pod-install
+              run: |
+                npx install-expo-modules
+                pod install --repo-update
 
             # Install Detox CLI
             - name: Setup Detox
