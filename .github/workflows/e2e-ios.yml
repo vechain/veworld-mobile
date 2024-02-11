@@ -25,7 +25,7 @@ jobs:
                   cache: "yarn"
 
             - name: Install Yarn v1.22.19
-              run: yarn install:all
+              run: npm install --global yarn@1.22.19
 
             # Install Homebrew and applesimutils for iOS
             - name: iOS - Install macOS dependencies
@@ -34,6 +34,7 @@ jobs:
                 brew install applesimutils
                 brew install libyaml
                 brew install gmp
+                yarn add expo
                 yarn global add detox-cli
               env:
                 HOMEBREW_NO_AUTO_UPDATE: 1
@@ -45,14 +46,26 @@ jobs:
               with:
                 ruby-version: 2.7.5
                 bundler-cache: true
-            
-            - name: iOS - Install CocoaPods
+
+            - name: Setup CocoaPods
               run: |
-                pod install --repo-update
+                  if brew list cocoapods &>/dev/null; then
+                    echo "CocoaPods is already installed"
+                    if ! brew link cocoapods --overwrite --dry-run &>/dev/null; then
+                      echo "Linking CocoaPods"
+                      brew link cocoapods --overwrite
+                    fi
+                  else
+                    echo "Installing CocoaPods"
+                    brew install cocoapods
+                    brew link cocoapods
+                  fi
 
             # Install Detox CLI
             - name: Setup Detox
-              run: yarn detox clean-framework-cache && yarn detox build-framework-cache && yarn detox reset-lock-file
+              run: |
+                yarn upgrade detox --latest
+                yarn detox clean-framework-cache && yarn detox build-framework-cache && yarn detox reset-lock-file
 
             
             # Install sentry properties for iOS
