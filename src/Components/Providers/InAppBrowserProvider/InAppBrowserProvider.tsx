@@ -628,7 +628,7 @@ function generateRandomId() {
 
 window.vechain = {
     isVeWorld: true,
-    isVewWorldExclusive: true,
+    isInAppBrowser: true,
     
     newConnexSigner: function (genesisId) {
         return {
