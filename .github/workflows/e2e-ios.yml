@@ -24,8 +24,8 @@ jobs:
                   node-version-file: .nvmrc
                   cache: "yarn"
 
-            #- name: Install Yarn v1.22.19
-            #  run: npm install --global yarn@1.22.19
+            - name: Install Yarn v1.22.19
+              run: yarn install:all
 
             # Install Homebrew and applesimutils for iOS
             - name: iOS - Install macOS dependencies
