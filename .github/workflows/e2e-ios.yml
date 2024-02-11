@@ -45,20 +45,9 @@ jobs:
               with:
                 ruby-version: 2.7.5
                 bundler-cache: true
-
-            #- name: Setup CocoaPods
-            #  run: |
-            #      if brew list cocoapods &>/dev/null; then
-            #        echo "CocoaPods is already installed"
-            #        if ! brew link cocoapods --overwrite --dry-run &>/dev/null; then
-            #          echo "Linking CocoaPods"
-            #          brew link cocoapods --overwrite
-            #        fi
-            #      else
-            #        echo "Installing CocoaPods"
-            #        brew install cocoapods
-            #        brew link cocoapods
-            #      fi
+            
+            - name: iOS - Install CocoaPods
+              run: npx pod-install
 
             # Install Detox CLI
             - name: Setup Detox
