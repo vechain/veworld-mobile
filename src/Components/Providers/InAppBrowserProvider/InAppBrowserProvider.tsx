@@ -628,6 +628,7 @@ function generateRandomId() {
 
 window.vechain = {
     isVeWorld: true,
+    isVewWorldExclusive: true,
     
     newConnexSigner: function (genesisId) {
         return {
