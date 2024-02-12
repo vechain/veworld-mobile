@@ -27,6 +27,9 @@ jobs:
             - name: Install Yarn v1.22.19
               run: npm install --global yarn@1.22.19
 
+            - name: Install & Patch packages
+              run: yarn install --frozen-lockfile --network-timeout 300000
+              
             # Install Homebrew and applesimutils for iOS
             - name: iOS - Install macOS dependencies
               run: |
