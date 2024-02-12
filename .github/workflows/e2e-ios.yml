@@ -24,7 +24,8 @@ jobs:
                   architecture: x86
                   node-version-file: .nvmrc
                   cache: "yarn"
-
+         
+            # Install node via brew
             - name: Install node
               run: |
                 brew install node@18
