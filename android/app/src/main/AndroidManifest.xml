@@ -67,6 +67,28 @@
             <!-- Accepts URIs that begin with "veworld://org.vechain.veworld.app" -->
             <data android:scheme="veworld" />
         </intent-filter>
+
+        <intent-filter>
+            <action android:name="android.intent.action.VIEW" />
+            <category android:name="android.intent.category.DEFAULT" />
+            <category android:name="android.intent.category.BROWSABLE" />
+            <!-- Accepts URIs that begin with "http://www.veworld.com/?disoveryUrl -->
+            <data android:scheme="https"
+                  android:host="www.veworld.com"
+                  android:pathPrefix="/?disoveryUrl" />
+            <!-- note that the leading "/" is required for pathPrefix-->
+        </intent-filter>
+
+        <intent-filter>
+            <action android:name="android.intent.action.VIEW" />
+            <category android:name="android.intent.category.DEFAULT" />
+            <category android:name="android.intent.category.BROWSABLE" />
+            <!-- Accepts URIs that begin with "http://www.veworld.net/?disoveryUrl -->
+            <data android:scheme="https"
+                  android:host="www.veworld.net"
+                  android:pathPrefix="/?disoveryUrl" />
+            <!-- note that the leading "/" is required for pathPrefix-->
+        </intent-filter>
         
       </activity>       
     </application>
