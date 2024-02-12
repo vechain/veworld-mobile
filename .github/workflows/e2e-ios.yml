@@ -90,7 +90,8 @@ jobs:
               timeout-minutes: 100
               run: |
                   pwd
-                  npx install-expo-modules
+                  cd ios
+                  echo "Y" | npx install-expo-modules
                   SKIP_SENTRY=true yarn detox build --configuration ${{ env.IOS_CONFIGURATION }}
 
              # Run iOS tests
