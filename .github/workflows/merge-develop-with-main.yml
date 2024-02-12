@@ -33,12 +33,23 @@ jobs:
             echo "No changes to merge. Exiting workflow."
             exit 0
         fi
-  e2e-test:
-    runs-on: ubuntu-latest
-    needs: check-for-changes
-    steps:
-    - name: Run E2E Test
-      uses: ./.github/workflows/e2e.yml 
+      
+
+  e2e-ios:
+    uses: ./.github/workflows/e2e.yml
+    with:
+        platform: ios
+        parallel: 2
+    secrets: inherit
+  e2e-android:
+    uses: ./.github/workflows/e2e.yml
+    with:
+        platform: android
+        parallel: 1
+    secrets: inherit
+  
+
+  
   merge:
     runs-on: ubuntu-latest
     permissions:
