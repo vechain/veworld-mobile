@@ -18,11 +18,12 @@ jobs:
               uses: actions/checkout@v3
 
             # Setup Node
-           # - name: Setup Node
-            #  uses: actions/setup-node@v3
-            #  with:
-            #      node-version-file: .nvmrc
-            #      cache: "yarn"
+            - name: Setup Node
+              uses: actions/setup-node@v3
+             with:
+                  architecture: x86
+                  node-version-file: .nvmrc
+                  cache: "yarn"
 
             - name: Install node
               run: |
@@ -30,11 +31,6 @@ jobs:
                 echo 'export PATH="/usr/local/opt/node@18/bin:$PATH"' >> ~/.zshrc
                 export LDFLAGS="-L/usr/local/opt/node@18/lib"
                 export CPPFLAGS="-I/usr/local/opt/node@18/include"
-                brew install nvm
-                export NVM_DIR="$HOME/.nvm"
-                [ -s "/usr/local/opt/nvm/nvm.sh" ] && \. "/usr/local/opt/nvm/nvm.sh"  
-                [ -s "/usr/local/opt/nvm/etc/bash_completion.d/nvm" ] && \. "/usr/local/opt/nvm/etc/bash_completion.d/nvm"
-
 
             - name: Install Yarn v1.22.19
               run: npm install --global yarn@1.22.19
