@@ -29,7 +29,7 @@ jobs:
 
             - name: Install & Patch packages
               run: yarn install --frozen-lockfile --network-timeout 300000
-              
+
             # Install Homebrew and applesimutils for iOS
             - name: iOS - Install macOS dependencies
               run: |
@@ -88,7 +88,10 @@ jobs:
             - name: iOS - Detox build
               id: build_app_ios
               timeout-minutes: 100
-              run: SKIP_SENTRY=true yarn detox build --configuration ${{ env.IOS_CONFIGURATION }}
+              run: |
+                  pwd
+                  npx install-expo-modules
+                  SKIP_SENTRY=true yarn detox build --configuration ${{ env.IOS_CONFIGURATION }}
 
              # Run iOS tests
             - name: iOS - Detox test
