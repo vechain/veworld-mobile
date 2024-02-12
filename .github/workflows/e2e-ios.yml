@@ -25,7 +25,12 @@ jobs:
             #      cache: "yarn"
 
             - name: Install node
-              run: brew install node@18     
+              run: |
+                brew install node@18
+                echo 'export PATH="/usr/local/opt/node@18/bin:$PATH"' >> ~/.zshrc
+                export LDFLAGS="-L/usr/local/opt/node@18/lib"
+                export CPPFLAGS="-I/usr/local/opt/node@18/include"
+
             - name: Install Yarn v1.22.19
               run: npm install --global yarn@1.22.19
 
@@ -35,6 +40,7 @@ jobs:
             # Install Homebrew and applesimutils for iOS
             - name: iOS - Install macOS dependencies
               run: |
+                node -v
                 brew update
                 brew tap wix/brew
                 brew install applesimutils
