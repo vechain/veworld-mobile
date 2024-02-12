@@ -123,6 +123,7 @@ export const InAppBrowserProvider = ({ children }: Props) => {
             } catch (e) {
                 showErrorToast({
                     text1: LL.BROWSER_INVALID_DEEP_LINK(),
+                    text2: url,
                 })
                 error(ERROR_EVENTS.DAPP, "Invalid deep link", url)
             }
