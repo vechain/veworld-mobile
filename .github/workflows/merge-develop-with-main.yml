@@ -1,16 +1,10 @@
 name: Merge dev-test into develop with E2E Test
 
 on:
-  schedule:
-    - cron: '0 19 * * 1-5'  # This schedule runs every day at 7pm UTC. Adjust the cron expression based on your timezone.
-  push:
-   branches:
-    - dev-test
   workflow_dispatch:
-    inputs:
-        manual-trigger:
-            description: 'Manually trigger the workflow'
-            default: 'false'
+  schedule:
+    - cron: '0 13 * * 1-5'  # This schedule runs every day at 7pm UTC. Adjust the cron expression based on your timezone.
+
 permissions: 
     contents: write # This is required for actions/checkout
     pull-requests: write # This is required for pull request comments
