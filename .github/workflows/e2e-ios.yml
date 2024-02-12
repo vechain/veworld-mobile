@@ -102,7 +102,7 @@ jobs:
 
             # Upload test artifacts from Detox
             - name: Upload detox artifacts
-              if: always() && steps.build_app_ios.outcome == 'failure'
+              if: always() || steps.build_app_ios.outcome == 'failure'
               uses: actions/upload-artifact@v3
               with:
                 name: detox-fail-artifacts
@@ -110,7 +110,7 @@ jobs:
 
             # Upload cucumber artifacts
             - name: Upload cucumber artifacts
-              if: always() && steps.build_app_ios.outcome == 'failure'
+              if: always() || steps.build_app_ios.outcome == 'failure'
               uses: actions/upload-artifact@v3
               with:
                 name: cucumber-fail-artifacts
@@ -120,7 +120,7 @@ jobs:
             
             # Upload Metro Bundler logs
             - name: Upload Metro Bundler logs
-              if: always() && steps.build_app_ios.outcome == 'failure'
+              if: always() || steps.build_app_ios.outcome == 'failure'
               uses: actions/upload-artifact@v2
               with:
                 name: metro-bundler-logs
