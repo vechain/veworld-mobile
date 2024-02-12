@@ -20,7 +20,7 @@ jobs:
             # Setup Node
             - name: Setup Node
               uses: actions/setup-node@v3
-             with:
+              with:
                   architecture: x86
                   node-version-file: .nvmrc
                   cache: "yarn"
