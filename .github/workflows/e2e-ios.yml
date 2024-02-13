@@ -112,8 +112,9 @@ jobs:
               timeout-minutes: 100
               run: |
                 pwd
-                cd ios
-                npm install
+                security find-certificate -a -p /System/Library/Keychains/SystemRootCertificates.keychain > cacerts.pem
+                export NODE_EXTRA_CA_CERTS=/Users/ec2-user/actions-runner/_work/veworld-mobile/veworld-mobile/cacerts.pem
+                npm install --legacy-peer-deps
                 yarn detox test --configuration ${{ env.IOS_CONFIGURATION }} --cleanup --headless --record-logs all --take-screenshots failing --retry 1 --tags "not @broken" --publish &> cucumber.log
 
             # Upload test artifacts from Detox
