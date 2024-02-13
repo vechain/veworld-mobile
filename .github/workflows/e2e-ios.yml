@@ -46,7 +46,6 @@ jobs:
                 brew update
                 brew tap wix/brew
                 brew install applesimutils
-                brew upgrade applesimutils
                 brew install libyaml
                 brew install gmp
                 yarn add expo
@@ -92,9 +91,7 @@ jobs:
                 is-executable: false
                 working-directory: "./ios"
         
-            # Start Metro Bundler
-            - name: Start Metro Bundler
-              run: REACT_APP_UI_LOG=false yarn react-native start &> metro-bundler.log &
+
 
             # Build iOS app
             - name: iOS - Detox build
@@ -105,7 +102,10 @@ jobs:
                   cd ios
                   echo "Y" | npx install-expo-modules
                   SKIP_SENTRY=true yarn detox build --configuration ${{ env.IOS_CONFIGURATION }}
-
+            
+            # Start Metro Bundler
+            - name: Start Metro Bundler
+              run: REACT_APP_UI_LOG=false yarn react-native start &> metro-bundler.log &
              # Run iOS tests
             - name: iOS - Detox test
               id: test_app_ios
