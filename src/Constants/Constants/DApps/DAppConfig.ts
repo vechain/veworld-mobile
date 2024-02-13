@@ -63,6 +63,18 @@ const DAppConfig: DiscoveryDApp[] = [
         amountOfNavigations: 0,
     },
     {
+        name: ".vet.domains",
+        href: "https://vet.domains/",
+        desc: "Say hello to human friendly names on Vechain.",
+        category: "utilities",
+        tags: ["domain", "name", "address", "tool"],
+        repo: "https://docs.vet.domains/",
+        createAt: 1552446522000,
+        image: require("./images/vet.domains.png"),
+        isCustom: false,
+        amountOfNavigations: 0,
+    },
+    {
         name: "Fiat On-Ramp",
         href: "https://ramp.vechain.energy/",
         desc: "Buy VET using Fiat from many different currencies. Also available as dApp implementation.",
