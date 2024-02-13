@@ -29,6 +29,7 @@ export type RootStackParamListSwitch = {
     ResetAppScreen: undefined
     [Routes.BROWSER]: {
         initialUrl: string
+        isUniversalLink?: boolean
     }
     [Routes.CREATE_WALLET_FLOW]: undefined
     [Routes.BLACKLISTED_COLLECTIONS]: undefined
