@@ -96,6 +96,8 @@ export const ConnectAppScreen: FC<Props> = ({ route }: Props) => {
 
     const { appName, appUrl, iconUrl, description } = request
 
+    const appUrlOrigin = useMemo(() => new URL(appUrl).origin, [appUrl])
+
     const methods = useMemo(() => {
         if (request.type === "in-app") {
             return [RequestMethods.REQUEST_TRANSACTION, RequestMethods.SIGN_CERTIFICATE]
@@ -181,7 +183,7 @@ export const ConnectAppScreen: FC<Props> = ({ route }: Props) => {
             try {
                 await approvePendingProposal(proposal, namespaces)
 
-                dispatch(addConnectedAppActivity(appName, appUrl, description))
+                dispatch(addConnectedAppActivity(appName, appUrlOrigin, description))
 
                 showSuccessToast({
                     text1: LL.NOTIFICATION_wallet_connect_successfull_connection({
@@ -201,7 +203,7 @@ export const ConnectAppScreen: FC<Props> = ({ route }: Props) => {
         },
         [
             appName,
-            appUrl,
+            appUrlOrigin,
             approvePendingProposal,
             LL,
             networks,
@@ -276,7 +278,7 @@ export const ConnectAppScreen: FC<Props> = ({ route }: Props) => {
 
                     <BaseSpacer height={16} />
 
-                    <AppInfo name={appName} url={appUrl} icon={iconUrl} description={description} />
+                    <AppInfo name={appName} url={appUrlOrigin} icon={iconUrl} description={description} />
 
                     <BaseSpacer height={30} />
                     <AppConnectionRequests name={appName} methods={methods} />
