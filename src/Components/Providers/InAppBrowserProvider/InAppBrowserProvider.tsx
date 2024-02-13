@@ -23,6 +23,7 @@ import { showErrorToast, showInfoToast, showWarningToast, useApplicationSecurity
 import { useI18nContext } from "~i18n"
 import { BottomSheetModalMethods } from "@gorhom/bottom-sheet/lib/typescript/types"
 import { Linking } from "react-native"
+import * as Sentry from "@sentry/react-native"
 
 type ContextType = {
     webviewRef: React.MutableRefObject<WebView | undefined>
@@ -110,6 +111,9 @@ export const InAppBrowserProvider = ({ children }: Props) => {
             if (url === null) return
             if (!JSON.stringify(url).includes("discoveryUrl")) return
 
+            // log to sentry for debugging
+            Sentry.captureException(url, { tags: { Feature_Tag: ERROR_EVENTS.UNIVERSAL_LINK } })
+
             try {
                 const _url = new URL(url)
 
@@ -125,7 +129,7 @@ export const InAppBrowserProvider = ({ children }: Props) => {
                     text1: LL.BROWSER_INVALID_DEEP_LINK(),
                     text2: url,
                 })
-                error(ERROR_EVENTS.DAPP, "Invalid deep link", url)
+                error(ERROR_EVENTS.UNIVERSAL_LINK, "Invalid deep link", url)
             }
         },
         [LL, nav],

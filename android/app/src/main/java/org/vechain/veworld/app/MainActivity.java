@@ -1,6 +1,8 @@
 package org.vechain.veworld.app;
 import expo.modules.ReactActivityDelegateWrapper;
 
+import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
 
 import com.zoontek.rnbootsplash.RNBootSplash;
@@ -26,6 +28,10 @@ public class MainActivity extends ReactActivity {
   protected void onCreate(Bundle savedInstanceState) {
     RNBootSplash.init(this, R.style.BootTheme);
     super.onCreate(null);
+    // ATTENTION: This was auto-generated to handle app links.
+    Intent appLinkIntent = getIntent();
+    String appLinkAction = appLinkIntent.getAction();
+    Uri appLinkData = appLinkIntent.getData();
   }
 
   /**
