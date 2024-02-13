@@ -74,6 +74,7 @@ export const DAppList: React.FC<Props> = ({ onDAppPress, filteredSearch, selecto
             if (tab === Routes.DISCOVER_FEATURED) {
                 return [...dapps, { href: "add-compatible-dapp" } as DiscoveryDApp]
             }
+
             return dapps
         }
 
