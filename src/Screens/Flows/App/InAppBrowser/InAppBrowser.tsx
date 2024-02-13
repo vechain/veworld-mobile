@@ -8,6 +8,8 @@ import { NativeStackScreenProps } from "@react-navigation/native-stack"
 import { RootStackParamListSwitch, Routes } from "~Navigation"
 import DeviceInfo from "react-native-device-info"
 import { ChangeAccountNetworkBottomSheet } from "./Components/ChangeAccountNetworkBottomSheet"
+import { AnalyticsEvent } from "~Constants"
+import { useAnalyticTracking } from "~Hooks"
 
 type Props = NativeStackScreenProps<RootStackParamListSwitch, Routes.BROWSER>
 
@@ -25,6 +27,14 @@ export const InAppBrowser: React.FC<Props> = ({ route }) => {
         handleConfirmChangeAccountNetworkBottomSheet,
         ChangeAccountNetworkBottomSheetRef,
     } = useInAppBrowser()
+
+    const track = useAnalyticTracking()
+
+    useEffect(() => {
+        if (route?.params?.isUniversalLink) {
+            track(AnalyticsEvent.DAPP_UNIVERSAL_LINK_INITIATED, { isUniversalLink: route.params.isUniversalLink })
+        }
+    }, [route.params.isUniversalLink, track])
 
     const [userAgent, setUserAgent] = React.useState<string | undefined>(undefined)
 

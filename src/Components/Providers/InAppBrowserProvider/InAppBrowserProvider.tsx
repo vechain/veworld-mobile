@@ -113,6 +113,7 @@ export const InAppBrowserProvider = ({ children }: Props) => {
 
             // log to sentry for debugging
             Sentry.captureException(url, { tags: { Feature_Tag: ERROR_EVENTS.UNIVERSAL_LINK } })
+            track(AnalyticsEvent.DAPP_UNIVERSAL_LINK_INITIATED, { url })
 
             try {
                 const _url = new URL(url)
@@ -122,6 +123,7 @@ export const InAppBrowserProvider = ({ children }: Props) => {
                 if (discoverUrl) {
                     nav.navigate(Routes.BROWSER, {
                         initialUrl: `https://${discoverUrl}`,
+                        isUniversalLink: true,
                     })
                 }
             } catch (e) {
@@ -132,7 +134,7 @@ export const InAppBrowserProvider = ({ children }: Props) => {
                 error(ERROR_EVENTS.UNIVERSAL_LINK, "Invalid deep link", url)
             }
         },
-        [LL, nav],
+        [LL, nav, track],
     )
 
     useEffect(() => {
