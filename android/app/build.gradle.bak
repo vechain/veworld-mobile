@@ -91,7 +91,7 @@ android {
         applicationId "org.vechain.veworld.app"
         minSdkVersion rootProject.ext.minSdkVersion
         targetSdkVersion rootProject.ext.targetSdkVersion
-        versionCode 66
+        versionCode 67
         versionName "1.6.4"
         testBuildType System.getProperty('testBuildType', 'debug')
         testInstrumentationRunner 'androidx.test.runner.AndroidJUnitRunner'
