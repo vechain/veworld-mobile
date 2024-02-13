@@ -110,7 +110,10 @@ jobs:
             - name: iOS - Detox test
               id: test_app_ios
               timeout-minutes: 100
-              run: yarn detox test --configuration ${{ env.IOS_CONFIGURATION }} --cleanup --headless --record-logs all --take-screenshots failing --retry 1 --tags "not @broken" --publish &> cucumber.log
+              run: |
+                pwd
+                npm install
+                yarn detox test --configuration ${{ env.IOS_CONFIGURATION }} --cleanup --headless --record-logs all --take-screenshots failing --retry 1 --tags "not @broken" --publish &> cucumber.log
 
             # Upload test artifacts from Detox
             - name: Upload detox artifacts
