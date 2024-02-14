@@ -108,6 +108,28 @@ const Main = () => {
     )
 }
 
+const linking = {
+    prefixes: [
+        "https://www.veworld.com/",
+        "veworld://",
+        "https://veworld.com/",
+        "https://veworld.net/",
+        "https://www.veworld.net/",
+    ],
+    config: {
+        screens: {
+            TabStack: {
+                screens: {
+                    DiscoverStack: {
+                        path: "discover",
+                        initialRouteName: "Discover",
+                    },
+                },
+            },
+        },
+    },
+}
+
 const NavigationProvider = ({ children }) => {
     const theme = useTheme()
 
@@ -122,7 +144,7 @@ const NavigationProvider = ({ children }) => {
     )
 
     return (
-        <NavigationContainer onReady={() => setReady(true)} theme={navigationTheme}>
+        <NavigationContainer onReady={() => setReady(true)} theme={navigationTheme} linking={linking}>
             {ready ? children : null}
         </NavigationContainer>
     )

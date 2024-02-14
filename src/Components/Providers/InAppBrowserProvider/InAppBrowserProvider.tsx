@@ -3,7 +3,7 @@ import WebView, { WebViewMessageEvent, WebViewNavigation } from "react-native-we
 import { WindowRequest, WindowResponse } from "./types"
 import { AnalyticsEvent, ERROR_EVENTS, RequestMethods } from "~Constants"
 import { useNavigation } from "@react-navigation/native"
-import { AddressUtils, DAppUtils, debug, error, warn } from "~Utils"
+import { AddressUtils, DAppUtils, debug, error, info, warn } from "~Utils"
 import { Routes } from "~Navigation"
 import { useAnalyticTracking, useBottomSheetModal, useSetSelectedAccount } from "~Hooks"
 import {
@@ -110,9 +110,8 @@ export const InAppBrowserProvider = ({ children }: Props) => {
         (url: string | null) => {
             if (url === null) return
             if (!JSON.stringify(url).includes("discoveryUrl")) return
+            info(ERROR_EVENTS.UNIVERSAL_LINK, url)
 
-            // log to sentry for debugging
-            Sentry.captureException(url, { tags: { Feature_Tag: ERROR_EVENTS.UNIVERSAL_LINK } })
             track(AnalyticsEvent.DAPP_UNIVERSAL_LINK_INITIATED, { url })
 
             try {
@@ -121,10 +120,14 @@ export const InAppBrowserProvider = ({ children }: Props) => {
                 const discoverUrl = _url.searchParams.get("discoveryUrl")
 
                 if (discoverUrl) {
-                    nav.navigate(Routes.BROWSER, {
-                        initialUrl: `https://${discoverUrl}`,
-                        isUniversalLink: true,
-                    })
+                    try {
+                        nav.navigate(Routes.BROWSER, {
+                            initialUrl: `https://${discoverUrl}`,
+                            isUniversalLink: true,
+                        })
+                    } catch (err) {
+                        Sentry.captureException({ url, err }, { tags: { Feature_Tag: ERROR_EVENTS.UNIVERSAL_LINK } })
+                    }
                 }
             } catch (e) {
                 showErrorToast({
