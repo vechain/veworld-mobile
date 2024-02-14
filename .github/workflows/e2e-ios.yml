@@ -5,146 +5,106 @@ on:
 
   workflow_call:
 
-env:
-    IOS_CONFIGURATION: ios.sim.debug_xcode_14.2
-
 jobs:
-    run-e2e-tests:
-        runs-on: macos
-        steps:
+  build-e2e-test-ios:
+    name: Detox Build & Test iOS Debug
+    runs-on: macos
 
-            # Checkout repository
-            - name: Checkout repository
-              uses: actions/checkout@v3
+    # Proceed only if it's either not a release event or it's a pre-release.
+    if: ${{ github.event_name != 'release' || (github.event_name == 'release' && github.event.release.prerelease) }}
 
-            # Setup Node
-            - name: Setup Node
-              uses: actions/setup-node@v3
-              with:
-                  architecture: x64
-                  node-version-file: .nvmrc
-                  cache: "yarn"
-         
-            # Install node via brew
-            - name: Install node
-              run: |
-                brew install node@18
-                echo 'export PATH="/usr/local/opt/node@18/bin:$PATH"' >> ~/.zshrc
-                export LDFLAGS="-L/usr/local/opt/node@18/lib"
-                export CPPFLAGS="-I/usr/local/opt/node@18/include"
-
-            - name: Install Yarn v1.22.19
-              run: npm install --global yarn@1.22.19
-
-            - name: Install & Patch packages
-              run: yarn install --frozen-lockfile --network-timeout 300000
-
-            # Install Homebrew and applesimutils for iOS
-            - name: iOS - Install macOS dependencies
-              run: |
-                node -v
-                brew update
-                brew tap wix/brew
-                brew install applesimutils
-                brew install libyaml
-                brew install gmp
-                yarn add expo
-                yarn global add detox-cli
-              env:
-                HOMEBREW_NO_AUTO_UPDATE: 1
-                HOMEBREW_NO_INSTALL_CLEANUP: 1
-
-            # Setup Ruby for iOS
-            - name: iOS - Setup Ruby
-              uses: ruby/setup-ruby@v1
-              with:
-                ruby-version: 2.7.5
-                bundler-cache: true
-
-            - name: Setup CocoaPods
-              run: |
-                  if brew list cocoapods &>/dev/null; then
-                    echo "CocoaPods is already installed"
-                    if ! brew link cocoapods --overwrite --dry-run &>/dev/null; then
-                      echo "Linking CocoaPods"
-                      brew link cocoapods --overwrite
-                    fi
-                  else
-                    echo "Installing CocoaPods"
-                    brew install cocoapods
-                    brew link cocoapods
-                  fi
-
-            # Install Detox CLI
-            - name: Setup Detox
-              run: |
-                yarn upgrade detox --latest
-                yarn detox clean-framework-cache && yarn detox build-framework-cache && yarn detox reset-lock-file
-
-            
-            # Install sentry properties for iOS
-            - name: iOS - Sentry properties
-              uses: mobiledevops/secret-to-file-action@v1
-              with:
-                base64-encoded-secret: ${{ secrets.SENTRY_PROPERTIES }}
-                filename: "sentry.properties"
-                is-executable: false
-                working-directory: "./ios"
-        
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v3
+        with:
+          # If it's a pre-release, check out the tag corresponding to the pre-release;
+          # otherwise, use the triggering branch unless it's a non-pre-release event.
+          ref: ${{ (github.event_name == 'release' && github.event.release.prerelease && github.event.release.tag_name) || github.ref }}
 
 
-            # Build iOS app
-            - name: iOS - Detox build
-              id: build_app_ios
-              timeout-minutes: 100
-              run: |
-                  pwd
-                  cd ios
-                  echo "Y" | npx install-expo-modules
-                  SKIP_SENTRY=true yarn detox build --configuration ${{ env.IOS_CONFIGURATION }}
-            
-            # Start Metro Bundler
-            - name: Start Metro Bundler
-              run: REACT_APP_UI_LOG=false yarn react-native start &> metro-bundler.log &
-             # Run iOS tests
-            - name: iOS - Detox test
-              id: test_app_ios
-              timeout-minutes: 100
-              run: |
-                pwd
-                security find-certificate -a -p /System/Library/Keychains/SystemRootCertificates.keychain > cacerts.pem
-                export NODE_EXTRA_CA_CERTS=/Users/ec2-user/actions-runner/_work/veworld-mobile/veworld-mobile/cacerts.pem
-                npm install --legacy-peer-deps
-                yarn detox test --configuration ${{ env.IOS_CONFIGURATION }} --cleanup --headless --record-logs all --take-screenshots failing --retry 1 --tags "not @broken" --publish &> cucumber.log
+      # Install Homebrew and applesimutils for Detox
+      - name: Install macOS dependencies
+        run: |
+          brew tap wix/brew
+          brew install applesimutils
+        env:
+          HOMEBREW_NO_AUTO_UPDATE: 1
+          HOMEBREW_NO_INSTALL_CLEANUP: 1
 
-            # Upload test artifacts from Detox
-            - name: Upload detox artifacts
-              if: always() || steps.build_app_ios.outcome == 'failure'
-              uses: actions/upload-artifact@v3
-              with:
-                name: detox-fail-artifacts
-                path: artifacts
+      # Setup Ruby
+      - name: Setup Ruby
+        uses: ruby/setup-ruby@v1
+        with:
+          bundler-cache: true
 
-            # Upload cucumber artifacts
-            - name: Upload cucumber artifacts
-              if: always() || steps.build_app_ios.outcome == 'failure'
-              uses: actions/upload-artifact@v3
-              with:
-                name: cucumber-fail-artifacts
-                path: |
-                    cucumber.log
-                    cucumber-report.html
-            
-            # Upload Metro Bundler logs
-            - name: Upload Metro Bundler logs
-              if: always() || steps.build_app_ios.outcome == 'failure'
-              uses: actions/upload-artifact@v2
-              with:
-                name: metro-bundler-logs
-                path: metro-bundler.log
+      # Setup Node.js
+      - name: Setup Node
+        uses: actions/setup-node@v3
+        with:
+          node-version-file: .nvmrc
+          cache: "yarn"
 
-            # Get cucumber published url
-            - name: Parse cucumber report URL
-              id: parse_report_url
-              run: |
-                echo report_url=$(cat cucumber.log | grep -Eo "https://reports.cucumber.io/reports/[a-zA-Z0-9-]+") >> "$GITHUB_OUTPUT"
+      # install dependencies with yarn
+      - name: Install & Patch packages
+        run: yarn install --frozen-lockfile --network-timeout 300000
+
+      # Install CocoaPods
+      - name: Install CocoaPods
+        run: npx pod-install
+
+      # Install Detox CLI
+      - name: Setup Detox
+        run: yarn detox clean-framework-cache && yarn detox build-framework-cache && yarn detox reset-lock-file
+
+      # Install sentry properties
+      - name: Sentry properties
+        uses: mobiledevops/secret-to-file-action@v1
+        with:
+            base64-encoded-secret: ${{ secrets.SENTRY_PROPERTIES }}
+            filename: "sentry.properties"
+            is-executable: false
+            working-directory: "./ios"
+
+      # Start Metro Bundler
+      - name: Start Metro Bundler
+        run: REACT_APP_UI_LOG=false yarn react-native start &> metro-bundler.log &
+
+      # Build iOS app
+      - name: Detox build iOS Debug
+        id: build_app
+        timeout-minutes: 60
+        run: SKIP_SENTRY=true yarn detox build --configuration ios.sim.debug_xcode_14.2 # GH macos-latest has Xcode 14.2
+
+      # Test with Detox
+      - name: Detox test iOS Debug
+        id: test_app
+        timeout-minutes: 100
+        run: yarn detox test --configuration ios.sim.debug_xcode_14.2 --cleanup --headless --record-logs all --take-screenshots all --tags "not @broken" --publish &> cucumber.log
+
+      # Upload test artifacts from Detox
+      - name: Upload detox artifacts
+        if: always() && steps.test_app.outcome == 'failure'
+        uses: actions/upload-artifact@v3
+        with:
+          name: detox-fail-artifacts
+          path: artifacts
+
+      # Upload cucumber artifacts
+      - name: Upload cucumber artifacts
+        if: always() && steps.test_app.outcome == 'failure'
+        uses: actions/upload-artifact@v3
+        with:
+          name: cucumber-fail-artifacts
+          path: |
+            cucumber.log
+            cucumber-report.html
+
+      # Upload Metro Bundler logs
+      - name: Upload Metro Bundler logs
+        if: always() && steps.build_app.outcome == 'failure'
+        uses: actions/upload-artifact@v2
+        with:
+          name: metro-bundler-logs
+          path: metro-bundler.log
+
+     
