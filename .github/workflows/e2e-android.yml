@@ -5,33 +5,14 @@ on:
     
     workflow_call:
 
-env:
-  ANDROID_CONFIGURATION: android.emu.debug.31
-  ANDROID_AVD_NAME: Pixel_6_Pro_API_31
-
-
 jobs:
     build-test-android:
         name: Detox Build & Test Android Release
-        runs-on: ubuntu
+        runs-on: macos
 
         steps:
             - name: Checkout repository
               uses: actions/checkout@v3
-            
-            - name: Install yarn
-              run: |
-                sudo apt update
-                curl -sS https://dl.yarnpkg.com/debian/pubkey.gpg | sudo apt-key add -
-                echo "deb https://dl.yarnpkg.com/debian/ stable main" | sudo tee /etc/apt/sources.list.d/yarn.list
-                sudo apt update
-                sudo apt install -y yarn
-
-            - name: Enable KVM
-              run: |
-                echo 'KERNEL=="kvm", GROUP="kvm", MODE="0666", OPTIONS+="static_node=kvm"' | sudo tee /etc/udev/rules.d/99-kvm4all.rules
-                sudo udevadm control --reload-rules
-                sudo udevadm trigger --name-match=kvm
 
             - name: Setup Node
               uses: actions/setup-node@v3
@@ -50,7 +31,7 @@ jobs:
                   java-version: "11"
 
             - name: Rebuild Detox Framework
-              run: yarn detox clean-framework-cache && yarn detox build-framework-cache && yarn detox reset-lock-file
+              run: yarn detox clean-framework-cache && yarn detox build-framework-cache
 
             # Install sentry properties
             - name: Sentry properties
@@ -70,28 +51,26 @@ jobs:
                 is-executable: false
                 working-directory: "./android"
 
-            # Start Metro Bundler
+            - name: Detox build Android release
+              run: yarn detox build --configuration android.emu.debug.31
+
+            - name: Get device name
+              id: device-name
+              run: node -e "console.log('AVD_NAME=' + require('./.detoxrc').devices.emulator_31.device.avdName)" >> $GITHUB_OUTPUT
+
             - name: Start Metro Bundler
-              run: REACT_APP_UI_LOG=false yarn react-native start &> metro-bundler.log &
+              run: yarn react-native start &
 
-            # Build Android app
-            - name: Android - Detox build
-              id: build_app_android
-              timeout-minutes: 100
-              run: yarn detox build --configuration ${{ env.ANDROID_CONFIGURATION }}
-
-             # Run Android tests
-            - name: Android - Detox test
-              id: test_app_android
+            - name: Detox test Android release
               uses: reactivecircus/android-emulator-runner@v2
-              timeout-minutes: 100
+              timeout-minutes: 90
               with:
                   api-level: 31
                   arch: x86_64
                   force-avd-creation: false
                   disable-animations: true
-                  avd-name: ${{ env.ANDROID_AVD_NAME }}
-                  script: yarn detox test --configuration ${{ env.ANDROID_CONFIGURATION }} --headless --record-logs all --take-screenshots failing --tags "not @broken and not @notAndroid" --parallel ${{ inputs.parallel }} --publish &> cucumber.log
+                  avd-name: ${{ steps.device-name.outputs.AVD_NAME }}
+                  script: yarn detox test --configuration android.emu.debug.31 --headless --record-logs all --take-screenshots failing --tags "not @broken and not @notAndroid" --publish
 
             - name: Upload artifacts
               if: failure() || cancelled()
