@@ -13,7 +13,7 @@ env:
 jobs:
     build-test-android:
         name: Detox Build & Test Android Release
-        runs-on: ubuntu
+        runs-on: macos
 
         steps:
             - name: Checkout repository
