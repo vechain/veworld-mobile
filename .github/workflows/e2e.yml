@@ -34,9 +34,6 @@ jobs:
               with:
                   node-version-file: .nvmrc
                   cache: "yarn"
-
-            - name: Install Yarn v1.22.19
-              run: npm install --global yarn@1.22.19
             
             - name: Install & Patch packages
               run: yarn install --frozen-lockfile --network-timeout 300000
@@ -49,12 +46,6 @@ jobs:
                   cache: gradle
                   distribution: "zulu"
                   java-version: "11"
-            #Setup SDK
-            - name: Setup Android SDK
-              if: ${{ inputs.platform == 'android' }}
-              uses: android-actions/setup-android@v3
-              with: 
-                cmdline-tools-version: 9123335
         
             # Install Homebrew and applesimutils for iOS
             - name: iOS - Install macOS dependencies
@@ -66,17 +57,17 @@ jobs:
                 HOMEBREW_NO_AUTO_UPDATE: 1
                 HOMEBREW_NO_INSTALL_CLEANUP: 1
 
+            # Install CocoaPods for iOS
+            - name: iOS - Install CocoaPods
+              if: ${{ inputs.platform == 'ios' }}
+              run: npx pod-install
+         
             # Setup Ruby for iOS
             - name: iOS - Setup Ruby
               if: ${{ inputs.platform == 'ios' }}
               uses: ruby/setup-ruby@v1
               with:
                 bundler-cache: true
-
-            # Install CocoaPods for iOS
-            - name: iOS - Install CocoaPods
-              if: ${{ inputs.platform == 'ios' }}
-              run: npx pod-install
 
             # Install Detox CLI
             - name: Setup Detox
