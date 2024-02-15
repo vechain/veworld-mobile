@@ -1,10 +1,11 @@
-import React, { forwardRef, memo } from "react"
-import { StyleSheet, TextInputProps, StyleProp, ViewStyle } from "react-native"
+import React, { forwardRef, memo, useMemo } from "react"
+import { StyleSheet, TextInputProps, StyleProp, ViewStyle, KeyboardTypeOptions } from "react-native"
 import { useThemedStyles } from "~Hooks"
 import { COLORS, typography, ColorThemeType } from "~Constants"
 import { BaseIcon, BaseText } from "~Components"
 import { BaseView } from "../BaseView"
 import { TextInput } from "react-native-gesture-handler"
+import { PlatformUtils } from "~Utils"
 const { defaults: defaultTypography } = typography
 
 export type BaseTextInputProps = {
@@ -47,6 +48,20 @@ const BaseTextInputComponent = forwardRef<TextInput, BaseTextInputProps>(
 
         const placeholderColor = theme.isDark ? COLORS.WHITE_DISABLED : COLORS.DARK_PURPLE_DISABLED
 
+        const setInputParams = useMemo(() => {
+            if (PlatformUtils.isAndroid()) {
+                return {
+                    keyboardType: "email-address" as KeyboardTypeOptions,
+                    autoCorrect: false,
+                }
+            } else {
+                return {
+                    keyboardType: undefined,
+                    autoCorrect: undefined,
+                }
+            }
+        }, [])
+
         return (
             <BaseView style={containerStyle}>
                 {label && (
@@ -65,8 +80,8 @@ const BaseTextInputComponent = forwardRef<TextInput, BaseTextInputProps>(
                             style,
                         ]}
                         // workarounds for android crashing when using the keyboard
-                        keyboardType="email-address"
-                        autoCorrect={false}
+                        keyboardType={setInputParams.keyboardType}
+                        autoCorrect={setInputParams.autoCorrect}
                         placeholder={placeholder}
                         placeholderTextColor={placeholderColor}
                         onChangeText={setValue}

@@ -1,9 +1,10 @@
-import React, { memo } from "react"
-import { TextInput, StyleSheet } from "react-native"
+import React, { memo, useMemo } from "react"
+import { TextInput, StyleSheet, KeyboardTypeOptions } from "react-native"
 import { useTheme, useThemedStyles } from "~Hooks"
 import { typography, ColorThemeType, COLORS } from "~Constants"
 import { BaseIcon } from "../BaseIcon"
 import { BaseView } from "../BaseView"
+import { PlatformUtils } from "~Utils"
 const { defaults: defaultTypography } = typography
 
 type Props = {
@@ -20,12 +21,26 @@ export const BaseSearchInput = memo(({ placeholder = "Search", value, setValue, 
 
     const placeholderColor = theme.isDark ? COLORS.WHITE_DISABLED : COLORS.DARK_PURPLE_DISABLED
 
+    const setInputParams = useMemo(() => {
+        if (PlatformUtils.isAndroid()) {
+            return {
+                keyboardType: "email-address" as KeyboardTypeOptions,
+                autoCorrect: false,
+            }
+        } else {
+            return {
+                keyboardType: undefined,
+                autoCorrect: undefined,
+            }
+        }
+    }, [])
+
     return (
         <BaseView style={styles.container}>
             <TextInput
                 // workarounds for android crashing when using the keyboard
-                keyboardType="email-address"
-                autoCorrect={false}
+                keyboardType={setInputParams.keyboardType}
+                autoCorrect={setInputParams.autoCorrect}
                 style={styles.input}
                 placeholder={placeholder}
                 placeholderTextColor={placeholderColor}
