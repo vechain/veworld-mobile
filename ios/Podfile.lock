@@ -660,7 +660,7 @@ PODS:
     - React-Core
   - RNScrypt (1.2.1):
     - React
-  - RNSentry (5.18.0):
+  - RNSentry (5.19.0):
     - hermes-engine
     - React-Core
     - React-hermes
@@ -1132,7 +1132,7 @@ SPEC CHECKSUMS:
   RNReanimated: ab2e96c6d5591c3dfbb38a464f54c8d17fb34a87
   RNScreens: 3c5b9f4a9dcde752466854b6109b79c0e205dad3
   RNScrypt: 95fdef077b482e9fdf8a761120cb69d129ef4016
-  RNSentry: eefa12fa65b37dd71f54371720f9fcddcd17be2f
+  RNSentry: 98df59e833edc1975d8628fb8c5345773c79974a
   RNSVG: d00c8f91c3cbf6d476451313a18f04d220d4f396
   SDWebImage: a7f831e1a65eb5e285e3fb046a23fcfbf08e696d
   SDWebImageWebPCoder: 908b83b6adda48effe7667cd2b7f78c897e5111d
