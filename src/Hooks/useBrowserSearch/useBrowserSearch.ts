@@ -17,10 +17,10 @@ export const useBrowserSearch = () => {
                 navInput = `https://${searchStr}`
             }
 
-            nav.navigate(Routes.BROWSER, { initialUrl: navInput })
+            nav.navigate(Routes.BROWSER, { url: navInput })
         } else {
             nav.navigate(Routes.BROWSER, {
-                initialUrl: `https://www.google.com/search?q=${encodeURIComponent(searchStr)}&oq=${encodeURIComponent(
+                url: `https://www.google.com/search?q=${encodeURIComponent(searchStr)}&oq=${encodeURIComponent(
                     searchStr,
                 )}`,
             })
