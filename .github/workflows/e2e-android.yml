@@ -52,7 +52,9 @@ jobs:
                 working-directory: "./android"
 
             - name: Detox build Android release
-              run: yarn detox build --configuration android.emu.debug.31
+              run: |
+                    brew install kotlin
+                    yarn detox build --configuration android.emu.debug.31
 
             - name: Get device name
               id: device-name
