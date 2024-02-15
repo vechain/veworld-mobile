@@ -21,7 +21,7 @@ jobs:
                   cache: "yarn"
 
             - name: Install & Patch packages
-              run: yarn install
+              run: yarn install --frozen-lockfile --network-timeout 300000
 
             - name: Setup Java
               uses: actions/setup-java@v3
