@@ -5,13 +5,14 @@ import WebView from "react-native-webview"
 import { useInAppBrowser } from "~Components/Providers/InAppBrowserProvider"
 import { BrowserBottomBar, URLBar } from "./Components"
 import { NativeStackScreenProps } from "@react-navigation/native-stack"
-import { RootStackParamListSwitch, Routes } from "~Navigation"
+import { RootStackParamListBrowser, Routes } from "~Navigation"
 import DeviceInfo from "react-native-device-info"
 import { ChangeAccountNetworkBottomSheet } from "./Components/ChangeAccountNetworkBottomSheet"
 import { AnalyticsEvent } from "~Constants"
 import { useAnalyticTracking } from "~Hooks"
+import { useNavigation } from "@react-navigation/native"
 
-type Props = NativeStackScreenProps<RootStackParamListSwitch, Routes.BROWSER>
+type Props = NativeStackScreenProps<RootStackParamListBrowser, Routes.BROWSER>
 
 export const InAppBrowser: React.FC<Props> = ({ route }) => {
     const {
@@ -29,12 +30,13 @@ export const InAppBrowser: React.FC<Props> = ({ route }) => {
     } = useInAppBrowser()
 
     const track = useAnalyticTracking()
+    const nav = useNavigation()
 
     useEffect(() => {
-        if (route?.params?.isUniversalLink) {
-            track(AnalyticsEvent.DAPP_UNIVERSAL_LINK_INITIATED, { isUniversalLink: route.params.isUniversalLink })
+        if (route?.params?.ul) {
+            track(AnalyticsEvent.DAPP_UNIVERSAL_LINK_INITIATED, { isUniversalLink: route.params.ul })
         }
-    }, [route.params.isUniversalLink, track])
+    }, [nav, route.params.ul, track])
 
     const [userAgent, setUserAgent] = React.useState<string | undefined>(undefined)
 
@@ -55,6 +57,8 @@ export const InAppBrowser: React.FC<Props> = ({ route }) => {
             fixedHeader={<URLBar />}
             noBackButton
             noMargin
+            hasSafeArea={false}
+            hasTopSafeAreaOnly
             footer={<BrowserBottomBar />}
             fixedBody={
                 <View style={styles.container}>
@@ -62,7 +66,7 @@ export const InAppBrowser: React.FC<Props> = ({ route }) => {
                         <WebView
                             ref={webviewRef as MutableRefObject<WebView>}
                             source={{
-                                uri: navigationState?.url ?? route.params.initialUrl,
+                                uri: navigationState?.url ?? route.params.url,
                             }}
                             userAgent={userAgent}
                             onNavigationStateChange={onNavigationStateChange}

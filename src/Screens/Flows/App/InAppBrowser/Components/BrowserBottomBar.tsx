@@ -72,7 +72,7 @@ const createStyles = (theme: ColorThemeType) =>
             borderTopColor: theme.colors.card,
             borderTopWidth: 1,
             paddingTop: 10,
-            paddingBottom: isIOS() ? 40 : 10,
+            paddingBottom: isIOS() ? 42 : 10,
         },
         icon: {
             fontSize: 40,

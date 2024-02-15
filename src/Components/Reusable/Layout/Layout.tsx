@@ -5,6 +5,7 @@ import { RefreshControlProps, ScrollView, StyleSheet } from "react-native"
 import { useTabBarBottomMargin, useTheme } from "~Hooks"
 import { isAndroid } from "~Utils/PlatformUtils/PlatformUtils"
 import { SelectedNetworkViewer } from "~Components"
+import { SafeAreaView } from "react-native-safe-area-context"
 
 type Props = {
     noBackButton?: boolean
@@ -25,6 +26,7 @@ type Props = {
     onGoBack?: () => void
     beforeNavigating?: () => Promise<void> | void
     hasSafeArea?: boolean
+    hasTopSafeAreaOnly?: boolean
 }
 
 export const Layout = ({
@@ -47,6 +49,7 @@ export const Layout = ({
     onGoBack,
     beforeNavigating,
     hasSafeArea = true,
+    hasTopSafeAreaOnly = false,
 }: Props) => {
     const theme = useTheme()
     const { androidOnlyTabBarBottomMargin, tabBarBottomMargin } = useTabBarBottomMargin()
@@ -170,6 +173,12 @@ export const Layout = ({
             <BaseSafeArea grow={1} testID={safeAreaTestID} onTouchStart={onTouchBody}>
                 {renderContent}
             </BaseSafeArea>
+        )
+    } else if (hasTopSafeAreaOnly) {
+        return (
+            <SafeAreaView onTouchStart={onTouchBody} edges={["top", "left", "right"]}>
+                {renderContent}
+            </SafeAreaView>
         )
     } else {
         return <>{renderContent}</>
