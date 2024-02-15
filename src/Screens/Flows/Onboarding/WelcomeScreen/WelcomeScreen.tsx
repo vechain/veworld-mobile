@@ -111,7 +111,7 @@ export const WelcomeScreen = () => {
                         testID="GET_STARTED_BTN"
                         haptics="Medium"
                     />
-                    {devFeaturesEnabled && (
+                    {(devFeaturesEnabled || process.env.IS_CI_BUILD_ENABLED) && (
                         <BaseButton size="md" variant="link" action={onDemoOnboarding} title="DEV:DEMO" />
                     )}
                 </BaseView>

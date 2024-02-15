@@ -114,3 +114,34 @@ platform :android do
   end
 end
 # 
+
+
+lane :build_test_ci do 
+  store_password = ENV["STORE_PASSWORD"]
+  key_password = ENV["KEY_PASSWORD"]
+  key_alias = ENV["KEY_ALIAS"]
+
+  Dir.chdir "../.." do
+    sh("yarn purge:android && yarn install")
+  end
+
+  releaseFilePath = File.join(Dir.pwd, "..", "release.keystore")
+
+  gradle(task: 'clean')
+  gradle(
+    task: 'assemble',
+    build_type: 'Release',
+    print_command: true,
+    print_command_output: true,
+
+    properties: {
+      "android.injected.version.code" => version_code, # Manually increment this value before each release
+      "android.injected.version.name" => version_name, # Manually increment this value before each release
+      "android.injected.signing.store.file" => releaseFilePath, # Path to the release keystore
+      "android.injected.signing.store.password" => store_password, # Keystore password
+      "android.injected.signing.key.alias" => key_alias, # Key alias
+      "android.injected.signing.key.password" => key_password, # Key password
+    }
+  )
+
+end
