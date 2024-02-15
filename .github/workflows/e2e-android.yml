@@ -8,7 +8,7 @@ on:
 jobs:
     build-test-android:
         name: Detox Build & Test Android Release
-        runs-on: ubuntu
+        runs-on: macos
 
         steps:
             - name: Checkout repository
@@ -32,7 +32,7 @@ jobs:
 
             - name: Rebuild Detox Framework
               run: yarn detox clean-framework-cache && yarn detox build-framework-cache
-              
+
             # Install sentry properties
             - name: Sentry properties
               uses: mobiledevops/secret-to-file-action@v1
