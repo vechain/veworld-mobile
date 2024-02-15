@@ -1,6 +1,7 @@
-import React from "react"
+import React, { useMemo } from "react"
 import Animated, { useAnimatedProps } from "react-native-reanimated"
-import { TextInputProps, TextInput, TextProps as RNTextProps } from "react-native"
+import { TextInputProps, TextInput, TextProps as RNTextProps, KeyboardTypeOptions } from "react-native"
+import { PlatformUtils } from "~Utils"
 
 // base animated text component using a TextInput
 // forked from https://github.com/wcandillon/react-native-redash/blob/master/src/ReText.tsx
@@ -21,12 +22,25 @@ export const BaseAnimatedText = (props: TextProps): JSX.Element => {
         } as any
     })
 
+    const setInputParams = useMemo(() => {
+        if (PlatformUtils.isAndroid()) {
+            return {
+                keyboardType: "email-address" as KeyboardTypeOptions,
+                autoCorrect: false,
+            }
+        } else {
+            return {
+                keyboardType: undefined,
+                autoCorrect: undefined,
+            }
+        }
+    }, [])
+
     return (
         <AnimatedTextInput
             // workarounds for android crashing when using the keyboard
-            editable={false}
-            keyboardType="email-address"
-            autoCorrect={false}
+            keyboardType={setInputParams.keyboardType}
+            autoCorrect={setInputParams.autoCorrect}
             style={[style || undefined]}
             underlineColorAndroid="transparent"
             value={text.value}
