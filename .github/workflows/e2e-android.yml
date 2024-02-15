@@ -73,6 +73,7 @@ jobs:
                   script: yarn detox test --configuration android.emu.debug.31 --headless --record-logs all --take-screenshots failing --tags "not @broken and not @notAndroid" --publish
 
             - name: Upload artifacts
+              if: failure() || cancelled()
               uses: actions/upload-artifact@v3
               with:
                   name: detox-fail-artifacts
@@ -80,6 +81,7 @@ jobs:
 
                   # Upload cucumber artifacts
             - name: Upload cucumber artifacts
+              if: failure() || cancelled()
               uses: actions/upload-artifact@v3
               with:
                 name: cucumber-fail-artifacts
@@ -89,6 +91,7 @@ jobs:
 
             # Upload Metro Bundler logs
             - name: Upload Metro Bundler logs
+              if: failure() || cancelled()
               uses: actions/upload-artifact@v2
               with:
                 name: metro-bundler-logs
