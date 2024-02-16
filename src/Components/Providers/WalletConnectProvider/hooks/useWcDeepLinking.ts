@@ -1,6 +1,6 @@
 import { useCallback, useEffect, useState } from "react"
 import { Linking } from "react-native"
-import { debug, error, WalletConnectUtils } from "~Utils"
+import { error, WalletConnectUtils } from "~Utils"
 import { WALLET_STATUS } from "~Model"
 import { useApplicationSecurity } from "~Components"
 import { ValidURI } from "~Utils/WalletConnectUtils/WalletConnectUtils"
@@ -73,7 +73,6 @@ export const useWcDeepLinking = (onPair: (uri: string) => Promise<void>): IUseWc
 
     useEffect(() => {
         Linking.getInitialURL().then(url => {
-            debug(ERROR_EVENTS.WALLET_CONNECT, "WalletConnectProvider:Linking.getInitialURL", url)
             if (url) {
                 setDeepLinkUris(prev => [...prev, url])
             }
@@ -86,7 +85,6 @@ export const useWcDeepLinking = (onPair: (uri: string) => Promise<void>): IUseWc
      */
     useEffect(() => {
         Linking.addListener("url", event => {
-            debug(ERROR_EVENTS.WALLET_CONNECT, "WalletConnectProvider:Linking.addListener", event)
             setDeepLinkUris(prev => [...prev, event.url])
         })
     }, [])

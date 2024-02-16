@@ -20,7 +20,6 @@ export const InAppBrowser: React.FC<Props> = ({ route }) => {
         onMessage,
         injectVechainScript,
         onNavigationStateChange,
-        navigationState,
         resetWebViewState,
         targetAccount,
         targetNetwork,
@@ -53,10 +52,8 @@ export const InAppBrowser: React.FC<Props> = ({ route }) => {
     }, [])
 
     const uri = useMemo(() => {
-        // is this necessary?
-        if (navigationState?.url) return navigationState?.url
         return route.params.url
-    }, [navigationState?.url, route.params.url])
+    }, [route.params.url])
 
     return (
         <Layout
@@ -70,6 +67,7 @@ export const InAppBrowser: React.FC<Props> = ({ route }) => {
                 <View style={styles.container}>
                     {userAgent && (
                         <WebView
+                            key={uri}
                             ref={webviewRef as MutableRefObject<WebView>}
                             source={{ uri }}
                             userAgent={userAgent}
