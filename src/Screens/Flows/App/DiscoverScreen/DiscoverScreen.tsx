@@ -63,7 +63,7 @@ export const DiscoverScreen: React.FC = () => {
 
     const onDAppPress = useCallback(
         (dapp: DiscoveryDApp) => {
-            nav.navigate(Routes.BROWSER, { initialUrl: dapp.href })
+            nav.navigate(Routes.BROWSER, { url: dapp.href })
             setFilteredSearch(undefined)
 
             track(AnalyticsEvent.DISCOVERY_USER_OPENED_DAPP, {

@@ -1,4 +1,4 @@
-import React, { useCallback } from "react"
+import React, { useCallback, useMemo } from "react"
 import { StyleSheet } from "react-native"
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs"
 import { TabIcon } from "~Components"
@@ -6,22 +6,40 @@ import { useTheme } from "~Hooks"
 import PlatformUtils from "~Utils/PlatformUtils"
 import { DiscoverStack, HomeStack, SettingsStack } from "~Navigation/Stacks"
 import { NFTStack } from "~Navigation/Stacks/NFTStack"
+import { selectCurrentScreen, useAppSelector } from "~Storage/Redux"
+import { Routes } from "~Navigation/Enums"
 
 const Tab = createBottomTabNavigator()
 
 export const TabStack = () => {
     const theme = useTheme()
+    const currentScreen = useAppSelector(selectCurrentScreen)
 
     const renderTabBarIcon = useCallback(
         (focused: boolean, iconName: string) => <TabIcon focused={focused} title={iconName} />,
         [],
     )
+
+    const display = useMemo(() => {
+        switch (currentScreen) {
+            case Routes.BROWSER:
+                return "none"
+
+            case "":
+                return "none"
+
+            default:
+                return "flex"
+        }
+    }, [currentScreen])
+
     return (
         <Tab.Navigator
             screenOptions={{
                 headerShown: false,
                 tabBarShowLabel: false,
                 tabBarStyle: {
+                    display,
                     backgroundColor: theme.colors.card,
                     ...tabbarBaseStyles.tabbar,
                     ...tabbarBaseStyles.shadow,

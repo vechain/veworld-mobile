@@ -5,8 +5,9 @@
 	<key>com.apple.developer.associated-domains</key>
 	<array>
 		<string>applinks:veworld.com</string>
-		<string>applinks:universal-links-1b525.web.app</string>
 		<string>applinks:veworld.net</string>
+		<string>applinks:www.veworld.com</string>
+		<string>applinks:www.veworld.net</string>
 	</array>
 </dict>
 </plist>

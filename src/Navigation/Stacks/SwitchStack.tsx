@@ -3,13 +3,7 @@ import { createNativeStackNavigator } from "@react-navigation/native-stack"
 import { TabStack } from "~Navigation/Tabs"
 import { OnboardingStack } from "./OnboardingStack"
 import { CreateWalletAppStack, Routes } from "~Navigation"
-import {
-    BlackListedCollectionsScreen,
-    ConnectAppScreen,
-    InAppBrowser,
-    SendTransactionScreen,
-    SignCertificateScreen,
-} from "~Screens"
+import { BlackListedCollectionsScreen, ConnectAppScreen, SendTransactionScreen, SignCertificateScreen } from "~Screens"
 import { PendingRequestTypes } from "@walletconnect/types"
 import { AppBlockedScreen } from "~Screens/Flows/App/AppBlockedScreen"
 import { TransferEventListener } from "../../TransferEventListener"
@@ -27,10 +21,6 @@ export type RootStackParamListSwitch = {
     OnboardingStack: undefined
     TabStack: undefined
     ResetAppScreen: undefined
-    [Routes.BROWSER]: {
-        initialUrl: string
-        isUniversalLink?: boolean
-    }
     [Routes.CREATE_WALLET_FLOW]: undefined
     [Routes.BLACKLISTED_COLLECTIONS]: undefined
     [Routes.BUY_FLOW]: undefined
@@ -115,12 +105,6 @@ export const SwitchStack = () => {
                         <Switch.Screen name={Routes.LEDGER_SIGN_TRANSACTION} component={LedgerSignTransaction} />
 
                         <Switch.Screen name={Routes.LEDGER_SIGN_MESSAGE} component={LedgerSignMessage} />
-
-                        <Switch.Screen
-                            name={Routes.BROWSER}
-                            component={InAppBrowser}
-                            options={{ headerShown: false }}
-                        />
 
                         {BUY_FEATURE_ENABLED && (
                             <Switch.Screen

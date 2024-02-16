@@ -1,10 +1,10 @@
 /* eslint-disable react-native/no-inline-styles */
-import React, { useEffect, useMemo, useState } from "react"
+import React, { useEffect, useMemo, useRef, useState } from "react"
 import { AppRegistry, LogBox } from "react-native"
 import { EntryPoint } from "./src/EntryPoint"
 import { name as appName } from "./app.json"
 import "@walletconnect/react-native-compat"
-import { NavigationContainer } from "@react-navigation/native"
+import { NavigationContainer, useNavigationContainerRef } from "@react-navigation/native"
 import { SafeAreaProvider } from "react-native-safe-area-context"
 import { useTheme } from "~Hooks"
 import {
@@ -30,7 +30,13 @@ import { ERROR_EVENTS, typography } from "~Constants"
 import { AnalyticsUtils, info } from "~Utils"
 import { BottomSheetModalProvider } from "@gorhom/bottom-sheet"
 import { PersistedThemeProvider, StoreContextProvider } from "~Components/Providers"
-import { selectAnalyticsTrackingEnabled, selectSentryTrackingEnabled, useAppSelector } from "~Storage/Redux"
+import {
+    selectAnalyticsTrackingEnabled,
+    selectSentryTrackingEnabled,
+    useAppSelector,
+    useAppDispatch,
+    setCurrentMountedScreen,
+} from "~Storage/Redux"
 import * as Sentry from "@sentry/react-native"
 import "react-native-url-polyfill/auto"
 import { InAppBrowserProvider } from "~Components/Providers/InAppBrowserProvider"
@@ -123,6 +129,15 @@ const linking = {
                     DiscoverStack: {
                         path: "discover",
                         initialRouteName: "Discover",
+                        screens: {
+                            Browser: {
+                                path: "browser/:redirect?/:ul/:url",
+                                parse: {
+                                    ul: () => true,
+                                    url: url => decodeURIComponent(url),
+                                },
+                            },
+                        },
                     },
                 },
             },
@@ -143,8 +158,32 @@ const NavigationProvider = ({ children }) => {
         [theme],
     )
 
+    const navigationRef = useNavigationContainerRef()
+    const routeNameRef = useRef(null)
+    const dispatch = useAppDispatch()
+
     return (
-        <NavigationContainer onReady={() => setReady(true)} theme={navigationTheme} linking={linking}>
+        <NavigationContainer
+            ref={navigationRef}
+            onReady={() => {
+                if (routeNameRef && routeNameRef.current === null) {
+                    routeNameRef.current = navigationRef.getCurrentRoute()?.name
+                }
+                setReady(true)
+            }}
+            onStateChange={async () => {
+                const previousRouteName = routeNameRef.current
+                const currentRouteName = navigationRef.getCurrentRoute()?.name
+                const trackScreenView = _currentRouteName => {
+                    dispatch(setCurrentMountedScreen(_currentRouteName))
+                }
+                if (previousRouteName !== currentRouteName) {
+                    routeNameRef.current = currentRouteName
+                    trackScreenView(currentRouteName)
+                }
+            }}
+            theme={navigationTheme}
+            linking={linking}>
             {ready ? children : null}
         </NavigationContainer>
     )
