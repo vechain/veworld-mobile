@@ -1,6 +1,6 @@
 import { Layout } from "~Components"
 import { StyleSheet, View } from "react-native"
-import React, { MutableRefObject, useEffect, useMemo } from "react"
+import React, { MutableRefObject, useEffect } from "react"
 import WebView from "react-native-webview"
 import { useInAppBrowser } from "~Components/Providers/InAppBrowserProvider"
 import { BrowserBottomBar, URLBar } from "./Components"
@@ -51,10 +51,6 @@ export const InAppBrowser: React.FC<Props> = ({ route }) => {
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [])
 
-    const uri = useMemo(() => {
-        return route.params.url
-    }, [route.params.url])
-
     return (
         <Layout
             fixedHeader={<URLBar />}
@@ -67,9 +63,8 @@ export const InAppBrowser: React.FC<Props> = ({ route }) => {
                 <View style={styles.container}>
                     {userAgent && (
                         <WebView
-                            key={uri}
                             ref={webviewRef as MutableRefObject<WebView>}
-                            source={{ uri }}
+                            source={{ uri: route.params.url }}
                             userAgent={userAgent}
                             onNavigationStateChange={onNavigationStateChange}
                             javaScriptEnabled={true}
