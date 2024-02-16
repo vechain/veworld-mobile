@@ -131,10 +131,10 @@ const linking = {
                         initialRouteName: "Discover",
                         screens: {
                             Browser: {
-                                path: "browser/:url/:ul",
+                                path: "browser/:redirect?/:ul/:url",
                                 parse: {
-                                    url: url => `https://${url}`,
                                     ul: () => true,
+                                    url: url => decodeURIComponent(url),
                                 },
                             },
                         },

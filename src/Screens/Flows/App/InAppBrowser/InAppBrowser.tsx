@@ -1,6 +1,6 @@
 import { Layout } from "~Components"
 import { StyleSheet, View } from "react-native"
-import React, { MutableRefObject, useEffect } from "react"
+import React, { MutableRefObject, useEffect, useMemo } from "react"
 import WebView from "react-native-webview"
 import { useInAppBrowser } from "~Components/Providers/InAppBrowserProvider"
 import { BrowserBottomBar, URLBar } from "./Components"
@@ -34,9 +34,9 @@ export const InAppBrowser: React.FC<Props> = ({ route }) => {
 
     useEffect(() => {
         if (route?.params?.ul) {
-            track(AnalyticsEvent.DAPP_UNIVERSAL_LINK_INITIATED, { isUniversalLink: route.params.ul })
+            track(AnalyticsEvent.DAPP_UNIVERSAL_LINK_INITIATED, { isUniversalLink: route.params.url })
         }
-    }, [nav, route.params.ul, track])
+    }, [nav, route.params?.ul, route.params.url, track])
 
     const [userAgent, setUserAgent] = React.useState<string | undefined>(undefined)
 
@@ -52,6 +52,12 @@ export const InAppBrowser: React.FC<Props> = ({ route }) => {
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [])
 
+    const uri = useMemo(() => {
+        // is this necessary?
+        if (navigationState?.url) return navigationState?.url
+        return route.params.url
+    }, [navigationState?.url, route.params.url])
+
     return (
         <Layout
             fixedHeader={<URLBar />}
@@ -65,9 +71,7 @@ export const InAppBrowser: React.FC<Props> = ({ route }) => {
                     {userAgent && (
                         <WebView
                             ref={webviewRef as MutableRefObject<WebView>}
-                            source={{
-                                uri: navigationState?.url ?? route.params.url,
-                            }}
+                            source={{ uri }}
                             userAgent={userAgent}
                             onNavigationStateChange={onNavigationStateChange}
                             javaScriptEnabled={true}
