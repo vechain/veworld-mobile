@@ -13,6 +13,17 @@ For _fastlane_ installation instructions, see [Installing _fastlane_](https://do
 
 # Available Actions
 
+### build_test_ci
+
+```sh
+[bundle exec] fastlane build_test_ci
+```
+
+
+
+----
+
+
 ## Android
 
 ### android validate
