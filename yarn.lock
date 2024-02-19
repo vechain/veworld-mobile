@@ -3909,39 +3909,39 @@
   dependencies:
     defer-to-connect "^2.0.1"
 
-"@tanstack/query-core@5.20.5":
-  version "5.20.5"
-  resolved "https://registry.yarnpkg.com/@tanstack/query-core/-/query-core-5.20.5.tgz#12bb02a937cc8f4f158b1428c0ddef5a1f48479b"
-  integrity sha512-T1W28gGgWn0A++tH3lxj3ZuUVZZorsiKcv+R50RwmPYz62YoDEkG4/aXHZELGkRp4DfrW07dyq2K5dvJ4Wl1aA==
+"@tanstack/query-core@5.21.7":
+  version "5.21.7"
+  resolved "https://registry.yarnpkg.com/@tanstack/query-core/-/query-core-5.21.7.tgz#c020574ea683a0738836549a686605f740438a7d"
+  integrity sha512-z0NSWFsM75esVmkxeuDWeyo9Wv4CZ/WsLMZgu1Zz164S6Oc/57NMia88dTu/d51wdVowMTAcDMQgRmiWmyPMxQ==
 
-"@tanstack/query-persist-client-core@5.20.5":
-  version "5.20.5"
-  resolved "https://registry.yarnpkg.com/@tanstack/query-persist-client-core/-/query-persist-client-core-5.20.5.tgz#2917a4e26b7defb9765cb95fb07896f046c8e0da"
-  integrity sha512-wR11+nLFFqmP5Em/vgih/89YABWfO6gzuv1h+934LAnsxNew3Ih4y1j/M7WgammWnpkUJrFy50/5BCAk4bQZIg==
+"@tanstack/query-persist-client-core@5.21.7":
+  version "5.21.7"
+  resolved "https://registry.yarnpkg.com/@tanstack/query-persist-client-core/-/query-persist-client-core-5.21.7.tgz#517f095c7f4eaa0f73662caac3dc605d61566feb"
+  integrity sha512-Lon0rI7c9lN4MkW12iuTWL6aEF1aGSoVAswEqD2O3NvVMQ/EOeopnn/95nfo37qO0xZRe39moBlmKtXLH9Vu2A==
   dependencies:
-    "@tanstack/query-core" "5.20.5"
+    "@tanstack/query-core" "5.21.7"
 
 "@tanstack/query-sync-storage-persister@^5.14.1":
-  version "5.20.5"
-  resolved "https://registry.yarnpkg.com/@tanstack/query-sync-storage-persister/-/query-sync-storage-persister-5.20.5.tgz#49799626adcab6092a0b42e40477f006b5095c75"
-  integrity sha512-cvY11l39h+D5oQ2Ejb3VS2VgjxoaTK4RarzU/2csSHTVx7V337SVfXyJMZrLYJWllvm6S+f2pUwctIEhSWL3Mw==
+  version "5.21.7"
+  resolved "https://registry.yarnpkg.com/@tanstack/query-sync-storage-persister/-/query-sync-storage-persister-5.21.7.tgz#8c089fa0a33978abac15aae910806d7c59ab89d5"
+  integrity sha512-/kUUzJ+c3YGXbgD7dEofA3BMrEFtMa1A0VW40vSMJg1F+qBUQMZbKPtrE8CwHJbDfxvay5rThPqr0a6AJFvE3w==
   dependencies:
-    "@tanstack/query-core" "5.20.5"
-    "@tanstack/query-persist-client-core" "5.20.5"
+    "@tanstack/query-core" "5.21.7"
+    "@tanstack/query-persist-client-core" "5.21.7"
 
 "@tanstack/react-query-persist-client@^5.14.1":
-  version "5.20.5"
-  resolved "https://registry.yarnpkg.com/@tanstack/react-query-persist-client/-/react-query-persist-client-5.20.5.tgz#48a1d277673f39102bb0c83dd3ddd5fb377b8855"
-  integrity sha512-Djjssuvog6DAq1+iyy9cq+vdqSQBuMKJ1hwf/4SzoeveL69x+BwxY1BY4XZ3v1AERtbH/gYfD9047EYwGkxHww==
+  version "5.21.7"
+  resolved "https://registry.yarnpkg.com/@tanstack/react-query-persist-client/-/react-query-persist-client-5.21.7.tgz#961a334ad67dabe98ba7809b3e0e3ef7df0bda60"
+  integrity sha512-BRGhIZ4w8oEiRTNWHDYk8vU6YhujCFp3gVd4zFFMd+wuX/Wdw2CuRctOIeKs4tOXAykalvTh8wQn89XvdT8vGQ==
   dependencies:
-    "@tanstack/query-persist-client-core" "5.20.5"
+    "@tanstack/query-persist-client-core" "5.21.7"
 
 "@tanstack/react-query@^5.14.1":
-  version "5.20.5"
-  resolved "https://registry.yarnpkg.com/@tanstack/react-query/-/react-query-5.20.5.tgz#ebf57b6d3344478d505ad8db09a8b29262a35dab"
-  integrity sha512-6MHwJ8G9cnOC/XKrwt56QMc91vN7hLlAQNUA0ubP7h9Jj3a/CmkUwT6ALdFbnVP+PsYdhW3WONa8WQ4VcTaSLQ==
+  version "5.21.7"
+  resolved "https://registry.yarnpkg.com/@tanstack/react-query/-/react-query-5.21.7.tgz#c49d4000f8564de76693baa5ec6d703a4fca4676"
+  integrity sha512-Op9nVL/L0Lg+aSPFSGbrymu6d3tzUoZ+FZ+rRIZpu5HkGasflqzhsXkL26Sa+MEwLyox7Q1erSFwNIRO3TYjXQ==
   dependencies:
-    "@tanstack/query-core" "5.20.5"
+    "@tanstack/query-core" "5.21.7"
 
 "@teppeis/multimaps@3.0.0":
   version "3.0.0"
@@ -4224,9 +4224,9 @@
     "@types/react" "*"
 
 "@types/react@*", "@types/react@^18.0.24":
-  version "18.2.55"
-  resolved "https://registry.yarnpkg.com/@types/react/-/react-18.2.55.tgz#38141821b7084404b5013742bc4ae08e44da7a67"
-  integrity sha512-Y2Tz5P4yz23brwm2d7jNon39qoAtMMmalOQv6+fEFt1mT+FcM3D841wDpoUvFXhaYenuROCy3FZYqdTjM7qVyA==
+  version "18.2.56"
+  resolved "https://registry.yarnpkg.com/@types/react/-/react-18.2.56.tgz#2d3e9021a0b6eb5bfc227761cc61b1c6dc6e0cd8"
+  integrity sha512-NpwHDMkS/EFZF2dONFQHgkPRwhvgq/OAvIaGQzxGSBmaeR++kTg6njr15Vatz0/2VcCEwJQFi6Jf4Q0qBu0rLA==
   dependencies:
     "@types/prop-types" "*"
     "@types/scheduler" "*"
@@ -5169,7 +5169,7 @@ atomic-sleep@^1.0.0:
   resolved "https://registry.yarnpkg.com/atomic-sleep/-/atomic-sleep-1.0.0.tgz#eb85b77a601fc932cfe432c5acd364a9e2c9075b"
   integrity sha512-kNOjDqAh7px0XWNI+4QbzoiR/nTkHAWNud2uvnJquD1/x5a7EQZMJT0AczqK0Qn67oY/TTQ1LbUKajZpp3I9tQ==
 
-available-typed-arrays@^1.0.5, available-typed-arrays@^1.0.6:
+available-typed-arrays@^1.0.6:
   version "1.0.6"
   resolved "https://registry.yarnpkg.com/available-typed-arrays/-/available-typed-arrays-1.0.6.tgz#ac812d8ce5a6b976d738e1c45f08d0b00bc7d725"
   integrity sha512-j1QzY8iPNPG4o4xmO3ptzpRxTciqD3MgEHtifP/YnJpIo58Xu+ne4BejlbkuaLfXn/nz6HFiw29bLpj2PNMdGg==
@@ -5899,9 +5899,9 @@ camelcase@^7.0.1:
   integrity sha512-xlx1yCK2Oc1APsPXDL2LdlNP6+uu8OCDdhOBSVT279M/S+y75O30C2VuD8T2ogdePBBl7PfPF4504tnLgX3zfw==
 
 caniuse-lite@^1.0.30001587:
-  version "1.0.30001587"
-  resolved "https://registry.yarnpkg.com/caniuse-lite/-/caniuse-lite-1.0.30001587.tgz#a0bce920155fa56a1885a69c74e1163fc34b4881"
-  integrity sha512-HMFNotUmLXn71BQxg8cijvqxnIAofforZOwGsxyXJ0qugTdspUF4sPSJ2vhgprHCB996tIDzEq1ubumPDV8ULA==
+  version "1.0.30001588"
+  resolved "https://registry.yarnpkg.com/caniuse-lite/-/caniuse-lite-1.0.30001588.tgz#07f16b65a7f95dba82377096923947fb25bce6e3"
+  integrity sha512-+hVY9jE44uKLkH0SrUTqxjxqNTOWHsbnQDIKjwkZ3lNTzUUVdBLBGXtj/q5Mp5u98r3droaZAewQuEDzjQdZlQ==
 
 capital-case@^1.0.4:
   version "1.0.4"
@@ -9333,9 +9333,9 @@ ip-regex@^2.1.0:
   integrity sha512-58yWmlHpp7VYfcdTwMTvwMmqx/Elfxjd9RXTDyMsbL7lLWmhMylLEqiYVLKuLzOZqVgiWXD9MfR62Vv89VRxkw==
 
 ip@^1.1.5:
-  version "1.1.8"
-  resolved "https://registry.yarnpkg.com/ip/-/ip-1.1.8.tgz#ae05948f6b075435ed3307acce04629da8cdbf48"
-  integrity sha512-PuExPYUiu6qMBQb4l06ecm6T6ujzhmh+MeJcW9wa89PoAz5pvd4zPgN5WJV104mb6S2T1AwNIAaB70JNrLQWhg==
+  version "1.1.9"
+  resolved "https://registry.yarnpkg.com/ip/-/ip-1.1.9.tgz#8dfbcc99a754d07f425310b86a99546b1151e396"
+  integrity sha512-cyRxvOEpNHNtchU3Ln9KC/auJgup87llfQpQ+t5ghoC/UhL16SWzbueiCsdTnWmqAWl7LadfuwhlqmtOaqMHdQ==
 
 ipaddr.js@^1.9.0:
   version "1.9.1"
@@ -9999,9 +9999,9 @@ jest-each@^29.7.0:
     pretty-format "^29.7.0"
 
 jest-environment-emit@^1.0.5:
-  version "1.0.6"
-  resolved "https://registry.yarnpkg.com/jest-environment-emit/-/jest-environment-emit-1.0.6.tgz#0c8f4f408012f3479e521fc31163975408814c49"
-  integrity sha512-iE+N18T76Gr5EVn58ANoUu1BMTrEYEgqpCOrAlev/KUfv8YuqUfyLon8C2tsp4qSmk0wIhEHhBMB0v54yv4tRA==
+  version "1.0.7"
+  resolved "https://registry.yarnpkg.com/jest-environment-emit/-/jest-environment-emit-1.0.7.tgz#14c2197e9fa48affa25b15fc5f4a74690aea7efd"
+  integrity sha512-/0AYqbL3zrfRTtGyzTZwgRxQZiDXEM8ZUfY7Uscla/XGs9vszx4f0XTSZqAk3CQaiwYAoKvFZkB2vSKm1Q08fQ==
   dependencies:
     bunyamin "^1.5.2"
     bunyan "^2.0.5"
@@ -13250,9 +13250,9 @@ react-native-in-app-review@^4.3.3:
   integrity sha512-Q9sXBtK8tCBYFPCGmMgeMlkxXC5e6vAyPZK26OC1oOKUuKUd0QORnryk/qbwnuN4fLshHQN8UKlLgyHLGRuK3A==
 
 react-native-keychain@^8.1.2:
-  version "8.1.2"
-  resolved "https://registry.yarnpkg.com/react-native-keychain/-/react-native-keychain-8.1.2.tgz#34291ae472878e5124d081211af5ede7d810e64f"
-  integrity sha512-bhHEui+yMp3Us41NMoRGtnWEJiBE0g8tw5VFpq4mpmXAx6XJYahuM6K3WN5CsUeUl83hYysSL9oFZNKSTPSvYw==
+  version "8.1.3"
+  resolved "https://registry.yarnpkg.com/react-native-keychain/-/react-native-keychain-8.1.3.tgz#3d9ccc5e4884a59521cbf6a2a529a41314497367"
+  integrity sha512-Y4PMfY+VpXn7P1HhszJkWJ5ikKxKwg8djoDxyy7mO3jbsiWtWUtb3AGbFkdOuYaEp7lDc/TPiQgWO8yZ+AMzmw==
 
 react-native-linear-gradient@^2.8.3:
   version "2.8.3"
@@ -14689,9 +14689,9 @@ stream-shift@^1.0.0:
   integrity sha512-76ORR0DO1o1hlKwTbi/DM3EXWGf3ZJYO8cXX5RJwnul2DEg2oyoZyjLNoQM8WsvZiFKCRfC1O0J7iCvie3RZmQ==
 
 streamx@^2.13.0, streamx@^2.15.0:
-  version "2.15.8"
-  resolved "https://registry.yarnpkg.com/streamx/-/streamx-2.15.8.tgz#5471145b54ee43b5088877023d8d0a2a77f95d8d"
-  integrity sha512-6pwMeMY/SuISiRsuS8TeIrAzyFbG5gGPHFQsYjUr/pbBadaL1PCWmzKw+CHZSwainfvcF6Si6cVLq4XTEwswFQ==
+  version "2.16.0"
+  resolved "https://registry.yarnpkg.com/streamx/-/streamx-2.16.0.tgz#b52e204b4e14c9225cb53f87e9e95bf5169c7cb8"
+  integrity sha512-a7Fi0PoUeusrUcMS4+HxivnZqYsw2MFEP841TIyLxTcEIucHcJsk+0ARcq3tGq1xDn+xK7sKHetvfMzI1/CzMA==
   dependencies:
     fast-fifo "^1.1.0"
     queue-tick "^1.0.1"
@@ -15457,15 +15457,16 @@ typed-array-byte-length@^1.0.0:
     is-typed-array "^1.1.10"
 
 typed-array-byte-offset@^1.0.0:
-  version "1.0.0"
-  resolved "https://registry.yarnpkg.com/typed-array-byte-offset/-/typed-array-byte-offset-1.0.0.tgz#cbbe89b51fdef9cd6aaf07ad4707340abbc4ea0b"
-  integrity sha512-RD97prjEt9EL8YgAgpOkf3O4IF9lhJFr9g0htQkm0rchFp/Vx7LW5Q8fSXXub7BXAODyUQohRMyOc3faCPd0hg==
+  version "1.0.1"
+  resolved "https://registry.yarnpkg.com/typed-array-byte-offset/-/typed-array-byte-offset-1.0.1.tgz#5e2bcc1d93e1a332d50e8b363a48604a134692f8"
+  integrity sha512-tcqKMrTRXjqvHN9S3553NPCaGL0VPgFI92lXszmrE8DMhiDPLBYLlvo8Uu4WZAAX/aGqp/T1sbA4ph8EWjDF9Q==
   dependencies:
-    available-typed-arrays "^1.0.5"
-    call-bind "^1.0.2"
+    available-typed-arrays "^1.0.6"
+    call-bind "^1.0.7"
     for-each "^0.3.3"
+    gopd "^1.0.1"
     has-proto "^1.0.1"
-    is-typed-array "^1.1.10"
+    is-typed-array "^1.1.13"
 
 typed-array-length@^1.0.4:
   version "1.0.4"
@@ -15918,9 +15919,9 @@ wcwidth@^1.0.1:
     defaults "^1.0.3"
 
 web-streams-polyfill@^3.0.3:
-  version "3.3.2"
-  resolved "https://registry.yarnpkg.com/web-streams-polyfill/-/web-streams-polyfill-3.3.2.tgz#32e26522e05128203a7de59519be3c648004343b"
-  integrity sha512-3pRGuxRF5gpuZc0W+EpwQRmCD7gRqcDOMt688KmdlDAgAyaB1XlN0zq2njfDNm44XVdIouE7pZ6GzbdyH47uIQ==
+  version "3.3.3"
+  resolved "https://registry.yarnpkg.com/web-streams-polyfill/-/web-streams-polyfill-3.3.3.tgz#2073b91a2fdb1fbfbd401e7de0ac9f8214cecb4b"
+  integrity sha512-d2JWLCivmZYTSIoge9MsgFCZrt571BikcWGYkjC1khllbTeDlGqZ2D8vD8E/lJa8WGWbb7Plm8/XJYV7IJHZZw==
 
 web3-core@^4.3.0, web3-core@^4.3.2:
   version "4.3.2"
