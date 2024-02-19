@@ -58,6 +58,7 @@ jobs:
             - name: Build apk 
               run: |
                   pwd
+                  ls -la
                   cd /android
                   ./gradlew assembleDebug
 
