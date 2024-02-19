@@ -1,0 +1,136 @@
+# flow.yaml
+
+appId: org.vechain.veworld.app
+env:
+    AMOUNT: 0.01
+---
+- launchApp:
+    clearState: true
+## welcome screen
+- assertVisible: "DEV:DEMO"
+- tapOn:
+    text: "DEV:DEMO"
+    index: 1
+- tapOn: 
+     id: "settings-tab"
+- tapOn: "Networks"
+- tapOn: "Mainnet"
+- tapOn: "Testnet"
+- tapOn:
+    id: "wallet-tab"
+- tapOn: "Wallet 1"
+
+
+## Homepage - Adding accounts
+- assertVisible: "VeWorld"
+- tapOn:
+    id: "HomeScreen_WalletManagementButton-wrapper"
+- tapOn: "Wallet 1"
+- tapOn:
+    id: "WalletDetailScreen_addAccountButton"
+- tapOn:
+    id: "WalletDetailScreen_addAccountButton"
+- tapOn:
+    id: "wallet-tab"
+- tapOn:
+    id: "AccountCard_changeAccountButton"
+- tapOn:
+    text: "Account 1"
+
+## User should be able to send tokens - Send VET from Account 1 to Account 2
+- tapOn: "Send"
+- assertVisible: "Send your token"
+- tapOn: "Vechain"
+- inputText: ${AMOUNT}
+- tapOn: "Send"
+- tapOn:
+    point: 49%,85%
+- tapOn: "Account 2"
+- tapOn:
+    point: 49%,85%
+- runFlow:
+    when:
+      visible: "CONFIRM"
+    commands:
+        - tapOn: "CONFIRM"
+- assertVisible: "Insert your 6-digit PIN"
+- repeat:
+    times: 6
+    commands:
+      - tapOn: "1"
+- assertNotVisible: "Insert your 6-digit PIN"
+- assertVisible: "VeWorld"
+
+## User should be able to send tokens - Send VETHO from Account 1 to Account 2
+- tapOn:
+    id: "wallet-tab"
+- tapOn: "Send"
+- tapOn: "VeThor"
+- inputText: ${AMOUNT}
+- tapOn: "Currency balance"
+- tapOn:
+    point: 50%,85%
+- tapOn: "Account 2"
+- tapOn:
+    point: 50%,85%
+- runFlow:
+    when:
+      visible: "CONFIRM"
+    commands:
+        - tapOn: "CONFIRM"
+- assertVisible: "Insert your 6-digit PIN"
+- repeat:
+    times: 6
+    commands:
+      - tapOn: "1"
+- assertNotVisible: "Insert your 6-digit PIN"
+- assertVisible: "VeWorld"
+
+## User should be able to send tokens- Send VET from Account 2 to Account 1
+- tapOn:
+    id: "wallet-tab"
+- tapOn:
+    id: "AccountCard_changeAccountButton"
+- tapOn:
+    text: "Account 2"
+- tapOn: "Send"
+- tapOn: "Vechain"
+- inputText: ${AMOUNT}
+- tapOn: "Send"
+- runFlow:
+    when:
+      visible: "CONFIRM"
+    commands:
+        - tapOn: "CONFIRM"
+- tapOn:
+    point: 49%,85%
+- tapOn: "Account 1"
+- tapOn:
+    point: 50%,85%
+- repeat:
+    times: 6
+    commands:
+      - tapOn: "1"
+- assertVisible: "Your tokens"
+
+## Reset the App
+- assertVisible:
+    id: "settings-tab"
+- tapOn:
+    id: "settings-tab"
+- tapOn:
+    id: "BackButtonHeader-BaseIcon-backButton"
+- assertVisible:
+    id: "settings-screen"
+- tapOn: "General"
+- tapOn:
+    text: Reset App
+    index: 0
+- tapOn:
+    point: "9%,80%"
+- tapOn: RESET APP
+- assertVisible: "DEV:DEMO"
+
+## User should be able to send tokens delegating with account method
+
+
