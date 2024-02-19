@@ -61,7 +61,7 @@ jobs:
                   ls -la
                   cd android
                   ./gradlew assembleDebug
-                  cd app/build/outputs/apk/
+                  cd app/build/outputs/apk/debug
                   ls -la
 
             - name: Get device name
@@ -100,7 +100,7 @@ jobs:
                       # Install app
                       pwd
                       ls 
-                      adb install app/build/outputs/apk/app-release.apk || (adb kill-server && adb start-server && adb devices && adb install app-release.apk)
+                      adb install android/app/build/outputs/apk/debug/app-release.apk || (adb kill-server && adb start-server && adb devices && adb install app-release.apk)
           
                       # Run e2e
                       ./run_android_e2e.sh
