@@ -58,7 +58,7 @@ jobs:
             - name: Build apk 
               run: |
                   pwd
-                  cd veworld-mobile/veworld-mobile/android
+                  cd /android
                   ./gradlew assembleDebug
 
             - name: Get device name
