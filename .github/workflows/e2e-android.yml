@@ -59,7 +59,7 @@ jobs:
               run: |
                   pwd
                   ls -la
-                  cd /android
+                  cd android
                   ./gradlew assembleDebug
 
             - name: Get device name
