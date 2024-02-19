@@ -5,7 +5,7 @@ import { EntryPoint } from "./src/EntryPoint"
 import { name as appName } from "./app.json"
 import "@walletconnect/react-native-compat"
 import { NavigationContainer, useNavigationContainerRef } from "@react-navigation/native"
-import { SafeAreaProvider } from "react-native-safe-area-context"
+import { SafeAreaProvider, initialWindowMetrics } from "react-native-safe-area-context"
 import { useTheme } from "~Hooks"
 import {
     ApplicationSecurityProvider,
@@ -215,7 +215,7 @@ const SentryInitialedMain = () => {
 
 const ReduxWrappedMain = () => {
     return (
-        <SafeAreaProvider>
+        <SafeAreaProvider initialMetrics={initialWindowMetrics}>
             <TranslationProvider>
                 <PersistedThemeProvider>
                     <ApplicationSecurityProvider>

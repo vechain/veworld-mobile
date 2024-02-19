@@ -132,7 +132,7 @@ export const Layout = ({
                 {fixedBody && (
                     <>
                         {fixedBody}
-                        <BaseView mb={androidOnlyTabBarBottomMargin} />
+                        <BaseView mb={!hasTopSafeAreaOnly ? androidOnlyTabBarBottomMargin : undefined} />
                     </>
                 )}
                 {footer && (
@@ -145,26 +145,27 @@ export const Layout = ({
             </BaseView>
         ),
         [
-            STATIC_BOTTOM_PADDING,
-            Title,
-            _iosOnlyTabBarBottomMargin,
-            androidOnlyTabBarBottomMargin,
-            body,
-            fixedBody,
-            fixedHeader,
-            footer,
-            scrollViewContentHeight,
-            scrollViewHeight,
             noBackButton,
-            noMargin,
-            onGoBack,
             beforeNavigating,
-            refreshControl,
-            scrollViewRef,
-            scrollViewTestID,
+            onGoBack,
+            fixedHeader,
+            noMargin,
+            title,
+            Title,
             showSelectedNetwork,
             theme.colors.card,
-            title,
+            body,
+            scrollViewRef,
+            refreshControl,
+            scrollViewTestID,
+            scrollViewContentHeight,
+            scrollViewHeight,
+            androidOnlyTabBarBottomMargin,
+            _iosOnlyTabBarBottomMargin,
+            fixedBody,
+            hasTopSafeAreaOnly,
+            footer,
+            STATIC_BOTTOM_PADDING,
         ],
     )
 
@@ -176,7 +177,7 @@ export const Layout = ({
         )
     } else if (hasTopSafeAreaOnly) {
         return (
-            <SafeAreaView onTouchStart={onTouchBody} edges={["top", "left", "right"]}>
+            <SafeAreaView onTouchStart={onTouchBody} edges={["top"]}>
                 {renderContent}
             </SafeAreaView>
         )
