@@ -12,7 +12,8 @@ env:
     text: "DEV:DEMO"
     index: 1
 - extendedWaitUntil:
-    visible: "settings-tab"
+    notVisible:
+      id: "settings-tab"
     timeout:  300000
 - tapOn: 
      id: "settings-tab"
