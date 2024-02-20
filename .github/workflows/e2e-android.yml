@@ -103,7 +103,7 @@ jobs:
                       adb install android/app/build/outputs/apk/debug/app-debug.apk || (adb kill-server && adb start-server && adb devices && adb install app-debug.apk)
           
                       # Run e2e
-                      maestro test sendflow.yaml
+                      maestro test maestro/sendflow.yaml
           
             - name: Upload report
               if: always()
