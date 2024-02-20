@@ -104,7 +104,38 @@ jobs:
           
                       # Run e2e
                       maestro test maestro/sendflow.yaml
-
+            
+            
+            
+            - name: Run Maestro E2E tests retry
+              uses: reactivecircus/android-emulator-runner@v2
+              with:
+                    api-level: 31
+                    target: google_apis
+                    arch: x86_64
+                    cores: 2
+                    ram-size: 2048M
+                    force-avd-creation: false
+                    emulator-boot-timeout: 900 # 15min
+                    emulator-options: -no-window -gpu swiftshader_indirect -noaudio -no-boot-anim -camera-back none
+                    disable-animations: true
+                    pre-emulator-launch-script: |
+                      echo "Running pre emulator launch script. Printing the working directory now:"
+                      pwd
+                    script: |
+                      # check memory usage
+                      npx envinfo
+                      
+                      # verify emulator is running
+                      adb devices
+          
+                      # Install app
+                      pwd
+                      ls 
+                      adb install android/app/build/outputs/apk/debug/app-debug.apk || (adb kill-server && adb start-server && adb devices && adb install app-debug.apk)
+          
+                      # Run e2e
+                      maestro test maestro/sendflow.yaml
 
             - name: Upload report
               if: always()
