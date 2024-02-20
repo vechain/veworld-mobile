@@ -104,10 +104,9 @@ jobs:
           
                       # Run e2e
                       maestro test maestro/sendflow.yaml
-            
-            
-            
+
             - name: Run Maestro E2E tests retry
+              if: always()
               uses: reactivecircus/android-emulator-runner@v2
               with:
                     api-level: 31
