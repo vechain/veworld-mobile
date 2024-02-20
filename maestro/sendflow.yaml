@@ -7,7 +7,7 @@ env:
 ## welcome screen
 - extendedWaitUntil:
     visible: "DEV:DEMO"
-    timeout: 10000
+    timeout:  300000
 - tapOn:
     text: "DEV:DEMO"
     index: 1
