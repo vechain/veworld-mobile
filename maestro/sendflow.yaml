@@ -5,9 +5,9 @@ env:
 - launchApp:
     clearState: true
 ## welcome screen
-- extendedWaitUntil: "DEV:DEMO"
-    visible: "DEV:DEMO" # or any other selector
-    timeout: 10000      # Timeout in milliseconds
+- extendedWaitUntil:
+    visible: "DEV:DEMO"
+    timeout: 10000
 - tapOn:
     text: "DEV:DEMO"
     index: 1
