@@ -52,6 +52,9 @@ env:
 - tapOn: "Account 2"
 - tapOn:
     point: 49%,85%
+- extendedWaitUntil:
+    visible: "CONFIRM"
+    timeout: 300000
 - assertVisible: "Insert your 6-digit PIN"
 - repeat:
     times: 6
