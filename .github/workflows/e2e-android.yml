@@ -9,7 +9,7 @@ on:
 jobs:
     build-test-android:
         name: Detox Build & Test Android Release
-        runs-on: ubuntu-latest
+        runs-on: macos
 
         steps:
             - name: Checkout repository
@@ -69,7 +69,7 @@ jobs:
               run: node -e "console.log('AVD_NAME=' + require('./.detoxrc').devices.emulator_31.device.avdName)" >> $GITHUB_OUTPUT
 
             - name: Start Metro Bundler
-              run: yarn react-native start &
+              run: REACT_APP_UI_LOG=false yarn react-native start &> metro-bundler.log &
 
 
             - name: Install Maestro
