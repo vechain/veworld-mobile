@@ -1,10 +1,23 @@
 import { useThor } from "~Components"
-import { useCallback, useEffect, useState } from "react"
+import { useCallback, useEffect, useMemo, useState } from "react"
+import { selectSelectedNetwork, useAppSelector } from "~Storage/Redux"
+import { NETWORK_TYPE } from "~Model"
 
 export const useEns = ({ name, address }: { name?: string; address?: string }) => {
     const thor = useThor()
+    const network = useAppSelector(selectSelectedNetwork)
     const [stateName, setName] = useState("")
     const [stateAddress, setAddres] = useState("")
+
+    const VET_RESOLVER_UTILS = useMemo(() => {
+        if (network.type === NETWORK_TYPE.MAIN) {
+            return "0xA11413086e163e41901bb81fdc5617c975Fa5a1A"
+        } else if (network.type === NETWORK_TYPE.TEST) {
+            return "0xc403b8EA53F707d7d4de095f0A20bC491Cf2bc94"
+        }
+
+        return "0xA11413086e163e41901bb81fdc5617c975Fa5a1A"
+    }, [network.type])
 
     const _getAddress = useCallback(
         async (_name: string) => {
@@ -19,7 +32,7 @@ export const useEns = ({ name, address }: { name?: string; address?: string }) =
 
             setAddres(addresses[0])
         },
-        [thor],
+        [VET_RESOLVER_UTILS, thor],
     )
 
     const _getName = useCallback(
@@ -35,7 +48,7 @@ export const useEns = ({ name, address }: { name?: string; address?: string }) =
 
             setName(names[0])
         },
-        [thor],
+        [VET_RESOLVER_UTILS, thor],
     )
 
     useEffect(() => {
@@ -51,8 +64,6 @@ export const useEns = ({ name, address }: { name?: string; address?: string }) =
 
     return { name: stateName, address: stateAddress }
 }
-
-const VET_RESOLVER_UTILS = "0xA11413086e163e41901bb81fdc5617c975Fa5a1A"
 
 const ABI = {
     getAddresses: {
