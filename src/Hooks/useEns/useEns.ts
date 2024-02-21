@@ -52,6 +52,8 @@ export const useEns = ({ name, address }: { name?: string; address?: string }) =
     )
 
     useEffect(() => {
+        if (network.type === NETWORK_TYPE.SOLO || network.type === NETWORK_TYPE.OTHER) return
+
         if (name && !address) {
             _getAddress(name)
         } else if (!name && address) {
@@ -60,7 +62,7 @@ export const useEns = ({ name, address }: { name?: string; address?: string }) =
             _getAddress(name)
             _getName(address)
         }
-    }, [address, _getAddress, _getName, name])
+    }, [address, _getAddress, _getName, name, network.type])
 
     return { name: stateName, address: stateAddress }
 }
