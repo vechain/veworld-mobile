@@ -77,14 +77,15 @@ env:
 - tapOn: "Account 2"
 - tapOn:
     point: 50%,85%
-- runFlow:
-    when:
-      visible: "CONFIRM"
-    commands:
-        - tapOn: "CONFIRM"
+- extendedWaitUntil:
+    visible: "CONFIRM"
+    timeout: 300000
 - extendedWaitUntil:
     visible: "Insert your 6-digit PIN"
     timeout: 300000
+- tapOn:
+    text: "CONFIRM"
+    index: 1
 - repeat:
     times: 6
     commands:
