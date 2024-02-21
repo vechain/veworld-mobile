@@ -74,7 +74,6 @@
         "@tanstack/react-query-persist-client": "^5.14.1",
         "@vechain/connex-driver": "^2.1.0",
         "@vechain/connex-framework": "^2.1.0",
-        "@vechain/dapp-kit-react": "^1.0.9",
         "@vechain/picasso": "^2.1.1",
         "@walletconnect/core": "^2.10.2",
         "@walletconnect/react-native-compat": "^2.10.2",
