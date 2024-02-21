@@ -52,18 +52,18 @@ env:
 - tapOn: "Account 2"
 - tapOn:
     point: 49%,85%
-- extendedWaitUntil:
-    visible: "CONFIRM"
-    timeout: 300000
-- tapOn:
-    text: "CONFIRM"
-    index: 1
 - assertVisible: "Insert your 6-digit PIN"
 - repeat:
     times: 6
     commands:
       - tapOn: "1"
 - assertNotVisible: "Insert your 6-digit PIN"
+- extendedWaitUntil:
+    visible: "CONFIRM"
+    timeout: 300000
+- tapOn:
+    text: "CONFIRM"
+    index: 1
 - assertVisible: "VeWorld"
 
 ## User should be able to send tokens - Send VETHO from Account 1 to Account 2
