@@ -5,10 +5,11 @@ on:
     
     workflow_call:
 
+
 jobs:
     build-test-android:
         name: Detox Build & Test Android Release
-        runs-on: macos-latest
+        runs-on: macos
 
         steps:
             - name: Checkout repository
@@ -21,7 +22,7 @@ jobs:
                   cache: "yarn"
 
             - name: Install & Patch packages
-              run: yarn install
+              run: yarn install --frozen-lockfile --network-timeout 300000
 
             - name: Setup Java
               uses: actions/setup-java@v3
@@ -30,9 +31,7 @@ jobs:
                   distribution: "zulu"
                   java-version: "11"
 
-            - name: Rebuild Detox Framework
-              run: yarn detox clean-framework-cache && yarn detox build-framework-cache
-
+          
             # Install sentry properties
             - name: Sentry properties
               uses: mobiledevops/secret-to-file-action@v1
@@ -51,30 +50,76 @@ jobs:
                 is-executable: false
                 working-directory: "./android"
 
-            - name: Detox build Android release
-              run: yarn detox build --configuration android.emu.debug.31
+            #- name: Detox build Android release
+            #  run: |
+            #        brew install kotlin
+            #        yarn detox build --configuration android.emu.debug.31
+
+            - name: Build apk 
+              run: |
+                  pwd
+                  ls -la
+                  cd android
+                  ./gradlew assembleDebug
+                  cd app/build/outputs/apk/debug
+                  ls -la
 
             - name: Get device name
               id: device-name
               run: node -e "console.log('AVD_NAME=' + require('./.detoxrc').devices.emulator_31.device.avdName)" >> $GITHUB_OUTPUT
 
             - name: Start Metro Bundler
-              run: yarn react-native start &
+              run: REACT_APP_UI_LOG=false yarn react-native start &> metro-bundler.log &
 
-            - name: Detox test Android release
+
+            - name: Install Maestro
+              run: MAESTRO_VERSION=1.36.0 curl -Ls 'https://get.maestro.mobile.dev' | bash
+          
+            - name: Run Maestro E2E tests
               uses: reactivecircus/android-emulator-runner@v2
-              timeout-minutes: 90
               with:
-                  api-level: 31
-                  arch: x86_64
-                  force-avd-creation: false
-                  disable-animations: true
-                  avd-name: ${{ steps.device-name.outputs.AVD_NAME }}
-                  script: yarn detox test --configuration android.emu.debug.31 --headless --record-logs all --take-screenshots failing --tags "not @broken and not @notAndroid" --publish
+                    api-level: 31
+                    target: google_apis
+                    arch: x86_64
+                    cores: 2
+                    ram-size: 2048M
+                    force-avd-creation: false
+                    emulator-boot-timeout: 900 # 15min
+                    emulator-options: -no-window -gpu swiftshader_indirect -noaudio -no-boot-anim -camera-back none
+                    disable-animations: true
+                    pre-emulator-launch-script: |
+                      echo "Running pre emulator launch script. Printing the working directory now:"
+                      pwd
+                    script: |
+                      # check memory usage
+                      npx envinfo
+                      
+                      # verify emulator is running
+                      adb devices
+          
+                      # Install app
+                      pwd
+                      ls 
+                      adb install android/app/build/outputs/apk/debug/app-debug.apk || (adb kill-server && adb start-server && adb devices && adb install app-debug.apk)
+          
+                      # Run e2e
+                      maestro test maestro/sendflow.yaml
 
-            - name: Upload artifacts
-              if: failure() || cancelled()
+            - name: Upload report
+              if: always()
               uses: actions/upload-artifact@v3
               with:
-                  name: detox-fail-artifacts
-                  path: artifacts
+                name: E2E Report
+                path: |
+                  ${{ github.workspace }}/*.mp4
+                  ${{ github.workspace }}/*.png
+                  ${{ github.workspace }}/report*.xml
+                  ~/.maestro/tests/**/*
+
+            # Upload Metro Bundler logs
+            - name: Upload Metro Bundler logs
+              if: failure() || cancelled()
+              uses: actions/upload-artifact@v2
+              with:
+                name: metro-bundler-logs
+                path: metro-bundler.log
