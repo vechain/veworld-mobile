@@ -82,7 +82,9 @@ env:
       visible: "CONFIRM"
     commands:
         - tapOn: "CONFIRM"
-- assertVisible: "Insert your 6-digit PIN"
+- extendedWaitUntil:
+    visible: "Insert your 6-digit PIN"
+    timeout: 300000
 - repeat:
     times: 6
     commands:
