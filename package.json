@@ -72,7 +72,6 @@
         "@tanstack/query-sync-storage-persister": "^5.14.1",
         "@tanstack/react-query": "^5.14.1",
         "@tanstack/react-query-persist-client": "^5.14.1",
-        "@vechain.energy/dapp-kit-hooks": "^1.2.1",
         "@vechain/connex-driver": "^2.1.0",
         "@vechain/connex-framework": "^2.1.0",
         "@vechain/dapp-kit-react": "^1.0.9",
