@@ -9,7 +9,7 @@ on:
 jobs:
     build-test-android:
         name: Detox Build & Test Android Release
-        runs-on: macos
+        runs-on: ubuntu-latest
 
         steps:
             - name: Checkout repository
@@ -74,12 +74,6 @@ jobs:
 
             - name: Install Maestro
               run: MAESTRO_VERSION=1.36.0 curl -Ls 'https://get.maestro.mobile.dev' | bash
-            
-            - name: Enable KVM group perms
-              run: |
-                echo 'KERNEL=="kvm", GROUP="kvm", MODE="0666", OPTIONS+="static_node=kvm"' | sudo tee /etc/udev/rules.d/99-kvm4all.rules
-                sudo udevadm control --reload-rules
-                sudo udevadm trigger --name-match=kvm
           
             - name: Run Maestro E2E tests
               uses: reactivecircus/android-emulator-runner@v2
