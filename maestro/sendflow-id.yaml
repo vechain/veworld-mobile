@@ -70,11 +70,11 @@ env:
 - extendedWaitUntil:
     visible: "CONFIRM"
     timeout: 300000
-##- runFlow:
-##   when:
-##      visible: "CONFIRM"
-##    commands:
-##        - tapOn: "CONFIRM"
+- runFlow:
+   when:
+      visible: "CONFIRM"
+    commands:
+        - tapOn: "CONFIRM"
 - assertVisible: "Insert your 6-digit PIN"
 - repeat:
     times: 6
