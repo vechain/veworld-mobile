@@ -1,338 +1,154 @@
-import React, { useCallback, useEffect, useMemo } from "react"
-import { NativeStackScreenProps } from "@react-navigation/native-stack"
-import { useAnalyticTracking, useTheme, useTransactionScreen, useTransferAddContact } from "~Hooks"
-import { AccountUtils, AddressUtils, BigNutils, TransactionUtils } from "~Utils"
-import { AnalyticsEvent, COLORS, GasPriceCoefficient } from "~Constants"
+import { useNavigation } from "@react-navigation/native"
+import React from "react"
 import {
+    AccountCard,
+    BaseButton,
+    BaseCard,
     BaseSpacer,
     BaseText,
     BaseView,
-    DelegationView,
-    FadeoutButton,
-    GasFeeOptions,
+    DelegationOptions,
     Layout,
-    RequireUserPassword,
-    TransferCard,
+    useThor,
 } from "~Components"
-import { RootStackParamListHome, Routes } from "~Navigation"
+import { AccountWithDevice, DEVICE_TYPE, LocalAccountWithDevice } from "~Model"
+import { DelegationType } from "~Model/Delegation"
+import { Routes } from "~Navigation"
 import {
-    addPendingTransferTransactionActivity,
-    selectAccounts,
-    selectCurrency,
-    selectPendingTx,
-    selectSelectedAccount,
-    setIsAppLoading,
+    getDefaultDelegationAccount,
+    getDefaultDelegationOption,
+    getDefaultDelegationUrl,
+    setDefaultDelegationAccount,
+    setDefaultDelegationOption,
+    setDefaultDelegationUrl,
     useAppDispatch,
     useAppSelector,
 } from "~Storage/Redux"
 import { useI18nContext } from "~i18n"
-import { useNavigation } from "@react-navigation/native"
-import { ContactType, DEVICE_TYPE, FungibleTokenWithBalance } from "~Model"
-import { Transaction } from "thor-devkit"
-import { ContactManagementBottomSheet } from "../../ContactsScreen"
-import Animated, { interpolateColor, useAnimatedStyle, useSharedValue, withTiming } from "react-native-reanimated"
-import { StyleSheet } from "react-native"
-import { getCoinGeckoIdBySymbol, useExchangeRate } from "~Api/Coingecko"
-import { NotEnoughGasModal } from "./Modal"
 
-type Props = NativeStackScreenProps<RootStackParamListHome, Routes.TRANSACTION_SUMMARY_SEND>
-
-export const TransactionSummarySendScreen = ({ route }: Props) => {
-    const { token, amount, address } = route.params
+export const SettingsTransactionsScreen = () => {
+    const {
+        genesis: { id: genesisId },
+    } = useThor()
+    const selectedDelegationOption = useAppSelector(getDefaultDelegationOption)
+    const selectedDelegationAccount = useAppSelector(getDefaultDelegationAccount)
+    const selectedDelegationUrl = useAppSelector(getDefaultDelegationUrl)
+    const dispatch = useAppDispatch()
+    const setNoDelegationOption = () => {
+        dispatch(
+            setDefaultDelegationOption({
+                type: DelegationType.NONE,
+                genesisId,
+            }),
+        )
+        dispatch(
+            setDefaultDelegationAccount({
+                delegationAccount: undefined,
+                genesisId,
+            }),
+        )
+        dispatch(
+            setDefaultDelegationUrl({
+                url: undefined,
+                genesisId,
+            }),
+        )
+    }
+    const setSelectedDelegationAccount = (defaultDelegationAccount?: AccountWithDevice) => {
+        if (defaultDelegationAccount && defaultDelegationAccount.device.type === DEVICE_TYPE.LOCAL_MNEMONIC) {
+            dispatch(
+                setDefaultDelegationAccount({
+                    delegationAccount: defaultDelegationAccount as LocalAccountWithDevice,
+                    genesisId,
+                }),
+            )
+            dispatch(
+                setDefaultDelegationOption({
+                    type: DelegationType.ACCOUNT,
+                    genesisId,
+                }),
+            )
+            dispatch(
+                setDefaultDelegationUrl({
+                    url: undefined,
+                    genesisId,
+                }),
+            )
+        }
+    }
+    const setSelectedDelegationUrl = (defaultDelegationUrl: string) => {
+        dispatch(setDefaultDelegationOption({ type: DelegationType.URL, genesisId }))
+        dispatch(setDefaultDelegationUrl({ url: defaultDelegationUrl, genesisId }))
+        dispatch(
+            setDefaultDelegationAccount({
+                delegationAccount: undefined,
+                genesisId,
+            }),
+        )
+    }
 
     const { LL } = useI18nContext()
-    const dispatch = useAppDispatch()
-    const track = useAnalyticTracking()
+
     const nav = useNavigation()
 
-    const selectedAccount = useAppSelector(selectSelectedAccount)
-    const pendingTransaction = useAppSelector(state => selectPendingTx(state, token.address))
-
-    const accounts = useAppSelector(selectAccounts)
-    const receiverIsAccount = accounts.find(_account => AddressUtils.compareAddresses(_account.address, address))
-    const { onAddContactPress, handleSaveContact, addContactSheet, selectedContactAddress, closeAddContactSheet } =
-        useTransferAddContact()
-
-    const onFinish = useCallback(
-        (success: boolean) => {
-            if (success) track(AnalyticsEvent.SEND_FUNGIBLE_SENT)
-            else track(AnalyticsEvent.SEND_FUNGIBLE_FAILED_TO_SEND)
-
-            nav.navigate(Routes.HOME)
-            dispatch(setIsAppLoading(false))
-        },
-        [track, dispatch, nav],
-    )
-
-    const onTransactionSuccess = useCallback(
-        async (transaction: Transaction) => {
-            dispatch(addPendingTransferTransactionActivity(transaction))
-            onFinish(true)
-        },
-        [dispatch, onFinish],
-    )
-
-    const onTransactionFailure = useCallback(() => {
-        onFinish(false)
-    }, [onFinish])
-
-    const clauses = useMemo(
-        () => TransactionUtils.prepareFungibleClause(amount, token, address),
-        [amount, token, address],
-    )
-
-    const {
-        selectedDelegationOption,
-        loadingGas,
-        onSubmit,
-        isPasswordPromptOpen,
-        handleClosePasswordModal,
-        onPasswordSuccess,
-        setSelectedFeeOption,
-        selectedFeeOption,
-        gasFeeOptions,
-        setNoDelegation,
-        setSelectedDelegationAccount,
-        setSelectedDelegationUrl,
-        isEnoughGas,
-        txCostTotal,
-        isDelegated,
-        selectedDelegationAccount,
-        selectedDelegationUrl,
-        vtho,
-        isDisabledButtonState,
-    } = useTransactionScreen({
-        clauses,
-        onTransactionSuccess,
-        onTransactionFailure,
-    })
-
+    const openManageUrls = () => {
+        nav.navigate(Routes.MANAGE_DELEGATION_URLS)
+    }
     return (
         <Layout
-            safeAreaTestID="Transaction_Summary_Send_Screen"
-            title={LL.SEND_TOKEN_TITLE()}
-            noStaticBottomPadding
+            safeAreaTestID="SettingsTransactionsScreen"
             body={
-                <BaseView mb={80} mt={8}>
-                    <TransferCard
-                        fromAddress={selectedAccount.address}
-                        toAddresses={[address]}
-                        onAddContactPress={onAddContactPress}
-                        isFromAccountLedger={selectedAccount.device?.type === DEVICE_TYPE.LEDGER}
-                        isToAccountLedger={
-                            receiverIsAccount?.device && receiverIsAccount?.device.type === DEVICE_TYPE.LEDGER
-                        }
-                        isObservedWallet={
-                            AccountUtils.isObservedAccount(receiverIsAccount) &&
-                            receiverIsAccount?.type === DEVICE_TYPE.LOCAL_WATCHED
-                        }
-                    />
+                <BaseView pt={16}>
+                    <BaseText typographyFont="title">{LL.SETTINGS_TRANSACTIONS_TITLE()}</BaseText>
+                    <BaseSpacer height={24} />
+                    <BaseText typographyFont="button">{LL.SETTINGS_TRANSACTIONS_DEFAULT_DELEGATION()}</BaseText>
+                    <BaseSpacer height={8} />
+                    <BaseText typographyFont="captionRegular">
+                        {LL.SETTINGS_TRANSACTIONS_SELECT_DEFAULT_DELEGATION()}
+                    </BaseText>
 
-                    {!!pendingTransaction && (
-                        <>
-                            <BaseSpacer height={24} />
-                            <BaseText color={COLORS.DARK_RED_ALERT}>{LL.SEND_PENDING_TX_REVERT_ALERT()}</BaseText>
-                        </>
-                    )}
+                    <BaseSpacer height={16} />
 
-                    <RequireUserPassword
-                        isOpen={isPasswordPromptOpen}
-                        onClose={handleClosePasswordModal}
-                        onSuccess={onPasswordSuccess}
-                    />
-
-                    <DelegationView
-                        setNoDelegation={setNoDelegation}
+                    <DelegationOptions
                         selectedDelegationOption={selectedDelegationOption}
                         setSelectedDelegationAccount={setSelectedDelegationAccount}
+                        setNoDelegation={setNoDelegationOption}
                         selectedDelegationAccount={selectedDelegationAccount}
                         selectedDelegationUrl={selectedDelegationUrl}
                         setSelectedDelegationUrl={setSelectedDelegationUrl}
                     />
-
-                    <TotalSendAmountView
-                        amount={amount}
-                        symbol={token.symbol}
-                        token={token}
-                        txCostTotal={txCostTotal}
-                        isDelegated={isDelegated}
-                        isEnoughGas={isEnoughGas}
+                    {selectedDelegationAccount && (
+                        <>
+                            <BaseSpacer height={16} />
+                            <AccountCard account={selectedDelegationAccount} />
+                        </>
+                    )}
+                    {selectedDelegationUrl && (
+                        <>
+                            <BaseSpacer height={16} />
+                            <BaseCard>
+                                <BaseText py={8}>{selectedDelegationUrl}</BaseText>
+                            </BaseCard>
+                        </>
+                    )}
+                    <BaseSpacer height={24} />
+                    <BaseText typographyFont="button">{LL.SETTINGS_TRANSACTIONS_SELECT_DELEGATION_URLS()}</BaseText>
+                    <BaseSpacer height={8} />
+                    <BaseText typographyFont="captionRegular">
+                        {LL.SETTINGS_TRANSACTIONS_SELECT_DELEGATION_URLS_BODY()}
+                    </BaseText>
+                    <BaseSpacer height={16} />
+                    <BaseButton
+                        haptics="Light"
+                        action={openManageUrls}
+                        variant="link"
+                        title={LL.SETTINGS_TRANSACTIONS_MANAGE_URLS()}
+                        px={0}
+                        mx={0}
+                        selfAlign="flex-start"
                     />
-
-                    <GasFeeOptions
-                        setSelectedFeeOption={setSelectedFeeOption}
-                        selectedDelegationOption={selectedDelegationOption}
-                        loadingGas={loadingGas}
-                        selectedFeeOption={selectedFeeOption}
-                        gasFeeOptions={gasFeeOptions}
-                        isThereEnoughGas={isEnoughGas}
-                        totalBalance={vtho.balance.balance}
-                        txCostTotal={txCostTotal}
-                        isDelegated={isDelegated}
-                    />
-
-                    <EstimatedTimeDetailsView selectedFeeOption={selectedFeeOption} />
-
-                    <ContactManagementBottomSheet
-                        ref={addContactSheet}
-                        contact={{
-                            alias: "",
-                            address: selectedContactAddress ?? "",
-                            type: ContactType.KNOWN,
-                        }}
-                        onClose={closeAddContactSheet}
-                        onSaveContact={handleSaveContact}
-                        isAddingContact={true}
-                        checkTouched={false}
-                    />
-
-                    <BaseSpacer height={12} />
-                    <NotEnoughGasModal isVisible={!isEnoughGas && !isDelegated} />
                 </BaseView>
-            }
-            footer={
-                <FadeoutButton
-                    testID="confirm-send-button"
-                    title={LL.COMMON_BTN_CONFIRM().toUpperCase()}
-                    action={onSubmit}
-                    disabled={isDisabledButtonState}
-                    bottom={0}
-                    mx={0}
-                    width={"auto"}
-                />
             }
         />
     )
 }
-
-function EstimatedTimeDetailsView({ selectedFeeOption }: { selectedFeeOption: string }) {
-    const { LL } = useI18nContext()
-    const theme = useTheme()
-
-    const computeEstimatedTime = useMemo(() => {
-        switch (selectedFeeOption) {
-            case GasPriceCoefficient.REGULAR.toString():
-                return LL.SEND_LESS_THAN_1_MIN()
-            case GasPriceCoefficient.MEDIUM.toString():
-                return LL.SEND_LESS_THAN_30_SECONDS()
-            case GasPriceCoefficient.HIGH.toString():
-                return LL.SEND_LESS_THAN_A_MOMENT()
-            default:
-                return LL.SEND_LESS_THAN_1_MIN()
-        }
-    }, [LL, selectedFeeOption])
-
-    return (
-        <>
-            <BaseSpacer height={12} />
-            <BaseSpacer height={0.5} width={"100%"} background={theme.colors.textDisabled} />
-            <BaseSpacer height={12} />
-            <BaseText typographyFont="buttonSecondary">{LL.SEND_ESTIMATED_TIME()}</BaseText>
-            <BaseSpacer height={6} />
-            <BaseText typographyFont="subSubTitle">{computeEstimatedTime}</BaseText>
-        </>
-    )
-}
-
-interface ITotalSendAmountView {
-    amount: string
-    symbol: string
-    token: FungibleTokenWithBalance
-    txCostTotal: string
-    isDelegated: boolean
-    isEnoughGas: boolean
-}
-
-function TotalSendAmountView({ amount, symbol, token, txCostTotal, isDelegated, isEnoughGas }: ITotalSendAmountView) {
-    const currency = useAppSelector(selectCurrency)
-
-    const { data: exchangeRate } = useExchangeRate({
-        id: getCoinGeckoIdBySymbol[token.symbol],
-        vs_currency: currency,
-    })
-
-    const theme = useTheme()
-    const { LL } = useI18nContext()
-
-    const animationProgress = useSharedValue(0)
-
-    useEffect(() => {
-        animationProgress.value = withTiming(1, { duration: 400 }, () => {
-            animationProgress.value = withTiming(0, { duration: 400 })
-        })
-    }, [txCostTotal, animationProgress])
-
-    const animatedStyle = useAnimatedStyle(() => {
-        return {
-            color: interpolateColor(
-                animationProgress.value,
-                [0, 1],
-                [theme.colors.text, isEnoughGas ? theme.colors.success : theme.colors.danger],
-            ),
-        }
-    }, [theme.isDark, isEnoughGas])
-
-    const formattedTotalCost = useMemo(
-        () => BigNutils(txCostTotal).toHuman(token.decimals).decimals(4).toString,
-        [token.decimals, txCostTotal],
-    )
-
-    const formattedFiatAmount = useMemo(() => {
-        const _amount = BigNutils()
-            .toCurrencyConversion(token.symbol.toLowerCase() === "vtho" ? formattedTotalCost : amount, exchangeRate)
-            .toCurrencyFormat_string(2)
-
-        if (_amount.includes("<")) {
-            return `${_amount} ${currency}`
-        } else {
-            return `≈ ${_amount} ${currency}`
-        }
-    }, [amount, currency, exchangeRate, formattedTotalCost, token.symbol])
-
-    return (
-        <>
-            <BaseSpacer height={24} />
-            <BaseText typographyFont="subTitleBold">{LL.SEND_DETAILS()}</BaseText>
-
-            <BaseSpacer height={12} />
-            <BaseText typographyFont="caption">{LL.SEND_AMOUNT()}</BaseText>
-
-            <BaseView flexDirection="row">
-                <BaseText typographyFont="subSubTitle">{amount}</BaseText>
-                <BaseText typographyFont="body" mx={4}>
-                    {symbol}
-                </BaseText>
-
-                {exchangeRate && token.symbol.toLowerCase() !== "vtho" && (
-                    <BaseText typographyFont="buttonSecondary">{formattedFiatAmount}</BaseText>
-                )}
-            </BaseView>
-
-            {/* Show total tx cost if the token is VTHO and the gas fee is not delegated */}
-            {token.symbol.toLowerCase() === "vtho" && !isDelegated ? (
-                <>
-                    <BaseSpacer height={12} />
-                    <BaseText typographyFont="caption">{"Total Cost"}</BaseText>
-                    <BaseView flexDirection="row">
-                        <Animated.Text style={[baseStyles.coloredText, animatedStyle]}>
-                            {formattedTotalCost}
-                        </Animated.Text>
-                        <BaseText typographyFont="body" mx={4}>
-                            {symbol}
-                        </BaseText>
-
-                        {exchangeRate && <BaseText typographyFont="buttonSecondary">{formattedFiatAmount}</BaseText>}
-                    </BaseView>
-                </>
-            ) : null}
-        </>
-    )
-}
-
-const baseStyles = StyleSheet.create({
-    coloredText: {
-        fontFamily: "Inter-Bold",
-        fontSize: 16,
-        fontWeight: "700",
-    },
-})
