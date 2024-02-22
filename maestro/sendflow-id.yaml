@@ -46,8 +46,6 @@ env:
 - tapOn: "Account 2"
 - tapOn:
     id: next-button
-- tapOn:
-    id: confirm-send-button
 - assertVisible: "Insert your 6-digit PIN"
 - repeat:
     times: 6
