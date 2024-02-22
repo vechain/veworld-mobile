@@ -71,7 +71,7 @@ env:
     visible: "CONFIRM"
     timeout: 300000
 - runFlow:
-   when:
+    when:
       visible: "CONFIRM"
     commands:
         - tapOn: "CONFIRM"
