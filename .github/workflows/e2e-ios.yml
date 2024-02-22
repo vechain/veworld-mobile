@@ -106,32 +106,3 @@ jobs:
         with:
           name: metro-bundler-logs
           path: metro-bundler.log
-
-      # Get cucumber published url
-      - name: Parse report URL
-        id: parse_report_url
-        if: always() && steps.test_app.outcome != 'skipped'
-        run: |
-          echo report_url=$(cat cucumber.log | grep -Eo "https://reports.cucumber.io/reports/[a-zA-Z0-9-]+") >> "$GITHUB_OUTPUT"
-          
-          # Post results to slack
-                - name: Post to a Slack channel
-                  if: always()
-                  uses: slackapi/slack-github-action@v1.24.0
-                  with:
-                    # Slack channel id, channel name, or user id to post message.
-                    # See also: https://api.slack.com/methods/chat.postMessage#channels
-                    # You can pass in multiple channels to post to by providing a comma-delimited list of channel IDs.
-                    channel-id: ${{ secrets.SLACK_VEWORLD_CHANNEL_ID }}
-                    slack-message: |
-                      🧱 Build Status - iOS Result: *${{ steps.build_app.outcome }}*
-                      🚀 E2E Testing - iOS Result: *${{ steps.test_app.outcome }}*
-                      📦 Repository: *${{ github.repository }}*
-                      🌿 Branch: *${{ github.ref_name }}*
-                      🔨 Commit: *${{ github.actor }}* [${{ github.sha.short }}](${{ github.event.head_commit.url }})
-                      🔗 View Run: ${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}
-                      🗒️ Release Type: ${{ (github.event_name == 'release' && github.event.release.prerelease) && '🔴 THIS IS A PRE-RELEASE!' || 'Not a pre-release' }}
-                      🏷️ Release Tag: ${{ (github.event_name == 'release') && ('Pre-Release Tag: ' || '') }} ${{ github.event.release.tag_name }}
-                      📈 Cucumber Report: ${{ steps.parse_report_url.outputs.report_url || 'Not found.' }}
-                  env:
-                    SLACK_BOT_TOKEN: ${{ secrets.SLACK_VEWORLD_BOT_TOKEN }}
