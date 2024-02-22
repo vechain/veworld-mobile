@@ -192,12 +192,13 @@ export const TransactionSummarySendScreen = ({ route }: Props) => {
             }
             footer={
                 <FadeoutButton
+                    testID="confirm-send-button"
                     title={LL.COMMON_BTN_CONFIRM().toUpperCase()}
                     action={onSubmit}
                     disabled={isDisabledButtonState}
-                    bottom={0}
+                    _bottom={0}
                     mx={0}
-                    width={"auto"}
+                    _width={"auto"}
                 />
             }
         />
