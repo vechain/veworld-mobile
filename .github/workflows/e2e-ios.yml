@@ -8,7 +8,7 @@ on:
 jobs:
   build-e2e-test-ios:
     name: Detox Build & Test iOS Debug
-    runs-on: macos-latest-xl
+    runs-on: macos
 
     # Proceed only if it's either not a release event or it's a pre-release.
     if: ${{ github.event_name != 'release' || (github.event_name == 'release' && github.event.release.prerelease) }}
