@@ -1,53 +1,40 @@
-import { DimensionValue, StyleSheet } from "react-native"
+import { DimensionValue } from "react-native"
 import React from "react"
-import LinearGradient from "react-native-linear-gradient"
-import { useBottomTabBarHeight } from "@react-navigation/bottom-tabs"
-import { SCREEN_WIDTH } from "~Constants"
-import { useTheme } from "~Hooks"
-import { BaseButton, BaseView } from "~Components/Base"
+import { BaseButton } from "~Components/Base"
 
 type Props = {
     title: string
     action: () => void
     disabled?: boolean
     isLoading?: boolean
-    bottom?: number
+    _bottom?: number
     mx?: number
-    width?: DimensionValue
+    _width?: DimensionValue
+    testID?: string
 }
 
-export const FadeoutButton = ({ title, action, disabled = false, isLoading = false, bottom, mx, width }: Props) => {
-    const tabBarHeight = useBottomTabBarHeight()
-    const theme = useTheme()
-
+export const FadeoutButton = ({
+    title,
+    action,
+    disabled = false,
+    isLoading = false,
+    _bottom,
+    mx,
+    _width,
+    testID,
+}: Props) => {
     return (
-        <LinearGradient
-            style={[
-                baseStyles.container,
-                {
-                    width: width ?? "100%",
-                    bottom: bottom ?? tabBarHeight,
-                },
-            ]}
-            colors={[theme.colors.backgroundTransparent, theme.colors.background]}>
-            <BaseView mx={mx ?? 20} style={{ width: SCREEN_WIDTH - 40 }} pb={24}>
-                <BaseButton
-                    disabled={disabled}
-                    size="lg"
-                    haptics="Medium"
-                    w={100}
-                    title={title}
-                    action={action}
-                    activeOpacity={0.94}
-                    isLoading={isLoading}
-                />
-            </BaseView>
-        </LinearGradient>
+        <BaseButton
+            testID={testID}
+            disabled={disabled}
+            size="lg"
+            haptics="Medium"
+            w={100}
+            title={title}
+            action={action}
+            activeOpacity={0.94}
+            isLoading={isLoading}
+            mx={mx}
+        />
     )
 }
-
-const baseStyles = StyleSheet.create({
-    container: {
-        position: "absolute",
-    },
-})
