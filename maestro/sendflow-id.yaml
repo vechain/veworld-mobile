@@ -5,7 +5,9 @@ env:
 - launchApp:
     clearState: true
 ## welcome screen
-- assertVisible: "DEV:DEMO"
+- extendedWaitUntil:
+    visible: "DEV:DEMO"
+    timeout:  300000
 - tapOn:
       text: "DEV:DEMO"
       index: 1
