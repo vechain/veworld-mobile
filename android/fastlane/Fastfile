@@ -121,6 +121,9 @@ lane :build_test_ci do
   key_password = ENV["KEY_PASSWORD"]
   key_alias = ENV["KEY_ALIAS"]
 
+  ci_value = true
+  sh("./set_ci_vars.sh #{ci_value}")
+
   Dir.chdir "../.." do
     sh("yarn purge:android && yarn install")
   end
@@ -135,8 +138,8 @@ lane :build_test_ci do
     print_command_output: true,
 
     properties: {
-      "android.injected.version.code" => version_code, # Manually increment this value before each release
-      "android.injected.version.name" => version_name, # Manually increment this value before each release
+      "android.injected.version.code" => 1000, # Manually increment this value before each release
+      "android.injected.version.name" => 1000, # Manually increment this value before each release
       "android.injected.signing.store.file" => releaseFilePath, # Path to the release keystore
       "android.injected.signing.store.password" => store_password, # Keystore password
       "android.injected.signing.key.alias" => key_alias, # Key alias
@@ -144,4 +147,6 @@ lane :build_test_ci do
     }
   )
 
+  ci_value = false
+  sh("./set_ci_vars.sh #{ci_value}")
 end
