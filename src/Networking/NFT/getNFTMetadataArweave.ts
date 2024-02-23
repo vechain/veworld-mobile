@@ -19,8 +19,17 @@ export const getNFTMetadataArweave = async (uri: string) => {
     try {
         const url = URIUtils.convertUriToUrl(uri)
         const id = toID(url)
+        let processedId
 
-        const response = await arweave.api.get<NFTMetadata>(id)
+        // Some uris have the arweave.net/ prefix, some don't, so we need to remove it if it's there
+        // otherwise the request will fail
+        if (id.includes("arweave.net/")) {
+            processedId = id.split("arweave.net/")[1]
+        } else {
+            processedId = id
+        }
+
+        const response = await arweave.api.get<NFTMetadata>(processedId)
         return response.data
     } catch (e) {
         error(ERROR_EVENTS.NFT, e)

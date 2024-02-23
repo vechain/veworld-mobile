@@ -17,8 +17,19 @@ const toID = (uri: string) => uri?.split("://")[1]
 export const getNFTMediaArweave = async (uri: string): Promise<NFTMedia> => {
     try {
         const txId = toID(uri)
-        const transaction = await arweave.transactions.get(txId)
-        const buffer = Buffer.from(transaction.data)
+        let processedId
+
+        // Some uris have the arweave.net/ prefix, some don't, so we need to remove it if it's there
+        // otherwise the request will fail
+        if (txId.includes("arweave.net/")) {
+            processedId = txId.split("arweave.net/")[1]
+        } else {
+            processedId = txId
+        }
+
+        const tx = await arweave.transactions.get(processedId)
+
+        const buffer = Buffer.from(tx.data)
 
         if (buffer.length > MAX_IMAGE_SIZE) {
             throw new Error(`Image size exceeds the maximum allowed size of ${MAX_IMAGE_SIZE} bytes.`)
