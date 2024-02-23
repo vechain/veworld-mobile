@@ -20,7 +20,6 @@ import { useTheme, useNFTMetadata } from "~Hooks"
 import { useLazyLoader } from "./useLazyLoader"
 import { ERROR_EVENTS } from "~Constants"
 
-//  Note: To test this hook, replace `selectedAccount.address` with `ACCOUNT_WITH_NFTS` to get an account with numerous NFT collections and NFTs.
 export const useNFTs = () => {
     const dispatch = useAppDispatch()
     const network = useAppSelector(selectSelectedNetwork)
@@ -52,7 +51,7 @@ export const useNFTs = () => {
             }
             dispatch(
                 updateNFT({
-                    address: currentAddress,
+                    address: currentAddress, // NFT_WHALE - replace here
                     collectionAddress: nft.address,
                     nft: updated,
                 }),
@@ -81,7 +80,7 @@ export const useNFTs = () => {
                 const nftResponse = await getNftsForContract(
                     network.type,
                     contractAddress,
-                    currentAddress,
+                    currentAddress, // NFT_WHALE - replace here
                     _resultsPerPage,
                     _page,
                 )
@@ -92,7 +91,7 @@ export const useNFTs = () => {
 
                 dispatch(
                     setNFTs({
-                        address: currentAddress,
+                        address: currentAddress, // NFT_WHALE - replace here
                         collectionAddress: contractAddress,
                         nfts: nfts,
                         // taking first element because we are fetching only for one contract address

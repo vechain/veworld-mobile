@@ -20,7 +20,7 @@ const initialCollectionsState: CollectionWithPagination = {
 }
 
 export const selectAllNFTCollections = createSelector(selectNftState, selectSelectedAccount, (state, account) => {
-    const normalizedAcct = HexUtils.normalize(account.address)
+    const normalizedAcct = HexUtils.normalize(account.address) // NFT_WHALE - replace here
     return state.collections[normalizedAcct]
 })
 
@@ -29,7 +29,7 @@ export const selectBlackListedAddresses = createSelector(
     selectSelectedNetwork,
     selectSelectedAccount,
     (state, network, account) => {
-        const normalizedAcct = HexUtils.normalize(account.address)
+        const normalizedAcct = HexUtils.normalize(account.address) // NFT_WHALE - replace here
         return state.blackListedCollections[network.type][normalizedAcct]?.addresses ?? []
     },
 )
@@ -83,7 +83,7 @@ export const selectCollectionWithContractAddress = createSelector(
 )
 
 export const selectAllNfts = createSelector(selectNftState, selectSelectedAccount, (state, account) => {
-    const normalizedAcct = HexUtils.normalize(account.address)
+    const normalizedAcct = HexUtils.normalize(account.address) // NFT_WHALE - replace here
 
     const nftsForUser = state.nfts[normalizedAcct]
     if (!nftsForUser) return []
@@ -114,7 +114,7 @@ export const selectNFTWithAddressAndTokenId = createSelector(
         (state: RootState, contractAddress: string, tokenId: string) => tokenId,
     ],
     (state, account, contractAddress, tokenId) => {
-        const normalizedAcct = HexUtils.normalize(account.address)
+        const normalizedAcct = HexUtils.normalize(account.address) // NFT_WHALE - replace here
         if (state.nfts[normalizedAcct] !== undefined) {
             return state.nfts[normalizedAcct][contractAddress].nfts.find(
                 nft => nft.tokenId === tokenId,
@@ -126,7 +126,7 @@ export const selectNFTWithAddressAndTokenId = createSelector(
 export const selectNFTsForCollection = createSelector(
     [selectNftState, selectSelectedAccount, (state: RootState, collectionAddress: string) => collectionAddress],
     (nftState, account, collectionAddress) => {
-        const normalizedAcct = HexUtils.normalize(account.address)
+        const normalizedAcct = HexUtils.normalize(account.address) // NFT_WHALE - replace here
         const normalizedCollection = HexUtils.normalize(collectionAddress)
         if (nftState.nfts[normalizedAcct] !== undefined) {
             return nftState.nfts[normalizedAcct][normalizedCollection]
