@@ -10,7 +10,7 @@ import { ERROR_EVENTS } from "~Constants"
 
 type Props = {
     mnemonicArray: string[]
-    setIsMissingWord: React.Dispatch<React.SetStateAction<boolean>>
+    setIsMissingWord?: React.Dispatch<React.SetStateAction<boolean>>
 }
 
 export const MnemonicCard: FC<Props> = ({ mnemonicArray, setIsMissingWord }) => {
@@ -30,17 +30,17 @@ export const MnemonicCard: FC<Props> = ({ mnemonicArray, setIsMissingWord }) => 
         return mnemonicArray.map((word, index) => {
             if (mnemonicArray.length !== 12) {
                 error(ERROR_EVENTS.MNEMONIC, "UI MnemonicCard Array has missing words")
-                setIsMissingWord(true)
+                setIsMissingWord && setIsMissingWord(true)
             }
 
             if (word && word.length < 1) {
                 error(ERROR_EVENTS.MNEMONIC, "UI MnemonicCard Word is Empty")
-                setIsMissingWord(true)
+                setIsMissingWord && setIsMissingWord(true)
             }
 
             if (word && typeof word !== "string") {
                 error(ERROR_EVENTS.MNEMONIC, "UI MnemonicCard Word is not a valid string")
-                setIsMissingWord(true)
+                setIsMissingWord && setIsMissingWord(true)
             }
 
             return (
