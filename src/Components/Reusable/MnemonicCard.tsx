@@ -5,12 +5,15 @@ import { useDisclosure, useTheme } from "~Hooks"
 import HapticsService from "~Services/HapticsService"
 import { PlatformBlur } from "./PlatformBlur"
 import { useI18nContext } from "~i18n"
+import { error } from "~Utils"
+import { ERROR_EVENTS } from "~Constants"
 
 type Props = {
     mnemonicArray: string[]
+    setIsMissingWord?: React.Dispatch<React.SetStateAction<boolean>>
 }
 
-export const MnemonicCard: FC<Props> = ({ mnemonicArray }) => {
+export const MnemonicCard: FC<Props> = ({ mnemonicArray, setIsMissingWord }) => {
     const { isOpen: isShow, onToggle: toggleShow } = useDisclosure()
 
     const theme = useTheme()
@@ -22,6 +25,34 @@ export const MnemonicCard: FC<Props> = ({ mnemonicArray }) => {
         HapticsService.triggerImpact({ level: "Light" })
         toggleShow()
     }, [toggleShow])
+
+    const RenderWords = useMemo(() => {
+        return mnemonicArray.map((word, index) => {
+            if (mnemonicArray.length !== 12) {
+                error(ERROR_EVENTS.MNEMONIC, "UI MnemonicCard Array has missing words")
+                setIsMissingWord && setIsMissingWord(true)
+            }
+
+            if (word && word.length < 1) {
+                error(ERROR_EVENTS.MNEMONIC, "UI MnemonicCard Word is Empty")
+                setIsMissingWord && setIsMissingWord(true)
+            }
+
+            if (word && typeof word !== "string") {
+                error(ERROR_EVENTS.MNEMONIC, "UI MnemonicCard Word is not a valid string")
+                setIsMissingWord && setIsMissingWord(true)
+            }
+
+            return (
+                <BaseText
+                    typographyFont="footNoteAccent"
+                    key={`word${index}`}
+                    my={8}
+                    w={33}
+                    testID={`word-${index}`}>{`${index + 1}. ${word}`}</BaseText>
+            )
+        })
+    }, [mnemonicArray, setIsMissingWord])
 
     return (
         <BaseView>
@@ -35,15 +66,7 @@ export const MnemonicCard: FC<Props> = ({ mnemonicArray }) => {
                         flexWrap="wrap"
                         w={92}
                         justifyContent="space-between">
-                        {mnemonicArray.map((word, index) => (
-                            <BaseText
-                                typographyFont="footNoteAccent"
-                                key={`word${index}`}
-                                my={8}
-                                w={33}
-                                testID={`word-${index}`}>{`${index + 1}. ${word}`}</BaseText>
-                        ))}
-
+                        {RenderWords}
                         {!isShow && <PlatformBlur backgroundColor={theme.colors.card} text={LL.TAP_TO_VIEW()} />}
                     </BaseView>
 
