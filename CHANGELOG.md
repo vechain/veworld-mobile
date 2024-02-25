@@ -1,5 +1,51 @@
 
 
+## [1.7.0](https://github.com/vechain/veworld-mobile/compare/v1.5.3-52...v1.7.0) (2024-02-24)
+
+
+### Features
+
+* add ci env for dev:demo ([#1886](https://github.com/vechain/veworld-mobile/issues/1886)) ([5412ca2](https://github.com/vechain/veworld-mobile/commit/5412ca2efd14e2b2140bb29050a3900278657a42))
+* add observed account ([#1855](https://github.com/vechain/veworld-mobile/issues/1855)) ([4a95a91](https://github.com/vechain/veworld-mobile/commit/4a95a91fc3232546016a3bc928d5689445c32832))
+* add ul intents android ([#1873](https://github.com/vechain/veworld-mobile/issues/1873)) ([24c556d](https://github.com/vechain/veworld-mobile/commit/24c556db5ccaf3889e7288a2ed13b82e488457dd))
+* add ul tracking events ([#1878](https://github.com/vechain/veworld-mobile/issues/1878)) ([f6a72f4](https://github.com/vechain/veworld-mobile/commit/f6a72f4e734725bc2ce6bf769ffc1a681f1ea71b))
+* add universal links ios ([#1866](https://github.com/vechain/veworld-mobile/issues/1866)) ([1484da6](https://github.com/vechain/veworld-mobile/commit/1484da622b5343a10c18c2c2014b747c8446dde2))
+* add vet domain dapp to featured ([#1879](https://github.com/vechain/veworld-mobile/issues/1879)) ([9200187](https://github.com/vechain/veworld-mobile/commit/92001874ee9800172a6e293826a3f0deb063bff6))
+* add zod, switch to coingecko endpoint ([#1845](https://github.com/vechain/veworld-mobile/issues/1845)) ([0df18a6](https://github.com/vechain/veworld-mobile/commit/0df18a627e2409176c60033fad76e0660628954e))
+* adding layout in enable additional settings screen ([#1792](https://github.com/vechain/veworld-mobile/issues/1792)) ([05c1223](https://github.com/vechain/veworld-mobile/commit/05c1223890655bfd38d93d930b4b2e981361cd18))
+* adding validation on generated words ([#1844](https://github.com/vechain/veworld-mobile/issues/1844)) ([c493773](https://github.com/vechain/veworld-mobile/commit/c493773f525a7aa4b8e67ee6e7a941f4743de766))
+
+
+### Bug Fixes
+
+* add better checks and better logging in case phrase is not rende… ([#1911](https://github.com/vechain/veworld-mobile/issues/1911)) ([ae07e3b](https://github.com/vechain/veworld-mobile/commit/ae07e3bc8554398bdc34b6d0a023f579fbf8fc35))
+* add check mnemonic test ([#1850](https://github.com/vechain/veworld-mobile/issues/1850)) ([48fac08](https://github.com/vechain/veworld-mobile/commit/48fac08f30c9a8006a405251a9625c12c01b28a7))
+* add deep link state and better sentry logging ([#1883](https://github.com/vechain/veworld-mobile/issues/1883)) ([9a73bcd](https://github.com/vechain/veworld-mobile/commit/9a73bcd5d365cc3839ad9a6a12718a2b21f154fe))
+* add script for ci env var ([#1903](https://github.com/vechain/veworld-mobile/issues/1903)) ([79f9b05](https://github.com/vechain/veworld-mobile/commit/79f9b05e4e9f9966bad78b5a2d0b5b26f2769e92))
+* add url on error toast ([#1875](https://github.com/vechain/veworld-mobile/issues/1875)) ([d55b015](https://github.com/vechain/veworld-mobile/commit/d55b015e9e457f6e07daffb3278794f7ebb076d1))
+* android deep links, add sentry loggin deep link handling ([#1877](https://github.com/vechain/veworld-mobile/issues/1877)) ([7ac243c](https://github.com/vechain/veworld-mobile/commit/7ac243c6708ee3bfc57492ca56f92cb79ce7d916))
+* android e2e build ([#1806](https://github.com/vechain/veworld-mobile/issues/1806)) ([9781dae](https://github.com/vechain/veworld-mobile/commit/9781daef77b81216d492a1002a37299b46805d86))
+* android has extra space for menu bar ([#1894](https://github.com/vechain/veworld-mobile/issues/1894)) ([93666f7](https://github.com/vechain/veworld-mobile/commit/93666f7cffbfdbfa9d6278cdf78f725c0f94df2f))
+* app reset screen and android 60 ([#1841](https://github.com/vechain/veworld-mobile/issues/1841)) ([318aa6b](https://github.com/vechain/veworld-mobile/commit/318aa6bbf59b538d3814b5d1015921b4216fb668))
+* arweave uri format ([#1910](https://github.com/vechain/veworld-mobile/issues/1910)) ([8bfa83d](https://github.com/vechain/veworld-mobile/commit/8bfa83d4593d02d3c90285d7a437d440bfc812f4))
+* better controls over observed accounts and daaps ([#1865](https://github.com/vechain/veworld-mobile/issues/1865)) ([352e7ec](https://github.com/vechain/veworld-mobile/commit/352e7eca6646a8ae74bcf749295a0c96b8d07f87))
+* ble perms api 31 and 32 ([#1793](https://github.com/vechain/veworld-mobile/issues/1793)) ([3df2ca8](https://github.com/vechain/veworld-mobile/commit/3df2ca8af288d365ade0cf92c074584749cbb894))
+* cancel button not going back ([#1839](https://github.com/vechain/veworld-mobile/issues/1839)) ([64b071f](https://github.com/vechain/veworld-mobile/commit/64b071f77c20f8048d58a19202afdf000d4580e4))
+* crash on ledger account page is left by user ([#1797](https://github.com/vechain/veworld-mobile/issues/1797)) ([c110022](https://github.com/vechain/veworld-mobile/commit/c110022176b75b8c4b22d9c4ae6d8cc2a2b707cc))
+* dapps url format ([#1880](https://github.com/vechain/veworld-mobile/issues/1880)) ([40a6f7d](https://github.com/vechain/veworld-mobile/commit/40a6f7d2b66f9351b46247ef1ff67ac1b876ceb0))
+* detox version ([#1896](https://github.com/vechain/veworld-mobile/issues/1896)) ([09c20a8](https://github.com/vechain/veworld-mobile/commit/09c20a82a750b8d7fd9877ab312827b3f6e43adc))
+* double am/pm on dates ([#1912](https://github.com/vechain/veworld-mobile/issues/1912)) ([57a6e33](https://github.com/vechain/veworld-mobile/commit/57a6e33bdcc7b8088ec574ccb9b30a74d9f5d832))
+* error boundary logging and reset app ([#1834](https://github.com/vechain/veworld-mobile/issues/1834)) ([9ee63e1](https://github.com/vechain/veworld-mobile/commit/9ee63e1f1ce2a81b89ff24e68ba1b1d7314c60f8))
+* fixing gitleaks permissions ([#1823](https://github.com/vechain/veworld-mobile/issues/1823)) ([fcc621f](https://github.com/vechain/veworld-mobile/commit/fcc621f0898256d80aaea9a2fa2be0968ec295a8))
+* ios keyboard type for input reverted to previous state ([#1887](https://github.com/vechain/veworld-mobile/issues/1887)) ([b8595bb](https://github.com/vechain/veworld-mobile/commit/b8595bbb4cc9b3de5b2eeb6ee32fa86359e7c05c))
+* library version breaking biometrics ([#1904](https://github.com/vechain/veworld-mobile/issues/1904)) ([f599bdb](https://github.com/vechain/veworld-mobile/commit/f599bdb07dbd26fe0f4720a004782a17bfeddd94))
+* prevent selected app from being set to undefined ([#1795](https://github.com/vechain/veworld-mobile/issues/1795)) ([c89cd99](https://github.com/vechain/veworld-mobile/commit/c89cd992499f20b4578483d845c5e8b630897ba6))
+* reduce sentry error logs ([#1819](https://github.com/vechain/veworld-mobile/issues/1819)) ([4f1a536](https://github.com/vechain/veworld-mobile/commit/4f1a536b62145d29a4f0c6ce35370d02dcf0a8c0))
+* samsung text input crashes ([#1852](https://github.com/vechain/veworld-mobile/issues/1852)) ([316df27](https://github.com/vechain/veworld-mobile/commit/316df270ddc70eb6156ed1d720b003a0995ce648))
+* sentry log on failed tx ([#1804](https://github.com/vechain/veworld-mobile/issues/1804)) ([bfb46a9](https://github.com/vechain/veworld-mobile/commit/bfb46a9b79d52e8052c00587934fcb5ec2f05cbb))
+* Sentry pod issue, set cb flag to off for ios, error boundary log ([#1833](https://github.com/vechain/veworld-mobile/issues/1833)) ([d90516e](https://github.com/vechain/veworld-mobile/commit/d90516ee34482e3997a0fb5383f1b7d337e2eddb))
+* test network manager react query ([#1821](https://github.com/vechain/veworld-mobile/issues/1821)) ([6d81378](https://github.com/vechain/veworld-mobile/commit/6d81378b6df17af38cfe824d29afdd721a0efc4c))
+
 ## [1.7.0](https://github.com/vechain/veworld-mobile/compare/v1.5.3-52...v1.7.0) (2024-02-19)
 
 
