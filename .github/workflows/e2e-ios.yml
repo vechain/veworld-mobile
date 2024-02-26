@@ -69,8 +69,8 @@ jobs:
         run: |
           brew tap facebook/fb
           brew install facebook/fb/idb-companion
-          curl -Ls 'https://get.maestro.mobile.dev' | bash
-
+          MAESTRO_VERSION=1.36.0 curl -Ls 'https://get.maestro.mobile.dev' | bash
+          
       - name: Install .app
         run: xcrun simctl install booted ./MyApp.app
       
