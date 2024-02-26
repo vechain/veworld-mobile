@@ -63,6 +63,8 @@ export const InAppBrowserProvider = ({ children }: Props) => {
     const { LL } = useI18nContext()
     const selectedAccountAddress = useAppSelector(selectSelectedAccountAddress)
     const connectedDiscoveryApps = useAppSelector(selectConnectedDiscoverDApps)
+    //TODO
+    const disconnectedDiscoveryApps = useAppSelector(selectConnectedDiscoverDApps)
     const {
         ref: ChangeAccountNetworkBottomSheetRef,
         onOpen: openChangeAccountNetworkBottomSheet,
@@ -71,6 +73,26 @@ export const InAppBrowserProvider = ({ children }: Props) => {
     const [targetAccount, setTargetAccount] = useState<AccountWithDevice>()
     const [targetNetwork, setTargetNetwork] = useState<Network>()
     const [navigateToOperation, setNavigateToOperation] = useState<Function>()
+
+    const dynamicInjection = useMemo(() => {
+        const dapps = JSON.stringify(disconnectedDiscoveryApps.map(app => app.href))
+
+        //TODO: We need a lot more than just clearing localStorage.
+        // - Cookies?
+        // Session Storage?
+        // Indexed DB?
+
+        //TODO Handle the response message and remove the app from the list
+        return `
+        const dapps = JSON.parse('${dapps}')
+        
+        if (dapps.some(dapp => dapp === window.location.hostname)) {
+            localStorage.clear()
+            window.ReactNativeWebView.postMessage(JSON.stringify({ type: 'removed-dapp', dapp: window.location.hostname }))
+
+        }
+        `
+    }, [disconnectedDiscoveryApps])
 
     const handleCloseChangeAccountNetworkBottomSheet = useCallback(() => {
         closeChangeAccountNetworkBottomSheet()
@@ -511,7 +533,7 @@ export const InAppBrowserProvider = ({ children }: Props) => {
             webviewRef,
             onMessage,
             postMessage,
-            injectVechainScript: injectedJs,
+            injectVechainScript: injectedJs(dynamicInjection),
             onNavigationStateChange,
             canGoBack,
             canGoForward,
@@ -574,7 +596,9 @@ export const useInAppBrowser = () => {
 //     error: (log, data1, data2) => consoleLog('error', log, data1, data2),
 // };
 
-const injectedJs = `
+const injectedJs = (dynamicCode: string) => `
+
+${dynamicCode}
 
 function newResponseHandler(id) {
     return new Promise((resolve, reject) => {
