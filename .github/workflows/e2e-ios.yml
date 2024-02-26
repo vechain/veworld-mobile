@@ -9,6 +9,8 @@ jobs:
   build-e2e-test-ios:
     name: Detox Build & Test iOS Debug
     runs-on: macos
+    env:
+      XC_SIMULATOR_NAME: iPhone 14
 
     # Proceed only if it's either not a release event or it's a pre-release.
     if: ${{ github.event_name != 'release' || (github.event_name == 'release' && github.event.release.prerelease) }}
@@ -76,19 +78,18 @@ jobs:
             ls -la
 
       - name: Install Maestro
+        run: MAESTRO_VERSION=1.36.0 curl -Ls 'https://get.maestro.mobile.dev' | bash
+      
+        
+      - name: Run iOS Simulator
         run: |
-          brew tap facebook/fb
-          brew install idb-companion
-          MAESTRO_VERSION=1.36.0 curl -Ls 'https://get.maestro.mobile.dev' | bash
-          
+          echo "All valid available device types"
+          xcrun simctl list devicetypes
+
+          echo "All valid and available runtimes"
+          xcrun simctl list runtimes
+
+          echo "Run simulator"
+          xcrun simctl boot "${{ env.XC_SIMULATOR_NAME }}"
       - name: Install .app
         run: xcrun simctl install booted ./MyApp.app
-    
-
-      # Upload Metro Bundler logs
-      - name: Upload Metro Bundler logs
-        if: always() && steps.build_app.outcome == 'failure'
-        uses: actions/upload-artifact@v2
-        with:
-          name: metro-bundler-logs
-          path: metro-bundler.log
