@@ -52,10 +52,6 @@ jobs:
       - name: Install CocoaPods
         run: npx pod-install
 
-      # Install Detox CLI
-      - name: Setup Detox
-        run: yarn detox clean-framework-cache && yarn detox build-framework-cache && yarn detox reset-lock-file
-
       # Install sentry properties
       - name: Sentry properties
         uses: mobiledevops/secret-to-file-action@v1
@@ -68,36 +64,25 @@ jobs:
       # Start Metro Bundler
       - name: Start Metro Bundler
         run: REACT_APP_UI_LOG=false yarn react-native start &> metro-bundler.log &
+      
+      - name: Install Maestro
+        run: |
+          brew tap facebook/fb
+          brew install facebook/fb/idb-companion
+          curl -Ls 'https://get.maestro.mobile.dev' | bash
 
-      # Build iOS app
-      - name: Detox build iOS Debug
-        id: build_app
-        timeout-minutes: 60
-        run: SKIP_SENTRY=true yarn detox build --configuration ios.sim.debug_xcode_14.2 # GH macos-latest has Xcode 14.2
+      - name: Install .app
+        run: xcrun simctl install booted ./MyApp.app
+      
+      - name: Build apk 
+        run: |
+            pwd
+            ls -la
+            cd ios
+            xcodebuild -workspace ios/VeWorld.xcworkspace -scheme VeWorld -configuration Debug -sdk iphonesimulator -derivedDataPath ios/build
+            cd build/debug
+            ls -la
 
-      # Test with Detox
-      - name: Detox test iOS Debug
-        id: test_app
-        timeout-minutes: 100
-        run: yarn detox test --configuration ios.sim.debug_xcode_14.2 --cleanup --headless --record-logs all --take-screenshots all --tags "not @broken" --publish &> cucumber.log
-
-      # Upload test artifacts from Detox
-      - name: Upload detox artifacts
-        if: always() && steps.test_app.outcome == 'failure'
-        uses: actions/upload-artifact@v3
-        with:
-          name: detox-fail-artifacts
-          path: artifacts
-
-      # Upload cucumber artifacts
-      - name: Upload cucumber artifacts
-        if: always() && steps.test_app.outcome == 'failure'
-        uses: actions/upload-artifact@v3
-        with:
-          name: cucumber-fail-artifacts
-          path: |
-            cucumber.log
-            cucumber-report.html
 
       # Upload Metro Bundler logs
       - name: Upload Metro Bundler logs
