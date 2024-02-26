@@ -41,6 +41,7 @@ export const BaseSafeArea = ({
 
     useEffect(() => {
         if (nav && nav.getState()) {
+            // @ts-expect-error
             const tab = getTabbar(nav)
             if (tab) {
                 setIsTab(true)
