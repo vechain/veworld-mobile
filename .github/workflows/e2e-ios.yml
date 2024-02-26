@@ -23,7 +23,6 @@ jobs:
           # otherwise, use the triggering branch unless it's a non-pre-release event.
           ref: ${{ (github.event_name == 'release' && github.event.release.prerelease && github.event.release.tag_name) || github.ref }}
 
-
       # Install Homebrew and applesimutils for Detox
       - name: Install macOS dependencies
         run: |
@@ -74,6 +73,7 @@ jobs:
             cd ios
             pwd
             ls
+            xcodebuild -list -workspace VeWorld.xcworkspace
             xcodebuild -workspace ios/VeWorld.xcworkspace -scheme VeWorld -configuration Debug -sdk iphonesimulator -derivedDataPath ios/build
             cd build/debug
             ls -la
