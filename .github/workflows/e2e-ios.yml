@@ -73,7 +73,9 @@ jobs:
             xcodebuild -workspace VeWorld.xcworkspace -scheme VeWorld -configuration Debug -sdk iphonesimulator -archivePath ./build/veworld.xcarchive
             pwd
             ls
-            cd build/veworld.xcarchive
+            cd build
+            ls
+            cd veworld.xcarchive
             ls -la
 
       - name: Install Maestro
