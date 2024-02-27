@@ -91,9 +91,9 @@ jobs:
 
           echo "All valid and available runtimes"
           xcrun simctl list runtimes
-          
+
       - name: Install .app
-        run: xcrun simctl install booted VeWorld.app
+        run: xcrun simctl install booted /Users/ec2-user/Library/Developer/Xcode/DerivedData/VeWorld-fbmomwsfnawcdcfmbjsuptqnhumm/Build/Products/Debug-iphonesimulator/VeWorld.app
 
       - name: Run Maestro
         run: maestro test maestro/sendflow-id.yaml
