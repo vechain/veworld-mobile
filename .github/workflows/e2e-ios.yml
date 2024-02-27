@@ -68,14 +68,12 @@ jobs:
        
       - name: Build apk 
         run: |
-            pwd
-            ls -la
             cd ios
+            xcodebuild -list -workspace VeWorld.xcworkspace
+            xcodebuild -workspace VeWorld.xcworkspace -scheme VeWorld -configuration Debug -sdk iphonesimulator -archivePath ./build/veworld.xcarchive
             pwd
             ls
-            xcodebuild -list -workspace VeWorld.xcworkspace
-            xcodebuild -workspace VeWorld.xcworkspace -scheme VeWorld -configuration Debug -sdk iphonesimulator -archivePath ./build/iamgroot.xcarchive
-            cd build/debug
+            cd build/veworld.xcarchive
             ls -la
 
       - name: Install Maestro
