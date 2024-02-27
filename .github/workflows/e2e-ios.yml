@@ -73,9 +73,8 @@ jobs:
             cd ios
             pwd
             ls
-            xcodebuild clean
             xcodebuild -list -workspace VeWorld.xcworkspace
-            xcodebuild -workspace VeWorld.xcworkspace -scheme VeWorld -configuration Debug -sdk iphonesimulator -derivedDataPath ios/build
+            xcodebuild -workspace VeWorld.xcworkspace -scheme VeWorld -configuration Debug -sdk iphonesimulator -archivePath ./build/iamgroot.xcarchive
             cd build/debug
             ls -la
 
