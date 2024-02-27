@@ -91,9 +91,7 @@ jobs:
 
           echo "All valid and available runtimes"
           xcrun simctl list runtimes
-
-          echo "Run simulator"
-          xcrun simctl boot "${{ env.XC_SIMULATOR_NAME }}"
+          
       - name: Install .app
         run: xcrun simctl install booted VeWorld.app
 
