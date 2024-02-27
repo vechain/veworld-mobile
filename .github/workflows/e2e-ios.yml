@@ -73,8 +73,11 @@ jobs:
             cd ios
             pwd
             ls
-            xcodebuild -workspace VeWorld.xcworkspace -scheme VeWorld -configuration Debug -sdk iphonesimulator -derivedDataPath ios/build
-            cd build/debug
+            xcodebuild -workspace VeWorld.xcworkspace -scheme VeWorld -configuration Debug -sdk iphonesimulator -derivedDataPath /build
+            cd build
+            pwd
+            ls
+            cd /Users/ec2-user/Library/Developer/Xcode/DerivedData
             ls -la
 
       - name: Install Maestro
