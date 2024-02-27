@@ -12,6 +12,9 @@ env:
       text: "DEV:DEMO"
 - tapOn:
       id: "settings-tab"
+- extendedWaitUntil:
+    visible: "Networks"
+    timeout:  300000
 - tapOn: "Networks"
 - tapOn: "Mainnet"
 - tapOn: "Testnet"
