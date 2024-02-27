@@ -70,6 +70,7 @@ jobs:
         run: |
             cd ios
             xcodebuild -list -workspace VeWorld.xcworkspace
+            xcodebuild archive -scheme "VeWorld" -sdk iphoneos -destination generic/platform=iOS -archivePath ./build/veworld.xcarchive
             xcodebuild -configuration Debug -sdk iphonesimulator -exportArchive -archivePath ./build/veworld.xcarchive -exportOptionsPlist exportOptions.plist -exportPath ./build
             pwd
             ls
