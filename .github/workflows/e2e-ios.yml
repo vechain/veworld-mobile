@@ -95,4 +95,7 @@ jobs:
           echo "Run simulator"
           xcrun simctl boot "${{ env.XC_SIMULATOR_NAME }}"
       - name: Install .app
-        run: xcrun simctl install booted ./MyApp.app
+        run: xcrun simctl install booted VeWorld.app
+
+      - name: Run Maestro
+        run: maestro test maestro/sendflow-id.yaml
