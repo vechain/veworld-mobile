@@ -10,7 +10,6 @@ env:
     timeout:  300000
 - tapOn:
       text: "DEV:DEMO"
-      index: 1
 - tapOn:
       id: "settings-tab"
 - tapOn: "Networks"
