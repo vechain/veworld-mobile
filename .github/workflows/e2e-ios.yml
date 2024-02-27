@@ -70,11 +70,12 @@ jobs:
         run: |
             cd ios
             xcodebuild -list -workspace VeWorld.xcworkspace
-            xcodebuild -workspace VeWorld.xcworkspace -scheme VeWorld -configuration Debug -sdk iphonesimulator -archivePath ./build/veworld.xcarchive
+            xcodebuild -workspace VeWorld.xcworkspace -scheme VeWorld -configuration Debug -sdk iphonesimulator -archivePath ./build/veworld.xcarchive -exportOptionsPlist exportOptions.plist -exportPath ./build
             pwd
             ls
             cd build
             ls
+            pwd
             cd veworld.xcarchive
             ls -la
 
