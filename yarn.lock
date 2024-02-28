@@ -3451,9 +3451,9 @@
     warn-once "^0.1.0"
 
 "@react-navigation/core@^6.4.9":
-  version "6.4.12"
-  resolved "https://registry.yarnpkg.com/@react-navigation/core/-/core-6.4.12.tgz#7265cbaa14ccadcf48606244f28310b528155748"
-  integrity sha512-D8xslRAJXmsuxx2gkv3IiP8iJ82lt+bb2mghHVCUuKzhJE+r+nPrAmTnuEgZuPA35Hqn7QGwfpHuOxMB0yagHQ==
+  version "6.4.13"
+  resolved "https://registry.yarnpkg.com/@react-navigation/core/-/core-6.4.13.tgz#27cf33d963f59aeeb36f27514a9744ab818097b3"
+  integrity sha512-RBUpNG11SEYfvvWefJPxz8Xu/feWuPxln7ddRSY92aKs7u6fj/Z694Jun76Gmmw/RIHW6xcu3PH2v3Wm8nbumg==
   dependencies:
     "@react-navigation/routers" "^6.1.9"
     escape-string-regexp "^4.0.0"
@@ -3463,9 +3463,9 @@
     use-latest-callback "^0.1.7"
 
 "@react-navigation/elements@^1.3.19":
-  version "1.3.25"
-  resolved "https://registry.yarnpkg.com/@react-navigation/elements/-/elements-1.3.25.tgz#0c62f88bc825e4167304cd4ffbb528d676c8bbd2"
-  integrity sha512-6CQIj7jAdbQs5CjQy7c7zYQp9TV6ex6Pr9PJrwf0zwEwhIxOY0rNRkFJ66B2Z9s8b35C013x4zsKFWXbQbYBiA==
+  version "1.3.26"
+  resolved "https://registry.yarnpkg.com/@react-navigation/elements/-/elements-1.3.26.tgz#f66afb21d01d1ff05a578991cfb81d19ae5f031d"
+  integrity sha512-9rSY7MD6etU3M3j/OYUvtg4eBqABlkS39iJwwQheE89pSa9QyvXbJSsz/bUBEjFWwsOYxTVzj27bc7ulrDVWgw==
 
 "@react-navigation/material-top-tabs@6.6.5":
   version "6.6.5"
