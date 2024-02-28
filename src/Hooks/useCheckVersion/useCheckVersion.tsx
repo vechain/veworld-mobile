@@ -3,11 +3,12 @@ import { useCallback, useEffect } from "react"
 import { Alert, Linking } from "react-native"
 import DeviceInfo from "react-native-device-info"
 import checkVersion from "react-native-store-version"
-import { ERROR_EVENTS } from "~Constants"
+import { AnalyticsEvent, ERROR_EVENTS } from "~Constants"
 import { selectLastVersionCheck, setLastVersionCheck, useAppDispatch, useAppSelector } from "~Storage/Redux"
 import { PlatformUtils, warn } from "~Utils"
 import { useI18nContext } from "~i18n"
 import { getCountry } from "react-native-localize"
+import { useAnalyticTracking } from "~Hooks/useAnalyticTracking"
 
 export const useCheckVersion = () => {
     const { LL } = useI18nContext()
@@ -20,6 +21,7 @@ export const useCheckVersion = () => {
     const nextVersionCheckDate = moment(lastVersionCheck).add(1, "weeks")
     const isTimeForANewCheck = moment().isAfter(nextVersionCheckDate)
     const dispatch = useAppDispatch()
+    const track = useAnalyticTracking()
 
     const init = useCallback(async () => {
         if (isTimeForANewCheck) {
@@ -34,10 +36,15 @@ export const useCheckVersion = () => {
                     })
 
                     if (check.result === "new") {
+                        track(AnalyticsEvent.VERSION_UPGRADE_MODAL_OPENED, {
+                            currentVersion: DeviceInfo.getVersion(),
+                            newVersion: check.remote,
+                        })
                         Alert.alert(LL.ALERT_TITLE_NEW_VERSION(), LL.ALERT_MSG_NEW_VERSION({ version: check.remote }), [
                             {
                                 text: LL.ALERT_OPTION_UPDATE_NOW(),
                                 onPress: () => {
+                                    track(AnalyticsEvent.VERSION_UPGRADE_MODAL_SUCCESS, { newVersion: check.remote })
                                     Linking.openURL(PlatformUtils.isIOS() ? APPLE_STORE_URL : GOOGLE_STORE_URL)
                                 },
                             },
@@ -58,7 +65,7 @@ export const useCheckVersion = () => {
                 warn(ERROR_EVENTS.APP, "useCheckVersion", "countryCode is undefined")
             }
         }
-    }, [isTimeForANewCheck, dispatch, countryCode, APPLE_STORE_URL, LL])
+    }, [isTimeForANewCheck, dispatch, countryCode, APPLE_STORE_URL, track, LL])
 
     useEffect(() => {
         init()
