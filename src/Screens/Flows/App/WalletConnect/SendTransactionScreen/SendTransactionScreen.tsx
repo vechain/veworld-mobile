@@ -111,8 +111,8 @@ export const SendTransactionScreen: FC<Props> = ({ route }: Props) => {
     const onFinish = useCallback(
         (sucess: boolean) => {
             if (isInjectedWallet) {
-                if (sucess) track(AnalyticsEvent.DAPP_UNIVERSAL_LINK_TRANSACTION_SUCCESS)
-                else track(AnalyticsEvent.DAPP_UNIVERSAL_LINK_TRANSACTION_FAILURE)
+                if (sucess) track(AnalyticsEvent.DAPP_DISCOVERY_TRANSACTION_SENT_SUCCESS)
+                else track(AnalyticsEvent.DAPP_DISCOVERY_TRANSACTION_SENT_FAILURE)
             } else {
                 if (sucess) track(AnalyticsEvent.DAPP_TX_SENT)
                 else track(AnalyticsEvent.SEND_NFT_FAILED_TO_SEND)
