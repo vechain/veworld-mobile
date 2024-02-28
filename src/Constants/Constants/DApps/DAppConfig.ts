@@ -18,6 +18,19 @@ export type DiscoveryDApp = {
 
 const DAppConfig: DiscoveryDApp[] = [
     {
+        name: "VeBetter DAO",
+        href: "https://governance.vebetterdao.org/",
+        desc: "Vote for your favourite sustainability dApps in vebetterdao’s governance",
+        category: "DAO",
+        tags: ["Governance Voting", "DAO", "Sustainability", "VeBetter"],
+        repo: "https://governance.vebetterdao.org/",
+        createAt: 1552446522000,
+        image: require("./images/org.vebetterdao.governance.png"),
+        isCustom: false,
+        amountOfNavigations: 99999999999,
+    },
+
+    {
         name: "Vechain Rewards",
         href: "https://app.rewards.vechain.org/dashboard",
         desc: "Explore the Official vechain Rewards dApp - Your solution to effortlessly manage x-nodes, claim rewards and track your reward history. Get started now!",
