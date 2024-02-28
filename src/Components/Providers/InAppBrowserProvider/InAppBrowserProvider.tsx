@@ -304,6 +304,7 @@ export const InAppBrowserProvider = ({ children }: Props) => {
             if (isAlreadyConnected) {
                 nav.navigate(Routes.CONNECTED_APP_SEND_TRANSACTION_SCREEN, {
                     request: req,
+                    isInjectedWallet: true,
                 })
             } else {
                 nav.navigate(Routes.CONNECT_APP_SCREEN, {
@@ -452,6 +453,7 @@ export const InAppBrowserProvider = ({ children }: Props) => {
             if (request.method === "thor_sendTransaction") {
                 nav.navigate(Routes.CONNECTED_APP_SEND_TRANSACTION_SCREEN, {
                     request: request,
+                    isInjectedWallet: true,
                 })
             }
 
