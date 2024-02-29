@@ -7,8 +7,8 @@ on:
 
 jobs:
     build-test-android:
-        name: Detox Build & Test Android Release
-        runs-on: macos
+        name: Maestro Build & Test Android Release
+        runs-on: macos-xl
 
         steps:
             - name: Checkout repository
