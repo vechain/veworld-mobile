@@ -65,7 +65,10 @@ jobs:
               run:  REACT_APP_UI_LOG=false yarn react-native start &> metro-bundler.log &
 
             - name: Install Maestro
-              run: MAESTRO_VERSION=1.36.0 curl -Ls 'https://get.maestro.mobile.dev' | bash
+              run: |
+                MAESTRO_VERSION=1.36.0 curl -Ls 'https://get.maestro.mobile.dev' | bash
+                export PATH="$PATH":"$HOME/.maestro/bin"
+
 
             - name: Run Maestro E2E tests
               uses: reactivecircus/android-emulator-runner@v2
