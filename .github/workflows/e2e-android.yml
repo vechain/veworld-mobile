@@ -66,7 +66,7 @@ jobs:
 
             - name: Install Maestro
               run:  MAESTRO_VERSION=1.36.0 curl -Ls 'https://get.maestro.mobile.dev' | bash
-
+              
             - name: Check Maestro install
               run: |
                 source ~/.bashrc
@@ -98,9 +98,7 @@ jobs:
                   adb install android/app/build/outputs/apk/debug/app-debug.apk || (adb kill-server && adb start-server && adb devices && adb install app-debug.apk)
 
                   # Run e2e
-
-            - name: Run test
-              run: maestro test maestro/sendflow-id.yaml
+                  $HOME/.maestro/bin/maestro test .maestro/sendflow-id.yaml
 
             # Upload Metro Bundler logs
             - name: Upload Metro Bundler logs
