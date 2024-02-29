@@ -69,7 +69,7 @@ jobs:
             - name: Check Maestro install
               run: |
                 export PATH="$PATH":"$HOME/.maestro/bin"
-                maestro
+                maestro --version
             - name: Run Maestro E2E tests
               uses: reactivecircus/android-emulator-runner@v2
               with:
