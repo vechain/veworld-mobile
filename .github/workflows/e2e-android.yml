@@ -8,7 +8,7 @@ on:
 jobs:
     build-test-android:
         name: Maestro Build & Test Android Release
-        runs-on: macos-xl
+        runs-on: macos-latest
 
         steps:
             - name: Checkout repository
