@@ -64,6 +64,14 @@ jobs:
             - name: Start Metro Bundler
               run:  REACT_APP_UI_LOG=false yarn react-native start &> metro-bundler.log &
 
+            - name: Install Maestro
+              run:  MAESTRO_VERSION=1.36.0 curl -Ls 'https://get.maestro.mobile.dev' | bash
+              
+            - name: Check Maestro install
+              run: |
+                source ~/.bashrc
+                export PATH="$PATH":"$HOME/.maestro/bin"
+                maestro --version
             - name: Run Maestro E2E tests
               uses: reactivecircus/android-emulator-runner@v2
               with:
@@ -88,11 +96,7 @@ jobs:
       
                   # Install app
                   adb install android/app/build/outputs/apk/debug/app-debug.apk || (adb kill-server && adb start-server && adb devices && adb install app-debug.apk)
-                  
-                  MAESTRO_VERSION=1.36.0 curl -Ls 'https://get.maestro.mobile.dev' | bash
-                  export PATH="$PATH":"$HOME/.maestro/bin"
-                  maestro --version
-                  
+
                   # Run e2e
                   maestro test maestro/sendflow-id.yaml
 
