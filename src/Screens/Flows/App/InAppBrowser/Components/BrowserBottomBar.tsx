@@ -1,7 +1,7 @@
 import React, { useMemo } from "react"
 import { StyleSheet } from "react-native"
 import { BaseIcon, BaseView } from "~Components"
-import { useDappBookmarking, useTheme } from "~Hooks"
+import { useBlockchainNetwork, useDappBookmarking, useTheme, useThemedStyles } from "~Hooks"
 import { useInAppBrowser } from "~Components/Providers/InAppBrowserProvider"
 import { ColorThemeType } from "~Constants"
 import { isIOS } from "~Utils/PlatformUtils/PlatformUtils"
@@ -15,9 +15,9 @@ type IconProps = {
 export const BrowserBottomBar: React.FC = () => {
     const { canGoBack, canGoForward, goBack, goForward, navigationState, webviewRef } = useInAppBrowser()
     const theme = useTheme()
-    const styles = createStyles(theme)
-
     const { isBookMarked, toggleBookmark } = useDappBookmarking(navigationState?.url, navigationState?.title)
+    const { isMainnet } = useBlockchainNetwork()
+    const { styles } = useThemedStyles(baseStyles(isMainnet))
 
     const IconConfig: IconProps[] = useMemo(() => {
         return [
@@ -61,15 +61,15 @@ export const BrowserBottomBar: React.FC = () => {
     ) : null
 }
 
-const createStyles = (theme: ColorThemeType) =>
+const baseStyles = (isMainnet: boolean) => (theme: ColorThemeType) =>
     StyleSheet.create({
         bottomBar: {
             display: "flex",
             flexDirection: "row",
             justifyContent: "space-evenly",
             alignItems: "center",
-            backgroundColor: theme.colors.background,
-            borderTopColor: theme.colors.card,
+            backgroundColor: isMainnet ? theme.colors.background : theme.colors.testnetBackground,
+            borderTopColor: isMainnet ? theme.colors.card : theme.colors.testnetBackground,
             borderTopWidth: 1,
             paddingTop: 10,
             paddingBottom: isIOS() ? 42 : 10,

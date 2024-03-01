@@ -33,6 +33,7 @@ export type Colors = {
     alertOrangeMedium: string
     alertRedMedium: string
     placeholder: string
+    testnetBackground: string
 }
 
 export enum COLORS {
@@ -70,6 +71,8 @@ export enum COLORS {
     COINBASE_BACKGROUND_LIGHT = "#ffffff",
     COINBASE_BACKGROUND_DARK = "#0a0b0d",
     COINBASE_BACKGROUND_BLUE = "#0052FF",
+    TESTNET_BACKGROUND_LIGHT = "rgba(243, 193, 27, 0.72)",
+    TESTNET_BACKGROUND_DARK = "#FF9900",
 }
 
 const light: Colors = {
@@ -107,6 +110,7 @@ const light: Colors = {
     alertOrangeMedium: COLORS.MEDIUM_ORANGE,
     alertRedMedium: COLORS.MEDIUM_RED,
     placeholder: COLORS.DISABLED_GREY,
+    testnetBackground: COLORS.TESTNET_BACKGROUND_LIGHT,
 }
 
 const dark: Colors = {
@@ -144,6 +148,7 @@ const dark: Colors = {
     alertOrangeMedium: COLORS.PASTEL_ORANGE,
     alertRedMedium: COLORS.PASTEL_RED,
     placeholder: COLORS.PURPLE,
+    testnetBackground: COLORS.TESTNET_BACKGROUND_DARK,
 }
 
 export const colors = { light, dark }

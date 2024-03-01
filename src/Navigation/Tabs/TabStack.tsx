@@ -6,14 +6,16 @@ import { useTheme } from "~Hooks"
 import PlatformUtils from "~Utils/PlatformUtils"
 import { DiscoverStack, HomeStack, SettingsStack } from "~Navigation/Stacks"
 import { NFTStack } from "~Navigation/Stacks/NFTStack"
-import { selectCurrentScreen, useAppSelector } from "~Storage/Redux"
+import { selectCurrentScreen, selectSelectedNetwork, useAppSelector } from "~Storage/Redux"
 import { Routes } from "~Navigation/Enums"
+import { NETWORK_TYPE } from "~Model"
 
 const Tab = createBottomTabNavigator()
 
 export const TabStack = () => {
     const theme = useTheme()
     const currentScreen = useAppSelector(selectCurrentScreen)
+    const network = useAppSelector(selectSelectedNetwork)
 
     const renderTabBarIcon = useCallback(
         (focused: boolean, iconName: string) => <TabIcon focused={focused} title={iconName} />,
@@ -40,7 +42,8 @@ export const TabStack = () => {
                 tabBarShowLabel: false,
                 tabBarStyle: {
                     display,
-                    backgroundColor: theme.colors.card,
+                    backgroundColor:
+                        network.name === NETWORK_TYPE.MAIN ? theme.colors.card : theme.colors.testnetBackground,
                     ...tabbarBaseStyles.tabbar,
                     ...tabbarBaseStyles.shadow,
                 },
