@@ -48,7 +48,7 @@ export const DAppList: React.FC<Props> = ({ onDAppPress, filteredSearch, selecto
                     if (url && (await Linking.canOpenURL(url))) {
                         Linking.openURL(url)
                     } else {
-                        error(ERROR_EVENTS.DAPP, "No REACT_APP_CREATE_YOUR_VECHAIN_DAPP_URL url found", url)
+                        error(ERROR_EVENTS.DAPP, "No REACT_APP_CREATE_YOUR_VECHAIN_DAPP_URL url found!", url)
                     }
                 }}
                 title={LL.DISCOVER_CREATE_YOUR_DAPP()}
