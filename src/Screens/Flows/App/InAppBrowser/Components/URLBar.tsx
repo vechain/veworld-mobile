@@ -1,14 +1,15 @@
 import React, { useCallback, useMemo } from "react"
 import { useInAppBrowser } from "~Components/Providers/InAppBrowserProvider"
-import { BaseIcon, BaseText, BaseView } from "~Components"
+import { BaseIcon, BaseText, BaseView, SelectedNetworkViewer } from "~Components"
 import { StyleSheet } from "react-native"
-import { useTheme } from "~Hooks"
+import { useBlockchainNetwork, useTheme } from "~Hooks"
 import { Routes } from "~Navigation"
 import { useNavigation } from "@react-navigation/native"
 
 export const URLBar = () => {
     const { navigationState } = useInAppBrowser()
     const nav = useNavigation()
+    const { isMainnet } = useBlockchainNetwork()
 
     const urlText = useMemo(() => {
         if (!navigationState?.url) return ""
@@ -52,9 +53,9 @@ export const URLBar = () => {
             />
 
             {/* URL Text centered */}
-            <BaseView flex={1}>
+            <BaseView flex={1} flexDirection="row" justifyContent="space-between">
                 <BaseText
-                    w={100}
+                    w={isMainnet ? 100 : 65}
                     color={theme.colors.text}
                     fontSize={14}
                     fontWeight="500"
@@ -63,6 +64,8 @@ export const URLBar = () => {
                     ellipsizeMode="tail">
                     {urlText}
                 </BaseText>
+
+                {!isMainnet && <SelectedNetworkViewer />}
             </BaseView>
 
             <BaseIcon

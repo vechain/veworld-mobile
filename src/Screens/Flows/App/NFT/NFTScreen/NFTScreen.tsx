@@ -100,9 +100,13 @@ export const NFTScreen = () => {
         )
     }, [error, collections, isLoading, renderImportNftView, renderNFTList])
 
+    const renderHeader = useMemo(() => {
+        return <NftScreenHeader openSelectAccountBottomSheet={openSelectAccountBottomSheet} />
+    }, [openSelectAccountBottomSheet])
+
     return (
         <Layout
-            fixedHeader={<NftScreenHeader openSelectAccountBottomSheet={openSelectAccountBottomSheet} />}
+            fixedHeader={renderHeader}
             noBackButton
             noMargin
             fixedBody={
