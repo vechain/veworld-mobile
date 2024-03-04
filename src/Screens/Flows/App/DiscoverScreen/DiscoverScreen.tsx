@@ -19,6 +19,7 @@ import {
 import { createMaterialTopTabNavigator } from "@react-navigation/material-top-tabs"
 import { TabBar } from "./Components/TabBar"
 import Animated, { useSharedValue, withDelay, withSpring, withTiming } from "react-native-reanimated"
+import { PlatformUtils } from "~Utils"
 
 export const DiscoverScreen: React.FC = () => {
     const { theme, styles } = useThemedStyles(baseStyles)
@@ -141,7 +142,7 @@ export const DiscoverScreen: React.FC = () => {
             fixedBody={
                 <>
                     {/*Search Bar*/}
-                    <BaseView w={100} flexDirection="row" px={24}>
+                    <BaseView w={100} flexDirection="row" px={24} pt={24}>
                         <BaseView flex={1}>
                             <BaseTextInput
                                 placeholder={LL.DISCOVER_SEARCH()}
@@ -177,11 +178,13 @@ export const DiscoverScreen: React.FC = () => {
                             options={{ title: LL.DISCOVER_TAB_FAVOURITES() }}
                             component={FavouriteScreen}
                         />
-                        <Tab.Screen
-                            name={Routes.DISCOVER_FEATURED}
-                            options={{ title: LL.DISCOVER_TAB_FEATURED() }}
-                            component={FeaturedScreen}
-                        />
+                        {PlatformUtils.isAndroid() && (
+                            <Tab.Screen
+                                name={Routes.DISCOVER_FEATURED}
+                                options={{ title: LL.DISCOVER_TAB_FEATURED() }}
+                                component={FeaturedScreen}
+                            />
+                        )}
                     </Tab.Navigator>
                 </>
             }
