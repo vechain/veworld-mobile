@@ -69,11 +69,14 @@ jobs:
       - name: Build apk
         run: |
               cd ios
-              xcodebuild -workspace VeWorld.xcworkspace -scheme VeWorld -configuration Debug -sdk iphonesimulator -derivedDataPath ios/build
-                      
+              xcodebuild -workspace VeWorld.xcworkspace -scheme VeWorld -configuration Debug -sdk iphonesimulator -derivedDataPath ios/build > build_out.txt
+              cd build
+              pwd
+              ls -ls
+
       - uses: mobile-dev-inc/action-maestro-cloud@v1.8.1
         with:
             name: iOS test
             api-key: ${{ secrets.MAESTRO_CLOUD_API_KEY }}
-            app-file: VeWorld.app
+            app-file: ios/build/VeWorld.app
             workspace: maestro_ios/
