@@ -132,14 +132,14 @@ PODS:
   - libwebp/sharpyuv (1.3.2)
   - libwebp/webp (1.3.2):
     - libwebp/sharpyuv
-  - lottie-ios (4.4.0)
-  - lottie-react-native (6.6.0):
-    - lottie-ios (~> 4.4.0)
+  - lottie-ios (4.4.1)
+  - lottie-react-native (6.7.0):
+    - lottie-ios (~> 4.4.1)
     - React-Core
   - Mixpanel-swift (4.2.0):
     - Mixpanel-swift/Complete (= 4.2.0)
   - Mixpanel-swift/Complete (4.2.0)
-  - MixpanelReactNative (2.4.0):
+  - MixpanelReactNative (2.4.1):
     - Mixpanel-swift (= 4.2.0)
     - React-Core
   - MMKV (1.3.3):
@@ -1061,10 +1061,10 @@ SPEC CHECKSUMS:
   hermes-engine: 8057e75cfc1437b178ac86c8654b24e7fead7f60
   libevent: 4049cae6c81cdb3654a443be001fb9bdceff7913
   libwebp: 1786c9f4ff8a279e4dac1e8f385004d5fc253009
-  lottie-ios: ef1be1f90d54255f08e09d767950e43714661178
-  lottie-react-native: 00ac19344296ae018260aabd14d6b36dd816b0e2
+  lottie-ios: e047b1d2e6239b787cc5e9755b988869cf190494
+  lottie-react-native: e3205322282d72e23efb3bff3287d0bd16fb1b01
   Mixpanel-swift: e5dd85295923e6a875acf17ccbab8d2ecb10ea65
-  MixpanelReactNative: 9e83f45fdcb6c2d83e97226d2dff79a780f882b4
+  MixpanelReactNative: 0101b8828c2f335c128850e71ab7d3b7adde089a
   MMKV: f902fb6719da13c2ab0965233d8963a59416f911
   MMKVCore: d26e4d3edd5cb8588c2569222cbd8be4231374e9
   MultiplatformBleAdapter: 5a6a897b006764392f9cef785e4360f54fb9477d
@@ -1146,4 +1146,4 @@ SPEC CHECKSUMS:
 
 PODFILE CHECKSUM: 8539af608c0cd595f9920d888a6de36af30112be
 
-COCOAPODS: 1.14.3
+COCOAPODS: 1.15.2

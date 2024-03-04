@@ -26,5 +26,9 @@ describe("IPFSUtils", () => {
             const invalidUri = "http://google.ie"
             expect(validateIpfsUri(invalidUri)).toBeFalsy()
         })
+        it("Should return true for version 1 CID", () => {
+            const validUri = "ipfs://bafybeic2v6x57oxedqos6xruudgbgtkszzquyxjv73ux7zs2w7w3d42q"
+            expect(validateIpfsUri(validUri)).toBeTruthy()
+        })
     })
 })
