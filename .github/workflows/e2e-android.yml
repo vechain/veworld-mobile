@@ -59,7 +59,7 @@ jobs:
                   ls -la
 
             - name: Start Metro Bundler
-              run: npx react-native start 
+              run: npx react-native start &
 
 
             - name: Maestro Cloud
