@@ -8,7 +8,7 @@ on:
 jobs:
   build-e2e-test-ios:
     name: Detox Build & Test iOS Debug
-    runs-on: macos
+    runs-on: macos-latest
     env:
       XC_SIMULATOR_NAME: iPhone 14
 
@@ -68,8 +68,6 @@ jobs:
        
       - name: Build apk 
         run: |
-            pwd
-            ls -la
             cd ios
             pwd
             ls
@@ -77,23 +75,11 @@ jobs:
             cd build
             pwd
             ls
-            cd /Users/ec2-user/Library/Developer/Xcode/DerivedData
-            ls -la
-
-      - name: Install Maestro
-        run: MAESTRO_VERSION=1.36.0 curl -Ls 'https://get.maestro.mobile.dev' | bash
-      
         
-      - name: Run iOS Simulator
-        run: |
-          echo "All valid available device types"
-          xcrun simctl list devicetypes
-
-          echo "All valid and available runtimes"
-          xcrun simctl list runtimes
-
-      - name: Install .app
-        run: xcrun simctl install booted /Users/ec2-user/Library/Developer/Xcode/DerivedData/VeWorld-fbmomwsfnawcdcfmbjsuptqnhumm/Build/Products/Debug-iphonesimulator/VeWorld.app
-
-      - name: Run Maestro
-        run: maestro test maestro/sendflow-id.yaml
+      - name: Run Maestro Test
+        uses: mobile-dev-inc/action-maestro-cloud@v1.8.1
+        with:
+            name: iOS test
+            api-key: ${{ secrets.MAESTRO_CLOUD_API_KEY }}
+            app-file: app.zip
+            workspace: myFlows/
