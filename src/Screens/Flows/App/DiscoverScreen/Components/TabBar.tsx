@@ -4,6 +4,7 @@ import { TouchableOpacity, StyleSheet } from "react-native"
 import { BaseText, BaseView } from "~Components"
 import { ColorThemeType } from "~Constants"
 import { useThemedStyles } from "~Hooks"
+import { PlatformUtils } from "~Utils"
 
 export const TabBar = ({ state, descriptors, navigation }: MaterialTopTabBarProps) => {
     const { styles } = useThemedStyles(baseStyles)
@@ -33,6 +34,8 @@ export const TabBar = ({ state, descriptors, navigation }: MaterialTopTabBarProp
                         navigation.navigate(route.name)
                     }
                 }
+
+                if (PlatformUtils.isIOS()) return
 
                 return (
                     <TouchableOpacity

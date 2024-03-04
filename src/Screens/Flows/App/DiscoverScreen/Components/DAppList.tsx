@@ -10,7 +10,7 @@ import { useI18nContext } from "~i18n"
 import { useBrowserSearch, useTheme } from "~Hooks"
 import { useAppSelector } from "~Storage/Redux"
 import { Routes } from "~Navigation"
-import { error } from "~Utils"
+import { PlatformUtils, error } from "~Utils"
 
 const filterDapps = (dapps: DiscoveryDApp[], searchText: string) => {
     return dapps.filter(dapp => {
@@ -48,7 +48,7 @@ export const DAppList: React.FC<Props> = ({ onDAppPress, filteredSearch, selecto
                     if (url && (await Linking.canOpenURL(url))) {
                         Linking.openURL(url)
                     } else {
-                        error(ERROR_EVENTS.DAPP, "No REACT_APP_CREATE_YOUR_VECHAIN_DAPP_URL url found", url)
+                        error(ERROR_EVENTS.DAPP, "No REACT_APP_CREATE_YOUR_VECHAIN_DAPP_URL url found!", url)
                     }
                 }}
                 title={LL.DISCOVER_CREATE_YOUR_DAPP()}
@@ -110,17 +110,22 @@ export const DAppList: React.FC<Props> = ({ onDAppPress, filteredSearch, selecto
                     {LL.DISCOVER_EMPTY_FAVOURITES_SUBTITLE()}
                 </BaseText>
                 <BaseSpacer height={40} />
-                <BaseView flexDirection="row" justifyContent="space-evenly" w={100}>
-                    <BaseButton
-                        style={styles.emptyListButton}
-                        action={() => setTab(Routes.DISCOVER_FEATURED)}
-                        title={LL.DISCOVER_EMPTY_FAVOURITES()}
-                        haptics="Light"
-                    />
-                </BaseView>
-                <BaseText mx={24} my={16} typographyFont="body" align="center">
-                    {LL.COMMON_OR()}
-                </BaseText>
+                {PlatformUtils.isAndroid() && (
+                    <>
+                        <BaseView flexDirection="row" justifyContent="space-evenly" w={100}>
+                            <BaseButton
+                                style={styles.emptyListButton}
+                                action={() => setTab(Routes.DISCOVER_FEATURED)}
+                                title={LL.DISCOVER_EMPTY_FAVOURITES()}
+                                haptics="Light"
+                            />
+                        </BaseView>
+
+                        <BaseText mx={24} my={16} typographyFont="body" align="center">
+                            {LL.COMMON_OR()}
+                        </BaseText>
+                    </>
+                )}
                 <BaseView flexDirection="row" justifyContent="space-evenly" w={100}>
                     <BaseButton
                         style={styles.emptyListButton}
