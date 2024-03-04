@@ -69,7 +69,7 @@ jobs:
       - name: Build apk
         run: |
               cd ios
-              xcodebuild -workspace VeWorld.xcworkspace -scheme VeWorld -configuration Debug -sdk iphonesimulator -derivedDataPath ios/build > build_out.txt
+              xcodebuild -workspace VeWorld.xcworkspace -scheme VeWorld -configuration Debug  SYMROOT=$(PWD)/build  -sdk iphonesimulator > build_out.txt
               cd build
               pwd
               ls -ls
