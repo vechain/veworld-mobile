@@ -67,7 +67,9 @@ jobs:
         run: REACT_APP_UI_LOG=false yarn react-native start &> metro-bundler.log &
       
       - name: Build apk
-        run: xcodebuild -project VeWorld.xcodeproj -scheme VeWorld -destination 'platform=iOS Simulator,name=iPhone 14'
+        run: |
+              cd ios
+              xcodebuild -project VeWorld.xcodeproj -scheme VeWorld -destination 'platform=iOS Simulator,name=iPhone 14'
         
       - uses: mobile-dev-inc/action-maestro-cloud@v1.8.1
         with:
