@@ -9,6 +9,8 @@ jobs:
     build-test-android:
         name: Maestro Build & Test Android Release
         runs-on: ubuntu-latest
+        outputs:
+          app: app/build/outputs/apk/debug
 
         steps:
             - name: Checkout repository
@@ -55,6 +57,7 @@ jobs:
                   cd android
                   ./gradlew assembleDebug
                   cd app/build/outputs/apk/debug
+                  pwd
                   ls 
 
             - name: Maestro Cloud
