@@ -59,9 +59,9 @@ jobs:
                   ls -la
 
             - name: Start Metro Bundler
-              run: yarn react-native start &
+              run: npx react-native start 
 
-              
+
             - name: Maestro Cloud
               uses: mobile-dev-inc/action-maestro-cloud@v1.8.1
               with:
