@@ -20,7 +20,7 @@ const isValidTxMessage = (message: unknown): message is Connex.Vendor.TxMessage 
             return false
         }
 
-        if (typeof item.data !== "string" && item.data !== null) {
+        if (typeof item.data !== "string" && item.data !== null && item.data !== undefined) {
             return false
         }
     }
