@@ -1821,6 +1821,10 @@ type RootTranslation = {
 	 */
 	BROWSER_INVALID_DEEP_LINK: string
 	/**
+	 * T​h​e​ ​D​A​p​p​ ​r​e​e​q​u​e​s​t​e​d​ ​a​ ​n​e​t​w​o​r​k​ ​t​h​a​t​ ​i​s​ ​n​o​t​ ​f​o​u​n​d​.
+	 */
+	BROWSER_NETWORK_NOT_FOUND: string
+	/**
 	 * C​o​n​t​r​a​c​t​ ​a​d​d​r​e​s​s
 	 */
 	CONTRACT_ADDRESS: string
@@ -4657,6 +4661,10 @@ Try reconnect your device to the internet.
 	 * There was an error trying to acces this link. Make sure it's correct and try again.
 	 */
 	BROWSER_INVALID_DEEP_LINK: () => LocalizedString
+	/**
+	 * The DApp reequested a network that is not found.
+	 */
+	BROWSER_NETWORK_NOT_FOUND: () => LocalizedString
 	/**
 	 * Contract address
 	 */

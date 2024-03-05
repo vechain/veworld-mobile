@@ -14,7 +14,7 @@ export const ActivityStatusIndicator = ({ activityStatus }: Props) => {
     const theme = useTheme()
 
     const statusBgColor =
-        activityStatus === ActivityStatus.PENDING ? theme.colors.alertOrangeMedium : theme.colors.alertRedMedium
+        activityStatus === ActivityStatus.PENDING ? theme.colors.testnetBackground : theme.colors.alertRedMedium
 
     const statusTitle =
         activityStatus === ActivityStatus.PENDING ? LL.ACTIVITIES_STATUS_pending() : LL.ACTIVITIES_STATUS_failed()

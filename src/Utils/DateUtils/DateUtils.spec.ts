@@ -21,7 +21,7 @@ describe("formatDateTime", () => {
 
     it("should format the timestamp correctly in English", () => {
         const timestamp = 1682448820000
-        expect(formatDateTime(timestamp, "en", DEFAULT_TIMEZONE)).toBe("Apr 25, 2023 - 6:53 pm")
+        expect(formatDateTime(timestamp, "en", DEFAULT_TIMEZONE)).toBe("Apr 25, 2023 - 6:53")
     })
 
     it("should throw an error for invalid locale", () => {
@@ -45,11 +45,11 @@ describe("formatDateTime", () => {
 
     it("should format the timestamp correctly in Italian", () => {
         const timestamp = 1678689944000
-        expect(formatDateTime(timestamp, "it", DEFAULT_TIMEZONE)).toBe("13 mar 2023 - 6:45 am")
+        expect(formatDateTime(timestamp, "it", DEFAULT_TIMEZONE)).toBe("13 mar 2023 - 6:45")
     })
 
     it("should format the timestamp correctly in German", () => {
         const timestamp = 1678689944000
-        expect(formatDateTime(timestamp, "de", DEFAULT_TIMEZONE)).toBe("13. März 2023 - 6:45 vorm. pm")
+        expect(formatDateTime(timestamp, "de", DEFAULT_TIMEZONE)).toBe("13. März 2023 - 6:45 vorm.")
     })
 })

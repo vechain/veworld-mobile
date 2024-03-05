@@ -241,11 +241,27 @@ export const InAppBrowserProvider = ({ children }: Props) => {
                 setTargetAccount(requestedAccount)
             }
 
+            let network: Network | undefined
+
             if (selectedNetwork.genesis.id === request.genesisId) {
                 setTargetNetwork(undefined)
             } else {
-                const network = networks.find(n => n.genesis.id === request.genesisId)
+                network = networks.find(n => n.genesis.id === request.genesisId)
                 setTargetNetwork(network)
+            }
+
+            if (!network) {
+                showInfoToast({
+                    text1: LL.BROWSER_NETWORK_NOT_FOUND(),
+                })
+
+                postMessage({
+                    id: request.id,
+                    error: "Invalid network",
+                    method: request.method,
+                })
+
+                return
             }
 
             openChangeAccountNetworkBottomSheet()
@@ -288,6 +304,7 @@ export const InAppBrowserProvider = ({ children }: Props) => {
             if (isAlreadyConnected) {
                 nav.navigate(Routes.CONNECTED_APP_SEND_TRANSACTION_SCREEN, {
                     request: req,
+                    isInjectedWallet: true,
                 })
             } else {
                 nav.navigate(Routes.CONNECT_APP_SCREEN, {
@@ -436,6 +453,7 @@ export const InAppBrowserProvider = ({ children }: Props) => {
             if (request.method === "thor_sendTransaction") {
                 nav.navigate(Routes.CONNECTED_APP_SEND_TRANSACTION_SCREEN, {
                     request: request,
+                    isInjectedWallet: true,
                 })
             }
 

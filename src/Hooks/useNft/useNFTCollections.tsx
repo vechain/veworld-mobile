@@ -66,6 +66,7 @@ export const useNFTCollections = () => {
                 let balanceOf: number | undefined
 
                 try {
+                    // NFT_WHALE - replace here
                     balanceOf = await getNftBalanceOf(currentAddress, collection.address, thor)
                 } catch (e) {
                     warn(ERROR_EVENTS.NFT, "failed to get balance", e)
@@ -75,6 +76,7 @@ export const useNFTCollections = () => {
                 let description = collection.description
 
                 if (!collection.fromRegistry) {
+                    // NFT_WHALE - replace here
                     const { data } = await getNftsForContract(network.type, collection.address, currentAddress, 1, 0)
                     const tokenURI = await getTokenURI(data[0].tokenId, collection.address, thor)
                     const tokenMetadata = await fetchMetadata(tokenURI)
@@ -97,7 +99,7 @@ export const useNFTCollections = () => {
 
                 dispatch(
                     updateCollection({
-                        currentAccountAddress: currentAddress,
+                        currentAccountAddress: currentAddress, // NFT_WHALE - replace here
                         collection: updated,
                     }),
                 )
@@ -123,7 +125,7 @@ export const useNFTCollections = () => {
                 // Get contract addresses for nfts owned by selected account
                 const { data: contractsForNFTs, pagination } = await getContractAddresses(
                     network.type,
-                    currentAddress,
+                    currentAddress, // NFT_WHALE - replace here
                     _resultsPerPage,
                     _page,
                 )
@@ -135,11 +137,12 @@ export const useNFTCollections = () => {
                 const _nftCollections: NftCollection[] = contractsForNFTs.map(collection => {
                     const regInfo = registryInfo.find(col => compareAddresses(col.address, collection))
                     if (regInfo) {
+                        // NFT_WHALE - replace here
                         return initCollectionMetadataFromRegistry(network.type, currentAddress, collection, regInfo)
                     } else {
                         return initCollectionMetadataWithoutRegistry(
                             network.type,
-                            currentAddress,
+                            currentAddress, // NFT_WHALE - replace here
                             collection,
                             LL.COMMON_NOT_AVAILABLE(),
                         )
@@ -149,7 +152,7 @@ export const useNFTCollections = () => {
                 // set collections to store
                 dispatch(
                     setCollections({
-                        currentAccountAddress: currentAddress,
+                        currentAccountAddress: currentAddress, // NFT_WHALE - replace here
                         collectionData: {
                             collections: _nftCollections,
                             pagination,

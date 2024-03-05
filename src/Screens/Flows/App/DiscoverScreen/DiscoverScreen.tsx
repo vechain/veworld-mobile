@@ -1,5 +1,5 @@
 import React, { useCallback, useEffect, useMemo, useRef } from "react"
-import { BaseIcon, BaseSpacer, BaseText, BaseTextInput, BaseView, Layout } from "~Components"
+import { BaseIcon, BaseSpacer, BaseText, BaseTextInput, BaseView, Layout, SelectedNetworkViewer } from "~Components"
 import { useI18nContext } from "~i18n"
 import { AnalyticsEvent, ColorThemeType, DiscoveryDApp } from "~Constants"
 import { useAnalyticTracking, useBrowserSearch, useThemedStyles } from "~Hooks"
@@ -19,6 +19,7 @@ import {
 import { createMaterialTopTabNavigator } from "@react-navigation/material-top-tabs"
 import { TabBar } from "./Components/TabBar"
 import Animated, { useSharedValue, withDelay, withSpring, withTiming } from "react-native-reanimated"
+import { PlatformUtils } from "~Utils"
 
 export const DiscoverScreen: React.FC = () => {
     const { theme, styles } = useThemedStyles(baseStyles)
@@ -119,17 +120,29 @@ export const DiscoverScreen: React.FC = () => {
         return Routes.DISCOVER_FEATURED
     }, [bookmarkedDApps])
 
-    return (
-        <Layout
-            noBackButton
-            fixedBody={
-                <>
-                    <BaseText mx={24} typographyFont="largeTitle" testID="settings-screen" pb={16}>
+    const renderHeader = useMemo(() => {
+        return (
+            <>
+                <BaseView flexDirection="row" justifyContent="space-between" alignItems="center" mx={24} pb={16}>
+                    <BaseText typographyFont="largeTitle" testID="settings-screen">
                         {LL.DISCOVER_TITLE()}
                     </BaseText>
 
+                    <SelectedNetworkViewer />
+                </BaseView>
+            </>
+        )
+    }, [LL])
+
+    return (
+        <Layout
+            fixedHeader={renderHeader}
+            noBackButton
+            noMargin
+            fixedBody={
+                <>
                     {/*Search Bar*/}
-                    <BaseView w={100} flexDirection="row" px={24}>
+                    <BaseView w={100} flexDirection="row" px={24} pt={24}>
                         <BaseView flex={1}>
                             <BaseTextInput
                                 placeholder={LL.DISCOVER_SEARCH()}
@@ -165,11 +178,13 @@ export const DiscoverScreen: React.FC = () => {
                             options={{ title: LL.DISCOVER_TAB_FAVOURITES() }}
                             component={FavouriteScreen}
                         />
-                        <Tab.Screen
-                            name={Routes.DISCOVER_FEATURED}
-                            options={{ title: LL.DISCOVER_TAB_FEATURED() }}
-                            component={FeaturedScreen}
-                        />
+                        {PlatformUtils.isAndroid() && (
+                            <Tab.Screen
+                                name={Routes.DISCOVER_FEATURED}
+                                options={{ title: LL.DISCOVER_TAB_FEATURED() }}
+                                component={FeaturedScreen}
+                            />
+                        )}
                     </Tab.Navigator>
                 </>
             }

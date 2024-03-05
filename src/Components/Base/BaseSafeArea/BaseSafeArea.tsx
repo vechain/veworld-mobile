@@ -4,7 +4,7 @@ import { StyleSheet } from "react-native"
 import { SafeAreaViewProps } from "react-native-safe-area-context"
 import { useTabBarBottomMargin, useThemedStyles } from "~Hooks"
 import { ColorThemeType } from "~Constants"
-import { getTabbar } from "../Helpers/getTabbar"
+import { NavProps, getTabbar } from "../Helpers/getTabbar"
 import { SafeAreaView } from "./SafeAreaView"
 import { isAndroid } from "~Utils/PlatformUtils/PlatformUtils"
 
@@ -24,7 +24,7 @@ export const BaseSafeArea = ({
     children,
     ...otherProps
 }: Props) => {
-    const nav = useNavigation()
+    const nav: NavProps = useNavigation()
     const { iosOnlyTabBarBottomMargin } = useTabBarBottomMargin()
 
     const [isTab, setIsTab] = useState(false)

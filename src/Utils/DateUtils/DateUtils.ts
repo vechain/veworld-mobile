@@ -59,9 +59,8 @@ export const formatDateTime = (timestamp: number, locale: string, timezone: stri
 
     const formattedDate = dateFormatter.format(date)
     const formattedTime = timeFormatter.format(date)
-    const timeSuffix = formattedTime.includes("AM") ? " am" : " pm"
 
-    return `${formattedDate} - ${formattedTime.replace(/ (AM|PM)/, "")}${timeSuffix}`
+    return `${formattedDate} - ${formattedTime.replace(/ (AM|PM)/, "")}`
 }
 
 export const DEFAULT_TIMEZONE = "UTC"

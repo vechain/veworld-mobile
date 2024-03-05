@@ -19,6 +19,8 @@ import { debug } from "~Utils"
 import { SecurityLevelType } from "~Model"
 import { ERROR_EVENTS } from "~Constants"
 
+const IS_CI_BUILD = process.env.IS_CI_BUILD_ENABLED === "true"
+
 export const WelcomeScreen = () => {
     const nav = useNavigation()
     const { LL } = useI18nContext()
@@ -111,7 +113,8 @@ export const WelcomeScreen = () => {
                         testID="GET_STARTED_BTN"
                         haptics="Medium"
                     />
-                    {devFeaturesEnabled && (
+
+                    {(devFeaturesEnabled || IS_CI_BUILD) && (
                         <BaseButton size="md" variant="link" action={onDemoOnboarding} title="DEV:DEMO" />
                     )}
                 </BaseView>

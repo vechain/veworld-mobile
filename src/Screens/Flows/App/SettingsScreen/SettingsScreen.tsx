@@ -1,5 +1,5 @@
 import React, { useCallback, useMemo, useRef } from "react"
-import { BaseSafeArea, BaseText, BaseView } from "~Components"
+import { BaseSafeArea, BaseText, BaseView, SelectedNetworkViewer } from "~Components"
 import { TranslationFunctions, useI18nContext } from "~i18n"
 import { Routes } from "~Navigation"
 import { StyleSheet } from "react-native"
@@ -31,9 +31,13 @@ export const SettingsScreen = () => {
 
     return (
         <BaseSafeArea>
-            <BaseText mx={24} typographyFont="largeTitle" testID="settings-screen" pb={16}>
-                {LL.TITLE_SETTINGS()}
-            </BaseText>
+            <BaseView flexDirection="row" justifyContent="space-between" mx={24} pb={16}>
+                <BaseText typographyFont="largeTitle" testID="settings-screen">
+                    {LL.TITLE_SETTINGS()}
+                </BaseText>
+
+                <SelectedNetworkViewer />
+            </BaseView>
 
             <BaseView style={[themedStyles.list]}>
                 <FlatList

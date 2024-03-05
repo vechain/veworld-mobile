@@ -42,7 +42,7 @@ import { AccountWithDevice, WatchedAccount } from "~Model"
 type Props = NativeStackScreenProps<RootStackParamListSwitch, Routes.CONNECTED_APP_SEND_TRANSACTION_SCREEN>
 
 export const SendTransactionScreen: FC<Props> = ({ route }: Props) => {
-    const { request } = route.params
+    const { request, isInjectedWallet } = route.params
 
     const dispatch = useAppDispatch()
     const { LL } = useI18nContext()
@@ -110,14 +110,20 @@ export const SendTransactionScreen: FC<Props> = ({ route }: Props) => {
 
     const onFinish = useCallback(
         (sucess: boolean) => {
-            if (sucess) track(AnalyticsEvent.DAPP_TX_SENT)
-            else track(AnalyticsEvent.SEND_NFT_FAILED_TO_SEND)
+            if (sucess) {
+                track(AnalyticsEvent.DAPP_TX_SENT, {
+                    accountType: isInjectedWallet ? "injected" : "wallet connect",
+                })
+            } else {
+                track(AnalyticsEvent.DAPP_TX_FAILED_TO_SEND, {
+                    accountType: isInjectedWallet ? "injected" : "wallet connect",
+                })
+            }
 
             dispatch(setIsAppLoading(false))
-
             goBack()
         },
-        [goBack, track, dispatch],
+        [isInjectedWallet, dispatch, goBack, track],
     )
 
     const onTransactionSuccess = useCallback(

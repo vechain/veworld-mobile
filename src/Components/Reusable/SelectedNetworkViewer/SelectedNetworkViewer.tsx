@@ -12,7 +12,7 @@ type Props = {
 
 export const SelectedNetworkViewer = ({ showEvenIfMainnet = false }: Props) => {
     const { network, isMainnet } = useBlockchainNetwork()
-    const { styles, theme } = useThemedStyles(selectedNetworkViewerStyle)
+    const { styles, theme } = useThemedStyles(selectedNetworkViewerStyle(isMainnet))
 
     return showEvenIfMainnet || !isMainnet ? (
         <BaseView style={styles.networkViewer}>
@@ -34,12 +34,12 @@ const formatNetworkName = (networkName: string) => {
     return capitalize(truncateTextIfSizeIsGreaterThan(8, networkName))
 }
 
-const selectedNetworkViewerStyle = (theme: ColorThemeType) =>
+const selectedNetworkViewerStyle = (isMainnet: boolean) => (theme: ColorThemeType) =>
     StyleSheet.create({
         networkViewer: {
             height: 25,
             borderRadius: 10,
-            backgroundColor: theme.colors.card,
+            backgroundColor: isMainnet ? theme.colors.card : theme.colors.testnetBackground,
             justifyContent: "center",
         },
         networkViewerIconText: {

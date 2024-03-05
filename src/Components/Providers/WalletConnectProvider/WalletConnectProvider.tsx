@@ -1,6 +1,6 @@
 import React, { useCallback, useEffect, useMemo } from "react"
 import { WalletConnectUtils, warn } from "~Utils"
-import { useNavigation } from "@react-navigation/native"
+import { NavigationState, useNavigation } from "@react-navigation/native"
 import { useWcRequest } from "./hooks"
 import { useSessionProposals } from "~Components/Providers/WalletConnectProvider/hooks/useSessionProposals"
 import { useWcSessions } from "~Components/Providers/WalletConnectProvider/hooks/useWcSessions"
@@ -37,8 +37,7 @@ const WalletConnectContextProvider = ({ children }: WalletConnectContextProvider
 
     const isBlackListScreen = useCallback((): boolean => {
         if (!nav) return true
-
-        return !WalletConnectUtils.shouldAutoNavigate(nav.getState())
+        return !WalletConnectUtils.shouldAutoNavigate(nav.getState() as NavigationState<ReactNavigation.RootParamList>)
     }, [nav])
 
     const { addSessionDisconnect, disconnectSession, activeSessions, addSession } = useWcSessions()
