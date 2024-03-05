@@ -162,7 +162,7 @@ export const ActivityDetailsScreen = ({ route }: Props) => {
                             activity.from && (
                                 <TransferCard
                                     fromAddress={activity.from}
-                                    toAddresses={[...activity.to]}
+                                    toAddresses={[...new Set(activity.to)]}
                                     onAddContactPress={onAddContactPress}
                                 />
                             )
