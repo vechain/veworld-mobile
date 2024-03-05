@@ -10,6 +10,7 @@ import { Network, TransactionRequest } from "~Model"
 import { selectCurrency, useAppSelector } from "~Storage/Redux"
 import { BigNumber } from "bignumber.js"
 import { useExchangeRate } from "~Api/Coingecko"
+import { scaleNumberDown } from "~Utils/FormattingUtils/FormattingUtils"
 
 type Props = {
     selectedDelegationOption: DelegationType
@@ -44,9 +45,12 @@ export const TransactionDetails = ({
     const comment = options.comment ?? message[0].comment
 
     const spendingAmount = useMemo(() => {
-        return message.reduce((acc: BigNumber, clause: Connex.VM.Clause) => {
-            return acc.plus(clause.value || "0")
-        }, new BigNumber(0))
+        const amount = message
+            .reduce((acc: BigNumber, clause: Connex.VM.Clause) => {
+                return acc.plus(clause.value || "0")
+            }, new BigNumber(0))
+            .toString()
+        return scaleNumberDown(amount || "0", VET.decimals, VET.decimals)
     }, [message])
 
     const vthoBalance = useMemo(
@@ -55,7 +59,7 @@ export const TransactionDetails = ({
     )
 
     const formattedFiatAmount = FormattingUtils.humanNumber(
-        FormattingUtils.convertToFiatBalance(spendingAmount.toString(10) || "0", exchangeRate || 1, 0),
+        FormattingUtils.convertToFiatBalance(spendingAmount || "0", exchangeRate || 1, 0),
         spendingAmount,
     )
 
