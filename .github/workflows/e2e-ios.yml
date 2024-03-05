@@ -68,6 +68,7 @@ jobs:
       
       - name: Build apk
         run: |
+              rm -rf ios/build/
               cd ios
               xcodebuild -workspace VeWorld.xcworkspace -scheme VeWorld -configuration Debug  SYMROOT=$(PWD)/build  -sdk iphonesimulator > build_out.txt
               cd build
