@@ -7,8 +7,10 @@ on:
 
 jobs:
     build-test-android:
-        name: Detox Build & Test Android Release
-        runs-on: macos-latest
+        name: Maestro Build & Test Android Release
+        runs-on: ubuntu-latest
+        outputs:
+          app: app/build/outputs/apk/debug
 
         steps:
             - name: Checkout repository
@@ -21,7 +23,7 @@ jobs:
                   cache: "yarn"
 
             - name: Install & Patch packages
-              run: yarn install
+              run: yarn install --frozen-lockfile --network-timeout 300000
 
             - name: Setup Java
               uses: actions/setup-java@v3
@@ -29,9 +31,6 @@ jobs:
                   cache: gradle
                   distribution: "zulu"
                   java-version: "11"
-
-            - name: Rebuild Detox Framework
-              run: yarn detox clean-framework-cache && yarn detox build-framework-cache
 
             # Install sentry properties
             - name: Sentry properties
@@ -50,31 +49,23 @@ jobs:
                 filename: "keystore.properties"
                 is-executable: false
                 working-directory: "./android"
-
-            - name: Detox build Android release
-              run: yarn detox build --configuration android.emu.debug.31
-
-            - name: Get device name
-              id: device-name
-              run: node -e "console.log('AVD_NAME=' + require('./.detoxrc').devices.emulator_31.device.avdName)" >> $GITHUB_OUTPUT
+          
+            - name: Build apk 
+              run: |
+                  cd android
+                  ./gradlew assembleDebug
+                  cd app/build/outputs/apk/debug
+                  pwd
+                  ls -la
 
             - name: Start Metro Bundler
-              run: yarn react-native start &
+              run: npx react-native start &
 
-            - name: Detox test Android release
-              uses: reactivecircus/android-emulator-runner@v2
-              timeout-minutes: 90
-              with:
-                  api-level: 31
-                  arch: x86_64
-                  force-avd-creation: false
-                  disable-animations: true
-                  avd-name: ${{ steps.device-name.outputs.AVD_NAME }}
-                  script: yarn detox test --configuration android.emu.debug.31 --headless --record-logs all --take-screenshots failing --tags "not @broken and not @notAndroid" --publish
 
-            - name: Upload artifacts
-              if: failure() || cancelled()
-              uses: actions/upload-artifact@v3
+            - name: Maestro Cloud
+              uses: mobile-dev-inc/action-maestro-cloud@v1.8.1
               with:
-                  name: detox-fail-artifacts
-                  path: artifacts
+                name: Android Test
+                api-key: ${{ secrets.MAESTRO_CLOUD_API_KEY }}
+                app-file: android/app/build/outputs/apk/debug/app-debug.apk
+                android-api-level: 31
