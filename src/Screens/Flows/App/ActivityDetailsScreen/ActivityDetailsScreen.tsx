@@ -162,7 +162,7 @@ export const ActivityDetailsScreen = ({ route }: Props) => {
                             activity.from && (
                                 <TransferCard
                                     fromAddress={activity.from}
-                                    toAddresses={[...new Set(activity.to)]}
+                                    toAddresses={[...activity.to]}
                                     onAddContactPress={onAddContactPress}
                                 />
                             )
@@ -194,6 +194,7 @@ export const ActivityDetailsScreen = ({ route }: Props) => {
                 footer={
                     explorerUrl && (
                         <FadeoutButton
+                            testID="view-on-explorer-button"
                             title={LL.VIEW_ON_EXPLORER().toUpperCase()}
                             action={() => {
                                 Linking.openURL(explorerUrl)
