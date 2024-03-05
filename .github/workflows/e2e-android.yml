@@ -52,9 +52,9 @@ jobs:
           
             - name: Build apk 
               run: |
-                  cd android
-                  ./gradlew assembleDebug
-                  cd app/build/outputs/apk/debug
+                  cd android 
+                  fastlane build_test_ci
+                  cd app/build/outputs/apk/release
                   pwd
                   ls -la
 
@@ -67,5 +67,5 @@ jobs:
               with:
                 name: Android Test
                 api-key: ${{ secrets.MAESTRO_CLOUD_API_KEY }}
-                app-file: android/app/build/outputs/apk/debug/app-debug.apk
+                app-file: android/app/build/outputs/apk/release/app-release.apk
                 android-api-level: 31
