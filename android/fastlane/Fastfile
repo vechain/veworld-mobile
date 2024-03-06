@@ -124,29 +124,37 @@ lane :build_test_ci do
   ci_value = true
   sh("./set_ci_vars.sh #{ci_value}")
 
-  Dir.chdir "../.." do
-    sh("yarn purge:android && yarn install")
+  begin
+    Dir.chdir "../.." do
+      sh("yarn purge:android && yarn install")
+    end
+  
+    releaseFilePath = File.join(Dir.pwd, "..", "release.keystore")
+  
+    gradle(task: 'clean')
+    gradle(
+      task: 'assemble',
+      build_type: 'Release',
+      print_command: true,
+      print_command_output: true,
+  
+      properties: {
+        "android.injected.version.code" => 1000, # Manually increment this value before each release
+        "android.injected.version.name" => 1000, # Manually increment this value before each release
+        "android.injected.signing.store.file" => releaseFilePath, # Path to the release keystore
+        "android.injected.signing.store.password" => store_password, # Keystore password
+        "android.injected.signing.key.alias" => key_alias, # Key alias
+        "android.injected.signing.key.password" => key_password, # Key password
+      }
+    )
+  
+    ci_value = false
+    sh("./set_ci_vars.sh #{ci_value}")
+  rescue => exception
+    puts exception
+
+    # Set the ci value to false
+    ci_value = false
+    sh("./set_ci_vars.sh #{ci_value}")
   end
-
-  releaseFilePath = File.join(Dir.pwd, "..", "release.keystore")
-
-  gradle(task: 'clean')
-  gradle(
-    task: 'assemble',
-    build_type: 'Release',
-    print_command: true,
-    print_command_output: true,
-
-    properties: {
-      "android.injected.version.code" => 1000, # Manually increment this value before each release
-      "android.injected.version.name" => 1000, # Manually increment this value before each release
-      "android.injected.signing.store.file" => releaseFilePath, # Path to the release keystore
-      "android.injected.signing.store.password" => store_password, # Keystore password
-      "android.injected.signing.key.alias" => key_alias, # Key alias
-      "android.injected.signing.key.password" => key_password, # Key password
-    }
-  )
-
-  ci_value = false
-  sh("./set_ci_vars.sh #{ci_value}")
 end
