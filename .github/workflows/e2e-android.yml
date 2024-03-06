@@ -66,4 +66,4 @@ jobs:
 
             - name: Maestro Cloud
               run: |
-                maestro cloud --apiKey ${{ secrets.MAESTRO_CLOUD_API_KEY }} android/app/build/outputs/apk/debug/app-debug.apk ./maestro
+                $HOME/.maestro/bin/maestro cloud --apiKey ${{ secrets.MAESTRO_CLOUD_API_KEY }} android/app/build/outputs/apk/debug/app-debug.apk ./maestro
