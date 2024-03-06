@@ -312,6 +312,7 @@ export const SelectAmountSendScreen = ({ route }: Props) => {
             }
             footer={
                 <FadeoutButton
+                    testID="next-button"
                     title={LL.COMMON_BTN_NEXT()}
                     disabled={
                         isError || input === "" || BigNutils(input).isZero

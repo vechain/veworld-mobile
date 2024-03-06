@@ -14,9 +14,19 @@ type Props = {
     bottom?: number
     mx?: number
     width?: DimensionValue
+    testID?: string
 }
 
-export const FadeoutButton = ({ title, action, disabled = false, isLoading = false, bottom, mx, width }: Props) => {
+export const FadeoutButton = ({
+    title,
+    action,
+    disabled = false,
+    isLoading = false,
+    bottom,
+    mx,
+    width,
+    testID,
+}: Props) => {
     const tabBarHeight = useBottomTabBarHeight()
     const theme = useTheme()
 
@@ -32,6 +42,7 @@ export const FadeoutButton = ({ title, action, disabled = false, isLoading = fal
             colors={[theme.colors.backgroundTransparent, theme.colors.background]}>
             <BaseView mx={mx ?? 20} style={{ width: SCREEN_WIDTH - 40 }} pb={24}>
                 <BaseButton
+                    testID={testID}
                     disabled={disabled}
                     size="lg"
                     haptics="Medium"

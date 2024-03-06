@@ -185,6 +185,7 @@ export const InsertAddressSendScreen = ({ route }: Props) => {
             footer={
                 <>
                     <FadeoutButton
+                        testID="next-button"
                         title={LL.COMMON_BTN_NEXT()}
                         action={onNext}
                         disabled={!selectedAddress}
