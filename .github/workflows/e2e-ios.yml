@@ -62,20 +62,13 @@ jobs:
             is-executable: false
             working-directory: "./ios"
 
-      # Start Metro Bundler
-      - name: Start Metro Bundler
-        run: |
-            rm -rf ios/build/
-            react-native run-ios &> metro-bundler.log &
       
       - name: Build apk
         run: |
               rm -rf ios/build/
               cd ios
               xcodebuild -workspace VeWorld.xcworkspace -scheme VeWorld -configuration Debug  SYMROOT=$(PWD)/build  -sdk iphonesimulator > build_out.txt
-              cd build
-              pwd
-              ls -ls
+              react-native run-ios &> metro-bundler.log &
 
       - uses: mobile-dev-inc/action-maestro-cloud@v1.8.1
         with:
