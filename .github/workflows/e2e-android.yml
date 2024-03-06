@@ -58,10 +58,12 @@ jobs:
                   pwd
                   ls -la
 
+            - name: Start Metro Bundler
+              run: npx react-native start &
+            
+            - name: Install Maestro
+              run:  MAESTRO_VERSION=1.36.0 curl -Ls 'https://get.maestro.mobile.dev' | bash
+
             - name: Maestro Cloud
-              uses: mobile-dev-inc/action-maestro-cloud@v1.8.1
-              with:
-                name: Android Test
-                api-key: ${{ secrets.MAESTRO_CLOUD_API_KEY }}
-                app-file: android/app/build/outputs/apk/debug/app-debug.apk
-                android-api-level: 31
+              run: |
+                maestro cloud --apiKey ${{ secrets.MAESTRO_CLOUD_API_KEY }} android/app/build/outputs/apk/debug/app-debug.apk ./maestro
