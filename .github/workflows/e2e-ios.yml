@@ -64,7 +64,9 @@ jobs:
 
       # Start Metro Bundler
       - name: Start Metro Bundler
-        run: rm -rf ios/build/; kill $(lsof -t -i:8081); react-native run-ios &> metro-bundler.log &
+        run: |
+            rm -rf ios/build/
+            react-native run-ios &> metro-bundler.log &
       
       - name: Build apk
         run: |
