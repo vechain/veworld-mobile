@@ -144,8 +144,8 @@ lane :build_test_ci do
       print_command_output: true,
   
       properties: {
-        "android.injected.version.code" => version_code, # Manually increment this value before each release
-        "android.injected.version.name" => version_name, # Manually increment this value before each release
+        "android.injected.version.code" => version_code, 
+        "android.injected.version.name" => version_name,
         "android.injected.signing.store.file" => releaseFilePath, # Path to the release keystore
         "android.injected.signing.store.password" => store_password, # Keystore password
         "android.injected.signing.key.alias" => key_alias, # Key alias
