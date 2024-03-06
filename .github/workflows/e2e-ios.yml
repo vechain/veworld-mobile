@@ -65,9 +65,8 @@ jobs:
       
       - name: Build apk
         run: |
-              rm -rf ios/build/
               cd ios
-              xcodebuild -scheme VeWorld -configuration Debug  -project 'VeWorld.xcodeproj' -destination 'generic/platform=iOS Simulator' CONFIGURATION_BUILD_DIR=$PWD/build
+              xcodebuild -scheme VeWorld -configuration Debug  -workspace 'VeWorld.xcworkspace' -destination 'generic/platform=iOS Simulator' CONFIGURATION_BUILD_DIR=$PWD/build
 
       - uses: mobile-dev-inc/action-maestro-cloud@v1.8.1
         with:
