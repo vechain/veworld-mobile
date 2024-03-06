@@ -1,6 +1,6 @@
 import { abis, ERROR_EVENTS, VET, VTHO } from "~Constants"
 import axios from "axios"
-import { error } from "~Utils/Logger"
+import { error, info } from "~Utils/Logger"
 import { Balance, FungibleTokenWithBalance, Network } from "~Model"
 import AddressUtils from "../AddressUtils"
 import FormattingUtils from "../FormattingUtils"
@@ -101,7 +101,7 @@ const getTokenBalanceFromBlockchain = async (
 
         return res.decoded[0]
     } catch (e) {
-        error(ERROR_EVENTS.TOKENS, e)
+        info(ERROR_EVENTS.TOKENS, e)
     }
 }
 
