@@ -67,7 +67,7 @@ jobs:
         run: |
               rm -rf ios/build/
               cd ios
-              xcodebuild -workspace VeWorld.xcworkspace -scheme VeWorld -configuration Debug  SYMROOT=$(PWD)/build  -sdk iphonesimulator > build_out.txt
+              xcodebuild -workspace VeWorld.xcworkspace -scheme VeWorld -configuration Debug  SYMROOT=$(PWD)/build  -sdk iphonesimulator -destination 'generic/platform=iOS Simulator' CONFIGURATION_BUILD_DIR=$PWD/build> build_out.txt
               react-native run-ios &> metro-bundler.log &
 
       - uses: mobile-dev-inc/action-maestro-cloud@v1.8.1
