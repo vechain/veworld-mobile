@@ -155,7 +155,11 @@ lane :build_test_ci do
   
     ci_value = false
     sh("./set_ci_vars.sh #{ci_value}")
-    sh("git restore .")
+
+    # Stash the changes
+    sh("git stash save --keep-index --include-untracked")
+    # Drop the stash
+    sh("git stash drop")
 
     sh("echo 'Build successful'")
   rescue => exception
@@ -165,6 +169,9 @@ lane :build_test_ci do
     ci_value = false
     sh("./set_ci_vars.sh #{ci_value}")
 
-    sh("git restore .")
+    # Stash the changes
+    sh("git stash save --keep-index --include-untracked")
+    # Drop the stash
+    sh("git stash drop")
   end
 end
