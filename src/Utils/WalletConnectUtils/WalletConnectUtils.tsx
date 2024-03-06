@@ -43,7 +43,7 @@ export async function getWeb3Wallet(): Promise<IWeb3Wallet> {
 
             return _web3wallet
         } catch (e) {
-            error(ERROR_EVENTS.WALLET_CONNECT, "Failed to initialize Web3Wallet", ErrorMessageUtils.getErrorMessage(e))
+            debug(ERROR_EVENTS.WALLET_CONNECT, "Failed to initialize Web3Wallet", ErrorMessageUtils.getErrorMessage(e))
             throw e
         }
     })
