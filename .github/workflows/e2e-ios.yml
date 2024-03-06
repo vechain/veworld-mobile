@@ -66,8 +66,8 @@ jobs:
       - name: Build apk
         run: |
               cd ios
-              xcodebuild -workspace VeWorld.xcworkspace -scheme VeWorld -configuration Debug  SYMROOT=$(PWD)/build -destination 'generic/platform=iOS Simulator' CONFIGURATION_BUILD_DIR=$PWD/build
-
+              xcodebuild -workspace VeWorld.xcworkspace -scheme VeWorld -configuration Debug -sdk iphonesimulator -derivedDataPath ios/build
+              
       - uses: mobile-dev-inc/action-maestro-cloud@v1.8.1
         with:
             name: iOS test
