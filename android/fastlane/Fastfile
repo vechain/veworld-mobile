@@ -124,12 +124,17 @@ lane :build_test_ci do
   ci_value = true
   sh("./set_ci_vars.sh #{ci_value}")
 
+  version_name = options[:version_name]
+  version_code = options[:version_code]
+
   begin
     Dir.chdir "../.." do
       sh("yarn purge:android && yarn install")
     end
   
     releaseFilePath = File.join(Dir.pwd, "..", "release.keystore")
+
+    sh("./bump_gradle_app_versions.sh #{version_code} #{version_name}")
   
     gradle(task: 'clean')
     gradle(
@@ -150,11 +155,16 @@ lane :build_test_ci do
   
     ci_value = false
     sh("./set_ci_vars.sh #{ci_value}")
+    sh("git restore .")
+
+    sh("echo 'Build successful'")
   rescue => exception
     puts exception
 
     # Set the ci value to false
     ci_value = false
     sh("./set_ci_vars.sh #{ci_value}")
+
+    sh("git restore .")
   end
 end
