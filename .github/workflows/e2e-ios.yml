@@ -67,6 +67,11 @@ jobs:
         run: |
               cd ios
               xcodebuild -workspace VeWorld.xcworkspace -scheme VeWorld -configuration Debug -sdk iphonesimulator -derivedDataPath ios/build
+              pwd
+              cd build
+              ls
+              cd Debug-iphonesimulator
+              ls -la
 
       - uses: mobile-dev-inc/action-maestro-cloud@v1.8.1
         with:
