@@ -58,10 +58,6 @@ jobs:
                   pwd
                   ls -la
 
-            - name: Start Metro Bundler
-              run: npx react-native start &
-
-
             - name: Maestro Cloud
               uses: mobile-dev-inc/action-maestro-cloud@v1.8.1
               with:
