@@ -67,12 +67,11 @@ jobs:
         run: |
               rm -rf ios/build/
               cd ios
-              xcodebuild -workspace VeWorld.xcworkspace -scheme VeWorld -configuration Debug  SYMROOT=$(PWD)/build  -sdk iphonesimulator -destination 'generic/platform=iOS Simulator' CONFIGURATION_BUILD_DIR=$PWD/build
-              react-native run-ios &> metro-bundler.log &
+              xcodebuild build -scheme VeWorld -configuration Debug  -project 'VeWorld.xcodeproj' -destination 'generic/platform=iOS Simulator' CONFIGURATION_BUILD_DIR=$PWD/build
 
       - uses: mobile-dev-inc/action-maestro-cloud@v1.8.1
         with:
             name: iOS test
             api-key: ${{ secrets.MAESTRO_CLOUD_API_KEY }}
-            app-file: ios/build/Debug-iphonesimulator/VeWorld.app
+            app-file: ios/build/VeWorld.app
             workspace: maestro_ios/
