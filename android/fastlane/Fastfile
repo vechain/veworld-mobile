@@ -116,7 +116,7 @@ end
 # 
 
 
-lane :build_test_ci do 
+lane :build_test_ci do |options|
   store_password = ENV["STORE_PASSWORD"]
   key_password = ENV["KEY_PASSWORD"]
   key_alias = ENV["KEY_ALIAS"]
