@@ -1,5 +1,5 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit"
-import { DAppConfig, DiscoveryDApp } from "~Constants"
+import { DiscoveryDApp } from "~Constants"
 import { URIUtils } from "~Utils"
 
 export type ConnectedDiscoveryApp = {
@@ -17,7 +17,7 @@ export type DiscoveryState = {
 }
 
 export const initialDiscoverState: DiscoveryState = {
-    featured: [...DAppConfig],
+    featured: [],
     favorites: [],
     custom: [],
     hasOpenedDiscovery: false,
@@ -51,6 +51,9 @@ export const DiscoverySlice = createSlice({
             } else {
                 state.favorites = state.favorites.filter(dapp => !URIUtils.compareURLs(dapp.href, href))
             }
+        },
+        setFeaturedDApps: (state, action: PayloadAction<DiscoveryDApp[]>) => {
+            state.featured = action.payload
         },
         addNavigationToDApp: (state, action: PayloadAction<{ href: string; isCustom: boolean }>) => {
             const { payload } = action
@@ -106,4 +109,5 @@ export const {
     setDiscoverySectionOpened,
     addConnectedDiscoveryApp,
     removeConnectedDiscoveryApp,
+    setFeaturedDApps,
 } = DiscoverySlice.actions

@@ -4,7 +4,7 @@ import { FlatList } from "react-native-gesture-handler"
 import { DAppCard } from "~Screens/Flows/App/DiscoverScreen/Components/DAppCard"
 import { useNavigation, useRoute, useScrollToTop } from "@react-navigation/native"
 import { Linking, StyleSheet } from "react-native"
-import { BaseButton, BaseIcon, BaseSpacer, BaseText, BaseView } from "~Components"
+import { BaseButton, BaseIcon, BaseSkeleton, BaseSpacer, BaseText, BaseView } from "~Components"
 import { EmptyResults } from "./EmptyResults"
 import { useI18nContext } from "~i18n"
 import { useBrowserSearch, useTheme } from "~Hooks"
@@ -26,9 +26,16 @@ type Props = {
     filteredSearch?: string
     selector: (...state: any) => DiscoveryDApp[]
     setFilteredSearch: (search: string | undefined) => void
+    isLoading?: boolean
 }
 
-export const DAppList: React.FC<Props> = ({ onDAppPress, filteredSearch, selector, setFilteredSearch }: Props) => {
+export const DAppList: React.FC<Props> = ({
+    onDAppPress,
+    filteredSearch,
+    selector,
+    setFilteredSearch,
+    isLoading,
+}: Props) => {
     const { LL } = useI18nContext()
     const flatListRef = useRef(null)
     useScrollToTop(flatListRef)
@@ -89,6 +96,23 @@ export const DAppList: React.FC<Props> = ({ onDAppPress, filteredSearch, selecto
     }, [filteredSearch, navigateToBrowser, setFilteredSearch])
 
     const renderSeparator = useCallback(() => <BaseSpacer height={16} />, [])
+
+    if (isLoading) {
+        return (
+            <BaseView flex={1} px={20}>
+                {[1, 2, 3, 4].map(n => (
+                    <BaseSkeleton
+                        containerStyle={styles.skeleton}
+                        key={n}
+                        animationDirection="horizontalLeft"
+                        boneColor={theme.colors.skeletonBoneColor}
+                        highlightColor={theme.colors.skeletonHighlightColor}
+                        height={40}
+                    />
+                ))}
+            </BaseView>
+        )
+    }
 
     if (filteredSearch && filteredDapps.length === 0) {
         return (
@@ -161,5 +185,8 @@ const styles = StyleSheet.create({
     },
     emptyListButton: {
         width: 250,
+    },
+    skeleton: {
+        marginBottom: 10,
     },
 })
