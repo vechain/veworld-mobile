@@ -31,8 +31,6 @@ jobs:
                   cache: gradle
                   distribution: "zulu"
                   java-version: "11"
-            - name: Setup Fastlane
-              run: sudo gem install fastlane
 
             # Install sentry properties
             - name: Sentry properties
@@ -54,6 +52,7 @@ jobs:
           
             - name: Build apk 
               run: |
+                  pwd     
                   cd android 
                   fastlane build_test_ci
                   cd app/build/outputs/apk/release
