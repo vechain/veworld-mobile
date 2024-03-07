@@ -62,22 +62,20 @@ jobs:
             is-executable: false
             working-directory: "./ios"
 
-      # Start Metro Bundler
-      - name: Start Metro Bundler
-        run: REACT_APP_UI_LOG=false yarn react-native start &> metro-bundler.log &
       
       - name: Build apk
         run: |
-              rm -rf ios/build/
               cd ios
-              xcodebuild -workspace VeWorld.xcworkspace -scheme VeWorld -configuration Debug  SYMROOT=$(PWD)/build  -sdk iphonesimulator > build_out.txt
-              cd build
+              xcodebuild -workspace VeWorld.xcworkspace -scheme VeWorld -configuration Release SYMROOT=$(PWD)/build -arch i386 -arch x86_64 only_active_arch=no -sdk iphonesimulator -derivedDataPath ios/build
               pwd
-              ls -ls
+              cd build
+              ls
+              cd Release-iphonesimulator
+              ls -la
 
       - uses: mobile-dev-inc/action-maestro-cloud@v1.8.1
         with:
             name: iOS test
             api-key: ${{ secrets.MAESTRO_CLOUD_API_KEY }}
-            app-file: ios/build/Debug-iphonesimulator/VeWorld.app
+            app-file: ios/build/Release-iphonesimulator/VeWorld.app
             workspace: maestro_ios/
