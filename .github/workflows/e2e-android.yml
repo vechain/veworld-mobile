@@ -32,7 +32,7 @@ jobs:
                   distribution: "zulu"
                   java-version: "11"
             - name: Setup Fastlane
-              run: gem install fastlane
+              run: sudo gem install fastlane
 
             # Install sentry properties
             - name: Sentry properties
