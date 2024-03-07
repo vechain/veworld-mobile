@@ -7,8 +7,13 @@ on:
 
 jobs:
     build-test-android:
-        name: Detox Build & Test Android Release
-        runs-on: macos-latest
+        name: Maestro Build & Test Android Release
+        runs-on: ubuntu-latest
+        environment: android-release
+        outputs:
+          app: app/build/outputs/apk/release
+        env:
+          SENTRY_LOG_LEVEL: debug
 
         steps:
             - name: Checkout repository
@@ -21,7 +26,7 @@ jobs:
                   cache: "yarn"
 
             - name: Install & Patch packages
-              run: yarn install
+              run: yarn install --frozen-lockfile --network-timeout 300000
 
             - name: Setup Java
               uses: actions/setup-java@v3
@@ -29,9 +34,6 @@ jobs:
                   cache: gradle
                   distribution: "zulu"
                   java-version: "11"
-
-            - name: Rebuild Detox Framework
-              run: yarn detox clean-framework-cache && yarn detox build-framework-cache
 
             # Install sentry properties
             - name: Sentry properties
@@ -41,7 +43,22 @@ jobs:
                 filename: "sentry.properties"
                 is-executable: false
                 working-directory: "./android"
-            
+            # Install env.default 
+            - name: Sentry properties
+              uses: mobiledevops/secret-to-file-action@v1
+              with:
+                base64-encoded-secret: ${{ secrets.ANDROID_FASTLANE_ENV }}
+                filename: "pc-api-4895632399891248889-903-c30062a54347.json"
+                is-executable: false
+                working-directory: "./android"
+              # Install sentry properties
+            - name: Sentry properties
+              uses: mobiledevops/secret-to-file-action@v1
+              with:
+                base64-encoded-secret: ${{ secrets.ANDROID_SERVICE_ACCOUNT }}
+                filename: "env.default"
+                is-executable: false
+                working-directory: "./android"
             # Install keystore properties
             - name: Keystore properties
               uses: mobiledevops/secret-to-file-action@v1
@@ -50,31 +67,43 @@ jobs:
                 filename: "keystore.properties"
                 is-executable: false
                 working-directory: "./android"
-
-            - name: Detox build Android release
-              run: yarn detox build --configuration android.emu.debug.31
-
-            - name: Get device name
-              id: device-name
-              run: node -e "console.log('AVD_NAME=' + require('./.detoxrc').devices.emulator_31.device.avdName)" >> $GITHUB_OUTPUT
+            # Download Keystore
+            - name: Keystore file
+              uses: mobiledevops/secret-to-file-action@v1
+              with:
+                base64-encoded-secret: ${{ secrets.ANDROID_RELEASE_KEYSTORE }}
+                filename: "release.keystore"
+                is-executable: false
+                working-directory: "./android"
+                    
+            - name: Build apk 
+              run: |
+                  pwd     
+                  cd android
+                  ls -la 
+                  echo "Senty file"
+                  cat sentry.properties
+                  echo "env.default file"
+                  cat env.default
+                  echo "keystore.properties"
+                  cat keystore.properties
+                  echo "pc-api file"
+                  cat pc-api-4895632399891248889-903-c30062a54347.json
+                  echo "release.keystore"
+                  keytool -list -storepass '86_3Bg@!1x2' -v -keystore release.keystore
+                  fastlane build_test_ci version_name:"1.0.0" version_code:"0.0.0"
+                  cd app/build/outputs/apk/release
+                  pwd
+                  ls -la
 
             - name: Start Metro Bundler
-              run: yarn react-native start &
+              run: npx react-native start &
 
-            - name: Detox test Android release
-              uses: reactivecircus/android-emulator-runner@v2
-              timeout-minutes: 90
-              with:
-                  api-level: 31
-                  arch: x86_64
-                  force-avd-creation: false
-                  disable-animations: true
-                  avd-name: ${{ steps.device-name.outputs.AVD_NAME }}
-                  script: yarn detox test --configuration android.emu.debug.31 --headless --record-logs all --take-screenshots failing --tags "not @broken and not @notAndroid" --publish
 
-            - name: Upload artifacts
-              if: failure() || cancelled()
-              uses: actions/upload-artifact@v3
+            - name: Maestro Cloud
+              uses: mobile-dev-inc/action-maestro-cloud@v1.8.1
               with:
-                  name: detox-fail-artifacts
-                  path: artifacts
+                name: Android Test
+                api-key: ${{ secrets.MAESTRO_CLOUD_API_KEY }}
+                app-file: android/app/build/outputs/apk/release/app-release.apk
+                android-api-level: 31

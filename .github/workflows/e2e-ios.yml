@@ -8,7 +8,9 @@ on:
 jobs:
   build-e2e-test-ios:
     name: Detox Build & Test iOS Debug
-    runs-on: macos-latest-xl
+    runs-on: macos-latest
+    env:
+      XC_SIMULATOR_NAME: iPhone 14
 
     # Proceed only if it's either not a release event or it's a pre-release.
     if: ${{ github.event_name != 'release' || (github.event_name == 'release' && github.event.release.prerelease) }}
@@ -20,7 +22,6 @@ jobs:
           # If it's a pre-release, check out the tag corresponding to the pre-release;
           # otherwise, use the triggering branch unless it's a non-pre-release event.
           ref: ${{ (github.event_name == 'release' && github.event.release.prerelease && github.event.release.tag_name) || github.ref }}
-
 
       # Install Homebrew and applesimutils for Detox
       - name: Install macOS dependencies
@@ -52,10 +53,6 @@ jobs:
       - name: Install CocoaPods
         run: npx pod-install
 
-      # Install Detox CLI
-      - name: Setup Detox
-        run: yarn detox clean-framework-cache && yarn detox build-framework-cache && yarn detox reset-lock-file
-
       # Install sentry properties
       - name: Sentry properties
         uses: mobiledevops/secret-to-file-action@v1
@@ -65,73 +62,20 @@ jobs:
             is-executable: false
             working-directory: "./ios"
 
-      # Start Metro Bundler
-      - name: Start Metro Bundler
-        run: REACT_APP_UI_LOG=false yarn react-native start &> metro-bundler.log &
-
-      # Build iOS app
-      - name: Detox build iOS Debug
-        id: build_app
-        timeout-minutes: 60
-        run: SKIP_SENTRY=true yarn detox build --configuration ios.sim.debug_xcode_14.2 # GH macos-latest has Xcode 14.2
-
-      # Test with Detox
-      - name: Detox test iOS Debug
-        id: test_app
-        timeout-minutes: 100
-        run: yarn detox test --configuration ios.sim.debug_xcode_14.2 --cleanup --headless --record-logs all --take-screenshots all --tags "not @broken" --publish &> cucumber.log
-
-      # Upload test artifacts from Detox
-      - name: Upload detox artifacts
-        if: always() && steps.test_app.outcome == 'failure'
-        uses: actions/upload-artifact@v3
-        with:
-          name: detox-fail-artifacts
-          path: artifacts
-
-      # Upload cucumber artifacts
-      - name: Upload cucumber artifacts
-        if: always() && steps.test_app.outcome == 'failure'
-        uses: actions/upload-artifact@v3
-        with:
-          name: cucumber-fail-artifacts
-          path: |
-            cucumber.log
-            cucumber-report.html
-
-      # Upload Metro Bundler logs
-      - name: Upload Metro Bundler logs
-        if: always() && steps.build_app.outcome == 'failure'
-        uses: actions/upload-artifact@v2
-        with:
-          name: metro-bundler-logs
-          path: metro-bundler.log
-
-      # Get cucumber published url
-      - name: Parse report URL
-        id: parse_report_url
-        if: always() && steps.test_app.outcome != 'skipped'
+      
+      - name: Build apk
         run: |
-          echo report_url=$(cat cucumber.log | grep -Eo "https://reports.cucumber.io/reports/[a-zA-Z0-9-]+") >> "$GITHUB_OUTPUT"
-          
-          # Post results to slack
-                - name: Post to a Slack channel
-                  if: always()
-                  uses: slackapi/slack-github-action@v1.24.0
-                  with:
-                    # Slack channel id, channel name, or user id to post message.
-                    # See also: https://api.slack.com/methods/chat.postMessage#channels
-                    # You can pass in multiple channels to post to by providing a comma-delimited list of channel IDs.
-                    channel-id: ${{ secrets.SLACK_VEWORLD_CHANNEL_ID }}
-                    slack-message: |
-                      🧱 Build Status - iOS Result: *${{ steps.build_app.outcome }}*
-                      🚀 E2E Testing - iOS Result: *${{ steps.test_app.outcome }}*
-                      📦 Repository: *${{ github.repository }}*
-                      🌿 Branch: *${{ github.ref_name }}*
-                      🔨 Commit: *${{ github.actor }}* [${{ github.sha.short }}](${{ github.event.head_commit.url }})
-                      🔗 View Run: ${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}
-                      🗒️ Release Type: ${{ (github.event_name == 'release' && github.event.release.prerelease) && '🔴 THIS IS A PRE-RELEASE!' || 'Not a pre-release' }}
-                      🏷️ Release Tag: ${{ (github.event_name == 'release') && ('Pre-Release Tag: ' || '') }} ${{ github.event.release.tag_name }}
-                      📈 Cucumber Report: ${{ steps.parse_report_url.outputs.report_url || 'Not found.' }}
-                  env:
-                    SLACK_BOT_TOKEN: ${{ secrets.SLACK_VEWORLD_BOT_TOKEN }}
+              cd ios
+              xcodebuild -workspace VeWorld.xcworkspace -scheme VeWorld -configuration Release SYMROOT=$(PWD)/build -arch i386 -arch x86_64 only_active_arch=no -sdk iphonesimulator -derivedDataPath ios/build
+              pwd
+              cd build
+              ls
+              cd Release-iphonesimulator
+              ls -la
+
+      - uses: mobile-dev-inc/action-maestro-cloud@v1.8.1
+        with:
+            name: iOS test
+            api-key: ${{ secrets.MAESTRO_CLOUD_API_KEY }}
+            app-file: ios/build/Release-iphonesimulator/VeWorld.app
+            workspace: maestro_ios/
