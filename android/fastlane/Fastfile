@@ -128,7 +128,7 @@ lane :build_test_ci do
     sh("yarn purge:android && yarn install")
   end
 
-  releaseFilePath = File.join(Dir.pwd, "..", "app", "debug.keystore")
+  releaseFilePath = File.join(Dir.pwd, "..", "release.keystore")
 
   gradle(task: 'clean')
   gradle(
