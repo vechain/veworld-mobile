@@ -13,6 +13,12 @@ ci_value="$1"
 # env_files=$(find ../.. -type f -name ".env.production.local")
 env_files=$(find ../.. -type f \( -name ".env.production.local" -o -name ".env.local" \))
 
+# Check if there are .env files
+if [ -z "$env_files" ]; then
+    echo "Error: No .env files found."
+    exit 1
+fi
+
 # Loop through each .env file
 for file in $env_files; do
     # Check if IS_CI_BUILD_ENABLED is declared in the .env file
