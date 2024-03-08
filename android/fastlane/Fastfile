@@ -29,7 +29,7 @@ platform :android do
    
 
     Dir.chdir "../.." do
-      sh("yarn purge:android && yarn install")
+      sh("yarn purge:android && yarn install:android")
     end
 
 
@@ -129,7 +129,7 @@ lane :build_test_ci do
 
   begin
     Dir.chdir "../.." do
-      sh("yarn purge:android && yarn install")
+      sh("yarn purge:android && yarn install:android")
     end
   
     releaseFilePath = File.join(Dir.pwd, "..", "release.keystore")
