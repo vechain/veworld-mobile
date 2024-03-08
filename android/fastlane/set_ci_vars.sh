@@ -13,11 +13,24 @@ ci_value="$1"
 # env_files=$(find ../.. -type f -name ".env.production.local")
 env_files=$(find ../.. -type f \( -name ".env.production.local" -o -name ".env.local" \))
 
-# Loop through each .env file and update IS_CI_BUILD_ENABLED
+# Check if there are .env files
+if [ -z "$env_files" ]; then
+    echo "Error: No .env files found."
+    exit 1
+fi
+
+# Loop through each .env file
 for file in $env_files; do
-  # Use sed to replace the value in each .env file
-  sed -i '.bak' "s|IS_CI_BUILD_ENABLED=.*|IS_CI_BUILD_ENABLED=${ci_value}|" "$file"
-  echo "Updated IS_CI_BUILD_ENABLED in $file"
+    # Check if IS_CI_BUILD_ENABLED is declared in the .env file
+    if ! grep -q "^IS_CI_BUILD_ENABLED=" "$file"; then
+        echo "Error: IS_CI_BUILD_ENABLED is not declared in $file"
+        exit 1
+    fi
+
+    # Use sed to replace the value in each .env file
+    sed -i '.bak' "s|^IS_CI_BUILD_ENABLED=.*|IS_CI_BUILD_ENABLED=${ci_value}|" "$file"
+    echo "Updated IS_CI_BUILD_ENABLED in $file"
 done
 
+# Delete backup files
 find ../.. -type f -name "*.bak" -delete
