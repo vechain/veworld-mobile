@@ -7,6 +7,7 @@
         "purge": "rm -rf node_modules && rm -rf yarn.lock && rm -rf android/app/build && cd ios && pod deintegrate && rm -rf Podfile.lock && cd ..",
         "purge:android": "rm -rf node_modules && rm -rf yarn.lock && rm -rf android/app/build",
         "install:all": "yarn hack-install && npx pod-install",
+        "install:android": "yarn hack-install",
         "reinstall": "yarn purge && yarn install:all",
         "android": "react-native run-android",
         "android:emus": "react-native run-android --list-devices",
