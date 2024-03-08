@@ -12,6 +12,14 @@ describe("useTransactionBuilder", () => {
                 useTransactionBuilder({
                     clauses: vetTransaction1.body.clauses,
                     isDelegated: false,
+                    gas: {
+                        caller: "string",
+                        gas: 21000,
+                        reverted: false,
+                        revertReason: "",
+                        vmError: "",
+                        baseGasPrice: "21000",
+                    },
                 }),
             { wrapper: TestWrapper },
         )
@@ -25,6 +33,14 @@ describe("useTransactionBuilder", () => {
                 useTransactionBuilder({
                     clauses: vetTransaction1.body.clauses,
                     isDelegated: false,
+                    gas: {
+                        caller: "string",
+                        gas: 21000,
+                        reverted: false,
+                        revertReason: "",
+                        vmError: "",
+                        baseGasPrice: "21000",
+                    },
                 }),
             { wrapper: TestWrapper },
         )
@@ -38,6 +54,14 @@ describe("useTransactionBuilder", () => {
                 useTransactionBuilder({
                     clauses: vetTransaction1.body.clauses,
                     isDelegated: false,
+                    gas: {
+                        caller: "string",
+                        gas: 21000,
+                        reverted: false,
+                        revertReason: "",
+                        vmError: "",
+                        baseGasPrice: "21000",
+                    },
                     providedGas: 21000,
                 }),
             { wrapper: TestWrapper },
@@ -81,6 +105,14 @@ describe("useTransactionBuilder", () => {
                     isDelegated: false,
                     providedGas: 21000,
                     dependsOn,
+                    gas: {
+                        caller: "string",
+                        gas: 21000,
+                        reverted: false,
+                        revertReason: "",
+                        vmError: "",
+                        baseGasPrice: "21000",
+                    },
                 }),
             { wrapper: TestWrapper },
         )
@@ -96,6 +128,14 @@ describe("useTransactionBuilder", () => {
                     clauses: vetTransaction1.body.clauses,
                     isDelegated: true,
                     providedGas: 21000,
+                    gas: {
+                        caller: "string",
+                        gas: 21000,
+                        reverted: false,
+                        revertReason: "",
+                        vmError: "",
+                        baseGasPrice: "21000",
+                    },
                 }),
             { wrapper: TestWrapper },
         )
