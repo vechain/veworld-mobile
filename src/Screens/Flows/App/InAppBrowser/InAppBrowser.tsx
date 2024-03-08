@@ -72,6 +72,7 @@ export const InAppBrowser: React.FC<Props> = ({ route }) => {
                             style={styles.loginWebView}
                             scalesPageToFit={true}
                             injectedJavaScriptBeforeContentLoaded={injectVechainScript}
+                            allowsInlineMediaPlayback={true}
                         />
                     )}
                     <ChangeAccountNetworkBottomSheet
