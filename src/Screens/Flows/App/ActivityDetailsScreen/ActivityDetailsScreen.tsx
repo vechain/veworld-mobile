@@ -194,6 +194,7 @@ export const ActivityDetailsScreen = ({ route }: Props) => {
                 footer={
                     explorerUrl && (
                         <FadeoutButton
+                            testID="view-on-explorer-button"
                             title={LL.VIEW_ON_EXPLORER().toUpperCase()}
                             action={() => {
                                 Linking.openURL(explorerUrl)

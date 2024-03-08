@@ -464,7 +464,7 @@ PODS:
     - React
   - react-native-flipper (0.163.0):
     - React-Core
-  - react-native-get-random-values (1.10.0):
+  - react-native-get-random-values (1.11.0):
     - React-Core
   - react-native-in-app-review (4.3.3):
     - React-Core
@@ -660,11 +660,11 @@ PODS:
     - React-Core
   - RNScrypt (1.2.1):
     - React
-  - RNSentry (5.19.1):
+  - RNSentry (5.19.2):
     - hermes-engine
     - React-Core
     - React-hermes
-    - Sentry/HybridSDK (= 8.17.1)
+    - Sentry/HybridSDK (= 8.20.0)
   - RNSVG (13.14.0):
     - React-Core
   - SDWebImage (5.11.1):
@@ -673,9 +673,9 @@ PODS:
   - SDWebImageWebPCoder (0.8.5):
     - libwebp (~> 1.0)
     - SDWebImage/Core (~> 5.10)
-  - Sentry/HybridSDK (8.17.1):
-    - SentryPrivate (= 8.17.1)
-  - SentryPrivate (8.17.1)
+  - Sentry/HybridSDK (8.20.0):
+    - SentryPrivate (= 8.20.0)
+  - SentryPrivate (8.20.0)
   - SocketRocket (0.6.1)
   - UMAppLoader (4.2.0)
   - Yoga (1.14.0)
@@ -1091,7 +1091,7 @@ SPEC CHECKSUMS:
   react-native-compat: e31d4e4ba7db54f2649c4b34b9b594029b51b5e2
   react-native-context-menu-view: dcec18eb8882e20596dbb75802e7d19cb87dac02
   react-native-flipper: 2d552a8178d839ef378220101fb7f0cd5b2a8003
-  react-native-get-random-values: 384787fd76976f5aec9465aff6fa9e9129af1e74
+  react-native-get-random-values: 21325b2244dfa6b58878f51f9aa42821e7ba3d06
   react-native-in-app-review: db8bb167a5f238e7ceca5c242d6b36ce8c4404a4
   react-native-mmkv: 124b22209aacdcd172b6ac39071b9647080f0411
   react-native-netinfo: 48c5f79a84fbc3ba1d28a8b0d04adeda72885fa8
@@ -1132,12 +1132,12 @@ SPEC CHECKSUMS:
   RNReanimated: ab2e96c6d5591c3dfbb38a464f54c8d17fb34a87
   RNScreens: 3c5b9f4a9dcde752466854b6109b79c0e205dad3
   RNScrypt: 95fdef077b482e9fdf8a761120cb69d129ef4016
-  RNSentry: 6872121e0af7aa9f3f50643f557d69adc8f7ecdc
+  RNSentry: 4b80f709293b6277d1718aef4b33ca8195c235de
   RNSVG: d00c8f91c3cbf6d476451313a18f04d220d4f396
   SDWebImage: a7f831e1a65eb5e285e3fb046a23fcfbf08e696d
   SDWebImageWebPCoder: 908b83b6adda48effe7667cd2b7f78c897e5111d
-  Sentry: d9f99f9cc13777c5d938650c1e1c85047bb4f0d1
-  SentryPrivate: 839b1e58addf58624087a80b2628e543193fa8ef
+  Sentry: a8d7b373b9f9868442b02a0c425192f693103cbf
+  SentryPrivate: 006b24af16828441f70e2ab6adf241bd0a8ad130
   SocketRocket: f32cd54efbe0f095c4d7594881e52619cfe80b17
   UMAppLoader: e83f024f75f07802fce99739f04b4537d188caaf
   Yoga: b76f1acfda8212aa16b7e26bcce3983230c82603

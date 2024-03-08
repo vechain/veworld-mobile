@@ -188,6 +188,7 @@ export const SendNFTRecapScreen = ({ route }: Props) => {
             }
             footer={
                 <FadeoutButton
+                    testID="confirm-send-button"
                     title={LL.COMMON_BTN_CONFIRM().toUpperCase()}
                     action={onSubmit}
                     disabled={isDisabledButtonState}

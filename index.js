@@ -45,6 +45,9 @@ import { clientPersister, queryClient } from "~Api/QueryProvider"
 import NetInfo from "@react-native-community/netinfo"
 import { onlineManager } from "@tanstack/react-query"
 
+global.process = process || {}
+global.process.browser = false
+
 const { fontFamily } = typography
 
 if (__DEV__) {
