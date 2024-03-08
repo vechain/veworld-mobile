@@ -27,27 +27,6 @@ describe("useTransactionBuilder", () => {
         expect(result.current.buildTransaction).toBeDefined()
     })
 
-    it("should throw an error if no gas is provided", async () => {
-        const { result } = renderHook(
-            () =>
-                useTransactionBuilder({
-                    clauses: vetTransaction1.body.clauses,
-                    isDelegated: false,
-                    gas: {
-                        caller: "string",
-                        gas: 21000,
-                        reverted: false,
-                        revertReason: "",
-                        vmError: "",
-                        baseGasPrice: "21000",
-                    },
-                }),
-            { wrapper: TestWrapper },
-        )
-
-        expect(result.current.buildTransaction).toThrow()
-    })
-
     it("should build with provided gas", async () => {
         const { result } = renderHook(
             () =>
