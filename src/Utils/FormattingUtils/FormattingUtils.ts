@@ -17,6 +17,7 @@ export const ROUND_DECIMAL_PRECISE = 6
  * @param roundDecimal - the number of decimals to round the result to
  * @param roundingStrategy - what strategy to use when rounding. Based on the strategies defined in `bignumber.js`. Default strategy is ROUND_HALF_UP
  * @returns the scaled up result as a string
+ * @deprecated Use `BigNutils` instead
  */
 export const scaleNumberUp = (
     val: BigNumber.Value,
@@ -49,6 +50,7 @@ export const scaleNumberUp = (
  * @param roundDecimal - the number of decimals to round the result to
  * @param roundingStrategy - what strategy to use when rounding. Based on the strategies defined in `bignumber.js`. Default strategy is ROUND_HALF_UP
  * @returns the scaled up result as a string
+ * @deprecated Use `BigNutils` instead
  */
 export const scaleNumberDown = (
     val: BigNumber.Value,
@@ -81,6 +83,7 @@ export const scaleNumberDown = (
  * @param rate - exchange rate
  * @param decimals - the number of decimals for token
  * @returns the formatted time
+ * @deprecated Use `BigNutils` instead
  */
 export const convertToFiatBalance = (balance: string, rate: number, decimals: number, roundDecimals: number = 2) => {
     const fiatBalance = new BigNumber(balance).multipliedBy(rate)
@@ -96,6 +99,7 @@ export type DateType = "short" | "full" | "long" | "medium" | undefined
  * @param originalValue - value in string or number to determine if the original value is 0
  * @param symbol - (optional) symbol to append at end of number (with a space)
  * @returns the formatted number
+ * @deprecated Use `BigNutils` instead
  */
 
 function roundDownSignificantDigits(numbers: number, decimals: number = 0) {
@@ -111,6 +115,14 @@ function roundDownSignificantDigits(numbers: number, decimals: number = 0) {
     return Math.floor(numbers * scaleFactor) / scaleFactor
 }
 
+/**
+ * Format the number human friendly
+ * @param formattedValue - value in string or number
+ * @param originalValue - value in string or number to determine if the original value is 0
+ * @param symbol - (optional) symbol to append at end of number (with a space)
+ * @returns the formatted number
+ * @deprecated Use `BigNutils` instead
+ */
 export const humanNumber = (
     formattedValue: BigNumber.Value,
     originalValue?: BigNumber.Value,
@@ -144,6 +156,7 @@ export const isZero = (value?: BigNumber.Value) => {
  * @param lengthBefore - (optional, default 4) the characters to show before the dots
  * @param lengthAfter - (optional, default 4) the characters to show after the dots
  * @returns the formatted address
+ * @deprecated Use `BigNutils` instead
  */
 export const humanAddress = (address: string, lengthBefore = 4, lengthAfter = 10) => {
     const before = address.substring(0, lengthBefore)

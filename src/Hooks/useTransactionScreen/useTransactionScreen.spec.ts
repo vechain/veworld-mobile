@@ -276,7 +276,7 @@ describe("useTransactionScreen", () => {
                                 ],
                                 dependsOn: null,
                                 expiration: 30,
-                                gas: 210000,
+                                gas: 0,
                                 gasPriceCoef: 0,
                                 nonce: "0x1234ab",
                             },
