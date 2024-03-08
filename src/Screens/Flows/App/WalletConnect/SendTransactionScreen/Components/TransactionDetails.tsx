@@ -5,12 +5,11 @@ import { DelegationType } from "~Model/Delegation"
 import { VET, VTHO } from "~Constants"
 import { useTheme } from "~Hooks"
 import { capitalize } from "lodash"
-import { BigNutils, FormattingUtils } from "~Utils"
+import { BigNutils } from "~Utils"
 import { Network, TransactionRequest } from "~Model"
 import { selectCurrency, useAppSelector } from "~Storage/Redux"
 import { BigNumber } from "bignumber.js"
 import { useExchangeRate } from "~Api/Coingecko"
-import { scaleNumberDown } from "~Utils/FormattingUtils/FormattingUtils"
 
 type Props = {
     selectedDelegationOption: DelegationType
@@ -50,18 +49,17 @@ export const TransactionDetails = ({
                 return acc.plus(clause.value || "0")
             }, new BigNumber(0))
             .toString()
-        return scaleNumberDown(amount || "0", VET.decimals, VET.decimals)
+        return BigNutils(amount || "0").toHuman(VET.decimals).toString
     }, [message])
 
     const vthoBalance = useMemo(
-        () => BigNutils(vtho.balance.balance).toHuman(18).decimals(2).toString,
+        () => BigNutils(vtho.balance.balance).toHuman(VET.decimals).decimals(2).toString,
         [vtho.balance.balance],
     )
 
-    const formattedFiatAmount = FormattingUtils.humanNumber(
-        FormattingUtils.convertToFiatBalance(spendingAmount || "0", exchangeRate || 1, 0),
-        spendingAmount,
-    )
+    const formattedFiatAmount = BigNutils()
+        .toCurrencyConversion(spendingAmount || "0", exchangeRate ?? 1)
+        .decimals(2).toString
 
     return (
         <>
