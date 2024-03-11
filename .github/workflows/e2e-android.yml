@@ -69,12 +69,9 @@ jobs:
                 working-directory: "./android"
             # Download Keystore
             - name: Keystore file
-              uses: mobiledevops/secret-to-file-action@v1
-              with:
-                base64-encoded-secret: ${{ secrets.ANDROID_RELEASE_KEYSTORE }}
-                filename: "release.keystore"
-                is-executable: false
-                working-directory: "./android"
+              run: |
+                    echo "{{$ secrets.ANDROID_RELEASE_KEYSTORE_GPG }}" > release.keystore.asc
+                    gpg -d -passphrase "{{$ secrets.ANDROID_KEY_PASSWORD }}" --batch release.keystore.asc > android/release.keystore
             
             - name: Find sentry prop 
               run: |
@@ -82,7 +79,7 @@ jobs:
                     cd android
                     ls -la
                     cat sentry.properties  
-                    
+
             - name: Build apk 
               run: |
                   pwd     
