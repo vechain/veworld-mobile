@@ -84,6 +84,7 @@ export const NFTDetailScreen = ({ route }: Props) => {
         if (!isObserved) {
             return (
                 <FadeoutButton
+                    testID="confirm-send-button"
                     disabled={!!isPendingTx}
                     title={LL.SEND_TOKEN_TITLE().toUpperCase()}
                     action={onSendPress}

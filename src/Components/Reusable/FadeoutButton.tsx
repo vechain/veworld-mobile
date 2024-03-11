@@ -1,15 +1,19 @@
-import { DimensionValue } from "react-native"
+import { DimensionValue, StyleSheet } from "react-native"
 import React from "react"
-import { BaseButton } from "~Components/Base"
+import LinearGradient from "react-native-linear-gradient"
+import { useBottomTabBarHeight } from "@react-navigation/bottom-tabs"
+import { SCREEN_WIDTH } from "~Constants"
+import { useTheme } from "~Hooks"
+import { BaseButton, BaseView } from "~Components/Base"
 
 type Props = {
     title: string
     action: () => void
     disabled?: boolean
     isLoading?: boolean
-    _bottom?: number
+    bottom?: number
     mx?: number
-    _width?: DimensionValue
+    width?: DimensionValue
     testID?: string
 }
 
@@ -18,23 +22,43 @@ export const FadeoutButton = ({
     action,
     disabled = false,
     isLoading = false,
-    _bottom,
+    bottom,
     mx,
-    _width,
+    width,
     testID,
 }: Props) => {
+    const tabBarHeight = useBottomTabBarHeight()
+    const theme = useTheme()
+
     return (
-        <BaseButton
-            testID={testID}
-            disabled={disabled}
-            size="lg"
-            haptics="Medium"
-            w={100}
-            title={title}
-            action={action}
-            activeOpacity={0.94}
-            isLoading={isLoading}
-            mx={mx}
-        />
+        <LinearGradient
+            style={[
+                baseStyles.container,
+                {
+                    width: width ?? "100%",
+                    bottom: bottom ?? tabBarHeight,
+                },
+            ]}
+            colors={[theme.colors.backgroundTransparent, theme.colors.background]}>
+            <BaseView mx={mx ?? 20} style={{ width: SCREEN_WIDTH - 40 }} pb={24}>
+                <BaseButton
+                    testID={testID}
+                    disabled={disabled}
+                    size="lg"
+                    haptics="Medium"
+                    w={100}
+                    title={title}
+                    action={action}
+                    activeOpacity={0.94}
+                    isLoading={isLoading}
+                />
+            </BaseView>
+        </LinearGradient>
     )
 }
+
+const baseStyles = StyleSheet.create({
+    container: {
+        position: "absolute",
+    },
+})

@@ -39,13 +39,7 @@ export const useTransactionGas = ({ clauses, providedGas, providedGasPayer }: Pr
         async (caller: string, payer: string, thor: Connex.Thor) => {
             setLoadingGas(true)
             try {
-                const estimatedGas = await GasUtils.estimateGas(
-                    thor,
-                    clauses,
-                    providedGas ?? 0, // NOTE: suggestedGas: 0;  in extension it was fixed 0
-                    caller,
-                    payer,
-                )
+                const estimatedGas = await GasUtils.estimateGas(thor, clauses, providedGas ?? 0, caller, payer)
 
                 setGas(estimatedGas)
             } catch (e) {
