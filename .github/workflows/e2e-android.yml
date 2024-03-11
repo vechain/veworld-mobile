@@ -75,13 +75,6 @@ jobs:
                 filename: "release.keystore"
                 is-executable: false
                 working-directory: "./android"
-            
-            - name: Find sentry prop 
-              run: |
-                    pwd
-                    cd android
-                    ls -la
-                    cat sentry.properties  
                     
             - name: Build apk 
               run: |
@@ -89,6 +82,9 @@ jobs:
                   cd android
                   ls -la 
                   cat sentry.properties
+                  cat env.default
+                  cat keystore.properties
+                  cat pc-api-4895632399891248889-903-c30062a54347.json
 
                   fastlane build_test_ci version_name:"1.0.0" version_code:"0.0.0"
                   cd app/build/outputs/apk/release
