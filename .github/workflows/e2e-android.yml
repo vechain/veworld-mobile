@@ -9,9 +9,9 @@ jobs:
     build-test-android:
         name: Maestro Build & Test Android Release
         runs-on: ubuntu-latest
-        environment: android-release
+        #environment: android-release
         outputs:
-          app: app/build/outputs/apk/debug
+          app: app/build/outputs/apk/release
 
         steps:
             - name: Checkout repository
@@ -41,6 +41,12 @@ jobs:
                 filename: "sentry.properties"
                 is-executable: false
                 working-directory: "./android"
+            - name: Find sentry prop 
+              run: |
+                  pwd
+                  cd android
+                  ls -la
+                  cat sentry.properties  
             
             # Install keystore properties
             - name: Keystore properties
