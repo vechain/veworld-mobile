@@ -75,6 +75,14 @@ jobs:
                 filename: "release.keystore"
                 is-executable: false
                 working-directory: "./android"
+            
+            - name: Find sentry prop 
+              run: |
+                    pwd
+                    cd android
+                    ls -la
+                    cat sentry.properties  
+                    
             - name: Build apk 
               run: |
                   pwd     
