@@ -9,7 +9,6 @@ jobs:
     build-test-android:
         name: Maestro Build & Test Android Release
         runs-on: ubuntu-latest
-        #environment: android-release
         outputs:
           app: app/build/outputs/apk/release
 
