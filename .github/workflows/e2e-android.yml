@@ -71,9 +71,7 @@ jobs:
             - name: Keystore file
               run: |
                     echo "{{$ secrets.ANDROID_RELEASE_KEYSTORE_GPG }}" > release.keystore.asc
-                    gpg -d -passphrase "{{$ secrets.ANDROID_KEY_PASSWORD }}" --batch release.keystore.asc
-                    gpg -d -passphrase "{{$ secrets.ANDROID_KEY_PASSWORD }}" --batch release.keystore.asc > android/release.keystore
-            
+                    gpg --batch --passphrase "${{ secrets.ANDROID_KEY_PASSWORD }}" -d -o release.keystore release.keystore.asc
             - name: Find sentry prop 
               run: |
                     pwd
