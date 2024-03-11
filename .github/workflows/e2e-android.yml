@@ -12,6 +12,8 @@ jobs:
         environment: android-release
         outputs:
           app: app/build/outputs/apk/release
+        env:
+          SENTRY_LOG_LEVEL=debug
 
         steps:
             - name: Checkout repository
@@ -77,6 +79,7 @@ jobs:
               run: |
                   pwd     
                   cd android 
+                  cat sentry.properties
                   fastlane build_test_ci version_name:"1.0.0" version_code:"0.0.0"
                   cd app/build/outputs/apk/release
                   pwd
