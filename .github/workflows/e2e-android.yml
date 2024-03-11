@@ -13,7 +13,7 @@ jobs:
         outputs:
           app: app/build/outputs/apk/release
         env:
-          SENTRY_LOG_LEVEL=debug
+          SENTRY_LOG_LEVEL: debug
 
         steps:
             - name: Checkout repository
