@@ -56,7 +56,7 @@ jobs:
               uses: mobiledevops/secret-to-file-action@v1
               with:
                 base64-encoded-secret: ${{ secrets.ANDROID_SERVICE_ACCOUNT }}
-                filename: "env.default"
+                filename: ".env.default"
                 is-executable: false
                 working-directory: "./android"
             # Install keystore properties
