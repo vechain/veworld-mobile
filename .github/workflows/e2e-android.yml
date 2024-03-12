@@ -17,9 +17,6 @@ jobs:
         steps:
             - name: Checkout repository
               uses: actions/checkout@v3
-            
-            - name: print env vars
-              run: export
 
             - name: Setup Node
               uses: actions/setup-node@v3
@@ -45,6 +42,7 @@ jobs:
                 filename: "sentry.properties"
                 is-executable: false
                 working-directory: "./android"
+
             # Decode key_alias 
             - name: Decode KEY_ALIAS
               uses: mobiledevops/secret-to-file-action@v1
@@ -53,6 +51,7 @@ jobs:
                 filename: "key_alias.txt"
                 is-executable: false
                 working-directory: "./android"
+
              # Decode key_password
             - name: Decode STORE_PASSWORD
               uses: mobiledevops/secret-to-file-action@v1
@@ -61,15 +60,6 @@ jobs:
                 filename: "store_password.txt"
                 is-executable: false
                 working-directory: "./android"
-            - name: Declare Envs
-              run: |
-                cd android
-                echo "This is in the store password file"
-                cat store_password.txt
-                export STORE_PASSWORD="$(<store_password.txt)"
-                export KEY_PASSWORD="$(<store_password.txt)"
-                export KEY_ALIAS="$(<key_alias.txt)"
-                export
 
             # Install env.default 
             - name: Sentry properties
@@ -79,6 +69,7 @@ jobs:
                 filename: "pc-api-4895632399891248889-903-c30062a54347.json"
                 is-executable: false
                 working-directory: "./android"
+
               # Install sentry properties
             - name: Sentry properties
               uses: mobiledevops/secret-to-file-action@v1
@@ -87,6 +78,7 @@ jobs:
                 filename: ".env.default"
                 is-executable: false
                 working-directory: "./android"
+
             # Install keystore properties
             - name: Keystore properties
               uses: mobiledevops/secret-to-file-action@v1
@@ -95,6 +87,7 @@ jobs:
                 filename: "keystore.properties"
                 is-executable: false
                 working-directory: "./android"
+
             # Download Keystore
             - name: Keystore file
               uses: mobiledevops/secret-to-file-action@v1
@@ -103,10 +96,11 @@ jobs:
                 filename: "release.keystore"
                 is-executable: false
                 working-directory: "./android"
+
             - name: Add release Dev:Demo link
               run: |
-                echo "IS_CI_BUILD_ENABLED=false" > .env.local
-                echo "IS_CI_BUILD_ENABLED=false" > .env.production.local
+                echo "IS_CI_BUILD_ENABLED=true" > .env.local
+                echo "IS_CI_BUILD_ENABLED=true" > .env.production.local
                 cat .env.local
                 cat .env.production.local
                 ls -la
