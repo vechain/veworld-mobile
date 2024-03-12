@@ -56,7 +56,7 @@ jobs:
               uses: mobiledevops/secret-to-file-action@v1
               with:
                 base64-encoded-secret: ${{ secrets.ANDROID_SERVICE_ACCOUNT }}
-                filename: ".env.local"
+                filename: ".env.production.local"
                 is-executable: false
                 working-directory: "./android"
             # Install keystore properties
@@ -83,8 +83,8 @@ jobs:
                   ls -la 
                   echo "Senty file"
                   cat sentry.properties
-                  echo ".env.local file"
-                  cat .env.local
+                  echo ".env.production.local file"
+                  cat .env.production.local
                   echo "keystore.properties"
                   cat keystore.properties
                   echo "pc-api file"
