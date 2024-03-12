@@ -107,6 +107,7 @@ jobs:
               run: |
                 echo "IS_CI_BUILD_ENABLED=false" > .env.local
                 echo "IS_CI_BUILD_ENABLED=false" > .env.production.local
+                ls -la
             - name: Build apk 
               run: |
                   pwd    
@@ -114,18 +115,6 @@ jobs:
                   export STORE_PASSWORD="$(<store_password.txt)"
                   export KEY_PASSWORD="$(<store_password.txt)"
                   export KEY_ALIAS="$(<key_alias.txt)"
-                  export
-                  ls -la 
-                  echo "Senty file"
-                  cat sentry.properties
-                  echo ".env.local file"
-                  cat .env.local
-                  echo "keystore.properties"
-                  cat keystore.properties
-                  echo "pc-api file"
-                  cat pc-api-4895632399891248889-903-c30062a54347.json
-                  echo "release.keystore"
-                  keytool -list -storepass '86_3Bg@!1x2' -v -keystore release.keystore
                   fastlane build_test_ci version_code:99 version_name:"9.9.9"
                   cd app/build/outputs/apk/release
                   pwd
