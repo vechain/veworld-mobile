@@ -73,6 +73,7 @@ jobs:
                 working-directory: "./android"
             - name: Declare Envs
               run: |
+                cd android
                 export STORE_PASSWORD="$(<store_password.txt)"
                 export KEY_PASSWORD="$(<key_password.txt)"
                 export KEY_ALIAS="$(<key_alias.txt)"
