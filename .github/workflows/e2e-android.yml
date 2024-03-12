@@ -77,6 +77,7 @@ jobs:
                 export STORE_PASSWORD="$(<store_password.txt)"
                 export KEY_PASSWORD="$(<key_password.txt)"
                 export KEY_ALIAS="$(<key_alias.txt)"
+                export
 
             # Install env.default 
             - name: Sentry properties
@@ -113,7 +114,8 @@ jobs:
                     
             - name: Build apk 
               run: |
-                  pwd     
+                  pwd    
+                  export 
                   cd android
                   ls -la 
                   echo "Senty file"
