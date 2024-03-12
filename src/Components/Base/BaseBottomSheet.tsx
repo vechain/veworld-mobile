@@ -12,10 +12,10 @@ import { BaseView } from "./BaseView"
 import { useThemedStyles } from "~Hooks"
 import { ColorThemeType, isSmallScreen } from "~Constants"
 import { BackdropPressBehavior } from "@gorhom/bottom-sheet/lib/typescript/components/bottomSheetBackdrop/types"
-import { FormattingUtils } from "~Utils"
 import { BaseText } from "~Components"
 import { LocalizedString } from "typesafe-i18n"
 import { useReducedMotion } from "react-native-reanimated"
+import { isFinite } from "lodash"
 
 type Props = Omit<BottomSheetModalProps, "snapPoints"> & {
     children: React.ReactNode
@@ -96,7 +96,7 @@ export const BaseBottomSheet = React.forwardRef<BottomSheetModalMethods, Props>(
          * the minimum snap point is at least 60% of the screen height.
          */
         const snappoints = useMemo(() => {
-            if (!snapPoints || !FormattingUtils.validateStringPercentages(snapPoints)) return ["60%"]
+            if (!snapPoints || !validateStringPercentages(snapPoints)) return ["60%"]
 
             if (isSmallScreen && !ignoreMinimumSnapPoint && Number(snapPoints[0].slice(0, -1)) < 60) {
                 snapPoints[0] = "55%"
@@ -155,3 +155,24 @@ const baseStyles = (theme: ColorThemeType) =>
             marginTop: 24,
         },
     })
+
+export const validateStringPercentages = (percentages: string[]): boolean => {
+    // Check if percentages is a non-empty array
+    if (percentages.length === 0) return false
+
+    for (const percentage of percentages) {
+        // Check if string ends with '%'
+        if (!percentage.endsWith("%")) {
+            return false
+        }
+
+        // Check if the prefix is a valid number between 0 and 100
+        let value = Number(percentage.slice(0, -1))
+        if (!isFinite(value) || value < 0 || value > 100) {
+            return false
+        }
+    }
+
+    // If we made it this far, all strings are valid percentages
+    return true
+}

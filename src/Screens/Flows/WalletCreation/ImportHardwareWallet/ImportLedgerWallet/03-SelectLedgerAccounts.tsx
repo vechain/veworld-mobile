@@ -13,7 +13,7 @@ import {
 import { useI18nContext } from "~i18n"
 import { useAnalyticTracking, useBottomSheetModal, useLedgerDevice, useThemedStyles } from "~Hooks"
 import { AnalyticsEvent, ColorThemeType, VET, VETLedgerAccount } from "~Constants"
-import { FormattingUtils, LedgerUtils } from "~Utils"
+import { BigNutils, AddressUtils, LedgerUtils } from "~Utils"
 import { StyleSheet } from "react-native"
 import { useNavigation } from "@react-navigation/native"
 
@@ -151,6 +151,10 @@ export const SelectLedgerAccounts: React.FC<Props> = ({ route }) => {
             })
         }
 
+        const formatBalance = (balance: string) => {
+            return BigNutils(balance).toHuman(VET.decimals).toTokenFormat_string(2)
+        }
+
         return (
             <BaseTouchableBox
                 key={item.address}
@@ -163,18 +167,10 @@ export const SelectLedgerAccounts: React.FC<Props> = ({ route }) => {
                         {LL.WALLET_LABEL_ACCOUNT()} {index + 1}
                     </BaseText>
                     <BaseSpacer height={6} />
-                    <BaseText typographyFont="captionRegular">{FormattingUtils.humanAddress(item.address)}</BaseText>
+                    <BaseText typographyFont="captionRegular">{AddressUtils.humanAddress(item.address)}</BaseText>
                 </BaseView>
                 <BaseText typographyFont="captionRegular">
-                    {item.balance &&
-                        FormattingUtils.humanNumber(
-                            FormattingUtils.scaleNumberDown(
-                                item.balance?.balance,
-                                VET.decimals,
-                                FormattingUtils.ROUND_DECIMAL_DEFAULT,
-                            ),
-                        )}{" "}
-                    {VET.symbol}
+                    {item.balance && formatBalance(item.balance.balance)} {VET.symbol}
                 </BaseText>
             </BaseTouchableBox>
         )

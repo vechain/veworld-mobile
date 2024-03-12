@@ -77,7 +77,7 @@ export const SelectAmountSendScreen = ({ route }: Props) => {
      * TOKEN selected balance in human readable format (correct value is when FIAT is active)
      * Example "2,472.771"
      */
-    const tokenHumanAmountFromFiat = BigNutils(tokenAmountFromFiat).toTokenFormat_string(4)
+    const tokenHumanAmountFromFiat = BigNutils(tokenAmountFromFiat).toTokenFormat_string(2)
 
     /**
      * Toggle between FIAT and TOKEN input (and update the input value)

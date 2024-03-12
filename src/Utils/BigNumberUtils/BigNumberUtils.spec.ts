@@ -73,7 +73,7 @@ describe("BigNumberUtils class", () => {
     })
 
     test("toTokenFormat_string should format correctly", () => {
-        expect(bigNumUtils.toTokenFormat_string(4)).toMatch(/^\d+(\.\d{1,4})?$/)
+        expect(bigNumUtils.toTokenFormat_string(2)).toMatch(/^\d+(\.\d{1,4})?$/)
     })
 
     // Test conversion methods

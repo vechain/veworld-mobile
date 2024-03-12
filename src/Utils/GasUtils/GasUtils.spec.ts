@@ -146,7 +146,7 @@ describe("GasUtils", () => {
                     baseGasPrice: new BigNumber("10000000000000"),
                     gasPriceCoefficient: GasPriceCoefficient.MEDIUM,
                 })
-                expect(gasFee).toStrictEqual("0.314588235294102")
+                expect(gasFee).toStrictEqual("0.31")
             })
         })
         describe("when the gas coefficient is high", () => {
@@ -165,7 +165,6 @@ describe("GasUtils", () => {
                     gas: new BigNumber(21000),
                     baseGasPrice: new BigNumber("10000000000000"),
                     gasPriceCoefficient: GasPriceCoefficient.MEDIUM,
-                    decimals: 2,
                 })
                 expect(gasFee).toStrictEqual("0.31")
             })

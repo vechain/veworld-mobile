@@ -2,7 +2,7 @@
 import React, { memo, useCallback, useMemo, useState } from "react"
 import { FlatList, StyleSheet, ViewToken } from "react-native"
 import { ColorThemeType, SCREEN_WIDTH, COLORS } from "~Constants"
-import { FormattingUtils } from "~Utils"
+import { AddressUtils } from "~Utils"
 import { useThemedStyles } from "~Hooks"
 import {
     BaseIcon,
@@ -95,13 +95,13 @@ export const TransferCard = memo(
         }, [accounts, toAddresses, toContacts])
 
         const fromAddressShort = useMemo(() => {
-            return FormattingUtils.humanAddress(fromAddress, 4, 6)
+            return AddressUtils.humanAddress(fromAddress, 4, 6)
         }, [fromAddress])
 
         const toAddressesShort = useMemo(() => {
             const shortenedAddresses: Array<string> = []
             toAddresses?.map((_address: string) => {
-                shortenedAddresses.push(FormattingUtils.humanAddress(_address, 4, 6))
+                shortenedAddresses.push(AddressUtils.humanAddress(_address, 4, 6))
             })
 
             return shortenedAddresses

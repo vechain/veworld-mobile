@@ -1,7 +1,7 @@
 import React, { memo, useMemo } from "react"
 import { StyleSheet } from "react-native"
 import { useFungibleTokenInfo, useTheme } from "~Hooks"
-import { DateUtils, FormattingUtils } from "~Utils"
+import { BigNutils, DateUtils } from "~Utils"
 import { COLORS, DIRECTIONS, getCoinGeckoIdBySymbol } from "~Constants"
 import { BaseIcon, BaseText, BaseTouchable, BaseView } from "~Components"
 import { Activity, ActivityStatus, FungibleToken, FungibleTokenActivity } from "~Model"
@@ -39,25 +39,15 @@ export const FungibleTokenActivityBox: React.FC<Props> = memo(({ activity, onPre
     })
 
     const amountTransferred = useMemo(() => {
-        const humanReadable = FormattingUtils.humanNumber(
-            FormattingUtils.scaleNumberDown(
-                activity.amount,
-                token?.decimals ?? decimals ?? 0,
-                FormattingUtils.ROUND_DECIMAL_DEFAULT,
-            ),
-            activity.amount,
-        )
-
-        return humanReadable.length > 11 ? humanReadable.substring(0, 10).concat("...") : humanReadable
+        return BigNutils(activity.amount)
+            .toHuman(token?.decimals ?? decimals ?? 0)
+            .toTokenFormat_string(2)
     }, [activity.amount, decimals, token])
 
     const fiatValueTransferred = useMemo(() => {
         if (!token || !exchangeRate) return undefined
-
-        return FormattingUtils.humanNumber(
-            FormattingUtils.convertToFiatBalance(activity.amount as string, exchangeRate, token.decimals),
-            activity.amount,
-        )
+        const amount = BigNutils(activity.amount).toHuman(token.decimals).toString
+        return BigNutils().toCurrencyConversion(amount, exchangeRate).toCurrencyFormat_string(2)
     }, [activity.amount, exchangeRate, token])
 
     const dateTimeTransfer = useMemo(() => {

@@ -152,7 +152,7 @@ function GasWarningView(props: IGasWarningView) {
             " " +
             BigNutils(props.computedGasDifference?.toString ?? "0")
                 .toHuman(VTHO.decimals)
-                .decimals(8).toString,
+                .toTokenFormat_string(2),
         [LL, props.computedGasDifference],
     )
 

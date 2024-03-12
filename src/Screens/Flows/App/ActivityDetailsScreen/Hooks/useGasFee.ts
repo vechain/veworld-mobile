@@ -2,8 +2,8 @@ import { useEffect, useMemo, useState } from "react"
 import { BigNumber } from "bignumber.js"
 import { Activity } from "~Model"
 import { useThor, showInfoToast } from "~Components"
-import { ERROR_EVENTS, VTHO } from "~Constants"
-import { FormattingUtils, GasUtils, warn } from "~Utils"
+import { ERROR_EVENTS } from "~Constants"
+import { BigNutils, GasUtils, warn } from "~Utils"
 import { selectCurrency, useAppSelector } from "~Storage/Redux"
 import { useI18nContext } from "~i18n"
 import { useVthoExchangeRate } from "~Api/Coingecko"
@@ -62,10 +62,7 @@ export const useGasFee = (activity: Activity) => {
 
     const fiatValueGasFeeSpent = useMemo(() => {
         if (VTHOexchangeRate && vthoGasFee) {
-            return FormattingUtils.humanNumber(
-                FormattingUtils.convertToFiatBalance(vthoGasFee, VTHOexchangeRate, VTHO.decimals),
-                vthoGasFee,
-            )
+            return BigNutils().toCurrencyConversion(vthoGasFee, VTHOexchangeRate).toCurrencyFormat_string(2)
         }
     }, [VTHOexchangeRate, vthoGasFee])
 

@@ -2,7 +2,7 @@ import React, { useCallback, useEffect, useMemo } from "react"
 import { NativeStackScreenProps } from "@react-navigation/native-stack"
 import { useAnalyticTracking, useTheme, useTransactionScreen, useTransferAddContact } from "~Hooks"
 import { AccountUtils, AddressUtils, BigNutils, TransactionUtils } from "~Utils"
-import { AnalyticsEvent, COLORS, GasPriceCoefficient } from "~Constants"
+import { AnalyticsEvent, COLORS, GasPriceCoefficient, currencySymbolMap } from "~Constants"
 import {
     BaseSpacer,
     BaseText,
@@ -283,9 +283,9 @@ function TotalSendAmountView({ amount, symbol, token, txCostTotal, isDelegated, 
             .toCurrencyFormat_string(2)
 
         if (_amount.includes("<")) {
-            return `${_amount} ${currency}`
+            return `${_amount} ${currencySymbolMap[currency]}`
         } else {
-            return `≈ ${_amount} ${currency}`
+            return `≈ ${_amount} ${currencySymbolMap[currency]}`
         }
     }, [amount, currency, exchangeRate, formattedTotalCost, token.symbol])
 
