@@ -18,6 +18,9 @@ jobs:
         steps:
             - name: Checkout repository
               uses: actions/checkout@v3
+            
+            - name: print env vars
+              run: export
 
             - name: Setup Node
               uses: actions/setup-node@v3
