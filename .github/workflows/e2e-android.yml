@@ -58,14 +58,6 @@ jobs:
                 filename: "key_alias.txt"
                 is-executable: false
                 working-directory: "./android"
-            # Decode key_password
-            - name: Decode KEY_PASSWORD
-              uses: mobiledevops/secret-to-file-action@v1
-              with:
-                base64-encoded-secret: ${{ secrets.ANDROID_KEY_PASSWORD }}
-                filename: "key_password.txt"
-                is-executable: false
-                working-directory: "./android"
              # Decode key_password
             - name: Decode STORE_PASSWORD
               uses: mobiledevops/secret-to-file-action@v1
@@ -80,7 +72,7 @@ jobs:
                 echo "This is in the store password file"
                 cat store_password.txt
                 export STORE_PASSWORD="$(<store_password.txt)"
-                export KEY_PASSWORD="$(<key_password.txt)"
+                export KEY_PASSWORD="$(<store_password.txt)"
                 export KEY_ALIAS="$(<key_alias.txt)"
                 export
 
