@@ -14,6 +14,9 @@ jobs:
           app: app/build/outputs/apk/release
         env:
           SENTRY_LOG_LEVEL: debug
+          STORE_PASSWORD: ${{ secrets.ANDROID_STORE_PASSWORD }}
+          KEY_PASSWORD: ${{ secrets.ANDROID_KEY_PASSWORD }}
+          KEY_ALIAS: ${{ secrets.ANDROID_KEY_PASSWORD }}
           
 
         steps:
@@ -74,6 +77,8 @@ jobs:
             - name: Declare Envs
               run: |
                 cd android
+                echo "This is in the store password file"
+                cat store_password.txt
                 export STORE_PASSWORD="$(<store_password.txt)"
                 export KEY_PASSWORD="$(<key_password.txt)"
                 export KEY_ALIAS="$(<key_alias.txt)"
