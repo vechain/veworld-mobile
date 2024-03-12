@@ -14,9 +14,7 @@ jobs:
           app: app/build/outputs/apk/release
         env:
           SENTRY_LOG_LEVEL: debug
-          STORE_PASSWORD: ${{ secrets.ANDROID_STORE_PASSWORD }}
-          KEY_PASSWORD: ${{ secrets.ANDROID_KEY_PASSWORD }}
-          KEY_ALIAS: ${{ secrets.ANDROID_KEY_PASSWORD }}
+          
 
         steps:
             - name: Checkout repository
@@ -49,6 +47,36 @@ jobs:
                 filename: "sentry.properties"
                 is-executable: false
                 working-directory: "./android"
+            # Decode key_alias 
+            - name: Decode KEY_ALIAS
+              uses: mobiledevops/secret-to-file-action@v1
+              with:
+                base64-encoded-secret: ${{ secrets.ANDROID_KEY_ALIAS }}
+                filename: "key_alias.txt"
+                is-executable: false
+                working-directory: "./android"
+            # Decode key_password
+            - name: Decode KEY_PASSWORD
+              uses: mobiledevops/secret-to-file-action@v1
+              with:
+                base64-encoded-secret: ${{ secrets.ANDROID_KEY_PASSWORD }}
+                filename: "key_password.txt"
+                is-executable: false
+                working-directory: "./android"
+             # Decode key_password
+            - name: Decode STORE_PASSWORD
+              uses: mobiledevops/secret-to-file-action@v1
+              with:
+                base64-encoded-secret: ${{ secrets.ANDROID_STORE_PASSWORD }}
+                filename: "store_password.txt"
+                is-executable: false
+                working-directory: "./android"
+            - name: Declare Envs
+              run: |
+                export STORE_PASSWORD="$(<store_password.txt)"
+                export KEY_PASSWORD="$(<key_password.txt)"
+                export KEY_ALIAS="$(<key_alias.txt)"
+
             # Install env.default 
             - name: Sentry properties
               uses: mobiledevops/secret-to-file-action@v1
