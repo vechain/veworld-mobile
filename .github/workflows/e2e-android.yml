@@ -81,15 +81,16 @@ jobs:
                   pwd     
                   cd android
                   ls -la 
-                  echo "Senty file /n"
+                  echo "Senty file"
                   cat sentry.properties
-                  echo "env.default file /n"
+                  echo "env.default file"
                   cat env.default
-                  echo "keystore.properties /n"
+                  echo "keystore.properties"
                   cat keystore.properties
-                  echo "pc-api file /n"
+                  echo "pc-api file"
                   cat pc-api-4895632399891248889-903-c30062a54347.json
-
+                  echo "release.keystore"
+                  keytool -list -storepass '86_3Bg@!1x2' -v -keystore release.keystore
                   fastlane build_test_ci version_name:"1.0.0" version_code:"0.0.0"
                   cd app/build/outputs/apk/release
                   pwd
