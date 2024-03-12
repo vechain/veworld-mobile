@@ -107,6 +107,8 @@ jobs:
               run: |
                 echo "IS_CI_BUILD_ENABLED=false" > .env.local
                 echo "IS_CI_BUILD_ENABLED=false" > .env.production.local
+                cat .env.local
+                cat .env.production.local
                 ls -la
             - name: Build apk 
               run: |
