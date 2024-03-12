@@ -139,7 +139,6 @@ export const getGasByCoefficient = ({
             gas: gas?.gas ?? 0,
             baseGasPrice: gas?.baseGasPrice ?? "0",
             gasPriceCoefficient: coefficient,
-            decimals: 2,
         })
 
     const gasFeeOptions = {

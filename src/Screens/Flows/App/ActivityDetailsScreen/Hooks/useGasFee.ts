@@ -43,7 +43,6 @@ export const useGasFee = (activity: Activity) => {
                 const { gasFee } = GasUtils.gasToVtho({
                     gas: new BigNumber(activity.gasUsed || 0),
                     baseGasPrice: new BigNumber(baseGasPrice),
-                    decimals: 2,
                 })
                 setVthoGasFee(gasFee)
             } catch (e) {
