@@ -107,8 +107,11 @@ jobs:
             - name: Build apk 
               run: |
                   pwd    
-                  export 
                   cd android
+                  export STORE_PASSWORD="$(<store_password.txt)"
+                  export KEY_PASSWORD="$(<store_password.txt)"
+                  export KEY_ALIAS="$(<key_alias.txt)"
+                  export
                   ls -la 
                   echo "Senty file"
                   cat sentry.properties
