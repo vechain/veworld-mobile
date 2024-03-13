@@ -2,7 +2,15 @@ import React, { useCallback, useEffect, useMemo } from "react"
 import { NativeStackScreenProps } from "@react-navigation/native-stack"
 import { useAnalyticTracking, useTheme, useTransactionScreen, useTransferAddContact } from "~Hooks"
 import { AccountUtils, AddressUtils, BigNutils, TransactionUtils } from "~Utils"
-import { AnalyticsEvent, COLORS, GasPriceCoefficient, VET, VTHO, creteAnalyticsEvent, currencySymbolMap } from "~Constants"
+import {
+    AnalyticsEvent,
+    COLORS,
+    GasPriceCoefficient,
+    VET,
+    VTHO,
+    creteAnalyticsEvent,
+    currencySymbolMap,
+} from "~Constants"
 import {
     BaseSpacer,
     BaseText,
