@@ -3,7 +3,7 @@ import React, { memo, useCallback, useMemo } from "react"
 import { StyleSheet } from "react-native"
 import DropShadow from "react-native-drop-shadow"
 import { useThemedStyles } from "~Hooks"
-import { FormattingUtils } from "~Utils"
+import { BigNutils, AddressUtils } from "~Utils"
 import { COLORS, ColorThemeType, getCoinGeckoIdBySymbol } from "~Constants"
 import { BaseIcon, BaseView } from "~Components"
 import { selectCurrency, useAppSelector } from "~Storage/Redux"
@@ -43,54 +43,39 @@ export const SwapCard = memo(
         })
 
         const paidTokenAddressShort = useMemo(() => {
-            return FormattingUtils.humanAddress(paidTokenAddress, 4, 6)
+            return AddressUtils.humanAddress(paidTokenAddress, 4, 6)
         }, [paidTokenAddress])
 
         const receivedTokenAddressShort = useMemo(() => {
-            return FormattingUtils.humanAddress(receivedTokenAddress, 4, 6)
+            return AddressUtils.humanAddress(receivedTokenAddress, 4, 6)
         }, [receivedTokenAddress])
 
-        const paidAmount = useMemo(() => {
-            return FormattingUtils.humanNumber(
-                FormattingUtils.scaleNumberDown(
-                    paidTokenAmount,
-                    paidToken?.decimals ?? 0,
-                    FormattingUtils.ROUND_DECIMAL_DEFAULT,
-                ),
-                paidTokenAmount,
-            )
-        }, [paidTokenAmount, paidToken])
+        const paidAmount = useMemo(
+            () =>
+                BigNutils(paidTokenAmount)
+                    .toHuman(paidToken?.decimals ?? 0)
+                    .toTokenFormat_string(2),
+            [paidTokenAmount, paidToken],
+        )
 
-        const receivedAmount = useMemo(() => {
-            return FormattingUtils.humanNumber(
-                FormattingUtils.scaleNumberDown(
-                    receivedTokenAmount,
-                    receivedToken?.decimals ?? 0,
-                    FormattingUtils.ROUND_DECIMAL_DEFAULT,
-                ),
-                receivedTokenAmount,
-            )
-        }, [receivedTokenAmount, receivedToken])
+        const receivedAmount = useMemo(
+            () =>
+                BigNutils(receivedTokenAmount)
+                    .toHuman(receivedToken?.decimals ?? 0)
+                    .toTokenFormat_string(2),
+
+            [receivedTokenAmount, receivedToken],
+        )
 
         const fiatValuePaid = useMemo(() => {
             if (exchangeRatePaid && paidToken)
-                return FormattingUtils.humanNumber(
-                    FormattingUtils.convertToFiatBalance(paidTokenAmount, exchangeRatePaid, paidToken.decimals),
-                    paidAmount,
-                )
-        }, [exchangeRatePaid, paidAmount, paidToken, paidTokenAmount])
+                return BigNutils().toCurrencyConversion(paidAmount, exchangeRatePaid).toCurrencyFormat_string(2)
+        }, [exchangeRatePaid, paidAmount, paidToken])
 
         const fiatValueReceived = useMemo(() => {
             if (exchangeRateReceived && receivedToken)
-                return FormattingUtils.humanNumber(
-                    FormattingUtils.convertToFiatBalance(
-                        receivedTokenAmount,
-                        exchangeRateReceived,
-                        receivedToken.decimals,
-                    ),
-                    receivedAmount,
-                )
-        }, [exchangeRateReceived, receivedAmount, receivedToken, receivedTokenAmount])
+                return BigNutils().toCurrencyConversion(receivedAmount, exchangeRateReceived).toCurrencyFormat_string(2)
+        }, [exchangeRateReceived, receivedAmount, receivedToken])
 
         const renderPaidToken = useCallback(() => {
             return (

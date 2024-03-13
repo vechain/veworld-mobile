@@ -7,7 +7,7 @@ import {
     withSpring,
     withTiming,
 } from "react-native-reanimated"
-import { COLORS, CURRENCY, ColorThemeType } from "~Constants"
+import { COLORS, CURRENCY, ColorThemeType, currencySymbolMap } from "~Constants"
 import { FungibleTokenWithBalance } from "~Model"
 
 export const useUI = ({
@@ -80,9 +80,9 @@ export const useUI = ({
             }
         } else {
             if (fiatHumanAmount.includes("<")) {
-                return `${fiatHumanAmount} ${currency}`
+                return `${fiatHumanAmount} ${currencySymbolMap[currency]}`
             } else {
-                return `≈ ${fiatHumanAmount} ${currency}`
+                return `≈ ${fiatHumanAmount} ${currencySymbolMap[currency]}`
             }
         }
     }, [currency, fiatHumanAmount, isInputInFiat, token.symbol, tokenHumanAmountFromFiat])

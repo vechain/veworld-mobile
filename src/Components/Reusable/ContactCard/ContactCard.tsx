@@ -1,6 +1,6 @@
 import React, { memo } from "react"
 import { StyleProp, ViewStyle } from "react-native"
-import { FormattingUtils } from "~Utils"
+import { AddressUtils } from "~Utils"
 import { BaseCard, BaseSpacer, BaseText, BaseView } from "~Components"
 import { Contact } from "~Model"
 
@@ -22,7 +22,7 @@ export const ContactCard = memo(({ contact, onPress, selected, containerStyle }:
                 <BaseText typographyFont="button">{contact.alias}</BaseText>
                 <BaseSpacer height={4} />
                 <BaseText fontSize={10} typographyFont="smallCaptionRegular">
-                    {FormattingUtils.humanAddress(contact.address, 4, 6)}
+                    {AddressUtils.humanAddress(contact.address, 4, 6)}
                 </BaseText>
             </BaseView>
         </BaseCard>

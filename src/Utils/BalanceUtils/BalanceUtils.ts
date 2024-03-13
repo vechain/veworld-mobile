@@ -3,9 +3,9 @@ import axios from "axios"
 import { error, info } from "~Utils/Logger"
 import { Balance, FungibleTokenWithBalance, Network } from "~Model"
 import AddressUtils from "../AddressUtils"
-import FormattingUtils from "../FormattingUtils"
 import { getTokenDecimals, getTokenName, getTokenSymbol } from "~Networking"
 import { BigNumber } from "bignumber.js"
+import BigNutils from "~Utils/BigNumberUtils"
 
 /**
  * Calls out to external sources to get the balance
@@ -105,11 +105,14 @@ const getTokenBalanceFromBlockchain = async (
     }
 }
 
-const getFiatBalance = (balance: string, exchangeRate: number, decimals: number) =>
-    FormattingUtils.humanNumber(FormattingUtils.convertToFiatBalance(balance, exchangeRate, decimals), balance)
+const getFiatBalance = (balance: string, exchangeRate: number, decimals: number) => {
+    const convertedBalance = BigNutils(balance).toHuman(decimals).toString
+    return BigNutils().toCurrencyConversion(convertedBalance, exchangeRate).toCurrencyFormat_string(2)
+}
 
-const getTokenUnitBalance = (balance: string, decimals: number) =>
-    FormattingUtils.humanNumber(FormattingUtils.convertToFiatBalance(balance, 1, decimals), balance)
+const getTokenUnitBalance = (balance: string, decimals: number) => {
+    return BigNutils(balance).toHuman(decimals).toTokenFormat_string(2)
+}
 
 const getIsTokenWithBalance = (token: FungibleTokenWithBalance) => !new BigNumber(token.balance.balance).isZero()
 
