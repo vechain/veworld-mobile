@@ -157,7 +157,7 @@ export const HomeScreen = () => {
                         }>
                         <BaseView>
                             <BaseView alignItems="center">
-                                <BaseSpacer height={20} />
+                                <BaseSpacer height={21} />
                                 <AccountCard
                                     balanceVisible={isBalanceVisible}
                                     openSelectAccountBottomSheet={openSelectAccountBottomSheet}
