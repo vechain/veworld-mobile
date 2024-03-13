@@ -28,7 +28,7 @@ import { useAnalyticTracking, useTransactionScreen, useTransferAddContact } from
 import { StackActions, useNavigation } from "@react-navigation/native"
 import { prepareNonFungibleClause } from "~Utils/TransactionUtils/TransactionUtils"
 import { Transaction } from "thor-devkit"
-import { AnalyticsEvent } from "~Constants"
+import { AnalyticsEvent, creteAnalyticsEvent } from "~Constants"
 import { ContactType, DEVICE_TYPE } from "~Model"
 import { ContactManagementBottomSheet } from "../../ContactsScreen"
 import { AccountUtils, AddressUtils } from "~Utils"
@@ -54,8 +54,15 @@ export const SendNFTRecapScreen = ({ route }: Props) => {
 
     const onFinish = useCallback(
         (success: boolean) => {
-            if (success) track(AnalyticsEvent.SEND_NFT_SENT)
-            else track(AnalyticsEvent.SEND_NFT_FAILED_TO_SEND)
+            if (success) {
+                track(AnalyticsEvent.WALLET_OPERATION, {
+                    ...creteAnalyticsEvent({
+                        medium: AnalyticsEvent.SEND,
+                        signature: AnalyticsEvent.LOCAL,
+                        subject: AnalyticsEvent.NFT,
+                    }),
+                })
+            }
 
             dispatch(setIsAppLoading(false))
             nav.dispatch(StackActions.popToTop())
