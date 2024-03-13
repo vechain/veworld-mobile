@@ -2,11 +2,11 @@ import React, { memo, useMemo } from "react"
 import { StyleSheet } from "react-native"
 import { COLORS, VET } from "~Constants"
 import { useTheme } from "~Hooks"
-import { FormattingUtils } from "~Utils"
 import { BaseIcon, BaseSkeleton, BaseText, BaseView } from "~Components"
 import { useI18nContext } from "~i18n"
 import { selectIsTokensOwnedLoading, selectVetBalanceByAccount, useAppSelector } from "~Storage/Redux"
 import { WalletAccount } from "~Model"
+import { BigNutils } from "~Utils"
 
 type Props = {
     isVisible: boolean
@@ -23,11 +23,11 @@ export const Balance: React.FC<Props> = memo(({ isVisible, toggleVisible, accoun
     const isTokensOwnedLoading = useAppSelector(selectIsTokensOwnedLoading)
 
     const renderBalance = useMemo(() => {
-        if (isVisible) return FormattingUtils.humanNumber(balance, balance)
+        if (isVisible) return BigNutils(balance).toHuman(VET.decimals).toTokenFormat_string(2)
         return "•••••"
     }, [balance, isVisible])
 
-    const computeFonts = useMemo(() => (renderBalance.length > 9 ? "title" : "largeTitle"), [renderBalance.length])
+    const computeFonts = useMemo(() => (renderBalance.length > 12 ? "title" : "largeTitle"), [renderBalance.length])
 
     return (
         <BaseView>

@@ -135,3 +135,16 @@ export const getExplorerLink = (network?: Network, type?: ExplorerLinkType) => {
 
     return `${networkBaseUrl}/${urlSuffix}`
 }
+
+/**
+ * Format address
+ * @param address - the address
+ * @param lengthBefore - (optional, default 4) the characters to show before the dots
+ * @param lengthAfter - (optional, default 4) the characters to show after the dots
+ * @returns the formatted address
+ */
+export const humanAddress = (_address: string, lengthBefore = 4, lengthAfter = 10) => {
+    const before = _address.substring(0, lengthBefore)
+    const after = _address.substring(_address.length - lengthAfter)
+    return `${before}…${after}`
+}

@@ -5,7 +5,7 @@ import { ClauseDetail } from "../ClauseDetail"
 import { useI18nContext } from "~i18n"
 import { useCopyClipboard } from "~Hooks"
 import { SCREEN_WIDTH } from "~Constants"
-import { FormattingUtils } from "~Utils"
+import { AddressUtils } from "~Utils"
 
 type Props = {
     clause: ClauseWithMetadata
@@ -22,7 +22,7 @@ export const TransferClause: React.FC<Props> = memo(({ clause }) => {
             {clause.to !== null && (
                 <ClauseDetail
                     title={LL.TO()}
-                    value={FormattingUtils.humanAddress(clause.to, 7, 9)}
+                    value={AddressUtils.humanAddress(clause.to, 7, 9)}
                     onValuePress={() => onCopyToClipboard(clause.to ?? "", LL.COMMON_LBL_ADDRESS())}
                     valueIcon="content-copy"
                 />

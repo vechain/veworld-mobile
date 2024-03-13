@@ -1,7 +1,7 @@
 import React, { useMemo } from "react"
 import { BaseSpacer, BaseText, BaseView, ChangeAccountButtonPill, SelectedNetworkViewer } from "~Components"
 import { selectSelectedAccount, useAppSelector } from "~Storage/Redux"
-import { FormattingUtils } from "~Utils"
+import { AddressUtils } from "~Utils"
 import { useI18nContext } from "~i18n"
 
 type Props = {
@@ -14,7 +14,7 @@ export const NftScreenHeader = ({ openSelectAccountBottomSheet }: Props) => {
     const selectedAccount = useAppSelector(selectSelectedAccount)
 
     const humanAddress = useMemo(
-        () => FormattingUtils.humanAddress(selectedAccount.address ?? "", 5, 4),
+        () => AddressUtils.humanAddress(selectedAccount.address ?? "", 5, 4),
         [selectedAccount.address],
     )
 

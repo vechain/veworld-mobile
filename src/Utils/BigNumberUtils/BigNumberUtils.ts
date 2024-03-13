@@ -139,7 +139,7 @@ class BigNumberUtils implements IBigNumberUtils {
     }
 
     toCurrencyFormat_string(decimals: number): string {
-        let format = { decimalSeparator: ".", groupSeparator: ",", suffix: "" }
+        let format = { decimalSeparator: ".", groupSeparator: ",", suffix: "", groupSize: 3 }
         BN.config({ FORMAT: format })
 
         let _data = ""
@@ -154,7 +154,7 @@ class BigNumberUtils implements IBigNumberUtils {
     }
 
     toTokenFormat_string(decimals: number): string {
-        let format = { decimalSeparator: ".", groupSeparator: ",", suffix: "" }
+        let format = { decimalSeparator: ".", groupSeparator: ",", suffix: "", groupSize: 3 }
         BN.config({ FORMAT: format })
 
         let _data = ""
@@ -162,7 +162,7 @@ class BigNumberUtils implements IBigNumberUtils {
         if (this.data.isLessThan("0.0001") && !this.data.isZero()) {
             _data = "< 0.0001"
         } else {
-            _data = this.data.toFormat(decimals, BN.ROUND_DOWN)
+            _data = new BN(this.data.toFixed(decimals, BN.ROUND_DOWN)).toFormat(decimals, BN.ROUND_DOWN)
         }
 
         return _data

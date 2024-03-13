@@ -3,7 +3,7 @@ import { FlashList, ListRenderItem } from "@shopify/flash-list"
 import React, { useCallback, useMemo, useRef, useState } from "react"
 import { StyleSheet } from "react-native"
 import { useBottomSheetModal, useScrollableList, useTheme } from "~Hooks"
-import { FormattingUtils } from "~Utils"
+import { AddressUtils } from "~Utils"
 import {
     BaseIcon,
     BaseSpacer,
@@ -102,7 +102,7 @@ export const ContactsScreen = () => {
     )
 
     const formattedAddress = useMemo(() => {
-        return FormattingUtils.humanAddress(selectedContactAddress ?? "", 4, 6)
+        return AddressUtils.humanAddress(selectedContactAddress ?? "", 4, 6)
     }, [selectedContactAddress])
 
     // [End] Methods

@@ -1,6 +1,6 @@
 import React, { memo, useMemo } from "react"
 import { VTHO, currencySymbolMap, genesisesId } from "~Constants"
-import { FormattingUtils, TransactionUtils } from "~Utils"
+import { AddressUtils, TransactionUtils } from "~Utils"
 import { BaseSpacer } from "~Components"
 import { useCopyClipboard } from "~Hooks"
 import { selectCurrency, selectOfficialTokens, useAppSelector } from "~Storage/Redux"
@@ -27,12 +27,22 @@ export const DappTransactionDetails: React.FC<Props> = memo(({ activity }) => {
 
     const { vthoGasFee, fiatValueGasFeeSpent } = useGasFee(activity)
 
+    const gasToFiat = useMemo(() => {
+        if (!fiatValueGasFeeSpent) return "0"
+
+        if (fiatValueGasFeeSpent.includes("<")) {
+            return `${fiatValueGasFeeSpent} ${currencySymbolMap[currency]}`
+        } else {
+            return `≈ ${fiatValueGasFeeSpent} ${currencySymbolMap[currency]}`
+        }
+    }, [currency, fiatValueGasFeeSpent])
+
     const tokens = useAppSelector(selectOfficialTokens)
 
     const clausesMetadata = TransactionUtils.interpretClauses(activity.clauses ?? [], tokens)
 
     const transactionIDshort = useMemo(() => {
-        return FormattingUtils.humanAddress(activity.txId ?? "", 7, 9)
+        return AddressUtils.humanAddress(activity.txId ?? "", 7, 9)
     }, [activity.txId])
 
     const txStatus = useMemo(() => {
@@ -90,7 +100,7 @@ export const DappTransactionDetails: React.FC<Props> = memo(({ activity }) => {
             value: `${vthoGasFee} ${VTHO.symbol}`,
             typographyFont: "subSubTitle",
             underline: false,
-            valueAdditional: fiatValueGasFeeSpent ? `≈ ${fiatValueGasFeeSpent} ${currencySymbolMap[currency]}` : "",
+            valueAdditional: gasToFiat ? gasToFiat : "",
         },
         {
             id: 6,

@@ -2,7 +2,7 @@ import { Linking } from "react-native"
 import { showErrorToast, showSuccessToast } from "~Components"
 import { defaultMainNetwork, VET } from "~Constants"
 import { Network } from "~Model"
-import { FormattingUtils } from "~Utils"
+import { BigNutils, AddressUtils } from "~Utils"
 import * as i18n from "~i18n"
 import { isEmpty } from "lodash"
 import { IncomingTransferResponse } from "~Networking"
@@ -25,7 +25,7 @@ export const informUserForIncomingNFT = ({
 }: InformUserForIncomingNFTProps) => {
     const locale = i18n.detectLocale()
 
-    const formattedFrom = FormattingUtils.humanAddress(from, 4, 5)
+    const formattedFrom = AddressUtils.humanAddress(from, 4, 5)
 
     showSuccessToast({
         text1: i18n.i18n()[locale].NOTIFICATION_INCOMING_NFT_TITLE(),
@@ -59,7 +59,7 @@ export const informUserForOutgoingNFT = ({
 }: InformUserForOutgoingNFTProps) => {
     const locale = i18n.detectLocale()
 
-    const formattedTo = FormattingUtils.humanAddress(to, 4, 5)
+    const formattedTo = AddressUtils.humanAddress(to, 4, 5)
 
     showSuccessToast({
         text1: i18n.i18n()[locale].NOTIFICATION_OUTGOING_NFT_TITLE(),
@@ -94,10 +94,7 @@ export const InformUserForIncomingToken = ({
 }: InformUserForIncomingTokenProps) => {
     const locale = i18n.detectLocale()
 
-    const formattedAmmount = FormattingUtils.humanNumber(
-        FormattingUtils.scaleNumberDown(amount, decimals, FormattingUtils.ROUND_DECIMAL_DEFAULT),
-        amount,
-    )
+    const formattedAmmount = BigNutils(amount).toHuman(decimals).toTokenFormat_string(2)
 
     showSuccessToast({
         text1: i18n.i18n()[locale].NOTIFICATION_INCOMING_NFT_TITLE(),
@@ -133,10 +130,7 @@ export const InformUserForOutgoingToken = ({
 
     const formattedTo = ""
 
-    const formattedAmmount = FormattingUtils.humanNumber(
-        FormattingUtils.scaleNumberDown(amount, decimals, FormattingUtils.ROUND_DECIMAL_DEFAULT),
-        amount,
-    )
+    const formattedAmmount = BigNutils(amount).toHuman(decimals).toTokenFormat_string(2)
 
     showSuccessToast({
         text1: i18n.i18n()[locale].SUCCESS_GENERIC(),
@@ -162,10 +156,7 @@ type InformUserForIncomingVETProps = {
 export const InformUserForIncomingVET = ({ amount, alias, to, informUser }: InformUserForIncomingVETProps) => {
     const locale = i18n.detectLocale()
 
-    const formattedAmount = FormattingUtils.humanNumber(
-        FormattingUtils.scaleNumberDown(amount, VET.decimals, FormattingUtils.ROUND_DECIMAL_DEFAULT),
-        amount,
-    )
+    const formattedAmount = BigNutils(amount).toHuman(VET.decimals).toTokenFormat_string(2)
 
     showSuccessToast({
         text1: i18n.i18n()[locale].NOTIFICATION_INCOMING_NFT_TITLE(),
@@ -193,11 +184,8 @@ type InformUserForOutgoingTokenVET = {
 export const InformUserForOutgoingVET = ({ txId, amount, to, from, informUser }: InformUserForOutgoingTokenVET) => {
     const locale = i18n.detectLocale()
 
-    const fomattedTo = FormattingUtils.humanAddress(to, 4, 5)
-    const formattedAmount = FormattingUtils.humanNumber(
-        FormattingUtils.scaleNumberDown(amount, VET.decimals, FormattingUtils.ROUND_DECIMAL_DEFAULT),
-        amount,
-    )
+    const fomattedTo = AddressUtils.humanAddress(to, 4, 5)
+    const formattedAmount = BigNutils(amount).toHuman(VET.decimals).toTokenFormat_string(2)
 
     showSuccessToast({
         text1: i18n.i18n()[locale].SUCCESS_GENERIC(),
@@ -215,7 +203,7 @@ export const InformUserForOutgoingVET = ({ txId, amount, to, from, informUser }:
 // ~ REVERTED TRANSACTION
 export const informUserforRevertedTransaction = ({ txId, network }: { txId: string; network: Network }) => {
     const locale = i18n.detectLocale()
-    const formattedTxId = FormattingUtils.humanAddress(txId, 4, 5)
+    const formattedTxId = AddressUtils.humanAddress(txId, 4, 5)
 
     showErrorToast({
         text1: i18n.i18n()[locale].ERROR(),

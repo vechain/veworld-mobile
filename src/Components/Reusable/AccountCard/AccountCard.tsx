@@ -2,7 +2,7 @@ import React, { memo, useMemo } from "react"
 import { StyleProp, StyleSheet, ViewProps, ViewStyle } from "react-native"
 import { useThemedStyles } from "~Hooks"
 import { ColorThemeType, VET, VTHO } from "~Constants"
-import { AccountUtils, FormattingUtils } from "~Utils"
+import { AccountUtils, AddressUtils, BigNutils } from "~Utils"
 import {
     AccountIcon,
     BaseIcon,
@@ -56,10 +56,14 @@ export const AccountCard: React.FC<Props> = memo(
 
             const computedVetBalance = formattedBalance ? formattedBalance : vetBalance
 
-            return `${isVthoBalance ? vthoBalance : computedVetBalance} ${isVthoBalance ? VTHO.symbol : VET.symbol}`
+            return `${
+                isVthoBalance
+                    ? BigNutils(vthoBalance).toHuman(VET.decimals).toTokenFormat_string(2)
+                    : BigNutils(computedVetBalance).toHuman(VET.decimals).toTokenFormat_string(2)
+            } ${isVthoBalance ? VTHO.symbol : VET.symbol}`
         }, [isBalanceVisible, isVthoBalance, vetBalance, vthoBalance, formattedBalance])
 
-        const humanAddress = useMemo(() => FormattingUtils.humanAddress(account.address, 4, 6), [account.address])
+        const humanAddress = useMemo(() => AddressUtils.humanAddress(account.address, 4, 6), [account.address])
 
         const accountWithDevice = useMemo(() => {
             if (!AccountUtils.isObservedAccount(account)) {
