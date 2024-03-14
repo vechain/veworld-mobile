@@ -122,6 +122,23 @@ async function isValidBrowserUrl(url: string): Promise<boolean> {
     }
 }
 
+function decodeUrl_HACK(url: string) {
+    // Check if the URL contains "://"
+    if (url.includes("://")) {
+        return decodeURIComponent(url)
+    }
+    // Check if the URL starts with "https:/"
+    else if (url.startsWith("https:/")) {
+        // Reconstruct the URL with "https://"
+        return "https://" + decodeURIComponent(url.substring("https:/".length))
+    }
+    // Add more conditions here for other URL formats or edge cases if needed
+    else {
+        // Return the original URL
+        return url
+    }
+}
+
 export default {
     compareURLs,
     clean,
@@ -134,4 +151,5 @@ export default {
     isValid,
     convertUriToUrl,
     isValidBrowserUrl,
+    decodeUrl_HACK,
 }
