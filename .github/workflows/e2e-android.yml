@@ -9,7 +9,6 @@ jobs:
     build-test-android:
         name: Detox Build & Test Android Release
         runs-on: macos-latest
-      # Test line for PR linking test on GH issue
         steps:
             - name: Checkout repository
               uses: actions/checkout@v3
