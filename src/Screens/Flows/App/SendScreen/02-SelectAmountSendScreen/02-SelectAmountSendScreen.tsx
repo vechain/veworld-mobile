@@ -123,7 +123,7 @@ export const SelectAmountSendScreen = ({ route }: Props) => {
         setInput(
             isInputInFiat
                 ? BigNutils(fiatTotalBalance).toCurrencyFormat_string(2)
-                : BigNutils(tokenTotalBalance).toHuman(token.decimals).decimals(4).toString,
+                : BigNutils(tokenTotalBalance).toHuman(token.decimals).decimals(8).toString,
         )
         let conv = BigNutils().toTokenConversion(fiatTotalBalance, exchangeRate).toString
         let scaleDownforPrecission = BigNutils(conv).decimals(4).toString
