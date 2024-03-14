@@ -468,8 +468,9 @@ PODS:
     - React-Core
   - react-native-in-app-review (4.3.3):
     - React-Core
-  - react-native-mmkv (2.12.1):
+  - react-native-mmkv (2.12.2):
     - MMKV (>= 1.3.3)
+    - RCT-Folly (= 2021.07.22.00)
     - React-Core
   - react-native-netinfo (9.5.0):
     - React-Core
@@ -1093,7 +1094,7 @@ SPEC CHECKSUMS:
   react-native-flipper: 2d552a8178d839ef378220101fb7f0cd5b2a8003
   react-native-get-random-values: 21325b2244dfa6b58878f51f9aa42821e7ba3d06
   react-native-in-app-review: db8bb167a5f238e7ceca5c242d6b36ce8c4404a4
-  react-native-mmkv: 124b22209aacdcd172b6ac39071b9647080f0411
+  react-native-mmkv: 38d484ccd8f5760fe0e46d206ed07add5ddda1fc
   react-native-netinfo: 48c5f79a84fbc3ba1d28a8b0d04adeda72885fa8
   react-native-pager-view: e26d35e382d86950c936f8917e3beb9188115ccc
   react-native-quick-base64: 777057ea4286f806b00259ede65dc79c7c706320
