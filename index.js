@@ -27,7 +27,7 @@ import {
     Mono_Regular,
 } from "~Assets"
 import { ERROR_EVENTS, typography } from "~Constants"
-import { AnalyticsUtils, info } from "~Utils"
+import { AnalyticsUtils, info, URIUtils } from "~Utils"
 import { BottomSheetModalProvider } from "@gorhom/bottom-sheet"
 import { PersistedThemeProvider, StoreContextProvider } from "~Components/Providers"
 import {
@@ -44,9 +44,7 @@ import { PersistQueryClientProvider } from "@tanstack/react-query-persist-client
 import { clientPersister, queryClient } from "~Api/QueryProvider"
 import NetInfo from "@react-native-community/netinfo"
 import { onlineManager } from "@tanstack/react-query"
-
-global.process = process || {}
-global.process.browser = false
+import { useFlipper } from "@react-navigation/devtools"
 
 const { fontFamily } = typography
 
@@ -137,7 +135,7 @@ const linking = {
                                 path: "browser/:redirect?/:ul/:url",
                                 parse: {
                                     ul: () => true,
-                                    url: url => decodeURIComponent(url),
+                                    url: url => URIUtils.decodeUrl_HACK(url),
                                 },
                             },
                         },
@@ -164,6 +162,7 @@ const NavigationProvider = ({ children }) => {
     const navigationRef = useNavigationContainerRef()
     const routeNameRef = useRef(null)
     const dispatch = useAppDispatch()
+    useFlipper(navigationRef)
 
     return (
         <NavigationContainer
