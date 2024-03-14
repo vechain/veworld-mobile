@@ -64,6 +64,7 @@
     "@react-native-community/slider": "^4.4.3",
     "@react-native-masked-view/masked-view": "^0.3.0",
     "@react-navigation/bottom-tabs": "6.5.9",
+    "@react-navigation/devtools": "^6.0.25",
     "@react-navigation/material-top-tabs": "6.6.5",
     "@react-navigation/native": "6.1.8",
     "@react-navigation/native-stack": "6.9.14",
