@@ -160,7 +160,7 @@ class BigNumberUtils implements IBigNumberUtils {
         let _data = ""
 
         if (this.data.isLessThan("0.0001") && !this.data.isZero()) {
-            _data = "< 0.0001"
+            _data = "< 0.01"
         } else {
             _data = new BN(this.data.toFixed(decimals, BN.ROUND_DOWN)).toFormat(decimals, BN.ROUND_DOWN)
         }
