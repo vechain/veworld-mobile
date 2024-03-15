@@ -9,6 +9,7 @@ jobs:
   build-e2e-test-ios:
     name: Maestro Build & Test iOS Debug
     runs-on: macos-latest
+    environment: ios-release
     env:
       XC_SIMULATOR_NAME: iPhone 14
 
