@@ -72,13 +72,13 @@ jobs:
              working-directory: "./ios"
 
           
-      - name: Env default 
-        uses: mobiledevops/secret-to-file-action@v1
-        with:
-            base64-encoded-secret: ${{ secrets.IOS_ENV}}
-            filename: "env"
-            is-executable: false
-            working-directory: "./ios"
+     # - name: Env default 
+     #   uses: mobiledevops/secret-to-file-action@v1
+     #   with:
+     #       base64-encoded-secret: ${{ secrets.IOS_ENV}}
+     #       filename: "env"
+      #      is-executable: false
+      #      working-directory: "./ios"
 
       - name: Build apk
         run: |
