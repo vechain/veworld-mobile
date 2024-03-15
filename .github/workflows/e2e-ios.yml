@@ -7,7 +7,7 @@ on:
 
 jobs:
   build-e2e-test-ios:
-    name: Detox Build & Test iOS Debug
+    name: Maestro Build & Test iOS Debug
     runs-on: macos-latest
     env:
       XC_SIMULATOR_NAME: iPhone 14
@@ -57,12 +57,28 @@ jobs:
       - name: Sentry properties
         uses: mobiledevops/secret-to-file-action@v1
         with:
-            base64-encoded-secret: ${{ secrets.SENTRY_PROPERTIES }}
+            base64-encoded-secret: ${{ secrets.IOS_SENTRY_PROPERTIES }}
             filename: "sentry.properties"
             is-executable: false
             working-directory: "./ios"
 
-      
+      - name: Env default 
+        uses: mobiledevops/secret-to-file-action@v1
+        with:
+             base64-encoded-secret: ${{ secrets.IOS_ENV_DEFAULT }}
+             filename: "env.default"
+             is-executable: false
+             working-directory: "./ios"
+
+          
+      - name: Env default 
+        uses: mobiledevops/secret-to-file-action@v1
+        with:
+            base64-encoded-secret: ${{ secrets.IOS_ENV}}
+            filename: "env"
+            is-executable: false
+            working-directory: "./ios"
+
       - name: Build apk
         run: |
               cd ios
