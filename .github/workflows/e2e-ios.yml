@@ -82,6 +82,10 @@ jobs:
       - name: Build apk
         run: |
               cd ios
+              ls -la
+              cat sentry.properties
+              cat env
+              cat env.default
               xcodebuild -workspace VeWorld.xcworkspace -scheme VeWorld -configuration Release SYMROOT=$(PWD)/build -arch i386 -arch x86_64 only_active_arch=no -sdk iphonesimulator -derivedDataPath ios/build
               pwd
               cd build
