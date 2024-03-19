@@ -1,5 +1,5 @@
 import { PersistedState } from "redux-persist/es/types"
-import { DAppConfig, ERROR_EVENTS } from "~Constants"
+import { ERROR_EVENTS } from "~Constants"
 import { debug } from "~Utils"
 import { DiscoveryState } from "../Slices"
 
@@ -20,7 +20,7 @@ export const Migration6 = (state: PersistedState): PersistedState => {
 
     const newState: DiscoveryState = {
         ...currentState,
-        featured: [...DAppConfig],
+        featured: [],
     }
 
     debug(ERROR_EVENTS.SECURITY, "=== ** Migrated State ** ===", newState.featured)
