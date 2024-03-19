@@ -11,5 +11,5 @@ export type DiscoveryDApp = {
     image?: object
     isCustom: boolean
     amountOfNavigations: number
-    isVeWorldCompatible?: boolean
+    isVeWorldSupported?: boolean
 }

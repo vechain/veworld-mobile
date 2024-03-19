@@ -16,7 +16,7 @@ export const useFetchFeaturedDApps = () => {
     })
 
     useEffect(() => {
-        const veWorldDapps = featuredDapps?.filter(dapp => dapp.isVeWorldCompatible)
+        const veWorldDapps = featuredDapps?.filter(dapp => dapp.isVeWorldSupported)
         dispatch(setFeaturedDApps(veWorldDapps ?? []))
     }, [dispatch, featuredDapps])
 
