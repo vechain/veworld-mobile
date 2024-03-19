@@ -1,7 +1,7 @@
 import React, { memo, useCallback, useMemo, useState } from "react"
 import { StyleSheet } from "react-native"
 import { useRenameAccount, useThemedStyles } from "~Hooks"
-import { FormattingUtils } from "~Utils"
+import { AddressUtils, BigNutils } from "~Utils"
 import { BaseTextInput, BaseSpacer, BaseText, BaseView } from "~Components"
 import { WalletAccount } from "~Model"
 import { selectVetBalanceByAccount, useAppSelector } from "~Storage/Redux"
@@ -41,7 +41,7 @@ export const AccountDetailBox: React.FC<Props> = memo(
                 return "•••• " + VET.symbol
             }
 
-            return `${vetBalance} ${VET.symbol}`
+            return `${BigNutils(vetBalance).toHuman(VET.decimals).toTokenFormat_string(2)} ${VET.symbol}`
         }, [isBalanceVisible, vetBalance])
 
         const handleFocus = useCallback(() => setBackupAlias(accountAlias), [accountAlias])
@@ -81,7 +81,7 @@ export const AccountDetailBox: React.FC<Props> = memo(
                 </BaseView>
                 <BaseView style={(styles.rightSubContainer, { opacity: cardOpacity })}>
                     <BaseText style={styles.address} fontSize={10}>
-                        {FormattingUtils.humanAddress(account.address, 4, 6)}
+                        {AddressUtils.humanAddress(account.address, 4, 6)}
                     </BaseText>
                     <BaseSpacer height={4} />
                     <BaseText fontSize={10}>{balance}</BaseText>

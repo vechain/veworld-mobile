@@ -29,7 +29,7 @@ import { ActivityUtils, debug, error, LedgerUtils } from "~Utils"
 import { useI18nContext } from "~i18n"
 import { useNavigation } from "@react-navigation/native"
 import * as Haptics from "expo-haptics"
-import { AnalyticsEvent, ERROR_EVENTS, LEDGER_ERROR_CODES, RequestMethods } from "~Constants"
+import { AnalyticsEvent, ERROR_EVENTS, LEDGER_ERROR_CODES, RequestMethods, creteAnalyticsEvent } from "~Constants"
 import { Buffer } from "buffer"
 import { Transaction } from "thor-devkit"
 import { ActivityType } from "~Model"
@@ -52,8 +52,8 @@ export const LedgerSignTransaction: React.FC<Props> = ({ route }) => {
 
     const nav = useNavigation()
     const track = useAnalyticTracking()
-    const { LL } = useI18nContext()
     const dispatch = useAppDispatch()
+    const { LL } = useI18nContext()
     const { processRequest } = useWalletConnect()
     const { postMessage } = useInAppBrowser()
 
@@ -92,33 +92,57 @@ export const LedgerSignTransaction: React.FC<Props> = ({ route }) => {
         (tx: Transaction) => {
             const activity = ActivityUtils.getActivityTypeFromClause(tx.body.clauses)
 
-            track(AnalyticsEvent.LEDGER_TX_SENT)
-
             switch (activity) {
                 case ActivityType.VET_TRANSFER:
+                    dispatch(addPendingTransferTransactionActivity(tx))
+
+                    track(AnalyticsEvent.WALLET_OPERATION, {
+                        ...creteAnalyticsEvent({
+                            medium: AnalyticsEvent.SEND,
+                            signature: AnalyticsEvent.HARDWARE,
+                            subject: AnalyticsEvent.NATIVE_TOKEN,
+                        }),
+                    })
+                    break
                 case ActivityType.FUNGIBLE_TOKEN:
                     dispatch(addPendingTransferTransactionActivity(tx))
-                    track(AnalyticsEvent.SEND_FUNGIBLE_SENT, {
-                        accountType: accountWithDevice.device.type,
+
+                    track(AnalyticsEvent.WALLET_OPERATION, {
+                        ...creteAnalyticsEvent({
+                            medium: AnalyticsEvent.SEND,
+                            signature: AnalyticsEvent.HARDWARE,
+                            subject: AnalyticsEvent.TOKEN,
+                        }),
                     })
                     break
                 case ActivityType.NFT_TRANSFER:
-                    track(AnalyticsEvent.SEND_NFT_SENT, {
-                        accountType: accountWithDevice.device.type,
-                    })
                     dispatch(addPendingNFTtransferTransactionActivity(tx))
-                    break
-                case ActivityType.DAPP_TRANSACTION:
-                    track(AnalyticsEvent.DAPP_TX_SENT, {
-                        accountType: accountWithDevice.device.type,
+
+                    track(AnalyticsEvent.WALLET_OPERATION, {
+                        ...creteAnalyticsEvent({
+                            medium: AnalyticsEvent.SEND,
+                            signature: AnalyticsEvent.HARDWARE,
+                            subject: AnalyticsEvent.NFT,
+                        }),
                     })
 
+                    break
+                case ActivityType.DAPP_TRANSACTION:
                     if (dappRequest) {
                         dispatch(addPendingDappTransactionActivity(tx, dappRequest.appName, dappRequest.appUrl))
+
+                        track(AnalyticsEvent.WALLET_OPERATION, {
+                            ...creteAnalyticsEvent({
+                                medium: AnalyticsEvent.DAPP,
+                                signature: AnalyticsEvent.HARDWARE,
+                                context: AnalyticsEvent.IN_APP,
+                                dappUrl: dappRequest?.appUrl,
+                            }),
+                        })
                     }
             }
         },
-        [track, dispatch, accountWithDevice, dappRequest],
+        [track, dispatch, dappRequest],
     )
 
     const { sendTransaction } = useSendTransaction(onTransactionSuccess)
@@ -314,7 +338,7 @@ export const LedgerSignTransaction: React.FC<Props> = ({ route }) => {
                 text1: LL.ERROR(),
                 text2: LL.ERROR_GENERIC_OPERATION(),
             })
-            track(AnalyticsEvent.LEDGER_TX_FAILED_TO_SEND)
+
             await Haptics.notificationAsync(Haptics.NotificationFeedbackType.Error)
             if (dappRequest) {
                 nav.goBack()
@@ -324,7 +348,6 @@ export const LedgerSignTransaction: React.FC<Props> = ({ route }) => {
             dispatch(setIsAppLoading(false))
         }
     }, [
-        track,
         signature,
         dispatch,
         transaction,

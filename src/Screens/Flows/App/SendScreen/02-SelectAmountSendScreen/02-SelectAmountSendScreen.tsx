@@ -77,7 +77,7 @@ export const SelectAmountSendScreen = ({ route }: Props) => {
      * TOKEN selected balance in human readable format (correct value is when FIAT is active)
      * Example "2,472.771"
      */
-    const tokenHumanAmountFromFiat = BigNutils(tokenAmountFromFiat).toTokenFormat_string(4)
+    const tokenHumanAmountFromFiat = BigNutils(tokenAmountFromFiat).toTokenFormat_string(2)
 
     /**
      * Toggle between FIAT and TOKEN input (and update the input value)
@@ -123,7 +123,7 @@ export const SelectAmountSendScreen = ({ route }: Props) => {
         setInput(
             isInputInFiat
                 ? BigNutils(fiatTotalBalance).toCurrencyFormat_string(2)
-                : BigNutils(tokenTotalBalance).toHuman(token.decimals).decimals(4).toString,
+                : BigNutils(tokenTotalBalance).toHuman(token.decimals).decimals(8).toString,
         )
         let conv = BigNutils().toTokenConversion(fiatTotalBalance, exchangeRate).toString
         let scaleDownforPrecission = BigNutils(conv).decimals(4).toString

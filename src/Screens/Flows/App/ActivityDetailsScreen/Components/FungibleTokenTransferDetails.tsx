@@ -1,7 +1,7 @@
 import React, { memo, useMemo } from "react"
 import { VTHO, currencySymbolMap, genesisesId, getCoinGeckoIdBySymbol } from "~Constants"
 import { useCopyClipboard, useFungibleTokenInfo } from "~Hooks"
-import { FormattingUtils } from "~Utils"
+import { BigNutils, AddressUtils } from "~Utils"
 import { FungibleToken, FungibleTokenActivity } from "~Model"
 import { selectCurrency, useAppSelector } from "~Storage/Redux"
 import { useI18nContext } from "~i18n"
@@ -28,19 +28,24 @@ export const FungibleTokenTransferDetails: React.FC<Props> = memo(({ activity, t
 
     const { vthoGasFee, fiatValueGasFeeSpent } = useGasFee(activity)
 
+    const gasToFiat = useMemo(() => {
+        if (!fiatValueGasFeeSpent) return "0"
+
+        if (fiatValueGasFeeSpent.includes("<")) {
+            return `${fiatValueGasFeeSpent} ${currencySymbolMap[currency]}`
+        } else {
+            return `≈ ${fiatValueGasFeeSpent} ${currencySymbolMap[currency]}`
+        }
+    }, [currency, fiatValueGasFeeSpent])
+
     const { symbol, decimals } = useFungibleTokenInfo(activity.tokenAddress)
 
     const amountTransferred = useMemo(() => {
         if (!token?.decimals && !decimals) return
 
-        return FormattingUtils.humanNumber(
-            FormattingUtils.scaleNumberDown(
-                activity.amount,
-                token?.decimals ?? decimals ?? 0,
-                FormattingUtils.ROUND_DECIMAL_DEFAULT,
-            ),
-            activity.amount,
-        )
+        return BigNutils(activity.amount)
+            .toHuman(token?.decimals ?? decimals ?? 0)
+            .toTokenFormat_string(2)
     }, [activity.amount, decimals, token])
 
     const { data: exchangeRate } = useExchangeRate({
@@ -49,16 +54,16 @@ export const FungibleTokenTransferDetails: React.FC<Props> = memo(({ activity, t
     })
 
     const fiatValueTransferred = useMemo(() => {
-        if (exchangeRate && token) {
-            return FormattingUtils.humanNumber(
-                FormattingUtils.convertToFiatBalance(activity.amount as string, exchangeRate, token.decimals),
-                activity.amount,
-            )
+        if (exchangeRate && token && decimals) {
+            let amount = BigNutils(activity.amount).toHuman(decimals).toString
+            return BigNutils()
+                .toCurrencyConversion(amount ?? "0", exchangeRate)
+                .toCurrencyFormat_string(2)
         }
-    }, [activity.amount, exchangeRate, token])
+    }, [activity.amount, decimals, exchangeRate, token])
 
     const transactionIDshort = useMemo(() => {
-        return FormattingUtils.humanAddress(activity.txId ?? "", 7, 9)
+        return AddressUtils.humanAddress(activity.txId ?? "", 7, 9)
     }, [activity.txId])
 
     const blockNumber = useMemo(() => {
@@ -81,7 +86,7 @@ export const FungibleTokenTransferDetails: React.FC<Props> = memo(({ activity, t
             value: vthoGasFee ? `${vthoGasFee} ${VTHO.symbol}` : "",
             typographyFont: "subSubTitle",
             underline: false,
-            valueAdditional: fiatValueGasFeeSpent ? `≈ ${fiatValueGasFeeSpent} ${currencySymbolMap[currency]}` : "",
+            valueAdditional: gasToFiat ? gasToFiat : "",
         },
         {
             id: 3,

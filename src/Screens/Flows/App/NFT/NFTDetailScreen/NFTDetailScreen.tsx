@@ -6,7 +6,7 @@ import { BaseSpacer, BaseView, FadeoutButton, Layout, TransactionStatusBox, show
 import { Linking } from "react-native"
 import { useCopyClipboard, useTabBarBottomMargin } from "~Hooks"
 import { useI18nContext } from "~i18n"
-import { AccountUtils, DateUtils, FormattingUtils } from "~Utils"
+import { AccountUtils, DateUtils, AddressUtils } from "~Utils"
 import { InfoSectionView, NFTDetailImage } from "./Components"
 import {
     isBlacklistedCollection,
@@ -178,7 +178,7 @@ export const NFTDetailScreen = ({ route }: Props) => {
                             action={() => onCopyToClipboardPress(collection.address)}
                             isLastInList
                             title={LL.CONTRACT_ADDRESS()}
-                            data={FormattingUtils.humanAddress(collection?.address ?? "", 5, 4)}
+                            data={AddressUtils.humanAddress(collection?.address ?? "", 5, 4)}
                         />
                     )}
                 </BaseView>

@@ -2,7 +2,15 @@ import React, { useCallback, useEffect, useMemo } from "react"
 import { NativeStackScreenProps } from "@react-navigation/native-stack"
 import { useAnalyticTracking, useTheme, useTransactionScreen, useTransferAddContact } from "~Hooks"
 import { AccountUtils, AddressUtils, BigNutils, TransactionUtils } from "~Utils"
-import { AnalyticsEvent, COLORS, GasPriceCoefficient } from "~Constants"
+import {
+    AnalyticsEvent,
+    COLORS,
+    GasPriceCoefficient,
+    VET,
+    VTHO,
+    creteAnalyticsEvent,
+    currencySymbolMap,
+} from "~Constants"
 import {
     BaseSpacer,
     BaseText,
@@ -55,13 +63,24 @@ export const TransactionSummarySendScreen = ({ route }: Props) => {
 
     const onFinish = useCallback(
         (success: boolean) => {
-            if (success) track(AnalyticsEvent.SEND_FUNGIBLE_SENT)
-            else track(AnalyticsEvent.SEND_FUNGIBLE_FAILED_TO_SEND)
+            const isNative =
+                token.symbol.toUpperCase() === VET.symbol.toUpperCase() ||
+                token.symbol.toUpperCase() === VTHO.symbol.toUpperCase()
+
+            if (success) {
+                track(AnalyticsEvent.WALLET_OPERATION, {
+                    ...creteAnalyticsEvent({
+                        medium: AnalyticsEvent.SEND,
+                        signature: AnalyticsEvent.LOCAL,
+                        subject: isNative ? AnalyticsEvent.NATIVE_TOKEN : AnalyticsEvent.TOKEN,
+                    }),
+                })
+            }
 
             nav.navigate(Routes.HOME)
             dispatch(setIsAppLoading(false))
         },
-        [track, dispatch, nav],
+        [token.symbol, track, nav, dispatch],
     )
 
     const onTransactionSuccess = useCallback(
@@ -283,9 +302,9 @@ function TotalSendAmountView({ amount, symbol, token, txCostTotal, isDelegated, 
             .toCurrencyFormat_string(2)
 
         if (_amount.includes("<")) {
-            return `${_amount} ${currency}`
+            return `${_amount} ${currencySymbolMap[currency]}`
         } else {
-            return `≈ ${_amount} ${currency}`
+            return `≈ ${_amount} ${currencySymbolMap[currency]}`
         }
     }, [amount, currency, exchangeRate, formattedTotalCost, token.symbol])
 

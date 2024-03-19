@@ -1,7 +1,7 @@
 import React, { useMemo } from "react"
 import { BaseSpacer, BaseText, BaseView } from "~Components"
 import { useThemedStyles } from "~Hooks"
-import { ColorThemeType } from "~Constants"
+import { ColorThemeType, currencySymbolMap } from "~Constants"
 import { StyleSheet } from "react-native"
 import { useI18nContext } from "~i18n"
 import { MarketInfo, useFormattedMarketInfo } from "../Hooks/useFormattedMarketInfo"
@@ -44,7 +44,7 @@ export const MarketInfoView = ({ tokenSymbol }: { tokenSymbol: string }) => {
                         {!!marketCap && (
                             <>
                                 <BaseSpacer width={4} />
-                                <BaseText typographyFont="captionRegular">{currency}</BaseText>
+                                <BaseText typographyFont="captionRegular">{currencySymbolMap[currency]}</BaseText>
                             </>
                         )}
                     </BaseView>
@@ -74,7 +74,7 @@ export const MarketInfoView = ({ tokenSymbol }: { tokenSymbol: string }) => {
                         {!!totalVolume && (
                             <>
                                 <BaseSpacer width={4} />
-                                <BaseText typographyFont="captionRegular">{currency}</BaseText>
+                                <BaseText typographyFont="captionRegular">{currencySymbolMap[currency]}</BaseText>
                             </>
                         )}
                     </BaseView>

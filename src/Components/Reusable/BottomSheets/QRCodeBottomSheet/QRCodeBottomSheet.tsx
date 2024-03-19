@@ -9,7 +9,7 @@ import { selectSelectedAccount } from "~Storage/Redux/Selectors"
 import QRCode from "react-native-qrcode-svg"
 import { COLORS } from "~Constants"
 import { StyleSheet } from "react-native"
-import { FormattingUtils } from "~Utils"
+import { AddressUtils } from "~Utils"
 import { veworldLogo } from "~Assets"
 
 const snapPoints = ["50%", "100%"]
@@ -57,7 +57,7 @@ export const QRCodeBottomSheet = React.forwardRef<BottomSheetModalMethods>(({}, 
                     haptics="Light"
                     px={28}
                     size="md"
-                    title={FormattingUtils.humanAddress(selectedAccount.address, 8, 7)}
+                    title={AddressUtils.humanAddress(selectedAccount.address, 8, 7)}
                     action={() => onCopyToClipboard(selectedAccount.address, LL.COMMON_LBL_ADDRESS())}
                     rightIcon={<BaseIcon name="content-copy" color={theme.colors.card} style={baseStyles.icon} />}
                 />

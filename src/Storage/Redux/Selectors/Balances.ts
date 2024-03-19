@@ -1,5 +1,4 @@
 import { createSelector } from "@reduxjs/toolkit"
-import { FormattingUtils } from "~Utils"
 import { selectSelectedAccount } from "./Account"
 import { VET, VTHO } from "~Constants"
 import { RootState } from "~Storage/Redux/Types"
@@ -165,9 +164,7 @@ export const selectVetTokenWithBalanceByAccount = createSelector(
 )
 
 export const selectVetBalanceByAccount = createSelector([selectVetTokenWithBalanceByAccount], vetBalance => {
-    return new BigNumber(
-        FormattingUtils.convertToFiatBalance(vetBalance?.balance.balance ?? "0", 1, VET.decimals),
-    ).toString()
+    return vetBalance?.balance.balance ?? "0"
 })
 
 export const selectVthoTokenWithBalanceByAccount = createSelector(
@@ -201,9 +198,7 @@ export const selectVthoTokenWithBalanceByAccount = createSelector(
 )
 
 export const selectVthoBalanceByAccount = createSelector([selectVthoTokenWithBalanceByAccount], vthoBalance => {
-    return new BigNumber(
-        FormattingUtils.convertToFiatBalance(vthoBalance?.balance.balance ?? "0", 1, VTHO.decimals),
-    ).toString()
+    return vthoBalance?.balance.balance ?? "0"
 })
 
 export const selectMissingSuggestedTokens = createSelector(
