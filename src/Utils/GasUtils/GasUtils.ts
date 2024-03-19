@@ -3,8 +3,7 @@ import { Transaction } from "thor-devkit"
 import { abis, BASE_GAS_PRICE, GasFeeOption, GasPriceCoefficient, VTHO } from "~Constants"
 import { EstimateGasResult } from "~Model"
 import AddressUtils from "~Utils/AddressUtils"
-import BigNumberUtils from "~Utils/BigNumberUtils"
-import FormattingUtils from "~Utils/FormattingUtils"
+import BigNutils from "~Utils/BigNumberUtils"
 import TransactionUtils from "~Utils/TransactionUtils"
 
 const paramsCache: Record<string, string> = {}
@@ -87,12 +86,10 @@ export function gasToVtho({
     gas,
     baseGasPrice,
     gasPriceCoefficient = GasPriceCoefficient.REGULAR,
-    decimals = VTHO.decimals,
 }: {
     gas: BigNumber
     baseGasPrice: BigNumber
     gasPriceCoefficient?: GasPriceCoefficient
-    decimals?: number
 }) {
     const rawVtho = new BigNumber(baseGasPrice) // ex: 210000000000000000
         .times(gasPriceCoefficient || GasPriceCoefficient.REGULAR)
@@ -102,7 +99,7 @@ export function gasToVtho({
 
     // transform to VTHO ex: 0.21
     return {
-        gasFee: FormattingUtils.scaleNumberDown(rawVtho, VTHO.decimals, decimals),
+        gasFee: BigNutils(rawVtho).toHuman(VTHO.decimals).decimals(2).toString,
         gasRaw: rawVtho,
     }
 }
@@ -111,14 +108,13 @@ export function getTxFeeWithCoeff({
     gas,
     baseGasPrice,
     gasPriceCoefficient = GasPriceCoefficient.REGULAR,
-    decimals = VTHO.decimals,
 }: {
     gas: string | number
     baseGasPrice: string | number
     gasPriceCoefficient?: GasPriceCoefficient
     decimals?: number
 }) {
-    const rawVtho = BigNumberUtils(baseGasPrice)
+    const rawVtho = BigNutils(baseGasPrice)
         .times(gasPriceCoefficient || GasPriceCoefficient.REGULAR)
         .idiv(255)
         .plus(baseGasPrice)
@@ -126,7 +122,7 @@ export function getTxFeeWithCoeff({
 
     // transform to VTHO ex: 0.21
     return {
-        gasFee: FormattingUtils.scaleNumberDown(rawVtho.toString, VTHO.decimals, decimals),
+        gasFee: BigNutils(rawVtho.toString).toHuman(VTHO.decimals).decimals(2).toString,
         gasRaw: rawVtho,
     }
 }
@@ -143,7 +139,6 @@ export const getGasByCoefficient = ({
             gas: gas?.gas ?? 0,
             baseGasPrice: gas?.baseGasPrice ?? "0",
             gasPriceCoefficient: coefficient,
-            decimals: 2,
         })
 
     const gasFeeOptions = {
@@ -181,7 +176,7 @@ const calculateVthoGas = (
             TransactionUtils.isTokenTransferClause(clause),
     )
 
-    let txCostTotal = BigNumberUtils(isDelegated ? "0" : priorityFees?.gasRaw.toString ?? "0")
+    let txCostTotal = BigNutils(isDelegated ? "0" : priorityFees?.gasRaw.toString ?? "0")
     let isEnoughGas = true
 
     for (const clause of vthoTransferClauses) {
@@ -195,7 +190,7 @@ const calculateVthoGas = (
     }
 
     // Get total balance of VTHO
-    const totalBalance = BigNumberUtils(vtho.balance.balance)
+    const totalBalance = BigNutils(vtho.balance.balance)
     // Check if the total cost of the transaction is less than or equal to the total balance of VTHO
     isEnoughGas = totalBalance.isBiggerThan(txCostTotal.toString)
 

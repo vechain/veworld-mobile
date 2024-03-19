@@ -1,11 +1,12 @@
 {
   "name": "veworld",
-  "version": "1.7.1",
+  "version": "1.7.4",
   "private": true,
   "scripts": {
     "purge": "rm -rf node_modules && rm -rf yarn.lock && rm -rf android/app/build && cd ios && pod deintegrate && rm -rf Podfile.lock && cd ..",
     "purge:android": "rm -rf node_modules && rm -rf yarn.lock && rm -rf android/app/build",
     "install:all": "yarn install && npx pod-install",
+    "install:android": "yarn install",
     "reinstall": "yarn purge && yarn install:all",
     "android": "react-native run-android",
     "android:emus": "react-native run-android --list-devices",
@@ -24,7 +25,7 @@
     "lint": "eslint . --ext .js,.jsx,.ts,.tsx",
     "format": "yarn prettier --write src",
     "format:check": "yarn prettier --check src",
-    "postinstall": "patch-package",
+    "postinstall": "patch-package --exclude 'nothing'",
     "check-circular-dependencies": "npx madge --circular --warning --extensions js,jsx,ts,tsx .",
     "i18n": "typesafe-i18n",
     "release:ci": "release-it --ci",
@@ -63,6 +64,7 @@
     "@react-native-community/slider": "^4.4.3",
     "@react-native-masked-view/masked-view": "^0.3.0",
     "@react-navigation/bottom-tabs": "6.5.9",
+    "@react-navigation/devtools": "^6.0.25",
     "@react-navigation/material-top-tabs": "6.6.5",
     "@react-navigation/native": "6.1.8",
     "@react-navigation/native-stack": "6.9.14",
@@ -86,6 +88,7 @@
     "axios": "^1.6.0",
     "basil-ws-flipper": "^1.0.0",
     "buffer": "^6.0.3",
+    "crypto-js": "^4.2.0",
     "eslint-plugin-es": "^4.1.0",
     "eth-rpc-errors": "^4.0.3",
     "ethers": "5",
@@ -224,6 +227,9 @@
     "ts-jest": "^29.1.0",
     "ts-node": "^10.9.1",
     "typescript": "4.8.4"
+  },
+  "resolutions": {
+    "browserify-sign": "4.2.2"
   },
   "lint-staged": {
     "*.{js,jsx,ts,tsx}": [

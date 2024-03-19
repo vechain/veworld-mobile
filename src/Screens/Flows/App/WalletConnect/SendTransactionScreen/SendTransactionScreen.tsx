@@ -35,7 +35,7 @@ import { useNavigation } from "@react-navigation/native"
 import { ClausesCarousel } from "../../ActivityDetailsScreen/Components"
 import { Transaction } from "thor-devkit"
 import { TransactionDetails, UnknownAppMessage } from "~Screens"
-import { AnalyticsEvent, RequestMethods } from "~Constants"
+import { AnalyticsEvent, RequestMethods, creteAnalyticsEvent } from "~Constants"
 import { useInAppBrowser } from "~Components/Providers/InAppBrowserProvider"
 import { AccountWithDevice, WatchedAccount } from "~Model"
 
@@ -111,12 +111,12 @@ export const SendTransactionScreen: FC<Props> = ({ route }: Props) => {
     const onFinish = useCallback(
         (sucess: boolean) => {
             if (sucess) {
-                track(AnalyticsEvent.DAPP_TX_SENT, {
-                    accountType: isInjectedWallet ? "injected" : "wallet connect",
-                })
-            } else {
-                track(AnalyticsEvent.DAPP_TX_FAILED_TO_SEND, {
-                    accountType: isInjectedWallet ? "injected" : "wallet connect",
+                track(AnalyticsEvent.WALLET_OPERATION, {
+                    ...creteAnalyticsEvent({
+                        medium: AnalyticsEvent.DAPP,
+                        signature: AnalyticsEvent.LOCAL,
+                        context: isInjectedWallet ? AnalyticsEvent.IN_APP : AnalyticsEvent.WALLET_CONNECT,
+                    }),
                 })
             }
 

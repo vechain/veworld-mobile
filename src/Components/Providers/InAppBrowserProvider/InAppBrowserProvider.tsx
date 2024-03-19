@@ -331,6 +331,7 @@ export const InAppBrowserProvider = ({ children }: Props) => {
             const isValid = DAppUtils.isValidTxMessage(message)
 
             if (!isValid) {
+                debug(ERROR_EVENTS.DAPP, "Invalid transaction", message)
                 return postMessage({
                     id: request.id,
                     error: "Invalid transaction",

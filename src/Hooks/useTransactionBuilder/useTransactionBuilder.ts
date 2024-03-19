@@ -15,7 +15,6 @@ type Props = {
 }
 
 export const useTransactionBuilder = ({
-    providedGas,
     gas,
     dependsOn,
     clauses,
@@ -27,9 +26,7 @@ export const useTransactionBuilder = ({
     const buildTransaction = useCallback(() => {
         const nonce = HexUtils.generateRandom(8)
 
-        const txGas = providedGas ?? gas?.gas
-
-        if (!txGas) throw new Error("Transaction gas is not ready")
+        const txGas = gas?.gas ?? 0
 
         const txBody: Transaction.Body = {
             chainTag: parseInt(thor.genesis.id.slice(-2), 16),
@@ -44,7 +41,7 @@ export const useTransactionBuilder = ({
         }
 
         return TransactionUtils.fromBody(txBody, isDelegated)
-    }, [providedGas, gas?.gas, thor.genesis.id, thor.status.head.id, clauses, gasPriceCoef, dependsOn, isDelegated])
+    }, [gas?.gas, thor.genesis.id, thor.status.head.id, clauses, gasPriceCoef, dependsOn, isDelegated])
 
     return {
         buildTransaction,

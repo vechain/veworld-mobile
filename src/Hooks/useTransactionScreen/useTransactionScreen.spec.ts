@@ -135,15 +135,15 @@ describe("useTransactionScreen", () => {
             selectedFeeOption: "0",
             gasFeeOptions: {
                 "0": {
-                    gasFee: "0.00",
+                    gasFee: "0",
                     gasRaw: BigNutils("0"),
                 },
                 "127": {
-                    gasFee: "0.00",
+                    gasFee: "0",
                     gasRaw: BigNutils("0"),
                 },
                 "255": {
-                    gasFee: "0.00",
+                    gasFee: "0",
                     gasRaw: BigNutils("0"),
                 },
             },
@@ -172,7 +172,7 @@ describe("useTransactionScreen", () => {
             },
             isDisabledButtonState: true,
             priorityFees: {
-                gasFee: "0.00",
+                gasFee: "0",
                 gasRaw: BigNutils("0"),
             },
         })
@@ -276,7 +276,7 @@ describe("useTransactionScreen", () => {
                                 ],
                                 dependsOn: null,
                                 expiration: 30,
-                                gas: 210000,
+                                gas: 0,
                                 gasPriceCoef: 0,
                                 nonce: "0x1234ab",
                             },

@@ -52,6 +52,7 @@ export const useTransactionScreen = ({
     // 1. Gas
     const { gas, loadingGas, setGasPayer } = useTransactionGas({
         clauses,
+        providedGas: dappRequest?.options?.gas,
     })
 
     // 2. Delegation
@@ -84,7 +85,6 @@ export const useTransactionScreen = ({
         gas,
         isDelegated,
         dependsOn: dappRequest?.options?.dependsOn,
-        providedGas: dappRequest?.options?.gas,
         gasPriceCoef,
     })
 

@@ -13,7 +13,7 @@ platform :android do
   end
 
 
-  
+
   # @param {object} options - The options for the build process.
   # @param {string} options.version_name - The version name of the build. Possible values: "patch", "minor", "major" or specific version "1.0.0".
   # @param {string} options.version_code - The version code of the build.
@@ -26,10 +26,10 @@ platform :android do
     github_username = options[:github_username]
     version_name = options[:version_name]
     version_code = options[:version_code]
-   
+
 
     Dir.chdir "../.." do
-      sh("yarn purge:android && yarn install")
+      sh("yarn purge:android && yarn install:android")
     end
 
 
@@ -45,7 +45,7 @@ platform :android do
         build_type: 'Release',
         print_command: true,
         print_command_output: true,
-  
+
         properties: {
           "android.injected.version.code" => version_code, # Manually increment this value before each release
           "android.injected.version.name" => version_name, # Manually increment this value before each release
@@ -62,7 +62,7 @@ platform :android do
         build_type: 'Release',
         print_command: true,
         print_command_output: true,
-  
+
         properties: {
           "android.injected.version.code" => version_code, # Manually increment this value before each release
           "android.injected.version.name" => version_name, # Manually increment this value before each release
@@ -86,7 +86,7 @@ platform :android do
         skip_upload_metadata: true,
       )
 =end
-  
+
       slack(
         message: version_name.nil? ? "VeWorld build number: #{version_code} was successfully released! [Android]" : "VeWorld version number: #{version_name} was successfully released! [Android]",
         slack_url: ENV["SLACK_WEBHOOK"],
@@ -96,7 +96,7 @@ platform :android do
           "Built by" => github_username,
         },
       )
-      
+
     rescue => exception
 
       puts exception
@@ -113,10 +113,10 @@ platform :android do
     end
   end
 end
-# 
+#
 
 
-lane :build_test_ci do 
+lane :build_test_ci do | options |
   store_password = ENV["STORE_PASSWORD"]
   key_password = ENV["KEY_PASSWORD"]
   key_alias = ENV["KEY_ALIAS"]
@@ -129,22 +129,22 @@ lane :build_test_ci do
 
   begin
     Dir.chdir "../.." do
-      sh("yarn purge:android && yarn install")
+      sh("yarn purge:android && yarn install:android")
     end
-  
+
     releaseFilePath = File.join(Dir.pwd, "..", "release.keystore")
 
     sh("./bump_gradle_app_versions.sh #{version_code} #{version_name}")
-  
+
     gradle(task: 'clean')
     gradle(
       task: 'assemble',
       build_type: 'Release',
       print_command: true,
       print_command_output: true,
-  
+
       properties: {
-        "android.injected.version.code" => version_code, 
+        "android.injected.version.code" => version_code,
         "android.injected.version.name" => version_name,
         "android.injected.signing.store.file" => releaseFilePath, # Path to the release keystore
         "android.injected.signing.store.password" => store_password, # Keystore password
@@ -152,7 +152,7 @@ lane :build_test_ci do
         "android.injected.signing.key.password" => key_password, # Key password
       }
     )
-  
+
     ci_value = false
     sh("./set_ci_vars.sh #{ci_value}")
 

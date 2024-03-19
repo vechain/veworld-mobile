@@ -1,7 +1,7 @@
 import React, { memo } from "react"
 import { StyleSheet } from "react-native"
 import { useTheme } from "~Hooks"
-import { FormattingUtils } from "~Utils"
+import { AddressUtils } from "~Utils"
 import { BaseCard, BaseIcon, BaseSpacer, BaseText, BaseView } from "~Components"
 import { Contact } from "~Model"
 
@@ -18,7 +18,7 @@ export const ContactDetailBox: React.FC<Props> = memo(({ contact }) => {
                 <BaseText typographyFont="button">{contact.alias}</BaseText>
                 <BaseSpacer height={4} />
                 <BaseText fontSize={10} typographyFont="smallCaptionRegular">
-                    {FormattingUtils.humanAddress(contact.address, 4, 6)}
+                    {AddressUtils.humanAddress(contact.address, 4, 6)}
                 </BaseText>
             </BaseView>
             <BaseView style={styles.rightSubContainer}>
