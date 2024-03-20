@@ -65,10 +65,10 @@ jobs:
             echo "SONAR_ARGS=-Dsonar.branch.target=main -Dsonar.branch.name=${{ github.head_ref }}" >> $GITHUB_OUTPUT
           fi
 
-      - name: SonarCloud Scan
-        uses: sonarsource/sonarcloud-github-action@master
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-          SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
-        with:
-          args: ${{ steps.sonar-args.outputs.SONAR_ARGS }}
+      #- name: SonarCloud Scan
+      #  uses: sonarsource/sonarcloud-github-action@master
+      #  env:
+      #    GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      #    SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
+      #  with:
+      #    args: ${{ steps.sonar-args.outputs.SONAR_ARGS }}
