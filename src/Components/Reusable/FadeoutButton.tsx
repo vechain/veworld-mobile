@@ -1,9 +1,6 @@
-import { DimensionValue, StyleSheet } from "react-native"
+import { StyleSheet } from "react-native"
 import React from "react"
-import LinearGradient from "react-native-linear-gradient"
-import { useBottomTabBarHeight } from "@react-navigation/bottom-tabs"
 import { SCREEN_WIDTH } from "~Constants"
-import { useTheme } from "~Hooks"
 import { BaseButton, BaseView } from "~Components/Base"
 
 type Props = {
@@ -11,56 +8,32 @@ type Props = {
     action: () => void
     disabled?: boolean
     isLoading?: boolean
-    bottom?: number
-    mx?: number
-    width?: DimensionValue
     testID?: string
 }
 
-export const FadeoutButton = ({
-    title,
-    action,
-    disabled = false,
-    isLoading = false,
-    bottom,
-    mx,
-    width,
-    testID,
-}: Props) => {
-    const tabBarHeight = useBottomTabBarHeight()
-    const theme = useTheme()
-
+export const FadeoutButton = ({ title, action, disabled = false, isLoading = false, testID }: Props) => {
     return (
-        <LinearGradient
-            accessible={false}
-            style={[
-                baseStyles.container,
-                {
-                    width: width ?? "100%",
-                    bottom: bottom ?? tabBarHeight,
-                },
-            ]}
-            colors={[theme.colors.backgroundTransparent, theme.colors.background]}>
-            <BaseView mx={mx ?? 20} style={{ width: SCREEN_WIDTH - 40 }} pb={24}>
-                <BaseButton
-                    accessible
-                    testID={testID}
-                    disabled={disabled}
-                    size="lg"
-                    haptics="Medium"
-                    w={100}
-                    title={title}
-                    action={action}
-                    activeOpacity={0.94}
-                    isLoading={isLoading}
-                />
-            </BaseView>
-        </LinearGradient>
+        <BaseView style={baseStyles.container} accessible={false}>
+            <BaseButton
+                accessible
+                testID={testID}
+                disabled={disabled}
+                size="lg"
+                haptics="Medium"
+                w={100}
+                title={title}
+                action={action}
+                activeOpacity={0.94}
+                isLoading={isLoading}
+            />
+        </BaseView>
     )
 }
 
 const baseStyles = StyleSheet.create({
     container: {
         position: "absolute",
+        width: SCREEN_WIDTH - 40,
+        bottom: 24,
     },
 })
