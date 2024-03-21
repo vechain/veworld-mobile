@@ -1,20 +1,17 @@
 appId: org.vechain.veworld.app
 env:
     AMOUNT: 0.01
+    ACCOUNT: "0x435933c8064b4Ae76bE665428e0307eF2cCFBD68"
 ---
 - launchApp:
     clearState: true
 ## welcome screen
-- extendedWaitUntil:
-    visible: "DEV:DEMO"
-    timeout:  600000
+- assertVisible: "DEV:DEMO"
 - tapOn:
       text: "DEV:DEMO"
+      index: 1
 - tapOn:
       id: "settings-tab"
-- extendedWaitUntil:
-    visible: "Networks"
-    timeout:  300000
 - tapOn: "Networks"
 - tapOn: "Mainnet"
 - tapOn: "Testnet"
@@ -200,16 +197,18 @@ env:
     when:
       visible: "Select delegation"
     commands:
-      - tapOn: "BackButtonHeader-BaseIcon-backButton"
       - tapOn:
           id: "button-URL"
       - tapOn:
-          point: "50%,83%"
+          id: "confirm-send-button"
       - inputText: "https://sponsor-testnet.vechain.energy/by/282"
       - tapOn:
           text: "Add"
           index: 1
-      - assertVisible: "Gas fee"
+      - tapOn:
+          text: "https://sponsor-testnet.vechain.energy/by/282"
+          index: 1
+      - assertVisible: "Details"
       - tapOn:
           id: "confirm-send-button"
 - repeat:
@@ -234,16 +233,13 @@ env:
           when:
             visible: "Select delegation"
           commands:
-            - tapOn: "BackButtonHeader-BaseIcon-backButton"
             - tapOn:
                 id: "button-URL"
             - tapOn:
-                point: "50%,83%"
+                id: "confirm-send-button"
             - inputText: "https://sponsor-testnet.vechain.energy/by/282"
-            - tapOn:
-                text: "Add"
-                index: 1
-            - assertVisible: "Gas fee"
+            - tapOn: "0.01"
+            - assertVisible: "Details"
             - tapOn:
                 id: "confirm-send-button"
       - repeat:
