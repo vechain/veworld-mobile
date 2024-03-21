@@ -123,6 +123,7 @@ lane :build_test_ci do |options|
 
   ci_value = true
   sh("./set_ci_vars.sh #{ci_value}")
+  sh("export SENTRY_DISABLE_AUTO_UPLOAD=true")
 
   version_name = options[:version_name]
   version_code = options[:version_code]
@@ -155,6 +156,7 @@ lane :build_test_ci do |options|
 
     ci_value = false
     sh("./set_ci_vars.sh #{ci_value}")
+    sh("export SENTRY_DISABLE_AUTO_UPLOAD=false")
 
     # Stash the changes
     sh("git stash save --keep-index --include-untracked")
@@ -168,6 +170,9 @@ lane :build_test_ci do |options|
     # Set the ci value to false
     ci_value = false
     sh("./set_ci_vars.sh #{ci_value}")
+
+    # Set the sentry auto upload to true
+    sh("export SENTRY_DISABLE_AUTO_UPLOAD=false")
 
     # Stash the changes
     sh("git stash save --keep-index --include-untracked")

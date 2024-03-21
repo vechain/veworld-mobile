@@ -3,7 +3,7 @@ import React, { memo, useMemo } from "react"
 import { BaseText, BaseCard, BaseView, BaseSpacer, BaseSkeleton } from "~Components"
 import Animated, { useAnimatedStyle, withTiming } from "react-native-reanimated"
 import { TokenWithCompleteInfo, useTheme } from "~Hooks"
-import { FormattingUtils } from "~Utils"
+import { BigNutils } from "~Utils"
 import { selectCurrency, selectIsTokensOwnedLoading } from "~Storage/Redux/Selectors"
 import { useAppSelector } from "~Storage/Redux"
 import { COLORS } from "~Constants"
@@ -26,12 +26,12 @@ export const VechainTokenCard = memo(({ tokenWithInfo, isAnimation, isBalanceVis
     const { tokenInfo, tokenInfoLoading, fiatBalance, tokenUnitBalance, exchangeRate } = tokenWithInfo
 
     const isPositive24hChange = (tokenInfo?.market_data?.price_change_percentage_24h ?? 0) >= 0
+
     const change24h =
         (isPositive24hChange ? "+" : "") +
-        FormattingUtils.humanNumber(
-            tokenInfo?.market_data?.price_change_percentage_24h ?? 0,
-            tokenInfo?.market_data?.price_change_percentage_24h ?? 0,
-        ) +
+        BigNutils(tokenInfo?.market_data?.price_change_percentage_24h ?? 0)
+            .toHuman(0)
+            .decimals(2).toString +
         "%"
 
     const animatedOpacityReverse = useAnimatedStyle(() => {

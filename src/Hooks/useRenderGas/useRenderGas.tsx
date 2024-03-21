@@ -13,7 +13,6 @@ export const useRenderGas = ({ gas }: { gas: EstimateGasResult | undefined }) =>
                 gas: new BigNumber(gas?.gas || 0),
                 baseGasPrice: new BigNumber(gas?.baseGasPrice || "0"),
                 gasPriceCoefficient: coefficient,
-                decimals: 2,
             }),
         [gas?.baseGasPrice, gas?.gas],
     )

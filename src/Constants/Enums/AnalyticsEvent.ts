@@ -13,9 +13,6 @@ export enum AnalyticsEvent {
      * DApps
      */
     DAPP_TX_REQUESTED = "DAPP_TX_REQUESTED",
-    DAPP_TX_SENT = "DAPP_TX_SENT",
-    DAPP_TX_FAILED_TO_SEND = "DAPP_TX_FAILED_TO_SEND",
-
     DAPP_REQUEST_CERTIFICATE = "DAPP_REQUEST_CERTIFICATE",
     DAPP_CERTIFICATE_SUCCESS = "DAPP_CERTIFICATE_SUCCESS",
     DAPP_CERTIFICATE_FAILED = "DAPP_CERTIFICATE_FAILED",
@@ -26,27 +23,9 @@ export enum AnalyticsEvent {
     DAPP_DISCOVERY_TRANSACTION_SENT_FAILURE = "DAPP_DISCOVERY_TRANSACTION_SENT_FAILURE",
 
     /**
-     * Ledger
-     */
-    LEDGER_TX_SENT = "LEDGER_TX_SENT",
-    LEDGER_TX_FAILED_TO_SEND = "LEDGER_TX_FAILED_TO_SEND",
-
-    /**
      * Tokens
      */
     TOKENS_CUSTOM_TOKEN_ADDED = "TOKENS_CUSTOM_TOKEN_ADDED",
-
-    /**
-     * Fungible Token TXs
-     */
-    SEND_FUNGIBLE_SENT = "SEND_FUNGIBLE_SENT",
-    SEND_FUNGIBLE_FAILED_TO_SEND = "SEND_FUNGIBLE_FAILED_TO_SEND",
-
-    /**
-     * Fungible Token TXs
-     */
-    SEND_NFT_SENT = "SEND_NFT_SENT",
-    SEND_NFT_FAILED_TO_SEND = "SEND_NFT_FAILED_TO_SEND",
 
     /**
      * Add wallets/accounts Events
@@ -104,4 +83,68 @@ export enum AnalyticsEvent {
     // */
     VERSION_UPGRADE_MODAL_OPENED = "VERSION_UPGRADE_MODAL_OPENED",
     VERSION_UPGRADE_MODAL_SUCCESS = "VERSION_UPGRADE_MODAL_SUCCESS",
+
+    /**
+     * UNIFIED EVENTS
+     */
+
+    WALLET_OPERATION = "WALLET_OPERATION",
+    NATIVE_TOKEN = "NATIVE_TOKEN",
+    TOKEN = "TOKEN",
+    NFT = "NFT",
+    LOCAL = "LOCAL",
+    HARDWARE = "HARDWARE",
+    IN_APP = "IN_APP",
+    WALLET_CONNECT = "WALLET_CONNECT",
+    DAPP = "DAPP",
+    SEND = "SEND",
+}
+
+/**
+ * @description MixPanelEvent type
+ */
+type MixPanelEvent = {
+    medium: AnalyticsEvent.SEND | AnalyticsEvent.DAPP
+    signature: AnalyticsEvent.LOCAL | AnalyticsEvent.HARDWARE
+    subject?: AnalyticsEvent.NATIVE_TOKEN | AnalyticsEvent.TOKEN | AnalyticsEvent.NFT
+    context?: AnalyticsEvent.IN_APP | AnalyticsEvent.WALLET_CONNECT
+    failed?: boolean
+    dappUrl?: string
+}
+
+/**
+ * @param {AnalyticsEvent.SEND | AnalyticsEvent.DAPP} medium
+ * @param {AnalyticsEvent.LOCAL | AnalyticsEvent.HARDWARE} signature
+ * @param {AnalyticsEvent.NATIVE_TOKEN | AnalyticsEvent.TOKEN | AnalyticsEvent.NFT} [subject]
+ * @param {AnalyticsEvent.IN_APP | AnalyticsEvent.WALLET_CONNECT} [context]
+ * @param {boolean} [failed]
+ * @param {string} [dappUrl]
+ *
+ * @description Create a new event for mixpanel
+ * @returns {MixPanelEvent} object
+ */
+
+export const creteAnalyticsEvent = ({
+    medium,
+    signature,
+    subject,
+    context,
+    failed,
+    dappUrl,
+}: {
+    medium: AnalyticsEvent.SEND | AnalyticsEvent.DAPP
+    signature: AnalyticsEvent.LOCAL | AnalyticsEvent.HARDWARE
+    subject?: AnalyticsEvent.NATIVE_TOKEN | AnalyticsEvent.TOKEN | AnalyticsEvent.NFT
+    context?: AnalyticsEvent.IN_APP | AnalyticsEvent.WALLET_CONNECT
+    failed?: boolean
+    dappUrl?: string
+}): MixPanelEvent => {
+    return {
+        subject,
+        medium,
+        signature,
+        context,
+        failed,
+        dappUrl,
+    }
 }

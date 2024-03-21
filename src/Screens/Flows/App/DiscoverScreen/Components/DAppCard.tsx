@@ -4,6 +4,7 @@ import { useDappBookmarking, useThemedStyles } from "~Hooks"
 import { DiscoveryDApp } from "~Constants"
 import { BaseIcon, BaseSpacer, BaseText, BaseTouchableBox, BaseView } from "~Components"
 import { DAppIcon } from "./DAppIcon"
+import { getAppHubIconUrl } from "../utils"
 
 type Props = {
     dapp: DiscoveryDApp
@@ -25,11 +26,11 @@ export const DAppCard: React.FC<Props> = memo(({ onPress, dapp, containerStyle }
                 containerStyle={styles.container}>
                 <BaseView flexDirection="row" style={styles.card} flex={1} pr={10}>
                     <DAppIcon
-                        imageSource={
-                            dapp.image ?? {
-                                uri: `${process.env.REACT_APP_GOOGLE_FAVICON_URL}${dapp.href}`,
-                            }
-                        }
+                        imageSource={{
+                            uri: dapp.id
+                                ? getAppHubIconUrl(dapp.id)
+                                : `${process.env.REACT_APP_GOOGLE_FAVICON_URL}${dapp.href}`,
+                        }}
                     />
                     <BaseSpacer width={12} />
                     <BaseView flex={1}>

@@ -20,6 +20,7 @@ import { createMaterialTopTabNavigator } from "@react-navigation/material-top-ta
 import { TabBar } from "./Components/TabBar"
 import Animated, { useSharedValue, withDelay, withSpring, withTiming } from "react-native-reanimated"
 import { PlatformUtils } from "~Utils"
+import { useFetchFeaturedDApps } from "./Hooks/useFetchFeaturedDApps"
 
 export const DiscoverScreen: React.FC = () => {
     const { theme, styles } = useThemedStyles(baseStyles)
@@ -28,6 +29,7 @@ export const DiscoverScreen: React.FC = () => {
     const [filteredSearch, setFilteredSearch] = React.useState<string>()
     const animatedIconOpacity = useSharedValue(0)
     const animatedIconRightPosition = useSharedValue(-20)
+    const { isLoading } = useFetchFeaturedDApps()
 
     const flatListRef = useRef(null)
     useScrollToTop(flatListRef)
@@ -90,13 +92,14 @@ export const DiscoverScreen: React.FC = () => {
     const FeaturedScreen = useCallback(
         () => (
             <DAppList
+                isLoading={isLoading}
                 onDAppPress={onDAppPress}
                 filteredSearch={filteredSearch}
                 selector={selectFeaturedDapps}
                 setFilteredSearch={setFilteredSearch}
             />
         ),
-        [filteredSearch, onDAppPress, setFilteredSearch],
+        [filteredSearch, onDAppPress, setFilteredSearch, isLoading],
     )
     const FavouriteScreen = useCallback(
         () => (
@@ -122,15 +125,13 @@ export const DiscoverScreen: React.FC = () => {
 
     const renderHeader = useMemo(() => {
         return (
-            <>
-                <BaseView flexDirection="row" justifyContent="space-between" alignItems="center" mx={24} pb={16}>
-                    <BaseText typographyFont="largeTitle" testID="settings-screen">
-                        {LL.DISCOVER_TITLE()}
-                    </BaseText>
+            <BaseView flexDirection="row" justifyContent="space-between" alignItems="center" mx={24} pb={16}>
+                <BaseText typographyFont="largeTitle" testID="settings-screen">
+                    {LL.DISCOVER_TITLE()}
+                </BaseText>
 
-                    <SelectedNetworkViewer />
-                </BaseView>
-            </>
+                <SelectedNetworkViewer />
+            </BaseView>
         )
     }, [LL])
 

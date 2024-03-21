@@ -17,6 +17,8 @@ type Props = {
     testID?: string
 }
 
+const IS_CI_BUILD = process.env.IS_CI_BUILD_ENABLED === "true"
+
 export const FadeoutButton = ({
     title,
     action,
@@ -30,8 +32,26 @@ export const FadeoutButton = ({
     const tabBarHeight = useBottomTabBarHeight()
     const theme = useTheme()
 
+    if (IS_CI_BUILD) {
+        return (
+            <BaseButton
+                accessible
+                testID={testID}
+                disabled={disabled}
+                size="lg"
+                haptics="Medium"
+                w={100}
+                title={title}
+                action={action}
+                activeOpacity={0.94}
+                isLoading={isLoading}
+            />
+        )
+    }
+
     return (
         <LinearGradient
+            accessible={false}
             style={[
                 baseStyles.container,
                 {
@@ -40,8 +60,9 @@ export const FadeoutButton = ({
                 },
             ]}
             colors={[theme.colors.backgroundTransparent, theme.colors.background]}>
-            <BaseView mx={mx ?? 20} style={{ width: SCREEN_WIDTH - 40 }} pb={24}>
+            <BaseView mx={mx ?? 20} style={{ width: SCREEN_WIDTH - 40 }} pb={24} accessible={false}>
                 <BaseButton
+                    accessible
                     testID={testID}
                     disabled={disabled}
                     size="lg"

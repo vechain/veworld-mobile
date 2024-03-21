@@ -36,9 +36,9 @@ describe("useFormattedMarketInfo", () => {
 
         expect(result.current).toEqual({
             circulatingSupply: null,
-            marketCap: null,
+            marketCap: "0",
             totalSupply: null,
-            totalVolume: null,
+            totalVolume: "0",
         })
     })
 

@@ -10,6 +10,6 @@ export * from "./VechainIndexer"
 export * from "./NftRegistry"
 export * from "./Api"
 export * from "./feature"
-export * from "./DApps/DAppConfig"
+export * from "./dapps"
 
 export { SettingsConstants }

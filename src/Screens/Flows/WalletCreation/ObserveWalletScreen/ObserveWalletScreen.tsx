@@ -65,7 +65,7 @@ export const ObserveWalletScreen = () => {
 
             // get balance
             const balance = await BalanceUtils.getBalanceFromBlockchain(VET.address, _address, selectedNetwork, thor)
-            const _formattedBalance = BigNutils(balance?.balance).toHuman(VET.decimals).decimals(4).toString
+            const _formattedBalance = BigNutils(balance?.balance).toHuman(VET.decimals).toTokenFormat_string(2)
             setFormattedBalance(_formattedBalance)
 
             setWatchedAccount(account)
