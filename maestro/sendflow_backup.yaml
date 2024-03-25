@@ -199,16 +199,15 @@ env:
     when:
       visible: "Select delegation"
     commands:
-      - tapOn: "BackButtonHeader-BaseIcon-backButton"
       - tapOn:
           id: "button-URL"
-      - tapOn:
-          point: "50%,83%"
+      - tapOn: "CONFIRM"
       - inputText: "https://sponsor-testnet.vechain.energy/by/282"
       - tapOn:
           text: "Add"
           index: 1
-      - assertVisible: "Gas fee"
+      - tapOn: "Select delegation"
+      - assertVisible: "Details"
       - tapOn:
           id: "confirm-send-button"
 - repeat:
@@ -233,16 +232,13 @@ env:
           when:
             visible: "Select delegation"
           commands:
-            - tapOn: "BackButtonHeader-BaseIcon-backButton"
             - tapOn:
                 id: "button-URL"
             - tapOn:
-                point: "50%,83%"
+                id: "confirm-send-button"
             - inputText: "https://sponsor-testnet.vechain.energy/by/282"
-            - tapOn:
-                text: "Add"
-                index: 1
-            - assertVisible: "Gas fee"
+            - tapOn: "Gas fee"
+            - assertVisible: "Details"
             - tapOn:
                 id: "confirm-send-button"
       - repeat:
