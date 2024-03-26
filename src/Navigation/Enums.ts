@@ -67,4 +67,5 @@ export enum Routes {
     BLOCKED_APP_SCREEN = "Blocked_App_Screen",
     OBSERVE_WALLET = "Observe_Wallet",
     OBSERVE_WALLET_CONFIRMATION = "Observe_Wallet_Confirmation",
+    DAPP_CHANGE_ACCOUNT_SCREEN = "Dapp_Change_Account_Screen",
 }
