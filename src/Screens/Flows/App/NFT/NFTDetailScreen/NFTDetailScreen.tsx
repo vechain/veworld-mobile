@@ -88,9 +88,6 @@ export const NFTDetailScreen = ({ route }: Props) => {
                     disabled={!!isPendingTx}
                     title={LL.SEND_TOKEN_TITLE().toUpperCase()}
                     action={onSendPress}
-                    bottom={0}
-                    mx={0}
-                    width={"auto"}
                 />
             )
         } else {

@@ -59,8 +59,12 @@ export const NetworkBox: React.FC<Props> = ({ network, onPress, rightIcon, isSel
     )
 
     return onPress ? (
-        <BaseView style={styles.touchableContainer} flexDirection="row">
-            <BaseTouchableBox haptics="Light" action={handleOnPress} innerContainerStyle={style}>
+        <BaseView style={styles.touchableContainer} flexDirection="row" accessible={false}>
+            <BaseTouchableBox
+                haptics="Light"
+                action={handleOnPress}
+                innerContainerStyle={style}
+                testID={`networks_box_${network.name}`}>
                 {networkBoxBody()}
             </BaseTouchableBox>
         </BaseView>
