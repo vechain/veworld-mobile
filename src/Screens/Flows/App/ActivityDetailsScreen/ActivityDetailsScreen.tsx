@@ -199,6 +199,9 @@ export const ActivityDetailsScreen = ({ route }: Props) => {
                             action={() => {
                                 Linking.openURL(explorerUrl)
                             }}
+                            bottom={0}
+                            mx={0}
+                            width={"auto"}
                         />
                     )
                 }
