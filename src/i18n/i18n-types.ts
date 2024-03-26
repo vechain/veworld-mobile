@@ -1639,9 +1639,18 @@ type RootTranslation = {
 	 */
 	CONNECTED_APP_SIGN_MESSAGE_TITLE: string
 	/**
+	 * C​h​a​n​g​e​ ​a​c​c​o​u​n​t
+	 */
+	CONNECTED_APP_CHANGE_ACCOUNT_REQUEST_TITLE: string
+	/**
 	 * Y​o​u​r​ ​S​i​g​n​a​t​u​r​e​ ​i​s​ ​b​e​i​n​g​ ​r​e​q​u​e​s​t​e​d​ ​t​o​ ​s​i​g​n​ ​a​ ​c​e​r​t​i​f​i​c​a​t​e
 	 */
 	CONNECTED_APP_SIGN_REQUEST_DESCRIPTION: string
+	/**
+	 * Y​o​u​ ​h​a​v​e​ ​p​r​e​v​i​o​u​s​l​y​ ​c​o​n​n​e​c​t​e​d​ ​t​o​ ​{​d​a​p​p​}​ ​w​i​t​h​ ​a​ ​d​i​f​f​e​r​e​n​t​ ​a​c​c​o​u​n​t​.​ ​D​o​ ​y​o​u​ ​w​a​n​t​ ​t​o​ ​s​w​i​t​c​h​ ​t​o​ ​t​h​e​ ​a​c​c​o​u​n​t​ ​c​o​n​n​e​c​t​e​d​ ​t​o​ ​{​d​a​p​p​}​?
+	 * @param {string} dapp
+	 */
+	CONNECTED_APP_CHANGE_ACCOUNT_REQUEST_DESCRIPTION: RequiredParams<'dapp' | 'dapp'>
 	/**
 	 * Y​o​u​r​ ​S​i​g​n​a​t​u​r​e​ ​i​s​ ​b​e​i​n​g​ ​r​e​q​u​e​s​t​e​d​ ​t​o​ ​s​i​g​n​ ​a​ ​m​e​s​s​a​g​e
 	 */
@@ -4482,9 +4491,17 @@ Try reconnect your device to the internet.
 	 */
 	CONNECTED_APP_SIGN_MESSAGE_TITLE: () => LocalizedString
 	/**
+	 * Change account
+	 */
+	CONNECTED_APP_CHANGE_ACCOUNT_REQUEST_TITLE: () => LocalizedString
+	/**
 	 * Your Signature is being requested to sign a certificate
 	 */
 	CONNECTED_APP_SIGN_REQUEST_DESCRIPTION: () => LocalizedString
+	/**
+	 * You have previously connected to {dapp} with a different account. Do you want to switch to the account connected to {dapp}?
+	 */
+	CONNECTED_APP_CHANGE_ACCOUNT_REQUEST_DESCRIPTION: (arg: { dapp: string }) => LocalizedString
 	/**
 	 * Your Signature is being requested to sign a message
 	 */

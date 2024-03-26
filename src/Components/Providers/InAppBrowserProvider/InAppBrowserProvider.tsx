@@ -43,6 +43,7 @@ type ContextType = {
     handleCloseChangeAccountNetworkBottomSheet: () => void
     handleConfirmChangeAccountNetworkBottomSheet: () => void
     ChangeAccountNetworkBottomSheetRef: React.RefObject<BottomSheetModalMethods>
+    switchAccount: (request: WindowRequest) => void
 }
 
 const Context = React.createContext<ContextType | undefined>(undefined)
@@ -224,6 +225,15 @@ export const InAppBrowserProvider = ({ children }: Props) => {
                     return AddressUtils.compareAddresses(request.options.signer, acct.address)
                 })
 
+                // change account if it exists
+                if (requestedAccount && !compareAddresses(requestedAccount.address, selectedAccountAddress)) {
+                    nav.navigate(Routes.DAPP_CHANGE_ACCOUNT_SCREEN, {
+                        request: request,
+                    })
+                    return
+                }
+
+                // cancel operation if account not found
                 if (!requestedAccount) {
                     showInfoToast({
                         text1: LL.NOTIFICATION_DAPP_REQUESTED_ACCOUNT_NOT_FOUND(),
@@ -243,11 +253,9 @@ export const InAppBrowserProvider = ({ children }: Props) => {
 
             let network: Network | undefined
 
-            if (selectedNetwork.genesis.id === request.genesisId) {
-                setTargetNetwork(undefined)
-            } else {
+            if (selectedNetwork.genesis.id !== request.genesisId) {
                 network = networks.find(n => n.genesis.id === request.genesisId)
-                setTargetNetwork(network)
+                network ? setTargetNetwork(network) : setTargetNetwork(undefined)
             }
 
             if (!network) {
@@ -269,6 +277,7 @@ export const InAppBrowserProvider = ({ children }: Props) => {
         [
             LL,
             accounts,
+            nav,
             networks,
             openChangeAccountNetworkBottomSheet,
             postMessage,
@@ -530,6 +539,7 @@ export const InAppBrowserProvider = ({ children }: Props) => {
             handleCloseChangeAccountNetworkBottomSheet,
             handleConfirmChangeAccountNetworkBottomSheet,
             ChangeAccountNetworkBottomSheetRef,
+            switchAccount,
         }
     }, [
         onMessage,
@@ -549,6 +559,7 @@ export const InAppBrowserProvider = ({ children }: Props) => {
         handleCloseChangeAccountNetworkBottomSheet,
         handleConfirmChangeAccountNetworkBottomSheet,
         ChangeAccountNetworkBottomSheetRef,
+        switchAccount,
     ])
 
     return <Context.Provider value={contextValue}>{children}</Context.Provider>
