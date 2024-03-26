@@ -51,7 +51,6 @@ export const FadeoutButton = ({
 
     return (
         <LinearGradient
-            accessible={false}
             style={[
                 baseStyles.container,
                 {
