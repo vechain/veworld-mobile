@@ -1,5 +1,54 @@
+plugins {
+    id("com.datadoghq.dd-sdk-android-gradle-plugin") version "1.+"
+}
+
+datadog {
+    checkProjectDependencies = "none"
+}
+
+plugins {
+    id("com.datadoghq.dd-sdk-android-gradle-plugin") version "1.+"
+}
+
+datadog {
+    checkProjectDependencies = "none"
+}
+
+plugins {
+    id("com.datadoghq.dd-sdk-android-gradle-plugin") version "1.+"
+}
+
+datadog {
+    checkProjectDependencies = "none"
+}
+
+plugins {
+    id("com.datadoghq.dd-sdk-android-gradle-plugin") version "1.+"
+}
+
+datadog {
+    checkProjectDependencies = "none"
+}
+
+plugins {
+    id("com.datadoghq.dd-sdk-android-gradle-plugin") version "1.+"
+}
+
+datadog {
+    checkProjectDependencies = "none"
+}
+
 apply plugin: "com.android.application"
 apply plugin: "com.facebook.react"
+apply from: "../../node_modules/@datadog/mobile-react-native/datadog-sourcemaps.gradle"
+apply from: "../../node_modules/@datadog/mobile-react-native/datadog-sourcemaps.gradle"
+apply from: "../../node_modules/@datadog/mobile-react-native/datadog-sourcemaps.gradle"
+apply from: "../../node_modules/@datadog/mobile-react-native/datadog-sourcemaps.gradle"
+apply from: "../../node_modules/@datadog/mobile-react-native/datadog-sourcemaps.gradle"
+apply from: "../../node_modules/@datadog/mobile-react-native/datadog-sourcemaps.gradle"
+apply from: "../../node_modules/@datadog/mobile-react-native/datadog-sourcemaps.gradle"
+apply from: "../../node_modules/@datadog/mobile-react-native/datadog-sourcemaps.gradle"
+apply from: "../../node_modules/@datadog/mobile-react-native/datadog-sourcemaps.gradle"
 apply plugin: "kotlin-android"
 
 def keystorePropertiesFile = rootProject.file("keystore.properties")
@@ -129,6 +178,36 @@ android {
             pickFirst 'lib/x86_64/libcrypto.so'
             pickFirst 'lib/armeabi-v7a/libcrypto.so'
             pickFirst 'lib/arm64-v8a/libcrypto.so'
+    }
+
+    applicationVariants.all { variant ->
+        if (project.tasks.findByName("minify${variant.name.capitalize()}WithR8")) {
+            tasks["minify${variant.name.capitalize()}WithR8"].finalizedBy { tasks["uploadMapping${variant.name.capitalize()}"] }
+        }
+    }
+
+    applicationVariants.all { variant ->
+        if (project.tasks.findByName("minify${variant.name.capitalize()}WithR8")) {
+            tasks["minify${variant.name.capitalize()}WithR8"].finalizedBy { tasks["uploadMapping${variant.name.capitalize()}"] }
+        }
+    }
+
+    applicationVariants.all { variant ->
+        if (project.tasks.findByName("minify${variant.name.capitalize()}WithR8")) {
+            tasks["minify${variant.name.capitalize()}WithR8"].finalizedBy { tasks["uploadMapping${variant.name.capitalize()}"] }
+        }
+    }
+
+    applicationVariants.all { variant ->
+        if (project.tasks.findByName("minify${variant.name.capitalize()}WithR8")) {
+            tasks["minify${variant.name.capitalize()}WithR8"].finalizedBy { tasks["uploadMapping${variant.name.capitalize()}"] }
+        }
+    }
+
+    applicationVariants.all { variant ->
+        if (project.tasks.findByName("minify${variant.name.capitalize()}WithR8")) {
+            tasks["minify${variant.name.capitalize()}WithR8"].finalizedBy { tasks["uploadMapping${variant.name.capitalize()}"] }
+        }
     }
 }
 

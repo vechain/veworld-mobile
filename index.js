@@ -45,6 +45,7 @@ import { clientPersister, queryClient } from "~Api/QueryProvider"
 import NetInfo from "@react-native-community/netinfo"
 import { onlineManager } from "@tanstack/react-query"
 import { useFlipper } from "@react-navigation/devtools"
+import { DdRumReactNavigationTracking } from "@datadog/mobile-react-navigation"
 
 const { fontFamily } = typography
 
@@ -163,6 +164,13 @@ const NavigationProvider = ({ children }) => {
     const routeNameRef = useRef(null)
     const dispatch = useAppDispatch()
     useFlipper(navigationRef)
+
+    useEffect(() => {
+        // Ensure that Datadog starts tracking views once the navigation is fully ready
+        if (ready) {
+            DdRumReactNavigationTracking.startTrackingViews(navigationRef.current)
+        }
+    }, [ready, navigationRef])
 
     return (
         <NavigationContainer
