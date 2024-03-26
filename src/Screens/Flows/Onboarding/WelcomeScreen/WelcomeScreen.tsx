@@ -115,7 +115,13 @@ export const WelcomeScreen = () => {
                     />
 
                     {(devFeaturesEnabled || IS_CI_BUILD) && (
-                        <BaseButton size="md" variant="link" action={onDemoOnboarding} title="DEV:DEMO" />
+                        <BaseButton
+                            size="md"
+                            variant="link"
+                            action={onDemoOnboarding}
+                            title="DEV:DEMO"
+                            testID="dev_demo"
+                        />
                     )}
                 </BaseView>
             }
