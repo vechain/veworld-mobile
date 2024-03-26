@@ -319,6 +319,9 @@ export const SelectAmountSendScreen = ({ route }: Props) => {
                         // isError || input === "" || BigNutils(input).isZero || BigNutils(tokenBalanceMinusProjectedFees).isZero
                     }
                     action={goToInsertAddress}
+                    bottom={0}
+                    mx={0}
+                    width={"auto"}
                 />
             }
         />
