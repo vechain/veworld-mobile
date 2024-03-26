@@ -1,5 +1,5 @@
-import React from "react"
-import { URIUtils } from "~Utils"
+import React, { useMemo } from "react"
+import { PlatformUtils, URIUtils } from "~Utils"
 import {
     BaseBottomSheetTextInput,
     BaseButton,
@@ -59,6 +59,13 @@ export const AddUrl = ({
     const closeAddMode = () => {
         setAddUrlMode(false)
     }
+
+    const platformPadding = useMemo(() => {
+        if (PlatformUtils.isAndroid()) return 0
+
+        return 32
+    }, [])
+
     return (
         <BaseView w={100} h={100} flexGrow={1} justifyContent="space-between">
             <BaseView>
@@ -73,7 +80,7 @@ export const AddUrl = ({
                     testID="AddUrl_input"
                 />
             </BaseView>
-            <BaseView flexDirection="row" pb={32}>
+            <BaseView flexDirection="row" pb={platformPadding}>
                 {addUrlMode && (
                     <>
                         <BaseButton title={LL.COMMON_BTN_CANCEL()} action={closeAddMode} variant="outline" flex={1} />

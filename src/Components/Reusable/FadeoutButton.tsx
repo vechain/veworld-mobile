@@ -51,7 +51,6 @@ export const FadeoutButton = ({
 
     return (
         <LinearGradient
-            accessible={false}
             style={[
                 baseStyles.container,
                 {
@@ -60,7 +59,7 @@ export const FadeoutButton = ({
                 },
             ]}
             colors={[theme.colors.backgroundTransparent, theme.colors.background]}>
-            <BaseView mx={mx ?? 20} style={{ width: SCREEN_WIDTH - 40 }} pb={24} accessible={false}>
+            <BaseView mx={mx ?? 20} style={{ width: SCREEN_WIDTH - 40 }} pb={24}>
                 <BaseButton
                     accessible
                     testID={testID}
