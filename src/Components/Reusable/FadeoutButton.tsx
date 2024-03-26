@@ -59,7 +59,7 @@ export const FadeoutButton = ({
                 },
             ]}
             colors={[theme.colors.backgroundTransparent, theme.colors.background]}>
-            <BaseView mx={mx ?? 20} style={{ width: SCREEN_WIDTH - 40 }} pb={24}>
+            <BaseView mx={mx ?? 20} style={{ width: SCREEN_WIDTH - 40 }} pb={24} accessible={false}>
                 <BaseButton
                     accessible
                     testID={testID}
