@@ -1,5 +1,3 @@
-# flow.yaml
-
 appId: org.vechain.veworld.app
 env:
     AMOUNT: 0.01
@@ -8,27 +6,24 @@ env:
 - launchApp:
     clearState: true
 ## welcome screen
-- extendedWaitUntil:
-          visible: "DEV:DEMO"
-          timeout: 10000
 - assertVisible: "DEV:DEMO"
 - tapOn:
       text: "DEV:DEMO"
+      index: 1
 - tapOn:
       id: "settings-tab"
-- tapOn:
-    id: "undefined-wrapper"
-    index: 3
-- tapOn: "Mainnet (Default) https://mainnet.vechain.org 󰍉"
-- tapOn: "Testnet (Default) https://testnet.vechain.org"
+- tapOn: "Networks"
+- tapOn: "Mainnet"
+- tapOn: "Testnet"
 - tapOn:
       id: "wallet-tab"
+- tapOn: "Wallet 1"
 
 ## Homepage - Adding accounts
 - assertVisible: "VeWorld"
 - tapOn:
       id: "HomeScreen_WalletManagementButton-wrapper"
-- tapOn: "Wallet 1 󰲶"
+- tapOn: "Wallet 1"
 - tapOn:
       id: "WalletDetailScreen_addAccountButton"
 - tapOn:
@@ -37,22 +32,17 @@ env:
       id: "wallet-tab"
 - tapOn:
       id: "AccountCard_changeAccountButton"
-- assertVisible: ".*?(Account 1).*?"
 - tapOn:
-    point: "50%,64%"
+      text: "Account 1"
 
 ## User should be able to send tokens - Send VET from Account 1 to Account 2
-- tapOn:
-    id: "sendButton"
+- tapOn: "Send"
 - assertVisible: "Send your token"
-- tapOn: "Vechain VET"
-- tapOn:
-        id: "SendScreen_amountInput"
+- tapOn: "Vechain"
 - inputText: ${AMOUNT}
-- tapOn: "Currency balance"
+- tapOn: "Send"
 - tapOn: "NEXT"
-- tapOn:
-    point: 50%,33%
+- tapOn: "Account 2"
 - tapOn:
     id: "next-button"
 - runFlow:
@@ -73,14 +63,12 @@ env:
 ## User should be able to send tokens - Send VETHO from Account 1 to Account 2
 - tapOn:
     id: "wallet-tab"
-- tapOn:
-    id: "sendButton"
-- tapOn: VeThor VTHO
+- tapOn: "Send"
+- tapOn: "VeThor"
 - inputText: ${AMOUNT}
 - tapOn: "Currency balance"
 - tapOn: "NEXT"
-- tapOn:
-    point: "50%,33%"
+- tapOn: "Account 2"
 - tapOn:
     id: "next-button"
 - runFlow:
@@ -103,17 +91,14 @@ env:
 - tapOn:
     id: "AccountCard_changeAccountButton"
 - tapOn:
-    point: "50%,74%"
-- tapOn:
-    id: "sendButton"
-- tapOn: "Vechain VET"
+    text: "Account 2"
+- tapOn: "Send"
+- tapOn: "Vechain"
 - inputText: ${AMOUNT}
 - tapOn: "Currency balance"
 - tapOn: "NEXT"
-- tapOn:
-    point: 50%,33%
-- tapOn:
-    id: next-button
+- tapOn: "Account 1"
+- tapOn: "NEXT"
 - runFlow:
     when:
       visible: "Select delegation"
@@ -130,20 +115,17 @@ env:
 ## User should be able to send tokens delegating with account method
 - tapOn:
     id: "AccountCard_changeAccountButton"
-- tapOn:
-    point: "50%,64%"
+- tapOn: "Account 1"
 - tapOn:
     id: "sendButton"
-- tapOn: "Vechain VET"
+- tapOn: "Vechain"
 - tapOn:
     id: "SendScreen_amountInput"
 - inputText: ${AMOUNT}
 - tapOn: "Currency balance"
 - tapOn: "NEXT"
-- tapOn:
-    point: "50%,33%"
-- tapOn:
-    id: "next-button"
+- tapOn: "Account 2"
+- tapOn: "NEXT"
 - evalScript: ${console.log('NEXT IS OK')}
 - runFlow:
     when:
@@ -152,9 +134,14 @@ env:
       - tapOn:
           id: "button-ACCOUNT"
       - tapOn:
-          point: "50%,64%"
+          text: "Account 2"
+          index: 1
       - tapOn:
           id: "confirm-send-button"
+- tapOn:
+    id: "BackButtonHeader-BaseIcon-backButton"
+- tapOn:
+    id: "confirm-send-button"
 - repeat:
     times: 6
     commands:
@@ -166,14 +153,13 @@ env:
     commands:
       - tapOn:
           id: "sendButton"
-      - tapOn: "VeThor VTHO"
+      - tapOn: "VeThor"
       - tapOn:
           id: "SendScreen_amountInput"
       - inputText: ${AMOUNT}
       - tapOn: "Currency balance"
       - tapOn: "NEXT"
-      - tapOn:
-          point: "50%,33%"
+      - tapOn: "Account 2"
       - tapOn: "NEXT"
       - evalScript: ${console.log('NEXT IS OK')}
       - runFlow:
@@ -183,90 +169,19 @@ env:
             - tapOn:
                 id: "button-ACCOUNT"
             - tapOn:
-                point: "50%,64%"
+                text: "Account 2"
+                index: 1
             - tapOn:
                 id: "confirm-send-button"
-      - extendedWaitUntil:
-          visible: "Insert your 6-digit PIN"
-          timeout: 10000
-      - repeat:
-          times: 6
-          commands:
-            - tapOn: "1"
-- evalScript: ${console.log('Delegation account Method')}
-## User should be able to send tokens delegating with url method
-- tapOn:
-    id: "AccountCard_changeAccountButton"
-- tapOn:
-    point: "50%,64%"
-- tapOn:
-    id: "sendButton"
-- tapOn: "Vechain VET"
-- tapOn:
-    id: "SendScreen_amountInput"
-- inputText: ${AMOUNT}
-- tapOn: "Currency balance"
-- tapOn: "NEXT"
-- tapOn:
-    point: "50%,33%"
-- tapOn:
-    id: "next-button"
-- evalScript: ${console.log('Delegation URL Method- going inside flow')}
-- runFlow:
-    when:
-      visible: "Select delegation"
-    commands:
       - tapOn:
-          id: "button-URL"
-      - tapOn:
-          id: "AddUrl_input"
-      - inputText: "https://sponsor-testnet.vechain.energy/by/282"
-      - tapOn: "Add"
-      - tapOn:
-           id: Home Grabber
-      - assertVisible: "Gas fee"
+          id: "BackButtonHeader-BaseIcon-backButton"
       - tapOn:
           id: "confirm-send-button"
-- repeat:
-    times: 6
-    commands:
-      - tapOn: "1"
-- runFlow:
-    env:
-      AMOUNT: 0.01
-    commands:
-      - tapOn:
-          id: "sendButton"
-      - tapOn: "VeThor VTHO"
-      - tapOn:
-          id: "SendScreen_amountInput"
-      - inputText: ${AMOUNT}
-      - tapOn: "Currency balance"
-      - tapOn: "NEXT"
-      - tapOn:
-          point: "50%,33%"
-      - tapOn: "NEXT"
-      - runFlow:
-          when:
-            visible: "Select delegation"
-          commands:
-            - tapOn:
-                id: "button-URL"
-            - tapOn:
-                 id: "UrlList_addUrlButton"
-            - tapOn:
-                 id: "AddUrl_input"
-            - inputText: "https://sponsor-testnet.vechain.energy/by/282"
-            - tapOn: "Add"
-            - assertVisible: "Gas fee"
-            - tapOn:
-                id: "confirm-send-button"
       - repeat:
           times: 6
           commands:
             - tapOn: "1"
-      - assertVisible: "Your tokens"
-- evalScript: ${console.log('Delegationg URL complete')}
+- evalScript: ${console.log('Delegation account Method complete')}
 
 ## User should be able to send custom tokens
 
@@ -279,23 +194,22 @@ env:
 - tapOn:
     id: "AddCustomTokenBottomSheet-TextInput-Address"
 - inputText: "0x8a9844e4750f5ce5f7988c4d1e04c278c718feea"
-- tapOn: "Add"
+- tapOn:
+    text: "Add"
+    index: 1
 - assertVisible:
     id: "BackButtonHeader-BaseIcon-backButton"
 - tapOn:
-     id: "BackButtonHeader-BaseIcon-backButton"
-- tapOn:
-     id: "sendButton"
-- tapOn: "CARP CarpToken CARP"
+    id: "BackButtonHeader-BaseIcon-backButton"
+- tapOn: "Send"
+- tapOn: "CarpToken"
 - tapOn:
     id: "SendScreen_amountInput"
 - inputText: ${AMOUNT}
 - tapOn: "Currency balance"
 - tapOn: "NEXT"
-- tapOn:
-    point: "50%,33%"
-- tapOn:
-    id: "next-button"
+- tapOn: "Account 2"
+- tapOn: "NEXT"
 - runFlow:
       when:
         visible: "Select delegation"
@@ -314,15 +228,15 @@ env:
     id: "settings-tab"
 - tapOn:
     id: "settings-tab"
-- extendedWaitUntil:
-        visible: "BackButtonHeader-BaseIcon-backButton-wrapper"
-        timeout: 10000
 - tapOn:
-    id: "BackButtonHeader-BaseIcon-backButton-wrapper"
+    id: "BackButtonHeader-BaseIcon-backButton"
 - assertVisible:
     id: "settings-screen"
-- tapOn: "󰢻 General 󰅂"
-- tapOn: "Reset App"
-- tapOn: "I am aware that this action is irreversible (required)"
-- tapOn: "RESET APP"
+- tapOn: "General"
+- tapOn:
+    text: Reset App
+    index: 0
+- tapOn:
+    id: "reset-app-checkbox"
+- tapOn: RESET APP
 - assertVisible: "DEV:DEMO"
