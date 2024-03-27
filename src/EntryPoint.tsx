@@ -1,7 +1,9 @@
 import React, { useEffect } from "react"
 // Import Datadog SDK dependencies
+import { Button, View } from "react-native"
+
 import { DatadogProvider, DatadogProviderConfiguration } from "@datadog/mobile-react-native"
-//import { crashNativeMainThread } from 'react-native-performance-limiter';
+import { crashJavascriptThread, crashNativeMainThread } from "react-native-performance-limiter"
 
 // Existing imports
 import { AutoLockProvider, BaseStatusBar, ErrorBoundary, useApplicationSecurity } from "~Components"
@@ -25,12 +27,12 @@ config.site = "EU1" // Set the Datadog site
 // Additional optional configurations...
 config.nativeCrashReportEnabled = true // enable native crash reporting
 
-//const crashApp = () => {
-//   crashNativeMainThread('Test crash here on entry Native ');
-//};
-//const crashApp2 = () => {
-//    crashJavascriptThread('custom error message Javascript');
-//};
+const crashApp = () => {
+    crashNativeMainThread("Test crash here on entry Native ")
+}
+const crashAppJS = () => {
+    crashJavascriptThread("custom error message Javascript")
+}
 
 export const EntryPoint = () => {
     const { setIsAppReady, securityType } = useApplicationSecurity()
@@ -38,12 +40,9 @@ export const EntryPoint = () => {
     useEffect(() => {
         RNBootSplash.hide({ fade: false })
         setIsAppReady(true)
-
-        // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [])
+    }, [setIsAppReady])
 
     return (
-        // Wrap with DatadogProvider
         <DatadogProvider configuration={config}>
             <ErrorBoundary>
                 <PlatformAutolock>
@@ -52,6 +51,12 @@ export const EntryPoint = () => {
                         useFadeOutAnimation={securityType === SecurityLevelType.SECRET}>
                         <AppLoader>
                             <BaseStatusBar />
+                            {/* Centered Buttons */}
+                            {/*<View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>*/}
+                            <View>
+                                <Button title="Crash Native Thread" onPress={() => crashApp()} />
+                                <Button title="Crash JS Thread" onPress={() => crashAppJS()} />
+                            </View>
                             <SwitchStack />
                         </AppLoader>
                     </AnimatedSplashScreen>
