@@ -106,6 +106,7 @@ export enum AnalyticsEvent {
 type MixPanelEvent = {
     medium: AnalyticsEvent.SEND | AnalyticsEvent.DAPP
     signature: AnalyticsEvent.LOCAL | AnalyticsEvent.HARDWARE
+    network: string
     subject?: AnalyticsEvent.NATIVE_TOKEN | AnalyticsEvent.TOKEN | AnalyticsEvent.NFT
     context?: AnalyticsEvent.IN_APP | AnalyticsEvent.WALLET_CONNECT
     failed?: boolean
@@ -115,6 +116,7 @@ type MixPanelEvent = {
 /**
  * @param {AnalyticsEvent.SEND | AnalyticsEvent.DAPP} medium
  * @param {AnalyticsEvent.LOCAL | AnalyticsEvent.HARDWARE} signature
+ * @param {string} network
  * @param {AnalyticsEvent.NATIVE_TOKEN | AnalyticsEvent.TOKEN | AnalyticsEvent.NFT} [subject]
  * @param {AnalyticsEvent.IN_APP | AnalyticsEvent.WALLET_CONNECT} [context]
  * @param {boolean} [failed]
@@ -127,6 +129,7 @@ type MixPanelEvent = {
 export const creteAnalyticsEvent = ({
     medium,
     signature,
+    network,
     subject,
     context,
     failed,
@@ -134,6 +137,7 @@ export const creteAnalyticsEvent = ({
 }: {
     medium: AnalyticsEvent.SEND | AnalyticsEvent.DAPP
     signature: AnalyticsEvent.LOCAL | AnalyticsEvent.HARDWARE
+    network: string
     subject?: AnalyticsEvent.NATIVE_TOKEN | AnalyticsEvent.TOKEN | AnalyticsEvent.NFT
     context?: AnalyticsEvent.IN_APP | AnalyticsEvent.WALLET_CONNECT
     failed?: boolean
@@ -142,6 +146,7 @@ export const creteAnalyticsEvent = ({
     return {
         subject,
         medium,
+        network,
         signature,
         context,
         failed,

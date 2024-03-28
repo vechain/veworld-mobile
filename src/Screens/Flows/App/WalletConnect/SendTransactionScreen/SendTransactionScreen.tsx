@@ -115,7 +115,9 @@ export const SendTransactionScreen: FC<Props> = ({ route }: Props) => {
                     ...creteAnalyticsEvent({
                         medium: AnalyticsEvent.DAPP,
                         signature: AnalyticsEvent.LOCAL,
+                        network: network.name,
                         context: isInjectedWallet ? AnalyticsEvent.IN_APP : AnalyticsEvent.WALLET_CONNECT,
+                        dappUrl: request.appUrl ?? request.appName,
                     }),
                 })
             }
@@ -123,7 +125,7 @@ export const SendTransactionScreen: FC<Props> = ({ route }: Props) => {
             dispatch(setIsAppLoading(false))
             goBack()
         },
-        [isInjectedWallet, dispatch, goBack, track],
+        [dispatch, goBack, track, network.name, isInjectedWallet, request.appUrl, request.appName],
     )
 
     const onTransactionSuccess = useCallback(
