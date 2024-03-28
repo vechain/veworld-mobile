@@ -3,7 +3,13 @@ import { createNativeStackNavigator } from "@react-navigation/native-stack"
 import { TabStack } from "~Navigation/Tabs"
 import { OnboardingStack } from "./OnboardingStack"
 import { CreateWalletAppStack, Routes } from "~Navigation"
-import { BlackListedCollectionsScreen, ConnectAppScreen, SendTransactionScreen, SignCertificateScreen } from "~Screens"
+import {
+    BlackListedCollectionsScreen,
+    ConnectAppScreen,
+    DappChangeAccountScreen,
+    SendTransactionScreen,
+    SignCertificateScreen,
+} from "~Screens"
 import { PendingRequestTypes } from "@walletconnect/types"
 import { AppBlockedScreen } from "~Screens/Flows/App/AppBlockedScreen"
 import { TransferEventListener } from "../../TransferEventListener"
@@ -16,6 +22,7 @@ import { BUY_FEATURE_ENABLED } from "~Constants"
 import { SignMessageScreen } from "~Screens/Flows/App/WalletConnect/SignMessageScreen"
 import { LedgerSignMessage } from "~Screens/Flows/App/LedgerScreen/LedgerSignMessage"
 import { TransactionRequest } from "~Model/DApp"
+import { WindowRequest } from "~Components/Providers/InAppBrowserProvider/types"
 
 export type RootStackParamListSwitch = {
     OnboardingStack: undefined
@@ -56,6 +63,9 @@ export type RootStackParamListSwitch = {
         accountWithDevice: LedgerAccountWithDevice
     }
     [Routes.BLOCKED_APP_SCREEN]: undefined
+    [Routes.DAPP_CHANGE_ACCOUNT_SCREEN]: {
+        request: WindowRequest
+    }
 }
 const Switch = createNativeStackNavigator<RootStackParamListSwitch>()
 
@@ -106,6 +116,8 @@ export const SwitchStack = () => {
                         <Switch.Screen name={Routes.LEDGER_SIGN_TRANSACTION} component={LedgerSignTransaction} />
 
                         <Switch.Screen name={Routes.LEDGER_SIGN_MESSAGE} component={LedgerSignMessage} />
+
+                        <Switch.Screen name={Routes.DAPP_CHANGE_ACCOUNT_SCREEN} component={DappChangeAccountScreen} />
 
                         {BUY_FEATURE_ENABLED && (
                             <Switch.Screen

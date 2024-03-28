@@ -243,7 +243,7 @@ export const LedgerSignTransaction: React.FC<Props> = ({ route }) => {
             setTimeout(() => signTransaction(), MUTEX_TIMEOUT)
         } else {
             debug(ERROR_EVENTS.LEDGER, "[LedgerSignTransaction] - skipping signTransaction")
-            startPollingCorrectDeviceSettings()
+            !isSending && startPollingCorrectDeviceSettings()
         }
     }, [
         userRejected,
@@ -254,6 +254,7 @@ export const LedgerSignTransaction: React.FC<Props> = ({ route }) => {
         startPollingCorrectDeviceSettings,
         stopPollingCorrectDeviceSettings,
         stopPollingDeviceStatus,
+        isSending,
     ])
 
     useEffect(() => {
