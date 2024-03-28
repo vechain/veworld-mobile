@@ -21,6 +21,22 @@ env:
       id: "wallet-tab"
 - tapOn: "Wallet 1"
 
+## Homepage - Adding accounts
+- assertVisible: "VeWorld"
+- tapOn:
+      id: "HomeScreen_WalletManagementButton-wrapper"
+- tapOn: "Wallet 1"
+- tapOn:
+      id: "WalletDetailScreen_addAccountButton"
+- tapOn:
+      id: "WalletDetailScreen_addAccountButton"
+- tapOn:
+      id: "wallet-tab"
+- tapOn:
+      id: "AccountCard_changeAccountButton"
+- tapOn:
+      text: "Account 1"
+
 ## User should be able to send tokens - Send VET from Account 1 to Account 2
 - tapOn: "Send"
 - assertVisible: "Send your token"
