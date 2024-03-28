@@ -20,9 +20,9 @@ export const core: ICore = new Core({
 
 const walletInitializer = new Mutex()
 
-export async function getWeb3Wallet(): Promise<IWeb3Wallet> {
+export async function getWeb3Wallet(newInstance = false): Promise<IWeb3Wallet> {
     return await walletInitializer.runExclusive(async () => {
-        if (_web3wallet) {
+        if (_web3wallet && !newInstance) {
             return _web3wallet
         }
 

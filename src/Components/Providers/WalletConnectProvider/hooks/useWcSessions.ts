@@ -6,6 +6,7 @@ import { useI18nContext } from "~i18n"
 import { SessionTypes, SignClientTypes } from "@walletconnect/types"
 import { cleanContexts, deleteContext, useAppDispatch } from "~Storage/Redux"
 import { ERROR_EVENTS } from "~Constants"
+import { AppState } from "react-native"
 
 type SessionDelete = Omit<SignClientTypes.BaseEventArgs, "params">
 type SessionDeleteState = Record<string, SessionDelete>
@@ -26,6 +27,18 @@ export const useWcSessions = () => {
             [sessionDelete.topic]: sessionDelete,
         }))
     }, [])
+
+    useEffect(() => {
+        ;(async () => {
+            AppState.addEventListener("focus", async () => {
+                const web3Wallet = await WalletConnectUtils.getWeb3Wallet()
+
+                for (const topic of Object.keys(activeSessions)) {
+                    await web3Wallet.engine.signClient.ping({ topic })
+                }
+            })
+        })()
+    }, [activeSessions])
 
     const disconnectSession = useCallback(
         async (topic: string, fromRemote = false) => {
