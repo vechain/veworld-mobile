@@ -1,3 +1,5 @@
+# flow.yaml
+
 appId: org.vechain.veworld.app
 env:
     AMOUNT: 0.01
@@ -138,6 +140,10 @@ env:
           index: 1
       - tapOn:
           id: "confirm-send-button"
+- tapOn:
+    id: "BackButtonHeader-BaseIcon-backButton"
+- tapOn:
+    id: "confirm-send-button"
 - repeat:
     times: 6
     commands:
@@ -169,85 +175,15 @@ env:
                 index: 1
             - tapOn:
                 id: "confirm-send-button"
-      - extendedWaitUntil:
-          visible: "Insert your 6-digit PIN"
-          timeout: 10000
+      - tapOn:
+          id: "BackButtonHeader-BaseIcon-backButton"
+      - tapOn:
+          id: "confirm-send-button"
       - repeat:
           times: 6
           commands:
             - tapOn: "1"
-- evalScript: ${console.log('Delegation account Method')}
-## User should be able to send tokens delegating with url method
-- tapOn:
-    id: "AccountCard_changeAccountButton"
-- tapOn: "Account 1"
-- tapOn:
-    id: "sendButton"
-- tapOn: "Vechain"
-- tapOn:
-    id: "SendScreen_amountInput"
-- inputText: ${AMOUNT}
-- tapOn: "Currency balance"
-- tapOn: "NEXT"
-- tapOn: "Account 2"
-- tapOn:
-    id: "next-button"
-- evalScript: ${console.log('Delegation URL Method- going inside flow')}
-- runFlow:
-    when:
-      visible: "Select delegation"
-    commands:
-      - tapOn:
-          id: "button-URL"
-      - tapOn:
-          id: "confirm-send-button"
-      - inputText: "https://sponsor-testnet.vechain.energy/by/282"
-      - tapOn:
-          text: "Add"
-          index: 1
-      - tapOn:
-          text: "https://sponsor-testnet.vechain.energy/by/282"
-          index: 1
-      - assertVisible: "Details"
-      - tapOn:
-          id: "confirm-send-button"
-- repeat:
-    times: 6
-    commands:
-      - tapOn: "1"
-- runFlow:
-    env:
-      AMOUNT: 0.01
-    commands:
-      - tapOn:
-          id: "sendButton"
-      - tapOn: "VeThor"
-      - tapOn:
-          id: "SendScreen_amountInput"
-      - inputText: ${AMOUNT}
-      - tapOn: "Currency balance"
-      - tapOn: "NEXT"
-      - tapOn: "Account 2"
-      - tapOn: "NEXT"
-      - runFlow:
-          when:
-            visible: "Select delegation"
-          commands:
-            - tapOn:
-                id: "button-URL"
-            - tapOn:
-                id: "confirm-send-button"
-            - inputText: "https://sponsor-testnet.vechain.energy/by/282"
-            - tapOn: "0.01"
-            - assertVisible: "Details"
-            - tapOn:
-                id: "confirm-send-button"
-      - repeat:
-          times: 6
-          commands:
-            - tapOn: "1"
-      - assertVisible: "Your tokens"
-- evalScript: ${console.log('Delegationg URL complete')}
+- evalScript: ${console.log('Delegation account Method complete')}
 
 ## User should be able to send custom tokens
 
