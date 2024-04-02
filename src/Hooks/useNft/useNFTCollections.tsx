@@ -131,7 +131,7 @@ export const useNFTCollections = () => {
                 )
 
                 // exit early if there are no more pages to fetch
-                if (pagination.totalPages && _page >= pagination.totalPages) return
+                if (!pagination.hasNext) return
 
                 // Parse collection metadata from registry info or the chain if needed
                 const _nftCollections: NftCollection[] = contractsForNFTs.map(collection => {
