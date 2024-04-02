@@ -16,9 +16,9 @@ import { PlatformUtils } from "~Utils"
 
 // Datadog SDK configuration
 const config = new DatadogProviderConfiguration(
-    "pubfcce59cd78594f40fb3dba62fc34280b", // Replace with your actual client token
-    "dev-test", // Environment name
-    "4b98025d-dc62-423c-8ee3-4e9002448328", // Application ID
+    "pub73c67659859b7626e182f39bdd46f484",
+    "dev-test",
+    "58c5bbac-e4d2-4be2-bfe2-f36002173ce4",
     true, // Track user interactions
     true, // Track XHR Resources
     true, // Track Errors
