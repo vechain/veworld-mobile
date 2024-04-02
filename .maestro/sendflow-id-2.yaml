@@ -85,7 +85,7 @@ env:
 - tapOn:
     id: "BackButtonHeader-BaseIcon-backButton"
 - extendedWaitUntil:
-    is: "settings-screen"
+    id: "settings-screen"
     timeout:  300000
 - assertVisible:
     id: "settings-screen"
