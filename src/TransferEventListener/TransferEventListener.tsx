@@ -10,7 +10,7 @@ import {
     useAppSelector,
     validateAndUpsertActivity,
 } from "~Storage/Redux"
-import { BloomUtils, debug, error } from "~Utils"
+import { BloomUtils, error } from "~Utils"
 import { useInformUser, useStateReconciliation } from "./Hooks"
 import { useFungibleTokenInfo } from "~Hooks"
 import { Activity, Beat } from "~Model"
@@ -85,12 +85,7 @@ export const TransferEventListener: React.FC = () => {
                     network.type,
                 )
 
-                debug(
-                    ERROR_EVENTS.TOKENS,
-                    `Found ${transfers.pagination.totalElements} transfers in block ${beat.number}`,
-                )
-
-                if (transfers.pagination.totalElements === 0) return
+                if (transfers.data.length <= 0) return
 
                 // ~ NFT TRANSFER
                 const nftTransfers = filterNFTTransferEvents(transfers.data, blackListedCollections)
