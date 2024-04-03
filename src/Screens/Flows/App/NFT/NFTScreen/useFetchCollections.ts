@@ -25,13 +25,7 @@ export const useFetchCollections = (
 
     const nftNetworkingSideEffects = useAppSelector(selectNftNetworkingSideEffects)
 
-    const hasNext = useMemo(
-        () =>
-            !allNFTCollections?.pagination.totalElements ||
-            (allNFTCollections?.collections.length ?? 0) < allNFTCollections?.pagination.totalElements,
-
-        [allNFTCollections?.collections.length, allNFTCollections?.pagination.totalElements],
-    )
+    const hasNext = useMemo(() => allNFTCollections?.pagination.hasNext, [allNFTCollections?.pagination.hasNext])
 
     useEffect(() => {
         if (isEmpty(allNFTCollections) && registryInfo !== undefined) {

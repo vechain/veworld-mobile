@@ -9,12 +9,7 @@ export const usePagination = () => {
             pageSize: number,
             cb: (page: number) => Promise<void>,
         ) => {
-            if (
-                (pagination?.totalElements && totalReceived >= pagination?.totalElements) ||
-                totalReceived % pageSize !== 0
-            )
-                return
-
+            if (!pagination.hasNext) return
             await cb(totalReceived / pageSize)
         },
         [],

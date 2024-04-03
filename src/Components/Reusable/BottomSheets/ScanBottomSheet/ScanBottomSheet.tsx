@@ -33,11 +33,13 @@ export const ScanBottomSheet = React.forwardRef<BottomSheetModalMethods, Props>(
             const isAddressTarget = target.includes(ScanTarget.ADDRESS)
             const isWalletConnectTarget = target.includes(ScanTarget.WALLET_CONNECT)
 
-            const isValidAddress = isAddressTarget && AddressUtils.isValid(data)
+            let coinbaseQRcodeClean = AddressUtils.coinbaseQRcodeAddress(data)
+
+            const isValidAddress = isAddressTarget && AddressUtils.isValid(coinbaseQRcodeClean)
             const isValidWalletConnectUri = isWalletConnectTarget && WalletConnectUtils.validateUri(data).isValid
 
             if (isValidAddress || isValidWalletConnectUri) {
-                onScan(data)
+                onScan(isAddressTarget ? coinbaseQRcodeClean : data)
             } else {
                 let toastProps = {
                     text1: LL.NOTIFICATION_TITLE_INVALID_QR(),

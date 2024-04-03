@@ -29,6 +29,7 @@ import {
     selectCurrency,
     selectPendingTx,
     selectSelectedAccount,
+    selectSelectedNetwork,
     setIsAppLoading,
     useAppDispatch,
     useAppSelector,
@@ -52,6 +53,7 @@ export const TransactionSummarySendScreen = ({ route }: Props) => {
     const dispatch = useAppDispatch()
     const track = useAnalyticTracking()
     const nav = useNavigation()
+    const network = useAppSelector(selectSelectedNetwork)
 
     const selectedAccount = useAppSelector(selectSelectedAccount)
     const pendingTransaction = useAppSelector(state => selectPendingTx(state, token.address))
@@ -72,6 +74,7 @@ export const TransactionSummarySendScreen = ({ route }: Props) => {
                     ...creteAnalyticsEvent({
                         medium: AnalyticsEvent.SEND,
                         signature: AnalyticsEvent.LOCAL,
+                        network: network.name,
                         subject: isNative ? AnalyticsEvent.NATIVE_TOKEN : AnalyticsEvent.TOKEN,
                     }),
                 })
@@ -80,7 +83,7 @@ export const TransactionSummarySendScreen = ({ route }: Props) => {
             nav.navigate(Routes.HOME)
             dispatch(setIsAppLoading(false))
         },
-        [token.symbol, track, nav, dispatch],
+        [token.symbol, nav, dispatch, track, network.name],
     )
 
     const onTransactionSuccess = useCallback(
