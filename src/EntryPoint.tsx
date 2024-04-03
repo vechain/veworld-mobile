@@ -1,11 +1,4 @@
 import React, { useEffect } from "react"
-// Import Datadog SDK dependencies
-import { Button, View } from "react-native"
-
-import { DatadogProvider, DatadogProviderConfiguration } from "@datadog/mobile-react-native"
-import { crashJavascriptThread, crashNativeMainThread } from "react-native-performance-limiter"
-
-// Existing imports
 import { AutoLockProvider, BaseStatusBar, ErrorBoundary, useApplicationSecurity } from "~Components"
 import { SwitchStack } from "~Navigation"
 import { AppLoader } from "./AppLoader"
@@ -13,12 +6,19 @@ import { AnimatedSplashScreen } from "./AnimatedSplashScreen"
 import RNBootSplash from "react-native-bootsplash"
 import { SecurityLevelType } from "~Model"
 import { PlatformUtils } from "~Utils"
+import { DatadogProvider, DatadogProviderConfiguration } from "@datadog/mobile-react-native"
+
+const dd_client_id = process.env.DATADOG_CLIENT_API
+const dd_application_id = process.env.DATADOG_APPLICATION_ID
+if (!dd_client_id || !dd_application_id) {
+    throw new Error("DATADOG environment variable is not set correctly. Please set it before running the application.")
+}
 
 // Datadog SDK configuration
 const config = new DatadogProviderConfiguration(
-    "pub73c67659859b7626e182f39bdd46f484",
-    "dev-test",
-    "58c5bbac-e4d2-4be2-bfe2-f36002173ce4",
+    dd_client_id, // Client API
+    "dev-test", // Environment name
+    dd_application_id, // Application ID
     true, // Track user interactions
     true, // Track XHR Resources
     true, // Track Errors
@@ -27,22 +27,17 @@ config.site = "EU1" // Set the Datadog site
 // Additional optional configurations...
 config.nativeCrashReportEnabled = true // enable native crash reporting
 
-const crashApp = () => {
-    crashNativeMainThread("Test crash here on entry Native ")
-}
-const crashAppJS = () => {
-    crashJavascriptThread("custom error message Javascript")
-}
-
 export const EntryPoint = () => {
     const { setIsAppReady, securityType } = useApplicationSecurity()
 
     useEffect(() => {
         RNBootSplash.hide({ fade: false })
         setIsAppReady(true)
-    }, [setIsAppReady])
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [])
 
     return (
+        // Wrap with DatadogProvider
         <DatadogProvider configuration={config}>
             <ErrorBoundary>
                 <PlatformAutolock>
@@ -51,12 +46,6 @@ export const EntryPoint = () => {
                         useFadeOutAnimation={securityType === SecurityLevelType.SECRET}>
                         <AppLoader>
                             <BaseStatusBar />
-                            {/* Centered Buttons */}
-                            {/*<View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>*/}
-                            <View>
-                                <Button title="Crash Native Thread" onPress={() => crashApp()} />
-                                <Button title="Crash JS Thread" onPress={() => crashAppJS()} />
-                            </View>
                             <SwitchStack />
                         </AppLoader>
                     </AnimatedSplashScreen>
