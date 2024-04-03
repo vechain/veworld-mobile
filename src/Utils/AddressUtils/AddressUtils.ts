@@ -148,3 +148,15 @@ export const humanAddress = (_address: string, lengthBefore = 4, lengthAfter = 1
     const after = _address.substring(_address.length - lengthAfter)
     return `${before}…${after}`
 }
+
+/**
+ * Coinbase QR code address is prefixed with vechain: which needs to be removed
+ * @param data
+ * @returns
+ */
+export const coinbaseQRcodeAddress = (data: string): string => {
+    if (data.includes("vechain:")) {
+        return data.replace("vechain:", "")
+    }
+    return data
+}
