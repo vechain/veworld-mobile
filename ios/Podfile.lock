@@ -480,9 +480,6 @@ PODS:
     - React-Core
   - react-native-cameraroll (5.10.0):
     - React-Core
-  - react-native-compat (2.11.3):
-    - RCT-Folly (= 2021.07.22.00)
-    - React-Core
   - react-native-context-menu-view (1.15.0):
     - React
   - react-native-flipper (0.163.0):
@@ -500,9 +497,7 @@ PODS:
   - react-native-pager-view (6.3.0):
     - RCT-Folly (= 2021.07.22.00)
     - React-Core
-  - react-native-performance-limiter (0.2.0):
-    - React-Core
-  - react-native-quick-base64 (2.0.8):
+  - react-native-quick-base64 (2.0.7):
     - React-Core
   - react-native-quick-crypto (0.6.1):
     - OpenSSL-Universal
@@ -629,7 +624,7 @@ PODS:
     - React-jsi (= 0.72.6)
     - React-logger (= 0.72.6)
     - React-perflogger (= 0.72.6)
-  - RNBootSplash (5.4.1):
+  - RNBootSplash (5.5.0):
     - React-Core
   - RNCAsyncStorage (1.23.1):
     - React-Core
@@ -785,7 +780,6 @@ DEPENDENCIES:
   - react-native-blob-util (from `../node_modules/react-native-blob-util`)
   - "react-native-blur (from `../node_modules/@react-native-community/blur`)"
   - "react-native-cameraroll (from `../node_modules/@react-native-camera-roll/camera-roll`)"
-  - "react-native-compat (from `../node_modules/@walletconnect/react-native-compat`)"
   - react-native-context-menu-view (from `../node_modules/react-native-context-menu-view`)
   - react-native-flipper (from `../node_modules/react-native-flipper`)
   - react-native-get-random-values (from `../node_modules/react-native-get-random-values`)
@@ -965,8 +959,6 @@ EXTERNAL SOURCES:
     :path: "../node_modules/@react-native-community/blur"
   react-native-cameraroll:
     :path: "../node_modules/@react-native-camera-roll/camera-roll"
-  react-native-compat:
-    :path: "../node_modules/@walletconnect/react-native-compat"
   react-native-context-menu-view:
     :path: "../node_modules/react-native-context-menu-view"
   react-native-flipper:
@@ -1137,7 +1129,6 @@ SPEC CHECKSUMS:
   react-native-blob-util: 30a6c9fd067aadf9177e61a998f2c7efb670598d
   react-native-blur: 69ecfe61d81b32ee7baae10f5d17aeb4e2594b10
   react-native-cameraroll: 4701ae7c3dbcd3f5e9e150ca17f250a276154b35
-  react-native-compat: 4da17905c26471d956dae70f9912a60d7da7fad2
   react-native-context-menu-view: dcec18eb8882e20596dbb75802e7d19cb87dac02
   react-native-flipper: 2d552a8178d839ef378220101fb7f0cd5b2a8003
   react-native-get-random-values: 21325b2244dfa6b58878f51f9aa42821e7ba3d06
@@ -1145,8 +1136,7 @@ SPEC CHECKSUMS:
   react-native-mmkv: 38d484ccd8f5760fe0e46d206ed07add5ddda1fc
   react-native-netinfo: 48c5f79a84fbc3ba1d28a8b0d04adeda72885fa8
   react-native-pager-view: 40d9ec4a63ed74f8aa2f1e1bba7c1e0b4080d8a6
-  react-native-performance-limiter: 7e3c21d1ae93530660f2e22e399e45a7318b553c
-  react-native-quick-base64: 777057ea4286f806b00259ede65dc79c7c706320
+  react-native-quick-base64: a5dbe4528f1453e662fcf7351029500b8b63e7bb
   react-native-quick-crypto: 455c1b411db006dba1026a30681ececb19180187
   react-native-restart: 7595693413fe3ca15893702f2c8306c62a708162
   react-native-safe-area-context: b97eb6f9e3b7f437806c2ce5983f479f8eb5de4b
@@ -1169,7 +1159,7 @@ SPEC CHECKSUMS:
   React-runtimescheduler: f23e337008403341177fc52ee4ca94e442c17ede
   React-utils: fa59c9a3375fb6f4aeb66714fd3f7f76b43a9f16
   ReactCommon: dd03c17275c200496f346af93a7b94c53f3093a4
-  RNBootSplash: eff8239c4f795ce42a0604873aef3733aac0dedd
+  RNBootSplash: 43323bde30fb54736d96543e2c20f2cb0531abc1
   RNCAsyncStorage: 826b603ae9c0f88b5ac4e956801f755109fa4d5c
   RNCMaskedView: 090213d32d8b3bb83a4dcb7d12c18f0152591906
   RNDeviceInfo: 4f9c7cfd6b9db1b05eb919620a001cf35b536423
