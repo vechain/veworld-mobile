@@ -205,7 +205,7 @@
         "@types/react-test-renderer": "^18.0.0",
         "@types/ws": "^8.5.5",
         "@vechain/connex-types": "^2.1.0",
-        "@walletconnect/types": "^2.10.2",
+        "@walletconnect/types": "2.10.2",
         "axios-mock-adapter": "^1.21.2",
         "babel-jest": "^29.3.1",
         "babel-plugin-module-resolver": "^5.0.0",
