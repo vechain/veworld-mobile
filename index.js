@@ -203,7 +203,7 @@ const NavigationProvider = ({ children }) => {
 const ddClientId = process.env.DATADOG_CLIENT_API
 const ddApplicationId = process.env.DATADOG_APPLICATION_ID
 if (!ddClientId || !ddApplicationId) {
-    throw new Error("DATADOG environment variable is not set correctly. Please set it before running the application.")
+    Sentry.captureMessage('DATADOG environment variable is not set correctly. Please set it before running the application.');
 }
 // Datadog SDK configuration
 const ddConfig = new DatadogProviderConfiguration(
