@@ -29,6 +29,7 @@ import { compareAddresses } from "~Utils/AddressUtils/AddressUtils"
 import { useNFTMetadata } from "~Hooks"
 import { useLazyLoader } from "./useLazyLoader"
 import { ERROR_EVENTS } from "~Constants"
+import { isEmpty } from "lodash"
 
 /**
  * `useNFTCollections` is a React hook that facilitates the fetching and management of NFT collections for a selected account.
@@ -131,7 +132,7 @@ export const useNFTCollections = () => {
                 )
 
                 // exit early if there are no more pages to fetch
-                if (!pagination.hasNext) return
+                if (isEmpty(contractsForNFTs) && !pagination.hasNext) return
 
                 // Parse collection metadata from registry info or the chain if needed
                 const _nftCollections: NftCollection[] = contractsForNFTs.map(collection => {
