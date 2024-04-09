@@ -155,8 +155,8 @@ PODS:
   - libwebp/webp (1.3.2):
     - libwebp/sharpyuv
   - lottie-ios (4.4.1)
-  - lottie-react-native (6.7.0):
-    - lottie-ios (~> 4.4.1)
+  - lottie-react-native (6.7.2):
+    - lottie-ios (= 4.4.1)
     - React-Core
   - Mixpanel-swift (4.2.0):
     - Mixpanel-swift/Complete (= 4.2.0)
@@ -622,7 +622,7 @@ PODS:
     - React-jsi (= 0.72.6)
     - React-logger (= 0.72.6)
     - React-perflogger (= 0.72.6)
-  - RNBootSplash (5.5.0):
+  - RNBootSplash (5.5.1):
     - React-Core
   - RNCAsyncStorage (1.23.1):
     - React-Core
@@ -1094,7 +1094,7 @@ SPEC CHECKSUMS:
   libevent: 4049cae6c81cdb3654a443be001fb9bdceff7913
   libwebp: 1786c9f4ff8a279e4dac1e8f385004d5fc253009
   lottie-ios: e047b1d2e6239b787cc5e9755b988869cf190494
-  lottie-react-native: e3205322282d72e23efb3bff3287d0bd16fb1b01
+  lottie-react-native: 17547b2f3c7034e2ae8672833fdb63262164d18a
   Mixpanel-swift: e5dd85295923e6a875acf17ccbab8d2ecb10ea65
   MixpanelReactNative: 0101b8828c2f335c128850e71ab7d3b7adde089a
   MMKV: ed58ad794b3f88c24d604a5b74f3fba17fcbaf74
@@ -1150,7 +1150,7 @@ SPEC CHECKSUMS:
   React-runtimescheduler: f23e337008403341177fc52ee4ca94e442c17ede
   React-utils: fa59c9a3375fb6f4aeb66714fd3f7f76b43a9f16
   ReactCommon: dd03c17275c200496f346af93a7b94c53f3093a4
-  RNBootSplash: 43323bde30fb54736d96543e2c20f2cb0531abc1
+  RNBootSplash: f640475e9e1efac8368f30fa634c19d666abd189
   RNCAsyncStorage: 826b603ae9c0f88b5ac4e956801f755109fa4d5c
   RNCMaskedView: 090213d32d8b3bb83a4dcb7d12c18f0152591906
   RNDeviceInfo: 4f9c7cfd6b9db1b05eb919620a001cf35b536423

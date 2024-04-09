@@ -1,5 +1,7 @@
 apply plugin: "com.android.application"
 apply plugin: "com.facebook.react"
+apply from: "../../node_modules/@datadog/mobile-react-native/datadog-sourcemaps.gradle"
+
 apply plugin: "kotlin-android"
 
 def keystorePropertiesFile = rootProject.file("keystore.properties")
@@ -91,8 +93,8 @@ android {
         applicationId "org.vechain.veworld.app"
         minSdkVersion rootProject.ext.minSdkVersion
         targetSdkVersion rootProject.ext.targetSdkVersion
-        versionCode 81
-        versionName "1.7.4"
+        versionCode 84
+        versionName "1.7.5"
         testBuildType System.getProperty('testBuildType', 'debug')
         testInstrumentationRunner 'androidx.test.runner.AndroidJUnitRunner'
     }
@@ -129,6 +131,12 @@ android {
             pickFirst 'lib/x86_64/libcrypto.so'
             pickFirst 'lib/armeabi-v7a/libcrypto.so'
             pickFirst 'lib/arm64-v8a/libcrypto.so'
+    }
+
+    applicationVariants.all { variant ->
+        if (project.tasks.findByName("minify${variant.name.capitalize()}WithR8")) {
+            tasks["minify${variant.name.capitalize()}WithR8"].finalizedBy { tasks["uploadMapping${variant.name.capitalize()}"] }
+        }
     }
 }
 
