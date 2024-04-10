@@ -3,6 +3,8 @@ import { StyleSheet, View } from "react-native"
 import { BaseIcon, BaseSpacer, BaseText, BaseTouchable, BaseView } from "~Components/Base"
 import { useThemedStyles } from "~Hooks"
 import { ColorThemeType } from "~Constants"
+import { AddressUtils } from "~Utils"
+import { WithVns } from "~Utils/VnsUtils"
 
 type Props = {
     text: string
@@ -17,9 +19,14 @@ export const AccountAddressButtonPill = ({ text, openQRCodeSheet, switchAccount 
         <BaseView flexDirection="row" style={themedStyles.container}>
             <BaseTouchable action={openQRCodeSheet} haptics="Light" style={themedStyles.pressable}>
                 <BaseView flexDirection="row" px={8}>
-                    <BaseText color={theme.colors.text} typographyFont="smallCaptionRegular">
-                        {text}
-                    </BaseText>
+                    <WithVns
+                        address={text}
+                        children={({ vnsName, vnsAddress }) => (
+                            <BaseText color={theme.colors.text} typographyFont="smallCaptionRegular">
+                                {vnsName || AddressUtils.humanAddress(vnsAddress ?? text, 6, 3)}
+                            </BaseText>
+                        )}
+                    />
                     <BaseSpacer width={4} />
                     <BaseIcon name="content-copy" color={theme.colors.text} size={12} />
                 </BaseView>

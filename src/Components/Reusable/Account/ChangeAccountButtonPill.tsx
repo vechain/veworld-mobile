@@ -3,6 +3,8 @@ import { StyleSheet, View } from "react-native"
 import { BaseIcon, BaseText, BaseTouchable, BaseView } from "~Components/Base"
 import { useThemedStyles } from "~Hooks"
 import { ColorThemeType } from "~Constants"
+import { WithVns } from "~Utils/VnsUtils"
+import { AddressUtils } from "~Utils"
 
 type Props = {
     title: string
@@ -23,13 +25,20 @@ export const ChangeAccountButtonPill = ({ title, text, action }: Props) => {
                     ellipsizeMode="tail">
                     {title}
                 </BaseText>
-                <BaseText
-                    color={theme.colors.textReversed}
-                    typographyFont="smallCaption"
-                    numberOfLines={1}
-                    ellipsizeMode="tail">
-                    {text}
-                </BaseText>
+                <WithVns
+                    address={text}
+                    children={({ vnsName, vnsAddress }) => {
+                        return (
+                            <BaseText
+                                color={theme.colors.textReversed}
+                                typographyFont="smallCaptionRegular"
+                                numberOfLines={1}
+                                ellipsizeMode="tail">
+                                {vnsName || AddressUtils.humanAddress(vnsAddress ?? text, 6, 3)}
+                            </BaseText>
+                        )
+                    }}
+                />
             </BaseView>
 
             <View style={themedStyles.seperator} />

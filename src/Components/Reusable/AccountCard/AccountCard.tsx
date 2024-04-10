@@ -15,6 +15,7 @@ import {
 } from "~Components"
 import { AccountWithDevice, DEVICE_TYPE, WatchedAccount } from "~Model"
 import { selectVetBalanceByAccount, selectVthoBalanceByAccount, useAppSelector } from "~Storage/Redux"
+import { WithVns } from "~Utils/VnsUtils"
 
 type Props = {
     account: AccountWithDevice | WatchedAccount
@@ -63,8 +64,6 @@ export const AccountCard: React.FC<Props> = memo(
             } ${isVthoBalance ? VTHO.symbol : VET.symbol}`
         }, [isBalanceVisible, isVthoBalance, vetBalance, vthoBalance, formattedBalance])
 
-        const humanAddress = useMemo(() => AddressUtils.humanAddress(account.address, 4, 6), [account.address])
-
         const accountWithDevice = useMemo(() => {
             if (!AccountUtils.isObservedAccount(account)) {
                 return account as AccountWithDevice
@@ -111,9 +110,15 @@ export const AccountCard: React.FC<Props> = memo(
                         </BaseView>
                     ) : (
                         <BaseView style={styles.rightSubContainer}>
-                            <BaseText style={styles.address} fontSize={10}>
-                                {humanAddress}
-                            </BaseText>
+                            <WithVns
+                                address={account.address}
+                                children={({ vnsName, vnsAddress }) => (
+                                    <BaseText style={styles.address} fontSize={10}>
+                                        {vnsName || AddressUtils.humanAddress(vnsAddress ?? account.address, 4, 6)}
+                                    </BaseText>
+                                )}
+                            />
+
                             <BaseSpacer height={4} />
                             <BaseText fontSize={10}>{balance}</BaseText>
                         </BaseView>

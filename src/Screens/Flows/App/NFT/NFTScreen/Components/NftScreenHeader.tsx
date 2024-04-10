@@ -1,7 +1,6 @@
-import React, { useMemo } from "react"
+import React from "react"
 import { BaseSpacer, BaseText, BaseView, ChangeAccountButtonPill, SelectedNetworkViewer } from "~Components"
 import { selectSelectedAccount, useAppSelector } from "~Storage/Redux"
-import { AddressUtils } from "~Utils"
 import { useI18nContext } from "~i18n"
 
 type Props = {
@@ -13,11 +12,6 @@ export const NftScreenHeader = ({ openSelectAccountBottomSheet }: Props) => {
 
     const selectedAccount = useAppSelector(selectSelectedAccount)
 
-    const humanAddress = useMemo(
-        () => AddressUtils.humanAddress(selectedAccount.address ?? "", 5, 4),
-        [selectedAccount.address],
-    )
-
     return (
         <BaseView flexDirection="row" justifyContent="space-between" mx={20} pb={16}>
             <BaseText typographyFont="largeTitle">{LL.TITLE_NFTS()}</BaseText>
@@ -26,7 +20,7 @@ export const NftScreenHeader = ({ openSelectAccountBottomSheet }: Props) => {
                 <BaseSpacer width={8} />
                 <ChangeAccountButtonPill
                     title={selectedAccount.alias ?? LL.WALLET_LABEL_ACCOUNT()}
-                    text={humanAddress}
+                    text={selectedAccount.address}
                     action={openSelectAccountBottomSheet}
                 />
             </BaseView>

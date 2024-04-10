@@ -506,7 +506,7 @@ PODS:
     - React-Core
   - react-native-safe-area-context (4.9.0):
     - React-Core
-  - react-native-slider (4.5.0):
+  - react-native-slider (4.5.1):
     - RCT-Folly (= 2021.07.22.00)
     - React-Core
   - react-native-webview (13.8.1):
@@ -622,7 +622,7 @@ PODS:
     - React-jsi (= 0.72.6)
     - React-logger (= 0.72.6)
     - React-perflogger (= 0.72.6)
-  - RNBootSplash (5.5.1):
+  - RNBootSplash (5.5.2):
     - React-Core
   - RNCAsyncStorage (1.23.1):
     - React-Core
@@ -1131,7 +1131,7 @@ SPEC CHECKSUMS:
   react-native-quick-crypto: 455c1b411db006dba1026a30681ececb19180187
   react-native-restart: 7595693413fe3ca15893702f2c8306c62a708162
   react-native-safe-area-context: b97eb6f9e3b7f437806c2ce5983f479f8eb5de4b
-  react-native-slider: cc89964e1432fa31aa9db7a0fa9b21e26b5d5152
+  react-native-slider: 1ceee2b429885bfcd452ebcdd6217ca6072b7bb8
   react-native-webview: bdc091de8cf7f8397653e30182efcd9f772e03b3
   React-NativeModulesApple: 02e35e9a51e10c6422f04f5e4076a7c02243fff2
   React-perflogger: e3596db7e753f51766bceadc061936ef1472edc3
@@ -1150,7 +1150,7 @@ SPEC CHECKSUMS:
   React-runtimescheduler: f23e337008403341177fc52ee4ca94e442c17ede
   React-utils: fa59c9a3375fb6f4aeb66714fd3f7f76b43a9f16
   ReactCommon: dd03c17275c200496f346af93a7b94c53f3093a4
-  RNBootSplash: f640475e9e1efac8368f30fa634c19d666abd189
+  RNBootSplash: 878e64bcbebe59550e5a9d0edb6745d716d5f463
   RNCAsyncStorage: 826b603ae9c0f88b5ac4e956801f755109fa4d5c
   RNCMaskedView: 090213d32d8b3bb83a4dcb7d12c18f0152591906
   RNDeviceInfo: 4f9c7cfd6b9db1b05eb919620a001cf35b536423

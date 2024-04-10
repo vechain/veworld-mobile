@@ -11,14 +11,15 @@ import { COLORS } from "~Constants"
 import { StyleSheet } from "react-native"
 import { AddressUtils } from "~Utils"
 import { veworldLogo } from "~Assets"
-
-const snapPoints = ["50%", "100%"]
+import { WithVns } from "~Utils/VnsUtils"
 
 export const QRCodeBottomSheet = React.forwardRef<BottomSheetModalMethods>(({}, ref) => {
     const theme = useTheme()
     const { LL } = useI18nContext()
 
     const selectedAccount = useAppSelector(selectSelectedAccount)
+
+    let snapPoints = ["55%"]
 
     const { onCopyToClipboard } = useCopyClipboard()
 
@@ -60,6 +61,27 @@ export const QRCodeBottomSheet = React.forwardRef<BottomSheetModalMethods>(({}, 
                     title={AddressUtils.humanAddress(selectedAccount.address, 8, 7)}
                     action={() => onCopyToClipboard(selectedAccount.address, LL.COMMON_LBL_ADDRESS())}
                     rightIcon={<BaseIcon name="content-copy" color={theme.colors.card} style={baseStyles.icon} />}
+                    m={16}
+                />
+
+                <WithVns
+                    address={selectedAccount.address}
+                    children={({ vnsName }) =>
+                        vnsName && (
+                            <BaseButton
+                                haptics="Light"
+                                px={28}
+                                size="md"
+                                bgColor={theme.colors.secondary}
+                                textColor={theme.colors.text}
+                                title={vnsName}
+                                action={() => onCopyToClipboard(vnsName, LL.COMMON_LBL_ADDRESS())}
+                                rightIcon={
+                                    <BaseIcon name="content-copy" color={theme.colors.text} style={baseStyles.icon} />
+                                }
+                            />
+                        )
+                    }
                 />
             </BaseView>
         </BaseBottomSheet>
