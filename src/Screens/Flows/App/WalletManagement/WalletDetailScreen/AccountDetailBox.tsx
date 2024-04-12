@@ -6,6 +6,7 @@ import { BaseTextInput, BaseSpacer, BaseText, BaseView } from "~Components"
 import { WalletAccount } from "~Model"
 import { selectVetBalanceByAccount, useAppSelector } from "~Storage/Redux"
 import { ColorThemeType, VET } from "~Constants"
+import { WithVns } from "~Utils/VnsUtils"
 
 type Props = {
     account: WalletAccount
@@ -79,10 +80,16 @@ export const AccountDetailBox: React.FC<Props> = memo(
                         maxLength={20}
                     />
                 </BaseView>
-                <BaseView style={(styles.rightSubContainer, { opacity: cardOpacity })}>
-                    <BaseText style={styles.address} fontSize={10}>
-                        {AddressUtils.humanAddress(account.address, 4, 6)}
-                    </BaseText>
+                <BaseView style={(styles.rightSubContainer, { opacity: cardOpacity })} alignItems="flex-end">
+                    <WithVns
+                        address={account.address}
+                        children={({ vnsName, vnsAddress }) => (
+                            <BaseText style={styles.address} fontSize={10}>
+                                {vnsName || AddressUtils.humanAddress(vnsAddress ?? account.address, 4, 6)}
+                            </BaseText>
+                        )}
+                    />
+
                     <BaseSpacer height={4} />
                     <BaseText fontSize={10}>{balance}</BaseText>
                 </BaseView>
