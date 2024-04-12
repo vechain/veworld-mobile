@@ -29,6 +29,7 @@ import { useNavigation } from "@react-navigation/native"
 import { AppInfo, UnknownAppMessage } from "~Screens"
 import { AnalyticsEvent, ERROR_EVENTS } from "~Constants"
 import { getSdkError } from "@walletconnect/utils"
+import { DdRum, RumActionType } from "@datadog/mobile-react-native"
 
 type Props = NativeStackScreenProps<RootStackParamListSwitch, Routes.CONNECTED_APP_SIGN_MESSAGE_SCREEN>
 
@@ -127,6 +128,10 @@ export const SignMessageScreen: FC<Props> = ({ route }: Props) => {
                 dispatch(setIsAppLoading(false))
             } catch (err: unknown) {
                 track(AnalyticsEvent.DAPP_CERTIFICATE_FAILED)
+                DdRum.startView("DAPP_CERTIFICATE", "DAPP_CERTIFICATE", {}, Date.now())
+                DdRum.addAction(RumActionType.TAP, "DAPP_CERTIFICATE_FAILED") // Log specific user action
+                DdRum.stopView("DAPP_CERTIFICATE") // Stop tracking the view when component unmounts or changes
+
                 error(ERROR_EVENTS.WALLET_CONNECT, err)
 
                 await failRequest(requestEvent, getRpcError("internal"))
@@ -154,6 +159,10 @@ export const SignMessageScreen: FC<Props> = ({ route }: Props) => {
     const onReject = useCallback(async () => {
         await failRequest(requestEvent, getRpcError("userRejectedRequest"))
         track(AnalyticsEvent.DAPP_CERTIFICATE_REJECTED)
+        DdRum.startView("DAPP_CERTIFICATE", "DAPP_CERTIFICATE", {}, Date.now())
+        DdRum.addAction(RumActionType.TAP, "DAPP_CERTIFICATE_REJECTED") // Log specific user action
+        DdRum.stopView("DAPP_CERTIFICATE") // Stop tracking the view when component unmounts or changes
+
         onClose()
     }, [requestEvent, track, onClose, failRequest])
 

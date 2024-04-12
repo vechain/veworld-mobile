@@ -11,6 +11,7 @@ import { ChangeAccountNetworkBottomSheet } from "./Components/ChangeAccountNetwo
 import { AnalyticsEvent } from "~Constants"
 import { useAnalyticTracking } from "~Hooks"
 import { useNavigation } from "@react-navigation/native"
+import { DdRum, RumActionType } from "@datadog/mobile-react-native"
 
 type Props = NativeStackScreenProps<RootStackParamListBrowser, Routes.BROWSER>
 
@@ -34,6 +35,9 @@ export const InAppBrowser: React.FC<Props> = ({ route }) => {
     useEffect(() => {
         if (route?.params?.ul) {
             track(AnalyticsEvent.DAPP_UNIVERSAL_LINK_INITIATED, { isUniversalLink: route.params.url })
+            DdRum.startView("DAPP_DISCOVERY", "DAPP_DISCOVERY", {}, Date.now())
+            DdRum.addAction(RumActionType.TAP, "DAPP_UNIVERSAL_LINK_INITIATED") // Log specific user action
+            DdRum.stopView("DAPP_DISCOVERY") // Stop tracking the view when component unmounts or changes
         }
     }, [nav, route.params?.ul, route.params.url, track])
 

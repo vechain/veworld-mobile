@@ -8,6 +8,7 @@ import { ImportWalletBottomSheet } from "./components"
 import { WalletSetupSvg } from "~Assets"
 import { AnalyticsEvent } from "~Constants"
 import { selectHasOnboarded, useAppSelector } from "~Storage/Redux"
+import { DdRum, RumActionType } from "@datadog/mobile-react-native"
 
 export const WalletSetupScreen = () => {
     const nav = useNavigation()
@@ -19,24 +20,36 @@ export const WalletSetupScreen = () => {
     const { ref, onOpen, onClose } = useBottomSheetModal()
 
     const createLocalWallet = useCallback(async () => {
+        DdRum.startView("Wallet_Setup_Screen", "Wallet_Setup_Screen", {}, Date.now())
+        DdRum.addAction(RumActionType.TAP, "SELECT_WALLET_CREATE_WALLET") // Log specific user action
+        DdRum.stopView("Wallet_Setup_Screen")
         track(AnalyticsEvent.SELECT_WALLET_CREATE_WALLET)
         nav.navigate(Routes.NEW_MNEMONIC)
     }, [nav, track])
 
     const onImportWallet = useCallback(async () => {
+        DdRum.startView("Wallet_Setup_Screen", "Wallet_Setup_Screen", {}, Date.now())
+        DdRum.addAction(RumActionType.TAP, "SELECT_WALLET_IMPORT_WALLET") // Log specific user action
+        DdRum.stopView("Wallet_Setup_Screen")
         track(AnalyticsEvent.SELECT_WALLET_IMPORT_WALLET)
         onOpen()
     }, [onOpen, track])
 
     const onObserveWallet = useCallback(async () => {
+        DdRum.startView("Wallet_Setup_Screen", "Wallet_Setup_Screen", {}, Date.now())
+        DdRum.addAction(RumActionType.TAP, "SELECT_WALLET_OBSERVE_WALLET") // Log specific user action
+        DdRum.stopView("Wallet_Setup_Screen")
         track(AnalyticsEvent.SELECT_WALLET_OBSERVE_WALLET)
         nav.navigate(Routes.OBSERVE_WALLET)
     }, [nav, track])
 
     useEffect(() => {
         track(AnalyticsEvent.PAGE_LOADED_IMPORT_OR_CREATE)
-        // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [])
+
+        DdRum.startView("Wallet_Setup_Screen", "Wallet_Setup_Screen", {}, Date.now())
+        DdRum.addAction(RumActionType.SCROLL, "PAGE_LOADED_IMPORT_OR_CREATE") // Log specific user action
+        DdRum.stopView("Wallet_Setup_Screen")
+    }, [track])
 
     return (
         <Layout

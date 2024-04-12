@@ -10,6 +10,7 @@ import { getThreeRandomIndexes } from "./getThreeRandomIndexes"
 import { selectAreDevFeaturesEnabled, useAppSelector } from "~Storage/Redux"
 import { selectHasOnboarded, selectMnemonic } from "~Storage/Redux/Selectors"
 import { AnalyticsEvent, valueToHP } from "~Constants"
+import { DdRum, RumActionType } from "@datadog/mobile-react-native"
 
 export const ConfirmMnemonicScreen = () => {
     const nav = useNavigation()
@@ -44,12 +45,19 @@ export const ConfirmMnemonicScreen = () => {
 
     const onConfirmPress = () => {
         track(AnalyticsEvent.NEW_WALLET_VERIFICATION_ATTEMPTED)
+        DdRum.startView("NEW_WALLET", "NEW_WALLET", {}, Date.now())
+        DdRum.addAction(RumActionType.TAP, "NEW_WALLET_VERTIFICATION_ATTEMPTED") // Log specific user action
+        DdRum.stopView("NEW_WALLET") // Stop tracking the view when component unmounts or changes
+
         if (
             selectedFirstWord === mnemonicArray[firstIndex] &&
             selectedSecondWord === mnemonicArray[secondIndex] &&
             selectedThirdWord === mnemonicArray[thirdIndex]
         ) {
             track(AnalyticsEvent.NEW_WALLET_VERIFICATION_SUCCESS)
+            DdRum.startView("NEW_WALLET", "NEW_WALLET", {}, Date.now())
+            DdRum.addAction(RumActionType.TAP, "NEW_WALLET_VERTIFICATION_SUCCESS") // Log specific user action
+            DdRum.stopView("NEW_WALLET") // Stop tracking the view when component unmounts or changes
 
             if (userHasOnboarded) {
                 nav.navigate(Routes.WALLET_SUCCESS)
@@ -58,6 +66,9 @@ export const ConfirmMnemonicScreen = () => {
             }
         } else {
             track(AnalyticsEvent.NEW_WALLET_VERIFICATION_FAILED)
+            DdRum.startView("NEW_WALLET", "NEW_WALLET", {}, Date.now())
+            DdRum.addAction(RumActionType.TAP, "NEW_WALLET_VERTIFICATION_FAILED") // Log specific user action
+            DdRum.stopView("NEW_WALLET") // Stop tracking the view when component unmounts or changes
 
             showErrorToast({
                 text1: LL.ERROR_WRONG_WORDS_COMBINATION(),
