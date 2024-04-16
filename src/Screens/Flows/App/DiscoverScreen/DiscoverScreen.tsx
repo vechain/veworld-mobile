@@ -21,7 +21,7 @@ import { TabBar } from "./Components/TabBar"
 import Animated, { useSharedValue, withDelay, withSpring, withTiming } from "react-native-reanimated"
 import { PlatformUtils } from "~Utils"
 import { useFetchFeaturedDApps } from "./Hooks/useFetchFeaturedDApps"
-import { RumManager } from "~Test/RumManager"
+import { RumManager } from "~Logging/RumManager"
 
 export const DiscoverScreen: React.FC = () => {
     const { theme, styles } = useThemedStyles(baseStyles)
