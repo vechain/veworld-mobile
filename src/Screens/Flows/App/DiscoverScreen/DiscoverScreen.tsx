@@ -21,7 +21,7 @@ import { TabBar } from "./Components/TabBar"
 import Animated, { useSharedValue, withDelay, withSpring, withTiming } from "react-native-reanimated"
 import { PlatformUtils } from "~Utils"
 import { useFetchFeaturedDApps } from "./Hooks/useFetchFeaturedDApps"
-import { DdRum, RumActionType } from "@datadog/mobile-react-native"
+import { RumManager } from "~Test/RumManager"
 
 export const DiscoverScreen: React.FC = () => {
     const { theme, styles } = useThemedStyles(baseStyles)
@@ -44,24 +44,15 @@ export const DiscoverScreen: React.FC = () => {
     const hasOpenedDiscovery = useAppSelector(selectHasUserOpenedDiscovery)
     const track = useAnalyticTracking()
 
-    useEffect(() => {
-        const startTime = Date.now()
-        DdRum.startView("DISCOVERY_SECTION", "DISCOVERY_SECTION", {}, startTime)
-
-        return () => {
-            DdRum.stopView("Wallet_Setup_Screen", {}, startTime)
-        }
-    }, [])
+    const ddLogger = useMemo(() => new RumManager(), [])
 
     useEffect(() => {
         if (!hasOpenedDiscovery) {
             track(AnalyticsEvent.DISCOVERY_SECTION_OPENED)
             dispatch(setDiscoverySectionOpened())
-            DdRum.startView("DISCOVERY_SECTION", "DISCOVERY_SECTION", {}, Date.now())
-            DdRum.addAction(RumActionType.TAP, "DISCOVERY_SECTION_OPENED") // Log specific user action
-            DdRum.stopView("DISCOVERY_SECTION")
+            ddLogger.logAction("DISCOVERY_SECTION", "DISCOVERY_SECTION_OPENED")
         }
-    }, [track, hasOpenedDiscovery, dispatch])
+    }, [track, hasOpenedDiscovery, dispatch, ddLogger])
 
     useEffect(() => {
         if (filteredSearch?.length) {
@@ -85,15 +76,14 @@ export const DiscoverScreen: React.FC = () => {
             track(AnalyticsEvent.DISCOVERY_USER_OPENED_DAPP, {
                 url: dapp.href,
             })
-            DdRum.startView("DISCOVERY_SECTION", "DISCOVERY_SECTION", {}, Date.now())
-            DdRum.addAction(RumActionType.TAP, "DISCOVERY_USER_OPENED_DAPP") // Log specific user action
-            DdRum.stopView("DISCOVERY_SECTION")
+
+            ddLogger.logAction("DISCOVERY_SECTION", "DISCOVERY_USER_OPENED_DAPP")
 
             setTimeout(() => {
                 dispatch(addNavigationToDApp({ href: dapp.href, isCustom: dapp.isCustom }))
             }, 1000)
         },
-        [track, dispatch, nav, setFilteredSearch],
+        [track, dispatch, nav, setFilteredSearch, ddLogger],
     )
 
     const onSearch = useCallback(() => {
