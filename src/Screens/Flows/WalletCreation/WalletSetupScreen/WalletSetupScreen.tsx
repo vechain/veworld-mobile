@@ -1,5 +1,5 @@
 import { useNavigation } from "@react-navigation/native"
-import React, { useCallback, useEffect } from "react"
+import React, { useCallback, useEffect, useMemo } from "react"
 import { BaseIcon, BaseSpacer, BaseText, BaseTouchableBox, BaseView, Layout } from "~Components"
 import { Routes } from "~Navigation"
 import { useI18nContext } from "~i18n"
@@ -8,7 +8,7 @@ import { ImportWalletBottomSheet } from "./components"
 import { WalletSetupSvg } from "~Assets"
 import { AnalyticsEvent } from "~Constants"
 import { selectHasOnboarded, useAppSelector } from "~Storage/Redux"
-import { DdRum, RumActionType } from "@datadog/mobile-react-native"
+import { RumManager } from "~Logging/RumManager"
 
 export const WalletSetupScreen = () => {
     const nav = useNavigation()
@@ -19,37 +19,31 @@ export const WalletSetupScreen = () => {
 
     const { ref, onOpen, onClose } = useBottomSheetModal()
 
+    const ddLogger = useMemo(() => new RumManager(), [])
+
     const createLocalWallet = useCallback(async () => {
-        DdRum.startView("Wallet_Setup_Screen", "Wallet_Setup_Screen", {}, Date.now())
-        DdRum.addAction(RumActionType.TAP, "SELECT_WALLET_CREATE_WALLET") // Log specific user action
-        DdRum.stopView("Wallet_Setup_Screen")
         track(AnalyticsEvent.SELECT_WALLET_CREATE_WALLET)
+        ddLogger.logAction("WALLET_SETUP_SCREEN", "SELECT_WALLET_CREATE_WALLET")
         nav.navigate(Routes.NEW_MNEMONIC)
-    }, [nav, track])
+    }, [nav, track, ddLogger])
 
     const onImportWallet = useCallback(async () => {
-        DdRum.startView("Wallet_Setup_Screen", "Wallet_Setup_Screen", {}, Date.now())
-        DdRum.addAction(RumActionType.TAP, "SELECT_WALLET_IMPORT_WALLET") // Log specific user action
-        DdRum.stopView("Wallet_Setup_Screen")
         track(AnalyticsEvent.SELECT_WALLET_IMPORT_WALLET)
+        ddLogger.logAction("WALLET_SETUP_SCREEN", "SELECT_WALLET_IMPORT_WALLET")
         onOpen()
-    }, [onOpen, track])
+    }, [onOpen, track, ddLogger])
 
     const onObserveWallet = useCallback(async () => {
-        DdRum.startView("Wallet_Setup_Screen", "Wallet_Setup_Screen", {}, Date.now())
-        DdRum.addAction(RumActionType.TAP, "SELECT_WALLET_OBSERVE_WALLET") // Log specific user action
-        DdRum.stopView("Wallet_Setup_Screen")
         track(AnalyticsEvent.SELECT_WALLET_OBSERVE_WALLET)
+        ddLogger.logAction("WALLET_SETUP_SCREEN", "SELECT_WALLET_OBSERVE_WALLET")
         nav.navigate(Routes.OBSERVE_WALLET)
-    }, [nav, track])
+    }, [nav, track, ddLogger])
 
     useEffect(() => {
         track(AnalyticsEvent.PAGE_LOADED_IMPORT_OR_CREATE)
-
-        DdRum.startView("Wallet_Setup_Screen", "Wallet_Setup_Screen", {}, Date.now())
-        DdRum.addAction(RumActionType.SCROLL, "PAGE_LOADED_IMPORT_OR_CREATE") // Log specific user action
-        DdRum.stopView("Wallet_Setup_Screen")
     }, [track])
+
+    ddLogger.logAction("WALLET_SETUP_SCREEN", "PAGE_LOADED_IMPORT_OR_CREATE")
 
     return (
         <Layout

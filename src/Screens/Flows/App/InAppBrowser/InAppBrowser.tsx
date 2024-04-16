@@ -1,6 +1,6 @@
 import { Layout } from "~Components"
 import { StyleSheet, View } from "react-native"
-import React, { MutableRefObject, useEffect } from "react"
+import React, { MutableRefObject, useEffect, useMemo } from "react"
 import WebView from "react-native-webview"
 import { useInAppBrowser } from "~Components/Providers/InAppBrowserProvider"
 import { BrowserBottomBar, URLBar } from "./Components"
@@ -11,7 +11,7 @@ import { ChangeAccountNetworkBottomSheet } from "./Components/ChangeAccountNetwo
 import { AnalyticsEvent } from "~Constants"
 import { useAnalyticTracking } from "~Hooks"
 import { useNavigation } from "@react-navigation/native"
-import { DdRum, RumActionType } from "@datadog/mobile-react-native"
+import { RumManager } from "~Logging/RumManager"
 
 type Props = NativeStackScreenProps<RootStackParamListBrowser, Routes.BROWSER>
 
@@ -32,14 +32,14 @@ export const InAppBrowser: React.FC<Props> = ({ route }) => {
     const track = useAnalyticTracking()
     const nav = useNavigation()
 
+    const ddLogger = useMemo(() => new RumManager(), [])
+
     useEffect(() => {
         if (route?.params?.ul) {
             track(AnalyticsEvent.DAPP_UNIVERSAL_LINK_INITIATED, { isUniversalLink: route.params.url })
-            DdRum.startView("DAPP_DISCOVERY", "DAPP_DISCOVERY", {}, Date.now())
-            DdRum.addAction(RumActionType.TAP, "DAPP_UNIVERSAL_LINK_INITIATED") // Log specific user action
-            DdRum.stopView("DAPP_DISCOVERY") // Stop tracking the view when component unmounts or changes
+            ddLogger.logAction("DAPP_DISCOVERY", "DAPP_UNIVERSAL_LINK_INITIATED")
         }
-    }, [nav, route.params?.ul, route.params.url, track])
+    }, [nav, route.params?.ul, route.params.url, track, ddLogger])
 
     const [userAgent, setUserAgent] = React.useState<string | undefined>(undefined)
 
