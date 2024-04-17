@@ -29,6 +29,7 @@ export interface WatchedAccount extends WalletAccount {
 
 export interface AccountWithDevice extends WalletAccount {
     device: Device
+    domain?: string
 }
 
 export type Device = LedgerDevice | LocalDevice

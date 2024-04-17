@@ -1263,6 +1263,10 @@ type RootTranslation = {
 	 */
 	ERROR_WALLET_ALREADY_EXISTS: string
 	/**
+	 * A​c​c​o​u​n​t​ ​a​l​r​e​a​d​y​ ​e​x​i​s​t​s
+	 */
+	ERROR_ACCOUNT_ALREADY_EXISTS: string
+	/**
 	 * E​n​t​e​r​ ​a​ ​v​a​l​i​d​ ​U​R​L
 	 */
 	ERROR_ENTER_VALID_URL: string
@@ -1330,6 +1334,10 @@ type RootTranslation = {
 	 * I​n​v​a​l​i​d​ ​a​d​d​r​e​s​s
 	 */
 	ERROR_INVALID_ADDRESS: string
+	/**
+	 * A​d​d​r​e​s​s​ ​n​o​t​ ​f​o​u​n​d​ ​f​o​r​ ​d​o​m​a​i​n​ ​n​a​m​e
+	 */
+	ERROR_COULD_NOT_FIND_ADDRESS_FOR_DOMAIN: string
 	/**
 	 * T​o​o​ ​m​a​n​y​ ​b​i​o​m​e​t​r​i​c​s​ ​a​u​t​h​e​n​t​i​c​a​t​i​o​n​ ​a​t​t​e​m​p​t​s​,​ ​p​l​e​a​s​e​ ​t​r​y​ ​a​g​a​i​n​ ​l​a​t​e​r
 	 */
@@ -2257,7 +2265,7 @@ type RootTranslation = {
 	 */
 	SEND_NO_CONTACTS_OR_ACCOUNTS_FOUND: string
 	/**
-	 * P​l​e​a​s​e​ ​t​y​p​e​ ​i​n​ ​t​h​e​ ​a​d​d​r​e​s​s​.
+	 * P​l​e​a​s​e​ ​t​y​p​e​ ​i​n​ ​a​n​ ​a​d​d​r​e​s​s​ ​o​r​ ​a​ ​.​v​e​t​ ​d​o​m​a​i​n​ ​n​a​m​e
 	 */
 	SEND_PLEASE_TYPE_ADDRESS: string
 	/**
@@ -4131,6 +4139,10 @@ Try reconnect your device to the internet.
 	 */
 	ERROR_WALLET_ALREADY_EXISTS: () => LocalizedString
 	/**
+	 * Account already exists
+	 */
+	ERROR_ACCOUNT_ALREADY_EXISTS: () => LocalizedString
+	/**
 	 * Enter a valid URL
 	 */
 	ERROR_ENTER_VALID_URL: () => LocalizedString
@@ -4198,6 +4210,10 @@ Try reconnect your device to the internet.
 	 * Invalid address
 	 */
 	ERROR_INVALID_ADDRESS: () => LocalizedString
+	/**
+	 * Address not found for domain name
+	 */
+	ERROR_COULD_NOT_FIND_ADDRESS_FOR_DOMAIN: () => LocalizedString
 	/**
 	 * Too many biometrics authentication attempts, please try again later
 	 */
@@ -5103,7 +5119,7 @@ Try reconnect your device to the internet.
 	 */
 	SEND_NO_CONTACTS_OR_ACCOUNTS_FOUND: () => LocalizedString
 	/**
-	 * Please type in the address.
+	 * Please type in an address or a .vet domain name
 	 */
 	SEND_PLEASE_TYPE_ADDRESS: () => LocalizedString
 	/**

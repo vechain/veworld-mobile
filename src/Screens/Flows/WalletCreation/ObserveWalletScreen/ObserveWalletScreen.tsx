@@ -21,6 +21,7 @@ import { AccountUtils, AddressUtils, BalanceUtils, BigNutils } from "~Utils"
 import { ScanTarget, VET } from "~Constants"
 import { Routes } from "~Navigation"
 import { DEVICE_TYPE, WatchedAccount } from "~Model"
+import { useVns, ZERO_ADDRESS } from "~Utils/VnsUtils"
 
 export const ObserveWalletScreen = () => {
     const { LL } = useI18nContext()
@@ -31,7 +32,10 @@ export const ObserveWalletScreen = () => {
     const selectedNetwork = useAppSelector(selectSelectedNetwork)
     const thor = useThor()
 
-    const [address, setAddress] = useState("")
+    const [inputValue, setInputValue] = useState("")
+    const [underlyingAddress, setUnderlyingAddress] = useState("")
+    const { _getName, _getAddress, isLoading } = useVns({ name: "", address: "" })
+
     const [error, setError] = useState<string | undefined>()
     const [_watchedAccount, setWatchedAccount] = useState<WatchedAccount | undefined>()
     const [formattedBalance, setFormattedBalance] = useState("0")
@@ -85,7 +89,7 @@ export const ObserveWalletScreen = () => {
             // Try to close the keyboard. Might come in handy if the user is using the camera to scan a QR code
             Keyboard.dismiss()
 
-            const addressIsValid = AddressUtils.isValid(_address ?? address)
+            const addressIsValid = AddressUtils.isValid(_address ?? underlyingAddress)
             if (!addressIsValid) {
                 showErrorToast({ text1: LL.ERROR_INVALID_ADDRESS() })
             }
@@ -94,7 +98,7 @@ export const ObserveWalletScreen = () => {
             let isWalletAlreadyImported = false
 
             for (const account of accounts) {
-                if (AddressUtils.compareAddresses(account.address, address)) {
+                if (AddressUtils.compareAddresses(account.address, _address ?? underlyingAddress)) {
                     isWalletAlreadyImported = true
                     break
                 }
@@ -104,10 +108,10 @@ export const ObserveWalletScreen = () => {
                 showErrorToast({ text1: LL.ERROR_WALLET_ALREADY_EXISTS() })
             } else {
                 // find wallet in the network and present the wallet details
-                findWalletOnChain(_address ?? address)
+                findWalletOnChain(_address ?? underlyingAddress)
             }
         },
-        [LL, accounts, address, findWalletOnChain],
+        [LL, accounts, underlyingAddress, findWalletOnChain],
     )
 
     const { RenderCameraModal, handleOpenCamera } = useCameraBottomSheet({
@@ -116,23 +120,37 @@ export const ObserveWalletScreen = () => {
     })
 
     const handleOnSetAddress = useCallback(
-        (value: string) => {
+        async (value: string) => {
+            setUnderlyingAddress("")
             setError(undefined)
 
-            const addressIsValid = AddressUtils.isValid(value)
+            setInputValue(value)
 
-            if (!addressIsValid) {
-                setError(LL.ERROR_INVALID_ADDRESS())
+            if (value.includes(".vet")) {
+                const address = await _getAddress(value)
+
+                if (address === ZERO_ADDRESS) {
+                    setError(LL.ERROR_COULD_NOT_FIND_ADDRESS_FOR_DOMAIN())
+                    return
+                }
+
+                setUnderlyingAddress(address)
+                return
             }
 
-            setAddress(value)
+            if (value.length === 42) {
+                const { name, address } = await _getName(value)
+                setUnderlyingAddress(address)
+                setInputValue(name || value)
+            }
         },
-        [LL],
+        [LL, _getAddress, _getName],
     )
 
     const onClearAddress = useCallback(() => {
         HapticsService.triggerImpact({ level: "Light" })
-        setAddress("")
+        setInputValue("")
+        setUnderlyingAddress("")
         setError(undefined)
     }, [])
 
@@ -162,10 +180,10 @@ export const ObserveWalletScreen = () => {
                                     label={LL.SEND_PLEASE_TYPE_ADDRESS()}
                                     errorMessage={error}
                                     setValue={handleOnSetAddress}
-                                    value={address}
+                                    value={inputValue}
                                     autoFocus
-                                    onIconPress={() => (address ? onClearAddress() : handleOnIconPress())}
-                                    rightIcon={address ? "close" : "qrcode-scan"}
+                                    onIconPress={() => (inputValue ? onClearAddress() : handleOnIconPress())}
+                                    rightIcon={inputValue ? "close" : "qrcode-scan"}
                                 />
 
                                 <BaseSpacer height={40} />
@@ -186,9 +204,10 @@ export const ObserveWalletScreen = () => {
                     <>
                         <BaseView w={100}>
                             <BaseButton
+                                isLoading={isLoading}
                                 testID="observe-wallet-confirm-button"
                                 action={onImport}
-                                disabled={!address || !!error}
+                                disabled={!underlyingAddress || !!error}
                                 w={100}
                                 title={btnTitle}
                                 disabledActionHaptics="Heavy"

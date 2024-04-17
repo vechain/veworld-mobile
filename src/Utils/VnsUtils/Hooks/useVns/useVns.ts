@@ -3,6 +3,8 @@ import { useCallback, useEffect, useMemo, useState } from "react"
 import { selectSelectedNetwork, useAppSelector } from "~Storage/Redux"
 import { NETWORK_TYPE } from "~Model"
 
+export const ZERO_ADDRESS = "0x0000000000000000000000000000000000000000"
+
 const VNS_RESOLVER = {
     mainnet: "0xA11413086e163e41901bb81fdc5617c975Fa5a1A",
     testnet: "0xc403b8EA53F707d7d4de095f0A20bC491Cf2bc94",
@@ -13,6 +15,7 @@ export const useVns = ({ name, address }: { name?: string; address?: string }) =
     const network = useAppSelector(selectSelectedNetwork)
     const [stateName, setName] = useState("")
     const [stateAddress, setAddres] = useState("")
+    const [isLoading, setIsLoading] = useState(false)
 
     const NETWORK_RESOLVER = useMemo(() => {
         return VNS_RESOLVER[network.type as keyof typeof VNS_RESOLVER]
@@ -20,34 +23,42 @@ export const useVns = ({ name, address }: { name?: string; address?: string }) =
 
     const _getAddress = useCallback(
         async (_name: string) => {
+            setIsLoading(true)
             const {
                 decoded: { addresses },
             } = await thor.account(NETWORK_RESOLVER).method(ABI.getAddresses).call([_name])
 
+            setIsLoading(false)
+
             if (Array.isArray(addresses)) {
                 setAddres(addresses[0])
-                return
+                return addresses[0]
             }
 
             setAddres(addresses)
+            return addresses[0]
         },
         [NETWORK_RESOLVER, thor],
     )
 
     const _getName = useCallback(
         async (_address: string) => {
+            setIsLoading(true)
             const {
                 decoded: { names },
             } = await thor.account(NETWORK_RESOLVER).method(ABI.getNames).call([_address])
 
+            setIsLoading(false)
+
             if (Array.isArray(names)) {
                 setName(names[0])
                 setAddres(_address)
-                return
+                return { name: names[0], address: _address }
             }
 
             setName(names)
             setAddres(_address)
+            return { name: names[0], address: _address }
         },
         [NETWORK_RESOLVER, thor],
     )
@@ -56,7 +67,7 @@ export const useVns = ({ name, address }: { name?: string; address?: string }) =
         if (network.type === NETWORK_TYPE.SOLO || network.type === NETWORK_TYPE.OTHER) return
 
         if (!name && !address) {
-            throw new Error("At least one of 'name' or 'address' must be provided.")
+            return
         }
 
         if (name && !address) {
@@ -69,7 +80,7 @@ export const useVns = ({ name, address }: { name?: string; address?: string }) =
         }
     }, [address, _getAddress, _getName, name, network.type])
 
-    return { name: stateName, address: stateAddress }
+    return { name: stateName, address: stateAddress, _getName, _getAddress, isLoading }
 }
 
 const ABI = {
