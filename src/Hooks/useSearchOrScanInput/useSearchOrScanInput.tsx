@@ -5,6 +5,7 @@ import { ScanTarget } from "~Constants"
 import { useCameraBottomSheet } from "~Hooks/useCameraBottomSheet"
 import { useSearchContactsAndAccounts } from "~Hooks/useSearchContactsAndAccounts"
 import { AddressUtils } from "~Utils"
+import { useVns } from "~Utils/VnsUtils"
 import { useI18nContext } from "~i18n"
 
 export const useSearchOrScanInput = (
@@ -17,20 +18,23 @@ export const useSearchOrScanInput = (
     const [searchText, setSearchText] = useState("")
     const [errorMessage, setErrorMessage] = useState("")
 
+    const { _getName } = useVns({ name: "", address: "" })
+
     const { filteredContacts, filteredAccounts, isAddressInContactsOrAccounts, accountsAndContacts, contacts } =
         useSearchContactsAndAccounts({ searchText, selectedAddress })
 
     const onSuccessfullScan = useCallback(
-        (address: string) => {
+        async (address: string) => {
             const addressExists = accountsAndContacts.some(accountOrContact =>
                 AddressUtils.compareAddresses(accountOrContact.address, address),
             )
 
-            setSearchText(address)
+            const { name } = await _getName(address)
+            setSearchText(name ?? address)
             setSelectedAddress(address)
             if (addressExists) return navigateNext(address)
         },
-        [accountsAndContacts, navigateNext, setSelectedAddress],
+        [_getName, accountsAndContacts, navigateNext, setSelectedAddress],
     )
 
     const { RenderCameraModal, handleOpenCamera } = useCameraBottomSheet({
