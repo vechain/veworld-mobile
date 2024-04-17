@@ -10,6 +10,7 @@ import { getThreeRandomIndexes } from "./getThreeRandomIndexes"
 import { selectAreDevFeaturesEnabled, useAppSelector } from "~Storage/Redux"
 import { selectHasOnboarded, selectMnemonic } from "~Storage/Redux/Selectors"
 import { AnalyticsEvent, valueToHP } from "~Constants"
+import { RumManager } from "~Logging/RumManager"
 
 export const ConfirmMnemonicScreen = () => {
     const nav = useNavigation()
@@ -30,6 +31,8 @@ export const ConfirmMnemonicScreen = () => {
 
     const [firstIndex, secondIndex, thirdIndex] = useMemo(() => getThreeRandomIndexes(), [])
 
+    const ddLogger = useMemo(() => new RumManager(), [])
+
     // Filter out the 3 words we are challenging the user to find
     // and shuffle the remaining words
     const fillerMnemonicArray = useMemo(() => {
@@ -44,12 +47,15 @@ export const ConfirmMnemonicScreen = () => {
 
     const onConfirmPress = () => {
         track(AnalyticsEvent.NEW_WALLET_VERIFICATION_ATTEMPTED)
+        ddLogger.logAction("NEW_WALLET", "NEW_WALLET_VERTIFICATION_ATTEMPTED")
+
         if (
             selectedFirstWord === mnemonicArray[firstIndex] &&
             selectedSecondWord === mnemonicArray[secondIndex] &&
             selectedThirdWord === mnemonicArray[thirdIndex]
         ) {
             track(AnalyticsEvent.NEW_WALLET_VERIFICATION_SUCCESS)
+            ddLogger.logAction("NEW_WALLET", "NEW_WALLET_VERTIFICATION_SUCCESS")
 
             if (userHasOnboarded) {
                 nav.navigate(Routes.WALLET_SUCCESS)
@@ -58,6 +64,7 @@ export const ConfirmMnemonicScreen = () => {
             }
         } else {
             track(AnalyticsEvent.NEW_WALLET_VERIFICATION_FAILED)
+            ddLogger.logAction("NEW_WALLET", "NEW_WALLET_VERTIFICATION_FAILED")
 
             showErrorToast({
                 text1: LL.ERROR_WRONG_WORDS_COMBINATION(),

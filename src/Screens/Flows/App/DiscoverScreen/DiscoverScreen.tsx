@@ -21,6 +21,7 @@ import { TabBar } from "./Components/TabBar"
 import Animated, { useSharedValue, withDelay, withSpring, withTiming } from "react-native-reanimated"
 import { PlatformUtils } from "~Utils"
 import { useFetchFeaturedDApps } from "./Hooks/useFetchFeaturedDApps"
+import { RumManager } from "~Logging/RumManager"
 
 export const DiscoverScreen: React.FC = () => {
     const { theme, styles } = useThemedStyles(baseStyles)
@@ -43,12 +44,15 @@ export const DiscoverScreen: React.FC = () => {
     const hasOpenedDiscovery = useAppSelector(selectHasUserOpenedDiscovery)
     const track = useAnalyticTracking()
 
+    const ddLogger = useMemo(() => new RumManager(), [])
+
     useEffect(() => {
         if (!hasOpenedDiscovery) {
             track(AnalyticsEvent.DISCOVERY_SECTION_OPENED)
             dispatch(setDiscoverySectionOpened())
+            ddLogger.logAction("DISCOVERY_SECTION", "DISCOVERY_SECTION_OPENED")
         }
-    }, [track, hasOpenedDiscovery, dispatch])
+    }, [track, hasOpenedDiscovery, dispatch, ddLogger])
 
     useEffect(() => {
         if (filteredSearch?.length) {
@@ -73,11 +77,13 @@ export const DiscoverScreen: React.FC = () => {
                 url: dapp.href,
             })
 
+            ddLogger.logAction("DISCOVERY_SECTION", "DISCOVERY_USER_OPENED_DAPP")
+
             setTimeout(() => {
                 dispatch(addNavigationToDApp({ href: dapp.href, isCustom: dapp.isCustom }))
             }, 1000)
         },
-        [track, dispatch, nav, setFilteredSearch],
+        [track, dispatch, nav, setFilteredSearch, ddLogger],
     )
 
     const onSearch = useCallback(() => {
