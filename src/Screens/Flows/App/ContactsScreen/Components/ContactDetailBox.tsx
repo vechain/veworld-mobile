@@ -1,10 +1,9 @@
 import React, { memo } from "react"
 import { StyleSheet } from "react-native"
-import { useTheme } from "~Hooks"
+import { useTheme, useVns } from "~Hooks"
 import { AddressUtils } from "~Utils"
 import { BaseCard, BaseIcon, BaseSpacer, BaseText, BaseView } from "~Components"
 import { Contact } from "~Model"
-import { WithVns } from "~Utils/VnsUtils"
 
 type Props = {
     contact: Contact
@@ -13,19 +12,16 @@ type Props = {
 export const ContactDetailBox: React.FC<Props> = memo(({ contact }) => {
     const theme = useTheme()
 
+    const { name: vnsName, address: vnsAddress } = useVns({ name: "", address: contact.address })
+
     return (
         <BaseCard testID={`${contact.alias}-contact-box`} style={styles.card}>
             <BaseView flexDirection="column">
                 <BaseText typographyFont="button">{contact.alias}</BaseText>
                 <BaseSpacer height={4} />
-                <WithVns
-                    address={contact.address}
-                    children={({ vnsName, vnsAddress }) => (
-                        <BaseText fontSize={10} typographyFont="smallCaptionRegular">
-                            {vnsName || AddressUtils.humanAddress(vnsAddress ?? contact.address, 4, 6)}
-                        </BaseText>
-                    )}
-                />
+                <BaseText fontSize={10} typographyFont="smallCaptionRegular">
+                    {vnsName || AddressUtils.humanAddress(vnsAddress ?? contact.address, 4, 6)}
+                </BaseText>
             </BaseView>
             <BaseView style={styles.rightSubContainer}>
                 <BaseIcon color={theme.colors.primary} size={24} name={"pencil"} />

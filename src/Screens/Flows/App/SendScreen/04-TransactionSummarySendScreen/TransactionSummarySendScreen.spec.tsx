@@ -56,7 +56,7 @@ jest.mock("~Hooks/useCheckIdentity/useCheckIdentity", () => ({
     }),
 }))
 
-jest.mock("~Utils/VnsUtils/Hooks/useVns/useVns", () => ({
+jest.mock("~Hooks/useVns/useVns", () => ({
     useVns: () => ({
         name: "grenos.vet",
         address: "0x",

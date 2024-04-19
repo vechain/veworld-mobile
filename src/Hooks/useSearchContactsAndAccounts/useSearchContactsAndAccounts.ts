@@ -1,8 +1,8 @@
 import { useEffect, useMemo, useRef, useState } from "react"
+import { useVns } from "~Hooks/useVns"
 import { AccountWithDevice, Contact } from "~Model"
 import { selectKnownContacts, selectOtherAccounts, useAppSelector } from "~Storage/Redux"
 import { AddressUtils } from "~Utils"
-import { useVns } from "~Utils/VnsUtils"
 
 export const useSearchContactsAndAccounts = ({
     searchText,

@@ -1,6 +1,6 @@
 import React, { memo, useMemo } from "react"
 import { StyleProp, StyleSheet, ViewProps, ViewStyle } from "react-native"
-import { useThemedStyles } from "~Hooks"
+import { useThemedStyles, useVns } from "~Hooks"
 import { ColorThemeType, VET, VTHO } from "~Constants"
 import { AccountUtils, AddressUtils, BigNutils } from "~Utils"
 import {
@@ -15,7 +15,6 @@ import {
 } from "~Components"
 import { AccountWithDevice, DEVICE_TYPE, WatchedAccount } from "~Model"
 import { selectVetBalanceByAccount, selectVthoBalanceByAccount, useAppSelector } from "~Storage/Redux"
-import { WithVns } from "~Utils/VnsUtils"
 
 type Props = {
     account: AccountWithDevice | WatchedAccount
@@ -76,6 +75,8 @@ export const AccountCard: React.FC<Props> = memo(
             }
         }, [account])
 
+        const { name: vnsName, address: vnsAddress } = useVns({ name: "", address: account.address })
+
         return (
             <BaseView w={100} flexDirection="row" style={containerStyle}>
                 <BaseTouchableBox
@@ -110,14 +111,9 @@ export const AccountCard: React.FC<Props> = memo(
                         </BaseView>
                     ) : (
                         <BaseView style={styles.rightSubContainer}>
-                            <WithVns
-                                address={account.address}
-                                children={({ vnsName, vnsAddress }) => (
-                                    <BaseText style={styles.address} fontSize={10}>
-                                        {vnsName || AddressUtils.humanAddress(vnsAddress ?? account.address, 4, 6)}
-                                    </BaseText>
-                                )}
-                            />
+                            <BaseText style={styles.address} fontSize={10}>
+                                {vnsName || AddressUtils.humanAddress(vnsAddress ?? account.address, 4, 6)}
+                            </BaseText>
 
                             <BaseSpacer height={4} />
                             <BaseText fontSize={10}>{balance}</BaseText>

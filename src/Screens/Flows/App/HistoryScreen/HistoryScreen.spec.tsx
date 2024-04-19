@@ -54,7 +54,7 @@ const TX_Mock = [
     },
 ]
 
-jest.mock("~Utils/VnsUtils/Hooks/useVns/useVns", () => ({
+jest.mock("~Hooks/useVns/useVns", () => ({
     useVns: () => ({
         name: "grenos.vet",
         address: "0x",

@@ -3,7 +3,7 @@ import React, { memo, useCallback, useMemo, useState } from "react"
 import { FlatList, StyleSheet, ViewToken } from "react-native"
 import { ColorThemeType, SCREEN_WIDTH, COLORS } from "~Constants"
 import { AddressUtils } from "~Utils"
-import { useThemedStyles } from "~Hooks"
+import { useThemedStyles, useVns } from "~Hooks"
 import {
     BaseIcon,
     BaseSpacer,
@@ -22,7 +22,6 @@ import {
     useAppSelector,
 } from "~Storage/Redux"
 import { useI18nContext } from "~i18n"
-import { WithVns } from "~Utils/VnsUtils"
 
 type Props = {
     fromAddress: string
@@ -107,23 +106,20 @@ export const TransferCard = memo(
             setActiveIndex(activeIdx ?? 0)
         }, [])
 
+        const { name: vnsNameFrom, address: vnsAddressFrom } = useVns({ name: "", address: fromAddress })
+
         return (
             <BaseView style={[styles.container]}>
                 <BaseView bg={theme.colors.card} style={styles.view}>
                     {/* FROM View */}
-                    <WithVns
-                        address={fromAddress}
-                        children={({ vnsName }) => (
-                            <FromAccounCard
-                                fromContactName={fromContactName}
-                                fromAddressShort={fromAddressShort}
-                                fromAddress={fromAddress}
-                                isFromAccountLedger={isFromAccountLedger}
-                                onAddContactPress={onAddContactPress}
-                                _isObservedWallet={isObservedWallet}
-                                vnsName={vnsName}
-                            />
-                        )}
+                    <FromAccounCard
+                        fromContactName={fromContactName}
+                        fromAddressShort={fromAddressShort}
+                        fromAddress={vnsAddressFrom}
+                        isFromAccountLedger={isFromAccountLedger}
+                        onAddContactPress={onAddContactPress}
+                        _isObservedWallet={isObservedWallet}
+                        vnsName={vnsNameFrom}
                     />
 
                     {/* TO View */}
@@ -135,18 +131,12 @@ export const TransferCard = memo(
                             <FlatList
                                 data={toAddresses}
                                 renderItem={({ index }) => (
-                                    <WithVns
-                                        address={toAddresses![index]}
-                                        children={({ vnsName }) => (
-                                            <ToAccountCard
-                                                toAddressesShort={toAddressesShort[index]}
-                                                toContactNames={toContactNames[index]}
-                                                toAddresses={toAddresses![index]}
-                                                isToAccountLedger={isToAccountLedger}
-                                                isObservedWallet={isObservedWallet}
-                                                vnsName={vnsName}
-                                            />
-                                        )}
+                                    <ToAccountCard
+                                        toAddressesShort={toAddressesShort[index]}
+                                        toContactNames={toContactNames[index]}
+                                        toAddresses={toAddresses![index]}
+                                        isToAccountLedger={isToAccountLedger}
+                                        isObservedWallet={isObservedWallet}
                                     />
                                 )}
                                 showsHorizontalScrollIndicator={false}
@@ -262,7 +252,6 @@ const ToAccountCard = ({
     isToAccountLedger,
     isObservedWallet,
     onAddContactPress,
-    vnsName,
 }: {
     toAddressesShort: string
     toAddresses: string
@@ -270,8 +259,9 @@ const ToAccountCard = ({
     isToAccountLedger?: boolean
     isObservedWallet?: boolean
     onAddContactPress?: (address: string) => void
-    vnsName?: string
 }) => {
+    const { name: vnsName } = useVns({ name: "", address: toAddresses })
+
     return (
         <AccountCard
             provenance={PROVENANCE.TO}

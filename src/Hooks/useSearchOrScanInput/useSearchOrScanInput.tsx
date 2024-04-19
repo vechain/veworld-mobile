@@ -4,8 +4,8 @@ import { BaseTextInput } from "~Components"
 import { ScanTarget } from "~Constants"
 import { useCameraBottomSheet } from "~Hooks/useCameraBottomSheet"
 import { useSearchContactsAndAccounts } from "~Hooks/useSearchContactsAndAccounts"
+import { useVns } from "~Hooks/useVns"
 import { AddressUtils } from "~Utils"
-import { useVns } from "~Utils/VnsUtils"
 import { useI18nContext } from "~i18n"
 
 export const useSearchOrScanInput = (

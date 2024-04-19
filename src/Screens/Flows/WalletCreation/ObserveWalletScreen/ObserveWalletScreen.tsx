@@ -15,13 +15,12 @@ import { useI18nContext } from "~i18n"
 import { selectAccounts, selectBalanceVisible, selectSelectedNetwork, useAppSelector } from "~Storage/Redux"
 import { useNavigation } from "@react-navigation/native"
 import { Keyboard } from "react-native"
-import { useBottomSheetModal, useCameraBottomSheet } from "~Hooks"
+import { useBottomSheetModal, useCameraBottomSheet, useVns, ZERO_ADDRESS } from "~Hooks"
 import HapticsService from "~Services/HapticsService"
 import { AccountUtils, AddressUtils, BalanceUtils, BigNutils } from "~Utils"
 import { ScanTarget, VET } from "~Constants"
 import { Routes } from "~Navigation"
 import { DEVICE_TYPE, WatchedAccount } from "~Model"
-import { useVns, ZERO_ADDRESS } from "~Utils/VnsUtils"
 
 export const ObserveWalletScreen = () => {
     const { LL } = useI18nContext()

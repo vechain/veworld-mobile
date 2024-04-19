@@ -1,9 +1,9 @@
 import React from "react"
 import { StyleSheet, View } from "react-native"
 import { BaseIcon, BaseText, BaseTouchable, BaseView } from "~Components/Base"
-import { useThemedStyles } from "~Hooks"
+import { useThemedStyles, useVns } from "~Hooks"
 import { ColorThemeType } from "~Constants"
-import { WithVns } from "~Utils/VnsUtils"
+
 import { AddressUtils } from "~Utils"
 
 type Props = {
@@ -14,6 +14,7 @@ type Props = {
 
 export const ChangeAccountButtonPill = ({ title, text, action }: Props) => {
     const { styles: themedStyles, theme } = useThemedStyles(baseStyles)
+    const { name: vnsName, address: vnsAddress } = useVns({ name: "", address: text })
 
     return (
         <BaseTouchable action={action} style={themedStyles.container} haptics="Light">
@@ -25,20 +26,13 @@ export const ChangeAccountButtonPill = ({ title, text, action }: Props) => {
                     ellipsizeMode="tail">
                     {title}
                 </BaseText>
-                <WithVns
-                    address={text}
-                    children={({ vnsName, vnsAddress }) => {
-                        return (
-                            <BaseText
-                                color={theme.colors.textReversed}
-                                typographyFont="smallCaptionRegular"
-                                numberOfLines={1}
-                                ellipsizeMode="tail">
-                                {vnsName || AddressUtils.humanAddress(vnsAddress ?? text, 6, 3)}
-                            </BaseText>
-                        )
-                    }}
-                />
+                <BaseText
+                    color={theme.colors.textReversed}
+                    typographyFont="smallCaptionRegular"
+                    numberOfLines={1}
+                    ellipsizeMode="tail">
+                    {vnsName || AddressUtils.humanAddress(vnsAddress ?? text, 6, 3)}
+                </BaseText>
             </BaseView>
 
             <View style={themedStyles.seperator} />

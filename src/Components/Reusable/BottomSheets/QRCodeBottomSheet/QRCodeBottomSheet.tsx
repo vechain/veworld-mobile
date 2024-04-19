@@ -1,6 +1,6 @@
 import React from "react"
 import { BottomSheetModalMethods } from "@gorhom/bottom-sheet/lib/typescript/types"
-import { useCopyClipboard, useTheme } from "~Hooks"
+import { useCopyClipboard, useTheme, useVns } from "~Hooks"
 import { BaseIcon, BaseSpacer, BaseText, BaseView, BaseBottomSheet, BaseButton } from "~Components"
 
 import { useI18nContext } from "~i18n"
@@ -11,7 +11,6 @@ import { COLORS } from "~Constants"
 import { StyleSheet } from "react-native"
 import { AddressUtils } from "~Utils"
 import { veworldLogo } from "~Assets"
-import { WithVns } from "~Utils/VnsUtils"
 
 export const QRCodeBottomSheet = React.forwardRef<BottomSheetModalMethods>(({}, ref) => {
     const theme = useTheme()
@@ -22,6 +21,8 @@ export const QRCodeBottomSheet = React.forwardRef<BottomSheetModalMethods>(({}, 
     let snapPoints = ["55%"]
 
     const { onCopyToClipboard } = useCopyClipboard()
+
+    const { name: vnsName } = useVns({ name: "", address: selectedAccount.address })
 
     return (
         <BaseBottomSheet snapPoints={snapPoints} ref={ref}>
@@ -64,25 +65,18 @@ export const QRCodeBottomSheet = React.forwardRef<BottomSheetModalMethods>(({}, 
                     m={16}
                 />
 
-                <WithVns
-                    address={selectedAccount.address}
-                    children={({ vnsName }) =>
-                        vnsName && (
-                            <BaseButton
-                                haptics="Light"
-                                px={28}
-                                size="md"
-                                bgColor={theme.colors.secondary}
-                                textColor={theme.colors.text}
-                                title={vnsName}
-                                action={() => onCopyToClipboard(vnsName, LL.COMMON_LBL_ADDRESS())}
-                                rightIcon={
-                                    <BaseIcon name="content-copy" color={theme.colors.text} style={baseStyles.icon} />
-                                }
-                            />
-                        )
-                    }
-                />
+                {vnsName && (
+                    <BaseButton
+                        haptics="Light"
+                        px={28}
+                        size="md"
+                        bgColor={theme.colors.secondary}
+                        textColor={theme.colors.text}
+                        title={vnsName}
+                        action={() => onCopyToClipboard(vnsName, LL.COMMON_LBL_ADDRESS())}
+                        rightIcon={<BaseIcon name="content-copy" color={theme.colors.text} style={baseStyles.icon} />}
+                    />
+                )}
             </BaseView>
         </BaseBottomSheet>
     )

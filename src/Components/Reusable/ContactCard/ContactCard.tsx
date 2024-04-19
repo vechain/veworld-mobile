@@ -3,7 +3,7 @@ import { StyleProp, ViewStyle } from "react-native"
 import { AddressUtils } from "~Utils"
 import { BaseCard, BaseSpacer, BaseText, BaseView } from "~Components"
 import { Contact } from "~Model"
-import { WithVns } from "~Utils/VnsUtils"
+import { useVns } from "~Hooks"
 
 type Props = {
     contact: Contact
@@ -13,6 +13,8 @@ type Props = {
 }
 
 export const ContactCard = memo(({ contact, onPress, selected, containerStyle }: Props) => {
+    const { name: vnsName, address: vnsAddress } = useVns({ name: "", address: contact.address })
+
     return (
         <BaseCard
             containerStyle={containerStyle}
@@ -22,14 +24,9 @@ export const ContactCard = memo(({ contact, onPress, selected, containerStyle }:
             <BaseView flexDirection="column">
                 <BaseText typographyFont="button">{contact.alias}</BaseText>
                 <BaseSpacer height={4} />
-                <WithVns
-                    address={contact.address}
-                    children={({ vnsName, vnsAddress }) => (
-                        <BaseText fontSize={10} typographyFont="smallCaptionRegular">
-                            {vnsName || AddressUtils.humanAddress(vnsAddress ?? contact.address, 4, 6)}
-                        </BaseText>
-                    )}
-                />
+                <BaseText fontSize={10} typographyFont="smallCaptionRegular">
+                    {vnsName || AddressUtils.humanAddress(vnsAddress ?? contact.address, 4, 6)}
+                </BaseText>
             </BaseView>
         </BaseCard>
     )
