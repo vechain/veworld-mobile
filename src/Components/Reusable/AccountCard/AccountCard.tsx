@@ -1,6 +1,6 @@
 import React, { memo, useMemo } from "react"
 import { StyleProp, StyleSheet, ViewProps, ViewStyle } from "react-native"
-import { useThemedStyles } from "~Hooks"
+import { useThemedStyles, useVns } from "~Hooks"
 import { ColorThemeType, VET, VTHO } from "~Constants"
 import { AccountUtils, AddressUtils, BigNutils } from "~Utils"
 import {
@@ -63,8 +63,6 @@ export const AccountCard: React.FC<Props> = memo(
             } ${isVthoBalance ? VTHO.symbol : VET.symbol}`
         }, [isBalanceVisible, isVthoBalance, vetBalance, vthoBalance, formattedBalance])
 
-        const humanAddress = useMemo(() => AddressUtils.humanAddress(account.address, 4, 6), [account.address])
-
         const accountWithDevice = useMemo(() => {
             if (!AccountUtils.isObservedAccount(account)) {
                 return account as AccountWithDevice
@@ -76,6 +74,8 @@ export const AccountCard: React.FC<Props> = memo(
                 return account as WatchedAccount
             }
         }, [account])
+
+        const { name: vnsName, address: vnsAddress } = useVns({ name: "", address: account.address })
 
         return (
             <BaseView w={100} flexDirection="row" style={containerStyle}>
@@ -112,8 +112,9 @@ export const AccountCard: React.FC<Props> = memo(
                     ) : (
                         <BaseView style={styles.rightSubContainer}>
                             <BaseText style={styles.address} fontSize={10}>
-                                {humanAddress}
+                                {vnsName || AddressUtils.humanAddress(vnsAddress ?? account.address, 4, 6)}
                             </BaseText>
+
                             <BaseSpacer height={4} />
                             <BaseText fontSize={10}>{balance}</BaseText>
                         </BaseView>

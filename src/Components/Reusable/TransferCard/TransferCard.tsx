@@ -3,7 +3,7 @@ import React, { memo, useCallback, useMemo, useState } from "react"
 import { FlatList, StyleSheet, ViewToken } from "react-native"
 import { ColorThemeType, SCREEN_WIDTH, COLORS } from "~Constants"
 import { AddressUtils } from "~Utils"
-import { useThemedStyles } from "~Hooks"
+import { useThemedStyles, useVns } from "~Hooks"
 import {
     BaseIcon,
     BaseSpacer,
@@ -46,18 +46,11 @@ export const TransferCard = memo(
         isToAccountLedger,
         isObservedWallet,
     }: Props) => {
-        const { LL } = useI18nContext()
-
         const { styles, theme } = useThemedStyles(baseStyles)
-
         const accounts = useAppSelector(selectVisibleAccounts)
-
         const fromContact = useAppSelector(state => selectContactByAddress(state, fromAddress))
-
         const toContacts = useAppSelector(state => selectContactsByAddresses(state, toAddresses))
-
         const [activeIndex, setActiveIndex] = useState(0)
-
         const isDeployContract = toAddresses?.[0] === ""
 
         const fromContactName = useMemo(() => {
@@ -107,112 +100,45 @@ export const TransferCard = memo(
             return shortenedAddresses
         }, [toAddresses])
 
-        const renderAccount = useCallback(
-            (
-                provenance: PROVENANCE,
-                _address: string,
-                addressShort: string,
-                contactName?: string,
-                isLedger?: boolean,
-                _isObservedWallet?: boolean,
-            ) => {
-                const provenanceText = provenance === PROVENANCE.FROM ? LL.FROM() : LL.TO()
-                return (
-                    <BaseView
-                        py={12}
-                        px={16}
-                        key={_address}
-                        style={{ width: SCREEN_WIDTH - 40 }}
-                        alignItems="flex-start">
-                        <BaseText typographyFont="buttonPrimary">{provenanceText}</BaseText>
-                        <BaseView flexDirection="row" py={8}>
-                            <PicassoAddressIcon address={_address} size={40} />
-                            <BaseView flexDirection="column" pl={12}>
-                                {contactName && <BaseText typographyFont="subSubTitle">{contactName}</BaseText>}
-                                <BaseView flexDirection="row" mt={3}>
-                                    {isLedger && (
-                                        <>
-                                            <LedgerBadge />
-                                            <BaseSpacer width={8} />
-                                        </>
-                                    )}
-                                    {_isObservedWallet && (
-                                        <>
-                                            <WatchedAccountBadge />
-                                            <BaseSpacer width={8} />
-                                        </>
-                                    )}
-                                    <BaseText typographyFont={contactName ? "captionRegular" : "button"}>
-                                        {addressShort}
-                                    </BaseText>
-                                </BaseView>
-                            </BaseView>
-                            {!contactName && onAddContactPress && (
-                                <BaseView pl={12}>
-                                    <BaseIcon
-                                        haptics="Light"
-                                        name={"account-plus-outline"}
-                                        size={20}
-                                        bg={COLORS.LIME_GREEN}
-                                        iconPadding={3}
-                                        color={COLORS.DARK_PURPLE}
-                                        action={() => onAddContactPress(_address)}
-                                    />
-                                </BaseView>
-                            )}
-                        </BaseView>
-                    </BaseView>
-                )
-            },
-            [LL, onAddContactPress],
-        )
-
-        const renderFromAccount = useCallback(() => {
-            const _address = fromAddress
-            const addressShort = fromAddressShort
-            const contactName = fromContactName
-
-            return renderAccount(PROVENANCE.FROM, _address, addressShort, contactName, isFromAccountLedger)
-        }, [fromAddress, fromAddressShort, fromContactName, isFromAccountLedger, renderAccount])
-
-        const renderToAccount = useCallback(
-            ({ index }: { index: number }) => {
-                const addressShort = toAddressesShort[index]
-                const contactName = toContactNames[index]
-                const _address = toAddresses![index]
-
-                return renderAccount(
-                    PROVENANCE.TO,
-                    _address,
-                    addressShort,
-                    contactName,
-                    isToAccountLedger,
-                    isObservedWallet,
-                )
-            },
-            [isToAccountLedger, renderAccount, toAddresses, toAddressesShort, toContactNames, isObservedWallet],
-        )
-
         const onViewableItemsChanged = useCallback(({ viewableItems }: { viewableItems: ViewToken[] }) => {
             const activeIdx = viewableItems[0].index
 
             setActiveIndex(activeIdx ?? 0)
         }, [])
 
+        const { name: vnsNameFrom, address: vnsAddressFrom } = useVns({ name: "", address: fromAddress })
+
         return (
             <BaseView style={[styles.container]}>
                 <BaseView bg={theme.colors.card} style={styles.view}>
                     {/* FROM View */}
-                    {renderFromAccount()}
+                    <FromAccounCard
+                        fromContactName={fromContactName}
+                        fromAddressShort={fromAddressShort}
+                        fromAddress={vnsAddressFrom}
+                        isFromAccountLedger={isFromAccountLedger}
+                        onAddContactPress={onAddContactPress}
+                        _isObservedWallet={isObservedWallet}
+                        vnsName={vnsNameFrom}
+                    />
 
                     {/* TO View */}
                     {toAddresses && !isDeployContract && (
                         <>
                             {/* SEPARATOR */}
                             <BaseView style={styles.separator} />
+
                             <FlatList
                                 data={toAddresses}
-                                renderItem={renderToAccount}
+                                renderItem={({ index }) => (
+                                    <ToAccountCard
+                                        toAddressesShort={toAddressesShort[index]}
+                                        toContactNames={toContactNames[index]}
+                                        toAddresses={toAddresses![index]}
+                                        isToAccountLedger={isToAccountLedger}
+                                        isObservedWallet={isObservedWallet}
+                                    />
+                                )}
                                 showsHorizontalScrollIndicator={false}
                                 showsVerticalScrollIndicator={false}
                                 horizontal
@@ -222,6 +148,7 @@ export const TransferCard = memo(
                                 onViewableItemsChanged={onViewableItemsChanged}
                                 scrollEnabled={toAddresses.length > 1}
                             />
+
                             {toAddresses.length > 1 && (
                                 <>
                                     <BaseIcon
@@ -282,3 +209,134 @@ const baseStyles = (theme: ColorThemeType) =>
             right: 20,
         },
     })
+
+const FromAccounCard = ({
+    fromContactName,
+    fromAddressShort,
+    fromAddress,
+    isFromAccountLedger,
+    onAddContactPress,
+    _isObservedWallet,
+    vnsName,
+}: {
+    fromContactName: string | undefined
+    fromAddressShort: string
+    fromAddress: string
+    vnsName?: string
+    isFromAccountLedger?: boolean
+    onAddContactPress?: (address: string) => void
+    _isObservedWallet?: boolean
+}) => {
+    const _address = fromAddress
+    const addressShort = fromAddressShort
+    const contactName = fromContactName
+
+    return (
+        <AccountCard
+            provenance={PROVENANCE.FROM}
+            _address={_address}
+            addressShort={addressShort}
+            contactName={contactName}
+            isLedger={isFromAccountLedger}
+            _isObservedWallet={_isObservedWallet}
+            onAddContactPress={onAddContactPress}
+            vnsName={vnsName}
+        />
+    )
+}
+
+const ToAccountCard = ({
+    toAddressesShort,
+    toContactNames,
+    toAddresses,
+    isToAccountLedger,
+    isObservedWallet,
+    onAddContactPress,
+}: {
+    toAddressesShort: string
+    toAddresses: string
+    toContactNames?: string
+    isToAccountLedger?: boolean
+    isObservedWallet?: boolean
+    onAddContactPress?: (address: string) => void
+}) => {
+    const { name: vnsName } = useVns({ name: "", address: toAddresses })
+
+    return (
+        <AccountCard
+            provenance={PROVENANCE.TO}
+            _address={toAddresses}
+            addressShort={toAddressesShort}
+            contactName={toContactNames}
+            isLedger={isToAccountLedger}
+            _isObservedWallet={isObservedWallet}
+            onAddContactPress={onAddContactPress}
+            vnsName={vnsName}
+        />
+    )
+}
+
+const AccountCard = ({
+    provenance,
+    _address,
+    addressShort,
+    contactName,
+    isLedger,
+    _isObservedWallet,
+    onAddContactPress,
+    vnsName,
+}: {
+    provenance: PROVENANCE
+    _address: string
+    addressShort: string
+    vnsName?: string
+    contactName?: string
+    isLedger?: boolean
+    _isObservedWallet?: boolean
+    onAddContactPress?: (address: string) => void
+}) => {
+    const { LL } = useI18nContext()
+    const provenanceText = provenance === PROVENANCE.FROM ? LL.FROM() : LL.TO()
+
+    return (
+        <BaseView py={12} px={16} key={_address} style={{ width: SCREEN_WIDTH - 40 }} alignItems="flex-start">
+            <BaseText typographyFont="buttonPrimary">{provenanceText}</BaseText>
+            <BaseView flexDirection="row" py={8}>
+                <PicassoAddressIcon address={_address} size={40} />
+                <BaseView flexDirection="column" pl={12}>
+                    {contactName && <BaseText typographyFont="subSubTitle">{contactName}</BaseText>}
+                    <BaseView flexDirection="row" mt={3}>
+                        {isLedger && (
+                            <>
+                                <LedgerBadge />
+                                <BaseSpacer width={8} />
+                            </>
+                        )}
+                        {_isObservedWallet && (
+                            <>
+                                <WatchedAccountBadge />
+                                <BaseSpacer width={8} />
+                            </>
+                        )}
+                        <BaseText typographyFont={contactName ? "captionRegular" : "button"}>
+                            {vnsName || addressShort}
+                        </BaseText>
+                    </BaseView>
+                </BaseView>
+                {!contactName && onAddContactPress && (
+                    <BaseView pl={12}>
+                        <BaseIcon
+                            haptics="Light"
+                            name={"account-plus-outline"}
+                            size={20}
+                            bg={COLORS.LIME_GREEN}
+                            iconPadding={3}
+                            color={COLORS.DARK_PURPLE}
+                            action={() => onAddContactPress(_address)}
+                        />
+                    </BaseView>
+                )}
+            </BaseView>
+        </BaseView>
+    )
+}

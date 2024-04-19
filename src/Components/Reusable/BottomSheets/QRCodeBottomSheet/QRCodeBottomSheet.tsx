@@ -1,6 +1,6 @@
 import React from "react"
 import { BottomSheetModalMethods } from "@gorhom/bottom-sheet/lib/typescript/types"
-import { useCopyClipboard, useTheme } from "~Hooks"
+import { useCopyClipboard, useTheme, useVns } from "~Hooks"
 import { BaseIcon, BaseSpacer, BaseText, BaseView, BaseBottomSheet, BaseButton } from "~Components"
 
 import { useI18nContext } from "~i18n"
@@ -12,15 +12,17 @@ import { StyleSheet } from "react-native"
 import { AddressUtils } from "~Utils"
 import { veworldLogo } from "~Assets"
 
-const snapPoints = ["50%", "100%"]
-
 export const QRCodeBottomSheet = React.forwardRef<BottomSheetModalMethods>(({}, ref) => {
     const theme = useTheme()
     const { LL } = useI18nContext()
 
     const selectedAccount = useAppSelector(selectSelectedAccount)
 
+    let snapPoints = ["55%"]
+
     const { onCopyToClipboard } = useCopyClipboard()
+
+    const { name: vnsName } = useVns({ name: "", address: selectedAccount.address })
 
     return (
         <BaseBottomSheet snapPoints={snapPoints} ref={ref}>
@@ -60,7 +62,21 @@ export const QRCodeBottomSheet = React.forwardRef<BottomSheetModalMethods>(({}, 
                     title={AddressUtils.humanAddress(selectedAccount.address, 8, 7)}
                     action={() => onCopyToClipboard(selectedAccount.address, LL.COMMON_LBL_ADDRESS())}
                     rightIcon={<BaseIcon name="content-copy" color={theme.colors.card} style={baseStyles.icon} />}
+                    m={16}
                 />
+
+                {vnsName && (
+                    <BaseButton
+                        haptics="Light"
+                        px={28}
+                        size="md"
+                        bgColor={theme.colors.secondary}
+                        textColor={theme.colors.text}
+                        title={vnsName}
+                        action={() => onCopyToClipboard(vnsName, LL.COMMON_LBL_ADDRESS())}
+                        rightIcon={<BaseIcon name="content-copy" color={theme.colors.text} style={baseStyles.icon} />}
+                    />
+                )}
             </BaseView>
         </BaseBottomSheet>
     )

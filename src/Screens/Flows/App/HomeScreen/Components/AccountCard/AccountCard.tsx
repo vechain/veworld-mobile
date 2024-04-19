@@ -2,7 +2,7 @@ import React, { memo, useCallback, useMemo } from "react"
 import { ViewProps, StyleSheet } from "react-native"
 import { CURRENCY, ColorThemeType } from "~Constants"
 import { useThemedStyles } from "~Hooks"
-import { AccountUtils, AddressUtils } from "~Utils"
+import { AccountUtils } from "~Utils"
 import { AccountIcon, BaseSpacer, BaseText, BaseView, LedgerBadge, WatchedAccountBadge } from "~Components"
 import { AccountWithDevice, DEVICE_TYPE, WatchedAccount } from "~Model"
 import { useAppDispatch } from "~Storage/Redux"
@@ -93,7 +93,7 @@ export const AccountCard: React.FC<Props> = memo(props => {
                         </BaseView>
                     </BaseView>
                     <AccountAddressButtonPill
-                        text={AddressUtils.humanAddress(account.address, 6, 3)}
+                        text={account.address}
                         openQRCodeSheet={openQRCodeSheet}
                         switchAccount={openSelectAccountBottomSheet}
                     />

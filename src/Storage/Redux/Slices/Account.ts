@@ -1,6 +1,7 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit"
 import { AddressUtils, HexUtils } from "~Utils"
 import { AccountWithDevice, WalletAccount } from "~Model"
+import { isEmpty } from "lodash"
 
 /**
  * The state of the account slice
@@ -79,8 +80,11 @@ export const AccountSlice = createSlice({
                 const accountExists = state.accounts.find(account =>
                     AddressUtils.compareAddresses(account.address, newAcc.address),
                 )
+
                 if (!accountExists) accountsToInsert.push(newAcc)
             })
+
+            if (isEmpty(accountsToInsert)) return
             state.accounts.push(...accountsToInsert)
             state.selectedAccount = accountsToInsert[0].address
         },
