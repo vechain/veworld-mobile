@@ -54,6 +54,13 @@ const TX_Mock = [
     },
 ]
 
+jest.mock("~Utils/VnsUtils/Hooks/useVns/useVns", () => ({
+    useVns: () => ({
+        name: "grenos.vet",
+        address: "0x",
+    }),
+}))
+
 describe("HistoryScreen", () => {
     it("should render correctly", async () => {
         render(<HistoryScreen />, {

@@ -56,6 +56,13 @@ jest.mock("~Hooks/useCheckIdentity/useCheckIdentity", () => ({
     }),
 }))
 
+jest.mock("~Utils/VnsUtils/Hooks/useVns/useVns", () => ({
+    useVns: () => ({
+        name: "grenos.vet",
+        address: "0x",
+    }),
+}))
+
 describe("TransactionSummarySendScreen", () => {
     it("should render correctly", async () => {
         render(<TransactionSummarySendScreen {...createTestProps()} />, {

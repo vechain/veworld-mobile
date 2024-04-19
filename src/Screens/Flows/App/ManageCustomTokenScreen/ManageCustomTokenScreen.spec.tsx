@@ -29,6 +29,13 @@ jest.spyOn(Driver, "connect").mockImplementation((_net: Net, _wallet?: Wallet): 
     return Promise.resolve(driver)
 })
 
+jest.mock("~Utils/VnsUtils/Hooks/useVns/useVns", () => ({
+    useVns: () => ({
+        name: "grenos.vet",
+        address: "0x",
+    }),
+}))
+
 describe("ManageCustomTokenScreen", () => {
     afterEach(() => {
         driver.close()

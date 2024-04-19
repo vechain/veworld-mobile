@@ -16,5 +16,5 @@ export const WithVns = ({
 }) => {
     const { name: vnsName, address: vnsAddress } = useVns({ name, address })
 
-    return children({ vnsName, vnsAddress })
+    return children({ vnsName, vnsAddress }) as JSX.Element | null
 }
