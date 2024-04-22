@@ -1,3 +1,4 @@
+import { isEmpty } from "lodash"
 import React, { useCallback, useMemo, useState } from "react"
 import { Keyboard, StyleSheet } from "react-native"
 import { BaseTextInput } from "~Components"
@@ -17,29 +18,40 @@ export const useSearchOrScanInput = (
 
     const [searchText, setSearchText] = useState("")
     const [errorMessage, setErrorMessage] = useState("")
-
-    const { _getName } = useVns({ name: "", address: "" })
+    const { _getName, _getAddress } = useVns({ name: "", address: "" })
 
     const { filteredContacts, filteredAccounts, isAddressInContactsOrAccounts, accountsAndContacts, contacts } =
         useSearchContactsAndAccounts({ searchText, selectedAddress })
 
     const onSuccessfullScan = useCallback(
-        async (address: string) => {
+        async (data: string) => {
+            let vnsName = ""
+            let vnsAddress = ""
+
+            if (data.includes(".vet")) {
+                vnsAddress = await _getAddress(data)
+                vnsName = data
+            } else {
+                const { name, address: vnsAddy } = await _getName(data)
+                vnsName = name
+                vnsAddress = vnsAddy
+            }
+
+            setSearchText(isEmpty(vnsName) ? vnsAddress : vnsName)
+            setSelectedAddress(vnsAddress)
+
             const addressExists = accountsAndContacts.some(accountOrContact =>
-                AddressUtils.compareAddresses(accountOrContact.address, address),
+                AddressUtils.compareAddresses(accountOrContact.address, vnsAddress),
             )
 
-            const { name } = await _getName(address)
-            setSearchText(name ?? address)
-            setSelectedAddress(address)
-            if (addressExists) return navigateNext(address)
+            if (addressExists) return navigateNext(vnsAddress)
         },
-        [_getName, accountsAndContacts, navigateNext, setSelectedAddress],
+        [_getAddress, _getName, accountsAndContacts, navigateNext, setSelectedAddress],
     )
 
     const { RenderCameraModal, handleOpenCamera } = useCameraBottomSheet({
         onScan: onSuccessfullScan,
-        targets: [ScanTarget.ADDRESS],
+        targets: [ScanTarget.ADDRESS, ScanTarget.VNS],
     })
 
     const onTextReset = useCallback(() => {

@@ -44,6 +44,7 @@ export const useVns = ({ name, address }: { name?: string; address?: string }) =
     const _getName = useCallback(
         async (_address: string) => {
             setIsLoading(true)
+
             const {
                 decoded: { names },
             } = await thor.account(NETWORK_RESOLVER).method(ABI.getNames).call([_address])

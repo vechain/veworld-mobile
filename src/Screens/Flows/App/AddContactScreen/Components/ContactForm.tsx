@@ -1,5 +1,5 @@
 import React, { memo, useCallback, useMemo, useState } from "react"
-import { useCameraBottomSheet } from "~Hooks"
+import { useCameraBottomSheet, useVns } from "~Hooks"
 import { BaseBottomSheetTextInput, BaseSpacer, BaseTextInput } from "~Components"
 import { ScanTarget } from "~Constants"
 import { Keyboard } from "react-native"
@@ -43,17 +43,26 @@ export const ContactForm: React.FC<Props> = memo(
         const [nameTouched, setNameTouched] = useState(false)
         const [addressTouched, setAddressTouched] = useState(false)
 
+        const { _getAddress } = useVns({ name: "", address: "" })
+
         const onScan = useCallback(
-            (uri: string) => {
+            async (uri: string) => {
                 HapticsService.triggerImpact({ level: "Light" })
-                setAddress(uri)
+
+                let address = ""
+
+                if (uri.includes(".vet")) {
+                    address = await _getAddress(uri)
+                }
+
+                setAddress(address)
             },
-            [setAddress],
+            [_getAddress, setAddress],
         )
 
         const { RenderCameraModal, handleOpenCamera } = useCameraBottomSheet({
             onScan,
-            targets: [ScanTarget.ADDRESS],
+            targets: [ScanTarget.ADDRESS, ScanTarget.VNS],
         })
 
         const onOpenCamera = useCallback(() => {

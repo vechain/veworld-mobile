@@ -75,9 +75,13 @@ export const InsertAddressSendScreen = ({ route }: Props) => {
 
     //Whenever search changes, we check if it's a valid address
     useEffect(() => {
-        if (searchText && AddressUtils.isValid(searchText)) {
-            setSelectedAddress(searchText)
+        if (searchText && searchText.includes(".vet")) {
             Keyboard.dismiss()
+        } else {
+            if (searchText && AddressUtils.isValid(searchText)) {
+                setSelectedAddress(searchText)
+                Keyboard.dismiss()
+            }
         }
     }, [searchText, isAddressInContactsOrAccounts])
 
@@ -177,6 +181,7 @@ export const InsertAddressSendScreen = ({ route }: Props) => {
                     {filteredAccounts.length === 0 && filteredContacts.length === 0 && (
                         <BaseView w={100} alignItems="center">
                             <BaseText typographyFont="body">{LL.SEND_NO_CONTACTS_OR_ACCOUNTS_FOUND()}</BaseText>
+
                             <BaseText typographyFont="body">{LL.SEND_PLEASE_TYPE_ADDRESS()}</BaseText>
                         </BaseView>
                     )}
