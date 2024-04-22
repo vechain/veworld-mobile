@@ -13,18 +13,12 @@ import {
     Layout,
     SwipeableRow,
     RequireUserPassword,
-    showErrorToast,
 } from "~Components"
 import { useI18nContext } from "~i18n"
 import { AccountDetailBox } from "./AccountDetailBox"
 import { AccountWithDevice, DEVICE_TYPE } from "~Model"
 import { addAccountForDevice, useAppDispatch, useAppSelector } from "~Storage/Redux"
-import {
-    selectAccountsByDevice,
-    selectBalanceVisible,
-    selectSelectedAccount,
-    selectVisibleAccounts,
-} from "~Storage/Redux/Selectors"
+import { selectAccountsByDevice, selectBalanceVisible, selectSelectedAccount } from "~Storage/Redux/Selectors"
 import { COLORS } from "~Constants"
 import { NativeStackScreenProps } from "@react-navigation/native-stack"
 import { RootStackParamListHome, Routes } from "~Navigation"
@@ -52,7 +46,6 @@ export const WalletDetailScreen = ({ route: { params } }: Props) => {
     const deviceAccounts = useAppSelector(state => selectAccountsByDevice(state, device?.rootAddress))
 
     const selectedAccount = useAppSelector(selectSelectedAccount)
-    const accounts = useAppSelector(selectVisibleAccounts)
 
     const {
         ref: removeAccountWarningBottomSheetRef,
@@ -63,13 +56,6 @@ export const WalletDetailScreen = ({ route: { params } }: Props) => {
     const onAddAccountClicked = () => {
         if (!device) {
             throw new Error("Device is undefined when trying to add account")
-        }
-
-        const foundAccoint = accounts.map(acc => AddressUtils.compareAddresses(acc.address, device.rootAddress))
-
-        if (foundAccoint) {
-            showErrorToast({ text1: LL.ERROR_ACCOUNT_ALREADY_EXISTS() })
-            return
         }
 
         dispatch(addAccountForDevice(device))
