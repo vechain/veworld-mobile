@@ -31,7 +31,7 @@ export const AddContactScreen = () => {
 
     const { nameError, addressError } = {
         nameError: validateName(name),
-        addressError: validateAddress(address),
+        addressError: address.length >= 42 ? validateAddress(address) : "",
     }
 
     const isFormValid = useMemo(() => {

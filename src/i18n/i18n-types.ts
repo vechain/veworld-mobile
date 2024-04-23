@@ -1515,6 +1515,10 @@ type RootTranslation = {
 	 */
 	NOTIFICATION_INVALID_QR: string
 	/**
+	 * D​o​m​a​i​n​ ​n​a​m​e​ ​/​ ​a​d​d​r​e​s​s​ ​n​o​t​ ​f​o​u​n​d​.
+	 */
+	NOTIFICATION_DOMAIN_NAME_NOT_FOUND: string
+	/**
 	 * G​a​s​ ​f​e​e​ ​e​s​t​i​m​a​t​e​s​ ​m​i​g​h​t​ ​v​a​r​y​.​ ​A​l​w​a​y​s​ ​d​o​u​b​l​e​-​c​h​e​c​k​ ​b​e​f​o​r​e​ ​c​o​n​f​i​r​m​i​n​g​.
 	 */
 	NOTIFICATION_GAS_FEE_INACCURATE: string
@@ -2265,7 +2269,7 @@ type RootTranslation = {
 	 */
 	SEND_NO_CONTACTS_OR_ACCOUNTS_FOUND: string
 	/**
-	 * P​l​e​a​s​e​ ​t​y​p​e​ ​i​n​ ​a​n​ ​a​d​d​r​e​s​s​ ​o​r​ ​a​ ​.​v​e​t​ ​d​o​m​a​i​n​ ​n​a​m​e
+	 * T​y​p​e​ ​i​n​ ​a​n​ ​a​d​d​r​e​s​s​ ​o​r​ ​a​ ​.​v​e​t​ ​d​o​m​a​i​n​ ​n​a​m​e
 	 */
 	SEND_PLEASE_TYPE_ADDRESS: string
 	/**
@@ -4379,6 +4383,10 @@ Try reconnect your device to the internet.
 	 */
 	NOTIFICATION_INVALID_QR: () => LocalizedString
 	/**
+	 * Domain name / address not found.
+	 */
+	NOTIFICATION_DOMAIN_NAME_NOT_FOUND: () => LocalizedString
+	/**
 	 * Gas fee estimates might vary. Always double-check before confirming.
 	 */
 	NOTIFICATION_GAS_FEE_INACCURATE: () => LocalizedString
@@ -5119,7 +5127,7 @@ Try reconnect your device to the internet.
 	 */
 	SEND_NO_CONTACTS_OR_ACCOUNTS_FOUND: () => LocalizedString
 	/**
-	 * Please type in an address or a .vet domain name
+	 * Type in an address or a .vet domain name
 	 */
 	SEND_PLEASE_TYPE_ADDRESS: () => LocalizedString
 	/**

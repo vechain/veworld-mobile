@@ -2,7 +2,7 @@ import React, { useCallback, useEffect, useState } from "react"
 import { useNavigation } from "@react-navigation/native"
 import { NativeStackScreenProps } from "@react-navigation/native-stack"
 import { StyleSheet, Keyboard } from "react-native"
-import { useBottomSheetModal, useSearchOrScanInput } from "~Hooks"
+import { useBottomSheetModal, useSearchOrScanInput, useVns, ZERO_ADDRESS } from "~Hooks"
 import { AddressUtils } from "~Utils"
 import {
     AccountCard,
@@ -13,6 +13,7 @@ import {
     ContactCard,
     FadeoutButton,
     Layout,
+    showWarningToast,
 } from "~Components"
 import { RootStackParamListHome, RootStackParamListNFT, Routes } from "~Navigation"
 import { useI18nContext } from "~i18n"
@@ -73,17 +74,32 @@ export const InsertAddressSendScreen = ({ route }: Props) => {
         isAddressInContactsOrAccounts,
     } = useSearchOrScanInput(navigateNext, setSelectedAddress, selectedAddress)
 
-    //Whenever search changes, we check if it's a valid address
+    const { _getAddress } = useVns({ name: "", address: "" })
+
+    //Whenever search changes, we check if it's a valid address or a domain name
     useEffect(() => {
-        if (searchText && searchText.includes(".vet")) {
-            Keyboard.dismiss()
-        } else {
-            if (searchText && AddressUtils.isValid(searchText)) {
-                setSelectedAddress(searchText)
-                Keyboard.dismiss()
+        const init = async () => {
+            if (searchText && searchText.includes(".vet")) {
+                const address = await _getAddress(searchText)
+
+                if (address === ZERO_ADDRESS) {
+                    showWarningToast({ text1: LL.NOTIFICATION_DOMAIN_NAME_NOT_FOUND() })
+                    return
+                }
+
+                if (AddressUtils.isValid(address)) {
+                    setSelectedAddress(address)
+                    Keyboard.dismiss()
+                }
+            } else {
+                if (searchText.length === 42 && AddressUtils.isValid(searchText)) {
+                    setSelectedAddress(searchText)
+                    Keyboard.dismiss()
+                }
             }
         }
-    }, [searchText, isAddressInContactsOrAccounts])
+        init()
+    }, [searchText, isAddressInContactsOrAccounts, _getAddress, LL])
 
     const onNext = useCallback(() => {
         if (isAddressInContactsOrAccounts && selectedAddress) {

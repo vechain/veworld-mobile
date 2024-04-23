@@ -1,11 +1,11 @@
 import { isEmpty } from "lodash"
 import React, { useCallback, useMemo, useState } from "react"
 import { Keyboard, StyleSheet } from "react-native"
-import { BaseTextInput } from "~Components"
+import { BaseTextInput, showWarningToast } from "~Components"
 import { ScanTarget } from "~Constants"
 import { useCameraBottomSheet } from "~Hooks/useCameraBottomSheet"
 import { useSearchContactsAndAccounts } from "~Hooks/useSearchContactsAndAccounts"
-import { useVns } from "~Hooks/useVns"
+import { useVns, ZERO_ADDRESS } from "~Hooks/useVns"
 import { AddressUtils } from "~Utils"
 import { useI18nContext } from "~i18n"
 
@@ -29,7 +29,14 @@ export const useSearchOrScanInput = (
             let vnsAddress = ""
 
             if (data.includes(".vet")) {
-                vnsAddress = await _getAddress(data)
+                const _addy = await _getAddress(data)
+
+                if (_addy === ZERO_ADDRESS) {
+                    showWarningToast({ text1: LL.NOTIFICATION_DOMAIN_NAME_NOT_FOUND() })
+                    return
+                }
+
+                vnsAddress = _addy
                 vnsName = data
             } else {
                 const { name, address: vnsAddy } = await _getName(data)
@@ -46,7 +53,7 @@ export const useSearchOrScanInput = (
 
             if (addressExists) return navigateNext(vnsAddress)
         },
-        [_getAddress, _getName, accountsAndContacts, navigateNext, setSelectedAddress],
+        [LL, _getAddress, _getName, accountsAndContacts, navigateNext, setSelectedAddress],
     )
 
     const { RenderCameraModal, handleOpenCamera } = useCameraBottomSheet({
