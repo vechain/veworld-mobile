@@ -71,10 +71,16 @@ export const QRCodeBottomSheet = React.forwardRef<BottomSheetModalMethods>(({}, 
                         px={28}
                         size="md"
                         bgColor={theme.colors.secondary}
-                        textColor={theme.colors.text}
+                        textColor={theme.isDark ? theme.colors.textReversed : theme.colors.text}
                         title={vnsName}
                         action={() => onCopyToClipboard(vnsName, LL.COMMON_LBL_ADDRESS())}
-                        rightIcon={<BaseIcon name="content-copy" color={theme.colors.text} style={baseStyles.icon} />}
+                        rightIcon={
+                            <BaseIcon
+                                name="content-copy"
+                                color={theme.isDark ? theme.colors.textReversed : theme.colors.text}
+                                style={baseStyles.icon}
+                            />
+                        }
                     />
                 )}
             </BaseView>

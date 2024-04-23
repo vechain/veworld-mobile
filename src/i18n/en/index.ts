@@ -423,6 +423,7 @@ const en: BaseTranslation = {
     NOTIFICATION_VIEW_ACCOUNT: "View account",
     NOTIFICATION_TITLE_INVALID_QR: "QR Code Not Supported",
     NOTIFICATION_INVALID_QR: "Please scan a WalletConnect or wallet address QR code.",
+    NOTIFICATION_DOMAIN_NAME_NOT_FOUND: "Domain name / address not found.",
     NOTIFICATION_GAS_FEE_INACCURATE: "Gas fee estimates might vary. Always double-check before confirming.",
 
     NOTIFICATION_FAILED_TO_REMOVE_ACCOUNT: "Failed to remove account",

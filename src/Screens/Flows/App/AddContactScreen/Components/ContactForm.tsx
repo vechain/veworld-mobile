@@ -1,9 +1,11 @@
 import React, { memo, useCallback, useMemo, useState } from "react"
-import { useCameraBottomSheet, useVns } from "~Hooks"
-import { BaseBottomSheetTextInput, BaseSpacer, BaseTextInput } from "~Components"
+import { useCameraBottomSheet, useVns, ZERO_ADDRESS } from "~Hooks"
+import { BaseBottomSheetTextInput, BaseSpacer, BaseTextInput, showWarningToast } from "~Components"
 import { ScanTarget } from "~Constants"
 import { Keyboard } from "react-native"
 import HapticsService from "~Services/HapticsService"
+import { isEmpty } from "lodash"
+import { useI18nContext } from "~i18n"
 
 type Props = {
     titleName: string
@@ -39,6 +41,8 @@ export const ContactForm: React.FC<Props> = memo(
         setName,
         setAddress,
     }) => {
+        const { LL } = useI18nContext()
+
         // States to handle showing error message once the user decides to add a contact, not at first render
         const [nameTouched, setNameTouched] = useState(false)
         const [addressTouched, setAddressTouched] = useState(false)
@@ -53,9 +57,12 @@ export const ContactForm: React.FC<Props> = memo(
 
                 if (uri.includes(".vet")) {
                     address = await _getAddress(uri)
-                }
+                    if (address === ZERO_ADDRESS) return
 
-                setAddress(address)
+                    setAddress(address)
+                } else {
+                    setAddress(uri)
+                }
             },
             [_getAddress, setAddress],
         )
@@ -65,11 +72,16 @@ export const ContactForm: React.FC<Props> = memo(
             targets: [ScanTarget.ADDRESS, ScanTarget.VNS],
         })
 
-        const onOpenCamera = useCallback(() => {
+        const onHandleIconTap = useCallback(() => {
+            if (!isEmpty(valueAddress)) {
+                setAddress("")
+            } else {
+                handleOpenCamera()
+            }
+
             Keyboard.dismiss()
             setAddressTouched(true)
-            handleOpenCamera()
-        }, [handleOpenCamera])
+        }, [handleOpenCamera, setAddress, valueAddress])
 
         const canShowNameError = checkTouched ? nameTouched : true
 
@@ -103,6 +115,30 @@ export const ContactForm: React.FC<Props> = memo(
             canShowNameError,
             setNameTouched,
         ])
+
+        const handleOnSetValue = useCallback(
+            async (_address: string) => {
+                let address = ""
+
+                if (_address.includes(".vet")) {
+                    const _addy = await _getAddress(_address)
+
+                    if (_addy === ZERO_ADDRESS) {
+                        showWarningToast({ text1: LL.NOTIFICATION_DOMAIN_NAME_NOT_FOUND() })
+                        return
+                    }
+
+                    address = _addy
+                    setAddress(address)
+                    setAddressTouched(true)
+                } else {
+                    setAddress(_address)
+                    setAddressTouched(true)
+                }
+            },
+            [LL, _getAddress, setAddress],
+        )
+
         /**
          * Render one input or another based on inBottomsheet
          */
@@ -110,14 +146,11 @@ export const ContactForm: React.FC<Props> = memo(
             const commonProps = {
                 placeholder: placeholderAddress,
                 label: titleAddress,
-                setValue: (address: string) => {
-                    setAddress(address)
-                    setAddressTouched(true)
-                },
+                setValue: (address: string) => handleOnSetValue(address),
                 errorMessage: canShowAddressError ? addressError : "",
                 value: valueAddress,
-                rightIcon: !addressFieldDisabled ? "qrcode-scan" : "",
-                onIconPress: onOpenCamera,
+                rightIcon: isEmpty(valueAddress) ? "qrcode-scan" : "close",
+                onIconPress: onHandleIconTap,
                 testID: "Contact-Address-Input",
                 editable: !addressFieldDisabled,
             }
@@ -125,16 +158,15 @@ export const ContactForm: React.FC<Props> = memo(
             if (inBottomSheet) return <BaseBottomSheetTextInput {...commonProps} />
             return <BaseTextInput {...commonProps} />
         }, [
-            inBottomSheet,
-            addressFieldDisabled,
-            valueAddress,
-            addressError,
-            titleAddress,
             placeholderAddress,
-            setAddress,
+            titleAddress,
             canShowAddressError,
-            setAddressTouched,
-            onOpenCamera,
+            addressError,
+            valueAddress,
+            addressFieldDisabled,
+            onHandleIconTap,
+            inBottomSheet,
+            handleOnSetValue,
         ])
 
         return (
