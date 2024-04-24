@@ -7,15 +7,17 @@ import { PlatformBlur } from "./PlatformBlur"
 import { useI18nContext } from "~i18n"
 import { error } from "~Utils"
 import { ERROR_EVENTS } from "~Constants"
+import { useNavigation } from "@react-navigation/native"
 
 type Props = {
     mnemonicArray: string[]
-    setIsMissingWord?: React.Dispatch<React.SetStateAction<boolean>>
+    souceScreen?: string
 }
 
-export const MnemonicCard: FC<Props> = ({ mnemonicArray, setIsMissingWord }) => {
+export const MnemonicCard: FC<Props> = ({ mnemonicArray, souceScreen }) => {
     const { isOpen: isShow, onToggle: toggleShow } = useDisclosure()
 
+    const nav = useNavigation()
     const theme = useTheme()
     const { LL } = useI18nContext()
 
@@ -27,20 +29,26 @@ export const MnemonicCard: FC<Props> = ({ mnemonicArray, setIsMissingWord }) => 
     }, [toggleShow])
 
     const RenderWords = useMemo(() => {
-        return mnemonicArray.map((word, index) => {
-            if (mnemonicArray.length !== 12) {
-                error(ERROR_EVENTS.MNEMONIC, "UI MnemonicCard Array has missing words")
-                setIsMissingWord && setIsMissingWord(true)
-            }
+        if (mnemonicArray.length !== 12) {
+            error(ERROR_EVENTS.MNEMONIC, `UI MnemonicCard Array has missing words from : ${souceScreen}`)
+            setTimeout(() => {
+                if (nav.canGoBack() && souceScreen === "BackupMnemonicBottomSheet") nav.goBack()
+            }, 400)
+        }
 
+        return mnemonicArray.map((word, index) => {
             if (word && word.length < 1) {
-                error(ERROR_EVENTS.MNEMONIC, "UI MnemonicCard Word is Empty")
-                setIsMissingWord && setIsMissingWord(true)
+                error(ERROR_EVENTS.MNEMONIC, `UI MnemonicCard Word is Empty from : ${souceScreen}`)
+                setTimeout(() => {
+                    if (nav.canGoBack() && souceScreen === "BackupMnemonicBottomSheet") nav.goBack()
+                }, 400)
             }
 
             if (word && typeof word !== "string") {
-                error(ERROR_EVENTS.MNEMONIC, "UI MnemonicCard Word is not a valid string")
-                setIsMissingWord && setIsMissingWord(true)
+                error(ERROR_EVENTS.MNEMONIC, `UI MnemonicCard Word is not a valid string from : ${souceScreen}`)
+                setTimeout(() => {
+                    if (nav.canGoBack() && souceScreen === "BackupMnemonicBottomSheet") nav.goBack()
+                }, 400)
             }
 
             return (
@@ -52,7 +60,7 @@ export const MnemonicCard: FC<Props> = ({ mnemonicArray, setIsMissingWord }) => 
                     testID={`word-${index}`}>{`${index + 1}. ${word}`}</BaseText>
             )
         })
-    }, [mnemonicArray, setIsMissingWord])
+    }, [mnemonicArray, nav, souceScreen])
 
     return (
         <BaseView>
