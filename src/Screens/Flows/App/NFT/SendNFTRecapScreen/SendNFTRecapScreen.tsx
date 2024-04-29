@@ -63,6 +63,7 @@ export const SendNFTRecapScreen = ({ route }: Props) => {
                         signature: AnalyticsEvent.LOCAL,
                         network: network.name,
                         subject: AnalyticsEvent.NFT,
+                        context: AnalyticsEvent.SEND,
                     }),
                 })
             }

@@ -105,6 +105,7 @@ export const LedgerSignTransaction: React.FC<Props> = ({ route }) => {
                             signature: AnalyticsEvent.HARDWARE,
                             network: network.name,
                             subject: AnalyticsEvent.NATIVE_TOKEN,
+                            context: AnalyticsEvent.SEND,
                         }),
                     })
                     break
@@ -117,6 +118,7 @@ export const LedgerSignTransaction: React.FC<Props> = ({ route }) => {
                             signature: AnalyticsEvent.HARDWARE,
                             network: network.name,
                             subject: AnalyticsEvent.TOKEN,
+                            context: AnalyticsEvent.SEND,
                         }),
                     })
                     break
@@ -129,6 +131,7 @@ export const LedgerSignTransaction: React.FC<Props> = ({ route }) => {
                             signature: AnalyticsEvent.HARDWARE,
                             network: network.name,
                             subject: AnalyticsEvent.NFT,
+                            context: AnalyticsEvent.SEND,
                         }),
                     })
 
