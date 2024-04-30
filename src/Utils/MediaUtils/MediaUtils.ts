@@ -75,6 +75,7 @@ const resolveMimeTypeFromUri = async (resource: string) => {
         })
 
         const contentType = res.headers["content-type"]
+
         return contentType ?? "image/png"
     } catch (err) {
         warn(ERROR_EVENTS.NFT, `Failed to resolve mime type for ${resource}`, err)
@@ -84,8 +85,8 @@ const resolveMimeTypeFromUri = async (resource: string) => {
 
 const resolveMediaTypeFromMimeType = (mimeType: string): NFTMediaType => {
     if (isValidMimeType(mimeType, [NFTMediaType.IMAGE])) return NFTMediaType.IMAGE
-    else if (isValidMimeType(mimeType, [NFTMediaType.VIDEO])) return NFTMediaType.VIDEO
-
+    if (isValidMimeType(mimeType, [NFTMediaType.VIDEO])) return NFTMediaType.VIDEO
+    if (isValidMimeType(mimeType, [NFTMediaType.MODEL])) return NFTMediaType.MODEL
     return NFTMediaType.UNKNOWN
 }
 

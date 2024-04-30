@@ -1,7 +1,7 @@
 import React, { memo, useCallback, useEffect, useMemo, useRef, useState } from "react"
 import { useTheme, useNFTMedia, useThemedStyles } from "~Hooks"
 import { NFTMediaType, NFTMedia as Media } from "~Model"
-import { warn } from "~Utils"
+import { URIUtils, warn } from "~Utils"
 import { NFTVideo } from "../NFTVideo"
 import { StyleSheet } from "react-native"
 import { BaseView } from "~Components/Base"
@@ -11,7 +11,21 @@ import { LongPressProvider } from "../LongPressProvider"
 // @ts-ignore
 import ProgressBar from "react-native-progress/Bar"
 import { useSaveMediaToPhotos } from "./Hooks"
-import { ERROR_EVENTS } from "~Constants"
+import { ERROR_EVENTS, SCREEN_WIDTH } from "~Constants"
+
+import { useGLTF } from "@react-three/drei/native"
+import { Canvas } from "@react-three/fiber/native"
+
+function Model({ uri }: { uri: string | undefined }) {
+    const gtlf = useGLTF(URIUtils.convertUriToUrl(uri ?? ""), true, false)
+
+    return (
+        <Canvas>
+            <primitive object={gtlf.scene} scale={[0.1, 0.1, 0.1]} />
+            <ambientLight intensity={5} />
+        </Canvas>
+    )
+}
 
 type Props = {
     uri?: string
@@ -57,10 +71,9 @@ export const NFTMedia = memo(
 
         useEffect(() => {
             if (!uri) return
+
             fetchMedia(uri)
-                .then(media => {
-                    setTokenMedia(media)
-                })
+                .then(media => setTokenMedia(media))
                 .catch(e => warn(ERROR_EVENTS.NFT, e))
         }, [fetchMedia, uri])
 
@@ -83,14 +96,26 @@ export const NFTMedia = memo(
         }, [isLoading])
 
         const RenderNFT = useMemo(() => {
-            return tokenMedia?.mediaType === NFTMediaType.VIDEO ? (
-                <NFTVideo
-                    uri={tokenMedia.image}
-                    style={[styles]}
-                    isPlayAudio={isPlayAudio}
-                    useNativeControls={useNativeControls}
-                />
-            ) : (
+            if (tokenMedia?.mediaType === NFTMediaType.VIDEO) {
+                return (
+                    <NFTVideo
+                        uri={tokenMedia.image}
+                        style={[styles]}
+                        isPlayAudio={isPlayAudio}
+                        useNativeControls={useNativeControls}
+                    />
+                )
+            }
+
+            if (tokenMedia?.mediaType === NFTMediaType.MODEL) {
+                return (
+                    <BaseView style={{ width: SCREEN_WIDTH / 2 - 30, height: SCREEN_WIDTH / 2 - 30 }}>
+                        <Model uri={uri} />
+                    </BaseView>
+                )
+            }
+
+            return (
                 <NFTImage
                     {...restProps}
                     uri={tokenMedia?.image}
@@ -108,6 +133,7 @@ export const NFTMedia = memo(
             themedStyles.imageOpacity,
             tokenMedia?.image,
             tokenMedia?.mediaType,
+            uri,
             useNativeControls,
         ])
 

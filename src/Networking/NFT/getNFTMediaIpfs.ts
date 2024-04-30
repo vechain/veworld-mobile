@@ -21,6 +21,7 @@ export const getNFTMediaIpfs = async (uri: string): Promise<NFTMedia> => {
             "image/tiff",
             "image/webp",
             "image/svg+xml",
+            "model/gltf-binary",
         ]
         if (!allowedMimeTypes.includes(response.data.type)) {
             throw new Error(`Unsupported MIME type: ${response.data.type}`)
