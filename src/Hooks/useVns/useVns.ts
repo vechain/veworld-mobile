@@ -26,7 +26,7 @@ export const useVns = ({ name, address }: { name?: string; address?: string }) =
             setIsLoading(true)
             const {
                 decoded: { addresses },
-            } = await thor.account(NETWORK_RESOLVER).method(ABI.getAddresses).call([_name])
+            } = await thor.account(NETWORK_RESOLVER).method(ABI.getAddresses).call([_name.toLowerCase()])
 
             setIsLoading(false)
 
