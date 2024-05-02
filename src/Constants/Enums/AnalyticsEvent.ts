@@ -108,7 +108,7 @@ type MixPanelEvent = {
     signature: AnalyticsEvent.LOCAL | AnalyticsEvent.HARDWARE
     network: string
     subject?: AnalyticsEvent.NATIVE_TOKEN | AnalyticsEvent.TOKEN | AnalyticsEvent.NFT
-    context?: AnalyticsEvent.IN_APP | AnalyticsEvent.WALLET_CONNECT
+    context?: AnalyticsEvent.IN_APP | AnalyticsEvent.WALLET_CONNECT | AnalyticsEvent.SEND
     failed?: boolean
     dappUrl?: string
 }
@@ -118,7 +118,7 @@ type MixPanelEvent = {
  * @param {AnalyticsEvent.LOCAL | AnalyticsEvent.HARDWARE} signature
  * @param {string} network
  * @param {AnalyticsEvent.NATIVE_TOKEN | AnalyticsEvent.TOKEN | AnalyticsEvent.NFT} [subject]
- * @param {AnalyticsEvent.IN_APP | AnalyticsEvent.WALLET_CONNECT} [context]
+ * @param {AnalyticsEvent.IN_APP | AnalyticsEvent.WALLET_CONNECT | AnalyticsEvent.SEND} [context]
  * @param {boolean} [failed]
  * @param {string} [dappUrl]
  *
@@ -139,7 +139,7 @@ export const creteAnalyticsEvent = ({
     signature: AnalyticsEvent.LOCAL | AnalyticsEvent.HARDWARE
     network: string
     subject?: AnalyticsEvent.NATIVE_TOKEN | AnalyticsEvent.TOKEN | AnalyticsEvent.NFT
-    context?: AnalyticsEvent.IN_APP | AnalyticsEvent.WALLET_CONNECT
+    context?: AnalyticsEvent.IN_APP | AnalyticsEvent.WALLET_CONNECT | AnalyticsEvent.SEND
     failed?: boolean
     dappUrl?: string
 }): MixPanelEvent => {

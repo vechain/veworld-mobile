@@ -76,6 +76,7 @@ export const TransactionSummarySendScreen = ({ route }: Props) => {
                         signature: AnalyticsEvent.LOCAL,
                         network: network.name,
                         subject: isNative ? AnalyticsEvent.NATIVE_TOKEN : AnalyticsEvent.TOKEN,
+                        context: AnalyticsEvent.SEND,
                     }),
                 })
             }
