@@ -336,7 +336,7 @@ platform :ios do
   
       # update yarn packages and pods
       Dir.chdir "../.." do
-        sh("yarn install:all")
+        sh("yarn purge && yarn install:all")
       end
   
       fetch_certificates_from_gh
