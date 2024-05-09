@@ -152,7 +152,7 @@ platform :ios do
 
       sh("node_modules/@sentry/cli/bin/sentry-cli releases files #{ENV["APP_IDENTIFIER"]}@#{version}+#{build} upload-sourcemaps --dist #{build} --strip-prefix ../../ main.jsbundle main.jsbundle.map --org 'vechain-foundation' --project 'veworld-mobile' --log-level=info")
       
-      # upload source maps to datadog with cli - handled by xcode build phase? I put it in here due to the xcode build phase having issues with uploading
+      # upload source maps to datadog with cli 
       sh("yarn datadog-ci react-native upload --platform ios --service org.vechain.veworld.app --bundle main.jsbundle.map --sourcemap ./build/main.jsbundle.map --release-version #{version_name} --build-version #{build_number} ")
       sh("yarn datadog-ci react-native upload --platform ios --service org.vechain.veworld.app --bundle main.jsbundle --sourcemap ./build/main.jsbundle. --release-version #{version_name} --build-version #{build_number} ")
 
@@ -338,15 +338,13 @@ platform :ios do
   
       # update yarn packages and pods
       Dir.chdir "../.." do
-        sh("yarn purge && yarn install:all")
+        sh("yarn install:all")
       end
   
       fetch_certificates_from_gh
       # begin -> rescure == try -> catch
       begin
-  
-        #fetch certififcates from github
-        
+          
         # build app
         build_app(
           workspace: "VeWorld.xcworkspace", 
@@ -368,6 +366,8 @@ platform :ios do
           # merge the two source maps
           sh("mv main.jsbundle.map main.jsbundle.packager.map")
           sh("node node_modules/react-native/scripts/compose-source-maps.js main.jsbundle.packager.map main.jsbundle.hbc.map -o main.jsbundle.map")
+          
+          # upload source maps to datadog
           sh("yarn datadog-ci react-native upload --platform ios --service org.vechain.veworld.app --bundle main.jsbundle.map --sourcemap ./build/main.jsbundle.map --release-version #{version_name} --build-version #{build_number} ")
           sh("yarn datadog-ci react-native upload --platform ios --service org.vechain.veworld.app --bundle main.jsbundle --sourcemap ./build/main.jsbundle --release-version #{version_name} --build-version #{build_number} ")
         end
