@@ -1,14 +1,14 @@
-package org.vechain.veworld.app.samplePackage
+package org.vechain.veworld.app.getTextPackage
 
 import com.facebook.react.bridge.Promise
 import com.facebook.react.bridge.ReactApplicationContext
 import com.facebook.react.bridge.ReactContextBaseJavaModule
 import com.facebook.react.bridge.ReactMethod
 
-class SampleModule(reactContext: ReactApplicationContext) : ReactContextBaseJavaModule(reactContext) {
+class GetTextPackage(reactContext: ReactApplicationContext) : ReactContextBaseJavaModule(reactContext) {
 
     override fun getName(): String {
-        return "SampleNativeModule"
+        return "GetTextPackageNativeModule"
     }
 
     @ReactMethod
