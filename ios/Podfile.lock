@@ -681,6 +681,8 @@ PODS:
     - RCT-Folly (= 2021.07.22.00)
     - React-Core
     - React-RCTImage
+  - RNScreenshotPrevent (1.2.0):
+    - React
   - RNScrypt (1.2.1):
     - React
   - RNSentry (5.22.0):
@@ -822,6 +824,7 @@ DEPENDENCIES:
   - RNReactNativeHapticFeedback (from `../node_modules/react-native-haptic-feedback`)
   - RNReanimated (from `../node_modules/react-native-reanimated`)
   - RNScreens (from `../node_modules/react-native-screens`)
+  - RNScreenshotPrevent (from `../node_modules/react-native-screenshot-prevent`)
   - RNScrypt (from `../node_modules/react-native-scrypt`)
   - "RNSentry (from `../node_modules/@sentry/react-native`)"
   - RNSVG (from `../node_modules/react-native-svg`)
@@ -1041,6 +1044,8 @@ EXTERNAL SOURCES:
     :path: "../node_modules/react-native-reanimated"
   RNScreens:
     :path: "../node_modules/react-native-screens"
+  RNScreenshotPrevent:
+    :path: "../node_modules/react-native-screenshot-prevent"
   RNScrypt:
     :path: "../node_modules/react-native-scrypt"
   RNSentry:
@@ -1167,6 +1172,7 @@ SPEC CHECKSUMS:
   RNReactNativeHapticFeedback: ec56a5f81c3941206fd85625fa669ffc7b4545f9
   RNReanimated: ab2e96c6d5591c3dfbb38a464f54c8d17fb34a87
   RNScreens: 93ae3be2f119d955620f9bbb39ad372adb53b7a9
+  RNScreenshotPrevent: dc9741e416ba80c3739418f112ac4093188315e9
   RNScrypt: 95fdef077b482e9fdf8a761120cb69d129ef4016
   RNSentry: 7ae2a06a5563de39ec09dcb1e751ac0c67f1883c
   RNSVG: d00c8f91c3cbf6d476451313a18f04d220d4f396

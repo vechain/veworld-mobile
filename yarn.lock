@@ -15619,6 +15619,11 @@ react-native-screens@^3.25.0:
     react-freeze "^1.0.0"
     warn-once "^0.1.0"
 
+react-native-screenshot-prevent@1.2.0:
+  version "1.2.0"
+  resolved "https://registry.yarnpkg.com/react-native-screenshot-prevent/-/react-native-screenshot-prevent-1.2.0.tgz#1ffe3c3627ec29f3dadaf4d040a4c5741a58c44a"
+  integrity sha512-dw3P01eWPcTV60ynPFFt9oJPUpcaP5GgRPYKXrclScdiSOWdEyFt8tynmurOfL5aqAkfVqsyiDxXVc3P+rpKxQ==
+
 react-native-scrypt@^1.2.1:
   version "1.2.1"
   resolved "https://registry.yarnpkg.com/react-native-scrypt/-/react-native-scrypt-1.2.1.tgz#22323d56fec370a9fb6ece143a5104e32af39195"
