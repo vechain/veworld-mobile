@@ -129,7 +129,7 @@ platform :ios do
 
 
 
-  lane :upload_source_maps_to_sentry do |values|
+  lane :upload_source_maps do |values|
     build = values[:build]
     version = values[:version]
 
@@ -151,9 +151,15 @@ platform :ios do
       # upload source maps to sentry with cli - handled by xcode build phase?
 
       sh("node_modules/@sentry/cli/bin/sentry-cli releases files #{ENV["APP_IDENTIFIER"]}@#{version}+#{build} upload-sourcemaps --dist #{build} --strip-prefix ../../ main.jsbundle main.jsbundle.map --org 'vechain-foundation' --project 'veworld-mobile' --log-level=info")
+      
+      # upload source maps to datadog with cli 
+      sh("yarn datadog-ci react-native upload --platform ios --service org.vechain.veworld.app --bundle main.jsbundle.map --sourcemap ./build/main.jsbundle.map --release-version #{version_name} --build-version #{build_number} ")
+      sh("yarn datadog-ci react-native upload --platform ios --service org.vechain.veworld.app --bundle main.jsbundle --sourcemap ./build/main.jsbundle. --release-version #{version_name} --build-version #{build_number} ")
 
     end
   end
+
+ 
 
   lane :create_tags_gh do |values|
     build = values[:build]
@@ -251,7 +257,7 @@ platform :ios do
 
       create_tags_gh(build:build, version:version)
 
-      upload_source_maps_to_sentry(build:build, version:version)
+      upload_source_maps_(build:build, version:version)
 
       gh_setup_after
 
@@ -313,9 +319,67 @@ platform :ios do
       end
     end
   end
+
+  lane :build_test_ci do | options |
+    store_password = ENV["STORE_PASSWORD"]
+    key_password = ENV["KEY_PASSWORD"]
+    key_alias = ENV["KEY_ALIAS"]
+  
+    version_name = options[:version_name]
+    build_number = options[:build_number]
+    github_username = options[:username]
+    github_token = options[:token]
+  
+    ci_value = true
+    sh("./set_ci_vars.sh #{ci_value}")
+    clean_build_artifacts
+  
+    clear_derived_data
+  
+      # update yarn packages and pods
+      Dir.chdir "../.." do
+        sh("yarn install:all")
+      end
+  
+      fetch_certificates_from_gh
+      # begin -> rescure == try -> catch
+      begin
+          
+        # build app
+        build_app(
+          workspace: "VeWorld.xcworkspace", 
+          scheme: "VeWorld", 
+          export_method: "app-store",
+          clean: true,
+          build_path: "./build",
+          output_directory: "./build",
+        )
+        # Build and upload sourcemaps to Datadog   
+        Dir.chdir "../.." do
+          # generate source maps for sentry
+          sh("npx react-native bundle --platform ios --dev false --entry-file index.js --reset-cache --bundle-output main.jsbundle --sourcemap-output main.jsbundle.map --minify false")
+          #compile source maps
+          sh("ios/Pods/hermes-engine/destroot/bin/hermesc -O -emit-binary -output-source-map -out=main.jsbundle.hbc main.jsbundle")
+          sh("rm -f main.jsbundle")
+          sh("mv main.jsbundle.hbc main.jsbundle")
+    
+          # merge the two source maps
+          sh("mv main.jsbundle.map main.jsbundle.packager.map")
+          sh("node node_modules/react-native/scripts/compose-source-maps.js main.jsbundle.packager.map main.jsbundle.hbc.map -o main.jsbundle.map")
+          
+          # upload source maps to datadog
+          sh("yarn datadog-ci react-native upload --platform ios --service org.vechain.veworld.app --bundle main.jsbundle.map --sourcemap ./build/main.jsbundle.map --release-version #{version_name} --build-version #{build_number} ")
+          sh("yarn datadog-ci react-native upload --platform ios --service org.vechain.veworld.app --bundle main.jsbundle --sourcemap ./build/main.jsbundle --release-version #{version_name} --build-version #{build_number} ")
+        end
+  
+      sh("echo 'Build successful'")
+    rescue => exception
+      puts exception
+  
+      sh("echo 'Build failed'")
+    end
+  end
 end
-
-
 
 
 
