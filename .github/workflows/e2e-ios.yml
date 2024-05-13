@@ -70,7 +70,7 @@ jobs:
              base64-encoded-secret: ${{ secrets.IOS_ENV_DEFAULT }}
              filename: "env.default"
              is-executable: false
-             working-directory: "./ios"
+             working-directory: "./ios/fastlane"
 
           
       - name: Env decode 
@@ -88,12 +88,20 @@ jobs:
             filename: "datadog-ci.json"
             is-executable: false
             working-directory: "."
+      
+      - name: Decode prod env      
+        uses: mobiledevops/secret-to-file-action@v1
+        with:
+            base64-encoded-secret: ${{ secrets.RN_ENV_PROD}}
+            filename: ".env.production"
+            is-executable: false
+            working-directory: "."
 
       - name: Build apk with fastlane
         run: |
               cd ios/fastlane
               fastlane build_test_ci username:${{secrets.CI_USER}} token:${{secrets.GCI_USER_TOKEN}} version_code:99 version_name:"9.9.9"
-              cd build
+              cd ../build
               ls
               cd Release-iphonesimulator
               ls -la
