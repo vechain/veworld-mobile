@@ -29,7 +29,7 @@ export const BackupMnemonicBottomSheet = React.forwardRef<BottomSheetModalMethod
             <BaseSpacer height={24} />
 
             <BaseView alignItems="flex-start">
-                <MnemonicCard mnemonicArray={mnemonicArray} />
+                <MnemonicCard mnemonicArray={mnemonicArray} souceScreen="BackupMnemonicBottomSheet" />
 
                 <BaseSpacer height={16} />
 

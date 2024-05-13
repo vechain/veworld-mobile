@@ -1,6 +1,6 @@
 package org.vechain.veworld.app
 
-import org.vechain.veworld.app.samplePackage.SampleModule
+import org.vechain.veworld.app.getTextPackage.GetTextPackage
 
 import android.view.View
 import com.facebook.react.ReactPackage
@@ -19,5 +19,5 @@ class VeWorldPackage : ReactPackage {
 
     override fun createNativeModules(
             reactContext: ReactApplicationContext
-    ): MutableList<NativeModule> = listOf(SampleModule(reactContext)).toMutableList()
+    ): MutableList<NativeModule> = listOf(GetTextPackage(reactContext)).toMutableList()
 }

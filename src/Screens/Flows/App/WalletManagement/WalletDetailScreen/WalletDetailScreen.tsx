@@ -57,6 +57,7 @@ export const WalletDetailScreen = ({ route: { params } }: Props) => {
         if (!device) {
             throw new Error("Device is undefined when trying to add account")
         }
+
         dispatch(addAccountForDevice(device))
         showSuccessToast({
             text1: LL.WALLET_MANAGEMENT_NOTIFICATION_CREATE_ACCOUNT_SUCCESS(),

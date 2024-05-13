@@ -24,7 +24,6 @@ export const NewMnemonicScreen = () => {
     const dispatch = useAppDispatch()
 
     const [isChecked, setIsChecked] = useState(false)
-    const [isMissingWord, setIsMissingWord] = useState(false)
     const { mnemonic } = useGenerateMnemonic()
 
     const theme = useTheme()
@@ -32,13 +31,9 @@ export const NewMnemonicScreen = () => {
     const { onCopyToClipboard } = useCopyClipboard()
 
     const onBackupPress = useCallback(() => {
-        if (isMissingWord) {
-            nav.goBack()
-        } else {
-            dispatch(setMnemonic(mnemonic))
-            nav.navigate(Routes.CONFIRM_MNEMONIC)
-        }
-    }, [dispatch, isMissingWord, mnemonic, nav])
+        dispatch(setMnemonic(mnemonic))
+        nav.navigate(Routes.CONFIRM_MNEMONIC)
+    }, [dispatch, mnemonic, nav])
 
     return (
         <Layout
@@ -55,7 +50,7 @@ export const NewMnemonicScreen = () => {
 
                         <BaseSpacer height={24} />
 
-                        <MnemonicCard mnemonicArray={mnemonic} setIsMissingWord={setIsMissingWord} />
+                        <MnemonicCard mnemonicArray={mnemonic} souceScreen="NewMnemonicScreen" />
                         <BaseSpacer height={20} />
                         <BaseButton
                             size="sm"

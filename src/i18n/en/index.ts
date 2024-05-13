@@ -349,6 +349,7 @@ const en: BaseTranslation = {
     ERROR_WRONG_WORDS_COMBINATION: "Wrong words combination",
     ERROR_WRONG_WORDS_COMBINATION_DESC: "The words combination is wrong, try again.",
     ERROR_WALLET_ALREADY_EXISTS: "Wallet already exists",
+    ERROR_ACCOUNT_ALREADY_EXISTS: "Account already exists",
     ERROR_ENTER_VALID_URL: "Enter a valid URL",
     ERROR_URL_NOT_VALID: "URL must be https or localhost",
     ERROR_URL_ALREADY_USED: "Network already in use",
@@ -367,6 +368,7 @@ const en: BaseTranslation = {
     ERROR_NFT_FAILED_TO_GET_METADATA: "Failed to get token metadata",
     ERROR_SECURITY_ACTION: "Security action failed. Please check your device and try again.",
     ERROR_INVALID_ADDRESS: "Invalid address",
+    ERROR_COULD_NOT_FIND_ADDRESS_FOR_DOMAIN: "Address not found for domain name",
     ERROR_TOO_MANY_BIOMETRICS_AUTH_ATTEMPTS: "Too many biometrics authentication attempts, please try again later",
     ERROR_CREATING_WALLET: "Error creating wallet",
 
@@ -421,6 +423,7 @@ const en: BaseTranslation = {
     NOTIFICATION_VIEW_ACCOUNT: "View account",
     NOTIFICATION_TITLE_INVALID_QR: "QR Code Not Supported",
     NOTIFICATION_INVALID_QR: "Please scan a WalletConnect or wallet address QR code.",
+    NOTIFICATION_DOMAIN_NAME_NOT_FOUND: "Domain name / address not found.",
     NOTIFICATION_GAS_FEE_INACCURATE: "Gas fee estimates might vary. Always double-check before confirming.",
 
     NOTIFICATION_FAILED_TO_REMOVE_ACCOUNT: "Failed to remove account",
@@ -647,7 +650,7 @@ const en: BaseTranslation = {
     SEND_INSERT_ADDRESS_DESCRIPTION: "Select a contact below or paste/scan an address",
     SEND_ENTER_AN_ADDRESS: "Enter the address to send to...",
     SEND_NO_CONTACTS_OR_ACCOUNTS_FOUND: "Oops! We couldn’t find any contacts or accounts.",
-    SEND_PLEASE_TYPE_ADDRESS: "Please type in the address.",
+    SEND_PLEASE_TYPE_ADDRESS: "Type in an address or a .vet domain name",
     SEND_INSERT_CONTACTS: "Contacts",
     SEND_INSERT_ACCOUNTS: "Accounts",
     SEND_FROM: "From",

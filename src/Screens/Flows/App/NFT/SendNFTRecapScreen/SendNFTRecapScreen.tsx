@@ -19,6 +19,7 @@ import {
     selectAccounts,
     selectNFTWithAddressAndTokenId,
     selectSelectedAccount,
+    selectSelectedNetwork,
     setIsAppLoading,
     useAppDispatch,
     useAppSelector,
@@ -40,6 +41,7 @@ export const SendNFTRecapScreen = ({ route }: Props) => {
     const nav = useNavigation()
     const track = useAnalyticTracking()
     const dispatch = useAppDispatch()
+    const network = useAppSelector(selectSelectedNetwork)
 
     const selectedAccount = useAppSelector(selectSelectedAccount)
     const nft = useAppSelector(state =>
@@ -59,7 +61,9 @@ export const SendNFTRecapScreen = ({ route }: Props) => {
                     ...creteAnalyticsEvent({
                         medium: AnalyticsEvent.SEND,
                         signature: AnalyticsEvent.LOCAL,
+                        network: network.name,
                         subject: AnalyticsEvent.NFT,
+                        context: AnalyticsEvent.SEND,
                     }),
                 })
             }
@@ -67,7 +71,7 @@ export const SendNFTRecapScreen = ({ route }: Props) => {
             dispatch(setIsAppLoading(false))
             nav.dispatch(StackActions.popToTop())
         },
-        [track, dispatch, nav],
+        [dispatch, nav, track, network.name],
     )
 
     const onTransactionSuccess = useCallback(

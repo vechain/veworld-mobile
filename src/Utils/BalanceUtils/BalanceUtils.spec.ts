@@ -1,7 +1,7 @@
 import { VET, VTHO, defaultMainNetwork } from "~Constants"
 import BalanceUtils from "./BalanceUtils"
 import { TestHelpers } from "~Test"
-import axios from "axios"
+var axios = require("axios")
 import MockAdapter from "axios-mock-adapter"
 
 const { account1D1, token1, token2 } = TestHelpers.data

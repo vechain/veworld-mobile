@@ -3,7 +3,7 @@ import React, { useCallback, useMemo, useState } from "react"
 import { FlatList, RefreshControl, StyleSheet } from "react-native"
 import { useBottomSheetModal, useSetSelectedAccount, useTheme } from "~Hooks"
 import { SCREEN_WIDTH } from "~Constants"
-import { AddressUtils, TransactionUtils } from "~Utils"
+import { TransactionUtils } from "~Utils"
 import { BaseText, BaseView, ChangeAccountButtonPill, BaseSpacer, SelectAccountBottomSheet, Layout } from "~Components"
 import {
     selectBalanceVisible,
@@ -254,7 +254,7 @@ export const HistoryScreen = () => {
 
                         <ChangeAccountButtonPill
                             title={selectedAccount.alias ?? LL.WALLET_LABEL_ACCOUNT()}
-                            text={AddressUtils.humanAddress(selectedAccount.address ?? "", 5, 4)}
+                            text={selectedAccount.address}
                             action={openSelectAccountBottomSheet}
                         />
                     </BaseView>

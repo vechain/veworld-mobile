@@ -1,6 +1,6 @@
 import React, { memo, useCallback, useMemo, useState } from "react"
 import { StyleSheet } from "react-native"
-import { useRenameAccount, useThemedStyles } from "~Hooks"
+import { useRenameAccount, useThemedStyles, useVns } from "~Hooks"
 import { AddressUtils, BigNutils } from "~Utils"
 import { BaseTextInput, BaseSpacer, BaseText, BaseView } from "~Components"
 import { WalletAccount } from "~Model"
@@ -52,6 +52,8 @@ export const AccountDetailBox: React.FC<Props> = memo(
         )
         const cardOpacity = useMemo(() => (isDisabled ? 0.7 : undefined), [isDisabled])
 
+        const { name: vnsName, address: vnsAddress } = useVns({ name: "", address: account.address })
+
         return (
             <BaseView
                 flexDirection="row"
@@ -79,10 +81,11 @@ export const AccountDetailBox: React.FC<Props> = memo(
                         maxLength={20}
                     />
                 </BaseView>
-                <BaseView style={(styles.rightSubContainer, { opacity: cardOpacity })}>
+                <BaseView style={(styles.rightSubContainer, { opacity: cardOpacity })} alignItems="flex-end">
                     <BaseText style={styles.address} fontSize={10}>
-                        {AddressUtils.humanAddress(account.address, 4, 6)}
+                        {vnsName || AddressUtils.humanAddress(vnsAddress ?? account.address, 4, 6)}
                     </BaseText>
+
                     <BaseSpacer height={4} />
                     <BaseText fontSize={10}>{balance}</BaseText>
                 </BaseView>

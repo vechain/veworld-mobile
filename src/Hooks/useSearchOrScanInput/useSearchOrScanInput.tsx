@@ -1,9 +1,11 @@
+import { isEmpty } from "lodash"
 import React, { useCallback, useMemo, useState } from "react"
 import { Keyboard, StyleSheet } from "react-native"
-import { BaseTextInput } from "~Components"
+import { BaseTextInput, showWarningToast } from "~Components"
 import { ScanTarget } from "~Constants"
 import { useCameraBottomSheet } from "~Hooks/useCameraBottomSheet"
 import { useSearchContactsAndAccounts } from "~Hooks/useSearchContactsAndAccounts"
+import { useVns, ZERO_ADDRESS } from "~Hooks/useVns"
 import { AddressUtils } from "~Utils"
 import { useI18nContext } from "~i18n"
 
@@ -16,26 +18,47 @@ export const useSearchOrScanInput = (
 
     const [searchText, setSearchText] = useState("")
     const [errorMessage, setErrorMessage] = useState("")
+    const { _getName, _getAddress } = useVns({ name: "", address: "" })
 
     const { filteredContacts, filteredAccounts, isAddressInContactsOrAccounts, accountsAndContacts, contacts } =
         useSearchContactsAndAccounts({ searchText, selectedAddress })
 
     const onSuccessfullScan = useCallback(
-        (address: string) => {
+        async (data: string) => {
+            let vnsName = ""
+            let vnsAddress = ""
+
+            if (data.includes(".vet")) {
+                const _addy = await _getAddress(data)
+
+                if (_addy === ZERO_ADDRESS) {
+                    showWarningToast({ text1: LL.NOTIFICATION_DOMAIN_NAME_NOT_FOUND() })
+                    return
+                }
+
+                vnsAddress = _addy
+                vnsName = data
+            } else {
+                const { name, address: vnsAddy } = await _getName(data)
+                vnsName = name
+                vnsAddress = vnsAddy
+            }
+
+            setSearchText(isEmpty(vnsName) ? vnsAddress : vnsName)
+            setSelectedAddress(vnsAddress)
+
             const addressExists = accountsAndContacts.some(accountOrContact =>
-                AddressUtils.compareAddresses(accountOrContact.address, address),
+                AddressUtils.compareAddresses(accountOrContact.address, vnsAddress),
             )
 
-            setSearchText(address)
-            setSelectedAddress(address)
-            if (addressExists) return navigateNext(address)
+            if (addressExists) return navigateNext(vnsAddress)
         },
-        [accountsAndContacts, navigateNext, setSelectedAddress],
+        [LL, _getAddress, _getName, accountsAndContacts, navigateNext, setSelectedAddress],
     )
 
     const { RenderCameraModal, handleOpenCamera } = useCameraBottomSheet({
         onScan: onSuccessfullScan,
-        targets: [ScanTarget.ADDRESS],
+        targets: [ScanTarget.ADDRESS, ScanTarget.VNS],
     })
 
     const onTextReset = useCallback(() => {

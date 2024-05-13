@@ -45,6 +45,8 @@ import { clientPersister, queryClient } from "~Api/QueryProvider"
 import NetInfo from "@react-native-community/netinfo"
 import { onlineManager } from "@tanstack/react-query"
 import { useFlipper } from "@react-navigation/devtools"
+import { DdRumReactNavigationTracking } from "@datadog/mobile-react-navigation"
+import { DatadogProvider, DatadogProviderConfiguration } from "@datadog/mobile-react-native"
 
 const { fontFamily } = typography
 
@@ -164,6 +166,13 @@ const NavigationProvider = ({ children }) => {
     const dispatch = useAppDispatch()
     useFlipper(navigationRef)
 
+    useEffect(() => {
+        // Ensure that Datadog starts tracking views once the navigation is fully ready
+        if (ready) {
+            DdRumReactNavigationTracking.startTrackingViews(navigationRef.current)
+        }
+    }, [ready, navigationRef])
+
     return (
         <NavigationContainer
             ref={navigationRef}
@@ -190,6 +199,26 @@ const NavigationProvider = ({ children }) => {
         </NavigationContainer>
     )
 }
+
+const ddClientId = process.env.DATADOG_CLIENT_API
+const ddApplicationId = process.env.DATADOG_APPLICATION_ID
+if (!ddClientId || !ddApplicationId) {
+    Sentry.captureMessage(
+        "DATADOG environment variable is not set correctly. Please set it before running the application.",
+    )
+}
+// Datadog SDK configuration
+const ddConfig = new DatadogProviderConfiguration(
+    ddClientId, // Client API
+    "dev-test", // Environment name
+    ddApplicationId, // Application ID
+    true, // Track user interactions
+    true, // Track XHR Resources
+    true, // Track Errors
+)
+ddConfig.site = "EU1" // Set the Datadog site
+// Additional optional configurations...
+ddConfig.nativeCrashReportEnabled = true // enable native crash reporting
 
 const SentryWrappedMain = Sentry.wrap(Main)
 
@@ -222,7 +251,9 @@ const ReduxWrappedMain = () => {
                 <PersistedThemeProvider>
                     <ApplicationSecurityProvider>
                         <StoreContextProvider>
-                            <SentryInitialedMain />
+                            <DatadogProvider configuration={ddConfig}>
+                                <SentryInitialedMain />
+                            </DatadogProvider>
                         </StoreContextProvider>
                     </ApplicationSecurityProvider>
                 </PersistedThemeProvider>

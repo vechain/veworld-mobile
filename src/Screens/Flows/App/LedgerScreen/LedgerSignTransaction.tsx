@@ -22,8 +22,10 @@ import {
     addPendingDappTransactionActivity,
     addPendingNFTtransferTransactionActivity,
     addPendingTransferTransactionActivity,
+    selectSelectedNetwork,
     setIsAppLoading,
     useAppDispatch,
+    useAppSelector,
 } from "~Storage/Redux"
 import { ActivityUtils, debug, error, LedgerUtils } from "~Utils"
 import { useI18nContext } from "~i18n"
@@ -56,6 +58,7 @@ export const LedgerSignTransaction: React.FC<Props> = ({ route }) => {
     const { LL } = useI18nContext()
     const { processRequest } = useWalletConnect()
     const { postMessage } = useInAppBrowser()
+    const network = useAppSelector(selectSelectedNetwork)
 
     const [signature, setSignature] = useState<Buffer>()
     const [isAwaitingSignature, setIsAwaitingSignature] = useState(false)
@@ -100,7 +103,9 @@ export const LedgerSignTransaction: React.FC<Props> = ({ route }) => {
                         ...creteAnalyticsEvent({
                             medium: AnalyticsEvent.SEND,
                             signature: AnalyticsEvent.HARDWARE,
+                            network: network.name,
                             subject: AnalyticsEvent.NATIVE_TOKEN,
+                            context: AnalyticsEvent.SEND,
                         }),
                     })
                     break
@@ -111,7 +116,9 @@ export const LedgerSignTransaction: React.FC<Props> = ({ route }) => {
                         ...creteAnalyticsEvent({
                             medium: AnalyticsEvent.SEND,
                             signature: AnalyticsEvent.HARDWARE,
+                            network: network.name,
                             subject: AnalyticsEvent.TOKEN,
+                            context: AnalyticsEvent.SEND,
                         }),
                     })
                     break
@@ -122,7 +129,9 @@ export const LedgerSignTransaction: React.FC<Props> = ({ route }) => {
                         ...creteAnalyticsEvent({
                             medium: AnalyticsEvent.SEND,
                             signature: AnalyticsEvent.HARDWARE,
+                            network: network.name,
                             subject: AnalyticsEvent.NFT,
+                            context: AnalyticsEvent.SEND,
                         }),
                     })
 
@@ -135,6 +144,7 @@ export const LedgerSignTransaction: React.FC<Props> = ({ route }) => {
                             ...creteAnalyticsEvent({
                                 medium: AnalyticsEvent.DAPP,
                                 signature: AnalyticsEvent.HARDWARE,
+                                network: network.name,
                                 context: AnalyticsEvent.IN_APP,
                                 dappUrl: dappRequest?.appUrl,
                             }),
@@ -142,7 +152,7 @@ export const LedgerSignTransaction: React.FC<Props> = ({ route }) => {
                     }
             }
         },
-        [track, dispatch, dappRequest],
+        [dispatch, track, network.name, dappRequest],
     )
 
     const { sendTransaction } = useSendTransaction(onTransactionSuccess)

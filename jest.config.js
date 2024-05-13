@@ -45,6 +45,7 @@ module.exports = {
         "^~Assets(.*)": ["<rootDir>/src/Assets$1"],
         "^~Test$": ["<rootDir>/src/Test/index.tsx"],
         "^~Networking(.*)": ["<rootDir>/src/Networking$1"],
+        "^~Logging(.*)": ["<rootDir>/src/Logging$1"],
 
         Intl: "<rootDir>/node_modules/intl/",
     },
