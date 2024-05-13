@@ -99,6 +99,8 @@ jobs:
 
       - name: Build apk with fastlane
         run: |
+              echo "IS_CI_BUILD_ENABLED=true" > .env.local
+              echo "IS_CI_BUILD_ENABLED=true" > .env.production.local
               cd ios/fastlane
               fastlane build_test_ci username:${{secrets.CI_USER}} token:${{secrets.GCI_USER_TOKEN}} version_code:99 version_name:"9.9.9"
               cd ../build
