@@ -63,7 +63,7 @@ jobs:
             is-executable: false
             working-directory: "./ios"
 
-      - name: Env default 
+      - name: Env default decode
         uses: mobiledevops/secret-to-file-action@v1
         with:
              base64-encoded-secret: ${{ secrets.IOS_ENV_DEFAULT }}
@@ -72,7 +72,7 @@ jobs:
              working-directory: "./ios"
 
           
-      - name: Env default 
+      - name: Env decode 
         uses: mobiledevops/secret-to-file-action@v1
         with:
              base64-encoded-secret: ${{ secrets.IOS_ENV}}
@@ -80,7 +80,7 @@ jobs:
              is-executable: false
              working-directory: "."
 
-      - name: datadog-ci download
+      - name: datadog-ci decode
         uses: mobiledevops/secret-to-file-action@v1
         with:
             base64-encoded-secret: ${{ secrets.DATADOG_CI}}
@@ -88,7 +88,7 @@ jobs:
             is-executable: false
             working-directory: "."
 
-      - name: Build apk
+      - name: Build apk with fastlane
         run: |
               cd ios
               fastlane build_test_ci username:${{secrets.CI_USER}} token:${{secrets.GCI_USER_TOKEN}} version_code:99 version_name:"9.9.9"
