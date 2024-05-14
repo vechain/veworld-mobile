@@ -31,6 +31,14 @@ jobs:
         env:
           HOMEBREW_NO_AUTO_UPDATE: 1
           HOMEBREW_NO_INSTALL_CLEANUP: 1
+      
+      - name: Set up Git credentials
+        run: |
+          git config --global credential.helper store
+          git config --global user.email ${{secrets.CI_EMAIL}}
+          git config --global user.name ${{secrets.CI_USER}}
+          echo "https://${{ secrets.GITHUB_TOKEN }}:x-oauth-basic@github.com" > ~/.gitconfig
+  
 
       # Setup Ruby
       - name: Setup Ruby
