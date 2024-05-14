@@ -10,8 +10,6 @@ jobs:
     name: Maestro Build & Test iOS Debug
     runs-on: macos-latest
     environment: ios-release
-    env:
-      XC_SIMULATOR_NAME: iPhone 14
 
     # Proceed only if it's either not a release event or it's a pre-release.
     if: ${{ github.event_name != 'release' || (github.event_name == 'release' && github.event.release.prerelease) }}
@@ -103,6 +101,9 @@ jobs:
               echo "IS_CI_BUILD_ENABLED=true" > .env.production.local
               cd ios/fastlane
               pwd
+              ls
+              git clone https://github.com/vechainfoundation/veworld-mobile-ios-cert.git
+              ls
               fastlane build_test_ci username:${{secrets.CI_USER}} token:${{secrets.CI_USER_TOKEN}} version_code:99 version_name:"9.9.9"
               cd ../build
               ls
