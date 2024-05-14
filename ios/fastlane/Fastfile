@@ -63,6 +63,7 @@ platform :ios do
       app_identifier: ENV["APP_IDENTIFIER"], # The app identifier of your app.
       readonly: true, # If true, will only print out the commands it would run, without actually running them.
       git_branch: "main", # The branch to commit the code signing files to.
+      git_basic_authorization: ENV["MATCH_GIT_BASIC_AUTHORIZATION"], # The GitHub token for authentication.
       verbose: true # If true, will print out extra information and debugging info.
     )
   end
