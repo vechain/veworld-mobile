@@ -3,7 +3,7 @@ import React, { memo, useCallback, useMemo, useState } from "react"
 import { FlatList, StyleSheet, ViewToken } from "react-native"
 import { ColorThemeType, SCREEN_WIDTH, COLORS } from "~Constants"
 import { AddressUtils } from "~Utils"
-import { useThemedStyles, useVns } from "~Hooks"
+import { useThemedStyles } from "~Hooks"
 import {
     BaseIcon,
     BaseSpacer,
@@ -19,6 +19,7 @@ import {
     selectContactByAddress,
     selectContactsByAddresses,
     selectVisibleAccounts,
+    selectVnsNameOrAddress,
     useAppSelector,
 } from "~Storage/Redux"
 import { useI18nContext } from "~i18n"
@@ -87,10 +88,6 @@ export const TransferCard = memo(
             return names
         }, [accounts, toAddresses, toContacts])
 
-        const fromAddressShort = useMemo(() => {
-            return AddressUtils.humanAddress(fromAddress, 4, 6)
-        }, [fromAddress])
-
         const toAddressesShort = useMemo(() => {
             const shortenedAddresses: Array<string> = []
             toAddresses?.map((_address: string) => {
@@ -106,7 +103,7 @@ export const TransferCard = memo(
             setActiveIndex(activeIdx ?? 0)
         }, [])
 
-        const { name: vnsNameFrom, address: vnsAddressFrom } = useVns({ name: "", address: fromAddress })
+        const nameOrAddressFrom = useAppSelector(state => selectVnsNameOrAddress(state, fromAddress, [4, 6]))
 
         return (
             <BaseView style={[styles.container]}>
@@ -114,12 +111,11 @@ export const TransferCard = memo(
                     {/* FROM View */}
                     <FromAccounCard
                         fromContactName={fromContactName}
-                        fromAddressShort={fromAddressShort}
-                        fromAddress={vnsAddressFrom}
+                        fromAddress={fromAddress}
                         isFromAccountLedger={isFromAccountLedger}
                         onAddContactPress={onAddContactPress}
                         _isObservedWallet={isObservedWallet}
-                        vnsName={vnsNameFrom}
+                        vnsName={nameOrAddressFrom}
                     />
 
                     {/* TO View */}
@@ -212,7 +208,6 @@ const baseStyles = (theme: ColorThemeType) =>
 
 const FromAccounCard = ({
     fromContactName,
-    fromAddressShort,
     fromAddress,
     isFromAccountLedger,
     onAddContactPress,
@@ -220,7 +215,6 @@ const FromAccounCard = ({
     vnsName,
 }: {
     fromContactName: string | undefined
-    fromAddressShort: string
     fromAddress: string
     vnsName?: string
     isFromAccountLedger?: boolean
@@ -228,14 +222,12 @@ const FromAccounCard = ({
     _isObservedWallet?: boolean
 }) => {
     const _address = fromAddress
-    const addressShort = fromAddressShort
     const contactName = fromContactName
 
     return (
         <AccountCard
             provenance={PROVENANCE.FROM}
             _address={_address}
-            addressShort={addressShort}
             contactName={contactName}
             isLedger={isFromAccountLedger}
             _isObservedWallet={_isObservedWallet}
@@ -246,7 +238,6 @@ const FromAccounCard = ({
 }
 
 const ToAccountCard = ({
-    toAddressesShort,
     toContactNames,
     toAddresses,
     isToAccountLedger,
@@ -260,18 +251,17 @@ const ToAccountCard = ({
     isObservedWallet?: boolean
     onAddContactPress?: (address: string) => void
 }) => {
-    const { name: vnsName } = useVns({ name: "", address: toAddresses })
+    const nameOrAddressTo = useAppSelector(state => selectVnsNameOrAddress(state, toAddresses, [4, 6]))
 
     return (
         <AccountCard
             provenance={PROVENANCE.TO}
             _address={toAddresses}
-            addressShort={toAddressesShort}
             contactName={toContactNames}
             isLedger={isToAccountLedger}
             _isObservedWallet={isObservedWallet}
             onAddContactPress={onAddContactPress}
-            vnsName={vnsName}
+            vnsName={nameOrAddressTo}
         />
     )
 }
@@ -279,7 +269,6 @@ const ToAccountCard = ({
 const AccountCard = ({
     provenance,
     _address,
-    addressShort,
     contactName,
     isLedger,
     _isObservedWallet,
@@ -288,7 +277,6 @@ const AccountCard = ({
 }: {
     provenance: PROVENANCE
     _address: string
-    addressShort: string
     vnsName?: string
     contactName?: string
     isLedger?: boolean
@@ -318,9 +306,7 @@ const AccountCard = ({
                                 <BaseSpacer width={8} />
                             </>
                         )}
-                        <BaseText typographyFont={contactName ? "captionRegular" : "button"}>
-                            {vnsName || addressShort}
-                        </BaseText>
+                        <BaseText typographyFont={contactName ? "captionRegular" : "button"}>{vnsName}</BaseText>
                     </BaseView>
                 </BaseView>
                 {!contactName && onAddContactPress && (

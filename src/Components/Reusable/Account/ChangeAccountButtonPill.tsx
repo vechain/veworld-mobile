@@ -1,10 +1,9 @@
 import React from "react"
 import { StyleSheet, View } from "react-native"
 import { BaseIcon, BaseText, BaseTouchable, BaseView } from "~Components/Base"
-import { useThemedStyles, useVns } from "~Hooks"
+import { useThemedStyles } from "~Hooks"
 import { ColorThemeType } from "~Constants"
-
-import { AddressUtils } from "~Utils"
+import { selectVnsNameOrAddress, useAppSelector } from "~Storage/Redux"
 
 type Props = {
     title: string
@@ -14,7 +13,7 @@ type Props = {
 
 export const ChangeAccountButtonPill = ({ title, text, action }: Props) => {
     const { styles: themedStyles, theme } = useThemedStyles(baseStyles)
-    const { name: vnsName, address: vnsAddress } = useVns({ name: "", address: text })
+    const nameOrAddress = useAppSelector(state => selectVnsNameOrAddress(state, text, [4, 3]))
 
     return (
         <BaseTouchable action={action} style={themedStyles.container} haptics="Light">
@@ -31,7 +30,7 @@ export const ChangeAccountButtonPill = ({ title, text, action }: Props) => {
                     typographyFont="smallCaptionRegular"
                     numberOfLines={1}
                     ellipsizeMode="tail">
-                    {vnsName || AddressUtils.humanAddress(vnsAddress ?? text, 6, 3)}
+                    {nameOrAddress}
                 </BaseText>
             </BaseView>
 

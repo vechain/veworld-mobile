@@ -4,6 +4,7 @@ import {
     useAnalyticTracking,
     useBottomSheetModal,
     useCheckVersion,
+    useFetchAllVns,
     useMemoizedAnimation,
     useSetSelectedAccount,
     useTheme,
@@ -38,6 +39,9 @@ import { AnalyticsEvent, BUY_FEATURE_ENABLED } from "~Constants"
 import { AccountUtils } from "~Utils"
 
 export const HomeScreen = () => {
+    /* Pre Fetch all VNS names and addresses */
+    useFetchAllVns()
+
     const selectedCurrency = useAppSelector(selectCurrency)
     const track = useAnalyticTracking()
     const { updateBalances, updateSuggested } = useTokenBalances()

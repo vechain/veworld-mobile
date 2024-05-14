@@ -131,6 +131,15 @@ export const AccountSlice = createSlice({
             }
         },
 
+        addVnsName: (state, action: PayloadAction<{ address: string; name: string }[]>) => {
+            state.accounts.forEach(account => {
+                const vnsName = action.payload.find(vns => AddressUtils.compareAddresses(vns.address, account.address))
+                if (vnsName) {
+                    account.vnsName = vnsName.name
+                }
+            })
+        },
+
         resetAccountState: () => initialAccountState,
     },
 })
@@ -144,4 +153,5 @@ export const {
     setAccountVisibility,
     toggleAccountVisibility,
     resetAccountState,
+    addVnsName,
 } = AccountSlice.actions

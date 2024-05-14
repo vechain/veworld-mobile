@@ -1,7 +1,8 @@
 import { useThor } from "~Components"
 import { useCallback, useEffect, useMemo, useState } from "react"
-import { selectSelectedNetwork, useAppSelector } from "~Storage/Redux"
+import { addVnsName, selectAccounts, selectSelectedNetwork, useAppDispatch, useAppSelector } from "~Storage/Redux"
 import { NETWORK_TYPE } from "~Model"
+import { useQueries } from "@tanstack/react-query"
 
 export const ZERO_ADDRESS = "0x0000000000000000000000000000000000000000"
 
@@ -124,4 +125,58 @@ const ABI = {
         stateMutability: "view",
         type: "function",
     },
+}
+
+//
+//
+//
+//
+//
+//
+//
+
+export const useFetchAllVns = () => {
+    const thor = useThor()
+    const network = useAppSelector(selectSelectedNetwork)
+    const accounts = useAppSelector(selectAccounts)
+    const disptatch = useAppDispatch()
+
+    const NETWORK_RESOLVER = useMemo(() => {
+        return VNS_RESOLVER[network.type as keyof typeof VNS_RESOLVER]
+    }, [network.type])
+
+    const fetchData = useCallback(
+        async (address: string) => {
+            const {
+                decoded: { names },
+            } = await thor.account(NETWORK_RESOLVER).method(ABI.getNames).call([address])
+
+            return { name: names[0], address: address }
+        },
+        [thor, NETWORK_RESOLVER],
+    )
+
+    const vnsResults = useQueries({
+        queries: accounts.map(acc => ({
+            queryKey: ["vns_name", acc.address],
+            queryFn: () => fetchData(acc.address),
+            enabled: true,
+            staleTime: Infinity,
+        })),
+    })
+
+    useEffect(() => {
+        if (vnsResults) {
+            let resultsWithNames = []
+            for (const result of vnsResults) {
+                if (result.data?.name) {
+                    resultsWithNames.push(result.data)
+                }
+            }
+
+            disptatch(addVnsName(resultsWithNames))
+        }
+    }, [disptatch, vnsResults])
+
+    return vnsResults
 }
