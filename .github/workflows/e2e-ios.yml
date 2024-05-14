@@ -32,14 +32,6 @@ jobs:
           HOMEBREW_NO_AUTO_UPDATE: 1
           HOMEBREW_NO_INSTALL_CLEANUP: 1
       
-      - name: Set up Git credentials
-        run: |
-          git config --global credential.helper store
-          git config --global user.email ${{secrets.CI_EMAIL}}
-          git config --global user.name ${{secrets.CI_USER}}
-          echo "https://${{ secrets.GITHUB_TOKEN }}:x-oauth-basic@github.com" > ~/.gitconfig
-  
-
       # Setup Ruby
       - name: Setup Ruby
         uses: ruby/setup-ruby@v1
@@ -109,8 +101,6 @@ jobs:
               echo "IS_CI_BUILD_ENABLED=true" > .env.production.local
               cd ios/fastlane
               pwd
-              ls
-              git clone https://github.com/vechainfoundation/veworld-mobile-ios-cert.git
               ls
               fastlane build_test_ci username:${{secrets.CI_USER}} token:${{secrets.CI_USER_TOKEN}} version_code:99 version_name:"9.9.9"
               cd ../build
