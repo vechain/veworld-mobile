@@ -58,6 +58,7 @@ platform :ios do
 
   desc "Get certificates"
   lane :fetch_certificates_from_gh do # Get the certificates from GitHub.
+    setup_ci
     sync_code_signing( # https://docs.fastlane.tools/actions/sync_code_signing/
       type: "appstore", # The type of code signing identity to generate.
       app_identifier: ENV["APP_IDENTIFIER"], # The app identifier of your app.
