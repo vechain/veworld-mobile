@@ -1,4 +1,4 @@
-git_url("https://${{ secrets.ACCESS_TOKEN }}@github.com/vechain/veworld-mobile-ios-cert.git")
+git_url("https://github.com/vechain/veworld-mobile-ios-cert.git")
 
 storage_mode("git")
 
