@@ -109,9 +109,14 @@ jobs:
               ls
               fastlane build_test_ci username:${{secrets.CI_USER}} token:${{secrets.CI_USER_TOKEN}} version_code:99 version_name:"9.9.9"
               cd ../build
+              pwd
+              cd generated
+              pwd
               ls
-              cd Release-iphoneos
-              ls -la
+              cd ..
+              pwd
+              ls
+
 
       - uses: mobile-dev-inc/action-maestro-cloud@v1.8.1
         with:
