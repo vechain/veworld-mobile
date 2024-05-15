@@ -122,5 +122,5 @@ jobs:
         with:
             name: iOS test
             api-key: ${{ secrets.MAESTRO_CLOUD_API_KEY }}
-            app-file: ios/build/Release-iphonesimulator/VeWorld.app
+            app-file: ios/build/VeWorld.ipa
             workspace: maestro_ios/
