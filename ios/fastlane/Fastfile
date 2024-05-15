@@ -342,7 +342,8 @@ platform :ios do
       Dir.chdir "../.." do
         sh("yarn install:all")
       end
-  
+      sh("export")
+
       fetch_certificates_from_gh
       # begin -> rescure == try -> catch
       begin
@@ -356,23 +357,6 @@ platform :ios do
           build_path: "./build",
           output_directory: "./build",
         )
-        # Build and upload sourcemaps to Datadog   
-        Dir.chdir "../.." do
-          # generate source maps for sentry
-          sh("npx react-native bundle --platform ios --dev false --entry-file index.js --reset-cache --bundle-output main.jsbundle --sourcemap-output main.jsbundle.map --minify false")
-          #compile source maps
-          sh("ios/Pods/hermes-engine/destroot/bin/hermesc -O -emit-binary -output-source-map -out=main.jsbundle.hbc main.jsbundle")
-          sh("rm -f main.jsbundle")
-          sh("mv main.jsbundle.hbc main.jsbundle")
-    
-          # merge the two source maps
-          sh("mv main.jsbundle.map main.jsbundle.packager.map")
-          sh("node node_modules/react-native/scripts/compose-source-maps.js main.jsbundle.packager.map main.jsbundle.hbc.map -o main.jsbundle.map")
-          
-          # upload source maps to datadog
-          sh("yarn datadog-ci react-native upload --platform ios --service org.vechain.veworld.app --bundle main.jsbundle.map --sourcemap ./build/main.jsbundle.map --release-version #{version_name} --build-version #{build_number} ")
-          sh("yarn datadog-ci react-native upload --platform ios --service org.vechain.veworld.app --bundle main.jsbundle --sourcemap ./build/main.jsbundle --release-version #{version_name} --build-version #{build_number} ")
-        end
   
       sh("echo 'Build successful'")
     rescue => exception
