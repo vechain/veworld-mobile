@@ -356,6 +356,7 @@ platform :ios do
           clean: true,
           build_path: "./build",
           output_directory: "./build",
+          destination: "generic/platform=iOS Simulator",
         )
   
       sh("echo 'Build successful'")
