@@ -1,7 +1,6 @@
 import { useThor } from "~Components"
 import { useCallback, useEffect, useMemo, useState } from "react"
 import { addVnsName, selectAccounts, selectSelectedNetwork, useAppDispatch, useAppSelector } from "~Storage/Redux"
-import { NETWORK_TYPE } from "~Model"
 import { useQueries } from "@tanstack/react-query"
 
 export const ZERO_ADDRESS = "0x0000000000000000000000000000000000000000"
@@ -11,7 +10,7 @@ const VNS_RESOLVER = {
     testnet: "0xc403b8EA53F707d7d4de095f0A20bC491Cf2bc94",
 } as const
 
-export const useVns = ({ name, address }: { name?: string; address?: string }) => {
+export const useVns = () => {
     const thor = useThor()
     const network = useAppSelector(selectSelectedNetwork)
     const [stateName, setName] = useState("")
@@ -64,23 +63,6 @@ export const useVns = ({ name, address }: { name?: string; address?: string }) =
         },
         [NETWORK_RESOLVER, thor],
     )
-
-    useEffect(() => {
-        if (network.type === NETWORK_TYPE.SOLO || network.type === NETWORK_TYPE.OTHER) return
-
-        if (!name && !address) {
-            return
-        }
-
-        if (name && !address) {
-            _getAddress(name)
-        } else if (!name && address) {
-            _getName(address)
-        } else if (name && address) {
-            _getAddress(name)
-            _getName(address)
-        }
-    }, [address, _getAddress, _getName, name, network.type])
 
     return { name: stateName, address: stateAddress, _getName, _getAddress, isLoading }
 }

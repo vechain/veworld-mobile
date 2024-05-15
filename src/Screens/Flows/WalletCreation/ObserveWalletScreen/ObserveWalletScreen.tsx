@@ -33,7 +33,7 @@ export const ObserveWalletScreen = () => {
 
     const [inputValue, setInputValue] = useState("")
     const [underlyingAddress, setUnderlyingAddress] = useState("")
-    const { _getName, _getAddress, isLoading } = useVns({ name: "", address: "" })
+    const { _getName, _getAddress, isLoading } = useVns()
 
     const [error, setError] = useState<string | undefined>()
     const [_watchedAccount, setWatchedAccount] = useState<WatchedAccount | undefined>()

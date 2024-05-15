@@ -18,7 +18,7 @@ export const useSearchOrScanInput = (
 
     const [searchText, setSearchText] = useState("")
     const [errorMessage, setErrorMessage] = useState("")
-    const { _getName, _getAddress } = useVns({ name: "", address: "" })
+    const { _getName, _getAddress } = useVns()
 
     const { filteredContacts, filteredAccounts, isAddressInContactsOrAccounts, accountsAndContacts, contacts } =
         useSearchContactsAndAccounts({ searchText, selectedAddress })
