@@ -110,11 +110,11 @@ jobs:
               fastlane build_test_ci username:${{secrets.CI_USER}} token:${{secrets.CI_USER_TOKEN}} version_code:99 version_name:"9.9.9"
               cd ../build
               pwd
+              ls
               cd generated
               pwd
               ls
-              cd ..
-              pwd
+              cd ios
               ls
 
 
@@ -124,5 +124,5 @@ jobs:
         with:
             name: iOS test
             api-key: ${{ secrets.MAESTRO_CLOUD_API_KEY }}
-            app-file: ios/build/VeWorld.app
+            app-file: ios/build/generatedVeWorld.app
             workspace: maestro_ios/
