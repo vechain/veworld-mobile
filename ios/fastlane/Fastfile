@@ -355,7 +355,10 @@ platform :ios do
           export_method: "app-store",
           clean: true,
           build_path: "./build",
-          xcargs: "-quiet -sdk 'iphonesimulator' -destination 'generic/platform=iOS Simulator'",
+          skip_package_ipa: true,
+          skip_archive: true,
+          destination: "generic/platform=iOS Simulator",
+          #xcargs: "-quiet -sdk 'iphonesimulator' -destination 'generic/platform=iOS Simulator'",
           output_directory: "./build",
         )
   
