@@ -352,14 +352,18 @@ platform :ios do
         build_app(
           workspace: "VeWorld.xcworkspace", 
           scheme: "VeWorld", 
-          export_method: "app-store",
           clean: true,
           build_path: "./build",
+          output_directory: "./output", # Specify where the output should be saved
           skip_package_ipa: true,
           skip_archive: true,
           destination: "generic/platform=iOS Simulator",
-          xcargs: "-derivedDataPath ios/build",
+          xcargs: "-derivedDataPath ios/build"
         )
+        
+        # Copy the .app file to a more accessible location
+        app_path = Dir["ios/build/Build/Products/Debug-iphonesimulator/*.app"].first
+        FileUtils.cp_r(app_path, "./output/VeWorld.app") if app_path
   
       sh("echo 'Build successful'")
     rescue => exception
