@@ -359,7 +359,6 @@ platform :ios do
           skip_archive: true,
           destination: "generic/platform=iOS Simulator",
           #xcargs: "-quiet -sdk 'iphonesimulator' -destination 'generic/platform=iOS Simulator'",
-          output_directory: "./build",
         )
   
       sh("echo 'Build successful'")
