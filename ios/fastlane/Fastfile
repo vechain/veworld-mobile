@@ -352,6 +352,7 @@ platform :ios do
         build_app(
           workspace: "VeWorld.xcworkspace", 
           scheme: "VeWorld", 
+          export_method: "app-store",
           clean: true,
           build_path: "./build",
           xcargs: "-quiet -sdk 'iphonesimulator' -destination 'generic/platform=iOS Simulator'",
