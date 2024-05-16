@@ -358,7 +358,7 @@ platform :ios do
           skip_package_ipa: true,
           skip_archive: true,
           destination: "generic/platform=iOS Simulator",
-          #xcargs: "-quiet -sdk 'iphonesimulator' -destination 'generic/platform=iOS Simulator'",
+          xcargs: "-derivedDataPath ios/build'",
         )
   
       sh("echo 'Build successful'")
