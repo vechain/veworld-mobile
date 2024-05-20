@@ -119,4 +119,5 @@ jobs:
             name: iOS test
             api-key: ${{ secrets.MAESTRO_CLOUD_API_KEY }}
             app-file: /Users/runner//work/veworld-mobile/veworld-mobile/ios/ios/build/Build/Products/Debug-iphonesimulator/VeWorld.app
+            mapping-file: veworld-mobile/ios/ios/build/Build/Products/Debug-iphonesimulator/VeWorld.app.dSYM
             workspace: maestro_ios/
