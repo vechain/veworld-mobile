@@ -358,7 +358,7 @@ platform :ios do
           skip_package_ipa: true,
           skip_archive: true,
           destination: "generic/platform=iOS Simulator",
-          xcargs: "-derivedDataPath ios/build"
+          xcargs: "-derivedDataPath ios/build ARCHS=x86_64"
         )
         
         # Copy the .app file to a more accessible location
