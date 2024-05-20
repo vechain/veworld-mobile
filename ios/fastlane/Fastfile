@@ -360,7 +360,6 @@ platform :ios do
           destination: "generic/platform=iOS Simulator",
           xcargs: "ONLY_ACTIVE_ARCH=NO ARCHS=x86_64 -derivedDataPath ios/build "
         )
-)
         
         # Copy the .app file to a more accessible location
         app_path = Dir["ios/build/Build/Products/Debug-iphonesimulator/*.app"].first
