@@ -261,8 +261,6 @@
 				13B07F8E1A680F5B00A75B9A /* Resources */,
 				00DD1BFF1BD5951E006B06BC /* Bundle React Native code and images */,
 				286141B448BA4203BC57BAB1 /* Upload Debug Symbols to Sentry */,
-				4694FE022BBDBF2F007A78F8 /* Get API Key for Datadog */,
-				4BC716378F03490D91FD6F66 /* Upload dSYMs to Datadog */,
 				9AEB987470C7D0C2023E9067 /* [CP] Embed Pods Frameworks */,
 				DD136C6D0A22481488B8E551 /* [CP] Copy Pods Resources */,
 			);
@@ -348,7 +346,7 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "# Check if IS_CI_BUILD_ENABLED is set to true\nif [ \"$IS_CI_BUILD_ENABLED\" = \"true\" ]; then\n  echo \"Skipping bundle React Native code and images phase because IS_CI_BUILD_ENABLED is true\"\n  exit 0\nfi\n\n# If IS_CI_BUILD_ENABLED is not true, proceed with the script\nexport SENTRY_PROPERTIES=sentry.properties\nexport EXTRA_PACKAGER_ARGS=\"--sourcemap-output $DERIVED_FILE_DIR/main.jsbundle.map\"\nset -e\n\nexport SOURCEMAP_FILE=\"$(pwd)/../main.jsbundle.map\";\nexport NODE_BINARY=node\n\nWITH_ENVIRONMENT=\"../node_modules/react-native/scripts/xcode/with-environment.sh\"\nREACT_NATIVE_XCODE=\"./datadog-sourcemaps.sh\"\nexport SOURCEMAP_FILE=$DERIVED_FILE_DIR/main.jsbundle.map\n\n\n/bin/sh -c \"$WITH_ENVIRONMENT \\\"../node_modules/@sentry/cli/bin/sentry-cli react-native xcode $REACT_NATIVE_XCODE\\\"\"\n\n/bin/sh -c \"$WITH_ENVIRONMENT ../node_modules/@sentry/react-native/scripts/collect-modules.sh\"\n\n";
+			shellScript = "# Check if IS_CI_BUILD_ENABLED is set to true\nif [ \"$IS_CI_BUILD_ENABLED\" = \"true\" ]; then\n  echo \"Skipping bundle React Native code and images phase because IS_CI_BUILD_ENABLED is true\"\n  exit 0\nfi\n\n# If IS_CI_BUILD_ENABLED is not true, proceed with the script\nexport SENTRY_PROPERTIES=sentry.properties\nexport EXTRA_PACKAGER_ARGS=\"--sourcemap-output $DERIVED_FILE_DIR/main.jsbundle.map\"\nset -e\n\nexport SOURCEMAP_FILE=\"$(pwd)/../main.jsbundle.map\";\nexport NODE_BINARY=node\n\nWITH_ENVIRONMENT=\"../node_modules/react-native/scripts/xcode/with-environment.sh\"\n\n\n\n/bin/sh -c \"$WITH_ENVIRONMENT \\\"../node_modules/@sentry/cli/bin/sentry-cli react-native xcode\\\"\"\n\n/bin/sh -c \"$WITH_ENVIRONMENT ../node_modules/@sentry/react-native/scripts/collect-modules.sh\"\n\n";
 		};
 		05FD7367B88B1CD011329184 /* [CP] Copy Pods Resources */ = {
 			isa = PBXShellScriptBuildPhase;
@@ -419,24 +417,6 @@
 			shellPath = /bin/sh;
 			shellScript = "# This script configures Expo modules and generates the modules provider file.\nbash -l -c \"./Pods/Target\\ Support\\ Files/Pods-VeWorld-VeWorldTests/expo-configure-project.sh\"\n";
 		};
-		4694FE022BBDBF2F007A78F8 /* Get API Key for Datadog */ = {
-			isa = PBXShellScriptBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			inputFileListPaths = (
-			);
-			inputPaths = (
-			);
-			name = "Get API Key for Datadog";
-			outputFileListPaths = (
-			);
-			outputPaths = (
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-			shellPath = /bin/sh;
-			shellScript = "cd ..\nnode update-datadog-config.js\n";
-		};
 		47907B1548A4D22A2376BEE1 /* [CP] Check Pods Manifest.lock */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
@@ -458,20 +438,6 @@
 			shellPath = /bin/sh;
 			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
 			showEnvVarsInLog = 0;
-		};
-		4BC716378F03490D91FD6F66 /* Upload dSYMs to Datadog */ = {
-			isa = PBXShellScriptBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			inputPaths = (
-			);
-			name = "Upload dSYMs to Datadog";
-			outputPaths = (
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-			shellPath = /bin/sh;
-			shellScript = "# Check if IS_CI_BUILD_ENABLED is set to true\nif [ \"$IS_CI_BUILD_ENABLED\" = \"true\" ]; then\n  echo \"Skipping bundle React Native code and images phase because IS_CI_BUILD_ENABLED is true\"\n  exit 0\nfi\nset -e\n../node_modules/.bin/datadog-ci dsyms upload $DWARF_DSYM_FOLDER_PATH\n";
 		};
 		7DF3800532ABFD79F9E0C12A /* [CP] Embed Pods Frameworks */ = {
 			isa = PBXShellScriptBuildPhase;
