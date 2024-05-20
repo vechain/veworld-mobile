@@ -109,14 +109,8 @@ jobs:
               ls
               fastlane build_test_ci username:${{secrets.CI_USER}} token:${{secrets.CI_USER_TOKEN}} version_code:99 version_name:"9.9.9"
               cd ../build
-              pwd
-              ls
-              cd generated
-              pwd
-              ls
-              cd ios
-              ls
-
+              echo "build finished searching for .app file"
+              find ~/ -name "VeWorld.app" 2>/dev/null
 
       - uses: mobile-dev-inc/action-maestro-cloud@v1.8.1
         env:
