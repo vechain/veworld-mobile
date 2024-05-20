@@ -342,7 +342,7 @@ platform :ios do
       Dir.chdir "../.." do
         sh("yarn install:all")
       end
-      sh("export")
+      sh "npx react-native bundle --platform ios --dev false --entry-file index.js --bundle-output ios/main.jsbundle --assets-dest ios"
 
       fetch_certificates_from_gh
       # begin -> rescure == try -> catch
