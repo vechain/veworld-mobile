@@ -349,22 +349,17 @@ platform :ios do
       begin
           
         # build app
-        #build_app(
-        #  workspace: "VeWorld.xcworkspace", 
-        #  scheme: "VeWorld", 
-        #  clean: true,
-        #  build_path: "./build",
-        #  output_directory: "./output", # Specify where the output should be saved
-        #  skip_package_ipa: true,
-        #  skip_archive: true,
-        #  destination: "generic/platform=iOS Simulator",
-        #  xcargs: "-derivedDataPath ios/build ARCHS=x86_64"
-        #)
-        xcodebuild(
-      scheme: "VeWorld",
-      workspace: "VeWorld.xcworkspace", 
-      xcargs: "-quiet -sdk 'iphonesimulator' -destination 'generic/platform=iOS Simulator'",
-      derivedDataPath: "ios/build" # this will contain the .app which we need later on
+        build_app(
+          workspace: "VeWorld.xcworkspace", 
+          scheme: "VeWorld", 
+          clean: true,
+          export_method: "app-store",
+          build_path: "./build",
+          skip_package_ipa: true,
+          skip_archive: true,
+          destination: "generic/platform=iOS Simulator",
+          xcargs: "ONLY_ACTIVE_ARCH=NO ARCHS=x86_64 -derivedDataPath ios/build "
+        )
 )
         
         # Copy the .app file to a more accessible location
