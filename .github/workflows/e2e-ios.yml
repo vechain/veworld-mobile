@@ -121,4 +121,5 @@ jobs:
             api-key: ${{ secrets.MAESTRO_CLOUD_API_KEY }}
             app-file: ${{ env.APP_PATH }}
             ios-version: 16
+            mapping-file: ${{ env.APP_PATH_DYSM }}
            #workspace: maestro_ios/
