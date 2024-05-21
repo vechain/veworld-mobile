@@ -123,4 +123,4 @@ jobs:
             app-file: ${{ env.APP_PATH }}
             ios-version: 16
             mapping-file: ${{ env.APP_PATH_DYSM }}
-           #workspace: maestro_ios/
+            workspace: maestro_ios/
