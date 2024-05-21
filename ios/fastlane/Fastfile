@@ -355,8 +355,12 @@ platform :ios do
           clean: true,
           export_method: "app-store",
           build_path: "./build",
+          skip_package_ipa: true,
           skip_archive: true,
-          output_directory: "./build",        
+          output_directory: "./build", 
+          destination: "generic/platform=iOS Simulator",
+          configuration: "Release",
+       
         )
         
         # Copy the .app file to a more accessible location
