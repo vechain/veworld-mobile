@@ -120,5 +120,4 @@ jobs:
             name: iOS test
             api-key: ${{ secrets.MAESTRO_CLOUD_API_KEY }}
             app-file: ${{ env.APP_PATH }}
-            #mapping-file: ${{ env.APP_PATH_DSYM }}
            #workspace: maestro_ios/
