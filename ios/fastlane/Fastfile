@@ -356,9 +356,7 @@ platform :ios do
           export_method: "app-store",
           build_path: "./build",
           skip_archive: true,
-          destination: "platform=iOS Simulator,name=iPhone 14,OS=16.1",
-          xcargs: "ARCHS=arm64 ",
-          
+          output_directory: "./build",        
         )
         
         # Copy the .app file to a more accessible location
