@@ -362,10 +362,6 @@ platform :ios do
           configuration: "Release",
        
         )
-        
-        # Copy the .app file to a more accessible location
-        app_path = Dir["ios/build/Build/Products/Debug-iphonesimulator/*.app"].first
-        FileUtils.cp_r(app_path, "./output/VeWorld.app") if app_path
   
       sh("echo 'Build successful'")
     rescue => exception
