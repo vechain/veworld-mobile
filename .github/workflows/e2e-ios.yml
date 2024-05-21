@@ -121,6 +121,6 @@ jobs:
             name: iOS test
             api-key: ${{ secrets.MAESTRO_CLOUD_API_KEY }}
             app-file: ${{ env.APP_PATH }}
-            ios-version: 16
+            ios-version: 17.2
             mapping-file: ${{ env.APP_PATH_DYSM }}
             workspace: maestro_ios/
