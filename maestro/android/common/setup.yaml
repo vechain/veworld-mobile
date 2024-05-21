@@ -1,0 +1,38 @@
+# setupflow.yaml
+
+appId: org.vechain.veworld.app
+env:
+  AMOUNT: 0.01
+  ACCOUNT: "0x435933c8064b4Ae76bE665428e0307eF2cCFBD68"
+---
+- launchApp:
+    clearState: true
+## welcome screen
+- assertVisible: "DEV:DEMO"
+- tapOn:
+    text: "DEV:DEMO"
+    index: 1
+- tapOn:
+    id: "settings-tab"
+- tapOn: "Networks"
+- tapOn: "Mainnet"
+- tapOn: "Testnet"
+- tapOn:
+    id: "wallet-tab"
+- tapOn: "Wallet 1"
+
+## Homepage - Adding accounts
+- assertVisible: "VeWorld"
+- tapOn:
+    id: "HomeScreen_WalletManagementButton-wrapper"
+- tapOn: "Wallet 1"
+- tapOn:
+    id: "WalletDetailScreen_addAccountButton"
+- tapOn:
+    id: "WalletDetailScreen_addAccountButton"
+- tapOn:
+    id: "wallet-tab"
+- tapOn:
+    id: "AccountCard_changeAccountButton"
+- tapOn:
+    text: "Account 1"

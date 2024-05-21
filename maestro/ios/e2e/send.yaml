@@ -1,0 +1,43 @@
+# flow.yaml
+
+appId: org.vechain.veworld.app
+env:
+    AMOUNT: 0.01
+    ACCOUNT: "0x435933c8064b4Ae76bE665428e0307eF2cCFBD68"
+onFlowStart:
+  - runFlow: ../common/setup.yaml
+onFlowComplete:
+  - runFlow: ../common/resetApp.yaml
+
+---
+## User should be able to send tokens - Send VET from Account 1 to Account 2
+- tapOn:
+    id: "sendButton"
+- assertVisible: "Send your token"
+- tapOn: "Vechain VET"
+- tapOn:
+    id: "SendScreen_amountInput"
+- inputText: ${AMOUNT}
+- tapOn: "Currency balance"
+- tapOn: "NEXT"
+- tapOn:
+    point: 50%,33%
+- tapOn:
+    id: "next-button"
+- runFlow:
+    when:
+      visible: "Select delegation"
+    commands:
+      - tapOn:
+          id: "confirm-send-button"
+- tapOn: "Insert your 6-digit PIN"
+- assertVisible: "Insert your 6-digit PIN"
+- repeat:
+    times: 6
+    commands:
+      - tapOn: "1"
+- assertVisible: "VeWorld"
+- evalScript: ${console.log('Send VET from Account 1 to Account 2')}
+
+
+

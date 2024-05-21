@@ -1,0 +1,86 @@
+#send.yaml
+appId: org.vechain.veworld.app
+env:
+  AMOUNT: 0.01
+  ACCOUNT: "0x435933c8064b4Ae76bE665428e0307eF2cCFBD68"
+onFlowStart:
+  - runFlow: ../../common/setup.yaml
+onFlowComplete:
+  - runFlow: ../../common/resetApp.yaml
+---
+## User should be able to send tokens - Send VET from Account 1 to Account 2
+- tapOn: "Send"
+- assertVisible: "Send your token"
+- tapOn: "Vechain"
+- inputText: ${AMOUNT}
+- tapOn: "Send"
+- tapOn: "NEXT"
+- tapOn: "Account 2"
+- tapOn:
+    id: "next-button"
+- runFlow:
+    when:
+      visible: "Select delegation"
+    commands:
+      - tapOn:
+          id: "confirm-send-button"
+- tapOn: "Insert your 6-digit PIN"
+- assertVisible: "Insert your 6-digit PIN"
+- repeat:
+    times: 6
+    commands:
+      - tapOn: "1"
+- assertVisible: "VeWorld"
+- evalScript: ${console.log('Send VET from Account 1 to Account 2')}
+
+## User should be able to send tokens - Send VETHO from Account 1 to Account 2
+- tapOn:
+    id: "wallet-tab"
+- tapOn: "Send"
+- tapOn: "VeThor"
+- inputText: ${AMOUNT}
+- tapOn: "Currency balance"
+- tapOn: "NEXT"
+- tapOn: "Account 2"
+- tapOn:
+    id: "next-button"
+- runFlow:
+    when:
+      visible: "Select delegation"
+    commands:
+      - tapOn:
+          id: "confirm-send-button"
+- assertVisible: "Insert your 6-digit PIN"
+- repeat:
+    times: 6
+    commands:
+      - tapOn: "1"
+- assertVisible: "VeWorld"
+- evalScript: ${console.log('Send VETHO from Account 1 to Account 2')}
+
+## User should be able to send tokens-Send VET from Account 2 to Account 1
+- tapOn:
+    id: "wallet-tab"
+- tapOn:
+    id: "AccountCard_changeAccountButton"
+- tapOn:
+    text: "Account 2"
+- tapOn: "Send"
+- tapOn: "Vechain"
+- inputText: ${AMOUNT}
+- tapOn: "Currency balance"
+- tapOn: "NEXT"
+- tapOn: "Account 1"
+- tapOn: "NEXT"
+- runFlow:
+    when:
+      visible: "Select delegation"
+    commands:
+      - tapOn:
+          id: "confirm-send-button"
+- repeat:
+    times: 6
+    commands:
+      - tapOn: "1"
+- assertVisible: "Your tokens"
+- evalScript: ${console.log('Send VET from Account 2 to Account 1')}

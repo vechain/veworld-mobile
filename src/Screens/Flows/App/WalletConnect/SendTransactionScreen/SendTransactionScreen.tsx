@@ -235,6 +235,7 @@ export const SendTransactionScreen: FC<Props> = ({ route }: Props) => {
                     <BaseText typographyFont="subTitleBold">{LL.CONNECTED_APP_SELECTED_ACCOUNT_LABEL()}</BaseText>
                     <BaseSpacer height={16} />
                     <AccountCard
+                        testID="selected account"
                         account={selectedAccount}
                         showOpacityWhenDisabled={false}
                         onPress={onAccountCardPress}

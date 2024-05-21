@@ -1,0 +1,20 @@
+#User removes a observe wallet
+appId: org.vechain.veworld.app
+---
+- tapOn:
+    id: "HomeScreen_WalletManagementButton-wrapper"
+- swipe:
+    from:
+      id: "DeviceBox"
+      index: 1
+    direction: "LEFT"
+- tapOn:
+    id: "DeleteUnderlay_DeleteIcon_observable-wrapper"
+- tapOn:
+    text: "REMOVE WALLET"
+    index: 2
+- repeat:
+    times: 6
+    commands:
+      - tapOn: "1"
+- assertNotVisible: "Observed"
