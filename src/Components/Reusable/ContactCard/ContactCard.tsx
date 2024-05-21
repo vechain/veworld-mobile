@@ -1,9 +1,8 @@
 import React, { memo } from "react"
 import { StyleProp, ViewStyle } from "react-native"
-import { AddressUtils } from "~Utils"
 import { BaseCard, BaseSpacer, BaseText, BaseView } from "~Components"
 import { Contact } from "~Model"
-import { useVns } from "~Hooks"
+import { selectVnsNameOrAddress, useAppSelector } from "~Storage/Redux"
 
 type Props = {
     contact: Contact
@@ -13,7 +12,7 @@ type Props = {
 }
 
 export const ContactCard = memo(({ contact, onPress, selected, containerStyle }: Props) => {
-    const { name: vnsName, address: vnsAddress } = useVns({ name: "", address: contact.address })
+    const nameOrAddress = useAppSelector(state => selectVnsNameOrAddress(state, contact.address, [4, 6]))
 
     return (
         <BaseCard
@@ -25,7 +24,7 @@ export const ContactCard = memo(({ contact, onPress, selected, containerStyle }:
                 <BaseText typographyFont="button">{contact.alias}</BaseText>
                 <BaseSpacer height={4} />
                 <BaseText fontSize={10} typographyFont="smallCaptionRegular">
-                    {vnsName || AddressUtils.humanAddress(vnsAddress ?? contact.address, 4, 6)}
+                    {nameOrAddress}
                 </BaseText>
             </BaseView>
         </BaseCard>

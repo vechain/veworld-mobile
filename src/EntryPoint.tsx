@@ -26,11 +26,11 @@ export const EntryPoint = () => {
              * on IOS enables blurry view when app goes into inactive state
              */
             RNScreenshotPrevent.enabled(true)
-            /* (IOS) enableSecureView for IOS13+
-             * creates a hidden secureTextField which prevents Application UI capture on screenshots
-             */
 
             if (PlatformUtils.isIOS()) {
+                /* (IOS) enableSecureView for IOS13+
+                 * creates a hidden secureTextField which prevents Application UI capture on screenshots
+                 */
                 RNScreenshotPrevent.enableSecureView()
 
                 InteractionManager.runAfterInteractions(() => {

@@ -1,8 +1,8 @@
 import React, { memo, useMemo } from "react"
 import { StyleProp, StyleSheet, ViewProps, ViewStyle } from "react-native"
-import { useThemedStyles, useVns } from "~Hooks"
+import { useThemedStyles } from "~Hooks"
 import { ColorThemeType, VET, VTHO } from "~Constants"
-import { AccountUtils, AddressUtils, BigNutils } from "~Utils"
+import { AccountUtils, BigNutils } from "~Utils"
 import {
     AccountIcon,
     BaseIcon,
@@ -14,7 +14,12 @@ import {
     WatchedAccountBadge,
 } from "~Components"
 import { AccountWithDevice, DEVICE_TYPE, WatchedAccount } from "~Model"
-import { selectVetBalanceByAccount, selectVthoBalanceByAccount, useAppSelector } from "~Storage/Redux"
+import {
+    selectVetBalanceByAccount,
+    selectVnsNameOrAddress,
+    selectVthoBalanceByAccount,
+    useAppSelector,
+} from "~Storage/Redux"
 
 type Props = {
     account: AccountWithDevice | WatchedAccount
@@ -75,7 +80,7 @@ export const AccountCard: React.FC<Props> = memo(
             }
         }, [account])
 
-        const { name: vnsName, address: vnsAddress } = useVns({ name: "", address: account.address })
+        const nameOrAddress = useAppSelector(state => selectVnsNameOrAddress(state, account.address, [4, 6]))
 
         return (
             <BaseView w={100} flexDirection="row" style={containerStyle}>
@@ -112,7 +117,7 @@ export const AccountCard: React.FC<Props> = memo(
                     ) : (
                         <BaseView style={styles.rightSubContainer}>
                             <BaseText style={styles.address} fontSize={10}>
-                                {vnsName || AddressUtils.humanAddress(vnsAddress ?? account.address, 4, 6)}
+                                {nameOrAddress}
                             </BaseText>
 
                             <BaseSpacer height={4} />

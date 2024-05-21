@@ -47,7 +47,7 @@ export const ContactForm: React.FC<Props> = memo(
         const [nameTouched, setNameTouched] = useState(false)
         const [addressTouched, setAddressTouched] = useState(false)
 
-        const { _getAddress } = useVns({ name: "", address: "" })
+        const { _getAddress } = useVns()
 
         const onScan = useCallback(
             async (uri: string) => {
