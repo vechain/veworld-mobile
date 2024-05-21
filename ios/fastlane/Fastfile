@@ -353,7 +353,7 @@ platform :ios do
           workspace: "VeWorld.xcworkspace", 
           scheme: "VeWorld", 
           clean: true,
-          export_method: "app-store",
+          #export_method: "app-store",
           build_path: "./build",
           output_directory: "./build", 
           configuration: "Release",
