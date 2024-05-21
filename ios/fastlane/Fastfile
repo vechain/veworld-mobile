@@ -358,8 +358,8 @@ platform :ios do
           skip_package_ipa: true,
           skip_archive: true,
           output_directory: "./build", 
-          destination: "generic/platform=iOS Simulator",
           configuration: "Release",
+          xcargs: "-quiet -sdk 'iphonesimulator' -destination 'generic/platform=iOS Simulator'",
        
         )
   
