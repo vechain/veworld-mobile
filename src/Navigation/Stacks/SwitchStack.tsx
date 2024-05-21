@@ -7,6 +7,7 @@ import {
     BlackListedCollectionsScreen,
     ConnectAppScreen,
     DappChangeAccountScreen,
+    SecurityUpgrade_V2,
     SendTransactionScreen,
     SignCertificateScreen,
 } from "~Screens"
@@ -66,6 +67,8 @@ export type RootStackParamListSwitch = {
     [Routes.DAPP_CHANGE_ACCOUNT_SCREEN]: {
         request: WindowRequest
     }
+
+    [Routes.SECURITY_UPGRADE_V2]: undefined
 }
 const Switch = createNativeStackNavigator<RootStackParamListSwitch>()
 
@@ -118,6 +121,12 @@ export const SwitchStack = () => {
                         <Switch.Screen name={Routes.LEDGER_SIGN_MESSAGE} component={LedgerSignMessage} />
 
                         <Switch.Screen name={Routes.DAPP_CHANGE_ACCOUNT_SCREEN} component={DappChangeAccountScreen} />
+
+                        <Switch.Screen
+                            name={Routes.SECURITY_UPGRADE_V2}
+                            component={SecurityUpgrade_V2}
+                            options={{ gestureEnabled: false }}
+                        />
 
                         {BUY_FEATURE_ENABLED && (
                             <Switch.Screen

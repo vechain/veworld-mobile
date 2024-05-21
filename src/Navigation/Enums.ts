@@ -9,9 +9,7 @@ export enum Routes {
     NEW_MNEMONIC = "New_Mnemonic",
     CONFIRM_MNEMONIC = "Confirm_Mnemonic",
     IMPORT_MNEMONIC = "Import_Mnemonic",
-
     BROWSER = "Browser",
-
     USER_CREATE_PASSWORD = "User_Create_Password",
     APP_SECURITY = "App_Security",
     SETTINGS = "Settings",
@@ -68,4 +66,5 @@ export enum Routes {
     OBSERVE_WALLET = "Observe_Wallet",
     OBSERVE_WALLET_CONFIRMATION = "Observe_Wallet_Confirmation",
     DAPP_CHANGE_ACCOUNT_SCREEN = "Dapp_Change_Account_Screen",
+    SECURITY_UPGRADE_V2 = "Security_Upgrade_V2",
 }

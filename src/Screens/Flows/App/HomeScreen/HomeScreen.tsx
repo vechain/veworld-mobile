@@ -6,6 +6,7 @@ import {
     useCheckVersion,
     useFetchAllVns,
     useMemoizedAnimation,
+    useSecurityUpgrade_V2,
     useSetSelectedAccount,
     useTheme,
 } from "~Hooks"
@@ -41,6 +42,8 @@ import { AccountUtils } from "~Utils"
 export const HomeScreen = () => {
     /* Pre Fetch all VNS names and addresses */
     useFetchAllVns()
+    useSecurityUpgrade_V2()
+    const nav = useNavigation()
 
     const selectedCurrency = useAppSelector(selectCurrency)
     const track = useAnalyticTracking()
@@ -101,8 +104,6 @@ export const HomeScreen = () => {
     useScrollToTop(scrollViewRef)
 
     useCheckVersion()
-
-    const nav = useNavigation()
 
     const Actions: FastAction[] = useMemo(() => {
         let actions: FastAction[] = []

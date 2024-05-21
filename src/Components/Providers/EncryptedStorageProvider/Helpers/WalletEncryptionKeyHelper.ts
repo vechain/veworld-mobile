@@ -58,6 +58,7 @@ const set = async (encryptionKeys: WalletEncryptionKey, pinCode?: string) => {
         await setWithBiometric(encryptionKeys)
     }
 }
+
 const decryptWallet = async (encryptedWallet: string, pinCode?: string): Promise<Wallet> => {
     const { walletKey } = await get(pinCode)
 
