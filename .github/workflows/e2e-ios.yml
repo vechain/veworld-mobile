@@ -111,7 +111,6 @@ jobs:
               cd ../build
               echo "build finished searching for .app file"
               echo "(find / -name 'VeWorld.app' 2>/dev/null)"
-              find / -name 'VeWorld.app' 2>/dev/null
               echo "finished searching"
               SIMULATOR_APP_PATH=$(find ~/ -path "*/Build/Products/Release-iphonesimulator/VeWorld.app" -print -quit)
               echo "APP_PATH=$SIMULATOR_APP_PATH" >> $GITHUB_ENV
