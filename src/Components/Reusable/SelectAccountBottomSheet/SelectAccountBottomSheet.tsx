@@ -71,6 +71,7 @@ export const SelectAccountBottomSheet = React.forwardRef<BottomSheetModalMethods
                     ItemSeparatorComponent={ItemSeparatorComponent}
                     renderItem={({ item }) => (
                         <AccountCard
+                            testID={"selectAccount"}
                             account={item}
                             onPress={handlePress}
                             selected={item.address === selectedAccount?.address}
