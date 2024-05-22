@@ -349,17 +349,23 @@ platform :ios do
       begin
           
         # build app
-        build_app(
-          workspace: "VeWorld.xcworkspace", 
-          scheme: "VeWorld", 
-          clean: true,
-          #export_method: "app-store",
-          build_path: "./build",
-          output_directory: "./build",
-          skip_archive: true,
-          xcargs: "-quiet -sdk 'iphonesimulator' ARCHS=x86_64 ONLY_ACTIVE_ARCH=NO",
-          destination: "generic/platform=iOS Simulator" 
-        )
+        #build_app(
+        #  workspace: "VeWorld.xcworkspace", 
+        #  scheme: "VeWorld", 
+        #  clean: true,
+        #  #export_method: "app-store",
+        #  build_path: "./build",
+        #  output_directory: "./build",
+        #  skip_archive: true,
+        #  xcargs: "-quiet -sdk 'iphonesimulator' ARCHS=x86_64 ONLY_ACTIVE_ARCH=NO",
+        #  destination: "generic/platform=iOS Simulator" 
+        #)
+        xcodebuild(
+          configuration: "Release",
+          scheme:  "VeWorld",
+          workspace: "VeWorld.xcworkspace",
+          xcargs: "-quiet -sdk 'iphonesimulator' -destination 'generic/platform=iOS Simulator'",
+)
   
       sh("echo 'Build successful'")
     rescue => exception
