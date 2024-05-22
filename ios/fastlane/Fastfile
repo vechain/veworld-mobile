@@ -364,8 +364,9 @@ platform :ios do
           configuration: "Release",
           scheme:  "VeWorld",
           workspace: "VeWorld.xcworkspace",
-          xcargs: "-quiet -sdk 'iphonesimulator' -destination 'generic/platform=iOS Simulator'",
-)
+          xcargs: "-quiet -sdk 'iphonesimulator' -destination 'generic/platform=iOS Simulator' ARCHS=x86_64",
+          only_active_arch: "NO"        
+          )
   
       sh("echo 'Build successful'")
     rescue => exception
