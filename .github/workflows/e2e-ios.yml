@@ -52,7 +52,7 @@ jobs:
 
       # Install CocoaPods
       - name: Install CocoaPods
-        run: yarn instll:all
+        run: yarn install:all
 
       # Install sentry properties
       - name: Sentry properties
