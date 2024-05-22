@@ -117,8 +117,6 @@ jobs:
               echo "APP_PATH_DSYM=$(find ~/ -path "*/Build/Products/Release-iphonesimulator/VeWorld.app.dSYM" -print -quit)" >> $GITHUB_ENV
 
       - uses: mobile-dev-inc/action-maestro-cloud@v1.8.1
-        env:
-          CONFIGURATION_BUILD_DIR: ios/build
         with:
             name: iOS test
             api-key: ${{ secrets.MAESTRO_CLOUD_API_KEY }}
