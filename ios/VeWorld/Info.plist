@@ -69,6 +69,8 @@
     <string>$(PRODUCT_NAME) uses Face ID to enhance the security of your wallet on this device.</string>
     <key>NSLocationWhenInUseUsageDescription</key>
     <string>$(PRODUCT_NAME) requires your location when in use to ensure a secure connection with your Ledger device.</string>
+    <key>NSLocationAlwaysUsageDescription</key>
+    <string>We need your location to provide better services.</string>
     <key>NSMicrophoneUsageDescription</key>
     <string>$(PRODUCT_NAME) needs microphone access.</string>
     <key>NSPhotoLibraryUsageDescription</key>
