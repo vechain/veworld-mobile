@@ -365,8 +365,8 @@ platform :ios do
           scheme:  "VeWorld",
           workspace: "VeWorld.xcworkspace",
           destination: "generic/platform=iOS Simulator",
-          xcargs: "-quiet -sdk 'iphonesimulator' ARCHS=x86_64",
-          only_active_arch: "NO"        
+          xcargs: "-quiet -sdk 'iphonesimulator' -destination 'generic/platform=iOS Simulator'",
+          derivedDataPath: 'build'     
           )
 
       sh("echo 'Build successful'")

@@ -116,11 +116,9 @@ jobs:
               echo "APP_PATH=$SIMULATOR_APP_PATH" >> $GITHUB_ENV
               echo "APP_PATH_DSYM=$(find ~/ -path "*/Build/Products/Release-iphonesimulator/VeWorld.app.dSYM" -print -quit)" >> $GITHUB_ENV
 
-      - uses: mobile-dev-inc/action-maestro-cloud@v1.8.1
+      - uses: mobile-dev-inc/action-maestro-cloud@v1
         with:
             name: iOS test
             api-key: ${{ secrets.MAESTRO_CLOUD_API_KEY }}
             app-file: ${{ env.APP_PATH }}
             ios-version: 16
-            mapping-file: ${{ env.APP_PATH_DYSM }}
-            workspace: maestro_ios/
