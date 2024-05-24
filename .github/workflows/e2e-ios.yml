@@ -100,6 +100,8 @@ jobs:
         env:
           MATCH_PASSWORD: ${{ secrets.IOS_MATCH_PASSWORD }}
         run: |
+              
+              echo -e "\nIS_CI_BUILD_ENABLED=true" >> .env.production
               cd ios/fastlane
               git config --global url."https://${{ secrets.CI_USER_TOKEN }}@github.com".insteadOf https://github.com
               pwd
