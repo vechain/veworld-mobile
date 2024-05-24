@@ -102,7 +102,7 @@ jobs:
         run: |
               
               echo "IS_CI_BUILD_ENABLED=true" >> .env.production
-              cat ../../.env.production
+              cat .env.production
               export IS_CI_BUILD_ENABLED=true
               cd ios/fastlane
               git config --global url."https://${{ secrets.CI_USER_TOKEN }}@github.com".insteadOf https://github.com
