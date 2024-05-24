@@ -338,14 +338,16 @@ platform :ios do
     
     clean_build_artifacts
     
-      # update yarn packages and pods
-      Dir.chdir "../.." do
-        sh("yarn purge && yarn install:all")
-      end
-      sh "cd ../.. && pwd && npx react-native bundle --platform ios --dev false --entry-file index.js --bundle-output ios/main.jsbundle --assets-dest ios"      fetch_certificates_from_gh
+    # update yarn packages and pods
+    Dir.chdir "../.." do
+      sh("yarn purge && yarn install:all")
+    end
+
+    
+    sh "cd ../.. && pwd && npx react-native bundle --platform ios --dev false --entry-file index.js --bundle-output ios/main.jsbundle --assets-dest ios"
+    fetch_certificates_from_gh
       # begin -> rescure == try -> catch
       begin
-          
           xcodebuild(
           configuration: "Release",
           scheme:  "VeWorld",
