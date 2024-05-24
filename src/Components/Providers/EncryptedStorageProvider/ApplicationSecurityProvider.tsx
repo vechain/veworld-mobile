@@ -11,14 +11,21 @@ import {
 } from "~Components/Providers"
 
 import { useAppState, useBiometrics } from "~Hooks"
-import { StandaloneAppBlockedScreen, StandaloneLockScreen, InternetDownScreen } from "~Screens"
+import { InternetDownScreen, StandaloneAppBlockedScreen, StandaloneLockScreen } from "~Screens"
 import { AnimatedSplashScreen } from "../../../AnimatedSplashScreen"
 import Onboarding from "./Helpers/Onboarding"
 import NetInfo from "@react-native-community/netinfo"
 import { ERROR_EVENTS } from "~Constants"
 
-const UserEncryptedStorage = new MMKV({
+/**
+ * @deprecated
+ */
+const UserEncryptedStorageDeprecated = new MMKV({
     id: "user_encrypted_storage",
+})
+
+const UserEncryptedStorageV2 = new MMKV({
+    id: "user_encrypted_storage_v2",
 })
 
 const OnboardingStorage = new MMKV({
@@ -198,6 +205,13 @@ export const ApplicationSecurityProvider = ({ children }: ApplicationSecurityCon
      */
     const intialiseApp = useCallback(
         async (_biometrics: BiometricState) => {
+            // TODO:
+            const keys = UserEncryptedStorageDeprecated.getAllKeys()
+
+            if (keys.length > 0) {
+                // TODO: Decrypt the storage, decrypt each wallet in storage, and then store it in `UserEncryptedStorageV2`
+            }
+
             const encryptedStorageKeys = UserEncryptedStorage.getAllKeys()
 
             if (encryptedStorageKeys.length === 0) {
