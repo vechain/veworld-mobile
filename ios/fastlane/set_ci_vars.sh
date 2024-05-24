@@ -11,7 +11,7 @@ ci_value="$1"
 
 # Find all .env files in the project
 # env_files=$(find ../.. -type f -name ".env.production.local")
-env_files=$(find ../.. -type f \( -name ".env.production" -o -name ".env.local" \))
+env_files=$(find ../.. -type f \( -name ".env.production"-o -name ".env.production.local" -o -name ".env.local" \))
 
 # Check if there are .env files
 if [ -z "$env_files" ]; then
