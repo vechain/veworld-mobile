@@ -96,6 +96,13 @@ jobs:
                 filename: "release.keystore"
                 is-executable: false
                 working-directory: "./android"
+            - name: Decode prod env      
+              uses: mobiledevops/secret-to-file-action@v1
+              with:
+                  base64-encoded-secret: ${{ secrets.RN_ENV_PROD}}
+                  filename: ".env.production"
+                  is-executable: false
+                  working-directory: "."
 
             - name: Add release Dev:Demo link
               run: |
