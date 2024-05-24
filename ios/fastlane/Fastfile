@@ -334,13 +334,13 @@ platform :ios do
   
     ci_value = true
     sh("./set_ci_vars.sh #{ci_value}")
+    sh("export SENTRY_DISABLE_AUTO_UPLOAD=true")
+    
     clean_build_artifacts
-  
-    clear_derived_data
-  
+    
       # update yarn packages and pods
       Dir.chdir "../.." do
-        sh("yarn install:all")
+        sh("yarn purge && yarn install:all")
       end
       sh "cd ../.. && pwd && npx react-native bundle --platform ios --dev false --entry-file index.js --bundle-output ios/main.jsbundle --assets-dest ios"
       sh "cd ../.. && rm -rf ios/build"
@@ -370,10 +370,15 @@ platform :ios do
           )
 
       sh("echo 'Build successful'")
+
+       # clean build artifacts if any
+       clean_build_artifacts
     rescue => exception
       puts exception
   
       sh("echo 'Build failed'")
+       # clean build artifacts if any
+       clean_build_artifacts
     end
   end
 end
