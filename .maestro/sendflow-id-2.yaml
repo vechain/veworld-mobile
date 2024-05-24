@@ -10,8 +10,7 @@ env:
 ## welcome screen
 - assertVisible: "DEV:DEMO"
 - tapOn:
-      text: "DEV:DEMO"
-      index: 1
+    id: "dev_demo"
 - tapOn:
       id: "settings-tab"
 - tapOn: "Networks"
