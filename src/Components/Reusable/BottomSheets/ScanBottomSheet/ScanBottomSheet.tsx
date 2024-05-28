@@ -2,7 +2,7 @@ import React, { useCallback, useEffect } from "react"
 import { BottomSheetModalMethods } from "@gorhom/bottom-sheet/lib/typescript/types"
 import { BaseBottomSheet, BaseView, showWarningToast } from "~Components"
 import { useI18nContext } from "~i18n"
-import { useBackHandler, useDisclosure } from "~Hooks"
+import { useDisclosure } from "~Hooks"
 import { BarCodeScanningResult, Camera, CameraType } from "expo-camera"
 import { COLORS, ScanTarget, SCREEN_WIDTH } from "~Constants"
 import { BarCodeScanner } from "expo-barcode-scanner"
@@ -27,8 +27,6 @@ export const ScanBottomSheet = React.forwardRef<BottomSheetModalMethods, Props>(
 
     const { isOpen, onClose: closeCamera } = useDisclosure(true)
     const { isOpen: isCameraReady, onOpen: onCameraReady } = useDisclosure(false)
-
-    useBackHandler(BackHandlerEvent.BLOCK)
 
     // Handles the common scan logic for all targets
     const handleScan = useCallback(
@@ -109,7 +107,12 @@ export const ScanBottomSheet = React.forwardRef<BottomSheetModalMethods, Props>(
     }, [closeCamera])
 
     return (
-        <BaseBottomSheet handleComponent={null} noMargins={true} snapPoints={snapPoints} ref={ref}>
+        <BaseBottomSheet
+            handleComponent={null}
+            noMargins={true}
+            snapPoints={snapPoints}
+            ref={ref}
+            backHandlerEvent={BackHandlerEvent.BLOCK}>
             {isOpen && (
                 <Camera
                     style={baseStyles.camera}
