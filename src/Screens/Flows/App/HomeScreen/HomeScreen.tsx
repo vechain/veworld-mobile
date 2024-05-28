@@ -42,7 +42,9 @@ import { AccountUtils } from "~Utils"
 export const HomeScreen = () => {
     /* Pre Fetch all VNS names and addresses */
     useFetchAllVns()
+    /* Check for security upgrade */
     useSecurityUpgrade_V2()
+
     const nav = useNavigation()
 
     const selectedCurrency = useAppSelector(selectCurrency)

@@ -21,6 +21,10 @@ const UserEncryptedStorage = new MMKV({
     id: "user_encrypted_storage",
 })
 
+// const UserEncryptedStorage_V2 = new MMKV({
+//     id: "user_encrypted_storage_V2",
+// })
+
 const OnboardingStorage = new MMKV({
     id: "onboarding_storage",
 })
@@ -52,6 +56,8 @@ type IApplicationSecurity = {
     setIsAppReady: (isReady: boolean) => void
     lockApplication: () => void
     triggerAutoLock: () => void
+    needsSecurityUpgradeToV2: () => boolean
+    upgradeSecurityToV2: (password?: string) => void
 }
 
 const ApplicationSecurityContext = React.createContext<IApplicationSecurity | undefined>(undefined)
@@ -192,6 +198,29 @@ export const ApplicationSecurityProvider = ({ children }: ApplicationSecurityCon
         },
         [unlock],
     )
+
+    const needsSecurityUpgradeToV2 = useCallback(() => {
+        const encryptedStorageKeys = UserEncryptedStorage.getAllKeys()
+        if (encryptedStorageKeys.length > 0) {
+            debug(ERROR_EVENTS.SECURITY, "Needs security upgrade to V2")
+            return true
+        }
+
+        return false
+    }, [])
+
+    const upgradeSecurityToV2 = useCallback((password?: string) => {
+        const encryptedStorageKeys = UserEncryptedStorage.getAllKeys()
+        info(ERROR_EVENTS.SECURITY, password)
+
+        if (encryptedStorageKeys.length > 0) {
+            // TODO: Decrypt the storage, decrypt each wallet in storage, and then store it in `UserEncryptedStorageV2`
+
+            encryptedStorageKeys.map(key => {
+                info(ERROR_EVENTS.SECURITY, key)
+            })
+        }
+    }, [])
 
     /**
      * Checks if the user has onboarded and sets up the encryption keys if so
@@ -334,6 +363,8 @@ export const ApplicationSecurityProvider = ({ children }: ApplicationSecurityCon
             securityType,
             lockApplication,
             triggerAutoLock,
+            upgradeSecurityToV2,
+            needsSecurityUpgradeToV2,
         }
     }, [
         reduxStorage,
@@ -346,6 +377,8 @@ export const ApplicationSecurityProvider = ({ children }: ApplicationSecurityCon
         updateSecurityMethod,
         securityType,
         lockApplication,
+        upgradeSecurityToV2,
+        needsSecurityUpgradeToV2,
     ])
 
     const { isConnected } = NetInfo.useNetInfo()

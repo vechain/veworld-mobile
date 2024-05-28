@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect } from "react"
+import React, { useCallback, useState } from "react"
 import {
     BaseButton,
     BaseSafeArea,
@@ -7,36 +7,32 @@ import {
     BaseView,
     RequireUserPassword,
     SelectDeviceBottomSheet,
+    useApplicationSecurity,
 } from "~Components"
-import { useBottomSheetModal, useDisclosure, useWalletSecurity } from "~Hooks"
+import { useBackHandler, useBottomSheetModal, useDisclosure, useWalletSecurity } from "~Hooks"
 import { useBackupMnemonic } from "../PrivacyScreen/Hooks/useBackupMnemonic"
-import { LocalDevice } from "~Model"
+import { BackHandlerEvent, LocalDevice } from "~Model"
 import { selectLocalDevices, useAppSelector } from "~Storage/Redux"
 import { BackupMnemonicBottomSheet } from "../PrivacyScreen/Components"
-import { BackHandler } from "react-native"
 import { BackupWarningBottomSheet } from "../PrivacyScreen/Components/BackupWarningBottomSheet"
 
+const PasswordPromptStatus = {
+    INIT: "INIT",
+    BACKUP_MNEMONIC: "BACKUP_MNEMONIC",
+    UPGRADE_SECURITY: "UPGRADE_SECURITY",
+} as const
+
+type PasswordPromptStatus = keyof typeof PasswordPromptStatus
+
 export const SecurityUpgrade_V2 = () => {
-    useEffect(() => {
-        // Remove hardware back button press for this screen on Android
-        const backHandler = BackHandler.addEventListener("hardwareBackPress", () => false)
-        return () => backHandler.remove()
-    }, [])
+    useBackHandler(BackHandlerEvent.BLOCK)
+
+    const [ppStatus, setPPStatus] = useState<PasswordPromptStatus>(PasswordPromptStatus.INIT)
 
     const { isWalletSecurityBiometrics } = useWalletSecurity()
+    const { upgradeSecurityToV2 } = useApplicationSecurity()
     const devices = useAppSelector(selectLocalDevices) as LocalDevice[]
     const { isOpen: isPasswordPromptOpen, onOpen: openPasswordPrompt, onClose: closePasswordPrompt } = useDisclosure()
-
-    const onRunV2Upgrade = useCallback(() => {
-        /*
-            TODO
-
-            1. get all wallets and decrypt them using the old flow
-            2. encrypt them using the new flow
-            3. save them back to the storage
-            4. remove the old keys from the keychain
-        */
-    }, [])
 
     const {
         ref: BackupPhraseSheetRef,
@@ -66,6 +62,14 @@ export const SecurityUpgrade_V2 = () => {
         isWalletSecurityBiometrics,
     })
 
+    const onBackupInitiated = useCallback(
+        (password: string) => {
+            closePasswordPrompt()
+            upgradeSecurityToV2(password)
+        },
+        [closePasswordPrompt, upgradeSecurityToV2],
+    )
+
     return (
         <BaseSafeArea grow={1}>
             <BaseView justifyContent="space-between" alignItems="center" h={100}>
@@ -78,7 +82,13 @@ export const SecurityUpgrade_V2 = () => {
 
                     <BaseSpacer height={69} />
 
-                    <BaseButton title="BACKUP NOW" action={checkSecurityBeforeOpening} />
+                    <BaseButton
+                        title="BACKUP NOW"
+                        action={() => {
+                            setPPStatus(PasswordPromptStatus.BACKUP_MNEMONIC)
+                            checkSecurityBeforeOpening()
+                        }}
+                    />
                 </BaseView>
 
                 <BaseView pb={62}>
@@ -101,14 +111,22 @@ export const SecurityUpgrade_V2 = () => {
             <RequireUserPassword
                 isOpen={isPasswordPromptOpen}
                 onClose={closePasswordPrompt}
-                onSuccess={onPasswordSuccess}
+                onSuccess={(password: string) =>
+                    ppStatus === PasswordPromptStatus.UPGRADE_SECURITY
+                        ? onBackupInitiated(password)
+                        : onPasswordSuccess(password)
+                }
             />
 
             <BackupWarningBottomSheet
                 ref={backupWarningSheetRef}
-                onConfirm={onRunV2Upgrade}
+                onConfirm={() => {
+                    setPPStatus(PasswordPromptStatus.UPGRADE_SECURITY)
+                    // TODO - Vas -- what to do if the user is with faceID?
+                    openPasswordPrompt()
+                }}
                 onClose={closeBackupWarningSheet}
-                isUpgradeSecurity={true}
+                isUpgradeSecurity
             />
         </BaseSafeArea>
     )
