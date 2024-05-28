@@ -1,11 +1,13 @@
 import React, { useCallback } from "react"
 import { StyleProp, StyleSheet, View, ViewProps } from "react-native"
-import { BaseIcon, BaseSpacer } from "~Components/Base"
+import { BaseIcon, BaseSpacer, BaseText } from "~Components/Base"
 import { useNavigation } from "@react-navigation/native"
-import { useTheme } from "~Hooks"
+import { useTheme, useThemedStyles } from "~Hooks"
+import { ColorThemeType } from "~Constants"
 
 type Props = {
     iconTestID?: string
+    text?: string
     hasBottomSpacer?: boolean
     iconColor?: string
     beforeNavigating?: () => Promise<void> | void
@@ -17,6 +19,7 @@ type Props = {
 export const BackButtonHeader = ({
     iconTestID = "BackButtonHeader-BaseIcon-backButton",
     hasBottomSpacer = true,
+    text,
     iconColor,
     beforeNavigating,
     onGoBack,
@@ -26,6 +29,8 @@ export const BackButtonHeader = ({
 }: Props) => {
     const nav = useNavigation()
     const theme = useTheme()
+
+    const { styles } = useThemedStyles(backButtonHeaderStyle)
 
     const onActionPress = useCallback(async () => {
         if (beforeNavigating) await beforeNavigating()
@@ -40,20 +45,26 @@ export const BackButtonHeader = ({
 
     return (
         <View {...otherProps}>
-            <BaseIcon
-                haptics="Light"
-                style={[backButtonHeaderStyle.backButton, iconStyle]}
-                size={36}
-                name="chevron-left"
-                color={iconColor ? iconColor : theme.colors.text}
-                action={onActionPress}
-                testID={iconTestID}
-            />
+            <View style={styles.inner}>
+                <BaseIcon
+                    haptics="Light"
+                    style={[styles.backButton, iconStyle]}
+                    size={36}
+                    name="chevron-left"
+                    color={iconColor || theme.colors.text}
+                    action={onActionPress}
+                    testID={iconTestID}
+                />
+                {!!text && <BaseText style={styles.text}>{text}</BaseText>}
+            </View>
             {hasBottomSpacer && <BaseSpacer height={16} />}
         </View>
     )
 }
 
-const backButtonHeaderStyle = StyleSheet.create({
-    backButton: { paddingHorizontal: 12, alignSelf: "flex-start" },
-})
+const backButtonHeaderStyle = (theme: ColorThemeType) =>
+    StyleSheet.create({
+        inner: { flexDirection: "row", alignItems: "center" },
+        backButton: { paddingHorizontal: 12, alignSelf: "flex-start" },
+        text: { color: theme.colors.text, fontSize: 16 },
+    })

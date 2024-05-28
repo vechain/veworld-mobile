@@ -10,7 +10,7 @@ type Props = NativeStackScreenProps<RootStackParamListBuy, Routes.BUY_WEBVIEW>
 
 export const BuyWebviewScreen: React.FC<Props> = ({ route }) => {
     const selectedAccountAddress = useAppSelector(selectSelectedAccountAddress)
-    const { provider } = route.params
+    const { provider, providerName } = route.params
 
     if (!selectedAccountAddress) return null
 
@@ -22,7 +22,7 @@ export const BuyWebviewScreen: React.FC<Props> = ({ route }) => {
             fixedHeader={
                 <>
                     <BaseSpacer height={8} />
-                    <BackButtonHeader hasBottomSpacer={false} />
+                    <BackButtonHeader hasBottomSpacer={false} text={providerName} />
                     <BaseSpacer height={8} />
                 </>
             }

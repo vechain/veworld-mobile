@@ -9,6 +9,7 @@ export type RootStackParamListBuy = {
     [Routes.BUY]: undefined
     [Routes.BUY_WEBVIEW]: {
         provider: PaymentProvidersEnum
+        providerName: string
     }
 }
 
