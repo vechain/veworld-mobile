@@ -528,9 +528,17 @@ type RootTranslation = {
 	 */
 	BD_SELECT_PAYMENT_PROVIDER: string
 	/**
+	 * G​o​ ​b​a​c​k​ ​t​o​ ​V​e​W​o​r​l​d​ ​a​p​p
+	 */
+	BD_GO_BACK: string
+	/**
 	 * B​u​y​ ​w​i​t​h​ ​C​o​i​n​b​a​s​e​ ​a​n​d​ ​r​e​c​e​i​v​e​ ​t​h​e​ ​t​o​k​e​n​s​ ​d​i​r​e​c​t​l​y​ ​i​n​ ​V​e​W​o​r​l​d​.
 	 */
 	BD_BUY_DESCRIPTION_COINBASE: string
+	/**
+	 * B​u​y​ ​w​i​t​h​ ​T​r​a​n​s​a​k​ ​a​n​d​ ​r​e​c​e​i​v​e​ ​t​h​e​ ​t​o​k​e​n​s​ ​d​i​r​e​c​t​l​y​ ​i​n​ ​V​e​W​o​r​l​d​.
+	 */
+	BD_BUY_DESCRIPTION_TRANSAK: string
 	/**
 	 * W​e​l​c​o​m​e​ ​t​o​ 
 	 */
@@ -3414,9 +3422,17 @@ export type TranslationFunctions = {
 	 */
 	BD_SELECT_PAYMENT_PROVIDER: () => LocalizedString
 	/**
+	 * Go back to VeWorld app
+	 */
+	BD_GO_BACK: () => LocalizedString
+	/**
 	 * Buy with Coinbase and receive the tokens directly in VeWorld.
 	 */
 	BD_BUY_DESCRIPTION_COINBASE: () => LocalizedString
+	/**
+	 * Buy with Transak and receive the tokens directly in VeWorld.
+	 */
+	BD_BUY_DESCRIPTION_TRANSAK: () => LocalizedString
 	/**
 	 * Welcome to 
 	 */

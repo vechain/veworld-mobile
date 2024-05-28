@@ -15,7 +15,7 @@ export const BuyScreen = () => {
             noMargin
             fixedHeader={
                 <>
-                    <BaseSpacer height={16} />
+                    <BaseSpacer height={8} />
                     <BackButtonHeader hasBottomSpacer={false} />
                     <BaseSpacer height={8} />
                 </>

@@ -148,7 +148,9 @@ const en: BaseTranslation = {
     BD_COLLECTION: "Collection",
     BD_APP_BLOCKED: "To continue using this app securely and effectively, please enable the biometric authentication feature in your device's settings.",
     BD_SELECT_PAYMENT_PROVIDER: "Choose a provider:",
+    BD_GO_BACK: "Go back to VeWorld app",
     BD_BUY_DESCRIPTION_COINBASE: "Buy with Coinbase and receive the tokens directly in VeWorld.",
+    BD_BUY_DESCRIPTION_TRANSAK: "Buy with Transak and receive the tokens directly in VeWorld.",
 
     // TITLES
     TITLE_WELCOME_TO: "Welcome to ",

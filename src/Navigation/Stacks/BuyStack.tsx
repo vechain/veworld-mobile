@@ -3,10 +3,13 @@ import { createNativeStackNavigator } from "@react-navigation/native-stack"
 import { Routes } from "~Navigation/Enums"
 import { BuyScreen, BuyWebviewScreen } from "~Screens"
 import { useNavAnimation } from "~Hooks"
+import { PaymentProvidersEnum } from "~Screens/Flows/App/BuyScreen/Hooks"
 
 export type RootStackParamListBuy = {
     [Routes.BUY]: undefined
-    [Routes.BUY_WEBVIEW]: undefined
+    [Routes.BUY_WEBVIEW]: {
+        provider: PaymentProvidersEnum
+    }
 }
 
 const { Navigator, Group, Screen } = createNativeStackNavigator<RootStackParamListBuy>()
