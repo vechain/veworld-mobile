@@ -9,13 +9,14 @@ import {
 } from "@gorhom/bottom-sheet"
 import { BottomSheetModalMethods } from "@gorhom/bottom-sheet/lib/typescript/types"
 import { BaseView } from "./BaseView"
-import { useThemedStyles } from "~Hooks"
+import { useBackHandler, useThemedStyles } from "~Hooks"
 import { ColorThemeType, isSmallScreen } from "~Constants"
 import { BackdropPressBehavior } from "@gorhom/bottom-sheet/lib/typescript/components/bottomSheetBackdrop/types"
 import { BaseText } from "~Components"
 import { LocalizedString } from "typesafe-i18n"
 import { useReducedMotion } from "react-native-reanimated"
 import { isFinite } from "lodash"
+import { BackHandlerEvent } from "~Model"
 
 type Props = Omit<BottomSheetModalProps, "snapPoints"> & {
     children: React.ReactNode
@@ -27,6 +28,7 @@ type Props = Omit<BottomSheetModalProps, "snapPoints"> & {
     footerStyle?: StyleProp<ViewStyle>
     footer?: React.ReactNode
     onPressOutside?: BackdropPressBehavior
+    backHandlerEvent?: BackHandlerEvent
 }
 
 /**
@@ -43,6 +45,7 @@ type Props = Omit<BottomSheetModalProps, "snapPoints"> & {
  * @prop {(StyleProp<ViewStyle>|undefined)} footerStyle - Styles for the footer view.
  * @prop {(React.ReactNode|undefined)} footer - The footer of the modal.
  * @prop {(BackdropPressBehavior|undefined)} onPressOutside - Determines the behavior when the backdrop is pressed.
+ * @prop {(BackHandlerEvent|undefined)} backHandlerEvent - Determines the behavior when the Android hardware back button is pressed. Use `BackHandlerEvent.BLOCK` to prevent the back button from closing the modal.
  * @returns {React.ElementType} Returns a `BottomSheetModal` element with the provided props and calculated snap points.
  */
 export const BaseBottomSheet = React.forwardRef<BottomSheetModalMethods, Props>(
@@ -57,12 +60,14 @@ export const BaseBottomSheet = React.forwardRef<BottomSheetModalMethods, Props>(
             footer,
             children,
             onPressOutside = "close",
+            backHandlerEvent = BackHandlerEvent.DONT_BLOCK,
             ...props
         },
         ref,
     ) => {
         const { styles } = useThemedStyles(baseStyles)
         const reducedMotion = useReducedMotion()
+        useBackHandler(backHandlerEvent)
 
         const renderBackdrop = useCallback(
             (props_: BottomSheetBackdropProps) => {
