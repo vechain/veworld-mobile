@@ -2,7 +2,7 @@ import React, { useCallback, useEffect } from "react"
 import { BottomSheetModalMethods } from "@gorhom/bottom-sheet/lib/typescript/types"
 import { BaseBottomSheet, BaseView, showWarningToast } from "~Components"
 import { useI18nContext } from "~i18n"
-import { useDisclosure } from "~Hooks"
+import { useBackHandler, useDisclosure } from "~Hooks"
 import { BarCodeScanningResult, Camera, CameraType } from "expo-camera"
 import { COLORS, ScanTarget, SCREEN_WIDTH } from "~Constants"
 import { BarCodeScanner } from "expo-barcode-scanner"
@@ -11,6 +11,7 @@ import { AddressUtils, WalletConnectUtils } from "~Utils"
 import { CameraHeader } from "./components/CameraHeader"
 import { CameraFooter } from "./components/CameraFooter"
 import HapticsService from "~Services/HapticsService"
+import { BackHandlerEvent } from "~Model"
 
 const QR_SCAN_SQUARE_SIZE = SCREEN_WIDTH - 80
 type Props = {
@@ -26,6 +27,8 @@ export const ScanBottomSheet = React.forwardRef<BottomSheetModalMethods, Props>(
 
     const { isOpen, onClose: closeCamera } = useDisclosure(true)
     const { isOpen: isCameraReady, onOpen: onCameraReady } = useDisclosure(false)
+
+    useBackHandler(BackHandlerEvent.BLOCK)
 
     // Handles the common scan logic for all targets
     const handleScan = useCallback(
