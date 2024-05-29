@@ -125,3 +125,21 @@ export const selectAccountsByDevice = createSelector(
         return accounts.filter(account => AddressUtils.compareAddresses(rootAddress, account.rootAddress))
     },
 )
+
+export const selectVnsNameOrAddress = createSelector(
+    [
+        selectAccounts,
+        (state: RootState, address: string) => address,
+        (state: RootState, address: string, truncate: number[]) => truncate,
+    ],
+    (accounts, address, truncate) => {
+        const acc = accounts.find(account => AddressUtils.compareAddresses(address, account.address))
+        if (!acc) return AddressUtils.humanAddress(address, ...truncate)
+
+        if (acc.vnsName) {
+            return acc.vnsName
+        } else {
+            return AddressUtils.humanAddress(acc?.address, ...truncate)
+        }
+    },
+)

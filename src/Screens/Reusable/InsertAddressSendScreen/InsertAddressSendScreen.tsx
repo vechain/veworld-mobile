@@ -74,7 +74,7 @@ export const InsertAddressSendScreen = ({ route }: Props) => {
         isAddressInContactsOrAccounts,
     } = useSearchOrScanInput(navigateNext, setSelectedAddress, selectedAddress)
 
-    const { _getAddress } = useVns({ name: "", address: "" })
+    const { _getAddress } = useVns()
 
     //Whenever search changes, we check if it's a valid address or a domain name
     useEffect(() => {

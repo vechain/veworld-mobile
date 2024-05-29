@@ -11,6 +11,7 @@ import { AddressUtils, WalletConnectUtils } from "~Utils"
 import { CameraHeader } from "./components/CameraHeader"
 import { CameraFooter } from "./components/CameraFooter"
 import HapticsService from "~Services/HapticsService"
+import { BackHandlerEvent } from "~Model"
 
 const QR_SCAN_SQUARE_SIZE = SCREEN_WIDTH - 80
 type Props = {
@@ -106,7 +107,12 @@ export const ScanBottomSheet = React.forwardRef<BottomSheetModalMethods, Props>(
     }, [closeCamera])
 
     return (
-        <BaseBottomSheet handleComponent={null} noMargins={true} snapPoints={snapPoints} ref={ref}>
+        <BaseBottomSheet
+            handleComponent={null}
+            noMargins={true}
+            snapPoints={snapPoints}
+            ref={ref}
+            backHandlerEvent={BackHandlerEvent.BLOCK}>
             {isOpen && (
                 <Camera
                     style={baseStyles.camera}

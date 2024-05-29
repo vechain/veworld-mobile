@@ -1,9 +1,9 @@
 import React from "react"
 import { StyleSheet, View } from "react-native"
 import { BaseIcon, BaseSpacer, BaseText, BaseTouchable, BaseView } from "~Components/Base"
-import { useThemedStyles, useVns } from "~Hooks"
+import { useThemedStyles } from "~Hooks"
 import { ColorThemeType } from "~Constants"
-import { AddressUtils } from "~Utils"
+import { selectVnsNameOrAddress, useAppSelector } from "~Storage/Redux"
 
 type Props = {
     text: string
@@ -13,15 +13,14 @@ type Props = {
 
 export const AccountAddressButtonPill = ({ text, openQRCodeSheet, switchAccount }: Props) => {
     const { styles: themedStyles, theme } = useThemedStyles(baseStyles)
-
-    const { name: vnsName, address: vnsAddress } = useVns({ name: "", address: text })
+    const nameOrAddressFrom = useAppSelector(state => selectVnsNameOrAddress(state, text, [6, 3]))
 
     return (
         <BaseView flexDirection="row" style={themedStyles.container}>
             <BaseTouchable action={openQRCodeSheet} haptics="Light" style={themedStyles.pressable}>
                 <BaseView flexDirection="row" px={8}>
                     <BaseText color={theme.colors.text} typographyFont="smallCaptionRegular">
-                        {vnsName || AddressUtils.humanAddress(vnsAddress ?? text, 6, 3)}
+                        {nameOrAddressFrom}
                     </BaseText>
                     <BaseSpacer width={4} />
                     <BaseIcon name="content-copy" color={theme.colors.text} size={12} />

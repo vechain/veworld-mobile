@@ -1,10 +1,10 @@
 import React, { memo, useCallback, useMemo, useState } from "react"
 import { StyleSheet } from "react-native"
-import { useRenameAccount, useThemedStyles, useVns } from "~Hooks"
-import { AddressUtils, BigNutils } from "~Utils"
+import { useRenameAccount, useThemedStyles } from "~Hooks"
+import { BigNutils } from "~Utils"
 import { BaseTextInput, BaseSpacer, BaseText, BaseView } from "~Components"
 import { WalletAccount } from "~Model"
-import { selectVetBalanceByAccount, useAppSelector } from "~Storage/Redux"
+import { selectVetBalanceByAccount, selectVnsNameOrAddress, useAppSelector } from "~Storage/Redux"
 import { ColorThemeType, VET } from "~Constants"
 
 type Props = {
@@ -52,7 +52,7 @@ export const AccountDetailBox: React.FC<Props> = memo(
         )
         const cardOpacity = useMemo(() => (isDisabled ? 0.7 : undefined), [isDisabled])
 
-        const { name: vnsName, address: vnsAddress } = useVns({ name: "", address: account.address })
+        const nameOrAddressFrom = useAppSelector(state => selectVnsNameOrAddress(state, account.address, [4, 6]))
 
         return (
             <BaseView
@@ -83,7 +83,7 @@ export const AccountDetailBox: React.FC<Props> = memo(
                 </BaseView>
                 <BaseView style={(styles.rightSubContainer, { opacity: cardOpacity })} alignItems="flex-end">
                     <BaseText style={styles.address} fontSize={10}>
-                        {vnsName || AddressUtils.humanAddress(vnsAddress ?? account.address, 4, 6)}
+                        {nameOrAddressFrom}
                     </BaseText>
 
                     <BaseSpacer height={4} />

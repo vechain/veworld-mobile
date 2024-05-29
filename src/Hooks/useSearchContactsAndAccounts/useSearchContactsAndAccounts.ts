@@ -18,7 +18,7 @@ export const useSearchContactsAndAccounts = ({
     }, [accounts, contacts])
 
     // START - [DOMAINS] we need to add the domain only for searching purposes
-    const { _getName } = useVns({ name: "", address: "" })
+    const { _getName } = useVns()
     const [contactsWithDomain, setContactsWithDomain] = useState<Contact[]>([])
     const [accountsWithDomain, setAccountsWithDomain] = useState<AccountWithDevice[]>([])
     const firstLoad = useRef(true)

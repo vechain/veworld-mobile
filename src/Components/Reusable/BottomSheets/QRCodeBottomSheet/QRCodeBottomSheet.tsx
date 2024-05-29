@@ -1,11 +1,11 @@
 import React from "react"
 import { BottomSheetModalMethods } from "@gorhom/bottom-sheet/lib/typescript/types"
-import { useCopyClipboard, useTheme, useVns } from "~Hooks"
+import { useCopyClipboard, useTheme } from "~Hooks"
 import { BaseIcon, BaseSpacer, BaseText, BaseView, BaseBottomSheet, BaseButton } from "~Components"
 
 import { useI18nContext } from "~i18n"
 import { useAppSelector } from "~Storage/Redux"
-import { selectSelectedAccount } from "~Storage/Redux/Selectors"
+import { selectSelectedAccount, selectVnsNameOrAddress } from "~Storage/Redux/Selectors"
 import QRCode from "react-native-qrcode-svg"
 import { COLORS } from "~Constants"
 import { StyleSheet } from "react-native"
@@ -22,7 +22,7 @@ export const QRCodeBottomSheet = React.forwardRef<BottomSheetModalMethods>(({}, 
 
     const { onCopyToClipboard } = useCopyClipboard()
 
-    const { name: vnsName } = useVns({ name: "", address: selectedAccount.address })
+    const nameOrAddress = useAppSelector(state => selectVnsNameOrAddress(state, selectedAccount.address, [4, 3]))
 
     return (
         <BaseBottomSheet snapPoints={snapPoints} ref={ref}>
@@ -65,15 +65,15 @@ export const QRCodeBottomSheet = React.forwardRef<BottomSheetModalMethods>(({}, 
                     m={16}
                 />
 
-                {vnsName && (
+                {nameOrAddress.includes(".vet") && (
                     <BaseButton
                         haptics="Light"
                         px={28}
                         size="md"
                         bgColor={theme.colors.secondary}
                         textColor={theme.isDark ? theme.colors.textReversed : theme.colors.text}
-                        title={vnsName}
-                        action={() => onCopyToClipboard(vnsName, LL.COMMON_LBL_ADDRESS())}
+                        title={nameOrAddress}
+                        action={() => onCopyToClipboard(nameOrAddress, LL.COMMON_LBL_ADDRESS())}
                         rightIcon={
                             <BaseIcon
                                 name="content-copy"

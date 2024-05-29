@@ -21,6 +21,7 @@ export interface WalletAccount extends Account {
     index: number
     path?: string
     visible: boolean
+    vnsName?: string
 }
 
 export interface WatchedAccount extends WalletAccount {
