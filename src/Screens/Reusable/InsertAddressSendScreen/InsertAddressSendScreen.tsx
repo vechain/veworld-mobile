@@ -210,6 +210,9 @@ export const InsertAddressSendScreen = ({ route }: Props) => {
                         title={LL.COMMON_BTN_NEXT()}
                         action={onNext}
                         disabled={!selectedAddress}
+                        bottom={0}
+                        mx={0}
+                        width={"auto"}
                     />
 
                     <CreateContactBottomSheet

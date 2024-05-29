@@ -219,6 +219,9 @@ export const TransactionSummarySendScreen = ({ route }: Props) => {
                     title={LL.COMMON_BTN_CONFIRM().toUpperCase()}
                     action={onSubmit}
                     disabled={isDisabledButtonState}
+                    bottom={0}
+                    mx={0}
+                    width={"auto"}
                 />
             }
         />
