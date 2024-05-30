@@ -1,0 +1,36 @@
+appId: org.vechain.veworld.app
+
+---
+- tapOn:
+     id: "settings-tab"
+- repeat:
+    while:
+      visible:
+         id: "BackButtonHeader-BaseIcon-backButton"
+    commands:
+      - tapOn:
+            id: "BackButtonHeader-BaseIcon-backButton"
+- repeat:
+    while:
+      visible:
+         id: "General"
+    commands:
+      - tapOn:
+            id: "General"
+- runFlow:
+    when:
+      platform: Android
+    commands:
+      - tapOn:
+          text: "Reset App"
+          index: 0
+      - tapOn:
+           id: "reset-app-checkbox"
+- runFlow:
+    when:
+      platform: iOS
+    commands:
+      - tapOn: "Reset App"
+      - tapOn: "I am aware that this action is irreversible (required)"
+- tapOn: "Reset App"
+- assertVisible: "DEV:DEMO"

@@ -1,0 +1,30 @@
+#User creates a observe wallet
+appId: org.vechain.veworld.app
+env:
+  WALLET_ADDRESS: "0x231E70Cf27A2c44Eb9C00a3B1d2F7507Ae791051"
+onFlowStart:
+  - runFlow: ../setup_reset/setupApp.yaml 
+onFlowComplete:
+  - runFlow: ../setup_reset/resetApp.yaml
+---
+
+## User adds a wallet to observe
+- tapOn:
+    id: "HomeScreen_WalletManagementButton-wrapper"
+- tapOn:
+    id: "add-wallet-button"
+- tapOn:
+    id: "import-observe-wallet-button"
+- tapOn:
+    id: "observe-wallet-address-input"
+- inputText: ${WALLET_ADDRESS}
+- tapOn: "Observe Wallet"
+- tapOn:
+    id: "observe-wallet-confirm-button"
+- tapOn:
+    id: "observe-wallet-account-card"
+- tapOn:
+    id: "observe-wallet-confirm-operation"
+- tapOn:
+    id: "wallet-tab"
+- assertVisible: "VeWorld"

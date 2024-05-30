@@ -1,0 +1,96 @@
+appId: org.vechain.veworld.app
+env:
+  AMOUNT: 0.01
+  ACCOUNT: "0x435933c8064b4Ae76bE665428e0307eF2cCFBD68"
+  ADDRESS: "0x8a9844e4750f5ce5f7988c4d1e04c278c718feea"
+onFlowStart:
+  - runFlow: ../setup_reset/setupApp.yaml
+onFlowComplete:
+  - runFlow: ../setup_reset/resetApp.yaml
+---
+## User should be able to send tokens delegating with account method
+- tapOn:
+    id: "AccountCard_changeAccountButton"
+- tapOn:
+    id: "selectAccount"
+    index: 0
+- tapOn:
+    id: "sendButton"
+- runFlow:
+    when:
+      platform: Android
+    commands:
+      - tapOn: "Vechain"
+- runFlow:
+    when:
+      platform: iOS
+    commands:
+      - tapOn: "Vechain VET"
+- tapOn:
+     id: "SendScreen_amountInput"
+- inputText: ${AMOUNT}
+- tapOn: "Currency balance"
+- tapOn:
+     id: "next-button"
+- tapOn:
+     id: "selectAccount"
+     index: 0
+- tapOn:
+     id: "next-button"
+- runFlow:
+    when:
+      visible: "Select delegation"
+    commands:
+      - tapOn:
+          id: "button-ACCOUNT"
+      - tapOn:
+          id: "selectAccount"
+          index: 0
+      - tapOn:
+          id: "confirm-send-button"
+- repeat:
+    times: 6
+    commands:
+      - tapOn: "1"
+- assertVisible: "Your tokens"
+- runFlow:
+    env:
+      AMOUNT: 0.01
+    commands:
+      - tapOn:
+          id: "sendButton"
+      - runFlow:
+            when:
+               platform: Android
+            commands:
+              - tapOn: "VeThor"
+      - runFlow:
+            when:
+               platform: iOS
+            commands:
+              - tapOn: "VeThor VTHO"
+      - tapOn:
+          id: "SendScreen_amountInput"
+      - inputText: ${AMOUNT}
+      - tapOn: "Currency balance"
+      - tapOn:
+          id: "next-button"
+      - tapOn:
+          id: "selectAccount"
+          index: 0
+      - tapOn:
+          id: "next-button"
+      - tapOn:
+          id: "button-ACCOUNT"
+      - assertVisible:
+          id: "selectAccount"
+          index: 0
+      - tapOn:
+          id: "selectAccount"
+          index: 0
+      - tapOn:
+          id: "confirm-send-button"
+      - repeat:
+          times: 6
+          commands:
+            - tapOn: "1"
