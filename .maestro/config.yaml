@@ -1,3 +1,4 @@
 # config.yaml
 flows:
-  - "iosTests/**"
+  - observedWallet/*
+  - send/*

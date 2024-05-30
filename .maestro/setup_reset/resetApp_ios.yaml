@@ -8,8 +8,15 @@ env:
     id: "settings-tab"
 - tapOn:
     id: "settings-tab"
-- tapOn:
-    id: "BackButtonHeader-BaseIcon-backButton"
+- evalScript: ${console.log('searching back button')}
+- repeat:
+    while:
+      visible:
+         id: "BackButtonHeader-BaseIcon-backButton"
+    commands:
+      - tapOn:
+            id: "BackButtonHeader-BaseIcon-backButton"
+- evalScript: ${console.log('back button found')}
 - tapOn:
     id: "General"
 - tapOn:
