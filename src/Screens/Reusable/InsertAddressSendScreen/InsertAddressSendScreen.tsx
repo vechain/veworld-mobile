@@ -181,6 +181,7 @@ export const InsertAddressSendScreen = ({ route }: Props) => {
                                         const onPress = () => setSelectedAddress(account.address)
                                         return (
                                             <AccountCard
+                                                testID="selectAccount"
                                                 key={account.address}
                                                 containerStyle={baseStyles.accountCard}
                                                 account={account}
