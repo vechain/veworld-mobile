@@ -1,7 +1,7 @@
 import React, { useCallback, useEffect, useMemo, useState } from "react"
 import { MMKV } from "react-native-mmkv"
-import { BiometricsUtils, debug, error, HexUtils, info } from "~Utils"
-import { BiometricState, SecurityLevelType, WALLET_STATUS } from "~Model"
+import { BiometricsUtils, CryptoUtils_Legacy, debug, error, HexUtils, info } from "~Utils"
+import { BiometricState, SecurityLevelType, Wallet, WALLET_STATUS } from "~Model"
 import {
     PreviousInstallation,
     SecurityConfig,
@@ -209,16 +209,66 @@ export const ApplicationSecurityProvider = ({ children }: ApplicationSecurityCon
         return false
     }, [])
 
-    const upgradeSecurityToV2 = useCallback((password?: string) => {
+    const upgradeSecurityToV2 = useCallback(async (password?: string) => {
         const encryptedStorageKeys = UserEncryptedStorage.getAllKeys()
-        info(ERROR_EVENTS.SECURITY, password)
+        /*
+            encryptedStorageKeys contains ["persist:root", "persist:nft"]
+        */
 
         if (encryptedStorageKeys.length > 0) {
-            // TODO: Decrypt the storage, decrypt each wallet in storage, and then store it in `UserEncryptedStorageV2`
+            // Get the wallet key
+            // TODO: Do we need to have a separate key for each wallet?
+            const { walletKey } = await WalletEncryptionKeyHelper.get(password)
 
-            encryptedStorageKeys.map(key => {
-                info(ERROR_EVENTS.SECURITY, key)
-            })
+            // Get the storage keys
+            const storageEncryptionKeys = await StorageEncryptionKeyHelper.get(password)
+            const reduxKey = storageEncryptionKeys.redux
+            // Get the encrypted state
+            const persistedState = UserEncryptedStorage.getString("persist:root")
+            if (!persistedState) return // TODO: handle this case somehow
+            const state = JSON.parse(persistedState)
+
+            // let newState = {}
+            let newWallets: string[] = []
+
+            // Go over the state enreies and decrypt them
+            for (const key of Object.keys(state)) {
+                const encrypted = state[key] as string
+                const toDecrypt = encrypted.replace(/['"]+/g, "").replace("0x", "")
+                const unencrypted = CryptoUtils_Legacy.decryptState(toDecrypt, reduxKey)
+                const parsedEntry = JSON.parse(unencrypted)
+
+                // Get wallets from unencrypted entries and decrypt them
+                if (Array.isArray(parsedEntry)) {
+                    if ("wallet" in parsedEntry[0] && "xPub" in parsedEntry[0]) {
+                        // loop on parsedEntry and decrypt each wallet
+                        for (const wallet of parsedEntry) {
+                            //  encrypt the wallets with the new encryption algorithm
+                            const decryptedWallet: Wallet = await WalletEncryptionKeyHelper.decryptWallet(
+                                wallet.wallet,
+                                walletKey,
+                            )
+
+                            const walletEncrypted_V2 = await WalletEncryptionKeyHelper.encryptWallet(
+                                decryptedWallet,
+                                password,
+                            )
+
+                            newWallets.push(walletEncrypted_V2)
+
+                            /*
+                                2. recreate the state by encrypting the rest of the parsedEntries
+                                3. need to do the same for the other storage entries (see encryptedStorageKeys)
+                                4. store the state in the new storage - UserEncryptedStorage_V2
+                                5. clear out the old storage - UserEncryptedStorage
+                               
+                            */
+                        }
+                    }
+                }
+            }
+
+            // console.log("newWallets", newWallets)
         }
     }, [])
 
@@ -402,7 +452,7 @@ export const ApplicationSecurityProvider = ({ children }: ApplicationSecurityCon
 
             if (securityType !== SecurityLevelType.SECRET) return <></>
             return (
-                <AnimatedSplashScreen playAnimation={true} useFadeOutAnimation={false}>
+                <AnimatedSplashScreen playAnimation useFadeOutAnimation={false}>
                     <StandaloneLockScreen onPinInserted={unlock} />
                 </AnimatedSplashScreen>
             )
