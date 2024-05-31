@@ -21,7 +21,7 @@ export const EntryPoint = () => {
     }, [])
 
     useEffect(() => {
-        if (__DEV__) {
+        if (!__DEV__) {
             /* (IOS, Android) for android might be the only step to get secureView
              * on IOS enables blurry view when app goes into inactive state
              */
