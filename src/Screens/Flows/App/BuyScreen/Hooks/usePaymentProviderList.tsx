@@ -1,7 +1,7 @@
 import React from "react"
 import { useTheme } from "~Hooks"
 import { useI18nContext } from "~i18n"
-import { COLORS, FEATURE_COINBASE } from "~Constants"
+import { COLORS, COINBASE_FEATURE_ENABLED } from "~Constants"
 import { PaymentMethod, PaymentMethodsIds, PaymentMethodsList } from "./constants"
 import { CoinbaseLogoSmallSvg } from "~Assets"
 import { TransakLogoSmallSvg } from "~Assets/Img/TransakLogoSmallSvg"
@@ -24,7 +24,7 @@ export const usePaymentProviderList = () => {
 
     const providers = []
 
-    if (FEATURE_COINBASE) {
+    if (COINBASE_FEATURE_ENABLED) {
         providers.push({
             id: PaymentProvidersEnum.CoinbasePay,
             name: "Coinbase",

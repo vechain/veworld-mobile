@@ -1,7 +1,7 @@
-import { TransakWebView, Environments, Events, TransakConfig, EventTypes } from "@transak/react-native-sdk"
+import { Environments, EventTypes, Events, TransakConfig, TransakWebView } from "@transak/react-native-sdk"
 import React, { useCallback, useEffect, useMemo, useState } from "react"
-import { DimensionValue, StatusBar, StyleSheet, useColorScheme } from "react-native"
-import { BaseActivityIndicator, BaseView } from "~Components/Base"
+import { DimensionValue, StyleSheet } from "react-native"
+import { BaseActivityIndicator, BaseStatusBar, BaseView } from "~Components/Base"
 import { AnalyticsEvent, COLORS } from "~Constants"
 import { useAnalyticTracking, useTheme } from "~Hooks"
 import { PlatformUtils } from "~Utils"
@@ -10,11 +10,26 @@ import { VECHAIN_BLOCKCHAIN } from "./Constants"
 const isProd = process.env.NODE_ENV === "production"
 const isAndroid = PlatformUtils.isAndroid()
 
-export const TransakPayWebView = (props: { currentAmount: number; destinationAddress: string }) => {
-    const { currentAmount, destinationAddress } = props
-    const theme = useTheme()
+const disabledOSProvider = isAndroid ? "apple_pay" : "google_pay"
+const disablePaymentMethods = `gbp_bank_transfer,inr_bank_transfer,sepa_bank_transfer,${disabledOSProvider}`
+
+export const TransakPayWebView = ({
+    currentAmount,
+    destinationAddress,
+}: {
+    currentAmount: number
+    destinationAddress: string
+}) => {
+    const { isDark } = useTheme()
     const track = useAnalyticTracking()
     const [isLoading, setIsLoading] = useState(true)
+    const styles = baseStyles(isLoading)
+
+    const { backgroundColors, themeColor } = useMemo(() => {
+        const bg = isDark ? COLORS.DARK_PURPLE : COLORS.LIGHT_GRAY
+        const tc = isDark ? COLORS.LIGHT_PURPLE : COLORS.DARK_PURPLE
+        return { backgroundColors: bg, themeColor: tc.replace("#", "") }
+    }, [isDark])
 
     const transakConfig: TransakConfig = useMemo(
         () => ({
@@ -23,19 +38,19 @@ export const TransakPayWebView = (props: { currentAmount: number; destinationAdd
             productsAvailed: "BUY",
             networks: VECHAIN_BLOCKCHAIN,
             defaultPaymentMethod: "credit_debit_card",
-            disablePaymentMethods: "gbp_bank_transfer,inr_bank_transfer,sepa_bank_transfer",
+            disablePaymentMethods,
             disableWalletAddressForm: true,
             defaultFiatCurrency: "EUR",
             defaultFiatAmount: currentAmount || 5,
             defaultNetwork: VECHAIN_BLOCKCHAIN,
             defaultCryptoCurrency: "VET",
-            backgroundColors: theme.isDark ? "242226" : "ffffff",
-            colorMode: theme.isDark ? "DARK" : "LIGHT",
-            themeColor: theme.isDark ? "a07aff" : "28008c",
+            backgroundColors,
+            colorMode: isDark ? "DARK" : "LIGHT",
+            themeColor,
             hideMenu: true,
             environment: isProd ? Environments.PRODUCTION : Environments.STAGING,
         }),
-        [currentAmount, destinationAddress, theme.isDark],
+        [backgroundColors, currentAmount, destinationAddress, isDark, themeColor],
     )
 
     const onTransakEventHandler = (event: EventTypes) => {
@@ -76,37 +91,24 @@ export const TransakPayWebView = (props: { currentAmount: number; destinationAdd
         handleLoadEnd()
     }, [handleLoadEnd])
 
-    const styles = baseStyles()
-    const systemColorScheme = useColorScheme()
-
-    const statusBar = useMemo(() => {
-        return (
-            <StatusBar
-                animated={true}
-                backgroundColor={
-                    systemColorScheme === "dark" ? COLORS.COINBASE_BACKGROUND_DARK : COLORS.COINBASE_BACKGROUND_LIGHT
-                }
-                barStyle={systemColorScheme === "dark" ? "light-content" : "dark-content"}
-            />
-        )
-    }, [systemColorScheme])
-
     return (
-        <BaseView style={styles.container}>
-            {!isLoading && isAndroid ? statusBar : null}
+        <BaseView flex={1}>
+            {!isLoading && isAndroid && <BaseStatusBar />}
             <BaseActivityIndicator isVisible={isLoading} />
             <TransakWebView
                 transakConfig={transakConfig}
                 onTransakEvent={onTransakEventHandler}
-                style={{ marginBottom: (isAndroid ? 10 : 30) as DimensionValue }}
+                style={styles.webView}
             />
         </BaseView>
     )
 }
 
-const baseStyles = () =>
+const baseStyles = (isLoading: boolean) =>
     StyleSheet.create({
-        container: {
-            flex: 1,
+        webView: {
+            marginTop: 10,
+            marginBottom: (isAndroid ? 10 : 30) as DimensionValue,
+            opacity: isLoading ? 0 : 1,
         },
     })

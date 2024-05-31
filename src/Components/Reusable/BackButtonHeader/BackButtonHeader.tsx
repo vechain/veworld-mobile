@@ -1,6 +1,6 @@
 import React, { useCallback } from "react"
 import { StyleProp, StyleSheet, View, ViewProps } from "react-native"
-import { BaseIcon, BaseSpacer, BaseText } from "~Components/Base"
+import { BaseIcon, BaseSpacer, BaseText, BaseView } from "~Components/Base"
 import { useNavigation } from "@react-navigation/native"
 import { useTheme, useThemedStyles } from "~Hooks"
 import { ColorThemeType } from "~Constants"
@@ -45,7 +45,7 @@ export const BackButtonHeader = ({
 
     return (
         <View {...otherProps}>
-            <View style={styles.inner}>
+            <BaseView flexDirection="row" alignItems="center">
                 <BaseIcon
                     haptics="Light"
                     style={[styles.backButton, iconStyle]}
@@ -56,7 +56,7 @@ export const BackButtonHeader = ({
                     testID={iconTestID}
                 />
                 {!!text && <BaseText style={styles.text}>{text}</BaseText>}
-            </View>
+            </BaseView>
             {hasBottomSpacer && <BaseSpacer height={16} />}
         </View>
     )
@@ -64,7 +64,6 @@ export const BackButtonHeader = ({
 
 const backButtonHeaderStyle = (theme: ColorThemeType) =>
     StyleSheet.create({
-        inner: { flexDirection: "row", alignItems: "center" },
-        backButton: { paddingHorizontal: 12, alignSelf: "flex-start" },
+        backButton: { paddingHorizontal: 12 },
         text: { color: theme.colors.text, fontSize: 16 },
     })
