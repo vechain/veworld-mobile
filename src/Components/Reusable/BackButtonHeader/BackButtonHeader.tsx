@@ -1,9 +1,8 @@
+import { useNavigation } from "@react-navigation/native"
 import React, { useCallback } from "react"
 import { StyleProp, StyleSheet, View, ViewProps } from "react-native"
 import { BaseIcon, BaseSpacer, BaseText, BaseView } from "~Components/Base"
-import { useNavigation } from "@react-navigation/native"
-import { useTheme, useThemedStyles } from "~Hooks"
-import { ColorThemeType } from "~Constants"
+import { useTheme } from "~Hooks"
 
 type Props = {
     iconTestID?: string
@@ -30,8 +29,6 @@ export const BackButtonHeader = ({
     const nav = useNavigation()
     const theme = useTheme()
 
-    const { styles } = useThemedStyles(backButtonHeaderStyle)
-
     const onActionPress = useCallback(async () => {
         if (beforeNavigating) await beforeNavigating()
 
@@ -48,22 +45,24 @@ export const BackButtonHeader = ({
             <BaseView flexDirection="row" alignItems="center">
                 <BaseIcon
                     haptics="Light"
-                    style={[styles.backButton, iconStyle]}
+                    style={[backButtonHeaderStyle.backButton, iconStyle]}
                     size={36}
                     name="chevron-left"
                     color={iconColor || theme.colors.text}
                     action={onActionPress}
                     testID={iconTestID}
                 />
-                {!!text && <BaseText style={styles.text}>{text}</BaseText>}
+                {!!text && (
+                    <BaseText color={theme.colors.text} fontSize={16}>
+                        {text}
+                    </BaseText>
+                )}
             </BaseView>
             {hasBottomSpacer && <BaseSpacer height={16} />}
         </View>
     )
 }
 
-const backButtonHeaderStyle = (theme: ColorThemeType) =>
-    StyleSheet.create({
-        backButton: { paddingHorizontal: 12 },
-        text: { color: theme.colors.text, fontSize: 16 },
-    })
+const backButtonHeaderStyle = StyleSheet.create({
+    backButton: { paddingHorizontal: 12 },
+})
