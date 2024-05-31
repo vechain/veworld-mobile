@@ -34,6 +34,8 @@ export function useLineChartPrice(): ValueAndFormatted {
             return Number(activeCursorPrice.value)
         }
 
+        if (!data?.length) return 0
+
         return data[data.length - 1]?.value ?? 0
     })
 
@@ -97,6 +99,8 @@ export function useLineChartRelativeChange({
 
     const relativeChange = useDerivedValue(() => {
         // when scrubbing, compute relative change from open price
+        if (!data?.length) return 0
+
         const openPrice = data[0]?.value
 
         // scrubbing: close price is active price
