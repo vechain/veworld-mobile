@@ -43,7 +43,7 @@ export const DeviceBox: React.FC<Props> = ({
                 <BaseView flexDirection="row" flex={1}>
                     {isEdit && (
                         <>
-                            <Pressable onPressIn={isEdit ? drag : undefined} disabled={!isActive}>
+                            <Pressable onPressIn={isEdit ? drag : undefined} disabled={isActive}>
                                 <BaseIcon name={"drag"} color={theme.colors.text} size={24} />
                             </Pressable>
                             <BaseSpacer width={8} />
