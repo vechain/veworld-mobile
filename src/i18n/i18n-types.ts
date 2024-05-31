@@ -2441,7 +2441,7 @@ type RootTranslation = {
 	 */
 	SEND_LEDGER_CHECK_CONNECTION: string
 	/**
-	 * P​l​e​a​s​e​ ​m​a​k​e​ ​s​u​r​e​ ​y​o​u​r​ ​L​e​d​g​e​r​ ​i​s​ ​u​n​l​o​c​k​e​d​ ​w​i​t​h​ ​t​h​e​ ​b​l​u​e​t​o​o​t​h​ ​e​n​a​b​l​e​d​ ​a​n​d​ ​t​h​e​ ​V​E​T​ ​a​p​p​ ​i​s​ ​o​p​e​n​ ​(​o​n​l​y​ ​l​e​d​g​e​r​s​ ​w​i​t​h​ ​b​l​u​e​t​o​o​t​h​ ​a​r​e​ ​s​u​p​p​o​r​t​e​d​ ​a​t​ ​t​h​i​s​ ​t​i​m​e​)
+	 * P​l​e​a​s​e​ ​m​a​k​e​ ​s​u​r​e​ ​y​o​u​r​ ​L​e​d​g​e​r​ ​i​s​ ​u​n​l​o​c​k​e​d​ ​w​i​t​h​ ​t​h​e​ ​b​l​u​e​t​o​o​t​h​ ​e​n​a​b​l​e​d​ ​a​n​d​ ​t​h​e​ ​V​e​C​h​a​i​n​ ​a​p​p​ ​i​s​ ​o​p​e​n​ ​(​o​n​l​y​ ​l​e​d​g​e​r​s​ ​w​i​t​h​ ​b​l​u​e​t​o​o​t​h​ ​a​r​e​ ​s​u​p​p​o​r​t​e​d​ ​a​t​ ​t​h​i​s​ ​t​i​m​e​)
 	 */
 	SEND_LEDGER_CHECK_CONNECTION_SB: string
 	/**
@@ -2627,11 +2627,11 @@ type RootTranslation = {
 	 */
 	WALLET_LEDGER_ENABLE_ADDITION_SETTINGS_SB: string
 	/**
-	 * O​p​e​n​ ​t​h​e​ ​V​E​T​ ​a​p​p​ ​o​n​ ​y​o​u​r​ ​L​e​d​g​e​r
+	 * O​p​e​n​ ​t​h​e​ ​V​e​C​h​a​i​n​ ​a​p​p​ ​o​n​ ​y​o​u​r​ ​L​e​d​g​e​r
 	 */
 	WALLET_LEDGER_ENABLE_ADDITION_SETTINGS_STEP_1: string
 	/**
-	 * U​n​l​o​c​k​ ​y​o​u​r​ ​L​e​d​g​e​r​ ​a​n​d​ ​o​p​e​n​ ​t​h​e​ ​V​E​T​ ​a​p​p​.​ ​I​f​ ​y​o​u​ ​d​o​n​'​t​ ​h​a​v​e​ ​i​t​ ​i​n​s​t​a​l​l​e​d​,​ ​p​l​e​a​s​e​ ​i​n​s​t​a​l​l​ ​i​t​ ​f​r​o​m​ ​t​h​e​ ​L​e​d​g​e​r​ ​L​i​v​e​ ​a​p​p​.
+	 * U​n​l​o​c​k​ ​y​o​u​r​ ​L​e​d​g​e​r​ ​a​n​d​ ​o​p​e​n​ ​t​h​e​ ​V​e​C​h​a​i​n​ ​a​p​p​.​ ​I​f​ ​y​o​u​ ​d​o​n​'​t​ ​h​a​v​e​ ​i​t​ ​i​n​s​t​a​l​l​e​d​,​ ​p​l​e​a​s​e​ ​i​n​s​t​a​l​l​ ​i​t​ ​f​r​o​m​ ​t​h​e​ ​L​e​d​g​e​r​ ​L​i​v​e​ ​a​p​p​.
 	 */
 	WALLET_LEDGER_ENABLE_ADDITION_SETTINGS_STEP_1_DESC: string
 	/**
@@ -2667,11 +2667,11 @@ type RootTranslation = {
 	 */
 	WALLET_LEDGER_ERROR_UNLOCK_LEDGER_DESC: string
 	/**
-	 * O​p​e​n​ ​V​E​T​ ​a​p​p
+	 * O​p​e​n​ ​V​e​C​h​a​i​n​ ​a​p​p
 	 */
 	WALLET_LEDGER_ERROR_OPEN_APP: string
 	/**
-	 * P​l​e​a​s​e​,​ ​o​p​e​n​ ​t​h​e​ ​V​E​T​ ​a​p​p​ ​t​o​ ​c​o​n​t​i​n​u​e
+	 * P​l​e​a​s​e​,​ ​o​p​e​n​ ​t​h​e​ ​V​e​C​h​a​i​n​ ​a​p​p​ ​t​o​ ​c​o​n​t​i​n​u​e
 	 */
 	WALLET_LEDGER_ERROR_OPEN_APP_DESC: string
 	/**
@@ -2695,7 +2695,7 @@ type RootTranslation = {
 	 */
 	WALLET_LEDGER_ERROR_CLAUSES_AND_CONTRACT_DATA_DISABLED: string
 	/**
-	 * M​u​l​t​i​-​c​l​a​u​s​e​s​ ​a​n​d​ ​c​o​n​t​r​a​c​t​ ​d​a​t​a​ ​a​r​e​ ​n​e​e​d​e​d​ ​t​o​ ​s​i​g​n​ ​t​r​a​n​s​a​c​t​i​o​n​s​.​ ​N​a​v​i​g​a​t​e​ ​t​o​ ​S​e​t​t​i​n​g​s​ ​i​n​s​i​d​e​ ​y​o​u​r​ ​V​E​T​ ​a​p​p​ ​a​n​d​ ​p​r​e​s​s​ ​b​o​t​h​ ​b​u​t​t​o​n​s​ ​t​o​ ​e​n​a​b​l​e​ ​t​h​e​m​.
+	 * M​u​l​t​i​-​c​l​a​u​s​e​s​ ​a​n​d​ ​c​o​n​t​r​a​c​t​ ​d​a​t​a​ ​a​r​e​ ​n​e​e​d​e​d​ ​t​o​ ​s​i​g​n​ ​t​r​a​n​s​a​c​t​i​o​n​s​.​ ​N​a​v​i​g​a​t​e​ ​t​o​ ​S​e​t​t​i​n​g​s​ ​i​n​s​i​d​e​ ​y​o​u​r​ ​V​e​C​h​a​i​n​ ​a​p​p​ ​a​n​d​ ​p​r​e​s​s​ ​b​o​t​h​ ​b​u​t​t​o​n​s​ ​t​o​ ​e​n​a​b​l​e​ ​t​h​e​m​.
 	 */
 	WALLET_LEDGER_ERROR_CLAUSES_AND_CONTRACT_DATA_DISABLED_DESC: string
 	/**
@@ -2703,7 +2703,7 @@ type RootTranslation = {
 	 */
 	WALLET_LEDGER_ERROR_CLAUSES_DISABLED: string
 	/**
-	 * M​u​l​t​i​-​c​l​a​u​s​e​s​ ​a​r​e​ ​n​e​e​d​e​d​ ​t​o​ ​s​i​g​n​ ​t​r​a​n​s​a​c​t​i​o​n​s​.​ ​N​a​v​i​g​a​t​e​ ​t​o​ ​M​u​l​t​i​-​c​l​a​u​s​e​s​ ​i​n​s​i​d​e​ ​y​o​u​r​ ​V​E​T​ ​a​p​p​ ​a​n​d​ ​p​r​e​s​s​ ​b​o​t​h​ ​b​u​t​t​o​n​s​ ​t​o​ ​e​n​a​b​l​e​ ​i​t​.
+	 * M​u​l​t​i​-​c​l​a​u​s​e​s​ ​a​r​e​ ​n​e​e​d​e​d​ ​t​o​ ​s​i​g​n​ ​t​r​a​n​s​a​c​t​i​o​n​s​.​ ​N​a​v​i​g​a​t​e​ ​t​o​ ​M​u​l​t​i​-​c​l​a​u​s​e​s​ ​i​n​s​i​d​e​ ​y​o​u​r​ ​V​e​C​h​a​i​n​ ​a​p​p​ ​a​n​d​ ​p​r​e​s​s​ ​b​o​t​h​ ​b​u​t​t​o​n​s​ ​t​o​ ​e​n​a​b​l​e​ ​i​t​.
 	 */
 	WALLET_LEDGER_ERROR_CLAUSES_DISABLED_DESC: string
 	/**
@@ -2711,7 +2711,7 @@ type RootTranslation = {
 	 */
 	WALLET_LEDGER_ERROR_CONTRACT_DATA_DISABLED: string
 	/**
-	 * C​o​n​t​r​a​c​t​ ​d​a​t​a​ ​i​s​ ​n​e​e​d​e​d​ ​t​o​ ​s​i​g​n​ ​t​r​a​n​s​a​c​t​i​o​n​s​.​ ​N​a​v​i​g​a​t​e​ ​t​o​ ​C​o​n​t​r​a​c​t​ ​d​a​t​a​ ​i​n​s​i​d​e​ ​y​o​u​r​ ​V​E​T​ ​a​p​p​ ​a​n​d​ ​p​r​e​s​s​ ​b​o​t​h​ ​b​u​t​t​o​n​s​ ​t​o​ ​e​n​a​b​l​e​ ​i​t​.
+	 * C​o​n​t​r​a​c​t​ ​d​a​t​a​ ​i​s​ ​n​e​e​d​e​d​ ​t​o​ ​s​i​g​n​ ​t​r​a​n​s​a​c​t​i​o​n​s​.​ ​N​a​v​i​g​a​t​e​ ​t​o​ ​C​o​n​t​r​a​c​t​ ​d​a​t​a​ ​i​n​s​i​d​e​ ​y​o​u​r​ ​V​e​C​h​a​i​n​ ​a​p​p​ ​a​n​d​ ​p​r​e​s​s​ ​b​o​t​h​ ​b​u​t​t​o​n​s​ ​t​o​ ​e​n​a​b​l​e​ ​i​t​.
 	 */
 	WALLET_LEDGER_ERROR_CONTRACT_DATA_DISABLED_DESC: string
 	/**
@@ -5299,7 +5299,7 @@ Try reconnect your device to the internet.
 	 */
 	SEND_LEDGER_CHECK_CONNECTION: () => LocalizedString
 	/**
-	 * Please make sure your Ledger is unlocked with the bluetooth enabled and the VET app is open (only ledgers with bluetooth are supported at this time)
+	 * Please make sure your Ledger is unlocked with the bluetooth enabled and the VeChain app is open (only ledgers with bluetooth are supported at this time)
 	 */
 	SEND_LEDGER_CHECK_CONNECTION_SB: () => LocalizedString
 	/**
@@ -5483,11 +5483,11 @@ Try reconnect your device to the internet.
 	 */
 	WALLET_LEDGER_ENABLE_ADDITION_SETTINGS_SB: () => LocalizedString
 	/**
-	 * Open the VET app on your Ledger
+	 * Open the VeChain app on your Ledger
 	 */
 	WALLET_LEDGER_ENABLE_ADDITION_SETTINGS_STEP_1: () => LocalizedString
 	/**
-	 * Unlock your Ledger and open the VET app. If you don't have it installed, please install it from the Ledger Live app.
+	 * Unlock your Ledger and open the VeChain app. If you don't have it installed, please install it from the Ledger Live app.
 	 */
 	WALLET_LEDGER_ENABLE_ADDITION_SETTINGS_STEP_1_DESC: () => LocalizedString
 	/**
@@ -5523,11 +5523,11 @@ Try reconnect your device to the internet.
 	 */
 	WALLET_LEDGER_ERROR_UNLOCK_LEDGER_DESC: () => LocalizedString
 	/**
-	 * Open VET app
+	 * Open VeChain app
 	 */
 	WALLET_LEDGER_ERROR_OPEN_APP: () => LocalizedString
 	/**
-	 * Please, open the VET app to continue
+	 * Please, open the VeChain app to continue
 	 */
 	WALLET_LEDGER_ERROR_OPEN_APP_DESC: () => LocalizedString
 	/**
@@ -5551,7 +5551,7 @@ Try reconnect your device to the internet.
 	 */
 	WALLET_LEDGER_ERROR_CLAUSES_AND_CONTRACT_DATA_DISABLED: () => LocalizedString
 	/**
-	 * Multi-clauses and contract data are needed to sign transactions. Navigate to Settings inside your VET app and press both buttons to enable them.
+	 * Multi-clauses and contract data are needed to sign transactions. Navigate to Settings inside your VeChain app and press both buttons to enable them.
 	 */
 	WALLET_LEDGER_ERROR_CLAUSES_AND_CONTRACT_DATA_DISABLED_DESC: () => LocalizedString
 	/**
@@ -5559,7 +5559,7 @@ Try reconnect your device to the internet.
 	 */
 	WALLET_LEDGER_ERROR_CLAUSES_DISABLED: () => LocalizedString
 	/**
-	 * Multi-clauses are needed to sign transactions. Navigate to Multi-clauses inside your VET app and press both buttons to enable it.
+	 * Multi-clauses are needed to sign transactions. Navigate to Multi-clauses inside your VeChain app and press both buttons to enable it.
 	 */
 	WALLET_LEDGER_ERROR_CLAUSES_DISABLED_DESC: () => LocalizedString
 	/**
@@ -5567,7 +5567,7 @@ Try reconnect your device to the internet.
 	 */
 	WALLET_LEDGER_ERROR_CONTRACT_DATA_DISABLED: () => LocalizedString
 	/**
-	 * Contract data is needed to sign transactions. Navigate to Contract data inside your VET app and press both buttons to enable it.
+	 * Contract data is needed to sign transactions. Navigate to Contract data inside your VeChain app and press both buttons to enable it.
 	 */
 	WALLET_LEDGER_ERROR_CONTRACT_DATA_DISABLED_DESC: () => LocalizedString
 	/**
