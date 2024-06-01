@@ -142,13 +142,11 @@ export const WalletManagementScreen = () => {
         <Layout
             safeAreaTestID="Wallet_Management_Screen"
             fixedHeader={
-                <>
-                    <WalletManagementHeader
-                        goToCreateWalletFlow={goToCreateWalletFlow}
-                        isEdit={isEdit}
-                        setIsEdit={setIsEdit}
-                    />
-                </>
+                <WalletManagementHeader
+                    goToCreateWalletFlow={goToCreateWalletFlow}
+                    isEdit={isEdit}
+                    setIsEdit={setIsEdit}
+                />
             }
             fixedBody={
                 <BaseView style={styles.view} mb={tabBarBottomMargin}>
