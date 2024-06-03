@@ -74,10 +74,15 @@ export const BaseBottomSheet = React.forwardRef<BottomSheetModalMethods, Props>(
 
         const [contentHeight, setContentHeight] = useState<number>(0)
 
-        const onLayoutHandler = useCallback((event: LayoutChangeEvent) => {
-            const { height } = event.nativeEvent.layout
-            setContentHeight(height)
-        }, [])
+        const onLayoutHandler = useCallback(
+            (event: LayoutChangeEvent) => {
+                if (dynamicHeight) {
+                    const { height } = event.nativeEvent.layout
+                    setContentHeight(height)
+                }
+            },
+            [dynamicHeight],
+        )
 
         const renderBackdrop = useCallback(
             (props_: BottomSheetBackdropProps) => {

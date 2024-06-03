@@ -11,10 +11,12 @@ import { COLORS } from "~Constants"
 import { StyleSheet } from "react-native"
 import { AddressUtils } from "~Utils"
 import { veworldLogo } from "~Assets"
+import { useSafeAreaInsets } from "react-native-safe-area-context"
 
 export const QRCodeBottomSheet = React.forwardRef<BottomSheetModalMethods>(({}, ref) => {
     const theme = useTheme()
     const { LL } = useI18nContext()
+    const { bottom: bottomSafeAreaSize } = useSafeAreaInsets()
 
     const selectedAccount = useAppSelector(selectSelectedAccount)
 
@@ -82,6 +84,7 @@ export const QRCodeBottomSheet = React.forwardRef<BottomSheetModalMethods>(({}, 
                     />
                 )}
             </BaseView>
+            <BaseSpacer height={bottomSafeAreaSize} />
         </BaseBottomSheet>
     )
 })
