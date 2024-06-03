@@ -18,14 +18,12 @@ export const QRCodeBottomSheet = React.forwardRef<BottomSheetModalMethods>(({}, 
 
     const selectedAccount = useAppSelector(selectSelectedAccount)
 
-    let snapPoints = ["55%"]
-
     const { onCopyToClipboard } = useCopyClipboard()
 
     const nameOrAddress = useAppSelector(state => selectVnsNameOrAddress(state, selectedAccount.address, [4, 3]))
 
     return (
-        <BaseBottomSheet snapPoints={snapPoints} ref={ref}>
+        <BaseBottomSheet dynamicHeight ref={ref}>
             <BaseView flexDirection="row" w={100} justifyContent="space-between">
                 <BaseText typographyFont="subTitleBold">
                     {LL.TITLE_QR_CODE_FOR_ACCOUNT({

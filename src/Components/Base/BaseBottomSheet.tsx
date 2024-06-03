@@ -1,5 +1,5 @@
-import React, { useCallback, useMemo } from "react"
-import { StyleProp, StyleSheet, ViewStyle } from "react-native"
+import React, { useCallback, useMemo, useState } from "react"
+import { LayoutChangeEvent, StyleProp, StyleSheet, ViewStyle } from "react-native"
 import {
     BottomSheetBackdrop,
     BottomSheetBackdropProps,
@@ -22,6 +22,7 @@ type Props = Omit<BottomSheetModalProps, "snapPoints"> & {
     children: React.ReactNode
     title?: LocalizedString
     snapPoints?: string[]
+    dynamicHeight?: boolean
     ignoreMinimumSnapPoint?: boolean
     contentStyle?: StyleProp<ViewStyle>
     noMargins?: boolean
@@ -39,6 +40,7 @@ type Props = Omit<BottomSheetModalProps, "snapPoints"> & {
  * @prop {(React.ReactNode)} children - The content of the modal.
  * @prop {(LocalizedString|undefined)} title - The title of the modal.
  * @prop {(string[]|undefined)} snapPoints - Snap points for the bottom sheet. They should be an array of strings, each representing a percentage.
+ * @prop {(boolean)} dynamicHeight - If true, the height of the bottom sheet will be determined by the content and snapPoints are ignored.
  * @prop {(boolean|undefined)} ignoreMinimumSnapPoint - If `true`, the minimum snap point is not enforced to 55% of the screen height.
  * @prop {(StyleProp<ViewStyle>|undefined)} contentStyle - Styles for the content view.
  * @prop {(boolean|undefined)} noMargins - If `true`, the content does not have horizontal or vertical margins.
@@ -53,6 +55,7 @@ export const BaseBottomSheet = React.forwardRef<BottomSheetModalMethods, Props>(
         {
             contentStyle,
             snapPoints,
+            dynamicHeight = false,
             title,
             ignoreMinimumSnapPoint = false,
             footerStyle,
@@ -68,6 +71,13 @@ export const BaseBottomSheet = React.forwardRef<BottomSheetModalMethods, Props>(
         const { styles } = useThemedStyles(baseStyles)
         const reducedMotion = useReducedMotion()
         useBackHandler(backHandlerEvent)
+
+        const [contentHeight, setContentHeight] = useState<number>(0)
+
+        const onLayoutHandler = useCallback((event: LayoutChangeEvent) => {
+            const { height } = event.nativeEvent.layout
+            setContentHeight(height)
+        }, [])
 
         const renderBackdrop = useCallback(
             (props_: BottomSheetBackdropProps) => {
@@ -101,6 +111,10 @@ export const BaseBottomSheet = React.forwardRef<BottomSheetModalMethods, Props>(
          * the minimum snap point is at least 60% of the screen height.
          */
         const snappoints = useMemo(() => {
+            if (dynamicHeight) {
+                return contentHeight ? [contentHeight] : ["55%"]
+            }
+
             if (!snapPoints || !validateStringPercentages(snapPoints)) return ["60%"]
 
             if (isSmallScreen && !ignoreMinimumSnapPoint && Number(snapPoints[0].slice(0, -1)) < 60) {
@@ -108,7 +122,7 @@ export const BaseBottomSheet = React.forwardRef<BottomSheetModalMethods, Props>(
             }
 
             return snapPoints
-        }, [ignoreMinimumSnapPoint, snapPoints])
+        }, [contentHeight, dynamicHeight, ignoreMinimumSnapPoint, snapPoints])
 
         return (
             <BottomSheetModal
@@ -130,7 +144,8 @@ export const BaseBottomSheet = React.forwardRef<BottomSheetModalMethods, Props>(
                     py={noMargins ? 0 : 24}
                     flexGrow={1}
                     alignItems="stretch"
-                    style={contentStyle}>
+                    style={contentStyle}
+                    onLayout={onLayoutHandler}>
                     {title && <BaseText typographyFont="title">{title}</BaseText>}
                     {children}
                 </BaseView>
