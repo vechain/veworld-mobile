@@ -1,15 +1,28 @@
 import { useCallback, useMemo } from "react"
+import { AnalyticsEvent, DiscoveryDApp } from "~Constants"
+import { useAnalyticTracking } from "~Hooks"
 import {
     addBookmark,
     removeBookmark,
     selectAllDapps,
     selectBookmarkedDapps,
+    updateBookmark,
     useAppDispatch,
     useAppSelector,
 } from "~Storage/Redux"
-import { URIUtils } from "~Utils"
-import { AnalyticsEvent, DiscoveryDApp } from "~Constants"
-import { useAnalyticTracking } from "~Hooks"
+import { HTMLUtils, URIUtils } from "~Utils"
+
+const getOpenGraphDescription = async (url: string) => {
+    let description = ""
+    try {
+        const html = await HTMLUtils.getHtmlFromUrl(url)
+        description = HTMLUtils.getOpenGraphDescriptionFromHtmlDocument(html, url)
+    } catch (error) {
+        description = url
+    }
+
+    return description
+}
 
 export const useDappBookmarking = (url?: string, title?: string) => {
     const dispatch = useAppDispatch()
@@ -63,6 +76,10 @@ export const useDappBookmarking = (url?: string, title?: string) => {
                 }
 
                 dispatch(addBookmark(bookmark))
+
+                getOpenGraphDescription(url).then(desc => {
+                    dispatch(updateBookmark({ ...bookmark, desc }))
+                })
             }
 
             track(AnalyticsEvent.DISCOVERY_BOOKMARK_ADDED, {

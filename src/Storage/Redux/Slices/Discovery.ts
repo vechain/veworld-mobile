@@ -32,6 +32,10 @@ const findByHref = (dapps: DiscoveryDApp[], href: string) => {
     return dapps.find(dapp => URIUtils.compareURLs(dapp.href, href))
 }
 
+const findIndexByHref = (dapps: DiscoveryDApp[], href: string) => {
+    return dapps.findIndex(dapp => URIUtils.compareURLs(dapp.href, href))
+}
+
 export const DiscoverySlice = createSlice({
     name: "discovery",
     initialState: initialDiscoverState,
@@ -50,6 +54,15 @@ export const DiscoverySlice = createSlice({
                 state.custom = state.custom.filter(dapp => !URIUtils.compareURLs(dapp.href, href))
             } else {
                 state.favorites = state.favorites.filter(dapp => !URIUtils.compareURLs(dapp.href, href))
+            }
+        },
+        updateBookmark: (state, action: PayloadAction<DiscoveryDApp>) => {
+            const { isCustom, href } = action.payload
+            const items = isCustom ? state.custom : state.favorites
+            const index = findIndexByHref(items, href)
+
+            if (index > -1) {
+                items.splice(index, 1, action.payload)
             }
         },
         setFeaturedDApps: (state, action: PayloadAction<DiscoveryDApp[]>) => {
@@ -104,6 +117,7 @@ export const DiscoverySlice = createSlice({
 export const {
     addBookmark,
     removeBookmark,
+    updateBookmark,
     resetDiscoveryState,
     addNavigationToDApp,
     setDiscoverySectionOpened,
