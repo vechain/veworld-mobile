@@ -71,7 +71,13 @@ export const DAppCard: React.FC<Props> = memo(({ onPress, dapp, containerStyle }
 
                         {isMoreLabelVisible && (
                             <BaseView flexDirection="row-reverse">
-                                <BaseTouchable title={showLabel} underlined action={showMoewHandler} font="caption" />
+                                <BaseTouchable
+                                    style={styles.showLabel}
+                                    title={showLabel}
+                                    underlined
+                                    action={showMoewHandler}
+                                    font="caption"
+                                />
                             </BaseView>
                         )}
                     </BaseView>
@@ -96,5 +102,8 @@ const baseStyles = () =>
         nameText: {
             fontWeight: "bold",
             fontSize: 16,
+        },
+        showLabel: {
+            padding: 4,
         },
     })
