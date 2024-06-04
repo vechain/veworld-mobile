@@ -1,10 +1,11 @@
-import React, { memo } from "react"
-import { StyleProp, StyleSheet, ViewStyle } from "react-native"
+import React, { memo, useCallback, useState } from "react"
+import { LayoutChangeEvent, StyleProp, StyleSheet, ViewStyle } from "react-native"
 import { useDappBookmarking, useThemedStyles } from "~Hooks"
 import { DiscoveryDApp } from "~Constants"
-import { BaseIcon, BaseSpacer, BaseText, BaseTouchableBox, BaseView } from "~Components"
+import { BaseIcon, BaseSpacer, BaseText, BaseTouchable, BaseTouchableBox, BaseView } from "~Components"
 import { DAppIcon } from "./DAppIcon"
 import { getAppHubIconUrl } from "../utils"
+import { useI18nContext } from "~i18n"
 
 type Props = {
     dapp: DiscoveryDApp
@@ -12,19 +13,41 @@ type Props = {
     containerStyle?: StyleProp<ViewStyle>
 }
 
+const MAX_NUMBER_OF_LINES = 2
+const DESCRIPTION_FONT_SIZE = 12
+
 export const DAppCard: React.FC<Props> = memo(({ onPress, dapp, containerStyle }: Props) => {
     const { styles, theme } = useThemedStyles(baseStyles)
+    const { LL } = useI18nContext()
 
     const { isBookMarked, toggleBookmark } = useDappBookmarking(dapp.href, dapp?.name)
 
+    const [isMoreLabelVisible, setIsMoreLabelVisible] = useState<boolean>(false)
+    const [showAllLines, setShowAllLines] = useState<boolean>(false)
+
+    const numberOfLines = showAllLines ? undefined : MAX_NUMBER_OF_LINES
+    const showLabel = !showAllLines ? LL.DISCOVER_DAPP_CARD_SHOW_MORE() : LL.DISCOVER_DAPP_CARD_SHOW_LESS()
+
+    const showMoewHandler = useCallback(() => {
+        setShowAllLines(prev => !prev)
+    }, [setShowAllLines])
+
+    const onLayoutHandler = useCallback((event: LayoutChangeEvent) => {
+        const { height } = event.nativeEvent.layout
+
+        if (height > DESCRIPTION_FONT_SIZE * MAX_NUMBER_OF_LINES) {
+            setIsMoreLabelVisible(true)
+        }
+    }, [])
+
     return (
-        <BaseView w={100} flexDirection="row" style={containerStyle}>
+        <BaseView flexDirection="row" style={containerStyle}>
             <BaseTouchableBox
                 haptics="Light"
                 action={() => onPress(dapp)}
                 justifyContent="space-between"
                 containerStyle={styles.container}>
-                <BaseView flexDirection="row" style={styles.card} flex={1} pr={10}>
+                <BaseView flexDirection="row" flex={1} pr={10}>
                     <DAppIcon
                         imageSource={{
                             uri: dapp.id
@@ -38,9 +61,19 @@ export const DAppCard: React.FC<Props> = memo(({ onPress, dapp, containerStyle }
                             {dapp.name}
                         </BaseText>
                         <BaseSpacer height={4} />
-                        <BaseText ellipsizeMode="tail" numberOfLines={2} style={styles.description}>
+                        <BaseText
+                            onLayout={onLayoutHandler}
+                            ellipsizeMode="tail"
+                            numberOfLines={numberOfLines}
+                            style={{ fontSize: DESCRIPTION_FONT_SIZE }}>
                             {dapp.desc ? dapp.desc : dapp.href}
                         </BaseText>
+
+                        {isMoreLabelVisible && (
+                            <BaseView flexDirection="row-reverse">
+                                <BaseTouchable title={showLabel} underlined action={showMoewHandler} font="caption" />
+                            </BaseView>
+                        )}
                     </BaseView>
                 </BaseView>
             </BaseTouchableBox>
@@ -60,14 +93,8 @@ const baseStyles = () =>
         container: {
             flex: 1,
         },
-        card: {
-            height: 60,
-        },
         nameText: {
             fontWeight: "bold",
             fontSize: 16,
-        },
-        description: {
-            fontSize: 12,
         },
     })

@@ -501,6 +501,8 @@ const en: BaseTranslation = {
     DISCOVER_EMPTY_FAVOURITES_SUBTITLE: "No favourites added",
     DISCOVER_EMPTY_CUSTOM_NODES: "Add bookmarks in the browser",
     DISCOVER_CREATE_YOUR_DAPP: "Create your own DApp",
+    DISCOVER_DAPP_CARD_SHOW_MORE: "show more",
+    DISCOVER_DAPP_CARD_SHOW_LESS: "show less",
     BROWSER_TAB_MANAGEMENT_TITLE: "Tabs",
     BROWSER_FAVOURITES_TITLE: "Favourites",
     BROWSER_ADD_BOOKMARK_TITLE: "Add bookmark",

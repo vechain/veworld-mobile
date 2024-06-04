@@ -1798,6 +1798,14 @@ type RootTranslation = {
 	 */
 	DISCOVER_CREATE_YOUR_DAPP: string
 	/**
+	 * s​h​o​w​ ​m​o​r​e
+	 */
+	DISCOVER_DAPP_CARD_SHOW_MORE: string
+	/**
+	 * s​h​o​w​ ​l​e​s​s
+	 */
+	DISCOVER_DAPP_CARD_SHOW_LESS: string
+	/**
 	 * T​a​b​s
 	 */
 	BROWSER_TAB_MANAGEMENT_TITLE: string
@@ -4658,6 +4666,14 @@ Try reconnect your device to the internet.
 	 * Create your own DApp
 	 */
 	DISCOVER_CREATE_YOUR_DAPP: () => LocalizedString
+	/**
+	 * show more
+	 */
+	DISCOVER_DAPP_CARD_SHOW_MORE: () => LocalizedString
+	/**
+	 * show less
+	 */
+	DISCOVER_DAPP_CARD_SHOW_LESS: () => LocalizedString
 	/**
 	 * Tabs
 	 */

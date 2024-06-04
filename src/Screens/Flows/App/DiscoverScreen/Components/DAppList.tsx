@@ -16,7 +16,8 @@ const filterDapps = (dapps: DiscoveryDApp[], searchText: string) => {
     return dapps.filter(dapp => {
         return (
             dapp.name.toLowerCase().includes(searchText.toLowerCase()) ||
-            dapp.href.toLowerCase().includes(searchText.toLowerCase())
+            dapp.href.toLowerCase().includes(searchText.toLowerCase()) ||
+            dapp.desc?.toLowerCase().includes(searchText.toLowerCase())
         )
     })
 }
