@@ -26,7 +26,7 @@ env:
 - assertVisible: "VeWorld"
 - tapOn:
     id: "HomeScreen_WalletManagementButton"
-- tapOn: "Wallet 1 󰲶"
+- tapOn: "Wallet 1"
 - tapOn:
     id: "WalletDetailScreen_addAccountButton"
 - tapOn:
