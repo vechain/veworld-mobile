@@ -11,12 +11,10 @@ import { COLORS } from "~Constants"
 import { StyleSheet } from "react-native"
 import { AddressUtils } from "~Utils"
 import { veworldLogo } from "~Assets"
-import { useSafeAreaInsets } from "react-native-safe-area-context"
 
 export const QRCodeBottomSheet = React.forwardRef<BottomSheetModalMethods>(({}, ref) => {
     const theme = useTheme()
     const { LL } = useI18nContext()
-    const { bottom: bottomSafeAreaSize } = useSafeAreaInsets()
 
     const selectedAccount = useAppSelector(selectSelectedAccount)
 
@@ -66,25 +64,27 @@ export const QRCodeBottomSheet = React.forwardRef<BottomSheetModalMethods>(({}, 
                 />
 
                 {nameOrAddress.includes(".vet") && (
-                    <BaseButton
-                        haptics="Light"
-                        px={28}
-                        size="md"
-                        bgColor={theme.colors.secondary}
-                        textColor={theme.isDark ? theme.colors.textReversed : theme.colors.text}
-                        title={nameOrAddress}
-                        action={() => onCopyToClipboard(nameOrAddress, LL.COMMON_LBL_ADDRESS())}
-                        rightIcon={
-                            <BaseIcon
-                                name="content-copy"
-                                color={theme.isDark ? theme.colors.textReversed : theme.colors.text}
-                                style={baseStyles.icon}
-                            />
-                        }
-                    />
+                    <>
+                        <BaseButton
+                            haptics="Light"
+                            px={28}
+                            size="md"
+                            bgColor={theme.colors.secondary}
+                            textColor={theme.isDark ? theme.colors.textReversed : theme.colors.text}
+                            title={nameOrAddress}
+                            action={() => onCopyToClipboard(nameOrAddress, LL.COMMON_LBL_ADDRESS())}
+                            rightIcon={
+                                <BaseIcon
+                                    name="content-copy"
+                                    color={theme.isDark ? theme.colors.textReversed : theme.colors.text}
+                                    style={baseStyles.icon}
+                                />
+                            }
+                        />
+                        <BaseSpacer height={16} />
+                    </>
                 )}
             </BaseView>
-            <BaseSpacer height={bottomSafeAreaSize} />
         </BaseBottomSheet>
     )
 })

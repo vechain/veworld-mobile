@@ -1,17 +1,7 @@
-import React, { useCallback, useMemo } from "react"
+import React, { useCallback } from "react"
 import { BottomSheetModalMethods } from "@gorhom/bottom-sheet/lib/typescript/types"
-import {
-    BaseBottomSheet,
-    BaseButton,
-    BaseSpacer,
-    BaseText,
-    BaseView,
-    DeviceBox,
-    ScrollViewWithFooter,
-} from "~Components"
+import { BaseBottomSheet, BaseButton, BaseSpacer, BaseText, BaseView, DeviceBox } from "~Components"
 import { useI18nContext } from "~i18n"
-import { isSmallScreen } from "~Constants"
-import { PlatformUtils } from "~Utils"
 import { BaseDevice, Device } from "~Model"
 
 type Props = {
@@ -29,49 +19,36 @@ export const RemoveWalletWarningBottomSheet = React.forwardRef<BottomSheetModalM
             onClose()
         }, [onClose, onConfirm])
 
-        const snapPoints = useMemo(() => {
-            if (PlatformUtils.isAndroid()) {
-                return ["70%"]
-            }
-
-            if (isSmallScreen) return ["80%"]
-
-            return ["60%"]
-        }, [])
-
         return (
-            <BaseBottomSheet ref={ref} snapPoints={snapPoints} onDismiss={onClose}>
-                <ScrollViewWithFooter
-                    footer={
-                        <BaseView>
-                            <BaseButton
-                                w={100}
-                                haptics="Light"
-                                title={LL.BTN_REMOVE_WALLET().toUpperCase()}
-                                action={handleOnProceed}
-                            />
-                            <BaseSpacer height={16} />
+            <BaseBottomSheet ref={ref} dynamicHeight onDismiss={onClose}>
+                <BaseView>
+                    <BaseText typographyFont="subTitleBold">{LL.BTN_REMOVE_WALLET()}</BaseText>
+                    <BaseSpacer height={16} />
+                    <BaseText typographyFont="subSubTitleLight">{LL.BD_WALLET_REMOVAL()}</BaseText>
 
-                            <BaseButton
-                                variant="outline"
-                                w={100}
-                                haptics="Light"
-                                title={LL.COMMON_BTN_CANCEL().toUpperCase()}
-                                action={onClose}
-                            />
-                            <BaseSpacer height={16} />
-                        </BaseView>
-                    }>
+                    <BaseSpacer height={16} />
+
+                    <DeviceBox device={selectedDevice as BaseDevice} isIconVisible={false} />
+                    <BaseSpacer height={16} />
                     <BaseView>
-                        <BaseText typographyFont="subTitleBold">{LL.BTN_REMOVE_WALLET()}</BaseText>
+                        <BaseButton
+                            w={100}
+                            haptics="Light"
+                            title={LL.BTN_REMOVE_WALLET().toUpperCase()}
+                            action={handleOnProceed}
+                        />
                         <BaseSpacer height={16} />
-                        <BaseText typographyFont="subSubTitleLight">{LL.BD_WALLET_REMOVAL()}</BaseText>
 
+                        <BaseButton
+                            variant="outline"
+                            w={100}
+                            haptics="Light"
+                            title={LL.COMMON_BTN_CANCEL().toUpperCase()}
+                            action={onClose}
+                        />
                         <BaseSpacer height={16} />
-
-                        <DeviceBox device={selectedDevice as BaseDevice} isIconVisible={false} />
                     </BaseView>
-                </ScrollViewWithFooter>
+                </BaseView>
             </BaseBottomSheet>
         )
     },

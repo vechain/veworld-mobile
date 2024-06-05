@@ -6,8 +6,6 @@ import { useTheme } from "~Hooks"
 import { ConnectedAppBox } from "./ConnectedAppBox"
 import { ConnectedApp } from "~Screens"
 
-const snapPoints = ["50%", "70%"]
-
 type Props = {
     onConfirm: (topic: ConnectedApp) => void
     onCancel: () => void
@@ -25,7 +23,7 @@ export const ConfirmDisconnectBottomSheet = React.forwardRef<BottomSheetModalMet
         }
 
         return (
-            <BaseBottomSheet snapPoints={snapPoints} ref={ref} onDismiss={onCancel}>
+            <BaseBottomSheet dynamicHeight ref={ref} onDismiss={onCancel}>
                 <BaseView>
                     <BaseText typographyFont="subTitleBold">{LL.SB_CONFIRM_OPERATION()}</BaseText>
 
@@ -47,6 +45,7 @@ export const ConfirmDisconnectBottomSheet = React.forwardRef<BottomSheetModalMet
                         action={onCancel}
                         title={LL.COMMON_BTN_CANCEL().toUpperCase()}
                     />
+                    <BaseSpacer height={16} />
                 </BaseView>
             </BaseBottomSheet>
         )

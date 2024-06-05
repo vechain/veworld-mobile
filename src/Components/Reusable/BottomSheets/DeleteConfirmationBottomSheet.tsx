@@ -12,8 +12,6 @@ type Props = {
     onConfirm: () => void
 }
 
-const snapPoints = ["55%"]
-
 export const DeleteConfirmationBottomSheet = React.forwardRef<BottomSheetModalMethods, Props>(
     ({ onClose, onConfirm, title, description, deletingElement }, ref) => {
         const { LL } = useI18nContext()
@@ -21,8 +19,8 @@ export const DeleteConfirmationBottomSheet = React.forwardRef<BottomSheetModalMe
         const theme = useTheme()
 
         return (
-            <BaseBottomSheet snapPoints={snapPoints} ref={ref}>
-                <BaseView h={100} alignItems="center" justifyContent="space-between" flexGrow={1}>
+            <BaseBottomSheet dynamicHeight ref={ref}>
+                <BaseView alignItems="center">
                     <BaseView alignSelf="flex-start">
                         <BaseText typographyFont="subTitleBold">{title}</BaseText>
                         <BaseSpacer height={16} />
@@ -33,7 +31,7 @@ export const DeleteConfirmationBottomSheet = React.forwardRef<BottomSheetModalMe
                         {deletingElement}
                     </BaseView>
 
-                    <BaseView flexDirection="row" justifyContent="space-between" w={100} alignItems="center">
+                    <BaseView flexDirection="row" justifyContent="space-between" w={100} my={16} alignItems="center">
                         <BaseView alignItems="center" w={100}>
                             <BaseButton
                                 haptics="Medium"
@@ -43,16 +41,17 @@ export const DeleteConfirmationBottomSheet = React.forwardRef<BottomSheetModalMe
                                 title={LL.COMMON_BTN_REMOVE().toUpperCase()}
                                 bgColor={theme.colors.primary}
                             />
+                            <BaseSpacer height={10} />
                             <BaseButton
                                 haptics="Medium"
                                 variant="outline"
                                 action={onClose}
                                 w={100}
-                                my={10}
                                 title={LL.COMMON_BTN_CANCEL().toUpperCase()}
                             />
                         </BaseView>
                     </BaseView>
+                    <BaseSpacer height={10} />
                 </BaseView>
             </BaseBottomSheet>
         )

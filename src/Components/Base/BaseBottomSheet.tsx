@@ -1,5 +1,5 @@
 import React, { useCallback, useMemo, useState } from "react"
-import { LayoutChangeEvent, StyleProp, StyleSheet, ViewStyle } from "react-native"
+import { LayoutChangeEvent, StyleProp, StyleSheet, ViewStyle, useWindowDimensions } from "react-native"
 import {
     BottomSheetBackdrop,
     BottomSheetBackdropProps,
@@ -12,11 +12,13 @@ import { BaseView } from "./BaseView"
 import { useBackHandler, useThemedStyles } from "~Hooks"
 import { ColorThemeType, isSmallScreen } from "~Constants"
 import { BackdropPressBehavior } from "@gorhom/bottom-sheet/lib/typescript/components/bottomSheetBackdrop/types"
-import { BaseText } from "~Components"
+import { BaseSpacer, BaseText } from "~Components"
 import { LocalizedString } from "typesafe-i18n"
 import { useReducedMotion } from "react-native-reanimated"
 import { isFinite } from "lodash"
 import { BackHandlerEvent } from "~Model"
+import { isAndroid } from "~Utils/PlatformUtils/PlatformUtils"
+import { useSafeAreaInsets } from "react-native-safe-area-context"
 
 type Props = Omit<BottomSheetModalProps, "snapPoints"> & {
     children: React.ReactNode
@@ -69,6 +71,8 @@ export const BaseBottomSheet = React.forwardRef<BottomSheetModalMethods, Props>(
         ref,
     ) => {
         const { styles } = useThemedStyles(baseStyles)
+        const { height: windowHeight } = useWindowDimensions()
+        const { bottom: bottomSafeAreaSize } = useSafeAreaInsets()
         const reducedMotion = useReducedMotion()
         useBackHandler(backHandlerEvent)
 
@@ -78,7 +82,7 @@ export const BaseBottomSheet = React.forwardRef<BottomSheetModalMethods, Props>(
             (event: LayoutChangeEvent) => {
                 if (dynamicHeight) {
                     const { height } = event.nativeEvent.layout
-                    setContentHeight(height)
+                    setContentHeight(prev => (prev !== height ? height : prev))
                 }
             },
             [dynamicHeight],
@@ -117,7 +121,8 @@ export const BaseBottomSheet = React.forwardRef<BottomSheetModalMethods, Props>(
          */
         const snappoints = useMemo(() => {
             if (dynamicHeight) {
-                return contentHeight ? [contentHeight] : ["55%"]
+                const percentage = Math.ceil(((contentHeight + bottomSafeAreaSize) / windowHeight) * 100)
+                return contentHeight ? [`${percentage}%`] : ["25%"]
             }
 
             if (!snapPoints || !validateStringPercentages(snapPoints)) return ["60%"]
@@ -127,7 +132,7 @@ export const BaseBottomSheet = React.forwardRef<BottomSheetModalMethods, Props>(
             }
 
             return snapPoints
-        }, [contentHeight, dynamicHeight, ignoreMinimumSnapPoint, snapPoints])
+        }, [bottomSafeAreaSize, contentHeight, dynamicHeight, ignoreMinimumSnapPoint, snapPoints, windowHeight])
 
         return (
             <BottomSheetModal
@@ -153,12 +158,14 @@ export const BaseBottomSheet = React.forwardRef<BottomSheetModalMethods, Props>(
                     onLayout={onLayoutHandler}>
                     {title && <BaseText typographyFont="title">{title}</BaseText>}
                     {children}
+                    {dynamicHeight && isAndroid() && <BaseSpacer height={16} />}
                 </BaseView>
                 {footer && (
                     <BaseView w={100} px={24} alignItems="center" justifyContent="center" style={footerStyle}>
                         {footer}
                     </BaseView>
                 )}
+                <BaseSpacer height={bottomSafeAreaSize} />
             </BottomSheetModal>
         )
     },

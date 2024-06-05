@@ -12,7 +12,7 @@ import {
 } from "~Components"
 import { useI18nContext } from "~i18n"
 
-import { ERROR_EVENTS, isSmallScreen } from "~Constants"
+import { ERROR_EVENTS } from "~Constants"
 import { URIUtils, warn } from "~Utils"
 import { Network } from "~Model"
 import { selectCustomNetworks, useAppDispatch, useAppSelector, validateAndUpdateCustomNode } from "~Storage/Redux"
@@ -22,8 +22,6 @@ type Props = {
     onClose: () => void
     network?: Network
 }
-
-const snapPoints = [isSmallScreen ? "60%" : "52%"]
 
 export const EditCustomNodeBottomSheet = React.forwardRef<BottomSheetModalMethods, Props>(
     ({ onClose, network }, ref) => {
@@ -93,8 +91,8 @@ export const EditCustomNodeBottomSheet = React.forwardRef<BottomSheetModalMethod
         )
 
         return (
-            <BaseBottomSheet snapPoints={snapPoints} ref={ref}>
-                <BaseView w={100} h={100} flexGrow={1} justifyContent="space-between">
+            <BaseBottomSheet dynamicHeight ref={ref}>
+                <BaseView w={100}>
                     <BaseView>
                         <BaseView flexDirection="row" w={100}>
                             <BaseText typographyFont="subTitleBold">{LL.BTN_EDIT_CUSTOM_NODE()}</BaseText>
