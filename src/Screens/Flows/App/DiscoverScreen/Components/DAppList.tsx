@@ -3,11 +3,17 @@ import { DiscoveryDApp } from "~Constants"
 import { FlatList } from "react-native-gesture-handler"
 import { DAppCard } from "~Screens/Flows/App/DiscoverScreen/Components/DAppCard"
 import { useScrollToTop } from "@react-navigation/native"
-import { ScrollView, StyleSheet } from "react-native"
+import { StyleSheet, TextInput } from "react-native"
 import { BaseSkeleton, BaseSpacer, BaseView } from "~Components"
 import { useTheme } from "~Hooks"
 import { selectFeaturedDapps, useAppSelector } from "~Storage/Redux"
 import { HeaderSection } from "./HeaderSection"
+import Animated, {
+    useAnimatedProps,
+    useAnimatedRef,
+    useDerivedValue,
+    useScrollViewOffset,
+} from "react-native-reanimated"
 
 export enum DAppType {
     ALL = "all",
@@ -26,6 +32,9 @@ export enum DAppType {
 //     })
 // }
 
+const AnimatedTextInput = Animated.createAnimatedComponent(TextInput)
+Animated.addWhitelistedNativeProps({ text: true })
+
 type Props = {
     onDAppPress: (dapp: DiscoveryDApp) => void
     isLoading?: boolean
@@ -34,19 +43,16 @@ type Props = {
 export const DAppList: React.FC<Props> = ({ onDAppPress, isLoading }: Props) => {
     const flatListRef = useRef(null)
     useScrollToTop(flatListRef)
+
     const theme = useTheme()
-
     const [selectedDapps, setSelectedDapps] = useState(DAppType.ALL)
-
     const renderItem = useCallback(
         ({ item }: { item: DiscoveryDApp }) => {
             return <DAppCard dapp={item} onPress={onDAppPress} />
         },
         [onDAppPress],
     )
-
     const dapps: DiscoveryDApp[] = useAppSelector(selectFeaturedDapps)
-
     const filteredDapps = React.useMemo(() => {
         switch (selectedDapps) {
             case DAppType.ALL:
@@ -69,12 +75,17 @@ export const DAppList: React.FC<Props> = ({ onDAppPress, isLoading }: Props) => 
                 return dapps
         }
     }, [dapps, selectedDapps])
-
     const renderSeparator = useCallback(() => <BaseSpacer height={24} />, [])
-
     const renderHeader = useCallback(() => {
         return <HeaderSection setSelectedDapps={setSelectedDapps} />
     }, [setSelectedDapps])
+    const animatedRef = useAnimatedRef<Animated.ScrollView>()
+    const offset = useScrollViewOffset(animatedRef)
+    const text = useDerivedValue(() => `Scroll offset: ${offset.value.toFixed(1)}`)
+    const animatedProps = useAnimatedProps(() => ({
+        text: text.value,
+        defaultValue: text.value,
+    }))
 
     if (isLoading) {
         return (
@@ -95,8 +106,10 @@ export const DAppList: React.FC<Props> = ({ onDAppPress, isLoading }: Props) => 
 
     return (
         <>
-            <ScrollView>
+            <Animated.ScrollView ref={animatedRef}>
                 {renderHeader()}
+
+                <AnimatedTextInput editable={false} value={text.value} animatedProps={animatedProps} />
 
                 <FlatList
                     ref={flatListRef}
@@ -111,7 +124,7 @@ export const DAppList: React.FC<Props> = ({ onDAppPress, isLoading }: Props) => 
                     numColumns={4}
                     columnWrapperStyle={styles.columnWrapperStyle}
                 />
-            </ScrollView>
+            </Animated.ScrollView>
         </>
     )
 }
