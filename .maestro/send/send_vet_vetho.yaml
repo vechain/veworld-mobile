@@ -4,18 +4,29 @@ env:
   AMOUNT: 0.01
   ACCOUNT: "0x435933c8064b4Ae76bE665428e0307eF2cCFBD68"
 onFlowStart:
-  - runFlow: ../../setup_reset/setupApp.yaml
+  - runFlow: ../setup_reset/setupApp.yaml
 onFlowComplete:
-  - runFlow: ../../setup_reset/resetApp.yaml
+  - runFlow: ../setup_reset/resetApp.yaml
 ---
 ## User should be able to send tokens - Send VET from Account 1 to Account 2
-- tapOn: "Send"
-- assertVisible: "Send your token"
-- tapOn: "Vechain"
+- tapOn:
+    id: "sendButton"
+- runFlow:
+    when:
+      platform: Android
+    commands:
+      - tapOn: "Vechain"
+- runFlow:
+    when:
+      platform: iOS
+    commands:
+      - tapOn: "Vechain VET"
 - inputText: ${AMOUNT}
 - tapOn: "Send"
 - tapOn: "NEXT"
-- tapOn: "Account 2"
+- tapOn:
+    id: "selectAccount"
+    index: 0
 - tapOn:
     id: "next-button"
 - runFlow:
@@ -36,12 +47,24 @@ onFlowComplete:
 ## User should be able to send tokens - Send VETHO from Account 1 to Account 2
 - tapOn:
     id: "wallet-tab"
-- tapOn: "Send"
-- tapOn: "VeThor"
+- tapOn:
+    id: "sendButton"
+- runFlow:
+    when:
+      platform: Android
+    commands:
+      - tapOn: "VeThor"
+- runFlow:
+    when:
+      platform: iOS
+    commands:
+      - tapOn: "VeThor VTHO"
 - inputText: ${AMOUNT}
 - tapOn: "Currency balance"
 - tapOn: "NEXT"
-- tapOn: "Account 2"
+- tapOn:
+    id: "selectAccount"
+    index: 0
 - tapOn:
     id: "next-button"
 - runFlow:
@@ -64,13 +87,26 @@ onFlowComplete:
 - tapOn:
     id: "AccountCard_changeAccountButton"
 - tapOn:
-    text: "Account 2"
-- tapOn: "Send"
-- tapOn: "Vechain"
+    id: "selectAccount"
+    index: 1
+- tapOn:
+    id: "sendButton"
+- runFlow:
+    when:
+      platform: Android
+    commands:
+      - tapOn: "Vechain"
+- runFlow:
+    when:
+      platform: iOS
+    commands:
+      - tapOn: "Vechain VET"
 - inputText: ${AMOUNT}
 - tapOn: "Currency balance"
 - tapOn: "NEXT"
-- tapOn: "Account 1"
+- tapOn:
+    id: "selectAccount"
+    index: 0
 - tapOn: "NEXT"
 - runFlow:
     when:

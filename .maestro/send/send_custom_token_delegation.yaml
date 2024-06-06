@@ -1,91 +1,15 @@
-#send_custom_token_delegation.yaml
+#send_token_account_method.yaml
 appId: org.vechain.veworld.app
 env:
   AMOUNT: 0.01
   ACCOUNT: "0x435933c8064b4Ae76bE665428e0307eF2cCFBD68"
   ADDRESS: "0x8a9844e4750f5ce5f7988c4d1e04c278c718feea"
 onFlowStart:
-  - runFlow: ../setup_reset/setupApp_ios.yaml
+  - runFlow: ../setup_reset/setupApp.yaml
 onFlowComplete:
-  - runFlow: ../setup_reset/resetApp_ios.yaml
+  - runFlow: ../setup_reset/resetApp.yaml
 ---
-## User should be able to send tokens delegating with account method
-- tapOn:
-    id: "AccountCard_changeAccountButton"
-- tapOn:
-    id: "selectAccount"
-    index: 0
-- tapOn:
-    id: "sendButton"
-- tapOn: "Vechain VET"
-- tapOn:
-    id: "SendScreen_amountInput"
-- inputText: ${AMOUNT}
-- tapOn: "Currency balance"
-- tapOn:
-    id: "next-button"
-- tapOn:
-    id: "selectAccount"
-    index: 0
-- tapOn:
-    id: "next-button"
-- evalScript: ${console.log('NEXT IS OK')}
-- runFlow:
-    when:
-      visible: "Select delegation"
-    commands:
-      - tapOn:
-          id: "button-ACCOUNT"
-      - tapOn:
-          id: "selectAccount"
-          index: 0
-      - tapOn:
-          id: "confirm-send-button"
-- repeat:
-    times: 6
-    commands:
-      - tapOn: "1"
-- assertVisible: "Your tokens"
-- runFlow:
-    env:
-      AMOUNT: 0.01
-    commands:
-      - tapOn:
-          id: "sendButton"
-      - tapOn: "VeThor VTHO"
-      - tapOn:
-          id: "SendScreen_amountInput"
-      - inputText: ${AMOUNT}
-      - tapOn: "Currency balance"
-      - tapOn:
-          id: "next-button"
-      - tapOn:
-          id: "selectAccount"
-          index: 0
-      - tapOn:
-          id: "next-button"
-      - evalScript: ${console.log('NEXT IS OK')}
-      - runFlow:
-          when:
-            visible: "Select delegation"
-          commands:
-            - tapOn:
-                id: "button-ACCOUNT"
-            - tapOn:
-                id: "selectAccount"
-                index: 0
-            - tapOn:
-                id: "confirm-send-button"
-      - repeat:
-          times: 6
-          commands:
-            - tapOn: "1"
-- evalScript: ${console.log('Delegation account Method complete')}
-
 ## User should be able to send custom tokens
-
-- evalScript: ${console.log('Send custom Token Flow starts')}
-
 - tapOn:
     id: "EditTokensBar_BaseIcon_manageToken"
 - tapOn:
@@ -103,7 +27,16 @@ onFlowComplete:
             id: "BackButtonHeader-BaseIcon-backButton"
 - tapOn:
     id: "sendButton"
-- tapOn: "CARP CarpToken CARP"
+- runFlow:
+    when:
+      platform: Android
+    commands:
+      - tapOn: "CarpToken"
+- runFlow:
+    when:
+      platform: iOS
+    commands:
+       - tapOn: "CARP CarpToken CARP"
 - tapOn:
     id: "SendScreen_amountInput"
 - inputText: ${AMOUNT}
