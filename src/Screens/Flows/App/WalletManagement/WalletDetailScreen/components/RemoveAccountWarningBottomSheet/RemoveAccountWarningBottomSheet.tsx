@@ -47,7 +47,7 @@ export const RemoveAccountWarningBottomSheet = React.forwardRef<BottomSheetModal
                     </BaseView>
 
                     <BaseView>
-                        <BaseSpacer height={4} />
+                        <BaseSpacer height={16} />
 
                         <BaseButton
                             w={100}
@@ -64,6 +64,7 @@ export const RemoveAccountWarningBottomSheet = React.forwardRef<BottomSheetModal
                             action={onCancel}
                         />
                     </BaseView>
+                    <BaseSpacer height={16} />
                 </BaseView>
             </BaseBottomSheet>
         )

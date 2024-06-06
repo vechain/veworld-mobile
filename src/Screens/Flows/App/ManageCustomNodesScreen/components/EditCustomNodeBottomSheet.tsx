@@ -118,6 +118,7 @@ export const EditCustomNodeBottomSheet = React.forwardRef<BottomSheetModalMethod
                             errorMessage={nodeUrlError}
                         />
                     </BaseView>
+                    <BaseSpacer height={16} />
                     <BaseView mb={20} w={100}>
                         <BaseButton
                             action={onEditNetworkPress}

@@ -36,8 +36,6 @@ type Props = {
     onClose: () => void
 }
 
-const snapPoints = ["40%"]
-
 export const AddCustomTokenBottomSheet = React.forwardRef<BottomSheetModalMethods, Props>(
     ({ tokenAddress, token, onClose }, ref) => {
         const { LL } = useI18nContext()
@@ -166,12 +164,7 @@ export const AddCustomTokenBottomSheet = React.forwardRef<BottomSheetModalMethod
 
         return (
             <>
-                <BaseBottomSheet
-                    snapPoints={snapPoints}
-                    ref={ref}
-                    contentStyle={styles.contentStyle}
-                    footerStyle={styles.footerStyle}
-                    onDismiss={handleOnDismissModal}>
+                <BaseBottomSheet dynamicHeight ref={ref} onDismiss={handleOnDismissModal}>
                     <BaseText typographyFont="subTitleBold">{LL.MANAGE_CUSTOM_TOKENS_ADD_TOKEN_TITLE()}</BaseText>
                     <BaseText typographyFont="subSubTitleLight" pt={12}>
                         {LL.MANAGE_CUSTOM_TOKENS_ADD_DESCRIPTION()}
@@ -208,6 +201,7 @@ export const AddCustomTokenBottomSheet = React.forwardRef<BottomSheetModalMethod
                         action={handleAddCustomToken}
                         disabled={!isTokenAvailable}
                     />
+                    <BaseSpacer height={16} />
                 </BaseBottomSheet>
                 {RenderCameraModal}
             </>
@@ -216,8 +210,6 @@ export const AddCustomTokenBottomSheet = React.forwardRef<BottomSheetModalMethod
 )
 
 const styles = StyleSheet.create({
-    contentStyle: { flex: 0.85 },
-    footerStyle: { flex: 0.15, paddingBottom: 24 },
     icon: {
         position: "absolute",
         top: 10,
