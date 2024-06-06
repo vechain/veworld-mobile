@@ -1,8 +1,7 @@
 import React, { memo, useState } from "react"
 import { Image, StyleSheet } from "react-native"
-import { useThemedStyles } from "~Hooks"
 import { BaseView } from "~Components"
-import { COLORS, ColorThemeType } from "~Constants"
+import { SCREEN_WIDTH } from "~Constants"
 
 type IconProps = {
     imageSource: object
@@ -10,33 +9,32 @@ type IconProps = {
 
 export const DAppIcon: React.FC<IconProps> = memo(({ imageSource }: IconProps) => {
     const [loadFallback, setLoadFallback] = useState(false)
-    const { styles } = useThemedStyles(baseStyles)
+
     return (
-        <BaseView borderRadius={20} bg={COLORS.WHITE} style={styles.iconContainer}>
+        <BaseView style={baseStyles.iconContainer}>
             <Image
                 source={loadFallback ? require("~Assets/Img/dapp-fallback.png") : imageSource}
                 // @ts-ignore
-                style={styles.icon}
+                style={baseStyles.icon}
                 onError={() => setLoadFallback(true)}
+                resizeMode="cover"
             />
         </BaseView>
     )
 })
 
-const baseStyles = (theme: ColorThemeType) =>
-    StyleSheet.create({
-        iconContainer: {
-            borderWidth: 1,
-            borderColor: theme.colors.text,
-            borderRadius: 20.5,
-            overflow: "hidden",
-            padding: 0,
-            width: 41,
-            height: 41,
-        },
-        icon: {
-            height: 40,
-            width: 40,
-            objectFit: "cover",
-        },
-    })
+const baseStyles = StyleSheet.create({
+    iconContainer: {
+        backgroundColor: "white",
+        borderRadius: 13,
+        overflow: "hidden",
+        height: 60,
+        width: SCREEN_WIDTH / 4 - 36,
+        justifyContent: "center",
+        alignItems: "center",
+    },
+    icon: {
+        height: 60,
+        width: SCREEN_WIDTH / 4 - 36,
+    },
+})

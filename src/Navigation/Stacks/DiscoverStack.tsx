@@ -1,6 +1,6 @@
 import React from "react"
 import { createNativeStackNavigator } from "@react-navigation/native-stack"
-import { DiscoverScreen, InAppBrowser } from "~Screens"
+import { DiscoverScreen, FavouritesScreen, InAppBrowser } from "~Screens"
 import { Routes } from "~Navigation/Enums"
 import { useNavAnimation } from "~Hooks"
 
@@ -24,6 +24,17 @@ export const DiscoverStack = () => {
             <Group>
                 <Screen name={Routes.DISCOVER} component={DiscoverScreen} options={{ headerShown: false }} />
                 <Screen name={Routes.BROWSER} component={InAppBrowser} options={{ headerShown: false }} />
+            </Group>
+
+            <Group
+                screenOptions={{
+                    presentation: "modal",
+                }}>
+                <Screen
+                    name={Routes.DISCOVER_FAVOURITES}
+                    component={FavouritesScreen}
+                    options={{ headerShown: false }}
+                />
             </Group>
         </Navigator>
     )

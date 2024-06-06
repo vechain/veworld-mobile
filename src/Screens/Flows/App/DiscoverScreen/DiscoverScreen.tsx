@@ -1,49 +1,36 @@
-import React, { useCallback, useEffect, useMemo, useRef } from "react"
-import { BaseIcon, BaseSpacer, BaseText, BaseTextInput, BaseView, Layout, SelectedNetworkViewer } from "~Components"
+import React, { memo, useCallback, useEffect, useMemo, useRef } from "react"
+import { BaseButton, BaseText, BaseView, Layout, SelectedNetworkViewer } from "~Components"
 import { useI18nContext } from "~i18n"
-import { AnalyticsEvent, ColorThemeType, DiscoveryDApp } from "~Constants"
-import { useAnalyticTracking, useBrowserSearch, useThemedStyles } from "~Hooks"
-import { NativeSyntheticEvent, StyleSheet, TextInputChangeEventData } from "react-native"
+import { AnalyticsEvent, DiscoveryDApp, SCREEN_WIDTH } from "~Constants"
+import { useAnalyticTracking, useBrowserSearch, useKeyboard, useThemedStyles } from "~Hooks"
 import { useNavigation, useScrollToTop } from "@react-navigation/native"
 import { Routes } from "~Navigation"
 import { DAppList } from "~Screens/Flows/App/DiscoverScreen/Components/DAppList"
 import {
     addNavigationToDApp,
-    selectBookmarkedDapps,
-    selectFeaturedDapps,
     selectHasUserOpenedDiscovery,
     setDiscoverySectionOpened,
     useAppDispatch,
     useAppSelector,
 } from "~Storage/Redux"
-import { createMaterialTopTabNavigator } from "@react-navigation/material-top-tabs"
-import { TabBar } from "./Components/TabBar"
-import Animated, { useSharedValue, withDelay, withSpring, withTiming } from "react-native-reanimated"
-import { PlatformUtils } from "~Utils"
 import { useFetchFeaturedDApps } from "./Hooks/useFetchFeaturedDApps"
 import { RumManager } from "~Logging/RumManager"
+import { StyleSheet } from "react-native"
+import Animated, { ReduceMotion, useSharedValue, withSpring } from "react-native-reanimated"
+import LinearGradient from "react-native-linear-gradient"
+import { SearchBar } from "./Components/SearchBar"
 
 export const DiscoverScreen: React.FC = () => {
-    const { theme, styles } = useThemedStyles(baseStyles)
     const { LL } = useI18nContext()
     const nav = useNavigation()
-    const [filteredSearch, setFilteredSearch] = React.useState<string>()
-    const animatedIconOpacity = useSharedValue(0)
-    const animatedIconRightPosition = useSharedValue(-20)
     const { isLoading } = useFetchFeaturedDApps()
-
     const flatListRef = useRef(null)
     useScrollToTop(flatListRef)
-
-    const { navigateToBrowser } = useBrowserSearch()
     const dispatch = useAppDispatch()
+    const { navigateToBrowser } = useBrowserSearch()
 
-    /**
-     * For metrics on discovery screen
-     */
     const hasOpenedDiscovery = useAppSelector(selectHasUserOpenedDiscovery)
     const track = useAnalyticTracking()
-
     const ddLogger = useMemo(() => new RumManager(), [])
 
     useEffect(() => {
@@ -54,24 +41,9 @@ export const DiscoverScreen: React.FC = () => {
         }
     }, [track, hasOpenedDiscovery, dispatch, ddLogger])
 
-    useEffect(() => {
-        if (filteredSearch?.length) {
-            animatedIconOpacity.value = withDelay(100, withTiming(1, { duration: 200 }))
-            animatedIconRightPosition.value = withSpring(2.5)
-        } else {
-            animatedIconOpacity.value = withTiming(0, { duration: 150 })
-            animatedIconRightPosition.value = withSpring(-20)
-        }
-    }, [animatedIconOpacity, animatedIconRightPosition, filteredSearch])
-
-    const onTextChange = (e: NativeSyntheticEvent<TextInputChangeEventData>) => {
-        setFilteredSearch(e.nativeEvent.text)
-    }
-
     const onDAppPress = useCallback(
         (dapp: DiscoveryDApp) => {
             nav.navigate(Routes.BROWSER, { url: dapp.href })
-            setFilteredSearch(undefined)
 
             track(AnalyticsEvent.DISCOVERY_USER_OPENED_DAPP, {
                 url: dapp.href,
@@ -83,61 +55,36 @@ export const DiscoverScreen: React.FC = () => {
                 dispatch(addNavigationToDApp({ href: dapp.href, isCustom: dapp.isCustom }))
             }, 1000)
         },
-        [track, dispatch, nav, setFilteredSearch, ddLogger],
+        [track, dispatch, nav, ddLogger],
     )
+
+    const [filteredSearch, setFilteredSearch] = React.useState("")
+    const onTextChange = (text: string) => {
+        setFilteredSearch(text)
+    }
+
+    const mountButton = useMemo(() => {
+        return !!filteredSearch.length
+    }, [filteredSearch.length])
 
     const onSearch = useCallback(() => {
         if (!filteredSearch) return
-
         navigateToBrowser(filteredSearch)
-        setFilteredSearch(undefined)
-    }, [filteredSearch, navigateToBrowser, setFilteredSearch])
-
-    const Tab = createMaterialTopTabNavigator()
-
-    const FeaturedScreen = useCallback(
-        () => (
-            <DAppList
-                isLoading={isLoading}
-                onDAppPress={onDAppPress}
-                filteredSearch={filteredSearch}
-                selector={selectFeaturedDapps}
-                setFilteredSearch={setFilteredSearch}
-            />
-        ),
-        [filteredSearch, onDAppPress, setFilteredSearch, isLoading],
-    )
-    const FavouriteScreen = useCallback(
-        () => (
-            <DAppList
-                onDAppPress={onDAppPress}
-                filteredSearch={filteredSearch}
-                selector={selectBookmarkedDapps}
-                setFilteredSearch={setFilteredSearch}
-            />
-        ),
-        [filteredSearch, onDAppPress, setFilteredSearch],
-    )
-
-    const bookmarkedDApps = useAppSelector(selectBookmarkedDapps)
-
-    const initialRoute = useMemo(() => {
-        if (bookmarkedDApps.length > 0) {
-            return Routes.DISCOVER_FAVOURITES
-        }
-
-        return Routes.DISCOVER_FEATURED
-    }, [bookmarkedDApps])
+    }, [filteredSearch, navigateToBrowser])
 
     const renderHeader = useMemo(() => {
         return (
-            <BaseView flexDirection="row" justifyContent="space-between" alignItems="center" mx={24} pb={16}>
-                <BaseText typographyFont="largeTitle" testID="settings-screen">
-                    {LL.DISCOVER_TITLE()}
-                </BaseText>
+            <>
+                <BaseView flexDirection="row" justifyContent="space-between" alignItems="center" mx={24}>
+                    <BaseText typographyFont="largeTitle" testID="settings-screen">
+                        {LL.DISCOVER_TITLE()}
+                    </BaseText>
 
-                <SelectedNetworkViewer />
-            </BaseView>
+                    <SelectedNetworkViewer />
+                </BaseView>
+
+                <SearchBar onTextChange={onTextChange} />
+            </>
         )
     }, [LL])
 
@@ -146,75 +93,74 @@ export const DiscoverScreen: React.FC = () => {
             fixedHeader={renderHeader}
             noBackButton
             noMargin
+            hasSafeArea
             fixedBody={
                 <>
-                    {/*Search Bar*/}
-                    <BaseView w={100} flexDirection="row" px={24} pt={24}>
-                        <BaseView flex={1}>
-                            <BaseTextInput
-                                placeholder={LL.DISCOVER_SEARCH()}
-                                onChange={onTextChange}
-                                value={filteredSearch}
-                                style={styles.searchBar}
-                            />
-                            <Animated.View
-                                style={[
-                                    styles.searchIconContainer,
-                                    {
-                                        opacity: animatedIconOpacity,
-                                        right: animatedIconRightPosition,
-                                    },
-                                ]}>
-                                <BaseIcon
-                                    name={"search-web"}
-                                    size={25}
-                                    action={onSearch}
-                                    color={theme.colors.text}
-                                    borderRadius={20}
-                                />
-                            </Animated.View>
-                        </BaseView>
-                    </BaseView>
-
-                    <BaseSpacer height={16} />
-
-                    {/*Tab Navigator*/}
-                    <Tab.Navigator tabBar={TabBar} initialRouteName={initialRoute}>
-                        <Tab.Screen
-                            name={Routes.DISCOVER_FAVOURITES}
-                            options={{ title: LL.DISCOVER_TAB_FAVOURITES() }}
-                            component={FavouriteScreen}
-                        />
-                        {PlatformUtils.isAndroid() && (
-                            <Tab.Screen
-                                name={Routes.DISCOVER_FEATURED}
-                                options={{ title: LL.DISCOVER_TAB_FEATURED() }}
-                                component={FeaturedScreen}
-                            />
-                        )}
-                    </Tab.Navigator>
+                    <WebSearchPopUp onSearch={onSearch} mountButton={mountButton} />
+                    <DAppList isLoading={isLoading} onDAppPress={onDAppPress} />
                 </>
             }
         />
     )
 }
 
-const baseStyles = (theme: ColorThemeType) =>
+const WebSearchPopUp = memo(({ onSearch, mountButton }: { onSearch: () => void; mountButton: boolean }) => {
+    const { visible, bottomStyle } = useKeyboard()
+    const bottom = useSharedValue(0)
+
+    useEffect(() => {
+        if (mountButton) {
+            bottom.value = withSpring(bottomStyle, {
+                mass: 1.2,
+                damping: 22,
+                stiffness: 190,
+                overshootClamping: false,
+                restDisplacementThreshold: 0.01,
+                restSpeedThreshold: 2,
+                reduceMotion: ReduceMotion.System,
+            })
+        } else {
+            bottom.value = withSpring(-100, {
+                mass: 1,
+                damping: 10,
+                stiffness: 230,
+                overshootClamping: true,
+                restDisplacementThreshold: 0.01,
+                restSpeedThreshold: 2,
+                reduceMotion: ReduceMotion.System,
+            })
+        }
+    }, [bottom, bottomStyle, mountButton, visible])
+
+    const { styles, theme } = useThemedStyles(baseStyles)
+
+    return (
+        <>
+            <Animated.View style={[styles.popUpContainer, { bottom }]}>
+                <LinearGradient colors={[theme.colors.backgroundTransparent, theme.colors.background]}>
+                    <BaseView mx={20} style={{ width: SCREEN_WIDTH - 40 }} pb={24}>
+                        <BaseButton
+                            size="lg"
+                            haptics="Medium"
+                            w={100}
+                            title={"SEARCH THE WEB"}
+                            action={onSearch}
+                            activeOpacity={0.94}
+                        />
+                    </BaseView>
+                </LinearGradient>
+            </Animated.View>
+        </>
+    )
+})
+
+const baseStyles = () =>
     StyleSheet.create({
-        searchBar: {
-            paddingVertical: 10,
-            paddingRight: 35,
-            height: 40,
-        },
-        searchIconContainer: {
-            borderColor: theme.colors.text,
+        popUpContainer: {
             position: "absolute",
+            bottom: -100,
+            left: 0,
             right: 0,
-            top: 0,
-            bottom: 0,
-            justifyContent: "center",
-            alignItems: "center",
-            width: 40,
-            height: 40,
+            zIndex: 2,
         },
     })

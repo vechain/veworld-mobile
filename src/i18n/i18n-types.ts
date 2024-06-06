@@ -1758,7 +1758,7 @@ type RootTranslation = {
 	 */
 	DISCOVER_SUB_TITLE: string
 	/**
-	 * S​e​a​r​c​h​ ​o​r​ ​t​y​p​e​ ​a​ ​U​R​L
+	 * S​e​a​r​c​h​ ​t​h​e​ ​W​e​b
 	 */
 	DISCOVER_SEARCH: string
 	/**
@@ -1794,9 +1794,21 @@ type RootTranslation = {
 	 */
 	DISCOVER_EMPTY_CUSTOM_NODES: string
 	/**
-	 * C​r​e​a​t​e​ ​y​o​u​r​ ​o​w​n​ ​D​A​p​p
+	 * M​a​k​e​ ​y​o​u​r​ ​o​w​n​ ​D​A​p​p​ ​o​n​ ​V​e​c​h​a​i​n
 	 */
 	DISCOVER_CREATE_YOUR_DAPP: string
+	/**
+	 * V​e​B​e​t​t​e​r​D​A​O​ ​D​A​p​p​s
+	 */
+	DISCOVER_DAPPS_TITLE: string
+	/**
+	 * S​e​e​ ​a​l​l
+	 */
+	DISCOVER_SEE_ALL_BOOKMARKS: string
+	/**
+	 * E​c​o​s​y​s​t​e​m
+	 */
+	DISCOVER_ECOSYSTEM: string
 	/**
 	 * T​a​b​s
 	 */
@@ -4619,7 +4631,7 @@ Try reconnect your device to the internet.
 	 */
 	DISCOVER_SUB_TITLE: () => LocalizedString
 	/**
-	 * Search or type a URL
+	 * Search the Web
 	 */
 	DISCOVER_SEARCH: () => LocalizedString
 	/**
@@ -4655,9 +4667,21 @@ Try reconnect your device to the internet.
 	 */
 	DISCOVER_EMPTY_CUSTOM_NODES: () => LocalizedString
 	/**
-	 * Create your own DApp
+	 * Make your own DApp on Vechain
 	 */
 	DISCOVER_CREATE_YOUR_DAPP: () => LocalizedString
+	/**
+	 * VeBetterDAO DApps
+	 */
+	DISCOVER_DAPPS_TITLE: () => LocalizedString
+	/**
+	 * See all
+	 */
+	DISCOVER_SEE_ALL_BOOKMARKS: () => LocalizedString
+	/**
+	 * Ecosystem
+	 */
+	DISCOVER_ECOSYSTEM: () => LocalizedString
 	/**
 	 * Tabs
 	 */
