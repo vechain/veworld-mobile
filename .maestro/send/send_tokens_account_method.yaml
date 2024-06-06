@@ -32,6 +32,9 @@ onFlowComplete:
 - tapOn: "Currency balance"
 - tapOn:
      id: "next-button"
+- assertVisible:
+          id: "selectAccount"
+          index: 0
 - tapOn:
      id: "selectAccount"
      index: 0
@@ -75,6 +78,9 @@ onFlowComplete:
       - tapOn: "Currency balance"
       - tapOn:
           id: "next-button"
+      - assertVisible:
+          id: "selectAccount"
+          index: 0
       - tapOn:
           id: "selectAccount"
           index: 0
@@ -82,12 +88,26 @@ onFlowComplete:
           id: "next-button"
       - tapOn:
           id: "button-ACCOUNT"
-      - assertVisible:
-          id: "selectAccount"
-          index: 0
-      - tapOn:
-          id: "selectAccount"
-          index: 0
+      - runFlow:
+            when:
+               platform: Android
+            commands:
+              - assertVisible:
+                 text: "Account 2"
+                 index: 1
+              - tapOn:
+                 text: "Account 2"
+                 index: 1
+      - runFlow:
+            when:
+               platform: iOS
+            commands:
+               - assertVisible:
+                  id: "selectAccount"
+                  index: 0
+               - tapOn:
+                  id: "selectAccount"
+                  index: 0
       - tapOn:
           id: "confirm-send-button"
       - repeat:
