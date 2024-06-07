@@ -35,7 +35,6 @@ export const CreateContactBottomSheet = React.forwardRef<BottomSheetModalMethods
         }, [addressError.length, nameError.length])
 
         const dispatch = useAppDispatch()
-        const snapPoints = creationMode ? ["57%"] : ["40%"]
 
         const backToChooseMode = useCallback(() => {
             setAlias("")
@@ -60,9 +59,9 @@ export const CreateContactBottomSheet = React.forwardRef<BottomSheetModalMethods
         }, [address, onClose, onSubmit])
 
         return (
-            <BaseBottomSheet ref={ref} snapPoints={snapPoints}>
+            <BaseBottomSheet ref={ref} dynamicHeight>
                 {creationMode ? (
-                    <BaseView justifyContent="space-between" flexGrow={1}>
+                    <BaseView>
                         <BaseView alignItems="stretch" w={100}>
                             <BaseText typographyFont="subTitleBold">{LL.SEND_CREATE_CONTACT_TITLE()}</BaseText>
                             <BaseSpacer height={16} />
@@ -106,6 +105,8 @@ export const CreateContactBottomSheet = React.forwardRef<BottomSheetModalMethods
                             <BaseText typographyFont="subSubTitleLight">{LL.SEND_CREATE_CONTACT_SUBTITLE()}</BaseText>
                         </BaseView>
 
+                        <BaseSpacer height={16} />
+
                         <BaseView>
                             <BaseButton
                                 w={100}
@@ -124,6 +125,7 @@ export const CreateContactBottomSheet = React.forwardRef<BottomSheetModalMethods
                         </BaseView>
                     </BaseView>
                 )}
+                <BaseSpacer height={16} />
             </BaseBottomSheet>
         )
     },

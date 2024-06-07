@@ -108,6 +108,7 @@ export const ScanBottomSheet = React.forwardRef<BottomSheetModalMethods, Props>(
 
     return (
         <BaseBottomSheet
+            bottomSafeArea={false}
             handleComponent={null}
             noMargins={true}
             snapPoints={snapPoints}

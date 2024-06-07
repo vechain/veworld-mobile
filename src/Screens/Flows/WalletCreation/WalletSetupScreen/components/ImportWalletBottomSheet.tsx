@@ -6,13 +6,12 @@ import { useAnalyticTracking, useTheme } from "~Hooks"
 import { debug } from "~Utils"
 import { useNavigation } from "@react-navigation/native"
 import { Routes } from "~Navigation"
-import { AnalyticsEvent, ERROR_EVENTS, isSmallScreen } from "~Constants"
+import { AnalyticsEvent, ERROR_EVENTS } from "~Constants"
 
 type Props = {
     onClose: () => void
 }
 
-const snapPoints = isSmallScreen ? ["60%", "70%", "90%"] : ["50%", "70%", "90%"]
 export const ImportWalletBottomSheet = React.forwardRef<BottomSheetModalMethods, Props>(({ onClose }, ref) => {
     const { LL } = useI18nContext()
     const nav = useNavigation()
@@ -36,7 +35,7 @@ export const ImportWalletBottomSheet = React.forwardRef<BottomSheetModalMethods,
     }, [track, onClose, nav])
 
     return (
-        <BaseBottomSheet snapPoints={snapPoints} onChange={handleSheetChanges} ref={ref}>
+        <BaseBottomSheet dynamicHeight onChange={handleSheetChanges} ref={ref}>
             <BaseView flexDirection="column" w={100}>
                 <BaseText typographyFont="subTitleBold">{LL.TITLE_IMPORT_WALLET_TYPE()}</BaseText>
                 <BaseSpacer height={16} />
@@ -70,6 +69,7 @@ export const ImportWalletBottomSheet = React.forwardRef<BottomSheetModalMethods,
                 </BaseView>
                 <BaseIcon name="chevron-right" size={24} color={theme.colors.text} />
             </BaseTouchableBox>
+            <BaseSpacer height={16} />
         </BaseBottomSheet>
     )
 })

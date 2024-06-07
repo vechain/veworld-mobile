@@ -1,17 +1,8 @@
-import React, { useCallback, useMemo } from "react"
+import React, { useCallback } from "react"
 import { BottomSheetModalMethods } from "@gorhom/bottom-sheet/lib/typescript/types"
-import {
-    BaseBottomSheet,
-    BaseButton,
-    BaseIcon,
-    BaseSpacer,
-    BaseText,
-    BaseView,
-    CheckBoxWithText,
-    ScrollViewWithFooter,
-} from "~Components"
+import { BaseBottomSheet, BaseButton, BaseIcon, BaseSpacer, BaseText, BaseView, CheckBoxWithText } from "~Components"
 import { useI18nContext } from "~i18n"
-import { AnalyticsEvent, COLORS, isSmallScreen } from "~Constants"
+import { AnalyticsEvent, COLORS } from "~Constants"
 import { StyleSheet } from "react-native"
 import { PlatformUtils } from "~Utils"
 import { useAnalyticTracking } from "~Hooks"
@@ -41,41 +32,9 @@ export const BackupWarningBottomSheet = React.forwardRef<BottomSheetModalMethods
             setChecked(false)
         }, [])
 
-        const snapPoints = useMemo(() => {
-            if (PlatformUtils.isAndroid() && isUpgradeSecurity) {
-                return ["70%"]
-            }
-
-            if (isSmallScreen) return ["80%"]
-
-            return ["60%"]
-        }, [isUpgradeSecurity])
-
         return (
-            <BaseBottomSheet ref={ref} snapPoints={snapPoints} onDismiss={onDismiss}>
-                <ScrollViewWithFooter
-                    footer={
-                        <BaseView>
-                            <CheckBoxWithText
-                                isChecked={isChecked}
-                                text={LL.BTN_SECURITY_OPERATION_CHECKBOX()}
-                                checkAction={setChecked}
-                                testID="security-operation-app-checkbox"
-                            />
-
-                            <BaseSpacer height={4} />
-
-                            <BaseButton
-                                w={100}
-                                haptics="Light"
-                                title={LL.COMMON_PROCEED()}
-                                disabled={!isChecked}
-                                action={handleOnProceed}
-                            />
-                            <BaseSpacer height={16} />
-                        </BaseView>
-                    }
-                    isScrollEnabled={false}>
+            <BaseBottomSheet ref={ref} dynamicHeight onDismiss={onDismiss}>
+                <BaseView>
                     <BaseView>
                         <BaseText typographyFont="subTitleBold">{LL.TITLE_BACKUP_YOUR_PHRASE()}</BaseText>
                         <BaseSpacer height={16} />
@@ -99,7 +58,26 @@ export const BackupWarningBottomSheet = React.forwardRef<BottomSheetModalMethods
                             </BaseText>
                         )}
                     </BaseView>
-                </ScrollViewWithFooter>
+                    <BaseView>
+                        <CheckBoxWithText
+                            isChecked={isChecked}
+                            text={LL.BTN_SECURITY_OPERATION_CHECKBOX()}
+                            checkAction={setChecked}
+                            testID="security-operation-app-checkbox"
+                        />
+
+                        <BaseSpacer height={4} />
+
+                        <BaseButton
+                            w={100}
+                            haptics="Light"
+                            title={LL.COMMON_PROCEED()}
+                            disabled={!isChecked}
+                            action={handleOnProceed}
+                        />
+                        <BaseSpacer height={16} />
+                    </BaseView>
+                </BaseView>
             </BaseBottomSheet>
         )
     },

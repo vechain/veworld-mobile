@@ -4,14 +4,11 @@ import { BaseButton, BaseIcon, BaseSpacer, BaseText, BaseView, MnemonicCard, Bas
 import { useI18nContext } from "~i18n"
 import { useCopyClipboard, useThemedStyles } from "~Hooks"
 import { StyleSheet } from "react-native"
-import { isSmallScreen } from "~Constants"
 
 type Props = {
     mnemonicArray: string[]
     onClose: () => void
 }
-
-const snapPoints = isSmallScreen ? ["55%"] : ["45%"]
 
 export const BackupMnemonicBottomSheet = React.forwardRef<BottomSheetModalMethods, Props>(({ mnemonicArray }, ref) => {
     const { LL } = useI18nContext()
@@ -21,14 +18,14 @@ export const BackupMnemonicBottomSheet = React.forwardRef<BottomSheetModalMethod
     const { onCopyToClipboard } = useCopyClipboard()
 
     return (
-        <BaseBottomSheet snapPoints={snapPoints} ref={ref}>
+        <BaseBottomSheet dynamicHeight ref={ref}>
             <BaseView flexDirection="row" w={100}>
                 <BaseText typographyFont="subTitleBold">{LL.BTN_BACKUP_MENMONIC()}</BaseText>
             </BaseView>
 
             <BaseSpacer height={24} />
 
-            <BaseView alignItems="flex-start">
+            <BaseView alignItems="flex-start" mb={16}>
                 <MnemonicCard mnemonicArray={mnemonicArray} souceScreen="BackupMnemonicBottomSheet" />
 
                 <BaseSpacer height={16} />
