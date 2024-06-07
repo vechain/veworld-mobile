@@ -10,8 +10,6 @@ type Props = {
     onUnlock: (pwd: string) => Promise<void>
 }
 
-const snapPoints = ["40%"]
-
 export const UnlockKeystoreBottomSheet = React.forwardRef<BottomSheetModalMethods, Props>(
     ({ onHide, onUnlock }, ref) => {
         const { LL } = useI18nContext()
@@ -35,15 +33,16 @@ export const UnlockKeystoreBottomSheet = React.forwardRef<BottomSheetModalMethod
 
         return (
             <BaseBottomSheet
-                snapPoints={snapPoints}
+                dynamicHeight
                 ignoreMinimumSnapPoint
                 ref={ref}
                 onChange={handleSheetChanges}
                 title={LL.TITLE_UNLOCK_KEYSTORE()}>
-                <BaseView flexGrow={1} justifyContent="space-between">
+                <BaseView>
                     <BaseText typographyFont="subSubTitleLight" pt={8}>
                         {LL.SB_INSERT_KEYSTORE_PASSWORD()}
                     </BaseText>
+                    <BaseSpacer height={16} />
                     <BaseBottomSheetTextInput
                         value={password}
                         onChangeText={setPassword}
@@ -53,7 +52,7 @@ export const UnlockKeystoreBottomSheet = React.forwardRef<BottomSheetModalMethod
                         placeholder="Insert password..."
                         testID="unlock-keystore-password-input"
                     />
-
+                    <BaseSpacer height={16} />
                     <BaseButton
                         haptics="Medium"
                         disabled={password.length < 1}

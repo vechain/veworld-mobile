@@ -1,4 +1,4 @@
-import React, { useCallback } from "react"
+import React, { useCallback, useMemo } from "react"
 import { BottomSheetFlatList } from "@gorhom/bottom-sheet"
 import { BottomSheetModalMethods } from "@gorhom/bottom-sheet/lib/typescript/types"
 import { useScrollableBottomSheet } from "~Hooks"
@@ -26,8 +26,6 @@ type Props = {
 
 const ItemSeparatorComponent = () => <BaseSpacer height={16} />
 
-const snapPoints = ["50%", "75%", "90%"]
-
 // component to select an account
 export const SelectAccountBottomSheet = React.forwardRef<BottomSheetModalMethods, Props>(
     (
@@ -52,14 +50,30 @@ export const SelectAccountBottomSheet = React.forwardRef<BottomSheetModalMethods
             [closeBottomSheet, setSelectedAccount],
         )
 
+        const computeSnappoints = useMemo(() => {
+            if (accounts.length < 4) {
+                return ["50%"]
+            }
+
+            if (accounts.length > 7) {
+                return ["90%"]
+            }
+
+            if (accounts.length > 4) {
+                return ["75%", "90%"]
+            }
+
+            return ["50%", "75%", "90%"]
+        }, [accounts.length])
+
         const { flatListScrollProps, handleSheetChangePosition } = useScrollableBottomSheet({
             data: accounts,
-            snapPoints,
+            snapPoints: computeSnappoints,
         })
 
         return (
             <BaseBottomSheet
-                snapPoints={snapPoints}
+                snapPoints={computeSnappoints}
                 ref={ref}
                 onChange={handleSheetChangePosition}
                 onDismiss={onDismiss}>

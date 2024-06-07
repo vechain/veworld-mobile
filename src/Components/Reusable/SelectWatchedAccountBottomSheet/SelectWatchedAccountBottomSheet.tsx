@@ -13,8 +13,6 @@ type Props = {
     formattedBalance: string
 }
 
-const snapPoints = ["25%"]
-
 // component to select an account
 export const SelectWatchedAccountBottomSheet = React.forwardRef<BottomSheetModalMethods, Props>(
     ({ closeBottomSheet, onDismiss, isBalanceVisible = true, confirmAccount, account, formattedBalance }, ref) => {
@@ -26,17 +24,20 @@ export const SelectWatchedAccountBottomSheet = React.forwardRef<BottomSheetModal
         }, [closeBottomSheet, confirmAccount])
 
         return (
-            <BaseBottomSheet snapPoints={snapPoints} ref={ref} onDismiss={onDismiss}>
+            <BaseBottomSheet dynamicHeight ref={ref} onDismiss={onDismiss}>
                 <BaseText typographyFont="subTitleBold">{LL.SB_CONFIRM_OPERATION()}</BaseText>
                 <BaseSpacer height={12} />
                 {!!account && (
-                    <AccountCard
-                        testID="observe-wallet-account-card"
-                        account={account}
-                        onPress={handlePress}
-                        isBalanceVisible={isBalanceVisible}
-                        formattedBalance={formattedBalance}
-                    />
+                    <>
+                        <AccountCard
+                            testID="observe-wallet-account-card"
+                            account={account}
+                            onPress={handlePress}
+                            isBalanceVisible={isBalanceVisible}
+                            formattedBalance={formattedBalance}
+                        />
+                        <BaseSpacer height={12} />
+                    </>
                 )}
             </BaseBottomSheet>
         )
