@@ -22,10 +22,10 @@ import { selectAccountsByDevice, selectBalanceVisible, selectSelectedAccount } f
 import { COLORS } from "~Constants"
 import { NativeStackScreenProps } from "@react-navigation/native-stack"
 import { RootStackParamListHome, Routes } from "~Navigation"
-import { FlashList } from "@shopify/flash-list"
 import { useAccountDelete } from "./hooks"
 import { AccountUnderlay, RemoveAccountWarningBottomSheet } from "./components"
 import { SwipeableItemImperativeRef } from "react-native-swipeable-item"
+import { FlatList } from "react-native"
 
 type Props = NativeStackScreenProps<RootStackParamListHome, Routes.WALLET_DETAILS>
 
@@ -149,7 +149,7 @@ export const WalletDetailScreen = ({ route: { params } }: Props) => {
             fixedBody={
                 <BaseView flex={1} flexGrow={1}>
                     {device && !!deviceAccounts.length && (
-                        <FlashList
+                        <FlatList
                             data={deviceAccounts}
                             keyExtractor={account => account.address}
                             extraData={openedAccount}
