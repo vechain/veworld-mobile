@@ -22,3 +22,7 @@ export const selectIsAppLoading = createSelector(reducer, state => {
 export const selectIsTokensOwnedLoading = createSelector(reducer, state => {
     return state.isTokensOwnedLoading
 })
+
+export const selectDerivedPath = createSelector(reducer, state => {
+    return state.derivedPath
+})

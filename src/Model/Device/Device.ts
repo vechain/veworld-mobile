@@ -1,3 +1,4 @@
+import { DerivationPath } from "~Constants"
 import { XPub } from "../Crypto"
 import { DEVICE_TYPE, Wallet } from "../Wallet"
 
@@ -16,6 +17,7 @@ export interface BaseDevice {
     alias: string
     index: number
     position: number
+    path?: DerivationPath
 }
 
 /**

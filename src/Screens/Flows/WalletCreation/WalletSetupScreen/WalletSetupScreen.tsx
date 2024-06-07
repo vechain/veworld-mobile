@@ -9,6 +9,7 @@ import { WalletSetupSvg } from "~Assets"
 import { AnalyticsEvent } from "~Constants"
 import { selectHasOnboarded, useAppSelector } from "~Storage/Redux"
 import { RumManager } from "~Logging/RumManager"
+import { SelectDerivationPathBottomSheet } from "./components/SelectDerivationPathBottomSheet"
 
 export const WalletSetupScreen = () => {
     const nav = useNavigation()
@@ -18,6 +19,11 @@ export const WalletSetupScreen = () => {
     const userHasOnboarded = useAppSelector(selectHasOnboarded)
 
     const { ref, onOpen, onClose } = useBottomSheetModal()
+    const {
+        ref: derivationPathRef,
+        onOpen: onOpenDerivationPath,
+        onClose: onCloseDerivationPath,
+    } = useBottomSheetModal()
 
     const ddLogger = useMemo(() => new RumManager(), [])
 
@@ -39,6 +45,10 @@ export const WalletSetupScreen = () => {
         nav.navigate(Routes.OBSERVE_WALLET)
     }, [nav, track, ddLogger])
 
+    const onDerivationPathOpen = useCallback(() => {
+        onOpenDerivationPath()
+    }, [onOpenDerivationPath])
+
     useEffect(() => {
         track(AnalyticsEvent.PAGE_LOADED_IMPORT_OR_CREATE)
     }, [track])
@@ -57,7 +67,8 @@ export const WalletSetupScreen = () => {
                             {LL.BD_CREATE_WALLET_TYPE()}
                         </BaseText>
                         <BaseSpacer height={48} />
-                        <WalletSetupSvg width={"100%"} />
+
+                        <WalletSetupSvg width="100%" />
                     </BaseView>
                 </BaseView>
             }
@@ -76,7 +87,9 @@ export const WalletSetupScreen = () => {
                             </BaseView>
                             <BaseIcon name="chevron-right" size={24} color={theme.colors.text} />
                         </BaseTouchableBox>
+
                         <BaseSpacer height={16} />
+
                         <BaseTouchableBox
                             haptics="Medium"
                             action={onImportWallet}
@@ -95,6 +108,24 @@ export const WalletSetupScreen = () => {
                         </BaseTouchableBox>
 
                         <BaseSpacer height={16} />
+
+                        <BaseTouchableBox
+                            haptics="Medium"
+                            action={onDerivationPathOpen}
+                            py={16}
+                            justifyContent="space-between">
+                            <BaseIcon name="alert" size={24} color={theme.colors.text} />
+                            <BaseView flex={1} px={12}>
+                                <BaseText align="left" typographyFont="subSubTitle">
+                                    {LL.BTN_CREATE_WALLET_ADVANCED_SETUP()}
+                                </BaseText>
+                            </BaseView>
+                            <BaseIcon name="chevron-right" size={24} color={theme.colors.text} />
+                        </BaseTouchableBox>
+
+                        <BaseSpacer height={24} />
+                        <BaseSpacer height={2} width={24} background={theme.colors.separator} />
+                        <BaseSpacer height={24} />
 
                         {userHasOnboarded && (
                             <>
@@ -122,6 +153,7 @@ export const WalletSetupScreen = () => {
                     </BaseView>
 
                     <ImportWalletBottomSheet ref={ref} onClose={onClose} />
+                    <SelectDerivationPathBottomSheet ref={derivationPathRef} onClose={onCloseDerivationPath} />
                 </BaseView>
             }
         />

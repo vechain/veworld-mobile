@@ -1,5 +1,6 @@
 import { WALLET_STATUS } from "./enum"
 import { StorageData } from "../StorageData"
+import { DerivationPath } from "~Constants"
 
 /**
  * The wallet object that is stored in browser storage. This is the most sensitive piece of data that we store
@@ -13,6 +14,7 @@ export interface Wallet {
     privateKey?: string
     rootAddress: string
     nonce: string
+    path?: DerivationPath
 }
 
 /**
