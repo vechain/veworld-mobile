@@ -18,8 +18,6 @@ type Props = {
     onRetry?: () => void
 }
 
-const snapPoints = ["50%"]
-
 type DataToDisplay = {
     title: string
     desc: string
@@ -101,23 +99,22 @@ export const ConnectionErrorBottomSheet = React.forwardRef<BottomSheetModalMetho
         if (!error) return <></>
 
         return (
-            <BaseBottomSheet snapPoints={snapPoints} onDismiss={onDismiss} ref={ref}>
-                <BaseView flexGrow={1}>
-                    <BaseView flexDirection="row" justifyContent="space-between" alignItems="center">
-                        <BaseText typographyFont="subTitleBold">{data.title}</BaseText>
-                        <ActivityIndicator size="small" color={theme.colors.primary} />
-                    </BaseView>
-                    <BaseSpacer height={16} />
-                    <BaseText typographyFont="body">{data.desc}</BaseText>
-                    <BaseSpacer height={72} />
-                    {data.image}
-                    {data.retry && onRetry && (
-                        <>
-                            <BaseSpacer height={8} />
-                            <BaseButton title={LL.BTN_RETRY()} action={onRetry} />
-                        </>
-                    )}
+            <BaseBottomSheet dynamicHeight onDismiss={onDismiss} ref={ref}>
+                <BaseView flexDirection="row" justifyContent="space-between" alignItems="center">
+                    <BaseText typographyFont="subTitleBold">{data.title}</BaseText>
+                    <ActivityIndicator size="small" color={theme.colors.primary} />
                 </BaseView>
+                <BaseSpacer height={16} />
+                <BaseText typographyFont="body">{data.desc}</BaseText>
+                <BaseSpacer height={72} />
+                {data.image}
+                {data.retry && onRetry && (
+                    <>
+                        <BaseSpacer height={8} />
+                        <BaseButton title={LL.BTN_RETRY()} action={onRetry} />
+                        <BaseSpacer height={8} />
+                    </>
+                )}
             </BaseBottomSheet>
         )
     },

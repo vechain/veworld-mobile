@@ -7,8 +7,6 @@ import { promptForEnableLocationIfNeeded } from "react-native-android-location-e
 import { Linking } from "react-native"
 import { PlatformUtils } from "~Utils"
 
-const snapPoints = ["55%"]
-
 /**
  * Bottom sheet that shows when location is not enabled or authorized
  **/
@@ -61,8 +59,8 @@ export const LocationStatusBottomSheet: React.FC = () => {
     }, [onClose])
 
     return (
-        <BaseBottomSheet enablePanDownToClose={false} snapPoints={snapPoints} ref={ref}>
-            <BaseView h={100} alignItems="center" justifyContent="space-between" flexGrow={1}>
+        <BaseBottomSheet enablePanDownToClose={false} dynamicHeight ref={ref}>
+            <BaseView alignItems="center">
                 <BaseView alignSelf="flex-start">
                     <BaseText typographyFont="subTitleBold">{LL.ALERT_TITLE_ENABLE_LOCATION()}</BaseText>
                     <BaseSpacer height={16} />
