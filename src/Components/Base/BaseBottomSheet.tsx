@@ -32,6 +32,7 @@ type Props = Omit<BottomSheetModalProps, "snapPoints"> & {
     footer?: React.ReactNode
     onPressOutside?: BackdropPressBehavior
     backHandlerEvent?: BackHandlerEvent
+    bottomSafeArea?: boolean
 }
 
 /**
@@ -66,6 +67,7 @@ export const BaseBottomSheet = React.forwardRef<BottomSheetModalMethods, Props>(
             children,
             onPressOutside = "close",
             backHandlerEvent = BackHandlerEvent.DONT_BLOCK,
+            bottomSafeArea = true,
             ...props
         },
         ref,
@@ -165,7 +167,7 @@ export const BaseBottomSheet = React.forwardRef<BottomSheetModalMethods, Props>(
                         {footer}
                     </BaseView>
                 )}
-                <BaseSpacer height={bottomSafeAreaSize} />
+                {bottomSafeArea && <BaseSpacer height={bottomSafeAreaSize} />}
             </BottomSheetModal>
         )
     },
