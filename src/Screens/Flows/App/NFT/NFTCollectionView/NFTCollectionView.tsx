@@ -87,11 +87,7 @@ export const NFTCollectionView = ({ collection, index }: Props) => {
     ])
 
     return (
-        <TouchableOpacity
-            activeOpacity={PlatformUtils.isIOS() ? 0.6 : 1}
-            // Workaround -> https://github.com/mpiannucci/react-native-context-menu-view/issues/60#issuecomment-1453864955
-            onLongPress={() => {}}
-            onPress={collection.updated ? onCollectionPress : undefined}
+        <BaseView
             style={[
                 styles.nftContainer,
                 // eslint-disable-next-line react-native/no-inline-styles
@@ -100,9 +96,15 @@ export const NFTCollectionView = ({ collection, index }: Props) => {
                 },
             ]}>
             <LongPressProvider items={CollectionItem} action={onToggleCollection}>
-                {renderCollection}
+                <TouchableOpacity
+                    activeOpacity={PlatformUtils.isIOS() ? 0.6 : 1}
+                    // Workaround -> https://github.com/mpiannucci/react-native-context-menu-view/issues/60#issuecomment-1453864955
+                    onLongPress={() => {}}
+                    onPress={collection.updated ? onCollectionPress : undefined}>
+                    {renderCollection}
+                </TouchableOpacity>
             </LongPressProvider>
-        </TouchableOpacity>
+        </BaseView>
     )
 }
 
