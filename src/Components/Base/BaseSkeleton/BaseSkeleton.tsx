@@ -18,7 +18,7 @@ type Props = {
         | "diagonalTopRight"
     layout?: ICustomViewStyle[]
     height?: number
-    width?: number
+    width?: number | string
     alignItems?: "flex-start" | "flex-end" | "center" | "stretch" | "baseline"
     testID?: string
 }
