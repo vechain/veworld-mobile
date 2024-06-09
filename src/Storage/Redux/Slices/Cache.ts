@@ -46,7 +46,7 @@ export const CacheSlice = createSlice({
         setIsTokensOwnedLoading: (state, action: PayloadAction<boolean>) => {
             state.isTokensOwnedLoading = action.payload
         },
-        setDerivedPathPath: (state, action: PayloadAction<DerivationPath>) => {
+        setDerivedPath: (state, action: PayloadAction<DerivationPath>) => {
             state.derivedPath = action.payload
         },
         resetCacheState: () => initialState,
@@ -60,5 +60,5 @@ export const {
     setIsAppLoading,
     setIsTokensOwnedLoading,
     resetCacheState,
-    setDerivedPathPath,
+    setDerivedPath,
 } = CacheSlice.actions

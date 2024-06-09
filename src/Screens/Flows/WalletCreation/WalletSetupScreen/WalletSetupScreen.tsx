@@ -6,7 +6,7 @@ import { useI18nContext } from "~i18n"
 import { useAnalyticTracking, useBottomSheetModal, useTheme } from "~Hooks"
 import { ImportWalletBottomSheet } from "./components"
 import { WalletSetupSvg } from "~Assets"
-import { AnalyticsEvent } from "~Constants"
+import { AnalyticsEvent, SCREEN_WIDTH } from "~Constants"
 import { selectHasOnboarded, useAppSelector } from "~Storage/Redux"
 import { RumManager } from "~Logging/RumManager"
 import { SelectDerivationPathBottomSheet } from "./components/SelectDerivationPathBottomSheet"
@@ -124,8 +124,13 @@ export const WalletSetupScreen = () => {
                         </BaseTouchableBox>
 
                         <BaseSpacer height={24} />
-                        <BaseSpacer height={2} width={24} background={theme.colors.separator} />
-                        <BaseSpacer height={24} />
+
+                        {userHasOnboarded && (
+                            <>
+                                <BaseSpacer height={2} width={SCREEN_WIDTH / 6} background={theme.colors.separator} />
+                                <BaseSpacer height={24} />
+                            </>
+                        )}
 
                         {userHasOnboarded && (
                             <>

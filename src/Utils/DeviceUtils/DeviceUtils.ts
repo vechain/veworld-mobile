@@ -24,7 +24,7 @@ export const generateDeviceForMnemonic = (
         mnemonic: mnemonic,
         nonce: HexUtils.generateRandom(256),
         rootAddress: hdNode.address,
-        path,
+        derivationPath: path,
     }
 
     const device: Omit<LocalDevice, "wallet"> = {
@@ -34,7 +34,7 @@ export const generateDeviceForMnemonic = (
         type: DEVICE_TYPE.LOCAL_MNEMONIC,
         index: deviceIndex,
         position: 0, // this will be updated when the device is added to the redux store
-        path,
+        derivationPath: path,
     }
 
     return { wallet, device }

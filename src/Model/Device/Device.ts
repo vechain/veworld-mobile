@@ -17,7 +17,7 @@ export interface BaseDevice {
     alias: string
     index: number
     position: number
-    path?: DerivationPath
+    derivationPath?: DerivationPath
 }
 
 /**

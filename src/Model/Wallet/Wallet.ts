@@ -14,7 +14,7 @@ export interface Wallet {
     privateKey?: string
     rootAddress: string
     nonce: string
-    path?: DerivationPath
+    derivationPath?: DerivationPath
 }
 
 /**

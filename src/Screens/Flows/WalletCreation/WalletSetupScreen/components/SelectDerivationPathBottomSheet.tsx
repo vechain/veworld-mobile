@@ -4,7 +4,7 @@ import { BaseSpacer, BaseText, BaseView, BaseBottomSheet, BaseIcon, BaseTouchabl
 import { useI18nContext } from "~i18n"
 import { useAnalyticTracking, useTheme, useThemedStyles } from "~Hooks"
 import { AnalyticsEvent, ColorThemeType, DerivationPath } from "~Constants"
-import { setDerivedPathPath, useAppDispatch } from "~Storage/Redux"
+import { setDerivedPath, useAppDispatch } from "~Storage/Redux"
 import { StyleSheet } from "react-native"
 
 type Props = {
@@ -23,7 +23,7 @@ export const SelectDerivationPathBottomSheet = React.forwardRef<BottomSheetModal
         (path: DerivationPath) => {
             setDerivationPath(path)
             track(AnalyticsEvent.WALLET_ADD_DERIVATION_PATH_TYPE, { path })
-            dispatch(setDerivedPathPath(path))
+            dispatch(setDerivedPath(path))
 
             setTimeout(() => {
                 onClose()
