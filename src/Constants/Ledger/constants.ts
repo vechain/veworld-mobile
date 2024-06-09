@@ -1,9 +1,4 @@
 /**
- * The derivation path for VeChain accounts on the ledger device
- */
-export const VET_DERIVATION_PATH = "m/44'/818'/0'/0"
-
-/**
  * Ledger error codes mapped from the device to a more readable format
  */
 export enum LEDGER_ERROR_CODES {
