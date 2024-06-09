@@ -58,7 +58,7 @@ export const DeviceBox: React.FC<Props> = ({
 
                     {device?.derivationPath === DerivationPath.ETH && (
                         <>
-                            <BaseIcon name="ethereum" size={24} color={theme.colors.textDisabled} />
+                            <BaseIcon name="ethereum" size={20} color={theme.colors.textDisabled} />
                             <BaseSpacer width={8} />
                         </>
                     )}
