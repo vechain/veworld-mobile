@@ -1,4 +1,5 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit"
+import { DerivationPath } from "~Constants"
 import { NewLedgerDevice } from "~Model"
 
 /**
@@ -14,6 +15,7 @@ export interface CacheState {
     newLedgerDevice?: NewLedgerDevice
     isAppLoading: boolean
     isTokensOwnedLoading: boolean
+    derivedPath: DerivationPath
 }
 
 const initialState: CacheState = {
@@ -22,6 +24,7 @@ const initialState: CacheState = {
     newLedgerDevice: undefined,
     isAppLoading: false,
     isTokensOwnedLoading: false,
+    derivedPath: DerivationPath.VET,
 }
 
 export const CacheSlice = createSlice({
@@ -43,6 +46,9 @@ export const CacheSlice = createSlice({
         setIsTokensOwnedLoading: (state, action: PayloadAction<boolean>) => {
             state.isTokensOwnedLoading = action.payload
         },
+        setDerivedPath: (state, action: PayloadAction<DerivationPath>) => {
+            state.derivedPath = action.payload
+        },
         resetCacheState: () => initialState,
     },
 })
@@ -54,4 +60,5 @@ export const {
     setIsAppLoading,
     setIsTokensOwnedLoading,
     resetCacheState,
+    setDerivedPath,
 } = CacheSlice.actions
