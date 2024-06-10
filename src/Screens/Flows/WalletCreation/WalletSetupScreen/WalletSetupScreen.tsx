@@ -68,7 +68,9 @@ export const WalletSetupScreen = () => {
                         </BaseText>
                         <BaseSpacer height={48} />
 
-                        <WalletSetupSvg width="100%" />
+                        <BaseView w={100} justifyContent="center" alignItems="center">
+                            <WalletSetupSvg width="40%" />
+                        </BaseView>
                     </BaseView>
                 </BaseView>
             }
