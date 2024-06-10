@@ -257,7 +257,7 @@ platform :ios do
 
       create_tags_gh(build:build, version:version)
 
-      upload_source_maps_(build:build, version:version)
+      upload_source_maps(build:build, version:version)
 
       gh_setup_after
 
