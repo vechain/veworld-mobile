@@ -1,0 +1,122 @@
+#send_vet_vetho.yaml
+appId: org.vechain.veworld.app
+env:
+  AMOUNT: 0.01
+  ACCOUNT: "0x435933c8064b4Ae76bE665428e0307eF2cCFBD68"
+onFlowStart:
+  - runFlow: ../setup_reset/setupApp.yaml
+onFlowComplete:
+  - runFlow: ../setup_reset/resetApp.yaml
+---
+## User should be able to send tokens - Send VET from Account 1 to Account 2
+- tapOn:
+    id: "sendButton"
+- runFlow:
+    when:
+      platform: Android
+    commands:
+      - tapOn: "Vechain"
+- runFlow:
+    when:
+      platform: iOS
+    commands:
+      - tapOn: "Vechain VET"
+- inputText: ${AMOUNT}
+- tapOn: "Send"
+- tapOn: "NEXT"
+- tapOn:
+    id: "selectAccount"
+    index: 0
+- tapOn:
+    id: "next-button"
+- runFlow:
+    when:
+      visible: "Select delegation"
+    commands:
+      - tapOn:
+          id: "confirm-send-button"
+- tapOn: "Insert your 6-digit PIN"
+- assertVisible: "Insert your 6-digit PIN"
+- repeat:
+    times: 6
+    commands:
+      - tapOn: "1"
+- assertVisible: "VeWorld"
+- evalScript: ${console.log('Send VET from Account 1 to Account 2')}
+
+## User should be able to send tokens - Send VETHO from Account 1 to Account 2
+- tapOn:
+    id: "wallet-tab"
+- tapOn:
+    id: "sendButton"
+- runFlow:
+    when:
+      platform: Android
+    commands:
+      - tapOn: "VeThor"
+- runFlow:
+    when:
+      platform: iOS
+    commands:
+      - tapOn: "VeThor VTHO"
+- inputText: ${AMOUNT}
+- tapOn: "Currency balance"
+- tapOn: "NEXT"
+- tapOn:
+    id: "selectAccount"
+    index: 0
+- tapOn:
+    id: "next-button"
+- runFlow:
+    when:
+      visible: "Select delegation"
+    commands:
+      - tapOn:
+          id: "confirm-send-button"
+- assertVisible: "Insert your 6-digit PIN"
+- repeat:
+    times: 6
+    commands:
+      - tapOn: "1"
+- assertVisible: "VeWorld"
+- evalScript: ${console.log('Send VETHO from Account 1 to Account 2')}
+
+## User should be able to send tokens-Send VET from Account 2 to Account 1
+- tapOn:
+    id: "wallet-tab"
+- tapOn:
+    id: "AccountCard_changeAccountButton"
+- tapOn:
+    id: "selectAccount"
+    index: 1
+- tapOn:
+    id: "sendButton"
+- runFlow:
+    when:
+      platform: Android
+    commands:
+      - tapOn: "Vechain"
+- runFlow:
+    when:
+      platform: iOS
+    commands:
+      - tapOn: "Vechain VET"
+- inputText: ${AMOUNT}
+- tapOn: "Currency balance"
+- tapOn: "NEXT"
+- tapOn:
+    id: "selectAccount"
+    index: 0
+- tapOn: "NEXT"
+- runFlow:
+    when:
+      visible: "Select delegation"
+    commands:
+      - tapOn:
+          id: "confirm-send-button"
+- repeat:
+    times: 6
+    commands:
+      - tapOn: "1"
+- assertVisible: "Your tokens"
+- evalScript: ${console.log('Send VET from Account 2 to Account 1')}
