@@ -1,5 +1,5 @@
 import { generateOnRampURL } from "@coinbase/cbpay-js"
-import { useNavigation, useTheme } from "@react-navigation/native"
+import { useNavigation } from "@react-navigation/native"
 import React, { useCallback, useMemo, useState } from "react"
 import { StyleSheet } from "react-native"
 import "react-native-url-polyfill/auto"
@@ -27,8 +27,6 @@ export const CoinbasePayWebView = ({
     const styles = baseStyles(isLoading)
     const track = useAnalyticTracking()
 
-    const { dark } = useTheme()
-
     const coinbaseURL = useMemo(() => {
         const options: GenerateOnRampURLOptions = {
             appId: process.env.REACT_APP_COINBASE_APP_ID as string,
@@ -40,11 +38,10 @@ export const CoinbasePayWebView = ({
             ],
             handlingRequestedUrls: true,
             presetCryptoAmount: currentAmount,
-            theme: dark ? "dark" : "light",
         }
 
         return generateOnRampURL(options)
-    }, [currentAmount, destinationAddress, dark])
+    }, [currentAmount, destinationAddress])
 
     const handleLoadEnd = useCallback(() => {
         setTimeout(() => {
