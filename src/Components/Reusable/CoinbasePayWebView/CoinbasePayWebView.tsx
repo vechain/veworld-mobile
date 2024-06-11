@@ -11,6 +11,8 @@ import { Routes } from "~Navigation"
 import { ErrorMessageUtils, PlatformUtils, debug } from "~Utils"
 import { VECHAIN_BLOCKCHAIN } from "./Constants"
 
+type GenerateOnRampURLOptions = Parameters<typeof generateOnRampURL>[0]
+
 const isAndroid = PlatformUtils.isAndroid()
 
 export const CoinbasePayWebView = ({
@@ -26,7 +28,7 @@ export const CoinbasePayWebView = ({
     const track = useAnalyticTracking()
 
     const coinbaseURL = useMemo(() => {
-        const options = {
+        const options: GenerateOnRampURLOptions = {
             appId: process.env.REACT_APP_COINBASE_APP_ID as string,
             destinationWallets: [
                 {

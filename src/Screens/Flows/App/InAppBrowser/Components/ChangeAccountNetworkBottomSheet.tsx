@@ -1,15 +1,6 @@
 import React, { useMemo } from "react"
 import { BottomSheetModalMethods } from "@gorhom/bottom-sheet/lib/typescript/types"
-import {
-    AccountCard,
-    BaseBottomSheet,
-    BaseButton,
-    BaseSpacer,
-    BaseText,
-    BaseView,
-    Layout,
-    NetworkBox,
-} from "~Components"
+import { AccountCard, BaseBottomSheet, BaseButton, BaseSpacer, BaseText, BaseView, NetworkBox } from "~Components"
 import { useI18nContext } from "~i18n"
 import { AccountWithDevice, Network } from "~Model"
 
@@ -78,49 +69,33 @@ export const ChangeAccountNetworkBottomSheet = React.forwardRef<BottomSheetModal
             }
         }, [LL, targetAccount, targetNetwork])
 
-        const snapPoints = useMemo(() => {
-            if (targetAccount && targetNetwork) {
-                return ["70%"]
-            }
-            if (targetAccount) {
-                return ["600%"]
-            }
-            if (targetNetwork) {
-                return ["600%"]
-            }
-        }, [targetAccount, targetNetwork])
-
         return (
-            <BaseBottomSheet snapPoints={snapPoints} ref={ref} noMargins>
-                <Layout
-                    hasSafeArea={false}
-                    noBackButton
-                    fixedHeader={
-                        <BaseText typographyFont="subTitleBold" mt={22}>
-                            {title}
-                        </BaseText>
-                    }
-                    body={body}
-                    footer={
-                        <BaseView mb={40}>
-                            <BaseSpacer height={16} />
-                            <BaseButton
-                                w={100}
-                                haptics="Light"
-                                title={LL.COMMON_BTN_CONFIRM().toUpperCase()}
-                                action={onConfirm}
-                            />
-                            <BaseSpacer height={16} />
-                            <BaseButton
-                                w={100}
-                                haptics="Light"
-                                variant="outline"
-                                title={LL.COMMON_BTN_CANCEL().toUpperCase()}
-                                action={onClose}
-                            />
-                        </BaseView>
-                    }
-                />
+            <BaseBottomSheet dynamicHeight ref={ref}>
+                <BaseView>
+                    <BaseText typographyFont="subTitleBold" mt={22}>
+                        {title}
+                    </BaseText>
+                    <BaseSpacer height={16} />
+                    {body}
+                    <BaseSpacer height={16} />
+                    <BaseView mb={40}>
+                        <BaseSpacer height={16} />
+                        <BaseButton
+                            w={100}
+                            haptics="Light"
+                            title={LL.COMMON_BTN_CONFIRM().toUpperCase()}
+                            action={onConfirm}
+                        />
+                        <BaseSpacer height={16} />
+                        <BaseButton
+                            w={100}
+                            haptics="Light"
+                            variant="outline"
+                            title={LL.COMMON_BTN_CANCEL().toUpperCase()}
+                            action={onClose}
+                        />
+                    </BaseView>
+                </BaseView>
             </BaseBottomSheet>
         )
     },

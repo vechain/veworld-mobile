@@ -13,7 +13,7 @@ const isAndroid = PlatformUtils.isAndroid()
 
 export const BuyWebviewScreen: React.FC<Props> = ({ route }) => {
     const selectedAccountAddress = useAppSelector(selectSelectedAccountAddress)
-    const { provider, providerName } = route.params
+    const { provider, providerName } = route.params || {}
 
     const ifTest = useMemo(() => (isProd ? "" : " (STAGING)"), [])
 

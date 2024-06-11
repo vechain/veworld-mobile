@@ -18,14 +18,12 @@ export const QRCodeBottomSheet = React.forwardRef<BottomSheetModalMethods>(({}, 
 
     const selectedAccount = useAppSelector(selectSelectedAccount)
 
-    let snapPoints = ["55%"]
-
     const { onCopyToClipboard } = useCopyClipboard()
 
     const nameOrAddress = useAppSelector(state => selectVnsNameOrAddress(state, selectedAccount.address, [4, 3]))
 
     return (
-        <BaseBottomSheet snapPoints={snapPoints} ref={ref}>
+        <BaseBottomSheet dynamicHeight ref={ref}>
             <BaseView flexDirection="row" w={100} justifyContent="space-between">
                 <BaseText typographyFont="subTitleBold">
                     {LL.TITLE_QR_CODE_FOR_ACCOUNT({
@@ -66,22 +64,25 @@ export const QRCodeBottomSheet = React.forwardRef<BottomSheetModalMethods>(({}, 
                 />
 
                 {nameOrAddress.includes(".vet") && (
-                    <BaseButton
-                        haptics="Light"
-                        px={28}
-                        size="md"
-                        bgColor={theme.colors.secondary}
-                        textColor={theme.isDark ? theme.colors.textReversed : theme.colors.text}
-                        title={nameOrAddress}
-                        action={() => onCopyToClipboard(nameOrAddress, LL.COMMON_LBL_ADDRESS())}
-                        rightIcon={
-                            <BaseIcon
-                                name="content-copy"
-                                color={theme.isDark ? theme.colors.textReversed : theme.colors.text}
-                                style={baseStyles.icon}
-                            />
-                        }
-                    />
+                    <>
+                        <BaseButton
+                            haptics="Light"
+                            px={28}
+                            size="md"
+                            bgColor={theme.colors.secondary}
+                            textColor={theme.isDark ? theme.colors.textReversed : theme.colors.text}
+                            title={nameOrAddress}
+                            action={() => onCopyToClipboard(nameOrAddress, LL.COMMON_LBL_ADDRESS())}
+                            rightIcon={
+                                <BaseIcon
+                                    name="content-copy"
+                                    color={theme.isDark ? theme.colors.textReversed : theme.colors.text}
+                                    style={baseStyles.icon}
+                                />
+                            }
+                        />
+                        <BaseSpacer height={16} />
+                    </>
                 )}
             </BaseView>
         </BaseBottomSheet>

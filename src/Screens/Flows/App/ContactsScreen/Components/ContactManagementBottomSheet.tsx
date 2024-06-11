@@ -5,7 +5,6 @@ import { useI18nContext } from "~i18n"
 import { ContactForm } from "../../AddContactScreen/Components"
 import { useContactValidation } from "./Hooks"
 import { useTheme } from "~Hooks"
-import { isSmallScreen } from "~Constants"
 import { Contact } from "~Model"
 import { LocalizedString } from "typesafe-i18n"
 
@@ -22,10 +21,6 @@ export const ContactManagementBottomSheet = React.forwardRef<BottomSheetModalMet
         const { LL } = useI18nContext()
 
         const theme = useTheme()
-
-        const snapPoints = useMemo(() => {
-            return isSmallScreen ? ["60%"] : ["52%"]
-        }, [])
 
         const [alias, _setAlias] = useState<string>(contact?.alias ?? "")
         const [address, _setAddress] = useState<string>(contact?.address ?? "")
@@ -62,8 +57,8 @@ export const ContactManagementBottomSheet = React.forwardRef<BottomSheetModalMet
         const title = isAddingContact ? LL.BTN_CREATE_CONTACT() : LL.SB_EDIT_CONTACT()
 
         return (
-            <BaseBottomSheet snapPoints={snapPoints} ref={ref}>
-                <BaseView w={100} h={100} flexGrow={1} justifyContent="space-between">
+            <BaseBottomSheet dynamicHeight ref={ref}>
+                <BaseView w={100}>
                     <BaseView>
                         <BaseView flexDirection="row" justifyContent="space-between" w={100} alignItems="center">
                             <BaseText typographyFont="subTitleBold">{title}</BaseText>

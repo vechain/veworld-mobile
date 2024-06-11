@@ -1,6 +1,6 @@
 import { useNavigation } from "@react-navigation/native"
 import React, { useCallback } from "react"
-import { StyleProp, StyleSheet, View, ViewProps } from "react-native"
+import { StyleProp, View, ViewProps } from "react-native"
 import { BaseIcon, BaseSpacer, BaseText, BaseView } from "~Components/Base"
 import { useTheme } from "~Hooks"
 
@@ -45,24 +45,17 @@ export const BackButtonHeader = ({
             <BaseView flexDirection="row" alignItems="center">
                 <BaseIcon
                     haptics="Light"
-                    style={[backButtonHeaderStyle.backButton, iconStyle]}
+                    style={[iconStyle]}
+                    px={12}
                     size={36}
                     name="chevron-left"
                     color={iconColor || theme.colors.text}
                     action={onActionPress}
                     testID={iconTestID}
                 />
-                {!!text && (
-                    <BaseText color={theme.colors.text} fontSize={16}>
-                        {text}
-                    </BaseText>
-                )}
+                {!!text && <BaseText typographyFont={"button"}>{text}</BaseText>}
             </BaseView>
             {hasBottomSpacer && <BaseSpacer height={16} />}
         </View>
     )
 }
-
-const backButtonHeaderStyle = StyleSheet.create({
-    backButton: { paddingHorizontal: 12 },
-})

@@ -7,8 +7,6 @@ import { useNavigation } from "@react-navigation/native"
 import { PlatformUtils, debug } from "~Utils"
 import { ERROR_EVENTS } from "~Constants"
 
-const snapPoints = ["55%"]
-
 /**
  * Bottom sheet that shows when bluetooth is not enabled or authorized
  * This bottomsheet is different than the others because it automatically manage its lifecycle based on ble status
@@ -82,8 +80,8 @@ export const BluetoothStatusBottomSheet: React.FC = () => {
     }, [LL, isAuthorized, isEnabled, isUnsupported])
 
     return (
-        <BaseBottomSheet enablePanDownToClose={false} snapPoints={snapPoints} ref={ref}>
-            <BaseView h={100} alignItems="center" justifyContent="space-between" flexGrow={1}>
+        <BaseBottomSheet enablePanDownToClose={false} dynamicHeight ref={ref}>
+            <BaseView alignItems="center">
                 <BaseView alignSelf="flex-start">
                     <BaseText typographyFont="subTitleBold">{content.title}</BaseText>
                     <BaseSpacer height={16} />
@@ -104,6 +102,7 @@ export const BluetoothStatusBottomSheet: React.FC = () => {
                     </BaseView>
                 </BaseView>
             </BaseView>
+            <BaseSpacer height={16} />
         </BaseBottomSheet>
     )
 }

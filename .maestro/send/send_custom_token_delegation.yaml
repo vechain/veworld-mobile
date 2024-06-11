@@ -1,0 +1,61 @@
+#send_token_account_method.yaml
+appId: org.vechain.veworld.app
+env:
+  AMOUNT: 0.01
+  ACCOUNT: "0x435933c8064b4Ae76bE665428e0307eF2cCFBD68"
+  ADDRESS: "0x8a9844e4750f5ce5f7988c4d1e04c278c718feea"
+onFlowStart:
+  - runFlow: ../setup_reset/setupApp.yaml
+onFlowComplete:
+  - runFlow: ../setup_reset/resetApp.yaml
+---
+## User should be able to send custom tokens
+- tapOn:
+    id: "EditTokensBar_BaseIcon_manageToken"
+- tapOn:
+    id: "ManageTokenScreen_AddCustomToken_Button"
+- tapOn:
+    id: "AddCustomTokenBottomSheet-TextInput-Address"
+- inputText: ${ADDRESS}
+- tapOn: "Add"
+- repeat:
+    while:
+      visible:
+         id: "BackButtonHeader-BaseIcon-backButton"
+    commands:
+      - tapOn:
+            id: "BackButtonHeader-BaseIcon-backButton"
+- tapOn:
+    id: "sendButton"
+- runFlow:
+    when:
+      platform: Android
+    commands:
+      - tapOn: "CarpToken"
+- runFlow:
+    when:
+      platform: iOS
+    commands:
+       - tapOn: "CARP CarpToken CARP"
+- tapOn:
+    id: "SendScreen_amountInput"
+- inputText: ${AMOUNT}
+- tapOn: "Currency balance"
+- tapOn:
+    id: "next-button"
+- tapOn:
+    id: "selectAccount"
+    index: 0
+- tapOn:
+    id: "next-button"
+- runFlow:
+    when:
+      visible: "Select delegation"
+    commands:
+      - tapOn:
+          id: "confirm-send-button"
+- repeat:
+    times: 6
+    commands:
+      - tapOn: "1"
+- assertVisible: "Your tokens"

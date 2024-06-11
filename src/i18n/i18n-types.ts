@@ -87,6 +87,22 @@ type RootTranslation = {
 	 */
 	BTN_CREATE_WALLET_TYPE_IMPORT_SUBTITLE: string
 	/**
+	 * A​d​v​a​n​c​e​d​ ​s​e​t​u​p
+	 */
+	BTN_CREATE_WALLET_ADVANCED_SETUP: string
+	/**
+	 * S​e​l​e​c​t​ ​d​e​r​i​v​a​t​i​o​n​ ​p​a​t​h​ ​f​o​r​ ​y​o​u​r​ ​w​a​l​l​e​t
+	 */
+	BTN_SELECT_DERIVATION_PATH: string
+	/**
+	 * D​e​r​i​v​a​t​i​o​n​ ​P​a​t​h​ ​f​o​r​ ​V​e​C​h​a​i​n
+	 */
+	BTN_SELECT_DERIVATION_PATH_VET: string
+	/**
+	 * D​e​r​i​v​a​t​i​o​n​ ​P​a​t​h​ ​f​o​r​ ​E​t​h​e​r​e​u​m
+	 */
+	BTN_SELECT_DERIVATION_PATH_ETH: string
+	/**
 	 * B​a​c​k​u​p
 	 */
 	BTN_MNEMONIC_BACKUP: string
@@ -2981,6 +2997,22 @@ export type TranslationFunctions = {
 	 * Import an existing wallet and manage your vechain portfolio
 	 */
 	BTN_CREATE_WALLET_TYPE_IMPORT_SUBTITLE: () => LocalizedString
+	/**
+	 * Advanced setup
+	 */
+	BTN_CREATE_WALLET_ADVANCED_SETUP: () => LocalizedString
+	/**
+	 * Select derivation path for your wallet
+	 */
+	BTN_SELECT_DERIVATION_PATH: () => LocalizedString
+	/**
+	 * Derivation Path for VeChain
+	 */
+	BTN_SELECT_DERIVATION_PATH_VET: () => LocalizedString
+	/**
+	 * Derivation Path for Ethereum
+	 */
+	BTN_SELECT_DERIVATION_PATH_ETH: () => LocalizedString
 	/**
 	 * Backup
 	 */
