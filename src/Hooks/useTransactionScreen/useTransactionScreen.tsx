@@ -12,18 +12,20 @@ import {
 } from "~Hooks"
 import { useI18nContext } from "~i18n"
 import {
+    selectBalancesState,
     selectSelectedAccount,
-    selectVthoTokenWithBalanceByAccount,
+    selectSelectedNetwork,
     setIsAppLoading,
     useAppDispatch,
     useAppSelector,
 } from "~Storage/Redux"
 import { showErrorToast, showWarningToast } from "~Components"
-import { error, GasUtils } from "~Utils"
+import { BalanceUtils, error, GasUtils } from "~Utils"
 import { DEVICE_TYPE, LedgerAccountWithDevice, TransactionRequest } from "~Model"
 import { DelegationType } from "~Model/Delegation"
 import { ERROR_EVENTS, GasPriceCoefficient } from "~Constants"
 import { Routes } from "~Navigation"
+import { useSelector } from "react-redux"
 
 type Props = {
     clauses: Transaction.Body["clauses"]
@@ -116,9 +118,13 @@ export const useTransactionScreen = ({
         [sendTransaction, onTransactionFailure, LL],
     )
 
-    const vtho = useAppSelector(state =>
-        selectVthoTokenWithBalanceByAccount(state, selectedDelegationAccount?.address ?? selectedAccount.address),
-    )
+    const balancesState = useSelector(selectBalancesState)
+    const selectedNetwork = useSelector(selectSelectedNetwork)
+
+    const vtho = useMemo(() => {
+        const accountAddress = selectedDelegationAccount?.address ?? selectedAccount.address
+        return BalanceUtils.getVthoTokenWithBalanceByAccount(balancesState, selectedNetwork.type, accountAddress)
+    }, [balancesState, selectedNetwork, selectedDelegationAccount, selectedAccount])
 
     /**
      * Signs the transaction and sends it to the blockchain
