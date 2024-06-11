@@ -21,7 +21,7 @@ export function DelegationView({
     selectedDelegationAccount,
     selectedDelegationUrl,
     setSelectedDelegationUrl,
-}: IDelegationView) {
+}: Readonly<IDelegationView>) {
     const RenderDelegationTypeViews = useMemo(() => {
         if (selectedDelegationAccount)
             return (

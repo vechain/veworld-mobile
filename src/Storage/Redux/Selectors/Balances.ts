@@ -8,6 +8,7 @@ import { FungibleToken, FungibleTokenWithBalance } from "~Model"
 import { selectAllTokens, selectCustomTokens, selectSuggestedTokens } from "./Tokens"
 import { compareAddresses } from "~Utils/AddressUtils/AddressUtils"
 import sortBy from "lodash/sortBy"
+import { BalanceUtils } from "~Utils"
 
 export const selectBalancesState = (state: RootState) => state.balances
 
@@ -170,30 +171,7 @@ export const selectVetBalanceByAccount = createSelector([selectVetTokenWithBalan
 export const selectVthoTokenWithBalanceByAccount = createSelector(
     [selectBalancesState, selectSelectedNetwork, (_: RootState, accountAddress: string) => accountAddress],
     (balances, network, accountAddress) => {
-        const defaultVetWithBalance = {
-            ...VTHO,
-            balance: {
-                balance: "0",
-                accountAddress,
-                tokenAddress: VET.address,
-                isCustomToken: false,
-            },
-        }
-
-        const netBalances = balances[network.type]
-        if (!netBalances) return defaultVetWithBalance
-
-        const balancesForAccount = netBalances[accountAddress]
-        if (!balancesForAccount) return defaultVetWithBalance
-
-        const balance = netBalances[accountAddress].find(_balance => _balance.tokenAddress === VTHO.address)
-
-        if (!balance) return defaultVetWithBalance
-
-        return {
-            ...VTHO,
-            balance,
-        }
+        return BalanceUtils.getVthoTokenWithBalanceByAccount(balances, network.type, accountAddress)
     },
 )
 
