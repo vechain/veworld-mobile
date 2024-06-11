@@ -1,7 +1,7 @@
 import { LedgerDevice, Network, Response } from "~Model"
 import { Certificate, HDNode, Transaction } from "thor-devkit"
 import { AddressUtils, BalanceUtils } from "~Utils"
-import { ERROR_EVENTS, LEDGER_ERROR_CODES, VET_DERIVATION_PATH, VETLedgerAccount, VETLedgerApp } from "~Constants"
+import { DerivationPath, ERROR_EVENTS, LEDGER_ERROR_CODES, VETLedgerAccount, VETLedgerApp } from "~Constants"
 import { debug, error } from "~Utils/Logger"
 import { Buffer } from "buffer"
 
@@ -82,7 +82,7 @@ export const verifyTransport = async (
             const config = await app.getAppConfiguration()
             const appConfig: LedgerConfig = config.toString("hex") as LedgerConfig
             debug(ERROR_EVENTS.LEDGER, "[verifyTransport] - getting root address")
-            const rootAccount: VETLedgerAccount = await app.getAddress(VET_DERIVATION_PATH, false, true)
+            const rootAccount: VETLedgerAccount = await app.getAddress(DerivationPath.VET, false, true)
 
             return {
                 success: true,
@@ -130,7 +130,7 @@ const signMessage = async ({ index, message, device, withTransport }: ISignMessa
 
             await validateRootAddress(device.rootAddress, vetLedger)
 
-            const path = `${VET_DERIVATION_PATH}/${index}`
+            const path = `${DerivationPath.VET}/${index}`
             const signature = await vetLedger.signMessage(path, message)
 
             return {
@@ -178,7 +178,7 @@ const signCertificate = async (
 
             const dataToSign = Buffer.from(Certificate.encode(cert), "utf8")
 
-            const path = `${VET_DERIVATION_PATH}/${index}`
+            const path = `${DerivationPath.VET}/${index}`
             const signature = await vetLedger.signJSON(path, dataToSign)
 
             return {
@@ -226,7 +226,7 @@ const signTransaction = async (
         try {
             await validateRootAddress(device.rootAddress, vetLedger)
 
-            const path = `${VET_DERIVATION_PATH}/${index}`
+            const path = `${DerivationPath.VET}/${index}`
             const signature = await vetLedger.signTransaction(
                 path,
                 transaction.encode(),
@@ -308,7 +308,7 @@ const getAccountsWithBalances = async (
  */
 const validateRootAddress = async (rootAddress: string, vetLedger: VETLedgerApp) => {
     debug(ERROR_EVENTS.LEDGER, "Validating root address")
-    const rootAccount = await vetLedger.getAddress(VET_DERIVATION_PATH, false, false)
+    const rootAccount = await vetLedger.getAddress(DerivationPath.VET, false, false)
 
     if (!AddressUtils.compareAddresses(rootAddress, rootAccount.address)) {
         throw LEDGER_ERROR_CODES.WRONG_ROOT_ACCOUNT

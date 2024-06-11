@@ -23,6 +23,10 @@ const en: BaseTranslation = {
     BTN_OBSERVE_WALLET_SUBTITLE: "Import a wallet address to only observe this wallet",
     BTN_CREATE_WALLET_TYPE_IMPORT: "Import wallet",
     BTN_CREATE_WALLET_TYPE_IMPORT_SUBTITLE: "Import an existing wallet and manage your vechain portfolio",
+    BTN_CREATE_WALLET_ADVANCED_SETUP: "Advanced setup",
+    BTN_SELECT_DERIVATION_PATH: "Select derivation path for your wallet",
+    BTN_SELECT_DERIVATION_PATH_VET: "Derivation Path for VeChain",
+    BTN_SELECT_DERIVATION_PATH_ETH: "Derivation Path for Ethereum",
     BTN_MNEMONIC_BACKUP: "Backup",
     BTN_MNEMONIC_CHECKBOX:
         "I state that I have saved the secret phrase and I am aware that I am responsible if I lose it.",

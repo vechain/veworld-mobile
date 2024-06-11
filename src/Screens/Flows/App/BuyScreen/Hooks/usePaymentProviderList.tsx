@@ -5,8 +5,12 @@ import { COLORS } from "~Constants"
 import { PaymentMethod, PaymentMethodsIds, PaymentMethodsList } from "./constants"
 import { CoinbaseLogoSmallSvg } from "~Assets"
 
+export enum PaymentProvidersEnum {
+    CoinbasePay = "coinbase-pay",
+    Transak = "transak",
+}
 export type PaymentProvider = {
-    id: string
+    id: PaymentProvidersEnum
     name: string
     description: string
     img: React.ReactNode
@@ -19,7 +23,7 @@ export const usePaymentProviderList = () => {
 
     return [
         {
-            id: "coinbase-pay",
+            id: PaymentProvidersEnum.CoinbasePay,
             name: "Coinbase",
             description: LL.BD_BUY_DESCRIPTION_COINBASE(),
             img: (

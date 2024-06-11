@@ -1,8 +1,7 @@
-import React, { useCallback, useMemo } from "react"
+import React, { useCallback } from "react"
 import { BottomSheetModalMethods } from "@gorhom/bottom-sheet/lib/typescript/types"
-import { BaseBottomSheet, BaseButton, BaseSpacer, BaseText, BaseView, ScrollViewWithFooter } from "~Components"
+import { BaseBottomSheet, BaseButton, BaseSpacer, BaseText, BaseView } from "~Components"
 import { useI18nContext } from "~i18n"
-import { isSmallScreen } from "~Constants"
 import { PlatformUtils } from "~Utils"
 import { AccountWithDevice } from "~Model"
 import { AccountDetailBox } from "../../AccountDetailBox"
@@ -22,40 +21,9 @@ export const RemoveAccountWarningBottomSheet = React.forwardRef<BottomSheetModal
             onConfirm()
         }, [onConfirm])
 
-        const snapPoints = useMemo(() => {
-            if (PlatformUtils.isAndroid()) {
-                return ["70%"]
-            }
-
-            if (isSmallScreen) return ["80%"]
-
-            return ["50%"]
-        }, [])
-
         return (
-            <BaseBottomSheet ref={ref} snapPoints={snapPoints}>
-                <ScrollViewWithFooter
-                    footer={
-                        <BaseView>
-                            <BaseSpacer height={4} />
-
-                            <BaseButton
-                                w={100}
-                                haptics="Light"
-                                title={LL.BTN_REMOVE_ACCOUNT().toUpperCase()}
-                                action={handleOnProceed}
-                            />
-                            <BaseSpacer height={16} />
-                            <BaseButton
-                                w={100}
-                                haptics="Light"
-                                variant="outline"
-                                title={LL.COMMON_BTN_CANCEL().toUpperCase()}
-                                action={onCancel}
-                            />
-                        </BaseView>
-                    }
-                    isScrollEnabled={false}>
+            <BaseBottomSheet ref={ref} dynamicHeight>
+                <BaseView>
                     <BaseView>
                         <BaseText typographyFont="subTitleBold">{LL.BTN_REMOVE_ACCOUNT()}</BaseText>
                         <BaseSpacer height={16} />
@@ -77,7 +45,27 @@ export const RemoveAccountWarningBottomSheet = React.forwardRef<BottomSheetModal
                             </BaseText>
                         )}
                     </BaseView>
-                </ScrollViewWithFooter>
+
+                    <BaseView>
+                        <BaseSpacer height={16} />
+
+                        <BaseButton
+                            w={100}
+                            haptics="Light"
+                            title={LL.BTN_REMOVE_ACCOUNT().toUpperCase()}
+                            action={handleOnProceed}
+                        />
+                        <BaseSpacer height={16} />
+                        <BaseButton
+                            w={100}
+                            haptics="Light"
+                            variant="outline"
+                            title={LL.COMMON_BTN_CANCEL().toUpperCase()}
+                            action={onCancel}
+                        />
+                    </BaseView>
+                    <BaseSpacer height={16} />
+                </BaseView>
             </BaseBottomSheet>
         )
     },

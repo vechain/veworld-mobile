@@ -17,10 +17,10 @@ import { SecurityLevelType } from "~Model"
 import { useAnalyticTracking, useCheckIdentity, useCreateWallet, useTheme } from "~Hooks"
 import { NativeStackScreenProps } from "@react-navigation/native-stack"
 import { RootStackParamListCreateWalletApp, RootStackParamListOnboarding, Routes } from "~Navigation"
-import { setIsAppLoading, useAppDispatch, useAppSelector } from "~Storage/Redux"
+import { setDerivedPath, setIsAppLoading, useAppDispatch, useAppSelector } from "~Storage/Redux"
 import { selectHasOnboarded, selectMnemonic, selectNewLedgerDevice, selectPrivateKey } from "~Storage/Redux/Selectors"
 import HapticsService from "~Services/HapticsService"
-import { AnalyticsEvent } from "~Constants"
+import { AnalyticsEvent, DerivationPath } from "~Constants"
 import { BiometricsUtils } from "~Utils"
 
 type Props = {} & NativeStackScreenProps<
@@ -105,8 +105,18 @@ export const WalletSuccessScreen: FC<Props> = ({ route }) => {
             }
 
             navigateNext()
+            dispatch(setDerivedPath(DerivationPath.VET))
         },
-        [mnemonic, privateKey, createLocalWallet, onWalletCreationError, navigateNext, newLedger, createLedgerWallet],
+        [
+            mnemonic,
+            privateKey,
+            newLedger,
+            navigateNext,
+            dispatch,
+            createLocalWallet,
+            onWalletCreationError,
+            createLedgerWallet,
+        ],
     )
 
     const {
@@ -170,6 +180,7 @@ export const WalletSuccessScreen: FC<Props> = ({ route }) => {
                 await migrateOnboarding(securityLevelSelected, params.userPin)
             }
         } finally {
+            dispatch(setDerivedPath(DerivationPath.VET))
             dispatch(setIsAppLoading(false))
         }
     }, [
