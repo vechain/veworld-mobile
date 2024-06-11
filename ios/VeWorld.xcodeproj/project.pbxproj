@@ -715,7 +715,7 @@
 				PRODUCT_BUNDLE_IDENTIFIER = org.vechain.veworld.app;
 				PRODUCT_NAME = VeWorld;
 				PROVISIONING_PROFILE_SPECIFIER = "";
-				"PROVISIONING_PROFILE_SPECIFIER[sdk=iphoneos*]" = "match AppStore org.vechain.veworld.app 1718102684";
+				"PROVISIONING_PROFILE_SPECIFIER[sdk=iphoneos*]" = "match AppStore org.vechain.veworld.app";
 				"SWIFT_OBJC_BRIDGING_HEADER[arch=*]" = "VeWorld-Bridging-Header.h";
 				SWIFT_VERSION = 5.0;
 				VERSIONING_SYSTEM = "apple-generic";
