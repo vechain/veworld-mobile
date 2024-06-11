@@ -6,12 +6,14 @@ import { AnalyticsEvent, COLORS } from "~Constants"
 import { useAnalyticTracking, useTheme } from "~Hooks"
 import { PlatformUtils } from "~Utils"
 import { VECHAIN_BLOCKCHAIN } from "./Constants"
+import { selectCurrency, useAppSelector } from "~Storage/Redux"
 
 const isProd = process.env.NODE_ENV === "production"
 const isAndroid = PlatformUtils.isAndroid()
 
-const disabledOSProvider = isAndroid ? "apple_pay" : "google_pay"
+const disabledOSProvider = isAndroid ? "apple_pay" : "google_pay,credit_debit_card"
 const disablePaymentMethods = `gbp_bank_transfer,inr_bank_transfer,sepa_bank_transfer,${disabledOSProvider}`
+const defaultPaymentMethod = isAndroid ? "credit_debit_card" : "apple_pay"
 
 export const TransakPayWebView = ({
     currentAmount,
@@ -24,6 +26,7 @@ export const TransakPayWebView = ({
     const track = useAnalyticTracking()
     const [isLoading, setIsLoading] = useState(true)
     const styles = baseStyles(isLoading)
+    const currency = useAppSelector(selectCurrency)
 
     const { backgroundColors, themeColor } = useMemo(() => {
         const bg = isDark ? COLORS.DARK_PURPLE : COLORS.LIGHT_GRAY
@@ -37,10 +40,10 @@ export const TransakPayWebView = ({
             walletAddress: destinationAddress,
             productsAvailed: "BUY",
             networks: VECHAIN_BLOCKCHAIN,
-            defaultPaymentMethod: "credit_debit_card",
+            defaultPaymentMethod,
             disablePaymentMethods,
             disableWalletAddressForm: true,
-            defaultFiatCurrency: "EUR",
+            defaultFiatCurrency: currency,
             defaultFiatAmount: currentAmount || 5,
             defaultNetwork: VECHAIN_BLOCKCHAIN,
             defaultCryptoCurrency: "VET",
@@ -50,7 +53,7 @@ export const TransakPayWebView = ({
             hideMenu: true,
             environment: isProd ? Environments.PRODUCTION : Environments.STAGING,
         }),
-        [backgroundColors, currentAmount, destinationAddress, isDark, themeColor],
+        [backgroundColors, currency, currentAmount, destinationAddress, isDark, themeColor],
     )
 
     const onTransakEventHandler = (event: EventTypes) => {
@@ -98,6 +101,7 @@ export const TransakPayWebView = ({
             <TransakWebView
                 transakConfig={transakConfig}
                 onTransakEvent={onTransakEventHandler}
+                enableApplePay
                 style={styles.webView}
             />
         </BaseView>
