@@ -79,10 +79,10 @@ Create Release Branch on GitHub for Beta
 
 Commit latest artifacts to GitHub
 
-### ios upload_source_maps_to_sentry
+### ios upload_source_maps
 
 ```sh
-[bundle exec] fastlane ios upload_source_maps_to_sentry
+[bundle exec] fastlane ios upload_source_maps
 ```
 
 
@@ -102,6 +102,14 @@ Commit latest artifacts to GitHub
 ```
 
 Push a new beta build to TestFlight
+
+### ios build_test_ci
+
+```sh
+[bundle exec] fastlane ios build_test_ci
+```
+
+
 
 ----
 
