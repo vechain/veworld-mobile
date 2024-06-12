@@ -1,12 +1,11 @@
 import { abis, ERROR_EVENTS, VET, VTHO } from "~Constants"
 import axios from "axios"
 import { error, info } from "~Utils/Logger"
-import { Balance, FungibleTokenWithBalance, Network, NETWORK_TYPE } from "~Model"
+import { Balance, FungibleTokenWithBalance, Network } from "~Model"
 import AddressUtils from "../AddressUtils"
 import { getTokenDecimals, getTokenName, getTokenSymbol } from "~Networking"
 import { BigNumber } from "bignumber.js"
 import BigNutils from "~Utils/BigNumberUtils"
-import { BalanceState } from "~Storage/Redux"
 
 /**
  * Calls out to external sources to get the balance
@@ -117,37 +116,6 @@ const getTokenUnitBalance = (balance: string, decimals: number) => {
 
 const getIsTokenWithBalance = (token: FungibleTokenWithBalance) => !new BigNumber(token.balance.balance).isZero()
 
-const getVthoTokenWithBalanceByAccount = (
-    balances: BalanceState,
-    networkType: NETWORK_TYPE,
-    accountAddress: string,
-) => {
-    const defaultVetWithBalance = {
-        ...VTHO,
-        balance: {
-            balance: "0",
-            accountAddress,
-            tokenAddress: VET.address,
-            isCustomToken: false,
-        },
-    }
-
-    const netBalances = balances[networkType]
-    if (!netBalances) return defaultVetWithBalance
-
-    const balancesForAccount = netBalances[accountAddress]
-    if (!balancesForAccount) return defaultVetWithBalance
-
-    const balance = netBalances[accountAddress].find(_balance => _balance.tokenAddress === VTHO.address)
-
-    if (!balance) return defaultVetWithBalance
-
-    return {
-        ...VTHO,
-        balance,
-    }
-}
-
 export default {
     getIsTokenWithBalance,
     getBalanceFromBlockchain,
@@ -156,5 +124,4 @@ export default {
     getFiatBalance,
     getTokenUnitBalance,
     getBalanceAndTokenInfoFromBlockchain,
-    getVthoTokenWithBalanceByAccount,
 }
