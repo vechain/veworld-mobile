@@ -153,8 +153,8 @@ platform :ios do
       sh("node_modules/@sentry/cli/bin/sentry-cli releases files #{ENV["APP_IDENTIFIER"]}@#{version}+#{build} upload-sourcemaps --dist #{build} --strip-prefix ../../ main.jsbundle main.jsbundle.map --org 'vechain-foundation' --project 'veworld-mobile' --log-level=info")
       
       # upload source maps to datadog with cli 
-      #sh("yarn datadog-ci react-native upload --platform ios --service org.vechain.veworld.app --bundle main.jsbundle.map --sourcemap ./build/main.jsbundle.map --release-version #{version_name} --build-version #{build_number} ")
-      #sh("yarn datadog-ci react-native upload --platform ios --service org.vechain.veworld.app --bundle main.jsbundle --sourcemap ./build/main.jsbundle. --release-version #{version_name} --build-version #{build_number} ")
+      sh("yarn datadog-ci react-native upload --platform ios --service org.vechain.veworld.app --bundle main.jsbundle.map --sourcemap ../../main.jsbundle.map --release-version #{version} --build-version #{build} ")
+      sh("yarn datadog-ci react-native upload --platform ios --service org.vechain.veworld.app --bundle main.jsbundle --sourcemap ../../main.jsbundle --release-version #{version} --build-version #{build} ")
 
     end
   end
@@ -325,8 +325,8 @@ platform :ios do
     key_password = ENV["KEY_PASSWORD"]
     key_alias = ENV["KEY_ALIAS"]
   
-    version_name = options[:version_name]
-    build_number = options[:build_number]
+    version = options[:version]
+    build = options[:build]
     github_username = options[:username]
     github_token = options[:token]
   
@@ -355,7 +355,10 @@ platform :ios do
           output_directory: "./build",
         )
         # Build and upload sourcemaps to Datadog   
-        Dir.chdir "../.." do
+        Dir.chdir "../.." do # Navigate to the root of the project where the Detox files are placed.
+
+          sentry_check_cli_installed
+    
           # generate source maps for sentry
           sh("npx react-native bundle --platform ios --dev false --entry-file index.js --reset-cache --bundle-output main.jsbundle --sourcemap-output main.jsbundle.map --minify false")
           #compile source maps
@@ -366,10 +369,15 @@ platform :ios do
           # merge the two source maps
           sh("mv main.jsbundle.map main.jsbundle.packager.map")
           sh("node node_modules/react-native/scripts/compose-source-maps.js main.jsbundle.packager.map main.jsbundle.hbc.map -o main.jsbundle.map")
+    
+          # upload source maps to sentry with cli - handled by xcode build phase?
+    
+          sh("node_modules/@sentry/cli/bin/sentry-cli releases files #{ENV["APP_IDENTIFIER"]}@#{version}+#{build} upload-sourcemaps --dist #{build} --strip-prefix ../../ main.jsbundle main.jsbundle.map --org 'vechain-foundation' --project 'veworld-mobile' --log-level=info")
           
-          # upload source maps to datadog
-          sh("yarn datadog-ci react-native upload --platform ios --service org.vechain.veworld.app --bundle main.jsbundle.map --sourcemap ./build/main.jsbundle.map --release-version #{version_name} --build-version #{build_number} ")
-          sh("yarn datadog-ci react-native upload --platform ios --service org.vechain.veworld.app --bundle main.jsbundle --sourcemap ./build/main.jsbundle --release-version #{version_name} --build-version #{build_number} ")
+          # upload source maps to datadog with cli 
+          sh("yarn datadog-ci react-native upload --platform ios --service org.vechain.veworld.app --bundle main.jsbundle.map --sourcemap ./build/main.jsbundle.map --release-version #{version} --build-version #{build} ")
+          sh("yarn datadog-ci react-native upload --platform ios --service org.vechain.veworld.app --bundle main.jsbundle --sourcemap ./build/main.jsbundle --release-version #{version} --build-version #{build} ")
+    
         end
   
       sh("echo 'Build successful'")
