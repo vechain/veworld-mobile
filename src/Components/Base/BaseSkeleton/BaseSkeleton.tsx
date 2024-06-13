@@ -1,5 +1,5 @@
 import React, { useMemo } from "react"
-import { StyleProp, ViewStyle } from "react-native"
+import { DimensionValue, StyleProp, ViewStyle } from "react-native"
 import Skeleton, { ICustomViewStyle } from "react-native-reanimated-skeleton"
 import { BaseView } from "~Components"
 
@@ -18,7 +18,7 @@ type Props = {
         | "diagonalTopRight"
     layout?: ICustomViewStyle[]
     height?: number
-    width?: number | string
+    width?: DimensionValue
     alignItems?: "flex-start" | "flex-end" | "center" | "stretch" | "baseline"
     testID?: string
 }
