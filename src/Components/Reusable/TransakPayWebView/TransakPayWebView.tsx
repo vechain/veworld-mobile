@@ -7,6 +7,8 @@ import { useAnalyticTracking, useTheme } from "~Hooks"
 import { PlatformUtils } from "~Utils"
 import { VECHAIN_BLOCKCHAIN } from "./Constants"
 import { selectCurrency, useAppSelector } from "~Storage/Redux"
+import { getUniqueIdSync } from "react-native-device-info"
+import { v4 as uuid } from "uuid"
 
 const isProd = process.env.NODE_ENV === "production"
 const isAndroid = PlatformUtils.isAndroid()
@@ -14,6 +16,9 @@ const isAndroid = PlatformUtils.isAndroid()
 const disabledOSProvider = isAndroid ? "apple_pay" : "google_pay,credit_debit_card"
 const disablePaymentMethods = `gbp_bank_transfer,inr_bank_transfer,sepa_bank_transfer,${disabledOSProvider}`
 const defaultPaymentMethod = isAndroid ? "credit_debit_card" : "apple_pay"
+
+// using getUniqueId allows us to make the partnerOrderId really unique and unrepeatable and to track better customer orders via Mixpanel to see their flow
+const partnerOrderId = getUniqueIdSync() + "-" + uuid()
 
 export const TransakPayWebView = ({
     currentAmount,
@@ -37,6 +42,7 @@ export const TransakPayWebView = ({
     const transakConfig: TransakConfig = useMemo(
         () => ({
             apiKey: process.env.REACT_APP_TRANSAK_API_KEY as string,
+            partnerOrderId,
             walletAddress: destinationAddress,
             productsAvailed: "BUY",
             networks: VECHAIN_BLOCKCHAIN,
@@ -58,27 +64,24 @@ export const TransakPayWebView = ({
 
     const onTransakEventHandler = (event: EventTypes) => {
         switch (event) {
-            case Events.ORDER_PROCESSING:
-                track(AnalyticsEvent.BUY_CRYPTO_INITIALISED, {
-                    provider: "transak",
-                })
-                break
-
             case Events.ORDER_CREATED:
                 track(AnalyticsEvent.BUY_CRYPTO_CREATED_ORDER, {
                     provider: "transak",
+                    partnerOrderId,
                 })
                 break
 
-            case Events.ORDER_COMPLETED:
+            case Events.ORDER_PROCESSING:
                 track(AnalyticsEvent.BUY_CRYPTO_SUCCESSFULLY_COMPLETED, {
                     provider: "transak",
+                    partnerOrderId,
                 })
                 break
 
             case Events.ORDER_FAILED:
                 track(AnalyticsEvent.BUY_CRYPTO_FAILED, {
                     provider: "transak",
+                    partnerOrderId,
                 })
                 break
         }

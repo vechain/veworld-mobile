@@ -1910,10 +1910,10 @@
   resolved "https://registry.yarnpkg.com/@bcoe/v8-coverage/-/v8-coverage-0.2.3.tgz#75a2e8b51cb758a7553d6804a5932d7aace75c39"
   integrity sha512-0hYQ8SB4Db5zvZB4axdMHGwEaQjkZzFjQiN9LVYvIFB2nSUHW9tYpxWriPrWDASIxiaXax83REcLxuSdnGPZtw==
 
-"@coinbase/cbpay-js@^2.1.0":
-  version "2.1.0"
-  resolved "https://registry.yarnpkg.com/@coinbase/cbpay-js/-/cbpay-js-2.1.0.tgz#1bdbc77aced3cef19134dd113ebdb9f1cccbba2d"
-  integrity sha512-J9kuMY7qiEM9fV6k6sBJ44S2fDjdXfX7SeDCDv7fWoni5QnP7Ca3k6pHE0TSBRCkzzC0x1zK6wgieG4RyDPeNw==
+"@coinbase/cbpay-js@^1.7.0":
+  version "1.10.0"
+  resolved "https://registry.yarnpkg.com/@coinbase/cbpay-js/-/cbpay-js-1.10.0.tgz#21c1c9fb4785760838809d2127ab73db474d8b05"
+  integrity sha512-jQ4rqJFNbsCMZ74ATucAUv2IpkbPFXsY+6AVBvFVNKmG4rEgc10Fa87pw/idm6Tlrs7EERQRXEs21DvJpMzi8A==
 
 "@colors/colors@1.5.0":
   version "1.5.0"
@@ -5354,10 +5354,10 @@
   resolved "https://registry.yarnpkg.com/@tootallnate/quickjs-emscripten/-/quickjs-emscripten-0.23.0.tgz#db4ecfd499a9765ab24002c3b696d02e6d32a12c"
   integrity sha512-C5Mc6rdnsaJDjO3UpGW/CQTHtCKaYlScZTly4JIu97Jxo/odCiH0ITnDXSJPTOrEKk/ycSZ0AOgTmkDtkOsvIA==
 
-"@transak/react-native-sdk@^2.0.1":
-  version "2.0.1"
-  resolved "https://registry.yarnpkg.com/@transak/react-native-sdk/-/react-native-sdk-2.0.1.tgz#448f13e4fda5d0821e0d163d85b84ebbe4ea52e8"
-  integrity sha512-ZXJECNNE0PAqZZJ1zxHK2JEw5V1i97kplbuUXPAqkg8w4RfJ+l2pi+mkGCcCCLHzyxYnYNozAVxf+uK/tOyJrw==
+"@transak/react-native-sdk@^2.0.2":
+  version "2.0.2"
+  resolved "https://registry.yarnpkg.com/@transak/react-native-sdk/-/react-native-sdk-2.0.2.tgz#2dc0b91025e7d43b2f17d7315d2481cb80073f24"
+  integrity sha512-wJ60nggja+td2GRwsZFmc1KIBEXdGbwt0/V9O2tN8Q9jNQExlEPH2RGUPrEZaZXSu7n9n1sIQ1e7yBahURCeTQ==
   dependencies:
     pako "^2.1.0"
     pusher-js "^8.3.0"

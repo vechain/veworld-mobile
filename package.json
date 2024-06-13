@@ -76,7 +76,7 @@
         "@tanstack/query-sync-storage-persister": "^5.14.1",
         "@tanstack/react-query": "^5.14.1",
         "@tanstack/react-query-persist-client": "^5.14.1",
-        "@transak/react-native-sdk": "^2.0.1",
+        "@transak/react-native-sdk": "^2.0.2",
         "@vechain/connex-driver": "^2.1.0",
         "@vechain/connex-framework": "^2.1.0",
         "@vechain/picasso": "^2.1.1",
