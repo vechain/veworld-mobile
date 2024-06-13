@@ -8,6 +8,8 @@ export type AlignSelf = FlexAlignType | "auto"
 
 export type AlignContent = "flex-start" | "flex-end" | "center" | "stretch" | "space-between" | "space-around"
 
+export type Overflow = "hidden" | "visible" | "scroll"
+
 export type Display = "flex" | "none"
 
 export type Position = "absolute" | "relative"

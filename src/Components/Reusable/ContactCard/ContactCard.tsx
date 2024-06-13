@@ -2,7 +2,6 @@ import React, { memo } from "react"
 import { StyleProp, ViewStyle } from "react-native"
 import { BaseCard, BaseSpacer, BaseText, BaseView } from "~Components"
 import { Contact } from "~Model"
-import { selectVnsNameOrAddress, useAppSelector } from "~Storage/Redux"
 
 type Props = {
     contact: Contact
@@ -12,8 +11,6 @@ type Props = {
 }
 
 export const ContactCard = memo(({ contact, onPress, selected, containerStyle }: Props) => {
-    const nameOrAddress = useAppSelector(state => selectVnsNameOrAddress(state, contact.address, [4, 6]))
-
     return (
         <BaseCard
             containerStyle={containerStyle}
@@ -24,7 +21,7 @@ export const ContactCard = memo(({ contact, onPress, selected, containerStyle }:
                 <BaseText typographyFont="button">{contact.alias}</BaseText>
                 <BaseSpacer height={4} />
                 <BaseText fontSize={10} typographyFont="smallCaptionRegular">
-                    {nameOrAddress}
+                    {contact.domain || contact.address}
                 </BaseText>
             </BaseView>
         </BaseCard>

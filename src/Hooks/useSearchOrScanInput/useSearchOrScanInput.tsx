@@ -20,8 +20,14 @@ export const useSearchOrScanInput = (
     const [errorMessage, setErrorMessage] = useState("")
     const { _getName, _getAddress } = useVns()
 
-    const { filteredContacts, filteredAccounts, isAddressInContactsOrAccounts, accountsAndContacts, contacts } =
-        useSearchContactsAndAccounts({ searchText, selectedAddress })
+    const {
+        filteredContacts,
+        filteredAccounts,
+        isAddressInContactsOrAccounts,
+        accountsAndContacts,
+        contacts,
+        isLoading,
+    } = useSearchContactsAndAccounts({ searchText, selectedAddress })
 
     const onSuccessfullScan = useCallback(
         async (data: string) => {
@@ -100,6 +106,7 @@ export const useSearchOrScanInput = (
         filteredContacts,
         filteredAccounts,
         isAddressInContactsOrAccounts,
+        isLoading,
         contacts,
     }
 }
