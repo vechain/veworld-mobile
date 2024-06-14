@@ -57,6 +57,9 @@ const StoreContextProvider = ({ children }: StoreContextProviderProps) => {
                 reducer: persistedReducer,
                 middleware: getDefaultMiddleware =>
                     getDefaultMiddleware({
+                        immutableCheck: {
+                            warnAfter: 100, // Custom threshold
+                        },
                         serializableCheck: {
                             ignoredActions: [FLUSH, REHYDRATE, PAUSE, PERSIST, PURGE, REGISTER],
                         },
