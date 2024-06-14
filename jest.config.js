@@ -30,6 +30,10 @@ module.exports = {
             "|@craftzdog/react-native-buffer" +
             "|react-native-svg" +
             "|mixpanel-react-native" +
+            "|query-string" +
+            "|decode-uri-component" +
+            "|split-on-first" +
+            "|filter-obj" +
             "|@transak/react-native-sdk" + // Added @transak/react-native-sdk here
             ")",
     ],
