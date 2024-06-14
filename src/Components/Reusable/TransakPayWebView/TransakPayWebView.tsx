@@ -22,8 +22,11 @@ const disabledOSProvider = isAndroid ? "apple_pay,google_pay" : "google_pay,cred
 const disablePaymentMethods = `gbp_bank_transfer,inr_bank_transfer,sepa_bank_transfer,pm_cash_app,pm_jwire,${disabledOSProvider}`
 const defaultPaymentMethod = isAndroid ? "credit_debit_card" : "apple_pay"
 
+// only for jest
+const uniqueID = getUniqueIdSync ? getUniqueIdSync() : "jest-unique-id"
+
 // using getUniqueId allows us to make the partnerOrderId really unique and unrepeatable and to track better customer orders via Mixpanel to see their flow
-const partnerOrderId = getUniqueIdSync() + "-" + uuid.v4().toString()
+const partnerOrderId = `${uniqueID}-${uuid.v4().toString()}`
 
 export const TransakPayWebView = ({
     currentAmount,
