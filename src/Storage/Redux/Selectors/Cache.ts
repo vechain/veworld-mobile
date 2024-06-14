@@ -26,3 +26,7 @@ export const selectIsTokensOwnedLoading = createSelector(reducer, state => {
 export const selectDerivedPath = createSelector(reducer, state => {
     return state.derivedPath
 })
+
+export const selectUserHasBeenAskedForBuckup = createSelector(reducer, state => {
+    return state.userHasBeenAskedForBuckup
+})

@@ -8,7 +8,6 @@ import {
     NewMnemonicScreen,
     SelectLedgerAccounts,
     SelectLedgerDevice,
-    UserCreatePasswordScreen,
     WalletSetupScreen,
     WalletSuccessScreen,
     WelcomeScreen,
@@ -80,12 +79,6 @@ export const OnboardingStack = () => {
                 <Onboarding.Screen
                     name={Routes.APP_SECURITY}
                     component={AppSecurityScreen}
-                    options={{ headerShown: false }}
-                />
-
-                <Onboarding.Screen
-                    name={Routes.USER_CREATE_PASSWORD}
-                    component={UserCreatePasswordScreen}
                     options={{ headerShown: false }}
                 />
 

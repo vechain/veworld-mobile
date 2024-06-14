@@ -1,29 +1,19 @@
 import React, { useCallback } from "react"
-import {
-    BaseButton,
-    BaseSpacer,
-    BaseText,
-    BaseView,
-    Layout,
-    useApplicationSecurity,
-    WalletEncryptionKeyHelper,
-} from "~Components"
+import { BackButtonHeader, BaseButton, BaseModal, BaseSpacer, BaseText, BaseView, Layout } from "~Components"
 import { useNavigation } from "@react-navigation/native"
 import { Routes } from "~Navigation"
 import { VeWorldLogoSVG } from "~Assets"
 import { useI18nContext } from "~i18n"
 import { Linking } from "react-native"
-import { selectAreDevFeaturesEnabled, setIsAppLoading, useAppDispatch, useAppSelector } from "~Storage/Redux"
-import { useCreateWallet } from "~Hooks"
-import { debug } from "~Utils"
-import { SecurityLevelType } from "~Model"
-import { ERROR_EVENTS } from "~Constants"
-
-const IS_CI_BUILD = process.env.IS_CI_BUILD_ENABLED === "true"
+import { useDemoWallet } from "./useDemoWallet"
+import { UserCreatePasswordScreen } from "~Screens/Flows/WalletCreation"
+import { useHandleWalletCreation } from "./useHandleWalletCreation"
+import { useTheme } from "~Hooks"
 
 export const WelcomeScreen = () => {
     const nav = useNavigation()
     const { LL } = useI18nContext()
+    const theme = useTheme()
 
     const onNavigate = useCallback(() => {
         nav.navigate(Routes.WALLET_SETUP)
@@ -39,92 +29,96 @@ export const WelcomeScreen = () => {
         url && Linking.openURL(url)
     }, [])
 
-    // dev button
-    const dispatch = useAppDispatch()
-    const devFeaturesEnabled = useAppSelector(selectAreDevFeaturesEnabled)
-    const { createLocalWallet: createWallet } = useCreateWallet()
-    const { migrateOnboarding } = useApplicationSecurity()
-
-    const onDemoOnboarding = useCallback(async () => {
-        dispatch(setIsAppLoading(true))
-        const mnemonic = "denial kitchen pet squirrel other broom bar gas better priority spoil cross".split(" ")
-        const userPassword = "111111"
-        await WalletEncryptionKeyHelper.init(userPassword)
-        await createWallet({
-            userPassword,
-            onError: e => debug(ERROR_EVENTS.APP, e),
-            mnemonic,
-        })
-        await migrateOnboarding(SecurityLevelType.SECRET, userPassword)
-        dispatch(setIsAppLoading(false))
-    }, [createWallet, dispatch, migrateOnboarding])
-    // end dev button
+    const DEV_DEMO_BUTTON = useDemoWallet()
+    const { onCreateWallet, isOpen, isError, onSuccess, onClose } = useHandleWalletCreation()
 
     return (
-        <Layout
-            noBackButton
-            fixedBody={
-                <BaseView alignItems="center" flex={1} mx={24}>
-                    <BaseView flexDirection="row" mt={20}>
-                        <BaseText typographyFont="largeTitle" testID="welcome-title-id">
-                            {LL.TITLE_WELCOME_TO()}
-                        </BaseText>
-                        <BaseText typographyFont="largeTitle">{LL.VEWORLD()}</BaseText>
+        <>
+            <Layout
+                noBackButton
+                fixedBody={
+                    <BaseView alignItems="center" flex={1} mx={24}>
+                        <BaseView flexDirection="row" mt={20}>
+                            <BaseText typographyFont="largeTitle" testID="welcome-title-id">
+                                {LL.TITLE_WELCOME_TO()}
+                            </BaseText>
+                            <BaseText typographyFont="largeTitle">{LL.VEWORLD()}</BaseText>
+                        </BaseView>
+
+                        <BaseView alignItems="center" w={100}>
+                            <BaseText align="center" typographyFont="buttonSecondary" py={20}>
+                                {LL.BD_WELCOME_SCREEN()}
+                            </BaseText>
+                        </BaseView>
+
+                        <VeWorldLogoSVG height={240} width={240} />
                     </BaseView>
-
-                    <BaseSpacer height={40} />
-                    <VeWorldLogoSVG height={200} width={200} />
-
+                }
+                footer={
                     <BaseView alignItems="center" w={100}>
-                        <BaseSpacer height={40} />
-                        <BaseText align="center" typographyFont="buttonSecondary" py={20}>
-                            {LL.BD_WELCOME_SCREEN()}
-                        </BaseText>
-                    </BaseView>
-                </BaseView>
-            }
-            footer={
-                <BaseView alignItems="center" w={100}>
-                    <BaseView
-                        alignSelf="center"
-                        flexDirection="row"
-                        justifyContent="center"
-                        alignItems="center"
-                        flexWrap="wrap">
-                        <BaseText typographyFont="body" align="center">
-                            {LL.BD_CREATE_WALLET_TYPE_USER_ACCEPTS()}
-                        </BaseText>
-                        <BaseText typographyFont="bodyMedium" underline align="center" onPress={goToTermsAndConditions}>
-                            {LL.COMMON_LBL_TERMS_AND_CONDITIONS()}
-                        </BaseText>
-                        <BaseText typographyFont="body" align="center">
-                            {" "}
-                            {LL.COMMON_LBL_AND()}{" "}
-                        </BaseText>
-                        <BaseText typographyFont="bodyMedium" underline align="center" onPress={goToPrivacyPolicy}>
-                            {LL.COMMON_LBL_PRIVACY_POLICY()}
-                        </BaseText>
-                    </BaseView>
-                    <BaseSpacer height={20} />
-                    <BaseButton
-                        action={onNavigate}
-                        w={100}
-                        title={LL.BTN_GET_STARTED()}
-                        testID="GET_STARTED_BTN"
-                        haptics="Medium"
-                    />
+                        {!!isError && (
+                            <BaseText my={10} color={theme.colors.danger}>
+                                {isError}
+                            </BaseText>
+                        )}
 
-                    {(devFeaturesEnabled || IS_CI_BUILD) && (
                         <BaseButton
-                            size="md"
-                            variant="link"
-                            action={onDemoOnboarding}
-                            title="DEV:DEMO"
-                            testID="dev_demo"
+                            action={onCreateWallet}
+                            w={100}
+                            title={"CREATE WALLET"}
+                            testID="CREATE_WALLET_BTN"
+                            haptics="Medium"
                         />
-                    )}
+
+                        <BaseSpacer height={12} />
+
+                        <BaseButton
+                            action={onNavigate}
+                            w={100}
+                            variant="ghost"
+                            title={"IMPORT WALLET"}
+                            testID="IMPORT_WALLET_BTN"
+                            haptics="Medium"
+                        />
+
+                        <BaseSpacer height={42} />
+
+                        <BaseView
+                            alignSelf="center"
+                            flexDirection="row"
+                            justifyContent="center"
+                            alignItems="center"
+                            flexWrap="wrap">
+                            <BaseText typographyFont="body" align="center">
+                                {LL.BD_CREATE_WALLET_TYPE_USER_ACCEPTS()}
+                            </BaseText>
+                            <BaseText
+                                typographyFont="bodyMedium"
+                                underline
+                                align="center"
+                                onPress={goToTermsAndConditions}>
+                                {LL.COMMON_LBL_TERMS_AND_CONDITIONS()}
+                            </BaseText>
+                            <BaseText typographyFont="body" align="center">
+                                {" "}
+                                {LL.COMMON_LBL_AND()}{" "}
+                            </BaseText>
+                            <BaseText typographyFont="bodyMedium" underline align="center" onPress={goToPrivacyPolicy}>
+                                {LL.COMMON_LBL_PRIVACY_POLICY()}
+                            </BaseText>
+                        </BaseView>
+
+                        {DEV_DEMO_BUTTON}
+                    </BaseView>
+                }
+            />
+
+            <BaseModal isOpen={isOpen} onClose={onClose}>
+                <BaseView justifyContent="flex-start">
+                    <BackButtonHeader action={onClose} hasBottomSpacer={false} />
+                    <UserCreatePasswordScreen onSuccess={onSuccess} />
                 </BaseView>
-            }
-        />
+            </BaseModal>
+        </>
     )
 }

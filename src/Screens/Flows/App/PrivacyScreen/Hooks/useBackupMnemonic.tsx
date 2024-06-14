@@ -1,6 +1,7 @@
 import { useCallback, useEffect, useState } from "react"
 import { LocalDevice } from "~Model"
 import { WalletEncryptionKeyHelper } from "~Components"
+import { setDeviceIsBackup, setUserHasBeenAskedForBuckup, useAppDispatch } from "~Storage/Redux"
 
 type Props = {
     closePasswordPrompt: () => void
@@ -23,6 +24,7 @@ export const useBackupMnemonic = ({
 }: Props) => {
     const [userPin, setUserPin] = useState<string | undefined>(undefined)
     const [mnemonicArray, setMnemonicArray] = useState<string[]>([""])
+    const dispatch = useAppDispatch()
 
     /*
     * This function checks if the user has enabled biometrics and if so, it will
@@ -42,6 +44,9 @@ export const useBackupMnemonic = ({
                 if (wallet?.mnemonic) {
                     setMnemonicArray(wallet.mnemonic)
                     openBackupPhraseSheetWithDelay(300)
+                    // set on cache and device that wallet is backed up
+                    dispatch(setUserHasBeenAskedForBuckup(true))
+                    dispatch(setDeviceIsBackup({ rootAddress: devices[0].rootAddress, isBackup: true }))
                 }
             }
         } else {
@@ -49,6 +54,7 @@ export const useBackupMnemonic = ({
         }
     }, [
         devices,
+        dispatch,
         isWalletSecurityBiometrics,
         openBackupPhraseSheetWithDelay,
         openPasswordPrompt,
@@ -74,10 +80,13 @@ export const useBackupMnemonic = ({
                 if (wallet?.mnemonic) {
                     setMnemonicArray(wallet.mnemonic)
                     openBackupPhraseSheetWithDelay(300)
+                    // set on cache and device that wallet is backed up
+                    dispatch(setUserHasBeenAskedForBuckup(true))
+                    dispatch(setDeviceIsBackup({ rootAddress: devices[0].rootAddress, isBackup: true }))
                 }
             }
         },
-        [closePasswordPrompt, devices, openBackupPhraseSheetWithDelay, openWalletMgmtSheetWithDelay],
+        [closePasswordPrompt, devices, dispatch, openBackupPhraseSheetWithDelay, openWalletMgmtSheetWithDelay],
     )
 
     /*
@@ -94,9 +103,12 @@ export const useBackupMnemonic = ({
             if (wallet?.mnemonic) {
                 setMnemonicArray(wallet.mnemonic)
                 openBackupPhraseSheetWithDelay(300)
+                // set on cache and device that wallet is backed up
+                dispatch(setUserHasBeenAskedForBuckup(true))
+                dispatch(setDeviceIsBackup({ rootAddress: devices[0].rootAddress, isBackup: true }))
             }
         },
-        [closeWalletMgmtSheet, openBackupPhraseSheetWithDelay, userPin],
+        [closeWalletMgmtSheet, devices, dispatch, openBackupPhraseSheetWithDelay, userPin],
     )
 
     useEffect(() => {

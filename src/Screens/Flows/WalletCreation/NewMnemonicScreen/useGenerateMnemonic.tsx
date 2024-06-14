@@ -14,7 +14,6 @@ export const useGenerateMnemonic = () => {
             function init() {
                 dispatch(setIsAppLoading(true))
                 const seed = thorMnemonic.generate()
-
                 if (seed.length === 12 && seed.every(word => word.length > 0)) {
                     setMnemonic(seed)
                     dispatch(setIsAppLoading(false))
