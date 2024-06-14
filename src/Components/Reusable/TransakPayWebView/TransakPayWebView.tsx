@@ -17,10 +17,10 @@ const isProd = process.env.NODE_ENV === "production"
 const isAndroid = PlatformUtils.isAndroid()
 
 // first google_pay for isAndroid is temporary, wait for a SDK fix
-const disabledOSProvider = isAndroid ? "apple_pay" : "google_pay,credit_debit_card"
+const disabledOSProvider = isAndroid ? "apple_pay,google_pay" : "google_pay,credit_debit_card"
 // eslint-disable-next-line max-len
 const disablePaymentMethods = `gbp_bank_transfer,inr_bank_transfer,sepa_bank_transfer,pm_cash_app,pm_jwire,${disabledOSProvider}`
-const defaultPaymentMethod = isAndroid ? "google_pay" : "apple_pay"
+const defaultPaymentMethod = isAndroid ? "credit_debit_card" : "apple_pay"
 
 // using getUniqueId allows us to make the partnerOrderId really unique and unrepeatable and to track better customer orders via Mixpanel to see their flow
 const partnerOrderId = getUniqueIdSync() + "-" + uuid.v4().toString()
