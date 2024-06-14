@@ -12,6 +12,7 @@ module.exports = {
         "^.+\\.jsx$": "babel-jest",
         "^.+\\.tsx?$": "ts-jest",
         ".+\\.(css|styl|less|sass|scss|png|jpg|ttf|woff|woff2)$": "jest-transform-stub",
+        "^.+\\.js$": "babel-jest", // Add support for JS files
     },
     transformIgnorePatterns: [
         "node_modules/(?!((jest-)?react-native|@react-native(-community)?)" +
@@ -27,6 +28,7 @@ module.exports = {
             "|@craftzdog/react-native-buffer" +
             "|react-native-svg" +
             "|mixpanel-react-native" +
+            "|@transak/react-native-sdk" + // Added @transak/react-native-sdk here
             ")",
     ],
     moduleNameMapper: {
@@ -46,12 +48,10 @@ module.exports = {
         "^~Test$": ["<rootDir>/src/Test/index.tsx"],
         "^~Networking(.*)": ["<rootDir>/src/Networking$1"],
         "^~Logging(.*)": ["<rootDir>/src/Logging$1"],
-
         Intl: "<rootDir>/node_modules/intl/",
     },
     moduleFileExtensions: ["ts", "tsx", "js", "jsx", "json", "node"],
     testMatch: ["**/*.(spec|test).(ts|tsx|js|jsx)"],
-
     collectCoverageFrom: ["src/Utils/**/*.{js,jsx,ts,tsx}"],
     coveragePathIgnorePatterns: [
         "index.ts",
