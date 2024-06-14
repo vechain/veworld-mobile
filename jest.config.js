@@ -13,7 +13,6 @@ module.exports = {
         "^.+\\.tsx?$": "ts-jest",
         ".+\\.(css|styl|less|sass|scss|png|jpg|ttf|woff|woff2)$": "jest-transform-stub",
         "^.+\\.js$": "babel-jest", // Add support for JS files
-        "node_modules/uuid/dist/esm-browser/index.js": "babel-jest", // Transform uuid ES module
         // eslint-disable-next-line max-len
         "node_modules/@transak/react-native-sdk/node_modules/query-string/index.js": "babel-jest", // Add specific transformation for query-string module
     },
@@ -32,7 +31,6 @@ module.exports = {
             "|react-native-svg" +
             "|mixpanel-react-native" +
             "|query-string" +
-            "|uuid" +
             "|decode-uri-component" +
             "|split-on-first" +
             "|filter-obj" +

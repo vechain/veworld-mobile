@@ -8,7 +8,7 @@ import { PlatformUtils } from "~Utils"
 import { VECHAIN_BLOCKCHAIN } from "./Constants"
 import { selectCurrency, useAppSelector } from "~Storage/Redux"
 import { getUniqueIdSync } from "react-native-device-info"
-import { v4 as uuid } from "uuid"
+import uuid from "react-native-uuid"
 import { Routes } from "~Navigation"
 import { useI18nContext } from "~i18n"
 import { useNavigation } from "@react-navigation/native"
@@ -23,7 +23,7 @@ const disablePaymentMethods = `gbp_bank_transfer,inr_bank_transfer,sepa_bank_tra
 const defaultPaymentMethod = isAndroid ? "google_pay" : "apple_pay"
 
 // using getUniqueId allows us to make the partnerOrderId really unique and unrepeatable and to track better customer orders via Mixpanel to see their flow
-const partnerOrderId = getUniqueIdSync() + "-" + uuid()
+const partnerOrderId = getUniqueIdSync() + "-" + uuid.v4().toString()
 
 export const TransakPayWebView = ({
     currentAmount,
