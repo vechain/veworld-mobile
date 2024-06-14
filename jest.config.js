@@ -13,6 +13,8 @@ module.exports = {
         "^.+\\.tsx?$": "ts-jest",
         ".+\\.(css|styl|less|sass|scss|png|jpg|ttf|woff|woff2)$": "jest-transform-stub",
         "^.+\\.js$": "babel-jest", // Add support for JS files
+        // eslint-disable-next-line max-len
+        "node_modules/@transak/react-native-sdk/node_modules/query-string/index.js": "babel-jest", // Add specific transformation for query-string module
     },
     transformIgnorePatterns: [
         "node_modules/(?!((jest-)?react-native|@react-native(-community)?)" +
