@@ -12,9 +12,9 @@ module.exports = {
         "^.+\\.jsx$": "babel-jest",
         "^.+\\.tsx?$": "ts-jest",
         ".+\\.(css|styl|less|sass|scss|png|jpg|ttf|woff|woff2)$": "jest-transform-stub",
-        "^.+\\.js$": "babel-jest", // Add support for JS files
-        // eslint-disable-next-line max-len
-        "node_modules/@transak/react-native-sdk/node_modules/query-string/index.js": "babel-jest", // Add specific transformation for query-string module
+        "^.+\\.js$": "babel-jest",
+
+        "node_modules/@transak/react-native-sdk/node_modules/query-string/index.js": "babel-jest",
     },
     transformIgnorePatterns: [
         "node_modules/(?!((jest-)?react-native|@react-native(-community)?)" +
@@ -34,7 +34,7 @@ module.exports = {
             "|decode-uri-component" +
             "|split-on-first" +
             "|filter-obj" +
-            "|@transak/react-native-sdk" + // Added @transak/react-native-sdk here
+            "|@transak/react-native-sdk" +
             ")",
     ],
     moduleNameMapper: {
@@ -54,6 +54,7 @@ module.exports = {
         "^~Test$": ["<rootDir>/src/Test/index.tsx"],
         "^~Networking(.*)": ["<rootDir>/src/Networking$1"],
         "^~Logging(.*)": ["<rootDir>/src/Logging$1"],
+        "^react-native-device-info$": "<rootDir>/src/Test/mocks/react-native-device-info.js",
         "^@react-native-community/netinfo$": "<rootDir>/src/Test/mocks/@react-native-community/netinfo.js",
         Intl: "<rootDir>/node_modules/intl/",
     },
