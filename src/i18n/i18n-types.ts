@@ -456,6 +456,10 @@ type RootTranslation = {
 	 */
 	BD_EUR: string
 	/**
+	 * G​O​ ​B​A​C​K​ ​T​O​ ​A​P​P
+	 */
+	BD_BACK_TO_APP: string
+	/**
 	 * A​d​d​r​e​s​s​ ​C​o​p​i​e​d​ ​t​o​ ​C​l​i​p​b​o​a​r​d
 	 */
 	BD_SCANED_ADDRESS_COPPIED: string
@@ -3365,6 +3369,10 @@ export type TranslationFunctions = {
 	 * EUR
 	 */
 	BD_EUR: () => LocalizedString
+	/**
+	 * GO BACK TO APP
+	 */
+	BD_BACK_TO_APP: () => LocalizedString
 	/**
 	 * Address Copied to Clipboard
 	 */

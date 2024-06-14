@@ -130,6 +130,7 @@ const en: BaseTranslation = {
     BD_APP_LANGUAGE_DISCLAIMER: "Select the general app language",
     BD_USD: "USD",
     BD_EUR: "EUR",
+    BD_BACK_TO_APP: "GO BACK TO APP",
     BD_SCANED_ADDRESS_COPPIED: "Address Copied to Clipboard",
     BD_CONTACTS_LIST: "Your contact list",
     BD_CONTACTS_LIST_DISCLAIMER: "Add friends and addresses you trust",
