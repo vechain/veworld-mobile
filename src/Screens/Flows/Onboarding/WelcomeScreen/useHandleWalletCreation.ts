@@ -7,6 +7,7 @@ import { SecurityLevelType } from "~Model"
 import { BiometricsUtils } from "~Utils"
 import HapticsService from "~Services/HapticsService"
 import { useI18nContext } from "~i18n"
+import { isEmpty } from "lodash"
 
 export const useHandleWalletCreation = () => {
     const biometrics = useBiometrics()
@@ -40,30 +41,39 @@ export const useHandleWalletCreation = () => {
         [LL, dispatch],
     )
 
-    const onCreateWallet = useCallback(async () => {
-        if (biometrics && biometrics.currentSecurityLevel === "BIOMETRIC") {
-            dispatch(setIsAppLoading(true))
-            const mnemonic = getNewMnemonic()
-            await WalletEncryptionKeyHelper.init()
-            await createLocalWallet({
-                mnemonic: mnemonic,
-                onError: onWalletCreationError,
-            })
-            await migrateOnboarding(SecurityLevelType.BIOMETRIC)
-            dispatch(setIsAppLoading(false))
-        } else {
-            onOpen()
-        }
-    }, [biometrics, createLocalWallet, dispatch, migrateOnboarding, onOpen, onWalletCreationError])
+    const onCreateWallet = useCallback(
+        async ({ importMnemonic, privateKey }: { importMnemonic?: string[]; privateKey?: string }) => {
+            if (biometrics && biometrics.currentSecurityLevel === "BIOMETRIC") {
+                if (!importMnemonic && !privateKey)
+                    throw new Error("Wrong/corrupted data. No device available in store")
+                dispatch(setIsAppLoading(true))
+                const mnemonic = isEmpty(importMnemonic) ? getNewMnemonic() : importMnemonic
+                await WalletEncryptionKeyHelper.init()
+                await createLocalWallet({
+                    mnemonic: privateKey ? undefined : mnemonic,
+                    privateKey,
+                    onError: onWalletCreationError,
+                })
+                await migrateOnboarding(SecurityLevelType.BIOMETRIC)
+                dispatch(setIsAppLoading(false))
+            } else {
+                onOpen()
+            }
+        },
+        [biometrics, createLocalWallet, dispatch, migrateOnboarding, onOpen, onWalletCreationError],
+    )
 
     const onSuccess = useCallback(
-        async (pin: string) => {
+        async ({ pin, mnemonic, privateKey }: { pin: string; mnemonic?: string[]; privateKey?: string }) => {
             onClose()
+            if (!mnemonic && !privateKey) throw new Error("Wrong/corrupted data. No device available in store")
+
             dispatch(setIsAppLoading(true))
-            const mnemonic = getNewMnemonic()
+            const _mnemonic = isEmpty(mnemonic) ? getNewMnemonic() : mnemonic
             await WalletEncryptionKeyHelper.init(pin)
             await createLocalWallet({
-                mnemonic: mnemonic,
+                mnemonic: privateKey ? undefined : _mnemonic,
+                privateKey: privateKey,
                 userPassword: pin,
                 onError: onWalletCreationError,
             })

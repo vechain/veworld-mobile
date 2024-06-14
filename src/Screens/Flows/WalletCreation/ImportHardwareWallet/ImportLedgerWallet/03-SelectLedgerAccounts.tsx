@@ -111,6 +111,7 @@ export const SelectLedgerAccounts: React.FC<Props> = ({ route }) => {
                         accounts: selectedAccountsIndex,
                     }),
                 )
+
                 navigateNext()
             }
         } catch (e) {

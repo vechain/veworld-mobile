@@ -1,31 +1,46 @@
 import React, { useCallback, useMemo, useState } from "react"
-import { BaseButton, BaseIcon, BaseSpacer, BaseText, BaseView, DismissKeyboardView, Layout } from "~Components"
+import {
+    BackButtonHeader,
+    BaseButton,
+    BaseIcon,
+    BaseModal,
+    BaseSpacer,
+    BaseText,
+    BaseTouchableBox,
+    BaseView,
+    DismissKeyboardView,
+    Layout,
+} from "~Components"
 import { useI18nContext } from "~i18n"
 import * as Clipboard from "expo-clipboard"
 import { useAnalyticTracking, useBottomSheetModal, useDeviceUtils, useTheme } from "~Hooks"
 import { CryptoUtils } from "~Utils"
 import { Keyboard, StyleSheet } from "react-native"
-import { Routes } from "~Navigation"
 import { ImportWalletInput } from "./Components/ImportWalletInput"
-import { useNavigation } from "@react-navigation/native"
-import { selectAreDevFeaturesEnabled, useAppDispatch, useAppSelector } from "~Storage/Redux"
-import { selectHasOnboarded } from "~Storage/Redux/Selectors"
-import { setMnemonic, setPrivateKey } from "~Storage/Redux/Actions"
+import { selectAreDevFeaturesEnabled, useAppSelector } from "~Storage/Redux"
 import HapticsService from "~Services/HapticsService"
 import { AnalyticsEvent } from "~Constants"
 import { DEVICE_CREATION_ERRORS as ERRORS, IMPORT_TYPE } from "~Model"
 import { UnlockKeystoreBottomSheet } from "./Components/UnlockKeystoreBottomSheet"
+import { SelectDerivationPathBottomSheet } from "../WalletSetupScreen/components/SelectDerivationPathBottomSheet"
+import { UserCreatePasswordScreen } from "../UserCreatePasswordScreen"
+import { useHandleWalletCreation } from "~Screens/Flows/Onboarding/WelcomeScreen/useHandleWalletCreation"
 
 const DEMO_MNEMONIC = "denial kitchen pet squirrel other broom bar gas better priority spoil cross"
 
 export const ImportLocalWallet = () => {
     const { LL } = useI18nContext()
-    const dispatch = useAppDispatch()
-    const nav = useNavigation()
     const theme = useTheme()
     const track = useAnalyticTracking()
 
-    const userHasOnboarded = useAppSelector(selectHasOnboarded)
+    const {
+        onCreateWallet,
+        isOpen,
+        isError: isCreateError,
+        onSuccess,
+        onClose: onCloseCreateFlow,
+    } = useHandleWalletCreation()
+
     const areDevFeaturesEnabled = useAppSelector(selectAreDevFeaturesEnabled)
 
     const [textValue, setTextValue] = useState<string>("")
@@ -39,7 +54,16 @@ export const ImportLocalWallet = () => {
         onClose: closeUnlockKeystoreBottomSheet,
     } = useBottomSheetModal()
 
+    const {
+        ref: derivationPathRef,
+        onOpen: onOpenDerivationPath,
+        onClose: onCloseDerivationPath,
+    } = useBottomSheetModal()
+
     const importType = useMemo(() => CryptoUtils.determineKeyImportType(textValue), [textValue])
+
+    const [mnemonicCache, setMnemonicCache] = useState<string[]>()
+    const [privateKeyCache, setPrivateKeyCache] = useState<string>()
 
     const processErrorMessage = useCallback(
         (err: unknown) => {
@@ -63,44 +87,35 @@ export const ImportLocalWallet = () => {
         [LL],
     )
 
-    const completeImport = useCallback(() => {
-        HapticsService.triggerImpact({ level: "Medium" })
-        if (userHasOnboarded) {
-            nav.navigate(Routes.WALLET_SUCCESS)
-        } else {
-            nav.navigate(Routes.APP_SECURITY)
-        }
-    }, [nav, userHasOnboarded])
-
     const importMnemonic = useCallback(
         (_mnemonic: string) => {
             try {
                 const mnemonic = CryptoUtils.mnemonicStringToArray(_mnemonic)
                 checkCanImportDevice(mnemonic)
-                dispatch(setMnemonic(mnemonic))
+                setMnemonicCache(mnemonic)
                 track(AnalyticsEvent.IMPORT_MNEMONIC_SUBMITTED)
-                completeImport()
+                onCreateWallet({ importMnemonic: mnemonic })
             } catch (err) {
                 processErrorMessage(err)
                 track(AnalyticsEvent.IMPORT_MNEMONIC_FAILED)
             }
         },
-        [checkCanImportDevice, dispatch, track, completeImport, processErrorMessage],
+        [checkCanImportDevice, track, onCreateWallet, processErrorMessage],
     )
 
     const importPrivateKey = useCallback(
         (_privKey: string) => {
             try {
                 checkCanImportDevice(undefined, _privKey)
-                dispatch(setPrivateKey(_privKey))
+                setPrivateKeyCache(_privKey)
                 track(AnalyticsEvent.IMPORT_PRIVATE_KEY_SUBMITTED)
-                completeImport()
+                onCreateWallet({ privateKey: _privKey })
             } catch (err) {
                 processErrorMessage(err)
                 track(AnalyticsEvent.IMPORT_PRIVATE_KEY_FAILED)
             }
         },
-        [checkCanImportDevice, dispatch, track, completeImport, processErrorMessage],
+        [checkCanImportDevice, track, onCreateWallet, processErrorMessage],
     )
 
     const onUnlockKeyStoreFile = useCallback(
@@ -108,15 +123,15 @@ export const ImportLocalWallet = () => {
             try {
                 const privateKey = await CryptoUtils.decryptKeystoreFile(textValue, pwd)
                 checkCanImportDevice(undefined, privateKey)
-                dispatch(setPrivateKey(privateKey))
+                setPrivateKeyCache(privateKey)
                 track(AnalyticsEvent.IMPORT_KEYSTORE_FILE_SUBMITTED)
-                completeImport()
+                onCreateWallet({ privateKey })
             } catch (err) {
                 processErrorMessage(err)
                 track(AnalyticsEvent.IMPORT_KEYSTORE_FILE_FAILED)
             }
         },
-        [textValue, checkCanImportDevice, dispatch, track, completeImport, processErrorMessage],
+        [textValue, checkCanImportDevice, track, onCreateWallet, processErrorMessage],
     )
 
     const onVerify = useCallback(
@@ -180,60 +195,97 @@ export const ImportLocalWallet = () => {
         <DismissKeyboardView>
             <Layout
                 body={
-                    <BaseView justifyContent="space-between">
-                        <BaseView>
-                            <BaseView flexDirection="row" w={100}>
-                                <BaseText typographyFont="title">{LL.TITLE_WALLET_IMPORT_LOCAL()}</BaseText>
-                                {areDevFeaturesEnabled && (
-                                    <BaseButton
-                                        size="md"
-                                        variant="link"
-                                        action={onDemoMnemonicClick}
-                                        title="DEV:DEMO"
+                    <>
+                        <BaseView justifyContent="space-between">
+                            <BaseView>
+                                <BaseView flexDirection="row" w={100}>
+                                    <BaseText typographyFont="title">{LL.TITLE_WALLET_IMPORT_LOCAL()}</BaseText>
+                                    {areDevFeaturesEnabled && (
+                                        <BaseButton
+                                            size="md"
+                                            variant="link"
+                                            action={onDemoMnemonicClick}
+                                            title="DEV:DEMO"
+                                        />
+                                    )}
+                                </BaseView>
+                                <BaseText typographyFont="body" my={10}>
+                                    {LL.BD_WALLET_IMPORT_LOCAL()}
+                                </BaseText>
+
+                                <BaseSpacer height={20} />
+
+                                <BaseView flexDirection="row" alignSelf="flex-end">
+                                    <BaseIcon
+                                        name={"content-paste"}
+                                        size={32}
+                                        style={styles.icon}
+                                        bg={theme.colors.secondary}
+                                        action={onPasteFromClipboard}
                                     />
+                                    <BaseIcon
+                                        name={"trash-can-outline"}
+                                        size={32}
+                                        bg={theme.colors.secondary}
+                                        action={onClearSeed}
+                                    />
+                                </BaseView>
+
+                                <BaseSpacer height={40} />
+
+                                <ImportWalletInput value={textValue} onChangeText={onChangeText} isError={!!isError} />
+
+                                <BaseSpacer height={12} />
+
+                                <BaseTouchableBox
+                                    bg="transparent"
+                                    haptics="Medium"
+                                    action={onOpenDerivationPath}
+                                    px={4}
+                                    justifyContent="space-between">
+                                    <BaseView flex={1}>
+                                        <BaseText align="left" typographyFont="bodyBold">
+                                            {"Derivation Path"}
+                                        </BaseText>
+                                    </BaseView>
+                                    <BaseIcon name="chevron-right" size={24} color={theme.colors.text} />
+                                </BaseTouchableBox>
+
+                                <UnlockKeystoreBottomSheet
+                                    ref={unlockKeystoreBottomSheetRef}
+                                    onHide={closeUnlockKeystoreBottomSheet}
+                                    onUnlock={onUnlockKeyStoreFile}
+                                />
+                                {!!isError && (
+                                    <BaseText my={10} color={theme.colors.danger}>
+                                        {isError}
+                                    </BaseText>
                                 )}
                             </BaseView>
-                            <BaseText typographyFont="body" my={10}>
-                                {LL.BD_WALLET_IMPORT_LOCAL()}
-                            </BaseText>
+                        </BaseView>
 
-                            <BaseSpacer height={20} />
+                        <SelectDerivationPathBottomSheet ref={derivationPathRef} onClose={onCloseDerivationPath} />
 
-                            <BaseView flexDirection="row" alignSelf="flex-end">
-                                <BaseIcon
-                                    name={"content-paste"}
-                                    size={32}
-                                    style={styles.icon}
-                                    bg={theme.colors.secondary}
-                                    action={onPasteFromClipboard}
-                                />
-                                <BaseIcon
-                                    name={"trash-can-outline"}
-                                    size={32}
-                                    bg={theme.colors.secondary}
-                                    action={onClearSeed}
+                        <BaseModal isOpen={isOpen} onClose={onCloseCreateFlow}>
+                            <BaseView justifyContent="flex-start">
+                                <BackButtonHeader action={onCloseCreateFlow} hasBottomSpacer={false} />
+                                <UserCreatePasswordScreen
+                                    onSuccess={pin =>
+                                        onSuccess({ pin, mnemonic: mnemonicCache, privateKey: privateKeyCache })
+                                    }
                                 />
                             </BaseView>
-
-                            <BaseSpacer height={40} />
-
-                            <ImportWalletInput value={textValue} onChangeText={onChangeText} isError={!!isError} />
-
-                            <UnlockKeystoreBottomSheet
-                                ref={unlockKeystoreBottomSheetRef}
-                                onHide={closeUnlockKeystoreBottomSheet}
-                                onUnlock={onUnlockKeyStoreFile}
-                            />
-                            {!!isError && (
-                                <BaseText my={10} color={theme.colors.danger}>
-                                    {isError}
-                                </BaseText>
-                            )}
-                        </BaseView>
-                    </BaseView>
+                        </BaseModal>
+                    </>
                 }
                 footer={
                     <BaseView w={100}>
+                        {!!isCreateError && (
+                            <BaseText my={10} color={theme.colors.danger}>
+                                {isCreateError}
+                            </BaseText>
+                        )}
+
                         <BaseButton
                             action={handleVerify}
                             w={100}

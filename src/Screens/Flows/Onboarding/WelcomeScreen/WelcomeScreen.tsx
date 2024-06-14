@@ -1,23 +1,29 @@
-import React, { useCallback } from "react"
+import React, { useCallback, useMemo } from "react"
 import { BackButtonHeader, BaseButton, BaseModal, BaseSpacer, BaseText, BaseView, Layout } from "~Components"
-import { useNavigation } from "@react-navigation/native"
-import { Routes } from "~Navigation"
 import { VeWorldLogoSVG } from "~Assets"
 import { useI18nContext } from "~i18n"
 import { Linking } from "react-native"
 import { useDemoWallet } from "./useDemoWallet"
 import { UserCreatePasswordScreen } from "~Screens/Flows/WalletCreation"
 import { useHandleWalletCreation } from "./useHandleWalletCreation"
-import { useTheme } from "~Hooks"
+import { useAnalyticTracking, useBottomSheetModal, useTheme } from "~Hooks"
+import { RumManager } from "~Logging"
+import { AnalyticsEvent } from "~Constants"
+import { ImportWalletBottomSheet } from "~Screens/Flows/WalletCreation/WalletSetupScreen/components"
 
 export const WelcomeScreen = () => {
-    const nav = useNavigation()
     const { LL } = useI18nContext()
     const theme = useTheme()
+    const ddLogger = useMemo(() => new RumManager(), [])
+    const track = useAnalyticTracking()
 
-    const onNavigate = useCallback(() => {
-        nav.navigate(Routes.WALLET_SETUP)
-    }, [nav])
+    const { ref, onOpen, onClose } = useBottomSheetModal()
+
+    const onImportWallet = useCallback(async () => {
+        track(AnalyticsEvent.SELECT_WALLET_IMPORT_WALLET)
+        ddLogger.logAction("WALLET_SETUP_SCREEN", "SELECT_WALLET_IMPORT_WALLET")
+        onOpen()
+    }, [onOpen, track, ddLogger])
 
     const goToTermsAndConditions = useCallback(() => {
         const url = process.env.REACT_APP_TERMS_OF_SERVICE_URL
@@ -30,7 +36,7 @@ export const WelcomeScreen = () => {
     }, [])
 
     const DEV_DEMO_BUTTON = useDemoWallet()
-    const { onCreateWallet, isOpen, isError, onSuccess, onClose } = useHandleWalletCreation()
+    const { onCreateWallet, isOpen, isError, onSuccess, onClose: onCloseCreateFlow } = useHandleWalletCreation()
 
     return (
         <>
@@ -63,7 +69,7 @@ export const WelcomeScreen = () => {
                         )}
 
                         <BaseButton
-                            action={onCreateWallet}
+                            action={() => onCreateWallet({})}
                             w={100}
                             title={"CREATE WALLET"}
                             testID="CREATE_WALLET_BTN"
@@ -73,7 +79,7 @@ export const WelcomeScreen = () => {
                         <BaseSpacer height={12} />
 
                         <BaseButton
-                            action={onNavigate}
+                            action={onImportWallet}
                             w={100}
                             variant="ghost"
                             title={"IMPORT WALLET"}
@@ -113,10 +119,12 @@ export const WelcomeScreen = () => {
                 }
             />
 
-            <BaseModal isOpen={isOpen} onClose={onClose}>
+            <ImportWalletBottomSheet ref={ref} onClose={onClose} />
+
+            <BaseModal isOpen={isOpen} onClose={onCloseCreateFlow}>
                 <BaseView justifyContent="flex-start">
                     <BackButtonHeader action={onClose} hasBottomSpacer={false} />
-                    <UserCreatePasswordScreen onSuccess={onSuccess} />
+                    <UserCreatePasswordScreen onSuccess={pin => onSuccess({ pin })} />
                 </BaseView>
             </BaseModal>
         </>

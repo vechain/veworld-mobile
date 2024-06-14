@@ -27,12 +27,6 @@ export const WalletSetupScreen = () => {
 
     const ddLogger = useMemo(() => new RumManager(), [])
 
-    const createLocalWallet = useCallback(async () => {
-        track(AnalyticsEvent.SELECT_WALLET_CREATE_WALLET)
-        ddLogger.logAction("WALLET_SETUP_SCREEN", "SELECT_WALLET_CREATE_WALLET")
-        nav.navigate(Routes.NEW_MNEMONIC)
-    }, [nav, track, ddLogger])
-
     const onImportWallet = useCallback(async () => {
         track(AnalyticsEvent.SELECT_WALLET_IMPORT_WALLET)
         ddLogger.logAction("WALLET_SETUP_SCREEN", "SELECT_WALLET_IMPORT_WALLET")
@@ -77,21 +71,6 @@ export const WalletSetupScreen = () => {
             footer={
                 <BaseView>
                     <BaseView alignItems="center" w={100}>
-                        <BaseTouchableBox action={createLocalWallet} py={16} haptics="Medium">
-                            <BaseIcon name="plus-circle" size={24} color={theme.colors.text} />
-                            <BaseView flex={1} px={12}>
-                                <BaseText align="left" typographyFont="subSubTitle">
-                                    {LL.BTN_CREATE_WALLET_TYPE_CREATE_NEW()}
-                                </BaseText>
-                                <BaseText pt={4} align="left" typographyFont="captionRegular">
-                                    {LL.BTN_CREATE_WALLET_TYPE_CREATE_NEW_SUBTITLE()}
-                                </BaseText>
-                            </BaseView>
-                            <BaseIcon name="chevron-right" size={24} color={theme.colors.text} />
-                        </BaseTouchableBox>
-
-                        <BaseSpacer height={16} />
-
                         <BaseTouchableBox
                             haptics="Medium"
                             action={onImportWallet}
