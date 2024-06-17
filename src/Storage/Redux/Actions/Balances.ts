@@ -42,7 +42,7 @@ export const updateAccountBalances =
 
         if (accountBalances.length === 0) return
 
-        // Get all networks and remove duplicates of the same network type. Only "Main" and "Testnet" have only one network
+        // Get all networks and remove duplicates of the same network type.
         const allNetworks = selectNetworks(getState()).reduce((acc: Network[], network: Network) => {
             if (!acc.some(n => n.type === network.type)) {
                 acc.push(network)
