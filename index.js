@@ -47,6 +47,7 @@ import { onlineManager } from "@tanstack/react-query"
 import { useFlipper } from "@react-navigation/devtools"
 import { DdRumReactNavigationTracking } from "@datadog/mobile-react-navigation"
 import { DatadogProvider, DatadogProviderConfiguration } from "@datadog/mobile-react-native"
+import { Routes } from "~Navigation"
 
 const { fontFamily } = typography
 
@@ -129,6 +130,10 @@ const linking = {
         screens: {
             TabStack: {
                 screens: {
+                    NFTStack: {
+                        path: "nfts",
+                        initialRouteName: Routes.NFTS,
+                    },
                     DiscoverStack: {
                         path: "discover",
                         initialRouteName: "Discover",

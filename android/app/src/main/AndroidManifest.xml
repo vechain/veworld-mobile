@@ -88,6 +88,18 @@
             <data android:scheme="https" />
             <data android:host="www.veworld.net" android:pathPrefix="/discover/browser" />
             <!-- note that the leading "/" is required for pathPrefix-->
+
+        </intent-filter>
+
+            <intent-filter android:autoVerify="true">
+            <action android:name="android.intent.action.VIEW" />
+            <category android:name="android.intent.category.DEFAULT" />
+            <category android:name="android.intent.category.BROWSABLE" />
+            <!-- Accepts URIs that begin with "http://www.veworld.com/?disoveryUrl -->
+
+            <data android:scheme="https" />
+            <data android:host="www.veworld.com" android:pathPrefix="/nfts" />
+            <!-- note that the leading "/" is required for pathPrefix-->
         </intent-filter>
         
       </activity>       

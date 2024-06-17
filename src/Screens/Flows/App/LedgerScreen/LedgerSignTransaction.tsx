@@ -425,7 +425,7 @@ export const LedgerSignTransaction: React.FC<Props> = ({ route }) => {
                     <StepsProgressBar
                         steps={Steps}
                         currentStep={currentStep}
-                        isCurrentStepError={!signature && !!signingError}
+                        isCurrentStepError={(!signature && !!signingError) || userRejected}
                     />
                     <BaseSpacer height={96} />
                     <BaseText typographyFont="bodyBold">

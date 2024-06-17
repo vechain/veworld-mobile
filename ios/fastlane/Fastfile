@@ -166,8 +166,8 @@ platform :ios do
       sh("node_modules/@sentry/cli/bin/sentry-cli releases files #{ENV["APP_IDENTIFIER"]}@#{version}+#{build} upload-sourcemaps --dist #{build} --strip-prefix ../../ main.jsbundle main.jsbundle.map --org 'vechain-foundation' --project 'veworld-mobile' --log-level=info")
       
       # upload source maps to datadog with cli 
-      sh("yarn datadog-ci react-native upload --platform ios --service org.vechain.veworld.app --bundle main.jsbundle.map --sourcemap ./build/main.jsbundle.map --release-version #{version_name} --build-version #{build_number} ")
-      sh("yarn datadog-ci react-native upload --platform ios --service org.vechain.veworld.app --bundle main.jsbundle --sourcemap ./build/main.jsbundle. --release-version #{version_name} --build-version #{build_number} ")
+      sh("yarn datadog-ci react-native upload --platform ios --service org.vechain.veworld.app --bundle main.jsbundle.map --sourcemap ./build/main.jsbundle.map --release-version #{version} --build-version #{build} ")
+      sh("yarn datadog-ci react-native upload --platform ios --service org.vechain.veworld.app --bundle main.jsbundle --sourcemap ./build/main.jsbundle --release-version #{version} --build-version #{build} ")
 
     end
   end
@@ -270,7 +270,7 @@ platform :ios do
 
       create_tags_gh(build:build, version:version)
 
-      upload_source_maps_(build:build, version:version)
+      upload_source_maps(build:build, version:version)
 
       gh_setup_after
 
@@ -338,8 +338,8 @@ platform :ios do
     key_password = ENV["KEY_PASSWORD"]
     key_alias = ENV["KEY_ALIAS"]
   
-    version_name = options[:version_name]
-    build_number = options[:build_number]
+    version = options[:version]
+    build = options[:build]
     github_username = options[:username]
     github_token = options[:token]
   

@@ -17,7 +17,7 @@ export const PaymentProviderList = () => {
     const renderItem = useCallback(
         ({ item }: { item: PaymentProvider }) => {
             const handleBuyClick = () => {
-                nav.navigate(Routes.BUY_WEBVIEW)
+                nav.navigate(Routes.BUY_WEBVIEW, { provider: item.id, providerName: item.name })
                 track(AnalyticsEvent.BUY_CRYPTO_PROVIDER_SELECTED, { provider: item.id })
             }
             return (

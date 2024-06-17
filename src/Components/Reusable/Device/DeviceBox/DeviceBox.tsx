@@ -4,7 +4,7 @@ import { useThemedStyles } from "~Hooks"
 import { BaseCard, BaseIcon, BaseSpacer, BaseText, BaseView, LedgerBadge, WatchedAccountBadge } from "~Components"
 import { BaseDevice, DEVICE_TYPE } from "~Model"
 import { Pressable, StyleSheet, ViewStyle } from "react-native"
-import { ColorThemeType } from "~Constants"
+import { ColorThemeType, DerivationPath } from "~Constants"
 import { TouchableOpacity } from "react-native-gesture-handler"
 
 type Props = {
@@ -43,7 +43,7 @@ export const DeviceBox: React.FC<Props> = ({
                 <BaseView flexDirection="row" flex={1}>
                     {isEdit && (
                         <>
-                            <Pressable onPressIn={isEdit ? drag : undefined} disabled={!isActive}>
+                            <Pressable onPressIn={isEdit ? drag : undefined} disabled={isActive}>
                                 <BaseIcon name={"drag"} color={theme.colors.text} size={24} />
                             </Pressable>
                             <BaseSpacer width={8} />
@@ -52,6 +52,13 @@ export const DeviceBox: React.FC<Props> = ({
                     {device?.type === DEVICE_TYPE.LEDGER && (
                         <>
                             <LedgerBadge />
+                            <BaseSpacer width={8} />
+                        </>
+                    )}
+
+                    {device?.derivationPath === DerivationPath.ETH && (
+                        <>
+                            <BaseIcon name="ethereum" size={20} color={theme.colors.textDisabled} />
                             <BaseSpacer width={8} />
                         </>
                     )}
@@ -72,7 +79,19 @@ export const DeviceBox: React.FC<Props> = ({
                 {isIconVisible && !isEdit && <BaseIcon name={"pencil-outline"} color={theme.colors.text} size={24} />}
             </BaseCard>
         ),
-        [cardStyle, device?.alias, device?.type, drag, isActive, isEdit, isIconVisible, styles.card, theme.colors.text],
+        [
+            cardStyle,
+            device?.alias,
+            device?.derivationPath,
+            device?.type,
+            drag,
+            isActive,
+            isEdit,
+            isIconVisible,
+            styles.card,
+            theme.colors.text,
+            theme.colors.textDisabled,
+        ],
     )
 
     return onDeviceSelected ? (

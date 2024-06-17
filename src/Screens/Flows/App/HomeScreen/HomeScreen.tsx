@@ -148,53 +148,47 @@ export const HomeScreen = () => {
             noBackButton
             noMargin
             fixedBody={
-                <>
-                    <NestableScrollContainer
-                        ref={scrollViewRef}
-                        testID="HomeScreen_ScrollView"
-                        refreshControl={
-                            <RefreshControl
-                                onRefresh={onRefresh}
-                                tintColor={theme.colors.border}
-                                refreshing={refreshing}
+                <NestableScrollContainer
+                    ref={scrollViewRef}
+                    testID="HomeScreen_ScrollView"
+                    refreshControl={
+                        <RefreshControl onRefresh={onRefresh} tintColor={theme.colors.border} refreshing={refreshing} />
+                    }>
+                    <BaseView>
+                        <BaseView alignItems="center">
+                            <BaseSpacer height={20} />
+                            <AccountCard
+                                balanceVisible={isBalanceVisible}
+                                openSelectAccountBottomSheet={openSelectAccountBottomSheet}
+                                account={selectedAccount}
+                                selectedCurrency={selectedCurrency}
+                                openQRCodeSheet={openQRCodeSheet}
                             />
-                        }>
-                        <BaseView>
-                            <BaseView alignItems="center">
-                                <BaseSpacer height={20} />
-                                <AccountCard
-                                    balanceVisible={isBalanceVisible}
-                                    openSelectAccountBottomSheet={openSelectAccountBottomSheet}
-                                    account={selectedAccount}
-                                    selectedCurrency={selectedCurrency}
-                                    openQRCodeSheet={openQRCodeSheet}
-                                />
-                            </BaseView>
-                            <BaseSpacer height={24} />
-
-                            <FastActionsBar actions={Actions} />
-
-                            <BaseSpacer height={24} />
-                            <EditTokensBar isEdit={isEdit} setIsEdit={setIsEdit} />
-                            <BaseSpacer height={24} />
-
-                            <TokenList isEdit={isEdit} isBalanceVisible={isBalanceVisible} entering={animateEntering} />
-                            <BaseSpacer height={24} />
                         </BaseView>
+                        <BaseSpacer height={24} />
 
-                        {/*Account Selection*/}
-                        <SelectAccountBottomSheet
-                            closeBottomSheet={closeSelectAccountBottonSheet}
-                            accounts={accounts}
-                            setSelectedAccount={setSelectedAccount}
-                            selectedAccount={selectedAccount}
-                            isBalanceVisible={isBalanceVisible}
-                            ref={selectAccountBottomSheetRef}
-                        />
+                        <FastActionsBar actions={Actions} />
 
-                        <QRCodeBottomSheet ref={QRCodeBottomSheetRef} />
-                    </NestableScrollContainer>
-                </>
+                        <BaseSpacer height={24} />
+                        <EditTokensBar isEdit={isEdit} setIsEdit={setIsEdit} />
+                        <BaseSpacer height={24} />
+
+                        <TokenList isEdit={isEdit} isBalanceVisible={isBalanceVisible} entering={animateEntering} />
+                        <BaseSpacer height={24} />
+                    </BaseView>
+
+                    {/*Account Selection*/}
+                    <SelectAccountBottomSheet
+                        closeBottomSheet={closeSelectAccountBottonSheet}
+                        accounts={accounts}
+                        setSelectedAccount={setSelectedAccount}
+                        selectedAccount={selectedAccount}
+                        isBalanceVisible={isBalanceVisible}
+                        ref={selectAccountBottomSheetRef}
+                    />
+
+                    <QRCodeBottomSheet ref={QRCodeBottomSheetRef} />
+                </NestableScrollContainer>
             }
         />
     )

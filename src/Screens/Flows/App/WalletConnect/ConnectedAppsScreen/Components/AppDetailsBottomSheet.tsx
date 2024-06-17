@@ -1,6 +1,6 @@
 import { BottomSheetModalMethods } from "@gorhom/bottom-sheet/lib/typescript/types"
-import React, { useCallback, useMemo, useState } from "react"
-import { BaseBottomSheet, BaseButton, BaseSpacer, BaseView, ScrollViewWithFooter } from "~Components"
+import React, { useCallback, useMemo } from "react"
+import { BaseBottomSheet, BaseButton, BaseSpacer, BaseView } from "~Components"
 import { useI18nContext } from "~i18n"
 import { AppInfo } from "../../Components"
 import { ConnectedApp } from "~Screens"
@@ -11,11 +11,8 @@ type Props = {
     onDisconnect: () => void
 }
 
-const snapPoints = ["50%"]
 export const AppDetailsBottomSheet = React.forwardRef<BottomSheetModalMethods, Props>(
     ({ onClose, connectedApp, onDisconnect }, ref) => {
-        const [isScrollEnabled, setIsScrollEnabled] = useState(true)
-
         const { LL } = useI18nContext()
 
         const icon = useMemo(() => {
@@ -48,26 +45,16 @@ export const AppDetailsBottomSheet = React.forwardRef<BottomSheetModalMethods, P
             onDisconnect()
         }, [onDisconnect, onClose])
 
-        const hanldeOnReadMore = useCallback((isDescriptionExpanded: boolean) => {
-            setIsScrollEnabled(isDescriptionExpanded)
-        }, [])
-
         return (
-            <BaseBottomSheet snapPoints={snapPoints} ref={ref} onDismiss={onClose} title={LL.CONNECTED_APP_TITLE()}>
-                <ScrollViewWithFooter
-                    isScrollEnabled={isScrollEnabled}
-                    footer={<BaseButton action={disconnectSession} title="Disconnect" />}>
+            <BaseBottomSheet dynamicHeight ref={ref} onDismiss={onClose} title={LL.CONNECTED_APP_TITLE()}>
+                <BaseView>
                     <BaseView mx={10}>
-                        <BaseSpacer height={16} />
-                        <AppInfo
-                            name={name}
-                            url={url}
-                            icon={icon}
-                            description={description}
-                            hanldeOnReadMore={hanldeOnReadMore}
-                        />
+                        <AppInfo name={name} url={url} icon={icon} description={description} />
                     </BaseView>
-                </ScrollViewWithFooter>
+                    <BaseSpacer height={16} />
+                    <BaseButton action={disconnectSession} title="Disconnect" />
+                    <BaseSpacer height={16} />
+                </BaseView>
             </BaseBottomSheet>
         )
     },
