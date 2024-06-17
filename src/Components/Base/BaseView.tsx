@@ -1,7 +1,7 @@
 import React, { memo, useMemo } from "react"
 import { StyleSheet, View, ViewProps } from "react-native"
 
-import { AlignItems, AlignSelf, FlexWrap, FlexDirection, JustifyContent, ColorThemeType } from "~Constants"
+import { AlignItems, AlignSelf, FlexWrap, FlexDirection, JustifyContent, ColorThemeType, Overflow } from "~Constants"
 import { useThemedStyles } from "~Hooks"
 
 export type BaseViewProps = {
@@ -12,6 +12,7 @@ export type BaseViewProps = {
     justifyContent?: JustifyContent
     alignItems?: AlignItems
     alignSelf?: AlignSelf
+    overflow?: Overflow
     flexWrap?: FlexWrap
     flex?: number
     flexGrow?: number
@@ -42,6 +43,7 @@ export const BaseView = memo(
         flexWrap,
         flexGrow,
         alignSelf,
+        overflow,
         bg,
         w,
         h,
@@ -79,6 +81,7 @@ export const BaseView = memo(
                 flex,
                 flexGrow,
                 alignSelf,
+                overflow,
                 flexDirection,
                 justifyContent: computedJustifyContent,
                 alignItems: computedAlignItems,
@@ -116,6 +119,7 @@ type BaseStyles = {
     alignItems: AlignItems
     flexWrap?: FlexWrap
     alignSelf?: AlignSelf
+    overflow?: Overflow
     bg?: string
     w?: number
     h?: number
@@ -146,6 +150,7 @@ const baseStyles = (props: BaseStyles) => (theme: ColorThemeType) =>
             alignItems: props.alignItems,
             flexGrow: props.flexGrow,
             alignSelf: props.alignSelf,
+            overflow: props.overflow,
             backgroundColor: props.bg || theme.colors.transparent,
             width: props.w && `${props.w}%`,
             height: props.h && `${props.h}%`,

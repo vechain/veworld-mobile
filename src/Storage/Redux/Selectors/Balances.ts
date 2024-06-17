@@ -175,7 +175,7 @@ export const selectVthoTokenWithBalanceByAccount = createSelector(
             balance: {
                 balance: "0",
                 accountAddress,
-                tokenAddress: VET.address,
+                tokenAddress: VTHO.address,
                 isCustomToken: false,
             },
         }

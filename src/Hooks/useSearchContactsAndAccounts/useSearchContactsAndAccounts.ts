@@ -21,10 +21,12 @@ export const useSearchContactsAndAccounts = ({
     const { _getName } = useVns()
     const [contactsWithDomain, setContactsWithDomain] = useState<Contact[]>([])
     const [accountsWithDomain, setAccountsWithDomain] = useState<AccountWithDevice[]>([])
+    const [isLoading, setIsLoading] = useState(true)
     const firstLoad = useRef(true)
 
     useEffect(() => {
         const init = async () => {
+            setIsLoading(true)
             firstLoad.current = false
             let _accounts: AccountWithDevice[] = []
             for (const acc of accounts) {
@@ -40,6 +42,7 @@ export const useSearchContactsAndAccounts = ({
 
             setContactsWithDomain(_contacts)
             setAccountsWithDomain(_accounts)
+            setIsLoading(false)
         }
 
         firstLoad.current && init()
@@ -82,5 +85,6 @@ export const useSearchContactsAndAccounts = ({
         isAddressInContactsOrAccounts,
         accountsAndContacts,
         contacts,
+        isLoading,
     }
 }
