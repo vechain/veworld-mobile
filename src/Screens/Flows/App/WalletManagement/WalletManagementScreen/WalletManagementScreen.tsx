@@ -3,7 +3,7 @@ import { BaseView, DeviceBox, Layout, RequireUserPassword, SwipeableRow, showWar
 import { BaseDevice, Device } from "~Model"
 import { setDeviceState, useAppSelector } from "~Storage/Redux"
 import { selectAccounts, selectDevices } from "~Storage/Redux/Selectors"
-import { RemoveWalletWarningBottomSheet, WalletManagementHeader } from "./components"
+import { CreateOrImportWalletBottomSheet, RemoveWalletWarningBottomSheet, WalletManagementHeader } from "./components"
 import { useWalletDeletion } from "./hooks"
 import { StyleSheet } from "react-native"
 import { useBottomSheetModal, useCheckIdentity, useTabBarBottomMargin } from "~Hooks"
@@ -35,6 +35,12 @@ export const WalletManagementScreen = () => {
         ref: removeWalletBottomSheetRef,
         onOpen: openRemoveWalletBottomSheet,
         onClose: closeRemoveWalletBottomSheet,
+    } = useBottomSheetModal()
+
+    const {
+        ref: addWalletBottomSheetRef,
+        onOpen: onOpenAddWalletBottomSheet,
+        onClose: onCloseAddWalletBottomSheet,
     } = useBottomSheetModal()
 
     const [isEdit, _setIsEdit] = useState(false)
@@ -132,18 +138,13 @@ export const WalletManagementScreen = () => {
             }),
         )
     }
-    const navigation = useNavigation()
-
-    const goToCreateWalletFlow = useCallback(() => {
-        navigation.navigate(Routes.CREATE_WALLET_FLOW)
-    }, [navigation])
 
     return (
         <Layout
             safeAreaTestID="Wallet_Management_Screen"
             fixedHeader={
                 <WalletManagementHeader
-                    goToCreateWalletFlow={goToCreateWalletFlow}
+                    goToCreateWalletFlow={onOpenAddWalletBottomSheet}
                     isEdit={isEdit}
                     setIsEdit={setIsEdit}
                 />
@@ -173,6 +174,11 @@ export const WalletManagementScreen = () => {
                         isOpen={isPasswordPromptOpen}
                         onClose={handleClosePasswordModal}
                         onSuccess={onPasswordSuccess}
+                    />
+
+                    <CreateOrImportWalletBottomSheet
+                        ref={addWalletBottomSheetRef}
+                        onClose={onCloseAddWalletBottomSheet}
                     />
                 </BaseView>
             }

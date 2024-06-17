@@ -44,8 +44,6 @@ export const useHandleWalletCreation = () => {
     const onCreateWallet = useCallback(
         async ({ importMnemonic, privateKey }: { importMnemonic?: string[]; privateKey?: string }) => {
             if (biometrics && biometrics.currentSecurityLevel === "BIOMETRIC") {
-                if (!importMnemonic && !privateKey)
-                    throw new Error("Wrong/corrupted data. No device available in store")
                 dispatch(setIsAppLoading(true))
                 const mnemonic = isEmpty(importMnemonic) ? getNewMnemonic() : importMnemonic
                 await WalletEncryptionKeyHelper.init()
@@ -66,8 +64,6 @@ export const useHandleWalletCreation = () => {
     const onSuccess = useCallback(
         async ({ pin, mnemonic, privateKey }: { pin: string; mnemonic?: string[]; privateKey?: string }) => {
             onClose()
-            if (!mnemonic && !privateKey) throw new Error("Wrong/corrupted data. No device available in store")
-
             dispatch(setIsAppLoading(true))
             const _mnemonic = isEmpty(mnemonic) ? getNewMnemonic() : mnemonic
             await WalletEncryptionKeyHelper.init(pin)

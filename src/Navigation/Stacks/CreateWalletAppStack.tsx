@@ -5,11 +5,8 @@ import {
     EnableAdditionalSettings,
     ImportLocalWallet,
     NewMnemonicScreen,
-    ObserveWalletScreen,
-    ObserveWalletSuccesScreen,
     SelectLedgerAccounts,
     SelectLedgerDevice,
-    UserCreatePasswordScreen,
     WalletSetupScreen,
     WalletSuccessScreen,
 } from "~Screens"
@@ -40,7 +37,6 @@ export type RootStackParamListCreateWalletApp = {
           }
         | undefined
     [Routes.USER_CREATE_PASSWORD]: undefined
-    [Routes.OBSERVE_WALLET]: undefined
     [Routes.OBSERVE_WALLET_CONFIRMATION]: { account: WatchedAccount }
 }
 
@@ -89,23 +85,6 @@ export const CreateWalletAppStack = () => {
             <CreateWalletApp.Screen
                 name={Routes.IMPORT_HW_LEDGER_SELECT_ACCOUNTS}
                 component={SelectLedgerAccounts}
-                options={{ headerShown: false }}
-            />
-            <CreateWalletApp.Screen
-                name={Routes.USER_CREATE_PASSWORD}
-                component={UserCreatePasswordScreen}
-                options={{ headerShown: false }}
-            />
-
-            <CreateWalletApp.Screen
-                name={Routes.OBSERVE_WALLET}
-                component={ObserveWalletScreen}
-                options={{ headerShown: false }}
-            />
-
-            <CreateWalletApp.Screen
-                name={Routes.OBSERVE_WALLET_CONFIRMATION}
-                component={ObserveWalletSuccesScreen}
                 options={{ headerShown: false }}
             />
         </CreateWalletApp.Navigator>

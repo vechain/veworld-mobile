@@ -14,16 +14,16 @@ export const useCheckWalletBackup = (account: AccountWithDevice) => {
     useEffect(() => {
         if (
             !userHasBeenAskedForBuckup &&
-            account.device.isBuckedUp !== undefined &&
-            !account.device.isBuckedUp &&
-            account.device.type === DEVICE_TYPE.LOCAL_MNEMONIC
+            account.device?.isBuckedUp !== undefined &&
+            !account.device?.isBuckedUp &&
+            account.device?.type === DEVICE_TYPE.LOCAL_MNEMONIC
         ) {
             // show backup modal
             setIsShowBackupModal(true)
         } else {
             setIsShowBackupModal(false)
         }
-    }, [account.device.isBuckedUp, account.device.type, userHasBeenAskedForBuckup])
+    }, [account.device?.isBuckedUp, account.device?.type, userHasBeenAskedForBuckup])
 
     return isShowBackupModal
 }
