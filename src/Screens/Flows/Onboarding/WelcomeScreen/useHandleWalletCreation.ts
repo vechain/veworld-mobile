@@ -3,7 +3,7 @@ import { showErrorToast, useApplicationSecurity, WalletEncryptionKeyHelper } fro
 import { useBiometrics, useCreateWallet, useDisclosure } from "~Hooks"
 import { setIsAppLoading, useAppDispatch } from "~Storage/Redux"
 import { mnemonic as thorMnemonic } from "thor-devkit"
-import { SecurityLevelType } from "~Model"
+import { NewLedgerDevice, SecurityLevelType } from "~Model"
 import { BiometricsUtils } from "~Utils"
 import HapticsService from "~Services/HapticsService"
 import { useI18nContext } from "~i18n"
@@ -12,7 +12,7 @@ import { isEmpty } from "lodash"
 export const useHandleWalletCreation = () => {
     const biometrics = useBiometrics()
     const { isOpen, onOpen, onClose } = useDisclosure()
-    const { createLocalWallet } = useCreateWallet()
+    const { createLocalWallet, createLedgerWallet } = useCreateWallet()
     const { migrateOnboarding } = useApplicationSecurity()
     const dispatch = useAppDispatch()
     const { LL } = useI18nContext()
@@ -83,7 +83,56 @@ export const useHandleWalletCreation = () => {
         [createLocalWallet, dispatch, migrateOnboarding, onClose, onWalletCreationError],
     )
 
-    return { onCreateWallet, isOpen, isError, onSuccess, onClose }
+    const onCreateLedgerWallet = useCallback(
+        async ({
+            newLedger,
+            disconnectLedger,
+        }: {
+            newLedger: NewLedgerDevice
+            disconnectLedger: () => Promise<void>
+        }) => {
+            if (biometrics && biometrics.currentSecurityLevel === "BIOMETRIC") {
+                dispatch(setIsAppLoading(true))
+                await WalletEncryptionKeyHelper.init()
+                await createLedgerWallet({
+                    newLedger,
+                    onError: onWalletCreationError,
+                })
+                await disconnectLedger()
+                await migrateOnboarding(SecurityLevelType.BIOMETRIC)
+                dispatch(setIsAppLoading(false))
+            } else {
+                onOpen()
+            }
+        },
+        [biometrics, createLedgerWallet, dispatch, migrateOnboarding, onOpen, onWalletCreationError],
+    )
+
+    const onLedgerPinSuccess = useCallback(
+        async ({
+            newLedger,
+            disconnectLedger,
+            pin,
+        }: {
+            newLedger: NewLedgerDevice | null
+            disconnectLedger: () => Promise<void>
+            pin: string
+        }) => {
+            if (!newLedger || !pin) throw new Error("Wrong/corrupted data. No device available from ledger or no pin")
+            dispatch(setIsAppLoading(true))
+            await WalletEncryptionKeyHelper.init(pin)
+            await createLedgerWallet({
+                newLedger,
+                onError: onWalletCreationError,
+            })
+            await disconnectLedger()
+            await migrateOnboarding(SecurityLevelType.SECRET, pin)
+            dispatch(setIsAppLoading(false))
+        },
+        [createLedgerWallet, dispatch, migrateOnboarding, onWalletCreationError],
+    )
+
+    return { onCreateWallet, isOpen, isError, onSuccess, onClose, onCreateLedgerWallet, onLedgerPinSuccess }
 }
 
 function getNewMnemonic() {

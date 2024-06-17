@@ -1,7 +1,9 @@
 import React, { useCallback, useEffect, useMemo, useState } from "react"
 import {
+    BackButtonHeader,
     BaseActivityIndicator,
     BaseButton,
+    BaseModal,
     BaseSpacer,
     BaseText,
     BaseTouchableBox,
@@ -15,21 +17,14 @@ import { useAnalyticTracking, useBottomSheetModal, useLedgerDevice, useThemedSty
 import { AnalyticsEvent, ColorThemeType, VET, VETLedgerAccount } from "~Constants"
 import { BigNutils, AddressUtils, LedgerUtils } from "~Utils"
 import { StyleSheet } from "react-native"
-import { useNavigation } from "@react-navigation/native"
-
 import { NativeStackScreenProps } from "@react-navigation/native-stack"
 import { RootStackParamListCreateWalletApp, RootStackParamListOnboarding, Routes } from "~Navigation"
-
-import {
-    selectHasOnboarded,
-    selectSelectedNetwork,
-    setNewLedgerDevice,
-    useAppDispatch,
-    useAppSelector,
-} from "~Storage/Redux"
+import { selectSelectedNetwork, useAppSelector } from "~Storage/Redux"
 import { FlashList, ViewToken } from "@shopify/flash-list"
 import * as Haptics from "expo-haptics"
-import { LedgerAccount } from "~Model"
+import { LedgerAccount, NewLedgerDevice } from "~Model"
+import { useHandleWalletCreation } from "~Screens/Flows/Onboarding/WelcomeScreen/useHandleWalletCreation"
+import { UserCreatePasswordScreen } from "../../UserCreatePasswordScreen"
 
 type Props = {} & NativeStackScreenProps<
     RootStackParamListOnboarding & RootStackParamListCreateWalletApp,
@@ -38,12 +33,9 @@ type Props = {} & NativeStackScreenProps<
 
 export const SelectLedgerAccounts: React.FC<Props> = ({ route }) => {
     const { device } = route.params
-    const dispatch = useAppDispatch()
     const { LL } = useI18nContext()
-    const nav = useNavigation()
     const { styles: themedStyles } = useThemedStyles(styles)
     const selectedNetwork = useAppSelector(selectSelectedNetwork)
-    const userHasOnboarded = useAppSelector(selectHasOnboarded)
     const track = useAnalyticTracking()
 
     const { errorCode, rootAccount, disconnectLedger } = useLedgerDevice({
@@ -54,7 +46,7 @@ export const SelectLedgerAccounts: React.FC<Props> = ({ route }) => {
     )
 
     useEffect(() => {
-        // root account will be undefined if the user disconnects. We don't care abet that, we only want to read it
+        // root account will be undefined if the user disconnects. We don't care about that, we only want to read it
         if (rootAccount) {
             setRootAcc({ ...rootAccount })
         }
@@ -67,6 +59,7 @@ export const SelectLedgerAccounts: React.FC<Props> = ({ route }) => {
     }, [errorCode, rootAcc])
 
     const { ref, onOpen, onClose } = useBottomSheetModal()
+    const { onCreateLedgerWallet, isOpen, onClose: onCloseCreateFlow, onLedgerPinSuccess } = useHandleWalletCreation()
 
     useEffect(() => {
         if (ledgerErrorCode) {
@@ -80,6 +73,7 @@ export const SelectLedgerAccounts: React.FC<Props> = ({ route }) => {
     const [ledgerAccountsLoading, setLedgerAccountsLoading] = useState(false)
     const [selectedAccountsIndex, setSelectedAccountsIndex] = useState<number[]>([])
     const [isScrollable, setIsScrollable] = useState(false)
+    const [newLedgerDevice, setNewLedgerDevice] = useState<NewLedgerDevice | null>(null)
 
     useEffect(() => {
         // Disconnect ledger when the component unmounts to avoid crashing the app when a user navigates back
@@ -88,38 +82,30 @@ export const SelectLedgerAccounts: React.FC<Props> = ({ route }) => {
         }
     }, [disconnectLedger])
 
-    const navigateNext = useCallback(async () => {
-        await disconnectLedger()
-
-        if (userHasOnboarded) {
-            nav.navigate(Routes.WALLET_SUCCESS)
-        } else {
-            nav.navigate(Routes.APP_SECURITY)
-        }
-    }, [disconnectLedger, nav, userHasOnboarded])
-
     const onConfirm = useCallback(async () => {
         try {
             track(AnalyticsEvent.IMPORT_HW_USER_SUBMITTED_ACCOUNTS)
             if (selectedAccountsIndex.length > 0 && rootAcc) {
-                // set device in the store we can use it in walletSuccess
-                dispatch(
-                    setNewLedgerDevice({
-                        deviceId: device.id,
-                        rootAccount: rootAcc,
-                        alias: device.localName,
-                        accounts: selectedAccountsIndex,
-                    }),
-                )
+                const newLedger = {
+                    deviceId: device.id,
+                    rootAccount: rootAcc,
+                    alias: device.localName,
+                    accounts: selectedAccountsIndex,
+                }
 
-                navigateNext()
+                setNewLedgerDevice(newLedger)
+
+                onCreateLedgerWallet({
+                    newLedger,
+                    disconnectLedger,
+                })
             }
         } catch (e) {
             track(AnalyticsEvent.IMPORT_HW_FAILED_TO_IMPORT)
             Haptics.notificationAsync(Haptics.NotificationFeedbackType.Error)
             showErrorToast({ text1: e as string })
         }
-    }, [track, selectedAccountsIndex, rootAcc, dispatch, device.id, device.localName, navigateNext])
+    }, [track, selectedAccountsIndex, rootAcc, device.id, device.localName, onCreateLedgerWallet, disconnectLedger])
 
     /**
      * When the root account changes, fetch the accounts and balances
@@ -232,6 +218,17 @@ export const SelectLedgerAccounts: React.FC<Props> = ({ route }) => {
                             />
                         )}
                     </BaseView>
+
+                    <BaseModal isOpen={isOpen} onClose={onCloseCreateFlow}>
+                        <BaseView justifyContent="flex-start">
+                            <BackButtonHeader action={onClose} hasBottomSpacer={false} />
+                            <UserCreatePasswordScreen
+                                onSuccess={pin =>
+                                    onLedgerPinSuccess({ pin, newLedger: newLedgerDevice, disconnectLedger })
+                                }
+                            />
+                        </BaseView>
+                    </BaseModal>
                 </>
             }
         />
