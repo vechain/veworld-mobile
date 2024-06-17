@@ -1463,6 +1463,10 @@ type RootTranslation = {
 	 */
 	NETWORK_LABEL_OTHER_NETWORKS: string
 	/**
+	 * S​o​l​o​ ​N​e​t​w​o​r​k​s
+	 */
+	NETWORK_LABEL_SOLO_NETWORKS: string
+	/**
 	 * M​a​i​n​n​e​t
 	 */
 	NETWORK_LABEL_MAINNET: string
@@ -4358,6 +4362,10 @@ Try reconnect your device to the internet.
 	 * Other Networks
 	 */
 	NETWORK_LABEL_OTHER_NETWORKS: () => LocalizedString
+	/**
+	 * Solo Networks
+	 */
+	NETWORK_LABEL_SOLO_NETWORKS: () => LocalizedString
 	/**
 	 * Mainnet
 	 */
