@@ -6,6 +6,7 @@ import {
     ConnectedAppsScreen,
     HistoryScreen,
     HomeScreen,
+    ImportLocalWallet,
     InsertAddressSendScreen,
     LedgerSignTransaction,
     ManageCustomTokenScreen,
@@ -71,6 +72,7 @@ export type RootStackParamListHome = {
     [Routes.TOKEN_DETAILS]: { token: TokenWithCompleteInfo }
     [Routes.SETTINGS_CONNECTED_APPS]: undefined
     [Routes.OBSERVE_WALLET]: undefined
+    [Routes.IMPORT_MNEMONIC]: undefined
 }
 
 const { Navigator, Group, Screen } = createNativeStackNavigator<RootStackParamListHome>()
@@ -127,8 +129,8 @@ export const HomeStack = () => {
                 />
 
                 <Screen name={Routes.TOKEN_DETAILS} component={AssetDetailScreen} options={{ headerShown: false }} />
-
                 <Screen name={Routes.OBSERVE_WALLET} component={ObserveWalletScreen} options={{ headerShown: false }} />
+                <Screen name={Routes.IMPORT_MNEMONIC} component={ImportLocalWallet} options={{ headerShown: false }} />
             </Group>
 
             <Group>

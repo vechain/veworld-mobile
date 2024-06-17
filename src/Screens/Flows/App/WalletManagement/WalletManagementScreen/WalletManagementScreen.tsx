@@ -14,6 +14,7 @@ import { useI18nContext } from "~i18n"
 import { useNavigation } from "@react-navigation/native"
 import { Routes } from "~Navigation"
 import { AccountUtils } from "~Utils"
+import { useHandleWalletCreation } from "~Screens/Flows/Onboarding/WelcomeScreen/useHandleWalletCreation"
 
 export const WalletManagementScreen = () => {
     const { tabBarBottomMargin } = useTabBarBottomMargin()
@@ -25,11 +26,23 @@ export const WalletManagementScreen = () => {
     const { LL } = useI18nContext()
     const dispatch = useDispatch()
 
+    const { createOnboardedWallet } = useHandleWalletCreation()
+
     const { isPasswordPromptOpen, handleClosePasswordModal, onPasswordSuccess, checkIdentityBeforeOpening } =
         useCheckIdentity({
             onIdentityConfirmed: deleteWallet,
             allowAutoPassword: false,
         })
+
+    const {
+        isPasswordPromptOpen: isPasswordPromptOpen_1,
+        handleClosePasswordModal: handleClosePasswordModal_1,
+        onPasswordSuccess: onPasswordSuccess_1,
+        checkIdentityBeforeOpening: checkIdentityBeforeOpening_1,
+    } = useCheckIdentity({
+        onIdentityConfirmed: (pin?: string) => createOnboardedWallet(pin),
+        allowAutoPassword: false,
+    })
 
     const {
         ref: removeWalletBottomSheetRef,
@@ -42,6 +55,11 @@ export const WalletManagementScreen = () => {
         onOpen: onOpenAddWalletBottomSheet,
         onClose: onCloseAddWalletBottomSheet,
     } = useBottomSheetModal()
+
+    const handleOnCreateWallet = useCallback(async () => {
+        onCloseAddWalletBottomSheet()
+        await checkIdentityBeforeOpening_1()
+    }, [onCloseAddWalletBottomSheet, checkIdentityBeforeOpening_1])
 
     const [isEdit, _setIsEdit] = useState(false)
     const swipeableItemRefs = useRef<Map<string, SwipeableItemImperativeRef>>(new Map())
@@ -176,9 +194,16 @@ export const WalletManagementScreen = () => {
                         onSuccess={onPasswordSuccess}
                     />
 
+                    <RequireUserPassword
+                        isOpen={isPasswordPromptOpen_1}
+                        onClose={handleClosePasswordModal_1}
+                        onSuccess={onPasswordSuccess_1}
+                    />
+
                     <CreateOrImportWalletBottomSheet
                         ref={addWalletBottomSheetRef}
                         onClose={onCloseAddWalletBottomSheet}
+                        handleOnCreateWallet={handleOnCreateWallet}
                     />
                 </BaseView>
             }

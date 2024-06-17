@@ -10,14 +10,15 @@ import {
     BaseView,
     DismissKeyboardView,
     Layout,
+    RequireUserPassword,
 } from "~Components"
 import { useI18nContext } from "~i18n"
 import * as Clipboard from "expo-clipboard"
-import { useAnalyticTracking, useBottomSheetModal, useDeviceUtils, useTheme } from "~Hooks"
+import { useAnalyticTracking, useBottomSheetModal, useCheckIdentity, useDeviceUtils, useTheme } from "~Hooks"
 import { CryptoUtils } from "~Utils"
 import { Keyboard, StyleSheet } from "react-native"
 import { ImportWalletInput } from "./Components/ImportWalletInput"
-import { selectAreDevFeaturesEnabled, useAppSelector } from "~Storage/Redux"
+import { selectAreDevFeaturesEnabled, selectHasOnboarded, useAppSelector } from "~Storage/Redux"
 import HapticsService from "~Services/HapticsService"
 import { AnalyticsEvent } from "~Constants"
 import { DEVICE_CREATION_ERRORS as ERRORS, IMPORT_TYPE } from "~Model"
@@ -25,6 +26,7 @@ import { UnlockKeystoreBottomSheet } from "./Components/UnlockKeystoreBottomShee
 import { SelectDerivationPathBottomSheet } from "../WalletSetupScreen/components/SelectDerivationPathBottomSheet"
 import { UserCreatePasswordScreen } from "../UserCreatePasswordScreen"
 import { useHandleWalletCreation } from "~Screens/Flows/Onboarding/WelcomeScreen/useHandleWalletCreation"
+import { useNavigation } from "@react-navigation/native"
 
 const DEMO_MNEMONIC = "denial kitchen pet squirrel other broom bar gas better priority spoil cross"
 
@@ -32,9 +34,12 @@ export const ImportLocalWallet = () => {
     const { LL } = useI18nContext()
     const theme = useTheme()
     const track = useAnalyticTracking()
+    const nav = useNavigation()
+    const userHasOnboarded = useAppSelector(selectHasOnboarded)
 
     const {
         onCreateWallet,
+        importOnboardedWallet,
         isOpen,
         isError: isCreateError,
         onSuccess,
@@ -59,6 +64,19 @@ export const ImportLocalWallet = () => {
         onOpen: onOpenDerivationPath,
         onClose: onCloseDerivationPath,
     } = useBottomSheetModal()
+
+    const {
+        isPasswordPromptOpen: isPasswordPromptOpen_1,
+        handleClosePasswordModal: handleClosePasswordModal_1,
+        onPasswordSuccess: onPasswordSuccess_1,
+        checkIdentityBeforeOpening: checkIdentityBeforeOpening_1,
+    } = useCheckIdentity({
+        onIdentityConfirmed: (pin?: string) => {
+            importOnboardedWallet({ importMnemonic: mnemonicCache, privateKey: privateKeyCache, pin })
+            nav.goBack()
+        },
+        allowAutoPassword: false,
+    })
 
     const importType = useMemo(() => CryptoUtils.determineKeyImportType(textValue), [textValue])
 
@@ -94,13 +112,24 @@ export const ImportLocalWallet = () => {
                 checkCanImportDevice(mnemonic)
                 setMnemonicCache(mnemonic)
                 track(AnalyticsEvent.IMPORT_MNEMONIC_SUBMITTED)
-                onCreateWallet({ importMnemonic: mnemonic })
+                if (userHasOnboarded) {
+                    checkIdentityBeforeOpening_1()
+                } else {
+                    onCreateWallet({ importMnemonic: mnemonic })
+                }
             } catch (err) {
                 processErrorMessage(err)
                 track(AnalyticsEvent.IMPORT_MNEMONIC_FAILED)
             }
         },
-        [checkCanImportDevice, track, onCreateWallet, processErrorMessage],
+        [
+            checkCanImportDevice,
+            track,
+            userHasOnboarded,
+            checkIdentityBeforeOpening_1,
+            onCreateWallet,
+            processErrorMessage,
+        ],
     )
 
     const importPrivateKey = useCallback(
@@ -109,13 +138,24 @@ export const ImportLocalWallet = () => {
                 checkCanImportDevice(undefined, _privKey)
                 setPrivateKeyCache(_privKey)
                 track(AnalyticsEvent.IMPORT_PRIVATE_KEY_SUBMITTED)
-                onCreateWallet({ privateKey: _privKey })
+                if (userHasOnboarded) {
+                    checkIdentityBeforeOpening_1()
+                } else {
+                    onCreateWallet({ privateKey: _privKey })
+                }
             } catch (err) {
                 processErrorMessage(err)
                 track(AnalyticsEvent.IMPORT_PRIVATE_KEY_FAILED)
             }
         },
-        [checkCanImportDevice, track, onCreateWallet, processErrorMessage],
+        [
+            checkCanImportDevice,
+            track,
+            userHasOnboarded,
+            checkIdentityBeforeOpening_1,
+            onCreateWallet,
+            processErrorMessage,
+        ],
     )
 
     const onUnlockKeyStoreFile = useCallback(
@@ -125,13 +165,25 @@ export const ImportLocalWallet = () => {
                 checkCanImportDevice(undefined, privateKey)
                 setPrivateKeyCache(privateKey)
                 track(AnalyticsEvent.IMPORT_KEYSTORE_FILE_SUBMITTED)
-                onCreateWallet({ privateKey })
+                if (userHasOnboarded) {
+                    checkIdentityBeforeOpening_1()
+                } else {
+                    onCreateWallet({ privateKey })
+                }
             } catch (err) {
                 processErrorMessage(err)
                 track(AnalyticsEvent.IMPORT_KEYSTORE_FILE_FAILED)
             }
         },
-        [textValue, checkCanImportDevice, track, onCreateWallet, processErrorMessage],
+        [
+            textValue,
+            checkCanImportDevice,
+            track,
+            userHasOnboarded,
+            checkIdentityBeforeOpening_1,
+            onCreateWallet,
+            processErrorMessage,
+        ],
     )
 
     const onVerify = useCallback(
@@ -187,8 +239,7 @@ export const ImportLocalWallet = () => {
         setIsError("")
     }
 
-    const handleVerify = useCallback(() => onVerify(textValue, importType), [textValue, onVerify, importType])
-
+    const handleVerify = useCallback(() => onVerify(textValue, importType), [onVerify, textValue, importType])
     const disabledAction = useCallback(() => setIsError(LL.ERROR_INVALID_IMPORT_DATA()), [LL])
 
     return (
@@ -293,6 +344,12 @@ export const ImportLocalWallet = () => {
                             disabled={importType === IMPORT_TYPE.UNKNOWN}
                             disabledAction={disabledAction}
                             disabledActionHaptics="Heavy"
+                        />
+
+                        <RequireUserPassword
+                            isOpen={isPasswordPromptOpen_1}
+                            onClose={handleClosePasswordModal_1}
+                            onSuccess={onPasswordSuccess_1}
                         />
                     </BaseView>
                 }

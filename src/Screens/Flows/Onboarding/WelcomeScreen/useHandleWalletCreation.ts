@@ -128,7 +128,62 @@ export const useHandleWalletCreation = () => {
         [createLedgerWallet, dispatch, migrateOnboarding, onWalletCreationError],
     )
 
-    return { onCreateWallet, isOpen, isError, onSuccess, onClose, onCreateLedgerWallet, onLedgerPinSuccess }
+    const createOnboardedWallet = useCallback(
+        async (pin?: string) => {
+            dispatch(setIsAppLoading(true))
+
+            const mnemonic = getNewMnemonic()
+            await createLocalWallet({
+                mnemonic: mnemonic,
+                userPassword: pin,
+                onError: onWalletCreationError,
+            })
+            dispatch(setIsAppLoading(false))
+        },
+        [createLocalWallet, dispatch, onWalletCreationError],
+    )
+
+    const importOnboardedWallet = useCallback(
+        async ({
+            importMnemonic,
+            privateKey,
+            pin,
+        }: {
+            importMnemonic?: string[]
+            privateKey?: string
+            pin?: string
+        }) => {
+            if (biometrics && biometrics.currentSecurityLevel === "BIOMETRIC") {
+                dispatch(setIsAppLoading(true))
+                await createLocalWallet({
+                    mnemonic: privateKey ? undefined : importMnemonic,
+                    privateKey,
+                    onError: onWalletCreationError,
+                })
+                dispatch(setIsAppLoading(false))
+            } else {
+                await createLocalWallet({
+                    mnemonic: privateKey ? undefined : importMnemonic,
+                    privateKey,
+                    userPassword: pin,
+                    onError: onWalletCreationError,
+                })
+            }
+        },
+        [biometrics, createLocalWallet, dispatch, onWalletCreationError],
+    )
+
+    return {
+        onCreateWallet,
+        isOpen,
+        isError,
+        onSuccess,
+        onClose,
+        onCreateLedgerWallet,
+        onLedgerPinSuccess,
+        createOnboardedWallet,
+        importOnboardedWallet,
+    }
 }
 
 function getNewMnemonic() {
