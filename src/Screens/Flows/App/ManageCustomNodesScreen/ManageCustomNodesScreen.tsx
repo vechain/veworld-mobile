@@ -65,6 +65,7 @@ export const ManageCustomNodesScreen = () => {
     const sections: Section[] = useMemo(() => {
         const mainNetworks = customNetworks.filter(network => network.type === NETWORK_TYPE.MAIN)
         const testNetworks = customNetworks.filter(network => network.type === NETWORK_TYPE.TEST)
+        const soloNetworks = customNetworks.filter(network => network.type === NETWORK_TYPE.SOLO)
         const otherNetworks = customNetworks.filter(network => network.type === NETWORK_TYPE.OTHER)
 
         const data: Section[] = []
@@ -85,6 +86,12 @@ export const ManageCustomNodesScreen = () => {
             data.push({
                 title: LL.NETWORK_LABEL_OTHER_NETWORKS(),
                 data: otherNetworks,
+            })
+        }
+        if (soloNetworks.length > 0) {
+            data.push({
+                title: LL.NETWORK_LABEL_SOLO_NETWORKS(),
+                data: soloNetworks,
             })
         }
         return data

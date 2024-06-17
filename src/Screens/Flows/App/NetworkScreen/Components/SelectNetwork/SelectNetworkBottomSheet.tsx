@@ -25,6 +25,7 @@ export const SelectNetworkBottomSheet = React.forwardRef<BottomSheetModalMethods
 
     const mainNetworks = useAppSelector(selectNetworksByType(NETWORK_TYPE.MAIN))
     const testNetworks = useAppSelector(selectNetworksByType(NETWORK_TYPE.TEST))
+    const soloNetworks = useAppSelector(selectNetworksByType(NETWORK_TYPE.SOLO))
     const otherNetworks = useAppSelector(selectNetworksByType(NETWORK_TYPE.OTHER))
 
     type Section = {
@@ -52,8 +53,15 @@ export const SelectNetworkBottomSheet = React.forwardRef<BottomSheetModalMethods
                 data: otherNetworks,
             })
         }
+        if (soloNetworks.length > 0) {
+            data.push({
+                title: LL.NETWORK_LABEL_SOLO_NETWORKS(),
+                data: soloNetworks,
+            })
+        }
+
         return data
-    }, [mainNetworks, testNetworks, otherNetworks, LL])
+    }, [mainNetworks, testNetworks, otherNetworks, soloNetworks, LL])
 
     const onPress = useCallback(
         (network: Network) => {
