@@ -1,9 +1,10 @@
 import React from "react"
 import { useTheme } from "~Hooks"
 import { useI18nContext } from "~i18n"
-import { COLORS } from "~Constants"
+import { COLORS, COINBASE_FEATURE_ENABLED } from "~Constants"
 import { PaymentMethod, PaymentMethodsIds, PaymentMethodsList } from "./constants"
 import { CoinbaseLogoSmallSvg } from "~Assets"
+import { TransakLogoSmallSvg } from "~Assets/Img/TransakLogoSmallSvg"
 
 export enum PaymentProvidersEnum {
     CoinbasePay = "coinbase-pay",
@@ -21,8 +22,10 @@ export const usePaymentProviderList = () => {
     const { LL } = useI18nContext()
     const theme = useTheme()
 
-    return [
-        {
+    const providers = []
+
+    if (COINBASE_FEATURE_ENABLED) {
+        providers.push({
             id: PaymentProvidersEnum.CoinbasePay,
             name: "Coinbase",
             description: LL.BD_BUY_DESCRIPTION_COINBASE(),
@@ -36,6 +39,20 @@ export const usePaymentProviderList = () => {
                 PaymentMethodsList[PaymentMethodsIds.CreditCard],
                 PaymentMethodsList[PaymentMethodsIds.BankAccount],
             ],
-        },
-    ]
+        })
+    }
+
+    providers.push({
+        id: PaymentProvidersEnum.Transak,
+        name: "Transak",
+        description: LL.BD_BUY_DESCRIPTION_TRANSAK(),
+        img: (
+            <TransakLogoSmallSvg
+                fill={theme.isDark ? COLORS.COINBASE_BACKGROUND_DARK : COLORS.COINBASE_BACKGROUND_BLUE}
+                width={22}
+            />
+        ),
+        paymentMethods: [PaymentMethodsList[PaymentMethodsIds.CreditCard]],
+    })
+    return providers
 }
