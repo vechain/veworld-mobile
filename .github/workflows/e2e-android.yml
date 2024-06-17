@@ -121,6 +121,7 @@ jobs:
                 cat .env.production.local
                 ls -la
             - name: Build apk 
+              id: build
               run: |
                   pwd    
                   cd android
@@ -129,15 +130,15 @@ jobs:
                   export KEY_ALIAS="$(<key_alias.txt)"
                   fastlane build_test_ci version_code:99 version_name:"9.9.9"
                   cd app/build/outputs/apk/release
-                  pwd
+                  pwd >> "$GITHUB_OUTPUT"
                   ls -la
             
             - name: Upload apk 
               uses: actions/upload-artifact@v4
               with:
                name: app-release.apk
-               path: /android/app/build/outputs/apk/release
-               
+               path: ${{ steps.build.outputs.app }}/app-release.apk
+
             - name: Maestro Cloud
               uses: mobile-dev-inc/action-maestro-cloud@v1.8.1
               with:
