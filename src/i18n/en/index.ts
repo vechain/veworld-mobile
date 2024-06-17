@@ -411,6 +411,7 @@ const en: BaseTranslation = {
     NETWORK_LABEL_MAIN_NETWORKS: "Main Networks",
     NETWORK_LABEL_TEST_NETWORKS: "Test Networks",
     NETWORK_LABEL_OTHER_NETWORKS: "Other Networks",
+    NETWORK_LABEL_SOLO_NETWORKS: "Solo Networks",
     NETWORK_LABEL_MAINNET: "Mainnet",
     NETWORK_LABEL_TESTNET: "Testnet",
 

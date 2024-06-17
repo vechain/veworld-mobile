@@ -42,57 +42,64 @@ export const updateAccountBalances =
 
         if (accountBalances.length === 0) return
 
-        const balancesMain: Balance[] = []
-        const balancesTest: Balance[] = []
+        // Get all networks and remove duplicates of the same network type. Only "Main" and "Testnet" have only one network
+        const allNetworks = selectNetworks(getState()).reduce((acc: Network[], network: Network) => {
+            if (!acc.some(n => n.type === network.type)) {
+                acc.push(network)
+            }
+            return acc
+        }, [])
 
-        const main = selectNetworks(getState()).find((net: Network) => net.type === NETWORK_TYPE.MAIN)
-        const test = selectNetworks(getState()).find((net: Network) => net.type === NETWORK_TYPE.TEST)
-        if (!main || !test) throw new Error("Networks not found")
+        if (allNetworks.length === 0) {
+            throw new Error("Networks not found")
+        }
 
         try {
-            for (const accountBalance of accountBalances) {
-                const balanceMain = await BalanceUtils.getBalanceFromBlockchain(
-                    accountBalance.tokenAddress,
-                    accountAddress,
-                    main,
-                    thorClient,
-                )
+            for (const network of allNetworks) {
+                for (const accountBalance of accountBalances) {
+                    const balance = await BalanceUtils.getBalanceFromBlockchain(
+                        accountBalance.tokenAddress,
+                        accountAddress,
+                        network,
+                        thorClient,
+                    )
 
-                const balanceTest = await BalanceUtils.getBalanceFromBlockchain(
-                    accountBalance.tokenAddress,
-                    accountAddress,
-                    test,
-                    thorClient,
-                )
+                    if (!balance) continue
 
-                if (balanceMain) {
-                    balancesMain.push({
-                        ...balanceMain,
-                    })
-                }
+                    switch (network.type) {
+                        case NETWORK_TYPE.MAIN:
+                            dispatch(
+                                updateTokenBalances({
+                                    network: NETWORK_TYPE.MAIN,
+                                    accountAddress,
+                                    newBalances: [balance],
+                                }),
+                            )
 
-                if (balanceTest) {
-                    balancesTest.push({
-                        ...balanceTest,
-                    })
+                            break
+                        case NETWORK_TYPE.TEST:
+                            dispatch(
+                                updateTokenBalances({
+                                    network: NETWORK_TYPE.TEST,
+                                    accountAddress,
+                                    newBalances: [balance],
+                                }),
+                            )
+                            break
+                        case NETWORK_TYPE.SOLO:
+                            dispatch(
+                                updateTokenBalances({
+                                    network: NETWORK_TYPE.SOLO,
+                                    accountAddress,
+                                    newBalances: [balance],
+                                }),
+                            )
+                            break
+                        default:
+                            break
+                    }
                 }
             }
-
-            dispatch(
-                updateTokenBalances({
-                    network: main.type,
-                    accountAddress,
-                    newBalances: balancesMain,
-                }),
-            )
-
-            dispatch(
-                updateTokenBalances({
-                    network: test.type,
-                    accountAddress,
-                    newBalances: balancesTest,
-                }),
-            )
         } catch (e) {
             throw new Error(`Failed to get balance from external service: ${e}`)
         } finally {
