@@ -56,12 +56,33 @@ export const CoinbasePayWebView = ({
 
                 // if successfully completed buy process
                 if (data.eventName === "success") {
-                    track(AnalyticsEvent.BUY_CRYPTO_SUCCESSFULLY_COMPLETED)
+                    track(AnalyticsEvent.BUY_CRYPTO_SUCCESSFULLY_COMPLETED, {
+                        provider: "coinbase",
+                    })
                 }
 
                 if (data.eventName === "exit") {
                     setIsLoading(true)
+                    track(AnalyticsEvent.BUY_CRYPTO_CLOSED, {
+                        provider: "coinbase",
+                    })
                     nav.navigate(Routes.HOME)
+                }
+
+                if (data.eventName === "error") {
+                    track(AnalyticsEvent.BUY_CRYPTO_FAILED, {
+                        provider: "coinbase",
+                    })
+                }
+                if (data.eventName === "open") {
+                    track(AnalyticsEvent.BUY_CRYPTO_INITIALISED, {
+                        provider: "coinbase",
+                    })
+                }
+                if (data.eventName === "transition_view") {
+                    track(AnalyticsEvent.BUY_CRYPTO_CREATED_ORDER, {
+                        provider: "coinbase",
+                    })
                 }
             } catch (error) {
                 debug(ERROR_EVENTS.BUY, ErrorMessageUtils.getErrorMessage(error))

@@ -130,6 +130,7 @@ const en: BaseTranslation = {
     BD_APP_LANGUAGE_DISCLAIMER: "Select the general app language",
     BD_USD: "USD",
     BD_EUR: "EUR",
+    BD_BACK_TO_APP: "GO BACK TO APP",
     BD_SCANED_ADDRESS_COPPIED: "Address Copied to Clipboard",
     BD_CONTACTS_LIST: "Your contact list",
     BD_CONTACTS_LIST_DISCLAIMER: "Add friends and addresses you trust",
@@ -152,7 +153,9 @@ const en: BaseTranslation = {
     BD_COLLECTION: "Collection",
     BD_APP_BLOCKED: "To continue using this app securely and effectively, please enable the biometric authentication feature in your device's settings.",
     BD_SELECT_PAYMENT_PROVIDER: "Choose a provider:",
+    BD_GO_BACK: "Go back to VeWorld app",
     BD_BUY_DESCRIPTION_COINBASE: "Buy with Coinbase and receive the tokens directly in VeWorld.",
+    BD_BUY_DESCRIPTION_TRANSAK: "Buy with Transak and receive the tokens directly in VeWorld.",
 
     // TITLES
     TITLE_WELCOME_TO: "Welcome to ",

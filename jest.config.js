@@ -12,6 +12,9 @@ module.exports = {
         "^.+\\.jsx$": "babel-jest",
         "^.+\\.tsx?$": "ts-jest",
         ".+\\.(css|styl|less|sass|scss|png|jpg|ttf|woff|woff2)$": "jest-transform-stub",
+        "^.+\\.js$": "babel-jest",
+
+        "node_modules/@transak/react-native-sdk/node_modules/query-string/index.js": "babel-jest",
     },
     transformIgnorePatterns: [
         "node_modules/(?!((jest-)?react-native|@react-native(-community)?)" +
@@ -27,6 +30,11 @@ module.exports = {
             "|@craftzdog/react-native-buffer" +
             "|react-native-svg" +
             "|mixpanel-react-native" +
+            "|query-string" +
+            "|decode-uri-component" +
+            "|split-on-first" +
+            "|filter-obj" +
+            "|@transak/react-native-sdk" +
             ")",
     ],
     moduleNameMapper: {
@@ -46,12 +54,12 @@ module.exports = {
         "^~Test$": ["<rootDir>/src/Test/index.tsx"],
         "^~Networking(.*)": ["<rootDir>/src/Networking$1"],
         "^~Logging(.*)": ["<rootDir>/src/Logging$1"],
-
+        "^react-native-device-info$": "<rootDir>/src/Test/mocks/react-native-device-info.js",
+        "^@react-native-community/netinfo$": "<rootDir>/src/Test/mocks/@react-native-community/netinfo.js",
         Intl: "<rootDir>/node_modules/intl/",
     },
     moduleFileExtensions: ["ts", "tsx", "js", "jsx", "json", "node"],
     testMatch: ["**/*.(spec|test).(ts|tsx|js|jsx)"],
-
     collectCoverageFrom: ["src/Utils/**/*.{js,jsx,ts,tsx}"],
     coveragePathIgnorePatterns: [
         "index.ts",

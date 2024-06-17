@@ -35,7 +35,7 @@ import { RefreshControl } from "react-native"
 import { useNavigation, useScrollToTop } from "@react-navigation/native"
 import { NestableScrollContainer } from "react-native-draggable-flatlist"
 import { Routes } from "~Navigation"
-import { AnalyticsEvent, BUY_FEATURE_ENABLED } from "~Constants"
+import { AnalyticsEvent } from "~Constants"
 import { AccountUtils } from "~Utils"
 
 export const HomeScreen = () => {
@@ -107,7 +107,7 @@ export const HomeScreen = () => {
     const Actions: FastAction[] = useMemo(() => {
         let actions: FastAction[] = []
         // account must not be observed to show the buy button
-        if (!AccountUtils.isObservedAccount(selectedAccount) && BUY_FEATURE_ENABLED) {
+        if (!AccountUtils.isObservedAccount(selectedAccount)) {
             actions.push({
                 name: LL.BTN_BUY(),
                 action: () => {
