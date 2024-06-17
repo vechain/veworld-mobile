@@ -131,11 +131,13 @@ jobs:
                   cd app/build/outputs/apk/release
                   pwd
                   ls -la
-
-            - name: Start Metro Bundler
-              run: npx react-native start &
-
-
+            
+            - name: Upload apk 
+              uses: actions/upload-artifact@v4
+              with:
+               name: app-release.apk
+               path: /android/app/build/outputs/apk/release
+               
             - name: Maestro Cloud
               uses: mobile-dev-inc/action-maestro-cloud@v1.8.1
               with:
