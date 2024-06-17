@@ -58,6 +58,7 @@ const StoreContextProvider = ({ children }: StoreContextProviderProps) => {
                 middleware: getDefaultMiddleware =>
                     getDefaultMiddleware({
                         immutableCheck: {
+                            // fix for repeated warnings "ImmutableStateInvariantMiddleware took 34ms, which is more than the warning threshold of <xx>ms"
                             warnAfter: 100, // Custom threshold
                         },
                         serializableCheck: {

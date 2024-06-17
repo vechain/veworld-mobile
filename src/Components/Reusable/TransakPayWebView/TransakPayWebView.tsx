@@ -2,8 +2,8 @@ import { Environments, EventTypes, Events, TransakConfig, TransakWebView } from 
 import React, { useCallback, useEffect, useMemo, useState } from "react"
 import { DimensionValue, StyleSheet } from "react-native"
 import { BaseActivityIndicator, BaseButton, BaseStatusBar, BaseView } from "~Components/Base"
-import { AnalyticsEvent, COLORS } from "~Constants"
-import { useAnalyticTracking, useTheme } from "~Hooks"
+import { AnalyticsEvent, COLORS, ColorThemeType } from "~Constants"
+import { useAnalyticTracking, useTheme, useThemedStyles } from "~Hooks"
 import { PlatformUtils } from "~Utils"
 import { VECHAIN_BLOCKCHAIN } from "./Constants"
 import { selectCurrency, useAppSelector } from "~Storage/Redux"
@@ -44,7 +44,7 @@ export const TransakPayWebView = ({
     const [isLoading, setIsLoading] = useState(true)
     const [isProcessing, setIsProcessing] = useState(false)
 
-    const styles = baseStyles(isLoading, isProcessing)
+    const { styles } = useThemedStyles(theme => baseStyles(theme, isLoading, isProcessing))
 
     const { backgroundColors, themeColor } = useMemo(() => {
         const bg = isDark ? COLORS.DARK_PURPLE : COLORS.LIGHT_GRAY
@@ -102,9 +102,7 @@ export const TransakPayWebView = ({
     }
 
     const handleLoadEnd = useCallback(() => {
-        setTimeout(() => {
-            if (isLoading) setIsLoading(false)
-        }, 1000)
+        if (isLoading) setIsLoading(false)
     }, [isLoading])
 
     useEffect(() => {
@@ -145,7 +143,7 @@ export const TransakPayWebView = ({
     )
 }
 
-const baseStyles = (isLoading: boolean, isProcessing: boolean) =>
+const baseStyles = (theme: ColorThemeType, isLoading: boolean, isProcessing: boolean) =>
     StyleSheet.create({
         webviewWrapper: {
             overflow: isProcessing ? "hidden" : undefined,
