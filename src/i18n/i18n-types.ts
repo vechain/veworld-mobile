@@ -1838,6 +1838,50 @@ type RootTranslation = {
 	 */
 	DISCOVER_ECOSYSTEM: string
 	/**
+	 * A​l​l
+	 */
+	DISCOVER_ECOSYSTEM_FILTER_ALL: string
+	/**
+	 * S​u​s​t​a​i​n​a​b​i​l​i​t​y
+	 */
+	DISCOVER_ECOSYSTEM_FILTER_SUSTAINABILITY: string
+	/**
+	 * N​F​T​s
+	 */
+	DISCOVER_ECOSYSTEM_FILTER_NFTS: string
+	/**
+	 * D​A​p​p​s
+	 */
+	DISCOVER_ECOSYSTEM_FILTER_DAPPS: string
+	/**
+	 * S​E​A​R​C​H​ ​T​H​E​ ​W​E​B
+	 */
+	DISCOVER_WEB_SEARCH_FLOATING_BUTTON_LABEL: string
+	/**
+	 * F​a​v​o​u​r​i​t​e​s
+	 */
+	FAVOURITES_DAPPS_TITLE: string
+	/**
+	 * S​e​a​r​c​h
+	 */
+	FAVOURITES_DAPPS_SEARCH_PLACEHOLDER: string
+	/**
+	 * C​o​u​l​d​ ​n​o​t​ ​f​i​n​d​ ​a​n​y​ ​d​a​p​p​s​ ​w​i​t​h​ ​t​h​i​s​ ​n​a​m​e
+	 */
+	FAVOURITES_DAPPS_NO_RECORDS: string
+	/**
+	 * B​r​o​w​s​e​r​ ​H​i​s​t​o​r​y
+	 */
+	BROWSER_HISTORY_TITLE: string
+	/**
+	 * S​e​a​r​c​h
+	 */
+	BROWSER_HISTORY_SEARCH_PLACEHOLDER: string
+	/**
+	 * N​o​ ​H​i​s​t​o​r​y​ ​A​v​a​i​l​a​b​l​e
+	 */
+	BROWSER_HISTORY_No_RECORDS: string
+	/**
 	 * T​a​b​s
 	 */
 	BROWSER_TAB_MANAGEMENT_TITLE: string
@@ -4738,6 +4782,50 @@ Try reconnect your device to the internet.
 	 * Ecosystem
 	 */
 	DISCOVER_ECOSYSTEM: () => LocalizedString
+	/**
+	 * All
+	 */
+	DISCOVER_ECOSYSTEM_FILTER_ALL: () => LocalizedString
+	/**
+	 * Sustainability
+	 */
+	DISCOVER_ECOSYSTEM_FILTER_SUSTAINABILITY: () => LocalizedString
+	/**
+	 * NFTs
+	 */
+	DISCOVER_ECOSYSTEM_FILTER_NFTS: () => LocalizedString
+	/**
+	 * DApps
+	 */
+	DISCOVER_ECOSYSTEM_FILTER_DAPPS: () => LocalizedString
+	/**
+	 * SEARCH THE WEB
+	 */
+	DISCOVER_WEB_SEARCH_FLOATING_BUTTON_LABEL: () => LocalizedString
+	/**
+	 * Favourites
+	 */
+	FAVOURITES_DAPPS_TITLE: () => LocalizedString
+	/**
+	 * Search
+	 */
+	FAVOURITES_DAPPS_SEARCH_PLACEHOLDER: () => LocalizedString
+	/**
+	 * Could not find any dapps with this name
+	 */
+	FAVOURITES_DAPPS_NO_RECORDS: () => LocalizedString
+	/**
+	 * Browser History
+	 */
+	BROWSER_HISTORY_TITLE: () => LocalizedString
+	/**
+	 * Search
+	 */
+	BROWSER_HISTORY_SEARCH_PLACEHOLDER: () => LocalizedString
+	/**
+	 * No History Available
+	 */
+	BROWSER_HISTORY_No_RECORDS: () => LocalizedString
 	/**
 	 * Tabs
 	 */

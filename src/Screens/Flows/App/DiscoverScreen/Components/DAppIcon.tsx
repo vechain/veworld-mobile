@@ -1,40 +1,45 @@
-import React, { memo, useState } from "react"
-import { Image, StyleSheet } from "react-native"
+import React, { useState } from "react"
+import { Image, ImageStyle, StyleProp, StyleSheet } from "react-native"
 import { BaseView } from "~Components"
-import { SCREEN_WIDTH } from "~Constants"
+import { COLORS, ColorThemeType } from "~Constants"
+import { useThemedStyles } from "~Hooks"
 
-type IconProps = {
+type DAppIconProps = {
     imageSource: object
 }
 
-export const DAppIcon: React.FC<IconProps> = memo(({ imageSource }: IconProps) => {
+export const DAppIcon: React.FC<DAppIconProps> = ({ imageSource }: DAppIconProps) => {
     const [loadFallback, setLoadFallback] = useState(false)
-
+    const { styles } = useThemedStyles(baseStyles)
     return (
-        <BaseView style={baseStyles.iconContainer}>
+        <BaseView borderRadius={20} bg={COLORS.WHITE} style={styles.iconContainer}>
             <Image
                 source={loadFallback ? require("~Assets/Img/dapp-fallback.png") : imageSource}
-                // @ts-ignore
-                style={baseStyles.icon}
+                style={styles.icon as StyleProp<ImageStyle>}
                 onError={() => setLoadFallback(true)}
-                resizeMode="cover"
             />
         </BaseView>
     )
-})
+}
 
-const baseStyles = StyleSheet.create({
-    iconContainer: {
-        backgroundColor: "white",
-        borderRadius: 13,
-        overflow: "hidden",
-        height: 60,
-        width: SCREEN_WIDTH / 4 - 36,
-        justifyContent: "center",
-        alignItems: "center",
-    },
-    icon: {
-        height: 60,
-        width: SCREEN_WIDTH / 4 - 36,
-    },
-})
+const baseStyles = (theme: ColorThemeType) =>
+    StyleSheet.create({
+        iconContainer: {
+            borderWidth: 1,
+            borderColor: theme.colors.text,
+            borderRadius: 20.5,
+            overflow: "hidden",
+            padding: 0,
+            width: 41,
+            height: 41,
+        },
+        icon: {
+            height: 40,
+            width: 40,
+            objectFit: "cover",
+        },
+        listContentContainer: {
+            flexGrow: 1,
+            paddingTop: 12,
+        },
+    })

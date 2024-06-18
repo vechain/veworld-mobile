@@ -27,22 +27,13 @@ export const DiscoverStack = () => {
                 <Screen name={Routes.BROWSER} component={InAppBrowser} options={{ headerShown: false }} />
             </Group>
 
-            <Group
-                screenOptions={{
-                    presentation: "modal",
-                }}>
-                <Screen
-                    name={Routes.DISCOVER_FAVOURITES}
-                    component={FavouritesScreen}
-                    options={{ headerShown: false }}
-                />
+            <Screen name={Routes.DISCOVER_FAVOURITES} component={FavouritesScreen} options={{ headerShown: false }} />
 
-                <Screen
-                    name={Routes.DISCOVER_BROWSER_HISTORY}
-                    component={BrowserHistoryScreen}
-                    options={{ headerShown: false }}
-                />
-            </Group>
+            <Screen
+                name={Routes.DISCOVER_BROWSER_HISTORY}
+                component={BrowserHistoryScreen}
+                options={{ headerShown: false }}
+            />
         </Navigator>
     )
 }

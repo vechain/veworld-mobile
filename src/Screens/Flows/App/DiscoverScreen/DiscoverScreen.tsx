@@ -1,88 +1,60 @@
-import React, { memo, useCallback, useEffect, useMemo, useRef, useState } from "react"
-import { BaseButton, BaseSpacer, BaseText, BaseTextInput, BaseView, Layout, SelectedNetworkViewer } from "~Components"
-import { useI18nContext } from "~i18n"
-import { AnalyticsEvent, ColorThemeType, DiscoveryDApp, SCREEN_WIDTH } from "~Constants"
-import { useAnalyticTracking, useBrowserSearch, useKeyboard, useThemedStyles } from "~Hooks"
 import { useNavigation, useScrollToTop } from "@react-navigation/native"
+import React, { useCallback, useEffect, useMemo, useRef, useState } from "react"
+import { Keyboard, Linking, StyleSheet } from "react-native"
+import Animated, { useAnimatedRef, useScrollViewOffset } from "react-native-reanimated"
+import { randomized as daoDapps } from "~Assets"
+import { BaseSpacer, BaseView, Layout } from "~Components"
+import { AnalyticsEvent } from "~Constants"
+import { useAnalyticTracking, useBrowserSearch, useThemedStyles, useVisitedUrls } from "~Hooks"
+import { RumManager } from "~Logging/RumManager"
 import { Routes } from "~Navigation"
-
 import {
     addNavigationToDApp,
+    selectBookmarkedDapps,
     selectFeaturedDapps,
     selectHasUserOpenedDiscovery,
     setDiscoverySectionOpened,
     useAppDispatch,
     useAppSelector,
 } from "~Storage/Redux"
+import { useI18nContext } from "~i18n"
+import { AnimatedSearchBar } from "./Components/AnimatedSearchBar"
+import { AnimatedTitle } from "./Components/AnimatedTitle"
+import { Ecosystem } from "./Components/Ecosystem"
+import { Favourites } from "./Components/Favourites"
+import { MakeYourOwnDApp } from "./Components/MakeYourOwnDApp"
+import { VeBetterDAODApps } from "./Components/VeBetterDAODapps"
+import { VeBetterDAOMainCard } from "./Components/VeBetterDAOMainCard"
+import { WebSearchFloatingButton } from "./Components/WebSearchFloatingButton"
 import { useFetchFeaturedDApps } from "./Hooks/useFetchFeaturedDApps"
-import { RumManager } from "~Logging/RumManager"
-import { FlatList, Keyboard, StyleSheet } from "react-native"
-import Animated, {
-    interpolate,
-    ReduceMotion,
-    useAnimatedRef,
-    useAnimatedStyle,
-    useScrollViewOffset,
-    useSharedValue,
-    withSpring,
-} from "react-native-reanimated"
-import LinearGradient from "react-native-linear-gradient"
-import { HeaderSection } from "./Components/HeaderSection"
-import { DAppCard } from "./Components/DAppCard"
-import Icon from "react-native-vector-icons/MaterialCommunityIcons"
 
-export enum DAppType {
-    ALL = "all",
-    SUSTAINABILTY = "sustainability",
-    NFT = "NFT",
-    DAPPS = "DAPPS",
-}
-
-const AnimatedBaseViewHeader = Animated.createAnimatedComponent(BaseView)
-const AnimatedBaseViewInput = Animated.createAnimatedComponent(BaseView)
-const AnimatedBaseViewHistoryIcon = Animated.createAnimatedComponent(BaseView)
-
-Animated.addWhitelistedNativeProps({ text: true })
+const DAO_URL = "https://governance.vebetterdao.org/"
 
 export const DiscoverScreen: React.FC = () => {
     const { LL } = useI18nContext()
+    const track = useAnalyticTracking()
     const nav = useNavigation()
+    const dispatch = useAppDispatch()
+    const { styles, theme } = useThemedStyles(baseStyles)
+    const ddLogger = useMemo(() => new RumManager(), [])
+
+    const { addVisitedUrl } = useVisitedUrls()
+
     useFetchFeaturedDApps()
+    const { navigateToBrowser } = useBrowserSearch()
+
+    const animatedRef = useAnimatedRef<Animated.ScrollView>()
+    const offset = useScrollViewOffset(animatedRef)
+
     const flatListRef = useRef(null)
     useScrollToTop(flatListRef)
-    const dispatch = useAppDispatch()
-    const { navigateToBrowser } = useBrowserSearch()
-    const { styles, theme } = useThemedStyles(baseStyles)
 
     const hasOpenedDiscovery = useAppSelector(selectHasUserOpenedDiscovery)
-    const track = useAnalyticTracking()
-    const ddLogger = useMemo(() => new RumManager(), [])
-    const [selectedDapps, setSelectedDapps] = useState(DAppType.ALL)
+    const bookmarkedDApps = useAppSelector(selectBookmarkedDapps)
+    const dapps = useAppSelector(selectFeaturedDapps)
 
-    const dapps: DiscoveryDApp[] = useAppSelector(selectFeaturedDapps)
-    const filteredDapps = React.useMemo(() => {
-        switch (selectedDapps) {
-            case DAppType.ALL:
-                return dapps
-
-            case DAppType.SUSTAINABILTY:
-                return dapps.filter(dapp => dapp.tags?.includes(DAppType.SUSTAINABILTY.toLowerCase()))
-
-            case DAppType.NFT:
-                return dapps.filter(dapp => dapp.tags?.includes(DAppType.NFT.toLowerCase()))
-
-            case DAppType.DAPPS:
-                return dapps.filter(
-                    dapp =>
-                        !dapp.tags?.includes(DAppType.NFT.toLowerCase()) &&
-                        !dapp.tags?.includes(DAppType.SUSTAINABILTY.toLowerCase()),
-                )
-
-            default:
-                return dapps
-        }
-    }, [dapps, selectedDapps])
-    const renderSeparator = useCallback(() => <BaseSpacer height={24} />, [])
+    const [filteredSearch, setFilteredSearch] = useState("")
+    const showFavorites = bookmarkedDApps.length > 0
 
     useEffect(() => {
         if (!hasOpenedDiscovery) {
@@ -93,36 +65,29 @@ export const DiscoverScreen: React.FC = () => {
     }, [track, hasOpenedDiscovery, dispatch, ddLogger])
 
     const onDAppPress = useCallback(
-        (dapp: DiscoveryDApp) => {
-            nav.navigate(Routes.BROWSER, { url: dapp.href })
+        ({ href, custom }: { href: string; custom?: boolean }) => {
+            nav.navigate(Routes.BROWSER, { url: href })
+
+            addVisitedUrl(href)
 
             track(AnalyticsEvent.DISCOVERY_USER_OPENED_DAPP, {
-                url: dapp.href,
+                url: href,
             })
 
             ddLogger.logAction("DISCOVERY_SECTION", "DISCOVERY_USER_OPENED_DAPP")
 
             setTimeout(() => {
-                dispatch(addNavigationToDApp({ href: dapp.href, isCustom: dapp.isCustom }))
+                dispatch(addNavigationToDApp({ href: href, isCustom: custom ?? false }))
             }, 1000)
         },
-        [track, dispatch, nav, ddLogger],
+        [nav, addVisitedUrl, track, ddLogger, dispatch],
     )
-
-    const renderItem = useCallback(
-        ({ item }: { item: DiscoveryDApp }) => {
-            return <DAppCard dapp={item} onPress={onDAppPress} />
-        },
-        [onDAppPress],
-    )
-
-    const [filteredSearch, setFilteredSearch] = React.useState("")
 
     const onTextChange = useCallback((_text: string) => {
         setFilteredSearch(_text)
     }, [])
 
-    const mountButton = useMemo(() => {
+    const isWebSearchFloatingButtonVisible = useMemo(() => {
         return !!filteredSearch.length
     }, [filteredSearch.length])
 
@@ -133,106 +98,36 @@ export const DiscoverScreen: React.FC = () => {
         setTimeout(() => navigateToBrowser(filteredSearch), 300)
     }, [filteredSearch, navigateToBrowser])
 
-    const animatedRef = useAnimatedRef<Animated.ScrollView>()
-    const offset = useScrollViewOffset(animatedRef)
-    const isInputActive = useSharedValue(false)
-
-    const animatedStylesInput = useAnimatedStyle(() => {
-        return {
-            width: withSpring(isInputActive.value ? SCREEN_WIDTH : SCREEN_WIDTH / 1.3, {
-                mass: 1.2,
-                damping: 22,
-                stiffness: 190,
-                overshootClamping: false,
-                restDisplacementThreshold: 0.01,
-                restSpeedThreshold: 2,
-                reduceMotion: ReduceMotion.System,
-            }),
+    const onMakeYourOwnDAppPress = useCallback(async () => {
+        const url = process.env.REACT_APP_CREATE_YOUR_VECHAIN_DAPP_URL
+        if (url && (await Linking.canOpenURL(url))) {
+            Linking.openURL(url)
         }
-    }, [isInputActive])
-
-    const animatedStylesHeader = useAnimatedStyle(() => {
-        if (offset.value < 0) {
-            return {
-                height: 40,
-            }
-        }
-
-        if (offset.value > 200) {
-            return {
-                height: 0,
-            }
-        }
-
-        return {
-            opacity: interpolate(offset.value, [0, 100], [1, 0]),
-            height: interpolate(offset.value, [0, 200], [40, 0]),
-        }
-    })
+    }, [])
 
     const onNavigateToBrowserHistory = useCallback(() => {
         nav.navigate(Routes.DISCOVER_BROWSER_HISTORY)
     }, [nav])
 
+    const onSeeAllPress = useCallback(() => nav.navigate(Routes.DISCOVER_FAVOURITES), [nav])
+
     const renderScreenHeader = useMemo(() => {
         return (
             <>
-                <AnimatedBaseViewHeader
-                    flexDirection="row"
-                    justifyContent="space-between"
-                    alignItems="center"
-                    mx={24}
-                    style={animatedStylesHeader}>
-                    <BaseText typographyFont="largeTitle" testID="settings-screen">
-                        {LL.DISCOVER_TITLE()}
-                    </BaseText>
-
-                    <SelectedNetworkViewer />
-                </AnimatedBaseViewHeader>
-
-                <BaseView flexDirection="row" justifyContent="space-between">
-                    <AnimatedBaseViewInput
-                        flexDirection="row"
-                        px={24}
-                        my={12}
-                        bg="transparent"
-                        style={animatedStylesInput}>
-                        <BaseView flex={1}>
-                            <BaseTextInput
-                                placeholder={LL.DISCOVER_SEARCH()}
-                                onChangeText={onTextChange}
-                                value={filteredSearch}
-                                style={[styles.searchBar]}
-                                handleFocus={() => (isInputActive.value = true)}
-                                handleBlur={() => (isInputActive.value = false)}
-                            />
-                        </BaseView>
-                    </AnimatedBaseViewInput>
-
-                    <AnimatedBaseViewHistoryIcon justifyContent="center" alignItems="flex-end">
-                        <Icon
-                            name="history"
-                            size={32}
-                            color={theme.colors.primary}
-                            style={styles.iconStyle}
-                            onPress={onNavigateToBrowserHistory}
-                        />
-                    </AnimatedBaseViewHistoryIcon>
-                </BaseView>
+                <AnimatedTitle title={LL.DISCOVER_TITLE()} scrollOffset={offset} />
+                <BaseSpacer height={12} />
+                <AnimatedSearchBar
+                    placeholder={LL.DISCOVER_SEARCH()}
+                    value={filteredSearch}
+                    iconName={"history"}
+                    iconColor={theme.colors.primary}
+                    onTextChange={onTextChange}
+                    onIconPress={onNavigateToBrowserHistory}
+                />
+                <BaseSpacer height={12} />
             </>
         )
-    }, [
-        animatedStylesHeader,
-        LL,
-        animatedStylesInput,
-        onTextChange,
-        filteredSearch,
-        styles.searchBar,
-        styles.iconStyle,
-        theme.colors.primary,
-        onNavigateToBrowserHistory,
-        isInputActive,
-    ])
+    }, [LL, filteredSearch, offset, onNavigateToBrowserHistory, onTextChange, theme.colors.primary])
 
     return (
         <Layout
@@ -241,87 +136,53 @@ export const DiscoverScreen: React.FC = () => {
             noMargin
             hasSafeArea
             fixedBody={
-                <>
-                    <WebSearchPopUp onSearch={onSearch} mountButton={mountButton} />
-
+                <BaseView style={styles.rootContainer}>
                     <Animated.ScrollView
                         ref={animatedRef}
+                        style={styles.scrollView}
                         showsHorizontalScrollIndicator={false}
                         showsVerticalScrollIndicator={false}>
-                        <HeaderSection setSelectedDapps={setSelectedDapps} />
-
-                        <FlatList
-                            ref={flatListRef}
-                            data={filteredDapps}
-                            contentContainerStyle={[styles.container]}
-                            ItemSeparatorComponent={renderSeparator}
-                            scrollEnabled={true}
-                            keyExtractor={item => item.href}
-                            showsVerticalScrollIndicator={false}
-                            showsHorizontalScrollIndicator={false}
-                            renderItem={renderItem}
-                            numColumns={4}
-                            columnWrapperStyle={styles.columnWrapperStyle}
+                        <BaseSpacer height={24} />
+                        <VeBetterDAOMainCard href={DAO_URL} onDAppPress={onDAppPress} />
+                        <BaseSpacer height={36} />
+                        <VeBetterDAODApps
+                            title={LL.DISCOVER_DAPPS_TITLE()}
+                            daoDapps={daoDapps}
+                            onDAppPress={onDAppPress}
                         />
+                        <BaseSpacer height={36} />
+                        <MakeYourOwnDApp label={LL.DISCOVER_CREATE_YOUR_DAPP()} onPress={onMakeYourOwnDAppPress} />
+                        <BaseSpacer height={36} />
+                        {showFavorites && (
+                            <>
+                                <Favourites
+                                    title={LL.DISCOVER_TAB_FAVOURITES()}
+                                    actionLabel={LL.DISCOVER_SEE_ALL_BOOKMARKS()}
+                                    bookmarkedDApps={bookmarkedDApps}
+                                    onActionLabelPress={onSeeAllPress}
+                                    onDAppPress={onDAppPress}
+                                />
+                                <BaseSpacer height={36} />
+                            </>
+                        )}
+                        <Ecosystem title={LL.DISCOVER_ECOSYSTEM()} dapps={dapps} onDAppPress={onDAppPress} />
+                        {isWebSearchFloatingButtonVisible && <BaseSpacer height={50} />}
                     </Animated.ScrollView>
-                </>
+                    <WebSearchFloatingButton isVisible={isWebSearchFloatingButtonVisible} onPress={onSearch} />
+                </BaseView>
             }
         />
     )
 }
 
-const WebSearchPopUp = memo(({ onSearch, mountButton }: { onSearch: () => void; mountButton: boolean }) => {
-    const { visible, bottomStyle } = useKeyboard()
-    const bottom = useSharedValue(-100)
-
-    useEffect(() => {
-        if (mountButton) {
-            bottom.value = withSpring(bottomStyle, {
-                mass: 1.2,
-                damping: 22,
-                stiffness: 190,
-                overshootClamping: false,
-                restDisplacementThreshold: 0.01,
-                restSpeedThreshold: 2,
-                reduceMotion: ReduceMotion.System,
-            })
-        } else {
-            bottom.value = withSpring(-100, {
-                mass: 1,
-                damping: 10,
-                stiffness: 230,
-                overshootClamping: true,
-                restDisplacementThreshold: 0.01,
-                restSpeedThreshold: 2,
-                reduceMotion: ReduceMotion.System,
-            })
-        }
-    }, [bottom, bottomStyle, mountButton, visible])
-
-    const { styles, theme } = useThemedStyles(baseStyles)
-
-    return (
-        <>
-            <Animated.View style={[styles.popUpContainer, { bottom }]}>
-                <LinearGradient colors={[theme.colors.backgroundTransparent, theme.colors.background]}>
-                    <BaseView mx={20} style={{ width: SCREEN_WIDTH - 40 }} pb={24}>
-                        <BaseButton
-                            size="lg"
-                            haptics="Medium"
-                            w={100}
-                            title={"SEARCH THE WEB"}
-                            action={onSearch}
-                            activeOpacity={0.94}
-                        />
-                    </BaseView>
-                </LinearGradient>
-            </Animated.View>
-        </>
-    )
-})
-
-const baseStyles = (theme: ColorThemeType) =>
+const baseStyles = () =>
     StyleSheet.create({
+        rootContainer: {
+            flexGrow: 1,
+        },
+        scrollView: {
+            flex: 1,
+        },
         popUpContainer: {
             position: "absolute",
             bottom: -100,
@@ -329,43 +190,7 @@ const baseStyles = (theme: ColorThemeType) =>
             right: 0,
             zIndex: 2,
         },
-
-        // FLATLIST
-        columnWrapperStyle: {
-            marginHorizontal: 24,
-        },
-        container: {
-            paddingBottom: 92, // TODO - 24 if button is not mounted and 92 if button is mounted
-        },
-        emptyListButton: {
-            width: 250,
-        },
-        skeleton: {
-            marginBottom: 10,
-        },
         paddingTop: {
             paddingTop: 24,
-        },
-
-        // SEARCHBAR
-        searchBar: {
-            height: 40,
-        },
-
-        // ICON
-        iconStyle: {
-            paddingHorizontal: 24,
-        },
-
-        searchIconContainer: {
-            borderColor: theme.colors.text,
-            position: "absolute",
-            right: 0,
-            top: 0,
-            bottom: 0,
-            justifyContent: "center",
-            alignItems: "center",
-            width: 40,
-            height: 40,
         },
     })

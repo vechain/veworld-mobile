@@ -1,9 +1,11 @@
 import { useNavigation } from "@react-navigation/native"
 import { URIUtils } from "~Utils"
 import { Routes } from "~Navigation"
+import { useVisitedUrls } from "./useVisitedUrls"
 
 export const useBrowserSearch = () => {
     const nav = useNavigation()
+    const { addVisitedUrl } = useVisitedUrls()
 
     const navigateToBrowser = async (searchStr: string) => {
         const isValid =
@@ -17,12 +19,16 @@ export const useBrowserSearch = () => {
                 navInput = `https://${searchStr}`
             }
 
+            addVisitedUrl(navInput)
             nav.navigate(Routes.BROWSER, { url: navInput })
         } else {
+            const url = `https://www.google.com/search?q=${encodeURIComponent(searchStr)}&oq=${encodeURIComponent(
+                searchStr,
+            )}`
+
+            addVisitedUrl(url)
             nav.navigate(Routes.BROWSER, {
-                url: `https://www.google.com/search?q=${encodeURIComponent(searchStr)}&oq=${encodeURIComponent(
-                    searchStr,
-                )}`,
+                url,
             })
         }
     }
