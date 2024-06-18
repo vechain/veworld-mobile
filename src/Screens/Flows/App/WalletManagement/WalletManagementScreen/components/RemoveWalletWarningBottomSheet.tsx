@@ -32,6 +32,7 @@ export const RemoveWalletWarningBottomSheet = React.forwardRef<BottomSheetModalM
                     <BaseSpacer height={16} />
                     <BaseView>
                         <BaseButton
+                            testID="remove-wallet-button"
                             w={100}
                             haptics="Light"
                             title={LL.BTN_REMOVE_WALLET().toUpperCase()}
