@@ -1,6 +1,6 @@
 import { useNavigation } from "@react-navigation/native"
 import { FlashList } from "@shopify/flash-list"
-import React, { useCallback, useMemo, useRef, useState } from "react"
+import React, { MutableRefObject, useCallback, useMemo, useRef, useState } from "react"
 import { ImageSourcePropType, StyleSheet } from "react-native"
 import { SwipeableItemImperativeRef } from "react-native-swipeable-item"
 import { BaseSearchInput, BaseSpacer, BaseText, BaseView, Layout, SwipeableRow } from "~Components"
@@ -18,14 +18,21 @@ type BrowserHistoryCardProps = {
     dapp: DiscoveryDApp
     onLinkPress: ({ href }: { href: string }) => void
     onTrashIconPress: (dapp: DiscoveryDApp) => void
+    swipeableItemRefs: MutableRefObject<Map<string, SwipeableItemImperativeRef>>
 }
 
-const BrowserHistoryCard = ({ dapp, onLinkPress, onTrashIconPress }: BrowserHistoryCardProps) => {
+const BrowserHistoryCard = ({ dapp, swipeableItemRefs, onLinkPress, onTrashIconPress }: BrowserHistoryCardProps) => {
     const { styles } = useThemedStyles(baseStyles)
-    const swipeableItemRefs = useRef<Map<string, SwipeableItemImperativeRef>>(new Map())
+    const [selectedItem, setSelectedItem] = useState<DiscoveryDApp | undefined>(undefined)
 
     const imageUri: ImageSourcePropType = {
         uri: dapp.id ? getAppHubIconUrl(dapp.id) : `${process.env.REACT_APP_GOOGLE_FAVICON_URL}${dapp.href}`,
+    }
+
+    const clickEnabled = selectedItem === undefined
+
+    const onPressHandler = () => {
+        clickEnabled && onLinkPress({ href: dapp.href })
     }
 
     return (
@@ -33,8 +40,9 @@ const BrowserHistoryCard = ({ dapp, onLinkPress, onTrashIconPress }: BrowserHist
             swipeableItemRefs={swipeableItemRefs}
             item={dapp}
             itemKey={dapp.href}
+            setSelectedItem={setSelectedItem}
             handleTrashIconPress={() => onTrashIconPress(dapp)}
-            onPress={() => onLinkPress({ href: dapp.href })}>
+            onPress={onPressHandler}>
             <BaseView flexDirection="row" alignItems="center" p={12}>
                 <DAppIcon imageSource={imageUri} />
                 <BaseSpacer width={12} />
@@ -52,6 +60,16 @@ const BrowserHistoryCard = ({ dapp, onLinkPress, onTrashIconPress }: BrowserHist
     )
 }
 
+const ListEmptyComponent = () => {
+    const { LL } = useI18nContext()
+
+    return (
+        <BaseView flex={1} justifyContent="center" alignItems="center">
+            <EmptyResults subtitle={LL.BROWSER_HISTORY_No_RECORDS()} icon={"search-web"} />
+        </BaseView>
+    )
+}
+
 export const BrowserHistoryScreen = () => {
     const nav = useNavigation()
     const track = useAnalyticTracking()
@@ -60,6 +78,7 @@ export const BrowserHistoryScreen = () => {
     const { styles } = useThemedStyles(baseStyles)
     const ddLogger = useMemo(() => new RumManager(), [])
     const { addVisitedUrl, removeVisitedUrl } = useVisitedUrls()
+    const swipeableItemRefs = useRef<Map<string, SwipeableItemImperativeRef>>(new Map())
 
     const [filteredSearch, setFilteredSearch] = useState("")
 
@@ -129,22 +148,25 @@ export const BrowserHistoryScreen = () => {
             }
             fixedBody={
                 <BaseView flex={1}>
-                    <FlashList
-                        contentContainerStyle={styles.listContentContainer}
-                        data={visitedUrlsToShow}
-                        keyExtractor={item => item.href}
-                        renderItem={({ item }) => (
-                            <BrowserHistoryCard
-                                dapp={item}
-                                onLinkPress={onLinkPress}
-                                onTrashIconPress={onTrashIconPress}
-                            />
-                        )}
-                        showsVerticalScrollIndicator={false}
-                        ListEmptyComponent={
-                            <EmptyResults subtitle={LL.BROWSER_HISTORY_No_RECORDS()} icon={"search-web"} />
-                        }
-                    />
+                    {visitedUrlsToShow.length > 0 ? (
+                        <FlashList
+                            contentContainerStyle={styles.listContentContainer}
+                            data={visitedUrlsToShow}
+                            keyExtractor={item => item.href}
+                            renderItem={({ item }) => (
+                                <BrowserHistoryCard
+                                    swipeableItemRefs={swipeableItemRefs}
+                                    dapp={item}
+                                    onLinkPress={onLinkPress}
+                                    onTrashIconPress={onTrashIconPress}
+                                />
+                            )}
+                            estimatedItemSize={80}
+                            showsVerticalScrollIndicator={false}
+                        />
+                    ) : (
+                        <ListEmptyComponent />
+                    )}
                 </BaseView>
             }
         />

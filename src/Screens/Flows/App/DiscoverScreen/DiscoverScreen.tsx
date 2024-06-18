@@ -13,6 +13,7 @@ import {
     selectBookmarkedDapps,
     selectFeaturedDapps,
     selectHasUserOpenedDiscovery,
+    selectVisitedUrls,
     setDiscoverySectionOpened,
     useAppDispatch,
     useAppSelector,
@@ -49,6 +50,7 @@ export const DiscoverScreen: React.FC = () => {
     const flatListRef = useRef(null)
     useScrollToTop(flatListRef)
 
+    const visitedUrls = useAppSelector(selectVisitedUrls)
     const hasOpenedDiscovery = useAppSelector(selectHasUserOpenedDiscovery)
     const bookmarkedDApps = useAppSelector(selectBookmarkedDapps)
     const dapps = useAppSelector(selectFeaturedDapps)
@@ -120,14 +122,23 @@ export const DiscoverScreen: React.FC = () => {
                     placeholder={LL.DISCOVER_SEARCH()}
                     value={filteredSearch}
                     iconName={"history"}
-                    iconColor={theme.colors.primary}
+                    iconColor={visitedUrls.length > 0 ? theme.colors.primary : theme.colors.disabled}
                     onTextChange={onTextChange}
                     onIconPress={onNavigateToBrowserHistory}
                 />
                 <BaseSpacer height={12} />
             </>
         )
-    }, [LL, filteredSearch, offset, onNavigateToBrowserHistory, onTextChange, theme.colors.primary])
+    }, [
+        LL,
+        filteredSearch,
+        offset,
+        onNavigateToBrowserHistory,
+        onTextChange,
+        theme.colors.disabled,
+        theme.colors.primary,
+        visitedUrls.length,
+    ])
 
     return (
         <Layout
