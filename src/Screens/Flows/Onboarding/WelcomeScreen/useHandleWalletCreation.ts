@@ -181,19 +181,15 @@ export const useHandleWalletCreation = () => {
             newLedger: NewLedgerDevice
             disconnectLedger: () => Promise<void>
         }) => {
-            if (biometrics && biometrics.currentSecurityLevel === "BIOMETRIC") {
-                dispatch(setIsAppLoading(true))
-                await createLedgerWallet({
-                    newLedger,
-                    onError: onWalletCreationError,
-                })
-                await disconnectLedger()
-                dispatch(setIsAppLoading(false))
-            } else {
-                onOpen()
-            }
+            dispatch(setIsAppLoading(true))
+            await createLedgerWallet({
+                newLedger,
+                onError: onWalletCreationError,
+            })
+            await disconnectLedger()
+            dispatch(setIsAppLoading(false))
         },
-        [biometrics, createLedgerWallet, dispatch, onOpen, onWalletCreationError],
+        [createLedgerWallet, dispatch, onWalletCreationError],
     )
 
     return {
