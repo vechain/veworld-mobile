@@ -130,19 +130,20 @@ jobs:
                   export KEY_ALIAS="$(<key_alias.txt)"
                   fastlane build_test_ci version_code:99 version_name:"9.9.9"
                   cd app/build/outputs/apk/release
-                  pwd >> "$GITHUB_OUTPUT"
+                  OUTPUT_DIR=$(pwd)
+                  echo "output_dir=$OUTPUT_DIR" >> "$GITHUB_ENV"
                   ls -la
             
             - name: Upload apk 
               uses: actions/upload-artifact@v4
               with:
                name: app-release.apk
-               path: ${{ steps.build.outputs.app }}/app-release.apk
+               path: ${{ env.output_dir }}/app-release.apk
 
-            - name: Maestro Cloud
-              uses: mobile-dev-inc/action-maestro-cloud@v1.8.1
-              with:
-                name: Android Test
-                api-key: ${{ secrets.MAESTRO_CLOUD_API_KEY }}
-                app-file: android/app/build/outputs/apk/release/app-release.apk
-                android-api-level: 30
+            #- name: Maestro Cloud
+            #  uses: mobile-dev-inc/action-maestro-cloud@v1.8.1
+            #  with:
+            #    name: Android Test
+            #    api-key: ${{ secrets.MAESTRO_CLOUD_API_KEY }}
+            #    app-file: android/app/build/outputs/apk/release/app-release.apk
+            #    android-api-level: 30
