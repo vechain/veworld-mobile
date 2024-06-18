@@ -1,24 +1,12 @@
 import React from "react"
 import { createNativeStackNavigator } from "@react-navigation/native-stack"
-import {
-    ConfirmMnemonicScreen,
-    EnableAdditionalSettings,
-    ImportLocalWallet,
-    NewMnemonicScreen,
-    SelectLedgerAccounts,
-    SelectLedgerDevice,
-    WalletSetupScreen,
-    WalletSuccessScreen,
-} from "~Screens"
+import { EnableAdditionalSettings, ImportLocalWallet, SelectLedgerAccounts, SelectLedgerDevice } from "~Screens"
 import { Routes } from "~Navigation/Enums"
-import { ConnectedLedgerDevice, SecurityLevelType, WatchedAccount } from "~Model"
+import { ConnectedLedgerDevice } from "~Model"
 import { useNavAnimation } from "~Hooks"
 
 export type RootStackParamListCreateWalletApp = {
     Home: undefined
-    [Routes.WALLET_SETUP]: undefined
-    [Routes.NEW_MNEMONIC]: undefined
-    [Routes.CONFIRM_MNEMONIC]: undefined
     [Routes.IMPORT_MNEMONIC]: undefined
     [Routes.IMPORT_HW_LEDGER_SELECT_DEVICE]: undefined
     [Routes.IMPORT_HW_LEDGER_ENABLE_ADDITIONAL_SETTINGS]: {
@@ -27,17 +15,6 @@ export type RootStackParamListCreateWalletApp = {
     [Routes.IMPORT_HW_LEDGER_SELECT_ACCOUNTS]: {
         device: ConnectedLedgerDevice
     }
-    [Routes.WALLET_SUCCESS]:
-        | {
-              securityLevelSelected: SecurityLevelType.BIOMETRIC
-          }
-        | {
-              securityLevelSelected: SecurityLevelType.SECRET
-              userPin: string
-          }
-        | undefined
-    [Routes.USER_CREATE_PASSWORD]: undefined
-    [Routes.OBSERVE_WALLET_CONFIRMATION]: { account: WatchedAccount }
 }
 
 const CreateWalletApp = createNativeStackNavigator<RootStackParamListCreateWalletApp>()
@@ -47,26 +24,6 @@ export const CreateWalletAppStack = () => {
 
     return (
         <CreateWalletApp.Navigator screenOptions={{ headerShown: false, animation }}>
-            <CreateWalletApp.Screen
-                name={Routes.WALLET_SETUP}
-                component={WalletSetupScreen}
-                options={{ headerShown: false }}
-            />
-            <CreateWalletApp.Screen
-                name={Routes.NEW_MNEMONIC}
-                component={NewMnemonicScreen}
-                options={{ headerShown: false }}
-            />
-            <CreateWalletApp.Screen
-                name={Routes.CONFIRM_MNEMONIC}
-                component={ConfirmMnemonicScreen}
-                options={{ headerShown: false }}
-            />
-            <CreateWalletApp.Screen
-                name={Routes.WALLET_SUCCESS}
-                component={WalletSuccessScreen}
-                options={{ headerShown: false }}
-            />
             <CreateWalletApp.Screen
                 name={Routes.IMPORT_MNEMONIC}
                 component={ImportLocalWallet}

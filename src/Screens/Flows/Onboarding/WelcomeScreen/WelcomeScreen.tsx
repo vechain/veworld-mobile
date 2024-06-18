@@ -1,5 +1,14 @@
 import React, { useCallback, useMemo } from "react"
-import { BackButtonHeader, BaseButton, BaseModal, BaseSpacer, BaseText, BaseView, Layout } from "~Components"
+import {
+    BackButtonHeader,
+    BaseButton,
+    BaseModal,
+    BaseSpacer,
+    BaseText,
+    BaseView,
+    ImportWalletBottomSheet,
+    Layout,
+} from "~Components"
 import { VeWorldLogoSVG } from "~Assets"
 import { useI18nContext } from "~i18n"
 import { Linking } from "react-native"
@@ -9,7 +18,6 @@ import { useHandleWalletCreation } from "./useHandleWalletCreation"
 import { useAnalyticTracking, useBottomSheetModal, useTheme } from "~Hooks"
 import { RumManager } from "~Logging"
 import { AnalyticsEvent } from "~Constants"
-import { ImportWalletBottomSheet } from "~Screens/Flows/WalletCreation/WalletSetupScreen/components"
 
 export const WelcomeScreen = () => {
     const { LL } = useI18nContext()

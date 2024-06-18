@@ -11,6 +11,7 @@ import {
     DismissKeyboardView,
     Layout,
     RequireUserPassword,
+    SelectDerivationPathBottomSheet,
 } from "~Components"
 import { useI18nContext } from "~i18n"
 import * as Clipboard from "expo-clipboard"
@@ -23,7 +24,6 @@ import HapticsService from "~Services/HapticsService"
 import { AnalyticsEvent } from "~Constants"
 import { DEVICE_CREATION_ERRORS as ERRORS, IMPORT_TYPE } from "~Model"
 import { UnlockKeystoreBottomSheet } from "./Components/UnlockKeystoreBottomSheet"
-import { SelectDerivationPathBottomSheet } from "../WalletSetupScreen/components/SelectDerivationPathBottomSheet"
 import { UserCreatePasswordScreen } from "../UserCreatePasswordScreen"
 import { useHandleWalletCreation } from "~Screens/Flows/Onboarding/WelcomeScreen/useHandleWalletCreation"
 import { useNavigation } from "@react-navigation/native"
