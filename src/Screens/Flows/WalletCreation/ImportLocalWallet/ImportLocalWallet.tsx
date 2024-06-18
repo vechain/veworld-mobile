@@ -1,4 +1,4 @@
-import React, { useCallback, useMemo, useState } from "react"
+import React, { useCallback, useMemo, useRef, useState } from "react"
 import {
     BackButtonHeader,
     BaseButton,
@@ -65,23 +65,27 @@ export const ImportLocalWallet = () => {
         onClose: onCloseDerivationPath,
     } = useBottomSheetModal()
 
+    const mnemonicCache = useRef<string[]>()
+    const privateKeyCache = useRef<string>()
+
     const {
         isPasswordPromptOpen: isPasswordPromptOpen_1,
         handleClosePasswordModal: handleClosePasswordModal_1,
         onPasswordSuccess: onPasswordSuccess_1,
         checkIdentityBeforeOpening: checkIdentityBeforeOpening_1,
     } = useCheckIdentity({
-        onIdentityConfirmed: (pin?: string) => {
-            importOnboardedWallet({ importMnemonic: mnemonicCache, privateKey: privateKeyCache, pin })
+        onIdentityConfirmed: async (pin?: string) => {
+            await importOnboardedWallet({
+                importMnemonic: mnemonicCache.current,
+                privateKey: privateKeyCache.current,
+                pin,
+            })
             nav.goBack()
         },
         allowAutoPassword: false,
     })
 
     const importType = useMemo(() => CryptoUtils.determineKeyImportType(textValue), [textValue])
-
-    const [mnemonicCache, setMnemonicCache] = useState<string[]>()
-    const [privateKeyCache, setPrivateKeyCache] = useState<string>()
 
     const processErrorMessage = useCallback(
         (err: unknown) => {
@@ -110,7 +114,7 @@ export const ImportLocalWallet = () => {
             try {
                 const mnemonic = CryptoUtils.mnemonicStringToArray(_mnemonic)
                 checkCanImportDevice(mnemonic)
-                setMnemonicCache(mnemonic)
+                mnemonicCache.current = mnemonic
                 track(AnalyticsEvent.IMPORT_MNEMONIC_SUBMITTED)
                 if (userHasOnboarded) {
                     checkIdentityBeforeOpening_1()
@@ -136,7 +140,7 @@ export const ImportLocalWallet = () => {
         (_privKey: string) => {
             try {
                 checkCanImportDevice(undefined, _privKey)
-                setPrivateKeyCache(_privKey)
+                privateKeyCache.current = _privKey
                 track(AnalyticsEvent.IMPORT_PRIVATE_KEY_SUBMITTED)
                 if (userHasOnboarded) {
                     checkIdentityBeforeOpening_1()
@@ -163,7 +167,7 @@ export const ImportLocalWallet = () => {
             try {
                 const privateKey = await CryptoUtils.decryptKeystoreFile(textValue, pwd)
                 checkCanImportDevice(undefined, privateKey)
-                setPrivateKeyCache(privateKey)
+                privateKeyCache.current = privateKey
                 track(AnalyticsEvent.IMPORT_KEYSTORE_FILE_SUBMITTED)
                 if (userHasOnboarded) {
                     checkIdentityBeforeOpening_1()
@@ -322,7 +326,11 @@ export const ImportLocalWallet = () => {
                                 <BackButtonHeader action={onCloseCreateFlow} hasBottomSpacer={false} />
                                 <UserCreatePasswordScreen
                                     onSuccess={pin =>
-                                        onSuccess({ pin, mnemonic: mnemonicCache, privateKey: privateKeyCache })
+                                        onSuccess({
+                                            pin,
+                                            mnemonic: mnemonicCache.current,
+                                            privateKey: privateKeyCache.current,
+                                        })
                                     }
                                 />
                             </BaseView>

@@ -153,7 +153,7 @@ export const useHandleWalletCreation = () => {
             privateKey?: string
             pin?: string
         }) => {
-            if (biometrics && biometrics.currentSecurityLevel === "BIOMETRIC") {
+            if (biometrics && biometrics.currentSecurityLevel === "BIOMETRIC" && !pin) {
                 dispatch(setIsAppLoading(true))
                 await createLocalWallet({
                     mnemonic: privateKey ? undefined : importMnemonic,
