@@ -19,7 +19,7 @@ import { BigNutils, AddressUtils, LedgerUtils } from "~Utils"
 import { StyleSheet } from "react-native"
 import { NativeStackScreenProps } from "@react-navigation/native-stack"
 import { RootStackParamListCreateWalletApp, RootStackParamListOnboarding, Routes } from "~Navigation"
-import { selectSelectedNetwork, useAppSelector } from "~Storage/Redux"
+import { selectHasOnboarded, selectSelectedNetwork, useAppSelector } from "~Storage/Redux"
 import { FlashList, ViewToken } from "@shopify/flash-list"
 import * as Haptics from "expo-haptics"
 import { LedgerAccount, NewLedgerDevice } from "~Model"
@@ -37,6 +37,7 @@ export const SelectLedgerAccounts: React.FC<Props> = ({ route }) => {
     const { styles: themedStyles } = useThemedStyles(styles)
     const selectedNetwork = useAppSelector(selectSelectedNetwork)
     const track = useAnalyticTracking()
+    const userHasOnboarded = useAppSelector(selectHasOnboarded)
 
     const { errorCode, rootAccount, disconnectLedger } = useLedgerDevice({
         deviceId: device.id,
@@ -59,7 +60,13 @@ export const SelectLedgerAccounts: React.FC<Props> = ({ route }) => {
     }, [errorCode, rootAcc])
 
     const { ref, onOpen, onClose } = useBottomSheetModal()
-    const { onCreateLedgerWallet, isOpen, onClose: onCloseCreateFlow, onLedgerPinSuccess } = useHandleWalletCreation()
+    const {
+        onCreateLedgerWallet,
+        isOpen,
+        onClose: onCloseCreateFlow,
+        onLedgerPinSuccess,
+        importLedgerWallet,
+    } = useHandleWalletCreation()
 
     useEffect(() => {
         if (ledgerErrorCode) {
@@ -95,17 +102,34 @@ export const SelectLedgerAccounts: React.FC<Props> = ({ route }) => {
 
                 setNewLedgerDevice(newLedger)
 
-                onCreateLedgerWallet({
-                    newLedger,
-                    disconnectLedger,
-                })
+                if (userHasOnboarded) {
+                    importLedgerWallet({
+                        newLedger,
+                        disconnectLedger,
+                    })
+                } else {
+                    onCreateLedgerWallet({
+                        newLedger,
+                        disconnectLedger,
+                    })
+                }
             }
         } catch (e) {
             track(AnalyticsEvent.IMPORT_HW_FAILED_TO_IMPORT)
             Haptics.notificationAsync(Haptics.NotificationFeedbackType.Error)
             showErrorToast({ text1: e as string })
         }
-    }, [track, selectedAccountsIndex, rootAcc, device.id, device.localName, onCreateLedgerWallet, disconnectLedger])
+    }, [
+        track,
+        selectedAccountsIndex,
+        rootAcc,
+        device.id,
+        device.localName,
+        userHasOnboarded,
+        importLedgerWallet,
+        disconnectLedger,
+        onCreateLedgerWallet,
+    ])
 
     /**
      * When the root account changes, fetch the accounts and balances

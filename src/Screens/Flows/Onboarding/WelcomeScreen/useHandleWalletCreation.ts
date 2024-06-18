@@ -173,6 +173,29 @@ export const useHandleWalletCreation = () => {
         [biometrics, createLocalWallet, dispatch, onWalletCreationError],
     )
 
+    const importLedgerWallet = useCallback(
+        async ({
+            newLedger,
+            disconnectLedger,
+        }: {
+            newLedger: NewLedgerDevice
+            disconnectLedger: () => Promise<void>
+        }) => {
+            if (biometrics && biometrics.currentSecurityLevel === "BIOMETRIC") {
+                dispatch(setIsAppLoading(true))
+                await createLedgerWallet({
+                    newLedger,
+                    onError: onWalletCreationError,
+                })
+                await disconnectLedger()
+                dispatch(setIsAppLoading(false))
+            } else {
+                onOpen()
+            }
+        },
+        [biometrics, createLedgerWallet, dispatch, onOpen, onWalletCreationError],
+    )
+
     return {
         onCreateWallet,
         isOpen,
@@ -183,6 +206,7 @@ export const useHandleWalletCreation = () => {
         onLedgerPinSuccess,
         createOnboardedWallet,
         importOnboardedWallet,
+        importLedgerWallet,
     }
 }
 

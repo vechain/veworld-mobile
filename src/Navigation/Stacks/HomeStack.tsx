@@ -4,6 +4,7 @@ import {
     ActivityDetailsScreen,
     AssetDetailScreen,
     ConnectedAppsScreen,
+    EnableAdditionalSettings,
     HistoryScreen,
     HomeScreen,
     ImportLocalWallet,
@@ -13,6 +14,8 @@ import {
     ManageTokenScreen,
     ObserveWalletScreen,
     SelectAmountSendScreen,
+    SelectLedgerAccounts,
+    SelectLedgerDevice,
     SelectTokenSendScreen,
     SwapScreen,
     TransactionSummarySendScreen,
@@ -22,6 +25,7 @@ import {
 import { Routes } from "~Navigation/Enums"
 import {
     Activity,
+    ConnectedLedgerDevice,
     Device,
     FungibleToken,
     FungibleTokenWithBalance,
@@ -73,6 +77,13 @@ export type RootStackParamListHome = {
     [Routes.SETTINGS_CONNECTED_APPS]: undefined
     [Routes.OBSERVE_WALLET]: undefined
     [Routes.IMPORT_MNEMONIC]: undefined
+    [Routes.IMPORT_HW_LEDGER_SELECT_DEVICE]: undefined
+    [Routes.IMPORT_HW_LEDGER_ENABLE_ADDITIONAL_SETTINGS]: {
+        device: ConnectedLedgerDevice
+    }
+    [Routes.IMPORT_HW_LEDGER_SELECT_ACCOUNTS]: {
+        device: ConnectedLedgerDevice
+    }
 }
 
 const { Navigator, Group, Screen } = createNativeStackNavigator<RootStackParamListHome>()
@@ -131,6 +142,22 @@ export const HomeStack = () => {
                 <Screen name={Routes.TOKEN_DETAILS} component={AssetDetailScreen} options={{ headerShown: false }} />
                 <Screen name={Routes.OBSERVE_WALLET} component={ObserveWalletScreen} options={{ headerShown: false }} />
                 <Screen name={Routes.IMPORT_MNEMONIC} component={ImportLocalWallet} options={{ headerShown: false }} />
+
+                <Screen
+                    name={Routes.IMPORT_HW_LEDGER_SELECT_DEVICE}
+                    component={SelectLedgerDevice}
+                    options={{ headerShown: false }}
+                />
+                <Screen
+                    name={Routes.IMPORT_HW_LEDGER_ENABLE_ADDITIONAL_SETTINGS}
+                    component={EnableAdditionalSettings}
+                    options={{ headerShown: false }}
+                />
+                <Screen
+                    name={Routes.IMPORT_HW_LEDGER_SELECT_ACCOUNTS}
+                    component={SelectLedgerAccounts}
+                    options={{ headerShown: false }}
+                />
             </Group>
 
             <Group>

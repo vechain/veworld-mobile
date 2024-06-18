@@ -507,7 +507,7 @@ PODS:
     - React-Core
   - react-native-restart (0.0.27):
     - React-Core
-  - react-native-safe-area-context (4.10.4):
+  - react-native-safe-area-context (4.10.5):
     - React-Core
   - react-native-slider (4.5.2):
     - RCT-Folly (= 2021.07.22.00)
@@ -687,11 +687,11 @@ PODS:
     - React
   - RNScrypt (1.2.1):
     - React
-  - RNSentry (5.23.1):
+  - RNSentry (5.24.0):
     - hermes-engine
     - React-Core
     - React-hermes
-    - Sentry/HybridSDK (= 8.27.0)
+    - Sentry/HybridSDK (= 8.28.0)
   - RNSVG (13.14.1):
     - React-Core
   - SDWebImage (5.11.1):
@@ -700,7 +700,7 @@ PODS:
   - SDWebImageWebPCoder (0.8.5):
     - libwebp (~> 1.0)
     - SDWebImage/Core (~> 5.10)
-  - Sentry/HybridSDK (8.27.0)
+  - Sentry/HybridSDK (8.28.0)
   - SocketRocket (0.6.1)
   - UMAppLoader (4.2.0)
   - Yoga (1.14.0)
@@ -1145,7 +1145,7 @@ SPEC CHECKSUMS:
   react-native-quick-base64: 61228d753294ae643294a75fece8e0e80b7558a6
   react-native-quick-crypto: 455c1b411db006dba1026a30681ececb19180187
   react-native-restart: 7595693413fe3ca15893702f2c8306c62a708162
-  react-native-safe-area-context: 399a5859f6acbdf67f671c69b53113f535f3b5b0
+  react-native-safe-area-context: a240ad4b683349e48b1d51fed1611138d1bdad97
   react-native-slider: 593253eb5fbc6ea519290e812bd477fc6abafd5a
   react-native-webview: bdc091de8cf7f8397653e30182efcd9f772e03b3
   React-NativeModulesApple: 02e35e9a51e10c6422f04f5e4076a7c02243fff2
@@ -1180,11 +1180,11 @@ SPEC CHECKSUMS:
   RNScreens: 93ae3be2f119d955620f9bbb39ad372adb53b7a9
   RNScreenshotPrevent: dc9741e416ba80c3739418f112ac4093188315e9
   RNScrypt: 95fdef077b482e9fdf8a761120cb69d129ef4016
-  RNSentry: 3d2dc9b3d85333ae858c39f9978e01056267ae90
+  RNSentry: 29360f46d9770060fceafd06c3ae097de1a1847e
   RNSVG: af3907ac5d4fa26a862b75a16d8f15bc74f2ceda
   SDWebImage: a7f831e1a65eb5e285e3fb046a23fcfbf08e696d
   SDWebImageWebPCoder: 908b83b6adda48effe7667cd2b7f78c897e5111d
-  Sentry: c404bb9052e7688451f8c3b7f4996a5471b4238e
+  Sentry: 1482a20b132098929714143f436a4fe574ad0517
   SocketRocket: f32cd54efbe0f095c4d7594881e52619cfe80b17
   UMAppLoader: e83f024f75f07802fce99739f04b4537d188caaf
   Yoga: b76f1acfda8212aa16b7e26bcce3983230c82603
@@ -1193,4 +1193,4 @@ SPEC CHECKSUMS:
 
 PODFILE CHECKSUM: 226dced8ce96660bbafc2f8a412fbbd5921d6b54
 
-COCOAPODS: 1.15.2
+COCOAPODS: 1.14.3
