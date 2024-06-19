@@ -10,7 +10,14 @@ import { selectCurrentScreen, selectSelectedAccount, selectSelectedNetwork, useA
 import { Routes } from "~Navigation/Enums"
 import { NETWORK_TYPE } from "~Model"
 
-const Tab = createBottomTabNavigator()
+export type TabStackParamList = {
+    HomeStack: undefined
+    NFTStack: undefined
+    DiscoverStack: undefined
+    SettingsStack: undefined
+}
+
+const Tab = createBottomTabNavigator<TabStackParamList>()
 
 export const TabStack = () => {
     const theme = useTheme()

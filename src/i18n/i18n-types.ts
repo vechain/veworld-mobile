@@ -1539,7 +1539,7 @@ type RootTranslation = {
 	 */
 	NOTIFICATION_TITLE_INVALID_QR: string
 	/**
-	 * P​l​e​a​s​e​ ​s​c​a​n​ ​a​ ​W​a​l​l​e​t​C​o​n​n​e​c​t​ ​o​r​ ​w​a​l​l​e​t​ ​a​d​d​r​e​s​s​ ​Q​R​ ​c​o​d​e​.
+	 * P​l​e​a​s​e​ ​s​c​a​n​ ​a​ ​W​a​l​l​e​t​C​o​n​n​e​c​t​,​ ​w​a​l​l​e​t​ ​a​d​d​r​e​s​s​ ​o​r​ ​v​a​l​i​d​ ​U​R​L​ ​Q​R​ ​c​o​d​e​.
 	 */
 	NOTIFICATION_INVALID_QR: string
 	/**
@@ -4491,7 +4491,7 @@ Try reconnect your device to the internet.
 	 */
 	NOTIFICATION_TITLE_INVALID_QR: () => LocalizedString
 	/**
-	 * Please scan a WalletConnect or wallet address QR code.
+	 * Please scan a WalletConnect, wallet address or valid URL QR code.
 	 */
 	NOTIFICATION_INVALID_QR: () => LocalizedString
 	/**
