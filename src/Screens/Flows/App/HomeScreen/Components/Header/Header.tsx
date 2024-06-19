@@ -1,22 +1,45 @@
 import { useNavigation } from "@react-navigation/native"
 import React, { memo, useCallback } from "react"
-import { useCameraBottomSheet, useCopyClipboard, useTheme } from "~Hooks"
+import { useCameraBottomSheet, useCopyClipboard, useTheme, useVisitedUrls } from "~Hooks"
 import { BaseIcon, BaseText, BaseView, useWalletConnect } from "~Components"
 import { useI18nContext } from "~i18n"
-import { Routes } from "~Navigation"
+import { RootStackParamListHome, Routes, TabStackParamList } from "~Navigation"
 import HapticsService from "~Services/HapticsService"
 import { ERROR_EVENTS, ScanTarget } from "~Constants"
 import { SelectedNetworkViewer } from "~Components/Reusable/SelectedNetworkViewer"
-import { AddressUtils, debug, WalletConnectUtils } from "~Utils"
+import { AddressUtils, debug, URIUtils, WalletConnectUtils } from "~Utils"
+import { NativeStackNavigationProp } from "@react-navigation/native-stack"
+
+type Navigation = NativeStackNavigationProp<TabStackParamList, "HomeStack"> &
+    NativeStackNavigationProp<RootStackParamListHome, Routes.HOME>
 
 export const Header = memo(() => {
     const theme = useTheme()
-    const nav = useNavigation()
+    const nav = useNavigation<Navigation>()
     const { LL } = useI18nContext()
+    const { addVisitedUrl } = useVisitedUrls()
 
     const { onPair } = useWalletConnect()
 
     const { onCopyToClipboard } = useCopyClipboard()
+
+    const goToInAppBrowser = useCallback(
+        (url: string) => {
+            nav.reset({
+                routes: [
+                    {
+                        name: "DiscoverStack",
+                        params: {
+                            state: {
+                                routes: [{ name: Routes.DISCOVER }, { name: Routes.BROWSER, params: { url } }],
+                            },
+                        },
+                    },
+                ],
+            })
+        },
+        [nav],
+    )
 
     const onScan = useCallback(
         (qrData: string) => {
@@ -25,16 +48,19 @@ export const Header = memo(() => {
                 onPair(qrData)
             } else if (AddressUtils.isValid(qrData)) {
                 onCopyToClipboard(qrData, LL.COMMON_LBL_ADDRESS())
+            } else if (URIUtils.isValid(qrData) && URIUtils.isHttps(qrData)) {
+                addVisitedUrl(qrData)
+                goToInAppBrowser(qrData)
             } else {
                 debug(ERROR_EVENTS.APP, qrData)
             }
         },
-        [LL, onCopyToClipboard, onPair],
+        [LL, addVisitedUrl, goToInAppBrowser, onCopyToClipboard, onPair],
     )
 
     const { RenderCameraModal, handleOpenCamera } = useCameraBottomSheet({
         onScan,
-        targets: [ScanTarget.WALLET_CONNECT, ScanTarget.ADDRESS],
+        targets: [ScanTarget.WALLET_CONNECT, ScanTarget.ADDRESS, ScanTarget.HTTPS_URL],
     })
 
     const goToWalletManagement = useCallback(() => {
