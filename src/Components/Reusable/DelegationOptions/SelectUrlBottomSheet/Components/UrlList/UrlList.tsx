@@ -33,7 +33,7 @@ export const UrlList = ({
             <BaseView flexDirection="row" justifyContent="space-between" alignItems="center" w={100}>
                 <BaseText typographyFont="subTitleBold">{LL.SEND_DELEGATION_SELECT_URL()}</BaseText>
                 <BaseIcon
-                    name={"plus"}
+                    name="plus"
                     bg={theme.colors.secondary}
                     action={() => setAddUrlMode(true)}
                     testID="UrlList_addUrlButton"

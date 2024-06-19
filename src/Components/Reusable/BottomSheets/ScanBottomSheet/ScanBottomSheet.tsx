@@ -124,7 +124,7 @@ export const ScanBottomSheet = React.forwardRef<BottomSheetModalMethods, Props>(
                     }}
                     onBarCodeScanned={onQrScanned}
                     onMountError={onClose}
-                    ratio={"16:9"}>
+                    ratio="16:9">
                     <BaseView style={baseStyles.container} w={100} h={100}>
                         {isCameraReady && <BaseView style={baseStyles.square} />}
 

@@ -44,7 +44,7 @@ export const DeviceBox: React.FC<Props> = ({
                     {isEdit && (
                         <>
                             <Pressable onPressIn={isEdit ? drag : undefined} disabled={isActive}>
-                                <BaseIcon name={"drag"} color={theme.colors.text} size={24} />
+                                <BaseIcon name="drag" color={theme.colors.text} size={24} />
                             </Pressable>
                             <BaseSpacer width={8} />
                         </>
@@ -76,7 +76,7 @@ export const DeviceBox: React.FC<Props> = ({
                     </BaseView>
                 </BaseView>
                 <BaseSpacer width={12} />
-                {isIconVisible && !isEdit && <BaseIcon name={"pencil-outline"} color={theme.colors.text} size={24} />}
+                {isIconVisible && !isEdit && <BaseIcon name="pencil-outline" color={theme.colors.text} size={24} />}
             </BaseCard>
         ),
         [

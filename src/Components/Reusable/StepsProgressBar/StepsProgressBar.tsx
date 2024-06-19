@@ -71,7 +71,7 @@ export const StepsProgressBar: React.FC<Props> = ({ steps, currentStep, isCurren
                             {isActive && !isError ? (
                                 <BaseView bg={bgColor} borderRadius={100} p={5}>
                                     <ActivityIndicator
-                                        size={"small"}
+                                        size="small"
                                         color={theme.colors.textReversed}
                                         style={{
                                             transform: [{ scale: 0.8 }],
