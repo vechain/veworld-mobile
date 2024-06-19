@@ -130,7 +130,7 @@ export const WelcomeScreen = () => {
 
             <BaseModal isOpen={isOpen} onClose={onCloseCreateFlow}>
                 <BaseView justifyContent="flex-start">
-                    <BackButtonHeader action={onClose} hasBottomSpacer={false} />
+                    <BackButtonHeader action={onCloseCreateFlow} hasBottomSpacer={false} />
                     <UserCreatePasswordScreen onSuccess={pin => onSuccess({ pin })} />
                 </BaseView>
             </BaseModal>

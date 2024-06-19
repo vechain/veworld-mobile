@@ -96,10 +96,14 @@ export const DiscoverScreen: React.FC = () => {
     }, [filteredSearch.length])
 
     const onSearch = useCallback(() => {
-        if (!filteredSearch) return
+        if (!filteredSearch.length) return
+
         Keyboard.dismiss()
-        setFilteredSearch("")
-        setTimeout(() => navigateToBrowser(filteredSearch), 300)
+
+        setTimeout(() => {
+            navigateToBrowser(filteredSearch)
+            setFilteredSearch("")
+        }, 300)
     }, [filteredSearch, navigateToBrowser])
 
     const onMakeYourOwnDAppPress = useCallback(async () => {
@@ -173,9 +177,9 @@ export const DiscoverScreen: React.FC = () => {
                                     onActionLabelPress={onSeeAllPress}
                                     onDAppPress={onDAppPress}
                                 />
-                                <BaseSpacer height={18} />
                             </>
                         )}
+                        <BaseSpacer height={12} />
                         <Ecosystem title={LL.DISCOVER_ECOSYSTEM()} dapps={dapps} onDAppPress={onDAppPress} />
                         {isWebSearchFloatingButtonVisible && <BaseSpacer height={70} />}
                     </Animated.ScrollView>
