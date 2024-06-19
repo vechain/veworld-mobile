@@ -163,9 +163,9 @@ export const DiscoverScreen: React.FC = () => {
                             daoDapps={daoDapps}
                             onDAppPress={onDAppPress}
                         />
-                        <BaseSpacer height={36} />
+                        <BaseSpacer height={42} />
                         <MakeYourOwnDApp label={LL.DISCOVER_CREATE_YOUR_DAPP()} onPress={onMakeYourOwnDAppPress} />
-                        <BaseSpacer height={36} />
+                        <BaseSpacer height={18} />
                         {showFavorites && (
                             <>
                                 <Favourites
@@ -173,7 +173,7 @@ export const DiscoverScreen: React.FC = () => {
                                     onActionLabelPress={onSeeAllPress}
                                     onDAppPress={onDAppPress}
                                 />
-                                <BaseSpacer height={36} />
+                                <BaseSpacer height={18} />
                             </>
                         )}
                         <Ecosystem title={LL.DISCOVER_ECOSYSTEM()} dapps={dapps} onDAppPress={onDAppPress} />
