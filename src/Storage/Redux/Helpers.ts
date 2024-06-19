@@ -32,6 +32,8 @@ import {
     WalletConnectSessionsSlice,
     AnalyticsSlice,
     resetAnalyticsState,
+    BrowserSlice,
+    resetBrowserState,
 } from "./Slices"
 import { migrationUpdates } from "~Storage/Redux/Migrations"
 import { createMigrate } from "redux-persist"
@@ -82,6 +84,7 @@ export const getPersistorConfig = async (mmkv: MMKV, encryptionKey: string): Pro
             DiscoverySlice.name,
             WalletConnectSessionsSlice.name,
             AnalyticsSlice.name,
+            BrowserSlice.name,
         ],
         migrate: createMigrate(migrationUpdates, { debug: true }),
         transforms: [encryptor],
@@ -109,4 +112,5 @@ export const resetActions = [
     resetWalletConnectState,
     resetPendingState,
     resetAnalyticsState,
+    resetBrowserState,
 ]

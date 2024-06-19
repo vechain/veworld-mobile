@@ -1,7 +1,6 @@
 import { useI18nContext } from "~i18n"
 import { addBookmark, useAppDispatch } from "~Storage/Redux"
-import { useInAppBrowser } from "~Components/Providers/InAppBrowserProvider"
-import { BaseIcon, BaseSpacer, BaseText, BaseTouchable, BaseView } from "~Components"
+import { BaseIcon, BaseSpacer, BaseText, BaseTouchable, BaseView, useInAppBrowser } from "~Components"
 import { COLORS, DiscoveryDApp } from "~Constants"
 import { StyleSheet } from "react-native"
 import React from "react"
