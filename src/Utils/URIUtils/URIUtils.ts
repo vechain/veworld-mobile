@@ -108,10 +108,8 @@ const convertUriToUrl = (uri: string) => {
 
 async function isValidBrowserUrl(url: string): Promise<boolean> {
     try {
-        new URL(url)
-
         let navInput = url
-        if (!url.toLowerCase().startsWith("http")) {
+        if (url.toLowerCase().startsWith("http")) {
             navInput = `https://${url}`
         }
 

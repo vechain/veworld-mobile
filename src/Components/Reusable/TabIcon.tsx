@@ -8,13 +8,17 @@ import { BaseView } from "~Components/Base"
 type Props = {
     focused: boolean
     title: string
+    isSettings: boolean
+    isShowBackupModal: boolean
 }
 
-export const TabIcon: FC<Props> = memo(({ focused, title }) => {
+export const TabIcon: FC<Props> = memo(({ focused, title, isSettings, isShowBackupModal }) => {
     const { styles } = useThemedStyles(baseStyles(focused))
 
     return (
         <BaseView justifyContent="center" alignItems="center" style={styles.container}>
+            {isSettings && isShowBackupModal && <BaseView style={styles.warningLabel} />}
+
             <Icon name={title.toLowerCase()} size={24} color={(styles.icon as TextStyle).color} />
 
             <View style={styles.dot} />
@@ -38,6 +42,7 @@ const baseStyles = (isFocused: boolean) => (theme: ColorThemeType) => {
             paddingHorizontal: 12,
             paddingVertical: 8.5,
             backgroundColor: bgColor,
+            position: "relative",
         },
         dot: {
             height: 4,
@@ -45,6 +50,15 @@ const baseStyles = (isFocused: boolean) => (theme: ColorThemeType) => {
             backgroundColor: isFocused ? iconColor() : "transparent",
             borderRadius: 4,
             marginTop: 1,
+        },
+        warningLabel: {
+            width: 8,
+            height: 8,
+            borderRadius: 4,
+            backgroundColor: theme.colors.danger,
+            position: "absolute",
+            top: 6,
+            right: 6,
         },
     })
 }

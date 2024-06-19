@@ -9,6 +9,7 @@ type Props = {
     action?: () => void
     underlined?: boolean
     font?: TFonts
+    children?: React.ReactNode
     haptics?: "Success" | "Warning" | "Error" | "Light" | "Medium" | "Heavy"
 } & TouchableOpacityProps &
     TextProps
