@@ -16,6 +16,7 @@ import {
     showInfoToast,
     showSuccessToast,
     useWalletConnect,
+    useInAppBrowser,
 } from "~Components"
 import { useBottomSheetModal } from "~Hooks"
 import { AccountWithDevice, WatchedAccount } from "~Model"
@@ -33,7 +34,6 @@ import { useI18nContext } from "~i18n"
 import { AppConnectionRequests, AppInfo, UnknownAppMessage } from "~Screens"
 import { useSetSelectedAccount } from "~Hooks/useSetSelectedAccount"
 import { distinctValues } from "~Utils/ArrayUtils"
-import { useInAppBrowser } from "~Components/Providers/InAppBrowserProvider"
 import { ERROR_EVENTS, RequestMethods } from "~Constants"
 import { useObservedAccountExclusion } from "../Hooks"
 

@@ -1,27 +1,26 @@
-import React, { memo, useState } from "react"
-import { Image, StyleSheet } from "react-native"
-import { useThemedStyles } from "~Hooks"
+import React, { useState } from "react"
+import { Image, ImageStyle, StyleProp, StyleSheet } from "react-native"
 import { BaseView } from "~Components"
 import { COLORS, ColorThemeType } from "~Constants"
+import { useThemedStyles } from "~Hooks"
 
-type IconProps = {
+type DAppIconProps = {
     imageSource: object
 }
 
-export const DAppIcon: React.FC<IconProps> = memo(({ imageSource }: IconProps) => {
+export const DAppIcon: React.FC<DAppIconProps> = ({ imageSource }: DAppIconProps) => {
     const [loadFallback, setLoadFallback] = useState(false)
     const { styles } = useThemedStyles(baseStyles)
     return (
         <BaseView borderRadius={20} bg={COLORS.WHITE} style={styles.iconContainer}>
             <Image
                 source={loadFallback ? require("~Assets/Img/dapp-fallback.png") : imageSource}
-                // @ts-ignore
-                style={styles.icon}
+                style={styles.icon as StyleProp<ImageStyle>}
                 onError={() => setLoadFallback(true)}
             />
         </BaseView>
     )
-})
+}
 
 const baseStyles = (theme: ColorThemeType) =>
     StyleSheet.create({
@@ -38,5 +37,9 @@ const baseStyles = (theme: ColorThemeType) =>
             height: 40,
             width: 40,
             objectFit: "cover",
+        },
+        listContentContainer: {
+            flexGrow: 1,
+            paddingTop: 12,
         },
     })

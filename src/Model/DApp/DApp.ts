@@ -59,3 +59,10 @@ export type TransactionRequest = WcTxRequest | InAppTxRequest
 export type ConnectAppRequest = WcConnectAppRequest | InAppConnectAppRequest
 
 export type InAppRequest = InAppCertRequest | InAppTxRequest
+
+export enum DAppType {
+    ALL = "all",
+    SUSTAINABILTY = "sustainability",
+    NFT = "NFT",
+    DAPPS = "DAPPS",
+}
