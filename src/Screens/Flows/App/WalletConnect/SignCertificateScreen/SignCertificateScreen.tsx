@@ -12,6 +12,7 @@ import {
     RequireUserPassword,
     SelectAccountBottomSheet,
     useWalletConnect,
+    useInAppBrowser,
 } from "~Components"
 import { blake2b256, Certificate } from "thor-devkit"
 import {
@@ -36,7 +37,6 @@ import { NativeStackScreenProps } from "@react-navigation/native-stack"
 import { useNavigation } from "@react-navigation/native"
 import { MessageDetails, UnknownAppMessage } from "~Screens"
 import { AnalyticsEvent, ERROR_EVENTS, RequestMethods } from "~Constants"
-import { useInAppBrowser } from "~Components/Providers/InAppBrowserProvider"
 import { useObservedAccountExclusion } from "../Hooks"
 import { RumManager } from "~Logging/RumManager"
 

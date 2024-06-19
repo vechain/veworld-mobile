@@ -1,27 +1,46 @@
 import { useEffect, useState } from "react"
 import { Keyboard } from "react-native"
+import { useSafeAreaInsets } from "react-native-safe-area-context"
+import { useTabBarBottomMargin } from "~Hooks/useTabBarBottomMargin"
+import { PlatformUtils } from "~Utils"
 
-/**
- * this hook is used to detect if the keyboard is visible or not
- */
-export const useKeyboard = (onChange?: (visible: boolean) => void): { visible: boolean } => {
+export const useKeyboard = () => {
     const [visible, setVisible] = useState(false)
+    const [bottomStyle, setBottomStyle] = useState(0)
+    const insets = useSafeAreaInsets()
+    const { androidOnlyTabBarBottomMargin } = useTabBarBottomMargin()
 
     useEffect(() => {
-        const keyboardDidShowListener = Keyboard.addListener("keyboardDidShow", () => {
-            setVisible(true)
-            onChange?.(true)
-        })
-        const keyboardDidHideListener = Keyboard.addListener("keyboardDidHide", () => {
-            setVisible(false)
-            onChange?.(false)
-        })
+        const keyboardDidShowListener = Keyboard.addListener(
+            // keyboardWillShow event is not supported on Android
+            PlatformUtils.isIOS() ? "keyboardWillShow" : "keyboardDidShow",
+            keyboardEvent => {
+                const keyboardHeight = keyboardEvent.endCoordinates.height - insets.bottom - insets.top
+                if (!visible) {
+                    setBottomStyle(
+                        PlatformUtils.isIOS() ? keyboardHeight : keyboardHeight - androidOnlyTabBarBottomMargin,
+                    )
+                    setVisible(true)
+                }
+            },
+        )
+
+        const keyboardDidHideListener = Keyboard.addListener(
+            // keyboardWillHide event is not supported on Android
+            PlatformUtils.isIOS() ? "keyboardWillHide" : "keyboardDidHide",
+            () => {
+                if (visible) {
+                    setVisible(false)
+                    setBottomStyle(0)
+                }
+            },
+        )
 
         return () => {
             keyboardDidHideListener.remove()
             keyboardDidShowListener.remove()
         }
-    }, [onChange])
+    }, [androidOnlyTabBarBottomMargin, insets.bottom, insets.top, visible])
 
-    return { visible }
+    return { visible, bottomStyle }
 }

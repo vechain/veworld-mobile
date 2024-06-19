@@ -1,8 +1,7 @@
 import React, { useMemo } from "react"
 import { StyleSheet } from "react-native"
-import { BaseIcon, BaseView } from "~Components"
+import { BaseIcon, BaseView, useInAppBrowser } from "~Components"
 import { useBlockchainNetwork, useDappBookmarking, useTheme, useThemedStyles } from "~Hooks"
-import { useInAppBrowser } from "~Components/Providers/InAppBrowserProvider"
 import { ColorThemeType } from "~Constants"
 import { isIOS } from "~Utils/PlatformUtils/PlatformUtils"
 
