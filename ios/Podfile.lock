@@ -494,7 +494,7 @@ PODS:
     - React-Core
   - react-native-netinfo (9.5.0):
     - React-Core
-  - react-native-pager-view (6.3.1):
+  - react-native-pager-view (6.3.2):
     - RCT-Folly (= 2021.07.22.00)
     - React-Core
   - react-native-quick-base64 (2.1.2):
@@ -679,7 +679,7 @@ PODS:
     - React-RCTText
     - ReactCommon/turbomodule/core
     - Yoga
-  - RNScreens (3.31.1):
+  - RNScreens (3.32.0):
     - RCT-Folly (= 2021.07.22.00)
     - React-Core
     - React-RCTImage
@@ -687,11 +687,11 @@ PODS:
     - React
   - RNScrypt (1.2.1):
     - React
-  - RNSentry (5.24.0):
+  - RNSentry (5.24.1):
     - hermes-engine
     - React-Core
     - React-hermes
-    - Sentry/HybridSDK (= 8.28.0)
+    - Sentry/HybridSDK (= 8.29.1)
   - RNSVG (13.14.1):
     - React-Core
   - SDWebImage (5.11.1):
@@ -700,7 +700,7 @@ PODS:
   - SDWebImageWebPCoder (0.8.5):
     - libwebp (~> 1.0)
     - SDWebImage/Core (~> 5.10)
-  - Sentry/HybridSDK (8.28.0)
+  - Sentry/HybridSDK (8.29.1)
   - SocketRocket (0.6.1)
   - UMAppLoader (4.2.0)
   - Yoga (1.14.0)
@@ -1141,7 +1141,7 @@ SPEC CHECKSUMS:
   react-native-in-app-review: db8bb167a5f238e7ceca5c242d6b36ce8c4404a4
   react-native-mmkv: 38d484ccd8f5760fe0e46d206ed07add5ddda1fc
   react-native-netinfo: 48c5f79a84fbc3ba1d28a8b0d04adeda72885fa8
-  react-native-pager-view: 712081434052f3af89ef00e8a353a7d351e62eeb
+  react-native-pager-view: 891544d669176b1fa0c78a923468156fcc83eebb
   react-native-quick-base64: 61228d753294ae643294a75fece8e0e80b7558a6
   react-native-quick-crypto: 455c1b411db006dba1026a30681ececb19180187
   react-native-restart: 7595693413fe3ca15893702f2c8306c62a708162
@@ -1177,14 +1177,14 @@ SPEC CHECKSUMS:
   RNLocalize: 1ce4263770515f53d3de442ce7657b3661b16a37
   RNReactNativeHapticFeedback: ec56a5f81c3941206fd85625fa669ffc7b4545f9
   RNReanimated: ab2e96c6d5591c3dfbb38a464f54c8d17fb34a87
-  RNScreens: 93ae3be2f119d955620f9bbb39ad372adb53b7a9
+  RNScreens: 0bd9eec783bed1032e02a4db9976dae1664a5c7b
   RNScreenshotPrevent: dc9741e416ba80c3739418f112ac4093188315e9
   RNScrypt: 95fdef077b482e9fdf8a761120cb69d129ef4016
-  RNSentry: 29360f46d9770060fceafd06c3ae097de1a1847e
+  RNSentry: e9aa15bb2f3e18c822c002eea13bbd3b222ab493
   RNSVG: af3907ac5d4fa26a862b75a16d8f15bc74f2ceda
   SDWebImage: a7f831e1a65eb5e285e3fb046a23fcfbf08e696d
   SDWebImageWebPCoder: 908b83b6adda48effe7667cd2b7f78c897e5111d
-  Sentry: 1482a20b132098929714143f436a4fe574ad0517
+  Sentry: c446963245407030e17f1b926a83c6337dc99f4e
   SocketRocket: f32cd54efbe0f095c4d7594881e52619cfe80b17
   UMAppLoader: e83f024f75f07802fce99739f04b4537d188caaf
   Yoga: b76f1acfda8212aa16b7e26bcce3983230c82603
