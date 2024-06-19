@@ -19,15 +19,17 @@ import {
     useAppSelector,
 } from "~Storage/Redux"
 import { useI18nContext } from "~i18n"
-import { AnimatedSearchBar } from "./Components/AnimatedSearchBar"
-import { AnimatedTitle } from "./Components/AnimatedTitle"
-import { Ecosystem } from "./Components/Ecosystem"
-import { Favourites } from "./Components/Favourites"
-import { MakeYourOwnDApp } from "./Components/MakeYourOwnDApp"
-import { VeBetterDAODApps } from "./Components/VeBetterDAODapps"
-import { VeBetterDAOMainCard } from "./Components/VeBetterDAOMainCard"
-import { WebSearchFloatingButton } from "./Components/WebSearchFloatingButton"
 import { useFetchFeaturedDApps } from "./Hooks/useFetchFeaturedDApps"
+import {
+    AnimatedSearchBar,
+    AnimatedTitle,
+    Ecosystem,
+    Favourites,
+    MakeYourOwnDApp,
+    VeBetterDAODApps,
+    VeBetterDAOMainCard,
+    WebSearchFloatingButton,
+} from "./Components"
 
 const DAO_URL = "https://governance.vebetterdao.org/"
 
@@ -122,7 +124,7 @@ export const DiscoverScreen: React.FC = () => {
                     placeholder={LL.DISCOVER_SEARCH()}
                     value={filteredSearch}
                     iconName={"history"}
-                    iconColor={visitedUrls.length > 0 ? theme.colors.primary : theme.colors.disabled}
+                    iconColor={visitedUrls.length > 0 ? theme.colors.primary : theme.colors.disabledButton}
                     onTextChange={onTextChange}
                     onIconPress={onNavigateToBrowserHistory}
                 />
@@ -135,7 +137,7 @@ export const DiscoverScreen: React.FC = () => {
         offset,
         onNavigateToBrowserHistory,
         onTextChange,
-        theme.colors.disabled,
+        theme.colors.disabledButton,
         theme.colors.primary,
         visitedUrls.length,
     ])
@@ -167,8 +169,6 @@ export const DiscoverScreen: React.FC = () => {
                         {showFavorites && (
                             <>
                                 <Favourites
-                                    title={LL.DISCOVER_TAB_FAVOURITES()}
-                                    actionLabel={LL.DISCOVER_SEE_ALL_BOOKMARKS()}
                                     bookmarkedDApps={bookmarkedDApps}
                                     onActionLabelPress={onSeeAllPress}
                                     onDAppPress={onDAppPress}
@@ -177,7 +177,7 @@ export const DiscoverScreen: React.FC = () => {
                             </>
                         )}
                         <Ecosystem title={LL.DISCOVER_ECOSYSTEM()} dapps={dapps} onDAppPress={onDAppPress} />
-                        {isWebSearchFloatingButtonVisible && <BaseSpacer height={50} />}
+                        {isWebSearchFloatingButtonVisible && <BaseSpacer height={70} />}
                     </Animated.ScrollView>
                     <WebSearchFloatingButton isVisible={isWebSearchFloatingButtonVisible} onPress={onSearch} />
                 </BaseView>

@@ -14,6 +14,7 @@ import {
     SelectAccountBottomSheet,
     showErrorToast,
     useWalletConnect,
+    useInAppBrowser,
 } from "~Components"
 import {
     addPendingDappTransactionActivity,
@@ -36,7 +37,6 @@ import { ClausesCarousel } from "../../ActivityDetailsScreen/Components"
 import { Transaction } from "thor-devkit"
 import { TransactionDetails, UnknownAppMessage } from "~Screens"
 import { AnalyticsEvent, RequestMethods, creteAnalyticsEvent } from "~Constants"
-import { useInAppBrowser } from "~Components/Providers/InAppBrowserProvider"
 import { AccountWithDevice, WatchedAccount } from "~Model"
 
 type Props = NativeStackScreenProps<RootStackParamListSwitch, Routes.CONNECTED_APP_SEND_TRANSACTION_SCREEN>

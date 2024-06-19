@@ -3,6 +3,7 @@ import { StyleSheet, useWindowDimensions } from "react-native"
 import Icon from "react-native-vector-icons/MaterialCommunityIcons"
 import { VeBetterBaoDarkSVG } from "~Assets"
 import { BaseTouchable } from "~Components"
+import { COLORS } from "~Constants"
 import { useThemedStyles } from "~Hooks"
 
 type VeBetterDAOMainCardProps = {
@@ -18,7 +19,7 @@ export const VeBetterDAOMainCard = React.memo(({ href, onDAppPress }: VeBetterDA
     return (
         <BaseTouchable style={[styles.headerContainer, theme.shadows.card]} action={() => onDAppPress({ href })}>
             <VeBetterBaoDarkSVG width={svgWidth} height={162} />
-            <Icon name={"open-in-new"} size={16} color={theme.colors.primary} style={styles.iconStyle} />
+            <Icon name={"open-in-new"} size={16} color={COLORS.DARK_PURPLE} style={styles.iconStyle} />
         </BaseTouchable>
     )
 })

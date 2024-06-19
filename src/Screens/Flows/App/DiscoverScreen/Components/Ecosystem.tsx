@@ -1,6 +1,6 @@
 import { useScrollToTop } from "@react-navigation/native"
 import React, { useCallback, useMemo, useRef, useState } from "react"
-import { FlatList, ListRenderItemInfo } from "react-native"
+import { FlatList, ListRenderItemInfo, StyleSheet } from "react-native"
 import { BaseSpacer, BaseText, BaseTouchable, BaseView } from "~Components"
 import { DiscoveryDApp } from "~Constants"
 import { DAppCard } from "./DAppCard"
@@ -43,10 +43,6 @@ const DAppsGrid = ({ dapps, onDAppPress }: DAppsGridProps) => {
         return <BaseSpacer height={columnsGap} />
     }, [columnsGap])
 
-    const renderFooter = useCallback(() => {
-        return <BaseSpacer height={72} />
-    }, [])
-
     const renderItem = useCallback(
         ({ item, index }: ListRenderItemInfo<DiscoveryDApp>) => {
             const isLast = index === dapps.length - 1
@@ -72,7 +68,7 @@ const DAppsGrid = ({ dapps, onDAppPress }: DAppsGridProps) => {
             scrollEnabled={true}
             keyExtractor={item => item.href}
             ItemSeparatorComponent={renderSeparator}
-            ListFooterComponent={renderFooter}
+            contentContainerStyle={styles.flatListPadding}
             showsVerticalScrollIndicator={false}
             showsHorizontalScrollIndicator={false}
             renderItem={renderItem}
@@ -80,6 +76,10 @@ const DAppsGrid = ({ dapps, onDAppPress }: DAppsGridProps) => {
         />
     )
 }
+
+const styles = StyleSheet.create({
+    flatListPadding: { paddingBottom: 24 },
+})
 
 type EcosystemProps = {
     title: string
