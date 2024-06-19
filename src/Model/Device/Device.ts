@@ -18,6 +18,7 @@ export interface BaseDevice {
     index: number
     position: number
     derivationPath?: DerivationPath
+    isBuckedUp?: boolean
 }
 
 /**

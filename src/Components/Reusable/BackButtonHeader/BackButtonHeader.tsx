@@ -53,7 +53,7 @@ export const BackButtonHeader = ({
                     action={onActionPress}
                     testID={iconTestID}
                 />
-                {!!text && <BaseText typographyFont={"button"}>{text}</BaseText>}
+                {!!text && <BaseText typographyFont="button">{text}</BaseText>}
             </BaseView>
             {hasBottomSpacer && <BaseSpacer height={16} />}
         </View>

@@ -127,7 +127,7 @@ export const SwapCard = memo(
                     {/* ICON */}
                     <BaseIcon
                         style={[styles.icon, { marginTop: -20 }]}
-                        name={"swap-horizontal"}
+                        name="swap-horizontal"
                         color={COLORS.WHITE}
                         size={24}
                         bg={theme.colors.switcher}

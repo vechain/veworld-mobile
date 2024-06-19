@@ -1,18 +1,15 @@
 import React, { useCallback, useEffect, useState } from "react"
 import { BaseSpacer, BaseText, BaseView, Layout, NumPad, PasswordPins } from "~Components"
 import { useI18nContext } from "~i18n"
-import { PinVerificationError, PinVerificationErrorType, SecurityLevelType } from "~Model"
-import { Routes } from "~Navigation"
-import { useNavigation } from "@react-navigation/native"
+import { PinVerificationError, PinVerificationErrorType } from "~Model"
 import { useOnDigitPressWithConfirmation } from "./useOnDigitPressWithConfirmation"
 import { useAnalyticTracking } from "~Hooks"
 import { AnalyticsEvent, valueToHP } from "~Constants"
 import HapticsService from "~Services/HapticsService"
 
 const digitNumber = 6
-export const UserCreatePasswordScreen = () => {
+export const UserCreatePasswordScreen = ({ onSuccess }: { onSuccess: (insertedPin: string) => void }) => {
     const { LL } = useI18nContext()
-    const nav = useNavigation()
     const track = useAnalyticTracking()
 
     /**
@@ -24,12 +21,9 @@ export const UserCreatePasswordScreen = () => {
         async (insertedPin: string) => {
             await HapticsService.triggerNotification({ level: "Success" })
             track(AnalyticsEvent.PASSWORD_SETUP_SUBMITTED)
-            nav.navigate(Routes.WALLET_SUCCESS, {
-                securityLevelSelected: SecurityLevelType.SECRET,
-                userPin: insertedPin,
-            })
+            onSuccess(insertedPin)
         },
-        [nav, track],
+        [onSuccess, track],
     )
 
     const [isConfirmationError, setIsConfirmationError] = useState<PinVerificationErrorType>({
@@ -70,6 +64,8 @@ export const UserCreatePasswordScreen = () => {
 
     return (
         <Layout
+            hasSafeArea={false}
+            noBackButton
             body={
                 <BaseView alignItems="center" justifyContent="flex-start">
                     <BaseView alignSelf="flex-start">

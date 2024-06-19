@@ -1,13 +1,22 @@
 import React, { useCallback, useMemo, useRef } from "react"
-import { BaseSafeArea, BaseText, BaseView, SelectedNetworkViewer } from "~Components"
+import {
+    BaseButton,
+    BaseCard,
+    BaseIcon,
+    BaseSafeArea,
+    BaseSpacer,
+    BaseText,
+    BaseView,
+    SelectedNetworkViewer,
+} from "~Components"
 import { TranslationFunctions, useI18nContext } from "~i18n"
 import { Routes } from "~Navigation"
 import { StyleSheet } from "react-native"
 import { RowProps, SettingsRow } from "./Components/SettingsRow"
-import { useThemedStyles } from "~Hooks"
+import { useCheckWalletBackup, useTheme, useThemedStyles } from "~Hooks"
 import { ColorThemeType, isSmallScreen } from "~Constants"
-import { selectAreDevFeaturesEnabled, useAppSelector } from "~Storage/Redux"
-import { useScrollToTop } from "@react-navigation/native"
+import { selectAreDevFeaturesEnabled, selectSelectedAccount, useAppSelector } from "~Storage/Redux"
+import { useNavigation, useScrollToTop } from "@react-navigation/native"
 import { FlatList } from "react-native-gesture-handler"
 
 export const SettingsScreen = () => {
@@ -28,6 +37,33 @@ export const SettingsScreen = () => {
     const flatListRef = useRef(null)
 
     useScrollToTop(flatListRef)
+    const theme = useTheme()
+
+    const selectedAccount = useAppSelector(selectSelectedAccount)
+    const isShowBackupModal = useCheckWalletBackup(selectedAccount)
+    const nav = useNavigation()
+
+    const renderBackupWarning = useMemo(() => {
+        return (
+            <BaseCard containerStyle={themedStyles.cardContainer}>
+                <BaseView w={100}>
+                    <BaseView flexDirection="row">
+                        <BaseIcon name="alert" size={24} color={theme.colors.error} />
+                        <BaseSpacer width={8} />
+                        <BaseText typographyFont="subTitleBold" color={theme.colors.textReversed}>
+                            {"Backup Your Wallet"}
+                        </BaseText>
+                    </BaseView>
+                    <BaseSpacer height={24} />
+                    <BaseText color={theme.colors.textReversed}>
+                        {"Make sure you can recover your crypto if you lose your device or switch to another wallet."}
+                    </BaseText>
+                    <BaseSpacer height={36} />
+                    <BaseButton title={"Backup Now"} action={() => nav.navigate(Routes.SETTINGS_PRIVACY)} />
+                </BaseView>
+            </BaseCard>
+        )
+    }, [nav, theme.colors.error, theme.colors.textReversed, themedStyles.cardContainer])
 
     return (
         <BaseSafeArea>
@@ -44,11 +80,13 @@ export const SettingsScreen = () => {
                     ref={flatListRef}
                     data={SCREEN_LIST}
                     contentContainerStyle={themedStyles.contentContainerStyle}
-                    scrollEnabled={isSmallScreen}
+                    scrollEnabled={isShowBackupModal || isSmallScreen}
                     keyExtractor={item => item.screenName}
                     showsVerticalScrollIndicator={false}
                     showsHorizontalScrollIndicator={false}
                     renderItem={renderItem}
+                    ListHeaderComponent={isShowBackupModal ? renderBackupWarning : undefined}
+                    ListHeaderComponentStyle={themedStyles.headerContainer}
                 />
             </BaseView>
         </BaseSafeArea>
@@ -65,6 +103,11 @@ const baseStyles = (theme: ColorThemeType) =>
             height: 0.5,
         },
         list: { flex: 1 },
+        cardContainer: {
+            backgroundColor: theme.colors.danger,
+            padding: 8,
+        },
+        headerContainer: { marginVertical: 12 },
     })
 
 const getList = (LL: TranslationFunctions, devEnabled: boolean) => {

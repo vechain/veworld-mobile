@@ -94,7 +94,7 @@ export const TokenBox = ({
                 {!isTokenAdded && (
                     <BaseView pl={12}>
                         <BaseIcon
-                            name={"plus"}
+                            name="plus"
                             size={20}
                             bg={COLORS.LIME_GREEN}
                             iconPadding={3}
