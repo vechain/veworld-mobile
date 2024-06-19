@@ -6,6 +6,8 @@ const VeChainVetLogoWithTitle = require("./VechainLogoAndTitleIcon.svg")
 const ChessIcon = require("./ChessIcon.svg")
 const KeyIcon = require("./KeyIcon.svg")
 const ShieldIcon = require("./ShieldIcon.svg")
+const VeBetterDaoDark = require("./vebetterdao_dark.svg")
+const VeBetterDaoLight = require("./vebetterdao_light.svg")
 
 export {
     VeChainVetLogo,
@@ -16,4 +18,6 @@ export {
     ChessIcon,
     KeyIcon,
     ShieldIcon,
+    VeBetterDaoDark,
+    VeBetterDaoLight,
 }
