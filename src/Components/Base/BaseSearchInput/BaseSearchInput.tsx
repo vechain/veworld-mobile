@@ -25,7 +25,7 @@ export const BaseSearchInput = memo(
         value,
         setValue,
         testID,
-        showIcon = false,
+        showIcon = true,
         iconName = "magnify",
         iconSize = 24,
         onIconPress,
