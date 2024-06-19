@@ -1,7 +1,7 @@
 import { useCallback, useEffect, useState } from "react"
 import { LocalDevice } from "~Model"
 import { WalletEncryptionKeyHelper } from "~Components"
-import { setDeviceIsBackup, setUserHasBeenAskedForBuckup, useAppDispatch } from "~Storage/Redux"
+import { setDeviceIsBackup, useAppDispatch } from "~Storage/Redux"
 
 type Props = {
     closePasswordPrompt: () => void
@@ -41,11 +41,10 @@ export const useBackupMnemonic = ({
                 openWalletMgmtSheetWithDelay(300)
             } else {
                 const wallet = await WalletEncryptionKeyHelper.decryptWallet(devices[0].wallet)
+
                 if (wallet?.mnemonic) {
                     setMnemonicArray(wallet.mnemonic)
                     openBackupPhraseSheetWithDelay(300)
-                    // set on cache and device that wallet is backed up
-                    dispatch(setUserHasBeenAskedForBuckup(true))
                     dispatch(setDeviceIsBackup({ rootAddress: devices[0].rootAddress, isBackup: true }))
                 }
             }
@@ -80,8 +79,6 @@ export const useBackupMnemonic = ({
                 if (wallet?.mnemonic) {
                     setMnemonicArray(wallet.mnemonic)
                     openBackupPhraseSheetWithDelay(300)
-                    // set on cache and device that wallet is backed up
-                    dispatch(setUserHasBeenAskedForBuckup(true))
                     dispatch(setDeviceIsBackup({ rootAddress: devices[0].rootAddress, isBackup: true }))
                 }
             }
@@ -103,12 +100,10 @@ export const useBackupMnemonic = ({
             if (wallet?.mnemonic) {
                 setMnemonicArray(wallet.mnemonic)
                 openBackupPhraseSheetWithDelay(300)
-                // set on cache and device that wallet is backed up
-                dispatch(setUserHasBeenAskedForBuckup(true))
-                dispatch(setDeviceIsBackup({ rootAddress: devices[0].rootAddress, isBackup: true }))
+                dispatch(setDeviceIsBackup({ rootAddress: device.rootAddress, isBackup: true }))
             }
         },
-        [closeWalletMgmtSheet, devices, dispatch, openBackupPhraseSheetWithDelay, userPin],
+        [closeWalletMgmtSheet, dispatch, openBackupPhraseSheetWithDelay, userPin],
     )
 
     useEffect(() => {
