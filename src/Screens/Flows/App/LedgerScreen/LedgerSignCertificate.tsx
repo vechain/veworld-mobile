@@ -17,6 +17,7 @@ import {
     Step,
     StepsProgressBar,
     useWalletConnect,
+    useInAppBrowser,
 } from "~Components"
 import { RootStackParamListSwitch, Routes } from "~Navigation"
 import { debug, error, HexUtils, LedgerUtils } from "~Utils"
@@ -24,7 +25,6 @@ import { useI18nContext } from "~i18n"
 import { useNavigation } from "@react-navigation/native"
 import * as Haptics from "expo-haptics"
 import { ERROR_EVENTS, LEDGER_ERROR_CODES, RequestMethods } from "~Constants"
-import { useInAppBrowser } from "~Components/Providers/InAppBrowserProvider"
 
 const MUTEX_TIMEOUT = 1000
 

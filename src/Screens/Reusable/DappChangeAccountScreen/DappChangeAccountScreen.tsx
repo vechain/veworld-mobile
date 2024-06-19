@@ -1,10 +1,18 @@
 import React, { FC, useCallback, useEffect, useMemo, useState } from "react"
-import { AccountCard, BaseButton, BaseSpacer, BaseText, BaseView, Layout, showInfoToast } from "~Components"
+import {
+    AccountCard,
+    BaseButton,
+    BaseSpacer,
+    BaseText,
+    BaseView,
+    Layout,
+    showInfoToast,
+    useInAppBrowser,
+} from "~Components"
 import { useI18nContext } from "~i18n"
 import { RootStackParamListSwitch, Routes } from "~Navigation"
 import { NativeStackScreenProps } from "@react-navigation/native-stack"
 import { useNavigation } from "@react-navigation/native"
-import { useInAppBrowser } from "~Components/Providers/InAppBrowserProvider"
 import { selectAccounts, useAppSelector } from "~Storage/Redux"
 import { AccountWithDevice } from "~Model"
 import { AddressUtils } from "~Utils"

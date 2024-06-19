@@ -54,6 +54,7 @@ export enum Routes {
     DISCOVER = "Discover",
     DISCOVER_FEATURED = "Discover_Featured",
     DISCOVER_FAVOURITES = "Discover_Favourites",
+    DISCOVER_BROWSER_HISTORY = "Discover_Browser_History",
     TOKEN_DETAILS = "Token_Details",
     ACTIVITY_DETAILS = "Activity_Details",
     RESET_APP = "Reset_App",

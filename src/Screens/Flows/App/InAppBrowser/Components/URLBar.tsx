@@ -1,6 +1,5 @@
 import React, { useCallback, useMemo } from "react"
-import { useInAppBrowser } from "~Components/Providers/InAppBrowserProvider"
-import { BaseIcon, BaseText, BaseView, SelectedNetworkViewer } from "~Components"
+import { BaseIcon, BaseText, BaseView, SelectedNetworkViewer, useInAppBrowser } from "~Components"
 import { StyleSheet } from "react-native"
 import { useBlockchainNetwork, useTheme } from "~Hooks"
 import { Routes } from "~Navigation"

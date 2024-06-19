@@ -16,6 +16,7 @@ import {
     Step,
     StepsProgressBar,
     useWalletConnect,
+    useInAppBrowser,
 } from "~Components"
 import { RootStackParamListHome, RootStackParamListSwitch, Routes } from "~Navigation"
 import {
@@ -36,7 +37,6 @@ import { Buffer } from "buffer"
 import { Transaction } from "thor-devkit"
 import { ActivityType } from "~Model"
 import { LedgerConfig } from "~Utils/LedgerUtils/LedgerUtils"
-import { useInAppBrowser } from "~Components/Providers/InAppBrowserProvider"
 
 const MUTEX_TIMEOUT = 1000
 
