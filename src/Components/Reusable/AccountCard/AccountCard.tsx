@@ -112,7 +112,7 @@ export const AccountCard: React.FC<Props> = memo(
                     </BaseView>
                     {showSelectAccountIcon ? (
                         <BaseView style={styles.rightSubContainer}>
-                            <BaseIcon color={theme.colors.text} size={24} name={"chevron-right"} />
+                            <BaseIcon color={theme.colors.text} size={24} name="chevron-right" />
                         </BaseView>
                     ) : (
                         <BaseView style={styles.rightSubContainer}>

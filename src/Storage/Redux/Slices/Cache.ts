@@ -16,6 +16,7 @@ export interface CacheState {
     isAppLoading: boolean
     isTokensOwnedLoading: boolean
     derivedPath: DerivationPath
+    userHasBeenAskedForBuckup?: boolean
 }
 
 const initialState: CacheState = {
@@ -25,6 +26,7 @@ const initialState: CacheState = {
     isAppLoading: false,
     isTokensOwnedLoading: false,
     derivedPath: DerivationPath.VET,
+    userHasBeenAskedForBuckup: false,
 }
 
 export const CacheSlice = createSlice({

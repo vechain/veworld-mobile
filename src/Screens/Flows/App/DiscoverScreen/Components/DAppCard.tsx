@@ -40,7 +40,7 @@ export const DAppCard = ({ columns, columnsGap, dapp, onPress }: DAppCardProps) 
                         ] as StyleProp<ImageStyle>
                     }
                     onError={() => setLoadFallback(true)}
-                    resizeMode="cover"
+                    resizeMode="contain"
                 />
                 <BaseSpacer height={8} />
                 <BaseText ellipsizeMode="tail" numberOfLines={1} fontSize={10}>

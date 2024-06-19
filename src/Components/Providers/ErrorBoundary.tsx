@@ -84,7 +84,7 @@ const ErrorView = ({ resetErrorState }: { resetErrorState: () => void }) => {
 
                     <BaseSpacer height={24} />
 
-                    <BaseIcon name={"close-circle-outline"} size={70} color={theme.colors.danger} style={styles.icon} />
+                    <BaseIcon name="close-circle-outline" size={70} color={theme.colors.danger} style={styles.icon} />
 
                     <BaseSpacer height={24} />
 

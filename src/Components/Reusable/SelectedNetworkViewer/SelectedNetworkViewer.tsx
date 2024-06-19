@@ -18,10 +18,10 @@ export const SelectedNetworkViewer = ({ showEvenIfMainnet = false }: Props) => {
         <BaseView style={styles.networkViewer}>
             <BaseView style={styles.networkViewerIconText}>
                 <BaseIcon
-                    name={"web"}
+                    name="web"
                     color={theme.colors.text}
                     size={15}
-                    testID={"web"}
+                    testID="web"
                     style={styles.networkViewerNetworkIcon}
                 />
                 <BaseText pl={5}>{network.name.length > 0 && formatNetworkName(network.name)}</BaseText>
