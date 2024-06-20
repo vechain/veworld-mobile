@@ -17,6 +17,7 @@ type Props = {
     initialRoute?: Routes.NFTS | Routes.HOME
     buildTransaction: () => Transaction
     dappRequest?: TransactionRequest
+    setNoDelegation: () => void
 }
 
 export enum SignStatus {
@@ -42,6 +43,7 @@ export const useSignTransaction = ({
     buildTransaction,
     dappRequest,
     initialRoute,
+    setNoDelegation,
 }: Props) => {
     const { LL } = useI18nContext()
     const account = useAppSelector(selectSelectedAccount)
@@ -148,6 +150,7 @@ export const useSignTransaction = ({
         const delegationSignature = await getDelegationSignature(transaction, password)
 
         if (delegationSignature === SignStatus.DELEGATION_FAILURE) {
+            setNoDelegation()
             showErrorToast({
                 text1: LL.ERROR(),
                 text2: LL.SEND_DELEGATION_ERROR_SIGNATURE(),

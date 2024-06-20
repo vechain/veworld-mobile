@@ -91,6 +91,7 @@ export const useTransactionScreen = ({
         selectedDelegationUrl,
         dappRequest,
         initialRoute,
+        setNoDelegation,
     })
 
     // 6. Send transaction
@@ -127,6 +128,7 @@ export const useTransactionScreen = ({
                     case SignStatus.NAVIGATE_TO_LEDGER:
                         return
                     case SignStatus.DELEGATION_FAILURE:
+                        setNoDelegation()
                         showWarningToast({
                             text1: LL.ERROR(),
                             text2: LL.SEND_DELEGATION_ERROR_SIGNATURE(),
@@ -146,7 +148,7 @@ export const useTransactionScreen = ({
                 onTransactionFailure(e)
             }
         },
-        [sendTransactionSafe, onTransactionFailure, dispatch, signTransaction, LL],
+        [signTransaction, setNoDelegation, LL, sendTransactionSafe, dispatch, onTransactionFailure],
     )
 
     const {
