@@ -7,7 +7,7 @@ import { BarCodeScanningResult, Camera, CameraType } from "expo-camera"
 import { COLORS, ScanTarget, SCREEN_WIDTH } from "~Constants"
 import { BarCodeScanner } from "expo-barcode-scanner"
 import { StyleSheet } from "react-native"
-import { AddressUtils, WalletConnectUtils } from "~Utils"
+import { AddressUtils, URIUtils, WalletConnectUtils } from "~Utils"
 import { CameraHeader } from "./components/CameraHeader"
 import { CameraFooter } from "./components/CameraFooter"
 import HapticsService from "~Services/HapticsService"
@@ -34,6 +34,7 @@ export const ScanBottomSheet = React.forwardRef<BottomSheetModalMethods, Props>(
             const isAddressTarget = target.includes(ScanTarget.ADDRESS)
             const isWalletConnectTarget = target.includes(ScanTarget.WALLET_CONNECT)
             const isVnsTarget = target.includes(ScanTarget.VNS)
+            const isUrl = target.includes(ScanTarget.HTTPS_URL)
 
             if (isVnsTarget && data.includes(".vet")) {
                 onScan(data)
@@ -45,8 +46,9 @@ export const ScanBottomSheet = React.forwardRef<BottomSheetModalMethods, Props>(
 
             const isValidAddress = isAddressTarget && AddressUtils.isValid(coinbaseQRcodeClean)
             const isValidWalletConnectUri = isWalletConnectTarget && WalletConnectUtils.validateUri(data).isValid
+            const isValidHttpsUrl = isUrl && URIUtils.isValid(data) && URIUtils.isHttps(data)
 
-            if (isValidAddress || isValidWalletConnectUri) {
+            if (isValidAddress || isValidWalletConnectUri || isValidHttpsUrl) {
                 onScan(isAddressTarget ? coinbaseQRcodeClean : data)
             } else {
                 let toastProps = {
@@ -124,7 +126,7 @@ export const ScanBottomSheet = React.forwardRef<BottomSheetModalMethods, Props>(
                     }}
                     onBarCodeScanned={onQrScanned}
                     onMountError={onClose}
-                    ratio={"16:9"}>
+                    ratio="16:9">
                     <BaseView style={baseStyles.container} w={100} h={100}>
                         {isCameraReady && <BaseView style={baseStyles.square} />}
 

@@ -1,19 +1,7 @@
 import { waitFor, element } from "detox"
 import assert from "assert"
-import { WalletSetupScreen, WelcomeScreen } from "../screens"
-import { DEFAULT_TIMEOUT, SHORT_TIMEOUT, TEST_MNEMONIC, TEST_PIN } from "../constants"
+import { DEFAULT_TIMEOUT, SHORT_TIMEOUT } from "../constants"
 import { clickByText } from "../common"
-
-export const skipToCreateLocalWallet = async () => {
-    await WelcomeScreen.goToWalletSetup()
-    await WalletSetupScreen.clickCreateWallet()
-}
-
-export const skipToImportLocalWallet = async () => {
-    await WelcomeScreen.goToWalletSetup()
-    await WalletSetupScreen.clickImportWallet()
-    await WalletSetupScreen.clickImportLocalWallet()
-}
 
 export const pasteIntoImportTextbox = async (text: string) => {
     await waitFor(element(by.id("import-input")))
@@ -98,19 +86,4 @@ export const protectWithBiometrics = async () => {
 export const matchBiometrics = async () => {
     if (element(by.text("Use Face ID"))) await detox.device.matchFace()
     if (element(by.text("Use Touch ID"))) await detox.device.matchFinger()
-}
-
-export const completeOnboarding = async (mnemonic?: string, password?: string) => {
-    await skipToImportLocalWallet()
-
-    mnemonic = mnemonic || TEST_MNEMONIC
-    password = password || TEST_PIN
-
-    await pasteIntoImportTextbox(mnemonic)
-
-    await element(by.text("Create password")).tap()
-
-    await chooseAndConfirmPassword(password, password)
-
-    await element(by.text("CREATE WALLET")).tap()
 }

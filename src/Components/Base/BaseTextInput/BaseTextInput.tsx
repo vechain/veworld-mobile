@@ -22,6 +22,8 @@ export type BaseTextInputProps = {
     setValue?: (s: string) => void
     disabled?: boolean
     inBottomSheet?: boolean
+    handleFocus?: () => void
+    handleBlur?: () => void
 } & TextInputProps
 
 const BaseTextInputComponent = forwardRef<TextInput, BaseTextInputProps>(
@@ -40,6 +42,8 @@ const BaseTextInputComponent = forwardRef<TextInput, BaseTextInputProps>(
             inputContainerStyle,
             disabled,
             style,
+            handleFocus,
+            handleBlur,
             ...otherProps
         },
         ref,
@@ -90,6 +94,8 @@ const BaseTextInputComponent = forwardRef<TextInput, BaseTextInputProps>(
                         testID={testID}
                         editable={!disabled}
                         selectTextOnFocus={disabled}
+                        onFocus={handleFocus}
+                        onBlur={handleBlur}
                         {...otherProps}
                     />
                     {rightIcon && (
@@ -106,7 +112,7 @@ const BaseTextInputComponent = forwardRef<TextInput, BaseTextInputProps>(
                 </BaseView>
                 {errorMessage && (
                     <BaseView pt={10} flexDirection="row" justifyContent="flex-start" style={styles.errorContainer}>
-                        <BaseIcon name={"alert-circle-outline"} size={20} color={theme.colors.danger} />
+                        <BaseIcon name="alert-circle-outline" size={20} color={theme.colors.danger} />
                         <BaseText px={7} color={theme.colors.danger} typographyFont="caption">
                             {errorMessage || " "}
                         </BaseText>

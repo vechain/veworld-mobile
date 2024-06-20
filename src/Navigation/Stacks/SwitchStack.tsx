@@ -18,7 +18,6 @@ import { CertificateRequest, ConnectAppRequest, LedgerAccountWithDevice, WALLET_
 import { LedgerSignCertificate, LedgerSignTransaction } from "~Screens/Flows/App/LedgerScreen"
 import { useWalletStatus } from "~Components"
 import { BuyStack } from "./BuyStack"
-import { BUY_FEATURE_ENABLED } from "~Constants"
 import { SignMessageScreen } from "~Screens/Flows/App/WalletConnect/SignMessageScreen"
 import { LedgerSignMessage } from "~Screens/Flows/App/LedgerScreen/LedgerSignMessage"
 import { TransactionRequest } from "~Model/DApp"
@@ -119,15 +118,13 @@ export const SwitchStack = () => {
 
                         <Switch.Screen name={Routes.DAPP_CHANGE_ACCOUNT_SCREEN} component={DappChangeAccountScreen} />
 
-                        {BUY_FEATURE_ENABLED && (
-                            <Switch.Screen
-                                name={Routes.BUY_FLOW}
-                                component={BuyStack}
-                                options={{
-                                    presentation: "modal",
-                                }}
-                            />
-                        )}
+                        <Switch.Screen
+                            name={Routes.BUY_FLOW}
+                            component={BuyStack}
+                            options={{
+                                presentation: "modal",
+                            }}
+                        />
                     </Switch.Group>
                 </>
             )

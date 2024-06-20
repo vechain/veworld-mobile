@@ -2,24 +2,45 @@ import React, { useCallback, useMemo } from "react"
 import { StyleSheet } from "react-native"
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs"
 import { TabIcon } from "~Components"
-import { useTheme } from "~Hooks"
+import { useCheckWalletBackup, useTheme } from "~Hooks"
 import PlatformUtils from "~Utils/PlatformUtils"
 import { DiscoverStack, HomeStack, SettingsStack } from "~Navigation/Stacks"
 import { NFTStack } from "~Navigation/Stacks/NFTStack"
-import { selectCurrentScreen, selectSelectedNetwork, useAppSelector } from "~Storage/Redux"
+import { selectCurrentScreen, selectSelectedAccount, selectSelectedNetwork, useAppSelector } from "~Storage/Redux"
 import { Routes } from "~Navigation/Enums"
 import { NETWORK_TYPE } from "~Model"
 
-const Tab = createBottomTabNavigator()
+export type TabStackParamList = {
+    HomeStack: undefined
+    NFTStack: undefined
+    DiscoverStack: undefined
+    SettingsStack: undefined
+}
+
+const Tab = createBottomTabNavigator<TabStackParamList>()
 
 export const TabStack = () => {
     const theme = useTheme()
     const currentScreen = useAppSelector(selectCurrentScreen)
     const network = useAppSelector(selectSelectedNetwork)
 
+    const selectedAccount = useAppSelector(selectSelectedAccount)
+    const isShowBackupModal = useCheckWalletBackup(selectedAccount)
+
     const renderTabBarIcon = useCallback(
-        (focused: boolean, iconName: string) => <TabIcon focused={focused} title={iconName} />,
-        [],
+        (focused: boolean, iconName: string) => {
+            const isSettings = iconName === "cog" || iconName === "cog-outline"
+
+            return (
+                <TabIcon
+                    focused={focused}
+                    title={iconName}
+                    isSettings={isSettings}
+                    isShowBackupModal={isShowBackupModal}
+                />
+            )
+        },
+        [isShowBackupModal],
     )
 
     const display = useMemo(() => {

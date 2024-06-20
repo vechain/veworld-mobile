@@ -456,6 +456,10 @@ type RootTranslation = {
 	 */
 	BD_EUR: string
 	/**
+	 * G​O​ ​B​A​C​K​ ​T​O​ ​A​P​P
+	 */
+	BD_BACK_TO_APP: string
+	/**
 	 * A​d​d​r​e​s​s​ ​C​o​p​i​e​d​ ​t​o​ ​C​l​i​p​b​o​a​r​d
 	 */
 	BD_SCANED_ADDRESS_COPPIED: string
@@ -544,9 +548,17 @@ type RootTranslation = {
 	 */
 	BD_SELECT_PAYMENT_PROVIDER: string
 	/**
+	 * G​o​ ​b​a​c​k​ ​t​o​ ​V​e​W​o​r​l​d​ ​a​p​p
+	 */
+	BD_GO_BACK: string
+	/**
 	 * B​u​y​ ​w​i​t​h​ ​C​o​i​n​b​a​s​e​ ​a​n​d​ ​r​e​c​e​i​v​e​ ​t​h​e​ ​t​o​k​e​n​s​ ​d​i​r​e​c​t​l​y​ ​i​n​ ​V​e​W​o​r​l​d​.
 	 */
 	BD_BUY_DESCRIPTION_COINBASE: string
+	/**
+	 * B​u​y​ ​w​i​t​h​ ​T​r​a​n​s​a​k​ ​a​n​d​ ​r​e​c​e​i​v​e​ ​t​h​e​ ​t​o​k​e​n​s​ ​d​i​r​e​c​t​l​y​ ​i​n​ ​V​e​W​o​r​l​d​.
+	 */
+	BD_BUY_DESCRIPTION_TRANSAK: string
 	/**
 	 * W​e​l​c​o​m​e​ ​t​o​ 
 	 */
@@ -1527,7 +1539,7 @@ type RootTranslation = {
 	 */
 	NOTIFICATION_TITLE_INVALID_QR: string
 	/**
-	 * P​l​e​a​s​e​ ​s​c​a​n​ ​a​ ​W​a​l​l​e​t​C​o​n​n​e​c​t​ ​o​r​ ​w​a​l​l​e​t​ ​a​d​d​r​e​s​s​ ​Q​R​ ​c​o​d​e​.
+	 * P​l​e​a​s​e​ ​s​c​a​n​ ​a​ ​W​a​l​l​e​t​C​o​n​n​e​c​t​,​ ​w​a​l​l​e​t​ ​a​d​d​r​e​s​s​ ​o​r​ ​v​a​l​i​d​ ​U​R​L​ ​Q​R​ ​c​o​d​e​.
 	 */
 	NOTIFICATION_INVALID_QR: string
 	/**
@@ -1774,7 +1786,7 @@ type RootTranslation = {
 	 */
 	DISCOVER_SUB_TITLE: string
 	/**
-	 * S​e​a​r​c​h​ ​o​r​ ​t​y​p​e​ ​a​ ​U​R​L
+	 * S​e​a​r​c​h​ ​t​h​e​ ​W​e​b
 	 */
 	DISCOVER_SEARCH: string
 	/**
@@ -1810,9 +1822,65 @@ type RootTranslation = {
 	 */
 	DISCOVER_EMPTY_CUSTOM_NODES: string
 	/**
-	 * C​r​e​a​t​e​ ​y​o​u​r​ ​o​w​n​ ​D​A​p​p
+	 * M​a​k​e​ ​y​o​u​r​ ​o​w​n​ ​D​A​p​p​ ​o​n​ ​V​e​c​h​a​i​n
 	 */
 	DISCOVER_CREATE_YOUR_DAPP: string
+	/**
+	 * V​e​B​e​t​t​e​r​D​A​O​ ​D​A​p​p​s
+	 */
+	DISCOVER_DAPPS_TITLE: string
+	/**
+	 * S​e​e​ ​a​l​l
+	 */
+	DISCOVER_SEE_ALL_BOOKMARKS: string
+	/**
+	 * E​c​o​s​y​s​t​e​m
+	 */
+	DISCOVER_ECOSYSTEM: string
+	/**
+	 * A​l​l
+	 */
+	DISCOVER_ECOSYSTEM_FILTER_ALL: string
+	/**
+	 * S​u​s​t​a​i​n​a​b​i​l​i​t​y
+	 */
+	DISCOVER_ECOSYSTEM_FILTER_SUSTAINABILITY: string
+	/**
+	 * N​F​T​s
+	 */
+	DISCOVER_ECOSYSTEM_FILTER_NFTS: string
+	/**
+	 * D​A​p​p​s
+	 */
+	DISCOVER_ECOSYSTEM_FILTER_DAPPS: string
+	/**
+	 * S​E​A​R​C​H​ ​T​H​E​ ​W​E​B
+	 */
+	DISCOVER_WEB_SEARCH_FLOATING_BUTTON_LABEL: string
+	/**
+	 * F​a​v​o​u​r​i​t​e​s
+	 */
+	FAVOURITES_DAPPS_TITLE: string
+	/**
+	 * S​e​a​r​c​h
+	 */
+	FAVOURITES_DAPPS_SEARCH_PLACEHOLDER: string
+	/**
+	 * C​o​u​l​d​ ​n​o​t​ ​f​i​n​d​ ​a​n​y​ ​d​a​p​p​s​ ​w​i​t​h​ ​t​h​i​s​ ​n​a​m​e
+	 */
+	FAVOURITES_DAPPS_NO_RECORDS: string
+	/**
+	 * B​r​o​w​s​e​r​ ​H​i​s​t​o​r​y
+	 */
+	BROWSER_HISTORY_TITLE: string
+	/**
+	 * S​e​a​r​c​h
+	 */
+	BROWSER_HISTORY_SEARCH_PLACEHOLDER: string
+	/**
+	 * N​o​ ​H​i​s​t​o​r​y​ ​A​v​a​i​l​a​b​l​e
+	 */
+	BROWSER_HISTORY_No_RECORDS: string
 	/**
 	 * T​a​b​s
 	 */
@@ -3358,6 +3426,10 @@ export type TranslationFunctions = {
 	 */
 	BD_EUR: () => LocalizedString
 	/**
+	 * GO BACK TO APP
+	 */
+	BD_BACK_TO_APP: () => LocalizedString
+	/**
 	 * Address Copied to Clipboard
 	 */
 	BD_SCANED_ADDRESS_COPPIED: () => LocalizedString
@@ -3446,9 +3518,17 @@ export type TranslationFunctions = {
 	 */
 	BD_SELECT_PAYMENT_PROVIDER: () => LocalizedString
 	/**
+	 * Go back to VeWorld app
+	 */
+	BD_GO_BACK: () => LocalizedString
+	/**
 	 * Buy with Coinbase and receive the tokens directly in VeWorld.
 	 */
 	BD_BUY_DESCRIPTION_COINBASE: () => LocalizedString
+	/**
+	 * Buy with Transak and receive the tokens directly in VeWorld.
+	 */
+	BD_BUY_DESCRIPTION_TRANSAK: () => LocalizedString
 	/**
 	 * Welcome to 
 	 */
@@ -4411,7 +4491,7 @@ Try reconnect your device to the internet.
 	 */
 	NOTIFICATION_TITLE_INVALID_QR: () => LocalizedString
 	/**
-	 * Please scan a WalletConnect or wallet address QR code.
+	 * Please scan a WalletConnect, wallet address or valid URL QR code.
 	 */
 	NOTIFICATION_INVALID_QR: () => LocalizedString
 	/**
@@ -4651,7 +4731,7 @@ Try reconnect your device to the internet.
 	 */
 	DISCOVER_SUB_TITLE: () => LocalizedString
 	/**
-	 * Search or type a URL
+	 * Search the Web
 	 */
 	DISCOVER_SEARCH: () => LocalizedString
 	/**
@@ -4687,9 +4767,65 @@ Try reconnect your device to the internet.
 	 */
 	DISCOVER_EMPTY_CUSTOM_NODES: () => LocalizedString
 	/**
-	 * Create your own DApp
+	 * Make your own DApp on Vechain
 	 */
 	DISCOVER_CREATE_YOUR_DAPP: () => LocalizedString
+	/**
+	 * VeBetterDAO DApps
+	 */
+	DISCOVER_DAPPS_TITLE: () => LocalizedString
+	/**
+	 * See all
+	 */
+	DISCOVER_SEE_ALL_BOOKMARKS: () => LocalizedString
+	/**
+	 * Ecosystem
+	 */
+	DISCOVER_ECOSYSTEM: () => LocalizedString
+	/**
+	 * All
+	 */
+	DISCOVER_ECOSYSTEM_FILTER_ALL: () => LocalizedString
+	/**
+	 * Sustainability
+	 */
+	DISCOVER_ECOSYSTEM_FILTER_SUSTAINABILITY: () => LocalizedString
+	/**
+	 * NFTs
+	 */
+	DISCOVER_ECOSYSTEM_FILTER_NFTS: () => LocalizedString
+	/**
+	 * DApps
+	 */
+	DISCOVER_ECOSYSTEM_FILTER_DAPPS: () => LocalizedString
+	/**
+	 * SEARCH THE WEB
+	 */
+	DISCOVER_WEB_SEARCH_FLOATING_BUTTON_LABEL: () => LocalizedString
+	/**
+	 * Favourites
+	 */
+	FAVOURITES_DAPPS_TITLE: () => LocalizedString
+	/**
+	 * Search
+	 */
+	FAVOURITES_DAPPS_SEARCH_PLACEHOLDER: () => LocalizedString
+	/**
+	 * Could not find any dapps with this name
+	 */
+	FAVOURITES_DAPPS_NO_RECORDS: () => LocalizedString
+	/**
+	 * Browser History
+	 */
+	BROWSER_HISTORY_TITLE: () => LocalizedString
+	/**
+	 * Search
+	 */
+	BROWSER_HISTORY_SEARCH_PLACEHOLDER: () => LocalizedString
+	/**
+	 * No History Available
+	 */
+	BROWSER_HISTORY_No_RECORDS: () => LocalizedString
 	/**
 	 * Tabs
 	 */

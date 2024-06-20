@@ -5,6 +5,7 @@ import { typography, ColorThemeType, COLORS } from "~Constants"
 import { BaseIcon } from "../BaseIcon"
 import { BaseView } from "../BaseView"
 import { PlatformUtils } from "~Utils"
+import { BaseTouchable } from "../BaseTouchable"
 const { defaults: defaultTypography } = typography
 
 type Props = {
@@ -12,46 +13,71 @@ type Props = {
     value?: string
     setValue?: (s: string) => void
     testID?: string
+    showIcon?: boolean
+    iconName?: string
+    iconSize?: number
+    onIconPress?: () => void
 }
 
-export const BaseSearchInput = memo(({ placeholder = "Search", value, setValue, testID }: Props) => {
-    const { styles } = useThemedStyles(baseStyles)
+export const BaseSearchInput = memo(
+    ({
+        placeholder = "Search",
+        value,
+        setValue,
+        testID,
+        showIcon = true,
+        iconName = "magnify",
+        iconSize = 24,
+        onIconPress,
+    }: Props) => {
+        const { styles } = useThemedStyles(baseStyles)
 
-    const theme = useTheme()
+        const theme = useTheme()
 
-    const placeholderColor = theme.isDark ? COLORS.WHITE_DISABLED : COLORS.DARK_PURPLE_DISABLED
+        const placeholderColor = theme.isDark ? COLORS.WHITE_DISABLED : COLORS.DARK_PURPLE_DISABLED
 
-    const setInputParams = useMemo(() => {
-        if (PlatformUtils.isAndroid()) {
-            return {
-                keyboardType: "email-address" as KeyboardTypeOptions,
-                autoCorrect: false,
+        const setInputParams = useMemo(() => {
+            if (PlatformUtils.isAndroid()) {
+                return {
+                    keyboardType: "email-address" as KeyboardTypeOptions,
+                    autoCorrect: false,
+                }
+            } else {
+                return {
+                    keyboardType: undefined,
+                    autoCorrect: undefined,
+                }
             }
-        } else {
-            return {
-                keyboardType: undefined,
-                autoCorrect: undefined,
-            }
-        }
-    }, [])
+        }, [])
 
-    return (
-        <BaseView style={styles.container}>
-            <TextInput
-                // workarounds for android crashing when using the keyboard
-                keyboardType={setInputParams.keyboardType}
-                autoCorrect={setInputParams.autoCorrect}
-                style={styles.input}
-                placeholder={placeholder}
-                placeholderTextColor={placeholderColor}
-                onChangeText={setValue}
-                value={value}
-                testID={testID}
-            />
-            <BaseIcon name="magnify" size={24} color={theme.colors.text} style={styles.icon} testID="magnify" />
-        </BaseView>
-    )
-})
+        return (
+            <BaseView style={styles.container}>
+                <TextInput
+                    // workarounds for android crashing when using the keyboard
+                    keyboardType={setInputParams.keyboardType}
+                    autoCorrect={setInputParams.autoCorrect}
+                    style={styles.input}
+                    placeholder={placeholder}
+                    placeholderTextColor={placeholderColor}
+                    onChangeText={setValue}
+                    value={value}
+                    testID={testID}
+                />
+                {showIcon && (
+                    <BaseTouchable disabled={!onIconPress} onPress={onIconPress}>
+                        <BaseIcon
+                            name={iconName}
+                            size={iconSize}
+                            color={theme.colors.text}
+                            style={styles.icon}
+                            testID="magnify"
+                        />
+                    </BaseTouchable>
+                )}
+            </BaseView>
+        )
+    },
+)
 
 const baseStyles = (theme: ColorThemeType) =>
     StyleSheet.create({

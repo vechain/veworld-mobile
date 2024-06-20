@@ -67,7 +67,7 @@ export const GasFeeOptions = ({
         return (
             <>
                 <BaseSpacer height={12} />
-                <BaseSpacer height={0.5} width={"100%"} background={theme.colors.textDisabled} />
+                <BaseSpacer height={0.5} width="100%" background={theme.colors.textDisabled} />
                 <BaseSpacer height={12} />
 
                 <BaseView flexDirection="row" justifyContent="space-between">
@@ -87,7 +87,7 @@ export const GasFeeOptions = ({
         return (
             <>
                 <BaseSpacer height={12} />
-                <BaseSpacer height={0.5} width={"100%"} background={theme.colors.textDisabled} />
+                <BaseSpacer height={0.5} width="100%" background={theme.colors.textDisabled} />
                 <BaseSpacer height={12} />
 
                 <BaseView flexDirection="row" justifyContent="space-between">

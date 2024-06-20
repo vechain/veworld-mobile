@@ -1,0 +1,87 @@
+import React, { useEffect, useRef } from "react"
+import { useWindowDimensions } from "react-native"
+import Animated, { ReduceMotion, useAnimatedStyle, useSharedValue, withSpring } from "react-native-reanimated"
+import Icon from "react-native-vector-icons/MaterialCommunityIcons"
+import { BaseSearchInput, BaseView } from "~Components"
+
+type AnimatedSearchBarProps = {
+    placeholder: string
+    value: string
+    iconName: string
+    iconColor: string
+    onTextChange: (text: string) => void
+    onIconPress: () => void
+}
+
+export const AnimatedSearchBar = ({
+    placeholder,
+    value,
+    iconName,
+    iconColor,
+    onTextChange,
+    onIconPress,
+}: AnimatedSearchBarProps) => {
+    const { width: windowWidth } = useWindowDimensions()
+
+    const dimensions = useRef(
+        (() => {
+            const paddingHorizontal = 24
+            const iconSize = 32
+            const totalIconContainerSize = paddingHorizontal + iconSize
+            const fullWidthPercentage = 100
+            const iconContainerWidthPercentage = (totalIconContainerSize / windowWidth) * fullWidthPercentage
+            const initialInputContainerWidthPercentage = fullWidthPercentage - iconContainerWidthPercentage
+
+            return {
+                paddingHorizontal,
+                iconSize,
+                initialInputContainerWidthPercentage,
+                fullWidthPercentage,
+            }
+        })(),
+    )
+
+    const inputContainerWidth = useSharedValue(dimensions.current.initialInputContainerWidthPercentage)
+
+    const animatedInputStyle = useAnimatedStyle(() => {
+        return {
+            width: `${inputContainerWidth.value}%`,
+        }
+    }, [inputContainerWidth])
+
+    useEffect(() => {
+        const targetValue =
+            value.length > 0
+                ? dimensions.current.fullWidthPercentage
+                : dimensions.current.initialInputContainerWidthPercentage
+
+        inputContainerWidth.value = withSpring(targetValue, {
+            mass: 1.2,
+            damping: 22,
+            stiffness: 190,
+            overshootClamping: false,
+            restDisplacementThreshold: 0.01,
+            restSpeedThreshold: 2,
+            reduceMotion: ReduceMotion.System,
+        })
+    }, [inputContainerWidth, value.length])
+
+    return (
+        <BaseView flexDirection="row" alignItems="center">
+            <Animated.View style={[animatedInputStyle, { paddingHorizontal: dimensions.current.paddingHorizontal }]}>
+                <BaseSearchInput
+                    placeholder={placeholder}
+                    setValue={onTextChange}
+                    value={value}
+                    showIcon={value.length > 0}
+                    iconName="close"
+                    iconSize={18}
+                    onIconPress={() => onTextChange("")}
+                />
+            </Animated.View>
+            <BaseView justifyContent={"center"} alignItems={"center"}>
+                <Icon name={iconName} size={dimensions.current.iconSize} color={iconColor} onPress={onIconPress} />
+            </BaseView>
+        </BaseView>
+    )
+}
