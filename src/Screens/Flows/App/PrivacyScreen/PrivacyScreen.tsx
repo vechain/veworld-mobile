@@ -71,15 +71,16 @@ export const PrivacyScreen = () => {
 
     const { isOpen: isPasswordPromptOpen, onOpen: openPasswordPrompt, onClose: closePasswordPrompt } = useDisclosure()
 
-    const { onPasswordSuccess, checkSecurityBeforeOpening, handleOnSelectedWallet, mnemonicArray } = useBackupMnemonic({
-        closePasswordPrompt,
-        openBackupPhraseSheetWithDelay,
-        openWalletMgmtSheetWithDelay,
-        openPasswordPrompt,
-        closeWalletMgmtSheet,
-        devices,
-        isWalletSecurityBiometrics,
-    })
+    const { onPasswordSuccess, checkSecurityBeforeOpening, handleOnSelectedWallet, mnemonicArray, deviceToBackup } =
+        useBackupMnemonic({
+            closePasswordPrompt,
+            openBackupPhraseSheetWithDelay,
+            openWalletMgmtSheetWithDelay,
+            openPasswordPrompt,
+            closeWalletMgmtSheet,
+            devices,
+            isWalletSecurityBiometrics,
+        })
 
     const {
         onEditPinPress,
@@ -232,6 +233,7 @@ export const PrivacyScreen = () => {
                             ref={BackupPhraseSheetRef}
                             onClose={closeBackupPhraseSheet}
                             mnemonicArray={mnemonicArray}
+                            deviceToBackup={deviceToBackup}
                         />
 
                         <SelectDeviceBottomSheet<LocalDevice>

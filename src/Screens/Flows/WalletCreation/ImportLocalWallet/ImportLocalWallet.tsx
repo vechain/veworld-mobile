@@ -15,7 +15,14 @@ import {
 } from "~Components"
 import { useI18nContext } from "~i18n"
 import * as Clipboard from "expo-clipboard"
-import { useAnalyticTracking, useBottomSheetModal, useCheckIdentity, useDeviceUtils, useTheme } from "~Hooks"
+import {
+    useAnalyticTracking,
+    useBottomSheetModal,
+    useCheckIdentity,
+    useCloudKit,
+    useDeviceUtils,
+    useTheme,
+} from "~Hooks"
 import { CryptoUtils } from "~Utils"
 import { Keyboard, StyleSheet } from "react-native"
 import { ImportWalletInput } from "./Components/ImportWalletInput"
@@ -29,6 +36,12 @@ import { useHandleWalletCreation } from "~Screens/Flows/Onboarding/WelcomeScreen
 import { useNavigation } from "@react-navigation/native"
 
 const DEMO_MNEMONIC = "denial kitchen pet squirrel other broom bar gas better priority spoil cross"
+
+enum ButtonType {
+    local,
+    icloud,
+    unknown,
+}
 
 export const ImportLocalWallet = () => {
     const { LL } = useI18nContext()
@@ -52,6 +65,14 @@ export const ImportLocalWallet = () => {
     const [isError, setIsError] = useState<string>("")
 
     const { checkCanImportDevice } = useDeviceUtils()
+
+    const { isCloudKitAvailable, getAllWalletsFromCloudKit } = useCloudKit()
+
+    const computeButtonType = useMemo(() => {
+        if (textValue.length) return ButtonType.local
+        if (isCloudKitAvailable && !textValue.length) return ButtonType.icloud
+        return ButtonType.unknown
+    }, [isCloudKitAvailable, textValue.length])
 
     const {
         ref: unlockKeystoreBottomSheetRef,
@@ -346,10 +367,18 @@ export const ImportLocalWallet = () => {
                         )}
 
                         <BaseButton
-                            action={handleVerify}
+                            action={async () =>
+                                computeButtonType === ButtonType.icloud
+                                    ? await getAllWalletsFromCloudKit()
+                                    : handleVerify()
+                            }
                             w={100}
-                            title={LL.BTN_IMPORT_WALLET_VERIFY()}
-                            disabled={importType === IMPORT_TYPE.UNKNOWN}
+                            title={
+                                computeButtonType === ButtonType.icloud
+                                    ? "Get from iCloud"
+                                    : LL.BTN_IMPORT_WALLET_VERIFY()
+                            }
+                            disabled={computeButtonType === ButtonType.unknown}
                             disabledAction={disabledAction}
                             disabledActionHaptics="Heavy"
                         />

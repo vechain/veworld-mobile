@@ -24,6 +24,7 @@ export const useBackupMnemonic = ({
 }: Props) => {
     const [userPin, setUserPin] = useState<string | undefined>(undefined)
     const [mnemonicArray, setMnemonicArray] = useState<string[]>([""])
+    const [deviceToBackup, setDeviceToBackup] = useState<LocalDevice>()
     const dispatch = useAppDispatch()
 
     /*
@@ -44,6 +45,7 @@ export const useBackupMnemonic = ({
 
                 if (wallet?.mnemonic) {
                     setMnemonicArray(wallet.mnemonic)
+                    setDeviceToBackup(devices[0])
                     openBackupPhraseSheetWithDelay(300)
                     dispatch(setDeviceIsBackup({ rootAddress: devices[0].rootAddress, isBackup: true }))
                 }
@@ -78,6 +80,7 @@ export const useBackupMnemonic = ({
 
                 if (wallet?.mnemonic) {
                     setMnemonicArray(wallet.mnemonic)
+                    setDeviceToBackup(devices[0])
                     openBackupPhraseSheetWithDelay(300)
                     dispatch(setDeviceIsBackup({ rootAddress: devices[0].rootAddress, isBackup: true }))
                 }
@@ -99,6 +102,7 @@ export const useBackupMnemonic = ({
 
             if (wallet?.mnemonic) {
                 setMnemonicArray(wallet.mnemonic)
+                setDeviceToBackup(device)
                 openBackupPhraseSheetWithDelay(300)
                 dispatch(setDeviceIsBackup({ rootAddress: device.rootAddress, isBackup: true }))
             }
@@ -109,6 +113,7 @@ export const useBackupMnemonic = ({
     useEffect(() => {
         return () => {
             setMnemonicArray([""])
+            setDeviceToBackup(undefined)
             setUserPin(undefined)
         }
     }, [])
@@ -118,5 +123,6 @@ export const useBackupMnemonic = ({
         checkSecurityBeforeOpening,
         handleOnSelectedWallet,
         mnemonicArray,
+        deviceToBackup,
     }
 }
