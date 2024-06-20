@@ -52,7 +52,7 @@ export const useTransactionScreen = ({
 
     // 2. Delegation
     const {
-        setNoDelegation,
+        resetDelegation,
         setSelectedDelegationAccount,
         setSelectedDelegationUrl,
         selectedDelegationOption,
@@ -91,7 +91,7 @@ export const useTransactionScreen = ({
         selectedDelegationUrl,
         dappRequest,
         initialRoute,
-        setNoDelegation,
+        resetDelegation,
     })
 
     // 6. Send transaction
@@ -128,7 +128,7 @@ export const useTransactionScreen = ({
                     case SignStatus.NAVIGATE_TO_LEDGER:
                         return
                     case SignStatus.DELEGATION_FAILURE:
-                        setNoDelegation()
+                        resetDelegation()
                         showWarningToast({
                             text1: LL.ERROR(),
                             text2: LL.SEND_DELEGATION_ERROR_SIGNATURE(),
@@ -148,7 +148,7 @@ export const useTransactionScreen = ({
                 onTransactionFailure(e)
             }
         },
-        [signTransaction, setNoDelegation, LL, sendTransactionSafe, dispatch, onTransactionFailure],
+        [signTransaction, resetDelegation, LL, sendTransactionSafe, dispatch, onTransactionFailure],
     )
 
     const {
@@ -219,7 +219,7 @@ export const useTransactionScreen = ({
         setSelectedFeeOption,
         selectedFeeOption,
         gasFeeOptions,
-        setNoDelegation,
+        resetDelegation,
         setSelectedDelegationAccount,
         setSelectedDelegationUrl,
         isEnoughGas,
