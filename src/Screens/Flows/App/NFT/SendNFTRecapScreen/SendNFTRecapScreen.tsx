@@ -94,7 +94,7 @@ export const SendNFTRecapScreen = ({ route }: Props) => {
         setSelectedFeeOption,
         selectedFeeOption,
         gasFeeOptions,
-        setNoDelegation,
+        resetDelegation,
         setSelectedDelegationAccount,
         setSelectedDelegationUrl,
         isEnoughGas,
@@ -145,7 +145,7 @@ export const SendNFTRecapScreen = ({ route }: Props) => {
                         {nft && <NFTTransferCard collectionAddress={nft.address} tokenId={nft.tokenId} />}
 
                         <DelegationView
-                            setNoDelegation={setNoDelegation}
+                            setNoDelegation={resetDelegation}
                             selectedDelegationOption={selectedDelegationOption}
                             setSelectedDelegationAccount={setSelectedDelegationAccount}
                             selectedDelegationAccount={selectedDelegationAccount}
