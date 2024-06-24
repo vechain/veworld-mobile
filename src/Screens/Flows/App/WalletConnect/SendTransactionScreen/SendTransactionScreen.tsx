@@ -196,7 +196,7 @@ export const SendTransactionScreen: FC<Props> = ({ route }: Props) => {
         isPasswordPromptOpen,
         handleClosePasswordModal,
         onPasswordSuccess,
-        setNoDelegation,
+        resetDelegation,
         setSelectedDelegationAccount,
         setSelectedDelegationUrl,
         isEnoughGas,
@@ -246,7 +246,7 @@ export const SendTransactionScreen: FC<Props> = ({ route }: Props) => {
                 <BaseSpacer height={24} />
                 <BaseView mx={20}>
                     <DelegationView
-                        setNoDelegation={setNoDelegation}
+                        setNoDelegation={resetDelegation}
                         selectedDelegationOption={selectedDelegationOption}
                         setSelectedDelegationAccount={setSelectedDelegationAccount}
                         selectedDelegationAccount={selectedDelegationAccount}
