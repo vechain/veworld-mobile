@@ -66,7 +66,7 @@ export const useDelegation = ({ providedUrl, setGasPayer }: Props) => {
     return {
         setSelectedDelegationUrl: handleSetSelectedDelegationUrl,
         setSelectedDelegationAccount: handleSetSelectedDelegationAccount,
-        setNoDelegation: handleNoDelegation,
+        resetDelegation: handleNoDelegation,
         selectedDelegationOption,
         selectedDelegationAccount,
         selectedDelegationUrl,

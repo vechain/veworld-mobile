@@ -34,7 +34,7 @@ describe("useDelegation", () => {
         expect(result.current).toEqual({
             setSelectedDelegationUrl: expect.any(Function),
             setSelectedDelegationAccount: expect.any(Function),
-            setNoDelegation: expect.any(Function),
+            resetDelegation: expect.any(Function),
             selectedDelegationOption: DelegationType.NONE,
             selectedDelegationAccount: undefined,
             selectedDelegationUrl: undefined,
@@ -118,7 +118,7 @@ describe("useDelegation", () => {
         expect(result.current.isDelegated).toBeTruthy()
         expect(result.current.selectedDelegationUrl).toEqual("https://test.com")
 
-        result.current.setNoDelegation()
+        result.current.resetDelegation()
 
         expect(result.current.isDelegated).toBeFalsy()
         expect(result.current.selectedDelegationOption).toEqual(DelegationType.NONE)
