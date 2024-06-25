@@ -108,7 +108,7 @@ const convertUriToUrl = (uri: string) => {
 
 async function isValidBrowserUrl(url: string): Promise<boolean> {
     let navInput: string | undefined
-    const regex = new RegExp("^www.[a-zA-Z0-9-]+(.[a-zA-Z0-9-]+)*.[a-zA-Z]{2,}$")
+    const regex = new RegExp("^www\\.[a-zA-Z0-9-]+(\\.[a-zA-Z0-9-]+)*\\.[a-zA-Z]{2,}$")
 
     try {
         if (isHttps(url)) {
