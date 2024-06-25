@@ -13,6 +13,6 @@ export const validateIpfsUri = (uri: string): boolean => {
     const trimmedUri = uri.trim()
     return (
         /^ipfs:\/\/Qm[a-zA-Z0-9]+(\/[^/]+)*\/?$/.test(trimmedUri) ||
-        /^ipfs:\/\/bafybe[a-z0-9]+(\/[^/]+)*\/?$/.test(trimmedUri)
+        /^ipfs:\/\/baf[a-z0-9]+(\/[^/]+)*\/?$/.test(trimmedUri)
     )
 }
