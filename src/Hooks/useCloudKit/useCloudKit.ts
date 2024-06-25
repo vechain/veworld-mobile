@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useMemo, useState } from "react"
+import { useCallback, useEffect, useState } from "react"
 import { NativeModules } from "react-native"
 import { ERROR_EVENTS } from "~Constants"
 import { LocalDevice } from "~Model"
@@ -7,6 +7,7 @@ const { CloudKitManager } = NativeModules
 
 export const useCloudKit = (deviceToBackup?: LocalDevice) => {
     const [isAvailable, setisAvailable] = useState(false)
+    const [isWalletBackedUp, setIsWalletBackedUp] = useState(false)
 
     const getCloudKitAvailability = useCallback(async () => await CloudKitManager.checkCloudKitAvailability(), [])
 
@@ -32,13 +33,8 @@ export const useCloudKit = (deviceToBackup?: LocalDevice) => {
 
     const getWalletByRootAddress = useCallback(async (rootAddress: string) => {
         const selectedWallet = await CloudKitManager.getWallet(rootAddress)
-        info(ERROR_EVENTS.WALLET_CREATION, selectedWallet)
+        setIsWalletBackedUp(!!selectedWallet)
         return selectedWallet
-    }, [])
-
-    const isWalletBackedUp = useMemo(async () => {
-        // TODO - get wallet by rootAddress from CloudKit
-        return false
     }, [])
 
     return {
