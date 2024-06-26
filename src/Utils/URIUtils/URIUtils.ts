@@ -107,14 +107,28 @@ const convertUriToUrl = (uri: string) => {
 }
 
 async function isValidBrowserUrl(url: string): Promise<boolean> {
+    let navInput: string | undefined
+    const regex = new RegExp("^www\\.[a-zA-Z0-9-]+(\\.[a-zA-Z0-9-]+)*\\.[a-zA-Z]{2,}$")
+
     try {
-        let navInput = url
-        if (url.toLowerCase().startsWith("http")) {
+        if (isHttps(url)) {
+            navInput = url
+        }
+
+        if (isHttp(url)) {
+            navInput = `https://${url.slice(7)}`
+        }
+
+        if (regex.test(url)) {
             navInput = `https://${url}`
         }
 
-        await axios.get(navInput)
-        return true
+        if (navInput) {
+            await axios.get(navInput)
+            return true
+        } else {
+            return false
+        }
     } catch (e) {
         return false
     }
@@ -137,6 +151,10 @@ function decodeUrl_HACK(url: string) {
     }
 }
 
+function getHostName(url: string) {
+    return isValid(url) ? new URL(url).hostname : null
+}
+
 export default {
     compareURLs,
     clean,
@@ -150,4 +168,5 @@ export default {
     convertUriToUrl,
     isValidBrowserUrl,
     decodeUrl_HACK,
+    getHostName,
 }
