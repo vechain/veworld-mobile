@@ -30,6 +30,7 @@ import {
     VeBetterDAOMainCard,
     WebSearchFloatingButton,
 } from "./Components"
+import { URIUtils } from "~Utils"
 
 const DAO_URL = "https://governance.vebetterdao.org/"
 
@@ -100,11 +101,13 @@ export const DiscoverScreen: React.FC = () => {
 
         Keyboard.dismiss()
 
-        setTimeout(() => {
-            navigateToBrowser(filteredSearch)
-            setFilteredSearch("")
-        }, 300)
-    }, [filteredSearch, navigateToBrowser])
+        const dapp = dapps.find(item => {
+            return URIUtils.getHostName(item.href)?.toLowerCase() === filteredSearch.toLowerCase()
+        })
+
+        navigateToBrowser(dapp?.href ?? filteredSearch)
+        setFilteredSearch("")
+    }, [dapps, filteredSearch, navigateToBrowser])
 
     const onMakeYourOwnDAppPress = useCallback(async () => {
         const url = process.env.REACT_APP_CREATE_YOUR_VECHAIN_DAPP_URL
