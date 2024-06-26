@@ -19,12 +19,13 @@ export const DAppCard = ({ columns, columnsGap, dapp, onPress }: DAppCardProps) 
     const [loadFallback, setLoadFallback] = useState(false)
 
     const gapsNumber = columns + 1
-    const iconDimension = (windowWidth - columnsGap * gapsNumber) / columns
+    const cardDimension = (windowWidth - columnsGap * gapsNumber) / columns
+    const imageDimension = cardDimension - 16
     const iconUri = dapp.id ? getAppHubIconUrl(dapp.id) : `${process.env.REACT_APP_GOOGLE_FAVICON_URL}${dapp.href}`
 
     return (
         <Animated.View entering={ZoomIn} exiting={ZoomOut}>
-            <BaseTouchable style={[styles.rootContainer, { maxWidth: iconDimension }]} onPress={onPress}>
+            <BaseTouchable style={[styles.rootContainer, { width: cardDimension }]} onPress={onPress}>
                 <Image
                     source={
                         loadFallback
@@ -35,7 +36,7 @@ export const DAppCard = ({ columns, columnsGap, dapp, onPress }: DAppCardProps) 
                     }
                     style={
                         [
-                            { height: iconDimension, width: iconDimension, backgroundColor: theme.colors.card },
+                            { height: imageDimension, width: imageDimension, backgroundColor: theme.colors.card },
                             styles.icon,
                         ] as StyleProp<ImageStyle>
                     }
@@ -43,8 +44,8 @@ export const DAppCard = ({ columns, columnsGap, dapp, onPress }: DAppCardProps) 
                     resizeMode="contain"
                 />
                 <BaseSpacer height={8} />
-                <BaseText ellipsizeMode="tail" numberOfLines={1} fontSize={10}>
-                    {dapp.name}
+                <BaseText numberOfLines={1} fontSize={10} style={styles.text}>
+                    {dapp.name.length > 9 ? dapp.name.slice(0, 9) + "..." : dapp.name}
                 </BaseText>
             </BaseTouchable>
         </Animated.View>
@@ -60,5 +61,8 @@ const baseStyles = () =>
         icon: {
             borderRadius: 12,
             overflow: "hidden",
+        },
+        text: {
+            width: "100%",
         },
     })
