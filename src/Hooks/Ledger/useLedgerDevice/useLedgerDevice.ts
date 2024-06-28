@@ -161,7 +161,7 @@ export const useLedgerDevice = ({ deviceId }: { deviceId: string }): UseLedgerDe
         detachedDisconnectedOnPurpose.current = true
         if (transport.current) {
             try {
-                await BleTransport.disconnectDevice(deviceId)
+                await BleTransport.disconnect(deviceId)
             } catch (e) {
                 error(ERROR_EVENTS.LEDGER, "[useLedgerDevice] - disconnectLedger error: ", e)
             }
