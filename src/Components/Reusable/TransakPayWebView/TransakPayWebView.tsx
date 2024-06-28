@@ -16,11 +16,10 @@ import { useNavigation } from "@react-navigation/native"
 const isProd = process.env.NODE_ENV === "production"
 const isAndroid = PlatformUtils.isAndroid()
 
-// first google_pay for isAndroid is temporary, wait for a SDK fix
-const disabledOSProvider = isAndroid ? "apple_pay,google_pay" : "google_pay,credit_debit_card"
+const disabledOSProvider = isAndroid ? "apple_pay" : "google_pay,credit_debit_card"
 // eslint-disable-next-line max-len
 const disablePaymentMethods = `gbp_bank_transfer,inr_bank_transfer,sepa_bank_transfer,pm_cash_app,pm_us_wire_bank_transfer,${disabledOSProvider}`
-const defaultPaymentMethod = isAndroid ? "credit_debit_card" : "apple_pay"
+const defaultPaymentMethod = isAndroid ? "google_pay" : "apple_pay"
 
 // only for jest
 const uniqueID = getUniqueIdSync ? getUniqueIdSync() : "jest-unique-id"
