@@ -147,7 +147,7 @@ describe("useTransactionScreen", () => {
                     gasRaw: BigNutils("0"),
                 },
             },
-            setNoDelegation: expect.any(Function),
+            resetDelegation: expect.any(Function),
             setSelectedDelegationAccount: expect.any(Function),
             setSelectedDelegationUrl: expect.any(Function),
             isEnoughGas: false,
