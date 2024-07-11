@@ -26,6 +26,7 @@ export const DAppCard = ({ columns, columnsGap, dapp, onPress }: DAppCardProps) 
     return (
         <Animated.View entering={ZoomIn} exiting={ZoomOut}>
             <BaseTouchable style={[styles.rootContainer, { width: cardDimension }]} onPress={onPress}>
+                <BaseSpacer height={8} />
                 <Image
                     source={
                         loadFallback

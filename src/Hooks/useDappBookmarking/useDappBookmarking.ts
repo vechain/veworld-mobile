@@ -15,7 +15,7 @@ export const useDappBookmarking = (url?: string, title?: string) => {
     const dispatch = useAppDispatch()
     const track = useAnalyticTracking()
 
-    const bookmarkedDapps: DiscoveryDApp[] = useAppSelector(selectBookmarkedDapps)
+    const bookmarkedDapps = useAppSelector(selectBookmarkedDapps)
     const allDApps = useAppSelector(selectAllDapps)
 
     const existingBookmark = useMemo(() => {
@@ -44,9 +44,9 @@ export const useDappBookmarking = (url?: string, title?: string) => {
                 dapp: url,
             })
         } else {
-            const existingDApp = allDApps.find(dapp =>
-                URIUtils.compareURLs(URIUtils.clean(dapp.href), URIUtils.clean(url)),
-            )
+            const existingDApp = allDApps.find(dapp => {
+                return URIUtils.compareURLs(URIUtils.clean(dapp.href), URIUtils.clean(url))
+            })
 
             if (existingDApp) {
                 return dispatch(addBookmark(existingDApp))
@@ -69,7 +69,7 @@ export const useDappBookmarking = (url?: string, title?: string) => {
                 dapp: URIUtils.clean(url),
             })
         }
-    }, [track, dispatch, existingBookmark, url, title, allDApps])
+    }, [url, existingBookmark, dispatch, track, allDApps, title])
 
     return {
         toggleBookmark,
