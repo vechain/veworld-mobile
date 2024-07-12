@@ -55,7 +55,9 @@ onFlowComplete:
       - tapOn:
           id: "confirm-send-button"
 - repeat:
-    times: 6
+    while:
+     notVisible: "Your tokens"
     commands:
       - tapOn: "1"
 - assertVisible: "Your tokens"
+- evalScript: ${console.log('Send custom token Ends')}

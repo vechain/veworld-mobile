@@ -33,4 +33,11 @@ appId: org.vechain.veworld.app
       - tapOn: "Reset App"
       - tapOn: "I am aware that this action is irreversible (required)"
 - tapOn: "Reset App"
+- repeat:
+    while:
+      visible:
+         id: "BackButtonHeader-BaseIcon-backButton"
+    commands:
+      - tapOn:
+            id: "BackButtonHeader-BaseIcon-backButton"
 - assertVisible: "DEV:DEMO"

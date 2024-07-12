@@ -52,9 +52,10 @@ onFlowComplete:
       - tapOn:
           id: "confirm-send-button"
 - repeat:
-    times: 6
-    commands:
-      - tapOn: "1"
+  while:
+    notVisible: "Your tokens"
+  commands:
+    - tapOn: "1"
 - assertVisible: "Your tokens"
 - runFlow:
     env:
@@ -111,6 +112,7 @@ onFlowComplete:
       - tapOn:
           id: "confirm-send-button"
       - repeat:
-          times: 6
+          while:
+           notVisible: "Your tokens"
           commands:
             - tapOn: "1"

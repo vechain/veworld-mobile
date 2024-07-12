@@ -4,8 +4,6 @@ env:
   WALLET_ADDRESS: "0x231E70Cf27A2c44Eb9C00a3B1d2F7507Ae791051"
 onFlowStart:
   - runFlow: ../setup_reset/setupApp.yaml 
-onFlowComplete:
-  - runFlow: ../setup_reset/resetApp.yaml
 ---
 
 ## User adds a wallet to observe
@@ -27,4 +25,11 @@ onFlowComplete:
     id: "observe-wallet-confirm-operation"
 - tapOn:
     id: "wallet-tab"
+- repeat:
+    while:
+        visible:
+            id: "BackButtonHeader-BaseIcon-backButton"
+    commands:
+        - tapOn:
+            id: "BackButtonHeader-BaseIcon-backButton"
 - assertVisible: "VeWorld"

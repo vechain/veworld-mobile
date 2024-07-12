@@ -38,7 +38,10 @@ onFlowComplete:
 - tapOn: "Insert your 6-digit PIN"
 - assertVisible: "Insert your 6-digit PIN"
 - repeat:
-    times: 6
+    while:
+       notVisible: "Your tokens"
+     commands:
+        - tapOn: "1"
     commands:
       - tapOn: "1"
 - assertVisible: "VeWorld"
@@ -75,9 +78,10 @@ onFlowComplete:
           id: "confirm-send-button"
 - assertVisible: "Insert your 6-digit PIN"
 - repeat:
-    times: 6
-    commands:
-      - tapOn: "1"
+    while:
+       notVisible: "Your tokens"
+     commands:
+        - tapOn: "1"
 - assertVisible: "VeWorld"
 - evalScript: ${console.log('Send VETHO from Account 1 to Account 2')}
 
@@ -115,8 +119,9 @@ onFlowComplete:
       - tapOn:
           id: "confirm-send-button"
 - repeat:
-    times: 6
-    commands:
-      - tapOn: "1"
+    while:
+       notVisible: "Your tokens"
+     commands:
+        - tapOn: "1"
 - assertVisible: "Your tokens"
 - evalScript: ${console.log('Send VET from Account 2 to Account 1')}
