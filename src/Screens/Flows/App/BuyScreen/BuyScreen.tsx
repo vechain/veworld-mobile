@@ -5,17 +5,19 @@ import { StatusBar } from "react-native"
 import { PlatformUtils } from "~Utils"
 import { PaymentProviderList } from "./Components"
 
+const isAndroid = PlatformUtils.isAndroid()
+
 export const BuyScreen = () => {
     const { LL } = useI18nContext()
 
     return (
         <Layout
-            hasSafeArea={!PlatformUtils.isIOS()}
+            hasSafeArea={isAndroid}
             noBackButton
             noMargin
             fixedHeader={
                 <>
-                    <BaseSpacer height={16} />
+                    <BaseSpacer height={8} />
                     <BackButtonHeader hasBottomSpacer={false} />
                     <BaseSpacer height={8} />
                 </>

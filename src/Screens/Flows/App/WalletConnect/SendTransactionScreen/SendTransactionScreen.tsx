@@ -14,6 +14,7 @@ import {
     SelectAccountBottomSheet,
     showErrorToast,
     useWalletConnect,
+    useInAppBrowser,
 } from "~Components"
 import {
     addPendingDappTransactionActivity,
@@ -36,7 +37,6 @@ import { ClausesCarousel } from "../../ActivityDetailsScreen/Components"
 import { Transaction } from "thor-devkit"
 import { TransactionDetails, UnknownAppMessage } from "~Screens"
 import { AnalyticsEvent, RequestMethods, creteAnalyticsEvent } from "~Constants"
-import { useInAppBrowser } from "~Components/Providers/InAppBrowserProvider"
 import { AccountWithDevice, WatchedAccount } from "~Model"
 
 type Props = NativeStackScreenProps<RootStackParamListSwitch, Routes.CONNECTED_APP_SEND_TRANSACTION_SCREEN>
@@ -196,7 +196,7 @@ export const SendTransactionScreen: FC<Props> = ({ route }: Props) => {
         isPasswordPromptOpen,
         handleClosePasswordModal,
         onPasswordSuccess,
-        setNoDelegation,
+        resetDelegation,
         setSelectedDelegationAccount,
         setSelectedDelegationUrl,
         isEnoughGas,
@@ -246,7 +246,7 @@ export const SendTransactionScreen: FC<Props> = ({ route }: Props) => {
                 <BaseSpacer height={24} />
                 <BaseView mx={20}>
                     <DelegationView
-                        setNoDelegation={setNoDelegation}
+                        setNoDelegation={resetDelegation}
                         selectedDelegationOption={selectedDelegationOption}
                         setSelectedDelegationAccount={setSelectedDelegationAccount}
                         selectedDelegationAccount={selectedDelegationAccount}

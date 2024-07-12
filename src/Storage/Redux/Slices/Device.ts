@@ -70,6 +70,15 @@ export const DeviceSlice = createSlice({
                     }),
             )
         },
+        setDeviceIsBackup: (state, action: PayloadAction<{ rootAddress: string; isBackup: boolean }>) => {
+            const { rootAddress, isBackup } = action.payload
+            const deviceExistsIndex = state.findIndex(device =>
+                AddressUtils.compareAddresses(device.rootAddress, rootAddress),
+            )
+            if (deviceExistsIndex === -1) throw new Error(`Device with root address ${rootAddress} does not exist`)
+
+            state[deviceExistsIndex].isBuckedUp = isBackup
+        },
         resetDeviceState: () => initialDeviceState,
         setDeviceState: (
             state: Device[],
@@ -88,4 +97,5 @@ export const {
     removeDevice,
     resetDeviceState,
     setDeviceState,
+    setDeviceIsBackup,
 } = DeviceSlice.actions

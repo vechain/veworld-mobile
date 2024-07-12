@@ -114,7 +114,7 @@ export const TransactionSummarySendScreen = ({ route }: Props) => {
         setSelectedFeeOption,
         selectedFeeOption,
         gasFeeOptions,
-        setNoDelegation,
+        resetDelegation,
         setSelectedDelegationAccount,
         setSelectedDelegationUrl,
         isEnoughGas,
@@ -165,7 +165,7 @@ export const TransactionSummarySendScreen = ({ route }: Props) => {
                     />
 
                     <DelegationView
-                        setNoDelegation={setNoDelegation}
+                        setNoDelegation={resetDelegation}
                         selectedDelegationOption={selectedDelegationOption}
                         setSelectedDelegationAccount={setSelectedDelegationAccount}
                         selectedDelegationAccount={selectedDelegationAccount}

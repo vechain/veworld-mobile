@@ -164,4 +164,44 @@ describe("URIUtils", () => {
             )
         })
     })
+
+    describe("isValidBrowserUrl", function () {
+        test("should return true for a valid HTTPS URL", async () => {
+            expect(await URIUtils.isValidBrowserUrl("https://www.example.com")).toBe(true)
+        })
+        test("should return true for a valid HTTP URL", async () => {
+            expect(await URIUtils.isValidBrowserUrl("http://www.example.com")).toBe(true)
+        })
+        test("should return true for a valid URL with the following format www.exmaple.com", async () => {
+            expect(await URIUtils.isValidBrowserUrl("www.example.com")).toBe(true)
+        })
+
+        test("should return false for an invalid URL", async () => {
+            expect(await URIUtils.isValidBrowserUrl("https://thisdoesnotexist99999.com")).toBe(false)
+        })
+    })
+
+    describe("decodeUrl_HACK", function () {
+        test("should correctly decode URLs", function () {
+            expect(URIUtils.decodeUrl_HACK("https://example.com/path/to%20resource")).toBe(
+                "https://example.com/path/to resource",
+            )
+        })
+
+        test("should handle malformed URLs", function () {
+            expect(URIUtils.decodeUrl_HACK("https:/example.com/path/to%20resource")).toBe(
+                "https://example.com/path/to resource",
+            )
+        })
+    })
+
+    describe("getHostName", function () {
+        test("should return hostname for valid URLs", function () {
+            expect(URIUtils.getHostName("https://www.example.com")).toBe("www.example.com")
+        })
+
+        test("should return null for invalid URLs", function () {
+            expect(URIUtils.getHostName("htp://example")).toBeNull()
+        })
+    })
 })

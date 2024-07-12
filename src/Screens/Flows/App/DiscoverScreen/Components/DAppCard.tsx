@@ -1,73 +1,68 @@
-import React, { memo } from "react"
-import { StyleProp, StyleSheet, ViewStyle } from "react-native"
-import { useDappBookmarking, useThemedStyles } from "~Hooks"
+import React, { useState } from "react"
+import { Image, ImageStyle, StyleProp, StyleSheet, useWindowDimensions } from "react-native"
 import { DiscoveryDApp } from "~Constants"
-import { BaseIcon, BaseSpacer, BaseText, BaseTouchableBox, BaseView } from "~Components"
-import { DAppIcon } from "./DAppIcon"
+import { BaseSpacer, BaseText, BaseTouchable } from "~Components"
 import { getAppHubIconUrl } from "../utils"
+import Animated, { ZoomIn, ZoomOut } from "react-native-reanimated"
+import { useThemedStyles } from "~Hooks"
 
-type Props = {
+type DAppCardProps = {
+    columns: number
+    columnsGap: number
     dapp: DiscoveryDApp
-    onPress: (dapp: DiscoveryDApp) => void
-    containerStyle?: StyleProp<ViewStyle>
+    onPress: () => void
 }
 
-export const DAppCard: React.FC<Props> = memo(({ onPress, dapp, containerStyle }: Props) => {
+export const DAppCard = ({ columns, columnsGap, dapp, onPress }: DAppCardProps) => {
+    const { width: windowWidth } = useWindowDimensions()
     const { styles, theme } = useThemedStyles(baseStyles)
+    const [loadFallback, setLoadFallback] = useState(false)
 
-    const { isBookMarked, toggleBookmark } = useDappBookmarking(dapp.href, dapp?.name)
+    const gapsNumber = columns + 1
+    const cardDimension = (windowWidth - columnsGap * gapsNumber) / columns
+    const imageDimension = cardDimension - 16
+    const iconUri = dapp.id ? getAppHubIconUrl(dapp.id) : `${process.env.REACT_APP_GOOGLE_FAVICON_URL}${dapp.href}`
 
     return (
-        <BaseView w={100} flexDirection="row" style={containerStyle}>
-            <BaseTouchableBox
-                haptics="Light"
-                action={() => onPress(dapp)}
-                justifyContent="space-between"
-                containerStyle={styles.container}>
-                <BaseView flexDirection="row" style={styles.card} flex={1} pr={10}>
-                    <DAppIcon
-                        imageSource={{
-                            uri: dapp.id
-                                ? getAppHubIconUrl(dapp.id)
-                                : `${process.env.REACT_APP_GOOGLE_FAVICON_URL}${dapp.href}`,
-                        }}
-                    />
-                    <BaseSpacer width={12} />
-                    <BaseView flex={1}>
-                        <BaseText ellipsizeMode="tail" numberOfLines={1} style={styles.nameText}>
-                            {dapp.name}
-                        </BaseText>
-                        <BaseSpacer height={4} />
-                        <BaseText ellipsizeMode="tail" numberOfLines={2} style={styles.description}>
-                            {dapp.desc ? dapp.desc : dapp.href}
-                        </BaseText>
-                    </BaseView>
-                </BaseView>
-            </BaseTouchableBox>
-            <BaseSpacer width={12} />
-            <BaseIcon
-                onPress={toggleBookmark}
-                name={isBookMarked ? "bookmark" : "bookmark-outline"}
-                color={theme.colors.text}
-                size={24}
-            />
-        </BaseView>
+        <Animated.View entering={ZoomIn} exiting={ZoomOut}>
+            <BaseTouchable style={[styles.rootContainer, { width: cardDimension }]} onPress={onPress}>
+                <Image
+                    source={
+                        loadFallback
+                            ? require("~Assets/Img/dapp-fallback.png")
+                            : {
+                                  uri: iconUri,
+                              }
+                    }
+                    style={
+                        [
+                            { height: imageDimension, width: imageDimension, backgroundColor: theme.colors.card },
+                            styles.icon,
+                        ] as StyleProp<ImageStyle>
+                    }
+                    onError={() => setLoadFallback(true)}
+                    resizeMode="contain"
+                />
+                <BaseSpacer height={8} />
+                <BaseText numberOfLines={1} fontSize={10} style={styles.text}>
+                    {dapp.name.length > 9 ? dapp.name.slice(0, 9) + "..." : dapp.name}
+                </BaseText>
+            </BaseTouchable>
+        </Animated.View>
     )
-})
+}
 
 const baseStyles = () =>
     StyleSheet.create({
-        container: {
-            flex: 1,
+        rootContainer: {
+            justifyContent: "center",
+            alignItems: "center",
         },
-        card: {
-            height: 60,
+        icon: {
+            borderRadius: 12,
+            overflow: "hidden",
         },
-        nameText: {
-            fontWeight: "bold",
-            fontSize: 16,
-        },
-        description: {
-            fontSize: 12,
+        text: {
+            width: "100%",
         },
     })

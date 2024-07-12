@@ -74,7 +74,7 @@ export const BaseAccordion = ({
     const renderCollapseIcon = useMemo(() => {
         return (
             <Animated.View style={[dynamicStyle, chevronContainerStyle]}>
-                <BaseIcon name={"chevron-down"} color={theme.colors.text} size={36} testID={"chevron"} />
+                <BaseIcon name="chevron-down" color={theme.colors.text} size={36} testID="chevron" />
             </Animated.View>
         )
     }, [dynamicStyle, chevronContainerStyle, theme])

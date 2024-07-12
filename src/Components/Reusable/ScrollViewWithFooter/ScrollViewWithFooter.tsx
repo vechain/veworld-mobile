@@ -9,7 +9,7 @@ type Props = {
 
 export const ScrollViewWithFooter = ({ children, footer, isScrollEnabled = true }: Props) => {
     return (
-        <BaseView flex={1} alignItems={"stretch"}>
+        <BaseView flex={1} alignItems="stretch">
             <BaseScrollView scrollEnabled={isScrollEnabled}>
                 <BaseView>{children}</BaseView>
                 {/** here we can add a fade like effect */}

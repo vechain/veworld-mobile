@@ -3,7 +3,7 @@ import { BaseView, DeviceBox, Layout, RequireUserPassword, SwipeableRow, showWar
 import { BaseDevice, Device } from "~Model"
 import { setDeviceState, useAppSelector } from "~Storage/Redux"
 import { selectAccounts, selectDevices } from "~Storage/Redux/Selectors"
-import { RemoveWalletWarningBottomSheet, WalletManagementHeader } from "./components"
+import { CreateOrImportWalletBottomSheet, RemoveWalletWarningBottomSheet, WalletManagementHeader } from "./components"
 import { useWalletDeletion } from "./hooks"
 import { StyleSheet } from "react-native"
 import { useBottomSheetModal, useCheckIdentity, useTabBarBottomMargin } from "~Hooks"
@@ -14,6 +14,7 @@ import { useI18nContext } from "~i18n"
 import { useNavigation } from "@react-navigation/native"
 import { Routes } from "~Navigation"
 import { AccountUtils } from "~Utils"
+import { useHandleWalletCreation } from "~Screens/Flows/Onboarding/WelcomeScreen/useHandleWalletCreation"
 
 export const WalletManagementScreen = () => {
     const { tabBarBottomMargin } = useTabBarBottomMargin()
@@ -25,6 +26,8 @@ export const WalletManagementScreen = () => {
     const { LL } = useI18nContext()
     const dispatch = useDispatch()
 
+    const { createOnboardedWallet } = useHandleWalletCreation()
+
     const { isPasswordPromptOpen, handleClosePasswordModal, onPasswordSuccess, checkIdentityBeforeOpening } =
         useCheckIdentity({
             onIdentityConfirmed: deleteWallet,
@@ -32,10 +35,31 @@ export const WalletManagementScreen = () => {
         })
 
     const {
+        isPasswordPromptOpen: isPasswordPromptOpen_1,
+        handleClosePasswordModal: handleClosePasswordModal_1,
+        onPasswordSuccess: onPasswordSuccess_1,
+        checkIdentityBeforeOpening: checkIdentityBeforeOpening_1,
+    } = useCheckIdentity({
+        onIdentityConfirmed: (pin?: string) => createOnboardedWallet(pin),
+        allowAutoPassword: false,
+    })
+
+    const {
         ref: removeWalletBottomSheetRef,
         onOpen: openRemoveWalletBottomSheet,
         onClose: closeRemoveWalletBottomSheet,
     } = useBottomSheetModal()
+
+    const {
+        ref: addWalletBottomSheetRef,
+        onOpen: onOpenAddWalletBottomSheet,
+        onClose: onCloseAddWalletBottomSheet,
+    } = useBottomSheetModal()
+
+    const handleOnCreateWallet = useCallback(async () => {
+        onCloseAddWalletBottomSheet()
+        await checkIdentityBeforeOpening_1()
+    }, [onCloseAddWalletBottomSheet, checkIdentityBeforeOpening_1])
 
     const [isEdit, _setIsEdit] = useState(false)
     const swipeableItemRefs = useRef<Map<string, SwipeableItemImperativeRef>>(new Map())
@@ -132,18 +156,13 @@ export const WalletManagementScreen = () => {
             }),
         )
     }
-    const navigation = useNavigation()
-
-    const goToCreateWalletFlow = useCallback(() => {
-        navigation.navigate(Routes.CREATE_WALLET_FLOW)
-    }, [navigation])
 
     return (
         <Layout
             safeAreaTestID="Wallet_Management_Screen"
             fixedHeader={
                 <WalletManagementHeader
-                    goToCreateWalletFlow={goToCreateWalletFlow}
+                    goToCreateWalletFlow={onOpenAddWalletBottomSheet}
                     isEdit={isEdit}
                     setIsEdit={setIsEdit}
                 />
@@ -173,6 +192,18 @@ export const WalletManagementScreen = () => {
                         isOpen={isPasswordPromptOpen}
                         onClose={handleClosePasswordModal}
                         onSuccess={onPasswordSuccess}
+                    />
+
+                    <RequireUserPassword
+                        isOpen={isPasswordPromptOpen_1}
+                        onClose={handleClosePasswordModal_1}
+                        onSuccess={onPasswordSuccess_1}
+                    />
+
+                    <CreateOrImportWalletBottomSheet
+                        ref={addWalletBottomSheetRef}
+                        onClose={onCloseAddWalletBottomSheet}
+                        handleOnCreateWallet={handleOnCreateWallet}
                     />
                 </BaseView>
             }

@@ -12,19 +12,26 @@ import {
     useThor,
 } from "~Components"
 import { useI18nContext } from "~i18n"
-import { selectAccounts, selectBalanceVisible, selectSelectedNetwork, useAppSelector } from "~Storage/Redux"
+import {
+    addAccount,
+    selectAccounts,
+    selectBalanceVisible,
+    selectSelectedNetwork,
+    useAppDispatch,
+    useAppSelector,
+} from "~Storage/Redux"
 import { useNavigation } from "@react-navigation/native"
 import { Keyboard } from "react-native"
 import { useBottomSheetModal, useCameraBottomSheet, useVns, ZERO_ADDRESS } from "~Hooks"
 import HapticsService from "~Services/HapticsService"
 import { AccountUtils, AddressUtils, BalanceUtils, BigNutils } from "~Utils"
 import { ScanTarget, VET } from "~Constants"
-import { Routes } from "~Navigation"
 import { DEVICE_TYPE, WatchedAccount } from "~Model"
 
 export const ObserveWalletScreen = () => {
     const { LL } = useI18nContext()
     const nav = useNavigation()
+    const dispatch = useAppDispatch()
 
     const accounts = useAppSelector(selectAccounts)
     const isBalanceVisible = useAppSelector(selectBalanceVisible)
@@ -79,9 +86,11 @@ export const ObserveWalletScreen = () => {
 
     const handleConfirmAccount = useCallback(() => {
         setBtnTitle(LL.COMMON_BTN_CONFIRM().toUpperCase())
-        // navigate to confirm watch wallet screen
-        !!_watchedAccount && nav.navigate(Routes.OBSERVE_WALLET_CONFIRMATION, { account: _watchedAccount })
-    }, [LL, _watchedAccount, nav])
+
+        !!_watchedAccount && dispatch(addAccount(_watchedAccount))
+
+        nav.goBack()
+    }, [LL, _watchedAccount, dispatch, nav])
 
     const onImport = useCallback(
         (_address?: string) => {

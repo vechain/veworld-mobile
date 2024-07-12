@@ -1,35 +1,32 @@
-import React, { useCallback, useEffect, useMemo, useState } from "react"
+import React, { useCallback, useEffect, useMemo, useRef, useState } from "react"
 import {
+    BackButtonHeader,
     BaseActivityIndicator,
     BaseButton,
+    BaseModal,
     BaseSpacer,
     BaseText,
     BaseTouchableBox,
     BaseView,
     ConnectionErrorBottomSheet,
     Layout,
+    RequireUserPassword,
     showErrorToast,
 } from "~Components"
 import { useI18nContext } from "~i18n"
-import { useAnalyticTracking, useBottomSheetModal, useLedgerDevice, useThemedStyles } from "~Hooks"
+import { useAnalyticTracking, useBottomSheetModal, useCheckIdentity, useLedgerDevice, useThemedStyles } from "~Hooks"
 import { AnalyticsEvent, ColorThemeType, VET, VETLedgerAccount } from "~Constants"
 import { BigNutils, AddressUtils, LedgerUtils } from "~Utils"
 import { StyleSheet } from "react-native"
-import { useNavigation } from "@react-navigation/native"
-
 import { NativeStackScreenProps } from "@react-navigation/native-stack"
 import { RootStackParamListCreateWalletApp, RootStackParamListOnboarding, Routes } from "~Navigation"
-
-import {
-    selectHasOnboarded,
-    selectSelectedNetwork,
-    setNewLedgerDevice,
-    useAppDispatch,
-    useAppSelector,
-} from "~Storage/Redux"
+import { selectHasOnboarded, selectSelectedNetwork, useAppSelector } from "~Storage/Redux"
 import { FlashList, ViewToken } from "@shopify/flash-list"
 import * as Haptics from "expo-haptics"
-import { LedgerAccount } from "~Model"
+import { LedgerAccount, NewLedgerDevice } from "~Model"
+import { useHandleWalletCreation } from "~Screens/Flows/Onboarding/WelcomeScreen/useHandleWalletCreation"
+import { UserCreatePasswordScreen } from "../../UserCreatePasswordScreen"
+import { StackActions, useNavigation } from "@react-navigation/native"
 
 type Props = {} & NativeStackScreenProps<
     RootStackParamListOnboarding & RootStackParamListCreateWalletApp,
@@ -38,13 +35,12 @@ type Props = {} & NativeStackScreenProps<
 
 export const SelectLedgerAccounts: React.FC<Props> = ({ route }) => {
     const { device } = route.params
-    const dispatch = useAppDispatch()
     const { LL } = useI18nContext()
-    const nav = useNavigation()
     const { styles: themedStyles } = useThemedStyles(styles)
     const selectedNetwork = useAppSelector(selectSelectedNetwork)
-    const userHasOnboarded = useAppSelector(selectHasOnboarded)
     const track = useAnalyticTracking()
+    const userHasOnboarded = useAppSelector(selectHasOnboarded)
+    const nav = useNavigation()
 
     const { errorCode, rootAccount, disconnectLedger } = useLedgerDevice({
         deviceId: device.id,
@@ -54,7 +50,7 @@ export const SelectLedgerAccounts: React.FC<Props> = ({ route }) => {
     )
 
     useEffect(() => {
-        // root account will be undefined if the user disconnects. We don't care abet that, we only want to read it
+        // root account will be undefined if the user disconnects. We don't care about that, we only want to read it
         if (rootAccount) {
             setRootAcc({ ...rootAccount })
         }
@@ -67,6 +63,13 @@ export const SelectLedgerAccounts: React.FC<Props> = ({ route }) => {
     }, [errorCode, rootAcc])
 
     const { ref, onOpen, onClose } = useBottomSheetModal()
+    const {
+        onCreateLedgerWallet,
+        isOpen,
+        onClose: onCloseCreateFlow,
+        onLedgerPinSuccess,
+        importLedgerWallet,
+    } = useHandleWalletCreation()
 
     useEffect(() => {
         if (ledgerErrorCode) {
@@ -80,6 +83,28 @@ export const SelectLedgerAccounts: React.FC<Props> = ({ route }) => {
     const [ledgerAccountsLoading, setLedgerAccountsLoading] = useState(false)
     const [selectedAccountsIndex, setSelectedAccountsIndex] = useState<number[]>([])
     const [isScrollable, setIsScrollable] = useState(false)
+    const ledgerCache = useRef<NewLedgerDevice | null>(null)
+
+    const {
+        isPasswordPromptOpen: isPasswordPromptOpen_1,
+        handleClosePasswordModal: handleClosePasswordModal_1,
+        onPasswordSuccess: onPasswordSuccess_1,
+        checkIdentityBeforeOpening: checkIdentityBeforeOpening_1,
+    } = useCheckIdentity({
+        onIdentityConfirmed: async () => {
+            if (!ledgerCache.current) return
+
+            await importLedgerWallet({
+                newLedger: ledgerCache.current,
+                disconnectLedger,
+            })
+
+            // Navigate back to the wallet management screen
+            const popAction = StackActions.pop(3)
+            nav.dispatch(popAction)
+        },
+        allowAutoPassword: false,
+    })
 
     useEffect(() => {
         // Disconnect ledger when the component unmounts to avoid crashing the app when a user navigates back
@@ -88,37 +113,44 @@ export const SelectLedgerAccounts: React.FC<Props> = ({ route }) => {
         }
     }, [disconnectLedger])
 
-    const navigateNext = useCallback(async () => {
-        await disconnectLedger()
-
-        if (userHasOnboarded) {
-            nav.navigate(Routes.WALLET_SUCCESS)
-        } else {
-            nav.navigate(Routes.APP_SECURITY)
-        }
-    }, [disconnectLedger, nav, userHasOnboarded])
-
     const onConfirm = useCallback(async () => {
         try {
             track(AnalyticsEvent.IMPORT_HW_USER_SUBMITTED_ACCOUNTS)
             if (selectedAccountsIndex.length > 0 && rootAcc) {
-                // set device in the store we can use it in walletSuccess
-                dispatch(
-                    setNewLedgerDevice({
-                        deviceId: device.id,
-                        rootAccount: rootAcc,
-                        alias: device.localName,
-                        accounts: selectedAccountsIndex,
-                    }),
-                )
-                navigateNext()
+                const newLedger = {
+                    deviceId: device.id,
+                    rootAccount: rootAcc,
+                    alias: device.localName,
+                    accounts: selectedAccountsIndex,
+                }
+
+                ledgerCache.current = newLedger
+
+                if (userHasOnboarded) {
+                    checkIdentityBeforeOpening_1()
+                } else {
+                    onCreateLedgerWallet({
+                        newLedger,
+                        disconnectLedger,
+                    })
+                }
             }
         } catch (e) {
             track(AnalyticsEvent.IMPORT_HW_FAILED_TO_IMPORT)
             Haptics.notificationAsync(Haptics.NotificationFeedbackType.Error)
             showErrorToast({ text1: e as string })
         }
-    }, [track, selectedAccountsIndex, rootAcc, dispatch, device.id, device.localName, navigateNext])
+    }, [
+        track,
+        selectedAccountsIndex,
+        rootAcc,
+        device.id,
+        device.localName,
+        userHasOnboarded,
+        checkIdentityBeforeOpening_1,
+        onCreateLedgerWallet,
+        disconnectLedger,
+    ])
 
     /**
      * When the root account changes, fetch the accounts and balances
@@ -231,6 +263,23 @@ export const SelectLedgerAccounts: React.FC<Props> = ({ route }) => {
                             />
                         )}
                     </BaseView>
+
+                    <RequireUserPassword
+                        isOpen={isPasswordPromptOpen_1}
+                        onClose={handleClosePasswordModal_1}
+                        onSuccess={onPasswordSuccess_1}
+                    />
+
+                    <BaseModal isOpen={isOpen} onClose={onCloseCreateFlow}>
+                        <BaseView justifyContent="flex-start">
+                            <BackButtonHeader action={onClose} hasBottomSpacer={false} />
+                            <UserCreatePasswordScreen
+                                onSuccess={pin =>
+                                    onLedgerPinSuccess({ pin, newLedger: ledgerCache.current, disconnectLedger })
+                                }
+                            />
+                        </BaseView>
+                    </BaseModal>
                 </>
             }
         />
