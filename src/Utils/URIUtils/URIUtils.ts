@@ -153,6 +153,10 @@ function getHostName(url: string) {
     return isValid(url) ? new URL(url).hostname : null
 }
 
+function getBaseURL(url: string) {
+    return isValid(url) ? new URL(url).origin : undefined
+}
+
 export default {
     compareURLs,
     clean,
@@ -167,4 +171,5 @@ export default {
     isValidBrowserUrl,
     decodeUrl_HACK,
     getHostName,
+    getBaseURL,
 }

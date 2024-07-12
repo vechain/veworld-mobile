@@ -1,4 +1,4 @@
-import React, { useEffect, useMemo, useState } from "react"
+import React, { useCallback, useEffect, useMemo, useState } from "react"
 import { StyleSheet } from "react-native"
 import Animated, { useSharedValue, withTiming } from "react-native-reanimated"
 import { DiscoveryDApp } from "~Constants"
@@ -30,7 +30,7 @@ export const FavoritesStackCard = ({ dapps, onDAppPress }: Props) => {
         })
     }, [finalStackHeight, isOpen, stackHeight, startingStackHeight])
 
-    const headerCard: DiscoveryDApp = useMemo(() => {
+    const cards = useMemo(() => {
         const hostname = URIUtils.getHostName(dapps[0].href)
 
         const amountOfNavigations = dapps
@@ -42,12 +42,12 @@ export const FavoritesStackCard = ({ dapps, onDAppPress }: Props) => {
             amountOfNavigations: amountOfNavigations,
             createAt: 0,
             desc: hostname ?? dapps[0]?.desc ?? "",
-            href: hostname ? `https://www.${hostname}` : dapps[0]?.href ?? "",
+            href: "header",
             isCustom: true,
             name: dapps[0]?.name ?? hostname,
         }
 
-        return dapp
+        return [dapp, ...dapps]
     }, [dapps])
 
     return (
@@ -58,12 +58,13 @@ export const FavoritesStackCard = ({ dapps, onDAppPress }: Props) => {
                 },
                 styles.stackContainer,
             ]}>
-            {[headerCard, ...dapps].map((dapp, index) => {
+            {cards.map((dapp, index) => {
+                const isFirst = index === 0
                 return (
                     <AnimatedCard
-                        key={index}
+                        key={dapp.href}
                         dapp={dapp}
-                        onDAppPress={index === 0 ? () => setIsOpen(prev => !prev) : onDAppPress}
+                        onDAppPress={isFirst ? () => setIsOpen(prev => !prev) : onDAppPress}
                         isStacked={!isOpen}
                         index={index}
                     />
@@ -87,20 +88,31 @@ const AnimatedCard = ({ dapp, onDAppPress, index, isStacked }: AnimatedCardProps
     const isThirdCard = index === 2
     const topInitialValue = isSecondCard || isThirdCard ? index * COLLAPED_STACK_CARD_SHIFT_SIZE : 0
     const topFinalValue = (CARD_HEIGHT + GAP_BETWEEN_CARDS) * index
-    const paddingHorizontalInitialValue = isStacked && index === 1 ? 3 : isStacked && index === 2 ? 6 : 0
     const paddingHorizontalFinalValue = 0
 
-    const top = useSharedValue<number>(topInitialValue)
-    const paddingHorizontal = useSharedValue<number>(paddingHorizontalInitialValue)
+    const getPaddingHorizontalInitialValue = useCallback(() => {
+        if (isStacked && isSecondCard) {
+            return 3
+        } else {
+            return isStacked && isThirdCard ? 6 : 0
+        }
+    }, [isSecondCard, isStacked, isThirdCard])
 
-    const iconName = index === 0 ? (isStacked ? "chevron-down" : "chevron-up") : undefined
+    const top = useSharedValue<number>(topInitialValue)
+    const paddingHorizontal = useSharedValue<number>(getPaddingHorizontalInitialValue())
+
+    const getIconName = () => {
+        if (isFirstCard) {
+            return isStacked ? "chevron-down" : "chevron-up"
+        }
+    }
 
     useEffect(() => {
         if (isStacked) {
             top.value = withTiming(topInitialValue, {
                 duration: ANIMATION_DURATION,
             })
-            paddingHorizontal.value = withTiming(paddingHorizontalInitialValue, {
+            paddingHorizontal.value = withTiming(getPaddingHorizontalInitialValue(), {
                 duration: ANIMATION_DURATION,
             })
         } else {
@@ -111,7 +123,7 @@ const AnimatedCard = ({ dapp, onDAppPress, index, isStacked }: AnimatedCardProps
                 duration: ANIMATION_DURATION,
             })
         }
-    }, [index, isStacked, paddingHorizontal, paddingHorizontalInitialValue, top, topFinalValue, topInitialValue])
+    }, [index, isStacked, paddingHorizontal, getPaddingHorizontalInitialValue, top, topFinalValue, topInitialValue])
 
     const backgroundColor = () => {
         if (isStacked) {
@@ -137,7 +149,7 @@ const AnimatedCard = ({ dapp, onDAppPress, index, isStacked }: AnimatedCardProps
                 dapp={dapp}
                 onDAppPress={onDAppPress}
                 disabled={isStacked && !isFirstCard}
-                iconName={iconName}
+                iconName={getIconName()}
                 iconPressDisabled={isFirstCard}
                 activeOpacity={isFirstCard ? 1 : undefined}
                 backgroundColor={backgroundColor()}

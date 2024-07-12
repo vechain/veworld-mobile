@@ -14,7 +14,7 @@ type BookmarkListProps = {
 }
 
 const BookmarkedDAppsList = ({ bookmarkedDApps, onDAppPress }: BookmarkListProps) => {
-    const [bottomSheetDapps, setBottomSheetDApps] = useState<DiscoveryDApp[]>([])
+    const [bottomSheetDApps, setBottomSheetDApps] = useState<DiscoveryDApp[]>([])
 
     const { ref, onOpen, onClose } = useBottomSheetModal()
 
@@ -65,7 +65,7 @@ const BookmarkedDAppsList = ({ bookmarkedDApps, onDAppPress }: BookmarkListProps
                 showsVerticalScrollIndicator={false}
                 showsHorizontalScrollIndicator={false}
             />
-            <StackedDappsBottomSheet ref={ref} dapps={bottomSheetDapps} onDAppPress={onDAppPress} onClose={onClose} />
+            <StackedDappsBottomSheet ref={ref} dapps={bottomSheetDApps} onDAppPress={onDAppPress} onClose={onClose} />
         </BaseView>
     )
 }

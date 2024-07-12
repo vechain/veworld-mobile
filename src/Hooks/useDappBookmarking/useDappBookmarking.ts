@@ -1,4 +1,6 @@
 import { useCallback, useMemo } from "react"
+import { AnalyticsEvent, DiscoveryDApp } from "~Constants"
+import { useAnalyticTracking } from "~Hooks"
 import {
     addBookmark,
     removeBookmark,
@@ -8,8 +10,6 @@ import {
     useAppSelector,
 } from "~Storage/Redux"
 import { URIUtils } from "~Utils"
-import { AnalyticsEvent, DiscoveryDApp } from "~Constants"
-import { useAnalyticTracking } from "~Hooks"
 
 export const useDappBookmarking = (url?: string, title?: string) => {
     const dispatch = useAppDispatch()
@@ -45,11 +45,11 @@ export const useDappBookmarking = (url?: string, title?: string) => {
             })
         } else {
             const existingDApp = allDApps.find(dapp => {
-                return URIUtils.compareURLs(URIUtils.clean(dapp.href), URIUtils.clean(url))
+                return URIUtils.compareURLs(URIUtils.getBaseURL(dapp.href), URIUtils.getBaseURL(url))
             })
 
             if (existingDApp) {
-                return dispatch(addBookmark(existingDApp))
+                return dispatch(addBookmark({ ...existingDApp, href: URIUtils.clean(url) }))
             } else {
                 const _url = new URL(url)
 

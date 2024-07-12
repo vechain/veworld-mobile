@@ -1,10 +1,10 @@
 import React, { useState } from "react"
 import { Image, ImageStyle, StyleProp, StyleSheet, useWindowDimensions } from "react-native"
-import { DiscoveryDApp } from "~Constants"
-import { BaseSpacer, BaseText, BaseTouchable } from "~Components"
-import { getAppHubIconUrl } from "../utils"
 import Animated, { ZoomIn, ZoomOut } from "react-native-reanimated"
+import { BaseSpacer, BaseText, BaseTouchable } from "~Components"
+import { DiscoveryDApp } from "~Constants"
 import { useThemedStyles } from "~Hooks"
+import { getAppHubIconUrl } from "../utils"
 
 type DAppCardProps = {
     columns: number
@@ -25,7 +25,11 @@ export const DAppCard = ({ columns, columnsGap, dapp, onPress }: DAppCardProps) 
 
     return (
         <Animated.View entering={ZoomIn} exiting={ZoomOut}>
-            <BaseTouchable style={[styles.rootContainer, { width: cardDimension }]} onPress={onPress}>
+            <BaseTouchable
+                style={[styles.rootContainer, { width: cardDimension }]}
+                onPress={onPress}
+                // Workaround -> https://github.com/mpiannucci/react-native-context-menu-view/issues/60#issuecomment-1453864955
+                onLongPress={() => {}}>
                 <BaseSpacer height={8} />
                 <Image
                     source={

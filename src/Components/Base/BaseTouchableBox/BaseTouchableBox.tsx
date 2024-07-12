@@ -109,8 +109,16 @@ const baseStyles =
         showOpacityWhenDisabled = true,
         opacity,
     }: BaseStyles) =>
-    (theme: ColorThemeType) =>
-        StyleSheet.create({
+    (theme: ColorThemeType) => {
+        const getOpacity = () => {
+            if (opacity) {
+                return opacity
+            } else {
+                return disabled && showOpacityWhenDisabled ? 0.5 : 1
+            }
+        }
+
+        return StyleSheet.create({
             container: {
                 flex,
                 width: w ?? "100%",
@@ -124,8 +132,9 @@ const baseStyles =
                 paddingHorizontal: px,
                 paddingVertical: py,
                 backgroundColor: bg ?? theme.colors.card,
-                opacity: opacity ? opacity : disabled && showOpacityWhenDisabled ? 0.5 : 1,
+                opacity: getOpacity(),
                 borderRadius: 16,
                 overflow: "hidden",
             },
         })
+    }

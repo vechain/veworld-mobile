@@ -36,7 +36,13 @@ export const FavoriteDAppCard: React.FC<Props> = memo(
             onDAppPress({ href: dapp.href })
         }, [dapp.href, onDAppPress])
 
-        const _iconName = iconName ? iconName : isBookMarked ? "bookmark" : "bookmark-outline"
+        const getIconName = () => {
+            if (iconName) {
+                return iconName
+            } else {
+                return isBookMarked ? "bookmark" : "bookmark-outline"
+            }
+        }
 
         return (
             <BaseTouchableBox
@@ -70,7 +76,7 @@ export const FavoriteDAppCard: React.FC<Props> = memo(
                 <BaseSpacer width={12} />
                 <BaseIcon
                     onPress={!iconPressDisabled ? toggleBookmark : undefined}
-                    name={_iconName}
+                    name={getIconName()}
                     color={theme.colors.text}
                     size={24}
                 />
