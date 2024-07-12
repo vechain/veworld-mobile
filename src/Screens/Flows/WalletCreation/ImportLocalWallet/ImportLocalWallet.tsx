@@ -34,6 +34,7 @@ import { UnlockKeystoreBottomSheet } from "./Components/UnlockKeystoreBottomShee
 import { UserCreatePasswordScreen } from "../UserCreatePasswordScreen"
 import { useHandleWalletCreation } from "~Screens/Flows/Onboarding/WelcomeScreen/useHandleWalletCreation"
 import { useNavigation } from "@react-navigation/native"
+import { Routes } from "~Navigation"
 
 const DEMO_MNEMONIC = "denial kitchen pet squirrel other broom bar gas better priority spoil cross"
 
@@ -66,7 +67,7 @@ export const ImportLocalWallet = () => {
 
     const { checkCanImportDevice } = useDeviceUtils()
 
-    const { isCloudKitAvailable, getAllWalletsFromCloudKit } = useCloudKit()
+    const { isCloudKitAvailable } = useCloudKit()
 
     const computeButtonType = useMemo(() => {
         if (textValue.length) return ButtonType.local
@@ -369,13 +370,13 @@ export const ImportLocalWallet = () => {
                         <BaseButton
                             action={async () =>
                                 computeButtonType === ButtonType.icloud
-                                    ? await getAllWalletsFromCloudKit()
+                                    ? nav.navigate(Routes.IMPORT_FROM_CLOUD)
                                     : handleVerify()
                             }
                             w={100}
                             title={
                                 computeButtonType === ButtonType.icloud
-                                    ? "Get from iCloud"
+                                    ? "Or get from iCloud"
                                     : LL.BTN_IMPORT_WALLET_VERIFY()
                             }
                             disabled={computeButtonType === ButtonType.unknown}

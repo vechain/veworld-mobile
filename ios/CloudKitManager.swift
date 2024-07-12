@@ -16,6 +16,7 @@ class CloudKitManager: NSObject {
   private let ROOT_ADDRESS = "rootAddress"
   private let WALLET_TYPE = "walletType"
   private let DATA = "data"
+  private let SALT = "salt"
   
   @objc
   static func requiresMainQueueSetup() -> Bool {
@@ -39,13 +40,14 @@ class CloudKitManager: NSObject {
   
   @available(iOS 15.0, *)
   @objc
-  func saveToCloudKit(_ rootAddress: String, data: String, walletType: String,  resolver: @escaping(RCTPromiseResolveBlock), rejecter reject: @escaping(RCTPromiseRejectBlock)) -> Void {
+  func saveToCloudKit(_ rootAddress: String, data: String, walletType: String, salt: String, resolver: @escaping(RCTPromiseResolveBlock), rejecter reject: @escaping(RCTPromiseRejectBlock)) -> Void {
     
     let recordID = CKRecord.ID(recordName: rootAddress)
     let wallet = CKRecord(recordType: FILE_NAME, recordID: recordID)
     wallet[ROOT_ADDRESS] = rootAddress as CKRecordValue
     wallet[WALLET_TYPE] = walletType  as CKRecordValue
     wallet.encryptedValues[DATA] = data
+    wallet.encryptedValues[SALT] = salt
  
     CKContainer.default().privateCloudDatabase.save(wallet) { record, error in
       if (error != nil) {
@@ -72,7 +74,7 @@ class CloudKitManager: NSObject {
     query.sortDescriptors = [sort]
     
     let operation = CKQueryOperation(query: query)
-    operation.desiredKeys = [ROOT_ADDRESS, WALLET_TYPE, DATA]
+    operation.desiredKeys = [ROOT_ADDRESS, WALLET_TYPE, DATA, SALT]
     
     var wallets = [[AnyHashable : Any]]()
     
@@ -82,6 +84,7 @@ class CloudKitManager: NSObject {
         self!.ROOT_ADDRESS : record[self!.ROOT_ADDRESS] as! String,
         self!.WALLET_TYPE : record[self!.WALLET_TYPE] as! String,
         self!.DATA : record.encryptedValues[self!.DATA] as! String,
+        self!.SALT : record.encryptedValues[self!.SALT] as! String,
       ] as [AnyHashable : Any]
       
       
@@ -110,7 +113,7 @@ class CloudKitManager: NSObject {
     let pred = NSPredicate(format: "\(ROOT_ADDRESS) == %@", rootAddress)
     let query = CKQuery(recordType: FILE_NAME, predicate: pred)
     let operation = CKQueryOperation(query: query)
-    operation.desiredKeys =  [ROOT_ADDRESS, WALLET_TYPE, DATA]
+    operation.desiredKeys =  [ROOT_ADDRESS, WALLET_TYPE, DATA, SALT]
     
     var wallet: [AnyHashable : Any] = ["" : ""]
     
@@ -119,6 +122,7 @@ class CloudKitManager: NSObject {
         self!.ROOT_ADDRESS : record[self!.ROOT_ADDRESS] as! String,
         self!.WALLET_TYPE : record[self!.WALLET_TYPE] as! String,
         self!.DATA : record.encryptedValues[self!.DATA] as! String,
+        self!.SALT : record.encryptedValues[self!.SALT] as! String,
       ] as [AnyHashable : Any]
     }
     

@@ -21,7 +21,7 @@ import {
 } from "~Components"
 import { useBackupMnemonic } from "./Hooks/useBackupMnemonic"
 import { useI18nContext } from "~i18n"
-import { BackupMnemonicBottomSheet, EnableBiometrics } from "./Components"
+import { EnableBiometrics } from "./Components"
 import { DEVICE_TYPE, LocalDevice } from "~Model"
 import { selectAreDevFeaturesEnabled, selectSelectedAccount, useAppDispatch, useAppSelector } from "~Storage/Redux"
 import { selectAnalyticsTrackingEnabled, selectLocalDevices } from "~Storage/Redux/Selectors"
@@ -38,12 +38,15 @@ import Animated, {
     withTiming,
 } from "react-native-reanimated"
 import { StyleSheet, Text } from "react-native"
+import { useNavigation } from "@react-navigation/native"
+import { Routes } from "~Navigation"
 
 const AnimatedBaseText = Animated.createAnimatedComponent(Text)
 
 export const PrivacyScreen = () => {
     // [START] - Hooks setup
     const { LL } = useI18nContext()
+    const nav = useNavigation()
 
     const dispatch = useAppDispatch()
 
@@ -58,12 +61,6 @@ export const PrivacyScreen = () => {
     const { isWalletSecurityBiometrics } = useWalletSecurity()
 
     const {
-        ref: BackupPhraseSheetRef,
-        openWithDelay: openBackupPhraseSheetWithDelay,
-        onClose: closeBackupPhraseSheet,
-    } = useBottomSheetModal()
-
-    const {
         ref: walletMgmtBottomSheetRef,
         openWithDelay: openWalletMgmtSheetWithDelay,
         onClose: closeWalletMgmtSheet,
@@ -71,16 +68,26 @@ export const PrivacyScreen = () => {
 
     const { isOpen: isPasswordPromptOpen, onOpen: openPasswordPrompt, onClose: closePasswordPrompt } = useDisclosure()
 
-    const { onPasswordSuccess, checkSecurityBeforeOpening, handleOnSelectedWallet, mnemonicArray, deviceToBackup } =
-        useBackupMnemonic({
-            closePasswordPrompt,
-            openBackupPhraseSheetWithDelay,
-            openWalletMgmtSheetWithDelay,
-            openPasswordPrompt,
-            closeWalletMgmtSheet,
-            devices,
-            isWalletSecurityBiometrics,
-        })
+    const openBackupPhraseSheetWithDelay = useCallback(
+        (delay: number, mnemonicArray: string[], deviceToBackup: LocalDevice) => {
+            if (!mnemonicArray.length) return
+
+            setTimeout(() => {
+                nav.navigate(Routes.ICLOUD_MNEMONIC_BACKUP, { mnemonicArray, deviceToBackup })
+            }, delay)
+        },
+        [nav],
+    )
+
+    const { onPasswordSuccess, checkSecurityBeforeOpening, handleOnSelectedWallet } = useBackupMnemonic({
+        closePasswordPrompt,
+        openBackupPhraseSheetWithDelay,
+        openWalletMgmtSheetWithDelay,
+        openPasswordPrompt,
+        closeWalletMgmtSheet,
+        devices,
+        isWalletSecurityBiometrics,
+    })
 
     const {
         onEditPinPress,
@@ -228,13 +235,6 @@ export const PrivacyScreen = () => {
                                 />
                             </>
                         )}
-
-                        <BackupMnemonicBottomSheet
-                            ref={BackupPhraseSheetRef}
-                            onClose={closeBackupPhraseSheet}
-                            mnemonicArray={mnemonicArray}
-                            deviceToBackup={deviceToBackup}
-                        />
 
                         <SelectDeviceBottomSheet<LocalDevice>
                             ref={walletMgmtBottomSheetRef}

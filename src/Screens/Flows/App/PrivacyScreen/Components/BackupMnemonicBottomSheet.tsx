@@ -1,4 +1,4 @@
-import React, { forwardRef, useState } from "react"
+import React, { forwardRef, memo, useCallback, useState } from "react"
 import { BottomSheetModalMethods } from "@gorhom/bottom-sheet/lib/typescript/types"
 import {
     BaseButton,
@@ -16,6 +16,7 @@ import { useBottomSheetModal, useCloudKit, useCopyClipboard, useThemedStyles } f
 import { StyleSheet } from "react-native"
 import { LocalDevice } from "~Model"
 import { COLORS } from "~Constants"
+import { CryptoUtils, HexUtils } from "~Utils"
 
 type Props = {
     mnemonicArray: string[]
@@ -23,17 +24,37 @@ type Props = {
     onClose: () => void
 }
 
-export const BackupMnemonicBottomSheet = forwardRef<BottomSheetModalMethods, Props>(
-    ({ mnemonicArray, deviceToBackup }, ref) => {
+export const BackupMnemonicBottomSheet = memo(
+    forwardRef<BottomSheetModalMethods, Props>(({ mnemonicArray, deviceToBackup, onClose }, ref) => {
         const { LL } = useI18nContext()
-
         const { styles, theme } = useThemedStyles(baseStyles)
-
-        const { isCloudKitAvailable, isWalletBackedUp } = useCloudKit(deviceToBackup)
-
+        const { isCloudKitAvailable, isWalletBackedUp, saveWalletToCloudKit } = useCloudKit()
         const { onCopyToClipboard } = useCopyClipboard()
-
         const { ref: warningRef, onOpen, onClose: onCloseWarning } = useBottomSheetModal()
+
+        const onHandleBackupToCloudKit = useCallback(
+            async (password: string) => {
+                onCloseWarning()
+
+                const salt = HexUtils.generateRandom(256)
+                const mnemonic = CryptoUtils.encrypt(mnemonicArray, password, salt)
+                await saveWalletToCloudKit({
+                    mnemonic,
+                    _rootAddress: deviceToBackup?.rootAddress,
+                    deviceType: deviceToBackup?.type,
+                    salt,
+                })
+                onClose()
+            },
+            [
+                deviceToBackup?.rootAddress,
+                deviceToBackup?.type,
+                mnemonicArray,
+                onClose,
+                onCloseWarning,
+                saveWalletToCloudKit,
+            ],
+        )
 
         return (
             <BaseBottomSheet snapPoints={["78%"]} ref={ref}>
@@ -115,7 +136,12 @@ export const BackupMnemonicBottomSheet = forwardRef<BottomSheetModalMethods, Pro
                             {isCloudKitAvailable && (
                                 <>
                                     <BaseSpacer height={56} />
-                                    <BaseButton w={100} action={onOpen} title={"Back up on iCloud"} />
+                                    <BaseButton
+                                        w={100}
+                                        action={onOpen}
+                                        title={"Back up on iCloud"}
+                                        disabled={isWalletBackedUp}
+                                    />
                                     <BaseSpacer height={24} />
                                 </>
                             )}
@@ -123,10 +149,10 @@ export const BackupMnemonicBottomSheet = forwardRef<BottomSheetModalMethods, Pro
                     }
                 />
 
-                <CloudKitWarningBottomSheet ref={warningRef} onCloseWarning={onCloseWarning} />
+                <CloudKitWarningBottomSheet ref={warningRef} onHandleBackupToCloudKit={onHandleBackupToCloudKit} />
             </BaseBottomSheet>
         )
-    },
+    }),
 )
 
 const baseStyles = () =>
@@ -142,70 +168,77 @@ const baseStyles = () =>
     })
 
 type WarningProps = {
-    onCloseWarning: () => void
+    onHandleBackupToCloudKit: (password: string) => void
 }
 
-const CloudKitWarningBottomSheet = forwardRef<BottomSheetModalMethods, WarningProps>(({ onCloseWarning }, ref) => {
-    const [secureText1, setsecureText1] = useState(true)
-    const [secureText2, setsecureText2] = useState(true)
+const CloudKitWarningBottomSheet = forwardRef<BottomSheetModalMethods, WarningProps>(
+    ({ onHandleBackupToCloudKit }, ref) => {
+        const [secureText1, setsecureText1] = useState(true)
+        const [secureText2, setsecureText2] = useState(true)
 
-    const [password1, setPassword1] = useState("")
-    const [password2, setPassword2] = useState("")
+        const [password1, setPassword1] = useState("")
+        const [password2, setPassword2] = useState("")
 
-    const { styles } = useThemedStyles(baseStyles)
+        const { styles } = useThemedStyles(baseStyles)
 
-    return (
-        <BaseBottomSheet snapPoints={["78%"]} ref={ref}>
-            <Layout
-                noBackButton
-                noMargin
-                noStaticBottomPadding
-                hasSafeArea={false}
-                fixedBody={
-                    <BaseView flex={1}>
-                        <BaseText typographyFont="subTitleBold">{"Cloud Backup Password"}</BaseText>
-                        <BaseSpacer height={48} />
-                        {/* Warning ICON */}
-                        <BaseView justifyContent="center" alignItems="center">
-                            <BaseView justifyContent="center" bg={COLORS.PASTEL_ORANGE} style={styles.warningIcon}>
-                                <BaseIcon my={8} size={22} name="alert-outline" color={COLORS.MEDIUM_ORANGE} />
+        const checkPasswordValidity = useCallback(() => {
+            // TODO-vas - check password validity
+            onHandleBackupToCloudKit(password2)
+        }, [onHandleBackupToCloudKit, password2])
+
+        return (
+            <BaseBottomSheet snapPoints={["78%"]} ref={ref}>
+                <Layout
+                    noBackButton
+                    noMargin
+                    noStaticBottomPadding
+                    hasSafeArea={false}
+                    fixedBody={
+                        <BaseView flex={1}>
+                            <BaseText typographyFont="subTitleBold">{"Cloud Backup Password"}</BaseText>
+                            <BaseSpacer height={48} />
+                            {/* Warning ICON */}
+                            <BaseView justifyContent="center" alignItems="center">
+                                <BaseView justifyContent="center" bg={COLORS.PASTEL_ORANGE} style={styles.warningIcon}>
+                                    <BaseIcon my={8} size={22} name="alert-outline" color={COLORS.MEDIUM_ORANGE} />
+                                </BaseView>
                             </BaseView>
+                            <BaseSpacer height={48} />
+                            <BaseText>
+                                {
+                                    // eslint-disable-next-line max-len
+                                    "This password will secure your secret recovery phrase in the cloud. VeWorld does NOT have access to your password. We can NOT reset it if you lose it, so keep it safe."
+                                }
+                            </BaseText>
+                            <BaseSpacer height={24} />
+                            <BaseTextInput
+                                placeholder="Chooe password"
+                                secureTextEntry={secureText1}
+                                rightIcon={secureText1 ? "eye-off" : "eye"}
+                                onIconPress={() => setsecureText1(prev => !prev)}
+                                value={password1}
+                                setValue={setPassword1}
+                            />
+                            <BaseSpacer height={24} />
+                            <BaseTextInput
+                                placeholder="Confirm password"
+                                secureTextEntry={secureText2}
+                                rightIcon={secureText2 ? "eye-off" : "eye"}
+                                onIconPress={() => setsecureText2(prev => !prev)}
+                                value={password2}
+                                setValue={setPassword2}
+                            />
                         </BaseView>
-                        <BaseSpacer height={48} />
-                        <BaseText>
-                            {
-                                // eslint-disable-next-line max-len
-                                "This password will secure your secret recovery phrase in the cloud. VeWorld does NOT have access to your password. We can NOT reset it if you lose it, so keep it safe."
-                            }
-                        </BaseText>
-                        <BaseSpacer height={24} />
-                        <BaseTextInput
-                            placeholder="Chooe password"
-                            secureTextEntry={secureText1}
-                            rightIcon={secureText1 ? "eye-off" : "eye"}
-                            onIconPress={() => setsecureText1(prev => !prev)}
-                            value={password1}
-                            setValue={setPassword1}
-                        />
-                        <BaseSpacer height={24} />
-                        <BaseTextInput
-                            placeholder="Confirm password"
-                            secureTextEntry={secureText2}
-                            rightIcon={secureText2 ? "eye-off" : "eye"}
-                            onIconPress={() => setsecureText2(prev => !prev)}
-                            value={password2}
-                            setValue={setPassword2}
-                        />
-                    </BaseView>
-                }
-                footer={
-                    <>
-                        <BaseSpacer height={48} />
-                        <BaseButton title="Proceed" action={onCloseWarning} />
-                        <BaseSpacer height={24} />
-                    </>
-                }
-            />
-        </BaseBottomSheet>
-    )
-})
+                    }
+                    footer={
+                        <>
+                            <BaseSpacer height={48} />
+                            <BaseButton title="Proceed" action={checkPasswordValidity} />
+                            <BaseSpacer height={24} />
+                        </>
+                    }
+                />
+            </BaseBottomSheet>
+        )
+    },
+)

@@ -17,6 +17,7 @@ export const ImportWalletInput = ({ value, onChangeText, isError }: Props) => {
         <TextInput
             style={themedStyles.container}
             autoCapitalize="none"
+            placeholder="Enter your Mnemonic phrase, Private Key or Keystore file here"
             autoCorrect={false}
             autoComplete="off"
             multiline={true}

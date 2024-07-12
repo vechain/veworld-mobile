@@ -16,6 +16,7 @@ RCT_EXTERN_METHOD(checkCloudKitAvailability: (RCTPromiseResolveBlock)resolve rej
 RCT_EXTERN_METHOD(saveToCloudKit: (NSString *)rootAddress
                   data:(NSString *)data
                   walletType:(NSString *)walletType
+                  salt:(NSString *)salt
                   resolver:(RCTPromiseResolveBlock)resolve
                   rejecter:(RCTPromiseRejectBlock)reject)
 
