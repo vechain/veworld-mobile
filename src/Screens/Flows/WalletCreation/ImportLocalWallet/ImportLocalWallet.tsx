@@ -1,4 +1,4 @@
-import React, { useCallback, useMemo, useRef, useState } from "react"
+import React, { useCallback, useEffect, useMemo, useRef, useState } from "react"
 import {
     BackButtonHeader,
     BaseButton,
@@ -44,6 +44,13 @@ enum ButtonType {
     unknown,
 }
 
+type ClpudKitWallet = {
+    data: string
+    rootAddress: string
+    walletType: string
+    salt: string
+}
+
 export const ImportLocalWallet = () => {
     const { LL } = useI18nContext()
     const theme = useTheme()
@@ -67,13 +74,24 @@ export const ImportLocalWallet = () => {
 
     const { checkCanImportDevice } = useDeviceUtils()
 
-    const { isCloudKitAvailable } = useCloudKit()
+    const { isCloudKitAvailable, getAllWalletsFromCloudKit } = useCloudKit()
+
+    const [CloudKitWallets, setCloudKitWallets] = useState<ClpudKitWallet[] | null>(null)
+
+    useEffect(() => {
+        const init = async () => {
+            const wallets = await getAllWalletsFromCloudKit()
+            setCloudKitWallets(wallets)
+        }
+
+        isCloudKitAvailable && init()
+    }, [getAllWalletsFromCloudKit, isCloudKitAvailable])
 
     const computeButtonType = useMemo(() => {
         if (textValue.length) return ButtonType.local
-        if (isCloudKitAvailable && !textValue.length) return ButtonType.icloud
+        if (isCloudKitAvailable && !textValue.length && !!CloudKitWallets?.length) return ButtonType.icloud
         return ButtonType.unknown
-    }, [isCloudKitAvailable, textValue.length])
+    }, [CloudKitWallets?.length, isCloudKitAvailable, textValue.length])
 
     const {
         ref: unlockKeystoreBottomSheetRef,
@@ -368,20 +386,30 @@ export const ImportLocalWallet = () => {
                         )}
 
                         <BaseButton
+                            leftIcon={
+                                computeButtonType === ButtonType.icloud ? (
+                                    <BaseIcon
+                                        name="apple-icloud"
+                                        color={theme.colors.textReversed}
+                                        style={styles.ickoudIcon}
+                                    />
+                                ) : undefined
+                            }
                             action={async () =>
                                 computeButtonType === ButtonType.icloud
                                     ? nav.navigate(Routes.IMPORT_FROM_CLOUD)
                                     : handleVerify()
                             }
-                            w={100}
+                            style={styles.button}
                             title={
                                 computeButtonType === ButtonType.icloud
-                                    ? "Or get from iCloud"
+                                    ? "or use iCloud "
                                     : LL.BTN_IMPORT_WALLET_VERIFY()
                             }
                             disabled={computeButtonType === ButtonType.unknown}
                             disabledAction={disabledAction}
                             disabledActionHaptics="Heavy"
+                            haptics="Light"
                         />
 
                         <RequireUserPassword
@@ -398,4 +426,6 @@ export const ImportLocalWallet = () => {
 
 const styles = StyleSheet.create({
     icon: { marginHorizontal: 20 },
+    ickoudIcon: { marginLeft: -12, marginRight: 12 },
+    button: { justifyContent: "center", height: 48 },
 })

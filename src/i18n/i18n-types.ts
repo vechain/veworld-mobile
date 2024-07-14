@@ -620,6 +620,10 @@ type RootTranslation = {
 	 */
 	TITLE_WALLET_IMPORT_LOCAL: string
 	/**
+	 * I​m​p​o​r​t​ ​W​a​l​l​e​t​ ​f​r​o​m​ ​i​C​l​o​u​d
+	 */
+	TITLE_IMPORT_WALLET_FROM_ICLOUD: string
+	/**
 	 * O​b​s​e​r​v​e​ ​W​a​l​l​e​t
 	 */
 	TITLE_OBSERVE_WALLET: string
@@ -3589,6 +3593,10 @@ export type TranslationFunctions = {
 	 * Import Local Wallet
 	 */
 	TITLE_WALLET_IMPORT_LOCAL: () => LocalizedString
+	/**
+	 * Import Wallet from iCloud
+	 */
+	TITLE_IMPORT_WALLET_FROM_ICLOUD: () => LocalizedString
 	/**
 	 * Observe Wallet
 	 */

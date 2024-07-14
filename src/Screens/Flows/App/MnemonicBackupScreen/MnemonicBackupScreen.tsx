@@ -140,7 +140,7 @@ export const MnemonicBackupScreen = ({ route }: Props) => {
                                     w={100}
                                     action={onOpen}
                                     title={"Back up on iCloud"}
-                                    disabled={isWalletBackedUp}
+                                    disabled={isWalletBackedUp || isLoading}
                                 />
                             </>
                         )}

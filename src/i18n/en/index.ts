@@ -173,6 +173,7 @@ const en: BaseTranslation = {
     TITLE_USER_PASSWORD: "Choose your 6-digit PIN",
     TITLE_USER_PIN: "Insert your 6-digit PIN",
     TITLE_WALLET_IMPORT_LOCAL: "Import Local Wallet",
+    TITLE_IMPORT_WALLET_FROM_ICLOUD: "Import Wallet from iCloud",
     TITLE_OBSERVE_WALLET: "Observe Wallet",
     TITLE_ALERT_FACE_ID_CANCELLED: "Face ID Cancelled",
     TITLE_ALERT_CAMERA_PERMISSION: "Camera Permissions",
