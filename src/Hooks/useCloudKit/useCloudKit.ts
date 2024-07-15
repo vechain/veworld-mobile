@@ -17,16 +17,25 @@ export const useCloudKit = () => {
             mnemonic,
             _rootAddress,
             deviceType,
+            firstAccountAddress,
             salt,
         }: {
             mnemonic: string
+            firstAccountAddress: string
             _rootAddress?: string
             deviceType?: DEVICE_TYPE
             salt: string
         }) => {
-            if (!mnemonic || !_rootAddress || !deviceType || !salt) throw new Error("No device to backup.")
+            if (!mnemonic || !_rootAddress || !deviceType || !salt || !firstAccountAddress)
+                throw new Error("No device to backup.") // TODO-vas - handle error with ui
             setIsLoading(true)
-            const result = await CloudKitManager.saveToCloudKit(_rootAddress, mnemonic, deviceType, salt)
+            const result = await CloudKitManager.saveToCloudKit(
+                _rootAddress,
+                mnemonic,
+                deviceType,
+                salt,
+                firstAccountAddress,
+            )
             info(ERROR_EVENTS.WALLET_CREATION, result)
             setIsLoading(false)
         },

@@ -17,6 +17,7 @@ RCT_EXTERN_METHOD(saveToCloudKit: (NSString *)rootAddress
                   data:(NSString *)data
                   walletType:(NSString *)walletType
                   salt:(NSString *)salt
+                  firstAccountAddress:(NSString *)firstAccountAddress
                   resolver:(RCTPromiseResolveBlock)resolve
                   rejecter:(RCTPromiseRejectBlock)reject)
 

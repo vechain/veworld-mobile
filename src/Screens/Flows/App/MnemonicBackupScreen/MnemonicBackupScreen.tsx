@@ -15,7 +15,7 @@ import { useI18nContext } from "~i18n"
 import { useBottomSheetModal, useCloudKit, useCopyClipboard, useThemedStyles } from "~Hooks"
 import { StyleSheet } from "react-native"
 import { COLORS } from "~Constants"
-import { CryptoUtils, HexUtils } from "~Utils"
+import { AddressUtils, CryptoUtils, DeviceUtils, HexUtils } from "~Utils"
 import { NativeStackScreenProps } from "@react-navigation/native-stack"
 import { RootStackParamListSettings, Routes } from "~Navigation"
 import { useNavigation } from "@react-navigation/native"
@@ -43,12 +43,17 @@ export const MnemonicBackupScreen = ({ route }: Props) => {
         async (password: string) => {
             onCloseWarning()
 
+            const { device } = DeviceUtils.generateDeviceForMnemonic(mnemonicArray, 999999999, "alias")
+            if (!device.xPub) return // TODO-vas - handle error
+            const firstAccountAddress = AddressUtils.getAddressFromXPub(device.xPub, 0)
+
             const salt = HexUtils.generateRandom(256)
             const mnemonic = CryptoUtils.encrypt(mnemonicArray, password, salt)
             await saveWalletToCloudKit({
                 mnemonic,
                 _rootAddress: deviceToBackup?.rootAddress,
                 deviceType: deviceToBackup?.type,
+                firstAccountAddress,
                 salt,
             })
             getWalletByRootAddress(deviceToBackup!.rootAddress)

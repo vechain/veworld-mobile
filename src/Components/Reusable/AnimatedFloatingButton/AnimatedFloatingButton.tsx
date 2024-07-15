@@ -4,15 +4,15 @@ import LinearGradient from "react-native-linear-gradient"
 import Animated, { ReduceMotion, useAnimatedStyle, useSharedValue, withSpring } from "react-native-reanimated"
 import { BaseButton, BaseView } from "~Components"
 import { useKeyboard, useThemedStyles } from "~Hooks"
-import { useI18nContext } from "~i18n"
 
-type WebSearchFloatingButtonProps = {
+type Props = {
+    title: string
     isVisible: boolean
     onPress: () => void
+    extraBottom?: number
 }
 
-export const WebSearchFloatingButton = React.memo(({ isVisible, onPress }: WebSearchFloatingButtonProps) => {
-    const { LL } = useI18nContext()
+export const AnimatedFloatingButton = React.memo(({ title, isVisible, onPress, extraBottom = 0 }: Props) => {
     const { visible: keyboardVisible, bottomStyle } = useKeyboard()
     const { width: windowWidth } = useWindowDimensions()
     const { styles, theme } = useThemedStyles(baseStyles)
@@ -22,7 +22,7 @@ export const WebSearchFloatingButton = React.memo(({ isVisible, onPress }: WebSe
 
     const animatedStyle = useAnimatedStyle(() => {
         return {
-            bottom: bottom.value,
+            bottom: bottom.value + extraBottom,
         }
     })
 
@@ -54,7 +54,7 @@ export const WebSearchFloatingButton = React.memo(({ isVisible, onPress }: WebSe
                         size="lg"
                         haptics="Medium"
                         w={100}
-                        title={LL.DISCOVER_WEB_SEARCH_FLOATING_BUTTON_LABEL()}
+                        title={title}
                         action={onPress}
                         activeOpacity={0.94}
                     />

@@ -58,13 +58,11 @@ export const OnboardingStack = () => {
                 options={{ headerShown: false }}
             />
 
-            <Onboarding.Group screenOptions={{ presentation: "fullScreenModal" }}>
-                <Onboarding.Screen
-                    name={Routes.IMPORT_FROM_CLOUD}
-                    component={ImportFromCloudScreen}
-                    options={{ headerShown: false }}
-                />
-            </Onboarding.Group>
+            <Onboarding.Screen
+                name={Routes.IMPORT_FROM_CLOUD}
+                component={ImportFromCloudScreen}
+                options={{ headerShown: false }}
+            />
         </Onboarding.Navigator>
     )
 }
