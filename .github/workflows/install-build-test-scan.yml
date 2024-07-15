@@ -18,10 +18,12 @@ concurrency:
 jobs:
   build-and-test-ios:
     uses: ./.github/workflows/e2e-ios.yml
+    needs: scan
     secrets: inherit
 
   build-and-test-android:
       uses: ./.github/workflows/e2e-android.yml
+      needs: scan
       secrets: inherit
 
   scan: 
@@ -29,7 +31,7 @@ jobs:
     steps:
     - name: Checkout repository
       uses: actions/checkout@v3
-      
+
     - name: Jest Coverage Comment
       if: always()
       uses: MishaKav/jest-coverage-comment@main
