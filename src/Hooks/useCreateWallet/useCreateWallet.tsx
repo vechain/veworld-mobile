@@ -45,15 +45,17 @@ export const useCreateWallet = () => {
             mnemonic,
             privateKey,
             userPassword,
+            isCloudKit,
             onError,
         }: {
             mnemonic?: string[]
             privateKey?: string
             userPassword?: string
+            isCloudKit: boolean
             onError?: (error: unknown) => void
         }) => {
             try {
-                const { device, wallet } = createDevice(mnemonic, privateKey)
+                const { device, wallet } = createDevice(isCloudKit, mnemonic, privateKey)
 
                 const encryptedWallet = await WalletEncryptionKeyHelper.encryptWallet(wallet, userPassword)
 

@@ -1,5 +1,4 @@
-import React, { forwardRef, useCallback, useEffect, useState } from "react"
-import { BottomSheetModalMethods } from "@gorhom/bottom-sheet/lib/typescript/types"
+import React, { useCallback, useEffect } from "react"
 import {
     BaseButton,
     BaseIcon,
@@ -7,14 +6,12 @@ import {
     BaseText,
     BaseView,
     MnemonicCard,
-    BaseBottomSheet,
-    BaseTextInput,
     Layout,
+    CloudKitWarningBottomSheet,
 } from "~Components"
 import { useI18nContext } from "~i18n"
 import { useBottomSheetModal, useCloudKit, useCopyClipboard, useThemedStyles } from "~Hooks"
 import { StyleSheet } from "react-native"
-import { COLORS } from "~Constants"
 import { AddressUtils, CryptoUtils, DeviceUtils, HexUtils } from "~Utils"
 import { NativeStackScreenProps } from "@react-navigation/native-stack"
 import { RootStackParamListSettings, Routes } from "~Navigation"
@@ -43,7 +40,13 @@ export const MnemonicBackupScreen = ({ route }: Props) => {
         async (password: string) => {
             onCloseWarning()
 
-            const { device } = DeviceUtils.generateDeviceForMnemonic(mnemonicArray, 999999999, "alias")
+            const { device } = DeviceUtils.generateDeviceForMnemonic(
+                mnemonicArray,
+                999999999,
+                "alias",
+                undefined,
+                false,
+            )
             if (!device.xPub) return // TODO-vas - handle error
             const firstAccountAddress = AddressUtils.getAddressFromXPub(device.xPub, 0)
 
@@ -56,6 +59,7 @@ export const MnemonicBackupScreen = ({ route }: Props) => {
                 firstAccountAddress,
                 salt,
             })
+
             getWalletByRootAddress(deviceToBackup!.rootAddress)
             nav.goBack()
         },
@@ -153,7 +157,11 @@ export const MnemonicBackupScreen = ({ route }: Props) => {
                 }
             />
 
-            <CloudKitWarningBottomSheet ref={warningRef} onHandleBackupToCloudKit={onHandleBackupToCloudKit} />
+            <CloudKitWarningBottomSheet
+                ref={warningRef}
+                onHandleBackupToCloudKit={onHandleBackupToCloudKit}
+                openLocation="Backup_Screen"
+            />
         </>
     )
 }
@@ -163,85 +171,4 @@ const baseStyles = () =>
         icon: {
             marginLeft: 6,
         },
-        warningIcon: {
-            width: 44,
-            height: 44,
-            borderRadius: 12,
-        },
     })
-
-type WarningProps = {
-    onHandleBackupToCloudKit: (password: string) => void
-}
-
-const CloudKitWarningBottomSheet = forwardRef<BottomSheetModalMethods, WarningProps>(
-    ({ onHandleBackupToCloudKit }, ref) => {
-        const [secureText1, setsecureText1] = useState(true)
-        const [secureText2, setsecureText2] = useState(true)
-
-        const [password1, setPassword1] = useState("")
-        const [password2, setPassword2] = useState("")
-
-        const { styles } = useThemedStyles(baseStyles)
-
-        const checkPasswordValidity = useCallback(() => {
-            // TODO-vas - check password validity
-            onHandleBackupToCloudKit(password2)
-        }, [onHandleBackupToCloudKit, password2])
-
-        return (
-            <BaseBottomSheet snapPoints={["78%"]} ref={ref}>
-                <Layout
-                    noBackButton
-                    noMargin
-                    noStaticBottomPadding
-                    hasSafeArea={false}
-                    fixedBody={
-                        <BaseView flex={1}>
-                            <BaseText typographyFont="subTitleBold">{"Cloud Backup Password"}</BaseText>
-                            <BaseSpacer height={48} />
-                            {/* Warning ICON */}
-                            <BaseView justifyContent="center" alignItems="center">
-                                <BaseView justifyContent="center" bg={COLORS.PASTEL_ORANGE} style={styles.warningIcon}>
-                                    <BaseIcon my={8} size={22} name="alert-outline" color={COLORS.MEDIUM_ORANGE} />
-                                </BaseView>
-                            </BaseView>
-                            <BaseSpacer height={48} />
-                            <BaseText>
-                                {
-                                    // eslint-disable-next-line max-len
-                                    "This password will secure your secret recovery phrase in the cloud. VeWorld does NOT have access to your password. We can NOT reset it if you lose it, so keep it safe."
-                                }
-                            </BaseText>
-                            <BaseSpacer height={24} />
-                            <BaseTextInput
-                                placeholder="Chooe password"
-                                secureTextEntry={secureText1}
-                                rightIcon={secureText1 ? "eye-off" : "eye"}
-                                onIconPress={() => setsecureText1(prev => !prev)}
-                                value={password1}
-                                setValue={setPassword1}
-                            />
-                            <BaseSpacer height={24} />
-                            <BaseTextInput
-                                placeholder="Confirm password"
-                                secureTextEntry={secureText2}
-                                rightIcon={secureText2 ? "eye-off" : "eye"}
-                                onIconPress={() => setsecureText2(prev => !prev)}
-                                value={password2}
-                                setValue={setPassword2}
-                            />
-                        </BaseView>
-                    }
-                    footer={
-                        <>
-                            <BaseSpacer height={48} />
-                            <BaseButton title="Proceed" action={checkPasswordValidity} />
-                            <BaseSpacer height={24} />
-                        </>
-                    }
-                />
-            </BaseBottomSheet>
-        )
-    },
-)

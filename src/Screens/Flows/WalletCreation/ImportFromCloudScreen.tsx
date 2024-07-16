@@ -1,21 +1,26 @@
-import React, { useCallback, useEffect, useMemo, useState } from "react"
+import React, { useCallback, useEffect, useMemo, useRef, useState } from "react"
 import { FlatList, StyleSheet } from "react-native"
 import { getTimeZone } from "react-native-localize"
 import {
     AccountIcon,
     AnimatedFloatingButton,
+    BackButtonHeader,
     BaseIcon,
+    BaseModal,
     BaseSpacer,
     BaseText,
     BaseTouchableBox,
     BaseView,
+    CloudKitWarningBottomSheet,
     Layout,
 } from "~Components"
-import { ColorThemeType, VET } from "~Constants"
-import { useCloudKit, useThemedStyles, useVns } from "~Hooks"
+import { AnalyticsEvent, ColorThemeType, VET } from "~Constants"
+import { useAnalyticTracking, useBottomSheetModal, useCloudKit, useDeviceUtils, useThemedStyles, useVns } from "~Hooks"
 import { useI18nContext } from "~i18n"
-import { selectSelectedNetwork, useAppSelector } from "~Storage/Redux"
-import { AddressUtils, BalanceUtils, BigNutils, DateUtils } from "~Utils"
+import { selectHasOnboarded, selectSelectedNetwork, useAppSelector } from "~Storage/Redux"
+import { AddressUtils, BalanceUtils, BigNutils, CryptoUtils, DateUtils } from "~Utils"
+import { useHandleWalletCreation } from "../Onboarding/WelcomeScreen/useHandleWalletCreation"
+import { UserCreatePasswordScreen } from "./UserCreatePasswordScreen"
 
 type CloudKitWallet = {
     data: string
@@ -27,11 +32,25 @@ type CloudKitWallet = {
 }
 
 export const ImportFromCloudScreen = () => {
-    const { styles } = useThemedStyles(baseStyles)
+    const userHasOnboarded = useAppSelector(selectHasOnboarded)
+    const track = useAnalyticTracking()
+    const { styles, theme } = useThemedStyles(baseStyles)
     const { getAllWalletsFromCloudKit, isLoading } = useCloudKit()
     const { LL } = useI18nContext()
     const [CcoudKitWallets, setCloudKitWallets] = useState<CloudKitWallet[] | null>(null)
     const [selected, setSelected] = useState<CloudKitWallet | null>(null)
+    const { ref: warningRef, onOpen, onClose: onCloseWarning } = useBottomSheetModal()
+    const { checkCanImportDevice } = useDeviceUtils()
+    const mnemonicCache = useRef<string[]>()
+
+    const {
+        onCreateWallet,
+        // importOnboardedWallet,
+        isOpen,
+        isError: isCreateError,
+        onSuccess,
+        onClose: onCloseCreateFlow,
+    } = useHandleWalletCreation()
 
     const Seperator = useMemo(() => <BaseSpacer height={16} />, [])
 
@@ -40,20 +59,35 @@ export const ImportFromCloudScreen = () => {
             const wallets = await getAllWalletsFromCloudKit()
             setCloudKitWallets(wallets)
         }
-
         init()
     }, [getAllWalletsFromCloudKit])
 
-    const handleOnPress = useCallback(() => {
-        // TODO-vas - handle if selected is null
-        if (selected) {
-            // TODO-vas - create wallet
-        }
-    }, [selected])
+    const handleOnPress = useCallback(
+        (password: string) => {
+            onCloseWarning()
+            // TODO-vas - handle if selected is null
+            if (selected) {
+                const mnemonic = CryptoUtils.decrypt(selected.data, password, selected.salt) as string[]
+                const isCloudKit = true
+                try {
+                    checkCanImportDevice(isCloudKit, mnemonic)
+                    mnemonicCache.current = mnemonic
+                    track(AnalyticsEvent.IMPORT_MNEMONIC_SUBMITTED)
+                    if (userHasOnboarded) {
+                        // checkIdentityBeforeOpening_1()
+                    } else {
+                        onCreateWallet({ importMnemonic: mnemonic, isCloudKit })
+                    }
+                } catch (err) {
+                    // eslint-disable-next-line no-console
+                    console.log(err)
+                }
+            }
+        },
+        [checkCanImportDevice, onCloseWarning, onCreateWallet, selected, track, userHasOnboarded],
+    )
 
-    // TODO-vas - fix flatlist height when wallets don't reach the end of the screen
-
-    //TODO-vas : Add sceleton loader
+    //TODO-vas : Add sceleton loader on the flatlist itself
     if (isLoading) return <BaseText>LOADING .....</BaseText>
 
     return (
@@ -74,12 +108,33 @@ export const ImportFromCloudScreen = () => {
                         />
                     )}
 
-                    <AnimatedFloatingButton
-                        title="Import"
-                        extraBottom={24}
-                        isVisible={!!selected}
-                        onPress={handleOnPress}
+                    <AnimatedFloatingButton title="Import" extraBottom={24} isVisible={!!selected} onPress={onOpen} />
+                    <CloudKitWarningBottomSheet
+                        ref={warningRef}
+                        onHandleBackupToCloudKit={handleOnPress}
+                        openLocation="Import_Screen"
                     />
+
+                    {!!isCreateError && (
+                        <BaseText my={10} color={theme.colors.danger}>
+                            {isCreateError}
+                        </BaseText>
+                    )}
+
+                    <BaseModal isOpen={isOpen} onClose={onCloseCreateFlow}>
+                        <BaseView justifyContent="flex-start">
+                            <BackButtonHeader action={onCloseCreateFlow} hasBottomSpacer={false} />
+                            <UserCreatePasswordScreen
+                                onSuccess={pin =>
+                                    onSuccess({
+                                        pin,
+                                        mnemonic: mnemonicCache.current,
+                                        isCloudKit: true,
+                                    })
+                                }
+                            />
+                        </BaseView>
+                    </BaseModal>
                 </BaseView>
             }
         />

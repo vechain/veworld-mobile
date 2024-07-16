@@ -118,6 +118,7 @@ export const ImportLocalWallet = () => {
             await importOnboardedWallet({
                 importMnemonic: mnemonicCache.current,
                 privateKey: privateKeyCache.current,
+                isCloudKit: false,
                 pin,
             })
             nav.goBack()
@@ -153,7 +154,8 @@ export const ImportLocalWallet = () => {
         (_mnemonic: string) => {
             try {
                 const mnemonic = CryptoUtils.mnemonicStringToArray(_mnemonic)
-                checkCanImportDevice(mnemonic)
+                const isCloudKit = false
+                checkCanImportDevice(isCloudKit, mnemonic)
                 mnemonicCache.current = mnemonic
                 track(AnalyticsEvent.IMPORT_MNEMONIC_SUBMITTED)
                 if (userHasOnboarded) {
@@ -179,7 +181,8 @@ export const ImportLocalWallet = () => {
     const importPrivateKey = useCallback(
         (_privKey: string) => {
             try {
-                checkCanImportDevice(undefined, _privKey)
+                const isCloudKit = false
+                checkCanImportDevice(isCloudKit, undefined, _privKey)
                 privateKeyCache.current = _privKey
                 track(AnalyticsEvent.IMPORT_PRIVATE_KEY_SUBMITTED)
                 if (userHasOnboarded) {
@@ -206,7 +209,8 @@ export const ImportLocalWallet = () => {
         async (pwd: string) => {
             try {
                 const privateKey = await CryptoUtils.decryptKeystoreFile(textValue, pwd)
-                checkCanImportDevice(undefined, privateKey)
+                const isCloudKit = false
+                checkCanImportDevice(isCloudKit, undefined, privateKey)
                 privateKeyCache.current = privateKey
                 track(AnalyticsEvent.IMPORT_KEYSTORE_FILE_SUBMITTED)
                 if (userHasOnboarded) {
