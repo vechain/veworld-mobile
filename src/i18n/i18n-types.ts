@@ -1874,6 +1874,10 @@ type RootTranslation = {
 	 */
 	FAVOURITES_DAPPS_NO_RECORDS: string
 	/**
+	 * F​a​v​o​u​r​i​t​e​s
+	 */
+	FAVOURITES_BOTTOM_SHEET_TITLE: string
+	/**
 	 * B​r​o​w​s​e​r​ ​H​i​s​t​o​r​y
 	 */
 	BROWSER_HISTORY_TITLE: string
@@ -4822,6 +4826,10 @@ Try reconnect your device to the internet.
 	 * Could not find any dapps with this name
 	 */
 	FAVOURITES_DAPPS_NO_RECORDS: () => LocalizedString
+	/**
+	 * Favourites
+	 */
+	FAVOURITES_BOTTOM_SHEET_TITLE: () => LocalizedString
 	/**
 	 * Browser History
 	 */

@@ -1,69 +1,16 @@
 import { useNavigation } from "@react-navigation/native"
-import React, { memo, useCallback, useMemo, useState } from "react"
-import { FlatList, StyleProp, StyleSheet, ViewStyle } from "react-native"
-import { BaseIcon, BaseSearchInput, BaseSpacer, BaseText, BaseTouchableBox, BaseView, Layout } from "~Components"
+import React, { useCallback, useEffect, useMemo, useState } from "react"
+import { FlatList, ListRenderItemInfo, StyleSheet } from "react-native"
+import { BaseSearchInput, BaseSpacer, BaseText, BaseView, Layout } from "~Components"
 import { AnalyticsEvent, DiscoveryDApp } from "~Constants"
-import { useAnalyticTracking, useDappBookmarking, useThemedStyles } from "~Hooks"
+import { useAnalyticTracking, useThemedStyles } from "~Hooks"
 import { RumManager } from "~Logging"
 import { Routes } from "~Navigation"
 import { addNavigationToDApp, selectBookmarkedDapps, useAppDispatch, useAppSelector } from "~Storage/Redux"
 import { useI18nContext } from "~i18n"
-import { DAppIcon } from "./Components/DAppIcon"
+import { FavoriteDAppCard, FavoritesStackCard } from "./Components"
 import { EmptyResults } from "./Components/EmptyResults"
-import { getAppHubIconUrl } from "./utils"
-
-type Props = {
-    dapp: DiscoveryDApp
-    onDAppPress: ({ href }: { href: string; custom?: boolean }) => void
-    containerStyle?: StyleProp<ViewStyle>
-}
-
-export const DAppCard: React.FC<Props> = memo(({ onDAppPress, dapp, containerStyle }: Props) => {
-    const { styles, theme } = useThemedStyles(baseStyles)
-
-    const { isBookMarked, toggleBookmark } = useDappBookmarking(dapp.href, dapp?.name)
-
-    const onPressCard = useCallback(() => {
-        onDAppPress({ href: dapp.href })
-    }, [dapp.href, onDAppPress])
-
-    return (
-        <BaseView w={100} flexDirection="row" style={containerStyle}>
-            <BaseTouchableBox
-                haptics="Light"
-                action={onPressCard}
-                justifyContent="space-between"
-                containerStyle={styles.container}>
-                <BaseView flexDirection="row" style={styles.card} flex={1} pr={10}>
-                    <DAppIcon
-                        imageSource={{
-                            uri: dapp.id
-                                ? getAppHubIconUrl(dapp.id)
-                                : `${process.env.REACT_APP_GOOGLE_FAVICON_URL}${dapp.href}`,
-                        }}
-                    />
-                    <BaseSpacer width={12} />
-                    <BaseView flex={1}>
-                        <BaseText ellipsizeMode="tail" numberOfLines={1} style={styles.nameText}>
-                            {dapp.name}
-                        </BaseText>
-                        <BaseSpacer height={4} />
-                        <BaseText ellipsizeMode="tail" numberOfLines={2} style={styles.description}>
-                            {dapp.desc ? dapp.desc : dapp.href}
-                        </BaseText>
-                    </BaseView>
-                </BaseView>
-            </BaseTouchableBox>
-            <BaseSpacer width={12} />
-            <BaseIcon
-                onPress={toggleBookmark}
-                name={isBookMarked ? "bookmark" : "bookmark-outline"}
-                color={theme.colors.text}
-                size={24}
-            />
-        </BaseView>
-    )
-})
+import { groupFavoritesByBaseUrl } from "./utils"
 
 export const FavouritesScreen = () => {
     const nav = useNavigation()
@@ -102,19 +49,38 @@ export const FavouritesScreen = () => {
     )
 
     const dappToShow = useMemo(() => {
-        if (filteredSearch === "") {
-            return bookmarkedDApps
-        }
+        const dapps =
+            filteredSearch === ""
+                ? bookmarkedDApps
+                : bookmarkedDApps.filter(dapp => dapp.name.toLowerCase().includes(filteredSearch.toLowerCase()))
 
-        return bookmarkedDApps.filter(dapp => dapp.name.toLowerCase().includes(filteredSearch.toLowerCase()))
+        return groupFavoritesByBaseUrl(dapps)
     }, [bookmarkedDApps, filteredSearch])
+
+    const renderItem = useCallback(
+        ({ item }: ListRenderItemInfo<DiscoveryDApp[]>) => {
+            return item.length === 1 ? (
+                <FavoriteDAppCard dapp={item[0]} onDAppPress={onDAppPress} />
+            ) : (
+                <FavoritesStackCard dapps={item} onDAppPress={onDAppPress} />
+            )
+        },
+        [onDAppPress],
+    )
+
+    // We need to force the re-render of the FlatList to update the grouped bookmarks
+    const [key, setKey] = useState(0)
+    useEffect(() => {
+        setKey(prev => prev + 1)
+    }, [dappToShow])
 
     return (
         <Layout
+            noMargin
             hasSafeArea={true}
             hasTopSafeAreaOnly={false}
             fixedHeader={
-                <>
+                <BaseView px={24}>
                     <BaseText typographyFont="title">{LL.FAVOURITES_DAPPS_TITLE()}</BaseText>
                     <BaseSpacer height={12} />
                     <BaseSearchInput
@@ -126,15 +92,16 @@ export const FavouritesScreen = () => {
                         iconSize={18}
                         onIconPress={() => setFilteredSearch("")}
                     />
-                </>
+                    <BaseSpacer height={12} />
+                </BaseView>
             }
             fixedBody={
-                <BaseView flex={1} px={24}>
+                <BaseView key={key} flex={1} px={24}>
                     <FlatList
                         contentContainerStyle={styles.listContentContainer}
                         data={dappToShow}
-                        keyExtractor={item => item.href}
-                        renderItem={({ item }) => <DAppCard dapp={item} onDAppPress={onDAppPress} />}
+                        keyExtractor={(item, index) => item[0]?.href ?? index.toString()}
+                        renderItem={renderItem}
                         ListFooterComponent={renderFooter}
                         ItemSeparatorComponent={renderSeparator}
                         showsVerticalScrollIndicator={false}
