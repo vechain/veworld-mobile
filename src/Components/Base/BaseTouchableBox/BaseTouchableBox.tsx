@@ -22,6 +22,7 @@ type Props = {
     flex?: number
     showOpacityWhenDisabled?: boolean
     haptics?: "Success" | "Warning" | "Error" | "Light" | "Medium" | "Heavy"
+    opacity?: ViewStyle["opacity"]
 } & Omit<TouchableOpacityProps, "style"> &
     GenericTouchableProps
 
@@ -41,6 +42,7 @@ export const BaseTouchableBox: React.FC<Props> = ({
     flex,
     showOpacityWhenDisabled = true,
     haptics,
+    opacity,
     ...props
 }) => {
     const { styles } = useThemedStyles(
@@ -55,6 +57,7 @@ export const BaseTouchableBox: React.FC<Props> = ({
             disabled,
             flex,
             showOpacityWhenDisabled,
+            opacity,
         }),
     )
 
@@ -89,6 +92,7 @@ type BaseStyles = {
     disabled: boolean
     flex?: number
     showOpacityWhenDisabled?: boolean
+    opacity?: ViewStyle["opacity"]
 }
 
 const baseStyles =
@@ -103,9 +107,18 @@ const baseStyles =
         disabled,
         flex,
         showOpacityWhenDisabled = true,
+        opacity,
     }: BaseStyles) =>
-    (theme: ColorThemeType) =>
-        StyleSheet.create({
+    (theme: ColorThemeType) => {
+        const getOpacity = () => {
+            if (opacity) {
+                return opacity
+            } else {
+                return disabled && showOpacityWhenDisabled ? 0.5 : 1
+            }
+        }
+
+        return StyleSheet.create({
             container: {
                 flex,
                 width: w ?? "100%",
@@ -119,8 +132,9 @@ const baseStyles =
                 paddingHorizontal: px,
                 paddingVertical: py,
                 backgroundColor: bg ?? theme.colors.card,
-                opacity: disabled && showOpacityWhenDisabled ? 0.5 : 1,
+                opacity: getOpacity(),
                 borderRadius: 16,
                 overflow: "hidden",
             },
         })
+    }

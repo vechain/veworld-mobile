@@ -3,7 +3,7 @@ import { validateIpfsUri } from "~Utils/IPFSUtils/IPFSUtils"
 
 // A helper function to normalize the URL by removing 'www.'
 const normalizeURL = (url: string) => {
-    const parsedURL = new URL(url)
+    const parsedURL = new URL(url.toLowerCase())
     parsedURL.hostname = parsedURL.hostname.replace("www.", "")
     return parsedURL
 }
@@ -19,9 +19,7 @@ const compareURLs = (url1?: string, url2?: string) => {
 
 const clean = (url: string) => {
     const parsedURL = new URL(url.trim())
-
     if (parsedURL.pathname.endsWith("/")) return parsedURL.origin + parsedURL.pathname.slice(0, -1)
-
     return parsedURL.origin + parsedURL.pathname
 }
 
@@ -155,6 +153,10 @@ function getHostName(url: string) {
     return isValid(url) ? new URL(url).hostname : null
 }
 
+function getBaseURL(url: string) {
+    return isValid(url) ? new URL(url).origin : undefined
+}
+
 export default {
     compareURLs,
     clean,
@@ -169,4 +171,5 @@ export default {
     isValidBrowserUrl,
     decodeUrl_HACK,
     getHostName,
+    getBaseURL,
 }
