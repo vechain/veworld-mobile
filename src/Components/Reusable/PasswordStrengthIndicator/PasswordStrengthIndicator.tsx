@@ -1,6 +1,9 @@
 import React from "react"
-import { View, Text, StyleSheet } from "react-native"
-import Animated, { useAnimatedStyle, SharedValue } from "react-native-reanimated"
+import { StyleSheet } from "react-native"
+import Animated, { useAnimatedStyle, SharedValue, interpolateColor, useDerivedValue } from "react-native-reanimated"
+import { BaseSpacer, BaseText, BaseView } from "~Components/Base"
+import { COLORS } from "~Constants"
+import { BaseAnimatedText } from "../AnimatedTextInput"
 
 type Props = {
     strength: SharedValue<number>
@@ -9,45 +12,60 @@ type Props = {
 export const PasswordStrengthIndicator = ({ strength }: Props) => {
     const animatedStyle = useAnimatedStyle(() => {
         return {
-            width: `${strength.value * 20}%`,
-            backgroundColor: strength.value < 3 ? "red" : strength.value < 4 ? "orange" : "green",
+            width: `${strength.value * 25}%`,
+            backgroundColor: interpolateColor(
+                strength.value,
+                [0, 2, 4],
+                [COLORS.DARK_RED, COLORS.MEDIUM_ORANGE, COLORS.LIGHT_GREEN],
+            ),
         }
     })
 
+    const computedStrength = useDerivedValue(() => {
+        if (strength.value === 0) return "None"
+        if (strength.value === 1) return "Weak"
+        if (strength.value === 2) return "Fair"
+        if (strength.value === 3) return "Medium"
+        if (strength.value === 4) return "Strong"
+        return "..."
+    }, [strength.value])
+
     return (
-        <View style={styles.container}>
-            <View style={styles.barBackground}>
+        <BaseView pt={18} px={6} justifyContent="center" mb={12}>
+            <BaseView style={styles.barBackground}>
                 <Animated.View style={[styles.bar, animatedStyle]} />
-            </View>
-            <Text>
-                {"Password Strength:"} {strength.value}/5
-            </Text>
-        </View>
+            </BaseView>
+
+            <BaseView flexDirection="row" justifyContent="flex-start">
+                <BaseText typographyFont="caption" pt={4}>
+                    {"Security:"}
+                </BaseText>
+
+                <BaseSpacer width={4} />
+
+                <BaseAnimatedText text={computedStrength} style={styles.securityText} />
+            </BaseView>
+        </BaseView>
     )
 }
 
 const styles = StyleSheet.create({
-    container: {
-        paddingTop: 18,
-        paddingHorizontal: 4,
-        justifyContent: "center",
-    },
-    input: {
-        height: 40,
-        borderColor: "gray",
-        borderWidth: 1,
-        marginBottom: 20,
-        paddingHorizontal: 10,
-    },
     barBackground: {
-        height: 10,
+        height: 8,
         backgroundColor: "#e0e0e0",
-        borderRadius: 5,
+        borderRadius: 4,
         overflow: "hidden",
     },
     bar: {
-        height: 10,
-        borderRadius: 5,
+        height: 8,
+        borderRadius: 4,
+    },
+    securityText: {
+        paddingTop: 6,
+        fontFamily: "Inter-Light",
+        fontSize: 12,
+        fontWeight: "normal",
+        lineHeight: 13,
     },
 })
 
