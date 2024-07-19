@@ -117,7 +117,7 @@ jobs:
         uses: actions/upload-artifact@v4
         with:
           name: VeWorld.app
-          path: ${{ env.APP_PATH }}/VeWorld.app
+          path: ${{ env.APP_PATH }}
       - uses: mobile-dev-inc/action-maestro-cloud@v1
         with:
             name: iOS test
