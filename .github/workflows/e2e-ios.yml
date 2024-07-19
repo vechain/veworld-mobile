@@ -113,7 +113,11 @@ jobs:
               SIMULATOR_APP_PATH=$(find ~/ -path "*/Build/Products/Release-iphonesimulator/VeWorld.app" -print -quit)
               echo "APP_PATH=$SIMULATOR_APP_PATH" >> $GITHUB_ENV
               echo "APP_PATH_DSYM=$(find ~/ -path "*/Build/Products/Release-iphonesimulator/VeWorld.app.dSYM" -print -quit)" >> $GITHUB_ENV
-
+      - name: Upload .app 
+        uses: actions/upload-artifact@v4
+        with:
+          name: VeWorld.app
+          path: ${{ env.APP_PATH }}/VeWorld.app
       - uses: mobile-dev-inc/action-maestro-cloud@v1
         with:
             name: iOS test
