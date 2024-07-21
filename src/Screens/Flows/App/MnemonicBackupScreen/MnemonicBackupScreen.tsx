@@ -8,6 +8,7 @@ import {
     MnemonicCard,
     Layout,
     CloudKitWarningBottomSheet,
+    showErrorToast,
 } from "~Components"
 import { useI18nContext } from "~i18n"
 import { useBottomSheetModal, useCloudKit, useCopyClipboard, useThemedStyles } from "~Hooks"
@@ -42,14 +43,19 @@ export const MnemonicBackupScreen = ({ route }: Props) => {
 
             const { device } = DeviceUtils.generateDeviceForMnemonic(
                 mnemonicArray,
-                999999999,
-                "alias",
-                undefined,
-                false,
+                999999999, // this get random data because the only thing we need is the xPub
+                "alias", // this get random data because the only thing we need is the xPub
+                undefined, // this get random data because the only thing we need is the xPub
+                false, // this get random data because the only thing we need is the xPub
             )
-            if (!device.xPub) return // TODO-vas - handle error
-            const firstAccountAddress = AddressUtils.getAddressFromXPub(device.xPub, 0)
+            if (!device.xPub) {
+                showErrorToast({
+                    text1: LL.CLOUDKIT_ERROR_GENERIC(),
+                })
+                return
+            }
 
+            const firstAccountAddress = AddressUtils.getAddressFromXPub(device.xPub, 0)
             const salt = HexUtils.generateRandom(256)
             const mnemonic = CryptoUtils.encrypt(mnemonicArray, password, salt)
             await saveWalletToCloudKit({
@@ -63,7 +69,7 @@ export const MnemonicBackupScreen = ({ route }: Props) => {
             getWalletByRootAddress(deviceToBackup!.rootAddress)
             nav.goBack()
         },
-        [deviceToBackup, getWalletByRootAddress, mnemonicArray, nav, onCloseWarning, saveWalletToCloudKit],
+        [LL, deviceToBackup, getWalletByRootAddress, mnemonicArray, nav, onCloseWarning, saveWalletToCloudKit],
     )
 
     return (
@@ -86,27 +92,17 @@ export const MnemonicBackupScreen = ({ route }: Props) => {
                                 />
                                 <BaseSpacer width={8} />
                                 <BaseText color={isWalletBackedUp ? theme.colors.success : theme.colors.danger}>
-                                    {isWalletBackedUp ? "Backed up to iCloud" : "Not backed up to iCloud"}
+                                    {isWalletBackedUp ? LL.BD_BACKED_UP_TO_CLOUD() : LL.BD_NOT_BACKED_UP_TO_CLOUD()}
                                 </BaseText>
                             </BaseView>
 
                             <BaseSpacer height={24} />
 
-                            <BaseText>
-                                {
-                                    // eslint-disable-next-line max-len
-                                    "Never share these words. Anyone who learns them can steal all of your crypto. VeWorld will never ask you for them."
-                                }
-                            </BaseText>
+                            <BaseText>{LL.BD_MNEMONIC_WARMNING()}</BaseText>
 
                             <BaseSpacer height={16} />
 
-                            <BaseText>
-                                {
-                                    // eslint-disable-next-line max-len
-                                    "The 12 words below are your wallet's recovery phrase. This phrase lets you recover your wallet if you lose your device. Back up it up on iCloud (recommended) or write it down. Or both."
-                                }
-                            </BaseText>
+                            <BaseText>{LL.BD_MNEMONIC_PASSWORD_WARNING()}</BaseText>
 
                             <BaseSpacer height={36} />
                         </BaseView>

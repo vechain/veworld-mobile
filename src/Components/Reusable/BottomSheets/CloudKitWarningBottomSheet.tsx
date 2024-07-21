@@ -1,4 +1,4 @@
-import React, { forwardRef, useCallback, useState } from "react"
+import React, { forwardRef, useCallback, useEffect, useState } from "react"
 import { BottomSheetModalMethods } from "@gorhom/bottom-sheet/lib/typescript/types"
 import { StyleSheet } from "react-native"
 import { BaseBottomSheet, BaseButton, BaseIcon, BaseSpacer, BaseText, BaseTextInput, BaseView } from "~Components/Base"
@@ -7,6 +7,7 @@ import { Layout } from "../Layout"
 import { COLORS } from "~Constants"
 import { PasswordStrengthIndicator } from "../PasswordStrengthIndicator"
 import { Easing, useSharedValue, withTiming } from "react-native-reanimated"
+import { useI18nContext } from "~i18n"
 
 type Props = {
     onHandleBackupToCloudKit: (password: string) => void
@@ -15,18 +16,46 @@ type Props = {
 
 export const CloudKitWarningBottomSheet = forwardRef<BottomSheetModalMethods, Props>(
     ({ onHandleBackupToCloudKit, openLocation }, ref) => {
+        const { LL } = useI18nContext()
         const [secureText1, setsecureText1] = useState(true)
         const [secureText2, setsecureText2] = useState(true)
         const [password1, setPassword1] = useState("")
         const [password2, setPassword2] = useState("")
         const [passwordMisMatch, setPasswordMisMatch] = useState(false)
         const [passwordNotStrong, setPasswordNotStrong] = useState(false)
+        const [isChecking, setIsChecking] = useState(false)
 
         const { styles } = useThemedStyles(baseStyles)
-
         const strength = useSharedValue(0)
 
+        // reset PasswordMisMatch and PasswordNotStrong when user starts typing again
+        useEffect(() => {
+            if (!password1 && !password2 && isChecking) {
+                setPasswordMisMatch(false)
+                setPasswordNotStrong(false)
+                setIsChecking(false)
+                strength.value = 0
+            }
+        }, [password1, password2, isChecking, strength])
+
+        const handleOnDismissBottomSheet = useCallback(
+            (index: number) => {
+                if (index === -1) {
+                    setPassword1("")
+                    setPassword2("")
+                    setPasswordMisMatch(false)
+                    setPasswordNotStrong(false)
+                    setIsChecking(false)
+                    strength.value = 0
+                }
+            },
+            [strength],
+        )
+
         const checkPasswordValidity = useCallback(() => {
+            setPasswordMisMatch(false)
+            setPasswordNotStrong(false)
+            setIsChecking(true)
             if (openLocation === "Backup_Screen") {
                 if (password1 === password2 && strength.value >= 4) {
                     onHandleBackupToCloudKit(password1)
@@ -69,9 +98,10 @@ export const CloudKitWarningBottomSheet = forwardRef<BottomSheetModalMethods, Pr
         )
 
         return (
-            <BaseBottomSheet snapPoints={["92%"]} ref={ref}>
+            <BaseBottomSheet snapPoints={["92%"]} ref={ref} enableDismissOnClose onChange={handleOnDismissBottomSheet}>
                 <Layout
                     noBackButton
+                    noMargin
                     noStaticBottomPadding
                     hasSafeArea={false}
                     fixedBody={
@@ -86,24 +116,28 @@ export const CloudKitWarningBottomSheet = forwardRef<BottomSheetModalMethods, Pr
                                     </BaseView>
                                 </BaseView>
 
-                                <BaseText typographyFont="subTitleBold">{"iCloud Backup Password"}</BaseText>
+                                <BaseText typographyFont="subTitleBold">{LL.BD_CLOUD_BACKUP_PASSWORD()}</BaseText>
                             </BaseView>
 
                             <BaseSpacer height={24} />
                             <BaseText>
                                 {openLocation === "Backup_Screen"
-                                    ? // eslint-disable-next-line max-len
-                                      "This password will secure your secret recovery phrase in the cloud. VeWorld does NOT have access to your password. We can NOT reset it if you lose it, so keep it safe."
-                                    : "Enter the password you used to back up your wallet."}
+                                    ? LL.BD_CLOUD_PASSWORD_CREATION_MESSAGE()
+                                    : LL.BD_CLOUD_INSERT_PASSWORD()}
                             </BaseText>
                             <BaseSpacer height={24} />
 
                             <BaseTextInput
-                                placeholder={openLocation === "Backup_Screen" ? "Choose password" : "Enter password"}
+                                placeholder={
+                                    openLocation === "Backup_Screen"
+                                        ? LL.BTN_CHOOSE_PASSWORD()
+                                        : LL.BTN_ENTER_PASSWORD()
+                                }
                                 secureTextEntry={secureText1}
                                 rightIcon={secureText1 ? "eye-off" : "eye"}
                                 onIconPress={() => setsecureText1(prev => !prev)}
                                 value={password1}
+                                autoFocus
                                 setValue={(s: string) =>
                                     openLocation === "Backup_Screen" ? handlePasswordChange(s) : setPassword1(s)
                                 }
@@ -115,7 +149,7 @@ export const CloudKitWarningBottomSheet = forwardRef<BottomSheetModalMethods, Pr
                                 <>
                                     <BaseSpacer height={24} />
                                     <BaseTextInput
-                                        placeholder="Confirm password"
+                                        placeholder={LL.BTN_CONFIRN_PASSWORD()}
                                         secureTextEntry={secureText2}
                                         rightIcon={secureText2 ? "eye-off" : "eye"}
                                         onIconPress={() => setsecureText2(prev => !prev)}
@@ -124,13 +158,17 @@ export const CloudKitWarningBottomSheet = forwardRef<BottomSheetModalMethods, Pr
                                     />
 
                                     <BaseView justifyContent="flex-start" alignItems="flex-start" my={8}>
-                                        <BaseText color={COLORS.DARK_RED} mt={4}>
-                                            {passwordMisMatch && "* Passwords do not match"}
-                                        </BaseText>
+                                        {passwordMisMatch && (
+                                            <BaseText color={COLORS.DARK_RED} mt={4}>
+                                                {LL.BD_PASSWORDS_DO_NOT_MATCH()}
+                                            </BaseText>
+                                        )}
 
-                                        <BaseText color={COLORS.DARK_RED} mt={4}>
-                                            {passwordNotStrong && "* Password is not strong enough"}
-                                        </BaseText>
+                                        {passwordNotStrong && (
+                                            <BaseText color={COLORS.DARK_RED} mt={4}>
+                                                {LL.BD_PASSWORD_NOT_STRONG()}
+                                            </BaseText>
+                                        )}
                                     </BaseView>
                                 </>
                             )}
@@ -138,7 +176,7 @@ export const CloudKitWarningBottomSheet = forwardRef<BottomSheetModalMethods, Pr
                     }
                     footer={
                         <>
-                            <BaseButton title="Proceed" action={checkPasswordValidity} />
+                            <BaseButton title={LL.COMMON_PROCEED()} action={checkPasswordValidity} />
                             <BaseSpacer height={24} />
                         </>
                     }

@@ -7,20 +7,32 @@ import {
     BackButtonHeader,
     BaseIcon,
     BaseModal,
+    BaseSkeleton,
     BaseSpacer,
     BaseText,
     BaseTouchableBox,
     BaseView,
     CloudKitWarningBottomSheet,
     Layout,
+    RequireUserPassword,
+    showErrorToast,
 } from "~Components"
 import { AnalyticsEvent, ColorThemeType, VET } from "~Constants"
-import { useAnalyticTracking, useBottomSheetModal, useCloudKit, useDeviceUtils, useThemedStyles, useVns } from "~Hooks"
+import {
+    useAnalyticTracking,
+    useBottomSheetModal,
+    useCheckIdentity,
+    useCloudKit,
+    useDeviceUtils,
+    useThemedStyles,
+    useVns,
+} from "~Hooks"
 import { useI18nContext } from "~i18n"
-import { selectHasOnboarded, selectSelectedNetwork, useAppSelector } from "~Storage/Redux"
+import { selectDevices, selectHasOnboarded, selectSelectedNetwork, useAppSelector } from "~Storage/Redux"
 import { AddressUtils, BalanceUtils, BigNutils, CryptoUtils, DateUtils } from "~Utils"
 import { useHandleWalletCreation } from "../Onboarding/WelcomeScreen/useHandleWalletCreation"
 import { UserCreatePasswordScreen } from "./UserCreatePasswordScreen"
+import { StackActions, useNavigation } from "@react-navigation/native"
 
 type CloudKitWallet = {
     data: string
@@ -31,13 +43,16 @@ type CloudKitWallet = {
     creationDate: number
 }
 
+const skeletonArray = new Array(4).fill({ rootAddress: Math.random().toString() })
+
 export const ImportFromCloudScreen = () => {
     const userHasOnboarded = useAppSelector(selectHasOnboarded)
+    const nav = useNavigation()
     const track = useAnalyticTracking()
     const { styles, theme } = useThemedStyles(baseStyles)
     const { getAllWalletsFromCloudKit, isLoading } = useCloudKit()
     const { LL } = useI18nContext()
-    const [CcoudKitWallets, setCloudKitWallets] = useState<CloudKitWallet[] | null>(null)
+    const [cloudKitWallets, setCloudKitWallets] = useState<CloudKitWallet[] | null>(null)
     const [selected, setSelected] = useState<CloudKitWallet | null>(null)
     const { ref: warningRef, onOpen, onClose: onCloseWarning } = useBottomSheetModal()
     const { checkCanImportDevice } = useDeviceUtils()
@@ -45,7 +60,7 @@ export const ImportFromCloudScreen = () => {
 
     const {
         onCreateWallet,
-        // importOnboardedWallet,
+        importOnboardedWallet,
         isOpen,
         isError: isCreateError,
         onSuccess,
@@ -62,10 +77,27 @@ export const ImportFromCloudScreen = () => {
         init()
     }, [getAllWalletsFromCloudKit])
 
+    const {
+        isPasswordPromptOpen: isPasswordPromptOpen,
+        handleClosePasswordModal: handleClosePasswordModal,
+        onPasswordSuccess: onPasswordSuccess,
+        checkIdentityBeforeOpening: checkIdentityBeforeOpening,
+    } = useCheckIdentity({
+        onIdentityConfirmed: async (pin?: string) => {
+            await importOnboardedWallet({
+                importMnemonic: mnemonicCache.current,
+                isCloudKit: true,
+                pin,
+            })
+            nav.dispatch(StackActions.popToTop())
+        },
+        allowAutoPassword: false,
+    })
+
     const handleOnPress = useCallback(
         (password: string) => {
             onCloseWarning()
-            // TODO-vas - handle if selected is null
+
             if (selected) {
                 const mnemonic = CryptoUtils.decrypt(selected.data, password, selected.salt) as string[]
                 const isCloudKit = true
@@ -74,30 +106,60 @@ export const ImportFromCloudScreen = () => {
                     mnemonicCache.current = mnemonic
                     track(AnalyticsEvent.IMPORT_MNEMONIC_SUBMITTED)
                     if (userHasOnboarded) {
-                        // checkIdentityBeforeOpening_1()
+                        setTimeout(() => {
+                            checkIdentityBeforeOpening()
+                        }, 300)
                     } else {
                         onCreateWallet({ importMnemonic: mnemonic, isCloudKit })
                     }
                 } catch (err) {
-                    // eslint-disable-next-line no-console
-                    console.log(err)
+                    showErrorToast({
+                        text1: LL.CLOUDKIT_ERROR_GENERIC(),
+                    })
                 }
+            } else {
+                showErrorToast({
+                    text1: LL.CLOUDKIT_ERROR_GENERIC(),
+                })
             }
         },
-        [checkCanImportDevice, onCloseWarning, onCreateWallet, selected, track, userHasOnboarded],
+        [
+            LL,
+            checkCanImportDevice,
+            checkIdentityBeforeOpening,
+            onCloseWarning,
+            onCreateWallet,
+            selected,
+            track,
+            userHasOnboarded,
+        ],
     )
-
-    //TODO-vas : Add sceleton loader on the flatlist itself
-    if (isLoading) return <BaseText>LOADING .....</BaseText>
 
     return (
         <Layout
             fixedHeader={<BaseText typographyFont="title">{LL.TITLE_IMPORT_WALLET_FROM_ICLOUD()}</BaseText>}
             fixedBody={
                 <BaseView flex={1}>
-                    {CcoudKitWallets && (
+                    {isLoading ? (
                         <FlatList
-                            data={CcoudKitWallets}
+                            data={skeletonArray}
+                            contentContainerStyle={styles.listContentContainer}
+                            ItemSeparatorComponent={() => Seperator}
+                            keyExtractor={item => item.rootAddress}
+                            renderItem={() => (
+                                <BaseSkeleton
+                                    height={74}
+                                    boneColor={theme.colors.skeletonBoneColor}
+                                    highlightColor={theme.colors.skeletonHighlightColor}
+                                    containerStyle={styles.skeletonCard}
+                                    borderRadius={16}
+                                />
+                            )}
+                            showsVerticalScrollIndicator={false}
+                        />
+                    ) : cloudKitWallets ? (
+                        <FlatList
+                            data={cloudKitWallets}
                             contentContainerStyle={styles.listContentContainer}
                             ItemSeparatorComponent={() => Seperator}
                             keyExtractor={item => item.rootAddress}
@@ -106,21 +168,25 @@ export const ImportFromCloudScreen = () => {
                             )}
                             showsVerticalScrollIndicator={false}
                         />
-                    )}
+                    ) : null}
 
-                    <AnimatedFloatingButton title="Import" extraBottom={24} isVisible={!!selected} onPress={onOpen} />
+                    <AnimatedFloatingButton
+                        title="Import"
+                        extraBottom={userHasOnboarded ? 0 : 24}
+                        isVisible={!!selected}
+                        onPress={onOpen}
+                    />
+
                     <CloudKitWarningBottomSheet
                         ref={warningRef}
                         onHandleBackupToCloudKit={handleOnPress}
                         openLocation="Import_Screen"
                     />
-
                     {!!isCreateError && (
                         <BaseText my={10} color={theme.colors.danger}>
                             {isCreateError}
                         </BaseText>
                     )}
-
                     <BaseModal isOpen={isOpen} onClose={onCloseCreateFlow}>
                         <BaseView justifyContent="flex-start">
                             <BackButtonHeader action={onCloseCreateFlow} hasBottomSpacer={false} />
@@ -135,6 +201,11 @@ export const ImportFromCloudScreen = () => {
                             />
                         </BaseView>
                     </BaseModal>
+                    <RequireUserPassword
+                        isOpen={isPasswordPromptOpen}
+                        onClose={handleClosePasswordModal}
+                        onSuccess={onPasswordSuccess}
+                    />
                 </BaseView>
             }
         />
@@ -154,6 +225,16 @@ const CloudKitWalletCard = ({
     const { _getName } = useVns()
     const network = useAppSelector(selectSelectedNetwork)
     const { locale } = useI18nContext()
+    const devices = useAppSelector(selectDevices)
+    const [isImported, setisImported] = useState(false)
+
+    useEffect(() => {
+        devices.forEach(device => {
+            if (device.rootAddress === wallet.rootAddress) {
+                setisImported(true)
+            }
+        })
+    }, [devices, wallet.rootAddress])
 
     const [nameOrAddress, setNameOrAddress] = useState(wallet.firstAccountAddress)
     useEffect(() => {
@@ -202,6 +283,7 @@ const CloudKitWalletCard = ({
     return (
         <BaseView w={100} flexDirection="row">
             <BaseTouchableBox
+                disabled={isImported}
                 haptics="Light"
                 action={() => onSelectWallet(wallet)}
                 justifyContent="space-between"
@@ -253,6 +335,9 @@ const CloudKitWalletCard = ({
 
 const baseStyles = (theme: ColorThemeType) =>
     StyleSheet.create({
+        alreadyImported: {
+            backgroundColor: "red",
+        },
         wallet: {
             opacity: 0.7,
         },
@@ -266,6 +351,9 @@ const baseStyles = (theme: ColorThemeType) =>
             borderWidth: 1,
             borderRadius: 16,
             borderColor: theme.colors.border,
+        },
+        skeletonCard: {
+            borderRadius: 16,
         },
         rightSubContainer: {
             flexDirection: "column",

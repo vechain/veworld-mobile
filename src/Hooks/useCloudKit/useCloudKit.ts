@@ -1,11 +1,14 @@
 import { useCallback, useEffect, useState } from "react"
 import { NativeModules } from "react-native"
+import { showErrorToast } from "~Components"
 import { ERROR_EVENTS } from "~Constants"
+import { useI18nContext } from "~i18n"
 import { DEVICE_TYPE } from "~Model"
 import { info } from "~Utils"
 const { CloudKitManager } = NativeModules
 
 export const useCloudKit = () => {
+    const { LL } = useI18nContext()
     const [isAvailable, setisAvailable] = useState(false)
     const [isWalletBackedUp, setIsWalletBackedUp] = useState(false)
     const [isLoading, setIsLoading] = useState(false)
@@ -26,8 +29,13 @@ export const useCloudKit = () => {
             deviceType?: DEVICE_TYPE
             salt: string
         }) => {
-            if (!mnemonic || !_rootAddress || !deviceType || !salt || !firstAccountAddress)
-                throw new Error("No device to backup.") // TODO-vas - handle error with ui
+            if (!mnemonic || !_rootAddress || !deviceType || !salt || !firstAccountAddress) {
+                showErrorToast({
+                    text1: LL.CLOUDKIT_ERROR_GENERIC(),
+                })
+                return
+            }
+
             setIsLoading(true)
             const result = await CloudKitManager.saveToCloudKit(
                 _rootAddress,
@@ -39,13 +47,12 @@ export const useCloudKit = () => {
             info(ERROR_EVENTS.WALLET_CREATION, result)
             setIsLoading(false)
         },
-        [],
+        [LL],
     )
 
     const getAllWalletsFromCloudKit = useCallback(async () => {
         setIsLoading(true)
         const result = await CloudKitManager.getAllFromCloudKit()
-        info(ERROR_EVENTS.WALLET_CREATION, result)
         setIsLoading(false)
         return result
     }, [])
