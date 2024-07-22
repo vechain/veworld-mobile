@@ -246,7 +246,7 @@ export const ApplicationSecurityProvider = ({ children }: ApplicationSecurityCon
                             //  encrypt the wallets with the new encryption algorithm
                             const decryptedWallet: Wallet = await WalletEncryptionKeyHelper.decryptWallet(
                                 wallet.wallet,
-                                walletKey,
+                                password ?? walletKey,
                             )
 
                             const walletEncrypted_V2 = await WalletEncryptionKeyHelper.encryptWallet(
@@ -254,6 +254,7 @@ export const ApplicationSecurityProvider = ({ children }: ApplicationSecurityCon
                                 password,
                             )
 
+                            info(ERROR_EVENTS.SECURITY, "walletEncrypted_V2", walletEncrypted_V2)
                             newWallets.push(walletEncrypted_V2)
 
                             /*
@@ -267,8 +268,6 @@ export const ApplicationSecurityProvider = ({ children }: ApplicationSecurityCon
                     }
                 }
             }
-
-            // console.log("newWallets", newWallets)
         }
     }, [])
 

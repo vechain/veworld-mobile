@@ -122,7 +122,6 @@ export const SwitchStack = () => {
                         <Switch.Screen name={Routes.DAPP_CHANGE_ACCOUNT_SCREEN} component={DappChangeAccountScreen} />
 
                         <Switch.Screen
-
                             name={Routes.SECURITY_UPGRADE_V2}
                             component={SecurityUpgrade_V2}
                             options={{ gestureEnabled: false }}

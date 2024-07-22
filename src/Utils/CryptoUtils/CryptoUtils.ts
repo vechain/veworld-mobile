@@ -39,8 +39,9 @@ function shuffleArray<T>(arr: T[]) {
 }
 
 function encrypt<T>(data: T, encryptionKey: string, salt?: string): string {
+    // TODO.vas - Generate Salt here or pass it as an argument?
     const key = PasswordUtils.hash(encryptionKey, salt)
-    const iv = PasswordUtils.getIV()
+    const iv = PasswordUtils.getIV() // TODO.vas- GET RANDOMIZED IV - Save it to keychain?
     const cipher = crypto.createCipheriv("aes256", key, iv)
     let ciph = cipher.update(JSON.stringify(data), "utf-8", "hex")
     ciph += cipher.final("hex")
