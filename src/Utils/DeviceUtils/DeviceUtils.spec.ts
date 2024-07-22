@@ -36,7 +36,7 @@ describe("generateDeviceForMnemonic", () => {
         const hdNode = HDNode.fromMnemonic(mnemonicPhrase)
         const expectedXPub = CryptoUtils.xPubFromHdNode(hdNode)
 
-        const result = generateDeviceForMnemonic(mnemonicPhrase, deviceIndex, "Wallet 3")
+        const result = generateDeviceForMnemonic(mnemonicPhrase, deviceIndex, "Wallet 3", undefined, false)
 
         expect(result.wallet.mnemonic).toEqual(mnemonicPhrase)
         expect(result.wallet.privateKey).toBeUndefined()
