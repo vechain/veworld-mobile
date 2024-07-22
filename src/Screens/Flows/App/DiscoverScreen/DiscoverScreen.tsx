@@ -3,7 +3,7 @@ import React, { useCallback, useEffect, useMemo, useRef, useState } from "react"
 import { Keyboard, Linking, StyleSheet } from "react-native"
 import Animated, { useAnimatedRef, useScrollViewOffset } from "react-native-reanimated"
 import { randomized as daoDapps } from "~Assets"
-import { BaseSpacer, BaseView, Layout } from "~Components"
+import { AnimatedFloatingButton, BaseSpacer, BaseView, Layout } from "~Components"
 import { AnalyticsEvent } from "~Constants"
 import { useAnalyticTracking, useBrowserSearch, useThemedStyles, useVisitedUrls } from "~Hooks"
 import { RumManager } from "~Logging/RumManager"
@@ -18,8 +18,8 @@ import {
     useAppDispatch,
     useAppSelector,
 } from "~Storage/Redux"
+import { URIUtils } from "~Utils"
 import { useI18nContext } from "~i18n"
-import { useFetchFeaturedDApps } from "./Hooks/useFetchFeaturedDApps"
 import {
     AnimatedSearchBar,
     AnimatedTitle,
@@ -28,9 +28,9 @@ import {
     MakeYourOwnDApp,
     VeBetterDAODApps,
     VeBetterDAOMainCard,
-    WebSearchFloatingButton,
 } from "./Components"
-import { URIUtils } from "~Utils"
+import { useFetchFeaturedDApps } from "./Hooks/useFetchFeaturedDApps"
+import { groupFavoritesByBaseUrl } from "./utils"
 
 const DAO_URL = "https://governance.vebetterdao.org/"
 
@@ -59,7 +59,8 @@ export const DiscoverScreen: React.FC = () => {
     const dapps = useAppSelector(selectFeaturedDapps)
 
     const [filteredSearch, setFilteredSearch] = useState("")
-    const showFavorites = bookmarkedDApps.length > 0
+    const groupedbookmarkedDApps = useMemo(() => groupFavoritesByBaseUrl(bookmarkedDApps), [bookmarkedDApps])
+    const showFavorites = groupedbookmarkedDApps.length > 0
 
     useEffect(() => {
         if (!hasOpenedDiscovery) {
@@ -174,19 +175,21 @@ export const DiscoverScreen: React.FC = () => {
                         <MakeYourOwnDApp label={LL.DISCOVER_CREATE_YOUR_DAPP()} onPress={onMakeYourOwnDAppPress} />
                         <BaseSpacer height={18} />
                         {showFavorites && (
-                            <>
-                                <Favourites
-                                    bookmarkedDApps={bookmarkedDApps}
-                                    onActionLabelPress={onSeeAllPress}
-                                    onDAppPress={onDAppPress}
-                                />
-                            </>
+                            <Favourites
+                                bookmarkedDApps={groupedbookmarkedDApps}
+                                onActionLabelPress={onSeeAllPress}
+                                onDAppPress={onDAppPress}
+                            />
                         )}
                         <BaseSpacer height={12} />
                         <Ecosystem title={LL.DISCOVER_ECOSYSTEM()} dapps={dapps} onDAppPress={onDAppPress} />
                         {isWebSearchFloatingButtonVisible && <BaseSpacer height={70} />}
                     </Animated.ScrollView>
-                    <WebSearchFloatingButton isVisible={isWebSearchFloatingButtonVisible} onPress={onSearch} />
+                    <AnimatedFloatingButton
+                        title={LL.DISCOVER_WEB_SEARCH_FLOATING_BUTTON_LABEL()}
+                        isVisible={isWebSearchFloatingButtonVisible}
+                        onPress={onSearch}
+                    />
                 </BaseView>
             }
         />

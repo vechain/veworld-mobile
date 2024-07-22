@@ -42,7 +42,7 @@ export const useDeviceUtils = () => {
      * @param mnemonic (optional)
      * @param privateKey (optional)
      */
-    const createDevice = (mnemonic?: string[], privateKey?: string) => {
+    const createDevice = (isCloudKit: boolean, mnemonic?: string[], privateKey?: string) => {
         if (!mnemonic && !privateKey) throw new Error(ERRORS.INVALID_IMPORT_DATA)
 
         const deviceIndex = getNextDeviceIndex(devices)
@@ -52,7 +52,7 @@ export const useDeviceUtils = () => {
 
         let walletAndDevice: WalletAndDevice
         if (mnemonic) {
-            walletAndDevice = DeviceUtils.generateDeviceForMnemonic(mnemonic, deviceIndex, alias, path)
+            walletAndDevice = DeviceUtils.generateDeviceForMnemonic(mnemonic, deviceIndex, alias, path, isCloudKit)
         } else if (privateKey) {
             walletAndDevice = DeviceUtils.generateDeviceForPrivateKey(privateKey, deviceIndex, alias)
         } else throw new Error(ERRORS.UNKNOWN_ERROR)
@@ -62,8 +62,8 @@ export const useDeviceUtils = () => {
         return walletAndDevice
     }
 
-    const checkCanImportDevice = (mnemonic?: string[], privateKey?: string): void => {
-        createDevice(mnemonic, privateKey)
+    const checkCanImportDevice = (isCloudKit: boolean, mnemonic?: string[], privateKey?: string): void => {
+        createDevice(isCloudKit, mnemonic, privateKey)
     }
 
     return {

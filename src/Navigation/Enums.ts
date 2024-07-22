@@ -12,6 +12,8 @@ export enum Routes {
 
     BROWSER = "Browser",
 
+    IMPORT_FROM_CLOUD = "Import_From_Cloud",
+    ICLOUD_MNEMONIC_BACKUP = "Icloud_Mnemonic_Backup",
     USER_CREATE_PASSWORD = "User_Create_Password",
     APP_SECURITY = "App_Security",
     SETTINGS = "Settings",

@@ -40,7 +40,7 @@ export const WalletManagementScreen = () => {
         onPasswordSuccess: onPasswordSuccess_1,
         checkIdentityBeforeOpening: checkIdentityBeforeOpening_1,
     } = useCheckIdentity({
-        onIdentityConfirmed: (pin?: string) => createOnboardedWallet(pin),
+        onIdentityConfirmed: (pin?: string) => createOnboardedWallet({ pin, isCloudKit: false }),
         allowAutoPassword: false,
     })
 

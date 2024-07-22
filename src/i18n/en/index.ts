@@ -63,6 +63,9 @@ const en: BaseTranslation = {
     BTN_LETS_GET_SENDING: "Let's get sending!",
     BTN_SECURITY_OPERATION_CHECKBOX: "I state that I have backed up my secret phrase",
     BTN_WALLET_CONFRIM_DELETION: "I state that I want to delete this wallet",
+    BTN_CHOOSE_PASSWORD: "Choose password",
+    BTN_ENTER_PASSWORD: "Enter password",
+    BTN_CONFIRN_PASSWORD: "Confirm password",
 
 
     // BODY
@@ -156,6 +159,16 @@ const en: BaseTranslation = {
     BD_GO_BACK: "Go back to VeWorld app",
     BD_BUY_DESCRIPTION_COINBASE: "Buy with Coinbase and receive the tokens directly in VeWorld.",
     BD_BUY_DESCRIPTION_TRANSAK: "Buy with Transak and receive the tokens directly in VeWorld.",
+    BD_PASSWORD_NOT_STRONG:   "* Password is not strong enough (min 6 characters, 1 nunber, 1 special character)",
+    BD_PASSWORDS_DO_NOT_MATCH: "* Passwords do not match",
+    BD_MNEMONIC_PASSWORD_WARNING: "The 12 words below are your wallet's recovery phrase. This phrase lets you recover your wallet if you lose your device. Back up it up on iCloud (recommended) or write it down. Or both.",
+    BD_MNEMONIC_WARMNING:  "Never share these words. Anyone who learns them can steal all of your crypto. VeWorld will never ask you for them.",
+    BD_BACKED_UP_TO_CLOUD: "Backed up to iCloud",
+    BD_NOT_BACKED_UP_TO_CLOUD: "Not backed up to iCloud",
+    BD_CLOUD_BACKUP_PASSWORD: "iCloud Backup Password",
+    BD_CLOUD_PASSWORD_CREATION_MESSAGE: "This password will secure your secret recovery phrase in the cloud. VeWorld does NOT have access to your password. We can NOT reset it if you lose it, so keep it safe.",
+    BD_CLOUD_INSERT_PASSWORD: "Enter the password you used to back up your wallet.",
+
 
     // TITLES
     TITLE_WELCOME_TO: "Welcome to ",
@@ -173,6 +186,7 @@ const en: BaseTranslation = {
     TITLE_USER_PASSWORD: "Choose your 6-digit PIN",
     TITLE_USER_PIN: "Insert your 6-digit PIN",
     TITLE_WALLET_IMPORT_LOCAL: "Import Local Wallet",
+    TITLE_IMPORT_WALLET_FROM_ICLOUD: "Import Wallet from iCloud",
     TITLE_OBSERVE_WALLET: "Observe Wallet",
     TITLE_ALERT_FACE_ID_CANCELLED: "Face ID Cancelled",
     TITLE_ALERT_CAMERA_PERMISSION: "Camera Permissions",
@@ -519,6 +533,7 @@ const en: BaseTranslation = {
     FAVOURITES_DAPPS_TITLE: "Favourites",
     FAVOURITES_DAPPS_SEARCH_PLACEHOLDER: "Search",
     FAVOURITES_DAPPS_NO_RECORDS: "Could not find any dapps with this name",
+    FAVOURITES_BOTTOM_SHEET_TITLE: "Favourites",
     BROWSER_HISTORY_TITLE: "Browser History",
     BROWSER_HISTORY_SEARCH_PLACEHOLDER: "Search",
     BROWSER_HISTORY_No_RECORDS: "No History Available",
@@ -805,6 +820,8 @@ const en: BaseTranslation = {
     WALLET_LEDGER_ERROR_UNKNOWN_DESC: "An unknown error occurred. Please try again",
     WALLET_LEDGER_NO_DEVICES: "No devices found",
     WALLET_LEDGER_NO_DEVICES_DESC: "We couldn't find any Ledger devices to connect to",
+
+    CLOUDKIT_ERROR_GENERIC: "An error occurred while trying to connect to iCloud service. Try again!",
 
     // Transaction Labels
 

@@ -6,9 +6,11 @@ import { useTheme } from "~Hooks"
 import { BaseIcon, BaseText, BaseTouchable, BaseView } from "~Components"
 import { RootStackParamListSettings, Routes } from "~Navigation"
 
+type Excluded = Routes.WALLET_DETAILS | Routes.ICLOUD_MNEMONIC_BACKUP
+
 export type RowProps = {
     title: LocalizedString
-    screenName: keyof Omit<RootStackParamListSettings, Routes.WALLET_DETAILS>
+    screenName: keyof Omit<RootStackParamListSettings, Excluded>
     icon: string
 }
 

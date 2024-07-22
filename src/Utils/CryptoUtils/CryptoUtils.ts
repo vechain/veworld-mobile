@@ -40,7 +40,7 @@ function shuffleArray<T>(arr: T[]) {
 
 function encrypt<T>(data: T, encryptionKey: string, salt?: string): string {
     const key = PasswordUtils.hash(encryptionKey, salt)
-    const iv = PasswordUtils.getIV()
+    const iv = PasswordUtils.getIV() // TODO - vas - generate IV
     const cipher = crypto.createCipheriv("aes256", key, iv)
     let ciph = cipher.update(JSON.stringify(data), "utf-8", "hex")
     ciph += cipher.final("hex")

@@ -42,7 +42,15 @@ export const useHandleWalletCreation = () => {
     )
 
     const onCreateWallet = useCallback(
-        async ({ importMnemonic, privateKey }: { importMnemonic?: string[]; privateKey?: string }) => {
+        async ({
+            importMnemonic,
+            privateKey,
+            isCloudKit = false,
+        }: {
+            importMnemonic?: string[]
+            privateKey?: string
+            isCloudKit?: boolean
+        }) => {
             if (biometrics && biometrics.currentSecurityLevel === "BIOMETRIC") {
                 dispatch(setIsAppLoading(true))
                 const mnemonic = isEmpty(importMnemonic) ? getNewMnemonic() : importMnemonic
@@ -50,6 +58,7 @@ export const useHandleWalletCreation = () => {
                 await createLocalWallet({
                     mnemonic: privateKey ? undefined : mnemonic,
                     privateKey,
+                    isCloudKit,
                     onError: onWalletCreationError,
                 })
                 await migrateOnboarding(SecurityLevelType.BIOMETRIC)
@@ -62,7 +71,17 @@ export const useHandleWalletCreation = () => {
     )
 
     const onSuccess = useCallback(
-        async ({ pin, mnemonic, privateKey }: { pin: string; mnemonic?: string[]; privateKey?: string }) => {
+        async ({
+            pin,
+            mnemonic,
+            privateKey,
+            isCloudKit = false,
+        }: {
+            pin: string
+            mnemonic?: string[]
+            privateKey?: string
+            isCloudKit?: boolean
+        }) => {
             onClose()
             dispatch(setIsAppLoading(true))
             const _mnemonic = isEmpty(mnemonic) ? getNewMnemonic() : mnemonic
@@ -71,6 +90,7 @@ export const useHandleWalletCreation = () => {
                 mnemonic: privateKey ? undefined : _mnemonic,
                 privateKey: privateKey,
                 userPassword: pin,
+                isCloudKit,
                 onError: onWalletCreationError,
             })
             await migrateOnboarding(SecurityLevelType.SECRET, pin)
@@ -129,13 +149,14 @@ export const useHandleWalletCreation = () => {
     )
 
     const createOnboardedWallet = useCallback(
-        async (pin?: string) => {
+        async ({ pin, isCloudKit = false }: { pin?: string; isCloudKit: boolean }) => {
             dispatch(setIsAppLoading(true))
 
             const mnemonic = getNewMnemonic()
             await createLocalWallet({
                 mnemonic: mnemonic,
                 userPassword: pin,
+                isCloudKit,
                 onError: onWalletCreationError,
             })
             dispatch(setIsAppLoading(false))
@@ -148,16 +169,19 @@ export const useHandleWalletCreation = () => {
             importMnemonic,
             privateKey,
             pin,
+            isCloudKit = false,
         }: {
             importMnemonic?: string[]
             privateKey?: string
             pin?: string
+            isCloudKit: boolean
         }) => {
             if (biometrics && biometrics.currentSecurityLevel === "BIOMETRIC" && !pin) {
                 dispatch(setIsAppLoading(true))
                 await createLocalWallet({
                     mnemonic: privateKey ? undefined : importMnemonic,
                     privateKey,
+                    isCloudKit,
                     onError: onWalletCreationError,
                 })
                 dispatch(setIsAppLoading(false))
@@ -166,6 +190,7 @@ export const useHandleWalletCreation = () => {
                     mnemonic: privateKey ? undefined : importMnemonic,
                     privateKey,
                     userPassword: pin,
+                    isCloudKit,
                     onError: onWalletCreationError,
                 })
             }
