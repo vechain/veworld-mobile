@@ -1,11 +1,11 @@
 import React, { useCallback } from "react"
-import { DimensionValue, StyleProp, StyleSheet, TouchableOpacityProps, ViewStyle, TouchableOpacity } from "react-native"
+import { DimensionValue, StyleProp, StyleSheet, TouchableOpacity, TouchableOpacityProps, ViewStyle } from "react-native"
 
 import { AlignItems, ColorThemeType, FlexDirection, JustifyContent } from "~Constants"
 import { useThemedStyles } from "~Hooks"
-import { GenericTouchableProps } from "./Types"
-import { BaseView } from "../BaseView"
 import HapticsService from "~Services/HapticsService"
+import { BaseView } from "../BaseView"
+import { GenericTouchableProps } from "./Types"
 
 type Props = {
     children: React.ReactNode
