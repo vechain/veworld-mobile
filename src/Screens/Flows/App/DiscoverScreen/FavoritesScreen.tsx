@@ -1,5 +1,5 @@
 import { useNavigation } from "@react-navigation/native"
-import React, { useCallback, useEffect, useMemo, useState } from "react"
+import React, { useCallback, useMemo, useState } from "react"
 import { FlatList, ListRenderItemInfo, StyleSheet } from "react-native"
 import { BaseSearchInput, BaseSpacer, BaseText, BaseView, Layout } from "~Components"
 import { AnalyticsEvent, DiscoveryDApp } from "~Constants"
@@ -68,12 +68,6 @@ export const FavouritesScreen = () => {
         [onDAppPress],
     )
 
-    // We need to force the re-render of the FlatList to update the grouped bookmarks
-    const [key, setKey] = useState(0)
-    useEffect(() => {
-        setKey(prev => prev + 1)
-    }, [dappToShow])
-
     return (
         <Layout
             noMargin
@@ -96,7 +90,7 @@ export const FavouritesScreen = () => {
                 </BaseView>
             }
             fixedBody={
-                <BaseView key={key} flex={1} px={24}>
+                <BaseView flex={1} px={24}>
                     <FlatList
                         contentContainerStyle={styles.listContentContainer}
                         data={dappToShow}

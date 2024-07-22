@@ -25,32 +25,48 @@ export const StackDAppCard = ({ columns, columnsGap, dapp, onPress }: Props) => 
         ? getAppHubIconUrl(dapp[0].id)
         : `${process.env.REACT_APP_GOOGLE_FAVICON_URL}${dapp[0]?.href}`
 
+    const overlayBackground = !theme.isDark ? "#d9d9d9" : "#584E87"
+
     return (
         <Animated.View entering={ZoomIn} exiting={ZoomOut}>
             <BaseTouchable style={[styles.rootContainer, { width: cardDimension }]} onPress={onPress}>
-                <Image
-                    source={
-                        loadFallback
-                            ? require("~Assets/Img/dapp-fallback.png")
-                            : {
-                                  uri: iconUri,
-                              }
-                    }
-                    style={
-                        [
+                <BaseView
+                    style={[
+                        {
+                            height: imageDimension,
+                            width: imageDimension,
+                            backgroundColor: theme.colors.card,
+                        },
+                        styles.backgroundimageContainer,
+                    ]}>
+                    <Image
+                        source={
+                            loadFallback
+                                ? require("~Assets/Img/dapp-fallback.png")
+                                : {
+                                      uri: iconUri,
+                                  }
+                        }
+                        style={
+                            [
+                                {
+                                    height: imageDimension,
+                                    width: imageDimension,
+                                },
+                            ] as StyleProp<ImageStyle>
+                        }
+                        onError={() => setLoadFallback(true)}
+                        resizeMode="contain"
+                    />
+                    <BaseView
+                        style={[
                             {
-                                height: imageDimension,
-                                width: imageDimension,
-                                backgroundColor: theme.colors.card,
-                                opacity: 0.5,
-                                marginLeft: 4,
+                                backgroundColor: overlayBackground,
                             },
-                            styles.icon,
-                        ] as StyleProp<ImageStyle>
-                    }
-                    onError={() => setLoadFallback(true)}
-                    resizeMode="contain"
-                />
+                            styles.overlay,
+                        ]}
+                    />
+                </BaseView>
                 <Image
                     source={
                         loadFallback
@@ -98,5 +114,16 @@ const baseStyles = () =>
         },
         text: {
             width: "100%",
+        },
+        backgroundimageContainer: {
+            borderRadius: 12,
+            overflow: "hidden",
+            marginLeft: 4,
+        },
+        overlay: {
+            position: "absolute",
+            height: "100%",
+            width: "100%",
+            opacity: 0.7,
         },
     })
