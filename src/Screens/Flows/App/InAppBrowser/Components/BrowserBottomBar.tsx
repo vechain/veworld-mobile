@@ -14,7 +14,7 @@ type IconProps = {
 export const BrowserBottomBar: React.FC = () => {
     const { canGoBack, canGoForward, goBack, goForward, navigationState, webviewRef } = useInAppBrowser()
     const theme = useTheme()
-    const { isBookMarked, toggleBookmark } = useDappBookmarking(navigationState?.url, navigationState?.title)
+    const { isBookMarked, toggleBookmark } = useDappBookmarking(navigationState?.url)
     const { isMainnet } = useBlockchainNetwork()
     const { styles } = useThemedStyles(baseStyles(isMainnet))
 

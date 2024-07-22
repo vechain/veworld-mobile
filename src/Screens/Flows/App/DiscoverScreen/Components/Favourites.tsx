@@ -1,31 +1,58 @@
-import React from "react"
+import React, { useCallback, useState } from "react"
 import { FlatList, ListRenderItemInfo } from "react-native"
 import { BaseSpacer, BaseText, BaseTouchable, BaseView } from "~Components"
 import { DiscoveryDApp } from "~Constants"
-import { DAppCard } from "./DAppCard"
+import { useBottomSheetModal } from "~Hooks"
 import { useI18nContext } from "~i18n"
+import { DAppCard } from "./DAppCard"
+import { StackDAppCard } from "./StackDAppCard"
+import { StackedDappsBottomSheet } from "./StackedDappsBottomSheet"
 
 type BookmarkListProps = {
-    bookmarkedDApps: DiscoveryDApp[]
+    bookmarkedDApps: DiscoveryDApp[][]
     onDAppPress: ({ href, custom }: { href: string; custom?: boolean }) => void
 }
 
 const BookmarkedDAppsList = ({ bookmarkedDApps, onDAppPress }: BookmarkListProps) => {
-    const renderItem = ({ item, index }: ListRenderItemInfo<DiscoveryDApp>) => {
-        const isLast = index === bookmarkedDApps.length - 1
-        const columnsGap = 24
+    const [bottomSheetDApps, setBottomSheetDApps] = useState<DiscoveryDApp[]>([])
 
-        return (
-            <BaseView pl={columnsGap} pr={isLast ? columnsGap : 0} justifyContent="center" alignItems="center">
-                <DAppCard
-                    columns={4}
-                    columnsGap={columnsGap}
-                    dapp={item}
-                    onPress={() => onDAppPress({ href: item.href, custom: item.isCustom })}
-                />
-            </BaseView>
-        )
-    }
+    const { ref, onOpen, onClose } = useBottomSheetModal()
+
+    const onStackDAppPress = useCallback(
+        (dapps: DiscoveryDApp[]) => {
+            setBottomSheetDApps(dapps)
+            onOpen()
+        },
+        [onOpen],
+    )
+
+    const renderItem = useCallback(
+        ({ item, index }: ListRenderItemInfo<DiscoveryDApp[]>) => {
+            const isLast = index === bookmarkedDApps.length - 1
+            const columnsGap = 24
+
+            return (
+                <BaseView pl={columnsGap} pr={isLast ? columnsGap : 0} justifyContent="center" alignItems="center">
+                    {item.length === 1 ? (
+                        <DAppCard
+                            columns={4}
+                            columnsGap={columnsGap}
+                            dapp={item[0]}
+                            onPress={() => onDAppPress({ href: item[0].href, custom: item[0].isCustom })}
+                        />
+                    ) : (
+                        <StackDAppCard
+                            columns={4}
+                            columnsGap={columnsGap}
+                            dapp={item}
+                            onPress={() => onStackDAppPress(item)}
+                        />
+                    )}
+                </BaseView>
+            )
+        },
+        [bookmarkedDApps.length, onDAppPress, onStackDAppPress],
+    )
 
     return (
         <BaseView>
@@ -33,17 +60,18 @@ const BookmarkedDAppsList = ({ bookmarkedDApps, onDAppPress }: BookmarkListProps
             <FlatList
                 data={bookmarkedDApps}
                 horizontal
-                keyExtractor={item => item.href}
+                keyExtractor={(_item, index) => _item[0]?.href ?? index.toString()}
                 renderItem={renderItem}
                 showsVerticalScrollIndicator={false}
                 showsHorizontalScrollIndicator={false}
             />
+            <StackedDappsBottomSheet ref={ref} dapps={bottomSheetDApps} onDAppPress={onDAppPress} onClose={onClose} />
         </BaseView>
     )
 }
 
 type FavouritesProps = {
-    bookmarkedDApps: DiscoveryDApp[]
+    bookmarkedDApps: DiscoveryDApp[][]
     onActionLabelPress: () => void
     onDAppPress: ({ href }: { href: string; custom?: boolean }) => void
 }

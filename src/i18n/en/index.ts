@@ -519,6 +519,7 @@ const en: BaseTranslation = {
     FAVOURITES_DAPPS_TITLE: "Favourites",
     FAVOURITES_DAPPS_SEARCH_PLACEHOLDER: "Search",
     FAVOURITES_DAPPS_NO_RECORDS: "Could not find any dapps with this name",
+    FAVOURITES_BOTTOM_SHEET_TITLE: "Favourites",
     BROWSER_HISTORY_TITLE: "Browser History",
     BROWSER_HISTORY_SEARCH_PLACEHOLDER: "Search",
     BROWSER_HISTORY_No_RECORDS: "No History Available",
