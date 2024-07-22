@@ -29,7 +29,8 @@ onFlowComplete:
 - tapOn:
      id: "SendScreen_amountInput"
 - inputText: ${AMOUNT}
-- tapOn: "Currency balance"
+- tapOn:
+     id: "Layout_ScrollView"
 - tapOn:
      id: "next-button"
 - assertVisible:
@@ -51,11 +52,11 @@ onFlowComplete:
           index: 0
       - tapOn:
           id: "confirm-send-button"
-- repeat:
-  while:
-    notVisible: "Your tokens"
-  commands:
-    - tapOn: "1"
+      - repeat:
+          while:
+            notVisible: "Your tokens"
+          commands:
+            - tapOn: "1"
 - assertVisible: "Your tokens"
 - runFlow:
     env:
@@ -76,7 +77,8 @@ onFlowComplete:
       - tapOn:
           id: "SendScreen_amountInput"
       - inputText: ${AMOUNT}
-      - tapOn: "Currency balance"
+      - tapOn:
+          id: "Layout_ScrollView"
       - tapOn:
           id: "next-button"
       - assertVisible:

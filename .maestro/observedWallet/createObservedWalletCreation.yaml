@@ -11,8 +11,13 @@ onFlowStart:
     id: "HomeScreen_WalletManagementButton-wrapper"
 - tapOn:
     id: "add-wallet-button"
-- tapOn:
-    id: "import-observe-wallet-button"
+- repeat:
+    while:
+      visible:
+         id: "import-observe-wallet-button"
+    commands:
+      - tapOn:
+            id: "import-observe-wallet-button"
 - tapOn:
     id: "observe-wallet-address-input"
 - inputText: ${WALLET_ADDRESS}
@@ -25,10 +30,10 @@ onFlowStart:
     id: "wallet-tab"
 - repeat:
     while:
-        visible:
-            id: "BackButtonHeader-BaseIcon-backButton"
+      visible:
+         id: "BackButtonHeader-BaseIcon-backButton"
     commands:
-        - tapOn:
+      - tapOn:
             id: "BackButtonHeader-BaseIcon-backButton"
 - assertVisible: "VeWorld"
 ## User deletes a wallet to observe
@@ -52,22 +57,21 @@ onFlowStart:
          direction: "LEFT"
 - tapOn:
      id: "DeleteUnderlay_DeleteIcon_observable-wrapper"
-- assertVisible: "REMOVE WALLET"
-- tapOn: "REMOVE WALLET"
+- assertVisible:
+    id: "remove-wallet-button"
+- tapOn:
+    id: "remove-wallet-button"
 - repeat:
     while:
        visible: "Insert your 6-digit PIN"
     commands:
       - tapOn: "1"
-- runFlow:
-    when:
-      platform: Android
+- repeat:
+    while:
+      visible:
+         id: "BackButtonHeader-BaseIcon-backButton"
     commands:
-        - tapOn:
-             id: "wallet-tab"
-- runFlow:
-    when:
-      platform: iOS
-    commands:
-        - tapOn: "REMOVE WALLET"
+      - tapOn:
+            id: "BackButtonHeader-BaseIcon-backButton"
+- assertVisible: "VeWorld"
 - runFlow: ../setup_reset/resetApp.yaml

@@ -1,5 +1,4 @@
 # config.yaml
 flows:
   - observedWallet/*
-local:
-  deterministicOrder: true
+  - send/*
