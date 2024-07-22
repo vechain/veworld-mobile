@@ -17,7 +17,11 @@ onFlowComplete:
 - tapOn:
     id: "AddCustomTokenBottomSheet-TextInput-Address"
 - inputText: ${ADDRESS}
-- tapOn: "Add"
+- repeat:
+    while:
+      visible: "Add"
+    commands:
+      - tapOn: "Add"
 - repeat:
     while:
       visible:
