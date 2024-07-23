@@ -130,7 +130,7 @@ class CloudKitManager: NSObject {
   @objc
   func getWallet(_ rootAddress: String, resolver: @escaping(RCTPromiseResolveBlock), rejecter reject: @escaping(RCTPromiseRejectBlock)) -> Void {
     
-    let pred = NSPredicate(format: "\(Constants.rootAddress) == %@", rootAddress)
+    let pred = NSPredicate(format: "\(Constants.rootAddress)=%@", rootAddress)
     let query = CKQuery(recordType: Constants.fileNameWallet, predicate: pred)
     let operation = CKQueryOperation(query: query)
     operation.desiredKeys = [Constants.rootAddress, Constants.walletType, Constants.data, Constants.firstAccountAddress, Constants.creationDate]
@@ -141,7 +141,7 @@ class CloudKitManager: NSObject {
       
       guard let self = self else { return }
       
-      let wallet = [
+      wallet = [
         Constants.rootAddress : record[Constants.rootAddress] as! String,
         Constants.walletType : record[Constants.walletType] as! String,
         Constants.firstAccountAddress : record[Constants.firstAccountAddress] as! String,
