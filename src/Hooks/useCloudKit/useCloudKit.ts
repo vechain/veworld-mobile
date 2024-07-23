@@ -72,9 +72,8 @@ export const useCloudKit = () => {
                 await rollback(_rootAddress)
                 setIsLoading(false)
                 let er = _error as Error
-                error(ERROR_EVENTS.WALLET_CREATION, er, er.message)
+                error(ERROR_EVENTS.CLOUDKIT, er, er.message)
                 showErrorToast({
-                    // text1: LL.CLOUDKIT_ERROR_GENERIC(),
                     text1: er.message ?? LL.CLOUDKIT_ERROR_GENERIC(),
                 })
             }
