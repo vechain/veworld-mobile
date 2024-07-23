@@ -266,4 +266,109 @@ class CloudKitManager: NSObject {
     CKContainer.default().privateCloudDatabase.add(operation)
   }
   
+  
+  @available(iOS 15.0, *)
+  @objc
+  func deleteWallet(_ rootAddress: String, resolver: @escaping(RCTPromiseResolveBlock), rejecter reject: @escaping(RCTPromiseRejectBlock)) -> Void {
+    
+    let pred = NSPredicate(format: "\(ROOT_ADDRESS) == %@", rootAddress)
+    let query = CKQuery(recordType: FILE_NAME, predicate: pred)
+    let operation = CKQueryOperation(query: query)
+    
+    operation.recordFetchedBlock = { record in
+      let id = record.recordID
+      
+      CKContainer.default().privateCloudDatabase.delete(withRecordID: id) { record, error in
+        if error != nil {
+          let err = NSError(domain: error!.localizedDescription, code: 200, userInfo: nil)
+          reject("ICLOUD", "Failed to delete wallet from iCloud", err)
+          print("Failed to delete wallet from iCloud")
+        }
+      }
+    }
+    
+    operation.queryCompletionBlock = { cursor, error in
+      if error != nil {
+        let err = NSError(domain: error!.localizedDescription, code: 200, userInfo: nil)
+        reject("ICLOUD", "Error, delete wallet operation, iCloud", err)
+        print("Error, delete wallet operation, iCloud")
+      } else {
+        resolver(true)
+      }
+    }
+    
+    CKContainer.default().privateCloudDatabase.add(operation)
+  }
+  
+  
+  @available(iOS 15.0, *)
+  @objc
+  func deleteSalt(_ rootAddress: String, resolver: @escaping(RCTPromiseResolveBlock), rejecter reject: @escaping(RCTPromiseRejectBlock)) -> Void {
+    
+    let zoneID = CKRecordZone.ID(zoneName: self.SALT_ZONE, ownerName: CKCurrentUserDefaultName)
+    let recordID: CKRecord.ID = CKRecord.ID(recordName: rootAddress, zoneID: zoneID)
+    let pred = NSPredicate(format: "recordID=%@", recordID)
+    let query = CKQuery(recordType: FILE_NAME_SALT, predicate: pred)
+    let operation = CKQueryOperation(query: query)
+    
+    operation.recordFetchedBlock = { record in
+      let id = record.recordID
+      
+      CKContainer.default().privateCloudDatabase.delete(withRecordID: id) { record, error in
+        if error != nil {
+          let err = NSError(domain: error!.localizedDescription, code: 200, userInfo: nil)
+          reject("ICLOUD", "Failed to delete salt from iCloud", err)
+          print("Failed to delete salt from iCloud")
+        }
+      }
+    }
+    
+    operation.queryCompletionBlock = { cursor, error in
+      if error != nil {
+        let err = NSError(domain: error!.localizedDescription, code: 200, userInfo: nil)
+        reject("ICLOUD", "Error, delete salt operation, iCloud", err)
+        print("Error, delete salt operation, iCloud")
+      } else {
+        resolver(true)
+      }
+    }
+    
+    CKContainer.default().privateCloudDatabase.add(operation)
+  }
+  
+  
+  @available(iOS 15.0, *)
+  @objc
+  func deleteIV(_ rootAddress: String, resolver: @escaping(RCTPromiseResolveBlock), rejecter reject: @escaping(RCTPromiseRejectBlock)) -> Void {
+    
+    let zoneID = CKRecordZone.ID(zoneName: self.IV_ZONE, ownerName: CKCurrentUserDefaultName)
+    let recordID: CKRecord.ID = CKRecord.ID(recordName: rootAddress, zoneID: zoneID)
+    let pred = NSPredicate(format: "recordID=%@", recordID)
+    let query = CKQuery(recordType: FILE_NAME_IV, predicate: pred)
+    let operation = CKQueryOperation(query: query)
+    
+    operation.recordFetchedBlock = { record in
+      let id = record.recordID
+      
+      CKContainer.default().privateCloudDatabase.delete(withRecordID: id) { record, error in
+        if error != nil {
+          let err = NSError(domain: error!.localizedDescription, code: 200, userInfo: nil)
+          reject("ICLOUD", "Failed to delete iv from iCloud", err)
+          print("Failed to delete iv from iCloud")
+        }
+      }
+    }
+    
+    operation.queryCompletionBlock = { cursor, error in
+      if error != nil {
+        let err = NSError(domain: error!.localizedDescription, code: 200, userInfo: nil)
+        reject("ICLOUD", "Error, delete iv operation, iCloud", err)
+        print("Error, delete iv operation, iCloud")
+      } else {
+        resolver(true)
+      }
+    }
+    
+    CKContainer.default().privateCloudDatabase.add(operation)
+  }
 }

@@ -14,6 +14,13 @@ export const useCloudKit = () => {
 
     const getCloudKitAvailability = useCallback(async () => await CloudKitManager.checkCloudKitAvailability(), [])
 
+    const rollback = useCallback(async (_rootAddress: string) => {
+        const delWAllet = await CloudKitManager.deleteWallet(_rootAddress)
+        const delSalt = await CloudKitManager.deleteSalt(_rootAddress)
+        const delIV = await CloudKitManager.deleteIV(_rootAddress)
+        return delWAllet && delSalt && delIV
+    }, [])
+
     const saveWalletToCloudKit = useCallback(
         async ({
             mnemonic,
@@ -38,27 +45,37 @@ export const useCloudKit = () => {
             }
 
             setIsLoading(true)
-            const result = await CloudKitManager.saveToCloudKit(_rootAddress, mnemonic, deviceType, firstAccountAddress)
 
-            if (result) {
-                // save salt to seperate record in cloudkit
-                const isSaltSaved = await CloudKitManager.saveSalt(_rootAddress, salt)
-                // save iv to seperate record in cloudkit
-                const isIvSaved = await CloudKitManager.saveIV(_rootAddress, PasswordUtils.bufferToBase64(iv))
+            try {
+                const result = await CloudKitManager.saveToCloudKit(
+                    _rootAddress,
+                    mnemonic,
+                    deviceType,
+                    firstAccountAddress,
+                )
 
-                // TODO.vas - rollback in case of failure (delete last entry from cloudkit)
-                if (!isSaltSaved || !isIvSaved) {
-                    showErrorToast({
-                        text1: LL.CLOUDKIT_ERROR_GENERIC(),
-                    })
-                    setIsLoading(false)
-                    return
+                if (result) {
+                    const isSaltSaved = await CloudKitManager.saveSalt(_rootAddress, salt)
+                    const isIvSaved = await CloudKitManager.saveIV(_rootAddress, PasswordUtils.bufferToBase64(iv))
+
+                    if (!isSaltSaved || !isIvSaved) {
+                        await rollback(_rootAddress)
+                        showErrorToast({
+                            text1: LL.CLOUDKIT_ERROR_GENERIC(),
+                        })
+                        setIsLoading(false)
+                        return
+                    }
                 }
+            } catch (error) {
+                await rollback(_rootAddress)
+                setIsLoading(false)
+                showErrorToast({
+                    text1: LL.CLOUDKIT_ERROR_GENERIC(),
+                })
             }
-
-            setIsLoading(false)
         },
-        [LL],
+        [LL, rollback],
     )
 
     const getAllWalletsFromCloudKit = useCallback(async () => {
