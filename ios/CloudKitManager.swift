@@ -59,61 +59,26 @@ class CloudKitManager: NSObject {
     }
   }
   
-  @available(iOS 15.0, *)
-  func checkAndCreateZone(zoneName: String, completion: @escaping (Result<Void, Error>) -> Void) {
-    let zoneID = CKRecordZone.ID(zoneName: zoneName, ownerName: CKCurrentUserDefaultName)
-    
-    let privateDatabase = CKContainer.default().privateCloudDatabase
-    privateDatabase.fetchAllRecordZones { (zones, error) in
-      if let error = error {
-        completion(.failure(error))
-        return
-      }
-      
-      if let zones = zones, zones.contains(where: { $0.zoneID == zoneID }) {
-        completion(.success(()))
-      } else {
-        let customZone = CKRecordZone(zoneID: zoneID)
-        privateDatabase.save(customZone) { (savedZone, error) in
-          if let error = error {
-            completion(.failure(error))
-          } else {
-            completion(.success(()))
-          }
-        }
-      }
-    }
-  }
-  
   
   @available(iOS 15.0, *)
   @objc
   func saveToCloudKit(_ rootAddress: String, data: String, walletType: String, firstAccountAddress: String, resolver: @escaping(RCTPromiseResolveBlock), rejecter reject: @escaping(RCTPromiseRejectBlock)) -> Void {
     
-    checkAndCreateZone(zoneName: Constants.fileNameWallet) { [weak self] result in
+    let recordID = CKRecord.ID(recordName: "\(Constants.walletZone )_\(rootAddress)")
+    let wallet = CKRecord(recordType: Constants.fileNameWallet, recordID: recordID)
+    wallet[Constants.rootAddress] = rootAddress as CKRecordValue
+    wallet[Constants.walletType] = walletType  as CKRecordValue
+    wallet[Constants.firstAccountAddress] = firstAccountAddress as CKRecordValue
+    wallet.encryptedValues[Constants.data] = data
+    
+    CKContainer.default().privateCloudDatabase.save(wallet) { [weak self] record, error in
       guard let self = self else { return }
       
-      switch result {
-      case .success():
-        
-        let zoneID = CKRecordZone.ID(zoneName: Constants.walletZone, ownerName: CKCurrentUserDefaultName)
-        let recordID = CKRecord.ID(recordName: rootAddress, zoneID: zoneID)
-        let wallet = CKRecord(recordType: Constants.fileNameWallet, recordID: recordID)
-        wallet[Constants.rootAddress] = rootAddress as CKRecordValue
-        wallet[Constants.walletType] = walletType  as CKRecordValue
-        wallet[Constants.firstAccountAddress] = firstAccountAddress as CKRecordValue
-        wallet.encryptedValues[Constants.data] = data
-        
-        CKContainer.default().privateCloudDatabase.save(wallet) { record, error in
-          if (error != nil) {
-            self.handleError(error, reject: reject)
-          } else {
-            print("Wallet saved successfullt on iCloud")
-            resolver(true)
-          }
-        }
-      case .failure(let error):
+      if (error != nil) {
         self.handleError(error, reject: reject)
+      } else {
+        print("Wallet saved successfullt on iCloud")
+        resolver(true)
       }
     }
   }
@@ -200,29 +165,19 @@ class CloudKitManager: NSObject {
   @available(iOS 15.0, *)
   @objc
   func saveSalt(_ rootAddress: String, salt: String, resolver: @escaping(RCTPromiseResolveBlock), rejecter reject: @escaping(RCTPromiseRejectBlock)) -> Void {
+        
+    let recordID = CKRecord.ID(recordName: "\(Constants.saltZone)_\(rootAddress)")
+    let _salt = CKRecord(recordType: Constants.fileNameSalt, recordID: recordID)
+    _salt.encryptedValues[Constants.salt] = salt
     
-    checkAndCreateZone(zoneName: Constants.saltZone) { [weak self] result in
-      
+    CKContainer.default().privateCloudDatabase.save(_salt) { [weak self] record, error in
       guard let self = self else { return }
       
-      switch result {
-      case .success():
-        
-        let zoneID = CKRecordZone.ID(zoneName: Constants.saltZone, ownerName: CKCurrentUserDefaultName)
-        let recordID = CKRecord.ID(recordName: rootAddress, zoneID: zoneID)
-        let _salt = CKRecord(recordType: Constants.fileNameSalt, recordID: recordID)
-        _salt.encryptedValues[Constants.salt] = salt
-        
-        CKContainer.default().privateCloudDatabase.save(_salt) { record, error in
-          if (error != nil) {
-            self.handleError(error, reject: reject)
-          } else {
-            print("Salt saved successfullt on iCloud")
-            resolver(true)
-          }
-        }
-      case .failure(let error):
+      if (error != nil) {
         self.handleError(error, reject: reject)
+      } else {
+        print("Salt saved successfullt on iCloud")
+        resolver(true)
       }
     }
   }
@@ -232,41 +187,28 @@ class CloudKitManager: NSObject {
   @objc
   func saveIV(_ rootAddress: String, iv: String, resolver: @escaping(RCTPromiseResolveBlock), rejecter reject: @escaping(RCTPromiseRejectBlock)) -> Void {
     
+    let recordID = CKRecord.ID(recordName: "\(Constants.ivZone)_\(rootAddress)")
+    let _iv = CKRecord(recordType: Constants.fileNameIV, recordID: recordID)
+    _iv.encryptedValues[Constants.iv] = iv
     
-    checkAndCreateZone(zoneName: Constants.ivZone) { [weak self] result in
+    CKContainer.default().privateCloudDatabase.save(_iv) {  [weak self] record, error in
       guard let self = self else { return }
       
-      
-      switch result {
-      case .success():
-        
-        let zoneID = CKRecordZone.ID(zoneName: Constants.ivZone, ownerName: CKCurrentUserDefaultName)
-        let recordID = CKRecord.ID(recordName: rootAddress, zoneID: zoneID)
-        let _iv = CKRecord(recordType: Constants.fileNameIV, recordID: recordID)
-        _iv.encryptedValues[Constants.iv] = iv
-        
-        CKContainer.default().privateCloudDatabase.save(_iv) { record, error in
-          if (error != nil) {
-            self.handleError(error, reject: reject)
-          } else {
-            print("IV saved successfullt on iCloud")
-            resolver(true)
-          }
-        }
-      case .failure(let error):
+      if (error != nil) {
         self.handleError(error, reject: reject)
+      } else {
+        print("IV saved successfullt on iCloud")
+        resolver(true)
       }
     }
   }
   
-  
-  
+
   @available(iOS 15.0, *)
   @objc
   func getSalt(_ rootAddress: String, resolver: @escaping(RCTPromiseResolveBlock), rejecter reject: @escaping(RCTPromiseRejectBlock)) -> Void {
     
-    let zoneID = CKRecordZone.ID(zoneName: Constants.saltZone, ownerName: CKCurrentUserDefaultName)
-    let recordID: CKRecord.ID = CKRecord.ID(recordName: rootAddress, zoneID: zoneID)
+    let recordID: CKRecord.ID = CKRecord.ID(recordName: "\(Constants.saltZone)_\(rootAddress)")
     let pred = NSPredicate(format: "recordID=%@", recordID)
     let query = CKQuery(recordType: Constants.fileNameSalt, predicate: pred)
     let operation = CKQueryOperation(query: query)
@@ -298,8 +240,7 @@ class CloudKitManager: NSObject {
   @objc
   func getIV(_ rootAddress: String, resolver: @escaping(RCTPromiseResolveBlock), rejecter reject: @escaping(RCTPromiseRejectBlock)) -> Void {
     
-    let zoneID = CKRecordZone.ID(zoneName: Constants.ivZone, ownerName: CKCurrentUserDefaultName)
-    let recordID: CKRecord.ID = CKRecord.ID(recordName: rootAddress, zoneID: zoneID)
+    let recordID: CKRecord.ID = CKRecord.ID(recordName: "\(Constants.ivZone)_\(rootAddress)")
     let pred = NSPredicate(format: "recordID=%@", recordID)
     let query = CKQuery(recordType: Constants.fileNameIV, predicate: pred)
     let operation = CKQueryOperation(query: query)
@@ -367,8 +308,7 @@ class CloudKitManager: NSObject {
   @objc
   func deleteSalt(_ rootAddress: String, resolver: @escaping(RCTPromiseResolveBlock), rejecter reject: @escaping(RCTPromiseRejectBlock)) -> Void {
     
-    let zoneID = CKRecordZone.ID(zoneName: Constants.saltZone, ownerName: CKCurrentUserDefaultName)
-    let recordID: CKRecord.ID = CKRecord.ID(recordName: rootAddress, zoneID: zoneID)
+    let recordID: CKRecord.ID = CKRecord.ID(recordName: "\(Constants.saltZone)_\(rootAddress)")
     let pred = NSPredicate(format: "recordID=%@", recordID)
     let query = CKQuery(recordType: Constants.fileNameSalt, predicate: pred)
     let operation = CKQueryOperation(query: query)
@@ -403,8 +343,7 @@ class CloudKitManager: NSObject {
   @objc
   func deleteIV(_ rootAddress: String, resolver: @escaping(RCTPromiseResolveBlock), rejecter reject: @escaping(RCTPromiseRejectBlock)) -> Void {
     
-    let zoneID = CKRecordZone.ID(zoneName: Constants.ivZone, ownerName: CKCurrentUserDefaultName)
-    let recordID: CKRecord.ID = CKRecord.ID(recordName: rootAddress, zoneID: zoneID)
+    let recordID: CKRecord.ID = CKRecord.ID(recordName: "\(Constants.ivZone)_\(rootAddress)")
     let pred = NSPredicate(format: "recordID=%@", recordID)
     let query = CKQuery(recordType: Constants.fileNameIV, predicate: pred)
     let operation = CKQueryOperation(query: query)
