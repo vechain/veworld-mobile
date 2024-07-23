@@ -1,10 +1,9 @@
 import { useCallback, useEffect, useState } from "react"
 import { NativeModules } from "react-native"
 import { showErrorToast } from "~Components"
-import { ERROR_EVENTS } from "~Constants"
 import { useI18nContext } from "~i18n"
 import { DEVICE_TYPE } from "~Model"
-import { info } from "~Utils"
+import { PasswordUtils } from "~Utils"
 const { CloudKitManager } = NativeModules
 
 export const useCloudKit = () => {
@@ -22,14 +21,16 @@ export const useCloudKit = () => {
             deviceType,
             firstAccountAddress,
             salt,
+            iv,
         }: {
             mnemonic: string
             firstAccountAddress: string
             _rootAddress?: string
             deviceType?: DEVICE_TYPE
             salt: string
+            iv: Uint8Array
         }) => {
-            if (!mnemonic || !_rootAddress || !deviceType || !salt || !firstAccountAddress) {
+            if (!mnemonic || !_rootAddress || !deviceType || !salt || !iv || !firstAccountAddress) {
                 showErrorToast({
                     text1: LL.CLOUDKIT_ERROR_GENERIC(),
                 })
@@ -37,14 +38,24 @@ export const useCloudKit = () => {
             }
 
             setIsLoading(true)
-            const result = await CloudKitManager.saveToCloudKit(
-                _rootAddress,
-                mnemonic,
-                deviceType,
-                salt,
-                firstAccountAddress,
-            )
-            info(ERROR_EVENTS.WALLET_CREATION, result)
+            const result = await CloudKitManager.saveToCloudKit(_rootAddress, mnemonic, deviceType, firstAccountAddress)
+
+            if (result) {
+                // save salt to seperate record in cloudkit
+                const isSaltSaved = await CloudKitManager.saveSalt(_rootAddress, salt)
+                // save iv to seperate record in cloudkit
+                const isIvSaved = await CloudKitManager.saveIV(_rootAddress, PasswordUtils.bufferToBase64(iv))
+
+                // TODO.vas - rollback in case of failure (delete last entry from cloudkit)
+                if (!isSaltSaved || !isIvSaved) {
+                    showErrorToast({
+                        text1: LL.CLOUDKIT_ERROR_GENERIC(),
+                    })
+                    setIsLoading(false)
+                    return
+                }
+            }
+
             setIsLoading(false)
         },
         [LL],
@@ -69,6 +80,14 @@ export const useCloudKit = () => {
         [isAvailable],
     )
 
+    const getSalt = useCallback(async (_rootAddress: string) => {
+        return await CloudKitManager.getSalt(_rootAddress)
+    }, [])
+
+    const getIV = useCallback(async (_rootAddress: string) => {
+        return await CloudKitManager.getIV(_rootAddress)
+    }, [])
+
     useEffect(() => {
         getCloudKitAvailability().then(_isAvailable => setisAvailable(_isAvailable))
     }, [getCloudKitAvailability])
@@ -81,5 +100,7 @@ export const useCloudKit = () => {
         isWalletBackedUp,
         getWalletByRootAddress,
         isLoading,
+        getSalt,
+        getIV,
     }
 }

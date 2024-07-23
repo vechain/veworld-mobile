@@ -17,19 +17,11 @@ import {
     RequireUserPassword,
     showErrorToast,
 } from "~Components"
-import { AnalyticsEvent, ColorThemeType, VET } from "~Constants"
-import {
-    useAnalyticTracking,
-    useBottomSheetModal,
-    useCheckIdentity,
-    useCloudKit,
-    useDeviceUtils,
-    useThemedStyles,
-    useVns,
-} from "~Hooks"
+import { ColorThemeType, VET } from "~Constants"
+import { useBottomSheetModal, useCheckIdentity, useCloudKit, useDeviceUtils, useThemedStyles, useVns } from "~Hooks"
 import { useI18nContext } from "~i18n"
 import { selectDevices, selectHasOnboarded, selectSelectedNetwork, useAppSelector } from "~Storage/Redux"
-import { AddressUtils, BalanceUtils, BigNutils, CryptoUtils, DateUtils } from "~Utils"
+import { AddressUtils, BalanceUtils, BigNutils, CryptoUtils, DateUtils, PasswordUtils } from "~Utils"
 import { useHandleWalletCreation } from "../Onboarding/WelcomeScreen/useHandleWalletCreation"
 import { UserCreatePasswordScreen } from "./UserCreatePasswordScreen"
 import { StackActions, useNavigation } from "@react-navigation/native"
@@ -48,9 +40,8 @@ const skeletonArray = new Array(4).fill({ rootAddress: Math.random().toString() 
 export const ImportFromCloudScreen = () => {
     const userHasOnboarded = useAppSelector(selectHasOnboarded)
     const nav = useNavigation()
-    const track = useAnalyticTracking()
     const { styles, theme } = useThemedStyles(baseStyles)
-    const { getAllWalletsFromCloudKit, isLoading } = useCloudKit()
+    const { getAllWalletsFromCloudKit, isLoading, getSalt, getIV } = useCloudKit()
     const { LL } = useI18nContext()
     const [cloudKitWallets, setCloudKitWallets] = useState<CloudKitWallet[] | null>(null)
     const [selected, setSelected] = useState<CloudKitWallet | null>(null)
@@ -95,16 +86,22 @@ export const ImportFromCloudScreen = () => {
     })
 
     const handleOnPress = useCallback(
-        (password: string) => {
+        async (password: string) => {
             onCloseWarning()
 
             if (selected) {
-                const mnemonic = CryptoUtils.decrypt(selected.data, password, selected.salt) as string[]
+                const { salt } = await getSalt(selected.rootAddress)
+                const { iv } = await getIV(selected.rootAddress)
+                const mnemonic = CryptoUtils.decrypt(
+                    selected.data,
+                    password,
+                    salt,
+                    PasswordUtils.base64ToBuffer(iv),
+                ) as string[]
                 const isCloudKit = true
                 try {
                     checkCanImportDevice(isCloudKit, mnemonic)
                     mnemonicCache.current = mnemonic
-                    track(AnalyticsEvent.IMPORT_MNEMONIC_SUBMITTED)
                     if (userHasOnboarded) {
                         setTimeout(() => {
                             checkIdentityBeforeOpening()
@@ -127,10 +124,11 @@ export const ImportFromCloudScreen = () => {
             LL,
             checkCanImportDevice,
             checkIdentityBeforeOpening,
+            getIV,
+            getSalt,
             onCloseWarning,
             onCreateWallet,
             selected,
-            track,
             userHasOnboarded,
         ],
     )

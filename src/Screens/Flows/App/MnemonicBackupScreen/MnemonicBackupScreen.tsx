@@ -13,7 +13,7 @@ import {
 import { useI18nContext } from "~i18n"
 import { useBottomSheetModal, useCloudKit, useCopyClipboard, useThemedStyles } from "~Hooks"
 import { StyleSheet } from "react-native"
-import { AddressUtils, CryptoUtils, DeviceUtils, HexUtils } from "~Utils"
+import { AddressUtils, CryptoUtils, HexUtils, PasswordUtils } from "~Utils"
 import { NativeStackScreenProps } from "@react-navigation/native-stack"
 import { RootStackParamListSettings, Routes } from "~Navigation"
 import { useNavigation } from "@react-navigation/native"
@@ -41,29 +41,24 @@ export const MnemonicBackupScreen = ({ route }: Props) => {
         async (password: string) => {
             onCloseWarning()
 
-            const { device } = DeviceUtils.generateDeviceForMnemonic(
-                mnemonicArray,
-                999999999, // this get random data because the only thing we need is the xPub
-                "alias", // this get random data because the only thing we need is the xPub
-                undefined, // this get random data because the only thing we need is the xPub
-                false, // this get random data because the only thing we need is the xPub
-            )
-            if (!device.xPub) {
+            if (!deviceToBackup?.xPub) {
                 showErrorToast({
                     text1: LL.CLOUDKIT_ERROR_GENERIC(),
                 })
                 return
             }
 
-            const firstAccountAddress = AddressUtils.getAddressFromXPub(device.xPub, 0)
+            const firstAccountAddress = AddressUtils.getAddressFromXPub(deviceToBackup.xPub, 0)
             const salt = HexUtils.generateRandom(256)
-            const mnemonic = CryptoUtils.encrypt(mnemonicArray, password, salt)
+            const iv = PasswordUtils.getRandomIV(16)
+            const mnemonic = CryptoUtils.encrypt(mnemonicArray, password, salt, iv)
             await saveWalletToCloudKit({
                 mnemonic,
                 _rootAddress: deviceToBackup?.rootAddress,
                 deviceType: deviceToBackup?.type,
                 firstAccountAddress,
                 salt,
+                iv,
             })
 
             getWalletByRootAddress(deviceToBackup!.rootAddress)

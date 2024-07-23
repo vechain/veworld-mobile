@@ -38,19 +38,19 @@ function shuffleArray<T>(arr: T[]) {
         .map(({ value }) => value)
 }
 
-function encrypt<T>(data: T, encryptionKey: string, salt?: string): string {
+function encrypt<T>(data: T, encryptionKey: string, salt?: string, iv?: Uint8Array): string {
     const key = PasswordUtils.hash(encryptionKey, salt)
-    const iv = PasswordUtils.getIV() // TODO - vas - generate IV
-    const cipher = crypto.createCipheriv("aes256", key, iv)
+    const _iv = iv ? iv : PasswordUtils.getIV()
+    const cipher = crypto.createCipheriv("aes256", key, _iv)
     let ciph = cipher.update(JSON.stringify(data), "utf-8", "hex")
     ciph += cipher.final("hex")
     return ciph as string
 }
 
-function decrypt<T>(data: string, encryptionKey: string, salt?: string): T {
+function decrypt<T>(data: string, encryptionKey: string, salt?: string, iv?: Uint8Array): T {
     const key = PasswordUtils.hash(encryptionKey, salt)
-    const iv = PasswordUtils.getIV()
-    const decipher = crypto.createDecipheriv("aes256", key, iv)
+    const _iv = iv ? iv : PasswordUtils.getIV()
+    const decipher = crypto.createDecipheriv("aes256", key, _iv)
     let txt = decipher.update(data, "hex", "utf-8")
     txt += decipher.final("utf-8")
     let txtToString = txt.toString()
