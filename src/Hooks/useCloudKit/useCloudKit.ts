@@ -1,9 +1,10 @@
 import { useCallback, useEffect, useState } from "react"
 import { NativeModules } from "react-native"
 import { showErrorToast } from "~Components"
+import { ERROR_EVENTS } from "~Constants"
 import { useI18nContext } from "~i18n"
 import { DEVICE_TYPE } from "~Model"
-import { PasswordUtils } from "~Utils"
+import { PasswordUtils, error } from "~Utils"
 const { CloudKitManager } = NativeModules
 
 export const useCloudKit = () => {
@@ -67,11 +68,14 @@ export const useCloudKit = () => {
                         return
                     }
                 }
-            } catch (error) {
+            } catch (_error: unknown) {
                 await rollback(_rootAddress)
                 setIsLoading(false)
+                let er = _error as Error
+                error(ERROR_EVENTS.WALLET_CREATION, er, er.message)
                 showErrorToast({
-                    text1: LL.CLOUDKIT_ERROR_GENERIC(),
+                    // text1: LL.CLOUDKIT_ERROR_GENERIC(),
+                    text1: er.message ?? LL.CLOUDKIT_ERROR_GENERIC(),
                 })
             }
         },
