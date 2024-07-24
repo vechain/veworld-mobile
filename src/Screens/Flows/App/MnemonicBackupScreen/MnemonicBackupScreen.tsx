@@ -17,6 +17,7 @@ import { AddressUtils, CryptoUtils, HexUtils, PasswordUtils } from "~Utils"
 import { NativeStackScreenProps } from "@react-navigation/native-stack"
 import { RootStackParamListSettings, Routes } from "~Navigation"
 import { useNavigation } from "@react-navigation/native"
+import { DerivationPath } from "~Constants"
 
 type Props = {} & NativeStackScreenProps<RootStackParamListSettings, Routes.ICLOUD_MNEMONIC_BACKUP>
 
@@ -59,6 +60,7 @@ export const MnemonicBackupScreen = ({ route }: Props) => {
                 firstAccountAddress,
                 salt,
                 iv,
+                derivationPath: deviceToBackup?.derivationPath ?? DerivationPath.VET,
             })
 
             getWalletByRootAddress(deviceToBackup!.rootAddress)

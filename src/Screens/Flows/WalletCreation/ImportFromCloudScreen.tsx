@@ -17,25 +17,17 @@ import {
     RequireUserPassword,
     showErrorToast,
 } from "~Components"
-import { ColorThemeType, VET } from "~Constants"
+import { ColorThemeType, DerivationPath, ERROR_EVENTS, VET } from "~Constants"
 import { useBottomSheetModal, useCheckIdentity, useCloudKit, useDeviceUtils, useThemedStyles, useVns } from "~Hooks"
 import { useI18nContext } from "~i18n"
 import { selectDevices, selectHasOnboarded, selectSelectedNetwork, useAppSelector } from "~Storage/Redux"
-import { AddressUtils, BalanceUtils, BigNutils, CryptoUtils, DateUtils, PasswordUtils } from "~Utils"
+import { AddressUtils, BalanceUtils, BigNutils, CryptoUtils, DateUtils, error, PasswordUtils } from "~Utils"
 import { useHandleWalletCreation } from "../Onboarding/WelcomeScreen/useHandleWalletCreation"
 import { UserCreatePasswordScreen } from "./UserCreatePasswordScreen"
 import { StackActions, useNavigation } from "@react-navigation/native"
+import { CloudKitWallet } from "~Model"
 
-type CloudKitWallet = {
-    data: string
-    rootAddress: string
-    walletType: string
-    salt: string
-    firstAccountAddress: string
-    creationDate: number
-}
-
-const skeletonArray = new Array(4).fill({ rootAddress: Math.random().toString() })
+const skeletonArray = [1, 2, 3, 4]
 
 export const ImportFromCloudScreen = () => {
     const userHasOnboarded = useAppSelector(selectHasOnboarded)
@@ -79,6 +71,7 @@ export const ImportFromCloudScreen = () => {
                 importMnemonic: mnemonicCache.current,
                 isCloudKit: true,
                 pin,
+                derivationPath: selected!.derivationPath,
             })
             nav.dispatch(StackActions.popToTop())
         },
@@ -100,18 +93,22 @@ export const ImportFromCloudScreen = () => {
                 ) as string[]
                 const isCloudKit = true
                 try {
-                    checkCanImportDevice(isCloudKit, mnemonic)
+                    checkCanImportDevice(isCloudKit, selected.derivationPath, mnemonic)
                     mnemonicCache.current = mnemonic
                     if (userHasOnboarded) {
-                        setTimeout(() => {
-                            checkIdentityBeforeOpening()
-                        }, 300)
+                        checkIdentityBeforeOpening()
                     } else {
-                        onCreateWallet({ importMnemonic: mnemonic, isCloudKit })
+                        onCreateWallet({
+                            importMnemonic: mnemonic,
+                            isCloudKit,
+                            derivationPath: selected.derivationPath,
+                        })
                     }
-                } catch (err) {
+                } catch (_error) {
+                    let er = _error as Error
+                    error(ERROR_EVENTS.CLOUDKIT, er, er.message)
                     showErrorToast({
-                        text1: LL.CLOUDKIT_ERROR_GENERIC(),
+                        text1: er.message ?? LL.CLOUDKIT_ERROR_GENERIC(),
                     })
                 }
             } else {
@@ -143,7 +140,7 @@ export const ImportFromCloudScreen = () => {
                             data={skeletonArray}
                             contentContainerStyle={styles.listContentContainer}
                             ItemSeparatorComponent={() => Seperator}
-                            keyExtractor={item => item.rootAddress}
+                            keyExtractor={(item, index) => index.toString()}
                             renderItem={() => (
                                 <BaseSkeleton
                                     height={74}
@@ -173,6 +170,8 @@ export const ImportFromCloudScreen = () => {
                         extraBottom={userHasOnboarded ? 0 : 24}
                         isVisible={!!selected}
                         onPress={onOpen}
+                        isDisabled={!selected}
+                        isLoading={isLoading}
                     />
 
                     <CloudKitWarningBottomSheet
@@ -194,6 +193,7 @@ export const ImportFromCloudScreen = () => {
                                         pin,
                                         mnemonic: mnemonicCache.current,
                                         isCloudKit: true,
+                                        derivationPath: selected!.derivationPath,
                                     })
                                 }
                             />
@@ -294,18 +294,27 @@ const CloudKitWalletCard = ({
                     <BaseSpacer width={12} />
 
                     <BaseView justifyContent="space-between">
-                        <BaseView alignSelf="flex-start" alignItems="flex-start">
-                            <BaseView flexDirection="row" style={styles.icloudTag}>
-                                <BaseIcon
-                                    size={18}
-                                    name="apple-icloud"
-                                    color={theme.colors.textReversed}
-                                    style={styles.cloudIcon}
-                                />
-                                <BaseText fontSize={12} color={theme.colors.textReversed}>
-                                    {"iCloud"}
-                                </BaseText>
+                        <BaseView flexDirection="row">
+                            <BaseView alignSelf="flex-start" alignItems="flex-start">
+                                <BaseView flexDirection="row" style={styles.icloudTag}>
+                                    <BaseIcon
+                                        size={18}
+                                        name="apple-icloud"
+                                        color={theme.colors.textReversed}
+                                        style={styles.cloudIcon}
+                                    />
+                                    <BaseText fontSize={12} color={theme.colors.textReversed}>
+                                        {"iCloud"}
+                                    </BaseText>
+                                </BaseView>
                             </BaseView>
+
+                            {wallet.derivationPath === DerivationPath.ETH && (
+                                <>
+                                    <BaseSpacer width={4} />
+                                    <BaseIcon name="ethereum" size={20} color={theme.colors.primaryDisabled} />
+                                </>
+                            )}
                         </BaseView>
 
                         <BaseSpacer height={4} />

@@ -8,6 +8,7 @@ import { BiometricsUtils } from "~Utils"
 import HapticsService from "~Services/HapticsService"
 import { useI18nContext } from "~i18n"
 import { isEmpty } from "lodash"
+import { DerivationPath } from "~Constants"
 
 export const useHandleWalletCreation = () => {
     const biometrics = useBiometrics()
@@ -46,10 +47,12 @@ export const useHandleWalletCreation = () => {
             importMnemonic,
             privateKey,
             isCloudKit = false,
+            derivationPath,
         }: {
             importMnemonic?: string[]
             privateKey?: string
             isCloudKit?: boolean
+            derivationPath: DerivationPath
         }) => {
             if (biometrics && biometrics.currentSecurityLevel === "BIOMETRIC") {
                 dispatch(setIsAppLoading(true))
@@ -60,6 +63,7 @@ export const useHandleWalletCreation = () => {
                     privateKey,
                     isCloudKit,
                     onError: onWalletCreationError,
+                    derivationPath,
                 })
                 await migrateOnboarding(SecurityLevelType.BIOMETRIC)
                 dispatch(setIsAppLoading(false))
@@ -76,11 +80,13 @@ export const useHandleWalletCreation = () => {
             mnemonic,
             privateKey,
             isCloudKit = false,
+            derivationPath,
         }: {
             pin: string
             mnemonic?: string[]
             privateKey?: string
             isCloudKit?: boolean
+            derivationPath: DerivationPath
         }) => {
             onClose()
             dispatch(setIsAppLoading(true))
@@ -92,6 +98,7 @@ export const useHandleWalletCreation = () => {
                 userPassword: pin,
                 isCloudKit,
                 onError: onWalletCreationError,
+                derivationPath,
             })
             await migrateOnboarding(SecurityLevelType.SECRET, pin)
             dispatch(setIsAppLoading(false))
@@ -149,7 +156,15 @@ export const useHandleWalletCreation = () => {
     )
 
     const createOnboardedWallet = useCallback(
-        async ({ pin, isCloudKit = false }: { pin?: string; isCloudKit: boolean }) => {
+        async ({
+            pin,
+            isCloudKit = false,
+            derivationPath,
+        }: {
+            pin?: string
+            isCloudKit: boolean
+            derivationPath: DerivationPath.VET
+        }) => {
             dispatch(setIsAppLoading(true))
 
             const mnemonic = getNewMnemonic()
@@ -158,6 +173,7 @@ export const useHandleWalletCreation = () => {
                 userPassword: pin,
                 isCloudKit,
                 onError: onWalletCreationError,
+                derivationPath,
             })
             dispatch(setIsAppLoading(false))
         },
@@ -170,11 +186,13 @@ export const useHandleWalletCreation = () => {
             privateKey,
             pin,
             isCloudKit = false,
+            derivationPath,
         }: {
             importMnemonic?: string[]
             privateKey?: string
             pin?: string
             isCloudKit: boolean
+            derivationPath: DerivationPath
         }) => {
             if (biometrics && biometrics.currentSecurityLevel === "BIOMETRIC" && !pin) {
                 dispatch(setIsAppLoading(true))
@@ -183,6 +201,7 @@ export const useHandleWalletCreation = () => {
                     privateKey,
                     isCloudKit,
                     onError: onWalletCreationError,
+                    derivationPath,
                 })
                 dispatch(setIsAppLoading(false))
             } else {
@@ -192,6 +211,7 @@ export const useHandleWalletCreation = () => {
                     userPassword: pin,
                     isCloudKit,
                     onError: onWalletCreationError,
+                    derivationPath,
                 })
             }
         },

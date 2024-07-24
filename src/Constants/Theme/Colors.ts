@@ -34,6 +34,7 @@ export type Colors = {
     alertRedMedium: string
     placeholder: string
     testnetBackground: string
+    gradientBackground: string[]
 }
 
 export enum COLORS {
@@ -73,6 +74,10 @@ export enum COLORS {
     COINBASE_BACKGROUND_BLUE = "#0052FF",
     TESTNET_BACKGROUND_LIGHT = "rgba(243, 193, 27, 1)",
     TESTNET_BACKGROUND_DARK = "#FF9900",
+    GRADIENT_BACKGROUND_LIGHT_TOP = "rgba(128, 128, 128, 0.7)",
+    GRADIENT_BACKGROUND_LIGHT_BOTTOM = "rgba(93, 93, 93, 0.95)",
+    GRADIENT_BACKGROUND_DARK_TOP = "rgba(11, 0, 67, 0.7)",
+    GRADIENT_BACKGROUND_DARK_BOTTOM = "rgba(11, 0, 67, 0.95)",
 }
 
 const light: Colors = {
@@ -111,6 +116,7 @@ const light: Colors = {
     alertRedMedium: COLORS.MEDIUM_RED,
     placeholder: COLORS.DISABLED_GREY,
     testnetBackground: COLORS.TESTNET_BACKGROUND_LIGHT,
+    gradientBackground: [COLORS.GRADIENT_BACKGROUND_LIGHT_TOP, COLORS.GRADIENT_BACKGROUND_LIGHT_BOTTOM],
 }
 
 const dark: Colors = {
@@ -149,6 +155,7 @@ const dark: Colors = {
     alertRedMedium: COLORS.PASTEL_RED,
     placeholder: COLORS.PURPLE,
     testnetBackground: COLORS.TESTNET_BACKGROUND_DARK,
+    gradientBackground: [COLORS.GRADIENT_BACKGROUND_DARK_TOP, COLORS.GRADIENT_BACKGROUND_DARK_BOTTOM],
 }
 
 export const colors = { light, dark }

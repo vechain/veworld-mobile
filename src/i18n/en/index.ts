@@ -6,6 +6,8 @@ const en: BaseTranslation = {
 
     // BUTTONS
     BTN_GET_STARTED: "GET STARTED",
+    BTN_CREATE_WALLET: "Create wallet",
+    BTN_IMPORT_WALLET: "Import wallet",
     BTN_ONBOARDING_SLIDE_01: "NEXT: SUSTAINABLE",
     BTN_ONBOARDING_SLIDE_02: "NEXT: SAFE AND FAST",
     BTN_ONBOARDING_SLIDE_03: "NEXT: CREATE PASSWORD",
@@ -889,6 +891,17 @@ const en: BaseTranslation = {
     // NFTs
 
     // Ledger Config
+
+
+    // CloudKit
+    WELCOME_BACK: "Welcome back",
+    WE_FOUND: "We found ",
+    WALLETS_SAVED_ON_ICLOUD: "wallets saved on iCloud.",
+    WOULD_YOU_LIKE_TO: "Would you like to ",
+    RESTORE: "restore ",
+    THEM: "them?",
+    TAKE_ME_TO_ICLOUD: "Take me to iCloud",
+    NO_THANKS: "No thanks",
 }
 
 export default en

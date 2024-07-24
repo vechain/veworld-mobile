@@ -18,6 +18,14 @@ type RootTranslation = {
 	 */
 	BTN_GET_STARTED: string
 	/**
+	 * C​r​e​a​t​e​ ​w​a​l​l​e​t
+	 */
+	BTN_CREATE_WALLET: string
+	/**
+	 * I​m​p​o​r​t​ ​w​a​l​l​e​t
+	 */
+	BTN_IMPORT_WALLET: string
+	/**
 	 * N​E​X​T​:​ ​S​U​S​T​A​I​N​A​B​L​E
 	 */
 	BTN_ONBOARDING_SLIDE_01: string
@@ -3042,6 +3050,38 @@ type RootTranslation = {
 	 * R​e​c​e​i​v​e​d
 	 */
 	RECEIVED: string
+	/**
+	 * W​e​l​c​o​m​e​ ​b​a​c​k
+	 */
+	WELCOME_BACK: string
+	/**
+	 * W​e​ ​f​o​u​n​d​ 
+	 */
+	WE_FOUND: string
+	/**
+	 * w​a​l​l​e​t​s​ ​s​a​v​e​d​ ​o​n​ ​i​C​l​o​u​d​.
+	 */
+	WALLETS_SAVED_ON_ICLOUD: string
+	/**
+	 * W​o​u​l​d​ ​y​o​u​ ​l​i​k​e​ ​t​o​ 
+	 */
+	WOULD_YOU_LIKE_TO: string
+	/**
+	 * r​e​s​t​o​r​e​ 
+	 */
+	RESTORE: string
+	/**
+	 * t​h​e​m​?
+	 */
+	THEM: string
+	/**
+	 * T​a​k​e​ ​m​e​ ​t​o​ ​i​C​l​o​u​d
+	 */
+	TAKE_ME_TO_ICLOUD: string
+	/**
+	 * N​o​ ​t​h​a​n​k​s
+	 */
+	NO_THANKS: string
 }
 
 export type TranslationFunctions = {
@@ -3049,6 +3089,14 @@ export type TranslationFunctions = {
 	 * GET STARTED
 	 */
 	BTN_GET_STARTED: () => LocalizedString
+	/**
+	 * Create wallet
+	 */
+	BTN_CREATE_WALLET: () => LocalizedString
+	/**
+	 * Import wallet
+	 */
+	BTN_IMPORT_WALLET: () => LocalizedString
 	/**
 	 * NEXT: SUSTAINABLE
 	 */
@@ -6042,6 +6090,38 @@ Try reconnect your device to the internet.
 	 * Received
 	 */
 	RECEIVED: () => LocalizedString
+	/**
+	 * Welcome back
+	 */
+	WELCOME_BACK: () => LocalizedString
+	/**
+	 * We found 
+	 */
+	WE_FOUND: () => LocalizedString
+	/**
+	 * wallets saved on iCloud.
+	 */
+	WALLETS_SAVED_ON_ICLOUD: () => LocalizedString
+	/**
+	 * Would you like to 
+	 */
+	WOULD_YOU_LIKE_TO: () => LocalizedString
+	/**
+	 * restore 
+	 */
+	RESTORE: () => LocalizedString
+	/**
+	 * them?
+	 */
+	THEM: () => LocalizedString
+	/**
+	 * Take me to iCloud
+	 */
+	TAKE_ME_TO_ICLOUD: () => LocalizedString
+	/**
+	 * No thanks
+	 */
+	NO_THANKS: () => LocalizedString
 }
 
 export type Formatters = {}

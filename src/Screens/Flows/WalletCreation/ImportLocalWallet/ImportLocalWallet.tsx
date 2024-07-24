@@ -28,8 +28,8 @@ import { Keyboard, StyleSheet } from "react-native"
 import { ImportWalletInput } from "./Components/ImportWalletInput"
 import { selectAreDevFeaturesEnabled, selectHasOnboarded, useAppSelector } from "~Storage/Redux"
 import HapticsService from "~Services/HapticsService"
-import { AnalyticsEvent } from "~Constants"
-import { DEVICE_CREATION_ERRORS as ERRORS, IMPORT_TYPE } from "~Model"
+import { AnalyticsEvent, DerivationPath } from "~Constants"
+import { CloudKitWallet, DEVICE_CREATION_ERRORS as ERRORS, IMPORT_TYPE } from "~Model"
 import { UnlockKeystoreBottomSheet } from "./Components/UnlockKeystoreBottomSheet"
 import { UserCreatePasswordScreen } from "../UserCreatePasswordScreen"
 import { useHandleWalletCreation } from "~Screens/Flows/Onboarding/WelcomeScreen/useHandleWalletCreation"
@@ -42,13 +42,6 @@ enum ButtonType {
     local,
     icloud,
     unknown,
-}
-
-type ClpudKitWallet = {
-    data: string
-    rootAddress: string
-    walletType: string
-    salt: string
 }
 
 export const ImportLocalWallet = () => {
@@ -76,7 +69,7 @@ export const ImportLocalWallet = () => {
 
     const { isCloudKitAvailable, getAllWalletsFromCloudKit } = useCloudKit()
 
-    const [CloudKitWallets, setCloudKitWallets] = useState<ClpudKitWallet[] | null>(null)
+    const [CloudKitWallets, setCloudKitWallets] = useState<CloudKitWallet[] | null>(null)
 
     useEffect(() => {
         const init = async () => {
@@ -107,6 +100,15 @@ export const ImportLocalWallet = () => {
 
     const mnemonicCache = useRef<string[]>()
     const privateKeyCache = useRef<string>()
+    const derivationPathCache = useRef<DerivationPath>()
+
+    const handleOnCloseDerivationPathSheet = useCallback(
+        (path: DerivationPath) => {
+            derivationPathCache.current = path
+            onCloseDerivationPath()
+        },
+        [onCloseDerivationPath],
+    )
 
     const {
         isPasswordPromptOpen: isPasswordPromptOpen_1,
@@ -120,6 +122,7 @@ export const ImportLocalWallet = () => {
                 privateKey: privateKeyCache.current,
                 isCloudKit: false,
                 pin,
+                derivationPath: derivationPathCache.current ?? DerivationPath.VET,
             })
             nav.goBack()
         },
@@ -155,13 +158,16 @@ export const ImportLocalWallet = () => {
             try {
                 const mnemonic = CryptoUtils.mnemonicStringToArray(_mnemonic)
                 const isCloudKit = false
-                checkCanImportDevice(isCloudKit, mnemonic)
+                checkCanImportDevice(isCloudKit, derivationPathCache.current ?? DerivationPath.VET, mnemonic)
                 mnemonicCache.current = mnemonic
                 track(AnalyticsEvent.IMPORT_MNEMONIC_SUBMITTED)
                 if (userHasOnboarded) {
                     checkIdentityBeforeOpening_1()
                 } else {
-                    onCreateWallet({ importMnemonic: mnemonic })
+                    onCreateWallet({
+                        importMnemonic: mnemonic,
+                        derivationPath: derivationPathCache.current ?? DerivationPath.VET,
+                    })
                 }
             } catch (err) {
                 processErrorMessage(err)
@@ -182,13 +188,16 @@ export const ImportLocalWallet = () => {
         (_privKey: string) => {
             try {
                 const isCloudKit = false
-                checkCanImportDevice(isCloudKit, undefined, _privKey)
+                checkCanImportDevice(isCloudKit, derivationPathCache.current ?? DerivationPath.VET, undefined, _privKey)
                 privateKeyCache.current = _privKey
                 track(AnalyticsEvent.IMPORT_PRIVATE_KEY_SUBMITTED)
                 if (userHasOnboarded) {
                     checkIdentityBeforeOpening_1()
                 } else {
-                    onCreateWallet({ privateKey: _privKey })
+                    onCreateWallet({
+                        privateKey: _privKey,
+                        derivationPath: derivationPathCache.current ?? DerivationPath.VET,
+                    })
                 }
             } catch (err) {
                 processErrorMessage(err)
@@ -210,13 +219,18 @@ export const ImportLocalWallet = () => {
             try {
                 const privateKey = await CryptoUtils.decryptKeystoreFile(textValue, pwd)
                 const isCloudKit = false
-                checkCanImportDevice(isCloudKit, undefined, privateKey)
+                checkCanImportDevice(
+                    isCloudKit,
+                    derivationPathCache.current ?? DerivationPath.VET,
+                    undefined,
+                    privateKey,
+                )
                 privateKeyCache.current = privateKey
                 track(AnalyticsEvent.IMPORT_KEYSTORE_FILE_SUBMITTED)
                 if (userHasOnboarded) {
                     checkIdentityBeforeOpening_1()
                 } else {
-                    onCreateWallet({ privateKey })
+                    onCreateWallet({ privateKey, derivationPath: derivationPathCache.current ?? DerivationPath.VET })
                 }
             } catch (err) {
                 processErrorMessage(err)
@@ -363,7 +377,10 @@ export const ImportLocalWallet = () => {
                             </BaseView>
                         </BaseView>
 
-                        <SelectDerivationPathBottomSheet ref={derivationPathRef} onClose={onCloseDerivationPath} />
+                        <SelectDerivationPathBottomSheet
+                            ref={derivationPathRef}
+                            onClose={handleOnCloseDerivationPathSheet}
+                        />
 
                         <BaseModal isOpen={isOpen} onClose={onCloseCreateFlow}>
                             <BaseView justifyContent="flex-start">
@@ -374,6 +391,7 @@ export const ImportLocalWallet = () => {
                                             pin,
                                             mnemonic: mnemonicCache.current,
                                             privateKey: privateKeyCache.current,
+                                            derivationPath: derivationPathCache.current ?? DerivationPath.VET,
                                         })
                                     }
                                 />

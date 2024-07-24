@@ -21,6 +21,7 @@ class CloudKitManager: NSObject {
     static let rootAddress = "rootAddress"
     static let walletType = "walletType"
     static let data = "data"
+    static let derivationPath = "derivationPath"
     static let firstAccountAddress = "firstAccountAddress"
     static let creationDate = "creationDate"
     static let walletZone = "WALLET_ZONE"
@@ -62,13 +63,14 @@ class CloudKitManager: NSObject {
   
   @available(iOS 15.0, *)
   @objc
-  func saveToCloudKit(_ rootAddress: String, data: String, walletType: String, firstAccountAddress: String, resolver: @escaping(RCTPromiseResolveBlock), rejecter reject: @escaping(RCTPromiseRejectBlock)) -> Void {
+  func saveToCloudKit(_ rootAddress: String, data: String, walletType: String, firstAccountAddress: String, derivationPath: String, resolver: @escaping(RCTPromiseResolveBlock), rejecter reject: @escaping(RCTPromiseRejectBlock)) -> Void {
     
     let recordID = CKRecord.ID(recordName: "\(Constants.walletZone )_\(rootAddress)")
     let wallet = CKRecord(recordType: Constants.fileNameWallet, recordID: recordID)
     wallet[Constants.rootAddress] = rootAddress as CKRecordValue
     wallet[Constants.walletType] = walletType  as CKRecordValue
     wallet[Constants.firstAccountAddress] = firstAccountAddress as CKRecordValue
+    wallet[Constants.derivationPath] = derivationPath as CKRecordValue
     wallet.encryptedValues[Constants.data] = data
     
     CKContainer.default().privateCloudDatabase.save(wallet) { [weak self] record, error in
@@ -94,7 +96,7 @@ class CloudKitManager: NSObject {
     query.sortDescriptors = [sort]
     
     let operation = CKQueryOperation(query: query)
-    operation.desiredKeys = [Constants.rootAddress, Constants.walletType, Constants.data, Constants.firstAccountAddress, Constants.creationDate]
+    operation.desiredKeys = [Constants.rootAddress, Constants.walletType, Constants.data, Constants.firstAccountAddress, Constants.creationDate, Constants.derivationPath]
     
     var wallets = [[AnyHashable : Any]]()
     
@@ -106,6 +108,7 @@ class CloudKitManager: NSObject {
         Constants.rootAddress : record[Constants.rootAddress] as! String,
         Constants.walletType : record[Constants.walletType] as! String,
         Constants.firstAccountAddress : record[Constants.firstAccountAddress] as! String,
+        Constants.derivationPath : record[Constants.derivationPath] as! String,
         Constants.creationDate : (record.creationDate?.timeIntervalSince1970 ?? Date().timeIntervalSince1970) as TimeInterval,
         Constants.data : record.encryptedValues[Constants.data] as! String,
       ] as [AnyHashable : Any]
@@ -133,7 +136,7 @@ class CloudKitManager: NSObject {
     let pred = NSPredicate(format: "\(Constants.rootAddress)=%@", rootAddress)
     let query = CKQuery(recordType: Constants.fileNameWallet, predicate: pred)
     let operation = CKQueryOperation(query: query)
-    operation.desiredKeys = [Constants.rootAddress, Constants.walletType, Constants.data, Constants.firstAccountAddress, Constants.creationDate]
+    operation.desiredKeys = [Constants.rootAddress, Constants.walletType, Constants.data, Constants.firstAccountAddress, Constants.creationDate, Constants.derivationPath]
     
     var wallet: [AnyHashable : Any] = ["" : ""]
     
@@ -145,6 +148,7 @@ class CloudKitManager: NSObject {
         Constants.rootAddress : record[Constants.rootAddress] as! String,
         Constants.walletType : record[Constants.walletType] as! String,
         Constants.firstAccountAddress : record[Constants.firstAccountAddress] as! String,
+        Constants.derivationPath : record[Constants.derivationPath] as! String,
         Constants.creationDate : (record.creationDate?.timeIntervalSince1970 ?? Date().timeIntervalSince1970) as TimeInterval,
         Constants.data : record.encryptedValues[Constants.data] as! String,
       ] as [AnyHashable : Any]

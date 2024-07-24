@@ -15,6 +15,7 @@ import { useNavigation } from "@react-navigation/native"
 import { Routes } from "~Navigation"
 import { AccountUtils } from "~Utils"
 import { useHandleWalletCreation } from "~Screens/Flows/Onboarding/WelcomeScreen/useHandleWalletCreation"
+import { DerivationPath } from "~Constants"
 
 export const WalletManagementScreen = () => {
     const { tabBarBottomMargin } = useTabBarBottomMargin()
@@ -40,7 +41,8 @@ export const WalletManagementScreen = () => {
         onPasswordSuccess: onPasswordSuccess_1,
         checkIdentityBeforeOpening: checkIdentityBeforeOpening_1,
     } = useCheckIdentity({
-        onIdentityConfirmed: (pin?: string) => createOnboardedWallet({ pin, isCloudKit: false }),
+        onIdentityConfirmed: (pin?: string) =>
+            createOnboardedWallet({ pin, isCloudKit: false, derivationPath: DerivationPath.VET }),
         allowAutoPassword: false,
     })
 

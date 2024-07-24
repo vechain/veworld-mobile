@@ -1,26 +1,35 @@
-import React, { useCallback, useMemo } from "react"
+import React, { useCallback, useEffect, useMemo, useState } from "react"
 import {
     BackButtonHeader,
     BaseButton,
+    BaseIcon,
     BaseModal,
     BaseSpacer,
     BaseText,
+    BaseTouchable,
     BaseView,
     ImportWalletBottomSheet,
     Layout,
 } from "~Components"
 import { VeWorldLogoSVG } from "~Assets"
 import { useI18nContext } from "~i18n"
-import { Linking } from "react-native"
+import { ImageBackground, Linking, Modal, StyleSheet, View } from "react-native"
 import { useDemoWallet } from "./useDemoWallet"
 import { UserCreatePasswordScreen } from "~Screens/Flows/WalletCreation"
 import { useHandleWalletCreation } from "./useHandleWalletCreation"
-import { useAnalyticTracking, useBottomSheetModal, useTheme } from "~Hooks"
+import { useAnalyticTracking, useBottomSheetModal, useCloudKit, useDisclosure, useTheme } from "~Hooks"
 import { RumManager } from "~Logging"
-import { AnalyticsEvent } from "~Constants"
+import { AnalyticsEvent, COLORS, DerivationPath, SCREEN_HEIGHT, SCREEN_WIDTH } from "~Constants"
+import { Routes } from "~Navigation"
+import { useNavigation } from "@react-navigation/native"
+import LinearGradient from "react-native-linear-gradient"
+import DropShadow from "react-native-drop-shadow"
+import Animated, { FadeInDown, FadeOutDown } from "react-native-reanimated"
+const assetImage = require("~Assets/Img/Clouds.png")
 
 export const WelcomeScreen = () => {
     const { LL } = useI18nContext()
+    const nav = useNavigation()
     const theme = useTheme()
     const ddLogger = useMemo(() => new RumManager(), [])
     const track = useAnalyticTracking()
@@ -43,8 +52,37 @@ export const WelcomeScreen = () => {
         url && Linking.openURL(url)
     }, [])
 
+    const { getAllWalletsFromCloudKit, isLoading } = useCloudKit()
+
+    const {
+        onOpen: onQuickCloudModalOpen,
+        onClose: onQuickCloudModalClose,
+        isOpen: isQuickCloudModalOpen,
+    } = useDisclosure()
+
+    const [walletNumber, setWalletNumber] = useState(0)
+
+    useEffect(() => {
+        const init = async () => {
+            const wallets = await getAllWalletsFromCloudKit()
+            setWalletNumber(wallets.length)
+            if (wallets.length) {
+                onQuickCloudModalOpen()
+            }
+        }
+
+        setTimeout(() => {
+            init()
+        }, 1000)
+    }, [getAllWalletsFromCloudKit, onQuickCloudModalOpen])
+
     const DEV_DEMO_BUTTON = useDemoWallet()
     const { onCreateWallet, isOpen, isError, onSuccess, onClose: onCloseCreateFlow } = useHandleWalletCreation()
+
+    const onGoToImportFromCLoud = useCallback(() => {
+        onQuickCloudModalClose()
+        nav.navigate(Routes.IMPORT_FROM_CLOUD)
+    }, [nav, onQuickCloudModalClose])
 
     return (
         <>
@@ -77,11 +115,12 @@ export const WelcomeScreen = () => {
                         )}
 
                         <BaseButton
-                            action={() => onCreateWallet({})}
+                            action={() => onCreateWallet({ derivationPath: DerivationPath.VET })}
                             w={100}
-                            title={"CREATE WALLET"}
+                            title={LL.BTN_CREATE_WALLET()}
                             testID="CREATE_WALLET_BTN"
                             haptics="Medium"
+                            isLoading={isLoading}
                         />
 
                         <BaseSpacer height={12} />
@@ -90,9 +129,10 @@ export const WelcomeScreen = () => {
                             action={onImportWallet}
                             w={100}
                             variant="ghost"
-                            title={"IMPORT WALLET"}
+                            title={LL.BTN_IMPORT_WALLET()}
                             testID="IMPORT_WALLET_BTN"
                             haptics="Medium"
+                            isLoading={isLoading}
                         />
 
                         <BaseSpacer height={42} />
@@ -126,14 +166,162 @@ export const WelcomeScreen = () => {
                 }
             />
 
+            <Modal animationType="fade" transparent={true} visible={isQuickCloudModalOpen}>
+                <BaseTouchable
+                    action={onQuickCloudModalClose}
+                    style={{
+                        height: SCREEN_HEIGHT,
+                        width: SCREEN_WIDTH,
+                    }}>
+                    <LinearGradient colors={theme.colors.gradientBackground} style={s.gradient}>
+                        <Animated.View entering={FadeInDown} exiting={FadeOutDown}>
+                            <CloudKitModalReminder
+                                walletNumber={walletNumber}
+                                onQuickCloudModalClose={onQuickCloudModalClose}
+                                onGoToImportFromCLoud={onGoToImportFromCLoud}
+                            />
+                        </Animated.View>
+                    </LinearGradient>
+                </BaseTouchable>
+            </Modal>
+
             <ImportWalletBottomSheet ref={ref} onClose={onClose} />
 
             <BaseModal isOpen={isOpen} onClose={onCloseCreateFlow}>
                 <BaseView justifyContent="flex-start">
                     <BackButtonHeader action={onCloseCreateFlow} hasBottomSpacer={false} />
-                    <UserCreatePasswordScreen onSuccess={pin => onSuccess({ pin })} />
+                    <UserCreatePasswordScreen
+                        onSuccess={pin => onSuccess({ pin, derivationPath: DerivationPath.VET })}
+                    />
                 </BaseView>
             </BaseModal>
         </>
     )
 }
+
+const CloudKitModalReminder = ({
+    onQuickCloudModalClose,
+    onGoToImportFromCLoud,
+    walletNumber,
+}: {
+    onQuickCloudModalClose: () => void
+    onGoToImportFromCLoud: () => void
+    walletNumber: number
+}) => {
+    const theme = useTheme()
+    const { LL } = useI18nContext()
+
+    return (
+        <View style={s.gradient}>
+            <DropShadow style={[theme.shadows.card]}>
+                <View style={s.imageContainer}>
+                    <ImageBackground source={assetImage} resizeMode="cover" style={s.bgImage}>
+                        <BaseView justifyContent="space-between" alignItems="center" flex={1} w={100} p={24} pt={42}>
+                            <BaseView w={100} flex={1}>
+                                <BaseText typographyFont="hugeTitle" align="center" color={COLORS.DARK_PURPLE}>
+                                    {LL.WELCOME_BACK()}
+                                </BaseText>
+
+                                <BaseSpacer height={12} />
+
+                                <BaseView flexDirection="row" w={100} justifyContent="center">
+                                    <BaseText typographyFont="subSubTitle" align="center" color={COLORS.DARK_PURPLE}>
+                                        {LL.WE_FOUND()}
+                                    </BaseText>
+
+                                    <BaseText typographyFont="title" align="center" color={COLORS.MEDIUM_GREEN}>
+                                        {`${walletNumber} `}
+                                    </BaseText>
+
+                                    <BaseText typographyFont="subSubTitle" align="center" color={COLORS.DARK_PURPLE}>
+                                        {LL.WALLETS_SAVED_ON_ICLOUD()}
+                                    </BaseText>
+                                </BaseView>
+
+                                <BaseSpacer height={12} />
+
+                                <BaseView w={100}>
+                                    <BaseView flexDirection="row" w={100} justifyContent="center" alignItems="center">
+                                        <BaseText typographyFont="body" align="center" color={COLORS.DARK_PURPLE}>
+                                            {LL.WOULD_YOU_LIKE_TO()}
+                                        </BaseText>
+
+                                        <BaseText typographyFont="bodyBold" align="center" color={COLORS.DARK_PURPLE}>
+                                            {LL.RESTORE()}
+                                        </BaseText>
+
+                                        <BaseText typographyFont="body" align="center" color={COLORS.DARK_PURPLE}>
+                                            {LL.THEM()}
+                                        </BaseText>
+                                    </BaseView>
+
+                                    <BaseSpacer height={72} />
+                                </BaseView>
+                            </BaseView>
+
+                            <BaseButton
+                                title={LL.TAKE_ME_TO_ICLOUD()}
+                                action={onGoToImportFromCLoud}
+                                w={100}
+                                bgColor={theme.isDark ? theme.colors.background : undefined}
+                                textColor={theme.isDark ? theme.colors.text : undefined}
+                                rightIcon={
+                                    <BaseIcon
+                                        name="apple-icloud"
+                                        size={22}
+                                        color={theme.isDark ? theme.colors.text : theme.colors.textReversed}
+                                        style={s.icon}
+                                    />
+                                }
+                                style={s.centerButtonContent}
+                            />
+
+                            <BaseSpacer height={12} />
+
+                            <BaseButton
+                                title={LL.NO_THANKS()}
+                                action={onQuickCloudModalClose}
+                                w={100}
+                                variant="ghost"
+                                textColor={COLORS.DARK_PURPLE}
+                            />
+                        </BaseView>
+                    </ImageBackground>
+                </View>
+            </DropShadow>
+        </View>
+    )
+}
+
+const s = StyleSheet.create({
+    gradient: {
+        height: SCREEN_HEIGHT,
+        width: SCREEN_WIDTH,
+        display: "flex",
+        justifyContent: "center",
+        alignItems: "center",
+    },
+
+    imageContainer: {
+        borderRadius: 20,
+        overflow: "hidden",
+    },
+
+    bgImage: {
+        height: SCREEN_HEIGHT / 2,
+        width: SCREEN_WIDTH - 24,
+        display: "flex",
+        justifyContent: "center",
+        alignItems: "center",
+        borderRadius: 16,
+    },
+
+    icon: {
+        marginLeft: 6,
+    },
+
+    centerButtonContent: {
+        justifyContent: "center",
+        alignItems: "center",
+    },
+})

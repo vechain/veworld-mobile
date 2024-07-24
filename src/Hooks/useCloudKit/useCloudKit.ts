@@ -1,7 +1,7 @@
 import { useCallback, useEffect, useState } from "react"
 import { NativeModules } from "react-native"
 import { showErrorToast } from "~Components"
-import { ERROR_EVENTS } from "~Constants"
+import { DerivationPath, ERROR_EVENTS } from "~Constants"
 import { useI18nContext } from "~i18n"
 import { DEVICE_TYPE } from "~Model"
 import { PasswordUtils, error } from "~Utils"
@@ -30,6 +30,7 @@ export const useCloudKit = () => {
             firstAccountAddress,
             salt,
             iv,
+            derivationPath,
         }: {
             mnemonic: string
             firstAccountAddress: string
@@ -37,6 +38,7 @@ export const useCloudKit = () => {
             deviceType?: DEVICE_TYPE
             salt: string
             iv: Uint8Array
+            derivationPath: DerivationPath
         }) => {
             if (!mnemonic || !_rootAddress || !deviceType || !salt || !iv || !firstAccountAddress) {
                 showErrorToast({
@@ -53,6 +55,7 @@ export const useCloudKit = () => {
                     mnemonic,
                     deviceType,
                     firstAccountAddress,
+                    derivationPath,
                 )
 
                 if (result) {
