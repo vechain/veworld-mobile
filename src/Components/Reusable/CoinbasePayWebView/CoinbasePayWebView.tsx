@@ -5,7 +5,7 @@ import { StyleSheet } from "react-native"
 import "react-native-url-polyfill/auto"
 import { WebView, WebViewMessageEvent } from "react-native-webview"
 import { BaseActivityIndicator, BaseStatusBar, BaseView } from "~Components"
-import { AnalyticsEvent, ERROR_EVENTS } from "~Constants"
+import { AnalyticsEvent, ERROR_EVENTS, VET, VTHO } from "~Constants"
 import { useAnalyticTracking } from "~Hooks"
 import { Routes } from "~Navigation"
 import { ErrorMessageUtils, PlatformUtils, debug } from "~Utils"
@@ -30,12 +30,10 @@ export const CoinbasePayWebView = ({
     const coinbaseURL = useMemo(() => {
         const options: GenerateOnRampURLOptions = {
             appId: process.env.REACT_APP_COINBASE_APP_ID as string,
-            destinationWallets: [
-                {
-                    address: destinationAddress,
-                    blockchains: [VECHAIN_BLOCKCHAIN],
-                },
-            ],
+            addresses: {
+                [destinationAddress]: [VECHAIN_BLOCKCHAIN],
+            },
+            assets: [VET.symbol, VTHO.symbol],
             handlingRequestedUrls: true,
             presetCryptoAmount: currentAmount,
         }
@@ -54,6 +52,9 @@ export const CoinbasePayWebView = ({
             try {
                 const { data } = JSON.parse(event.nativeEvent.data)
 
+                // eslint-disable-next-line no-console
+                console.log("TRIGGERED EVENT", data.eventName)
+
                 // if successfully completed buy process
                 if (data.eventName === "success") {
                     track(AnalyticsEvent.BUY_CRYPTO_SUCCESSFULLY_COMPLETED, {
@@ -70,6 +71,8 @@ export const CoinbasePayWebView = ({
                 }
 
                 if (data.eventName === "error") {
+                    // eslint-disable-next-line no-console
+                    console.log("ON ERROR", event.nativeEvent.data)
                     track(AnalyticsEvent.BUY_CRYPTO_FAILED, {
                         provider: "coinbase",
                     })
@@ -96,6 +99,7 @@ export const CoinbasePayWebView = ({
             {!isLoading && isAndroid && <BaseStatusBar />}
             <BaseActivityIndicator isVisible={isLoading} />
             <WebView
+                androidLayerType="software"
                 source={{ uri: coinbaseURL }}
                 onLoadEnd={handleLoadEnd}
                 onMessage={onMessage}
