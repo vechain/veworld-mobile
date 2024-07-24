@@ -1,6 +1,6 @@
 import { DiscoveryDApp } from "~Constants"
-import { AppHubUrl } from "./constants"
 import { URIUtils } from "~Utils"
+import { AppHubUrl } from "./constants"
 
 export const getAppHubIconUrl = (appId: string) => {
     return `${AppHubUrl}/imgs/${appId}.png`

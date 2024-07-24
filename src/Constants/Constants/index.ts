@@ -12,5 +12,6 @@ export * from "./Api"
 export * from "./feature"
 export * from "./dapps"
 export * from "./derivationPaths"
+export * from "./DApp"
 
 export { SettingsConstants }

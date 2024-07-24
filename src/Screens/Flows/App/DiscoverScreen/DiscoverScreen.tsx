@@ -2,7 +2,6 @@ import { useNavigation, useScrollToTop } from "@react-navigation/native"
 import React, { useCallback, useEffect, useMemo, useRef, useState } from "react"
 import { Keyboard, Linking, StyleSheet } from "react-native"
 import Animated, { useAnimatedRef, useScrollViewOffset } from "react-native-reanimated"
-import { randomized as daoDapps } from "~Assets"
 import { BaseSpacer, BaseView, Layout } from "~Components"
 import { AnalyticsEvent } from "~Constants"
 import { useAnalyticTracking, useBrowserSearch, useThemedStyles, useVisitedUrls } from "~Hooks"
@@ -167,11 +166,7 @@ export const DiscoverScreen: React.FC = () => {
                         <BaseSpacer height={24} />
                         <VeBetterDAOMainCard href={DAO_URL} onDAppPress={onDAppPress} />
                         <BaseSpacer height={36} />
-                        <VeBetterDAODApps
-                            title={LL.DISCOVER_DAPPS_TITLE()}
-                            daoDapps={daoDapps}
-                            onDAppPress={onDAppPress}
-                        />
+                        <VeBetterDAODApps onDAppPress={onDAppPress} />
                         <BaseSpacer height={42} />
                         <MakeYourOwnDApp label={LL.DISCOVER_CREATE_YOUR_DAPP()} onPress={onMakeYourOwnDAppPress} />
                         <BaseSpacer height={18} />

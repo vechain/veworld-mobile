@@ -1,7 +1,7 @@
 import type { abi } from "thor-devkit"
 import { BigNumber } from "bignumber.js"
 
-import { VIP180, VIP181, RouterV2, UniswapRouterV2, UniswapPairV2 } from "./abis"
+import { VIP180, VIP181, RouterV2, UniswapRouterV2, UniswapPairV2, VeBetterDao } from "./abis"
 import { Network, NETWORK_TYPE } from "~Model"
 
 const THOR_MAIN_URLS = [
@@ -38,6 +38,7 @@ export const abis = {
     UniswapRouterV2,
     UniswapPairV2,
     paramsGet,
+    VeBetterDao,
 }
 
 export const genesisesId = {
