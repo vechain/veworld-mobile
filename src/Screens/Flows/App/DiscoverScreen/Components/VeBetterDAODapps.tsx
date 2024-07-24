@@ -57,7 +57,6 @@ const VeBetterDaoDAppCard = ({ onPress, containerStyle, item, areDappsLoading }:
         }
     }, [])
 
-    // If an error happens we search for a local dapp with the same base url and we show it, otherwise we don't show anything
     if (error) {
         const dapp = localDaoDAppsMetadata.find(metdata => metdata.name === item.name)
         return dapp ? <Card href={dapp.external_url} source={getImagerSource(dapp?.weworld?.banner ?? "")} /> : null
