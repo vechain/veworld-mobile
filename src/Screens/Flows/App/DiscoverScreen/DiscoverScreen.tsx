@@ -30,8 +30,8 @@ import {
     VeBetterDAOMainCard,
     WebSearchFloatingButton,
 } from "./Components"
-import { useFetchFeaturedDApps } from "./Hooks/useFetchFeaturedDApps"
 import { groupFavoritesByBaseUrl } from "./utils"
+import { useFetchFeaturedDApps } from "~Hooks/useFetchFeaturedDApps"
 
 const DAO_URL = "https://governance.vebetterdao.org/"
 

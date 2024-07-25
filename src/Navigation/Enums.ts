@@ -11,6 +11,8 @@ export enum Routes {
     IMPORT_MNEMONIC = "Import_Mnemonic",
 
     BROWSER = "Browser",
+    HOME_STACK = "HomeStack",
+    DISCOVER_STACK = "DiscoverStack",
 
     USER_CREATE_PASSWORD = "User_Create_Password",
     APP_SECURITY = "App_Security",

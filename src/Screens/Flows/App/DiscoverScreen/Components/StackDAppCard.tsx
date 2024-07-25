@@ -2,9 +2,9 @@ import React, { useState } from "react"
 import { Image, ImageStyle, StyleProp, StyleSheet, useWindowDimensions } from "react-native"
 import { DiscoveryDApp } from "~Constants"
 import { useThemedStyles } from "~Hooks"
-import { getAppHubIconUrl } from "../utils"
 import Animated, { ZoomIn, ZoomOut } from "react-native-reanimated"
 import { BaseSpacer, BaseText, BaseTouchable, BaseView } from "~Components"
+import { DAppUtils } from "~Utils"
 
 type Props = {
     columns: number
@@ -22,7 +22,7 @@ export const StackDAppCard = ({ columns, columnsGap, dapp, onPress }: Props) => 
     const cardDimension = (windowWidth - columnsGap * gapsNumber) / columns
     const imageDimension = cardDimension - 16
     const iconUri = dapp[0]?.id
-        ? getAppHubIconUrl(dapp[0].id)
+        ? DAppUtils.getAppHubIconUrl(dapp[0].id)
         : `${process.env.REACT_APP_GOOGLE_FAVICON_URL}${dapp[0]?.href}`
 
     const overlayBackground = !theme.isDark ? "#d9d9d9" : "#584E87"

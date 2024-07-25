@@ -3,16 +3,15 @@ import { FlashList } from "@shopify/flash-list"
 import React, { MutableRefObject, useCallback, useMemo, useRef, useState } from "react"
 import { ImageSourcePropType, StyleSheet } from "react-native"
 import { SwipeableItemImperativeRef } from "react-native-swipeable-item"
-import { BaseSearchInput, BaseSpacer, BaseText, BaseView, Layout, SwipeableRow } from "~Components"
+import { BaseSearchInput, BaseSpacer, BaseText, BaseView, DAppIcon, Layout, SwipeableRow } from "~Components"
 import { AnalyticsEvent, DiscoveryDApp } from "~Constants"
 import { useAnalyticTracking, useThemedStyles, useVisitedUrls } from "~Hooks"
 import { RumManager } from "~Logging"
 import { Routes } from "~Navigation"
 import { addNavigationToDApp, selectVisitedUrls, useAppDispatch, useAppSelector } from "~Storage/Redux"
+import { DAppUtils } from "~Utils"
 import { useI18nContext } from "~i18n"
-import { DAppIcon } from "./Components/DAppIcon"
 import { EmptyResults } from "./Components/EmptyResults"
-import { getAppHubIconUrl } from "./utils"
 
 type BrowserHistoryCardProps = {
     dapp: DiscoveryDApp
@@ -26,7 +25,7 @@ const BrowserHistoryCard = ({ dapp, swipeableItemRefs, onLinkPress, onTrashIconP
     const [selectedItem, setSelectedItem] = useState<DiscoveryDApp | undefined>(undefined)
 
     const imageUri: ImageSourcePropType = {
-        uri: dapp.id ? getAppHubIconUrl(dapp.id) : `${process.env.REACT_APP_GOOGLE_FAVICON_URL}${dapp.href}`,
+        uri: dapp.id ? DAppUtils.getAppHubIconUrl(dapp.id) : `${process.env.REACT_APP_GOOGLE_FAVICON_URL}${dapp.href}`,
     }
 
     const clickEnabled = selectedItem === undefined

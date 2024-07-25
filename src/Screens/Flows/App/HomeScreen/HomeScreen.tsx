@@ -133,6 +133,13 @@ export const HomeScreen = () => {
         }
 
         actions.push({
+            name: LL.BTN_SWAP(),
+            action: () => nav.navigate(Routes.SWAP),
+            icon: <BaseIcon color={theme.colors.text} name="swap-horizontal" />,
+            testID: "swapButton",
+        })
+
+        actions.push({
             name: LL.BTN_HISTORY(),
             action: () => nav.navigate(Routes.HISTORY),
             icon: <BaseIcon color={theme.colors.text} name="history" />,

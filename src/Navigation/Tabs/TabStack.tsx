@@ -1,20 +1,28 @@
+import { createBottomTabNavigator } from "@react-navigation/bottom-tabs"
+import { NavigatorScreenParams } from "@react-navigation/native"
 import React, { useCallback, useMemo } from "react"
 import { StyleSheet } from "react-native"
-import { createBottomTabNavigator } from "@react-navigation/bottom-tabs"
 import { TabIcon } from "~Components"
 import { useCheckWalletBackup, useTheme } from "~Hooks"
-import PlatformUtils from "~Utils/PlatformUtils"
-import { DiscoverStack, HomeStack, SettingsStack } from "~Navigation/Stacks"
-import { NFTStack } from "~Navigation/Stacks/NFTStack"
-import { selectCurrentScreen, selectSelectedAccount, selectSelectedNetwork, useAppSelector } from "~Storage/Redux"
-import { Routes } from "~Navigation/Enums"
 import { NETWORK_TYPE } from "~Model"
+import { Routes } from "~Navigation/Enums"
+import {
+    DiscoverStack,
+    HomeStack,
+    RootStackParamListBrowser,
+    RootStackParamListHome,
+    RootStackParamListSettings,
+    SettingsStack,
+} from "~Navigation/Stacks"
+import { NFTStack, RootStackParamListNFT } from "~Navigation/Stacks/NFTStack"
+import { selectCurrentScreen, selectSelectedAccount, selectSelectedNetwork, useAppSelector } from "~Storage/Redux"
+import PlatformUtils from "~Utils/PlatformUtils"
 
 export type TabStackParamList = {
-    HomeStack: undefined
-    NFTStack: undefined
-    DiscoverStack: undefined
-    SettingsStack: undefined
+    HomeStack: NavigatorScreenParams<RootStackParamListHome>
+    NFTStack: NavigatorScreenParams<RootStackParamListNFT>
+    DiscoverStack: NavigatorScreenParams<RootStackParamListBrowser>
+    SettingsStack: NavigatorScreenParams<RootStackParamListSettings>
 }
 
 const Tab = createBottomTabNavigator<TabStackParamList>()
