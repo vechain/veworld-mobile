@@ -12,12 +12,13 @@ type Props = {
 }
 
 export const ImportWalletInput = ({ value, onChangeText, isError }: Props) => {
-    const { styles: themedStyles } = useThemedStyles(baseStyles(isError))
+    const { styles: themedStyles, theme } = useThemedStyles(baseStyles(isError))
     return (
         <TextInput
             style={themedStyles.container}
             autoCapitalize="none"
             placeholder="Enter your Mnemonic phrase, Private Key or Keystore file here"
+            placeholderTextColor={theme.colors.text}
             autoCorrect={false}
             autoComplete="off"
             multiline={true}

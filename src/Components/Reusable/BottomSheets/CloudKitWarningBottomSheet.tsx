@@ -141,6 +141,7 @@ export const CloudKitWarningBottomSheet = forwardRef<BottomSheetModalMethods, Pr
                                 setValue={(s: string) =>
                                     openLocation === "Backup_Screen" ? handlePasswordChange(s) : setPassword1(s)
                                 }
+                                textContentType="password"
                             />
 
                             {openLocation === "Backup_Screen" && <PasswordStrengthIndicator strength={strength} />}
@@ -155,6 +156,7 @@ export const CloudKitWarningBottomSheet = forwardRef<BottomSheetModalMethods, Pr
                                         onIconPress={() => setsecureText2(prev => !prev)}
                                         value={password2}
                                         setValue={setPassword2}
+                                        textContentType="newPassword"
                                     />
 
                                     <BaseView justifyContent="flex-start" alignItems="flex-start" my={8}>
