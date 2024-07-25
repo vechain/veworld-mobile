@@ -100,17 +100,34 @@ class CloudKitManager: NSObject {
     
     var wallets = [[AnyHashable : Any]]()
     
-    operation.recordFetchedBlock = { record in
-      let wallet = [
-        Constants.rootAddress : record[Constants.rootAddress] as! String,
-        Constants.walletType : record[Constants.walletType] as! String,
-        Constants.firstAccountAddress : record[Constants.firstAccountAddress] as! String,
-        Constants.derivationPath : record[Constants.derivationPath] as! String,
-        Constants.creationDate : (record.creationDate?.timeIntervalSince1970 ?? Date().timeIntervalSince1970) as TimeInterval,
-        Constants.data : record.encryptedValues[Constants.data] as! String,
-      ] as [AnyHashable : Any]
+    operation.recordFetchedBlock = { [weak self] record in
+      guard let self = self else { return }
       
-      wallets.append(wallet)
+      do {
+        if let rootAddress = record[Constants.rootAddress] as? String,
+           let walletType = record[Constants.walletType] as? String,
+           let firstAccountAddress = record[Constants.firstAccountAddress] as? String,
+           let derivationPath = record[Constants.derivationPath] as? String,
+           let data = record.encryptedValues[Constants.data] as? String {
+          
+          let wallet = [
+            Constants.rootAddress : rootAddress,
+            Constants.walletType : walletType,
+            Constants.firstAccountAddress : firstAccountAddress,
+            Constants.derivationPath : derivationPath,
+            Constants.creationDate : (record.creationDate?.timeIntervalSince1970 ?? Date().timeIntervalSince1970) as TimeInterval,
+            Constants.data : data,
+          ] as [AnyHashable : Any]
+          
+          wallets.append(wallet)
+          
+        } else {
+          print("Record data is missing or invalid")
+        }
+      } catch {
+        self.handleError(error, reject: reject)
+        print("Error processing record: \(error)")
+      }
     }
     
     operation.queryCompletionBlock = {  [weak self] cursor, error in
