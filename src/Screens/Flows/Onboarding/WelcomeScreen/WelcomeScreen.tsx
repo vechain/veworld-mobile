@@ -52,7 +52,7 @@ export const WelcomeScreen = () => {
         url && Linking.openURL(url)
     }, [])
 
-    const { getAllWalletsFromCloudKit, isLoading } = useCloudKit()
+    const { getAllWalletsFromCloudKit, isLoading, isCloudKitAvailable } = useCloudKit()
 
     const {
         onOpen: onQuickCloudModalOpen,
@@ -71,8 +71,8 @@ export const WelcomeScreen = () => {
             }
         }
 
-        init()
-    }, [getAllWalletsFromCloudKit, onQuickCloudModalOpen])
+        isCloudKitAvailable && init()
+    }, [getAllWalletsFromCloudKit, onQuickCloudModalOpen, isCloudKitAvailable])
 
     const DEV_DEMO_BUTTON = useDemoWallet()
     const { onCreateWallet, isOpen, isError, onSuccess, onClose: onCloseCreateFlow } = useHandleWalletCreation()
