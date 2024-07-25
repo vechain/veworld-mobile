@@ -71,9 +71,7 @@ export const WelcomeScreen = () => {
             }
         }
 
-        setTimeout(() => {
-            init()
-        }, 1000)
+        init()
     }, [getAllWalletsFromCloudKit, onQuickCloudModalOpen])
 
     const DEV_DEMO_BUTTON = useDemoWallet()

@@ -100,10 +100,7 @@ class CloudKitManager: NSObject {
     
     var wallets = [[AnyHashable : Any]]()
     
-    operation.recordFetchedBlock = { [weak self] record in
-      
-      guard let self = self else { return }
-      
+    operation.recordFetchedBlock = { record in
       let wallet = [
         Constants.rootAddress : record[Constants.rootAddress] as! String,
         Constants.walletType : record[Constants.walletType] as! String,
@@ -116,7 +113,9 @@ class CloudKitManager: NSObject {
       wallets.append(wallet)
     }
     
-    operation.queryCompletionBlock = { cursor, error in
+    operation.queryCompletionBlock = {  [weak self] cursor, error in
+      guard let self = self else { return }
+      
       if error != nil {
         self.handleError(error, reject: reject)
       } else {
@@ -140,9 +139,7 @@ class CloudKitManager: NSObject {
     
     var wallet: [AnyHashable : Any] = ["" : ""]
     
-    operation.recordFetchedBlock = { [weak self] record in
-      
-      guard let self = self else { return }
+    operation.recordFetchedBlock = { record in
       
       wallet = [
         Constants.rootAddress : record[Constants.rootAddress] as! String,
@@ -154,7 +151,9 @@ class CloudKitManager: NSObject {
       ] as [AnyHashable : Any]
     }
     
-    operation.queryCompletionBlock = { cursor, error in
+    operation.queryCompletionBlock = { [weak self] cursor, error in
+      guard let self = self else { return }
+      
       if error != nil {
         self.handleError(error, reject: reject)
       } else {
@@ -169,7 +168,7 @@ class CloudKitManager: NSObject {
   @available(iOS 15.0, *)
   @objc
   func saveSalt(_ rootAddress: String, salt: String, resolver: @escaping(RCTPromiseResolveBlock), rejecter reject: @escaping(RCTPromiseRejectBlock)) -> Void {
-        
+    
     let recordID = CKRecord.ID(recordName: "\(Constants.saltZone)_\(rootAddress)")
     let _salt = CKRecord(recordType: Constants.fileNameSalt, recordID: recordID)
     _salt.encryptedValues[Constants.salt] = salt
@@ -207,7 +206,7 @@ class CloudKitManager: NSObject {
     }
   }
   
-
+  
   @available(iOS 15.0, *)
   @objc
   func getSalt(_ rootAddress: String, resolver: @escaping(RCTPromiseResolveBlock), rejecter reject: @escaping(RCTPromiseRejectBlock)) -> Void {
@@ -220,15 +219,15 @@ class CloudKitManager: NSObject {
     
     var salt: [AnyHashable : Any] = ["" : ""]
     
-    operation.recordFetchedBlock = { [weak self] record in
-      guard let self = self else { return }
-      
+    operation.recordFetchedBlock = { record in
       salt = [
         Constants.salt : record.encryptedValues[Constants.salt] as! String,
       ] as [AnyHashable : Any]
     }
     
-    operation.queryCompletionBlock = { cursor, error in
+    operation.queryCompletionBlock = { [weak self] cursor, error in
+      guard let self = self else { return }
+      
       if error != nil {
         self.handleError(error, reject: reject)
       } else {
@@ -252,15 +251,15 @@ class CloudKitManager: NSObject {
     
     var iv: [AnyHashable : Any] = ["" : ""]
     
-    operation.recordFetchedBlock = { [weak self] record in
-      guard let self = self else { return }
-      
+    operation.recordFetchedBlock = { record in
       iv = [
         Constants.iv : record.encryptedValues[Constants.iv] as! String,
       ] as [AnyHashable : Any]
     }
     
-    operation.queryCompletionBlock = { cursor, error in
+    operation.queryCompletionBlock = { [weak self] cursor, error in
+      guard let self = self else { return }
+      
       if error != nil {
         self.handleError(error, reject: reject)
       } else {
@@ -280,13 +279,11 @@ class CloudKitManager: NSObject {
     let query = CKQuery(recordType: Constants.fileNameWallet, predicate: pred)
     let operation = CKQueryOperation(query: query)
     
-    operation.recordFetchedBlock = { [weak self] record in
-      guard let self = self else { return }
-      
+    operation.recordFetchedBlock = { record in
       let id = record.recordID
       
-      CKContainer.default().privateCloudDatabase.delete(withRecordID: id) { record, error in
-        
+      CKContainer.default().privateCloudDatabase.delete(withRecordID: id) { [weak self] record, error in
+        guard let self = self else { return }
         
         if error != nil {
           self.handleError(error, reject: reject)
@@ -317,12 +314,12 @@ class CloudKitManager: NSObject {
     let query = CKQuery(recordType: Constants.fileNameSalt, predicate: pred)
     let operation = CKQueryOperation(query: query)
     
-    operation.recordFetchedBlock = { [weak self] record in
-      guard let self = self else { return }
-      
+    operation.recordFetchedBlock = { record in
       let id = record.recordID
       
-      CKContainer.default().privateCloudDatabase.delete(withRecordID: id) { record, error in
+      CKContainer.default().privateCloudDatabase.delete(withRecordID: id) { [weak self] record, error in
+        guard let self = self else { return }
+        
         if error != nil {
           self.handleError(error, reject: reject)
         }
@@ -352,12 +349,12 @@ class CloudKitManager: NSObject {
     let query = CKQuery(recordType: Constants.fileNameIV, predicate: pred)
     let operation = CKQueryOperation(query: query)
     
-    operation.recordFetchedBlock = { [weak self] record in
-      guard let self = self else { return }
-      
+    operation.recordFetchedBlock = { record in
       let id = record.recordID
       
-      CKContainer.default().privateCloudDatabase.delete(withRecordID: id) { record, error in
+      CKContainer.default().privateCloudDatabase.delete(withRecordID: id) {  [weak self] record, error in
+        guard let self = self else { return }
+        
         if error != nil {
           self.handleError(error, reject: reject)
         }
