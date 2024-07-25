@@ -52,9 +52,6 @@ export const CoinbasePayWebView = ({
             try {
                 const { data } = JSON.parse(event.nativeEvent.data)
 
-                // eslint-disable-next-line no-console
-                console.log("TRIGGERED EVENT", data.eventName)
-
                 // if successfully completed buy process
                 if (data.eventName === "success") {
                     track(AnalyticsEvent.BUY_CRYPTO_SUCCESSFULLY_COMPLETED, {
@@ -71,8 +68,6 @@ export const CoinbasePayWebView = ({
                 }
 
                 if (data.eventName === "error") {
-                    // eslint-disable-next-line no-console
-                    console.log("ON ERROR", event.nativeEvent.data)
                     track(AnalyticsEvent.BUY_CRYPTO_FAILED, {
                         provider: "coinbase",
                     })
