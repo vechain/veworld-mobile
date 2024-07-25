@@ -135,7 +135,7 @@ export const CloudKitWarningBottomSheet = forwardRef<BottomSheetModalMethods, Pr
                                         ? LL.BTN_CHOOSE_PASSWORD()
                                         : LL.BTN_ENTER_PASSWORD()
                                 }
-                                // secureTextEntry={secureText1}
+                                secureTextEntry
                                 // rightIcon={secureText1 ? "eye-off" : "eye"}
                                 // onIconPress={() => setsecureText1(prev => !prev)}
                                 value={password1}
