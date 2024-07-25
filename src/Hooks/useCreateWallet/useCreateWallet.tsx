@@ -1,5 +1,5 @@
 import { useCallback, useState } from "react"
-import { NewLedgerDevice } from "~Model"
+import { IMPORT_TYPE, NewLedgerDevice } from "~Model"
 import { useDeviceUtils } from "../useDeviceUtils"
 import {
     addDeviceAndAccounts,
@@ -11,7 +11,7 @@ import {
     useAppDispatch,
     useAppSelector,
 } from "~Storage/Redux"
-import { selectAccountsState } from "~Storage/Redux/Selectors"
+import { selectAccountsState, selectHasOnboarded } from "~Storage/Redux/Selectors"
 import { warn } from "~Utils/Logger"
 import { useBiometrics } from "../useBiometrics"
 import { useAnalyticTracking } from "~Hooks/useAnalyticTracking"
@@ -30,6 +30,7 @@ export const useCreateWallet = () => {
     const biometrics = useBiometrics()
     const dispatch = useAppDispatch()
     const selectedAccount = useAppSelector(selectAccountsState)?.selectedAccount
+    const userHasOnboarded = useAppSelector(selectHasOnboarded)
     const [isComplete, setIsComplete] = useState(false)
     const track = useAnalyticTracking()
     /**
@@ -42,14 +43,18 @@ export const useCreateWallet = () => {
      */
     const createLocalWallet = useCallback(
         async ({
+            isImported,
             mnemonic,
             privateKey,
             userPassword,
+            importType,
             onError,
         }: {
+            isImported: boolean
             mnemonic?: string[]
             privateKey?: string
             userPassword?: string
+            importType?: IMPORT_TYPE
             onError?: (error: unknown) => void
         }) => {
             try {
@@ -70,6 +75,18 @@ export const useCreateWallet = () => {
                 dispatch(setPrivateKey(undefined))
                 setIsComplete(true)
                 track(AnalyticsEvent.WALLET_ADD_LOCAL_SUCCESS)
+                track(AnalyticsEvent.WALLET_GENERATION, {
+                    context: userHasOnboarded ? "management" : "onboarding",
+                    type: !isImported ? "create" : "import",
+                    signature: "local",
+                    importType: importType,
+                })
+                if (!userHasOnboarded)
+                    track(AnalyticsEvent.ONBOARDING_SUCCESS, {
+                        type: !mnemonic && !privateKey ? "create" : "import",
+                        signature: "local",
+                        importType: importType,
+                    })
             } catch (e) {
                 warn(ERROR_EVENTS.WALLET_CREATION, e)
                 track(AnalyticsEvent.WALLET_ADD_LOCAL_ERROR)
@@ -77,7 +94,7 @@ export const useCreateWallet = () => {
                 throw e
             }
         },
-        [dispatch, createDevice, selectedAccount, track],
+        [createDevice, dispatch, selectedAccount, track, userHasOnboarded],
     )
     //* [END] - Create Wallet
 
@@ -88,7 +105,15 @@ export const useCreateWallet = () => {
      * @returns void
      */
     const createLedgerWallet = useCallback(
-        async ({ newLedger, onError }: { newLedger: NewLedgerDevice; onError?: (error: unknown) => void }) => {
+        async ({
+            newLedger,
+            isImported,
+            onError,
+        }: {
+            newLedger: NewLedgerDevice
+            isImported: boolean
+            onError?: (error: unknown) => void
+        }) => {
             try {
                 const { accounts } = await dispatch(addLedgerDeviceAndAccounts(newLedger)).unwrap()
 
@@ -98,6 +123,16 @@ export const useCreateWallet = () => {
 
                 setIsComplete(true)
                 track(AnalyticsEvent.WALLET_ADD_LEDGER_SUCCESS)
+                track(AnalyticsEvent.WALLET_GENERATION, {
+                    context: userHasOnboarded ? "management" : "onboarding",
+                    type: !isImported ? "create" : "import",
+                    signature: "hardware",
+                })
+                if (!userHasOnboarded)
+                    track(AnalyticsEvent.ONBOARDING_SUCCESS, {
+                        type: !isImported ? "create" : "import",
+                        signature: "hardware",
+                    })
             } catch (e) {
                 warn(ERROR_EVENTS.WALLET_CREATION, e)
                 track(AnalyticsEvent.WALLET_ADD_LEDGER_ERROR)
@@ -105,7 +140,7 @@ export const useCreateWallet = () => {
                 throw e
             }
         },
-        [dispatch, selectedAccount, track],
+        [dispatch, selectedAccount, track, userHasOnboarded],
     )
     //* [END] - Create Wallet
 
