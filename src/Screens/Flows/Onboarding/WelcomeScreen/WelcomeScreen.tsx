@@ -1,4 +1,4 @@
-import React, { useCallback, useMemo } from "react"
+import React, { useCallback, useEffect, useMemo } from "react"
 import {
     BackButtonHeader,
     BaseButton,
@@ -43,6 +43,12 @@ export const WelcomeScreen = () => {
         url && Linking.openURL(url)
     }, [])
 
+    useEffect(() => {
+        // Track when a new onboarding start
+        track(AnalyticsEvent.ONBOARDING_START)
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [])
+
     const DEV_DEMO_BUTTON = useDemoWallet()
     const { onCreateWallet, isOpen, isError, onSuccess, onClose: onCloseCreateFlow } = useHandleWalletCreation()
 
@@ -77,7 +83,7 @@ export const WelcomeScreen = () => {
                         )}
 
                         <BaseButton
-                            action={() => onCreateWallet({})}
+                            action={() => onCreateWallet({ isImported: false })}
                             w={100}
                             title={"CREATE WALLET"}
                             testID="CREATE_WALLET_BTN"

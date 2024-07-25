@@ -79,6 +79,7 @@ export const ImportLocalWallet = () => {
                 importMnemonic: mnemonicCache.current,
                 privateKey: privateKeyCache.current,
                 pin,
+                importType: importType,
             })
             nav.goBack()
         },
@@ -119,7 +120,7 @@ export const ImportLocalWallet = () => {
                 if (userHasOnboarded) {
                     checkIdentityBeforeOpening_1()
                 } else {
-                    onCreateWallet({ importMnemonic: mnemonic })
+                    onCreateWallet({ isImported: true, importMnemonic: mnemonic, importType: IMPORT_TYPE.MNEMONIC })
                 }
             } catch (err) {
                 processErrorMessage(err)
@@ -145,7 +146,7 @@ export const ImportLocalWallet = () => {
                 if (userHasOnboarded) {
                     checkIdentityBeforeOpening_1()
                 } else {
-                    onCreateWallet({ privateKey: _privKey })
+                    onCreateWallet({ isImported: true, privateKey: _privKey, importType: IMPORT_TYPE.PRIVATE_KEY })
                 }
             } catch (err) {
                 processErrorMessage(err)
@@ -172,7 +173,7 @@ export const ImportLocalWallet = () => {
                 if (userHasOnboarded) {
                     checkIdentityBeforeOpening_1()
                 } else {
-                    onCreateWallet({ privateKey })
+                    onCreateWallet({ isImported: true, privateKey, importType: IMPORT_TYPE.KEYSTORE_FILE })
                 }
             } catch (err) {
                 processErrorMessage(err)

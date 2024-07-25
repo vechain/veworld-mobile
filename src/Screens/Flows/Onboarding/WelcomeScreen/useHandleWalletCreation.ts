@@ -3,7 +3,7 @@ import { showErrorToast, useApplicationSecurity, WalletEncryptionKeyHelper } fro
 import { useBiometrics, useCreateWallet, useDisclosure } from "~Hooks"
 import { setIsAppLoading, useAppDispatch } from "~Storage/Redux"
 import { mnemonic as thorMnemonic } from "thor-devkit"
-import { NewLedgerDevice, SecurityLevelType } from "~Model"
+import { IMPORT_TYPE, NewLedgerDevice, SecurityLevelType } from "~Model"
 import { BiometricsUtils } from "~Utils"
 import HapticsService from "~Services/HapticsService"
 import { useI18nContext } from "~i18n"
@@ -42,14 +42,26 @@ export const useHandleWalletCreation = () => {
     )
 
     const onCreateWallet = useCallback(
-        async ({ importMnemonic, privateKey }: { importMnemonic?: string[]; privateKey?: string }) => {
+        async ({
+            isImported,
+            importMnemonic,
+            privateKey,
+            importType,
+        }: {
+            isImported: boolean
+            importMnemonic?: string[]
+            privateKey?: string
+            importType?: IMPORT_TYPE
+        }) => {
             if (biometrics && biometrics.currentSecurityLevel === "BIOMETRIC") {
                 dispatch(setIsAppLoading(true))
                 const mnemonic = isEmpty(importMnemonic) ? getNewMnemonic() : importMnemonic
                 await WalletEncryptionKeyHelper.init()
                 await createLocalWallet({
+                    isImported,
                     mnemonic: privateKey ? undefined : mnemonic,
                     privateKey,
+                    importType,
                     onError: onWalletCreationError,
                 })
                 await migrateOnboarding(SecurityLevelType.BIOMETRIC)
@@ -68,6 +80,7 @@ export const useHandleWalletCreation = () => {
             const _mnemonic = isEmpty(mnemonic) ? getNewMnemonic() : mnemonic
             await WalletEncryptionKeyHelper.init(pin)
             await createLocalWallet({
+                isImported: !!mnemonic || !!privateKey,
                 mnemonic: privateKey ? undefined : _mnemonic,
                 privateKey: privateKey,
                 userPassword: pin,
@@ -91,6 +104,7 @@ export const useHandleWalletCreation = () => {
                 dispatch(setIsAppLoading(true))
                 await WalletEncryptionKeyHelper.init()
                 await createLedgerWallet({
+                    isImported: false,
                     newLedger,
                     onError: onWalletCreationError,
                 })
@@ -118,6 +132,7 @@ export const useHandleWalletCreation = () => {
             dispatch(setIsAppLoading(true))
             await WalletEncryptionKeyHelper.init(pin)
             await createLedgerWallet({
+                isImported: true,
                 newLedger,
                 onError: onWalletCreationError,
             })
@@ -134,6 +149,7 @@ export const useHandleWalletCreation = () => {
 
             const mnemonic = getNewMnemonic()
             await createLocalWallet({
+                isImported: false,
                 mnemonic: mnemonic,
                 userPassword: pin,
                 onError: onWalletCreationError,
@@ -148,24 +164,30 @@ export const useHandleWalletCreation = () => {
             importMnemonic,
             privateKey,
             pin,
+            importType,
         }: {
             importMnemonic?: string[]
             privateKey?: string
             pin?: string
+            importType?: IMPORT_TYPE
         }) => {
             if (biometrics && biometrics.currentSecurityLevel === "BIOMETRIC" && !pin) {
                 dispatch(setIsAppLoading(true))
                 await createLocalWallet({
+                    isImported: true,
                     mnemonic: privateKey ? undefined : importMnemonic,
                     privateKey,
+                    importType,
                     onError: onWalletCreationError,
                 })
                 dispatch(setIsAppLoading(false))
             } else {
                 await createLocalWallet({
+                    isImported: true,
                     mnemonic: privateKey ? undefined : importMnemonic,
                     privateKey,
                     userPassword: pin,
+                    importType,
                     onError: onWalletCreationError,
                 })
             }
@@ -183,6 +205,7 @@ export const useHandleWalletCreation = () => {
         }) => {
             dispatch(setIsAppLoading(true))
             await createLedgerWallet({
+                isImported: true,
                 newLedger,
                 onError: onWalletCreationError,
             })

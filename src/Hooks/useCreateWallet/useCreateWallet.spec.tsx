@@ -102,7 +102,7 @@ describe("useCreateWallet", () => {
             })
             const { createLocalWallet } = result.current
 
-            await createLocalWallet({ mnemonic: mnemonic })
+            await createLocalWallet({ mnemonic: mnemonic, isImported: true })
             await waitFor(() => result.current.isComplete)
             expect(result.current.accessControl).toBe(true)
             expect(result.current.isComplete).toBe(true)
@@ -126,6 +126,7 @@ describe("useCreateWallet", () => {
             })
             const createLocalWallet = result.current.createLocalWallet
             await createLocalWallet({
+                isImported: true,
                 mnemonic: mnemonic,
                 userPassword: "password",
                 onError: undefined,
@@ -157,6 +158,7 @@ describe("useCreateWallet", () => {
 
             try {
                 await createLedgerWallet({
+                    isImported: true,
                     newLedger: ledger,
                     onError: undefined,
                 })
