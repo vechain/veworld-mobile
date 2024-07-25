@@ -1,6 +1,6 @@
-import React, { forwardRef, useCallback, useEffect, useState } from "react"
+import React, { forwardRef, useCallback, useEffect, useRef, useState } from "react"
 import { BottomSheetModalMethods } from "@gorhom/bottom-sheet/lib/typescript/types"
-import { StyleSheet } from "react-native"
+import { Keyboard, StyleSheet, TextInput } from "react-native"
 import { BaseBottomSheet, BaseButton, BaseIcon, BaseSpacer, BaseText, BaseTextInput, BaseView } from "~Components/Base"
 import { useThemedStyles } from "~Hooks"
 import { Layout } from "../Layout"
@@ -17,13 +17,15 @@ type Props = {
 export const CloudKitWarningBottomSheet = forwardRef<BottomSheetModalMethods, Props>(
     ({ onHandleBackupToCloudKit, openLocation }, ref) => {
         const { LL } = useI18nContext()
-        const [secureText1, setsecureText1] = useState(true)
-        const [secureText2, setsecureText2] = useState(true)
+        // const [secureText1, setsecureText1] = useState(true)
+        // const [secureText2, setsecureText2] = useState(true)
         const [password1, setPassword1] = useState("")
         const [password2, setPassword2] = useState("")
         const [passwordMisMatch, setPasswordMisMatch] = useState(false)
         const [passwordNotStrong, setPasswordNotStrong] = useState(false)
         const [isChecking, setIsChecking] = useState(false)
+
+        const inputRef = useRef<TextInput>(null)
 
         const { styles } = useThemedStyles(baseStyles)
         const strength = useSharedValue(0)
@@ -133,15 +135,21 @@ export const CloudKitWarningBottomSheet = forwardRef<BottomSheetModalMethods, Pr
                                         ? LL.BTN_CHOOSE_PASSWORD()
                                         : LL.BTN_ENTER_PASSWORD()
                                 }
-                                secureTextEntry={secureText1}
-                                rightIcon={secureText1 ? "eye-off" : "eye"}
-                                onIconPress={() => setsecureText1(prev => !prev)}
+                                // secureTextEntry={secureText1}
+                                // rightIcon={secureText1 ? "eye-off" : "eye"}
+                                // onIconPress={() => setsecureText1(prev => !prev)}
                                 value={password1}
                                 autoFocus
                                 setValue={(s: string) =>
                                     openLocation === "Backup_Screen" ? handlePasswordChange(s) : setPassword1(s)
                                 }
-                                textContentType="password"
+                                textContentType="newPassword"
+                                passwordRules="required: digit; minlength: 6; required: special; required: lower;"
+                                // onSubmitEditing={() => inputRef?.current?.focus()}
+                                onSubmitEditing={() => {
+                                    Keyboard.dismiss()
+                                    onHandleBackupToCloudKit(password1)
+                                }}
                             />
 
                             {openLocation === "Backup_Screen" && <PasswordStrengthIndicator strength={strength} />}
@@ -149,14 +157,14 @@ export const CloudKitWarningBottomSheet = forwardRef<BottomSheetModalMethods, Pr
                             {openLocation === "Backup_Screen" && (
                                 <>
                                     <BaseSpacer height={24} />
-                                    <BaseTextInput
+                                    <TextInput
                                         placeholder={LL.BTN_CONFIRN_PASSWORD()}
-                                        secureTextEntry={secureText2}
-                                        rightIcon={secureText2 ? "eye-off" : "eye"}
-                                        onIconPress={() => setsecureText2(prev => !prev)}
+                                        // secureTextEntry={secureText2}
+                                        // rightIcon={secureText2 ? "eye-off" : "eye"}
+                                        // onIconPress={() => setsecureText2(prev => !prev)}
                                         value={password2}
-                                        setValue={setPassword2}
-                                        textContentType="newPassword"
+                                        onChangeText={setPassword2}
+                                        ref={inputRef}
                                     />
 
                                     <BaseView justifyContent="flex-start" alignItems="flex-start" my={8}>
