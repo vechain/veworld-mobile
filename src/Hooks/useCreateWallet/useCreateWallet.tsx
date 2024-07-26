@@ -81,15 +81,23 @@ export const useCreateWallet = () => {
                     signature: "local",
                     importType: importType,
                 })
-                if (!userHasOnboarded)
+                if (!userHasOnboarded) {
                     track(AnalyticsEvent.ONBOARDING_SUCCESS, {
-                        type: !mnemonic && !privateKey ? "create" : "import",
+                        type: !isImported ? "create" : "import",
                         signature: "local",
                         importType: importType,
                     })
+                }
             } catch (e) {
                 warn(ERROR_EVENTS.WALLET_CREATION, e)
                 track(AnalyticsEvent.WALLET_ADD_LOCAL_ERROR)
+                if (!userHasOnboarded) {
+                    track(AnalyticsEvent.ONBOARDING_FAILED, {
+                        type: !isImported ? "create" : "import",
+                        signature: "local",
+                        importType: importType,
+                    })
+                }
                 onError?.(e)
                 throw e
             }
@@ -128,14 +136,21 @@ export const useCreateWallet = () => {
                     type: !isImported ? "create" : "import",
                     signature: "hardware",
                 })
-                if (!userHasOnboarded)
+                if (!userHasOnboarded) {
                     track(AnalyticsEvent.ONBOARDING_SUCCESS, {
                         type: !isImported ? "create" : "import",
                         signature: "hardware",
                     })
+                }
             } catch (e) {
                 warn(ERROR_EVENTS.WALLET_CREATION, e)
                 track(AnalyticsEvent.WALLET_ADD_LEDGER_ERROR)
+                if (!userHasOnboarded) {
+                    track(AnalyticsEvent.ONBOARDING_FAILED, {
+                        type: !isImported ? "create" : "import",
+                        signature: "hardware",
+                    })
+                }
                 onError?.(e)
                 throw e
             }
