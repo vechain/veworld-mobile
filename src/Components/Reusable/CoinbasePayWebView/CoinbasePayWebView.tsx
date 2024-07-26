@@ -94,7 +94,6 @@ export const CoinbasePayWebView = ({
             {!isLoading && isAndroid && <BaseStatusBar />}
             <BaseActivityIndicator isVisible={isLoading} />
             <WebView
-                androidLayerType="software"
                 source={{ uri: coinbaseURL }}
                 onLoadEnd={handleLoadEnd}
                 onMessage={onMessage}
