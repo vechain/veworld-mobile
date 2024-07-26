@@ -1,14 +1,8 @@
+import { useNavigation, useScrollToTop } from "@react-navigation/native"
 import React, { useCallback, useEffect, useMemo, useRef, useState } from "react"
-import { AccountCard, EditTokensBar, Header, TokenList } from "./Components"
-import {
-    useAnalyticTracking,
-    useBottomSheetModal,
-    useCheckVersion,
-    useFetchAllVns,
-    useMemoizedAnimation,
-    useSetSelectedAccount,
-    useTheme,
-} from "~Hooks"
+import { RefreshControl } from "react-native"
+import { NestableScrollContainer } from "react-native-draggable-flatlist"
+import { FadeInRight } from "react-native-reanimated"
 import {
     BaseIcon,
     BaseSpacer,
@@ -18,8 +12,18 @@ import {
     QRCodeBottomSheet,
     SelectAccountBottomSheet,
 } from "~Components"
-import { FadeInRight } from "react-native-reanimated"
-import { useTokenBalances } from "./Hooks"
+import { AnalyticsEvent } from "~Constants"
+import {
+    useAnalyticTracking,
+    useBottomSheetModal,
+    useCheckVersion,
+    useFetchAllVns,
+    useMemoizedAnimation,
+    useSetSelectedAccount,
+    useTheme,
+} from "~Hooks"
+import { AccountWithDevice, FastAction, WatchedAccount } from "~Model"
+import { Routes } from "~Navigation"
 import {
     selectBalanceVisible,
     selectCurrency,
@@ -29,14 +33,10 @@ import {
     useAppDispatch,
     useAppSelector,
 } from "~Storage/Redux"
-import { AccountWithDevice, FastAction, WatchedAccount } from "~Model"
-import { useI18nContext } from "~i18n"
-import { RefreshControl } from "react-native"
-import { useNavigation, useScrollToTop } from "@react-navigation/native"
-import { NestableScrollContainer } from "react-native-draggable-flatlist"
-import { Routes } from "~Navigation"
-import { AnalyticsEvent } from "~Constants"
 import { AccountUtils } from "~Utils"
+import { useI18nContext } from "~i18n"
+import { AccountCard, EditTokensBar, Header, TokenList } from "./Components"
+import { useTokenBalances } from "./Hooks"
 
 export const HomeScreen = () => {
     /* Pre Fetch all VNS names and addresses */
@@ -106,6 +106,7 @@ export const HomeScreen = () => {
 
     const Actions: FastAction[] = useMemo(() => {
         let actions: FastAction[] = []
+
         // account must not be observed to show the buy button
         if (!AccountUtils.isObservedAccount(selectedAccount)) {
             actions.push({
@@ -127,7 +128,7 @@ export const HomeScreen = () => {
                     nav.navigate(Routes.SELECT_TOKEN_SEND, {
                         initialRoute: Routes.HOME,
                     }),
-                icon: <BaseIcon color={theme.colors.text} name="send-outline" />,
+                icon: <BaseIcon color={theme.colors.text} name="arrow-up" />,
                 testID: "sendButton",
             })
         }
@@ -137,13 +138,6 @@ export const HomeScreen = () => {
             action: () => nav.navigate(Routes.SWAP),
             icon: <BaseIcon color={theme.colors.text} name="swap-horizontal" />,
             testID: "swapButton",
-        })
-
-        actions.push({
-            name: LL.BTN_HISTORY(),
-            action: () => nav.navigate(Routes.HISTORY),
-            icon: <BaseIcon color={theme.colors.text} name="history" />,
-            testID: "historyButton",
         })
 
         return actions

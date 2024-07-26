@@ -56,6 +56,7 @@ export enum Routes {
     SETTINGS_MANAGE_CUSTOM_NODES = "Settings_Manage_custom_Nodes",
     CAMERA = "Camera",
     DISCOVER = "Discover",
+    HISTORY_STACK = "HistoryStack",
     DISCOVER_FEATURED = "Discover_Featured",
     DISCOVER_FAVOURITES = "Discover_Favourites",
     DISCOVER_BROWSER_HISTORY = "Discover_Browser_History",

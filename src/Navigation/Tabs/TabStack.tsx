@@ -14,6 +14,7 @@ import {
     RootStackParamListSettings,
     SettingsStack,
 } from "~Navigation/Stacks"
+import { HistoryStack, HistoryStackParamList } from "~Navigation/Stacks/HistoryStack"
 import { NFTStack, RootStackParamListNFT } from "~Navigation/Stacks/NFTStack"
 import { selectCurrentScreen, selectSelectedAccount, selectSelectedNetwork, useAppSelector } from "~Storage/Redux"
 import PlatformUtils from "~Utils/PlatformUtils"
@@ -23,6 +24,7 @@ export type TabStackParamList = {
     NFTStack: NavigatorScreenParams<RootStackParamListNFT>
     DiscoverStack: NavigatorScreenParams<RootStackParamListBrowser>
     SettingsStack: NavigatorScreenParams<RootStackParamListSettings>
+    [Routes.HISTORY_STACK]: NavigatorScreenParams<HistoryStackParamList>
 }
 
 const Tab = createBottomTabNavigator<TabStackParamList>()
@@ -105,6 +107,16 @@ export const TabStack = () => {
                     tabBarLabel: "Discover",
                     tabBarTestID: "discover-tab",
                     tabBarIcon: ({ focused }) => renderTabBarIcon(focused, focused ? "compass" : "compass-outline"),
+                }}
+            />
+
+            <Tab.Screen
+                name={Routes.HISTORY_STACK}
+                component={HistoryStack}
+                options={{
+                    tabBarLabel: Routes.HISTORY,
+                    tabBarTestID: "history-tab",
+                    tabBarIcon: ({ focused }) => renderTabBarIcon(focused, focused ? "history" : "history"),
                 }}
             />
 

@@ -1,5 +1,5 @@
-import { BottomTabNavigationProp } from "@react-navigation/bottom-tabs"
 import { useNavigation } from "@react-navigation/native"
+import { NativeStackNavigationProp } from "@react-navigation/native-stack"
 import React, { useCallback, useMemo } from "react"
 import { FlatList, ListRenderItemInfo, StyleSheet } from "react-native"
 import {
@@ -16,7 +16,7 @@ import { useAnalyticTracking, useBottomSheetModal, useThemedStyles } from "~Hook
 import { useFetchFeaturedDApps } from "~Hooks/useFetchFeaturedDApps"
 import { useI18nContext } from "~i18n"
 import { RumManager } from "~Logging"
-import { Routes, TabStackParamList } from "~Navigation"
+import { RootStackParamListHome, Routes } from "~Navigation"
 import {
     addNavigationToDApp,
     selectBalanceVisible,
@@ -30,7 +30,7 @@ import {
 } from "~Storage/Redux"
 import { EmptyResults, ListSkeleton } from "./components"
 
-type NavigationProps = BottomTabNavigationProp<TabStackParamList, Routes.HOME_STACK>
+type NavigationProps = NativeStackNavigationProp<RootStackParamListHome, Routes.SWAP>
 
 export const SwapScreen = () => {
     const { LL } = useI18nContext()
@@ -66,16 +66,14 @@ export const SwapScreen = () => {
             }
         })
 
-        swapDAppsNotBookmarked.sort((a, b) => b.amountOfNavigations - a.amountOfNavigations)
+        swapDAppsBookmarked.sort((a, b) => a.name.localeCompare(b.name))
+        swapDAppsNotBookmarked.sort((a, b) => a.name.localeCompare(b.name))
         return [...swapDAppsBookmarked, ...swapDAppsNotBookmarked]
     }, [bookmarkedDApps, swappDApps])
 
     const onDAppPress = useCallback(
         ({ href, custom }: { href: string; custom?: boolean }) => {
-            nav.navigate(Routes.DISCOVER_STACK, {
-                screen: Routes.BROWSER,
-                params: { url: href },
-            })
+            nav.navigate(Routes.BROWSER, { url: href })
 
             track(AnalyticsEvent.SWAPP_USER_OPENED_DAPP, {
                 url: href,
