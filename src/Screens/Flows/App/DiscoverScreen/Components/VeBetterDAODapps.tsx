@@ -59,7 +59,9 @@ const VeBetterDaoDAppCard = ({ onPress, containerStyle, item, areDappsLoading }:
 
     if (error) {
         const dapp = localDaoDAppsMetadata.find(metdata => metdata.name === item.name)
-        return dapp ? <Card href={dapp.external_url} source={getImagerSource(dapp?.weworld?.banner ?? "")} /> : null
+        return dapp ? (
+            <Card href={dapp.external_url} source={getImagerSource(dapp?.we_world?.banner ?? dapp.banner ?? "")} />
+        ) : null
     }
 
     return showSkeleton ? (
@@ -71,7 +73,7 @@ const VeBetterDaoDAppCard = ({ onPress, containerStyle, item, areDappsLoading }:
             layout={[{ flexDirection: "column", height: "100%", width: "100%" }]}
         />
     ) : (
-        <Card href={data?.external_url ?? ""} source={getImagerSource(data?.banner ?? "")} />
+        <Card href={data?.external_url ?? ""} source={getImagerSource(data?.we_world?.banner ?? data.banner ?? "")} />
     )
 }
 
