@@ -168,6 +168,7 @@ const en: BaseTranslation = {
     BD_BACKED_UP_TO_CLOUD: "Backed up to iCloud",
     BD_NOT_BACKED_UP_TO_CLOUD: "Not backed up to iCloud",
     BD_CLOUD_BACKUP_PASSWORD: "iCloud Backup Password",
+    BD_BACKUP_PASSWORD_TO_KEYCHAIN: "Backup Password to Keychain",
     BD_CLOUD_PASSWORD_CREATION_MESSAGE: "This password will secure your secret recovery phrase in the cloud. VeWorld does NOT have access to your password. We can NOT reset it if you lose it, so keep it safe.",
     BD_CLOUD_INSERT_PASSWORD: "Enter the password you used to back up your wallet.",
 
@@ -394,6 +395,7 @@ const en: BaseTranslation = {
     ERROR_COULD_NOT_FIND_ADDRESS_FOR_DOMAIN: "Address not found for domain name",
     ERROR_TOO_MANY_BIOMETRICS_AUTH_ATTEMPTS: "Too many biometrics authentication attempts, please try again later",
     ERROR_CREATING_WALLET: "Error creating wallet",
+    ERROR_DECRYPTING_WALLET: "Error getting wallet. Make sure you have the correct password",
 
     // Success
 

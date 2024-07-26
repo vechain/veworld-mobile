@@ -154,6 +154,7 @@ export const MnemonicBackupScreen = ({ route }: Props) => {
                 ref={warningRef}
                 onHandleBackupToCloudKit={onHandleBackupToCloudKit}
                 openLocation="Backup_Screen"
+                rootAddress={deviceToBackup?.rootAddress}
             />
         </>
     )

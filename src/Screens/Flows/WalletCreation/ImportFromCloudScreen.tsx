@@ -85,14 +85,32 @@ export const ImportFromCloudScreen = () => {
             if (selected) {
                 const { salt } = await getSalt(selected.rootAddress)
                 const { iv } = await getIV(selected.rootAddress)
-                const mnemonic = CryptoUtils.decrypt(
-                    selected.data,
-                    password,
-                    salt,
-                    PasswordUtils.base64ToBuffer(iv),
-                ) as string[]
-                const isCloudKit = true
+
+                if (!salt || !iv) {
+                    showErrorToast({
+                        text1: LL.CLOUDKIT_ERROR_GENERIC(),
+                    })
+                    return
+                }
+
+                let mnemonic: string[] = []
+
                 try {
+                    mnemonic = CryptoUtils.decrypt(
+                        selected.data,
+                        password,
+                        salt,
+                        PasswordUtils.base64ToBuffer(iv),
+                    ) as string[]
+                } catch (err) {
+                    showErrorToast({
+                        text1: LL.ERROR_DECRYPTING_WALLET(),
+                    })
+                    return
+                }
+
+                try {
+                    const isCloudKit = true
                     checkCanImportDevice(isCloudKit, selected.derivationPath, mnemonic)
                     mnemonicCache.current = mnemonic
                     if (userHasOnboarded) {
@@ -178,6 +196,7 @@ export const ImportFromCloudScreen = () => {
                         ref={warningRef}
                         onHandleBackupToCloudKit={handleOnPress}
                         openLocation="Import_Screen"
+                        rootAddress={selected?.rootAddress}
                     />
                     {!!isCreateError && (
                         <BaseText my={10} color={theme.colors.danger}>

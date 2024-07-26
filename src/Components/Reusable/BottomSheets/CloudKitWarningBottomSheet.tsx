@@ -1,29 +1,46 @@
 import React, { forwardRef, useCallback, useEffect, useRef, useState } from "react"
 import { BottomSheetModalMethods } from "@gorhom/bottom-sheet/lib/typescript/types"
-import { Keyboard, StyleSheet, TextInput } from "react-native"
-import { BaseBottomSheet, BaseButton, BaseIcon, BaseSpacer, BaseText, BaseTextInput, BaseView } from "~Components/Base"
+import { Keyboard, StyleSheet } from "react-native"
+import {
+    BaseBottomSheet,
+    BaseButton,
+    BaseIcon,
+    BaseSpacer,
+    BaseSwitch,
+    BaseText,
+    BaseTextInput,
+    BaseView,
+} from "~Components/Base"
 import { useThemedStyles } from "~Hooks"
 import { Layout } from "../Layout"
 import { COLORS } from "~Constants"
 import { PasswordStrengthIndicator } from "../PasswordStrengthIndicator"
 import { Easing, useSharedValue, withTiming } from "react-native-reanimated"
 import { useI18nContext } from "~i18n"
+import { TextInput } from "react-native-gesture-handler"
+import { Keychain } from "~Storage"
 
 type Props = {
     onHandleBackupToCloudKit: (password: string) => void
     openLocation: "Backup_Screen" | "Import_Screen"
+    rootAddress?: string
 }
 
 export const CloudKitWarningBottomSheet = forwardRef<BottomSheetModalMethods, Props>(
-    ({ onHandleBackupToCloudKit, openLocation }, ref) => {
+    ({ onHandleBackupToCloudKit, openLocation, rootAddress }, ref) => {
         const { LL } = useI18nContext()
-        // const [secureText1, setsecureText1] = useState(true)
-        // const [secureText2, setsecureText2] = useState(true)
+        const [secureText1, setsecureText1] = useState(true)
+        const [secureText2, setsecureText2] = useState(true)
         const [password1, setPassword1] = useState("")
         const [password2, setPassword2] = useState("")
         const [passwordMisMatch, setPasswordMisMatch] = useState(false)
         const [passwordNotStrong, setPasswordNotStrong] = useState(false)
         const [isChecking, setIsChecking] = useState(false)
+        const [backupToKeychain, setBackupToKeychain] = useState(true)
+
+        const onBackupToKeychain = useCallback(() => {
+            setBackupToKeychain(prev => !prev)
+        }, [])
 
         const inputRef = useRef<TextInput>(null)
 
@@ -54,12 +71,24 @@ export const CloudKitWarningBottomSheet = forwardRef<BottomSheetModalMethods, Pr
             [strength],
         )
 
-        const checkPasswordValidity = useCallback(() => {
+        const checkPasswordValidity = useCallback(async () => {
             setPasswordMisMatch(false)
             setPasswordNotStrong(false)
             setIsChecking(true)
+
+            // TODO.vas - show tost
+            if (!rootAddress) throw new Error("Root Address is missing")
+
             if (openLocation === "Backup_Screen") {
                 if (password1 === password2 && strength.value >= 4) {
+                    if (backupToKeychain) {
+                        await Keychain.set({
+                            key: `CLOUD_WALLET_${rootAddress}`,
+                            value: password1,
+                            isCloudSync: true,
+                        })
+                    }
+
                     onHandleBackupToCloudKit(password1)
                 } else {
                     if (password1 !== password2) setPasswordMisMatch(true)
@@ -70,7 +99,33 @@ export const CloudKitWarningBottomSheet = forwardRef<BottomSheetModalMethods, Pr
             if (openLocation === "Import_Screen") {
                 onHandleBackupToCloudKit(password1)
             }
-        }, [onHandleBackupToCloudKit, openLocation, password1, password2, strength.value])
+        }, [
+            backupToKeychain,
+            onHandleBackupToCloudKit,
+            openLocation,
+            password1,
+            password2,
+            rootAddress,
+            strength.value,
+        ])
+
+        useEffect(() => {
+            const init = async () => {
+                if (!rootAddress) return
+
+                // Check keychain to see if password for rootAddress exists
+                const keychainPassword = await Keychain.get({
+                    key: `CLOUD_WALLET_${rootAddress}`,
+                    isCloudSync: true,
+                })
+
+                if (keychainPassword) {
+                    setPassword1(keychainPassword)
+                }
+            }
+
+            init()
+        }, [rootAddress])
 
         const calculateStrength = useCallback((_password: string) => {
             if (!_password) return 0
@@ -135,21 +190,16 @@ export const CloudKitWarningBottomSheet = forwardRef<BottomSheetModalMethods, Pr
                                         ? LL.BTN_CHOOSE_PASSWORD()
                                         : LL.BTN_ENTER_PASSWORD()
                                 }
-                                secureTextEntry
-                                // rightIcon={secureText1 ? "eye-off" : "eye"}
-                                // onIconPress={() => setsecureText1(prev => !prev)}
+                                secureTextEntry={secureText1}
+                                rightIcon={secureText1 ? "eye-off" : "eye"}
+                                onIconPress={() => setsecureText1(prev => !prev)}
                                 value={password1}
                                 autoFocus
                                 setValue={(s: string) =>
                                     openLocation === "Backup_Screen" ? handlePasswordChange(s) : setPassword1(s)
                                 }
-                                textContentType="newPassword"
-                                passwordRules="required: digit; minlength: 6; required: special; required: lower;"
-                                // onSubmitEditing={() => inputRef?.current?.focus()}
-                                onSubmitEditing={() => {
-                                    Keyboard.dismiss()
-                                    onHandleBackupToCloudKit(password1)
-                                }}
+                                onSubmitEditing={() => inputRef?.current?.focus()}
+                                returnKeyType={openLocation === "Backup_Screen" ? "next" : "done"}
                             />
 
                             {openLocation === "Backup_Screen" && <PasswordStrengthIndicator strength={strength} />}
@@ -157,14 +207,16 @@ export const CloudKitWarningBottomSheet = forwardRef<BottomSheetModalMethods, Pr
                             {openLocation === "Backup_Screen" && (
                                 <>
                                     <BaseSpacer height={24} />
-                                    <TextInput
+                                    <BaseTextInput
                                         placeholder={LL.BTN_CONFIRN_PASSWORD()}
-                                        // secureTextEntry={secureText2}
-                                        // rightIcon={secureText2 ? "eye-off" : "eye"}
-                                        // onIconPress={() => setsecureText2(prev => !prev)}
+                                        secureTextEntry={secureText2}
+                                        rightIcon={secureText2 ? "eye-off" : "eye"}
+                                        onIconPress={() => setsecureText2(prev => !prev)}
                                         value={password2}
                                         onChangeText={setPassword2}
                                         ref={inputRef}
+                                        onSubmitEditing={() => Keyboard.dismiss()}
+                                        returnKeyType="done"
                                     />
 
                                     <BaseView justifyContent="flex-start" alignItems="flex-start" my={8}>
@@ -186,6 +238,22 @@ export const CloudKitWarningBottomSheet = forwardRef<BottomSheetModalMethods, Pr
                     }
                     footer={
                         <>
+                            {openLocation === "Backup_Screen" && (
+                                <>
+                                    <BaseView
+                                        flexDirection="row"
+                                        justifyContent="space-between"
+                                        alignItems="center"
+                                        px={4}>
+                                        <BaseText typographyFont="bodyBold">
+                                            {LL.BD_BACKUP_PASSWORD_TO_KEYCHAIN()}
+                                        </BaseText>
+                                        <BaseSwitch onValueChange={onBackupToKeychain} value={backupToKeychain} />
+                                    </BaseView>
+                                    <BaseSpacer height={24} />
+                                </>
+                            )}
+
                             <BaseButton title={LL.COMMON_PROCEED()} action={checkPasswordValidity} />
                             <BaseSpacer height={24} />
                         </>

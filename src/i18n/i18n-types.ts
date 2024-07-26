@@ -608,6 +608,10 @@ type RootTranslation = {
 	 */
 	BD_CLOUD_BACKUP_PASSWORD: string
 	/**
+	 * B​a​c​k​u​p​ ​P​a​s​s​w​o​r​d​ ​t​o​ ​K​e​y​c​h​a​i​n
+	 */
+	BD_BACKUP_PASSWORD_TO_KEYCHAIN: string
+	/**
 	 * T​h​i​s​ ​p​a​s​s​w​o​r​d​ ​w​i​l​l​ ​s​e​c​u​r​e​ ​y​o​u​r​ ​s​e​c​r​e​t​ ​r​e​c​o​v​e​r​y​ ​p​h​r​a​s​e​ ​i​n​ ​t​h​e​ ​c​l​o​u​d​.​ ​V​e​W​o​r​l​d​ ​d​o​e​s​ ​N​O​T​ ​h​a​v​e​ ​a​c​c​e​s​s​ ​t​o​ ​y​o​u​r​ ​p​a​s​s​w​o​r​d​.​ ​W​e​ ​c​a​n​ ​N​O​T​ ​r​e​s​e​t​ ​i​t​ ​i​f​ ​y​o​u​ ​l​o​s​e​ ​i​t​,​ ​s​o​ ​k​e​e​p​ ​i​t​ ​s​a​f​e​.
 	 */
 	BD_CLOUD_PASSWORD_CREATION_MESSAGE: string
@@ -1434,6 +1438,10 @@ type RootTranslation = {
 	 * E​r​r​o​r​ ​c​r​e​a​t​i​n​g​ ​w​a​l​l​e​t
 	 */
 	ERROR_CREATING_WALLET: string
+	/**
+	 * E​r​r​o​r​ ​g​e​t​t​i​n​g​ ​w​a​l​l​e​t​.​ ​M​a​k​e​ ​s​u​r​e​ ​y​o​u​ ​h​a​v​e​ ​t​h​e​ ​c​o​r​r​e​c​t​ ​p​a​s​s​w​o​r​d
+	 */
+	ERROR_DECRYPTING_WALLET: string
 	/**
 	 * S​u​c​c​e​s​s​!
 	 */
@@ -3678,6 +3686,10 @@ export type TranslationFunctions = {
 	 */
 	BD_CLOUD_BACKUP_PASSWORD: () => LocalizedString
 	/**
+	 * Backup Password to Keychain
+	 */
+	BD_BACKUP_PASSWORD_TO_KEYCHAIN: () => LocalizedString
+	/**
 	 * This password will secure your secret recovery phrase in the cloud. VeWorld does NOT have access to your password. We can NOT reset it if you lose it, so keep it safe.
 	 */
 	BD_CLOUD_PASSWORD_CREATION_MESSAGE: () => LocalizedString
@@ -4498,6 +4510,10 @@ Try reconnect your device to the internet.
 	 * Error creating wallet
 	 */
 	ERROR_CREATING_WALLET: () => LocalizedString
+	/**
+	 * Error getting wallet. Make sure you have the correct password
+	 */
+	ERROR_DECRYPTING_WALLET: () => LocalizedString
 	/**
 	 * Success!
 	 */
