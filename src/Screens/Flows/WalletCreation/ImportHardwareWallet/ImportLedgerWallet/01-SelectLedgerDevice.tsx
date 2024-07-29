@@ -26,7 +26,7 @@ import { AnalyticsEvent } from "~Constants"
 import { PlatformUtils } from "~Utils"
 import { NativeStackScreenProps } from "@react-navigation/native-stack"
 
-type Props = {} & NativeStackScreenProps<
+type Props = NativeStackScreenProps<
     RootStackParamListOnboarding & RootStackParamListCreateWalletApp,
     Routes.IMPORT_HW_LEDGER_SELECT_DEVICE
 >
