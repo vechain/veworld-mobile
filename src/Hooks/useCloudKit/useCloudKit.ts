@@ -15,10 +15,12 @@ export const useCloudKit = () => {
 
     const getCloudKitAvailability = useCallback(async () => await CloudKitManager.checkCloudKitAvailability(), [])
 
-    const rollback = useCallback(async (_rootAddress: string) => {
+    const deleteWallet = useCallback(async (_rootAddress: string) => {
+        setIsLoading(true)
         const delWAllet = await CloudKitManager.deleteWallet(_rootAddress)
         const delSalt = await CloudKitManager.deleteSalt(_rootAddress)
         const delIV = await CloudKitManager.deleteIV(_rootAddress)
+        setIsLoading(false)
         return delWAllet && delSalt && delIV
     }, [])
 
@@ -63,7 +65,7 @@ export const useCloudKit = () => {
                     const isIvSaved = await CloudKitManager.saveIV(_rootAddress, PasswordUtils.bufferToBase64(iv))
 
                     if (!isSaltSaved || !isIvSaved) {
-                        await rollback(_rootAddress)
+                        await deleteWallet(_rootAddress)
                         showErrorToast({
                             text1: LL.CLOUDKIT_ERROR_GENERIC(),
                         })
@@ -72,7 +74,7 @@ export const useCloudKit = () => {
                     }
                 }
             } catch (_error: unknown) {
-                await rollback(_rootAddress)
+                await deleteWallet(_rootAddress)
                 setIsLoading(false)
                 let er = _error as Error
                 error(ERROR_EVENTS.CLOUDKIT, er, er.message)
@@ -81,7 +83,7 @@ export const useCloudKit = () => {
                 })
             }
         },
-        [LL, rollback],
+        [LL, deleteWallet],
     )
 
     const getAllWalletsFromCloudKit = useCallback(async () => {
@@ -125,5 +127,6 @@ export const useCloudKit = () => {
         isLoading,
         getSalt,
         getIV,
+        deleteWallet,
     }
 }

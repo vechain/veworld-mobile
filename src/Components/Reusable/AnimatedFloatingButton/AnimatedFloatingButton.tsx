@@ -25,7 +25,7 @@ export const AnimatedFloatingButton = React.memo(
 
         const animatedStyle = useAnimatedStyle(() => {
             return {
-                bottom: bottom.value + extraBottom,
+                bottom: bottom.value,
             }
         })
 
@@ -62,6 +62,7 @@ export const AnimatedFloatingButton = React.memo(
                             activeOpacity={0.94}
                             disabled={isDisabled}
                             isLoading={isLoading}
+                            my={extraBottom}
                         />
                     </BaseView>
                 </LinearGradient>

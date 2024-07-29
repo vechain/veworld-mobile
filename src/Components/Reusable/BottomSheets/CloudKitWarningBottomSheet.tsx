@@ -1,16 +1,7 @@
 import React, { forwardRef, useCallback, useEffect, useRef, useState } from "react"
 import { BottomSheetModalMethods } from "@gorhom/bottom-sheet/lib/typescript/types"
 import { Keyboard, StyleSheet } from "react-native"
-import {
-    BaseBottomSheet,
-    BaseButton,
-    BaseIcon,
-    BaseSpacer,
-    BaseSwitch,
-    BaseText,
-    BaseTextInput,
-    BaseView,
-} from "~Components/Base"
+import { BaseBottomSheet, BaseButton, BaseIcon, BaseSpacer, BaseText, BaseTextInput, BaseView } from "~Components/Base"
 import { useThemedStyles } from "~Hooks"
 import { Layout } from "../Layout"
 import { COLORS } from "~Constants"
@@ -18,7 +9,7 @@ import { PasswordStrengthIndicator } from "../PasswordStrengthIndicator"
 import { Easing, useSharedValue, withTiming } from "react-native-reanimated"
 import { useI18nContext } from "~i18n"
 import { TextInput } from "react-native-gesture-handler"
-import { Keychain } from "~Storage"
+// import { Keychain } from "~Storage"
 
 type Props = {
     onHandleBackupToCloudKit: (password: string) => void
@@ -27,7 +18,14 @@ type Props = {
 }
 
 export const CloudKitWarningBottomSheet = forwardRef<BottomSheetModalMethods, Props>(
-    ({ onHandleBackupToCloudKit, openLocation, rootAddress }, ref) => {
+    (
+        {
+            onHandleBackupToCloudKit,
+            openLocation,
+            // rootAddress
+        },
+        ref,
+    ) => {
         const { LL } = useI18nContext()
         const [secureText1, setsecureText1] = useState(true)
         const [secureText2, setsecureText2] = useState(true)
@@ -36,11 +34,10 @@ export const CloudKitWarningBottomSheet = forwardRef<BottomSheetModalMethods, Pr
         const [passwordMisMatch, setPasswordMisMatch] = useState(false)
         const [passwordNotStrong, setPasswordNotStrong] = useState(false)
         const [isChecking, setIsChecking] = useState(false)
-        const [backupToKeychain, setBackupToKeychain] = useState(true)
-
-        const onBackupToKeychain = useCallback(() => {
-            setBackupToKeychain(prev => !prev)
-        }, [])
+        // const [backupToKeychain, setBackupToKeychain] = useState(true)
+        // const onBackupToKeychain = useCallback(() => {
+        //     setBackupToKeychain(prev => !prev)
+        // }, [])
 
         const inputRef = useRef<TextInput>(null)
 
@@ -76,18 +73,17 @@ export const CloudKitWarningBottomSheet = forwardRef<BottomSheetModalMethods, Pr
             setPasswordNotStrong(false)
             setIsChecking(true)
 
-            // TODO.vas - show tost
-            if (!rootAddress) throw new Error("Root Address is missing")
+            // if (!rootAddress) throw new Error("Root Address is missing")
 
             if (openLocation === "Backup_Screen") {
                 if (password1 === password2 && strength.value >= 4) {
-                    if (backupToKeychain) {
-                        await Keychain.set({
-                            key: `CLOUD_WALLET_${rootAddress}`,
-                            value: password1,
-                            isCloudSync: true,
-                        })
-                    }
+                    // if (backupToKeychain) {
+                    //     await Keychain.set({
+                    //         key: `CLOUD_WALLET_${rootAddress}`,
+                    //         value: password1,
+                    //         isCloudSync: true,
+                    //     })
+                    // }
 
                     onHandleBackupToCloudKit(password1)
                 } else {
@@ -100,32 +96,32 @@ export const CloudKitWarningBottomSheet = forwardRef<BottomSheetModalMethods, Pr
                 onHandleBackupToCloudKit(password1)
             }
         }, [
-            backupToKeychain,
+            // backupToKeychain,
             onHandleBackupToCloudKit,
             openLocation,
             password1,
             password2,
-            rootAddress,
+            // rootAddress,
             strength.value,
         ])
 
-        useEffect(() => {
-            const init = async () => {
-                if (!rootAddress) return
+        // useEffect(() => {
+        //     const init = async () => {
+        //         if (!rootAddress) return
 
-                // Check keychain to see if password for rootAddress exists
-                const keychainPassword = await Keychain.get({
-                    key: `CLOUD_WALLET_${rootAddress}`,
-                    isCloudSync: true,
-                })
+        //         // Check keychain to see if password for rootAddress exists
+        //         const keychainPassword = await Keychain.get({
+        //             key: `CLOUD_WALLET_${rootAddress}`,
+        //             isCloudSync: true,
+        //         })
 
-                if (keychainPassword) {
-                    setPassword1(keychainPassword)
-                }
-            }
+        //         if (keychainPassword) {
+        //             setPassword1(keychainPassword)
+        //         }
+        //     }
 
-            init()
-        }, [rootAddress])
+        //     init()
+        // }, [rootAddress])
 
         const calculateStrength = useCallback((_password: string) => {
             if (!_password) return 0
@@ -238,7 +234,7 @@ export const CloudKitWarningBottomSheet = forwardRef<BottomSheetModalMethods, Pr
                     }
                     footer={
                         <>
-                            {openLocation === "Backup_Screen" && (
+                            {/* {openLocation === "Backup_Screen" && (
                                 <>
                                     <BaseView
                                         flexDirection="row"
@@ -252,7 +248,7 @@ export const CloudKitWarningBottomSheet = forwardRef<BottomSheetModalMethods, Pr
                                     </BaseView>
                                     <BaseSpacer height={24} />
                                 </>
-                            )}
+                            )} */}
 
                             <BaseButton title={LL.COMMON_PROCEED()} action={checkPasswordValidity} />
                             <BaseSpacer height={24} />
