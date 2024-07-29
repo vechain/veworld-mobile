@@ -1,0 +1,21 @@
+version: '3.7'
+
+services:
+  nanos:
+    container_name: speculos-nanox
+    build: .
+    image: speculos
+    volumes:
+      - ./apps:/speculos/apps
+    ports:
+      - "1234:1234" # gdb
+      - "5001:5001" # api
+      - "40000:40000" # apdu
+      - "41000:41000" # vnc
+    expose:
+      - 1234
+      - 5001
+      - 40000
+      - 41000
+    command: "--model nanox ./apps/nanox#vechain.elf --seed secret --display headless --apdu-port 40000 --vnc-port 41000 --api-port 5001"
+    # Add `--vnc-password "<password>"` for macos users to use built-in vnc client.
