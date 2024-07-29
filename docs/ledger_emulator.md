@@ -63,6 +63,4 @@ Before we can exchange transaction between the Ledger Speculos and the VeWorld a
 
 - [ ]  Integrate the VeWorld app request to the emulated Ledger to simulate a real one. Like: transaction, wallet add/import, contacts sync ecc. ecc.
 
-## Footnotes
-
 [^1]: You can find the demo code to the barebone emulated bluetooth device [here](https://example.com)
