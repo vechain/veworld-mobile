@@ -116,7 +116,7 @@ export const TabStack = () => {
                 options={{
                     tabBarLabel: Routes.HISTORY,
                     tabBarTestID: "history-tab",
-                    tabBarIcon: ({ focused }) => renderTabBarIcon(focused, focused ? "history" : "history"),
+                    tabBarIcon: ({ focused }) => renderTabBarIcon(focused, "history"),
                 }}
             />
 

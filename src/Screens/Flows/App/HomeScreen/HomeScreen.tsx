@@ -115,7 +115,7 @@ export const HomeScreen = () => {
                     nav.navigate(Routes.BUY_FLOW)
                     track(AnalyticsEvent.BUY_CRYPTO_BUTTON_CLICKED)
                 },
-                icon: <BaseIcon color={theme.colors.text} name="cart-outline" size={21} />,
+                icon: <BaseIcon color={theme.colors.text} name="plus-circle-outline" size={21} />,
                 testID: "buyButton",
             })
         }
