@@ -9,6 +9,7 @@ import {
     ChangeAccountButtonPill,
     FavoriteDAppCard,
     Layout,
+    ListEmptyResults,
     SelectAccountBottomSheet,
 } from "~Components"
 import { AnalyticsEvent, DiscoveryDApp } from "~Constants"
@@ -28,7 +29,7 @@ import {
     useAppDispatch,
     useAppSelector,
 } from "~Storage/Redux"
-import { EmptyResults, ListSkeleton } from "./components"
+import { ListSkeleton } from "./components"
 
 type NavigationProps = NativeStackNavigationProp<RootStackParamListHome, Routes.SWAP>
 
@@ -135,7 +136,7 @@ export const SwapScreen = () => {
                             ItemSeparatorComponent={renderSeparator}
                             showsVerticalScrollIndicator={false}
                             ListEmptyComponent={
-                                <EmptyResults subtitle={LL.FAVOURITES_DAPPS_NO_RECORDS()} icon={"search-web"} />
+                                <ListEmptyResults subtitle={LL.SWAP_EMPTY_LIST()} icon={"search-web"} />
                             }
                         />
                     )}

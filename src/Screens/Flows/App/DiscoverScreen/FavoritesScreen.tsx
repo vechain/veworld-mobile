@@ -1,7 +1,15 @@
 import { useNavigation } from "@react-navigation/native"
 import React, { useCallback, useMemo, useState } from "react"
 import { FlatList, ListRenderItemInfo, StyleSheet } from "react-native"
-import { BaseSearchInput, BaseSpacer, BaseText, BaseView, FavoriteDAppCard, Layout } from "~Components"
+import {
+    BaseSearchInput,
+    BaseSpacer,
+    BaseText,
+    BaseView,
+    FavoriteDAppCard,
+    Layout,
+    ListEmptyResults,
+} from "~Components"
 import { AnalyticsEvent, DiscoveryDApp } from "~Constants"
 import { useAnalyticTracking, useThemedStyles } from "~Hooks"
 import { RumManager } from "~Logging"
@@ -9,7 +17,6 @@ import { Routes } from "~Navigation"
 import { addNavigationToDApp, selectBookmarkedDapps, useAppDispatch, useAppSelector } from "~Storage/Redux"
 import { useI18nContext } from "~i18n"
 import { FavoritesStackCard } from "./Components"
-import { EmptyResults } from "./Components/EmptyResults"
 import { groupFavoritesByBaseUrl } from "./utils"
 
 export const FavouritesScreen = () => {
@@ -100,7 +107,7 @@ export const FavouritesScreen = () => {
                         ItemSeparatorComponent={renderSeparator}
                         showsVerticalScrollIndicator={false}
                         ListEmptyComponent={
-                            <EmptyResults subtitle={LL.FAVOURITES_DAPPS_NO_RECORDS()} icon={"search-web"} />
+                            <ListEmptyResults subtitle={LL.FAVOURITES_DAPPS_NO_RECORDS()} icon={"search-web"} />
                         }
                     />
                 </BaseView>

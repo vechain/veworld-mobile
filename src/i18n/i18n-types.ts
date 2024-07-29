@@ -2116,6 +2116,10 @@ type RootTranslation = {
 	 */
 	SWAP_DAPP_NUMBER: RequiredParams<'total'>
 	/**
+	 * N​o​ ​d​A​p​p​s​ ​f​o​u​n​d
+	 */
+	SWAP_EMPTY_LIST: string
+	/**
 	 * L​i​g​h​t
 	 */
 	LIGHT_THEME: string
@@ -5075,6 +5079,10 @@ Try reconnect your device to the internet.
 	 * {total} dApps
 	 */
 	SWAP_DAPP_NUMBER: (arg: { total: number }) => LocalizedString
+	/**
+	 * No dApps found
+	 */
+	SWAP_EMPTY_LIST: () => LocalizedString
 	/**
 	 * Light
 	 */

@@ -3,7 +3,16 @@ import { FlashList } from "@shopify/flash-list"
 import React, { MutableRefObject, useCallback, useMemo, useRef, useState } from "react"
 import { ImageSourcePropType, StyleSheet } from "react-native"
 import { SwipeableItemImperativeRef } from "react-native-swipeable-item"
-import { BaseSearchInput, BaseSpacer, BaseText, BaseView, DAppIcon, Layout, SwipeableRow } from "~Components"
+import {
+    BaseSearchInput,
+    BaseSpacer,
+    BaseText,
+    BaseView,
+    DAppIcon,
+    Layout,
+    ListEmptyResults,
+    SwipeableRow,
+} from "~Components"
 import { AnalyticsEvent, DiscoveryDApp } from "~Constants"
 import { useAnalyticTracking, useThemedStyles, useVisitedUrls } from "~Hooks"
 import { RumManager } from "~Logging"
@@ -11,7 +20,6 @@ import { Routes } from "~Navigation"
 import { addNavigationToDApp, selectVisitedUrls, useAppDispatch, useAppSelector } from "~Storage/Redux"
 import { DAppUtils } from "~Utils"
 import { useI18nContext } from "~i18n"
-import { EmptyResults } from "./Components/EmptyResults"
 
 type BrowserHistoryCardProps = {
     dapp: DiscoveryDApp
@@ -64,7 +72,7 @@ const ListEmptyComponent = () => {
 
     return (
         <BaseView flex={1} justifyContent="center" alignItems="center">
-            <EmptyResults subtitle={LL.BROWSER_HISTORY_No_RECORDS()} icon={"search-web"} />
+            <ListEmptyResults subtitle={LL.BROWSER_HISTORY_No_RECORDS()} icon={"search-web"} />
         </BaseView>
     )
 }
