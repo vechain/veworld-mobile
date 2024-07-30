@@ -21,13 +21,12 @@ onFlowStart:
 - tapOn:
     id: "observe-wallet-address-input"
 - inputText: ${WALLET_ADDRESS}
-- tapOn: "Observe Wallet"
+- tapOn:
+    id: "Layout_ScrollView"
 - tapOn:
     id: "observe-wallet-confirm-button"
 - tapOn:
     id: "observe-wallet-account-card"
-- tapOn:
-    id: "observe-wallet-confirm-operation"
 - tapOn:
     id: "wallet-tab"
 - repeat:
