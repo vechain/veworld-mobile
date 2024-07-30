@@ -54,7 +54,7 @@ onFlowComplete:
           id: "confirm-send-button"
       - repeat:
           while:
-            notVisible: "Your tokens"
+            visible: "Insert your 6-digit PIN"
           commands:
             - tapOn: "1"
 - assertVisible: "Your tokens"
