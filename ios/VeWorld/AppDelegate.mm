@@ -7,7 +7,6 @@
 
 
 // MARK: REMOVE ANY POSSIBLE KESYS LEFT IN KEYCHAIN FROM PREVIOUS INSTALLATIONS ON NEW APP INSTALL
-/*
 static void ClearKeychainIfNecessary() {
     // Checks wether or not this is the first time the app is run
     if ([[NSUserDefaults standardUserDefaults] boolForKey:@"HAS_RUN_BEFORE"] == NO) {
@@ -29,9 +28,9 @@ static void ClearKeychainIfNecessary() {
         }
     }
 }
-*/
 
 
+/*
 // MARK: REMOVE ANY POSSIBLE KESYS LEFT IN KEYCHAIN FROM PREVIOUS INSTALLATIONS ON NEW APP INSTALL EXCLUDING KEYS WITH "CLOUD_WALLET_"
 static void ClearKeychainIfNecessary() {
     // Checks whether or not this is the first time the app is run
@@ -73,6 +72,7 @@ static void ClearKeychainIfNecessary() {
         }
     }
 }
+*/
 
 
 

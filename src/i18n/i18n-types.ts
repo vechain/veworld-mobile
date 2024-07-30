@@ -3090,6 +3090,18 @@ type RootTranslation = {
 	 * N​o​ ​t​h​a​n​k​s
 	 */
 	NO_THANKS: string
+	/**
+	 * T​h​e​r​e​ ​w​a​s​ ​a​n​ ​e​r​r​o​r​ ​c​o​n​n​e​c​t​i​n​g​ ​t​o​ ​i​C​l​o​u​d​.​ ​P​l​e​a​s​e​ ​c​h​e​c​k​ ​y​o​u​r​ ​n​e​t​w​o​r​k​ ​c​o​n​n​e​c​t​i​o​n​ ​a​n​d​ ​t​r​y​ ​a​g​a​i​n​.
+	 */
+	CLOUD_ERR_NETWORK: string
+	/**
+	 * T​h​e​r​e​ ​w​a​s​ ​a​n​ ​e​r​r​o​r​ ​p​e​r​f​o​r​m​i​n​g​ ​t​h​i​s​ ​i​C​l​o​u​d​ ​w​a​l​l​e​t​ ​o​p​e​r​a​t​i​o​n​.​ ​P​l​e​a​s​e​ ​t​r​y​ ​a​g​a​i​n​.
+	 */
+	CLOUD_ERR_WALLET_OPERATION: string
+	/**
+	 * T​h​e​r​e​ ​w​a​s​ ​a​n​ ​e​r​r​o​r​ ​c​h​e​c​k​i​n​g​ ​y​o​u​r​ ​i​C​l​o​u​d​ ​s​t​a​t​u​s​.​ ​P​l​e​a​s​e​ ​t​r​y​ ​a​g​a​i​n​.
+	 */
+	CLOUD_ERR_USER_STATUS: string
 }
 
 export type TranslationFunctions = {
@@ -6138,6 +6150,18 @@ Try reconnect your device to the internet.
 	 * No thanks
 	 */
 	NO_THANKS: () => LocalizedString
+	/**
+	 * There was an error connecting to iCloud. Please check your network connection and try again.
+	 */
+	CLOUD_ERR_NETWORK: () => LocalizedString
+	/**
+	 * There was an error performing this iCloud wallet operation. Please try again.
+	 */
+	CLOUD_ERR_WALLET_OPERATION: () => LocalizedString
+	/**
+	 * There was an error checking your iCloud status. Please try again.
+	 */
+	CLOUD_ERR_USER_STATUS: () => LocalizedString
 }
 
 export type Formatters = {}

@@ -11,7 +11,7 @@ import CloudKit
 
 @objc(CloudKitManager)
 class CloudKitManager: NSObject {
-  
+    
   private enum Constants {
     static let fileNameWallet = "VEWORLD_WALLET"
     static let fileNameSalt = "SALT"
@@ -51,11 +51,80 @@ class CloudKitManager: NSObject {
   
   private func handleError(_ error: Error?, reject: RCTPromiseRejectBlock, domain: String = "ICLOUD", code: Int = 420, defaultMessage: String = "iCloud operation failed") {
     if let error = error {
-      print("Internal iCloud error log: \(String(describing: error))")
-      let nsError = NSError(domain: domain, code: code, userInfo: [NSLocalizedDescriptionKey: error.localizedDescription])
-      reject(domain, error.localizedDescription, nsError)
+
+      if let ckError = error as? CKError {
+        switch ckError.code {
+          
+        // Service related stuff code - 411
+        case .networkUnavailable:
+          print("Network is unavailable")
+          let nsError = NSError(domain: String(411), code: 411, userInfo: [NSLocalizedDescriptionKey: error.localizedDescription])
+          reject(domain, "Network is unavailable", nsError)
+        case .networkFailure:
+          print("Network failure occurred")
+          let nsError = NSError(domain: String(411), code: 411, userInfo: [NSLocalizedDescriptionKey: error.localizedDescription])
+          reject(domain, "Network failure occurred", nsError)
+        case .serviceUnavailable:
+          print("Service is unavailable")
+          let nsError = NSError(domain: String(411), code: 411, userInfo: [NSLocalizedDescriptionKey: error.localizedDescription])
+          reject(domain, "Service is unavailable", nsError)
+        case .requestRateLimited:
+          print("Request rate is limited")
+          let nsError = NSError(domain: String(411), code: 411, userInfo: [NSLocalizedDescriptionKey: error.localizedDescription])
+          reject(domain, "Request rate is limited", nsError)
+          
+        // Wallet/User related stuff code - 122
+        case .unknownItem:
+          print("Unknown item")
+          let nsError = NSError(domain: String(122), code: 122, userInfo: [NSLocalizedDescriptionKey: error.localizedDescription])
+          reject(domain, "Unknown item", nsError)
+        case .invalidArguments:
+          print("Invalid arguments")
+          let nsError = NSError(domain: String(122), code: 122, userInfo: [NSLocalizedDescriptionKey: error.localizedDescription])
+          reject(String(122), "Invalid arguments", nsError)
+        case .serverRejectedRequest:
+          print("iCloud server rejected the request")
+          let nsError = NSError(domain: String(122), code: 122, userInfo: [NSLocalizedDescriptionKey: error.localizedDescription])
+          reject(domain, "iCloud server rejected the request", nsError)
+        case .assetFileNotFound:
+          print("Wallet not found on iCloud")
+          let nsError = NSError(domain: String(122), code: 122, userInfo: [NSLocalizedDescriptionKey: error.localizedDescription])
+          reject(domain, "Wallet not found on iCloud", nsError)
+        case .assetNotAvailable:
+          print("Wallet not found on iCloud")
+          let nsError = NSError(domain: String(122), code: 122, userInfo: [NSLocalizedDescriptionKey: error.localizedDescription])
+          reject(domain, "Wallet not found on iCloud", nsError)
+
+        // User relate stuff code - 233
+        case .quotaExceeded:
+          print("iCloud quota exceeded")
+          let nsError = NSError(domain: String(233), code: 233, userInfo: [NSLocalizedDescriptionKey: error.localizedDescription])
+          reject(domain, "iCloud quota exceeded", nsError)
+        case .managedAccountRestricted:
+          print("Account restricted")
+          let nsError = NSError(domain: String(233), code: 233, userInfo: [NSLocalizedDescriptionKey: error.localizedDescription])
+          reject(domain, "Account restricted", nsError)
+        case .participantMayNeedVerification:
+          print("User may need verification on iCloud")
+          let nsError = NSError(domain: String(233), code: 233, userInfo: [NSLocalizedDescriptionKey: error.localizedDescription])
+          reject(domain, "User may need verification on iCloud", nsError)
+        case .accountTemporarilyUnavailable:
+          print("iCloud temporarily unavailable")
+          let nsError = NSError(domain: String(233), code: 233, userInfo: [NSLocalizedDescriptionKey: error.localizedDescription])
+          reject(domain, "iCloud temporarily unavailable", nsError)
+
+          // code 001
+        default:
+          let nsError = NSError(domain: String(001), code: 001, userInfo: [NSLocalizedDescriptionKey: error.localizedDescription])
+          reject(domain, error.localizedDescription, nsError)
+        }
+      } else {
+        print("Internal iCloud error log: \(String(describing: error))")
+        let nsError = NSError(domain: String(000), code: 000, userInfo: [NSLocalizedDescriptionKey: error.localizedDescription])
+        reject(domain, error.localizedDescription, nsError)
+      }
     } else {
-      let nsError = NSError(domain: domain, code: code, userInfo: [NSLocalizedDescriptionKey: defaultMessage])
+      let nsError = NSError(domain: String(000), code: 000, userInfo: [NSLocalizedDescriptionKey: defaultMessage])
       reject(domain, defaultMessage, nsError)
     }
   }
@@ -65,7 +134,7 @@ class CloudKitManager: NSObject {
   @objc
   func saveToCloudKit(_ rootAddress: String, data: String, walletType: String, firstAccountAddress: String, derivationPath: String, resolver: @escaping(RCTPromiseResolveBlock), rejecter reject: @escaping(RCTPromiseRejectBlock)) -> Void {
     
-    let recordID = CKRecord.ID(recordName: "\(Constants.walletZone )_\(rootAddress)")
+    let recordID = CKRecord.ID(recordName: "\(Constants.walletZone)_\(rootAddress)")
     let wallet = CKRecord(recordType: Constants.fileNameWallet, recordID: recordID)
     wallet[Constants.rootAddress] = rootAddress as CKRecordValue
     wallet[Constants.walletType] = walletType  as CKRecordValue
@@ -76,7 +145,7 @@ class CloudKitManager: NSObject {
     CKContainer.default().privateCloudDatabase.save(wallet) { [weak self] record, error in
       guard let self = self else { return }
       
-      if (error != nil) {
+      if let error = error {
         self.handleError(error, reject: reject)
       } else {
         print("Wallet saved successfullt on iCloud")
@@ -124,9 +193,6 @@ class CloudKitManager: NSObject {
         } else {
           print("Record data is missing or invalid")
         }
-      } catch {
-        self.handleError(error, reject: reject)
-        print("Error processing record: \(error)")
       }
     }
     

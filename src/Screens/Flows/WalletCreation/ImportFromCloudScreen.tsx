@@ -155,7 +155,7 @@ export const ImportFromCloudScreen = () => {
                     let er = _error as Error
                     error(ERROR_EVENTS.CLOUDKIT, er, er.message)
                     showErrorToast({
-                        text1: er.message ?? LL.CLOUDKIT_ERROR_GENERIC(),
+                        text1: er.message ?? LL.ERROR_CREATING_WALLET(),
                     })
                 }
             } else {
@@ -192,11 +192,15 @@ export const ImportFromCloudScreen = () => {
     const handleOnDeleteFromCloud = useCallback(async () => {
         if (selectedToDelete) {
             await deleteWallet(selectedToDelete.rootAddress)
-            const wallets = await getAllWalletsFromCloudKit()
-            setCloudKitWallets(wallets)
             closeRemoveWalletBottomSheet()
+            const wallets = await getAllWalletsFromCloudKit()
+            if (!wallets.length) {
+                nav.dispatch(StackActions.popToTop())
+            } else {
+                setCloudKitWallets(wallets)
+            }
         }
-    }, [closeRemoveWalletBottomSheet, deleteWallet, getAllWalletsFromCloudKit, selectedToDelete])
+    }, [closeRemoveWalletBottomSheet, deleteWallet, getAllWalletsFromCloudKit, nav, selectedToDelete])
 
     const isWalletActive = useCallback(
         (wallet: CloudKitWallet) => devices.find(w => w.rootAddress === wallet.rootAddress),

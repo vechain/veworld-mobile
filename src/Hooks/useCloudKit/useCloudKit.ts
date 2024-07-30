@@ -5,6 +5,7 @@ import { DerivationPath, ERROR_EVENTS } from "~Constants"
 import { useI18nContext } from "~i18n"
 import { DEVICE_TYPE } from "~Model"
 import { PasswordUtils, error } from "~Utils"
+import { CKError, handleCloudKitErrors } from "./ErrorModel"
 const { CloudKitManager } = NativeModules
 
 export const useCloudKit = () => {
@@ -76,10 +77,11 @@ export const useCloudKit = () => {
             } catch (_error: unknown) {
                 await deleteWallet(_rootAddress)
                 setIsLoading(false)
-                let er = _error as Error
+                let er = _error as CKError
                 error(ERROR_EVENTS.CLOUDKIT, er, er.message)
                 showErrorToast({
-                    text1: er.message ?? LL.CLOUDKIT_ERROR_GENERIC(),
+                    text1: er.message,
+                    text2: handleCloudKitErrors(er),
                 })
             }
         },
@@ -88,29 +90,71 @@ export const useCloudKit = () => {
 
     const getAllWalletsFromCloudKit = useCallback(async () => {
         setIsLoading(true)
-        const result = await CloudKitManager.getAllFromCloudKit()
-        setIsLoading(false)
-        return result
+        try {
+            const result = await CloudKitManager.getAllFromCloudKit()
+            setIsLoading(false)
+            return result
+        } catch (_error) {
+            setIsLoading(false)
+            let er = _error as CKError
+            error(ERROR_EVENTS.CLOUDKIT, er, er.message)
+            showErrorToast({
+                text1: er.message,
+                text2: handleCloudKitErrors(er),
+            })
+        }
     }, [])
 
     const getWalletByRootAddress = useCallback(
         async (_rootAddress: string) => {
             if (!isAvailable) return
             setIsLoading(true)
-            const selectedWallet = await CloudKitManager.getWallet(_rootAddress)
-            setIsWalletBackedUp(!!selectedWallet?.rootAddress)
-            setIsLoading(false)
-            return selectedWallet
+            try {
+                const selectedWallet = await CloudKitManager.getWallet(_rootAddress)
+                setIsWalletBackedUp(!!selectedWallet?.rootAddress)
+                setIsLoading(false)
+                return selectedWallet
+            } catch (_error) {
+                setIsLoading(false)
+                let er = _error as CKError
+                error(ERROR_EVENTS.CLOUDKIT, er, er.message)
+                showErrorToast({
+                    text1: er.message,
+                    text2: handleCloudKitErrors(er),
+                })
+            }
         },
         [isAvailable],
     )
 
     const getSalt = useCallback(async (_rootAddress: string) => {
-        return await CloudKitManager.getSalt(_rootAddress)
+        setIsLoading(true)
+        try {
+            return await CloudKitManager.getSalt(_rootAddress)
+        } catch (_error) {
+            setIsLoading(false)
+            let er = _error as CKError
+            error(ERROR_EVENTS.CLOUDKIT, er, er.message)
+            showErrorToast({
+                text1: er.message,
+                text2: handleCloudKitErrors(er),
+            })
+        }
     }, [])
 
     const getIV = useCallback(async (_rootAddress: string) => {
-        return await CloudKitManager.getIV(_rootAddress)
+        setIsLoading(true)
+        try {
+            return await CloudKitManager.getIV(_rootAddress)
+        } catch (_error) {
+            setIsLoading(false)
+            let er = _error as CKError
+            error(ERROR_EVENTS.CLOUDKIT, er, er.message)
+            showErrorToast({
+                text1: er.message,
+                text2: handleCloudKitErrors(er),
+            })
+        }
     }, [])
 
     useEffect(() => {

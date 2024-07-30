@@ -40,7 +40,6 @@ export const CloudKitWarningBottomSheet = forwardRef<BottomSheetModalMethods, Pr
         // }, [])
 
         const inputRef = useRef<TextInput>(null)
-
         const { styles } = useThemedStyles(baseStyles)
         const strength = useSharedValue(0)
 
