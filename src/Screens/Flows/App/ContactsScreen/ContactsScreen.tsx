@@ -126,8 +126,8 @@ export const ContactsScreen = () => {
     )
 
     const renderItem: ListRenderItem<Contact> = useCallback(
-        ({ item }) => {
-            const contactId = `${item.address}-${item.alias}`
+        ({ item, index }) => {
+            const contactId = `contact-row-${index}`
 
             return (
                 <SwipeableRow
