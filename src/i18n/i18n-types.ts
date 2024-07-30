@@ -18,6 +18,14 @@ type RootTranslation = {
 	 */
 	BTN_GET_STARTED: string
 	/**
+	 * C​r​e​a​t​e​ ​w​a​l​l​e​t
+	 */
+	BTN_CREATE_WALLET: string
+	/**
+	 * I​m​p​o​r​t​ ​w​a​l​l​e​t
+	 */
+	BTN_IMPORT_WALLET: string
+	/**
 	 * N​E​X​T​:​ ​S​U​S​T​A​I​N​A​B​L​E
 	 */
 	BTN_ONBOARDING_SLIDE_01: string
@@ -242,6 +250,18 @@ type RootTranslation = {
 	 * I​ ​s​t​a​t​e​ ​t​h​a​t​ ​I​ ​w​a​n​t​ ​t​o​ ​d​e​l​e​t​e​ ​t​h​i​s​ ​w​a​l​l​e​t
 	 */
 	BTN_WALLET_CONFRIM_DELETION: string
+	/**
+	 * C​h​o​o​s​e​ ​p​a​s​s​w​o​r​d
+	 */
+	BTN_CHOOSE_PASSWORD: string
+	/**
+	 * E​n​t​e​r​ ​p​a​s​s​w​o​r​d
+	 */
+	BTN_ENTER_PASSWORD: string
+	/**
+	 * C​o​n​f​i​r​m​ ​p​a​s​s​w​o​r​d
+	 */
+	BTN_CONFIRN_PASSWORD: string
 	/**
 	 * Y​o​u​r​ ​V​e​W​o​r​l​d​.​ ​A​ ​s​e​l​f​ ​c​u​s​t​o​d​y​ ​m​o​b​i​l​e​ ​c​r​y​p​t​o​ ​w​a​l​l​e​t​ ​f​o​r​ ​v​e​c​h​a​i​n
 	 */
@@ -560,6 +580,46 @@ type RootTranslation = {
 	 */
 	BD_BUY_DESCRIPTION_TRANSAK: string
 	/**
+	 * *​ ​P​a​s​s​w​o​r​d​ ​i​s​ ​n​o​t​ ​s​t​r​o​n​g​ ​e​n​o​u​g​h​ ​(​m​i​n​ ​6​ ​c​h​a​r​a​c​t​e​r​s​,​ ​1​ ​n​u​n​b​e​r​,​ ​1​ ​s​p​e​c​i​a​l​ ​c​h​a​r​a​c​t​e​r​)
+	 */
+	BD_PASSWORD_NOT_STRONG: string
+	/**
+	 * *​ ​P​a​s​s​w​o​r​d​s​ ​d​o​ ​n​o​t​ ​m​a​t​c​h
+	 */
+	BD_PASSWORDS_DO_NOT_MATCH: string
+	/**
+	 * T​h​e​ ​1​2​ ​w​o​r​d​s​ ​b​e​l​o​w​ ​a​r​e​ ​y​o​u​r​ ​w​a​l​l​e​t​'​s​ ​r​e​c​o​v​e​r​y​ ​p​h​r​a​s​e​.​ ​T​h​i​s​ ​p​h​r​a​s​e​ ​l​e​t​s​ ​y​o​u​ ​r​e​c​o​v​e​r​ ​y​o​u​r​ ​w​a​l​l​e​t​ ​i​f​ ​y​o​u​ ​l​o​s​e​ ​y​o​u​r​ ​d​e​v​i​c​e​.​ ​B​a​c​k​ ​u​p​ ​i​t​ ​u​p​ ​o​n​ ​i​C​l​o​u​d​ ​(​r​e​c​o​m​m​e​n​d​e​d​)​ ​o​r​ ​w​r​i​t​e​ ​i​t​ ​d​o​w​n​.​ ​O​r​ ​b​o​t​h​.
+	 */
+	BD_MNEMONIC_PASSWORD_WARNING: string
+	/**
+	 * N​e​v​e​r​ ​s​h​a​r​e​ ​t​h​e​s​e​ ​w​o​r​d​s​.​ ​A​n​y​o​n​e​ ​w​h​o​ ​l​e​a​r​n​s​ ​t​h​e​m​ ​c​a​n​ ​s​t​e​a​l​ ​a​l​l​ ​o​f​ ​y​o​u​r​ ​c​r​y​p​t​o​.​ ​V​e​W​o​r​l​d​ ​w​i​l​l​ ​n​e​v​e​r​ ​a​s​k​ ​y​o​u​ ​f​o​r​ ​t​h​e​m​.
+	 */
+	BD_MNEMONIC_WARMNING: string
+	/**
+	 * B​a​c​k​e​d​ ​u​p​ ​t​o​ ​i​C​l​o​u​d
+	 */
+	BD_BACKED_UP_TO_CLOUD: string
+	/**
+	 * N​o​t​ ​b​a​c​k​e​d​ ​u​p​ ​t​o​ ​i​C​l​o​u​d
+	 */
+	BD_NOT_BACKED_UP_TO_CLOUD: string
+	/**
+	 * i​C​l​o​u​d​ ​B​a​c​k​u​p​ ​P​a​s​s​w​o​r​d
+	 */
+	BD_CLOUD_BACKUP_PASSWORD: string
+	/**
+	 * B​a​c​k​u​p​ ​P​a​s​s​w​o​r​d​ ​t​o​ ​K​e​y​c​h​a​i​n
+	 */
+	BD_BACKUP_PASSWORD_TO_KEYCHAIN: string
+	/**
+	 * T​h​i​s​ ​p​a​s​s​w​o​r​d​ ​w​i​l​l​ ​s​e​c​u​r​e​ ​y​o​u​r​ ​s​e​c​r​e​t​ ​r​e​c​o​v​e​r​y​ ​p​h​r​a​s​e​ ​i​n​ ​t​h​e​ ​c​l​o​u​d​.​ ​V​e​W​o​r​l​d​ ​d​o​e​s​ ​N​O​T​ ​h​a​v​e​ ​a​c​c​e​s​s​ ​t​o​ ​y​o​u​r​ ​p​a​s​s​w​o​r​d​.​ ​W​e​ ​c​a​n​ ​N​O​T​ ​r​e​s​e​t​ ​i​t​ ​i​f​ ​y​o​u​ ​l​o​s​e​ ​i​t​,​ ​s​o​ ​k​e​e​p​ ​i​t​ ​s​a​f​e​.
+	 */
+	BD_CLOUD_PASSWORD_CREATION_MESSAGE: string
+	/**
+	 * E​n​t​e​r​ ​t​h​e​ ​p​a​s​s​w​o​r​d​ ​y​o​u​ ​u​s​e​d​ ​t​o​ ​b​a​c​k​ ​u​p​ ​y​o​u​r​ ​w​a​l​l​e​t​.
+	 */
+	BD_CLOUD_INSERT_PASSWORD: string
+	/**
 	 * W​e​l​c​o​m​e​ ​t​o​ 
 	 */
 	TITLE_WELCOME_TO: string
@@ -619,6 +679,10 @@ type RootTranslation = {
 	 * I​m​p​o​r​t​ ​L​o​c​a​l​ ​W​a​l​l​e​t
 	 */
 	TITLE_WALLET_IMPORT_LOCAL: string
+	/**
+	 * I​m​p​o​r​t​ ​W​a​l​l​e​t​ ​f​r​o​m​ ​i​C​l​o​u​d
+	 */
+	TITLE_IMPORT_WALLET_FROM_ICLOUD: string
 	/**
 	 * O​b​s​e​r​v​e​ ​W​a​l​l​e​t
 	 */
@@ -1374,6 +1438,10 @@ type RootTranslation = {
 	 * E​r​r​o​r​ ​c​r​e​a​t​i​n​g​ ​w​a​l​l​e​t
 	 */
 	ERROR_CREATING_WALLET: string
+	/**
+	 * E​r​r​o​r​ ​g​e​t​t​i​n​g​ ​w​a​l​l​e​t​.​ ​M​a​k​e​ ​s​u​r​e​ ​y​o​u​ ​h​a​v​e​ ​t​h​e​ ​c​o​r​r​e​c​t​ ​p​a​s​s​w​o​r​d
+	 */
+	ERROR_DECRYPTING_WALLET: string
 	/**
 	 * S​u​c​c​e​s​s​!
 	 */
@@ -2819,6 +2887,10 @@ type RootTranslation = {
 	 */
 	WALLET_LEDGER_NO_DEVICES_DESC: string
 	/**
+	 * A​n​ ​e​r​r​o​r​ ​o​c​c​u​r​r​e​d​ ​w​h​i​l​e​ ​t​r​y​i​n​g​ ​t​o​ ​c​o​n​n​e​c​t​ ​t​o​ ​i​C​l​o​u​d​ ​s​e​r​v​i​c​e​.​ ​T​r​y​ ​a​g​a​i​n​!
+	 */
+	CLOUDKIT_ERROR_GENERIC: string
+	/**
 	 * D​a​t​e​ ​n​o​t​ ​a​v​a​i​l​a​b​l​e
 	 */
 	DATE_NOT_AVAILABLE: string
@@ -2986,6 +3058,50 @@ type RootTranslation = {
 	 * R​e​c​e​i​v​e​d
 	 */
 	RECEIVED: string
+	/**
+	 * W​e​l​c​o​m​e​ ​b​a​c​k
+	 */
+	WELCOME_BACK: string
+	/**
+	 * W​e​ ​f​o​u​n​d​ 
+	 */
+	WE_FOUND: string
+	/**
+	 * w​a​l​l​e​t​s​ ​s​a​v​e​d​ ​o​n​ ​i​C​l​o​u​d​.
+	 */
+	WALLETS_SAVED_ON_ICLOUD: string
+	/**
+	 * W​o​u​l​d​ ​y​o​u​ ​l​i​k​e​ ​t​o​ 
+	 */
+	WOULD_YOU_LIKE_TO: string
+	/**
+	 * r​e​s​t​o​r​e​ 
+	 */
+	RESTORE: string
+	/**
+	 * t​h​e​m​?
+	 */
+	THEM: string
+	/**
+	 * T​a​k​e​ ​m​e​ ​t​o​ ​i​C​l​o​u​d
+	 */
+	TAKE_ME_TO_ICLOUD: string
+	/**
+	 * N​o​ ​t​h​a​n​k​s
+	 */
+	NO_THANKS: string
+	/**
+	 * T​h​e​r​e​ ​w​a​s​ ​a​n​ ​e​r​r​o​r​ ​c​o​n​n​e​c​t​i​n​g​ ​t​o​ ​i​C​l​o​u​d​.​ ​P​l​e​a​s​e​ ​c​h​e​c​k​ ​y​o​u​r​ ​n​e​t​w​o​r​k​ ​c​o​n​n​e​c​t​i​o​n​ ​a​n​d​ ​t​r​y​ ​a​g​a​i​n​.
+	 */
+	CLOUD_ERR_NETWORK: string
+	/**
+	 * T​h​e​r​e​ ​w​a​s​ ​a​n​ ​e​r​r​o​r​ ​p​e​r​f​o​r​m​i​n​g​ ​t​h​i​s​ ​i​C​l​o​u​d​ ​w​a​l​l​e​t​ ​o​p​e​r​a​t​i​o​n​.​ ​P​l​e​a​s​e​ ​t​r​y​ ​a​g​a​i​n​.
+	 */
+	CLOUD_ERR_WALLET_OPERATION: string
+	/**
+	 * T​h​e​r​e​ ​w​a​s​ ​a​n​ ​e​r​r​o​r​ ​c​h​e​c​k​i​n​g​ ​y​o​u​r​ ​i​C​l​o​u​d​ ​s​t​a​t​u​s​.​ ​P​l​e​a​s​e​ ​t​r​y​ ​a​g​a​i​n​.
+	 */
+	CLOUD_ERR_USER_STATUS: string
 }
 
 export type TranslationFunctions = {
@@ -2993,6 +3109,14 @@ export type TranslationFunctions = {
 	 * GET STARTED
 	 */
 	BTN_GET_STARTED: () => LocalizedString
+	/**
+	 * Create wallet
+	 */
+	BTN_CREATE_WALLET: () => LocalizedString
+	/**
+	 * Import wallet
+	 */
+	BTN_IMPORT_WALLET: () => LocalizedString
 	/**
 	 * NEXT: SUSTAINABLE
 	 */
@@ -3217,6 +3341,18 @@ export type TranslationFunctions = {
 	 * I state that I want to delete this wallet
 	 */
 	BTN_WALLET_CONFRIM_DELETION: () => LocalizedString
+	/**
+	 * Choose password
+	 */
+	BTN_CHOOSE_PASSWORD: () => LocalizedString
+	/**
+	 * Enter password
+	 */
+	BTN_ENTER_PASSWORD: () => LocalizedString
+	/**
+	 * Confirm password
+	 */
+	BTN_CONFIRN_PASSWORD: () => LocalizedString
 	/**
 	 * Your VeWorld. A self custody mobile crypto wallet for vechain
 	 */
@@ -3534,6 +3670,46 @@ export type TranslationFunctions = {
 	 */
 	BD_BUY_DESCRIPTION_TRANSAK: () => LocalizedString
 	/**
+	 * * Password is not strong enough (min 6 characters, 1 nunber, 1 special character)
+	 */
+	BD_PASSWORD_NOT_STRONG: () => LocalizedString
+	/**
+	 * * Passwords do not match
+	 */
+	BD_PASSWORDS_DO_NOT_MATCH: () => LocalizedString
+	/**
+	 * The 12 words below are your wallet's recovery phrase. This phrase lets you recover your wallet if you lose your device. Back up it up on iCloud (recommended) or write it down. Or both.
+	 */
+	BD_MNEMONIC_PASSWORD_WARNING: () => LocalizedString
+	/**
+	 * Never share these words. Anyone who learns them can steal all of your crypto. VeWorld will never ask you for them.
+	 */
+	BD_MNEMONIC_WARMNING: () => LocalizedString
+	/**
+	 * Backed up to iCloud
+	 */
+	BD_BACKED_UP_TO_CLOUD: () => LocalizedString
+	/**
+	 * Not backed up to iCloud
+	 */
+	BD_NOT_BACKED_UP_TO_CLOUD: () => LocalizedString
+	/**
+	 * iCloud Backup Password
+	 */
+	BD_CLOUD_BACKUP_PASSWORD: () => LocalizedString
+	/**
+	 * Backup Password to Keychain
+	 */
+	BD_BACKUP_PASSWORD_TO_KEYCHAIN: () => LocalizedString
+	/**
+	 * This password will secure your secret recovery phrase in the cloud. VeWorld does NOT have access to your password. We can NOT reset it if you lose it, so keep it safe.
+	 */
+	BD_CLOUD_PASSWORD_CREATION_MESSAGE: () => LocalizedString
+	/**
+	 * Enter the password you used to back up your wallet.
+	 */
+	BD_CLOUD_INSERT_PASSWORD: () => LocalizedString
+	/**
 	 * Welcome to 
 	 */
 	TITLE_WELCOME_TO: () => LocalizedString
@@ -3593,6 +3769,10 @@ export type TranslationFunctions = {
 	 * Import Local Wallet
 	 */
 	TITLE_WALLET_IMPORT_LOCAL: () => LocalizedString
+	/**
+	 * Import Wallet from iCloud
+	 */
+	TITLE_IMPORT_WALLET_FROM_ICLOUD: () => LocalizedString
 	/**
 	 * Observe Wallet
 	 */
@@ -4342,6 +4522,10 @@ Try reconnect your device to the internet.
 	 * Error creating wallet
 	 */
 	ERROR_CREATING_WALLET: () => LocalizedString
+	/**
+	 * Error getting wallet. Make sure you have the correct password
+	 */
+	ERROR_DECRYPTING_WALLET: () => LocalizedString
 	/**
 	 * Success!
 	 */
@@ -5763,6 +5947,10 @@ Try reconnect your device to the internet.
 	 */
 	WALLET_LEDGER_NO_DEVICES_DESC: () => LocalizedString
 	/**
+	 * An error occurred while trying to connect to iCloud service. Try again!
+	 */
+	CLOUDKIT_ERROR_GENERIC: () => LocalizedString
+	/**
 	 * Date not available
 	 */
 	DATE_NOT_AVAILABLE: () => LocalizedString
@@ -5930,6 +6118,50 @@ Try reconnect your device to the internet.
 	 * Received
 	 */
 	RECEIVED: () => LocalizedString
+	/**
+	 * Welcome back
+	 */
+	WELCOME_BACK: () => LocalizedString
+	/**
+	 * We found 
+	 */
+	WE_FOUND: () => LocalizedString
+	/**
+	 * wallets saved on iCloud.
+	 */
+	WALLETS_SAVED_ON_ICLOUD: () => LocalizedString
+	/**
+	 * Would you like to 
+	 */
+	WOULD_YOU_LIKE_TO: () => LocalizedString
+	/**
+	 * restore 
+	 */
+	RESTORE: () => LocalizedString
+	/**
+	 * them?
+	 */
+	THEM: () => LocalizedString
+	/**
+	 * Take me to iCloud
+	 */
+	TAKE_ME_TO_ICLOUD: () => LocalizedString
+	/**
+	 * No thanks
+	 */
+	NO_THANKS: () => LocalizedString
+	/**
+	 * There was an error connecting to iCloud. Please check your network connection and try again.
+	 */
+	CLOUD_ERR_NETWORK: () => LocalizedString
+	/**
+	 * There was an error performing this iCloud wallet operation. Please try again.
+	 */
+	CLOUD_ERR_WALLET_OPERATION: () => LocalizedString
+	/**
+	 * There was an error checking your iCloud status. Please try again.
+	 */
+	CLOUD_ERR_USER_STATUS: () => LocalizedString
 }
 
 export type Formatters = {}

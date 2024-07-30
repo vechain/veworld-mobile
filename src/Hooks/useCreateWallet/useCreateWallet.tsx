@@ -15,7 +15,7 @@ import { selectAccountsState } from "~Storage/Redux/Selectors"
 import { warn } from "~Utils/Logger"
 import { useBiometrics } from "../useBiometrics"
 import { useAnalyticTracking } from "~Hooks/useAnalyticTracking"
-import { AnalyticsEvent, ERROR_EVENTS } from "~Constants"
+import { AnalyticsEvent, DerivationPath, ERROR_EVENTS } from "~Constants"
 import { WalletEncryptionKeyHelper } from "~Components"
 
 /**
@@ -45,15 +45,19 @@ export const useCreateWallet = () => {
             mnemonic,
             privateKey,
             userPassword,
+            isCloudKit,
             onError,
+            derivationPath,
         }: {
             mnemonic?: string[]
             privateKey?: string
             userPassword?: string
+            isCloudKit: boolean
             onError?: (error: unknown) => void
+            derivationPath: DerivationPath
         }) => {
             try {
-                const { device, wallet } = createDevice(mnemonic, privateKey)
+                const { device, wallet } = createDevice(isCloudKit, derivationPath, mnemonic, privateKey)
 
                 const encryptedWallet = await WalletEncryptionKeyHelper.encryptWallet(wallet, userPassword)
 

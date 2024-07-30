@@ -7,6 +7,7 @@ import {
     EnableAdditionalSettings,
     HistoryScreen,
     HomeScreen,
+    ImportFromCloudScreen,
     ImportLocalWallet,
     InsertAddressSendScreen,
     LedgerSignTransaction,
@@ -84,6 +85,7 @@ export type RootStackParamListHome = {
     [Routes.IMPORT_HW_LEDGER_SELECT_ACCOUNTS]: {
         device: ConnectedLedgerDevice
     }
+    [Routes.IMPORT_FROM_CLOUD]: undefined
 }
 
 const { Navigator, Group, Screen } = createNativeStackNavigator<RootStackParamListHome>()
@@ -156,6 +158,12 @@ export const HomeStack = () => {
                 <Screen
                     name={Routes.IMPORT_HW_LEDGER_SELECT_ACCOUNTS}
                     component={SelectLedgerAccounts}
+                    options={{ headerShown: false }}
+                />
+
+                <Screen
+                    name={Routes.IMPORT_FROM_CLOUD}
+                    component={ImportFromCloudScreen}
                     options={{ headerShown: false }}
                 />
             </Group>

@@ -6,6 +6,8 @@ const en: BaseTranslation = {
 
     // BUTTONS
     BTN_GET_STARTED: "GET STARTED",
+    BTN_CREATE_WALLET: "Create wallet",
+    BTN_IMPORT_WALLET: "Import wallet",
     BTN_ONBOARDING_SLIDE_01: "NEXT: SUSTAINABLE",
     BTN_ONBOARDING_SLIDE_02: "NEXT: SAFE AND FAST",
     BTN_ONBOARDING_SLIDE_03: "NEXT: CREATE PASSWORD",
@@ -63,6 +65,9 @@ const en: BaseTranslation = {
     BTN_LETS_GET_SENDING: "Let's get sending!",
     BTN_SECURITY_OPERATION_CHECKBOX: "I state that I have backed up my secret phrase",
     BTN_WALLET_CONFRIM_DELETION: "I state that I want to delete this wallet",
+    BTN_CHOOSE_PASSWORD: "Choose password",
+    BTN_ENTER_PASSWORD: "Enter password",
+    BTN_CONFIRN_PASSWORD: "Confirm password",
 
 
     // BODY
@@ -156,6 +161,17 @@ const en: BaseTranslation = {
     BD_GO_BACK: "Go back to VeWorld app",
     BD_BUY_DESCRIPTION_COINBASE: "Buy with Coinbase and receive the tokens directly in VeWorld.",
     BD_BUY_DESCRIPTION_TRANSAK: "Buy with Transak and receive the tokens directly in VeWorld.",
+    BD_PASSWORD_NOT_STRONG:   "* Password is not strong enough (min 6 characters, 1 nunber, 1 special character)",
+    BD_PASSWORDS_DO_NOT_MATCH: "* Passwords do not match",
+    BD_MNEMONIC_PASSWORD_WARNING: "The 12 words below are your wallet's recovery phrase. This phrase lets you recover your wallet if you lose your device. Back up it up on iCloud (recommended) or write it down. Or both.",
+    BD_MNEMONIC_WARMNING:  "Never share these words. Anyone who learns them can steal all of your crypto. VeWorld will never ask you for them.",
+    BD_BACKED_UP_TO_CLOUD: "Backed up to iCloud",
+    BD_NOT_BACKED_UP_TO_CLOUD: "Not backed up to iCloud",
+    BD_CLOUD_BACKUP_PASSWORD: "iCloud Backup Password",
+    BD_BACKUP_PASSWORD_TO_KEYCHAIN: "Backup Password to Keychain",
+    BD_CLOUD_PASSWORD_CREATION_MESSAGE: "This password will secure your secret recovery phrase in the cloud. VeWorld does NOT have access to your password. We can NOT reset it if you lose it, so keep it safe.",
+    BD_CLOUD_INSERT_PASSWORD: "Enter the password you used to back up your wallet.",
+
 
     // TITLES
     TITLE_WELCOME_TO: "Welcome to ",
@@ -173,6 +189,7 @@ const en: BaseTranslation = {
     TITLE_USER_PASSWORD: "Choose your 6-digit PIN",
     TITLE_USER_PIN: "Insert your 6-digit PIN",
     TITLE_WALLET_IMPORT_LOCAL: "Import Local Wallet",
+    TITLE_IMPORT_WALLET_FROM_ICLOUD: "Import Wallet from iCloud",
     TITLE_OBSERVE_WALLET: "Observe Wallet",
     TITLE_ALERT_FACE_ID_CANCELLED: "Face ID Cancelled",
     TITLE_ALERT_CAMERA_PERMISSION: "Camera Permissions",
@@ -378,6 +395,7 @@ const en: BaseTranslation = {
     ERROR_COULD_NOT_FIND_ADDRESS_FOR_DOMAIN: "Address not found for domain name",
     ERROR_TOO_MANY_BIOMETRICS_AUTH_ATTEMPTS: "Too many biometrics authentication attempts, please try again later",
     ERROR_CREATING_WALLET: "Error creating wallet",
+    ERROR_DECRYPTING_WALLET: "Error getting wallet. Make sure you have the correct password",
 
     // Success
 
@@ -807,6 +825,8 @@ const en: BaseTranslation = {
     WALLET_LEDGER_NO_DEVICES: "No devices found",
     WALLET_LEDGER_NO_DEVICES_DESC: "We couldn't find any Ledger devices to connect to",
 
+    CLOUDKIT_ERROR_GENERIC: "An error occurred while trying to connect to iCloud service. Try again!",
+
     // Transaction Labels
 
     // Unlock
@@ -873,6 +893,20 @@ const en: BaseTranslation = {
     // NFTs
 
     // Ledger Config
+
+
+    // CloudKit
+    WELCOME_BACK: "Welcome back",
+    WE_FOUND: "We found ",
+    WALLETS_SAVED_ON_ICLOUD: "wallets saved on iCloud.",
+    WOULD_YOU_LIKE_TO: "Would you like to ",
+    RESTORE: "restore ",
+    THEM: "them?",
+    TAKE_ME_TO_ICLOUD: "Take me to iCloud",
+    NO_THANKS: "No thanks",
+    CLOUD_ERR_NETWORK: "There was an error connecting to iCloud. Please check your network connection and try again.",
+    CLOUD_ERR_WALLET_OPERATION: "There was an error performing this iCloud wallet operation. Please try again.",
+    CLOUD_ERR_USER_STATUS: "There was an error checking your iCloud status. Please try again.",
 }
 
 export default en

@@ -3,7 +3,7 @@ import React, { useCallback, useEffect, useMemo, useRef, useState } from "react"
 import { Keyboard, Linking, StyleSheet } from "react-native"
 import Animated, { useAnimatedRef, useScrollViewOffset } from "react-native-reanimated"
 import { randomized as daoDapps } from "~Assets"
-import { BaseSpacer, BaseView, Layout } from "~Components"
+import { AnimatedFloatingButton, BaseSpacer, BaseView, Layout } from "~Components"
 import { AnalyticsEvent } from "~Constants"
 import { useAnalyticTracking, useBrowserSearch, useThemedStyles, useVisitedUrls } from "~Hooks"
 import { RumManager } from "~Logging/RumManager"
@@ -28,7 +28,6 @@ import {
     MakeYourOwnDApp,
     VeBetterDAODApps,
     VeBetterDAOMainCard,
-    WebSearchFloatingButton,
 } from "./Components"
 import { useFetchFeaturedDApps } from "./Hooks/useFetchFeaturedDApps"
 import { groupFavoritesByBaseUrl } from "./utils"
@@ -186,7 +185,11 @@ export const DiscoverScreen: React.FC = () => {
                         <Ecosystem title={LL.DISCOVER_ECOSYSTEM()} dapps={dapps} onDAppPress={onDAppPress} />
                         {isWebSearchFloatingButtonVisible && <BaseSpacer height={70} />}
                     </Animated.ScrollView>
-                    <WebSearchFloatingButton isVisible={isWebSearchFloatingButtonVisible} onPress={onSearch} />
+                    <AnimatedFloatingButton
+                        title={LL.DISCOVER_WEB_SEARCH_FLOATING_BUTTON_LABEL()}
+                        isVisible={isWebSearchFloatingButtonVisible}
+                        onPress={onSearch}
+                    />
                 </BaseView>
             }
         />

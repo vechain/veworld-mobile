@@ -17,6 +17,7 @@ export const generateDeviceForMnemonic = (
     deviceIndex: number,
     alias: string,
     path: DerivationPath = DerivationPath.VET,
+    isCloudKit: boolean,
 ): WalletAndDevice => {
     const hdNode = HDNode.fromMnemonic(mnemonic, path)
 
@@ -35,7 +36,7 @@ export const generateDeviceForMnemonic = (
         index: deviceIndex,
         position: 0, // this will be updated when the device is added to the redux store
         derivationPath: path,
-        isBuckedUp: false,
+        isBuckedUp: isCloudKit,
     }
 
     return { wallet, device }

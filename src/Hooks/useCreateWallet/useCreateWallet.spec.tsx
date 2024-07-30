@@ -102,7 +102,7 @@ describe("useCreateWallet", () => {
             })
             const { createLocalWallet } = result.current
 
-            await createLocalWallet({ mnemonic: mnemonic })
+            await createLocalWallet({ mnemonic: mnemonic, isCloudKit: false })
             await waitFor(() => result.current.isComplete)
             expect(result.current.accessControl).toBe(true)
             expect(result.current.isComplete).toBe(true)
@@ -129,6 +129,7 @@ describe("useCreateWallet", () => {
                 mnemonic: mnemonic,
                 userPassword: "password",
                 onError: undefined,
+                isCloudKit: false,
             })
 
             expect(addDeviceAndAccounts).toBeCalledWith({
