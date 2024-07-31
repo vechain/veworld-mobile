@@ -1,8 +1,9 @@
-import { TestHelpers } from "~Test"
-import GasUtils from "./GasUtils"
 import BigNumber from "bignumber.js"
 import { GasPriceCoefficient } from "~Constants"
+import { TestHelpers } from "~Test"
+import GasUtils from "./GasUtils"
 
+const url = "https://mainnet.vechain.org"
 const thor = TestHelpers.thor.mockThorInstance({})
 const thorExplainExecuteVmError = TestHelpers.thor.mockThorInstance({
     explain: (clauses: Connex.VM.Clause[]) => ({
@@ -22,7 +23,7 @@ const clausesStubs = TestHelpers.data.clauses
 describe("GasUtils", () => {
     describe("estimateGas", () => {
         it("should return the estimated gas - no clauses", async () => {
-            const estimated = await GasUtils.estimateGas(thor, [], 0, "0x")
+            const estimated = await GasUtils.estimateGas(url, thor, [], 0, "0x")
             expect(estimated).toStrictEqual({
                 caller: "0x",
                 gas: 36001,
@@ -35,6 +36,7 @@ describe("GasUtils", () => {
 
         it("should return the estimated gas - clauses", async () => {
             const estimated = await GasUtils.estimateGas(
+                url,
                 thor,
                 [
                     ...clausesStubs,
@@ -58,6 +60,7 @@ describe("GasUtils", () => {
 
         it("should return the estimated gas - gasPayer", async () => {
             const estimated = await GasUtils.estimateGas(
+                url,
                 thor,
                 clausesStubs,
                 0,
@@ -76,6 +79,7 @@ describe("GasUtils", () => {
 
         it("should return the estimated gas - reverted", async () => {
             const reverted = await GasUtils.estimateGas(
+                url,
                 thorExplainExecuteReverts,
                 [],
                 0,
@@ -94,6 +98,7 @@ describe("GasUtils", () => {
 
         it("should return the estimated gas - vmError", async () => {
             const reverted = await GasUtils.estimateGas(
+                url,
                 thorExplainExecuteVmError,
                 [],
                 0,
@@ -111,6 +116,7 @@ describe("GasUtils", () => {
         })
         it("should run correctly with suggested gas", async () => {
             const reverted = await GasUtils.estimateGas(
+                url,
                 thorExplainExecuteVmError,
                 [],
                 50000,

@@ -4,8 +4,9 @@ import { Transaction } from "thor-devkit"
 import { error, GasUtils } from "~Utils"
 import { useThor } from "~Components"
 import { EstimateGasResult } from "~Model"
-import { selectSelectedAccount, useAppSelector } from "~Storage/Redux"
+import { selectSelectedAccount, selectSelectedNetwork, useAppSelector } from "~Storage/Redux"
 import { ERROR_EVENTS } from "~Constants"
+import { useSelector } from "react-redux"
 
 type UseTransactionReturnProps = {
     gas?: EstimateGasResult
@@ -31,6 +32,7 @@ type Props = {
 export const useTransactionGas = ({ clauses, providedGas, providedGasPayer }: Props): UseTransactionReturnProps => {
     const [loadingGas, setLoadingGas] = useState<boolean>(true)
     const [gas, setGas] = useState<EstimateGasResult>()
+    const selectedNetwork = useSelector(selectSelectedNetwork)
     const account = useAppSelector(selectSelectedAccount)
     const [gasPayer, setGasPayer] = useState<string>(providedGasPayer ?? account.address)
     const thorClient = useThor()
@@ -39,7 +41,14 @@ export const useTransactionGas = ({ clauses, providedGas, providedGasPayer }: Pr
         async (caller: string, payer: string, thor: Connex.Thor) => {
             setLoadingGas(true)
             try {
-                const estimatedGas = await GasUtils.estimateGas(thor, clauses, providedGas ?? 0, caller, payer)
+                const estimatedGas = await GasUtils.estimateGas(
+                    selectedNetwork.urls[0],
+                    thor,
+                    clauses,
+                    providedGas ?? 0,
+                    caller,
+                    payer,
+                )
 
                 setGas(estimatedGas)
             } catch (e) {
@@ -48,7 +57,7 @@ export const useTransactionGas = ({ clauses, providedGas, providedGasPayer }: Pr
                 setLoadingGas(false)
             }
         },
-        [clauses, providedGas],
+        [clauses, providedGas, selectedNetwork.urls],
     )
 
     useEffect(() => {
