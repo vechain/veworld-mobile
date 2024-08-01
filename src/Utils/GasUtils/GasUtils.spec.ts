@@ -1,9 +1,11 @@
+import axios from "axios"
 import BigNumber from "bignumber.js"
 import { GasPriceCoefficient } from "~Constants"
 import { TestHelpers } from "~Test"
 import GasUtils from "./GasUtils"
 
 const url = "https://mainnet.vechain.org"
+
 const thor = TestHelpers.thor.mockThorInstance({})
 const thorExplainExecuteVmError = TestHelpers.thor.mockThorInstance({
     explain: (clauses: Connex.VM.Clause[]) => ({
@@ -19,42 +21,39 @@ const thorExplainExecuteReverts = TestHelpers.thor.mockThorInstance({
 })
 
 const clausesStubs = TestHelpers.data.clauses
-const axiosMock = {
+
+jest.mock("axios", () => ({
     get: jest.fn(() => ({
         headers: {
-            get: jest.fn(() => "2.0.0"),
+            get: jest.fn(() => "2.1.0"),
         },
     })),
     post: jest.fn(),
     create: jest.fn(),
-}
+}))
 
 describe("GasUtils", () => {
-    beforeAll(() => {
-        jest.mock("axios", () => axiosMock)
-    })
     describe("estimateGas", () => {
         it("should return the estimated gas - no clauses", async () => {
-            jest.mock("axios", () => axiosMock)
-
-            axiosMock.post.mockReturnValue({
+            ;(axios.post as jest.Mock).mockResolvedValueOnce({
                 data: [
                     {
-                        data: "asdfasdf",
-                        vmError: "",
-                        gasUsed: 36001,
-                        reverted: false,
-                        revertReason: "",
+                        data: "0x000000000000000000000000000000000000000000000000000009184e72a000",
                         events: [],
                         transfers: [],
+                        gasUsed: 591,
+                        reverted: false,
+                        vmError: "",
+                        revertReason: "",
                     },
                 ],
             })
+
             const estimated = await GasUtils.estimateGas(url, thor, [], 0, "0x")
 
             expect(estimated).toStrictEqual({
                 caller: "0x",
-                gas: 36001,
+                gas: 36591,
                 reverted: false,
                 revertReason: "",
                 vmError: "",
@@ -62,7 +61,21 @@ describe("GasUtils", () => {
             })
         })
 
-        it.skip("should return the estimated gas - clauses", async () => {
+        it("should return the estimated gas - clauses", async () => {
+            ;(axios.post as jest.Mock).mockResolvedValueOnce({
+                data: [
+                    {
+                        data: "0x000000000000000000000000000000000000000000000000000009184e72a000",
+                        events: [],
+                        transfers: [],
+                        gasUsed: 591,
+                        reverted: false,
+                        vmError: "",
+                        revertReason: "",
+                    },
+                ],
+            })
+
             const estimated = await GasUtils.estimateGas(
                 url,
                 thor,
@@ -78,7 +91,7 @@ describe("GasUtils", () => {
             )
             expect(estimated).toStrictEqual({
                 caller: "0x",
-                gas: 100001,
+                gas: 100591,
                 reverted: false,
                 revertReason: "",
                 vmError: "",
@@ -86,7 +99,21 @@ describe("GasUtils", () => {
             })
         })
 
-        it.skip("should return the estimated gas - gasPayer", async () => {
+        it("should return the estimated gas - gasPayer", async () => {
+            ;(axios.post as jest.Mock).mockResolvedValueOnce({
+                data: [
+                    {
+                        data: "0x000000000000000000000000000000000000000000000000000009184e72a000",
+                        events: [],
+                        transfers: [],
+                        gasUsed: 591,
+                        reverted: false,
+                        vmError: "",
+                        revertReason: "",
+                    },
+                ],
+            })
+
             const estimated = await GasUtils.estimateGas(
                 url,
                 thor,
@@ -97,7 +124,7 @@ describe("GasUtils", () => {
             )
             expect(estimated).toStrictEqual({
                 caller: "0x",
-                gas: 84001,
+                gas: 84591,
                 reverted: false,
                 revertReason: "",
                 vmError: "",
@@ -105,7 +132,20 @@ describe("GasUtils", () => {
             })
         })
 
-        it.skip("should return the estimated gas - reverted", async () => {
+        it("should return the estimated gas - reverted", async () => {
+            ;(axios.post as jest.Mock).mockResolvedValueOnce({
+                data: [
+                    {
+                        data: "0x000000000000000000000000000000000000000000000000000009184e72a000",
+                        events: [],
+                        transfers: [],
+                        gasUsed: 36591,
+                        reverted: true,
+                        vmError: "",
+                        revertReason: "revertReason",
+                    },
+                ],
+            })
             const reverted = await GasUtils.estimateGas(
                 url,
                 thorExplainExecuteReverts,
@@ -116,7 +156,7 @@ describe("GasUtils", () => {
             )
             expect(reverted).toStrictEqual({
                 caller: "0x",
-                gas: 36001,
+                gas: 72591,
                 reverted: true,
                 revertReason: "revertReason",
                 vmError: "",
@@ -124,7 +164,21 @@ describe("GasUtils", () => {
             })
         })
 
-        it.skip("should return the estimated gas - vmError", async () => {
+        it("should return the estimated gas - vmError", async () => {
+            ;(axios.post as jest.Mock).mockResolvedValueOnce({
+                data: [
+                    {
+                        data: "0x000000000000000000000000000000000000000000000000000009184e72a000",
+                        events: [],
+                        transfers: [],
+                        gasUsed: 591,
+                        reverted: false,
+                        vmError: "vmError",
+                        revertReason: "vmError",
+                    },
+                ],
+            })
+
             const reverted = await GasUtils.estimateGas(
                 url,
                 thorExplainExecuteVmError,
@@ -135,14 +189,28 @@ describe("GasUtils", () => {
             )
             expect(reverted).toStrictEqual({
                 caller: "0x",
-                gas: 36001,
+                gas: 36591,
                 reverted: false,
                 revertReason: "vmError",
                 vmError: "vmError",
                 baseGasPrice: "0x000000000000000000000000000000000000000000000000000009184e72a000",
             })
         })
-        it.skip("should run correctly with suggested gas", async () => {
+        it("should run correctly with suggested gas", async () => {
+            ;(axios.post as jest.Mock).mockResolvedValueOnce({
+                data: [
+                    {
+                        data: "0x000000000000000000000000000000000000000000000000000009184e72a000",
+                        events: [],
+                        transfers: [],
+                        gasUsed: 591,
+                        reverted: false,
+                        vmError: "vmError",
+                        revertReason: "vmError",
+                    },
+                ],
+            })
+
             const reverted = await GasUtils.estimateGas(
                 url,
                 thorExplainExecuteVmError,
@@ -164,7 +232,7 @@ describe("GasUtils", () => {
 
     describe("gasToVtho", () => {
         describe("when the gas coefficient is regular", () => {
-            it.skip("should return the regular fee", async () => {
+            it("should return the regular fee", async () => {
                 const { gasFee } = await GasUtils.gasToVtho({
                     gas: new BigNumber(21000),
                     baseGasPrice: new BigNumber("10000000000000"),
@@ -174,7 +242,7 @@ describe("GasUtils", () => {
             })
         })
         describe("when the gas coefficient is medium", () => {
-            it.skip("should return the medium fee", async () => {
+            it("should return the medium fee", async () => {
                 const { gasFee } = await GasUtils.gasToVtho({
                     gas: new BigNumber(21000),
                     baseGasPrice: new BigNumber("10000000000000"),
@@ -184,7 +252,7 @@ describe("GasUtils", () => {
             })
         })
         describe("when the gas coefficient is high", () => {
-            it.skip("should return the medium fee", async () => {
+            it("should return the medium fee", async () => {
                 const { gasFee } = await GasUtils.gasToVtho({
                     gas: new BigNumber(21000),
                     baseGasPrice: new BigNumber("10000000000000"),
@@ -194,7 +262,7 @@ describe("GasUtils", () => {
             })
         })
         describe("when the gas coefficient is medium and decimals are 2", () => {
-            it.skip("should return the medium fee with 2 decimals", async () => {
+            it("should return the medium fee with 2 decimals", async () => {
                 const { gasFee } = await GasUtils.gasToVtho({
                     gas: new BigNumber(21000),
                     baseGasPrice: new BigNumber("10000000000000"),

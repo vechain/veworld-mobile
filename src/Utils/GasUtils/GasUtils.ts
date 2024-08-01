@@ -27,7 +27,7 @@ const estimateGas = async (
     url: string,
     thor: Connex.Thor,
     clauses: Connex.VM.Clause[],
-    suggestedGas: number,
+    providedGas: number,
     caller: string,
     gasPayer?: string,
 ): Promise<EstimateGasResult> => {
@@ -42,34 +42,35 @@ const estimateGas = async (
     )
 
     const genesis = await axios.get<Connex.Thor.Block>(`${url}/blocks/best`)
+
     let revision = "best"
 
     if (genesis.headers.get && typeof genesis.headers.get === "function") {
-        const thorVersion = genesis.headers.get("x-thor-version")
+        const thorVersion = genesis.headers.get("x-thorest-ver")
 
-        if (typeof thorVersion === "string" && VersionUtils.compareSemanticVersions(thorVersion, "2.0.0") < 0) {
+        if (typeof thorVersion === "string" && VersionUtils.compareSemanticVersions(thorVersion, "2.1.3") < 0) {
             revision = "next"
         }
     }
 
-    const offeredGas = suggestedGas ? Math.max(suggestedGas - intrinsicGas, 1) : 2000 * 10000
+    const offeredGas = providedGas ? Math.max(providedGas - intrinsicGas, 1) : 2000 * 10000
 
-    const res = await axios.post<Connex.VM.Output[]>(`${url}/accounts/*?revision=${revision}`, {
+    const { data } = await axios.post<Connex.VM.Output[]>(`${url}/accounts/*?revision=${revision}`, {
         clauses,
         caller,
         gas: offeredGas,
         gasPayer,
     })
 
-    let gas = suggestedGas
+    let gas = providedGas
 
     if (!gas) {
-        const execGas = res.data.reduce((sum, out) => sum + out.gasUsed, 0)
+        const execGas = data.reduce((sum, out) => sum + out.gasUsed, 0)
         gas = intrinsicGas + (execGas ? execGas + 15000 : 0)
     }
 
     const baseGasPrice = await getBaseGasPrice(thor)
-    const lastOutput = res.data.slice().pop()
+    const lastOutput = data.slice().pop()
 
     return {
         caller,
@@ -82,6 +83,7 @@ const estimateGas = async (
 }
 
 // const estimateGas = async (
+//     url: string,
 //     thor: Connex.Thor,
 //     clauses: Connex.VM.Clause[],
 //     suggestedGas: number,

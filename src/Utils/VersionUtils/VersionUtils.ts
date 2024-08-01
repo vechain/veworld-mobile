@@ -7,7 +7,6 @@ function compareSemanticVersions(version1: string, version2: string) {
         if (!semVerPattern.test(version)) {
             return null // Invalid version format
         }
-        // Split the version string into its numeric components
         return version.split(".").map(Number)
     }
 
@@ -18,7 +17,6 @@ function compareSemanticVersions(version1: string, version2: string) {
         throw new Error("Invalid version format. Versions should be in x.x.x, x.x, or x format.")
     }
 
-    // Compare the versions component-wise
     for (let i = 0; i < 3; i++) {
         const part1 = parsedVersion1[i] || 0
         const part2 = parsedVersion2[i] || 0
