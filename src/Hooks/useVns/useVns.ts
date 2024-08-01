@@ -45,21 +45,28 @@ export const useVns = () => {
         async (_address: string) => {
             setIsLoading(true)
 
-            const {
-                decoded: { names },
-            } = await thor.account(NETWORK_RESOLVER).method(ABI.getNames).call([_address])
+            try {
+                const {
+                    decoded: { names },
+                } = await thor.account(NETWORK_RESOLVER).method(ABI.getNames).call([_address])
 
-            setIsLoading(false)
+                setIsLoading(false)
 
-            if (Array.isArray(names)) {
-                setName(names[0])
+                if (Array.isArray(names)) {
+                    setName(names[0])
+                    setAddres(_address)
+                    return { name: names[0], address: _address }
+                }
+
+                setName(names)
                 setAddres(_address)
                 return { name: names[0], address: _address }
-            }
+            } catch {
+                setIsLoading(false)
 
-            setName(names)
-            setAddres(_address)
-            return { name: names[0], address: _address }
+                setAddres(_address)
+                return { name: undefined, address: _address }
+            }
         },
         [NETWORK_RESOLVER, thor],
     )

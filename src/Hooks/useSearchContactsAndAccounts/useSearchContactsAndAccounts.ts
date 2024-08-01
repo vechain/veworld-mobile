@@ -1,7 +1,7 @@
 import { useEffect, useMemo, useRef, useState } from "react"
 import { useVns } from "~Hooks/useVns"
-import { AccountWithDevice, Contact } from "~Model"
-import { selectKnownContacts, selectOtherAccounts, useAppSelector } from "~Storage/Redux"
+import { AccountWithDevice, Contact, NETWORK_TYPE } from "~Model"
+import { selectKnownContacts, selectOtherAccounts, selectSelectedNetwork, useAppSelector } from "~Storage/Redux"
 import { AddressUtils } from "~Utils"
 
 export const useSearchContactsAndAccounts = ({
@@ -11,11 +11,16 @@ export const useSearchContactsAndAccounts = ({
     searchText: string
     selectedAddress: string | undefined
 }) => {
+    const selectedNetwork = useAppSelector(selectSelectedNetwork)
     const accounts = useAppSelector(selectOtherAccounts)
     const contacts = useAppSelector(selectKnownContacts)
     const accountsAndContacts = useMemo(() => {
         return [...accounts, ...contacts]
     }, [accounts, contacts])
+    const isOfficialNetwork = useMemo(
+        () => selectedNetwork.type === NETWORK_TYPE.MAIN || selectedNetwork.type === NETWORK_TYPE.TEST,
+        [selectedNetwork.type],
+    )
 
     // START - [DOMAINS] we need to add the domain only for searching purposes
     const { _getName } = useVns()
@@ -45,8 +50,17 @@ export const useSearchContactsAndAccounts = ({
             setIsLoading(false)
         }
 
+        // Avoid fetching VNS when not in MainNet or TestNet
+        if (!isOfficialNetwork) {
+            firstLoad.current = false
+            setContactsWithDomain(contacts)
+            setAccountsWithDomain(accounts)
+            setIsLoading(false)
+            return
+        }
+
         firstLoad.current && init()
-    }, [_getName, accounts, contacts])
+    }, [_getName, accounts, contacts, isOfficialNetwork])
     // END - [DOMAINS]
 
     const filteredContacts = useMemo(() => {
