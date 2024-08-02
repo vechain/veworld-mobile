@@ -65,10 +65,9 @@ const decryptWallet = async (encryptedWallet: string, pinCode?: string): Promise
     return CryptoUtils.decrypt<Wallet>(encryptedWallet, walletKey)
 }
 
-const encryptWallet = async (wallet: Wallet, pinCode?: string) => {
+const encryptWallet = async (wallet: Wallet, pinCode?: string, salt?: string, iv?: Uint8Array) => {
     const { walletKey } = await get(pinCode)
-
-    return CryptoUtils.encrypt(wallet, walletKey)
+    return CryptoUtils.encrypt(wallet, walletKey, salt, iv)
 }
 
 const remove = async () => {

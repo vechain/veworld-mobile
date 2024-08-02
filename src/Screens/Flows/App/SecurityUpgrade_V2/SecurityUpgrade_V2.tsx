@@ -13,8 +13,9 @@ import { useBackHandler, useBottomSheetModal, useDisclosure, useWalletSecurity }
 import { useBackupMnemonic } from "../PrivacyScreen/Hooks/useBackupMnemonic"
 import { BackHandlerEvent, LocalDevice } from "~Model"
 import { selectLocalDevices, useAppSelector } from "~Storage/Redux"
-import { BackupMnemonicBottomSheet } from "../PrivacyScreen/Components"
 import { BackupWarningBottomSheet } from "../PrivacyScreen/Components/BackupWarningBottomSheet"
+import { useNavigation } from "@react-navigation/native"
+import { Routes } from "~Navigation"
 
 const PasswordPromptStatus = {
     INIT: "INIT",
@@ -25,6 +26,7 @@ const PasswordPromptStatus = {
 type PasswordPromptStatus = keyof typeof PasswordPromptStatus
 
 export const SecurityUpgrade_V2 = () => {
+    const nav = useNavigation()
     useBackHandler(BackHandlerEvent.BLOCK)
 
     const [ppStatus, setPPStatus] = useState<PasswordPromptStatus>(PasswordPromptStatus.INIT)
@@ -33,12 +35,6 @@ export const SecurityUpgrade_V2 = () => {
     const { upgradeSecurityToV2 } = useApplicationSecurity()
     const devices = useAppSelector(selectLocalDevices) as LocalDevice[]
     const { isOpen: isPasswordPromptOpen, onOpen: openPasswordPrompt, onClose: closePasswordPrompt } = useDisclosure()
-
-    const {
-        ref: BackupPhraseSheetRef,
-        openWithDelay: openBackupPhraseSheetWithDelay,
-        onClose: closeBackupPhraseSheet,
-    } = useBottomSheetModal()
 
     const {
         ref: walletMgmtBottomSheetRef,
@@ -52,7 +48,18 @@ export const SecurityUpgrade_V2 = () => {
         onClose: closeBackupWarningSheet,
     } = useBottomSheetModal()
 
-    const { onPasswordSuccess, checkSecurityBeforeOpening, handleOnSelectedWallet, mnemonicArray } = useBackupMnemonic({
+    const openBackupPhraseSheetWithDelay = useCallback(
+        (delay: number, mnemonicArray: string[], deviceToBackup: LocalDevice) => {
+            if (!mnemonicArray.length) return
+
+            setTimeout(() => {
+                nav.navigate(Routes.ICLOUD_MNEMONIC_BACKUP, { mnemonicArray, deviceToBackup })
+            }, delay)
+        },
+        [nav],
+    )
+
+    const { onPasswordSuccess, checkSecurityBeforeOpening, handleOnSelectedWallet } = useBackupMnemonic({
         closePasswordPrompt,
         openBackupPhraseSheetWithDelay,
         openWalletMgmtSheetWithDelay,
@@ -95,12 +102,6 @@ export const SecurityUpgrade_V2 = () => {
                     <BaseButton title="Upgrade Security" action={openBackupWarningSheet} />
                 </BaseView>
             </BaseView>
-
-            <BackupMnemonicBottomSheet
-                ref={BackupPhraseSheetRef}
-                onClose={closeBackupPhraseSheet}
-                mnemonicArray={mnemonicArray}
-            />
 
             <SelectDeviceBottomSheet<LocalDevice>
                 ref={walletMgmtBottomSheetRef}

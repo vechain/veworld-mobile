@@ -15702,6 +15702,11 @@ react-native-localize@3.0.4:
   resolved "https://registry.yarnpkg.com/react-native-localize/-/react-native-localize-3.0.4.tgz#70bb6212cee4dd9eaabb65a4a6227dca5b7faf5e"
   integrity sha512-O6NnwsdorLiK5PCulfiKSnNjBW8B0m1HO24MQOgSC2iHiZZWMCA2to7Ln5EOagaGPsqq5UbgisR2bpycoMPYaw==
 
+react-native-mmkv-flipper-plugin@^1.0.0:
+  version "1.0.0"
+  resolved "https://registry.yarnpkg.com/react-native-mmkv-flipper-plugin/-/react-native-mmkv-flipper-plugin-1.0.0.tgz#f87f747d8cea51d2b12a1e711287feff5f212788"
+  integrity sha512-e3owMIBzXez45Wz8Ac84Vf1FmfwMXFVUpf/gCDWDLq19w7iCipVezQjlZo8ISVza8aQf1G4ggaK/r+qqtGmRlg==
+
 react-native-mmkv@^2.10.2:
   version "2.12.2"
   resolved "https://registry.yarnpkg.com/react-native-mmkv/-/react-native-mmkv-2.12.2.tgz#4bba0f5f04e2cf222494cce3a9794ba6a4894dee"

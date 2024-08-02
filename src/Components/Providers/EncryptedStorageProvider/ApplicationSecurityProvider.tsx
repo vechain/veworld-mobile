@@ -1,7 +1,7 @@
 import React, { useCallback, useEffect, useMemo, useState } from "react"
 import { MMKV } from "react-native-mmkv"
-import { BiometricsUtils, CryptoUtils_Legacy, debug, error, HexUtils, info } from "~Utils"
-import { BiometricState, SecurityLevelType, Wallet, WALLET_STATUS } from "~Model"
+import { BiometricsUtils, CryptoUtils, CryptoUtils_Legacy, debug, error, HexUtils, info, PasswordUtils } from "~Utils"
+import { BiometricState, Device, SecurityLevelType, Wallet, WALLET_STATUS } from "~Model"
 import {
     PreviousInstallation,
     SecurityConfig,
@@ -16,14 +16,15 @@ import { AnimatedSplashScreen } from "../../../AnimatedSplashScreen"
 import Onboarding from "./Helpers/Onboarding"
 import NetInfo from "@react-native-community/netinfo"
 import { ERROR_EVENTS } from "~Constants"
+import { initializeMMKVFlipper } from "react-native-mmkv-flipper-plugin"
 
 const UserEncryptedStorage = new MMKV({
     id: "user_encrypted_storage",
 })
 
-// const UserEncryptedStorage_V2 = new MMKV({
-//     id: "user_encrypted_storage_V2",
-// })
+const UserEncryptedStorage_V2 = new MMKV({
+    id: "user_encrypted_storage_V2",
+})
 
 const OnboardingStorage = new MMKV({
     id: "onboarding_storage",
@@ -42,6 +43,17 @@ export type EncryptedStorage = {
     encryptionKey: string
 }
 
+// add this line inside your App.tsx
+if (__DEV__) {
+    initializeMMKVFlipper({ default: UserEncryptedStorage_V2 })
+}
+
+export enum SecurityMigration {
+    NOT_STARTED,
+    IN_PROGRESS,
+    COMPLETED,
+}
+
 type IApplicationSecurity = {
     redux?: EncryptedStorage
     images?: EncryptedStorage
@@ -58,6 +70,7 @@ type IApplicationSecurity = {
     triggerAutoLock: () => void
     needsSecurityUpgradeToV2: () => boolean
     upgradeSecurityToV2: (password?: string) => void
+    securityMigrationStatus: SecurityMigration
 }
 
 const ApplicationSecurityContext = React.createContext<IApplicationSecurity | undefined>(undefined)
@@ -72,6 +85,7 @@ export const ApplicationSecurityProvider = ({ children }: ApplicationSecurityCon
     const [imageStorage, setImageStorage] = useState<EncryptedStorage>()
     const [metadataStorage, setMetadataStorage] = useState<EncryptedStorage>()
     const [userDisabledBiometrics, setUserDisabledBiometrics] = useState(false)
+    const [_securityMigrationStatus, setSecurityMigrationStatus] = useState(SecurityMigration.NOT_STARTED)
 
     // After unlocking, we need to wait for the redux to be setup before we can render the app
     const [isAppReady, setIsAppReady] = useState(false)
@@ -103,6 +117,7 @@ export const ApplicationSecurityProvider = ({ children }: ApplicationSecurityCon
         updateSecurityType(undefined)
 
         UserEncryptedStorage.clearAll()
+        UserEncryptedStorage_V2.clearAll()
         OnboardingStorage.clearAll()
 
         setReduxStorage({
@@ -148,7 +163,7 @@ export const ApplicationSecurityProvider = ({ children }: ApplicationSecurityCon
 
         if (keys) {
             setReduxStorage({
-                mmkv: UserEncryptedStorage,
+                mmkv: UserEncryptedStorage_V2,
                 encryptionKey: keys.redux,
             })
 
@@ -201,6 +216,8 @@ export const ApplicationSecurityProvider = ({ children }: ApplicationSecurityCon
 
     const needsSecurityUpgradeToV2 = useCallback(() => {
         const encryptedStorageKeys = UserEncryptedStorage.getAllKeys()
+        // TODO.vas - even if you create a new wwallet the condition is true
+        // if (encryptedStorageKeys.length > 0 && !UserEncryptedStorage_V2.getString("persist:root_V2")) {
         if (encryptedStorageKeys.length > 0) {
             debug(ERROR_EVENTS.SECURITY, "Needs security upgrade to V2")
             return true
@@ -215,59 +232,86 @@ export const ApplicationSecurityProvider = ({ children }: ApplicationSecurityCon
             encryptedStorageKeys contains ["persist:root", "persist:nft"]
         */
 
+        setSecurityMigrationStatus(SecurityMigration.IN_PROGRESS)
+
         if (encryptedStorageKeys.length > 0) {
             // Get the wallet key
-            // TODO: Do we need to have a separate key for each wallet?
             const { walletKey } = await WalletEncryptionKeyHelper.get(password)
 
             // Get the storage keys
             const storageEncryptionKeys = await StorageEncryptionKeyHelper.get(password)
-            const reduxKey = storageEncryptionKeys.redux
-            // Get the encrypted state
+            const reduxKey = storageEncryptionKeys.redux //TODO.vas-{"images": "0xb7979fa8", "metadata": "0x2192f7fa"}
+
+            // Get the encrypted state for redux
             const persistedState = UserEncryptedStorage.getString("persist:root")
             if (!persistedState) return // TODO: handle this case somehow
-            const state = JSON.parse(persistedState)
+            const oldState = JSON.parse(persistedState)
 
-            // let newState = {}
-            let newWallets: string[] = []
+            let newState = {}
+            let walletState = {
+                devices: [],
+            } as { devices: Device[] }
 
             // Go over the state enreies and decrypt them
-            for (const key of Object.keys(state)) {
-                const encrypted = state[key] as string
+            for (const key in oldState) {
+                if (!oldState.hasOwnProperty(key)) return
+
+                const encrypted = oldState[key] as string
                 const toDecrypt = encrypted.replace(/['"]+/g, "").replace("0x", "")
                 const unencrypted = CryptoUtils_Legacy.decryptState(toDecrypt, reduxKey)
-                const parsedEntry = JSON.parse(unencrypted)
+                const parsedEntryInState = JSON.parse(unencrypted)
 
                 // Get wallets from unencrypted entries and decrypt them
-                if (Array.isArray(parsedEntry)) {
-                    if ("wallet" in parsedEntry[0] && "xPub" in parsedEntry[0]) {
-                        // loop on parsedEntry and decrypt each wallet
-                        for (const wallet of parsedEntry) {
-                            //  encrypt the wallets with the new encryption algorithm
+                if (key === "devices") {
+                    if ("wallet" in parsedEntryInState[0] && "xPub" in parsedEntryInState[0]) {
+                        // loop on parsedEntryInState for wallets
+                        for (const wallet of parsedEntryInState) {
+                            // and decrypt each wallet
                             const decryptedWallet: Wallet = await WalletEncryptionKeyHelper.decryptWallet(
                                 wallet.wallet,
                                 password ?? walletKey,
                             )
 
+                            //  encrypt each wallet with the new encryption algorithm
+                            // TODO - need salt
+                            let salt = "wfncr928hfc893hn0cf938"
+                            // TODO - need iv and to save to the keychain
+                            let iv = PasswordUtils.getIV() as Uint8Array
                             const walletEncrypted_V2 = await WalletEncryptionKeyHelper.encryptWallet(
                                 decryptedWallet,
                                 password,
+                                salt,
+                                iv,
                             )
 
-                            info(ERROR_EVENTS.SECURITY, "walletEncrypted_V2", walletEncrypted_V2)
-                            newWallets.push(walletEncrypted_V2)
-
-                            /*
-                                2. recreate the state by encrypting the rest of the parsedEntries
-                                3. need to do the same for the other storage entries (see encryptedStorageKeys)
-                                4. store the state in the new storage - UserEncryptedStorage_V2
-                                5. clear out the old storage - UserEncryptedStorage
-                               
-                            */
+                            wallet.wallet = walletEncrypted_V2
+                            wallet.isMigrated = true
+                            walletState.devices.push(wallet)
                         }
+                    }
+                } else {
+                    newState = {
+                        ...newState,
+                        [key]: encrypted,
                     }
                 }
             }
+
+            newState = {
+                ...newState,
+                devices: CryptoUtils.encryptState(walletState.devices, reduxKey),
+            }
+
+            // store the state in the new storage - UserEncryptedStorage_V2
+            UserEncryptedStorage_V2.set("persist:root_V2", JSON.stringify(newState))
+            setSecurityMigrationStatus(SecurityMigration.COMPLETED)
+            setReduxStorage({
+                mmkv: UserEncryptedStorage_V2,
+                encryptionKey: reduxKey,
+            })
+
+            // TODO 5. clear out the old storage - UserEncryptedStorage
+            Onboarding.prune(UserEncryptedStorage)
         }
     }, [])
 
@@ -276,9 +320,17 @@ export const ApplicationSecurityProvider = ({ children }: ApplicationSecurityCon
      */
     const intialiseApp = useCallback(
         async (_biometrics: BiometricState) => {
-            const encryptedStorageKeys = UserEncryptedStorage.getAllKeys()
+            const oldStorageKeys = UserEncryptedStorage.getAllKeys()
 
-            if (encryptedStorageKeys.length === 0) {
+            if (oldStorageKeys.length > 0) {
+                info(ERROR_EVENTS.SECURITY, "- - - - - - User has onboarded, migrating to new storage - - - - - - -")
+                setWalletStatus(WALLET_STATUS.MIGRATING)
+                return
+            }
+
+            const currentStorageKeys = UserEncryptedStorage_V2.getAllKeys()
+
+            if (currentStorageKeys.length === 0) {
                 info(ERROR_EVENTS.SECURITY, "No keys found in encrypted storage, user is onboarding")
 
                 await PreviousInstallation.clearOldStorage()
@@ -309,7 +361,7 @@ export const ApplicationSecurityProvider = ({ children }: ApplicationSecurityCon
             try {
                 Onboarding.migrateState({
                     onboardingStorage: OnboardingStorage,
-                    encryptedStorage: UserEncryptedStorage,
+                    encryptedStorage: UserEncryptedStorage_V2,
                     encryptionKey: encryptionKeys.redux,
                     onboardingKey,
                 })
@@ -317,17 +369,20 @@ export const ApplicationSecurityProvider = ({ children }: ApplicationSecurityCon
                 Onboarding.prune(OnboardingStorage)
 
                 setReduxStorage({
-                    mmkv: UserEncryptedStorage,
+                    mmkv: UserEncryptedStorage_V2,
                     encryptionKey: encryptionKeys.redux,
                 })
+
                 setImageStorage({
                     mmkv: ImageStorage,
                     encryptionKey: encryptionKeys.images,
                 })
+
                 setMetadataStorage({
                     mmkv: MetadataStorage,
                     encryptionKey: encryptionKeys.metadata,
                 })
+
                 setWalletStatus(WALLET_STATUS.UNLOCKED)
             } catch (e) {
                 error(ERROR_EVENTS.SECURITY, e)
@@ -335,7 +390,7 @@ export const ApplicationSecurityProvider = ({ children }: ApplicationSecurityCon
                 await resetApplication()
             }
         },
-        [updateSecurityType, resetApplication, onboardingKey],
+        [updateSecurityType, onboardingKey, resetApplication],
     )
 
     /**
@@ -414,6 +469,7 @@ export const ApplicationSecurityProvider = ({ children }: ApplicationSecurityCon
             triggerAutoLock,
             upgradeSecurityToV2,
             needsSecurityUpgradeToV2,
+            securityMigrationStatus: _securityMigrationStatus,
         }
     }, [
         reduxStorage,
@@ -428,6 +484,7 @@ export const ApplicationSecurityProvider = ({ children }: ApplicationSecurityCon
         lockApplication,
         upgradeSecurityToV2,
         needsSecurityUpgradeToV2,
+        _securityMigrationStatus,
     ])
 
     const { isConnected } = NetInfo.useNetInfo()
@@ -436,6 +493,10 @@ export const ApplicationSecurityProvider = ({ children }: ApplicationSecurityCon
         case WALLET_STATUS.NOT_INITIALISED:
             // App is initialising
             return <></>
+        case WALLET_STATUS.MIGRATING:
+            return (
+                <div>{"Show screen to user that a migration is required (Similar to StandaloneAppBlockedScreen)"}</div>
+            )
         case WALLET_STATUS.FIRST_TIME_ACCESS:
         case WALLET_STATUS.UNLOCKED:
             if (!value?.redux) return <></>

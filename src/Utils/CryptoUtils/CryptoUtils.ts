@@ -39,7 +39,7 @@ function shuffleArray<T>(arr: T[]) {
 }
 
 function encrypt<T>(data: T, encryptionKey: string, salt?: string, iv?: Uint8Array): string {
-    const key = PasswordUtils.hash(encryptionKey, salt)
+    const key = PasswordUtils.hash(encryptionKey, salt) // TODO - change this with scrypt from fastKeystoreDecrypt
     const _iv = iv ? iv : PasswordUtils.getIV()
     const cipher = crypto.createCipheriv("aes256", key, _iv)
     let ciph = cipher.update(JSON.stringify(data), "utf-8", "hex")
