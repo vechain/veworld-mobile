@@ -18,7 +18,7 @@ export const useSearchOrScanInput = (
 
     const [searchText, setSearchText] = useState("")
     const [errorMessage, setErrorMessage] = useState("")
-    const { _getName, _getAddress } = useVns()
+    const { getVnsName, getVnsAddress } = useVns()
 
     const {
         filteredContacts,
@@ -35,19 +35,19 @@ export const useSearchOrScanInput = (
             let vnsAddress = ""
 
             if (data.includes(".vet")) {
-                const _addy = await _getAddress(data)
+                const _addy = await getVnsAddress(data)
 
                 if (_addy === ZERO_ADDRESS) {
                     showWarningToast({ text1: LL.NOTIFICATION_DOMAIN_NAME_NOT_FOUND() })
                     return
                 }
 
-                vnsAddress = _addy
+                vnsAddress = _addy ?? ""
                 vnsName = data
             } else {
-                const { name, address: vnsAddy } = await _getName(data)
-                vnsName = name
-                vnsAddress = vnsAddy
+                const _name = await getVnsName(data)
+                vnsName = _name ?? ""
+                vnsAddress = data
             }
 
             setSearchText(isEmpty(vnsName) ? vnsAddress : vnsName)
@@ -59,7 +59,7 @@ export const useSearchOrScanInput = (
 
             if (addressExists) return navigateNext(vnsAddress)
         },
-        [LL, _getAddress, _getName, accountsAndContacts, navigateNext, setSelectedAddress],
+        [LL, getVnsAddress, getVnsName, accountsAndContacts, navigateNext, setSelectedAddress],
     )
 
     const { RenderCameraModal, handleOpenCamera } = useCameraBottomSheet({

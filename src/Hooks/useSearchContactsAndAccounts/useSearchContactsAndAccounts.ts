@@ -23,7 +23,7 @@ export const useSearchContactsAndAccounts = ({
     )
 
     // START - [DOMAINS] we need to add the domain only for searching purposes
-    const { _getName } = useVns()
+    const { getVnsName } = useVns()
     const [contactsWithDomain, setContactsWithDomain] = useState<Contact[]>([])
     const [accountsWithDomain, setAccountsWithDomain] = useState<AccountWithDevice[]>([])
     const [isLoading, setIsLoading] = useState(true)
@@ -35,13 +35,13 @@ export const useSearchContactsAndAccounts = ({
             firstLoad.current = false
             let _accounts: AccountWithDevice[] = []
             for (const acc of accounts) {
-                const { name } = await _getName(acc.address)
+                const name = await getVnsName(acc.address)
                 _accounts.push({ ...acc, domain: name })
             }
 
             let _contacts: Contact[] = []
             for (const acc of contacts) {
-                const { name } = await _getName(acc.address)
+                const name = await getVnsName(acc.address)
                 _contacts.push({ ...acc, domain: name })
             }
 
@@ -60,7 +60,7 @@ export const useSearchContactsAndAccounts = ({
         }
 
         firstLoad.current && init()
-    }, [_getName, accounts, contacts, isOfficialNetwork])
+    }, [getVnsName, accounts, contacts, isOfficialNetwork])
     // END - [DOMAINS]
 
     const filteredContacts = useMemo(() => {

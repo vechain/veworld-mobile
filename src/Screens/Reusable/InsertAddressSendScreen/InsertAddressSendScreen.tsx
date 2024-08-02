@@ -77,13 +77,13 @@ export const InsertAddressSendScreen = ({ route }: Props) => {
         isLoading,
     } = useSearchOrScanInput(navigateNext, setSelectedAddress, selectedAddress)
 
-    const { _getAddress } = useVns()
+    const { getVnsAddress } = useVns()
 
     //Whenever search changes, we check if it's a valid address or a domain name
     useEffect(() => {
         const init = async () => {
             if (searchText && searchText.includes(".vet")) {
-                const address = await _getAddress(searchText)
+                const address = await getVnsAddress(searchText)
 
                 if (address === ZERO_ADDRESS) {
                     showWarningToast({ text1: LL.NOTIFICATION_DOMAIN_NAME_NOT_FOUND() })
@@ -91,7 +91,7 @@ export const InsertAddressSendScreen = ({ route }: Props) => {
                 }
 
                 if (AddressUtils.isValid(address)) {
-                    setSelectedAddress(address)
+                    setSelectedAddress(address ?? "")
                     Keyboard.dismiss()
                 }
             } else {
@@ -102,7 +102,7 @@ export const InsertAddressSendScreen = ({ route }: Props) => {
             }
         }
         init()
-    }, [searchText, isAddressInContactsOrAccounts, _getAddress, LL])
+    }, [searchText, isAddressInContactsOrAccounts, getVnsAddress, LL])
 
     const onNext = useCallback(() => {
         if (isAddressInContactsOrAccounts && selectedAddress) {

@@ -51,8 +51,18 @@ export const ContactsSlice = createSlice({
                 state.contacts[contactExistsIndex].alias = alias
             }
         },
+        addDomainName: (state, action: PayloadAction<{ domain: string; address: string }[]>) => {
+            state.contacts.forEach(contact => {
+                const contactDomain = action.payload.find(vns =>
+                    AddressUtils.compareAddresses(vns.address, contact.address),
+                )
+                if (contactDomain) {
+                    contact.domain = contactDomain.domain
+                }
+            })
+        },
         resetContactsState: () => initialContactsState,
     },
 })
 
-export const { insertContact, deleteContact, updateContact, resetContactsState } = ContactsSlice.actions
+export const { insertContact, deleteContact, updateContact, addDomainName, resetContactsState } = ContactsSlice.actions

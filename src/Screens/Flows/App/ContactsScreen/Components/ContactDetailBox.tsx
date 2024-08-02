@@ -1,9 +1,9 @@
-import React, { memo } from "react"
+import React, { memo, useMemo } from "react"
 import { StyleSheet } from "react-native"
 import { useTheme } from "~Hooks"
 import { BaseCard, BaseIcon, BaseSpacer, BaseText, BaseView } from "~Components"
 import { Contact } from "~Model"
-import { selectVnsNameOrAddress, useAppSelector } from "~Storage/Redux"
+import { AddressUtils } from "~Utils"
 
 type Props = {
     contact: Contact
@@ -11,7 +11,9 @@ type Props = {
 
 export const ContactDetailBox: React.FC<Props> = memo(({ contact }) => {
     const theme = useTheme()
-    const nameOrAddressFrom = useAppSelector(state => selectVnsNameOrAddress(state, contact.address, [4, 6]))
+    const contactNameOrAddress = useMemo(() => {
+        return contact.domain ?? AddressUtils.humanAddress(contact.address, 4, 6)
+    }, [contact])
 
     return (
         <BaseCard testID={`${contact.alias}-contact-box`} style={styles.card}>
@@ -19,7 +21,7 @@ export const ContactDetailBox: React.FC<Props> = memo(({ contact }) => {
                 <BaseText typographyFont="button">{contact.alias}</BaseText>
                 <BaseSpacer height={4} />
                 <BaseText fontSize={10} typographyFont="smallCaptionRegular">
-                    {nameOrAddressFrom}
+                    {contactNameOrAddress}
                 </BaseText>
             </BaseView>
             <BaseView style={styles.rightSubContainer}>
