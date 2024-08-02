@@ -104,7 +104,7 @@ export const SwapScreen = () => {
             hasSafeArea={true}
             hasTopSafeAreaOnly={false}
             fixedHeader={
-                <BaseView px={24}>
+                <BaseView px={20}>
                     <BaseView flexDirection="row" justifyContent="space-between">
                         <BaseText typographyFont="title">{LL.SWAP_TITLE()}</BaseText>
 
@@ -118,7 +118,7 @@ export const SwapScreen = () => {
                 </BaseView>
             }
             fixedBody={
-                <BaseView flex={1} px={24}>
+                <BaseView flex={1} px={20}>
                     <BaseSpacer height={24} />
                     <BaseText typographyFont="body">{LL.SWAP_DESCRIPTION()}</BaseText>
                     <BaseSpacer height={24} />

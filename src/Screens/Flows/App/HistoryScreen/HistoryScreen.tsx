@@ -258,7 +258,6 @@ export const HistoryScreen = () => {
                             action={openSelectAccountBottomSheet}
                         />
                     </BaseView>
-                    <BaseSpacer height={16} />
                 </>
             }
             fixedBody={
