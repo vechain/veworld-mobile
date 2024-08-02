@@ -11,7 +11,7 @@ import {
 } from "~Components/Providers"
 
 import { useAppState, useBiometrics } from "~Hooks"
-import { StandaloneAppBlockedScreen, StandaloneLockScreen, InternetDownScreen } from "~Screens"
+import { InternetDownScreen, StandaloneAppBlockedScreen, StandaloneLockScreen } from "~Screens"
 import { AnimatedSplashScreen } from "../../../AnimatedSplashScreen"
 import Onboarding from "./Helpers/Onboarding"
 import NetInfo from "@react-native-community/netinfo"
@@ -19,6 +19,10 @@ import { ERROR_EVENTS } from "~Constants"
 
 const UserEncryptedStorage = new MMKV({
     id: "user_encrypted_storage",
+})
+
+const UserEncryptedStorage_V2 = new MMKV({
+    id: "user_encrypted_storage_v2",
 })
 
 const OnboardingStorage = new MMKV({
@@ -97,6 +101,7 @@ export const ApplicationSecurityProvider = ({ children }: ApplicationSecurityCon
         updateSecurityType(undefined)
 
         UserEncryptedStorage.clearAll()
+        UserEncryptedStorage_V2.clearAll()
         OnboardingStorage.clearAll()
 
         setReduxStorage({
@@ -142,7 +147,7 @@ export const ApplicationSecurityProvider = ({ children }: ApplicationSecurityCon
 
         if (keys) {
             setReduxStorage({
-                mmkv: UserEncryptedStorage,
+                mmkv: UserEncryptedStorage_V2,
                 encryptionKey: keys.redux,
             })
 
@@ -198,9 +203,16 @@ export const ApplicationSecurityProvider = ({ children }: ApplicationSecurityCon
      */
     const intialiseApp = useCallback(
         async (_biometrics: BiometricState) => {
-            const encryptedStorageKeys = UserEncryptedStorage.getAllKeys()
+            const oldStorageKeys = UserEncryptedStorage.getAllKeys()
 
-            if (encryptedStorageKeys.length === 0) {
+            if (oldStorageKeys.length > 0) {
+                setWalletStatus(WALLET_STATUS.MIGRATING)
+                return
+            }
+
+            const currentStorageKeys = UserEncryptedStorage_V2.getAllKeys()
+
+            if (currentStorageKeys.length === 0) {
                 info(ERROR_EVENTS.SECURITY, "No keys found in encrypted storage, user is onboarding")
 
                 await PreviousInstallation.clearOldStorage()
@@ -231,7 +243,7 @@ export const ApplicationSecurityProvider = ({ children }: ApplicationSecurityCon
             try {
                 Onboarding.migrateState({
                     onboardingStorage: OnboardingStorage,
-                    encryptedStorage: UserEncryptedStorage,
+                    encryptedStorage: UserEncryptedStorage_V2,
                     encryptionKey: encryptionKeys.redux,
                     onboardingKey,
                 })
@@ -239,7 +251,7 @@ export const ApplicationSecurityProvider = ({ children }: ApplicationSecurityCon
                 Onboarding.prune(OnboardingStorage)
 
                 setReduxStorage({
-                    mmkv: UserEncryptedStorage,
+                    mmkv: UserEncryptedStorage_V2,
                     encryptionKey: encryptionKeys.redux,
                 })
                 setImageStorage({
@@ -355,6 +367,8 @@ export const ApplicationSecurityProvider = ({ children }: ApplicationSecurityCon
             // App is initialising
             return <></>
         case WALLET_STATUS.FIRST_TIME_ACCESS:
+        case WALLET_STATUS.MIGRATING:
+            return <div>Show screen to user that a migration is required (Similar to StandaloneAppBlockedScreen)</div>
         case WALLET_STATUS.UNLOCKED:
             if (!value?.redux) return <></>
 
