@@ -3,7 +3,7 @@ appId: org.vechain.veworld.app
 env:
   WALLET_ADDRESS: "0x231E70Cf27A2c44Eb9C00a3B1d2F7507Ae791051"
 onFlowStart:
-  - runFlow: ../setup_reset/setupApp.yaml 
+  - runFlow: ../setup_reset/setupApp.yaml
 ---
 
 ## User adds a wallet to observe
@@ -21,7 +21,8 @@ onFlowStart:
 - tapOn:
     id: "observe-wallet-address-input"
 - inputText: ${WALLET_ADDRESS}
-- tapOn: "Observe Wallet"
+- tapOn:
+    id: "Layout_ScrollView"
 - tapOn:
     id: "observe-wallet-confirm-button"
 - tapOn:
@@ -44,7 +45,7 @@ onFlowStart:
       platform: Android
     commands:
       - swipe:
-         from: 
+         from:
           id: "DeviceBox"
           index: 1
          direction: "LEFT"
