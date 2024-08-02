@@ -1,8 +1,7 @@
 import { useQuery } from "@tanstack/react-query"
 import { setFeaturedDApps, useAppDispatch } from "~Storage/Redux"
 import { useEffect } from "react"
-import { DiscoveryDApp } from "~Constants"
-import { AppHubIndexUrl } from "~Screens/Flows/App/DiscoverScreen/constants"
+import { AppHubIndexUrl, DiscoveryDApp } from "~Constants"
 
 export const useFetchFeaturedDApps = () => {
     const dispatch = useAppDispatch()
