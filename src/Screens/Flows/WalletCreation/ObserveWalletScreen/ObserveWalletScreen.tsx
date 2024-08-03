@@ -40,7 +40,7 @@ export const ObserveWalletScreen = () => {
 
     const [inputValue, setInputValue] = useState("")
     const [underlyingAddress, setUnderlyingAddress] = useState("")
-    const { _getName, _getAddress, isLoading } = useVns()
+    const { getVnsName, getVnsAddress, isLoading } = useVns()
 
     const [error, setError] = useState<string | undefined>()
     const [_watchedAccount, setWatchedAccount] = useState<WatchedAccount | undefined>()
@@ -135,24 +135,24 @@ export const ObserveWalletScreen = () => {
             setInputValue(value)
 
             if (value.includes(".vet")) {
-                const address = await _getAddress(value)
+                const address = await getVnsAddress(value)
 
                 if (address === ZERO_ADDRESS) {
                     setError(LL.ERROR_COULD_NOT_FIND_ADDRESS_FOR_DOMAIN())
                     return
                 }
 
-                setUnderlyingAddress(address)
+                setUnderlyingAddress(address ?? "")
                 return
             }
 
             if (value.length === 42) {
-                const { name, address } = await _getName(value)
-                setUnderlyingAddress(address)
+                const name = await getVnsName(value)
+                setUnderlyingAddress(value)
                 setInputValue(name || value)
             }
         },
-        [LL, _getAddress, _getName],
+        [LL, getVnsAddress, getVnsName],
     )
 
     const onClearAddress = useCallback(() => {

@@ -60,10 +60,6 @@ export type VnsHook = {
     isLoading: boolean
     getVnsName: (address: string) => Promise<string | undefined>
     getVnsAddress: (name: string) => Promise<string | undefined>
-    // validateVnsAddress: (
-    //     name: string,
-    //     onSuccess?: ValidateVnsAddressOnSuccess,
-    // ) => Promise<string | boolean>
 }
 
 export const useVns = (props?: Vns): VnsHook => {
