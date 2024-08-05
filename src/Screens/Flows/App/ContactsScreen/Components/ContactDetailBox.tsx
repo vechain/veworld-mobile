@@ -12,7 +12,7 @@ type Props = {
 export const ContactDetailBox: React.FC<Props> = memo(({ contact }) => {
     const theme = useTheme()
     const contactNameOrAddress = useMemo(() => {
-        return contact.domain ?? AddressUtils.humanAddress(contact.address, 4, 6)
+        return contact.domain || AddressUtils.humanAddress(contact.address, 4, 6)
     }, [contact])
 
     return (

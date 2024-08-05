@@ -130,16 +130,15 @@ export const AccountSlice = createSlice({
                 state.accounts[accountExistsIndex].visible = !state.accounts[accountExistsIndex].visible
             }
         },
+        setVnsNames: (state, action: PayloadAction<{ name: string; address: string }[]>) => {
+            for (const acc of state.accounts) {
+                const vnsIdx = action.payload.findIndex(vns => AddressUtils.compareAddresses(acc.address, vns.address))
 
-        addVnsName: (state, action: PayloadAction<{ address: string; name: string }[]>) => {
-            state.accounts.forEach(account => {
-                const vnsName = action.payload.find(vns => AddressUtils.compareAddresses(vns.address, account.address))
-                if (vnsName) {
-                    account.vnsName = vnsName.name
+                if (vnsIdx !== -1) {
+                    acc.vnsName = action.payload[vnsIdx].name
                 }
-            })
+            }
         },
-
         resetAccountState: () => initialAccountState,
     },
 })
@@ -153,5 +152,5 @@ export const {
     setAccountVisibility,
     toggleAccountVisibility,
     resetAccountState,
-    addVnsName,
+    setVnsNames,
 } = AccountSlice.actions
