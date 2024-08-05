@@ -217,8 +217,7 @@ export const useFetchContactsVns = () => {
             queryKey: ["contact_vns_name", contact.address],
             queryFn: () => fetchContactsVns(contact.address),
             enabled: true,
-            // staleTime: 1000 * 60 * 60 * 24, // 24 hours in milliseconds,
-            staleTime: 24, // 24 hours in milliseconds,
+            staleTime: 1000 * 60 * 60 * 24, // 24 hours in milliseconds,
         })),
     })
 
