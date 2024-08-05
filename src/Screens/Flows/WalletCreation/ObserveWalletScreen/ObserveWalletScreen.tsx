@@ -169,6 +169,7 @@ export const ObserveWalletScreen = () => {
     return (
         <DismissKeyboardView>
             <Layout
+                safeAreaTestID="Observe_Wallet_Screen"
                 body={
                     <>
                         <BaseView justifyContent="space-between">
