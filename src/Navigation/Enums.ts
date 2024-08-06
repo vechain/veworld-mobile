@@ -11,6 +11,8 @@ export enum Routes {
     IMPORT_MNEMONIC = "Import_Mnemonic",
 
     BROWSER = "Browser",
+    HOME_STACK = "HomeStack",
+    DISCOVER_STACK = "DiscoverStack",
 
     USER_CREATE_PASSWORD = "User_Create_Password",
     APP_SECURITY = "App_Security",
@@ -54,6 +56,7 @@ export enum Routes {
     SETTINGS_MANAGE_CUSTOM_NODES = "Settings_Manage_custom_Nodes",
     CAMERA = "Camera",
     DISCOVER = "Discover",
+    HISTORY_STACK = "HistoryStack",
     DISCOVER_FEATURED = "Discover_Featured",
     DISCOVER_FAVOURITES = "Discover_Favourites",
     DISCOVER_BROWSER_HISTORY = "Discover_Browser_History",

@@ -1,12 +1,15 @@
 import { useQuery } from "@tanstack/react-query"
 import { setFeaturedDApps, useAppDispatch } from "~Storage/Redux"
-import { AppHubIndexUrl } from "../constants"
 import { useEffect } from "react"
-import { DiscoveryDApp } from "~Constants"
+import { AppHubIndexUrl, DiscoveryDApp } from "~Constants"
 
 export const useFetchFeaturedDApps = () => {
     const dispatch = useAppDispatch()
-    const { data: featuredDapps, isLoading } = useQuery<DiscoveryDApp[]>({
+    const {
+        data: featuredDapps,
+        isLoading,
+        isFetching,
+    } = useQuery<DiscoveryDApp[]>({
         queryKey: ["fetchFeaturedDApps"],
         queryFn: async () => {
             const response = await fetch(AppHubIndexUrl)
@@ -20,5 +23,5 @@ export const useFetchFeaturedDApps = () => {
         dispatch(setFeaturedDApps(veWorldDapps ?? []))
     }, [dispatch, featuredDapps])
 
-    return { isLoading }
+    return { isLoading, isFetching }
 }
