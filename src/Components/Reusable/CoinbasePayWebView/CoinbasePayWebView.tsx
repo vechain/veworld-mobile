@@ -5,7 +5,7 @@ import { StyleSheet } from "react-native"
 import "react-native-url-polyfill/auto"
 import { WebView, WebViewMessageEvent } from "react-native-webview"
 import { BaseActivityIndicator, BaseStatusBar, BaseView } from "~Components"
-import { AnalyticsEvent, ERROR_EVENTS } from "~Constants"
+import { AnalyticsEvent, ERROR_EVENTS, VET, VTHO } from "~Constants"
 import { useAnalyticTracking } from "~Hooks"
 import { Routes } from "~Navigation"
 import { ErrorMessageUtils, PlatformUtils, debug } from "~Utils"
@@ -30,12 +30,10 @@ export const CoinbasePayWebView = ({
     const coinbaseURL = useMemo(() => {
         const options: GenerateOnRampURLOptions = {
             appId: process.env.REACT_APP_COINBASE_APP_ID as string,
-            destinationWallets: [
-                {
-                    address: destinationAddress,
-                    blockchains: [VECHAIN_BLOCKCHAIN],
-                },
-            ],
+            addresses: {
+                [destinationAddress]: [VECHAIN_BLOCKCHAIN],
+            },
+            assets: [VET.symbol, VTHO.symbol],
             handlingRequestedUrls: true,
             presetCryptoAmount: currentAmount,
         }

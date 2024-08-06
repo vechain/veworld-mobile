@@ -1,10 +1,5 @@
 import { DiscoveryDApp } from "~Constants"
-import { AppHubUrl } from "./constants"
 import { URIUtils } from "~Utils"
-
-export const getAppHubIconUrl = (appId: string) => {
-    return `${AppHubUrl}/imgs/${appId}.png`
-}
 
 export const groupFavoritesByBaseUrl = (dapps: DiscoveryDApp[]) => {
     const groupedData = dapps.reduce((acc: { [key: string]: DiscoveryDApp[] }, item) => {
