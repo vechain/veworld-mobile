@@ -91,6 +91,7 @@ export const ContactManagementBottomSheet = React.forwardRef<BottomSheetModalMet
                             disabled={!isFormValid}
                             title={LL.COMMON_BTN_SAVE().toUpperCase()}
                             bgColor={theme.colors.primary}
+                            testID="save-contact-btn"
                         />
                     </BaseView>
                 </BaseView>
