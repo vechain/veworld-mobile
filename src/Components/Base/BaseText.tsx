@@ -7,7 +7,7 @@ import { BaseView } from "./BaseView"
 
 const { defaults: defaultTypography, ...otherTypography } = typography
 
-type Props = {
+export type BaseTextProps = {
     typographyFont?: keyof typeof defaultTypography
     fontSize?: keyof typeof otherTypography.fontSize
     fontWeight?: keyof typeof otherTypography.fontWeight
@@ -37,7 +37,7 @@ type Props = {
     justifyContainer?: "flex-start" | "flex-end" | "center" | "space-between" | "space-around" | "space-evenly"
 } & TextProps
 
-export const BaseText = (props: Props) => {
+export const BaseText = (props: BaseTextProps) => {
     const { style, typographyFont, fontSize, fontWeight, fontFamily, ...otherProps } = props
     const theme = useTheme()
 
