@@ -4,6 +4,7 @@ import { error, warn } from "~Utils/Logger"
 import { ERROR_EVENTS, VET, VTHO } from "~Constants"
 import CryptoUtils from "../CryptoUtils"
 import HexUtils from "../HexUtils"
+import { Vns } from "~Hooks"
 
 export const getAddressFromPrivateKey = (privateKey: string): string => {
     try {
@@ -159,4 +160,35 @@ export const coinbaseQRcodeAddress = (data: string): string => {
         return data.replace("vechain:", "")
     }
     return data
+}
+
+/**
+ * @param _address - the account address
+ * @param name - the VNS name
+ * @returns the VNS name of an address, if available, otherwise the address
+ */
+export const showAddressOrName = (
+    _address: string,
+    vnsData: Vns,
+    formatOptions?: {
+        ellipsed?: boolean
+        lengthBefore?: number
+        lengthAfter?: number
+    },
+): string => {
+    const { name: vnsName, address: vnsAddress } = vnsData
+    const { ellipsed, lengthBefore, lengthAfter } = formatOptions || {}
+
+    const parsedVnsName = vnsName && _address ? vnsName : undefined
+
+    const parsedVnsAddress = vnsAddress && _address ? vnsAddress : undefined
+
+    const humanAddr = () => {
+        const addr = parsedVnsAddress || _address
+        return ellipsed ? humanAddress(addr, lengthBefore, lengthAfter) : addr
+    }
+
+    const finalAddr = parsedVnsName || humanAddr()
+
+    return finalAddr
 }

@@ -2,7 +2,7 @@ import { useNavigation } from "@react-navigation/native"
 import { FlashList, ListRenderItem } from "@shopify/flash-list"
 import React, { useCallback, useMemo, useRef, useState } from "react"
 import { StyleSheet } from "react-native"
-import { useBottomSheetModal, useFetchContactsVns, useScrollableList, useTheme } from "~Hooks"
+import { useBottomSheetModal, useScrollableList, useTheme } from "~Hooks"
 import { AddressUtils } from "~Utils"
 import {
     BaseIcon,
@@ -25,11 +25,6 @@ import { Contact } from "~Model"
 
 export const ContactsScreen = () => {
     // [Start] Hooks
-
-    // Retrieve all the Vns for every known contact
-    // the VNS cache will be updated every 24 hours
-    useFetchContactsVns()
-
     const nav = useNavigation()
 
     const theme = useTheme()

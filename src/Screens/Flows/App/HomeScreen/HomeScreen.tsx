@@ -4,7 +4,7 @@ import {
     useAnalyticTracking,
     useBottomSheetModal,
     useCheckVersion,
-    useFetchAllVns,
+    usePrefetchAllVns,
     useMemoizedAnimation,
     useSetSelectedAccount,
     useTheme,
@@ -40,7 +40,7 @@ import { AccountUtils } from "~Utils"
 
 export const HomeScreen = () => {
     /* Pre Fetch all VNS names and addresses */
-    useFetchAllVns()
+    usePrefetchAllVns()
 
     const selectedCurrency = useAppSelector(selectCurrency)
     const track = useAnalyticTracking()

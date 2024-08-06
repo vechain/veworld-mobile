@@ -2,12 +2,12 @@ import React, { useCallback, useEffect, useMemo, useState } from "react"
 import { useNavigation } from "@react-navigation/native"
 import { NativeStackScreenProps } from "@react-navigation/native-stack"
 import { StyleSheet, Keyboard } from "react-native"
-import { useBottomSheetModal, useSearchOrScanInput, useTheme, useVns, ZERO_ADDRESS } from "~Hooks"
+import { useBottomSheetModal, useSearchOrScanInput, useVns, ZERO_ADDRESS } from "~Hooks"
 import { AddressUtils } from "~Utils"
 import {
     AccountCard,
     BaseAccordion,
-    BaseSkeleton,
+    // BaseSkeleton,
     BaseSpacer,
     BaseText,
     BaseView,
@@ -30,7 +30,7 @@ export const InsertAddressSendScreen = ({ route }: Props) => {
     const { LL } = useI18nContext()
     const [selectedAddress, setSelectedAddress] = useState("")
     const nav = useNavigation()
-    const theme = useTheme()
+    // const theme = useTheme()
 
     const {
         ref: createContactBottomSheetRef,
@@ -74,7 +74,6 @@ export const InsertAddressSendScreen = ({ route }: Props) => {
         filteredContacts,
         filteredAccounts,
         isAddressInContactsOrAccounts,
-        isLoading,
     } = useSearchOrScanInput(navigateNext, setSelectedAddress, selectedAddress)
 
     const { getVnsAddress } = useVns()
@@ -203,53 +202,12 @@ export const InsertAddressSendScreen = ({ route }: Props) => {
                         />
                     )}
 
-                    {isLoading ? (
-                        <BaseView>
-                            <BaseView flexDirection="row" justifyContent="space-between" alignItems="center" mb={10}>
-                                <BaseSkeleton
-                                    animationDirection="horizontalLeft"
-                                    boneColor={theme.colors.skeletonBoneColor}
-                                    highlightColor={theme.colors.skeletonHighlightColor}
-                                    height={24}
-                                    width={90}
-                                />
-                                <BaseSkeleton
-                                    animationDirection="horizontalLeft"
-                                    boneColor={theme.colors.skeletonBoneColor}
-                                    highlightColor={theme.colors.skeletonHighlightColor}
-                                    height={24}
-                                    width={30}
-                                />
-                            </BaseView>
-                            {[0, 1, 2, 3].map(a => {
-                                return (
-                                    <BaseView
-                                        key={a}
-                                        flexDirection="row"
-                                        alignItems="center"
-                                        borderRadius={16}
-                                        mb={10}
-                                        overflow="hidden">
-                                        <BaseSkeleton
-                                            containerStyle={baseStyles.skeletonContact}
-                                            animationDirection="horizontalLeft"
-                                            boneColor={theme.colors.skeletonBoneColor}
-                                            highlightColor={theme.colors.skeletonHighlightColor}
-                                            height={64}
-                                            width={"100%"}
-                                        />
-                                    </BaseView>
-                                )
-                            })}
-                        </BaseView>
-                    ) : (
-                        isEmpty && (
-                            <BaseView w={100} alignItems="center">
-                                <BaseText typographyFont="body">{LL.SEND_NO_CONTACTS_OR_ACCOUNTS_FOUND()}</BaseText>
+                    {isEmpty && (
+                        <BaseView w={100} alignItems="center">
+                            <BaseText typographyFont="body">{LL.SEND_NO_CONTACTS_OR_ACCOUNTS_FOUND()}</BaseText>
 
-                                <BaseText typographyFont="body">{LL.SEND_PLEASE_TYPE_ADDRESS()}</BaseText>
-                            </BaseView>
-                        )
+                            <BaseText typographyFont="body">{LL.SEND_PLEASE_TYPE_ADDRESS()}</BaseText>
+                        </BaseView>
                     )}
                 </BaseView>
             }

@@ -36,7 +36,7 @@ export const useSearchContactsAndAccounts = ({
             let _accounts: AccountWithDevice[] = []
             for (const acc of accounts) {
                 const name = await getVnsName(acc.address)
-                _accounts.push({ ...acc, domain: name })
+                _accounts.push({ ...acc, vnsName: name })
             }
 
             let _contacts: Contact[] = []

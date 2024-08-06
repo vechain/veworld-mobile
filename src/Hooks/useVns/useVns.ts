@@ -1,16 +1,9 @@
 import { useThor } from "~Components"
-import { useCallback, useEffect, useMemo } from "react"
-import {
-    addDomainName,
-    setVnsNames,
-    selectAccounts,
-    selectContacts,
-    selectSelectedNetwork,
-    useAppDispatch,
-    useAppSelector,
-} from "~Storage/Redux"
-import { useQueries, useQuery } from "@tanstack/react-query"
+import { useCallback, useMemo } from "react"
+import { selectAccounts, selectContacts, selectSelectedNetwork, useAppSelector } from "~Storage/Redux"
+import { useQuery, useQueryClient } from "@tanstack/react-query"
 import { NETWORK_TYPE } from "~Model"
+import { abi } from "thor-devkit"
 
 export const ZERO_ADDRESS = "0x0000000000000000000000000000000000000000"
 
@@ -69,7 +62,7 @@ export const useVns = (props?: Vns): VnsHook => {
 
     const fetchVns = useCallback(async () => {
         const nameRes = await getVnsName(thor, network.type, address)
-        const vnsName = nameRes ?? name
+        const vnsName = nameRes || name
 
         const addrRes = await getVnsAddresse(thor, network.type, vnsName)
         const vnsAddr = addrRes || address
@@ -84,24 +77,25 @@ export const useVns = (props?: Vns): VnsHook => {
     }, [address, name, network.type])
 
     const queryRes = useQuery<Vns>({
-        queryKey: [name, address, network],
+        queryKey: [name, address, network.genesis.id],
         queryFn: () => fetchVns(),
         enabled: !isQueryDisabled,
-        staleTime: 1000 * 60 * 60 * 24, // 24 hours in milliseconds
+        staleTime: 1000 * 60,
     })
 
-    const vnsData = useMemo(() => queryRes?.data, [queryRes.data])
-
     return {
-        name: vnsData?.name || name || "",
-        address: vnsData?.address || address || "",
+        name: queryRes.data?.name || name || "",
+        address: queryRes.data?.address || address || "",
         isLoading: queryRes?.isLoading,
         getVnsName: addr => getVnsName(thor, network.type, addr),
         getVnsAddress: n => getVnsAddresse(thor, network.type, n),
     }
 }
 
-const ABI = {
+const ABI: {
+    getAddresses: abi.Function.Definition
+    getNames: abi.Function.Definition
+} = {
     getAddresses: {
         inputs: [
             {
@@ -121,7 +115,6 @@ const ABI = {
         stateMutability: "view",
         type: "function",
     },
-
     getNames: {
         inputs: [
             {
@@ -143,100 +136,60 @@ const ABI = {
     },
 }
 
-//
-//
-//
-//
-//
-//
-//
+const namesABi = new abi.Function(ABI.getNames)
 
-export const useFetchAllVns = () => {
+const getAllAccoutsNameClauses = (addresses: string[], networkType: NETWORK_TYPE) => {
+    const NETWORK_RESOLVER = VNS_RESOLVER[networkType]
+    const clauses: Connex.VM.Clause[] = addresses.map(addr => {
+        return {
+            to: NETWORK_RESOLVER ?? "",
+            value: 0,
+            data: namesABi.encode([addr]),
+        }
+    })
+
+    return clauses
+}
+
+export const usePrefetchAllVns = () => {
     const thor = useThor()
     const network = useAppSelector(selectSelectedNetwork)
     const accounts = useAppSelector(selectAccounts)
-    const dispatch = useAppDispatch()
-
-    const fetchData = useCallback(
-        async (address: string) => {
-            const vnsName = await getVnsName(thor, network.type, address)
-            // eslint-disable-next-line no-console
-            console.log("FETCH VNS", vnsName)
-            return { name: vnsName, address: address }
-        },
-        [thor, network.type],
-    )
+    const contacts = useAppSelector(selectContacts)
+    const queryClient = useQueryClient()
 
     const isQueryDisabled = useMemo(() => {
         const onWrongNetwork = network.type === NETWORK_TYPE.SOLO || network.type === NETWORK_TYPE.OTHER
-        return onWrongNetwork
-    }, [network.type])
+        return onWrongNetwork || !thor
+    }, [network.type, thor])
 
-    const vnsResults = useQueries({
-        queries: accounts.map(acc => ({
-            queryKey: ["vns_names", network, acc.address],
-            queryFn: () => fetchData(acc.address),
-            enabled: !isQueryDisabled,
-            staleTime: 1000 * 60 * 60 * 24, // 24 hours in milliseconds
-        })),
+    const addresses = useMemo(
+        () => [...accounts.map(acc => acc.address), ...contacts.map(ctc => ctc.address)],
+        [accounts, contacts],
+    )
+
+    const vnsResults = useQuery({
+        queryKey: ["vns_names", network.genesis.id],
+        queryFn: async () => {
+            const clauses = getAllAccoutsNameClauses(addresses, network.type)
+
+            const res = await thor.explain(clauses).execute()
+
+            const states = res.map((r, idx) => {
+                const decoded = namesABi.decode(r.data)
+                const address = accounts[idx].address
+                const vnsName = decoded.names[0]
+                const state = { name: vnsName, address }
+
+                queryClient.setQueryData([vnsName, address, network.genesis.id], state)
+
+                return state
+            })
+            return states
+        },
+        enabled: !isQueryDisabled,
+        staleTime: 1000 * 60,
     })
-
-    useEffect(() => {
-        if (vnsResults) {
-            let resultsWithNames = []
-            for (const result of vnsResults) {
-                if (result.data) {
-                    resultsWithNames.push(result.data)
-                }
-            }
-
-            dispatch(setVnsNames(resultsWithNames))
-        }
-    }, [accounts.length, dispatch, vnsResults])
 
     return vnsResults
-}
-
-export const useFetchContactsVns = () => {
-    const thor = useThor()
-    const network = useAppSelector(selectSelectedNetwork)
-    const contacts = useAppSelector(selectContacts)
-    const dispatch = useAppDispatch()
-
-    const fetchContactsVns = useCallback(
-        async (address: string) => {
-            const name = await getVnsName(thor, network.type, address)
-            return { domain: name, address }
-        },
-        [thor, network.type],
-    )
-
-    const isQueryDisabled = useMemo(() => {
-        const onWrongNetwork = network.type === NETWORK_TYPE.SOLO || network.type === NETWORK_TYPE.OTHER
-        return onWrongNetwork
-    }, [network.type])
-
-    const contactVnsResults = useQueries({
-        queries: contacts.map(contact => ({
-            queryKey: ["contact_vns_name", network, contact.address],
-            queryFn: () => fetchContactsVns(contact.address),
-            enabled: !isQueryDisabled,
-            staleTime: 1000 * 60 * 60 * 24, // 24 hours in milliseconds,
-        })),
-    })
-
-    useEffect(() => {
-        if (contactVnsResults) {
-            let contactWithNames = []
-            for (const result of contactVnsResults) {
-                if (result.data) {
-                    contactWithNames.push(result.data)
-                }
-            }
-
-            dispatch(addDomainName(contactWithNames))
-        }
-    }, [contactVnsResults, dispatch])
-
-    return contactVnsResults
 }
