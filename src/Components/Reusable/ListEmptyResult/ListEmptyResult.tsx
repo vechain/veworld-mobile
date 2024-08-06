@@ -1,15 +1,15 @@
-import { BaseButton, BaseIcon, BaseSpacer, BaseText, BaseView } from "~Components"
 import React from "react"
+import { BaseButton, BaseIcon, BaseSpacer, BaseText, BaseView } from "~Components"
 import { useTheme } from "~Hooks"
 
-export type EmptyResultsProps = {
+export type ListEmptyResultsProps = {
     onClick?: () => void
     title?: string
     subtitle: string
     icon: string
 }
 
-export const EmptyResults = ({ onClick, title, subtitle, icon }: EmptyResultsProps) => {
+export const ListEmptyResults = ({ onClick, title, subtitle, icon }: ListEmptyResultsProps) => {
     const theme = useTheme()
     return (
         <BaseView justifyContent="center" alignItems="center" flex={1}>
