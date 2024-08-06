@@ -2175,6 +2175,23 @@ type RootTranslation = {
 	 */
 	NFT_ALERT_IMAGE_SAVED_MSG: string
 	/**
+	 * S​w​a​p​ ​t​o​k​e​n​s
+	 */
+	SWAP_TITLE: string
+	/**
+	 * U​s​i​n​g​ ​V​e​c​h​a​i​n​ ​d​A​p​p​s​ ​y​o​u​ ​c​a​n​ ​s​w​a​p​ ​t​h​e​ ​t​o​k​e​n​s​ ​o​n​ ​y​o​u​r​ ​w​a​l​l​e​t​ ​d​i​r​e​c​t​l​y​ ​f​o​r​ ​d​i​f​f​e​r​e​n​t​ ​o​n​e​s​ ​w​i​t​h​o​u​t​ ​t​h​e​ ​h​a​v​i​n​g​ ​t​o​ ​b​u​y​ ​a​n​d​ ​s​e​l​l​.
+	 */
+	SWAP_DESCRIPTION: string
+	/**
+	 * {​t​o​t​a​l​}​ ​d​A​p​p​s
+	 * @param {number} total
+	 */
+	SWAP_DAPP_NUMBER: RequiredParams<'total'>
+	/**
+	 * N​o​ ​d​A​p​p​s​ ​f​o​u​n​d
+	 */
+	SWAP_EMPTY_LIST: string
+	/**
 	 * L​i​g​h​t
 	 */
 	LIGHT_THEME: string
@@ -5242,6 +5259,22 @@ Try reconnect your device to the internet.
 	 * You have successfully saved the NFT image to your photo album
 	 */
 	NFT_ALERT_IMAGE_SAVED_MSG: () => LocalizedString
+	/**
+	 * Swap tokens
+	 */
+	SWAP_TITLE: () => LocalizedString
+	/**
+	 * Using Vechain dApps you can swap the tokens on your wallet directly for different ones without the having to buy and sell.
+	 */
+	SWAP_DESCRIPTION: () => LocalizedString
+	/**
+	 * {total} dApps
+	 */
+	SWAP_DAPP_NUMBER: (arg: { total: number }) => LocalizedString
+	/**
+	 * No dApps found
+	 */
+	SWAP_EMPTY_LIST: () => LocalizedString
 	/**
 	 * Light
 	 */

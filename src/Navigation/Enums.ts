@@ -10,6 +10,8 @@ export enum Routes {
     CONFIRM_MNEMONIC = "Confirm_Mnemonic",
     IMPORT_MNEMONIC = "Import_Mnemonic",
     BROWSER = "Browser",
+    HOME_STACK = "HomeStack",
+    DISCOVER_STACK = "DiscoverStack",
 
     IMPORT_FROM_CLOUD = "Import_From_Cloud",
     ICLOUD_MNEMONIC_BACKUP = "Icloud_Mnemonic_Backup",
@@ -55,6 +57,7 @@ export enum Routes {
     SETTINGS_MANAGE_CUSTOM_NODES = "Settings_Manage_custom_Nodes",
     CAMERA = "Camera",
     DISCOVER = "Discover",
+    HISTORY_STACK = "HistoryStack",
     DISCOVER_FEATURED = "Discover_Featured",
     DISCOVER_FAVOURITES = "Discover_Favourites",
     DISCOVER_BROWSER_HISTORY = "Discover_Browser_History",
