@@ -1,5 +1,5 @@
 import React, { memo, useCallback, useMemo, useState } from "react"
-import { useAnalyticTracking } from "~Hooks"
+import { useAnalyticTracking, useOnDigitPress } from "~Hooks"
 import {
     BaseSafeArea,
     BaseSpacer,
@@ -11,7 +11,6 @@ import {
 } from "~Components"
 import { useI18nContext } from "~i18n"
 import { LOCKSCREEN_SCENARIO } from "./Enums"
-import { useOnDigitPress } from "./useOnDigitPress"
 import { PinVerificationError, PinVerificationErrorType } from "~Model"
 import { AnalyticsEvent, isSmallScreen } from "~Constants"
 

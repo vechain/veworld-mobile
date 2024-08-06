@@ -1,85 +1,99 @@
 import React, { useCallback, useState } from "react"
-import {
-    BaseButton,
-    BaseSafeArea,
-    BaseSpacer,
-    BaseText,
-    BaseView,
-    RequireUserPassword,
-    SelectDeviceBottomSheet,
-    useApplicationSecurity,
-} from "~Components"
-import { useBackHandler, useBottomSheetModal, useDisclosure, useWalletSecurity } from "~Hooks"
-import { useBackupMnemonic } from "../PrivacyScreen/Hooks/useBackupMnemonic"
-import { BackHandlerEvent, LocalDevice } from "~Model"
-import { selectLocalDevices, useAppSelector } from "~Storage/Redux"
-import { BackupWarningBottomSheet } from "../PrivacyScreen/Components/BackupWarningBottomSheet"
-import { useNavigation } from "@react-navigation/native"
-import { Routes } from "~Navigation"
+import { BaseButton, BaseSpacer, BaseText, BaseView, MigrationToSecurity_v2 } from "~Components"
+import { useBackHandler, useDisclosure } from "~Hooks"
+import { BackHandlerEvent, SecurityLevelType, Wallet } from "~Model"
+import { SafeAreaView } from "react-native-safe-area-context"
+import { COLORS } from "~Constants"
+import { BaseModalWithChildren, LockScreen, MnemonicBackup, WalletsList } from "./Standalone.components"
+import { LOCKSCREEN_SCENARIO } from "~Screens/LockScreen/Enums"
+import { useWalletSecurity } from "./Helpers.standalone"
 
-const PasswordPromptStatus = {
-    INIT: "INIT",
-    BACKUP_MNEMONIC: "BACKUP_MNEMONIC",
-    UPGRADE_SECURITY: "UPGRADE_SECURITY",
-} as const
+const { getMnemonicsFromStorage } = MigrationToSecurity_v2
 
-type PasswordPromptStatus = keyof typeof PasswordPromptStatus
-
-export const SecurityUpgrade_V2 = () => {
-    const nav = useNavigation()
+export const SecurityUpgrade_V2 = ({
+    oldPersistedState,
+    securityType,
+    upgradeSecurityToV2,
+}: {
+    oldPersistedState?: string
+    securityType: SecurityLevelType
+    upgradeSecurityToV2: (password?: string) => void
+}) => {
     useBackHandler(BackHandlerEvent.BLOCK)
 
-    const [ppStatus, setPPStatus] = useState<PasswordPromptStatus>(PasswordPromptStatus.INIT)
+    const [wallets, setWallets] = useState<Wallet[] | []>([])
+    const [password, setPassword] = useState<string | undefined>()
 
-    const { isWalletSecurityBiometrics } = useWalletSecurity()
-    const { upgradeSecurityToV2 } = useApplicationSecurity()
-    const devices = useAppSelector(selectLocalDevices) as LocalDevice[]
+    const { isWalletSecurityBiometrics, isWalletSecurityPassword, isWalletSecurityNone } =
+        useWalletSecurity(securityType)
+
     const { isOpen: isPasswordPromptOpen, onOpen: openPasswordPrompt, onClose: closePasswordPrompt } = useDisclosure()
+    const { isOpen: isWalletListOpen, onOpen: onOpenWalletList, onClose: onCloseWalletList } = useDisclosure()
+    const { isOpen: isWalletBackupOpen, onOpen: onOpenWalletBackup, onClose: onCloseWalletBackup } = useDisclosure()
 
-    const {
-        ref: walletMgmtBottomSheetRef,
-        openWithDelay: openWalletMgmtSheetWithDelay,
-        onClose: closeWalletMgmtSheet,
-    } = useBottomSheetModal()
+    const getWalletsWithUserAuthentication = useCallback(async () => {
+        if (isWalletSecurityNone) throw new Error("No security set")
+        if (isWalletSecurityPassword) openPasswordPrompt()
 
-    const {
-        ref: backupWarningSheetRef,
-        onOpen: openBackupWarningSheet,
-        onClose: closeBackupWarningSheet,
-    } = useBottomSheetModal()
+        if (oldPersistedState && isWalletSecurityBiometrics) {
+            const _wallets = await getMnemonicsFromStorage(oldPersistedState)
+            if (!_wallets) return
+            let validWallets: Wallet[] = []
+            for (let wallet of _wallets) {
+                if (wallet.mnemonic) validWallets.push(wallet)
+            }
+            setWallets(_wallets ?? [])
+            if (_wallets.length > 1) {
+                onOpenWalletList()
+            } else {
+                onOpenWalletBackup()
+            }
+        }
+    }, [
+        isWalletSecurityNone,
+        isWalletSecurityPassword,
+        openPasswordPrompt,
+        oldPersistedState,
+        isWalletSecurityBiometrics,
+        onOpenWalletList,
+        onOpenWalletBackup,
+    ])
 
-    const openBackupPhraseSheetWithDelay = useCallback(
-        (delay: number, mnemonicArray: string[], deviceToBackup: LocalDevice) => {
-            if (!mnemonicArray.length) return
-
-            setTimeout(() => {
-                nav.navigate(Routes.ICLOUD_MNEMONIC_BACKUP, { mnemonicArray, deviceToBackup })
-            }, delay)
+    const onPasswordSuccess = useCallback(
+        async (_password: string) => {
+            if (oldPersistedState) {
+                closePasswordPrompt()
+                setPassword(_password)
+                const _wallets = await getMnemonicsFromStorage(oldPersistedState, _password)
+                if (!_wallets) return
+                let validWallets: Wallet[] = []
+                for (let wallet of _wallets) {
+                    if (wallet.mnemonic) validWallets.push(wallet)
+                }
+                setWallets(_wallets ?? [])
+                if (_wallets.length > 1) {
+                    onOpenWalletList()
+                } else {
+                    onOpenWalletBackup()
+                }
+            }
         },
-        [nav],
+        [oldPersistedState, closePasswordPrompt, onOpenWalletList, onOpenWalletBackup],
     )
 
-    const { onPasswordSuccess, checkSecurityBeforeOpening, handleOnSelectedWallet } = useBackupMnemonic({
-        closePasswordPrompt,
-        openBackupPhraseSheetWithDelay,
-        openWalletMgmtSheetWithDelay,
-        openPasswordPrompt,
-        closeWalletMgmtSheet,
-        devices,
-        isWalletSecurityBiometrics,
-    })
-
-    const onBackupInitiated = useCallback(
-        (password: string) => {
-            closePasswordPrompt()
-            upgradeSecurityToV2(password)
+    const [selectedWalletToBackup, setSelectedWalletToBackup] = useState<Wallet | null>(null)
+    const handleOnSelectedWallet = useCallback(
+        (selectedWallet: Wallet) => {
+            onCloseWalletList()
+            setSelectedWalletToBackup(selectedWallet)
+            onOpenWalletBackup()
         },
-        [closePasswordPrompt, upgradeSecurityToV2],
+        [onOpenWalletBackup, onCloseWalletList],
     )
 
     return (
-        <BaseSafeArea grow={1}>
-            <BaseView justifyContent="space-between" alignItems="center" h={100}>
+        <SafeAreaView style={{ backgroundColor: COLORS.LIGHT_GRAY }}>
+            <BaseView justifyContent="space-between" alignItems="center" h={100} bg={COLORS.LIGHT_GRAY}>
                 <BaseView alignItems="center">
                     <BaseText>{"SecurityUpgrade_V2"}</BaseText>
 
@@ -89,46 +103,29 @@ export const SecurityUpgrade_V2 = () => {
 
                     <BaseSpacer height={69} />
 
-                    <BaseButton
-                        title="BACKUP NOW"
-                        action={() => {
-                            setPPStatus(PasswordPromptStatus.BACKUP_MNEMONIC)
-                            checkSecurityBeforeOpening()
-                        }}
-                    />
+                    <BaseButton title="BACKUP NOW" action={getWalletsWithUserAuthentication} />
                 </BaseView>
 
                 <BaseView pb={62}>
-                    <BaseButton title="Upgrade Security" action={openBackupWarningSheet} />
+                    <BaseButton title="Upgrade Security" action={() => upgradeSecurityToV2(password)} />
                 </BaseView>
             </BaseView>
 
-            <SelectDeviceBottomSheet<LocalDevice>
-                ref={walletMgmtBottomSheetRef}
-                onClose={handleOnSelectedWallet}
-                devices={devices}
-            />
+            <BaseModalWithChildren isOpen={isWalletListOpen} onClose={onCloseWalletList}>
+                <WalletsList wallets={wallets} onSelected={handleOnSelectedWallet} />
+            </BaseModalWithChildren>
 
-            <RequireUserPassword
-                isOpen={isPasswordPromptOpen}
-                onClose={closePasswordPrompt}
-                onSuccess={(password: string) =>
-                    ppStatus === PasswordPromptStatus.UPGRADE_SECURITY
-                        ? onBackupInitiated(password)
-                        : onPasswordSuccess(password)
-                }
-            />
+            <BaseModalWithChildren isOpen={isWalletBackupOpen} onClose={onCloseWalletBackup}>
+                <MnemonicBackup wallet={selectedWalletToBackup} onClose={onCloseWalletBackup} />
+            </BaseModalWithChildren>
 
-            <BackupWarningBottomSheet
-                ref={backupWarningSheetRef}
-                onConfirm={() => {
-                    setPPStatus(PasswordPromptStatus.UPGRADE_SECURITY)
-                    // TODO - Vas -- what to do if the user is with faceID?
-                    openPasswordPrompt()
-                }}
-                onClose={closeBackupWarningSheet}
-                isUpgradeSecurity
-            />
-        </BaseSafeArea>
+            <BaseModalWithChildren isOpen={isPasswordPromptOpen} onClose={closePasswordPrompt}>
+                <LockScreen
+                    onSuccess={onPasswordSuccess}
+                    scenario={LOCKSCREEN_SCENARIO.UNLOCK_WALLET}
+                    isValidatePassword={true}
+                />
+            </BaseModalWithChildren>
+        </SafeAreaView>
     )
 }

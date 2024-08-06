@@ -14,7 +14,10 @@ export const useCloudKit = () => {
     const [isWalletBackedUp, setIsWalletBackedUp] = useState(false)
     const [isLoading, setIsLoading] = useState(false)
 
-    const getCloudKitAvailability = useCallback(async () => await CloudKitManager.checkCloudKitAvailability(), [])
+    const getCloudKitAvailability = useCallback(
+        async () => await CloudKitManager.checkCloudKitAvailability().then().catch(),
+        [],
+    )
 
     const deleteWallet = useCallback(async (_rootAddress: string) => {
         setIsLoading(true)

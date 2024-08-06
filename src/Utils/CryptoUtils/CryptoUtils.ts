@@ -1,7 +1,7 @@
 import { HDNode, Keystore, mnemonic as Mnemonic } from "thor-devkit"
 import crypto from "react-native-quick-crypto"
+import scrypt from "react-native-scrypt"
 import { XPub } from "~Model/Crypto"
-import PasswordUtils from "../PasswordUtils"
 import stringify from "json-stringify-safe"
 import { error } from "~Utils/Logger"
 import { IMPORT_TYPE } from "~Model"
@@ -38,19 +38,37 @@ function shuffleArray<T>(arr: T[]) {
         .map(({ value }) => value)
 }
 
-function encrypt<T>(data: T, encryptionKey: string, salt?: string, iv?: Uint8Array): string {
-    const key = PasswordUtils.hash(encryptionKey, salt) // TODO - change this with scrypt from fastKeystoreDecrypt
-    const _iv = iv ? iv : PasswordUtils.getIV()
-    const cipher = crypto.createCipheriv("aes256", key, _iv)
+async function encrypt<T>(data: T, encryptionKey: string, salt: string, iv: Uint8Array): Promise<string> {
+    let _N = 16384
+    let r = 8
+    let p = 1
+
+    const key = await scrypt(Buffer.from(encryptionKey).toString("hex"), salt, _N, r, p, 32, "hex")
+
+    const trimmedKey = key.substring(0, 32)
+    if (Buffer.from(key, "hex").length !== 32) {
+        throw new Error("Key is NOT 32 bytes")
+    }
+
+    const cipher = crypto.createCipheriv("aes-256-cbc", trimmedKey, iv)
     let ciph = cipher.update(JSON.stringify(data), "utf-8", "hex")
     ciph += cipher.final("hex")
     return ciph as string
 }
 
-function decrypt<T>(data: string, encryptionKey: string, salt?: string, iv?: Uint8Array): T {
-    const key = PasswordUtils.hash(encryptionKey, salt)
-    const _iv = iv ? iv : PasswordUtils.getIV()
-    const decipher = crypto.createDecipheriv("aes256", key, _iv)
+async function decrypt<T>(data: string, encryptionKey: string, salt: string, iv: Uint8Array): Promise<T> {
+    let _N = 16384
+    let r = 8
+    let p = 1
+
+    const key = await scrypt(Buffer.from(encryptionKey).toString("hex"), salt, _N, r, p, 32, "hex")
+
+    const trimmedKey = key.substring(0, 32)
+    if (Buffer.from(key, "hex").length !== 32) {
+        throw new Error("Key is NOT 32 bytes")
+    }
+
+    const decipher = crypto.createDecipheriv("aes256", trimmedKey, iv)
     let txt = decipher.update(data, "hex", "utf-8")
     txt += decipher.final("utf-8")
     let txtToString = txt.toString()

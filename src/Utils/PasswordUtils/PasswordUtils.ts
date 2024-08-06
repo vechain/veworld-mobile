@@ -12,7 +12,6 @@ const hash = (encryptionKey: string, salt?: string) => {
 
 const hashWithSalt = (password: string, salt: string): string => {
     const passwordHash = blake2b256(password).toString()
-
     return blake2b256(passwordHash.concat(salt)).toString("hex").substring(0, 32)
 }
 

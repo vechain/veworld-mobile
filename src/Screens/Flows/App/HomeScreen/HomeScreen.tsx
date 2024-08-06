@@ -6,7 +6,6 @@ import {
     useCheckVersion,
     useFetchAllVns,
     useMemoizedAnimation,
-    useSecurityUpgrade_V2,
     useSetSelectedAccount,
     useTheme,
 } from "~Hooks"
@@ -40,9 +39,6 @@ import { AnalyticsEvent } from "~Constants"
 import { AccountUtils } from "~Utils"
 
 export const HomeScreen = () => {
-    /* Check for security upgrade */
-    useSecurityUpgrade_V2()
-
     /* Pre Fetch all VNS names and addresses */
     useFetchAllVns()
 

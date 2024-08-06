@@ -1,6 +1,6 @@
 import { StorageEncryptionKeys } from "~Components/Providers/EncryptedStorageProvider/Model"
 import { Keychain } from "~Storage"
-import { CryptoUtils, HexUtils } from "~Utils"
+import { CryptoUtils, HexUtils, PasswordUtils } from "~Utils"
 import SaltHelper from "./SaltHelper"
 import { ACCESS_CONTROL, Options } from "react-native-keychain"
 
@@ -18,17 +18,24 @@ const get = async (pinCode?: string): Promise<StorageEncryptionKeys> => {
     if (!keys) throw new Error("StorageEncryptionKeyHelper -> get: No key found")
 
     if (pinCode) {
-        const salt = await SaltHelper.getSalt()
-        return CryptoUtils.decrypt(keys, pinCode, salt) as StorageEncryptionKeys
+        const { salt, iv: base64IV } = await SaltHelper.getSaltAndIV()
+        const iv = PasswordUtils.base64ToBuffer(base64IV)
+        const decryptedKeys: StorageEncryptionKeys = (await CryptoUtils.decrypt(
+            keys,
+            pinCode,
+            salt,
+            iv,
+        )) as StorageEncryptionKeys
+        return decryptedKeys
     } else {
         return JSON.parse(keys) as StorageEncryptionKeys
     }
 }
 
 const setWithPinCode = async (encryptionKeys: StorageEncryptionKeys, pinCode: string) => {
-    const salt = await SaltHelper.getSalt()
-
-    const encryptedKeys = CryptoUtils.encrypt(encryptionKeys, pinCode, salt)
+    const { salt, iv: base64IV } = await SaltHelper.getSaltAndIV()
+    const iv = PasswordUtils.base64ToBuffer(base64IV)
+    const encryptedKeys = await CryptoUtils.encrypt(encryptionKeys, pinCode, salt, iv)
 
     await Keychain.set({
         key: PIN_CODE_STORAGE,
@@ -66,9 +73,9 @@ const validatePinCode = async (pinCode: string): Promise<boolean> => {
 
         if (!keys) throw new Error("StorageEncryptionKeyHelper -> validatePinCode: No key found")
 
-        const salt = await SaltHelper.getSalt()
-
-        const decryptedKeys = CryptoUtils.decrypt(keys, pinCode, salt) as StorageEncryptionKeys
+        const { salt, iv: base64IV } = await SaltHelper.getSaltAndIV()
+        const iv = PasswordUtils.base64ToBuffer(base64IV)
+        const decryptedKeys = (await CryptoUtils.decrypt(keys, pinCode, salt, iv)) as StorageEncryptionKeys
 
         return !!decryptedKeys && !!decryptedKeys.redux
     } catch (e) {

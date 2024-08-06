@@ -1229,6 +1229,10 @@ type RootTranslation = {
 	 */
 	COMMON_OR: string
 	/**
+	 * F​r​o​m
+	 */
+	COMMON_ROOT_ADDRESS: string
+	/**
 	 * B​i​o​m​e​t​r​i​c​s​ ​n​o​t​ ​a​v​a​i​l​a​b​l​e
 	 */
 	ALERT_TITLE_NOT_ENROLLED: string
@@ -4313,6 +4317,10 @@ export type TranslationFunctions = {
 	 * Or
 	 */
 	COMMON_OR: () => LocalizedString
+	/**
+	 * From
+	 */
+	COMMON_ROOT_ADDRESS: () => LocalizedString
 	/**
 	 * Biometrics not available
 	 */

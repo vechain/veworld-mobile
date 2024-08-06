@@ -38,12 +38,12 @@ class CloudKitManager: NSObject {
   @objc
   func checkCloudKitAvailability(_ resolve: @escaping(RCTPromiseResolveBlock), rejecter reject: @escaping(RCTPromiseRejectBlock)) -> Void {
     CKContainer.default().accountStatus { (accountStatus, error) in
-      if accountStatus == .available {
-        print("iCloud app container and private database is available")
-        resolve(true)
+      if let error = error {
+        self.handleError(error, reject: reject)
       } else {
-        let error = NSError(domain: "", code: 200, userInfo: nil)
-        reject("ICLOUD", "iCloud is not available on the device", error)
+        if accountStatus == .available {
+          resolve(true)
+        }
       }
     }
   }

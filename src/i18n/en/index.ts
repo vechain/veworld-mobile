@@ -336,6 +336,7 @@ const en: BaseTranslation = {
     COMMON_OOPS: "Oops!",
     COMMON_PROCEED: "Proceed",
     COMMON_OR: "Or",
+    COMMON_ROOT_ADDRESS: "From",
 
 
     // Alerts

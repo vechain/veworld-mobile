@@ -1,6 +1,6 @@
 import { Wallet } from "~Model"
 import { WalletEncryptionKey } from "~Components/Providers/EncryptedStorageProvider/Model"
-import { CryptoUtils, HexUtils } from "~Utils"
+import { CryptoUtils, HexUtils, PasswordUtils } from "~Utils"
 import { Keychain } from "~Storage"
 import SaltHelper from "./SaltHelper"
 import { ACCESS_CONTROL, Options } from "react-native-keychain"
@@ -19,17 +19,20 @@ const get = async (pinCode?: string): Promise<WalletEncryptionKey> => {
     if (!keys) throw new Error("WalletEncryptionKeyHelper: No key found")
 
     if (pinCode) {
-        const salt = await SaltHelper.getSalt()
-        return CryptoUtils.decrypt(keys, pinCode, salt) as WalletEncryptionKey
+        const { salt, iv: base64IV } = await SaltHelper.getSaltAndIV()
+        const iv = PasswordUtils.base64ToBuffer(base64IV)
+        const decryptedKeys: WalletEncryptionKey = await CryptoUtils.decrypt(keys, pinCode, salt, iv)
+        return decryptedKeys
     } else {
         return JSON.parse(keys) as WalletEncryptionKey
     }
 }
 
 const setWithPinCode = async (encryptionKeys: WalletEncryptionKey, pinCode: string) => {
-    const salt = await SaltHelper.getSalt()
+    const { salt, iv: base64IV } = await SaltHelper.getSaltAndIV()
+    const iv = PasswordUtils.base64ToBuffer(base64IV)
 
-    const encryptedKeys = CryptoUtils.encrypt(encryptionKeys, pinCode, salt)
+    const encryptedKeys = await CryptoUtils.encrypt(encryptionKeys, pinCode, salt, iv)
 
     await Keychain.set({
         key: WALLET_ENCRYPTION_KEY_STORAGE,
@@ -61,12 +64,15 @@ const set = async (encryptionKeys: WalletEncryptionKey, pinCode?: string) => {
 
 const decryptWallet = async (encryptedWallet: string, pinCode?: string): Promise<Wallet> => {
     const { walletKey } = await get(pinCode)
-
-    return CryptoUtils.decrypt<Wallet>(encryptedWallet, walletKey)
+    const { salt, iv: base64IV } = await SaltHelper.getSaltAndIV()
+    const iv = PasswordUtils.base64ToBuffer(base64IV)
+    return CryptoUtils.decrypt<Wallet>(encryptedWallet, walletKey, salt, iv)
 }
 
-const encryptWallet = async (wallet: Wallet, pinCode?: string, salt?: string, iv?: Uint8Array) => {
+const encryptWallet = async (wallet: Wallet, pinCode?: string) => {
     const { walletKey } = await get(pinCode)
+    const { salt, iv: base64IV } = await SaltHelper.getSaltAndIV()
+    const iv = PasswordUtils.base64ToBuffer(base64IV)
     return CryptoUtils.encrypt(wallet, walletKey, salt, iv)
 }
 

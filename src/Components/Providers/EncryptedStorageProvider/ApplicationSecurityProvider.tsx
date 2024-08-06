@@ -1,6 +1,6 @@
 import React, { useCallback, useEffect, useMemo, useState } from "react"
 import { MMKV } from "react-native-mmkv"
-import { BiometricsUtils, CryptoUtils, CryptoUtils_Legacy, debug, error, HexUtils, info, PasswordUtils } from "~Utils"
+import { BiometricsUtils, CryptoUtils, CryptoUtils_Legacy, debug, error, HexUtils, info } from "~Utils"
 import { BiometricState, Device, SecurityLevelType, Wallet, WALLET_STATUS } from "~Model"
 import {
     PreviousInstallation,
@@ -11,12 +11,13 @@ import {
 } from "~Components/Providers"
 
 import { useAppState, useBiometrics } from "~Hooks"
-import { StandaloneAppBlockedScreen, StandaloneLockScreen, InternetDownScreen } from "~Screens"
+import { StandaloneAppBlockedScreen, StandaloneLockScreen, InternetDownScreen, SecurityUpgrade_V2 } from "~Screens"
 import { AnimatedSplashScreen } from "../../../AnimatedSplashScreen"
 import Onboarding from "./Helpers/Onboarding"
 import NetInfo from "@react-native-community/netinfo"
 import { ERROR_EVENTS } from "~Constants"
 import { initializeMMKVFlipper } from "react-native-mmkv-flipper-plugin"
+import RNBootSplash from "react-native-bootsplash"
 
 const UserEncryptedStorage = new MMKV({
     id: "user_encrypted_storage",
@@ -68,9 +69,6 @@ type IApplicationSecurity = {
     setIsAppReady: (isReady: boolean) => void
     lockApplication: () => void
     triggerAutoLock: () => void
-    needsSecurityUpgradeToV2: () => boolean
-    upgradeSecurityToV2: (password?: string) => void
-    securityMigrationStatus: SecurityMigration
 }
 
 const ApplicationSecurityContext = React.createContext<IApplicationSecurity | undefined>(undefined)
@@ -93,6 +91,8 @@ export const ApplicationSecurityProvider = ({ children }: ApplicationSecurityCon
     const biometrics = useBiometrics()
 
     const onboardingKey = useMemo(() => HexUtils.generateRandom(256), [])
+
+    const oldPersistedState = useMemo(() => UserEncryptedStorage.getString("persist:root"), [])
 
     const triggerAutoLock = () => {
         setAutoLock(true)
@@ -214,23 +214,8 @@ export const ApplicationSecurityProvider = ({ children }: ApplicationSecurityCon
         [unlock],
     )
 
-    const needsSecurityUpgradeToV2 = useCallback(() => {
-        const encryptedStorageKeys = UserEncryptedStorage.getAllKeys()
-        // TODO.vas - even if you create a new wwallet the condition is true
-        // if (encryptedStorageKeys.length > 0 && !UserEncryptedStorage_V2.getString("persist:root_V2")) {
-        if (encryptedStorageKeys.length > 0) {
-            debug(ERROR_EVENTS.SECURITY, "Needs security upgrade to V2")
-            return true
-        }
-
-        return false
-    }, [])
-
     const upgradeSecurityToV2 = useCallback(async (password?: string) => {
         const encryptedStorageKeys = UserEncryptedStorage.getAllKeys()
-        /*
-            encryptedStorageKeys contains ["persist:root", "persist:nft"]
-        */
 
         setSecurityMigrationStatus(SecurityMigration.IN_PROGRESS)
 
@@ -240,11 +225,12 @@ export const ApplicationSecurityProvider = ({ children }: ApplicationSecurityCon
 
             // Get the storage keys
             const storageEncryptionKeys = await StorageEncryptionKeyHelper.get(password)
-            const reduxKey = storageEncryptionKeys.redux //TODO.vas-{"images": "0xb7979fa8", "metadata": "0x2192f7fa"}
+            const reduxKey = storageEncryptionKeys.redux
 
             // Get the encrypted state for redux
             const persistedState = UserEncryptedStorage.getString("persist:root")
-            if (!persistedState) return // TODO: handle this case somehow
+
+            if (!persistedState) return
             const oldState = JSON.parse(persistedState)
 
             let newState = {}
@@ -272,16 +258,9 @@ export const ApplicationSecurityProvider = ({ children }: ApplicationSecurityCon
                                 password ?? walletKey,
                             )
 
-                            //  encrypt each wallet with the new encryption algorithm
-                            // TODO - need salt
-                            let salt = "wfncr928hfc893hn0cf938"
-                            // TODO - need iv and to save to the keychain
-                            let iv = PasswordUtils.getIV() as Uint8Array
                             const walletEncrypted_V2 = await WalletEncryptionKeyHelper.encryptWallet(
                                 decryptedWallet,
                                 password,
-                                salt,
-                                iv,
                             )
 
                             wallet.wallet = walletEncrypted_V2
@@ -303,14 +282,15 @@ export const ApplicationSecurityProvider = ({ children }: ApplicationSecurityCon
             }
 
             // store the state in the new storage - UserEncryptedStorage_V2
-            UserEncryptedStorage_V2.set("persist:root_V2", JSON.stringify(newState))
+            UserEncryptedStorage_V2.set("persist:root", JSON.stringify(newState))
             setSecurityMigrationStatus(SecurityMigration.COMPLETED)
             setReduxStorage({
                 mmkv: UserEncryptedStorage_V2,
                 encryptionKey: reduxKey,
             })
 
-            // TODO 5. clear out the old storage - UserEncryptedStorage
+            // clear out the old storage
+            UserEncryptedStorage.clearAll()
             Onboarding.prune(UserEncryptedStorage)
         }
     }, [])
@@ -323,8 +303,10 @@ export const ApplicationSecurityProvider = ({ children }: ApplicationSecurityCon
             const oldStorageKeys = UserEncryptedStorage.getAllKeys()
 
             if (oldStorageKeys.length > 0) {
-                info(ERROR_EVENTS.SECURITY, "- - - - - - User has onboarded, migrating to new storage - - - - - - -")
+                info(ERROR_EVENTS.SECURITY, "User has onboarded, migrating to new storage")
                 setWalletStatus(WALLET_STATUS.MIGRATING)
+                await setUpEncryptionKeys(_biometrics)
+                RNBootSplash.hide({ fade: true })
                 return
             }
 
@@ -467,9 +449,6 @@ export const ApplicationSecurityProvider = ({ children }: ApplicationSecurityCon
             securityType,
             lockApplication,
             triggerAutoLock,
-            upgradeSecurityToV2,
-            needsSecurityUpgradeToV2,
-            securityMigrationStatus: _securityMigrationStatus,
         }
     }, [
         reduxStorage,
@@ -482,9 +461,6 @@ export const ApplicationSecurityProvider = ({ children }: ApplicationSecurityCon
         updateSecurityMethod,
         securityType,
         lockApplication,
-        upgradeSecurityToV2,
-        needsSecurityUpgradeToV2,
-        _securityMigrationStatus,
     ])
 
     const { isConnected } = NetInfo.useNetInfo()
@@ -495,7 +471,11 @@ export const ApplicationSecurityProvider = ({ children }: ApplicationSecurityCon
             return <></>
         case WALLET_STATUS.MIGRATING:
             return (
-                <div>{"Show screen to user that a migration is required (Similar to StandaloneAppBlockedScreen)"}</div>
+                <SecurityUpgrade_V2
+                    oldPersistedState={oldPersistedState}
+                    securityType={securityType}
+                    upgradeSecurityToV2={upgradeSecurityToV2}
+                />
             )
         case WALLET_STATUS.FIRST_TIME_ACCESS:
         case WALLET_STATUS.UNLOCKED:
