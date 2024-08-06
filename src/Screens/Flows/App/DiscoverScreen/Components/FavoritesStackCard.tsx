@@ -1,12 +1,10 @@
 import React, { useCallback, useEffect, useMemo, useState } from "react"
 import { StyleSheet } from "react-native"
 import Animated, { interpolateColor, useAnimatedStyle, useSharedValue, withTiming } from "react-native-reanimated"
-import { BaseIcon, BaseSpacer, BaseText, BaseTouchable, BaseView } from "~Components"
+import { BaseIcon, BaseSpacer, BaseText, BaseTouchable, BaseView, DAppIcon } from "~Components"
 import { DiscoveryDApp } from "~Constants"
 import { useDappBookmarking, useThemedStyles } from "~Hooks"
-import { URIUtils } from "~Utils"
-import { getAppHubIconUrl } from "../utils"
-import { DAppIcon } from "./DAppIcon"
+import { DAppUtils, URIUtils } from "~Utils"
 
 const GAP_BETWEEN_CARDS = 10
 const CARD_HEIGHT = 84
@@ -186,7 +184,7 @@ const AnimatedCard = ({ index, isStacked, onDAppPress, dapp }: AnimatedCardProps
                 <DAppIcon
                     imageSource={{
                         uri: dapp.id
-                            ? getAppHubIconUrl(dapp.id)
+                            ? DAppUtils.getAppHubIconUrl(dapp.id)
                             : `${process.env.REACT_APP_GOOGLE_FAVICON_URL}${dapp.href}`,
                     }}
                 />

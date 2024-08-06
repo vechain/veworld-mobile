@@ -1,13 +1,25 @@
-import React from "react"
 import { createNativeStackNavigator } from "@react-navigation/native-stack"
+import React from "react"
+import { Transaction } from "thor-devkit"
+import { TokenWithCompleteInfo, useNavAnimation } from "~Hooks"
+import {
+    Activity,
+    ConnectedLedgerDevice,
+    Device,
+    FungibleToken,
+    FungibleTokenWithBalance,
+    LedgerAccountWithDevice,
+    TransactionOutcomes,
+} from "~Model"
+import { Routes } from "~Navigation/Enums"
 import {
     ActivityDetailsScreen,
     AssetDetailScreen,
     ConnectedAppsScreen,
     EnableAdditionalSettings,
-    HistoryScreen,
     HomeScreen,
     ImportLocalWallet,
+    InAppBrowser,
     InsertAddressSendScreen,
     LedgerSignTransaction,
     ManageCustomTokenScreen,
@@ -22,18 +34,6 @@ import {
     WalletDetailScreen,
     WalletManagementScreen,
 } from "~Screens"
-import { Routes } from "~Navigation/Enums"
-import {
-    Activity,
-    ConnectedLedgerDevice,
-    Device,
-    FungibleToken,
-    FungibleTokenWithBalance,
-    LedgerAccountWithDevice,
-    TransactionOutcomes,
-} from "~Model"
-import { Transaction } from "thor-devkit"
-import { TokenWithCompleteInfo, useNavAnimation } from "~Hooks"
 
 export type RootStackParamListHome = {
     [Routes.HOME]: undefined
@@ -86,6 +86,10 @@ export type RootStackParamListHome = {
     [Routes.IMPORT_HW_LEDGER_SELECT_ACCOUNTS]: {
         device: ConnectedLedgerDevice
     }
+    [Routes.BROWSER]: {
+        url: string
+        ul?: boolean
+    }
 }
 
 const { Navigator, Group, Screen } = createNativeStackNavigator<RootStackParamListHome>()
@@ -128,7 +132,6 @@ export const HomeStack = () => {
                     component={ConnectedAppsScreen}
                     options={{ headerShown: false }}
                 />
-                <Screen name={Routes.HISTORY} component={HistoryScreen} options={{ headerShown: false }} />
                 <Screen
                     name={Routes.ACTIVITY_DETAILS}
                     component={ActivityDetailsScreen}
@@ -161,6 +164,7 @@ export const HomeStack = () => {
                     component={SelectLedgerAccounts}
                     options={{ headerShown: false }}
                 />
+                <Screen name={Routes.BROWSER} component={InAppBrowser} options={{ headerShown: false }} />
             </Group>
 
             <Group>
