@@ -20,12 +20,7 @@ const get = async (pinCode?: string): Promise<StorageEncryptionKeys> => {
     if (pinCode) {
         const { salt, iv: base64IV } = await SaltHelper.getSaltAndIV()
         const iv = PasswordUtils.base64ToBuffer(base64IV)
-        const decryptedKeys: StorageEncryptionKeys = (await CryptoUtils.decrypt(
-            keys,
-            pinCode,
-            salt,
-            iv,
-        )) as StorageEncryptionKeys
+        const decryptedKeys: StorageEncryptionKeys = await CryptoUtils.decrypt(keys, pinCode, salt, iv)
         return decryptedKeys
     } else {
         return JSON.parse(keys) as StorageEncryptionKeys
@@ -75,7 +70,7 @@ const validatePinCode = async (pinCode: string): Promise<boolean> => {
 
         const { salt, iv: base64IV } = await SaltHelper.getSaltAndIV()
         const iv = PasswordUtils.base64ToBuffer(base64IV)
-        const decryptedKeys = (await CryptoUtils.decrypt(keys, pinCode, salt, iv)) as StorageEncryptionKeys
+        const decryptedKeys: StorageEncryptionKeys = await CryptoUtils.decrypt(keys, pinCode, salt, iv)
 
         return !!decryptedKeys && !!decryptedKeys.redux
     } catch (e) {

@@ -66,14 +66,16 @@ const decryptWallet = async (encryptedWallet: string, pinCode?: string): Promise
     const { walletKey } = await get(pinCode)
     const { salt, iv: base64IV } = await SaltHelper.getSaltAndIV()
     const iv = PasswordUtils.base64ToBuffer(base64IV)
-    return CryptoUtils.decrypt<Wallet>(encryptedWallet, walletKey, salt, iv)
+    const wallet = await CryptoUtils.decrypt<Wallet>(encryptedWallet, walletKey, salt, iv)
+    return wallet
 }
 
 const encryptWallet = async (wallet: Wallet, pinCode?: string) => {
     const { walletKey } = await get(pinCode)
     const { salt, iv: base64IV } = await SaltHelper.getSaltAndIV()
     const iv = PasswordUtils.base64ToBuffer(base64IV)
-    return CryptoUtils.encrypt(wallet, walletKey, salt, iv)
+    const walletEncrypted = await CryptoUtils.encrypt(wallet, walletKey, salt, iv)
+    return walletEncrypted
 }
 
 const remove = async () => {

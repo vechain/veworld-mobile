@@ -125,12 +125,12 @@ export const ImportFromCloudScreen = () => {
                 let mnemonic: string[] = []
 
                 try {
-                    mnemonic = CryptoUtils.decrypt(
+                    mnemonic = await CryptoUtils.decrypt(
                         selected.data,
                         password,
                         salt,
                         PasswordUtils.base64ToBuffer(iv),
-                    ) as string[]
+                    )
                 } catch (err) {
                     showErrorToast({
                         text1: LL.ERROR_DECRYPTING_WALLET(),

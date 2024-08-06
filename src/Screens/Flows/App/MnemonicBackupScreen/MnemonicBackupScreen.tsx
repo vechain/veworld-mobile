@@ -52,7 +52,7 @@ export const MnemonicBackupScreen = ({ route }: Props) => {
             const firstAccountAddress = AddressUtils.getAddressFromXPub(deviceToBackup.xPub, 0)
             const salt = HexUtils.generateRandom(256)
             const iv = PasswordUtils.getRandomIV(16)
-            const mnemonic = CryptoUtils.encrypt(mnemonicArray, password, salt, iv)
+            const mnemonic = await CryptoUtils.encrypt(mnemonicArray, password, salt, iv)
             await saveWalletToCloudKit({
                 mnemonic,
                 _rootAddress: deviceToBackup?.rootAddress,
