@@ -72,7 +72,7 @@ export const AssetPriceBanner = ({ isChartDataLoading }: Props) => {
                     <AssetTrendBannerSkeleton />
                 ) : (
                     <BaseView flexDirection="row">
-                        <BaseAnimatedText text={icon} style={[changeStyles, styles.textTitle]} />
+                        <BaseAnimatedText text={icon} style={[changeStyles, styles.textTitle, styles.icon]} />
                         <BaseAnimatedText text={formattedPriceChange} style={[changeStyles, styles.textTitle]} />
                     </BaseView>
                 )}
@@ -96,5 +96,8 @@ const baseStyles = (theme: ColorThemeType) =>
             fontWeight: "700",
             fontFamily: otherTypography.fontFamily["Inter-Bold"],
             padding: 0,
+        },
+        icon: {
+            marginRight: -8,
         },
     })
