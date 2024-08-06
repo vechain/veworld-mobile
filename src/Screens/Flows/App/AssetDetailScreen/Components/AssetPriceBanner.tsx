@@ -14,10 +14,9 @@ import { isIOS } from "~Utils/PlatformUtils/PlatformUtils"
 const { ...otherTypography } = typography
 
 type Props = {
-    symbol: string
     isChartDataLoading: boolean
 }
-export const AssetPriceBanner = ({ symbol, isChartDataLoading }: Props) => {
+export const AssetPriceBanner = ({ isChartDataLoading }: Props) => {
     const { LL } = useI18nContext()
     const datetime = useLineChartDatetime()
     const { formatted: formattedPrice } = useLineChartPrice()
@@ -51,7 +50,7 @@ export const AssetPriceBanner = ({ symbol, isChartDataLoading }: Props) => {
                 <BaseText typographyFont="body">{LL.COMMON_PRICE()}</BaseText>
                 <BaseView flexDirection="row" alignItems="baseline">
                     {isChartDataLoading ? (
-                        <AssetPriceBannerSkeleton symbol={symbol} />
+                        <AssetPriceBannerSkeleton />
                     ) : (
                         <BaseAnimatedText
                             text={formattedPrice}
