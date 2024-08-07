@@ -1,8 +1,9 @@
 import { StorageEncryptionKeys } from "~Components/Providers/EncryptedStorageProvider/Model"
 import { Keychain } from "~Storage"
-import { CryptoUtils, CryptoUtils_Legacy, HexUtils, PasswordUtils } from "~Utils"
+import { CryptoUtils, CryptoUtils_Legacy, error, HexUtils, PasswordUtils } from "~Utils"
 import SaltHelper from "./SaltHelper"
 import { ACCESS_CONTROL, Options } from "react-native-keychain"
+import { ERROR_EVENTS } from "~Constants"
 
 const PIN_CODE_STORAGE = "ENCRYPTION_KEY_STORAGE"
 const BIOMETRIC_KEY_STORAGE = "BIOMETRIC_KEY_STORAGE"
@@ -20,7 +21,7 @@ const get = async (pinCode?: string, isLegacy?: boolean): Promise<StorageEncrypt
     if (pinCode) {
         const { salt, iv: base64IV } = await SaltHelper.getSaltAndIV()
         const iv = PasswordUtils.base64ToBuffer(base64IV)
-        let decryptedKeys: StorageEncryptionKeys = await CryptoUtils.decrypt(keys, pinCode, salt, iv)
+        let decryptedKeys: StorageEncryptionKeys
         if (isLegacy) {
             decryptedKeys = await CryptoUtils_Legacy.decrypt(keys, pinCode, salt)
         } else {
@@ -75,7 +76,7 @@ const validatePinCode = async (pinCode: string, isLegacy?: boolean): Promise<boo
 
         const { salt, iv: base64IV } = await SaltHelper.getSaltAndIV()
         const iv = PasswordUtils.base64ToBuffer(base64IV)
-        let decryptedKeys: StorageEncryptionKeys = await CryptoUtils.decrypt(keys, pinCode, salt, iv)
+        let decryptedKeys: StorageEncryptionKeys
         if (isLegacy) {
             decryptedKeys = await CryptoUtils_Legacy.decrypt(keys, pinCode, salt)
         } else {
@@ -83,6 +84,7 @@ const validatePinCode = async (pinCode: string, isLegacy?: boolean): Promise<boo
         }
         return !!decryptedKeys && !!decryptedKeys.redux
     } catch (e) {
+        error(ERROR_EVENTS.SECURITY, e)
         return false
     }
 }

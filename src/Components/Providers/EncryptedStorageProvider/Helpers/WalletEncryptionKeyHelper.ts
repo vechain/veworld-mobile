@@ -21,7 +21,8 @@ const get = async (pinCode?: string, isLegacy?: boolean): Promise<WalletEncrypti
     if (pinCode) {
         const { salt, iv: base64IV } = await SaltHelper.getSaltAndIV()
         const iv = PasswordUtils.base64ToBuffer(base64IV)
-        let decryptedKeys: WalletEncryptionKey = await CryptoUtils.decrypt(keys, pinCode, salt, iv)
+        let decryptedKeys: WalletEncryptionKey
+
         if (isLegacy) {
             decryptedKeys = await CryptoUtils_Legacy.decrypt(keys, pinCode, salt)
         } else {
@@ -67,11 +68,17 @@ const set = async (encryptionKeys: WalletEncryptionKey, pinCode?: string) => {
     }
 }
 
-const decryptWallet = async (encryptedWallet: string, pinCode?: string): Promise<Wallet> => {
-    const { walletKey } = await get(pinCode)
+const decryptWallet = async (encryptedWallet: string, pinCode?: string, isLegacy?: boolean): Promise<Wallet> => {
+    const { walletKey } = await get(pinCode, isLegacy)
     const { salt, iv: base64IV } = await SaltHelper.getSaltAndIV()
     const iv = PasswordUtils.base64ToBuffer(base64IV)
-    const wallet = await CryptoUtils.decrypt<Wallet>(encryptedWallet, walletKey, salt, iv)
+
+    let wallet: Wallet
+    if (isLegacy) {
+        wallet = CryptoUtils_Legacy.decrypt<Wallet>(encryptedWallet, walletKey, salt)
+    } else {
+        wallet = await CryptoUtils.decrypt<Wallet>(encryptedWallet, walletKey, salt, iv)
+    }
     return wallet
 }
 

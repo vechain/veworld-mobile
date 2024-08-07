@@ -33,6 +33,7 @@ export const SecurityUpgrade_V2 = ({
     const getWalletsWithUserAuthentication = useCallback(async () => {
         if (isWalletSecurityNone) throw new Error("No security set")
         if (isWalletSecurityPassword) openPasswordPrompt()
+        isUpgrade.current = false
 
         if (oldPersistedState && isWalletSecurityBiometrics) {
             const _wallets = await getMnemonicsFromStorage(oldPersistedState)
@@ -90,6 +91,8 @@ export const SecurityUpgrade_V2 = ({
     )
 
     const onStartUpgrade = useCallback(async () => {
+        isUpgrade.current = true
+
         if (isWalletSecurityPassword) openPasswordPrompt()
         if (oldPersistedState && isWalletSecurityBiometrics) await upgradeSecurityToV2()
     }, [
@@ -102,7 +105,9 @@ export const SecurityUpgrade_V2 = ({
 
     const onPasswordUpgradeSuccess = useCallback(
         async (pin: string) => {
-            if (oldPersistedState) await upgradeSecurityToV2(pin)
+            if (oldPersistedState) {
+                await upgradeSecurityToV2(pin)
+            }
         },
         [oldPersistedState, upgradeSecurityToV2],
     )

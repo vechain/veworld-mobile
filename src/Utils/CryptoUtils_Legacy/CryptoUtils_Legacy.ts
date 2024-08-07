@@ -10,7 +10,7 @@ import { ERROR_EVENTS } from "~Constants"
 // [START] - Used for testing purposes ONLY
 function encrypt<T>(data: T, encryptionKey: string, salt?: string): string {
     const key = PasswordUtils.hash(encryptionKey, salt)
-    const iv = PasswordUtils.getIV_Legacy()
+    const iv = PasswordUtils.getIV()
     const cipher = crypto.createCipheriv("aes256", key, iv)
     let ciph = cipher.update(JSON.stringify(data), "utf-8", "hex")
     ciph += cipher.final("hex")
@@ -27,7 +27,7 @@ function encryptState<T>(data: T, key: string): string {
 
 function decrypt<T>(data: string, encryptionKey: string, salt?: string): T {
     const key = PasswordUtils.hash(encryptionKey, salt)
-    const iv = PasswordUtils.getIV_Legacy()
+    const iv = PasswordUtils.getIV()
     const decipher = crypto.createDecipheriv("aes256", key, iv)
     let txt = decipher.update(data, "hex", "utf-8")
     txt += decipher.final("utf-8")

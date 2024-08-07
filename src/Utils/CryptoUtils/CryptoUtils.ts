@@ -68,7 +68,7 @@ async function decrypt<T>(data: string, encryptionKey: string, salt: string, iv:
         throw new Error("Key is NOT 32 bytes")
     }
 
-    const decipher = crypto.createDecipheriv("aes256", trimmedKey, iv)
+    const decipher = crypto.createDecipheriv("aes-256-cbc", trimmedKey, iv)
     let txt = decipher.update(data, "hex", "utf-8")
     txt += decipher.final("utf-8")
     let txtToString = txt.toString()
