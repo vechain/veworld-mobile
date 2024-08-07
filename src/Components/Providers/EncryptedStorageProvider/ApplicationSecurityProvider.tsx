@@ -151,7 +151,7 @@ export const ApplicationSecurityProvider = ({ children }: ApplicationSecurityCon
         let keys
 
         try {
-            keys = backUpKeys?.storage ?? (await StorageEncryptionKeyHelper.get(pinCode))
+            keys = backUpKeys?.storage ?? (await StorageEncryptionKeyHelper.get({ pinCode }))
         } catch (e) {
             // handle cases when  the user cancels the biometric prompt and the keychain returns it as an error
             if (BiometricsUtils.BiometricErrors.isBiometricCanceled(e)) {
@@ -223,10 +223,10 @@ export const ApplicationSecurityProvider = ({ children }: ApplicationSecurityCon
             try {
                 // Get the wallet key
                 const isLegacy = true
-                const { walletKey } = await WalletEncryptionKeyHelper.get(password, isLegacy)
+                const { walletKey } = await WalletEncryptionKeyHelper.get({ pinCode: password, isLegacy })
 
                 // Get the storage keys
-                const storageEncryptionKeys = await StorageEncryptionKeyHelper.get(password, isLegacy)
+                const storageEncryptionKeys = await StorageEncryptionKeyHelper.get({ pinCode: password, isLegacy })
                 const reduxKey = storageEncryptionKeys.redux
 
                 // Get the encrypted state for redux
@@ -256,11 +256,11 @@ export const ApplicationSecurityProvider = ({ children }: ApplicationSecurityCon
                             // loop on parsedEntryInState for wallets
                             for (const wallet of parsedEntryInState) {
                                 // and decrypt each wallet
-                                const decryptedWallet: Wallet = await WalletEncryptionKeyHelper.decryptWallet(
-                                    wallet.wallet,
-                                    password ?? walletKey,
+                                const decryptedWallet: Wallet = await WalletEncryptionKeyHelper.decryptWallet({
+                                    encryptedWallet: wallet.wallet,
+                                    pinCode: password ?? walletKey,
                                     isLegacy,
-                                )
+                                })
 
                                 const walletEncrypted_V2 = await WalletEncryptionKeyHelper.encryptWallet(
                                     decryptedWallet,
@@ -476,7 +476,6 @@ export const ApplicationSecurityProvider = ({ children }: ApplicationSecurityCon
         case WALLET_STATUS.NOT_INITIALISED:
             // App is initialising
             return <></>
-        case WALLET_STATUS.FIRST_TIME_ACCESS:
         case WALLET_STATUS.MIGRATING:
             return (
                 <SecurityUpgrade_V2
@@ -485,6 +484,7 @@ export const ApplicationSecurityProvider = ({ children }: ApplicationSecurityCon
                     upgradeSecurityToV2={upgradeSecurityToV2}
                 />
             )
+        case WALLET_STATUS.FIRST_TIME_ACCESS:
         case WALLET_STATUS.UNLOCKED:
             if (!value?.redux) return <></>
 

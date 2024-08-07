@@ -8,7 +8,7 @@ import { ERROR_EVENTS } from "~Constants"
 const PIN_CODE_STORAGE = "ENCRYPTION_KEY_STORAGE"
 const BIOMETRIC_KEY_STORAGE = "BIOMETRIC_KEY_STORAGE"
 
-const get = async (pinCode?: string, isLegacy?: boolean): Promise<StorageEncryptionKeys> => {
+const get = async ({ pinCode, isLegacy }: { pinCode?: string; isLegacy?: boolean }): Promise<StorageEncryptionKeys> => {
     const keys = await Keychain.get({
         key: pinCode ? PIN_CODE_STORAGE : BIOMETRIC_KEY_STORAGE,
         options: {
@@ -66,7 +66,7 @@ const set = async (encryptionKeys: StorageEncryptionKeys, pinCode?: string) => {
     }
 }
 
-const validatePinCode = async (pinCode: string, isLegacy?: boolean): Promise<boolean> => {
+const validatePinCode = async ({ pinCode, isLegacy }: { pinCode: string; isLegacy?: boolean }): Promise<boolean> => {
     try {
         const keys = await Keychain.get({
             key: PIN_CODE_STORAGE,

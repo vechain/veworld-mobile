@@ -8,7 +8,7 @@ import { ACCESS_CONTROL, Options } from "react-native-keychain"
 const WALLET_ENCRYPTION_KEY_STORAGE = "WALLET_ENCRYPTION_KEY_STORAGE"
 const WALLET_BIOMETRIC_KEY_STORAGE = "WALLET_BIOMETRIC_KEY_STORAGE"
 
-const get = async (pinCode?: string, isLegacy?: boolean): Promise<WalletEncryptionKey> => {
+const get = async ({ pinCode, isLegacy }: { pinCode?: string; isLegacy?: boolean }): Promise<WalletEncryptionKey> => {
     const keys = await Keychain.get({
         key: pinCode ? WALLET_ENCRYPTION_KEY_STORAGE : WALLET_BIOMETRIC_KEY_STORAGE,
         options: {
@@ -68,8 +68,16 @@ const set = async (encryptionKeys: WalletEncryptionKey, pinCode?: string) => {
     }
 }
 
-const decryptWallet = async (encryptedWallet: string, pinCode?: string, isLegacy?: boolean): Promise<Wallet> => {
-    const { walletKey } = await get(pinCode, isLegacy)
+const decryptWallet = async ({
+    encryptedWallet,
+    pinCode,
+    isLegacy,
+}: {
+    encryptedWallet: string
+    pinCode?: string
+    isLegacy?: boolean
+}): Promise<Wallet> => {
+    const { walletKey } = await get({ pinCode, isLegacy })
     const { salt, iv: base64IV } = await SaltHelper.getSaltAndIV()
     const iv = PasswordUtils.base64ToBuffer(base64IV)
 
@@ -83,7 +91,7 @@ const decryptWallet = async (encryptedWallet: string, pinCode?: string, isLegacy
 }
 
 const encryptWallet = async (wallet: Wallet, pinCode?: string) => {
-    const { walletKey } = await get(pinCode)
+    const { walletKey } = await get({ pinCode })
     const { salt, iv: base64IV } = await SaltHelper.getSaltAndIV()
     const iv = PasswordUtils.base64ToBuffer(base64IV)
     const walletEncrypted = await CryptoUtils.encrypt(wallet, walletKey, salt, iv)
