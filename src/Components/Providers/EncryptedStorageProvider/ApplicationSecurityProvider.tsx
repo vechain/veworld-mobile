@@ -469,6 +469,7 @@ export const ApplicationSecurityProvider = ({ children }: ApplicationSecurityCon
         case WALLET_STATUS.NOT_INITIALISED:
             // App is initialising
             return <></>
+        case WALLET_STATUS.FIRST_TIME_ACCESS:
         case WALLET_STATUS.MIGRATING:
             return (
                 <SecurityUpgrade_V2
@@ -477,7 +478,6 @@ export const ApplicationSecurityProvider = ({ children }: ApplicationSecurityCon
                     upgradeSecurityToV2={upgradeSecurityToV2}
                 />
             )
-        case WALLET_STATUS.FIRST_TIME_ACCESS:
         case WALLET_STATUS.UNLOCKED:
             if (!value?.redux) return <></>
 

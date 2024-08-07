@@ -1,4 +1,4 @@
-import React, { useCallback, useState } from "react"
+import React, { useCallback, useRef, useState } from "react"
 import { BaseButton, BaseSpacer, BaseText, BaseView, MigrationToSecurity_v2 } from "~Components"
 import { useBackHandler, useDisclosure } from "~Hooks"
 import { BackHandlerEvent, SecurityLevelType, Wallet } from "~Model"
@@ -17,12 +17,12 @@ export const SecurityUpgrade_V2 = ({
 }: {
     oldPersistedState?: string
     securityType: SecurityLevelType
-    upgradeSecurityToV2: (password?: string) => void
+    upgradeSecurityToV2: (password?: string) => Promise<void>
 }) => {
     useBackHandler(BackHandlerEvent.BLOCK)
 
     const [wallets, setWallets] = useState<Wallet[] | []>([])
-    const [password, setPassword] = useState<string | undefined>()
+    const isUpgrade = useRef(false)
 
     const { isWalletSecurityBiometrics, isWalletSecurityPassword, isWalletSecurityNone } =
         useWalletSecurity(securityType)
@@ -63,7 +63,6 @@ export const SecurityUpgrade_V2 = ({
         async (_password: string) => {
             if (oldPersistedState) {
                 closePasswordPrompt()
-                setPassword(_password)
                 const _wallets = await getMnemonicsFromStorage(oldPersistedState, _password)
                 if (!_wallets) return
                 let validWallets: Wallet[] = []
@@ -91,6 +90,24 @@ export const SecurityUpgrade_V2 = ({
         [onOpenWalletBackup, onCloseWalletList],
     )
 
+    const onStartUpgrade = useCallback(async () => {
+        if (isWalletSecurityPassword) openPasswordPrompt()
+        if (oldPersistedState && isWalletSecurityBiometrics) await upgradeSecurityToV2()
+    }, [
+        isWalletSecurityBiometrics,
+        isWalletSecurityPassword,
+        oldPersistedState,
+        openPasswordPrompt,
+        upgradeSecurityToV2,
+    ])
+
+    const onPasswordUpgradeSuccess = useCallback(
+        async (pin: string) => {
+            if (oldPersistedState) await upgradeSecurityToV2(pin)
+        },
+        [oldPersistedState, upgradeSecurityToV2],
+    )
+
     return (
         <SafeAreaView style={{ backgroundColor: COLORS.LIGHT_GRAY }}>
             <BaseView justifyContent="space-between" alignItems="center" h={100} bg={COLORS.LIGHT_GRAY}>
@@ -107,7 +124,7 @@ export const SecurityUpgrade_V2 = ({
                 </BaseView>
 
                 <BaseView pb={62}>
-                    <BaseButton title="Upgrade Security" action={() => upgradeSecurityToV2(password)} />
+                    <BaseButton title="Upgrade Security" action={onStartUpgrade} />
                 </BaseView>
             </BaseView>
 
@@ -121,7 +138,9 @@ export const SecurityUpgrade_V2 = ({
 
             <BaseModalWithChildren isOpen={isPasswordPromptOpen} onClose={closePasswordPrompt}>
                 <LockScreen
-                    onSuccess={onPasswordSuccess}
+                    onSuccess={(pin: string) =>
+                        isUpgrade.current ? onPasswordUpgradeSuccess(pin) : onPasswordSuccess(pin)
+                    }
                     scenario={LOCKSCREEN_SCENARIO.UNLOCK_WALLET}
                     isValidatePassword={true}
                 />
