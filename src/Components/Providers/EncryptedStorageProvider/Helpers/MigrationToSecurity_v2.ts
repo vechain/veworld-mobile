@@ -35,9 +35,11 @@ const getMnemonicsFromStorage = async (persistedState: any, password?: string) =
                 // loop on parsedEntryInState for wallets
                 for (const wallet of parsedEntryInState) {
                     // and decrypt each wallet
+                    const isLegacy = true
                     const decryptedWallet: Wallet = await WalletEncryptionKeyHelper.decryptWallet(
                         wallet.wallet,
                         password ?? walletKey,
+                        isLegacy,
                     )
 
                     if (!decryptedWallet.mnemonic) {

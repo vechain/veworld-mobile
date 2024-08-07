@@ -7,8 +7,6 @@ import { COLORS } from "~Constants"
 import { BaseModalWithChildren, LockScreen, MnemonicBackup, WalletsList } from "./Standalone.components"
 import { useWalletSecurity } from "./Helpers.standalone"
 
-const { getMnemonicsFromStorage } = MigrationToSecurity_v2
-
 export const SecurityUpgrade_V2 = ({
     oldPersistedState,
     securityType,
@@ -36,7 +34,7 @@ export const SecurityUpgrade_V2 = ({
         isUpgrade.current = false
 
         if (oldPersistedState && isWalletSecurityBiometrics) {
-            const _wallets = await getMnemonicsFromStorage(oldPersistedState)
+            const _wallets = await MigrationToSecurity_v2.getMnemonicsFromStorage(oldPersistedState)
             if (!_wallets) return
             let validWallets: Wallet[] = []
             for (let wallet of _wallets) {
@@ -63,7 +61,7 @@ export const SecurityUpgrade_V2 = ({
         async (_password: string) => {
             if (oldPersistedState) {
                 closePasswordPrompt()
-                const _wallets = await getMnemonicsFromStorage(oldPersistedState, _password)
+                const _wallets = await MigrationToSecurity_v2.getMnemonicsFromStorage(oldPersistedState, _password)
                 if (!_wallets) return
                 let validWallets: Wallet[] = []
                 for (let wallet of _wallets) {

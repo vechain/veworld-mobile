@@ -8,7 +8,6 @@ import {
     ConnectAppScreen,
     DappChangeAccountScreen,
     MnemonicBackupScreen,
-    SecurityUpgrade_V2,
     SendTransactionScreen,
     SignCertificateScreen,
 } from "~Screens"
@@ -68,7 +67,6 @@ export type RootStackParamListSwitch = {
         request: WindowRequest
     }
 
-    [Routes.SECURITY_UPGRADE_V2]: undefined
     [Routes.ICLOUD_MNEMONIC_BACKUP]: { deviceToBackup?: LocalDevice; mnemonicArray: string[] }
 }
 const Switch = createNativeStackNavigator<RootStackParamListSwitch>()
@@ -122,12 +120,6 @@ export const SwitchStack = () => {
                         <Switch.Screen name={Routes.LEDGER_SIGN_MESSAGE} component={LedgerSignMessage} />
 
                         <Switch.Screen name={Routes.DAPP_CHANGE_ACCOUNT_SCREEN} component={DappChangeAccountScreen} />
-
-                        <Switch.Screen
-                            name={Routes.SECURITY_UPGRADE_V2}
-                            component={SecurityUpgrade_V2}
-                            options={{ gestureEnabled: false }}
-                        />
 
                         <Switch.Screen
                             name={Routes.ICLOUD_MNEMONIC_BACKUP}
