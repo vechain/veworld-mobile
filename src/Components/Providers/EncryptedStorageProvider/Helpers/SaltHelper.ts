@@ -28,7 +28,7 @@ const getSalt = async (): Promise<string> => {
 }
 
 const _storeNewSaltAndIV = async (): Promise<string> => {
-    const salt = HexUtils.generateRandom(256)
+    const salt = await getSalt()
     const iv = PasswordUtils.getRandomIV(16)
     const ivToBase64 = PasswordUtils.bufferToBase64(iv)
 
