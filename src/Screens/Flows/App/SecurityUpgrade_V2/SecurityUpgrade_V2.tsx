@@ -5,7 +5,6 @@ import { BackHandlerEvent, SecurityLevelType, Wallet } from "~Model"
 import { SafeAreaView } from "react-native-safe-area-context"
 import { COLORS } from "~Constants"
 import { BaseModalWithChildren, LockScreen, MnemonicBackup, WalletsList } from "./Standalone.components"
-import { LOCKSCREEN_SCENARIO } from "~Screens/LockScreen/Enums"
 import { useWalletSecurity } from "./Helpers.standalone"
 
 const { getMnemonicsFromStorage } = MigrationToSecurity_v2
@@ -141,8 +140,6 @@ export const SecurityUpgrade_V2 = ({
                     onSuccess={(pin: string) =>
                         isUpgrade.current ? onPasswordUpgradeSuccess(pin) : onPasswordSuccess(pin)
                     }
-                    scenario={LOCKSCREEN_SCENARIO.UNLOCK_WALLET}
-                    isValidatePassword={true}
                 />
             </BaseModalWithChildren>
         </SafeAreaView>

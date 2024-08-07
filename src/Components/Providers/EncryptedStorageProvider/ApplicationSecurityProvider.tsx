@@ -221,10 +221,11 @@ export const ApplicationSecurityProvider = ({ children }: ApplicationSecurityCon
 
         if (encryptedStorageKeys.length > 0) {
             // Get the wallet key
-            const { walletKey } = await WalletEncryptionKeyHelper.get(password)
+            const isLegacy = true
+            const { walletKey } = await WalletEncryptionKeyHelper.get(password, isLegacy)
 
             // Get the storage keys
-            const storageEncryptionKeys = await StorageEncryptionKeyHelper.get(password)
+            const storageEncryptionKeys = await StorageEncryptionKeyHelper.get(password, isLegacy)
             const reduxKey = storageEncryptionKeys.redux
 
             // Get the encrypted state for redux

@@ -1,13 +1,13 @@
 import { StorageEncryptionKeys } from "~Components/Providers/EncryptedStorageProvider/Model"
 import { Keychain } from "~Storage"
-import { CryptoUtils, HexUtils, PasswordUtils } from "~Utils"
+import { CryptoUtils, CryptoUtils_Legacy, HexUtils, PasswordUtils } from "~Utils"
 import SaltHelper from "./SaltHelper"
 import { ACCESS_CONTROL, Options } from "react-native-keychain"
 
 const PIN_CODE_STORAGE = "ENCRYPTION_KEY_STORAGE"
 const BIOMETRIC_KEY_STORAGE = "BIOMETRIC_KEY_STORAGE"
 
-const get = async (pinCode?: string): Promise<StorageEncryptionKeys> => {
+const get = async (pinCode?: string, isLegacy?: boolean): Promise<StorageEncryptionKeys> => {
     const keys = await Keychain.get({
         key: pinCode ? PIN_CODE_STORAGE : BIOMETRIC_KEY_STORAGE,
         options: {
@@ -20,7 +20,12 @@ const get = async (pinCode?: string): Promise<StorageEncryptionKeys> => {
     if (pinCode) {
         const { salt, iv: base64IV } = await SaltHelper.getSaltAndIV()
         const iv = PasswordUtils.base64ToBuffer(base64IV)
-        const decryptedKeys: StorageEncryptionKeys = await CryptoUtils.decrypt(keys, pinCode, salt, iv)
+        let decryptedKeys: StorageEncryptionKeys = await CryptoUtils.decrypt(keys, pinCode, salt, iv)
+        if (isLegacy) {
+            decryptedKeys = await CryptoUtils_Legacy.decrypt(keys, pinCode, salt)
+        } else {
+            decryptedKeys = await CryptoUtils.decrypt(keys, pinCode, salt, iv)
+        }
         return decryptedKeys
     } else {
         return JSON.parse(keys) as StorageEncryptionKeys
@@ -60,7 +65,7 @@ const set = async (encryptionKeys: StorageEncryptionKeys, pinCode?: string) => {
     }
 }
 
-const validatePinCode = async (pinCode: string): Promise<boolean> => {
+const validatePinCode = async (pinCode: string, isLegacy?: boolean): Promise<boolean> => {
     try {
         const keys = await Keychain.get({
             key: PIN_CODE_STORAGE,
@@ -70,8 +75,12 @@ const validatePinCode = async (pinCode: string): Promise<boolean> => {
 
         const { salt, iv: base64IV } = await SaltHelper.getSaltAndIV()
         const iv = PasswordUtils.base64ToBuffer(base64IV)
-        const decryptedKeys: StorageEncryptionKeys = await CryptoUtils.decrypt(keys, pinCode, salt, iv)
-
+        let decryptedKeys: StorageEncryptionKeys = await CryptoUtils.decrypt(keys, pinCode, salt, iv)
+        if (isLegacy) {
+            decryptedKeys = await CryptoUtils_Legacy.decrypt(keys, pinCode, salt)
+        } else {
+            decryptedKeys = await CryptoUtils.decrypt(keys, pinCode, salt, iv)
+        }
         return !!decryptedKeys && !!decryptedKeys.redux
     } catch (e) {
         return false
