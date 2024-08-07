@@ -36,7 +36,6 @@ import {
 } from "~Storage/Redux"
 import { AccountUtils } from "~Utils"
 import { useI18nContext } from "~i18n"
-import { AccountCard, EditTokensBar, Header, TokenList } from "./Components"
 import { useTokenBalances } from "./Hooks"
 
 export const HomeScreen = () => {
