@@ -22,14 +22,8 @@ export const useSearchOrScanInput = (
     const network = useAppSelector(selectSelectedNetwork)
     const { getVnsName, getVnsAddress } = useVns()
 
-    const {
-        filteredContacts,
-        filteredAccounts,
-        isAddressInContactsOrAccounts,
-        accountsAndContacts,
-        contacts,
-        // isLoading,
-    } = useSearchContactsAndAccounts({ searchText, selectedAddress })
+    const { filteredContacts, filteredAccounts, isAddressInContactsOrAccounts, accountsAndContacts, contacts } =
+        useSearchContactsAndAccounts({ searchText, selectedAddress })
 
     const fetchAccountVns = useCallback(
         async (data: string) => {
@@ -130,7 +124,6 @@ export const useSearchOrScanInput = (
         filteredContacts,
         filteredAccounts,
         isAddressInContactsOrAccounts,
-        // isLoading,
         contacts,
     }
 }
