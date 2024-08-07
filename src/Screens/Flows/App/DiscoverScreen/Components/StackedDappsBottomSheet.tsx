@@ -2,10 +2,9 @@ import { BottomSheetFlatList } from "@gorhom/bottom-sheet"
 import { BottomSheetModalMethods } from "@gorhom/bottom-sheet/lib/typescript/types"
 import React, { useCallback, useMemo, useState } from "react"
 import { ListRenderItemInfo } from "react-native"
-import { BaseBottomSheet, BaseSpacer, BaseText } from "~Components"
+import { BaseBottomSheet, BaseSpacer, BaseText, FavoriteDAppCard } from "~Components"
 import { DiscoveryDApp } from "~Constants"
 import { useI18nContext } from "~i18n"
-import { FavoriteDAppCard } from "./FavoriteDAppCard"
 
 const snapPoints = ["50%", "90%"]
 
