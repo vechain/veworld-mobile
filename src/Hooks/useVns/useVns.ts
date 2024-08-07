@@ -2,8 +2,9 @@ import { useThor } from "~Components"
 import { useCallback, useMemo } from "react"
 import { selectAccounts, selectContacts, selectSelectedNetwork, useAppSelector } from "~Storage/Redux"
 import { useQuery, useQueryClient } from "@tanstack/react-query"
-import { NETWORK_TYPE } from "~Model"
+import { Network, NETWORK_TYPE } from "~Model"
 import { abi } from "thor-devkit"
+import { queryClient } from "~Api/QueryProvider"
 
 export const ZERO_ADDRESS = "0x0000000000000000000000000000000000000000"
 
@@ -12,9 +13,9 @@ const VNS_RESOLVER: Partial<{ [key in NETWORK_TYPE]: string }> = {
     testnet: "0xc403b8EA53F707d7d4de095f0A20bC491Cf2bc94",
 } as const
 
-export const getVnsName = async (thor: Connex.Thor, networkType: NETWORK_TYPE, address?: string) => {
+export const getVnsName = async (thor: Connex.Thor, network: Network, address?: string) => {
     if (!address) return ""
-    const NETWORK_RESOLVER = VNS_RESOLVER[networkType]
+    const NETWORK_RESOLVER = VNS_RESOLVER[network.type]
 
     try {
         const {
@@ -24,14 +25,17 @@ export const getVnsName = async (thor: Connex.Thor, networkType: NETWORK_TYPE, a
             .method(ABI.getNames)
             .call([address])
 
+        // Add VNS to the react-query cache
+        queryClient.setQueryData([names?.[0], address, network.genesis.id], { name: names?.[0], address })
+
         return names?.[0] || ""
     } catch {
         return ""
     }
 }
 
-export const getVnsAddresse = async (thor: Connex.Thor, networkType: NETWORK_TYPE, name?: string) => {
-    const NETWORK_RESOLVER = VNS_RESOLVER[networkType]
+export const getVnsAddress = async (thor: Connex.Thor, network: Network, name?: string) => {
+    const NETWORK_RESOLVER = VNS_RESOLVER[network.type]
     const {
         decoded: { addresses },
     } = await thor
@@ -39,6 +43,12 @@ export const getVnsAddresse = async (thor: Connex.Thor, networkType: NETWORK_TYP
         .method(ABI.getAddresses)
         .call([(name ?? "").toLowerCase()])
     const isEmpty = addresses?.[0] === ZERO_ADDRESS
+
+    if (!isEmpty) {
+        // Add VNS to the react-query cache if address is not empty
+        queryClient.setQueryData([name, addresses?.[0], network.genesis.id], { name, address: addresses?.[0] })
+    }
+
     return isEmpty ? undefined : addresses?.[0] || undefined
 }
 
@@ -61,14 +71,14 @@ export const useVns = (props?: Vns): VnsHook => {
     const network = useAppSelector(selectSelectedNetwork)
 
     const fetchVns = useCallback(async () => {
-        const nameRes = await getVnsName(thor, network.type, address)
+        const nameRes = await getVnsName(thor, network, address)
         const vnsName = nameRes || name
 
-        const addrRes = await getVnsAddresse(thor, network.type, vnsName)
+        const addrRes = await getVnsAddress(thor, network, vnsName)
         const vnsAddr = addrRes || address
 
         return { name: vnsName, address: vnsAddr }
-    }, [address, name, network.type, thor])
+    }, [address, name, network, thor])
 
     const isQueryDisabled = useMemo(() => {
         const onWrongNetwork = network.type === NETWORK_TYPE.SOLO || network.type === NETWORK_TYPE.OTHER
@@ -87,8 +97,8 @@ export const useVns = (props?: Vns): VnsHook => {
         name: queryRes.data?.name || name || "",
         address: queryRes.data?.address || address || "",
         isLoading: queryRes?.isLoading,
-        getVnsName: addr => getVnsName(thor, network.type, addr),
-        getVnsAddress: n => getVnsAddresse(thor, network.type, n),
+        getVnsName: addr => getVnsName(thor, network, addr),
+        getVnsAddress: n => getVnsAddress(thor, network, n),
     }
 }
 
@@ -156,17 +166,14 @@ export const usePrefetchAllVns = () => {
     const network = useAppSelector(selectSelectedNetwork)
     const accounts = useAppSelector(selectAccounts)
     const contacts = useAppSelector(selectContacts)
-    const queryClient = useQueryClient()
+    const qc = useQueryClient()
 
     const isQueryDisabled = useMemo(() => {
         const onWrongNetwork = network.type === NETWORK_TYPE.SOLO || network.type === NETWORK_TYPE.OTHER
         return onWrongNetwork || !thor
     }, [network.type, thor])
 
-    const addresses = useMemo(
-        () => [...accounts.map(acc => acc.address), ...contacts.map(ctc => ctc.address)],
-        [accounts, contacts],
-    )
+    const addresses = useMemo(() => [...accounts, ...contacts].map(account => account.address), [accounts, contacts])
 
     const vnsResults = useQuery({
         queryKey: ["vns_names", network.genesis.id],
@@ -177,11 +184,10 @@ export const usePrefetchAllVns = () => {
 
             const states = res.map((r, idx) => {
                 const decoded = namesABi.decode(r.data)
-                const address = accounts[idx].address
                 const vnsName = decoded.names[0]
-                const state = { name: vnsName, address }
+                const state = { name: vnsName, address: addresses[idx] }
 
-                queryClient.setQueryData([vnsName, address, network.genesis.id], state)
+                qc.setQueryData([vnsName, addresses[idx], network.genesis.id], state)
 
                 return state
             })

@@ -5,6 +5,7 @@ import { ERROR_EVENTS, VET, VTHO } from "~Constants"
 import CryptoUtils from "../CryptoUtils"
 import HexUtils from "../HexUtils"
 import { Vns } from "~Hooks"
+import { queryClient } from "~Api/QueryProvider"
 
 export const getAddressFromPrivateKey = (privateKey: string): string => {
     try {
@@ -191,4 +192,21 @@ export const showAddressOrName = (
     const finalAddr = parsedVnsName || humanAddr()
 
     return finalAddr
+}
+
+/**
+ * Retrieve VNS data for a given address
+ * @param _address - the address to find in the cache (It can be a .vet domain or an address)
+ * @param network - the current network
+ * @returns {{name: string, address: string} | undefined} the address with the corrisponding VNS object else return undefined
+ */
+export const loadVnsFromCache = (_address: string, network: Network) => {
+    const cachedVns = queryClient.getQueryData<{ name: string; address: string }[]>(["vns_names", network.genesis.id])
+    if (!cachedVns) return undefined
+
+    if (_address.includes(".vet")) {
+        return cachedVns.find(vns => compareAddresses(_address, vns.name))
+    }
+
+    return cachedVns.find(vns => compareAddresses(_address, vns.address))
 }

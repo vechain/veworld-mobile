@@ -6,6 +6,7 @@ import { ScanTarget } from "~Constants"
 import { useCameraBottomSheet } from "~Hooks/useCameraBottomSheet"
 import { useSearchContactsAndAccounts } from "~Hooks/useSearchContactsAndAccounts"
 import { useVns, ZERO_ADDRESS } from "~Hooks/useVns"
+import { selectSelectedNetwork, useAppSelector } from "~Storage/Redux"
 import { AddressUtils } from "~Utils"
 import { useI18nContext } from "~i18n"
 
@@ -18,6 +19,7 @@ export const useSearchOrScanInput = (
 
     const [searchText, setSearchText] = useState("")
     const [errorMessage, setErrorMessage] = useState("")
+    const network = useAppSelector(selectSelectedNetwork)
     const { getVnsName, getVnsAddress } = useVns()
 
     const {
@@ -26,10 +28,10 @@ export const useSearchOrScanInput = (
         isAddressInContactsOrAccounts,
         accountsAndContacts,
         contacts,
-        isLoading,
+        // isLoading,
     } = useSearchContactsAndAccounts({ searchText, selectedAddress })
 
-    const onSuccessfullScan = useCallback(
+    const fetchAccountVns = useCallback(
         async (data: string) => {
             let vnsName = ""
             let vnsAddress = ""
@@ -50,6 +52,28 @@ export const useSearchOrScanInput = (
                 vnsAddress = data
             }
 
+            return { name: vnsName, address: vnsAddress }
+        },
+        [LL, getVnsAddress, getVnsName],
+    )
+
+    const onSuccessfullScan = useCallback(
+        async (data: string) => {
+            let vnsName = ""
+            let vnsAddress = ""
+
+            const cachedAddr = AddressUtils.loadVnsFromCache(data, network)
+
+            // Load data from cache if present otherwise retrieve data
+            if (cachedAddr) {
+                vnsName = cachedAddr.name
+                vnsAddress = cachedAddr.address
+            } else {
+                const vns = await fetchAccountVns(data)
+                vnsName = vns?.name || ""
+                vnsAddress = vns?.address || ""
+            }
+
             setSearchText(isEmpty(vnsName) ? vnsAddress : vnsName)
             setSelectedAddress(vnsAddress)
 
@@ -59,7 +83,7 @@ export const useSearchOrScanInput = (
 
             if (addressExists) return navigateNext(vnsAddress)
         },
-        [LL, getVnsAddress, getVnsName, accountsAndContacts, navigateNext, setSelectedAddress],
+        [network, setSelectedAddress, accountsAndContacts, navigateNext, fetchAccountVns],
     )
 
     const { RenderCameraModal, handleOpenCamera } = useCameraBottomSheet({
@@ -106,7 +130,7 @@ export const useSearchOrScanInput = (
         filteredContacts,
         filteredAccounts,
         isAddressInContactsOrAccounts,
-        isLoading,
+        // isLoading,
         contacts,
     }
 }

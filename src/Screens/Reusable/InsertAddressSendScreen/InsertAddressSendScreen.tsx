@@ -7,7 +7,6 @@ import { AddressUtils } from "~Utils"
 import {
     AccountCard,
     BaseAccordion,
-    // BaseSkeleton,
     BaseSpacer,
     BaseText,
     BaseView,
@@ -30,7 +29,6 @@ export const InsertAddressSendScreen = ({ route }: Props) => {
     const { LL } = useI18nContext()
     const [selectedAddress, setSelectedAddress] = useState("")
     const nav = useNavigation()
-    // const theme = useTheme()
 
     const {
         ref: createContactBottomSheetRef,

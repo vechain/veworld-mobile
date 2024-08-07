@@ -1,5 +1,6 @@
+import { useQueryClient } from "@tanstack/react-query"
 import { useEffect, useMemo, useRef, useState } from "react"
-import { useVns } from "~Hooks/useVns"
+import { useVns, Vns } from "~Hooks/useVns"
 import { AccountWithDevice, Contact, NETWORK_TYPE } from "~Model"
 import { selectKnownContacts, selectOtherAccounts, selectSelectedNetwork, useAppSelector } from "~Storage/Redux"
 import { AddressUtils } from "~Utils"
@@ -17,6 +18,9 @@ export const useSearchContactsAndAccounts = ({
     const accountsAndContacts = useMemo(() => {
         return [...accounts, ...contacts]
     }, [accounts, contacts])
+
+    const qc = useQueryClient()
+
     const isOfficialNetwork = useMemo(
         () => selectedNetwork.type === NETWORK_TYPE.MAIN || selectedNetwork.type === NETWORK_TYPE.TEST,
         [selectedNetwork.type],
@@ -26,28 +30,46 @@ export const useSearchContactsAndAccounts = ({
     const { getVnsName } = useVns()
     const [contactsWithDomain, setContactsWithDomain] = useState<Contact[]>([])
     const [accountsWithDomain, setAccountsWithDomain] = useState<AccountWithDevice[]>([])
-    const [isLoading, setIsLoading] = useState(true)
     const firstLoad = useRef(true)
 
     useEffect(() => {
-        const init = async () => {
-            setIsLoading(true)
+        const init = () => {
             firstLoad.current = false
-            let _accounts: AccountWithDevice[] = []
-            for (const acc of accounts) {
-                const name = await getVnsName(acc.address)
-                _accounts.push({ ...acc, vnsName: name })
+            const cachedAddresses = qc.getQueryData<Vns[]>(["vns_names", selectedNetwork.genesis.id])
+            if (!cachedAddresses) {
+                setContactsWithDomain(contacts)
+                setAccountsWithDomain(accounts)
+                return
             }
 
-            let _contacts: Contact[] = []
-            for (const acc of contacts) {
-                const name = await getVnsName(acc.address)
-                _contacts.push({ ...acc, domain: name })
-            }
+            const _contacts = contacts.map(ctc => {
+                const address = cachedAddresses.find(addr => AddressUtils.compareAddresses(ctc.address, addr.address))
+
+                if (address) {
+                    return {
+                        ...ctc,
+                        domain: address.name,
+                    }
+                }
+
+                return ctc
+            })
+
+            const _accounts = accounts.map(acc => {
+                const address = cachedAddresses.find(addr => AddressUtils.compareAddresses(acc.address, addr.address))
+
+                if (address) {
+                    return {
+                        ...acc,
+                        domain: address.name,
+                    }
+                }
+
+                return acc
+            })
 
             setContactsWithDomain(_contacts)
             setAccountsWithDomain(_accounts)
-            setIsLoading(false)
         }
 
         // Avoid fetching VNS when not in MainNet or TestNet
@@ -55,12 +77,11 @@ export const useSearchContactsAndAccounts = ({
             firstLoad.current = false
             setContactsWithDomain(contacts)
             setAccountsWithDomain(accounts)
-            setIsLoading(false)
             return
         }
 
         firstLoad.current && init()
-    }, [getVnsName, accounts, contacts, isOfficialNetwork])
+    }, [getVnsName, accounts, contacts, isOfficialNetwork, selectedNetwork, qc])
     // END - [DOMAINS]
 
     const filteredContacts = useMemo(() => {
@@ -99,6 +120,5 @@ export const useSearchContactsAndAccounts = ({
         isAddressInContactsOrAccounts,
         accountsAndContacts,
         contacts,
-        isLoading,
     }
 }
