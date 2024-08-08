@@ -294,116 +294,100 @@ export const ApplicationSecurityProvider = ({ children }: ApplicationSecurityCon
         [updateSecurityType, onboardingKey, resetApplication],
     )
 
-    const reInitAppAfterMigration = useCallback(async () => {
-        if (biometrics && currentState === "active" && walletStatus === WALLET_STATUS.NOT_INITIALISED) {
-            intialiseApp(biometrics)
-                .then(() => {
-                    debug(ERROR_EVENTS.SECURITY, "App state initialised app")
-                })
-                .catch(e => {
-                    error(ERROR_EVENTS.SECURITY, e)
-                })
-        }
-    }, [biometrics, currentState, intialiseApp, walletStatus])
+    const upgradeSecurityToV2 = useCallback(async (password?: string) => {
+        const encryptedStorageKeys = UserEncryptedStorage.getAllKeys()
 
-    const upgradeSecurityToV2 = useCallback(
-        async (password?: string) => {
-            const encryptedStorageKeys = UserEncryptedStorage.getAllKeys()
+        setSecurityMigrationStatus(SecurityMigration.IN_PROGRESS)
 
-            setSecurityMigrationStatus(SecurityMigration.IN_PROGRESS)
+        if (encryptedStorageKeys.length > 0) {
+            try {
+                // Get the wallet key
+                const isLegacy = true
+                const { walletKey } = await WalletEncryptionKeyHelper.get({ pinCode: password, isLegacy })
 
-            if (encryptedStorageKeys.length > 0) {
-                try {
-                    // Get the wallet key
-                    const isLegacy = true
-                    const { walletKey } = await WalletEncryptionKeyHelper.get({ pinCode: password, isLegacy })
+                // Get the storage keys
+                const storageEncryptionKeys = await StorageEncryptionKeyHelper.get({ pinCode: password, isLegacy })
+                const reduxKey = storageEncryptionKeys.redux
 
-                    // Get the storage keys
-                    const storageEncryptionKeys = await StorageEncryptionKeyHelper.get({ pinCode: password, isLegacy })
-                    const reduxKey = storageEncryptionKeys.redux
+                // Get the encrypted state for redux
+                const persistedState = UserEncryptedStorage.getString("persist:root")
 
-                    // Get the encrypted state for redux
-                    const persistedState = UserEncryptedStorage.getString("persist:root")
+                if (!persistedState) return
+                const oldState = JSON.parse(persistedState)
 
-                    if (!persistedState) return
-                    const oldState = JSON.parse(persistedState)
+                let newState = {}
+                let walletState = {
+                    devices: [],
+                } as { devices: Device[] }
 
-                    let newState = {}
-                    let walletState = {
-                        devices: [],
-                    } as { devices: Device[] }
+                // Go over the state enreies and decrypt them
+                for (const key in oldState) {
+                    if (!oldState.hasOwnProperty(key)) return
 
-                    // Go over the state enreies and decrypt them
-                    for (const key in oldState) {
-                        if (!oldState.hasOwnProperty(key)) return
+                    const encrypted = oldState[key] as string
+                    const toDecrypt = encrypted.replace(/['"]+/g, "").replace("0x", "")
+                    const unencrypted = CryptoUtils_Legacy.decryptState(toDecrypt, reduxKey)
 
-                        const encrypted = oldState[key] as string
-                        const toDecrypt = encrypted.replace(/['"]+/g, "").replace("0x", "")
-                        const unencrypted = CryptoUtils_Legacy.decryptState(toDecrypt, reduxKey)
+                    const parsedEntryInState = JSON.parse(unencrypted)
 
-                        const parsedEntryInState = JSON.parse(unencrypted)
+                    // Get wallets from unencrypted entries and decrypt them
+                    if (key === "devices") {
+                        if ("wallet" in parsedEntryInState[0] && "xPub" in parsedEntryInState[0]) {
+                            // loop on parsedEntryInState for wallets
+                            for (const wallet of parsedEntryInState) {
+                                // and decrypt each wallet
+                                const decryptedWallet: Wallet = await WalletEncryptionKeyHelper.decryptWallet({
+                                    encryptedWallet: wallet.wallet,
+                                    pinCode: password ?? walletKey,
+                                    isLegacy,
+                                })
 
-                        // Get wallets from unencrypted entries and decrypt them
-                        if (key === "devices") {
-                            if ("wallet" in parsedEntryInState[0] && "xPub" in parsedEntryInState[0]) {
-                                // loop on parsedEntryInState for wallets
-                                for (const wallet of parsedEntryInState) {
-                                    // and decrypt each wallet
-                                    const decryptedWallet: Wallet = await WalletEncryptionKeyHelper.decryptWallet({
-                                        encryptedWallet: wallet.wallet,
-                                        pinCode: password ?? walletKey,
-                                        isLegacy,
-                                    })
+                                // Re-encrypt wallet and storage keys with new algo
+                                await WalletEncryptionKeyHelper.remove()
+                                await StorageEncryptionKeyHelper.remove()
 
-                                    // Re-encrypt wallet and storage keys with new algo
-                                    await WalletEncryptionKeyHelper.remove()
-                                    await StorageEncryptionKeyHelper.remove()
+                                await WalletEncryptionKeyHelper.set({ walletKey }, password)
+                                await StorageEncryptionKeyHelper.set(storageEncryptionKeys, password)
 
-                                    await WalletEncryptionKeyHelper.set({ walletKey }, password)
-                                    await StorageEncryptionKeyHelper.set(storageEncryptionKeys, password)
+                                const walletEncrypted_V2 = await WalletEncryptionKeyHelper.encryptWallet(
+                                    decryptedWallet,
+                                    password,
+                                )
 
-                                    const walletEncrypted_V2 = await WalletEncryptionKeyHelper.encryptWallet(
-                                        decryptedWallet,
-                                        password,
-                                    )
-
-                                    wallet.wallet = walletEncrypted_V2
-                                    wallet.isMigrated = true
-                                    walletState.devices.push(wallet)
-                                }
-                            }
-                        } else {
-                            newState = {
-                                ...newState,
-                                [key]: encrypted,
+                                wallet.wallet = walletEncrypted_V2
+                                wallet.isMigrated = true
+                                walletState.devices.push(wallet)
                             }
                         }
+                    } else {
+                        newState = {
+                            ...newState,
+                            [key]: encrypted,
+                        }
                     }
-
-                    newState = {
-                        ...newState,
-                        devices: CryptoUtils.encryptState(walletState.devices, reduxKey),
-                    }
-
-                    // store the state in the new storage - UserEncryptedStorage_V2
-                    UserEncryptedStorage_V2.set("persist:root", JSON.stringify(newState))
-                    setReduxStorage({
-                        mmkv: UserEncryptedStorage_V2,
-                        encryptionKey: reduxKey,
-                    })
-
-                    setWalletStatus(WALLET_STATUS.NOT_INITIALISED)
-                    UserEncryptedStorage.clearAll()
-                    Onboarding.prune(UserEncryptedStorage)
-                    setSecurityMigrationStatus(SecurityMigration.COMPLETED)
-                    reInitAppAfterMigration()
-                } catch (err) {
-                    error(ERROR_EVENTS.ENCRYPTION, err)
                 }
+
+                newState = {
+                    ...newState,
+                    devices: CryptoUtils.encryptState(walletState.devices, reduxKey),
+                }
+
+                // store the state in the new storage - UserEncryptedStorage_V2
+                UserEncryptedStorage_V2.set("persist:root", JSON.stringify(newState))
+                setReduxStorage({
+                    mmkv: UserEncryptedStorage_V2,
+                    encryptionKey: reduxKey,
+                })
+
+                setWalletStatus(WALLET_STATUS.NOT_INITIALISED)
+                UserEncryptedStorage.clearAll()
+                Onboarding.prune(UserEncryptedStorage)
+                setSecurityMigrationStatus(SecurityMigration.COMPLETED)
+            } catch (err) {
+                error(ERROR_EVENTS.ENCRYPTION, err)
             }
-        },
-        [reInitAppAfterMigration],
-    )
+        }
+    }, [])
 
     /**
      * Update the security method
