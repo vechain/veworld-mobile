@@ -1,6 +1,6 @@
 import { StorageEncryptionKeys, WalletEncryptionKey } from "~Components/Providers/EncryptedStorageProvider/Model"
 import { Keychain } from "~Storage"
-import { CryptoUtils, debug, error, PasswordUtils } from "~Utils"
+import { CryptoUtils, CryptoUtils_Legacy, debug, error, PasswordUtils } from "~Utils"
 import { StorageEncryptionKeyHelper, WalletEncryptionKeyHelper } from "~Components"
 import SaltHelper from "./SaltHelper"
 import { ERROR_EVENTS } from "~Constants"
@@ -36,10 +36,15 @@ const get = async (pinCode: string): Promise<BackupKeys | null> => {
         return null
     }
 
-    const { salt, iv: base64IV } = await SaltHelper.getSaltAndIV()
-    const iv = PasswordUtils.base64ToBuffer(base64IV)
-    const backupKeys: BackupKeys = await CryptoUtils.decrypt(keys, pinCode, salt, iv)
-    return backupKeys
+    try {
+        const { salt, iv: base64IV } = await SaltHelper.getSaltAndIV()
+        const iv = PasswordUtils.base64ToBuffer(base64IV)
+        return (await CryptoUtils.decrypt(keys, pinCode, salt, iv)) as BackupKeys
+    } catch (err) {
+        error(ERROR_EVENTS.SECURITY, err)
+        const salt = await SaltHelper.getSalt()
+        return CryptoUtils_Legacy.decrypt(keys, pinCode, salt) as BackupKeys
+    }
 }
 
 const clear = async () => {

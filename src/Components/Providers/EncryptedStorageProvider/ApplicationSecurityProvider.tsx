@@ -374,11 +374,6 @@ export const ApplicationSecurityProvider = ({ children }: ApplicationSecurityCon
 
                 // store the state in the new storage - UserEncryptedStorage_V2
                 UserEncryptedStorage_V2.set("persist:root", JSON.stringify(newState))
-                setReduxStorage({
-                    mmkv: UserEncryptedStorage_V2,
-                    encryptionKey: reduxKey,
-                })
-
                 setWalletStatus(WALLET_STATUS.NOT_INITIALISED)
                 UserEncryptedStorage.clearAll()
                 Onboarding.prune(UserEncryptedStorage)
