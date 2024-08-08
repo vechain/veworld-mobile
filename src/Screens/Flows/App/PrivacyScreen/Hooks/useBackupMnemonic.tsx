@@ -40,7 +40,7 @@ export const useBackupMnemonic = ({
             if (devices.length > 1) {
                 openWalletMgmtSheetWithDelay(300)
             } else {
-                const wallet = await WalletEncryptionKeyHelper.decryptWallet(devices[0].wallet)
+                const wallet = await WalletEncryptionKeyHelper.decryptWallet({ encryptedWallet: devices[0].wallet })
 
                 if (wallet?.mnemonic) {
                     setDeviceToBackup(devices[0])
@@ -74,7 +74,10 @@ export const useBackupMnemonic = ({
             if (devices.length > 1) {
                 openWalletMgmtSheetWithDelay(300)
             } else {
-                const wallet = await WalletEncryptionKeyHelper.decryptWallet(devices[0].wallet, password)
+                const wallet = await WalletEncryptionKeyHelper.decryptWallet({
+                    encryptedWallet: devices[0].wallet,
+                    pinCode: password,
+                })
 
                 if (wallet?.mnemonic?.length) {
                     setDeviceToBackup(devices[0])
@@ -95,7 +98,10 @@ export const useBackupMnemonic = ({
         async (device: LocalDevice) => {
             closeWalletMgmtSheet()
 
-            const wallet = await WalletEncryptionKeyHelper.decryptWallet(device.wallet, userPin)
+            const wallet = await WalletEncryptionKeyHelper.decryptWallet({
+                encryptedWallet: device.wallet,
+                pinCode: userPin,
+            })
 
             if (wallet?.mnemonic) {
                 setDeviceToBackup(device)

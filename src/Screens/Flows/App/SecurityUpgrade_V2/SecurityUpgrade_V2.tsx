@@ -135,7 +135,10 @@ export const SecurityUpgrade_V2 = ({
             </BaseModalWithChildren>
 
             <BaseModalWithChildren isOpen={isWalletBackupOpen} onClose={onCloseWalletBackup}>
-                <MnemonicBackup wallet={selectedWalletToBackup} onClose={onCloseWalletBackup} />
+                <MnemonicBackup
+                    wallet={wallets.length > 1 ? selectedWalletToBackup : wallets[0]}
+                    onClose={onCloseWalletBackup}
+                />
             </BaseModalWithChildren>
 
             <BaseModalWithChildren isOpen={isPasswordPromptOpen} onClose={closePasswordPrompt}>

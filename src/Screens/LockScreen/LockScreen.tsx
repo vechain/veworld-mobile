@@ -43,7 +43,7 @@ export const LockScreen: React.FC<Props> = memo(
 
         const isOldPinSameAsNewPin = useCallback(
             async (pin: string) => {
-                const isValid = await StorageEncryptionKeyHelper.validatePinCode(pin)
+                const isValid = await StorageEncryptionKeyHelper.validatePinCode({ pinCode: pin })
                 if (isValid) {
                     setIsError({
                         type: PinVerificationError.EDIT_PIN,
@@ -95,7 +95,7 @@ export const LockScreen: React.FC<Props> = memo(
                     return
                 }
 
-                const isValid = await StorageEncryptionKeyHelper.validatePinCode(userPin)
+                const isValid = await StorageEncryptionKeyHelper.validatePinCode({ pinCode: userPin })
 
                 if (isValid) {
                     track(AnalyticsEvent.APP_PIN_UNLOCKED)

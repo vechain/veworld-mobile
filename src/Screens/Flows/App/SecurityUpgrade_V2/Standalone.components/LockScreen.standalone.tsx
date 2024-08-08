@@ -34,7 +34,7 @@ export const LockScreen: React.FC<Props> = memo(({ onSuccess }) => {
     const validateUserPin = useCallback(
         async (userPin: string) => {
             const isLegacy = true
-            const isValid = await StorageEncryptionKeyHelper.validatePinCode(userPin, isLegacy)
+            const isValid = await StorageEncryptionKeyHelper.validatePinCode({ pinCode: userPin, isLegacy })
 
             if (isValid) {
                 onSuccess(userPin)

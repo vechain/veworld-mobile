@@ -8,10 +8,10 @@ const getMnemonicsFromStorage = async (persistedState: any, password?: string) =
     if (!persistedState) throw new Error("No persisted state found")
 
     // Get the wallet key
-    const { walletKey } = await WalletEncryptionKeyHelper.get(password)
+    const { walletKey } = await WalletEncryptionKeyHelper.get({ pinCode: password, isLegacy: true })
 
     // Get the storage keys
-    const storageEncryptionKeys = await StorageEncryptionKeyHelper.get(password)
+    const storageEncryptionKeys = await StorageEncryptionKeyHelper.get({ pinCode: password, isLegacy: true })
     const reduxKey = storageEncryptionKeys.redux
 
     // Get the encrypted state for redux
@@ -36,11 +36,11 @@ const getMnemonicsFromStorage = async (persistedState: any, password?: string) =
                 for (const wallet of parsedEntryInState) {
                     // and decrypt each wallet
                     const isLegacy = true
-                    const decryptedWallet: Wallet = await WalletEncryptionKeyHelper.decryptWallet(
-                        wallet.wallet,
-                        password ?? walletKey,
+                    const decryptedWallet: Wallet = await WalletEncryptionKeyHelper.decryptWallet({
+                        encryptedWallet: wallet.wallet,
+                        pinCode: password ?? walletKey,
                         isLegacy,
-                    )
+                    })
 
                     if (!decryptedWallet.mnemonic) {
                         error(ERROR_EVENTS.ENCRYPTION, "No mnemonic found for wallet")

@@ -83,7 +83,7 @@ const decryptWallet = async ({
 
     let wallet: Wallet
     if (isLegacy) {
-        wallet = CryptoUtils_Legacy.decrypt<Wallet>(encryptedWallet, walletKey, salt)
+        wallet = CryptoUtils_Legacy.decrypt<Wallet>(encryptedWallet, walletKey)
     } else {
         wallet = await CryptoUtils.decrypt<Wallet>(encryptedWallet, walletKey, salt, iv)
     }

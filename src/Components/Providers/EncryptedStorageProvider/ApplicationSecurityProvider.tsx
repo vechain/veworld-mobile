@@ -262,6 +262,13 @@ export const ApplicationSecurityProvider = ({ children }: ApplicationSecurityCon
                                     isLegacy,
                                 })
 
+                                // Re-encrypt wallet and storage keys with new algo
+                                await WalletEncryptionKeyHelper.remove()
+                                await StorageEncryptionKeyHelper.remove()
+
+                                await WalletEncryptionKeyHelper.set({ walletKey }, password)
+                                await StorageEncryptionKeyHelper.set(storageEncryptionKeys, password)
+
                                 const walletEncrypted_V2 = await WalletEncryptionKeyHelper.encryptWallet(
                                     decryptedWallet,
                                     password,
@@ -287,7 +294,6 @@ export const ApplicationSecurityProvider = ({ children }: ApplicationSecurityCon
 
                 // store the state in the new storage - UserEncryptedStorage_V2
                 UserEncryptedStorage_V2.set("persist:root", JSON.stringify(newState))
-                setSecurityMigrationStatus(SecurityMigration.COMPLETED)
                 setReduxStorage({
                     mmkv: UserEncryptedStorage_V2,
                     encryptionKey: reduxKey,
@@ -296,6 +302,7 @@ export const ApplicationSecurityProvider = ({ children }: ApplicationSecurityCon
                 // clear out the old storage
                 UserEncryptedStorage.clearAll()
                 Onboarding.prune(UserEncryptedStorage)
+                setSecurityMigrationStatus(SecurityMigration.COMPLETED)
             } catch (err) {
                 error(ERROR_EVENTS.ENCRYPTION, err)
             }

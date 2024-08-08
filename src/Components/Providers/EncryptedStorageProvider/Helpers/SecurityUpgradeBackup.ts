@@ -7,6 +7,8 @@ import { ERROR_EVENTS } from "~Constants"
 
 const BACKUP_KEY_STORAGE = "BACKUP_KEY_STORAGE"
 
+// TODO.vas - fix entire file
+
 type BackupKeys = {
     wallet: WalletEncryptionKey
     storage: StorageEncryptionKeys
