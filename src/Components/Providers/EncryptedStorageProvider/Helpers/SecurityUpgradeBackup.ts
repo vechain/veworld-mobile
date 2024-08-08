@@ -25,6 +25,7 @@ const _store = async (keys: BackupKeys, pinCode: string) => {
     })
 }
 
+// TODO : fix with legacy option
 const get = async (pinCode: string): Promise<BackupKeys | null> => {
     const keys = await Keychain.get({
         key: BACKUP_KEY_STORAGE,
@@ -74,8 +75,8 @@ const updateSecurityMethod = async (currentPinCode: string, newPinCode?: string)
     let storage
 
     try {
-        wallet = await WalletEncryptionKeyHelper.get(currentPinCode)
-        storage = await StorageEncryptionKeyHelper.get(currentPinCode)
+        wallet = await WalletEncryptionKeyHelper.get({ pinCode: currentPinCode })
+        storage = await StorageEncryptionKeyHelper.get({ pinCode: currentPinCode })
 
         const backup: BackupKeys = {
             wallet,
