@@ -392,6 +392,7 @@ export const ApplicationSecurityProvider = ({ children }: ApplicationSecurityCon
                         encryptionKey: reduxKey,
                     })
 
+                    setWalletStatus(WALLET_STATUS.NOT_INITIALISED)
                     UserEncryptedStorage.clearAll()
                     Onboarding.prune(UserEncryptedStorage)
                     setSecurityMigrationStatus(SecurityMigration.COMPLETED)
