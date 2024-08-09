@@ -18,7 +18,7 @@ type Props = {
 }
 export const AssetPriceBanner = ({ isChartDataLoading }: Props) => {
     const { LL } = useI18nContext()
-    const datetime = useLineChartDatetime()
+    const datetime = useLineChartDatetime(LL.COMMON_OVERALL())
     const { formatted: formattedPrice } = useLineChartPrice()
     const { value: priceChangeValue, formatted: formattedPriceChange } = useLineChartRelativeChange({})
 
@@ -38,7 +38,7 @@ export const AssetPriceBanner = ({ isChartDataLoading }: Props) => {
         } else {
             return 24
         }
-    })
+    }, [formattedPrice.value.length])
 
     const applyPriceContainerStyle = useMemo(() => {
         return isIOS() ? styles.textContainer : undefined

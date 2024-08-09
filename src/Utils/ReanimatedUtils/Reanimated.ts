@@ -344,6 +344,26 @@ export function numberToLocaleStringWorklet(
     return sNum
 }
 
+export function fiatToLocaleStringWorklet(
+    value: string,
+    locale: Language = "en-US",
+    options: OptionsType = {},
+): string {
+    "worklet"
+    if (locale && locale.length < 2) {
+        throw new RangeError("Invalid language tag: " + locale)
+    }
+
+    if (!value) {
+        return "-"
+    }
+
+    const format = currencyFormats[<string>mapMatch(currencyFormatMap, locale)]
+
+    const num = (<(key: string, options?: OptionsType) => string>mapMatch(transformForLocale, locale))(value, options)
+    return renderFormat(format, { num, code: "" })
+}
+
 const DEFAULT_PRECISION = 2
 const DEFAULT_ABSOLUTE = false
 

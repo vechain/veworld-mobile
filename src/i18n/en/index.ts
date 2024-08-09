@@ -105,6 +105,7 @@ const en: BaseTranslation = {
     BD_RESET_APP_DISCLAIMER: "Ensure you have backed up the recovery phrase of all your wallets, as this action is irreversible.",
     BD_ACCOUNT_REMOVAL: "Your account will be removed, but you can still access it by adding new accounts to the wallet.",
     BD_YOUR_BALANCE: "Your balance",
+    BD_TESTNET_NO_FIAT: "Fiat balance is not available on testnet",
     BD_SELECT_WORD: "Select word {number: number}",
     BD_SELECT_NETWORK: "Select a network",
     BD_SELECT_NETWORK_DESC: "Select the network you want to transact on",
@@ -306,6 +307,7 @@ const en: BaseTranslation = {
     COMMON_ASSETS: "Assets",
     COMMON_DAPPS: "DApps",
     COMMON_PRICE: "Price",
+    COMMON_OVERALL: "Overall",
     COMMON_TODAY: "Today",
     COMMON_SELECT_ACCOUNT: "Select account",
     COMMON_SELECT_ACCOUNT_TO_REMOVE: "Select account to remove",
@@ -319,6 +321,7 @@ const en: BaseTranslation = {
     COMMON_OOPS: "Oops!",
     COMMON_PROCEED: "Proceed",
     COMMON_OR: "Or",
+    COMMON_24H: "24 HRs",
 
 
     // Alerts
@@ -679,6 +682,7 @@ const en: BaseTranslation = {
     SEND_TO: "To",
     SEND_DETAILS: "Details",
     SEND_AMOUNT: "Amount",
+    SEND_TOTAL_COST: "Total Cost",
     SEND_GAS_FEE: "Gas fee",
     SEND_ESTIMATED_TIME: "Estimated time",
     SEND_LESS_THAN_1_MIN: "Less than 1 min",

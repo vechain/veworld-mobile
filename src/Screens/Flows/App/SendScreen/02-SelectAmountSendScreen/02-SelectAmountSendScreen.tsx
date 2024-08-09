@@ -16,7 +16,7 @@ import {
 } from "~Components"
 import { RootStackParamListHome, Routes } from "~Navigation"
 import { useI18nContext } from "~i18n"
-import { COLORS, CURRENCY_SYMBOLS, typography } from "~Constants"
+import { COLORS, CURRENCY_SYMBOLS, typography, VTHO } from "~Constants"
 import { selectCurrency, useAppSelector } from "~Storage/Redux"
 import { useNavigation } from "@react-navigation/native"
 import { useTotalTokenBalance, useUI, useCalculateGas } from "./Hooks"
@@ -24,6 +24,7 @@ import Animated, { AnimatedProps, FadeInRight, FadeOut } from "react-native-rean
 import HapticsService from "~Services/HapticsService"
 import { BigNutils } from "~Utils"
 import { getCoinGeckoIdBySymbol, useExchangeRate } from "~Api/Coingecko"
+import FiatBalance from "../../HomeScreen/Components/AccountCard/FiatBalance"
 
 const { defaults: defaultTypography } = typography
 
@@ -59,25 +60,19 @@ export const SelectAmountSendScreen = ({ route }: Props) => {
      * TOKEN total balance in FIAT in raw-ish format (with decimals)
      * Example "147031782362332055578.377092605442914032"
      */
-    const fiatTotalBalance = BigNutils().toCurrencyConversion(tokenTotalToHuman, exchangeRate).toString
+    const fiatTotalBalance = BigNutils().toCurrencyConversion(tokenTotalToHuman, 2, exchangeRate)
 
     /**
      * FIAT selected balance calculated fron TOKEN input in human readable format (correct value is when TOKEN is active)
      * Example "53.54"
      */
-    const fiatHumanAmount = BigNutils().toCurrencyConversion(input, exchangeRate).toCurrencyFormat_string(2)
+    const fiatHumanAmount = BigNutils().toCurrencyConversion(input, 2, exchangeRate)
 
     /**
      * TOKEN selected balance in raw-ish format (with decimals) (correct value is when FIAT is active)
      * Example "2472.770518899835788"
      */
     const [tokenAmountFromFiat, setTokenAmountFromFiat] = useState("")
-
-    /**
-     * TOKEN selected balance in human readable format (correct value is when FIAT is active)
-     * Example "2,472.771"
-     */
-    const tokenHumanAmountFromFiat = BigNutils(tokenAmountFromFiat).toTokenFormat_string(2)
 
     /**
      * Toggle between FIAT and TOKEN input (and update the input value)
@@ -144,23 +139,8 @@ export const SelectAmountSendScreen = ({ route }: Props) => {
         })
     }
 
-    const {
-        inputColorNotAnimated,
-        placeholderColor,
-        shortenedTokenName,
-        animatedFontStyle,
-        animatedStyleInputColor,
-        computeconvertedAmountInFooter,
-    } = useUI({
-        isError,
-        input,
-        token,
-        theme,
-        isInputInFiat,
-        tokenHumanAmountFromFiat,
-        fiatHumanAmount,
-        currency,
-    })
+    const { inputColorNotAnimated, placeholderColor, shortenedTokenName, animatedFontStyle, animatedStyleInputColor } =
+        useUI({ isError, input, token, theme })
 
     return (
         <Layout
@@ -263,16 +243,19 @@ export const SelectAmountSendScreen = ({ route }: Props) => {
                                     ? [
                                           {
                                               children: (
-                                                  <BaseText typographyFont="captionBold" color={inputColorNotAnimated}>
-                                                      {computeconvertedAmountInFooter}
-                                                  </BaseText>
+                                                  <FiatBalance
+                                                      typographyFont="captionBold"
+                                                      color={inputColorNotAnimated}
+                                                      balances={[fiatHumanAmount]}
+                                                      prefix="≈ "
+                                                  />
                                               ),
                                               style: styles.counterValueView,
                                           },
                                       ]
                                     : []),
 
-                                ...(token.symbol.toLowerCase() === "vtho"
+                                ...(token.symbol === VTHO.symbol
                                     ? [
                                           {
                                               children: (

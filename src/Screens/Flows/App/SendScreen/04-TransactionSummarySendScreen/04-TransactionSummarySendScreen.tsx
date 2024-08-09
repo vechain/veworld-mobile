@@ -2,15 +2,7 @@ import React, { useCallback, useEffect, useMemo } from "react"
 import { NativeStackScreenProps } from "@react-navigation/native-stack"
 import { useAnalyticTracking, useTheme, useTransactionScreen, useTransferAddContact } from "~Hooks"
 import { AccountUtils, AddressUtils, BigNutils, TransactionUtils } from "~Utils"
-import {
-    AnalyticsEvent,
-    COLORS,
-    GasPriceCoefficient,
-    VET,
-    VTHO,
-    creteAnalyticsEvent,
-    currencySymbolMap,
-} from "~Constants"
+import { AnalyticsEvent, COLORS, GasPriceCoefficient, VET, VTHO, creteAnalyticsEvent } from "~Constants"
 import {
     BaseSpacer,
     BaseText,
@@ -43,6 +35,7 @@ import Animated, { interpolateColor, useAnimatedStyle, useSharedValue, withTimin
 import { StyleSheet } from "react-native"
 import { getCoinGeckoIdBySymbol, useExchangeRate } from "~Api/Coingecko"
 import { NotEnoughGasModal } from "./Modal"
+import FiatBalance from "../../HomeScreen/Components/AccountCard/FiatBalance"
 
 type Props = NativeStackScreenProps<RootStackParamListHome, Routes.TRANSACTION_SUMMARY_SEND>
 
@@ -299,18 +292,9 @@ function TotalSendAmountView({ amount, symbol, token, txCostTotal, isDelegated, 
         () => BigNutils(txCostTotal).toHuman(token.decimals).decimals(4).toString,
         [token.decimals, txCostTotal],
     )
+    const isVTHO = useMemo(() => token.symbol === VTHO.symbol, [token.symbol])
 
-    const formattedFiatAmount = useMemo(() => {
-        const _amount = BigNutils()
-            .toCurrencyConversion(token.symbol.toLowerCase() === "vtho" ? formattedTotalCost : amount, exchangeRate)
-            .toCurrencyFormat_string(2)
-
-        if (_amount.includes("<")) {
-            return `${_amount} ${currencySymbolMap[currency]}`
-        } else {
-            return `≈ ${_amount} ${currencySymbolMap[currency]}`
-        }
-    }, [amount, currency, exchangeRate, formattedTotalCost, token.symbol])
+    const fiatHumanAmount = BigNutils().toCurrencyConversion(isVTHO ? formattedTotalCost : amount, 2, exchangeRate)
 
     return (
         <>
@@ -322,29 +306,31 @@ function TotalSendAmountView({ amount, symbol, token, txCostTotal, isDelegated, 
 
             <BaseView flexDirection="row">
                 <BaseText typographyFont="subSubTitle">{amount}</BaseText>
-                <BaseText typographyFont="body" mx={4}>
+                <BaseText typographyFont="bodyBold" mx={4}>
                     {symbol}
                 </BaseText>
 
-                {exchangeRate && token.symbol.toLowerCase() !== "vtho" && (
-                    <BaseText typographyFont="buttonSecondary">{formattedFiatAmount}</BaseText>
+                {exchangeRate && token.symbol !== VTHO.symbol && (
+                    <FiatBalance typographyFont="buttonSecondary" balances={[fiatHumanAmount]} prefix="≈ " />
                 )}
             </BaseView>
 
             {/* Show total tx cost if the token is VTHO and the gas fee is not delegated */}
-            {token.symbol.toLowerCase() === "vtho" && !isDelegated ? (
+            {isVTHO && !isDelegated ? (
                 <>
                     <BaseSpacer height={12} />
-                    <BaseText typographyFont="caption">{"Total Cost"}</BaseText>
+                    <BaseText typographyFont="caption">{LL.SEND_TOTAL_COST()}</BaseText>
                     <BaseView flexDirection="row">
                         <Animated.Text style={[baseStyles.coloredText, animatedStyle]}>
                             {formattedTotalCost}
                         </Animated.Text>
-                        <BaseText typographyFont="body" mx={4}>
+                        <BaseText typographyFont="bodyBold" mx={4}>
                             {symbol}
                         </BaseText>
 
-                        {exchangeRate && <BaseText typographyFont="buttonSecondary">{formattedFiatAmount}</BaseText>}
+                        {exchangeRate && (
+                            <FiatBalance typographyFont="buttonSecondary" balances={[fiatHumanAmount]} prefix="≈ " />
+                        )}
                     </BaseView>
                 </>
             ) : null}

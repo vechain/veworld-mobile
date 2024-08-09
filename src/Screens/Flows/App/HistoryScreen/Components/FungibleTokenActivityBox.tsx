@@ -10,6 +10,7 @@ import { useI18nContext } from "~i18n"
 import { getTimeZone } from "react-native-localize"
 import { ActivityStatusIndicator } from "./ActivityStatusIndicator"
 import { useExchangeRate } from "~Api/Coingecko"
+import FiatBalance from "../../HomeScreen/Components/AccountCard/FiatBalance"
 
 type Props = {
     activity: FungibleTokenActivity
@@ -47,7 +48,7 @@ export const FungibleTokenActivityBox: React.FC<Props> = memo(({ activity, onPre
     const fiatValueTransferred = useMemo(() => {
         if (!token || !exchangeRate) return undefined
         const amount = BigNutils(activity.amount).toHuman(token.decimals).toString
-        return BigNutils().toCurrencyConversion(amount, exchangeRate).toCurrencyFormat_string(2)
+        return BigNutils().toCurrencyConversion(amount, 2, exchangeRate)
     }, [activity.amount, exchangeRate, token])
 
     const dateTimeTransfer = useMemo(() => {
@@ -76,14 +77,16 @@ export const FungibleTokenActivityBox: React.FC<Props> = memo(({ activity, onPre
                         </BaseView>
                     </BaseView>
                     {fiatValueTransferred && (
-                        <BaseText typographyFont="smallCaptionMedium" color={theme.colors.success}>
-                            {fiatValueTransferred} {currency}
-                        </BaseText>
+                        <FiatBalance
+                            typographyFont="smallCaptionMedium"
+                            balances={[fiatValueTransferred]}
+                            color={theme.colors.success}
+                        />
                     )}
                 </BaseView>
             </BaseView>
         )
-    }, [amountTransferred, currency, fiatValueTransferred, symbol, theme.colors.success, token?.symbol])
+    }, [amountTransferred, fiatValueTransferred, symbol, theme.colors.success, token?.symbol])
 
     return (
         <BaseTouchable haptics="Light" action={() => onPress(activity, token)} style={baseStyles.container}>

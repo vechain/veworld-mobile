@@ -37,22 +37,6 @@ export const removeUrlProtocolAndPath = (url: string) => {
     return new URL(url).host
 }
 
-// /**
-//  * Format currency
-//  */
-// export const formatCurrency = (currency: CURRENCY): string => {
-//     let name = "Dollar (US)"
-//     switch (currency) {
-//         case CURRENCY.EUR:
-//             name = "Euro"
-//             break
-//         case CURRENCY.USD:
-//         default:
-//     }
-
-//     return `${currency} - ${name}`
-// }
-
 export const limitChars = (text: string) => {
     if (text.length <= 24) {
         return text

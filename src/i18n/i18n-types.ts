@@ -355,6 +355,10 @@ type RootTranslation = {
 	 */
 	BD_YOUR_BALANCE: string
 	/**
+	 * F​i​a​t​ ​b​a​l​a​n​c​e​ ​i​s​ ​n​o​t​ ​a​v​a​i​l​a​b​l​e​ ​o​n​ ​t​e​s​t​n​e​t
+	 */
+	BD_TESTNET_NO_FIAT: string
+	/**
 	 * S​e​l​e​c​t​ ​w​o​r​d​ ​{​n​u​m​b​e​r​}
 	 * @param {number} number
 	 */
@@ -1113,6 +1117,10 @@ type RootTranslation = {
 	 */
 	COMMON_PRICE: string
 	/**
+	 * O​v​e​r​a​l​l
+	 */
+	COMMON_OVERALL: string
+	/**
 	 * T​o​d​a​y
 	 */
 	COMMON_TODAY: string
@@ -1164,6 +1172,10 @@ type RootTranslation = {
 	 * O​r
 	 */
 	COMMON_OR: string
+	/**
+	 * 2​4​ ​H​R​s
+	 */
+	COMMON_24H: string
 	/**
 	 * B​i​o​m​e​t​r​i​c​s​ ​n​o​t​ ​a​v​a​i​l​a​b​l​e
 	 */
@@ -2385,6 +2397,10 @@ type RootTranslation = {
 	 */
 	SEND_AMOUNT: string
 	/**
+	 * T​o​t​a​l​ ​C​o​s​t
+	 */
+	SEND_TOTAL_COST: string
+	/**
 	 * G​a​s​ ​f​e​e
 	 */
 	SEND_GAS_FEE: string
@@ -3330,6 +3346,10 @@ export type TranslationFunctions = {
 	 */
 	BD_YOUR_BALANCE: () => LocalizedString
 	/**
+	 * Fiat balance is not available on testnet
+	 */
+	BD_TESTNET_NO_FIAT: () => LocalizedString
+	/**
 	 * Select word {number}
 	 */
 	BD_SELECT_WORD: (arg: { number: number }) => LocalizedString
@@ -4082,6 +4102,10 @@ export type TranslationFunctions = {
 	 */
 	COMMON_PRICE: () => LocalizedString
 	/**
+	 * Overall
+	 */
+	COMMON_OVERALL: () => LocalizedString
+	/**
 	 * Today
 	 */
 	COMMON_TODAY: () => LocalizedString
@@ -4133,6 +4157,10 @@ export type TranslationFunctions = {
 	 * Or
 	 */
 	COMMON_OR: () => LocalizedString
+	/**
+	 * 24 HRs
+	 */
+	COMMON_24H: () => LocalizedString
 	/**
 	 * Biometrics not available
 	 */
@@ -5330,6 +5358,10 @@ Try reconnect your device to the internet.
 	 * Amount
 	 */
 	SEND_AMOUNT: () => LocalizedString
+	/**
+	 * Total Cost
+	 */
+	SEND_TOTAL_COST: () => LocalizedString
 	/**
 	 * Gas fee
 	 */

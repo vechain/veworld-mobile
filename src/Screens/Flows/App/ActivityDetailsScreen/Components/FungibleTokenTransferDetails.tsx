@@ -1,14 +1,14 @@
 import React, { memo, useMemo } from "react"
+import { useExchangeRate } from "~Api/Coingecko"
 import { VTHO, currencySymbolMap, genesisesId, getCoinGeckoIdBySymbol } from "~Constants"
 import { useCopyClipboard, useFungibleTokenInfo } from "~Hooks"
-import { BigNutils, AddressUtils } from "~Utils"
 import { FungibleToken, FungibleTokenActivity } from "~Model"
 import { selectCurrency, useAppSelector } from "~Storage/Redux"
+import { AddressUtils, BigNutils } from "~Utils"
 import { useI18nContext } from "~i18n"
-import { ActivityDetail } from "../Type"
 import { useGasFee } from "../Hooks"
-import { ActivityDetailItem } from "./ActivityDetailItem"
-import { useExchangeRate } from "~Api/Coingecko"
+import { ActivityDetail } from "../Type"
+import { ActivityDetailContent, ActivityDetailItem } from "./ActivityDetailItem"
 
 type Props = {
     activity: FungibleTokenActivity
@@ -56,9 +56,7 @@ export const FungibleTokenTransferDetails: React.FC<Props> = memo(({ activity, t
     const fiatValueTransferred = useMemo(() => {
         if (exchangeRate && token && decimals) {
             let amount = BigNutils(activity.amount).toHuman(decimals).toString
-            return BigNutils()
-                .toCurrencyConversion(amount ?? "0", exchangeRate)
-                .toCurrencyFormat_string(2)
+            return BigNutils().toCurrencyConversion(amount ?? "0", 2, exchangeRate)
         }
     }, [activity.amount, decimals, exchangeRate, token])
 
@@ -71,47 +69,63 @@ export const FungibleTokenTransferDetails: React.FC<Props> = memo(({ activity, t
     }, [activity.blockNumber])
 
     // Details List
-    const details: Array<ActivityDetail> = [
-        {
-            id: 1,
-            title: LL.VALUE_TITLE(),
-            value: `${amountTransferred} ${token?.symbol ?? symbol}`,
-            typographyFont: "subSubTitle",
-            underline: false,
-            valueAdditional: fiatValueTransferred ? `≈ ${fiatValueTransferred} ${currencySymbolMap[currency]}` : "",
-        },
-        {
-            id: 2,
-            title: LL.GAS_FEE(),
-            value: vthoGasFee ? `${vthoGasFee} ${VTHO.symbol}` : "",
-            typographyFont: "subSubTitle",
-            underline: false,
-            valueAdditional: gasToFiat ? gasToFiat : "",
-        },
-        {
-            id: 3,
-            title: LL.TRANSACTION_ID(),
-            value: `${transactionIDshort}`,
-            typographyFont: "subSubTitle",
-            underline: false,
-            icon: "content-copy",
-            onValuePress: () => onCopyToClipboard(activity.id, LL.COMMON_LBL_ADDRESS()),
-        },
-        {
-            id: 4,
-            title: LL.BLOCK_NUMBER(),
-            value: blockNumber ? `${blockNumber}` : "",
-            typographyFont: "subSubTitle",
-            underline: false,
-        },
-        {
-            id: 5,
-            title: LL.TITLE_NETWORK(),
-            value: network.toUpperCase(),
-            typographyFont: "subSubTitle",
-            underline: false,
-        },
-    ]
+    const details: Array<ActivityDetailContent> = useMemo(
+        () => [
+            {
+                id: 1,
+                title: LL.VALUE_TITLE(),
+                value: `${amountTransferred} ${token?.symbol ?? symbol}`,
+                typographyFont: "subSubTitle",
+                underline: false,
+                valueAdditional: fiatValueTransferred || "",
+            },
+            {
+                id: 2,
+                title: LL.GAS_FEE(),
+                value: vthoGasFee ? `${vthoGasFee} ${VTHO.symbol}` : "",
+                typographyFont: "subSubTitle",
+                underline: false,
+                valueAdditional: gasToFiat || "",
+            },
+            {
+                id: 3,
+                title: LL.TRANSACTION_ID(),
+                value: `${transactionIDshort}`,
+                typographyFont: "subSubTitle",
+                underline: false,
+                icon: "content-copy",
+                onValuePress: () => onCopyToClipboard(activity.id, LL.COMMON_LBL_ADDRESS()),
+            },
+            {
+                id: 4,
+                title: LL.BLOCK_NUMBER(),
+                value: blockNumber ? `${blockNumber}` : "",
+                typographyFont: "subSubTitle",
+                underline: false,
+            },
+            {
+                id: 5,
+                title: LL.TITLE_NETWORK(),
+                value: network.toUpperCase(),
+                typographyFont: "subSubTitle",
+                underline: false,
+            },
+        ],
+        [
+            LL,
+            activity.id,
+            amountTransferred,
+            blockNumber,
+            fiatValueTransferred,
+            gasToFiat,
+            network,
+            onCopyToClipboard,
+            symbol,
+            token?.symbol,
+            transactionIDshort,
+            vthoGasFee,
+        ],
+    )
 
     return (
         <>
