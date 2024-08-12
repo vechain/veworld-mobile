@@ -1,9 +1,9 @@
 import React, { memo, useMemo } from "react"
-import { VTHO, currencySymbolMap, genesisesId } from "~Constants"
+import { VTHO, genesisesId } from "~Constants"
 import { AddressUtils, TransactionUtils } from "~Utils"
 import { BaseSpacer } from "~Components"
 import { useCopyClipboard } from "~Hooks"
-import { selectCurrency, selectOfficialTokens, useAppSelector } from "~Storage/Redux"
+import { selectOfficialTokens, useAppSelector } from "~Storage/Redux"
 import { useI18nContext } from "~i18n"
 import { ActivityStatus, DappTxActivity } from "~Model"
 import { ActivityDetail } from "../../Type"
@@ -23,19 +23,7 @@ export const DappTransactionDetails: React.FC<Props> = memo(({ activity }) => {
         return activity.genesisId === genesisesId.main ? LL.NETWORK_LABEL_MAINNET() : LL.NETWORK_LABEL_TESTNET()
     }, [LL, activity.genesisId])
 
-    const currency = useAppSelector(selectCurrency)
-
     const { vthoGasFee, fiatValueGasFeeSpent } = useGasFee(activity)
-
-    const gasToFiat = useMemo(() => {
-        if (!fiatValueGasFeeSpent) return "0"
-
-        if (fiatValueGasFeeSpent.includes("<")) {
-            return `${fiatValueGasFeeSpent} ${currencySymbolMap[currency]}`
-        } else {
-            return `≈ ${fiatValueGasFeeSpent} ${currencySymbolMap[currency]}`
-        }
-    }, [currency, fiatValueGasFeeSpent])
 
     const tokens = useAppSelector(selectOfficialTokens)
 
@@ -100,7 +88,7 @@ export const DappTransactionDetails: React.FC<Props> = memo(({ activity }) => {
             value: `${vthoGasFee} ${VTHO.symbol}`,
             typographyFont: "subSubTitle",
             underline: false,
-            valueAdditional: gasToFiat ? gasToFiat : "",
+            valueAdditional: fiatValueGasFeeSpent || "",
         },
         {
             id: 6,

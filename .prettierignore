@@ -1,3 +1,4 @@
 src/i18n/*
 .circleci/config.yml
 src/Assets/Lottie/**/*.json
+package.json

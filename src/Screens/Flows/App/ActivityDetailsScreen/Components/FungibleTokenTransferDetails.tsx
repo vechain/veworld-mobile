@@ -1,6 +1,6 @@
 import React, { memo, useMemo } from "react"
 import { useExchangeRate } from "~Api/Coingecko"
-import { VTHO, currencySymbolMap, genesisesId, getCoinGeckoIdBySymbol } from "~Constants"
+import { VTHO, genesisesId, getCoinGeckoIdBySymbol } from "~Constants"
 import { useCopyClipboard, useFungibleTokenInfo } from "~Hooks"
 import { FungibleToken, FungibleTokenActivity } from "~Model"
 import { selectCurrency, useAppSelector } from "~Storage/Redux"
@@ -27,16 +27,6 @@ export const FungibleTokenTransferDetails: React.FC<Props> = memo(({ activity, t
     const { onCopyToClipboard } = useCopyClipboard()
 
     const { vthoGasFee, fiatValueGasFeeSpent } = useGasFee(activity)
-
-    const gasToFiat = useMemo(() => {
-        if (!fiatValueGasFeeSpent) return "0"
-
-        if (fiatValueGasFeeSpent.includes("<")) {
-            return `${fiatValueGasFeeSpent} ${currencySymbolMap[currency]}`
-        } else {
-            return `≈ ${fiatValueGasFeeSpent} ${currencySymbolMap[currency]}`
-        }
-    }, [currency, fiatValueGasFeeSpent])
 
     const { symbol, decimals } = useFungibleTokenInfo(activity.tokenAddress)
 
@@ -85,7 +75,7 @@ export const FungibleTokenTransferDetails: React.FC<Props> = memo(({ activity, t
                 value: vthoGasFee ? `${vthoGasFee} ${VTHO.symbol}` : "",
                 typographyFont: "subSubTitle",
                 underline: false,
-                valueAdditional: gasToFiat || "",
+                valueAdditional: fiatValueGasFeeSpent || "",
             },
             {
                 id: 3,
@@ -116,8 +106,8 @@ export const FungibleTokenTransferDetails: React.FC<Props> = memo(({ activity, t
             activity.id,
             amountTransferred,
             blockNumber,
+            fiatValueGasFeeSpent,
             fiatValueTransferred,
-            gasToFiat,
             network,
             onCopyToClipboard,
             symbol,

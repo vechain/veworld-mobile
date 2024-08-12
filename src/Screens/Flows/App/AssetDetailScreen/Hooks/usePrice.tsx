@@ -20,7 +20,6 @@ export type ValueAndFormatted<U = number, V = string> = {
  * @returns latest price when not scrubbing and active price when scrubbing
  */
 export function useLineChartPrice(): ValueAndFormatted {
-    let langTag = LocaleUtils.getLanguageTag()
     const { value: activeCursorPrice } = useRNWagmiChartLineChartPrice({
         // do not round
         precision: 18,
@@ -39,13 +38,7 @@ export function useLineChartPrice(): ValueAndFormatted {
         return data[data.length - 1]?.value ?? 0
     }, [activeCursorPrice.value, data])
 
-    const fiatPrice = useDerivedValue(() => formatFiat({ amount: price.value }), [formatFiat, price.value])
-
-    const priceFormatted = useDerivedValue(() => {
-        return ReanimatedUtils.fiatToLocaleStringWorklet(fiatPrice.value, langTag, {
-            style: "currency",
-        })
-    }, [fiatPrice, langTag])
+    const priceFormatted = useDerivedValue(() => formatFiat({ amount: price.value }), [formatFiat, price.value])
 
     return {
         value: price,
