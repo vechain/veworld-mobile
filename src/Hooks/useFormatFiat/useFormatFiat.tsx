@@ -10,7 +10,7 @@ type FormatFiatFuncArgs = {
 }
 
 export const useFormatFiat = (intlOptions?: FormatFiatConfig) => {
-    let local
+    let local: string
 
     const c = useAppSelector(selectCurrency)
     const { currency } = useMemo(

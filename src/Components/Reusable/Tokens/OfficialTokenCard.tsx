@@ -8,10 +8,10 @@ import { BigNutils } from "~Utils"
 import { useI18nContext } from "~i18n"
 import FiatBalance from "~Screens/Flows/App/HomeScreen/Components/AccountCard/FiatBalance"
 import { selectBalanceVisible, useAppSelector } from "~Storage/Redux"
-import { FungibleTokenWithBalance } from "~Model"
+import { FungibleToken } from "~Model"
 
 type OfficialTokenCardProps = {
-    token: FungibleTokenWithBalance
+    token: FungibleToken
     tokenWithInfo?: Partial<TokenWithCompleteInfo>
     action: () => void
     iconHeight: number
