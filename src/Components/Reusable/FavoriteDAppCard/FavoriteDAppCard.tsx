@@ -3,7 +3,7 @@ import { StyleSheet, TouchableOpacityProps, ViewStyle } from "react-native"
 import { BaseIcon, BaseSpacer, BaseText, BaseTouchableBox, BaseView } from "~Components"
 import { DiscoveryDApp } from "~Constants"
 import { useDappBookmarking, useThemedStyles } from "~Hooks"
-import { getAppHubIconUrl } from "../utils"
+import { DAppUtils } from "~Utils"
 import { DAppIcon } from "./DAppIcon"
 
 type Props = {
@@ -58,7 +58,7 @@ export const FavoriteDAppCard: React.FC<Props> = memo(
                     <DAppIcon
                         imageSource={{
                             uri: dapp.id
-                                ? getAppHubIconUrl(dapp.id)
+                                ? DAppUtils.getAppHubIconUrl(dapp.id)
                                 : `${process.env.REACT_APP_GOOGLE_FAVICON_URL}${dapp.href}`,
                         }}
                     />

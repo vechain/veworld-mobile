@@ -1,20 +1,30 @@
+import { createBottomTabNavigator } from "@react-navigation/bottom-tabs"
+import { NavigatorScreenParams } from "@react-navigation/native"
 import React, { useCallback, useMemo } from "react"
 import { StyleSheet } from "react-native"
-import { createBottomTabNavigator } from "@react-navigation/bottom-tabs"
 import { TabIcon } from "~Components"
 import { useCheckWalletBackup, useTheme } from "~Hooks"
-import PlatformUtils from "~Utils/PlatformUtils"
-import { DiscoverStack, HomeStack, SettingsStack } from "~Navigation/Stacks"
-import { NFTStack } from "~Navigation/Stacks/NFTStack"
-import { selectCurrentScreen, selectSelectedAccount, selectSelectedNetwork, useAppSelector } from "~Storage/Redux"
-import { Routes } from "~Navigation/Enums"
 import { NETWORK_TYPE } from "~Model"
+import { Routes } from "~Navigation/Enums"
+import {
+    DiscoverStack,
+    HomeStack,
+    RootStackParamListBrowser,
+    RootStackParamListHome,
+    RootStackParamListSettings,
+    SettingsStack,
+} from "~Navigation/Stacks"
+import { HistoryStack, HistoryStackParamList } from "~Navigation/Stacks/HistoryStack"
+import { NFTStack, RootStackParamListNFT } from "~Navigation/Stacks/NFTStack"
+import { selectCurrentScreen, selectSelectedAccount, selectSelectedNetwork, useAppSelector } from "~Storage/Redux"
+import PlatformUtils from "~Utils/PlatformUtils"
 
 export type TabStackParamList = {
-    HomeStack: undefined
-    NFTStack: undefined
-    DiscoverStack: undefined
-    SettingsStack: undefined
+    HomeStack: NavigatorScreenParams<RootStackParamListHome>
+    NFTStack: NavigatorScreenParams<RootStackParamListNFT>
+    DiscoverStack: NavigatorScreenParams<RootStackParamListBrowser>
+    SettingsStack: NavigatorScreenParams<RootStackParamListSettings>
+    [Routes.HISTORY_STACK]: NavigatorScreenParams<HistoryStackParamList>
 }
 
 const Tab = createBottomTabNavigator<TabStackParamList>()
@@ -97,6 +107,16 @@ export const TabStack = () => {
                     tabBarLabel: "Discover",
                     tabBarTestID: "discover-tab",
                     tabBarIcon: ({ focused }) => renderTabBarIcon(focused, focused ? "compass" : "compass-outline"),
+                }}
+            />
+
+            <Tab.Screen
+                name={Routes.HISTORY_STACK}
+                component={HistoryStack}
+                options={{
+                    tabBarLabel: Routes.HISTORY,
+                    tabBarTestID: "history-tab",
+                    tabBarIcon: ({ focused }) => renderTabBarIcon(focused, "history"),
                 }}
             />
 

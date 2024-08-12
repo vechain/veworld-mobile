@@ -51,7 +51,7 @@
     "e2e.android.r": "yarn e2e.android.build.r && yarn e2e.android.test.r"
   },
   "dependencies": {
-    "@coinbase/cbpay-js": "^1.7.0",
+    "@coinbase/cbpay-js": "2.2.0",
     "@craftzdog/react-native-buffer": "^6.0.5",
     "@datadog/mobile-react-native": "^2.3.1",
     "@datadog/mobile-react-navigation": "^2.3.1",

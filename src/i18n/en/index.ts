@@ -588,6 +588,11 @@ const en: BaseTranslation = {
     NFT_ALERT_IMAGE_SAVED_TITLE: "NFT image saved to photo album",
     NFT_ALERT_IMAGE_SAVED_MSG: "You have successfully saved the NFT image to your photo album",
 
+    // Swap screen
+    SWAP_TITLE: "Swap tokens",
+    SWAP_DESCRIPTION: "Using these Vechain dApps you can swap tokens on your wallet for different ones, without having to buy and sell.",
+    SWAP_DAPP_NUMBER: "{total: number} dApps",
+    SWAP_EMPTY_LIST: "No dApps found",
 
     // Onboarding
 
