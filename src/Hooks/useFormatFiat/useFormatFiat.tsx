@@ -69,10 +69,6 @@ export const useFormatFiat = (intlOptions?: FormatFiatConfig) => {
                 res = formattedAmount
             }
 
-            if (intlOptions?.minimumFractionDigits && intlOptions?.minimumFractionDigits > 2) {
-                // remove any comma after the first one if it's a number with many decimals
-                res = res
-            }
             return res
         },
         [mainSymbolPosition, local, currency, intlOptions],

@@ -3,7 +3,6 @@ import { BaseSkeleton, BaseText, BaseTextProps, BaseView, BaseViewProps } from "
 import { COLORS } from "~Constants"
 import { useTheme } from "~Hooks"
 import { useFormatFiat } from "~Hooks/useFormatFiat"
-import { selectSymbolPosition, useAppSelector } from "~Storage/Redux"
 
 type FiatBalanceProps = {
     isVisible?: boolean
@@ -25,7 +24,6 @@ const FiatBalance: React.FC<FiatBalanceProps> = (props: FiatBalanceProps) => {
         ...baseviewProps
     } = props
     const theme = useTheme()
-    const symbolPosition = useAppSelector(selectSymbolPosition)
 
     const isAlmostZero = useCallback((b: string) => b?.includes("<"), [])
     const areAlmostZero = useMemo(() => balances?.every(isAlmostZero), [balances, isAlmostZero])
@@ -39,8 +37,8 @@ const FiatBalance: React.FC<FiatBalanceProps> = (props: FiatBalanceProps) => {
 
     const { formatFiat } = useFormatFiat()
     const renderBalance = useMemo(
-        () => formatFiat({ amount: isNaN ? 0 : amount, cover: !isVisible, symbolPosition }),
-        [formatFiat, isNaN, amount, isVisible, symbolPosition],
+        () => formatFiat({ amount: isNaN ? 0 : amount, cover: !isVisible }),
+        [formatFiat, isNaN, amount, isVisible],
     )
 
     return isLoading ? (
