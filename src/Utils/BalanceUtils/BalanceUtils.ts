@@ -110,8 +110,9 @@ const getFiatBalance = (balance: string, exchangeRate: number, decimals: number)
     return BigNutils().toCurrencyConversion(convertedBalance, 2, exchangeRate)
 }
 
-const getTokenUnitBalance = (balance: string, decimals: number) => {
-    return BigNutils(balance).toHuman(decimals).toTokenFormat_string(2)
+const getTokenUnitBalance = (balance: string, decimals: number, formatDecimals?: number) => {
+    const humanized = BigNutils(balance).toHuman(decimals)
+    return formatDecimals ? humanized.toTokenFormat_string(formatDecimals) : humanized.toString
 }
 
 const getIsTokenWithBalance = (token: FungibleTokenWithBalance) => !new BigNumber(token.balance.balance).isZero()
