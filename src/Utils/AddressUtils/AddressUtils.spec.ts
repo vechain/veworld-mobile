@@ -11,8 +11,12 @@ import {
     isValid,
     isVechainToken,
     leftPadWithZeros,
+    loadVnsFromCache,
     regexPattern,
+    showAddressOrName,
 } from "./AddressUtils"
+import { defaultTestNetwork } from "~Constants"
+import { queryClient } from "~Api/QueryProvider"
 
 const validMnemonicPhrase = [
     "denial",
@@ -43,6 +47,13 @@ const invalidXPub: XPub = {
     publicKey: "854754389759",
     chainCode: "84747",
 }
+
+jest.mock("~Api/QueryProvider", () => ({
+    ...jest.requireActual("~Api/QueryProvider"),
+    queryClient: {
+        getQueryData: jest.fn().mockReturnValue(undefined),
+    },
+}))
 
 describe("getAddressFromXPub - positive tests", () => {
     test("valid XPub - address1", () => {
@@ -239,5 +250,78 @@ describe("Check vechain address", () => {
 describe("humanAddress", () => {
     it("should return correctly", () => {
         expect(humanAddress("0x4fec365ab34c21784b05e3fed80633268e6457ff")).toBe("0x4f…268e6457ff")
+    })
+})
+
+describe("showAddressOrName", () => {
+    it("should return the VNS name if vnsData have both name and address", () => {
+        const addressOrName = showAddressOrName(address1, {
+            name: "test-dev.vet",
+            address: "0xf077b491b355E64048cE21E3A6Fc4751eEeA77fa",
+        })
+
+        expect(addressOrName).toBe("test-dev.vet")
+    })
+
+    it("should return the address when vnsData only have the address", () => {
+        const addressOrName = showAddressOrName(address2, { address: "0x435933c8064b4Ae76bE665428e0307eF2cCFBD68" })
+
+        expect(addressOrName).toBe("0x435933c8064b4Ae76bE665428e0307eF2cCFBD68")
+    })
+
+    it("should return the address when no vnsData provided", () => {
+        const addressOrName = showAddressOrName(address1, {})
+
+        expect(addressOrName).toBe("0xf077b491b355E64048cE21E3A6Fc4751eEeA77fa")
+    })
+
+    it("should return the address formatted if format options are provided", () => {
+        const addressOrName = showAddressOrName(address1, {}, { ellipsed: true, lengthBefore: 4, lengthAfter: 6 })
+
+        expect(addressOrName).toBe("0xf0…eA77fa")
+    })
+})
+
+describe("loadVnsFromCache", () => {
+    it("should return undefined if there isn't data on the cache", () => {
+        ;(queryClient.getQueryData as jest.Mock<{ name: string; address: string }[] | undefined>).mockReturnValue(
+            undefined,
+        )
+        const vnsData = loadVnsFromCache(address1, defaultTestNetwork)
+
+        expect(vnsData).toBeUndefined()
+    })
+
+    it("should return the VNS name if data on cache and name exists", () => {
+        ;(queryClient.getQueryData as jest.Mock<{ name: string; address: string }[] | undefined>).mockReturnValue([
+            { name: "test-dev.vet", address: "0xf077b491b355E64048cE21E3A6Fc4751eEeA77fa" },
+            { name: "", address: "0x435933c8064b4Ae76bE665428e0307eF2cCFBD68" },
+        ])
+        const vnsData = loadVnsFromCache(address1, defaultTestNetwork)
+
+        expect(vnsData).not.toBeUndefined()
+        expect(vnsData).toMatchObject({ name: "test-dev.vet", address: address1 })
+    })
+
+    it("should return the VNS name if data on cache and name exists when vns provided as address", () => {
+        ;(queryClient.getQueryData as jest.Mock<{ name: string; address: string }[] | undefined>).mockReturnValue([
+            { name: "test-dev.vet", address: "0xf077b491b355E64048cE21E3A6Fc4751eEeA77fa" },
+            { name: "", address: "0x435933c8064b4Ae76bE665428e0307eF2cCFBD68" },
+        ])
+        const vnsData = loadVnsFromCache("test-dev.vet", defaultTestNetwork)
+
+        expect(vnsData).not.toBeUndefined()
+        expect(vnsData).toMatchObject({ name: "test-dev.vet", address: address1 })
+    })
+
+    it("should return the address if data on cache doesn't have name", () => {
+        ;(queryClient.getQueryData as jest.Mock<{ name: string; address: string }[] | undefined>).mockReturnValue([
+            { name: "test-dev.vet", address: "0xf077b491b355E64048cE21E3A6Fc4751eEeA77fa" },
+            { name: "", address: "0x435933c8064b4Ae76bE665428e0307eF2cCFBD68" },
+        ])
+        const vnsData = loadVnsFromCache(address2, defaultTestNetwork)
+
+        expect(vnsData).not.toBeUndefined()
+        expect(vnsData).toMatchObject({ name: "", address: address2 })
     })
 })

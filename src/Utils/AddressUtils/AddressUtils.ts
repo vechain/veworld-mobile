@@ -185,8 +185,8 @@ export const showAddressOrName = (
     const parsedVnsAddress = vnsAddress && _address ? vnsAddress : undefined
 
     const toHumanAddress = () => {
-        const addr = parsedVnsAddress || _address
-        return ellipsed ? humanAddress(addr, lengthBefore, lengthAfter) : addr
+        const parsedAddress = parsedVnsAddress || _address
+        return ellipsed ? humanAddress(parsedAddress, lengthBefore, lengthAfter) : parsedAddress
     }
 
     const finalAddress = parsedVnsName || toHumanAddress()
