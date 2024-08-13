@@ -35,6 +35,7 @@ export const useSearchContactsAndAccounts = ({
     useEffect(() => {
         const init = () => {
             firstLoad.current = false
+
             const cachedAddresses = qc.getQueryData<Vns[]>(["vns_names", selectedNetwork.genesis.id])
             if (!cachedAddresses) {
                 setContactsWithDomain(contacts)

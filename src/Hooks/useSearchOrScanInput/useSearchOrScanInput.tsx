@@ -31,14 +31,14 @@ export const useSearchOrScanInput = (
             let vnsAddress = ""
 
             if (data.includes(".vet")) {
-                const _addy = await getVnsAddress(data)
+                const addressFromVns = await getVnsAddress(data)
 
-                if (_addy === ZERO_ADDRESS) {
+                if (addressFromVns === ZERO_ADDRESS) {
                     showWarningToast({ text1: LL.NOTIFICATION_DOMAIN_NAME_NOT_FOUND() })
                     return
                 }
 
-                vnsAddress = _addy ?? ""
+                vnsAddress = addressFromVns ?? ""
                 vnsName = data
             } else {
                 const _name = await getVnsName(data)
@@ -56,12 +56,12 @@ export const useSearchOrScanInput = (
             let vnsName = ""
             let vnsAddress = ""
 
-            const cachedAddr = AddressUtils.loadVnsFromCache(data, network)
+            const cachedVns = AddressUtils.loadVnsFromCache(data, network)
 
             // Load data from cache if present otherwise retrieve data
-            if (cachedAddr) {
-                vnsName = cachedAddr.name
-                vnsAddress = cachedAddr.address
+            if (cachedVns) {
+                vnsName = cachedVns.name
+                vnsAddress = cachedVns.address
             } else {
                 const vns = await fetchAccountVns(data)
                 vnsName = vns?.name || ""

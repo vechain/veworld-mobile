@@ -37,7 +37,6 @@ export const upsertTokenBalance =
 export const updateAccountBalances =
     (thorClient: Connex.Thor, accountAddress: string) => async (dispatch: Dispatch, getState: () => RootState) => {
         dispatch(setIsTokensOwnedLoading(true))
-        // BUG: Missign update balances for custom networks
         const accountBalances = selectBalancesForAccount(getState(), accountAddress)
 
         if (accountBalances.length === 0) return

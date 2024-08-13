@@ -184,14 +184,14 @@ export const showAddressOrName = (
 
     const parsedVnsAddress = vnsAddress && _address ? vnsAddress : undefined
 
-    const humanAddr = () => {
+    const toHumanAddress = () => {
         const addr = parsedVnsAddress || _address
         return ellipsed ? humanAddress(addr, lengthBefore, lengthAfter) : addr
     }
 
-    const finalAddr = parsedVnsName || humanAddr()
+    const finalAddress = parsedVnsName || toHumanAddress()
 
-    return finalAddr
+    return finalAddress
 }
 
 /**

@@ -57,7 +57,7 @@ export type Vns = {
     address?: string
 }
 
-export type VnsHook = {
+type VnsHook = {
     name: string
     address: string
     isLoading: boolean
@@ -81,9 +81,9 @@ export const useVns = (props?: Vns): VnsHook => {
     }, [address, name, network, thor])
 
     const isQueryDisabled = useMemo(() => {
-        const onWrongNetwork = network.type === NETWORK_TYPE.SOLO || network.type === NETWORK_TYPE.OTHER
-        const missingData = !address && !name
-        return onWrongNetwork || missingData
+        const isOnWrongNetwork = network.type === NETWORK_TYPE.SOLO || network.type === NETWORK_TYPE.OTHER
+        const isMissingData = !address && !name
+        return isOnWrongNetwork || isMissingData
     }, [address, name, network.type])
 
     const queryRes = useQuery<Vns>({
@@ -169,25 +169,29 @@ export const usePrefetchAllVns = () => {
     const qc = useQueryClient()
 
     const isQueryDisabled = useMemo(() => {
-        const onWrongNetwork = network.type === NETWORK_TYPE.SOLO || network.type === NETWORK_TYPE.OTHER
-        return onWrongNetwork || !thor
+        const isOnWrongNetwork = network.type === NETWORK_TYPE.SOLO || network.type === NETWORK_TYPE.OTHER
+        return isOnWrongNetwork || !thor
     }, [network.type, thor])
 
-    const addresses = useMemo(() => [...accounts, ...contacts].map(account => account.address), [accounts, contacts])
+    const addresses = useMemo(
+        () => [...accounts.map(acc => acc.address), ...contacts.map(ctc => ctc.address)],
+        [accounts, contacts],
+    )
 
     const vnsResults = useQuery({
         queryKey: ["vns_names", network.genesis.id],
         queryFn: async () => {
             const clauses = getAllAccoutsNameClauses(addresses, network.type)
 
-            const res = await thor.explain(clauses).execute()
+            const responses = await thor.explain(clauses).execute()
 
-            const states = res.map((r, idx) => {
-                const decoded = namesABi.decode(r.data)
+            const states = responses.map((response, idx) => {
+                const decoded = namesABi.decode(response.data)
+                const address = accounts[idx].address
                 const vnsName = decoded.names[0]
-                const state = { name: vnsName, address: addresses[idx] }
+                const state = { name: vnsName, address }
 
-                qc.setQueryData([vnsName, addresses[idx], network.genesis.id], state)
+                qc.setQueryData([vnsName, address, network.genesis.id], state)
 
                 return state
             })
