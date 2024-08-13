@@ -5,6 +5,35 @@ import { AccountWithDevice, Contact, NETWORK_TYPE } from "~Model"
 import { selectKnownContacts, selectOtherAccounts, selectSelectedNetwork, useAppSelector } from "~Storage/Redux"
 import { AddressUtils } from "~Utils"
 
+const setContactsVns = (contacts: Contact[], cachedAddresses: Vns[]) => {
+    return contacts.map(ctc => {
+        const address = cachedAddresses.find(addr => AddressUtils.compareAddresses(ctc.address, addr.address))
+
+        if (address) {
+            return {
+                ...ctc,
+                domain: address.name,
+            }
+        }
+
+        return ctc
+    })
+}
+const setAccountsVns = (accounts: AccountWithDevice[], cachedAddresses: Vns[]) => {
+    return accounts.map(account => {
+        const address = cachedAddresses.find(addr => AddressUtils.compareAddresses(account.address, addr.address))
+
+        if (address) {
+            return {
+                ...account,
+                vnsName: address.name,
+            }
+        }
+
+        return account
+    })
+}
+
 export const useSearchContactsAndAccounts = ({
     searchText,
     selectedAddress,
@@ -43,31 +72,8 @@ export const useSearchContactsAndAccounts = ({
                 return
             }
 
-            const _contacts = contacts.map(ctc => {
-                const address = cachedAddresses.find(addr => AddressUtils.compareAddresses(ctc.address, addr.address))
-
-                if (address) {
-                    return {
-                        ...ctc,
-                        domain: address.name,
-                    }
-                }
-
-                return ctc
-            })
-
-            const _accounts = accounts.map(acc => {
-                const address = cachedAddresses.find(addr => AddressUtils.compareAddresses(acc.address, addr.address))
-
-                if (address) {
-                    return {
-                        ...acc,
-                        domain: address.name,
-                    }
-                }
-
-                return acc
-            })
+            const _contacts = setContactsVns(contacts, cachedAddresses)
+            const _accounts = setAccountsVns(accounts, cachedAddresses)
 
             setContactsWithDomain(_contacts)
             setAccountsWithDomain(_accounts)
