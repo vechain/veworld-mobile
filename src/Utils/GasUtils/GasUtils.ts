@@ -82,50 +82,6 @@ const estimateGas = async (
     }
 }
 
-// const estimateGas = async (
-//     url: string,
-//     thor: Connex.Thor,
-//     clauses: Connex.VM.Clause[],
-//     suggestedGas: number,
-//     caller: string,
-//     gasPayer?: string,
-// ): Promise<EstimateGasResult> => {
-//     const intrinsicGas = Transaction.intrinsicGas(
-//         clauses.map(item => {
-//             return {
-//                 to: item.to,
-//                 value: item.value || 0,
-//                 data: item.data || "0x",
-//             }
-//         }),
-//     )
-//     const offeredGas = suggestedGas ? Math.max(suggestedGas - intrinsicGas, 1) : 2000 * 10000
-//     const explainer = thor.explain(clauses).caller(caller).gas(offeredGas)
-
-//     if (gasPayer) {
-//         explainer.gasPayer(gasPayer)
-//     }
-
-//     const outputs = await explainer.execute()
-//     let gas = suggestedGas
-//     if (!gas) {
-//         const execGas = outputs.reduce((sum, out) => sum + out.gasUsed, 0)
-//         gas = intrinsicGas + (execGas ? execGas + 15000 : 0)
-//     }
-
-//     const baseGasPrice = await getBaseGasPrice(thor)
-//     const lastOutput = outputs.slice().pop()
-
-//     return {
-//         caller,
-//         gas,
-//         reverted: lastOutput ? lastOutput.reverted : false,
-//         revertReason: getRevertReason(lastOutput),
-//         vmError: lastOutput ? lastOutput.vmError : "",
-//         baseGasPrice,
-//     }
-// }
-
 const getRevertReason = (output: Connex.VM.Output | undefined): string => {
     if (output) {
         if (output.revertReason) {
