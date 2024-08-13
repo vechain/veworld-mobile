@@ -1,6 +1,8 @@
 // need this function because JS will auto convert very small numbers to scientific notation
 export function convertSmallSciNotationToDecimal(value: number): string {
     "worklet"
+    const isNAN = isNaN(value)
+    if (isNAN) return "-"
     const num = value.toPrecision(4)
     if (!num.includes("e-")) return num
 

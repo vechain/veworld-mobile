@@ -96,6 +96,7 @@ describe("BalanceUtils", () => {
 
         expect(balance?.balance).toEqual(decodedTokenBalance)
     })
+
     it("SHA Token - should return the correct balance", async () => {
         const balance = await BalanceUtils.getBalanceFromBlockchain(
             token2.address,
@@ -132,5 +133,49 @@ describe("BalanceUtils", () => {
         })
 
         expect(isTokenWithBalance2).toEqual(true)
+    })
+
+    it("should handle getBalanceAndTokenInfoFromBlockchain correctly", async () => {
+        mock.onGet(`${mainNetwork.currentUrl}/accounts/${account1D1.address}`).reply(200, mockedBalance)
+
+        const balance = await BalanceUtils.getBalanceAndTokenInfoFromBlockchain(
+            token1.address,
+            account1D1.address,
+            mainNetwork,
+            thorClient,
+        )
+
+        expect(balance).toBeDefined()
+    })
+
+    it("should handle getFiatBalance with valid inputs", () => {
+        const fiatBalance = BalanceUtils.getFiatBalance("1000000000000000000", 1.1, 18)
+        expect(fiatBalance).toBe("1.10")
+    })
+
+    it("should handle getFiatBalance with zero balance", () => {
+        const fiatBalance = BalanceUtils.getFiatBalance("0", 1.1, 18)
+        expect(fiatBalance).toBe("0.00")
+    })
+
+    it("should handle getTokenUnitBalance with no formatting", () => {
+        const unitBalance = BalanceUtils.getTokenUnitBalance("1000000000000000000", 18)
+        expect(unitBalance).toBe("1")
+    })
+
+    it("should handle getTokenUnitBalance with formatting", () => {
+        const unitBalance = BalanceUtils.getTokenUnitBalance("1000000000000000000", 18, 2)
+        expect(unitBalance).toBe("1.00")
+    })
+
+    it("should handle getTokenUnitBalance with zero balance", () => {
+        const unitBalance = BalanceUtils.getTokenUnitBalance("0", 18)
+        expect(unitBalance).toBe("0")
+    })
+
+    it("should handle getIsTokenWithBalance with zero balance", () => {
+        const token = { ...tokenWithBalance, balance: { ...tokenWithBalance.balance, balance: "0x0" } }
+        const isTokenWithBalance = BalanceUtils.getIsTokenWithBalance(token)
+        expect(isTokenWithBalance).toEqual(false)
     })
 })
