@@ -3,7 +3,7 @@ import React, { memo, useCallback, useMemo, useState } from "react"
 import { FlatList, StyleSheet, ViewToken } from "react-native"
 import { ColorThemeType, SCREEN_WIDTH, COLORS } from "~Constants"
 import { AddressUtils } from "~Utils"
-import { useThemedStyles } from "~Hooks"
+import { useThemedStyles, useVns } from "~Hooks"
 import {
     BaseIcon,
     BaseSpacer,
@@ -19,7 +19,6 @@ import {
     selectContactByAddress,
     selectContactsByAddresses,
     selectVisibleAccounts,
-    selectVnsNameOrAddress,
     useAppSelector,
 } from "~Storage/Redux"
 import { useI18nContext } from "~i18n"
@@ -53,6 +52,11 @@ export const TransferCard = memo(
         const toContacts = useAppSelector(state => selectContactsByAddresses(state, toAddresses))
         const [activeIndex, setActiveIndex] = useState(0)
         const isDeployContract = toAddresses?.[0] === ""
+
+        const fromAddressVns = useVns({
+            name: "",
+            address: fromAddress,
+        })
 
         const fromContactName = useMemo(() => {
             if (fromContact) return fromContact.alias
@@ -103,7 +107,11 @@ export const TransferCard = memo(
             setActiveIndex(activeIdx ?? 0)
         }, [])
 
-        const nameOrAddressFrom = useAppSelector(state => selectVnsNameOrAddress(state, fromAddress, [4, 6]))
+        const nameOrAddressFrom = AddressUtils.showAddressOrName(fromAddress, fromAddressVns, {
+            ellipsed: true,
+            lengthBefore: 4,
+            lengthAfter: 6,
+        })
 
         return (
             <BaseView style={[styles.container]}>
@@ -114,7 +122,6 @@ export const TransferCard = memo(
                         fromAddress={fromAddress}
                         isFromAccountLedger={isFromAccountLedger}
                         onAddContactPress={onAddContactPress}
-                        _isObservedWallet={isObservedWallet}
                         vnsName={nameOrAddressFrom}
                     />
 
@@ -251,7 +258,16 @@ const ToAccountCard = ({
     isObservedWallet?: boolean
     onAddContactPress?: (address: string) => void
 }) => {
-    const nameOrAddressTo = useAppSelector(state => selectVnsNameOrAddress(state, toAddresses, [4, 6]))
+    const toAddressVns = useVns({
+        name: "",
+        address: toAddresses,
+    })
+
+    const nameOrAddressTo = AddressUtils.showAddressOrName(toAddresses, toAddressVns, {
+        ellipsed: true,
+        lengthBefore: 4,
+        lengthAfter: 6,
+    })
 
     return (
         <AccountCard
