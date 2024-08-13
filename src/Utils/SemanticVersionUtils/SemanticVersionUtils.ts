@@ -1,3 +1,4 @@
+/* eslint-disable radix */
 function compareSemanticVersions(version1: string, version2: string) {
     // Regular expression to validate the semantic version format
     const semVerPattern = /^\d+(\.\d+){0,2}$/
@@ -31,4 +32,26 @@ function compareSemanticVersions(version1: string, version2: string) {
     return 0
 }
 
-export default { compareSemanticVersions }
+const moreThan = (a: string, b: string): boolean => {
+    const aParts = a.split(".")
+    const bParts = b.split(".")
+
+    for (let i = 0; i < aParts.length; i++) {
+        const aPart = parseInt(aParts[i])
+        const bPart = parseInt(bParts[i])
+
+        if (aPart > bPart) {
+            return true
+        } else if (aPart < bPart) {
+            return false
+        }
+    }
+
+    return false
+}
+
+const moreThanOrEqual = (a: string, b: string): boolean => {
+    return moreThan(a, b) || a === b
+}
+
+export default { compareSemanticVersions, moreThan, moreThanOrEqual }

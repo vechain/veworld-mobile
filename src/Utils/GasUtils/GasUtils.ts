@@ -6,7 +6,7 @@ import { EstimateGasResult } from "~Model"
 import AddressUtils from "~Utils/AddressUtils"
 import BigNutils from "~Utils/BigNumberUtils"
 import TransactionUtils from "~Utils/TransactionUtils"
-import VersionUtils from "~Utils/VersionUtils"
+import SemanticVersionUtils from "~Utils/SemanticVersionUtils"
 
 const paramsCache: Record<string, string> = {}
 
@@ -48,7 +48,7 @@ const estimateGas = async (
     if (genesis.headers.get && typeof genesis.headers.get === "function") {
         const thorVersion = genesis.headers.get("x-thorest-ver")
 
-        if (typeof thorVersion === "string" && VersionUtils.compareSemanticVersions(thorVersion, "2.1.3") < 0) {
+        if (typeof thorVersion === "string" && SemanticVersionUtils.moreThanOrEqual(thorVersion, "2.1.3")) {
             revision = "next"
         }
     }
