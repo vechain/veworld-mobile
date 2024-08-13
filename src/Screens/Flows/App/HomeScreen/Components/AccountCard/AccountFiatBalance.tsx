@@ -1,5 +1,4 @@
 import React, { useMemo } from "react"
-import { BaseTextProps } from "~Components"
 import { VET, VTHO } from "~Constants"
 import { useTheme, useTokenWithCompleteInfo } from "~Hooks"
 import FiatBalance from "./FiatBalance"
@@ -7,8 +6,6 @@ import FiatBalance from "./FiatBalance"
 type AccountFiatBalanceProps = {
     isVisible?: boolean
     isLoading?: boolean
-    typographyFont?: BaseTextProps["typographyFont"]
-    color?: BaseTextProps["color"]
 }
 
 const AccountFiatBalance: React.FC<AccountFiatBalanceProps> = (props: AccountFiatBalanceProps) => {

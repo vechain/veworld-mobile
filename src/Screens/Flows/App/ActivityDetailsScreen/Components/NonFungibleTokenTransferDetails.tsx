@@ -39,7 +39,7 @@ export const NonFungibleTokenTransferDetails: React.FC<Props> = memo(({ activity
             value: vthoGasFee ? `${vthoGasFee} ${VTHO.symbol}` : "",
             typographyFont: "subSubTitle",
             underline: false,
-            valueAdditional: fiatValueGasFeeSpent || "",
+            valueAdditional: fiatValueGasFeeSpent ?? "",
         },
         {
             id: 3,

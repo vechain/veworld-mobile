@@ -33,12 +33,12 @@ const FiatBalance: React.FC<FiatBalanceProps> = (props: FiatBalanceProps) => {
     )
     const amount = useMemo(() => (areAlmostZero ? 0.01 : preSum), [areAlmostZero, preSum])
 
-    const isNaN = useMemo(() => Number.isNaN(amount), [amount])
+    const isNAN = useMemo(() => Number.isNaN(amount), [amount])
 
     const { formatFiat } = useFormatFiat()
     const renderBalance = useMemo(
-        () => formatFiat({ amount: isNaN ? 0 : amount, cover: !isVisible }),
-        [formatFiat, isNaN, amount, isVisible],
+        () => formatFiat({ amount: isNAN ? 0 : amount, cover: !isVisible }),
+        [formatFiat, isNAN, amount, isVisible],
     )
 
     return isLoading ? (

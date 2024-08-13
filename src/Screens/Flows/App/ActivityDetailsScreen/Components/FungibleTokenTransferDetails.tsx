@@ -67,7 +67,7 @@ export const FungibleTokenTransferDetails: React.FC<Props> = memo(({ activity, t
                 value: `${amountTransferred} ${token?.symbol ?? symbol}`,
                 typographyFont: "subSubTitle",
                 underline: false,
-                valueAdditional: fiatValueTransferred || "",
+                valueAdditional: fiatValueTransferred ?? "",
             },
             {
                 id: 2,
@@ -75,7 +75,7 @@ export const FungibleTokenTransferDetails: React.FC<Props> = memo(({ activity, t
                 value: vthoGasFee ? `${vthoGasFee} ${VTHO.symbol}` : "",
                 typographyFont: "subSubTitle",
                 underline: false,
-                valueAdditional: fiatValueGasFeeSpent || "",
+                valueAdditional: fiatValueGasFeeSpent ?? "",
             },
             {
                 id: 3,

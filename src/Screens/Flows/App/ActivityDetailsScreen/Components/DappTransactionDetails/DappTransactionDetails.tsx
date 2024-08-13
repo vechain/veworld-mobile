@@ -88,7 +88,7 @@ export const DappTransactionDetails: React.FC<Props> = memo(({ activity }) => {
             value: `${vthoGasFee} ${VTHO.symbol}`,
             typographyFont: "subSubTitle",
             underline: false,
-            valueAdditional: fiatValueGasFeeSpent || "",
+            valueAdditional: fiatValueGasFeeSpent ?? "",
         },
         {
             id: 6,

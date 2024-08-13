@@ -2,7 +2,7 @@ import { Dimensions, StyleSheet, ViewProps } from "react-native"
 import React, { memo, useMemo } from "react"
 import { BaseCard, BaseText, BaseView } from "~Components"
 import { useTheme, useThemedStyles, TokenWithCompleteInfo, useBalances } from "~Hooks"
-import { ColorThemeType, CURRENCY } from "~Constants"
+import { ColorThemeType } from "~Constants"
 import { TokenImage } from "../TokenImage"
 import { BigNutils } from "~Utils"
 import { useI18nContext } from "~i18n"
@@ -17,9 +17,6 @@ type OfficialTokenCardProps = {
     iconHeight: number
     iconWidth: number
     selected?: boolean
-    currency?: CURRENCY
-    change24h?: string
-    isPositive24hChange?: boolean
 }
 
 export const OfficialTokenCard = memo(
@@ -51,10 +48,10 @@ export const OfficialTokenCard = memo(
         const { tokenUnitBalance } = useBalances({ token, exchangeRate: tokenWithInfo.exchangeRate })
 
         const unitBalance = useMemo(
-            () => tokenWithInfo.tokenUnitBalance || tokenUnitBalance,
+            () => tokenWithInfo.tokenUnitBalance ?? tokenUnitBalance,
             [tokenWithInfo.tokenUnitBalance, tokenUnitBalance],
         )
-        const symbol = useMemo(() => tokenWithInfo.symbol || token?.symbol, [tokenWithInfo.symbol, token?.symbol])
+        const symbol = useMemo(() => tokenWithInfo.symbol ?? token?.symbol, [tokenWithInfo.symbol, token?.symbol])
 
         return (
             <BaseCard onPress={action} containerStyle={[styles.container, style]}>
@@ -87,7 +84,7 @@ export const OfficialTokenCard = memo(
                         )}
                     </BaseView>
 
-                    {change24h && (
+                    {Boolean(change24h) && (
                         <BaseView alignItems="flex-end" w={42}>
                             {tokenWithInfo.fiatBalance && (
                                 <FiatBalance
