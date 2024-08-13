@@ -111,7 +111,7 @@ export const ContactsScreen = () => {
 
     const renderAddContactButton = useMemo(() => {
         return (
-            <BaseView justifyContent="center" alignItems="center" h={50} w={100}>
+            <BaseView justifyContent="center" alignItems="center" h={50} w={100} testID="create-new-contact">
                 <AddContactButton onPress={onAddContactPress} />
             </BaseView>
         )
@@ -126,8 +126,8 @@ export const ContactsScreen = () => {
     )
 
     const renderItem: ListRenderItem<Contact> = useCallback(
-        ({ item }) => {
-            const contactId = `${item.address}-${item.alias}`
+        ({ item, index }) => {
+            const contactId = `contact-row-${index}`
 
             return (
                 <SwipeableRow

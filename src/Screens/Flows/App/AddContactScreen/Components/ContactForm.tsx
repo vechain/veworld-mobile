@@ -155,7 +155,8 @@ export const ContactForm: React.FC<Props> = memo(
                 editable: !addressFieldDisabled,
             }
 
-            if (inBottomSheet) return <BaseBottomSheetTextInput {...commonProps} />
+            if (inBottomSheet)
+                return <BaseBottomSheetTextInput {...commonProps} rightIconTestID="clear-contact-address" />
             return <BaseTextInput {...commonProps} />
         }, [
             placeholderAddress,
