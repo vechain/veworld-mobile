@@ -23,6 +23,7 @@ export const useDemoWallet = () => {
             userPassword,
             onError: e => debug(ERROR_EVENTS.APP, e),
             mnemonic,
+            isImported: false,
         })
         await migrateOnboarding(SecurityLevelType.SECRET, userPassword)
         dispatch(setIsAppLoading(false))
