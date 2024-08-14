@@ -1,5 +1,5 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit"
-import { AddressUtils, HexUtils } from "~Utils"
+import { AccountUtils, AddressUtils, HexUtils } from "~Utils"
 import { AccountWithDevice, WalletAccount } from "~Model"
 import { isEmpty } from "lodash"
 
@@ -131,13 +131,9 @@ export const AccountSlice = createSlice({
             }
         },
         setVnsNames: (state, action: PayloadAction<{ name: string; address: string }[]>) => {
-            for (const acc of state.accounts) {
-                const vnsIdx = action.payload.findIndex(vns => AddressUtils.compareAddresses(acc.address, vns.address))
-
-                if (vnsIdx !== -1) {
-                    acc.vnsName = action.payload[vnsIdx].name
-                }
-            }
+            state.accounts.forEach(account => {
+                account.vnsName = (AccountUtils.updateAccoutVns(account, action.payload) as WalletAccount).vnsName
+            })
         },
         resetAccountState: () => initialAccountState,
     },

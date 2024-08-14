@@ -1,5 +1,5 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit"
-import { AddressUtils } from "~Utils"
+import { AccountUtils, AddressUtils } from "~Utils"
 import { Contact } from "~Model"
 import { address as addressThor } from "thor-devkit"
 
@@ -51,18 +51,13 @@ export const ContactsSlice = createSlice({
                 state.contacts[contactExistsIndex].alias = alias
             }
         },
-        addDomainName: (state, action: PayloadAction<{ domain: string; address: string }[]>) => {
+        setDomainNames: (state, action: PayloadAction<{ domain: string; address: string }[]>) => {
             state.contacts.forEach(contact => {
-                const contactDomain = action.payload.find(vns =>
-                    AddressUtils.compareAddresses(vns.address, contact.address),
-                )
-                if (contactDomain) {
-                    contact.domain = contactDomain.domain
-                }
+                contact.domain = (AccountUtils.updateAccoutVns(contact, action.payload) as Contact).domain
             })
         },
         resetContactsState: () => initialContactsState,
     },
 })
 
-export const { insertContact, deleteContact, updateContact, addDomainName, resetContactsState } = ContactsSlice.actions
+export const { insertContact, deleteContact, updateContact, setDomainNames, resetContactsState } = ContactsSlice.actions
