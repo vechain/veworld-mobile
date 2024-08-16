@@ -19,7 +19,7 @@ onFlowComplete:
           id: "BackButtonHeader-BaseIcon-backButton-wrapper"
     commands:
       - tapOn:
-          id: "ManageUrls_addUrlButton-wrapper"
+          id: "BackButtonHeader-BaseIcon-backButton-wrapper"
 - tapOn:
     id: "Transactions"
 - tapOn:

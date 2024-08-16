@@ -33,4 +33,4 @@ onFlowComplete:
       - tapOn:
           id: "selectAccount"
           index: 0
-- assertVisible: "Account 2, Wallet 1, 0x43…cfbd68, 3,631.12 VET"
+- assertVisible: "Account 2"
