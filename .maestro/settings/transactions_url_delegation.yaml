@@ -1,0 +1,50 @@
+#transactions_url_delegation.yaml
+appId: org.vechain.veworld.app
+env:
+  URL_1: "https://sponsor-testnet.vechain.energy/by/282"
+  URL_2: "https://sponsor-testnet.vechain.energy/by/219"
+onFlowStart:
+  - runFlow: ../setup_reset/setupApp.yaml
+onFlowComplete:
+  - runFlow: ../setup_reset/resetApp.yaml
+---
+## User can select an URL as default delegation method for transactions
+- tapOn:
+    id: "settings-tab"
+## Use the repeat button to avoid that the add button on the header is
+## temporary hidden by a notification snackbar and cause the flaw to fail
+- repeat:
+    while:
+      visible:
+          id: "BackButtonHeader-BaseIcon-backButton-wrapper"
+    commands:
+      - tapOn:
+          id: "ManageUrls_addUrlButton-wrapper"
+- tapOn:
+    id: "Transactions"
+- tapOn:
+    id: "button-URL"
+- tapOn:
+    id: "AddUrl_input"
+- inputText: "${URL_1}"
+- tapOn:
+    id: "Add_URL_Submit"
+- tapOn: "Transactions"
+- assertVisible: "${URL_1}"
+## User can create multiple delegation URLs
+- tapOn:
+    id: "button-URL"
+- tapOn:
+    id: "UrlList_addUrlButton-wrapper"
+- tapOn:
+    id: "AddUrl_input"
+- inputText: "${URL_2}"
+- tapOn:
+    id: "Add_URL_Submit"
+- assertVisible: "${URL_2}"
+## User can change delegation URL
+- tapOn:
+    id: "button-URL"
+- tapOn:
+    id: Delegation_URL_0
+- assertVisible: "${URL_1}"

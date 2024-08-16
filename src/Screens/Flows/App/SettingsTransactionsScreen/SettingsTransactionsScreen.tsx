@@ -139,6 +139,7 @@ export const SettingsTransactionsScreen = () => {
                     </BaseText>
                     <BaseSpacer height={16} />
                     <BaseButton
+                        testID="Manage_Transactions_Urls"
                         haptics="Light"
                         action={openManageUrls}
                         variant="link"

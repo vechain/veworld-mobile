@@ -2,3 +2,4 @@
 flows:
   - observedWallet/*
   - send/*
+  - settings/*
