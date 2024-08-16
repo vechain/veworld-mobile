@@ -1,4 +1,3 @@
-import { setPlatform } from "~Test"
 import { isBiometricCanceled, isBiometricTooManyAttempts } from "./BiometricErrors"
 
 describe("isBiometricCanceled", () => {
@@ -25,13 +24,11 @@ describe("isBiometricCanceled", () => {
 
 describe("isBiometricTooManyAttempts", () => {
     it("should return true when error is a custom Error object with Android too many attempts code", () => {
-        setPlatform("android")
         const error = { code: "7" }
         expect(isBiometricTooManyAttempts(error)).toBe(true)
     })
 
     it("should return true when error is a custom Error object with Android disabled sensor code", () => {
-        setPlatform("android")
         const error = { code: "9" }
         expect(isBiometricTooManyAttempts(error)).toBe(true)
     })
