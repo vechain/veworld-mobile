@@ -9,13 +9,12 @@ onFlowComplete:
     id: "settings-tab"
 ## Use the repeat button to avoid that the back button on the header is
 ## temporary hidden by a notification snackbar and cause the flaw to fail
-- repeat:
-    while:
-      visible:
-          id: "BackButtonHeader-BaseIcon-backButton-wrapper"
-    commands:
-      - tapOn:
-          id: "BackButtonHeader-BaseIcon-backButton-wrapper"
+- extendedWaitUntil:
+    visible:
+        id: "BackButtonHeader-BaseIcon-backButton-wrapper"
+    timeout: 10000
+- tapOn:
+    id: "BackButtonHeader-BaseIcon-backButton-wrapper"
 - tapOn:
     id: "Transactions"
 - tapOn:
@@ -33,4 +32,6 @@ onFlowComplete:
       - tapOn:
           id: "selectAccount"
           index: 0
-- assertVisible: "Account 2"
+- assertVisible: 
+    id: "Selected_Delegation_Account"
+    enabled: false

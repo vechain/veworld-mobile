@@ -11,15 +11,12 @@ onFlowComplete:
 ## User can select an URL as default delegation method for transactions
 - tapOn:
     id: "settings-tab"
-## Use the repeat button to avoid that the add button on the header is
-## temporary hidden by a notification snackbar and cause the flaw to fail
-- repeat:
-    while:
-      visible:
-          id: "BackButtonHeader-BaseIcon-backButton-wrapper"
-    commands:
-      - tapOn:
-          id: "BackButtonHeader-BaseIcon-backButton-wrapper"
+- extendedWaitUntil:
+    visible:
+        id: "BackButtonHeader-BaseIcon-backButton-wrapper"
+    timeout: 10000
+- tapOn:
+    id: "BackButtonHeader-BaseIcon-backButton-wrapper"
 - tapOn:
     id: "Transactions"
 - tapOn:
@@ -27,6 +24,18 @@ onFlowComplete:
 - tapOn:
     id: "AddUrl_input"
 - inputText: "${URL_1}"
+# START FLOW - hide keyboard to prevent errors
+- runFlow:
+    when:
+      platform: Android
+    commands:
+      - hideKeyboard
+- runFlow:
+    when:
+      platform: iOS 
+    commands:
+      - tapOn: "Add delegation URL"
+# END FLOW
 - tapOn:
     id: "Add_URL_Submit"
 - tapOn: "Transactions"
@@ -39,6 +48,18 @@ onFlowComplete:
 - tapOn:
     id: "AddUrl_input"
 - inputText: "${URL_2}"
+# START FLOW - hide keyboard to prevent errors
+- runFlow:
+    when:
+      platform: Android
+    commands:
+      - hideKeyboard
+- runFlow:
+    when:
+      platform: iOS 
+    commands:
+      - tapOn: "Add delegation URL"
+# END FLOW
 - tapOn:
     id: "Add_URL_Submit"
 - assertVisible: "${URL_2}"

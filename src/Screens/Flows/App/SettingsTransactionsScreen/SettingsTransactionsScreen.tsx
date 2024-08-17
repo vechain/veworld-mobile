@@ -120,7 +120,7 @@ export const SettingsTransactionsScreen = () => {
                     {selectedDelegationAccount && (
                         <>
                             <BaseSpacer height={16} />
-                            <AccountCard account={selectedDelegationAccount} />
+                            <AccountCard testID="Selected_Delegation_Account" account={selectedDelegationAccount} />
                         </>
                     )}
                     {selectedDelegationUrl && (
