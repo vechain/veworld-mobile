@@ -36,11 +36,6 @@ onFlowComplete:
       platform: Android
     commands:
       - hideKeyboard
-- runFlow:
-    when:
-      platform: iOS 
-    commands:
-      - tapOn: "Add delegation URL"
 # END FLOW
 - tapOn:
     id: "Add_URL_Submit"
@@ -60,11 +55,6 @@ onFlowComplete:
       platform: Android
     commands:
       - hideKeyboard
-- runFlow:
-    when:
-      platform: iOS 
-    commands:
-      - tapOn: "Add delegation URL"
 # END FLOW
 - tapOn:
     id: "Add_URL_Submit"
