@@ -12,15 +12,8 @@ onFlowComplete:
 - tapOn:
     id: "sendButton"
 - runFlow:
-    when:
-      platform: Android
     commands:
       - tapOn: "Vechain"
-- runFlow:
-    when:
-      platform: iOS
-    commands:
-      - tapOn: "Vechain VET"
 - inputText: ${AMOUNT}
 - tapOn: "Send"
 - tapOn: "NEXT"
@@ -51,15 +44,8 @@ onFlowComplete:
 - tapOn:
     id: "sendButton"
 - runFlow:
-    when:
-      platform: Android
     commands:
       - tapOn: "VeThor"
-- runFlow:
-    when:
-      platform: iOS
-    commands:
-      - tapOn: "VeThor VTHO"
 - inputText: ${AMOUNT}
 - tapOn:
     id: "Layout_ScrollView"
@@ -95,15 +81,8 @@ onFlowComplete:
 - tapOn:
     id: "sendButton"
 - runFlow:
-    when:
-      platform: Android
     commands:
       - tapOn: "Vechain"
-- runFlow:
-    when:
-      platform: iOS
-    commands:
-      - tapOn: "Vechain VET"
 - inputText: ${AMOUNT}
 - tapOn:
     id: "Layout_ScrollView"
