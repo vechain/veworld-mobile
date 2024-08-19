@@ -38,7 +38,6 @@ onFlowComplete:
 # END FLOW
 - tapOn:
     id: "Add_URL_Submit"
-- tapOn: "Transactions"
 - assertVisible: "${URL_1}"
 ## User can create multiple delegation URLs
 - tapOn:
