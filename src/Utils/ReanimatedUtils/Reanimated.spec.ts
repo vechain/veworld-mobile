@@ -179,11 +179,20 @@ describe("reanimated numberToLocaleStringWorklet", function () {
                 currency: "NOK",
             }),
         ).toBe("1\u00A0234,56 kr")
+
+        expect(
+            numberToLocaleStringWorklet(negative_num, "en-US", {
+                style,
+                currency,
+                currencyDisplay: "code",
+            }),
+        ).toBe("-USD1,234.56")
     })
 
     it("format percentages with rounding and zero padding", function () {
         const num = -1234.56
 
+        expect(numberToPercentWorklet(num)).toBe("-1234.56%")
         expect(numberToPercentWorklet(num, { precision: 0, absolute: true })).toBe("1235%")
         expect(numberToPercentWorklet(num, { precision: 1, absolute: true })).toBe("1234.6%")
         expect(numberToPercentWorklet(num, { precision: 2, absolute: true })).toBe("1234.56%")
@@ -228,7 +237,7 @@ describe("reanimated numberToLocaleStringWorklet", function () {
     })
 })
 
-describe("Reanimated round funciton", function () {
+describe("Reanimated round function", function () {
     it("should round numbers corrrectly when it has a precisison param", function () {
         const numberToRound = 123.4321
         expect(round(numberToRound, 2)).toBe(123.43)
@@ -240,7 +249,7 @@ describe("Reanimated round funciton", function () {
     })
 })
 
-describe("Reaniamted convertSmallSciNotationToDecimal funciton", function () {
+describe("Reaniamted convertSmallSciNotationToDecimal function", function () {
     /*
         The condition if (!num.includes("e-")) checks whether the number in the variable num is in scientific notation with a negative exponent. Therefore, the value of value should be a number that is greater than or equal to 1e-4 and less than 1e5 (100,000) in order for the conditional to be true and return num in non-scientific notation with a precision of 4.
 

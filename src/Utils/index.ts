@@ -35,6 +35,7 @@ import MathUtils from "./MathUtils"
 import AnalyticsUtils from "./AnalyticsUtils"
 import ColorUtils from "./ColorUtils"
 import BigNutils, { BigNumberUtils } from "./BigNumberUtils"
+import SemanticVersionUtils from "./SemanticVersionUtils"
 
 export * from "./Logger"
 export * from "./SignMessageUtils"
@@ -77,6 +78,7 @@ export {
     ColorUtils,
     DeviceUtils,
     BigNutils,
+    SemanticVersionUtils,
 }
 
 export { BigNumberUtils }

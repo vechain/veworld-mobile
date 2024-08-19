@@ -21,4 +21,12 @@ describe("AccountUtils", () => {
             AccountUtils.getAccountForIndex(0, { ...TestHelpers.data.device1, xPub: undefined }, 0),
         ).toThrowError("The XPub can't be null for HD devices")
     })
+
+    it("isObservedAccount - should return true", () => {
+        expect(AccountUtils.isObservedAccount(TestHelpers.data.account5D1Observed)).toBe(true)
+    })
+
+    it("isObservedAccount - should return false", () => {
+        expect(AccountUtils.isObservedAccount(TestHelpers.data.account4D1)).toBe(false)
+    })
 })
