@@ -137,12 +137,12 @@ describe("BigNumberUtils class", () => {
 
     // Test conversion methods with edge cases
     test("toCurrencyConversion should handle undefined rate", () => {
-        const result = bigNumUtils.toCurrencyConversion("100", 2)
+        const result = bigNumUtils.toCurrencyConversion("100")
         expect(result).toBe("100.00")
     })
 
     test("toCurrencyConversion should apply the rate correctly", () => {
-        const result = bigNumUtils.toCurrencyConversion("100", 2, 2)
+        const result = bigNumUtils.toCurrencyConversion("100", 2)
         expect(result).toBe("200.00")
     })
 

@@ -294,7 +294,7 @@ function TotalSendAmountView({ amount, symbol, token, txCostTotal, isDelegated, 
     )
     const isVTHO = useMemo(() => token.symbol === VTHO.symbol, [token.symbol])
 
-    const fiatHumanAmount = BigNutils().toCurrencyConversion(isVTHO ? formattedTotalCost : amount, 2, exchangeRate)
+    const fiatHumanAmount = BigNutils().toCurrencyConversion(isVTHO ? formattedTotalCost : amount, exchangeRate)
 
     return (
         <>

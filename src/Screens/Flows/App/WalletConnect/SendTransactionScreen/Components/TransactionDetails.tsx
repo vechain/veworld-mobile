@@ -58,7 +58,7 @@ export const TransactionDetails = ({
         [vtho.balance.balance],
     )
 
-    const formattedFiatAmount = BigNutils().toCurrencyConversion(spendingAmount || "0", 2, exchangeRate ?? 1)
+    const formattedFiatAmount = BigNutils().toCurrencyConversion(spendingAmount || "0", exchangeRate ?? 1)
 
     return (
         <>

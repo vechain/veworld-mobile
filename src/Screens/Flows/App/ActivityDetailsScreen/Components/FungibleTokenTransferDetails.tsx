@@ -46,7 +46,7 @@ export const FungibleTokenTransferDetails: React.FC<Props> = memo(({ activity, t
     const fiatValueTransferred = useMemo(() => {
         if (exchangeRate && token && decimals) {
             let amount = BigNutils(activity.amount).toHuman(decimals).toString
-            return BigNutils().toCurrencyConversion(amount ?? "0", 2, exchangeRate)
+            return BigNutils().toCurrencyConversion(amount ?? "0", exchangeRate)
         }
     }, [activity.amount, decimals, exchangeRate, token])
 

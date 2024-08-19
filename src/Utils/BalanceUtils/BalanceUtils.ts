@@ -107,7 +107,7 @@ const getTokenBalanceFromBlockchain = async (
 
 const getFiatBalance = (balance: string, exchangeRate: number, decimals: number) => {
     const convertedBalance = BigNutils(balance).toHuman(decimals).toString
-    return BigNutils().toCurrencyConversion(convertedBalance, 2, exchangeRate)
+    return BigNutils().toCurrencyConversion(convertedBalance, exchangeRate)
 }
 
 const getTokenUnitBalance = (balance: string, decimals: number, formatDecimals?: number) => {

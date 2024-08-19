@@ -61,7 +61,7 @@ export const useGasFee = (activity: Activity) => {
 
     const fiatValueGasFeeSpent = useMemo(() => {
         if (VTHOexchangeRate && vthoGasFee) {
-            return BigNutils().toCurrencyConversion(vthoGasFee, 2, VTHOexchangeRate)
+            return BigNutils().toCurrencyConversion(vthoGasFee, VTHOexchangeRate)
         }
     }, [VTHOexchangeRate, vthoGasFee])
 

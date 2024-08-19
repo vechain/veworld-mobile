@@ -60,13 +60,13 @@ export const SelectAmountSendScreen = ({ route }: Props) => {
      * TOKEN total balance in FIAT in raw-ish format (with decimals)
      * Example "147031782362332055578.377092605442914032"
      */
-    const fiatTotalBalance = BigNutils().toCurrencyConversion(tokenTotalToHuman, 2, exchangeRate)
+    const fiatTotalBalance = BigNutils().toCurrencyConversion(tokenTotalToHuman, exchangeRate)
 
     /**
      * FIAT selected balance calculated fron TOKEN input in human readable format (correct value is when TOKEN is active)
      * Example "53.54"
      */
-    const fiatHumanAmount = BigNutils().toCurrencyConversion(input, 2, exchangeRate)
+    const fiatHumanAmount = BigNutils().toCurrencyConversion(input, exchangeRate)
 
     /**
      * TOKEN selected balance in raw-ish format (with decimals) (correct value is when FIAT is active)

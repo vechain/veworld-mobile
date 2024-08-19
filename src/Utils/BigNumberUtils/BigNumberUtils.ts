@@ -7,7 +7,7 @@ interface IBigNumberUtils {
     decimals(decimals: number, callback?: (result: BN) => void): BigNumberUtils
     toCurrencyFormat_string(decimals: number): string
     toTokenFormat_string(decimals: number): string
-    toCurrencyConversion(balance: string, decimals: number, rate?: number, callback?: (result: BN) => void): string
+    toCurrencyConversion(balance: string, rate?: number, callback?: (result: BN) => void): string
     toTokenConversion(balance: string, rate?: number, callback?: (result: BN) => void): BigNumberUtils
     addTrailingZeros(decimals: number, callback?: (result: BN) => void): BigNumberUtils
 
@@ -167,7 +167,7 @@ class BigNumberUtils implements IBigNumberUtils {
         return _data
     }
 
-    toCurrencyConversion(balance: string, decimals: number, rate?: number, callback?: (result: BN) => void) {
+    toCurrencyConversion(balance: string, rate?: number, callback?: (result: BN) => void) {
         let _balance = !isEmpty(balance) ? balance : "0"
         let _rate = rate ?? 1
         this.data = new BN(_balance).multipliedBy(_rate)
@@ -178,7 +178,7 @@ class BigNumberUtils implements IBigNumberUtils {
 
         if (this.data.isLessThan("0.01") && !this.data.isZero()) return "< 0.01"
 
-        return this.data.toFixed(decimals, BN.ROUND_DOWN)
+        return this.data.toFixed(2, BN.ROUND_DOWN)
     }
 
     toTokenConversion(balance: string, rate?: number, callback?: (result: BN) => void) {
