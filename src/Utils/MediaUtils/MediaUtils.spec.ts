@@ -1,9 +1,12 @@
 import axios from "axios"
-import MediaUtils from "./MediaUtils"
+import MediaUtils, { resolveMimeTypeFromRawData } from "./MediaUtils"
 import { NFTMediaType } from "~Model"
 import { NFTPlaceHolderLight, NFTPlaceholderDark } from "~Assets"
+import { TestHelpers } from "~Test"
 
 jest.mock("axios") // Mock the axios library
+
+const { bmpImage, gifImage, jpgImage, pngImage, svgImage, tiffImage, webpImage, icoImage } = TestHelpers.assets
 
 describe("isValidMimeType", () => {
     it("should return true for valid mime types", () => {
@@ -42,6 +45,15 @@ describe("resolveMimeTypeFromUri", () => {
         const mime = await MediaUtils.resolveMimeTypeFromUri(resource)
         expect(mime).toBe("image/png")
     })
+
+    it("should resolve media type as 'image/png' by fetching the URL if not provided", async () => {
+        const imageUrl = "https://example.com/image.mov"
+        ;(axios.head as jest.Mock).mockResolvedValueOnce({
+            headers: {},
+        })
+        const mime = await MediaUtils.resolveMimeTypeFromUri(imageUrl)
+        expect(mime).toBe("image/png")
+    })
 })
 
 describe("resolveMediaType", () => {
@@ -76,6 +88,16 @@ describe("resolveMediaType", () => {
         const mediaType = MediaUtils.resolveMediaTypeFromMimeType(mimeType)
         expect(mediaType).toBe("unknown")
     })
+
+    it("should resolve media type for video by fetching mime type from the URL", async () => {
+        const imageUrl = "https://example.com/video.mp4"
+        const contentType = "video/mp4"
+        ;(axios.head as jest.Mock).mockResolvedValueOnce({
+            headers: { "content-type": contentType },
+        })
+        const mediaType = await MediaUtils.resolveMediaTypeFromUri(imageUrl)
+        expect(mediaType).toBe("video")
+    })
 })
 
 describe("isDefaultImage", () => {
@@ -87,5 +109,51 @@ describe("isDefaultImage", () => {
     it("should return false if the image is not a default placeholder", () => {
         expect(MediaUtils.isDefaultImage("https://example.com/image.jpg")).toBe(false)
         expect(MediaUtils.isDefaultImage("data:image/png;base64,iVBORw0KGgoAAAANS...")).toBe(false)
+    })
+})
+
+describe("resolveMimeTypeFromRawData", () => {
+    it("sould return null when buffer lenght < 4", () => {
+        expect(resolveMimeTypeFromRawData(Buffer.from([]))).toBeNull()
+    })
+
+    it("sould return null when invalid mime type", () => {
+        const imageBuffer = Buffer.from(icoImage, "base64")
+        expect(resolveMimeTypeFromRawData(imageBuffer)).toBeNull()
+    })
+
+    it("sould return image/bmp", () => {
+        const imageBuffer = Buffer.from(bmpImage, "base64")
+        expect(resolveMimeTypeFromRawData(imageBuffer)).toBe("image/bmp")
+    })
+
+    it("sould return image/tiff", () => {
+        const imageBuffer = Buffer.from(tiffImage, "base64")
+        expect(resolveMimeTypeFromRawData(imageBuffer)).toBe("image/tiff")
+    })
+
+    it("sould return image/webp", () => {
+        const imageBuffer = Buffer.from(webpImage, "base64")
+        expect(resolveMimeTypeFromRawData(imageBuffer)).toBe("image/webp")
+    })
+
+    it("sould return image/jpeg", () => {
+        const imageBuffer = Buffer.from(jpgImage, "base64")
+        expect(resolveMimeTypeFromRawData(imageBuffer)).toBe("image/jpeg")
+    })
+
+    it("sould return image/png", () => {
+        const imageBuffer = Buffer.from(pngImage, "base64")
+        expect(resolveMimeTypeFromRawData(imageBuffer)).toBe("image/png")
+    })
+
+    it("sould return image/gif", () => {
+        const imageBuffer = Buffer.from(gifImage, "base64")
+        expect(resolveMimeTypeFromRawData(imageBuffer)).toBe("image/gif")
+    })
+
+    it("sould return image/svg+xml", () => {
+        const imageBuffer = Buffer.from(svgImage, "utf-8")
+        expect(resolveMimeTypeFromRawData(imageBuffer)).toBe("image/svg+xml")
     })
 })

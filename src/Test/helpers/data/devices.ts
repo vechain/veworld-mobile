@@ -14,6 +14,16 @@ export const device1: LocalDevice = {
     position: 0,
 }
 
+export const observedDevice: LocalDevice = {
+    alias: "Observed Device 1",
+    rootAddress: hdnode1.address,
+    type: DEVICE_TYPE.LOCAL_WATCHED,
+    xPub: CryptoUtils.xPubFromHdNode(hdnode1),
+    index: 0,
+    wallet: JSON.stringify(wallet1),
+    position: 0,
+}
+
 export const keystoreDevice: LocalDevice = {
     alias: "Keystore Device 1",
     rootAddress: hdnode1.address,

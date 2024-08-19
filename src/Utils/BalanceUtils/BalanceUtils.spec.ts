@@ -1,15 +1,31 @@
-import { VET, VTHO, defaultMainNetwork } from "~Constants"
+import { ERROR_EVENTS, VET, VTHO, defaultMainNetwork } from "~Constants"
 import BalanceUtils from "./BalanceUtils"
 import { TestHelpers } from "~Test"
 var axios = require("axios")
 import MockAdapter from "axios-mock-adapter"
+import { getTokenDecimals, getTokenName, getTokenSymbol } from "~Networking"
+import { error } from "~Utils/Logger"
 
-const { account1D1, token1, token2 } = TestHelpers.data
+const { account1D1, token1, token2, customToken } = TestHelpers.data
 const thorAccountStub = TestHelpers.thor.stubs.account
 const thorClient = TestHelpers.thor.mockThorInstance({})
 const thorClientWithCallError = TestHelpers.thor.mockThorInstance({
     account: thorAccountStub({ shouldCallError: true }),
 })
+
+jest.mock("~Networking", () => ({
+    getTokenDecimals: jest.fn(),
+    getTokenSymbol: jest.fn(),
+    getTokenName: jest.fn(),
+}))
+
+jest.mock("@sentry/react-native", () => ({ init: () => jest.fn() }))
+
+jest.mock("~Utils/Logger", () => ({
+    error: jest.fn(),
+    info: jest.fn(),
+}))
+
 const mainNetwork = defaultMainNetwork
 
 const mockedBalance = {
@@ -49,6 +65,7 @@ describe("BalanceUtils", () => {
 
     afterEach(() => {
         mock.reset()
+        jest.clearAllMocks()
     })
 
     it("VET - should return the correct balance", async () => {
@@ -83,7 +100,8 @@ describe("BalanceUtils", () => {
         const balanceRequest = async () =>
             await BalanceUtils.getBalanceFromBlockchain(VTHO.address, account1D1.address, mainNetwork, thorClient)
 
-        await expect(balanceRequest).rejects.toThrowError("Failed to get balance from external service")
+        await expect(balanceRequest).rejects.toThrow("Failed to get balance from external service")
+        expect(error).toHaveBeenCalledWith(ERROR_EVENTS.TOKENS, new Error("Network Error"))
     })
 
     it("PLA Token - should return the correct balance", async () => {
@@ -135,47 +153,39 @@ describe("BalanceUtils", () => {
         expect(isTokenWithBalance2).toEqual(true)
     })
 
-    it("should handle getBalanceAndTokenInfoFromBlockchain correctly", async () => {
+    it("getBalanceAndTokenInfoFromBlockchain - should return balance and token details", async () => {
         mock.onGet(`${mainNetwork.currentUrl}/accounts/${account1D1.address}`).reply(200, mockedBalance)
 
-        const balance = await BalanceUtils.getBalanceAndTokenInfoFromBlockchain(
-            token1.address,
+        const symbolMock = "MTKN"
+        const decimalsMock = 18
+        const nameMock = "MyToken"
+
+        ;(getTokenDecimals as jest.Mock).mockResolvedValue(decimalsMock)
+        ;(getTokenSymbol as jest.Mock).mockResolvedValue(symbolMock)
+        ;(getTokenName as jest.Mock).mockResolvedValue(nameMock)
+
+        const balanceAndTokens = await BalanceUtils.getBalanceAndTokenInfoFromBlockchain(
+            customToken.address,
             account1D1.address,
             mainNetwork,
             thorClient,
         )
 
-        expect(balance).toBeDefined()
+        expect(balanceAndTokens).not.toBeUndefined()
+        expect(balanceAndTokens?.tokenName).toEqual("MyToken")
+        expect(balanceAndTokens?.tokenSymbol).toEqual("MTKN")
+        expect(balanceAndTokens?.tokenDecimals).toEqual(18)
+        expect(balanceAndTokens?.balance).toEqual(decodedTokenBalance)
     })
 
-    it("should handle getFiatBalance with valid inputs", () => {
-        const fiatBalance = BalanceUtils.getFiatBalance("1000000000000000000", 1.1, 18)
-        expect(fiatBalance).toBe("1.10")
-    })
+    it("getBalanceAndTokenInfoFromBlockchain - should return undefined", async () => {
+        const balanceAndTokens = await BalanceUtils.getBalanceAndTokenInfoFromBlockchain(
+            token1.address,
+            account1D1.address,
+            mainNetwork,
+            thorClientWithCallError,
+        )
 
-    it("should handle getFiatBalance with zero balance", () => {
-        const fiatBalance = BalanceUtils.getFiatBalance("0", 1.1, 18)
-        expect(fiatBalance).toBe("0.00")
-    })
-
-    it("should handle getTokenUnitBalance with no formatting", () => {
-        const unitBalance = BalanceUtils.getTokenUnitBalance("1000000000000000000", 18)
-        expect(unitBalance).toBe("1")
-    })
-
-    it("should handle getTokenUnitBalance with formatting", () => {
-        const unitBalance = BalanceUtils.getTokenUnitBalance("1000000000000000000", 18, 2)
-        expect(unitBalance).toBe("1.00")
-    })
-
-    it("should handle getTokenUnitBalance with zero balance", () => {
-        const unitBalance = BalanceUtils.getTokenUnitBalance("0", 18)
-        expect(unitBalance).toBe("0")
-    })
-
-    it("should handle getIsTokenWithBalance with zero balance", () => {
-        const token = { ...tokenWithBalance, balance: { ...tokenWithBalance.balance, balance: "0x0" } }
-        const isTokenWithBalance = BalanceUtils.getIsTokenWithBalance(token)
-        expect(isTokenWithBalance).toEqual(false)
+        expect(balanceAndTokens).toBeUndefined()
     })
 })

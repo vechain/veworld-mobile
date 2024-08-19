@@ -173,6 +173,12 @@ describe("MergeUtils", () => {
         expect(result).toEqual([person1, person2])
     })
 
+    it("Merge two arrays with custom order", () => {
+        const result = mergeArrays<Person>([person2, person4], [person1, person3], "id", [], ["name"])
+
+        expect(result).toEqual([person1, person2, person3, person4])
+    })
+
     it("Merge an empty array with a non-empty array 2", () => {
         const result = mergeArrays<Person>([person1, person2], [], "id")
 

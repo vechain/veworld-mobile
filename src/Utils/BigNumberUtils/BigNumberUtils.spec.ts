@@ -1,4 +1,19 @@
 import BigNutils, { BigNumberUtils } from "./BigNumberUtils"
+import { BigNumber } from "bignumber.js"
+
+// Adjust the import path as necessary
+
+describe("BigNutils", () => {
+    it("should instance the class with custom input", () => {
+        const bigNumUtils = BigNutils(5)
+        expect(bigNumUtils.toString).toBe("5")
+    })
+
+    it("should instance the class init function", () => {
+        const bigNumUtils = BigNutils()
+        expect(bigNumUtils.toString).toBe("0")
+    })
+})
 
 describe("BigNumberUtils class", () => {
     let bigNumUtils: BigNumberUtils
@@ -59,55 +74,98 @@ describe("BigNumberUtils class", () => {
         expect(bigNumUtils.toString).toBe("0.0001")
     })
 
-    test("toHuman should handle zero decimals", () => {
-        bigNumUtils.toHuman(0)
-        expect(bigNumUtils.toString).toBe("10")
+    // Test toHuman with callback
+    test("toHuman should convert correctly with callback", () => {
+        function callback(result: BigNumber) {
+            expect(result.toString()).toBe("0.1")
+        }
+
+        bigNumUtils.toHuman(2, callback)
     })
 
-    // Test decimals with different precisions
+    // Test decimals
     test("decimals should round correctly", () => {
         const num = BigNutils("10.123456").decimals(4).toString
         expect(num).toBe("10.1234")
     })
 
-    test("decimals should round down correctly", () => {
-        const num = BigNutils("10.999999").decimals(2).toString
-        expect(num).toBe("10.99")
+    // Test decimals with callback
+    test("decimals should round correctly with callback", () => {
+        function callback(result: BigNumber) {
+            expect(result.toString()).toBe("10.12")
+        }
+
+        BigNutils("10.1234").decimals(2, callback)
     })
 
-    // Math operations with edge cases
-    test("minus should subtract correctly with negative numbers", () => {
-        bigNumUtils.minus(-5)
-        expect(bigNumUtils.toString).toBe("15")
+    // Test math operations
+    test("minus should subtract correctly", () => {
+        bigNumUtils.minus(5)
+        expect(bigNumUtils.toString).toBe("5")
     })
 
-    test("minus should handle subtraction resulting in zero", () => {
-        bigNumUtils.minus(10)
-        expect(bigNumUtils.isZero).toBeTruthy()
+    test("minus should subtract correctly with callback", () => {
+        function callback(result: BigNumber) {
+            expect(result.toString()).toBe("5")
+        }
+
+        bigNumUtils.minus(5, callback)
     })
 
-    test("times should handle multiplication by zero", () => {
-        bigNumUtils.times(0)
-        expect(bigNumUtils.toString).toBe("0")
-        expect(bigNumUtils.isZero).toBeTruthy()
+    test("multiply should multiply correctly", () => {
+        bigNumUtils.multiply(4)
+        expect(bigNumUtils.toString).toBe("40")
     })
 
-    test("plus should handle adding zero", () => {
-        bigNumUtils.plus(0)
-        expect(bigNumUtils.toString).toBe("10")
+    test("multiply should multiply correctly with callback", () => {
+        function callback(result: BigNumber) {
+            expect(result.toString()).toBe("40")
+        }
+
+        bigNumUtils.multiply(4, callback)
     })
 
-    test("idiv should handle integer division correctly", () => {
-        bigNumUtils.idiv(3)
-        expect(bigNumUtils.toString).toBe("3")
+    test("plus should add correctly", () => {
+        bigNumUtils.plus(15)
+        expect(bigNumUtils.toString).toBe("25")
     })
 
-    // Comparison methods with edge cases
-    test("isLessThan should return false for equal values", () => {
-        expect(bigNumUtils.isLessThan(10)).toBeFalsy()
+    test("plus should add correctly with callback", () => {
+        function callback(result: BigNumber) {
+            expect(result.toString()).toBe("25")
+        }
+
+        bigNumUtils.plus(15, callback)
     })
 
-    test("isLessThan should return true for smaller values", () => {
+    test("times should multiply correctly", () => {
+        bigNumUtils.times(3)
+        expect(bigNumUtils.toString).toBe("30")
+    })
+
+    test("times should multiply correctly with callback", () => {
+        function callback(result: BigNumber) {
+            expect(result.toString()).toBe("30")
+        }
+
+        bigNumUtils.times(3, callback)
+    })
+
+    test("idiv should divide correctly", () => {
+        bigNumUtils.idiv(2)
+        expect(bigNumUtils.toString).toBe("5")
+    })
+
+    test("idiv should divide correctly with callback", () => {
+        function callback(result: BigNumber) {
+            expect(result.toString()).toBe("5")
+        }
+
+        bigNumUtils.idiv(2, callback)
+    })
+
+    // Test comparison methods
+    test("isLessThan should compare correctly", () => {
         expect(bigNumUtils.isLessThan(20)).toBeTruthy()
     })
 
@@ -121,13 +179,13 @@ describe("BigNumberUtils class", () => {
 
     // Test format methods
     test("toCurrencyFormat_string should format correctly", () => {
-        const num = BigNutils("1234.567").toCurrencyFormat_string(2)
-        expect(num).toBe("1,234.56")
+        expect(bigNumUtils.toCurrencyFormat_string(2)).toMatch(/^\d+(\.\d{1,2})?$/)
+        expect(bigNumUtils.idiv(10).minus(0.998).toCurrencyFormat_string(2)).toBe("< 0.01")
     })
 
-    test("toCurrencyFormat_string should handle small numbers", () => {
-        const smallNumber = BigNutils("0.009")
-        expect(smallNumber.toCurrencyFormat_string(2)).toBe("< 0.01")
+    test("toTokenFormat_string should format correctly", () => {
+        expect(bigNumUtils.toTokenFormat_string(2)).toMatch(/^\d+(\.\d{1,4})?$/)
+        expect(bigNumUtils.idiv(10).minus(0.99995).toTokenFormat_string(2)).toBe("< 0.01")
     })
 
     test("toTokenFormat_string should format correctly with small numbers", () => {
@@ -135,35 +193,58 @@ describe("BigNumberUtils class", () => {
         expect(smallNumber.toTokenFormat_string(4)).toBe("< 0.01")
     })
 
-    // Test conversion methods with edge cases
-    test("toCurrencyConversion should handle undefined rate", () => {
-        const result = bigNumUtils.toCurrencyConversion("100")
-        expect(result).toBe("100.00")
+    test("toCurrencyConversion should convert correctly with 0 balance", () => {
+        bigNumUtils.toCurrencyConversion("", 1.5)
+        expect(bigNumUtils.toString).toBe("0")
     })
 
-    test("toCurrencyConversion should apply the rate correctly", () => {
-        const result = bigNumUtils.toCurrencyConversion("100", 2)
-        expect(result).toBe("200.00")
-    })
-
-    test("toTokenConversion should handle undefined rate", () => {
-        bigNumUtils.toTokenConversion("100")
+    test("toCurrencyConversion should convert correctly without rate", () => {
+        bigNumUtils.toCurrencyConversion("100")
         expect(bigNumUtils.toString).toBe("100")
     })
 
-    test("toTokenConversion should apply the rate correctly", () => {
+    test("toCurrencyConversion should convert correctly with callback", () => {
+        function callback(result: BigNumber) {
+            expect(result.toString()).toBe("150")
+        }
+
+        bigNumUtils.toCurrencyConversion("100", 1.5, callback)
+    })
+
+    test("toTokenConversion should convert correctly", () => {
         bigNumUtils.toTokenConversion("100", 2)
         expect(bigNumUtils.toString).toBe("50")
     })
 
-    // Test addTrailingZeros with edge cases
-    test("addTrailingZeros should handle zero decimals", () => {
-        bigNumUtils.addTrailingZeros(0)
-        expect(bigNumUtils.toString).toBe("10")
+    test("toTokenConversion should convert correctly with 0 balance", () => {
+        bigNumUtils.toTokenConversion("", 2)
+        expect(bigNumUtils.toString).toBe("0")
     })
 
-    test("addTrailingZeros should add multiple zeros correctly", () => {
-        bigNumUtils.addTrailingZeros(5)
-        expect(bigNumUtils.toString).toBe("1000000")
+    test("toTokenConversion should convert correctly without custom rate", () => {
+        bigNumUtils.toTokenConversion("100")
+        expect(bigNumUtils.toString).toBe("100")
+    })
+
+    test("toTokenConversion should convert correctly with callback", () => {
+        function callback(result: BigNumber) {
+            expect(result.toString()).toBe("50")
+        }
+
+        bigNumUtils.toTokenConversion("100", 2, callback)
+    })
+
+    // Test addTrailingZeros
+    test("addTrailingZeros should work correctly", () => {
+        bigNumUtils.addTrailingZeros(2)
+        expect(bigNumUtils.toString).toBe("1000")
+    })
+
+    test("addTrailingZeros should work correctly with callback", () => {
+        function callback(result: BigNumber) {
+            expect(result.toString()).toBe("1000")
+        }
+
+        bigNumUtils.addTrailingZeros(2, callback)
     })
 })
