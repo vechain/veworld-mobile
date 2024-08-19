@@ -54,7 +54,7 @@ export const OfficialTokenCard = memo(
         const symbol = useMemo(() => tokenWithInfo.symbol ?? token?.symbol, [tokenWithInfo.symbol, token?.symbol])
 
         return (
-            <BaseCard onPress={action} containerStyle={[styles.container, style]}>
+            <BaseCard onPress={action} containerStyle={[styles.container, style]} testID={symbol}>
                 <BaseView flexDirection="row" justifyContent="space-between">
                     <BaseView w={14}>
                         <TokenImage

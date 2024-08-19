@@ -18,7 +18,8 @@ onFlowComplete:
     id: "sendButton"
 - runFlow:
     commands:
-      - tapOn: "Vechain"
+      - tapOn:
+          id: "VET"
 - tapOn:
      id: "SendScreen_amountInput"
 - inputText: ${AMOUNT}

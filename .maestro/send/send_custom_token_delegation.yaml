@@ -33,7 +33,8 @@ onFlowComplete:
     id: "sendButton"
 - runFlow:
     commands:
-      - tapOn: "CarpToken"
+      - tapOn:
+          id: "CARP"
 - tapOn:
     id: "SendScreen_amountInput"
 - inputText: ${AMOUNT}

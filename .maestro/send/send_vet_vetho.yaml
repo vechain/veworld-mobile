@@ -13,7 +13,8 @@ onFlowComplete:
     id: "sendButton"
 - runFlow:
     commands:
-      - tapOn: "Vechain"
+      - tapOn:
+          id: "VET"
 - inputText: ${AMOUNT}
 - tapOn: "Send"
 - tapOn: "NEXT"
@@ -45,7 +46,8 @@ onFlowComplete:
     id: "sendButton"
 - runFlow:
     commands:
-      - tapOn: "VeThor"
+      - tapOn:
+          id: "VTHO"
 - inputText: ${AMOUNT}
 - tapOn:
     id: "Layout_ScrollView"
@@ -82,7 +84,8 @@ onFlowComplete:
     id: "sendButton"
 - runFlow:
     commands:
-      - tapOn: "Vechain"
+      - tapOn:
+          id: "VET"
 - inputText: ${AMOUNT}
 - tapOn:
     id: "Layout_ScrollView"
