@@ -3,16 +3,17 @@ import { ActivityDetail } from "../Type"
 import { BaseIcon, BaseText, BaseTouchable, BaseView } from "~Components"
 import { useTheme } from "~Hooks"
 import { StyleSheet } from "react-native"
+import FiatBalance from "../../HomeScreen/Components/AccountCard/FiatBalance"
+
+export type ActivityDetailContent = ActivityDetail
 
 type Props = {
-    activityDetail: ActivityDetail
+    activityDetail: ActivityDetailContent
     border?: boolean
 }
 
 export const ActivityDetailItem: React.FC<Props> = memo(({ activityDetail, border = true }) => {
     const theme = useTheme()
-
-    if (!activityDetail.value) return <></>
 
     return (
         <BaseView
@@ -37,12 +38,17 @@ export const ActivityDetailItem: React.FC<Props> = memo(({ activityDetail, borde
                     action={activityDetail.onValuePress}
                     disabled={!activityDetail.onValuePress}
                     style={baseStyles.valueContainer}>
-                    <BaseText typographyFont="subSubTitle" underline={activityDetail.underline}>
+                    <BaseText typographyFont={activityDetail.typographyFont} underline={activityDetail.underline}>
                         {activityDetail.value}
                     </BaseText>
 
                     {activityDetail.valueAdditional && (
-                        <BaseText typographyFont="captionRegular"> {activityDetail.valueAdditional}</BaseText>
+                        <FiatBalance
+                            typographyFont="buttonSecondary"
+                            ml={6}
+                            balances={[activityDetail.valueAdditional]}
+                            prefix="≈ "
+                        />
                     )}
                     {activityDetail.icon && (
                         <BaseView pl={3}>

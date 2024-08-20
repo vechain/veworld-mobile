@@ -2,7 +2,7 @@ import React, { useCallback } from "react"
 import { useTheme, useThemedStyles } from "~Hooks"
 import { ColorThemeType } from "~Constants"
 import { BaseView } from "./BaseView"
-import { BaseIcon, BaseText } from "~Components"
+import { BaseIcon, BaseText, BaseTextProps } from "~Components"
 import { StyleSheet, TouchableOpacity } from "react-native"
 import { BaseButtonGroupHorizontalType } from "~Model"
 import HapticsService from "~Services/HapticsService"
@@ -15,6 +15,7 @@ type Props = {
      */
     selectedButtonIds: string[]
     disabled?: boolean
+    typographyFont?: BaseTextProps["typographyFont"]
     renderButton?: (button: BaseButtonGroupHorizontalType, textColor: string) => React.ReactNode
 }
 
@@ -23,6 +24,7 @@ export const BaseButtonGroupHorizontal = ({
     selectedButtonIds,
     buttons,
     disabled: disableAllButtons,
+    typographyFont = "buttonPrimary",
     renderButton,
 }: Props) => {
     const theme = useTheme()
@@ -86,7 +88,7 @@ export const BaseButtonGroupHorizontal = ({
                             ) : (
                                 <BaseView justifyContent="center" alignItems="center" flexDirection="row">
                                     {icon && <BaseIcon size={18} name={icon} color={textColor} />}
-                                    <BaseText color={textColor} typographyFont="buttonPrimary" px={5}>
+                                    <BaseText color={textColor} typographyFont={typographyFont} px={5} align="center">
                                         {label}
                                     </BaseText>
                                 </BaseView>

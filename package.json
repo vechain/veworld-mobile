@@ -19,6 +19,7 @@
     "start:i18n:reset": "yarn i18n & react-native start --reset-cache & wait",
     "start:test": "REACT_APP_UI_LOG=false react-native start --reset-cache",
     "test": "jest",
+    "test:specific": "jest --watch --verbose <filepath>",
     "test:troubleshoot": "jest --detectOpenHandles",
     "test:coverage:debug": "yarn test --forceExit --coverage",
     "test:coverage": "yarn test:coverage:debug --silent",
