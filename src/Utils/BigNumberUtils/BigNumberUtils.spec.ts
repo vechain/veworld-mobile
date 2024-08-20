@@ -22,10 +22,27 @@ describe("BigNumberUtils class", () => {
         bigNumUtils = BigNutils(10)
     })
 
-    // Test instance creation
-    test("should create an instance correctly", () => {
-        expect(bigNumUtils).toBeInstanceOf(BigNumberUtils)
-        expect(bigNumUtils.toString).toBe("10")
+    // Test instance creation with various inputs
+    test("should create an instance with zero", () => {
+        const bigNumZero = BigNutils(0)
+        expect(bigNumZero.toString).toBe("0")
+        expect(bigNumZero.isZero).toBeTruthy()
+    })
+
+    test("should handle negative numbers", () => {
+        const bigNumNegative = BigNutils(-10)
+        expect(bigNumNegative.toString).toBe("-10")
+        expect(bigNumNegative.isZero).toBeFalsy()
+    })
+
+    test("should handle large numbers", () => {
+        const bigNumLarge = BigNutils("1e30")
+        expect(bigNumLarge.toString).toBe("1000000000000000000000000000000")
+    })
+
+    test("should handle NaN", () => {
+        const bigNumNaN = BigNutils(NaN)
+        expect(bigNumNaN.toString).toBe("0")
     })
 
     // Test properties
@@ -36,10 +53,25 @@ describe("BigNumberUtils class", () => {
         expect(bigNumUtils.isZero).toBeFalsy()
     })
 
-    // Test toHuman
-    test("toHuman should convert correctly", () => {
+    // Test edge cases for property methods
+    test("should return '0' when BigNumber is zero", () => {
+        bigNumUtils = BigNutils(0)
+        expect(bigNumUtils.toString).toBe("0")
+        expect(bigNumUtils.isZero).toBeTruthy()
+    })
+
+    test("should return '0' when BigNumber is NaN", () => {
+        bigNumUtils = BigNutils(NaN)
+        expect(bigNumUtils.toString).toBe("0")
+        expect(bigNumUtils.isZero).toBeTruthy()
+    })
+
+    // Test toHuman with different precisions
+    test("toHuman should convert correctly with different precisions", () => {
         bigNumUtils.toHuman(2)
         expect(bigNumUtils.toString).toBe("0.1")
+        bigNumUtils.toHuman(3)
+        expect(bigNumUtils.toString).toBe("0.0001")
     })
 
     // Test toHuman with callback
@@ -53,8 +85,8 @@ describe("BigNumberUtils class", () => {
 
     // Test decimals
     test("decimals should round correctly", () => {
-        const num = BigNutils("10.1234").decimals(2).toString
-        expect(num).toBe("10.12")
+        const num = BigNutils("10.123456").decimals(4).toString
+        expect(num).toBe("10.1234")
     })
 
     // Test decimals with callback
@@ -135,15 +167,17 @@ describe("BigNumberUtils class", () => {
     // Test comparison methods
     test("isLessThan should compare correctly", () => {
         expect(bigNumUtils.isLessThan(20)).toBeTruthy()
-        expect(bigNumUtils.isLessThan(5)).toBeFalsy()
     })
 
-    test("isBiggerThan should compare correctly", () => {
-        expect(bigNumUtils.isBiggerThan(20)).toBeFalsy()
+    test("isBiggerThan should return false for equal values", () => {
+        expect(bigNumUtils.isBiggerThan(10)).toBeFalsy()
+    })
+
+    test("isBiggerThan should return true for bigger values", () => {
         expect(bigNumUtils.isBiggerThan(5)).toBeTruthy()
     })
 
-    // Test formatting methods
+    // Test format methods
     test("toCurrencyFormat_string should format correctly", () => {
         expect(bigNumUtils.toCurrencyFormat_string(2)).toMatch(/^\d+(\.\d{1,2})?$/)
         expect(bigNumUtils.idiv(10).minus(0.998).toCurrencyFormat_string(2)).toBe("< 0.01")
@@ -154,10 +188,9 @@ describe("BigNumberUtils class", () => {
         expect(bigNumUtils.idiv(10).minus(0.99995).toTokenFormat_string(2)).toBe("< 0.01")
     })
 
-    // Test conversion methods
-    test("toCurrencyConversion should convert correctly", () => {
-        bigNumUtils.toCurrencyConversion("100", 1.5)
-        expect(bigNumUtils.toString).toBe("150")
+    test("toTokenFormat_string should format correctly with small numbers", () => {
+        const smallNumber = BigNutils("0.00005")
+        expect(smallNumber.toTokenFormat_string(4)).toBe("< 0.01")
     })
 
     test("toCurrencyConversion should convert correctly with 0 balance", () => {

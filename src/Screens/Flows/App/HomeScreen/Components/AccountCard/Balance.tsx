@@ -1,12 +1,11 @@
-import React, { memo, useMemo } from "react"
+import React, { memo } from "react"
 import { StyleSheet } from "react-native"
-import { COLORS, VET } from "~Constants"
+import { BaseIcon, BaseText, BaseView } from "~Components"
 import { useTheme } from "~Hooks"
-import { BaseIcon, BaseSkeleton, BaseText, BaseView } from "~Components"
 import { useI18nContext } from "~i18n"
-import { selectIsTokensOwnedLoading, selectVetBalanceByAccount, useAppSelector } from "~Storage/Redux"
 import { WalletAccount } from "~Model"
-import { BigNutils } from "~Utils"
+import { selectIsTokensOwnedLoading, useAppSelector } from "~Storage/Redux"
+import AccountFiatBalance from "./AccountFiatBalance"
 
 type Props = {
     isVisible: boolean
@@ -14,20 +13,11 @@ type Props = {
     account: WalletAccount
 }
 
-export const Balance: React.FC<Props> = memo(({ isVisible, toggleVisible, account }) => {
+export const Balance: React.FC<Props> = memo(({ isVisible, toggleVisible }) => {
     const theme = useTheme()
     const { LL } = useI18nContext()
 
-    const balance = useAppSelector(state => selectVetBalanceByAccount(state, account.address))
-
     const isTokensOwnedLoading = useAppSelector(selectIsTokensOwnedLoading)
-
-    const renderBalance = useMemo(() => {
-        if (isVisible) return BigNutils(balance).toHuman(VET.decimals).toTokenFormat_string(2)
-        return "•••••"
-    }, [balance, isVisible])
-
-    const computeFonts = useMemo(() => (renderBalance.length > 12 ? "title" : "largeTitle"), [renderBalance.length])
 
     return (
         <BaseView>
@@ -45,25 +35,7 @@ export const Balance: React.FC<Props> = memo(({ isVisible, toggleVisible, accoun
                 />
             </BaseView>
             <BaseView flexDirection="row" alignItems="baseline">
-                {isTokensOwnedLoading ? (
-                    <BaseView pt={4}>
-                        <BaseSkeleton
-                            animationDirection="horizontalLeft"
-                            boneColor={theme.isDark ? COLORS.LIME_GREEN : COLORS.DARK_PURPLE}
-                            highlightColor={COLORS.LIGHT_PURPLE}
-                            height={renderBalance.length > 9 ? 22 : 45}
-                            width={140}
-                        />
-                    </BaseView>
-                ) : (
-                    <BaseText color={theme.colors.textReversed} typographyFont={computeFonts}>
-                        {renderBalance}
-                    </BaseText>
-                )}
-
-                <BaseText mx={4} color={theme.colors.textReversed} typographyFont="body">
-                    {VET.symbol}
-                </BaseText>
+                <AccountFiatBalance isLoading={isTokensOwnedLoading} isVisible={isVisible} />
             </BaseView>
         </BaseView>
     )

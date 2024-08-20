@@ -1,14 +1,14 @@
 import { SharedValue, useDerivedValue } from "react-native-reanimated"
 import {
     useLineChart,
-    useLineChartPrice as useRNWagmiChartLineChartPrice,
     useLineChartDatetime as useRNWagmiChartLineChartDatetime,
+    useLineChartPrice as useRNWagmiChartLineChartPrice,
 } from "react-native-wagmi-charts"
 import { LocaleUtils, ReanimatedUtils } from "~Utils"
-import { selectCurrency, useAppSelector } from "~Storage/Redux"
 
 import "intl"
 import "intl/locale-data/jsonp/en"
+import { useFormatFiat } from "~Hooks/useFormatFiat"
 
 export type ValueAndFormatted<U = number, V = string> = {
     value: Readonly<SharedValue<U>>
@@ -20,13 +20,12 @@ export type ValueAndFormatted<U = number, V = string> = {
  * @returns latest price when not scrubbing and active price when scrubbing
  */
 export function useLineChartPrice(): ValueAndFormatted {
-    const currency = useAppSelector(selectCurrency)
-    let langTag = LocaleUtils.getLanguageTag()
     const { value: activeCursorPrice } = useRNWagmiChartLineChartPrice({
         // do not round
         precision: 18,
     })
     const { data } = useLineChart()
+    const { formatFiat } = useFormatFiat({ maximumFractionDigits: 5, minimumFractionDigits: 5 })
 
     const price = useDerivedValue(() => {
         if (activeCursorPrice.value) {
@@ -37,14 +36,9 @@ export function useLineChartPrice(): ValueAndFormatted {
         if (!data?.length) return 0
 
         return data[data.length - 1]?.value ?? 0
-    })
+    }, [activeCursorPrice.value, data])
 
-    const priceFormatted = useDerivedValue(() => {
-        return ReanimatedUtils.numberToLocaleStringWorklet(price.value, langTag, {
-            style: "currency",
-            currency,
-        })
-    })
+    const priceFormatted = useDerivedValue(() => formatFiat({ amount: price.value }), [formatFiat, price.value])
 
     return {
         value: price,
@@ -60,7 +54,7 @@ export type DateFormatted<V = string> = {
  * Wrapper around react-native-wagmi-chart#useLineChartDatetime
  * @returns "Today" string when not scrubbing and active date when scrubbing
  */
-export function useLineChartDatetime(): DateFormatted {
+export function useLineChartDatetime(fallback: string = ""): DateFormatted {
     let langTag = LocaleUtils.getLanguageTag()
     const { value: activeDateTime } = useRNWagmiChartLineChartDatetime()
 
@@ -78,7 +72,7 @@ export function useLineChartDatetime(): DateFormatted {
             })
         }
 
-        return "Overall"
+        return fallback
     })
 
     return {

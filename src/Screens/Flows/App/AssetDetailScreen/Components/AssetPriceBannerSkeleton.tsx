@@ -2,7 +2,7 @@ import React from "react"
 import { useTheme } from "~Hooks"
 import { BaseSkeleton } from "~Components/Base"
 
-export const AssetPriceBannerSkeleton = ({ symbol }: { symbol: string }) => {
+export const AssetPriceBannerSkeleton = () => {
     const theme = useTheme()
 
     return (
@@ -14,10 +14,12 @@ export const AssetPriceBannerSkeleton = ({ symbol }: { symbol: string }) => {
                 {
                     alignItems: "center",
                     opacity: 0.3,
+                    marginTop: 15,
+                    marginBottom: 10,
                     children: [
                         {
-                            width: symbol === "VET" ? 148 : 162,
-                            height: symbol === "VET" ? 38 : 24,
+                            width: 148,
+                            height: 38,
                         },
                     ],
                 },

@@ -12,6 +12,7 @@ export const AssetTrendBannerSkeleton = () => {
             highlightColor={theme.colors.skeletonHighlightColor}
             layout={[
                 {
+                    marginTop: -20,
                     alignItems: "center",
                     opacity: 0.3,
                     children: [{ width: 102, height: 24 }],

@@ -114,6 +114,7 @@ describe("BalanceUtils", () => {
 
         expect(balance?.balance).toEqual(decodedTokenBalance)
     })
+
     it("SHA Token - should return the correct balance", async () => {
         const balance = await BalanceUtils.getBalanceFromBlockchain(
             token2.address,

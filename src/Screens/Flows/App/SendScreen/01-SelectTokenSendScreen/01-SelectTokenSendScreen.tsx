@@ -2,6 +2,8 @@ import { useNavigation } from "@react-navigation/native"
 import { NativeStackScreenProps } from "@react-navigation/native-stack"
 import React, { useState } from "react"
 import { BaseSearchInput, BaseSpacer, BaseText, BaseView, Layout, OfficialTokenCard } from "~Components"
+import { VET, VTHO } from "~Constants"
+import { useTokenWithCompleteInfo } from "~Hooks"
 import { FungibleTokenWithBalance } from "~Model"
 import { RootStackParamListHome, Routes } from "~Navigation"
 import { selectSendableTokensWithBalance, useAppSelector } from "~Storage/Redux"
@@ -26,6 +28,9 @@ export const SelectTokenSendScreen = ({ route }: Props) => {
         })
     }
 
+    const tokenWithInfoVET = useTokenWithCompleteInfo(VET)
+    const tokenWithInfoVTHO = useTokenWithCompleteInfo(VTHO)
+
     return (
         <Layout
             safeAreaTestID="Select_Token_Send_Screen"
@@ -46,15 +51,21 @@ export const SelectTokenSendScreen = ({ route }: Props) => {
             body={
                 <BaseView>
                     {filteredTokens.length ? (
-                        filteredTokens.map(token => (
-                            <OfficialTokenCard
-                                iconHeight={20}
-                                iconWidth={20}
-                                key={token.address}
-                                token={token}
-                                action={handleClickToken(token)}
-                            />
-                        ))
+                        filteredTokens.map(token => {
+                            const isVET = token.symbol === VET.symbol
+                            const isVTHO = token.symbol === VTHO.symbol
+
+                            return (
+                                <OfficialTokenCard
+                                    iconHeight={20}
+                                    iconWidth={20}
+                                    key={token.address}
+                                    token={token}
+                                    tokenWithInfo={isVET ? tokenWithInfoVET : isVTHO ? tokenWithInfoVTHO : undefined}
+                                    action={handleClickToken(token)}
+                                />
+                            )
+                        })
                     ) : (
                         <BaseText m={20}>{LL.BD_NO_TOKEN_FOUND()}</BaseText>
                     )}
