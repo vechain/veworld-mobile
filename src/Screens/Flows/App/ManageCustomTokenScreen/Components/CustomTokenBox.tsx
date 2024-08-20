@@ -30,7 +30,7 @@ export const CustomTokenBox: React.FC<Props> = memo(({ tokenBalance, onTogglePre
     }, [onTogglePress, tokenBalance])
 
     const tokenUnitBalance = useMemo(
-        () => BalanceUtils.getTokenUnitBalance(tokenBalance.balance, tokenBalance.tokenDecimals ?? 0),
+        () => BalanceUtils.getTokenUnitBalance(tokenBalance.balance, tokenBalance.tokenDecimals ?? 0, 2),
         [tokenBalance.balance, tokenBalance.tokenDecimals],
     )
 

@@ -1,65 +1,101 @@
 import { Dimensions, StyleSheet, ViewProps } from "react-native"
-import React, { memo } from "react"
-import { TokenWithCompleteInfo } from "~Model"
-import { BaseCard, BaseSpacer, BaseText, BaseView } from "~Components"
-import { useTheme, useThemedStyles } from "~Hooks"
-import { ColorThemeType, CURRENCY } from "~Constants"
+import React, { memo, useMemo } from "react"
+import { BaseCard, BaseText, BaseView } from "~Components"
+import { useTheme, useThemedStyles, TokenWithCompleteInfo, useBalances } from "~Hooks"
+import { ColorThemeType } from "~Constants"
 import { TokenImage } from "../TokenImage"
+import { BigNutils } from "~Utils"
+import { useI18nContext } from "~i18n"
+import FiatBalance from "~Screens/Flows/App/HomeScreen/Components/AccountCard/FiatBalance"
+import { selectBalanceVisible, useAppSelector } from "~Storage/Redux"
+import { FungibleToken } from "~Model"
 
 type OfficialTokenCardProps = {
-    token: TokenWithCompleteInfo
+    token: FungibleToken
+    tokenWithInfo?: Partial<TokenWithCompleteInfo>
     action: () => void
     iconHeight: number
     iconWidth: number
     selected?: boolean
-    currency?: CURRENCY
-    change24h?: string
-    isPositive24hChange?: boolean
 }
 
 export const OfficialTokenCard = memo(
     ({
         token,
+        tokenWithInfo = {},
         style,
         action,
         iconHeight,
         iconWidth,
         selected,
-        currency,
-        change24h,
-        isPositive24hChange,
     }: OfficialTokenCardProps & ViewProps) => {
         const { styles } = useThemedStyles(baseStyles(selected))
         const theme = useTheme()
+        const { LL } = useI18nContext()
+
+        const isBalanceVisible = useAppSelector(selectBalanceVisible)
+
+        const { tokenInfo } = tokenWithInfo
+        const isPositive24hChange = (tokenInfo?.market_data?.price_change_percentage_24h ?? 0) >= 0
+
+        const change24h =
+            (isPositive24hChange ? "+" : "") +
+            BigNutils(tokenInfo?.market_data?.price_change_percentage_24h ?? 0)
+                .toHuman(0)
+                .decimals(2).toString +
+            "%"
+
+        const { tokenUnitBalance } = useBalances({ token, exchangeRate: tokenWithInfo.exchangeRate })
+
+        const unitBalance = useMemo(
+            () => tokenWithInfo.tokenUnitBalance ?? tokenUnitBalance,
+            [tokenWithInfo.tokenUnitBalance, tokenUnitBalance],
+        )
+        const symbol = useMemo(() => tokenWithInfo.symbol ?? token?.symbol, [tokenWithInfo.symbol, token?.symbol])
+
         return (
-            <BaseCard onPress={action} containerStyle={[styles.container, style]}>
-                <BaseView flexDirection="row" justifyContent="flex-start">
-                    <TokenImage
-                        icon={token.icon}
-                        height={iconHeight}
-                        width={iconWidth}
-                        tokenAddress={token.address}
-                        symbol={token.symbol}
-                    />
-                    <BaseSpacer width={16} />
-                    <BaseView flexDirection="column" style={{ width: Dimensions.get("window").width - 140 }}>
+            <BaseCard onPress={action} containerStyle={[styles.container, style]} testID={symbol}>
+                <BaseView flexDirection="row" justifyContent="space-between">
+                    <BaseView w={14}>
+                        <TokenImage
+                            icon={token.icon}
+                            height={iconHeight}
+                            width={iconWidth}
+                            tokenAddress={token.address}
+                            symbol={token.symbol}
+                        />
+                    </BaseView>
+                    <BaseView w={42}>
                         <BaseText typographyFont="buttonPrimary" ellipsizeMode="tail" numberOfLines={1}>
                             {token.name}
                         </BaseText>
-                        <BaseText typographyFont="captionRegular">{token.symbol}</BaseText>
+
+                        {tokenWithInfo.fiatBalance && (
+                            <BaseView flexDirection="row">
+                                <BaseText
+                                    typographyFont="captionBold"
+                                    color={isPositive24hChange ? theme.colors.success : theme.colors.danger}>
+                                    {change24h}
+                                </BaseText>
+                                <BaseText typographyFont="smallCaption" mx={2} mt={4}>
+                                    ({LL.COMMON_24H()})
+                                </BaseText>
+                            </BaseView>
+                        )}
                     </BaseView>
 
-                    {change24h && currency && token.rate && (
-                        <BaseView flexDirection="column" alignItems="flex-end" flexGrow={1}>
-                            <BaseView flexDirection="row" alignItems="baseline">
-                                <BaseText typographyFont="subTitleBold">{token.rate?.toFixed(4)} </BaseText>
-                                <BaseText typographyFont="captionRegular">{currency}</BaseText>
-                            </BaseView>
-
-                            <BaseText
-                                typographyFont="captionBold"
-                                color={isPositive24hChange ? theme.colors.success : theme.colors.danger}>
-                                {change24h}
+                    {Boolean(change24h) && (
+                        <BaseView alignItems="flex-end" w={42}>
+                            {tokenWithInfo.fiatBalance && (
+                                <FiatBalance
+                                    typographyFont={"buttonPrimary"}
+                                    color={theme.colors.text}
+                                    balances={[tokenWithInfo.fiatBalance]}
+                                    isVisible={isBalanceVisible}
+                                />
+                            )}
+                            <BaseText typographyFont="captionRegular">
+                                {isBalanceVisible ? unitBalance : "•••••"} {symbol}
                             </BaseText>
                         </BaseView>
                     )}

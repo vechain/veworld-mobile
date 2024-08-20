@@ -6,6 +6,7 @@ import { selectBalanceForToken, selectCurrency, useAppSelector } from "~Storage/
 export type TokenWithCompleteInfo = FungibleToken & {
     fiatBalance: string
     tokenUnitBalance: string
+    tokenUnitFullBalance: string
     exchangeRate?: number
     exchangeRateCurrency: string
     exchangeRateLoading: boolean
@@ -25,7 +26,7 @@ export const useTokenWithCompleteInfo = (token: FungibleToken): TokenWithComplet
         id: getCoinGeckoIdBySymbol[token.symbol],
         vs_currency: currency,
     })
-    const { fiatBalance, tokenUnitBalance } = useBalances({
+    const { fiatBalance, tokenUnitBalance, tokenUnitFullBalance } = useBalances({
         token: { ...token, balance },
         exchangeRate,
     })
@@ -37,6 +38,7 @@ export const useTokenWithCompleteInfo = (token: FungibleToken): TokenWithComplet
         ...token,
         fiatBalance,
         tokenUnitBalance,
+        tokenUnitFullBalance,
         exchangeRate,
         exchangeRateCurrency: currency,
         exchangeRateLoading,

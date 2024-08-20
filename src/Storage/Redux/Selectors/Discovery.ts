@@ -74,3 +74,7 @@ export const selectFeaturedImages = createSelector(getDiscoveryState, discovery 
 
     return images
 })
+
+export const selectSwapFeaturedDapps = createSelector(selectFeaturedDapps, dapps =>
+    dapps.filter(dapp => dapp?.tags?.map(t => t.toLowerCase())?.includes("swap")),
+)

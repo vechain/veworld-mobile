@@ -5,7 +5,7 @@ import Animated, { useAnimatedRef, useScrollViewOffset } from "react-native-rean
 import { randomized as daoDapps } from "~Assets"
 import { BaseSpacer, BaseView, Layout } from "~Components"
 import { AnalyticsEvent } from "~Constants"
-import { useAnalyticTracking, useBrowserSearch, useThemedStyles, useVisitedUrls } from "~Hooks"
+import { useAnalyticTracking, useBrowserSearch, useThemedStyles, useVisitedUrls, useFetchFeaturedDApps } from "~Hooks"
 import { RumManager } from "~Logging/RumManager"
 import { Routes } from "~Navigation"
 import {
@@ -30,7 +30,6 @@ import {
     VeBetterDAOMainCard,
     WebSearchFloatingButton,
 } from "./Components"
-import { useFetchFeaturedDApps } from "./Hooks/useFetchFeaturedDApps"
 import { groupFavoritesByBaseUrl } from "./utils"
 
 const DAO_URL = "https://governance.vebetterdao.org/"

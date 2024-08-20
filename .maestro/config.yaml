@@ -2,3 +2,5 @@
 flows:
   - observedWallet/*
   - send/*
+  - contactManagement/contactManagement.yaml
+  - contactManagement/addContactsToScroll.yaml

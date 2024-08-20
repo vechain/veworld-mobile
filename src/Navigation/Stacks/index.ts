@@ -6,6 +6,7 @@ export * from "./CreateWalletAppStack"
 export * from "./NFTStack"
 export * from "./BuyStack"
 export * from "./DiscoverStack"
+export * from "./HistoryStack"
 
 import { RootStackParamListOnboarding } from "./OnboardingStack"
 import { RootStackParamListHome } from "./HomeStack"
@@ -15,6 +16,7 @@ import { RootStackParamListSwitch } from "./SwitchStack"
 import { RootStackParamListNFT } from "./NFTStack"
 import { RootStackParamListBuy } from "./BuyStack"
 import { RootStackParamListBrowser } from "./DiscoverStack"
+import { HistoryStackParamList } from "./HistoryStack"
 
 export type ScreenRootParams = RootStackParamListSwitch &
     RootStackParamListOnboarding &
@@ -23,7 +25,8 @@ export type ScreenRootParams = RootStackParamListSwitch &
     RootStackParamListCreateWalletApp &
     RootStackParamListNFT &
     RootStackParamListBuy &
-    RootStackParamListBrowser
+    RootStackParamListBrowser &
+    HistoryStackParamList
 
 declare global {
     namespace ReactNavigation {

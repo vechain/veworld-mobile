@@ -1,7 +1,7 @@
 import { LANGUAGE } from "../../../Constants/Enums/LanguageEnum"
 import { createSlice, PayloadAction } from "@reduxjs/toolkit"
 import moment from "moment"
-import { CURRENCY, ThemeEnum } from "~Constants"
+import { CURRENCY, SYMBOL_POSITIONS, ThemeEnum } from "~Constants"
 
 /**
  * @typedef {Object} UserPreferenceState
@@ -21,6 +21,7 @@ export interface UserPreferenceState {
     isPinCodeRequired: boolean
     balanceVisible: boolean
     currency: CURRENCY
+    symbolPosition: SYMBOL_POSITIONS
     language: LANGUAGE
     isAnalyticsTrackingEnabled: boolean
     isSentryTrackingEnabled: boolean
@@ -36,6 +37,7 @@ const initialState: UserPreferenceState = {
     isPinCodeRequired: true,
     balanceVisible: true,
     currency: CURRENCY.USD,
+    symbolPosition: SYMBOL_POSITIONS.BEFORE,
     language: LANGUAGE.ENGLISH,
     isAnalyticsTrackingEnabled: true, // this is enabled by default because otherwise onboarding events won't be tracked
     isSentryTrackingEnabled: true,
@@ -68,6 +70,10 @@ export const UserPreferencesSlice = createSlice({
 
         setCurrency: (state, action: PayloadAction<CURRENCY>) => {
             state.currency = action.payload
+        },
+
+        setSymbolPosition: (state, action: PayloadAction<SYMBOL_POSITIONS>) => {
+            state.symbolPosition = action.payload
         },
 
         setLanguage: (state, action: PayloadAction<LANGUAGE>) => {
@@ -104,6 +110,7 @@ export const {
     setIsPinCodeRequired,
     setBalanceVisible,
     setCurrency,
+    setSymbolPosition,
     setLanguage,
     setAnalyticsTrackingEnabled,
     setSentryTrackingEnabled,

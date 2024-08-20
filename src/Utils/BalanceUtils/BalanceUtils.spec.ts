@@ -1,15 +1,31 @@
-import { VET, VTHO, defaultMainNetwork } from "~Constants"
+import { ERROR_EVENTS, VET, VTHO, defaultMainNetwork } from "~Constants"
 import BalanceUtils from "./BalanceUtils"
 import { TestHelpers } from "~Test"
 var axios = require("axios")
 import MockAdapter from "axios-mock-adapter"
+import { getTokenDecimals, getTokenName, getTokenSymbol } from "~Networking"
+import { error } from "~Utils/Logger"
 
-const { account1D1, token1, token2 } = TestHelpers.data
+const { account1D1, token1, token2, customToken } = TestHelpers.data
 const thorAccountStub = TestHelpers.thor.stubs.account
 const thorClient = TestHelpers.thor.mockThorInstance({})
 const thorClientWithCallError = TestHelpers.thor.mockThorInstance({
     account: thorAccountStub({ shouldCallError: true }),
 })
+
+jest.mock("~Networking", () => ({
+    getTokenDecimals: jest.fn(),
+    getTokenSymbol: jest.fn(),
+    getTokenName: jest.fn(),
+}))
+
+jest.mock("@sentry/react-native", () => ({ init: () => jest.fn() }))
+
+jest.mock("~Utils/Logger", () => ({
+    error: jest.fn(),
+    info: jest.fn(),
+}))
+
 const mainNetwork = defaultMainNetwork
 
 const mockedBalance = {
@@ -49,6 +65,7 @@ describe("BalanceUtils", () => {
 
     afterEach(() => {
         mock.reset()
+        jest.clearAllMocks()
     })
 
     it("VET - should return the correct balance", async () => {
@@ -83,7 +100,8 @@ describe("BalanceUtils", () => {
         const balanceRequest = async () =>
             await BalanceUtils.getBalanceFromBlockchain(VTHO.address, account1D1.address, mainNetwork, thorClient)
 
-        await expect(balanceRequest).rejects.toThrowError("Failed to get balance from external service")
+        await expect(balanceRequest).rejects.toThrow("Failed to get balance from external service")
+        expect(error).toHaveBeenCalledWith(ERROR_EVENTS.TOKENS, new Error("Network Error"))
     })
 
     it("PLA Token - should return the correct balance", async () => {
@@ -96,6 +114,7 @@ describe("BalanceUtils", () => {
 
         expect(balance?.balance).toEqual(decodedTokenBalance)
     })
+
     it("SHA Token - should return the correct balance", async () => {
         const balance = await BalanceUtils.getBalanceFromBlockchain(
             token2.address,
@@ -132,5 +151,41 @@ describe("BalanceUtils", () => {
         })
 
         expect(isTokenWithBalance2).toEqual(true)
+    })
+
+    it("getBalanceAndTokenInfoFromBlockchain - should return balance and token details", async () => {
+        mock.onGet(`${mainNetwork.currentUrl}/accounts/${account1D1.address}`).reply(200, mockedBalance)
+
+        const symbolMock = "MTKN"
+        const decimalsMock = 18
+        const nameMock = "MyToken"
+
+        ;(getTokenDecimals as jest.Mock).mockResolvedValue(decimalsMock)
+        ;(getTokenSymbol as jest.Mock).mockResolvedValue(symbolMock)
+        ;(getTokenName as jest.Mock).mockResolvedValue(nameMock)
+
+        const balanceAndTokens = await BalanceUtils.getBalanceAndTokenInfoFromBlockchain(
+            customToken.address,
+            account1D1.address,
+            mainNetwork,
+            thorClient,
+        )
+
+        expect(balanceAndTokens).not.toBeUndefined()
+        expect(balanceAndTokens?.tokenName).toEqual("MyToken")
+        expect(balanceAndTokens?.tokenSymbol).toEqual("MTKN")
+        expect(balanceAndTokens?.tokenDecimals).toEqual(18)
+        expect(balanceAndTokens?.balance).toEqual(decodedTokenBalance)
+    })
+
+    it("getBalanceAndTokenInfoFromBlockchain - should return undefined", async () => {
+        const balanceAndTokens = await BalanceUtils.getBalanceAndTokenInfoFromBlockchain(
+            token1.address,
+            account1D1.address,
+            mainNetwork,
+            thorClientWithCallError,
+        )
+
+        expect(balanceAndTokens).toBeUndefined()
     })
 })

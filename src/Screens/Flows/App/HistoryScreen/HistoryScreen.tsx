@@ -248,18 +248,15 @@ export const HistoryScreen = () => {
         <Layout
             safeAreaTestID="History_Screen"
             fixedHeader={
-                <>
-                    <BaseView flexDirection="row" justifyContent="space-between">
-                        <BaseText typographyFont="title">{LL.BTN_HISTORY()}</BaseText>
+                <BaseView flexDirection="row" justifyContent="space-between">
+                    <BaseText typographyFont="title">{LL.BTN_HISTORY()}</BaseText>
 
-                        <ChangeAccountButtonPill
-                            title={selectedAccount.alias ?? LL.WALLET_LABEL_ACCOUNT()}
-                            text={selectedAccount.address}
-                            action={openSelectAccountBottomSheet}
-                        />
-                    </BaseView>
-                    <BaseSpacer height={16} />
-                </>
+                    <ChangeAccountButtonPill
+                        title={selectedAccount.alias ?? LL.WALLET_LABEL_ACCOUNT()}
+                        text={selectedAccount.address}
+                        action={openSelectAccountBottomSheet}
+                    />
+                </BaseView>
             }
             fixedBody={
                 <>

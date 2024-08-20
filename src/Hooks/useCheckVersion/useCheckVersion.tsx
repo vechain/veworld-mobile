@@ -10,6 +10,8 @@ import { useI18nContext } from "~i18n"
 import { getCountry } from "react-native-localize"
 import { useAnalyticTracking } from "~Hooks/useAnalyticTracking"
 
+const isProd = process.env.NODE_ENV === "production"
+
 export const useCheckVersion = () => {
     const { LL } = useI18nContext()
     const countryCode = getCountry()?.toLowerCase()
@@ -24,7 +26,7 @@ export const useCheckVersion = () => {
     const track = useAnalyticTracking()
 
     const init = useCallback(async () => {
-        if (isTimeForANewCheck) {
+        if (isTimeForANewCheck && isProd) {
             dispatch(setLastVersionCheck(moment().toISOString()))
             if (countryCode) {
                 try {
