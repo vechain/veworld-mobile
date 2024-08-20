@@ -46,8 +46,9 @@ import NetInfo from "@react-native-community/netinfo"
 import { onlineManager } from "@tanstack/react-query"
 import { useFlipper } from "@react-navigation/devtools"
 import { DdRumReactNavigationTracking } from "@datadog/mobile-react-navigation"
-import { DatadogProvider, DatadogProviderConfiguration } from "@datadog/mobile-react-native"
+import { DatadogProvider, DatadogProviderConfiguration, DdSdkReactNative } from "@datadog/mobile-react-native"
 import { Routes } from "~Navigation"
+import DeviceInfo from "react-native-device-info"
 
 const { fontFamily } = typography
 
@@ -224,7 +225,13 @@ const ddConfig = new DatadogProviderConfiguration(
 ddConfig.site = "EU1" // Set the Datadog site
 // Additional optional configurations...
 ddConfig.nativeCrashReportEnabled = true // enable native crash reporting
+DdSdkReactNative.initialize(ddConfig).then(() => {
+    const uniqueId = DeviceInfo.getUniqueIdSync()
 
+    DdSdkReactNative.setUser({
+        id: uniqueId,
+    })
+})
 const SentryWrappedMain = Sentry.wrap(Main)
 
 const SentryInitialedMain = () => {
