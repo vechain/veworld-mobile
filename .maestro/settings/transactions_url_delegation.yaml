@@ -30,9 +30,10 @@ onFlowComplete:
 - tapOn:
     id: "AddUrl_input"
 - inputText: "${URL_1}"
+# START ANDROID FLOW
 - runFlow:
     when:
-        platform: Android
+      platform: Android
     commands:
         - hideKeyboard
         - tapOn:
@@ -50,21 +51,23 @@ onFlowComplete:
         - tapOn:
             id: "Add_URL_Submit"
         - assertVisible: "${URL_2}"
-        ## User can change delegation URL
+       ## User can change delegation URL
         - tapOn:
             id: "button-URL"
         - tapOn:
             id: Delegation_URL_0
-        - assertVisible: "${URL_1}"
+        - assertVisible: "${URL_1}" 
+# END FLOW
+# START iOS FLOW
 - runFlow:
     when:
-        platform: iOS 
+      platform: iOS
     commands:
         - tapOn:
             id: "Add_URL_Submit"
         - assertVisible: "${URL_1}"
-        ## User can create multiple delegation URLs
         - assertVisible: "Select URL"
+        ## User can create multiple delegation URLs
         - tapOn:
             id: "UrlList_addUrlButton-wrapper"
         - tapOn:
@@ -73,9 +76,10 @@ onFlowComplete:
         - tapOn:
             id: "Add_URL_Submit"
         - assertVisible: "${URL_2}"
-        ## User can change delegation URL
+       ## User can change delegation URL
         - tapOn:
             id: "button-URL"
         - tapOn:
             id: Delegation_URL_0
-        - assertVisible: "${URL_1}"
+        - assertVisible: "${URL_1}" 
+# END FLOW
