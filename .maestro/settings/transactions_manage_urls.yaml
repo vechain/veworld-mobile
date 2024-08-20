@@ -18,8 +18,6 @@ onFlowComplete:
 - tapOn:
     id: "BackButtonHeader-BaseIcon-backButton-wrapper"
 - tapOn:
-    id: "BackButtonHeader-BaseIcon-backButton-wrapper"
-- tapOn:
     id: "Transactions"
 - tapOn:
     id: "Manage_Transactions_Urls"
@@ -27,8 +25,6 @@ onFlowComplete:
     visible:
         id: "ManageUrls_addUrlButton-wrapper"
     timeout: 10000
-- tapOn:
-    id: "ManageUrls_addUrlButton-wrapper"
 - tapOn:
     id: "ManageUrls_addUrlButton-wrapper"
 - tapOn:

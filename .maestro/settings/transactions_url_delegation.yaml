@@ -17,12 +17,6 @@ onFlowComplete:
     timeout: 10000
 - tapOn:
     id: "BackButtonHeader-BaseIcon-backButton-wrapper"
-- extendedWaitUntil:
-    visible:
-        id: "BackButtonHeader-BaseIcon-backButton-wrapper"
-    timeout: 10000
-- tapOn:
-    id: "BackButtonHeader-BaseIcon-backButton-wrapper"
 - tapOn:
     id: "Transactions"
 - tapOn:
