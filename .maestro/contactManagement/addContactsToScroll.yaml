@@ -39,7 +39,7 @@ env:
 - runFlow: multipleContacts.yaml
 - scrollUntilVisible:
     element:
-      id: "My Contact 14-contact-box" # or any other selector
+      id: "contact-row-9" # or any other selector
     direction: DOWN # DOWN|UP|LEFT|RIGHT (optional, default: DOWN)
 #Reset the app
 - runFlow: ../setup_reset/resetApp.yaml
