@@ -19,7 +19,13 @@ import { useAnalyticTracking, useBottomSheetModal, useCheckIdentity, useDeviceUt
 import { CryptoUtils } from "~Utils"
 import { Keyboard, StyleSheet } from "react-native"
 import { ImportWalletInput } from "./Components/ImportWalletInput"
-import { selectAreDevFeaturesEnabled, selectHasOnboarded, useAppSelector } from "~Storage/Redux"
+import {
+    selectAreDevFeaturesEnabled,
+    selectHasOnboarded,
+    setFlowData,
+    useAppDispatch,
+    useAppSelector,
+} from "~Storage/Redux"
 import HapticsService from "~Services/HapticsService"
 import { AnalyticsEvent } from "~Constants"
 import { DEVICE_CREATION_ERRORS as ERRORS, IMPORT_TYPE } from "~Model"
@@ -35,6 +41,7 @@ export const ImportLocalWallet = () => {
     const theme = useTheme()
     const track = useAnalyticTracking()
     const nav = useNavigation()
+    const dispatch = useAppDispatch()
     const userHasOnboarded = useAppSelector(selectHasOnboarded)
 
     const {
@@ -79,7 +86,6 @@ export const ImportLocalWallet = () => {
                 importMnemonic: mnemonicCache.current,
                 privateKey: privateKeyCache.current,
                 pin,
-                importType: importType,
             })
             nav.goBack()
         },
@@ -120,7 +126,17 @@ export const ImportLocalWallet = () => {
                 if (userHasOnboarded) {
                     checkIdentityBeforeOpening_1()
                 } else {
-                    onCreateWallet({ isImported: true, importMnemonic: mnemonic, importType: IMPORT_TYPE.MNEMONIC })
+                    // Update flow tracker data
+                    dispatch(
+                        setFlowData({
+                            flowKey: "wallet-generation",
+                            flowData: {
+                                type: "import",
+                                importType: IMPORT_TYPE.MNEMONIC,
+                            },
+                        }),
+                    )
+                    onCreateWallet({ importMnemonic: mnemonic })
                 }
             } catch (err) {
                 processErrorMessage(err)
@@ -132,6 +148,7 @@ export const ImportLocalWallet = () => {
             track,
             userHasOnboarded,
             checkIdentityBeforeOpening_1,
+            dispatch,
             onCreateWallet,
             processErrorMessage,
         ],
@@ -146,7 +163,17 @@ export const ImportLocalWallet = () => {
                 if (userHasOnboarded) {
                     checkIdentityBeforeOpening_1()
                 } else {
-                    onCreateWallet({ isImported: true, privateKey: _privKey, importType: IMPORT_TYPE.PRIVATE_KEY })
+                    // Update flow tracker data
+                    dispatch(
+                        setFlowData({
+                            flowKey: "wallet-generation",
+                            flowData: {
+                                type: "import",
+                                importType: IMPORT_TYPE.PRIVATE_KEY,
+                            },
+                        }),
+                    )
+                    onCreateWallet({ privateKey: _privKey })
                 }
             } catch (err) {
                 processErrorMessage(err)
@@ -158,6 +185,7 @@ export const ImportLocalWallet = () => {
             track,
             userHasOnboarded,
             checkIdentityBeforeOpening_1,
+            dispatch,
             onCreateWallet,
             processErrorMessage,
         ],
@@ -173,7 +201,17 @@ export const ImportLocalWallet = () => {
                 if (userHasOnboarded) {
                     checkIdentityBeforeOpening_1()
                 } else {
-                    onCreateWallet({ isImported: true, privateKey, importType: IMPORT_TYPE.KEYSTORE_FILE })
+                    // Update flow tracker data
+                    dispatch(
+                        setFlowData({
+                            flowKey: "wallet-generation",
+                            flowData: {
+                                type: "import",
+                                importType: IMPORT_TYPE.KEYSTORE_FILE,
+                            },
+                        }),
+                    )
+                    onCreateWallet({ privateKey })
                 }
             } catch (err) {
                 processErrorMessage(err)
@@ -186,6 +224,7 @@ export const ImportLocalWallet = () => {
             track,
             userHasOnboarded,
             checkIdentityBeforeOpening_1,
+            dispatch,
             onCreateWallet,
             processErrorMessage,
         ],

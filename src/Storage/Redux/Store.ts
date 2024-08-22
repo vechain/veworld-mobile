@@ -22,6 +22,7 @@ import {
 } from "./Slices"
 import { persistReducer } from "redux-persist"
 import { PersistConfig } from "redux-persist/es/types"
+import { FlowsTrackerSlice } from "./Slices/FlowsTracker"
 
 export const reducer = (nftPersistConfig: PersistConfig<NftSliceState>) =>
     combineReducers({
@@ -43,4 +44,5 @@ export const reducer = (nftPersistConfig: PersistConfig<NftSliceState>) =>
         [DiscoverySlice.name]: DiscoverySlice.reducer,
         [AnalyticsSlice.name]: AnalyticsSlice.reducer,
         [BrowserSlice.name]: BrowserSlice.reducer,
+        [FlowsTrackerSlice.name]: FlowsTrackerSlice.reducer,
     })

@@ -15,7 +15,7 @@ import { Platform, StyleSheet } from "react-native"
 import { useNavigation } from "@react-navigation/native"
 import { LedgerDeviceBox } from "../components"
 import { FlatList } from "react-native-gesture-handler"
-import { RootStackParamListCreateWalletApp, RootStackParamListOnboarding, Routes } from "~Navigation"
+import { Routes } from "~Navigation"
 import { ConnectedLedgerDevice } from "~Model"
 import Lottie from "lottie-react-native"
 import { BlePairingDark } from "~Assets/Lottie"
@@ -24,17 +24,13 @@ import { LedgerAndroidPermissions } from "../Hooks/LedgerAndroidPermissions"
 import { useAnalyticTracking, useScanLedgerDevices } from "~Hooks"
 import { AnalyticsEvent } from "~Constants"
 import { PlatformUtils } from "~Utils"
-import { NativeStackScreenProps } from "@react-navigation/native-stack"
+import { selectHasOnboarded, useAppSelector } from "~Storage/Redux"
 
-type Props = NativeStackScreenProps<
-    RootStackParamListOnboarding & RootStackParamListCreateWalletApp,
-    Routes.IMPORT_HW_LEDGER_SELECT_DEVICE
->
-
-export const SelectLedgerDevice: React.FC<Props> = ({ route }) => {
+export const SelectLedgerDevice = () => {
     const { LL } = useI18nContext()
     const nav = useNavigation()
     const track = useAnalyticTracking()
+    const userHasOnboarded = useAppSelector(selectHasOnboarded)
 
     const [selectedDevice, setSelectedDevice] = useState<ConnectedLedgerDevice>()
 
@@ -110,7 +106,7 @@ export const SelectLedgerDevice: React.FC<Props> = ({ route }) => {
         // Tracking event used to detect when start the process to import a new hardware wallet
         // this in combination with the WALLET_GENERATION result help to track bugs on the
         // Ledger connection
-        track(AnalyticsEvent.IMPORT_HW_LEDGER_START, { context: route.params.context })
+        track(AnalyticsEvent.IMPORT_HW_LEDGER_START, { context: userHasOnboarded ? "management" : "onboarding" })
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [])
     return (

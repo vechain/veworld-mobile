@@ -102,7 +102,7 @@ describe("useCreateWallet", () => {
             })
             const { createLocalWallet } = result.current
 
-            await createLocalWallet({ mnemonic: mnemonic, isImported: true })
+            await createLocalWallet({ mnemonic: mnemonic })
             await waitFor(() => result.current.isComplete)
             expect(result.current.accessControl).toBe(true)
             expect(result.current.isComplete).toBe(true)
@@ -124,15 +124,14 @@ describe("useCreateWallet", () => {
             const { result } = renderHook(() => useCreateWallet(), {
                 wrapper: TestWrapper,
             })
-            const createLocalWallet = result.current.createLocalWallet
+            const { createLocalWallet } = result.current
             await createLocalWallet({
-                isImported: true,
                 mnemonic: mnemonic,
                 userPassword: "password",
                 onError: undefined,
             })
 
-            expect(addDeviceAndAccounts).toBeCalledWith({
+            expect(addDeviceAndAccounts).toHaveBeenCalledWith({
                 alias: "Wallet 1",
                 index: 0,
                 rootAddress: "0xec954b8e81777354d0a35111d83373b9ec171c64",
@@ -144,7 +143,7 @@ describe("useCreateWallet", () => {
                         "0494c3ff1acb0cf8e842c54a2bf109b7549d8f800895576892a4ea67eff584a427904a4b2545cf84569be87387bc5fe221c20d1ba5f23d278468faa98f54ddedbe",
                 },
             })
-            expect(setMnemonic).toBeCalledWith(undefined)
+            expect(setMnemonic).toHaveBeenCalledWith(undefined)
             expect(result.current.isComplete).toBe(true)
         })
     })
@@ -158,13 +157,12 @@ describe("useCreateWallet", () => {
 
             try {
                 await createLedgerWallet({
-                    isImported: true,
                     newLedger: ledger,
                     onError: undefined,
                 })
             } catch (e) {}
 
-            expect(addLedgerDeviceAndAccounts).toBeCalledWith(ledger)
+            expect(addLedgerDeviceAndAccounts).toHaveBeenCalledWith(ledger)
         })
     })
 })

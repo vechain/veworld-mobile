@@ -6,7 +6,7 @@ import { useAnalyticTracking, useTheme } from "~Hooks"
 import { useNavigation } from "@react-navigation/native"
 import { Routes } from "~Navigation"
 import { AnalyticsEvent } from "~Constants"
-import { selectHasOnboarded, useAppSelector } from "~Storage/Redux"
+import { selectHasOnboarded, setFlowData, useAppDispatch, useAppSelector } from "~Storage/Redux"
 import { RumManager } from "~Logging"
 
 type Props = {
@@ -19,21 +19,40 @@ export const CreateOrImportWalletBottomSheet = React.forwardRef<BottomSheetModal
         const { LL } = useI18nContext()
         const nav = useNavigation()
         const theme = useTheme()
+        const dispatch = useAppDispatch()
         const track = useAnalyticTracking()
         const userHasOnboarded = useAppSelector(selectHasOnboarded)
         const ddLogger = useMemo(() => new RumManager(), [])
 
         const navigateToImportLocalWallet = useCallback(() => {
             track(AnalyticsEvent.SELECT_WALLET_IMPORT_MNEMONIC)
+            dispatch(
+                setFlowData({
+                    flowKey: "wallet-generation",
+                    flowData: {
+                        type: "import",
+                    },
+                }),
+            )
+
             onClose()
             nav.navigate(Routes.IMPORT_MNEMONIC)
-        }, [nav, onClose, track])
+        }, [dispatch, nav, onClose, track])
 
         const navigateToImportHardwareWallet = useCallback(() => {
             track(AnalyticsEvent.SELECT_WALLET_IMPORT_HARDWARE)
+            dispatch(
+                setFlowData({
+                    flowKey: "wallet-generation",
+                    flowData: {
+                        type: "import",
+                    },
+                }),
+            )
+
             onClose()
-            nav.navigate(Routes.IMPORT_HW_LEDGER_SELECT_DEVICE, { context: "management" })
-        }, [track, onClose, nav])
+            nav.navigate(Routes.IMPORT_HW_LEDGER_SELECT_DEVICE)
+        }, [track, dispatch, onClose, nav])
 
         const onObserveWallet = useCallback(() => {
             onClose()

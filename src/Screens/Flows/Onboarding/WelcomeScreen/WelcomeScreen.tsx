@@ -18,20 +18,31 @@ import { useHandleWalletCreation } from "./useHandleWalletCreation"
 import { useAnalyticTracking, useBottomSheetModal, useTheme } from "~Hooks"
 import { RumManager } from "~Logging"
 import { AnalyticsEvent } from "~Constants"
+import { setFlowData, useAppDispatch } from "~Storage/Redux"
 
 export const WelcomeScreen = () => {
     const { LL } = useI18nContext()
     const theme = useTheme()
     const ddLogger = useMemo(() => new RumManager(), [])
     const track = useAnalyticTracking()
+    const dispatch = useAppDispatch()
 
     const { ref, onOpen, onClose } = useBottomSheetModal()
 
     const onImportWallet = useCallback(async () => {
         track(AnalyticsEvent.SELECT_WALLET_IMPORT_WALLET)
         ddLogger.logAction("WALLET_SETUP_SCREEN", "SELECT_WALLET_IMPORT_WALLET")
+        dispatch(
+            setFlowData({
+                flowKey: "wallet-generation",
+                flowData: {
+                    type: "import",
+                },
+            }),
+        )
+
         onOpen()
-    }, [onOpen, track, ddLogger])
+    }, [track, ddLogger, dispatch, onOpen])
 
     const goToTermsAndConditions = useCallback(() => {
         const url = process.env.REACT_APP_TERMS_OF_SERVICE_URL
@@ -51,6 +62,18 @@ export const WelcomeScreen = () => {
 
     const DEV_DEMO_BUTTON = useDemoWallet()
     const { onCreateWallet, isOpen, isError, onSuccess, onClose: onCloseCreateFlow } = useHandleWalletCreation()
+
+    const onCreateNewWallet = useCallback(async () => {
+        dispatch(
+            setFlowData({
+                flowKey: "wallet-generation",
+                flowData: {
+                    type: "create",
+                },
+            }),
+        )
+        onCreateWallet({})
+    }, [dispatch, onCreateWallet])
 
     return (
         <>
@@ -83,7 +106,7 @@ export const WelcomeScreen = () => {
                         )}
 
                         <BaseButton
-                            action={() => onCreateWallet({ isImported: false })}
+                            action={onCreateNewWallet}
                             w={100}
                             title={"CREATE WALLET"}
                             testID="CREATE_WALLET_BTN"

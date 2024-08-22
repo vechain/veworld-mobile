@@ -8,9 +8,7 @@ import { useNavAnimation } from "~Hooks"
 export type RootStackParamListCreateWalletApp = {
     Home: undefined
     [Routes.IMPORT_MNEMONIC]: undefined
-    [Routes.IMPORT_HW_LEDGER_SELECT_DEVICE]: {
-        context: "onboarding" | "management"
-    }
+    [Routes.IMPORT_HW_LEDGER_SELECT_DEVICE]: undefined
     [Routes.IMPORT_HW_LEDGER_ENABLE_ADDITIONAL_SETTINGS]: {
         device: ConnectedLedgerDevice
     }
@@ -35,7 +33,6 @@ export const CreateWalletAppStack = () => {
                 name={Routes.IMPORT_HW_LEDGER_SELECT_DEVICE}
                 component={SelectLedgerDevice}
                 options={{ headerShown: false }}
-                initialParams={{ context: "management" }}
             />
             <CreateWalletApp.Screen
                 name={Routes.IMPORT_HW_LEDGER_ENABLE_ADDITIONAL_SETTINGS}
