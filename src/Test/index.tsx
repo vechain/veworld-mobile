@@ -9,7 +9,7 @@ import { Provider } from "react-redux"
 import { newStorage, NftSlice, NftSliceState, reducer } from "~Storage/Redux"
 import { GestureHandlerRootView } from "react-native-gesture-handler"
 import { configureStore } from "@reduxjs/toolkit"
-import { DEVICE_TYPE, IMPORT_TYPE } from "~Model"
+import { DEVICE_TYPE } from "~Model"
 import { RootState } from "~Storage/Redux/Types"
 import { Platform } from "react-native"
 import TestHelpers from "./helpers"
@@ -102,14 +102,6 @@ const getStore = (preloadedState: Partial<RootState>) =>
                     position: 0,
                 },
             ],
-            flowsTracker: {
-                flows: {
-                    "wallet-generation": {
-                        type: "import",
-                        importType: IMPORT_TYPE.MNEMONIC,
-                    },
-                },
-            },
             ...preloadedState,
         },
     })
