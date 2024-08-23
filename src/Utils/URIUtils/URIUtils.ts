@@ -158,6 +158,13 @@ function getBaseURL(url: string) {
     return isValid(url) ? new URL(url).origin : undefined
 }
 
+const convertHttpToHttps = (url: string) => {
+    if (isHttp(url)) {
+        return url.replace("http://", "https://")
+    }
+    return url
+}
+
 export default {
     compareURLs,
     clean,
@@ -173,4 +180,5 @@ export default {
     decodeUrl_HACK,
     getHostName,
     getBaseURL,
+    convertHttpToHttps,
 }

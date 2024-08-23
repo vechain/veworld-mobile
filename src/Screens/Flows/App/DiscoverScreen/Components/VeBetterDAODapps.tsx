@@ -73,7 +73,10 @@ const VeBetterDaoDAppCard = ({ onPress, containerStyle, item, areDappsLoading }:
             layout={[{ flexDirection: "column", height: "100%", width: "100%" }]}
         />
     ) : (
-        <Card href={data?.external_url ?? ""} source={getImagerSource(data?.we_world?.banner ?? data.banner ?? "")} />
+        <Card
+            href={URIUtils.convertHttpToHttps("https://governance.vebetterdao.org/apps")}
+            source={getImagerSource(data?.we_world?.banner ?? data.banner ?? "")}
+        />
     )
 }
 

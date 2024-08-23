@@ -97,7 +97,7 @@ const localDaoDAppsMetadata: VeBetterDaoDAppMetadata[] = [
         app_urls: [],
         social_urls: [],
         tweets: ["1801334584593772863"],
-        weworld: {
+        we_world: {
             banner: mugshot,
         },
     },
@@ -123,7 +123,7 @@ const localDaoDAppsMetadata: VeBetterDaoDAppMetadata[] = [
         app_urls: [],
         social_urls: [{ name: "Twitter", url: "https://x.com/cleanify_vet" }],
         tweets: ["1770429956151013558", "1807918713607225847"],
-        weworld: {
+        we_world: {
             banner: cleanify,
         },
     },
@@ -142,7 +142,7 @@ const localDaoDAppsMetadata: VeBetterDaoDAppMetadata[] = [
             },
         ],
         app_urls: [],
-        weworld: {
+        we_world: {
             banner: greencart,
         },
     },
@@ -163,7 +163,7 @@ const localDaoDAppsMetadata: VeBetterDaoDAppMetadata[] = [
             { name: "Telegram", url: "https://t.me/greenambassadorchallenge" },
         ],
         tweets: ["1808139581788745899", "1806683246924554397"],
-        weworld: {
+        we_world: {
             banner: greenambassadorchallenge,
         },
     },
@@ -182,7 +182,7 @@ const localDaoDAppsMetadata: VeBetterDaoDAppMetadata[] = [
             },
         ],
         app_urls: [],
-        weworld: {
+        we_world: {
             banner: oily,
         },
     },
@@ -201,7 +201,7 @@ const localDaoDAppsMetadata: VeBetterDaoDAppMetadata[] = [
             },
         ],
         app_urls: [],
-        weworld: {
+        we_world: {
             banner: evearn,
         },
     },
@@ -224,7 +224,7 @@ const localDaoDAppsMetadata: VeBetterDaoDAppMetadata[] = [
             },
         ],
         app_urls: [],
-        weworld: {
+        we_world: {
             banner: vyvo,
         },
     },
@@ -252,7 +252,7 @@ const localDaoDAppsMetadata: VeBetterDaoDAppMetadata[] = [
             { name: "Discord", url: "https://discord.gg/yneWB6ugYN" },
         ],
         tweets: ["1810795837800468960", "1810669891651043421", "1810497604104688059", "1810294260413202665"],
-        weworld: {
+        we_world: {
             banner: nonfungiblebookclub,
         },
     },
@@ -275,7 +275,7 @@ const localDaoDAppsMetadata: VeBetterDaoDAppMetadata[] = [
             },
         ],
         app_urls: [],
-        weworld: {
+        we_world: {
             banner: carboneers,
         },
     },

@@ -1,9 +1,9 @@
-import { abis, VEBETTER_DAO_DAPPS_TEST_ADDRESS } from "~Constants"
+import { abis } from "~Constants"
 import { VeBetterDaoDapp } from "~Model"
 
-export const getVeBetterDaoDapps = async (thor: Connex.Thor): Promise<VeBetterDaoDapp[]> => {
-    const res = await thor.account(VEBETTER_DAO_DAPPS_TEST_ADDRESS).method(abis.VeBetterDao.X2EarnDapps).call()
-    const apps = res.decoded[0]
+export const getVeBetterDaoDapps = async (thor: Connex.Thor, address: string): Promise<VeBetterDaoDapp[]> => {
+    const res = await thor.account(address).method(abis.VeBetterDao.X2EarnDapps).call()
+    const apps = res?.decoded[0] ?? []
 
     return apps.map((app: any) => ({
         id: app[0],
