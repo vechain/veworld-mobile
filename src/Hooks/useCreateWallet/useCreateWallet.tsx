@@ -1,10 +1,9 @@
 import { useCallback, useState } from "react"
-import { NewLedgerDevice, WalletGenerationData } from "~Model"
+import { IMPORT_TYPE, NewLedgerDevice } from "~Model"
 import { useDeviceUtils } from "../useDeviceUtils"
 import {
     addDeviceAndAccounts,
     addLedgerDeviceAndAccounts,
-    resetFlow,
     setMnemonic,
     setNewLedgerDevice,
     setPrivateKey,
@@ -18,7 +17,6 @@ import { useBiometrics } from "../useBiometrics"
 import { useAnalyticTracking } from "~Hooks/useAnalyticTracking"
 import { AnalyticsEvent, ERROR_EVENTS } from "~Constants"
 import { WalletEncryptionKeyHelper } from "~Components"
-import { selectFlowData } from "~Storage/Redux/Selectors/FlowsTracker"
 
 /**
  * useCreateWallet is a hook that allows you to create a wallet and store it in the store
@@ -35,7 +33,6 @@ export const useCreateWallet = () => {
     const userHasOnboarded = useAppSelector(selectHasOnboarded)
     const [isComplete, setIsComplete] = useState(false)
     const track = useAnalyticTracking()
-    const walletFlow = useAppSelector(selectFlowData<WalletGenerationData>("wallet-generation"))
     /**
      * Insert new wallet in store
      * if userPassword is provided, encrypt the wallet with it and store the hash
@@ -49,11 +46,13 @@ export const useCreateWallet = () => {
             mnemonic,
             privateKey,
             userPassword,
+            importType,
             onError,
         }: {
             mnemonic?: string[]
             privateKey?: string
             userPassword?: string
+            importType?: IMPORT_TYPE
             onError?: (error: unknown) => void
         }) => {
             try {
@@ -76,36 +75,32 @@ export const useCreateWallet = () => {
                 track(AnalyticsEvent.WALLET_ADD_LOCAL_SUCCESS)
                 track(AnalyticsEvent.WALLET_GENERATION, {
                     context: userHasOnboarded ? "management" : "onboarding",
-                    type: walletFlow.type,
+                    type: !importType ? "create" : "import",
                     signature: "local",
-                    importType: walletFlow.importType,
+                    importType: importType,
                 })
                 if (!userHasOnboarded) {
                     track(AnalyticsEvent.ONBOARDING_SUCCESS, {
-                        type: walletFlow.type,
+                        type: !importType ? "create" : "import",
                         signature: "local",
-                        importType: walletFlow.importType,
+                        importType: importType,
                     })
                 }
-                // Clear the current flow to prevent errors when a new wallet is created
-                dispatch(resetFlow("wallet-generation"))
             } catch (e) {
                 warn(ERROR_EVENTS.WALLET_CREATION, e)
                 track(AnalyticsEvent.WALLET_ADD_LOCAL_ERROR)
                 if (!userHasOnboarded) {
                     track(AnalyticsEvent.ONBOARDING_FAILED, {
-                        type: walletFlow.type,
+                        type: !importType ? "create" : "import",
                         signature: "local",
-                        importType: walletFlow.importType,
+                        importType: importType,
                     })
                 }
-                // Clear the current flow to prevent errors when a new wallet is created
-                dispatch(resetFlow("wallet-generation"))
                 onError?.(e)
                 throw e
             }
         },
-        [createDevice, dispatch, selectedAccount, walletFlow, track, userHasOnboarded],
+        [createDevice, dispatch, selectedAccount, track, userHasOnboarded],
     )
     //* [END] - Create Wallet
 
@@ -128,33 +123,29 @@ export const useCreateWallet = () => {
                 track(AnalyticsEvent.WALLET_ADD_LEDGER_SUCCESS)
                 track(AnalyticsEvent.WALLET_GENERATION, {
                     context: userHasOnboarded ? "management" : "onboarding",
-                    type: walletFlow.type,
+                    type: "import",
                     signature: "hardware",
                 })
                 if (!userHasOnboarded) {
                     track(AnalyticsEvent.ONBOARDING_SUCCESS, {
-                        type: walletFlow.type,
+                        type: "import",
                         signature: "hardware",
                     })
                 }
-                // Clear the current flow to prevent errors when a new wallet is created
-                dispatch(resetFlow("wallet-generation"))
             } catch (e) {
                 warn(ERROR_EVENTS.WALLET_CREATION, e)
                 track(AnalyticsEvent.WALLET_ADD_LEDGER_ERROR)
                 if (!userHasOnboarded) {
                     track(AnalyticsEvent.ONBOARDING_FAILED, {
-                        type: walletFlow.type,
+                        type: "import",
                         signature: "hardware",
                     })
                 }
-                // Clear the current flow to prevent errors when a new wallet is created
-                dispatch(resetFlow("wallet-generation"))
                 onError?.(e)
                 throw e
             }
         },
-        [dispatch, selectedAccount, track, userHasOnboarded, walletFlow],
+        [dispatch, selectedAccount, track, userHasOnboarded],
     )
     //* [END] - Create Wallet
 

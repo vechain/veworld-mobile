@@ -3,13 +3,7 @@ import { BaseButton, useApplicationSecurity, WalletEncryptionKeyHelper } from "~
 import { ERROR_EVENTS } from "~Constants"
 import { useCreateWallet } from "~Hooks"
 import { IMPORT_TYPE, SecurityLevelType } from "~Model"
-import {
-    selectAreDevFeaturesEnabled,
-    setFlowData,
-    setIsAppLoading,
-    useAppDispatch,
-    useAppSelector,
-} from "~Storage/Redux"
+import { selectAreDevFeaturesEnabled, setIsAppLoading, useAppDispatch, useAppSelector } from "~Storage/Redux"
 import { debug } from "~Utils"
 
 const IS_CI_BUILD = process.env.IS_CI_BUILD_ENABLED === "true"
@@ -22,15 +16,6 @@ export const useDemoWallet = () => {
 
     const onDemoOnboarding = useCallback(async () => {
         dispatch(setIsAppLoading(true))
-        dispatch(
-            setFlowData({
-                flowKey: "wallet-generation",
-                flowData: {
-                    type: "import",
-                    importType: IMPORT_TYPE.MNEMONIC,
-                },
-            }),
-        )
         const mnemonic = "denial kitchen pet squirrel other broom bar gas better priority spoil cross".split(" ")
         const userPassword = "111111"
         await WalletEncryptionKeyHelper.init(userPassword)
@@ -38,6 +23,7 @@ export const useDemoWallet = () => {
             userPassword,
             onError: e => debug(ERROR_EVENTS.APP, e),
             mnemonic,
+            importType: IMPORT_TYPE.MNEMONIC,
         })
         await migrateOnboarding(SecurityLevelType.SECRET, userPassword)
         dispatch(setIsAppLoading(false))

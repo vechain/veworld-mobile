@@ -19,13 +19,7 @@ import { useAnalyticTracking, useBottomSheetModal, useCheckIdentity, useDeviceUt
 import { CryptoUtils } from "~Utils"
 import { Keyboard, StyleSheet } from "react-native"
 import { ImportWalletInput } from "./Components/ImportWalletInput"
-import {
-    selectAreDevFeaturesEnabled,
-    selectHasOnboarded,
-    setFlowData,
-    useAppDispatch,
-    useAppSelector,
-} from "~Storage/Redux"
+import { selectAreDevFeaturesEnabled, selectHasOnboarded, useAppSelector } from "~Storage/Redux"
 import HapticsService from "~Services/HapticsService"
 import { AnalyticsEvent } from "~Constants"
 import { DEVICE_CREATION_ERRORS as ERRORS, IMPORT_TYPE } from "~Model"
@@ -41,7 +35,6 @@ export const ImportLocalWallet = () => {
     const theme = useTheme()
     const track = useAnalyticTracking()
     const nav = useNavigation()
-    const dispatch = useAppDispatch()
     const userHasOnboarded = useAppSelector(selectHasOnboarded)
 
     const {
@@ -75,6 +68,8 @@ export const ImportLocalWallet = () => {
     const mnemonicCache = useRef<string[]>()
     const privateKeyCache = useRef<string>()
 
+    const importType = useMemo(() => CryptoUtils.determineKeyImportType(textValue), [textValue])
+
     const {
         isPasswordPromptOpen: isPasswordPromptOpen_1,
         handleClosePasswordModal: handleClosePasswordModal_1,
@@ -86,13 +81,12 @@ export const ImportLocalWallet = () => {
                 importMnemonic: mnemonicCache.current,
                 privateKey: privateKeyCache.current,
                 pin,
+                importType,
             })
             nav.goBack()
         },
         allowAutoPassword: false,
     })
-
-    const importType = useMemo(() => CryptoUtils.determineKeyImportType(textValue), [textValue])
 
     const processErrorMessage = useCallback(
         (err: unknown) => {
@@ -123,20 +117,11 @@ export const ImportLocalWallet = () => {
                 checkCanImportDevice(mnemonic)
                 mnemonicCache.current = mnemonic
                 track(AnalyticsEvent.IMPORT_MNEMONIC_SUBMITTED)
+
                 if (userHasOnboarded) {
                     checkIdentityBeforeOpening_1()
                 } else {
-                    // Update flow tracker data
-                    dispatch(
-                        setFlowData({
-                            flowKey: "wallet-generation",
-                            flowData: {
-                                type: "import",
-                                importType: IMPORT_TYPE.MNEMONIC,
-                            },
-                        }),
-                    )
-                    onCreateWallet({ importMnemonic: mnemonic })
+                    onCreateWallet({ importMnemonic: mnemonic, importType: IMPORT_TYPE.MNEMONIC })
                 }
             } catch (err) {
                 processErrorMessage(err)
@@ -148,7 +133,6 @@ export const ImportLocalWallet = () => {
             track,
             userHasOnboarded,
             checkIdentityBeforeOpening_1,
-            dispatch,
             onCreateWallet,
             processErrorMessage,
         ],
@@ -160,20 +144,11 @@ export const ImportLocalWallet = () => {
                 checkCanImportDevice(undefined, _privKey)
                 privateKeyCache.current = _privKey
                 track(AnalyticsEvent.IMPORT_PRIVATE_KEY_SUBMITTED)
+
                 if (userHasOnboarded) {
                     checkIdentityBeforeOpening_1()
                 } else {
-                    // Update flow tracker data
-                    dispatch(
-                        setFlowData({
-                            flowKey: "wallet-generation",
-                            flowData: {
-                                type: "import",
-                                importType: IMPORT_TYPE.PRIVATE_KEY,
-                            },
-                        }),
-                    )
-                    onCreateWallet({ privateKey: _privKey })
+                    onCreateWallet({ privateKey: _privKey, importType: IMPORT_TYPE.PRIVATE_KEY })
                 }
             } catch (err) {
                 processErrorMessage(err)
@@ -185,7 +160,6 @@ export const ImportLocalWallet = () => {
             track,
             userHasOnboarded,
             checkIdentityBeforeOpening_1,
-            dispatch,
             onCreateWallet,
             processErrorMessage,
         ],
@@ -198,20 +172,11 @@ export const ImportLocalWallet = () => {
                 checkCanImportDevice(undefined, privateKey)
                 privateKeyCache.current = privateKey
                 track(AnalyticsEvent.IMPORT_KEYSTORE_FILE_SUBMITTED)
+
                 if (userHasOnboarded) {
                     checkIdentityBeforeOpening_1()
                 } else {
-                    // Update flow tracker data
-                    dispatch(
-                        setFlowData({
-                            flowKey: "wallet-generation",
-                            flowData: {
-                                type: "import",
-                                importType: IMPORT_TYPE.KEYSTORE_FILE,
-                            },
-                        }),
-                    )
-                    onCreateWallet({ privateKey })
+                    onCreateWallet({ privateKey, importType: IMPORT_TYPE.KEYSTORE_FILE })
                 }
             } catch (err) {
                 processErrorMessage(err)
@@ -224,7 +189,6 @@ export const ImportLocalWallet = () => {
             track,
             userHasOnboarded,
             checkIdentityBeforeOpening_1,
-            dispatch,
             onCreateWallet,
             processErrorMessage,
         ],
@@ -283,7 +247,7 @@ export const ImportLocalWallet = () => {
         setIsError("")
     }
 
-    const handleVerify = useCallback(() => onVerify(textValue, importType), [onVerify, textValue, importType])
+    const handleVerify = useCallback(async () => onVerify(textValue, importType), [importType, onVerify, textValue])
     const disabledAction = useCallback(() => setIsError(LL.ERROR_INVALID_IMPORT_DATA()), [LL])
 
     return (
