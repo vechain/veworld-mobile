@@ -49,7 +49,7 @@ export const FavoritesStackCard = ({ dapps, onDAppPress }: Props) => {
                 return dapp.desc
             }
 
-            return hostname ? hostname : dapp.name
+            return hostname ?? dapp.name
         }
 
         const dapp = {

@@ -131,7 +131,7 @@ const localDaoDAppsMetadata: VeBetterDaoDAppMetadata[] = [
         name: "GreenCart",
         description:
             "Shop, Scan, Earn!  Turn your grocery receipts into rewards with our sustainable shopping app. Make every purchase count for a greener future",
-        external_url: "http://greencart.vet/",
+        external_url: "https://greencart.vet/",
         logo: "ipfs://bafybeig4lj2j2wal67lglwz2x7rs4kf6bgmmvizcoaxgrqwgi2efv73t2q/images/logo.png",
         banner: "ipfs://bafybeig4lj2j2wal67lglwz2x7rs4kf6bgmmvizcoaxgrqwgi2efv73t2q/images/banner.png",
         screenshots: [],
