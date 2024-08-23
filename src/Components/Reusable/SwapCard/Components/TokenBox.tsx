@@ -1,13 +1,14 @@
 import React from "react"
-import { Token } from "~Model"
-import { SWAP_SIDE } from "../SwapCard"
-import { useI18nContext } from "~i18n"
-import { selectVisibleCustomTokens, selectCurrency, useAppSelector, selectOfficialTokens } from "~Storage/Redux"
-import { SCREEN_WIDTH, currencySymbolMap, COLORS } from "~Constants"
+import { StyleSheet } from "react-native"
 import DropShadow from "react-native-drop-shadow"
 import { BaseCard, BaseIcon, BaseImage, BaseText, BaseView } from "~Components/Base"
+import { COLORS, SCREEN_WIDTH } from "~Constants"
 import { useTheme } from "~Hooks"
-import { StyleSheet } from "react-native"
+import { useI18nContext } from "~i18n"
+import { Token } from "~Model"
+import FiatBalance from "~Screens/Flows/App/HomeScreen/Components/AccountCard/FiatBalance"
+import { selectOfficialTokens, selectVisibleCustomTokens, useAppSelector } from "~Storage/Redux"
+import { SWAP_SIDE } from "../SwapCard"
 
 type Props = {
     provenance: SWAP_SIDE
@@ -37,8 +38,6 @@ export const TokenBox = ({
     const customTokens = useAppSelector(selectVisibleCustomTokens)
 
     const officialTokens = useAppSelector(selectOfficialTokens)
-
-    const currency = useAppSelector(selectCurrency)
 
     const isTokenAdded = [...customTokens, ...officialTokens]
         .map(tkn => tkn.address.toLowerCase())
@@ -77,13 +76,10 @@ export const TokenBox = ({
                                 </BaseText>
                             </BaseView>
                             <BaseView pt={3} flexDirection="row">
-                                <BaseText typographyFont="captionRegular">{amount}</BaseText>
-                                <BaseText typographyFont="captionRegular"> {token.symbol}</BaseText>
+                                <BaseText typographyFont="captionBold">{amount}</BaseText>
+                                <BaseText typographyFont="captionBold"> {token.symbol}</BaseText>
                                 {fiatValue && (
-                                    <BaseText typographyFont="captionRegular">
-                                        {" ≈ "}
-                                        {fiatValue} {currencySymbolMap[currency]}
-                                    </BaseText>
+                                    <FiatBalance typographyFont="captionRegular" balances={[fiatValue]} prefix=" ≈ " />
                                 )}
                             </BaseView>
                         </>

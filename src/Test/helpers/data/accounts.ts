@@ -4,7 +4,7 @@ import { hdnode1, hdnode2 } from "./wallets"
 import { mockLedgerAccount } from "./ledger"
 import { HDNode } from "thor-devkit"
 import { Buffer } from "buffer"
-import { WalletAccount } from "~Model"
+import { DEVICE_TYPE, WalletAccount, WatchedAccount } from "~Model"
 import { AddressUtils, CryptoUtils } from "~Utils"
 
 // Testing account address on Mainnet with plenty of transactions & NFTs
@@ -36,6 +36,15 @@ export const account3D1NotVisible: WalletAccount = {
 
 export const account4D1: WalletAccount = {
     alias: "D1 - Account 4",
+    rootAddress: device1.rootAddress,
+    address: AddressUtils.getAddressFromXPub(CryptoUtils.xPubFromHdNode(hdnode1), 3),
+    index: 3,
+    visible: true,
+}
+
+export const account5D1Observed: WatchedAccount = {
+    alias: "D1 - Account 4",
+    type: DEVICE_TYPE.LOCAL_WATCHED,
     rootAddress: device1.rootAddress,
     address: AddressUtils.getAddressFromXPub(CryptoUtils.xPubFromHdNode(hdnode1), 3),
     index: 3,

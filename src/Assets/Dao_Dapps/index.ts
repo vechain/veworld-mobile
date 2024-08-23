@@ -15,7 +15,7 @@ const daoDapps: DaoDapps[] = [
     { img: greencart, href: "https://www.greencart.vet" },
     { img: nonfungiblebookclub, href: "https://www.nfbclub.com" },
     { img: greenambassadorchallenge, href: "https://greenambassadorchallenge.com/" },
-    { img: evearn, href: "https://evearn.org/" },
+    { img: evearn, href: "https://evearn.io/" },
 ]
 
 const randomized = daoDapps.sort(() => Math.random() - 0.5)

@@ -95,6 +95,12 @@ describe("getActivityTypeFromClause", () => {
         expect(type).toBe(ActivityType.VET_TRANSFER)
     })
 
+    test("should return NFT_TRANSFER when the clause is a NFT transfer", () => {
+        const clauses = [nftTransferClause]
+        const type = ActivityUtils.getActivityTypeFromClause(clauses)
+        expect(type).toBe(ActivityType.NFT_TRANSFER)
+    })
+
     test("should return DAPP_TRANSACTION when the clause is not vet transfer or token transfer", () => {
         const clauses = [contractCallClause]
         const type = ActivityUtils.getActivityTypeFromClause(clauses)

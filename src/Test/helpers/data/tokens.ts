@@ -41,6 +41,14 @@ export const token2: Token = {
     custom: false,
 }
 
+export const customToken: Token = {
+    name: "MyToken",
+    symbol: "MTKN",
+    address: "0x0c77f2c75e1833e4e437ff52107a2bb4f0a8feea",
+    icon,
+    custom: true,
+}
+
 export const tokensMock = [token1, token2]
 
 export const NFT_Mock: NonFungibleToken = {

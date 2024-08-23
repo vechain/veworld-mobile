@@ -4,10 +4,11 @@ import { BaseText, BaseCard, BaseView, BaseSpacer, BaseSkeleton } from "~Compone
 import Animated, { useAnimatedStyle, withTiming } from "react-native-reanimated"
 import { TokenWithCompleteInfo, useTheme } from "~Hooks"
 import { BigNutils } from "~Utils"
-import { selectCurrency, selectIsTokensOwnedLoading } from "~Storage/Redux/Selectors"
+import { selectIsTokensOwnedLoading } from "~Storage/Redux/Selectors"
 import { useAppSelector } from "~Storage/Redux"
 import { COLORS } from "~Constants"
 import { useI18nContext } from "~i18n"
+import FiatBalance from "../../AccountCard/FiatBalance"
 
 type Props = {
     tokenWithInfo: TokenWithCompleteInfo
@@ -18,8 +19,6 @@ type Props = {
 export const VechainTokenCard = memo(({ tokenWithInfo, isAnimation, isBalanceVisible }: Props) => {
     const theme = useTheme()
     const { LL } = useI18nContext()
-
-    const currency = useAppSelector(selectCurrency)
 
     const isTokensOwnedLoading = useAppSelector(selectIsTokensOwnedLoading)
 
@@ -42,7 +41,7 @@ export const VechainTokenCard = memo(({ tokenWithInfo, isAnimation, isBalanceVis
         }
     }, [isAnimation])
 
-    const computeFonts = useMemo(() => (fiatBalance.length > 6 ? "body" : "subTitleBold"), [fiatBalance.length])
+    const typographyFont = useMemo(() => (fiatBalance.length > 6 ? "body" : "subTitleBold"), [fiatBalance.length])
 
     const renderFiatBalance = useMemo(() => {
         if (isTokensOwnedLoading)
@@ -59,12 +58,24 @@ export const VechainTokenCard = memo(({ tokenWithInfo, isAnimation, isBalanceVis
             )
         if (!exchangeRate) return <BaseText typographyFont="bodyMedium">{LL.ERROR_PRICE_FEED_NOT_AVAILABLE()}</BaseText>
         return (
-            <BaseView flexDirection="row">
-                <BaseText typographyFont={computeFonts}>{isBalanceVisible ? fiatBalance : "••••"}</BaseText>
-                <BaseText typographyFont="captionRegular"> {currency}</BaseText>
-            </BaseView>
+            <FiatBalance
+                typographyFont={typographyFont}
+                color={theme.colors.text}
+                balances={[fiatBalance]}
+                isVisible={isBalanceVisible}
+            />
         )
-    }, [fiatBalance, computeFonts, exchangeRate, isBalanceVisible, isTokensOwnedLoading, LL, theme.colors, currency])
+    }, [
+        isTokensOwnedLoading,
+        theme.colors.skeletonBoneColor,
+        theme.colors.skeletonHighlightColor,
+        theme.colors.text,
+        exchangeRate,
+        LL,
+        typographyFont,
+        fiatBalance,
+        isBalanceVisible,
+    ])
 
     const tokenValueLabelColor = theme.isDark ? COLORS.WHITE_DISABLED : COLORS.DARK_PURPLE_DISABLED
 

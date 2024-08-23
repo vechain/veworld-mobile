@@ -2,6 +2,7 @@ import {
     setAnalyticsTrackingEnabled,
     setBalanceVisible,
     setCurrency,
+    setSymbolPosition,
     setHideTokensWithNoBalance,
     setLanguage,
     setSentryTrackingEnabled,
@@ -14,6 +15,7 @@ export {
     setHideTokensWithNoBalance,
     setLanguage,
     setCurrency,
+    setSymbolPosition,
     setAnalyticsTrackingEnabled,
     setSentryTrackingEnabled,
 }

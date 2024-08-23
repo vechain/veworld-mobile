@@ -52,6 +52,22 @@ describe("DAppUtils", () => {
             expect(DAppUtils.isValidCertMessage({ payload: { type: "text" } })).toBe(false)
             expect(DAppUtils.isValidCertMessage({ payload: { content: "Hello World" } })).toBe(false)
             expect(DAppUtils.isValidCertMessage({ payload: { type: "text", content: null } })).toBe(false)
+            expect(DAppUtils.isValidCertMessage({ purpose: "identification", payload: {} })).toBe(false)
+            expect(
+                DAppUtils.isValidCertMessage({
+                    purpose: "identification",
+                    payload: { type: "string", content: "Hello World" },
+                }),
+            ).toBe(false)
+            expect(DAppUtils.isValidCertMessage({ purpose: "identification", payload: { content: "test" } })).toBe(
+                false,
+            )
+            expect(
+                DAppUtils.isValidCertMessage({
+                    purpose: "identification",
+                    payload: { type: "text", content: "" },
+                }),
+            ).toBe(false)
         })
 
         it("is a valid message", () => {
@@ -68,6 +84,16 @@ describe("DAppUtils", () => {
                     payload: { type: "text", content: "Hello World" },
                 }),
             ).toBe(true)
+        })
+    })
+
+    describe("getAppHubIconUrl", () => {
+        process.env.REACT_APP_HUB_URL = "https://vechain.github.io/app-hub"
+
+        it("should return a valid icon address", () => {
+            expect(DAppUtils.getAppHubIconUrl("vet.cleanify")).toBe(
+                "https://vechain.github.io/app-hub/imgs/vet.cleanify.png",
+            )
         })
     })
 })

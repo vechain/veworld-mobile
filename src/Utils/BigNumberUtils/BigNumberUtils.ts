@@ -1,5 +1,4 @@
 import { BigNumber as BN } from "bignumber.js"
-// import { BigNumber as EtherBN } from "ethers"
 import { isEmpty } from "lodash"
 
 interface IBigNumberUtils {
@@ -8,7 +7,7 @@ interface IBigNumberUtils {
     decimals(decimals: number, callback?: (result: BN) => void): BigNumberUtils
     toCurrencyFormat_string(decimals: number): string
     toTokenFormat_string(decimals: number): string
-    toCurrencyConversion(balance: string, rate?: number, callback?: (result: BN) => void): BigNumberUtils
+    toCurrencyConversion(balance: string, rate?: number, callback?: (result: BN) => void): string
     toTokenConversion(balance: string, rate?: number, callback?: (result: BN) => void): BigNumberUtils
     addTrailingZeros(decimals: number, callback?: (result: BN) => void): BigNumberUtils
 
@@ -177,7 +176,9 @@ class BigNumberUtils implements IBigNumberUtils {
             callback(this.data)
         }
 
-        return this
+        if (this.data.isLessThan("0.01") && !this.data.isZero()) return "< 0.01"
+
+        return this.data.toFixed(2, BN.ROUND_DOWN)
     }
 
     toTokenConversion(balance: string, rate?: number, callback?: (result: BN) => void) {
