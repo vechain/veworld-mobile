@@ -105,6 +105,7 @@ const en: BaseTranslation = {
     BD_RESET_APP_DISCLAIMER: "Ensure you have backed up the recovery phrase of all your wallets, as this action is irreversible.",
     BD_ACCOUNT_REMOVAL: "Your account will be removed, but you can still access it by adding new accounts to the wallet.",
     BD_YOUR_BALANCE: "Your balance",
+    BD_TESTNET_NO_FIAT: "Fiat balance is not available on testnet",
     BD_SELECT_WORD: "Select word {number: number}",
     BD_SELECT_NETWORK: "Select a network",
     BD_SELECT_NETWORK_DESC: "Select the network you want to transact on",
@@ -121,13 +122,17 @@ const en: BaseTranslation = {
     BD_HELP_IMPROVE: "Help us improve",
     BD_HELP_IMPROVE_DISCLAIMER: "Enable this setting to help us improve and always provide the best experience for you",
     BD_CONVERSION_CURRENCY: "Conversion currency",
-    BD_APP_THEME: "App theme",
-    BD_APP_LANGUAGE: "App language",
-    BD_HIDE_TOKENS: "Hide tokens without balance",
     BD_CONVERSION_CURRENCY_DISCLAIMER: "Pick the currency that you prefer to be shown for conversions",
+    BD_SYMBOL_POSITION: "Symbol position",
+    BD_SYMBOL_POSITION_DISCLAIMER: "Pick the position that you prefer to use for fiat currencies.",
+    BD_SYMBOL_POSITION_OPTION_before: "Before amount",
+    BD_SYMBOL_POSITION_OPTION_after: "After amount",
+    BD_APP_THEME: "App theme",
     BD_APP_THEME_DISCLAIMER: "Select the general app theme",
-    BD_HIDE_TOKENS_DISCLAIMER: "Tokens without balance won't be shown in the assets list",
+    BD_APP_LANGUAGE: "App language",
     BD_APP_LANGUAGE_DISCLAIMER: "Select the general app language",
+    BD_HIDE_TOKENS: "Hide tokens without balance",
+    BD_HIDE_TOKENS_DISCLAIMER: "Tokens without balance won't be shown in the assets list",
     BD_USD: "USD",
     BD_EUR: "EUR",
     BD_BACK_TO_APP: "GO BACK TO APP",
@@ -306,6 +311,7 @@ const en: BaseTranslation = {
     COMMON_ASSETS: "Assets",
     COMMON_DAPPS: "DApps",
     COMMON_PRICE: "Price",
+    COMMON_OVERALL: "Overall",
     COMMON_TODAY: "Today",
     COMMON_SELECT_ACCOUNT: "Select account",
     COMMON_SELECT_ACCOUNT_TO_REMOVE: "Select account to remove",
@@ -319,6 +325,7 @@ const en: BaseTranslation = {
     COMMON_OOPS: "Oops!",
     COMMON_PROCEED: "Proceed",
     COMMON_OR: "Or",
+    COMMON_24H: "24 HRs",
 
 
     // Alerts
@@ -581,6 +588,11 @@ const en: BaseTranslation = {
     NFT_ALERT_IMAGE_SAVED_TITLE: "NFT image saved to photo album",
     NFT_ALERT_IMAGE_SAVED_MSG: "You have successfully saved the NFT image to your photo album",
 
+    // Swap screen
+    SWAP_TITLE: "Swap tokens",
+    SWAP_DESCRIPTION: "Using these Vechain dApps you can swap tokens on your wallet for different ones, without having to buy and sell.",
+    SWAP_DAPP_NUMBER: "{total: number} dApps",
+    SWAP_EMPTY_LIST: "No dApps found",
 
     // Onboarding
 
@@ -679,6 +691,7 @@ const en: BaseTranslation = {
     SEND_TO: "To",
     SEND_DETAILS: "Details",
     SEND_AMOUNT: "Amount",
+    SEND_TOTAL_COST: "Total Cost",
     SEND_GAS_FEE: "Gas fee",
     SEND_ESTIMATED_TIME: "Estimated time",
     SEND_LESS_THAN_1_MIN: "Less than 1 min",

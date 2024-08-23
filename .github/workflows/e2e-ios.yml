@@ -7,8 +7,9 @@ on:
 
 jobs:
   build-e2e-test-ios:
-    name: Detox Build & Test iOS Debug
-    runs-on: macos-latest-xl
+    name: Maestro Build & Test iOS Debug
+    runs-on: macos-latest
+    environment: ios-release
 
     # Proceed only if it's either not a release event or it's a pre-release.
     if: ${{ github.event_name != 'release' || (github.event_name == 'release' && github.event.release.prerelease) }}
@@ -21,16 +22,17 @@ jobs:
           # otherwise, use the triggering branch unless it's a non-pre-release event.
           ref: ${{ (github.event_name == 'release' && github.event.release.prerelease && github.event.release.tag_name) || github.ref }}
 
-
       # Install Homebrew and applesimutils for Detox
       - name: Install macOS dependencies
         run: |
           brew tap wix/brew
           brew install applesimutils
+          brew install fastlane
+          bundle install
         env:
           HOMEBREW_NO_AUTO_UPDATE: 1
           HOMEBREW_NO_INSTALL_CLEANUP: 1
-
+      
       # Setup Ruby
       - name: Setup Ruby
         uses: ruby/setup-ruby@v1
@@ -46,92 +48,78 @@ jobs:
 
       # install dependencies with yarn
       - name: Install & Patch packages
-        run: yarn install --frozen-lockfile --network-timeout 300000
+        run: yarn install:all
 
       # Install CocoaPods
       - name: Install CocoaPods
-        run: npx pod-install
-
-      # Install Detox CLI
-      - name: Setup Detox
-        run: yarn detox clean-framework-cache && yarn detox build-framework-cache && yarn detox reset-lock-file
+        run: yarn install:all
 
       # Install sentry properties
       - name: Sentry properties
         uses: mobiledevops/secret-to-file-action@v1
         with:
-            base64-encoded-secret: ${{ secrets.SENTRY_PROPERTIES }}
+            base64-encoded-secret: ${{ secrets.IOS_SENTRY_PROPERTIES }}
             filename: "sentry.properties"
             is-executable: false
             working-directory: "./ios"
 
-      # Start Metro Bundler
-      - name: Start Metro Bundler
-        run: REACT_APP_UI_LOG=false yarn react-native start &> metro-bundler.log &
-
-      # Build iOS app
-      - name: Detox build iOS Debug
-        id: build_app
-        timeout-minutes: 60
-        run: SKIP_SENTRY=true yarn detox build --configuration ios.sim.debug_xcode_14.2 # GH macos-latest has Xcode 14.2
-
-      # Test with Detox
-      - name: Detox test iOS Debug
-        id: test_app
-        timeout-minutes: 100
-        run: yarn detox test --configuration ios.sim.debug_xcode_14.2 --cleanup --headless --record-logs all --take-screenshots all --tags "not @broken" --publish &> cucumber.log
-
-      # Upload test artifacts from Detox
-      - name: Upload detox artifacts
-        if: always() && steps.test_app.outcome == 'failure'
-        uses: actions/upload-artifact@v3
+      - name: Env default decode
+        uses: mobiledevops/secret-to-file-action@v1
         with:
-          name: detox-fail-artifacts
-          path: artifacts
+             base64-encoded-secret: ${{ secrets.IOS_ENV_DEFAULT }}
+             filename: "env.default"
+             is-executable: false
+             working-directory: "./ios/fastlane"
 
-      # Upload cucumber artifacts
-      - name: Upload cucumber artifacts
-        if: always() && steps.test_app.outcome == 'failure'
-        uses: actions/upload-artifact@v3
-        with:
-          name: cucumber-fail-artifacts
-          path: |
-            cucumber.log
-            cucumber-report.html
-
-      # Upload Metro Bundler logs
-      - name: Upload Metro Bundler logs
-        if: always() && steps.build_app.outcome == 'failure'
-        uses: actions/upload-artifact@v2
-        with:
-          name: metro-bundler-logs
-          path: metro-bundler.log
-
-      # Get cucumber published url
-      - name: Parse report URL
-        id: parse_report_url
-        if: always() && steps.test_app.outcome != 'skipped'
-        run: |
-          echo report_url=$(cat cucumber.log | grep -Eo "https://reports.cucumber.io/reports/[a-zA-Z0-9-]+") >> "$GITHUB_OUTPUT"
           
-          # Post results to slack
-                - name: Post to a Slack channel
-                  if: always()
-                  uses: slackapi/slack-github-action@v1.24.0
-                  with:
-                    # Slack channel id, channel name, or user id to post message.
-                    # See also: https://api.slack.com/methods/chat.postMessage#channels
-                    # You can pass in multiple channels to post to by providing a comma-delimited list of channel IDs.
-                    channel-id: ${{ secrets.SLACK_VEWORLD_CHANNEL_ID }}
-                    slack-message: |
-                      🧱 Build Status - iOS Result: *${{ steps.build_app.outcome }}*
-                      🚀 E2E Testing - iOS Result: *${{ steps.test_app.outcome }}*
-                      📦 Repository: *${{ github.repository }}*
-                      🌿 Branch: *${{ github.ref_name }}*
-                      🔨 Commit: *${{ github.actor }}* [${{ github.sha.short }}](${{ github.event.head_commit.url }})
-                      🔗 View Run: ${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}
-                      🗒️ Release Type: ${{ (github.event_name == 'release' && github.event.release.prerelease) && '🔴 THIS IS A PRE-RELEASE!' || 'Not a pre-release' }}
-                      🏷️ Release Tag: ${{ (github.event_name == 'release') && ('Pre-Release Tag: ' || '') }} ${{ github.event.release.tag_name }}
-                      📈 Cucumber Report: ${{ steps.parse_report_url.outputs.report_url || 'Not found.' }}
-                  env:
-                    SLACK_BOT_TOKEN: ${{ secrets.SLACK_VEWORLD_BOT_TOKEN }}
+      - name: Env decode 
+        uses: mobiledevops/secret-to-file-action@v1
+        with:
+             base64-encoded-secret: ${{ secrets.IOS_ENV}}
+             filename: ".env"
+             is-executable: false
+             working-directory: "./ios/fastlane"
+
+      - name: datadog-ci decode
+        uses: mobiledevops/secret-to-file-action@v1
+        with:
+            base64-encoded-secret: ${{ secrets.DATADOG_CI}}
+            filename: "datadog-ci.json"
+            is-executable: false
+            working-directory: "."
+      
+      - name: Decode prod env      
+        uses: mobiledevops/secret-to-file-action@v1
+        with:
+            base64-encoded-secret: ${{ secrets.RN_ENV_PROD}}
+            filename: ".env.production"
+            is-executable: false
+            working-directory: "."
+
+      - name: Build apk with fastlane
+        env:
+          MATCH_PASSWORD: ${{ secrets.IOS_MATCH_PASSWORD }}
+        run: |
+              echo -e "\nIS_CI_BUILD_ENABLED=true" >> .env.production
+              cd ios/fastlane
+              git config --global url."https://${{ secrets.CI_USER_TOKEN }}@github.com".insteadOf https://github.com
+              pwd
+              ls
+              fastlane build_test_ci username:${{secrets.CI_USER}} token:${{secrets.CI_USER_TOKEN}} version_code:99 version_name:"9.9.9"
+              cd ../build
+              echo "build finished searching for .app file"
+              echo "(find / -name 'VeWorld.app' 2>/dev/null)"
+              echo "finished searching"
+              SIMULATOR_APP_PATH=$(find ~/ -path "*/Build/Products/Release-iphonesimulator/VeWorld.app" -print -quit)
+              echo "APP_PATH=$SIMULATOR_APP_PATH" >> $GITHUB_ENV
+              echo "APP_PATH_DSYM=$(find ~/ -path "*/Build/Products/Release-iphonesimulator/VeWorld.app.dSYM" -print -quit)" >> $GITHUB_ENV
+      - name: Upload .app 
+        uses: actions/upload-artifact@v4
+        with:
+          name: VeWorld.app
+          path: ${{ env.APP_PATH }}
+      - uses: mobile-dev-inc/action-maestro-cloud@v1
+        with:
+            name: iOS test
+            api-key: ${{ secrets.MAESTRO_CLOUD_API_KEY }}
+            app-file: ${{ env.APP_PATH }}

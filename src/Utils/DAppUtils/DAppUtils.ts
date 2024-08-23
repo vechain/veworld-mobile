@@ -58,7 +58,12 @@ const isValidCertMessage = (message: unknown): message is Connex.Vendor.CertMess
     return true
 }
 
+export const getAppHubIconUrl = (appId: string) => {
+    return `${process.env.REACT_APP_HUB_URL}/imgs/${appId}.png`
+}
+
 export const DAppUtils = {
     isValidTxMessage,
     isValidCertMessage,
+    getAppHubIconUrl,
 }

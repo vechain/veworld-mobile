@@ -1,0 +1,78 @@
+#User creates a observe wallet
+appId: org.vechain.veworld.app
+env:
+  WALLET_ADDRESS: "0x231E70Cf27A2c44Eb9C00a3B1d2F7507Ae791051"
+onFlowStart:
+  - runFlow: ../setup_reset/setupApp.yaml
+---
+
+## User adds a wallet to observe
+- tapOn:
+    id: "HomeScreen_WalletManagementButton-wrapper"
+- tapOn:
+    id: "add-wallet-button"
+- repeat:
+    while:
+      visible:
+         id: "import-observe-wallet-button"
+    commands:
+      - tapOn:
+            id: "import-observe-wallet-button"
+- tapOn:
+    id: "observe-wallet-address-input"
+- inputText: ${WALLET_ADDRESS}
+- tapOn:
+    id: "Layout_ScrollView"
+- tapOn:
+    id: "observe-wallet-confirm-button"
+- tapOn:
+    id: "observe-wallet-account-card"
+- tapOn:
+    id: "wallet-tab"
+- repeat:
+    while:
+      visible:
+         id: "BackButtonHeader-BaseIcon-backButton"
+    commands:
+      - tapOn:
+            id: "BackButtonHeader-BaseIcon-backButton"
+- assertVisible: "VeWorld"
+## User deletes a wallet to observe
+- tapOn:
+    id: "HomeScreen_WalletManagementButton-wrapper"
+- runFlow:
+    when:
+      platform: Android
+    commands:
+      - swipe:
+         from:
+          id: "DeviceBox"
+          index: 1
+         direction: "LEFT"
+- runFlow:
+    when:
+      platform: iOS
+    commands:
+      - swipe:
+         from: "Observed Wallet 1 󰲶"
+         direction: "LEFT"
+- tapOn:
+     id: "DeleteUnderlay_DeleteIcon_observable-wrapper"
+- assertVisible:
+    id: "remove-wallet-button"
+- tapOn:
+    id: "remove-wallet-button"
+- repeat:
+    while:
+       visible: "Insert your 6-digit PIN"
+    commands:
+      - tapOn: "1"
+- repeat:
+    while:
+      visible:
+         id: "BackButtonHeader-BaseIcon-backButton"
+    commands:
+      - tapOn:
+            id: "BackButtonHeader-BaseIcon-backButton"
+- assertVisible: "VeWorld"
+- runFlow: ../setup_reset/resetApp.yaml

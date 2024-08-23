@@ -2,7 +2,7 @@ import { BaseIcon, BaseSpacer, BaseText, BaseView, CompressAndExpandBaseText } f
 import { useI18nContext } from "~i18n"
 import React, { useMemo } from "react"
 import { DelegationType } from "~Model/Delegation"
-import { VET, VTHO } from "~Constants"
+import { getCoinGeckoIdBySymbol, VET, VTHO } from "~Constants"
 import { useTheme } from "~Hooks"
 import { capitalize } from "lodash"
 import { BigNutils } from "~Utils"
@@ -10,6 +10,7 @@ import { Network, TransactionRequest } from "~Model"
 import { selectCurrency, useAppSelector } from "~Storage/Redux"
 import { BigNumber } from "bignumber.js"
 import { useExchangeRate } from "~Api/Coingecko"
+import FiatBalance from "~Screens/Flows/App/HomeScreen/Components/AccountCard/FiatBalance"
 
 type Props = {
     selectedDelegationOption: DelegationType
@@ -36,8 +37,8 @@ export const TransactionDetails = ({
     const theme = useTheme()
 
     const currency = useAppSelector(selectCurrency)
-    //TODO: is this correct no token was specified
     const { data: exchangeRate } = useExchangeRate({
+        id: getCoinGeckoIdBySymbol[VET.symbol],
         vs_currency: currency,
     })
 
@@ -57,9 +58,7 @@ export const TransactionDetails = ({
         [vtho.balance.balance],
     )
 
-    const formattedFiatAmount = BigNutils()
-        .toCurrencyConversion(spendingAmount || "0", exchangeRate ?? 1)
-        .decimals(2).toString
+    const formattedFiatAmount = BigNutils().toCurrencyConversion(spendingAmount || "0", exchangeRate ?? 1)
 
     return (
         <>
@@ -88,12 +87,7 @@ export const TransactionDetails = ({
                 <BaseText typographyFont="subSubTitle">
                     {spendingAmount.toString()} {VET.symbol}
                 </BaseText>
-                {exchangeRate && (
-                    <BaseText typographyFont="buttonSecondary">
-                        {" ≈ "}
-                        {formattedFiatAmount} {currency}
-                    </BaseText>
-                )}
+                <FiatBalance typographyFont="buttonSecondary" ml={6} balances={[formattedFiatAmount]} prefix="≈ " />
             </BaseView>
 
             <BaseSpacer height={12} />

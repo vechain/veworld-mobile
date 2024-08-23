@@ -10,11 +10,10 @@ import {
 } from "react-native"
 import { localDaoDApps, localDaoDAppsMetadata, localDaoDAppsPlaceholder } from "~Assets"
 import { BaseSkeleton, BaseSpacer, BaseText, BaseTouchable, BaseView } from "~Components"
-import { useTheme } from "~Hooks"
+import { useTheme, useVeBetterDaoDapps, useVeBetterDaoDAppsMetadata } from "~Hooks"
 import { useI18nContext } from "~i18n"
 import { VeBetterDaoDapp } from "~Model"
 import { URIUtils } from "~Utils"
-import { useVeBetterDaoDapps, useVeBetterDaoDAppsMetadata } from "../Hooks"
 
 type VeBetterDaoDAppCardProps = {
     containerStyle?: TouchableOpacityProps["style"]
@@ -74,7 +73,7 @@ const VeBetterDaoDAppCard = ({ onPress, containerStyle, item, areDappsLoading }:
         />
     ) : (
         <Card
-            href={URIUtils.convertHttpToHttps("https://governance.vebetterdao.org/apps")}
+            href={URIUtils.convertHttpToHttps(data?.external_url ?? "https://governance.vebetterdao.org/apps")}
             source={getImagerSource(data?.we_world?.banner ?? data.banner ?? "")}
         />
     )

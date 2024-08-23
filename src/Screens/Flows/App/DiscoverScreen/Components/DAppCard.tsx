@@ -4,7 +4,7 @@ import Animated, { ZoomIn, ZoomOut } from "react-native-reanimated"
 import { BaseSpacer, BaseText, BaseTouchable } from "~Components"
 import { DiscoveryDApp } from "~Constants"
 import { useThemedStyles } from "~Hooks"
-import { getAppHubIconUrl } from "../utils"
+import { DAppUtils } from "~Utils"
 
 type DAppCardProps = {
     columns: number
@@ -21,7 +21,9 @@ export const DAppCard = ({ columns, columnsGap, dapp, onPress }: DAppCardProps) 
     const gapsNumber = columns + 1
     const cardDimension = (windowWidth - columnsGap * gapsNumber) / columns
     const imageDimension = cardDimension - 16
-    const iconUri = dapp.id ? getAppHubIconUrl(dapp.id) : `${process.env.REACT_APP_GOOGLE_FAVICON_URL}${dapp.href}`
+    const iconUri = dapp.id
+        ? DAppUtils.getAppHubIconUrl(dapp.id)
+        : `${process.env.REACT_APP_GOOGLE_FAVICON_URL}${dapp.href}`
 
     return (
         <Animated.View entering={ZoomIn} exiting={ZoomOut}>

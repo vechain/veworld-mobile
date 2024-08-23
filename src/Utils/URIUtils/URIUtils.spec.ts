@@ -10,6 +10,10 @@ describe("URIUtils", () => {
             expect(URIUtils.compareURLs("https://www.google.com", "https://www.facebook.com")).toBe(false)
         })
 
+        it("should return false if no urls provided", () => {
+            expect(URIUtils.compareURLs()).toBe(false)
+        })
+
         describe("Compare world of V DApps", function () {
             test("should return false for different DApps", function () {
                 expect(
@@ -106,6 +110,10 @@ describe("URIUtils", () => {
             expect(URIUtils.isLocalHost("chrome://history")).toBe(false)
         })
 
+        test("should return false for invalid address", function () {
+            expect(URIUtils.isLocalHost("invalid-address")).toBe(false)
+        })
+
         test("should return true for IP http://127.0.0.1", function () {
             expect(URIUtils.isLocalHost("http://127.0.0.1")).toBe(true)
         })
@@ -124,6 +132,9 @@ describe("URIUtils", () => {
         })
         test("should return false for non valid url", function () {
             expect(URIUtils.isHttp("gsrgdgfgdf.com")).toBe(false)
+        })
+        test("should return false for non valid protocol", function () {
+            expect(URIUtils.isHttp("chrome://inspect")).toBe(false)
         })
     })
 
@@ -154,12 +165,36 @@ describe("URIUtils", () => {
     })
 
     describe("convertUriToUrl", () => {
+        it("should return the URL if starts with data:", () => {
+            const uri =
+                // eslint-disable-next-line max-len
+                "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAgAAAAIAQMAAAD+wSzIAAAABlBMVEX///+/v7+jQ3Y5AAAADklEQVQI12P4AIX8EAgALgAD/aNpbtEAAAAASUVORK5CYII"
+            expect(URIUtils.convertUriToUrl(uri)).toBe(uri)
+        })
+
+        it("should throw on invalid URL", () => {
+            const uri = "ipfs://https://QmZ1YXJzZS5jb20"
+            expect(() => URIUtils.convertUriToUrl(uri)).toThrow(`Invalid URI ${uri}`)
+        })
+
+        it("should throw on invalid IPFS URL", () => {
+            expect(() => URIUtils.convertUriToUrl("ipfs://QmZ1YXJzZS5jb20.com")).toThrow(
+                "Invalid IPFS URI ipfs://QmZ1YXJzZS5jb20.com",
+            )
+        })
+
         it("should return IPFS URL", () => {
             expect(URIUtils.convertUriToUrl("ipfs://QmZ1YXJzZS5jb20")).toBe("https://api.vorj.app/ipfs/QmZ1YXJzZS5jb20")
         })
 
         it("should return arweave URL", () => {
             expect(URIUtils.convertUriToUrl("ar://QmZ1YXJzZS5jb20?contentType=text/html")).toBe(
+                "https://arweave.net/QmZ1YXJzZS5jb20?contentType=text/html",
+            )
+        })
+
+        it("should return the provided URL", () => {
+            expect(URIUtils.convertUriToUrl("https://arweave.net/QmZ1YXJzZS5jb20?contentType=text/html")).toBe(
                 "https://arweave.net/QmZ1YXJzZS5jb20?contentType=text/html",
             )
         })
@@ -175,9 +210,11 @@ describe("URIUtils", () => {
         test("should return true for a valid URL with the following format www.exmaple.com", async () => {
             expect(await URIUtils.isValidBrowserUrl("www.example.com")).toBe(true)
         })
-
         test("should return false for an invalid URL", async () => {
             expect(await URIUtils.isValidBrowserUrl("https://thisdoesnotexist99999.com")).toBe(false)
+        })
+        test("should return false for a malformed URL", async () => {
+            expect(await URIUtils.isValidBrowserUrl("https://wwz example")).toBe(false)
         })
     })
 
@@ -193,6 +230,10 @@ describe("URIUtils", () => {
                 "https://example.com/path/to resource",
             )
         })
+
+        test("should handle correct URLs", function () {
+            expect(URIUtils.decodeUrl_HACK("./example.com/path/to%20resource")).toBe("./example.com/path/to%20resource")
+        })
     })
 
     describe("getHostName", function () {
@@ -202,6 +243,16 @@ describe("URIUtils", () => {
 
         test("should return null for invalid URLs", function () {
             expect(URIUtils.getHostName("htp://example")).toBeNull()
+        })
+    })
+
+    describe("getBaseUrl", () => {
+        it("should return the origin", () => {
+            expect(URIUtils.getBaseURL("https://example.com/path/to/resource")).toBe("https://example.com")
+        })
+
+        it("should return undefined", () => {
+            expect(URIUtils.getBaseURL("ftps://example.com")).toBeUndefined()
         })
     })
 })

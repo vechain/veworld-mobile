@@ -29,6 +29,16 @@ describe("SignMessageUtils", () => {
 
             expect(result.length).toEqual(32)
         })
+
+        it("should hash a hex message on chain eip155", () => {
+            const message = HexUtils.generateRandom(128)
+
+            const chain = "eip155"
+
+            const result = SignMessageUtils.hashMessage(message, chain)
+
+            expect(result.length).toEqual(32)
+        })
     })
 
     describe("recover", () => {

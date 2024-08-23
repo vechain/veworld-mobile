@@ -12,15 +12,9 @@ onFlowComplete:
 - tapOn:
     id: "sendButton"
 - runFlow:
-    when:
-      platform: Android
     commands:
-      - tapOn: "Vechain"
-- runFlow:
-    when:
-      platform: iOS
-    commands:
-      - tapOn: "Vechain VET"
+      - tapOn:
+          id: "VET"
 - inputText: ${AMOUNT}
 - tapOn: "Send"
 - tapOn: "NEXT"
@@ -38,9 +32,10 @@ onFlowComplete:
 - tapOn: "Insert your 6-digit PIN"
 - assertVisible: "Insert your 6-digit PIN"
 - repeat:
-    times: 6
-    commands:
-      - tapOn: "1"
+     while:
+       notVisible: "Your tokens"
+     commands:
+        - tapOn: "1"
 - assertVisible: "VeWorld"
 - evalScript: ${console.log('Send VET from Account 1 to Account 2')}
 
@@ -50,21 +45,16 @@ onFlowComplete:
 - tapOn:
     id: "sendButton"
 - runFlow:
-    when:
-      platform: Android
     commands:
-      - tapOn: "VeThor"
-- runFlow:
-    when:
-      platform: iOS
-    commands:
-      - tapOn: "VeThor VTHO"
+      - tapOn:
+          id: "VTHO"
 - inputText: ${AMOUNT}
-- tapOn: "Currency balance"
-- tapOn: "NEXT"
+- tapOn:
+    id: "Layout_ScrollView"
+- tapOn:
+    id: "next-button"
 - tapOn:
     id: "selectAccount"
-    index: 0
 - tapOn:
     id: "next-button"
 - runFlow:
@@ -75,9 +65,10 @@ onFlowComplete:
           id: "confirm-send-button"
 - assertVisible: "Insert your 6-digit PIN"
 - repeat:
-    times: 6
-    commands:
-      - tapOn: "1"
+     while:
+       notVisible: "Your tokens"
+     commands:
+        - tapOn: "1"
 - assertVisible: "VeWorld"
 - evalScript: ${console.log('Send VETHO from Account 1 to Account 2')}
 
@@ -92,17 +83,12 @@ onFlowComplete:
 - tapOn:
     id: "sendButton"
 - runFlow:
-    when:
-      platform: Android
     commands:
-      - tapOn: "Vechain"
-- runFlow:
-    when:
-      platform: iOS
-    commands:
-      - tapOn: "Vechain VET"
+      - tapOn:
+          id: "VET"
 - inputText: ${AMOUNT}
-- tapOn: "Currency balance"
+- tapOn:
+    id: "Layout_ScrollView"
 - tapOn: "NEXT"
 - tapOn:
     id: "selectAccount"
@@ -115,8 +101,9 @@ onFlowComplete:
       - tapOn:
           id: "confirm-send-button"
 - repeat:
-    times: 6
-    commands:
-      - tapOn: "1"
+     while:
+       notVisible: "Your tokens"
+     commands:
+        - tapOn: "1"
 - assertVisible: "Your tokens"
 - evalScript: ${console.log('Send VET from Account 2 to Account 1')}

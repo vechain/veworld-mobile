@@ -3,6 +3,7 @@ import { TokenWithCompleteInfo, useTheme } from "~Hooks"
 import { BaseSkeleton, BaseSpacer, BaseText, BaseView } from "~Components"
 import { useI18nContext } from "~i18n"
 import { selectIsTokensOwnedLoading, useAppSelector } from "~Storage/Redux"
+import FiatBalance from "../../HomeScreen/Components/AccountCard/FiatBalance"
 
 export const BalanceView = ({
     tokenWithInfo,
@@ -16,8 +17,7 @@ export const BalanceView = ({
 
     const isTokensOwnedLoading = useAppSelector(selectIsTokensOwnedLoading)
 
-    const { symbol, fiatBalance, exchangeRateCurrency, exchangeRate, tokenUnitBalance, exchangeRateLoading } =
-        tokenWithInfo
+    const { symbol, fiatBalance, exchangeRate, tokenUnitFullBalance, exchangeRateLoading } = tokenWithInfo
 
     const isLoading = exchangeRateLoading || isTokensOwnedLoading
     const priceFeedNotAvailable = !exchangeRate || isLoading
@@ -39,11 +39,15 @@ export const BalanceView = ({
             return <BaseText typographyFont="bodyMedium">{LL.ERROR_PRICE_FEED_NOT_AVAILABLE()}</BaseText>
         return (
             <BaseView flexDirection="row">
-                <BaseText typographyFont="subTitleBold">{isBalanceVisible ? fiatBalance : "••••"}</BaseText>
-                <BaseText typographyFont="captionRegular"> {exchangeRateCurrency}</BaseText>
+                <FiatBalance
+                    typographyFont={"subTitleBold"}
+                    color={theme.colors.text}
+                    balances={[fiatBalance]}
+                    isVisible={isBalanceVisible}
+                />
             </BaseView>
         )
-    }, [fiatBalance, exchangeRateCurrency, LL, isBalanceVisible, isLoading, priceFeedNotAvailable, theme.colors])
+    }, [fiatBalance, LL, isBalanceVisible, isLoading, priceFeedNotAvailable, theme.colors])
 
     return (
         <BaseView w={100}>
@@ -64,7 +68,9 @@ export const BalanceView = ({
                             width={60}
                         />
                     ) : (
-                        <BaseText typographyFont="bodyMedium">{isBalanceVisible ? tokenUnitBalance : "•••••"}</BaseText>
+                        <BaseText typographyFont="bodyMedium">
+                            {isBalanceVisible ? tokenUnitFullBalance : "•••••"}
+                        </BaseText>
                     )}
                     <BaseSpacer width={4} />
                     <BaseText typographyFont="captionRegular">{symbol}</BaseText>

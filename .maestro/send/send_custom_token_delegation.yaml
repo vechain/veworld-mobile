@@ -17,7 +17,11 @@ onFlowComplete:
 - tapOn:
     id: "AddCustomTokenBottomSheet-TextInput-Address"
 - inputText: ${ADDRESS}
-- tapOn: "Add"
+- repeat:
+    while:
+      visible: "Add"
+    commands:
+      - tapOn: "Add"
 - repeat:
     while:
       visible:
@@ -28,15 +32,9 @@ onFlowComplete:
 - tapOn:
     id: "sendButton"
 - runFlow:
-    when:
-      platform: Android
     commands:
-      - tapOn: "CarpToken"
-- runFlow:
-    when:
-      platform: iOS
-    commands:
-       - tapOn: "CARP CarpToken CARP"
+      - tapOn:
+          id: "CARP"
 - tapOn:
     id: "SendScreen_amountInput"
 - inputText: ${AMOUNT}
@@ -55,7 +53,9 @@ onFlowComplete:
       - tapOn:
           id: "confirm-send-button"
 - repeat:
-    times: 6
+    while:
+      notVisible: "Your tokens"
     commands:
       - tapOn: "1"
 - assertVisible: "Your tokens"
+- evalScript: ${console.log('Send custom token Ends')}
