@@ -103,8 +103,9 @@ env.production.local
 ios/fastlane/env
 ios/fastlane/env.default
 
-
+#e2e test files
 sendflow_backup.yaml
+tokenManagement.yaml
 
 # datadog
 datadog-ci.json

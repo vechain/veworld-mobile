@@ -1,0 +1,393 @@
+#tokenManagement
+appId: org.vechain.veworld.app
+env:
+ TOKEN_NAME_ADDRESS: "0xeDecAa0Ad8d93d6167D647A0105f2d93d8270124"
+ TOKEN_NAME2_ADDRESS: "0xC9e1B9B34e02610d27Bf213ecbf527D608CE3D39"
+ CARP_TOKEN_ADRESS: "0x8a9844e4750f5ce5f7988c4d1e04c278c718feea"
+---
+- launchApp:
+    clearState: true
+##welcome screen
+- tapOn:
+    id: "dev_demo"
+- tapOn:
+    id: "settings-tab"
+- tapOn:
+    id: "Networks"
+- tapOn:
+    id: "networks_box_mainnet"
+- tapOn:
+    id: "networks_box_testnet"
+- assertVisible: 
+   id: "BackButtonHeader-BaseIcon-backButton"
+- tapOn:
+    id: "BackButtonHeader-BaseIcon-backButton"
+- tapOn:
+    id: "wallet-tab"
+##User selects an official token
+- tapOn:
+    id: "EditTokensBar_BaseIcon_manageToken"
+- swipe:
+    from:
+        id: "ManageTokenScreen_SearchInput_searchTokenInput"
+    direction: "UP"
+- runFlow:
+    when:
+      platform: Android
+    commands:
+      - tapOn: "Plair"
+- runFlow:
+    when:
+      platform: iOS
+    commands:
+      - tapOn: 
+           id: "PLA"
+- assertVisible: 
+    id: "BackButtonHeader-BaseIcon-backButton"    
+- tapOn:
+    id: "BackButtonHeader-BaseIcon-backButton"
+- swipe: 
+    from:
+      id: "sendButton"
+    direction: "UP"
+- runFlow:
+    when:
+      platform: Android
+    commands:
+      - assertVisible: "Plair"
+- runFlow:
+    when:
+      platform: iOS
+    commands:
+      - assertVisible: "Plair 0.00  PLA"
+- swipe:
+    direction: "DOWN"
+##User selects multiple official tokens
+- assertVisible: 
+     id: "EditTokensBar_BaseIcon_manageToken"
+- tapOn:
+     id: "EditTokensBar_BaseIcon_manageToken"
+- runFlow:
+    when:
+      platform: iOS
+    commands:
+      - swipe:
+          from: 
+             id: "PLA"
+          direction: "UP"
+      - tapOn:
+           id: "JUR"
+      - tapOn:
+           id: "YEET"
+- runFlow:
+    when:
+      platform: Android
+    commands:
+      - swipe:
+          from: "Plair"
+          direction: "UP"
+      - tapOn:
+          text: "Jur"
+          index: 0
+      - tapOn: "Yeet Coin"
+- repeat:
+    while:
+      notVisible: 
+        id: "BackButtonHeader-BaseIcon-backButton"
+    commands:
+      - tapOn: 
+          id: "BackButtonHeader-BaseIcon-backButton"
+- tapOn: 
+    id: "BackButtonHeader-BaseIcon-backButton"
+- swipe:
+    from:
+      id: "sendButton"
+    direction: "UP"
+- runFlow:
+    when:
+      platform: iOS
+    commands:
+      - assertVisible: "Jur 0.00  JUR"
+      - extendedWaitUntil:
+            visible: "Yeet Coin 0.00  YEET"
+            timeout: 10000 
+- runFlow:
+    when:
+      platform: Android
+    commands:
+      - assertVisible: 
+            text: "Jur"
+            index: 0
+      - assertVisible: "Yeet Coin"
+- swipe:
+    direction: "DOWN"
+##User can unselect official tokens
+- swipe:
+    direction: "DOWN"
+- tapOn:
+    id: "EditTokensBar_BaseIcon_manageToken"
+- swipe:
+    from:
+      id: "ManageTokenScreen_SearchInput_searchTokenInput"
+    direction: "UP"
+- runFlow:
+    when:
+      platform: Android
+    commands:
+      - tapOn: 
+            text: "Jur"
+            index: 0
+- runFlow:
+    when:
+      platform: iOS
+    commands:
+      - tapOn: 
+           id: "Jur"
+- extendedWaitUntil:
+    visible:
+        id: "BackButtonHeader-BaseIcon-backButton"
+    timeout: 10000  
+- tapOn:
+    id: "BackButtonHeader-BaseIcon-backButton"
+- swipe:
+    from:
+      id: "sendButton"
+    direction: "UP"
+- runFlow:
+    when:
+      platform: iOS
+    commands:
+      - assertNotVisible: "Jur"
+- runFlow:
+    when:
+      platform: Android
+    commands:
+      - assertNotVisible: 
+            text: "Jur"
+            index: 0
+##User search for a token and only that token comes in the list
+- swipe:
+    direction: "DOWN"
+- tapOn:
+     id: "EditTokensBar_BaseIcon_manageToken"
+- tapOn:
+     id: "ManageTokenScreen_SearchInput_searchTokenInput"
+- inputText: "PLAIR"
+- runFlow:
+    when:
+      platform: Android
+    commands:
+      - assertVisible: "Plair"
+- runFlow:
+    when:
+      platform: iOS
+    commands:
+      - assertVisible:
+             id: "PLA"
+##User add a custom token
+- extendedWaitUntil:
+    visible: 
+     id: "BackButtonHeader-BaseIcon-backButton" 
+    timeout: 10000
+- tapOn:
+    id: "BackButtonHeader-BaseIcon-backButton"
+- tapOn:
+    id: "EditTokensBar_BaseIcon_manageToken"
+- tapOn:
+    id: "ManageTokenScreen_AddCustomToken_Button"
+- tapOn:
+    id: "AddCustomTokenBottomSheet-TextInput-Address"
+- inputText: ${CARP_TOKEN_ADRESS}
+- extendedWaitUntil:
+    visible: "Add"
+    timeout: 10000
+- tapOn: "Add"
+- extendedWaitUntil:
+    visible: 
+     id: "BackButtonHeader-BaseIcon-backButton"
+    timeout: 10000
+- assertVisible:
+    id: "BackButtonHeader-BaseIcon-backButton"
+- tapOn:
+    id: "BackButtonHeader-BaseIcon-backButton"
+- swipe:
+    from:
+      id: "sendButton"
+    direction: "UP"
+- runFlow:
+    when:
+      platform: Android
+    commands:
+      - assertVisible: "CarpToken"
+- runFlow: 
+    when:
+      platform: iOS
+    commands:
+       - assertVisible: ".*CARP CarpToken.*"
+##User add multiple custom tokens and delete one of them
+- tapOn:
+    id: "wallet-tab"
+- tapOn:
+    id: "EditTokensBar_BaseIcon_manageToken"
+- tapOn:
+    id: "ManageTokenScreen_AddCustomToken_Button"
+- tapOn:
+    id: "AddCustomTokenBottomSheet-TextInput-Address"
+- inputText: "0xeDecAa0Ad8d93d6167D647A0105f2d93d8270124"
+- tapOn: "Add"
+- tapOn:
+    id: "ManageTokenScreen_AddCustomToken_Button"
+- tapOn:
+    id: "AddCustomTokenBottomSheet-TextInput-Address"
+- inputText: "0xC9e1B9B34e02610d27Bf213ecbf527D608CE3D39"
+- tapOn: "Add"
+- assertVisible: 
+    id: "BackButtonHeader-BaseIcon-backButton"
+- tapOn:
+    id: "BackButtonHeader-BaseIcon-backButton"
+- swipe:
+    from:
+      id: "sendButton"
+    direction: "UP"
+- swipe:
+    direction: "UP"
+- runFlow:
+    when:
+      platform: iOS
+    commands:
+      - assertVisible: "TEST Test_Token 0.00  TEST"
+      - assertVisible: "TEST Test_Token_2 0.00  TEST2"
+- runFlow:
+    when:
+      platform: Android
+    commands:
+       - assertVisible: "Test_Token"
+       - assertVisible: "Test_Token_2"
+- runFlow:
+    when:
+      platform: Android
+    commands:
+      - swipe:
+         from: "Test_Token"
+         direction: "LEFT"
+- runFlow:
+    when:
+      platform: iOS
+    commands:
+      - swipe:
+         from: "TEST Test_Token 0.00  TEST"
+         direction: "LEFT"
+- tapOn:
+    id: "DeleteUnderlay_DeleteIcon"
+- tapOn: "REMOVE"
+- swipe:
+    direction: "UP"
+- runFlow:
+    when:
+      platform: iOS
+    commands:
+      - assertNotVisible: "TEST Test_Token 0.00  TEST"
+- runFlow:
+    when:
+      platform: Android
+    commands:
+     - assertNotVisible: "Test_Token"
+- swipe:
+    direction: "DOWN"
+##When the user add an official token and then it change network it should not throw the error
+- tapOn:
+    id: "settings-tab"
+- tapOn:
+    id: "Networks"
+- tapOn:
+    id: "networks_box_testnet"
+- tapOn:
+    id: "networks_box_mainnet"
+- assertVisible:
+    id: "BackButtonHeader-BaseIcon-backButton"
+- tapOn:
+    id: "BackButtonHeader-BaseIcon-backButton"
+- tapOn:
+    id: "wallet-tab"
+- tapOn:
+    id: "wallet-tab"
+- tapOn:
+    id: "EditTokensBar_BaseIcon_manageToken"
+- runFlow:
+    when:
+      platform: Android
+    commands:
+      - tapOn: "Safe Haven Token"
+- runFlow:
+    when:
+      platform: iOS
+    commands:
+      - tapOn:
+          id: "SHA"
+- assertVisible: 
+    id: "BackButtonHeader-BaseIcon-backButton"
+- tapOn:
+    id: "BackButtonHeader-BaseIcon-backButton"
+- tapOn:
+    id: "settings-tab"
+- tapOn:
+    id: "Networks"
+- tapOn:
+    id: "networks_box_mainnet"
+- tapOn:
+    id: "networks_box_testnet"
+- assertVisible: 
+    id: "BackButtonHeader-BaseIcon-backButton"
+- tapOn:
+    id: "BackButtonHeader-BaseIcon-backButton"
+- tapOn:
+    id: "wallet-tab"
+- tapOn:
+    id: "EditTokensBar_BaseIcon_manageToken"
+- runFlow:
+    when:
+      platform: iOS
+    commands:
+        - swipe:
+           from:
+             id: "PLA"
+           direction: "UP"
+- runFlow:
+    when:
+      platform: Android
+    commands:
+        - swipe:
+           from: "Plair"
+           direction: "UP"
+- runFlow:
+    when:
+      platform: iOS
+    commands:
+        - tapOn:
+             id: "JUR"
+- runFlow:
+    when:
+      platform: Android
+    commands:
+        - tapOn:
+             text: "JUR"
+             index: 0
+- assertVisible: 
+    id: "BackButtonHeader-BaseIcon-backButton"
+- tapOn:
+    id: "BackButtonHeader-BaseIcon-backButton"
+- tapOn:
+    id: "settings-tab"
+- tapOn:
+    id: "Networks"
+- tapOn:
+    id: "networks_box_testnet"
+- tapOn:
+    id: "networks_box_mainnet"
+- assertVisible: 
+    id: "BackButtonHeader-BaseIcon-backButton"
+- tapOn:
+    id: "BackButtonHeader-BaseIcon-backButton"
+- tapOn:
+    id: "wallet-tab"
+- assertVisible: "Your tokens"
