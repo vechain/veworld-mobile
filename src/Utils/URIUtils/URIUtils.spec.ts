@@ -255,4 +255,21 @@ describe("URIUtils", () => {
             expect(URIUtils.getBaseURL("ftps://example.com")).toBeUndefined()
         })
     })
+
+    describe("convertHttpToHttps", function () {
+        test("should convert http URL to https", function () {
+            const url = "http://example.com"
+            expect(URIUtils.convertHttpToHttps(url)).toBe("https://example.com")
+        })
+
+        test("should return the original URL if it is already https", function () {
+            const url = "https://example.com"
+            expect(URIUtils.convertHttpToHttps(url)).toBe(url)
+        })
+
+        test("should return the original URL if it does not start with http", function () {
+            const url = "ftp://example.com"
+            expect(URIUtils.convertHttpToHttps(url)).toBe(url)
+        })
+    })
 })

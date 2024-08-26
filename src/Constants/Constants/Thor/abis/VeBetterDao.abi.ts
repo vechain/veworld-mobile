@@ -46,7 +46,7 @@ export const X2EarnDapps: abi.Function.Definition = {
     type: "function",
 }
 
-export const _X2EarnDapps = [
+export const X2EarnDappsFullAbi = [
     {
         inputs: [],
         stateMutability: "nonpayable",
