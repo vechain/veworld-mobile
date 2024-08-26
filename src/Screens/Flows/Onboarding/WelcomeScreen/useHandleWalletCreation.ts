@@ -70,15 +70,18 @@ export const useHandleWalletCreation = () => {
         [biometrics, createLocalWallet, dispatch, migrateOnboarding, onOpen, onWalletCreationError],
     )
 
+    const parseImportType = useCallback((mnemonic?: string[], privateKey?: string) => {
+        if (privateKey) return IMPORT_TYPE.PRIVATE_KEY
+        if (mnemonic && !isEmpty(mnemonic)) return IMPORT_TYPE.MNEMONIC
+
+        return undefined
+    }, [])
+
     const onSuccess = useCallback(
         async ({ pin, mnemonic, privateKey }: { pin: string; mnemonic?: string[]; privateKey?: string }) => {
             onClose()
             dispatch(setIsAppLoading(true))
-            const importType = privateKey
-                ? IMPORT_TYPE.PRIVATE_KEY
-                : mnemonic && !isEmpty(mnemonic)
-                ? IMPORT_TYPE.MNEMONIC
-                : undefined
+            const importType = parseImportType(mnemonic, privateKey)
             const _mnemonic = isEmpty(mnemonic) ? getNewMnemonic() : mnemonic
             await WalletEncryptionKeyHelper.init(pin)
             await createLocalWallet({
@@ -91,7 +94,7 @@ export const useHandleWalletCreation = () => {
             await migrateOnboarding(SecurityLevelType.SECRET, pin)
             dispatch(setIsAppLoading(false))
         },
-        [createLocalWallet, dispatch, migrateOnboarding, onClose, onWalletCreationError],
+        [createLocalWallet, dispatch, migrateOnboarding, onClose, onWalletCreationError, parseImportType],
     )
 
     const onCreateLedgerWallet = useCallback(
