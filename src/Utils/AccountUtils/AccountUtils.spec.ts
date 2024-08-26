@@ -48,11 +48,12 @@ describe("AccountUtils", () => {
         const contact = updateAccountVns(TestHelpers.data.account2D1, vnsData) as WalletAccount
         expect(contact.vnsName).toBeUndefined()
 
-    it("isObservedAccount - should return true", () => {
-        expect(AccountUtils.isObservedAccount(TestHelpers.data.account5D1Observed)).toBe(true)
-    })
+        it("isObservedAccount - should return true", () => {
+            expect(AccountUtils.isObservedAccount(TestHelpers.data.account5D1Observed)).toBe(true)
+        })
 
-    it("isObservedAccount - should return false", () => {
-        expect(AccountUtils.isObservedAccount(TestHelpers.data.account4D1)).toBe(false)
+        it("isObservedAccount - should return false", () => {
+            expect(AccountUtils.isObservedAccount(TestHelpers.data.account4D1)).toBe(false)
+        })
     })
 })
