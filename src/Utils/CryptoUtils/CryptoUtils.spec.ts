@@ -158,6 +158,13 @@ describe("decryptState", () => {
     })
 })
 
+describe("shuffleArray", () => {
+    it("shuffleArray should return a shuffled array", () => {
+        const initialArray = ["VTHO", "VET", "B3TR", "VOT3", "ETH", "BTC"]
+        expect(CryptoUtils.shuffleArray(initialArray)).not.toBe(initialArray)
+    })
+})
+
 describe("determineKeyImportType", () => {
     it("valid 12 word mnemonic", () => {
         expect(determineKeyImportType(VALID_MNEMONIC_12)).toBe(IMPORT_TYPE.MNEMONIC)

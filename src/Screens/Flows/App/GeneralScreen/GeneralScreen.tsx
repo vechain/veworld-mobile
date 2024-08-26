@@ -16,6 +16,7 @@ import {
     useAppSelector,
 } from "~Storage/Redux"
 import { Reset } from "~Screens/Flows/App/GeneralScreen/Components/Reset"
+import { ChangeSymbolPosition } from "./Components/ChangeSymbolPosition"
 
 export const GeneralScreen = () => {
     const { LL } = useI18nContext()
@@ -70,21 +71,23 @@ export const GeneralScreen = () => {
                         {LL.BD_CONVERSION_CURRENCY()}
                     </BaseText>
                     <BaseText typographyFont="caption">{LL.BD_CONVERSION_CURRENCY_DISCLAIMER()}</BaseText>
-
                     <BaseSpacer height={20} />
-
                     <ChangeCurrency />
                     <BaseSpacer height={20} />
 
+                    <BaseText typographyFont="bodyMedium" my={8}>
+                        {LL.BD_SYMBOL_POSITION()}
+                    </BaseText>
+                    <BaseText typographyFont="caption">{LL.BD_SYMBOL_POSITION_DISCLAIMER()}</BaseText>
+                    <BaseSpacer height={20} />
+                    <ChangeSymbolPosition />
                     <BaseSpacer height={20} />
 
                     <BaseText typographyFont="bodyMedium" my={8}>
                         {LL.BD_APP_THEME()}
                     </BaseText>
                     <BaseText typographyFont="caption">{LL.BD_APP_THEME_DISCLAIMER()}</BaseText>
-
                     <BaseSpacer height={20} />
-
                     <ChangeTheme />
 
                     <BaseSpacer height={24} />
@@ -92,8 +95,8 @@ export const GeneralScreen = () => {
                         {LL.BD_RESET()}
                     </BaseText>
                     <BaseText typographyFont="caption">{LL.BD_RESET_DISCLAIMER()}</BaseText>
-
                     <BaseSpacer height={16} />
+
                     <Reset />
 
                     {devFeaturesEnabled && (
@@ -108,20 +111,19 @@ export const GeneralScreen = () => {
                         </>
                     )}
 
-                    <BaseSpacer height={20} />
-
                     {devFeaturesEnabled && (
                         <>
+                            <BaseSpacer height={20} />
                             <EnableFeature
                                 title={LL.BD_HIDE_TOKENS()}
                                 subtitle={LL.BD_HIDE_TOKENS_DISCLAIMER()}
                                 onValueChange={toggleTokensHiddenSwitch}
                                 value={hideTokensWithNoBalance}
                             />
-
-                            <BaseSpacer height={20} />
                         </>
                     )}
+
+                    <BaseSpacer height={20} />
 
                     {devFeaturesEnabled && (
                         <>
@@ -129,9 +131,7 @@ export const GeneralScreen = () => {
                                 {LL.BD_APP_LANGUAGE()}
                             </BaseText>
                             <BaseText typographyFont="caption">{LL.BD_APP_LANGUAGE_DISCLAIMER()}</BaseText>
-
                             <BaseSpacer height={20} />
-
                             <ChangeLanguage language={selectedLanguage} onPress={openSelectLanguageSheet} />
                         </>
                     )}
@@ -142,7 +142,6 @@ export const GeneralScreen = () => {
                         selectedLanguage={selectedLanguage}
                         handleSelectLanguage={handleSelectLanguage}
                     />
-
                     <BaseSpacer height={20} />
                 </BaseView>
             }
