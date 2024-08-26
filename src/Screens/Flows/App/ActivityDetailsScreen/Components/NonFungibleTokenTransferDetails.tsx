@@ -1,12 +1,11 @@
 import React, { memo, useMemo } from "react"
-import { VTHO, currencySymbolMap, genesisesId } from "~Constants"
+import { VTHO, genesisesId } from "~Constants"
 import { useCopyClipboard } from "~Hooks"
-import { AddressUtils } from "~Utils"
 import { NonFungibleTokenActivity } from "~Model"
-import { selectCurrency, useAppSelector } from "~Storage/Redux"
+import { AddressUtils } from "~Utils"
 import { useI18nContext } from "~i18n"
-import { ActivityDetail } from "../Type"
 import { useGasFee } from "../Hooks"
+import { ActivityDetail } from "../Type"
 import { ActivityDetailItem } from "./ActivityDetailItem"
 
 type Props = {
@@ -16,21 +15,9 @@ type Props = {
 export const NonFungibleTokenTransferDetails: React.FC<Props> = memo(({ activity }) => {
     const { LL } = useI18nContext()
 
-    const currency = useAppSelector(selectCurrency)
-
     const { onCopyToClipboard } = useCopyClipboard()
 
     const { vthoGasFee, fiatValueGasFeeSpent } = useGasFee(activity)
-
-    const gasToFiat = useMemo(() => {
-        if (!fiatValueGasFeeSpent) return "0"
-
-        if (fiatValueGasFeeSpent.includes("<")) {
-            return `${fiatValueGasFeeSpent} ${currencySymbolMap[currency]}`
-        } else {
-            return `≈ ${fiatValueGasFeeSpent} ${currencySymbolMap[currency]}`
-        }
-    }, [currency, fiatValueGasFeeSpent])
 
     const transactionIDshort = useMemo(() => {
         return AddressUtils.humanAddress(activity.txId ?? "", 7, 9)
@@ -52,7 +39,7 @@ export const NonFungibleTokenTransferDetails: React.FC<Props> = memo(({ activity
             value: vthoGasFee ? `${vthoGasFee} ${VTHO.symbol}` : "",
             typographyFont: "subSubTitle",
             underline: false,
-            valueAdditional: gasToFiat ? gasToFiat : "",
+            valueAdditional: fiatValueGasFeeSpent ?? "",
         },
         {
             id: 3,

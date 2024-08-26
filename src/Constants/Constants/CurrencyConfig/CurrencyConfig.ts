@@ -1,4 +1,4 @@
-import { CURRENCY, CURRENCY_SYMBOLS } from "~Constants/Enums/CurrencyEnum"
+import { CURRENCY, CURRENCY_SYMBOLS, SYMBOL_POSITIONS } from "~Constants/Enums/CurrencyEnum"
 
 export interface CurrencyConfig {
     currency: CURRENCY
@@ -23,6 +23,8 @@ fiatCurrencies.push({
 export default [...fiatCurrencies].sort(function (a, b) {
     return a.currency.localeCompare(b.currency)
 })
+
+export const symbolPositions: SYMBOL_POSITIONS[] = [SYMBOL_POSITIONS.BEFORE, SYMBOL_POSITIONS.AFTER]
 
 export const currencySymbolMap: Record<CURRENCY, CURRENCY_SYMBOLS> = {
     [CURRENCY.USD]: CURRENCY_SYMBOLS.USD,

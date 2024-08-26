@@ -1,3 +1,4 @@
+import axios from "axios"
 import BigNumber from "bignumber.js"
 import { Transaction } from "thor-devkit"
 import { abis, BASE_GAS_PRICE, GasFeeOption, GasPriceCoefficient, VTHO } from "~Constants"
@@ -5,6 +6,7 @@ import { EstimateGasResult } from "~Model"
 import AddressUtils from "~Utils/AddressUtils"
 import BigNutils from "~Utils/BigNumberUtils"
 import TransactionUtils from "~Utils/TransactionUtils"
+import SemanticVersionUtils from "~Utils/SemanticVersionUtils"
 
 const paramsCache: Record<string, string> = {}
 
@@ -22,9 +24,10 @@ const getBaseGasPrice = async (thor: Connex.Thor): Promise<string> => {
 }
 
 const estimateGas = async (
+    url: string,
     thor: Connex.Thor,
     clauses: Connex.VM.Clause[],
-    suggestedGas: number,
+    providedGas: number,
     caller: string,
     gasPayer?: string,
 ): Promise<EstimateGasResult> => {
@@ -37,22 +40,37 @@ const estimateGas = async (
             }
         }),
     )
-    const offeredGas = suggestedGas ? Math.max(suggestedGas - intrinsicGas, 1) : 2000 * 10000
-    const explainer = thor.explain(clauses).caller(caller).gas(offeredGas)
 
-    if (gasPayer) {
-        explainer.gasPayer(gasPayer)
+    const genesis = await axios.get<Connex.Thor.Block>(`${url}/blocks/best`)
+
+    let revision = "best"
+
+    if (genesis.headers.get && typeof genesis.headers.get === "function") {
+        const thorVersion = genesis.headers.get("x-thorest-ver")
+
+        if (typeof thorVersion === "string" && SemanticVersionUtils.moreThanOrEqual(thorVersion, "2.1.3")) {
+            revision = "next"
+        }
     }
 
-    const outputs = await explainer.execute()
-    let gas = suggestedGas
+    const offeredGas = providedGas ? Math.max(providedGas - intrinsicGas, 1) : 2000 * 10000
+
+    const { data } = await axios.post<Connex.VM.Output[]>(`${url}/accounts/*?revision=${revision}`, {
+        clauses,
+        caller,
+        gas: offeredGas,
+        gasPayer,
+    })
+
+    let gas = providedGas
+
     if (!gas) {
-        const execGas = outputs.reduce((sum, out) => sum + out.gasUsed, 0)
+        const execGas = data.reduce((sum, out) => sum + out.gasUsed, 0)
         gas = intrinsicGas + (execGas ? execGas + 15000 : 0)
     }
 
     const baseGasPrice = await getBaseGasPrice(thor)
-    const lastOutput = outputs.slice().pop()
+    const lastOutput = data.slice().pop()
 
     return {
         caller,

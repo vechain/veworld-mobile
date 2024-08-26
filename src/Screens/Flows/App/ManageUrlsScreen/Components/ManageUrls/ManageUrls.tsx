@@ -31,6 +31,7 @@ export const ManageUrls = ({ openAddUrl }: Props) => {
         ({ item, index }) => {
             return (
                 <SwipeableRow
+                    testID={`Delegation_Url_${index}`}
                     item={item}
                     itemKey={String(index)}
                     swipeableItemRefs={swipeableItemRefs}

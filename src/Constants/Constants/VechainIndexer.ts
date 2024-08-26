@@ -2,7 +2,7 @@
 import { genesises } from "~Constants"
 import { Network, NETWORK_TYPE } from "~Model"
 
-const isMainnet = (thor: Connex.Thor) => thor.genesis.id === genesises.main.id
+const isMainGenesis = (thor: Connex.Thor) => thor.genesis.id === genesises.main.id
 
 export enum ORDER {
     ASC = "ASC",
@@ -139,7 +139,7 @@ export const getTransfersForBlock = (
 }
 
 export const getBlock = (thor: Connex.Thor, blockId: string) => {
-    return isMainnet(thor)
+    return isMainGenesis(thor)
         ? `${process.env.REACT_APP_INDEXER_MAINNET_URL}/blocks?revision=${blockId}`
         : `${process.env.REACT_APP_INDEXER_TESTNET_URL}/blocks?revision=${blockId}`
 }

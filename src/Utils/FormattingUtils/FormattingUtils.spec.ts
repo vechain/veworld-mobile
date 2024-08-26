@@ -8,6 +8,9 @@ describe("isZero", () => {
     it("should return false", () => {
         expect(isZero(new BigNumber(1000.00000003))).toBe(false)
     })
+    it("should return false if no value provided", () => {
+        expect(isZero()).toBe(false)
+    })
 })
 
 describe("humanUrl", () => {

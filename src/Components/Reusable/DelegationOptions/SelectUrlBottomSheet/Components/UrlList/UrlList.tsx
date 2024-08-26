@@ -43,8 +43,11 @@ export const UrlList = ({
             <BottomSheetFlatList
                 data={delegationUrls}
                 keyExtractor={(url: string) => url}
-                renderItem={({ item }) => (
-                    <BaseCard selected={item === selectedDelegationUrl} onPress={handleClickUrl(item)}>
+                renderItem={({ item, index }) => (
+                    <BaseCard
+                        testID={`Delegation_URL_${index}`}
+                        selected={item === selectedDelegationUrl}
+                        onPress={handleClickUrl(item)}>
                         <BaseText typographyFont="bodyBold" w={100} py={8}>
                             {item}
                         </BaseText>

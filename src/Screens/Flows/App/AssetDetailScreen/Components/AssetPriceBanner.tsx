@@ -13,12 +13,11 @@ import { isIOS } from "~Utils/PlatformUtils/PlatformUtils"
 const { ...otherTypography } = typography
 
 type Props = {
-    symbol: string
     isChartDataLoading: boolean
 }
-export const AssetPriceBanner = ({ symbol, isChartDataLoading }: Props) => {
+export const AssetPriceBanner = ({ isChartDataLoading }: Props) => {
     const { LL } = useI18nContext()
-    const datetime = useLineChartDatetime()
+    const datetime = useLineChartDatetime(LL.COMMON_OVERALL())
     const { formatted: formattedPrice } = useLineChartPrice()
     const { value: priceChangeValue, formatted: formattedPriceChange } = useLineChartRelativeChange({})
 
@@ -38,7 +37,7 @@ export const AssetPriceBanner = ({ symbol, isChartDataLoading }: Props) => {
         } else {
             return 24
         }
-    })
+    }, [formattedPrice.value.length])
 
     const applyPriceContainerStyle = useMemo(() => {
         return isIOS() ? styles.textContainer : undefined
@@ -50,7 +49,7 @@ export const AssetPriceBanner = ({ symbol, isChartDataLoading }: Props) => {
                 <BaseText typographyFont="body">{LL.COMMON_PRICE()}</BaseText>
                 <BaseView flexDirection="row" alignItems="baseline">
                     {isChartDataLoading ? (
-                        <AssetPriceBannerSkeleton symbol={symbol} />
+                        <AssetPriceBannerSkeleton />
                     ) : (
                         <BaseAnimatedText
                             text={formattedPrice}
@@ -72,7 +71,7 @@ export const AssetPriceBanner = ({ symbol, isChartDataLoading }: Props) => {
                     <AssetTrendBannerSkeleton />
                 ) : (
                     <BaseView flexDirection="row">
-                        <BaseAnimatedText text={icon} style={[changeStyles, styles.textTitle]} />
+                        <BaseAnimatedText text={icon} style={[changeStyles, styles.textTitle, styles.icon]} />
                         <BaseAnimatedText text={formattedPriceChange} style={[changeStyles, styles.textTitle]} />
                     </BaseView>
                 )}
@@ -96,5 +95,8 @@ const baseStyles = (theme: ColorThemeType) =>
             fontWeight: "700",
             fontFamily: otherTypography.fontFamily["Inter-Bold"],
             padding: 0,
+        },
+        icon: {
+            marginRight: -8,
         },
     })

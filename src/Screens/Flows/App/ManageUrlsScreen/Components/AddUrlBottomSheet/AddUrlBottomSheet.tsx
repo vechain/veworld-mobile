@@ -56,6 +56,7 @@ export const AddUrlBottomSheet = React.forwardRef<BottomSheetModalMethods, Props
                 </BaseView>
                 <BaseView flexDirection="row" mb={16}>
                     <BaseButton
+                        testID="Add_URL_Cancel"
                         haptics="Light"
                         title={LL.COMMON_BTN_CANCEL()}
                         action={handleClose}
@@ -64,6 +65,7 @@ export const AddUrlBottomSheet = React.forwardRef<BottomSheetModalMethods, Props
                     />
                     <BaseSpacer width={16} />
                     <BaseButton
+                        testID="Add_URL_Submit"
                         haptics="Light"
                         title={LL.COMMON_BTN_ADD()}
                         action={handleAddUrl}

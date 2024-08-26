@@ -83,11 +83,18 @@ export const AddUrl = ({
             <BaseView flexDirection="row" pb={platformPadding}>
                 {addUrlMode && (
                     <>
-                        <BaseButton title={LL.COMMON_BTN_CANCEL()} action={closeAddMode} variant="outline" flex={1} />
+                        <BaseButton
+                            testID="Add_URL_Cancel"
+                            title={LL.COMMON_BTN_CANCEL()}
+                            action={closeAddMode}
+                            variant="outline"
+                            flex={1}
+                        />
                         <BaseSpacer width={16} />
                     </>
                 )}
                 <BaseButton
+                    testID="Add_URL_Submit"
                     title={LL.COMMON_BTN_ADD()}
                     action={handleAddUrl}
                     disabled={!URIUtils.isValid(newUrl)}

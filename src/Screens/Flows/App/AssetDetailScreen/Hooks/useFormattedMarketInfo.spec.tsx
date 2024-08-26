@@ -36,9 +36,9 @@ describe("useFormattedMarketInfo", () => {
 
         expect(result.current).toEqual({
             circulatingSupply: null,
-            marketCap: "0",
+            marketCap: "$0",
             totalSupply: null,
-            totalVolume: "0",
+            totalVolume: "$0",
         })
     })
 
@@ -59,7 +59,7 @@ describe("useFormattedMarketInfo", () => {
             wrapper: TestWrapper,
         })
 
-        expect(result.current.marketCap).toBe(results.marketCap)
+        expect(result.current.marketCap).toBe(`$${results.marketCap}`)
     })
 
     it("should display the correct totalSupply", async () => {
@@ -79,6 +79,6 @@ describe("useFormattedMarketInfo", () => {
             wrapper: TestWrapper,
         })
 
-        expect(result.current.totalVolume).toBe(results.totalVolume)
+        expect(result.current.totalVolume).toBe(`$${results.totalVolume}`)
     })
 })

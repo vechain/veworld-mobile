@@ -375,6 +375,10 @@ type RootTranslation = {
 	 */
 	BD_YOUR_BALANCE: string
 	/**
+	 * F​i​a​t​ ​b​a​l​a​n​c​e​ ​i​s​ ​n​o​t​ ​a​v​a​i​l​a​b​l​e​ ​o​n​ ​t​e​s​t​n​e​t
+	 */
+	BD_TESTNET_NO_FIAT: string
+	/**
 	 * S​e​l​e​c​t​ ​w​o​r​d​ ​{​n​u​m​b​e​r​}
 	 * @param {number} number
 	 */
@@ -440,33 +444,49 @@ type RootTranslation = {
 	 */
 	BD_CONVERSION_CURRENCY: string
 	/**
-	 * A​p​p​ ​t​h​e​m​e
-	 */
-	BD_APP_THEME: string
-	/**
-	 * A​p​p​ ​l​a​n​g​u​a​g​e
-	 */
-	BD_APP_LANGUAGE: string
-	/**
-	 * H​i​d​e​ ​t​o​k​e​n​s​ ​w​i​t​h​o​u​t​ ​b​a​l​a​n​c​e
-	 */
-	BD_HIDE_TOKENS: string
-	/**
 	 * P​i​c​k​ ​t​h​e​ ​c​u​r​r​e​n​c​y​ ​t​h​a​t​ ​y​o​u​ ​p​r​e​f​e​r​ ​t​o​ ​b​e​ ​s​h​o​w​n​ ​f​o​r​ ​c​o​n​v​e​r​s​i​o​n​s
 	 */
 	BD_CONVERSION_CURRENCY_DISCLAIMER: string
+	/**
+	 * S​y​m​b​o​l​ ​p​o​s​i​t​i​o​n
+	 */
+	BD_SYMBOL_POSITION: string
+	/**
+	 * P​i​c​k​ ​t​h​e​ ​p​o​s​i​t​i​o​n​ ​t​h​a​t​ ​y​o​u​ ​p​r​e​f​e​r​ ​t​o​ ​u​s​e​ ​f​o​r​ ​f​i​a​t​ ​c​u​r​r​e​n​c​i​e​s​.
+	 */
+	BD_SYMBOL_POSITION_DISCLAIMER: string
+	/**
+	 * B​e​f​o​r​e​ ​t​h​e​ ​a​m​o​u​n​t
+	 */
+	BD_SYMBOL_POSITION_OPTION_before: string
+	/**
+	 * A​f​t​e​r​ ​t​h​e​ ​a​m​o​u​n​t
+	 */
+	BD_SYMBOL_POSITION_OPTION_after: string
+	/**
+	 * A​p​p​ ​t​h​e​m​e
+	 */
+	BD_APP_THEME: string
 	/**
 	 * S​e​l​e​c​t​ ​t​h​e​ ​g​e​n​e​r​a​l​ ​a​p​p​ ​t​h​e​m​e
 	 */
 	BD_APP_THEME_DISCLAIMER: string
 	/**
-	 * T​o​k​e​n​s​ ​w​i​t​h​o​u​t​ ​b​a​l​a​n​c​e​ ​w​o​n​'​t​ ​b​e​ ​s​h​o​w​n​ ​i​n​ ​t​h​e​ ​a​s​s​e​t​s​ ​l​i​s​t
+	 * A​p​p​ ​l​a​n​g​u​a​g​e
 	 */
-	BD_HIDE_TOKENS_DISCLAIMER: string
+	BD_APP_LANGUAGE: string
 	/**
 	 * S​e​l​e​c​t​ ​t​h​e​ ​g​e​n​e​r​a​l​ ​a​p​p​ ​l​a​n​g​u​a​g​e
 	 */
 	BD_APP_LANGUAGE_DISCLAIMER: string
+	/**
+	 * H​i​d​e​ ​t​o​k​e​n​s​ ​w​i​t​h​o​u​t​ ​b​a​l​a​n​c​e
+	 */
+	BD_HIDE_TOKENS: string
+	/**
+	 * T​o​k​e​n​s​ ​w​i​t​h​o​u​t​ ​b​a​l​a​n​c​e​ ​w​o​n​'​t​ ​b​e​ ​s​h​o​w​n​ ​i​n​ ​t​h​e​ ​a​s​s​e​t​s​ ​l​i​s​t
+	 */
+	BD_HIDE_TOKENS_DISCLAIMER: string
 	/**
 	 * U​S​D
 	 */
@@ -1177,6 +1197,10 @@ type RootTranslation = {
 	 */
 	COMMON_PRICE: string
 	/**
+	 * O​v​e​r​a​l​l
+	 */
+	COMMON_OVERALL: string
+	/**
 	 * T​o​d​a​y
 	 */
 	COMMON_TODAY: string
@@ -1232,6 +1256,10 @@ type RootTranslation = {
 	 * F​r​o​m
 	 */
 	COMMON_ROOT_ADDRESS: string
+	/**
+	 * 2​4​ ​H​R​s
+	 */
+	COMMON_24H: string
 	/**
 	 * B​i​o​m​e​t​r​i​c​s​ ​n​o​t​ ​a​v​a​i​l​a​b​l​e
 	 */
@@ -2474,6 +2502,10 @@ type RootTranslation = {
 	 */
 	SEND_AMOUNT: string
 	/**
+	 * T​o​t​a​l​ ​C​o​s​t
+	 */
+	SEND_TOTAL_COST: string
+	/**
 	 * G​a​s​ ​f​e​e
 	 */
 	SEND_GAS_FEE: string
@@ -3487,6 +3519,10 @@ export type TranslationFunctions = {
 	 */
 	BD_YOUR_BALANCE: () => LocalizedString
 	/**
+	 * Fiat balance is not available on testnet
+	 */
+	BD_TESTNET_NO_FIAT: () => LocalizedString
+	/**
 	 * Select word {number}
 	 */
 	BD_SELECT_WORD: (arg: { number: number }) => LocalizedString
@@ -3551,33 +3587,49 @@ export type TranslationFunctions = {
 	 */
 	BD_CONVERSION_CURRENCY: () => LocalizedString
 	/**
-	 * App theme
-	 */
-	BD_APP_THEME: () => LocalizedString
-	/**
-	 * App language
-	 */
-	BD_APP_LANGUAGE: () => LocalizedString
-	/**
-	 * Hide tokens without balance
-	 */
-	BD_HIDE_TOKENS: () => LocalizedString
-	/**
 	 * Pick the currency that you prefer to be shown for conversions
 	 */
 	BD_CONVERSION_CURRENCY_DISCLAIMER: () => LocalizedString
+	/**
+	 * Symbol position
+	 */
+	BD_SYMBOL_POSITION: () => LocalizedString
+	/**
+	 * Pick the position that you prefer to use for fiat currencies.
+	 */
+	BD_SYMBOL_POSITION_DISCLAIMER: () => LocalizedString
+	/**
+	 * Before the amount
+	 */
+	BD_SYMBOL_POSITION_OPTION_before: () => LocalizedString
+	/**
+	 * After the amount
+	 */
+	BD_SYMBOL_POSITION_OPTION_after: () => LocalizedString
+	/**
+	 * App theme
+	 */
+	BD_APP_THEME: () => LocalizedString
 	/**
 	 * Select the general app theme
 	 */
 	BD_APP_THEME_DISCLAIMER: () => LocalizedString
 	/**
-	 * Tokens without balance won't be shown in the assets list
+	 * App language
 	 */
-	BD_HIDE_TOKENS_DISCLAIMER: () => LocalizedString
+	BD_APP_LANGUAGE: () => LocalizedString
 	/**
 	 * Select the general app language
 	 */
 	BD_APP_LANGUAGE_DISCLAIMER: () => LocalizedString
+	/**
+	 * Hide tokens without balance
+	 */
+	BD_HIDE_TOKENS: () => LocalizedString
+	/**
+	 * Tokens without balance won't be shown in the assets list
+	 */
+	BD_HIDE_TOKENS_DISCLAIMER: () => LocalizedString
 	/**
 	 * USD
 	 */
@@ -4283,6 +4335,10 @@ export type TranslationFunctions = {
 	 */
 	COMMON_PRICE: () => LocalizedString
 	/**
+	 * Overall
+	 */
+	COMMON_OVERALL: () => LocalizedString
+	/**
 	 * Today
 	 */
 	COMMON_TODAY: () => LocalizedString
@@ -4338,6 +4394,10 @@ export type TranslationFunctions = {
 	 * From
 	 */
 	COMMON_ROOT_ADDRESS: () => LocalizedString
+	/**
+	 * 24 HRs
+	 */
+	COMMON_24H: () => LocalizedString
 	/**
 	 * Biometrics not available
 	 */
@@ -5555,6 +5615,10 @@ Try reconnect your device to the internet.
 	 * Amount
 	 */
 	SEND_AMOUNT: () => LocalizedString
+	/**
+	 * Total Cost
+	 */
+	SEND_TOTAL_COST: () => LocalizedString
 	/**
 	 * Gas fee
 	 */
