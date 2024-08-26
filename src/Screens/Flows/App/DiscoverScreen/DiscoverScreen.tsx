@@ -79,7 +79,7 @@ export const DiscoverScreen: React.FC = () => {
                 url: href,
             })
 
-            ddLogger.logAction("DISCOVERY_SECTION", "DISCOVERY_USER_OPENED_DAPP")
+            ddLogger.logAction("DISCOVERY_SECTION", "DISCOVERY_USER_OPENED_DAPP", href)
 
             setTimeout(() => {
                 dispatch(addNavigationToDApp({ href: href, isCustom: custom ?? false }))
