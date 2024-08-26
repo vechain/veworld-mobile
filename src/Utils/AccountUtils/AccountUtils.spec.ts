@@ -1,6 +1,6 @@
 import { TestHelpers } from "~Test"
 import AccountUtils from "./index"
-import { updateAccoutVns } from "./AccountUtils"
+import { updateAccountVns } from "./AccountUtils"
 import { Vns } from "~Hooks"
 import { Contact, ContactType, WalletAccount } from "~Model"
 
@@ -34,18 +34,18 @@ describe("AccountUtils", () => {
         ).toThrowError("The XPub can't be null for HD devices")
     })
 
-    it("updateAccoutVns - should return an account with the vnsName property", () => {
-        const account = updateAccoutVns(TestHelpers.data.account1D1, vnsData) as WalletAccount
+    it("updateAccountVns - should return an account with the vnsName property", () => {
+        const account = updateAccountVns(TestHelpers.data.account1D1, vnsData) as WalletAccount
         expect(account.vnsName).toBe("test-dev.vet")
     })
 
-    it("updateAccoutVns - should return a contact with the domain property", () => {
-        const contact = updateAccoutVns(contact1, vnsData) as Contact
-        expect(contact.domain).toBe("doublemme.vet")
+    it("updateAccountVns - should return a contact with the vnsName property", () => {
+        const contact = updateAccountVns(contact1, vnsData) as Contact
+        expect(contact.vnsName).toBe("doublemme.vet")
     })
 
-    it("updateAccoutVns - should return undefined if no address found in vnsData", () => {
-        const contact = updateAccoutVns(TestHelpers.data.account2D1, vnsData) as WalletAccount
+    it("updateAccountVns - should return undefined if no address found in vnsData", () => {
+        const contact = updateAccountVns(TestHelpers.data.account2D1, vnsData) as WalletAccount
         expect(contact.vnsName).toBeUndefined()
     })
 })

@@ -130,9 +130,9 @@ export const AccountSlice = createSlice({
                 state.accounts[accountExistsIndex].visible = !state.accounts[accountExistsIndex].visible
             }
         },
-        setVnsNames: (state, action: PayloadAction<{ name: string; address: string }[]>) => {
+        setAccountsVns: (state, action: PayloadAction<{ name: string; address: string }[]>) => {
             state.accounts.forEach(account => {
-                account.vnsName = (AccountUtils.updateAccoutVns(account, action.payload) as WalletAccount).vnsName
+                account.vnsName = (AccountUtils.updateAccountVns(account, action.payload) as WalletAccount).vnsName
             })
         },
         resetAccountState: () => initialAccountState,
@@ -148,5 +148,5 @@ export const {
     setAccountVisibility,
     toggleAccountVisibility,
     resetAccountState,
-    setVnsNames,
+    setAccountsVns,
 } = AccountSlice.actions

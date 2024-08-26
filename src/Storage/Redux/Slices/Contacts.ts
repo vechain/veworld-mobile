@@ -51,13 +51,13 @@ export const ContactsSlice = createSlice({
                 state.contacts[contactExistsIndex].alias = alias
             }
         },
-        setDomainNames: (state, action: PayloadAction<{ domain: string; address: string }[]>) => {
+        setContactsVns: (state, action: PayloadAction<{ domain: string; address: string }[]>) => {
             state.contacts.forEach(contact => {
-                contact.domain = (AccountUtils.updateAccoutVns(contact, action.payload) as Contact).domain
+                contact.vnsName = (AccountUtils.updateAccountVns(contact, action.payload) as Contact).vnsName
             })
         },
         resetContactsState: () => initialContactsState,
     },
 })
 
-export const { insertContact, deleteContact, updateContact, setDomainNames, resetContactsState } = ContactsSlice.actions
+export const { insertContact, deleteContact, updateContact, setContactsVns, resetContactsState } = ContactsSlice.actions

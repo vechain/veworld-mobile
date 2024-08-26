@@ -12,7 +12,7 @@ const setContactsVns = (contacts: Contact[], cachedAddresses: Vns[]) => {
         if (address) {
             return {
                 ...ctc,
-                domain: address.name,
+                vnsName: address.name,
             }
         }
 
@@ -98,7 +98,7 @@ export const useSearchContactsAndAccounts = ({
                 (!!selectedAddress && AddressUtils.compareAddresses(contact.address, selectedAddress)) ||
                 contact.alias.toLowerCase().includes(searchText.toLowerCase()) ||
                 contact.address.toLowerCase().includes(searchText.toLowerCase()) ||
-                contact.domain?.toLowerCase().includes(searchText.toLowerCase()),
+                contact.vnsName?.toLowerCase().includes(searchText.toLowerCase()),
         )
     }, [selectedAddress, contactsWithDomain, searchText])
 
@@ -110,7 +110,7 @@ export const useSearchContactsAndAccounts = ({
                 (!!selectedAddress && AddressUtils.compareAddresses(account.address, selectedAddress)) ||
                 account.alias.toLowerCase().includes(searchText.toLowerCase()) ||
                 account.address.toLowerCase().includes(searchText.toLowerCase()) ||
-                account.domain?.toLowerCase().includes(searchText.toLowerCase()),
+                account.vnsName?.toLowerCase().includes(searchText.toLowerCase()),
         )
     }, [selectedAddress, accountsWithDomain, searchText])
 
