@@ -3,10 +3,13 @@
 import { HDNode, mnemonic } from "thor-devkit"
 import { XPub } from "~Model/Crypto"
 import {
+    coinbaseQRcodeAddress,
     compareAddresses,
     compareListOfAddresses,
+    ExplorerLinkType,
     getAddressFromHdNode,
     getAddressFromXPub,
+    getExplorerLink,
     humanAddress,
     isValid,
     isVechainToken,
@@ -15,8 +18,14 @@ import {
     regexPattern,
     showAddressOrName,
 } from "./AddressUtils"
-import { defaultTestNetwork } from "~Constants"
 import { queryClient } from "~Api/QueryProvider"
+import { defaultMainNetwork, defaultTestNetwork } from "~Constants"
+
+const mainNetwork = defaultMainNetwork
+const testNetwork = defaultTestNetwork
+
+process.env.REACT_APP_EXPLORER_MAIN_URL = mainNetwork.explorerUrl
+process.env.REACT_APP_EXPLORER_TESTNET_URL = testNetwork.explorerUrl
 
 const validMnemonicPhrase = [
     "denial",
@@ -146,6 +155,10 @@ describe("compareAddresses - negative testing", () => {
     test("one address no hex", () => {
         expect(compareAddresses(address1, address1NoHex)).toBe(true)
     })
+
+    test("no addresses provided", () => {
+        expect(compareAddresses()).toBe(false)
+    })
 })
 
 describe("compareListOfAddresses - positive testing", () => {
@@ -240,10 +253,36 @@ describe("Check vechain address", () => {
         expect(leftPadWithZeros(address1, 64)).toBe("0x000000000000000000000000" + address1NoHex)
     })
 
+    test("should add correct padding to no hex address", () => {
+        expect(leftPadWithZeros(address1NoHex, 64)).toBe("0x000000000000000000000000" + address1NoHex)
+    })
+
     test("left pad with too many zeros", () => {
         expect(() => {
             leftPadWithZeros(address1, 5)
         }).toThrow()
+    })
+})
+
+describe("getExplorerLink", () => {
+    it("MAINNET - should return accounts", () => {
+        expect(getExplorerLink(mainNetwork, ExplorerLinkType.ACCOUNT)).toBe("https://vechainstats.com/accounts")
+    })
+
+    it("MAINNET - should return transfers", () => {
+        expect(getExplorerLink(mainNetwork, ExplorerLinkType.TRANSACTION)).toBe("https://vechainstats.com/transactions")
+    })
+
+    it("TESTNET - should return accounts", () => {
+        expect(getExplorerLink(testNetwork, ExplorerLinkType.ACCOUNT)).toBe(
+            "https://explore-testnet.vechain.org/accounts",
+        )
+    })
+
+    it("TESTNET - should return transfers", () => {
+        expect(getExplorerLink(testNetwork, ExplorerLinkType.TRANSACTION)).toBe(
+            "https://explore-testnet.vechain.org/transactions",
+        )
     })
 })
 
@@ -323,5 +362,19 @@ describe("loadVnsFromCache", () => {
 
         expect(vnsData).not.toBeUndefined()
         expect(vnsData).toMatchObject({ name: "", address: address2 })
+    })
+})
+
+describe("coinbaseQRcodeAddress", () => {
+    it("should remove the 'vechain:' prefix correctly", () => {
+        expect(coinbaseQRcodeAddress("vechain:0x4fec365ab34c21784b05e3fed80633268e6457ff")).toBe(
+            "0x4fec365ab34c21784b05e3fed80633268e6457ff",
+        )
+    })
+
+    it("should return the address correctly", () => {
+        expect(coinbaseQRcodeAddress("0x4fec365ab34c21784b05e3fed80633268e6457ff")).toBe(
+            "0x4fec365ab34c21784b05e3fed80633268e6457ff",
+        )
     })
 })

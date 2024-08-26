@@ -1,6 +1,6 @@
 import { createSelector } from "@reduxjs/toolkit"
 import { RootState } from "../Types"
-import { CURRENCY, CURRENCY_SYMBOLS } from "~Constants"
+import { CURRENCY, CURRENCY_SYMBOLS, SYMBOL_POSITIONS } from "~Constants"
 
 const reducer = (state: RootState) => state.userPreferences
 
@@ -10,6 +10,10 @@ export const selectTheme = createSelector(reducer, state => {
 
 export const selectCurrency = createSelector(reducer, state => {
     return state.currency
+})
+
+export const selectSymbolPosition = createSelector(reducer, state => {
+    return state.symbolPosition || SYMBOL_POSITIONS.BEFORE
 })
 
 export const selectCurrencySymbol = createSelector(selectCurrency, currency => {

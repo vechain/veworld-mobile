@@ -1,0 +1,142 @@
+appId: org.vechain.veworld.app
+env:   
+  CONTACT_NAME_6: "My Contact 6"
+  CONTACT_ADDRESS_6: "0x231E70Cf27A2c44Eb9C00a3B1d2F7507Ae791056"
+  CONTACT_NAME_7: "My Contact 7"
+  CONTACT_ADDRESS_7: "0x231E70Cf27A2c44Eb9C00a3B1d2F7507Ae791057"
+  CONTACT_NAME_8: "My Contact 8"
+  CONTACT_ADDRESS_8: "0x231E70Cf27A2c44Eb9C00a3B1d2F7507Ae791058"
+  CONTACT_NAME_9: "My Contact 9"
+  CONTACT_ADDRESS_9: "0x231E70Cf27A2c44Eb9C00a3B1d2F7507Ae791059"
+  CONTACT_NAME_10: "My Contact 10"
+  CONTACT_ADDRESS_10: "0x231E70Cf27A2c44Eb9C00a3B1d2F7507Ae791060"
+  CONTACT_NAME_11: "My Contact 11"
+  CONTACT_ADDRESS_11: "0x231E70Cf27A2c44Eb9C00a3B1d2F7507Ae791061"
+  CONTACT_NAME_12: "My Contact 12"
+  CONTACT_ADDRESS_12: "0x231E70Cf27A2c44Eb9C00a3B1d2F7507Ae791062"
+  CONTACT_NAME_13: "My Contact 13"
+  CONTACT_ADDRESS_13: "0x231E70Cf27A2c44Eb9C00a3B1d2F7507Ae791063"
+  CONTACT_NAME_14: "My Contact 14"
+  CONTACT_ADDRESS_14: "0x231E70Cf27A2c44Eb9C00a3B1d2F7507Ae791064"
+---
+- assertVisible:
+     id: "Add_Contact_Button"
+- tapOn:
+     id: "Add_Contact_Button"
+- tapOn:
+     id: "Contact-Name-Input"
+- inputText: ${CONTACT_NAME_6}
+- tapOn:
+     id: Contact-Address-Input
+- inputText: ${CONTACT_ADDRESS_6}
+- tapOn: "Contact name"
+- assertVisible:
+     id: "Add_Contact_Button"
+- tapOn:
+     id: "Add_Contact_Button"
+- assertVisible:
+     id: "Add_Contact_Button"
+- tapOn:
+     id: "Add_Contact_Button"
+- tapOn:
+     id: "Contact-Name-Input"
+- inputText: ${CONTACT_NAME_7}
+- tapOn:
+     id: Contact-Address-Input
+- inputText: ${CONTACT_ADDRESS_7}
+- tapOn: "Contact name"
+- assertVisible:
+     id: "Add_Contact_Button"
+- tapOn:
+     id: "Add_Contact_Button"
+- assertVisible:
+     id: "Add_Contact_Button"
+- tapOn:
+     id: "Add_Contact_Button"
+- tapOn:
+     id: "Contact-Name-Input"
+- inputText: ${CONTACT_NAME_8}
+- tapOn:
+     id: Contact-Address-Input
+- inputText: ${CONTACT_ADDRESS_8}
+- tapOn: "Contact name"
+- tapOn:
+     id: "Add_Contact_Button"
+- assertVisible:
+     id: "Add_Contact_Button"
+- tapOn:
+     id: "Add_Contact_Button"
+- tapOn:
+     id: "Contact-Name-Input"
+- inputText: ${CONTACT_NAME_9}
+- tapOn:
+     id: Contact-Address-Input
+- inputText: ${CONTACT_ADDRESS_9}
+- tapOn: "Contact name"
+- tapOn:
+     id: "Add_Contact_Button"
+- assertVisible:
+     id: "Add_Contact_Button"
+- tapOn:
+     id: "Add_Contact_Button"
+- tapOn:
+     id: "Contact-Name-Input"
+- inputText: ${CONTACT_NAME_10}
+- tapOn:
+     id: Contact-Address-Input
+- inputText: ${CONTACT_ADDRESS_10}
+- tapOn: "Contact name"
+- tapOn:
+     id: "Add_Contact_Button"
+- assertVisible:
+     id: "Add_Contact_Button"
+- tapOn:
+     id: "Add_Contact_Button"
+- tapOn:
+     id: "Contact-Name-Input"
+- inputText: ${CONTACT_NAME_11}
+- tapOn:
+     id: Contact-Address-Input
+- inputText: ${CONTACT_ADDRESS_11}
+- tapOn: "Contact name"
+- tapOn:
+     id: "Add_Contact_Button"
+- assertVisible:
+     id: "Add_Contact_Button"
+- tapOn:
+     id: "Add_Contact_Button"
+- tapOn:
+     id: "Contact-Name-Input"
+- inputText: ${CONTACT_NAME_12}
+- tapOn:
+     id: Contact-Address-Input
+- inputText: ${CONTACT_ADDRESS_12}
+- tapOn: "Contact name"
+- tapOn:
+     id: "Add_Contact_Button"
+- assertVisible:
+     id: "Add_Contact_Button"
+- tapOn:
+     id: "Add_Contact_Button"
+- tapOn:
+     id: "Contact-Name-Input"
+- inputText: ${CONTACT_NAME_13}
+- tapOn:
+     id: Contact-Address-Input
+- inputText: ${CONTACT_ADDRESS_13}
+- tapOn: "Contact name"
+- tapOn:
+     id: "Add_Contact_Button"
+- assertVisible:
+     id: "Add_Contact_Button"
+- tapOn:
+     id: "Add_Contact_Button"
+- tapOn:
+     id: "Contact-Name-Input"
+- inputText: ${CONTACT_NAME_14}
+- tapOn:
+     id: Contact-Address-Input
+- inputText: ${CONTACT_ADDRESS_14}
+- tapOn: "Contact name"
+- tapOn:
+     id: "Add_Contact_Button"

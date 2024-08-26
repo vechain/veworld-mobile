@@ -7,7 +7,7 @@ import {
     withSpring,
     withTiming,
 } from "react-native-reanimated"
-import { COLORS, CURRENCY, ColorThemeType, currencySymbolMap } from "~Constants"
+import { COLORS, ColorThemeType } from "~Constants"
 import { FungibleTokenWithBalance } from "~Model"
 
 export const useUI = ({
@@ -15,19 +15,11 @@ export const useUI = ({
     isError,
     theme,
     input,
-    isInputInFiat,
-    tokenHumanAmountFromFiat,
-    fiatHumanAmount,
-    currency,
 }: {
     token: FungibleTokenWithBalance
     isError: boolean
     theme: ColorThemeType
     input: string
-    isInputInFiat: boolean
-    tokenHumanAmountFromFiat: string
-    fiatHumanAmount: string
-    currency: CURRENCY
 }) => {
     const inputColorNotAnimated = isError ? theme.colors.danger : theme.colors.text
 
@@ -71,22 +63,6 @@ export const useUI = ({
               }))
     }, [input.length, inputTextSize])
 
-    const computeconvertedAmountInFooter = useMemo(() => {
-        if (isInputInFiat) {
-            if (tokenHumanAmountFromFiat.includes("<")) {
-                return `${tokenHumanAmountFromFiat} ${token.symbol}`
-            } else {
-                return `≈ ${tokenHumanAmountFromFiat} ${token.symbol}`
-            }
-        } else {
-            if (fiatHumanAmount.includes("<")) {
-                return `${fiatHumanAmount} ${currencySymbolMap[currency]}`
-            } else {
-                return `≈ ${fiatHumanAmount} ${currencySymbolMap[currency]}`
-            }
-        }
-    }, [currency, fiatHumanAmount, isInputInFiat, token.symbol, tokenHumanAmountFromFiat])
-
     return {
         placeholderColor,
         shortenedTokenName,
@@ -94,6 +70,5 @@ export const useUI = ({
         animatedFontStyle,
         animatedStyleInputColor,
         inputColorNotAnimated,
-        computeconvertedAmountInFooter,
     }
 }
