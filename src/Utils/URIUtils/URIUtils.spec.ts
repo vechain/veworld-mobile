@@ -1,3 +1,4 @@
+import { setPlatform } from "~Test"
 import URIUtils from "./URIUtils"
 
 describe("URIUtils", () => {
@@ -120,6 +121,26 @@ describe("URIUtils", () => {
 
         test("should return true for IP with port", function () {
             expect(URIUtils.isLocalHost("http://127.0.0.1:3000")).toBe(true)
+        })
+
+        test("should return true for Ip http://10.0.2.2 on Android device", function () {
+            setPlatform("android")
+            expect(URIUtils.isLocalHost("http://10.0.2.2")).toBe(true)
+        })
+
+        test("should return true for Ip http://10.0.2.2 on Android device with port", function () {
+            setPlatform("android")
+            expect(URIUtils.isLocalHost("http://10.0.2.2:3000")).toBe(true)
+        })
+
+        test("should return false for Ip http://10.0.2.2 on IOS device", function () {
+            setPlatform("ios")
+            expect(URIUtils.isLocalHost("http://10.0.2.2")).toBe(false)
+        })
+
+        test("should return false for Ip http://10.0.2.2 on IOS device with port", function () {
+            setPlatform("ios")
+            expect(URIUtils.isLocalHost("http://10.0.2.2:3000")).toBe(false)
         })
     })
 

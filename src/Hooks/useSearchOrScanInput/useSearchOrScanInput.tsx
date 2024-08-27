@@ -6,6 +6,7 @@ import { ScanTarget } from "~Constants"
 import { useCameraBottomSheet } from "~Hooks/useCameraBottomSheet"
 import { useSearchContactsAndAccounts } from "~Hooks/useSearchContactsAndAccounts"
 import { useVns, ZERO_ADDRESS } from "~Hooks/useVns"
+import { selectSelectedNetwork, useAppSelector } from "~Storage/Redux"
 import { AddressUtils } from "~Utils"
 import { useI18nContext } from "~i18n"
 
@@ -18,36 +19,53 @@ export const useSearchOrScanInput = (
 
     const [searchText, setSearchText] = useState("")
     const [errorMessage, setErrorMessage] = useState("")
-    const { _getName, _getAddress } = useVns()
+    const network = useAppSelector(selectSelectedNetwork)
+    const { getVnsName, getVnsAddress } = useVns()
 
-    const {
-        filteredContacts,
-        filteredAccounts,
-        isAddressInContactsOrAccounts,
-        accountsAndContacts,
-        contacts,
-        isLoading,
-    } = useSearchContactsAndAccounts({ searchText, selectedAddress })
+    const { filteredContacts, filteredAccounts, isAddressInContactsOrAccounts, accountsAndContacts, contacts } =
+        useSearchContactsAndAccounts({ searchText, selectedAddress })
+
+    const fetchAccountVns = useCallback(
+        async (data: string) => {
+            let vnsName = ""
+            let vnsAddress = ""
+
+            if (data.includes(".vet")) {
+                const addressFromVns = await getVnsAddress(data)
+
+                if (addressFromVns === ZERO_ADDRESS) {
+                    showWarningToast({ text1: LL.NOTIFICATION_DOMAIN_NAME_NOT_FOUND() })
+                    return
+                }
+
+                vnsAddress = addressFromVns ?? ""
+                vnsName = data
+            } else {
+                const _name = await getVnsName(data)
+                vnsName = _name ?? ""
+                vnsAddress = data
+            }
+
+            return { name: vnsName, address: vnsAddress }
+        },
+        [LL, getVnsAddress, getVnsName],
+    )
 
     const onSuccessfullScan = useCallback(
         async (data: string) => {
             let vnsName = ""
             let vnsAddress = ""
 
-            if (data.includes(".vet")) {
-                const _addy = await _getAddress(data)
+            const cachedVns = AddressUtils.loadVnsFromCache(data, network)
 
-                if (_addy === ZERO_ADDRESS) {
-                    showWarningToast({ text1: LL.NOTIFICATION_DOMAIN_NAME_NOT_FOUND() })
-                    return
-                }
-
-                vnsAddress = _addy
-                vnsName = data
+            // Load data from cache if present otherwise retrieve data
+            if (cachedVns) {
+                vnsName = cachedVns.name
+                vnsAddress = cachedVns.address
             } else {
-                const { name, address: vnsAddy } = await _getName(data)
-                vnsName = name
-                vnsAddress = vnsAddy
+                const vns = await fetchAccountVns(data)
+                vnsName = vns?.name || ""
+                vnsAddress = vns?.address || ""
             }
 
             setSearchText(isEmpty(vnsName) ? vnsAddress : vnsName)
@@ -59,7 +77,7 @@ export const useSearchOrScanInput = (
 
             if (addressExists) return navigateNext(vnsAddress)
         },
-        [LL, _getAddress, _getName, accountsAndContacts, navigateNext, setSelectedAddress],
+        [network, setSelectedAddress, accountsAndContacts, navigateNext, fetchAccountVns],
     )
 
     const { RenderCameraModal, handleOpenCamera } = useCameraBottomSheet({
@@ -106,7 +124,6 @@ export const useSearchOrScanInput = (
         filteredContacts,
         filteredAccounts,
         isAddressInContactsOrAccounts,
-        isLoading,
         contacts,
     }
 }
