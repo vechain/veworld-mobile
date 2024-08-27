@@ -133,12 +133,14 @@ export const HomeScreen = () => {
             })
         }
 
-        actions.push({
-            name: LL.BTN_SWAP(),
-            action: () => nav.navigate(Routes.SWAP),
-            icon: <BaseIcon color={theme.colors.text} name="swap-horizontal" />,
-            testID: "swapButton",
-        })
+        if (!AccountUtils.isObservedAccount(selectedAccount)) {
+            actions.push({
+                name: LL.BTN_SWAP(),
+                action: () => nav.navigate(Routes.SWAP),
+                icon: <BaseIcon color={theme.colors.text} name="swap-horizontal" />,
+                testID: "swapButton",
+            })
+        }
 
         return actions
     }, [LL, nav, selectedAccount, theme.colors.text, track])
