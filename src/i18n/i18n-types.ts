@@ -2178,13 +2178,21 @@ type RootTranslation = {
 	 */
 	SETTINGS_ABOUT_WEWORLD_WEBSITE: string
 	/**
-	 * G​e​t​ ​h​e​l​p
+	 * S​u​p​p​o​r​t
 	 */
-	SETTINGS_ABOUT_GET_HELP: string
+	SETTINGS_ABOUT_SUPPORT: string
 	/**
-	 * R​e​p​o​r​t​ ​a​ ​b​u​g
+	 * F​i​n​d​ ​s​o​l​u​t​i​o​n​s​ ​t​o​ ​c​o​m​m​o​n​ ​p​r​o​b​l​e​m​s
 	 */
-	SETTINGS_ABOUT_REPORT_BUG: string
+	SETTINGS_ABOUT_FIND_COMMON_PROBLEMS: string
+	/**
+	 * S​u​g​g​e​s​t​ ​a​ ​f​e​a​t​u​r​e
+	 */
+	SETTINGS_ABOUT_SUGGEST_NEW_FEATURE: string
+	/**
+	 * W​h​a​t​ ​w​o​u​l​d​ ​y​o​u​ ​l​i​k​e​ ​t​o​ ​s​e​e​ ​d​i​f​f​e​r​e​n​t​l​y​ ​o​n​ ​V​e​W​o​r​l​d​?
+	 */
+	SETTINGS_ABOUT_VEWORLD_NEW_FEATURES: string
 	/**
 	 * O​u​r​ ​c​o​m​m​i​t​m​e​n​t​ ​t​o​ ​y​o​u
 	 */
@@ -5173,13 +5181,21 @@ Try reconnect your device to the internet.
 	 */
 	SETTINGS_ABOUT_WEWORLD_WEBSITE: () => LocalizedString
 	/**
-	 * Get help
+	 * Support
 	 */
-	SETTINGS_ABOUT_GET_HELP: () => LocalizedString
+	SETTINGS_ABOUT_SUPPORT: () => LocalizedString
 	/**
-	 * Report a bug
+	 * Find solutions to common problems
 	 */
-	SETTINGS_ABOUT_REPORT_BUG: () => LocalizedString
+	SETTINGS_ABOUT_FIND_COMMON_PROBLEMS: () => LocalizedString
+	/**
+	 * Suggest a feature
+	 */
+	SETTINGS_ABOUT_SUGGEST_NEW_FEATURE: () => LocalizedString
+	/**
+	 * What would you like to see differently on VeWorld?
+	 */
+	SETTINGS_ABOUT_VEWORLD_NEW_FEATURES: () => LocalizedString
 	/**
 	 * Our commitment to you
 	 */
