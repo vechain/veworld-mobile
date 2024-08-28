@@ -91,6 +91,7 @@ const convertUriToUrl = (uri: string) => {
     // if it is a data uri just return it
     if (uri.startsWith("data:")) return uri
     const splitUri = uri?.split("://")
+
     if (splitUri.length !== 2) throw new Error(`Invalid URI ${uri}`)
     const protocol = splitUri[0].trim()
     const uriWithoutProtocol = splitUri[1]
@@ -162,6 +163,13 @@ function getBaseURL(url: string) {
     return isValid(url) ? new URL(url).origin : undefined
 }
 
+const convertHttpToHttps = (url: string) => {
+    if (isHttp(url)) {
+        return url.replace("http://", "https://")
+    }
+    return url
+}
+
 export default {
     compareURLs,
     clean,
@@ -177,4 +185,5 @@ export default {
     decodeUrl_HACK,
     getHostName,
     getBaseURL,
+    convertHttpToHttps,
 }
