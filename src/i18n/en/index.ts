@@ -433,7 +433,7 @@ const en: BaseTranslation = {
     NOTIFIACTION_INCOMING_NFT_ACTION: "Go to NFTs",
     NOTIFICATION_OUTGOING_NFT_TITLE: "Outgoing!",
     NOTIFICATION_OUTGOING_NFT_BODY: "{collectionName: string} NFT was successfully sent to {to: string}.",
-    NOTIFIACTION_OUTGOING_TOKEN_BODY: "{amount: string} was successfully sent to {to: string}.",
+    NOTIFIACTION_OUTGOING_TOKEN_BODY_WITH_TOKEN: "{amount: string} {token: string} was successfully sent to {to: string}.",
     NOTIFICATION_VIEW_ACCOUNT: "View account",
     NOTIFICATION_TITLE_INVALID_QR: "QR Code Not Supported",
     NOTIFICATION_INVALID_QR: "Please scan a WalletConnect, wallet address or valid URL QR code.",

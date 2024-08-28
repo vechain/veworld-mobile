@@ -436,11 +436,11 @@ type RootTranslation = {
 	 */
 	BD_SYMBOL_POSITION_DISCLAIMER: string
 	/**
-	 * B​e​f​o​r​e​ ​t​h​e​ ​a​m​o​u​n​t
+	 * B​e​f​o​r​e​ ​a​m​o​u​n​t
 	 */
 	BD_SYMBOL_POSITION_OPTION_before: string
 	/**
-	 * A​f​t​e​r​ ​t​h​e​ ​a​m​o​u​n​t
+	 * A​f​t​e​r​ ​a​m​o​u​n​t
 	 */
 	BD_SYMBOL_POSITION_OPTION_after: string
 	/**
@@ -1553,11 +1553,12 @@ type RootTranslation = {
 	 */
 	NOTIFICATION_OUTGOING_NFT_BODY: RequiredParams<'collectionName' | 'to'>
 	/**
-	 * {​a​m​o​u​n​t​}​ ​w​a​s​ ​s​u​c​c​e​s​s​f​u​l​l​y​ ​s​e​n​t​ ​t​o​ ​{​t​o​}​.
+	 * {​a​m​o​u​n​t​}​ ​{​t​o​k​e​n​}​ ​w​a​s​ ​s​u​c​c​e​s​s​f​u​l​l​y​ ​s​e​n​t​ ​t​o​ ​{​t​o​}​.
 	 * @param {string} amount
 	 * @param {string} to
+	 * @param {string} token
 	 */
-	NOTIFIACTION_OUTGOING_TOKEN_BODY: RequiredParams<'amount' | 'to'>
+	NOTIFIACTION_OUTGOING_TOKEN_BODY_WITH_TOKEN: RequiredParams<'amount' | 'to' | 'token'>
 	/**
 	 * V​i​e​w​ ​a​c​c​o​u​n​t
 	 */
@@ -2135,7 +2136,7 @@ type RootTranslation = {
 	 */
 	SWAP_TITLE: string
 	/**
-	 * U​s​i​n​g​ ​V​e​c​h​a​i​n​ ​d​A​p​p​s​ ​y​o​u​ ​c​a​n​ ​s​w​a​p​ ​t​h​e​ ​t​o​k​e​n​s​ ​o​n​ ​y​o​u​r​ ​w​a​l​l​e​t​ ​d​i​r​e​c​t​l​y​ ​f​o​r​ ​d​i​f​f​e​r​e​n​t​ ​o​n​e​s​ ​w​i​t​h​o​u​t​ ​t​h​e​ ​h​a​v​i​n​g​ ​t​o​ ​b​u​y​ ​a​n​d​ ​s​e​l​l​.
+	 * U​s​i​n​g​ ​t​h​e​s​e​ ​V​e​c​h​a​i​n​ ​d​A​p​p​s​ ​y​o​u​ ​c​a​n​ ​s​w​a​p​ ​t​o​k​e​n​s​ ​o​n​ ​y​o​u​r​ ​w​a​l​l​e​t​ ​f​o​r​ ​d​i​f​f​e​r​e​n​t​ ​o​n​e​s​,​ ​w​i​t​h​o​u​t​ ​h​a​v​i​n​g​ ​t​o​ ​b​u​y​ ​a​n​d​ ​s​e​l​l​.
 	 */
 	SWAP_DESCRIPTION: string
 	/**
@@ -3459,11 +3460,11 @@ export type TranslationFunctions = {
 	 */
 	BD_SYMBOL_POSITION_DISCLAIMER: () => LocalizedString
 	/**
-	 * Before the amount
+	 * Before amount
 	 */
 	BD_SYMBOL_POSITION_OPTION_before: () => LocalizedString
 	/**
-	 * After the amount
+	 * After amount
 	 */
 	BD_SYMBOL_POSITION_OPTION_after: () => LocalizedString
 	/**
@@ -4560,9 +4561,9 @@ Try reconnect your device to the internet.
 	 */
 	NOTIFICATION_OUTGOING_NFT_BODY: (arg: { collectionName: string, to: string }) => LocalizedString
 	/**
-	 * {amount} was successfully sent to {to}.
+	 * {amount} {token} was successfully sent to {to}.
 	 */
-	NOTIFIACTION_OUTGOING_TOKEN_BODY: (arg: { amount: string, to: string }) => LocalizedString
+	NOTIFIACTION_OUTGOING_TOKEN_BODY_WITH_TOKEN: (arg: { amount: string, to: string, token: string }) => LocalizedString
 	/**
 	 * View account
 	 */
@@ -5132,7 +5133,7 @@ Try reconnect your device to the internet.
 	 */
 	SWAP_TITLE: () => LocalizedString
 	/**
-	 * Using Vechain dApps you can swap the tokens on your wallet directly for different ones without the having to buy and sell.
+	 * Using these Vechain dApps you can swap tokens on your wallet for different ones, without having to buy and sell.
 	 */
 	SWAP_DESCRIPTION: () => LocalizedString
 	/**
