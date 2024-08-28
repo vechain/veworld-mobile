@@ -5590,9 +5590,9 @@
   integrity sha512-nG96G3Wp6acyAgJqGasjODb+acrI7KltPiRxzHPXnP3NgI28bpQDRv53olbqGXbfcgF5aiiHmO3xpwEpS5Ld9g==
 
 "@types/node@*", "@types/node@>=13.7.0":
-  version "22.5.0"
-  resolved "https://registry.yarnpkg.com/@types/node/-/node-22.5.0.tgz#10f01fe9465166b4cab72e75f60d8b99d019f958"
-  integrity sha512-DkFrJOe+rfdHTqqMg0bSNlGlQ85hSoh2TPzZyhHsXnMtligRWpxUySiyw8FY14ITt24HVCiQPWxS3KO/QlGmWg==
+  version "22.5.1"
+  resolved "https://registry.yarnpkg.com/@types/node/-/node-22.5.1.tgz#de01dce265f6b99ed32b295962045d10b5b99560"
+  integrity sha512-KkHsxej0j9IW1KKOOAA/XBA0z08UFSrRQHErzEfA3Vgq57eXIMYboIlHJuYIfd+lwCQjtKqUu3UnmKbtUc9yRw==
   dependencies:
     undici-types "~6.19.2"
 
@@ -10649,9 +10649,9 @@ google-auth-library@^9.0.0, google-auth-library@^9.12.0, google-auth-library@^9.
     jws "^4.0.0"
 
 google-gax@^4.0.3:
-  version "4.3.9"
-  resolved "https://registry.yarnpkg.com/google-gax/-/google-gax-4.3.9.tgz#44e2920d13e1e12934da1c74f3e9bb8ac7e4f197"
-  integrity sha512-tcjQr7sXVGMdlvcG25wSv98ap1dtF4Z6mcV0rztGIddOcezw4YMb/uTXg72JPrLep+kXcVjaJjg6oo3KLf4itQ==
+  version "4.4.0"
+  resolved "https://registry.yarnpkg.com/google-gax/-/google-gax-4.4.0.tgz#5e75cc1feaa9d8cb6da77c02d96b9f54615cef61"
+  integrity sha512-4fkXSbNy85ikO7mkD5lChLL5UfLnRBvg6z3s3THUJKI6OSbISbufMDE4S/ZH+J3mB9A2FdMXBT/hh7wTvpGAow==
   dependencies:
     "@grpc/grpc-js" "^1.10.9"
     "@grpc/proto-loader" "^0.7.13"
