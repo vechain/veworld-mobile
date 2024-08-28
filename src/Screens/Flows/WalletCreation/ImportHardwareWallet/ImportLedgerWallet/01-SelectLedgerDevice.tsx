@@ -1,6 +1,5 @@
 import React, { useCallback, useEffect, useMemo, useState } from "react"
 import {
-    BackButtonHeader,
     BaseButton,
     BaseSafeArea,
     BaseSpacer,
@@ -8,6 +7,7 @@ import {
     BaseView,
     BluetoothStatusBottomSheet,
     DismissKeyboardView,
+    Layout,
     LocationStatusBottomSheet,
 } from "~Components"
 import { useI18nContext } from "~i18n"
@@ -104,63 +104,72 @@ export const SelectLedgerDevice = () => {
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [])
     return (
-        <DismissKeyboardView>
-            <BaseSafeArea grow={1}>
-                <BackButtonHeader beforeNavigating={unsubscribe} />
-                <BaseView alignItems="center" justifyContent="space-between" flexGrow={1} mx={20}>
-                    <BaseView alignSelf="flex-start" w={100}>
-                        <BaseText typographyFont="title">{LL.WALLET_LEDGER_SELECT_DEVICE_TITLE()}</BaseText>
-                        <BaseText typographyFont="body" my={10}>
-                            {LL.WALLET_LEDGER_SELECT_DEVICE_SB()}
-                        </BaseText>
-
-                        <BaseSpacer height={20} />
-                        <Lottie source={BlePairingDark} autoPlay loop style={styles.lottie} />
-                        <BaseSpacer height={20} />
-                        <BaseText align="center" typographyFont="subTitleBold" my={10}>
-                            {devicesFoundMessage}
-                        </BaseText>
-                        {availableDevices.length > 0 && (
-                            <FlatList
-                                style={styles.container}
-                                data={availableDevices}
-                                numColumns={1}
-                                horizontal={false}
-                                renderItem={renderItem}
-                                nestedScrollEnabled={false}
-                                showsVerticalScrollIndicator={false}
-                                ItemSeparatorComponent={renderSeparator}
-                                keyExtractor={item => item.id}
-                            />
-                        )}
-                    </BaseView>
-                    {Platform.OS === "android" && !androidPermissionsGranted ? (
-                        <BaseView w={100}>
-                            <BaseText>{LL.WALLET_LEDGER_ASK_PERMISSIONS_MESSAGE()}</BaseText>
-                            <BaseSpacer height={16} />
-                            <BaseButton
-                                action={checkPermissions}
-                                w={100}
-                                title={LL.WALLET_LEDGER_ASK_PERMISSIONS_BUTTON()}
-                            />
-                        </BaseView>
-                    ) : (
-                        <BaseView w={100}>
-                            <BaseButton
-                                action={onImportClick}
-                                w={100}
-                                title={LL.COMMON_LBL_IMPORT()}
-                                disabled={!selectedDevice}
-                            />
-                        </BaseView>
-                    )}
+        <Layout
+            safeAreaTestID="Select_Hw_Device_Screen"
+            fixedHeader={
+                <BaseView>
+                    <BaseText typographyFont="title">{LL.WALLET_LEDGER_SELECT_DEVICE_TITLE()}</BaseText>
+                    <BaseText typographyFont="body" my={10}>
+                        {LL.WALLET_LEDGER_SELECT_DEVICE_SB()}
+                    </BaseText>
                 </BaseView>
+            }
+            body={
+                <DismissKeyboardView>
+                    <BaseSafeArea grow={1}>
+                        <BaseView alignItems="center" justifyContent="space-between" flexGrow={1}>
+                            <BaseView alignSelf="flex-start" w={100}>
+                                <BaseSpacer height={20} />
+                                <Lottie source={BlePairingDark} autoPlay loop style={styles.lottie} />
+                                <BaseSpacer height={20} />
+                                <BaseText align="center" typographyFont="subTitleBold" my={10}>
+                                    {devicesFoundMessage}
+                                </BaseText>
+                                {availableDevices.length > 0 && (
+                                    <FlatList
+                                        style={styles.container}
+                                        data={availableDevices}
+                                        numColumns={1}
+                                        horizontal={false}
+                                        renderItem={renderItem}
+                                        nestedScrollEnabled={false}
+                                        showsVerticalScrollIndicator={false}
+                                        ItemSeparatorComponent={renderSeparator}
+                                        keyExtractor={item => item.id}
+                                    />
+                                )}
+                            </BaseView>
+                        </BaseView>
 
-                <BaseSpacer height={40} />
-                <BluetoothStatusBottomSheet />
-                <LocationStatusBottomSheet />
-            </BaseSafeArea>
-        </DismissKeyboardView>
+                        <BaseSpacer height={40} />
+                        <BluetoothStatusBottomSheet />
+                        <LocationStatusBottomSheet />
+                    </BaseSafeArea>
+                </DismissKeyboardView>
+            }
+            footer={
+                Platform.OS === "android" && !androidPermissionsGranted ? (
+                    <BaseView w={100}>
+                        <BaseText>{LL.WALLET_LEDGER_ASK_PERMISSIONS_MESSAGE()}</BaseText>
+                        <BaseSpacer height={16} />
+                        <BaseButton
+                            action={checkPermissions}
+                            w={100}
+                            title={LL.WALLET_LEDGER_ASK_PERMISSIONS_BUTTON()}
+                        />
+                    </BaseView>
+                ) : (
+                    <BaseView w={100}>
+                        <BaseButton
+                            action={onImportClick}
+                            w={100}
+                            title={LL.COMMON_LBL_IMPORT()}
+                            disabled={!selectedDevice}
+                        />
+                    </BaseView>
+                )
+            }
+        />
     )
 }
 
