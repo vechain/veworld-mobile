@@ -22,6 +22,11 @@ type VeBetterDaoDAppCardProps = {
     areDappsLoading?: boolean
 }
 
+type CardProps = {
+    href: string
+    source: ImageSourcePropType
+}
+
 const VeBetterDaoDAppCard = ({ onPress, containerStyle, item, areDappsLoading }: VeBetterDaoDAppCardProps) => {
     const theme = useTheme()
     const { width: windowWidth } = useWindowDimensions()
@@ -30,7 +35,7 @@ const VeBetterDaoDAppCard = ({ onPress, containerStyle, item, areDappsLoading }:
     const showSkeleton = isPending || !data || areDappsLoading
 
     const Card = useCallback(
-        ({ href, source }: { href: string; source: ImageSourcePropType }) => {
+        ({ href, source }: CardProps) => {
             return (
                 <BaseTouchable style={containerStyle} action={() => onPress({ href: href })}>
                     <Image
