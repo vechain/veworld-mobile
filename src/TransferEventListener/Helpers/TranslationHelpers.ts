@@ -117,6 +117,8 @@ type InformUserForOutgoingTokenProps = {
     decimals: number
     transfer: IncomingTransferResponse
     informUser: (params: { accountAddress: string; txId?: string }) => void
+    to: string
+    symbol: string
 }
 
 export const InformUserForOutgoingToken = ({
@@ -125,16 +127,18 @@ export const InformUserForOutgoingToken = ({
     decimals,
     transfer,
     informUser,
+    to,
+    symbol,
 }: InformUserForOutgoingTokenProps) => {
     const locale = i18n.detectLocale()
 
-    const formattedTo = ""
-
+    const formattedTo = AddressUtils.humanAddress(to, 4, 5)
     const formattedAmmount = BigNutils(amount).toHuman(decimals).toTokenFormat_string(2)
 
     showSuccessToast({
         text1: i18n.i18n()[locale].SUCCESS_GENERIC(),
-        text2: i18n.i18n()[locale].NOTIFIACTION_OUTGOING_TOKEN_BODY({
+        text2: i18n.i18n()[locale].NOTIFIACTION_OUTGOING_TOKEN_BODY_WITH_TOKEN({
+            token: symbol,
             amount: formattedAmmount,
             to: formattedTo,
         }),
@@ -189,7 +193,8 @@ export const InformUserForOutgoingVET = ({ txId, amount, to, from, informUser }:
 
     showSuccessToast({
         text1: i18n.i18n()[locale].SUCCESS_GENERIC(),
-        text2: i18n.i18n()[locale].NOTIFIACTION_OUTGOING_TOKEN_BODY({
+        text2: i18n.i18n()[locale].NOTIFIACTION_OUTGOING_TOKEN_BODY_WITH_TOKEN({
+            token: VET.symbol,
             amount: formattedAmount,
             to: fomattedTo,
         }),
