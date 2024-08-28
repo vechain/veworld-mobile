@@ -7,6 +7,7 @@ import {
     BaseView,
     BluetoothStatusBottomSheet,
     DismissKeyboardView,
+    FadeoutButton,
     Layout,
     LocationStatusBottomSheet,
 } from "~Components"
@@ -51,10 +52,61 @@ export const SelectLedgerDevice = () => {
         } else return true
     }, [androidPermissionsGranted])
 
-    const { availableDevices, unsubscribe, scanForDevices } = useScanLedgerDevices({
+    const { unsubscribe, scanForDevices } = useScanLedgerDevices({
         onAddDevice,
         readyToScan,
     })
+
+    const availableDevices: ConnectedLedgerDevice[] = [
+        {
+            id: "1",
+            isConnectable: true,
+            localName: "ledger",
+            name: "Ledger Nano X",
+            productName: "ledger",
+            rssi: 123455,
+        },
+        {
+            id: "2",
+            isConnectable: true,
+            localName: "ledger",
+            name: "Ledger Nano X",
+            productName: "ledger",
+            rssi: 123455,
+        },
+        {
+            id: "3",
+            isConnectable: true,
+            localName: "ledger",
+            name: "Ledger Nano X",
+            productName: "ledger",
+            rssi: 123455,
+        },
+        {
+            id: "4",
+            isConnectable: true,
+            localName: "ledger",
+            name: "Ledger Nano X",
+            productName: "ledger",
+            rssi: 123455,
+        },
+        {
+            id: "5",
+            isConnectable: true,
+            localName: "ledger",
+            name: "Ledger Nano X",
+            productName: "ledger",
+            rssi: 123455,
+        },
+        {
+            id: "6",
+            isConnectable: true,
+            localName: "ledger",
+            name: "Ledger Nano X",
+            productName: "ledger",
+            rssi: 123455,
+        },
+    ]
 
     const onImportClick = useCallback(() => {
         if (selectedDevice) {
@@ -106,39 +158,40 @@ export const SelectLedgerDevice = () => {
     return (
         <Layout
             safeAreaTestID="Select_Hw_Device_Screen"
+            noStaticBottomPadding
             fixedHeader={
-                <BaseView>
-                    <BaseText typographyFont="title">{LL.WALLET_LEDGER_SELECT_DEVICE_TITLE()}</BaseText>
-                    <BaseText typographyFont="body" my={10}>
-                        {LL.WALLET_LEDGER_SELECT_DEVICE_SB()}
-                    </BaseText>
-                </BaseView>
+                <>
+                    <BaseView>
+                        <BaseText typographyFont="title">{LL.WALLET_LEDGER_SELECT_DEVICE_TITLE()}</BaseText>
+                        <BaseText typographyFont="body" my={10}>
+                            {LL.WALLET_LEDGER_SELECT_DEVICE_SB()}
+                        </BaseText>
+                    </BaseView>
+                    <BaseView alignSelf="flex-start" w={100}>
+                        <Lottie source={BlePairingDark} autoPlay loop style={styles.lottie} />
+                        <BaseText align="center" typographyFont="subTitleBold" my={10}>
+                            {devicesFoundMessage}
+                        </BaseText>
+                    </BaseView>
+                </>
             }
             body={
                 <DismissKeyboardView>
-                    <BaseSafeArea grow={1}>
+                    <BaseSafeArea grow={1} style={styles.safeArea}>
                         <BaseView alignItems="center" justifyContent="space-between" flexGrow={1}>
-                            <BaseView alignSelf="flex-start" w={100}>
-                                <BaseSpacer height={20} />
-                                <Lottie source={BlePairingDark} autoPlay loop style={styles.lottie} />
-                                <BaseSpacer height={20} />
-                                <BaseText align="center" typographyFont="subTitleBold" my={10}>
-                                    {devicesFoundMessage}
-                                </BaseText>
-                                {availableDevices.length > 0 && (
-                                    <FlatList
-                                        style={styles.container}
-                                        data={availableDevices}
-                                        numColumns={1}
-                                        horizontal={false}
-                                        renderItem={renderItem}
-                                        nestedScrollEnabled={false}
-                                        showsVerticalScrollIndicator={false}
-                                        ItemSeparatorComponent={renderSeparator}
-                                        keyExtractor={item => item.id}
-                                    />
-                                )}
-                            </BaseView>
+                            {availableDevices.length > 0 && (
+                                <FlatList
+                                    style={styles.container}
+                                    data={availableDevices}
+                                    numColumns={1}
+                                    horizontal={false}
+                                    renderItem={renderItem}
+                                    nestedScrollEnabled={false}
+                                    showsVerticalScrollIndicator={false}
+                                    ItemSeparatorComponent={renderSeparator}
+                                    keyExtractor={item => item.id}
+                                />
+                            )}
                         </BaseView>
 
                         <BaseSpacer height={40} />
@@ -159,14 +212,14 @@ export const SelectLedgerDevice = () => {
                         />
                     </BaseView>
                 ) : (
-                    <BaseView w={100}>
-                        <BaseButton
-                            action={onImportClick}
-                            w={100}
-                            title={LL.COMMON_LBL_IMPORT()}
-                            disabled={!selectedDevice}
-                        />
-                    </BaseView>
+                    <FadeoutButton
+                        action={onImportClick}
+                        title={LL.COMMON_LBL_IMPORT()}
+                        disabled={!selectedDevice}
+                        bottom={0}
+                        mx={0}
+                        width={"auto"}
+                    />
                 )
             }
         />
@@ -174,7 +227,9 @@ export const SelectLedgerDevice = () => {
 }
 
 const styles = StyleSheet.create({
-    backIcon: { marginHorizontal: 20, alignSelf: "flex-start" },
+    safeArea: {
+        paddingTop: 20,
+    },
     container: {
         width: "100%",
     },
