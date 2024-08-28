@@ -1,10 +1,10 @@
 import React, { memo, useCallback, useMemo, useState } from "react"
 import { StyleSheet } from "react-native"
-import { useRenameAccount, useThemedStyles } from "~Hooks"
-import { BigNutils } from "~Utils"
+import { useRenameAccount, useThemedStyles, useVns } from "~Hooks"
+import { AddressUtils, BigNutils } from "~Utils"
 import { BaseTextInput, BaseSpacer, BaseText, BaseView } from "~Components"
 import { WalletAccount } from "~Model"
-import { selectVetBalanceByAccount, selectVnsNameOrAddress, useAppSelector } from "~Storage/Redux"
+import { selectVetBalanceByAccount, useAppSelector } from "~Storage/Redux"
 import { ColorThemeType, VET } from "~Constants"
 
 type Props = {
@@ -22,6 +22,10 @@ export const AccountDetailBox: React.FC<Props> = memo(
 
         const [backupAlias, setBackupAlias] = useState(account.alias ?? "")
         const [accountAlias, setAccountAlias] = useState(account.alias ?? "")
+        const { name: vnsName, address: vnsAddress } = useVns({
+            name: "",
+            address: account.address,
+        })
 
         const onRenameAccount = (name: string) => {
             setAccountAlias(name)
@@ -52,7 +56,10 @@ export const AccountDetailBox: React.FC<Props> = memo(
         )
         const cardOpacity = useMemo(() => (isDisabled ? 0.7 : undefined), [isDisabled])
 
-        const nameOrAddressFrom = useAppSelector(state => selectVnsNameOrAddress(state, account.address, [4, 6]))
+        const nameOrAddressFrom = useMemo(
+            () => vnsName || AddressUtils.humanAddress(vnsAddress || account.address, 4, 6),
+            [account.address, vnsAddress, vnsName],
+        )
 
         return (
             <BaseView

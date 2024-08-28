@@ -1,6 +1,7 @@
 import React, { memo } from "react"
 import { StyleProp, ViewStyle } from "react-native"
 import { BaseCard, BaseSpacer, BaseText, BaseView } from "~Components"
+import { useVns } from "~Hooks"
 import { Contact } from "~Model"
 
 type Props = {
@@ -11,6 +12,11 @@ type Props = {
 }
 
 export const ContactCard = memo(({ contact, onPress, selected, containerStyle }: Props) => {
+    const { name: vnsName, address: vnsAddress } = useVns({
+        name: "",
+        address: contact.address,
+    })
+
     return (
         <BaseCard
             containerStyle={containerStyle}
@@ -21,7 +27,7 @@ export const ContactCard = memo(({ contact, onPress, selected, containerStyle }:
                 <BaseText typographyFont="button">{contact.alias}</BaseText>
                 <BaseSpacer height={4} />
                 <BaseText fontSize={10} typographyFont="smallCaptionRegular">
-                    {contact.domain || contact.address}
+                    {vnsName || vnsAddress}
                 </BaseText>
             </BaseView>
         </BaseCard>
