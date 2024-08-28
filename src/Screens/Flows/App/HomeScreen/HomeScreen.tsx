@@ -1,8 +1,18 @@
 import { useNavigation, useScrollToTop } from "@react-navigation/native"
 import React, { useCallback, useEffect, useMemo, useRef, useState } from "react"
+import { AccountCard, EditTokensBar, Header, TokenList } from "./Components"
 import { RefreshControl } from "react-native"
 import { NestableScrollContainer } from "react-native-draggable-flatlist"
 import { FadeInRight } from "react-native-reanimated"
+import {
+    useAnalyticTracking,
+    useBottomSheetModal,
+    useCheckVersion,
+    usePrefetchAllVns,
+    useMemoizedAnimation,
+    useSetSelectedAccount,
+    useTheme,
+} from "~Hooks"
 import {
     BaseIcon,
     BaseSpacer,
@@ -13,15 +23,6 @@ import {
     SelectAccountBottomSheet,
 } from "~Components"
 import { AnalyticsEvent } from "~Constants"
-import {
-    useAnalyticTracking,
-    useBottomSheetModal,
-    useCheckVersion,
-    useFetchAllVns,
-    useMemoizedAnimation,
-    useSetSelectedAccount,
-    useTheme,
-} from "~Hooks"
 import { AccountWithDevice, FastAction, WatchedAccount } from "~Model"
 import { Routes } from "~Navigation"
 import {
@@ -35,12 +36,11 @@ import {
 } from "~Storage/Redux"
 import { AccountUtils } from "~Utils"
 import { useI18nContext } from "~i18n"
-import { AccountCard, EditTokensBar, Header, TokenList } from "./Components"
 import { useTokenBalances } from "./Hooks"
 
 export const HomeScreen = () => {
     /* Pre Fetch all VNS names and addresses */
-    useFetchAllVns()
+    usePrefetchAllVns()
 
     const selectedCurrency = useAppSelector(selectCurrency)
     const track = useAnalyticTracking()
