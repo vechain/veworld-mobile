@@ -17,7 +17,7 @@ export const BalanceView = ({
 
     const isTokensOwnedLoading = useAppSelector(selectIsTokensOwnedLoading)
 
-    const { symbol, fiatBalance, exchangeRate, tokenUnitFullBalance, exchangeRateLoading } = tokenWithInfo
+    const { symbol, fiatBalance, exchangeRate, tokenUnitBalance, exchangeRateLoading } = tokenWithInfo
 
     const isLoading = exchangeRateLoading || isTokensOwnedLoading
     const priceFeedNotAvailable = !exchangeRate || isLoading
@@ -68,9 +68,7 @@ export const BalanceView = ({
                             width={60}
                         />
                     ) : (
-                        <BaseText typographyFont="bodyMedium">
-                            {isBalanceVisible ? tokenUnitFullBalance : "•••••"}
-                        </BaseText>
+                        <BaseText typographyFont="bodyMedium">{isBalanceVisible ? tokenUnitBalance : "•••••"}</BaseText>
                     )}
                     <BaseSpacer width={4} />
                     <BaseText typographyFont="captionRegular">{symbol}</BaseText>

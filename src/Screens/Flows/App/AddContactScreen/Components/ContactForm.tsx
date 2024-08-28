@@ -47,7 +47,7 @@ export const ContactForm: React.FC<Props> = memo(
         const [nameTouched, setNameTouched] = useState(false)
         const [addressTouched, setAddressTouched] = useState(false)
 
-        const { _getAddress } = useVns()
+        const { getVnsAddress } = useVns()
 
         const onScan = useCallback(
             async (uri: string) => {
@@ -56,7 +56,8 @@ export const ContactForm: React.FC<Props> = memo(
                 let address = ""
 
                 if (uri.includes(".vet")) {
-                    address = await _getAddress(uri)
+                    const vnsAddress = await getVnsAddress(uri)
+                    address = vnsAddress ?? ""
                     if (address === ZERO_ADDRESS) return
 
                     setAddress(address)
@@ -64,7 +65,7 @@ export const ContactForm: React.FC<Props> = memo(
                     setAddress(uri)
                 }
             },
-            [_getAddress, setAddress],
+            [getVnsAddress, setAddress],
         )
 
         const { RenderCameraModal, handleOpenCamera } = useCameraBottomSheet({
@@ -121,14 +122,14 @@ export const ContactForm: React.FC<Props> = memo(
                 let address = ""
 
                 if (_address.includes(".vet")) {
-                    const _addy = await _getAddress(_address)
+                    const _addy = await getVnsAddress(_address)
 
                     if (_addy === ZERO_ADDRESS) {
                         showWarningToast({ text1: LL.NOTIFICATION_DOMAIN_NAME_NOT_FOUND() })
                         return
                     }
 
-                    address = _addy
+                    address = _addy ?? ""
                     setAddress(address)
                     setAddressTouched(true)
                 } else {
@@ -136,7 +137,7 @@ export const ContactForm: React.FC<Props> = memo(
                     setAddressTouched(true)
                 }
             },
-            [LL, _getAddress, setAddress],
+            [LL, getVnsAddress, setAddress],
         )
 
         /**
