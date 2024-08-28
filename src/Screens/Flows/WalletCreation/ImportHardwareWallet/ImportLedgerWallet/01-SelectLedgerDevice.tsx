@@ -52,61 +52,10 @@ export const SelectLedgerDevice = () => {
         } else return true
     }, [androidPermissionsGranted])
 
-    const { unsubscribe, scanForDevices } = useScanLedgerDevices({
+    const { availableDevices, unsubscribe, scanForDevices } = useScanLedgerDevices({
         onAddDevice,
         readyToScan,
     })
-
-    const availableDevices: ConnectedLedgerDevice[] = [
-        {
-            id: "1",
-            isConnectable: true,
-            localName: "ledger",
-            name: "Ledger Nano X",
-            productName: "ledger",
-            rssi: 123455,
-        },
-        {
-            id: "2",
-            isConnectable: true,
-            localName: "ledger",
-            name: "Ledger Nano X",
-            productName: "ledger",
-            rssi: 123455,
-        },
-        {
-            id: "3",
-            isConnectable: true,
-            localName: "ledger",
-            name: "Ledger Nano X",
-            productName: "ledger",
-            rssi: 123455,
-        },
-        {
-            id: "4",
-            isConnectable: true,
-            localName: "ledger",
-            name: "Ledger Nano X",
-            productName: "ledger",
-            rssi: 123455,
-        },
-        {
-            id: "5",
-            isConnectable: true,
-            localName: "ledger",
-            name: "Ledger Nano X",
-            productName: "ledger",
-            rssi: 123455,
-        },
-        {
-            id: "6",
-            isConnectable: true,
-            localName: "ledger",
-            name: "Ledger Nano X",
-            productName: "ledger",
-            rssi: 123455,
-        },
-    ]
 
     const onImportClick = useCallback(() => {
         if (selectedDevice) {
