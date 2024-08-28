@@ -613,7 +613,7 @@ const en: BaseTranslation = {
 
     SETTINGS_ABOUT_OFFICIAL_SITE: "Official site",
     SETTINGS_ABOUT_APP_VERSION: "Version {version}",
-    SETTINGS_ABOUT_WEWORLD_WEBSITE: "veworld.net",
+    SETTINGS_ABOUT_WEWORLD_WEBSITE: "veworld.com",
     SETTINGS_ABOUT_SUPPORT: "Support",
     SETTINGS_ABOUT_FIND_COMMON_PROBLEMS: "Find solutions to common problems",
     SETTINGS_ABOUT_SUGGEST_NEW_FEATURE: "Suggest a feature",

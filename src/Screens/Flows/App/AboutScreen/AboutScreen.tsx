@@ -17,7 +17,7 @@ export const AboutScreen = () => {
         {
             title: LL.SETTINGS_ABOUT_OFFICIAL_SITE(),
             subtitle: LL.SETTINGS_ABOUT_WEWORLD_WEBSITE(),
-            url: "https://www.veworld.net/",
+            url: "https://www.veworld.com/",
         },
         {
             title: LL.SETTINGS_ABOUT_SUPPORT(),
