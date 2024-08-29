@@ -190,7 +190,7 @@ const localDaoDAppsMetadata: VeBetterDaoDAppMetadata[] = [
         name: "EVearn",
         description:
             "The EVEarn app rewards your eco-friendly actions. Earn $B3TR tokens by charging your electric vehicle. Simply connect your Tesla to the VeWorld wallet by uploading your VIN number, and snap photos of your charging sessions to start earning rewards!",
-        external_url: "https://www.evearn.org",
+        external_url: "https://www.evearn.io",
         logo: "ipfs://bafybeibc2usjmwruvmb24wcowfeznkjl5xesz377ux2sjtwe4me6xos7hm/images/logo.png",
         banner: "ipfs://bafybeibc2usjmwruvmb24wcowfeznkjl5xesz377ux2sjtwe4me6xos7hm/images/banner.png",
         screenshots: [],
@@ -281,47 +281,13 @@ const localDaoDAppsMetadata: VeBetterDaoDAppMetadata[] = [
     },
 ]
 
-const localDaoDAppsPlaceholder = [
-    {
-        appAvailableForAllocationVoting: true,
-        createdAtTimestamp: "",
-        id: "",
-        metadataURI: "",
-        name: "",
-        teamWalletAddress: "",
-    },
-    {
-        appAvailableForAllocationVoting: true,
-        createdAtTimestamp: "",
-        id: "",
-        metadataURI: "",
-        name: "",
-        teamWalletAddress: "",
-    },
-    {
-        appAvailableForAllocationVoting: true,
-        createdAtTimestamp: "",
-        id: "",
-        metadataURI: "",
-        name: "",
-        teamWalletAddress: "",
-    },
-    {
-        appAvailableForAllocationVoting: true,
-        createdAtTimestamp: "",
-        id: "",
-        metadataURI: "",
-        name: "",
-        teamWalletAddress: "",
-    },
-    {
-        appAvailableForAllocationVoting: true,
-        createdAtTimestamp: "",
-        id: "",
-        metadataURI: "",
-        name: "",
-        teamWalletAddress: "",
-    },
-]
+const localDaoDAppsPlaceholder = [0, 0, 0, 0, 0].map(() => ({
+    appAvailableForAllocationVoting: true,
+    createdAtTimestamp: "",
+    id: "",
+    metadataURI: "",
+    name: "",
+    teamWalletAddress: "",
+}))
 
 export { localDaoDAppsMetadata, localDaoDApps, localDaoDAppsPlaceholder }
