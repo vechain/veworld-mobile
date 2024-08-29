@@ -18,6 +18,8 @@ env:
     id: "networks_box_mainnet"
 - tapOn:
     id: "networks_box_testnet"
+- assertVisible: 
+   id: "BackButtonHeader-BaseIcon-backButton"
 - tapOn:
     id: "BackButtonHeader-BaseIcon-backButton"
 - tapOn:
@@ -40,6 +42,8 @@ env:
     commands:
       - tapOn: 
            id: "PLA"
+- assertVisible: 
+    id: "BackButtonHeader-BaseIcon-backButton"    
 - tapOn:
     id: "BackButtonHeader-BaseIcon-backButton"
 - swipe: 
@@ -139,6 +143,8 @@ env:
     commands:
       - tapOn: 
            id: "Jur"
+- assertVisible:
+    id: "BackButtonHeader-BaseIcon-backButton"
 - tapOn:
     id: "BackButtonHeader-BaseIcon-backButton"
 - swipe:
@@ -177,6 +183,8 @@ env:
       - assertVisible:
              id: "PLA"
 ##User add a custom token
+- assertVisible: 
+    id: "BackButtonHeader-BaseIcon-backButton"
 - tapOn:
     id: "BackButtonHeader-BaseIcon-backButton"
 - tapOn:
@@ -187,6 +195,8 @@ env:
     id: "AddCustomTokenBottomSheet-TextInput-Address"
 - inputText: ${CARP_TOKEN_ADRESS}
 - tapOn: "Add"
+- assertVisible:
+    id: "BackButtonHeader-BaseIcon-backButton"
 - tapOn:
     id: "BackButtonHeader-BaseIcon-backButton"
 - swipe:
@@ -220,6 +230,8 @@ env:
     id: "AddCustomTokenBottomSheet-TextInput-Address"
 - inputText: "0xC9e1B9B34e02610d27Bf213ecbf527D608CE3D39"
 - tapOn: "Add"
+- assertVisible: 
+    id: "BackButtonHeader-BaseIcon-backButton"
 - tapOn:
     id: "BackButtonHeader-BaseIcon-backButton"
 - swipe:
@@ -280,6 +292,8 @@ env:
     id: "networks_box_testnet"
 - tapOn:
     id: "networks_box_mainnet"
+- assertVisible:
+    id: "BackButtonHeader-BaseIcon-backButton"
 - tapOn:
     id: "BackButtonHeader-BaseIcon-backButton"
 - tapOn:
@@ -299,6 +313,8 @@ env:
     commands:
       - tapOn:
           id: "SHA"
+- assertVisible: 
+    id: "BackButtonHeader-BaseIcon-backButton"
 - tapOn:
     id: "BackButtonHeader-BaseIcon-backButton"
 - tapOn:
@@ -309,6 +325,8 @@ env:
     id: "networks_box_mainnet"
 - tapOn:
     id: "networks_box_testnet"
+- assertVisible: 
+    id: "BackButtonHeader-BaseIcon-backButton"
 - tapOn:
     id: "BackButtonHeader-BaseIcon-backButton"
 - tapOn:
@@ -343,7 +361,8 @@ env:
         - tapOn:
              text: "JUR"
              index: 0
-
+- assertVisible: 
+    id: "BackButtonHeader-BaseIcon-backButton"
 - tapOn:
     id: "BackButtonHeader-BaseIcon-backButton"
 - tapOn:
@@ -354,6 +373,8 @@ env:
     id: "networks_box_testnet"
 - tapOn:
     id: "networks_box_mainnet"
+- assertVisible: 
+    id: "BackButtonHeader-BaseIcon-backButton"
 - tapOn:
     id: "BackButtonHeader-BaseIcon-backButton"
 - tapOn:
