@@ -4,6 +4,7 @@ import { useDeviceUtils } from "../useDeviceUtils"
 import {
     addDeviceAndAccounts,
     addLedgerDeviceAndAccounts,
+    setIsImportingWallet,
     setMnemonic,
     setNewLedgerDevice,
     setPrivateKey,
@@ -68,6 +69,7 @@ export const useCreateWallet = () => {
 
                 dispatch(setMnemonic(undefined))
                 dispatch(setPrivateKey(undefined))
+                dispatch(setIsImportingWallet(undefined))
                 setIsComplete(true)
                 track(AnalyticsEvent.WALLET_ADD_LOCAL_SUCCESS)
             } catch (e) {

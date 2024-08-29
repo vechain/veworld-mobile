@@ -3,6 +3,7 @@ import { generateDeviceForMnemonic, generateDeviceForPrivateKey, isSlowDevice } 
 import { HDNode } from "thor-devkit"
 import { CryptoUtils, HexUtils } from "~Utils"
 import { DEVICE_TYPE } from "~Model"
+import { DerivationPath } from "~Constants"
 
 // Mock the methods from react-native-device-info
 jest.mock("react-native-device-info", () => ({
@@ -48,6 +49,44 @@ describe("generateDeviceForMnemonic", () => {
         expect(result.device.rootAddress).toEqual(hdNode.address)
         expect(result.device.type).toEqual(DEVICE_TYPE.LOCAL_MNEMONIC)
         expect(result.device.index).toEqual(deviceIndex)
+        expect(result.device.isBuckedUp).toEqual(false)
+    })
+
+    it("valid imported menemonic phrase", () => {
+        const mnemonicPhrase = [
+            "juice",
+            "direct",
+            "sell",
+            "apart",
+            "motion",
+            "polar",
+            "copper",
+            "air",
+            "novel",
+            "dumb",
+            "slender",
+            "flash",
+            "feature",
+            "early",
+            "feel",
+        ]
+        const deviceIndex = 1
+        const hdNode = HDNode.fromMnemonic(mnemonicPhrase)
+        const expectedXPub = CryptoUtils.xPubFromHdNode(hdNode)
+
+        const result = generateDeviceForMnemonic(mnemonicPhrase, deviceIndex, "Wallet 3", DerivationPath.VET, true)
+
+        expect(result.wallet.mnemonic).toEqual(mnemonicPhrase)
+        expect(result.wallet.privateKey).toBeUndefined()
+        expect(result.wallet.nonce).toHaveLength(258)
+        expect(result.wallet.rootAddress).toEqual(hdNode.address)
+
+        expect(result.device.alias).toEqual("Wallet 3")
+        expect(result.device.xPub).toEqual(expectedXPub)
+        expect(result.device.rootAddress).toEqual(hdNode.address)
+        expect(result.device.type).toEqual(DEVICE_TYPE.LOCAL_MNEMONIC)
+        expect(result.device.index).toEqual(deviceIndex)
+        expect(result.device.isBuckedUp).toEqual(true)
     })
 })
 describe("generateDeviceForPrivateKey", () => {

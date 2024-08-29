@@ -1,6 +1,6 @@
 import { AddressUtils, DeviceUtils } from "~Utils"
 import { getNextDeviceIndex, useAppSelector } from "~Storage/Redux"
-import { selectAccounts, selectDerivedPath, selectDevices } from "~Storage/Redux/Selectors"
+import { selectAccounts, selectDerivedPath, selectDevices, selectIsImportingWallet } from "~Storage/Redux/Selectors"
 import { DEVICE_CREATION_ERRORS as ERRORS, LocalDevice, Wallet } from "~Model"
 import { getAddressFromXPub } from "~Utils/AddressUtils/AddressUtils"
 import * as i18n from "~i18n"
@@ -14,7 +14,7 @@ export const useDeviceUtils = () => {
     const devices = useAppSelector(selectDevices)
     const accounts = useAppSelector(selectAccounts)
     const path = useAppSelector(selectDerivedPath)
-
+    const isImportingWallet = useAppSelector(selectIsImportingWallet)
     /**
      * Verify that a conflicting device doesn't already exist
      * Throws an error if a device already exists with the same root address or if an account already exists with the same address
@@ -52,7 +52,13 @@ export const useDeviceUtils = () => {
 
         let walletAndDevice: WalletAndDevice
         if (mnemonic) {
-            walletAndDevice = DeviceUtils.generateDeviceForMnemonic(mnemonic, deviceIndex, alias, path)
+            walletAndDevice = DeviceUtils.generateDeviceForMnemonic(
+                mnemonic,
+                deviceIndex,
+                alias,
+                path,
+                isImportingWallet,
+            )
         } else if (privateKey) {
             walletAndDevice = DeviceUtils.generateDeviceForPrivateKey(privateKey, deviceIndex, alias)
         } else throw new Error(ERRORS.UNKNOWN_ERROR)

@@ -1,4 +1,4 @@
-import React, { useCallback, useMemo, useRef, useState } from "react"
+import React, { useCallback, useEffect, useMemo, useRef, useState } from "react"
 import {
     BackButtonHeader,
     BaseButton,
@@ -19,7 +19,13 @@ import { useAnalyticTracking, useBottomSheetModal, useCheckIdentity, useDeviceUt
 import { CryptoUtils } from "~Utils"
 import { Keyboard, StyleSheet } from "react-native"
 import { ImportWalletInput } from "./Components/ImportWalletInput"
-import { selectAreDevFeaturesEnabled, selectHasOnboarded, useAppSelector } from "~Storage/Redux"
+import {
+    selectAreDevFeaturesEnabled,
+    selectHasOnboarded,
+    setIsImportingWallet,
+    useAppDispatch,
+    useAppSelector,
+} from "~Storage/Redux"
 import HapticsService from "~Services/HapticsService"
 import { AnalyticsEvent } from "~Constants"
 import { DEVICE_CREATION_ERRORS as ERRORS, IMPORT_TYPE } from "~Model"
@@ -35,6 +41,7 @@ export const ImportLocalWallet = () => {
     const theme = useTheme()
     const track = useAnalyticTracking()
     const nav = useNavigation()
+    const dispatch = useAppDispatch()
     const userHasOnboarded = useAppSelector(selectHasOnboarded)
 
     const {
@@ -86,6 +93,10 @@ export const ImportLocalWallet = () => {
     })
 
     const importType = useMemo(() => CryptoUtils.determineKeyImportType(textValue), [textValue])
+
+    useEffect(() => {
+        dispatch(setIsImportingWallet(true))
+    }, [dispatch])
 
     const processErrorMessage = useCallback(
         (err: unknown) => {
@@ -245,10 +256,12 @@ export const ImportLocalWallet = () => {
 
     const handleVerify = useCallback(() => onVerify(textValue, importType), [onVerify, textValue, importType])
     const disabledAction = useCallback(() => setIsError(LL.ERROR_INVALID_IMPORT_DATA()), [LL])
+    const onGoBack = useCallback(() => dispatch(setIsImportingWallet(undefined)), [dispatch])
 
     return (
         <DismissKeyboardView>
             <Layout
+                onGoBack={onGoBack}
                 body={
                     <>
                         <BaseView justifyContent="space-between">

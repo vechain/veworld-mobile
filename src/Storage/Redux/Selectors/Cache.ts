@@ -26,3 +26,7 @@ export const selectIsTokensOwnedLoading = createSelector(reducer, state => {
 export const selectDerivedPath = createSelector(reducer, state => {
     return state.derivedPath
 })
+
+export const selectIsImportingWallet = createSelector(reducer, state => {
+    return state.isImportingWallet
+})
