@@ -1,7 +1,13 @@
 import { useCallback, useState } from "react"
 import { showErrorToast, useApplicationSecurity, WalletEncryptionKeyHelper } from "~Components"
 import { useBiometrics, useCreateWallet, useDisclosure } from "~Hooks"
-import { setIsAppLoading, useAppDispatch } from "~Storage/Redux"
+import {
+    selectIsImportingWallet,
+    setIsAppLoading,
+    setIsImportingWallet,
+    useAppDispatch,
+    useAppSelector,
+} from "~Storage/Redux"
 import { mnemonic as thorMnemonic } from "thor-devkit"
 import { NewLedgerDevice, SecurityLevelType } from "~Model"
 import { BiometricsUtils } from "~Utils"
@@ -17,6 +23,7 @@ export const useHandleWalletCreation = () => {
     const dispatch = useAppDispatch()
     const { LL } = useI18nContext()
     const [isError, setIsError] = useState("")
+    const isImportingWallet = useAppSelector(selectIsImportingWallet)
 
     const onWalletCreationError = useCallback(
         (_error: unknown) => {
@@ -53,12 +60,14 @@ export const useHandleWalletCreation = () => {
                     onError: onWalletCreationError,
                 })
                 await migrateOnboarding(SecurityLevelType.BIOMETRIC)
+                //Reset wallet importing state after onboarding migration
+                if (isImportingWallet) dispatch(setIsImportingWallet(undefined))
                 dispatch(setIsAppLoading(false))
             } else {
                 onOpen()
             }
         },
-        [biometrics, createLocalWallet, dispatch, migrateOnboarding, onOpen, onWalletCreationError],
+        [biometrics, createLocalWallet, dispatch, isImportingWallet, migrateOnboarding, onOpen, onWalletCreationError],
     )
 
     const onSuccess = useCallback(
@@ -74,9 +83,11 @@ export const useHandleWalletCreation = () => {
                 onError: onWalletCreationError,
             })
             await migrateOnboarding(SecurityLevelType.SECRET, pin)
+            //Reset wallet importing state after onboarding migration
+            if (isImportingWallet) dispatch(setIsImportingWallet(undefined))
             dispatch(setIsAppLoading(false))
         },
-        [createLocalWallet, dispatch, migrateOnboarding, onClose, onWalletCreationError],
+        [createLocalWallet, dispatch, isImportingWallet, migrateOnboarding, onClose, onWalletCreationError],
     )
 
     const onCreateLedgerWallet = useCallback(

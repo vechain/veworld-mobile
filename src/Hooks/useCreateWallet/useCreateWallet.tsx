@@ -79,7 +79,7 @@ export const useCreateWallet = () => {
                 throw e
             }
         },
-        [dispatch, createDevice, selectedAccount, track],
+        [createDevice, dispatch, selectedAccount, track],
     )
     //* [END] - Create Wallet
 
