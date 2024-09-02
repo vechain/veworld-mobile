@@ -613,9 +613,11 @@ const en: BaseTranslation = {
 
     SETTINGS_ABOUT_OFFICIAL_SITE: "Official site",
     SETTINGS_ABOUT_APP_VERSION: "Version {version}",
-    SETTINGS_ABOUT_WEWORLD_WEBSITE: "veworld.net",
-    SETTINGS_ABOUT_GET_HELP: "Get help",
-    SETTINGS_ABOUT_REPORT_BUG: "Report a bug",
+    SETTINGS_ABOUT_WEWORLD_WEBSITE: "veworld.com",
+    SETTINGS_ABOUT_SUPPORT: "Support",
+    SETTINGS_ABOUT_FIND_COMMON_PROBLEMS: "Find solutions to common problems",
+    SETTINGS_ABOUT_SUGGEST_NEW_FEATURE: "Suggest a feature",
+    SETTINGS_ABOUT_VEWORLD_NEW_FEATURES: "What would you like to see differently on VeWorld?",
     SETTINGS_ABOUT_OUR_COMMITMENT: "Our commitment to you",
     SETTINGS_ABOUT_PRIVACY_POLICY: "Privacy policy",
 
