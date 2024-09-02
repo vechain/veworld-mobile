@@ -12,7 +12,6 @@ const oily = require("./oily.png")
 
 const localDaoDApps: VeBetterDaoDapp[] = [
     {
-        appAvailableForAllocationVoting: true,
         createdAtTimestamp: "1719216830",
         id: "0x2fc30c2ad41a2994061efaf218f1d52dc92bc4a31a0f02a4916490076a7a393a",
         metadataURI: "bafkreiddzfwwbc2nhdzdxodrnblatzix26xupyjxpp65s6fwzwzdoxz45q",
@@ -20,70 +19,62 @@ const localDaoDApps: VeBetterDaoDapp[] = [
         teamWalletAddress: "0xbfe2122a82c0aea091514f57c7713c3118101eda",
     },
     {
-        appAvailableForAllocationVoting: true,
-        createdAtTimestamp: "1719216830",
+        createdAtTimestamp: "1719216831",
         id: "0x899de0d0f0b39e484c8835b2369194c4c102b230c813862db383d44a4efe14d3",
         metadataURI: "bafkreibcgvnzmp6hpccaphsdrkgx5estfbhxpgcsb6xcgigzwnknp2fyf4",
         name: "Cleanify",
         teamWalletAddress: "0x6b020e5c8e8574388a275cc498b27e3eb91ec3f2",
     },
     {
-        appAvailableForAllocationVoting: true,
-        createdAtTimestamp: "1719216830",
+        createdAtTimestamp: "1719216832",
         id: "0x9643ed1637948cc571b23f836ade2bdb104de88e627fa6e8e3ffef1ee5a1739a",
         metadataURI: "bafkreif3wf422t4z6zyiztirmpplcdmemldk24dc3a4kow6ug5nznzmvhm",
         name: "GreenCart",
         teamWalletAddress: "0x4e506ee842ba8ccce88e424522506f5b860e5c9b",
     },
     {
-        appAvailableForAllocationVoting: true,
-        createdAtTimestamp: "1719216830",
+        createdAtTimestamp: "1719216833",
         id: "0x821a9ae30590c7c11e0ebc03b27902e8cae0f320ad27b0f5bde9f100eebcb5a7",
         metadataURI: "bafkreibx7q6ytesoc4j2mxupegrsob555tbsesj3fc5rd4z7neyf5vy3jm",
         name: "Green Ambassador Challenge",
         teamWalletAddress: "0x15e74aeb00d367a5a20c61b469df30a25f0e602f",
     },
     {
-        appAvailableForAllocationVoting: true,
-        createdAtTimestamp: "1719216830",
+        createdAtTimestamp: "1719216834",
         id: "0xcd9f16381818b575a55661602638102b2b8497a202bb2497bb2a3a2cd438e85d",
         metadataURI: "bafkreiegiuaukybbauhae3vdy2ktdqrehf4wzfg6rnfn5ebd36c2k6pmxa",
         name: "Oily",
         teamWalletAddress: "0xd52e3356231c9fa86bb9fab731f8c0c3f1018753",
     },
     {
-        appAvailableForAllocationVoting: true,
-        createdAtTimestamp: "1719216830",
+        createdAtTimestamp: "1719216835",
         id: "0x6c977a18d427360e27c3fc2129a6942acd4ece2c8aaeaf4690034931dc5ba7f9",
         metadataURI: "bafkreicz2cslyuzbmj2msmgyzpz2tqwmbyifb7yvb5jbnydp4yx4jnkfny",
         name: "EVearn",
         teamWalletAddress: "0xb2919e12d035a484f8414643b606b2a180224f54",
     },
     {
-        appAvailableForAllocationVoting: true,
-        createdAtTimestamp: "1719216830",
+        createdAtTimestamp: "1719216836",
         id: "0xa30ddd53895674f3517ed4eb8f7261a4287ec1285fdd13b1c19a1d7009e5b7e3",
         metadataURI: "bafkreid3dbmrxe3orutmptc43me5gnvskz7hu53bjnlfgafwu6xb53w3mi",
         name: "Vyvo",
         teamWalletAddress: "0x61ffc950b04090f5ce857ebf056852a6d27b0c3c",
     },
     {
-        appAvailableForAllocationVoting: true,
-        createdAtTimestamp: "1719216830",
+        createdAtTimestamp: "1719216837",
         id: "0x74133534672eca50a67f8b20bf17dd731b70d83f0a12e3500fca0793fca51c7d",
         metadataURI: "bafkreieqbiuvoh63gbr2k7xetdsxo3eractg5zd5st6arq5da5vnil5mti",
         name: "Non Fungible Book Club (NFBC)",
         teamWalletAddress: "0xcd093a08794dda7fbcc6d5839c85892f8da2e8be",
     },
     {
-        appAvailableForAllocationVoting: true,
-        createdAtTimestamp: "1721578330",
+        createdAtTimestamp: "1721578338",
         id: "0xe19c5e83670576cac1cee923e1f92990387bf701af06ff3e0c5f1be8d265c478",
         metadataURI: "bafkreihla5awp3y7utgbxv7ezt64aka5tbbup6bvsbvb3pkef57rydiwjm",
         name: "Carboneers",
         teamWalletAddress: "0x5b9bdbc0063c15cd50b06e8b9954332a534a0b6d",
     },
-]
+].map(dapp => ({ ...dapp, appAvailableForAllocationVoting: true }))
 
 const localDaoDAppsMetadata: VeBetterDaoDAppMetadata[] = [
     {
@@ -282,7 +273,6 @@ const localDaoDAppsMetadata: VeBetterDaoDAppMetadata[] = [
 ]
 
 const localDaoDAppsPlaceholder = [0, 0, 0, 0, 0].map(() => ({
-    appAvailableForAllocationVoting: true,
     createdAtTimestamp: "",
     id: "",
     metadataURI: "",
