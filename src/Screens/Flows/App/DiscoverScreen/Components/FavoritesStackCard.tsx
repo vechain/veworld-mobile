@@ -44,11 +44,19 @@ export const FavoritesStackCard = ({ dapps, onDAppPress }: Props) => {
             .map(dapp => dapp.amountOfNavigations)
             .reduce((total, current) => total + current, 0)
 
+        const getDesc = (dapp: DiscoveryDApp) => {
+            if (dapp.desc) {
+                return dapp.desc
+            }
+
+            return hostname ?? dapp.name
+        }
+
         const dapp = {
             id: dapps.find(item => !!item.id)?.id,
             amountOfNavigations: amountOfNavigations,
             createAt: 0,
-            desc: hostname ?? dapps[0]?.desc ?? "",
+            desc: getDesc(dapps[0]),
             href: "header",
             isCustom: true,
             name: dapps[0]?.name ?? hostname,
@@ -195,7 +203,7 @@ const AnimatedCard = ({ index, isStacked, onDAppPress, dapp }: AnimatedCardProps
                     </BaseText>
                     <BaseSpacer height={4} />
                     <BaseText ellipsizeMode="tail" numberOfLines={2} style={styles.description}>
-                        {dapp.desc ? dapp.desc : dapp.href}
+                        {!isFirst ? dapp.href : dapp.desc ?? ""}
                     </BaseText>
                 </BaseView>
                 {isFirst ? (

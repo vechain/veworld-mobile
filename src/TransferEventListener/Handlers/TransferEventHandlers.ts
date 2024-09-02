@@ -96,6 +96,8 @@ export const handleTokenTransfers = async ({
             decimals,
             transfer,
             informUser,
+            to: transfer.to,
+            symbol,
         })
     }
 }

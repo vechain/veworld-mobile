@@ -66,3 +66,33 @@ export enum DAppType {
     NFT = "NFT",
     DAPPS = "DAPPS",
 }
+
+export type VeBetterDaoDapp = {
+    id: string
+    teamWalletAddress: string
+    name: string
+    metadataURI: string
+    createdAtTimestamp: string
+    appAvailableForAllocationVoting?: boolean
+}
+
+export type VeBetterDaoDAppMetadata = {
+    name: string
+    description: string
+    external_url: string
+    logo: string
+    banner: string
+    screenshots: string[]
+    social_urls: {
+        name: string
+        url: string
+    }[]
+    app_urls: {
+        code: string
+        url: string
+    }[]
+    tweets?: string[]
+    we_world?: {
+        banner: string | number
+    }
+}
