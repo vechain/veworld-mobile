@@ -1,11 +1,11 @@
-import React from "react"
+import React, { useMemo } from "react"
 import { BottomSheetModalMethods } from "@gorhom/bottom-sheet/lib/typescript/types"
-import { useCopyClipboard, useTheme } from "~Hooks"
+import { useCopyClipboard, useTheme, useVns } from "~Hooks"
 import { BaseIcon, BaseSpacer, BaseText, BaseView, BaseBottomSheet, BaseButton } from "~Components"
 
 import { useI18nContext } from "~i18n"
 import { useAppSelector } from "~Storage/Redux"
-import { selectSelectedAccount, selectVnsNameOrAddress } from "~Storage/Redux/Selectors"
+import { selectSelectedAccount } from "~Storage/Redux/Selectors"
 import QRCode from "react-native-qrcode-svg"
 import { COLORS } from "~Constants"
 import { StyleSheet } from "react-native"
@@ -17,10 +17,16 @@ export const QRCodeBottomSheet = React.forwardRef<BottomSheetModalMethods>(({}, 
     const { LL } = useI18nContext()
 
     const selectedAccount = useAppSelector(selectSelectedAccount)
+    const { name: vnsName, address: vnsAddress } = useVns({
+        name: "",
+        address: selectedAccount.address,
+    })
 
     const { onCopyToClipboard } = useCopyClipboard()
 
-    const nameOrAddress = useAppSelector(state => selectVnsNameOrAddress(state, selectedAccount.address, [4, 3]))
+    const nameOrAddress = useMemo(() => {
+        return vnsName || AddressUtils.humanAddress(vnsAddress || selectedAccount.address, 4, 3)
+    }, [selectedAccount.address, vnsAddress, vnsName])
 
     return (
         <BaseBottomSheet dynamicHeight ref={ref}>

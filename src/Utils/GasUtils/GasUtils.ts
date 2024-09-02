@@ -35,7 +35,7 @@ const estimateGas = async (
         clauses.map(item => {
             return {
                 to: item.to,
-                value: item.value || 0,
+                value: item.value || "0x0",
                 data: item.data || "0x",
             }
         }),

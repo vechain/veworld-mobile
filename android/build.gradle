@@ -2,11 +2,11 @@
 
 buildscript {
     ext {
-        buildToolsVersion = "33.0.0"
-        minSdkVersion = 23
-        compileSdkVersion = 33
-        targetSdkVersion = 33
-        kotlinVersion = "1.8.0"
+        buildToolsVersion = "34.0.0"
+        minSdkVersion = 24
+        compileSdkVersion = 34
+        targetSdkVersion = 34
+        kotlinVersion = "1.9.0"
 
         // We use NDK 23 which has both M1 support and is the side-by-side NDK version from AGP.
         ndkVersion = "23.1.7779620"
@@ -36,15 +36,6 @@ allprojects {
 
         maven {
             url("$rootDir/../node_modules/detox/Detox-android")
-        }
-    }
-    afterEvaluate {
-        if (it.hasProperty('android')){
-            android {
-                defaultConfig {
-                    minSdkVersion 21
-                }
-            }
         }
     }
 }

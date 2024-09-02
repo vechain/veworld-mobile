@@ -108,3 +108,11 @@ sendflow_backup.yaml
 
 # datadog
 datadog-ci.json
+
+# Yarn
+.yarn/*
+!.yarn/patches
+!.yarn/plugins
+!.yarn/releases
+!.yarn/sdks
+!.yarn/versions

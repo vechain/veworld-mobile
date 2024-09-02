@@ -1,5 +1,6 @@
 import axios from "axios"
 import { validateIpfsUri } from "~Utils/IPFSUtils/IPFSUtils"
+import { isAndroid } from "~Utils/PlatformUtils/PlatformUtils"
 
 // A helper function to normalize the URL by removing 'www.'
 const normalizeURL = (url: string) => {
@@ -45,7 +46,11 @@ const isHttps = (url: string) => {
 const isLocalHost = (url: string) => {
     try {
         const parsedURL = new URL(url)
-        return parsedURL.hostname === "localhost" || parsedURL.hostname === "127.0.0.1"
+        return (
+            parsedURL.hostname === "localhost" ||
+            parsedURL.hostname === "127.0.0.1" ||
+            (isAndroid() && parsedURL.hostname === "10.0.2.2")
+        )
     } catch (e) {
         return false
     }
@@ -86,6 +91,7 @@ const convertUriToUrl = (uri: string) => {
     // if it is a data uri just return it
     if (uri.startsWith("data:")) return uri
     const splitUri = uri?.split("://")
+
     if (splitUri.length !== 2) throw new Error(`Invalid URI ${uri}`)
     const protocol = splitUri[0].trim()
     const uriWithoutProtocol = splitUri[1]
@@ -157,6 +163,13 @@ function getBaseURL(url: string) {
     return isValid(url) ? new URL(url).origin : undefined
 }
 
+const convertHttpToHttps = (url: string) => {
+    if (isHttp(url)) {
+        return url.replace("http://", "https://")
+    }
+    return url
+}
+
 export default {
     compareURLs,
     clean,
@@ -172,4 +185,5 @@ export default {
     decodeUrl_HACK,
     getHostName,
     getBaseURL,
+    convertHttpToHttps,
 }

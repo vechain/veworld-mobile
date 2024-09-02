@@ -1,3 +1,4 @@
+import { setPlatform } from "~Test"
 import URIUtils from "./URIUtils"
 
 describe("URIUtils", () => {
@@ -120,6 +121,26 @@ describe("URIUtils", () => {
 
         test("should return true for IP with port", function () {
             expect(URIUtils.isLocalHost("http://127.0.0.1:3000")).toBe(true)
+        })
+
+        test("should return true for Ip http://10.0.2.2 on Android device", function () {
+            setPlatform("android")
+            expect(URIUtils.isLocalHost("http://10.0.2.2")).toBe(true)
+        })
+
+        test("should return true for Ip http://10.0.2.2 on Android device with port", function () {
+            setPlatform("android")
+            expect(URIUtils.isLocalHost("http://10.0.2.2:3000")).toBe(true)
+        })
+
+        test("should return false for Ip http://10.0.2.2 on IOS device", function () {
+            setPlatform("ios")
+            expect(URIUtils.isLocalHost("http://10.0.2.2")).toBe(false)
+        })
+
+        test("should return false for Ip http://10.0.2.2 on IOS device with port", function () {
+            setPlatform("ios")
+            expect(URIUtils.isLocalHost("http://10.0.2.2:3000")).toBe(false)
         })
     })
 
@@ -253,6 +274,23 @@ describe("URIUtils", () => {
 
         it("should return undefined", () => {
             expect(URIUtils.getBaseURL("ftps://example.com")).toBeUndefined()
+        })
+    })
+
+    describe("convertHttpToHttps", function () {
+        test("should convert http URL to https", function () {
+            const url = "http://example.com"
+            expect(URIUtils.convertHttpToHttps(url)).toBe("https://example.com")
+        })
+
+        test("should return the original URL if it is already https", function () {
+            const url = "https://example.com"
+            expect(URIUtils.convertHttpToHttps(url)).toBe(url)
+        })
+
+        test("should return the original URL if it does not start with http", function () {
+            const url = "ftp://example.com"
+            expect(URIUtils.convertHttpToHttps(url)).toBe(url)
         })
     })
 })
