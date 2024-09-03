@@ -1,4 +1,4 @@
-import React, { useCallback, useMemo, useState } from "react"
+import React, { useCallback, useEffect, useMemo, useState } from "react"
 import { LayoutChangeEvent, StyleProp, StyleSheet, ViewStyle, useWindowDimensions } from "react-native"
 import {
     BottomSheetBackdrop,
@@ -72,13 +72,15 @@ export const BaseBottomSheet = React.forwardRef<BottomSheetModalMethods, Props>(
         },
         ref,
     ) => {
+        const { onChange: onChangeFromProps, ...otherProps } = props
         const { styles } = useThemedStyles(baseStyles)
         const { height: windowHeight } = useWindowDimensions()
         const { bottom: bottomSafeAreaSize } = useSafeAreaInsets()
         const reducedMotion = useReducedMotion()
-        useBackHandler(backHandlerEvent)
+        const { addBackHandlerListener, removeBackHandlerListener } = useBackHandler(backHandlerEvent)
 
         const [contentHeight, setContentHeight] = useState<number>(0)
+        const [sheetState, setSheetState] = useState<number>(-1)
 
         const onLayoutHandler = useCallback(
             (event: LayoutChangeEvent) => {
@@ -109,6 +111,24 @@ export const BaseBottomSheet = React.forwardRef<BottomSheetModalMethods, Props>(
             (props_: BottomSheetHandleProps) => <BaseView {...props_} style={styles.handleStyle} />,
             [styles],
         )
+
+        const onChange = useCallback(
+            (index: number) => {
+                setSheetState(index)
+                onChangeFromProps && onChangeFromProps(index)
+            },
+            [onChangeFromProps],
+        )
+
+        useEffect(() => {
+            if (sheetState === 0) {
+                addBackHandlerListener()
+            }
+
+            if (sheetState === -1) {
+                removeBackHandlerListener()
+            }
+        }, [addBackHandlerListener, removeBackHandlerListener, sheetState])
 
         /**
          * `snapPoints` should be an array of strings, each representing a percentage.
@@ -149,7 +169,8 @@ export const BaseBottomSheet = React.forwardRef<BottomSheetModalMethods, Props>(
                 keyboardBehavior="interactive"
                 keyboardBlurBehavior="restore"
                 snapPoints={snappoints}
-                {...props}>
+                onChange={onChange}
+                {...otherProps}>
                 <BaseView
                     w={100}
                     px={noMargins ? 0 : 24}

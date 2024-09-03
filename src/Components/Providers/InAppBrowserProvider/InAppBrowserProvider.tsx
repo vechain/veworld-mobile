@@ -1,11 +1,13 @@
+import { BottomSheetModalMethods } from "@gorhom/bottom-sheet/lib/typescript/types"
+import { useNavigation } from "@react-navigation/native"
 import React, { useCallback, useContext, useMemo, useRef, useState } from "react"
 import WebView, { WebViewMessageEvent, WebViewNavigation } from "react-native-webview"
-import { WindowRequest, WindowResponse } from "./types"
+import { showInfoToast, showWarningToast } from "~Components"
 import { AnalyticsEvent, ERROR_EVENTS, RequestMethods } from "~Constants"
-import { useNavigation } from "@react-navigation/native"
-import { AddressUtils, DAppUtils, debug, warn } from "~Utils"
-import { Routes } from "~Navigation"
 import { useAnalyticTracking, useBottomSheetModal, useSetSelectedAccount } from "~Hooks"
+import { useI18nContext } from "~i18n"
+import { AccountWithDevice, CertificateRequest, InAppRequest, Network, TransactionRequest } from "~Model"
+import { Routes } from "~Navigation"
 import {
     addConnectedDiscoveryApp,
     changeSelectedNetwork,
@@ -17,11 +19,9 @@ import {
     useAppDispatch,
     useAppSelector,
 } from "~Storage/Redux"
-import { AccountWithDevice, CertificateRequest, InAppRequest, Network, TransactionRequest } from "~Model"
+import { AddressUtils, DAppUtils, debug, warn } from "~Utils"
 import { compareAddresses } from "~Utils/AddressUtils/AddressUtils"
-import { showInfoToast, showWarningToast } from "~Components"
-import { useI18nContext } from "~i18n"
-import { BottomSheetModalMethods } from "@gorhom/bottom-sheet/lib/typescript/types"
+import { WindowRequest, WindowResponse } from "./types"
 
 type ContextType = {
     webviewRef: React.MutableRefObject<WebView | undefined>
@@ -29,8 +29,10 @@ type ContextType = {
     postMessage: (message: WindowResponse) => void
     onNavigationStateChange: (navState: WebViewNavigation) => void
     injectVechainScript: string
+    navigationCanGoBack: boolean
     canGoBack: boolean
     canGoForward: boolean
+    closeInAppBrowser: () => void
     goBack: () => void
     goForward: () => void
     goHome: () => void
@@ -501,6 +503,10 @@ export const InAppBrowserProvider = ({ children }: Props) => {
         setNavigationState(navState)
     }, [])
 
+    const closeInAppBrowser = useCallback(() => {
+        nav.goBack()
+    }, [nav])
+
     const goBack = useCallback(() => {
         webviewRef.current?.goBack()
     }, [])
@@ -525,8 +531,10 @@ export const InAppBrowserProvider = ({ children }: Props) => {
             postMessage,
             injectVechainScript: injectedJs,
             onNavigationStateChange,
+            navigationCanGoBack: nav.canGoBack(),
             canGoBack,
             canGoForward,
+            closeInAppBrowser,
             goBack,
             goForward,
             navigateToUrl,
@@ -545,8 +553,10 @@ export const InAppBrowserProvider = ({ children }: Props) => {
         onMessage,
         postMessage,
         onNavigationStateChange,
+        nav,
         canGoBack,
         canGoForward,
+        closeInAppBrowser,
         goBack,
         goForward,
         navigateToUrl,
