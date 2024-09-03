@@ -6,7 +6,7 @@ import { BrowserBottomBar, URLBar } from "../../InAppBrowser/Components"
 import { NativeStackScreenProps } from "@react-navigation/native-stack"
 import { RootStackParamListSettings, Routes } from "~Navigation"
 import DeviceInfo from "react-native-device-info"
-import { ChangeAccountNetworkBottomSheet } from "../../InAppBrowser/Components/ChangeAccountNetworkBottomSheet"
+// import { ChangeAccountNetworkBottomSheet } from "../../InAppBrowser/Components/ChangeAccountNetworkBottomSheet"
 
 type Props = NativeStackScreenProps<
     RootStackParamListSettings,
@@ -14,18 +14,7 @@ type Props = NativeStackScreenProps<
 >
 
 export const SettingsBrowserView: React.FC<Props> = ({ route }) => {
-    const {
-        webviewRef,
-        onMessage,
-        injectVechainScript,
-        onNavigationStateChange,
-        resetWebViewState,
-        targetAccount,
-        targetNetwork,
-        handleCloseChangeAccountNetworkBottomSheet,
-        handleConfirmChangeAccountNetworkBottomSheet,
-        ChangeAccountNetworkBottomSheetRef,
-    } = useInAppBrowser()
+    const { webviewRef, onMessage, injectVechainScript, onNavigationStateChange, resetWebViewState } = useInAppBrowser()
 
     const [userAgent, setUserAgent] = React.useState<string | undefined>(undefined)
 
@@ -65,13 +54,13 @@ export const SettingsBrowserView: React.FC<Props> = ({ route }) => {
                             allowsInlineMediaPlayback={true}
                         />
                     )}
-                    <ChangeAccountNetworkBottomSheet
+                    {/* <ChangeAccountNetworkBottomSheet
                         targetAccount={targetAccount}
                         targetNetwork={targetNetwork}
                         ref={ChangeAccountNetworkBottomSheetRef}
                         onClose={handleCloseChangeAccountNetworkBottomSheet}
                         onConfirm={handleConfirmChangeAccountNetworkBottomSheet}
-                    />
+                    /> */}
                 </View>
             }
         />
