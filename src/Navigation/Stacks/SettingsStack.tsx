@@ -20,6 +20,7 @@ import { Routes } from "~Navigation/Enums"
 import { AboutScreen } from "~Screens/Flows/App/AboutScreen"
 import { useNavAnimation } from "~Hooks"
 import { Device } from "~Model"
+import { SettingsBrowserView } from "~Screens/Flows/App/SettingsScreen/Components/SettingsBrowserView"
 
 export type RootStackParamListSettings = {
     [Routes.SETTINGS]: undefined
@@ -38,6 +39,8 @@ export type RootStackParamListSettings = {
     [Routes.MANAGE_DELEGATION_URLS]: undefined
     [Routes.RESET_APP]: undefined
     [Routes.SETTINGS_CONNECTED_APPS]: undefined
+    [Routes.SETTINGS_GET_SUPPORT]: { url: string }
+    [Routes.SETTINGS_GIVE_FEEDBACK]: { url: string }
 }
 
 const Settings = createNativeStackNavigator<RootStackParamListSettings>()
@@ -78,6 +81,19 @@ export const SettingsStack = () => {
                     component={AboutScreen}
                     options={{ headerShown: false }}
                 />
+
+                <Settings.Screen
+                    name={Routes.SETTINGS_GET_SUPPORT}
+                    component={SettingsBrowserView}
+                    options={{ headerShown: false }}
+                />
+
+                <Settings.Screen
+                    name={Routes.SETTINGS_GIVE_FEEDBACK}
+                    component={SettingsBrowserView}
+                    options={{ headerShown: false }}
+                />
+
                 <Settings.Screen
                     name={Routes.WALLET_MANAGEMENT}
                     component={WalletManagementScreen}

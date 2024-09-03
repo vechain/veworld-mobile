@@ -24,24 +24,42 @@ export const SettingsScreen = () => {
 
     const devFeaturesEnabled = useAppSelector(selectAreDevFeaturesEnabled)
 
-    const SCREEN_LIST = useMemo(() => getList(LL, devFeaturesEnabled), [devFeaturesEnabled, LL])
+    const { settingsList, supportList } = useMemo(() => getLists(LL, devFeaturesEnabled), [devFeaturesEnabled, LL])
 
     const { styles: themedStyles } = useThemedStyles(baseStyles)
 
     const renderItem = useCallback(
         ({ item }: { item: RowProps }) => (
-            <SettingsRow title={item.title} screenName={item.screenName} icon={item.icon} />
+            <SettingsRow title={item.title} screenName={item.screenName} icon={item.icon} url={item.url} />
         ),
         [],
     )
-    const flatListRef = useRef(null)
 
-    useScrollToTop(flatListRef)
+    const flatSettingListRef = useRef(null)
+    const flatSupportListRef = useRef(null)
+
+    useScrollToTop(flatSettingListRef)
     const theme = useTheme()
 
     const selectedAccount = useAppSelector(selectSelectedAccount)
     const isShowBackupModal = useCheckWalletBackup(selectedAccount)
     const nav = useNavigation()
+
+    const SupportList = useCallback(() => {
+        return (
+            <BaseView style={[themedStyles.list]}>
+                <BaseSpacer height={1} background={theme.colors.placeholder} />
+                <FlatList
+                    ref={flatSupportListRef}
+                    data={supportList}
+                    keyExtractor={item => item.screenName}
+                    showsVerticalScrollIndicator={false}
+                    showsHorizontalScrollIndicator={false}
+                    renderItem={renderItem}
+                />
+            </BaseView>
+        )
+    }, [renderItem, supportList, theme.colors.placeholder, themedStyles.list])
 
     const renderBackupWarning = useMemo(() => {
         return (
@@ -77,8 +95,8 @@ export const SettingsScreen = () => {
 
             <BaseView style={[themedStyles.list]}>
                 <FlatList
-                    ref={flatListRef}
-                    data={SCREEN_LIST}
+                    ref={flatSettingListRef}
+                    data={settingsList}
                     contentContainerStyle={themedStyles.contentContainerStyle}
                     scrollEnabled={isShowBackupModal || isSmallScreen}
                     keyExtractor={item => item.screenName}
@@ -87,6 +105,7 @@ export const SettingsScreen = () => {
                     renderItem={renderItem}
                     ListHeaderComponent={isShowBackupModal ? renderBackupWarning : undefined}
                     ListHeaderComponentStyle={themedStyles.headerContainer}
+                    ListFooterComponent={<SupportList />}
                 />
             </BaseView>
         </BaseSafeArea>
@@ -110,10 +129,10 @@ const baseStyles = (theme: ColorThemeType) =>
         headerContainer: { marginVertical: 12 },
     })
 
-const getList = (LL: TranslationFunctions, devEnabled: boolean) => {
+const getLists = (LL: TranslationFunctions, devEnabled: boolean) => {
     const settingsList: RowProps[] = [
         {
-            title: LL.TITLE_GENERAL(),
+            title: LL.TITLE_GENERAL_SETTINGS(),
             screenName: Routes.SETTINGS_GENERAL,
             icon: "cog-outline",
         },
@@ -148,6 +167,21 @@ const getList = (LL: TranslationFunctions, devEnabled: boolean) => {
             screenName: Routes.SETTINGS_CONNECTED_APPS,
             icon: "widgets-outline",
         },
+    ]
+
+    const supportList: RowProps[] = [
+        {
+            title: LL.TITLE_GET_SUPPORT(),
+            screenName: Routes.SETTINGS_GET_SUPPORT,
+            icon: "help-circle-outline",
+            url: "https://support.veworld.com",
+        },
+        {
+            title: LL.TITLE_GIVE_FEEDBACK(),
+            screenName: Routes.SETTINGS_GIVE_FEEDBACK,
+            icon: "message-outline",
+            url: "https://forms.office.com/e/Vq1CUJD9Vy",
+        },
         {
             title: LL.TITLE_ABOUT(),
             screenName: Routes.SETTINGS_ABOUT,
@@ -163,5 +197,5 @@ const getList = (LL: TranslationFunctions, devEnabled: boolean) => {
         })
     }
 
-    return settingsList
+    return { settingsList, supportList }
 }
