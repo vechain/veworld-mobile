@@ -189,7 +189,7 @@ const en: BaseTranslation = {
     TITLE_SETTINGS: "Settings",
     TITLE_GENERAL_SETTINGS: "General settings",
     TITLE_ADVANCED: "Advanced",
-    TITLE_CONTACTS: "Contacts",
+    TITLE_CONTACTS: "My Contacts",
     TITLE_ADD_CONTACT: "Add Contact",
     TITLE_MANAGE_WALLET: "Manage Wallet",
     TITLE_TRANSACTIONS: "Transactions",

@@ -154,7 +154,7 @@ const getLists = (LL: TranslationFunctions, devEnabled: boolean) => {
         {
             title: LL.TITLE_CONTACTS(),
             screenName: Routes.SETTINGS_CONTACTS,
-            icon: "book-outline",
+            icon: "account-multiple-outline",
         },
         {
             title: LL.TITLE_PRIVACY(),
