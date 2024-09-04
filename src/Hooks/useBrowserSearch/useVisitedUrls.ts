@@ -9,20 +9,22 @@ export const useVisitedUrls = () => {
     const { navigationState } = useInAppBrowser()
 
     const addVisitedUrl = useCallback(
-        (url: string) => {
-            const _url = new URL(url)
-            const href = _url.search.length === 0 ? URIUtils.clean(_url.href) : url
+        async (url: string) => {
+            if (await URIUtils.isValidBrowserUrl(url)) {
+                const _url = new URL(url)
+                const href = _url.search.length === 0 ? URIUtils.clean(_url.href) : url
 
-            const visitedUrl: DiscoveryDApp = {
-                name: navigationState?.title ?? _url.host,
-                href: href,
-                desc: "",
-                isCustom: true,
-                createAt: new Date().getTime(),
-                amountOfNavigations: 1,
+                const visitedUrl: DiscoveryDApp = {
+                    name: navigationState?.title ?? _url.host,
+                    href: href,
+                    desc: "",
+                    isCustom: true,
+                    createAt: new Date().getTime(),
+                    amountOfNavigations: 1,
+                }
+
+                dispatch(setVisitedUrl(visitedUrl))
             }
-
-            dispatch(setVisitedUrl(visitedUrl))
         },
         [dispatch, navigationState?.title],
     )

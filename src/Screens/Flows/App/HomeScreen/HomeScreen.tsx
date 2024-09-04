@@ -1,8 +1,18 @@
 import { useNavigation, useScrollToTop } from "@react-navigation/native"
 import React, { useCallback, useEffect, useMemo, useRef, useState } from "react"
+import { AccountCard, EditTokensBar, Header, TokenList } from "./Components"
 import { RefreshControl } from "react-native"
 import { NestableScrollContainer } from "react-native-draggable-flatlist"
 import { FadeInRight } from "react-native-reanimated"
+import {
+    useAnalyticTracking,
+    useBottomSheetModal,
+    useCheckVersion,
+    usePrefetchAllVns,
+    useMemoizedAnimation,
+    useSetSelectedAccount,
+    useTheme,
+} from "~Hooks"
 import {
     BaseIcon,
     BaseSpacer,
@@ -13,15 +23,6 @@ import {
     SelectAccountBottomSheet,
 } from "~Components"
 import { AnalyticsEvent } from "~Constants"
-import {
-    useAnalyticTracking,
-    useBottomSheetModal,
-    useCheckVersion,
-    useFetchAllVns,
-    useMemoizedAnimation,
-    useSetSelectedAccount,
-    useTheme,
-} from "~Hooks"
 import { AccountWithDevice, FastAction, WatchedAccount } from "~Model"
 import { Routes } from "~Navigation"
 import {
@@ -35,12 +36,11 @@ import {
 } from "~Storage/Redux"
 import { AccountUtils } from "~Utils"
 import { useI18nContext } from "~i18n"
-import { AccountCard, EditTokensBar, Header, TokenList } from "./Components"
 import { useTokenBalances } from "./Hooks"
 
 export const HomeScreen = () => {
     /* Pre Fetch all VNS names and addresses */
-    useFetchAllVns()
+    usePrefetchAllVns()
 
     const nav = useNavigation()
 
@@ -133,12 +133,14 @@ export const HomeScreen = () => {
             })
         }
 
-        actions.push({
-            name: LL.BTN_SWAP(),
-            action: () => nav.navigate(Routes.SWAP),
-            icon: <BaseIcon color={theme.colors.text} name="swap-horizontal" />,
-            testID: "swapButton",
-        })
+        if (!AccountUtils.isObservedAccount(selectedAccount)) {
+            actions.push({
+                name: LL.BTN_SWAP(),
+                action: () => nav.navigate(Routes.SWAP),
+                icon: <BaseIcon color={theme.colors.text} name="swap-horizontal" />,
+                testID: "swapButton",
+            })
+        }
 
         return actions
     }, [LL, nav, selectedAccount, theme.colors.text, track])

@@ -37,16 +37,18 @@ export const upsertTokenBalance =
 export const updateAccountBalances =
     (thorClient: Connex.Thor, accountAddress: string) => async (dispatch: Dispatch, getState: () => RootState) => {
         dispatch(setIsTokensOwnedLoading(true))
-
         const accountBalances = selectBalancesForAccount(getState(), accountAddress)
 
         if (accountBalances.length === 0) return
 
         const balancesMain: Balance[] = []
         const balancesTest: Balance[] = []
+        const balancesOther: Balance[] = []
 
         const main = selectNetworks(getState()).find((net: Network) => net.type === NETWORK_TYPE.MAIN)
         const test = selectNetworks(getState()).find((net: Network) => net.type === NETWORK_TYPE.TEST)
+        const other = selectNetworks(getState()).find((net: Network) => net.type === NETWORK_TYPE.OTHER)
+
         if (!main || !test) throw new Error("Networks not found")
 
         try {
@@ -76,6 +78,20 @@ export const updateAccountBalances =
                         ...balanceTest,
                     })
                 }
+
+                if (other) {
+                    const balanceOther = await BalanceUtils.getBalanceFromBlockchain(
+                        accountBalance.tokenAddress,
+                        accountAddress,
+                        other,
+                        thorClient,
+                    )
+                    if (balanceOther) {
+                        balancesOther.push({
+                            ...balanceOther,
+                        })
+                    }
+                }
             }
 
             dispatch(
@@ -93,6 +109,16 @@ export const updateAccountBalances =
                     newBalances: balancesTest,
                 }),
             )
+
+            if (other) {
+                dispatch(
+                    updateTokenBalances({
+                        network: other.type,
+                        accountAddress,
+                        newBalances: balancesOther,
+                    }),
+                )
+            }
         } catch (e) {
             throw new Error(`Failed to get balance from external service: ${e}`)
         } finally {

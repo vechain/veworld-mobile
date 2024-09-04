@@ -1,8 +1,8 @@
 import React, { memo, useMemo } from "react"
 import { StyleProp, StyleSheet, ViewProps, ViewStyle } from "react-native"
-import { useThemedStyles } from "~Hooks"
+import { useThemedStyles, useVns } from "~Hooks"
 import { ColorThemeType, VET, VTHO } from "~Constants"
-import { AccountUtils, BigNutils } from "~Utils"
+import { AccountUtils, AddressUtils, BigNutils } from "~Utils"
 import {
     AccountIcon,
     BaseIcon,
@@ -14,12 +14,7 @@ import {
     WatchedAccountBadge,
 } from "~Components"
 import { AccountWithDevice, DEVICE_TYPE, WatchedAccount } from "~Model"
-import {
-    selectVetBalanceByAccount,
-    selectVnsNameOrAddress,
-    selectVthoBalanceByAccount,
-    useAppSelector,
-} from "~Storage/Redux"
+import { selectVetBalanceByAccount, selectVthoBalanceByAccount, useAppSelector } from "~Storage/Redux"
 
 type Props = {
     account: AccountWithDevice | WatchedAccount
@@ -49,6 +44,10 @@ export const AccountCard: React.FC<Props> = memo(
         const { styles, theme } = useThemedStyles(baseStyles)
         const vetBalance = useAppSelector(state => selectVetBalanceByAccount(state, account.address))
         const vthoBalance = useAppSelector(state => selectVthoBalanceByAccount(state, account.address))
+        const { name: vnsName, address: vnsAddress } = useVns({
+            name: "",
+            address: account.address,
+        })
 
         const balance = useMemo(() => {
             if (!isBalanceVisible && isVthoBalance) {
@@ -79,8 +78,6 @@ export const AccountCard: React.FC<Props> = memo(
                 return account as WatchedAccount
             }
         }, [account])
-
-        const nameOrAddress = useAppSelector(state => selectVnsNameOrAddress(state, account.address, [4, 6]))
 
         return (
             <BaseView w={100} flexDirection="row" style={containerStyle}>
@@ -117,7 +114,7 @@ export const AccountCard: React.FC<Props> = memo(
                     ) : (
                         <BaseView style={styles.rightSubContainer}>
                             <BaseText style={styles.address} fontSize={10}>
-                                {nameOrAddress}
+                                {vnsName || AddressUtils.humanAddress(vnsAddress || account.address, 4, 6)}
                             </BaseText>
 
                             <BaseSpacer height={4} />

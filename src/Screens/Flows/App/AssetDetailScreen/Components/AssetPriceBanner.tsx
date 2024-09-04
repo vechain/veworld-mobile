@@ -10,6 +10,7 @@ import { typography, ColorThemeType } from "~Constants"
 import { AssetTrendBannerSkeleton } from "./AssetTrendBannerSkeleton"
 import { AssetPriceBannerSkeleton } from "./AssetPriceBannerSkeleton"
 import { isIOS } from "~Utils/PlatformUtils/PlatformUtils"
+import { PlatformUtils } from "~Utils"
 const { ...otherTypography } = typography
 
 type Props = {
@@ -97,6 +98,6 @@ const baseStyles = (theme: ColorThemeType) =>
             padding: 0,
         },
         icon: {
-            marginRight: -8,
+            marginRight: PlatformUtils.isAndroid() ? -8 : undefined,
         },
     })
