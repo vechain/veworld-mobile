@@ -78,24 +78,6 @@ const StoreContextProvider = ({ children }: StoreContextProviderProps) => {
     }, [])
 
     useEffect(() => {
-        // const init = async () => {
-        //     if (reduxStorage) {
-        //         if (persistor) {
-        //             info(ERROR_EVENTS.SECURITY, "Purging persistor", persistor.getState())
-        //             await persistor.purge()
-        //             info(ERROR_EVENTS.SECURITY, "Purged persistor", persistor.getState())
-
-        //             if (store.current) {
-        //                 store.current.dispatch({ type: PURGE })
-        //             }
-        //         }
-
-        //         initStore(reduxStorage.mmkv, reduxStorage.encryptionKey)
-        //     }
-        // }
-
-        // init()
-
         reduxStorage && initStore(reduxStorage.mmkv, reduxStorage.encryptionKey)
     }, [initStore, reduxStorage])
 

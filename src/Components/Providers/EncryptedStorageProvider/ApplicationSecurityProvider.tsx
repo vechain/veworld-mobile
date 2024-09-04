@@ -369,7 +369,7 @@ export const ApplicationSecurityProvider = ({ children }: ApplicationSecurityCon
 
                 newState = {
                     ...newState,
-                    devices: CryptoUtils.encryptState(walletState.devices, reduxKey),
+                    devices: JSON.stringify(CryptoUtils.encryptState(walletState.devices, reduxKey)),
                 }
 
                 // store the state in the new storage - UserEncryptedStorage_V2
