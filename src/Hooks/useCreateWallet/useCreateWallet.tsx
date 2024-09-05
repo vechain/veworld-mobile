@@ -56,7 +56,7 @@ export const useCreateWallet = () => {
             onError?: (error: unknown) => void
         }) => {
             try {
-                const isWalletImported = !importType ? false : true
+                const isWalletImported = !!importType
 
                 const { device, wallet } = createDevice(isWalletImported, mnemonic, privateKey)
 

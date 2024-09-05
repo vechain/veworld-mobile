@@ -3,7 +3,6 @@ import { generateDeviceForMnemonic, generateDeviceForPrivateKey, isSlowDevice } 
 import { HDNode } from "thor-devkit"
 import { CryptoUtils, HexUtils } from "~Utils"
 import { DEVICE_TYPE } from "~Model"
-import { DerivationPath } from "~Constants"
 
 // Mock the methods from react-native-device-info
 jest.mock("react-native-device-info", () => ({
@@ -37,7 +36,7 @@ describe("generateDeviceForMnemonic", () => {
         const hdNode = HDNode.fromMnemonic(mnemonicPhrase)
         const expectedXPub = CryptoUtils.xPubFromHdNode(hdNode)
 
-        const result = generateDeviceForMnemonic(mnemonicPhrase, deviceIndex, "Wallet 3", DerivationPath.VET, false)
+        const result = generateDeviceForMnemonic(mnemonicPhrase, deviceIndex, "Wallet 3", false)
 
         expect(result.wallet.mnemonic).toEqual(mnemonicPhrase)
         expect(result.wallet.privateKey).toBeUndefined()
@@ -74,7 +73,7 @@ describe("generateDeviceForMnemonic", () => {
         const hdNode = HDNode.fromMnemonic(mnemonicPhrase)
         const expectedXPub = CryptoUtils.xPubFromHdNode(hdNode)
 
-        const result = generateDeviceForMnemonic(mnemonicPhrase, deviceIndex, "Wallet 3", DerivationPath.VET, true)
+        const result = generateDeviceForMnemonic(mnemonicPhrase, deviceIndex, "Wallet 3", true)
 
         expect(result.wallet.mnemonic).toEqual(mnemonicPhrase)
         expect(result.wallet.privateKey).toBeUndefined()

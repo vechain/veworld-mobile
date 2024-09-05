@@ -16,8 +16,8 @@ export const generateDeviceForMnemonic = (
     mnemonic: string[],
     deviceIndex: number,
     alias: string,
-    path: DerivationPath = DerivationPath.VET,
     isImported: boolean,
+    path: DerivationPath = DerivationPath.VET,
 ): WalletAndDevice => {
     const hdNode = HDNode.fromMnemonic(mnemonic, path)
 

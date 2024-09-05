@@ -52,7 +52,7 @@ export const useDeviceUtils = () => {
 
         let walletAndDevice: WalletAndDevice
         if (mnemonic) {
-            walletAndDevice = DeviceUtils.generateDeviceForMnemonic(mnemonic, deviceIndex, alias, path, isImported)
+            walletAndDevice = DeviceUtils.generateDeviceForMnemonic(mnemonic, deviceIndex, alias, isImported, path)
         } else if (privateKey) {
             walletAndDevice = DeviceUtils.generateDeviceForPrivateKey(privateKey, deviceIndex, alias)
         } else throw new Error(ERRORS.UNKNOWN_ERROR)
