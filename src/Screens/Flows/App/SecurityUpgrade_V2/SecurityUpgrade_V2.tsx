@@ -1,11 +1,10 @@
 import React, { useCallback, useRef, useState } from "react"
-import { BaseButton, BaseSpacer, BaseText, BaseView, MigrationToSecurity_v2 } from "~Components"
-import { useBackHandler, useDisclosure } from "~Hooks"
-import { BackHandlerEvent, SecurityLevelType, Wallet } from "~Model"
 import { SafeAreaView } from "react-native-safe-area-context"
-import { COLORS } from "~Constants"
-import { BaseModalWithChildren, LockScreen, MnemonicBackup, WalletsList } from "./Standalone.components"
+import { BaseButton, BaseSpacer, BaseText, BaseView, MigrationToSecurity_v2 } from "~Components"
+import { useBackHandler, useDisclosure, useTheme } from "~Hooks"
+import { BackHandlerEvent, SecurityLevelType, Wallet } from "~Model"
 import { useWalletSecurity } from "./Helpers.standalone"
+import { BaseModalWithChildren, LockScreen, MnemonicBackup, WalletsList } from "./Standalone.components"
 
 export const SecurityUpgrade_V2 = ({
     oldPersistedState,
@@ -16,6 +15,7 @@ export const SecurityUpgrade_V2 = ({
     securityType: SecurityLevelType
     upgradeSecurityToV2: (password?: string) => Promise<void>
 }) => {
+    const theme = useTheme()
     useBackHandler(BackHandlerEvent.BLOCK)
 
     const [wallets, setWallets] = useState<Wallet[] | []>([])
@@ -111,8 +111,8 @@ export const SecurityUpgrade_V2 = ({
     )
 
     return (
-        <SafeAreaView style={{ backgroundColor: COLORS.LIGHT_GRAY }}>
-            <BaseView justifyContent="space-between" alignItems="center" h={100} bg={COLORS.LIGHT_GRAY}>
+        <SafeAreaView style={{ backgroundColor: theme.colors.background }}>
+            <BaseView justifyContent="space-between" alignItems="center" h={100}>
                 <BaseView alignItems="center">
                     <BaseText>{"SecurityUpgrade_V2"}</BaseText>
 

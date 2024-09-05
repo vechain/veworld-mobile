@@ -2,7 +2,8 @@ import React, { useCallback } from "react"
 import { Pressable, StyleSheet } from "react-native"
 import { widthPercentageToDP as wp } from "react-native-responsive-screen"
 import { BaseIcon, BaseText, BaseView } from "~Components"
-import { COLORS, valueToHP } from "~Constants"
+import { ColorThemeType, valueToHP } from "~Constants"
+import { useThemedStyles } from "~Hooks"
 
 const numPad = ["1", "2", "3", "4", "5", "6", "7", "8", "9", "blank", "0", "canc"]
 
@@ -12,6 +13,8 @@ export type NumPadProps = {
 }
 
 export const NumPad = ({ onDigitPress, onDigitDelete }: NumPadProps) => {
+    const { styles, theme } = useThemedStyles(baseStyles)
+
     const handleOnDigitPress = useCallback(
         (digit: string) => () => {
             onDigitPress(digit)
@@ -20,7 +23,7 @@ export const NumPad = ({ onDigitPress, onDigitDelete }: NumPadProps) => {
     )
 
     return (
-        <BaseView flexDirection="row" flexWrap="wrap" bg={COLORS.LIGHT_GRAY}>
+        <BaseView flexDirection="row" flexWrap="wrap" bg={theme.colors.background}>
             {numPad.map((digit, index) => {
                 const isDeleteKey = digit === "canc"
                 const onPress = isDeleteKey ? onDigitDelete : handleOnDigitPress(digit)
@@ -35,7 +38,7 @@ export const NumPad = ({ onDigitPress, onDigitDelete }: NumPadProps) => {
                                         {digit}
                                     </BaseText>
                                 ) : (
-                                    <BaseIcon name="backspace-outline" color={COLORS.DARK_PURPLE} />
+                                    <BaseIcon name="backspace-outline" color={theme.colors.text} />
                                 )}
                             </Pressable>
                         ) : null}
@@ -46,19 +49,20 @@ export const NumPad = ({ onDigitPress, onDigitDelete }: NumPadProps) => {
     )
 }
 
-const styles = StyleSheet.create({
-    width: {
-        width: "33%",
-        justifyContent: "center",
-        alignItems: "center",
-        paddingVertical: valueToHP[22],
-    },
-    pressable: {
-        width: wp("16%"),
-        height: wp("16%"),
-        justifyContent: "center",
-        alignItems: "center",
-        backgroundColor: COLORS.WHITE,
-        borderRadius: wp("9%"),
-    },
-})
+const baseStyles = (theme: ColorThemeType) =>
+    StyleSheet.create({
+        width: {
+            width: "33%",
+            justifyContent: "center",
+            alignItems: "center",
+            paddingVertical: valueToHP[22],
+        },
+        pressable: {
+            width: wp("18%"),
+            height: wp("18%"),
+            justifyContent: "center",
+            alignItems: "center",
+            backgroundColor: theme.colors.card,
+            borderRadius: wp("9%"),
+        },
+    })

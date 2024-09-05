@@ -1,8 +1,7 @@
 import React from "react"
 import { BaseSpacer, BaseText, BaseTouchable, BaseView } from "~Components"
+import { useCopyClipboard, useTheme } from "~Hooks"
 import { useI18nContext } from "~i18n"
-import { useCopyClipboard } from "~Hooks"
-import { COLORS } from "~Constants"
 import { Wallet } from "~Model"
 import { MnemonicCard } from "./MnemonicCard.standalone"
 
@@ -13,14 +12,13 @@ type Props = {
 
 export const MnemonicBackup = ({ wallet }: Props) => {
     const { LL } = useI18nContext()
+    const theme = useTheme()
     const { onCopyToClipboard } = useCopyClipboard()
 
     return (
-        <BaseView bg={COLORS.LIGHT_GRAY} px={24} h={100}>
+        <BaseView bg={theme.colors.background} px={24} h={100}>
             <BaseView flexDirection="row" w={100} pt={12}>
-                <BaseText typographyFont="subTitleBold" color={COLORS.DARK_PURPLE}>
-                    {LL.BTN_BACKUP_MENMONIC()}
-                </BaseText>
+                <BaseText typographyFont="subTitleBold">{LL.BTN_BACKUP_MENMONIC()}</BaseText>
             </BaseView>
 
             <BaseSpacer height={24} />

@@ -1,11 +1,11 @@
 import React, { memo, useCallback, useMemo, useState } from "react"
 import { BaseSpacer, BaseText, BaseView, StorageEncryptionKeyHelper } from "~Components"
-import { useOnDigitPress } from "~Hooks"
+import { isSmallScreen } from "~Constants"
+import { useOnDigitPress, useTheme } from "~Hooks"
 import { useI18nContext } from "~i18n"
 import { PinVerificationError, PinVerificationErrorType } from "~Model"
-import { PasswordPins } from "./PasswordPins.standalone"
-import { COLORS, isSmallScreen } from "~Constants"
 import { NumPad } from "./NumPad.standalone"
+import { PasswordPins } from "./PasswordPins.standalone"
 
 export type Props = {
     onSuccess: (password: string) => void
@@ -20,6 +20,7 @@ const digitNumber = 6
 
 export const LockScreen: React.FC<Props> = memo(({ onSuccess }) => {
     const { LL } = useI18nContext()
+    const theme = useTheme()
 
     const [isError, setIsError] = useState<PinVerificationErrorType>({
         type: undefined,
@@ -70,7 +71,7 @@ export const LockScreen: React.FC<Props> = memo(({ onSuccess }) => {
     }, [LL])
 
     return (
-        <BaseView flexGrow={1} bg={COLORS.LIGHT_GRAY}>
+        <BaseView flexGrow={1} bg={theme.colors.background}>
             <BaseSpacer height={20} />
             <BaseView mx={24} alignItems="center">
                 <BaseView alignSelf="flex-start">

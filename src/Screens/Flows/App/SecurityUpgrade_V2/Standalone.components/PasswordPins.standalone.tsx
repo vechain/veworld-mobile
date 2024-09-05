@@ -1,7 +1,8 @@
 import React, { memo, useMemo } from "react"
 import { StyleSheet } from "react-native"
 import { BaseText, BaseView, WrapTranslation } from "~Components"
-import { COLORS, valueToHP } from "~Constants"
+import { COLORS, ColorThemeType, valueToHP } from "~Constants"
+import { useThemedStyles } from "~Hooks"
 import { useI18nContext } from "~i18n"
 import { PinVerificationError, PinVerificationErrorType } from "~Model"
 
@@ -17,6 +18,7 @@ const MESSAGE_FAKE_PLACEHOLDER = "placeholder"
 export const PasswordPins = memo(({ pin, _digitNumber, isPINRetype, isPinError }: PasswordPinsProps) => {
     const { value: errorValue, type: errorType } = isPinError
     const { LL } = useI18nContext()
+    const { styles, theme } = useThemedStyles(baseStyles)
 
     const getMessageText = useMemo(() => {
         if (isPINRetype) return LL.BD_USER_PASSWORD_CONFIRM()
@@ -26,8 +28,8 @@ export const PasswordPins = memo(({ pin, _digitNumber, isPINRetype, isPinError }
                 <WrapTranslation
                     message={LL.BD_USER_PASSWORD_ERROR()}
                     renderComponent={() => (
-                        <BaseView justifyContent="center" alignItems="center" style={PasswordStyles.danferIcon}>
-                            <BaseText color={COLORS.DARK_RED} fontSize={10}>
+                        <BaseView justifyContent="center" alignItems="center" style={styles.danferIcon}>
+                            <BaseText color={theme.colors.danger} fontSize={10}>
                                 !
                             </BaseText>
                         </BaseView>
@@ -38,13 +40,13 @@ export const PasswordPins = memo(({ pin, _digitNumber, isPINRetype, isPinError }
         if (errorType === PinVerificationError.EDIT_PIN && errorValue) return LL.BD_USER_EDIT_PASSWORD_ERROR()
 
         return MESSAGE_FAKE_PLACEHOLDER
-    }, [isPINRetype, LL, errorType, errorValue])
+    }, [isPINRetype, LL, errorType, errorValue, styles.danferIcon, theme.colors.danger])
 
     const getMessageTextColor = useMemo(() => {
-        if (isPINRetype) return COLORS.DARK_PURPLE
-        if (isPinError) return COLORS.DARK_RED
+        if (isPINRetype) return theme.colors.text
+        if (isPinError) return theme.colors.danger
         return undefined
-    }, [isPINRetype, isPinError])
+    }, [isPINRetype, isPinError, theme.colors.danger, theme.colors.text])
 
     const getPinMessage = useMemo(() => {
         return (
@@ -69,10 +71,7 @@ export const PasswordPins = memo(({ pin, _digitNumber, isPINRetype, isPinError }
                         <BaseView
                             key={digit}
                             mx={10}
-                            style={[
-                                PasswordStyles.pinBase,
-                                ...(digitExist ? [PasswordStyles.pressed] : [PasswordStyles.notPressed]),
-                            ]}
+                            style={[styles.pinBase, ...(digitExist ? [styles.pressed] : [styles.notPressed])]}
                         />
                     )
                 })}
@@ -83,24 +82,25 @@ export const PasswordPins = memo(({ pin, _digitNumber, isPINRetype, isPinError }
     )
 })
 
-const PasswordStyles = StyleSheet.create({
-    pinBase: {
-        width: valueToHP[12],
-        height: valueToHP[12],
-        borderRadius: 6,
-    },
-    pressed: {
-        backgroundColor: COLORS.DARK_PURPLE,
-    },
-    notPressed: {
-        backgroundColor: COLORS.DARK_PURPLE_DISABLED,
-    },
-    messageTextStyle: { opacity: 1 },
-    danferIcon: {
-        borderRadius: 16,
-        height: 16,
-        width: 16,
-        borderWidth: 1,
-        borderColor: COLORS.DARK_RED,
-    },
-})
+const baseStyles = (theme: ColorThemeType) =>
+    StyleSheet.create({
+        pinBase: {
+            width: valueToHP[12],
+            height: valueToHP[12],
+            borderRadius: 6,
+        },
+        pressed: {
+            backgroundColor: theme.colors.text,
+        },
+        notPressed: {
+            backgroundColor: COLORS.DARK_PURPLE_DISABLED,
+        },
+        messageTextStyle: { opacity: 1 },
+        danferIcon: {
+            borderRadius: 16,
+            height: 16,
+            width: 16,
+            borderWidth: 1,
+            borderColor: theme.colors.danger,
+        },
+    })

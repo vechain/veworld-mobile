@@ -1,11 +1,10 @@
 import React, { FC, useCallback, useMemo } from "react"
 import { StyleSheet, TouchableWithoutFeedback } from "react-native"
+import { PlatformBlur } from "~Components"
 import { BaseIcon, BaseText, BaseView } from "~Components/Base"
-import { useDisclosure } from "~Hooks"
+import { useDisclosure, useTheme } from "~Hooks"
 import HapticsService from "~Services/HapticsService"
 import { useI18nContext } from "~i18n"
-import { COLORS } from "~Constants"
-import { PlatformBlur } from "~Components"
 
 type Props = {
     mnemonicArray: string[]
@@ -14,8 +13,9 @@ type Props = {
 export const MnemonicCard: FC<Props> = ({ mnemonicArray }) => {
     const { isOpen: isShow, onToggle: toggleShow } = useDisclosure()
     const { LL } = useI18nContext()
+    const theme = useTheme()
 
-    const iconColor = useMemo(() => COLORS.WHITE, [])
+    const iconColor = useMemo(() => (theme.isDark ? theme.colors.tertiary : theme.colors.card), [theme])
 
     const onPress = useCallback(async () => {
         HapticsService.triggerImpact({ level: "Light" })
@@ -25,7 +25,7 @@ export const MnemonicCard: FC<Props> = ({ mnemonicArray }) => {
     return (
         <BaseView>
             <TouchableWithoutFeedback onPress={onPress}>
-                <BaseView flexDirection="row" w={100} borderRadius={16} bg={COLORS.WHITE}>
+                <BaseView flexDirection="row" w={100} borderRadius={16} bg={theme.colors.card}>
                     <BaseView
                         px={16}
                         py={12}
@@ -44,7 +44,7 @@ export const MnemonicCard: FC<Props> = ({ mnemonicArray }) => {
                                     testID={`word-${index}`}>{`${index + 1}. ${word}`}</BaseText>
                             )
                         })}
-                        {!isShow && <PlatformBlur backgroundColor={COLORS.LIGHT_GRAY} text={LL.TAP_TO_VIEW()} />}
+                        {!isShow && <PlatformBlur backgroundColor={theme.colors.card} text={LL.TAP_TO_VIEW()} />}
                     </BaseView>
 
                     <BaseView
@@ -54,7 +54,7 @@ export const MnemonicCard: FC<Props> = ({ mnemonicArray }) => {
                         style={styles.button}
                         justifyContent="center"
                         alignItems="center"
-                        bg={COLORS.DARK_PURPLE}>
+                        bg={theme.colors.primary}>
                         <BaseIcon
                             name={isShow ? "eye-off-outline" : "eye-outline"}
                             size={18}

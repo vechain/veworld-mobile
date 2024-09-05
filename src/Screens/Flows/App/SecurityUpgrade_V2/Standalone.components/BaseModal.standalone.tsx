@@ -2,6 +2,7 @@ import React, { memo } from "react"
 import { Modal, ModalProps } from "react-native"
 import { BaseIcon, BaseView } from "~Components"
 import { COLORS } from "~Constants"
+import { useTheme } from "~Hooks"
 
 interface IBaseModal extends ModalProps {
     isOpen: boolean
@@ -13,15 +14,18 @@ interface IBaseModal extends ModalProps {
 
 export const BaseModalWithChildren: React.FC<IBaseModal> = memo(
     ({ isOpen, onClose, transparent, hasBackButton = true, children }) => {
+        const theme = useTheme()
+
         return (
             <BaseModal
                 isOpen={isOpen}
                 onClose={onClose}
                 transparent={transparent}
-                style={{ backgroundColor: COLORS.LIGHT_GRAY }}>
-                <BaseView justifyContent="flex-start" py={transparent ? 0 : 62} bg={COLORS.LIGHT_GRAY}>
+                style={{ backgroundColor: theme.colors.background }}>
+                <BaseView justifyContent="flex-start" py={transparent ? 0 : 62} bg={theme.colors.background}>
                     {hasBackButton && (
                         <BaseIcon
+                            color={theme.isDark ? COLORS.WHITE : COLORS.PURPLE}
                             haptics="Light"
                             px={12}
                             size={36}
@@ -41,6 +45,7 @@ export const BaseModalWithChildren: React.FC<IBaseModal> = memo(
 )
 
 const BaseModal: React.FC<IBaseModal> = ({ isOpen, onClose, children, transparent = false, ...otherProps }) => {
+    const theme = useTheme()
     return (
         <Modal
             visible={isOpen}
@@ -50,7 +55,7 @@ const BaseModal: React.FC<IBaseModal> = ({ isOpen, onClose, children, transparen
             presentationStyle={transparent ? "overFullScreen" : "fullScreen"}
             onDismiss={onClose}
             onRequestClose={onClose}
-            style={{ backgroundColor: COLORS.LIGHT_GRAY }}
+            style={{ backgroundColor: theme.colors.background }}
             {...otherProps}>
             {children}
         </Modal>
