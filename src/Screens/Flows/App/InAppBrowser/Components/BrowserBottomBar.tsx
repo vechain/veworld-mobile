@@ -1,9 +1,10 @@
 import React, { useMemo } from "react"
 import { StyleSheet } from "react-native"
-import { BaseIcon, BaseView, useInAppBrowser } from "~Components"
+import { BaseIcon, useInAppBrowser } from "~Components"
 import { useBlockchainNetwork, useDappBookmarking, useTheme, useThemedStyles } from "~Hooks"
 import { ColorThemeType } from "~Constants"
 import { isIOS } from "~Utils/PlatformUtils/PlatformUtils"
+import Animated, { useAnimatedStyle, withTiming } from "react-native-reanimated"
 
 type IconProps = {
     name: string
@@ -11,12 +12,28 @@ type IconProps = {
     disabled?: boolean
 }
 
-export const BrowserBottomBar: React.FC = () => {
+interface Props {
+    isVisible: boolean
+}
+
+export const BrowserBottomBar: React.FC<Props> = ({ isVisible }) => {
     const { canGoBack, canGoForward, goBack, goForward, navigationState, webviewRef } = useInAppBrowser()
     const theme = useTheme()
     const { isBookMarked, toggleBookmark } = useDappBookmarking(navigationState?.url)
     const { isMainnet } = useBlockchainNetwork()
     const { styles } = useThemedStyles(baseStyles(isMainnet))
+    const isIOSPlatform = isIOS()
+
+    const animatedStyles = useAnimatedStyle(() => {
+        const parsedPadding = isIOSPlatform ? 42 : 10
+
+        return {
+            transform: [{ translateY: isVisible ? withTiming(0) : withTiming(40) }],
+            opacity: isVisible ? withTiming(1) : withTiming(0),
+            paddingTop: isVisible ? withTiming(10) : withTiming(0),
+            paddingBottom: isVisible ? withTiming(parsedPadding) : withTiming(0),
+        }
+    })
 
     const IconConfig: IconProps[] = useMemo(() => {
         return [
@@ -42,7 +59,7 @@ export const BrowserBottomBar: React.FC = () => {
     }, [canGoBack, canGoForward, goBack, goForward, isBookMarked, toggleBookmark, webviewRef])
 
     return navigationState?.url ? (
-        <BaseView style={styles.bottomBar}>
+        <Animated.View style={[styles.bottomBar, styles.animatedContainer, animatedStyles]}>
             {IconConfig.map((config, index) => {
                 return (
                     <BaseIcon
@@ -56,12 +73,15 @@ export const BrowserBottomBar: React.FC = () => {
                     />
                 )
             })}
-        </BaseView>
+        </Animated.View>
     ) : null
 }
 
 const baseStyles = (isMainnet: boolean) => (theme: ColorThemeType) =>
     StyleSheet.create({
+        animatedContainer: {
+            opacity: 1,
+        },
         bottomBar: {
             display: "flex",
             flexDirection: "row",

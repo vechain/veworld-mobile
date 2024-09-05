@@ -4,8 +4,13 @@ import { StyleSheet } from "react-native"
 import { useBlockchainNetwork, useTheme } from "~Hooks"
 import { Routes } from "~Navigation"
 import { useNavigation } from "@react-navigation/native"
+import Animated, { useAnimatedStyle, withTiming } from "react-native-reanimated"
 
-export const URLBar = () => {
+interface Props {
+    isVisible: boolean
+}
+
+export const URLBar: React.FC<Props> = ({ isVisible }) => {
     const { navigationState } = useInAppBrowser()
     const nav = useNavigation()
     const { isMainnet } = useBlockchainNetwork()
@@ -40,45 +45,56 @@ export const URLBar = () => {
 
     const theme = useTheme()
 
+    const animatedStyles = useAnimatedStyle(() => ({
+        transform: [{ translateY: isVisible ? withTiming(0) : withTiming(-50) }],
+        height: isVisible ? withTiming(40) : withTiming(0),
+        opacity: isVisible ? withTiming(1) : withTiming(0),
+    }))
+
     return navigationState?.url ? (
-        <BaseView style={styles.inputContainer}>
-            {/* Icon on the left */}
-            <BaseIcon
-                haptics="Light"
-                size={20}
-                style={[styles.icon]}
-                name={isSecure ? "lock-check-outline" : "lock-open-outline"}
-                color={isSecure ? theme.colors.text : theme.colors.alertRedMedium}
-            />
+        <Animated.View style={[styles.animatedContainer, animatedStyles]}>
+            <BaseView style={styles.inputContainer}>
+                {/* Icon on the left */}
+                <BaseIcon
+                    haptics="Light"
+                    size={20}
+                    style={[styles.icon]}
+                    name={isSecure ? "lock-check-outline" : "lock-open-outline"}
+                    color={isSecure ? theme.colors.text : theme.colors.alertRedMedium}
+                />
 
-            {/* URL Text centered */}
-            <BaseView flex={1} flexDirection="row" justifyContent="space-between">
-                <BaseText
-                    w={isMainnet ? 100 : 65}
-                    color={theme.colors.text}
-                    fontSize={14}
-                    fontWeight="500"
-                    style={[styles.urlText]}
-                    numberOfLines={1}
-                    ellipsizeMode="tail">
-                    {urlText}
-                </BaseText>
+                {/* URL Text centered */}
+                <BaseView flex={1} flexDirection="row" justifyContent="space-between">
+                    <BaseText
+                        w={isMainnet ? 100 : 65}
+                        color={theme.colors.text}
+                        fontSize={14}
+                        fontWeight="500"
+                        style={[styles.urlText]}
+                        numberOfLines={1}
+                        ellipsizeMode="tail">
+                        {urlText}
+                    </BaseText>
 
-                {!isMainnet && <SelectedNetworkViewer />}
+                    {!isMainnet && <SelectedNetworkViewer />}
+                </BaseView>
+
+                <BaseIcon
+                    action={navBackToDiscover}
+                    haptics="Light"
+                    style={[styles.icon]}
+                    name="close"
+                    color={isSecure ? theme.colors.text : theme.colors.alertRedMedium}
+                />
             </BaseView>
-
-            <BaseIcon
-                action={navBackToDiscover}
-                haptics="Light"
-                style={[styles.icon]}
-                name="close"
-                color={isSecure ? theme.colors.text : theme.colors.alertRedMedium}
-            />
-        </BaseView>
+        </Animated.View>
     ) : null
 }
 
 const styles = StyleSheet.create({
+    animatedContainer: {
+        opacity: 1,
+    },
     inputContainer: {
         width: "100%",
         height: 40,
@@ -87,6 +103,7 @@ const styles = StyleSheet.create({
         flexDirection: "row",
         justifyContent: "space-between",
     },
+
     urlText: {
         textAlign: "center", // centers the text
         marginHorizontal: 10, // adds space around the text

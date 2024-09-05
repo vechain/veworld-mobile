@@ -1,6 +1,6 @@
 import { Layout, useInAppBrowser } from "~Components"
 import { StyleSheet, View } from "react-native"
-import React, { MutableRefObject, useEffect, useMemo } from "react"
+import React, { MutableRefObject, useCallback, useEffect, useMemo, useRef, useState } from "react"
 import WebView from "react-native-webview"
 import { BrowserBottomBar, URLBar } from "./Components"
 import { NativeStackScreenProps } from "@react-navigation/native-stack"
@@ -11,8 +11,17 @@ import { AnalyticsEvent } from "~Constants"
 import { useAnalyticTracking } from "~Hooks"
 import { useNavigation } from "@react-navigation/native"
 import { RumManager } from "~Logging/RumManager"
+import { Double } from "react-native/Libraries/Types/CodegenTypes"
+// import { SlideOutUp, SlideInDown } from "react-native-reanimated"
 
 type Props = NativeStackScreenProps<RootStackParamListBrowser, Routes.BROWSER>
+
+type ScrollOffset = { x: Double; y: Double }
+enum ScrollDirection {
+    NONE = "NONE",
+    UP = "UP",
+    DOWN = "DOWN",
+}
 
 export const InAppBrowser: React.FC<Props> = ({ route }) => {
     const {
@@ -30,6 +39,9 @@ export const InAppBrowser: React.FC<Props> = ({ route }) => {
 
     const track = useAnalyticTracking()
     const nav = useNavigation()
+
+    let prevY = useRef<Double>(0)
+    const [showToolbars, setShowToolbars] = useState(true)
 
     const ddLogger = useMemo(() => new RumManager(), [])
 
@@ -54,14 +66,39 @@ export const InAppBrowser: React.FC<Props> = ({ route }) => {
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [])
 
+    const detectScrollDirection = useCallback(
+        (offset: ScrollOffset): ScrollDirection => {
+            const { y } = offset
+            let direction = ScrollDirection.NONE
+
+            if (prevY.current < y) direction = ScrollDirection.DOWN
+            if (prevY.current > y) direction = ScrollDirection.UP
+
+            prevY.current = y
+
+            return direction
+        },
+        [prevY],
+    )
+
+    const handleScroll = useCallback(
+        (offset: ScrollOffset) => {
+            const direction = detectScrollDirection(offset)
+            if (direction === ScrollDirection.DOWN && showToolbars) setShowToolbars(false)
+            if (direction === ScrollDirection.UP && !showToolbars) setShowToolbars(true)
+            if (offset.y === 0 || offset.y < 0) setShowToolbars(true)
+        },
+        [detectScrollDirection, showToolbars],
+    )
+
     return (
         <Layout
-            fixedHeader={<URLBar />}
+            fixedHeader={<URLBar isVisible={showToolbars} />}
             noBackButton
             noMargin
             hasSafeArea={false}
             hasTopSafeAreaOnly
-            footer={<BrowserBottomBar />}
+            footer={<BrowserBottomBar isVisible={showToolbars} />}
             fixedBody={
                 <View style={styles.container}>
                     {userAgent && (
@@ -74,6 +111,9 @@ export const InAppBrowser: React.FC<Props> = ({ route }) => {
                             onMessage={onMessage}
                             style={styles.loginWebView}
                             scalesPageToFit={true}
+                            onScroll={e => {
+                                handleScroll(e.nativeEvent.contentOffset)
+                            }}
                             injectedJavaScriptBeforeContentLoaded={injectVechainScript}
                             allowsInlineMediaPlayback={true}
                         />
