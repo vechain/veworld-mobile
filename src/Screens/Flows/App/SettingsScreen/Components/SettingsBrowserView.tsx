@@ -45,7 +45,6 @@ export const SettingsBrowserView: React.FC<Props> = ({ route }) => {
                             userAgent={userAgent}
                             javaScriptEnabled={true}
                             style={styles.loginWebView}
-                            // bounces={false}
                             scalesPageToFit={true}
                             allowsInlineMediaPlayback={true}
                             onNavigationStateChange={onNavigationStateChange}
