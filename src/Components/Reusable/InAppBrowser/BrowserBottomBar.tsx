@@ -52,7 +52,9 @@ export const BrowserBottomBar: React.FC = () => {
             },
             {
                 name: isBookMarked ? "bookmark" : "bookmark-outline",
-                onPress: () => toggleBookmark(),
+                onPress: () => {
+                    toggleBookmark()
+                },
                 disabled: !fromDiscovery,
             },
             {
