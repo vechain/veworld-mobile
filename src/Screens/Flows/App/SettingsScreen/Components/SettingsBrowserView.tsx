@@ -1,8 +1,7 @@
-import { Layout, useInAppBrowser } from "~Components"
+import { Layout, useInAppBrowser, BrowserBottomBar, URLBar } from "~Components"
 import { StyleSheet, View } from "react-native"
 import React, { MutableRefObject, useEffect } from "react"
 import WebView from "react-native-webview"
-import { BrowserBottomBar, URLBar } from "../../InAppBrowser/Components"
 import { NativeStackScreenProps } from "@react-navigation/native-stack"
 import { RootStackParamListSettings, Routes } from "~Navigation"
 import DeviceInfo from "react-native-device-info"
@@ -13,7 +12,7 @@ type Props = NativeStackScreenProps<
 >
 
 export const SettingsBrowserView: React.FC<Props> = ({ route }) => {
-    const { webviewRef, onMessage, injectVechainScript, onNavigationStateChange, resetWebViewState } = useInAppBrowser()
+    const { webviewRef, resetWebViewState, onScroll, onNavigationStateChange } = useInAppBrowser()
 
     const [userAgent, setUserAgent] = React.useState<string | undefined>(undefined)
 
@@ -44,13 +43,13 @@ export const SettingsBrowserView: React.FC<Props> = ({ route }) => {
                             ref={webviewRef as MutableRefObject<WebView>}
                             source={{ uri: route.params.url }}
                             userAgent={userAgent}
-                            onNavigationStateChange={onNavigationStateChange}
                             javaScriptEnabled={true}
-                            onMessage={onMessage}
                             style={styles.loginWebView}
+                            // bounces={false}
                             scalesPageToFit={true}
-                            injectedJavaScriptBeforeContentLoaded={injectVechainScript}
                             allowsInlineMediaPlayback={true}
+                            onNavigationStateChange={onNavigationStateChange}
+                            onScroll={onScroll}
                         />
                     )}
                 </View>

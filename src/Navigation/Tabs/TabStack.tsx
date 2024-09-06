@@ -55,6 +55,8 @@ export const TabStack = () => {
 
     const display = useMemo(() => {
         switch (currentScreen) {
+            case Routes.SETTINGS_GET_SUPPORT:
+            case Routes.SETTINGS_GIVE_FEEDBACK:
             case Routes.BROWSER:
                 return "none"
 
