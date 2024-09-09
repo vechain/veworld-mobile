@@ -20,16 +20,6 @@ export const AboutScreen = () => {
             url: "https://www.veworld.com/",
         },
         {
-            title: LL.SETTINGS_ABOUT_SUPPORT(),
-            subtitle: LL.SETTINGS_ABOUT_FIND_COMMON_PROBLEMS(),
-            url: "https://support.veworld.com/",
-        },
-        {
-            title: LL.SETTINGS_ABOUT_SUGGEST_NEW_FEATURE(),
-            subtitle: LL.SETTINGS_ABOUT_VEWORLD_NEW_FEATURES(),
-            url: "https://forms.office.com/e/Vq1CUJD9Vy",
-        },
-        {
             title: LL.SETTINGS_ABOUT_OUR_COMMITMENT(),
             subtitle: LL.SETTINGS_ABOUT_PRIVACY_POLICY(),
             url: "https://www.veworld.net/privacy-policy",
