@@ -25,11 +25,13 @@ import { LedgerAndroidPermissions } from "../Hooks/LedgerAndroidPermissions"
 import { useAnalyticTracking, useScanLedgerDevices } from "~Hooks"
 import { AnalyticsEvent } from "~Constants"
 import { PlatformUtils } from "~Utils"
+import { selectHasOnboarded, useAppSelector } from "~Storage/Redux"
 
 export const SelectLedgerDevice = () => {
     const { LL } = useI18nContext()
     const nav = useNavigation()
     const track = useAnalyticTracking()
+    const userHasOnboarded = useAppSelector(selectHasOnboarded)
 
     const [selectedDevice, setSelectedDevice] = useState<ConnectedLedgerDevice>()
 
@@ -102,6 +104,10 @@ export const SelectLedgerDevice = () => {
 
     useEffect(() => {
         track(AnalyticsEvent.IMPORT_HW_PAGE_LOADED)
+        // Tracking event used to detect when start the process to import a new hardware wallet
+        // this in combination with the WALLET_GENERATION result help to track bugs on the
+        // Ledger connection
+        track(AnalyticsEvent.IMPORT_HW_LEDGER_START, { context: userHasOnboarded ? "management" : "onboarding" })
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [])
     return (
