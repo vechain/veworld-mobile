@@ -62,9 +62,27 @@ const VeBetterDaoDAppCard = ({ onPress, containerStyle, item, areDappsLoading }:
         }
     }, [])
 
+    const getImageSourceValue = useMemo(() => {
+        switch (true) {
+            case !!data?.ve_world?.banner:
+                return data?.ve_world?.banner
+            case !!localDApp?.ve_world?.banner:
+                return localDApp?.ve_world?.banner
+            case !!data?.banner:
+                return data?.banner
+            case !!localDApp?.banner:
+                return localDApp?.banner
+            default:
+                return ""
+        }
+    }, [data?.banner, data?.ve_world?.banner, localDApp?.banner, localDApp?.ve_world?.banner])
+
     if (error) {
-        return localDApp?.ve_world?.banner ? (
-            <Card href={localDApp.external_url} source={getImagerSource(localDApp.ve_world?.banner)} />
+        return localDApp?.ve_world?.banner || localDApp?.banner ? (
+            <Card
+                href={localDApp.external_url}
+                source={getImagerSource(localDApp.ve_world?.banner ?? localDApp?.banner)}
+            />
         ) : null
     }
 
@@ -79,7 +97,7 @@ const VeBetterDaoDAppCard = ({ onPress, containerStyle, item, areDappsLoading }:
     ) : (
         <Card
             href={URIUtils.convertHttpToHttps(data?.external_url ?? "https://governance.vebetterdao.org/apps")}
-            source={getImagerSource(data?.ve_world?.banner ?? localDApp?.ve_world?.banner ?? "")}
+            source={getImagerSource(getImageSourceValue)}
         />
     )
 }

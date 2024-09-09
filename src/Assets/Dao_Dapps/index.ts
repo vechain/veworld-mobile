@@ -220,7 +220,7 @@ const localDaoDAppsMetadata: VeBetterDaoDAppMetadata[] = [
         },
     },
     {
-        name: "NFBC",
+        name: "Non Fungible Book Club (NFBC)",
         description:
             "Non-Fungible Book Club’s (NFBC) audio streaming DApp offers a sustainable alternative to traditional literary consumption. Partake in minting and streaming audiobook content and help reduce the waste products of the traditional print industry. With a free, and fee-delegated array of audiobook titles to enjoy, visit the NFBC BETA DApp and claim your audio NFTs today!",
         logo: "ipfs://bafybeigydxvvtzcct36rnxy7dqaad3xrxb7itokv5uxym2vavii4cilyiq/media/logo.jpeg",
