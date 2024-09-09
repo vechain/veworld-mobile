@@ -39,7 +39,7 @@ export const TabStack = () => {
 
     const renderTabBarIcon = useCallback(
         (focused: boolean, iconName: string) => {
-            const isSettings = iconName === "cog" || iconName === "cog-outline"
+            const isSettings = iconName === "menu"
 
             return (
                 <TabIcon
@@ -55,6 +55,8 @@ export const TabStack = () => {
 
     const display = useMemo(() => {
         switch (currentScreen) {
+            case Routes.SETTINGS_GET_SUPPORT:
+            case Routes.SETTINGS_GIVE_FEEDBACK:
             case Routes.BROWSER:
                 return "none"
 
@@ -126,7 +128,7 @@ export const TabStack = () => {
                 options={{
                     tabBarLabel: "Settings",
                     tabBarTestID: "settings-tab",
-                    tabBarIcon: ({ focused }) => renderTabBarIcon(focused, focused ? "cog" : "cog-outline"),
+                    tabBarIcon: ({ focused }) => renderTabBarIcon(focused, "menu"),
                 }}
             />
         </Tab.Navigator>

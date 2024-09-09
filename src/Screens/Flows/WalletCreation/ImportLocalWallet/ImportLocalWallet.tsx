@@ -68,6 +68,8 @@ export const ImportLocalWallet = () => {
     const mnemonicCache = useRef<string[]>()
     const privateKeyCache = useRef<string>()
 
+    const importType = useMemo(() => CryptoUtils.determineKeyImportType(textValue), [textValue])
+
     const {
         isPasswordPromptOpen: isPasswordPromptOpen_1,
         handleClosePasswordModal: handleClosePasswordModal_1,
@@ -79,13 +81,12 @@ export const ImportLocalWallet = () => {
                 importMnemonic: mnemonicCache.current,
                 privateKey: privateKeyCache.current,
                 pin,
+                importType,
             })
             nav.goBack()
         },
         allowAutoPassword: false,
     })
-
-    const importType = useMemo(() => CryptoUtils.determineKeyImportType(textValue), [textValue])
 
     const processErrorMessage = useCallback(
         (err: unknown) => {
@@ -119,7 +120,7 @@ export const ImportLocalWallet = () => {
                 if (userHasOnboarded) {
                     checkIdentityBeforeOpening_1()
                 } else {
-                    onCreateWallet({ importMnemonic: mnemonic })
+                    onCreateWallet({ importMnemonic: mnemonic, importType: IMPORT_TYPE.MNEMONIC })
                 }
             } catch (err) {
                 processErrorMessage(err)
@@ -145,7 +146,7 @@ export const ImportLocalWallet = () => {
                 if (userHasOnboarded) {
                     checkIdentityBeforeOpening_1()
                 } else {
-                    onCreateWallet({ privateKey: _privKey })
+                    onCreateWallet({ privateKey: _privKey, importType: IMPORT_TYPE.PRIVATE_KEY })
                 }
             } catch (err) {
                 processErrorMessage(err)
@@ -172,7 +173,7 @@ export const ImportLocalWallet = () => {
                 if (userHasOnboarded) {
                     checkIdentityBeforeOpening_1()
                 } else {
-                    onCreateWallet({ privateKey })
+                    onCreateWallet({ privateKey, importType: IMPORT_TYPE.KEYSTORE_FILE })
                 }
             } catch (err) {
                 processErrorMessage(err)
