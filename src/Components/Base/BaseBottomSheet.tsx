@@ -20,6 +20,9 @@ import { BackHandlerEvent } from "~Model"
 import { isAndroid } from "~Utils/PlatformUtils/PlatformUtils"
 import { useSafeAreaInsets } from "react-native-safe-area-context"
 
+const OPENED_STATE = 0
+const CLOSED_STATE = -1
+
 type Props = Omit<BottomSheetModalProps, "snapPoints"> & {
     children: React.ReactNode
     title?: LocalizedString
@@ -72,7 +75,7 @@ export const BaseBottomSheet = React.forwardRef<BottomSheetModalMethods, Props>(
         },
         ref,
     ) => {
-        const { onChange: onChangeFromProps, ...otherProps } = props
+        const { onChange, ...sheetProps } = props
         const { styles } = useThemedStyles(baseStyles)
         const { height: windowHeight } = useWindowDimensions()
         const { bottom: bottomSafeAreaSize } = useSafeAreaInsets()
@@ -112,20 +115,20 @@ export const BaseBottomSheet = React.forwardRef<BottomSheetModalMethods, Props>(
             [styles],
         )
 
-        const onChange = useCallback(
+        const onSheetPositionChange = useCallback(
             (index: number) => {
                 setSheetState(index)
-                onChangeFromProps && onChangeFromProps(index)
+                onChange && onChange(index)
             },
-            [onChangeFromProps],
+            [onChange],
         )
 
         useEffect(() => {
-            if (sheetState === 0) {
+            if (sheetState === OPENED_STATE) {
                 addBackHandlerListener()
             }
 
-            if (sheetState === -1) {
+            if (sheetState === CLOSED_STATE) {
                 removeBackHandlerListener()
             }
         }, [addBackHandlerListener, removeBackHandlerListener, sheetState])
@@ -169,8 +172,8 @@ export const BaseBottomSheet = React.forwardRef<BottomSheetModalMethods, Props>(
                 keyboardBehavior="interactive"
                 keyboardBlurBehavior="restore"
                 snapPoints={snappoints}
-                onChange={onChange}
-                {...otherProps}>
+                onChange={onSheetPositionChange}
+                {...sheetProps}>
                 <BaseView
                     w={100}
                     px={noMargins ? 0 : 24}
