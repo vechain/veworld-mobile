@@ -1,4 +1,4 @@
-import React, { useCallback, useMemo } from "react"
+import React, { useCallback, useEffect, useMemo } from "react"
 import {
     BackButtonHeader,
     BaseButton,
@@ -41,6 +41,12 @@ export const WelcomeScreen = () => {
     const goToPrivacyPolicy = useCallback(() => {
         const url = process.env.REACT_APP_PRIVACY_POLICY_URL
         url && Linking.openURL(url)
+    }, [])
+
+    useEffect(() => {
+        // Track when a new onboarding start
+        track(AnalyticsEvent.ONBOARDING_START)
+        // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [])
 
     const DEV_DEMO_BUTTON = useDemoWallet()

@@ -1,8 +1,7 @@
-import { Layout, useInAppBrowser } from "~Components"
+import { Layout, useInAppBrowser, BrowserBottomBar, URLBar } from "~Components"
 import { StyleSheet, View } from "react-native"
 import React, { MutableRefObject, useEffect, useMemo } from "react"
 import WebView from "react-native-webview"
-import { BrowserBottomBar, URLBar } from "./Components"
 import { NativeStackScreenProps } from "@react-navigation/native-stack"
 import { RootStackParamListBrowser, Routes } from "~Navigation"
 import DeviceInfo from "react-native-device-info"
@@ -18,6 +17,7 @@ export const InAppBrowser: React.FC<Props> = ({ route }) => {
     const {
         webviewRef,
         onMessage,
+        onScroll,
         injectVechainScript,
         onNavigationStateChange,
         resetWebViewState,
@@ -72,6 +72,7 @@ export const InAppBrowser: React.FC<Props> = ({ route }) => {
                             onNavigationStateChange={onNavigationStateChange}
                             javaScriptEnabled={true}
                             onMessage={onMessage}
+                            onScroll={onScroll}
                             style={styles.loginWebView}
                             scalesPageToFit={true}
                             injectedJavaScriptBeforeContentLoaded={injectVechainScript}

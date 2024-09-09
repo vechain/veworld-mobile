@@ -34,7 +34,7 @@ describe("createDevice", () => {
             "patrol marriage valve view dismiss history retire mystery garlic limb adult swing dilemma dynamic hungry".split(
                 " ",
             )
-        const { device, wallet } = hook.current.createDevice(mnemonic)
+        const { device, wallet } = hook.current.createDevice(true, mnemonic)
         expect(device).toBeDefined()
         expect(wallet).toBeDefined()
         expect(device.rootAddress).toBeDefined()
@@ -51,7 +51,7 @@ describe("createDevice", () => {
         })
 
         const privateKey = "99f0500549792796c14fed62011a51081dc5b5e68fe8bd8a13b86be829c4fd36"
-        const { device, wallet } = hook.current.createDevice(undefined, privateKey)
+        const { device, wallet } = hook.current.createDevice(true, undefined, privateKey)
         expect(device).toBeDefined()
         expect(wallet).toBeDefined()
         expect(device.rootAddress).toBeDefined()
@@ -84,7 +84,7 @@ describe("createDevice", () => {
                 " ",
             )
         expect(() => {
-            result.current.createDevice(mnemonic)
+            result.current.createDevice(true, mnemonic)
         }).toThrowError(ERRORS.ADDRESS_EXISTS)
     })
 })

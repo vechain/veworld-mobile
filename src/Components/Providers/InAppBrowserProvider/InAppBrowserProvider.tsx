@@ -1,6 +1,7 @@
 import { BottomSheetModalMethods } from "@gorhom/bottom-sheet/lib/typescript/types"
 import { useNavigation } from "@react-navigation/native"
 import React, { useCallback, useContext, useMemo, useRef, useState } from "react"
+import { NativeScrollEvent, NativeScrollPoint, NativeSyntheticEvent } from "react-native"
 import WebView, { WebViewMessageEvent, WebViewNavigation } from "react-native-webview"
 import { showInfoToast, showWarningToast } from "~Components"
 import { AnalyticsEvent, ERROR_EVENTS, RequestMethods } from "~Constants"
@@ -23,9 +24,13 @@ import { AddressUtils, DAppUtils, debug, warn } from "~Utils"
 import { compareAddresses } from "~Utils/AddressUtils/AddressUtils"
 import { WindowRequest, WindowResponse } from "./types"
 
+// Resolve an issue with types for the WebView component
+type EnhancedScrollEvent = Omit<NativeScrollEvent, "zoomScale"> & { zoomScale?: number }
+
 type ContextType = {
     webviewRef: React.MutableRefObject<WebView | undefined>
     onMessage: (event: WebViewMessageEvent) => void
+    onScroll: (event: NativeSyntheticEvent<Readonly<EnhancedScrollEvent>>) => void
     postMessage: (message: WindowResponse) => void
     onNavigationStateChange: (navState: WebViewNavigation) => void
     injectVechainScript: string
@@ -37,6 +42,7 @@ type ContextType = {
     goForward: () => void
     goHome: () => void
     navigateToUrl: (url: string) => void
+    showToolbars: boolean
     navigationState: WebViewNavigation | undefined
     resetWebViewState: () => void
     addAppAndNavToRequest: (request: InAppRequest) => void
@@ -49,6 +55,12 @@ type ContextType = {
 }
 
 const Context = React.createContext<ContextType | undefined>(undefined)
+
+enum ScrollDirection {
+    NONE = "NONE",
+    UP = "UP",
+    DOWN = "DOWN",
+}
 
 type Props = {
     children: React.ReactNode
@@ -74,6 +86,7 @@ export const InAppBrowserProvider = ({ children }: Props) => {
     const [targetAccount, setTargetAccount] = useState<AccountWithDevice>()
     const [targetNetwork, setTargetNetwork] = useState<Network>()
     const [navigateToOperation, setNavigateToOperation] = useState<Function>()
+    const [showToolbars, setShowToolbars] = useState(true)
 
     const handleCloseChangeAccountNetworkBottomSheet = useCallback(() => {
         closeChangeAccountNetworkBottomSheet()
@@ -92,6 +105,7 @@ export const InAppBrowserProvider = ({ children }: Props) => {
     const dispatch = useAppDispatch()
 
     const track = useAnalyticTracking()
+    let prevY = useRef<number>(0) // Used to detect the scroll direction of the web view
     const webviewRef = useRef<WebView | undefined>()
 
     const [navigationState, setNavigationState] = useState<WebViewNavigation | undefined>(undefined)
@@ -499,6 +513,34 @@ export const InAppBrowserProvider = ({ children }: Props) => {
         [validateTxMessage, validateCertMessage],
     )
 
+    const detectScrollDirection = useCallback(
+        (offset: NativeScrollPoint): ScrollDirection => {
+            const { y } = offset
+            let direction = ScrollDirection.NONE
+            if (prevY.current < y) direction = ScrollDirection.DOWN
+            if (prevY.current > y) direction = ScrollDirection.UP
+
+            prevY.current = y
+
+            return direction
+        },
+        [prevY],
+    )
+
+    const onScroll = useCallback(
+        (event: NativeSyntheticEvent<Readonly<EnhancedScrollEvent>>) => {
+            const { contentOffset: offset, layoutMeasurement, contentSize } = event.nativeEvent
+            const direction = detectScrollDirection(offset)
+            // Threshold to avoid the toolbars glitch when the scroll bounce
+            const threshold = contentSize.height - layoutMeasurement.height - 1
+
+            if (direction === ScrollDirection.DOWN && showToolbars) setShowToolbars(false)
+            if (direction === ScrollDirection.UP && !showToolbars && offset.y <= threshold) setShowToolbars(true)
+            if (offset.y === 0 || offset.y < 0) setShowToolbars(true)
+        },
+        [detectScrollDirection, showToolbars],
+    )
+
     const onNavigationStateChange = useCallback((navState: WebViewNavigation) => {
         setNavigationState(navState)
     }, [])
@@ -528,6 +570,7 @@ export const InAppBrowserProvider = ({ children }: Props) => {
         return {
             webviewRef,
             onMessage,
+            onScroll,
             postMessage,
             injectVechainScript: injectedJs,
             onNavigationStateChange,
@@ -539,6 +582,7 @@ export const InAppBrowserProvider = ({ children }: Props) => {
             goForward,
             navigateToUrl,
             goHome,
+            showToolbars,
             navigationState,
             resetWebViewState,
             addAppAndNavToRequest,
@@ -551,6 +595,7 @@ export const InAppBrowserProvider = ({ children }: Props) => {
         }
     }, [
         onMessage,
+        onScroll,
         postMessage,
         onNavigationStateChange,
         nav,
@@ -561,6 +606,7 @@ export const InAppBrowserProvider = ({ children }: Props) => {
         goForward,
         navigateToUrl,
         goHome,
+        showToolbars,
         navigationState,
         resetWebViewState,
         addAppAndNavToRequest,
