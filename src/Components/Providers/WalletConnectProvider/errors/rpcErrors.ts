@@ -1,4 +1,4 @@
-import { ErrorResponse } from "@walletconnect/jsonrpc-types/dist/cjs/jsonrpc"
+import { ErrorResponse } from "@walletconnect/jsonrpc-types"
 
 const errorCodes = {
     invalidInput: { code: -32000, message: "Invalid input" },

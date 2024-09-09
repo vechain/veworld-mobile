@@ -1,6 +1,5 @@
 import React, { useCallback, useEffect, useMemo, useState } from "react"
 import {
-    BackButtonHeader,
     BaseButton,
     BaseSafeArea,
     BaseSpacer,
@@ -8,6 +7,8 @@ import {
     BaseView,
     BluetoothStatusBottomSheet,
     DismissKeyboardView,
+    FadeoutButton,
+    Layout,
     LocationStatusBottomSheet,
 } from "~Components"
 import { useI18nContext } from "~i18n"
@@ -24,11 +25,13 @@ import { LedgerAndroidPermissions } from "../Hooks/LedgerAndroidPermissions"
 import { useAnalyticTracking, useScanLedgerDevices } from "~Hooks"
 import { AnalyticsEvent } from "~Constants"
 import { PlatformUtils } from "~Utils"
+import { selectHasOnboarded, useAppSelector } from "~Storage/Redux"
 
 export const SelectLedgerDevice = () => {
     const { LL } = useI18nContext()
     const nav = useNavigation()
     const track = useAnalyticTracking()
+    const userHasOnboarded = useAppSelector(selectHasOnboarded)
 
     const [selectedDevice, setSelectedDevice] = useState<ConnectedLedgerDevice>()
 
@@ -101,71 +104,87 @@ export const SelectLedgerDevice = () => {
 
     useEffect(() => {
         track(AnalyticsEvent.IMPORT_HW_PAGE_LOADED)
+        // Tracking event used to detect when start the process to import a new hardware wallet
+        // this in combination with the WALLET_GENERATION result help to track bugs on the
+        // Ledger connection
+        track(AnalyticsEvent.IMPORT_HW_LEDGER_START, { context: userHasOnboarded ? "management" : "onboarding" })
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [])
     return (
-        <DismissKeyboardView>
-            <BaseSafeArea grow={1}>
-                <BackButtonHeader beforeNavigating={unsubscribe} />
-                <BaseView alignItems="center" justifyContent="space-between" flexGrow={1} mx={20}>
-                    <BaseView alignSelf="flex-start" w={100}>
+        <Layout
+            safeAreaTestID="Select_Hw_Device_Screen"
+            noStaticBottomPadding
+            fixedHeader={
+                <>
+                    <BaseView>
                         <BaseText typographyFont="title">{LL.WALLET_LEDGER_SELECT_DEVICE_TITLE()}</BaseText>
                         <BaseText typographyFont="body" my={10}>
                             {LL.WALLET_LEDGER_SELECT_DEVICE_SB()}
                         </BaseText>
-
-                        <BaseSpacer height={20} />
+                    </BaseView>
+                    <BaseView alignSelf="flex-start" w={100}>
                         <Lottie source={BlePairingDark} autoPlay loop style={styles.lottie} />
-                        <BaseSpacer height={20} />
                         <BaseText align="center" typographyFont="subTitleBold" my={10}>
                             {devicesFoundMessage}
                         </BaseText>
-                        {availableDevices.length > 0 && (
-                            <FlatList
-                                style={styles.container}
-                                data={availableDevices}
-                                numColumns={1}
-                                horizontal={false}
-                                renderItem={renderItem}
-                                nestedScrollEnabled={false}
-                                showsVerticalScrollIndicator={false}
-                                ItemSeparatorComponent={renderSeparator}
-                                keyExtractor={item => item.id}
-                            />
-                        )}
                     </BaseView>
-                    {Platform.OS === "android" && !androidPermissionsGranted ? (
-                        <BaseView w={100}>
-                            <BaseText>{LL.WALLET_LEDGER_ASK_PERMISSIONS_MESSAGE()}</BaseText>
-                            <BaseSpacer height={16} />
-                            <BaseButton
-                                action={checkPermissions}
-                                w={100}
-                                title={LL.WALLET_LEDGER_ASK_PERMISSIONS_BUTTON()}
-                            />
+                </>
+            }
+            body={
+                <DismissKeyboardView>
+                    <BaseSafeArea grow={1} style={styles.safeArea}>
+                        <BaseView alignItems="center" justifyContent="space-between" flexGrow={1}>
+                            {availableDevices.length > 0 && (
+                                <FlatList
+                                    style={styles.container}
+                                    data={availableDevices}
+                                    numColumns={1}
+                                    horizontal={false}
+                                    renderItem={renderItem}
+                                    nestedScrollEnabled={false}
+                                    showsVerticalScrollIndicator={false}
+                                    ItemSeparatorComponent={renderSeparator}
+                                    keyExtractor={item => item.id}
+                                />
+                            )}
                         </BaseView>
-                    ) : (
-                        <BaseView w={100}>
-                            <BaseButton
-                                action={onImportClick}
-                                w={100}
-                                title={LL.COMMON_LBL_IMPORT()}
-                                disabled={!selectedDevice}
-                            />
-                        </BaseView>
-                    )}
-                </BaseView>
 
-                <BaseSpacer height={40} />
-                <BluetoothStatusBottomSheet />
-                <LocationStatusBottomSheet />
-            </BaseSafeArea>
-        </DismissKeyboardView>
+                        <BaseSpacer height={40} />
+                        <BluetoothStatusBottomSheet />
+                        <LocationStatusBottomSheet />
+                    </BaseSafeArea>
+                </DismissKeyboardView>
+            }
+            footer={
+                Platform.OS === "android" && !androidPermissionsGranted ? (
+                    <BaseView w={100}>
+                        <BaseText>{LL.WALLET_LEDGER_ASK_PERMISSIONS_MESSAGE()}</BaseText>
+                        <BaseSpacer height={16} />
+                        <BaseButton
+                            action={checkPermissions}
+                            w={100}
+                            title={LL.WALLET_LEDGER_ASK_PERMISSIONS_BUTTON()}
+                        />
+                    </BaseView>
+                ) : (
+                    <FadeoutButton
+                        action={onImportClick}
+                        title={LL.COMMON_LBL_IMPORT()}
+                        disabled={!selectedDevice}
+                        bottom={0}
+                        mx={0}
+                        width={"auto"}
+                    />
+                )
+            }
+        />
     )
 }
 
 const styles = StyleSheet.create({
-    backIcon: { marginHorizontal: 20, alignSelf: "flex-start" },
+    safeArea: {
+        paddingTop: 20,
+    },
     container: {
         width: "100%",
     },

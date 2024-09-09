@@ -36,7 +36,7 @@ describe("generateDeviceForMnemonic", () => {
         const hdNode = HDNode.fromMnemonic(mnemonicPhrase)
         const expectedXPub = CryptoUtils.xPubFromHdNode(hdNode)
 
-        const result = generateDeviceForMnemonic(mnemonicPhrase, deviceIndex, "Wallet 3")
+        const result = generateDeviceForMnemonic(mnemonicPhrase, deviceIndex, "Wallet 3", false)
 
         expect(result.wallet.mnemonic).toEqual(mnemonicPhrase)
         expect(result.wallet.privateKey).toBeUndefined()
@@ -48,6 +48,44 @@ describe("generateDeviceForMnemonic", () => {
         expect(result.device.rootAddress).toEqual(hdNode.address)
         expect(result.device.type).toEqual(DEVICE_TYPE.LOCAL_MNEMONIC)
         expect(result.device.index).toEqual(deviceIndex)
+        expect(result.device.isBuckedUp).toEqual(false)
+    })
+
+    it("valid imported menemonic phrase", () => {
+        const mnemonicPhrase = [
+            "juice",
+            "direct",
+            "sell",
+            "apart",
+            "motion",
+            "polar",
+            "copper",
+            "air",
+            "novel",
+            "dumb",
+            "slender",
+            "flash",
+            "feature",
+            "early",
+            "feel",
+        ]
+        const deviceIndex = 1
+        const hdNode = HDNode.fromMnemonic(mnemonicPhrase)
+        const expectedXPub = CryptoUtils.xPubFromHdNode(hdNode)
+
+        const result = generateDeviceForMnemonic(mnemonicPhrase, deviceIndex, "Wallet 3", true)
+
+        expect(result.wallet.mnemonic).toEqual(mnemonicPhrase)
+        expect(result.wallet.privateKey).toBeUndefined()
+        expect(result.wallet.nonce).toHaveLength(258)
+        expect(result.wallet.rootAddress).toEqual(hdNode.address)
+
+        expect(result.device.alias).toEqual("Wallet 3")
+        expect(result.device.xPub).toEqual(expectedXPub)
+        expect(result.device.rootAddress).toEqual(hdNode.address)
+        expect(result.device.type).toEqual(DEVICE_TYPE.LOCAL_MNEMONIC)
+        expect(result.device.index).toEqual(deviceIndex)
+        expect(result.device.isBuckedUp).toEqual(true)
     })
 })
 describe("generateDeviceForPrivateKey", () => {

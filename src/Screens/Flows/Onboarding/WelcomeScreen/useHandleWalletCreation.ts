@@ -3,7 +3,7 @@ import { showErrorToast, useApplicationSecurity, WalletEncryptionKeyHelper } fro
 import { useBiometrics, useCreateWallet, useDisclosure } from "~Hooks"
 import { setIsAppLoading, useAppDispatch } from "~Storage/Redux"
 import { mnemonic as thorMnemonic } from "thor-devkit"
-import { NewLedgerDevice, SecurityLevelType } from "~Model"
+import { IMPORT_TYPE, NewLedgerDevice, SecurityLevelType } from "~Model"
 import { BiometricsUtils } from "~Utils"
 import HapticsService from "~Services/HapticsService"
 import { useI18nContext } from "~i18n"
@@ -42,7 +42,15 @@ export const useHandleWalletCreation = () => {
     )
 
     const onCreateWallet = useCallback(
-        async ({ importMnemonic, privateKey }: { importMnemonic?: string[]; privateKey?: string }) => {
+        async ({
+            importMnemonic,
+            privateKey,
+            importType,
+        }: {
+            importMnemonic?: string[]
+            privateKey?: string
+            importType?: IMPORT_TYPE
+        }) => {
             if (biometrics && biometrics.currentSecurityLevel === "BIOMETRIC") {
                 dispatch(setIsAppLoading(true))
                 const mnemonic = isEmpty(importMnemonic) ? getNewMnemonic() : importMnemonic
@@ -50,6 +58,7 @@ export const useHandleWalletCreation = () => {
                 await createLocalWallet({
                     mnemonic: privateKey ? undefined : mnemonic,
                     privateKey,
+                    importType,
                     onError: onWalletCreationError,
                 })
                 await migrateOnboarding(SecurityLevelType.BIOMETRIC)
@@ -61,22 +70,31 @@ export const useHandleWalletCreation = () => {
         [biometrics, createLocalWallet, dispatch, migrateOnboarding, onOpen, onWalletCreationError],
     )
 
+    const parseImportType = useCallback((mnemonic?: string[], privateKey?: string) => {
+        if (privateKey) return IMPORT_TYPE.PRIVATE_KEY
+        if (mnemonic && !isEmpty(mnemonic)) return IMPORT_TYPE.MNEMONIC
+
+        return undefined
+    }, [])
+
     const onSuccess = useCallback(
         async ({ pin, mnemonic, privateKey }: { pin: string; mnemonic?: string[]; privateKey?: string }) => {
             onClose()
             dispatch(setIsAppLoading(true))
+            const importType = parseImportType(mnemonic, privateKey)
             const _mnemonic = isEmpty(mnemonic) ? getNewMnemonic() : mnemonic
             await WalletEncryptionKeyHelper.init(pin)
             await createLocalWallet({
                 mnemonic: privateKey ? undefined : _mnemonic,
                 privateKey: privateKey,
                 userPassword: pin,
+                importType,
                 onError: onWalletCreationError,
             })
             await migrateOnboarding(SecurityLevelType.SECRET, pin)
             dispatch(setIsAppLoading(false))
         },
-        [createLocalWallet, dispatch, migrateOnboarding, onClose, onWalletCreationError],
+        [createLocalWallet, dispatch, migrateOnboarding, onClose, onWalletCreationError, parseImportType],
     )
 
     const onCreateLedgerWallet = useCallback(
@@ -148,16 +166,19 @@ export const useHandleWalletCreation = () => {
             importMnemonic,
             privateKey,
             pin,
+            importType,
         }: {
             importMnemonic?: string[]
             privateKey?: string
             pin?: string
+            importType: IMPORT_TYPE
         }) => {
             if (biometrics && biometrics.currentSecurityLevel === "BIOMETRIC" && !pin) {
                 dispatch(setIsAppLoading(true))
                 await createLocalWallet({
                     mnemonic: privateKey ? undefined : importMnemonic,
                     privateKey,
+                    importType,
                     onError: onWalletCreationError,
                 })
                 dispatch(setIsAppLoading(false))
@@ -166,6 +187,7 @@ export const useHandleWalletCreation = () => {
                     mnemonic: privateKey ? undefined : importMnemonic,
                     privateKey,
                     userPassword: pin,
+                    importType,
                     onError: onWalletCreationError,
                 })
             }
