@@ -13,10 +13,10 @@ appId: org.vechain.veworld.app
 - repeat:
     while:
       visible:
-         id: "General"
+         id: "General settings"
     commands:
       - tapOn:
-            id: "General"
+            id: "General settings"
 - runFlow:
     when:
       platform: Android
