@@ -110,6 +110,8 @@ export const ImportLocalWallet = () => {
         [onCloseDerivationPath],
     )
 
+    const importType = useMemo(() => CryptoUtils.determineKeyImportType(textValue), [textValue])
+
     const {
         isPasswordPromptOpen: isPasswordPromptOpen_1,
         handleClosePasswordModal: handleClosePasswordModal_1,
@@ -123,13 +125,12 @@ export const ImportLocalWallet = () => {
                 isCloudKit: false,
                 pin,
                 derivationPath: derivationPathCache.current ?? DerivationPath.VET,
+                importType,
             })
             nav.goBack()
         },
         allowAutoPassword: false,
     })
-
-    const importType = useMemo(() => CryptoUtils.determineKeyImportType(textValue), [textValue])
 
     const processErrorMessage = useCallback(
         (err: unknown) => {
@@ -167,6 +168,7 @@ export const ImportLocalWallet = () => {
                     onCreateWallet({
                         importMnemonic: mnemonic,
                         derivationPath: derivationPathCache.current ?? DerivationPath.VET,
+                        importType: IMPORT_TYPE.MNEMONIC,
                     })
                 }
             } catch (err) {
@@ -197,6 +199,7 @@ export const ImportLocalWallet = () => {
                     onCreateWallet({
                         privateKey: _privKey,
                         derivationPath: derivationPathCache.current ?? DerivationPath.VET,
+                        importType: IMPORT_TYPE.PRIVATE_KEY,
                     })
                 }
             } catch (err) {
@@ -230,7 +233,11 @@ export const ImportLocalWallet = () => {
                 if (userHasOnboarded) {
                     checkIdentityBeforeOpening_1()
                 } else {
-                    onCreateWallet({ privateKey, derivationPath: derivationPathCache.current ?? DerivationPath.VET })
+                    onCreateWallet({
+                        privateKey,
+                        derivationPath: derivationPathCache.current ?? DerivationPath.VET,
+                        importType: IMPORT_TYPE.KEYSTORE_FILE,
+                    })
                 }
             } catch (err) {
                 processErrorMessage(err)

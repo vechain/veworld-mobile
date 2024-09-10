@@ -12,14 +12,27 @@ export type RowProps = {
     title: LocalizedString
     screenName: keyof Omit<RootStackParamListSettings, Excluded>
     icon: string
+    url?: string
 }
 
-export const SettingsRow = ({ title, screenName, icon }: RowProps) => {
+export const SettingsRow = ({ title, screenName, icon, url }: RowProps) => {
     const nav = useNavigation()
 
     const theme = useTheme()
 
-    const onPress = useCallback(() => nav.navigate(screenName), [screenName, nav])
+    const onPress = useCallback(() => {
+        if (url && (screenName === Routes.SETTINGS_GET_SUPPORT || screenName === Routes.SETTINGS_GIVE_FEEDBACK)) {
+            nav.navigate(screenName, { url })
+            return
+        }
+
+        nav.navigate(
+            screenName as keyof Omit<
+                RootStackParamListSettings,
+                Routes.SETTINGS_GET_SUPPORT | Routes.SETTINGS_GIVE_FEEDBACK | Routes.WALLET_DETAILS
+            >,
+        )
+    }, [url, screenName, nav])
 
     return (
         <BaseTouchable action={onPress} style={baseStyles.container} haptics="Light" testID={title}>

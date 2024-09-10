@@ -124,7 +124,7 @@ describe("useCreateWallet", () => {
             const { result } = renderHook(() => useCreateWallet(), {
                 wrapper: TestWrapper,
             })
-            const createLocalWallet = result.current.createLocalWallet
+            const { createLocalWallet } = result.current
             await createLocalWallet({
                 mnemonic: mnemonic,
                 userPassword: "password",
@@ -132,7 +132,7 @@ describe("useCreateWallet", () => {
                 isCloudKit: false,
             })
 
-            expect(addDeviceAndAccounts).toBeCalledWith({
+            expect(addDeviceAndAccounts).toHaveBeenCalledWith({
                 alias: "Wallet 1",
                 index: 0,
                 rootAddress: "0xec954b8e81777354d0a35111d83373b9ec171c64",
@@ -144,7 +144,7 @@ describe("useCreateWallet", () => {
                         "0494c3ff1acb0cf8e842c54a2bf109b7549d8f800895576892a4ea67eff584a427904a4b2545cf84569be87387bc5fe221c20d1ba5f23d278468faa98f54ddedbe",
                 },
             })
-            expect(setMnemonic).toBeCalledWith(undefined)
+            expect(setMnemonic).toHaveBeenCalledWith(undefined)
             expect(result.current.isComplete).toBe(true)
         })
     })
@@ -163,7 +163,7 @@ describe("useCreateWallet", () => {
                 })
             } catch (e) {}
 
-            expect(addLedgerDeviceAndAccounts).toBeCalledWith(ledger)
+            expect(addLedgerDeviceAndAccounts).toHaveBeenCalledWith(ledger)
         })
     })
 })

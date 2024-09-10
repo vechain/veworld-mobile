@@ -3,7 +3,7 @@ import { showErrorToast, useApplicationSecurity, WalletEncryptionKeyHelper } fro
 import { useBiometrics, useCreateWallet, useDisclosure } from "~Hooks"
 import { setIsAppLoading, useAppDispatch } from "~Storage/Redux"
 import { mnemonic as thorMnemonic } from "thor-devkit"
-import { NewLedgerDevice, SecurityLevelType } from "~Model"
+import { IMPORT_TYPE, NewLedgerDevice, SecurityLevelType } from "~Model"
 import { BiometricsUtils } from "~Utils"
 import HapticsService from "~Services/HapticsService"
 import { useI18nContext } from "~i18n"
@@ -48,11 +48,13 @@ export const useHandleWalletCreation = () => {
             privateKey,
             isCloudKit = false,
             derivationPath,
+            importType,
         }: {
             importMnemonic?: string[]
             privateKey?: string
             isCloudKit?: boolean
             derivationPath: DerivationPath
+            importType?: IMPORT_TYPE
         }) => {
             if (biometrics && biometrics.currentSecurityLevel === "BIOMETRIC") {
                 dispatch(setIsAppLoading(true))
@@ -62,6 +64,7 @@ export const useHandleWalletCreation = () => {
                     mnemonic: privateKey ? undefined : mnemonic,
                     privateKey,
                     isCloudKit,
+                    importType,
                     onError: onWalletCreationError,
                     derivationPath,
                 })
@@ -73,6 +76,13 @@ export const useHandleWalletCreation = () => {
         },
         [biometrics, createLocalWallet, dispatch, migrateOnboarding, onOpen, onWalletCreationError],
     )
+
+    const parseImportType = useCallback((mnemonic?: string[], privateKey?: string) => {
+        if (privateKey) return IMPORT_TYPE.PRIVATE_KEY
+        if (mnemonic && !isEmpty(mnemonic)) return IMPORT_TYPE.MNEMONIC
+
+        return undefined
+    }, [])
 
     const onSuccess = useCallback(
         async ({
@@ -90,6 +100,7 @@ export const useHandleWalletCreation = () => {
         }) => {
             onClose()
             dispatch(setIsAppLoading(true))
+            const importType = parseImportType(mnemonic, privateKey)
             const _mnemonic = isEmpty(mnemonic) ? getNewMnemonic() : mnemonic
             await WalletEncryptionKeyHelper.init(pin)
             await createLocalWallet({
@@ -97,13 +108,14 @@ export const useHandleWalletCreation = () => {
                 privateKey: privateKey,
                 userPassword: pin,
                 isCloudKit,
+                importType,
                 onError: onWalletCreationError,
                 derivationPath,
             })
             await migrateOnboarding(SecurityLevelType.SECRET, pin)
             dispatch(setIsAppLoading(false))
         },
-        [createLocalWallet, dispatch, migrateOnboarding, onClose, onWalletCreationError],
+        [createLocalWallet, dispatch, migrateOnboarding, onClose, onWalletCreationError, parseImportType],
     )
 
     const onCreateLedgerWallet = useCallback(
@@ -187,12 +199,14 @@ export const useHandleWalletCreation = () => {
             pin,
             isCloudKit = false,
             derivationPath,
+            importType,
         }: {
             importMnemonic?: string[]
             privateKey?: string
             pin?: string
             isCloudKit: boolean
             derivationPath: DerivationPath
+            importType: IMPORT_TYPE
         }) => {
             if (biometrics && biometrics.currentSecurityLevel === "BIOMETRIC" && !pin) {
                 dispatch(setIsAppLoading(true))
@@ -200,6 +214,7 @@ export const useHandleWalletCreation = () => {
                     mnemonic: privateKey ? undefined : importMnemonic,
                     privateKey,
                     isCloudKit,
+                    importType,
                     onError: onWalletCreationError,
                     derivationPath,
                 })
@@ -210,6 +225,7 @@ export const useHandleWalletCreation = () => {
                     privateKey,
                     userPassword: pin,
                     isCloudKit,
+                    importType,
                     onError: onWalletCreationError,
                     derivationPath,
                 })

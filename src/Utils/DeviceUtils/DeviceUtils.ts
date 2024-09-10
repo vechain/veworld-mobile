@@ -68,7 +68,7 @@ export const generateDeviceForPrivateKey = (
         type: DEVICE_TYPE.LOCAL_PRIVATE_KEY,
         index: deviceIndex,
         position: 0, // this will be updated when the device is added to the redux store
-        isBuckedUp: false,
+        isBuckedUp: true,
     }
 
     return { wallet, device }

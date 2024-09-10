@@ -33,6 +33,7 @@ const VeBetterDaoDAppCard = ({ onPress, containerStyle, item, areDappsLoading }:
     const cardWidth = windowWidth / 2.7
     const { data, isPending, error } = useVeBetterDaoDAppsMetadata(`ipfs://${item.metadataURI}`)
     const showSkeleton = isPending || !data || areDappsLoading
+    const localDApp = localDaoDAppsMetadata.find(metdata => metdata.name === item.name)
 
     const Card = useCallback(
         ({ href, source }: CardProps) => {
@@ -61,10 +62,20 @@ const VeBetterDaoDAppCard = ({ onPress, containerStyle, item, areDappsLoading }:
         }
     }, [])
 
+    const getImageSourceValue = useMemo(() => {
+        if (data?.ve_world?.banner) return data?.ve_world?.banner
+        if (localDApp?.ve_world?.banner) return localDApp?.ve_world?.banner
+        if (data?.banner) return data?.banner
+        if (localDApp?.banner) return localDApp?.banner
+        return ""
+    }, [data?.banner, data?.ve_world?.banner, localDApp?.banner, localDApp?.ve_world?.banner])
+
     if (error) {
-        const dapp = localDaoDAppsMetadata.find(metdata => metdata.name === item.name)
-        return dapp ? (
-            <Card href={dapp.external_url} source={getImagerSource(dapp?.we_world?.banner ?? dapp.banner ?? "")} />
+        return localDApp?.ve_world?.banner || localDApp?.banner ? (
+            <Card
+                href={localDApp.external_url}
+                source={getImagerSource(localDApp.ve_world?.banner ?? localDApp?.banner)}
+            />
         ) : null
     }
 
@@ -79,7 +90,7 @@ const VeBetterDaoDAppCard = ({ onPress, containerStyle, item, areDappsLoading }:
     ) : (
         <Card
             href={URIUtils.convertHttpToHttps(data?.external_url ?? "https://governance.vebetterdao.org/apps")}
-            source={getImagerSource(data?.we_world?.banner ?? data.banner ?? "")}
+            source={getImagerSource(getImageSourceValue)}
         />
     )
 }
