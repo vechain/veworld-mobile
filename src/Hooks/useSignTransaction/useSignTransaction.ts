@@ -62,7 +62,7 @@ export const useSignTransaction = ({
             if (!signatureAccount.index && signatureAccount.index !== 0)
                 throw new Error("signatureAccount index is empty")
 
-            const hdNode = HDNode.fromMnemonic(wallet.mnemonic)
+            const hdNode = HDNode.fromMnemonic(wallet.mnemonic, wallet.derivationPath)
             const derivedNode = hdNode.derive(signatureAccount.index)
 
             const privateKey = derivedNode.privateKey as Buffer
