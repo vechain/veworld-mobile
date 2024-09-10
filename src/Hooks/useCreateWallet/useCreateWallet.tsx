@@ -46,23 +46,19 @@ export const useCreateWallet = () => {
             mnemonic,
             privateKey,
             userPassword,
-            isCloudKit,
-            importType,
             onError,
+            importType,
             derivationPath,
         }: {
             mnemonic?: string[]
             privateKey?: string
             userPassword?: string
-            isCloudKit: boolean
             importType?: IMPORT_TYPE
             onError?: (error: unknown) => void
             derivationPath: DerivationPath
         }) => {
             try {
-                //   const isWalletImported = !!importType
-
-                const { device, wallet } = createDevice(isCloudKit, derivationPath, mnemonic, privateKey)
+                const { device, wallet } = createDevice(derivationPath, mnemonic, privateKey, importType)
 
                 const encryptedWallet = await WalletEncryptionKeyHelper.encryptWallet(wallet, userPassword)
 
@@ -78,6 +74,7 @@ export const useCreateWallet = () => {
                 dispatch(setMnemonic(undefined))
                 dispatch(setPrivateKey(undefined))
                 setIsComplete(true)
+
                 track(AnalyticsEvent.WALLET_ADD_LOCAL_SUCCESS)
                 track(AnalyticsEvent.WALLET_GENERATION, {
                     context: userHasOnboarded ? "management" : "onboarding",

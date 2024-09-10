@@ -1,7 +1,7 @@
 import DeviceInfo from "react-native-device-info"
 import { HDNode } from "thor-devkit"
 import { DerivationPath } from "~Constants"
-import { DEVICE_TYPE, LocalDevice, Wallet, WalletAndDevice } from "~Model"
+import { DEVICE_TYPE, IMPORT_TYPE, LocalDevice, Wallet, WalletAndDevice } from "~Model"
 import AddressUtils from "~Utils/AddressUtils"
 import CryptoUtils from "~Utils/CryptoUtils"
 import HexUtils from "~Utils/HexUtils"
@@ -17,7 +17,7 @@ export const generateDeviceForMnemonic = (
     deviceIndex: number,
     alias: string,
     path: DerivationPath = DerivationPath.VET,
-    isCloudKit: boolean,
+    importType?: IMPORT_TYPE,
 ): WalletAndDevice => {
     const hdNode = HDNode.fromMnemonic(mnemonic, path)
 
@@ -36,7 +36,7 @@ export const generateDeviceForMnemonic = (
         index: deviceIndex,
         position: 0, // this will be updated when the device is added to the redux store
         derivationPath: path,
-        isBuckedUp: isCloudKit,
+        isBuckedUp: !!importType,
     }
 
     return { wallet, device }

@@ -25,7 +25,7 @@ import { CryptoUtils, error, PasswordUtils } from "~Utils"
 import { useHandleWalletCreation } from "../Onboarding/WelcomeScreen/useHandleWalletCreation"
 import { UserCreatePasswordScreen } from "./UserCreatePasswordScreen"
 import { StackActions, useNavigation } from "@react-navigation/native"
-import { CloudKitWallet } from "~Model"
+import { CloudKitWallet, IMPORT_TYPE } from "~Model"
 import { SwipeableItemImperativeRef } from "react-native-swipeable-item"
 
 const skeletonArray = [1, 2, 3, 4]
@@ -73,7 +73,7 @@ export const ImportFromCloudScreen = () => {
         onIdentityConfirmed: async (pin?: string) => {
             await importOnboardedWallet({
                 importMnemonic: mnemonicCache.current,
-                isCloudKit: true,
+                importType: IMPORT_TYPE.ICLOUD,
                 pin,
                 derivationPath: selected!.derivationPath,
             })
@@ -139,16 +139,15 @@ export const ImportFromCloudScreen = () => {
                 }
 
                 try {
-                    const isCloudKit = true
-                    checkCanImportDevice(isCloudKit, selected.derivationPath, mnemonic)
+                    checkCanImportDevice(selected.derivationPath, mnemonic)
                     mnemonicCache.current = mnemonic
                     if (userHasOnboarded) {
                         checkIdentityBeforeOpening()
                     } else {
                         onCreateWallet({
                             importMnemonic: mnemonic,
-                            isCloudKit,
                             derivationPath: selected.derivationPath,
+                            importType: IMPORT_TYPE.ICLOUD,
                         })
                     }
                 } catch (_error) {
@@ -306,7 +305,7 @@ export const ImportFromCloudScreen = () => {
                                     onSuccess({
                                         pin,
                                         mnemonic: mnemonicCache.current,
-                                        isCloudKit: true,
+                                        importType: IMPORT_TYPE.ICLOUD,
                                         derivationPath: selected!.derivationPath,
                                     })
                                 }

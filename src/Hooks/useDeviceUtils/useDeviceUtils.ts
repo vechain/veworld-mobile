@@ -1,7 +1,7 @@
 import { AddressUtils, DeviceUtils } from "~Utils"
 import { getNextDeviceIndex, useAppSelector } from "~Storage/Redux"
 import { selectAccounts, selectDevices } from "~Storage/Redux/Selectors"
-import { DEVICE_CREATION_ERRORS as ERRORS, LocalDevice, Wallet } from "~Model"
+import { DEVICE_CREATION_ERRORS as ERRORS, IMPORT_TYPE, LocalDevice, Wallet } from "~Model"
 import { getAddressFromXPub } from "~Utils/AddressUtils/AddressUtils"
 import * as i18n from "~i18n"
 import { DerivationPath } from "~Constants"
@@ -43,10 +43,10 @@ export const useDeviceUtils = () => {
      * @param privateKey (optional)
      */
     const createDevice = (
-        isCloudKit: boolean,
         derivationPath: DerivationPath,
         mnemonic?: string[],
         privateKey?: string,
+        importType?: IMPORT_TYPE,
     ) => {
         if (!mnemonic && !privateKey) throw new Error(ERRORS.INVALID_IMPORT_DATA)
 
@@ -62,7 +62,7 @@ export const useDeviceUtils = () => {
                 deviceIndex,
                 alias,
                 derivationPath,
-                isCloudKit,
+                importType,
             )
         } else if (privateKey) {
             walletAndDevice = DeviceUtils.generateDeviceForPrivateKey(privateKey, deviceIndex, alias)
@@ -73,13 +73,8 @@ export const useDeviceUtils = () => {
         return walletAndDevice
     }
 
-    const checkCanImportDevice = (
-        isCloudKit: boolean,
-        derivationPath: DerivationPath,
-        mnemonic?: string[],
-        privateKey?: string,
-    ): void => {
-        createDevice(isCloudKit, derivationPath, mnemonic, privateKey)
+    const checkCanImportDevice = (derivationPath: DerivationPath, mnemonic?: string[], privateKey?: string): void => {
+        createDevice(derivationPath, mnemonic, privateKey)
     }
 
     return {

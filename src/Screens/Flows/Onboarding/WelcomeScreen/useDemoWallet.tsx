@@ -23,7 +23,6 @@ export const useDemoWallet = () => {
             userPassword,
             onError: e => debug(ERROR_EVENTS.APP, e),
             mnemonic,
-            isCloudKit: false,
             derivationPath: DerivationPath.VET,
             importType: IMPORT_TYPE.MNEMONIC,
         })

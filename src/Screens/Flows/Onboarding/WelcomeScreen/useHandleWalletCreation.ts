@@ -46,14 +46,12 @@ export const useHandleWalletCreation = () => {
         async ({
             importMnemonic,
             privateKey,
-            isCloudKit = false,
             derivationPath,
             importType,
         }: {
+            derivationPath: DerivationPath
             importMnemonic?: string[]
             privateKey?: string
-            isCloudKit?: boolean
-            derivationPath: DerivationPath
             importType?: IMPORT_TYPE
         }) => {
             if (biometrics && biometrics.currentSecurityLevel === "BIOMETRIC") {
@@ -63,7 +61,6 @@ export const useHandleWalletCreation = () => {
                 await createLocalWallet({
                     mnemonic: privateKey ? undefined : mnemonic,
                     privateKey,
-                    isCloudKit,
                     importType,
                     onError: onWalletCreationError,
                     derivationPath,
@@ -77,37 +74,28 @@ export const useHandleWalletCreation = () => {
         [biometrics, createLocalWallet, dispatch, migrateOnboarding, onOpen, onWalletCreationError],
     )
 
-    const parseImportType = useCallback((mnemonic?: string[], privateKey?: string) => {
-        if (privateKey) return IMPORT_TYPE.PRIVATE_KEY
-        if (mnemonic && !isEmpty(mnemonic)) return IMPORT_TYPE.MNEMONIC
-
-        return undefined
-    }, [])
-
     const onSuccess = useCallback(
         async ({
             pin,
             mnemonic,
             privateKey,
-            isCloudKit = false,
             derivationPath,
+            importType,
         }: {
             pin: string
             mnemonic?: string[]
             privateKey?: string
-            isCloudKit?: boolean
             derivationPath: DerivationPath
+            importType?: IMPORT_TYPE
         }) => {
             onClose()
             dispatch(setIsAppLoading(true))
-            const importType = parseImportType(mnemonic, privateKey)
             const _mnemonic = isEmpty(mnemonic) ? getNewMnemonic() : mnemonic
             await WalletEncryptionKeyHelper.init(pin)
             await createLocalWallet({
                 mnemonic: privateKey ? undefined : _mnemonic,
                 privateKey: privateKey,
                 userPassword: pin,
-                isCloudKit,
                 importType,
                 onError: onWalletCreationError,
                 derivationPath,
@@ -115,7 +103,7 @@ export const useHandleWalletCreation = () => {
             await migrateOnboarding(SecurityLevelType.SECRET, pin)
             dispatch(setIsAppLoading(false))
         },
-        [createLocalWallet, dispatch, migrateOnboarding, onClose, onWalletCreationError, parseImportType],
+        [createLocalWallet, dispatch, migrateOnboarding, onClose, onWalletCreationError],
     )
 
     const onCreateLedgerWallet = useCallback(
@@ -168,22 +156,13 @@ export const useHandleWalletCreation = () => {
     )
 
     const createOnboardedWallet = useCallback(
-        async ({
-            pin,
-            isCloudKit = false,
-            derivationPath,
-        }: {
-            pin?: string
-            isCloudKit: boolean
-            derivationPath: DerivationPath.VET
-        }) => {
+        async ({ pin, derivationPath }: { pin?: string; derivationPath: DerivationPath.VET }) => {
             dispatch(setIsAppLoading(true))
 
             const mnemonic = getNewMnemonic()
             await createLocalWallet({
                 mnemonic: mnemonic,
                 userPassword: pin,
-                isCloudKit,
                 onError: onWalletCreationError,
                 derivationPath,
             })
@@ -197,14 +176,12 @@ export const useHandleWalletCreation = () => {
             importMnemonic,
             privateKey,
             pin,
-            isCloudKit = false,
             derivationPath,
             importType,
         }: {
             importMnemonic?: string[]
             privateKey?: string
             pin?: string
-            isCloudKit: boolean
             derivationPath: DerivationPath
             importType: IMPORT_TYPE
         }) => {
@@ -213,7 +190,6 @@ export const useHandleWalletCreation = () => {
                 await createLocalWallet({
                     mnemonic: privateKey ? undefined : importMnemonic,
                     privateKey,
-                    isCloudKit,
                     importType,
                     onError: onWalletCreationError,
                     derivationPath,
@@ -224,7 +200,6 @@ export const useHandleWalletCreation = () => {
                     mnemonic: privateKey ? undefined : importMnemonic,
                     privateKey,
                     userPassword: pin,
-                    isCloudKit,
                     importType,
                     onError: onWalletCreationError,
                     derivationPath,
