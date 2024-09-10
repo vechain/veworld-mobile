@@ -63,18 +63,11 @@ const VeBetterDaoDAppCard = ({ onPress, containerStyle, item, areDappsLoading }:
     }, [])
 
     const getImageSourceValue = useMemo(() => {
-        switch (true) {
-            case !!data?.ve_world?.banner:
-                return data?.ve_world?.banner
-            case !!localDApp?.ve_world?.banner:
-                return localDApp?.ve_world?.banner
-            case !!data?.banner:
-                return data?.banner
-            case !!localDApp?.banner:
-                return localDApp?.banner
-            default:
-                return ""
-        }
+        if (data?.ve_world?.banner) return data?.ve_world?.banner
+        if (localDApp?.ve_world?.banner) return localDApp?.ve_world?.banner
+        if (data?.banner) return data?.banner
+        if (localDApp?.banner) return localDApp?.banner
+        return ""
     }, [data?.banner, data?.ve_world?.banner, localDApp?.banner, localDApp?.ve_world?.banner])
 
     if (error) {
