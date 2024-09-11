@@ -70,7 +70,7 @@ export const SecurityUpgrade_V2 = ({
             if (_wallets.length > 1) {
                 onOpenWalletList()
             } else {
-                onBackupClick()
+                onBackupClick(_wallets[0])
             }
         }
     }, [
@@ -97,7 +97,7 @@ export const SecurityUpgrade_V2 = ({
                 if (_wallets.length > 1) {
                     onOpenWalletList()
                 } else {
-                    onBackupClick()
+                    onBackupClick(_wallets[0])
                 }
             }
         },
