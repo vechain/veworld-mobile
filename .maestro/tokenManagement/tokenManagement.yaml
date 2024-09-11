@@ -216,6 +216,8 @@ env:
     from:
       id: "sendButton"
     direction: "UP"
+- swipe:
+    direction: "UP"
 - runFlow:
     when:
       platform: Android
@@ -243,6 +245,10 @@ env:
     id: "AddCustomTokenBottomSheet-TextInput-Address"
 - inputText: "0xC9e1B9B34e02610d27Bf213ecbf527D608CE3D39"
 - tapOn: "Add"
+- swipe:
+    from:
+      id: "ManageTokenScreen_SearchInput_searchTokenInput"
+    direction: "UP"
 - assertVisible: 
     id: "BackButtonHeader-BaseIcon-backButton"
 - tapOn:
@@ -316,6 +322,8 @@ env:
 - tapOn:
     id: "EditTokensBar_BaseIcon_manageToken"
 - swipe:
+    from:
+      id: "ManageTokenScreen_SearchInput_searchTokenInput"
     direction: "UP"
 - runFlow:
     when:
