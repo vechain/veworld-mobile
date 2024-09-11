@@ -1,6 +1,6 @@
 import React, { useCallback, useRef, useState } from "react"
 import { SafeAreaView } from "react-native-safe-area-context"
-import { BaseButton, BaseSpacer, BaseText, BaseView, MigrationToSecurity_v2 } from "~Components"
+import { BaseButton, BaseIcon, BaseSpacer, BaseText, BaseView, MigrationToSecurity_v2 } from "~Components"
 import { useBackHandler, useDisclosure, useTheme } from "~Hooks"
 import { BackHandlerEvent, SecurityLevelType, Wallet } from "~Model"
 import { useWalletSecurity } from "./Helpers.standalone"
@@ -112,21 +112,54 @@ export const SecurityUpgrade_V2 = ({
 
     return (
         <SafeAreaView style={{ backgroundColor: theme.colors.background }}>
-            <BaseView justifyContent="space-between" alignItems="center" h={100}>
+            <BaseView justifyContent="space-between" alignItems="center" h={100} w={100} p={24}>
                 <BaseView alignItems="center">
-                    <BaseText>{"SecurityUpgrade_V2"}</BaseText>
+                    <BaseIcon name="shield-alert-outline" size={72} />
+                    <BaseSpacer height={24} />
+                    <BaseText align="center" fontSize={24} fontWeight="600">
+                        {"Security Enhancement"}
+                    </BaseText>
+                    <BaseSpacer height={8} />
+                    <BaseText align="center" fontSize={12} fontWeight={"400"}>
+                        {
+                            // eslint-disable-next-line max-len
+                            "Our wallet has always met the highest standards, and now we're taking it a step further. To keep your assets even more secure, please upgrade your wallet."
+                        }
+                    </BaseText>
 
                     <BaseSpacer height={69} />
-
-                    <BaseText>{"Lorem ipsum dolor sit, amet consectetur adipisicing elit. Aliquam."}</BaseText>
-
-                    <BaseSpacer height={69} />
-
-                    <BaseButton title="BACKUP NOW" action={getWalletsWithUserAuthentication} />
                 </BaseView>
-
-                <BaseView pb={62}>
-                    <BaseButton title="Upgrade Security" action={onStartUpgrade} />
+                <BaseView w={100}>
+                    <BaseView
+                        w={100}
+                        p={24}
+                        mb={24}
+                        borderRadius={16}
+                        //eslint-disable-next-line react-native/no-inline-styles
+                        style={{ borderWidth: 1, borderColor: theme.colors.border }}>
+                        <BaseText align="center" fontSize={14} fontWeight="600">
+                            {"Backup phrase"}
+                        </BaseText>
+                        <BaseSpacer height={8} />
+                        <BaseText align="center" fontSize={12} fontWeight="400">
+                            {
+                                // eslint-disable-next-line max-len
+                                "Before proceeding with the upgrade, please backup your recovery phrase if you haven’t done it yet."
+                            }
+                        </BaseText>
+                        <BaseSpacer height={16} />
+                        <BaseButton
+                            title="Backup Now"
+                            size="sm"
+                            py={11}
+                            radius={8}
+                            variant="outline"
+                            action={getWalletsWithUserAuthentication}
+                        />
+                    </BaseView>
+                    <BaseView w={100}>
+                        <BaseButton title="Upgrade Security" w={100} action={onStartUpgrade} />
+                    </BaseView>
                 </BaseView>
             </BaseView>
 
