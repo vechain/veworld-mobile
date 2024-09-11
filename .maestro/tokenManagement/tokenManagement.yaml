@@ -103,6 +103,8 @@ env:
     from:
       id: "sendButton"
     direction: "UP"
+- swipe:
+    direction: "UP"
 - runFlow:
     when:
       platform: iOS
@@ -313,6 +315,8 @@ env:
     id: "wallet-tab"
 - tapOn:
     id: "EditTokensBar_BaseIcon_manageToken"
+- swipe:
+    direction: "UP"
 - runFlow:
     when:
       platform: Android
