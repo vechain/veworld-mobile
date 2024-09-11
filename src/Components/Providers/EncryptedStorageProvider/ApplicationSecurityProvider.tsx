@@ -11,13 +11,14 @@ import {
 } from "~Components/Providers"
 
 import { useAppState, useBiometrics } from "~Hooks"
-import { StandaloneAppBlockedScreen, StandaloneLockScreen, InternetDownScreen, SecurityUpgrade_V2 } from "~Screens"
+import { StandaloneAppBlockedScreen, StandaloneLockScreen, InternetDownScreen } from "~Screens"
 import { AnimatedSplashScreen } from "../../../AnimatedSplashScreen"
 import Onboarding from "./Helpers/Onboarding"
 import NetInfo from "@react-native-community/netinfo"
 import { ERROR_EVENTS } from "~Constants"
 import { initializeMMKVFlipper } from "react-native-mmkv-flipper-plugin"
 import RNBootSplash from "react-native-bootsplash"
+import { BackupWalletStack } from "~Screens/Flows/App/SecurityUpgrade_V2/Navigation.standalone"
 
 const UserEncryptedStorage = new MMKV({
     id: "user_encrypted_storage",
@@ -480,7 +481,7 @@ export const ApplicationSecurityProvider = ({ children }: ApplicationSecurityCon
             return <></>
         case WALLET_STATUS.MIGRATING:
             return (
-                <SecurityUpgrade_V2
+                <BackupWalletStack
                     oldPersistedState={oldPersistedState}
                     securityType={securityType}
                     upgradeSecurityToV2={upgradeSecurityToV2}
