@@ -34,7 +34,7 @@ export const NumPad = ({ onDigitPress, onDigitDelete }: NumPadProps) => {
                                 style={({ pressed }) => [styles.pressable, { opacity: pressed ? 0.5 : 1.0 }]}
                                 onPress={onPress}>
                                 {digit !== "canc" ? (
-                                    <BaseText typographyFont="largeTitleAccent" alignContainer="center">
+                                    <BaseText typographyFont="largeTitle" alignContainer="center">
                                         {digit}
                                     </BaseText>
                                 ) : (

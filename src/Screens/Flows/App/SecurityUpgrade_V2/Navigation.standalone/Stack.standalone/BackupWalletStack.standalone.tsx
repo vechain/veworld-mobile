@@ -10,6 +10,9 @@ export type RootStackParamListBackupWallet = {
     [Routes.SECURITY_UPGRADE_V2_HOME]: undefined
     [Routes.SECURITY_UPGRADE_V2_MNEMONIC_BACKUP]: {
         wallet: Wallet | null
+        securityType: SecurityLevelType
+        oldPersistedState?: string
+        upgradeSecurityToV2: (password?: string) => Promise<void>
     }
 }
 
@@ -37,9 +40,11 @@ export const BackupWalletStack = ({
                         />
                     )}
                 </Stack.Screen>
-                <Stack.Screen name={Routes.SECURITY_UPGRADE_V2_MNEMONIC_BACKUP} options={{ headerShown: false }}>
-                    {props => <MnemonicBackup {...props} wallet={null} />}
-                </Stack.Screen>
+                <Stack.Screen
+                    name={Routes.SECURITY_UPGRADE_V2_MNEMONIC_BACKUP}
+                    options={{ headerShown: false }}
+                    component={MnemonicBackup}
+                />
             </Stack.Navigator>
         </NavigationContainer>
     )

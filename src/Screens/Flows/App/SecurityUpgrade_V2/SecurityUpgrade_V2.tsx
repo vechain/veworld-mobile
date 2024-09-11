@@ -34,7 +34,6 @@ export const SecurityUpgrade_V2 = ({
     useBackHandler(BackHandlerEvent.BLOCK)
 
     const [wallets, setWallets] = useState<Wallet[] | []>([])
-    const [selectedWalletToBackup, setSelectedWalletToBackup] = useState<Wallet | null>(null)
     const isUpgrade = useRef(false)
 
     const { isWalletSecurityBiometrics, isWalletSecurityPassword, isWalletSecurityNone } =
@@ -43,11 +42,17 @@ export const SecurityUpgrade_V2 = ({
     const { isOpen: isPasswordPromptOpen, onOpen: openPasswordPrompt, onClose: closePasswordPrompt } = useDisclosure()
     const { isOpen: isWalletListOpen, onOpen: onOpenWalletList, onClose: onCloseWalletList } = useDisclosure()
 
-    const onBackupClick = useCallback(() => {
-        nav.navigate(Routes.SECURITY_UPGRADE_V2_MNEMONIC_BACKUP, {
-            wallet: wallets.length > 1 ? selectedWalletToBackup : wallets[0],
-        })
-    }, [nav, selectedWalletToBackup, wallets])
+    const onBackupClick = useCallback(
+        (selectedWallet?: Wallet) => {
+            nav.navigate(Routes.SECURITY_UPGRADE_V2_MNEMONIC_BACKUP, {
+                wallet: selectedWallet ? selectedWallet : wallets[0],
+                oldPersistedState,
+                securityType,
+                upgradeSecurityToV2,
+            })
+        },
+        [nav, oldPersistedState, securityType, upgradeSecurityToV2, wallets],
+    )
 
     const getWalletsWithUserAuthentication = useCallback(async () => {
         if (isWalletSecurityNone) throw new Error("No security set")
@@ -102,8 +107,7 @@ export const SecurityUpgrade_V2 = ({
     const handleOnSelectedWallet = useCallback(
         (selectedWallet: Wallet) => {
             onCloseWalletList()
-            setSelectedWalletToBackup(selectedWallet)
-            onBackupClick()
+            onBackupClick(selectedWallet)
         },
         [onBackupClick, onCloseWalletList],
     )
