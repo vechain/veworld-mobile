@@ -910,6 +910,14 @@ const en: BaseTranslation = {
 
     // Ledger Config
 
+    // Security Upgrade V2
+    SECURITY_ENHANCEMENT_TITLE: "Security Enhancement",
+    SECURITY_ENHANCEMENT_DESC: "Our wallet has always met the highest standards, and now we're taking it a step further. To keep your assets even more secure, please upgrade your wallet.",
+    SECURITY_UPGRADE_BTN: "Upgrade now",
+    SECURITY_BACKUP_TITLE: "Backup phrase",
+    SECURITY_BACKUP_DESC: "Before proceeding with the upgrade, please backup your recovery phrase if you haven't done it yet.",
+    SECURITY_BACKUP_BTN: "Backup now",
+    SECURITY_PHRASE_BACKED_UP: "I've backed up the phrase!",
 
     // CloudKit
     WELCOME_BACK: "Welcome back",

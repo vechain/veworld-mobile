@@ -2246,7 +2246,7 @@ type RootTranslation = {
 	 */
 	SETTINGS_ABOUT_APP_VERSION: RequiredParams<'version'>
 	/**
-	 * v​e​w​o​r​l​d​.​n​e​t
+	 * v​e​w​o​r​l​d​.​c​o​m
 	 */
 	SETTINGS_ABOUT_WEWORLD_WEBSITE: string
 	/**
@@ -3120,6 +3120,34 @@ type RootTranslation = {
 	 * R​e​c​e​i​v​e​d
 	 */
 	RECEIVED: string
+	/**
+	 * S​e​c​u​r​i​t​y​ ​E​n​h​a​n​c​e​m​e​n​t
+	 */
+	SECURITY_ENHANCEMENT_TITLE: string
+	/**
+	 * O​u​r​ ​w​a​l​l​e​t​ ​h​a​s​ ​a​l​w​a​y​s​ ​m​e​t​ ​t​h​e​ ​h​i​g​h​e​s​t​ ​s​t​a​n​d​a​r​d​s​,​ ​a​n​d​ ​n​o​w​ ​w​e​'​r​e​ ​t​a​k​i​n​g​ ​i​t​ ​a​ ​s​t​e​p​ ​f​u​r​t​h​e​r​.​ ​T​o​ ​k​e​e​p​ ​y​o​u​r​ ​a​s​s​e​t​s​ ​e​v​e​n​ ​m​o​r​e​ ​s​e​c​u​r​e​,​ ​p​l​e​a​s​e​ ​u​p​g​r​a​d​e​ ​y​o​u​r​ ​w​a​l​l​e​t​.
+	 */
+	SECURITY_ENHANCEMENT_DESC: string
+	/**
+	 * U​p​g​r​a​d​e​ ​n​o​w
+	 */
+	SECURITY_UPGRADE_BTN: string
+	/**
+	 * B​a​c​k​u​p​ ​p​h​r​a​s​e
+	 */
+	SECURITY_BACKUP_TITLE: string
+	/**
+	 * B​e​f​o​r​e​ ​p​r​o​c​e​e​d​i​n​g​ ​w​i​t​h​ ​t​h​e​ ​u​p​g​r​a​d​e​,​ ​p​l​e​a​s​e​ ​b​a​c​k​u​p​ ​y​o​u​r​ ​r​e​c​o​v​e​r​y​ ​p​h​r​a​s​e​ ​i​f​ ​y​o​u​ ​h​a​v​e​n​'​t​ ​d​o​n​e​ ​i​t​ ​y​e​t​.
+	 */
+	SECURITY_BACKUP_DESC: string
+	/**
+	 * B​a​c​k​u​p​ ​n​o​w
+	 */
+	SECURITY_BACKUP_BTN: string
+	/**
+	 * I​'​v​e​ ​b​a​c​k​e​d​ ​u​p​ ​t​h​e​ ​p​h​r​a​s​e​!
+	 */
+	SECURITY_PHRASE_BACKED_UP: string
 	/**
 	 * W​e​l​c​o​m​e​ ​b​a​c​k
 	 */
@@ -5369,7 +5397,7 @@ Try reconnect your device to the internet.
 	 */
 	SETTINGS_ABOUT_APP_VERSION: (arg: { version: unknown }) => LocalizedString
 	/**
-	 * veworld.net
+	 * veworld.com
 	 */
 	SETTINGS_ABOUT_WEWORLD_WEBSITE: () => LocalizedString
 	/**
@@ -6240,6 +6268,34 @@ Try reconnect your device to the internet.
 	 * Received
 	 */
 	RECEIVED: () => LocalizedString
+	/**
+	 * Security Enhancement
+	 */
+	SECURITY_ENHANCEMENT_TITLE: () => LocalizedString
+	/**
+	 * Our wallet has always met the highest standards, and now we're taking it a step further. To keep your assets even more secure, please upgrade your wallet.
+	 */
+	SECURITY_ENHANCEMENT_DESC: () => LocalizedString
+	/**
+	 * Upgrade now
+	 */
+	SECURITY_UPGRADE_BTN: () => LocalizedString
+	/**
+	 * Backup phrase
+	 */
+	SECURITY_BACKUP_TITLE: () => LocalizedString
+	/**
+	 * Before proceeding with the upgrade, please backup your recovery phrase if you haven't done it yet.
+	 */
+	SECURITY_BACKUP_DESC: () => LocalizedString
+	/**
+	 * Backup now
+	 */
+	SECURITY_BACKUP_BTN: () => LocalizedString
+	/**
+	 * I've backed up the phrase!
+	 */
+	SECURITY_PHRASE_BACKED_UP: () => LocalizedString
 	/**
 	 * Welcome back
 	 */

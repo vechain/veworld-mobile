@@ -1,24 +1,13 @@
-import React, { useCallback, useRef, useState } from "react"
+import React, { useCallback, useRef } from "react"
 import { SafeAreaView } from "react-native-safe-area-context"
 import { BaseButton, BaseIcon, BaseSpacer, BaseText, BaseView, MigrationToSecurity_v2 } from "~Components"
 import { useBackHandler, useDisclosure, useTheme } from "~Hooks"
 import { BackHandlerEvent, SecurityLevelType, Wallet } from "~Model"
 import { useWalletSecurity } from "./Helpers.standalone"
-import { BaseModalWithChildren, LockScreen, WalletsList } from "./Standalone.components"
+import { BaseModalWithChildren, LockScreen } from "./Standalone.components"
 import { useNavigation } from "@react-navigation/native"
 import { Routes } from "~Navigation"
-
-const LL = {
-    SECURITY_ENHANCEMENT_TITLE: "Security Enhancement",
-    SECURITY_ENHANCEMENT_DESC:
-        // eslint-disable-next-line max-len
-        "Our wallet has always met the highest standards, and now we're taking it a step further. To keep your assets even more secure, please upgrade your wallet.",
-    SECURITY_UPGRADE_BTN: "Upgrade now",
-    SECURITY_BACKUP_TITLE: "Backup phrase",
-    SECURITY_BACKUP_DESC:
-        "Before proceeding with the upgrade, please backup your recovery phrase if you haven't done it yet.",
-    SECURITY_BACKUP_BTN: "Backup now",
-}
+import { useI18nContext } from "~i18n"
 
 export const SecurityUpgrade_V2 = ({
     oldPersistedState,
@@ -30,35 +19,33 @@ export const SecurityUpgrade_V2 = ({
     upgradeSecurityToV2: (password?: string) => Promise<void>
 }) => {
     const theme = useTheme()
+    const { LL } = useI18nContext()
     const nav = useNavigation()
     useBackHandler(BackHandlerEvent.BLOCK)
 
-    const [wallets, setWallets] = useState<Wallet[] | []>([])
     const isUpgrade = useRef(false)
 
     const { isWalletSecurityBiometrics, isWalletSecurityPassword, isWalletSecurityNone } =
         useWalletSecurity(securityType)
 
     const { isOpen: isPasswordPromptOpen, onOpen: openPasswordPrompt, onClose: closePasswordPrompt } = useDisclosure()
-    const { isOpen: isWalletListOpen, onOpen: onOpenWalletList, onClose: onCloseWalletList } = useDisclosure()
 
-    const onBackupClick = useCallback(
-        (selectedWallet?: Wallet) => {
+    const navigateToBackupScreen = useCallback(
+        (wallets: Wallet[], _password?: string) => {
             nav.navigate(Routes.SECURITY_UPGRADE_V2_MNEMONIC_BACKUP, {
-                wallet: selectedWallet ? selectedWallet : wallets[0],
+                wallets,
                 oldPersistedState,
                 securityType,
-                upgradeSecurityToV2,
+                pin: _password,
             })
         },
-        [nav, oldPersistedState, securityType, upgradeSecurityToV2, wallets],
+        [nav, oldPersistedState, securityType],
     )
 
-    const getWalletsWithUserAuthentication = useCallback(async () => {
+    const onBackupHandler = useCallback(async () => {
         if (isWalletSecurityNone) throw new Error("No security set")
         if (isWalletSecurityPassword) openPasswordPrompt()
         isUpgrade.current = false
-
         if (oldPersistedState && isWalletSecurityBiometrics) {
             const _wallets = await MigrationToSecurity_v2.getMnemonicsFromStorage(oldPersistedState)
             if (!_wallets) return
@@ -66,12 +53,7 @@ export const SecurityUpgrade_V2 = ({
             for (let wallet of _wallets) {
                 if (wallet.mnemonic) validWallets.push(wallet)
             }
-            setWallets(_wallets ?? [])
-            if (_wallets.length > 1) {
-                onOpenWalletList()
-            } else {
-                onBackupClick(_wallets[0])
-            }
+            navigateToBackupScreen(_wallets)
         }
     }, [
         isWalletSecurityNone,
@@ -79,8 +61,7 @@ export const SecurityUpgrade_V2 = ({
         openPasswordPrompt,
         oldPersistedState,
         isWalletSecurityBiometrics,
-        onOpenWalletList,
-        onBackupClick,
+        navigateToBackupScreen,
     ])
 
     const onPasswordSuccess = useCallback(
@@ -93,23 +74,10 @@ export const SecurityUpgrade_V2 = ({
                 for (let wallet of _wallets) {
                     if (wallet.mnemonic) validWallets.push(wallet)
                 }
-                setWallets(_wallets ?? [])
-                if (_wallets.length > 1) {
-                    onOpenWalletList()
-                } else {
-                    onBackupClick(_wallets[0])
-                }
+                navigateToBackupScreen(_wallets, _password)
             }
         },
-        [oldPersistedState, closePasswordPrompt, onOpenWalletList, onBackupClick],
-    )
-
-    const handleOnSelectedWallet = useCallback(
-        (selectedWallet: Wallet) => {
-            onCloseWalletList()
-            onBackupClick(selectedWallet)
-        },
-        [onBackupClick, onCloseWalletList],
+        [oldPersistedState, closePasswordPrompt, navigateToBackupScreen],
     )
 
     const onStartUpgrade = useCallback(async () => {
@@ -138,14 +106,14 @@ export const SecurityUpgrade_V2 = ({
         <SafeAreaView style={{ backgroundColor: theme.colors.background }}>
             <BaseView justifyContent="space-between" alignItems="center" h={100} w={100} p={24}>
                 <BaseView alignItems="center">
-                    <BaseIcon name="shield-alert-outline" size={72} />
+                    <BaseIcon name="shield-alert-outline" size={72} color={theme.colors.text} />
                     <BaseSpacer height={24} />
-                    <BaseText align="center" fontSize={24} fontWeight="600">
-                        {LL.SECURITY_ENHANCEMENT_TITLE}
+                    <BaseText align="center" typographyFont="title">
+                        {LL.SECURITY_ENHANCEMENT_TITLE()}
                     </BaseText>
                     <BaseSpacer height={12} />
-                    <BaseText align="center" fontSize={12} fontWeight={"400"}>
-                        {LL.SECURITY_ENHANCEMENT_DESC}
+                    <BaseText align="center" typographyFont="caption">
+                        {LL.SECURITY_ENHANCEMENT_DESC()}
                     </BaseText>
 
                     <BaseSpacer height={69} />
@@ -157,33 +125,29 @@ export const SecurityUpgrade_V2 = ({
                         mb={24}
                         borderRadius={16}
                         //eslint-disable-next-line react-native/no-inline-styles
-                        style={{ borderWidth: 1, borderColor: theme.colors.border }}>
-                        <BaseText align="center" fontSize={14} fontWeight="600">
-                            {LL.SECURITY_BACKUP_TITLE}
+                        style={{ borderWidth: 1, borderColor: theme.colors.card }}>
+                        <BaseText align="center" typographyFont="subSubTitle">
+                            {LL.SECURITY_BACKUP_TITLE()}
                         </BaseText>
                         <BaseSpacer height={8} />
-                        <BaseText align="center" fontSize={12} fontWeight="400">
-                            {LL.SECURITY_BACKUP_DESC}
+                        <BaseText align="center" typographyFont="caption">
+                            {LL.SECURITY_BACKUP_DESC()}
                         </BaseText>
                         <BaseSpacer height={16} />
                         <BaseButton
-                            title={LL.SECURITY_BACKUP_BTN}
+                            title={LL.SECURITY_BACKUP_BTN()}
                             size="sm"
                             py={11}
                             radius={8}
                             variant="outline"
-                            action={getWalletsWithUserAuthentication}
+                            action={onBackupHandler}
                         />
                     </BaseView>
                     <BaseView w={100}>
-                        <BaseButton title={LL.SECURITY_UPGRADE_BTN} w={100} radius={8} action={onStartUpgrade} />
+                        <BaseButton title={LL.SECURITY_UPGRADE_BTN()} w={100} radius={8} action={onStartUpgrade} />
                     </BaseView>
                 </BaseView>
             </BaseView>
-
-            <BaseModalWithChildren isOpen={isWalletListOpen} onClose={onCloseWalletList}>
-                <WalletsList wallets={wallets} onSelected={handleOnSelectedWallet} />
-            </BaseModalWithChildren>
 
             <BaseModalWithChildren isOpen={isPasswordPromptOpen} onClose={closePasswordPrompt}>
                 <LockScreen

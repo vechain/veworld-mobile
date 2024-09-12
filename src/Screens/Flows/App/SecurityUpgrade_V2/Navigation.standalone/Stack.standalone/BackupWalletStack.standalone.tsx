@@ -5,14 +5,16 @@ import { SecurityLevelType, Wallet } from "~Model"
 import { SecurityUpgrade_V2 } from "../../SecurityUpgrade_V2"
 import { MnemonicBackup } from "../../Standalone.components"
 import { Routes } from "~Navigation"
+import { BottomSheetModalProvider } from "@gorhom/bottom-sheet"
+import { GestureHandlerRootView } from "react-native-gesture-handler"
 
 export type RootStackParamListBackupWallet = {
     [Routes.SECURITY_UPGRADE_V2_HOME]: undefined
     [Routes.SECURITY_UPGRADE_V2_MNEMONIC_BACKUP]: {
-        wallet: Wallet | null
+        wallets: Wallet[]
         securityType: SecurityLevelType
         oldPersistedState?: string
-        upgradeSecurityToV2: (password?: string) => Promise<void>
+        pin?: string
     }
 }
 
@@ -40,11 +42,15 @@ export const BackupWalletStack = ({
                         />
                     )}
                 </Stack.Screen>
-                <Stack.Screen
-                    name={Routes.SECURITY_UPGRADE_V2_MNEMONIC_BACKUP}
-                    options={{ headerShown: false }}
-                    component={MnemonicBackup}
-                />
+                <Stack.Screen name={Routes.SECURITY_UPGRADE_V2_MNEMONIC_BACKUP} options={{ headerShown: false }}>
+                    {props => (
+                        <GestureHandlerRootView>
+                            <BottomSheetModalProvider>
+                                <MnemonicBackup {...props} upgradeSecurityToV2={upgradeSecurityToV2} />
+                            </BottomSheetModalProvider>
+                        </GestureHandlerRootView>
+                    )}
+                </Stack.Screen>
             </Stack.Navigator>
         </NavigationContainer>
     )

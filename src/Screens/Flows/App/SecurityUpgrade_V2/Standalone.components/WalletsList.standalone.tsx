@@ -20,7 +20,7 @@ export const WalletsList = ({ wallets, onSelected }: Props) => {
     return (
         <BaseView bg={theme.colors.background}>
             <BaseView flexDirection="row">
-                <BaseText pt={12} px={24} typographyFont="subTitleBold">
+                <BaseText pt={12} px={24} typographyFont="title">
                     {LL.SB_BACKUP_MNEMONIC()}
                 </BaseText>
             </BaseView>
