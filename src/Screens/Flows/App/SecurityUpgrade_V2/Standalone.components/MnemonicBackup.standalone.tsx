@@ -46,7 +46,7 @@ export const MnemonicBackup = ({ route, upgradeSecurityToV2 }: Props) => {
                     <WalletsList wallets={wallets} onSelected={handleOnSelectedWallet} />
                 </BaseView>
                 <BaseView w={100} h={25} p={24}>
-                    <BaseButton title={LL.SECURITY_PHRASE_BACKED_UP()} w={100} radius={8} action={onStartUpgrade} />
+                    <BaseButton title={LL.SECURITY_UPGRADE_BTN()} w={100} radius={8} action={onStartUpgrade} />
                 </BaseView>
             </BaseView>
             <MnemonicModalSheetStandalone ref={ref} selectedWallet={selectedWallet} />
