@@ -77,13 +77,7 @@ export const HistoryScreen = () => {
     // To prevent fetching next page of activities on FlashList mount
     const [hasScrolled, setHasScrolled] = useState(false)
 
-    const onStartTransactingPress = useCallback(
-        () =>
-            nav.navigate(Routes.SELECT_TOKEN_SEND, {
-                initialRoute: Routes.HOME,
-            }),
-        [nav],
-    )
+    const onStartTransactingPress = useCallback(() => nav.navigate(Routes.SELECT_TOKEN_SEND), [nav])
 
     const onActivityPress = useCallback(
         (activity: Activity, token?: FungibleToken, isSwap?: boolean, decodedClauses?: TransactionOutcomes) => {

@@ -2174,7 +2174,7 @@ type RootTranslation = {
 	 */
 	SETTINGS_ABOUT_APP_VERSION: RequiredParams<'version'>
 	/**
-	 * v​e​w​o​r​l​d​.​n​e​t
+	 * v​e​w​o​r​l​d​.​c​o​m
 	 */
 	SETTINGS_ABOUT_WEWORLD_WEBSITE: string
 	/**
@@ -2394,6 +2394,14 @@ type RootTranslation = {
 	 * I​n​s​u​f​f​i​c​i​e​n​t​ ​b​a​l​a​n​c​e
 	 */
 	SEND_INSUFFICIENT_BALANCE: string
+	/**
+	 * I​n​s​u​f​f​i​c​i​e​n​t​ ​g​a​s
+	 */
+	SEND_INSUFFICIENT_GAS: string
+	/**
+	 * E​r​r​o​r​ ​c​a​l​c​u​l​a​t​i​n​g​ ​f​e​e​s​,​ ​p​l​e​a​s​e​ ​t​r​y​ ​a​g​a​i​n​.
+	 */
+	ERROR_FEES_CALCULATION: string
 	/**
 	 * S​e​n​d​ ​y​o​u​r​ ​t​o​k​e​n
 	 */
@@ -5177,7 +5185,7 @@ Try reconnect your device to the internet.
 	 */
 	SETTINGS_ABOUT_APP_VERSION: (arg: { version: unknown }) => LocalizedString
 	/**
-	 * veworld.net
+	 * veworld.com
 	 */
 	SETTINGS_ABOUT_WEWORLD_WEBSITE: () => LocalizedString
 	/**
@@ -5396,6 +5404,14 @@ Try reconnect your device to the internet.
 	 * Insufficient balance
 	 */
 	SEND_INSUFFICIENT_BALANCE: () => LocalizedString
+	/**
+	 * Insufficient gas
+	 */
+	SEND_INSUFFICIENT_GAS: () => LocalizedString
+	/**
+	 * Error calculating fees, please try again.
+	 */
+	ERROR_FEES_CALCULATION: () => LocalizedString
 	/**
 	 * Send your token
 	 */

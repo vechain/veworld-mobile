@@ -288,6 +288,8 @@ function TotalSendAmountView({ amount, symbol, token, txCostTotal, isDelegated, 
         }
     }, [theme.isDark, isEnoughGas])
 
+    const formattedAmount = useMemo(() => BigNutils(amount).decimals(4).toString, [amount])
+
     const formattedTotalCost = useMemo(
         () => BigNutils(txCostTotal).toHuman(token.decimals).decimals(4).toString,
         [token.decimals, txCostTotal],
@@ -305,13 +307,13 @@ function TotalSendAmountView({ amount, symbol, token, txCostTotal, isDelegated, 
             <BaseText typographyFont="caption">{LL.SEND_AMOUNT()}</BaseText>
 
             <BaseView flexDirection="row">
-                <BaseText typographyFont="subSubTitle">{amount}</BaseText>
+                <BaseText typographyFont="subSubTitle">{formattedAmount}</BaseText>
                 <BaseText typographyFont="bodyBold" mx={4}>
                     {symbol}
                 </BaseText>
 
                 {exchangeRate && token.symbol !== VTHO.symbol && (
-                    <FiatBalance typographyFont="buttonSecondary" balances={[fiatHumanAmount]} prefix="≈ " />
+                    <FiatBalance typographyFont="buttonSecondary" balances={[fiatHumanAmount.value]} prefix="≈ " />
                 )}
             </BaseView>
 
@@ -329,7 +331,11 @@ function TotalSendAmountView({ amount, symbol, token, txCostTotal, isDelegated, 
                         </BaseText>
 
                         {exchangeRate && (
-                            <FiatBalance typographyFont="buttonSecondary" balances={[fiatHumanAmount]} prefix="≈ " />
+                            <FiatBalance
+                                typographyFont="buttonSecondary"
+                                balances={[fiatHumanAmount.value]}
+                                prefix="≈ "
+                            />
                         )}
                     </BaseView>
                 </>

@@ -94,9 +94,8 @@ export const TokenList = memo(({ isEdit, isBalanceVisible, ...animatedViewProps 
 
                 if (AccountUtils.isObservedAccount(selectedAccount)) return
 
-                nav.navigate(Routes.SELECT_AMOUNT_SEND, {
+                nav.navigate(Routes.INSERT_ADDRESS_SEND, {
                     token,
-                    initialRoute: Routes.HOME,
                 })
             }
         },

@@ -1,7 +1,9 @@
+import { useNavigation } from "@react-navigation/native"
 import { NativeStackScreenProps } from "@react-navigation/native-stack"
-import React, { useCallback, useState } from "react"
+import React, { useCallback, useMemo, useRef, useState } from "react"
 import { StyleSheet, TextInput, ViewProps } from "react-native"
-import { useAmountInput, useTheme, useThemedStyles } from "~Hooks"
+import Animated, { AnimatedProps, FadeInRight, FadeOut } from "react-native-reanimated"
+import { getCoinGeckoIdBySymbol, useExchangeRate } from "~Api/Coingecko"
 import {
     BaseCardGroup,
     BaseIcon,
@@ -13,18 +15,17 @@ import {
     DismissKeyboardView,
     FadeoutButton,
     Layout,
+    showErrorToast,
 } from "~Components"
-import { RootStackParamListHome, Routes } from "~Navigation"
-import { useI18nContext } from "~i18n"
 import { COLORS, CURRENCY_SYMBOLS, typography, VTHO } from "~Constants"
-import { selectCurrency, useAppSelector } from "~Storage/Redux"
-import { useNavigation } from "@react-navigation/native"
-import { useTotalTokenBalance, useUI, useCalculateGas } from "./Hooks"
-import Animated, { AnimatedProps, FadeInRight, FadeOut } from "react-native-reanimated"
+import { useAmountInput, useTheme, useThemedStyles } from "~Hooks"
+import { RootStackParamListHome, Routes } from "~Navigation"
 import HapticsService from "~Services/HapticsService"
-import { BigNutils } from "~Utils"
-import { getCoinGeckoIdBySymbol, useExchangeRate } from "~Api/Coingecko"
+import { selectCurrency, useAppSelector } from "~Storage/Redux"
+import { BigNutils, TransactionUtils } from "~Utils"
+import { useI18nContext } from "~i18n"
 import FiatBalance from "../../HomeScreen/Components/AccountCard/FiatBalance"
+import { useTotalTokenBalance, useUI } from "./Hooks"
 
 const { defaults: defaultTypography } = typography
 
@@ -33,40 +34,19 @@ type Props = NativeStackScreenProps<RootStackParamListHome, Routes.SELECT_AMOUNT
 const AnimatedTextInput = Animated.createAnimatedComponent(TextInput)
 
 export const SelectAmountSendScreen = ({ route }: Props) => {
-    const { initialRoute, token } = route.params
+    const { address, token } = route.params
 
     const { LL } = useI18nContext()
     const nav = useNavigation()
-    const { input, setInput } = useAmountInput()
+
+    const timer = useRef<NodeJS.Timeout | null>(null)
+    const isVTHO = useRef(token.symbol.toLowerCase() === VTHO.symbol.toLowerCase())
 
     const currency = useAppSelector(selectCurrency)
 
-    const { data: exchangeRate } = useExchangeRate({
-        id: getCoinGeckoIdBySymbol[token.symbol],
-        vs_currency: currency,
-    })
-
     const [isInputInFiat, setIsInputInFiat] = useState(false)
     const [isError, setIsError] = useState(false)
-    const isExchangeRateAvailable = !!exchangeRate
-
-    const { styles, theme } = useThemedStyles(baseStyles(isExchangeRateAvailable))
-
-    const { gas } = useCalculateGas({ token })
-
-    const { tokenTotalBalance, tokenTotalToHuman } = useTotalTokenBalance(token, gas)
-
-    /**
-     * TOKEN total balance in FIAT in raw-ish format (with decimals)
-     * Example "147031782362332055578.377092605442914032"
-     */
-    const fiatTotalBalance = BigNutils().toCurrencyConversion(tokenTotalToHuman, exchangeRate)
-
-    /**
-     * FIAT selected balance calculated fron TOKEN input in human readable format (correct value is when TOKEN is active)
-     * Example "53.54"
-     */
-    const fiatHumanAmount = BigNutils().toCurrencyConversion(input, exchangeRate)
+    const [areFeesLoading, setAreFeesLoading] = useState(false)
 
     /**
      * TOKEN selected balance in raw-ish format (with decimals) (correct value is when FIAT is active)
@@ -74,15 +54,67 @@ export const SelectAmountSendScreen = ({ route }: Props) => {
      */
     const [tokenAmountFromFiat, setTokenAmountFromFiat] = useState("")
 
+    const { input, setInput } = useAmountInput()
+
+    const { data: exchangeRate } = useExchangeRate({
+        id: getCoinGeckoIdBySymbol[token.symbol],
+        vs_currency: currency,
+    })
+
+    const isExchangeRateAvailable = !!exchangeRate
+
+    const { styles, theme } = useThemedStyles(baseStyles(isExchangeRateAvailable))
+
+    const { getGasFees, tokenTotalBalance, tokenTotalToHuman } = useTotalTokenBalance(
+        token,
+        isInputInFiat ? tokenAmountFromFiat : "1",
+        address,
+    )
+
+    const { inputColorNotAnimated, placeholderColor, shortenedTokenName, animatedFontStyle, animatedStyleInputColor } =
+        useUI({ isError, input, token, theme })
+
+    /**
+     * TOKEN total balance in FIAT in raw-ish format (with decimals)
+     * Example "147031782362332055578.377092605442914032"
+     */
+    const fiatTotalBalance = useMemo(
+        () => BigNutils().toCurrencyConversion(tokenTotalToHuman, exchangeRate),
+        [exchangeRate, tokenTotalToHuman],
+    )
+
+    /**
+     * FIAT selected balance calculated fron TOKEN input in human readable format (correct value is when TOKEN is active)
+     * Example "53.54"
+     */
+    const fiatHumanAmount = useMemo(() => BigNutils().toCurrencyConversion(input, exchangeRate), [exchangeRate, input])
+
+    const computeconvertedAmountInFooter = useMemo(() => {
+        if (isInputInFiat) {
+            return BigNutils().toTokenConversion(input, exchangeRate).decimals(8).toString
+        } else {
+            return ""
+        }
+    }, [exchangeRate, input, isInputInFiat])
+
     /**
      * Toggle between FIAT and TOKEN input (and update the input value)
      */
-    const handleToggleInputMode = () => {
+    const handleToggleInputMode = useCallback(() => {
         setInput("")
         setIsError(false)
         setTokenAmountFromFiat("")
         setIsInputInFiat(s => !s)
-    }
+        setAreFeesLoading(false)
+    }, [setInput])
+
+    const onFeesCalculationError = useCallback(() => {
+        showErrorToast({ text1: LL.ERROR_FEES_CALCULATION() })
+        setInput("")
+        setIsError(false)
+        setTokenAmountFromFiat("")
+        setAreFeesLoading(false)
+    }, [LL, setInput])
 
     /**
      * Checks input or slider value against the total balance and sets the error state
@@ -90,57 +122,130 @@ export const SelectAmountSendScreen = ({ route }: Props) => {
      */
     const onChangeTextInput = useCallback(
         (newValue: string) => {
-            // Get the correct token amount from the FIAT input
-            const controlValue = isInputInFiat
-                ? BigNutils().toTokenConversion(newValue, exchangeRate)
-                : BigNutils(newValue).addTrailingZeros(token.decimals)
+            setInput(newValue)
 
-            let roundDownValue = controlValue.decimals(6)
+            if (newValue === "" || BigNutils(newValue).isZero) {
+                if (timer.current) {
+                    clearTimeout(timer.current)
+                    timer.current = null
+                }
 
-            if (controlValue.isBiggerThan(tokenTotalBalance)) {
-                setIsError(true)
-                HapticsService.triggerNotification({ level: "Error" })
-            } else {
+                setTokenAmountFromFiat("")
                 setIsError(false)
+                return
             }
 
-            setInput(newValue)
-            setTokenAmountFromFiat(roundDownValue.toString)
+            if (!isVTHO.current) {
+                const controlValue = isInputInFiat
+                    ? BigNutils().toTokenConversion(newValue, exchangeRate)
+                    : BigNutils(newValue).addTrailingZeros(token.decimals).toHuman(token.decimals)
+
+                const balanceToHuman = BigNutils(tokenTotalBalance).toHuman(token.decimals)
+
+                if (controlValue.isBiggerThan(balanceToHuman.toString)) {
+                    setIsError(true)
+                    HapticsService.triggerNotification({ level: "Error" })
+                } else {
+                    setIsError(false)
+                }
+
+                setTokenAmountFromFiat(controlValue.toString)
+            } else {
+                setAreFeesLoading(true)
+
+                if (timer.current) {
+                    clearTimeout(timer.current)
+                    timer.current = null
+                }
+
+                timer.current = setTimeout(async () => {
+                    const controlValue = isInputInFiat
+                        ? BigNutils().toTokenConversion(newValue, exchangeRate).decimals(token.decimals)
+                        : BigNutils(newValue).addTrailingZeros(token.decimals).toHuman(token.decimals)
+
+                    const clauses = TransactionUtils.prepareFungibleClause(controlValue.toString, token, address)
+                    const { gasFee, isError: feesError } = await getGasFees(clauses)
+
+                    if (feesError) {
+                        onFeesCalculationError()
+                        return
+                    }
+
+                    const gasFeeToHuman = gasFee.toHuman(VTHO.decimals)
+                    const fiatToToken = BigNutils(controlValue.toString)
+                    const amountPlusFees = controlValue.plus(gasFeeToHuman.toString)
+                    const balanceToHuman = BigNutils(tokenTotalBalance).toHuman(token.decimals)
+
+                    if (amountPlusFees.isBiggerThan(balanceToHuman.toString)) {
+                        setIsError(true)
+                        HapticsService.triggerNotification({ level: "Error" })
+                    } else {
+                        setIsError(false)
+                    }
+
+                    setTokenAmountFromFiat(fiatToToken.toString)
+                    setAreFeesLoading(false)
+                }, 500)
+            }
         },
-        [exchangeRate, isInputInFiat, setInput, token.decimals, tokenTotalBalance],
+        [address, exchangeRate, getGasFees, isInputInFiat, onFeesCalculationError, setInput, token, tokenTotalBalance],
     )
 
     /**
      * Sets the input value to the max available balance (in TOKEN or FIAT)
      */
-    const handleOnMaxPress = useCallback(() => {
-        // setInput(isInputInFiat ? BigNutils(fiatTotalBalance).toCurrencyFormatString(2).toString : tokenBalanceMinusProjectedFees)
-        setInput(
-            isInputInFiat
-                ? BigNutils(fiatTotalBalance).toCurrencyFormat_string(2)
-                : BigNutils(tokenTotalBalance).toHuman(token.decimals).decimals(8).toString,
-        )
-        let conv = BigNutils().toTokenConversion(fiatTotalBalance, exchangeRate).toString
-        let scaleDownforPrecission = BigNutils(conv).decimals(4).toString
-        setTokenAmountFromFiat(scaleDownforPrecission)
+    const handleOnMaxPress = useCallback(async () => {
+        if (!isVTHO.current) {
+            setInput(isInputInFiat ? BigNutils(fiatTotalBalance.value).toCurrencyFormat_string(2) : tokenTotalToHuman)
+
+            setTokenAmountFromFiat(tokenTotalToHuman)
+        } else {
+            setAreFeesLoading(true)
+            const clauses = TransactionUtils.prepareFungibleClause(tokenTotalToHuman, token, address)
+            const { maxAmountMinusFeesHuman, isError: feesError } = await getGasFees(clauses)
+
+            if (feesError) {
+                onFeesCalculationError()
+                return
+            }
+
+            const fiatMaxAmountMinusFees = BigNutils().toCurrencyConversion(
+                maxAmountMinusFeesHuman,
+                exchangeRate,
+                undefined,
+                8,
+            )
+
+            setInput(isInputInFiat ? fiatMaxAmountMinusFees.preciseValue : maxAmountMinusFeesHuman)
+            setTokenAmountFromFiat(maxAmountMinusFeesHuman)
+            setAreFeesLoading(false)
+        }
+
         setIsError(false)
-    }, [exchangeRate, fiatTotalBalance, isInputInFiat, setInput, token.decimals, tokenTotalBalance])
+    }, [
+        address,
+        exchangeRate,
+        fiatTotalBalance,
+        getGasFees,
+        isInputInFiat,
+        onFeesCalculationError,
+        setInput,
+        token,
+        tokenTotalToHuman,
+    ])
 
     /**
      * Navigate to the next screen
      * Nav params: If user has FIAT active send the TOKEN amount calculated from FIAT,
      * otherwise send the input value (human readable token value)
      */
-    const goToInsertAddress = async () => {
-        nav.navigate(Routes.INSERT_ADDRESS_SEND, {
+    const goToInsertAddress = useCallback(async () => {
+        nav.navigate(Routes.TRANSACTION_SUMMARY_SEND, {
             token,
             amount: isInputInFiat ? tokenAmountFromFiat : input,
-            initialRoute: initialRoute ?? "",
+            address,
         })
-    }
-
-    const { inputColorNotAnimated, placeholderColor, shortenedTokenName, animatedFontStyle, animatedStyleInputColor } =
-        useUI({ isError, input, token, theme })
+    }, [address, input, isInputInFiat, nav, token, tokenAmountFromFiat])
 
     return (
         <Layout
@@ -163,6 +268,7 @@ export const SelectAmountSendScreen = ({ route }: Props) => {
 
                             {isError && (
                                 <BalanceWarningView
+                                    text={!isVTHO.current ? LL.SEND_INSUFFICIENT_BALANCE() : LL.SEND_INSUFFICIENT_GAS()}
                                     entering={FadeInRight.springify(300).mass(1)}
                                     exiting={FadeOut.springify(300).mass(1)}
                                 />
@@ -222,17 +328,16 @@ export const SelectAmountSendScreen = ({ route }: Props) => {
                                             </BaseTouchable>
 
                                             {isExchangeRateAvailable && (
-                                                <>
-                                                    <BaseIcon
-                                                        name={"autorenew"}
-                                                        size={20}
-                                                        color={COLORS.DARK_PURPLE}
-                                                        bg={COLORS.LIME_GREEN}
-                                                        style={styles.icon}
-                                                        haptics="Light"
-                                                        action={handleToggleInputMode}
-                                                    />
-                                                </>
+                                                <BaseIcon
+                                                    name={"autorenew"}
+                                                    size={20}
+                                                    disabled={areFeesLoading}
+                                                    color={COLORS.DARK_PURPLE}
+                                                    bg={COLORS.LIME_GREEN}
+                                                    style={styles.icon}
+                                                    haptics="Light"
+                                                    action={handleToggleInputMode}
+                                                />
                                             )}
                                         </BaseView>
                                     ),
@@ -243,12 +348,27 @@ export const SelectAmountSendScreen = ({ route }: Props) => {
                                     ? [
                                           {
                                               children: (
-                                                  <FiatBalance
-                                                      typographyFont="captionBold"
-                                                      color={inputColorNotAnimated}
-                                                      balances={[fiatHumanAmount]}
-                                                      prefix="≈ "
-                                                  />
+                                                  <>
+                                                      {isInputInFiat ? (
+                                                          <BaseView flexDirection="row" alignItems="center">
+                                                              <BaseText
+                                                                  typographyFont="captionBold"
+                                                                  color={inputColorNotAnimated}>
+                                                                  {computeconvertedAmountInFooter}
+                                                              </BaseText>
+                                                              <BaseSpacer width={4} />
+                                                              {/* @ts-ignore */}
+                                                              <BaseImage uri={token.icon} style={styles.logoIcon} />
+                                                          </BaseView>
+                                                      ) : (
+                                                          <FiatBalance
+                                                              typographyFont="captionBold"
+                                                              color={inputColorNotAnimated}
+                                                              balances={[fiatHumanAmount.value]}
+                                                              prefix="≈ "
+                                                          />
+                                                      )}
+                                                  </>
                                               ),
                                               style: styles.counterValueView,
                                           },
@@ -259,30 +379,26 @@ export const SelectAmountSendScreen = ({ route }: Props) => {
                                     ? [
                                           {
                                               children: (
-                                                  <>
-                                                      <BaseText
-                                                          typographyFont="caption"
-                                                          px={4}
-                                                          style={styles.infoTextStyle}
-                                                          color={theme.colors.textDisabled}>
-                                                          {LL.SEND_VTHO_WARNING_MAX()}
-                                                      </BaseText>
-                                                  </>
+                                                  <BaseText
+                                                      typographyFont="caption"
+                                                      px={4}
+                                                      style={styles.infoTextStyle}
+                                                      color={theme.colors.textDisabled}>
+                                                      {LL.SEND_VTHO_WARNING_MAX()}
+                                                  </BaseText>
                                               ),
                                           },
                                       ]
                                     : [
                                           {
                                               children: (
-                                                  <>
-                                                      <BaseText
-                                                          typographyFont="caption"
-                                                          px={4}
-                                                          style={styles.infoTextStyle}
-                                                          color={theme.colors.textDisabled}>
-                                                          {LL.SEND_VTHO_WARNING_TOKEN()}
-                                                      </BaseText>
-                                                  </>
+                                                  <BaseText
+                                                      typographyFont="caption"
+                                                      px={4}
+                                                      style={styles.infoTextStyle}
+                                                      color={theme.colors.textDisabled}>
+                                                      {LL.SEND_VTHO_WARNING_TOKEN()}
+                                                  </BaseText>
                                               ),
                                           },
                                       ]),
@@ -297,10 +413,7 @@ export const SelectAmountSendScreen = ({ route }: Props) => {
                 <FadeoutButton
                     testID="next-button"
                     title={LL.COMMON_BTN_NEXT()}
-                    disabled={
-                        isError || input === "" || BigNutils(input).isZero
-                        // isError || input === "" || BigNutils(input).isZero || BigNutils(tokenBalanceMinusProjectedFees).isZero
-                    }
+                    disabled={isError || input === "" || BigNutils(input).isZero || areFeesLoading}
                     action={goToInsertAddress}
                     bottom={0}
                     mx={0}
@@ -358,12 +471,13 @@ const baseStyles = (isExchangeRateAvailable: boolean) => () =>
         },
     })
 
-interface IBalanceWarningView extends AnimatedProps<ViewProps> {}
+interface IBalanceWarningView extends AnimatedProps<ViewProps> {
+    text: string
+}
 
-function BalanceWarningView(props: IBalanceWarningView) {
-    const { ...animatedViewProps } = props
+function BalanceWarningView(props: Readonly<IBalanceWarningView>) {
+    const { text, ...animatedViewProps } = props
     const theme = useTheme()
-    const { LL } = useI18nContext()
 
     return (
         <Animated.View {...animatedViewProps}>
@@ -371,7 +485,7 @@ function BalanceWarningView(props: IBalanceWarningView) {
                 <BaseIcon name={"alert-circle-outline"} size={20} color={theme.colors.danger} />
                 <BaseSpacer width={8} />
                 <BaseText typographyFont="body" fontSize={12} color={theme.colors.danger}>
-                    {LL.SEND_INSUFFICIENT_BALANCE()}
+                    {text}
                 </BaseText>
             </BaseView>
         </Animated.View>

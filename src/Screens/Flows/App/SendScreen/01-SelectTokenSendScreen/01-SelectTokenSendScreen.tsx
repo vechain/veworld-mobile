@@ -11,7 +11,7 @@ import { useI18nContext } from "~i18n"
 
 type Props = NativeStackScreenProps<RootStackParamListHome, Routes.SELECT_TOKEN_SEND>
 
-export const SelectTokenSendScreen = ({ route }: Props) => {
+export const SelectTokenSendScreen = ({}: Props) => {
     const { LL } = useI18nContext()
     const [tokenQuery, setTokenQuery] = useState<string>("")
     const tokens = useAppSelector(selectSendableTokensWithBalance)
@@ -22,9 +22,8 @@ export const SelectTokenSendScreen = ({ route }: Props) => {
     )
     const nav = useNavigation()
     const handleClickToken = (token: FungibleTokenWithBalance) => async () => {
-        nav.navigate(Routes.SELECT_AMOUNT_SEND, {
+        nav.navigate(Routes.INSERT_ADDRESS_SEND, {
             token,
-            initialRoute: route.params.initialRoute,
         })
     }
 

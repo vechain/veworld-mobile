@@ -682,6 +682,8 @@ const en: BaseTranslation = {
     SEND_RANGE_ZERO: "0%",
     SEND_RANGE_MAX: "MAX",
     SEND_INSUFFICIENT_BALANCE: "Insufficient balance",
+    SEND_INSUFFICIENT_GAS: "Insufficient gas",
+    ERROR_FEES_CALCULATION: "Error calculating fees, please try again.",
     SEND_INSERT_ADDRESS: "Send your token",
     SEND_INSERT_ADDRESS_DESCRIPTION: "Select a contact below or paste/scan an address",
     SEND_ENTER_AN_ADDRESS: "Enter the address to send to...",
