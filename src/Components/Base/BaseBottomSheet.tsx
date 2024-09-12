@@ -1,4 +1,4 @@
-import React, { useCallback, useMemo, useState } from "react"
+import React, { useCallback, useEffect, useMemo, useState } from "react"
 import { LayoutChangeEvent, StyleProp, StyleSheet, ViewStyle, useWindowDimensions } from "react-native"
 import {
     BottomSheetBackdrop,
@@ -19,6 +19,9 @@ import { isFinite } from "lodash"
 import { BackHandlerEvent } from "~Model"
 import { isAndroid } from "~Utils/PlatformUtils/PlatformUtils"
 import { useSafeAreaInsets } from "react-native-safe-area-context"
+
+const OPENED_STATE = 0
+const CLOSED_STATE = -1
 
 type Props = Omit<BottomSheetModalProps, "snapPoints"> & {
     children: React.ReactNode
@@ -74,13 +77,15 @@ export const BaseBottomSheet = React.forwardRef<BottomSheetModalMethods, Props>(
         },
         ref,
     ) => {
+        const { onChange, ...sheetProps } = props
         const { styles } = useThemedStyles(baseStyles)
         const { height: windowHeight } = useWindowDimensions()
         const { bottom: bottomSafeAreaSize } = useSafeAreaInsets()
         const reducedMotion = useReducedMotion()
-        useBackHandler(backHandlerEvent)
+        const { addBackHandlerListener, removeBackHandlerListener } = useBackHandler(backHandlerEvent)
 
         const [contentHeight, setContentHeight] = useState<number>(0)
+        const [sheetState, setSheetState] = useState<number>(-1)
 
         const onLayoutHandler = useCallback(
             (event: LayoutChangeEvent) => {
@@ -111,6 +116,24 @@ export const BaseBottomSheet = React.forwardRef<BottomSheetModalMethods, Props>(
             (props_: BottomSheetHandleProps) => <BaseView {...props_} style={styles.handleStyle} />,
             [styles],
         )
+
+        const onSheetPositionChange = useCallback(
+            (index: number) => {
+                setSheetState(index)
+                onChange && onChange(index)
+            },
+            [onChange],
+        )
+
+        useEffect(() => {
+            if (sheetState === OPENED_STATE) {
+                addBackHandlerListener()
+            }
+
+            if (sheetState === CLOSED_STATE) {
+                removeBackHandlerListener()
+            }
+        }, [addBackHandlerListener, removeBackHandlerListener, sheetState])
 
         /**
          * `snapPoints` should be an array of strings, each representing a percentage.
@@ -151,7 +174,8 @@ export const BaseBottomSheet = React.forwardRef<BottomSheetModalMethods, Props>(
                 keyboardBehavior="interactive"
                 keyboardBlurBehavior="restore"
                 snapPoints={snappoints}
-                {...props}>
+                onChange={onSheetPositionChange}
+                {...sheetProps}>
                 <BaseView
                     w={100}
                     px={noMargins ? 0 : 24}

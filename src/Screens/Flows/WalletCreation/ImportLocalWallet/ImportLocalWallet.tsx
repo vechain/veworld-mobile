@@ -110,6 +110,8 @@ export const ImportLocalWallet = () => {
         [onCloseDerivationPath],
     )
 
+    const importType = useMemo(() => CryptoUtils.determineKeyImportType(textValue), [textValue])
+
     const {
         isPasswordPromptOpen: isPasswordPromptOpen_1,
         handleClosePasswordModal: handleClosePasswordModal_1,
@@ -120,16 +122,14 @@ export const ImportLocalWallet = () => {
             await importOnboardedWallet({
                 importMnemonic: mnemonicCache.current,
                 privateKey: privateKeyCache.current,
-                isCloudKit: false,
                 pin,
                 derivationPath: derivationPathCache.current ?? DerivationPath.VET,
+                importType,
             })
             nav.goBack()
         },
         allowAutoPassword: false,
     })
-
-    const importType = useMemo(() => CryptoUtils.determineKeyImportType(textValue), [textValue])
 
     const processErrorMessage = useCallback(
         (err: unknown) => {
@@ -157,8 +157,7 @@ export const ImportLocalWallet = () => {
         (_mnemonic: string) => {
             try {
                 const mnemonic = CryptoUtils.mnemonicStringToArray(_mnemonic)
-                const isCloudKit = false
-                checkCanImportDevice(isCloudKit, derivationPathCache.current ?? DerivationPath.VET, mnemonic)
+                checkCanImportDevice(derivationPathCache.current ?? DerivationPath.VET, mnemonic)
                 mnemonicCache.current = mnemonic
                 track(AnalyticsEvent.IMPORT_MNEMONIC_SUBMITTED)
                 if (userHasOnboarded) {
@@ -167,6 +166,7 @@ export const ImportLocalWallet = () => {
                     onCreateWallet({
                         importMnemonic: mnemonic,
                         derivationPath: derivationPathCache.current ?? DerivationPath.VET,
+                        importType: IMPORT_TYPE.MNEMONIC,
                     })
                 }
             } catch (err) {
@@ -187,8 +187,7 @@ export const ImportLocalWallet = () => {
     const importPrivateKey = useCallback(
         (_privKey: string) => {
             try {
-                const isCloudKit = false
-                checkCanImportDevice(isCloudKit, derivationPathCache.current ?? DerivationPath.VET, undefined, _privKey)
+                checkCanImportDevice(derivationPathCache.current ?? DerivationPath.VET, undefined, _privKey)
                 privateKeyCache.current = _privKey
                 track(AnalyticsEvent.IMPORT_PRIVATE_KEY_SUBMITTED)
                 if (userHasOnboarded) {
@@ -197,6 +196,7 @@ export const ImportLocalWallet = () => {
                     onCreateWallet({
                         privateKey: _privKey,
                         derivationPath: derivationPathCache.current ?? DerivationPath.VET,
+                        importType: IMPORT_TYPE.PRIVATE_KEY,
                     })
                 }
             } catch (err) {
@@ -218,19 +218,17 @@ export const ImportLocalWallet = () => {
         async (pwd: string) => {
             try {
                 const privateKey = await CryptoUtils.decryptKeystoreFile(textValue, pwd)
-                const isCloudKit = false
-                checkCanImportDevice(
-                    isCloudKit,
-                    derivationPathCache.current ?? DerivationPath.VET,
-                    undefined,
-                    privateKey,
-                )
+                checkCanImportDevice(derivationPathCache.current ?? DerivationPath.VET, undefined, privateKey)
                 privateKeyCache.current = privateKey
                 track(AnalyticsEvent.IMPORT_KEYSTORE_FILE_SUBMITTED)
                 if (userHasOnboarded) {
                     checkIdentityBeforeOpening_1()
                 } else {
-                    onCreateWallet({ privateKey, derivationPath: derivationPathCache.current ?? DerivationPath.VET })
+                    onCreateWallet({
+                        privateKey,
+                        derivationPath: derivationPathCache.current ?? DerivationPath.VET,
+                        importType: IMPORT_TYPE.KEYSTORE_FILE,
+                    })
                 }
             } catch (err) {
                 processErrorMessage(err)
@@ -392,6 +390,7 @@ export const ImportLocalWallet = () => {
                                             mnemonic: mnemonicCache.current,
                                             privateKey: privateKeyCache.current,
                                             derivationPath: derivationPathCache.current ?? DerivationPath.VET,
+                                            importType,
                                         })
                                     }
                                 />

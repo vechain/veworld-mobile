@@ -45,4 +45,5 @@ export enum IMPORT_TYPE {
     MNEMONIC = "mnemonic",
     PRIVATE_KEY = "private-key",
     KEYSTORE_FILE = "keystore-file",
+    ICLOUD = "icloud",
 }

@@ -5,6 +5,7 @@ import { selectDevices } from "~Storage/Redux/Selectors"
 import { TestWrapper } from "~Test"
 import { DEVICE_CREATION_ERRORS as ERRORS } from "~Model"
 import { HexUtils } from "~Utils"
+import { DerivationPath } from "~Constants"
 
 jest.mock("react-native-quick-crypto")
 
@@ -34,7 +35,7 @@ describe("createDevice", () => {
             "patrol marriage valve view dismiss history retire mystery garlic limb adult swing dilemma dynamic hungry".split(
                 " ",
             )
-        const { device, wallet } = hook.current.createDevice(false, mnemonic)
+        const { device, wallet } = hook.current.createDevice(false, DerivationPath.VET, mnemonic)
         expect(device).toBeDefined()
         expect(wallet).toBeDefined()
         expect(device.rootAddress).toBeDefined()
@@ -51,7 +52,7 @@ describe("createDevice", () => {
         })
 
         const privateKey = "99f0500549792796c14fed62011a51081dc5b5e68fe8bd8a13b86be829c4fd36"
-        const { device, wallet } = hook.current.createDevice(false, undefined, privateKey)
+        const { device, wallet } = hook.current.createDevice(false, DerivationPath.VET, undefined, privateKey)
         expect(device).toBeDefined()
         expect(wallet).toBeDefined()
         expect(device.rootAddress).toBeDefined()
@@ -84,7 +85,7 @@ describe("createDevice", () => {
                 " ",
             )
         expect(() => {
-            result.current.createDevice(false, mnemonic)
+            result.current.createDevice(false, DerivationPath.VET, mnemonic)
         }).toThrowError(ERRORS.ADDRESS_EXISTS)
     })
 })

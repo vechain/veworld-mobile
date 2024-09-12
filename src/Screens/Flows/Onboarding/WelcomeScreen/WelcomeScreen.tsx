@@ -74,6 +74,12 @@ export const WelcomeScreen = () => {
         isCloudKitAvailable && init()
     }, [getAllWalletsFromCloudKit, onQuickCloudModalOpen, isCloudKitAvailable])
 
+    useEffect(() => {
+        // Track when a new onboarding start
+        track(AnalyticsEvent.ONBOARDING_START)
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [])
+
     const DEV_DEMO_BUTTON = useDemoWallet()
     const { onCreateWallet, isOpen, isError, onSuccess, onClose: onCloseCreateFlow } = useHandleWalletCreation()
 

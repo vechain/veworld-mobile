@@ -21,6 +21,7 @@ import { Routes } from "~Navigation/Enums"
 import { AboutScreen } from "~Screens/Flows/App/AboutScreen"
 import { useNavAnimation } from "~Hooks"
 import { Device, LocalDevice } from "~Model"
+import { SettingsBrowserView } from "~Screens/Flows/App/SettingsScreen/Components/SettingsBrowserView"
 
 export type RootStackParamListSettings = {
     [Routes.SETTINGS]: undefined
@@ -40,6 +41,8 @@ export type RootStackParamListSettings = {
     [Routes.RESET_APP]: undefined
     [Routes.SETTINGS_CONNECTED_APPS]: undefined
     [Routes.ICLOUD_MNEMONIC_BACKUP]: { deviceToBackup?: LocalDevice; mnemonicArray: string[] }
+    [Routes.SETTINGS_GET_SUPPORT]: { url: string }
+    [Routes.SETTINGS_GIVE_FEEDBACK]: { url: string }
 }
 
 const Settings = createNativeStackNavigator<RootStackParamListSettings>()
@@ -75,6 +78,7 @@ export const SettingsStack = () => {
             />
 
             <Settings.Screen name={Routes.SETTINGS_ABOUT} component={AboutScreen} options={{ headerShown: false }} />
+
             <Settings.Screen
                 name={Routes.WALLET_MANAGEMENT}
                 component={WalletManagementScreen}
@@ -127,6 +131,18 @@ export const SettingsStack = () => {
             <Settings.Screen
                 name={Routes.ICLOUD_MNEMONIC_BACKUP}
                 component={MnemonicBackupScreen}
+                options={{ headerShown: false }}
+            />
+
+            <Settings.Screen
+                name={Routes.SETTINGS_GET_SUPPORT}
+                component={SettingsBrowserView}
+                options={{ headerShown: false }}
+            />
+
+            <Settings.Screen
+                name={Routes.SETTINGS_GIVE_FEEDBACK}
+                component={SettingsBrowserView}
                 options={{ headerShown: false }}
             />
         </Settings.Navigator>

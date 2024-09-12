@@ -1,5 +1,5 @@
 import { useCallback, useState } from "react"
-import { NewLedgerDevice } from "~Model"
+import { IMPORT_TYPE, NewLedgerDevice } from "~Model"
 import { useDeviceUtils } from "../useDeviceUtils"
 import {
     addDeviceAndAccounts,
@@ -11,7 +11,7 @@ import {
     useAppDispatch,
     useAppSelector,
 } from "~Storage/Redux"
-import { selectAccountsState } from "~Storage/Redux/Selectors"
+import { selectAccountsState, selectHasOnboarded } from "~Storage/Redux/Selectors"
 import { warn } from "~Utils/Logger"
 import { useBiometrics } from "../useBiometrics"
 import { useAnalyticTracking } from "~Hooks/useAnalyticTracking"
@@ -30,6 +30,7 @@ export const useCreateWallet = () => {
     const biometrics = useBiometrics()
     const dispatch = useAppDispatch()
     const selectedAccount = useAppSelector(selectAccountsState)?.selectedAccount
+    const userHasOnboarded = useAppSelector(selectHasOnboarded)
     const [isComplete, setIsComplete] = useState(false)
     const track = useAnalyticTracking()
     /**
@@ -45,19 +46,19 @@ export const useCreateWallet = () => {
             mnemonic,
             privateKey,
             userPassword,
-            isCloudKit,
             onError,
+            importType,
             derivationPath,
         }: {
             mnemonic?: string[]
             privateKey?: string
             userPassword?: string
-            isCloudKit: boolean
+            importType?: IMPORT_TYPE
             onError?: (error: unknown) => void
             derivationPath: DerivationPath
         }) => {
             try {
-                const { device, wallet } = createDevice(isCloudKit, derivationPath, mnemonic, privateKey)
+                const { device, wallet } = createDevice(derivationPath, mnemonic, privateKey, importType)
 
                 const encryptedWallet = await WalletEncryptionKeyHelper.encryptWallet(wallet, userPassword)
 
@@ -73,15 +74,36 @@ export const useCreateWallet = () => {
                 dispatch(setMnemonic(undefined))
                 dispatch(setPrivateKey(undefined))
                 setIsComplete(true)
+
                 track(AnalyticsEvent.WALLET_ADD_LOCAL_SUCCESS)
+                track(AnalyticsEvent.WALLET_GENERATION, {
+                    context: userHasOnboarded ? "management" : "onboarding",
+                    type: !importType ? "create" : "import",
+                    signature: "local",
+                    importType: importType,
+                })
+                if (!userHasOnboarded) {
+                    track(AnalyticsEvent.ONBOARDING_SUCCESS, {
+                        type: !importType ? "create" : "import",
+                        signature: "local",
+                        importType: importType,
+                    })
+                }
             } catch (e) {
                 warn(ERROR_EVENTS.WALLET_CREATION, e)
                 track(AnalyticsEvent.WALLET_ADD_LOCAL_ERROR)
+                if (!userHasOnboarded) {
+                    track(AnalyticsEvent.ONBOARDING_FAILED, {
+                        type: !importType ? "create" : "import",
+                        signature: "local",
+                        importType: importType,
+                    })
+                }
                 onError?.(e)
                 throw e
             }
         },
-        [dispatch, createDevice, selectedAccount, track],
+        [createDevice, dispatch, selectedAccount, track, userHasOnboarded],
     )
     //* [END] - Create Wallet
 
@@ -102,14 +124,31 @@ export const useCreateWallet = () => {
 
                 setIsComplete(true)
                 track(AnalyticsEvent.WALLET_ADD_LEDGER_SUCCESS)
+                track(AnalyticsEvent.WALLET_GENERATION, {
+                    context: userHasOnboarded ? "management" : "onboarding",
+                    type: "import",
+                    signature: "hardware",
+                })
+                if (!userHasOnboarded) {
+                    track(AnalyticsEvent.ONBOARDING_SUCCESS, {
+                        type: "import",
+                        signature: "hardware",
+                    })
+                }
             } catch (e) {
                 warn(ERROR_EVENTS.WALLET_CREATION, e)
                 track(AnalyticsEvent.WALLET_ADD_LEDGER_ERROR)
+                if (!userHasOnboarded) {
+                    track(AnalyticsEvent.ONBOARDING_FAILED, {
+                        type: "import",
+                        signature: "hardware",
+                    })
+                }
                 onError?.(e)
                 throw e
             }
         },
-        [dispatch, selectedAccount, track],
+        [dispatch, selectedAccount, track, userHasOnboarded],
     )
     //* [END] - Create Wallet
 

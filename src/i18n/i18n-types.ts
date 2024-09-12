@@ -736,9 +736,9 @@ type RootTranslation = {
 	 */
 	TITLE_SETTINGS: string
 	/**
-	 * G​e​n​e​r​a​l
+	 * G​e​n​e​r​a​l​ ​s​e​t​t​i​n​g​s
 	 */
-	TITLE_GENERAL: string
+	TITLE_GENERAL_SETTINGS: string
 	/**
 	 * A​d​v​a​n​c​e​d
 	 */
@@ -787,6 +787,14 @@ type RootTranslation = {
 	 * C​o​n​n​e​c​t​e​d​ ​A​p​p​s
 	 */
 	TITLE_CONNECTED_APPS: string
+	/**
+	 * G​e​t​ ​s​u​p​p​o​r​t
+	 */
+	TITLE_GET_SUPPORT: string
+	/**
+	 * G​i​v​e​ ​f​e​e​d​b​a​c​k
+	 */
+	TITLE_GIVE_FEEDBACK: string
 	/**
 	 * A​b​o​u​t
 	 */
@@ -3916,9 +3924,9 @@ export type TranslationFunctions = {
 	 */
 	TITLE_SETTINGS: () => LocalizedString
 	/**
-	 * General
+	 * General settings
 	 */
-	TITLE_GENERAL: () => LocalizedString
+	TITLE_GENERAL_SETTINGS: () => LocalizedString
 	/**
 	 * Advanced
 	 */
@@ -3967,6 +3975,14 @@ export type TranslationFunctions = {
 	 * Connected Apps
 	 */
 	TITLE_CONNECTED_APPS: () => LocalizedString
+	/**
+	 * Get support
+	 */
+	TITLE_GET_SUPPORT: () => LocalizedString
+	/**
+	 * Give feedback
+	 */
+	TITLE_GIVE_FEEDBACK: () => LocalizedString
 	/**
 	 * About
 	 */
