@@ -54,7 +54,7 @@ export const SelectAmountSendScreen = ({ route }: Props) => {
      */
     const [tokenAmountFromFiat, setTokenAmountFromFiat] = useState("")
 
-    const { input, setInput } = useAmountInput()
+    const { input, setInput, removeInvalidCharacters } = useAmountInput()
 
     const { data: exchangeRate } = useExchangeRate({
         id: getCoinGeckoIdBySymbol[token.symbol],
@@ -122,9 +122,10 @@ export const SelectAmountSendScreen = ({ route }: Props) => {
      */
     const onChangeTextInput = useCallback(
         (newValue: string) => {
-            setInput(newValue)
+            const _newValue = removeInvalidCharacters(newValue)
+            setInput(_newValue)
 
-            if (newValue === "" || BigNutils(newValue).isZero) {
+            if (_newValue === "" || BigNutils(_newValue).isZero) {
                 if (timer.current) {
                     clearTimeout(timer.current)
                     timer.current = null
@@ -138,8 +139,8 @@ export const SelectAmountSendScreen = ({ route }: Props) => {
 
             if (!isVTHO.current) {
                 const controlValue = isInputInFiat
-                    ? BigNutils().toTokenConversion(newValue, exchangeRate)
-                    : BigNutils(newValue).addTrailingZeros(token.decimals).toHuman(token.decimals)
+                    ? BigNutils().toTokenConversion(_newValue, exchangeRate)
+                    : BigNutils(_newValue).addTrailingZeros(token.decimals).toHuman(token.decimals)
 
                 const balanceToHuman = BigNutils(tokenTotalBalance).toHuman(token.decimals)
 
@@ -161,8 +162,8 @@ export const SelectAmountSendScreen = ({ route }: Props) => {
 
                 timer.current = setTimeout(async () => {
                     const controlValue = isInputInFiat
-                        ? BigNutils().toTokenConversion(newValue, exchangeRate).decimals(token.decimals)
-                        : BigNutils(newValue).addTrailingZeros(token.decimals).toHuman(token.decimals)
+                        ? BigNutils().toTokenConversion(_newValue, exchangeRate).decimals(token.decimals)
+                        : BigNutils(_newValue).addTrailingZeros(token.decimals).toHuman(token.decimals)
 
                     const clauses = TransactionUtils.prepareFungibleClause(controlValue.toString, token, address)
                     const { gasFee, isError: feesError } = await getGasFees(clauses)
@@ -189,7 +190,17 @@ export const SelectAmountSendScreen = ({ route }: Props) => {
                 }, 500)
             }
         },
-        [address, exchangeRate, getGasFees, isInputInFiat, onFeesCalculationError, setInput, token, tokenTotalBalance],
+        [
+            address,
+            exchangeRate,
+            getGasFees,
+            isInputInFiat,
+            onFeesCalculationError,
+            removeInvalidCharacters,
+            setInput,
+            token,
+            tokenTotalBalance,
+        ],
     )
 
     /**
@@ -197,21 +208,33 @@ export const SelectAmountSendScreen = ({ route }: Props) => {
      */
     const handleOnMaxPress = useCallback(async () => {
         if (!isVTHO.current) {
-            setInput(isInputInFiat ? BigNutils(fiatTotalBalance.value).toCurrencyFormat_string(2) : tokenTotalToHuman)
+            const newValue = removeInvalidCharacters(
+                isInputInFiat ? BigNutils(fiatTotalBalance.value).toCurrencyFormat_string(2) : tokenTotalToHuman,
+            )
+            setInput(newValue)
             setTokenAmountFromFiat(tokenTotalToHuman)
         } else {
             setAreFeesLoading(true)
             const clauses = TransactionUtils.prepareFungibleClause(tokenTotalToHuman, token, address)
             const { gasFee, isError: feesError } = await getGasFees(clauses)
             const maxAmountMinusFees = BigNutils(token.balance.balance).minus(gasFee.toString)
-            const maxAmountMinusFeesHuman = BigNutils(maxAmountMinusFees.toString)
-                .toHuman(token.decimals)
-                .decimals(8).toString
 
             if (feesError) {
                 onFeesCalculationError()
                 return
             }
+
+            if (maxAmountMinusFees.isLessThan(BigNutils("0").toString)) {
+                setIsError(true)
+                setInput("")
+                setTokenAmountFromFiat("")
+                setAreFeesLoading(false)
+                return
+            }
+
+            const maxAmountMinusFeesHuman = BigNutils(maxAmountMinusFees.toString)
+                .toHuman(token.decimals)
+                .decimals(8).toString
 
             const fiatMaxAmountMinusFees = BigNutils().toCurrencyConversion(
                 maxAmountMinusFeesHuman,
@@ -220,7 +243,10 @@ export const SelectAmountSendScreen = ({ route }: Props) => {
                 8,
             )
 
-            setInput(isInputInFiat ? fiatMaxAmountMinusFees.preciseValue : maxAmountMinusFeesHuman)
+            const newValue = removeInvalidCharacters(
+                isInputInFiat ? fiatMaxAmountMinusFees.preciseValue : maxAmountMinusFeesHuman,
+            )
+            setInput(newValue)
             setTokenAmountFromFiat(maxAmountMinusFeesHuman)
             setAreFeesLoading(false)
         }
@@ -229,10 +255,11 @@ export const SelectAmountSendScreen = ({ route }: Props) => {
     }, [
         address,
         exchangeRate,
-        fiatTotalBalance,
+        fiatTotalBalance.value,
         getGasFees,
         isInputInFiat,
         onFeesCalculationError,
+        removeInvalidCharacters,
         setInput,
         token,
         tokenTotalToHuman,

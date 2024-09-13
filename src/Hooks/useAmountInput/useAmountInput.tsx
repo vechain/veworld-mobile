@@ -7,13 +7,12 @@ import { useCallback, useState } from "react"
 export const useAmountInput = (initialValue: string = "") => {
     const [input, setInput] = useState(initialValue)
 
-    const handleChangeInput = useCallback((text: string) => {
-        const filteredText = text
+    const removeInvalidCharacters = useCallback((text: string) => {
+        return text
             .replace(",", ".") // Replace comma with dot
             .replace(new RegExp("[^\\d\\.]", "g"), "") // Filter out non-numeric characters except for decimal separator
             .replace(new RegExp("\\.(?=.*\\.)", "g"), "") // Filter out duplicate decimal separators
-        setInput(filteredText)
     }, [])
 
-    return { input, setInput: handleChangeInput }
+    return { input, setInput, removeInvalidCharacters }
 }

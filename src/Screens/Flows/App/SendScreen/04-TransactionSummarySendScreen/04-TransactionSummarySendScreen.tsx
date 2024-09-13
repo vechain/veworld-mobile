@@ -149,7 +149,13 @@ export const TransactionSummarySendScreen = ({ route }: Props) => {
 
             if (!isEnoughGas) {
                 _vthoBalance.minus(_gasFees.toString).toHuman(token.decimals).decimals(4)
-                priorityStatesToVTHOAmount.current[feeOptionIndex] = _vthoBalance.toString
+                if (
+                    priorityStatesToVTHOAmount.current[feeOptionIndex] !== _vthoBalance.toString ||
+                    priorityStatesToVTHOAmount.current[feeOptionIndex] === "0"
+                ) {
+                    priorityStatesToVTHOAmount.current[feeOptionIndex] = _vthoBalance.toString
+                }
+
                 _finalAmount = _vthoBalance.toString
             } else if (!BigNutils(priorityStatesToVTHOAmount.current[feeOptionIndex]).isZero) {
                 _finalAmount = priorityStatesToVTHOAmount.current[feeOptionIndex]
