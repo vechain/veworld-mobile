@@ -47,6 +47,14 @@ Generate new certificates
 
 Get certificates
 
+### ios fetch_certificates_from_gh_for_ci
+
+```sh
+[bundle exec] fastlane ios fetch_certificates_from_gh_for_ci
+```
+
+Get certificates
+
 ### ios rotate_certificates
 
 ```sh
