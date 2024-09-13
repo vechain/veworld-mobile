@@ -1,5 +1,5 @@
 appId: org.vechain.veworld.app
-env:   
+env:
   CONTACT_NAME_6: "My Contact 6"
   CONTACT_ADDRESS_6: "0x231E70Cf27A2c44Eb9C00a3B1d2F7507Ae791056"
   CONTACT_NAME_7: "My Contact 7"
@@ -19,7 +19,9 @@ env:
   CONTACT_NAME_14: "My Contact 14"
   CONTACT_ADDRESS_14: "0x231E70Cf27A2c44Eb9C00a3B1d2F7507Ae791064"
 ---
-- assertVisible: "My Contacts"
+- extendedWaitUntil:
+     visible: "My Contacts"
+     timeout: 10000
 - tapOn:
      id: "Add_Contact_Button"
 - tapOn:
@@ -33,7 +35,9 @@ env:
      id: "Add_Contact_Button"
 - tapOn:
      id: "Add_Contact_Button"
-- assertVisible: "My Contacts"
+- extendedWaitUntil:
+     visible: "My Contacts"
+     timeout: 10000
 - tapOn:
      id: "Add_Contact_Button"
 - tapOn:
@@ -47,7 +51,9 @@ env:
      id: "Add_Contact_Button"
 - tapOn:
      id: "Add_Contact_Button"
-- assertVisible: "My Contacts"
+- extendedWaitUntil:
+     visible: "My Contacts"
+     timeout: 10000
 - tapOn:
      id: "Add_Contact_Button"
 - tapOn:
@@ -59,7 +65,11 @@ env:
 - tapOn: "Contact name"
 - tapOn:
      id: "Add_Contact_Button"
-- assertVisible: "My Contacts"
+- extendedWaitUntil:
+     visible: "My Contacts"
+     timeout: 10000
+- assertVisible:
+     id: "Add_Contact_Button"
 - tapOn:
      id: "Add_Contact_Button"
 - tapOn:
@@ -71,7 +81,9 @@ env:
 - tapOn: "Contact name"
 - tapOn:
      id: "Add_Contact_Button"
-- assertVisible: "My Contacts"
+- extendedWaitUntil:
+     visible: "My Contacts"
+     timeout: 10000
 - tapOn:
      id: "Add_Contact_Button"
 - tapOn:
@@ -83,7 +95,9 @@ env:
 - tapOn: "Contact name"
 - tapOn:
      id: "Add_Contact_Button"
-- assertVisible: "My Contacts"
+- extendedWaitUntil:
+     visible: "My Contacts"
+     timeout: 10000
 - tapOn:
      id: "Add_Contact_Button"
 - tapOn:
@@ -95,7 +109,9 @@ env:
 - tapOn: "Contact name"
 - tapOn:
      id: "Add_Contact_Button"
-- assertVisible: "My Contacts"
+- extendedWaitUntil:
+     visible: "My Contacts"
+     timeout: 10000
 - tapOn:
      id: "Add_Contact_Button"
 - tapOn:
@@ -107,7 +123,9 @@ env:
 - tapOn: "Contact name"
 - tapOn:
      id: "Add_Contact_Button"
-- assertVisible: "My Contacts"
+- extendedWaitUntil:
+     visible: "My Contacts"
+     timeout: 10000
 - tapOn:
      id: "Add_Contact_Button"
 - tapOn:
@@ -119,7 +137,9 @@ env:
 - tapOn: "Contact name"
 - tapOn:
      id: "Add_Contact_Button"
-- assertVisible: "My Contacts"
+- extendedWaitUntil:
+     visible: "My Contacts"
+     timeout: 10000
 - tapOn:
      id: "Add_Contact_Button"
 - tapOn:

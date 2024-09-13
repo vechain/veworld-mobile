@@ -103,6 +103,8 @@ env:
     from:
       id: "sendButton"
     direction: "UP"
+- swipe:
+    direction: "UP"
 - runFlow:
     when:
       platform: iOS
@@ -143,8 +145,10 @@ env:
     commands:
       - tapOn: 
            id: "Jur"
-- assertVisible:
-    id: "BackButtonHeader-BaseIcon-backButton"
+- extendedWaitUntil:
+    visible:
+        id: "BackButtonHeader-BaseIcon-backButton"
+    timeout: 10000  
 - tapOn:
     id: "BackButtonHeader-BaseIcon-backButton"
 - swipe:
@@ -183,8 +187,10 @@ env:
       - assertVisible:
              id: "PLA"
 ##User add a custom token
-- assertVisible: 
-    id: "BackButtonHeader-BaseIcon-backButton"
+- extendedWaitUntil:
+    visible: 
+     id: "BackButtonHeader-BaseIcon-backButton" 
+    timeout: 10000
 - tapOn:
     id: "BackButtonHeader-BaseIcon-backButton"
 - tapOn:
@@ -194,7 +200,14 @@ env:
 - tapOn:
     id: "AddCustomTokenBottomSheet-TextInput-Address"
 - inputText: ${CARP_TOKEN_ADRESS}
+- extendedWaitUntil:
+    visible: "Add"
+    timeout: 10000
 - tapOn: "Add"
+- extendedWaitUntil:
+    visible: 
+     id: "BackButtonHeader-BaseIcon-backButton"
+    timeout: 10000
 - assertVisible:
     id: "BackButtonHeader-BaseIcon-backButton"
 - tapOn:
@@ -202,6 +215,8 @@ env:
 - swipe:
     from:
       id: "sendButton"
+    direction: "UP"
+- swipe:
     direction: "UP"
 - runFlow:
     when:
@@ -230,6 +245,10 @@ env:
     id: "AddCustomTokenBottomSheet-TextInput-Address"
 - inputText: "0xC9e1B9B34e02610d27Bf213ecbf527D608CE3D39"
 - tapOn: "Add"
+- swipe:
+    from:
+      id: "ManageTokenScreen_SearchInput_searchTokenInput"
+    direction: "UP"
 - assertVisible: 
     id: "BackButtonHeader-BaseIcon-backButton"
 - tapOn:
@@ -302,6 +321,10 @@ env:
     id: "wallet-tab"
 - tapOn:
     id: "EditTokensBar_BaseIcon_manageToken"
+- swipe:
+    from:
+      id: "ManageTokenScreen_SearchInput_searchTokenInput"
+    direction: "UP"
 - runFlow:
     when:
       platform: Android
