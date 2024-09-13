@@ -1,7 +1,7 @@
 import React, { useCallback, useEffect, useMemo, useState } from "react"
 import { MMKV } from "react-native-mmkv"
 import { BiometricsUtils, CryptoUtils, CryptoUtils_Legacy, debug, error, HexUtils, info } from "~Utils"
-import { BiometricState, Device, SecurityLevelType, Wallet, WALLET_STATUS } from "~Model"
+import { BiometricState, LocalDevice, SecurityLevelType, Wallet, WALLET_STATUS } from "~Model"
 import {
     PreviousInstallation,
     SecurityConfig,
@@ -303,11 +303,13 @@ export const ApplicationSecurityProvider = ({ children }: ApplicationSecurityCon
         if (encryptedStorageKeys.length > 0) {
             try {
                 // Get the wallet key
-                const isLegacy = true
-                const { walletKey } = await WalletEncryptionKeyHelper.get({ pinCode: password, isLegacy })
+                const { walletKey } = await WalletEncryptionKeyHelper.get({ pinCode: password, isLegacy: true })
 
                 // Get the storage keys
-                const storageEncryptionKeys = await StorageEncryptionKeyHelper.get({ pinCode: password, isLegacy })
+                const storageEncryptionKeys = await StorageEncryptionKeyHelper.get({
+                    pinCode: password,
+                    isLegacy: true,
+                })
                 const reduxKey = storageEncryptionKeys.redux
 
                 // Get the encrypted state for redux
@@ -319,7 +321,7 @@ export const ApplicationSecurityProvider = ({ children }: ApplicationSecurityCon
                 let newState = {}
                 let walletState = {
                     devices: [],
-                } as { devices: Device[] }
+                } as { devices: LocalDevice[] }
 
                 // Go over the state enreies and decrypt them
                 for (const key in oldState) {
@@ -333,31 +335,39 @@ export const ApplicationSecurityProvider = ({ children }: ApplicationSecurityCon
 
                     // Get wallets from unencrypted entries and decrypt them
                     if (key === "devices") {
+                        let decryptedWallets: Wallet[] = []
+                        let decryptedDevices: LocalDevice[] = []
+
                         if ("wallet" in parsedEntryInState[0] && "xPub" in parsedEntryInState[0]) {
                             // loop on parsedEntryInState for wallets
-                            for (const wallet of parsedEntryInState) {
+                            // First decrypt all wallets with old keys and algos
+                            for (const device of parsedEntryInState) {
                                 // and decrypt each wallet
                                 const decryptedWallet: Wallet = await WalletEncryptionKeyHelper.decryptWallet({
-                                    encryptedWallet: wallet.wallet,
+                                    encryptedWallet: device.wallet,
                                     pinCode: password ?? walletKey,
-                                    isLegacy,
+                                    isLegacy: true,
                                 })
 
-                                // Re-encrypt wallet and storage keys with new algo
-                                await WalletEncryptionKeyHelper.remove()
-                                await StorageEncryptionKeyHelper.remove()
+                                decryptedWallets.push(decryptedWallet)
+                                decryptedDevices.push(device)
+                            }
 
-                                await WalletEncryptionKeyHelper.set({ walletKey }, password)
-                                await StorageEncryptionKeyHelper.set(storageEncryptionKeys, password)
+                            // Re-encrypt wallet and storage keys with new algo
+                            await WalletEncryptionKeyHelper.remove()
+                            await StorageEncryptionKeyHelper.remove()
+                            await WalletEncryptionKeyHelper.set({ walletKey }, password)
+                            await StorageEncryptionKeyHelper.set(storageEncryptionKeys, password)
 
+                            for (const [index, device] of decryptedDevices.entries()) {
                                 const walletEncrypted_V2 = await WalletEncryptionKeyHelper.encryptWallet(
-                                    decryptedWallet,
+                                    decryptedWallets[index],
                                     password,
                                 )
 
-                                wallet.wallet = walletEncrypted_V2
-                                wallet.isMigrated = true
-                                walletState.devices.push(wallet)
+                                device.wallet = walletEncrypted_V2
+                                device.isMigrated = true
+                                walletState.devices.push(device)
                             }
                         }
                     } else {
