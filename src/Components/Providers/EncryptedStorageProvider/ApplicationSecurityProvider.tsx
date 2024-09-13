@@ -186,7 +186,7 @@ export const ApplicationSecurityProvider = ({ children }: ApplicationSecurityCon
      * - Attempt to unlock with biometrics if the user has biometrics enabled
      */
     const setUpEncryptionKeys = useCallback(
-        async (_biometrics: BiometricState) => {
+        async (_biometrics: BiometricState, status?: WALLET_STATUS) => {
             try {
                 const _securityType = SecurityConfig.get()
 
@@ -200,6 +200,10 @@ export const ApplicationSecurityProvider = ({ children }: ApplicationSecurityCon
                 const { isDeviceEnrolled, currentSecurityLevel } = _biometrics
 
                 const biometricsDisabled = !isDeviceEnrolled || currentSecurityLevel !== SecurityLevelType.BIOMETRIC
+
+                if (status === WALLET_STATUS.MIGRATING) {
+                    return
+                }
 
                 if (biometricsDisabled) {
                     setUserDisabledBiometrics(true)
@@ -225,7 +229,7 @@ export const ApplicationSecurityProvider = ({ children }: ApplicationSecurityCon
             if (oldStorageKeys.length > 0) {
                 info(ERROR_EVENTS.SECURITY, "User has onboarded, migrating to new storage")
                 setWalletStatus(WALLET_STATUS.MIGRATING)
-                await setUpEncryptionKeys(_biometrics)
+                await setUpEncryptionKeys(_biometrics, WALLET_STATUS.MIGRATING)
                 RNBootSplash.hide({ fade: true })
                 return
             }
@@ -310,6 +314,7 @@ export const ApplicationSecurityProvider = ({ children }: ApplicationSecurityCon
                     pinCode: password,
                     isLegacy: true,
                 })
+
                 const reduxKey = storageEncryptionKeys.redux
 
                 // Get the encrypted state for redux
@@ -345,7 +350,7 @@ export const ApplicationSecurityProvider = ({ children }: ApplicationSecurityCon
                                 // and decrypt each wallet
                                 const decryptedWallet: Wallet = await WalletEncryptionKeyHelper.decryptWallet({
                                     encryptedWallet: device.wallet,
-                                    pinCode: password ?? walletKey,
+                                    pinCode: password,
                                     isLegacy: true,
                                 })
 
