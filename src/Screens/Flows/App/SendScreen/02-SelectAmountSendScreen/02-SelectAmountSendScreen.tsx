@@ -202,7 +202,11 @@ export const SelectAmountSendScreen = ({ route }: Props) => {
         } else {
             setAreFeesLoading(true)
             const clauses = TransactionUtils.prepareFungibleClause(tokenTotalToHuman, token, address)
-            const { maxAmountMinusFeesHuman, isError: feesError } = await getGasFees(clauses)
+            const { gasFee, isError: feesError } = await getGasFees(clauses)
+            const maxAmountMinusFees = BigNutils(token.balance.balance).minus(gasFee.toString)
+            const maxAmountMinusFeesHuman = BigNutils(maxAmountMinusFees.toString)
+                .toHuman(token.decimals)
+                .decimals(8).toString
 
             if (feesError) {
                 onFeesCalculationError()
