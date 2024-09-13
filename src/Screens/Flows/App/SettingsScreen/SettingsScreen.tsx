@@ -152,6 +152,11 @@ const getLists = (LL: TranslationFunctions, devEnabled: boolean) => {
             icon: "web",
         },
         {
+            title: LL.TITLE_CONNECTED_APPS(),
+            screenName: Routes.SETTINGS_CONNECTED_APPS,
+            icon: "widgets-outline",
+        },
+        {
             title: LL.TITLE_CONTACTS(),
             screenName: Routes.SETTINGS_CONTACTS,
             icon: "account-multiple-outline",
@@ -160,12 +165,6 @@ const getLists = (LL: TranslationFunctions, devEnabled: boolean) => {
             title: LL.TITLE_PRIVACY(),
             screenName: Routes.SETTINGS_PRIVACY,
             icon: "shield-check-outline",
-        },
-
-        {
-            title: LL.TITLE_CONNECTED_APPS(),
-            screenName: Routes.SETTINGS_CONNECTED_APPS,
-            icon: "widgets-outline",
         },
     ]
 
