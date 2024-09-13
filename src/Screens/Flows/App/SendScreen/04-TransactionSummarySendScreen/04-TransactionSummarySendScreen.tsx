@@ -1,8 +1,10 @@
-import React, { useCallback, useEffect, useMemo } from "react"
+import { useNavigation } from "@react-navigation/native"
 import { NativeStackScreenProps } from "@react-navigation/native-stack"
-import { useAnalyticTracking, useTheme, useTransactionScreen, useTransferAddContact } from "~Hooks"
-import { AccountUtils, AddressUtils, BigNutils, TransactionUtils } from "~Utils"
-import { AnalyticsEvent, COLORS, GasPriceCoefficient, VET, VTHO, creteAnalyticsEvent } from "~Constants"
+import React, { useCallback, useEffect, useMemo, useRef, useState } from "react"
+import { StyleSheet } from "react-native"
+import Animated, { interpolateColor, useAnimatedStyle, useSharedValue, withTiming } from "react-native-reanimated"
+import { Transaction } from "thor-devkit"
+import { getCoinGeckoIdBySymbol, useExchangeRate } from "~Api/Coingecko"
 import {
     BaseSpacer,
     BaseText,
@@ -14,6 +16,9 @@ import {
     RequireUserPassword,
     TransferCard,
 } from "~Components"
+import { AnalyticsEvent, COLORS, GasPriceCoefficient, VET, VTHO, creteAnalyticsEvent } from "~Constants"
+import { useAnalyticTracking, useTheme, useTransactionScreen, useTransferAddContact } from "~Hooks"
+import { ContactType, DEVICE_TYPE, FungibleTokenWithBalance } from "~Model"
 import { RootStackParamListHome, Routes } from "~Navigation"
 import {
     addPendingTransferTransactionActivity,
@@ -26,16 +31,11 @@ import {
     useAppDispatch,
     useAppSelector,
 } from "~Storage/Redux"
+import { AccountUtils, AddressUtils, BigNutils, TransactionUtils } from "~Utils"
 import { useI18nContext } from "~i18n"
-import { useNavigation } from "@react-navigation/native"
-import { ContactType, DEVICE_TYPE, FungibleTokenWithBalance } from "~Model"
-import { Transaction } from "thor-devkit"
 import { ContactManagementBottomSheet } from "../../ContactsScreen"
-import Animated, { interpolateColor, useAnimatedStyle, useSharedValue, withTiming } from "react-native-reanimated"
-import { StyleSheet } from "react-native"
-import { getCoinGeckoIdBySymbol, useExchangeRate } from "~Api/Coingecko"
-import { NotEnoughGasModal } from "./Modal"
 import FiatBalance from "../../HomeScreen/Components/AccountCard/FiatBalance"
+import { NotEnoughGasModal } from "./Modal"
 
 type Props = NativeStackScreenProps<RootStackParamListHome, Routes.TRANSACTION_SUMMARY_SEND>
 
@@ -46,12 +46,15 @@ export const TransactionSummarySendScreen = ({ route }: Props) => {
     const dispatch = useAppDispatch()
     const track = useAnalyticTracking()
     const nav = useNavigation()
-    const network = useAppSelector(selectSelectedNetwork)
+    const isVTHO = useRef(token.symbol.toLowerCase() === VTHO.symbol.toLowerCase())
 
+    const network = useAppSelector(selectSelectedNetwork)
     const selectedAccount = useAppSelector(selectSelectedAccount)
     const pendingTransaction = useAppSelector(state => selectPendingTx(state, token.address))
-
     const accounts = useAppSelector(selectAccounts)
+
+    const [finalAmount, setFinalAmount] = useState(amount)
+
     const receiverIsAccount = accounts.find(_account => AddressUtils.compareAddresses(_account.address, address))
     const { onAddContactPress, handleSaveContact, addContactSheet, selectedContactAddress, closeAddContactSheet } =
         useTransferAddContact()
@@ -93,8 +96,8 @@ export const TransactionSummarySendScreen = ({ route }: Props) => {
     }, [onFinish])
 
     const clauses = useMemo(
-        () => TransactionUtils.prepareFungibleClause(amount, token, address),
-        [amount, token, address],
+        () => TransactionUtils.prepareFungibleClause(finalAmount, token, address),
+        [finalAmount, token, address],
     )
 
     const {
@@ -122,6 +125,48 @@ export const TransactionSummarySendScreen = ({ route }: Props) => {
         onTransactionSuccess,
         onTransactionFailure,
     })
+
+    /**
+     * This is used to store the amount of VTHO when gas is not enough when user choose an higher prority,
+     * so we can restore the previous amount when user switch back to the previous priority.
+     */
+    const priorityStatesToVTHOAmount = useRef({
+        [GasPriceCoefficient.REGULAR]: amount,
+        [GasPriceCoefficient.MEDIUM]: "0",
+        [GasPriceCoefficient.HIGH]: "0",
+    })
+
+    /**
+     * If user is sending VTHO and gas is not enough, we will adjust the amount to send
+     */
+    useEffect(() => {
+        let _finalAmount = amount
+
+        if (isVTHO) {
+            const feeOptionIndex = parseInt(selectedFeeOption, 10) as GasPriceCoefficient
+            const _gasFees = gasFeeOptions[feeOptionIndex].gasRaw
+            const _vthoBalance = BigNutils(token.balance.balance)
+
+            if (!isEnoughGas) {
+                _vthoBalance.minus(_gasFees.toString).toHuman(token.decimals).decimals(4)
+                priorityStatesToVTHOAmount.current[feeOptionIndex] = _vthoBalance.toString
+                _finalAmount = _vthoBalance.toString
+            } else if (!BigNutils(priorityStatesToVTHOAmount.current[feeOptionIndex]).isZero) {
+                _finalAmount = priorityStatesToVTHOAmount.current[feeOptionIndex]
+            }
+        }
+
+        setFinalAmount(_finalAmount)
+    }, [
+        amount,
+        gasFeeOptions,
+        isEnoughGas,
+        selectedFeeOption,
+        token.balance.balance,
+        token.decimals,
+        token.symbol,
+        txCostTotal,
+    ])
 
     return (
         <Layout
@@ -167,12 +212,12 @@ export const TransactionSummarySendScreen = ({ route }: Props) => {
                     />
 
                     <TotalSendAmountView
-                        amount={amount}
+                        amount={finalAmount}
                         symbol={token.symbol}
                         token={token}
                         txCostTotal={txCostTotal}
                         isDelegated={isDelegated}
-                        isEnoughGas={isEnoughGas}
+                        isEnoughGas={isEnoughGas || isVTHO.current}
                     />
 
                     <GasFeeOptions
@@ -181,7 +226,7 @@ export const TransactionSummarySendScreen = ({ route }: Props) => {
                         loadingGas={loadingGas}
                         selectedFeeOption={selectedFeeOption}
                         gasFeeOptions={gasFeeOptions}
-                        isThereEnoughGas={isEnoughGas}
+                        isThereEnoughGas={isEnoughGas || isVTHO.current}
                         totalBalance={vtho.balance.balance}
                         txCostTotal={txCostTotal}
                         isDelegated={isDelegated}
@@ -259,7 +304,14 @@ interface ITotalSendAmountView {
     isEnoughGas: boolean
 }
 
-function TotalSendAmountView({ amount, symbol, token, txCostTotal, isDelegated, isEnoughGas }: ITotalSendAmountView) {
+function TotalSendAmountView({
+    amount,
+    symbol,
+    token,
+    txCostTotal,
+    isDelegated,
+    isEnoughGas,
+}: Readonly<ITotalSendAmountView>) {
     const currency = useAppSelector(selectCurrency)
 
     const { data: exchangeRate } = useExchangeRate({

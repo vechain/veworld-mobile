@@ -130,8 +130,9 @@ export const SelectAmountSendScreen = ({ route }: Props) => {
                     timer.current = null
                 }
 
-                setTokenAmountFromFiat("")
                 setIsError(false)
+                setTokenAmountFromFiat("")
+                setAreFeesLoading(false)
                 return
             }
 
@@ -172,7 +173,7 @@ export const SelectAmountSendScreen = ({ route }: Props) => {
                     }
 
                     const gasFeeToHuman = gasFee.toHuman(VTHO.decimals)
-                    const fiatToToken = BigNutils(controlValue.toString)
+                    const fiatToToken = controlValue.toString
                     const amountPlusFees = controlValue.plus(gasFeeToHuman.toString)
                     const balanceToHuman = BigNutils(tokenTotalBalance).toHuman(token.decimals)
 
@@ -183,7 +184,7 @@ export const SelectAmountSendScreen = ({ route }: Props) => {
                         setIsError(false)
                     }
 
-                    setTokenAmountFromFiat(fiatToToken.toString)
+                    setTokenAmountFromFiat(fiatToToken)
                     setAreFeesLoading(false)
                 }, 500)
             }
@@ -197,7 +198,6 @@ export const SelectAmountSendScreen = ({ route }: Props) => {
     const handleOnMaxPress = useCallback(async () => {
         if (!isVTHO.current) {
             setInput(isInputInFiat ? BigNutils(fiatTotalBalance.value).toCurrencyFormat_string(2) : tokenTotalToHuman)
-
             setTokenAmountFromFiat(tokenTotalToHuman)
         } else {
             setAreFeesLoading(true)

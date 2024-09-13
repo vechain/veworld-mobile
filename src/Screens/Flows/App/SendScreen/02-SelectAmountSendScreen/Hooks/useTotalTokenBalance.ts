@@ -21,9 +21,11 @@ export const useTotalTokenBalance = (token: FungibleTokenWithBalance, amount: st
     const getGasFees = useCallback(
         async (_clauses: Transaction.Body["clauses"]) => {
             let maxAmountMinusFees = BigNutils(token.balance.balance).minus("0")
+
             let maxAmountMinusFeesHuman = BigNutils(maxAmountMinusFees.toString)
                 .toHuman(token.decimals)
                 .decimals(8).toString
+
             let isEnoughGas = true
             let gasFee: BigNumberUtils = BigNutils("0")
             let isError = false
