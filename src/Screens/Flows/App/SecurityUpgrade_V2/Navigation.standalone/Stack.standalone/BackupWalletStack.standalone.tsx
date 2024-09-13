@@ -1,4 +1,4 @@
-import React from "react"
+import React, { useEffect } from "react"
 import { NavigationContainer } from "@react-navigation/native"
 import { createNativeStackNavigator } from "@react-navigation/native-stack"
 import { SecurityLevelType, Wallet } from "~Model"
@@ -7,6 +7,8 @@ import { MnemonicBackup } from "../../Standalone.components"
 import { Routes } from "~Navigation"
 import { BottomSheetModalProvider } from "@gorhom/bottom-sheet"
 import { GestureHandlerRootView } from "react-native-gesture-handler"
+import { usePersistedTheme } from "~Components"
+import { ThemeEnum } from "~Constants"
 
 export type RootStackParamListBackupWallet = {
     [Routes.SECURITY_UPGRADE_V2_HOME]: undefined
@@ -29,6 +31,17 @@ export const BackupWalletStack = ({
     securityType: SecurityLevelType
     upgradeSecurityToV2: (password?: string) => Promise<void>
 }) => {
+    const { theme, changeTheme } = usePersistedTheme()
+
+    useEffect(() => {
+        changeTheme(ThemeEnum.DARK)
+
+        return () => {
+            changeTheme(theme)
+        }
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [])
+
     return (
         <NavigationContainer>
             <Stack.Navigator id="BackupWalletStack" initialRouteName={Routes.SECURITY_UPGRADE_V2_HOME}>
