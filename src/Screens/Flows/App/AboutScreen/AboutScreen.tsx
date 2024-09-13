@@ -17,12 +17,7 @@ export const AboutScreen = () => {
         {
             title: LL.SETTINGS_ABOUT_OFFICIAL_SITE(),
             subtitle: LL.SETTINGS_ABOUT_WEWORLD_WEBSITE(),
-            url: "https://www.veworld.net/",
-        },
-        {
-            title: LL.SETTINGS_ABOUT_GET_HELP(),
-            subtitle: LL.SETTINGS_ABOUT_REPORT_BUG(),
-            url: "https://support.veworld.com/support/tickets/new",
+            url: "https://www.veworld.com/",
         },
         {
             title: LL.SETTINGS_ABOUT_OUR_COMMITMENT(),

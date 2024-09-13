@@ -725,7 +725,7 @@ export const prepareNonFungibleClause = (
     return [
         {
             to: nft.address,
-            value: 0,
+            value: "0x0",
             data: data,
         },
     ]
@@ -756,7 +756,7 @@ export const prepareFungibleClause = (
     return [
         {
             to: _token.address,
-            value: 0,
+            value: "0x0",
             data: data,
         },
     ]

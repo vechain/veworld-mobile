@@ -1,6 +1,6 @@
 {
   "name": "veworld",
-  "version": "1.9.1",
+  "version": "1.9.5",
   "private": true,
   "scripts": {
     "purge": "rm -rf node_modules && rm -rf yarn.lock && rm -rf android/app/build && cd ios && pod deintegrate && rm -rf Podfile.lock && cd ..",
@@ -81,10 +81,10 @@
     "@vechain/connex-driver": "^2.1.0",
     "@vechain/connex-framework": "^2.1.0",
     "@vechain/picasso": "^2.1.1",
-    "@walletconnect/core": "2.10.2",
-    "@walletconnect/react-native-compat": "2.10.2",
-    "@walletconnect/utils": "2.10.2",
-    "@walletconnect/web3wallet": "1.9.2",
+    "@walletconnect/core": "2.15.2",
+    "@walletconnect/react-native-compat": "2.15.2",
+    "@walletconnect/utils": "2.15.2",
+    "@walletconnect/web3wallet": "1.14.2",
     "add": "^2.0.6",
     "aes-js": "3",
     "arweave": "^1.13.7",
@@ -212,7 +212,7 @@
     "@types/react-test-renderer": "^18.0.0",
     "@types/ws": "^8.5.5",
     "@vechain/connex-types": "^2.1.0",
-    "@walletconnect/types": "2.10.2",
+    "@walletconnect/types": "2.15.2",
     "axios-mock-adapter": "^1.21.2",
     "babel-jest": "^29.3.1",
     "babel-plugin-module-resolver": "^5.0.0",
@@ -240,7 +240,7 @@
     "semver": "7.5.4",
     "d3-color": "3.1.0",
     "@vechain/connex-driver/axios": "0.28.0",
-    "@walletconnect/types": "2.12.2"
+    "@walletconnect/types": "2.15.2"
   },
   "lint-staged": {
     "*.{js,jsx,ts,tsx}": [

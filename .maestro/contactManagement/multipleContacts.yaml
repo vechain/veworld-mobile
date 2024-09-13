@@ -19,8 +19,7 @@ env:
   CONTACT_NAME_14: "My Contact 14"
   CONTACT_ADDRESS_14: "0x231E70Cf27A2c44Eb9C00a3B1d2F7507Ae791064"
 ---
-- assertVisible:
-     id: "Add_Contact_Button"
+- assertVisible: "My Contacts"
 - tapOn:
      id: "Add_Contact_Button"
 - tapOn:
@@ -34,8 +33,7 @@ env:
      id: "Add_Contact_Button"
 - tapOn:
      id: "Add_Contact_Button"
-- assertVisible:
-     id: "Add_Contact_Button"
+- assertVisible: "My Contacts"
 - tapOn:
      id: "Add_Contact_Button"
 - tapOn:
@@ -49,8 +47,7 @@ env:
      id: "Add_Contact_Button"
 - tapOn:
      id: "Add_Contact_Button"
-- assertVisible:
-     id: "Add_Contact_Button"
+- assertVisible: "My Contacts"
 - tapOn:
      id: "Add_Contact_Button"
 - tapOn:
@@ -62,8 +59,7 @@ env:
 - tapOn: "Contact name"
 - tapOn:
      id: "Add_Contact_Button"
-- assertVisible:
-     id: "Add_Contact_Button"
+- assertVisible: "My Contacts"
 - tapOn:
      id: "Add_Contact_Button"
 - tapOn:
@@ -75,8 +71,7 @@ env:
 - tapOn: "Contact name"
 - tapOn:
      id: "Add_Contact_Button"
-- assertVisible:
-     id: "Add_Contact_Button"
+- assertVisible: "My Contacts"
 - tapOn:
      id: "Add_Contact_Button"
 - tapOn:
@@ -88,8 +83,7 @@ env:
 - tapOn: "Contact name"
 - tapOn:
      id: "Add_Contact_Button"
-- assertVisible:
-     id: "Add_Contact_Button"
+- assertVisible: "My Contacts"
 - tapOn:
      id: "Add_Contact_Button"
 - tapOn:
@@ -101,8 +95,7 @@ env:
 - tapOn: "Contact name"
 - tapOn:
      id: "Add_Contact_Button"
-- assertVisible:
-     id: "Add_Contact_Button"
+- assertVisible: "My Contacts"
 - tapOn:
      id: "Add_Contact_Button"
 - tapOn:
@@ -114,8 +107,7 @@ env:
 - tapOn: "Contact name"
 - tapOn:
      id: "Add_Contact_Button"
-- assertVisible:
-     id: "Add_Contact_Button"
+- assertVisible: "My Contacts"
 - tapOn:
      id: "Add_Contact_Button"
 - tapOn:
@@ -127,8 +119,7 @@ env:
 - tapOn: "Contact name"
 - tapOn:
      id: "Add_Contact_Button"
-- assertVisible:
-     id: "Add_Contact_Button"
+- assertVisible: "My Contacts"
 - tapOn:
      id: "Add_Contact_Button"
 - tapOn:

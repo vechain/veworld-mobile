@@ -18,7 +18,7 @@ import { useNavigation } from "@react-navigation/native"
 import { useI18nContext } from "~i18n"
 import { useAnalyticTracking, useSetSelectedAccount } from "~Hooks"
 import { IWeb3Wallet } from "@walletconnect/web3wallet"
-import { ErrorResponse } from "@walletconnect/jsonrpc-types/dist/cjs/jsonrpc"
+import { ErrorResponse } from "@walletconnect/jsonrpc-types"
 
 type PendingRequests = Record<string, PendingRequestTypes.Struct>
 
