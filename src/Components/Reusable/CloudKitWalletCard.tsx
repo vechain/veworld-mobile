@@ -18,7 +18,7 @@ export const CloudKitWalletCard = ({
     selected: CloudKitWallet | null
 }) => {
     const { styles, theme } = useThemedStyles(baseStyles)
-    const { _getName } = useVns()
+    const { getVnsName } = useVns()
     const network = useAppSelector(selectSelectedNetwork)
     const { locale } = useI18nContext()
     const devices = useAppSelector(selectDevices)
@@ -35,15 +35,15 @@ export const CloudKitWalletCard = ({
     const [nameOrAddress, setNameOrAddress] = useState(wallet.firstAccountAddress)
     useEffect(() => {
         const init = async () => {
-            const _nameOrAddress = await _getName(wallet.firstAccountAddress)
-            if (_nameOrAddress.name) {
-                setNameOrAddress(_nameOrAddress.name)
+            const vnsName = await getVnsName(wallet.firstAccountAddress)
+            if (vnsName) {
+                setNameOrAddress(vnsName)
             } else {
                 setNameOrAddress(AddressUtils.humanAddress(wallet.firstAccountAddress, 4, 6))
             }
         }
         init()
-    }, [_getName, wallet.firstAccountAddress])
+    }, [getVnsName, wallet.firstAccountAddress])
 
     const [balance, setBalance] = useState("0")
     useEffect(() => {
