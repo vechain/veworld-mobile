@@ -42,13 +42,6 @@ const baseStyles = (isFocused: boolean) => (theme: ColorThemeType) => {
             backgroundColor: bgColor,
             position: "relative",
         },
-        dot: {
-            height: 4,
-            width: 4,
-            backgroundColor: isFocused ? iconColor() : "transparent",
-            borderRadius: 4,
-            marginTop: 1,
-        },
         warningLabel: {
             width: 8,
             height: 8,
