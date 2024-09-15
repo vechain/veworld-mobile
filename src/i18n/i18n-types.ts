@@ -672,15 +672,15 @@ type RootTranslation = {
 	 */
 	TITLE_SETTINGS: string
 	/**
-	 * G​e​n​e​r​a​l
+	 * G​e​n​e​r​a​l​ ​s​e​t​t​i​n​g​s
 	 */
-	TITLE_GENERAL: string
+	TITLE_GENERAL_SETTINGS: string
 	/**
 	 * A​d​v​a​n​c​e​d
 	 */
 	TITLE_ADVANCED: string
 	/**
-	 * C​o​n​t​a​c​t​s
+	 * M​y​ ​C​o​n​t​a​c​t​s
 	 */
 	TITLE_CONTACTS: string
 	/**
@@ -688,7 +688,7 @@ type RootTranslation = {
 	 */
 	TITLE_ADD_CONTACT: string
 	/**
-	 * M​a​n​a​g​e​ ​W​a​l​l​e​t
+	 * M​a​n​a​g​e​ ​w​a​l​l​e​t​s
 	 */
 	TITLE_MANAGE_WALLET: string
 	/**
@@ -712,7 +712,7 @@ type RootTranslation = {
 	 */
 	TITLE_NETWORKS: string
 	/**
-	 * P​r​i​v​a​c​y​ ​a​n​d​ ​S​e​c​u​r​i​t​y
+	 * P​r​i​v​a​c​y​ ​&​ ​S​e​c​u​r​i​t​y
 	 */
 	TITLE_PRIVACY: string
 	/**
@@ -720,9 +720,17 @@ type RootTranslation = {
 	 */
 	TITLE_ALERTS: string
 	/**
-	 * C​o​n​n​e​c​t​e​d​ ​A​p​p​s
+	 * C​o​n​n​e​c​t​e​d​ ​a​p​p​s
 	 */
 	TITLE_CONNECTED_APPS: string
+	/**
+	 * G​e​t​ ​s​u​p​p​o​r​t
+	 */
+	TITLE_GET_SUPPORT: string
+	/**
+	 * G​i​v​e​ ​f​e​e​d​b​a​c​k
+	 */
+	TITLE_GIVE_FEEDBACK: string
 	/**
 	 * A​b​o​u​t
 	 */
@@ -3712,15 +3720,15 @@ export type TranslationFunctions = {
 	 */
 	TITLE_SETTINGS: () => LocalizedString
 	/**
-	 * General
+	 * General settings
 	 */
-	TITLE_GENERAL: () => LocalizedString
+	TITLE_GENERAL_SETTINGS: () => LocalizedString
 	/**
 	 * Advanced
 	 */
 	TITLE_ADVANCED: () => LocalizedString
 	/**
-	 * Contacts
+	 * My Contacts
 	 */
 	TITLE_CONTACTS: () => LocalizedString
 	/**
@@ -3728,7 +3736,7 @@ export type TranslationFunctions = {
 	 */
 	TITLE_ADD_CONTACT: () => LocalizedString
 	/**
-	 * Manage Wallet
+	 * Manage wallets
 	 */
 	TITLE_MANAGE_WALLET: () => LocalizedString
 	/**
@@ -3752,7 +3760,7 @@ export type TranslationFunctions = {
 	 */
 	TITLE_NETWORKS: () => LocalizedString
 	/**
-	 * Privacy and Security
+	 * Privacy & Security
 	 */
 	TITLE_PRIVACY: () => LocalizedString
 	/**
@@ -3760,9 +3768,17 @@ export type TranslationFunctions = {
 	 */
 	TITLE_ALERTS: () => LocalizedString
 	/**
-	 * Connected Apps
+	 * Connected apps
 	 */
 	TITLE_CONNECTED_APPS: () => LocalizedString
+	/**
+	 * Get support
+	 */
+	TITLE_GET_SUPPORT: () => LocalizedString
+	/**
+	 * Give feedback
+	 */
+	TITLE_GIVE_FEEDBACK: () => LocalizedString
 	/**
 	 * About
 	 */

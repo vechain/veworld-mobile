@@ -1,7 +1,7 @@
 import { ProposalTypes } from "@walletconnect/types/dist/types/sign-client/proposal"
 import { RequestMethods } from "~Constants"
 import { getSdkError } from "@walletconnect/utils"
-import { ErrorResponse } from "@walletconnect/jsonrpc-types/dist/cjs/jsonrpc"
+import { ErrorResponse } from "@walletconnect/jsonrpc-types"
 
 export const WCSupportedChains: ProposalTypes.RequiredNamespaces = {
     vechain: {

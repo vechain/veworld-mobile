@@ -24,7 +24,7 @@ env:
 - tapOn:
      id: "BackButtonHeader-BaseIcon-backButton"
 - tapOn:
-     id: "Contacts"
+     id: "My Contacts"
 - tapOn:
      id: "create-new-contact"
 - tapOn:

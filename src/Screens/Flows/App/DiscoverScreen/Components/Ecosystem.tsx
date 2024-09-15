@@ -126,15 +126,20 @@ export const Ecosystem = React.memo(({ title, dapps, onDAppPress }: EcosystemPro
     }, [LL, selectedDappsType])
 
     const dappsToShow = useMemo(() => {
+        const dappsWithLowercaseTags = dapps.map(dapp => ({
+            ...dapp,
+            tags: dapp.tags?.map(tag => tag.toLowerCase()),
+        }))
+
         switch (selectedDappsType) {
             case DAppType.SUSTAINABILTY:
-                return dapps.filter(dapp => dapp.tags?.includes(DAppType.SUSTAINABILTY.toLowerCase()))
+                return dappsWithLowercaseTags.filter(dapp => dapp.tags?.includes(DAppType.SUSTAINABILTY.toLowerCase()))
 
             case DAppType.NFT:
-                return dapps.filter(dapp => dapp.tags?.includes(DAppType.NFT.toLowerCase()))
+                return dappsWithLowercaseTags.filter(dapp => dapp.tags?.includes(DAppType.NFT.toLowerCase()))
 
             case DAppType.DAPPS:
-                return dapps.filter(
+                return dappsWithLowercaseTags.filter(
                     dapp =>
                         !dapp.tags?.includes(DAppType.NFT.toLowerCase()) &&
                         !dapp.tags?.includes(DAppType.SUSTAINABILTY.toLowerCase()),
