@@ -1,12 +1,12 @@
-import { useRoute } from "@react-navigation/native"
 import React, { useCallback, useEffect, useMemo } from "react"
 import { BackHandler, StyleSheet } from "react-native"
-import Animated, { useAnimatedStyle, withTiming } from "react-native-reanimated"
 import { BaseIcon, useInAppBrowser } from "~Components"
-import { ColorThemeType } from "~Constants"
 import { useBlockchainNetwork, useDappBookmarking, useTheme, useThemedStyles } from "~Hooks"
-import { Routes } from "~Navigation"
+import { ColorThemeType } from "~Constants"
 import { isIOS } from "~Utils/PlatformUtils/PlatformUtils"
+import Animated, { useAnimatedStyle, withTiming } from "react-native-reanimated"
+import { useRoute } from "@react-navigation/native"
+import { Routes } from "~Navigation"
 
 type IconProps = {
     name: string
@@ -26,7 +26,6 @@ export const BrowserBottomBar: React.FC = () => {
         navigationState,
         webviewRef,
     } = useInAppBrowser()
-
     const theme = useTheme()
     const { isBookMarked, toggleBookmark } = useDappBookmarking(navigationState?.url)
     const { isMainnet } = useBlockchainNetwork()
@@ -61,7 +60,7 @@ export const BrowserBottomBar: React.FC = () => {
         }
 
         return false
-    }, [canGoBack, closeInAppBrowser, goBack, navigationCanGoBack])
+    }, [canGoBack, navigationCanGoBack, goBack, closeInAppBrowser])
 
     useEffect(() => {
         const sub = BackHandler.addEventListener("hardwareBackPress", onBackHandler)
