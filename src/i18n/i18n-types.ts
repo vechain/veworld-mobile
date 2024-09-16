@@ -744,7 +744,7 @@ type RootTranslation = {
 	 */
 	TITLE_ADVANCED: string
 	/**
-	 * C​o​n​t​a​c​t​s
+	 * M​y​ ​C​o​n​t​a​c​t​s
 	 */
 	TITLE_CONTACTS: string
 	/**
@@ -752,7 +752,7 @@ type RootTranslation = {
 	 */
 	TITLE_ADD_CONTACT: string
 	/**
-	 * M​a​n​a​g​e​ ​W​a​l​l​e​t
+	 * M​a​n​a​g​e​ ​w​a​l​l​e​t​s
 	 */
 	TITLE_MANAGE_WALLET: string
 	/**
@@ -776,7 +776,7 @@ type RootTranslation = {
 	 */
 	TITLE_NETWORKS: string
 	/**
-	 * P​r​i​v​a​c​y​ ​a​n​d​ ​S​e​c​u​r​i​t​y
+	 * P​r​i​v​a​c​y​ ​&​ ​S​e​c​u​r​i​t​y
 	 */
 	TITLE_PRIVACY: string
 	/**
@@ -784,7 +784,7 @@ type RootTranslation = {
 	 */
 	TITLE_ALERTS: string
 	/**
-	 * C​o​n​n​e​c​t​e​d​ ​A​p​p​s
+	 * C​o​n​n​e​c​t​e​d​ ​a​p​p​s
 	 */
 	TITLE_CONNECTED_APPS: string
 	/**
@@ -3932,7 +3932,7 @@ export type TranslationFunctions = {
 	 */
 	TITLE_ADVANCED: () => LocalizedString
 	/**
-	 * Contacts
+	 * My Contacts
 	 */
 	TITLE_CONTACTS: () => LocalizedString
 	/**
@@ -3940,7 +3940,7 @@ export type TranslationFunctions = {
 	 */
 	TITLE_ADD_CONTACT: () => LocalizedString
 	/**
-	 * Manage Wallet
+	 * Manage wallets
 	 */
 	TITLE_MANAGE_WALLET: () => LocalizedString
 	/**
@@ -3964,7 +3964,7 @@ export type TranslationFunctions = {
 	 */
 	TITLE_NETWORKS: () => LocalizedString
 	/**
-	 * Privacy and Security
+	 * Privacy & Security
 	 */
 	TITLE_PRIVACY: () => LocalizedString
 	/**
@@ -3972,7 +3972,7 @@ export type TranslationFunctions = {
 	 */
 	TITLE_ALERTS: () => LocalizedString
 	/**
-	 * Connected Apps
+	 * Connected apps
 	 */
 	TITLE_CONNECTED_APPS: () => LocalizedString
 	/**
