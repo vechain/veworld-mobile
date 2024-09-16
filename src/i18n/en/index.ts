@@ -32,7 +32,7 @@ const en: BaseTranslation = {
     BTN_MNEMONIC_BACKUP: "Backup",
     BTN_MNEMONIC_CHECKBOX:
         "I state that I have saved the secret phrase and I am aware that I am responsible if I lose it.",
-    BTN_MNEMONIC_CLIPBOARD: "Copy mnemonic to clipboard",
+    BTN_MNEMONIC_CLIPBOARD: "Copy to clipboard",
     BTN_IMPORT_WALLET_VERIFY: "Verify",
     BTN_CREATE_WALLET_SUCCESS: "GO TO YOUR WALLET",
     BTN_RESET_APP_CHECKBOX: "I am aware that this action is irreversible (required)",
@@ -260,6 +260,7 @@ const en: BaseTranslation = {
     ERROR_SECURITY_UPDATE_REVERTED: "The security update has failed and your security method has been reverted to the previous one.",
     ERROR_SECURITY_UPDATE_FAILED: "The security update has failed. Locking the application",
     SB_BACKUP_MNEMONIC: "Backup your mnemonic",
+    SB_RECOVERY_PHRASE: "Recovery phrase",
     SB_ANALYTICS_TRACKING: "Analytics tracking",
     SB_NO_TRANSACTIONS: "Your activities will appear here",
     SB_DESCRIPTION: "Description",

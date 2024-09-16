@@ -119,7 +119,7 @@ type RootTranslation = {
 	 */
 	BTN_MNEMONIC_CHECKBOX: string
 	/**
-	 * C​o​p​y​ ​m​n​e​m​o​n​i​c​ ​t​o​ ​c​l​i​p​b​o​a​r​d
+	 * C​o​p​y​ ​t​o​ ​c​l​i​p​b​o​a​r​d
 	 */
 	BTN_MNEMONIC_CLIPBOARD: string
 	/**
@@ -954,6 +954,10 @@ type RootTranslation = {
 	 * B​a​c​k​u​p​ ​y​o​u​r​ ​m​n​e​m​o​n​i​c
 	 */
 	SB_BACKUP_MNEMONIC: string
+	/**
+	 * R​e​c​o​v​e​r​y​ ​p​h​r​a​s​e
+	 */
+	SB_RECOVERY_PHRASE: string
 	/**
 	 * A​n​a​l​y​t​i​c​s​ ​t​r​a​c​k​i​n​g
 	 */
@@ -3312,7 +3316,7 @@ export type TranslationFunctions = {
 	 */
 	BTN_MNEMONIC_CHECKBOX: () => LocalizedString
 	/**
-	 * Copy mnemonic to clipboard
+	 * Copy to clipboard
 	 */
 	BTN_MNEMONIC_CLIPBOARD: () => LocalizedString
 	/**
@@ -4143,6 +4147,10 @@ export type TranslationFunctions = {
 	 * Backup your mnemonic
 	 */
 	SB_BACKUP_MNEMONIC: () => LocalizedString
+	/**
+	 * Recovery phrase
+	 */
+	SB_RECOVERY_PHRASE: () => LocalizedString
 	/**
 	 * Analytics tracking
 	 */

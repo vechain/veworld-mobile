@@ -36,7 +36,12 @@ export const MnemonicModalSheetStandalone = React.forwardRef<BottomSheetModalMet
                     </BaseView>
 
                     <BaseView alignItems="flex-start">
+                        <BaseText typographyFont="subSubTitle">{LL.SB_RECOVERY_PHRASE()}</BaseText>
+
+                        <BaseSpacer height={16} />
+
                         {!!selectedWallet?.mnemonic?.length && <MnemonicCard mnemonicArray={selectedWallet.mnemonic} />}
+
                         <BaseSpacer height={16} />
 
                         <BaseButton
