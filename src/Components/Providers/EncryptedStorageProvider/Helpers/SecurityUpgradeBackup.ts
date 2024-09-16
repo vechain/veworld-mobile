@@ -7,8 +7,6 @@ import { ERROR_EVENTS } from "~Constants"
 
 const BACKUP_KEY_STORAGE = "BACKUP_KEY_STORAGE"
 
-// TODO.vas - fix entire file
-
 type BackupKeys = {
     wallet: WalletEncryptionKey
     storage: StorageEncryptionKeys
@@ -25,7 +23,6 @@ const _store = async (keys: BackupKeys, pinCode: string) => {
     })
 }
 
-// TODO : fix with legacy option
 const get = async (pinCode: string): Promise<BackupKeys | null> => {
     const keys = await Keychain.get({
         key: BACKUP_KEY_STORAGE,
