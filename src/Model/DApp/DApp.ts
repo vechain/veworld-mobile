@@ -92,7 +92,7 @@ export type VeBetterDaoDAppMetadata = {
         url: string
     }[]
     tweets?: string[]
-    we_world?: {
+    ve_world?: {
         banner: string | number
     }
 }

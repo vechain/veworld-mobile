@@ -1,5 +1,5 @@
-import React, { useMemo } from "react"
-import { StyleSheet } from "react-native"
+import React, { useCallback, useEffect, useMemo } from "react"
+import { BackHandler, StyleSheet } from "react-native"
 import { BaseIcon, useInAppBrowser } from "~Components"
 import { useBlockchainNetwork, useDappBookmarking, useTheme, useThemedStyles } from "~Hooks"
 import { ColorThemeType } from "~Constants"
@@ -15,7 +15,17 @@ type IconProps = {
 }
 
 export const BrowserBottomBar: React.FC = () => {
-    const { showToolbars, canGoBack, canGoForward, goBack, goForward, navigationState, webviewRef } = useInAppBrowser()
+    const {
+        showToolbars,
+        navigationCanGoBack,
+        canGoBack,
+        canGoForward,
+        closeInAppBrowser,
+        goBack,
+        goForward,
+        navigationState,
+        webviewRef,
+    } = useInAppBrowser()
     const theme = useTheme()
     const { isBookMarked, toggleBookmark } = useDappBookmarking(navigationState?.url)
     const { isMainnet } = useBlockchainNetwork()
@@ -38,11 +48,30 @@ export const BrowserBottomBar: React.FC = () => {
         }
     })
 
+    const onBackHandler = useCallback(() => {
+        if (canGoBack) {
+            goBack()
+            return true
+        }
+
+        if (navigationCanGoBack) {
+            closeInAppBrowser()
+            return true
+        }
+
+        return false
+    }, [canGoBack, navigationCanGoBack, goBack, closeInAppBrowser])
+
+    useEffect(() => {
+        const sub = BackHandler.addEventListener("hardwareBackPress", onBackHandler)
+        return () => sub.remove()
+    }, [onBackHandler])
+
     const IconConfig: IconProps[] = useMemo(() => {
         return [
             {
                 name: "chevron-left",
-                onPress: goBack,
+                onPress: onBackHandler,
                 disabled: !canGoBack,
             },
             {
@@ -62,7 +91,7 @@ export const BrowserBottomBar: React.FC = () => {
                 onPress: () => webviewRef.current?.reload(),
             },
         ]
-    }, [canGoBack, canGoForward, fromDiscovery, goBack, goForward, isBookMarked, toggleBookmark, webviewRef])
+    }, [canGoBack, canGoForward, fromDiscovery, goForward, isBookMarked, onBackHandler, toggleBookmark, webviewRef])
 
     return navigationState?.url ? (
         <Animated.View style={[styles.bottomBar, styles.animatedContainer, animatedStyles]}>

@@ -12,7 +12,7 @@ jest.spyOn(LocalAuthentication, "authenticateAsync").mockResolvedValue({
     success: true,
 })
 
-const findElement = async () => await screen.findByText("Privacy and Security", {}, { timeout: 5000 })
+const findElement = async () => await screen.findByText("Privacy & Security", {}, { timeout: 5000 })
 
 describe("PrivacyScreen", () => {
     it("should render correctly", async () => {
