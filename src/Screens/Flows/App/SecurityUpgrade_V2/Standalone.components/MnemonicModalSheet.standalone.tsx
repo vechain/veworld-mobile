@@ -26,7 +26,7 @@ export const MnemonicModalSheetStandalone = React.forwardRef<BottomSheetModalMet
 
         return (
             <BaseBottomSheet ref={ref}>
-                <BaseView w={100} px={24}>
+                <BaseView w={100}>
                     <BaseText typographyFont="subTitleBold">{LL.BTN_BACKUP_MENMONIC()}</BaseText>
                     <BaseSpacer height={16} />
                     <BaseView justifyContent="center">
@@ -42,10 +42,10 @@ export const MnemonicModalSheetStandalone = React.forwardRef<BottomSheetModalMet
                         <BaseButton
                             size="sm"
                             py={8}
-                            radius={8}
+                            variant="ghost"
                             rightIcon={
                                 <BaseView ml={5}>
-                                    <BaseIcon name="content-copy" size={14} color={theme.colors.textReversed} />
+                                    <BaseIcon name="content-copy" size={14} color={theme.colors.text} />
                                 </BaseView>
                             }
                             title={LL.BTN_MNEMONIC_CLIPBOARD()}
