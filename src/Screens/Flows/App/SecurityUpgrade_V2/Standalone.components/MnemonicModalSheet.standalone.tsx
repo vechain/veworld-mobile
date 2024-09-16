@@ -1,6 +1,15 @@
 import { BottomSheetModalMethods } from "@gorhom/bottom-sheet/lib/typescript/types"
 import React from "react"
-import { BaseButton, BaseBottomSheet, BaseView, BaseText, BaseSpacer, MnemonicCard, BaseIcon } from "~Components"
+import {
+    BaseButton,
+    BaseBottomSheet,
+    BaseView,
+    BaseText,
+    BaseSpacer,
+    MnemonicCard,
+    BaseIcon,
+    MnemonicBackupAlert,
+} from "~Components"
 import { useCopyClipboard, useTheme } from "~Hooks"
 import { useI18nContext } from "~i18n"
 import { Wallet } from "~Model"
@@ -44,6 +53,9 @@ export const MnemonicModalSheetStandalone = React.forwardRef<BottomSheetModalMet
                                 onCopyToClipboard(selectedWallet!.mnemonic!.join(" "), LL.BD_BACKUP_MNEMONIC())
                             }
                         />
+
+                        <BaseSpacer height={24} />
+                        <MnemonicBackupAlert />
                     </BaseView>
                 </BaseView>
             </BaseBottomSheet>

@@ -9,6 +9,7 @@ import {
     Layout,
     CloudKitWarningBottomSheet,
     showErrorToast,
+    MnemonicBackupAlert,
 } from "~Components"
 import { useI18nContext } from "~i18n"
 import { useBottomSheetModal, useCloudKit, useCopyClipboard, useThemedStyles } from "~Hooks"
@@ -127,7 +128,9 @@ export const MnemonicBackupScreen = ({ route }: Props) => {
                                     />
                                 }
                             />
+                            <BaseSpacer height={24} />
 
+                            <MnemonicBackupAlert />
                             {!isCloudKitAvailable && <BaseSpacer height={12} />}
                         </BaseView>
                     </BaseView>

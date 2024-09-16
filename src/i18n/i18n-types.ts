@@ -744,7 +744,7 @@ type RootTranslation = {
 	 */
 	TITLE_ADVANCED: string
 	/**
-	 * C​o​n​t​a​c​t​s
+	 * M​y​ ​C​o​n​t​a​c​t​s
 	 */
 	TITLE_CONTACTS: string
 	/**
@@ -1342,6 +1342,10 @@ type RootTranslation = {
 	 * A​s​k​ ​m​e​ ​l​a​t​e​r
 	 */
 	ALERT_OPTION_ASK_ME_LATER: string
+	/**
+	 * A​v​o​i​d​ ​s​c​r​e​e​n​s​h​o​t​t​i​n​g​ ​a​n​d​ ​s​a​v​i​n​g​ ​t​h​e​ ​p​h​r​a​s​e​ ​o​n​l​i​n​e​.​ ​O​f​f​l​i​n​e​ ​m​e​t​h​o​d​s​ ​a​r​e​ ​c​o​n​s​i​d​e​r​e​d​ ​t​h​e​ ​s​a​f​e​s​t​ ​w​a​y​ ​t​o​ ​a​v​o​i​d​ ​h​a​c​k​i​n​g​.
+	 */
+	ALERT_DONT_SCREENSHOT_MNEMONIC: string
 	/**
 	 * P​r​i​c​e​ ​f​e​e​d​ ​n​o​t​ ​a​v​a​i​l​a​b​l​e
 	 */
@@ -3932,7 +3936,7 @@ export type TranslationFunctions = {
 	 */
 	TITLE_ADVANCED: () => LocalizedString
 	/**
-	 * Contacts
+	 * My Contacts
 	 */
 	TITLE_CONTACTS: () => LocalizedString
 	/**
@@ -4524,6 +4528,10 @@ Try reconnect your device to the internet.
 	 * Ask me later
 	 */
 	ALERT_OPTION_ASK_ME_LATER: () => LocalizedString
+	/**
+	 * Avoid screenshotting and saving the phrase online. Offline methods are considered the safest way to avoid hacking.
+	 */
+	ALERT_DONT_SCREENSHOT_MNEMONIC: () => LocalizedString
 	/**
 	 * Price feed not available
 	 */
