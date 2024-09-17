@@ -290,7 +290,6 @@ export const ImportFromCloudScreen = () => {
                         ref={warningRef}
                         onHandleBackupToCloudKit={handleOnPress}
                         openLocation="Import_Screen"
-                        rootAddress={selected?.rootAddress}
                     />
                     {!!isCreateError && (
                         <BaseText my={10} color={theme.colors.danger}>

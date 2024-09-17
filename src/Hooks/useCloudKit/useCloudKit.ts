@@ -4,14 +4,12 @@ import { showErrorToast } from "~Components"
 import { DerivationPath, ERROR_EVENTS } from "~Constants"
 import { useI18nContext } from "~i18n"
 import { DEVICE_TYPE } from "~Model"
-import { PasswordUtils, error } from "~Utils"
+import { PasswordUtils, PlatformUtils, error } from "~Utils"
 import { CKError, handleCloudKitErrors } from "./ErrorModel"
-import { isIOS } from "~Utils/PlatformUtils/PlatformUtils"
 const { CloudKitManager } = NativeModules
 
 export const useCloudKit = () => {
     const { LL } = useI18nContext()
-    const isIOSDevce = isIOS()
     const [isAvailable, setisAvailable] = useState(false)
     const [isWalletBackedUp, setIsWalletBackedUp] = useState(false)
     const [isLoading, setIsLoading] = useState(false)
@@ -171,8 +169,12 @@ export const useCloudKit = () => {
     }, [])
 
     useEffect(() => {
-        isIOSDevce && getCloudKitAvailability().then(_isAvailable => setisAvailable(_isAvailable))
-    }, [getCloudKitAvailability, isIOSDevce])
+        if (PlatformUtils.isIOS()) {
+            getCloudKitAvailability().then(_isAvailable => setisAvailable(_isAvailable))
+        } else {
+            setisAvailable(false)
+        }
+    }, [getCloudKitAvailability])
 
     return {
         getCloudKitAvailability,

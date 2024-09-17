@@ -9,23 +9,14 @@ import { PasswordStrengthIndicator } from "../PasswordStrengthIndicator"
 import { Easing, useSharedValue, withTiming } from "react-native-reanimated"
 import { useI18nContext } from "~i18n"
 import { TextInput } from "react-native-gesture-handler"
-// import { Keychain } from "~Storage"
 
 type Props = {
     onHandleBackupToCloudKit: (password: string) => void
     openLocation: "Backup_Screen" | "Import_Screen"
-    rootAddress?: string
 }
 
 export const CloudKitWarningBottomSheet = forwardRef<BottomSheetModalMethods, Props>(
-    (
-        {
-            onHandleBackupToCloudKit,
-            openLocation,
-            // rootAddress
-        },
-        ref,
-    ) => {
+    ({ onHandleBackupToCloudKit, openLocation }, ref) => {
         const { LL } = useI18nContext()
         const [secureText1, setsecureText1] = useState(true)
         const [secureText2, setsecureText2] = useState(true)
@@ -34,10 +25,6 @@ export const CloudKitWarningBottomSheet = forwardRef<BottomSheetModalMethods, Pr
         const [passwordMisMatch, setPasswordMisMatch] = useState(false)
         const [passwordNotStrong, setPasswordNotStrong] = useState(false)
         const [isChecking, setIsChecking] = useState(false)
-        // const [backupToKeychain, setBackupToKeychain] = useState(true)
-        // const onBackupToKeychain = useCallback(() => {
-        //     setBackupToKeychain(prev => !prev)
-        // }, [])
 
         const inputRef = useRef<TextInput>(null)
         const { styles } = useThemedStyles(baseStyles)
@@ -72,18 +59,8 @@ export const CloudKitWarningBottomSheet = forwardRef<BottomSheetModalMethods, Pr
             setPasswordNotStrong(false)
             setIsChecking(true)
 
-            // if (!rootAddress) throw new Error("Root Address is missing")
-
             if (openLocation === "Backup_Screen") {
                 if (password1 === password2 && strength.value >= 4) {
-                    // if (backupToKeychain) {
-                    //     await Keychain.set({
-                    //         key: `CLOUD_WALLET_${rootAddress}`,
-                    //         value: password1,
-                    //         isCloudSync: true,
-                    //     })
-                    // }
-
                     onHandleBackupToCloudKit(password1)
                 } else {
                     if (password1 !== password2) setPasswordMisMatch(true)
@@ -94,33 +71,7 @@ export const CloudKitWarningBottomSheet = forwardRef<BottomSheetModalMethods, Pr
             if (openLocation === "Import_Screen") {
                 onHandleBackupToCloudKit(password1)
             }
-        }, [
-            // backupToKeychain,
-            onHandleBackupToCloudKit,
-            openLocation,
-            password1,
-            password2,
-            // rootAddress,
-            strength.value,
-        ])
-
-        // useEffect(() => {
-        //     const init = async () => {
-        //         if (!rootAddress) return
-
-        //         // Check keychain to see if password for rootAddress exists
-        //         const keychainPassword = await Keychain.get({
-        //             key: `CLOUD_WALLET_${rootAddress}`,
-        //             isCloudSync: true,
-        //         })
-
-        //         if (keychainPassword) {
-        //             setPassword1(keychainPassword)
-        //         }
-        //     }
-
-        //     init()
-        // }, [rootAddress])
+        }, [onHandleBackupToCloudKit, openLocation, password1, password2, strength.value])
 
         const calculateStrength = useCallback((_password: string) => {
             if (!_password) return 0
@@ -233,22 +184,6 @@ export const CloudKitWarningBottomSheet = forwardRef<BottomSheetModalMethods, Pr
                     }
                     footer={
                         <>
-                            {/* {openLocation === "Backup_Screen" && (
-                                <>
-                                    <BaseView
-                                        flexDirection="row"
-                                        justifyContent="space-between"
-                                        alignItems="center"
-                                        px={4}>
-                                        <BaseText typographyFont="bodyBold">
-                                            {LL.BD_BACKUP_PASSWORD_TO_KEYCHAIN()}
-                                        </BaseText>
-                                        <BaseSwitch onValueChange={onBackupToKeychain} value={backupToKeychain} />
-                                    </BaseView>
-                                    <BaseSpacer height={24} />
-                                </>
-                            )} */}
-
                             <BaseButton title={LL.COMMON_PROCEED()} action={checkPasswordValidity} />
                             <BaseSpacer height={24} />
                         </>
