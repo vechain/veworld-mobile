@@ -117,7 +117,8 @@ jobs:
               id: build
               run: |
                   pwd
-                  ls -la    
+                  ls -la
+                  cat .env.production 
                   cd android
                   pwd
                   ls -la
