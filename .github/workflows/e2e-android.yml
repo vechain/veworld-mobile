@@ -112,12 +112,15 @@ jobs:
                   filename: "datadog-ci.json"
                   is-executable: false
                   working-directory: "."
-                  
+
             - name: Build apk 
               id: build
               run: |
-                  pwd    
+                  pwd
+                  ls -la    
                   cd android
+                  pwd
+                  ls -la
                   export STORE_PASSWORD="$(<store_password.txt)"
                   export KEY_PASSWORD="$(<store_password.txt)"
                   export KEY_ALIAS="$(<key_alias.txt)"
