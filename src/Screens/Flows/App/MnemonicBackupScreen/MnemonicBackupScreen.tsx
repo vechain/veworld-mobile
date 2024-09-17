@@ -19,12 +19,14 @@ import { NativeStackScreenProps } from "@react-navigation/native-stack"
 import { RootStackParamListSettings, Routes } from "~Navigation"
 import { useNavigation } from "@react-navigation/native"
 import { DerivationPath } from "~Constants"
+import { isIOS } from "~Utils/PlatformUtils/PlatformUtils"
 
 type Props = {} & NativeStackScreenProps<RootStackParamListSettings, Routes.ICLOUD_MNEMONIC_BACKUP>
 
 export const MnemonicBackupScreen = ({ route }: Props) => {
     const { LL } = useI18nContext()
     const { styles, theme } = useThemedStyles(baseStyles)
+    const isIOSDevice = isIOS()
     const { isCloudKitAvailable, isWalletBackedUp, saveWalletToCloudKit, getWalletByRootAddress, isLoading } =
         useCloudKit()
     const { onCopyToClipboard } = useCopyClipboard()
@@ -82,19 +84,24 @@ export const MnemonicBackupScreen = ({ route }: Props) => {
                         <BaseSpacer height={24} />
 
                         <BaseView justifyContent="center">
-                            <BaseView flexDirection="row">
-                                <BaseIcon
-                                    name="apple-icloud"
-                                    size={24}
-                                    color={isWalletBackedUp ? theme.colors.success : theme.colors.danger}
-                                />
-                                <BaseSpacer width={8} />
-                                <BaseText color={isWalletBackedUp ? theme.colors.success : theme.colors.danger}>
-                                    {isWalletBackedUp ? LL.BD_BACKED_UP_TO_CLOUD() : LL.BD_NOT_BACKED_UP_TO_CLOUD()}
-                                </BaseText>
-                            </BaseView>
-
-                            <BaseSpacer height={24} />
+                            {isIOSDevice && (
+                                <>
+                                    <BaseView flexDirection="row">
+                                        <BaseIcon
+                                            name="apple-icloud"
+                                            size={24}
+                                            color={isWalletBackedUp ? theme.colors.success : theme.colors.danger}
+                                        />
+                                        <BaseSpacer width={8} />
+                                        <BaseText color={isWalletBackedUp ? theme.colors.success : theme.colors.danger}>
+                                            {isWalletBackedUp
+                                                ? LL.BD_BACKED_UP_TO_CLOUD()
+                                                : LL.BD_NOT_BACKED_UP_TO_CLOUD()}
+                                        </BaseText>
+                                    </BaseView>
+                                    <BaseSpacer height={24} />
+                                </>
+                            )}
 
                             <BaseText>{LL.BD_MNEMONIC_WARMNING()}</BaseText>
 
