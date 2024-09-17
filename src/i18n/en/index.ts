@@ -169,7 +169,7 @@ const en: BaseTranslation = {
     BD_PASSWORD_NOT_STRONG:   "* Password is not strong enough (min 6 characters, 1 nunber, 1 special character)",
     BD_PASSWORDS_DO_NOT_MATCH: "* Passwords do not match",
     BD_MNEMONIC_PASSWORD_WARNING: "The 12 words below are your wallet's recovery phrase. This phrase lets you recover your wallet if you lose your device. Back up it up on iCloud (recommended) or write it down. Or both.",
-    BD_MNEMONIC_WARMNING:  "Never share these words. Anyone who learns them can steal all of your crypto. VeWorld will never ask you for them.",
+    BD_MNEMONIC_WARMNING:  "Never share these words. Anyone who learns them can steal all of your crypto.\nVeWorld will never ask you for them.",
     BD_BACKED_UP_TO_CLOUD: "Backed up to iCloud",
     BD_NOT_BACKED_UP_TO_CLOUD: "Not backed up to iCloud",
     BD_CLOUD_BACKUP_PASSWORD: "iCloud Backup Password",

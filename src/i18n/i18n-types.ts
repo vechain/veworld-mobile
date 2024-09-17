@@ -612,7 +612,8 @@ type RootTranslation = {
 	 */
 	BD_MNEMONIC_PASSWORD_WARNING: string
 	/**
-	 * N​e​v​e​r​ ​s​h​a​r​e​ ​t​h​e​s​e​ ​w​o​r​d​s​.​ ​A​n​y​o​n​e​ ​w​h​o​ ​l​e​a​r​n​s​ ​t​h​e​m​ ​c​a​n​ ​s​t​e​a​l​ ​a​l​l​ ​o​f​ ​y​o​u​r​ ​c​r​y​p​t​o​.​ ​V​e​W​o​r​l​d​ ​w​i​l​l​ ​n​e​v​e​r​ ​a​s​k​ ​y​o​u​ ​f​o​r​ ​t​h​e​m​.
+	 * N​e​v​e​r​ ​s​h​a​r​e​ ​t​h​e​s​e​ ​w​o​r​d​s​.​ ​A​n​y​o​n​e​ ​w​h​o​ ​l​e​a​r​n​s​ ​t​h​e​m​ ​c​a​n​ ​s​t​e​a​l​ ​a​l​l​ ​o​f​ ​y​o​u​r​ ​c​r​y​p​t​o​.​
+​V​e​W​o​r​l​d​ ​w​i​l​l​ ​n​e​v​e​r​ ​a​s​k​ ​y​o​u​ ​f​o​r​ ​t​h​e​m​.
 	 */
 	BD_MNEMONIC_WARMNING: string
 	/**
@@ -3808,7 +3809,8 @@ export type TranslationFunctions = {
 	 */
 	BD_MNEMONIC_PASSWORD_WARNING: () => LocalizedString
 	/**
-	 * Never share these words. Anyone who learns them can steal all of your crypto. VeWorld will never ask you for them.
+	 * Never share these words. Anyone who learns them can steal all of your crypto.
+VeWorld will never ask you for them.
 	 */
 	BD_MNEMONIC_WARMNING: () => LocalizedString
 	/**

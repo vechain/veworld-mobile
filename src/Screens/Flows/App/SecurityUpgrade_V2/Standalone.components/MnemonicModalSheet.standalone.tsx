@@ -30,9 +30,9 @@ export const MnemonicModalSheetStandalone = React.forwardRef<BottomSheetModalMet
                     <BaseText typographyFont="subTitleBold">{LL.BTN_BACKUP_MENMONIC()}</BaseText>
                     <BaseSpacer height={16} />
                     <BaseView justifyContent="center">
-                        <BaseText typographyFont="body">{LL.BD_MNEMONIC_WARMNING()}</BaseText>
+                        <BaseText typographyFont="captionRegular">{LL.BD_MNEMONIC_WARMNING()}</BaseText>
 
-                        <BaseSpacer height={26} />
+                        <BaseSpacer height={24} />
                     </BaseView>
 
                     <BaseView alignItems="flex-start">
@@ -42,7 +42,7 @@ export const MnemonicModalSheetStandalone = React.forwardRef<BottomSheetModalMet
 
                         {!!selectedWallet?.mnemonic?.length && <MnemonicCard mnemonicArray={selectedWallet.mnemonic} />}
 
-                        <BaseSpacer height={16} />
+                        <BaseSpacer height={8} />
 
                         <BaseButton
                             size="sm"
@@ -59,7 +59,7 @@ export const MnemonicModalSheetStandalone = React.forwardRef<BottomSheetModalMet
                             }
                         />
 
-                        <BaseSpacer height={24} />
+                        <BaseSpacer height={16} />
                         <MnemonicBackupAlert />
                     </BaseView>
                 </BaseView>
