@@ -18,6 +18,7 @@ import { ColorThemeType, isSmallScreen } from "~Constants"
 import { selectAreDevFeaturesEnabled, selectSelectedAccount, useAppSelector } from "~Storage/Redux"
 import { useNavigation, useScrollToTop } from "@react-navigation/native"
 import { FlatList } from "react-native-gesture-handler"
+import { isAndroid } from "~Utils/PlatformUtils/PlatformUtils"
 
 export const SettingsScreen = () => {
     const { LL } = useI18nContext()
@@ -47,10 +48,11 @@ export const SettingsScreen = () => {
 
     const SupportList = useCallback(() => {
         return (
-            <BaseView style={[themedStyles.list]}>
+            <BaseView h={100} style={[themedStyles.footerList]}>
                 <BaseSpacer height={1} background={theme.colors.placeholder} />
                 <FlatList
                     ref={flatSupportListRef}
+                    bounces={false}
                     data={supportList}
                     keyExtractor={item => item.screenName}
                     showsVerticalScrollIndicator={false}
@@ -59,7 +61,7 @@ export const SettingsScreen = () => {
                 />
             </BaseView>
         )
-    }, [renderItem, supportList, theme.colors.placeholder, themedStyles.list])
+    }, [renderItem, supportList, theme.colors.placeholder, themedStyles.footerList])
 
     const renderBackupWarning = useMemo(() => {
         return (
@@ -122,6 +124,9 @@ const baseStyles = (theme: ColorThemeType) =>
             height: 0.5,
         },
         list: { flex: 1 },
+        footerList: {
+            marginBottom: isAndroid() ? 72 : 0,
+        },
         cardContainer: {
             backgroundColor: theme.colors.danger,
             padding: 8,
