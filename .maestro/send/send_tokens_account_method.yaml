@@ -20,21 +20,23 @@ onFlowComplete:
     commands:
       - tapOn:
           id: "VET"
-      - tapOn:
-          id: "Layout_ScrollView"
-      - assertVisible:
-          id: "selectAccount"
-          index: 0
-      - tapOn:
-          id: "selectAccount"
-          index: 0
-      - tapOn:
-          id: "next-button"
-      - tapOn:
-          id: "SendScreen_amountInput"
-      - inputText: ${AMOUNT}
-      - tapOn:
-          id: "next-button"
+- tapOn:
+    id: "Layout_ScrollView"
+- assertVisible:
+    id: "selectAccount"
+    index: 0
+- tapOn:
+    id: "selectAccount"
+    index: 0
+- tapOn:
+    id: "next-button"
+- tapOn:
+    id: "SendScreen_amountInput"
+- inputText: ${AMOUNT}
+- tapOn:
+    id: "Select_Amount_Send_Screen"
+- tapOn:
+    id: "next-button"
 - runFlow:
     when:
       visible: "Select delegation"
@@ -74,6 +76,8 @@ onFlowComplete:
       - tapOn:
           id: "SendScreen_amountInput"  
       - inputText: ${AMOUNT}
+      - tapOn:
+          id: "Select_Amount_Send_Screen"  
       - tapOn:
           id: "next-button"
       - tapOn:
