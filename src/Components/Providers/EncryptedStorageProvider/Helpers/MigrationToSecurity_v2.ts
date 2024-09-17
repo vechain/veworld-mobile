@@ -7,9 +7,6 @@ import { ERROR_EVENTS } from "~Constants"
 const getMnemonicsFromStorage = async (persistedState: any, password?: string) => {
     if (!persistedState) throw new Error("No persisted state found")
 
-    // Get the wallet key
-    const { walletKey } = await WalletEncryptionKeyHelper.get({ pinCode: password, isLegacy: true })
-
     // Get the storage keys
     const storageEncryptionKeys = await StorageEncryptionKeyHelper.get({ pinCode: password, isLegacy: true })
     const reduxKey = storageEncryptionKeys.redux
@@ -38,7 +35,7 @@ const getMnemonicsFromStorage = async (persistedState: any, password?: string) =
                     const isLegacy = true
                     const decryptedWallet: Wallet = await WalletEncryptionKeyHelper.decryptWallet({
                         encryptedWallet: wallet.wallet,
-                        pinCode: password ?? walletKey,
+                        pinCode: password,
                         isLegacy,
                     })
 
