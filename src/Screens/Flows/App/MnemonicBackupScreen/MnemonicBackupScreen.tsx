@@ -10,6 +10,7 @@ import {
     CloudKitWarningBottomSheet,
     showErrorToast,
     MnemonicBackupAlert,
+    FadeoutButton,
 } from "~Components"
 import { useI18nContext } from "~i18n"
 import { useBottomSheetModal, useCloudKit, useCopyClipboard, useThemedStyles } from "~Hooks"
@@ -75,6 +76,7 @@ export const MnemonicBackupScreen = ({ route }: Props) => {
     return (
         <>
             <Layout
+                noStaticBottomPadding
                 body={
                     <BaseView flex={1}>
                         <BaseView flexDirection="row" w={100}>
@@ -138,23 +140,24 @@ export const MnemonicBackupScreen = ({ route }: Props) => {
                             <BaseSpacer height={24} />
 
                             <MnemonicBackupAlert />
-                            {!isCloudKitAvailable && <BaseSpacer height={12} />}
+
+                            <BaseSpacer height={!isCloudKitAvailable ? 12 : 64} />
                         </BaseView>
                     </BaseView>
                 }
                 footer={
                     <>
                         {isCloudKitAvailable && (
-                            <>
-                                <BaseSpacer height={56} />
-                                <BaseButton
-                                    isLoading={isLoading}
-                                    w={100}
-                                    action={onOpen}
-                                    title={"Back up on iCloud"}
-                                    disabled={isWalletBackedUp || isLoading}
-                                />
-                            </>
+                            <FadeoutButton
+                                isLoading={isLoading}
+                                // w={100}
+                                bottom={0}
+                                mx={0}
+                                width={"auto"}
+                                action={onOpen}
+                                title={"Back up on iCloud"}
+                                disabled={isWalletBackedUp || isLoading}
+                            />
                         )}
                     </>
                 }
