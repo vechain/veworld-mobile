@@ -116,12 +116,7 @@ jobs:
             - name: Build apk 
               id: build
               run: |
-                  pwd
-                  ls -la
-                  cat .env.production 
                   cd android
-                  pwd
-                  ls -la
                   export STORE_PASSWORD="$(<store_password.txt)"
                   export KEY_PASSWORD="$(<store_password.txt)"
                   export KEY_ALIAS="$(<key_alias.txt)"
