@@ -265,7 +265,7 @@ env:
     commands:
       - swipe:
          direction: "DOWN"
-         duration: 1000
+         duration: 400
       - swipe:
          from: "Plair"
          direction: "LEFT"
