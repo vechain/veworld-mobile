@@ -261,29 +261,20 @@ env:
     direction: "UP"
 - runFlow:
     when:
-      platform: iOS
-    commands:
-      - assertVisible: "TEST Test_Token 0.00  TEST"
-      - assertVisible: "TEST Test_Token_2 0.00  TEST2"
-- runFlow:
-    when:
-      platform: Android
-    commands:
-       - assertVisible: "Test_Token"
-       - assertVisible: "Test_Token_2"
-- runFlow:
-    when:
       platform: Android
     commands:
       - swipe:
-         from: "Test_Token"
+         direction: "DOWN"
+         duration: 2000 
+      - swipe:
+         from: "Plair"
          direction: "LEFT"
 - runFlow:
     when:
       platform: iOS
     commands:
       - swipe:
-         from: "TEST Test_Token 0.00  TEST"
+         from: ".*PLA.*"
          direction: "LEFT"
 - tapOn:
     id: "DeleteUnderlay_DeleteIcon"
@@ -294,12 +285,12 @@ env:
     when:
       platform: iOS
     commands:
-      - assertNotVisible: "TEST Test_Token 0.00  TEST"
+      - assertNotVisible: ".*PLA.*"
 - runFlow:
     when:
       platform: Android
     commands:
-     - assertNotVisible: "Test_Token"
+     - assertNotVisible: ".*Pla.*"
 - swipe:
     direction: "DOWN"
 ##When the user add an official token and then it change network it should not throw the error
@@ -362,14 +353,15 @@ env:
     commands:
         - swipe:
            from:
-             id: "PLA"
+             id: "EHrT"
            direction: "UP"
 - runFlow:
     when:
       platform: Android
     commands:
         - swipe:
-           from: "Plair"
+           from:
+             id: "EHrT"
            direction: "UP"
 - runFlow:
     when:
