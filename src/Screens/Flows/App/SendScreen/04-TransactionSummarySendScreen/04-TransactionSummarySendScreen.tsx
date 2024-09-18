@@ -142,13 +142,13 @@ export const TransactionSummarySendScreen = ({ route }: Props) => {
     useEffect(() => {
         let _finalAmount = amount
 
-        if (isVTHO) {
+        if (isVTHO.current && !isDelegated) {
             const feeOptionIndex = parseInt(selectedFeeOption, 10) as GasPriceCoefficient
             const _gasFees = gasFeeOptions[feeOptionIndex].gasRaw
             const _vthoBalance = BigNutils(token.balance.balance)
+            _vthoBalance.minus(_gasFees.toString).toHuman(token.decimals).decimals(4)
 
-            if (!isEnoughGas) {
-                _vthoBalance.minus(_gasFees.toString).toHuman(token.decimals).decimals(4)
+            if (!isEnoughGas && _vthoBalance.isBiggerThan(BigNutils("0").toString)) {
                 if (
                     priorityStatesToVTHOAmount.current[feeOptionIndex] !== _vthoBalance.toString ||
                     priorityStatesToVTHOAmount.current[feeOptionIndex] === "0"
@@ -166,6 +166,7 @@ export const TransactionSummarySendScreen = ({ route }: Props) => {
     }, [
         amount,
         gasFeeOptions,
+        isDelegated,
         isEnoughGas,
         selectedFeeOption,
         token.balance.balance,
@@ -223,7 +224,7 @@ export const TransactionSummarySendScreen = ({ route }: Props) => {
                         token={token}
                         txCostTotal={txCostTotal}
                         isDelegated={isDelegated}
-                        isEnoughGas={isEnoughGas || isVTHO.current}
+                        isEnoughGas={isEnoughGas}
                     />
 
                     <GasFeeOptions
@@ -232,7 +233,7 @@ export const TransactionSummarySendScreen = ({ route }: Props) => {
                         loadingGas={loadingGas}
                         selectedFeeOption={selectedFeeOption}
                         gasFeeOptions={gasFeeOptions}
-                        isThereEnoughGas={isEnoughGas || isVTHO.current}
+                        isThereEnoughGas={isEnoughGas}
                         totalBalance={vtho.balance.balance}
                         txCostTotal={txCostTotal}
                         isDelegated={isDelegated}
@@ -272,7 +273,7 @@ export const TransactionSummarySendScreen = ({ route }: Props) => {
     )
 }
 
-function EstimatedTimeDetailsView({ selectedFeeOption }: { selectedFeeOption: string }) {
+function EstimatedTimeDetailsView({ selectedFeeOption }: Readonly<{ selectedFeeOption: string }>) {
     const { LL } = useI18nContext()
     const theme = useTheme()
 
@@ -328,18 +329,36 @@ function TotalSendAmountView({
     const theme = useTheme()
     const { LL } = useI18nContext()
 
-    const animationProgress = useSharedValue(0)
+    const totalTxAnimationProgress = useSharedValue(0)
 
     useEffect(() => {
-        animationProgress.value = withTiming(1, { duration: 400 }, () => {
-            animationProgress.value = withTiming(0, { duration: 400 })
+        totalTxAnimationProgress.value = withTiming(1, { duration: 400 }, () => {
+            totalTxAnimationProgress.value = withTiming(0, { duration: 400 })
         })
-    }, [txCostTotal, animationProgress])
+    }, [txCostTotal, totalTxAnimationProgress])
 
-    const animatedStyle = useAnimatedStyle(() => {
+    const totalTxAnimatedStyle = useAnimatedStyle(() => {
         return {
             color: interpolateColor(
-                animationProgress.value,
+                totalTxAnimationProgress.value,
+                [0, 1],
+                [theme.colors.text, isEnoughGas ? theme.colors.success : theme.colors.danger],
+            ),
+        }
+    }, [theme.isDark, isEnoughGas])
+
+    const amountAnimationProgress = useSharedValue(0)
+
+    useEffect(() => {
+        amountAnimationProgress.value = withTiming(1, { duration: 400 }, () => {
+            amountAnimationProgress.value = withTiming(0, { duration: 400 })
+        })
+    }, [amount, amountAnimationProgress])
+
+    const amountAanimatedStyle = useAnimatedStyle(() => {
+        return {
+            color: interpolateColor(
+                amountAnimationProgress.value,
                 [0, 1],
                 [theme.colors.text, isEnoughGas ? theme.colors.success : theme.colors.danger],
             ),
@@ -352,7 +371,7 @@ function TotalSendAmountView({
         () => BigNutils(txCostTotal).toHuman(token.decimals).decimals(4).toString,
         [token.decimals, txCostTotal],
     )
-    const isVTHO = useMemo(() => token.symbol === VTHO.symbol, [token.symbol])
+    const isVTHO = useMemo(() => token.symbol.toLowerCase() === VTHO.symbol.toLowerCase(), [token.symbol])
 
     const fiatHumanAmount = BigNutils().toCurrencyConversion(isVTHO ? formattedTotalCost : amount, exchangeRate)
 
@@ -365,12 +384,18 @@ function TotalSendAmountView({
             <BaseText typographyFont="caption">{LL.SEND_AMOUNT()}</BaseText>
 
             <BaseView flexDirection="row">
-                <BaseText typographyFont="subSubTitle">{formattedAmount}</BaseText>
+                {isVTHO ? (
+                    <Animated.Text style={[baseStyles.coloredText, amountAanimatedStyle]}>
+                        {formattedAmount}
+                    </Animated.Text>
+                ) : (
+                    <BaseText typographyFont="subSubTitle">{formattedAmount}</BaseText>
+                )}
                 <BaseText typographyFont="bodyBold" mx={4}>
                     {symbol}
                 </BaseText>
 
-                {exchangeRate && token.symbol !== VTHO.symbol && (
+                {exchangeRate && !isVTHO && (
                     <FiatBalance typographyFont="buttonSecondary" balances={[fiatHumanAmount.value]} prefix="≈ " />
                 )}
             </BaseView>
@@ -381,7 +406,7 @@ function TotalSendAmountView({
                     <BaseSpacer height={12} />
                     <BaseText typographyFont="caption">{LL.SEND_TOTAL_COST()}</BaseText>
                     <BaseView flexDirection="row">
-                        <Animated.Text style={[baseStyles.coloredText, animatedStyle]}>
+                        <Animated.Text style={[baseStyles.coloredText, totalTxAnimatedStyle]}>
                             {formattedTotalCost}
                         </Animated.Text>
                         <BaseText typographyFont="bodyBold" mx={4}>

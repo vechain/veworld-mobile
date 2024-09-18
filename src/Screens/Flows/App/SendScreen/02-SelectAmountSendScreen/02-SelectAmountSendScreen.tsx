@@ -46,6 +46,8 @@ export const SelectAmountSendScreen = ({ route }: Props) => {
 
     const [isInputInFiat, setIsInputInFiat] = useState(false)
     const [isError, setIsError] = useState(false)
+    const [isFeeAmountError, setIsFeeAmountError] = useState(false)
+    const [isFeeCalculationError, setIsFeeCalculationError] = useState(false)
     const [areFeesLoading, setAreFeesLoading] = useState(false)
 
     /**
@@ -97,24 +99,27 @@ export const SelectAmountSendScreen = ({ route }: Props) => {
         }
     }, [exchangeRate, input, isInputInFiat])
 
+    const resetInput = useCallback(() => {
+        setInput("")
+        setTokenAmountFromFiat("")
+        setIsError(false)
+        setIsFeeAmountError(false)
+        setIsFeeCalculationError(false)
+        setAreFeesLoading(false)
+    }, [setInput])
+
     /**
      * Toggle between FIAT and TOKEN input (and update the input value)
      */
     const handleToggleInputMode = useCallback(() => {
-        setInput("")
-        setIsError(false)
-        setTokenAmountFromFiat("")
         setIsInputInFiat(s => !s)
-        setAreFeesLoading(false)
-    }, [setInput])
+        resetInput()
+    }, [resetInput])
 
     const onFeesCalculationError = useCallback(() => {
         showErrorToast({ text1: LL.ERROR_FEES_CALCULATION() })
-        setInput("")
-        setIsError(false)
-        setTokenAmountFromFiat("")
-        setAreFeesLoading(false)
-    }, [LL, setInput])
+        resetInput()
+    }, [LL, resetInput])
 
     /**
      * Checks input or slider value against the total balance and sets the error state
@@ -132,6 +137,8 @@ export const SelectAmountSendScreen = ({ route }: Props) => {
                 }
 
                 setIsError(false)
+                setIsFeeAmountError(false)
+                setIsFeeCalculationError(false)
                 setTokenAmountFromFiat("")
                 setAreFeesLoading(false)
                 return
@@ -146,9 +153,13 @@ export const SelectAmountSendScreen = ({ route }: Props) => {
 
                 if (controlValue.isBiggerThan(balanceToHuman.toString)) {
                     setIsError(true)
+                    setIsFeeAmountError(false)
+                    setIsFeeCalculationError(false)
                     HapticsService.triggerNotification({ level: "Error" })
                 } else {
                     setIsError(false)
+                    setIsFeeAmountError(false)
+                    setIsFeeCalculationError(false)
                 }
 
                 setTokenAmountFromFiat(controlValue.toString)
@@ -165,6 +176,16 @@ export const SelectAmountSendScreen = ({ route }: Props) => {
                         ? BigNutils().toTokenConversion(_newValue, exchangeRate).decimals(token.decimals)
                         : BigNutils(_newValue).addTrailingZeros(token.decimals).toHuman(token.decimals)
 
+                    const balanceToHuman = BigNutils(tokenTotalBalance).toHuman(token.decimals)
+
+                    if (controlValue.isBiggerThan(balanceToHuman.toString)) {
+                        setIsError(true)
+                        setIsFeeAmountError(false)
+                        setIsFeeCalculationError(false)
+                        HapticsService.triggerNotification({ level: "Error" })
+                        return
+                    }
+
                     const clauses = TransactionUtils.prepareFungibleClause(controlValue.toString, token, address)
                     const { gasFee, isError: feesError } = await getGasFees(clauses)
 
@@ -176,13 +197,16 @@ export const SelectAmountSendScreen = ({ route }: Props) => {
                     const gasFeeToHuman = gasFee.toHuman(VTHO.decimals)
                     const fiatToToken = controlValue.toString
                     const amountPlusFees = controlValue.plus(gasFeeToHuman.toString)
-                    const balanceToHuman = BigNutils(tokenTotalBalance).toHuman(token.decimals)
 
                     if (amountPlusFees.isBiggerThan(balanceToHuman.toString)) {
-                        setIsError(true)
+                        setIsFeeAmountError(true)
+                        setIsError(false)
+                        setIsFeeCalculationError(false)
                         HapticsService.triggerNotification({ level: "Error" })
                     } else {
                         setIsError(false)
+                        setIsFeeAmountError(false)
+                        setIsFeeCalculationError(false)
                     }
 
                     setTokenAmountFromFiat(fiatToToken)
@@ -207,63 +231,18 @@ export const SelectAmountSendScreen = ({ route }: Props) => {
      * Sets the input value to the max available balance (in TOKEN or FIAT)
      */
     const handleOnMaxPress = useCallback(async () => {
-        if (!isVTHO.current) {
-            const newValue = removeInvalidCharacters(
-                isInputInFiat ? BigNutils(fiatTotalBalance.value).toCurrencyFormat_string(2) : tokenTotalToHuman,
-            )
-            setInput(newValue)
-            setTokenAmountFromFiat(tokenTotalToHuman)
-        } else {
-            setAreFeesLoading(true)
-            const clauses = TransactionUtils.prepareFungibleClause(tokenTotalToHuman, token, address)
-            const { gasFee, isError: feesError } = await getGasFees(clauses)
-            const maxAmountMinusFees = BigNutils(token.balance.balance).minus(gasFee.toString)
+        const newValue = removeInvalidCharacters(
+            isInputInFiat ? BigNutils(fiatTotalBalance.value).toCurrencyFormat_string(2) : tokenTotalToHuman,
+        )
+        setInput(newValue)
+        setTokenAmountFromFiat(tokenTotalToHuman)
 
-            if (feesError) {
-                onFeesCalculationError()
-                return
-            }
-
-            if (maxAmountMinusFees.isLessThan(BigNutils("0").toString)) {
-                setIsError(true)
-                setInput("")
-                setTokenAmountFromFiat("")
-                setAreFeesLoading(false)
-                return
-            }
-
-            const maxAmountMinusFeesHuman = BigNutils(maxAmountMinusFees.toString)
-                .toHuman(token.decimals)
-                .decimals(8).toString
-
-            const fiatMaxAmountMinusFees = BigNutils().toCurrencyConversion(
-                maxAmountMinusFeesHuman,
-                exchangeRate,
-                undefined,
-                8,
-            )
-
-            const newValue = removeInvalidCharacters(
-                isInputInFiat ? fiatMaxAmountMinusFees.preciseValue : maxAmountMinusFeesHuman,
-            )
-            setInput(newValue)
-            setTokenAmountFromFiat(maxAmountMinusFeesHuman)
-            setAreFeesLoading(false)
+        if (isVTHO.current) {
+            setIsFeeAmountError(true)
+            setIsError(false)
+            setIsFeeCalculationError(false)
         }
-
-        setIsError(false)
-    }, [
-        address,
-        exchangeRate,
-        fiatTotalBalance.value,
-        getGasFees,
-        isInputInFiat,
-        onFeesCalculationError,
-        removeInvalidCharacters,
-        setInput,
-        token,
-        tokenTotalToHuman,
-    ])
+    }, [fiatTotalBalance.value, isInputInFiat, removeInvalidCharacters, setInput, tokenTotalToHuman])
 
     /**
      * Navigate to the next screen
@@ -299,7 +278,9 @@ export const SelectAmountSendScreen = ({ route }: Props) => {
 
                             {isError && (
                                 <BalanceWarningView
-                                    text={!isVTHO.current ? LL.SEND_INSUFFICIENT_BALANCE() : LL.SEND_INSUFFICIENT_GAS()}
+                                    text={
+                                        isFeeAmountError ? LL.SEND_INSUFFICIENT_GAS() : LL.SEND_INSUFFICIENT_BALANCE()
+                                    }
                                     entering={FadeInRight.springify(300).mass(1)}
                                     exiting={FadeOut.springify(300).mass(1)}
                                 />
@@ -444,7 +425,9 @@ export const SelectAmountSendScreen = ({ route }: Props) => {
                 <FadeoutButton
                     testID="next-button"
                     title={LL.COMMON_BTN_NEXT()}
-                    disabled={isError || input === "" || BigNutils(input).isZero || areFeesLoading}
+                    disabled={
+                        isError || isFeeCalculationError || input === "" || BigNutils(input).isZero || areFeesLoading
+                    }
                     action={goToInsertAddress}
                     bottom={0}
                     mx={0}
