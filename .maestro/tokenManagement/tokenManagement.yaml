@@ -18,7 +18,7 @@ env:
     id: "networks_box_mainnet"
 - tapOn:
     id: "networks_box_testnet"
-- assertVisible: 
+- assertVisible:
    id: "BackButtonHeader-BaseIcon-backButton"
 - tapOn:
     id: "BackButtonHeader-BaseIcon-backButton"
@@ -40,13 +40,13 @@ env:
     when:
       platform: iOS
     commands:
-      - tapOn: 
+      - tapOn:
            id: "PLA"
-- assertVisible: 
-    id: "BackButtonHeader-BaseIcon-backButton"    
+- assertVisible:
+    id: "BackButtonHeader-BaseIcon-backButton"
 - tapOn:
     id: "BackButtonHeader-BaseIcon-backButton"
-- swipe: 
+- swipe:
     from:
       id: "sendButton"
     direction: "UP"
@@ -63,7 +63,7 @@ env:
 - swipe:
     direction: "DOWN"
 ##User selects multiple official tokens
-- assertVisible: 
+- assertVisible:
      id: "EditTokensBar_BaseIcon_manageToken"
 - tapOn:
      id: "EditTokensBar_BaseIcon_manageToken"
@@ -72,7 +72,7 @@ env:
       platform: iOS
     commands:
       - swipe:
-          from: 
+          from:
              id: "PLA"
           direction: "UP"
       - tapOn:
@@ -92,12 +92,12 @@ env:
       - tapOn: "Yeet Coin"
 - repeat:
     while:
-      notVisible: 
+      notVisible:
         id: "BackButtonHeader-BaseIcon-backButton"
     commands:
-      - tapOn: 
+      - tapOn:
           id: "BackButtonHeader-BaseIcon-backButton"
-- tapOn: 
+- tapOn:
     id: "BackButtonHeader-BaseIcon-backButton"
 - swipe:
     from:
@@ -112,12 +112,12 @@ env:
       - assertVisible: "Jur 0.00  JUR"
       - extendedWaitUntil:
             visible: "Yeet Coin 0.00  YEET"
-            timeout: 10000 
+            timeout: 10000
 - runFlow:
     when:
       platform: Android
     commands:
-      - assertVisible: 
+      - assertVisible:
             text: "Jur"
             index: 0
       - assertVisible: "Yeet Coin"
@@ -136,19 +136,19 @@ env:
     when:
       platform: Android
     commands:
-      - tapOn: 
+      - tapOn:
             text: "Jur"
             index: 0
 - runFlow:
     when:
       platform: iOS
     commands:
-      - tapOn: 
+      - tapOn:
            id: "Jur"
 - extendedWaitUntil:
     visible:
         id: "BackButtonHeader-BaseIcon-backButton"
-    timeout: 10000  
+    timeout: 10000
 - tapOn:
     id: "BackButtonHeader-BaseIcon-backButton"
 - swipe:
@@ -164,7 +164,7 @@ env:
     when:
       platform: Android
     commands:
-      - assertNotVisible: 
+      - assertNotVisible:
             text: "Jur"
             index: 0
 ##User search for a token and only that token comes in the list
@@ -188,8 +188,8 @@ env:
              id: "PLA"
 ##User add a custom token
 - extendedWaitUntil:
-    visible: 
-     id: "BackButtonHeader-BaseIcon-backButton" 
+    visible:
+     id: "BackButtonHeader-BaseIcon-backButton"
     timeout: 10000
 - tapOn:
     id: "BackButtonHeader-BaseIcon-backButton"
@@ -205,7 +205,7 @@ env:
     timeout: 10000
 - tapOn: "Add"
 - extendedWaitUntil:
-    visible: 
+    visible:
      id: "BackButtonHeader-BaseIcon-backButton"
     timeout: 10000
 - assertVisible:
@@ -223,7 +223,7 @@ env:
       platform: Android
     commands:
       - assertVisible: "CarpToken"
-- runFlow: 
+- runFlow:
     when:
       platform: iOS
     commands:
@@ -249,7 +249,7 @@ env:
     from:
       id: "ManageTokenScreen_SearchInput_searchTokenInput"
     direction: "UP"
-- assertVisible: 
+- assertVisible:
     id: "BackButtonHeader-BaseIcon-backButton"
 - tapOn:
     id: "BackButtonHeader-BaseIcon-backButton"
@@ -265,7 +265,7 @@ env:
     commands:
       - swipe:
          direction: "DOWN"
-         duration: 2000 
+         duration: 1000
       - swipe:
          from: "Plair"
          direction: "LEFT"
@@ -274,7 +274,7 @@ env:
       platform: iOS
     commands:
       - swipe:
-         from: ".*PLA.*"
+         from: "Plair 0.00  PLA"
          direction: "LEFT"
 - tapOn:
     id: "DeleteUnderlay_DeleteIcon"
@@ -285,7 +285,7 @@ env:
     when:
       platform: iOS
     commands:
-      - assertNotVisible: ".*PLA.*"
+      - assertNotVisible: "Plair 0.00  PLA"
 - runFlow:
     when:
       platform: Android
@@ -327,7 +327,7 @@ env:
     commands:
       - tapOn:
           id: "SHA"
-- assertVisible: 
+- assertVisible:
     id: "BackButtonHeader-BaseIcon-backButton"
 - tapOn:
     id: "BackButtonHeader-BaseIcon-backButton"
@@ -339,7 +339,7 @@ env:
     id: "networks_box_mainnet"
 - tapOn:
     id: "networks_box_testnet"
-- assertVisible: 
+- assertVisible:
     id: "BackButtonHeader-BaseIcon-backButton"
 - tapOn:
     id: "BackButtonHeader-BaseIcon-backButton"
@@ -376,7 +376,7 @@ env:
         - tapOn:
              text: "JUR"
              index: 0
-- assertVisible: 
+- assertVisible:
     id: "BackButtonHeader-BaseIcon-backButton"
 - tapOn:
     id: "BackButtonHeader-BaseIcon-backButton"
@@ -388,7 +388,7 @@ env:
     id: "networks_box_testnet"
 - tapOn:
     id: "networks_box_mainnet"
-- assertVisible: 
+- assertVisible:
     id: "BackButtonHeader-BaseIcon-backButton"
 - tapOn:
     id: "BackButtonHeader-BaseIcon-backButton"
