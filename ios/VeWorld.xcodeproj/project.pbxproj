@@ -261,8 +261,6 @@
 				13B07F8E1A680F5B00A75B9A /* Resources */,
 				00DD1BFF1BD5951E006B06BC /* Bundle React Native code and images */,
 				286141B448BA4203BC57BAB1 /* Upload Debug Symbols to Sentry */,
-				4694FE022BBDBF2F007A78F8 /* Get API Key for Datadog */,
-				4BC716378F03490D91FD6F66 /* Upload dSYMs to Datadog */,
 				5A215E8F22BB737C1867E753 /* [CP] Embed Pods Frameworks */,
 				EA46BC2BBC6DD953AF7E8BE1 /* [CP] Copy Pods Resources */,
 			);
@@ -440,38 +438,6 @@
 			shellPath = /bin/sh;
 			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
 			showEnvVarsInLog = 0;
-		};
-		4694FE022BBDBF2F007A78F8 /* Get API Key for Datadog */ = {
-			isa = PBXShellScriptBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			inputFileListPaths = (
-			);
-			inputPaths = (
-			);
-			name = "Get API Key for Datadog";
-			outputFileListPaths = (
-			);
-			outputPaths = (
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-			shellPath = /bin/sh;
-			shellScript = "cd ..\nnode update-datadog-config.js\n";
-		};
-		4BC716378F03490D91FD6F66 /* Upload dSYMs to Datadog */ = {
-			isa = PBXShellScriptBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			inputPaths = (
-			);
-			name = "Upload dSYMs to Datadog";
-			outputPaths = (
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-			shellPath = /bin/sh;
-			shellScript = "# Check if IS_CI_BUILD_ENABLED is set to true\nif [ \"$IS_CI_BUILD_ENABLED\" = \"true\" ]; then\n  echo \"Skipping bundle React Native code and images phase because IS_CI_BUILD_ENABLED is true\"\n  exit 0\nfi\nset -e\n../node_modules/.bin/datadog-ci dsyms upload $DWARF_DSYM_FOLDER_PATH\n";
 		};
 		5A215E8F22BB737C1867E753 /* [CP] Embed Pods Frameworks */ = {
 			isa = PBXShellScriptBuildPhase;

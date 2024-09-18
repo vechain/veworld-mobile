@@ -45,10 +45,10 @@ import { clientPersister, queryClient } from "~Api/QueryProvider"
 import NetInfo from "@react-native-community/netinfo"
 import { onlineManager } from "@tanstack/react-query"
 import { useFlipper } from "@react-navigation/devtools"
-import { DdRumReactNavigationTracking } from "@datadog/mobile-react-navigation"
-import { DatadogProvider, DatadogProviderConfiguration, DdSdkReactNative } from "@datadog/mobile-react-native"
+//import { DdRumReactNavigationTracking } from "@datadog/mobile-react-navigation"
+//import { DatadogProvider, DatadogProviderConfiguration, DdSdkReactNative } from "@datadog/mobile-react-native"
 import { Routes } from "~Navigation"
-import DeviceInfo from "react-native-device-info"
+//import DeviceInfo from "react-native-device-info"
 
 const { fontFamily } = typography
 
@@ -172,12 +172,16 @@ const NavigationProvider = ({ children }) => {
     const dispatch = useAppDispatch()
     useFlipper(navigationRef)
 
+    /* Removing Datadog integration for now
+    
     useEffect(() => {
         // Ensure that Datadog starts tracking views once the navigation is fully ready
         if (ready) {
             DdRumReactNavigationTracking.startTrackingViews(navigationRef.current)
         }
     }, [ready, navigationRef])
+
+    */
 
     return (
         <NavigationContainer
@@ -206,6 +210,8 @@ const NavigationProvider = ({ children }) => {
     )
 }
 
+/* Commented out for now, as we're pausing Datadog integration
+
 const ddClientId = process.env.DATADOG_CLIENT_API
 const ddApplicationId = process.env.DATADOG_APPLICATION_ID
 if (!ddClientId || !ddApplicationId) {
@@ -232,6 +238,7 @@ DdSdkReactNative.initialize(ddConfig).then(() => {
         id: uniqueId,
     })
 })
+*/
 const SentryWrappedMain = Sentry.wrap(Main)
 
 const SentryInitialedMain = () => {
@@ -263,9 +270,7 @@ const ReduxWrappedMain = () => {
                 <PersistedThemeProvider>
                     <ApplicationSecurityProvider>
                         <StoreContextProvider>
-                            <DatadogProvider configuration={ddConfig}>
-                                <SentryInitialedMain />
-                            </DatadogProvider>
+                            <SentryInitialedMain />
                         </StoreContextProvider>
                     </ApplicationSecurityProvider>
                 </PersistedThemeProvider>

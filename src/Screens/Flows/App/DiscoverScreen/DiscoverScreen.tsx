@@ -5,7 +5,7 @@ import Animated, { useAnimatedRef, useScrollViewOffset } from "react-native-rean
 import { BaseSpacer, BaseView, Layout } from "~Components"
 import { AnalyticsEvent } from "~Constants"
 import { useAnalyticTracking, useBrowserSearch, useThemedStyles, useVisitedUrls, useFetchFeaturedDApps } from "~Hooks"
-import { RumManager } from "~Logging/RumManager"
+//import { RumManager } from "~Logging/RumManager"
 import { Routes } from "~Navigation"
 import {
     addNavigationToDApp,
@@ -39,7 +39,7 @@ export const DiscoverScreen: React.FC = () => {
     const nav = useNavigation()
     const dispatch = useAppDispatch()
     const { styles, theme } = useThemedStyles(baseStyles)
-    const ddLogger = useMemo(() => new RumManager(), [])
+    //const ddLogger = useMemo(() => new RumManager(), [])
 
     const { addVisitedUrl } = useVisitedUrls()
 
@@ -65,9 +65,9 @@ export const DiscoverScreen: React.FC = () => {
         if (!hasOpenedDiscovery) {
             track(AnalyticsEvent.DISCOVERY_SECTION_OPENED)
             dispatch(setDiscoverySectionOpened())
-            ddLogger.logAction("DISCOVERY_SECTION", "DISCOVERY_SECTION_OPENED")
+            //  ddLogger.logAction("DISCOVERY_SECTION", "DISCOVERY_SECTION_OPENED")
         }
-    }, [track, hasOpenedDiscovery, dispatch, ddLogger])
+    }, [track, hasOpenedDiscovery, dispatch])
 
     const onDAppPress = useCallback(
         ({ href, custom }: { href: string; custom?: boolean }) => {
@@ -79,13 +79,13 @@ export const DiscoverScreen: React.FC = () => {
                 url: href,
             })
 
-            ddLogger.logAction("DISCOVERY_SECTION", "DISCOVERY_USER_OPENED_DAPP", href)
+            //ddLogger.logAction("DISCOVERY_SECTION", "DISCOVERY_USER_OPENED_DAPP", href)
 
             setTimeout(() => {
                 dispatch(addNavigationToDApp({ href: href, isCustom: custom ?? false }))
             }, 1000)
         },
-        [nav, addVisitedUrl, track, ddLogger, dispatch],
+        [nav, addVisitedUrl, track, dispatch],
     )
 
     const onTextChange = useCallback((_text: string) => {

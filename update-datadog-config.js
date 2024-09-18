@@ -29,7 +29,11 @@ if (envFilePath) {
     require("dotenv").config({ path: envFilePath })
 }
 
+/* 
+
 const datadogConfigPath = path.resolve(__dirname, "datadog-ci.json")
 const datadogConfig = require(datadogConfigPath)
 datadogConfig.apiKey = process.env.DATADOG_API_KEY
 fs.writeFileSync(datadogConfigPath, JSON.stringify(datadogConfig, null, 2))
+
+*/
