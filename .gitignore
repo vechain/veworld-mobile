@@ -103,9 +103,6 @@ env.production.local
 ios/fastlane/env
 ios/fastlane/env.default
 
-
-sendflow_backup.yaml
-
 # datadog
 datadog-ci.json
 
