@@ -38,7 +38,6 @@ import { useNavigation } from "@react-navigation/native"
 import { MessageDetails, UnknownAppMessage } from "~Screens"
 import { AnalyticsEvent, ERROR_EVENTS, RequestMethods } from "~Constants"
 import { useObservedAccountExclusion } from "../Hooks"
-//import { RumManager } from "~Logging/RumManager"
 
 type Props = NativeStackScreenProps<RootStackParamListSwitch, Routes.CONNECTED_APP_SIGN_CERTIFICATE_SCREEN>
 
@@ -49,7 +48,6 @@ export const SignCertificateScreen: FC<Props> = ({ route }: Props) => {
     const { postMessage } = useInAppBrowser()
     const { LL } = useI18nContext()
     const nav = useNavigation()
-    //const ddLogger = useMemo(() => new RumManager(), [])
 
     const {
         ref: selectAccountBottomSheetRef,
@@ -155,12 +153,10 @@ export const SignCertificateScreen: FC<Props> = ({ route }: Props) => {
                 dispatch(addSignCertificateActivity(request.appName, cert.domain, cert.payload.content, cert.purpose))
 
                 track(AnalyticsEvent.DAPP_CERTIFICATE_SUCCESS)
-                //ddLogger.logAction("DAPP_CERTIFICATE", "DAPP_CERTIFICATE_SUCCESS")
 
                 dispatch(setIsAppLoading(false))
             } catch (err: unknown) {
                 track(AnalyticsEvent.DAPP_CERTIFICATE_FAILED)
-                //ddLogger.logAction("DAPP_CERTIFICATE", "DAPP_CERTIFICATE_FAILED")
 
                 error(ERROR_EVENTS.WALLET_CONNECT, err)
 
@@ -204,7 +200,6 @@ export const SignCertificateScreen: FC<Props> = ({ route }: Props) => {
         }
 
         track(AnalyticsEvent.DAPP_CERTIFICATE_REJECTED)
-        //ddLogger.logAction("DAPP_CERTIFICATE", "DAPP_CERTIFICATE_REJECTED")
 
         onClose()
     }, [postMessage, request, track, onClose, failRequest])

@@ -9,7 +9,6 @@ import { ChangeAccountNetworkBottomSheet } from "./Components/ChangeAccountNetwo
 import { AnalyticsEvent } from "~Constants"
 import { useAnalyticTracking } from "~Hooks"
 import { useNavigation } from "@react-navigation/native"
-//import { RumManager } from "~Logging/RumManager"
 
 type Props = NativeStackScreenProps<RootStackParamListBrowser, Routes.BROWSER>
 
@@ -31,12 +30,9 @@ export const InAppBrowser: React.FC<Props> = ({ route }) => {
     const track = useAnalyticTracking()
     const nav = useNavigation()
 
-    //const ddLogger = useMemo(() => new RumManager(), [])
-
     useEffect(() => {
         if (route?.params?.ul) {
             track(AnalyticsEvent.DAPP_UNIVERSAL_LINK_INITIATED, { isUniversalLink: route.params.url })
-            //ddLogger.logAction("DAPP_DISCOVERY", "DAPP_UNIVERSAL_LINK_INITIATED")
         }
     }, [nav, route.params?.ul, route.params.url, track])
 

@@ -16,7 +16,6 @@ import { AnalyticsEvent, DiscoveryDApp } from "~Constants"
 import { useAnalyticTracking, useBottomSheetModal, useThemedStyles } from "~Hooks"
 import { useFetchFeaturedDApps } from "~Hooks/useFetchFeaturedDApps"
 import { useI18nContext } from "~i18n"
-//import { RumManager } from "~Logging"
 import { RootStackParamListHome, Routes } from "~Navigation"
 import {
     addNavigationToDApp,
@@ -38,7 +37,6 @@ export const SwapScreen = () => {
     const { styles } = useThemedStyles(baseStyles)
     const nav = useNavigation<NavigationProps>()
     const track = useAnalyticTracking()
-    //const ddLogger = useMemo(() => new RumManager(), [])
     const dispatch = useAppDispatch()
 
     const selectedAccount = useAppSelector(selectSelectedAccount)
@@ -79,7 +77,6 @@ export const SwapScreen = () => {
             track(AnalyticsEvent.SWAPP_USER_OPENED_DAPP, {
                 url: href,
             })
-            //ddLogger.logAction("HOME_SECTION", "SWAPP_USER_OPENED_DAPP")
             setTimeout(() => {
                 dispatch(addNavigationToDApp({ href: href, isCustom: custom ?? false }))
             }, 1000)

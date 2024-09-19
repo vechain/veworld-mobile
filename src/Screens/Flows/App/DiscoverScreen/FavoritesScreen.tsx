@@ -12,7 +12,6 @@ import {
 } from "~Components"
 import { AnalyticsEvent, DiscoveryDApp } from "~Constants"
 import { useAnalyticTracking, useThemedStyles } from "~Hooks"
-//import { RumManager } from "~Logging"
 import { Routes } from "~Navigation"
 import { addNavigationToDApp, selectBookmarkedDapps, useAppDispatch, useAppSelector } from "~Storage/Redux"
 import { useI18nContext } from "~i18n"
@@ -25,7 +24,6 @@ export const FavouritesScreen = () => {
     const dispatch = useAppDispatch()
     const { styles } = useThemedStyles(baseStyles)
     const { LL } = useI18nContext()
-    //const ddLogger = useMemo(() => new RumManager(), [])
 
     const bookmarkedDApps = useAppSelector(selectBookmarkedDapps)
 
@@ -45,8 +43,6 @@ export const FavouritesScreen = () => {
             track(AnalyticsEvent.DISCOVERY_USER_OPENED_DAPP, {
                 url: href,
             })
-
-            //ddLogger.logAction("DISCOVERY_SECTION", "DISCOVERY_USER_OPENED_DAPP")
 
             setTimeout(() => {
                 dispatch(addNavigationToDApp({ href: href, isCustom: custom ?? false }))

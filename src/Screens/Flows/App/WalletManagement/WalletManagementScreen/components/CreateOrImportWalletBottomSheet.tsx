@@ -7,7 +7,6 @@ import { useNavigation } from "@react-navigation/native"
 import { Routes } from "~Navigation"
 import { AnalyticsEvent } from "~Constants"
 import { selectHasOnboarded, useAppSelector } from "~Storage/Redux"
-//import { RumManager } from "~Logging"
 
 type Props = {
     onClose: () => void
@@ -21,7 +20,6 @@ export const CreateOrImportWalletBottomSheet = React.forwardRef<BottomSheetModal
         const theme = useTheme()
         const track = useAnalyticTracking()
         const userHasOnboarded = useAppSelector(selectHasOnboarded)
-        //const ddLogger = useMemo(() => new RumManager(), [])
 
         const navigateToImportLocalWallet = useCallback(() => {
             track(AnalyticsEvent.SELECT_WALLET_IMPORT_MNEMONIC)
@@ -38,7 +36,6 @@ export const CreateOrImportWalletBottomSheet = React.forwardRef<BottomSheetModal
         const onObserveWallet = useCallback(() => {
             onClose()
             track(AnalyticsEvent.SELECT_WALLET_OBSERVE_WALLET)
-            //ddLogger.logAction("WALLET_SETUP_SCREEN", "SELECT_WALLET_OBSERVE_WALLET")
             setTimeout(() => {
                 nav.navigate(Routes.OBSERVE_WALLET)
             }, 400)
