@@ -59,14 +59,6 @@ jobs:
           node-version-file: .nvmrc
           cache: "yarn"
 
-      # install dependencies with yarn
-      - name: Install & Patch packages
-        run: yarn install:all
-
-      # Install CocoaPods
-      - name: Install CocoaPods
-        run: yarn install:all
-
       # Install sentry properties
       - name: Sentry properties
         uses: mobiledevops/secret-to-file-action@v1
@@ -113,7 +105,7 @@ jobs:
         env:
           MATCH_PASSWORD: ${{ secrets.IOS_MATCH_PASSWORD }}
         run: |
-              cd ios/fastlane
+              cd ios
               git config --global url."https://${{ secrets.CI_USER_TOKEN }}@github.com".insteadOf https://github.com
               pwd
               ls
