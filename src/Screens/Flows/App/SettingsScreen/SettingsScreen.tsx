@@ -40,15 +40,20 @@ export const SettingsScreen = () => {
     const flatSupportListRef = useRef(null)
 
     useScrollToTop(flatSettingListRef)
+    useScrollToTop(flatSupportListRef)
     const theme = useTheme()
 
     const selectedAccount = useAppSelector(selectSelectedAccount)
     const isShowBackupModal = useCheckWalletBackup(selectedAccount)
     const nav = useNavigation()
+    const calculateFooterMargin = useMemo(() => {
+        if (isAndroid() && isShowBackupModal) return 72
+        return 0
+    }, [isShowBackupModal])
 
     const SupportList = useCallback(() => {
         return (
-            <BaseView h={100} style={[themedStyles.footerList]}>
+            <BaseView h={100}>
                 <BaseSpacer height={1} background={theme.colors.placeholder} />
                 <FlatList
                     ref={flatSupportListRef}
@@ -61,7 +66,7 @@ export const SettingsScreen = () => {
                 />
             </BaseView>
         )
-    }, [renderItem, supportList, theme.colors.placeholder, themedStyles.footerList])
+    }, [renderItem, supportList, theme.colors.placeholder])
 
     const renderBackupWarning = useMemo(() => {
         return (
@@ -95,7 +100,7 @@ export const SettingsScreen = () => {
                 <SelectedNetworkViewer />
             </BaseView>
 
-            <BaseView style={[themedStyles.list]}>
+            <BaseView mb={calculateFooterMargin} style={[themedStyles.list]}>
                 <FlatList
                     ref={flatSettingListRef}
                     data={settingsList}
@@ -123,9 +128,8 @@ const baseStyles = (theme: ColorThemeType) =>
             backgroundColor: theme.colors.text,
             height: 0.5,
         },
-        list: { flex: 1 },
-        footerList: {
-            marginBottom: isAndroid() ? 72 : 0,
+        list: {
+            flex: 1,
         },
         cardContainer: {
             backgroundColor: theme.colors.danger,
