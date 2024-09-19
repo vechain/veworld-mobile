@@ -54,11 +54,19 @@ jobs:
         with:
           bundler-cache: true
       
+      # Update Bundler and Install Gems
+      - name: Update Bundler and Install Gems
+        run: |
+          gem install bundler 
+          bundle install 
+        env:
+          BUNDLE_GEMFILE: ${{ github.workspace }}/ios/Gemfile
+          
       # Install CocoaPods dependencies
       - name: Install CocoaPods
         run: |
           cd ios
-          bundle exec pod install # Use Bundler to install CocoaPods dependencies
+          bundle exec pod install
 
       # Setup Node.js
       - name: Setup Node
