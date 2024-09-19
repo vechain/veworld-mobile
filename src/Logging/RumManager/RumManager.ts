@@ -1,4 +1,4 @@
-/*
+//Currently a pause on logging for datadog but leaving for future use
 import { DdRum, RumActionType } from "@datadog/mobile-react-native"
 class RumManager {
     public logAction(viewName: string, actionName: string, context?: string): void {
@@ -9,4 +9,3 @@ class RumManager {
 }
 
 export { RumManager, RumActionType }
-*/

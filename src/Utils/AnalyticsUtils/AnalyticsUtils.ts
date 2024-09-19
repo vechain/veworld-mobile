@@ -1,3 +1,4 @@
+//import { DdRum, RumActionType } from "@datadog/mobile-react-native"
 import { Mixpanel } from "mixpanel-react-native"
 import { ERROR_EVENTS } from "~Constants"
 import { selectAnalyticsTrackingEnabled } from "~Storage/Redux"
@@ -32,6 +33,13 @@ const trackEvent =
             const isAnalyticsEnabled = selectAnalyticsTrackingEnabled(getState())
             if (mixpanel && isInitialized && isAnalyticsEnabled) {
                 mixpanel.track(event, properties)
+                /* Removed for now while datadog integration is paused
+                if (properties) {
+                    const context = properties.context
+                    DdRum.addAction(RumActionType.TAP, event, { context }, Date.now())
+                } else {
+                    DdRum.addAction(RumActionType.TAP, event, {}, Date.now())
+                }*/
             }
         } catch (e) {
             warn(ERROR_EVENTS.APP, "Error tracking event", e)
