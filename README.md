@@ -113,7 +113,17 @@ To get started with Maestro, install it using the following command:
 To upgrade the Maestro CLI:
  curl -Ls "https://get.maestro.mobile.dev" | bash
 
-Android Emulator Setup
+Step 2: Prepare the Environment
+
+On the `.env.local` file, that you can find in 1Password you need to paste this two lines and replace the `<e2e_mnemonic>` with the one you find in 1Password
+
+```bash
+# maestro test
+IS_CI_BUILD_ENABLED="true"
+E2E_MNEMONIC="<e2e_mnemonic>"
+```
+
+#### Android Emulator Setup
 
 Step 1: Prepare the Environment
 1. Navigate to your platform tools directory:
@@ -146,7 +156,7 @@ Run the flow.yaml file to start the test:
 Uninstall the App (if needed):
  ./adb -s <emulator_id> uninstall org.vechain.veworld.app
 
-iOS emulator Setup
+#### iOS emulator Setup
 
 Step 1: Prepare the Environment
  1. List iOS devices:
@@ -197,6 +207,14 @@ yarn start:i18n
 
 ### Release
 
+Before starting the release process remember to comment or delete this two variables in the `.env.local`
+
+```bash
+# maestro test
+# IS_CI_BUILD_ENABLED="true"
+# E2E_MNEMONIC="<e2e_mnemonic>"
+```
+
 the release process is automated via Fastlane:
 
 [IOS build](./ios/fastlane/BUILD_README.md)
@@ -207,5 +225,7 @@ the release process is automated via Fastlane:
 
 -   **dlopen failed: library "libexpo-av.so" not found (Android)**: This error can rise when node has not been installed using either Brew or NVM. To solve the issue, reinstall node using one of these two methods and build again the app.
 -   **NDK at ~/Library/Android/sdk/ndk did not have a source.properties file (Android)**: To solve this error just delete the NDK folders in the above path and run the build again. The NDKs will be downloaded and read properly.
-
-
+-  **can't find gem fastlane (>= 0.a) with executable fastlane (Gem::GemNotFoundException)**
+To solve this error when you run the fastlane command to create the app build you can try to run: 
+   - Building for Android: `bundle exec fastlane build_android` and will check for all the gem dependencies, if something is missing you can run `build install` to install them.
+   - Building for iOS : `bundle exec fastlane build` and will check for all the gem dependencies, if something is missing you can run `build install` to install them.

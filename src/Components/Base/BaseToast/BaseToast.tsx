@@ -7,6 +7,8 @@ import { errorToastStyles, infoToastStyles, successToastStyles, warningToastStyl
 import { ToastContent } from "./components"
 import HapticsService from "~Services/HapticsService"
 
+const IS_CI_BUILD = process.env.IS_CI_BUILD_ENABLED === "true"
+
 /**
  * Creates a toast configuration object for the given theme.
  *
@@ -125,6 +127,10 @@ type CustomToastConfig = {
  */
 export const BaseToast: React.FC = () => {
     const theme = useTheme()
+
+    // Disable toast notification for CI build
+    // Tests with maestro become unreliable with them active
+    if (IS_CI_BUILD) return <></>
 
     return <Toast config={toastConfig(theme)} {...commonToastParams} />
 }
