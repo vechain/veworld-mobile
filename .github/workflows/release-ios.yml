@@ -14,13 +14,9 @@ on:
 
   workflow_call:
 
-  push:
-    branches:
-        - build-release-and-push-to-testflight
-
 jobs:
-  build-e2e-test-ios:
-    name: Maestro Build & Test iOS Debug
+  build-release-ios:
+    name: Build release for iOS
     runs-on: macos-latest
     environment: ios-release
 
