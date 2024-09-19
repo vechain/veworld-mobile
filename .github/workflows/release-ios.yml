@@ -35,6 +35,17 @@ jobs:
           # otherwise, use the triggering branch unless it's a non-pre-release event.
           ref: ${{ (github.event_name == 'release' && github.event.release.prerelease && github.event.release.tag_name) || github.ref }}
 
+      # Setup Node.js
+      - name: Setup Node
+        uses: actions/setup-node@v3
+        with:
+          node-version-file: .nvmrc
+          cache: "yarn"
+
+      - name: Install Node.js dependencies
+        run: |
+          yarn install
+          
       # Install Homebrew and applesimutils for Detox
       - name: Install macOS dependencies
         run: |
@@ -68,12 +79,7 @@ jobs:
           cd ios
           bundle exec pod install
 
-      # Setup Node.js
-      - name: Setup Node
-        uses: actions/setup-node@v3
-        with:
-          node-version-file: .nvmrc
-          cache: "yarn"
+
 
       # Install sentry properties
       - name: Sentry properties
