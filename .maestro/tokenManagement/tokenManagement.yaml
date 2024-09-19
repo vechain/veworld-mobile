@@ -264,9 +264,6 @@ env:
       platform: Android
     commands:
       - swipe:
-         direction: "DOWN"
-         duration: 100
-      - swipe:
          from: "Plair"
          direction: "LEFT"
 - runFlow:
