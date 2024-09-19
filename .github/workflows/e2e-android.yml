@@ -113,13 +113,6 @@ jobs:
                   is-executable: false
                   working-directory: "."
 
-            - name: Add release Dev:Demo link
-              run: |
-                echo "IS_CI_BUILD_ENABLED=true" > .env.local
-                echo "IS_CI_BUILD_ENABLED=true" > .env.production.local
-                cat .env.local
-                cat .env.production.local
-                ls -la
             - name: Build apk 
               id: build
               run: |
