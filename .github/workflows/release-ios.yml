@@ -6,13 +6,17 @@ on:
       build_number:
         description: 'Build number'
         required: true
-        default: '99'
+        default: '197'
       version_number:
         description: 'Version number'
         required: true
-        default: '9.9.9'
+        default: '1.9.5'
 
   workflow_call:
+ 
+  push:
+    branches:
+        - build-release-and-push-to-testflight
 
 jobs:
   build-release-ios:
