@@ -40,7 +40,6 @@ export const SettingsScreen = () => {
     const flatSupportListRef = useRef(null)
 
     useScrollToTop(flatSettingListRef)
-    useScrollToTop(flatSupportListRef)
     const theme = useTheme()
 
     const selectedAccount = useAppSelector(selectSelectedAccount)
