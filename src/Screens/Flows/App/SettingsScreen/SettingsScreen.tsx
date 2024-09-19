@@ -13,31 +13,29 @@ import { TranslationFunctions, useI18nContext } from "~i18n"
 import { Routes } from "~Navigation"
 import { StyleSheet } from "react-native"
 import { RowProps, SettingsRow } from "./Components/SettingsRow"
-import { useCheckWalletBackup, useTheme, useThemedStyles } from "~Hooks"
+import { useCheckWalletBackup, useTabBarBottomMargin, useTheme, useThemedStyles } from "~Hooks"
 import { ColorThemeType, isSmallScreen } from "~Constants"
 import { selectAreDevFeaturesEnabled, selectSelectedAccount, useAppSelector } from "~Storage/Redux"
 import { useNavigation, useScrollToTop } from "@react-navigation/native"
 import { FlatList } from "react-native-gesture-handler"
-import { isAndroid } from "~Utils/PlatformUtils/PlatformUtils"
+import SettingsRowDivider, { RowDividerProps } from "./Components/SettingsRowDivider"
 
 export const SettingsScreen = () => {
     const { LL } = useI18nContext()
-
     const devFeaturesEnabled = useAppSelector(selectAreDevFeaturesEnabled)
 
-    const { settingsList, supportList } = useMemo(() => getLists(LL, devFeaturesEnabled), [devFeaturesEnabled, LL])
+    const { settingsList } = useMemo(() => getLists(LL, devFeaturesEnabled), [devFeaturesEnabled, LL])
 
     const { styles: themedStyles } = useThemedStyles(baseStyles)
+    const { androidOnlyTabBarBottomMargin } = useTabBarBottomMargin()
 
-    const renderItem = useCallback(
-        ({ item }: { item: RowProps }) => (
-            <SettingsRow title={item.title} screenName={item.screenName} icon={item.icon} url={item.url} />
-        ),
-        [],
-    )
+    const renderItem = useCallback(({ item }: { item: RowProps | RowDividerProps }) => {
+        if ("height" in item) return <SettingsRowDivider {...item} />
+
+        return <SettingsRow title={item.title} screenName={item.screenName} icon={item.icon} url={item.url} />
+    }, [])
 
     const flatSettingListRef = useRef(null)
-    const flatSupportListRef = useRef(null)
 
     useScrollToTop(flatSettingListRef)
     const theme = useTheme()
@@ -45,27 +43,6 @@ export const SettingsScreen = () => {
     const selectedAccount = useAppSelector(selectSelectedAccount)
     const isShowBackupModal = useCheckWalletBackup(selectedAccount)
     const nav = useNavigation()
-    const calculateFooterMargin = useMemo(() => {
-        if (isAndroid() && isShowBackupModal) return 72
-        return 0
-    }, [isShowBackupModal])
-
-    const SupportList = useCallback(() => {
-        return (
-            <BaseView h={100}>
-                <BaseSpacer height={1} background={theme.colors.placeholder} />
-                <FlatList
-                    ref={flatSupportListRef}
-                    bounces={false}
-                    data={supportList}
-                    keyExtractor={item => item.screenName}
-                    showsVerticalScrollIndicator={false}
-                    showsHorizontalScrollIndicator={false}
-                    renderItem={renderItem}
-                />
-            </BaseView>
-        )
-    }, [renderItem, supportList, theme.colors.placeholder])
 
     const renderBackupWarning = useMemo(() => {
         return (
@@ -99,19 +76,18 @@ export const SettingsScreen = () => {
                 <SelectedNetworkViewer />
             </BaseView>
 
-            <BaseView mb={calculateFooterMargin} style={[themedStyles.list]}>
+            <BaseView style={[themedStyles.list, { paddingBottom: androidOnlyTabBarBottomMargin }]}>
                 <FlatList
                     ref={flatSettingListRef}
                     data={settingsList}
-                    contentContainerStyle={themedStyles.contentContainerStyle}
+                    contentContainerStyle={[themedStyles.contentContainerStyle]}
                     scrollEnabled={isShowBackupModal || isSmallScreen}
-                    keyExtractor={item => item.screenName}
+                    keyExtractor={(item, index) => ("height" in item ? `divider-${index}` : item.screenName)}
                     showsVerticalScrollIndicator={false}
                     showsHorizontalScrollIndicator={false}
                     renderItem={renderItem}
                     ListHeaderComponent={isShowBackupModal ? renderBackupWarning : undefined}
                     ListHeaderComponentStyle={themedStyles.headerContainer}
-                    ListFooterComponent={<SupportList />}
                 />
             </BaseView>
         </BaseSafeArea>
@@ -138,7 +114,7 @@ const baseStyles = (theme: ColorThemeType) =>
     })
 
 const getLists = (LL: TranslationFunctions, devEnabled: boolean) => {
-    const settingsList: RowProps[] = [
+    const settingsList: (RowProps | RowDividerProps)[] = [
         {
             title: LL.TITLE_GENERAL_SETTINGS(),
             screenName: Routes.SETTINGS_GENERAL,
@@ -174,9 +150,10 @@ const getLists = (LL: TranslationFunctions, devEnabled: boolean) => {
             screenName: Routes.SETTINGS_PRIVACY,
             icon: "shield-check-outline",
         },
-    ]
-
-    const supportList: RowProps[] = [
+        {
+            title: "Support_divider",
+            height: 1,
+        },
         {
             title: LL.TITLE_GET_SUPPORT(),
             screenName: Routes.SETTINGS_GET_SUPPORT,
@@ -195,6 +172,8 @@ const getLists = (LL: TranslationFunctions, devEnabled: boolean) => {
             icon: "information-outline",
         },
     ]
+
+    const supportList: RowProps[] = []
 
     if (devEnabled) {
         settingsList.push({
