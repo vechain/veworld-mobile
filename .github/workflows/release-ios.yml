@@ -57,11 +57,11 @@ jobs:
       # Update Bundler and Install Gems
       - name: Update Bundler and Install Gems
         run: |
-          gem install bundler 
-          bundle install 
+          gem install bundler -v 2.4.22 
+          bundle install --jobs 4 --retry 3 
         env:
           BUNDLE_GEMFILE: ${{ github.workspace }}/ios/Gemfile
-          
+
       # Install CocoaPods dependencies
       - name: Install CocoaPods
         run: |
