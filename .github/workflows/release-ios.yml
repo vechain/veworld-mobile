@@ -1,0 +1,129 @@
+name: Release - iOS
+
+on:
+  workflow_dispatch:
+    inputs:
+      build_number:
+        description: 'Build number'
+        required: true
+        default: '99'
+      version_number:
+        description: 'Version number'
+        required: true
+        default: '9.9.9'
+
+  workflow_call:
+
+jobs:
+  build-e2e-test-ios:
+    name: Maestro Build & Test iOS Debug
+    runs-on: macos-latest
+    environment: ios-release
+
+    # Proceed only if it's either not a release event or it's a pre-release.
+    if: ${{ github.event_name != 'release' || (github.event_name == 'release' && github.event.release.prerelease) }}
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v3
+        with:
+          # If it's a pre-release, check out the tag corresponding to the pre-release;
+          # otherwise, use the triggering branch unless it's a non-pre-release event.
+          ref: ${{ (github.event_name == 'release' && github.event.release.prerelease && github.event.release.tag_name) || github.ref }}
+
+      # Install Homebrew and applesimutils for Detox
+      - name: Install macOS dependencies
+        run: |
+          brew tap wix/brew
+          brew install applesimutils
+          brew install fastlane
+          bundle install
+        env:
+          HOMEBREW_NO_AUTO_UPDATE: 1
+          HOMEBREW_NO_INSTALL_CLEANUP: 1
+      
+      # Setup Ruby
+      - name: Setup Ruby
+        uses: ruby/setup-ruby@v1
+        with:
+          bundler-cache: true
+
+      # Setup Node.js
+      - name: Setup Node
+        uses: actions/setup-node@v3
+        with:
+          node-version-file: .nvmrc
+          cache: "yarn"
+
+      # install dependencies with yarn
+      - name: Install & Patch packages
+        run: yarn install:all
+
+      # Install CocoaPods
+      - name: Install CocoaPods
+        run: yarn install:all
+
+      # Install sentry properties
+      - name: Sentry properties
+        uses: mobiledevops/secret-to-file-action@v1
+        with:
+            base64-encoded-secret: ${{ secrets.IOS_SENTRY_PROPERTIES }}
+            filename: "sentry.properties"
+            is-executable: false
+            working-directory: "./ios"
+
+      - name: Env default decode
+        uses: mobiledevops/secret-to-file-action@v1
+        with:
+             base64-encoded-secret: ${{ secrets.IOS_ENV_DEFAULT }}
+             filename: "env.default"
+             is-executable: false
+             working-directory: "./ios/fastlane"
+
+          
+      - name: Env decode 
+        uses: mobiledevops/secret-to-file-action@v1
+        with:
+             base64-encoded-secret: ${{ secrets.IOS_ENV_RELEASE}}
+             filename: ".env"
+             is-executable: false
+             working-directory: "./ios/fastlane"
+
+      - name: datadog-ci decode
+        uses: mobiledevops/secret-to-file-action@v1
+        with:
+            base64-encoded-secret: ${{ secrets.DATADOG_CI}}
+            filename: "datadog-ci.json"
+            is-executable: false
+            working-directory: "."
+      
+      - name: Decode prod env      
+        uses: mobiledevops/secret-to-file-action@v1
+        with:
+            base64-encoded-secret: ${{ secrets.RN_ENV_PROD}}
+            filename: ".env.production"
+            is-executable: false
+            working-directory: "."
+
+      - name: Build apk with fastlane
+        env:
+          MATCH_PASSWORD: ${{ secrets.IOS_MATCH_PASSWORD }}
+        run: |
+              cd ios/fastlane
+              git config --global url."https://${{ secrets.CI_USER_TOKEN }}@github.com".insteadOf https://github.com
+              pwd
+              ls
+              fastlane build username:${{secrets.CI_USER}} token:${{secrets.CI_USER_TOKEN}} version_code:${{ github.event.inputs.version_code }} version_name:${{ github.event.inputs.version_name }}
+              cd ../build
+              echo "build finished searching for .app file"
+              echo "(find / -name 'VeWorld.app' 2>/dev/null)"
+              echo "finished searching"
+              SIMULATOR_APP_PATH=$(find ~/ -path "*/Build/Products/Release-iphonesimulator/VeWorld.app" -print -quit)
+              echo "APP_PATH=$SIMULATOR_APP_PATH" >> $GITHUB_ENV
+              echo "APP_PATH_DSYM=$(find ~/ -path "*/Build/Products/Release-iphonesimulator/VeWorld.app.dSYM" -print -quit)" >> $GITHUB_ENV
+      - name: Upload .app 
+        uses: actions/upload-artifact@v4
+        with:
+          name: VeWorld.app
+          path: ${{ env.APP_PATH }}
+
