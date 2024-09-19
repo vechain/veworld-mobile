@@ -116,7 +116,6 @@ jobs:
             - name: Build apk 
               id: build
               run: |
-                  pwd    
                   cd android
                   export STORE_PASSWORD="$(<store_password.txt)"
                   export KEY_PASSWORD="$(<store_password.txt)"

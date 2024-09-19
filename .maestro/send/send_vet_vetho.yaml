@@ -75,6 +75,10 @@ onFlowComplete:
 ## User should be able to send tokens-Send VET from Account 2 to Account 1
 - tapOn:
     id: "wallet-tab"
+- extendedWaitUntil:
+    visible:
+       id: "AccountCard_changeAccountButton"
+    timeout: 10000
 - tapOn:
     id: "AccountCard_changeAccountButton"
 - tapOn:
