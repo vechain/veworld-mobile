@@ -41,6 +41,8 @@ jobs:
           brew tap wix/brew
           brew install applesimutils
           brew install fastlane
+          gem install cocoapods # Install CocoaPods globally
+
           bundle install
         env:
           HOMEBREW_NO_AUTO_UPDATE: 1
@@ -51,6 +53,12 @@ jobs:
         uses: ruby/setup-ruby@v1
         with:
           bundler-cache: true
+      
+      # Install CocoaPods dependencies
+      - name: Install CocoaPods
+        run: |
+          cd ios
+          bundle exec pod install # Use Bundler to install CocoaPods dependencies
 
       # Setup Node.js
       - name: Setup Node
