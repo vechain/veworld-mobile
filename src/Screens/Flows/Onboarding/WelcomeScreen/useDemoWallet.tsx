@@ -14,9 +14,20 @@ export const useDemoWallet = () => {
     const { migrateOnboarding } = useApplicationSecurity()
     const devFeaturesEnabled = useAppSelector(selectAreDevFeaturesEnabled)
 
+    const getDemoMnemonic = useCallback(() => {
+        const demoMnemonic = "denial kitchen pet squirrel other broom bar gas better priority spoil cross".split(" ")
+        const ciMnemonic = process.env.E2E_MNEMONIC
+
+        if (IS_CI_BUILD && ciMnemonic) {
+            return ciMnemonic.split(" ")
+        }
+
+        return demoMnemonic
+    }, [])
+
     const onDemoOnboarding = useCallback(async () => {
         dispatch(setIsAppLoading(true))
-        const mnemonic = "denial kitchen pet squirrel other broom bar gas better priority spoil cross".split(" ")
+        const mnemonic = getDemoMnemonic()
         const userPassword = "111111"
         await WalletEncryptionKeyHelper.init(userPassword)
         await createWallet({
@@ -27,7 +38,7 @@ export const useDemoWallet = () => {
         })
         await migrateOnboarding(SecurityLevelType.SECRET, userPassword)
         dispatch(setIsAppLoading(false))
-    }, [createWallet, dispatch, migrateOnboarding])
+    }, [createWallet, dispatch, getDemoMnemonic, migrateOnboarding])
 
     const DEV_DEMO_BUTTON = useMemo(() => {
         if (devFeaturesEnabled || IS_CI_BUILD) {
