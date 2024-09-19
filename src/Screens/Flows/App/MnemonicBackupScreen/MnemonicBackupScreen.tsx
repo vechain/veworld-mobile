@@ -150,7 +150,6 @@ export const MnemonicBackupScreen = ({ route }: Props) => {
                         {isCloudKitAvailable && (
                             <FadeoutButton
                                 isLoading={isLoading}
-                                // w={100}
                                 bottom={0}
                                 mx={0}
                                 width={"auto"}
