@@ -6,7 +6,7 @@ on:
       build_number:
         description: 'Build number'
         required: true
-        default: '197'
+        default: '1'
       version_number:
         description: 'Version number'
         required: true
@@ -45,7 +45,7 @@ jobs:
       - name: Install Node.js dependencies
         run: |
           yarn install
-          
+
       # Install Homebrew and applesimutils for Detox
       - name: Install macOS dependencies
         run: |
