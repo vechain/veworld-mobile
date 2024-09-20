@@ -27,10 +27,6 @@ env:
 ##User selects an official token
 - tapOn:
     id: "EditTokensBar_BaseIcon_manageToken"
-- swipe:
-    from:
-        id: "ManageTokenScreen_SearchInput_searchTokenInput"
-    direction: "UP"
 - runFlow:
     when:
       platform: Android
@@ -350,7 +346,7 @@ env:
     commands:
         - swipe:
            from:
-             id: "EHrT"
+             id: "ManageTokenScreen_SearchInput_searchTokenInput"
            direction: "UP"
 - runFlow:
     when:
@@ -358,7 +354,7 @@ env:
     commands:
         - swipe:
            from:
-             id: "EHrT"
+             id: "ManageTokenScreen_SearchInput_searchTokenInput"
            direction: "UP"
 - runFlow:
     when:
