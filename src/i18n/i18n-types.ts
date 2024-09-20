@@ -1348,7 +1348,7 @@ type RootTranslation = {
 	 */
 	ALERT_OPTION_ASK_ME_LATER: string
 	/**
-	 * A​v​o​i​d​ ​s​c​r​e​e​n​s​h​o​t​t​i​n​g​ ​a​n​d​ ​s​a​v​i​n​g​ ​t​h​e​ ​p​h​r​a​s​e​ ​o​n​l​i​n​e​.​ ​O​f​f​l​i​n​e​ ​m​e​t​h​o​d​s​ ​a​r​e​ ​c​o​n​s​i​d​e​r​e​d​ ​t​h​e​ ​s​a​f​e​s​t​ ​w​a​y​ ​t​o​ ​a​v​o​i​d​ ​h​a​c​k​i​n​g​.
+	 * A​v​o​i​d​ ​s​c​r​e​e​n​s​h​o​t​t​i​n​g​ ​y​o​u​r​ ​r​e​c​o​v​e​r​y​ ​p​h​r​a​s​e​.​ ​S​t​o​r​e​ ​i​t​ ​o​f​f​l​i​n​e​ ​o​r​ ​b​a​c​k​ ​i​t​ ​u​p​ ​s​e​c​u​r​e​l​y​ ​o​n​l​i​n​e​.
 	 */
 	ALERT_DONT_SCREENSHOT_MNEMONIC: string
 	/**
@@ -4539,7 +4539,7 @@ Try reconnect your device to the internet.
 	 */
 	ALERT_OPTION_ASK_ME_LATER: () => LocalizedString
 	/**
-	 * Avoid screenshotting and saving the phrase online. Offline methods are considered the safest way to avoid hacking.
+	 * Avoid screenshotting your recovery phrase. Store it offline or back it up securely online.
 	 */
 	ALERT_DONT_SCREENSHOT_MNEMONIC: () => LocalizedString
 	/**

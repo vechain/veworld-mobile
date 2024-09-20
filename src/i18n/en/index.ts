@@ -368,7 +368,7 @@ const en: BaseTranslation = {
     ALERT_MSG_NEW_VERSION: "A new version {version: string} is out now. Please update to the latest version",
     ALERT_OPTION_UPDATE_NOW: "Update now",
     ALERT_OPTION_ASK_ME_LATER: "Ask me later",
-    ALERT_DONT_SCREENSHOT_MNEMONIC: "Avoid screenshotting and saving the phrase online. Offline methods are considered the safest way to avoid hacking.",
+    ALERT_DONT_SCREENSHOT_MNEMONIC: "Avoid screenshotting your recovery phrase. Store it offline or back it up securely online.",
 
     // Errors
     ERROR_PRICE_FEED_NOT_AVAILABLE: "Price feed not available",
