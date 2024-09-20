@@ -289,7 +289,10 @@ platform :ios do
         )
 
         sh("echo 'Build successful'")
-        sh("cd build && ls -la")
+        sh("pwd")
+        sh("ls -la")
+        sh("cd ./build && ls -la")
+        sh("pwd")
         
         rescue => exception
           puts exception
