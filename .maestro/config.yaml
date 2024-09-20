@@ -5,3 +5,4 @@ flows:
   - settings/*
   - contactManagement/contactManagement.yaml
   - contactManagement/addContactsToScroll.yaml
+  - tokenManagement/tokenManagement.yaml
