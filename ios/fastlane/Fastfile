@@ -116,7 +116,7 @@ platform :ios do
     github_username = values[:github_username]
     build_number = values[:build_number]
     version_number = values[:version_number]
-    branch_name = "release-build"
+    branch_name = "release-build-ci"
 
     # Create and push the branch locally
     sh("git checkout -b #{branch_name}-#{build_number}-#{version_number}")
