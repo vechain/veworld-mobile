@@ -291,16 +291,16 @@ platform :ios do
         api_url: "https://api.github.com"
       )
 
-      # send slack message
-      slack(
-        message: versionType.nil? ? "VeWorld build number: #{build} was successfully released! [iOS]" : "VeWorld version number: #{version} was successfully released! [iOS]",
-        slack_url: ENV["SLACK_WEBHOOK"],
-        success: true,
-        payload: {
-          "Build Date" => Time.new.strftime("%d/%m/%Y %H:%M"),
-          "Built by" => github_username,
-        },
-      )
+      ## send slack message
+      #slack(
+      #  message: versionType.nil? ? "VeWorld build number: #{build} was successfully released! [iOS]" : "VeWorld version number: #{version} was successfully released! [iOS]",
+      #  slack_url: ENV["SLACK_WEBHOOK"],
+      #  success: true,
+      #  payload: {
+      #    "Build Date" => Time.new.strftime("%d/%m/%Y %H:%M"),
+      #    "Built by" => github_username,
+      #  },
+      #)
 
       # clean build artifacts if any
       clean_build_artifacts
