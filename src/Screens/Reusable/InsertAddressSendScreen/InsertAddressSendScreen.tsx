@@ -47,9 +47,8 @@ export const InsertAddressSendScreen = ({ route }: Props) => {
             ) {
                 const params = route.params as RootStackParamListHome[Routes.INSERT_ADDRESS_SEND]
 
-                nav.navigate(Routes.TRANSACTION_SUMMARY_SEND, {
+                nav.navigate(Routes.SELECT_AMOUNT_SEND, {
                     token: params.token!,
-                    amount: params.amount!,
                     address,
                 })
             } else {

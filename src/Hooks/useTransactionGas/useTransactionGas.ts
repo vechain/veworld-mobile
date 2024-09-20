@@ -13,6 +13,7 @@ type UseTransactionReturnProps = {
     setGas: (gas: EstimateGasResult) => void
     loadingGas: boolean
     setGasPayer: (gasPayer: string) => void
+    calculateGasFees: (_clauses: Transaction.Body["clauses"]) => Promise<EstimateGasResult>
 }
 
 type Props = {
@@ -20,6 +21,7 @@ type Props = {
     providedGasPayer?: string
     dependsOn?: string
     providedGas?: number
+    disabled?: boolean
 }
 
 /**
@@ -29,7 +31,12 @@ type Props = {
  * @param providedGas - the gas to use for the transaction
  * @param providedGasPayer - the gas payer to use for the transaction
  */
-export const useTransactionGas = ({ clauses, providedGas, providedGasPayer }: Props): UseTransactionReturnProps => {
+export const useTransactionGas = ({
+    clauses,
+    providedGas,
+    providedGasPayer,
+    disabled = false,
+}: Props): UseTransactionReturnProps => {
     const [loadingGas, setLoadingGas] = useState<boolean>(true)
     const [gas, setGas] = useState<EstimateGasResult>()
     const selectedNetwork = useSelector(selectSelectedNetwork)
@@ -37,32 +44,37 @@ export const useTransactionGas = ({ clauses, providedGas, providedGasPayer }: Pr
     const [gasPayer, setGasPayer] = useState<string>(providedGasPayer ?? account.address)
     const thorClient = useThor()
 
-    const estimateGas = useCallback(
-        async (caller: string, payer: string, thor: Connex.Thor) => {
-            setLoadingGas(true)
-            try {
-                const estimatedGas = await GasUtils.estimateGas(
-                    selectedNetwork.urls[0],
-                    thor,
-                    clauses,
-                    providedGas ?? 0,
-                    caller,
-                    payer,
-                )
-
-                setGas(estimatedGas)
-            } catch (e) {
-                error(ERROR_EVENTS.SEND, e)
-            } finally {
-                setLoadingGas(false)
-            }
+    const calculateGasFees = useCallback(
+        async (_clauses: Transaction.Body["clauses"]) => {
+            return await GasUtils.estimateGas(
+                selectedNetwork.urls[0],
+                thorClient,
+                _clauses,
+                providedGas ?? 0,
+                account.address,
+                gasPayer,
+            )
         },
-        [clauses, providedGas, selectedNetwork.urls],
+        [account.address, gasPayer, providedGas, selectedNetwork.urls, thorClient],
     )
 
-    useEffect(() => {
-        estimateGas(account.address, gasPayer, thorClient)
-    }, [account.address, gasPayer, clauses, estimateGas, thorClient])
+    const estimateGas = useCallback(async () => {
+        setLoadingGas(true)
+        try {
+            const estimatedGas = await calculateGasFees(clauses)
+            setGas(estimatedGas)
+        } catch (e) {
+            error(ERROR_EVENTS.SEND, e)
+        } finally {
+            setLoadingGas(false)
+        }
+    }, [calculateGasFees, clauses])
 
-    return { gas, loadingGas, setGas, setGasPayer }
+    useEffect(() => {
+        if (!disabled) {
+            estimateGas()
+        }
+    }, [disabled, estimateGas])
+
+    return { gas, loadingGas, setGas, setGasPayer, calculateGasFees }
 }

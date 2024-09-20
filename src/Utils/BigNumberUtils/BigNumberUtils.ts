@@ -7,7 +7,11 @@ interface IBigNumberUtils {
     decimals(decimals: number, callback?: (result: BN) => void): BigNumberUtils
     toCurrencyFormat_string(decimals: number): string
     toTokenFormat_string(decimals: number): string
-    toCurrencyConversion(balance: string, rate?: number, callback?: (result: BN) => void): string
+    toCurrencyConversion(
+        balance: string,
+        rate?: number,
+        callback?: (result: BN) => void,
+    ): { value: string; isLeesThan_0_01: boolean }
     toTokenConversion(balance: string, rate?: number, callback?: (result: BN) => void): BigNumberUtils
     addTrailingZeros(decimals: number, callback?: (result: BN) => void): BigNumberUtils
 
@@ -167,7 +171,7 @@ class BigNumberUtils implements IBigNumberUtils {
         return _data
     }
 
-    toCurrencyConversion(balance: string, rate?: number, callback?: (result: BN) => void) {
+    toCurrencyConversion(balance: string, rate?: number, callback?: (result: BN) => void, decimals?: number) {
         let _balance = !isEmpty(balance) ? balance : "0"
         let _rate = rate ?? 1
         this.data = new BN(_balance).multipliedBy(_rate)
@@ -176,9 +180,11 @@ class BigNumberUtils implements IBigNumberUtils {
             callback(this.data)
         }
 
-        if (this.data.isLessThan("0.01") && !this.data.isZero()) return "< 0.01"
-
-        return this.data.toFixed(2, BN.ROUND_DOWN)
+        return {
+            value: this.data.isLessThan("0.01") && !this.data.isZero() ? "0.01" : this.data.toFixed(2, BN.ROUND_DOWN),
+            preciseValue: this.data.toFixed(decimals ?? 8, BN.ROUND_DOWN),
+            isLeesThan_0_01: this.data.isLessThan("0.01") && !this.data.isZero(),
+        }
     }
 
     toTokenConversion(balance: string, rate?: number, callback?: (result: BN) => void) {

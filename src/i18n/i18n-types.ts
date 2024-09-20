@@ -2403,6 +2403,14 @@ type RootTranslation = {
 	 */
 	SEND_INSUFFICIENT_BALANCE: string
 	/**
+	 * I​n​s​u​f​f​i​c​i​e​n​t​ ​g​a​s
+	 */
+	SEND_INSUFFICIENT_GAS: string
+	/**
+	 * E​r​r​o​r​ ​c​a​l​c​u​l​a​t​i​n​g​ ​f​e​e​s​,​ ​p​l​e​a​s​e​ ​t​r​y​ ​a​g​a​i​n​.
+	 */
+	ERROR_FEES_CALCULATION: string
+	/**
 	 * S​e​n​d​ ​y​o​u​r​ ​t​o​k​e​n
 	 */
 	SEND_INSERT_ADDRESS: string
@@ -5412,6 +5420,14 @@ Try reconnect your device to the internet.
 	 * Insufficient balance
 	 */
 	SEND_INSUFFICIENT_BALANCE: () => LocalizedString
+	/**
+	 * Insufficient gas
+	 */
+	SEND_INSUFFICIENT_GAS: () => LocalizedString
+	/**
+	 * Error calculating fees, please try again.
+	 */
+	ERROR_FEES_CALCULATION: () => LocalizedString
 	/**
 	 * Send your token
 	 */
