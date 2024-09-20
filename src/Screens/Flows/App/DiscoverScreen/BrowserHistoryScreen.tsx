@@ -15,7 +15,6 @@ import {
 } from "~Components"
 import { AnalyticsEvent, DiscoveryDApp } from "~Constants"
 import { useAnalyticTracking, useThemedStyles, useVisitedUrls } from "~Hooks"
-import { RumManager } from "~Logging"
 import { Routes } from "~Navigation"
 import { addNavigationToDApp, selectVisitedUrls, useAppDispatch, useAppSelector } from "~Storage/Redux"
 import { DAppUtils } from "~Utils"
@@ -83,7 +82,6 @@ export const BrowserHistoryScreen = () => {
     const dispatch = useAppDispatch()
     const { LL } = useI18nContext()
     const { styles } = useThemedStyles(baseStyles)
-    const ddLogger = useMemo(() => new RumManager(), [])
     const { addVisitedUrl, removeVisitedUrl } = useVisitedUrls()
     const swipeableItemRefs = useRef<Map<string, SwipeableItemImperativeRef>>(new Map())
 
@@ -118,13 +116,11 @@ export const BrowserHistoryScreen = () => {
                 url: href,
             })
 
-            ddLogger.logAction("DISCOVERY_SECTION", "DISCOVERY_USER_OPENED_DAPP", href)
-
             setTimeout(() => {
                 dispatch(addNavigationToDApp({ href: href, isCustom: custom ?? false }))
             }, 1000)
         },
-        [nav, addVisitedUrl, track, ddLogger, dispatch],
+        [nav, addVisitedUrl, track, dispatch],
     )
 
     const onTrashIconPress = useCallback(

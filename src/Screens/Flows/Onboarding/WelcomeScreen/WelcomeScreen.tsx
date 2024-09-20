@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect, useMemo } from "react"
+import React, { useCallback, useEffect } from "react"
 import {
     BackButtonHeader,
     BaseButton,
@@ -16,22 +16,19 @@ import { useDemoWallet } from "./useDemoWallet"
 import { UserCreatePasswordScreen } from "~Screens/Flows/WalletCreation"
 import { useHandleWalletCreation } from "./useHandleWalletCreation"
 import { useAnalyticTracking, useBottomSheetModal, useTheme } from "~Hooks"
-import { RumManager } from "~Logging"
 import { AnalyticsEvent } from "~Constants"
 
 export const WelcomeScreen = () => {
     const { LL } = useI18nContext()
     const theme = useTheme()
-    const ddLogger = useMemo(() => new RumManager(), [])
     const track = useAnalyticTracking()
 
     const { ref, onOpen, onClose } = useBottomSheetModal()
 
     const onImportWallet = useCallback(async () => {
         track(AnalyticsEvent.SELECT_WALLET_IMPORT_WALLET)
-        ddLogger.logAction("WALLET_SETUP_SCREEN", "SELECT_WALLET_IMPORT_WALLET")
         onOpen()
-    }, [onOpen, track, ddLogger])
+    }, [onOpen, track])
 
     const goToTermsAndConditions = useCallback(() => {
         const url = process.env.REACT_APP_TERMS_OF_SERVICE_URL
