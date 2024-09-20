@@ -182,6 +182,7 @@ export const SelectAmountSendScreen = ({ route }: Props) => {
                         setIsError(true)
                         setIsFeeAmountError(false)
                         setIsFeeCalculationError(false)
+                        setAreFeesLoading(false)
                         HapticsService.triggerNotification({ level: "Error" })
                         return
                     }
@@ -234,6 +235,7 @@ export const SelectAmountSendScreen = ({ route }: Props) => {
         const newValue = removeInvalidCharacters(
             isInputInFiat ? BigNutils(fiatTotalBalance.value).toCurrencyFormat_string(2) : tokenTotalToHuman,
         )
+
         setInput(newValue)
         setTokenAmountFromFiat(tokenTotalToHuman)
 
