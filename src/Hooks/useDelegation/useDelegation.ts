@@ -1,6 +1,6 @@
-import { DelegationType } from "~Model/Delegation"
-import { AccountWithDevice, DEVICE_TYPE, LocalAccountWithDevice } from "~Model"
 import { useCallback, useEffect, useState } from "react"
+import { AccountWithDevice, DEVICE_TYPE, LocalAccountWithDevice } from "~Model"
+import { DelegationType } from "~Model/Delegation"
 import {
     getDefaultDelegationAccount,
     getDefaultDelegationOption,
@@ -27,6 +27,7 @@ export const useDelegation = ({ providedUrl, setGasPayer }: Props) => {
     const handleSetSelectedDelegationUrl = useCallback((url: string) => {
         setSelectedDelegationUrl(url)
         setSelectedDelegationOption(DelegationType.URL)
+        setSelectedDelegationAccount(undefined)
     }, [])
 
     useEffect(() => {

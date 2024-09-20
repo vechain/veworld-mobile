@@ -38,15 +38,13 @@ import {
 
 export type RootStackParamListHome = {
     [Routes.HOME]: undefined
-    [Routes.SELECT_TOKEN_SEND]: { initialRoute: Routes }
+    [Routes.SELECT_TOKEN_SEND]: undefined
     [Routes.SELECT_AMOUNT_SEND]: {
         token: FungibleTokenWithBalance
-        initialRoute: Routes
+        address: string
     }
     [Routes.INSERT_ADDRESS_SEND]: {
         token?: FungibleTokenWithBalance
-        amount?: string
-        initialRoute?: Routes
         contractAddress?: string
         tokenId?: string
     }

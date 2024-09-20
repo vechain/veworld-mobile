@@ -1,6 +1,6 @@
 import { useNavigation } from "@react-navigation/native"
 import { NativeStackScreenProps } from "@react-navigation/native-stack"
-import React, { useCallback, useEffect, useMemo } from "react"
+import React, { useCallback, useEffect, useMemo, useRef, useState } from "react"
 import { StyleSheet } from "react-native"
 import Animated, { interpolateColor, useAnimatedStyle, useSharedValue, withTiming } from "react-native-reanimated"
 import { Transaction } from "thor-devkit"
@@ -47,12 +47,15 @@ export const TransactionSummarySendScreen = ({ route }: Props) => {
     const dispatch = useAppDispatch()
     const track = useAnalyticTracking()
     const nav = useNavigation()
-    const network = useAppSelector(selectSelectedNetwork)
+    const isVTHO = useRef(token.symbol.toLowerCase() === VTHO.symbol.toLowerCase())
 
+    const network = useAppSelector(selectSelectedNetwork)
     const selectedAccount = useAppSelector(selectSelectedAccount)
     const pendingTransaction = useAppSelector(state => selectPendingTx(state, token.address))
-
     const accounts = useAppSelector(selectAccounts)
+
+    const [finalAmount, setFinalAmount] = useState(amount)
+
     const receiverIsAccount = accounts.find(_account => AddressUtils.compareAddresses(_account.address, address))
     const { onAddContactPress, handleSaveContact, addContactSheet, selectedContactAddress, closeAddContactSheet } =
         useTransferAddContact()
@@ -94,8 +97,8 @@ export const TransactionSummarySendScreen = ({ route }: Props) => {
     }, [onFinish])
 
     const clauses = useMemo(
-        () => TransactionUtils.prepareFungibleClause(amount, token, address),
-        [amount, token, address],
+        () => TransactionUtils.prepareFungibleClause(finalAmount, token, address),
+        [finalAmount, token, address],
     )
 
     const {
@@ -123,6 +126,55 @@ export const TransactionSummarySendScreen = ({ route }: Props) => {
         onTransactionSuccess,
         onTransactionFailure,
     })
+
+    /**
+     * This is used to store the amount of VTHO when gas is not enough when user choose an higher prority,
+     * so we can restore the previous amount when user switch back to the previous priority.
+     */
+    const priorityStatesToVTHOAmount = useRef({
+        [GasPriceCoefficient.REGULAR]: amount,
+        [GasPriceCoefficient.MEDIUM]: "0",
+        [GasPriceCoefficient.HIGH]: "0",
+    })
+
+    /**
+     * If user is sending VTHO and gas is not enough, we will adjust the amount to send
+     */
+    useEffect(() => {
+        let _finalAmount = amount
+
+        if (isVTHO.current && !isDelegated) {
+            const feeOptionIndex = parseInt(selectedFeeOption, 10) as GasPriceCoefficient
+            const _gasFees = gasFeeOptions[feeOptionIndex].gasRaw
+            const _vthoBalance = BigNutils(token.balance.balance)
+            _vthoBalance.minus(_gasFees.toString).toHuman(token.decimals).decimals(4)
+
+            if (!isEnoughGas && _vthoBalance.isBiggerThan(BigNutils("0").toString)) {
+                if (
+                    priorityStatesToVTHOAmount.current[feeOptionIndex] !== _vthoBalance.toString ||
+                    priorityStatesToVTHOAmount.current[feeOptionIndex] === "0"
+                ) {
+                    priorityStatesToVTHOAmount.current[feeOptionIndex] = _vthoBalance.toString
+                }
+
+                _finalAmount = _vthoBalance.toString
+            } else if (!BigNutils(priorityStatesToVTHOAmount.current[feeOptionIndex]).isZero) {
+                _finalAmount = priorityStatesToVTHOAmount.current[feeOptionIndex]
+            }
+        }
+
+        setFinalAmount(_finalAmount)
+    }, [
+        amount,
+        gasFeeOptions,
+        isDelegated,
+        isEnoughGas,
+        selectedFeeOption,
+        token.balance.balance,
+        token.decimals,
+        token.symbol,
+        txCostTotal,
+    ])
 
     return (
         <Layout
@@ -169,7 +221,7 @@ export const TransactionSummarySendScreen = ({ route }: Props) => {
                     />
 
                     <TotalSendAmountView
-                        amount={amount}
+                        amount={finalAmount}
                         symbol={token.symbol}
                         token={token}
                         txCostTotal={txCostTotal}
@@ -223,7 +275,7 @@ export const TransactionSummarySendScreen = ({ route }: Props) => {
     )
 }
 
-function EstimatedTimeDetailsView({ selectedFeeOption }: { selectedFeeOption: string }) {
+function EstimatedTimeDetailsView({ selectedFeeOption }: Readonly<{ selectedFeeOption: string }>) {
     const { LL } = useI18nContext()
     const theme = useTheme()
 
@@ -261,7 +313,14 @@ interface ITotalSendAmountView {
     isEnoughGas: boolean
 }
 
-function TotalSendAmountView({ amount, symbol, token, txCostTotal, isDelegated, isEnoughGas }: ITotalSendAmountView) {
+function TotalSendAmountView({
+    amount,
+    symbol,
+    token,
+    txCostTotal,
+    isDelegated,
+    isEnoughGas,
+}: Readonly<ITotalSendAmountView>) {
     const currency = useAppSelector(selectCurrency)
 
     const { data: exchangeRate } = useExchangeRate({
@@ -272,29 +331,49 @@ function TotalSendAmountView({ amount, symbol, token, txCostTotal, isDelegated, 
     const theme = useTheme()
     const { LL } = useI18nContext()
 
-    const animationProgress = useSharedValue(0)
+    const totalTxAnimationProgress = useSharedValue(0)
 
     useEffect(() => {
-        animationProgress.value = withTiming(1, { duration: 400 }, () => {
-            animationProgress.value = withTiming(0, { duration: 400 })
+        totalTxAnimationProgress.value = withTiming(1, { duration: 400 }, () => {
+            totalTxAnimationProgress.value = withTiming(0, { duration: 400 })
         })
-    }, [txCostTotal, animationProgress])
+    }, [txCostTotal, totalTxAnimationProgress])
 
-    const animatedStyle = useAnimatedStyle(() => {
+    const totalTxAnimatedStyle = useAnimatedStyle(() => {
         return {
             color: interpolateColor(
-                animationProgress.value,
+                totalTxAnimationProgress.value,
                 [0, 1],
                 [theme.colors.text, isEnoughGas ? theme.colors.success : theme.colors.danger],
             ),
         }
     }, [theme.isDark, isEnoughGas])
 
+    const amountAnimationProgress = useSharedValue(0)
+
+    useEffect(() => {
+        amountAnimationProgress.value = withTiming(1, { duration: 400 }, () => {
+            amountAnimationProgress.value = withTiming(0, { duration: 400 })
+        })
+    }, [amount, amountAnimationProgress])
+
+    const amountAanimatedStyle = useAnimatedStyle(() => {
+        return {
+            color: interpolateColor(
+                amountAnimationProgress.value,
+                [0, 1],
+                [theme.colors.text, isEnoughGas ? theme.colors.success : theme.colors.danger],
+            ),
+        }
+    }, [theme.isDark, isEnoughGas])
+
+    const formattedAmount = useMemo(() => BigNutils(amount).decimals(4).toString, [amount])
+
     const formattedTotalCost = useMemo(
         () => BigNutils(txCostTotal).toHuman(token.decimals).decimals(4).toString,
         [token.decimals, txCostTotal],
     )
-    const isVTHO = useMemo(() => token.symbol === VTHO.symbol, [token.symbol])
+    const isVTHO = useMemo(() => token.symbol.toLowerCase() === VTHO.symbol.toLowerCase(), [token.symbol])
 
     const fiatHumanAmount = BigNutils().toCurrencyConversion(isVTHO ? formattedTotalCost : amount, exchangeRate)
 
@@ -307,13 +386,19 @@ function TotalSendAmountView({ amount, symbol, token, txCostTotal, isDelegated, 
             <BaseText typographyFont="caption">{LL.SEND_AMOUNT()}</BaseText>
 
             <BaseView flexDirection="row">
-                <BaseText typographyFont="subSubTitle">{amount}</BaseText>
+                {isVTHO ? (
+                    <Animated.Text style={[baseStyles.coloredText, amountAanimatedStyle]}>
+                        {formattedAmount}
+                    </Animated.Text>
+                ) : (
+                    <BaseText typographyFont="subSubTitle">{formattedAmount}</BaseText>
+                )}
                 <BaseText typographyFont="bodyBold" mx={4}>
                     {symbol}
                 </BaseText>
 
-                {exchangeRate && token.symbol !== VTHO.symbol && (
-                    <FiatBalance typographyFont="buttonSecondary" balances={[fiatHumanAmount]} prefix="≈ " />
+                {exchangeRate && !isVTHO && (
+                    <FiatBalance typographyFont="buttonSecondary" balances={[fiatHumanAmount.value]} prefix="≈ " />
                 )}
             </BaseView>
 
@@ -323,7 +408,7 @@ function TotalSendAmountView({ amount, symbol, token, txCostTotal, isDelegated, 
                     <BaseSpacer height={12} />
                     <BaseText typographyFont="caption">{LL.SEND_TOTAL_COST()}</BaseText>
                     <BaseView flexDirection="row">
-                        <Animated.Text style={[baseStyles.coloredText, animatedStyle]}>
+                        <Animated.Text style={[baseStyles.coloredText, totalTxAnimatedStyle]}>
                             {formattedTotalCost}
                         </Animated.Text>
                         <BaseText typographyFont="bodyBold" mx={4}>
@@ -331,7 +416,11 @@ function TotalSendAmountView({ amount, symbol, token, txCostTotal, isDelegated, 
                         </BaseText>
 
                         {exchangeRate && (
-                            <FiatBalance typographyFont="buttonSecondary" balances={[fiatHumanAmount]} prefix="≈ " />
+                            <FiatBalance
+                                typographyFont="buttonSecondary"
+                                balances={[fiatHumanAmount.value]}
+                                prefix="≈ "
+                            />
                         )}
                     </BaseView>
                 </>

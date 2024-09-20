@@ -87,7 +87,12 @@ export const TransactionDetails = ({
                 <BaseText typographyFont="subSubTitle">
                     {spendingAmount.toString()} {VET.symbol}
                 </BaseText>
-                <FiatBalance typographyFont="buttonSecondary" ml={6} balances={[formattedFiatAmount]} prefix="≈ " />
+                <FiatBalance
+                    typographyFont="buttonSecondary"
+                    ml={6}
+                    balances={[formattedFiatAmount.value]}
+                    prefix="≈ "
+                />
             </BaseView>
 
             <BaseSpacer height={12} />

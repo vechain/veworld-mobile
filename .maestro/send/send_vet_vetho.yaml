@@ -15,14 +15,13 @@ onFlowComplete:
     commands:
       - tapOn:
           id: "VET"
-- inputText: ${AMOUNT}
-- tapOn: "Send"
-- tapOn: "NEXT"
 - tapOn:
     id: "selectAccount"
     index: 0
-- tapOn:
-    id: "next-button"
+- tapOn: "NEXT"
+- inputText: ${AMOUNT}
+- tapOn: "Send"
+- tapOn: "NEXT"
 - runFlow:
     when:
       visible: "Select delegation"
@@ -48,13 +47,13 @@ onFlowComplete:
     commands:
       - tapOn:
           id: "VTHO"
+- tapOn:
+    id: "selectAccount"
+- tapOn:
+    id: "next-button"
 - inputText: ${AMOUNT}
 - tapOn:
     id: "Layout_ScrollView"
-- tapOn:
-    id: "next-button"
-- tapOn:
-    id: "selectAccount"
 - tapOn:
     id: "next-button"
 - runFlow:
@@ -90,13 +89,13 @@ onFlowComplete:
     commands:
       - tapOn:
           id: "VET"
-- inputText: ${AMOUNT}
-- tapOn:
-    id: "Layout_ScrollView"
-- tapOn: "NEXT"
 - tapOn:
     id: "selectAccount"
     index: 0
+- tapOn: "NEXT"
+- inputText: ${AMOUNT}
+- tapOn:
+    id: "Layout_ScrollView"
 - tapOn: "NEXT"
 - runFlow:
     when:
