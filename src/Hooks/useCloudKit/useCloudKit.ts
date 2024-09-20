@@ -141,7 +141,9 @@ export const useCloudKit = () => {
     const getSalt = useCallback(async (_rootAddress: string) => {
         setIsLoading(true)
         try {
-            return await CloudKitManager.getSalt(_rootAddress)
+            const salt = await CloudKitManager.getSalt(_rootAddress)
+            setIsLoading(false)
+            return salt
         } catch (_error) {
             setIsLoading(false)
             let er = _error as CKError
@@ -156,7 +158,9 @@ export const useCloudKit = () => {
     const getIV = useCallback(async (_rootAddress: string) => {
         setIsLoading(true)
         try {
-            return await CloudKitManager.getIV(_rootAddress)
+            const iv = await CloudKitManager.getIV(_rootAddress)
+            setIsLoading(false)
+            return iv
         } catch (_error) {
             setIsLoading(false)
             let er = _error as CKError
