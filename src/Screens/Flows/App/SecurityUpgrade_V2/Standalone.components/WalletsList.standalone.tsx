@@ -4,12 +4,12 @@ import { BaseSpacer, BaseText, BaseView } from "~Components"
 import { ColorThemeType } from "~Constants"
 import { useThemedStyles } from "~Hooks"
 import { useI18nContext } from "~i18n"
-import { Wallet } from "~Model"
+import { BackupWallet } from "~Model"
 import { ListMnemonicCard } from "./ListMnemonicCard.standalone"
 
 type Props = {
-    wallets: Wallet[]
-    onSelected: (selectedWallet: Wallet) => void
+    wallets: BackupWallet[]
+    onSelected: (selectedWallet: BackupWallet) => void
 }
 
 export const WalletsList = ({ wallets, onSelected }: Props) => {

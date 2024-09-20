@@ -7,7 +7,7 @@ import { RootStackParamListBackupWallet } from "../Navigation.standalone"
 import { NativeStackScreenProps } from "@react-navigation/native-stack"
 import { Routes } from "~Navigation"
 import { useWalletSecurity } from "../Helpers.standalone"
-import { Wallet } from "~Model"
+import { BackupWallet } from "~Model"
 import { WalletsList } from "./WalletsList.standalone"
 import { MnemonicModalSheetStandalone } from "./MnemonicModalSheet.standalone"
 interface Props
@@ -23,10 +23,10 @@ export const MnemonicBackup = ({ route, upgradeSecurityToV2 }: Props) => {
     const { isWalletSecurityBiometrics, isWalletSecurityPassword } = useWalletSecurity(securityType)
     const { ref, openWithDelay } = useBottomSheetModal()
 
-    const [selectedWallet, setSelectedWallet] = useState<Wallet | null>(null)
+    const [selectedWallet, setSelectedWallet] = useState<BackupWallet | null>(null)
 
     const handleOnSelectedWallet = useCallback(
-        (_selectedWallet: Wallet) => {
+        (_selectedWallet: BackupWallet) => {
             setSelectedWallet(_selectedWallet)
             openWithDelay(200)
         },

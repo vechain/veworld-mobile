@@ -1,13 +1,14 @@
-import React, { useCallback, useRef } from "react"
+import React, { useCallback, useRef, useState } from "react"
 import { SafeAreaView } from "react-native-safe-area-context"
 import { BaseButton, BaseIcon, BaseSpacer, BaseText, BaseView, MigrationToSecurity_v2 } from "~Components"
 import { useBackHandler, useDisclosure, useTheme } from "~Hooks"
-import { BackHandlerEvent, SecurityLevelType, Wallet } from "~Model"
+import { BackHandlerEvent, BackupWallet, SecurityLevelType } from "~Model"
 import { useWalletSecurity } from "./Helpers.standalone"
 import { BaseModalWithChildren, LockScreen } from "./Standalone.components"
 import { useNavigation } from "@react-navigation/native"
 import { Routes } from "~Navigation"
 import { useI18nContext } from "~i18n"
+import { isEmpty, isUndefined } from "lodash"
 
 export const SecurityUpgrade_V2 = ({
     oldPersistedState,
@@ -22,8 +23,9 @@ export const SecurityUpgrade_V2 = ({
     const { LL } = useI18nContext()
     const nav = useNavigation()
     useBackHandler(BackHandlerEvent.BLOCK)
-
     const isUpgrade = useRef(false)
+    const [_isOnlyLedger, setisOnlyLedger] = useState(false)
+    const [_isOnlyPk, setisOnlyPk] = useState(false)
 
     const { isWalletSecurityBiometrics, isWalletSecurityPassword, isWalletSecurityNone } =
         useWalletSecurity(securityType)
@@ -31,7 +33,7 @@ export const SecurityUpgrade_V2 = ({
     const { isOpen: isPasswordPromptOpen, onOpen: openPasswordPrompt, onClose: closePasswordPrompt } = useDisclosure()
 
     const navigateToBackupScreen = useCallback(
-        (wallets: Wallet[], _password?: string) => {
+        (wallets: BackupWallet[], _password?: string) => {
             nav.navigate(Routes.SECURITY_UPGRADE_V2_MNEMONIC_BACKUP, {
                 wallets,
                 oldPersistedState,
@@ -47,13 +49,26 @@ export const SecurityUpgrade_V2 = ({
         if (isWalletSecurityPassword) openPasswordPrompt()
         isUpgrade.current = false
         if (oldPersistedState && isWalletSecurityBiometrics) {
-            const _wallets = await MigrationToSecurity_v2.getMnemonicsFromStorage(oldPersistedState)
-            if (!_wallets) return
-            let validWallets: Wallet[] = []
-            for (let wallet of _wallets) {
+            const { isOnlyLedger, inOnlyPrivateKey, localWallets } =
+                await MigrationToSecurity_v2.getMnemonicsFromStorage(oldPersistedState)
+
+            if (isOnlyLedger) {
+                setisOnlyLedger(true)
+                return
+            }
+
+            if (inOnlyPrivateKey) {
+                setisOnlyPk(true)
+                return
+            }
+
+            if (isEmpty(localWallets) || isUndefined(localWallets)) return
+
+            let validWallets: BackupWallet[] = []
+            for (let wallet of localWallets) {
                 if (wallet.mnemonic) validWallets.push(wallet)
             }
-            navigateToBackupScreen(_wallets)
+            navigateToBackupScreen(localWallets)
         }
     }, [
         isWalletSecurityNone,
@@ -68,13 +83,26 @@ export const SecurityUpgrade_V2 = ({
         async (_password: string) => {
             if (oldPersistedState) {
                 closePasswordPrompt()
-                const _wallets = await MigrationToSecurity_v2.getMnemonicsFromStorage(oldPersistedState, _password)
-                if (!_wallets) return
-                let validWallets: Wallet[] = []
-                for (let wallet of _wallets) {
+                const { isOnlyLedger, inOnlyPrivateKey, localWallets } =
+                    await MigrationToSecurity_v2.getMnemonicsFromStorage(oldPersistedState, _password)
+
+                if (isOnlyLedger) {
+                    setisOnlyLedger(true)
+                    return
+                }
+
+                if (inOnlyPrivateKey) {
+                    setisOnlyPk(true)
+                    return
+                }
+
+                if (isEmpty(localWallets) || isUndefined(localWallets)) return
+
+                let validWallets: BackupWallet[] = []
+                for (let wallet of localWallets) {
                     if (wallet.mnemonic) validWallets.push(wallet)
                 }
-                navigateToBackupScreen(_wallets, _password)
+                navigateToBackupScreen(localWallets, _password)
             }
         },
         [oldPersistedState, closePasswordPrompt, navigateToBackupScreen],
@@ -118,7 +146,16 @@ export const SecurityUpgrade_V2 = ({
 
                     <BaseSpacer height={69} />
                 </BaseView>
+
                 <BaseView w={100}>
+                    {(_isOnlyLedger || _isOnlyPk) && (
+                        <BaseView w={100} pb={14}>
+                            <BaseText align="center" typographyFont="caption" color={theme.colors.danger}>
+                                {_isOnlyLedger ? LL.SECURITY_UPGRADE_ONLY_HARDWARE() : LL.SECURITY_UPGRADE_ONLY_PK()}
+                            </BaseText>
+                        </BaseView>
+                    )}
+
                     <BaseView
                         w={100}
                         p={24}
@@ -141,8 +178,10 @@ export const SecurityUpgrade_V2 = ({
                             radius={8}
                             variant="outline"
                             action={onBackupHandler}
+                            disabled={_isOnlyLedger || _isOnlyPk}
                         />
                     </BaseView>
+
                     <BaseView w={100}>
                         <BaseButton title={LL.SECURITY_UPGRADE_BTN()} w={100} radius={8} action={onStartUpgrade} />
                     </BaseView>
