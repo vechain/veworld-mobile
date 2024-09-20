@@ -1,6 +1,5 @@
 apply plugin: "com.android.application"
 apply plugin: "com.facebook.react"
-apply from: "../../node_modules/@datadog/mobile-react-native/datadog-sourcemaps.gradle"
 
 apply plugin: "kotlin-android"
 
