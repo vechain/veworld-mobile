@@ -1,6 +1,6 @@
 import { useNavigation, useScrollToTop } from "@react-navigation/native"
 import React, { useCallback, useEffect, useMemo, useRef, useState } from "react"
-import { AccountCard, EditTokensBar, Header, TokenList } from "./Components"
+import { AccountCard, DeviceBackupModal, EditTokensBar, Header, TokenList } from "./Components"
 import { RefreshControl } from "react-native"
 import { NestableScrollContainer } from "react-native-draggable-flatlist"
 import { FadeInRight } from "react-native-reanimated"
@@ -191,6 +191,7 @@ export const HomeScreen = () => {
                     />
 
                     <QRCodeBottomSheet ref={QRCodeBottomSheetRef} />
+                    <DeviceBackupModal />
                 </NestableScrollContainer>
             }
         />

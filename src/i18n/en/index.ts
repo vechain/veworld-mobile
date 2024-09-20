@@ -182,6 +182,7 @@ const en: BaseTranslation = {
     TITLE_ALERT_FACE_ID_CANCELLED: "Face ID Cancelled",
     TITLE_ALERT_CAMERA_PERMISSION: "Camera Permissions",
     TITLE_ALERT_BIOMETRICS_CANCELLED: "Biometrics Cancelled",
+    DEVICE_BACKUP_MODAL_TITLE: "Backup now",
 
     TITLE_CREATE_WALLET_SUCCESS: "Your vechain wallet is ready!",
     TITLE_RESET_APP: "VeWorld reset",
@@ -254,6 +255,7 @@ const en: BaseTranslation = {
     SB_SECURITY: "To secure your wallet, you can either use your device's biometric (like a fingerprint) or set up a password. You can change the password anytime if needed.",
     SB_USER_PASSWORD: "This password will be used to authorize transactions.",
     SB_INSERT_KEYSTORE_PASSWORD: "Insert your keystore password",
+    DEVICE_BACKUP_MODAL_SUBTITLE: "One or more of your accounts recovery phrase haven’t been backed up yet. Make sure to backup to never lose access to your crypto.",
 
 
     // ELEMENTS
@@ -753,6 +755,9 @@ const en: BaseTranslation = {
     LEDGER_CERTIFICATE_READ_SB: "The certificate is ready to be sent to the DApp, press confirm to continue",
     LEDGER_MESSAGE_READ_SB: "The message is ready, press confirm to continue",
     SEND_PENDING_TX_REVERT_ALERT: "This transaction may be reverted if your balance is too low",
+    BACKUP_YOUR_DEVICES_TITLE: "Backup your wallet",
+    BACKUP_YOUR_DEVICES_DESCRIPTION: "Before proceeding with the transaction, we suggest to backup the recovery phrase for this account.",
+    BACKUP_YOUR_DEVICES_CTA: "Backup now",
     SEND_ERROR_TOKEN_NOT_FOUND: "It looks like you don't have any {tokenName: string} in your wallet",
     SIGN_TRANSACTION_ERROR: "Error signing transaction",
     SEND_TRANSACTION_ERROR: "There was an error sending the transaction. This may be due to a lack of funds",

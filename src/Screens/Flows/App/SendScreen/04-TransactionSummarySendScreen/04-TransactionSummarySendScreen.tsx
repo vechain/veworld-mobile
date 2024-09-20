@@ -1,8 +1,10 @@
-import React, { useCallback, useEffect, useMemo } from "react"
+import { useNavigation } from "@react-navigation/native"
 import { NativeStackScreenProps } from "@react-navigation/native-stack"
-import { useAnalyticTracking, useTheme, useTransactionScreen, useTransferAddContact } from "~Hooks"
-import { AccountUtils, AddressUtils, BigNutils, TransactionUtils } from "~Utils"
-import { AnalyticsEvent, COLORS, GasPriceCoefficient, VET, VTHO, creteAnalyticsEvent } from "~Constants"
+import React, { useCallback, useEffect, useMemo } from "react"
+import { StyleSheet } from "react-native"
+import Animated, { interpolateColor, useAnimatedStyle, useSharedValue, withTiming } from "react-native-reanimated"
+import { Transaction } from "thor-devkit"
+import { getCoinGeckoIdBySymbol, useExchangeRate } from "~Api/Coingecko"
 import {
     BaseSpacer,
     BaseText,
@@ -14,6 +16,9 @@ import {
     RequireUserPassword,
     TransferCard,
 } from "~Components"
+import { AnalyticsEvent, COLORS, GasPriceCoefficient, VET, VTHO, creteAnalyticsEvent } from "~Constants"
+import { useAnalyticTracking, useTheme, useTransactionScreen, useTransferAddContact } from "~Hooks"
+import { ContactType, DEVICE_TYPE, FungibleTokenWithBalance } from "~Model"
 import { RootStackParamListHome, Routes } from "~Navigation"
 import {
     addPendingTransferTransactionActivity,
@@ -26,16 +31,12 @@ import {
     useAppDispatch,
     useAppSelector,
 } from "~Storage/Redux"
+import { AccountUtils, AddressUtils, BigNutils, TransactionUtils } from "~Utils"
 import { useI18nContext } from "~i18n"
-import { useNavigation } from "@react-navigation/native"
-import { ContactType, DEVICE_TYPE, FungibleTokenWithBalance } from "~Model"
-import { Transaction } from "thor-devkit"
 import { ContactManagementBottomSheet } from "../../ContactsScreen"
-import Animated, { interpolateColor, useAnimatedStyle, useSharedValue, withTiming } from "react-native-reanimated"
-import { StyleSheet } from "react-native"
-import { getCoinGeckoIdBySymbol, useExchangeRate } from "~Api/Coingecko"
-import { NotEnoughGasModal } from "./Modal"
 import FiatBalance from "../../HomeScreen/Components/AccountCard/FiatBalance"
+import { NotEnoughGasModal } from "./Modal"
+import { BackupDevicesAlert } from "./components"
 
 type Props = NativeStackScreenProps<RootStackParamListHome, Routes.TRANSACTION_SUMMARY_SEND>
 
@@ -130,6 +131,7 @@ export const TransactionSummarySendScreen = ({ route }: Props) => {
             noStaticBottomPadding
             body={
                 <BaseView mb={80} mt={8}>
+                    <BackupDevicesAlert />
                     <TransferCard
                         fromAddress={selectedAccount.address}
                         toAddresses={[address]}
