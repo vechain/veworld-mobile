@@ -291,7 +291,10 @@ platform :ios do
         sh("echo 'Build successful'")
         sh("pwd")
         sh("ls -la")
-        sh("cd ./build && ls -la")
+        sh("cd ..")
+        sh("ls -la")
+        sh("pwd")
+        sh("cd build && ls -la")
         sh("pwd")
         
         rescue => exception
