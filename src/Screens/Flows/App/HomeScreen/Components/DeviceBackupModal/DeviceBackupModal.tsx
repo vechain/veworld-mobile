@@ -44,6 +44,17 @@ export const DeviceBackupModal = () => {
 
         const now = moment()
 
+        if (isBackupNeeded && !lastBackupRequestTimestamp) {
+            dispatch(
+                setLastBackupRequestTimestamp({
+                    address: address,
+                    timestamp: now.unix(),
+                }),
+            )
+            onOpen()
+            return
+        }
+
         if (lastBackupRequestTimestamp) {
             const timeStamp = lastBackupRequestTimestamp[address]
 

@@ -164,11 +164,7 @@ export const HomeStack = () => {
                     options={{ headerShown: false }}
                 />
                 <Screen name={Routes.BROWSER} component={InAppBrowser} options={{ headerShown: false }} />
-                <Screen
-                    name={Routes.SETTINGS_PRIVACY}
-                    component={PrivacyScreen}
-                    options={{ headerShown: false, presentation: "modal" }}
-                />
+                <Screen name={Routes.SETTINGS_PRIVACY} component={PrivacyScreen} options={{ headerShown: false }} />
             </Group>
 
             <Group>
