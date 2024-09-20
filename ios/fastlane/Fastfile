@@ -309,16 +309,16 @@ platform :ios do
     rescue => exception # catch
       puts exception
 
-      # send slack message
-      slack(
-        message: versionType.nil? ? "Error releasing VeWorld build number: #{build} [iOS]" : "Error releasing VeWorld version number: #{version} [iOS]",
-        slack_url: ENV["SLACK_WEBHOOK"],
-        success: false,
-        payload: {
-          "Build Date" => Time.new.strftime("%d/%m/%Y %H:%M"),
-          "Built by" => github_username,
-        },
-      )
+      ## send slack message
+      #slack(
+      #  message: versionType.nil? ? "Error releasing VeWorld build number: #{build} [iOS]" : "Error releasing VeWorld version number: #{version} [iOS]",
+      #  slack_url: ENV["SLACK_WEBHOOK"],
+      #  success: false,
+      #  payload: {
+      #    "Build Date" => Time.new.strftime("%d/%m/%Y %H:%M"),
+      #    "Built by" => github_username,
+      #  },
+      #)
 
       # clean build artifacts if any
       clean_build_artifacts
