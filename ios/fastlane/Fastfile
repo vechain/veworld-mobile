@@ -289,9 +289,8 @@ platform :ios do
         )
 
         sh("echo 'Build successful'")
-
-        # clean build artifacts if any
-        clean_build_artifacts
+        sh("cd build && ls -la")
+        
         rescue => exception
           puts exception
       
