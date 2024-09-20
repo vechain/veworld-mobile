@@ -173,8 +173,6 @@ const getLists = (LL: TranslationFunctions, devEnabled: boolean) => {
         },
     ]
 
-    const supportList: RowProps[] = []
-
     if (devEnabled) {
         settingsList.push({
             title: LL.TITLE_ALERTS(),
@@ -183,5 +181,5 @@ const getLists = (LL: TranslationFunctions, devEnabled: boolean) => {
         })
     }
 
-    return { settingsList, supportList }
+    return { settingsList }
 }
