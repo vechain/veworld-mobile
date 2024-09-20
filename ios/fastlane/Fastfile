@@ -209,6 +209,8 @@ platform :ios do
     versionType = options[:version]
     buildNumber = options[:build]
 
+    setup_ci if ENV['CI']
+
     # clean build artifacts if any
     clean_build_artifacts
 
@@ -257,6 +259,7 @@ platform :ios do
 
       fetch_certificates_from_gh
 
+      
       # build app - inital fastlane build
       #build_app(
       #  workspace: "VeWorld.xcworkspace", 
@@ -267,14 +270,24 @@ platform :ios do
       #  output_directory: "./build",
       #)
       begin
-        xcodebuild(
-        configuration: "Release",
-        scheme:  "VeWorld",
-        workspace: "VeWorld.xcworkspace",
-        destination: "generic/platform=iOS Simulator",
-        xcargs: "-quiet -sdk 'iphonesimulator' -destination 'generic/platform=iOS Simulator'",
-        derivedDataPath: 'build'     
+        #xcodebuild(
+        #configuration: "Release",
+        #scheme:  "VeWorld",
+        #workspace: "VeWorld.xcworkspace",
+        #destination: "generic/platform=iOS Simulator",
+        #xcargs: "-quiet -sdk 'iphonesimulator' -destination 'generic/platform=iOS Simulator'",
+        #derivedDataPath: 'build'     
+        #)
+      
+        build_app(
+        workspace: "VeWorld.xcworkspace", 
+        scheme: "VeWorld", 
+        export_method: "app-store",
+        clean: true,
+        build_path: "./build",
+        output_directory: "./build",
         )
+
         sh("echo 'Build successful'")
 
         # clean build artifacts if any
