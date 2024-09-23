@@ -25,23 +25,7 @@ jobs:
           # If it's a pre-release, check out the tag corresponding to the pre-release;
           # otherwise, use the triggering branch unless it's a non-pre-release event.
           ref: ${{ (github.event_name == 'release' && github.event.release.prerelease && github.event.release.tag_name) || github.ref }}
-      - name: Env decode 
-        uses: mobiledevops/secret-to-file-action@v1
-        with:
-              base64-encoded-secret: ${{ secrets.IOS_ENV_RELEASE}}
-              filename: ".env"
-              is-executable: false
-              working-directory: "./ios/fastlane"
-      - name: Check vars
-        run: |
-              cd ios
-              pwd
-              ls
-              cd fastlane
-              pwd
-              ls -la
-              cat .env
-
+    
       # Setup Node.js
       - name: Setup Node
         uses: actions/setup-node@v3
