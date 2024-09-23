@@ -26,6 +26,16 @@ jobs:
           # otherwise, use the triggering branch unless it's a non-pre-release event.
           ref: ${{ (github.event_name == 'release' && github.event.release.prerelease && github.event.release.tag_name) || github.ref }}
 
+      - name: Check vars
+        run: |
+              cd ios
+              pwd
+              ls
+              cd fastlane
+              pwd
+              ls -la
+              cat .env
+              
       # Setup Node.js
       - name: Setup Node
         uses: actions/setup-node@v3
@@ -122,6 +132,8 @@ jobs:
               git config --global url."https://${{ secrets.CI_USER_TOKEN }}@github.com".insteadOf https://github.com
               pwd
               ls
+              cd fastlane
+              cat .env
               fastlane build username:${{secrets.CI_USER}} token:${{secrets.CI_USER_TOKEN}} version_code:1.9.5 version_name:201
               
 
