@@ -122,6 +122,6 @@ jobs:
               git config --global url."https://${{ secrets.CI_USER_TOKEN }}@github.com".insteadOf https://github.com
               pwd
               ls
-              fastlane build username:${{secrets.CI_USER}} token:${{secrets.CI_USER_TOKEN}} version_code:1.9.5 version_name:200
+              fastlane build username:${{secrets.CI_USER}} token:${{secrets.CI_USER_TOKEN}} version_code:1.9.5 version_name:201
               
 
