@@ -225,8 +225,8 @@ platform :ios do
     # begin -> rescure == try -> catch
     begin
       
-      sh("echo 'build number: #{buildNumber}'")
-      sh("echo 'version type: #{versionType}'")
+      sh("echo 'build number: #{build}'")
+      sh("echo 'version type: #{version}'")
       # create new branch and push to github
       gh_setup_before(
         github_username:github_username, 
