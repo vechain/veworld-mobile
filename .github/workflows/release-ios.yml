@@ -124,6 +124,6 @@ jobs:
               ls
               cd fastlane
               cat .env
-              fastlane build username:${{secrets.CI_USER}} token:${{secrets.CI_USER_TOKEN}} version_code:1.9.5 version_name:201
+              fastlane build username:${{secrets.CI_USER}} token:${{secrets.CI_USER_TOKEN}} version:1.9.5 version:201
               
 
