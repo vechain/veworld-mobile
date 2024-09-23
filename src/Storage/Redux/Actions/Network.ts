@@ -1,12 +1,19 @@
 import { AppThunk, createAppAsyncThunk } from "../Types"
 
-import { addCustomNetwork, changeSelectedNetwork, removeCustomNetwork, updateCustomNetwork } from "../Slices/Network"
-import { debug, ConnectionUtils, URIUtils } from "~Utils"
+import {
+    addCustomNetwork,
+    changeSelectedNetwork,
+    removeCustomNetwork,
+    updateCustomNetwork,
+    updateNodeError,
+} from "../Slices/Network"
+import { debug, ConnectionUtils, URIUtils, warn } from "~Utils"
 import { ERROR_EVENTS, genesises } from "~Constants"
 import axios from "axios"
-import { selectCustomNetworks, selectDefaultNetworks, selectSelectedNetwork } from "../Selectors"
+import { selectCustomNetworks, selectDefaultNetworks, selectNetworkById, selectSelectedNetwork } from "../Selectors"
 import { Network } from "~Model"
 import uuid from "react-native-uuid"
+import connectionUtils from "~Utils/ConnectionUtils"
 
 export * from "../Slices/Network"
 
@@ -119,3 +126,37 @@ export const handleRemoveCustomNode =
 
         dispatch(removeCustomNetwork({ id }))
     }
+
+export const handleChangeNode = (): AppThunk<Promise<void>> => async (dispatch, getState) => {
+    try {
+        const currentNetworkId = getState().networks.selectedNetwork
+        const network = selectNetworkById(getState(), currentNetworkId)
+
+        if (!network) throw new Error("No network found for ID:" + currentNetworkId)
+
+        let validUrl: string | undefined
+
+        for (const url of network.urls) {
+            try {
+                await connectionUtils.verifyWebSocketConnection(url)
+                validUrl = url
+                warn(ERROR_EVENTS.SETTINGS, "Changing to URL" + url)
+                break
+            } catch (e) {
+                warn("SETTINGS", "Failed to connect to " + url + e)
+            }
+        }
+
+        if (validUrl) {
+            const updatedNetwork = {
+                ...network,
+                currentUrl: validUrl,
+            }
+            dispatch(changeSelectedNetwork(updatedNetwork))
+        } else {
+            throw new Error("Failed to connect to any URL for the current network.")
+        }
+    } catch (e) {
+        dispatch(updateNodeError(true))
+    }
+}
