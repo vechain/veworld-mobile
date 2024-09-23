@@ -206,8 +206,8 @@ platform :ios do
   lane :build do |options|
     github_username = options[:username]
     github_token = options[:token]
-    versionType = options[:version]
-    buildNumber = options[:build]
+    version = options[:version]
+    build = options[:build]
 
     setup_ci if ENV['CI']
 
