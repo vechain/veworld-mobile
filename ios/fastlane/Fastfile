@@ -291,11 +291,11 @@ platform :ios do
         sh("echo 'Build successful'")
         sh("pwd")
         sh("ls -la")
-        sh("cd ..")
-        sh("ls -la")
-        sh("pwd")
-        sh("cd build && ls -la")
-        sh("pwd")
+        Dir.chdir "../" do
+          sh("pwd")
+          sh("ls -la")
+          sh("cd build && ls -la")
+        end
         
         rescue => exception
           puts exception
