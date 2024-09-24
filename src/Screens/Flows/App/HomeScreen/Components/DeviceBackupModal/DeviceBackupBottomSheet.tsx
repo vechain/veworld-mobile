@@ -3,12 +3,11 @@ import { NativeStackNavigationProp } from "@react-navigation/native-stack"
 import moment from "moment"
 import React, { useEffect } from "react"
 import { StyleSheet } from "react-native"
-import { SecurityAlertDarkSVG, SecurityAlertLightSVG } from "~Assets"
+import { SecurityAlertLight } from "~Assets"
 import { BaseBottomSheet, BaseButton, BaseSpacer, BaseText, BaseView } from "~Components"
-import { useBottomSheetModal, useThemedStyles } from "~Hooks"
+import { useBottomSheetModal, useCheckWalletBackup, useThemedStyles } from "~Hooks"
 import { useI18nContext } from "~i18n"
-import { DEVICE_TYPE } from "~Model"
-import { RootStackParamListHome, Routes } from "~Navigation"
+import { RootStackParamListSettings, Routes, TabStackParamList } from "~Navigation"
 import {
     selectLastBackupRequestTimestamp,
     selectSelectedAccount,
@@ -17,17 +16,18 @@ import {
     useAppSelector,
 } from "~Storage/Redux"
 
-export const DeviceBackupModal = () => {
+export const DeviceBackupBottomSheet = () => {
     const dispatch = useAppDispatch()
-    const { styles, theme } = useThemedStyles(baseStyles)
+    const { styles } = useThemedStyles(baseStyles)
     const { LL } = useI18nContext()
-    const naigation = useNavigation<NativeStackNavigationProp<RootStackParamListHome>>()
+    const navigation = useNavigation<NativeStackNavigationProp<TabStackParamList>>()
+    const settingsNavigation = useNavigation<NativeStackNavigationProp<RootStackParamListSettings>>()
 
     const lastBackupRequestTimestamp = useAppSelector(selectLastBackupRequestTimestamp)
     const selectedAccount = useAppSelector(selectSelectedAccount)
     const { ref, onOpen, onClose } = useBottomSheetModal()
-    const isBackupNeeded =
-        !selectedAccount.device?.isBuckedUp && selectedAccount.device?.type === DEVICE_TYPE.LOCAL_MNEMONIC
+
+    const isBackupNeeded = useCheckWalletBackup(selectedAccount)
 
     useEffect(() => {
         const address = selectedAccount.device?.rootAddress ?? ""
@@ -71,7 +71,7 @@ export const DeviceBackupModal = () => {
 
             if (timeStamp) {
                 const _lastBackupRequestTimestamp = moment.unix(timeStamp)
-                const shouldOpen = now.diff(_lastBackupRequestTimestamp, "weeks") >= 1 && isBackupNeeded
+                const shouldOpen = now.diff(_lastBackupRequestTimestamp, "seconds") >= 1 && isBackupNeeded
 
                 if (shouldOpen) {
                     dispatch(
@@ -80,6 +80,7 @@ export const DeviceBackupModal = () => {
                             timestamp: now.unix(),
                         }),
                     )
+
                     onOpen()
                 }
             }
@@ -88,13 +89,15 @@ export const DeviceBackupModal = () => {
 
     const goToPrivacyScreen = () => {
         onClose()
-        naigation.navigate(Routes.SETTINGS_PRIVACY)
+        navigation.navigate("SettingsStack", { screen: Routes.SETTINGS })
+        navigation.navigate("SettingsStack", { screen: Routes.SETTINGS_PRIVACY })
+        settingsNavigation.navigate(Routes.SETTINGS_PRIVACY)
     }
 
     return (
         <BaseBottomSheet style={styles.contentContainer} bottomSafeArea dynamicHeight ref={ref}>
             <BaseView style={styles.contentContainer}>
-                {theme.isDark ? <SecurityAlertDarkSVG /> : <SecurityAlertLightSVG />}
+                <SecurityAlertLight />
                 <BaseSpacer height={24} />
                 <BaseText typographyFont="button">{LL.DEVICE_BACKUP_MODAL_TITLE()}</BaseText>
                 <BaseSpacer height={8} />
@@ -106,7 +109,7 @@ export const DeviceBackupModal = () => {
                     size="lg"
                     haptics="Medium"
                     w={100}
-                    title={"Backup now"}
+                    title={LL.BTN_BACKUP_ALERT_CONFIRM()}
                     action={goToPrivacyScreen}
                     activeOpacity={0.94}
                 />
@@ -117,7 +120,7 @@ export const DeviceBackupModal = () => {
                     size="lg"
                     haptics="Medium"
                     w={100}
-                    title={"I’ll do it later"}
+                    title={LL.BTN_BACKUP_ALERT_CLOSE()}
                     action={onClose}
                     activeOpacity={0.94}
                 />

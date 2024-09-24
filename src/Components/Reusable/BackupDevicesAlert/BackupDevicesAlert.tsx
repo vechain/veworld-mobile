@@ -6,19 +6,21 @@ import { BaseButton, BaseIcon, BaseSpacer, BaseText, BaseView } from "~Component
 import { ColorThemeType } from "~Constants"
 import { useCheckWalletBackup, useThemedStyles } from "~Hooks"
 import { useI18nContext } from "~i18n"
-import { RootStackParamListHome, Routes } from "~Navigation"
+import { RootStackParamListSettings, Routes, TabStackParamList } from "~Navigation"
 import { selectSelectedAccount, useAppSelector } from "~Storage/Redux"
 
 export const BackupDevicesAlert = () => {
     const { LL } = useI18nContext()
     const { styles } = useThemedStyles(baseStyles)
-    const naigation = useNavigation<NativeStackNavigationProp<RootStackParamListHome>>()
+    const navigation = useNavigation<NativeStackNavigationProp<TabStackParamList>>()
+    const settingsNavigation = useNavigation<NativeStackNavigationProp<RootStackParamListSettings>>()
 
     const selectedAccount = useAppSelector(selectSelectedAccount)
     const isBackupNeeded = useCheckWalletBackup(selectedAccount)
 
     const goToPrivacyScreen = () => {
-        naigation.navigate(Routes.SETTINGS_PRIVACY)
+        navigation.navigate("SettingsStack", { screen: Routes.SETTINGS })
+        settingsNavigation.navigate(Routes.SETTINGS_PRIVACY)
     }
 
     return isBackupNeeded ? (

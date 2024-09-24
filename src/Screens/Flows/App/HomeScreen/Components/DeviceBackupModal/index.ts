@@ -1,1 +1,1 @@
-export * from "./DeviceBackupModal"
+export * from "./DeviceBackupBottomSheet"

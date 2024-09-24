@@ -6,6 +6,7 @@ import Animated, { interpolateColor, useAnimatedStyle, useSharedValue, withTimin
 import { Transaction } from "thor-devkit"
 import { getCoinGeckoIdBySymbol, useExchangeRate } from "~Api/Coingecko"
 import {
+    BackupDevicesAlert,
     BaseSpacer,
     BaseText,
     BaseView,
@@ -36,7 +37,6 @@ import { useI18nContext } from "~i18n"
 import { ContactManagementBottomSheet } from "../../ContactsScreen"
 import FiatBalance from "../../HomeScreen/Components/AccountCard/FiatBalance"
 import { NotEnoughGasModal } from "./Modal"
-import { BackupDevicesAlert } from "./components"
 
 type Props = NativeStackScreenProps<RootStackParamListHome, Routes.TRANSACTION_SUMMARY_SEND>
 

@@ -231,6 +231,14 @@ type RootTranslation = {
 	 */
 	BTN_BACKUP_MENMONIC: string
 	/**
+	 * B​a​c​k​u​p​ ​n​o​w
+	 */
+	BTN_BACKUP_ALERT_CONFIRM: string
+	/**
+	 * I​'​l​l​ ​d​o​ ​i​t​ ​l​a​t​e​r
+	 */
+	BTN_BACKUP_ALERT_CLOSE: string
+	/**
 	 * L​e​t​'​s​ ​g​e​t​ ​s​e​n​d​i​n​g​!
 	 */
 	BTN_LETS_GET_SENDING: string
@@ -3299,6 +3307,14 @@ export type TranslationFunctions = {
 	 * Backup phrase
 	 */
 	BTN_BACKUP_MENMONIC: () => LocalizedString
+	/**
+	 * Backup now
+	 */
+	BTN_BACKUP_ALERT_CONFIRM: () => LocalizedString
+	/**
+	 * I'll do it later
+	 */
+	BTN_BACKUP_ALERT_CLOSE: () => LocalizedString
 	/**
 	 * Let's get sending!
 	 */
