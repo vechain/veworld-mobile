@@ -302,14 +302,14 @@ platform :ios do
       create_pull_request(
         api_token: github_token,
         repo: "vechain/veworld-mobile",
-        title: versionType.nil? ? "build: build artifacts build-#{build} [iOS]" : "version: build artifacts version-#{version} [iOS]", 
+        title: version.nil? ? "build: build artifacts build-#{build} [iOS]" : "version: build artifacts version-#{version} [iOS]", 
         base: "main",
         api_url: "https://api.github.com"
       )
 
       ## send slack message
       #slack(
-      #  message: versionType.nil? ? "VeWorld build number: #{build} was successfully released! [iOS]" : "VeWorld version number: #{version} was successfully released! [iOS]",
+      #  message: version.nil? ? "VeWorld build number: #{build} was successfully released! [iOS]" : "VeWorld version number: #{version} was successfully released! [iOS]",
       #  slack_url: ENV["SLACK_WEBHOOK"],
       #  success: true,
       #  payload: {
