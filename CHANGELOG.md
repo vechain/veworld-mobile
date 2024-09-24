@@ -1,5 +1,12 @@
 
 
+## 1.9.6 (2024-09-24)
+
+
+### Bug Fixes
+
+* updating versionType check on PR ([4b80ad9](https://github.com/vechain/veworld-mobile/commit/4b80ad996559287892c31a0cb3c02871260f7d24))
+
 ## [1.10.0](https://github.com/vechain/veworld-mobile/compare/v1.5.3-52...v1.10.0) (2024-09-10)
 
 
