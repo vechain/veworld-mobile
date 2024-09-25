@@ -13,7 +13,6 @@ import axios from "axios"
 import { selectCustomNetworks, selectDefaultNetworks, selectNetworkById, selectSelectedNetwork } from "../Selectors"
 import { Network } from "~Model"
 import uuid from "react-native-uuid"
-import connectionUtils from "~Utils/ConnectionUtils"
 
 export * from "../Slices/Network"
 
@@ -138,7 +137,7 @@ export const handleChangeNode = (): AppThunk<Promise<void>> => async (dispatch, 
 
         for (const url of network.urls) {
             try {
-                await connectionUtils.verifyWebSocketConnection(url)
+                await ConnectionUtils.verifyWebSocketConnection(url)
                 validUrl = url
                 warn(ERROR_EVENTS.SETTINGS, "Changing to URL" + url)
                 break
