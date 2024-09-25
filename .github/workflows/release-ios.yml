@@ -2,17 +2,17 @@ name: Release - iOS
 
 on:
   workflow_dispatch:
-    inputs:
-      version: 
-        description: 'Version to build'
-        type: string
-        required: true
-        default: '1.9.6'
-      build: 
-        description: 'Build number'
-        type: number
-        required: true
-        default: 203
+    #inputs:
+    #  version: 
+    #    description: 'Version to build'
+    #    type: string
+    #    required: true
+    #    default: '1.9.6'
+    #  build: 
+    #    description: 'Build number'
+    #    type: number
+    #    required: true
+    #    default: 203
 
   workflow_call:
  
@@ -135,6 +135,6 @@ jobs:
               ls
               cd fastlane
               cat .env
-              fastlane build_ci username:${{secrets.CI_USER}} token:${{secrets.CI_USER_TOKEN}} version:${{inputs.version}} build:${{inputs.build}}
+              fastlane build_ci username:${{secrets.CI_USER}} token:${{secrets.CI_USER_TOKEN}} version:1.9.6 build:203
               
 
