@@ -2,23 +2,26 @@ name: Release - iOS
 
 on:
   workflow_dispatch:
-    #inputs:
-    #  version: 
-    #    description: 'Version to build'
-    #    type: string
-    #    required: true
-    #    default: '1.9.6'
-    #  build: 
-    #    description: 'Build number'
-    #    type: number
-    #    required: true
-    #    default: 203
+    inputs:
+      version: 
+        description: 'Version to build'
+        type: string
+        required: true
+      build: 
+        description: 'Build number'
+        type: number
+        required: true
 
   workflow_call:
- 
-  push:
-    branches:
-        - build-release-and-push-to-testflight
+    inputs:
+      version: 
+        description: 'Version to build'
+        type: string
+        required: true
+      build: 
+        description: 'Build number'
+        type: number
+        required: true
 
 jobs:
   build-release-ios:
@@ -135,6 +138,6 @@ jobs:
               ls
               cd fastlane
               cat .env
-              fastlane build_ci username:${{secrets.CI_USER}} token:${{secrets.CI_USER_TOKEN}} version:1.9.6 build:203
+              fastlane build_ci username:${{secrets.CI_USER}} token:${{secrets.CI_USER_TOKEN}} version:${{github.event.inputs.version}} build:${{github.event.inputs.version}}
               
 
