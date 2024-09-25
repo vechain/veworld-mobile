@@ -1,5 +1,7 @@
 
 
+## 1.9.6 (2024-09-25)
+
 ## [1.10.0](https://github.com/vechain/veworld-mobile/compare/v1.5.3-52...v1.10.0) (2024-09-10)
 
 
