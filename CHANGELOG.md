@@ -1,5 +1,12 @@
 
 
+## 1.9.6 (2024-09-25)
+
+
+### Bug Fixes
+
+* inputs unavailable on new actions ([37c5277](https://github.com/vechain/veworld-mobile/commit/37c52775d2f6b5da0bb29488068bbfdaebd5d289))
+
 ## [1.10.0](https://github.com/vechain/veworld-mobile/compare/v1.5.3-52...v1.10.0) (2024-09-10)
 
 
