@@ -124,10 +124,7 @@ export const HomeScreen = () => {
         if (!AccountUtils.isObservedAccount(selectedAccount)) {
             actions.push({
                 name: LL.BTN_SEND(),
-                action: () =>
-                    nav.navigate(Routes.SELECT_TOKEN_SEND, {
-                        initialRoute: Routes.HOME,
-                    }),
+                action: () => nav.navigate(Routes.SELECT_TOKEN_SEND),
                 icon: <BaseIcon color={theme.colors.text} name="arrow-up" />,
                 testID: "sendButton",
             })

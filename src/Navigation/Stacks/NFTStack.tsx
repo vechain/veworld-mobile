@@ -22,8 +22,6 @@ export type RootStackParamListNFT = {
 
     [Routes.INSERT_ADDRESS_SEND]: {
         token?: FungibleTokenWithBalance
-        amount?: string
-        initialRoute?: Routes
         contractAddress?: string
         tokenId?: string
     }

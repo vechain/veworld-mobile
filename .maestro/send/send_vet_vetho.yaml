@@ -15,14 +15,13 @@ onFlowComplete:
     commands:
       - tapOn:
           id: "VET"
-- inputText: ${AMOUNT}
-- tapOn: "Send"
-- tapOn: "NEXT"
 - tapOn:
     id: "selectAccount"
     index: 0
-- tapOn:
-    id: "next-button"
+- tapOn: "NEXT"
+- inputText: ${AMOUNT}
+- tapOn: "Send"
+- tapOn: "NEXT"
 - runFlow:
     when:
       visible: "Select delegation"
@@ -48,13 +47,13 @@ onFlowComplete:
     commands:
       - tapOn:
           id: "VTHO"
+- tapOn:
+    id: "selectAccount"
+- tapOn:
+    id: "next-button"
 - inputText: ${AMOUNT}
 - tapOn:
     id: "Layout_ScrollView"
-- tapOn:
-    id: "next-button"
-- tapOn:
-    id: "selectAccount"
 - tapOn:
     id: "next-button"
 - runFlow:
@@ -75,6 +74,10 @@ onFlowComplete:
 ## User should be able to send tokens-Send VET from Account 2 to Account 1
 - tapOn:
     id: "wallet-tab"
+- extendedWaitUntil:
+    visible:
+       id: "AccountCard_changeAccountButton"
+    timeout: 10000
 - tapOn:
     id: "AccountCard_changeAccountButton"
 - tapOn:
@@ -86,13 +89,13 @@ onFlowComplete:
     commands:
       - tapOn:
           id: "VET"
-- inputText: ${AMOUNT}
-- tapOn:
-    id: "Layout_ScrollView"
-- tapOn: "NEXT"
 - tapOn:
     id: "selectAccount"
     index: 0
+- tapOn: "NEXT"
+- inputText: ${AMOUNT}
+- tapOn:
+    id: "Layout_ScrollView"
 - tapOn: "NEXT"
 - runFlow:
     when:

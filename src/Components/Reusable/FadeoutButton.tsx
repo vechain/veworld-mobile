@@ -34,18 +34,20 @@ export const FadeoutButton = ({
 
     if (IS_CI_BUILD) {
         return (
-            <BaseButton
-                accessible
-                testID={testID}
-                disabled={disabled}
-                size="lg"
-                haptics="Medium"
-                w={100}
-                title={title}
-                action={action}
-                activeOpacity={0.94}
-                isLoading={isLoading}
-            />
+            <BaseView pb={24} style={{ width: SCREEN_WIDTH - 40 }} accessible={false}>
+                <BaseButton
+                    accessible
+                    testID={testID}
+                    disabled={disabled}
+                    size="lg"
+                    haptics="Medium"
+                    w={100}
+                    title={title}
+                    action={action}
+                    activeOpacity={0.94}
+                    isLoading={isLoading}
+                />
+            </BaseView>
         )
     }
 

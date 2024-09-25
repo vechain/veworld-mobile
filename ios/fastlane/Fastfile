@@ -173,10 +173,6 @@ platform :ios do
 
       sh("node_modules/@sentry/cli/bin/sentry-cli releases files #{ENV["APP_IDENTIFIER"]}@#{version}+#{build} upload-sourcemaps --dist #{build} --strip-prefix ../../ main.jsbundle main.jsbundle.map --org 'vechain-foundation' --project 'veworld-mobile' --log-level=info")
       
-      # upload source maps to datadog with cli 
-       sh("yarn datadog-ci react-native upload --platform ios --service org.vechain.veworld.app --bundle main.jsbundle.map --sourcemap main.jsbundle.map --release-version #{version} --build-version #{build} ")
-       sh("yarn datadog-ci react-native upload --platform ios --service org.vechain.veworld.app --bundle main.jsbundle --sourcemap main.jsbundle --release-version #{version} --build-version #{build} ")
-
     end
   end
 
