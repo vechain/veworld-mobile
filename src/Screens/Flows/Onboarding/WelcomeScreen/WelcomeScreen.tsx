@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect, useMemo, useState } from "react"
+import React, { useCallback, useEffect, useState } from "react"
 import {
     BackButtonHeader,
     BaseButton,
@@ -18,7 +18,6 @@ import { useDemoWallet } from "./useDemoWallet"
 import { UserCreatePasswordScreen } from "~Screens/Flows/WalletCreation"
 import { useHandleWalletCreation } from "./useHandleWalletCreation"
 import { useAnalyticTracking, useBottomSheetModal, useCloudKit, useDisclosure, useTheme } from "~Hooks"
-import { RumManager } from "~Logging"
 import { AnalyticsEvent, COLORS, DerivationPath, SCREEN_HEIGHT, SCREEN_WIDTH } from "~Constants"
 import { Routes } from "~Navigation"
 import { useNavigation } from "@react-navigation/native"
@@ -26,7 +25,6 @@ import LinearGradient from "react-native-linear-gradient"
 import DropShadow from "react-native-drop-shadow"
 import Animated, { FadeInDown, FadeOutDown } from "react-native-reanimated"
 const assetImage = require("~Assets/Img/Clouds.png")
-
 
 export const WelcomeScreen = () => {
     const { LL } = useI18nContext()
