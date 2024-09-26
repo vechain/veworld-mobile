@@ -263,6 +263,10 @@ type RootTranslation = {
 	 */
 	BTN_CONFIRN_PASSWORD: string
 	/**
+	 * I​m​p​o​r​t
+	 */
+	BTN_IMPORT: string
+	/**
 	 * Y​o​u​r​ ​V​e​W​o​r​l​d​.​ ​A​ ​s​e​l​f​ ​c​u​s​t​o​d​y​ ​m​o​b​i​l​e​ ​c​r​y​p​t​o​ ​w​a​l​l​e​t​ ​f​o​r​ ​v​e​c​h​a​i​n
 	 */
 	BD_WELCOME_SCREEN: string
@@ -3460,6 +3464,10 @@ export type TranslationFunctions = {
 	 * Confirm password
 	 */
 	BTN_CONFIRN_PASSWORD: () => LocalizedString
+	/**
+	 * Import
+	 */
+	BTN_IMPORT: () => LocalizedString
 	/**
 	 * Your VeWorld. A self custody mobile crypto wallet for vechain
 	 */

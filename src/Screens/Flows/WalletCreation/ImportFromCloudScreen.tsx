@@ -271,7 +271,7 @@ export const ImportFromCloudScreen = () => {
                     ) : null}
 
                     <AnimatedFloatingButton
-                        title="Import"
+                        title={LL.BTN_IMPORT()}
                         extraBottom={userHasOnboarded ? 0 : 24}
                         isVisible={!!selected}
                         onPress={onOpen}

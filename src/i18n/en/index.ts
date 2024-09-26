@@ -68,7 +68,7 @@ const en: BaseTranslation = {
     BTN_CHOOSE_PASSWORD: "Choose password",
     BTN_ENTER_PASSWORD: "Enter password",
     BTN_CONFIRN_PASSWORD: "Confirm password",
-
+    BTN_IMPORT: "Import",
 
     // BODY
     BD_WELCOME_SCREEN:
