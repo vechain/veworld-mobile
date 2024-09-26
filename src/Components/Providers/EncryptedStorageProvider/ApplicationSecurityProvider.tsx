@@ -1,7 +1,15 @@
 import React, { useCallback, useEffect, useMemo, useState } from "react"
 import { MMKV } from "react-native-mmkv"
 import { BiometricsUtils, CryptoUtils, CryptoUtils_Legacy, debug, error, HexUtils, info, PasswordUtils } from "~Utils"
-import { BiometricState, LocalDevice, SecurityLevelType, Wallet, WALLET_STATUS } from "~Model"
+import {
+    BiometricState,
+    DEVICE_TYPE,
+    LedgerDevice,
+    LocalDevice,
+    SecurityLevelType,
+    Wallet,
+    WALLET_STATUS,
+} from "~Model"
 import {
     PreviousInstallation,
     SecurityConfig,
@@ -339,10 +347,11 @@ export const ApplicationSecurityProvider = ({ children }: ApplicationSecurityCon
                 if (!persistedState) return
                 const oldState = JSON.parse(persistedState)
 
+                type Device = LocalDevice | LedgerDevice
                 let newState = {}
                 let walletState = {
                     devices: [],
-                } as { devices: LocalDevice[] }
+                } as { devices: Device[] }
 
                 // Go over the state enreies and decrypt them
                 for (const key in oldState) {
@@ -359,32 +368,33 @@ export const ApplicationSecurityProvider = ({ children }: ApplicationSecurityCon
                         let decryptedWallets: Wallet[] = []
                         let decryptedDevices: LocalDevice[] = []
 
-                        if ("wallet" in parsedEntryInState[0] && "xPub" in parsedEntryInState[0]) {
-                            // loop on parsedEntryInState for wallets
-                            // First decrypt all wallets with old keys and algos
-                            for (const device of parsedEntryInState) {
-                                // and decrypt each wallet
+                        for (const anyDevice of parsedEntryInState) {
+                            if (anyDevice.type === DEVICE_TYPE.LEDGER) {
+                                walletState.devices.push(anyDevice)
+                            } else {
+                                // loop on parsedEntryInState for wallets
+                                // First decrypt all wallets with old keys and algos
                                 const decryptedWallet: Wallet = CryptoUtils_Legacy.decrypt<Wallet>(
-                                    device.wallet,
+                                    anyDevice.wallet,
                                     walletKey,
                                 )
 
                                 decryptedWallets.push(decryptedWallet)
-                                decryptedDevices.push(device)
+                                decryptedDevices.push(anyDevice)
                             }
+                        }
 
-                            for (const [index, device] of decryptedDevices.entries()) {
-                                const walletEncrypted_V2 = await CryptoUtils.encrypt(
-                                    decryptedWallets[index],
-                                    walletKey,
-                                    salt,
-                                    iv,
-                                )
+                        for (const [index, device] of decryptedDevices.entries()) {
+                            const walletEncrypted_V2 = await CryptoUtils.encrypt(
+                                decryptedWallets[index],
+                                walletKey,
+                                salt,
+                                iv,
+                            )
 
-                                device.wallet = walletEncrypted_V2
-                                device.isMigrated = true
-                                walletState.devices.push(device)
-                            }
+                            device.wallet = walletEncrypted_V2
+                            device.isMigrated = true
+                            walletState.devices.push(device)
                         }
                     } else {
                         newState = {

@@ -1,7 +1,7 @@
 import React from "react"
 import { NavigationContainer } from "@react-navigation/native"
 import { createNativeStackNavigator } from "@react-navigation/native-stack"
-import { SecurityLevelType, Wallet } from "~Model"
+import { BackupWallet, SecurityLevelType } from "~Model"
 import { SecurityUpgrade_V2 } from "../../SecurityUpgrade_V2"
 import { MnemonicBackup } from "../../Standalone.components"
 import { Routes } from "~Navigation"
@@ -11,7 +11,7 @@ import { GestureHandlerRootView } from "react-native-gesture-handler"
 export type RootStackParamListBackupWallet = {
     [Routes.SECURITY_UPGRADE_V2_HOME]: undefined
     [Routes.SECURITY_UPGRADE_V2_MNEMONIC_BACKUP]: {
-        wallets: Wallet[]
+        wallets: BackupWallet[]
         securityType: SecurityLevelType
         oldPersistedState?: string
         pin?: string

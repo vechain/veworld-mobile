@@ -3170,6 +3170,14 @@ type RootTranslation = {
 	 */
 	SECURITY_PHRASE_BACKED_UP: string
 	/**
+	 * I​t​ ​l​o​o​k​s​ ​l​i​k​e​ ​y​o​u​ ​o​n​l​y​ ​h​a​v​e​ ​a​ ​h​a​r​d​w​a​r​e​ ​w​a​l​l​e​t​ ​c​o​n​n​e​c​t​e​d​ ​t​o​ ​V​e​W​o​r​l​d​.​ ​Y​o​u​ ​c​a​n​ ​u​p​g​r​a​d​e​ ​s​e​c​u​r​i​t​y​ ​l​e​v​e​l​ ​w​i​t​h​o​u​t​ ​b​a​c​k​i​n​g​ ​u​p
+	 */
+	SECURITY_UPGRADE_ONLY_HARDWARE: string
+	/**
+	 * I​t​ ​l​o​o​k​s​ ​l​i​k​e​ ​y​o​u​ ​o​n​l​y​ ​h​a​v​e​ ​a​ ​p​r​i​v​a​t​e​ ​k​e​y​ ​w​a​l​l​e​t​ ​c​o​n​n​e​c​t​e​d​ ​t​o​ ​V​e​W​o​r​l​d​.​ ​Y​o​u​ ​c​a​n​ ​u​p​g​r​a​d​e​ ​s​e​c​u​r​i​t​y​ ​l​e​v​e​l​ ​w​i​t​h​o​u​t​ ​b​a​c​k​i​n​g​ ​u​p
+	 */
+	SECURITY_UPGRADE_ONLY_PK: string
+	/**
 	 * W​e​l​c​o​m​e​ ​b​a​c​k
 	 */
 	WELCOME_BACK: string
@@ -6338,6 +6346,14 @@ Try reconnect your device to the internet.
 	 * I've backed up the phrase!
 	 */
 	SECURITY_PHRASE_BACKED_UP: () => LocalizedString
+	/**
+	 * It looks like you only have a hardware wallet connected to VeWorld. You can upgrade security level without backing up
+	 */
+	SECURITY_UPGRADE_ONLY_HARDWARE: () => LocalizedString
+	/**
+	 * It looks like you only have a private key wallet connected to VeWorld. You can upgrade security level without backing up
+	 */
+	SECURITY_UPGRADE_ONLY_PK: () => LocalizedString
 	/**
 	 * Welcome back
 	 */
