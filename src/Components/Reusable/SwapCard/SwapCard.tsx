@@ -68,12 +68,20 @@ export const SwapCard = memo(
         )
 
         const fiatValuePaid = useMemo(() => {
-            if (exchangeRatePaid && paidToken) return BigNutils().toCurrencyConversion(paidAmount, exchangeRatePaid)
+            if (exchangeRatePaid && paidToken) {
+                const { value, isLeesThan_0_01 } = BigNutils().toCurrencyConversion(paidAmount, exchangeRatePaid)
+                return isLeesThan_0_01 ? `< ${value}` : value
+            }
         }, [exchangeRatePaid, paidAmount, paidToken])
 
         const fiatValueReceived = useMemo(() => {
-            if (exchangeRateReceived && receivedToken)
-                return BigNutils().toCurrencyConversion(receivedAmount, exchangeRateReceived)
+            if (exchangeRateReceived && receivedToken) {
+                const { value, isLeesThan_0_01 } = BigNutils().toCurrencyConversion(
+                    receivedAmount,
+                    exchangeRateReceived,
+                )
+                return isLeesThan_0_01 ? `< ${value}` : value
+            }
         }, [exchangeRateReceived, receivedAmount, receivedToken])
 
         const renderPaidToken = useCallback(() => {

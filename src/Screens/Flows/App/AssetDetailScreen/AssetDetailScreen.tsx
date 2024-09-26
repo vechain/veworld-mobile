@@ -61,9 +61,8 @@ export const AssetDetailScreen = ({ route }: Props) => {
                 name: LL.BTN_SEND(),
                 action: () => {
                     if (foundToken) {
-                        nav.navigate(Routes.SELECT_AMOUNT_SEND, {
+                        nav.navigate(Routes.INSERT_ADDRESS_SEND, {
                             token: foundToken,
-                            initialRoute: Routes.HOME,
                         })
                     } else {
                         showWarningToast({

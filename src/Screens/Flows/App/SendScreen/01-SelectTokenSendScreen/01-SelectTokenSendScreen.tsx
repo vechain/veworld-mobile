@@ -1,5 +1,5 @@
 import { useNavigation } from "@react-navigation/native"
-import { NativeStackScreenProps } from "@react-navigation/native-stack"
+import { NativeStackNavigationProp } from "@react-navigation/native-stack"
 import React, { useState } from "react"
 import { BaseSearchInput, BaseSpacer, BaseText, BaseView, Layout, OfficialTokenCard } from "~Components"
 import { VET, VTHO } from "~Constants"
@@ -9,9 +9,9 @@ import { RootStackParamListHome, Routes } from "~Navigation"
 import { selectSendableTokensWithBalance, useAppSelector } from "~Storage/Redux"
 import { useI18nContext } from "~i18n"
 
-type Props = NativeStackScreenProps<RootStackParamListHome, Routes.SELECT_TOKEN_SEND>
+type Props = NativeStackNavigationProp<RootStackParamListHome, Routes.SELECT_TOKEN_SEND>
 
-export const SelectTokenSendScreen = ({ route }: Props) => {
+export const SelectTokenSendScreen = () => {
     const { LL } = useI18nContext()
     const [tokenQuery, setTokenQuery] = useState<string>("")
     const tokens = useAppSelector(selectSendableTokensWithBalance)
@@ -20,11 +20,10 @@ export const SelectTokenSendScreen = ({ route }: Props) => {
             token.name?.toLowerCase().includes(tokenQuery.toLowerCase()) ||
             token.symbol?.toLowerCase().includes(tokenQuery.toLowerCase()),
     )
-    const nav = useNavigation()
+    const nav = useNavigation<Props>()
     const handleClickToken = (token: FungibleTokenWithBalance) => async () => {
-        nav.navigate(Routes.SELECT_AMOUNT_SEND, {
+        nav.navigate(Routes.INSERT_ADDRESS_SEND, {
             token,
-            initialRoute: route.params.initialRoute,
         })
     }
 
@@ -55,13 +54,21 @@ export const SelectTokenSendScreen = ({ route }: Props) => {
                             const isVET = token.symbol === VET.symbol
                             const isVTHO = token.symbol === VTHO.symbol
 
+                            const getTokenWithInfo = () => {
+                                if (isVET) {
+                                    return tokenWithInfoVET
+                                } else if (isVTHO) {
+                                    return tokenWithInfoVTHO
+                                }
+                            }
+
                             return (
                                 <OfficialTokenCard
                                     iconHeight={20}
                                     iconWidth={20}
                                     key={token.address}
                                     token={token}
-                                    tokenWithInfo={isVET ? tokenWithInfoVET : isVTHO ? tokenWithInfoVTHO : undefined}
+                                    tokenWithInfo={getTokenWithInfo()}
                                     action={handleClickToken(token)}
                                 />
                             )

@@ -29,7 +29,6 @@ import { useNavigation } from "@react-navigation/native"
 import { AppInfo, UnknownAppMessage } from "~Screens"
 import { AnalyticsEvent, ERROR_EVENTS } from "~Constants"
 import { getSdkError } from "@walletconnect/utils"
-import { RumManager } from "~Logging/RumManager"
 
 type Props = NativeStackScreenProps<RootStackParamListSwitch, Routes.CONNECTED_APP_SIGN_MESSAGE_SCREEN>
 
@@ -47,8 +46,6 @@ export const SignMessageScreen: FC<Props> = ({ route }: Props) => {
     const [isInvalidChecked, setInvalidChecked] = React.useState(false)
 
     const sessionContext = useAppSelector(state => selectVerifyContext(state, requestEvent.topic))
-
-    const ddLogger = useMemo(() => new RumManager(), [])
 
     const appInfo = useMemo(() => {
         const session = activeSessions[requestEvent.topic]
@@ -130,7 +127,7 @@ export const SignMessageScreen: FC<Props> = ({ route }: Props) => {
                 dispatch(setIsAppLoading(false))
             } catch (err: unknown) {
                 track(AnalyticsEvent.DAPP_CERTIFICATE_FAILED)
-                ddLogger.logAction("DAPP_CERTIFICATE", "DAPP_CERTIFICATE_FAILED")
+                //ddLogger.logAction("DAPP_CERTIFICATE", "DAPP_CERTIFICATE_FAILED")
 
                 error(ERROR_EVENTS.WALLET_CONNECT, err)
 
@@ -153,17 +150,15 @@ export const SignMessageScreen: FC<Props> = ({ route }: Props) => {
             processRequest,
             dispatch,
             track,
-            ddLogger,
         ],
     )
 
     const onReject = useCallback(async () => {
         await failRequest(requestEvent, getRpcError("userRejectedRequest"))
         track(AnalyticsEvent.DAPP_CERTIFICATE_REJECTED)
-        ddLogger.logAction("DAPP_CERTIFICATE", "DAPP_CERTIFICATE_REJECTED")
 
         onClose()
-    }, [requestEvent, track, onClose, failRequest, ddLogger])
+    }, [requestEvent, track, onClose, failRequest])
 
     const {
         isPasswordPromptOpen,

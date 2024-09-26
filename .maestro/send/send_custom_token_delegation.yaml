@@ -36,14 +36,14 @@ onFlowComplete:
       - tapOn:
           id: "CARP"
 - tapOn:
-    id: "SendScreen_amountInput"
-- inputText: ${AMOUNT}
-- tapOn: "Currency balance"
+    id: "selectAccount"
+    index: 0
 - tapOn:
     id: "next-button"
 - tapOn:
-    id: "selectAccount"
-    index: 0
+    id: "SendScreen_amountInput"
+- inputText: ${AMOUNT}
+- tapOn: "Currency balance"
 - tapOn:
     id: "next-button"
 - runFlow:

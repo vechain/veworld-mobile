@@ -30,7 +30,8 @@ describe("useAmountInput", () => {
         const { result } = renderHook(() => useAmountInput())
 
         act(() => {
-            result.current.setInput("1a2b3c")
+            const input = result.current.removeInvalidCharacters("1a2b3c")
+            result.current.setInput(input)
         })
 
         expect(result.current.input).toEqual("123")
@@ -40,7 +41,8 @@ describe("useAmountInput", () => {
         const { result } = renderHook(() => useAmountInput())
 
         act(() => {
-            result.current.setInput("1.2.3")
+            const input = result.current.removeInvalidCharacters("1.2.3")
+            result.current.setInput(input)
         })
 
         expect(result.current.input).toEqual("12.3")

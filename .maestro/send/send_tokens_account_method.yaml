@@ -21,20 +21,22 @@ onFlowComplete:
       - tapOn:
           id: "VET"
 - tapOn:
-     id: "SendScreen_amountInput"
+    id: "Layout_ScrollView"
+- assertVisible:
+    id: "selectAccount"
+    index: 0
+- tapOn:
+    id: "selectAccount"
+    index: 0
+- tapOn:
+    id: "next-button"
+- tapOn:
+    id: "SendScreen_amountInput"
 - inputText: ${AMOUNT}
 - tapOn:
-     id: "Layout_ScrollView"
+    id: "Select_Amount_Send_Screen"
 - tapOn:
-     id: "next-button"
-- assertVisible:
-          id: "selectAccount"
-          index: 0
-- tapOn:
-     id: "selectAccount"
-     index: 0
-- tapOn:
-     id: "next-button"
+    id: "next-button"
 - runFlow:
     when:
       visible: "Select delegation"
@@ -62,18 +64,20 @@ onFlowComplete:
             commands:
               - tapOn: "VeThor"
       - tapOn:
-          id: "SendScreen_amountInput"
-      - inputText: ${AMOUNT}
-      - tapOn:
-          id: "Layout_ScrollView"
-      - tapOn:
-          id: "next-button"
+          id: "Layout_ScrollView"      
       - assertVisible:
           id: "selectAccount"
           index: 0
       - tapOn:
           id: "selectAccount"
           index: 0
+      - tapOn:
+          id: "next-button"
+      - tapOn:
+          id: "SendScreen_amountInput"  
+      - inputText: ${AMOUNT}
+      - tapOn:
+          id: "Select_Amount_Send_Screen"  
       - tapOn:
           id: "next-button"
       - tapOn:
@@ -102,6 +106,6 @@ onFlowComplete:
           id: "confirm-send-button"
       - repeat:
           while:
-           notVisible: "Your tokens"
+           visible: "Insert your 6-digit PIN"
           commands:
             - tapOn: "1"

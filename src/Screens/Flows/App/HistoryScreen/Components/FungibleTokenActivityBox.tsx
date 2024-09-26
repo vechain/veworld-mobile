@@ -48,7 +48,8 @@ export const FungibleTokenActivityBox: React.FC<Props> = memo(({ activity, onPre
     const fiatValueTransferred = useMemo(() => {
         if (!token || !exchangeRate) return undefined
         const amount = BigNutils(activity.amount).toHuman(token.decimals).toString
-        return BigNutils().toCurrencyConversion(amount, exchangeRate)
+        const { value, isLeesThan_0_01 } = BigNutils().toCurrencyConversion(amount, exchangeRate)
+        return isLeesThan_0_01 ? `< ${value}` : value
     }, [activity.amount, exchangeRate, token])
 
     const dateTimeTransfer = useMemo(() => {

@@ -27,20 +27,19 @@ import DropShadow from "react-native-drop-shadow"
 import Animated, { FadeInDown, FadeOutDown } from "react-native-reanimated"
 const assetImage = require("~Assets/Img/Clouds.png")
 
+
 export const WelcomeScreen = () => {
     const { LL } = useI18nContext()
     const nav = useNavigation()
     const theme = useTheme()
-    const ddLogger = useMemo(() => new RumManager(), [])
     const track = useAnalyticTracking()
 
     const { ref, onOpen, onClose } = useBottomSheetModal()
 
     const onImportWallet = useCallback(async () => {
         track(AnalyticsEvent.SELECT_WALLET_IMPORT_WALLET)
-        ddLogger.logAction("WALLET_SETUP_SCREEN", "SELECT_WALLET_IMPORT_WALLET")
         onOpen()
-    }, [onOpen, track, ddLogger])
+    }, [onOpen, track])
 
     const goToTermsAndConditions = useCallback(() => {
         const url = process.env.REACT_APP_TERMS_OF_SERVICE_URL
