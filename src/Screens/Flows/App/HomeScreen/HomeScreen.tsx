@@ -1,7 +1,7 @@
 import { useNavigation, useScrollToTop } from "@react-navigation/native"
 import React, { useCallback, useEffect, useMemo, useRef, useState } from "react"
 import { AccountCard, EditTokensBar, Header, TokenList } from "./Components"
-import { RefreshControl } from "react-native"
+import { RefreshControl, NativeModules, Button } from "react-native"
 import { NestableScrollContainer } from "react-native-draggable-flatlist"
 import { FadeInRight } from "react-native-reanimated"
 import {
@@ -37,6 +37,8 @@ import {
 import { AccountUtils } from "~Utils"
 import { useI18nContext } from "~i18n"
 import { useTokenBalances } from "./Hooks"
+
+const { GoogleDriveManager } = NativeModules
 
 export const HomeScreen = () => {
     /* Pre Fetch all VNS names and addresses */
@@ -166,6 +168,15 @@ export const HomeScreen = () => {
                             />
                         </BaseView>
                         <BaseSpacer height={24} />
+
+                        <Button
+                            title="click me"
+                            onPress={async () => {
+                                try {
+                                    await GoogleDriveManager.backupMnemonicToCloud()
+                                } catch (error) {}
+                            }}
+                        />
 
                         <FastActionsBar actions={Actions} />
 
