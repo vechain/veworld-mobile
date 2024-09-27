@@ -312,7 +312,7 @@ platform :ios do
       clean_build_artifacts
 
       # checkout main
-      sh("git checkout main")
+      # sh("git checkout main")
 
       # delete branch locally
       sh("git branch -D release-build-#{build}-#{version}")
