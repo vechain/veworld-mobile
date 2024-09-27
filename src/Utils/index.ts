@@ -6,6 +6,7 @@ import BiometricsUtils from "./BiometricsUtils"
 import BloomUtils from "./BloomUtils"
 import ConnectionUtils from "./ConnectionUtils"
 import CryptoUtils from "./CryptoUtils"
+import CryptoUtils_Legacy from "./CryptoUtils_Legacy"
 import HexUtils from "./HexUtils"
 import DateUtils from "./DateUtils"
 import ErrorMessageUtils from "./ErrorMessageUtils"
@@ -78,6 +79,7 @@ export {
     ColorUtils,
     DeviceUtils,
     BigNutils,
+    CryptoUtils_Legacy,
     SemanticVersionUtils,
 }
 

@@ -121,7 +121,10 @@ export const useSignTransaction = ({
                 throw new Error("Delegated hardware wallet not supported yet")
             }
 
-            const delegationWallet = await WalletEncryptionKeyHelper.decryptWallet(delegationDevice.wallet, password)
+            const delegationWallet = await WalletEncryptionKeyHelper.decryptWallet({
+                encryptedWallet: delegationDevice.wallet,
+                pinCode: password,
+            })
 
             return await getSignature(transaction, delegationWallet, account.address, selectedDelegationAccount)
         } catch (e) {
@@ -185,7 +188,10 @@ export const useSignTransaction = ({
             throw new Error("Hardware wallet not supported yet")
         }
 
-        const senderWallet = await WalletEncryptionKeyHelper.decryptWallet(senderDevice.wallet, password)
+        const senderWallet = await WalletEncryptionKeyHelper.decryptWallet({
+            encryptedWallet: senderDevice.wallet,
+            pinCode: password,
+        })
 
         const senderSignature = await getSignature(transaction, senderWallet)
         const delegationResult = await getDelegationSignature(transaction, password)

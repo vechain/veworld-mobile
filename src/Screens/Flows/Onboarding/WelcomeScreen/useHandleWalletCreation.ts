@@ -8,6 +8,7 @@ import { BiometricsUtils } from "~Utils"
 import HapticsService from "~Services/HapticsService"
 import { useI18nContext } from "~i18n"
 import { isEmpty } from "lodash"
+import { DerivationPath } from "~Constants"
 
 export const useHandleWalletCreation = () => {
     const biometrics = useBiometrics()
@@ -45,8 +46,10 @@ export const useHandleWalletCreation = () => {
         async ({
             importMnemonic,
             privateKey,
+            derivationPath,
             importType,
         }: {
+            derivationPath: DerivationPath
             importMnemonic?: string[]
             privateKey?: string
             importType?: IMPORT_TYPE
@@ -60,6 +63,7 @@ export const useHandleWalletCreation = () => {
                     privateKey,
                     importType,
                     onError: onWalletCreationError,
+                    derivationPath,
                 })
                 await migrateOnboarding(SecurityLevelType.BIOMETRIC)
                 dispatch(setIsAppLoading(false))
@@ -70,18 +74,22 @@ export const useHandleWalletCreation = () => {
         [biometrics, createLocalWallet, dispatch, migrateOnboarding, onOpen, onWalletCreationError],
     )
 
-    const parseImportType = useCallback((mnemonic?: string[], privateKey?: string) => {
-        if (privateKey) return IMPORT_TYPE.PRIVATE_KEY
-        if (mnemonic && !isEmpty(mnemonic)) return IMPORT_TYPE.MNEMONIC
-
-        return undefined
-    }, [])
-
     const onSuccess = useCallback(
-        async ({ pin, mnemonic, privateKey }: { pin: string; mnemonic?: string[]; privateKey?: string }) => {
+        async ({
+            pin,
+            mnemonic,
+            privateKey,
+            derivationPath,
+            importType,
+        }: {
+            pin: string
+            mnemonic?: string[]
+            privateKey?: string
+            derivationPath: DerivationPath
+            importType?: IMPORT_TYPE
+        }) => {
             onClose()
             dispatch(setIsAppLoading(true))
-            const importType = parseImportType(mnemonic, privateKey)
             const _mnemonic = isEmpty(mnemonic) ? getNewMnemonic() : mnemonic
             await WalletEncryptionKeyHelper.init(pin)
             await createLocalWallet({
@@ -90,11 +98,12 @@ export const useHandleWalletCreation = () => {
                 userPassword: pin,
                 importType,
                 onError: onWalletCreationError,
+                derivationPath,
             })
             await migrateOnboarding(SecurityLevelType.SECRET, pin)
             dispatch(setIsAppLoading(false))
         },
-        [createLocalWallet, dispatch, migrateOnboarding, onClose, onWalletCreationError, parseImportType],
+        [createLocalWallet, dispatch, migrateOnboarding, onClose, onWalletCreationError],
     )
 
     const onCreateLedgerWallet = useCallback(
@@ -147,7 +156,7 @@ export const useHandleWalletCreation = () => {
     )
 
     const createOnboardedWallet = useCallback(
-        async (pin?: string) => {
+        async ({ pin, derivationPath }: { pin?: string; derivationPath: DerivationPath.VET }) => {
             dispatch(setIsAppLoading(true))
 
             const mnemonic = getNewMnemonic()
@@ -155,6 +164,7 @@ export const useHandleWalletCreation = () => {
                 mnemonic: mnemonic,
                 userPassword: pin,
                 onError: onWalletCreationError,
+                derivationPath,
             })
             dispatch(setIsAppLoading(false))
         },
@@ -166,11 +176,13 @@ export const useHandleWalletCreation = () => {
             importMnemonic,
             privateKey,
             pin,
+            derivationPath,
             importType,
         }: {
             importMnemonic?: string[]
             privateKey?: string
             pin?: string
+            derivationPath: DerivationPath
             importType: IMPORT_TYPE
         }) => {
             if (biometrics && biometrics.currentSecurityLevel === "BIOMETRIC" && !pin) {
@@ -180,6 +192,7 @@ export const useHandleWalletCreation = () => {
                     privateKey,
                     importType,
                     onError: onWalletCreationError,
+                    derivationPath,
                 })
                 dispatch(setIsAppLoading(false))
             } else {
@@ -189,6 +202,7 @@ export const useHandleWalletCreation = () => {
                     userPassword: pin,
                     importType,
                     onError: onWalletCreationError,
+                    derivationPath,
                 })
             }
         },

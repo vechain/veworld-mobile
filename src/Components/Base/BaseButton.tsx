@@ -154,8 +154,8 @@ export const BaseButton = ({
     ])
 
     const calculateTextColor = useMemo(() => {
-        return textColor ?? (isSolidButton ? theme.colors.background : theme.colors.text)
-    }, [isSolidButton, textColor, theme.colors.background, theme.colors.text])
+        return textColor ?? (isSolidButton ? theme.colors.background : backgroundColor)
+    }, [backgroundColor, isSolidButton, textColor, theme.colors.background])
 
     return (
         <TouchableOpacity

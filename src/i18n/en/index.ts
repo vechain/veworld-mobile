@@ -6,6 +6,8 @@ const en: BaseTranslation = {
 
     // BUTTONS
     BTN_GET_STARTED: "GET STARTED",
+    BTN_CREATE_WALLET: "Create wallet",
+    BTN_IMPORT_WALLET: "Import wallet",
     BTN_ONBOARDING_SLIDE_01: "NEXT: SUSTAINABLE",
     BTN_ONBOARDING_SLIDE_02: "NEXT: SAFE AND FAST",
     BTN_ONBOARDING_SLIDE_03: "NEXT: CREATE PASSWORD",
@@ -30,7 +32,7 @@ const en: BaseTranslation = {
     BTN_MNEMONIC_BACKUP: "Backup",
     BTN_MNEMONIC_CHECKBOX:
         "I state that I have saved the secret phrase and I am aware that I am responsible if I lose it.",
-    BTN_MNEMONIC_CLIPBOARD: "Copy mnemonic to clipboard",
+    BTN_MNEMONIC_CLIPBOARD: "Copy to clipboard",
     BTN_IMPORT_WALLET_VERIFY: "Verify",
     BTN_CREATE_WALLET_SUCCESS: "GO TO YOUR WALLET",
     BTN_RESET_APP_CHECKBOX: "I am aware that this action is irreversible (required)",
@@ -63,7 +65,10 @@ const en: BaseTranslation = {
     BTN_LETS_GET_SENDING: "Let's get sending!",
     BTN_SECURITY_OPERATION_CHECKBOX: "I state that I have backed up my secret phrase",
     BTN_WALLET_CONFRIM_DELETION: "I state that I want to delete this wallet",
-
+    BTN_CHOOSE_PASSWORD: "Choose password",
+    BTN_ENTER_PASSWORD: "Enter password",
+    BTN_CONFIRN_PASSWORD: "Confirm password",
+    BTN_IMPORT: "Import",
 
     // BODY
     BD_WELCOME_SCREEN:
@@ -161,6 +166,17 @@ const en: BaseTranslation = {
     BD_GO_BACK: "Go back to VeWorld app",
     BD_BUY_DESCRIPTION_COINBASE: "Buy with Coinbase and receive the tokens directly in VeWorld.",
     BD_BUY_DESCRIPTION_TRANSAK: "Buy with Transak and receive the tokens directly in VeWorld.",
+    BD_PASSWORD_NOT_STRONG:   "* Password is not strong enough (min 6 characters, 1 nunber, 1 special character)",
+    BD_PASSWORDS_DO_NOT_MATCH: "* Passwords do not match",
+    BD_MNEMONIC_PASSWORD_WARNING: "The 12 words below are your wallet's recovery phrase. This phrase lets you recover your wallet if you lose your device. Back up it up on iCloud (recommended) or write it down. Or both.",
+    BD_MNEMONIC_WARMNING:  "Never share these words. Anyone who learns them can steal all of your crypto.\nVeWorld will never ask you for them.",
+    BD_BACKED_UP_TO_CLOUD: "Backed up to iCloud",
+    BD_NOT_BACKED_UP_TO_CLOUD: "Not backed up to iCloud",
+    BD_CLOUD_BACKUP_PASSWORD: "iCloud Backup Password",
+    BD_BACKUP_PASSWORD_TO_KEYCHAIN: "Backup Password to Keychain",
+    BD_CLOUD_PASSWORD_CREATION_MESSAGE: "This password will secure your secret recovery phrase in the cloud. VeWorld does NOT have access to your password. We can NOT reset it if you lose it, so keep it safe.",
+    BD_CLOUD_INSERT_PASSWORD: "Enter the password you used to back up your wallet.",
+
 
     // TITLES
     TITLE_WELCOME_TO: "Welcome to ",
@@ -178,6 +194,7 @@ const en: BaseTranslation = {
     TITLE_USER_PASSWORD: "Choose your 6-digit PIN",
     TITLE_USER_PIN: "Insert your 6-digit PIN",
     TITLE_WALLET_IMPORT_LOCAL: "Import Local Wallet",
+    TITLE_IMPORT_WALLET_FROM_ICLOUD: "Import Wallet from iCloud",
     TITLE_OBSERVE_WALLET: "Observe Wallet",
     TITLE_ALERT_FACE_ID_CANCELLED: "Face ID Cancelled",
     TITLE_ALERT_CAMERA_PERMISSION: "Camera Permissions",
@@ -243,6 +260,7 @@ const en: BaseTranslation = {
     ERROR_SECURITY_UPDATE_REVERTED: "The security update has failed and your security method has been reverted to the previous one.",
     ERROR_SECURITY_UPDATE_FAILED: "The security update has failed. Locking the application",
     SB_BACKUP_MNEMONIC: "Backup your mnemonic",
+    SB_RECOVERY_PHRASE: "Recovery phrase",
     SB_ANALYTICS_TRACKING: "Analytics tracking",
     SB_NO_TRANSACTIONS: "Your activities will appear here",
     SB_DESCRIPTION: "Description",
@@ -327,6 +345,7 @@ const en: BaseTranslation = {
     COMMON_OOPS: "Oops!",
     COMMON_PROCEED: "Proceed",
     COMMON_OR: "Or",
+    COMMON_ROOT_ADDRESS: "From",
     COMMON_24H: "24 HRs",
 
 
@@ -349,7 +368,7 @@ const en: BaseTranslation = {
     ALERT_MSG_NEW_VERSION: "A new version {version: string} is out now. Please update to the latest version",
     ALERT_OPTION_UPDATE_NOW: "Update now",
     ALERT_OPTION_ASK_ME_LATER: "Ask me later",
-
+    ALERT_DONT_SCREENSHOT_MNEMONIC: "Avoid screenshotting your recovery phrase. Store it offline or back it up securely online.",
 
     // Errors
     ERROR_PRICE_FEED_NOT_AVAILABLE: "Price feed not available",
@@ -387,6 +406,7 @@ const en: BaseTranslation = {
     ERROR_COULD_NOT_FIND_ADDRESS_FOR_DOMAIN: "Address not found for domain name",
     ERROR_TOO_MANY_BIOMETRICS_AUTH_ATTEMPTS: "Too many biometrics authentication attempts, please try again later",
     ERROR_CREATING_WALLET: "Error creating wallet",
+    ERROR_DECRYPTING_WALLET: "Error getting wallet. Make sure you have the correct password",
 
     // Success
 
@@ -826,6 +846,8 @@ const en: BaseTranslation = {
     WALLET_LEDGER_NO_DEVICES: "No devices found",
     WALLET_LEDGER_NO_DEVICES_DESC: "We couldn't find any Ledger devices to connect to",
 
+    CLOUDKIT_ERROR_GENERIC: "An error occurred while trying to connect to iCloud service. Try again!",
+
     // Transaction Labels
 
     // Unlock
@@ -892,6 +914,30 @@ const en: BaseTranslation = {
     // NFTs
 
     // Ledger Config
+
+    // Security Upgrade V2
+    SECURITY_ENHANCEMENT_TITLE: "Security Enhancement",
+    SECURITY_ENHANCEMENT_DESC: "Our wallet has always met the highest standards, and now we're taking it a step further. To keep your assets even more secure, please upgrade your wallet.",
+    SECURITY_UPGRADE_BTN: "Upgrade now",
+    SECURITY_BACKUP_TITLE: "Backup phrase",
+    SECURITY_BACKUP_DESC: "Before proceeding with the upgrade, please backup your recovery phrase if you haven't done it yet.",
+    SECURITY_BACKUP_BTN: "Backup now",
+    SECURITY_PHRASE_BACKED_UP: "I've backed up the phrase!",
+    SECURITY_UPGRADE_ONLY_HARDWARE: "It looks like you only have a hardware wallet connected to VeWorld. You can upgrade security level without backing up",
+    SECURITY_UPGRADE_ONLY_PK: "It looks like you only have a private key wallet connected to VeWorld. You can upgrade security level without backing up",
+
+    // CloudKit
+    WELCOME_BACK: "Welcome back",
+    WE_FOUND: "We found ",
+    WALLETS_SAVED_ON_ICLOUD: "wallets saved on iCloud.",
+    WOULD_YOU_LIKE_TO: "Would you like to ",
+    RESTORE: "restore ",
+    THEM: "them?",
+    TAKE_ME_TO_ICLOUD: "Take me to iCloud",
+    NO_THANKS: "No thanks",
+    CLOUD_ERR_NETWORK: "There was an error connecting to iCloud. Please check your network connection and try again.",
+    CLOUD_ERR_WALLET_OPERATION: "There was an error performing this iCloud wallet operation. Please try again.",
+    CLOUD_ERR_USER_STATUS: "There was an error checking your iCloud status. Please try again.",
 }
 
 export default en

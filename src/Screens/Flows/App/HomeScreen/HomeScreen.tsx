@@ -44,6 +44,8 @@ export const HomeScreen = () => {
     /* Pre Fetch all VNS names and addresses */
     usePrefetchAllVns()
 
+    const nav = useNavigation()
+
     const selectedCurrency = useAppSelector(selectCurrency)
     const track = useAnalyticTracking()
     const { updateBalances, updateSuggested } = useTokenBalances()
@@ -103,8 +105,6 @@ export const HomeScreen = () => {
     useScrollToTop(scrollViewRef)
 
     useCheckVersion()
-
-    const nav = useNavigation()
 
     const Actions: FastAction[] = useMemo(() => {
         let actions: FastAction[] = []
