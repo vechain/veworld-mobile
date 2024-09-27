@@ -8,7 +8,6 @@ import androidx.lifecycle.viewModelScope
 import com.facebook.react.bridge.ActivityEventListener
 import com.facebook.react.bridge.Promise
 import com.facebook.react.bridge.ReactApplicationContext
-import com.facebook.react.bridge.ReactMethod
 import com.facebook.react.bridge.WritableNativeArray
 import com.google.android.gms.auth.api.signin.GoogleSignIn
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount
@@ -25,7 +24,6 @@ import com.google.api.services.drive.DriveScopes
 import com.google.api.services.drive.model.File
 import com.google.api.services.drive.model.FileList
 import com.google.gson.Gson
-import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
@@ -154,7 +152,7 @@ class GoogleDriveViewModel(private val gson: Gson = Gson()) : ViewModel() {
     private fun getFileIdByFileName(drive: Drive, name: String): String? {
         try {
             val files: FileList =
-                drive.files().list().setSpaces(GDriveParams.SPACES).setFields(GDriveParams.FIELDS)
+                drive.files().list().setSpaces("drive").setFields(GDriveParams.FIELDS)
                     .setPageSize(GDriveParams.PAGE_SIZE_SINGLE).setQ("name = '$name.json'")
                     .execute()
             return files.files.firstOrNull()?.id
@@ -164,7 +162,7 @@ class GoogleDriveViewModel(private val gson: Gson = Gson()) : ViewModel() {
         return null
     }
 
-    private fun getFolderId(drive: Drive, folderName: String): String? {
+    private fun getFolderById(drive: Drive, folderName: String): String? {
         return try {
             val result = drive.files().list()
                 .setQ("mimeType='application/vnd.google-apps.folder' and name='$folderName' and trashed=false")
@@ -199,7 +197,7 @@ class GoogleDriveViewModel(private val gson: Gson = Gson()) : ViewModel() {
         val fileMetadata = File()
         fileMetadata.name = "$mnemonicId.json"
 
-        val folderId = getFolderId(drive, "VeWorld") ?: createFolder(drive, "VeWorld")
+        val folderId = getFolderById(drive, "VeWorld") ?: createFolder(drive, "VeWorld")
 
         folderId?.let {
             fileMetadata.parents = listOf(it)
@@ -218,13 +216,32 @@ class GoogleDriveViewModel(private val gson: Gson = Gson()) : ViewModel() {
     private suspend fun fetchCloudBackupFiles(
         drive: Drive,
     ): FileList {
-        return withContext(Dispatchers.IO) {
-            val files: FileList =
-                drive.files().list().setSpaces(GDriveParams.SPACES).setFields(GDriveParams.FIELDS)
-                    .setPageSize(GDriveParams.PAGE_SIZE_NORMAL).execute()
+        val allFiles = FileList()
+        allFiles.files = mutableListOf()
 
-            files
+        withContext(Dispatchers.IO) {
+            val folderId = getFolderById(drive, "VeWorld")
+
+            folderId?.let { id ->
+                var pageToken: String? = null
+
+                do {
+                    val result =
+                        drive.files().list().setSpaces("drive").setFields(GDriveParams.FIELDS)
+                            .setQ("'$id' in parents and trashed = false")
+                            .setPageToken(pageToken).execute()
+
+                    result.files?.let {
+                        allFiles.files.addAll(it)
+                    }
+
+                    pageToken = result.nextPageToken
+
+                } while (pageToken != null)
+            }
         }
+
+        return allFiles
     }
 
 
