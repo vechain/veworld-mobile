@@ -31,15 +31,21 @@ class GoogleDriveManager(private val reactContext: ReactApplicationContext) :
     }
 
     @ReactMethod
+    fun areGoogleServicesAvailable(promise: Promise) {
+        val googleApiAvailability = GoogleApiAvailability.getInstance()
+        val resultCode = googleApiAvailability.isGooglePlayServicesAvailable(reactContext)
+        promise.resolve(resultCode == ConnectionResult.SUCCESS)
+    }
+
+    @ReactMethod
     fun backupMnemonicToCloud(promise: Promise) {
         initViewModel()
         viewModel?.backupMnemonicToCloud(reactContext, promise)
     }
 
     @ReactMethod
-    fun areGoogleServicesAvailable(promise: Promise) {
-        val googleApiAvailability = GoogleApiAvailability.getInstance()
-        val resultCode = googleApiAvailability.isGooglePlayServicesAvailable(reactContext)
-        promise.resolve(resultCode == ConnectionResult.SUCCESS)
+    fun fetchMnemonicBackups(promise: Promise) {
+        initViewModel()
+        viewModel?.fetchMnemonicBackups(reactContext, promise)
     }
 }

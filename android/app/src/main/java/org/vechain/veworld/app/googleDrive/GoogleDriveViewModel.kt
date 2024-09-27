@@ -8,6 +8,8 @@ import androidx.lifecycle.viewModelScope
 import com.facebook.react.bridge.ActivityEventListener
 import com.facebook.react.bridge.Promise
 import com.facebook.react.bridge.ReactApplicationContext
+import com.facebook.react.bridge.ReactMethod
+import com.facebook.react.bridge.WritableNativeArray
 import com.google.android.gms.auth.api.signin.GoogleSignIn
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount
 import com.google.android.gms.auth.api.signin.GoogleSignInClient
@@ -23,12 +25,14 @@ import com.google.api.services.drive.DriveScopes
 import com.google.api.services.drive.model.File
 import com.google.api.services.drive.model.FileList
 import com.google.gson.Gson
+import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.suspendCancellableCoroutine
 import kotlinx.coroutines.withContext
 import org.vechain.veworld.app.R
+import java.io.ByteArrayOutputStream
 import java.nio.charset.StandardCharsets
 import java.util.Date
 
@@ -61,10 +65,9 @@ class GoogleDriveViewModel(private val gson: Gson = Gson()) : ViewModel() {
     private fun getGoogleSignInClient(reactContext: ReactApplicationContext): GoogleSignInClient {
         val activity = reactContext.currentActivity
         if (activity != null) {
-            val signInOptions = GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
-                .requestEmail()
-                .requestScopes(Scope(DriveScopes.DRIVE_APPDATA))
-                .build()
+            val signInOptions =
+                GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN).requestEmail()
+                    .requestScopes(Scope(DriveScopes.DRIVE_APPDATA)).build()
             return GoogleSignIn.getClient(activity, signInOptions)
         } else {
             throw IllegalStateException("Activity cannot be null")
@@ -78,8 +81,7 @@ class GoogleDriveViewModel(private val gson: Gson = Gson()) : ViewModel() {
                 googleSignInClient.signOut() // Force a sign out so that we can reselect account
                 val signInIntent = googleSignInClient.signInIntent
                 reactContext.currentActivity?.startActivityForResult(
-                    signInIntent,
-                    Request.GOOGLE_SIGN_IN.value
+                    signInIntent, Request.GOOGLE_SIGN_IN.value
                 )
 
                 val listener = object : ActivityEventListener {
@@ -125,30 +127,22 @@ class GoogleDriveViewModel(private val gson: Gson = Gson()) : ViewModel() {
         return withContext(Dispatchers.IO) {
             val canUseRecentAccount = useRecentAccount && hasPermissionToGoogleDrive(reactContext)
 
-            val account =
-                if (canUseRecentAccount) {
-                    GoogleSignIn.getLastSignedInAccount(reactContext)
-                }
-                else {
-                    getGoogleDrivePermissions(reactContext)
-                }
+            val account = if (canUseRecentAccount) {
+                GoogleSignIn.getLastSignedInAccount(reactContext)
+            } else {
+                getGoogleDrivePermissions(reactContext)
+            }
 
             val drive = account?.let {
-                val credential =
-                    GoogleAccountCredential.usingOAuth2(
-                        reactContext,
-                        listOf(DriveScopes.DRIVE_APPDATA)
-                    )
+                val credential = GoogleAccountCredential.usingOAuth2(
+                    reactContext, listOf(DriveScopes.DRIVE_APPDATA)
+                )
 
                 credential.selectedAccount = account.account!!
 
                 Drive.Builder(
-                    NetHttpTransport(),
-                    GsonFactory.getDefaultInstance(),
-                    credential
-                )
-                    .setApplicationName(reactContext.getString(R.string.app_name))
-                    .build()
+                    NetHttpTransport(), GsonFactory.getDefaultInstance(), credential
+                ).setApplicationName(reactContext.getString(R.string.app_name)).build()
             }
 
             Pair(drive, account)
@@ -157,12 +151,10 @@ class GoogleDriveViewModel(private val gson: Gson = Gson()) : ViewModel() {
 
     private fun getFileIdByFileName(drive: Drive, name: String): String? {
         try {
-            val files: FileList = drive.files().list()
-                .setSpaces(GDriveParams.SPACES)
-                .setFields(GDriveParams.FIELDS)
-                .setPageSize(GDriveParams.PAGE_SIZE_SINGLE)
-                .setQ("name = '$name.json'")
-                .execute()
+            val files: FileList =
+                drive.files().list().setSpaces(GDriveParams.SPACES).setFields(GDriveParams.FIELDS)
+                    .setPageSize(GDriveParams.PAGE_SIZE_SINGLE).setQ("name = '$name.json'")
+                    .execute()
             return files.files.firstOrNull()?.id
         } catch (e: Exception) {
             e.printStackTrace()
@@ -187,8 +179,55 @@ class GoogleDriveViewModel(private val gson: Gson = Gson()) : ViewModel() {
         if (fileId != null) {
             drive.files().delete(fileId).execute()
         }
-        drive.files().create(fileMetadata, inputContent)
-            .execute()
+        drive.files().create(fileMetadata, inputContent).execute()
+    }
+
+    private suspend fun fetchCloudBackupFiles(
+        drive: Drive,
+    ): FileList {
+        return withContext(Dispatchers.IO) {
+            val files: FileList =
+                drive.files().list().setSpaces(GDriveParams.SPACES).setFields(GDriveParams.FIELDS)
+                    .setPageSize(GDriveParams.PAGE_SIZE_NORMAL).execute()
+
+            files
+        }
+    }
+
+
+    fun fetchMnemonicBackups(reactContext: ReactApplicationContext, promise: Promise) {
+        viewModelScope.launch {
+            try {
+                val mnemonics = mutableListOf<BackupFile>()
+
+                getGoogleDrive(reactContext).let { (drive) ->
+                    if (drive == null) return@launch
+                    fetchCloudBackupFiles(drive).let { files ->
+                        withContext(Dispatchers.IO) {
+                            files.files.forEach { file ->
+                                launch {
+                                    val outputStream = ByteArrayOutputStream()
+                                    drive.files()[file.id].executeMediaAndDownloadTo(outputStream)
+                                    val backupFile: BackupFile = gson.fromJson(
+                                        outputStream.toString(), BackupFile::class.java
+                                    )
+                                    mnemonics.add(backupFile)
+                                }
+                            }
+                        }
+                    }
+                }
+
+                val writableNativeArray = WritableNativeArray()
+                mnemonics.forEach {
+                    writableNativeArray.pushMap(it.toWritableMap())
+                }
+
+                promise.resolve(writableNativeArray)
+            } catch (e: Exception) {
+                promise.reject("cloudError", "Failed to fetch cloud backups, ${e.message}")
+            }
+        }
     }
 
     fun backupMnemonicToCloud(reactContext: ReactApplicationContext, promise: Promise) {
@@ -199,9 +238,7 @@ class GoogleDriveViewModel(private val gson: Gson = Gson()) : ViewModel() {
                     val createdAt = Date().time / 1000.0
 
                     val backup = BackupFile(
-                        "Name",
-                        "Content",
-                        createdAt
+                        "Name", "Content", createdAt
                     )
 
                     withContext(Dispatchers.IO) {

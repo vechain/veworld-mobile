@@ -170,7 +170,16 @@ export const HomeScreen = () => {
                         <BaseSpacer height={24} />
 
                         <Button
-                            title="click me"
+                            title="fetch"
+                            onPress={async () => {
+                                try {
+                                    const x = await GoogleDriveManager.fetchMnemonicBackups()
+                                    return x
+                                } catch (error) {}
+                            }}
+                        />
+                        <Button
+                            title="save"
                             onPress={async () => {
                                 try {
                                     await GoogleDriveManager.backupMnemonicToCloud()
