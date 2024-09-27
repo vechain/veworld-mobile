@@ -67,7 +67,9 @@ class GoogleDriveViewModel(private val gson: Gson = Gson()) : ViewModel() {
         if (activity != null) {
             val signInOptions =
                 GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN).requestEmail()
-                    .requestScopes(Scope(DriveScopes.DRIVE_APPDATA)).build()
+                    .requestScopes(
+                        Scope(DriveScopes.DRIVE_FILE),
+                    ).build()
             return GoogleSignIn.getClient(activity, signInOptions)
         } else {
             throw IllegalStateException("Activity cannot be null")
@@ -162,6 +164,33 @@ class GoogleDriveViewModel(private val gson: Gson = Gson()) : ViewModel() {
         return null
     }
 
+    private fun getFolderId(drive: Drive, folderName: String): String? {
+        return try {
+            val result = drive.files().list()
+                .setQ("mimeType='application/vnd.google-apps.folder' and name='$folderName' and trashed=false")
+                .setSpaces("drive").setFields("files(id, name)").execute()
+
+            result.files.firstOrNull()?.id
+        } catch (e: Exception) {
+            e.printStackTrace()
+            null
+        }
+    }
+
+    private fun createFolder(drive: Drive, folderName: String): String? {
+        return try {
+            val fileMetadata = File()
+            fileMetadata.name = folderName
+            fileMetadata.mimeType = "application/vnd.google-apps.folder"
+
+            val folder = drive.files().create(fileMetadata).setFields("id").execute()
+            folder.id
+        } catch (e: Exception) {
+            e.printStackTrace()
+            null
+        }
+    }
+
     private fun saveMnemonicToGoogleDrive(
         drive: Drive,
         mnemonicId: String,
@@ -169,10 +198,14 @@ class GoogleDriveViewModel(private val gson: Gson = Gson()) : ViewModel() {
     ) {
         val fileMetadata = File()
         fileMetadata.name = "$mnemonicId.json"
-        fileMetadata.parents = listOf("appDataFolder")
+
+        val folderId = getFolderId(drive, "VeWorld") ?: createFolder(drive, "VeWorld")
+
+        folderId?.let {
+            fileMetadata.parents = listOf(it)
+        }
 
         val jsonData = gson.toJson(backup)
-
         val jsonByteArray = jsonData.toByteArray(StandardCharsets.UTF_8)
         val inputContent = ByteArrayContent("application/json", jsonByteArray)
         val fileId = getFileIdByFileName(drive, mnemonicId)
