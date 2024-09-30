@@ -152,6 +152,7 @@ platform :ios do
     # Fetch latest changes from the remote repository
     sh("git fetch origin")
 
+    sh("git rebase origin/#{branch_name}-#{build_number}-#{version_number} || true")
     # Commit changes
     sh("git commit -a -m 'build: init'")
 
