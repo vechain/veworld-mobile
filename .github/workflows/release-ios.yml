@@ -22,6 +22,10 @@ on:
         description: 'Build number'
         type: number
         required: true
+        
+  push:
+    branches:
+      - build-release-and-push-to-testflight
 
 jobs:
   build-release-ios:
