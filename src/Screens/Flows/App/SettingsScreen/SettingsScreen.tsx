@@ -1,14 +1,5 @@
 import React, { useCallback, useMemo, useRef } from "react"
-import {
-    BaseButton,
-    BaseCard,
-    BaseIcon,
-    BaseSafeArea,
-    BaseSpacer,
-    BaseText,
-    BaseView,
-    SelectedNetworkViewer,
-} from "~Components"
+import { BaseCard, BaseIcon, BaseSafeArea, BaseSpacer, BaseText, BaseView, SelectedNetworkViewer } from "~Components"
 import { TranslationFunctions, useI18nContext } from "~i18n"
 import { Routes } from "~Navigation"
 import { StyleSheet } from "react-native"
@@ -16,9 +7,24 @@ import { RowProps, SettingsRow } from "./Components/SettingsRow"
 import { useCheckWalletBackup, useTabBarBottomMargin, useTheme, useThemedStyles } from "~Hooks"
 import { ColorThemeType, isSmallScreen } from "~Constants"
 import { selectAreDevFeaturesEnabled, selectSelectedAccount, useAppSelector } from "~Storage/Redux"
-import { useNavigation, useScrollToTop } from "@react-navigation/native"
+import { useScrollToTop } from "@react-navigation/native"
 import { FlatList } from "react-native-gesture-handler"
 import SettingsRowDivider, { RowDividerProps } from "./Components/SettingsRowDivider"
+
+type SettingsRowItem = {
+    type: "settingsRow"
+} & RowProps
+
+type DividerItem = {
+    type: "divider"
+} & RowDividerProps
+
+type BackupBannerItem = {
+    type: "backupBanner"
+    title: string
+}
+
+type SettingsItem = SettingsRowItem | DividerItem | BackupBannerItem
 
 export const SettingsScreen = () => {
     const { LL } = useI18nContext()
@@ -29,12 +35,6 @@ export const SettingsScreen = () => {
     const { styles: themedStyles } = useThemedStyles(baseStyles)
     const { androidOnlyTabBarBottomMargin } = useTabBarBottomMargin()
 
-    const renderItem = useCallback(({ item }: { item: RowProps | RowDividerProps }) => {
-        if ("height" in item) return <SettingsRowDivider {...item} />
-
-        return <SettingsRow title={item.title} screenName={item.screenName} icon={item.icon} url={item.url} />
-    }, [])
-
     const flatSettingListRef = useRef(null)
 
     useScrollToTop(flatSettingListRef)
@@ -42,7 +42,6 @@ export const SettingsScreen = () => {
 
     const selectedAccount = useAppSelector(selectSelectedAccount)
     const isShowBackupModal = useCheckWalletBackup(selectedAccount)
-    const nav = useNavigation()
 
     const renderBackupWarning = useMemo(() => {
         return (
@@ -59,12 +58,31 @@ export const SettingsScreen = () => {
                     <BaseText color={theme.colors.textReversed}>
                         {"Make sure you can recover your crypto if you lose your device or switch to another wallet."}
                     </BaseText>
-                    <BaseSpacer height={36} />
-                    <BaseButton title={"Backup Now"} action={() => nav.navigate(Routes.SETTINGS_PRIVACY)} />
                 </BaseView>
             </BaseCard>
         )
-    }, [nav, theme.colors.error, theme.colors.textReversed, themedStyles.cardContainer])
+    }, [theme.colors.error, theme.colors.textReversed, themedStyles.cardContainer])
+
+    const renderItem = useCallback(
+        ({ item }: { item: SettingsItem }) => {
+            switch (item.type) {
+                case "settingsRow":
+                    return (
+                        <SettingsRow title={item.title} screenName={item.screenName} icon={item.icon} url={item.url} />
+                    )
+
+                case "divider":
+                    return <SettingsRowDivider height={item.height} title={item.title} />
+
+                case "backupBanner":
+                    return isShowBackupModal ? renderBackupWarning : null
+
+                default:
+                    return null
+            }
+        },
+        [isShowBackupModal, renderBackupWarning],
+    )
 
     return (
         <BaseSafeArea>
@@ -72,7 +90,6 @@ export const SettingsScreen = () => {
                 <BaseText typographyFont="largeTitle" testID="settings-screen">
                     {LL.TITLE_SETTINGS()}
                 </BaseText>
-
                 <SelectedNetworkViewer />
             </BaseView>
 
@@ -82,12 +99,12 @@ export const SettingsScreen = () => {
                     data={settingsList}
                     contentContainerStyle={[themedStyles.contentContainerStyle]}
                     scrollEnabled={isShowBackupModal || isSmallScreen}
-                    keyExtractor={(item, index) => ("height" in item ? `divider-${index}` : item.screenName)}
+                    keyExtractor={(item, index) =>
+                        item.type === "settingsRow" ? item.screenName : `${item.type}-${index}`
+                    }
                     showsVerticalScrollIndicator={false}
                     showsHorizontalScrollIndicator={false}
                     renderItem={renderItem}
-                    ListHeaderComponent={isShowBackupModal ? renderBackupWarning : undefined}
-                    ListHeaderComponentStyle={themedStyles.headerContainer}
                 />
             </BaseView>
         </BaseSafeArea>
@@ -110,63 +127,77 @@ const baseStyles = (theme: ColorThemeType) =>
             backgroundColor: theme.colors.danger,
             padding: 8,
         },
-        headerContainer: { marginVertical: 12 },
     })
 
 const getLists = (LL: TranslationFunctions, devEnabled: boolean) => {
-    const settingsList: (RowProps | RowDividerProps)[] = [
+    const settingsList: SettingsItem[] = [
         {
+            type: "settingsRow",
             title: LL.TITLE_GENERAL_SETTINGS(),
             screenName: Routes.SETTINGS_GENERAL,
             icon: "cog-outline",
         },
         {
+            type: "settingsRow",
             title: LL.TITLE_MANAGE_WALLET(),
             screenName: Routes.WALLET_MANAGEMENT,
             icon: "wallet-outline",
         },
         {
+            type: "settingsRow",
             title: LL.TITLE_TRANSACTIONS(),
             screenName: Routes.SETTINGS_TRANSACTIONS,
             icon: "currency-usd",
         },
         {
+            type: "settingsRow",
             title: LL.TITLE_NETWORKS(),
             screenName: Routes.SETTINGS_NETWORK,
             icon: "web",
         },
         {
+            type: "settingsRow",
             title: LL.TITLE_CONNECTED_APPS(),
             screenName: Routes.SETTINGS_CONNECTED_APPS,
             icon: "widgets-outline",
         },
         {
+            type: "settingsRow",
             title: LL.TITLE_CONTACTS(),
             screenName: Routes.SETTINGS_CONTACTS,
             icon: "account-multiple-outline",
         },
         {
+            type: "settingsRow",
             title: LL.TITLE_PRIVACY(),
             screenName: Routes.SETTINGS_PRIVACY,
             icon: "shield-check-outline",
         },
         {
+            type: "backupBanner",
+            title: "Backup_Warning",
+        },
+        {
             title: "Support_divider",
+            type: "divider",
             height: 1,
         },
         {
+            type: "settingsRow",
             title: LL.TITLE_GET_SUPPORT(),
             screenName: Routes.SETTINGS_GET_SUPPORT,
             icon: "help-circle-outline",
             url: "https://support.veworld.com",
         },
         {
+            type: "settingsRow",
             title: LL.TITLE_GIVE_FEEDBACK(),
             screenName: Routes.SETTINGS_GIVE_FEEDBACK,
             icon: "message-outline",
             url: "https://forms.office.com/e/Vq1CUJD9Vy",
         },
         {
+            type: "settingsRow",
             title: LL.TITLE_ABOUT(),
             screenName: Routes.SETTINGS_ABOUT,
             icon: "information-outline",
@@ -175,6 +206,7 @@ const getLists = (LL: TranslationFunctions, devEnabled: boolean) => {
 
     if (devEnabled) {
         settingsList.push({
+            type: "settingsRow",
             title: LL.TITLE_ALERTS(),
             screenName: Routes.SETTINGS_ALERTS,
             icon: "bell-outline",
