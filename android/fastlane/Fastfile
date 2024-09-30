@@ -26,6 +26,8 @@ platform :android do
     github_username = options[:github_username]
     version_name = options[:version_name]
     version_code = options[:version_code]
+    
+    setup_ci if ENV['CI']
 
 
     Dir.chdir "../.." do
@@ -101,15 +103,15 @@ platform :android do
 
       puts exception
 
-      slack(
-        message: version_name.nil? ? "Error releasing VeWorld build number: #{version_code} [Android]" : "Error releasing VeWorld version number: #{version_name} [Android]",
-        slack_url: ENV["SLACK_WEBHOOK"],
-        success: false,
-        payload: {
-          "Build Date" => Time.new.strftime("%d/%m/%Y %H:%M"),
-          "Built by" => github_username,
-        },
-      )
+      #slack(
+      #  message: version_name.nil? ? "Error releasing VeWorld build number: #{version_code} [Android]" : "Error releasing VeWorld version number: #{version_name} [Android]",
+      #  slack_url: ENV["SLACK_WEBHOOK"],
+      #  success: false,
+      #  payload: {
+      #    "Build Date" => Time.new.strftime("%d/%m/%Y %H:%M"),
+      #    "Built by" => github_username,
+      #  },
+      #)
     end
   end
 end
