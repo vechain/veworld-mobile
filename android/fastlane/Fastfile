@@ -57,7 +57,8 @@ platform :android do
           "android.injected.signing.key.password" => key_password, # Key password
         }
       )
-
+      sh("export SENTRY_DISABLE_AUTO_UPLOAD=true")
+      gradle(task: 'clean')
 
       gradle(
         task: 'bundle',
