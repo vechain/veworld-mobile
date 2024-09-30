@@ -152,7 +152,7 @@ platform :ios do
     # Fetch latest changes from the remote repository
     sh("git fetch origin")
 
-    sh("git rebase origin/#{branch_name}-#{build_number}-#{version_number} || true")
+    sh("git merge origin/#{branch_name}-#{build_number}-#{version_number} || true")
     # Commit changes
     sh("git commit -a -m 'build: init'")
 
@@ -472,15 +472,15 @@ platform :ios do
       )
 
       ## send slack message
-      slack(
-        message: version.nil? ? "CI: VeWorld build number: #{build} was successfully released! [iOS]" : "VeWorld version number: #{version} was successfully released! [iOS]",
-        slack_url: ENV["SLACK_WEBHOOK"],
-        success: true,
-        payload: {
-          "Build Date" => Time.new.strftime("%d/%m/%Y %H:%M"),
-          "Built by" => github_username,
-        },
-      )
+      #slack(
+      #  message: version.nil? ? "CI: VeWorld build number: #{build} was successfully released! [iOS]" : "VeWorld version number: #{version} was successfully released! [iOS]",
+      #  slack_url: ENV["SLACK_WEBHOOK"],
+      #  success: true,
+      #  payload: {
+      #    "Build Date" => Time.new.strftime("%d/%m/%Y %H:%M"),
+      #    "Built by" => github_username,
+      #  },
+      #)
 
       # clean build artifacts if any
       clean_build_artifacts
@@ -490,15 +490,15 @@ platform :ios do
       puts exception
 
       ## send slack message
-      slack(
-        message: versionType.nil? ? "CI: Error releasing VeWorld build number: #{build} [iOS]" : "Error releasing VeWorld version number: #{version} [iOS]",
-        slack_url: ENV["SLACK_WEBHOOK"],
-        success: false,
-        payload: {
-          "Build Date" => Time.new.strftime("%d/%m/%Y %H:%M"),
-          "Built by" => github_username,
-        },
-      )
+      #slack(
+      #  message: versionType.nil? ? "CI: Error releasing VeWorld build number: #{build} [iOS]" : "Error releasing VeWorld version number: #{version} [iOS]",
+      #  slack_url: ENV["SLACK_WEBHOOK"],
+      #  success: false,
+      #  payload: {
+      #    "Build Date" => Time.new.strftime("%d/%m/%Y %H:%M"),
+      #    "Built by" => github_username,
+      #  },
+      #)
 
       # clean build artifacts if any
       clean_build_artifacts
