@@ -48,4 +48,10 @@ class GoogleDriveManager(private val reactContext: ReactApplicationContext) :
         initViewModel()
         viewModel?.fetchMnemonicBackups(reactContext, promise)
     }
+
+    @ReactMethod
+    fun saveMnemonicToGoogleDrive(promise: Promise) {
+        initViewModel()
+        viewModel?.deleteCloudStorageMnemonicBackup(reactContext, promise)
+    }
 }

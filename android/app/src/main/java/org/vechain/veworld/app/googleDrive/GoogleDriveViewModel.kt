@@ -8,6 +8,7 @@ import androidx.lifecycle.viewModelScope
 import com.facebook.react.bridge.ActivityEventListener
 import com.facebook.react.bridge.Promise
 import com.facebook.react.bridge.ReactApplicationContext
+import com.facebook.react.bridge.ReactMethod
 import com.facebook.react.bridge.WritableNativeArray
 import com.google.android.gms.auth.api.signin.GoogleSignIn
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount
@@ -24,6 +25,7 @@ import com.google.api.services.drive.DriveScopes
 import com.google.api.services.drive.model.File
 import com.google.api.services.drive.model.FileList
 import com.google.gson.Gson
+import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
@@ -31,6 +33,7 @@ import kotlinx.coroutines.suspendCancellableCoroutine
 import kotlinx.coroutines.withContext
 import org.vechain.veworld.app.R
 import java.io.ByteArrayOutputStream
+import java.io.FileNotFoundException
 import java.nio.charset.StandardCharsets
 import java.util.Date
 
@@ -149,11 +152,12 @@ class GoogleDriveViewModel(private val gson: Gson = Gson()) : ViewModel() {
         }
     }
 
-    private fun getFileIdByFileName(drive: Drive, name: String): String? {
+    private fun getFileIdByFileName(drive: Drive, name: String, folderId: String): String? {
         try {
             val files: FileList =
                 drive.files().list().setSpaces("drive").setFields(GDriveParams.FIELDS)
-                    .setPageSize(GDriveParams.PAGE_SIZE_SINGLE).setQ("name = '$name.json'")
+                    .setPageSize(GDriveParams.PAGE_SIZE_SINGLE)
+                    .setQ("'$folderId' in parents and and trashed=false and name = '$name.json'")
                     .execute()
             return files.files.firstOrNull()?.id
         } catch (e: Exception) {
@@ -201,16 +205,16 @@ class GoogleDriveViewModel(private val gson: Gson = Gson()) : ViewModel() {
 
         folderId?.let {
             fileMetadata.parents = listOf(it)
-        }
 
-        val jsonData = gson.toJson(backup)
-        val jsonByteArray = jsonData.toByteArray(StandardCharsets.UTF_8)
-        val inputContent = ByteArrayContent("application/json", jsonByteArray)
-        val fileId = getFileIdByFileName(drive, mnemonicId)
-        if (fileId != null) {
-            drive.files().delete(fileId).execute()
+            val jsonData = gson.toJson(backup)
+            val jsonByteArray = jsonData.toByteArray(StandardCharsets.UTF_8)
+            val inputContent = ByteArrayContent("application/json", jsonByteArray)
+            val fileId = getFileIdByFileName(drive, mnemonicId, folderId)
+            if (fileId != null) {
+                drive.files().delete(fileId).execute()
+            }
+            drive.files().create(fileMetadata, inputContent).execute()
         }
-        drive.files().create(fileMetadata, inputContent).execute()
     }
 
     private suspend fun fetchCloudBackupFiles(
@@ -303,6 +307,46 @@ class GoogleDriveViewModel(private val gson: Gson = Gson()) : ViewModel() {
                     "backupEncryptionError",
                     "Failed to encrypt mnemonics: ${e.message}",
                     e,
+                )
+            }
+        }
+    }
+
+    @ReactMethod
+    fun deleteCloudStorageMnemonicBackup(
+        reactContext: ReactApplicationContext,
+        promise: Promise,
+    ) {
+        viewModelScope.launch {
+            try {
+                getGoogleDrive(reactContext, true).let { (drive) ->
+                    if (drive == null) {
+                        return@launch
+                    }
+
+                    withContext(Dispatchers.IO) {
+                        val folderId = getFolderById(drive, "VeWorld")
+
+                        folderId?.let { id ->
+                            val fileId = getFileIdByFileName(drive, "1", folderId)
+                            if (fileId != null) {
+                                drive.files().delete(fileId).execute()
+                            }
+                        }
+                    }
+                }
+                promise.resolve(true)
+            } catch (e: FileNotFoundException) {
+                Log.e("EXCEPTION", "${e.message}")
+                promise.reject(
+                    "deleteBackupError",
+                    "Failed to locate backup"
+                )
+            } catch (e: Exception) {
+                Log.e("EXCEPTION", "${e.message}")
+                promise.reject(
+                    "deleteBackupError",
+                    "Failed to delete backup"
                 )
             }
         }

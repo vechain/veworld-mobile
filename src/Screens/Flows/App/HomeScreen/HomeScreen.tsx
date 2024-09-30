@@ -186,6 +186,14 @@ export const HomeScreen = () => {
                                 } catch (error) {}
                             }}
                         />
+                        <Button
+                            title="delete"
+                            onPress={async () => {
+                                try {
+                                    await GoogleDriveManager.backupMnemonicToCloud()
+                                } catch (error) {}
+                            }}
+                        />
 
                         <FastActionsBar actions={Actions} />
 
