@@ -267,8 +267,6 @@
 				13B07F8E1A680F5B00A75B9A /* Resources */,
 				00DD1BFF1BD5951E006B06BC /* Bundle React Native code and images */,
 				286141B448BA4203BC57BAB1 /* Upload Debug Symbols to Sentry */,
-				4694FE022BBDBF2F007A78F8 /* Upload Debug Symbols to Sentry */,
-				4BC716378F03490D91FD6F66 /* Upload dSYMs to Datadog */,
 				974AC4A591761334A7C2D255 /* [CP] Embed Pods Frameworks */,
 				D0FB06EE320C737E20576008 /* [CP] Copy Pods Resources */,
 			);

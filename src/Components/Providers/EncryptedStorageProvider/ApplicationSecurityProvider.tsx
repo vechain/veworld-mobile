@@ -404,6 +404,9 @@ export const ApplicationSecurityProvider = ({ children }: ApplicationSecurityCon
                     }
                 }
 
+                await WalletEncryptionKeyHelper.set({ walletKey }, password)
+                await StorageEncryptionKeyHelper.set(storageEncryptionKeys, password)
+
                 newState = {
                     ...newState,
                     devices: JSON.stringify(CryptoUtils.encryptState(walletState.devices, reduxKey)),

@@ -671,6 +671,7 @@ PODS:
     - React
   - RNSentry (5.32.0):
     - hermes-engine
+    - RCT-Folly (= 2021.07.22.00)
     - React-Core
     - React-hermes
     - Sentry/HybridSDK (= 8.36.0)
