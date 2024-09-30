@@ -22,7 +22,7 @@ import {
 } from "~Storage/Redux"
 import { AddressUtils, DAppUtils, debug, warn } from "~Utils"
 import { compareAddresses } from "~Utils/AddressUtils/AddressUtils"
-import { WindowRequest, WindowResponse } from "./types"
+import { SignedDataRequest, WindowRequest, WindowResponse } from "./types"
 
 // Resolve an issue with types for the WebView component
 type EnhancedScrollEvent = Omit<NativeScrollEvent, "zoomScale"> & { zoomScale?: number }
@@ -466,6 +466,40 @@ export const InAppBrowserProvider = ({ children }: Props) => {
         ],
     )
 
+    const validateSignedDataMessage = useCallback(
+        (
+            request: SignedDataRequest,
+            // appUrl: string, appName: string
+        ) => {
+            const message = request
+
+            const isValid = DAppUtils.isValidSignedDataMessage(message)
+
+            track(AnalyticsEvent.DISCOVERY_SIGNED_DATA_REQUESTED, {
+                dapp: navigationState?.url,
+            })
+
+            if (!isValid) {
+                return postMessage({
+                    id: request.id,
+                    error: "Invalid signed data message",
+                    method: RequestMethods.SIGN_TYPED_DATA,
+                })
+            }
+
+            if (
+                (!request.options.signer || compareAddresses(selectedAccountAddress, request.options.signer)) &&
+                selectedNetwork.genesis.id === request.genesisId
+            ) {
+                // return navigateToCertificateScreen(message, appUrl, appName)
+            }
+
+            // setNavigateToOperation(() => () => navigateToSignedDataScreen(request))
+            // initAndOpenChangeAccountNetworkBottomSheet(message)
+        },
+        [navigationState?.url, postMessage, selectedAccountAddress, selectedNetwork.genesis.id, track],
+    )
+
     const addAppAndNavToRequest = useCallback(
         (request: InAppRequest) => {
             dispatch(
@@ -506,11 +540,17 @@ export const InAppBrowserProvider = ({ children }: Props) => {
                 return validateTxMessage(data, event.nativeEvent.url, event.nativeEvent.title)
             } else if (data.method === RequestMethods.SIGN_CERTIFICATE) {
                 return validateCertMessage(data, event.nativeEvent.url, event.nativeEvent.title)
+            } else if (data.method === RequestMethods.SIGN_TYPED_DATA) {
+                return validateSignedDataMessage(
+                    data as unknown as SignedDataRequest,
+                    // event.nativeEvent.url,
+                    // event.nativeEvent.title,
+                )
             } else {
                 warn(ERROR_EVENTS.DAPP, "Unknown method", event.nativeEvent)
             }
         },
-        [validateTxMessage, validateCertMessage],
+        [validateTxMessage, validateCertMessage, validateSignedDataMessage],
     )
 
     const detectScrollDirection = useCallback(
@@ -704,6 +744,22 @@ window.vechain = {
 
                 return newResponseHandler(request.id)
             },
+
+            signTypedData(domain, types, value) {
+                const request = {
+                    id: generateRandomId(),
+                    method: "thor_signTypedData",
+                    origin: window.origin,
+                    domain,
+                    types,
+                    value,
+                    genesisId,
+                }
+
+                window.ReactNativeWebView.postMessage(JSON.stringify(request))
+
+                return newResponseHandler(request.id)
+            }, 
         }
     },
 }

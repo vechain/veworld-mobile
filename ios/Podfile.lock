@@ -669,8 +669,9 @@ PODS:
     - React
   - RNScrypt (1.2.1):
     - React
-  - RNSentry (5.24.3):
+  - RNSentry (5.33.1):
     - hermes-engine
+    - RCT-Folly (= 2021.07.22.00)
     - React-Core
     - React-hermes
     - Sentry/HybridSDK (= 8.36.0)
@@ -1146,7 +1147,7 @@ SPEC CHECKSUMS:
   RNScreens: 80369e822c4f123c3f076c9ea4141991c17770f9
   RNScreenshotPrevent: dc9741e416ba80c3739418f112ac4093188315e9
   RNScrypt: 95fdef077b482e9fdf8a761120cb69d129ef4016
-  RNSentry: e7e5d059d62d6c447d83e14800edc1812a594a5d
+  RNSentry: 0744d3c79504bc4778190d047d1b60daf4a378cd
   RNSVG: af3907ac5d4fa26a862b75a16d8f15bc74f2ceda
   SDWebImage: a7f831e1a65eb5e285e3fb046a23fcfbf08e696d
   SDWebImageWebPCoder: 908b83b6adda48effe7667cd2b7f78c897e5111d

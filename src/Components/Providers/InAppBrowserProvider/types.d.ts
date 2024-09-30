@@ -1,3 +1,4 @@
+import { ethers } from "ethers"
 import { RequestMethods } from "~Constants"
 
 type ErrorResponse = {
@@ -28,6 +29,17 @@ export type CertRequest = {
     message: Connex.Vendor.CertMessage
     options: Connex.Signer.CertOptions
     genesisId: string
+}
+
+export type SignedDataRequest = {
+    domain: ethers.TypedDataDomain
+    genesisId: string
+    id: string
+    method: RequestMethods.SIGN_TYPED_DATA
+    origin: string
+    types: Record<string, ethers.TypedDataField[]>
+    value: Record<string, unknown>
+    options: Connex.Signer.CertOptions
 }
 
 export type WindowRequest = TxRequest | CertRequest

@@ -1,3 +1,6 @@
+import { SignedDataRequest } from "~Components/Providers/InAppBrowserProvider/types"
+import { RequestMethods } from "~Constants"
+
 const isValidTxMessage = (message: unknown): message is Connex.Vendor.TxMessage => {
     if (!Array.isArray(message)) {
         return false
@@ -58,6 +61,88 @@ const isValidCertMessage = (message: unknown): message is Connex.Vendor.CertMess
     return true
 }
 
+export const isValidSignedDataMessage = (message: unknown): message is SignedDataRequest => {
+    if (message === null || message === undefined || typeof message !== "object" || Array.isArray(message)) {
+        return false
+    }
+
+    //     domain: {
+    //         chainId: 1,
+    //         name: "Ether Mail",
+    //         verifyingContract: "0xCcCCccccCCCCcCCCCCCcCcCccCcCCCcCcccccccC",
+    //         version: "1",
+    //     },
+    //     genesisId: "0x000000000b2bce3c70bc649a02749e8687721b09ed2e15997f466536b20bb127",
+    //     id: "c71670e2f98dc86bad48bd069098",
+    //     method: "thor_signTypedData",
+    //     origin: "http://192.168.1.6:5001",
+    //     types: {
+    //         Mail: [
+    //             { name: "from", type: "Person" },
+    //             { name: "to", type: "Person" },
+    //             { name: "contents", type: "string" },
+    //         ],
+    //         Person: [
+    //             { name: "name", type: "string" },
+    //             { name: "wallet", type: "address" },
+    //         ],
+    //     },
+    //     value: {
+    //         contents: "Hello, Bob!",
+    //         from: { name: "Cow", wallet: "0xCD2a3d9F938E13CD947Ec05AbC7FE734Df8DD826" },
+    //         to: { name: "Bob", wallet: "0xbBbBBBBbbBBBbbbBbbBbbbbBBbBbbbbBbBbbBBbB" },
+    //     },
+
+    const _message: Partial<SignedDataRequest> = message
+
+    if (
+        !_message.domain ||
+        !_message.genesisId ||
+        !_message.id ||
+        !_message.method ||
+        !_message.origin ||
+        !_message.types ||
+        !_message.value
+    ) {
+        return false
+    }
+
+    if (
+        typeof _message.domain.chainId !== "number" ||
+        typeof _message.domain.name !== "string" ||
+        typeof _message.domain.verifyingContract !== "string" ||
+        typeof _message.domain.version !== "string"
+    ) {
+        return false
+    }
+
+    if (typeof _message.genesisId !== "string") {
+        return false
+    }
+
+    if (typeof _message.id !== "string") {
+        return false
+    }
+
+    if (typeof _message.method !== RequestMethods.SIGN_TYPED_DATA) {
+        return false
+    }
+
+    if (typeof _message.origin !== "string") {
+        return false
+    }
+
+    if (typeof _message.types !== "object") {
+        return false
+    }
+
+    if (typeof _message.value !== "object") {
+        return false
+    }
+
+    return true
+}
+
 export const getAppHubIconUrl = (appId: string) => {
     return `${process.env.REACT_APP_HUB_URL}/imgs/${appId}.png`
 }
@@ -66,4 +151,5 @@ export const DAppUtils = {
     isValidTxMessage,
     isValidCertMessage,
     getAppHubIconUrl,
+    isValidSignedDataMessage,
 }
