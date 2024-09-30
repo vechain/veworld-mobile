@@ -38,7 +38,7 @@ const TokenInfoResponseSchema = z.object({
     }),
     description: z.record(z.string(), z.string()),
     links: z.object({
-        blockchain_site: z.array(z.string()),
+        blockchain_site: z.array(z.nullable(z.string())),
         homepage: z.array(z.string()),
     }),
     market_data: TokenInfoMarketDataSchema,
