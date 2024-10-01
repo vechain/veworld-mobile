@@ -118,5 +118,5 @@ jobs:
                   export STORE_PASSWORD="$(<store_password.txt)"
                   export KEY_PASSWORD="$(<store_password.txt)"
                   export KEY_ALIAS="$(<key_alias.txt)"
-                  fastlane build_android_ci version_code:107 version_name:"2.0.0"
+                  fastlane build_android_ci version_code:208 version_name:"2.0.0"
                 
