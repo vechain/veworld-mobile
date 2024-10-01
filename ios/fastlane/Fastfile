@@ -258,7 +258,7 @@ platform :ios do
       
 
       # create new branch and push to github
-      gh_setup_before_ci(
+      gh_setup_before(
         github_username:github_username, 
         github_token:github_token,
         build_number: build,
