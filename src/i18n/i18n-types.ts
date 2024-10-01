@@ -2982,6 +2982,10 @@ type RootTranslation = {
 	 */
 	CLOUDKIT_ERROR_GENERIC: string
 	/**
+	 * A​n​ ​e​r​r​o​r​ ​o​c​c​u​r​r​e​d​ ​w​h​i​l​e​ ​t​r​y​i​n​g​ ​t​o​ ​c​o​n​n​e​c​t​ ​t​o​ ​G​o​o​g​l​e​ ​D​r​i​v​e​ ​s​e​r​v​i​c​e​.​ ​T​r​y​ ​a​g​a​i​n​!
+	 */
+	GOOGLE_DRIVE_ERROR_GENERIC: string
+	/**
 	 * D​a​t​e​ ​n​o​t​ ​a​v​a​i​l​a​b​l​e
 	 */
 	DATE_NOT_AVAILABLE: string
@@ -6166,6 +6170,10 @@ Try reconnect your device to the internet.
 	 * An error occurred while trying to connect to iCloud service. Try again!
 	 */
 	CLOUDKIT_ERROR_GENERIC: () => LocalizedString
+	/**
+	 * An error occurred while trying to connect to Google Drive service. Try again!
+	 */
+	GOOGLE_DRIVE_ERROR_GENERIC: () => LocalizedString
 	/**
 	 * Date not available
 	 */

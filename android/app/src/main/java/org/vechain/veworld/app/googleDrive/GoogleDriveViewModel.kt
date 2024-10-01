@@ -10,6 +10,7 @@ import com.facebook.react.bridge.Promise
 import com.facebook.react.bridge.ReactApplicationContext
 import com.facebook.react.bridge.ReactMethod
 import com.facebook.react.bridge.WritableNativeArray
+import com.facebook.react.bridge.WritableNativeMap
 import com.google.android.gms.auth.api.signin.GoogleSignIn
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount
 import com.google.android.gms.auth.api.signin.GoogleSignInClient
@@ -25,9 +26,7 @@ import com.google.api.services.drive.DriveScopes
 import com.google.api.services.drive.model.File
 import com.google.api.services.drive.model.FileList
 import com.google.gson.Gson
-import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.suspendCancellableCoroutine
 import kotlinx.coroutines.withContext
@@ -36,6 +35,12 @@ import java.io.ByteArrayOutputStream
 import java.io.FileNotFoundException
 import java.nio.charset.StandardCharsets
 import java.util.Date
+
+object Constants {
+    const val space = "drive"
+    const val folderName = "VeWorld"
+    const val walletZone = "WALLET_ZONE"
+}
 
 enum class Request(val value: Int) {
     GOOGLE_SIGN_IN(122)
@@ -49,13 +54,6 @@ object GDriveParams {
 }
 
 class GoogleDriveViewModel(private val gson: Gson = Gson()) : ViewModel() {
-    fun test(promise: Promise) {
-        viewModelScope.launch {
-            delay(2000)
-            promise.resolve("OK")
-        }
-    }
-
     private fun hasPermissionToGoogleDrive(reactContext: ReactApplicationContext): Boolean {
         val acc = GoogleSignIn.getLastSignedInAccount(reactContext)
         val hasPermissions =
@@ -155,9 +153,9 @@ class GoogleDriveViewModel(private val gson: Gson = Gson()) : ViewModel() {
     private fun getFileIdByFileName(drive: Drive, name: String, folderId: String): String? {
         try {
             val files: FileList =
-                drive.files().list().setSpaces("drive").setFields(GDriveParams.FIELDS)
+                drive.files().list().setSpaces(Constants.space).setFields(GDriveParams.FIELDS)
                     .setPageSize(GDriveParams.PAGE_SIZE_SINGLE)
-                    .setQ("'$folderId' in parents and and trashed=false and name = '$name.json'")
+                    .setQ("'$folderId' in parents and trashed=false and name ='$name.json'")
                     .execute()
             return files.files.firstOrNull()?.id
         } catch (e: Exception) {
@@ -166,11 +164,11 @@ class GoogleDriveViewModel(private val gson: Gson = Gson()) : ViewModel() {
         return null
     }
 
-    private fun getFolderById(drive: Drive, folderName: String): String? {
+    private fun getFolderById(drive: Drive): String? {
         return try {
             val result = drive.files().list()
-                .setQ("mimeType='application/vnd.google-apps.folder' and name='$folderName' and trashed=false")
-                .setSpaces("drive").setFields("files(id, name)").execute()
+                .setQ("mimeType='application/vnd.google-apps.folder' and name='${Constants.folderName}' and trashed=false")
+                .setSpaces(Constants.space).setFields("files(id, name)").execute()
 
             result.files.firstOrNull()?.id
         } catch (e: Exception) {
@@ -179,10 +177,10 @@ class GoogleDriveViewModel(private val gson: Gson = Gson()) : ViewModel() {
         }
     }
 
-    private fun createFolder(drive: Drive, folderName: String): String? {
+    private fun createFolder(drive: Drive): String? {
         return try {
             val fileMetadata = File()
-            fileMetadata.name = folderName
+            fileMetadata.name = Constants.folderName
             fileMetadata.mimeType = "application/vnd.google-apps.folder"
 
             val folder = drive.files().create(fileMetadata).setFields("id").execute()
@@ -195,13 +193,14 @@ class GoogleDriveViewModel(private val gson: Gson = Gson()) : ViewModel() {
 
     private fun saveMnemonicToGoogleDrive(
         drive: Drive,
-        mnemonicId: String,
+        fileName: String,
         backup: BackupFile,
     ) {
         val fileMetadata = File()
-        fileMetadata.name = "$mnemonicId.json"
+        fileMetadata.name = "$fileName.json"
 
-        val folderId = getFolderById(drive, "VeWorld") ?: createFolder(drive, "VeWorld")
+        val folderId =
+            getFolderById(drive) ?: createFolder(drive)
 
         folderId?.let {
             fileMetadata.parents = listOf(it)
@@ -209,7 +208,7 @@ class GoogleDriveViewModel(private val gson: Gson = Gson()) : ViewModel() {
             val jsonData = gson.toJson(backup)
             val jsonByteArray = jsonData.toByteArray(StandardCharsets.UTF_8)
             val inputContent = ByteArrayContent("application/json", jsonByteArray)
-            val fileId = getFileIdByFileName(drive, mnemonicId, folderId)
+            val fileId = getFileIdByFileName(drive, fileName, folderId)
             if (fileId != null) {
                 drive.files().delete(fileId).execute()
             }
@@ -224,14 +223,15 @@ class GoogleDriveViewModel(private val gson: Gson = Gson()) : ViewModel() {
         allFiles.files = mutableListOf()
 
         withContext(Dispatchers.IO) {
-            val folderId = getFolderById(drive, "VeWorld")
+            val folderId = getFolderById(drive)
 
             folderId?.let { id ->
                 var pageToken: String? = null
 
                 do {
                     val result =
-                        drive.files().list().setSpaces("drive").setFields(GDriveParams.FIELDS)
+                        drive.files().list().setSpaces(Constants.space)
+                            .setFields(GDriveParams.FIELDS)
                             .setQ("'$id' in parents and trashed = false")
                             .setPageToken(pageToken).execute()
 
@@ -249,7 +249,7 @@ class GoogleDriveViewModel(private val gson: Gson = Gson()) : ViewModel() {
     }
 
 
-    fun fetchMnemonicBackups(reactContext: ReactApplicationContext, promise: Promise) {
+    fun getAllWalletsFromGoogleDrive(reactContext: ReactApplicationContext, promise: Promise) {
         viewModelScope.launch {
             try {
                 val mnemonics = mutableListOf<BackupFile>()
@@ -284,22 +284,23 @@ class GoogleDriveViewModel(private val gson: Gson = Gson()) : ViewModel() {
         }
     }
 
-    fun backupMnemonicToCloud(reactContext: ReactApplicationContext, promise: Promise) {
+    fun saveToGoogleDrive(
+        wallet: BackupFile,
+        reactContext: ReactApplicationContext,
+        promise: Promise,
+    ) {
         viewModelScope.launch {
             try {
                 getGoogleDrive(reactContext).let { (drive, acc) ->
                     if (drive == null) return@launch
-                    val createdAt = Date().time / 1000.0
-
-                    val backup = BackupFile(
-                        "Name", "Content", createdAt
-                    )
 
                     withContext(Dispatchers.IO) {
-                        saveMnemonicToGoogleDrive(drive, "1", backup)
+                        saveMnemonicToGoogleDrive(
+                            drive,
+                            "${Constants.walletZone}_${wallet.rootAddress}",
+                            wallet
+                        )
                     }
-
-                    // sendFoundBackupEvent(mnemonicId, createdAt.toString(), acc?.email)
                 }
                 promise.resolve(true)
             } catch (e: Exception) {
@@ -312,8 +313,9 @@ class GoogleDriveViewModel(private val gson: Gson = Gson()) : ViewModel() {
         }
     }
 
-    @ReactMethod
-    fun deleteCloudStorageMnemonicBackup(
+
+    fun deleteWallet(
+        rootAddress: String,
         reactContext: ReactApplicationContext,
         promise: Promise,
     ) {
@@ -325,10 +327,14 @@ class GoogleDriveViewModel(private val gson: Gson = Gson()) : ViewModel() {
                     }
 
                     withContext(Dispatchers.IO) {
-                        val folderId = getFolderById(drive, "VeWorld")
+                        val folderId = getFolderById(drive)
 
                         folderId?.let { id ->
-                            val fileId = getFileIdByFileName(drive, "1", folderId)
+                            val fileId = getFileIdByFileName(
+                                drive,
+                                "${Constants.walletZone}_$rootAddress",
+                                id
+                            )
                             if (fileId != null) {
                                 drive.files().delete(fileId).execute()
                             }
@@ -348,6 +354,106 @@ class GoogleDriveViewModel(private val gson: Gson = Gson()) : ViewModel() {
                     "deleteBackupError",
                     "Failed to delete backup"
                 )
+            }
+        }
+    }
+
+    fun getWallet(rootAddress: String, reactContext: ReactApplicationContext, promise: Promise) {
+        viewModelScope.launch {
+            getGoogleDrive(reactContext, true).let { (drive) ->
+                if (drive == null) {
+                    return@launch
+                }
+
+                withContext(Dispatchers.IO) {
+                    val folderId = getFolderById(drive)
+
+                    folderId?.let { id ->
+                        val fileId = getFileIdByFileName(
+                            drive,
+                            "${Constants.walletZone}_$rootAddress",
+                            id
+                        )
+                        if (fileId != null) {
+                            val outputStream = ByteArrayOutputStream()
+                            drive.files()[fileId].executeMediaAndDownloadTo(outputStream)
+                            val backupFile: BackupFile = gson.fromJson(
+                                outputStream.toString(), BackupFile::class.java
+                            )
+                            promise.resolve(backupFile.toWritableMap())
+                        }
+                    }
+                }
+            }
+        }
+    }
+
+    fun getSalt(rootAddress: String, reactContext: ReactApplicationContext, promise: Promise) {
+        viewModelScope.launch {
+            getGoogleDrive(reactContext, true).let { (drive) ->
+                if (drive == null) {
+                    return@launch
+                }
+
+                withContext(Dispatchers.IO) {
+                    val folderId = getFolderById(drive)
+
+                    folderId?.let { id ->
+                        val fileId = getFileIdByFileName(
+                            drive,
+                            "${Constants.walletZone}_$rootAddress",
+                            id
+                        )
+                        if (fileId != null) {
+                            val outputStream = ByteArrayOutputStream()
+                            drive.files()[fileId].executeMediaAndDownloadTo(outputStream)
+                            val backupFile: BackupFile = gson.fromJson(
+                                outputStream.toString(), BackupFile::class.java
+                            )
+                            promise.resolve(WritableNativeMap().apply {
+                                putString(
+                                    "salt",
+                                    backupFile.salt
+                                )
+                            })
+                        }
+                    }
+                }
+            }
+        }
+    }
+
+    fun getIV(rootAddress: String, reactContext: ReactApplicationContext, promise: Promise) {
+        viewModelScope.launch {
+            getGoogleDrive(reactContext, true).let { (drive) ->
+                if (drive == null) {
+                    return@launch
+                }
+
+                withContext(Dispatchers.IO) {
+                    val folderId = getFolderById(drive)
+
+                    folderId?.let { id ->
+                        val fileId = getFileIdByFileName(
+                            drive,
+                            "${Constants.walletZone}_$rootAddress",
+                            id
+                        )
+                        if (fileId != null) {
+                            val outputStream = ByteArrayOutputStream()
+                            drive.files()[fileId].executeMediaAndDownloadTo(outputStream)
+                            val backupFile: BackupFile = gson.fromJson(
+                                outputStream.toString(), BackupFile::class.java
+                            )
+                            promise.resolve(WritableNativeMap().apply {
+                                putString(
+                                    "iv",
+                                    backupFile.iv
+                                )
+                            })
+                        }
+                    }
+                }
             }
         }
     }

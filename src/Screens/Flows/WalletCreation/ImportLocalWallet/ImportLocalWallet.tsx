@@ -1,4 +1,7 @@
+import { useNavigation } from "@react-navigation/native"
+import * as Clipboard from "expo-clipboard"
 import React, { useCallback, useEffect, useMemo, useRef, useState } from "react"
+import { Keyboard, StyleSheet } from "react-native"
 import {
     BackButtonHeader,
     BaseButton,
@@ -13,28 +16,25 @@ import {
     RequireUserPassword,
     SelectDerivationPathBottomSheet,
 } from "~Components"
-import { useI18nContext } from "~i18n"
-import * as Clipboard from "expo-clipboard"
+import { AnalyticsEvent, DerivationPath } from "~Constants"
 import {
     useAnalyticTracking,
     useBottomSheetModal,
     useCheckIdentity,
-    useCloudKit,
+    useCloudBackup,
     useDeviceUtils,
     useTheme,
 } from "~Hooks"
-import { CryptoUtils } from "~Utils"
-import { Keyboard, StyleSheet } from "react-native"
-import { ImportWalletInput } from "./Components/ImportWalletInput"
-import { selectAreDevFeaturesEnabled, selectHasOnboarded, useAppSelector } from "~Storage/Redux"
-import HapticsService from "~Services/HapticsService"
-import { AnalyticsEvent, DerivationPath } from "~Constants"
+import { useI18nContext } from "~i18n"
 import { CloudKitWallet, DEVICE_CREATION_ERRORS as ERRORS, IMPORT_TYPE } from "~Model"
-import { UnlockKeystoreBottomSheet } from "./Components/UnlockKeystoreBottomSheet"
-import { UserCreatePasswordScreen } from "../UserCreatePasswordScreen"
-import { useHandleWalletCreation } from "~Screens/Flows/Onboarding/WelcomeScreen/useHandleWalletCreation"
-import { useNavigation } from "@react-navigation/native"
 import { Routes } from "~Navigation"
+import { useHandleWalletCreation } from "~Screens/Flows/Onboarding/WelcomeScreen/useHandleWalletCreation"
+import HapticsService from "~Services/HapticsService"
+import { selectAreDevFeaturesEnabled, selectHasOnboarded, useAppSelector } from "~Storage/Redux"
+import { CryptoUtils } from "~Utils"
+import { UserCreatePasswordScreen } from "../UserCreatePasswordScreen"
+import { ImportWalletInput } from "./Components/ImportWalletInput"
+import { UnlockKeystoreBottomSheet } from "./Components/UnlockKeystoreBottomSheet"
 
 const DEMO_MNEMONIC = "denial kitchen pet squirrel other broom bar gas better priority spoil cross"
 
@@ -67,24 +67,24 @@ export const ImportLocalWallet = () => {
 
     const { checkCanImportDevice } = useDeviceUtils()
 
-    const { isCloudKitAvailable, getAllWalletsFromCloudKit } = useCloudKit()
+    const { isCloudAvailable, getAllWalletFromCloud } = useCloudBackup()
 
     const [CloudKitWallets, setCloudKitWallets] = useState<CloudKitWallet[] | null>(null)
 
     useEffect(() => {
         const init = async () => {
-            const wallets = await getAllWalletsFromCloudKit()
+            const wallets = await getAllWalletFromCloud()
             setCloudKitWallets(wallets)
         }
 
-        isCloudKitAvailable && init()
-    }, [getAllWalletsFromCloudKit, isCloudKitAvailable])
+        isCloudAvailable && init()
+    }, [getAllWalletFromCloud, isCloudAvailable])
 
     const computeButtonType = useMemo(() => {
         if (textValue.length) return ButtonType.local
-        if (isCloudKitAvailable && !textValue.length && !!CloudKitWallets?.length) return ButtonType.icloud
+        if (isCloudAvailable && !textValue.length && !!CloudKitWallets?.length) return ButtonType.icloud
         return ButtonType.unknown
-    }, [CloudKitWallets?.length, isCloudKitAvailable, textValue.length])
+    }, [CloudKitWallets?.length, isCloudAvailable, textValue.length])
 
     const {
         ref: unlockKeystoreBottomSheetRef,

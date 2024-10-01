@@ -8,6 +8,7 @@ import com.facebook.react.bridge.ReactContextBaseJavaModule
 import com.facebook.react.bridge.ReactMethod
 import com.google.android.gms.common.ConnectionResult
 import com.google.android.gms.common.GoogleApiAvailability
+import java.util.Date
 
 class GoogleDriveManager(private val reactContext: ReactApplicationContext) :
     ReactContextBaseJavaModule(reactContext) {
@@ -25,33 +26,65 @@ class GoogleDriveManager(private val reactContext: ReactApplicationContext) :
     override fun getName(): String = "GoogleDriveManager"
 
     @ReactMethod
-    fun test(promise: Promise) {
-        initViewModel()
-        viewModel?.test(promise)
-    }
-
-    @ReactMethod
-    fun areGoogleServicesAvailable(promise: Promise) {
+    fun checkGoogleServicesAvailability(promise: Promise) {
         val googleApiAvailability = GoogleApiAvailability.getInstance()
         val resultCode = googleApiAvailability.isGooglePlayServicesAvailable(reactContext)
         promise.resolve(resultCode == ConnectionResult.SUCCESS)
     }
 
     @ReactMethod
-    fun backupMnemonicToCloud(promise: Promise) {
+    fun saveToGoogleDrive(
+        rootAddress: String,
+        data: String,
+        walletType: String,
+        firstAccountAddress: String,
+        salt: String,
+        iv: String,
+        derivationPath: String, promise: Promise,
+    ) {
         initViewModel()
-        viewModel?.backupMnemonicToCloud(reactContext, promise)
+
+        val backupFile = BackupFile(
+            rootAddress = rootAddress,
+            data = data,
+            walletType = walletType,
+            firstAccountAddress = firstAccountAddress,
+            derivationPath = derivationPath,
+            salt = salt,
+            iv = iv,
+            creationDate = Date().time / 1000.0
+        )
+
+        viewModel?.saveToGoogleDrive(backupFile, reactContext, promise)
     }
 
     @ReactMethod
-    fun fetchMnemonicBackups(promise: Promise) {
+    fun getAllWalletsFromGoogleDrive(promise: Promise) {
         initViewModel()
-        viewModel?.fetchMnemonicBackups(reactContext, promise)
+        viewModel?.getAllWalletsFromGoogleDrive(reactContext, promise)
     }
 
     @ReactMethod
-    fun saveMnemonicToGoogleDrive(promise: Promise) {
+    fun getWallet(rootAddress: String, promise: Promise) {
         initViewModel()
-        viewModel?.deleteCloudStorageMnemonicBackup(reactContext, promise)
+        viewModel?.getWallet(rootAddress, reactContext, promise)
+    }
+
+    @ReactMethod
+    fun getSalt(rootAddress: String, promise: Promise) {
+        initViewModel()
+        viewModel?.getSalt(rootAddress, reactContext, promise)
+    }
+
+    @ReactMethod
+    fun getIV(rootAddress: String, promise: Promise) {
+        initViewModel()
+        viewModel?.getIV(rootAddress, reactContext, promise)
+    }
+
+    @ReactMethod
+    fun deleteWallet(rootAddress: String, promise: Promise) {
+        initViewModel()
+        viewModel?.deleteWallet(rootAddress, reactContext, promise)
     }
 }

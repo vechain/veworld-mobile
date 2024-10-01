@@ -1,16 +1,15 @@
-import { useCallback, useEffect, useState } from "react"
+import { useCallback, useState } from "react"
 import { NativeModules } from "react-native"
 import { showErrorToast } from "~Components"
 import { DerivationPath, ERROR_EVENTS } from "~Constants"
 import { useI18nContext } from "~i18n"
 import { DEVICE_TYPE } from "~Model"
-import { PasswordUtils, PlatformUtils, error } from "~Utils"
+import { PasswordUtils, error } from "~Utils"
 import { CKError, handleCloudKitErrors } from "./ErrorModel"
 const { CloudKitManager } = NativeModules
 
 export const useCloudKit = () => {
     const { LL } = useI18nContext()
-    const [isAvailable, setisAvailable] = useState(false)
     const [isWalletBackedUp, setIsWalletBackedUp] = useState(false)
     const [isLoading, setIsLoading] = useState(false)
 
@@ -116,27 +115,23 @@ export const useCloudKit = () => {
         }
     }, [])
 
-    const getWalletByRootAddress = useCallback(
-        async (_rootAddress: string) => {
-            if (!isAvailable) return
-            setIsLoading(true)
-            try {
-                const selectedWallet = await CloudKitManager.getWallet(_rootAddress)
-                setIsWalletBackedUp(!!selectedWallet?.rootAddress)
-                setIsLoading(false)
-                return selectedWallet
-            } catch (_error) {
-                setIsLoading(false)
-                let er = _error as CKError
-                error(ERROR_EVENTS.CLOUDKIT, er, er.message)
-                showErrorToast({
-                    text1: er.message,
-                    text2: handleCloudKitErrors(er),
-                })
-            }
-        },
-        [isAvailable],
-    )
+    const getWalletByRootAddress = useCallback(async (_rootAddress: string) => {
+        setIsLoading(true)
+        try {
+            const selectedWallet = await CloudKitManager.getWallet(_rootAddress)
+            setIsWalletBackedUp(!!selectedWallet?.rootAddress)
+            setIsLoading(false)
+            return selectedWallet
+        } catch (_error) {
+            setIsLoading(false)
+            let er = _error as CKError
+            error(ERROR_EVENTS.CLOUDKIT, er, er.message)
+            showErrorToast({
+                text1: er.message,
+                text2: handleCloudKitErrors(er),
+            })
+        }
+    }, [])
 
     const getSalt = useCallback(async (_rootAddress: string) => {
         setIsLoading(true)
@@ -172,19 +167,10 @@ export const useCloudKit = () => {
         }
     }, [])
 
-    useEffect(() => {
-        if (PlatformUtils.isIOS()) {
-            getCloudKitAvailability().then(_isAvailable => setisAvailable(_isAvailable))
-        } else {
-            setisAvailable(false)
-        }
-    }, [getCloudKitAvailability])
-
     return {
         getCloudKitAvailability,
         saveWalletToCloudKit,
         getAllWalletsFromCloudKit,
-        isCloudKitAvailable: isAvailable,
         isWalletBackedUp,
         getWalletByRootAddress,
         isLoading,

@@ -1,18 +1,8 @@
 import { useNavigation, useScrollToTop } from "@react-navigation/native"
 import React, { useCallback, useEffect, useMemo, useRef, useState } from "react"
-import { AccountCard, EditTokensBar, Header, TokenList } from "./Components"
-import { RefreshControl, NativeModules, Button } from "react-native"
+import { RefreshControl } from "react-native"
 import { NestableScrollContainer } from "react-native-draggable-flatlist"
 import { FadeInRight } from "react-native-reanimated"
-import {
-    useAnalyticTracking,
-    useBottomSheetModal,
-    useCheckVersion,
-    usePrefetchAllVns,
-    useMemoizedAnimation,
-    useSetSelectedAccount,
-    useTheme,
-} from "~Hooks"
 import {
     BaseIcon,
     BaseSpacer,
@@ -23,6 +13,15 @@ import {
     SelectAccountBottomSheet,
 } from "~Components"
 import { AnalyticsEvent } from "~Constants"
+import {
+    useAnalyticTracking,
+    useBottomSheetModal,
+    useCheckVersion,
+    useMemoizedAnimation,
+    usePrefetchAllVns,
+    useSetSelectedAccount,
+    useTheme,
+} from "~Hooks"
 import { AccountWithDevice, FastAction, WatchedAccount } from "~Model"
 import { Routes } from "~Navigation"
 import {
@@ -36,9 +35,8 @@ import {
 } from "~Storage/Redux"
 import { AccountUtils } from "~Utils"
 import { useI18nContext } from "~i18n"
+import { AccountCard, EditTokensBar, Header, TokenList } from "./Components"
 import { useTokenBalances } from "./Hooks"
-
-const { GoogleDriveManager } = NativeModules
 
 export const HomeScreen = () => {
     /* Pre Fetch all VNS names and addresses */
@@ -168,32 +166,6 @@ export const HomeScreen = () => {
                             />
                         </BaseView>
                         <BaseSpacer height={24} />
-
-                        <Button
-                            title="fetch"
-                            onPress={async () => {
-                                try {
-                                    const x = await GoogleDriveManager.fetchMnemonicBackups()
-                                    return x
-                                } catch (error) {}
-                            }}
-                        />
-                        <Button
-                            title="save"
-                            onPress={async () => {
-                                try {
-                                    await GoogleDriveManager.backupMnemonicToCloud()
-                                } catch (error) {}
-                            }}
-                        />
-                        <Button
-                            title="delete"
-                            onPress={async () => {
-                                try {
-                                    await GoogleDriveManager.backupMnemonicToCloud()
-                                } catch (error) {}
-                            }}
-                        />
 
                         <FastActionsBar actions={Actions} />
 

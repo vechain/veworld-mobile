@@ -1,4 +1,10 @@
+import { useNavigation } from "@react-navigation/native"
 import React, { useCallback, useEffect, useState } from "react"
+import { ImageBackground, Linking, Modal, StyleSheet, View } from "react-native"
+import DropShadow from "react-native-drop-shadow"
+import LinearGradient from "react-native-linear-gradient"
+import Animated, { FadeInDown, FadeOutDown } from "react-native-reanimated"
+import { VeWorldLogoSVG } from "~Assets"
 import {
     BackButtonHeader,
     BaseButton,
@@ -11,19 +17,13 @@ import {
     ImportWalletBottomSheet,
     Layout,
 } from "~Components"
-import { VeWorldLogoSVG } from "~Assets"
-import { useI18nContext } from "~i18n"
-import { ImageBackground, Linking, Modal, StyleSheet, View } from "react-native"
-import { useDemoWallet } from "./useDemoWallet"
-import { UserCreatePasswordScreen } from "~Screens/Flows/WalletCreation"
-import { useHandleWalletCreation } from "./useHandleWalletCreation"
-import { useAnalyticTracking, useBottomSheetModal, useCloudKit, useDisclosure, useTheme } from "~Hooks"
 import { AnalyticsEvent, COLORS, DerivationPath, SCREEN_HEIGHT, SCREEN_WIDTH } from "~Constants"
+import { useAnalyticTracking, useBottomSheetModal, useCloudBackup, useDisclosure, useTheme } from "~Hooks"
+import { useI18nContext } from "~i18n"
 import { Routes } from "~Navigation"
-import { useNavigation } from "@react-navigation/native"
-import LinearGradient from "react-native-linear-gradient"
-import DropShadow from "react-native-drop-shadow"
-import Animated, { FadeInDown, FadeOutDown } from "react-native-reanimated"
+import { UserCreatePasswordScreen } from "~Screens/Flows/WalletCreation"
+import { useDemoWallet } from "./useDemoWallet"
+import { useHandleWalletCreation } from "./useHandleWalletCreation"
 const assetImage = require("~Assets/Img/Clouds.png")
 
 export const WelcomeScreen = () => {
@@ -49,7 +49,7 @@ export const WelcomeScreen = () => {
         url && Linking.openURL(url)
     }, [])
 
-    const { getAllWalletsFromCloudKit, isLoading, isCloudKitAvailable } = useCloudKit()
+    const { getAllWalletFromCloud, isLoading, isCloudAvailable } = useCloudBackup()
 
     const {
         onOpen: onQuickCloudModalOpen,
@@ -61,15 +61,15 @@ export const WelcomeScreen = () => {
 
     useEffect(() => {
         const init = async () => {
-            const wallets = await getAllWalletsFromCloudKit()
+            const wallets = await getAllWalletFromCloud()
             setWalletNumber(wallets.length)
             if (wallets.length) {
                 onQuickCloudModalOpen()
             }
         }
 
-        isCloudKitAvailable && init()
-    }, [getAllWalletsFromCloudKit, onQuickCloudModalOpen, isCloudKitAvailable])
+        isCloudAvailable && init()
+    }, [onQuickCloudModalOpen, isCloudAvailable, getAllWalletFromCloud])
 
     useEffect(() => {
         // Track when a new onboarding start

@@ -1,25 +1,25 @@
+import { useNavigation } from "@react-navigation/native"
+import { NativeStackScreenProps } from "@react-navigation/native-stack"
 import React, { useCallback, useEffect } from "react"
+import { StyleSheet } from "react-native"
 import {
     BaseButton,
     BaseIcon,
     BaseSpacer,
     BaseText,
     BaseView,
-    MnemonicCard,
-    Layout,
     CloudKitWarningBottomSheet,
-    showErrorToast,
-    MnemonicBackupAlert,
     FadeoutButton,
+    Layout,
+    MnemonicBackupAlert,
+    MnemonicCard,
+    showErrorToast,
 } from "~Components"
-import { useI18nContext } from "~i18n"
-import { useBottomSheetModal, useCloudKit, useCopyClipboard, useThemedStyles } from "~Hooks"
-import { StyleSheet } from "react-native"
-import { AddressUtils, CryptoUtils, HexUtils, PasswordUtils } from "~Utils"
-import { NativeStackScreenProps } from "@react-navigation/native-stack"
-import { RootStackParamListSettings, Routes } from "~Navigation"
-import { useNavigation } from "@react-navigation/native"
 import { DerivationPath } from "~Constants"
+import { useBottomSheetModal, useCloudBackup, useCopyClipboard, useThemedStyles } from "~Hooks"
+import { useI18nContext } from "~i18n"
+import { RootStackParamListSettings, Routes } from "~Navigation"
+import { AddressUtils, CryptoUtils, HexUtils, PasswordUtils } from "~Utils"
 import { isIOS } from "~Utils/PlatformUtils/PlatformUtils"
 
 type Props = {} & NativeStackScreenProps<RootStackParamListSettings, Routes.ICLOUD_MNEMONIC_BACKUP>
@@ -28,8 +28,8 @@ export const MnemonicBackupScreen = ({ route }: Props) => {
     const { LL } = useI18nContext()
     const { styles, theme } = useThemedStyles(baseStyles)
     const isIOSDevice = isIOS()
-    const { isCloudKitAvailable, isWalletBackedUp, saveWalletToCloudKit, getWalletByRootAddress, isLoading } =
-        useCloudKit()
+    const { isCloudAvailable, isWalletBackedUp, saveWalletToCloud, getWalletByRootAddress, isLoading } =
+        useCloudBackup()
     const { onCopyToClipboard } = useCopyClipboard()
     const { ref: warningRef, onOpen, onClose: onCloseWarning } = useBottomSheetModal()
     const nav = useNavigation()
@@ -57,7 +57,8 @@ export const MnemonicBackupScreen = ({ route }: Props) => {
             const salt = HexUtils.generateRandom(256)
             const iv = PasswordUtils.getRandomIV(16)
             const mnemonic = await CryptoUtils.encrypt(mnemonicArray, password, salt, iv)
-            await saveWalletToCloudKit({
+
+            await saveWalletToCloud({
                 mnemonic,
                 _rootAddress: deviceToBackup?.rootAddress,
                 deviceType: deviceToBackup?.type,
@@ -70,7 +71,7 @@ export const MnemonicBackupScreen = ({ route }: Props) => {
             getWalletByRootAddress(deviceToBackup!.rootAddress)
             nav.goBack()
         },
-        [LL, deviceToBackup, getWalletByRootAddress, mnemonicArray, nav, onCloseWarning, saveWalletToCloudKit],
+        [LL, deviceToBackup, getWalletByRootAddress, mnemonicArray, nav, onCloseWarning, saveWalletToCloud],
     )
 
     return (
@@ -141,13 +142,13 @@ export const MnemonicBackupScreen = ({ route }: Props) => {
 
                             <MnemonicBackupAlert />
 
-                            <BaseSpacer height={!isCloudKitAvailable ? 12 : 64} />
+                            <BaseSpacer height={!isCloudAvailable ? 12 : 64} />
                         </BaseView>
                     </BaseView>
                 }
                 footer={
                     <>
-                        {isCloudKitAvailable && (
+                        {isCloudAvailable && (
                             <FadeoutButton
                                 isLoading={isLoading}
                                 bottom={0}

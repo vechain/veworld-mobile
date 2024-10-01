@@ -847,6 +847,7 @@ const en: BaseTranslation = {
     WALLET_LEDGER_NO_DEVICES_DESC: "We couldn't find any Ledger devices to connect to",
 
     CLOUDKIT_ERROR_GENERIC: "An error occurred while trying to connect to iCloud service. Try again!",
+    GOOGLE_DRIVE_ERROR_GENERIC: "An error occurred while trying to connect to Google Drive service. Try again!",
 
     // Transaction Labels
 
