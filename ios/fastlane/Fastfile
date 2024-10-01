@@ -124,6 +124,8 @@ platform :ios do
     # Set the GitHub remote URL with credentials
     remote_url = "https://#{github_username}:#{github_token}@github.com/vechain/veworld-mobile.git"
     sh("git remote set-url origin #{remote_url}")
+    
+  end
 
   desc "Create Release Branch on GitHub via CI"  
   lane :gh_setup_before_ci do |values|
