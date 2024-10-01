@@ -35,7 +35,7 @@ import {
 } from "~Storage/Redux"
 import { AccountUtils } from "~Utils"
 import { useI18nContext } from "~i18n"
-import { AccountCard, EditTokensBar, Header, TokenList } from "./Components"
+import { AccountCard, DeviceBackupBottomSheet, EditTokensBar, Header, TokenList } from "./Components"
 import { useTokenBalances } from "./Hooks"
 
 export const HomeScreen = () => {
@@ -188,6 +188,7 @@ export const HomeScreen = () => {
                     />
 
                     <QRCodeBottomSheet ref={QRCodeBottomSheetRef} />
+                    <DeviceBackupBottomSheet />
                 </NestableScrollContainer>
             }
         />

@@ -85,7 +85,7 @@
     "@walletconnect/web3wallet": "1.14.2",
     "add": "^2.0.6",
     "aes-js": "3",
-    "arweave": "^1.13.7",
+    "arweave": "1.13.7",
     "async-mutex": "^0.4.0",
     "axios": "^1.6.0",
     "basil-ws-flipper": "^1.0.0",

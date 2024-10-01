@@ -16,6 +16,7 @@ type Props = {
     isActive?: boolean
     cardStyle?: ViewStyle
     testID?: string
+    showWarningLabel?: boolean
 }
 
 export const DeviceBox: React.FC<Props> = ({
@@ -27,6 +28,7 @@ export const DeviceBox: React.FC<Props> = ({
     isActive = true,
     cardStyle,
     testID,
+    showWarningLabel = false,
 }) => {
     const { styles, theme } = useThemedStyles(baseStyles)
 
@@ -76,7 +78,17 @@ export const DeviceBox: React.FC<Props> = ({
                     </BaseView>
                 </BaseView>
                 <BaseSpacer width={12} />
+
                 {isIconVisible && !isEdit && <BaseIcon name="pencil-outline" color={theme.colors.text} size={24} />}
+
+                {showWarningLabel && (
+                    <BaseView flexDirection="row">
+                        <BaseSpacer width={12} />
+                        <BaseView flexDirection="column" justifyContent="center">
+                            <BaseView style={styles.warningLabel} />
+                        </BaseView>
+                    </BaseView>
+                )}
             </BaseCard>
         ),
         [
@@ -88,7 +100,9 @@ export const DeviceBox: React.FC<Props> = ({
             isActive,
             isEdit,
             isIconVisible,
+            showWarningLabel,
             styles.card,
+            styles.warningLabel,
             theme.colors.text,
             theme.colors.textDisabled,
         ],
@@ -121,5 +135,11 @@ const baseStyles = (theme: ColorThemeType) =>
         deviceBoxPressable: {
             backgroundColor: theme.colors.card,
             borderRadius: 16,
+        },
+        warningLabel: {
+            width: 8,
+            height: 8,
+            borderRadius: 4,
+            backgroundColor: theme.colors.danger,
         },
     })
