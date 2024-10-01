@@ -23,9 +23,6 @@ on:
         type: number
         required: true
 
-  push:
-    branches:
-      - build-release-and-push-to-testflight
 
 jobs:
   build-release-ios:
@@ -142,6 +139,6 @@ jobs:
               ls
               cd fastlane
               cat .env
-              fastlane build_ci username:${{secrets.CI_USER}} token:${{secrets.CI_USER_TOKEN}} version:2.0.0 build:207
+              fastlane build_ci username:${{secrets.CI_USER}} token:${{secrets.CI_USER_TOKEN}} version:${{github.event.inputs.version}} build:${{github.event.inputs.build}}
               
 
