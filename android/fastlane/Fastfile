@@ -57,23 +57,6 @@ platform :android do
           "android.injected.signing.key.password" => key_password, # Key password
         }
       )
-      gradle(task: 'clean')
-
-      gradle(
-        task: 'bundle',
-        build_type: 'Release',
-        print_command: true,
-        print_command_output: true,
-
-        properties: {
-          "android.injected.version.code" => version_code, # Manually increment this value before each release
-          "android.injected.version.name" => version_name, # Manually increment this value before each release
-          "android.injected.signing.store.file" => releaseFilePath, # Path to the release keystore
-          "android.injected.signing.store.password" => store_password, # Keystore password
-          "android.injected.signing.key.alias" => key_alias, # Key alias
-          "android.injected.signing.key.password" => key_password, # Key password
-        }
-      )
 
 
 
