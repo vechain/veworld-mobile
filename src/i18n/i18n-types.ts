@@ -231,6 +231,14 @@ type RootTranslation = {
 	 */
 	BTN_BACKUP_MENMONIC: string
 	/**
+	 * B​a​c​k​u​p​ ​n​o​w
+	 */
+	BTN_BACKUP_ALERT_CONFIRM: string
+	/**
+	 * I​'​l​l​ ​d​o​ ​i​t​ ​l​a​t​e​r
+	 */
+	BTN_BACKUP_ALERT_CLOSE: string
+	/**
 	 * L​e​t​'​s​ ​g​e​t​ ​s​e​n​d​i​n​g​!
 	 */
 	BTN_LETS_GET_SENDING: string
@@ -656,6 +664,10 @@ type RootTranslation = {
 	 */
 	TITLE_ALERT_BIOMETRICS_CANCELLED: string
 	/**
+	 * B​a​c​k​u​p​ ​n​o​w
+	 */
+	DEVICE_BACKUP_MODAL_TITLE: string
+	/**
 	 * Y​o​u​r​ ​v​e​c​h​a​i​n​ ​w​a​l​l​e​t​ ​i​s​ ​r​e​a​d​y​!
 	 */
 	TITLE_CREATE_WALLET_SUCCESS: string
@@ -934,6 +946,10 @@ type RootTranslation = {
 	 * I​n​s​e​r​t​ ​y​o​u​r​ ​k​e​y​s​t​o​r​e​ ​p​a​s​s​w​o​r​d
 	 */
 	SB_INSERT_KEYSTORE_PASSWORD: string
+	/**
+	 * O​n​e​ ​o​r​ ​m​o​r​e​ ​o​f​ ​y​o​u​r​ ​a​c​c​o​u​n​t​s​ ​r​e​c​o​v​e​r​y​ ​p​h​r​a​s​e​ ​h​a​v​e​n​’​t​ ​b​e​e​n​ ​b​a​c​k​e​d​ ​u​p​ ​y​e​t​.​ ​M​a​k​e​ ​s​u​r​e​ ​t​o​ ​b​a​c​k​u​p​ ​t​o​ ​n​e​v​e​r​ ​l​o​s​e​ ​a​c​c​e​s​s​ ​t​o​ ​y​o​u​r​ ​c​r​y​p​t​o​.
+	 */
+	DEVICE_BACKUP_MODAL_SUBTITLE: string
 	/**
 	 * F​a​c​e​ ​I​D
 	 */
@@ -2687,6 +2703,18 @@ type RootTranslation = {
 	 */
 	SEND_PENDING_TX_REVERT_ALERT: string
 	/**
+	 * B​a​c​k​u​p​ ​y​o​u​r​ ​w​a​l​l​e​t
+	 */
+	BACKUP_YOUR_DEVICES_TITLE: string
+	/**
+	 * B​e​f​o​r​e​ ​p​r​o​c​e​e​d​i​n​g​ ​w​i​t​h​ ​t​h​e​ ​t​r​a​n​s​a​c​t​i​o​n​,​ ​w​e​ ​s​u​g​g​e​s​t​ ​t​o​ ​b​a​c​k​u​p​ ​t​h​e​ ​r​e​c​o​v​e​r​y​ ​p​h​r​a​s​e​ ​f​o​r​ ​t​h​i​s​ ​a​c​c​o​u​n​t​.
+	 */
+	BACKUP_YOUR_DEVICES_DESCRIPTION: string
+	/**
+	 * B​a​c​k​u​p​ ​n​o​w
+	 */
+	BACKUP_YOUR_DEVICES_CTA: string
+	/**
 	 * I​t​ ​l​o​o​k​s​ ​l​i​k​e​ ​y​o​u​ ​d​o​n​'​t​ ​h​a​v​e​ ​a​n​y​ ​{​t​o​k​e​n​N​a​m​e​}​ ​i​n​ ​y​o​u​r​ ​w​a​l​l​e​t
 	 * @param {string} tokenName
 	 */
@@ -3280,6 +3308,14 @@ export type TranslationFunctions = {
 	 */
 	BTN_BACKUP_MENMONIC: () => LocalizedString
 	/**
+	 * Backup now
+	 */
+	BTN_BACKUP_ALERT_CONFIRM: () => LocalizedString
+	/**
+	 * I'll do it later
+	 */
+	BTN_BACKUP_ALERT_CLOSE: () => LocalizedString
+	/**
 	 * Let's get sending!
 	 */
 	BTN_LETS_GET_SENDING: () => LocalizedString
@@ -3704,6 +3740,10 @@ export type TranslationFunctions = {
 	 */
 	TITLE_ALERT_BIOMETRICS_CANCELLED: () => LocalizedString
 	/**
+	 * Backup now
+	 */
+	DEVICE_BACKUP_MODAL_TITLE: () => LocalizedString
+	/**
 	 * Your vechain wallet is ready!
 	 */
 	TITLE_CREATE_WALLET_SUCCESS: () => LocalizedString
@@ -3979,6 +4019,10 @@ export type TranslationFunctions = {
 	 * Insert your keystore password
 	 */
 	SB_INSERT_KEYSTORE_PASSWORD: () => LocalizedString
+	/**
+	 * One or more of your accounts recovery phrase haven’t been backed up yet. Make sure to backup to never lose access to your crypto.
+	 */
+	DEVICE_BACKUP_MODAL_SUBTITLE: () => LocalizedString
 	/**
 	 * Face ID
 	 */
@@ -5704,6 +5748,18 @@ Try reconnect your device to the internet.
 	 * This transaction may be reverted if your balance is too low
 	 */
 	SEND_PENDING_TX_REVERT_ALERT: () => LocalizedString
+	/**
+	 * Backup your wallet
+	 */
+	BACKUP_YOUR_DEVICES_TITLE: () => LocalizedString
+	/**
+	 * Before proceeding with the transaction, we suggest to backup the recovery phrase for this account.
+	 */
+	BACKUP_YOUR_DEVICES_DESCRIPTION: () => LocalizedString
+	/**
+	 * Backup now
+	 */
+	BACKUP_YOUR_DEVICES_CTA: () => LocalizedString
 	/**
 	 * It looks like you don't have any {tokenName} in your wallet
 	 */

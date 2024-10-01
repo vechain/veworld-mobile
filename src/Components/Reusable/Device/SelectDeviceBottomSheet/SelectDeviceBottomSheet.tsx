@@ -2,7 +2,7 @@ import React, { useCallback, useMemo, useState } from "react"
 import { BottomSheetModalMethods } from "@gorhom/bottom-sheet/lib/typescript/types"
 import { BaseSpacer, BaseText, BaseView, BaseBottomSheet } from "~Components"
 import { useI18nContext } from "~i18n"
-import { BaseDevice } from "~Model"
+import { BaseDevice, DEVICE_TYPE } from "~Model"
 import { StyleSheet } from "react-native"
 import { BottomSheetFlatList } from "@gorhom/bottom-sheet"
 import { useScrollableList } from "~Hooks"
@@ -66,7 +66,16 @@ function SelectDeviceBottomSheetInner<T extends BaseDevice = BaseDevice>(
                         onViewableItemsChanged={onViewableItemsChanged}
                         viewabilityConfig={viewabilityConfig}
                         renderItem={({ item }) => {
-                            return <DeviceBox device={item} onDeviceSelected={onDeviceSelected} isIconVisible={false} />
+                            const isBackupNeeded = !item?.isBuckedUp && item?.type === DEVICE_TYPE.LOCAL_MNEMONIC
+
+                            return (
+                                <DeviceBox
+                                    device={item}
+                                    onDeviceSelected={onDeviceSelected}
+                                    isIconVisible={false}
+                                    showWarningLabel={isBackupNeeded}
+                                />
+                            )
                         }}
                         scrollEnabled={isListScrollable}
                         showsVerticalScrollIndicator={false}
