@@ -71,7 +71,7 @@ jobs:
               uses: mobiledevops/secret-to-file-action@v1
               with:
                 base64-encoded-secret: ${{ secrets.ANDROID_SERVICE_ACCOUNT }}
-                filename: "pc-api-4895632399891248889-903-41060cd0ba40.json"
+                filename: "pc-api-4895632399891248889-903-1f538768f7fe.json"
                 is-executable: false
                 working-directory: "./android"
 
