@@ -12,15 +12,18 @@ import * as i18n from "~i18n"
 type Set = {
     key: string
     value: string
+    isCloudSync?: boolean
     options?: Options
 }
 
-export async function set({ key, value, options = {} }: Set) {
+export async function set({ key, value, isCloudSync = false, options = {} }: Set) {
     const locale = i18n.detectLocale()
-    let title = i18n.i18n()[locale].BIOMETRICS_PROMPT_UNLOCK()
+    let title = isCloudSync
+        ? i18n.i18n()[locale].BD_BACKUP_PASSWORD_TO_KEYCHAIN()
+        : i18n.i18n()[locale].BIOMETRICS_PROMPT_UNLOCK()
     let cancel = i18n.i18n()[locale].COMMON_BTN_CANCEL()
 
-    options.accessible = ACCESSIBLE.WHEN_UNLOCKED_THIS_DEVICE_ONLY
+    options.accessible = isCloudSync ? ACCESSIBLE.WHEN_UNLOCKED : ACCESSIBLE.WHEN_UNLOCKED_THIS_DEVICE_ONLY
     options.service = key
     options.authenticationPrompt = { title, cancel }
 
@@ -38,13 +41,17 @@ export async function set({ key, value, options = {} }: Set) {
 type Get = {
     key: string
     options?: Options
+    isCloudSync?: boolean
 }
 
-export async function get({ key, options = {} }: Get): Promise<string | null> {
+export async function get({ key, isCloudSync = false, options = {} }: Get): Promise<string | null> {
     const locale = i18n.detectLocale()
-    let title = i18n.i18n()[locale].BIOMETRICS_PROMPT_UNLOCK()
+    let title = isCloudSync
+        ? i18n.i18n()[locale].BD_BACKUP_PASSWORD_TO_KEYCHAIN()
+        : i18n.i18n()[locale].BIOMETRICS_PROMPT_UNLOCK()
     let cancel = i18n.i18n()[locale].COMMON_BTN_CANCEL()
-    options.accessible = ACCESSIBLE.WHEN_UNLOCKED_THIS_DEVICE_ONLY
+
+    options.accessible = isCloudSync ? ACCESSIBLE.WHEN_UNLOCKED : ACCESSIBLE.WHEN_UNLOCKED_THIS_DEVICE_ONLY
     options.service = key
     options.authenticationPrompt = { title, cancel }
 

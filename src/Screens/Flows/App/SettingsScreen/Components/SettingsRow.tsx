@@ -6,9 +6,13 @@ import { useTheme } from "~Hooks"
 import { BaseIcon, BaseText, BaseTouchable, BaseView } from "~Components"
 import { RootStackParamListSettings, Routes } from "~Navigation"
 
+type Excluded = Routes.WALLET_DETAILS | Routes.ICLOUD_MNEMONIC_BACKUP
+
+type ExcludedSettingRoutes = Excluded | Routes.SETTINGS_GET_SUPPORT | Routes.SETTINGS_GIVE_FEEDBACK
+
 export type RowProps = {
     title: LocalizedString
-    screenName: keyof Omit<RootStackParamListSettings, Routes.WALLET_DETAILS>
+    screenName: keyof Omit<RootStackParamListSettings, Excluded>
     icon: string
     url?: string
 }
@@ -24,12 +28,7 @@ export const SettingsRow = ({ title, screenName, icon, url }: RowProps) => {
             return
         }
 
-        nav.navigate(
-            screenName as keyof Omit<
-                RootStackParamListSettings,
-                Routes.SETTINGS_GET_SUPPORT | Routes.SETTINGS_GIVE_FEEDBACK | Routes.WALLET_DETAILS
-            >,
-        )
+        nav.navigate(screenName as keyof Omit<RootStackParamListSettings, ExcludedSettingRoutes>)
     }, [url, screenName, nav])
 
     return (

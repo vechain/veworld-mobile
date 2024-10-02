@@ -1,5 +1,5 @@
 import { useCallback, useEffect, useMemo, useState } from "react"
-import { useOnDigitPress } from "~Screens/LockScreen/useOnDigitPress"
+import { useOnDigitPress } from "~Hooks"
 
 export const useOnDigitPressWithConfirmation = ({
     digitNumber,

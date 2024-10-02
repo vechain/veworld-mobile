@@ -15,11 +15,12 @@ import {
     SettingsTransactionsScreen,
     WalletManagementScreen,
     WalletDetailScreen,
+    MnemonicBackupScreen,
 } from "~Screens"
 import { Routes } from "~Navigation/Enums"
 import { AboutScreen } from "~Screens/Flows/App/AboutScreen"
 import { useNavAnimation } from "~Hooks"
-import { Device } from "~Model"
+import { Device, LocalDevice } from "~Model"
 import { SettingsBrowserView } from "~Screens/Flows/App/SettingsScreen/Components/SettingsBrowserView"
 
 export type RootStackParamListSettings = {
@@ -39,6 +40,7 @@ export type RootStackParamListSettings = {
     [Routes.MANAGE_DELEGATION_URLS]: undefined
     [Routes.RESET_APP]: undefined
     [Routes.SETTINGS_CONNECTED_APPS]: undefined
+    [Routes.ICLOUD_MNEMONIC_BACKUP]: { deviceToBackup?: LocalDevice; mnemonicArray: string[] }
     [Routes.SETTINGS_GET_SUPPORT]: { url: string }
     [Routes.SETTINGS_GIVE_FEEDBACK]: { url: string }
 }
@@ -50,99 +52,99 @@ export const SettingsStack = () => {
 
     return (
         <Settings.Navigator screenOptions={{ headerShown: false, animation }}>
-            <Settings.Group>
-                <Settings.Screen name={Routes.SETTINGS} component={SettingsScreen} options={{ headerShown: false }} />
-                <Settings.Screen
-                    name={Routes.SETTINGS_NETWORK}
-                    component={ChangeNetworkScreen}
-                    options={{ headerShown: false }}
-                />
+            <Settings.Screen name={Routes.SETTINGS} component={SettingsScreen} options={{ headerShown: false }} />
+            <Settings.Screen
+                name={Routes.SETTINGS_NETWORK}
+                component={ChangeNetworkScreen}
+                options={{ headerShown: false }}
+            />
 
-                <Settings.Screen
-                    name={Routes.SETTINGS_ADD_CUSTOM_NODE}
-                    component={AddCustomNodeScreen}
-                    options={{ headerShown: false }}
-                />
+            <Settings.Screen
+                name={Routes.SETTINGS_ADD_CUSTOM_NODE}
+                component={AddCustomNodeScreen}
+                options={{ headerShown: false }}
+            />
 
-                <Settings.Screen
-                    name={Routes.SETTINGS_MANAGE_CUSTOM_NODES}
-                    component={ManageCustomNodesScreen}
-                    options={{ headerShown: false }}
-                />
+            <Settings.Screen
+                name={Routes.SETTINGS_MANAGE_CUSTOM_NODES}
+                component={ManageCustomNodesScreen}
+                options={{ headerShown: false }}
+            />
 
-                <Settings.Screen
-                    name={Routes.SETTINGS_PRIVACY}
-                    component={PrivacyScreen}
-                    options={{ headerShown: false }}
-                />
+            <Settings.Screen
+                name={Routes.SETTINGS_PRIVACY}
+                component={PrivacyScreen}
+                options={{ headerShown: false }}
+            />
 
-                <Settings.Screen
-                    name={Routes.SETTINGS_ABOUT}
-                    component={AboutScreen}
-                    options={{ headerShown: false }}
-                />
+            <Settings.Screen name={Routes.SETTINGS_ABOUT} component={AboutScreen} options={{ headerShown: false }} />
 
-                <Settings.Screen
-                    name={Routes.SETTINGS_GET_SUPPORT}
-                    component={SettingsBrowserView}
-                    options={{ headerShown: false }}
-                />
+            <Settings.Screen
+                name={Routes.WALLET_MANAGEMENT}
+                component={WalletManagementScreen}
+                options={{ headerShown: false }}
+            />
+            <Settings.Screen
+                name={Routes.WALLET_DETAILS}
+                component={WalletDetailScreen}
+                options={{ headerShown: false }}
+            />
 
-                <Settings.Screen
-                    name={Routes.SETTINGS_GIVE_FEEDBACK}
-                    component={SettingsBrowserView}
-                    options={{ headerShown: false }}
-                />
+            <Settings.Screen
+                name={Routes.SETTINGS_GENERAL}
+                component={GeneralScreen}
+                options={{ headerShown: false }}
+            />
 
-                <Settings.Screen
-                    name={Routes.WALLET_MANAGEMENT}
-                    component={WalletManagementScreen}
-                    options={{ headerShown: false }}
-                />
-                <Settings.Screen
-                    name={Routes.WALLET_DETAILS}
-                    component={WalletDetailScreen}
-                    options={{ headerShown: false }}
-                />
+            <Settings.Screen
+                name={Routes.SETTINGS_CONTACTS}
+                component={ContactsScreen}
+                options={{ headerShown: false }}
+            />
 
-                <Settings.Screen
-                    name={Routes.SETTINGS_GENERAL}
-                    component={GeneralScreen}
-                    options={{ headerShown: false }}
-                />
+            <Settings.Screen
+                name={Routes.SETTINGS_TRANSACTIONS}
+                component={SettingsTransactionsScreen}
+                options={{ headerShown: false }}
+            />
 
-                <Settings.Screen
-                    name={Routes.SETTINGS_CONTACTS}
-                    component={ContactsScreen}
-                    options={{ headerShown: false }}
-                />
+            <Settings.Screen
+                name={Routes.MANAGE_DELEGATION_URLS}
+                component={ManageUrlsScreen}
+                options={{ headerShown: false }}
+            />
 
-                <Settings.Screen
-                    name={Routes.SETTINGS_TRANSACTIONS}
-                    component={SettingsTransactionsScreen}
-                    options={{ headerShown: false }}
-                />
+            <Settings.Screen
+                name={Routes.SETTINGS_ADD_CONTACT}
+                component={AddContactScreen}
+                options={{ headerShown: false }}
+            />
 
-                <Settings.Screen
-                    name={Routes.MANAGE_DELEGATION_URLS}
-                    component={ManageUrlsScreen}
-                    options={{ headerShown: false }}
-                />
+            <Settings.Screen name={Routes.RESET_APP} component={ResetAppScreen} options={{ headerShown: false }} />
 
-                <Settings.Screen
-                    name={Routes.SETTINGS_ADD_CONTACT}
-                    component={AddContactScreen}
-                    options={{ headerShown: false }}
-                />
+            <Settings.Screen
+                name={Routes.SETTINGS_CONNECTED_APPS}
+                component={ConnectedAppsScreen}
+                options={{ headerShown: false }}
+            />
 
-                <Settings.Screen name={Routes.RESET_APP} component={ResetAppScreen} options={{ headerShown: false }} />
+            <Settings.Screen
+                name={Routes.ICLOUD_MNEMONIC_BACKUP}
+                component={MnemonicBackupScreen}
+                options={{ headerShown: false }}
+            />
 
-                <Settings.Screen
-                    name={Routes.SETTINGS_CONNECTED_APPS}
-                    component={ConnectedAppsScreen}
-                    options={{ headerShown: false }}
-                />
-            </Settings.Group>
+            <Settings.Screen
+                name={Routes.SETTINGS_GET_SUPPORT}
+                component={SettingsBrowserView}
+                options={{ headerShown: false }}
+            />
+
+            <Settings.Screen
+                name={Routes.SETTINGS_GIVE_FEEDBACK}
+                component={SettingsBrowserView}
+                options={{ headerShown: false }}
+            />
         </Settings.Navigator>
     )
 }
