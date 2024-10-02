@@ -76,7 +76,7 @@ export const TabStack = () => {
                 tabBarStyle: {
                     display,
                     backgroundColor:
-                        network.name === NETWORK_TYPE.MAIN ? theme.colors.card : theme.colors.testnetBackground,
+                        network.type === NETWORK_TYPE.MAIN ? theme.colors.card : theme.colors.testnetBackground,
                     ...tabbarBaseStyles.tabbar,
                     ...tabbarBaseStyles.shadow,
                 },

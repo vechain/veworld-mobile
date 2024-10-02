@@ -257,7 +257,7 @@ export const TransactionSummarySendScreen = ({ route }: Props) => {
                     />
 
                     <BaseSpacer height={12} />
-                    <NotEnoughGasModal isVisible={!isEnoughGas && !isDelegated} />
+                    {!isVTHO.current && <NotEnoughGasModal isVisible={!isEnoughGas && !isDelegated} />}
                 </BaseView>
             }
             footer={
