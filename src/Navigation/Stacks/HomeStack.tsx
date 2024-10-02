@@ -25,6 +25,7 @@ import {
     ManageCustomTokenScreen,
     ManageTokenScreen,
     ObserveWalletScreen,
+    PrivacyScreen,
     SelectAmountSendScreen,
     SelectLedgerAccounts,
     SelectLedgerDevice,
@@ -86,6 +87,7 @@ export type RootStackParamListHome = {
         url: string
         ul?: boolean
     }
+    [Routes.SETTINGS_PRIVACY]: undefined
 }
 
 const { Navigator, Group, Screen } = createNativeStackNavigator<RootStackParamListHome>()
@@ -160,6 +162,7 @@ export const HomeStack = () => {
                     options={{ headerShown: false }}
                 />
                 <Screen name={Routes.BROWSER} component={InAppBrowser} options={{ headerShown: false }} />
+                <Screen name={Routes.SETTINGS_PRIVACY} component={PrivacyScreen} options={{ headerShown: false }} />
             </Group>
 
             <Group>

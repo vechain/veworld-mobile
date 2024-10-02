@@ -66,3 +66,7 @@ export const selectLastVersionCheck = createSelector(reducer, state => {
 export const selectAppResetTimestamp = createSelector(reducer, state => {
     return state.appResetTimestamp
 })
+
+export const selectLastBackupRequestTimestamp = createSelector(reducer, state => {
+    return state.lastBackupRequestTimestamp
+})

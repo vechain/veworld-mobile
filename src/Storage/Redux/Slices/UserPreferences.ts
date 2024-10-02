@@ -13,6 +13,7 @@ import { CURRENCY, SYMBOL_POSITIONS, ThemeEnum } from "~Constants"
  * @property {LANGUAGE} language
  * @property {boolean} isAnalyticsTrackingEnabled
  * @property {boolean} isSentryTrackingEnabled
+ * @property {number} lastBackupRequestTimestamp
  */
 
 export interface UserPreferenceState {
@@ -29,6 +30,7 @@ export interface UserPreferenceState {
     lastReviewTimestamp: string
     lastVersionCheck: string
     appResetTimestamp?: string
+    lastBackupRequestTimestamp?: { [key: string]: number | undefined }
 }
 
 const initialState: UserPreferenceState = {
@@ -100,6 +102,19 @@ export const UserPreferencesSlice = createSlice({
             state.appResetTimestamp = action.payload
         },
 
+        setLastBackupRequestTimestamp: (
+            state,
+            action: PayloadAction<{ address: string; timestamp: number | undefined }>,
+        ) => {
+            if (!state.lastBackupRequestTimestamp) {
+                state.lastBackupRequestTimestamp = {
+                    [action.payload.address]: action.payload.timestamp,
+                }
+            } else {
+                state.lastBackupRequestTimestamp[action.payload.address] = action.payload.timestamp
+            }
+        },
+
         resetUserPreferencesState: () => initialState,
     },
 })
@@ -118,4 +133,5 @@ export const {
     setLastReviewTimestamp,
     setLastVersionCheck,
     setAppResetTimestamp,
+    setLastBackupRequestTimestamp,
 } = UserPreferencesSlice.actions
