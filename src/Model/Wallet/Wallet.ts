@@ -1,4 +1,4 @@
-import { WALLET_STATUS } from "./enum"
+import { DEVICE_TYPE, WALLET_STATUS } from "./enum"
 import { StorageData } from "../StorageData"
 import { DerivationPath } from "~Constants"
 
@@ -14,6 +14,12 @@ export interface Wallet {
     privateKey?: string
     rootAddress: string
     nonce: string
+    derivationPath?: DerivationPath
+}
+
+export interface BackupWallet extends Wallet {
+    type: DEVICE_TYPE
+    alias: string
     derivationPath?: DerivationPath
 }
 

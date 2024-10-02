@@ -1,13 +1,14 @@
 import { StorageEncryptionKeys } from "~Components/Providers/EncryptedStorageProvider/Model"
 import { Keychain } from "~Storage"
-import { CryptoUtils, HexUtils } from "~Utils"
+import { CryptoUtils, CryptoUtils_Legacy, error, HexUtils, PasswordUtils } from "~Utils"
 import SaltHelper from "./SaltHelper"
 import { ACCESS_CONTROL, Options } from "react-native-keychain"
+import { ERROR_EVENTS } from "~Constants"
 
 const PIN_CODE_STORAGE = "ENCRYPTION_KEY_STORAGE"
 const BIOMETRIC_KEY_STORAGE = "BIOMETRIC_KEY_STORAGE"
 
-const get = async (pinCode?: string): Promise<StorageEncryptionKeys> => {
+const get = async ({ pinCode, isLegacy }: { pinCode?: string; isLegacy?: boolean }): Promise<StorageEncryptionKeys> => {
     const keys = await Keychain.get({
         key: pinCode ? PIN_CODE_STORAGE : BIOMETRIC_KEY_STORAGE,
         options: {
@@ -18,17 +19,24 @@ const get = async (pinCode?: string): Promise<StorageEncryptionKeys> => {
     if (!keys) throw new Error("StorageEncryptionKeyHelper -> get: No key found")
 
     if (pinCode) {
-        const salt = await SaltHelper.getSalt()
-        return CryptoUtils.decrypt(keys, pinCode, salt) as StorageEncryptionKeys
+        const { salt, iv: base64IV } = await SaltHelper.getSaltAndIV()
+        const iv = PasswordUtils.base64ToBuffer(base64IV)
+        let decryptedKeys: StorageEncryptionKeys
+        if (isLegacy) {
+            decryptedKeys = await CryptoUtils_Legacy.decrypt(keys, pinCode, salt)
+        } else {
+            decryptedKeys = await CryptoUtils.decrypt(keys, pinCode, salt, iv)
+        }
+        return decryptedKeys
     } else {
         return JSON.parse(keys) as StorageEncryptionKeys
     }
 }
 
 const setWithPinCode = async (encryptionKeys: StorageEncryptionKeys, pinCode: string) => {
-    const salt = await SaltHelper.getSalt()
-
-    const encryptedKeys = CryptoUtils.encrypt(encryptionKeys, pinCode, salt)
+    const { salt, iv: base64IV } = await SaltHelper.getSaltAndIV()
+    const iv = PasswordUtils.base64ToBuffer(base64IV)
+    const encryptedKeys = await CryptoUtils.encrypt(encryptionKeys, pinCode, salt, iv)
 
     await Keychain.set({
         key: PIN_CODE_STORAGE,
@@ -58,7 +66,7 @@ const set = async (encryptionKeys: StorageEncryptionKeys, pinCode?: string) => {
     }
 }
 
-const validatePinCode = async (pinCode: string): Promise<boolean> => {
+const validatePinCode = async ({ pinCode, isLegacy }: { pinCode: string; isLegacy?: boolean }): Promise<boolean> => {
     try {
         const keys = await Keychain.get({
             key: PIN_CODE_STORAGE,
@@ -66,12 +74,17 @@ const validatePinCode = async (pinCode: string): Promise<boolean> => {
 
         if (!keys) throw new Error("StorageEncryptionKeyHelper -> validatePinCode: No key found")
 
-        const salt = await SaltHelper.getSalt()
-
-        const decryptedKeys = CryptoUtils.decrypt(keys, pinCode, salt) as StorageEncryptionKeys
-
+        const { salt, iv: base64IV } = await SaltHelper.getSaltAndIV()
+        const iv = PasswordUtils.base64ToBuffer(base64IV)
+        let decryptedKeys: StorageEncryptionKeys
+        if (isLegacy) {
+            decryptedKeys = await CryptoUtils_Legacy.decrypt(keys, pinCode, salt)
+        } else {
+            decryptedKeys = await CryptoUtils.decrypt(keys, pinCode, salt, iv)
+        }
         return !!decryptedKeys && !!decryptedKeys.redux
     } catch (e) {
+        error(ERROR_EVENTS.SECURITY, e)
         return false
     }
 }

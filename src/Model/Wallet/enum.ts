@@ -10,6 +10,7 @@ export enum WALLET_STATUS {
     LOCKED = "LOCKED",
     UNLOCKED = "UNLOCKED",
     NOT_INITIALISED = "NOT_INITIALISED",
+    MIGRATING = "MIGRATING",
 }
 
 /**
@@ -44,4 +45,5 @@ export enum IMPORT_TYPE {
     MNEMONIC = "mnemonic",
     PRIVATE_KEY = "private-key",
     KEYSTORE_FILE = "keystore-file",
+    ICLOUD = "icloud",
 }

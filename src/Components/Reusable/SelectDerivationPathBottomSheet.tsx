@@ -8,7 +8,7 @@ import { setDerivedPath, useAppDispatch } from "~Storage/Redux"
 import { StyleSheet } from "react-native"
 
 type Props = {
-    onClose: () => void
+    onClose: (path: DerivationPath) => void
 }
 
 export const SelectDerivationPathBottomSheet = React.forwardRef<BottomSheetModalMethods, Props>(({ onClose }, ref) => {
@@ -26,7 +26,7 @@ export const SelectDerivationPathBottomSheet = React.forwardRef<BottomSheetModal
             dispatch(setDerivedPath(path))
 
             setTimeout(() => {
-                onClose()
+                onClose(path)
             }, 200)
         },
         [track, dispatch, onClose],
