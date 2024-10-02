@@ -58,8 +58,9 @@ platform :android do
         }
       )
       upload_to_play_store(
-      track: 'internal',
-      skip_upload_changelogs: true
+        track: 'internal',
+        skip_upload_changelogs: true,
+        skip_upload_metadata: true
       )
 
 
