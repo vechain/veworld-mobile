@@ -12,13 +12,9 @@ on:
 
 jobs:
     build-test-android:
-        name: Maestro Build & Test Android Release
+        name: Build and Release Android
         runs-on: ubuntu-latest
         environment: android-release
-        outputs:
-          app: app/build/outputs/apk/release
-        env:
-          SENTRY_LOG_LEVEL: debug
         steps:
             - name: Checkout repository
               uses: actions/checkout@v3
@@ -118,5 +114,5 @@ jobs:
                   export STORE_PASSWORD="$(<store_password.txt)"
                   export KEY_PASSWORD="$(<store_password.txt)"
                   export KEY_ALIAS="$(<key_alias.txt)"
-                  fastlane build_android_ci version_code:209 version_name:"2.0.0"
+                  fastlane build_android_ci version_code:209 version_name:"2.0.1"
                 
