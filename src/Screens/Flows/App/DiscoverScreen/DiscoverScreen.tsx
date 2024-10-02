@@ -2,7 +2,7 @@ import { useNavigation, useScrollToTop } from "@react-navigation/native"
 import React, { useCallback, useEffect, useMemo, useRef, useState } from "react"
 import { Keyboard, Linking, StyleSheet } from "react-native"
 import Animated, { useAnimatedRef, useScrollViewOffset } from "react-native-reanimated"
-import { BaseSpacer, BaseView, Layout } from "~Components"
+import { AnimatedFloatingButton, BaseSpacer, BaseView, Layout } from "~Components"
 import { AnalyticsEvent } from "~Constants"
 import { useAnalyticTracking, useBrowserSearch, useThemedStyles, useVisitedUrls, useFetchFeaturedDApps } from "~Hooks"
 import { Routes } from "~Navigation"
@@ -26,7 +26,6 @@ import {
     MakeYourOwnDApp,
     VeBetterDAODApps,
     VeBetterDAOMainCard,
-    WebSearchFloatingButton,
 } from "./Components"
 import { groupFavoritesByBaseUrl } from "./utils"
 
@@ -175,7 +174,11 @@ export const DiscoverScreen: React.FC = () => {
                         <Ecosystem title={LL.DISCOVER_ECOSYSTEM()} dapps={dapps} onDAppPress={onDAppPress} />
                         {isWebSearchFloatingButtonVisible && <BaseSpacer height={70} />}
                     </Animated.ScrollView>
-                    <WebSearchFloatingButton isVisible={isWebSearchFloatingButtonVisible} onPress={onSearch} />
+                    <AnimatedFloatingButton
+                        title={LL.DISCOVER_WEB_SEARCH_FLOATING_BUTTON_LABEL()}
+                        isVisible={isWebSearchFloatingButtonVisible}
+                        onPress={onSearch}
+                    />
                 </BaseView>
             }
         />

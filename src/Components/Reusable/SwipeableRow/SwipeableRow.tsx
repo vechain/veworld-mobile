@@ -18,11 +18,13 @@ type Props<T> = {
     swipeableItemRefs: MutableRefObject<Map<string, SwipeableItemImperativeRef>>
     testID?: string
     xMargins?: number
+    yMargins?: number
     onPress?: (item: T) => void
     isDragMode?: boolean
     isOpen?: boolean
     customUnderlay?: ReactNode
     snapPointsLeft?: number[]
+    isLogPressEnabled?: boolean
 }
 
 // this component is used to wrap the item in the list and uniform the logic with swipeable items
@@ -36,11 +38,13 @@ export const SwipeableRow = <T,>({
     swipeEnabled = true,
     testID,
     xMargins = 20,
+    yMargins = 8,
     onPress,
     isDragMode,
     isOpen,
     customUnderlay,
     snapPointsLeft,
+    isLogPressEnabled = true,
 }: Props<T>) => {
     const { styles } = useThemedStyles(baseStyles)
 
@@ -93,7 +97,7 @@ export const SwipeableRow = <T,>({
     const PressableComponent = isDragMode ? Pressable : TouchableOpacity
 
     return (
-        <BaseView flexDirection="row" mx={xMargins} my={8} testID={testID}>
+        <BaseView flexDirection="row" mx={xMargins} my={yMargins} testID={testID}>
             <SwipeableItem
                 ref={el => {
                     el && swipeableItemRefs.current.set(itemKey, el)
@@ -117,7 +121,7 @@ export const SwipeableRow = <T,>({
                         onPressIn={() => {
                             closeSwipeableItems(false)
                         }}
-                        onLongPress={handleLongPress}>
+                        onLongPress={() => isLogPressEnabled && handleLongPress()}>
                         <BaseView>{children}</BaseView>
                     </PressableComponent>
                 </BaseView>

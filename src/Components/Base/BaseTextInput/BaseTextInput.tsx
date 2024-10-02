@@ -26,7 +26,7 @@ export type BaseTextInputProps = {
     handleBlur?: () => void
 } & TextInputProps
 
-const BaseTextInputComponent = forwardRef<TextInput, BaseTextInputProps>(
+export const BaseTextInputComponent = forwardRef<TextInput, BaseTextInputProps>(
     (
         {
             placeholder,

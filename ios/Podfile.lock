@@ -620,7 +620,7 @@ PODS:
   - RNFlashList (1.7.1):
     - RCT-Folly (= 2021.07.22.00)
     - React-Core
-  - RNGestureHandler (2.19.0):
+  - RNGestureHandler (2.20.0):
     - RCT-Folly (= 2021.07.22.00)
     - React-Core
   - RNInAppBrowser (3.7.0):
@@ -669,8 +669,9 @@ PODS:
     - React
   - RNScrypt (1.2.1):
     - React
-  - RNSentry (5.24.3):
+  - RNSentry (5.33.1):
     - hermes-engine
+    - RCT-Folly (= 2021.07.22.00)
     - React-Core
     - React-hermes
     - Sentry/HybridSDK (= 8.36.0)
@@ -1137,7 +1138,7 @@ SPEC CHECKSUMS:
   RNDeviceInfo: 59344c19152c4b2b32283005f9737c5c64b42fba
   RNFastImage: 5c9c9fed9c076e521b3f509fe79e790418a544e8
   RNFlashList: fadf593d8e195ce2fe261980ac59e9f49808b68c
-  RNGestureHandler: 7ad14a6c7b491add489246611d324f10009083ac
+  RNGestureHandler: 74c531dc20aa37fb3a8d3d8514447a0d129ddb7d
   RNInAppBrowser: e36d6935517101ccba0e875bac8ad7b0cb655364
   RNKeychain: a65256b6ca6ba6976132cc4124b238a5b13b3d9c
   RNLocalize: 1ce4263770515f53d3de442ce7657b3661b16a37
@@ -1146,7 +1147,7 @@ SPEC CHECKSUMS:
   RNScreens: 80369e822c4f123c3f076c9ea4141991c17770f9
   RNScreenshotPrevent: dc9741e416ba80c3739418f112ac4093188315e9
   RNScrypt: 95fdef077b482e9fdf8a761120cb69d129ef4016
-  RNSentry: e7e5d059d62d6c447d83e14800edc1812a594a5d
+  RNSentry: 0744d3c79504bc4778190d047d1b60daf4a378cd
   RNSVG: af3907ac5d4fa26a862b75a16d8f15bc74f2ceda
   SDWebImage: a7f831e1a65eb5e285e3fb046a23fcfbf08e696d
   SDWebImageWebPCoder: 908b83b6adda48effe7667cd2b7f78c897e5111d
