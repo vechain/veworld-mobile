@@ -7,11 +7,16 @@ import { DEVICE_TYPE } from "~Model"
 import { error, PasswordUtils } from "~Utils"
 import { GDError, handleGoogleDriveErrors } from "./ErrorModel"
 const { GoogleDriveManager } = NativeModules
+const { OAUTH_INTERRUPTED } = GoogleDriveManager.getConstants()
 
 export const useGoogleDrive = () => {
     const { LL } = useI18nContext()
     const [isWalletBackedUp, setIsWalletBackedUp] = useState(false)
     const [isLoading, setIsLoading] = useState(false)
+
+    const isCancelError = (message: string) => {
+        return message === OAUTH_INTERRUPTED
+    }
 
     const getGoogleServicesAvailability = useCallback(async () => {
         try {
@@ -19,10 +24,12 @@ export const useGoogleDrive = () => {
         } catch (_error) {
             let er = _error as GDError
             error(ERROR_EVENTS.GOOGLE_DRIVE, er, er.message)
-            showErrorToast({
-                text1: er.message,
-                text2: handleGoogleDriveErrors(er),
-            })
+            if (!isCancelError(er.message)) {
+                showErrorToast({
+                    text1: er.message,
+                    text2: handleGoogleDriveErrors(er),
+                })
+            }
         }
     }, [])
 
@@ -76,9 +83,11 @@ export const useGoogleDrive = () => {
                     derivationPath,
                 )
             } catch (err) {
-                showErrorToast({
-                    text1: LL.GOOGLE_DRIVE_ERROR_GENERIC(),
-                })
+                if (!isCancelError((err as GDError).message)) {
+                    showErrorToast({
+                        text1: LL.GOOGLE_DRIVE_ERROR_GENERIC(),
+                    })
+                }
             } finally {
                 setIsLoading(false)
             }
@@ -95,10 +104,13 @@ export const useGoogleDrive = () => {
         } catch (err) {
             let er = err as GDError
             error(ERROR_EVENTS.GOOGLE_DRIVE, er, er.message)
-            showErrorToast({
-                text1: er.message,
-                text2: handleGoogleDriveErrors(er),
-            })
+            if (!isCancelError(er.message)) {
+                showErrorToast({
+                    text1: er.message,
+                    text2: handleGoogleDriveErrors(er),
+                })
+            }
+            return []
         } finally {
             setIsLoading(false)
         }
@@ -114,10 +126,12 @@ export const useGoogleDrive = () => {
         } catch (err) {
             let er = err as GDError
             error(ERROR_EVENTS.GOOGLE_DRIVE, er, er.message)
-            showErrorToast({
-                text1: er.message,
-                text2: handleGoogleDriveErrors(er),
-            })
+            if (!isCancelError(er.message)) {
+                showErrorToast({
+                    text1: er.message,
+                    text2: handleGoogleDriveErrors(er),
+                })
+            }
         } finally {
             setIsLoading(false)
         }
@@ -131,10 +145,12 @@ export const useGoogleDrive = () => {
         } catch (err) {
             let er = err as GDError
             error(ERROR_EVENTS.CLOUDKIT, er, er.message)
-            showErrorToast({
-                text1: er.message,
-                text2: handleGoogleDriveErrors(er),
-            })
+            if (!isCancelError(er.message)) {
+                showErrorToast({
+                    text1: er.message,
+                    text2: handleGoogleDriveErrors(er),
+                })
+            }
         } finally {
             setIsLoading(false)
         }
@@ -148,10 +164,12 @@ export const useGoogleDrive = () => {
         } catch (err) {
             let er = err as GDError
             error(ERROR_EVENTS.CLOUDKIT, er, er.message)
-            showErrorToast({
-                text1: er.message,
-                text2: handleGoogleDriveErrors(er),
-            })
+            if (!isCancelError(er.message)) {
+                showErrorToast({
+                    text1: er.message,
+                    text2: handleGoogleDriveErrors(er),
+                })
+            }
         } finally {
             setIsLoading(false)
         }

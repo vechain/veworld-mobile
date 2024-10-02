@@ -14,6 +14,17 @@ class GoogleDriveManager(private val reactContext: ReactApplicationContext) :
     ReactContextBaseJavaModule(reactContext) {
     private var viewModel: GoogleDriveViewModel? = null
 
+    companion object {
+        const val ACTIVITY_NULL = "Activity cannot be null"
+        const val OAUTH_INTERRUPTED = "Oauth process has been interrupted"
+        const val FAILED_TO_GET_DRIVE = "Failed to get google drive account"
+        const val FAILED_TO_LOCATE_WALLET = "Failed to locate wallet"
+        const val FAILED_TO_DELETE_WALLET = "Failed to delete wallet"
+        const val FAILED_TO_GET_WALLET = "Failed to retrieve wallet"
+        const val FAILED_TO_GET_SALT = "Failed to retrieve salt"
+        const val FAILED_TO_GET_IV = "Failed to retrieve IV"
+    }
+
     private fun initViewModel() {
         if (viewModel == null) {
             currentActivity?.let {
@@ -87,4 +98,16 @@ class GoogleDriveManager(private val reactContext: ReactApplicationContext) :
         initViewModel()
         viewModel?.deleteWallet(rootAddress, reactContext, promise)
     }
+
+    override fun getConstants(): MutableMap<String, Any> =
+        hashMapOf(
+            "ACTIVITY_NULL" to ACTIVITY_NULL,
+            "OAUTH_INTERRUPTED" to OAUTH_INTERRUPTED,
+            "FAILED_TO_GET_DRIVE" to FAILED_TO_GET_DRIVE,
+            "FAILED_TO_LOCATE_WALLET" to FAILED_TO_LOCATE_WALLET,
+            "FAILED_TO_DELETE_WALLET" to FAILED_TO_DELETE_WALLET,
+            "FAILED_TO_GET_WALLET" to FAILED_TO_GET_WALLET,
+            "FAILED_TO_GET_SALT" to FAILED_TO_GET_SALT,
+            "FAILED_TO_GET_IV" to FAILED_TO_GET_IV,
+        )
 }

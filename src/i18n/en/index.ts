@@ -944,7 +944,9 @@ const en: BaseTranslation = {
     TAKE_ME_TO_ICLOUD: "Take me to iCloud",
     NO_THANKS: "No thanks",
     CLOUD_ERR_NETWORK: "There was an error connecting to iCloud. Please check your network connection and try again.",
+    GOOGLE_DRIVE_ERR_NETWORK: "There was an error connecting to Google Drive. Please check your network connection and try again.",
     CLOUD_ERR_WALLET_OPERATION: "There was an error performing this iCloud wallet operation. Please try again.",
+    GOOGLE_DRIVE_ERR_WALLET_OPERATION: "There was an error performing this Google Drive wallet operation. Please try again.",
     CLOUD_ERR_USER_STATUS: "There was an error checking your iCloud status. Please try again.",
 }
 

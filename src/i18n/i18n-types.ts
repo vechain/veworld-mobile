@@ -3254,9 +3254,17 @@ type RootTranslation = {
 	 */
 	CLOUD_ERR_NETWORK: string
 	/**
+	 * T​h​e​r​e​ ​w​a​s​ ​a​n​ ​e​r​r​o​r​ ​c​o​n​n​e​c​t​i​n​g​ ​t​o​ ​G​o​o​g​l​e​ ​D​r​i​v​e​.​ ​P​l​e​a​s​e​ ​c​h​e​c​k​ ​y​o​u​r​ ​n​e​t​w​o​r​k​ ​c​o​n​n​e​c​t​i​o​n​ ​a​n​d​ ​t​r​y​ ​a​g​a​i​n​.
+	 */
+	GOOGLE_DRIVE_ERR_NETWORK: string
+	/**
 	 * T​h​e​r​e​ ​w​a​s​ ​a​n​ ​e​r​r​o​r​ ​p​e​r​f​o​r​m​i​n​g​ ​t​h​i​s​ ​i​C​l​o​u​d​ ​w​a​l​l​e​t​ ​o​p​e​r​a​t​i​o​n​.​ ​P​l​e​a​s​e​ ​t​r​y​ ​a​g​a​i​n​.
 	 */
 	CLOUD_ERR_WALLET_OPERATION: string
+	/**
+	 * T​h​e​r​e​ ​w​a​s​ ​a​n​ ​e​r​r​o​r​ ​p​e​r​f​o​r​m​i​n​g​ ​t​h​i​s​ ​G​o​o​g​l​e​ ​D​r​i​v​e​ ​w​a​l​l​e​t​ ​o​p​e​r​a​t​i​o​n​.​ ​P​l​e​a​s​e​ ​t​r​y​ ​a​g​a​i​n​.
+	 */
+	GOOGLE_DRIVE_ERR_WALLET_OPERATION: string
 	/**
 	 * T​h​e​r​e​ ​w​a​s​ ​a​n​ ​e​r​r​o​r​ ​c​h​e​c​k​i​n​g​ ​y​o​u​r​ ​i​C​l​o​u​d​ ​s​t​a​t​u​s​.​ ​P​l​e​a​s​e​ ​t​r​y​ ​a​g​a​i​n​.
 	 */
@@ -6471,9 +6479,17 @@ Try reconnect your device to the internet.
 	 */
 	CLOUD_ERR_NETWORK: () => LocalizedString
 	/**
+	 * There was an error connecting to Google Drive. Please check your network connection and try again.
+	 */
+	GOOGLE_DRIVE_ERR_NETWORK: () => LocalizedString
+	/**
 	 * There was an error performing this iCloud wallet operation. Please try again.
 	 */
 	CLOUD_ERR_WALLET_OPERATION: () => LocalizedString
+	/**
+	 * There was an error performing this Google Drive wallet operation. Please try again.
+	 */
+	GOOGLE_DRIVE_ERR_WALLET_OPERATION: () => LocalizedString
 	/**
 	 * There was an error checking your iCloud status. Please try again.
 	 */
