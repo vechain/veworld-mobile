@@ -206,7 +206,7 @@ const en: BaseTranslation = {
     TITLE_CREATE_WALLET_SUCCESS: "Your vechain wallet is ready!",
     TITLE_RESET_APP: "VeWorld reset",
     TITLE_WALLET_MANAGEMENT: "Wallets",
-    TITLE_SETTINGS: "Settings",
+    TITLE_SETTINGS: "Menu",
     TITLE_GENERAL_SETTINGS: "General settings",
     TITLE_ADVANCED: "Advanced",
     TITLE_CONTACTS: "My Contacts",

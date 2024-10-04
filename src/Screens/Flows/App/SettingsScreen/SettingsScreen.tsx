@@ -12,15 +12,15 @@ import { FlatList } from "react-native-gesture-handler"
 import SettingsRowDivider, { RowDividerProps } from "./Components/SettingsRowDivider"
 
 type SettingsRowItem = {
-    type: "settingsRow"
+    element: "settingsRow"
 } & RowProps
 
 type DividerItem = {
-    type: "divider"
+    element: "divider"
 } & RowDividerProps
 
 type BackupBannerItem = {
-    type: "backupBanner"
+    element: "backupBanner"
     title: string
 }
 
@@ -48,24 +48,24 @@ export const SettingsScreen = () => {
             <BaseCard containerStyle={themedStyles.cardContainer}>
                 <BaseView w={100}>
                     <BaseView flexDirection="row">
-                        <BaseIcon name="alert" size={24} color={theme.colors.error} />
+                        <BaseIcon name="alert-outline" size={16} color={theme.colors.alertCards.error.icon} />
                         <BaseSpacer width={8} />
-                        <BaseText typographyFont="subTitleBold" color={theme.colors.textReversed}>
-                            {"Backup Your Wallet"}
+                        <BaseText typographyFont="bodyMedium" color={theme.colors.alertCards.error.title}>
+                            {"Backup your wallet"}
                         </BaseText>
                     </BaseView>
-                    <BaseSpacer height={24} />
-                    <BaseText color={theme.colors.textReversed}>
-                        {"Make sure you can recover your crypto if you lose your device or switch to another wallet."}
+                    <BaseSpacer height={4} />
+                    <BaseText typographyFont="captionRegular" color={theme.colors.alertDescription} pl={24}>
+                        {"Make sure to backup your recovery phrase and never lose access to your account."}
                     </BaseText>
                 </BaseView>
             </BaseCard>
         )
-    }, [theme.colors.error, theme.colors.textReversed, themedStyles.cardContainer])
+    }, [themedStyles.cardContainer, theme.colors.alertCards.error, theme.colors.alertDescription])
 
     const renderItem = useCallback(
         ({ item }: { item: SettingsItem }) => {
-            switch (item.type) {
+            switch (item.element) {
                 case "settingsRow":
                     return (
                         <SettingsRow title={item.title} screenName={item.screenName} icon={item.icon} url={item.url} />
@@ -87,7 +87,7 @@ export const SettingsScreen = () => {
     return (
         <BaseSafeArea>
             <BaseView flexDirection="row" justifyContent="space-between" mx={24} pb={16}>
-                <BaseText typographyFont="largeTitle" testID="settings-screen">
+                <BaseText typographyFont="subTitleBold" testID="settings-screen">
                     {LL.TITLE_SETTINGS()}
                 </BaseText>
                 <SelectedNetworkViewer />
@@ -100,7 +100,7 @@ export const SettingsScreen = () => {
                     contentContainerStyle={[themedStyles.contentContainerStyle]}
                     scrollEnabled={isShowBackupModal || isSmallScreen}
                     keyExtractor={(item, index) =>
-                        item.type === "settingsRow" ? item.screenName : `${item.type}-${index}`
+                        item.element === "settingsRow" ? item.screenName : `${item.element}-${index}`
                     }
                     showsVerticalScrollIndicator={false}
                     showsHorizontalScrollIndicator={false}
@@ -124,80 +124,84 @@ const baseStyles = (theme: ColorThemeType) =>
             flex: 1,
         },
         cardContainer: {
-            backgroundColor: theme.colors.danger,
-            padding: 8,
+            backgroundColor: theme.colors.alertCards.error.background,
+            borderColor: theme.colors.alertCards.error.border,
+            borderRadius: 8,
+            paddingLeft: 2,
+            paddingRight: 4,
+            marginBottom: 8,
         },
     })
 
 const getLists = (LL: TranslationFunctions, devEnabled: boolean) => {
     const settingsList: SettingsItem[] = [
         {
-            type: "settingsRow",
+            element: "settingsRow",
             title: LL.TITLE_GENERAL_SETTINGS(),
             screenName: Routes.SETTINGS_GENERAL,
             icon: "cog-outline",
         },
         {
-            type: "settingsRow",
+            element: "settingsRow",
             title: LL.TITLE_MANAGE_WALLET(),
             screenName: Routes.WALLET_MANAGEMENT,
             icon: "wallet-outline",
         },
         {
-            type: "settingsRow",
+            element: "settingsRow",
             title: LL.TITLE_TRANSACTIONS(),
             screenName: Routes.SETTINGS_TRANSACTIONS,
             icon: "currency-usd",
         },
         {
-            type: "settingsRow",
+            element: "settingsRow",
             title: LL.TITLE_NETWORKS(),
             screenName: Routes.SETTINGS_NETWORK,
             icon: "web",
         },
         {
-            type: "settingsRow",
+            element: "settingsRow",
             title: LL.TITLE_CONNECTED_APPS(),
             screenName: Routes.SETTINGS_CONNECTED_APPS,
             icon: "widgets-outline",
         },
         {
-            type: "settingsRow",
+            element: "settingsRow",
             title: LL.TITLE_CONTACTS(),
             screenName: Routes.SETTINGS_CONTACTS,
             icon: "account-multiple-outline",
         },
         {
-            type: "settingsRow",
+            element: "settingsRow",
             title: LL.TITLE_PRIVACY(),
             screenName: Routes.SETTINGS_PRIVACY,
             icon: "shield-check-outline",
         },
         {
-            type: "backupBanner",
+            element: "backupBanner",
             title: "Backup_Warning",
         },
         {
+            element: "divider",
             title: "Support_divider",
-            type: "divider",
             height: 1,
         },
         {
-            type: "settingsRow",
+            element: "settingsRow",
             title: LL.TITLE_GET_SUPPORT(),
             screenName: Routes.SETTINGS_GET_SUPPORT,
             icon: "help-circle-outline",
             url: "https://support.veworld.com",
         },
         {
-            type: "settingsRow",
+            element: "settingsRow",
             title: LL.TITLE_GIVE_FEEDBACK(),
             screenName: Routes.SETTINGS_GIVE_FEEDBACK,
             icon: "message-outline",
             url: "https://forms.office.com/e/Vq1CUJD9Vy",
         },
         {
-            type: "settingsRow",
+            element: "settingsRow",
             title: LL.TITLE_ABOUT(),
             screenName: Routes.SETTINGS_ABOUT,
             icon: "information-outline",
@@ -206,7 +210,7 @@ const getLists = (LL: TranslationFunctions, devEnabled: boolean) => {
 
     if (devEnabled) {
         settingsList.push({
-            type: "settingsRow",
+            element: "settingsRow",
             title: LL.TITLE_ALERTS(),
             screenName: Routes.SETTINGS_ALERTS,
             icon: "bell-outline",
