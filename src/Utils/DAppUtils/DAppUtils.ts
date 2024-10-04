@@ -66,32 +66,24 @@ export const isValidSignedDataMessage = (message: unknown): message is SignedDat
         return false
     }
 
-    //     domain: {
-    //         chainId: 1,
-    //         name: "Ether Mail",
-    //         verifyingContract: "0xCcCCccccCCCCcCCCCCCcCcCccCcCCCcCcccccccC",
-    //         version: "1",
+    // {
+    //     appName: "Sign Typed Data",
+    //     appUrl: "http://192.168.1.6:5001/",
+    //     message: {
+    //         domain: {
+    //             chainId: "20257036855429895315704288894496386224204271168750785572924599986678",
+    //             name: "Ether Mail",
+    //             verifyingContract: "0x84871F3a5D8C39Acb5FF2498deDa5af8C8fd40Ae",
+    //             version: "1",
+    //         },
+    //         genesisId: "0x000000000b2bce3c70bc649a02749e8687721b09ed2e15997f466536b20bb127",
+    //         id: "5b9978d3176a89931ad9a830ce8",
+    //         method: "thor_signTypedData",
+    //         origin: "http://192.168.1.6:5001",
+    //         types: { Mail: [Array], Person: [Array] },
+    //         value: { contents: "Hello, Bob!", from: [Object], to: [Object] },
     //     },
-    //     genesisId: "0x000000000b2bce3c70bc649a02749e8687721b09ed2e15997f466536b20bb127",
-    //     id: "c71670e2f98dc86bad48bd069098",
-    //     method: "thor_signTypedData",
-    //     origin: "http://192.168.1.6:5001",
-    //     types: {
-    //         Mail: [
-    //             { name: "from", type: "Person" },
-    //             { name: "to", type: "Person" },
-    //             { name: "contents", type: "string" },
-    //         ],
-    //         Person: [
-    //             { name: "name", type: "string" },
-    //             { name: "wallet", type: "address" },
-    //         ],
-    //     },
-    //     value: {
-    //         contents: "Hello, Bob!",
-    //         from: { name: "Cow", wallet: "0xCD2a3d9F938E13CD947Ec05AbC7FE734Df8DD826" },
-    //         to: { name: "Bob", wallet: "0xbBbBBBBbbBBBbbbBbbBbbbbBBbBbbbbBbBbbBBbB" },
-    //     },
+    // }
 
     const _message: Partial<SignedDataRequest> = message
 

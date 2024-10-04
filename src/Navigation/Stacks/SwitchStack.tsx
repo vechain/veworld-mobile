@@ -10,6 +10,7 @@ import {
     MnemonicBackupScreen,
     SendTransactionScreen,
     SignCertificateScreen,
+    SignDataMessageScreen,
 } from "~Screens"
 import { PendingRequestTypes } from "@walletconnect/types"
 import { AppBlockedScreen } from "~Screens/Flows/App/AppBlockedScreen"
@@ -21,7 +22,7 @@ import { useWalletStatus } from "~Components"
 import { BuyStack } from "./BuyStack"
 import { SignMessageScreen } from "~Screens/Flows/App/WalletConnect/SignMessageScreen"
 import { LedgerSignMessage } from "~Screens/Flows/App/LedgerScreen/LedgerSignMessage"
-import { TransactionRequest } from "~Model/DApp"
+import { SignDataMessageRequest, TransactionRequest } from "~Model/DApp"
 import { WindowRequest } from "~Components/Providers/InAppBrowserProvider/types"
 
 export type RootStackParamListSwitch = {
@@ -40,6 +41,9 @@ export type RootStackParamListSwitch = {
     }
     [Routes.CONNECTED_APP_SIGN_CERTIFICATE_SCREEN]: {
         request: CertificateRequest
+    }
+    [Routes.CONNECTED_APP_SIGN_TYPED_MESSAGE_SCREEN]: {
+        request: SignDataMessageRequest
     }
     [Routes.CONNECTED_APP_SIGN_MESSAGE_SCREEN]: {
         requestEvent: PendingRequestTypes.Struct
@@ -107,6 +111,11 @@ export const SwitchStack = () => {
                         <Switch.Screen
                             name={Routes.CONNECTED_APP_SIGN_CERTIFICATE_SCREEN}
                             component={SignCertificateScreen}
+                        />
+
+                        <Switch.Screen
+                            name={Routes.CONNECTED_APP_SIGN_TYPED_MESSAGE_SCREEN}
+                            component={SignDataMessageScreen}
                         />
 
                         <Switch.Screen name={Routes.CONNECTED_APP_SIGN_MESSAGE_SCREEN} component={SignMessageScreen} />
