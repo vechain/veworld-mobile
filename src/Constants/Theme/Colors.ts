@@ -44,6 +44,9 @@ export type Colors = {
             title: string
         }
     }
+    horizontalButtonSelected: string
+    horizontalButtonText: string
+    horizontalButtonTextReversed: string
 }
 
 export enum COLORS {
@@ -144,6 +147,9 @@ const light: Colors = {
             title: COLORS.RED_700,
         },
     },
+    horizontalButtonSelected: COLORS.DARK_PURPLE,
+    horizontalButtonText: COLORS.WHITE,
+    horizontalButtonTextReversed: COLORS.DARK_PURPLE,
 }
 
 const dark: Colors = {
@@ -184,6 +190,9 @@ const dark: Colors = {
     placeholder: COLORS.PURPLE,
     testnetBackground: COLORS.TESTNET_BACKGROUND_DARK,
     gradientBackground: [COLORS.GRADIENT_BACKGROUND_DARK_TOP, COLORS.GRADIENT_BACKGROUND_DARK_BOTTOM],
+    horizontalButtonSelected: COLORS.DARK_PURPLE,
+    horizontalButtonText: COLORS.WHITE,
+    horizontalButtonTextReversed: COLORS.WHITE,
     alertCards: {
         error: {
             border: COLORS.RED_200,
