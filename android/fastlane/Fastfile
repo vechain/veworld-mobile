@@ -34,22 +34,12 @@ platform :android do
       sh("yarn purge:android && yarn install:android")
     end
 
-    increment_version_code(
-      gradle_file_path: "./android/app/build.gradle",
-      version_code: version_code
-    )
-
-    increment_version_name(
-      gradle_file_path: "./android/app/build.gradle",
-      version_name: version_name
-    )
-
 
     begin
 
       releaseFilePath = File.join(Dir.pwd, "..", "release.keystore")
 
-      sh("./bump_gradle_app_versions.sh #{version_code} #{version_name}")
+      sh("./ci_bump_gradle_app_versions.sh #{version_code} #{version_name}")
 
       gradle(task: 'clean')
       gradle(
