@@ -404,7 +404,7 @@ platform :ios do
       sh("echo 'build number: #{build}'")
       sh("echo 'version type: #{version}'")
       # create new branch and push to github
-      gh_setup_before(
+      gh_setup_before_ci(
         github_username:github_username, 
         github_token:github_token,
         build_number: build,
@@ -425,13 +425,6 @@ platform :ios do
         )
 
         sh("echo 'Build successful'")
-        sh("pwd")
-        sh("ls -la")
-        Dir.chdir "../" do
-          sh("pwd")
-          sh("ls -la")
-          sh("cd build && ls -la")
-        end
         
         rescue => exception
           puts exception
