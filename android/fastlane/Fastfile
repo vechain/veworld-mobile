@@ -34,6 +34,16 @@ platform :android do
       sh("yarn purge:android && yarn install:android")
     end
 
+    increment_version_code(
+      gradle_file_path: "./android/app/build.gradle",
+      version_code: version_code
+    )
+
+    increment_version_name(
+      gradle_file_path: "./android/app/build.gradle",
+      version_name: version_name
+    )
+
 
     begin
 
@@ -62,18 +72,6 @@ platform :android do
         skip_upload_changelogs: true,
         skip_upload_metadata: true
       )
-
-
-      #upload_to_play_store(
-      #  package_name: "com.vechain.wallet",
-      #  version_name: version_name,
-      #  version_code: version_code,
-      #  track: "internal",
-      #  json_key: "pc-api-4895632399891248889-903-1f538768f7fe.json", #from root directory
-      #  aab: "app/build/outputs/bundle/release/app-release.aab", #from root directory
-      #  skip_upload_apk: true,
-      #  skip_upload_metadata: true,
-      #)
 
 
       #slack(
