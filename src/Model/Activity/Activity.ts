@@ -1,5 +1,6 @@
 import { DIRECTIONS } from "~Constants"
 import { ActivityStatus, ActivityType } from "./enum"
+import { TypedData } from "~Model"
 
 export type OutputResponse = {
     contractAddress: string
@@ -82,6 +83,15 @@ export interface SignCertActivity extends Activity {
     content?: string
     purpose?: string
     linkUrl?: string
+}
+
+/**
+ * The SignTypedDataActivity interface represents a blockchain activity related to typed data signings.
+ */
+export interface SignTypedDataActivity extends Activity {
+    type: ActivityType.SIGN_TYPED_DATA
+    typedData: TypedData
+    sender: string
 }
 
 /**

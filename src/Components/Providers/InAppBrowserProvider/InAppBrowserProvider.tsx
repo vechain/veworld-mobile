@@ -131,10 +131,10 @@ export const InAppBrowserProvider = ({ children }: Props) => {
 
             webviewRef.current?.injectJavaScript(
                 `
-                setTimeout(function() { 
-                   postMessage(${JSON.stringify(message)}, "*")
-                }, 1);
-                `,
+                    setTimeout(function() { 
+                    postMessage(${JSON.stringify(message)}, "*")
+                    }, 1);
+                    `,
             )
 
             /**
@@ -155,6 +155,14 @@ export const InAppBrowserProvider = ({ children }: Props) => {
                     analyticEvent = AnalyticsEvent.DISCOVERY_CERTIFICATE_ERROR
                 } else {
                     analyticEvent = AnalyticsEvent.DISCOVERY_CERTIFICATE_SUCCESS
+                }
+            }
+
+            if (message.method === RequestMethods.SIGN_TYPED_DATA) {
+                if ("err" in message) {
+                    analyticEvent = AnalyticsEvent.DISCOVERY_SIGNED_DATA_ERROR
+                } else {
+                    analyticEvent = AnalyticsEvent.DISCOVERY_SIGNED_DATA_SUCCESS
                 }
             }
 
@@ -543,10 +551,11 @@ export const InAppBrowserProvider = ({ children }: Props) => {
                 return navigateToSignedDataScreen(message, appUrl, appName)
             }
 
-            // setNavigateToOperation(() => () => navigateToSignedDataScreen(request))
-            // initAndOpenChangeAccountNetworkBottomSheet(message)
+            setNavigateToOperation(() => () => navigateToSignedDataScreen(request, appUrl, appName))
+            initAndOpenChangeAccountNetworkBottomSheet(message)
         },
         [
+            initAndOpenChangeAccountNetworkBottomSheet,
             navigateToSignedDataScreen,
             navigationState?.url,
             postMessage,
@@ -575,6 +584,12 @@ export const InAppBrowserProvider = ({ children }: Props) => {
 
             if (request.method === "thor_signCertificate") {
                 nav.navigate(Routes.CONNECTED_APP_SIGN_CERTIFICATE_SCREEN, {
+                    request,
+                })
+            }
+
+            if (request.method === "thor_signTypedData") {
+                nav.navigate(Routes.CONNECTED_APP_SIGN_TYPED_MESSAGE_SCREEN, {
                     request,
                 })
             }

@@ -3178,6 +3178,22 @@ type RootTranslation = {
 	 */
 	RECEIVED: string
 	/**
+	 * D​o​m​a​i​n
+	 */
+	CONNECTED_APP_DOMAIN: string
+	/**
+	 * U​R​L
+	 */
+	CONNECTED_APP_URL: string
+	/**
+	 * v​e​r​s​i​o​n
+	 */
+	CONNECTED_APP_VERSION: string
+	/**
+	 * C​o​n​t​r​a​c​t
+	 */
+	CONNECTED_APP_CONTRACT: string
+	/**
 	 * S​e​c​u​r​i​t​y​ ​E​n​h​a​n​c​e​m​e​n​t
 	 */
 	SECURITY_ENHANCEMENT_TITLE: string
@@ -6390,6 +6406,22 @@ Try reconnect your device to the internet.
 	 * Received
 	 */
 	RECEIVED: () => LocalizedString
+	/**
+	 * Domain
+	 */
+	CONNECTED_APP_DOMAIN: () => LocalizedString
+	/**
+	 * URL
+	 */
+	CONNECTED_APP_URL: () => LocalizedString
+	/**
+	 * version
+	 */
+	CONNECTED_APP_VERSION: () => LocalizedString
+	/**
+	 * Contract
+	 */
+	CONNECTED_APP_CONTRACT: () => LocalizedString
 	/**
 	 * Security Enhancement
 	 */

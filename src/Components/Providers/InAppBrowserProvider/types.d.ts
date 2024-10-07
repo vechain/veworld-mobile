@@ -9,7 +9,7 @@ type ErrorResponse = {
 
 type SuccessResponse = {
     id: string
-    data: Connex.Vendor.CertResponse | Connex.Vendor.TxResponse
+    data: Connex.Vendor.CertResponse | Connex.Vendor.TxResponse | SignedTypedDataResponse
     method: RequestMethods.REQUEST_TRANSACTION | RequestMethods.SIGN_CERTIFICATE
 }
 

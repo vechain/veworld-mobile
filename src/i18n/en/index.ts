@@ -913,7 +913,10 @@ const en: BaseTranslation = {
     // Transfers
 
     // Connected App
-
+    CONNECTED_APP_DOMAIN: "Domain",
+    CONNECTED_APP_URL: "URL",
+    CONNECTED_APP_VERSION: "version",
+    CONNECTED_APP_CONTRACT: "Contract",
     // Connected App Labels
 
     // Tokens

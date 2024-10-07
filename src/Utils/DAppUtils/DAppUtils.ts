@@ -100,7 +100,7 @@ export const isValidSignedDataMessage = (message: unknown): message is SignedDat
     }
 
     if (
-        typeof _message.domain.chainId !== "number" ||
+        typeof _message.domain.chainId !== "string" ||
         typeof _message.domain.name !== "string" ||
         typeof _message.domain.verifyingContract !== "string" ||
         typeof _message.domain.version !== "string"
@@ -116,7 +116,7 @@ export const isValidSignedDataMessage = (message: unknown): message is SignedDat
         return false
     }
 
-    if (typeof _message.method !== RequestMethods.SIGN_TYPED_DATA) {
+    if (_message.method !== RequestMethods.SIGN_TYPED_DATA) {
         return false
     }
 

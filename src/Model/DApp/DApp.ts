@@ -62,6 +62,8 @@ type WcTxRequest = BaseTransactionRequest & BaseWcRequest
 
 type InAppTxRequest = BaseTransactionRequest & BaseInAppRequest
 
+type InAppSignDataRequest = BaseSignDataMessageRequest & BaseInAppRequest
+
 export type CertificateRequest = WcCertRequest | InAppCertRequest
 
 export type TransactionRequest = WcTxRequest | InAppTxRequest
@@ -70,7 +72,7 @@ export type SignDataMessageRequest = BaseSignDataMessageRequest & BaseInAppReque
 
 export type ConnectAppRequest = WcConnectAppRequest | InAppConnectAppRequest
 
-export type InAppRequest = InAppCertRequest | InAppTxRequest
+export type InAppRequest = InAppCertRequest | InAppTxRequest | InAppSignDataRequest
 
 export enum DAppType {
     ALL = "all",
