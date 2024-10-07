@@ -1,14 +1,28 @@
 name: Release Android
 
 on:
-    workflow_dispatch:
-    
-    workflow_call:
-    
+  workflow_dispatch:
+    inputs:
+      version: 
+        description: 'Version to build'
+        type: string
+        required: true
+      build: 
+        description: 'Build number'
+        type: number
+        required: true
 
-    push:
-        branches:
-            - android-release-build-and-upload
+  workflow_call:
+    inputs:
+      version: 
+        description: 'Version to build'
+        type: string
+        required: true
+      build: 
+        description: 'Build number'
+        type: number
+        required: true
+    
 
 jobs:
     build-test-android:
@@ -114,5 +128,5 @@ jobs:
                   export STORE_PASSWORD="$(<store_password.txt)"
                   export KEY_PASSWORD="$(<store_password.txt)"
                   export KEY_ALIAS="$(<key_alias.txt)"
-                  fastlane build_android_ci version_code:214 version_name:"2.0.2"
+                  fastlane build_android_ci version_code:${{github.event.inputs.build}} version_name:${{github.event.inputs.version}}
                 

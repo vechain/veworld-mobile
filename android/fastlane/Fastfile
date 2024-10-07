@@ -42,10 +42,6 @@ platform :android do
 
       sh("./ci_bump_gradle_app_versions.sh #{version_code} #{version_name}")
 
-      Dir.chdir "../app" do
-        sh("cat build.gradle")
-      end
-
       gradle(task: 'clean')
       gradle(
         task: 'bundle',
@@ -62,6 +58,7 @@ platform :android do
           "android.injected.signing.key.password" => key_password, # Key password
         }
       )
+      
       upload_to_play_store(
         track: 'production',
         skip_upload_changelogs: true,
@@ -69,29 +66,29 @@ platform :android do
       )
 
 
-      #slack(
-      #  message: version_name.nil? ? "VeWorld build number: #{version_code} was successfully released! [Android]" : "VeWorld version number: #{version_name} was successfully released! [Android]",
-      #  slack_url: ENV["SLACK_WEBHOOK"],
-      #  success: true,
-      #  payload: {
-      #    "Build Date" => Time.new.strftime("%d/%m/%Y %H:%M"),
-      #    "Built by" => github_username,
-      #  },
-      #)
+      slack(
+        message: version_name.nil? ? "VeWorld build number: #{version_code} was successfully released! [Android]" : "VeWorld version number: #{version_name} was successfully released! [Android]",
+        slack_url: ENV["SLACK_WEBHOOK"],
+        success: true,
+        payload: {
+          "Build Date" => Time.new.strftime("%d/%m/%Y %H:%M"),
+          "Built by" => github_username,
+        },
+      )
 
     rescue => exception
 
       puts exception
 
-      #slack(
-      #  message: version_name.nil? ? "Error releasing VeWorld build number: #{version_code} [Android]" : "Error releasing VeWorld version number: #{version_name} [Android]",
-      #  slack_url: ENV["SLACK_WEBHOOK"],
-      #  success: false,
-      #  payload: {
-      #    "Build Date" => Time.new.strftime("%d/%m/%Y %H:%M"),
-      #    "Built by" => github_username,
-      #  },
-      #)
+      slack(
+        message: version_name.nil? ? "Error releasing VeWorld build number: #{version_code} [Android]" : "Error releasing VeWorld version number: #{version_name} [Android]",
+        slack_url: ENV["SLACK_WEBHOOK"],
+        success: false,
+        payload: {
+          "Build Date" => Time.new.strftime("%d/%m/%Y %H:%M"),
+          "Built by" => github_username,
+        },
+      )
     end
   end
 end
