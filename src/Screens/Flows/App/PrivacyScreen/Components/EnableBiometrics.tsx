@@ -57,7 +57,9 @@ export const EnableBiometrics = () => {
 
     return (
         <>
-            <BaseText typographyFont="bodyMedium">{LL.SB_SECURITY_METHOD()}</BaseText>
+            <BaseText mb={8} typographyFont="button">
+                {LL.SB_SECURITY_METHOD()}
+            </BaseText>
             <BaseText typographyFont="caption">{LL.BD_SECURITY_METHOD()}</BaseText>
 
             <BaseSpacer height={24} />
@@ -66,6 +68,7 @@ export const EnableBiometrics = () => {
                 selectedButtonIds={[securityButtons.currentSecurity]}
                 buttons={securityButtons.buttons}
                 action={onButtonPress}
+                typographyFont="button"
             />
 
             <RequireUserPassword

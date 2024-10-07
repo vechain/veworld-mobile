@@ -36,6 +36,9 @@ export type Colors = {
     placeholder: string
     testnetBackground: string
     gradientBackground: string[]
+    horizontalButtonSelected: string
+    horizontalButtonText: string
+    horizontalButtonTextReversed: string
     alertCards: {
         error: {
             border: string
@@ -67,8 +70,8 @@ export enum COLORS {
     PASTEL_RED = "#f7c4bc",
     DARK_RED = "#931536",
     DARK_RED_ALERT = "#9D1800",
-    RED_700 = "#9B2C2C",
     MEDIUM_RED = "#E02200",
+    RED_700 = "#9B2C2C",
     RED_500 = "#E53E3E",
     RED_200 = "#FEB2B2",
     RED_50 = "#FFF5F5",
@@ -136,6 +139,9 @@ const light: Colors = {
     placeholder: COLORS.DISABLED_GREY,
     testnetBackground: COLORS.TESTNET_BACKGROUND_LIGHT,
     gradientBackground: [COLORS.GRADIENT_BACKGROUND_LIGHT_TOP, COLORS.GRADIENT_BACKGROUND_LIGHT_BOTTOM],
+    horizontalButtonSelected: COLORS.DARK_PURPLE,
+    horizontalButtonText: COLORS.WHITE,
+    horizontalButtonTextReversed: COLORS.DARK_PURPLE,
     alertCards: {
         error: {
             border: COLORS.RED_200,
@@ -184,6 +190,9 @@ const dark: Colors = {
     placeholder: COLORS.PURPLE,
     testnetBackground: COLORS.TESTNET_BACKGROUND_DARK,
     gradientBackground: [COLORS.GRADIENT_BACKGROUND_DARK_TOP, COLORS.GRADIENT_BACKGROUND_DARK_BOTTOM],
+    horizontalButtonSelected: COLORS.DARK_PURPLE,
+    horizontalButtonText: COLORS.WHITE,
+    horizontalButtonTextReversed: COLORS.WHITE,
     alertCards: {
         error: {
             border: COLORS.RED_200,
