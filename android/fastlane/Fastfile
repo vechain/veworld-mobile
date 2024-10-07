@@ -41,8 +41,8 @@ platform :android do
       releaseFilePath = File.join(Dir.pwd, "..", "release.keystore")
 
       sh("./ci_bump_gradle_app_versions.sh #{version_code} #{version_name}")
-    
-      Dir.chdir "/app" do
+
+      Dir.chdir "app" do
         sh("cat build.gradle")
       end
 
