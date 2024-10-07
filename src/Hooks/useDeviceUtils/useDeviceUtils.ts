@@ -1,9 +1,10 @@
 import { AddressUtils, DeviceUtils } from "~Utils"
 import { getNextDeviceIndex, useAppSelector } from "~Storage/Redux"
-import { selectAccounts, selectDerivedPath, selectDevices } from "~Storage/Redux/Selectors"
-import { DEVICE_CREATION_ERRORS as ERRORS, LocalDevice, Wallet } from "~Model"
+import { selectAccounts, selectDevices } from "~Storage/Redux/Selectors"
+import { DEVICE_CREATION_ERRORS as ERRORS, IMPORT_TYPE, LocalDevice, Wallet } from "~Model"
 import { getAddressFromXPub } from "~Utils/AddressUtils/AddressUtils"
 import * as i18n from "~i18n"
+import { DerivationPath } from "~Constants"
 
 type WalletAndDevice = {
     wallet: Wallet
@@ -13,7 +14,6 @@ type WalletAndDevice = {
 export const useDeviceUtils = () => {
     const devices = useAppSelector(selectDevices)
     const accounts = useAppSelector(selectAccounts)
-    const path = useAppSelector(selectDerivedPath)
 
     /**
      * Verify that a conflicting device doesn't already exist
@@ -42,7 +42,12 @@ export const useDeviceUtils = () => {
      * @param mnemonic (optional)
      * @param privateKey (optional)
      */
-    const createDevice = (isImported: boolean, mnemonic?: string[], privateKey?: string) => {
+    const createDevice = (
+        derivationPath: DerivationPath,
+        mnemonic?: string[],
+        privateKey?: string,
+        importType?: IMPORT_TYPE,
+    ) => {
         if (!mnemonic && !privateKey) throw new Error(ERRORS.INVALID_IMPORT_DATA)
 
         const deviceIndex = getNextDeviceIndex(devices)
@@ -52,7 +57,13 @@ export const useDeviceUtils = () => {
 
         let walletAndDevice: WalletAndDevice
         if (mnemonic) {
-            walletAndDevice = DeviceUtils.generateDeviceForMnemonic(mnemonic, deviceIndex, alias, isImported, path)
+            walletAndDevice = DeviceUtils.generateDeviceForMnemonic(
+                mnemonic,
+                deviceIndex,
+                alias,
+                derivationPath,
+                importType,
+            )
         } else if (privateKey) {
             walletAndDevice = DeviceUtils.generateDeviceForPrivateKey(privateKey, deviceIndex, alias)
         } else throw new Error(ERRORS.UNKNOWN_ERROR)
@@ -62,8 +73,8 @@ export const useDeviceUtils = () => {
         return walletAndDevice
     }
 
-    const checkCanImportDevice = (mnemonic?: string[], privateKey?: string): void => {
-        createDevice(true, mnemonic, privateKey)
+    const checkCanImportDevice = (derivationPath: DerivationPath, mnemonic?: string[], privateKey?: string): void => {
+        createDevice(derivationPath, mnemonic, privateKey)
     }
 
     return {

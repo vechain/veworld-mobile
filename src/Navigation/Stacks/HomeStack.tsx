@@ -18,6 +18,7 @@ import {
     ConnectedAppsScreen,
     EnableAdditionalSettings,
     HomeScreen,
+    ImportFromCloudScreen,
     ImportLocalWallet,
     InAppBrowser,
     InsertAddressSendScreen,
@@ -25,6 +26,7 @@ import {
     ManageCustomTokenScreen,
     ManageTokenScreen,
     ObserveWalletScreen,
+    PrivacyScreen,
     SelectAmountSendScreen,
     SelectLedgerAccounts,
     SelectLedgerDevice,
@@ -82,10 +84,12 @@ export type RootStackParamListHome = {
     [Routes.IMPORT_HW_LEDGER_SELECT_ACCOUNTS]: {
         device: ConnectedLedgerDevice
     }
+    [Routes.IMPORT_FROM_CLOUD]: undefined
     [Routes.BROWSER]: {
         url: string
         ul?: boolean
     }
+    [Routes.SETTINGS_PRIVACY]: undefined
 }
 
 const { Navigator, Group, Screen } = createNativeStackNavigator<RootStackParamListHome>()
@@ -159,7 +163,14 @@ export const HomeStack = () => {
                     component={SelectLedgerAccounts}
                     options={{ headerShown: false }}
                 />
+
+                <Screen
+                    name={Routes.IMPORT_FROM_CLOUD}
+                    component={ImportFromCloudScreen}
+                    options={{ headerShown: false }}
+                />
                 <Screen name={Routes.BROWSER} component={InAppBrowser} options={{ headerShown: false }} />
+                <Screen name={Routes.SETTINGS_PRIVACY} component={PrivacyScreen} options={{ headerShown: false }} />
             </Group>
 
             <Group>

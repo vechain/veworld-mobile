@@ -1,6 +1,12 @@
 import React from "react"
 import { createNativeStackNavigator } from "@react-navigation/native-stack"
-import { EnableAdditionalSettings, ImportLocalWallet, SelectLedgerAccounts, SelectLedgerDevice } from "~Screens"
+import {
+    EnableAdditionalSettings,
+    ImportFromCloudScreen,
+    ImportLocalWallet,
+    SelectLedgerAccounts,
+    SelectLedgerDevice,
+} from "~Screens"
 import { Routes } from "~Navigation/Enums"
 import { ConnectedLedgerDevice } from "~Model"
 import { useNavAnimation } from "~Hooks"
@@ -15,6 +21,7 @@ export type RootStackParamListCreateWalletApp = {
     [Routes.IMPORT_HW_LEDGER_SELECT_ACCOUNTS]: {
         device: ConnectedLedgerDevice
     }
+    [Routes.IMPORT_FROM_CLOUD]: undefined
 }
 
 const CreateWalletApp = createNativeStackNavigator<RootStackParamListCreateWalletApp>()
@@ -42,6 +49,12 @@ export const CreateWalletAppStack = () => {
             <CreateWalletApp.Screen
                 name={Routes.IMPORT_HW_LEDGER_SELECT_ACCOUNTS}
                 component={SelectLedgerAccounts}
+                options={{ headerShown: false }}
+            />
+
+            <CreateWalletApp.Screen
+                name={Routes.IMPORT_FROM_CLOUD}
+                component={ImportFromCloudScreen}
                 options={{ headerShown: false }}
             />
         </CreateWalletApp.Navigator>

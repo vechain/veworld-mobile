@@ -6,6 +6,7 @@ import Animated, { interpolateColor, useAnimatedStyle, useSharedValue, withTimin
 import { Transaction } from "thor-devkit"
 import { getCoinGeckoIdBySymbol, useExchangeRate } from "~Api/Coingecko"
 import {
+    BackupDevicesAlert,
     BaseSpacer,
     BaseText,
     BaseView,
@@ -182,6 +183,7 @@ export const TransactionSummarySendScreen = ({ route }: Props) => {
             noStaticBottomPadding
             body={
                 <BaseView mb={80} mt={8}>
+                    <BackupDevicesAlert />
                     <TransferCard
                         fromAddress={selectedAccount.address}
                         toAddresses={[address]}
@@ -255,7 +257,7 @@ export const TransactionSummarySendScreen = ({ route }: Props) => {
                     />
 
                     <BaseSpacer height={12} />
-                    <NotEnoughGasModal isVisible={!isEnoughGas && !isDelegated} />
+                    {!isVTHO.current && <NotEnoughGasModal isVisible={!isEnoughGas && !isDelegated} />}
                 </BaseView>
             }
             footer={

@@ -1,7 +1,7 @@
 import { useCallback, useEffect, useRef, useState } from "react"
 import { URIUtils, debug, error, warn } from "~Utils"
 import WebSocket, { CloseEvent, ErrorEvent, MessageEvent } from "isomorphic-ws"
-import { updateNodeError, useAppDispatch } from "~Storage/Redux"
+import { handleChangeNode, updateNodeError, useAppDispatch } from "~Storage/Redux"
 import { useAppState, useCounter } from "~Hooks"
 import { AppStateType, Beat } from "~Model"
 import { ERROR_EVENTS } from "~Constants"
@@ -61,6 +61,7 @@ export const useBeatWebsocket = (currentNetworkUrl: string, onMessage: (beat: Be
             if (count > 3) {
                 warn(ERROR_EVENTS.SEND, "Trouble connecting to useBeatWebsocket.")
                 dispatch(updateNodeError(true))
+                dispatch(handleChangeNode())
             } else {
                 increment()
             }
