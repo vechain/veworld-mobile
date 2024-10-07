@@ -29,6 +29,7 @@ platform :android do
     
     setup_ci if ENV['CI']
 
+    sh("chmod +x ./ci_bump_gradle_app_versions.sh")
 
     Dir.chdir "../.." do
       sh("yarn purge:android && yarn install:android")
