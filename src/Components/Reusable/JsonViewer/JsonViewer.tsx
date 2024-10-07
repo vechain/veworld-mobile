@@ -72,7 +72,7 @@ export const JsonViewer: React.FC<Props> = ({ data }) => {
                 hideRoot
                 theme={jsonViewerTheme}
                 shouldExpandNode={() => true}
-                invertTheme={theme.isDark}
+                invertTheme={false}
                 labelRenderer={renderJsonKey}
                 valueRenderer={renderJsonValue}
             />
