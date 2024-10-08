@@ -552,9 +552,13 @@ type RootTranslation = {
 	 */
 	BD_APP_LOCK: string
 	/**
-	 * C​l​i​c​k​ ​t​o​ ​r​e​s​e​t​ ​V​e​W​o​r​l​d​ ​a​n​d​ ​e​r​a​s​e​ ​a​l​l​ ​y​o​u​r​ ​d​a​t​a​ ​s​t​o​r​e​d​ ​o​n​ ​i​t
+	 * S​e​l​e​c​t​ ​t​h​e​ ​s​e​c​u​r​i​t​y​ ​m​e​t​h​o​d​ ​t​o​ ​u​n​l​o​c​k​ ​y​o​u​r​ ​w​a​l​l​e​t​.
 	 */
 	BD_SECURITY_METHOD: string
+	/**
+	 * T​h​e​ ​r​e​c​o​v​e​r​y​ ​p​h​r​a​s​e​s​ ​b​a​c​k​u​p​ ​e​n​s​u​r​e​ ​y​o​u​ ​n​e​v​e​r​ ​l​o​s​e​ ​a​c​c​e​s​s​ ​t​o​ ​y​o​u​r​ ​w​a​l​l​e​t​ ​i​n​ ​c​a​s​e​ ​o​f​ ​a​p​p​ ​r​e​s​e​t​ ​o​r​ ​l​o​s​t​ ​d​e​v​i​c​e​.
+	 */
+	BD_BACKUP_RECOVERY_PHRASE: string
 	/**
 	 * N​o​ ​t​o​k​e​n​ ​f​o​u​n​d
 	 */
@@ -960,6 +964,10 @@ type RootTranslation = {
 	 */
 	SB_SECURITY_METHOD: string
 	/**
+	 * B​a​c​k​u​p​ ​“​R​e​c​o​v​e​r​y​ ​p​h​r​a​s​e​”
+	 */
+	SB_BACKUP_RECOVERY_PHRASE: string
+	/**
 	 * T​h​e​ ​s​e​c​u​r​i​t​y​ ​u​p​d​a​t​e​ ​h​a​s​ ​f​a​i​l​e​d​ ​a​n​d​ ​y​o​u​r​ ​s​e​c​u​r​i​t​y​ ​m​e​t​h​o​d​ ​h​a​s​ ​b​e​e​n​ ​r​e​v​e​r​t​e​d​ ​t​o​ ​t​h​e​ ​p​r​e​v​i​o​u​s​ ​o​n​e​.
 	 */
 	ERROR_SECURITY_UPDATE_REVERTED: string
@@ -1040,7 +1048,7 @@ type RootTranslation = {
 	 */
 	BIOMETRICS: string
 	/**
-	 * P​I​N​ ​C​o​d​e
+	 * P​I​N
 	 */
 	PIN_CODE: string
 	/**
@@ -3805,9 +3813,13 @@ export type TranslationFunctions = {
 	 */
 	BD_APP_LOCK: () => LocalizedString
 	/**
-	 * Click to reset VeWorld and erase all your data stored on it
+	 * Select the security method to unlock your wallet.
 	 */
 	BD_SECURITY_METHOD: () => LocalizedString
+	/**
+	 * The recovery phrases backup ensure you never lose access to your wallet in case of app reset or lost device.
+	 */
+	BD_BACKUP_RECOVERY_PHRASE: () => LocalizedString
 	/**
 	 * No token found
 	 */
@@ -4210,6 +4222,10 @@ VeWorld will never ask you for them.
 	 */
 	SB_SECURITY_METHOD: () => LocalizedString
 	/**
+	 * Backup “Recovery phrase”
+	 */
+	SB_BACKUP_RECOVERY_PHRASE: () => LocalizedString
+	/**
 	 * The security update has failed and your security method has been reverted to the previous one.
 	 */
 	ERROR_SECURITY_UPDATE_REVERTED: () => LocalizedString
@@ -4290,7 +4306,7 @@ VeWorld will never ask you for them.
 	 */
 	BIOMETRICS: () => LocalizedString
 	/**
-	 * PIN Code
+	 * PIN
 	 */
 	PIN_CODE: () => LocalizedString
 	/**
