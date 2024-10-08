@@ -5,6 +5,8 @@ import "~Test"
 import CryptoUtils from "./CryptoUtils"
 import { IMPORT_TYPE } from "~Model"
 import HexUtils from "~Utils/HexUtils"
+import PasswordUtils from "~Utils/PasswordUtils"
+import scrypt from "react-native-scrypt"
 
 const { hdNodeFromXPub, xPubFromHdNode, mnemonicStringToArray, decryptKeystoreFile, determineKeyImportType } =
     CryptoUtils
@@ -19,8 +21,11 @@ const KEYSTORE_FILE =
 const KEYSTORE_ENCRY_KEY = "Password1!"
 const PRIVATE_KEY = "99f0500549792796c14fed62011a51081dc5b5e68fe8bd8a13b86be829c4fd36"
 const PRIVATE_KEY_BASE64 = "00PQBscafudaWmgP9XaC+mA/JXxzLs7JZxWUX/GzIj+MnFJlYXMizW4Ul7esLG213TExGpuDo8xCc16LSXdZkQ=="
+const PRIVATE_KEY_V2_BASE64 = "36b4d5d44b882941abd34aab0edad431a73fffed03c66d0a0859fc3d976ff446"
 
 const deviceEncryptionKey = "deviceEncryptionKey"
+const salt = HexUtils.generateRandom(256)
+const iv = new Uint8Array(PasswordUtils.getIV())
 
 jest.mock("~Services/KeychainService", () => {
     return {
@@ -33,17 +38,19 @@ jest.mock("~Services/KeychainService", () => {
 jest.mock("react-native-scrypt", () => ({
     __esModule: true,
 
-    default: async (
-        _password: string,
-        _salt: string,
-        _N: number,
-        _r: number,
-        _p: number,
-        _dkLen: number,
-        _encoding: string,
-    ) => {
-        return PRIVATE_KEY_BASE64
-    },
+    default: jest.fn(
+        async (
+            _password: string,
+            _salt: string,
+            _N: number,
+            _r: number,
+            _p: number,
+            _dkLen: number,
+            _encoding: string,
+        ) => {
+            return PRIVATE_KEY_BASE64
+        },
+    ),
 }))
 
 // NOTE: snapshot testing
@@ -128,17 +135,20 @@ describe("random", () => {
         expect(random).not.toBeNull()
     })
 })
+
 describe("encrypt", () => {
-    it("encrypt should return an encrypted string", () => {
-        const encrypted = CryptoUtils.encrypt("test", deviceEncryptionKey)
+    it("encrypt should return an encrypted string", async () => {
+        ;(scrypt as jest.Mock).mockImplementation(async () => PRIVATE_KEY_V2_BASE64)
+        const encrypted = await CryptoUtils.encrypt("test", deviceEncryptionKey, salt, iv)
         expect(encrypted).not.toBeNull()
     })
 })
 
 describe("decrypt", () => {
-    it("decrypt should return a decrypted string", () => {
-        const encrypted = CryptoUtils.encrypt("test", deviceEncryptionKey)
-        const decrypted = CryptoUtils.decrypt(encrypted, deviceEncryptionKey)
+    it("decrypt should return a decrypted string", async () => {
+        ;(scrypt as jest.Mock).mockImplementation(async () => PRIVATE_KEY_V2_BASE64)
+        const encrypted = await CryptoUtils.encrypt("test", deviceEncryptionKey, salt, iv)
+        const decrypted = await CryptoUtils.decrypt(encrypted, deviceEncryptionKey, salt, iv)
         expect(decrypted).toEqual("test")
     })
 })

@@ -46,7 +46,10 @@ export const useSignMessage = ({ hash }: Props) => {
         //local mnemonic, identity already verified via useCheckIdentity
         if (!senderDevice.wallet) throw new Error("The device doesn't have a wallet")
 
-        const wallet: Wallet = await WalletEncryptionKeyHelper.decryptWallet(senderDevice.wallet, password)
+        const wallet: Wallet = await WalletEncryptionKeyHelper.decryptWallet({
+            encryptedWallet: senderDevice.wallet,
+            pinCode: password,
+        })
 
         return await getSignature(wallet)
     }

@@ -21,6 +21,7 @@ type Props = {
     width?: DimensionValue
     alignItems?: "flex-start" | "flex-end" | "center" | "stretch" | "baseline"
     testID?: string
+    borderRadius?: number
 }
 
 /**
@@ -61,6 +62,7 @@ export const BaseSkeleton = ({
     width,
     alignItems = "center",
     testID,
+    borderRadius = undefined,
 }: Props) => {
     const computedContainerStyle = useMemo(() => {
         if (containerStyle) {
@@ -81,6 +83,7 @@ export const BaseSkeleton = ({
                         {
                             width: "100%",
                             height: height,
+                            borderRadius: borderRadius,
                         },
                     ],
                 },
@@ -88,7 +91,7 @@ export const BaseSkeleton = ({
         }
 
         return layout
-    }, [alignItems, height, layout])
+    }, [alignItems, borderRadius, height, layout])
 
     return (
         <BaseView testID={testID}>

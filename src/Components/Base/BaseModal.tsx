@@ -11,24 +11,22 @@ export interface IBaseModal extends ModalProps {
 }
 export const BaseModal: React.FC<IBaseModal> = ({ isOpen, onClose, children, transparent = false, ...otherProps }) => {
     return (
-        <>
-            <Modal
-                visible={isOpen}
-                animationType="slide"
-                transparent={transparent}
-                hardwareAccelerated
-                presentationStyle="fullScreen"
-                onDismiss={onClose}
-                onRequestClose={onClose}
-                {...otherProps}>
-                <SafeAreaProvider>
-                    <BaseSafeArea bg={transparent ? "transparent" : undefined} grow={1}>
-                        <BaseView alignItems="center" justifyContent="flex-start" flexGrow={1}>
-                            {children}
-                        </BaseView>
-                    </BaseSafeArea>
-                </SafeAreaProvider>
-            </Modal>
-        </>
+        <Modal
+            visible={isOpen}
+            animationType="slide"
+            transparent={transparent}
+            hardwareAccelerated
+            presentationStyle="fullScreen"
+            onDismiss={onClose}
+            onRequestClose={onClose}
+            {...otherProps}>
+            <SafeAreaProvider>
+                <BaseSafeArea bg={transparent ? "transparent" : undefined} grow={1}>
+                    <BaseView alignItems="center" justifyContent="flex-start" flexGrow={1}>
+                        {children}
+                    </BaseView>
+                </BaseSafeArea>
+            </SafeAreaProvider>
+        </Modal>
     )
 }

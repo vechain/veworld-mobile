@@ -7,6 +7,7 @@ import {
     BlackListedCollectionsScreen,
     ConnectAppScreen,
     DappChangeAccountScreen,
+    MnemonicBackupScreen,
     SendTransactionScreen,
     SignCertificateScreen,
 } from "~Screens"
@@ -14,7 +15,7 @@ import { PendingRequestTypes } from "@walletconnect/types"
 import { AppBlockedScreen } from "~Screens/Flows/App/AppBlockedScreen"
 import { TransferEventListener } from "../../TransferEventListener"
 import { Certificate, Transaction } from "thor-devkit"
-import { CertificateRequest, ConnectAppRequest, LedgerAccountWithDevice, WALLET_STATUS } from "~Model"
+import { CertificateRequest, ConnectAppRequest, LedgerAccountWithDevice, LocalDevice, WALLET_STATUS } from "~Model"
 import { LedgerSignCertificate, LedgerSignTransaction } from "~Screens/Flows/App/LedgerScreen"
 import { useWalletStatus } from "~Components"
 import { BuyStack } from "./BuyStack"
@@ -65,6 +66,8 @@ export type RootStackParamListSwitch = {
     [Routes.DAPP_CHANGE_ACCOUNT_SCREEN]: {
         request: WindowRequest
     }
+
+    [Routes.ICLOUD_MNEMONIC_BACKUP]: { deviceToBackup?: LocalDevice; mnemonicArray: string[] }
 }
 const Switch = createNativeStackNavigator<RootStackParamListSwitch>()
 
@@ -117,6 +120,12 @@ export const SwitchStack = () => {
                         <Switch.Screen name={Routes.LEDGER_SIGN_MESSAGE} component={LedgerSignMessage} />
 
                         <Switch.Screen name={Routes.DAPP_CHANGE_ACCOUNT_SCREEN} component={DappChangeAccountScreen} />
+
+                        <Switch.Screen
+                            name={Routes.ICLOUD_MNEMONIC_BACKUP}
+                            component={MnemonicBackupScreen}
+                            options={{ headerShown: false }}
+                        />
 
                         <Switch.Screen
                             name={Routes.BUY_FLOW}

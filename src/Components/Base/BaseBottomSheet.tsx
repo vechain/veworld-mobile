@@ -36,6 +36,7 @@ type Props = Omit<BottomSheetModalProps, "snapPoints"> & {
     onPressOutside?: BackdropPressBehavior
     backHandlerEvent?: BackHandlerEvent
     bottomSafeArea?: boolean
+    enablePanDownToClose?: boolean
 }
 
 /**
@@ -71,6 +72,7 @@ export const BaseBottomSheet = React.forwardRef<BottomSheetModalMethods, Props>(
             onPressOutside = "close",
             backHandlerEvent = BackHandlerEvent.DONT_BLOCK,
             bottomSafeArea = true,
+            enablePanDownToClose = true,
             ...props
         },
         ref,
@@ -164,7 +166,7 @@ export const BaseBottomSheet = React.forwardRef<BottomSheetModalMethods, Props>(
                 animateOnMount={!reducedMotion}
                 stackBehavior="push"
                 ref={ref}
-                enablePanDownToClose={true}
+                enablePanDownToClose={enablePanDownToClose}
                 index={0}
                 backgroundStyle={[styles.backgroundStyle]}
                 backdropComponent={renderBackdrop}

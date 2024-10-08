@@ -71,7 +71,7 @@ export const DeviceBackupBottomSheet = () => {
 
             if (timeStamp) {
                 const _lastBackupRequestTimestamp = moment.unix(timeStamp)
-                const shouldOpen = now.diff(_lastBackupRequestTimestamp, "seconds") >= 1 && isBackupNeeded
+                const shouldOpen = now.diff(_lastBackupRequestTimestamp, "weeks") >= 1 && isBackupNeeded
 
                 if (shouldOpen) {
                     dispatch(

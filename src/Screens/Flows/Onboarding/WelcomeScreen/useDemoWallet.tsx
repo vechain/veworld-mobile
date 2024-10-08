@@ -1,6 +1,6 @@
 import React, { useCallback, useMemo } from "react"
 import { BaseButton, useApplicationSecurity, WalletEncryptionKeyHelper } from "~Components"
-import { ERROR_EVENTS } from "~Constants"
+import { DerivationPath, ERROR_EVENTS } from "~Constants"
 import { useCreateWallet } from "~Hooks"
 import { IMPORT_TYPE, SecurityLevelType } from "~Model"
 import { selectAreDevFeaturesEnabled, setIsAppLoading, useAppDispatch, useAppSelector } from "~Storage/Redux"
@@ -34,6 +34,7 @@ export const useDemoWallet = () => {
             userPassword,
             onError: e => debug(ERROR_EVENTS.APP, e),
             mnemonic,
+            derivationPath: DerivationPath.VET,
             importType: IMPORT_TYPE.MNEMONIC,
         })
         await migrateOnboarding(SecurityLevelType.SECRET, userPassword)
