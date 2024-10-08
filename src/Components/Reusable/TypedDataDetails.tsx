@@ -1,23 +1,23 @@
 import React from "react"
 import { StyleSheet } from "react-native"
-import { BaseSpacer, BaseText, BaseView, CopyToClipboardAddress, JsonViewer } from "~Components"
+import { BaseView, BaseText, BaseSpacer } from "~Components/Base"
 import { useThemedStyles } from "~Hooks"
 import { useI18nContext } from "~i18n"
-import { SignDataMessageRequest } from "~Model"
+import { TypedData } from "~Model"
+import { CopyToClipboardAddress } from "./CopyToClipboardAddress"
+import { JsonViewer } from "./JsonViewer"
 
 type Props = {
-    request: SignDataMessageRequest
+    typedData: Partial<TypedData>
+    origin: string
 }
 
-export const TypedDataDetails: React.FC<Props> = ({ request }) => {
+export const TypedDataDetails: React.FC<Props> = ({ typedData, origin }) => {
     const { styles } = useThemedStyles(baseStyles)
     const { LL } = useI18nContext()
 
     return (
         <BaseView>
-            <BaseText typographyFont="subTitleBold">{LL.SEND_DETAILS()}</BaseText>
-
-            <BaseSpacer height={16} />
             <BaseView flexDirection="row" style={styles.detailRow}>
                 <BaseView style={styles.detailCol}>
                     {/* Domain label */}
@@ -37,26 +37,26 @@ export const TypedDataDetails: React.FC<Props> = ({ request }) => {
                     {/* Domain value */}
                     <BaseView flexDirection="row">
                         <BaseText typographyFont="bodyMedium" style={styles.detailValue}>
-                            {request.domain.name}
+                            {typedData.domain?.name}
                         </BaseText>
                         <BaseText typographyFont="body" style={[styles.detailValue, styles.detailVersionLabel]}>
                             {LL.CONNECTED_APP_VERSION()}
                         </BaseText>
-                        <BaseText typographyFont="bodyMedium">{request.domain.version}</BaseText>
+                        <BaseText typographyFont="bodyMedium">{typedData.domain?.version}</BaseText>
                     </BaseView>
 
                     {/* URL value */}
                     <BaseText typographyFont="bodyMedium" style={styles.detailValue}>
-                        {request.origin}
+                        {origin}
                     </BaseText>
 
                     {/* Contract value */}
-                    <CopyToClipboardAddress address={request.domain.verifyingContract ?? ""} lenghtBefore={12} />
+                    <CopyToClipboardAddress address={typedData.domain?.verifyingContract ?? ""} lenghtBefore={12} />
                 </BaseView>
             </BaseView>
 
             <BaseSpacer height={18} />
-            <JsonViewer data={request.value as Record<string, string | number>} />
+            <JsonViewer data={typedData.value as Record<string, string | number>} />
         </BaseView>
     )
 }

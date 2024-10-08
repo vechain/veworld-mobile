@@ -23,6 +23,7 @@ import {
     SignedCertificateActivityBox,
     SkeletonActivityBox,
     SwapTransactionActivityBox,
+    TypedDataActivityBox,
 } from "./Components"
 import {
     AccountWithDevice,
@@ -34,6 +35,7 @@ import {
     FungibleTokenActivity,
     NonFungibleTokenActivity,
     SignCertActivity,
+    TypedDataActivity,
     TransactionOutcomes,
     WatchedAccount,
 } from "~Model"
@@ -165,6 +167,14 @@ export const HistoryScreen = () => {
                         <ConnectedAppActivityBox
                             key={id}
                             activity={activity as ConnectedAppActivity}
+                            onPress={onActivityPress}
+                        />
+                    )
+                case ActivityType.SIGN_TYPED_DATA:
+                    return (
+                        <TypedDataActivityBox
+                            key={id}
+                            activity={activity as TypedDataActivity}
                             onPress={onActivityPress}
                         />
                     )

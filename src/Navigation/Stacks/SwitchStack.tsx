@@ -22,7 +22,7 @@ import { useWalletStatus } from "~Components"
 import { BuyStack } from "./BuyStack"
 import { SignMessageScreen } from "~Screens/Flows/App/WalletConnect/SignMessageScreen"
 import { LedgerSignMessage } from "~Screens/Flows/App/LedgerScreen/LedgerSignMessage"
-import { SignDataMessageRequest, TransactionRequest } from "~Model/DApp"
+import { TypeDataRequest, TransactionRequest } from "~Model/DApp"
 import { WindowRequest } from "~Components/Providers/InAppBrowserProvider/types"
 
 export type RootStackParamListSwitch = {
@@ -43,7 +43,7 @@ export type RootStackParamListSwitch = {
         request: CertificateRequest
     }
     [Routes.CONNECTED_APP_SIGN_TYPED_MESSAGE_SCREEN]: {
-        request: SignDataMessageRequest
+        request: TypeDataRequest
     }
     [Routes.CONNECTED_APP_SIGN_MESSAGE_SCREEN]: {
         requestEvent: PendingRequestTypes.Struct

@@ -899,6 +899,7 @@ const en: BaseTranslation = {
     CONNECTED_APP_swap_vet_for_tokens: "Swap VET for tokens",
     CONNECTED_APP_swap_tokens_for_vet: "Swap tokens for VET",
     CONNECTED_APP_swap_tokens_for_tokens: "Swap tokens for tokens",
+    CONNECTED_APP_SIGN_TYPED_DATA: "Sign typed data",
     OUTCOMES: "Outcomes",
     TYPE: "Type",
     TOKEN_SYMBOL: "Token symbol",

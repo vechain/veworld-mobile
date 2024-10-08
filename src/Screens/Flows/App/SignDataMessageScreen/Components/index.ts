@@ -1,1 +1,1 @@
-export * from "./TypedDataDetails"
+export * from "./DataMessageDetails"

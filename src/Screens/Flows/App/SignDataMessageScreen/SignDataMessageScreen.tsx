@@ -8,18 +8,18 @@ import {
     BaseText,
     BaseView,
     CloseModalButton,
-    // getRpcError,
+    getRpcError,
     RequireUserPassword,
     SelectAccountBottomSheet,
-    // useWalletConnect,
+    useWalletConnect,
     useInAppBrowser,
 } from "~Components"
 import {
     addSignTypedDataActivity,
-    // selectVerifyContext,
+    selectVerifyContext,
     setIsAppLoading,
     useAppDispatch,
-    // useAppSelector,
+    useAppSelector,
 } from "~Storage/Redux"
 import { error, HexUtils } from "~Utils"
 import {
@@ -34,17 +34,17 @@ import { useI18nContext } from "~i18n"
 import { RootStackParamListSwitch, Routes } from "~Navigation"
 import { NativeStackScreenProps } from "@react-navigation/native-stack"
 import { useNavigation } from "@react-navigation/native"
-// import { UnknownAppMessage } from "~Screens"
+import { UnknownAppMessage } from "~Screens"
 import { AnalyticsEvent, ERROR_EVENTS, RequestMethods } from "~Constants"
 import { useObservedAccountExclusion } from "../WalletConnect/Hooks"
-import { TypedDataDetails } from "./Components"
+import { DataMessageDetails } from "./Components"
 
 type Props = NativeStackScreenProps<RootStackParamListSwitch, Routes.CONNECTED_APP_SIGN_TYPED_MESSAGE_SCREEN>
 
 export const SignDataMessageScreen: FC<Props> = ({ route }: Props) => {
     const { request } = route.params
 
-    // const { processRequest, failRequest } = useWalletConnect()
+    const { processRequest, failRequest } = useWalletConnect()
     const { postMessage } = useInAppBrowser()
     const { LL } = useI18nContext()
     const nav = useNavigation()
@@ -63,21 +63,21 @@ export const SignDataMessageScreen: FC<Props> = ({ route }: Props) => {
     const track = useAnalyticTracking()
     const dispatch = useAppDispatch()
 
-    // const [isInvalidChecked, setInvalidChecked] = React.useState(false)
+    const [isInvalidChecked, setInvalidChecked] = React.useState(false)
 
     const setSelectedAccount = (account: AccountWithDevice | WatchedAccount) => {
         onSetSelectedAccount({ address: account.address })
     }
 
-    // const sessionContext = useAppSelector(state =>
-    //     selectVerifyContext(state, request.type === "wallet-connect" ? request.session.topic : undefined),
-    // )
+    const sessionContext = useAppSelector(state =>
+        selectVerifyContext(state, request.type === "wallet-connect" ? request.session.topic : undefined),
+    )
 
-    // const validConnectedApp = useMemo(() => {
-    //     if (!sessionContext) return true
+    const validConnectedApp = useMemo(() => {
+        if (!sessionContext) return true
 
-    //     return sessionContext.verifyContext.validation === "VALID"
-    // }, [sessionContext])
+        return sessionContext.verifyContext.validation === "VALID"
+    }, [sessionContext])
 
     const onAccountCardPress = useCallback(() => {
         if (!request.options.signer) {
@@ -126,13 +126,17 @@ export const SignDataMessageScreen: FC<Props> = ({ route }: Props) => {
 
                 dispatch(setIsAppLoading(true))
 
-                // if (request.type === "wallet-connect") {
-                //     await processRequest(request.requestEvent, res)
-                // } else {
-                postMessage({ id: request.id, data: signedTypedData.signature, method: RequestMethods.SIGN_TYPED_DATA })
-                // }
+                if (request.type === "wallet-connect") {
+                    await processRequest(request.requestEvent, signature)
+                } else {
+                    postMessage({
+                        id: request.id,
+                        data: signedTypedData.signature,
+                        method: RequestMethods.SIGN_TYPED_DATA,
+                    })
+                }
 
-                dispatch(addSignTypedDataActivity(signedTypedData.signer, request.appName, signedTypedData))
+                dispatch(addSignTypedDataActivity(signedTypedData.signer, request.origin, signedTypedData))
 
                 track(AnalyticsEvent.DAPP_TYPED_DATA_SUCCESS)
 
@@ -142,15 +146,15 @@ export const SignDataMessageScreen: FC<Props> = ({ route }: Props) => {
 
                 error(ERROR_EVENTS.WALLET_CONNECT, err)
 
-                // if (request.type === "wallet-connect") {
-                //     await failRequest(request.requestEvent, getRpcError("internal"))
-                // } else {
-                postMessage({
-                    id: request.id,
-                    error: "Internal error",
-                    method: RequestMethods.SIGN_TYPED_DATA,
-                })
-                // }
+                if (request.type === "wallet-connect") {
+                    await failRequest(request.requestEvent, getRpcError("internal"))
+                } else {
+                    postMessage({
+                        id: request.id,
+                        error: "Internal error",
+                        method: RequestMethods.SIGN_TYPED_DATA,
+                    })
+                }
 
                 dispatch(setIsAppLoading(false))
             } finally {
@@ -165,24 +169,25 @@ export const SignDataMessageScreen: FC<Props> = ({ route }: Props) => {
             signTypedData,
             typedData,
             dispatch,
-            postMessage,
-            request.id,
-            request.appName,
+            request,
             track,
+            processRequest,
+            postMessage,
+            failRequest,
         ],
     )
 
     const onReject = useCallback(async () => {
-        // if (request.type === "wallet-connect") {
-        //     await failRequest(request.requestEvent, getRpcError("userRejectedRequest"))
-        // } else {
-        postMessage({ id: request.id, error: "User rejected request", method: RequestMethods.REQUEST_TRANSACTION })
-        // }
+        if (request.type === "wallet-connect") {
+            await failRequest(request.requestEvent, getRpcError("userRejectedRequest"))
+        } else {
+            postMessage({ id: request.id, error: "User rejected request", method: RequestMethods.REQUEST_TRANSACTION })
+        }
 
         track(AnalyticsEvent.DAPP_TYPED_DATA_REJECTED)
 
         onClose()
-    }, [postMessage, request, track, onClose])
+    }, [request, track, onClose, failRequest, postMessage])
 
     const {
         isPasswordPromptOpen,
@@ -228,15 +233,15 @@ export const SignDataMessageScreen: FC<Props> = ({ route }: Props) => {
 
                     <BaseSpacer height={32} />
 
-                    <TypedDataDetails request={request} />
+                    <DataMessageDetails request={request} />
 
-                    {/* {sessionContext && (
+                    {sessionContext && (
                         <UnknownAppMessage
                             verifyContext={sessionContext.verifyContext}
                             confirmed={isInvalidChecked}
                             setConfirmed={setInvalidChecked}
                         />
-                    )} */}
+                    )}
                 </BaseView>
 
                 <BaseSpacer height={30} />
@@ -249,8 +254,8 @@ export const SignDataMessageScreen: FC<Props> = ({ route }: Props) => {
                         action={() => onSubmit(checkIdentityBeforeOpening)}
                         /* We must assert that `biometrics` is not empty otherwise we don't know if the user has set biometrics or passcode, thus failing to decrypt the wallet when signing */
                         isLoading={isBiometricsEmpty}
-                        // disabled={isBiometricsEmpty || (!validConnectedApp && !isInvalidChecked)}
-                        disabled={isBiometricsEmpty}
+                        disabled={isBiometricsEmpty || (!validConnectedApp && !isInvalidChecked)}
+                        // disabled={isBiometricsEmpty}
                     />
                     <BaseSpacer height={16} />
                     <BaseButton

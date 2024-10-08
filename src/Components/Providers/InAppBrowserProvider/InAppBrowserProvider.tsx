@@ -12,7 +12,7 @@ import {
     CertificateRequest,
     InAppRequest,
     Network,
-    SignDataMessageRequest,
+    TypeDataRequest,
     TransactionRequest,
 } from "~Model"
 import { Routes } from "~Navigation"
@@ -414,7 +414,7 @@ export const InAppBrowserProvider = ({ children }: Props) => {
 
             const isAlreadyConnected = !!connectedDiscoveryApps?.find(app => app.href === new URL(appUrl).hostname)
 
-            const req: SignDataMessageRequest = {
+            const req: TypeDataRequest = {
                 method: request.method,
                 id: request.id,
                 type: "in-app",

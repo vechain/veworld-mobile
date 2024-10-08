@@ -3142,6 +3142,10 @@ type RootTranslation = {
 	 */
 	CONNECTED_APP_swap_tokens_for_tokens: string
 	/**
+	 * S​i​g​n​ ​t​y​p​e​d​ ​d​a​t​a
+	 */
+	CONNECTED_APP_SIGN_TYPED_DATA: string
+	/**
 	 * O​u​t​c​o​m​e​s
 	 */
 	OUTCOMES: string
@@ -6370,6 +6374,10 @@ Try reconnect your device to the internet.
 	 * Swap tokens for tokens
 	 */
 	CONNECTED_APP_swap_tokens_for_tokens: () => LocalizedString
+	/**
+	 * Sign typed data
+	 */
+	CONNECTED_APP_SIGN_TYPED_DATA: () => LocalizedString
 	/**
 	 * Outcomes
 	 */

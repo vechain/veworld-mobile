@@ -35,7 +35,7 @@ type BaseTransactionRequest = {
     method: "thor_sendTransaction"
 }
 
-type BaseSignDataMessageRequest = {
+type BaseTypedDataRequest = {
     domain: ethers.TypedDataDomain
     origin: string
     options: Connex.Signer.CertOptions
@@ -51,7 +51,7 @@ type WcConnectAppRequest = BaseRequest & {
 
 type InAppConnectAppRequest = BaseRequest & {
     type: "in-app"
-    initialRequest: InAppCertRequest | InAppTxRequest | SignDataMessageRequest
+    initialRequest: InAppCertRequest | InAppTxRequest | BaseTypedDataRequest
 }
 
 type WcCertRequest = BaseCertificateRequest & BaseWcRequest
@@ -62,17 +62,19 @@ type WcTxRequest = BaseTransactionRequest & BaseWcRequest
 
 type InAppTxRequest = BaseTransactionRequest & BaseInAppRequest
 
-type InAppSignDataRequest = BaseSignDataMessageRequest & BaseInAppRequest
+type WcSignDataRequest = BaseTypedDataRequest & BaseWcRequest
+
+type InAppTypedDataRequest = BaseTypedDataRequest & BaseInAppRequest
 
 export type CertificateRequest = WcCertRequest | InAppCertRequest
 
 export type TransactionRequest = WcTxRequest | InAppTxRequest
 
-export type SignDataMessageRequest = BaseSignDataMessageRequest & BaseInAppRequest
+export type TypeDataRequest = WcSignDataRequest | InAppTypedDataRequest
 
 export type ConnectAppRequest = WcConnectAppRequest | InAppConnectAppRequest
 
-export type InAppRequest = InAppCertRequest | InAppTxRequest | InAppSignDataRequest
+export type InAppRequest = InAppCertRequest | InAppTxRequest | InAppTypedDataRequest
 
 export enum DAppType {
     ALL = "all",

@@ -88,7 +88,7 @@ export interface SignCertActivity extends Activity {
 /**
  * The SignTypedDataActivity interface represents a blockchain activity related to typed data signings.
  */
-export interface SignTypedDataActivity extends Activity {
+export interface TypedDataActivity extends Activity {
     type: ActivityType.SIGN_TYPED_DATA
     typedData: TypedData
     sender: string

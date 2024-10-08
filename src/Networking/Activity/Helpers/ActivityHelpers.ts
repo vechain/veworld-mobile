@@ -11,7 +11,7 @@ import {
     Network,
     NonFungibleTokenActivity,
     SignCertActivity,
-    SignTypedDataActivity,
+    TypedDataActivity,
     TypedData,
 } from "~Model"
 import { EventTypeResponse, IncomingTransferResponse, TransactionsResponse } from "~Networking"
@@ -248,11 +248,7 @@ export const createSignCertificateActivity = (
  * @param content - The typed data
  * @returns A new sign typed data activity object.
  */
-export const createSingTypedDataActivity = (
-    from: string,
-    sender: string,
-    content: TypedData,
-): SignTypedDataActivity => {
+export const createSingTypedDataActivity = (from: string, sender: string, content: TypedData): TypedDataActivity => {
     return {
         from,
         id: uuid.v4().toString(),

@@ -27,6 +27,7 @@ import {
     NonFungibleTokenActivity,
     SignCertActivity,
     ConnectedAppActivity,
+    TypedDataActivity,
 } from "~Model"
 import {
     FungibleTokenTransferDetails,
@@ -39,6 +40,7 @@ import { ContactManagementBottomSheet } from "../ContactsScreen"
 import { selectActivity, selectSelectedNetwork, useAppSelector } from "~Storage/Redux"
 import { AddCustomTokenBottomSheet } from "../ManageCustomTokenScreen/BottomSheets"
 import { ExplorerLinkType, getExplorerLink } from "~Utils/AddressUtils/AddressUtils"
+import TypedDataTransactionDetails from "./Components/TypedDataTransactionDetails"
 
 type Props = NativeStackScreenProps<RootStackParamListHome, Routes.ACTIVITY_DETAILS>
 
@@ -113,6 +115,9 @@ export const ActivityDetailsScreen = ({ route }: Props) => {
             }
             case ActivityType.CONNECTED_APP_TRANSACTION: {
                 return <ConnectedAppDetails activity={(activityFromStore ?? activity) as ConnectedAppActivity} />
+            }
+            case ActivityType.SIGN_TYPED_DATA: {
+                return <TypedDataTransactionDetails activity={(activityFromStore ?? activity) as TypedDataActivity} />
             }
             default:
                 return <></>
