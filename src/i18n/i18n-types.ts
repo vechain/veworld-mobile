@@ -1834,6 +1834,10 @@ type RootTranslation = {
 	 */
 	CONNECTED_APP_SIGN_MESSAGE_REQUEST_DESCRIPTION: string
 	/**
+	 * Y​o​u​r​ ​S​i​g​n​a​t​u​r​e​ ​i​s​ ​b​e​i​n​g​ ​r​e​q​u​e​s​t​e​d​ ​t​o​ ​s​i​g​n​ ​t​y​p​e​d​ ​d​a​t​a​ ​m​e​s​s​a​g​e
+	 */
+	CONNECTED_APP_SIGN_TYPED_DATA_REQUEST_DESCRIPTION: string
+	/**
 	 * M​e​s​s​a​g​e​:​ 
 	 */
 	CONNECTED_APP_MESSAGE_HEADER: string
@@ -5074,6 +5078,10 @@ Try reconnect your device to the internet.
 	 * Your Signature is being requested to sign a message
 	 */
 	CONNECTED_APP_SIGN_MESSAGE_REQUEST_DESCRIPTION: () => LocalizedString
+	/**
+	 * Your Signature is being requested to sign typed data message
+	 */
+	CONNECTED_APP_SIGN_TYPED_DATA_REQUEST_DESCRIPTION: () => LocalizedString
 	/**
 	 * Message: 
 	 */

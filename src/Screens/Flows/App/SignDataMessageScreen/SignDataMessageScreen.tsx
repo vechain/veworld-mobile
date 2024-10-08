@@ -217,9 +217,9 @@ export const SignDataMessageScreen: FC<Props> = ({ route }: Props) => {
                     <BaseText typographyFont="title">{LL.CONNECTED_APP_REQUEST()}</BaseText>
 
                     <BaseSpacer height={32} />
-                    <BaseText typographyFont="subTitle">{LL.CONNECTED_APP_SIGN_MESSAGE_TITLE()}</BaseText>
+                    <BaseText typographyFont="subTitle">{LL.CONNECTED_APP_SIGN_TYPED_DATA()}</BaseText>
                     <BaseSpacer height={16} />
-                    <BaseText>{LL.CONNECTED_APP_SIGN_MESSAGE_REQUEST_DESCRIPTION()}</BaseText>
+                    <BaseText>{LL.CONNECTED_APP_SIGN_TYPED_DATA_REQUEST_DESCRIPTION()}</BaseText>
 
                     <BaseSpacer height={32} />
                     <BaseText typographyFont="subTitleBold">{LL.CONNECTED_APP_SELECTED_ACCOUNT_LABEL()}</BaseText>

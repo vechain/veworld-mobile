@@ -505,6 +505,7 @@ const en: BaseTranslation = {
     CONNECTED_APP_SIGN_REQUEST_DESCRIPTION: "Your Signature is being requested to sign a certificate",
     CONNECTED_APP_CHANGE_ACCOUNT_REQUEST_DESCRIPTION: "You have previously connected to {dapp:string} with a different account. Do you want to switch to the account connected to {dapp:string}?",
     CONNECTED_APP_SIGN_MESSAGE_REQUEST_DESCRIPTION: "Your Signature is being requested to sign a message",
+    CONNECTED_APP_SIGN_TYPED_DATA_REQUEST_DESCRIPTION: "Your Signature is being requested to sign typed data message",
     CONNECTED_APP_MESSAGE_HEADER: "Message: ",
     CONNECTED_APP_SIGN_TRANSACTION_REQUEST_TITLE: "Sign and Send a transaction",
     CONNECTED_APP_SIGN_TRANSACTION_REQUEST_DESCRIPTION: "Your Signature is being requested to sign and send a transaction",
