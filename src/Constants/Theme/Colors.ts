@@ -47,6 +47,7 @@ export type Colors = {
             title: string
         }
     }
+    cardBorder: string
 }
 
 export enum COLORS {
@@ -74,6 +75,7 @@ export enum COLORS {
     RED_700 = "#9B2C2C",
     RED_500 = "#E53E3E",
     RED_200 = "#FEB2B2",
+    RED_100 = "#FED7D7",
     RED_50 = "#FFF5F5",
     DARK_GREEN = "#325B00",
     DARK_GREEN_ALERT = "#185927",
@@ -84,12 +86,19 @@ export enum COLORS {
     LIGHT_GREEN = "#AAD836",
     PASTEL_GREEN = "#c5eacd",
     MEDIUM_GREEN = "#30B34E",
+    GREEN_500 = "#38A169",
+    GREEN_100 = "#C6F6D5",
+    GREEN_50 = "#F0FFF4",
     PASTEL_ORANGE = "#fedbc0",
     DARK_ORANGE_ALERT = "#AF4F0A",
     MEDIUM_ORANGE = "#FA710E",
-    GREY_600 = "#4A5568",
     DISABLED_GREY = "#E5E5E5",
     MEDIUM_GRAY = "#C4C4C4",
+    GREY_600 = "#4A5568",
+    GREY_500 = "#718096",
+    GREY_300 = "#CBD5E0",
+    GREY_200 = "#E2E8F0",
+    GREY_100 = "#EDF2F7",
     COINBASE_BACKGROUND_LIGHT = "#ffffff",
     COINBASE_BACKGROUND_DARK = "#0a0b0d",
     COINBASE_BACKGROUND_BLUE = "#0052FF",
@@ -127,6 +136,7 @@ const light: Colors = {
     splashColorLayer: COLORS.DARK_PURPLE,
     splashBackground: COLORS.DARK_PURPLE,
     card: COLORS.WHITE,
+    cardBorder: COLORS.GREY_300,
     border: COLORS.DARK_PURPLE,
     notification: COLORS.DARK_PURPLE,
     transparent: COLORS.TRANSPARENT,
@@ -178,6 +188,7 @@ const dark: Colors = {
     splashColorLayer: COLORS.LIME_GREEN,
     splashBackground: COLORS.DARK_PURPLE,
     card: COLORS.PURPLE,
+    cardBorder: COLORS.DARK_PURPLE,
     border: COLORS.WHITE,
     notification: COLORS.WHITE,
     transparent: COLORS.TRANSPARENT,
