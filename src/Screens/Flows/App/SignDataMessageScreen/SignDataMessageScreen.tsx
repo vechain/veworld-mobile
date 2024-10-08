@@ -110,7 +110,7 @@ export const SignDataMessageScreen: FC<Props> = ({ route }: Props) => {
         async (password?: string) => {
             try {
                 if (selectedAccount.device.type === DEVICE_TYPE.LEDGER) {
-                    throw new Error("Ledger signature not supported")
+                    throw new Error("Ledger devices not supported")
                 }
 
                 const signature = await signTypedData(password)

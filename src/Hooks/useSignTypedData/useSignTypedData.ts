@@ -12,7 +12,7 @@ export const useSignTypedMessage = ({ typedData }: Props) => {
     const senderDevice = useAppSelector(state => selectDevice(state, account.rootAddress))
     const currentNetwork = useAppSelector(selectSelectedNetwork)
 
-    const getSignature = (privateKey: Buffer<ArrayBufferLike>) => {
+    const getSignature = (privateKey: Buffer) => {
         const { domain, types, value } = typedData
 
         const thorClient = ThorClient.fromUrl(currentNetwork.currentUrl)
