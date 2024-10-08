@@ -8,6 +8,7 @@ import { BaseDevice, DEVICE_TYPE } from "~Model"
 
 type Props<T extends BaseDevice = BaseDevice> = {
     devices: T[]
+    onPress: (device: T) => void
 }
 
 type StatusConfig = {
@@ -19,7 +20,7 @@ type StatusConfig = {
     textColor?: string
 }
 
-export const DevicesBackupState = <T extends BaseDevice = BaseDevice>({ devices }: Props<T>) => {
+export const DevicesBackupState = <T extends BaseDevice = BaseDevice>({ devices, onPress }: Props<T>) => {
     const { LL } = useI18nContext()
 
     const { styles } = useThemedStyles(baseStyles)
@@ -54,6 +55,8 @@ export const DevicesBackupState = <T extends BaseDevice = BaseDevice>({ devices 
         return statusConfigs.unableToBackup
     }, [])
 
+    const renderItemSeparator = useCallback(() => <BaseSpacer height={4} />, [])
+
     const renderDeviceItem = useCallback(
         ({ item }: { item: T }) => {
             const { iconName, iconColor, backgroundColor, borderColor, statusText, textColor } = getStatusConfig(item)
@@ -61,7 +64,8 @@ export const DevicesBackupState = <T extends BaseDevice = BaseDevice>({ devices 
             return (
                 <BaseTouchableBox
                     containerStyle={[styles.deviceRow, { backgroundColor, borderColor }]}
-                    style={styles.deviceRowContent}>
+                    style={styles.deviceRowContent}
+                    onPress={() => onPress(item)}>
                     <BaseView style={styles.deviceInfo}>
                         <BaseIcon name={iconName} size={18} color={iconColor} />
                         <BaseSpacer width={12} />
@@ -79,7 +83,7 @@ export const DevicesBackupState = <T extends BaseDevice = BaseDevice>({ devices 
                 </BaseTouchableBox>
             )
         },
-        [getStatusConfig, styles],
+        [getStatusConfig, onPress, styles.deviceInfo, styles.deviceRow, styles.deviceRowContent],
     )
 
     return (
@@ -104,7 +108,7 @@ export const DevicesBackupState = <T extends BaseDevice = BaseDevice>({ devices 
                     data={devices}
                     keyExtractor={device => device.rootAddress}
                     renderItem={renderDeviceItem}
-                    ItemSeparatorComponent={() => <BaseSpacer height={4} />}
+                    ItemSeparatorComponent={renderItemSeparator}
                     showsVerticalScrollIndicator={false}
                 />
             </BaseCard>
