@@ -8,11 +8,9 @@ platform :android do
   desc "Validate the keystore and credentials"
   lane :validate do
     validate_play_store_json_key(
-      json_key: "./pc-api-4895632399891248889-903-c30062a54347.json"
+      json_key: "./pc-api-4895632399891248889-903-1f538768f7fe.json"
     )
   end
-
-
 
   # @param {object} options - The options for the build process.
   # @param {string} options.version_name - The version name of the build. Possible values: "patch", "minor", "major" or specific version "1.0.0".
@@ -72,20 +70,12 @@ platform :android do
           "android.injected.signing.key.password" => key_password, # Key password
         }
       )
-
-
-=begin
+      #upload .aab to the play store as internal track
       upload_to_play_store(
-        package_name: "com.vechain.wallet",
-        version_name: version_name,
-        version_code: version_code,
-        track: "interal",
-        json_key: "pc-api-4895632399891248889-903-c30062a54347.json", #from root directory
-        aab: "app/build/outputs/bundle/release/app-release.aab", #from root directory
-        skip_upload_apk: true,
-        skip_upload_metadata: true,
+        track: 'internal',
+        skip_upload_changelogs: true,
+        skip_upload_metadata: true
       )
-=end
 
       slack(
         message: version_name.nil? ? "VeWorld build number: #{version_code} was successfully released! [Android]" : "VeWorld version number: #{version_name} was successfully released! [Android]",
@@ -113,7 +103,85 @@ platform :android do
     end
   end
 end
-#
+
+  # @param {object} options - The options for the build process.
+  # @param {string} options.version_name - The version name of the build. Possible values: "patch", "minor", "major" or specific version "1.0.0".
+  # @param {string} options.version_code - The version code of the build.
+  desc "Submit a new Beta Build to Play Store"
+  lane :build_android_ci do |options|
+    store_password = ENV["STORE_PASSWORD"]
+    key_password = ENV["KEY_PASSWORD"]
+    key_alias = ENV["KEY_ALIAS"]
+
+    github_username = options[:github_username]
+    version_name = options[:version_name]
+    version_code = options[:version_code]
+    
+    setup_ci if ENV['CI']
+
+    sh("chmod +x ./ci_bump_gradle_app_versions.sh")
+
+    Dir.chdir "../.." do
+      sh("yarn purge:android && yarn install:android")
+    end
+
+
+    begin
+
+      releaseFilePath = File.join(Dir.pwd, "..", "release.keystore")
+
+      sh("./ci_bump_gradle_app_versions.sh #{version_code} #{version_name}")
+
+      gradle(task: 'clean')
+      gradle(
+        task: 'bundle',
+        build_type: 'Release',
+        print_command: true,
+        print_command_output: true,
+
+        properties: {
+          "android.injected.version.code" => version_code, # Manually increment this value before each release
+          "android.injected.version.name" => version_name, # Manually increment this value before each release
+          "android.injected.signing.store.file" => releaseFilePath, # Path to the release keystore
+          "android.injected.signing.store.password" => store_password, # Keystore password
+          "android.injected.signing.key.alias" => key_alias, # Key alias
+          "android.injected.signing.key.password" => key_password, # Key password
+        }
+      )
+
+      upload_to_play_store(
+        track: 'internal',
+        skip_upload_changelogs: true,
+        skip_upload_metadata: true
+      )
+
+
+      slack(
+        message: version_name.nil? ? "VeWorld build number: #{version_code} was successfully released! [Android]" : "VeWorld version number: #{version_name} was successfully released! [Android]",
+        slack_url: ENV["SLACK_WEBHOOK"],
+        success: true,
+        payload: {
+          "Build Date" => Time.new.strftime("%d/%m/%Y %H:%M"),
+          "Built by" => github_username,
+        },
+      )
+
+    rescue => exception
+
+      puts exception
+
+      slack(
+        message: version_name.nil? ? "Error releasing VeWorld build number: #{version_code} [Android]" : "Error releasing VeWorld version number: #{version_name} [Android]",
+        slack_url: ENV["SLACK_WEBHOOK"],
+        success: false,
+        payload: {
+          "Build Date" => Time.new.strftime("%d/%m/%Y %H:%M"),
+          "Built by" => github_username,
+        },
+      )
+    end
+  end
+
 
 
 lane :build_test_ci do |options|
