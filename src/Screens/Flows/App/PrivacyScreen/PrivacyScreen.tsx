@@ -16,7 +16,6 @@ import {
     EnableFeature,
     Layout,
     RequireUserPassword,
-    SelectDeviceBottomSheet,
     showWarningToast,
 } from "~Components"
 import { useBackupMnemonic } from "./Hooks/useBackupMnemonic"
@@ -61,11 +60,7 @@ export const PrivacyScreen = () => {
 
     const { isWalletSecurityBiometrics } = useWalletSecurity()
 
-    const {
-        ref: walletMgmtBottomSheetRef,
-        openWithDelay: openWalletMgmtSheetWithDelay,
-        onClose: closeWalletMgmtSheet,
-    } = useBottomSheetModal()
+    const { openWithDelay: openWalletMgmtSheetWithDelay, onClose: closeWalletMgmtSheet } = useBottomSheetModal()
 
     const { isOpen: isPasswordPromptOpen, onOpen: openPasswordPrompt, onClose: closePasswordPrompt } = useDisclosure()
 
@@ -114,6 +109,13 @@ export const PrivacyScreen = () => {
         }
         openBackupWarningSheet()
     }, [selectedAccount, LL, openBackupWarningSheet])
+
+    const handleDeviceBackup = useCallback(
+        (device: LocalDevice) => {
+            handleOnSelectedWallet(device)
+        },
+        [handleOnSelectedWallet],
+    )
 
     // [END] - Hooks setup
 
@@ -188,7 +190,13 @@ export const PrivacyScreen = () => {
                         <EnableBiometrics />
                         <BaseSpacer height={40} />
 
-                        <DevicesBackupState<LocalDevice> devices={devices} />
+                        <DevicesBackupState devices={devices} onPress={handleDeviceBackup} />
+
+                        <RequireUserPassword
+                            isOpen={isPasswordPromptOpen}
+                            onClose={closePasswordPrompt}
+                            onSuccess={onPasswordSuccess}
+                        />
 
                         {!isWalletSecurityBiometrics && (
                             <>
@@ -239,18 +247,6 @@ export const PrivacyScreen = () => {
                                 />
                             </>
                         )}
-
-                        <SelectDeviceBottomSheet<LocalDevice>
-                            ref={walletMgmtBottomSheetRef}
-                            onClose={handleOnSelectedWallet}
-                            devices={devices}
-                        />
-
-                        <RequireUserPassword
-                            isOpen={isPasswordPromptOpen}
-                            onClose={closePasswordPrompt}
-                            onSuccess={onPasswordSuccess}
-                        />
 
                         <RequireUserPassword
                             isOpen={isEditPinPromptOpen}
