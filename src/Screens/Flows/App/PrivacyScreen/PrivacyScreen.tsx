@@ -40,6 +40,7 @@ import Animated, {
 import { StyleSheet, Text } from "react-native"
 import { useNavigation } from "@react-navigation/native"
 import { Routes } from "~Navigation"
+import { DevicesBackupState } from "~Screens/Flows/App/PrivacyScreen/Components/DevicesBackupState"
 
 const AnimatedBaseText = Animated.createAnimatedComponent(Text)
 
@@ -185,6 +186,9 @@ export const PrivacyScreen = () => {
                         )}
 
                         <EnableBiometrics />
+                        <BaseSpacer height={40} />
+
+                        <DevicesBackupState<LocalDevice> devices={devices} />
 
                         {!isWalletSecurityBiometrics && (
                             <>
