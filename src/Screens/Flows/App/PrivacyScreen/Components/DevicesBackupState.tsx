@@ -88,12 +88,13 @@ export const DevicesBackupState = <T extends BaseDevice = BaseDevice>({ devices,
 
     return (
         <>
-            <BaseText mb={8} typographyFont="button">
+            <BaseText mb={4} typographyFont="subSubTitleMedium">
                 {LL.SB_BACKUP_RECOVERY_PHRASE()}
             </BaseText>
+            <BaseSpacer height={4} />
             <BaseText typographyFont="captionRegular">{LL.BD_BACKUP_RECOVERY_PHRASE()}</BaseText>
 
-            <BaseSpacer height={24} />
+            <BaseSpacer height={16} />
 
             <BaseCard containerStyle={styles.cardContainer} style={styles.card}>
                 <BaseView style={styles.cardHeader}>

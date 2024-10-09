@@ -48,6 +48,8 @@ export type Colors = {
         }
     }
     cardBorder: string
+    switchEnabled: string
+    textLight: string
 }
 
 export enum COLORS {
@@ -130,6 +132,7 @@ const light: Colors = {
     textDisabled: COLORS.DARK_PURPLE_DISABLED,
     textReversed: COLORS.WHITE,
     alertDescription: COLORS.GREY_600,
+    textLight: COLORS.GREY_500,
     background: COLORS.LIGHT_GRAY,
     backgroundReversed: COLORS.DARK_PURPLE,
     backgroundTransparent: COLORS.LIGHT_GRAY_TRANSPARENT,
@@ -160,6 +163,7 @@ const light: Colors = {
             title: COLORS.RED_700,
         },
     },
+    switchEnabled: COLORS.LIME_GREEN,
 }
 
 const dark: Colors = {
@@ -182,6 +186,7 @@ const dark: Colors = {
     textDisabled: COLORS.WHITE_DISABLED,
     textReversed: COLORS.DARK_PURPLE,
     alertDescription: COLORS.GREY_600,
+    textLight: COLORS.WHITE,
     background: COLORS.DARK_PURPLE,
     backgroundReversed: COLORS.GRAY,
     backgroundTransparent: COLORS.DARK_PURPLE_TRANSPARENT,
@@ -212,6 +217,7 @@ const dark: Colors = {
             title: COLORS.RED_700,
         },
     },
+    switchEnabled: COLORS.LIME_GREEN,
 }
 
 export const colors = { light, dark }

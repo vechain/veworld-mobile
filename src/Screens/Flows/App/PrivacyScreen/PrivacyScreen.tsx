@@ -154,7 +154,7 @@ export const PrivacyScreen = () => {
                                     value={false}
                                 />
 
-                                <BaseSpacer height={24} />
+                                <BaseSpacer height={40} />
                             </>
                         )}
 
@@ -186,7 +186,7 @@ export const PrivacyScreen = () => {
                             onSuccess={onPasswordSuccess}
                         />
 
-                        <BaseSpacer height={24} />
+                        <BaseSpacer height={40} />
 
                         {devFeaturesEnabled && (
                             <>
