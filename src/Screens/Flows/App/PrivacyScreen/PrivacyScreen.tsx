@@ -1,14 +1,6 @@
 import React, { useCallback, useEffect, useState } from "react"
+import { useBottomSheetModal, useCheckWalletBackup, useDisclosure, useInterval, useWalletSecurity } from "~Hooks"
 import {
-    useBottomSheetModal,
-    useCheckWalletBackup,
-    useDisclosure,
-    useInterval,
-    useTheme,
-    useWalletSecurity,
-} from "~Hooks"
-import {
-    BaseIcon,
     BaseSpacer,
     BaseText,
     BaseTouchable,
@@ -29,19 +21,10 @@ import { useEditPin } from "./Hooks/useEditPin"
 import { BackupWarningBottomSheet } from "./Components/BackupWarningBottomSheet"
 import { warn } from "~Utils"
 import { ERROR_EVENTS } from "~Constants"
-import Animated, {
-    interpolate,
-    interpolateColor,
-    useAnimatedStyle,
-    useSharedValue,
-    withTiming,
-} from "react-native-reanimated"
-import { StyleSheet, Text } from "react-native"
+import { useSharedValue, withTiming } from "react-native-reanimated"
 import { useNavigation } from "@react-navigation/native"
 import { Routes } from "~Navigation"
 import { DevicesBackupState } from "~Screens/Flows/App/PrivacyScreen/Components/DevicesBackupState"
-
-const AnimatedBaseText = Animated.createAnimatedComponent(Text)
 
 export const PrivacyScreen = () => {
     // [START] - Hooks setup
@@ -75,7 +58,7 @@ export const PrivacyScreen = () => {
         [nav],
     )
 
-    const { onPasswordSuccess, checkSecurityBeforeOpening, handleOnSelectedWallet } = useBackupMnemonic({
+    const { onPasswordSuccess, handleOnSelectedWallet } = useBackupMnemonic({
         closePasswordPrompt,
         openBackupPhraseSheetWithDelay,
         openWalletMgmtSheetWithDelay,
@@ -135,7 +118,6 @@ export const PrivacyScreen = () => {
 
     // [START] - Animations
     const animationProgress = useSharedValue(0)
-    const theme = useTheme()
     const [count, setCount] = useState<number>(0)
     useInterval({
         callback: () => {
@@ -150,17 +132,6 @@ export const PrivacyScreen = () => {
             animationProgress.value = withTiming(0, { duration: 400 })
         })
     }, [animationProgress, count])
-
-    const animatedStyle = useAnimatedStyle(() => {
-        return {
-            color: interpolateColor(animationProgress.value, [0, 1], [theme.colors.text, theme.colors.danger]),
-            transform: [
-                {
-                    scale: interpolate(animationProgress.value, [0, 1], [0.99, 1.01]),
-                },
-            ],
-        }
-    }, [theme.isDark])
 
     // [END] - Animations
 
@@ -188,6 +159,23 @@ export const PrivacyScreen = () => {
                         )}
 
                         <EnableBiometrics />
+
+                        {!isWalletSecurityBiometrics && (
+                            <>
+                                <BaseSpacer height={8} />
+                                <BaseView alignItems="flex-end" w={100}>
+                                    <BaseView alignItems="center" w={50}>
+                                        <BaseTouchable
+                                            haptics="Light"
+                                            action={handleOnEditPinPress}
+                                            title={LL.BTN_EDIT_PIN()}
+                                            underlined
+                                        />
+                                    </BaseView>
+                                </BaseView>
+                            </>
+                        )}
+
                         <BaseSpacer height={40} />
 
                         <DevicesBackupState devices={devices} onPress={handleDeviceBackup} />
@@ -198,44 +186,7 @@ export const PrivacyScreen = () => {
                             onSuccess={onPasswordSuccess}
                         />
 
-                        {!isWalletSecurityBiometrics && (
-                            <>
-                                <BaseSpacer height={16} />
-                                <BaseTouchable
-                                    haptics="Light"
-                                    action={handleOnEditPinPress}
-                                    title={LL.BTN_EDIT_PIN()}
-                                    underlined
-                                />
-                            </>
-                        )}
-
                         <BaseSpacer height={24} />
-
-                        {/** this fix a bug where there are only ledger wallets */}
-                        {!!devices.length && (
-                            <>
-                                {isShowBackupModal ? (
-                                    <BaseTouchable haptics="Light" action={checkSecurityBeforeOpening} underlined>
-                                        <BaseView flexDirection="row" alignItems="baseline">
-                                            <BaseIcon name="alert" size={24} color={theme.colors.danger} />
-                                            <BaseSpacer width={8} />
-                                            <AnimatedBaseText style={[styles.animatedFont, animatedStyle]}>
-                                                {LL.BD_BACKUP_MNEMONIC()}
-                                            </AnimatedBaseText>
-                                        </BaseView>
-                                    </BaseTouchable>
-                                ) : (
-                                    <BaseTouchable
-                                        haptics="Light"
-                                        action={checkSecurityBeforeOpening}
-                                        underlined
-                                        title={LL.BD_BACKUP_MNEMONIC()}
-                                    />
-                                )}
-                                <BaseSpacer height={24} />
-                            </>
-                        )}
 
                         {devFeaturesEnabled && (
                             <>
@@ -266,9 +217,3 @@ export const PrivacyScreen = () => {
         />
     )
 }
-
-const styles = StyleSheet.create({
-    animatedFont: {
-        fontWeight: "600",
-    },
-})
