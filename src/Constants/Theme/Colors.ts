@@ -143,7 +143,7 @@ const light: Colors = {
     horizontalButtonSelected: COLORS.DARK_PURPLE,
     horizontalButtonText: COLORS.WHITE,
     horizontalButtonTextReversed: COLORS.DARK_PURPLE,
-    switchEnabled: COLORS.LIME_GREEN,
+    switchEnabled: COLORS.LIGHT_GREEN,
 }
 
 const dark: Colors = {
@@ -188,7 +188,7 @@ const dark: Colors = {
     horizontalButtonSelected: COLORS.DARK_PURPLE,
     horizontalButtonText: COLORS.WHITE,
     horizontalButtonTextReversed: COLORS.WHITE,
-    switchEnabled: COLORS.LIME_GREEN,
+    switchEnabled: COLORS.LIGHT_GREEN,
 }
 
 export const colors = { light, dark }
