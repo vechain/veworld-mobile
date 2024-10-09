@@ -22,13 +22,13 @@ export const useBrowserSearch = () => {
                 addVisitedUrl(navInput)
                 nav.navigate(Routes.BROWSER, { url: navInput })
             } else {
-                // const url = `https://www.google.com/search?q=${encodeURIComponent(searchStr)}&oq=${encodeURIComponent(
-                //     searchStr,
-                // )}`
+                const url = `https://www.google.com/search?q=${encodeURIComponent(searchStr)}&oq=${encodeURIComponent(
+                    searchStr,
+                )}`
 
-                addVisitedUrl(searchStr)
+                addVisitedUrl(url)
                 nav.navigate(Routes.BROWSER, {
-                    url: searchStr,
+                    url,
                 })
             }
         },
