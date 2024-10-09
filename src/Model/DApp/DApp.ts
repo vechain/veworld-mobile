@@ -51,7 +51,7 @@ type WcConnectAppRequest = BaseRequest & {
 
 type InAppConnectAppRequest = BaseRequest & {
     type: "in-app"
-    initialRequest: InAppCertRequest | InAppTxRequest | BaseTypedDataRequest
+    initialRequest: InAppCertRequest | InAppTxRequest | InAppTypedDataRequest
 }
 
 type WcCertRequest = BaseCertificateRequest & BaseWcRequest

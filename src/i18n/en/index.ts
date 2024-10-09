@@ -499,6 +499,7 @@ const en: BaseTranslation = {
     CONNECTION_REQUEST_SUBTITLE: "{name} is asking for access to:",
     CONNECTION_REQUEST_TRANSACTION_DESCRIPTION: "\u25CF Request transactions to send to Vechain Thor",
     CONNECTION_REQUEST_SIGN_DESCRIPTION: "\u25CF Request your signature on certificates or identification and agreements",
+    CONNECTION_REQUEST_SIGN_TYPED_DATA_DESCRIPTION: "\u25CF Request your signature on typed data message",
     CONNECTED_APP_SIGN_REQUEST_TITLE: "Sign a certificate",
     CONNECTED_APP_SIGN_MESSAGE_TITLE: "Sign a message",
     CONNECTED_APP_CHANGE_ACCOUNT_REQUEST_TITLE: "Change account",

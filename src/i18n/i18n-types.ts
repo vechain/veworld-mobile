@@ -1809,6 +1809,10 @@ type RootTranslation = {
 	 */
 	CONNECTION_REQUEST_SIGN_DESCRIPTION: string
 	/**
+	 * ●​ ​R​e​q​u​e​s​t​ ​y​o​u​r​ ​s​i​g​n​a​t​u​r​e​ ​o​n​ ​t​y​p​e​d​ ​d​a​t​a​ ​m​e​s​s​a​g​e
+	 */
+	CONNECTION_REQUEST_SIGN_TYPED_DATA_DESCRIPTION: string
+	/**
 	 * S​i​g​n​ ​a​ ​c​e​r​t​i​f​i​c​a​t​e
 	 */
 	CONNECTED_APP_SIGN_REQUEST_TITLE: string
@@ -5054,6 +5058,10 @@ Try reconnect your device to the internet.
 	 * ● Request your signature on certificates or identification and agreements
 	 */
 	CONNECTION_REQUEST_SIGN_DESCRIPTION: () => LocalizedString
+	/**
+	 * ● Request your signature on typed data message
+	 */
+	CONNECTION_REQUEST_SIGN_TYPED_DATA_DESCRIPTION: () => LocalizedString
 	/**
 	 * Sign a certificate
 	 */
