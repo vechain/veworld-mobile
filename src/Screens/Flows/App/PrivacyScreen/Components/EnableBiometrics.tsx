@@ -57,9 +57,10 @@ export const EnableBiometrics = () => {
 
     return (
         <>
-            <BaseText mb={8} typographyFont="button">
+            <BaseText mb={4} typographyFont="subSubTitleMedium">
                 {LL.SB_SECURITY_METHOD()}
             </BaseText>
+            <BaseSpacer height={4} />
             <BaseText typographyFont="captionRegular">{LL.BD_SECURITY_METHOD()}</BaseText>
 
             <BaseSpacer height={24} />

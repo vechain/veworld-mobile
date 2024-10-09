@@ -7,6 +7,7 @@ export type TFonts =
     | "subTitle"
     | "subTitleLight"
     | "subSubTitle"
+    | "subSubTitleMedium"
     | "subSubTitleLight"
     | "body"
     | "bodyBold"
@@ -125,6 +126,11 @@ export const defaults: Record<TFonts, TypographyObject> = {
         fontFamily: fontFamily["Inter-Bold"],
         fontSize: 16,
         fontWeight: fontWeight[700],
+    },
+    subSubTitleMedium: {
+        fontFamily: fontFamily["Inter-Medium"],
+        fontSize: 16,
+        fontWeight: fontWeight[500],
     },
     subSubTitleLight: {
         fontFamily: fontFamily["Inter-Regular"],
