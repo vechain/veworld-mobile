@@ -39,7 +39,7 @@ export const useSignTypedMessage = ({ typedData }: Props) => {
     const getSignatureByPrivateKey = (wallet: Wallet) => {
         if (!wallet.privateKey) throw new Error("Private key wallet can't have an empty private key")
 
-        const privateKey = Buffer.from(HexUtils.removePrefix(wallet.privateKey!), "hex")
+        const privateKey = Buffer.from(HexUtils.removePrefix(wallet.privateKey), "hex")
 
         return getSignature(privateKey)
     }

@@ -36,7 +36,7 @@ import { NativeStackScreenProps } from "@react-navigation/native-stack"
 import { useNavigation } from "@react-navigation/native"
 import { UnknownAppMessage } from "~Screens"
 import { AnalyticsEvent, ERROR_EVENTS, RequestMethods } from "~Constants"
-import { useObservedAccountExclusion } from "../WalletConnect/Hooks"
+import { useObservedAccountExclusion } from "../Hooks"
 import { DataMessageDetails } from "./Components"
 
 type Props = NativeStackScreenProps<RootStackParamListSwitch, Routes.CONNECTED_APP_SIGN_TYPED_MESSAGE_SCREEN>
@@ -63,7 +63,7 @@ export const SignDataMessageScreen: FC<Props> = ({ route }: Props) => {
     const track = useAnalyticTracking()
     const dispatch = useAppDispatch()
 
-    const [isInvalidChecked, setInvalidChecked] = React.useState(false)
+    const [isInvalidChecked, setIsInvalidChecked] = React.useState(false)
 
     const setSelectedAccount = (account: AccountWithDevice | WatchedAccount) => {
         onSetSelectedAccount({ address: account.address })
@@ -196,7 +196,9 @@ export const SignDataMessageScreen: FC<Props> = ({ route }: Props) => {
         checkIdentityBeforeOpening,
         isBiometricsEmpty,
     } = useCheckIdentity({
-        onIdentityConfirmed: handleAccept,
+        onIdentityConfirmed: password => {
+            handleAccept(password)
+        },
         allowAutoPassword: true,
     })
 
@@ -239,7 +241,7 @@ export const SignDataMessageScreen: FC<Props> = ({ route }: Props) => {
                         <UnknownAppMessage
                             verifyContext={sessionContext.verifyContext}
                             confirmed={isInvalidChecked}
-                            setConfirmed={setInvalidChecked}
+                            setConfirmed={setIsInvalidChecked}
                         />
                     )}
                 </BaseView>
