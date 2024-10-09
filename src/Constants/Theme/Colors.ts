@@ -163,7 +163,7 @@ const light: Colors = {
             title: COLORS.RED_700,
         },
     },
-    switchEnabled: COLORS.LIME_GREEN,
+    switchEnabled: COLORS.LIGHT_GREEN,
 }
 
 const dark: Colors = {
@@ -217,7 +217,7 @@ const dark: Colors = {
             title: COLORS.RED_700,
         },
     },
-    switchEnabled: COLORS.LIME_GREEN,
+    switchEnabled: COLORS.LIGHT_GREEN,
 }
 
 export const colors = { light, dark }
