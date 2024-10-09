@@ -179,9 +179,9 @@ export function getSendTxOptions(requestEvent: PendingRequestTypes.Struct): Conn
     }
 }
 
-export function getSignTypedDataOptions(requestEvent: PendingRequestTypes.Struct): {
-    signer?: string
-} {
+export function getSignTypedDataOptions(
+    requestEvent: PendingRequestTypes.Struct,
+): Omit<Connex.Signer.CertOptions, "link" | "onAccepted"> {
     try {
         return requestEvent.params.request.params[0].options ?? {}
     } catch (e) {
