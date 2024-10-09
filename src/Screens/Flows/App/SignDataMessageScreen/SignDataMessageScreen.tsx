@@ -255,7 +255,6 @@ export const SignDataMessageScreen: FC<Props> = ({ route }: Props) => {
                         /* We must assert that `biometrics` is not empty otherwise we don't know if the user has set biometrics or passcode, thus failing to decrypt the wallet when signing */
                         isLoading={isBiometricsEmpty}
                         disabled={isBiometricsEmpty || (!validConnectedApp && !isInvalidChecked)}
-                        // disabled={isBiometricsEmpty}
                     />
                     <BaseSpacer height={16} />
                     <BaseButton
