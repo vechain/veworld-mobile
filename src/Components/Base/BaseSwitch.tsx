@@ -13,16 +13,14 @@ export const BaseSwitch = ({ onValueChange, value, ...props }: Props) => {
             return theme.isDark ? theme.colors.text : theme.colors.textReversed
         }
 
-        if (!value) return theme.isDark ? theme.colors.text : theme.colors.textReversed
-
-        return theme.colors.textReversed
-    }, [theme, value])
+        return theme.colors.text
+    }, [theme])
 
     return (
         <Switch
             trackColor={{
                 false: theme.colors.primaryDisabled,
-                true: theme.colors.primary,
+                true: theme.colors.switchEnabled,
             }}
             thumbColor={thumbColor}
             ios_backgroundColor={theme.colors.primaryDisabled}

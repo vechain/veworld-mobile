@@ -1,5 +1,6 @@
 import React from "react"
-import { BaseSpacer, BaseSwitch, BaseText } from "~Components"
+import { BaseSpacer, BaseSwitch, BaseText, BaseView } from "~Components"
+import { useTheme } from "~Hooks"
 
 type Props = {
     title: string
@@ -9,14 +10,23 @@ type Props = {
 }
 
 export const EnableFeature = ({ title, subtitle, onValueChange, value }: Props) => {
+    const theme = useTheme()
     return (
         <>
-            <BaseText typographyFont="bodyMedium" my={8}>
-                {title}
-            </BaseText>
-            {subtitle && <BaseText typographyFont="caption">{subtitle}</BaseText>}
-            <BaseSpacer height={20} />
-            <BaseSwitch onValueChange={onValueChange} value={value} />
+            <BaseView flexDirection="row" alignItems="center">
+                <BaseView flexDirection="column" flex={1}>
+                    <BaseText typographyFont="subSubTitleMedium" my={8}>
+                        {title}
+                    </BaseText>
+                    {subtitle && (
+                        <BaseText color={theme.colors.textLight} typographyFont="captionRegular">
+                            {subtitle}
+                        </BaseText>
+                    )}
+                </BaseView>
+                <BaseSpacer width={20} />
+                <BaseSwitch onValueChange={onValueChange} value={value} />
+            </BaseView>
         </>
     )
 }
