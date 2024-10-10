@@ -24,8 +24,6 @@ type BackupBannerItem = {
     title: string
 }
 
-type SettingsItem = SettingsRowItem | DividerItem | BackupBannerItem
-
 export const SettingsScreen = () => {
     const { LL } = useI18nContext()
     const devFeaturesEnabled = useAppSelector(selectAreDevFeaturesEnabled)
@@ -64,7 +62,9 @@ export const SettingsScreen = () => {
     }, [themedStyles.cardContainer, theme.colors.alertCards.error, theme.colors.alertDescription])
 
     const renderItem = useCallback(
-        ({ item }: { item: SettingsItem }) => {
+        (props: { item: SettingsRowItem | DividerItem | BackupBannerItem }) => {
+            const { item } = props
+
             switch (item.element) {
                 case "settingsRow":
                     return (
@@ -134,7 +134,7 @@ const baseStyles = (theme: ColorThemeType) =>
     })
 
 const getLists = (LL: TranslationFunctions, devEnabled: boolean) => {
-    const settingsList: SettingsItem[] = [
+    const settingsList: (SettingsRowItem | DividerItem | BackupBannerItem)[] = [
         {
             element: "settingsRow",
             title: LL.TITLE_GENERAL_SETTINGS(),
