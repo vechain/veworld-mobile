@@ -1,5 +1,7 @@
 #tokenManagement
 appId: org.vechain.veworld.app
+onFlowComplete:
+  - runFlow: ../setup_reset/resetApp.yaml
 env:
  TOKEN_NAME_ADDRESS: "0xeDecAa0Ad8d93d6167D647A0105f2d93d8270124"
  TOKEN_NAME2_ADDRESS: "0xC9e1B9B34e02610d27Bf213ecbf527D608CE3D39"
