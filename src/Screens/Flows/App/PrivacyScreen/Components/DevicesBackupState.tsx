@@ -58,24 +58,28 @@ export const DevicesBackupState = <T extends BaseDevice = BaseDevice>({ devices,
     const renderItemSeparator = useCallback(() => <BaseSpacer height={4} />, [])
 
     const renderDeviceItem = useCallback(
-        ({ item }: { item: T }) => {
-            const { iconName, iconColor, backgroundColor, borderColor, statusText, textColor } = getStatusConfig(item)
+        (props: { item: T }) => {
+            const { item } = props
+            const itemConfig = getStatusConfig(item)
 
             return (
                 <BaseTouchableBox
-                    containerStyle={[styles.deviceRow, { backgroundColor, borderColor }]}
+                    containerStyle={[
+                        styles.deviceRow,
+                        { backgroundColor: itemConfig.backgroundColor, borderColor: itemConfig.borderColor },
+                    ]}
                     style={styles.deviceRowContent}
                     onPress={() => onPress(item)}>
                     <BaseView style={styles.deviceInfo}>
-                        <BaseIcon name={iconName} size={18} color={iconColor} />
+                        <BaseIcon name={itemConfig.iconName} size={18} color={itemConfig.iconColor} />
                         <BaseSpacer width={12} />
-                        <BaseText typographyFont="buttonSecondary" color={textColor || COLORS.DARK_PURPLE}>
+                        <BaseText typographyFont="buttonSecondary" color={itemConfig.textColor ?? COLORS.DARK_PURPLE}>
                             {item.alias}
                         </BaseText>
                     </BaseView>
-                    {statusText ? (
-                        <BaseText typographyFont="captionMedium" color={textColor || COLORS.DARK_PURPLE}>
-                            {statusText}
+                    {itemConfig.statusText ? (
+                        <BaseText typographyFont="captionMedium" color={itemConfig.textColor ?? COLORS.DARK_PURPLE}>
+                            {itemConfig.statusText}
                         </BaseText>
                     ) : (
                         <BaseIcon name="chevron-right" size={12} color={COLORS.DARK_PURPLE} />
