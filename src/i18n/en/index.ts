@@ -932,6 +932,8 @@ const en: BaseTranslation = {
     SECURITY_PHRASE_BACKED_UP: "I've backed up the phrase!",
     SECURITY_UPGRADE_ONLY_HARDWARE: "It looks like you only have a hardware wallet connected to VeWorld. You can upgrade security level without backing up",
     SECURITY_UPGRADE_ONLY_PK: "It looks like you only have a private key wallet connected to VeWorld. You can upgrade security level without backing up",
+    SECURITY_UPGRADE_REMINDER: "Important Reminder",
+    SECURITY_UPGRADE_REMINDER_DESC: "Please, make sure you have backed up your recovery phrase before proceeding with the upgrade.",
 
     // CloudKit
     WELCOME_BACK: "Welcome back",

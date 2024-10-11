@@ -9,6 +9,7 @@ import { useNavigation } from "@react-navigation/native"
 import { Routes } from "~Navigation"
 import { useI18nContext } from "~i18n"
 import { isEmpty, isUndefined } from "lodash"
+import { Modal, StyleSheet, View } from "react-native"
 
 export const SecurityUpgrade_V2 = ({
     oldPersistedState,
@@ -31,6 +32,7 @@ export const SecurityUpgrade_V2 = ({
         useWalletSecurity(securityType)
 
     const { isOpen: isPasswordPromptOpen, onOpen: openPasswordPrompt, onClose: closePasswordPrompt } = useDisclosure()
+    const { isOpen: isExtraModalOpen, onOpen: openExtraModal, onClose: closeExtraModal } = useDisclosure()
 
     const navigateToBackupScreen = useCallback(
         (wallets: BackupWallet[], _password?: string) => {
@@ -45,6 +47,7 @@ export const SecurityUpgrade_V2 = ({
     )
 
     const onBackupHandler = useCallback(async () => {
+        closeExtraModal()
         if (isWalletSecurityNone) throw new Error("No security set")
         if (isWalletSecurityPassword) openPasswordPrompt()
         isUpgrade.current = false
@@ -77,6 +80,7 @@ export const SecurityUpgrade_V2 = ({
         oldPersistedState,
         isWalletSecurityBiometrics,
         navigateToBackupScreen,
+        closeExtraModal,
     ])
 
     const onPasswordSuccess = useCallback(
@@ -109,6 +113,7 @@ export const SecurityUpgrade_V2 = ({
     )
 
     const onStartUpgrade = useCallback(async () => {
+        closeExtraModal()
         isUpgrade.current = true
 
         if (isWalletSecurityPassword) openPasswordPrompt()
@@ -119,6 +124,7 @@ export const SecurityUpgrade_V2 = ({
         oldPersistedState,
         openPasswordPrompt,
         upgradeSecurityToV2,
+        closeExtraModal,
     ])
 
     const onPasswordUpgradeSuccess = useCallback(
@@ -183,7 +189,15 @@ export const SecurityUpgrade_V2 = ({
                     </BaseView>
 
                     <BaseView w={100}>
-                        <BaseButton title={LL.SECURITY_UPGRADE_BTN()} w={100} radius={8} action={onStartUpgrade} />
+                        <BaseButton
+                            title={LL.SECURITY_UPGRADE_BTN()}
+                            w={100}
+                            radius={8}
+                            action={
+                                (_isOnlyLedger ? onStartUpgrade : openExtraModal) ||
+                                (_isOnlyPk ? onStartUpgrade : openExtraModal)
+                            }
+                        />
                     </BaseView>
                 </BaseView>
             </BaseView>
@@ -195,6 +209,62 @@ export const SecurityUpgrade_V2 = ({
                     }
                 />
             </BaseModalWithChildren>
+
+            <Modal animationType="slide" transparent={true} visible={isExtraModalOpen} onRequestClose={closeExtraModal}>
+                <View style={styles.endView}>
+                    <View style={[styles.modalView, { backgroundColor: theme.colors.card }]}>
+                        <BaseText align="center" typographyFont="subSubTitle">
+                            {LL.SECURITY_UPGRADE_REMINDER()}
+                        </BaseText>
+
+                        <BaseSpacer height={8} />
+
+                        <BaseText align="center" typographyFont="caption">
+                            {LL.SECURITY_UPGRADE_REMINDER_DESC()}
+                        </BaseText>
+
+                        <View style={styles.innerButtonContainer}>
+                            <BaseButton
+                                w={100}
+                                radius={8}
+                                title={LL.SECURITY_BACKUP_BTN()}
+                                variant="outline"
+                                action={onBackupHandler}
+                                disabled={_isOnlyLedger || _isOnlyPk}
+                            />
+
+                            <BaseSpacer height={14} />
+                            <BaseButton title={"Upgrade"} w={100} radius={8} action={onStartUpgrade} />
+                        </View>
+                    </View>
+                </View>
+            </Modal>
         </SafeAreaView>
     )
 }
+
+const styles = StyleSheet.create({
+    endView: {
+        flex: 1,
+        justifyContent: "flex-end",
+        alignItems: "center",
+    },
+    modalView: {
+        width: "100%",
+        height: "40%",
+        borderRadius: 20,
+        padding: 24,
+
+        shadowColor: "#000",
+        shadowOffset: {
+            width: 0,
+            height: 2,
+        },
+        shadowOpacity: 0.25,
+        shadowRadius: 4,
+        elevation: 5,
+
+        alignItems: "center",
+    },
+    innerButtonContainer: { flexGrow: 1, width: "100%", justifyContent: "flex-end", paddingBottom: 12 },
+})
