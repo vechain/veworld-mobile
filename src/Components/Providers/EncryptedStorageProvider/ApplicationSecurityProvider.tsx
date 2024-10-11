@@ -245,7 +245,7 @@ export const ApplicationSecurityProvider = ({ children }: ApplicationSecurityCon
         async (_biometrics: BiometricState) => {
             const oldStorageKeys = UserEncryptedStorage.getAllKeys()
 
-            if (oldStorageKeys.length === 0) {
+            if (oldStorageKeys.length > 0) {
                 info(ERROR_EVENTS.SECURITY, "User has onboarded, migrating to new storage")
                 setWalletStatus(WALLET_STATUS.MIGRATING)
                 await setUpEncryptionKeys(_biometrics, WALLET_STATUS.MIGRATING)
