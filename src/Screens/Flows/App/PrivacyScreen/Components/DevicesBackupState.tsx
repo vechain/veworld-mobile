@@ -45,7 +45,7 @@ export const DevicesBackupState = <T extends BaseDevice = BaseDevice>({ devices,
                 iconColor: COLORS.GREY_500,
                 backgroundColor: COLORS.GREY_100,
                 borderColor: COLORS.GREY_200,
-                statusText: "Can't be backed up",
+                statusText: "(Can't be backed up)",
                 textColor: COLORS.GREY_600,
             },
         }
@@ -78,7 +78,9 @@ export const DevicesBackupState = <T extends BaseDevice = BaseDevice>({ devices,
                         </BaseText>
                     </BaseView>
                     {itemConfig.statusText ? (
-                        <BaseText typographyFont="captionMedium" color={itemConfig.textColor ?? COLORS.DARK_PURPLE}>
+                        <BaseText
+                            typographyFont="smallCaptionRegular"
+                            color={itemConfig.textColor ?? COLORS.DARK_PURPLE}>
                             {itemConfig.statusText}
                         </BaseText>
                     ) : (
