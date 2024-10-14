@@ -1,6 +1,16 @@
 import React, { useCallback, useEffect, useMemo, useState } from "react"
 import { MMKV } from "react-native-mmkv"
-import { BiometricsUtils, CryptoUtils, CryptoUtils_Legacy, debug, error, HexUtils, info, PasswordUtils } from "~Utils"
+import {
+    BiometricsUtils,
+    CryptoUtils,
+    CryptoUtils_Legacy,
+    debug,
+    error,
+    HexUtils,
+    info,
+    PasswordUtils,
+    AnalyticsUtils,
+} from "~Utils"
 import {
     BiometricState,
     DEVICE_TYPE,
@@ -17,7 +27,6 @@ import {
     StorageEncryptionKeyHelper,
     WalletEncryptionKeyHelper,
 } from "~Components/Providers"
-
 import { useAppState, useBiometrics } from "~Hooks"
 import { StandaloneAppBlockedScreen, StandaloneLockScreen, InternetDownScreen } from "~Screens"
 import { AnimatedSplashScreen } from "../../../AnimatedSplashScreen"
@@ -321,6 +330,7 @@ export const ApplicationSecurityProvider = ({ children }: ApplicationSecurityCon
 
     const upgradeSecurityToV2 = useCallback(async (password?: string) => {
         const encryptedStorageKeys = UserEncryptedStorage.getAllKeys()
+        AnalyticsUtils.initialize()
 
         mixpanel.track(AnalyticsEvent.SECURITY_UPGRADE, { status: "STARTED" })
         setSecurityMigrationStatus(SecurityMigration.IN_PROGRESS)
