@@ -1,26 +1,3 @@
-/**
- * Map of ISO 639-1 language codes to human readable language names.
- */
-export const languageMap: { [key: string]: string } = {
-    en: "English",
-    it: "Italian",
-    hi: "Hindi",
-    tw: "Taiwanese",
-    fr: "French",
-    es: "Spanish",
-    de: "German",
-    ja: "Japanese",
-    ko: "Korean",
-    nl: "Dutch",
-    pt: "Portuguese",
-    sv: "Swedish",
-    vi: "Vietnamese",
-    tr: "Turkish",
-    zh: "Chinese",
-    ru: "Russian",
-    pl: "Polish",
-}
-
 export const languages: {
     code: string
     name: string
