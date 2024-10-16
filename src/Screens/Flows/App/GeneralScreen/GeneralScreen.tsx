@@ -1,13 +1,12 @@
 import React, { useCallback } from "react"
 import { BaseSpacer, BaseText, BaseView, EnableFeature, Layout } from "~Components"
-import { useI18nContext } from "~i18n"
+import { Locales, useI18nContext } from "~i18n"
 import { ChangeCurrency, ChangeLanguage, ChangeTheme, SelectLanguageBottomSheet } from "./Components"
 import { useBottomSheetModal } from "~Hooks"
-import { LANGUAGE } from "~Constants"
 import {
     selectAreDevFeaturesEnabled,
     selectHideTokensWithNoBalance,
-    selectLangauge,
+    selectLanguage,
     selectSentryTrackingEnabled,
     setHideTokensWithNoBalance,
     setLanguage,
@@ -19,7 +18,7 @@ import { Reset } from "~Screens/Flows/App/GeneralScreen/Components/Reset"
 import { ChangeSymbolPosition } from "./Components/ChangeSymbolPosition"
 
 export const GeneralScreen = () => {
-    const { LL } = useI18nContext()
+    const { LL, setLocale } = useI18nContext()
 
     const {
         ref: selectLanguageSheetRef,
@@ -29,7 +28,7 @@ export const GeneralScreen = () => {
 
     const dispatch = useAppDispatch()
 
-    const selectedLanguage = useAppSelector(selectLangauge)
+    const selectedLanguageCode = useAppSelector(selectLanguage)
     const devFeaturesEnabled = useAppSelector(selectAreDevFeaturesEnabled)
 
     const sentryTrackingEnabled = useAppSelector(selectSentryTrackingEnabled)
@@ -51,12 +50,12 @@ export const GeneralScreen = () => {
     )
 
     const handleSelectLanguage = useCallback(
-        (language: string) => {
-            dispatch(setLanguage(language as LANGUAGE))
-
+        (language: Locales) => {
+            dispatch(setLanguage(language))
+            setLocale(language)
             closeSelectLanguageSheet()
         },
-        [closeSelectLanguageSheet, dispatch],
+        [closeSelectLanguageSheet, dispatch, setLocale],
     )
 
     return (
@@ -132,14 +131,14 @@ export const GeneralScreen = () => {
                             </BaseText>
                             <BaseText typographyFont="caption">{LL.BD_APP_LANGUAGE_DISCLAIMER()}</BaseText>
                             <BaseSpacer height={20} />
-                            <ChangeLanguage language={selectedLanguage} onPress={openSelectLanguageSheet} />
+                            <ChangeLanguage language={selectedLanguageCode} onPress={openSelectLanguageSheet} />
                         </>
                     )}
 
                     <SelectLanguageBottomSheet
                         ref={selectLanguageSheetRef}
                         onClose={closeSelectLanguageSheet}
-                        selectedLanguage={selectedLanguage}
+                        selectedLanguage={selectedLanguageCode}
                         handleSelectLanguage={handleSelectLanguage}
                     />
                     <BaseSpacer height={20} />

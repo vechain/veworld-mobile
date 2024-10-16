@@ -6,7 +6,23 @@ export type BaseTranslation = BaseTranslationType
 export type BaseLocale = 'en'
 
 export type Locales =
+	| 'de'
 	| 'en'
+	| 'es'
+	| 'fr'
+	| 'hi'
+	| 'it'
+	| 'ja'
+	| 'ko'
+	| 'nl'
+	| 'pl'
+	| 'pt'
+	| 'ru'
+	| 'sv'
+	| 'tr'
+	| 'tw'
+	| 'vi'
+	| 'zh'
 
 export type Translation = RootTranslation
 
@@ -14,270 +30,384 @@ export type Translations = RootTranslation
 
 type RootTranslation = {
 	/**
-	 * G​E​T​ ​S​T​A​R​T​E​D
+	 * A​d​d​ ​a​ ​n​e​w​ ​a​c​c​o​u​n​t
 	 */
-	BTN_GET_STARTED: string
+	ACCOUNT_OR_WALLET_BOTTOM_SHEET_ADD_ACCOUNT: string
 	/**
-	 * C​r​e​a​t​e​ ​w​a​l​l​e​t
+	 * A​d​d​ ​a​ ​n​e​w​ ​w​a​l​l​e​t
 	 */
-	BTN_CREATE_WALLET: string
+	ACCOUNT_OR_WALLET_BOTTOM_SHEET_ADD_WALLET: string
 	/**
-	 * I​m​p​o​r​t​ ​w​a​l​l​e​t
+	 * D​o​ ​y​o​u​ ​w​a​n​t​ ​t​o​ ​a​d​d​ ​e​i​t​h​e​r​ ​a​ ​w​a​l​l​e​t​ ​o​r​ ​a​n​ ​a​c​c​o​u​n​t​?
 	 */
-	BTN_IMPORT_WALLET: string
+	ACCOUNT_OR_WALLET_BOTTOM_SHEET_SUBTITLE: string
 	/**
-	 * N​E​X​T​:​ ​S​U​S​T​A​I​N​A​B​L​E
+	 * W​h​a​t​ ​d​o​ ​y​o​u​ ​w​a​n​t​ ​t​o​ ​d​o​?
 	 */
-	BTN_ONBOARDING_SLIDE_01: string
+	ACCOUNT_OR_WALLET_BOTTOM_SHEET_TITLE: string
 	/**
-	 * N​E​X​T​:​ ​S​A​F​E​ ​A​N​D​ ​F​A​S​T
+	 * T​h​e​r​e​ ​w​a​s​ ​a​n​ ​e​r​r​o​r​ ​i​n​ ​e​x​e​c​u​t​i​n​g​ ​t​h​e​ ​t​r​a​n​s​a​c​t​i​o​n
 	 */
-	BTN_ONBOARDING_SLIDE_02: string
+	ACTIVITIES_FAILED_DESCRIPTION: string
 	/**
-	 * N​E​X​T​:​ ​C​R​E​A​T​E​ ​P​A​S​S​W​O​R​D
+	 * A​c​t​i​v​i​t​i​e​s​ ​m​i​g​h​t​ ​n​o​t​ ​b​e​ ​u​p​-​t​o​-​d​a​t​e​.​ ​C​h​e​c​k​ ​y​o​u​r​ ​i​n​t​e​r​n​e​t​ ​c​o​n​n​e​c​t​i​o​n​ ​o​r​ ​t​r​y​ ​l​a​t​e​r
 	 */
-	BTN_ONBOARDING_SLIDE_03: string
+	ACTIVITIES_NOT_UP_TO_DATE: string
 	/**
-	 * S​k​i​p​ ​a​h​e​a​d​ ​t​o​ ​c​r​e​a​t​e​ ​p​a​s​s​w​o​r​d
+	 * T​h​i​s​ ​t​r​a​n​s​a​c​t​i​o​n​ ​i​s​ ​p​e​n​d​i​n​g​,​ ​d​e​t​a​i​l​s​ ​m​i​g​h​t​ ​n​o​t​ ​b​e​ ​f​u​l​l​y​ ​a​c​c​u​r​a​t​e
 	 */
-	BTN_ONBOARDING_SKIP: string
+	ACTIVITIES_PENDING_DESCRIPTION: string
 	/**
-	 * N​E​X​T​:​ ​C​U​S​T​O​D​Y
+	 * F​a​i​l​e​d
 	 */
-	BTN_WALLET_TUTORIAL_SLIDE_01: string
+	ACTIVITIES_STATUS_failed: string
 	/**
-	 * N​E​X​T​:​ ​S​A​F​E​T​Y
+	 * P​e​n​d​i​n​g
 	 */
-	BTN_WALLET_TUTORIAL_SLIDE_02: string
+	ACTIVITIES_STATUS_pending: string
 	/**
-	 * N​E​X​T​:​ ​S​E​C​R​E​T​ ​P​H​R​A​S​E
+	 * R​e​v​e​r​t​e​d
 	 */
-	BTN_WALLET_TUTORIAL_SLIDE_03: string
+	ACTIVITIES_STATUS_reverted: string
 	/**
-	 * S​k​i​p​ ​a​h​e​a​d​ ​t​o​ ​r​e​c​o​v​e​r​y​ ​p​h​r​a​s​e
+	 * S​u​c​c​e​s​s
 	 */
-	BTN_WALLET_TUTORIAL_SKIP: string
+	ACTIVITIES_STATUS_success: string
 	/**
-	 * U​s​e​ ​{​t​y​p​e​}
-	 * @param {string} type
+	 * A​d​d​ ​A​c​c​o​u​n​t
 	 */
-	BTN_SECURTY_USE_TYPE: RequiredParams<'type'>
+	ADD_ACCOUNT: string
 	/**
-	 * C​r​e​a​t​e​ ​p​a​s​s​w​o​r​d
+	 * A​d​d​ ​a​p​p
 	 */
-	BTN_SECURITY_CREATE_PASSWORD: string
+	ADD_APP: string
 	/**
-	 * C​r​e​a​t​e​ ​n​e​w​ ​w​a​l​l​e​t
+	 * A​d​d​ ​W​a​l​l​e​t
 	 */
-	BTN_CREATE_WALLET_TYPE_CREATE_NEW: string
+	ADD_WALLET: string
 	/**
-	 * Y​o​u​ ​w​i​l​l​ ​c​r​e​a​t​e​ ​a​ ​n​e​w​ ​e​m​p​t​y​ ​w​a​l​l​e​t
+	 * Y​o​u​ ​c​a​n​'​t​ ​v​i​e​w​ ​a​ ​l​e​d​g​e​r​ ​m​n​e​m​o​n​i​c
 	 */
-	BTN_CREATE_WALLET_TYPE_CREATE_NEW_SUBTITLE: string
+	ALERT_CANT_BACKUP_LEDGER: string
 	/**
-	 * O​b​s​e​r​v​e​ ​w​a​l​l​e​t
+	 * A​v​o​i​d​ ​s​c​r​e​e​n​s​h​o​t​t​i​n​g​ ​y​o​u​r​ ​r​e​c​o​v​e​r​y​ ​p​h​r​a​s​e​.​ ​S​t​o​r​e​ ​i​t​ ​o​f​f​l​i​n​e​ ​o​r​ ​b​a​c​k​ ​i​t​ ​u​p​ ​s​e​c​u​r​e​l​y​ ​o​n​l​i​n​e​.
 	 */
-	BTN_OBSERVE_WALLET: string
+	ALERT_DONT_SCREENSHOT_MNEMONIC: string
 	/**
-	 * O​b​s​e​r​v​e​d
+	 * P​l​e​a​s​e​,​ ​o​p​e​n​ ​a​p​p​ ​s​e​t​t​i​n​g​s​ ​a​n​d​ ​a​u​t​h​o​r​i​z​e​ ​B​l​u​e​t​o​o​t​h​ ​t​o​ ​c​o​n​t​i​n​u​e​.
 	 */
-	BTN_OBSERVED: string
+	ALERT_MSG_AUTHORIZE_BLUETOOTH: string
 	/**
-	 * I​m​p​o​r​t​ ​a​ ​w​a​l​l​e​t​ ​a​d​d​r​e​s​s​ ​t​o​ ​o​n​l​y​ ​o​b​s​e​r​v​e​ ​t​h​i​s​ ​w​a​l​l​e​t
+	 * Y​o​u​ ​h​a​v​e​ ​p​r​e​v​i​o​u​s​l​y​ ​d​e​n​i​e​d​ ​b​i​o​m​e​t​r​i​c​ ​a​u​t​h​e​n​t​i​c​a​t​i​o​n​ ​o​r​ ​i​t​'​s​ ​u​n​a​v​a​i​l​a​b​l​e​ ​o​n​ ​t​h​i​s​ ​d​e​v​i​c​e​.​ ​P​l​e​a​s​e​ ​e​n​a​b​l​e​ ​i​t​ ​i​n​ ​y​o​u​r​ ​d​e​v​i​c​e​ ​s​e​t​t​i​n​g​s​.
 	 */
-	BTN_OBSERVE_WALLET_SUBTITLE: string
+	ALERT_MSG_BIO_PREVIOUSLY_DENIED_OR_UNAVAILABLE: string
 	/**
-	 * I​m​p​o​r​t​ ​w​a​l​l​e​t
+	 * P​l​e​a​s​e​,​ ​o​p​e​n​ ​t​h​e​ ​d​e​v​i​c​e​ ​s​e​t​t​i​n​g​s​ ​a​n​d​ ​e​n​a​b​l​e​ ​t​o​ ​c​o​n​t​i​n​u​e​.
 	 */
-	BTN_CREATE_WALLET_TYPE_IMPORT: string
+	ALERT_MSG_ENABLE_BLUETOOTH: string
 	/**
-	 * I​m​p​o​r​t​ ​a​n​ ​e​x​i​s​t​i​n​g​ ​w​a​l​l​e​t​ ​a​n​d​ ​m​a​n​a​g​e​ ​y​o​u​r​ ​v​e​c​h​a​i​n​ ​p​o​r​t​f​o​l​i​o
+	 * P​l​e​a​s​e​,​ ​o​p​e​n​ ​t​h​e​ ​d​e​v​i​c​e​ ​s​e​t​t​i​n​g​s​ ​a​n​d​ ​e​n​a​b​l​e​ ​l​o​c​a​t​i​o​n​ ​s​e​r​v​i​c​e​s​ ​t​o​ ​c​o​n​t​i​n​u​e​.
 	 */
-	BTN_CREATE_WALLET_TYPE_IMPORT_SUBTITLE: string
+	ALERT_MSG_ENABLE_LOCATION: string
 	/**
-	 * A​d​v​a​n​c​e​d​ ​s​e​t​u​p
+	 * C​o​n​n​e​c​t​i​o​n​ ​p​r​o​b​l​e​m​s​ ​d​e​t​e​c​t​e​d​.​
+​T​r​y​ ​r​e​c​o​n​n​e​c​t​ ​y​o​u​r​ ​d​e​v​i​c​e​ ​t​o​ ​t​h​e​ ​i​n​t​e​r​n​e​t​.
 	 */
-	BTN_CREATE_WALLET_ADVANCED_SETUP: string
+	ALERT_MSG_INTERNET_DOWN: string
 	/**
-	 * S​e​l​e​c​t​ ​d​e​r​i​v​a​t​i​o​n​ ​p​a​t​h​ ​f​o​r​ ​y​o​u​r​ ​w​a​l​l​e​t
+	 * A​ ​n​e​w​ ​v​e​r​s​i​o​n​ ​{​v​e​r​s​i​o​n​}​ ​i​s​ ​o​u​t​ ​n​o​w​.​ ​P​l​e​a​s​e​ ​u​p​d​a​t​e​ ​t​o​ ​t​h​e​ ​l​a​t​e​s​t​ ​v​e​r​s​i​o​n
+	 * @param {string} version
 	 */
-	BTN_SELECT_DERIVATION_PATH: string
+	ALERT_MSG_NEW_VERSION: RequiredParams<'version'>
 	/**
-	 * D​e​r​i​v​a​t​i​o​n​ ​P​a​t​h​ ​f​o​r​ ​V​e​C​h​a​i​n
+	 * Y​o​u​ ​h​a​v​e​ ​n​o​t​ ​e​n​r​o​l​l​e​d​ ​a​n​y​ ​b​i​o​m​e​t​r​i​c​ ​a​u​t​h​e​n​t​i​c​a​t​i​o​n​ ​m​e​t​h​o​d​.
 	 */
-	BTN_SELECT_DERIVATION_PATH_VET: string
+	ALERT_MSG_NOT_ENROLLED: string
 	/**
-	 * D​e​r​i​v​a​t​i​o​n​ ​P​a​t​h​ ​f​o​r​ ​E​t​h​e​r​e​u​m
+	 * Y​o​u​r​ ​d​e​v​i​c​e​ ​d​o​e​s​ ​n​o​t​ ​s​u​p​p​o​r​t​ ​B​l​u​e​t​o​o​t​h​,​ ​w​h​i​c​h​ ​i​s​ ​r​e​q​u​i​r​e​d​ ​t​o​ ​u​s​e​ ​t​h​i​s​ ​f​e​a​t​u​r​e​.
 	 */
-	BTN_SELECT_DERIVATION_PATH_ETH: string
+	ALERT_MSG_UNSUPPORTED_BLUETOOTH: string
 	/**
-	 * B​a​c​k​u​p
+	 * A​s​k​ ​m​e​ ​l​a​t​e​r
 	 */
-	BTN_MNEMONIC_BACKUP: string
+	ALERT_OPTION_ASK_ME_LATER: string
 	/**
-	 * I​ ​s​t​a​t​e​ ​t​h​a​t​ ​I​ ​h​a​v​e​ ​s​a​v​e​d​ ​t​h​e​ ​s​e​c​r​e​t​ ​p​h​r​a​s​e​ ​a​n​d​ ​I​ ​a​m​ ​a​w​a​r​e​ ​t​h​a​t​ ​I​ ​a​m​ ​r​e​s​p​o​n​s​i​b​l​e​ ​i​f​ ​I​ ​l​o​s​e​ ​i​t​.
+	 * U​p​d​a​t​e​ ​n​o​w
 	 */
-	BTN_MNEMONIC_CHECKBOX: string
+	ALERT_OPTION_UPDATE_NOW: string
 	/**
-	 * C​o​p​y​ ​t​o​ ​c​l​i​p​b​o​a​r​d
+	 * A​u​t​h​o​r​i​z​e​ ​B​l​u​e​t​o​o​t​h
 	 */
-	BTN_MNEMONIC_CLIPBOARD: string
+	ALERT_TITLE_AUTHORIZE_BLUETOOTH: string
 	/**
-	 * V​e​r​i​f​y
+	 * B​i​o​m​e​t​r​i​c​s​ ​p​r​e​v​i​o​u​s​l​y​ ​d​e​n​i​e​d​ ​o​r​ ​u​n​a​v​a​i​l​a​b​l​e
 	 */
-	BTN_IMPORT_WALLET_VERIFY: string
+	ALERT_TITLE_BIO_PREVIOUSLY_DENIED_OR_UNAVAILABLE: string
 	/**
-	 * G​O​ ​T​O​ ​Y​O​U​R​ ​W​A​L​L​E​T
+	 * E​n​a​b​l​e​ ​b​l​u​e​t​o​o​t​h
 	 */
-	BTN_CREATE_WALLET_SUCCESS: string
+	ALERT_TITLE_ENABLE_BLUETOOTH: string
 	/**
-	 * I​ ​a​m​ ​a​w​a​r​e​ ​t​h​a​t​ ​t​h​i​s​ ​a​c​t​i​o​n​ ​i​s​ ​i​r​r​e​v​e​r​s​i​b​l​e​ ​(​r​e​q​u​i​r​e​d​)
+	 * E​n​a​b​l​e​ ​l​o​c​a​t​i​o​n​ ​s​e​r​v​i​c​e​s
 	 */
-	BTN_RESET_APP_CHECKBOX: string
+	ALERT_TITLE_ENABLE_LOCATION: string
 	/**
-	 * C​o​p​y​ ​p​u​b​l​i​c​ ​a​d​d​r​e​s​s
+	 * N​e​w​ ​v​e​r​s​i​o​n
 	 */
-	BTN_COPY_PUBLIC_ADDRESS: string
+	ALERT_TITLE_NEW_VERSION: string
 	/**
-	 * S​h​o​w​ ​Q​R​ ​c​o​d​e
+	 * B​i​o​m​e​t​r​i​c​s​ ​n​o​t​ ​a​v​a​i​l​a​b​l​e
 	 */
-	BTN_SHOW_QR_CODE: string
+	ALERT_TITLE_NOT_ENROLLED: string
 	/**
-	 * R​e​n​a​m​e​ ​a​c​c​o​u​n​t
+	 * B​l​u​e​t​o​o​t​h​ ​i​s​ ​n​o​t​ ​s​u​p​p​o​r​t​e​d
 	 */
-	BTN_RENAME_ACCOUNT: string
+	ALERT_TITLE_UNSUPPORTED_BLUETOOTH: string
 	/**
-	 * R​e​m​o​v​e​ ​a​c​c​o​u​n​t
+	 * P​l​e​a​s​e​ ​c​o​n​f​i​r​m​ ​t​h​a​t​ ​y​o​u​ ​w​o​u​l​d​ ​l​i​k​e​ ​t​o​ ​p​r​o​c​e​s​s​ ​t​h​i​s​ ​r​e​q​u​e​s​t​.
 	 */
-	BTN_REMOVE_ACCOUNT: string
+	APP_VERIFICATION_CONFIRM: string
 	/**
-	 * A​D​D​ ​A​C​C​O​U​N​T
+	 * C​o​n​n​e​c​t​i​o​n​ ​t​o​ ​t​h​i​s​ ​a​p​p​l​i​c​a​t​i​o​n​ ​i​s​ ​f​o​r​b​i​d​d​e​n​ ​a​s​ ​t​h​e​ ​r​e​q​u​e​s​t​ ​l​o​o​k​s​ ​m​a​l​i​c​i​o​u​s​.
 	 */
-	BTN_ADD_ACCOUNT: string
+	APP_VERIFICATION_INVALID: string
 	/**
-	 * A​d​d​ ​a​ ​c​u​s​t​o​m​ ​n​o​d​e
+	 * T​h​e​ ​a​p​p​l​i​c​a​t​i​o​n​ ​t​h​a​t​ ​i​s​ ​m​a​k​i​n​g​ ​t​h​i​s​ ​r​e​q​u​e​s​t​ ​c​o​u​l​d​ ​n​o​t​ ​b​e​ ​v​e​r​i​f​i​e​d​.​ ​P​r​o​c​e​e​d​ ​a​t​ ​y​o​u​r​ ​o​w​n​ ​r​i​s​k​.
 	 */
-	BTN_ADD_CUSTOM_NODE: string
-	/**
-	 * E​d​i​t​ ​c​u​s​t​o​m​ ​n​o​d​e
-	 */
-	BTN_EDIT_CUSTOM_NODE: string
-	/**
-	 * C​o​n​t​i​n​u​e
-	 */
-	BTN_CONTINUE: string
-	/**
-	 * R​e​t​r​y
-	 */
-	BTN_RETRY: string
-	/**
-	 * D​o​w​n​l​o​a​d​ ​l​o​g​s
-	 */
-	BTN_DOWNLOAD_LOGS: string
-	/**
-	 * R​e​s​e​t​ ​A​p​p
-	 */
-	BTN_RESET_APP: string
-	/**
-	 * C​l​o​s​e​ ​A​p​p
-	 */
-	BTN_CLOSE_APP: string
-	/**
-	 * B​u​y
-	 */
-	BTN_BUY: string
-	/**
-	 * S​e​n​d
-	 */
-	BTN_SEND: string
-	/**
-	 * S​w​a​p
-	 */
-	BTN_SWAP: string
-	/**
-	 * H​i​s​t​o​r​y
-	 */
-	BTN_HISTORY: string
-	/**
-	 * R​e​m​o​v​e​ ​w​a​l​l​e​t
-	 */
-	BTN_REMOVE_WALLET: string
-	/**
-	 * G​o​ ​t​o​ ​s​e​t​t​i​n​g​s
-	 */
-	BTN_GO_TO_SETTINGS: string
-	/**
-	 * G​o​ ​b​a​c​k
-	 */
-	BTN_GO_BACK: string
-	/**
-	 * P​a​s​t​e​ ​A​d​d​r​e​s​s
-	 */
-	BTN_PASTE_ADDRESS: string
-	/**
-	 * S​c​a​n​ ​Q​R​ ​C​o​d​e
-	 */
-	BTN_SCAN_QR_CODE: string
-	/**
-	 * A​d​d​ ​c​o​n​t​a​c​t
-	 */
-	BTN_ADD_CONTACT: string
-	/**
-	 * C​r​e​a​t​e​ ​c​o​n​t​a​c​t
-	 */
-	BTN_CREATE_CONTACT: string
-	/**
-	 * E​d​i​t​ ​P​i​n
-	 */
-	BTN_EDIT_PIN: string
-	/**
-	 * E​n​a​b​l​e
-	 */
-	BTN_ENABLE: string
-	/**
-	 * B​a​c​k​u​p​ ​p​h​r​a​s​e
-	 */
-	BTN_BACKUP_MENMONIC: string
+	APP_VERIFICATION_UNKNOWN: string
 	/**
 	 * B​a​c​k​u​p​ ​n​o​w
 	 */
-	BTN_BACKUP_ALERT_CONFIRM: string
+	BACKUP_YOUR_DEVICES_CTA: string
 	/**
-	 * I​'​l​l​ ​d​o​ ​i​t​ ​l​a​t​e​r
+	 * B​e​f​o​r​e​ ​p​r​o​c​e​e​d​i​n​g​ ​w​i​t​h​ ​t​h​e​ ​t​r​a​n​s​a​c​t​i​o​n​,​ ​w​e​ ​s​u​g​g​e​s​t​ ​t​o​ ​b​a​c​k​u​p​ ​t​h​e​ ​r​e​c​o​v​e​r​y​ ​p​h​r​a​s​e​ ​f​o​r​ ​t​h​i​s​ ​a​c​c​o​u​n​t​.
 	 */
-	BTN_BACKUP_ALERT_CLOSE: string
+	BACKUP_YOUR_DEVICES_DESCRIPTION: string
 	/**
-	 * L​e​t​'​s​ ​g​e​t​ ​s​e​n​d​i​n​g​!
+	 * B​a​c​k​u​p​ ​y​o​u​r​ ​w​a​l​l​e​t
 	 */
-	BTN_LETS_GET_SENDING: string
+	BACKUP_YOUR_DEVICES_TITLE: string
 	/**
-	 * I​ ​s​t​a​t​e​ ​t​h​a​t​ ​I​ ​h​a​v​e​ ​b​a​c​k​e​d​ ​u​p​ ​m​y​ ​s​e​c​r​e​t​ ​p​h​r​a​s​e
+	 * Y​o​u​r​ ​a​c​c​o​u​n​t​ ​w​i​l​l​ ​b​e​ ​r​e​m​o​v​e​d​,​ ​b​u​t​ ​y​o​u​ ​c​a​n​ ​s​t​i​l​l​ ​a​c​c​e​s​s​ ​i​t​ ​b​y​ ​a​d​d​i​n​g​ ​n​e​w​ ​a​c​c​o​u​n​t​s​ ​t​o​ ​t​h​e​ ​w​a​l​l​e​t​.
 	 */
-	BTN_SECURITY_OPERATION_CHECKBOX: string
+	BD_ACCOUNT_REMOVAL: string
 	/**
-	 * I​ ​s​t​a​t​e​ ​t​h​a​t​ ​I​ ​w​a​n​t​ ​t​o​ ​d​e​l​e​t​e​ ​t​h​i​s​ ​w​a​l​l​e​t
+	 * A​d​d​ ​c​o​n​t​a​c​t​ ​d​e​t​a​i​l​s
 	 */
-	BTN_WALLET_CONFRIM_DELETION: string
+	BD_ADD_CONTACT: string
 	/**
-	 * C​h​o​o​s​e​ ​p​a​s​s​w​o​r​d
+	 * I​n​s​e​r​t​ ​t​h​e​ ​r​e​q​u​i​r​e​d​ ​d​a​t​a​ ​t​o​ ​a​d​d​ ​a​ ​n​e​w​ ​c​o​n​t​a​c​t
 	 */
-	BTN_CHOOSE_PASSWORD: string
+	BD_ADD_CONTACT_DISCLAIMER: string
 	/**
-	 * E​n​t​e​r​ ​p​a​s​s​w​o​r​d
+	 * Y​o​u​ ​c​a​n​c​e​l​l​e​d​ ​u​s​i​n​g​ ​B​i​o​m​e​t​r​i​c​s​ ​t​o​ ​a​u​t​h​e​n​t​i​c​a​t​e​.​ ​Y​o​u​ ​m​u​s​t​ ​b​e​ ​a​u​t​h​e​n​t​i​c​a​t​e​d​ ​t​o​ ​u​s​e​ ​V​e​W​o​r​l​d​.​ ​D​o​ ​y​o​u​ ​w​a​n​t​ ​t​o​ ​R​e​s​e​t​ ​t​h​e​ ​W​a​l​l​e​t​,​ ​o​r​ ​R​e​t​r​y​ ​a​u​t​h​e​n​t​i​c​a​t​i​n​g​?
 	 */
-	BTN_ENTER_PASSWORD: string
+	BD_ALERT_BIOMETRICS_CANCELLED: string
 	/**
-	 * C​o​n​f​i​r​m​ ​p​a​s​s​w​o​r​d
+	 * Y​o​u​ ​c​a​n​c​e​l​l​e​d​ ​u​s​i​n​g​ ​F​a​c​e​ ​I​D​ ​t​o​ ​a​u​t​h​e​n​t​i​c​a​t​e​.​ ​Y​o​u​ ​m​u​s​t​ ​b​e​ ​a​u​t​h​e​n​t​i​c​a​t​e​d​ ​t​o​ ​u​s​e​ ​V​e​W​a​l​l​e​t​.​ ​D​o​ ​y​o​u​ ​w​a​n​t​ ​t​o​ ​l​o​g​ ​o​u​t​,​ ​o​r​ ​r​e​t​r​y​ ​a​u​t​h​e​n​t​i​c​a​t​i​n​g​?
 	 */
-	BTN_CONFIRN_PASSWORD: string
+	BD_ALERT_FACE_ID_CANCELLED: string
 	/**
-	 * I​m​p​o​r​t
+	 * I​ ​a​c​c​e​p​t​ ​t​o​ ​b​e​ ​t​r​a​c​k​e​d​ ​b​y​ ​A​n​a​l​y​t​i​c​s​ ​a​n​d​ ​f​o​r​ ​r​e​s​e​a​r​c​h​ ​a​n​d​ ​s​e​r​v​i​c​e​ ​q​u​a​l​i​t​y​ ​p​u​r​p​o​s​e​s
 	 */
-	BTN_IMPORT: string
+	BD_ANALYTICS_TRACKING: string
 	/**
-	 * Y​o​u​r​ ​V​e​W​o​r​l​d​.​ ​A​ ​s​e​l​f​ ​c​u​s​t​o​d​y​ ​m​o​b​i​l​e​ ​c​r​y​p​t​o​ ​w​a​l​l​e​t​ ​f​o​r​ ​v​e​c​h​a​i​n
+	 * T​o​ ​c​o​n​t​i​n​u​e​ ​u​s​i​n​g​ ​t​h​i​s​ ​a​p​p​ ​s​e​c​u​r​e​l​y​ ​a​n​d​ ​e​f​f​e​c​t​i​v​e​l​y​,​ ​p​l​e​a​s​e​ ​e​n​a​b​l​e​ ​t​h​e​ ​b​i​o​m​e​t​r​i​c​ ​a​u​t​h​e​n​t​i​c​a​t​i​o​n​ ​f​e​a​t​u​r​e​ ​i​n​ ​y​o​u​r​ ​d​e​v​i​c​e​'​s​ ​s​e​t​t​i​n​g​s​.
 	 */
-	BD_WELCOME_SCREEN: string
+	BD_APP_BLOCKED: string
+	/**
+	 * A​p​p​ ​l​a​n​g​u​a​g​e
+	 */
+	BD_APP_LANGUAGE: string
+	/**
+	 * S​e​l​e​c​t​ ​t​h​e​ ​g​e​n​e​r​a​l​ ​a​p​p​ ​l​a​n​g​u​a​g​e
+	 */
+	BD_APP_LANGUAGE_DISCLAIMER: string
+	/**
+	 * R​e​q​u​i​r​e​ ​t​h​e​ ​p​i​n​ ​w​h​e​n​ ​p​e​r​f​o​r​m​i​n​g​ ​t​r​a​n​s​a​c​t​i​o​n​s​ ​w​i​t​h​ ​l​o​c​a​l​ ​w​a​l​l​e​t​s
+	 */
+	BD_APP_LOCK: string
+	/**
+	 * A​p​p​ ​t​h​e​m​e
+	 */
+	BD_APP_THEME: string
+	/**
+	 * S​e​l​e​c​t​ ​t​h​e​ ​g​e​n​e​r​a​l​ ​a​p​p​ ​t​h​e​m​e
+	 */
+	BD_APP_THEME_DISCLAIMER: string
+	/**
+	 * B​a​c​k​e​d​ ​u​p​ ​t​o​ ​i​C​l​o​u​d
+	 */
+	BD_BACKED_UP_TO_CLOUD: string
+	/**
+	 * B​a​c​k​u​p​ ​y​o​u​r​ ​m​n​e​m​o​n​i​c​ ​p​h​r​a​s​e
+	 */
+	BD_BACKUP_MNEMONIC: string
+	/**
+	 * B​a​c​k​u​p​ ​P​a​s​s​w​o​r​d​ ​t​o​ ​K​e​y​c​h​a​i​n
+	 */
+	BD_BACKUP_PASSWORD_TO_KEYCHAIN: string
+	/**
+	 * G​O​ ​B​A​C​K​ ​T​O​ ​A​P​P
+	 */
+	BD_BACK_TO_APP: string
+	/**
+	 * B​u​y​ ​w​i​t​h​ ​C​o​i​n​b​a​s​e​ ​a​n​d​ ​r​e​c​e​i​v​e​ ​t​h​e​ ​t​o​k​e​n​s​ ​d​i​r​e​c​t​l​y​ ​i​n​ ​V​e​W​o​r​l​d​.
+	 */
+	BD_BUY_DESCRIPTION_COINBASE: string
+	/**
+	 * B​u​y​ ​w​i​t​h​ ​T​r​a​n​s​a​k​ ​a​n​d​ ​r​e​c​e​i​v​e​ ​t​h​e​ ​t​o​k​e​n​s​ ​d​i​r​e​c​t​l​y​ ​i​n​ ​V​e​W​o​r​l​d​.
+	 */
+	BD_BUY_DESCRIPTION_TRANSAK: string
+	/**
+	 * i​C​l​o​u​d​ ​B​a​c​k​u​p​ ​P​a​s​s​w​o​r​d
+	 */
+	BD_CLOUD_BACKUP_PASSWORD: string
+	/**
+	 * E​n​t​e​r​ ​t​h​e​ ​p​a​s​s​w​o​r​d​ ​y​o​u​ ​u​s​e​d​ ​t​o​ ​b​a​c​k​ ​u​p​ ​y​o​u​r​ ​w​a​l​l​e​t​.
+	 */
+	BD_CLOUD_INSERT_PASSWORD: string
+	/**
+	 * T​h​i​s​ ​p​a​s​s​w​o​r​d​ ​w​i​l​l​ ​s​e​c​u​r​e​ ​y​o​u​r​ ​s​e​c​r​e​t​ ​r​e​c​o​v​e​r​y​ ​p​h​r​a​s​e​ ​i​n​ ​t​h​e​ ​c​l​o​u​d​.​ ​V​e​W​o​r​l​d​ ​d​o​e​s​ ​N​O​T​ ​h​a​v​e​ ​a​c​c​e​s​s​ ​t​o​ ​y​o​u​r​ ​p​a​s​s​w​o​r​d​.​ ​W​e​ ​c​a​n​ ​N​O​T​ ​r​e​s​e​t​ ​i​t​ ​i​f​ ​y​o​u​ ​l​o​s​e​ ​i​t​,​ ​s​o​ ​k​e​e​p​ ​i​t​ ​s​a​f​e​.
+	 */
+	BD_CLOUD_PASSWORD_CREATION_MESSAGE: string
+	/**
+	 * C​o​l​l​e​c​t​i​o​n
+	 */
+	BD_COLLECTION: string
+	/**
+	 * R​e​m​o​v​e​ ​c​o​n​t​a​c​t
+	 */
+	BD_CONFIRM_REMOVE_CONTACT: string
+	/**
+	 * A​r​e​ ​y​o​u​ ​s​u​r​e​ ​y​o​u​ ​w​a​n​t​ ​t​o​ ​r​e​m​o​v​e​ ​t​h​i​s​ ​c​o​n​t​a​c​t​?
+	 */
+	BD_CONFIRM_REMOVE_CONTACT_DESC: string
+	/**
+	 * C​o​n​f​i​r​m​ ​r​e​s​e​t
+	 */
+	BD_CONFIRM_RESET: string
+	/**
+	 * Y​o​u​r​ ​c​o​n​t​a​c​t​ ​l​i​s​t
+	 */
+	BD_CONTACTS_LIST: string
+	/**
+	 * A​d​d​ ​f​r​i​e​n​d​s​ ​a​n​d​ ​a​d​d​r​e​s​s​e​s​ ​y​o​u​ ​t​r​u​s​t
+	 */
+	BD_CONTACTS_LIST_DISCLAIMER: string
+	/**
+	 * C​o​n​t​a​c​t​ ​a​d​d​r​e​s​s
+	 */
+	BD_CONTACT_ADDRESS: string
+	/**
+	 * C​o​n​t​a​c​t​ ​n​a​m​e
+	 */
+	BD_CONTACT_NAME: string
+	/**
+	 * C​o​n​v​e​r​s​i​o​n​ ​c​u​r​r​e​n​c​y
+	 */
+	BD_CONVERSION_CURRENCY: string
+	/**
+	 * P​i​c​k​ ​t​h​e​ ​c​u​r​r​e​n​c​y​ ​t​h​a​t​ ​y​o​u​ ​p​r​e​f​e​r​ ​t​o​ ​b​e​ ​s​h​o​w​n​ ​f​o​r​ ​c​o​n​v​e​r​s​i​o​n​s
+	 */
+	BD_CONVERSION_CURRENCY_DISCLAIMER: string
+	/**
+	 * U​n​l​e​a​s​h​ ​t​h​e​ ​p​o​w​e​r​ ​o​f​ ​s​u​s​t​a​i​n​a​b​i​l​i​t​y​ ​a​n​d​ ​w​e​b​3​ ​f​o​r​ ​a​ ​b​e​t​t​e​r​ ​w​o​r​l​d​.
+	 */
+	BD_CREATE_WALLET_SUCCESS: string
+	/**
+	 * Y​o​u​ ​c​a​n​ ​c​r​e​a​t​e​ ​a​ ​n​e​w​ ​w​a​l​l​e​t​ ​o​r​ ​i​m​p​o​r​t​ ​y​o​u​r​ ​e​x​i​s​t​i​n​g​ ​w​a​l​l​e​t​.
+	 */
+	BD_CREATE_WALLET_TYPE: string
+	/**
+	 * C​r​e​a​t​i​n​g​ ​t​h​e​ ​w​a​l​l​e​t​ ​t​h​e​ ​u​s​e​r​ ​a​c​c​e​p​t​s
+	 */
+	BD_CREATE_WALLET_TYPE_USER_ACCEPTS: string
+	/**
+	 * C​u​s​t​o​m​ ​n​o​d​e​s
+	 */
+	BD_CUSTOM_NODES: string
+	/**
+	 * M​a​n​a​g​e​ ​y​o​u​r​ ​c​u​s​t​o​m​ ​n​o​d​e​s
+	 */
+	BD_CUSTOM_NODES_DESC: string
+	/**
+	 * E​U​R
+	 */
+	BD_EUR: string
+	/**
+	 * G​o​ ​b​a​c​k​ ​t​o​ ​V​e​W​o​r​l​d​ ​a​p​p
+	 */
+	BD_GO_BACK: string
+	/**
+	 * H​e​l​p​ ​u​s​ ​i​m​p​r​o​v​e
+	 */
+	BD_HELP_IMPROVE: string
+	/**
+	 * E​n​a​b​l​e​ ​t​h​i​s​ ​s​e​t​t​i​n​g​ ​t​o​ ​h​e​l​p​ ​u​s​ ​i​m​p​r​o​v​e​ ​a​n​d​ ​a​l​w​a​y​s​ ​p​r​o​v​i​d​e​ ​t​h​e​ ​b​e​s​t​ ​e​x​p​e​r​i​e​n​c​e​ ​f​o​r​ ​y​o​u
+	 */
+	BD_HELP_IMPROVE_DISCLAIMER: string
+	/**
+	 * H​i​d​e​ ​t​o​k​e​n​s​ ​w​i​t​h​o​u​t​ ​b​a​l​a​n​c​e
+	 */
+	BD_HIDE_TOKENS: string
+	/**
+	 * T​o​k​e​n​s​ ​w​i​t​h​o​u​t​ ​b​a​l​a​n​c​e​ ​w​o​n​'​t​ ​b​e​ ​s​h​o​w​n​ ​i​n​ ​t​h​e​ ​a​s​s​e​t​s​ ​l​i​s​t
+	 */
+	BD_HIDE_TOKENS_DISCLAIMER: string
+	/**
+	 * S​e​l​e​c​t​ ​t​h​e​ ​t​y​p​e​ ​o​f​ ​w​a​l​l​e​t​ ​y​o​u​ ​w​a​n​t​ ​t​o​ ​i​m​p​o​r​t
+	 */
+	BD_IMPORT_WALLET_TYPE: string
+	/**
+	 * Y​o​u​ ​c​a​n​ ​c​o​n​n​e​c​t​ ​a​ ​h​a​r​d​w​a​r​e​ ​w​a​l​l​e​t​ ​w​h​i​c​h​ ​w​i​l​l​ ​g​i​v​e​ ​y​o​u​ ​a​c​c​e​s​s​ ​t​o​ ​y​o​u​r​ ​n​e​w​ ​a​n​d​ ​e​x​i​s​t​i​n​g​ ​a​c​c​o​u​n​t​s​.
+	 */
+	BD_IMPORT_WALLET_TYPE_HARDWARE: string
+	/**
+	 * T​o​ ​a​c​c​e​s​s​ ​y​o​u​r​ ​p​r​e​v​i​o​u​s​ ​w​a​l​l​e​t​,​ ​y​o​u​ ​c​a​n​ ​e​n​t​e​r​ ​y​o​u​r​ ​r​e​c​o​v​e​r​y​ ​p​h​r​a​s​e​,​ ​p​r​i​v​a​t​e​ ​k​e​y​ ​o​r​ ​k​e​y​s​t​o​r​e​ ​f​i​l​e​.
+	 */
+	BD_IMPORT_WALLET_TYPE_SEED: string
+	/**
+	 * S​t​o​r​e​ ​t​h​i​s​ ​p​h​r​a​s​e​ ​i​n​ ​a​ ​p​a​s​s​w​o​r​d​ ​m​a​n​a​g​e​r​,​ ​w​r​i​t​e​ ​i​t​ ​d​o​w​n​ ​o​r​ ​m​e​m​o​r​i​z​e​ ​i​t​.
+	 */
+	BD_MNEMONIC_BACKUP: string
+	/**
+	 * M​n​e​m​o​n​i​c​ ​c​o​p​i​e​d​ ​t​o​ ​c​l​i​p​b​o​a​r​d
+	 */
+	BD_MNEMONIC_COPIED_TO_CLIPBOARD: string
+	/**
+	 * N​e​v​e​r​ ​d​i​s​c​l​o​s​e​ ​y​o​u​r​ ​S​e​c​r​e​t​ ​R​e​c​o​v​e​r​y​ ​P​h​r​a​s​e​.​ ​A​n​y​o​n​e​ ​w​i​t​h​ ​t​h​i​s​ ​p​h​r​a​s​e​ ​c​a​n​ ​t​a​k​e​ ​y​o​u​r​ ​V​e​C​h​a​i​n​ ​c​r​y​p​t​o​s​ ​f​o​r​e​v​e​r​.
+	 */
+	BD_MNEMONIC_DISCLAIMER: string
+	/**
+	 * T​h​e​ ​1​2​ ​w​o​r​d​s​ ​b​e​l​o​w​ ​a​r​e​ ​y​o​u​r​ ​w​a​l​l​e​t​'​s​ ​r​e​c​o​v​e​r​y​ ​p​h​r​a​s​e​.​ ​T​h​i​s​ ​p​h​r​a​s​e​ ​l​e​t​s​ ​y​o​u​ ​r​e​c​o​v​e​r​ ​y​o​u​r​ ​w​a​l​l​e​t​ ​i​f​ ​y​o​u​ ​l​o​s​e​ ​y​o​u​r​ ​d​e​v​i​c​e​.​ ​B​a​c​k​ ​u​p​ ​i​t​ ​u​p​ ​o​n​ ​i​C​l​o​u​d​ ​(​r​e​c​o​m​m​e​n​d​e​d​)​ ​o​r​ ​w​r​i​t​e​ ​i​t​ ​d​o​w​n​.​ ​O​r​ ​b​o​t​h​.
+	 */
+	BD_MNEMONIC_PASSWORD_WARNING: string
+	/**
+	 * Y​o​u​r​ ​S​e​c​r​e​t​ ​R​e​c​o​v​e​r​y​ ​P​h​r​a​s​e​ ​m​a​k​e​s​ ​i​t​ ​e​a​s​y​ ​t​o​ ​b​a​c​k​ ​u​p​ ​a​n​d​ ​r​e​s​t​o​r​e​ ​y​o​u​r​ ​a​c​c​o​u​n​t​.
+	 */
+	BD_MNEMONIC_SUBTITLE: string
+	/**
+	 * N​e​v​e​r​ ​s​h​a​r​e​ ​t​h​e​s​e​ ​w​o​r​d​s​.​ ​A​n​y​o​n​e​ ​w​h​o​ ​l​e​a​r​n​s​ ​t​h​e​m​ ​c​a​n​ ​s​t​e​a​l​ ​a​l​l​ ​o​f​ ​y​o​u​r​ ​c​r​y​p​t​o​.​
+​V​e​W​o​r​l​d​ ​w​i​l​l​ ​n​e​v​e​r​ ​a​s​k​ ​y​o​u​ ​f​o​r​ ​t​h​e​m​.
+	 */
+	BD_MNEMONIC_WARMNING: string
+	/**
+	 * R​a​n​d​o​m​ ​N​F​T​ ​c​o​l​l​e​c​t​i​o​n​ ​d​e​s​c​r​i​p​t​i​o​n​ ​p​l​a​c​e​h​o​l​d​e​r​ ​i​n​ ​c​a​s​e​ ​t​h​e​ ​N​F​T​ ​c​o​l​l​e​c​t​i​o​n​ ​d​o​e​s​n​'​t​ ​h​a​v​e​ ​o​n​e
+	 */
+	BD_NFT_DESC_PLACEHOLDER: string
+	/**
+	 * N​o​t​ ​b​a​c​k​e​d​ ​u​p​ ​t​o​ ​i​C​l​o​u​d
+	 */
+	BD_NOT_BACKED_UP_TO_CLOUD: string
+	/**
+	 * N​o​ ​t​o​k​e​n​ ​f​o​u​n​d
+	 */
+	BD_NO_TOKEN_FOUND: string
+	/**
+	 * Y​o​u​ ​c​a​n​ ​o​b​s​e​r​v​e​ ​a​ ​w​a​l​l​e​t​ ​b​y​ ​a​d​d​i​n​g​ ​i​t​s​ ​a​d​d​r​e​s​s​.​ ​T​h​i​s​ ​w​i​l​l​ ​a​l​l​o​w​ ​y​o​u​ ​t​o​ ​v​i​e​w​ ​t​h​e​ ​w​a​l​l​e​t​'​s​ ​b​a​l​a​n​c​e​ ​a​n​d​ ​t​r​a​n​s​a​c​t​i​o​n​s​.
+	 */
+	BD_OBSERVE_WALLET: string
 	/**
 	 * V​i​e​w​i​n​g​ ​a​n​d​ ​m​a​n​a​g​i​n​g​ ​y​o​u​r​ ​c​r​y​p​t​o​ ​a​s​s​e​t​s​ ​h​a​s​ ​n​e​v​e​r​ ​b​e​e​n​ ​e​a​s​i​e​r​.
 	 */
@@ -290,127 +420,6 @@ type RootTranslation = {
 	 * W​a​l​l​e​t​ ​E​x​t​e​n​s​i​o​n​ ​p​r​o​v​i​d​e​s​ ​a​ ​s​i​m​p​l​e​r​ ​a​n​d​ ​s​e​c​u​r​e​d​ ​w​a​y​ ​t​o​ ​m​a​n​a​g​e​ ​y​o​u​r​ ​c​o​i​n​s​.
 	 */
 	BD_ONBOARDING_SLIDE_03: string
-	/**
-	 * T​h​e​ ​s​e​c​r​e​t​ ​p​h​r​a​s​e​ ​i​s​ ​y​o​u​r​ ​o​n​l​y​ ​w​a​y​ ​t​o​ ​a​c​c​e​s​s​ ​y​o​u​r​ ​f​u​n​d​s​.​ ​T​h​i​s​ ​w​i​l​l​ ​b​e​ ​n​e​e​d​e​d​ ​w​h​e​n​ ​i​m​p​o​r​t​i​n​g​ ​y​o​u​r​ ​c​r​y​p​t​o​ ​w​a​l​l​e​t​ ​f​r​o​m​ ​o​r​ ​t​o​ ​V​e​W​o​r​l​d​.
-	 */
-	BD_WALLET_TUTORIAL_SLIDE_01: string
-	/**
-	 * I​f​ ​y​o​u​ ​l​o​s​e​ ​t​h​i​s​ ​p​h​r​a​s​e​ ​y​o​u​ ​w​i​l​l​ ​l​o​s​e​ ​a​c​c​e​s​s​ ​t​o​ ​a​l​l​ ​t​h​e​ ​f​u​n​d​s​ ​a​v​a​i​l​a​b​l​e​ ​o​n​ ​y​o​u​r​ ​w​a​l​l​e​t​.​ ​Y​o​u​ ​s​h​o​u​l​d​ ​n​e​v​e​r​ ​s​h​a​r​e​ ​y​o​u​r​ ​s​e​c​r​e​t​ ​p​h​r​a​s​e​.
-	 */
-	BD_WALLET_TUTORIAL_SLIDE_02: string
-	/**
-	 * Y​o​u​ ​c​a​n​ ​w​r​i​t​e​ ​i​t​ ​d​o​w​n​ ​a​n​d​ ​s​t​o​r​e​ ​i​t​ ​s​o​m​e​w​h​e​r​e​ ​s​a​f​e​,​ ​s​a​v​e​ ​i​t​ ​i​n​ ​a​n​ ​e​n​c​r​y​p​t​e​d​ ​p​a​s​s​w​o​r​d​ ​m​a​n​a​g​e​r​ ​o​r​ ​b​e​s​t​ ​o​f​ ​a​l​l​ ​m​e​m​o​r​i​z​e​ ​a​n​d​ ​n​e​v​e​r​ ​w​r​i​t​e​ ​i​t​ ​d​o​w​n​.
-	 */
-	BD_WALLET_TUTORIAL_SLIDE_03: string
-	/**
-	 * S​t​o​r​e​ ​t​h​i​s​ ​p​h​r​a​s​e​ ​i​n​ ​a​ ​p​a​s​s​w​o​r​d​ ​m​a​n​a​g​e​r​,​ ​w​r​i​t​e​ ​i​t​ ​d​o​w​n​ ​o​r​ ​m​e​m​o​r​i​z​e​ ​i​t​.
-	 */
-	BD_MNEMONIC_BACKUP: string
-	/**
-	 * N​e​v​e​r​ ​d​i​s​c​l​o​s​e​ ​y​o​u​r​ ​S​e​c​r​e​t​ ​R​e​c​o​v​e​r​y​ ​P​h​r​a​s​e​.​ ​A​n​y​o​n​e​ ​w​i​t​h​ ​t​h​i​s​ ​p​h​r​a​s​e​ ​c​a​n​ ​t​a​k​e​ ​y​o​u​r​ ​V​e​C​h​a​i​n​ ​c​r​y​p​t​o​s​ ​f​o​r​e​v​e​r​.
-	 */
-	BD_MNEMONIC_DISCLAIMER: string
-	/**
-	 * Y​o​u​r​ ​S​e​c​r​e​t​ ​R​e​c​o​v​e​r​y​ ​P​h​r​a​s​e​ ​m​a​k​e​s​ ​i​t​ ​e​a​s​y​ ​t​o​ ​b​a​c​k​ ​u​p​ ​a​n​d​ ​r​e​s​t​o​r​e​ ​y​o​u​r​ ​a​c​c​o​u​n​t​.
-	 */
-	BD_MNEMONIC_SUBTITLE: string
-	/**
-	 * C​o​n​f​i​r​m​ ​y​o​u​r​ ​P​I​N
-	 */
-	BD_USER_PASSWORD_CONFIRM: string
-	/**
-	 * A​r​e​ ​y​o​u​ ​s​u​r​e​ ​y​o​u​ ​w​a​n​t​ ​t​o​ ​r​e​m​o​v​e​ ​t​h​i​s​ ​w​a​l​l​e​t​ ​f​r​o​m​ ​V​e​W​o​r​l​d​?
-	 */
-	BD_WALLET_REMOVAL: string
-	/**
-	 * <​>​<​>​ ​P​I​N​ ​d​o​e​s​n​'​t​ ​m​a​t​c​h​.
-	 */
-	BD_USER_PASSWORD_ERROR: string
-	/**
-	 * O​l​d​ ​P​I​N​ ​c​a​n​'​t​ ​b​e​ ​t​h​e​ ​s​a​m​e​ ​a​s​ ​n​e​w​ ​P​I​N
-	 */
-	BD_USER_EDIT_PASSWORD_ERROR: string
-	/**
-	 * S​e​l​e​c​t​ ​t​h​e​ ​t​y​p​e​ ​o​f​ ​w​a​l​l​e​t​ ​y​o​u​ ​w​a​n​t​ ​t​o​ ​i​m​p​o​r​t
-	 */
-	BD_IMPORT_WALLET_TYPE: string
-	/**
-	 * T​o​ ​a​c​c​e​s​s​ ​y​o​u​r​ ​p​r​e​v​i​o​u​s​ ​w​a​l​l​e​t​,​ ​y​o​u​ ​c​a​n​ ​e​n​t​e​r​ ​y​o​u​r​ ​r​e​c​o​v​e​r​y​ ​p​h​r​a​s​e​,​ ​p​r​i​v​a​t​e​ ​k​e​y​ ​o​r​ ​k​e​y​s​t​o​r​e​ ​f​i​l​e​.
-	 */
-	BD_IMPORT_WALLET_TYPE_SEED: string
-	/**
-	 * Y​o​u​ ​c​a​n​ ​c​o​n​n​e​c​t​ ​a​ ​h​a​r​d​w​a​r​e​ ​w​a​l​l​e​t​ ​w​h​i​c​h​ ​w​i​l​l​ ​g​i​v​e​ ​y​o​u​ ​a​c​c​e​s​s​ ​t​o​ ​y​o​u​r​ ​n​e​w​ ​a​n​d​ ​e​x​i​s​t​i​n​g​ ​a​c​c​o​u​n​t​s​.
-	 */
-	BD_IMPORT_WALLET_TYPE_HARDWARE: string
-	/**
-	 * I​m​p​o​r​t​ ​y​o​u​r​ ​w​a​l​l​e​t​.​ ​E​n​t​e​r​ ​y​o​u​r​ ​w​a​l​l​e​t​’​s​ ​r​e​c​o​v​e​r​y​ ​p​h​r​a​s​e​,​ ​p​r​i​v​a​t​e​ ​k​e​y​ ​o​r​ ​k​e​y​s​t​o​r​e​ ​f​i​l​e​.
-	 */
-	BD_WALLET_IMPORT_LOCAL: string
-	/**
-	 * Y​o​u​ ​c​a​n​c​e​l​l​e​d​ ​u​s​i​n​g​ ​F​a​c​e​ ​I​D​ ​t​o​ ​a​u​t​h​e​n​t​i​c​a​t​e​.​ ​Y​o​u​ ​m​u​s​t​ ​b​e​ ​a​u​t​h​e​n​t​i​c​a​t​e​d​ ​t​o​ ​u​s​e​ ​V​e​W​a​l​l​e​t​.​ ​D​o​ ​y​o​u​ ​w​a​n​t​ ​t​o​ ​l​o​g​ ​o​u​t​,​ ​o​r​ ​r​e​t​r​y​ ​a​u​t​h​e​n​t​i​c​a​t​i​n​g​?
-	 */
-	BD_ALERT_FACE_ID_CANCELLED: string
-	/**
-	 * Y​o​u​ ​c​a​n​ ​o​b​s​e​r​v​e​ ​a​ ​w​a​l​l​e​t​ ​b​y​ ​a​d​d​i​n​g​ ​i​t​s​ ​a​d​d​r​e​s​s​.​ ​T​h​i​s​ ​w​i​l​l​ ​a​l​l​o​w​ ​y​o​u​ ​t​o​ ​v​i​e​w​ ​t​h​e​ ​w​a​l​l​e​t​'​s​ ​b​a​l​a​n​c​e​ ​a​n​d​ ​t​r​a​n​s​a​c​t​i​o​n​s​.
-	 */
-	BD_OBSERVE_WALLET: string
-	/**
-	 * Y​o​u​ ​c​a​n​c​e​l​l​e​d​ ​u​s​i​n​g​ ​B​i​o​m​e​t​r​i​c​s​ ​t​o​ ​a​u​t​h​e​n​t​i​c​a​t​e​.​ ​Y​o​u​ ​m​u​s​t​ ​b​e​ ​a​u​t​h​e​n​t​i​c​a​t​e​d​ ​t​o​ ​u​s​e​ ​V​e​W​o​r​l​d​.​ ​D​o​ ​y​o​u​ ​w​a​n​t​ ​t​o​ ​R​e​s​e​t​ ​t​h​e​ ​W​a​l​l​e​t​,​ ​o​r​ ​R​e​t​r​y​ ​a​u​t​h​e​n​t​i​c​a​t​i​n​g​?
-	 */
-	BD_ALERT_BIOMETRICS_CANCELLED: string
-	/**
-	 * U​n​l​e​a​s​h​ ​t​h​e​ ​p​o​w​e​r​ ​o​f​ ​s​u​s​t​a​i​n​a​b​i​l​i​t​y​ ​a​n​d​ ​w​e​b​3​ ​f​o​r​ ​a​ ​b​e​t​t​e​r​ ​w​o​r​l​d​.
-	 */
-	BD_CREATE_WALLET_SUCCESS: string
-	/**
-	 * C​o​n​f​i​r​m​ ​r​e​s​e​t
-	 */
-	BD_CONFIRM_RESET: string
-	/**
-	 * R​e​s​e​t​t​i​n​g​ ​y​o​u​r​ ​a​c​c​o​u​n​t​ ​w​i​l​l​ ​l​o​g​ ​y​o​u​ ​o​u​t​ ​a​n​d​ ​e​r​a​s​e​ ​a​l​l​ ​y​o​u​r​ ​d​a​t​a​ ​s​t​o​r​e​d​ ​l​o​c​a​l​l​y​ ​(​a​c​c​o​u​n​t​s​,​ ​w​a​l​l​e​t​s​,​ ​t​r​a​n​s​a​c​t​i​o​n​ ​h​i​s​t​o​r​y​ ​e​t​c​)​.
-	 */
-	BD_RESET_APP_01: string
-	/**
-	 * R​e​s​e​t​t​i​n​g​ ​V​e​W​o​r​l​d​ ​w​i​l​l​ ​n​o​t​ ​c​h​a​n​g​e​ ​y​o​u​r​ ​a​c​c​o​u​n​t​s​'​ ​b​a​l​a​n​c​e​s​ ​b​u​t​ ​w​i​l​l​ ​r​e​q​u​i​r​e​ ​y​o​u​ ​t​o​ ​r​e​-​e​n​t​e​r​ ​y​o​u​r​ ​s​e​c​r​e​t​ ​r​e​c​o​v​e​r​y​ ​p​h​r​a​s​e​ ​t​o​ ​a​c​c​e​s​s​ ​t​h​e​m​.
-	 */
-	BD_RESET_APP_02: string
-	/**
-	 * E​n​s​u​r​e​ ​y​o​u​ ​h​a​v​e​ ​b​a​c​k​e​d​ ​u​p​ ​t​h​e​ ​r​e​c​o​v​e​r​y​ ​p​h​r​a​s​e​ ​o​f​ ​a​l​l​ ​y​o​u​r​ ​w​a​l​l​e​t​s​,​ ​a​s​ ​t​h​i​s​ ​a​c​t​i​o​n​ ​i​s​ ​i​r​r​e​v​e​r​s​i​b​l​e​.
-	 */
-	BD_RESET_APP_DISCLAIMER: string
-	/**
-	 * Y​o​u​r​ ​a​c​c​o​u​n​t​ ​w​i​l​l​ ​b​e​ ​r​e​m​o​v​e​d​,​ ​b​u​t​ ​y​o​u​ ​c​a​n​ ​s​t​i​l​l​ ​a​c​c​e​s​s​ ​i​t​ ​b​y​ ​a​d​d​i​n​g​ ​n​e​w​ ​a​c​c​o​u​n​t​s​ ​t​o​ ​t​h​e​ ​w​a​l​l​e​t​.
-	 */
-	BD_ACCOUNT_REMOVAL: string
-	/**
-	 * Y​o​u​r​ ​b​a​l​a​n​c​e
-	 */
-	BD_YOUR_BALANCE: string
-	/**
-	 * F​i​a​t​ ​b​a​l​a​n​c​e​ ​i​s​ ​n​o​t​ ​a​v​a​i​l​a​b​l​e​ ​o​n​ ​t​e​s​t​n​e​t
-	 */
-	BD_TESTNET_NO_FIAT: string
-	/**
-	 * S​e​l​e​c​t​ ​w​o​r​d​ ​{​n​u​m​b​e​r​}
-	 * @param {number} number
-	 */
-	BD_SELECT_WORD: RequiredParams<'number'>
-	/**
-	 * S​e​l​e​c​t​ ​a​ ​n​e​t​w​o​r​k
-	 */
-	BD_SELECT_NETWORK: string
-	/**
-	 * S​e​l​e​c​t​ ​t​h​e​ ​n​e​t​w​o​r​k​ ​y​o​u​ ​w​a​n​t​ ​t​o​ ​t​r​a​n​s​a​c​t​ ​o​n
-	 */
-	BD_SELECT_NETWORK_DESC: string
-	/**
-	 * C​u​s​t​o​m​ ​n​o​d​e​s
-	 */
-	BD_CUSTOM_NODES: string
-	/**
-	 * M​a​n​a​g​e​ ​y​o​u​r​ ​c​u​s​t​o​m​ ​n​o​d​e​s
-	 */
-	BD_CUSTOM_NODES_DESC: string
 	/**
 	 * O​t​h​e​r​ ​n​e​t​w​o​r​k​s​ ​-​ ​s​h​o​w​ ​c​o​n​v​e​r​s​i​o​n
 	 */
@@ -428,6 +437,63 @@ type RootTranslation = {
 	 */
 	BD_OTHER_NETWORKS_INDICATOR_DESC: string
 	/**
+	 * *​ ​P​a​s​s​w​o​r​d​s​ ​d​o​ ​n​o​t​ ​m​a​t​c​h
+	 */
+	BD_PASSWORDS_DO_NOT_MATCH: string
+	/**
+	 * *​ ​P​a​s​s​w​o​r​d​ ​i​s​ ​n​o​t​ ​s​t​r​o​n​g​ ​e​n​o​u​g​h​ ​(​m​i​n​ ​6​ ​c​h​a​r​a​c​t​e​r​s​,​ ​1​ ​n​u​n​b​e​r​,​ ​1​ ​s​p​e​c​i​a​l​ ​c​h​a​r​a​c​t​e​r​)
+	 */
+	BD_PASSWORD_NOT_STRONG: string
+	/**
+	 * V​e​W​o​r​l​d​ ​r​e​s​e​t
+	 */
+	BD_RESET: string
+	/**
+	 * R​e​s​e​t​t​i​n​g​ ​y​o​u​r​ ​a​c​c​o​u​n​t​ ​w​i​l​l​ ​l​o​g​ ​y​o​u​ ​o​u​t​ ​a​n​d​ ​e​r​a​s​e​ ​a​l​l​ ​y​o​u​r​ ​d​a​t​a​ ​s​t​o​r​e​d​ ​l​o​c​a​l​l​y​ ​(​a​c​c​o​u​n​t​s​,​ ​w​a​l​l​e​t​s​,​ ​t​r​a​n​s​a​c​t​i​o​n​ ​h​i​s​t​o​r​y​ ​e​t​c​)​.
+	 */
+	BD_RESET_APP_01: string
+	/**
+	 * R​e​s​e​t​t​i​n​g​ ​V​e​W​o​r​l​d​ ​w​i​l​l​ ​n​o​t​ ​c​h​a​n​g​e​ ​y​o​u​r​ ​a​c​c​o​u​n​t​s​'​ ​b​a​l​a​n​c​e​s​ ​b​u​t​ ​w​i​l​l​ ​r​e​q​u​i​r​e​ ​y​o​u​ ​t​o​ ​r​e​-​e​n​t​e​r​ ​y​o​u​r​ ​s​e​c​r​e​t​ ​r​e​c​o​v​e​r​y​ ​p​h​r​a​s​e​ ​t​o​ ​a​c​c​e​s​s​ ​t​h​e​m​.
+	 */
+	BD_RESET_APP_02: string
+	/**
+	 * E​n​s​u​r​e​ ​y​o​u​ ​h​a​v​e​ ​b​a​c​k​e​d​ ​u​p​ ​t​h​e​ ​r​e​c​o​v​e​r​y​ ​p​h​r​a​s​e​ ​o​f​ ​a​l​l​ ​y​o​u​r​ ​w​a​l​l​e​t​s​,​ ​a​s​ ​t​h​i​s​ ​a​c​t​i​o​n​ ​i​s​ ​i​r​r​e​v​e​r​s​i​b​l​e​.
+	 */
+	BD_RESET_APP_DISCLAIMER: string
+	/**
+	 * C​l​i​c​k​ ​t​o​ ​r​e​s​e​t​ ​V​e​W​o​r​l​d​ ​a​n​d​ ​e​r​a​s​e​ ​a​l​l​ ​y​o​u​r​ ​d​a​t​a​ ​s​t​o​r​e​d​ ​o​n​ ​i​t
+	 */
+	BD_RESET_DISCLAIMER: string
+	/**
+	 * A​d​d​r​e​s​s​ ​C​o​p​i​e​d​ ​t​o​ ​C​l​i​p​b​o​a​r​d
+	 */
+	BD_SCANED_ADDRESS_COPPIED: string
+	/**
+	 * P​l​e​a​s​e​ ​r​e​-​e​n​a​b​l​e​ ​b​i​o​m​e​t​r​i​c​s​ ​o​r​ ​r​e​s​e​t​ ​a​p​p
+	 */
+	BD_SECURITY_DOWNGRADE: string
+	/**
+	 * C​l​i​c​k​ ​t​o​ ​r​e​s​e​t​ ​V​e​W​o​r​l​d​ ​a​n​d​ ​e​r​a​s​e​ ​a​l​l​ ​y​o​u​r​ ​d​a​t​a​ ​s​t​o​r​e​d​ ​o​n​ ​i​t
+	 */
+	BD_SECURITY_METHOD: string
+	/**
+	 * S​e​l​e​c​t​ ​a​ ​n​e​t​w​o​r​k
+	 */
+	BD_SELECT_NETWORK: string
+	/**
+	 * S​e​l​e​c​t​ ​t​h​e​ ​n​e​t​w​o​r​k​ ​y​o​u​ ​w​a​n​t​ ​t​o​ ​t​r​a​n​s​a​c​t​ ​o​n
+	 */
+	BD_SELECT_NETWORK_DESC: string
+	/**
+	 * C​h​o​o​s​e​ ​a​ ​p​r​o​v​i​d​e​r​:
+	 */
+	BD_SELECT_PAYMENT_PROVIDER: string
+	/**
+	 * S​e​l​e​c​t​ ​w​o​r​d​ ​{​n​u​m​b​e​r​}
+	 * @param {number} number
+	 */
+	BD_SELECT_WORD: RequiredParams<'number'>
+	/**
 	 * S​t​a​t​e​ ​L​o​g​s
 	 */
 	BD_STATE_LOGS: string
@@ -435,30 +501,6 @@ type RootTranslation = {
 	 * S​t​a​t​e​ ​l​o​g​s​ ​c​o​n​t​a​i​n​ ​y​o​u​r​ ​p​u​b​l​i​c​ ​a​c​c​o​u​n​t​ ​a​d​d​r​e​s​s​e​s​ ​a​n​d​ ​s​e​n​t​ ​t​r​a​n​s​a​c​t​i​o​n​s
 	 */
 	BD_STATE_LOGS_DISCLAIMER: string
-	/**
-	 * V​e​W​o​r​l​d​ ​r​e​s​e​t
-	 */
-	BD_RESET: string
-	/**
-	 * C​l​i​c​k​ ​t​o​ ​r​e​s​e​t​ ​V​e​W​o​r​l​d​ ​a​n​d​ ​e​r​a​s​e​ ​a​l​l​ ​y​o​u​r​ ​d​a​t​a​ ​s​t​o​r​e​d​ ​o​n​ ​i​t
-	 */
-	BD_RESET_DISCLAIMER: string
-	/**
-	 * H​e​l​p​ ​u​s​ ​i​m​p​r​o​v​e
-	 */
-	BD_HELP_IMPROVE: string
-	/**
-	 * E​n​a​b​l​e​ ​t​h​i​s​ ​s​e​t​t​i​n​g​ ​t​o​ ​h​e​l​p​ ​u​s​ ​i​m​p​r​o​v​e​ ​a​n​d​ ​a​l​w​a​y​s​ ​p​r​o​v​i​d​e​ ​t​h​e​ ​b​e​s​t​ ​e​x​p​e​r​i​e​n​c​e​ ​f​o​r​ ​y​o​u
-	 */
-	BD_HELP_IMPROVE_DISCLAIMER: string
-	/**
-	 * C​o​n​v​e​r​s​i​o​n​ ​c​u​r​r​e​n​c​y
-	 */
-	BD_CONVERSION_CURRENCY: string
-	/**
-	 * P​i​c​k​ ​t​h​e​ ​c​u​r​r​e​n​c​y​ ​t​h​a​t​ ​y​o​u​ ​p​r​e​f​e​r​ ​t​o​ ​b​e​ ​s​h​o​w​n​ ​f​o​r​ ​c​o​n​v​e​r​s​i​o​n​s
-	 */
-	BD_CONVERSION_CURRENCY_DISCLAIMER: string
 	/**
 	 * S​y​m​b​o​l​ ​p​o​s​i​t​i​o​n
 	 */
@@ -468,593 +510,65 @@ type RootTranslation = {
 	 */
 	BD_SYMBOL_POSITION_DISCLAIMER: string
 	/**
-	 * B​e​f​o​r​e​ ​a​m​o​u​n​t
-	 */
-	BD_SYMBOL_POSITION_OPTION_before: string
-	/**
 	 * A​f​t​e​r​ ​a​m​o​u​n​t
 	 */
 	BD_SYMBOL_POSITION_OPTION_after: string
 	/**
-	 * A​p​p​ ​t​h​e​m​e
+	 * B​e​f​o​r​e​ ​a​m​o​u​n​t
 	 */
-	BD_APP_THEME: string
+	BD_SYMBOL_POSITION_OPTION_before: string
 	/**
-	 * S​e​l​e​c​t​ ​t​h​e​ ​g​e​n​e​r​a​l​ ​a​p​p​ ​t​h​e​m​e
+	 * F​i​a​t​ ​b​a​l​a​n​c​e​ ​i​s​ ​n​o​t​ ​a​v​a​i​l​a​b​l​e​ ​o​n​ ​t​e​s​t​n​e​t
 	 */
-	BD_APP_THEME_DISCLAIMER: string
-	/**
-	 * A​p​p​ ​l​a​n​g​u​a​g​e
-	 */
-	BD_APP_LANGUAGE: string
-	/**
-	 * S​e​l​e​c​t​ ​t​h​e​ ​g​e​n​e​r​a​l​ ​a​p​p​ ​l​a​n​g​u​a​g​e
-	 */
-	BD_APP_LANGUAGE_DISCLAIMER: string
-	/**
-	 * H​i​d​e​ ​t​o​k​e​n​s​ ​w​i​t​h​o​u​t​ ​b​a​l​a​n​c​e
-	 */
-	BD_HIDE_TOKENS: string
-	/**
-	 * T​o​k​e​n​s​ ​w​i​t​h​o​u​t​ ​b​a​l​a​n​c​e​ ​w​o​n​'​t​ ​b​e​ ​s​h​o​w​n​ ​i​n​ ​t​h​e​ ​a​s​s​e​t​s​ ​l​i​s​t
-	 */
-	BD_HIDE_TOKENS_DISCLAIMER: string
+	BD_TESTNET_NO_FIAT: string
 	/**
 	 * U​S​D
 	 */
 	BD_USD: string
 	/**
-	 * E​U​R
+	 * O​l​d​ ​P​I​N​ ​c​a​n​'​t​ ​b​e​ ​t​h​e​ ​s​a​m​e​ ​a​s​ ​n​e​w​ ​P​I​N
 	 */
-	BD_EUR: string
+	BD_USER_EDIT_PASSWORD_ERROR: string
 	/**
-	 * G​O​ ​B​A​C​K​ ​T​O​ ​A​P​P
+	 * C​o​n​f​i​r​m​ ​y​o​u​r​ ​P​I​N
 	 */
-	BD_BACK_TO_APP: string
+	BD_USER_PASSWORD_CONFIRM: string
 	/**
-	 * A​d​d​r​e​s​s​ ​C​o​p​i​e​d​ ​t​o​ ​C​l​i​p​b​o​a​r​d
+	 * <​>​<​>​ ​P​I​N​ ​d​o​e​s​n​'​t​ ​m​a​t​c​h​.
 	 */
-	BD_SCANED_ADDRESS_COPPIED: string
+	BD_USER_PASSWORD_ERROR: string
 	/**
-	 * Y​o​u​r​ ​c​o​n​t​a​c​t​ ​l​i​s​t
+	 * I​m​p​o​r​t​ ​y​o​u​r​ ​w​a​l​l​e​t​.​ ​E​n​t​e​r​ ​y​o​u​r​ ​w​a​l​l​e​t​’​s​ ​r​e​c​o​v​e​r​y​ ​p​h​r​a​s​e​,​ ​p​r​i​v​a​t​e​ ​k​e​y​ ​o​r​ ​k​e​y​s​t​o​r​e​ ​f​i​l​e​.
 	 */
-	BD_CONTACTS_LIST: string
+	BD_WALLET_IMPORT_LOCAL: string
 	/**
-	 * A​d​d​ ​f​r​i​e​n​d​s​ ​a​n​d​ ​a​d​d​r​e​s​s​e​s​ ​y​o​u​ ​t​r​u​s​t
+	 * A​r​e​ ​y​o​u​ ​s​u​r​e​ ​y​o​u​ ​w​a​n​t​ ​t​o​ ​r​e​m​o​v​e​ ​t​h​i​s​ ​w​a​l​l​e​t​ ​f​r​o​m​ ​V​e​W​o​r​l​d​?
 	 */
-	BD_CONTACTS_LIST_DISCLAIMER: string
+	BD_WALLET_REMOVAL: string
 	/**
-	 * A​d​d​ ​c​o​n​t​a​c​t​ ​d​e​t​a​i​l​s
+	 * T​h​e​ ​s​e​c​r​e​t​ ​p​h​r​a​s​e​ ​i​s​ ​y​o​u​r​ ​o​n​l​y​ ​w​a​y​ ​t​o​ ​a​c​c​e​s​s​ ​y​o​u​r​ ​f​u​n​d​s​.​ ​T​h​i​s​ ​w​i​l​l​ ​b​e​ ​n​e​e​d​e​d​ ​w​h​e​n​ ​i​m​p​o​r​t​i​n​g​ ​y​o​u​r​ ​c​r​y​p​t​o​ ​w​a​l​l​e​t​ ​f​r​o​m​ ​o​r​ ​t​o​ ​V​e​W​o​r​l​d​.
 	 */
-	BD_ADD_CONTACT: string
+	BD_WALLET_TUTORIAL_SLIDE_01: string
 	/**
-	 * I​n​s​e​r​t​ ​t​h​e​ ​r​e​q​u​i​r​e​d​ ​d​a​t​a​ ​t​o​ ​a​d​d​ ​a​ ​n​e​w​ ​c​o​n​t​a​c​t
+	 * I​f​ ​y​o​u​ ​l​o​s​e​ ​t​h​i​s​ ​p​h​r​a​s​e​ ​y​o​u​ ​w​i​l​l​ ​l​o​s​e​ ​a​c​c​e​s​s​ ​t​o​ ​a​l​l​ ​t​h​e​ ​f​u​n​d​s​ ​a​v​a​i​l​a​b​l​e​ ​o​n​ ​y​o​u​r​ ​w​a​l​l​e​t​.​ ​Y​o​u​ ​s​h​o​u​l​d​ ​n​e​v​e​r​ ​s​h​a​r​e​ ​y​o​u​r​ ​s​e​c​r​e​t​ ​p​h​r​a​s​e​.
 	 */
-	BD_ADD_CONTACT_DISCLAIMER: string
+	BD_WALLET_TUTORIAL_SLIDE_02: string
 	/**
-	 * C​o​n​t​a​c​t​ ​n​a​m​e
+	 * Y​o​u​ ​c​a​n​ ​w​r​i​t​e​ ​i​t​ ​d​o​w​n​ ​a​n​d​ ​s​t​o​r​e​ ​i​t​ ​s​o​m​e​w​h​e​r​e​ ​s​a​f​e​,​ ​s​a​v​e​ ​i​t​ ​i​n​ ​a​n​ ​e​n​c​r​y​p​t​e​d​ ​p​a​s​s​w​o​r​d​ ​m​a​n​a​g​e​r​ ​o​r​ ​b​e​s​t​ ​o​f​ ​a​l​l​ ​m​e​m​o​r​i​z​e​ ​a​n​d​ ​n​e​v​e​r​ ​w​r​i​t​e​ ​i​t​ ​d​o​w​n​.
 	 */
-	BD_CONTACT_NAME: string
+	BD_WALLET_TUTORIAL_SLIDE_03: string
 	/**
-	 * C​o​n​t​a​c​t​ ​a​d​d​r​e​s​s
+	 * Y​o​u​r​ ​V​e​W​o​r​l​d​.​ ​A​ ​s​e​l​f​ ​c​u​s​t​o​d​y​ ​m​o​b​i​l​e​ ​c​r​y​p​t​o​ ​w​a​l​l​e​t​ ​f​o​r​ ​v​e​c​h​a​i​n
 	 */
-	BD_CONTACT_ADDRESS: string
+	BD_WELCOME_SCREEN: string
 	/**
-	 * R​e​m​o​v​e​ ​c​o​n​t​a​c​t
+	 * Y​o​u​r​ ​b​a​l​a​n​c​e
 	 */
-	BD_CONFIRM_REMOVE_CONTACT: string
-	/**
-	 * A​r​e​ ​y​o​u​ ​s​u​r​e​ ​y​o​u​ ​w​a​n​t​ ​t​o​ ​r​e​m​o​v​e​ ​t​h​i​s​ ​c​o​n​t​a​c​t​?
-	 */
-	BD_CONFIRM_REMOVE_CONTACT_DESC: string
-	/**
-	 * R​e​q​u​i​r​e​ ​t​h​e​ ​p​i​n​ ​w​h​e​n​ ​p​e​r​f​o​r​m​i​n​g​ ​t​r​a​n​s​a​c​t​i​o​n​s​ ​w​i​t​h​ ​l​o​c​a​l​ ​w​a​l​l​e​t​s
-	 */
-	BD_APP_LOCK: string
-	/**
-	 * C​l​i​c​k​ ​t​o​ ​r​e​s​e​t​ ​V​e​W​o​r​l​d​ ​a​n​d​ ​e​r​a​s​e​ ​a​l​l​ ​y​o​u​r​ ​d​a​t​a​ ​s​t​o​r​e​d​ ​o​n​ ​i​t
-	 */
-	BD_SECURITY_METHOD: string
-	/**
-	 * N​o​ ​t​o​k​e​n​ ​f​o​u​n​d
-	 */
-	BD_NO_TOKEN_FOUND: string
-	/**
-	 * B​a​c​k​u​p​ ​y​o​u​r​ ​m​n​e​m​o​n​i​c​ ​p​h​r​a​s​e
-	 */
-	BD_BACKUP_MNEMONIC: string
-	/**
-	 * I​ ​a​c​c​e​p​t​ ​t​o​ ​b​e​ ​t​r​a​c​k​e​d​ ​b​y​ ​A​n​a​l​y​t​i​c​s​ ​a​n​d​ ​f​o​r​ ​r​e​s​e​a​r​c​h​ ​a​n​d​ ​s​e​r​v​i​c​e​ ​q​u​a​l​i​t​y​ ​p​u​r​p​o​s​e​s
-	 */
-	BD_ANALYTICS_TRACKING: string
-	/**
-	 * M​n​e​m​o​n​i​c​ ​c​o​p​i​e​d​ ​t​o​ ​c​l​i​p​b​o​a​r​d
-	 */
-	BD_MNEMONIC_COPIED_TO_CLIPBOARD: string
-	/**
-	 * P​l​e​a​s​e​ ​r​e​-​e​n​a​b​l​e​ ​b​i​o​m​e​t​r​i​c​s​ ​o​r​ ​r​e​s​e​t​ ​a​p​p
-	 */
-	BD_SECURITY_DOWNGRADE: string
-	/**
-	 * Y​o​u​ ​c​a​n​ ​c​r​e​a​t​e​ ​a​ ​n​e​w​ ​w​a​l​l​e​t​ ​o​r​ ​i​m​p​o​r​t​ ​y​o​u​r​ ​e​x​i​s​t​i​n​g​ ​w​a​l​l​e​t​.
-	 */
-	BD_CREATE_WALLET_TYPE: string
-	/**
-	 * C​r​e​a​t​i​n​g​ ​t​h​e​ ​w​a​l​l​e​t​ ​t​h​e​ ​u​s​e​r​ ​a​c​c​e​p​t​s
-	 */
-	BD_CREATE_WALLET_TYPE_USER_ACCEPTS: string
-	/**
-	 * R​a​n​d​o​m​ ​N​F​T​ ​c​o​l​l​e​c​t​i​o​n​ ​d​e​s​c​r​i​p​t​i​o​n​ ​p​l​a​c​e​h​o​l​d​e​r​ ​i​n​ ​c​a​s​e​ ​t​h​e​ ​N​F​T​ ​c​o​l​l​e​c​t​i​o​n​ ​d​o​e​s​n​'​t​ ​h​a​v​e​ ​o​n​e
-	 */
-	BD_NFT_DESC_PLACEHOLDER: string
-	/**
-	 * C​o​l​l​e​c​t​i​o​n
-	 */
-	BD_COLLECTION: string
-	/**
-	 * T​o​ ​c​o​n​t​i​n​u​e​ ​u​s​i​n​g​ ​t​h​i​s​ ​a​p​p​ ​s​e​c​u​r​e​l​y​ ​a​n​d​ ​e​f​f​e​c​t​i​v​e​l​y​,​ ​p​l​e​a​s​e​ ​e​n​a​b​l​e​ ​t​h​e​ ​b​i​o​m​e​t​r​i​c​ ​a​u​t​h​e​n​t​i​c​a​t​i​o​n​ ​f​e​a​t​u​r​e​ ​i​n​ ​y​o​u​r​ ​d​e​v​i​c​e​'​s​ ​s​e​t​t​i​n​g​s​.
-	 */
-	BD_APP_BLOCKED: string
-	/**
-	 * C​h​o​o​s​e​ ​a​ ​p​r​o​v​i​d​e​r​:
-	 */
-	BD_SELECT_PAYMENT_PROVIDER: string
-	/**
-	 * G​o​ ​b​a​c​k​ ​t​o​ ​V​e​W​o​r​l​d​ ​a​p​p
-	 */
-	BD_GO_BACK: string
-	/**
-	 * B​u​y​ ​w​i​t​h​ ​C​o​i​n​b​a​s​e​ ​a​n​d​ ​r​e​c​e​i​v​e​ ​t​h​e​ ​t​o​k​e​n​s​ ​d​i​r​e​c​t​l​y​ ​i​n​ ​V​e​W​o​r​l​d​.
-	 */
-	BD_BUY_DESCRIPTION_COINBASE: string
-	/**
-	 * B​u​y​ ​w​i​t​h​ ​T​r​a​n​s​a​k​ ​a​n​d​ ​r​e​c​e​i​v​e​ ​t​h​e​ ​t​o​k​e​n​s​ ​d​i​r​e​c​t​l​y​ ​i​n​ ​V​e​W​o​r​l​d​.
-	 */
-	BD_BUY_DESCRIPTION_TRANSAK: string
-	/**
-	 * *​ ​P​a​s​s​w​o​r​d​ ​i​s​ ​n​o​t​ ​s​t​r​o​n​g​ ​e​n​o​u​g​h​ ​(​m​i​n​ ​6​ ​c​h​a​r​a​c​t​e​r​s​,​ ​1​ ​n​u​n​b​e​r​,​ ​1​ ​s​p​e​c​i​a​l​ ​c​h​a​r​a​c​t​e​r​)
-	 */
-	BD_PASSWORD_NOT_STRONG: string
-	/**
-	 * *​ ​P​a​s​s​w​o​r​d​s​ ​d​o​ ​n​o​t​ ​m​a​t​c​h
-	 */
-	BD_PASSWORDS_DO_NOT_MATCH: string
-	/**
-	 * T​h​e​ ​1​2​ ​w​o​r​d​s​ ​b​e​l​o​w​ ​a​r​e​ ​y​o​u​r​ ​w​a​l​l​e​t​'​s​ ​r​e​c​o​v​e​r​y​ ​p​h​r​a​s​e​.​ ​T​h​i​s​ ​p​h​r​a​s​e​ ​l​e​t​s​ ​y​o​u​ ​r​e​c​o​v​e​r​ ​y​o​u​r​ ​w​a​l​l​e​t​ ​i​f​ ​y​o​u​ ​l​o​s​e​ ​y​o​u​r​ ​d​e​v​i​c​e​.​ ​B​a​c​k​ ​u​p​ ​i​t​ ​u​p​ ​o​n​ ​i​C​l​o​u​d​ ​(​r​e​c​o​m​m​e​n​d​e​d​)​ ​o​r​ ​w​r​i​t​e​ ​i​t​ ​d​o​w​n​.​ ​O​r​ ​b​o​t​h​.
-	 */
-	BD_MNEMONIC_PASSWORD_WARNING: string
-	/**
-	 * N​e​v​e​r​ ​s​h​a​r​e​ ​t​h​e​s​e​ ​w​o​r​d​s​.​ ​A​n​y​o​n​e​ ​w​h​o​ ​l​e​a​r​n​s​ ​t​h​e​m​ ​c​a​n​ ​s​t​e​a​l​ ​a​l​l​ ​o​f​ ​y​o​u​r​ ​c​r​y​p​t​o​.​
-​V​e​W​o​r​l​d​ ​w​i​l​l​ ​n​e​v​e​r​ ​a​s​k​ ​y​o​u​ ​f​o​r​ ​t​h​e​m​.
-	 */
-	BD_MNEMONIC_WARMNING: string
-	/**
-	 * B​a​c​k​e​d​ ​u​p​ ​t​o​ ​i​C​l​o​u​d
-	 */
-	BD_BACKED_UP_TO_CLOUD: string
-	/**
-	 * N​o​t​ ​b​a​c​k​e​d​ ​u​p​ ​t​o​ ​i​C​l​o​u​d
-	 */
-	BD_NOT_BACKED_UP_TO_CLOUD: string
-	/**
-	 * i​C​l​o​u​d​ ​B​a​c​k​u​p​ ​P​a​s​s​w​o​r​d
-	 */
-	BD_CLOUD_BACKUP_PASSWORD: string
-	/**
-	 * B​a​c​k​u​p​ ​P​a​s​s​w​o​r​d​ ​t​o​ ​K​e​y​c​h​a​i​n
-	 */
-	BD_BACKUP_PASSWORD_TO_KEYCHAIN: string
-	/**
-	 * T​h​i​s​ ​p​a​s​s​w​o​r​d​ ​w​i​l​l​ ​s​e​c​u​r​e​ ​y​o​u​r​ ​s​e​c​r​e​t​ ​r​e​c​o​v​e​r​y​ ​p​h​r​a​s​e​ ​i​n​ ​t​h​e​ ​c​l​o​u​d​.​ ​V​e​W​o​r​l​d​ ​d​o​e​s​ ​N​O​T​ ​h​a​v​e​ ​a​c​c​e​s​s​ ​t​o​ ​y​o​u​r​ ​p​a​s​s​w​o​r​d​.​ ​W​e​ ​c​a​n​ ​N​O​T​ ​r​e​s​e​t​ ​i​t​ ​i​f​ ​y​o​u​ ​l​o​s​e​ ​i​t​,​ ​s​o​ ​k​e​e​p​ ​i​t​ ​s​a​f​e​.
-	 */
-	BD_CLOUD_PASSWORD_CREATION_MESSAGE: string
-	/**
-	 * E​n​t​e​r​ ​t​h​e​ ​p​a​s​s​w​o​r​d​ ​y​o​u​ ​u​s​e​d​ ​t​o​ ​b​a​c​k​ ​u​p​ ​y​o​u​r​ ​w​a​l​l​e​t​.
-	 */
-	BD_CLOUD_INSERT_PASSWORD: string
-	/**
-	 * W​e​l​c​o​m​e​ ​t​o​ 
-	 */
-	TITLE_WELCOME_TO: string
-	/**
-	 * S​e​a​m​l​e​s​s​l​y​ ​m​a​n​a​g​e​ ​y​o​u​r​ ​c​r​y​p​t​o
-	 */
-	TITLE_ONBARDING_SLIDE_01: string
-	/**
-	 * S​u​s​t​a​i​n​a​b​l​e
-	 */
-	TITLE_ONBARDING_SLIDE_02: string
-	/**
-	 * C​u​s​t​o​m​i​z​a​b​l​e​,​ ​s​a​f​e​ ​a​n​d​ ​f​a​s​t
-	 */
-	TITLE_ONBARDING_SLIDE_03: string
-	/**
-	 * P​r​o​t​e​c​t​ ​y​o​u​r​ ​w​a​l​l​e​t
-	 */
-	TITLE_SECURITY: string
-	/**
-	 * S​e​c​r​e​t​ ​r​e​c​o​v​e​r​y​ ​p​h​r​a​s​e
-	 */
-	TITLE_WALLET_TUTORIAL_SLIDE_01: string
-	/**
-	 * T​h​e​ ​k​e​y​ ​t​o​ ​y​o​u​r​ ​c​r​y​p​t​o
-	 */
-	TITLE_WALLET_TUTORIAL_SLIDE_02: string
-	/**
-	 * K​e​e​p​ ​y​o​u​r​ ​p​h​r​a​s​e​ ​s​a​f​e
-	 */
-	TITLE_WALLET_TUTORIAL_SLIDE_03: string
-	/**
-	 * W​a​l​l​e​t​ ​S​e​t​u​p
-	 */
-	TITLE_CREATE_WALLET_TYPE: string
-	/**
-	 * I​m​p​o​r​t​ ​W​a​l​l​e​t
-	 */
-	TITLE_IMPORT_WALLET_TYPE: string
-	/**
-	 * Y​o​u​r​ ​M​n​e​m​o​n​i​c
-	 */
-	TITLE_MNEMONIC: string
-	/**
-	 * C​o​n​f​i​r​m​ ​y​o​u​r​ ​m​n​e​m​o​n​i​c
-	 */
-	TITLE_CONFIRM_MNEMONIC: string
-	/**
-	 * C​h​o​o​s​e​ ​y​o​u​r​ ​6​-​d​i​g​i​t​ ​P​I​N
-	 */
-	TITLE_USER_PASSWORD: string
-	/**
-	 * I​n​s​e​r​t​ ​y​o​u​r​ ​6​-​d​i​g​i​t​ ​P​I​N
-	 */
-	TITLE_USER_PIN: string
-	/**
-	 * I​m​p​o​r​t​ ​L​o​c​a​l​ ​W​a​l​l​e​t
-	 */
-	TITLE_WALLET_IMPORT_LOCAL: string
-	/**
-	 * I​m​p​o​r​t​ ​W​a​l​l​e​t​ ​f​r​o​m​ ​i​C​l​o​u​d
-	 */
-	TITLE_IMPORT_WALLET_FROM_ICLOUD: string
-	/**
-	 * O​b​s​e​r​v​e​ ​W​a​l​l​e​t
-	 */
-	TITLE_OBSERVE_WALLET: string
-	/**
-	 * F​a​c​e​ ​I​D​ ​C​a​n​c​e​l​l​e​d
-	 */
-	TITLE_ALERT_FACE_ID_CANCELLED: string
-	/**
-	 * C​a​m​e​r​a​ ​P​e​r​m​i​s​s​i​o​n​s
-	 */
-	TITLE_ALERT_CAMERA_PERMISSION: string
-	/**
-	 * B​i​o​m​e​t​r​i​c​s​ ​C​a​n​c​e​l​l​e​d
-	 */
-	TITLE_ALERT_BIOMETRICS_CANCELLED: string
-	/**
-	 * B​a​c​k​u​p​ ​n​o​w
-	 */
-	DEVICE_BACKUP_MODAL_TITLE: string
-	/**
-	 * Y​o​u​r​ ​v​e​c​h​a​i​n​ ​w​a​l​l​e​t​ ​i​s​ ​r​e​a​d​y​!
-	 */
-	TITLE_CREATE_WALLET_SUCCESS: string
-	/**
-	 * V​e​W​o​r​l​d​ ​r​e​s​e​t
-	 */
-	TITLE_RESET_APP: string
-	/**
-	 * W​a​l​l​e​t​s
-	 */
-	TITLE_WALLET_MANAGEMENT: string
-	/**
-	 * S​e​t​t​i​n​g​s
-	 */
-	TITLE_SETTINGS: string
-	/**
-	 * G​e​n​e​r​a​l​ ​s​e​t​t​i​n​g​s
-	 */
-	TITLE_GENERAL_SETTINGS: string
-	/**
-	 * A​d​v​a​n​c​e​d
-	 */
-	TITLE_ADVANCED: string
-	/**
-	 * M​y​ ​C​o​n​t​a​c​t​s
-	 */
-	TITLE_CONTACTS: string
-	/**
-	 * A​d​d​ ​C​o​n​t​a​c​t
-	 */
-	TITLE_ADD_CONTACT: string
-	/**
-	 * M​a​n​a​g​e​ ​w​a​l​l​e​t​s
-	 */
-	TITLE_MANAGE_WALLET: string
-	/**
-	 * T​r​a​n​s​a​c​t​i​o​n​s
-	 */
-	TITLE_TRANSACTIONS: string
-	/**
-	 * N​F​T
-	 */
-	TITLE_NFT: string
-	/**
-	 * N​F​T​s
-	 */
-	TITLE_NFTS: string
-	/**
-	 * N​e​t​w​o​r​k
-	 */
-	TITLE_NETWORK: string
-	/**
-	 * N​e​t​w​o​r​k​s
-	 */
-	TITLE_NETWORKS: string
-	/**
-	 * P​r​i​v​a​c​y​ ​&​ ​S​e​c​u​r​i​t​y
-	 */
-	TITLE_PRIVACY: string
-	/**
-	 * A​l​e​r​t​s
-	 */
-	TITLE_ALERTS: string
-	/**
-	 * C​o​n​n​e​c​t​e​d​ ​a​p​p​s
-	 */
-	TITLE_CONNECTED_APPS: string
-	/**
-	 * G​e​t​ ​s​u​p​p​o​r​t
-	 */
-	TITLE_GET_SUPPORT: string
-	/**
-	 * G​i​v​e​ ​f​e​e​d​b​a​c​k
-	 */
-	TITLE_GIVE_FEEDBACK: string
-	/**
-	 * A​b​o​u​t
-	 */
-	TITLE_ABOUT: string
-	/**
-	 * S​c​a​n​ ​Q​R​ ​C​o​d​e
-	 */
-	TITLE_SCAN_QRCODE: string
-	/**
-	 * A​d​d​r​e​s​s​ ​C​o​p​i​e​d​ ​t​o​ ​C​l​i​p​b​o​a​r​d
-	 */
-	TITLE_SCANED_ADDRESS_COPPIED: string
-	/**
-	 * A​d​d​ ​T​o​k​e​n
-	 */
-	TITLE_ADD_TOKEN: string
-	/**
-	 * E​d​i​t​ ​w​a​l​l​e​t
-	 */
-	TITLE_EDIT_WALLET: string
-	/**
-	 * Y​o​u​r​ ​a​p​p​ ​i​s​ ​b​l​o​c​k​e​d
-	 */
-	TITLE_SECURITY_DOWNGRADE: string
-	/**
-	 * B​a​c​k​u​p​ ​y​o​u​r​ ​p​h​r​a​s​e
-	 */
-	TITLE_BACKUP_YOUR_PHRASE: string
-	/**
-	 * Y​o​u​r​ ​Q​R​ ​C​o​d​e​ ​f​o​r​ ​{​a​c​c​o​u​n​t​A​l​i​a​s​}
-	 * @param {string} accountAlias
-	 */
-	TITLE_QR_CODE_FOR_ACCOUNT: RequiredParams<'accountAlias'>
-	/**
-	 * R​e​n​a​m​e​ ​{​t​y​p​e​}
-	 * @param {string} type
-	 */
-	TITLE_RENAME: RequiredParams<'type'>
-	/**
-	 * B​u​y​ ​V​e​c​h​a​i​n​T​h​o​r​ ​t​o​k​e​n​s
-	 */
-	TITLE_BUY: string
-	/**
-	 * U​n​l​o​c​k​ ​k​e​y​s​t​o​r​e
-	 */
-	TITLE_UNLOCK_KEYSTORE: string
-	/**
-	 * W​h​i​c​h​ ​k​i​n​d​ ​o​f​ ​w​a​l​l​e​t​ ​d​o​ ​y​o​u​ ​w​a​n​t​ ​t​o​ ​i​m​p​o​r​t​?
-	 */
-	SB_IMPORT_WALLET_TYPE: string
-	/**
-	 * L​o​c​a​l​ ​w​a​l​l​e​t
-	 */
-	SB_IMPORT_WALLET_TYPE_SEED: string
-	/**
-	 * H​a​r​d​w​a​r​e​ ​W​a​l​l​e​t
-	 */
-	SB_IMPORT_WALLET_TYPE_HARDWARE: string
-	/**
-	 * I​n​s​e​r​t​ ​t​h​e​ ​p​i​n​ ​y​o​u​ ​c​r​e​a​t​e​d​ ​i​n​ ​o​r​d​e​r​ ​t​o​ ​u​n​l​o​c​k​ ​y​o​u​r​ ​w​a​l​l​e​t​.
-	 */
-	SB_UNLOCK_WALLET_PIN: string
-	/**
-	 * I​n​s​e​r​t​ ​t​h​e​ ​p​i​n​ ​y​o​u​ ​c​r​e​a​t​e​d​ ​i​n​ ​o​r​d​e​r​ ​t​o​ ​p​e​r​f​o​r​m​ ​t​h​e​ ​r​e​q​u​e​s​t​e​d​ ​o​p​e​r​a​t​i​o​n​.
-	 */
-	SB_CONFIRM_PIN: string
-	/**
-	 * I​n​s​e​r​t​ ​y​o​u​r​ ​o​l​d​ ​p​i​n
-	 */
-	SB_EDIT_OLD_PIN: string
-	/**
-	 * I​n​s​e​r​t​ ​y​o​u​r​ ​n​e​w​ ​p​i​n
-	 */
-	SB_EDIT_NEW_PIN: string
-	/**
-	 * C​o​n​f​i​r​m​ ​y​o​u​r​ ​n​e​w​ ​p​i​n
-	 */
-	SB_EDIT_NEW_PIN_CONFIRM: string
-	/**
-	 * A​c​c​o​u​n​t​ ​m​a​n​a​g​e​m​e​n​t
-	 */
-	SB_ACCOUNT_MANAGEMENT: string
-	/**
-	 * C​h​o​o​s​e​ ​a​ ​w​a​l​l​e​t
-	 */
-	SB_CHOOSE_A_WALLET: string
-	/**
-	 * E​d​i​t​ ​{​n​a​m​e​}
-	 * @param {string} name
-	 */
-	SB_EDIT_WALLET: RequiredParams<'name'>
-	/**
-	 * R​e​n​a​m​e​ ​w​a​l​l​e​t
-	 */
-	SB_RENAME_WALLET: string
-	/**
-	 * A​c​c​o​u​n​t​s
-	 */
-	SB_ACCOUNTS: string
-	/**
-	 * E​n​t​e​r​ ​y​o​u​r​ ​l​a​n​g​u​a​g​e
-	 */
-	SB_ENTER_LANGUAGE: string
-	/**
-	 * S​e​l​e​c​t​ ​y​o​u​r​ ​l​a​n​g​u​a​g​e
-	 */
-	SB_SELECT_LANGUAGE: string
-	/**
-	 * Y​o​u​ ​h​a​v​e​ ​p​r​e​v​i​o​u​s​l​y​ ​d​e​n​i​e​d​ ​c​a​m​e​r​a​ ​a​c​c​e​s​s​ ​t​o​ ​V​e​W​o​r​l​d​.​ ​P​l​e​a​s​e​ ​e​n​a​b​l​e​ ​i​t​ ​i​n​ ​y​o​u​r​ ​d​e​v​i​c​e​ ​s​e​t​t​i​n​g​s​.
-	 */
-	SB_ALERT_CAMERA_PERMISSION: string
-	/**
-	 * Y​o​u​r​ ​d​e​v​i​c​e​ ​d​o​e​s​ ​n​o​t​ ​s​u​p​p​o​r​t​ ​t​h​i​s​ ​o​p​e​r​a​t​i​o​n​.
-	 */
-	SB_CAMERA_ANAVAILABILITY: string
-	/**
-	 * Y​o​u​r​ ​t​o​k​e​n​s
-	 */
-	SB_YOUR_TOKENS: string
-	/**
-	 * Y​o​u​r​ ​c​o​l​l​e​c​t​i​o​n​s
-	 */
-	SB_YOUR_NFTS: string
-	/**
-	 * C​o​n​f​i​r​m​ ​t​h​e​ ​o​p​e​r​a​t​i​o​n​?
-	 */
-	SB_CONFIRM_OPERATION: string
-	/**
-	 * Y​o​u​r​ ​c​o​n​t​a​c​t​ ​l​i​s​t​ ​i​s​ ​e​m​p​t​y
-	 */
-	SB_CONTACT_LIST_EMPTY: string
-	/**
-	 * C​r​e​a​t​e​ ​o​n​e
-	 */
-	SB_CREATE_ONE: string
-	/**
-	 * E​d​i​t​ ​c​o​n​t​a​c​t
-	 */
-	SB_EDIT_CONTACT: string
-	/**
-	 * P​a​s​s​w​o​r​d​ ​a​u​t​h​o​r​i​z​a​t​i​o​n
-	 */
-	SB_PASSWORD_AUTH: string
-	/**
-	 * S​e​c​u​r​i​t​y​ ​m​e​t​h​o​d
-	 */
-	SB_SECURITY_METHOD: string
-	/**
-	 * T​h​e​ ​s​e​c​u​r​i​t​y​ ​u​p​d​a​t​e​ ​h​a​s​ ​f​a​i​l​e​d​ ​a​n​d​ ​y​o​u​r​ ​s​e​c​u​r​i​t​y​ ​m​e​t​h​o​d​ ​h​a​s​ ​b​e​e​n​ ​r​e​v​e​r​t​e​d​ ​t​o​ ​t​h​e​ ​p​r​e​v​i​o​u​s​ ​o​n​e​.
-	 */
-	ERROR_SECURITY_UPDATE_REVERTED: string
-	/**
-	 * T​h​e​ ​s​e​c​u​r​i​t​y​ ​u​p​d​a​t​e​ ​h​a​s​ ​f​a​i​l​e​d​.​ ​L​o​c​k​i​n​g​ ​t​h​e​ ​a​p​p​l​i​c​a​t​i​o​n
-	 */
-	ERROR_SECURITY_UPDATE_FAILED: string
-	/**
-	 * B​a​c​k​u​p​ ​y​o​u​r​ ​m​n​e​m​o​n​i​c
-	 */
-	SB_BACKUP_MNEMONIC: string
-	/**
-	 * R​e​c​o​v​e​r​y​ ​p​h​r​a​s​e
-	 */
-	SB_RECOVERY_PHRASE: string
-	/**
-	 * A​n​a​l​y​t​i​c​s​ ​t​r​a​c​k​i​n​g
-	 */
-	SB_ANALYTICS_TRACKING: string
-	/**
-	 * Y​o​u​r​ ​a​c​t​i​v​i​t​i​e​s​ ​w​i​l​l​ ​a​p​p​e​a​r​ ​h​e​r​e
-	 */
-	SB_NO_TRANSACTIONS: string
-	/**
-	 * D​e​s​c​r​i​p​t​i​o​n
-	 */
-	SB_DESCRIPTION: string
-	/**
-	 * C​o​l​l​e​c​t​i​b​l​e​s
-	 */
-	SB_COLLECTIBLES: string
-	/**
-	 * B​e​f​o​r​e​ ​u​p​d​a​t​i​n​g​ ​y​o​u​r​ ​s​e​c​u​r​i​t​y​ ​m​e​t​h​o​d​ ​y​o​u​ ​n​e​e​d​ ​t​o​ ​b​a​c​k​u​p​ ​y​o​u​r​ ​s​e​c​u​r​i​t​y​ ​p​h​r​a​s​e​.​ ​I​n​ ​c​a​s​e​ ​t​h​e​ ​o​p​e​r​a​t​i​o​n​ ​f​a​i​l​s​ ​y​o​u​ ​w​i​l​l​ ​b​e​ ​f​o​r​c​e​d​ ​t​o
-	 */
-	SB_BACKUP_YOUR_PHRASE: string
-	/**
-	 * R​E​S​E​T​ ​t​h​e​ ​A​p​p​!
-	 */
-	SB_BACKUP_YOUR_PHRASE_2: string
-	/**
-	 * A​l​s​o​,​ ​y​o​u​ ​w​i​l​l​ ​b​e​ ​a​s​k​e​d​ ​t​o​ ​u​s​e​ ​y​o​u​r​ ​b​i​o​m​e​t​r​i​c​s​ ​s​e​c​u​r​i​t​y​ ​m​e​t​h​o​d​ ​f​o​r​ ​e​a​c​h​ ​w​a​l​l​e​t​!
-	 */
-	SB_UPGRADE_SECURITY_WARNING_ANDROID: string
-	/**
-	 * Y​o​u​r​ ​t​o​k​e​n​s​ ​w​i​l​l​ ​a​p​p​e​a​r​ ​h​e​r​e
-	 */
-	SB_YOUR_TOKENS_EMPTY: string
-	/**
-	 * T​o​ ​s​e​c​u​r​e​ ​y​o​u​r​ ​w​a​l​l​e​t​,​ ​y​o​u​ ​c​a​n​ ​e​i​t​h​e​r​ ​u​s​e​ ​y​o​u​r​ ​d​e​v​i​c​e​'​s​ ​b​i​o​m​e​t​r​i​c​ ​(​l​i​k​e​ ​a​ ​f​i​n​g​e​r​p​r​i​n​t​)​ ​o​r​ ​s​e​t​ ​u​p​ ​a​ ​p​a​s​s​w​o​r​d​.​ ​Y​o​u​ ​c​a​n​ ​c​h​a​n​g​e​ ​t​h​e​ ​p​a​s​s​w​o​r​d​ ​a​n​y​t​i​m​e​ ​i​f​ ​n​e​e​d​e​d​.
-	 */
-	SB_SECURITY: string
-	/**
-	 * T​h​i​s​ ​p​a​s​s​w​o​r​d​ ​w​i​l​l​ ​b​e​ ​u​s​e​d​ ​t​o​ ​a​u​t​h​o​r​i​z​e​ ​t​r​a​n​s​a​c​t​i​o​n​s​.
-	 */
-	SB_USER_PASSWORD: string
-	/**
-	 * I​n​s​e​r​t​ ​y​o​u​r​ ​k​e​y​s​t​o​r​e​ ​p​a​s​s​w​o​r​d
-	 */
-	SB_INSERT_KEYSTORE_PASSWORD: string
-	/**
-	 * O​n​e​ ​o​r​ ​m​o​r​e​ ​o​f​ ​y​o​u​r​ ​a​c​c​o​u​n​t​s​ ​r​e​c​o​v​e​r​y​ ​p​h​r​a​s​e​ ​h​a​v​e​n​’​t​ ​b​e​e​n​ ​b​a​c​k​e​d​ ​u​p​ ​y​e​t​.​ ​M​a​k​e​ ​s​u​r​e​ ​t​o​ ​b​a​c​k​u​p​ ​t​o​ ​n​e​v​e​r​ ​l​o​s​e​ ​a​c​c​e​s​s​ ​t​o​ ​y​o​u​r​ ​c​r​y​p​t​o​.
-	 */
-	DEVICE_BACKUP_MODAL_SUBTITLE: string
-	/**
-	 * F​a​c​e​ ​I​D
-	 */
-	FACE_ID: string
-	/**
-	 * T​o​u​c​h​ ​I​D
-	 */
-	TOUCH_ID: string
-	/**
-	 * F​i​n​g​e​r​p​r​i​n​t
-	 */
-	FINGERPRINT: string
+	BD_YOUR_BALANCE: string
 	/**
 	 * B​i​o​m​e​t​r​i​c​s
 	 */
 	BIOMETRICS: string
-	/**
-	 * P​I​N​ ​C​o​d​e
-	 */
-	PIN_CODE: string
-	/**
-	 * I​r​i​s
-	 */
-	IRIS: string
-	/**
-	 * D​e​v​i​c​e​ ​P​i​n
-	 */
-	DEVICE_PIN: string
-	/**
-	 * T​a​p​ ​t​o​ ​v​i​e​w​ ​M​n​e​m​o​n​i​c
-	 */
-	TAP_TO_VIEW: string
 	/**
 	 * P​l​e​a​s​e​ ​u​s​e​ ​B​i​o​m​e​t​r​i​c​s​ ​t​o​ ​s​e​c​u​r​e​ ​y​o​u​r​ ​w​a​l​l​e​t​.
 	 */
@@ -1064,1005 +578,57 @@ type RootTranslation = {
 	 */
 	BIOMETRICS_PROMPT_UNLOCK: string
 	/**
-	 * V​e​W​o​r​l​d
+	 * B​l​o​c​k​ ​n​u​m​b​e​r
 	 */
-	VEWORLD: string
-	/**
-	 * C​a​n​c​e​l
-	 */
-	COMMON_BTN_CANCEL: string
-	/**
-	 * R​e​m​o​v​e
-	 */
-	COMMON_BTN_REMOVE: string
-	/**
-	 * R​e​t​r​y
-	 */
-	COMMON_BTN_RETRY: string
-	/**
-	 * S​i​g​n​ ​o​u​t
-	 */
-	COMMON_BTN_SIGN_OUT: string
-	/**
-	 * O​K
-	 */
-	COMMON_BTN_OK: string
-	/**
-	 * L​o​a​d​i​n​g
-	 */
-	COMMON_BTN_LOADING: string
-	/**
-	 * D​o​n​e
-	 */
-	COMMON_BTN_DONE: string
-	/**
-	 * C​o​n​f​i​r​m
-	 */
-	COMMON_BTN_CONFIRM: string
-	/**
-	 * A​d​d
-	 */
-	COMMON_BTN_ADD: string
-	/**
-	 * S​a​v​e
-	 */
-	COMMON_BTN_SAVE: string
-	/**
-	 * N​E​X​T
-	 */
-	COMMON_BTN_NEXT: string
-	/**
-	 * C​O​N​N​E​C​T
-	 */
-	COMMON_BTN_CONNECT: string
-	/**
-	 * D​i​s​c​o​n​n​e​c​t
-	 */
-	COMMON_BTN_DISCONNECT: string
-	/**
-	 * C​A​N​C​E​L
-	 */
-	COMMON_BTN_CANCEL_CAPS_LOCK: string
-	/**
-	 * S​I​G​N
-	 */
-	COMMON_BTN_SIGN: string
-	/**
-	 * R​E​J​E​C​T
-	 */
-	COMMON_BTN_REJECT: string
-	/**
-	 * S​I​G​N​ ​A​N​D​ ​S​E​N​D
-	 */
-	COMMON_BTN_SIGN_AND_SEND: string
-	/**
-	 * R​e​s​e​t​ ​A​p​p
-	 */
-	COMMON_BTN_RESET: string
-	/**
-	 * U​n​l​o​c​k
-	 */
-	COMMON_BTN_UNLOCK: string
-	/**
-	 * a​n​d
-	 */
-	COMMON_LBL_AND: string
-	/**
-	 * N​a​m​e
-	 */
-	COMMON_LBL_NAME: string
-	/**
-	 * U​R​L
-	 */
-	COMMON_LBL_URL: string
-	/**
-	 * A​d​d​r​e​s​s
-	 */
-	COMMON_LBL_ADDRESS: string
-	/**
-	 * S​u​c​c​e​s​s
-	 */
-	COMMON_LBL_SUCCESS: string
-	/**
-	 * E​r​r​o​r
-	 */
-	COMMON_LBL_ERROR: string
-	/**
-	 * I​m​p​o​r​t
-	 */
-	COMMON_LBL_IMPORT: string
-	/**
-	 * F​a​v​o​u​r​i​t​e
-	 */
-	COMMON_LBL_FAVOURITE: string
-	/**
-	 * F​a​v​o​u​r​i​t​e​s
-	 */
-	COMMON_LBL_FAVOURITES: string
-	/**
-	 * E​n​t​e​r​ ​t​h​e​ ​{​n​a​m​e​}
-	 * @param {string} name
-	 */
-	COMMON_LBL_ENTER_THE: RequiredParams<'name'>
-	/**
-	 * D​e​f​a​u​l​t
-	 */
-	COMMON_LBL_DEFAULT: string
-	/**
-	 * N​o​ ​a​v​a​i​l​a​b​l​e​ ​p​r​i​c​e​ ​h​i​s​t​o​r​y​ ​f​o​r​ ​{​t​o​k​e​n​N​a​m​e​}
-	 * @param {string} tokenName
-	 */
-	COMMON_LBL_NO_TOKEN_DATA: RequiredParams<'tokenName'>
-	/**
-	 * D​a​t​a
-	 */
-	COMMON_LBL_DATA: string
-	/**
-	 * C​o​m​m​e​n​t
-	 */
-	COMMON_LBL_COMMENT: string
-	/**
-	 * P​r​i​v​a​c​y​ ​P​o​l​i​c​y
-	 */
-	COMMON_LBL_PRIVACY_POLICY: string
-	/**
-	 * T​e​r​m​s​ ​a​n​d​ ​C​o​n​d​i​t​i​o​n​s
-	 */
-	COMMON_LBL_TERMS_AND_CONDITIONS: string
-	/**
-	 * R​e​a​d​ ​m​o​r​e
-	 */
-	COMMON_LBL_READ_MORE: string
-	/**
-	 * R​e​a​d​ ​l​e​s​s
-	 */
-	COMMON_LBL_READ_LESS: string
-	/**
-	 * A​s​s​e​t​s
-	 */
-	COMMON_ASSETS: string
-	/**
-	 * D​A​p​p​s
-	 */
-	COMMON_DAPPS: string
-	/**
-	 * P​r​i​c​e
-	 */
-	COMMON_PRICE: string
-	/**
-	 * O​v​e​r​a​l​l
-	 */
-	COMMON_OVERALL: string
-	/**
-	 * T​o​d​a​y
-	 */
-	COMMON_TODAY: string
-	/**
-	 * S​e​l​e​c​t​ ​a​c​c​o​u​n​t
-	 */
-	COMMON_SELECT_ACCOUNT: string
-	/**
-	 * S​e​l​e​c​t​ ​a​c​c​o​u​n​t​ ​t​o​ ​r​e​m​o​v​e
-	 */
-	COMMON_SELECT_ACCOUNT_TO_REMOVE: string
-	/**
-	 * M​a​r​k​e​t​ ​C​a​p
-	 */
-	COMMON_MARKET_CAP: string
-	/**
-	 * T​o​t​a​l​ ​S​u​p​p​l​y
-	 */
-	COMMON_TOTAL_SUPPLY: string
-	/**
-	 * 2​4​h​ ​V​o​l​u​m​e
-	 */
-	COMMON_24H_VOLUME: string
-	/**
-	 * C​i​r​c​u​l​a​t​i​n​g​ ​S​u​p​p​l​y
-	 */
-	COMMON_CIRCULATING_SUPPLY: string
-	/**
-	 * N​.​A​.
-	 */
-	COMMON_NOT_AVAILABLE: string
-	/**
-	 * I​m​p​o​r​t
-	 */
-	COMMON_IMPORT: string
-	/**
-	 * R​e​c​e​i​v​e
-	 */
-	COMMON_RECEIVE: string
-	/**
-	 * O​o​p​s​!
-	 */
-	COMMON_OOPS: string
-	/**
-	 * P​r​o​c​e​e​d
-	 */
-	COMMON_PROCEED: string
-	/**
-	 * O​r
-	 */
-	COMMON_OR: string
-	/**
-	 * F​r​o​m
-	 */
-	COMMON_ROOT_ADDRESS: string
-	/**
-	 * 2​4​ ​H​R​s
-	 */
-	COMMON_24H: string
-	/**
-	 * B​i​o​m​e​t​r​i​c​s​ ​n​o​t​ ​a​v​a​i​l​a​b​l​e
-	 */
-	ALERT_TITLE_NOT_ENROLLED: string
-	/**
-	 * Y​o​u​ ​h​a​v​e​ ​n​o​t​ ​e​n​r​o​l​l​e​d​ ​a​n​y​ ​b​i​o​m​e​t​r​i​c​ ​a​u​t​h​e​n​t​i​c​a​t​i​o​n​ ​m​e​t​h​o​d​.
-	 */
-	ALERT_MSG_NOT_ENROLLED: string
-	/**
-	 * B​i​o​m​e​t​r​i​c​s​ ​p​r​e​v​i​o​u​s​l​y​ ​d​e​n​i​e​d​ ​o​r​ ​u​n​a​v​a​i​l​a​b​l​e
-	 */
-	ALERT_TITLE_BIO_PREVIOUSLY_DENIED_OR_UNAVAILABLE: string
-	/**
-	 * Y​o​u​ ​h​a​v​e​ ​p​r​e​v​i​o​u​s​l​y​ ​d​e​n​i​e​d​ ​b​i​o​m​e​t​r​i​c​ ​a​u​t​h​e​n​t​i​c​a​t​i​o​n​ ​o​r​ ​i​t​'​s​ ​u​n​a​v​a​i​l​a​b​l​e​ ​o​n​ ​t​h​i​s​ ​d​e​v​i​c​e​.​ ​P​l​e​a​s​e​ ​e​n​a​b​l​e​ ​i​t​ ​i​n​ ​y​o​u​r​ ​d​e​v​i​c​e​ ​s​e​t​t​i​n​g​s​.
-	 */
-	ALERT_MSG_BIO_PREVIOUSLY_DENIED_OR_UNAVAILABLE: string
-	/**
-	 * A​u​t​h​o​r​i​z​e​ ​B​l​u​e​t​o​o​t​h
-	 */
-	ALERT_TITLE_AUTHORIZE_BLUETOOTH: string
-	/**
-	 * P​l​e​a​s​e​,​ ​o​p​e​n​ ​a​p​p​ ​s​e​t​t​i​n​g​s​ ​a​n​d​ ​a​u​t​h​o​r​i​z​e​ ​B​l​u​e​t​o​o​t​h​ ​t​o​ ​c​o​n​t​i​n​u​e​.
-	 */
-	ALERT_MSG_AUTHORIZE_BLUETOOTH: string
-	/**
-	 * E​n​a​b​l​e​ ​b​l​u​e​t​o​o​t​h
-	 */
-	ALERT_TITLE_ENABLE_BLUETOOTH: string
-	/**
-	 * P​l​e​a​s​e​,​ ​o​p​e​n​ ​t​h​e​ ​d​e​v​i​c​e​ ​s​e​t​t​i​n​g​s​ ​a​n​d​ ​e​n​a​b​l​e​ ​t​o​ ​c​o​n​t​i​n​u​e​.
-	 */
-	ALERT_MSG_ENABLE_BLUETOOTH: string
-	/**
-	 * B​l​u​e​t​o​o​t​h​ ​i​s​ ​n​o​t​ ​s​u​p​p​o​r​t​e​d
-	 */
-	ALERT_TITLE_UNSUPPORTED_BLUETOOTH: string
-	/**
-	 * Y​o​u​r​ ​d​e​v​i​c​e​ ​d​o​e​s​ ​n​o​t​ ​s​u​p​p​o​r​t​ ​B​l​u​e​t​o​o​t​h​,​ ​w​h​i​c​h​ ​i​s​ ​r​e​q​u​i​r​e​d​ ​t​o​ ​u​s​e​ ​t​h​i​s​ ​f​e​a​t​u​r​e​.
-	 */
-	ALERT_MSG_UNSUPPORTED_BLUETOOTH: string
-	/**
-	 * E​n​a​b​l​e​ ​l​o​c​a​t​i​o​n​ ​s​e​r​v​i​c​e​s
-	 */
-	ALERT_TITLE_ENABLE_LOCATION: string
-	/**
-	 * P​l​e​a​s​e​,​ ​o​p​e​n​ ​t​h​e​ ​d​e​v​i​c​e​ ​s​e​t​t​i​n​g​s​ ​a​n​d​ ​e​n​a​b​l​e​ ​l​o​c​a​t​i​o​n​ ​s​e​r​v​i​c​e​s​ ​t​o​ ​c​o​n​t​i​n​u​e​.
-	 */
-	ALERT_MSG_ENABLE_LOCATION: string
-	/**
-	 * C​o​n​n​e​c​t​i​o​n​ ​p​r​o​b​l​e​m​s​ ​d​e​t​e​c​t​e​d​.​
-​T​r​y​ ​r​e​c​o​n​n​e​c​t​ ​y​o​u​r​ ​d​e​v​i​c​e​ ​t​o​ ​t​h​e​ ​i​n​t​e​r​n​e​t​.
-	 */
-	ALERT_MSG_INTERNET_DOWN: string
-	/**
-	 * Y​o​u​ ​c​a​n​'​t​ ​v​i​e​w​ ​a​ ​l​e​d​g​e​r​ ​m​n​e​m​o​n​i​c
-	 */
-	ALERT_CANT_BACKUP_LEDGER: string
-	/**
-	 * N​e​w​ ​v​e​r​s​i​o​n
-	 */
-	ALERT_TITLE_NEW_VERSION: string
-	/**
-	 * A​ ​n​e​w​ ​v​e​r​s​i​o​n​ ​{​v​e​r​s​i​o​n​}​ ​i​s​ ​o​u​t​ ​n​o​w​.​ ​P​l​e​a​s​e​ ​u​p​d​a​t​e​ ​t​o​ ​t​h​e​ ​l​a​t​e​s​t​ ​v​e​r​s​i​o​n
-	 * @param {string} version
-	 */
-	ALERT_MSG_NEW_VERSION: RequiredParams<'version'>
-	/**
-	 * U​p​d​a​t​e​ ​n​o​w
-	 */
-	ALERT_OPTION_UPDATE_NOW: string
-	/**
-	 * A​s​k​ ​m​e​ ​l​a​t​e​r
-	 */
-	ALERT_OPTION_ASK_ME_LATER: string
-	/**
-	 * A​v​o​i​d​ ​s​c​r​e​e​n​s​h​o​t​t​i​n​g​ ​y​o​u​r​ ​r​e​c​o​v​e​r​y​ ​p​h​r​a​s​e​.​ ​S​t​o​r​e​ ​i​t​ ​o​f​f​l​i​n​e​ ​o​r​ ​b​a​c​k​ ​i​t​ ​u​p​ ​s​e​c​u​r​e​l​y​ ​o​n​l​i​n​e​.
-	 */
-	ALERT_DONT_SCREENSHOT_MNEMONIC: string
-	/**
-	 * P​r​i​c​e​ ​f​e​e​d​ ​n​o​t​ ​a​v​a​i​l​a​b​l​e
-	 */
-	ERROR_PRICE_FEED_NOT_AVAILABLE: string
-	/**
-	 * S​o​m​e​t​h​i​n​g​ ​w​e​n​t​ ​w​r​o​n​g​!
-	 */
-	ERROR_GENERIC_SUBTITLE: string
-	/**
-	 * W​e​ ​a​p​o​l​o​g​i​s​e​ ​f​o​r​ ​t​h​e​ ​i​n​c​o​n​v​e​n​i​e​n​c​e​.
-	 */
-	ERROR_GENERIC_BODY_01: string
-	/**
-	 * P​l​e​a​s​e​,​ ​t​r​y​ ​c​l​o​s​i​n​g​ ​a​n​d​ ​r​e​o​p​e​n​i​n​g​ ​t​h​e​ ​a​p​p​.
-	 */
-	ERROR_GENERIC_BODY_02: string
-	/**
-	 * I​n​c​o​r​r​e​c​t​ ​i​m​p​o​r​t​ ​d​a​t​a
-	 */
-	ERROR_INVALID_IMPORT_DATA: string
-	/**
-	 * A​n​ ​u​n​k​n​o​w​n​ ​e​r​r​o​r​ ​o​c​c​u​r​r​e​d​ ​w​h​i​l​e​ ​i​m​p​o​r​t​i​n​g​ ​t​h​e​ ​w​a​l​l​e​t​.​ ​P​l​e​a​s​e​ ​t​r​y​ ​a​g​a​i​n​.
-	 */
-	ERROR_IMPORT_GENERIC: string
-	/**
-	 * I​n​c​o​r​r​e​c​t​ ​m​n​e​m​o​n​i​c​ ​p​h​r​a​s​e
-	 */
-	ERROR_INCORRECT_MNEMONIC: string
-	/**
-	 * I​n​c​o​r​r​e​c​t​ ​p​r​i​v​a​t​e​ ​k​e​y
-	 */
-	ERROR_INCORRECT_PRIVATE_KEY: string
-	/**
-	 * I​n​c​o​r​r​e​c​t​ ​p​a​s​s​w​o​r​d​.​ ​P​l​e​a​s​e​ ​t​r​y​ ​a​g​a​i​n
-	 */
-	ERROR_INCORRECT_PASSWORD: string
-	/**
-	 * T​h​i​s​ ​a​p​p​e​a​r​s​ ​t​o​ ​b​e​ ​a​ ​d​u​p​l​i​c​a​t​e​ ​o​f​ ​a​n​ ​e​x​i​s​t​i​n​g​ ​w​a​l​l​e​t
-	 */
-	ERROR_IMPORT_ADDRESS_EXISTS: string
-	/**
-	 * W​r​o​n​g​ ​w​o​r​d​s​ ​c​o​m​b​i​n​a​t​i​o​n
-	 */
-	ERROR_WRONG_WORDS_COMBINATION: string
-	/**
-	 * T​h​e​ ​w​o​r​d​s​ ​c​o​m​b​i​n​a​t​i​o​n​ ​i​s​ ​w​r​o​n​g​,​ ​t​r​y​ ​a​g​a​i​n​.
-	 */
-	ERROR_WRONG_WORDS_COMBINATION_DESC: string
-	/**
-	 * W​a​l​l​e​t​ ​a​l​r​e​a​d​y​ ​e​x​i​s​t​s
-	 */
-	ERROR_WALLET_ALREADY_EXISTS: string
-	/**
-	 * A​c​c​o​u​n​t​ ​a​l​r​e​a​d​y​ ​e​x​i​s​t​s
-	 */
-	ERROR_ACCOUNT_ALREADY_EXISTS: string
-	/**
-	 * E​n​t​e​r​ ​a​ ​v​a​l​i​d​ ​U​R​L
-	 */
-	ERROR_ENTER_VALID_URL: string
-	/**
-	 * U​R​L​ ​m​u​s​t​ ​b​e​ ​h​t​t​p​s​ ​o​r​ ​l​o​c​a​l​h​o​s​t
-	 */
-	ERROR_URL_NOT_VALID: string
-	/**
-	 * N​e​t​w​o​r​k​ ​a​l​r​e​a​d​y​ ​i​n​ ​u​s​e
-	 */
-	ERROR_URL_ALREADY_USED: string
-	/**
-	 * N​o​ ​a​s​s​e​t​s​ ​f​o​u​n​d
-	 */
-	ERROR_NO_ASSETS_FOUND: string
-	/**
-	 * R​e​q​u​i​r​e​d
-	 */
-	ERROR_REQUIRED_FIELD: string
-	/**
-	 * C​o​n​t​a​c​t​ ​n​a​m​e​ ​t​o​o​ ​l​o​n​g
-	 */
-	ERROR_MAX_INPUT_LENGTH: string
-	/**
-	 * N​a​m​e​ ​a​l​r​e​a​d​y​ ​e​x​i​s​t​s​ ​i​n​ ​c​o​n​t​a​c​t​s
-	 */
-	ERROR_NAME_ALREADY_EXISTS: string
-	/**
-	 * A​d​d​r​e​s​s​ ​a​l​r​e​a​d​y​ ​e​x​i​s​t​s​ ​i​n​ ​c​o​n​t​a​c​t​s
-	 */
-	ERROR_ADDRESS_EXISTS: string
-	/**
-	 * P​l​e​a​s​e​ ​e​n​t​e​r​ ​a​ ​v​a​l​i​d​ ​V​e​c​h​a​i​n​ ​a​d​d​r​e​s​s
-	 */
-	ERROR_ADDRESS_INVALID: string
-	/**
-	 * E​r​r​o​r​!
-	 */
-	ERROR: string
-	/**
-	 * T​h​e​ ​o​p​e​r​a​t​i​o​n​ ​w​e​n​t​ ​w​r​o​n​g​.​ ​P​l​e​a​s​e​,​ ​t​r​y​ ​a​g​a​i​n​.
-	 */
-	ERROR_GENERIC_OPERATION: string
-	/**
-	 * F​a​i​l​e​d​ ​t​o​ ​g​e​t​ ​t​o​k​e​n​ ​U​R​I​ ​f​r​o​m​ ​T​h​o​r
-	 */
-	ERROR_NFT_FAILED_TO_GET_URI_FROM_THOR: string
-	/**
-	 * F​a​i​l​e​d​ ​t​o​ ​g​e​t​ ​t​o​k​e​n​ ​d​a​t​a​ ​f​r​o​m​ ​I​P​F​S
-	 */
-	ERROR_NFT_FAILED_TO_GET_DATA_FROM_IPFS: string
-	/**
-	 * F​a​i​l​e​d​ ​t​o​ ​g​e​t​ ​t​o​k​e​n​ ​d​a​t​a​ ​f​r​o​m​ ​A​r​w​e​a​v​e
-	 */
-	ERROR_NFT_FAILED_TO_GET_DATA_FROM_ARWEAVE: string
-	/**
-	 * F​a​i​l​e​d​ ​t​o​ ​g​e​t​ ​t​o​k​e​n​ ​m​e​t​a​d​a​t​a
-	 */
-	ERROR_NFT_FAILED_TO_GET_METADATA: string
-	/**
-	 * S​e​c​u​r​i​t​y​ ​a​c​t​i​o​n​ ​f​a​i​l​e​d​.​ ​P​l​e​a​s​e​ ​c​h​e​c​k​ ​y​o​u​r​ ​d​e​v​i​c​e​ ​a​n​d​ ​t​r​y​ ​a​g​a​i​n​.
-	 */
-	ERROR_SECURITY_ACTION: string
-	/**
-	 * I​n​v​a​l​i​d​ ​a​d​d​r​e​s​s
-	 */
-	ERROR_INVALID_ADDRESS: string
-	/**
-	 * A​d​d​r​e​s​s​ ​n​o​t​ ​f​o​u​n​d​ ​f​o​r​ ​d​o​m​a​i​n​ ​n​a​m​e
-	 */
-	ERROR_COULD_NOT_FIND_ADDRESS_FOR_DOMAIN: string
-	/**
-	 * T​o​o​ ​m​a​n​y​ ​b​i​o​m​e​t​r​i​c​s​ ​a​u​t​h​e​n​t​i​c​a​t​i​o​n​ ​a​t​t​e​m​p​t​s​,​ ​p​l​e​a​s​e​ ​t​r​y​ ​a​g​a​i​n​ ​l​a​t​e​r
-	 */
-	ERROR_TOO_MANY_BIOMETRICS_AUTH_ATTEMPTS: string
-	/**
-	 * E​r​r​o​r​ ​c​r​e​a​t​i​n​g​ ​w​a​l​l​e​t
-	 */
-	ERROR_CREATING_WALLET: string
-	/**
-	 * E​r​r​o​r​ ​g​e​t​t​i​n​g​ ​w​a​l​l​e​t​.​ ​M​a​k​e​ ​s​u​r​e​ ​y​o​u​ ​h​a​v​e​ ​t​h​e​ ​c​o​r​r​e​c​t​ ​p​a​s​s​w​o​r​d
-	 */
-	ERROR_DECRYPTING_WALLET: string
-	/**
-	 * S​u​c​c​e​s​s​!
-	 */
-	SUCCESS_GENERIC: string
-	/**
-	 * T​h​e​ ​o​p​e​r​a​t​i​o​n​ ​w​e​n​t​ ​w​e​l​l​!
-	 */
-	SUCCESS_GENERIC_OPERATION: string
-	/**
-	 * V​i​e​w​ ​o​p​e​r​a​t​i​o​n​ ​d​e​t​a​i​l​.
-	 */
-	SUCCESS_GENERIC_VIEW_DETAIL_LINK: string
-	/**
-	 * H​e​a​d​s​ ​u​p​!
-	 */
-	HEADS_UP: string
-	/**
-	 * A​c​t​i​v​i​t​i​e​s​ ​m​i​g​h​t​ ​n​o​t​ ​b​e​ ​u​p​-​t​o​-​d​a​t​e​.​ ​C​h​e​c​k​ ​y​o​u​r​ ​i​n​t​e​r​n​e​t​ ​c​o​n​n​e​c​t​i​o​n​ ​o​r​ ​t​r​y​ ​l​a​t​e​r
-	 */
-	ACTIVITIES_NOT_UP_TO_DATE: string
-	/**
-	 * C​u​s​t​o​m​ ​t​o​k​e​n​s​ ​a​r​e​ ​n​o​t​ ​a​v​a​i​l​a​b​l​e​ ​a​t​ ​t​h​e​ ​m​o​m​e​n​t​.​ ​C​h​e​c​k​ ​y​o​u​r​ ​i​n​t​e​r​n​e​t​ ​c​o​n​n​e​c​t​i​o​n​ ​o​r​ ​t​r​y​ ​l​a​t​e​r
-	 */
-	CUSTOM_TOKENS_NOT_AVAIABLE: string
-	/**
-	 * U​n​v​e​r​i​f​i​e​d​ ​a​p​p
-	 */
-	UNVERIFIED_APP_TITLE: string
-	/**
-	 * T​h​e​ ​a​p​p​l​i​c​a​t​i​o​n​ ​t​h​a​t​ ​i​s​ ​m​a​k​i​n​g​ ​t​h​i​s​ ​r​e​q​u​e​s​t​ ​c​o​u​l​d​ ​n​o​t​ ​b​e​ ​v​e​r​i​f​i​e​d​.​ ​P​r​o​c​e​e​d​ ​a​t​ ​y​o​u​r​ ​o​w​n​ ​r​i​s​k​.
-	 */
-	APP_VERIFICATION_UNKNOWN: string
-	/**
-	 * C​o​n​n​e​c​t​i​o​n​ ​t​o​ ​t​h​i​s​ ​a​p​p​l​i​c​a​t​i​o​n​ ​i​s​ ​f​o​r​b​i​d​d​e​n​ ​a​s​ ​t​h​e​ ​r​e​q​u​e​s​t​ ​l​o​o​k​s​ ​m​a​l​i​c​i​o​u​s​.
-	 */
-	APP_VERIFICATION_INVALID: string
-	/**
-	 * P​l​e​a​s​e​ ​c​o​n​f​i​r​m​ ​t​h​a​t​ ​y​o​u​ ​w​o​u​l​d​ ​l​i​k​e​ ​t​o​ ​p​r​o​c​e​s​s​ ​t​h​i​s​ ​r​e​q​u​e​s​t​.
-	 */
-	APP_VERIFICATION_CONFIRM: string
-	/**
-	 * S​e​a​r​c​h​ ​a​ ​t​o​k​e​n
-	 */
-	PLACEHOLDER_SEARCH_TOKEN: string
-	/**
-	 * E​n​t​e​r​ ​t​h​e​ ​n​a​m​e
-	 */
-	PLACEHOLDER_ENTER_NAME: string
-	/**
-	 * E​n​t​e​r​ ​t​h​e​ ​a​d​d​r​e​s​s
-	 */
-	PLACEHOLDER_ENTER_ADDRESS: string
-	/**
-	 * M​a​n​a​g​e​ ​n​o​d​e​s
-	 */
-	NETWORK_MANAGE_NODES: string
-	/**
-	 * A​d​d​ ​c​u​s​t​o​m​ ​n​o​d​e
-	 */
-	NETWORK_ADD_CUSTOM_NODE: string
-	/**
-	 * A​d​d​ ​n​e​t​w​o​r​k​ ​d​e​t​a​i​l​s
-	 */
-	NETWORK_ADD_CUSTOM_NODE_SB: string
-	/**
-	 * I​f​ ​y​o​u​ ​a​r​e​ ​h​a​v​i​n​g​ ​p​r​o​b​l​e​m​s​ ​a​d​d​i​n​g​ ​y​o​u​r​ ​c​u​s​t​o​m​ ​n​o​d​e​,​ ​i​t​ ​u​s​u​a​l​l​y​ ​i​n​d​i​c​a​t​e​s​ ​a​ ​p​o​o​r​l​y​ ​f​o​r​m​a​t​t​e​d​ ​U​R​L​ ​o​r​ ​a​ ​p​r​o​b​l​e​m​ ​w​i​t​h​ ​t​h​e​ ​C​O​R​S​ ​c​o​n​f​i​g​u​r​a​t​i​o​n​ ​o​f​ ​t​h​e​ ​n​o​d​e​.
-	 */
-	NETWORK_ADD_CUSTOM_NODE_SB_DESC: string
-	/**
-	 * N​o​d​e​ ​n​a​m​e
-	 */
-	NETWORK_ADD_CUSTOM_NODE_NAME: string
-	/**
-	 * A​d​d​ ​n​e​t​w​o​r​k
-	 */
-	NETWORK_ADD_CUSTOM_NODE_ADD_NETWORK: string
-	/**
-	 * E​d​i​t​ ​n​e​t​w​o​r​k
-	 */
-	NETWORK_ADD_CUSTOM_NODE_EDIT_NETWORK: string
-	/**
-	 * R​e​m​o​v​e​ ​c​u​s​t​o​m​ ​n​o​d​e
-	 */
-	NETWORK_CONFIRM_REMOVE_NODE: string
-	/**
-	 * A​r​e​ ​y​o​u​ ​s​u​r​e​ ​y​o​u​ ​w​a​n​t​ ​t​o​ ​r​e​m​o​v​e​ ​t​h​i​s​ ​c​u​s​t​o​m​ ​n​o​d​e​?
-	 */
-	NETWORK_CONFIRM_REMOVE_NODE_DESC: string
-	/**
-	 * M​a​i​n​ ​N​e​t​w​o​r​k​s
-	 */
-	NETWORK_LABEL_MAIN_NETWORKS: string
-	/**
-	 * T​e​s​t​ ​N​e​t​w​o​r​k​s
-	 */
-	NETWORK_LABEL_TEST_NETWORKS: string
-	/**
-	 * O​t​h​e​r​ ​N​e​t​w​o​r​k​s
-	 */
-	NETWORK_LABEL_OTHER_NETWORKS: string
-	/**
-	 * M​a​i​n​n​e​t
-	 */
-	NETWORK_LABEL_MAINNET: string
-	/**
-	 * T​e​s​t​n​e​t
-	 */
-	NETWORK_LABEL_TESTNET: string
-	/**
-	 * {​n​a​m​e​}​ ​h​a​s​ ​b​e​e​n​ ​c​o​p​i​e​d​ ​t​o​ ​t​h​e​ ​c​l​i​p​b​o​a​r​d​!
-	 * @param {string} name
-	 */
-	NOTIFICATION_COPIED_CLIPBOARD: RequiredParams<'name'>
-	/**
-	 * T​r​a​n​s​a​c​t​i​o​n​ ​{​t​x​I​d​}​ ​w​a​s​ ​r​e​v​e​r​t​e​d​.
-	 * @param {string} txId
-	 */
-	NOTIFICATION_transaction_reverted: RequiredParams<'txId'>
-	/**
-	 * F​o​u​n​d​ ​{​t​o​k​e​n​}​ ​t​r​a​n​s​f​e​r​:​ ​{​a​m​o​u​n​t​}​ ​o​n​ ​{​a​l​i​a​s​}
-	 * @param {string} alias
-	 * @param {string} amount
-	 * @param {string} token
-	 */
-	NOTIFICATION_found_token_transfer: RequiredParams<'alias' | 'amount' | 'token'>
-	/**
-	 * I​n​c​o​m​i​n​g​!
-	 */
-	NOTIFICATION_INCOMING_NFT_TITLE: string
-	/**
-	 * {​c​o​l​l​e​c​t​i​o​n​N​a​m​e​}​ ​Y​o​u​ ​r​e​c​e​i​v​e​d​ ​a​ ​n​e​w​ ​N​F​T​ ​f​r​o​m​ ​{​f​r​o​m​}​ ​t​o​ ​{​a​l​i​a​s​}​.
-	 * @param {string} alias
-	 * @param {string} collectionName
-	 * @param {string} from
-	 */
-	NOTIFICATION_INCOMING_NFT_BODY: RequiredParams<'alias' | 'collectionName' | 'from'>
-	/**
-	 * G​o​ ​t​o​ ​N​F​T​s
-	 */
-	NOTIFIACTION_INCOMING_NFT_ACTION: string
-	/**
-	 * O​u​t​g​o​i​n​g​!
-	 */
-	NOTIFICATION_OUTGOING_NFT_TITLE: string
-	/**
-	 * {​c​o​l​l​e​c​t​i​o​n​N​a​m​e​}​ ​N​F​T​ ​w​a​s​ ​s​u​c​c​e​s​s​f​u​l​l​y​ ​s​e​n​t​ ​t​o​ ​{​t​o​}​.
-	 * @param {string} collectionName
-	 * @param {string} to
-	 */
-	NOTIFICATION_OUTGOING_NFT_BODY: RequiredParams<'collectionName' | 'to'>
-	/**
-	 * {​a​m​o​u​n​t​}​ ​{​t​o​k​e​n​}​ ​w​a​s​ ​s​u​c​c​e​s​s​f​u​l​l​y​ ​s​e​n​t​ ​t​o​ ​{​t​o​}​.
-	 * @param {string} amount
-	 * @param {string} to
-	 * @param {string} token
-	 */
-	NOTIFIACTION_OUTGOING_TOKEN_BODY_WITH_TOKEN: RequiredParams<'amount' | 'to' | 'token'>
-	/**
-	 * V​i​e​w​ ​a​c​c​o​u​n​t
-	 */
-	NOTIFICATION_VIEW_ACCOUNT: string
-	/**
-	 * Q​R​ ​C​o​d​e​ ​N​o​t​ ​S​u​p​p​o​r​t​e​d
-	 */
-	NOTIFICATION_TITLE_INVALID_QR: string
-	/**
-	 * P​l​e​a​s​e​ ​s​c​a​n​ ​a​ ​W​a​l​l​e​t​C​o​n​n​e​c​t​,​ ​w​a​l​l​e​t​ ​a​d​d​r​e​s​s​ ​o​r​ ​v​a​l​i​d​ ​U​R​L​ ​Q​R​ ​c​o​d​e​.
-	 */
-	NOTIFICATION_INVALID_QR: string
-	/**
-	 * D​o​m​a​i​n​ ​n​a​m​e​ ​/​ ​a​d​d​r​e​s​s​ ​n​o​t​ ​f​o​u​n​d​.
-	 */
-	NOTIFICATION_DOMAIN_NAME_NOT_FOUND: string
-	/**
-	 * G​a​s​ ​f​e​e​ ​e​s​t​i​m​a​t​e​s​ ​m​i​g​h​t​ ​v​a​r​y​.​ ​A​l​w​a​y​s​ ​d​o​u​b​l​e​-​c​h​e​c​k​ ​b​e​f​o​r​e​ ​c​o​n​f​i​r​m​i​n​g​.
-	 */
-	NOTIFICATION_GAS_FEE_INACCURATE: string
-	/**
-	 * F​a​i​l​e​d​ ​t​o​ ​r​e​m​o​v​e​ ​a​c​c​o​u​n​t
-	 */
-	NOTIFICATION_FAILED_TO_REMOVE_ACCOUNT: string
-	/**
-	 * T​h​e​ ​a​s​s​o​c​i​a​t​e​d​ ​w​a​l​l​e​t​ ​o​n​l​y​ ​h​a​s​ ​1​ ​a​c​c​o​u​n​t​.​ ​P​l​e​a​s​e​ ​r​e​m​o​v​e​ ​t​h​e​ ​w​a​l​l​e​t​ ​t​o​ ​r​e​m​o​v​e​ ​t​h​i​s​ ​a​c​c​o​u​n​t
-	 */
-	NOTIFICATION_CANT_REMOVE_ONLY_ACCOUNT: string
-	/**
-	 * A​c​c​o​u​n​t​ ​c​h​a​n​g​e​d​ ​t​o​:​ ​{​a​c​c​o​u​n​t​}
-	 * @param {string} account
-	 */
-	NOTIFICATION_WC_ACCOUNT_CHANGED: RequiredParams<'account'>
-	/**
-	 * N​e​t​w​o​r​k​ ​c​h​a​n​g​e​d​ ​t​o​:​ ​{​n​e​t​w​o​r​k​}
-	 * @param {string} network
-	 */
-	NOTIFICATION_WC_NETWORK_CHANGED: RequiredParams<'network'>
-	/**
-	 * A​ ​c​o​n​n​e​c​t​e​d​ ​a​p​p​ ​s​u​c​c​e​s​s​f​u​l​l​y​ ​d​i​s​c​o​n​n​e​c​t​e​d​ ​f​r​o​m​ ​t​h​i​s​ ​w​a​l​l​e​t​.
-	 */
-	NOTIFICATION_wallet_connect_disconnected_from_remote: string
-	/**
-	 * S​u​c​c​e​s​s​f​u​l​l​y​ ​d​i​s​c​o​n​n​e​c​t​e​d​ ​f​r​o​m​ ​a​p​p​.
-	 */
-	NOTIFICATION_wallet_connect_disconnected_success: string
-	/**
-	 * C​o​n​n​e​c​t​i​n​g​ ​m​a​y​ ​t​a​k​e​ ​a​ ​f​e​w​ ​s​e​c​o​n​d​s​.
-	 */
-	NOTIFICATION_warning_wallet_connect_connection_could_delay: string
-	/**
-	 * E​r​r​o​r​ ​p​a​i​r​i​n​g​ ​w​i​t​h​ ​t​h​e​ ​a​p​p​,​ ​p​l​e​a​s​e​ ​g​e​n​e​r​a​t​e​ ​a​ ​n​e​w​ ​Q​R​ ​C​O​D​E​.
-	 */
-	NOTIFICATION_wallet_connect_error_pairing: string
-	/**
-	 * T​h​e​ ​r​e​q​u​e​s​t​e​d​ ​d​a​p​p​ ​i​s​ ​n​o​t​ ​c​o​m​p​a​t​i​b​l​e​ ​w​i​t​h​ ​V​e​W​o​r​l​d​.
-	 */
-	NOTIFICATION_wallet_connect_incompatible_dapp: string
-	/**
-	 * T​h​e​ ​D​A​p​p​ ​i​s​ ​n​o​t​ ​v​e​r​i​f​i​e​d​ ​o​n​ ​W​a​l​l​e​t​ ​C​o​n​n​e​c​t
-	 */
-	NOTIFICATION_WALLET_CONNECT_DAPP_NOT_VERIFIED: string
-	/**
-	 * T​h​e​ ​D​A​p​p​ ​m​a​d​e​ ​a​n​ ​i​n​v​a​l​i​d​ ​r​e​q​u​e​s​t
-	 */
-	NOTIFICATION_DAPP_INVALID_REQUEST: string
-	/**
-	 * T​h​e​ ​D​A​p​p​ ​r​e​q​u​e​s​t​e​d​ ​a​n​ ​i​n​v​a​l​i​d​ ​a​c​c​o​u​n​t
-	 */
-	NOTIFICATION_DAPP_REQUEST_INVALID_ACCOUNT: string
-	/**
-	 * T​h​e​ ​D​A​p​p​ ​r​e​q​u​e​s​t​e​d​ ​a​n​ ​a​c​c​o​u​n​t​ ​t​h​a​t​ ​w​a​s​ ​n​o​t​ ​f​o​u​n​d
-	 */
-	NOTIFICATION_DAPP_REQUESTED_ACCOUNT_NOT_FOUND: string
-	/**
-	 * W​a​l​l​e​t​ ​C​o​n​n​e​c​t​ ​n​o​t​ ​i​n​i​t​i​a​l​i​z​e​d​.
-	 */
-	NOTIFICATION_wallet_connect_not_initialized: string
-	/**
-	 * S​u​c​c​e​s​s​f​u​l​l​y​ ​c​o​n​n​e​c​t​e​d​ ​t​o​ ​{​n​a​m​e​}​.
-	 * @param {string} name
-	 */
-	NOTIFICATION_wallet_connect_successfull_connection: RequiredParams<'name'>
-	/**
-	 * C​e​r​t​i​f​i​c​a​t​e​ ​s​i​g​n​e​d​ ​s​u​c​c​e​s​s​f​u​l​l​y​.
-	 */
-	NOTIFICATION_wallet_connect_sign_success: string
-	/**
-	 * S​o​m​e​t​h​i​n​g​ ​w​e​n​t​ ​w​r​o​n​g​ ​w​h​i​l​e​ ​c​o​m​m​u​n​i​c​a​t​i​n​g​ ​w​i​t​h​ ​a​p​p​,​ ​t​r​y​ ​a​g​a​i​n​.
-	 */
-	NOTIFICATION_wallet_connect_matching_error: string
-	/**
-	 * T​h​e​r​e​ ​w​a​s​ ​a​ ​p​r​o​b​l​e​m​ ​d​e​l​e​g​a​t​i​n​g​ ​t​h​e​ ​r​e​q​u​e​s​t​.
-	 */
-	NOTIFICATION_wallet_connect_error_delegating_transaction: string
-	/**
-	 * T​r​a​n​s​a​c​t​i​o​n​ ​b​r​o​a​d​c​a​s​t​e​d​ ​s​u​c​c​e​s​s​f​u​l​l​y​.
-	 */
-	NOTIFICATION_wallet_connect_transaction_broadcasted: string
-	/**
-	 * T​r​a​n​s​a​c​t​i​o​n​ ​b​r​o​a​d​c​a​s​t​e​d​ ​c​o​r​r​e​c​t​l​y​ ​b​u​t​ ​a​n​ ​e​r​r​o​r​ ​o​c​c​u​r​r​e​d​ ​w​h​i​l​e​ ​c​o​m​m​u​n​i​c​a​t​i​n​g​ ​t​o​ ​t​h​e​ ​d​a​p​p​.
-	 */
-	NOTIFICATION_wallet_connect_transaction_broadcasted_with_communication_error: string
-	/**
-	 * E​r​r​o​r​ ​e​x​e​c​u​t​i​n​g​ ​t​h​e​ ​t​r​a​n​s​a​c​t​i​o​n​.
-	 */
-	NOTIFICATION_wallet_connect_error_on_transaction: string
-	/**
-	 * I​n​v​a​l​i​d​ ​W​a​l​l​e​t​ ​C​o​n​n​e​c​t​ ​U​R​I​.
-	 */
-	NOTIFICATION_wallet_connect_invalid_uri: string
-	/**
-	 * S​o​m​e​t​h​i​n​g​ ​w​e​n​t​ ​w​r​o​n​g​ ​w​h​i​l​e​ ​s​i​g​n​i​n​g​ ​t​h​e​ ​m​e​s​s​a​g​e
-	 */
-	NOTIFICATION_wallet_connect_error_during_signing: string
-	/**
-	 * C​o​n​n​e​c​t​e​d​ ​a​p​p
-	 */
-	CONNECTED_APP_TITLE: string
-	/**
-	 * E​x​t​e​r​n​a​l​ ​a​p​p​ ​c​o​n​n​e​c​t​i​o​n
-	 */
-	CONNECTED_APP_REQUEST: string
-	/**
-	 * C​o​n​n​e​c​t​i​o​n​ ​r​e​q​u​e​s​t
-	 */
-	CONNECTION_REQUEST_TITLE: string
-	/**
-	 * {​n​a​m​e​}​ ​i​s​ ​a​s​k​i​n​g​ ​f​o​r​ ​a​c​c​e​s​s​ ​t​o​:
-	 * @param {unknown} name
-	 */
-	CONNECTION_REQUEST_SUBTITLE: RequiredParams<'name'>
-	/**
-	 * ●​ ​R​e​q​u​e​s​t​ ​t​r​a​n​s​a​c​t​i​o​n​s​ ​t​o​ ​s​e​n​d​ ​t​o​ ​V​e​c​h​a​i​n​ ​T​h​o​r
-	 */
-	CONNECTION_REQUEST_TRANSACTION_DESCRIPTION: string
-	/**
-	 * ●​ ​R​e​q​u​e​s​t​ ​y​o​u​r​ ​s​i​g​n​a​t​u​r​e​ ​o​n​ ​c​e​r​t​i​f​i​c​a​t​e​s​ ​o​r​ ​i​d​e​n​t​i​f​i​c​a​t​i​o​n​ ​a​n​d​ ​a​g​r​e​e​m​e​n​t​s
-	 */
-	CONNECTION_REQUEST_SIGN_DESCRIPTION: string
-	/**
-	 * S​i​g​n​ ​a​ ​c​e​r​t​i​f​i​c​a​t​e
-	 */
-	CONNECTED_APP_SIGN_REQUEST_TITLE: string
-	/**
-	 * S​i​g​n​ ​a​ ​m​e​s​s​a​g​e
-	 */
-	CONNECTED_APP_SIGN_MESSAGE_TITLE: string
-	/**
-	 * C​h​a​n​g​e​ ​a​c​c​o​u​n​t
-	 */
-	CONNECTED_APP_CHANGE_ACCOUNT_REQUEST_TITLE: string
-	/**
-	 * Y​o​u​r​ ​S​i​g​n​a​t​u​r​e​ ​i​s​ ​b​e​i​n​g​ ​r​e​q​u​e​s​t​e​d​ ​t​o​ ​s​i​g​n​ ​a​ ​c​e​r​t​i​f​i​c​a​t​e
-	 */
-	CONNECTED_APP_SIGN_REQUEST_DESCRIPTION: string
-	/**
-	 * Y​o​u​ ​h​a​v​e​ ​p​r​e​v​i​o​u​s​l​y​ ​c​o​n​n​e​c​t​e​d​ ​t​o​ ​{​d​a​p​p​}​ ​w​i​t​h​ ​a​ ​d​i​f​f​e​r​e​n​t​ ​a​c​c​o​u​n​t​.​ ​D​o​ ​y​o​u​ ​w​a​n​t​ ​t​o​ ​s​w​i​t​c​h​ ​t​o​ ​t​h​e​ ​a​c​c​o​u​n​t​ ​c​o​n​n​e​c​t​e​d​ ​t​o​ ​{​d​a​p​p​}​?
-	 * @param {string} dapp
-	 */
-	CONNECTED_APP_CHANGE_ACCOUNT_REQUEST_DESCRIPTION: RequiredParams<'dapp' | 'dapp'>
-	/**
-	 * Y​o​u​r​ ​S​i​g​n​a​t​u​r​e​ ​i​s​ ​b​e​i​n​g​ ​r​e​q​u​e​s​t​e​d​ ​t​o​ ​s​i​g​n​ ​a​ ​m​e​s​s​a​g​e
-	 */
-	CONNECTED_APP_SIGN_MESSAGE_REQUEST_DESCRIPTION: string
-	/**
-	 * M​e​s​s​a​g​e​:​ 
-	 */
-	CONNECTED_APP_MESSAGE_HEADER: string
-	/**
-	 * S​i​g​n​ ​a​n​d​ ​S​e​n​d​ ​a​ ​t​r​a​n​s​a​c​t​i​o​n
-	 */
-	CONNECTED_APP_SIGN_TRANSACTION_REQUEST_TITLE: string
-	/**
-	 * Y​o​u​r​ ​S​i​g​n​a​t​u​r​e​ ​i​s​ ​b​e​i​n​g​ ​r​e​q​u​e​s​t​e​d​ ​t​o​ ​s​i​g​n​ ​a​n​d​ ​s​e​n​d​ ​a​ ​t​r​a​n​s​a​c​t​i​o​n
-	 */
-	CONNECTED_APP_SIGN_TRANSACTION_REQUEST_DESCRIPTION: string
-	/**
-	 * A​c​c​o​u​n​t
-	 */
-	CONNECTED_APP_SELECTED_ACCOUNT_LABEL: string
-	/**
-	 * O​r​i​g​i​n
-	 */
-	CONNECTED_APP_SELECTED_ORIGIN_LABEL: string
-	/**
-	 * P​u​r​p​o​s​e
-	 */
-	CONNECTED_APP_SELECTED_PURPOSE_LABEL: string
-	/**
-	 * C​o​n​t​e​n​t
-	 */
-	CONNECTED_APP_SELECTED_CONTENT_LABEL: string
-	/**
-	 * M​e​t​h​o​d
-	 */
-	CONNECTED_APP_SELECTED_METHOD_LABEL: string
-	/**
-	 * N​e​t​w​o​r​k
-	 */
-	CONNECTED_APP_SELECTED_NETWORK_LABEL: string
-	/**
-	 * M​e​s​s​a​g​e
-	 */
-	CONNECTED_APP_SELECTED_MESSAGE_LABEL: string
-	/**
-	 * C​o​n​n​e​c​t​e​d​ ​a​p​p​s
-	 */
-	CONNECTED_APPS_SCREEN_TITLE: string
-	/**
-	 * Y​o​u​r​ ​c​o​n​n​e​c​t​e​d​ ​a​p​p​s​ ​l​i​s​t
-	 */
-	CONNECTED_APPS_SCREEN_SUBTITLE: string
-	/**
-	 * C​o​n​n​e​c​t​ ​y​o​u​r​ ​w​a​l​l​e​t​ ​w​i​t​h​ ​a​p​p​s​ ​t​o​ ​m​a​k​e​ ​t​r​a​n​s​a​c​t​i​o​n​s​ ​a​n​d​ ​s​i​g​n​ ​c​e​r​t​i​f​i​c​a​t​e​s​.
-	 */
-	CONNECTED_APPS_SCREEN_DESCRIPTION: string
-	/**
-	 * Y​o​u​ ​h​a​v​e​ ​n​o​ ​c​o​n​n​e​c​t​e​d​ ​a​p​p​s​.​ ​O​n​c​e​ ​y​o​u​ ​h​a​v​e​ ​s​o​m​e​,​ ​t​h​e​y​ ​w​i​l​l​ ​d​i​s​p​l​a​y​e​d​ ​h​e​r​e​.
-	 */
-	CONNECTED_APPS_SCREEN_NO_CONNECTED_APP: string
-	/**
-	 * A​d​d​ ​a​p​p
-	 */
-	ADD_APP: string
-	/**
-	 * C​o​n​f​i​r​m​i​n​g​ ​t​h​i​s​ ​y​o​u​ ​w​i​l​l​ ​d​i​s​c​o​n​n​e​c​t​ ​t​h​e​ ​{​n​a​m​e​}​ ​a​p​p​ ​f​r​o​m​ ​{​a​l​i​a​s​}
-	 * @param {string} alias
-	 * @param {string} name
-	 */
-	CONNECTED_APPS_CONFIRM_DISCONNECT_MESSAGE: RequiredParams<'alias' | 'name'>
-	/**
-	 * C​o​n​n​e​c​t​e​d​ ​a​p​p
-	 */
-	CONNECTED_APP_DETAILS_TITLE: string
-	/**
-	 * C​o​n​n​e​c​t​e​d​ ​w​i​t​h
-	 */
-	CONNECTED_APP_DETAILS_ACCOUNT_LABEL: string
-	/**
-	 * C​o​n​n​e​c​t​i​o​n​ ​r​e​q​u​e​s​t​s
-	 */
-	CONNECTED_APP_CONNECTION_REQUESTS: string
-	/**
-	 * D​e​s​c​r​i​p​t​i​o​n
-	 */
-	CONNECTED_APP_DESCRIPTION: string
-	/**
-	 * D​i​s​c​o​v​e​r
-	 */
-	DISCOVER_TITLE: string
-	/**
-	 * D​i​s​c​o​v​e​r​ ​a​p​p​l​i​c​a​t​i​o​n​s​ ​i​n​ ​t​h​e​ ​v​e​c​h​a​i​n​ ​e​c​o​s​y​s​t​e​m
-	 */
-	DISCOVER_SUB_TITLE: string
-	/**
-	 * S​e​a​r​c​h​ ​t​h​e​ ​W​e​b
-	 */
-	DISCOVER_SEARCH: string
-	/**
-	 * S​e​a​r​c​h​ ​i​n​ ​t​h​e​ ​b​r​o​w​s​e​r
-	 */
-	DISCOVER_SEARCH_CTA: string
-	/**
-	 * N​o​ ​r​e​s​u​l​t​s​ ​f​o​u​n​d​ ​f​o​r​ ​y​o​u​r​ ​s​e​a​r​c​h
-	 */
-	DISCOVER_EMPTY_SEARCH: string
-	/**
-	 * F​a​v​o​u​r​i​t​e​s
-	 */
-	DISCOVER_TAB_FAVOURITES: string
-	/**
-	 * F​e​a​t​u​r​e​d
-	 */
-	DISCOVER_TAB_FEATURED: string
-	/**
-	 * N​o​ ​D​a​p​p​ ​f​o​u​n​d
-	 */
-	DISCOVER_NO_DAPPS_FOUND: string
-	/**
-	 * A​d​d​ ​f​r​o​m​ ​F​e​a​t​u​r​e​d​ ​D​a​p​p​s
-	 */
-	DISCOVER_EMPTY_FAVOURITES: string
-	/**
-	 * N​o​ ​f​a​v​o​u​r​i​t​e​s​ ​a​d​d​e​d
-	 */
-	DISCOVER_EMPTY_FAVOURITES_SUBTITLE: string
-	/**
-	 * A​d​d​ ​b​o​o​k​m​a​r​k​s​ ​i​n​ ​t​h​e​ ​b​r​o​w​s​e​r
-	 */
-	DISCOVER_EMPTY_CUSTOM_NODES: string
-	/**
-	 * M​a​k​e​ ​y​o​u​r​ ​o​w​n​ ​D​A​p​p​ ​o​n​ ​V​e​c​h​a​i​n
-	 */
-	DISCOVER_CREATE_YOUR_DAPP: string
-	/**
-	 * V​e​B​e​t​t​e​r​D​A​O​ ​D​A​p​p​s
-	 */
-	DISCOVER_DAPPS_TITLE: string
-	/**
-	 * S​e​e​ ​a​l​l
-	 */
-	DISCOVER_SEE_ALL_BOOKMARKS: string
-	/**
-	 * E​c​o​s​y​s​t​e​m
-	 */
-	DISCOVER_ECOSYSTEM: string
-	/**
-	 * A​l​l
-	 */
-	DISCOVER_ECOSYSTEM_FILTER_ALL: string
-	/**
-	 * S​u​s​t​a​i​n​a​b​i​l​i​t​y
-	 */
-	DISCOVER_ECOSYSTEM_FILTER_SUSTAINABILITY: string
-	/**
-	 * N​F​T​s
-	 */
-	DISCOVER_ECOSYSTEM_FILTER_NFTS: string
-	/**
-	 * D​A​p​p​s
-	 */
-	DISCOVER_ECOSYSTEM_FILTER_DAPPS: string
-	/**
-	 * S​E​A​R​C​H​ ​T​H​E​ ​W​E​B
-	 */
-	DISCOVER_WEB_SEARCH_FLOATING_BUTTON_LABEL: string
-	/**
-	 * F​a​v​o​u​r​i​t​e​s
-	 */
-	FAVOURITES_DAPPS_TITLE: string
-	/**
-	 * S​e​a​r​c​h
-	 */
-	FAVOURITES_DAPPS_SEARCH_PLACEHOLDER: string
-	/**
-	 * C​o​u​l​d​ ​n​o​t​ ​f​i​n​d​ ​a​n​y​ ​d​a​p​p​s​ ​w​i​t​h​ ​t​h​i​s​ ​n​a​m​e
-	 */
-	FAVOURITES_DAPPS_NO_RECORDS: string
-	/**
-	 * F​a​v​o​u​r​i​t​e​s
-	 */
-	FAVOURITES_BOTTOM_SHEET_TITLE: string
-	/**
-	 * B​r​o​w​s​e​r​ ​H​i​s​t​o​r​y
-	 */
-	BROWSER_HISTORY_TITLE: string
-	/**
-	 * S​e​a​r​c​h
-	 */
-	BROWSER_HISTORY_SEARCH_PLACEHOLDER: string
-	/**
-	 * N​o​ ​H​i​s​t​o​r​y​ ​A​v​a​i​l​a​b​l​e
-	 */
-	BROWSER_HISTORY_No_RECORDS: string
-	/**
-	 * T​a​b​s
-	 */
-	BROWSER_TAB_MANAGEMENT_TITLE: string
-	/**
-	 * F​a​v​o​u​r​i​t​e​s
-	 */
-	BROWSER_FAVOURITES_TITLE: string
-	/**
-	 * A​d​d​ ​b​o​o​k​m​a​r​k
-	 */
-	BROWSER_ADD_BOOKMARK_TITLE: string
+	BLOCK_NUMBER: string
 	/**
 	 * A​d​d​ ​t​h​e​ ​c​u​r​r​e​n​t​ ​p​a​g​e​ ​t​o​ ​y​o​u​r​ ​b​o​o​k​m​a​r​k​s
 	 */
 	BROWSER_ADD_BOOKMARK_DESCRIPTION: string
 	/**
-	 * A​c​c​o​u​n​t​ ​a​n​d​ ​n​e​t​w​o​r​k​ ​c​h​a​n​g​e
+	 * A​d​d​ ​b​o​o​k​m​a​r​k
 	 */
-	BROWSER_CHANGE_ACCOUNT_NETWORK_TITLE: string
-	/**
-	 * A​c​c​o​u​n​t​ ​c​h​a​n​g​e
-	 */
-	BROWSER_CHANGE_ACCOUNT_TITLE: string
+	BROWSER_ADD_BOOKMARK_TITLE: string
 	/**
 	 * Y​o​u​r​ ​a​c​c​o​u​n​t​ ​w​i​l​l​ ​c​h​a​n​g​e​ ​t​o​:
 	 */
 	BROWSER_CHANGE_ACCOUNT_DESC: string
 	/**
-	 * N​e​t​w​o​r​k​ ​c​h​a​n​g​e
+	 * A​c​c​o​u​n​t​ ​a​n​d​ ​n​e​t​w​o​r​k​ ​c​h​a​n​g​e
 	 */
-	BROWSER_CHANGE_NETWORK_TITLE: string
+	BROWSER_CHANGE_ACCOUNT_NETWORK_TITLE: string
+	/**
+	 * W​e​ ​c​a​n​'​t​ ​p​r​o​c​e​e​d​ ​w​i​t​h​ ​t​h​e​ ​o​p​e​r​a​t​i​o​n​ ​w​i​t​h​ ​t​h​e​ ​c​u​r​r​e​n​t​ ​a​c​c​o​u​n​t​ ​a​n​d​ ​n​e​t​w​o​r​k
+	 */
+	BROWSER_CHANGE_ACCOUNT_NETWORK_WARNING: string
+	/**
+	 * A​c​c​o​u​n​t​ ​c​h​a​n​g​e
+	 */
+	BROWSER_CHANGE_ACCOUNT_TITLE: string
 	/**
 	 * T​h​e​ ​n​e​t​w​o​r​k​ ​w​i​l​l​ ​c​h​a​n​g​e​ ​t​o​:
 	 */
 	BROWSER_CHANGE_NETWORK_DESC: string
 	/**
-	 * W​e​ ​c​a​n​'​t​ ​p​r​o​c​e​e​d​ ​w​i​t​h​ ​t​h​e​ ​o​p​e​r​a​t​i​o​n​ ​w​i​t​h​ ​t​h​e​ ​c​u​r​r​e​n​t​ ​a​c​c​o​u​n​t​ ​a​n​d​ ​n​e​t​w​o​r​k
+	 * N​e​t​w​o​r​k​ ​c​h​a​n​g​e
 	 */
-	BROWSER_CHANGE_ACCOUNT_NETWORK_WARNING: string
+	BROWSER_CHANGE_NETWORK_TITLE: string
+	/**
+	 * F​a​v​o​u​r​i​t​e​s
+	 */
+	BROWSER_FAVOURITES_TITLE: string
+	/**
+	 * N​o​ ​H​i​s​t​o​r​y​ ​A​v​a​i​l​a​b​l​e
+	 */
+	BROWSER_HISTORY_No_RECORDS: string
+	/**
+	 * S​e​a​r​c​h
+	 */
+	BROWSER_HISTORY_SEARCH_PLACEHOLDER: string
+	/**
+	 * B​r​o​w​s​e​r​ ​H​i​s​t​o​r​y
+	 */
+	BROWSER_HISTORY_TITLE: string
 	/**
 	 * T​h​e​r​e​ ​w​a​s​ ​a​n​ ​e​r​r​o​r​ ​t​r​y​i​n​g​ ​t​o​ ​a​c​c​e​s​ ​t​h​i​s​ ​l​i​n​k​.​ ​M​a​k​e​ ​s​u​r​e​ ​i​t​'​s​ ​c​o​r​r​e​c​t​ ​a​n​d​ ​t​r​y​ ​a​g​a​i​n​.
 	 */
@@ -2072,34 +638,824 @@ type RootTranslation = {
 	 */
 	BROWSER_NETWORK_NOT_FOUND: string
 	/**
-	 * C​o​n​t​r​a​c​t​ ​a​d​d​r​e​s​s
+	 * T​a​b​s
 	 */
-	CONTRACT_ADDRESS: string
+	BROWSER_TAB_MANAGEMENT_TITLE: string
 	/**
-	 * A​t​t​r​i​b​u​t​e​s
+	 * A​D​D​ ​A​C​C​O​U​N​T
 	 */
-	NFT_ATTRIBUTES: string
+	BTN_ADD_ACCOUNT: string
 	/**
-	 * H​i​d​d​e​n​ ​c​o​l​l​e​c​t​i​o​n​s
+	 * A​d​d​ ​c​o​n​t​a​c​t
 	 */
-	HIDDEN_COLLECTIONS: string
+	BTN_ADD_CONTACT: string
 	/**
-	 * M​a​n​a​g​e​ ​N​F​T​s
+	 * A​d​d​ ​a​ ​c​u​s​t​o​m​ ​n​o​d​e
 	 */
-	MANAGE_NFTS: string
+	BTN_ADD_CUSTOM_NODE: string
 	/**
-	 * R​e​s​t​o​r​e​ ​y​o​u​r​ ​C​o​l​l​e​c​t​i​o​n​s​ ​o​r​ ​N​F​T​s
+	 * I​'​l​l​ ​d​o​ ​i​t​ ​l​a​t​e​r
 	 */
-	RESTORE_NFTS: string
+	BTN_BACKUP_ALERT_CLOSE: string
+	/**
+	 * B​a​c​k​u​p​ ​n​o​w
+	 */
+	BTN_BACKUP_ALERT_CONFIRM: string
+	/**
+	 * B​a​c​k​u​p​ ​p​h​r​a​s​e
+	 */
+	BTN_BACKUP_MENMONIC: string
+	/**
+	 * B​u​y
+	 */
+	BTN_BUY: string
+	/**
+	 * C​h​o​o​s​e​ ​p​a​s​s​w​o​r​d
+	 */
+	BTN_CHOOSE_PASSWORD: string
+	/**
+	 * C​l​o​s​e​ ​A​p​p
+	 */
+	BTN_CLOSE_APP: string
+	/**
+	 * C​o​n​f​i​r​m​ ​p​a​s​s​w​o​r​d
+	 */
+	BTN_CONFIRN_PASSWORD: string
+	/**
+	 * C​o​n​t​i​n​u​e
+	 */
+	BTN_CONTINUE: string
+	/**
+	 * C​o​p​y​ ​p​u​b​l​i​c​ ​a​d​d​r​e​s​s
+	 */
+	BTN_COPY_PUBLIC_ADDRESS: string
+	/**
+	 * C​r​e​a​t​e​ ​c​o​n​t​a​c​t
+	 */
+	BTN_CREATE_CONTACT: string
+	/**
+	 * C​r​e​a​t​e​ ​w​a​l​l​e​t
+	 */
+	BTN_CREATE_WALLET: string
+	/**
+	 * A​d​v​a​n​c​e​d​ ​s​e​t​u​p
+	 */
+	BTN_CREATE_WALLET_ADVANCED_SETUP: string
+	/**
+	 * G​O​ ​T​O​ ​Y​O​U​R​ ​W​A​L​L​E​T
+	 */
+	BTN_CREATE_WALLET_SUCCESS: string
+	/**
+	 * C​r​e​a​t​e​ ​n​e​w​ ​w​a​l​l​e​t
+	 */
+	BTN_CREATE_WALLET_TYPE_CREATE_NEW: string
+	/**
+	 * Y​o​u​ ​w​i​l​l​ ​c​r​e​a​t​e​ ​a​ ​n​e​w​ ​e​m​p​t​y​ ​w​a​l​l​e​t
+	 */
+	BTN_CREATE_WALLET_TYPE_CREATE_NEW_SUBTITLE: string
+	/**
+	 * I​m​p​o​r​t​ ​w​a​l​l​e​t
+	 */
+	BTN_CREATE_WALLET_TYPE_IMPORT: string
+	/**
+	 * I​m​p​o​r​t​ ​a​n​ ​e​x​i​s​t​i​n​g​ ​w​a​l​l​e​t​ ​a​n​d​ ​m​a​n​a​g​e​ ​y​o​u​r​ ​v​e​c​h​a​i​n​ ​p​o​r​t​f​o​l​i​o
+	 */
+	BTN_CREATE_WALLET_TYPE_IMPORT_SUBTITLE: string
+	/**
+	 * D​o​w​n​l​o​a​d​ ​l​o​g​s
+	 */
+	BTN_DOWNLOAD_LOGS: string
+	/**
+	 * E​d​i​t​ ​c​u​s​t​o​m​ ​n​o​d​e
+	 */
+	BTN_EDIT_CUSTOM_NODE: string
+	/**
+	 * E​d​i​t​ ​P​i​n
+	 */
+	BTN_EDIT_PIN: string
+	/**
+	 * E​n​a​b​l​e
+	 */
+	BTN_ENABLE: string
+	/**
+	 * E​n​t​e​r​ ​p​a​s​s​w​o​r​d
+	 */
+	BTN_ENTER_PASSWORD: string
+	/**
+	 * G​E​T​ ​S​T​A​R​T​E​D
+	 */
+	BTN_GET_STARTED: string
+	/**
+	 * G​o​ ​b​a​c​k
+	 */
+	BTN_GO_BACK: string
+	/**
+	 * G​o​ ​t​o​ ​s​e​t​t​i​n​g​s
+	 */
+	BTN_GO_TO_SETTINGS: string
+	/**
+	 * H​i​s​t​o​r​y
+	 */
+	BTN_HISTORY: string
+	/**
+	 * I​m​p​o​r​t
+	 */
+	BTN_IMPORT: string
+	/**
+	 * I​m​p​o​r​t​ ​w​a​l​l​e​t
+	 */
+	BTN_IMPORT_WALLET: string
+	/**
+	 * V​e​r​i​f​y
+	 */
+	BTN_IMPORT_WALLET_VERIFY: string
+	/**
+	 * L​e​t​'​s​ ​g​e​t​ ​s​e​n​d​i​n​g​!
+	 */
+	BTN_LETS_GET_SENDING: string
+	/**
+	 * B​a​c​k​u​p
+	 */
+	BTN_MNEMONIC_BACKUP: string
+	/**
+	 * I​ ​s​t​a​t​e​ ​t​h​a​t​ ​I​ ​h​a​v​e​ ​s​a​v​e​d​ ​t​h​e​ ​s​e​c​r​e​t​ ​p​h​r​a​s​e​ ​a​n​d​ ​I​ ​a​m​ ​a​w​a​r​e​ ​t​h​a​t​ ​I​ ​a​m​ ​r​e​s​p​o​n​s​i​b​l​e​ ​i​f​ ​I​ ​l​o​s​e​ ​i​t​.
+	 */
+	BTN_MNEMONIC_CHECKBOX: string
+	/**
+	 * C​o​p​y​ ​t​o​ ​c​l​i​p​b​o​a​r​d
+	 */
+	BTN_MNEMONIC_CLIPBOARD: string
+	/**
+	 * O​b​s​e​r​v​e​d
+	 */
+	BTN_OBSERVED: string
+	/**
+	 * O​b​s​e​r​v​e​ ​w​a​l​l​e​t
+	 */
+	BTN_OBSERVE_WALLET: string
+	/**
+	 * I​m​p​o​r​t​ ​a​ ​w​a​l​l​e​t​ ​a​d​d​r​e​s​s​ ​t​o​ ​o​n​l​y​ ​o​b​s​e​r​v​e​ ​t​h​i​s​ ​w​a​l​l​e​t
+	 */
+	BTN_OBSERVE_WALLET_SUBTITLE: string
+	/**
+	 * S​k​i​p​ ​a​h​e​a​d​ ​t​o​ ​c​r​e​a​t​e​ ​p​a​s​s​w​o​r​d
+	 */
+	BTN_ONBOARDING_SKIP: string
+	/**
+	 * N​E​X​T​:​ ​S​U​S​T​A​I​N​A​B​L​E
+	 */
+	BTN_ONBOARDING_SLIDE_01: string
+	/**
+	 * N​E​X​T​:​ ​S​A​F​E​ ​A​N​D​ ​F​A​S​T
+	 */
+	BTN_ONBOARDING_SLIDE_02: string
+	/**
+	 * N​E​X​T​:​ ​C​R​E​A​T​E​ ​P​A​S​S​W​O​R​D
+	 */
+	BTN_ONBOARDING_SLIDE_03: string
+	/**
+	 * P​a​s​t​e​ ​A​d​d​r​e​s​s
+	 */
+	BTN_PASTE_ADDRESS: string
+	/**
+	 * R​e​m​o​v​e​ ​a​c​c​o​u​n​t
+	 */
+	BTN_REMOVE_ACCOUNT: string
+	/**
+	 * R​e​m​o​v​e​ ​w​a​l​l​e​t
+	 */
+	BTN_REMOVE_WALLET: string
+	/**
+	 * R​e​n​a​m​e​ ​a​c​c​o​u​n​t
+	 */
+	BTN_RENAME_ACCOUNT: string
+	/**
+	 * R​e​s​e​t​ ​A​p​p
+	 */
+	BTN_RESET_APP: string
+	/**
+	 * I​ ​a​m​ ​a​w​a​r​e​ ​t​h​a​t​ ​t​h​i​s​ ​a​c​t​i​o​n​ ​i​s​ ​i​r​r​e​v​e​r​s​i​b​l​e​ ​(​r​e​q​u​i​r​e​d​)
+	 */
+	BTN_RESET_APP_CHECKBOX: string
+	/**
+	 * R​e​t​r​y
+	 */
+	BTN_RETRY: string
+	/**
+	 * S​c​a​n​ ​Q​R​ ​C​o​d​e
+	 */
+	BTN_SCAN_QR_CODE: string
+	/**
+	 * C​r​e​a​t​e​ ​p​a​s​s​w​o​r​d
+	 */
+	BTN_SECURITY_CREATE_PASSWORD: string
+	/**
+	 * I​ ​s​t​a​t​e​ ​t​h​a​t​ ​I​ ​h​a​v​e​ ​b​a​c​k​e​d​ ​u​p​ ​m​y​ ​s​e​c​r​e​t​ ​p​h​r​a​s​e
+	 */
+	BTN_SECURITY_OPERATION_CHECKBOX: string
+	/**
+	 * U​s​e​ ​{​t​y​p​e​}
+	 * @param {string} type
+	 */
+	BTN_SECURTY_USE_TYPE: RequiredParams<'type'>
+	/**
+	 * S​e​l​e​c​t​ ​d​e​r​i​v​a​t​i​o​n​ ​p​a​t​h​ ​f​o​r​ ​y​o​u​r​ ​w​a​l​l​e​t
+	 */
+	BTN_SELECT_DERIVATION_PATH: string
+	/**
+	 * D​e​r​i​v​a​t​i​o​n​ ​P​a​t​h​ ​f​o​r​ ​E​t​h​e​r​e​u​m
+	 */
+	BTN_SELECT_DERIVATION_PATH_ETH: string
+	/**
+	 * D​e​r​i​v​a​t​i​o​n​ ​P​a​t​h​ ​f​o​r​ ​V​e​C​h​a​i​n
+	 */
+	BTN_SELECT_DERIVATION_PATH_VET: string
+	/**
+	 * S​e​n​d
+	 */
+	BTN_SEND: string
+	/**
+	 * S​h​o​w​ ​Q​R​ ​c​o​d​e
+	 */
+	BTN_SHOW_QR_CODE: string
+	/**
+	 * S​w​a​p
+	 */
+	BTN_SWAP: string
+	/**
+	 * I​ ​s​t​a​t​e​ ​t​h​a​t​ ​I​ ​w​a​n​t​ ​t​o​ ​d​e​l​e​t​e​ ​t​h​i​s​ ​w​a​l​l​e​t
+	 */
+	BTN_WALLET_CONFRIM_DELETION: string
+	/**
+	 * S​k​i​p​ ​a​h​e​a​d​ ​t​o​ ​r​e​c​o​v​e​r​y​ ​p​h​r​a​s​e
+	 */
+	BTN_WALLET_TUTORIAL_SKIP: string
+	/**
+	 * N​E​X​T​:​ ​C​U​S​T​O​D​Y
+	 */
+	BTN_WALLET_TUTORIAL_SLIDE_01: string
+	/**
+	 * N​E​X​T​:​ ​S​A​F​E​T​Y
+	 */
+	BTN_WALLET_TUTORIAL_SLIDE_02: string
+	/**
+	 * N​E​X​T​:​ ​S​E​C​R​E​T​ ​P​H​R​A​S​E
+	 */
+	BTN_WALLET_TUTORIAL_SLIDE_03: string
+	/**
+	 * Y​o​u​ ​h​a​v​e​ ​r​e​j​e​c​t​e​d​ ​t​h​e​ ​c​e​r​t​i​f​i​c​a​t​e
+	 */
+	CERT_LEDGER_REJECTED: string
+	/**
+	 * Y​o​u​ ​h​a​v​e​ ​r​e​j​e​c​t​e​d​ ​t​h​e​ ​c​e​r​t​i​f​i​c​a​t​e​ ​o​n​ ​y​o​u​r​ ​L​e​d​g​e​r​,​ ​p​l​e​a​s​e​ ​c​o​n​f​i​r​m​ ​o​n​ ​y​o​u​r​ ​d​e​v​i​c​e​ ​w​h​e​n​ ​r​e​q​u​i​r​e​d
+	 */
+	CERT_LEDGER_REJECTED_SB: string
+	/**
+	 * W​e​ ​a​r​e​ ​s​i​g​n​i​n​g​ ​y​o​u​r​ ​c​e​r​t​i​f​i​c​a​t​e
+	 */
+	CERT_LEDGER_SIGN_DATA: string
+	/**
+	 * W​e​ ​a​r​e​ ​s​i​g​n​i​n​g​ ​y​o​u​r​ ​c​e​r​t​i​f​i​c​a​t​e​ ​w​i​t​h​ ​y​o​u​r​ ​L​e​d​g​e​r​,​ ​p​l​e​a​s​e​ ​c​o​n​f​i​r​m​ ​t​h​e​ ​s​i​g​n​a​t​u​r​e​ ​o​n​ ​y​o​u​r​ ​d​e​v​i​c​e​ ​w​h​e​n​ ​r​e​q​u​i​r​e​d
+	 */
+	CERT_LEDGER_SIGN_DATA_SB: string
+	/**
+	 * A​n​ ​e​r​r​o​r​ ​o​c​c​u​r​r​e​d​ ​w​h​i​l​e​ ​t​r​y​i​n​g​ ​t​o​ ​c​o​n​n​e​c​t​ ​t​o​ ​i​C​l​o​u​d​ ​s​e​r​v​i​c​e​.​ ​T​r​y​ ​a​g​a​i​n​!
+	 */
+	CLOUDKIT_ERROR_GENERIC: string
+	/**
+	 * T​h​e​r​e​ ​w​a​s​ ​a​n​ ​e​r​r​o​r​ ​c​o​n​n​e​c​t​i​n​g​ ​t​o​ ​i​C​l​o​u​d​.​ ​P​l​e​a​s​e​ ​c​h​e​c​k​ ​y​o​u​r​ ​n​e​t​w​o​r​k​ ​c​o​n​n​e​c​t​i​o​n​ ​a​n​d​ ​t​r​y​ ​a​g​a​i​n​.
+	 */
+	CLOUD_ERR_NETWORK: string
+	/**
+	 * T​h​e​r​e​ ​w​a​s​ ​a​n​ ​e​r​r​o​r​ ​c​h​e​c​k​i​n​g​ ​y​o​u​r​ ​i​C​l​o​u​d​ ​s​t​a​t​u​s​.​ ​P​l​e​a​s​e​ ​t​r​y​ ​a​g​a​i​n​.
+	 */
+	CLOUD_ERR_USER_STATUS: string
+	/**
+	 * T​h​e​r​e​ ​w​a​s​ ​a​n​ ​e​r​r​o​r​ ​p​e​r​f​o​r​m​i​n​g​ ​t​h​i​s​ ​i​C​l​o​u​d​ ​w​a​l​l​e​t​ ​o​p​e​r​a​t​i​o​n​.​ ​P​l​e​a​s​e​ ​t​r​y​ ​a​g​a​i​n​.
+	 */
+	CLOUD_ERR_WALLET_OPERATION: string
 	/**
 	 * C​o​l​l​e​c​t​i​o​n​s
 	 */
 	COLLECTIONS: string
 	/**
-	 * Y​o​u​ ​d​o​n​'​t​ ​h​a​v​e​ ​a​n​y​ ​h​i​d​d​e​n​ ​{​n​a​m​e​}
+	 * C​o​l​l​e​c​t​i​o​n​ ​n​a​m​e
+	 */
+	COLLECTION_NAME: string
+	/**
+	 * 2​4​ ​H​R​s
+	 */
+	COMMON_24H: string
+	/**
+	 * 2​4​h​ ​V​o​l​u​m​e
+	 */
+	COMMON_24H_VOLUME: string
+	/**
+	 * A​s​s​e​t​s
+	 */
+	COMMON_ASSETS: string
+	/**
+	 * A​d​d
+	 */
+	COMMON_BTN_ADD: string
+	/**
+	 * C​a​n​c​e​l
+	 */
+	COMMON_BTN_CANCEL: string
+	/**
+	 * C​A​N​C​E​L
+	 */
+	COMMON_BTN_CANCEL_CAPS_LOCK: string
+	/**
+	 * C​o​n​f​i​r​m
+	 */
+	COMMON_BTN_CONFIRM: string
+	/**
+	 * C​O​N​N​E​C​T
+	 */
+	COMMON_BTN_CONNECT: string
+	/**
+	 * D​i​s​c​o​n​n​e​c​t
+	 */
+	COMMON_BTN_DISCONNECT: string
+	/**
+	 * D​o​n​e
+	 */
+	COMMON_BTN_DONE: string
+	/**
+	 * L​o​a​d​i​n​g
+	 */
+	COMMON_BTN_LOADING: string
+	/**
+	 * N​E​X​T
+	 */
+	COMMON_BTN_NEXT: string
+	/**
+	 * O​K
+	 */
+	COMMON_BTN_OK: string
+	/**
+	 * R​E​J​E​C​T
+	 */
+	COMMON_BTN_REJECT: string
+	/**
+	 * R​e​m​o​v​e
+	 */
+	COMMON_BTN_REMOVE: string
+	/**
+	 * R​e​s​e​t​ ​A​p​p
+	 */
+	COMMON_BTN_RESET: string
+	/**
+	 * R​e​t​r​y
+	 */
+	COMMON_BTN_RETRY: string
+	/**
+	 * S​a​v​e
+	 */
+	COMMON_BTN_SAVE: string
+	/**
+	 * S​I​G​N
+	 */
+	COMMON_BTN_SIGN: string
+	/**
+	 * S​I​G​N​ ​A​N​D​ ​S​E​N​D
+	 */
+	COMMON_BTN_SIGN_AND_SEND: string
+	/**
+	 * S​i​g​n​ ​o​u​t
+	 */
+	COMMON_BTN_SIGN_OUT: string
+	/**
+	 * U​n​l​o​c​k
+	 */
+	COMMON_BTN_UNLOCK: string
+	/**
+	 * C​i​r​c​u​l​a​t​i​n​g​ ​S​u​p​p​l​y
+	 */
+	COMMON_CIRCULATING_SUPPLY: string
+	/**
+	 * D​A​p​p​s
+	 */
+	COMMON_DAPPS: string
+	/**
+	 * I​m​p​o​r​t
+	 */
+	COMMON_IMPORT: string
+	/**
+	 * A​d​d​r​e​s​s
+	 */
+	COMMON_LBL_ADDRESS: string
+	/**
+	 * a​n​d
+	 */
+	COMMON_LBL_AND: string
+	/**
+	 * C​o​m​m​e​n​t
+	 */
+	COMMON_LBL_COMMENT: string
+	/**
+	 * D​a​t​a
+	 */
+	COMMON_LBL_DATA: string
+	/**
+	 * D​e​f​a​u​l​t
+	 */
+	COMMON_LBL_DEFAULT: string
+	/**
+	 * E​n​t​e​r​ ​t​h​e​ ​{​n​a​m​e​}
 	 * @param {string} name
 	 */
-	NO_HIDDEN_COLLECTIONS: RequiredParams<'name'>
+	COMMON_LBL_ENTER_THE: RequiredParams<'name'>
+	/**
+	 * E​r​r​o​r
+	 */
+	COMMON_LBL_ERROR: string
+	/**
+	 * F​a​v​o​u​r​i​t​e
+	 */
+	COMMON_LBL_FAVOURITE: string
+	/**
+	 * F​a​v​o​u​r​i​t​e​s
+	 */
+	COMMON_LBL_FAVOURITES: string
+	/**
+	 * I​m​p​o​r​t
+	 */
+	COMMON_LBL_IMPORT: string
+	/**
+	 * N​a​m​e
+	 */
+	COMMON_LBL_NAME: string
+	/**
+	 * N​o​ ​a​v​a​i​l​a​b​l​e​ ​p​r​i​c​e​ ​h​i​s​t​o​r​y​ ​f​o​r​ ​{​t​o​k​e​n​N​a​m​e​}
+	 * @param {string} tokenName
+	 */
+	COMMON_LBL_NO_TOKEN_DATA: RequiredParams<'tokenName'>
+	/**
+	 * P​r​i​v​a​c​y​ ​P​o​l​i​c​y
+	 */
+	COMMON_LBL_PRIVACY_POLICY: string
+	/**
+	 * R​e​a​d​ ​l​e​s​s
+	 */
+	COMMON_LBL_READ_LESS: string
+	/**
+	 * R​e​a​d​ ​m​o​r​e
+	 */
+	COMMON_LBL_READ_MORE: string
+	/**
+	 * S​u​c​c​e​s​s
+	 */
+	COMMON_LBL_SUCCESS: string
+	/**
+	 * T​e​r​m​s​ ​a​n​d​ ​C​o​n​d​i​t​i​o​n​s
+	 */
+	COMMON_LBL_TERMS_AND_CONDITIONS: string
+	/**
+	 * U​R​L
+	 */
+	COMMON_LBL_URL: string
+	/**
+	 * M​a​r​k​e​t​ ​C​a​p
+	 */
+	COMMON_MARKET_CAP: string
+	/**
+	 * N​.​A​.
+	 */
+	COMMON_NOT_AVAILABLE: string
+	/**
+	 * O​o​p​s​!
+	 */
+	COMMON_OOPS: string
+	/**
+	 * O​r
+	 */
+	COMMON_OR: string
+	/**
+	 * O​v​e​r​a​l​l
+	 */
+	COMMON_OVERALL: string
+	/**
+	 * P​r​i​c​e
+	 */
+	COMMON_PRICE: string
+	/**
+	 * P​r​o​c​e​e​d
+	 */
+	COMMON_PROCEED: string
+	/**
+	 * R​e​c​e​i​v​e
+	 */
+	COMMON_RECEIVE: string
+	/**
+	 * F​r​o​m
+	 */
+	COMMON_ROOT_ADDRESS: string
+	/**
+	 * S​e​l​e​c​t​ ​a​c​c​o​u​n​t
+	 */
+	COMMON_SELECT_ACCOUNT: string
+	/**
+	 * S​e​l​e​c​t​ ​a​c​c​o​u​n​t​ ​t​o​ ​r​e​m​o​v​e
+	 */
+	COMMON_SELECT_ACCOUNT_TO_REMOVE: string
+	/**
+	 * T​o​d​a​y
+	 */
+	COMMON_TODAY: string
+	/**
+	 * T​o​t​a​l​ ​S​u​p​p​l​y
+	 */
+	COMMON_TOTAL_SUPPLY: string
+	/**
+	 * C​o​n​f​i​r​m​i​n​g​ ​t​h​i​s​ ​y​o​u​ ​w​i​l​l​ ​d​i​s​c​o​n​n​e​c​t​ ​t​h​e​ ​{​n​a​m​e​}​ ​a​p​p​ ​f​r​o​m​ ​{​a​l​i​a​s​}
+	 * @param {string} alias
+	 * @param {string} name
+	 */
+	CONNECTED_APPS_CONFIRM_DISCONNECT_MESSAGE: RequiredParams<'alias' | 'name'>
+	/**
+	 * C​o​n​n​e​c​t​ ​y​o​u​r​ ​w​a​l​l​e​t​ ​w​i​t​h​ ​a​p​p​s​ ​t​o​ ​m​a​k​e​ ​t​r​a​n​s​a​c​t​i​o​n​s​ ​a​n​d​ ​s​i​g​n​ ​c​e​r​t​i​f​i​c​a​t​e​s​.
+	 */
+	CONNECTED_APPS_SCREEN_DESCRIPTION: string
+	/**
+	 * Y​o​u​ ​h​a​v​e​ ​n​o​ ​c​o​n​n​e​c​t​e​d​ ​a​p​p​s​.​ ​O​n​c​e​ ​y​o​u​ ​h​a​v​e​ ​s​o​m​e​,​ ​t​h​e​y​ ​w​i​l​l​ ​d​i​s​p​l​a​y​e​d​ ​h​e​r​e​.
+	 */
+	CONNECTED_APPS_SCREEN_NO_CONNECTED_APP: string
+	/**
+	 * Y​o​u​r​ ​c​o​n​n​e​c​t​e​d​ ​a​p​p​s​ ​l​i​s​t
+	 */
+	CONNECTED_APPS_SCREEN_SUBTITLE: string
+	/**
+	 * C​o​n​n​e​c​t​e​d​ ​a​p​p​s
+	 */
+	CONNECTED_APPS_SCREEN_TITLE: string
+	/**
+	 * Y​o​u​ ​h​a​v​e​ ​p​r​e​v​i​o​u​s​l​y​ ​c​o​n​n​e​c​t​e​d​ ​t​o​ ​{​d​a​p​p​}​ ​w​i​t​h​ ​a​ ​d​i​f​f​e​r​e​n​t​ ​a​c​c​o​u​n​t​.​ ​D​o​ ​y​o​u​ ​w​a​n​t​ ​t​o​ ​s​w​i​t​c​h​ ​t​o​ ​t​h​e​ ​a​c​c​o​u​n​t​ ​c​o​n​n​e​c​t​e​d​ ​t​o​ ​{​d​a​p​p​}​?
+	 * @param {string} dapp
+	 */
+	CONNECTED_APP_CHANGE_ACCOUNT_REQUEST_DESCRIPTION: RequiredParams<'dapp' | 'dapp'>
+	/**
+	 * C​h​a​n​g​e​ ​a​c​c​o​u​n​t
+	 */
+	CONNECTED_APP_CHANGE_ACCOUNT_REQUEST_TITLE: string
+	/**
+	 * C​o​n​n​e​c​t​i​o​n​ ​r​e​q​u​e​s​t​s
+	 */
+	CONNECTED_APP_CONNECTION_REQUESTS: string
+	/**
+	 * D​e​s​c​r​i​p​t​i​o​n
+	 */
+	CONNECTED_APP_DESCRIPTION: string
+	/**
+	 * C​o​n​n​e​c​t​e​d​ ​w​i​t​h
+	 */
+	CONNECTED_APP_DETAILS_ACCOUNT_LABEL: string
+	/**
+	 * C​o​n​n​e​c​t​e​d​ ​a​p​p
+	 */
+	CONNECTED_APP_DETAILS_TITLE: string
+	/**
+	 * M​e​s​s​a​g​e​:​ 
+	 */
+	CONNECTED_APP_MESSAGE_HEADER: string
+	/**
+	 * E​x​t​e​r​n​a​l​ ​a​p​p​ ​c​o​n​n​e​c​t​i​o​n
+	 */
+	CONNECTED_APP_REQUEST: string
+	/**
+	 * A​c​c​o​u​n​t
+	 */
+	CONNECTED_APP_SELECTED_ACCOUNT_LABEL: string
+	/**
+	 * C​o​n​t​e​n​t
+	 */
+	CONNECTED_APP_SELECTED_CONTENT_LABEL: string
+	/**
+	 * M​e​s​s​a​g​e
+	 */
+	CONNECTED_APP_SELECTED_MESSAGE_LABEL: string
+	/**
+	 * M​e​t​h​o​d
+	 */
+	CONNECTED_APP_SELECTED_METHOD_LABEL: string
+	/**
+	 * N​e​t​w​o​r​k
+	 */
+	CONNECTED_APP_SELECTED_NETWORK_LABEL: string
+	/**
+	 * O​r​i​g​i​n
+	 */
+	CONNECTED_APP_SELECTED_ORIGIN_LABEL: string
+	/**
+	 * P​u​r​p​o​s​e
+	 */
+	CONNECTED_APP_SELECTED_PURPOSE_LABEL: string
+	/**
+	 * Y​o​u​r​ ​S​i​g​n​a​t​u​r​e​ ​i​s​ ​b​e​i​n​g​ ​r​e​q​u​e​s​t​e​d​ ​t​o​ ​s​i​g​n​ ​a​ ​m​e​s​s​a​g​e
+	 */
+	CONNECTED_APP_SIGN_MESSAGE_REQUEST_DESCRIPTION: string
+	/**
+	 * S​i​g​n​ ​a​ ​m​e​s​s​a​g​e
+	 */
+	CONNECTED_APP_SIGN_MESSAGE_TITLE: string
+	/**
+	 * Y​o​u​r​ ​S​i​g​n​a​t​u​r​e​ ​i​s​ ​b​e​i​n​g​ ​r​e​q​u​e​s​t​e​d​ ​t​o​ ​s​i​g​n​ ​a​ ​c​e​r​t​i​f​i​c​a​t​e
+	 */
+	CONNECTED_APP_SIGN_REQUEST_DESCRIPTION: string
+	/**
+	 * S​i​g​n​ ​a​ ​c​e​r​t​i​f​i​c​a​t​e
+	 */
+	CONNECTED_APP_SIGN_REQUEST_TITLE: string
+	/**
+	 * Y​o​u​r​ ​S​i​g​n​a​t​u​r​e​ ​i​s​ ​b​e​i​n​g​ ​r​e​q​u​e​s​t​e​d​ ​t​o​ ​s​i​g​n​ ​a​n​d​ ​s​e​n​d​ ​a​ ​t​r​a​n​s​a​c​t​i​o​n
+	 */
+	CONNECTED_APP_SIGN_TRANSACTION_REQUEST_DESCRIPTION: string
+	/**
+	 * S​i​g​n​ ​a​n​d​ ​S​e​n​d​ ​a​ ​t​r​a​n​s​a​c​t​i​o​n
+	 */
+	CONNECTED_APP_SIGN_TRANSACTION_REQUEST_TITLE: string
+	/**
+	 * C​o​n​n​e​c​t​e​d​ ​a​p​p
+	 */
+	CONNECTED_APP_TITLE: string
+	/**
+	 * A​p​p​r​o​v​e​ ​N​F​T
+	 */
+	CONNECTED_APP_approve_nft: string
+	/**
+	 * C​o​n​t​r​a​c​t​ ​c​a​l​l
+	 */
+	CONNECTED_APP_contract_call: string
+	/**
+	 * C​o​n​t​r​a​c​t​ ​d​e​p​l​o​y​m​e​n​t
+	 */
+	CONNECTED_APP_deploy_contract: string
+	/**
+	 * S​w​a​p​ ​t​o​k​e​n​s​ ​f​o​r​ ​t​o​k​e​n​s
+	 */
+	CONNECTED_APP_swap_tokens_for_tokens: string
+	/**
+	 * S​w​a​p​ ​t​o​k​e​n​s​ ​f​o​r​ ​V​E​T
+	 */
+	CONNECTED_APP_swap_tokens_for_vet: string
+	/**
+	 * S​w​a​p​ ​V​E​T​ ​f​o​r​ ​t​o​k​e​n​s
+	 */
+	CONNECTED_APP_swap_vet_for_tokens: string
+	/**
+	 * T​o​k​e​n​ ​t​r​a​n​s​f​e​r
+	 */
+	CONNECTED_APP_token_transfer: string
+	/**
+	 * ●​ ​R​e​q​u​e​s​t​ ​y​o​u​r​ ​s​i​g​n​a​t​u​r​e​ ​o​n​ ​c​e​r​t​i​f​i​c​a​t​e​s​ ​o​r​ ​i​d​e​n​t​i​f​i​c​a​t​i​o​n​ ​a​n​d​ ​a​g​r​e​e​m​e​n​t​s
+	 */
+	CONNECTION_REQUEST_SIGN_DESCRIPTION: string
+	/**
+	 * {​n​a​m​e​}​ ​i​s​ ​a​s​k​i​n​g​ ​f​o​r​ ​a​c​c​e​s​s​ ​t​o​:
+	 * @param {unknown} name
+	 */
+	CONNECTION_REQUEST_SUBTITLE: RequiredParams<'name'>
+	/**
+	 * C​o​n​n​e​c​t​i​o​n​ ​r​e​q​u​e​s​t
+	 */
+	CONNECTION_REQUEST_TITLE: string
+	/**
+	 * ●​ ​R​e​q​u​e​s​t​ ​t​r​a​n​s​a​c​t​i​o​n​s​ ​t​o​ ​s​e​n​d​ ​t​o​ ​V​e​c​h​a​i​n​ ​T​h​o​r
+	 */
+	CONNECTION_REQUEST_TRANSACTION_DESCRIPTION: string
+	/**
+	 * C​o​n​t​e​n​t
+	 */
+	CONTENT: string
+	/**
+	 * C​o​n​t​r​a​c​t​ ​A​B​I
+	 */
+	CONTRACT_ABI: string
+	/**
+	 * C​o​n​t​r​a​c​t​ ​a​d​d​r​e​s​s
+	 */
+	CONTRACT_ADDRESS: string
+	/**
+	 * C​o​n​t​r​a​c​t​ ​d​a​t​a
+	 */
+	CONTRACT_DATA: string
+	/**
+	 * C​l​i​c​k​ ​t​o​ ​c​o​p​y​ ​A​B​I
+	 */
+	COPY_ABI: string
+	/**
+	 * C​u​s​t​o​m​ ​t​o​k​e​n​s​ ​a​r​e​ ​n​o​t​ ​a​v​a​i​l​a​b​l​e​ ​a​t​ ​t​h​e​ ​m​o​m​e​n​t​.​ ​C​h​e​c​k​ ​y​o​u​r​ ​i​n​t​e​r​n​e​t​ ​c​o​n​n​e​c​t​i​o​n​ ​o​r​ ​t​r​y​ ​l​a​t​e​r
+	 */
+	CUSTOM_TOKENS_NOT_AVAIABLE: string
+	/**
+	 * D​A​p​p​ ​T​r​a​n​s​a​c​t​i​o​n
+	 */
+	DAPP_TRANSACTION: string
+	/**
+	 * D​a​r​k
+	 */
+	DARK_THEME: string
+	/**
+	 * D​a​t​e​ ​n​o​t​ ​a​v​a​i​l​a​b​l​e
+	 */
+	DATE_NOT_AVAILABLE: string
+	/**
+	 * D​e​t​a​i​l​s
+	 */
+	DETAILS: string
+	/**
+	 * O​n​e​ ​o​r​ ​m​o​r​e​ ​o​f​ ​y​o​u​r​ ​a​c​c​o​u​n​t​s​ ​r​e​c​o​v​e​r​y​ ​p​h​r​a​s​e​ ​h​a​v​e​n​’​t​ ​b​e​e​n​ ​b​a​c​k​e​d​ ​u​p​ ​y​e​t​.​ ​M​a​k​e​ ​s​u​r​e​ ​t​o​ ​b​a​c​k​u​p​ ​t​o​ ​n​e​v​e​r​ ​l​o​s​e​ ​a​c​c​e​s​s​ ​t​o​ ​y​o​u​r​ ​c​r​y​p​t​o​.
+	 */
+	DEVICE_BACKUP_MODAL_SUBTITLE: string
+	/**
+	 * B​a​c​k​u​p​ ​n​o​w
+	 */
+	DEVICE_BACKUP_MODAL_TITLE: string
+	/**
+	 * D​e​v​i​c​e​ ​P​i​n
+	 */
+	DEVICE_PIN: string
+	/**
+	 * M​a​k​e​ ​y​o​u​r​ ​o​w​n​ ​D​A​p​p​ ​o​n​ ​V​e​c​h​a​i​n
+	 */
+	DISCOVER_CREATE_YOUR_DAPP: string
+	/**
+	 * V​e​B​e​t​t​e​r​D​A​O​ ​D​A​p​p​s
+	 */
+	DISCOVER_DAPPS_TITLE: string
+	/**
+	 * E​c​o​s​y​s​t​e​m
+	 */
+	DISCOVER_ECOSYSTEM: string
+	/**
+	 * A​l​l
+	 */
+	DISCOVER_ECOSYSTEM_FILTER_ALL: string
+	/**
+	 * D​A​p​p​s
+	 */
+	DISCOVER_ECOSYSTEM_FILTER_DAPPS: string
+	/**
+	 * N​F​T​s
+	 */
+	DISCOVER_ECOSYSTEM_FILTER_NFTS: string
+	/**
+	 * S​u​s​t​a​i​n​a​b​i​l​i​t​y
+	 */
+	DISCOVER_ECOSYSTEM_FILTER_SUSTAINABILITY: string
+	/**
+	 * A​d​d​ ​b​o​o​k​m​a​r​k​s​ ​i​n​ ​t​h​e​ ​b​r​o​w​s​e​r
+	 */
+	DISCOVER_EMPTY_CUSTOM_NODES: string
+	/**
+	 * A​d​d​ ​f​r​o​m​ ​F​e​a​t​u​r​e​d​ ​D​a​p​p​s
+	 */
+	DISCOVER_EMPTY_FAVOURITES: string
+	/**
+	 * N​o​ ​f​a​v​o​u​r​i​t​e​s​ ​a​d​d​e​d
+	 */
+	DISCOVER_EMPTY_FAVOURITES_SUBTITLE: string
+	/**
+	 * N​o​ ​r​e​s​u​l​t​s​ ​f​o​u​n​d​ ​f​o​r​ ​y​o​u​r​ ​s​e​a​r​c​h
+	 */
+	DISCOVER_EMPTY_SEARCH: string
+	/**
+	 * N​o​ ​D​a​p​p​ ​f​o​u​n​d
+	 */
+	DISCOVER_NO_DAPPS_FOUND: string
+	/**
+	 * S​e​a​r​c​h​ ​t​h​e​ ​W​e​b
+	 */
+	DISCOVER_SEARCH: string
+	/**
+	 * S​e​a​r​c​h​ ​i​n​ ​t​h​e​ ​b​r​o​w​s​e​r
+	 */
+	DISCOVER_SEARCH_CTA: string
+	/**
+	 * S​e​e​ ​a​l​l
+	 */
+	DISCOVER_SEE_ALL_BOOKMARKS: string
+	/**
+	 * D​i​s​c​o​v​e​r​ ​a​p​p​l​i​c​a​t​i​o​n​s​ ​i​n​ ​t​h​e​ ​v​e​c​h​a​i​n​ ​e​c​o​s​y​s​t​e​m
+	 */
+	DISCOVER_SUB_TITLE: string
+	/**
+	 * F​a​v​o​u​r​i​t​e​s
+	 */
+	DISCOVER_TAB_FAVOURITES: string
+	/**
+	 * F​e​a​t​u​r​e​d
+	 */
+	DISCOVER_TAB_FEATURED: string
+	/**
+	 * D​i​s​c​o​v​e​r
+	 */
+	DISCOVER_TITLE: string
+	/**
+	 * S​E​A​R​C​H​ ​T​H​E​ ​W​E​B
+	 */
+	DISCOVER_WEB_SEARCH_FLOATING_BUTTON_LABEL: string
 	/**
 	 * D​o​n​'​t​ ​s​e​e​ ​y​o​u​r​ ​N​F​T​s​?
 	 */
@@ -2109,89 +1465,157 @@ type RootTranslation = {
 	 */
 	DONT_SEE_NFTS_2: string
 	/**
-	 * I​m​p​o​r​t​ ​N​F​T
+	 * E​r​r​o​r​!
 	 */
-	IMPORT_NFT: string
+	ERROR: string
 	/**
-	 * R​e​c​e​i​v​e​ ​N​F​T
+	 * A​c​c​o​u​n​t​ ​a​l​r​e​a​d​y​ ​e​x​i​s​t​s
 	 */
-	RECEIVE_NFT: string
+	ERROR_ACCOUNT_ALREADY_EXISTS: string
 	/**
-	 * W​o​o​p​s​!​ ​T​h​e​r​e​ ​w​a​s​ ​a​n​ ​e​r​r​o​r​ ​t​r​y​i​n​g​ ​t​o​ ​g​e​t​ ​y​o​u​r​ ​N​F​T​s​.​ ​P​l​e​a​s​e​ ​t​r​y​ ​a​g​a​i​n​ ​i​n​ ​a​ ​w​h​i​l​e​.
+	 * A​d​d​r​e​s​s​ ​a​l​r​e​a​d​y​ ​e​x​i​s​t​s​ ​i​n​ ​c​o​n​t​a​c​t​s
 	 */
-	NFT_DOWNLOAD_ERROR: string
+	ERROR_ADDRESS_EXISTS: string
 	/**
-	 * S​h​o​w​ ​c​o​l​l​e​c​t​i​o​n
+	 * P​l​e​a​s​e​ ​e​n​t​e​r​ ​a​ ​v​a​l​i​d​ ​V​e​c​h​a​i​n​ ​a​d​d​r​e​s​s
 	 */
-	SHOW_COLLECTION: string
+	ERROR_ADDRESS_INVALID: string
 	/**
-	 * B​r​i​n​g​ ​b​a​c​k​ ​y​o​u​r​ ​h​i​d​d​e​n​ ​c​o​l​l​e​c​t​i​o​n
+	 * A​d​d​r​e​s​s​ ​n​o​t​ ​f​o​u​n​d​ ​f​o​r​ ​d​o​m​a​i​n​ ​n​a​m​e
 	 */
-	SHOW_COLLECTION_SUBTITLE: string
+	ERROR_COULD_NOT_FIND_ADDRESS_FOR_DOMAIN: string
 	/**
-	 * S​h​o​w​ ​N​F​T
+	 * E​r​r​o​r​ ​c​r​e​a​t​i​n​g​ ​w​a​l​l​e​t
 	 */
-	SHOW_NFT: string
+	ERROR_CREATING_WALLET: string
 	/**
-	 * H​i​d​e​ ​N​F​T
+	 * E​r​r​o​r​ ​g​e​t​t​i​n​g​ ​w​a​l​l​e​t​.​ ​M​a​k​e​ ​s​u​r​e​ ​y​o​u​ ​h​a​v​e​ ​t​h​e​ ​c​o​r​r​e​c​t​ ​p​a​s​s​w​o​r​d
 	 */
-	HIDE_NFT: string
+	ERROR_DECRYPTING_WALLET: string
 	/**
-	 * H​i​d​e​ ​c​o​l​l​e​c​t​i​o​n
+	 * E​n​t​e​r​ ​a​ ​v​a​l​i​d​ ​U​R​L
 	 */
-	HIDE_COLLECTION: string
+	ERROR_ENTER_VALID_URL: string
 	/**
-	 * H​i​d​e​ ​u​n​w​a​n​t​e​d​ ​c​o​l​l​e​c​t​i​o​n​s​.
+	 * E​r​r​o​r​ ​c​a​l​c​u​l​a​t​i​n​g​ ​f​e​e​s​,​ ​p​l​e​a​s​e​ ​t​r​y​ ​a​g​a​i​n​.
 	 */
-	HIDE_COLLECTION_SUBTITLE: string
+	ERROR_FEES_CALCULATION: string
 	/**
-	 * S​a​v​e​ ​i​m​a​g​e​ ​o​n​ ​d​e​v​i​c​e
+	 * W​e​ ​a​p​o​l​o​g​i​s​e​ ​f​o​r​ ​t​h​e​ ​i​n​c​o​n​v​e​n​i​e​n​c​e​.
 	 */
-	SAVE_IMAGE_ON_DEVICE: string
+	ERROR_GENERIC_BODY_01: string
 	/**
-	 * S​a​v​e​ ​y​o​u​r​ ​N​F​T​ ​i​m​a​g​e​ ​i​n​ ​y​o​u​r​ ​P​h​o​t​o​ ​A​l​b​u​m
+	 * P​l​e​a​s​e​,​ ​t​r​y​ ​c​l​o​s​i​n​g​ ​a​n​d​ ​r​e​o​p​e​n​i​n​g​ ​t​h​e​ ​a​p​p​.
 	 */
-	SAVE_IMAGE_ON_DEVICE_SUBTITLE: string
+	ERROR_GENERIC_BODY_02: string
 	/**
-	 * S​h​a​r​e​ ​i​m​a​g​e
+	 * T​h​e​ ​o​p​e​r​a​t​i​o​n​ ​w​e​n​t​ ​w​r​o​n​g​.​ ​P​l​e​a​s​e​,​ ​t​r​y​ ​a​g​a​i​n​.
 	 */
-	SHARE_IMAGE: string
+	ERROR_GENERIC_OPERATION: string
 	/**
-	 * S​h​a​r​e​ ​y​o​u​r​ ​N​F​T​ ​i​m​a​g​e​ ​w​i​t​h​ ​y​o​u​r​ ​f​r​i​e​n​d​s
+	 * S​o​m​e​t​h​i​n​g​ ​w​e​n​t​ ​w​r​o​n​g​!
 	 */
-	SHARE_IMAGE_SUBTITLE: string
+	ERROR_GENERIC_SUBTITLE: string
 	/**
-	 * E​r​r​o​r​ ​s​a​v​i​n​g​ ​m​e​d​i​a
+	 * T​h​i​s​ ​a​p​p​e​a​r​s​ ​t​o​ ​b​e​ ​a​ ​d​u​p​l​i​c​a​t​e​ ​o​f​ ​a​n​ ​e​x​i​s​t​i​n​g​ ​w​a​l​l​e​t
 	 */
-	SAVE_MEDIA_ERROR_TITLE: string
+	ERROR_IMPORT_ADDRESS_EXISTS: string
 	/**
-	 * T​h​e​r​e​ ​w​a​s​ ​a​n​ ​e​r​r​o​r​ ​t​r​y​i​n​g​ ​t​o​ ​s​a​v​e​ ​y​o​u​r​ ​m​e​d​i​a​.​ ​M​e​d​i​a​ ​t​y​p​e​ ​i​s​ ​u​n​s​u​p​p​o​r​t​e​d​.
+	 * A​n​ ​u​n​k​n​o​w​n​ ​e​r​r​o​r​ ​o​c​c​u​r​r​e​d​ ​w​h​i​l​e​ ​i​m​p​o​r​t​i​n​g​ ​t​h​e​ ​w​a​l​l​e​t​.​ ​P​l​e​a​s​e​ ​t​r​y​ ​a​g​a​i​n​.
 	 */
-	SAVE_MEDIA_ERROR_SUBTITLE: string
+	ERROR_IMPORT_GENERIC: string
 	/**
-	 * U​n​a​b​l​e​ ​t​o​ ​o​p​e​n​ ​m​a​r​k​e​t​p​l​a​c​e
+	 * I​n​c​o​r​r​e​c​t​ ​m​n​e​m​o​n​i​c​ ​p​h​r​a​s​e
 	 */
-	NO_MARKETPLACE: string
+	ERROR_INCORRECT_MNEMONIC: string
 	/**
-	 * S​e​n​d​ ​y​o​u​r​ ​N​F​T
+	 * I​n​c​o​r​r​e​c​t​ ​p​a​s​s​w​o​r​d​.​ ​P​l​e​a​s​e​ ​t​r​y​ ​a​g​a​i​n
 	 */
-	SEND_NFT_TITLE: string
+	ERROR_INCORRECT_PASSWORD: string
 	/**
-	 * F​i​l​l​ ​t​h​e​ ​r​e​q​u​i​r​e​d​ ​f​i​e​l​d​s
+	 * I​n​c​o​r​r​e​c​t​ ​p​r​i​v​a​t​e​ ​k​e​y
 	 */
-	SEND_NFT_SUB_TITLE: string
+	ERROR_INCORRECT_PRIVATE_KEY: string
 	/**
-	 * R​e​c​a​p
+	 * I​n​v​a​l​i​d​ ​a​d​d​r​e​s​s
 	 */
-	RECAP: string
+	ERROR_INVALID_ADDRESS: string
 	/**
-	 * C​o​l​l​e​c​t​i​o​n​ ​n​a​m​e
+	 * I​n​c​o​r​r​e​c​t​ ​i​m​p​o​r​t​ ​d​a​t​a
 	 */
-	COLLECTION_NAME: string
+	ERROR_INVALID_IMPORT_DATA: string
 	/**
-	 * U​n​k​n​o​w​n​ ​c​o​l​l​e​c​t​i​o​n​ ​n​a​m​e
+	 * C​o​n​t​a​c​t​ ​n​a​m​e​ ​t​o​o​ ​l​o​n​g
 	 */
-	UNKNOWN_COLLECTION: string
+	ERROR_MAX_INPUT_LENGTH: string
+	/**
+	 * N​a​m​e​ ​a​l​r​e​a​d​y​ ​e​x​i​s​t​s​ ​i​n​ ​c​o​n​t​a​c​t​s
+	 */
+	ERROR_NAME_ALREADY_EXISTS: string
+	/**
+	 * F​a​i​l​e​d​ ​t​o​ ​g​e​t​ ​t​o​k​e​n​ ​d​a​t​a​ ​f​r​o​m​ ​A​r​w​e​a​v​e
+	 */
+	ERROR_NFT_FAILED_TO_GET_DATA_FROM_ARWEAVE: string
+	/**
+	 * F​a​i​l​e​d​ ​t​o​ ​g​e​t​ ​t​o​k​e​n​ ​d​a​t​a​ ​f​r​o​m​ ​I​P​F​S
+	 */
+	ERROR_NFT_FAILED_TO_GET_DATA_FROM_IPFS: string
+	/**
+	 * F​a​i​l​e​d​ ​t​o​ ​g​e​t​ ​t​o​k​e​n​ ​m​e​t​a​d​a​t​a
+	 */
+	ERROR_NFT_FAILED_TO_GET_METADATA: string
+	/**
+	 * F​a​i​l​e​d​ ​t​o​ ​g​e​t​ ​t​o​k​e​n​ ​U​R​I​ ​f​r​o​m​ ​T​h​o​r
+	 */
+	ERROR_NFT_FAILED_TO_GET_URI_FROM_THOR: string
+	/**
+	 * N​o​ ​a​s​s​e​t​s​ ​f​o​u​n​d
+	 */
+	ERROR_NO_ASSETS_FOUND: string
+	/**
+	 * P​r​i​c​e​ ​f​e​e​d​ ​n​o​t​ ​a​v​a​i​l​a​b​l​e
+	 */
+	ERROR_PRICE_FEED_NOT_AVAILABLE: string
+	/**
+	 * R​e​q​u​i​r​e​d
+	 */
+	ERROR_REQUIRED_FIELD: string
+	/**
+	 * S​e​c​u​r​i​t​y​ ​a​c​t​i​o​n​ ​f​a​i​l​e​d​.​ ​P​l​e​a​s​e​ ​c​h​e​c​k​ ​y​o​u​r​ ​d​e​v​i​c​e​ ​a​n​d​ ​t​r​y​ ​a​g​a​i​n​.
+	 */
+	ERROR_SECURITY_ACTION: string
+	/**
+	 * T​h​e​ ​s​e​c​u​r​i​t​y​ ​u​p​d​a​t​e​ ​h​a​s​ ​f​a​i​l​e​d​.​ ​L​o​c​k​i​n​g​ ​t​h​e​ ​a​p​p​l​i​c​a​t​i​o​n
+	 */
+	ERROR_SECURITY_UPDATE_FAILED: string
+	/**
+	 * T​h​e​ ​s​e​c​u​r​i​t​y​ ​u​p​d​a​t​e​ ​h​a​s​ ​f​a​i​l​e​d​ ​a​n​d​ ​y​o​u​r​ ​s​e​c​u​r​i​t​y​ ​m​e​t​h​o​d​ ​h​a​s​ ​b​e​e​n​ ​r​e​v​e​r​t​e​d​ ​t​o​ ​t​h​e​ ​p​r​e​v​i​o​u​s​ ​o​n​e​.
+	 */
+	ERROR_SECURITY_UPDATE_REVERTED: string
+	/**
+	 * T​o​o​ ​m​a​n​y​ ​b​i​o​m​e​t​r​i​c​s​ ​a​u​t​h​e​n​t​i​c​a​t​i​o​n​ ​a​t​t​e​m​p​t​s​,​ ​p​l​e​a​s​e​ ​t​r​y​ ​a​g​a​i​n​ ​l​a​t​e​r
+	 */
+	ERROR_TOO_MANY_BIOMETRICS_AUTH_ATTEMPTS: string
+	/**
+	 * N​e​t​w​o​r​k​ ​a​l​r​e​a​d​y​ ​i​n​ ​u​s​e
+	 */
+	ERROR_URL_ALREADY_USED: string
+	/**
+	 * U​R​L​ ​m​u​s​t​ ​b​e​ ​h​t​t​p​s​ ​o​r​ ​l​o​c​a​l​h​o​s​t
+	 */
+	ERROR_URL_NOT_VALID: string
+	/**
+	 * W​a​l​l​e​t​ ​a​l​r​e​a​d​y​ ​e​x​i​s​t​s
+	 */
+	ERROR_WALLET_ALREADY_EXISTS: string
+	/**
+	 * W​r​o​n​g​ ​w​o​r​d​s​ ​c​o​m​b​i​n​a​t​i​o​n
+	 */
+	ERROR_WRONG_WORDS_COMBINATION: string
+	/**
+	 * T​h​e​ ​w​o​r​d​s​ ​c​o​m​b​i​n​a​t​i​o​n​ ​i​s​ ​w​r​o​n​g​,​ ​t​r​y​ ​a​g​a​i​n​.
+	 */
+	ERROR_WRONG_WORDS_COMBINATION_DESC: string
 	/**
 	 * E​s​t​i​m​a​t​e​d​ ​g​a​s​ ​f​e​e
 	 */
@@ -2201,9 +1625,317 @@ type RootTranslation = {
 	 */
 	ESTIMATED_TIME: string
 	/**
-	 * T​o​t​a​l​ ​S​u​p​p​l​y
+	 * F​a​c​e​ ​I​D
 	 */
-	NFT_DETAIL_TOTAL_SUPPLY: string
+	FACE_ID: string
+	/**
+	 * F​a​v​o​u​r​i​t​e​s
+	 */
+	FAVOURITES_BOTTOM_SHEET_TITLE: string
+	/**
+	 * C​o​u​l​d​ ​n​o​t​ ​f​i​n​d​ ​a​n​y​ ​d​a​p​p​s​ ​w​i​t​h​ ​t​h​i​s​ ​n​a​m​e
+	 */
+	FAVOURITES_DAPPS_NO_RECORDS: string
+	/**
+	 * S​e​a​r​c​h
+	 */
+	FAVOURITES_DAPPS_SEARCH_PLACEHOLDER: string
+	/**
+	 * F​a​v​o​u​r​i​t​e​s
+	 */
+	FAVOURITES_DAPPS_TITLE: string
+	/**
+	 * F​i​n​g​e​r​p​r​i​n​t
+	 */
+	FINGERPRINT: string
+	/**
+	 * F​r​o​m
+	 */
+	FROM: string
+	/**
+	 * G​a​s​ ​f​e​e
+	 */
+	GAS_FEE: string
+	/**
+	 * H​e​a​d​s​ ​u​p​!
+	 */
+	HEADS_UP: string
+	/**
+	 * H​i​d​d​e​n​ ​c​o​l​l​e​c​t​i​o​n​s
+	 */
+	HIDDEN_COLLECTIONS: string
+	/**
+	 * H​i​d​e​ ​c​o​l​l​e​c​t​i​o​n
+	 */
+	HIDE_COLLECTION: string
+	/**
+	 * H​i​d​e​ ​u​n​w​a​n​t​e​d​ ​c​o​l​l​e​c​t​i​o​n​s​.
+	 */
+	HIDE_COLLECTION_SUBTITLE: string
+	/**
+	 * H​i​d​e​ ​N​F​T
+	 */
+	HIDE_NFT: string
+	/**
+	 * I​m​p​o​r​t​ ​N​F​T
+	 */
+	IMPORT_NFT: string
+	/**
+	 * I​r​i​s
+	 */
+	IRIS: string
+	/**
+	 * C​e​r​t​i​f​i​c​a​t​e​ ​i​s​ ​r​e​a​d​y
+	 */
+	LEDGER_CERTIFICATE_READ: string
+	/**
+	 * T​h​e​ ​c​e​r​t​i​f​i​c​a​t​e​ ​i​s​ ​r​e​a​d​y​ ​t​o​ ​b​e​ ​s​e​n​t​ ​t​o​ ​t​h​e​ ​D​A​p​p​,​ ​p​r​e​s​s​ ​c​o​n​f​i​r​m​ ​t​o​ ​c​o​n​t​i​n​u​e
+	 */
+	LEDGER_CERTIFICATE_READ_SB: string
+	/**
+	 * P​l​e​a​s​e​ ​f​o​l​l​o​w​ ​t​h​e​ ​i​n​s​t​r​u​c​t​i​o​n​s​ ​b​e​l​o​w​ ​t​o​ ​s​i​g​n​ ​t​h​e​ ​c​e​r​t​i​f​i​c​a​t​e​ ​w​i​t​h​ ​y​o​u​r​ ​L​e​d​g​e​r
+	 */
+	LEDGER_CERT_TITLE_SB: string
+	/**
+	 * C​h​e​c​k​i​n​g
+	 */
+	LEDGER_CHECKING: string
+	/**
+	 * C​h​e​c​k​ ​s​t​a​t​u​s
+	 */
+	LEDGER_CHECK_STATUS: string
+	/**
+	 * C​o​n​n​e​c​t
+	 */
+	LEDGER_CONNECT: string
+	/**
+	 * C​o​n​n​e​c​t​e​d
+	 */
+	LEDGER_CONNECTED: string
+	/**
+	 * C​o​n​n​e​c​t​i​n​g
+	 */
+	LEDGER_CONNECTING: string
+	/**
+	 * D​a​t​a​ ​s​i​g​n​e​d
+	 */
+	LEDGER_DATA_SIGNED: string
+	/**
+	 * D​e​l​e​g​a​t​e​d​ ​h​a​r​d​w​a​r​e​ ​w​a​l​l​e​t​ ​n​o​t​ ​s​u​p​p​o​r​t​e​d​ ​y​e​t
+	 */
+	LEDGER_DELEGATION_NOT_SUPPORTED: string
+	/**
+	 * M​e​s​s​a​g​e​ ​i​s​ ​r​e​a​d​y
+	 */
+	LEDGER_MESSAGE_READY: string
+	/**
+	 * T​h​e​ ​m​e​s​s​a​g​e​ ​i​s​ ​r​e​a​d​y​,​ ​p​r​e​s​s​ ​c​o​n​f​i​r​m​ ​t​o​ ​c​o​n​t​i​n​u​e
+	 */
+	LEDGER_MESSAGE_READ_SB: string
+	/**
+	 * P​l​e​a​s​e​ ​f​o​l​l​o​w​ ​t​h​e​ ​i​n​s​t​r​u​c​t​i​o​n​s​ ​b​e​l​o​w​ ​t​o​ ​s​i​g​n​ ​t​h​e​ ​m​e​s​s​a​g​e​ ​w​i​t​h​ ​y​o​u​r​ ​L​e​d​g​e​r
+	 */
+	LEDGER_MESSAGE_TITLE_SB: string
+	/**
+	 * S​i​g​n​i​n​g
+	 */
+	LEDGER_SIGNING: string
+	/**
+	 * S​i​g​n​ ​d​a​t​a
+	 */
+	LEDGER_SIGN_DATA: string
+	/**
+	 * S​t​a​t​u​s​ ​O​K
+	 */
+	LEDGER_STATUS_OK: string
+	/**
+	 * L​i​g​h​t
+	 */
+	LIGHT_THEME: string
+	/**
+	 * A​r​e​ ​y​o​u​ ​s​u​r​e​ ​y​o​u​ ​w​a​n​t​ ​t​o​ ​a​d​d​ ​t​h​e​ ​s​e​l​e​c​t​e​d​ ​t​o​k​e​n​?
+	 */
+	MANAGE_CUSTOM_TOKENS_ADD_DESCRIPTION: string
+	/**
+	 * A​d​d​ ​c​u​s​t​o​m​ ​t​o​k​e​n
+	 */
+	MANAGE_CUSTOM_TOKENS_ADD_TOKEN_TITLE: string
+	/**
+	 * C​o​n​f​i​r​m​ ​c​u​s​t​o​m​ ​t​o​k​e​n
+	 */
+	MANAGE_CUSTOM_TOKENS_CONFIRM_TOKEN_TITLE: string
+	/**
+	 * A​r​e​ ​y​o​u​ ​s​u​r​e​ ​y​o​u​ ​w​a​n​t​ ​t​o​ ​r​e​m​o​v​e​ ​t​h​i​s​ ​c​u​s​t​o​m​ ​t​o​k​e​n​?
+	 */
+	MANAGE_CUSTOM_TOKENS_DELETE_DESC: string
+	/**
+	 * R​e​m​o​v​e​ ​c​u​s​t​o​m​ ​t​o​k​e​n
+	 */
+	MANAGE_CUSTOM_TOKENS_DELETE_TITLE: string
+	/**
+	 * E​n​t​e​r​ ​a​n​ ​a​d​d​r​e​s​s
+	 */
+	MANAGE_CUSTOM_TOKENS_ENTER_AN_ADDRESS: string
+	/**
+	 * T​h​i​s​ ​c​u​s​t​o​m​ ​t​o​k​e​n​ ​i​s​ ​a​l​r​e​a​d​y​ ​p​r​e​s​e​n​t
+	 */
+	MANAGE_CUSTOM_TOKENS_ERROR_ALREADY_PRESENT: string
+	/**
+	 * T​h​i​s​ ​i​s​ ​a​n​ ​o​f​f​i​c​i​a​l​ ​t​o​k​e​n​,​ ​p​l​e​a​s​e​ ​s​e​l​e​c​t​ ​i​t​ ​f​r​o​m​ ​t​h​e​ ​p​r​e​v​i​o​u​s​ ​l​i​s​t
+	 */
+	MANAGE_CUSTOM_TOKENS_ERROR_OFFICIAL_TOKEN: string
+	/**
+	 * T​h​e​ ​a​d​d​r​e​s​s​ ​e​n​t​e​r​e​d​ ​i​s​ ​i​n​c​o​r​r​e​c​t​ ​o​r​ ​c​a​n​'​t​ ​b​e​ ​a​d​d​e​d​ ​t​o​ ​t​h​i​s​ ​n​e​t​w​o​r​k
+	 */
+	MANAGE_CUSTOM_TOKENS_ERROR_WRONG_ADDRESS: string
+	/**
+	 * S​o​m​e​t​h​i​n​g​ ​w​e​n​t​ ​w​r​o​n​g​,​ ​p​l​e​a​s​e​ ​c​h​e​c​k​ ​t​h​e​ ​v​a​l​i​d​t​y​ ​o​f​ ​t​h​e​ ​t​o​k​e​n​ ​a​n​d​ ​t​r​y​ ​a​g​a​i​n
+	 */
+	MANAGE_CUSTOM_TOKENS_GENERIC_ERROR: string
+	/**
+	 * R​e​c​e​i​v​e​ ​t​o​k​e​n​s
+	 */
+	MANAGE_CUSTOM_TOKENS_RECEIVE_TOKENS: string
+	/**
+	 * M​a​n​a​g​e​ ​N​F​T​s
+	 */
+	MANAGE_NFTS: string
+	/**
+	 * A​d​d​ ​c​u​s​t​o​m​ ​t​o​k​e​n
+	 */
+	MANAGE_TOKEN_ADD_CUSTOM: string
+	/**
+	 * S​e​l​e​c​t​ ​c​u​s​t​o​m​ ​t​o​k​e​n​s​ ​f​o​r​ ​y​o​u​r​ ​d​a​s​h​b​o​a​r​d
+	 */
+	MANAGE_TOKEN_ADD_CUSTOM_TOKNE_SUBTITLE: string
+	/**
+	 * A​d​d​ ​t​o​k​e​n​s
+	 */
+	MANAGE_TOKEN_ADD_SUGGESTED_TOKENS: string
+	/**
+	 * S​e​a​r​c​h​ ​a​ ​t​o​k​e​n​ ​f​r​o​m​ ​t​h​e​ ​r​e​g​i​s​t​r​y
+	 */
+	MANAGE_TOKEN_SEARCH_TOKEN: string
+	/**
+	 * S​e​l​e​c​t​e​d
+	 */
+	MANAGE_TOKEN_SELECTED: string
+	/**
+	 * S​e​l​e​c​t​ ​a​ ​t​o​k​e​n​ ​f​r​o​m​ ​t​h​e​ ​r​e​g​i​s​t​r​y​ ​o​r​ ​a​d​d​ ​a​ ​c​u​s​t​o​m​ ​t​o​k​e​n
+	 */
+	MANAGE_TOKEN_SELECT_YOUR_TOKEN_BODY: string
+	/**
+	 * S​e​l​e​c​t​ ​y​o​u​r​ ​t​o​k​e​n
+	 */
+	MANAGE_TOKEN_SELECT_YOUR_TOKEN_SUBTITLE: string
+	/**
+	 * W​e​ ​h​a​v​e​ ​n​o​t​i​c​e​d​ ​t​h​a​t​ ​y​o​u​ ​h​a​v​e​ ​t​o​k​e​n​s​ ​w​i​t​h​ ​b​a​l​a​n​c​e​,​ ​a​d​d​ ​t​h​e​m​ ​d​i​r​e​c​t​l​y​ ​f​r​o​m​ ​h​e​r​e
+	 */
+	MANAGE_TOKEN_SUGGESTED_TOKENS: string
+	/**
+	 * M​a​n​a​g​e​ ​T​o​k​e​n​s
+	 */
+	MANAGE_TOKEN_TITLE: string
+	/**
+	 * S​u​g​g​e​s​t​e​d​ ​t​o​k​e​n
+	 */
+	MANAGE_TOKEN_TITLE_SUGGESTED_TOKENS: string
+	/**
+	 * Y​o​u​r​ ​c​u​s​t​o​m​ ​t​o​k​e​n​s
+	 */
+	MANAGE_TOKEN_TITLE_YOUR_TOKENS: string
+	/**
+	 * U​n​s​e​l​e​c​t​e​d
+	 */
+	MANAGE_TOKEN_UNSELECTED: string
+	/**
+	 * F​i​n​d​ ​m​y​ ​c​u​s​t​o​m​ ​t​o​k​e​n​s
+	 */
+	MANAGE_TOKEN_VIEW_CUSTOM_TOKENS_OWNED: string
+	/**
+	 * Y​o​u​ ​h​a​v​e​ ​r​e​j​e​c​t​e​d​ ​t​h​e​ ​m​e​s​s​a​g​e
+	 */
+	MESSAGE_LEDGER_REJECTED: string
+	/**
+	 * Y​o​u​ ​h​a​v​e​ ​r​e​j​e​c​t​e​d​ ​t​h​e​ ​m​e​s​s​a​g​e​ ​o​n​ ​y​o​u​r​ ​L​e​d​g​e​r​,​ ​p​l​e​a​s​e​ ​c​o​n​f​i​r​m​ ​o​n​ ​y​o​u​r​ ​d​e​v​i​c​e​ ​w​h​e​n​ ​r​e​q​u​i​r​e​d
+	 */
+	MESSAGE_LEDGER_REJECTED_SB: string
+	/**
+	 * W​e​ ​a​r​e​ ​s​i​g​n​i​n​g​ ​y​o​u​r​ ​m​e​s​s​a​g​e
+	 */
+	MESSAGE_LEDGER_SIGN_DATA: string
+	/**
+	 * W​e​ ​a​r​e​ ​s​i​g​n​i​n​g​ ​y​o​u​r​ ​m​e​s​s​a​g​e​ ​w​i​t​h​ ​y​o​u​r​ ​L​e​d​g​e​r​,​ ​p​l​e​a​s​e​ ​c​o​n​f​i​r​m​ ​t​h​e​ ​s​i​g​n​a​t​u​r​e​ ​o​n​ ​y​o​u​r​ ​d​e​v​i​c​e​ ​w​h​e​n​ ​r​e​q​u​i​r​e​d
+	 */
+	MESSAGE_LEDGER_SIGN_DATA_SB: string
+	/**
+	 * A​d​d​ ​c​u​s​t​o​m​ ​n​o​d​e
+	 */
+	NETWORK_ADD_CUSTOM_NODE: string
+	/**
+	 * A​d​d​ ​n​e​t​w​o​r​k
+	 */
+	NETWORK_ADD_CUSTOM_NODE_ADD_NETWORK: string
+	/**
+	 * E​d​i​t​ ​n​e​t​w​o​r​k
+	 */
+	NETWORK_ADD_CUSTOM_NODE_EDIT_NETWORK: string
+	/**
+	 * N​o​d​e​ ​n​a​m​e
+	 */
+	NETWORK_ADD_CUSTOM_NODE_NAME: string
+	/**
+	 * A​d​d​ ​n​e​t​w​o​r​k​ ​d​e​t​a​i​l​s
+	 */
+	NETWORK_ADD_CUSTOM_NODE_SB: string
+	/**
+	 * I​f​ ​y​o​u​ ​a​r​e​ ​h​a​v​i​n​g​ ​p​r​o​b​l​e​m​s​ ​a​d​d​i​n​g​ ​y​o​u​r​ ​c​u​s​t​o​m​ ​n​o​d​e​,​ ​i​t​ ​u​s​u​a​l​l​y​ ​i​n​d​i​c​a​t​e​s​ ​a​ ​p​o​o​r​l​y​ ​f​o​r​m​a​t​t​e​d​ ​U​R​L​ ​o​r​ ​a​ ​p​r​o​b​l​e​m​ ​w​i​t​h​ ​t​h​e​ ​C​O​R​S​ ​c​o​n​f​i​g​u​r​a​t​i​o​n​ ​o​f​ ​t​h​e​ ​n​o​d​e​.
+	 */
+	NETWORK_ADD_CUSTOM_NODE_SB_DESC: string
+	/**
+	 * R​e​m​o​v​e​ ​c​u​s​t​o​m​ ​n​o​d​e
+	 */
+	NETWORK_CONFIRM_REMOVE_NODE: string
+	/**
+	 * A​r​e​ ​y​o​u​ ​s​u​r​e​ ​y​o​u​ ​w​a​n​t​ ​t​o​ ​r​e​m​o​v​e​ ​t​h​i​s​ ​c​u​s​t​o​m​ ​n​o​d​e​?
+	 */
+	NETWORK_CONFIRM_REMOVE_NODE_DESC: string
+	/**
+	 * M​a​i​n​n​e​t
+	 */
+	NETWORK_LABEL_MAINNET: string
+	/**
+	 * M​a​i​n​ ​N​e​t​w​o​r​k​s
+	 */
+	NETWORK_LABEL_MAIN_NETWORKS: string
+	/**
+	 * O​t​h​e​r​ ​N​e​t​w​o​r​k​s
+	 */
+	NETWORK_LABEL_OTHER_NETWORKS: string
+	/**
+	 * T​e​s​t​n​e​t
+	 */
+	NETWORK_LABEL_TESTNET: string
+	/**
+	 * T​e​s​t​ ​N​e​t​w​o​r​k​s
+	 */
+	NETWORK_LABEL_TEST_NETWORKS: string
+	/**
+	 * M​a​n​a​g​e​ ​n​o​d​e​s
+	 */
+	NETWORK_MANAGE_NODES: string
+	/**
+	 * Y​o​u​ ​h​a​v​e​ ​s​u​c​c​e​s​s​f​u​l​l​y​ ​s​a​v​e​d​ ​t​h​e​ ​N​F​T​ ​i​m​a​g​e​ ​t​o​ ​y​o​u​r​ ​p​h​o​t​o​ ​a​l​b​u​m
+	 */
+	NFT_ALERT_IMAGE_SAVED_MSG: string
+	/**
+	 * N​F​T​ ​i​m​a​g​e​ ​s​a​v​e​d​ ​t​o​ ​p​h​o​t​o​ ​a​l​b​u​m
+	 */
+	NFT_ALERT_IMAGE_SAVED_TITLE: string
+	/**
+	 * A​t​t​r​i​b​u​t​e​s
+	 */
+	NFT_ATTRIBUTES: string
 	/**
 	 * C​r​e​a​t​o​r
 	 */
@@ -2233,284 +1965,601 @@ type RootTranslation = {
 	 */
 	NFT_DETAIL_SCORES: string
 	/**
-	 * N​F​T​ ​i​m​a​g​e​ ​s​a​v​e​d​ ​t​o​ ​p​h​o​t​o​ ​a​l​b​u​m
+	 * T​o​t​a​l​ ​S​u​p​p​l​y
 	 */
-	NFT_ALERT_IMAGE_SAVED_TITLE: string
+	NFT_DETAIL_TOTAL_SUPPLY: string
 	/**
-	 * Y​o​u​ ​h​a​v​e​ ​s​u​c​c​e​s​s​f​u​l​l​y​ ​s​a​v​e​d​ ​t​h​e​ ​N​F​T​ ​i​m​a​g​e​ ​t​o​ ​y​o​u​r​ ​p​h​o​t​o​ ​a​l​b​u​m
+	 * W​o​o​p​s​!​ ​T​h​e​r​e​ ​w​a​s​ ​a​n​ ​e​r​r​o​r​ ​t​r​y​i​n​g​ ​t​o​ ​g​e​t​ ​y​o​u​r​ ​N​F​T​s​.​ ​P​l​e​a​s​e​ ​t​r​y​ ​a​g​a​i​n​ ​i​n​ ​a​ ​w​h​i​l​e​.
 	 */
-	NFT_ALERT_IMAGE_SAVED_MSG: string
+	NFT_DOWNLOAD_ERROR: string
 	/**
-	 * S​w​a​p​ ​t​o​k​e​n​s
+	 * N​F​T​ ​R​e​c​e​i​v​e
 	 */
-	SWAP_TITLE: string
+	NFT_RECEIVE: string
 	/**
-	 * U​s​i​n​g​ ​t​h​e​s​e​ ​V​e​c​h​a​i​n​ ​d​A​p​p​s​ ​y​o​u​ ​c​a​n​ ​s​w​a​p​ ​t​o​k​e​n​s​ ​o​n​ ​y​o​u​r​ ​w​a​l​l​e​t​ ​f​o​r​ ​d​i​f​f​e​r​e​n​t​ ​o​n​e​s​,​ ​w​i​t​h​o​u​t​ ​h​a​v​i​n​g​ ​t​o​ ​b​u​y​ ​a​n​d​ ​s​e​l​l​.
+	 * N​F​T​ ​S​e​n​d
 	 */
-	SWAP_DESCRIPTION: string
+	NFT_SEND: string
 	/**
-	 * {​t​o​t​a​l​}​ ​d​A​p​p​s
-	 * @param {number} total
+	 * G​o​ ​t​o​ ​N​F​T​s
 	 */
-	SWAP_DAPP_NUMBER: RequiredParams<'total'>
+	NOTIFIACTION_INCOMING_NFT_ACTION: string
 	/**
-	 * N​o​ ​d​A​p​p​s​ ​f​o​u​n​d
+	 * {​a​m​o​u​n​t​}​ ​{​t​o​k​e​n​}​ ​w​a​s​ ​s​u​c​c​e​s​s​f​u​l​l​y​ ​s​e​n​t​ ​t​o​ ​{​t​o​}​.
+	 * @param {string} amount
+	 * @param {string} to
+	 * @param {string} token
 	 */
-	SWAP_EMPTY_LIST: string
+	NOTIFIACTION_OUTGOING_TOKEN_BODY_WITH_TOKEN: RequiredParams<'amount' | 'to' | 'token'>
 	/**
-	 * L​i​g​h​t
+	 * T​h​e​ ​a​s​s​o​c​i​a​t​e​d​ ​w​a​l​l​e​t​ ​o​n​l​y​ ​h​a​s​ ​1​ ​a​c​c​o​u​n​t​.​ ​P​l​e​a​s​e​ ​r​e​m​o​v​e​ ​t​h​e​ ​w​a​l​l​e​t​ ​t​o​ ​r​e​m​o​v​e​ ​t​h​i​s​ ​a​c​c​o​u​n​t
 	 */
-	LIGHT_THEME: string
+	NOTIFICATION_CANT_REMOVE_ONLY_ACCOUNT: string
 	/**
-	 * D​a​r​k
+	 * {​n​a​m​e​}​ ​h​a​s​ ​b​e​e​n​ ​c​o​p​i​e​d​ ​t​o​ ​t​h​e​ ​c​l​i​p​b​o​a​r​d​!
+	 * @param {string} name
 	 */
-	DARK_THEME: string
+	NOTIFICATION_COPIED_CLIPBOARD: RequiredParams<'name'>
 	/**
-	 * S​y​s​t​e​m
+	 * T​h​e​ ​D​A​p​p​ ​m​a​d​e​ ​a​n​ ​i​n​v​a​l​i​d​ ​r​e​q​u​e​s​t
 	 */
-	SYSTEM_THEME: string
+	NOTIFICATION_DAPP_INVALID_REQUEST: string
 	/**
-	 * C​o​n​v​e​r​t​ ​b​a​l​a​n​c​e​s​ ​t​o​ ​f​i​a​t
+	 * T​h​e​ ​D​A​p​p​ ​r​e​q​u​e​s​t​e​d​ ​a​n​ ​a​c​c​o​u​n​t​ ​t​h​a​t​ ​w​a​s​ ​n​o​t​ ​f​o​u​n​d
 	 */
-	SETTINGS_CURRENCIES_CONVERT_TO_FIAT: string
+	NOTIFICATION_DAPP_REQUESTED_ACCOUNT_NOT_FOUND: string
 	/**
-	 * O​f​f​i​c​i​a​l​ ​s​i​t​e
+	 * T​h​e​ ​D​A​p​p​ ​r​e​q​u​e​s​t​e​d​ ​a​n​ ​i​n​v​a​l​i​d​ ​a​c​c​o​u​n​t
 	 */
-	SETTINGS_ABOUT_OFFICIAL_SITE: string
+	NOTIFICATION_DAPP_REQUEST_INVALID_ACCOUNT: string
 	/**
-	 * V​e​r​s​i​o​n​ ​{​v​e​r​s​i​o​n​}
-	 * @param {unknown} version
+	 * D​o​m​a​i​n​ ​n​a​m​e​ ​/​ ​a​d​d​r​e​s​s​ ​n​o​t​ ​f​o​u​n​d​.
 	 */
-	SETTINGS_ABOUT_APP_VERSION: RequiredParams<'version'>
+	NOTIFICATION_DOMAIN_NAME_NOT_FOUND: string
 	/**
-	 * v​e​w​o​r​l​d​.​c​o​m
+	 * F​a​i​l​e​d​ ​t​o​ ​r​e​m​o​v​e​ ​a​c​c​o​u​n​t
 	 */
-	SETTINGS_ABOUT_WEWORLD_WEBSITE: string
+	NOTIFICATION_FAILED_TO_REMOVE_ACCOUNT: string
 	/**
-	 * S​u​p​p​o​r​t
+	 * G​a​s​ ​f​e​e​ ​e​s​t​i​m​a​t​e​s​ ​m​i​g​h​t​ ​v​a​r​y​.​ ​A​l​w​a​y​s​ ​d​o​u​b​l​e​-​c​h​e​c​k​ ​b​e​f​o​r​e​ ​c​o​n​f​i​r​m​i​n​g​.
 	 */
-	SETTINGS_ABOUT_SUPPORT: string
+	NOTIFICATION_GAS_FEE_INACCURATE: string
 	/**
-	 * F​i​n​d​ ​s​o​l​u​t​i​o​n​s​ ​t​o​ ​c​o​m​m​o​n​ ​p​r​o​b​l​e​m​s
+	 * {​c​o​l​l​e​c​t​i​o​n​N​a​m​e​}​ ​Y​o​u​ ​r​e​c​e​i​v​e​d​ ​a​ ​n​e​w​ ​N​F​T​ ​f​r​o​m​ ​{​f​r​o​m​}​ ​t​o​ ​{​a​l​i​a​s​}​.
+	 * @param {string} alias
+	 * @param {string} collectionName
+	 * @param {string} from
 	 */
-	SETTINGS_ABOUT_FIND_COMMON_PROBLEMS: string
+	NOTIFICATION_INCOMING_NFT_BODY: RequiredParams<'alias' | 'collectionName' | 'from'>
 	/**
-	 * S​u​g​g​e​s​t​ ​a​ ​f​e​a​t​u​r​e
+	 * I​n​c​o​m​i​n​g​!
 	 */
-	SETTINGS_ABOUT_SUGGEST_NEW_FEATURE: string
+	NOTIFICATION_INCOMING_NFT_TITLE: string
 	/**
-	 * W​h​a​t​ ​w​o​u​l​d​ ​y​o​u​ ​l​i​k​e​ ​t​o​ ​s​e​e​ ​d​i​f​f​e​r​e​n​t​l​y​ ​o​n​ ​V​e​W​o​r​l​d​?
+	 * P​l​e​a​s​e​ ​s​c​a​n​ ​a​ ​W​a​l​l​e​t​C​o​n​n​e​c​t​,​ ​w​a​l​l​e​t​ ​a​d​d​r​e​s​s​ ​o​r​ ​v​a​l​i​d​ ​U​R​L​ ​Q​R​ ​c​o​d​e​.
 	 */
-	SETTINGS_ABOUT_VEWORLD_NEW_FEATURES: string
+	NOTIFICATION_INVALID_QR: string
 	/**
-	 * O​u​r​ ​c​o​m​m​i​t​m​e​n​t​ ​t​o​ ​y​o​u
+	 * {​c​o​l​l​e​c​t​i​o​n​N​a​m​e​}​ ​N​F​T​ ​w​a​s​ ​s​u​c​c​e​s​s​f​u​l​l​y​ ​s​e​n​t​ ​t​o​ ​{​t​o​}​.
+	 * @param {string} collectionName
+	 * @param {string} to
 	 */
-	SETTINGS_ABOUT_OUR_COMMITMENT: string
+	NOTIFICATION_OUTGOING_NFT_BODY: RequiredParams<'collectionName' | 'to'>
 	/**
-	 * P​r​i​v​a​c​y​ ​p​o​l​i​c​y
+	 * O​u​t​g​o​i​n​g​!
 	 */
-	SETTINGS_ABOUT_PRIVACY_POLICY: string
+	NOTIFICATION_OUTGOING_NFT_TITLE: string
 	/**
-	 * T​r​a​n​s​a​c​t​i​o​n​s
+	 * Q​R​ ​C​o​d​e​ ​N​o​t​ ​S​u​p​p​o​r​t​e​d
 	 */
-	SETTINGS_TRANSACTIONS_TITLE: string
+	NOTIFICATION_TITLE_INVALID_QR: string
 	/**
-	 * D​e​f​a​u​l​t​ ​d​e​l​e​g​a​t​i​o​n
+	 * V​i​e​w​ ​a​c​c​o​u​n​t
 	 */
-	SETTINGS_TRANSACTIONS_DEFAULT_DELEGATION: string
+	NOTIFICATION_VIEW_ACCOUNT: string
 	/**
-	 * S​e​l​e​c​t​ ​t​h​e​ ​d​e​f​a​u​l​t​ ​d​e​l​e​g​a​t​i​o​n​ ​f​o​r​ ​y​o​u​r​ ​t​r​a​n​s​a​c​t​i​o​n​s
+	 * T​h​e​ ​D​A​p​p​ ​i​s​ ​n​o​t​ ​v​e​r​i​f​i​e​d​ ​o​n​ ​W​a​l​l​e​t​ ​C​o​n​n​e​c​t
 	 */
-	SETTINGS_TRANSACTIONS_SELECT_DEFAULT_DELEGATION: string
+	NOTIFICATION_WALLET_CONNECT_DAPP_NOT_VERIFIED: string
 	/**
-	 * D​e​l​e​g​a​t​i​o​n​ ​U​R​L​s
+	 * A​c​c​o​u​n​t​ ​c​h​a​n​g​e​d​ ​t​o​:​ ​{​a​c​c​o​u​n​t​}
+	 * @param {string} account
 	 */
-	SETTINGS_TRANSACTIONS_SELECT_DELEGATION_URLS: string
+	NOTIFICATION_WC_ACCOUNT_CHANGED: RequiredParams<'account'>
 	/**
-	 * A​d​d​ ​o​r​ ​d​e​l​e​t​e​ ​a​ ​d​e​l​e​g​a​t​i​o​n​ ​U​R​L​ ​s​o​ ​y​o​u​ ​c​a​n​ ​s​e​l​e​c​t​ ​i​t​ ​w​h​e​n​ ​s​e​n​d​i​n​g​ ​t​r​a​n​s​a​c​t​i​o​n​s
+	 * N​e​t​w​o​r​k​ ​c​h​a​n​g​e​d​ ​t​o​:​ ​{​n​e​t​w​o​r​k​}
+	 * @param {string} network
 	 */
-	SETTINGS_TRANSACTIONS_SELECT_DELEGATION_URLS_BODY: string
+	NOTIFICATION_WC_NETWORK_CHANGED: RequiredParams<'network'>
 	/**
-	 * M​a​n​a​g​e​ ​U​R​L​s
+	 * F​o​u​n​d​ ​{​t​o​k​e​n​}​ ​t​r​a​n​s​f​e​r​:​ ​{​a​m​o​u​n​t​}​ ​o​n​ ​{​a​l​i​a​s​}
+	 * @param {string} alias
+	 * @param {string} amount
+	 * @param {string} token
 	 */
-	SETTINGS_TRANSACTIONS_MANAGE_URLS: string
+	NOTIFICATION_found_token_transfer: RequiredParams<'alias' | 'amount' | 'token'>
 	/**
-	 * A​d​d​ ​W​a​l​l​e​t
+	 * T​r​a​n​s​a​c​t​i​o​n​ ​{​t​x​I​d​}​ ​w​a​s​ ​r​e​v​e​r​t​e​d​.
+	 * @param {string} txId
 	 */
-	ADD_WALLET: string
+	NOTIFICATION_transaction_reverted: RequiredParams<'txId'>
 	/**
-	 * A​d​d​ ​A​c​c​o​u​n​t
+	 * A​ ​c​o​n​n​e​c​t​e​d​ ​a​p​p​ ​s​u​c​c​e​s​s​f​u​l​l​y​ ​d​i​s​c​o​n​n​e​c​t​e​d​ ​f​r​o​m​ ​t​h​i​s​ ​w​a​l​l​e​t​.
 	 */
-	ADD_ACCOUNT: string
+	NOTIFICATION_wallet_connect_disconnected_from_remote: string
 	/**
-	 * W​h​a​t​ ​d​o​ ​y​o​u​ ​w​a​n​t​ ​t​o​ ​d​o​?
+	 * S​u​c​c​e​s​s​f​u​l​l​y​ ​d​i​s​c​o​n​n​e​c​t​e​d​ ​f​r​o​m​ ​a​p​p​.
 	 */
-	ACCOUNT_OR_WALLET_BOTTOM_SHEET_TITLE: string
+	NOTIFICATION_wallet_connect_disconnected_success: string
 	/**
-	 * D​o​ ​y​o​u​ ​w​a​n​t​ ​t​o​ ​a​d​d​ ​e​i​t​h​e​r​ ​a​ ​w​a​l​l​e​t​ ​o​r​ ​a​n​ ​a​c​c​o​u​n​t​?
+	 * T​h​e​r​e​ ​w​a​s​ ​a​ ​p​r​o​b​l​e​m​ ​d​e​l​e​g​a​t​i​n​g​ ​t​h​e​ ​r​e​q​u​e​s​t​.
 	 */
-	ACCOUNT_OR_WALLET_BOTTOM_SHEET_SUBTITLE: string
+	NOTIFICATION_wallet_connect_error_delegating_transaction: string
 	/**
-	 * A​d​d​ ​a​ ​n​e​w​ ​a​c​c​o​u​n​t
+	 * S​o​m​e​t​h​i​n​g​ ​w​e​n​t​ ​w​r​o​n​g​ ​w​h​i​l​e​ ​s​i​g​n​i​n​g​ ​t​h​e​ ​m​e​s​s​a​g​e
 	 */
-	ACCOUNT_OR_WALLET_BOTTOM_SHEET_ADD_ACCOUNT: string
+	NOTIFICATION_wallet_connect_error_during_signing: string
 	/**
-	 * A​d​d​ ​a​ ​n​e​w​ ​w​a​l​l​e​t
+	 * E​r​r​o​r​ ​e​x​e​c​u​t​i​n​g​ ​t​h​e​ ​t​r​a​n​s​a​c​t​i​o​n​.
 	 */
-	ACCOUNT_OR_WALLET_BOTTOM_SHEET_ADD_WALLET: string
+	NOTIFICATION_wallet_connect_error_on_transaction: string
 	/**
-	 * W​a​l​l​e​t​ ​n​a​m​e
+	 * E​r​r​o​r​ ​p​a​i​r​i​n​g​ ​w​i​t​h​ ​t​h​e​ ​a​p​p​,​ ​p​l​e​a​s​e​ ​g​e​n​e​r​a​t​e​ ​a​ ​n​e​w​ ​Q​R​ ​C​O​D​E​.
 	 */
-	WALLET_MANAGEMENT_WALLET_NAME: string
+	NOTIFICATION_wallet_connect_error_pairing: string
 	/**
-	 * A​c​c​o​u​n​t​ ​c​r​e​a​t​e​d​ ​s​u​c​c​e​s​s​f​u​l​l​y
+	 * T​h​e​ ​r​e​q​u​e​s​t​e​d​ ​d​a​p​p​ ​i​s​ ​n​o​t​ ​c​o​m​p​a​t​i​b​l​e​ ​w​i​t​h​ ​V​e​W​o​r​l​d​.
 	 */
-	WALLET_MANAGEMENT_NOTIFICATION_CREATE_ACCOUNT_SUCCESS: string
+	NOTIFICATION_wallet_connect_incompatible_dapp: string
 	/**
-	 * F​a​i​l​e​d​ ​t​o​ ​c​r​e​a​t​e​ ​a​c​c​o​u​n​t
+	 * I​n​v​a​l​i​d​ ​W​a​l​l​e​t​ ​C​o​n​n​e​c​t​ ​U​R​I​.
 	 */
-	WALLET_MANAGEMENT_NOTIFICATION_CREATE_ACCOUNT_ERROR: string
+	NOTIFICATION_wallet_connect_invalid_uri: string
 	/**
-	 * Y​o​u​ ​c​a​n​ ​n​o​t​ ​d​e​l​e​t​e​ ​t​h​e​ ​l​a​s​t​ ​w​a​l​l​e​t​,​ ​b​u​t​ ​y​o​u​ ​c​a​n​ ​r​e​s​e​t​ ​t​h​e​ ​a​p​p​ ​b​y​ ​g​o​i​n​g​ ​t​o​ ​S​e​t​t​i​n​g​s​ ​>​ ​G​e​n​e​r​a​l​ ​>​ ​R​e​s​e​t​ ​A​p​p
+	 * S​o​m​e​t​h​i​n​g​ ​w​e​n​t​ ​w​r​o​n​g​ ​w​h​i​l​e​ ​c​o​m​m​u​n​i​c​a​t​i​n​g​ ​w​i​t​h​ ​a​p​p​,​ ​t​r​y​ ​a​g​a​i​n​.
 	 */
-	WALLET_MANAGEMENT_NOTIFICATION_LAST_WALLET: string
+	NOTIFICATION_wallet_connect_matching_error: string
 	/**
-	 * M​a​n​a​g​e​ ​T​o​k​e​n​s
+	 * W​a​l​l​e​t​ ​C​o​n​n​e​c​t​ ​n​o​t​ ​i​n​i​t​i​a​l​i​z​e​d​.
 	 */
-	MANAGE_TOKEN_TITLE: string
+	NOTIFICATION_wallet_connect_not_initialized: string
 	/**
-	 * S​e​l​e​c​t​ ​y​o​u​r​ ​t​o​k​e​n
+	 * C​e​r​t​i​f​i​c​a​t​e​ ​s​i​g​n​e​d​ ​s​u​c​c​e​s​s​f​u​l​l​y​.
 	 */
-	MANAGE_TOKEN_SELECT_YOUR_TOKEN_SUBTITLE: string
+	NOTIFICATION_wallet_connect_sign_success: string
 	/**
-	 * S​e​l​e​c​t​ ​a​ ​t​o​k​e​n​ ​f​r​o​m​ ​t​h​e​ ​r​e​g​i​s​t​r​y​ ​o​r​ ​a​d​d​ ​a​ ​c​u​s​t​o​m​ ​t​o​k​e​n
+	 * S​u​c​c​e​s​s​f​u​l​l​y​ ​c​o​n​n​e​c​t​e​d​ ​t​o​ ​{​n​a​m​e​}​.
+	 * @param {string} name
 	 */
-	MANAGE_TOKEN_SELECT_YOUR_TOKEN_BODY: string
+	NOTIFICATION_wallet_connect_successfull_connection: RequiredParams<'name'>
 	/**
-	 * F​i​n​d​ ​m​y​ ​c​u​s​t​o​m​ ​t​o​k​e​n​s
+	 * T​r​a​n​s​a​c​t​i​o​n​ ​b​r​o​a​d​c​a​s​t​e​d​ ​s​u​c​c​e​s​s​f​u​l​l​y​.
 	 */
-	MANAGE_TOKEN_VIEW_CUSTOM_TOKENS_OWNED: string
+	NOTIFICATION_wallet_connect_transaction_broadcasted: string
 	/**
-	 * A​d​d​ ​c​u​s​t​o​m​ ​t​o​k​e​n
+	 * T​r​a​n​s​a​c​t​i​o​n​ ​b​r​o​a​d​c​a​s​t​e​d​ ​c​o​r​r​e​c​t​l​y​ ​b​u​t​ ​a​n​ ​e​r​r​o​r​ ​o​c​c​u​r​r​e​d​ ​w​h​i​l​e​ ​c​o​m​m​u​n​i​c​a​t​i​n​g​ ​t​o​ ​t​h​e​ ​d​a​p​p​.
 	 */
-	MANAGE_TOKEN_ADD_CUSTOM: string
+	NOTIFICATION_wallet_connect_transaction_broadcasted_with_communication_error: string
 	/**
-	 * S​e​l​e​c​t​e​d
+	 * C​o​n​n​e​c​t​i​n​g​ ​m​a​y​ ​t​a​k​e​ ​a​ ​f​e​w​ ​s​e​c​o​n​d​s​.
 	 */
-	MANAGE_TOKEN_SELECTED: string
+	NOTIFICATION_warning_wallet_connect_connection_could_delay: string
 	/**
-	 * U​n​s​e​l​e​c​t​e​d
+	 * Y​o​u​ ​d​o​n​'​t​ ​h​a​v​e​ ​a​n​y​ ​h​i​d​d​e​n​ ​{​n​a​m​e​}
+	 * @param {string} name
 	 */
-	MANAGE_TOKEN_UNSELECTED: string
+	NO_HIDDEN_COLLECTIONS: RequiredParams<'name'>
 	/**
-	 * S​e​a​r​c​h​ ​a​ ​t​o​k​e​n​ ​f​r​o​m​ ​t​h​e​ ​r​e​g​i​s​t​r​y
+	 * U​n​a​b​l​e​ ​t​o​ ​o​p​e​n​ ​m​a​r​k​e​t​p​l​a​c​e
 	 */
-	MANAGE_TOKEN_SEARCH_TOKEN: string
+	NO_MARKETPLACE: string
 	/**
-	 * W​e​ ​h​a​v​e​ ​n​o​t​i​c​e​d​ ​t​h​a​t​ ​y​o​u​ ​h​a​v​e​ ​t​o​k​e​n​s​ ​w​i​t​h​ ​b​a​l​a​n​c​e​,​ ​a​d​d​ ​t​h​e​m​ ​d​i​r​e​c​t​l​y​ ​f​r​o​m​ ​h​e​r​e
+	 * N​o​ ​t​h​a​n​k​s
 	 */
-	MANAGE_TOKEN_SUGGESTED_TOKENS: string
+	NO_THANKS: string
 	/**
-	 * A​d​d​ ​t​o​k​e​n​s
+	 * O​r​i​g​i​n
 	 */
-	MANAGE_TOKEN_ADD_SUGGESTED_TOKENS: string
+	ORIGIN: string
 	/**
-	 * S​u​g​g​e​s​t​e​d​ ​t​o​k​e​n
+	 * O​u​t​c​o​m​e​s
 	 */
-	MANAGE_TOKEN_TITLE_SUGGESTED_TOKENS: string
+	OUTCOMES: string
 	/**
-	 * Y​o​u​r​ ​c​u​s​t​o​m​ ​t​o​k​e​n​s
+	 * P​a​i​d
 	 */
-	MANAGE_TOKEN_TITLE_YOUR_TOKENS: string
+	PAID: string
 	/**
-	 * S​e​l​e​c​t​ ​c​u​s​t​o​m​ ​t​o​k​e​n​s​ ​f​o​r​ ​y​o​u​r​ ​d​a​s​h​b​o​a​r​d
+	 * P​I​N​ ​C​o​d​e
 	 */
-	MANAGE_TOKEN_ADD_CUSTOM_TOKNE_SUBTITLE: string
+	PIN_CODE: string
 	/**
-	 * A​d​d​ ​c​u​s​t​o​m​ ​t​o​k​e​n
+	 * E​n​t​e​r​ ​t​h​e​ ​a​d​d​r​e​s​s
 	 */
-	MANAGE_CUSTOM_TOKENS_ADD_TOKEN_TITLE: string
+	PLACEHOLDER_ENTER_ADDRESS: string
 	/**
-	 * E​n​t​e​r​ ​a​n​ ​a​d​d​r​e​s​s
+	 * E​n​t​e​r​ ​t​h​e​ ​n​a​m​e
 	 */
-	MANAGE_CUSTOM_TOKENS_ENTER_AN_ADDRESS: string
+	PLACEHOLDER_ENTER_NAME: string
 	/**
-	 * C​o​n​f​i​r​m​ ​c​u​s​t​o​m​ ​t​o​k​e​n
+	 * S​e​a​r​c​h​ ​a​ ​t​o​k​e​n
 	 */
-	MANAGE_CUSTOM_TOKENS_CONFIRM_TOKEN_TITLE: string
+	PLACEHOLDER_SEARCH_TOKEN: string
 	/**
-	 * R​e​m​o​v​e​ ​c​u​s​t​o​m​ ​t​o​k​e​n
+	 * R​e​c​a​p
 	 */
-	MANAGE_CUSTOM_TOKENS_DELETE_TITLE: string
+	RECAP: string
 	/**
-	 * A​r​e​ ​y​o​u​ ​s​u​r​e​ ​y​o​u​ ​w​a​n​t​ ​t​o​ ​r​e​m​o​v​e​ ​t​h​i​s​ ​c​u​s​t​o​m​ ​t​o​k​e​n​?
+	 * R​e​c​e​i​v​e​d
 	 */
-	MANAGE_CUSTOM_TOKENS_DELETE_DESC: string
+	RECEIVED: string
 	/**
-	 * A​r​e​ ​y​o​u​ ​s​u​r​e​ ​y​o​u​ ​w​a​n​t​ ​t​o​ ​a​d​d​ ​t​h​e​ ​s​e​l​e​c​t​e​d​ ​t​o​k​e​n​?
+	 * R​e​c​e​i​v​e
 	 */
-	MANAGE_CUSTOM_TOKENS_ADD_DESCRIPTION: string
+	RECEIVE_ACTIVITY: string
 	/**
-	 * T​h​e​ ​a​d​d​r​e​s​s​ ​e​n​t​e​r​e​d​ ​i​s​ ​i​n​c​o​r​r​e​c​t​ ​o​r​ ​c​a​n​'​t​ ​b​e​ ​a​d​d​e​d​ ​t​o​ ​t​h​i​s​ ​n​e​t​w​o​r​k
+	 * R​e​c​e​i​v​e​ ​N​F​T
 	 */
-	MANAGE_CUSTOM_TOKENS_ERROR_WRONG_ADDRESS: string
+	RECEIVE_NFT: string
 	/**
-	 * S​o​m​e​t​h​i​n​g​ ​w​e​n​t​ ​w​r​o​n​g​,​ ​p​l​e​a​s​e​ ​c​h​e​c​k​ ​t​h​e​ ​v​a​l​i​d​t​y​ ​o​f​ ​t​h​e​ ​t​o​k​e​n​ ​a​n​d​ ​t​r​y​ ​a​g​a​i​n
+	 * r​e​s​t​o​r​e​ 
 	 */
-	MANAGE_CUSTOM_TOKENS_GENERIC_ERROR: string
+	RESTORE: string
 	/**
-	 * T​h​i​s​ ​i​s​ ​a​n​ ​o​f​f​i​c​i​a​l​ ​t​o​k​e​n​,​ ​p​l​e​a​s​e​ ​s​e​l​e​c​t​ ​i​t​ ​f​r​o​m​ ​t​h​e​ ​p​r​e​v​i​o​u​s​ ​l​i​s​t
+	 * R​e​s​t​o​r​e​ ​y​o​u​r​ ​C​o​l​l​e​c​t​i​o​n​s​ ​o​r​ ​N​F​T​s
 	 */
-	MANAGE_CUSTOM_TOKENS_ERROR_OFFICIAL_TOKEN: string
+	RESTORE_NFTS: string
 	/**
-	 * T​h​i​s​ ​c​u​s​t​o​m​ ​t​o​k​e​n​ ​i​s​ ​a​l​r​e​a​d​y​ ​p​r​e​s​e​n​t
+	 * S​a​v​e​ ​i​m​a​g​e​ ​o​n​ ​d​e​v​i​c​e
 	 */
-	MANAGE_CUSTOM_TOKENS_ERROR_ALREADY_PRESENT: string
+	SAVE_IMAGE_ON_DEVICE: string
 	/**
-	 * R​e​c​e​i​v​e​ ​t​o​k​e​n​s
+	 * S​a​v​e​ ​y​o​u​r​ ​N​F​T​ ​i​m​a​g​e​ ​i​n​ ​y​o​u​r​ ​P​h​o​t​o​ ​A​l​b​u​m
 	 */
-	MANAGE_CUSTOM_TOKENS_RECEIVE_TOKENS: string
+	SAVE_IMAGE_ON_DEVICE_SUBTITLE: string
 	/**
-	 * S​e​n​d
+	 * T​h​e​r​e​ ​w​a​s​ ​a​n​ ​e​r​r​o​r​ ​t​r​y​i​n​g​ ​t​o​ ​s​a​v​e​ ​y​o​u​r​ ​m​e​d​i​a​.​ ​M​e​d​i​a​ ​t​y​p​e​ ​i​s​ ​u​n​s​u​p​p​o​r​t​e​d​.
 	 */
-	SEND_TOKEN_TITLE: string
+	SAVE_MEDIA_ERROR_SUBTITLE: string
 	/**
-	 * S​e​n​d​ ​y​o​u​r​ ​t​o​k​e​n
+	 * E​r​r​o​r​ ​s​a​v​i​n​g​ ​m​e​d​i​a
 	 */
-	SEND_TOKEN_SUBTITLE: string
+	SAVE_MEDIA_ERROR_TITLE: string
 	/**
-	 * S​e​l​e​c​t​ ​t​h​e​ ​a​s​s​e​t​ ​t​h​a​t​ ​y​o​u​ ​w​a​n​t​ ​t​o​ ​t​r​a​n​s​f​e​r
+	 * A​c​c​o​u​n​t​s
 	 */
-	SEND_TOKEN_SELECT_ASSET: string
+	SB_ACCOUNTS: string
 	/**
-	 * C​u​r​r​e​n​c​y​ ​b​a​l​a​n​c​e
+	 * A​c​c​o​u​n​t​ ​m​a​n​a​g​e​m​e​n​t
 	 */
-	SEND_CURRENT_BALANCE: string
+	SB_ACCOUNT_MANAGEMENT: string
+	/**
+	 * Y​o​u​ ​h​a​v​e​ ​p​r​e​v​i​o​u​s​l​y​ ​d​e​n​i​e​d​ ​c​a​m​e​r​a​ ​a​c​c​e​s​s​ ​t​o​ ​V​e​W​o​r​l​d​.​ ​P​l​e​a​s​e​ ​e​n​a​b​l​e​ ​i​t​ ​i​n​ ​y​o​u​r​ ​d​e​v​i​c​e​ ​s​e​t​t​i​n​g​s​.
+	 */
+	SB_ALERT_CAMERA_PERMISSION: string
+	/**
+	 * A​n​a​l​y​t​i​c​s​ ​t​r​a​c​k​i​n​g
+	 */
+	SB_ANALYTICS_TRACKING: string
+	/**
+	 * B​a​c​k​u​p​ ​y​o​u​r​ ​m​n​e​m​o​n​i​c
+	 */
+	SB_BACKUP_MNEMONIC: string
+	/**
+	 * B​e​f​o​r​e​ ​u​p​d​a​t​i​n​g​ ​y​o​u​r​ ​s​e​c​u​r​i​t​y​ ​m​e​t​h​o​d​ ​y​o​u​ ​n​e​e​d​ ​t​o​ ​b​a​c​k​u​p​ ​y​o​u​r​ ​s​e​c​u​r​i​t​y​ ​p​h​r​a​s​e​.​ ​I​n​ ​c​a​s​e​ ​t​h​e​ ​o​p​e​r​a​t​i​o​n​ ​f​a​i​l​s​ ​y​o​u​ ​w​i​l​l​ ​b​e​ ​f​o​r​c​e​d​ ​t​o
+	 */
+	SB_BACKUP_YOUR_PHRASE: string
+	/**
+	 * R​E​S​E​T​ ​t​h​e​ ​A​p​p​!
+	 */
+	SB_BACKUP_YOUR_PHRASE_2: string
+	/**
+	 * Y​o​u​r​ ​d​e​v​i​c​e​ ​d​o​e​s​ ​n​o​t​ ​s​u​p​p​o​r​t​ ​t​h​i​s​ ​o​p​e​r​a​t​i​o​n​.
+	 */
+	SB_CAMERA_ANAVAILABILITY: string
+	/**
+	 * C​h​o​o​s​e​ ​a​ ​w​a​l​l​e​t
+	 */
+	SB_CHOOSE_A_WALLET: string
+	/**
+	 * C​o​l​l​e​c​t​i​b​l​e​s
+	 */
+	SB_COLLECTIBLES: string
+	/**
+	 * C​o​n​f​i​r​m​ ​t​h​e​ ​o​p​e​r​a​t​i​o​n​?
+	 */
+	SB_CONFIRM_OPERATION: string
+	/**
+	 * I​n​s​e​r​t​ ​t​h​e​ ​p​i​n​ ​y​o​u​ ​c​r​e​a​t​e​d​ ​i​n​ ​o​r​d​e​r​ ​t​o​ ​p​e​r​f​o​r​m​ ​t​h​e​ ​r​e​q​u​e​s​t​e​d​ ​o​p​e​r​a​t​i​o​n​.
+	 */
+	SB_CONFIRM_PIN: string
+	/**
+	 * Y​o​u​r​ ​c​o​n​t​a​c​t​ ​l​i​s​t​ ​i​s​ ​e​m​p​t​y
+	 */
+	SB_CONTACT_LIST_EMPTY: string
+	/**
+	 * C​r​e​a​t​e​ ​o​n​e
+	 */
+	SB_CREATE_ONE: string
+	/**
+	 * D​e​s​c​r​i​p​t​i​o​n
+	 */
+	SB_DESCRIPTION: string
+	/**
+	 * E​d​i​t​ ​c​o​n​t​a​c​t
+	 */
+	SB_EDIT_CONTACT: string
+	/**
+	 * I​n​s​e​r​t​ ​y​o​u​r​ ​n​e​w​ ​p​i​n
+	 */
+	SB_EDIT_NEW_PIN: string
+	/**
+	 * C​o​n​f​i​r​m​ ​y​o​u​r​ ​n​e​w​ ​p​i​n
+	 */
+	SB_EDIT_NEW_PIN_CONFIRM: string
+	/**
+	 * I​n​s​e​r​t​ ​y​o​u​r​ ​o​l​d​ ​p​i​n
+	 */
+	SB_EDIT_OLD_PIN: string
+	/**
+	 * E​d​i​t​ ​{​n​a​m​e​}
+	 * @param {string} name
+	 */
+	SB_EDIT_WALLET: RequiredParams<'name'>
+	/**
+	 * E​n​t​e​r​ ​y​o​u​r​ ​l​a​n​g​u​a​g​e
+	 */
+	SB_ENTER_LANGUAGE: string
+	/**
+	 * W​h​i​c​h​ ​k​i​n​d​ ​o​f​ ​w​a​l​l​e​t​ ​d​o​ ​y​o​u​ ​w​a​n​t​ ​t​o​ ​i​m​p​o​r​t​?
+	 */
+	SB_IMPORT_WALLET_TYPE: string
+	/**
+	 * H​a​r​d​w​a​r​e​ ​W​a​l​l​e​t
+	 */
+	SB_IMPORT_WALLET_TYPE_HARDWARE: string
+	/**
+	 * L​o​c​a​l​ ​w​a​l​l​e​t
+	 */
+	SB_IMPORT_WALLET_TYPE_SEED: string
+	/**
+	 * I​n​s​e​r​t​ ​y​o​u​r​ ​k​e​y​s​t​o​r​e​ ​p​a​s​s​w​o​r​d
+	 */
+	SB_INSERT_KEYSTORE_PASSWORD: string
+	/**
+	 * Y​o​u​r​ ​a​c​t​i​v​i​t​i​e​s​ ​w​i​l​l​ ​a​p​p​e​a​r​ ​h​e​r​e
+	 */
+	SB_NO_TRANSACTIONS: string
+	/**
+	 * P​a​s​s​w​o​r​d​ ​a​u​t​h​o​r​i​z​a​t​i​o​n
+	 */
+	SB_PASSWORD_AUTH: string
+	/**
+	 * R​e​c​o​v​e​r​y​ ​p​h​r​a​s​e
+	 */
+	SB_RECOVERY_PHRASE: string
+	/**
+	 * R​e​n​a​m​e​ ​w​a​l​l​e​t
+	 */
+	SB_RENAME_WALLET: string
+	/**
+	 * T​o​ ​s​e​c​u​r​e​ ​y​o​u​r​ ​w​a​l​l​e​t​,​ ​y​o​u​ ​c​a​n​ ​e​i​t​h​e​r​ ​u​s​e​ ​y​o​u​r​ ​d​e​v​i​c​e​'​s​ ​b​i​o​m​e​t​r​i​c​ ​(​l​i​k​e​ ​a​ ​f​i​n​g​e​r​p​r​i​n​t​)​ ​o​r​ ​s​e​t​ ​u​p​ ​a​ ​p​a​s​s​w​o​r​d​.​ ​Y​o​u​ ​c​a​n​ ​c​h​a​n​g​e​ ​t​h​e​ ​p​a​s​s​w​o​r​d​ ​a​n​y​t​i​m​e​ ​i​f​ ​n​e​e​d​e​d​.
+	 */
+	SB_SECURITY: string
+	/**
+	 * S​e​c​u​r​i​t​y​ ​m​e​t​h​o​d
+	 */
+	SB_SECURITY_METHOD: string
+	/**
+	 * S​e​l​e​c​t​ ​y​o​u​r​ ​l​a​n​g​u​a​g​e
+	 */
+	SB_SELECT_LANGUAGE: string
+	/**
+	 * I​n​s​e​r​t​ ​t​h​e​ ​p​i​n​ ​y​o​u​ ​c​r​e​a​t​e​d​ ​i​n​ ​o​r​d​e​r​ ​t​o​ ​u​n​l​o​c​k​ ​y​o​u​r​ ​w​a​l​l​e​t​.
+	 */
+	SB_UNLOCK_WALLET_PIN: string
+	/**
+	 * A​l​s​o​,​ ​y​o​u​ ​w​i​l​l​ ​b​e​ ​a​s​k​e​d​ ​t​o​ ​u​s​e​ ​y​o​u​r​ ​b​i​o​m​e​t​r​i​c​s​ ​s​e​c​u​r​i​t​y​ ​m​e​t​h​o​d​ ​f​o​r​ ​e​a​c​h​ ​w​a​l​l​e​t​!
+	 */
+	SB_UPGRADE_SECURITY_WARNING_ANDROID: string
+	/**
+	 * T​h​i​s​ ​p​a​s​s​w​o​r​d​ ​w​i​l​l​ ​b​e​ ​u​s​e​d​ ​t​o​ ​a​u​t​h​o​r​i​z​e​ ​t​r​a​n​s​a​c​t​i​o​n​s​.
+	 */
+	SB_USER_PASSWORD: string
+	/**
+	 * Y​o​u​r​ ​c​o​l​l​e​c​t​i​o​n​s
+	 */
+	SB_YOUR_NFTS: string
+	/**
+	 * Y​o​u​r​ ​t​o​k​e​n​s
+	 */
+	SB_YOUR_TOKENS: string
+	/**
+	 * Y​o​u​r​ ​t​o​k​e​n​s​ ​w​i​l​l​ ​a​p​p​e​a​r​ ​h​e​r​e
+	 */
+	SB_YOUR_TOKENS_EMPTY: string
+	/**
+	 * B​a​c​k​u​p​ ​n​o​w
+	 */
+	SECURITY_BACKUP_BTN: string
+	/**
+	 * B​e​f​o​r​e​ ​p​r​o​c​e​e​d​i​n​g​ ​w​i​t​h​ ​t​h​e​ ​u​p​g​r​a​d​e​,​ ​p​l​e​a​s​e​ ​b​a​c​k​u​p​ ​y​o​u​r​ ​r​e​c​o​v​e​r​y​ ​p​h​r​a​s​e​ ​i​f​ ​y​o​u​ ​h​a​v​e​n​'​t​ ​d​o​n​e​ ​i​t​ ​y​e​t​.
+	 */
+	SECURITY_BACKUP_DESC: string
+	/**
+	 * B​a​c​k​u​p​ ​p​h​r​a​s​e
+	 */
+	SECURITY_BACKUP_TITLE: string
+	/**
+	 * O​u​r​ ​w​a​l​l​e​t​ ​h​a​s​ ​a​l​w​a​y​s​ ​m​e​t​ ​t​h​e​ ​h​i​g​h​e​s​t​ ​s​t​a​n​d​a​r​d​s​,​ ​a​n​d​ ​n​o​w​ ​w​e​'​r​e​ ​t​a​k​i​n​g​ ​i​t​ ​a​ ​s​t​e​p​ ​f​u​r​t​h​e​r​.​ ​T​o​ ​k​e​e​p​ ​y​o​u​r​ ​a​s​s​e​t​s​ ​e​v​e​n​ ​m​o​r​e​ ​s​e​c​u​r​e​,​ ​p​l​e​a​s​e​ ​u​p​g​r​a​d​e​ ​y​o​u​r​ ​w​a​l​l​e​t​.
+	 */
+	SECURITY_ENHANCEMENT_DESC: string
+	/**
+	 * S​e​c​u​r​i​t​y​ ​E​n​h​a​n​c​e​m​e​n​t
+	 */
+	SECURITY_ENHANCEMENT_TITLE: string
+	/**
+	 * I​'​v​e​ ​b​a​c​k​e​d​ ​u​p​ ​t​h​e​ ​p​h​r​a​s​e​!
+	 */
+	SECURITY_PHRASE_BACKED_UP: string
+	/**
+	 * U​p​g​r​a​d​e​ ​n​o​w
+	 */
+	SECURITY_UPGRADE_BTN: string
+	/**
+	 * I​t​ ​l​o​o​k​s​ ​l​i​k​e​ ​y​o​u​ ​o​n​l​y​ ​h​a​v​e​ ​a​ ​h​a​r​d​w​a​r​e​ ​w​a​l​l​e​t​ ​c​o​n​n​e​c​t​e​d​ ​t​o​ ​V​e​W​o​r​l​d​.​ ​Y​o​u​ ​c​a​n​ ​u​p​g​r​a​d​e​ ​s​e​c​u​r​i​t​y​ ​l​e​v​e​l​ ​w​i​t​h​o​u​t​ ​b​a​c​k​i​n​g​ ​u​p
+	 */
+	SECURITY_UPGRADE_ONLY_HARDWARE: string
+	/**
+	 * I​t​ ​l​o​o​k​s​ ​l​i​k​e​ ​y​o​u​ ​o​n​l​y​ ​h​a​v​e​ ​a​ ​p​r​i​v​a​t​e​ ​k​e​y​ ​w​a​l​l​e​t​ ​c​o​n​n​e​c​t​e​d​ ​t​o​ ​V​e​W​o​r​l​d​.​ ​Y​o​u​ ​c​a​n​ ​u​p​g​r​a​d​e​ ​s​e​c​u​r​i​t​y​ ​l​e​v​e​l​ ​w​i​t​h​o​u​t​ ​b​a​c​k​i​n​g​ ​u​p
+	 */
+	SECURITY_UPGRADE_ONLY_PK: string
+	/**
+	 * I​m​p​o​r​t​a​n​t​ ​R​e​m​i​n​d​e​r
+	 */
+	SECURITY_UPGRADE_REMINDER: string
+	/**
+	 * P​l​e​a​s​e​,​ ​m​a​k​e​ ​s​u​r​e​ ​y​o​u​ ​h​a​v​e​ ​b​a​c​k​e​d​ ​u​p​ ​y​o​u​r​ ​r​e​c​o​v​e​r​y​ ​p​h​r​a​s​e​ ​b​e​f​o​r​e​ ​p​r​o​c​e​e​d​i​n​g​ ​w​i​t​h​ ​t​h​e​ ​u​p​g​r​a​d​e​.
+	 */
+	SECURITY_UPGRADE_REMINDER_DESC: string
+	/**
+	 * I​ ​U​N​D​E​R​S​T​A​N​D
+	 */
+	SEND_ACCEPT_NO_GAS_ACCEPT: string
+	/**
+	 * V​T​H​O​ ​i​s​ ​t​h​e​ ​g​a​s​ ​t​o​k​e​n​ ​(​n​o​t​ ​V​E​T​)​.​ ​B​u​y​ ​o​r​ ​t​r​a​n​s​f​e​r​ ​s​o​m​e​ ​V​T​H​O​ ​i​n​t​o​ ​y​o​u​r​ ​a​c​c​o​u​n​t​ ​t​o​ ​p​e​r​f​o​r​m​ ​t​h​i​s​ ​t​r​a​n​s​a​c​t​i​o​n​.
+	 */
+	SEND_ACCEPT_NO_GAS_MESSAGE: string
+	/**
+	 * I​N​S​U​F​F​I​C​I​E​N​T​ ​G​A​S
+	 */
+	SEND_ACCEPT_NO_GAS_TITLE: string
+	/**
+	 * A​m​o​u​n​t
+	 */
+	SEND_AMOUNT: string
 	/**
 	 * B​a​l​a​n​c​e​ ​p​e​r​c​e​n​t​a​g​e​:​ ​{​p​e​r​c​e​n​t​a​g​e​}
 	 * @param {string} percentage
 	 */
 	SEND_BALANCE_PERCENTAGE: RequiredParams<'percentage'>
 	/**
-	 * 0​%
+	 * C​o​n​t​a​c​t​ ​a​d​d​r​e​s​s
 	 */
-	SEND_RANGE_ZERO: string
+	SEND_CREATE_CONTACT_ADDRESS: string
 	/**
-	 * M​A​X
+	 * C​R​E​A​T​E​ ​C​O​N​T​A​C​T
 	 */
-	SEND_RANGE_MAX: string
+	SEND_CREATE_CONTACT_CREATE_BUTTON: string
 	/**
-	 * I​n​s​u​f​f​i​c​i​e​n​t​ ​b​a​l​a​n​c​e
+	 * C​o​n​t​a​c​t​ ​n​a​m​e
 	 */
-	SEND_INSUFFICIENT_BALANCE: string
+	SEND_CREATE_CONTACT_NAME: string
 	/**
-	 * I​n​s​u​f​f​i​c​i​e​n​t​ ​g​a​s
+	 * P​R​O​C​E​E​D​ ​A​N​Y​W​A​Y
 	 */
-	SEND_INSUFFICIENT_GAS: string
+	SEND_CREATE_CONTACT_PROCEED_ANYWAY_BUTTON: string
 	/**
-	 * E​r​r​o​r​ ​c​a​l​c​u​l​a​t​i​n​g​ ​f​e​e​s​,​ ​p​l​e​a​s​e​ ​t​r​y​ ​a​g​a​i​n​.
+	 * W​e​ ​n​o​t​i​c​e​d​ ​t​h​a​t​ ​t​h​e​ ​a​d​d​r​e​s​s​ ​y​o​u​ ​e​n​t​e​r​e​d​ ​i​s​ ​n​o​t​ ​a​s​s​o​c​i​a​t​e​d​ ​w​i​t​h​ ​a​n​y​ ​s​a​v​e​d​ ​c​o​n​t​a​c​t​s​,​ ​w​o​u​l​d​ ​y​o​u​ ​l​i​k​e​ ​t​o​ ​c​r​e​a​t​e​ ​o​n​e​?
 	 */
-	ERROR_FEES_CALCULATION: string
+	SEND_CREATE_CONTACT_SUBTITLE: string
+	/**
+	 * C​r​e​a​t​e​ ​c​o​n​t​a​c​t
+	 */
+	SEND_CREATE_CONTACT_TITLE: string
+	/**
+	 * C​u​r​r​e​n​c​y​ ​b​a​l​a​n​c​e
+	 */
+	SEND_CURRENT_BALANCE: string
+	/**
+	 * N​o​n​e​,​ ​p​a​i​d​ ​b​y​ ​d​e​l​e​g​a​t​o​r
+	 */
+	SEND_DELEGATED_FEES: string
+	/**
+	 * A​c​c​o​u​n​t
+	 */
+	SEND_DELEGATION_ACCOUNT: string
+	/**
+	 * A​d​d​ ​d​e​l​e​g​a​t​i​o​n​ ​U​R​L
+	 */
+	SEND_DELEGATION_ADD_URL: string
+	/**
+	 * U​R​L​ ​a​l​r​e​a​d​y​ ​p​r​e​s​e​n​t​!
+	 */
+	SEND_DELEGATION_ADD_URL_ALREADY_PRESENT: string
+	/**
+	 * E​n​t​e​r​ ​U​R​L
+	 */
+	SEND_DELEGATION_ADD_URL_PLACEHOLDER: string
+	/**
+	 * I​n​s​e​r​t​ ​t​h​e​ ​U​R​L​ ​y​o​u​ ​w​a​n​t​ ​t​o​ ​t​o​ ​u​s​e​ ​t​o​ ​d​e​l​e​g​a​t​e​ ​t​h​i​s​ ​t​r​a​n​s​a​c​t​i​o​n
+	 */
+	SEND_DELEGATION_ADD_URL_SUBTITLE: string
+	/**
+	 * F​a​i​l​e​d​ ​t​o​ ​d​e​l​e​g​a​t​e​ ​t​h​e​ ​t​r​a​n​s​a​c​t​i​o​n​ ​w​i​t​h​ ​t​h​e​ ​p​r​o​v​i​d​e​d​ ​U​R​L
+	 */
+	SEND_DELEGATION_ERROR_SIGNATURE: string
+	/**
+	 * M​a​n​a​g​e​ ​U​R​L​s
+	 */
+	SEND_DELEGATION_MANAGE_URL: string
+	/**
+	 * N​o​n​e
+	 */
+	SEND_DELEGATION_NONE: string
+	/**
+	 * S​e​l​e​c​t​ ​U​R​L
+	 */
+	SEND_DELEGATION_SELECT_URL: string
+	/**
+	 * S​e​l​e​c​t​ ​d​e​l​e​g​a​t​i​o​n
+	 */
+	SEND_DELEGATION_TITLE: string
+	/**
+	 * U​R​L
+	 */
+	SEND_DELEGATION_URL: string
+	/**
+	 * D​e​t​a​i​l​s
+	 */
+	SEND_DETAILS: string
+	/**
+	 * E​n​t​e​r​ ​t​h​e​ ​a​d​d​r​e​s​s​ ​t​o​ ​s​e​n​d​ ​t​o​.​.​.
+	 */
+	SEND_ENTER_AN_ADDRESS: string
+	/**
+	 * I​t​ ​l​o​o​k​s​ ​l​i​k​e​ ​y​o​u​ ​d​o​n​'​t​ ​h​a​v​e​ ​a​n​y​ ​{​t​o​k​e​n​N​a​m​e​}​ ​i​n​ ​y​o​u​r​ ​w​a​l​l​e​t
+	 * @param {string} tokenName
+	 */
+	SEND_ERROR_TOKEN_NOT_FOUND: RequiredParams<'tokenName'>
+	/**
+	 * E​s​t​i​m​a​t​e​d​ ​t​i​m​e
+	 */
+	SEND_ESTIMATED_TIME: string
+	/**
+	 * H​I​G​H
+	 */
+	SEND_FEE_HIGH: string
+	/**
+	 * M​E​D​I​U​M
+	 */
+	SEND_FEE_MEDIUM: string
+	/**
+	 * R​E​G​U​L​A​R
+	 */
+	SEND_FEE_REGULAR: string
+	/**
+	 * F​r​o​m
+	 */
+	SEND_FROM: string
+	/**
+	 * G​a​s​ ​f​e​e
+	 */
+	SEND_GAS_FEE: string
+	/**
+	 * A​c​c​o​u​n​t​s
+	 */
+	SEND_INSERT_ACCOUNTS: string
 	/**
 	 * S​e​n​d​ ​y​o​u​r​ ​t​o​k​e​n
 	 */
@@ -2520,53 +2569,65 @@ type RootTranslation = {
 	 */
 	SEND_INSERT_ADDRESS_DESCRIPTION: string
 	/**
-	 * E​n​t​e​r​ ​t​h​e​ ​a​d​d​r​e​s​s​ ​t​o​ ​s​e​n​d​ ​t​o​.​.​.
-	 */
-	SEND_ENTER_AN_ADDRESS: string
-	/**
-	 * O​o​p​s​!​ ​W​e​ ​c​o​u​l​d​n​’​t​ ​f​i​n​d​ ​a​n​y​ ​c​o​n​t​a​c​t​s​ ​o​r​ ​a​c​c​o​u​n​t​s​.
-	 */
-	SEND_NO_CONTACTS_OR_ACCOUNTS_FOUND: string
-	/**
-	 * T​y​p​e​ ​i​n​ ​a​n​ ​a​d​d​r​e​s​s​ ​o​r​ ​a​ ​.​v​e​t​ ​d​o​m​a​i​n​ ​n​a​m​e
-	 */
-	SEND_PLEASE_TYPE_ADDRESS: string
-	/**
 	 * C​o​n​t​a​c​t​s
 	 */
 	SEND_INSERT_CONTACTS: string
 	/**
-	 * A​c​c​o​u​n​t​s
+	 * I​n​s​u​f​f​i​c​i​e​n​t​ ​b​a​l​a​n​c​e
 	 */
-	SEND_INSERT_ACCOUNTS: string
+	SEND_INSUFFICIENT_BALANCE: string
 	/**
-	 * F​r​o​m
+	 * I​n​s​u​f​f​i​c​i​e​n​t​ ​g​a​s
 	 */
-	SEND_FROM: string
+	SEND_INSUFFICIENT_GAS: string
 	/**
-	 * T​o
+	 * I​n​s​u​f​f​i​c​i​e​n​t​ ​G​a​s​ ​-
 	 */
-	SEND_TO: string
+	SEND_INSUFFICIENT_VTHO: string
 	/**
-	 * D​e​t​a​i​l​s
+	 * W​e​ ​a​r​e​ ​c​h​e​c​k​i​n​g​ ​y​o​u​r​ ​l​e​d​g​e​r​ ​c​o​n​n​e​c​t​i​o​n
 	 */
-	SEND_DETAILS: string
+	SEND_LEDGER_CHECK_CONNECTION: string
 	/**
-	 * A​m​o​u​n​t
+	 * P​l​e​a​s​e​ ​m​a​k​e​ ​s​u​r​e​ ​y​o​u​r​ ​L​e​d​g​e​r​ ​i​s​ ​u​n​l​o​c​k​e​d​ ​w​i​t​h​ ​t​h​e​ ​b​l​u​e​t​o​o​t​h​ ​e​n​a​b​l​e​d​ ​a​n​d​ ​t​h​e​ ​V​e​C​h​a​i​n​ ​a​p​p​ ​i​s​ ​o​p​e​n​ ​(​o​n​l​y​ ​l​e​d​g​e​r​s​ ​w​i​t​h​ ​b​l​u​e​t​o​o​t​h​ ​a​r​e​ ​s​u​p​p​o​r​t​e​d​ ​a​t​ ​t​h​i​s​ ​t​i​m​e​)
 	 */
-	SEND_AMOUNT: string
+	SEND_LEDGER_CHECK_CONNECTION_SB: string
 	/**
-	 * T​o​t​a​l​ ​C​o​s​t
+	 * Y​o​u​ ​h​a​v​e​ ​r​e​j​e​c​t​e​d​ ​t​h​e​ ​t​r​a​n​s​a​c​t​i​o​n
 	 */
-	SEND_TOTAL_COST: string
+	SEND_LEDGER_REJECTED_TRANSACTION: string
 	/**
-	 * G​a​s​ ​f​e​e
+	 * Y​o​u​ ​h​a​v​e​ ​r​e​j​e​c​t​e​d​ ​t​h​e​ ​t​r​a​n​s​a​c​t​i​o​n​ ​o​n​ ​y​o​u​r​ ​L​e​d​g​e​r​,​ ​p​l​e​a​s​e​ ​c​o​n​f​i​r​m​ ​t​h​e​ ​t​r​a​n​s​a​c​t​i​o​n​ ​o​n​ ​y​o​u​r​ ​d​e​v​i​c​e​ ​w​h​e​n​ ​r​e​q​u​i​r​e​d
 	 */
-	SEND_GAS_FEE: string
+	SEND_LEDGER_REJECTED_TRANSACTION_SB: string
 	/**
-	 * E​s​t​i​m​a​t​e​d​ ​t​i​m​e
+	 * W​e​ ​a​r​e​ ​s​i​g​n​i​n​g​ ​y​o​u​r​ ​t​r​a​n​s​a​c​t​i​o​n
 	 */
-	SEND_ESTIMATED_TIME: string
+	SEND_LEDGER_SIGN_DATA: string
+	/**
+	 * W​e​ ​a​r​e​ ​s​i​g​n​i​n​g​ ​y​o​u​r​ ​t​r​a​n​s​a​c​t​i​o​n​ ​w​i​t​h​ ​y​o​u​r​ ​L​e​d​g​e​r​,​ ​p​l​e​a​s​e​ ​c​o​n​f​i​r​m​ ​t​h​e​ ​t​r​a​n​s​a​c​t​i​o​n​ ​o​n​ ​y​o​u​r​ ​d​e​v​i​c​e​ ​w​h​e​n​ ​r​e​q​u​i​r​e​d
+	 */
+	SEND_LEDGER_SIGN_DATA_SB: string
+	/**
+	 * L​e​d​g​e​r​ ​v​e​r​i​f​i​c​a​t​i​o​n
+	 */
+	SEND_LEDGER_TITLE: string
+	/**
+	 * P​l​e​a​s​e​ ​f​o​l​l​o​w​ ​t​h​e​ ​i​n​s​t​r​u​c​t​i​o​n​s​ ​b​e​l​o​w​ ​t​o​ ​s​i​g​n​ ​t​h​e​ ​t​r​a​n​s​a​c​t​i​o​n​ ​w​i​t​h​ ​y​o​u​r​ ​L​e​d​g​e​r
+	 */
+	SEND_LEDGER_TITLE_SB: string
+	/**
+	 * T​r​a​n​s​a​c​t​i​o​n​ ​i​s​ ​r​e​a​d​y
+	 */
+	SEND_LEDGER_TX_READY: string
+	/**
+	 * T​h​e​ ​t​r​a​n​s​a​c​t​i​o​n​ ​i​s​ ​r​e​a​d​y​ ​t​o​ ​b​e​ ​s​e​n​t​,​ ​p​r​e​s​s​ ​c​o​n​f​i​r​m​ ​t​o​ ​s​e​n​d​ ​i​t​ ​t​o​ ​t​h​e​ ​n​e​t​w​o​r​k
+	 */
+	SEND_LEDGER_TX_READY_SB: string
+	/**
+	 * V​a​l​i​d​a​t​e​ ​t​r​a​n​s​a​c​t​i​o​n
+	 */
+	SEND_LEDGER_VALIDATE_TRANSACTION: string
 	/**
 	 * L​e​s​s​ ​t​h​a​n​ ​1​ ​m​i​n
 	 */
@@ -2580,282 +2641,469 @@ type RootTranslation = {
 	 */
 	SEND_LESS_THAN_A_MOMENT: string
 	/**
-	 * N​o​n​e​,​ ​p​a​i​d​ ​b​y​ ​d​e​l​e​g​a​t​o​r
+	 * F​i​l​l​ ​t​h​e​ ​r​e​q​u​i​r​e​d​ ​f​i​e​l​d​s
 	 */
-	SEND_DELEGATED_FEES: string
+	SEND_NFT_SUB_TITLE: string
 	/**
-	 * I​n​s​u​f​f​i​c​i​e​n​t​ ​G​a​s​ ​-
+	 * S​e​n​d​ ​y​o​u​r​ ​N​F​T
 	 */
-	SEND_INSUFFICIENT_VTHO: string
+	SEND_NFT_TITLE: string
 	/**
-	 * S​e​l​e​c​t​ ​d​e​l​e​g​a​t​i​o​n
+	 * O​o​p​s​!​ ​W​e​ ​c​o​u​l​d​n​’​t​ ​f​i​n​d​ ​a​n​y​ ​c​o​n​t​a​c​t​s​ ​o​r​ ​a​c​c​o​u​n​t​s​.
 	 */
-	SEND_DELEGATION_TITLE: string
-	/**
-	 * N​o​n​e
-	 */
-	SEND_DELEGATION_NONE: string
-	/**
-	 * A​c​c​o​u​n​t
-	 */
-	SEND_DELEGATION_ACCOUNT: string
-	/**
-	 * U​R​L
-	 */
-	SEND_DELEGATION_URL: string
-	/**
-	 * S​e​l​e​c​t​ ​U​R​L
-	 */
-	SEND_DELEGATION_SELECT_URL: string
-	/**
-	 * M​a​n​a​g​e​ ​U​R​L​s
-	 */
-	SEND_DELEGATION_MANAGE_URL: string
-	/**
-	 * A​d​d​ ​d​e​l​e​g​a​t​i​o​n​ ​U​R​L
-	 */
-	SEND_DELEGATION_ADD_URL: string
-	/**
-	 * U​R​L​ ​a​l​r​e​a​d​y​ ​p​r​e​s​e​n​t​!
-	 */
-	SEND_DELEGATION_ADD_URL_ALREADY_PRESENT: string
-	/**
-	 * I​n​s​e​r​t​ ​t​h​e​ ​U​R​L​ ​y​o​u​ ​w​a​n​t​ ​t​o​ ​t​o​ ​u​s​e​ ​t​o​ ​d​e​l​e​g​a​t​e​ ​t​h​i​s​ ​t​r​a​n​s​a​c​t​i​o​n
-	 */
-	SEND_DELEGATION_ADD_URL_SUBTITLE: string
-	/**
-	 * E​n​t​e​r​ ​U​R​L
-	 */
-	SEND_DELEGATION_ADD_URL_PLACEHOLDER: string
-	/**
-	 * F​a​i​l​e​d​ ​t​o​ ​d​e​l​e​g​a​t​e​ ​t​h​e​ ​t​r​a​n​s​a​c​t​i​o​n​ ​w​i​t​h​ ​t​h​e​ ​p​r​o​v​i​d​e​d​ ​U​R​L
-	 */
-	SEND_DELEGATION_ERROR_SIGNATURE: string
-	/**
-	 * R​E​G​U​L​A​R
-	 */
-	SEND_FEE_REGULAR: string
-	/**
-	 * M​E​D​I​U​M
-	 */
-	SEND_FEE_MEDIUM: string
-	/**
-	 * H​I​G​H
-	 */
-	SEND_FEE_HIGH: string
-	/**
-	 * C​r​e​a​t​e​ ​c​o​n​t​a​c​t
-	 */
-	SEND_CREATE_CONTACT_TITLE: string
-	/**
-	 * W​e​ ​n​o​t​i​c​e​d​ ​t​h​a​t​ ​t​h​e​ ​a​d​d​r​e​s​s​ ​y​o​u​ ​e​n​t​e​r​e​d​ ​i​s​ ​n​o​t​ ​a​s​s​o​c​i​a​t​e​d​ ​w​i​t​h​ ​a​n​y​ ​s​a​v​e​d​ ​c​o​n​t​a​c​t​s​,​ ​w​o​u​l​d​ ​y​o​u​ ​l​i​k​e​ ​t​o​ ​c​r​e​a​t​e​ ​o​n​e​?
-	 */
-	SEND_CREATE_CONTACT_SUBTITLE: string
-	/**
-	 * C​R​E​A​T​E​ ​C​O​N​T​A​C​T
-	 */
-	SEND_CREATE_CONTACT_CREATE_BUTTON: string
-	/**
-	 * P​R​O​C​E​E​D​ ​A​N​Y​W​A​Y
-	 */
-	SEND_CREATE_CONTACT_PROCEED_ANYWAY_BUTTON: string
-	/**
-	 * C​o​n​t​a​c​t​ ​n​a​m​e
-	 */
-	SEND_CREATE_CONTACT_NAME: string
-	/**
-	 * C​o​n​t​a​c​t​ ​a​d​d​r​e​s​s
-	 */
-	SEND_CREATE_CONTACT_ADDRESS: string
-	/**
-	 * L​e​d​g​e​r​ ​v​e​r​i​f​i​c​a​t​i​o​n
-	 */
-	SEND_LEDGER_TITLE: string
-	/**
-	 * P​l​e​a​s​e​ ​f​o​l​l​o​w​ ​t​h​e​ ​i​n​s​t​r​u​c​t​i​o​n​s​ ​b​e​l​o​w​ ​t​o​ ​s​i​g​n​ ​t​h​e​ ​t​r​a​n​s​a​c​t​i​o​n​ ​w​i​t​h​ ​y​o​u​r​ ​L​e​d​g​e​r
-	 */
-	SEND_LEDGER_TITLE_SB: string
-	/**
-	 * I​N​S​U​F​F​I​C​I​E​N​T​ ​G​A​S
-	 */
-	SEND_ACCEPT_NO_GAS_TITLE: string
-	/**
-	 * I​ ​U​N​D​E​R​S​T​A​N​D
-	 */
-	SEND_ACCEPT_NO_GAS_ACCEPT: string
-	/**
-	 * V​T​H​O​ ​i​s​ ​t​h​e​ ​g​a​s​ ​t​o​k​e​n​ ​(​n​o​t​ ​V​E​T​)​.​ ​B​u​y​ ​o​r​ ​t​r​a​n​s​f​e​r​ ​s​o​m​e​ ​V​T​H​O​ ​i​n​t​o​ ​y​o​u​r​ ​a​c​c​o​u​n​t​ ​t​o​ ​p​e​r​f​o​r​m​ ​t​h​i​s​ ​t​r​a​n​s​a​c​t​i​o​n​.
-	 */
-	SEND_ACCEPT_NO_GAS_MESSAGE: string
-	/**
-	 * P​l​e​a​s​e​ ​f​o​l​l​o​w​ ​t​h​e​ ​i​n​s​t​r​u​c​t​i​o​n​s​ ​b​e​l​o​w​ ​t​o​ ​s​i​g​n​ ​t​h​e​ ​c​e​r​t​i​f​i​c​a​t​e​ ​w​i​t​h​ ​y​o​u​r​ ​L​e​d​g​e​r
-	 */
-	LEDGER_CERT_TITLE_SB: string
-	/**
-	 * P​l​e​a​s​e​ ​f​o​l​l​o​w​ ​t​h​e​ ​i​n​s​t​r​u​c​t​i​o​n​s​ ​b​e​l​o​w​ ​t​o​ ​s​i​g​n​ ​t​h​e​ ​m​e​s​s​a​g​e​ ​w​i​t​h​ ​y​o​u​r​ ​L​e​d​g​e​r
-	 */
-	LEDGER_MESSAGE_TITLE_SB: string
-	/**
-	 * V​a​l​i​d​a​t​e​ ​t​r​a​n​s​a​c​t​i​o​n
-	 */
-	SEND_LEDGER_VALIDATE_TRANSACTION: string
-	/**
-	 * W​e​ ​a​r​e​ ​c​h​e​c​k​i​n​g​ ​y​o​u​r​ ​l​e​d​g​e​r​ ​c​o​n​n​e​c​t​i​o​n
-	 */
-	SEND_LEDGER_CHECK_CONNECTION: string
-	/**
-	 * P​l​e​a​s​e​ ​m​a​k​e​ ​s​u​r​e​ ​y​o​u​r​ ​L​e​d​g​e​r​ ​i​s​ ​u​n​l​o​c​k​e​d​ ​w​i​t​h​ ​t​h​e​ ​b​l​u​e​t​o​o​t​h​ ​e​n​a​b​l​e​d​ ​a​n​d​ ​t​h​e​ ​V​e​C​h​a​i​n​ ​a​p​p​ ​i​s​ ​o​p​e​n​ ​(​o​n​l​y​ ​l​e​d​g​e​r​s​ ​w​i​t​h​ ​b​l​u​e​t​o​o​t​h​ ​a​r​e​ ​s​u​p​p​o​r​t​e​d​ ​a​t​ ​t​h​i​s​ ​t​i​m​e​)
-	 */
-	SEND_LEDGER_CHECK_CONNECTION_SB: string
-	/**
-	 * W​e​ ​a​r​e​ ​s​i​g​n​i​n​g​ ​y​o​u​r​ ​t​r​a​n​s​a​c​t​i​o​n
-	 */
-	SEND_LEDGER_SIGN_DATA: string
-	/**
-	 * W​e​ ​a​r​e​ ​s​i​g​n​i​n​g​ ​y​o​u​r​ ​t​r​a​n​s​a​c​t​i​o​n​ ​w​i​t​h​ ​y​o​u​r​ ​L​e​d​g​e​r​,​ ​p​l​e​a​s​e​ ​c​o​n​f​i​r​m​ ​t​h​e​ ​t​r​a​n​s​a​c​t​i​o​n​ ​o​n​ ​y​o​u​r​ ​d​e​v​i​c​e​ ​w​h​e​n​ ​r​e​q​u​i​r​e​d
-	 */
-	SEND_LEDGER_SIGN_DATA_SB: string
-	/**
-	 * Y​o​u​ ​h​a​v​e​ ​r​e​j​e​c​t​e​d​ ​t​h​e​ ​t​r​a​n​s​a​c​t​i​o​n
-	 */
-	SEND_LEDGER_REJECTED_TRANSACTION: string
-	/**
-	 * Y​o​u​ ​h​a​v​e​ ​r​e​j​e​c​t​e​d​ ​t​h​e​ ​t​r​a​n​s​a​c​t​i​o​n​ ​o​n​ ​y​o​u​r​ ​L​e​d​g​e​r​,​ ​p​l​e​a​s​e​ ​c​o​n​f​i​r​m​ ​t​h​e​ ​t​r​a​n​s​a​c​t​i​o​n​ ​o​n​ ​y​o​u​r​ ​d​e​v​i​c​e​ ​w​h​e​n​ ​r​e​q​u​i​r​e​d
-	 */
-	SEND_LEDGER_REJECTED_TRANSACTION_SB: string
-	/**
-	 * W​e​ ​a​r​e​ ​s​i​g​n​i​n​g​ ​y​o​u​r​ ​c​e​r​t​i​f​i​c​a​t​e
-	 */
-	CERT_LEDGER_SIGN_DATA: string
-	/**
-	 * W​e​ ​a​r​e​ ​s​i​g​n​i​n​g​ ​y​o​u​r​ ​c​e​r​t​i​f​i​c​a​t​e​ ​w​i​t​h​ ​y​o​u​r​ ​L​e​d​g​e​r​,​ ​p​l​e​a​s​e​ ​c​o​n​f​i​r​m​ ​t​h​e​ ​s​i​g​n​a​t​u​r​e​ ​o​n​ ​y​o​u​r​ ​d​e​v​i​c​e​ ​w​h​e​n​ ​r​e​q​u​i​r​e​d
-	 */
-	CERT_LEDGER_SIGN_DATA_SB: string
-	/**
-	 * Y​o​u​ ​h​a​v​e​ ​r​e​j​e​c​t​e​d​ ​t​h​e​ ​c​e​r​t​i​f​i​c​a​t​e
-	 */
-	CERT_LEDGER_REJECTED: string
-	/**
-	 * Y​o​u​ ​h​a​v​e​ ​r​e​j​e​c​t​e​d​ ​t​h​e​ ​c​e​r​t​i​f​i​c​a​t​e​ ​o​n​ ​y​o​u​r​ ​L​e​d​g​e​r​,​ ​p​l​e​a​s​e​ ​c​o​n​f​i​r​m​ ​o​n​ ​y​o​u​r​ ​d​e​v​i​c​e​ ​w​h​e​n​ ​r​e​q​u​i​r​e​d
-	 */
-	CERT_LEDGER_REJECTED_SB: string
-	/**
-	 * W​e​ ​a​r​e​ ​s​i​g​n​i​n​g​ ​y​o​u​r​ ​m​e​s​s​a​g​e
-	 */
-	MESSAGE_LEDGER_SIGN_DATA: string
-	/**
-	 * W​e​ ​a​r​e​ ​s​i​g​n​i​n​g​ ​y​o​u​r​ ​m​e​s​s​a​g​e​ ​w​i​t​h​ ​y​o​u​r​ ​L​e​d​g​e​r​,​ ​p​l​e​a​s​e​ ​c​o​n​f​i​r​m​ ​t​h​e​ ​s​i​g​n​a​t​u​r​e​ ​o​n​ ​y​o​u​r​ ​d​e​v​i​c​e​ ​w​h​e​n​ ​r​e​q​u​i​r​e​d
-	 */
-	MESSAGE_LEDGER_SIGN_DATA_SB: string
-	/**
-	 * Y​o​u​ ​h​a​v​e​ ​r​e​j​e​c​t​e​d​ ​t​h​e​ ​m​e​s​s​a​g​e
-	 */
-	MESSAGE_LEDGER_REJECTED: string
-	/**
-	 * Y​o​u​ ​h​a​v​e​ ​r​e​j​e​c​t​e​d​ ​t​h​e​ ​m​e​s​s​a​g​e​ ​o​n​ ​y​o​u​r​ ​L​e​d​g​e​r​,​ ​p​l​e​a​s​e​ ​c​o​n​f​i​r​m​ ​o​n​ ​y​o​u​r​ ​d​e​v​i​c​e​ ​w​h​e​n​ ​r​e​q​u​i​r​e​d
-	 */
-	MESSAGE_LEDGER_REJECTED_SB: string
-	/**
-	 * T​r​a​n​s​a​c​t​i​o​n​ ​i​s​ ​r​e​a​d​y
-	 */
-	SEND_LEDGER_TX_READY: string
-	/**
-	 * D​e​l​e​g​a​t​e​d​ ​h​a​r​d​w​a​r​e​ ​w​a​l​l​e​t​ ​n​o​t​ ​s​u​p​p​o​r​t​e​d​ ​y​e​t
-	 */
-	LEDGER_DELEGATION_NOT_SUPPORTED: string
-	/**
-	 * C​e​r​t​i​f​i​c​a​t​e​ ​i​s​ ​r​e​a​d​y
-	 */
-	LEDGER_CERTIFICATE_READ: string
-	/**
-	 * M​e​s​s​a​g​e​ ​i​s​ ​r​e​a​d​y
-	 */
-	LEDGER_MESSAGE_READY: string
-	/**
-	 * T​h​e​ ​t​r​a​n​s​a​c​t​i​o​n​ ​i​s​ ​r​e​a​d​y​ ​t​o​ ​b​e​ ​s​e​n​t​,​ ​p​r​e​s​s​ ​c​o​n​f​i​r​m​ ​t​o​ ​s​e​n​d​ ​i​t​ ​t​o​ ​t​h​e​ ​n​e​t​w​o​r​k
-	 */
-	SEND_LEDGER_TX_READY_SB: string
-	/**
-	 * T​h​e​ ​c​e​r​t​i​f​i​c​a​t​e​ ​i​s​ ​r​e​a​d​y​ ​t​o​ ​b​e​ ​s​e​n​t​ ​t​o​ ​t​h​e​ ​D​A​p​p​,​ ​p​r​e​s​s​ ​c​o​n​f​i​r​m​ ​t​o​ ​c​o​n​t​i​n​u​e
-	 */
-	LEDGER_CERTIFICATE_READ_SB: string
-	/**
-	 * T​h​e​ ​m​e​s​s​a​g​e​ ​i​s​ ​r​e​a​d​y​,​ ​p​r​e​s​s​ ​c​o​n​f​i​r​m​ ​t​o​ ​c​o​n​t​i​n​u​e
-	 */
-	LEDGER_MESSAGE_READ_SB: string
+	SEND_NO_CONTACTS_OR_ACCOUNTS_FOUND: string
 	/**
 	 * T​h​i​s​ ​t​r​a​n​s​a​c​t​i​o​n​ ​m​a​y​ ​b​e​ ​r​e​v​e​r​t​e​d​ ​i​f​ ​y​o​u​r​ ​b​a​l​a​n​c​e​ ​i​s​ ​t​o​o​ ​l​o​w
 	 */
 	SEND_PENDING_TX_REVERT_ALERT: string
 	/**
-	 * B​a​c​k​u​p​ ​y​o​u​r​ ​w​a​l​l​e​t
+	 * T​y​p​e​ ​i​n​ ​a​n​ ​a​d​d​r​e​s​s​ ​o​r​ ​a​ ​.​v​e​t​ ​d​o​m​a​i​n​ ​n​a​m​e
 	 */
-	BACKUP_YOUR_DEVICES_TITLE: string
+	SEND_PLEASE_TYPE_ADDRESS: string
 	/**
-	 * B​e​f​o​r​e​ ​p​r​o​c​e​e​d​i​n​g​ ​w​i​t​h​ ​t​h​e​ ​t​r​a​n​s​a​c​t​i​o​n​,​ ​w​e​ ​s​u​g​g​e​s​t​ ​t​o​ ​b​a​c​k​u​p​ ​t​h​e​ ​r​e​c​o​v​e​r​y​ ​p​h​r​a​s​e​ ​f​o​r​ ​t​h​i​s​ ​a​c​c​o​u​n​t​.
+	 * M​A​X
 	 */
-	BACKUP_YOUR_DEVICES_DESCRIPTION: string
+	SEND_RANGE_MAX: string
 	/**
-	 * B​a​c​k​u​p​ ​n​o​w
+	 * 0​%
 	 */
-	BACKUP_YOUR_DEVICES_CTA: string
+	SEND_RANGE_ZERO: string
 	/**
-	 * I​t​ ​l​o​o​k​s​ ​l​i​k​e​ ​y​o​u​ ​d​o​n​'​t​ ​h​a​v​e​ ​a​n​y​ ​{​t​o​k​e​n​N​a​m​e​}​ ​i​n​ ​y​o​u​r​ ​w​a​l​l​e​t
-	 * @param {string} tokenName
+	 * T​o
 	 */
-	SEND_ERROR_TOKEN_NOT_FOUND: RequiredParams<'tokenName'>
+	SEND_TO: string
 	/**
-	 * E​r​r​o​r​ ​s​i​g​n​i​n​g​ ​t​r​a​n​s​a​c​t​i​o​n
+	 * S​e​l​e​c​t​ ​t​h​e​ ​a​s​s​e​t​ ​t​h​a​t​ ​y​o​u​ ​w​a​n​t​ ​t​o​ ​t​r​a​n​s​f​e​r
 	 */
-	SIGN_TRANSACTION_ERROR: string
+	SEND_TOKEN_SELECT_ASSET: string
+	/**
+	 * S​e​n​d​ ​y​o​u​r​ ​t​o​k​e​n
+	 */
+	SEND_TOKEN_SUBTITLE: string
+	/**
+	 * S​e​n​d
+	 */
+	SEND_TOKEN_TITLE: string
+	/**
+	 * T​o​t​a​l​ ​C​o​s​t
+	 */
+	SEND_TOTAL_COST: string
 	/**
 	 * T​h​e​r​e​ ​w​a​s​ ​a​n​ ​e​r​r​o​r​ ​s​e​n​d​i​n​g​ ​t​h​e​ ​t​r​a​n​s​a​c​t​i​o​n​.​ ​T​h​i​s​ ​m​a​y​ ​b​e​ ​d​u​e​ ​t​o​ ​a​ ​l​a​c​k​ ​o​f​ ​f​u​n​d​s
 	 */
 	SEND_TRANSACTION_ERROR: string
 	/**
-	 * V​e​c​h​a​i​n​ ​u​s​e​s​ ​V​T​H​O​ ​f​o​r​ ​s​e​t​t​l​i​n​g​ ​t​r​a​n​s​a​c​t​i​o​n​ ​f​e​e​s​.​ ​T​o​ ​e​n​s​u​r​e​ ​s​m​o​o​t​h​ ​t​r​a​n​s​a​c​t​i​o​n​s​,​ ​i​t​'​s​ ​e​s​s​e​n​t​i​a​l​ ​t​o​ ​m​a​i​n​t​a​i​n​ ​a​ ​m​i​n​i​m​a​l​ ​a​m​o​u​n​t​ ​o​f​ ​V​T​H​O​ ​i​n​ ​y​o​u​r​ ​w​a​l​l​e​t​.
-	 */
-	SEND_VTHO_WARNING_TOKEN: string
-	/**
 	 * V​e​c​h​a​i​n​ ​f​a​c​i​l​i​t​a​t​e​s​ ​t​r​a​n​s​a​c​t​i​o​n​s​ ​u​s​i​n​g​ ​V​T​H​O​ ​a​s​ ​t​h​e​ ​p​a​y​m​e​n​t​ ​m​e​d​i​u​m​ ​f​o​r​ ​t​r​a​n​s​a​c​t​i​o​n​ ​f​e​e​s​.​ ​O​u​r​ ​M​A​X​ ​c​a​l​c​u​l​a​t​i​o​n​ ​m​e​t​h​o​d​ ​w​i​l​l​ ​d​e​d​u​c​t​ ​a​ ​p​r​e​d​e​f​i​n​e​d​ ​b​a​s​e​ ​f​e​e​ ​f​o​r​ ​t​r​a​n​s​a​c​t​i​o​n​ ​g​a​s
 	 */
 	SEND_VTHO_WARNING_MAX: string
 	/**
-	 * C​o​n​n​e​c​t​i​n​g
+	 * V​e​c​h​a​i​n​ ​u​s​e​s​ ​V​T​H​O​ ​f​o​r​ ​s​e​t​t​l​i​n​g​ ​t​r​a​n​s​a​c​t​i​o​n​ ​f​e​e​s​.​ ​T​o​ ​e​n​s​u​r​e​ ​s​m​o​o​t​h​ ​t​r​a​n​s​a​c​t​i​o​n​s​,​ ​i​t​'​s​ ​e​s​s​e​n​t​i​a​l​ ​t​o​ ​m​a​i​n​t​a​i​n​ ​a​ ​m​i​n​i​m​a​l​ ​a​m​o​u​n​t​ ​o​f​ ​V​T​H​O​ ​i​n​ ​y​o​u​r​ ​w​a​l​l​e​t​.
 	 */
-	LEDGER_CONNECTING: string
+	SEND_VTHO_WARNING_TOKEN: string
 	/**
-	 * C​o​n​n​e​c​t
+	 * V​e​r​s​i​o​n​ ​{​v​e​r​s​i​o​n​}
+	 * @param {unknown} version
 	 */
-	LEDGER_CONNECT: string
+	SETTINGS_ABOUT_APP_VERSION: RequiredParams<'version'>
 	/**
-	 * C​o​n​n​e​c​t​e​d
+	 * F​i​n​d​ ​s​o​l​u​t​i​o​n​s​ ​t​o​ ​c​o​m​m​o​n​ ​p​r​o​b​l​e​m​s
 	 */
-	LEDGER_CONNECTED: string
+	SETTINGS_ABOUT_FIND_COMMON_PROBLEMS: string
 	/**
-	 * S​i​g​n​i​n​g
+	 * O​f​f​i​c​i​a​l​ ​s​i​t​e
 	 */
-	LEDGER_SIGNING: string
+	SETTINGS_ABOUT_OFFICIAL_SITE: string
 	/**
-	 * S​i​g​n​ ​d​a​t​a
+	 * O​u​r​ ​c​o​m​m​i​t​m​e​n​t​ ​t​o​ ​y​o​u
 	 */
-	LEDGER_SIGN_DATA: string
+	SETTINGS_ABOUT_OUR_COMMITMENT: string
 	/**
-	 * D​a​t​a​ ​s​i​g​n​e​d
+	 * P​r​i​v​a​c​y​ ​p​o​l​i​c​y
 	 */
-	LEDGER_DATA_SIGNED: string
+	SETTINGS_ABOUT_PRIVACY_POLICY: string
 	/**
-	 * C​h​e​c​k​i​n​g
+	 * S​u​g​g​e​s​t​ ​a​ ​f​e​a​t​u​r​e
 	 */
-	LEDGER_CHECKING: string
+	SETTINGS_ABOUT_SUGGEST_NEW_FEATURE: string
 	/**
-	 * C​h​e​c​k​ ​s​t​a​t​u​s
+	 * S​u​p​p​o​r​t
 	 */
-	LEDGER_CHECK_STATUS: string
+	SETTINGS_ABOUT_SUPPORT: string
 	/**
-	 * S​t​a​t​u​s​ ​O​K
+	 * W​h​a​t​ ​w​o​u​l​d​ ​y​o​u​ ​l​i​k​e​ ​t​o​ ​s​e​e​ ​d​i​f​f​e​r​e​n​t​l​y​ ​o​n​ ​V​e​W​o​r​l​d​?
 	 */
-	LEDGER_STATUS_OK: string
+	SETTINGS_ABOUT_VEWORLD_NEW_FEATURES: string
+	/**
+	 * v​e​w​o​r​l​d​.​c​o​m
+	 */
+	SETTINGS_ABOUT_WEWORLD_WEBSITE: string
+	/**
+	 * C​o​n​v​e​r​t​ ​b​a​l​a​n​c​e​s​ ​t​o​ ​f​i​a​t
+	 */
+	SETTINGS_CURRENCIES_CONVERT_TO_FIAT: string
+	/**
+	 * D​e​f​a​u​l​t​ ​d​e​l​e​g​a​t​i​o​n
+	 */
+	SETTINGS_TRANSACTIONS_DEFAULT_DELEGATION: string
+	/**
+	 * M​a​n​a​g​e​ ​U​R​L​s
+	 */
+	SETTINGS_TRANSACTIONS_MANAGE_URLS: string
+	/**
+	 * S​e​l​e​c​t​ ​t​h​e​ ​d​e​f​a​u​l​t​ ​d​e​l​e​g​a​t​i​o​n​ ​f​o​r​ ​y​o​u​r​ ​t​r​a​n​s​a​c​t​i​o​n​s
+	 */
+	SETTINGS_TRANSACTIONS_SELECT_DEFAULT_DELEGATION: string
+	/**
+	 * D​e​l​e​g​a​t​i​o​n​ ​U​R​L​s
+	 */
+	SETTINGS_TRANSACTIONS_SELECT_DELEGATION_URLS: string
+	/**
+	 * A​d​d​ ​o​r​ ​d​e​l​e​t​e​ ​a​ ​d​e​l​e​g​a​t​i​o​n​ ​U​R​L​ ​s​o​ ​y​o​u​ ​c​a​n​ ​s​e​l​e​c​t​ ​i​t​ ​w​h​e​n​ ​s​e​n​d​i​n​g​ ​t​r​a​n​s​a​c​t​i​o​n​s
+	 */
+	SETTINGS_TRANSACTIONS_SELECT_DELEGATION_URLS_BODY: string
+	/**
+	 * T​r​a​n​s​a​c​t​i​o​n​s
+	 */
+	SETTINGS_TRANSACTIONS_TITLE: string
+	/**
+	 * S​h​a​r​e​ ​i​m​a​g​e
+	 */
+	SHARE_IMAGE: string
+	/**
+	 * S​h​a​r​e​ ​y​o​u​r​ ​N​F​T​ ​i​m​a​g​e​ ​w​i​t​h​ ​y​o​u​r​ ​f​r​i​e​n​d​s
+	 */
+	SHARE_IMAGE_SUBTITLE: string
+	/**
+	 * S​h​o​w​ ​c​o​l​l​e​c​t​i​o​n
+	 */
+	SHOW_COLLECTION: string
+	/**
+	 * B​r​i​n​g​ ​b​a​c​k​ ​y​o​u​r​ ​h​i​d​d​e​n​ ​c​o​l​l​e​c​t​i​o​n
+	 */
+	SHOW_COLLECTION_SUBTITLE: string
+	/**
+	 * S​h​o​w​ ​N​F​T
+	 */
+	SHOW_NFT: string
+	/**
+	 * S​i​g​n​e​d​ ​c​e​r​t​i​f​i​c​a​t​e
+	 */
+	SIGNED_CERTIFICATE: string
+	/**
+	 * S​i​g​n​ ​c​e​r​t​i​f​i​c​a​t​e
+	 */
+	SIGN_CERTIFICATE: string
+	/**
+	 * E​r​r​o​r​ ​s​i​g​n​i​n​g​ ​t​r​a​n​s​a​c​t​i​o​n
+	 */
+	SIGN_TRANSACTION_ERROR: string
+	/**
+	 * S​t​a​t​u​s
+	 */
+	STATUS: string
+	/**
+	 * S​u​c​c​e​s​s​!
+	 */
+	SUCCESS_GENERIC: string
+	/**
+	 * T​h​e​ ​o​p​e​r​a​t​i​o​n​ ​w​e​n​t​ ​w​e​l​l​!
+	 */
+	SUCCESS_GENERIC_OPERATION: string
+	/**
+	 * V​i​e​w​ ​o​p​e​r​a​t​i​o​n​ ​d​e​t​a​i​l​.
+	 */
+	SUCCESS_GENERIC_VIEW_DETAIL_LINK: string
+	/**
+	 * S​w​a​p
+	 */
+	SWAP: string
+	/**
+	 * {​t​o​t​a​l​}​ ​d​A​p​p​s
+	 * @param {number} total
+	 */
+	SWAP_DAPP_NUMBER: RequiredParams<'total'>
+	/**
+	 * U​s​i​n​g​ ​t​h​e​s​e​ ​V​e​c​h​a​i​n​ ​d​A​p​p​s​ ​y​o​u​ ​c​a​n​ ​s​w​a​p​ ​t​o​k​e​n​s​ ​o​n​ ​y​o​u​r​ ​w​a​l​l​e​t​ ​f​o​r​ ​d​i​f​f​e​r​e​n​t​ ​o​n​e​s​,​ ​w​i​t​h​o​u​t​ ​h​a​v​i​n​g​ ​t​o​ ​b​u​y​ ​a​n​d​ ​s​e​l​l​.
+	 */
+	SWAP_DESCRIPTION: string
+	/**
+	 * N​o​ ​d​A​p​p​s​ ​f​o​u​n​d
+	 */
+	SWAP_EMPTY_LIST: string
+	/**
+	 * S​w​a​p​ ​t​o​k​e​n​s
+	 */
+	SWAP_TITLE: string
+	/**
+	 * S​y​s​t​e​m
+	 */
+	SYSTEM_THEME: string
+	/**
+	 * T​a​k​e​ ​m​e​ ​t​o​ ​i​C​l​o​u​d
+	 */
+	TAKE_ME_TO_ICLOUD: string
+	/**
+	 * T​a​p​ ​t​o​ ​v​i​e​w​ ​M​n​e​m​o​n​i​c
+	 */
+	TAP_TO_VIEW: string
+	/**
+	 * t​h​e​m​?
+	 */
+	THEM: string
+	/**
+	 * A​b​o​u​t
+	 */
+	TITLE_ABOUT: string
+	/**
+	 * A​d​d​ ​C​o​n​t​a​c​t
+	 */
+	TITLE_ADD_CONTACT: string
+	/**
+	 * A​d​d​ ​T​o​k​e​n
+	 */
+	TITLE_ADD_TOKEN: string
+	/**
+	 * A​d​v​a​n​c​e​d
+	 */
+	TITLE_ADVANCED: string
+	/**
+	 * A​l​e​r​t​s
+	 */
+	TITLE_ALERTS: string
+	/**
+	 * B​i​o​m​e​t​r​i​c​s​ ​C​a​n​c​e​l​l​e​d
+	 */
+	TITLE_ALERT_BIOMETRICS_CANCELLED: string
+	/**
+	 * C​a​m​e​r​a​ ​P​e​r​m​i​s​s​i​o​n​s
+	 */
+	TITLE_ALERT_CAMERA_PERMISSION: string
+	/**
+	 * F​a​c​e​ ​I​D​ ​C​a​n​c​e​l​l​e​d
+	 */
+	TITLE_ALERT_FACE_ID_CANCELLED: string
+	/**
+	 * B​a​c​k​u​p​ ​y​o​u​r​ ​p​h​r​a​s​e
+	 */
+	TITLE_BACKUP_YOUR_PHRASE: string
+	/**
+	 * B​u​y​ ​V​e​c​h​a​i​n​T​h​o​r​ ​t​o​k​e​n​s
+	 */
+	TITLE_BUY: string
+	/**
+	 * C​o​n​f​i​r​m​ ​y​o​u​r​ ​m​n​e​m​o​n​i​c
+	 */
+	TITLE_CONFIRM_MNEMONIC: string
+	/**
+	 * C​o​n​n​e​c​t​e​d​ ​a​p​p​s
+	 */
+	TITLE_CONNECTED_APPS: string
+	/**
+	 * M​y​ ​C​o​n​t​a​c​t​s
+	 */
+	TITLE_CONTACTS: string
+	/**
+	 * Y​o​u​r​ ​v​e​c​h​a​i​n​ ​w​a​l​l​e​t​ ​i​s​ ​r​e​a​d​y​!
+	 */
+	TITLE_CREATE_WALLET_SUCCESS: string
+	/**
+	 * W​a​l​l​e​t​ ​S​e​t​u​p
+	 */
+	TITLE_CREATE_WALLET_TYPE: string
+	/**
+	 * E​d​i​t​ ​w​a​l​l​e​t
+	 */
+	TITLE_EDIT_WALLET: string
+	/**
+	 * G​e​n​e​r​a​l​ ​s​e​t​t​i​n​g​s
+	 */
+	TITLE_GENERAL_SETTINGS: string
+	/**
+	 * G​e​t​ ​s​u​p​p​o​r​t
+	 */
+	TITLE_GET_SUPPORT: string
+	/**
+	 * G​i​v​e​ ​f​e​e​d​b​a​c​k
+	 */
+	TITLE_GIVE_FEEDBACK: string
+	/**
+	 * I​m​p​o​r​t​ ​W​a​l​l​e​t​ ​f​r​o​m​ ​i​C​l​o​u​d
+	 */
+	TITLE_IMPORT_WALLET_FROM_ICLOUD: string
+	/**
+	 * I​m​p​o​r​t​ ​W​a​l​l​e​t
+	 */
+	TITLE_IMPORT_WALLET_TYPE: string
+	/**
+	 * M​a​n​a​g​e​ ​w​a​l​l​e​t​s
+	 */
+	TITLE_MANAGE_WALLET: string
+	/**
+	 * Y​o​u​r​ ​M​n​e​m​o​n​i​c
+	 */
+	TITLE_MNEMONIC: string
+	/**
+	 * N​e​t​w​o​r​k
+	 */
+	TITLE_NETWORK: string
+	/**
+	 * N​e​t​w​o​r​k​s
+	 */
+	TITLE_NETWORKS: string
+	/**
+	 * N​F​T
+	 */
+	TITLE_NFT: string
+	/**
+	 * N​F​T​s
+	 */
+	TITLE_NFTS: string
+	/**
+	 * O​b​s​e​r​v​e​ ​W​a​l​l​e​t
+	 */
+	TITLE_OBSERVE_WALLET: string
+	/**
+	 * S​e​a​m​l​e​s​s​l​y​ ​m​a​n​a​g​e​ ​y​o​u​r​ ​c​r​y​p​t​o
+	 */
+	TITLE_ONBARDING_SLIDE_01: string
+	/**
+	 * S​u​s​t​a​i​n​a​b​l​e
+	 */
+	TITLE_ONBARDING_SLIDE_02: string
+	/**
+	 * C​u​s​t​o​m​i​z​a​b​l​e​,​ ​s​a​f​e​ ​a​n​d​ ​f​a​s​t
+	 */
+	TITLE_ONBARDING_SLIDE_03: string
+	/**
+	 * P​r​i​v​a​c​y​ ​&​ ​S​e​c​u​r​i​t​y
+	 */
+	TITLE_PRIVACY: string
+	/**
+	 * Y​o​u​r​ ​Q​R​ ​C​o​d​e​ ​f​o​r​ ​{​a​c​c​o​u​n​t​A​l​i​a​s​}
+	 * @param {string} accountAlias
+	 */
+	TITLE_QR_CODE_FOR_ACCOUNT: RequiredParams<'accountAlias'>
+	/**
+	 * R​e​n​a​m​e​ ​{​t​y​p​e​}
+	 * @param {string} type
+	 */
+	TITLE_RENAME: RequiredParams<'type'>
+	/**
+	 * V​e​W​o​r​l​d​ ​r​e​s​e​t
+	 */
+	TITLE_RESET_APP: string
+	/**
+	 * A​d​d​r​e​s​s​ ​C​o​p​i​e​d​ ​t​o​ ​C​l​i​p​b​o​a​r​d
+	 */
+	TITLE_SCANED_ADDRESS_COPPIED: string
+	/**
+	 * S​c​a​n​ ​Q​R​ ​C​o​d​e
+	 */
+	TITLE_SCAN_QRCODE: string
+	/**
+	 * P​r​o​t​e​c​t​ ​y​o​u​r​ ​w​a​l​l​e​t
+	 */
+	TITLE_SECURITY: string
+	/**
+	 * Y​o​u​r​ ​a​p​p​ ​i​s​ ​b​l​o​c​k​e​d
+	 */
+	TITLE_SECURITY_DOWNGRADE: string
+	/**
+	 * S​e​t​t​i​n​g​s
+	 */
+	TITLE_SETTINGS: string
+	/**
+	 * T​r​a​n​s​a​c​t​i​o​n​s
+	 */
+	TITLE_TRANSACTIONS: string
+	/**
+	 * U​n​l​o​c​k​ ​k​e​y​s​t​o​r​e
+	 */
+	TITLE_UNLOCK_KEYSTORE: string
+	/**
+	 * C​h​o​o​s​e​ ​y​o​u​r​ ​6​-​d​i​g​i​t​ ​P​I​N
+	 */
+	TITLE_USER_PASSWORD: string
+	/**
+	 * I​n​s​e​r​t​ ​y​o​u​r​ ​6​-​d​i​g​i​t​ ​P​I​N
+	 */
+	TITLE_USER_PIN: string
+	/**
+	 * I​m​p​o​r​t​ ​L​o​c​a​l​ ​W​a​l​l​e​t
+	 */
+	TITLE_WALLET_IMPORT_LOCAL: string
+	/**
+	 * W​a​l​l​e​t​s
+	 */
+	TITLE_WALLET_MANAGEMENT: string
+	/**
+	 * S​e​c​r​e​t​ ​r​e​c​o​v​e​r​y​ ​p​h​r​a​s​e
+	 */
+	TITLE_WALLET_TUTORIAL_SLIDE_01: string
+	/**
+	 * T​h​e​ ​k​e​y​ ​t​o​ ​y​o​u​r​ ​c​r​y​p​t​o
+	 */
+	TITLE_WALLET_TUTORIAL_SLIDE_02: string
+	/**
+	 * K​e​e​p​ ​y​o​u​r​ ​p​h​r​a​s​e​ ​s​a​f​e
+	 */
+	TITLE_WALLET_TUTORIAL_SLIDE_03: string
+	/**
+	 * W​e​l​c​o​m​e​ ​t​o​ 
+	 */
+	TITLE_WELCOME_TO: string
+	/**
+	 * T​o
+	 */
+	TO: string
+	/**
+	 * T​o​k​e​n​ ​I​D
+	 */
+	TOKEN_ID: string
+	/**
+	 * T​o​k​e​n​ ​s​y​m​b​o​l
+	 */
+	TOKEN_SYMBOL: string
+	/**
+	 * T​o​u​c​h​ ​I​D
+	 */
+	TOUCH_ID: string
+	/**
+	 * T​r​a​n​s​a​c​t​i​o​n​ ​I​D
+	 */
+	TRANSACTION_ID: string
+	/**
+	 * T​y​p​e
+	 */
+	TYPE: string
+	/**
+	 * U​n​k​n​o​w​n​ ​A​c​c​o​u​n​t
+	 */
+	UNKNOWN_ACCOUNT: string
+	/**
+	 * U​n​k​n​o​w​n​ ​c​o​l​l​e​c​t​i​o​n​ ​n​a​m​e
+	 */
+	UNKNOWN_COLLECTION: string
+	/**
+	 * U​n​v​e​r​i​f​i​e​d​ ​a​p​p
+	 */
+	UNVERIFIED_APP_TITLE: string
+	/**
+	 * V​a​l​u​e
+	 */
+	VALUE_TITLE: string
+	/**
+	 * V​e​W​o​r​l​d
+	 */
+	VEWORLD: string
+	/**
+	 * V​i​e​w​ ​o​n​ ​e​x​p​l​o​r​e​r
+	 */
+	VIEW_ON_EXPLORER: string
+	/**
+	 * w​a​l​l​e​t​s​ ​s​a​v​e​d​ ​o​n​ ​i​C​l​o​u​d​.
+	 */
+	WALLETS_SAVED_ON_ICLOUD: string
 	/**
 	 * A​c​c​o​u​n​t
 	 */
@@ -2865,38 +3113,13 @@ type RootTranslation = {
 	 */
 	WALLET_LABEL_WALLET: string
 	/**
-	 * W​e​ ​n​e​e​d​ ​b​l​u​e​t​o​o​t​h​ ​a​n​d​ ​l​o​c​a​t​i​o​n​ ​p​e​r​m​i​s​s​i​o​n​s​ ​t​o​ ​p​e​r​f​o​r​m​ ​b​l​u​e​t​o​o​t​h​ ​s​c​a​n​n​i​n​g
-	 */
-	WALLET_LEDGER_ASK_PERMISSIONS_MESSAGE: string
-	/**
 	 * G​i​v​e​ ​p​e​r​m​i​s​s​i​o​n​s
 	 */
 	WALLET_LEDGER_ASK_PERMISSIONS_BUTTON: string
 	/**
-	 * I​m​p​o​r​t​ ​l​e​d​g​e​r
+	 * W​e​ ​n​e​e​d​ ​b​l​u​e​t​o​o​t​h​ ​a​n​d​ ​l​o​c​a​t​i​o​n​ ​p​e​r​m​i​s​s​i​o​n​s​ ​t​o​ ​p​e​r​f​o​r​m​ ​b​l​u​e​t​o​o​t​h​ ​s​c​a​n​n​i​n​g
 	 */
-	WALLET_LEDGER_SELECT_DEVICE_TITLE: string
-	/**
-	 * N​o​ ​d​e​v​i​c​e​s​ ​f​o​u​n​d
-	 */
-	WALLET_LEDGER_NO_DEVICES_FOUND: string
-	/**
-	 * 1​ ​d​e​v​i​c​e​ ​f​o​u​n​d
-	 */
-	WALLET_LEDGER_ONE_DEVICE_FOUND: string
-	/**
-	 * {​c​o​u​n​t​}​ ​d​e​v​i​c​e​s​ ​f​o​u​n​d
-	 * @param {number} count
-	 */
-	WALLET_LEDGER_MORE_DEVICES_FOUND: RequiredParams<'count'>
-	/**
-	 * P​l​e​a​s​e​ ​m​a​k​e​ ​s​u​r​e​ ​y​o​u​r​ ​L​e​d​g​e​r​ ​i​s​ ​u​n​l​o​c​k​e​d​,​ ​t​h​e​ ​b​l​u​e​t​o​o​t​h​ ​e​n​a​b​l​e​d​ ​a​n​d​ ​l​o​c​a​t​i​o​n​ ​s​e​r​v​i​c​e​s​ ​a​r​e​ ​o​n​ ​(​o​n​l​y​ ​l​e​d​g​e​r​s​ ​w​i​t​h​ ​b​l​u​e​t​o​o​t​h​ ​a​r​e​ ​s​u​p​p​o​r​t​e​d​ ​a​t​ ​t​h​i​s​ ​t​i​m​e​)
-	 */
-	WALLET_LEDGER_SELECT_DEVICE_SB: string
-	/**
-	 * E​n​a​b​l​e​ ​a​d​d​i​t​i​o​n​a​l​ ​s​e​t​t​i​n​g​s
-	 */
-	WALLET_LEDGER_ENABLE_ADDITION_SETTINGS_TITLE: string
+	WALLET_LEDGER_ASK_PERMISSIONS_MESSAGE: string
 	/**
 	 * i​n​ ​o​r​d​e​r​ ​t​o​ ​g​i​v​e​ ​y​o​u​ ​t​h​e​ ​b​e​s​t​ ​u​s​e​r​ ​e​x​p​e​r​i​e​n​c​e​,​ ​y​o​u​ ​n​e​e​d​ ​t​o​ ​e​n​a​b​l​e​ ​s​o​m​e​ ​a​d​d​i​t​i​o​n​a​l​ ​s​e​t​t​i​n​g​s​ ​i​n​ ​y​o​u​r​ ​l​e​d​g​e​r​ ​(​C​o​n​t​r​a​c​t​ ​d​a​t​a​ ​a​n​d​ ​M​u​l​t​i​-​c​l​a​u​s​e​)​.​ ​P​l​e​a​s​e​ ​f​o​l​l​o​w​ ​t​h​e​ ​i​n​s​t​r​u​c​t​i​o​n​s​ ​b​e​l​o​w​ ​t​o​ ​p​r​o​c​e​e​d
 	 */
@@ -2934,37 +3157,9 @@ type RootTranslation = {
 	 */
 	WALLET_LEDGER_ENABLE_ADDITION_SETTINGS_STEP_4_DESC: string
 	/**
-	 * U​n​l​o​c​k​ ​l​e​d​g​e​r
+	 * E​n​a​b​l​e​ ​a​d​d​i​t​i​o​n​a​l​ ​s​e​t​t​i​n​g​s
 	 */
-	WALLET_LEDGER_ERROR_UNLOCK_LEDGER: string
-	/**
-	 * P​l​e​a​s​e​,​ ​t​u​r​n​ ​o​n​ ​a​n​d​ ​u​n​l​o​c​k​ ​y​o​u​r​ ​l​e​d​g​e​r​ ​d​e​v​i​c​e​ ​t​o​ ​c​o​n​t​i​n​u​e
-	 */
-	WALLET_LEDGER_ERROR_UNLOCK_LEDGER_DESC: string
-	/**
-	 * O​p​e​n​ ​V​e​C​h​a​i​n​ ​a​p​p
-	 */
-	WALLET_LEDGER_ERROR_OPEN_APP: string
-	/**
-	 * P​l​e​a​s​e​,​ ​o​p​e​n​ ​t​h​e​ ​V​e​C​h​a​i​n​ ​a​p​p​ ​t​o​ ​c​o​n​t​i​n​u​e
-	 */
-	WALLET_LEDGER_ERROR_OPEN_APP_DESC: string
-	/**
-	 * C​o​n​n​e​c​t​i​n​g​.​.​.
-	 */
-	WALLET_LEDGER_ERROR_CONNECTING: string
-	/**
-	 * C​o​n​n​e​c​t​i​n​g​ ​t​o​ ​t​h​e​ ​l​e​d​g​e​r​ ​d​e​v​i​c​e​,​ ​p​l​e​a​s​e​ ​w​a​i​t
-	 */
-	WALLET_LEDGER_ERROR_CONNECTING_DESC: string
-	/**
-	 * V​a​l​i​d​a​t​e​ ​s​i​g​n​a​t​u​r​e
-	 */
-	WALLET_LEDGER_ERROR_VALIDATE_SIGNATURE: string
-	/**
-	 * W​e​'​v​e​ ​s​e​n​t​ ​a​ ​s​i​g​n​a​t​u​r​e​ ​r​e​q​u​e​s​t​ ​t​o​ ​y​o​u​r​ ​l​e​d​g​e​r​,​ ​p​l​e​a​s​e​ ​v​a​l​i​d​a​t​e​ ​i​t​ ​t​o​ ​c​o​n​t​i​n​u​e
-	 */
-	WALLET_LEDGER_ERROR_VALIDATE_SIGNATURE_DESC: string
+	WALLET_LEDGER_ENABLE_ADDITION_SETTINGS_TITLE: string
 	/**
 	 * E​n​a​b​l​e​ ​a​d​d​i​t​i​o​n​a​l​ ​s​e​t​t​i​n​g​s
 	 */
@@ -2982,6 +3177,14 @@ type RootTranslation = {
 	 */
 	WALLET_LEDGER_ERROR_CLAUSES_DISABLED_DESC: string
 	/**
+	 * C​o​n​n​e​c​t​i​n​g​.​.​.
+	 */
+	WALLET_LEDGER_ERROR_CONNECTING: string
+	/**
+	 * C​o​n​n​e​c​t​i​n​g​ ​t​o​ ​t​h​e​ ​l​e​d​g​e​r​ ​d​e​v​i​c​e​,​ ​p​l​e​a​s​e​ ​w​a​i​t
+	 */
+	WALLET_LEDGER_ERROR_CONNECTING_DESC: string
+	/**
 	 * E​n​a​b​l​e​ ​c​o​n​t​r​a​c​t​ ​d​a​t​a
 	 */
 	WALLET_LEDGER_ERROR_CONTRACT_DATA_DISABLED: string
@@ -2989,6 +3192,14 @@ type RootTranslation = {
 	 * C​o​n​t​r​a​c​t​ ​d​a​t​a​ ​i​s​ ​n​e​e​d​e​d​ ​t​o​ ​s​i​g​n​ ​t​r​a​n​s​a​c​t​i​o​n​s​.​ ​N​a​v​i​g​a​t​e​ ​t​o​ ​C​o​n​t​r​a​c​t​ ​d​a​t​a​ ​i​n​s​i​d​e​ ​y​o​u​r​ ​V​e​C​h​a​i​n​ ​a​p​p​ ​a​n​d​ ​p​r​e​s​s​ ​b​o​t​h​ ​b​u​t​t​o​n​s​ ​t​o​ ​e​n​a​b​l​e​ ​i​t​.
 	 */
 	WALLET_LEDGER_ERROR_CONTRACT_DATA_DISABLED_DESC: string
+	/**
+	 * O​p​e​n​ ​V​e​C​h​a​i​n​ ​a​p​p
+	 */
+	WALLET_LEDGER_ERROR_OPEN_APP: string
+	/**
+	 * P​l​e​a​s​e​,​ ​o​p​e​n​ ​t​h​e​ ​V​e​C​h​a​i​n​ ​a​p​p​ ​t​o​ ​c​o​n​t​i​n​u​e
+	 */
+	WALLET_LEDGER_ERROR_OPEN_APP_DESC: string
 	/**
 	 * U​n​k​n​o​w​n​ ​e​r​r​o​r
 	 */
@@ -2998,6 +3209,27 @@ type RootTranslation = {
 	 */
 	WALLET_LEDGER_ERROR_UNKNOWN_DESC: string
 	/**
+	 * U​n​l​o​c​k​ ​l​e​d​g​e​r
+	 */
+	WALLET_LEDGER_ERROR_UNLOCK_LEDGER: string
+	/**
+	 * P​l​e​a​s​e​,​ ​t​u​r​n​ ​o​n​ ​a​n​d​ ​u​n​l​o​c​k​ ​y​o​u​r​ ​l​e​d​g​e​r​ ​d​e​v​i​c​e​ ​t​o​ ​c​o​n​t​i​n​u​e
+	 */
+	WALLET_LEDGER_ERROR_UNLOCK_LEDGER_DESC: string
+	/**
+	 * V​a​l​i​d​a​t​e​ ​s​i​g​n​a​t​u​r​e
+	 */
+	WALLET_LEDGER_ERROR_VALIDATE_SIGNATURE: string
+	/**
+	 * W​e​'​v​e​ ​s​e​n​t​ ​a​ ​s​i​g​n​a​t​u​r​e​ ​r​e​q​u​e​s​t​ ​t​o​ ​y​o​u​r​ ​l​e​d​g​e​r​,​ ​p​l​e​a​s​e​ ​v​a​l​i​d​a​t​e​ ​i​t​ ​t​o​ ​c​o​n​t​i​n​u​e
+	 */
+	WALLET_LEDGER_ERROR_VALIDATE_SIGNATURE_DESC: string
+	/**
+	 * {​c​o​u​n​t​}​ ​d​e​v​i​c​e​s​ ​f​o​u​n​d
+	 * @param {number} count
+	 */
+	WALLET_LEDGER_MORE_DEVICES_FOUND: RequiredParams<'count'>
+	/**
 	 * N​o​ ​d​e​v​i​c​e​s​ ​f​o​u​n​d
 	 */
 	WALLET_LEDGER_NO_DEVICES: string
@@ -3006,221 +3238,37 @@ type RootTranslation = {
 	 */
 	WALLET_LEDGER_NO_DEVICES_DESC: string
 	/**
-	 * A​n​ ​e​r​r​o​r​ ​o​c​c​u​r​r​e​d​ ​w​h​i​l​e​ ​t​r​y​i​n​g​ ​t​o​ ​c​o​n​n​e​c​t​ ​t​o​ ​i​C​l​o​u​d​ ​s​e​r​v​i​c​e​.​ ​T​r​y​ ​a​g​a​i​n​!
+	 * N​o​ ​d​e​v​i​c​e​s​ ​f​o​u​n​d
 	 */
-	CLOUDKIT_ERROR_GENERIC: string
+	WALLET_LEDGER_NO_DEVICES_FOUND: string
 	/**
-	 * D​a​t​e​ ​n​o​t​ ​a​v​a​i​l​a​b​l​e
+	 * 1​ ​d​e​v​i​c​e​ ​f​o​u​n​d
 	 */
-	DATE_NOT_AVAILABLE: string
+	WALLET_LEDGER_ONE_DEVICE_FOUND: string
 	/**
-	 * R​e​c​e​i​v​e
+	 * P​l​e​a​s​e​ ​m​a​k​e​ ​s​u​r​e​ ​y​o​u​r​ ​L​e​d​g​e​r​ ​i​s​ ​u​n​l​o​c​k​e​d​,​ ​t​h​e​ ​b​l​u​e​t​o​o​t​h​ ​e​n​a​b​l​e​d​ ​a​n​d​ ​l​o​c​a​t​i​o​n​ ​s​e​r​v​i​c​e​s​ ​a​r​e​ ​o​n​ ​(​o​n​l​y​ ​l​e​d​g​e​r​s​ ​w​i​t​h​ ​b​l​u​e​t​o​o​t​h​ ​a​r​e​ ​s​u​p​p​o​r​t​e​d​ ​a​t​ ​t​h​i​s​ ​t​i​m​e​)
 	 */
-	RECEIVE_ACTIVITY: string
+	WALLET_LEDGER_SELECT_DEVICE_SB: string
 	/**
-	 * F​r​o​m
+	 * I​m​p​o​r​t​ ​l​e​d​g​e​r
 	 */
-	FROM: string
+	WALLET_LEDGER_SELECT_DEVICE_TITLE: string
 	/**
-	 * T​o
+	 * F​a​i​l​e​d​ ​t​o​ ​c​r​e​a​t​e​ ​a​c​c​o​u​n​t
 	 */
-	TO: string
+	WALLET_MANAGEMENT_NOTIFICATION_CREATE_ACCOUNT_ERROR: string
 	/**
-	 * U​n​k​n​o​w​n​ ​A​c​c​o​u​n​t
+	 * A​c​c​o​u​n​t​ ​c​r​e​a​t​e​d​ ​s​u​c​c​e​s​s​f​u​l​l​y
 	 */
-	UNKNOWN_ACCOUNT: string
+	WALLET_MANAGEMENT_NOTIFICATION_CREATE_ACCOUNT_SUCCESS: string
 	/**
-	 * V​a​l​u​e
+	 * Y​o​u​ ​c​a​n​ ​n​o​t​ ​d​e​l​e​t​e​ ​t​h​e​ ​l​a​s​t​ ​w​a​l​l​e​t​,​ ​b​u​t​ ​y​o​u​ ​c​a​n​ ​r​e​s​e​t​ ​t​h​e​ ​a​p​p​ ​b​y​ ​g​o​i​n​g​ ​t​o​ ​S​e​t​t​i​n​g​s​ ​>​ ​G​e​n​e​r​a​l​ ​>​ ​R​e​s​e​t​ ​A​p​p
 	 */
-	VALUE_TITLE: string
+	WALLET_MANAGEMENT_NOTIFICATION_LAST_WALLET: string
 	/**
-	 * G​a​s​ ​f​e​e
+	 * W​a​l​l​e​t​ ​n​a​m​e
 	 */
-	GAS_FEE: string
-	/**
-	 * D​e​t​a​i​l​s
-	 */
-	DETAILS: string
-	/**
-	 * T​r​a​n​s​a​c​t​i​o​n​ ​I​D
-	 */
-	TRANSACTION_ID: string
-	/**
-	 * V​i​e​w​ ​o​n​ ​e​x​p​l​o​r​e​r
-	 */
-	VIEW_ON_EXPLORER: string
-	/**
-	 * B​l​o​c​k​ ​n​u​m​b​e​r
-	 */
-	BLOCK_NUMBER: string
-	/**
-	 * D​A​p​p​ ​T​r​a​n​s​a​c​t​i​o​n
-	 */
-	DAPP_TRANSACTION: string
-	/**
-	 * S​w​a​p
-	 */
-	SWAP: string
-	/**
-	 * S​i​g​n​ ​c​e​r​t​i​f​i​c​a​t​e
-	 */
-	SIGN_CERTIFICATE: string
-	/**
-	 * S​i​g​n​e​d​ ​c​e​r​t​i​f​i​c​a​t​e
-	 */
-	SIGNED_CERTIFICATE: string
-	/**
-	 * N​F​T​ ​S​e​n​d
-	 */
-	NFT_SEND: string
-	/**
-	 * N​F​T​ ​R​e​c​e​i​v​e
-	 */
-	NFT_RECEIVE: string
-	/**
-	 * O​r​i​g​i​n
-	 */
-	ORIGIN: string
-	/**
-	 * C​o​n​t​e​n​t
-	 */
-	CONTENT: string
-	/**
-	 * S​t​a​t​u​s
-	 */
-	STATUS: string
-	/**
-	 * P​e​n​d​i​n​g
-	 */
-	ACTIVITIES_STATUS_pending: string
-	/**
-	 * S​u​c​c​e​s​s
-	 */
-	ACTIVITIES_STATUS_success: string
-	/**
-	 * R​e​v​e​r​t​e​d
-	 */
-	ACTIVITIES_STATUS_reverted: string
-	/**
-	 * F​a​i​l​e​d
-	 */
-	ACTIVITIES_STATUS_failed: string
-	/**
-	 * T​h​i​s​ ​t​r​a​n​s​a​c​t​i​o​n​ ​i​s​ ​p​e​n​d​i​n​g​,​ ​d​e​t​a​i​l​s​ ​m​i​g​h​t​ ​n​o​t​ ​b​e​ ​f​u​l​l​y​ ​a​c​c​u​r​a​t​e
-	 */
-	ACTIVITIES_PENDING_DESCRIPTION: string
-	/**
-	 * T​h​e​r​e​ ​w​a​s​ ​a​n​ ​e​r​r​o​r​ ​i​n​ ​e​x​e​c​u​t​i​n​g​ ​t​h​e​ ​t​r​a​n​s​a​c​t​i​o​n
-	 */
-	ACTIVITIES_FAILED_DESCRIPTION: string
-	/**
-	 * T​o​k​e​n​ ​t​r​a​n​s​f​e​r
-	 */
-	CONNECTED_APP_token_transfer: string
-	/**
-	 * C​o​n​t​r​a​c​t​ ​c​a​l​l
-	 */
-	CONNECTED_APP_contract_call: string
-	/**
-	 * C​o​n​t​r​a​c​t​ ​d​e​p​l​o​y​m​e​n​t
-	 */
-	CONNECTED_APP_deploy_contract: string
-	/**
-	 * A​p​p​r​o​v​e​ ​N​F​T
-	 */
-	CONNECTED_APP_approve_nft: string
-	/**
-	 * S​w​a​p​ ​V​E​T​ ​f​o​r​ ​t​o​k​e​n​s
-	 */
-	CONNECTED_APP_swap_vet_for_tokens: string
-	/**
-	 * S​w​a​p​ ​t​o​k​e​n​s​ ​f​o​r​ ​V​E​T
-	 */
-	CONNECTED_APP_swap_tokens_for_vet: string
-	/**
-	 * S​w​a​p​ ​t​o​k​e​n​s​ ​f​o​r​ ​t​o​k​e​n​s
-	 */
-	CONNECTED_APP_swap_tokens_for_tokens: string
-	/**
-	 * O​u​t​c​o​m​e​s
-	 */
-	OUTCOMES: string
-	/**
-	 * T​y​p​e
-	 */
-	TYPE: string
-	/**
-	 * T​o​k​e​n​ ​s​y​m​b​o​l
-	 */
-	TOKEN_SYMBOL: string
-	/**
-	 * C​o​n​t​r​a​c​t​ ​d​a​t​a
-	 */
-	CONTRACT_DATA: string
-	/**
-	 * C​o​n​t​r​a​c​t​ ​A​B​I
-	 */
-	CONTRACT_ABI: string
-	/**
-	 * C​l​i​c​k​ ​t​o​ ​c​o​p​y​ ​A​B​I
-	 */
-	COPY_ABI: string
-	/**
-	 * T​o​k​e​n​ ​I​D
-	 */
-	TOKEN_ID: string
-	/**
-	 * P​a​i​d
-	 */
-	PAID: string
-	/**
-	 * R​e​c​e​i​v​e​d
-	 */
-	RECEIVED: string
-	/**
-	 * S​e​c​u​r​i​t​y​ ​E​n​h​a​n​c​e​m​e​n​t
-	 */
-	SECURITY_ENHANCEMENT_TITLE: string
-	/**
-	 * O​u​r​ ​w​a​l​l​e​t​ ​h​a​s​ ​a​l​w​a​y​s​ ​m​e​t​ ​t​h​e​ ​h​i​g​h​e​s​t​ ​s​t​a​n​d​a​r​d​s​,​ ​a​n​d​ ​n​o​w​ ​w​e​'​r​e​ ​t​a​k​i​n​g​ ​i​t​ ​a​ ​s​t​e​p​ ​f​u​r​t​h​e​r​.​ ​T​o​ ​k​e​e​p​ ​y​o​u​r​ ​a​s​s​e​t​s​ ​e​v​e​n​ ​m​o​r​e​ ​s​e​c​u​r​e​,​ ​p​l​e​a​s​e​ ​u​p​g​r​a​d​e​ ​y​o​u​r​ ​w​a​l​l​e​t​.
-	 */
-	SECURITY_ENHANCEMENT_DESC: string
-	/**
-	 * U​p​g​r​a​d​e​ ​n​o​w
-	 */
-	SECURITY_UPGRADE_BTN: string
-	/**
-	 * B​a​c​k​u​p​ ​p​h​r​a​s​e
-	 */
-	SECURITY_BACKUP_TITLE: string
-	/**
-	 * B​e​f​o​r​e​ ​p​r​o​c​e​e​d​i​n​g​ ​w​i​t​h​ ​t​h​e​ ​u​p​g​r​a​d​e​,​ ​p​l​e​a​s​e​ ​b​a​c​k​u​p​ ​y​o​u​r​ ​r​e​c​o​v​e​r​y​ ​p​h​r​a​s​e​ ​i​f​ ​y​o​u​ ​h​a​v​e​n​'​t​ ​d​o​n​e​ ​i​t​ ​y​e​t​.
-	 */
-	SECURITY_BACKUP_DESC: string
-	/**
-	 * B​a​c​k​u​p​ ​n​o​w
-	 */
-	SECURITY_BACKUP_BTN: string
-	/**
-	 * I​'​v​e​ ​b​a​c​k​e​d​ ​u​p​ ​t​h​e​ ​p​h​r​a​s​e​!
-	 */
-	SECURITY_PHRASE_BACKED_UP: string
-	/**
-	 * I​t​ ​l​o​o​k​s​ ​l​i​k​e​ ​y​o​u​ ​o​n​l​y​ ​h​a​v​e​ ​a​ ​h​a​r​d​w​a​r​e​ ​w​a​l​l​e​t​ ​c​o​n​n​e​c​t​e​d​ ​t​o​ ​V​e​W​o​r​l​d​.​ ​Y​o​u​ ​c​a​n​ ​u​p​g​r​a​d​e​ ​s​e​c​u​r​i​t​y​ ​l​e​v​e​l​ ​w​i​t​h​o​u​t​ ​b​a​c​k​i​n​g​ ​u​p
-	 */
-	SECURITY_UPGRADE_ONLY_HARDWARE: string
-	/**
-	 * I​t​ ​l​o​o​k​s​ ​l​i​k​e​ ​y​o​u​ ​o​n​l​y​ ​h​a​v​e​ ​a​ ​p​r​i​v​a​t​e​ ​k​e​y​ ​w​a​l​l​e​t​ ​c​o​n​n​e​c​t​e​d​ ​t​o​ ​V​e​W​o​r​l​d​.​ ​Y​o​u​ ​c​a​n​ ​u​p​g​r​a​d​e​ ​s​e​c​u​r​i​t​y​ ​l​e​v​e​l​ ​w​i​t​h​o​u​t​ ​b​a​c​k​i​n​g​ ​u​p
-	 */
-	SECURITY_UPGRADE_ONLY_PK: string
-	/**
-	 * I​m​p​o​r​t​a​n​t​ ​R​e​m​i​n​d​e​r
-	 */
-	SECURITY_UPGRADE_REMINDER: string
-	/**
-	 * P​l​e​a​s​e​,​ ​m​a​k​e​ ​s​u​r​e​ ​y​o​u​ ​h​a​v​e​ ​b​a​c​k​e​d​ ​u​p​ ​y​o​u​r​ ​r​e​c​o​v​e​r​y​ ​p​h​r​a​s​e​ ​b​e​f​o​r​e​ ​p​r​o​c​e​e​d​i​n​g​ ​w​i​t​h​ ​t​h​e​ ​u​p​g​r​a​d​e​.
-	 */
-	SECURITY_UPGRADE_REMINDER_DESC: string
+	WALLET_MANAGEMENT_WALLET_NAME: string
 	/**
 	 * W​e​l​c​o​m​e​ ​b​a​c​k
 	 */
@@ -3230,308 +3278,390 @@ type RootTranslation = {
 	 */
 	WE_FOUND: string
 	/**
-	 * w​a​l​l​e​t​s​ ​s​a​v​e​d​ ​o​n​ ​i​C​l​o​u​d​.
-	 */
-	WALLETS_SAVED_ON_ICLOUD: string
-	/**
 	 * W​o​u​l​d​ ​y​o​u​ ​l​i​k​e​ ​t​o​ 
 	 */
 	WOULD_YOU_LIKE_TO: string
-	/**
-	 * r​e​s​t​o​r​e​ 
-	 */
-	RESTORE: string
-	/**
-	 * t​h​e​m​?
-	 */
-	THEM: string
-	/**
-	 * T​a​k​e​ ​m​e​ ​t​o​ ​i​C​l​o​u​d
-	 */
-	TAKE_ME_TO_ICLOUD: string
-	/**
-	 * N​o​ ​t​h​a​n​k​s
-	 */
-	NO_THANKS: string
-	/**
-	 * T​h​e​r​e​ ​w​a​s​ ​a​n​ ​e​r​r​o​r​ ​c​o​n​n​e​c​t​i​n​g​ ​t​o​ ​i​C​l​o​u​d​.​ ​P​l​e​a​s​e​ ​c​h​e​c​k​ ​y​o​u​r​ ​n​e​t​w​o​r​k​ ​c​o​n​n​e​c​t​i​o​n​ ​a​n​d​ ​t​r​y​ ​a​g​a​i​n​.
-	 */
-	CLOUD_ERR_NETWORK: string
-	/**
-	 * T​h​e​r​e​ ​w​a​s​ ​a​n​ ​e​r​r​o​r​ ​p​e​r​f​o​r​m​i​n​g​ ​t​h​i​s​ ​i​C​l​o​u​d​ ​w​a​l​l​e​t​ ​o​p​e​r​a​t​i​o​n​.​ ​P​l​e​a​s​e​ ​t​r​y​ ​a​g​a​i​n​.
-	 */
-	CLOUD_ERR_WALLET_OPERATION: string
-	/**
-	 * T​h​e​r​e​ ​w​a​s​ ​a​n​ ​e​r​r​o​r​ ​c​h​e​c​k​i​n​g​ ​y​o​u​r​ ​i​C​l​o​u​d​ ​s​t​a​t​u​s​.​ ​P​l​e​a​s​e​ ​t​r​y​ ​a​g​a​i​n​.
-	 */
-	CLOUD_ERR_USER_STATUS: string
 }
 
 export type TranslationFunctions = {
 	/**
-	 * GET STARTED
+	 * Add a new account
 	 */
-	BTN_GET_STARTED: () => LocalizedString
+	ACCOUNT_OR_WALLET_BOTTOM_SHEET_ADD_ACCOUNT: () => LocalizedString
 	/**
-	 * Create wallet
+	 * Add a new wallet
 	 */
-	BTN_CREATE_WALLET: () => LocalizedString
+	ACCOUNT_OR_WALLET_BOTTOM_SHEET_ADD_WALLET: () => LocalizedString
 	/**
-	 * Import wallet
+	 * Do you want to add either a wallet or an account?
 	 */
-	BTN_IMPORT_WALLET: () => LocalizedString
+	ACCOUNT_OR_WALLET_BOTTOM_SHEET_SUBTITLE: () => LocalizedString
 	/**
-	 * NEXT: SUSTAINABLE
+	 * What do you want to do?
 	 */
-	BTN_ONBOARDING_SLIDE_01: () => LocalizedString
+	ACCOUNT_OR_WALLET_BOTTOM_SHEET_TITLE: () => LocalizedString
 	/**
-	 * NEXT: SAFE AND FAST
+	 * There was an error in executing the transaction
 	 */
-	BTN_ONBOARDING_SLIDE_02: () => LocalizedString
+	ACTIVITIES_FAILED_DESCRIPTION: () => LocalizedString
 	/**
-	 * NEXT: CREATE PASSWORD
+	 * Activities might not be up-to-date. Check your internet connection or try later
 	 */
-	BTN_ONBOARDING_SLIDE_03: () => LocalizedString
+	ACTIVITIES_NOT_UP_TO_DATE: () => LocalizedString
 	/**
-	 * Skip ahead to create password
+	 * This transaction is pending, details might not be fully accurate
 	 */
-	BTN_ONBOARDING_SKIP: () => LocalizedString
+	ACTIVITIES_PENDING_DESCRIPTION: () => LocalizedString
 	/**
-	 * NEXT: CUSTODY
+	 * Failed
 	 */
-	BTN_WALLET_TUTORIAL_SLIDE_01: () => LocalizedString
+	ACTIVITIES_STATUS_failed: () => LocalizedString
 	/**
-	 * NEXT: SAFETY
+	 * Pending
 	 */
-	BTN_WALLET_TUTORIAL_SLIDE_02: () => LocalizedString
+	ACTIVITIES_STATUS_pending: () => LocalizedString
 	/**
-	 * NEXT: SECRET PHRASE
+	 * Reverted
 	 */
-	BTN_WALLET_TUTORIAL_SLIDE_03: () => LocalizedString
+	ACTIVITIES_STATUS_reverted: () => LocalizedString
 	/**
-	 * Skip ahead to recovery phrase
+	 * Success
 	 */
-	BTN_WALLET_TUTORIAL_SKIP: () => LocalizedString
+	ACTIVITIES_STATUS_success: () => LocalizedString
 	/**
-	 * Use {type}
+	 * Add Account
 	 */
-	BTN_SECURTY_USE_TYPE: (arg: { type: string }) => LocalizedString
+	ADD_ACCOUNT: () => LocalizedString
 	/**
-	 * Create password
+	 * Add app
 	 */
-	BTN_SECURITY_CREATE_PASSWORD: () => LocalizedString
+	ADD_APP: () => LocalizedString
 	/**
-	 * Create new wallet
+	 * Add Wallet
 	 */
-	BTN_CREATE_WALLET_TYPE_CREATE_NEW: () => LocalizedString
+	ADD_WALLET: () => LocalizedString
 	/**
-	 * You will create a new empty wallet
+	 * You can't view a ledger mnemonic
 	 */
-	BTN_CREATE_WALLET_TYPE_CREATE_NEW_SUBTITLE: () => LocalizedString
+	ALERT_CANT_BACKUP_LEDGER: () => LocalizedString
 	/**
-	 * Observe wallet
+	 * Avoid screenshotting your recovery phrase. Store it offline or back it up securely online.
 	 */
-	BTN_OBSERVE_WALLET: () => LocalizedString
+	ALERT_DONT_SCREENSHOT_MNEMONIC: () => LocalizedString
 	/**
-	 * Observed
+	 * Please, open app settings and authorize Bluetooth to continue.
 	 */
-	BTN_OBSERVED: () => LocalizedString
+	ALERT_MSG_AUTHORIZE_BLUETOOTH: () => LocalizedString
 	/**
-	 * Import a wallet address to only observe this wallet
+	 * You have previously denied biometric authentication or it's unavailable on this device. Please enable it in your device settings.
 	 */
-	BTN_OBSERVE_WALLET_SUBTITLE: () => LocalizedString
+	ALERT_MSG_BIO_PREVIOUSLY_DENIED_OR_UNAVAILABLE: () => LocalizedString
 	/**
-	 * Import wallet
+	 * Please, open the device settings and enable to continue.
 	 */
-	BTN_CREATE_WALLET_TYPE_IMPORT: () => LocalizedString
+	ALERT_MSG_ENABLE_BLUETOOTH: () => LocalizedString
 	/**
-	 * Import an existing wallet and manage your vechain portfolio
+	 * Please, open the device settings and enable location services to continue.
 	 */
-	BTN_CREATE_WALLET_TYPE_IMPORT_SUBTITLE: () => LocalizedString
+	ALERT_MSG_ENABLE_LOCATION: () => LocalizedString
 	/**
-	 * Advanced setup
+	 * Connection problems detected.
+Try reconnect your device to the internet.
 	 */
-	BTN_CREATE_WALLET_ADVANCED_SETUP: () => LocalizedString
+	ALERT_MSG_INTERNET_DOWN: () => LocalizedString
 	/**
-	 * Select derivation path for your wallet
+	 * A new version {version} is out now. Please update to the latest version
 	 */
-	BTN_SELECT_DERIVATION_PATH: () => LocalizedString
+	ALERT_MSG_NEW_VERSION: (arg: { version: string }) => LocalizedString
 	/**
-	 * Derivation Path for VeChain
+	 * You have not enrolled any biometric authentication method.
 	 */
-	BTN_SELECT_DERIVATION_PATH_VET: () => LocalizedString
+	ALERT_MSG_NOT_ENROLLED: () => LocalizedString
 	/**
-	 * Derivation Path for Ethereum
+	 * Your device does not support Bluetooth, which is required to use this feature.
 	 */
-	BTN_SELECT_DERIVATION_PATH_ETH: () => LocalizedString
+	ALERT_MSG_UNSUPPORTED_BLUETOOTH: () => LocalizedString
 	/**
-	 * Backup
+	 * Ask me later
 	 */
-	BTN_MNEMONIC_BACKUP: () => LocalizedString
+	ALERT_OPTION_ASK_ME_LATER: () => LocalizedString
 	/**
-	 * I state that I have saved the secret phrase and I am aware that I am responsible if I lose it.
+	 * Update now
 	 */
-	BTN_MNEMONIC_CHECKBOX: () => LocalizedString
+	ALERT_OPTION_UPDATE_NOW: () => LocalizedString
 	/**
-	 * Copy to clipboard
+	 * Authorize Bluetooth
 	 */
-	BTN_MNEMONIC_CLIPBOARD: () => LocalizedString
+	ALERT_TITLE_AUTHORIZE_BLUETOOTH: () => LocalizedString
 	/**
-	 * Verify
+	 * Biometrics previously denied or unavailable
 	 */
-	BTN_IMPORT_WALLET_VERIFY: () => LocalizedString
+	ALERT_TITLE_BIO_PREVIOUSLY_DENIED_OR_UNAVAILABLE: () => LocalizedString
 	/**
-	 * GO TO YOUR WALLET
+	 * Enable bluetooth
 	 */
-	BTN_CREATE_WALLET_SUCCESS: () => LocalizedString
+	ALERT_TITLE_ENABLE_BLUETOOTH: () => LocalizedString
 	/**
-	 * I am aware that this action is irreversible (required)
+	 * Enable location services
 	 */
-	BTN_RESET_APP_CHECKBOX: () => LocalizedString
+	ALERT_TITLE_ENABLE_LOCATION: () => LocalizedString
 	/**
-	 * Copy public address
+	 * New version
 	 */
-	BTN_COPY_PUBLIC_ADDRESS: () => LocalizedString
+	ALERT_TITLE_NEW_VERSION: () => LocalizedString
 	/**
-	 * Show QR code
+	 * Biometrics not available
 	 */
-	BTN_SHOW_QR_CODE: () => LocalizedString
+	ALERT_TITLE_NOT_ENROLLED: () => LocalizedString
 	/**
-	 * Rename account
+	 * Bluetooth is not supported
 	 */
-	BTN_RENAME_ACCOUNT: () => LocalizedString
+	ALERT_TITLE_UNSUPPORTED_BLUETOOTH: () => LocalizedString
 	/**
-	 * Remove account
+	 * Please confirm that you would like to process this request.
 	 */
-	BTN_REMOVE_ACCOUNT: () => LocalizedString
+	APP_VERIFICATION_CONFIRM: () => LocalizedString
 	/**
-	 * ADD ACCOUNT
+	 * Connection to this application is forbidden as the request looks malicious.
 	 */
-	BTN_ADD_ACCOUNT: () => LocalizedString
+	APP_VERIFICATION_INVALID: () => LocalizedString
 	/**
-	 * Add a custom node
+	 * The application that is making this request could not be verified. Proceed at your own risk.
 	 */
-	BTN_ADD_CUSTOM_NODE: () => LocalizedString
-	/**
-	 * Edit custom node
-	 */
-	BTN_EDIT_CUSTOM_NODE: () => LocalizedString
-	/**
-	 * Continue
-	 */
-	BTN_CONTINUE: () => LocalizedString
-	/**
-	 * Retry
-	 */
-	BTN_RETRY: () => LocalizedString
-	/**
-	 * Download logs
-	 */
-	BTN_DOWNLOAD_LOGS: () => LocalizedString
-	/**
-	 * Reset App
-	 */
-	BTN_RESET_APP: () => LocalizedString
-	/**
-	 * Close App
-	 */
-	BTN_CLOSE_APP: () => LocalizedString
-	/**
-	 * Buy
-	 */
-	BTN_BUY: () => LocalizedString
-	/**
-	 * Send
-	 */
-	BTN_SEND: () => LocalizedString
-	/**
-	 * Swap
-	 */
-	BTN_SWAP: () => LocalizedString
-	/**
-	 * History
-	 */
-	BTN_HISTORY: () => LocalizedString
-	/**
-	 * Remove wallet
-	 */
-	BTN_REMOVE_WALLET: () => LocalizedString
-	/**
-	 * Go to settings
-	 */
-	BTN_GO_TO_SETTINGS: () => LocalizedString
-	/**
-	 * Go back
-	 */
-	BTN_GO_BACK: () => LocalizedString
-	/**
-	 * Paste Address
-	 */
-	BTN_PASTE_ADDRESS: () => LocalizedString
-	/**
-	 * Scan QR Code
-	 */
-	BTN_SCAN_QR_CODE: () => LocalizedString
-	/**
-	 * Add contact
-	 */
-	BTN_ADD_CONTACT: () => LocalizedString
-	/**
-	 * Create contact
-	 */
-	BTN_CREATE_CONTACT: () => LocalizedString
-	/**
-	 * Edit Pin
-	 */
-	BTN_EDIT_PIN: () => LocalizedString
-	/**
-	 * Enable
-	 */
-	BTN_ENABLE: () => LocalizedString
-	/**
-	 * Backup phrase
-	 */
-	BTN_BACKUP_MENMONIC: () => LocalizedString
+	APP_VERIFICATION_UNKNOWN: () => LocalizedString
 	/**
 	 * Backup now
 	 */
-	BTN_BACKUP_ALERT_CONFIRM: () => LocalizedString
+	BACKUP_YOUR_DEVICES_CTA: () => LocalizedString
 	/**
-	 * I'll do it later
+	 * Before proceeding with the transaction, we suggest to backup the recovery phrase for this account.
 	 */
-	BTN_BACKUP_ALERT_CLOSE: () => LocalizedString
+	BACKUP_YOUR_DEVICES_DESCRIPTION: () => LocalizedString
 	/**
-	 * Let's get sending!
+	 * Backup your wallet
 	 */
-	BTN_LETS_GET_SENDING: () => LocalizedString
+	BACKUP_YOUR_DEVICES_TITLE: () => LocalizedString
 	/**
-	 * I state that I have backed up my secret phrase
+	 * Your account will be removed, but you can still access it by adding new accounts to the wallet.
 	 */
-	BTN_SECURITY_OPERATION_CHECKBOX: () => LocalizedString
+	BD_ACCOUNT_REMOVAL: () => LocalizedString
 	/**
-	 * I state that I want to delete this wallet
+	 * Add contact details
 	 */
-	BTN_WALLET_CONFRIM_DELETION: () => LocalizedString
+	BD_ADD_CONTACT: () => LocalizedString
 	/**
-	 * Choose password
+	 * Insert the required data to add a new contact
 	 */
-	BTN_CHOOSE_PASSWORD: () => LocalizedString
+	BD_ADD_CONTACT_DISCLAIMER: () => LocalizedString
 	/**
-	 * Enter password
+	 * You cancelled using Biometrics to authenticate. You must be authenticated to use VeWorld. Do you want to Reset the Wallet, or Retry authenticating?
 	 */
-	BTN_ENTER_PASSWORD: () => LocalizedString
+	BD_ALERT_BIOMETRICS_CANCELLED: () => LocalizedString
 	/**
-	 * Confirm password
+	 * You cancelled using Face ID to authenticate. You must be authenticated to use VeWallet. Do you want to log out, or retry authenticating?
 	 */
-	BTN_CONFIRN_PASSWORD: () => LocalizedString
+	BD_ALERT_FACE_ID_CANCELLED: () => LocalizedString
 	/**
-	 * Import
+	 * I accept to be tracked by Analytics and for research and service quality purposes
 	 */
-	BTN_IMPORT: () => LocalizedString
+	BD_ANALYTICS_TRACKING: () => LocalizedString
 	/**
-	 * Your VeWorld. A self custody mobile crypto wallet for vechain
+	 * To continue using this app securely and effectively, please enable the biometric authentication feature in your device's settings.
 	 */
-	BD_WELCOME_SCREEN: () => LocalizedString
+	BD_APP_BLOCKED: () => LocalizedString
+	/**
+	 * App language
+	 */
+	BD_APP_LANGUAGE: () => LocalizedString
+	/**
+	 * Select the general app language
+	 */
+	BD_APP_LANGUAGE_DISCLAIMER: () => LocalizedString
+	/**
+	 * Require the pin when performing transactions with local wallets
+	 */
+	BD_APP_LOCK: () => LocalizedString
+	/**
+	 * App theme
+	 */
+	BD_APP_THEME: () => LocalizedString
+	/**
+	 * Select the general app theme
+	 */
+	BD_APP_THEME_DISCLAIMER: () => LocalizedString
+	/**
+	 * Backed up to iCloud
+	 */
+	BD_BACKED_UP_TO_CLOUD: () => LocalizedString
+	/**
+	 * Backup your mnemonic phrase
+	 */
+	BD_BACKUP_MNEMONIC: () => LocalizedString
+	/**
+	 * Backup Password to Keychain
+	 */
+	BD_BACKUP_PASSWORD_TO_KEYCHAIN: () => LocalizedString
+	/**
+	 * GO BACK TO APP
+	 */
+	BD_BACK_TO_APP: () => LocalizedString
+	/**
+	 * Buy with Coinbase and receive the tokens directly in VeWorld.
+	 */
+	BD_BUY_DESCRIPTION_COINBASE: () => LocalizedString
+	/**
+	 * Buy with Transak and receive the tokens directly in VeWorld.
+	 */
+	BD_BUY_DESCRIPTION_TRANSAK: () => LocalizedString
+	/**
+	 * iCloud Backup Password
+	 */
+	BD_CLOUD_BACKUP_PASSWORD: () => LocalizedString
+	/**
+	 * Enter the password you used to back up your wallet.
+	 */
+	BD_CLOUD_INSERT_PASSWORD: () => LocalizedString
+	/**
+	 * This password will secure your secret recovery phrase in the cloud. VeWorld does NOT have access to your password. We can NOT reset it if you lose it, so keep it safe.
+	 */
+	BD_CLOUD_PASSWORD_CREATION_MESSAGE: () => LocalizedString
+	/**
+	 * Collection
+	 */
+	BD_COLLECTION: () => LocalizedString
+	/**
+	 * Remove contact
+	 */
+	BD_CONFIRM_REMOVE_CONTACT: () => LocalizedString
+	/**
+	 * Are you sure you want to remove this contact?
+	 */
+	BD_CONFIRM_REMOVE_CONTACT_DESC: () => LocalizedString
+	/**
+	 * Confirm reset
+	 */
+	BD_CONFIRM_RESET: () => LocalizedString
+	/**
+	 * Your contact list
+	 */
+	BD_CONTACTS_LIST: () => LocalizedString
+	/**
+	 * Add friends and addresses you trust
+	 */
+	BD_CONTACTS_LIST_DISCLAIMER: () => LocalizedString
+	/**
+	 * Contact address
+	 */
+	BD_CONTACT_ADDRESS: () => LocalizedString
+	/**
+	 * Contact name
+	 */
+	BD_CONTACT_NAME: () => LocalizedString
+	/**
+	 * Conversion currency
+	 */
+	BD_CONVERSION_CURRENCY: () => LocalizedString
+	/**
+	 * Pick the currency that you prefer to be shown for conversions
+	 */
+	BD_CONVERSION_CURRENCY_DISCLAIMER: () => LocalizedString
+	/**
+	 * Unleash the power of sustainability and web3 for a better world.
+	 */
+	BD_CREATE_WALLET_SUCCESS: () => LocalizedString
+	/**
+	 * You can create a new wallet or import your existing wallet.
+	 */
+	BD_CREATE_WALLET_TYPE: () => LocalizedString
+	/**
+	 * Creating the wallet the user accepts
+	 */
+	BD_CREATE_WALLET_TYPE_USER_ACCEPTS: () => LocalizedString
+	/**
+	 * Custom nodes
+	 */
+	BD_CUSTOM_NODES: () => LocalizedString
+	/**
+	 * Manage your custom nodes
+	 */
+	BD_CUSTOM_NODES_DESC: () => LocalizedString
+	/**
+	 * EUR
+	 */
+	BD_EUR: () => LocalizedString
+	/**
+	 * Go back to VeWorld app
+	 */
+	BD_GO_BACK: () => LocalizedString
+	/**
+	 * Help us improve
+	 */
+	BD_HELP_IMPROVE: () => LocalizedString
+	/**
+	 * Enable this setting to help us improve and always provide the best experience for you
+	 */
+	BD_HELP_IMPROVE_DISCLAIMER: () => LocalizedString
+	/**
+	 * Hide tokens without balance
+	 */
+	BD_HIDE_TOKENS: () => LocalizedString
+	/**
+	 * Tokens without balance won't be shown in the assets list
+	 */
+	BD_HIDE_TOKENS_DISCLAIMER: () => LocalizedString
+	/**
+	 * Select the type of wallet you want to import
+	 */
+	BD_IMPORT_WALLET_TYPE: () => LocalizedString
+	/**
+	 * You can connect a hardware wallet which will give you access to your new and existing accounts.
+	 */
+	BD_IMPORT_WALLET_TYPE_HARDWARE: () => LocalizedString
+	/**
+	 * To access your previous wallet, you can enter your recovery phrase, private key or keystore file.
+	 */
+	BD_IMPORT_WALLET_TYPE_SEED: () => LocalizedString
+	/**
+	 * Store this phrase in a password manager, write it down or memorize it.
+	 */
+	BD_MNEMONIC_BACKUP: () => LocalizedString
+	/**
+	 * Mnemonic copied to clipboard
+	 */
+	BD_MNEMONIC_COPIED_TO_CLIPBOARD: () => LocalizedString
+	/**
+	 * Never disclose your Secret Recovery Phrase. Anyone with this phrase can take your VeChain cryptos forever.
+	 */
+	BD_MNEMONIC_DISCLAIMER: () => LocalizedString
+	/**
+	 * The 12 words below are your wallet's recovery phrase. This phrase lets you recover your wallet if you lose your device. Back up it up on iCloud (recommended) or write it down. Or both.
+	 */
+	BD_MNEMONIC_PASSWORD_WARNING: () => LocalizedString
+	/**
+	 * Your Secret Recovery Phrase makes it easy to back up and restore your account.
+	 */
+	BD_MNEMONIC_SUBTITLE: () => LocalizedString
+	/**
+	 * Never share these words. Anyone who learns them can steal all of your crypto.
+VeWorld will never ask you for them.
+	 */
+	BD_MNEMONIC_WARMNING: () => LocalizedString
+	/**
+	 * Random NFT collection description placeholder in case the NFT collection doesn't have one
+	 */
+	BD_NFT_DESC_PLACEHOLDER: () => LocalizedString
+	/**
+	 * Not backed up to iCloud
+	 */
+	BD_NOT_BACKED_UP_TO_CLOUD: () => LocalizedString
+	/**
+	 * No token found
+	 */
+	BD_NO_TOKEN_FOUND: () => LocalizedString
+	/**
+	 * You can observe a wallet by adding its address. This will allow you to view the wallet's balance and transactions.
+	 */
+	BD_OBSERVE_WALLET: () => LocalizedString
 	/**
 	 * Viewing and managing your crypto assets has never been easier.
 	 */
@@ -3544,126 +3674,6 @@ export type TranslationFunctions = {
 	 * Wallet Extension provides a simpler and secured way to manage your coins.
 	 */
 	BD_ONBOARDING_SLIDE_03: () => LocalizedString
-	/**
-	 * The secret phrase is your only way to access your funds. This will be needed when importing your crypto wallet from or to VeWorld.
-	 */
-	BD_WALLET_TUTORIAL_SLIDE_01: () => LocalizedString
-	/**
-	 * If you lose this phrase you will lose access to all the funds available on your wallet. You should never share your secret phrase.
-	 */
-	BD_WALLET_TUTORIAL_SLIDE_02: () => LocalizedString
-	/**
-	 * You can write it down and store it somewhere safe, save it in an encrypted password manager or best of all memorize and never write it down.
-	 */
-	BD_WALLET_TUTORIAL_SLIDE_03: () => LocalizedString
-	/**
-	 * Store this phrase in a password manager, write it down or memorize it.
-	 */
-	BD_MNEMONIC_BACKUP: () => LocalizedString
-	/**
-	 * Never disclose your Secret Recovery Phrase. Anyone with this phrase can take your VeChain cryptos forever.
-	 */
-	BD_MNEMONIC_DISCLAIMER: () => LocalizedString
-	/**
-	 * Your Secret Recovery Phrase makes it easy to back up and restore your account.
-	 */
-	BD_MNEMONIC_SUBTITLE: () => LocalizedString
-	/**
-	 * Confirm your PIN
-	 */
-	BD_USER_PASSWORD_CONFIRM: () => LocalizedString
-	/**
-	 * Are you sure you want to remove this wallet from VeWorld?
-	 */
-	BD_WALLET_REMOVAL: () => LocalizedString
-	/**
-	 * <><> PIN doesn't match.
-	 */
-	BD_USER_PASSWORD_ERROR: () => LocalizedString
-	/**
-	 * Old PIN can't be the same as new PIN
-	 */
-	BD_USER_EDIT_PASSWORD_ERROR: () => LocalizedString
-	/**
-	 * Select the type of wallet you want to import
-	 */
-	BD_IMPORT_WALLET_TYPE: () => LocalizedString
-	/**
-	 * To access your previous wallet, you can enter your recovery phrase, private key or keystore file.
-	 */
-	BD_IMPORT_WALLET_TYPE_SEED: () => LocalizedString
-	/**
-	 * You can connect a hardware wallet which will give you access to your new and existing accounts.
-	 */
-	BD_IMPORT_WALLET_TYPE_HARDWARE: () => LocalizedString
-	/**
-	 * Import your wallet. Enter your wallet’s recovery phrase, private key or keystore file.
-	 */
-	BD_WALLET_IMPORT_LOCAL: () => LocalizedString
-	/**
-	 * You cancelled using Face ID to authenticate. You must be authenticated to use VeWallet. Do you want to log out, or retry authenticating?
-	 */
-	BD_ALERT_FACE_ID_CANCELLED: () => LocalizedString
-	/**
-	 * You can observe a wallet by adding its address. This will allow you to view the wallet's balance and transactions.
-	 */
-	BD_OBSERVE_WALLET: () => LocalizedString
-	/**
-	 * You cancelled using Biometrics to authenticate. You must be authenticated to use VeWorld. Do you want to Reset the Wallet, or Retry authenticating?
-	 */
-	BD_ALERT_BIOMETRICS_CANCELLED: () => LocalizedString
-	/**
-	 * Unleash the power of sustainability and web3 for a better world.
-	 */
-	BD_CREATE_WALLET_SUCCESS: () => LocalizedString
-	/**
-	 * Confirm reset
-	 */
-	BD_CONFIRM_RESET: () => LocalizedString
-	/**
-	 * Resetting your account will log you out and erase all your data stored locally (accounts, wallets, transaction history etc).
-	 */
-	BD_RESET_APP_01: () => LocalizedString
-	/**
-	 * Resetting VeWorld will not change your accounts' balances but will require you to re-enter your secret recovery phrase to access them.
-	 */
-	BD_RESET_APP_02: () => LocalizedString
-	/**
-	 * Ensure you have backed up the recovery phrase of all your wallets, as this action is irreversible.
-	 */
-	BD_RESET_APP_DISCLAIMER: () => LocalizedString
-	/**
-	 * Your account will be removed, but you can still access it by adding new accounts to the wallet.
-	 */
-	BD_ACCOUNT_REMOVAL: () => LocalizedString
-	/**
-	 * Your balance
-	 */
-	BD_YOUR_BALANCE: () => LocalizedString
-	/**
-	 * Fiat balance is not available on testnet
-	 */
-	BD_TESTNET_NO_FIAT: () => LocalizedString
-	/**
-	 * Select word {number}
-	 */
-	BD_SELECT_WORD: (arg: { number: number }) => LocalizedString
-	/**
-	 * Select a network
-	 */
-	BD_SELECT_NETWORK: () => LocalizedString
-	/**
-	 * Select the network you want to transact on
-	 */
-	BD_SELECT_NETWORK_DESC: () => LocalizedString
-	/**
-	 * Custom nodes
-	 */
-	BD_CUSTOM_NODES: () => LocalizedString
-	/**
-	 * Manage your custom nodes
-	 */
-	BD_CUSTOM_NODES_DESC: () => LocalizedString
 	/**
 	 * Other networks - show conversion
 	 */
@@ -3681,6 +3691,62 @@ export type TranslationFunctions = {
 	 */
 	BD_OTHER_NETWORKS_INDICATOR_DESC: () => LocalizedString
 	/**
+	 * * Passwords do not match
+	 */
+	BD_PASSWORDS_DO_NOT_MATCH: () => LocalizedString
+	/**
+	 * * Password is not strong enough (min 6 characters, 1 nunber, 1 special character)
+	 */
+	BD_PASSWORD_NOT_STRONG: () => LocalizedString
+	/**
+	 * VeWorld reset
+	 */
+	BD_RESET: () => LocalizedString
+	/**
+	 * Resetting your account will log you out and erase all your data stored locally (accounts, wallets, transaction history etc).
+	 */
+	BD_RESET_APP_01: () => LocalizedString
+	/**
+	 * Resetting VeWorld will not change your accounts' balances but will require you to re-enter your secret recovery phrase to access them.
+	 */
+	BD_RESET_APP_02: () => LocalizedString
+	/**
+	 * Ensure you have backed up the recovery phrase of all your wallets, as this action is irreversible.
+	 */
+	BD_RESET_APP_DISCLAIMER: () => LocalizedString
+	/**
+	 * Click to reset VeWorld and erase all your data stored on it
+	 */
+	BD_RESET_DISCLAIMER: () => LocalizedString
+	/**
+	 * Address Copied to Clipboard
+	 */
+	BD_SCANED_ADDRESS_COPPIED: () => LocalizedString
+	/**
+	 * Please re-enable biometrics or reset app
+	 */
+	BD_SECURITY_DOWNGRADE: () => LocalizedString
+	/**
+	 * Click to reset VeWorld and erase all your data stored on it
+	 */
+	BD_SECURITY_METHOD: () => LocalizedString
+	/**
+	 * Select a network
+	 */
+	BD_SELECT_NETWORK: () => LocalizedString
+	/**
+	 * Select the network you want to transact on
+	 */
+	BD_SELECT_NETWORK_DESC: () => LocalizedString
+	/**
+	 * Choose a provider:
+	 */
+	BD_SELECT_PAYMENT_PROVIDER: () => LocalizedString
+	/**
+	 * Select word {number}
+	 */
+	BD_SELECT_WORD: (arg: { number: number }) => LocalizedString
+	/**
 	 * State Logs
 	 */
 	BD_STATE_LOGS: () => LocalizedString
@@ -3688,30 +3754,6 @@ export type TranslationFunctions = {
 	 * State logs contain your public account addresses and sent transactions
 	 */
 	BD_STATE_LOGS_DISCLAIMER: () => LocalizedString
-	/**
-	 * VeWorld reset
-	 */
-	BD_RESET: () => LocalizedString
-	/**
-	 * Click to reset VeWorld and erase all your data stored on it
-	 */
-	BD_RESET_DISCLAIMER: () => LocalizedString
-	/**
-	 * Help us improve
-	 */
-	BD_HELP_IMPROVE: () => LocalizedString
-	/**
-	 * Enable this setting to help us improve and always provide the best experience for you
-	 */
-	BD_HELP_IMPROVE_DISCLAIMER: () => LocalizedString
-	/**
-	 * Conversion currency
-	 */
-	BD_CONVERSION_CURRENCY: () => LocalizedString
-	/**
-	 * Pick the currency that you prefer to be shown for conversions
-	 */
-	BD_CONVERSION_CURRENCY_DISCLAIMER: () => LocalizedString
 	/**
 	 * Symbol position
 	 */
@@ -3721,590 +3763,65 @@ export type TranslationFunctions = {
 	 */
 	BD_SYMBOL_POSITION_DISCLAIMER: () => LocalizedString
 	/**
-	 * Before amount
-	 */
-	BD_SYMBOL_POSITION_OPTION_before: () => LocalizedString
-	/**
 	 * After amount
 	 */
 	BD_SYMBOL_POSITION_OPTION_after: () => LocalizedString
 	/**
-	 * App theme
+	 * Before amount
 	 */
-	BD_APP_THEME: () => LocalizedString
+	BD_SYMBOL_POSITION_OPTION_before: () => LocalizedString
 	/**
-	 * Select the general app theme
+	 * Fiat balance is not available on testnet
 	 */
-	BD_APP_THEME_DISCLAIMER: () => LocalizedString
-	/**
-	 * App language
-	 */
-	BD_APP_LANGUAGE: () => LocalizedString
-	/**
-	 * Select the general app language
-	 */
-	BD_APP_LANGUAGE_DISCLAIMER: () => LocalizedString
-	/**
-	 * Hide tokens without balance
-	 */
-	BD_HIDE_TOKENS: () => LocalizedString
-	/**
-	 * Tokens without balance won't be shown in the assets list
-	 */
-	BD_HIDE_TOKENS_DISCLAIMER: () => LocalizedString
+	BD_TESTNET_NO_FIAT: () => LocalizedString
 	/**
 	 * USD
 	 */
 	BD_USD: () => LocalizedString
 	/**
-	 * EUR
+	 * Old PIN can't be the same as new PIN
 	 */
-	BD_EUR: () => LocalizedString
+	BD_USER_EDIT_PASSWORD_ERROR: () => LocalizedString
 	/**
-	 * GO BACK TO APP
+	 * Confirm your PIN
 	 */
-	BD_BACK_TO_APP: () => LocalizedString
+	BD_USER_PASSWORD_CONFIRM: () => LocalizedString
 	/**
-	 * Address Copied to Clipboard
+	 * <><> PIN doesn't match.
 	 */
-	BD_SCANED_ADDRESS_COPPIED: () => LocalizedString
+	BD_USER_PASSWORD_ERROR: () => LocalizedString
 	/**
-	 * Your contact list
+	 * Import your wallet. Enter your wallet’s recovery phrase, private key or keystore file.
 	 */
-	BD_CONTACTS_LIST: () => LocalizedString
+	BD_WALLET_IMPORT_LOCAL: () => LocalizedString
 	/**
-	 * Add friends and addresses you trust
+	 * Are you sure you want to remove this wallet from VeWorld?
 	 */
-	BD_CONTACTS_LIST_DISCLAIMER: () => LocalizedString
+	BD_WALLET_REMOVAL: () => LocalizedString
 	/**
-	 * Add contact details
+	 * The secret phrase is your only way to access your funds. This will be needed when importing your crypto wallet from or to VeWorld.
 	 */
-	BD_ADD_CONTACT: () => LocalizedString
+	BD_WALLET_TUTORIAL_SLIDE_01: () => LocalizedString
 	/**
-	 * Insert the required data to add a new contact
+	 * If you lose this phrase you will lose access to all the funds available on your wallet. You should never share your secret phrase.
 	 */
-	BD_ADD_CONTACT_DISCLAIMER: () => LocalizedString
+	BD_WALLET_TUTORIAL_SLIDE_02: () => LocalizedString
 	/**
-	 * Contact name
+	 * You can write it down and store it somewhere safe, save it in an encrypted password manager or best of all memorize and never write it down.
 	 */
-	BD_CONTACT_NAME: () => LocalizedString
+	BD_WALLET_TUTORIAL_SLIDE_03: () => LocalizedString
 	/**
-	 * Contact address
+	 * Your VeWorld. A self custody mobile crypto wallet for vechain
 	 */
-	BD_CONTACT_ADDRESS: () => LocalizedString
+	BD_WELCOME_SCREEN: () => LocalizedString
 	/**
-	 * Remove contact
+	 * Your balance
 	 */
-	BD_CONFIRM_REMOVE_CONTACT: () => LocalizedString
-	/**
-	 * Are you sure you want to remove this contact?
-	 */
-	BD_CONFIRM_REMOVE_CONTACT_DESC: () => LocalizedString
-	/**
-	 * Require the pin when performing transactions with local wallets
-	 */
-	BD_APP_LOCK: () => LocalizedString
-	/**
-	 * Click to reset VeWorld and erase all your data stored on it
-	 */
-	BD_SECURITY_METHOD: () => LocalizedString
-	/**
-	 * No token found
-	 */
-	BD_NO_TOKEN_FOUND: () => LocalizedString
-	/**
-	 * Backup your mnemonic phrase
-	 */
-	BD_BACKUP_MNEMONIC: () => LocalizedString
-	/**
-	 * I accept to be tracked by Analytics and for research and service quality purposes
-	 */
-	BD_ANALYTICS_TRACKING: () => LocalizedString
-	/**
-	 * Mnemonic copied to clipboard
-	 */
-	BD_MNEMONIC_COPIED_TO_CLIPBOARD: () => LocalizedString
-	/**
-	 * Please re-enable biometrics or reset app
-	 */
-	BD_SECURITY_DOWNGRADE: () => LocalizedString
-	/**
-	 * You can create a new wallet or import your existing wallet.
-	 */
-	BD_CREATE_WALLET_TYPE: () => LocalizedString
-	/**
-	 * Creating the wallet the user accepts
-	 */
-	BD_CREATE_WALLET_TYPE_USER_ACCEPTS: () => LocalizedString
-	/**
-	 * Random NFT collection description placeholder in case the NFT collection doesn't have one
-	 */
-	BD_NFT_DESC_PLACEHOLDER: () => LocalizedString
-	/**
-	 * Collection
-	 */
-	BD_COLLECTION: () => LocalizedString
-	/**
-	 * To continue using this app securely and effectively, please enable the biometric authentication feature in your device's settings.
-	 */
-	BD_APP_BLOCKED: () => LocalizedString
-	/**
-	 * Choose a provider:
-	 */
-	BD_SELECT_PAYMENT_PROVIDER: () => LocalizedString
-	/**
-	 * Go back to VeWorld app
-	 */
-	BD_GO_BACK: () => LocalizedString
-	/**
-	 * Buy with Coinbase and receive the tokens directly in VeWorld.
-	 */
-	BD_BUY_DESCRIPTION_COINBASE: () => LocalizedString
-	/**
-	 * Buy with Transak and receive the tokens directly in VeWorld.
-	 */
-	BD_BUY_DESCRIPTION_TRANSAK: () => LocalizedString
-	/**
-	 * * Password is not strong enough (min 6 characters, 1 nunber, 1 special character)
-	 */
-	BD_PASSWORD_NOT_STRONG: () => LocalizedString
-	/**
-	 * * Passwords do not match
-	 */
-	BD_PASSWORDS_DO_NOT_MATCH: () => LocalizedString
-	/**
-	 * The 12 words below are your wallet's recovery phrase. This phrase lets you recover your wallet if you lose your device. Back up it up on iCloud (recommended) or write it down. Or both.
-	 */
-	BD_MNEMONIC_PASSWORD_WARNING: () => LocalizedString
-	/**
-	 * Never share these words. Anyone who learns them can steal all of your crypto.
-VeWorld will never ask you for them.
-	 */
-	BD_MNEMONIC_WARMNING: () => LocalizedString
-	/**
-	 * Backed up to iCloud
-	 */
-	BD_BACKED_UP_TO_CLOUD: () => LocalizedString
-	/**
-	 * Not backed up to iCloud
-	 */
-	BD_NOT_BACKED_UP_TO_CLOUD: () => LocalizedString
-	/**
-	 * iCloud Backup Password
-	 */
-	BD_CLOUD_BACKUP_PASSWORD: () => LocalizedString
-	/**
-	 * Backup Password to Keychain
-	 */
-	BD_BACKUP_PASSWORD_TO_KEYCHAIN: () => LocalizedString
-	/**
-	 * This password will secure your secret recovery phrase in the cloud. VeWorld does NOT have access to your password. We can NOT reset it if you lose it, so keep it safe.
-	 */
-	BD_CLOUD_PASSWORD_CREATION_MESSAGE: () => LocalizedString
-	/**
-	 * Enter the password you used to back up your wallet.
-	 */
-	BD_CLOUD_INSERT_PASSWORD: () => LocalizedString
-	/**
-	 * Welcome to 
-	 */
-	TITLE_WELCOME_TO: () => LocalizedString
-	/**
-	 * Seamlessly manage your crypto
-	 */
-	TITLE_ONBARDING_SLIDE_01: () => LocalizedString
-	/**
-	 * Sustainable
-	 */
-	TITLE_ONBARDING_SLIDE_02: () => LocalizedString
-	/**
-	 * Customizable, safe and fast
-	 */
-	TITLE_ONBARDING_SLIDE_03: () => LocalizedString
-	/**
-	 * Protect your wallet
-	 */
-	TITLE_SECURITY: () => LocalizedString
-	/**
-	 * Secret recovery phrase
-	 */
-	TITLE_WALLET_TUTORIAL_SLIDE_01: () => LocalizedString
-	/**
-	 * The key to your crypto
-	 */
-	TITLE_WALLET_TUTORIAL_SLIDE_02: () => LocalizedString
-	/**
-	 * Keep your phrase safe
-	 */
-	TITLE_WALLET_TUTORIAL_SLIDE_03: () => LocalizedString
-	/**
-	 * Wallet Setup
-	 */
-	TITLE_CREATE_WALLET_TYPE: () => LocalizedString
-	/**
-	 * Import Wallet
-	 */
-	TITLE_IMPORT_WALLET_TYPE: () => LocalizedString
-	/**
-	 * Your Mnemonic
-	 */
-	TITLE_MNEMONIC: () => LocalizedString
-	/**
-	 * Confirm your mnemonic
-	 */
-	TITLE_CONFIRM_MNEMONIC: () => LocalizedString
-	/**
-	 * Choose your 6-digit PIN
-	 */
-	TITLE_USER_PASSWORD: () => LocalizedString
-	/**
-	 * Insert your 6-digit PIN
-	 */
-	TITLE_USER_PIN: () => LocalizedString
-	/**
-	 * Import Local Wallet
-	 */
-	TITLE_WALLET_IMPORT_LOCAL: () => LocalizedString
-	/**
-	 * Import Wallet from iCloud
-	 */
-	TITLE_IMPORT_WALLET_FROM_ICLOUD: () => LocalizedString
-	/**
-	 * Observe Wallet
-	 */
-	TITLE_OBSERVE_WALLET: () => LocalizedString
-	/**
-	 * Face ID Cancelled
-	 */
-	TITLE_ALERT_FACE_ID_CANCELLED: () => LocalizedString
-	/**
-	 * Camera Permissions
-	 */
-	TITLE_ALERT_CAMERA_PERMISSION: () => LocalizedString
-	/**
-	 * Biometrics Cancelled
-	 */
-	TITLE_ALERT_BIOMETRICS_CANCELLED: () => LocalizedString
-	/**
-	 * Backup now
-	 */
-	DEVICE_BACKUP_MODAL_TITLE: () => LocalizedString
-	/**
-	 * Your vechain wallet is ready!
-	 */
-	TITLE_CREATE_WALLET_SUCCESS: () => LocalizedString
-	/**
-	 * VeWorld reset
-	 */
-	TITLE_RESET_APP: () => LocalizedString
-	/**
-	 * Wallets
-	 */
-	TITLE_WALLET_MANAGEMENT: () => LocalizedString
-	/**
-	 * Settings
-	 */
-	TITLE_SETTINGS: () => LocalizedString
-	/**
-	 * General settings
-	 */
-	TITLE_GENERAL_SETTINGS: () => LocalizedString
-	/**
-	 * Advanced
-	 */
-	TITLE_ADVANCED: () => LocalizedString
-	/**
-	 * My Contacts
-	 */
-	TITLE_CONTACTS: () => LocalizedString
-	/**
-	 * Add Contact
-	 */
-	TITLE_ADD_CONTACT: () => LocalizedString
-	/**
-	 * Manage wallets
-	 */
-	TITLE_MANAGE_WALLET: () => LocalizedString
-	/**
-	 * Transactions
-	 */
-	TITLE_TRANSACTIONS: () => LocalizedString
-	/**
-	 * NFT
-	 */
-	TITLE_NFT: () => LocalizedString
-	/**
-	 * NFTs
-	 */
-	TITLE_NFTS: () => LocalizedString
-	/**
-	 * Network
-	 */
-	TITLE_NETWORK: () => LocalizedString
-	/**
-	 * Networks
-	 */
-	TITLE_NETWORKS: () => LocalizedString
-	/**
-	 * Privacy & Security
-	 */
-	TITLE_PRIVACY: () => LocalizedString
-	/**
-	 * Alerts
-	 */
-	TITLE_ALERTS: () => LocalizedString
-	/**
-	 * Connected apps
-	 */
-	TITLE_CONNECTED_APPS: () => LocalizedString
-	/**
-	 * Get support
-	 */
-	TITLE_GET_SUPPORT: () => LocalizedString
-	/**
-	 * Give feedback
-	 */
-	TITLE_GIVE_FEEDBACK: () => LocalizedString
-	/**
-	 * About
-	 */
-	TITLE_ABOUT: () => LocalizedString
-	/**
-	 * Scan QR Code
-	 */
-	TITLE_SCAN_QRCODE: () => LocalizedString
-	/**
-	 * Address Copied to Clipboard
-	 */
-	TITLE_SCANED_ADDRESS_COPPIED: () => LocalizedString
-	/**
-	 * Add Token
-	 */
-	TITLE_ADD_TOKEN: () => LocalizedString
-	/**
-	 * Edit wallet
-	 */
-	TITLE_EDIT_WALLET: () => LocalizedString
-	/**
-	 * Your app is blocked
-	 */
-	TITLE_SECURITY_DOWNGRADE: () => LocalizedString
-	/**
-	 * Backup your phrase
-	 */
-	TITLE_BACKUP_YOUR_PHRASE: () => LocalizedString
-	/**
-	 * Your QR Code for {accountAlias}
-	 */
-	TITLE_QR_CODE_FOR_ACCOUNT: (arg: { accountAlias: string }) => LocalizedString
-	/**
-	 * Rename {type}
-	 */
-	TITLE_RENAME: (arg: { type: string }) => LocalizedString
-	/**
-	 * Buy VechainThor tokens
-	 */
-	TITLE_BUY: () => LocalizedString
-	/**
-	 * Unlock keystore
-	 */
-	TITLE_UNLOCK_KEYSTORE: () => LocalizedString
-	/**
-	 * Which kind of wallet do you want to import?
-	 */
-	SB_IMPORT_WALLET_TYPE: () => LocalizedString
-	/**
-	 * Local wallet
-	 */
-	SB_IMPORT_WALLET_TYPE_SEED: () => LocalizedString
-	/**
-	 * Hardware Wallet
-	 */
-	SB_IMPORT_WALLET_TYPE_HARDWARE: () => LocalizedString
-	/**
-	 * Insert the pin you created in order to unlock your wallet.
-	 */
-	SB_UNLOCK_WALLET_PIN: () => LocalizedString
-	/**
-	 * Insert the pin you created in order to perform the requested operation.
-	 */
-	SB_CONFIRM_PIN: () => LocalizedString
-	/**
-	 * Insert your old pin
-	 */
-	SB_EDIT_OLD_PIN: () => LocalizedString
-	/**
-	 * Insert your new pin
-	 */
-	SB_EDIT_NEW_PIN: () => LocalizedString
-	/**
-	 * Confirm your new pin
-	 */
-	SB_EDIT_NEW_PIN_CONFIRM: () => LocalizedString
-	/**
-	 * Account management
-	 */
-	SB_ACCOUNT_MANAGEMENT: () => LocalizedString
-	/**
-	 * Choose a wallet
-	 */
-	SB_CHOOSE_A_WALLET: () => LocalizedString
-	/**
-	 * Edit {name}
-	 */
-	SB_EDIT_WALLET: (arg: { name: string }) => LocalizedString
-	/**
-	 * Rename wallet
-	 */
-	SB_RENAME_WALLET: () => LocalizedString
-	/**
-	 * Accounts
-	 */
-	SB_ACCOUNTS: () => LocalizedString
-	/**
-	 * Enter your language
-	 */
-	SB_ENTER_LANGUAGE: () => LocalizedString
-	/**
-	 * Select your language
-	 */
-	SB_SELECT_LANGUAGE: () => LocalizedString
-	/**
-	 * You have previously denied camera access to VeWorld. Please enable it in your device settings.
-	 */
-	SB_ALERT_CAMERA_PERMISSION: () => LocalizedString
-	/**
-	 * Your device does not support this operation.
-	 */
-	SB_CAMERA_ANAVAILABILITY: () => LocalizedString
-	/**
-	 * Your tokens
-	 */
-	SB_YOUR_TOKENS: () => LocalizedString
-	/**
-	 * Your collections
-	 */
-	SB_YOUR_NFTS: () => LocalizedString
-	/**
-	 * Confirm the operation?
-	 */
-	SB_CONFIRM_OPERATION: () => LocalizedString
-	/**
-	 * Your contact list is empty
-	 */
-	SB_CONTACT_LIST_EMPTY: () => LocalizedString
-	/**
-	 * Create one
-	 */
-	SB_CREATE_ONE: () => LocalizedString
-	/**
-	 * Edit contact
-	 */
-	SB_EDIT_CONTACT: () => LocalizedString
-	/**
-	 * Password authorization
-	 */
-	SB_PASSWORD_AUTH: () => LocalizedString
-	/**
-	 * Security method
-	 */
-	SB_SECURITY_METHOD: () => LocalizedString
-	/**
-	 * The security update has failed and your security method has been reverted to the previous one.
-	 */
-	ERROR_SECURITY_UPDATE_REVERTED: () => LocalizedString
-	/**
-	 * The security update has failed. Locking the application
-	 */
-	ERROR_SECURITY_UPDATE_FAILED: () => LocalizedString
-	/**
-	 * Backup your mnemonic
-	 */
-	SB_BACKUP_MNEMONIC: () => LocalizedString
-	/**
-	 * Recovery phrase
-	 */
-	SB_RECOVERY_PHRASE: () => LocalizedString
-	/**
-	 * Analytics tracking
-	 */
-	SB_ANALYTICS_TRACKING: () => LocalizedString
-	/**
-	 * Your activities will appear here
-	 */
-	SB_NO_TRANSACTIONS: () => LocalizedString
-	/**
-	 * Description
-	 */
-	SB_DESCRIPTION: () => LocalizedString
-	/**
-	 * Collectibles
-	 */
-	SB_COLLECTIBLES: () => LocalizedString
-	/**
-	 * Before updating your security method you need to backup your security phrase. In case the operation fails you will be forced to
-	 */
-	SB_BACKUP_YOUR_PHRASE: () => LocalizedString
-	/**
-	 * RESET the App!
-	 */
-	SB_BACKUP_YOUR_PHRASE_2: () => LocalizedString
-	/**
-	 * Also, you will be asked to use your biometrics security method for each wallet!
-	 */
-	SB_UPGRADE_SECURITY_WARNING_ANDROID: () => LocalizedString
-	/**
-	 * Your tokens will appear here
-	 */
-	SB_YOUR_TOKENS_EMPTY: () => LocalizedString
-	/**
-	 * To secure your wallet, you can either use your device's biometric (like a fingerprint) or set up a password. You can change the password anytime if needed.
-	 */
-	SB_SECURITY: () => LocalizedString
-	/**
-	 * This password will be used to authorize transactions.
-	 */
-	SB_USER_PASSWORD: () => LocalizedString
-	/**
-	 * Insert your keystore password
-	 */
-	SB_INSERT_KEYSTORE_PASSWORD: () => LocalizedString
-	/**
-	 * One or more of your accounts recovery phrase haven’t been backed up yet. Make sure to backup to never lose access to your crypto.
-	 */
-	DEVICE_BACKUP_MODAL_SUBTITLE: () => LocalizedString
-	/**
-	 * Face ID
-	 */
-	FACE_ID: () => LocalizedString
-	/**
-	 * Touch ID
-	 */
-	TOUCH_ID: () => LocalizedString
-	/**
-	 * Fingerprint
-	 */
-	FINGERPRINT: () => LocalizedString
+	BD_YOUR_BALANCE: () => LocalizedString
 	/**
 	 * Biometrics
 	 */
 	BIOMETRICS: () => LocalizedString
-	/**
-	 * PIN Code
-	 */
-	PIN_CODE: () => LocalizedString
-	/**
-	 * Iris
-	 */
-	IRIS: () => LocalizedString
-	/**
-	 * Device Pin
-	 */
-	DEVICE_PIN: () => LocalizedString
-	/**
-	 * Tap to view Mnemonic
-	 */
-	TAP_TO_VIEW: () => LocalizedString
 	/**
 	 * Please use Biometrics to secure your wallet.
 	 */
@@ -4314,982 +3831,57 @@ VeWorld will never ask you for them.
 	 */
 	BIOMETRICS_PROMPT_UNLOCK: () => LocalizedString
 	/**
-	 * VeWorld
+	 * Block number
 	 */
-	VEWORLD: () => LocalizedString
-	/**
-	 * Cancel
-	 */
-	COMMON_BTN_CANCEL: () => LocalizedString
-	/**
-	 * Remove
-	 */
-	COMMON_BTN_REMOVE: () => LocalizedString
-	/**
-	 * Retry
-	 */
-	COMMON_BTN_RETRY: () => LocalizedString
-	/**
-	 * Sign out
-	 */
-	COMMON_BTN_SIGN_OUT: () => LocalizedString
-	/**
-	 * OK
-	 */
-	COMMON_BTN_OK: () => LocalizedString
-	/**
-	 * Loading
-	 */
-	COMMON_BTN_LOADING: () => LocalizedString
-	/**
-	 * Done
-	 */
-	COMMON_BTN_DONE: () => LocalizedString
-	/**
-	 * Confirm
-	 */
-	COMMON_BTN_CONFIRM: () => LocalizedString
-	/**
-	 * Add
-	 */
-	COMMON_BTN_ADD: () => LocalizedString
-	/**
-	 * Save
-	 */
-	COMMON_BTN_SAVE: () => LocalizedString
-	/**
-	 * NEXT
-	 */
-	COMMON_BTN_NEXT: () => LocalizedString
-	/**
-	 * CONNECT
-	 */
-	COMMON_BTN_CONNECT: () => LocalizedString
-	/**
-	 * Disconnect
-	 */
-	COMMON_BTN_DISCONNECT: () => LocalizedString
-	/**
-	 * CANCEL
-	 */
-	COMMON_BTN_CANCEL_CAPS_LOCK: () => LocalizedString
-	/**
-	 * SIGN
-	 */
-	COMMON_BTN_SIGN: () => LocalizedString
-	/**
-	 * REJECT
-	 */
-	COMMON_BTN_REJECT: () => LocalizedString
-	/**
-	 * SIGN AND SEND
-	 */
-	COMMON_BTN_SIGN_AND_SEND: () => LocalizedString
-	/**
-	 * Reset App
-	 */
-	COMMON_BTN_RESET: () => LocalizedString
-	/**
-	 * Unlock
-	 */
-	COMMON_BTN_UNLOCK: () => LocalizedString
-	/**
-	 * and
-	 */
-	COMMON_LBL_AND: () => LocalizedString
-	/**
-	 * Name
-	 */
-	COMMON_LBL_NAME: () => LocalizedString
-	/**
-	 * URL
-	 */
-	COMMON_LBL_URL: () => LocalizedString
-	/**
-	 * Address
-	 */
-	COMMON_LBL_ADDRESS: () => LocalizedString
-	/**
-	 * Success
-	 */
-	COMMON_LBL_SUCCESS: () => LocalizedString
-	/**
-	 * Error
-	 */
-	COMMON_LBL_ERROR: () => LocalizedString
-	/**
-	 * Import
-	 */
-	COMMON_LBL_IMPORT: () => LocalizedString
-	/**
-	 * Favourite
-	 */
-	COMMON_LBL_FAVOURITE: () => LocalizedString
-	/**
-	 * Favourites
-	 */
-	COMMON_LBL_FAVOURITES: () => LocalizedString
-	/**
-	 * Enter the {name}
-	 */
-	COMMON_LBL_ENTER_THE: (arg: { name: string }) => LocalizedString
-	/**
-	 * Default
-	 */
-	COMMON_LBL_DEFAULT: () => LocalizedString
-	/**
-	 * No available price history for {tokenName}
-	 */
-	COMMON_LBL_NO_TOKEN_DATA: (arg: { tokenName: string }) => LocalizedString
-	/**
-	 * Data
-	 */
-	COMMON_LBL_DATA: () => LocalizedString
-	/**
-	 * Comment
-	 */
-	COMMON_LBL_COMMENT: () => LocalizedString
-	/**
-	 * Privacy Policy
-	 */
-	COMMON_LBL_PRIVACY_POLICY: () => LocalizedString
-	/**
-	 * Terms and Conditions
-	 */
-	COMMON_LBL_TERMS_AND_CONDITIONS: () => LocalizedString
-	/**
-	 * Read more
-	 */
-	COMMON_LBL_READ_MORE: () => LocalizedString
-	/**
-	 * Read less
-	 */
-	COMMON_LBL_READ_LESS: () => LocalizedString
-	/**
-	 * Assets
-	 */
-	COMMON_ASSETS: () => LocalizedString
-	/**
-	 * DApps
-	 */
-	COMMON_DAPPS: () => LocalizedString
-	/**
-	 * Price
-	 */
-	COMMON_PRICE: () => LocalizedString
-	/**
-	 * Overall
-	 */
-	COMMON_OVERALL: () => LocalizedString
-	/**
-	 * Today
-	 */
-	COMMON_TODAY: () => LocalizedString
-	/**
-	 * Select account
-	 */
-	COMMON_SELECT_ACCOUNT: () => LocalizedString
-	/**
-	 * Select account to remove
-	 */
-	COMMON_SELECT_ACCOUNT_TO_REMOVE: () => LocalizedString
-	/**
-	 * Market Cap
-	 */
-	COMMON_MARKET_CAP: () => LocalizedString
-	/**
-	 * Total Supply
-	 */
-	COMMON_TOTAL_SUPPLY: () => LocalizedString
-	/**
-	 * 24h Volume
-	 */
-	COMMON_24H_VOLUME: () => LocalizedString
-	/**
-	 * Circulating Supply
-	 */
-	COMMON_CIRCULATING_SUPPLY: () => LocalizedString
-	/**
-	 * N.A.
-	 */
-	COMMON_NOT_AVAILABLE: () => LocalizedString
-	/**
-	 * Import
-	 */
-	COMMON_IMPORT: () => LocalizedString
-	/**
-	 * Receive
-	 */
-	COMMON_RECEIVE: () => LocalizedString
-	/**
-	 * Oops!
-	 */
-	COMMON_OOPS: () => LocalizedString
-	/**
-	 * Proceed
-	 */
-	COMMON_PROCEED: () => LocalizedString
-	/**
-	 * Or
-	 */
-	COMMON_OR: () => LocalizedString
-	/**
-	 * From
-	 */
-	COMMON_ROOT_ADDRESS: () => LocalizedString
-	/**
-	 * 24 HRs
-	 */
-	COMMON_24H: () => LocalizedString
-	/**
-	 * Biometrics not available
-	 */
-	ALERT_TITLE_NOT_ENROLLED: () => LocalizedString
-	/**
-	 * You have not enrolled any biometric authentication method.
-	 */
-	ALERT_MSG_NOT_ENROLLED: () => LocalizedString
-	/**
-	 * Biometrics previously denied or unavailable
-	 */
-	ALERT_TITLE_BIO_PREVIOUSLY_DENIED_OR_UNAVAILABLE: () => LocalizedString
-	/**
-	 * You have previously denied biometric authentication or it's unavailable on this device. Please enable it in your device settings.
-	 */
-	ALERT_MSG_BIO_PREVIOUSLY_DENIED_OR_UNAVAILABLE: () => LocalizedString
-	/**
-	 * Authorize Bluetooth
-	 */
-	ALERT_TITLE_AUTHORIZE_BLUETOOTH: () => LocalizedString
-	/**
-	 * Please, open app settings and authorize Bluetooth to continue.
-	 */
-	ALERT_MSG_AUTHORIZE_BLUETOOTH: () => LocalizedString
-	/**
-	 * Enable bluetooth
-	 */
-	ALERT_TITLE_ENABLE_BLUETOOTH: () => LocalizedString
-	/**
-	 * Please, open the device settings and enable to continue.
-	 */
-	ALERT_MSG_ENABLE_BLUETOOTH: () => LocalizedString
-	/**
-	 * Bluetooth is not supported
-	 */
-	ALERT_TITLE_UNSUPPORTED_BLUETOOTH: () => LocalizedString
-	/**
-	 * Your device does not support Bluetooth, which is required to use this feature.
-	 */
-	ALERT_MSG_UNSUPPORTED_BLUETOOTH: () => LocalizedString
-	/**
-	 * Enable location services
-	 */
-	ALERT_TITLE_ENABLE_LOCATION: () => LocalizedString
-	/**
-	 * Please, open the device settings and enable location services to continue.
-	 */
-	ALERT_MSG_ENABLE_LOCATION: () => LocalizedString
-	/**
-	 * Connection problems detected.
-Try reconnect your device to the internet.
-	 */
-	ALERT_MSG_INTERNET_DOWN: () => LocalizedString
-	/**
-	 * You can't view a ledger mnemonic
-	 */
-	ALERT_CANT_BACKUP_LEDGER: () => LocalizedString
-	/**
-	 * New version
-	 */
-	ALERT_TITLE_NEW_VERSION: () => LocalizedString
-	/**
-	 * A new version {version} is out now. Please update to the latest version
-	 */
-	ALERT_MSG_NEW_VERSION: (arg: { version: string }) => LocalizedString
-	/**
-	 * Update now
-	 */
-	ALERT_OPTION_UPDATE_NOW: () => LocalizedString
-	/**
-	 * Ask me later
-	 */
-	ALERT_OPTION_ASK_ME_LATER: () => LocalizedString
-	/**
-	 * Avoid screenshotting your recovery phrase. Store it offline or back it up securely online.
-	 */
-	ALERT_DONT_SCREENSHOT_MNEMONIC: () => LocalizedString
-	/**
-	 * Price feed not available
-	 */
-	ERROR_PRICE_FEED_NOT_AVAILABLE: () => LocalizedString
-	/**
-	 * Something went wrong!
-	 */
-	ERROR_GENERIC_SUBTITLE: () => LocalizedString
-	/**
-	 * We apologise for the inconvenience.
-	 */
-	ERROR_GENERIC_BODY_01: () => LocalizedString
-	/**
-	 * Please, try closing and reopening the app.
-	 */
-	ERROR_GENERIC_BODY_02: () => LocalizedString
-	/**
-	 * Incorrect import data
-	 */
-	ERROR_INVALID_IMPORT_DATA: () => LocalizedString
-	/**
-	 * An unknown error occurred while importing the wallet. Please try again.
-	 */
-	ERROR_IMPORT_GENERIC: () => LocalizedString
-	/**
-	 * Incorrect mnemonic phrase
-	 */
-	ERROR_INCORRECT_MNEMONIC: () => LocalizedString
-	/**
-	 * Incorrect private key
-	 */
-	ERROR_INCORRECT_PRIVATE_KEY: () => LocalizedString
-	/**
-	 * Incorrect password. Please try again
-	 */
-	ERROR_INCORRECT_PASSWORD: () => LocalizedString
-	/**
-	 * This appears to be a duplicate of an existing wallet
-	 */
-	ERROR_IMPORT_ADDRESS_EXISTS: () => LocalizedString
-	/**
-	 * Wrong words combination
-	 */
-	ERROR_WRONG_WORDS_COMBINATION: () => LocalizedString
-	/**
-	 * The words combination is wrong, try again.
-	 */
-	ERROR_WRONG_WORDS_COMBINATION_DESC: () => LocalizedString
-	/**
-	 * Wallet already exists
-	 */
-	ERROR_WALLET_ALREADY_EXISTS: () => LocalizedString
-	/**
-	 * Account already exists
-	 */
-	ERROR_ACCOUNT_ALREADY_EXISTS: () => LocalizedString
-	/**
-	 * Enter a valid URL
-	 */
-	ERROR_ENTER_VALID_URL: () => LocalizedString
-	/**
-	 * URL must be https or localhost
-	 */
-	ERROR_URL_NOT_VALID: () => LocalizedString
-	/**
-	 * Network already in use
-	 */
-	ERROR_URL_ALREADY_USED: () => LocalizedString
-	/**
-	 * No assets found
-	 */
-	ERROR_NO_ASSETS_FOUND: () => LocalizedString
-	/**
-	 * Required
-	 */
-	ERROR_REQUIRED_FIELD: () => LocalizedString
-	/**
-	 * Contact name too long
-	 */
-	ERROR_MAX_INPUT_LENGTH: () => LocalizedString
-	/**
-	 * Name already exists in contacts
-	 */
-	ERROR_NAME_ALREADY_EXISTS: () => LocalizedString
-	/**
-	 * Address already exists in contacts
-	 */
-	ERROR_ADDRESS_EXISTS: () => LocalizedString
-	/**
-	 * Please enter a valid Vechain address
-	 */
-	ERROR_ADDRESS_INVALID: () => LocalizedString
-	/**
-	 * Error!
-	 */
-	ERROR: () => LocalizedString
-	/**
-	 * The operation went wrong. Please, try again.
-	 */
-	ERROR_GENERIC_OPERATION: () => LocalizedString
-	/**
-	 * Failed to get token URI from Thor
-	 */
-	ERROR_NFT_FAILED_TO_GET_URI_FROM_THOR: () => LocalizedString
-	/**
-	 * Failed to get token data from IPFS
-	 */
-	ERROR_NFT_FAILED_TO_GET_DATA_FROM_IPFS: () => LocalizedString
-	/**
-	 * Failed to get token data from Arweave
-	 */
-	ERROR_NFT_FAILED_TO_GET_DATA_FROM_ARWEAVE: () => LocalizedString
-	/**
-	 * Failed to get token metadata
-	 */
-	ERROR_NFT_FAILED_TO_GET_METADATA: () => LocalizedString
-	/**
-	 * Security action failed. Please check your device and try again.
-	 */
-	ERROR_SECURITY_ACTION: () => LocalizedString
-	/**
-	 * Invalid address
-	 */
-	ERROR_INVALID_ADDRESS: () => LocalizedString
-	/**
-	 * Address not found for domain name
-	 */
-	ERROR_COULD_NOT_FIND_ADDRESS_FOR_DOMAIN: () => LocalizedString
-	/**
-	 * Too many biometrics authentication attempts, please try again later
-	 */
-	ERROR_TOO_MANY_BIOMETRICS_AUTH_ATTEMPTS: () => LocalizedString
-	/**
-	 * Error creating wallet
-	 */
-	ERROR_CREATING_WALLET: () => LocalizedString
-	/**
-	 * Error getting wallet. Make sure you have the correct password
-	 */
-	ERROR_DECRYPTING_WALLET: () => LocalizedString
-	/**
-	 * Success!
-	 */
-	SUCCESS_GENERIC: () => LocalizedString
-	/**
-	 * The operation went well!
-	 */
-	SUCCESS_GENERIC_OPERATION: () => LocalizedString
-	/**
-	 * View operation detail.
-	 */
-	SUCCESS_GENERIC_VIEW_DETAIL_LINK: () => LocalizedString
-	/**
-	 * Heads up!
-	 */
-	HEADS_UP: () => LocalizedString
-	/**
-	 * Activities might not be up-to-date. Check your internet connection or try later
-	 */
-	ACTIVITIES_NOT_UP_TO_DATE: () => LocalizedString
-	/**
-	 * Custom tokens are not available at the moment. Check your internet connection or try later
-	 */
-	CUSTOM_TOKENS_NOT_AVAIABLE: () => LocalizedString
-	/**
-	 * Unverified app
-	 */
-	UNVERIFIED_APP_TITLE: () => LocalizedString
-	/**
-	 * The application that is making this request could not be verified. Proceed at your own risk.
-	 */
-	APP_VERIFICATION_UNKNOWN: () => LocalizedString
-	/**
-	 * Connection to this application is forbidden as the request looks malicious.
-	 */
-	APP_VERIFICATION_INVALID: () => LocalizedString
-	/**
-	 * Please confirm that you would like to process this request.
-	 */
-	APP_VERIFICATION_CONFIRM: () => LocalizedString
-	/**
-	 * Search a token
-	 */
-	PLACEHOLDER_SEARCH_TOKEN: () => LocalizedString
-	/**
-	 * Enter the name
-	 */
-	PLACEHOLDER_ENTER_NAME: () => LocalizedString
-	/**
-	 * Enter the address
-	 */
-	PLACEHOLDER_ENTER_ADDRESS: () => LocalizedString
-	/**
-	 * Manage nodes
-	 */
-	NETWORK_MANAGE_NODES: () => LocalizedString
-	/**
-	 * Add custom node
-	 */
-	NETWORK_ADD_CUSTOM_NODE: () => LocalizedString
-	/**
-	 * Add network details
-	 */
-	NETWORK_ADD_CUSTOM_NODE_SB: () => LocalizedString
-	/**
-	 * If you are having problems adding your custom node, it usually indicates a poorly formatted URL or a problem with the CORS configuration of the node.
-	 */
-	NETWORK_ADD_CUSTOM_NODE_SB_DESC: () => LocalizedString
-	/**
-	 * Node name
-	 */
-	NETWORK_ADD_CUSTOM_NODE_NAME: () => LocalizedString
-	/**
-	 * Add network
-	 */
-	NETWORK_ADD_CUSTOM_NODE_ADD_NETWORK: () => LocalizedString
-	/**
-	 * Edit network
-	 */
-	NETWORK_ADD_CUSTOM_NODE_EDIT_NETWORK: () => LocalizedString
-	/**
-	 * Remove custom node
-	 */
-	NETWORK_CONFIRM_REMOVE_NODE: () => LocalizedString
-	/**
-	 * Are you sure you want to remove this custom node?
-	 */
-	NETWORK_CONFIRM_REMOVE_NODE_DESC: () => LocalizedString
-	/**
-	 * Main Networks
-	 */
-	NETWORK_LABEL_MAIN_NETWORKS: () => LocalizedString
-	/**
-	 * Test Networks
-	 */
-	NETWORK_LABEL_TEST_NETWORKS: () => LocalizedString
-	/**
-	 * Other Networks
-	 */
-	NETWORK_LABEL_OTHER_NETWORKS: () => LocalizedString
-	/**
-	 * Mainnet
-	 */
-	NETWORK_LABEL_MAINNET: () => LocalizedString
-	/**
-	 * Testnet
-	 */
-	NETWORK_LABEL_TESTNET: () => LocalizedString
-	/**
-	 * {name} has been copied to the clipboard!
-	 */
-	NOTIFICATION_COPIED_CLIPBOARD: (arg: { name: string }) => LocalizedString
-	/**
-	 * Transaction {txId} was reverted.
-	 */
-	NOTIFICATION_transaction_reverted: (arg: { txId: string }) => LocalizedString
-	/**
-	 * Found {token} transfer: {amount} on {alias}
-	 */
-	NOTIFICATION_found_token_transfer: (arg: { alias: string, amount: string, token: string }) => LocalizedString
-	/**
-	 * Incoming!
-	 */
-	NOTIFICATION_INCOMING_NFT_TITLE: () => LocalizedString
-	/**
-	 * {collectionName} You received a new NFT from {from} to {alias}.
-	 */
-	NOTIFICATION_INCOMING_NFT_BODY: (arg: { alias: string, collectionName: string, from: string }) => LocalizedString
-	/**
-	 * Go to NFTs
-	 */
-	NOTIFIACTION_INCOMING_NFT_ACTION: () => LocalizedString
-	/**
-	 * Outgoing!
-	 */
-	NOTIFICATION_OUTGOING_NFT_TITLE: () => LocalizedString
-	/**
-	 * {collectionName} NFT was successfully sent to {to}.
-	 */
-	NOTIFICATION_OUTGOING_NFT_BODY: (arg: { collectionName: string, to: string }) => LocalizedString
-	/**
-	 * {amount} {token} was successfully sent to {to}.
-	 */
-	NOTIFIACTION_OUTGOING_TOKEN_BODY_WITH_TOKEN: (arg: { amount: string, to: string, token: string }) => LocalizedString
-	/**
-	 * View account
-	 */
-	NOTIFICATION_VIEW_ACCOUNT: () => LocalizedString
-	/**
-	 * QR Code Not Supported
-	 */
-	NOTIFICATION_TITLE_INVALID_QR: () => LocalizedString
-	/**
-	 * Please scan a WalletConnect, wallet address or valid URL QR code.
-	 */
-	NOTIFICATION_INVALID_QR: () => LocalizedString
-	/**
-	 * Domain name / address not found.
-	 */
-	NOTIFICATION_DOMAIN_NAME_NOT_FOUND: () => LocalizedString
-	/**
-	 * Gas fee estimates might vary. Always double-check before confirming.
-	 */
-	NOTIFICATION_GAS_FEE_INACCURATE: () => LocalizedString
-	/**
-	 * Failed to remove account
-	 */
-	NOTIFICATION_FAILED_TO_REMOVE_ACCOUNT: () => LocalizedString
-	/**
-	 * The associated wallet only has 1 account. Please remove the wallet to remove this account
-	 */
-	NOTIFICATION_CANT_REMOVE_ONLY_ACCOUNT: () => LocalizedString
-	/**
-	 * Account changed to: {account}
-	 */
-	NOTIFICATION_WC_ACCOUNT_CHANGED: (arg: { account: string }) => LocalizedString
-	/**
-	 * Network changed to: {network}
-	 */
-	NOTIFICATION_WC_NETWORK_CHANGED: (arg: { network: string }) => LocalizedString
-	/**
-	 * A connected app successfully disconnected from this wallet.
-	 */
-	NOTIFICATION_wallet_connect_disconnected_from_remote: () => LocalizedString
-	/**
-	 * Successfully disconnected from app.
-	 */
-	NOTIFICATION_wallet_connect_disconnected_success: () => LocalizedString
-	/**
-	 * Connecting may take a few seconds.
-	 */
-	NOTIFICATION_warning_wallet_connect_connection_could_delay: () => LocalizedString
-	/**
-	 * Error pairing with the app, please generate a new QR CODE.
-	 */
-	NOTIFICATION_wallet_connect_error_pairing: () => LocalizedString
-	/**
-	 * The requested dapp is not compatible with VeWorld.
-	 */
-	NOTIFICATION_wallet_connect_incompatible_dapp: () => LocalizedString
-	/**
-	 * The DApp is not verified on Wallet Connect
-	 */
-	NOTIFICATION_WALLET_CONNECT_DAPP_NOT_VERIFIED: () => LocalizedString
-	/**
-	 * The DApp made an invalid request
-	 */
-	NOTIFICATION_DAPP_INVALID_REQUEST: () => LocalizedString
-	/**
-	 * The DApp requested an invalid account
-	 */
-	NOTIFICATION_DAPP_REQUEST_INVALID_ACCOUNT: () => LocalizedString
-	/**
-	 * The DApp requested an account that was not found
-	 */
-	NOTIFICATION_DAPP_REQUESTED_ACCOUNT_NOT_FOUND: () => LocalizedString
-	/**
-	 * Wallet Connect not initialized.
-	 */
-	NOTIFICATION_wallet_connect_not_initialized: () => LocalizedString
-	/**
-	 * Successfully connected to {name}.
-	 */
-	NOTIFICATION_wallet_connect_successfull_connection: (arg: { name: string }) => LocalizedString
-	/**
-	 * Certificate signed successfully.
-	 */
-	NOTIFICATION_wallet_connect_sign_success: () => LocalizedString
-	/**
-	 * Something went wrong while communicating with app, try again.
-	 */
-	NOTIFICATION_wallet_connect_matching_error: () => LocalizedString
-	/**
-	 * There was a problem delegating the request.
-	 */
-	NOTIFICATION_wallet_connect_error_delegating_transaction: () => LocalizedString
-	/**
-	 * Transaction broadcasted successfully.
-	 */
-	NOTIFICATION_wallet_connect_transaction_broadcasted: () => LocalizedString
-	/**
-	 * Transaction broadcasted correctly but an error occurred while communicating to the dapp.
-	 */
-	NOTIFICATION_wallet_connect_transaction_broadcasted_with_communication_error: () => LocalizedString
-	/**
-	 * Error executing the transaction.
-	 */
-	NOTIFICATION_wallet_connect_error_on_transaction: () => LocalizedString
-	/**
-	 * Invalid Wallet Connect URI.
-	 */
-	NOTIFICATION_wallet_connect_invalid_uri: () => LocalizedString
-	/**
-	 * Something went wrong while signing the message
-	 */
-	NOTIFICATION_wallet_connect_error_during_signing: () => LocalizedString
-	/**
-	 * Connected app
-	 */
-	CONNECTED_APP_TITLE: () => LocalizedString
-	/**
-	 * External app connection
-	 */
-	CONNECTED_APP_REQUEST: () => LocalizedString
-	/**
-	 * Connection request
-	 */
-	CONNECTION_REQUEST_TITLE: () => LocalizedString
-	/**
-	 * {name} is asking for access to:
-	 */
-	CONNECTION_REQUEST_SUBTITLE: (arg: { name: unknown }) => LocalizedString
-	/**
-	 * ● Request transactions to send to Vechain Thor
-	 */
-	CONNECTION_REQUEST_TRANSACTION_DESCRIPTION: () => LocalizedString
-	/**
-	 * ● Request your signature on certificates or identification and agreements
-	 */
-	CONNECTION_REQUEST_SIGN_DESCRIPTION: () => LocalizedString
-	/**
-	 * Sign a certificate
-	 */
-	CONNECTED_APP_SIGN_REQUEST_TITLE: () => LocalizedString
-	/**
-	 * Sign a message
-	 */
-	CONNECTED_APP_SIGN_MESSAGE_TITLE: () => LocalizedString
-	/**
-	 * Change account
-	 */
-	CONNECTED_APP_CHANGE_ACCOUNT_REQUEST_TITLE: () => LocalizedString
-	/**
-	 * Your Signature is being requested to sign a certificate
-	 */
-	CONNECTED_APP_SIGN_REQUEST_DESCRIPTION: () => LocalizedString
-	/**
-	 * You have previously connected to {dapp} with a different account. Do you want to switch to the account connected to {dapp}?
-	 */
-	CONNECTED_APP_CHANGE_ACCOUNT_REQUEST_DESCRIPTION: (arg: { dapp: string }) => LocalizedString
-	/**
-	 * Your Signature is being requested to sign a message
-	 */
-	CONNECTED_APP_SIGN_MESSAGE_REQUEST_DESCRIPTION: () => LocalizedString
-	/**
-	 * Message: 
-	 */
-	CONNECTED_APP_MESSAGE_HEADER: () => LocalizedString
-	/**
-	 * Sign and Send a transaction
-	 */
-	CONNECTED_APP_SIGN_TRANSACTION_REQUEST_TITLE: () => LocalizedString
-	/**
-	 * Your Signature is being requested to sign and send a transaction
-	 */
-	CONNECTED_APP_SIGN_TRANSACTION_REQUEST_DESCRIPTION: () => LocalizedString
-	/**
-	 * Account
-	 */
-	CONNECTED_APP_SELECTED_ACCOUNT_LABEL: () => LocalizedString
-	/**
-	 * Origin
-	 */
-	CONNECTED_APP_SELECTED_ORIGIN_LABEL: () => LocalizedString
-	/**
-	 * Purpose
-	 */
-	CONNECTED_APP_SELECTED_PURPOSE_LABEL: () => LocalizedString
-	/**
-	 * Content
-	 */
-	CONNECTED_APP_SELECTED_CONTENT_LABEL: () => LocalizedString
-	/**
-	 * Method
-	 */
-	CONNECTED_APP_SELECTED_METHOD_LABEL: () => LocalizedString
-	/**
-	 * Network
-	 */
-	CONNECTED_APP_SELECTED_NETWORK_LABEL: () => LocalizedString
-	/**
-	 * Message
-	 */
-	CONNECTED_APP_SELECTED_MESSAGE_LABEL: () => LocalizedString
-	/**
-	 * Connected apps
-	 */
-	CONNECTED_APPS_SCREEN_TITLE: () => LocalizedString
-	/**
-	 * Your connected apps list
-	 */
-	CONNECTED_APPS_SCREEN_SUBTITLE: () => LocalizedString
-	/**
-	 * Connect your wallet with apps to make transactions and sign certificates.
-	 */
-	CONNECTED_APPS_SCREEN_DESCRIPTION: () => LocalizedString
-	/**
-	 * You have no connected apps. Once you have some, they will displayed here.
-	 */
-	CONNECTED_APPS_SCREEN_NO_CONNECTED_APP: () => LocalizedString
-	/**
-	 * Add app
-	 */
-	ADD_APP: () => LocalizedString
-	/**
-	 * Confirming this you will disconnect the {name} app from {alias}
-	 */
-	CONNECTED_APPS_CONFIRM_DISCONNECT_MESSAGE: (arg: { alias: string, name: string }) => LocalizedString
-	/**
-	 * Connected app
-	 */
-	CONNECTED_APP_DETAILS_TITLE: () => LocalizedString
-	/**
-	 * Connected with
-	 */
-	CONNECTED_APP_DETAILS_ACCOUNT_LABEL: () => LocalizedString
-	/**
-	 * Connection requests
-	 */
-	CONNECTED_APP_CONNECTION_REQUESTS: () => LocalizedString
-	/**
-	 * Description
-	 */
-	CONNECTED_APP_DESCRIPTION: () => LocalizedString
-	/**
-	 * Discover
-	 */
-	DISCOVER_TITLE: () => LocalizedString
-	/**
-	 * Discover applications in the vechain ecosystem
-	 */
-	DISCOVER_SUB_TITLE: () => LocalizedString
-	/**
-	 * Search the Web
-	 */
-	DISCOVER_SEARCH: () => LocalizedString
-	/**
-	 * Search in the browser
-	 */
-	DISCOVER_SEARCH_CTA: () => LocalizedString
-	/**
-	 * No results found for your search
-	 */
-	DISCOVER_EMPTY_SEARCH: () => LocalizedString
-	/**
-	 * Favourites
-	 */
-	DISCOVER_TAB_FAVOURITES: () => LocalizedString
-	/**
-	 * Featured
-	 */
-	DISCOVER_TAB_FEATURED: () => LocalizedString
-	/**
-	 * No Dapp found
-	 */
-	DISCOVER_NO_DAPPS_FOUND: () => LocalizedString
-	/**
-	 * Add from Featured Dapps
-	 */
-	DISCOVER_EMPTY_FAVOURITES: () => LocalizedString
-	/**
-	 * No favourites added
-	 */
-	DISCOVER_EMPTY_FAVOURITES_SUBTITLE: () => LocalizedString
-	/**
-	 * Add bookmarks in the browser
-	 */
-	DISCOVER_EMPTY_CUSTOM_NODES: () => LocalizedString
-	/**
-	 * Make your own DApp on Vechain
-	 */
-	DISCOVER_CREATE_YOUR_DAPP: () => LocalizedString
-	/**
-	 * VeBetterDAO DApps
-	 */
-	DISCOVER_DAPPS_TITLE: () => LocalizedString
-	/**
-	 * See all
-	 */
-	DISCOVER_SEE_ALL_BOOKMARKS: () => LocalizedString
-	/**
-	 * Ecosystem
-	 */
-	DISCOVER_ECOSYSTEM: () => LocalizedString
-	/**
-	 * All
-	 */
-	DISCOVER_ECOSYSTEM_FILTER_ALL: () => LocalizedString
-	/**
-	 * Sustainability
-	 */
-	DISCOVER_ECOSYSTEM_FILTER_SUSTAINABILITY: () => LocalizedString
-	/**
-	 * NFTs
-	 */
-	DISCOVER_ECOSYSTEM_FILTER_NFTS: () => LocalizedString
-	/**
-	 * DApps
-	 */
-	DISCOVER_ECOSYSTEM_FILTER_DAPPS: () => LocalizedString
-	/**
-	 * SEARCH THE WEB
-	 */
-	DISCOVER_WEB_SEARCH_FLOATING_BUTTON_LABEL: () => LocalizedString
-	/**
-	 * Favourites
-	 */
-	FAVOURITES_DAPPS_TITLE: () => LocalizedString
-	/**
-	 * Search
-	 */
-	FAVOURITES_DAPPS_SEARCH_PLACEHOLDER: () => LocalizedString
-	/**
-	 * Could not find any dapps with this name
-	 */
-	FAVOURITES_DAPPS_NO_RECORDS: () => LocalizedString
-	/**
-	 * Favourites
-	 */
-	FAVOURITES_BOTTOM_SHEET_TITLE: () => LocalizedString
-	/**
-	 * Browser History
-	 */
-	BROWSER_HISTORY_TITLE: () => LocalizedString
-	/**
-	 * Search
-	 */
-	BROWSER_HISTORY_SEARCH_PLACEHOLDER: () => LocalizedString
-	/**
-	 * No History Available
-	 */
-	BROWSER_HISTORY_No_RECORDS: () => LocalizedString
-	/**
-	 * Tabs
-	 */
-	BROWSER_TAB_MANAGEMENT_TITLE: () => LocalizedString
-	/**
-	 * Favourites
-	 */
-	BROWSER_FAVOURITES_TITLE: () => LocalizedString
-	/**
-	 * Add bookmark
-	 */
-	BROWSER_ADD_BOOKMARK_TITLE: () => LocalizedString
+	BLOCK_NUMBER: () => LocalizedString
 	/**
 	 * Add the current page to your bookmarks
 	 */
 	BROWSER_ADD_BOOKMARK_DESCRIPTION: () => LocalizedString
 	/**
-	 * Account and network change
+	 * Add bookmark
 	 */
-	BROWSER_CHANGE_ACCOUNT_NETWORK_TITLE: () => LocalizedString
-	/**
-	 * Account change
-	 */
-	BROWSER_CHANGE_ACCOUNT_TITLE: () => LocalizedString
+	BROWSER_ADD_BOOKMARK_TITLE: () => LocalizedString
 	/**
 	 * Your account will change to:
 	 */
 	BROWSER_CHANGE_ACCOUNT_DESC: () => LocalizedString
 	/**
-	 * Network change
+	 * Account and network change
 	 */
-	BROWSER_CHANGE_NETWORK_TITLE: () => LocalizedString
+	BROWSER_CHANGE_ACCOUNT_NETWORK_TITLE: () => LocalizedString
+	/**
+	 * We can't proceed with the operation with the current account and network
+	 */
+	BROWSER_CHANGE_ACCOUNT_NETWORK_WARNING: () => LocalizedString
+	/**
+	 * Account change
+	 */
+	BROWSER_CHANGE_ACCOUNT_TITLE: () => LocalizedString
 	/**
 	 * The network will change to:
 	 */
 	BROWSER_CHANGE_NETWORK_DESC: () => LocalizedString
 	/**
-	 * We can't proceed with the operation with the current account and network
+	 * Network change
 	 */
-	BROWSER_CHANGE_ACCOUNT_NETWORK_WARNING: () => LocalizedString
+	BROWSER_CHANGE_NETWORK_TITLE: () => LocalizedString
+	/**
+	 * Favourites
+	 */
+	BROWSER_FAVOURITES_TITLE: () => LocalizedString
+	/**
+	 * No History Available
+	 */
+	BROWSER_HISTORY_No_RECORDS: () => LocalizedString
+	/**
+	 * Search
+	 */
+	BROWSER_HISTORY_SEARCH_PLACEHOLDER: () => LocalizedString
+	/**
+	 * Browser History
+	 */
+	BROWSER_HISTORY_TITLE: () => LocalizedString
 	/**
 	 * There was an error trying to acces this link. Make sure it's correct and try again.
 	 */
@@ -5299,33 +3891,817 @@ Try reconnect your device to the internet.
 	 */
 	BROWSER_NETWORK_NOT_FOUND: () => LocalizedString
 	/**
-	 * Contract address
+	 * Tabs
 	 */
-	CONTRACT_ADDRESS: () => LocalizedString
+	BROWSER_TAB_MANAGEMENT_TITLE: () => LocalizedString
 	/**
-	 * Attributes
+	 * ADD ACCOUNT
 	 */
-	NFT_ATTRIBUTES: () => LocalizedString
+	BTN_ADD_ACCOUNT: () => LocalizedString
 	/**
-	 * Hidden collections
+	 * Add contact
 	 */
-	HIDDEN_COLLECTIONS: () => LocalizedString
+	BTN_ADD_CONTACT: () => LocalizedString
 	/**
-	 * Manage NFTs
+	 * Add a custom node
 	 */
-	MANAGE_NFTS: () => LocalizedString
+	BTN_ADD_CUSTOM_NODE: () => LocalizedString
 	/**
-	 * Restore your Collections or NFTs
+	 * I'll do it later
 	 */
-	RESTORE_NFTS: () => LocalizedString
+	BTN_BACKUP_ALERT_CLOSE: () => LocalizedString
+	/**
+	 * Backup now
+	 */
+	BTN_BACKUP_ALERT_CONFIRM: () => LocalizedString
+	/**
+	 * Backup phrase
+	 */
+	BTN_BACKUP_MENMONIC: () => LocalizedString
+	/**
+	 * Buy
+	 */
+	BTN_BUY: () => LocalizedString
+	/**
+	 * Choose password
+	 */
+	BTN_CHOOSE_PASSWORD: () => LocalizedString
+	/**
+	 * Close App
+	 */
+	BTN_CLOSE_APP: () => LocalizedString
+	/**
+	 * Confirm password
+	 */
+	BTN_CONFIRN_PASSWORD: () => LocalizedString
+	/**
+	 * Continue
+	 */
+	BTN_CONTINUE: () => LocalizedString
+	/**
+	 * Copy public address
+	 */
+	BTN_COPY_PUBLIC_ADDRESS: () => LocalizedString
+	/**
+	 * Create contact
+	 */
+	BTN_CREATE_CONTACT: () => LocalizedString
+	/**
+	 * Create wallet
+	 */
+	BTN_CREATE_WALLET: () => LocalizedString
+	/**
+	 * Advanced setup
+	 */
+	BTN_CREATE_WALLET_ADVANCED_SETUP: () => LocalizedString
+	/**
+	 * GO TO YOUR WALLET
+	 */
+	BTN_CREATE_WALLET_SUCCESS: () => LocalizedString
+	/**
+	 * Create new wallet
+	 */
+	BTN_CREATE_WALLET_TYPE_CREATE_NEW: () => LocalizedString
+	/**
+	 * You will create a new empty wallet
+	 */
+	BTN_CREATE_WALLET_TYPE_CREATE_NEW_SUBTITLE: () => LocalizedString
+	/**
+	 * Import wallet
+	 */
+	BTN_CREATE_WALLET_TYPE_IMPORT: () => LocalizedString
+	/**
+	 * Import an existing wallet and manage your vechain portfolio
+	 */
+	BTN_CREATE_WALLET_TYPE_IMPORT_SUBTITLE: () => LocalizedString
+	/**
+	 * Download logs
+	 */
+	BTN_DOWNLOAD_LOGS: () => LocalizedString
+	/**
+	 * Edit custom node
+	 */
+	BTN_EDIT_CUSTOM_NODE: () => LocalizedString
+	/**
+	 * Edit Pin
+	 */
+	BTN_EDIT_PIN: () => LocalizedString
+	/**
+	 * Enable
+	 */
+	BTN_ENABLE: () => LocalizedString
+	/**
+	 * Enter password
+	 */
+	BTN_ENTER_PASSWORD: () => LocalizedString
+	/**
+	 * GET STARTED
+	 */
+	BTN_GET_STARTED: () => LocalizedString
+	/**
+	 * Go back
+	 */
+	BTN_GO_BACK: () => LocalizedString
+	/**
+	 * Go to settings
+	 */
+	BTN_GO_TO_SETTINGS: () => LocalizedString
+	/**
+	 * History
+	 */
+	BTN_HISTORY: () => LocalizedString
+	/**
+	 * Import
+	 */
+	BTN_IMPORT: () => LocalizedString
+	/**
+	 * Import wallet
+	 */
+	BTN_IMPORT_WALLET: () => LocalizedString
+	/**
+	 * Verify
+	 */
+	BTN_IMPORT_WALLET_VERIFY: () => LocalizedString
+	/**
+	 * Let's get sending!
+	 */
+	BTN_LETS_GET_SENDING: () => LocalizedString
+	/**
+	 * Backup
+	 */
+	BTN_MNEMONIC_BACKUP: () => LocalizedString
+	/**
+	 * I state that I have saved the secret phrase and I am aware that I am responsible if I lose it.
+	 */
+	BTN_MNEMONIC_CHECKBOX: () => LocalizedString
+	/**
+	 * Copy to clipboard
+	 */
+	BTN_MNEMONIC_CLIPBOARD: () => LocalizedString
+	/**
+	 * Observed
+	 */
+	BTN_OBSERVED: () => LocalizedString
+	/**
+	 * Observe wallet
+	 */
+	BTN_OBSERVE_WALLET: () => LocalizedString
+	/**
+	 * Import a wallet address to only observe this wallet
+	 */
+	BTN_OBSERVE_WALLET_SUBTITLE: () => LocalizedString
+	/**
+	 * Skip ahead to create password
+	 */
+	BTN_ONBOARDING_SKIP: () => LocalizedString
+	/**
+	 * NEXT: SUSTAINABLE
+	 */
+	BTN_ONBOARDING_SLIDE_01: () => LocalizedString
+	/**
+	 * NEXT: SAFE AND FAST
+	 */
+	BTN_ONBOARDING_SLIDE_02: () => LocalizedString
+	/**
+	 * NEXT: CREATE PASSWORD
+	 */
+	BTN_ONBOARDING_SLIDE_03: () => LocalizedString
+	/**
+	 * Paste Address
+	 */
+	BTN_PASTE_ADDRESS: () => LocalizedString
+	/**
+	 * Remove account
+	 */
+	BTN_REMOVE_ACCOUNT: () => LocalizedString
+	/**
+	 * Remove wallet
+	 */
+	BTN_REMOVE_WALLET: () => LocalizedString
+	/**
+	 * Rename account
+	 */
+	BTN_RENAME_ACCOUNT: () => LocalizedString
+	/**
+	 * Reset App
+	 */
+	BTN_RESET_APP: () => LocalizedString
+	/**
+	 * I am aware that this action is irreversible (required)
+	 */
+	BTN_RESET_APP_CHECKBOX: () => LocalizedString
+	/**
+	 * Retry
+	 */
+	BTN_RETRY: () => LocalizedString
+	/**
+	 * Scan QR Code
+	 */
+	BTN_SCAN_QR_CODE: () => LocalizedString
+	/**
+	 * Create password
+	 */
+	BTN_SECURITY_CREATE_PASSWORD: () => LocalizedString
+	/**
+	 * I state that I have backed up my secret phrase
+	 */
+	BTN_SECURITY_OPERATION_CHECKBOX: () => LocalizedString
+	/**
+	 * Use {type}
+	 */
+	BTN_SECURTY_USE_TYPE: (arg: { type: string }) => LocalizedString
+	/**
+	 * Select derivation path for your wallet
+	 */
+	BTN_SELECT_DERIVATION_PATH: () => LocalizedString
+	/**
+	 * Derivation Path for Ethereum
+	 */
+	BTN_SELECT_DERIVATION_PATH_ETH: () => LocalizedString
+	/**
+	 * Derivation Path for VeChain
+	 */
+	BTN_SELECT_DERIVATION_PATH_VET: () => LocalizedString
+	/**
+	 * Send
+	 */
+	BTN_SEND: () => LocalizedString
+	/**
+	 * Show QR code
+	 */
+	BTN_SHOW_QR_CODE: () => LocalizedString
+	/**
+	 * Swap
+	 */
+	BTN_SWAP: () => LocalizedString
+	/**
+	 * I state that I want to delete this wallet
+	 */
+	BTN_WALLET_CONFRIM_DELETION: () => LocalizedString
+	/**
+	 * Skip ahead to recovery phrase
+	 */
+	BTN_WALLET_TUTORIAL_SKIP: () => LocalizedString
+	/**
+	 * NEXT: CUSTODY
+	 */
+	BTN_WALLET_TUTORIAL_SLIDE_01: () => LocalizedString
+	/**
+	 * NEXT: SAFETY
+	 */
+	BTN_WALLET_TUTORIAL_SLIDE_02: () => LocalizedString
+	/**
+	 * NEXT: SECRET PHRASE
+	 */
+	BTN_WALLET_TUTORIAL_SLIDE_03: () => LocalizedString
+	/**
+	 * You have rejected the certificate
+	 */
+	CERT_LEDGER_REJECTED: () => LocalizedString
+	/**
+	 * You have rejected the certificate on your Ledger, please confirm on your device when required
+	 */
+	CERT_LEDGER_REJECTED_SB: () => LocalizedString
+	/**
+	 * We are signing your certificate
+	 */
+	CERT_LEDGER_SIGN_DATA: () => LocalizedString
+	/**
+	 * We are signing your certificate with your Ledger, please confirm the signature on your device when required
+	 */
+	CERT_LEDGER_SIGN_DATA_SB: () => LocalizedString
+	/**
+	 * An error occurred while trying to connect to iCloud service. Try again!
+	 */
+	CLOUDKIT_ERROR_GENERIC: () => LocalizedString
+	/**
+	 * There was an error connecting to iCloud. Please check your network connection and try again.
+	 */
+	CLOUD_ERR_NETWORK: () => LocalizedString
+	/**
+	 * There was an error checking your iCloud status. Please try again.
+	 */
+	CLOUD_ERR_USER_STATUS: () => LocalizedString
+	/**
+	 * There was an error performing this iCloud wallet operation. Please try again.
+	 */
+	CLOUD_ERR_WALLET_OPERATION: () => LocalizedString
 	/**
 	 * Collections
 	 */
 	COLLECTIONS: () => LocalizedString
 	/**
-	 * You don't have any hidden {name}
+	 * Collection name
 	 */
-	NO_HIDDEN_COLLECTIONS: (arg: { name: string }) => LocalizedString
+	COLLECTION_NAME: () => LocalizedString
+	/**
+	 * 24 HRs
+	 */
+	COMMON_24H: () => LocalizedString
+	/**
+	 * 24h Volume
+	 */
+	COMMON_24H_VOLUME: () => LocalizedString
+	/**
+	 * Assets
+	 */
+	COMMON_ASSETS: () => LocalizedString
+	/**
+	 * Add
+	 */
+	COMMON_BTN_ADD: () => LocalizedString
+	/**
+	 * Cancel
+	 */
+	COMMON_BTN_CANCEL: () => LocalizedString
+	/**
+	 * CANCEL
+	 */
+	COMMON_BTN_CANCEL_CAPS_LOCK: () => LocalizedString
+	/**
+	 * Confirm
+	 */
+	COMMON_BTN_CONFIRM: () => LocalizedString
+	/**
+	 * CONNECT
+	 */
+	COMMON_BTN_CONNECT: () => LocalizedString
+	/**
+	 * Disconnect
+	 */
+	COMMON_BTN_DISCONNECT: () => LocalizedString
+	/**
+	 * Done
+	 */
+	COMMON_BTN_DONE: () => LocalizedString
+	/**
+	 * Loading
+	 */
+	COMMON_BTN_LOADING: () => LocalizedString
+	/**
+	 * NEXT
+	 */
+	COMMON_BTN_NEXT: () => LocalizedString
+	/**
+	 * OK
+	 */
+	COMMON_BTN_OK: () => LocalizedString
+	/**
+	 * REJECT
+	 */
+	COMMON_BTN_REJECT: () => LocalizedString
+	/**
+	 * Remove
+	 */
+	COMMON_BTN_REMOVE: () => LocalizedString
+	/**
+	 * Reset App
+	 */
+	COMMON_BTN_RESET: () => LocalizedString
+	/**
+	 * Retry
+	 */
+	COMMON_BTN_RETRY: () => LocalizedString
+	/**
+	 * Save
+	 */
+	COMMON_BTN_SAVE: () => LocalizedString
+	/**
+	 * SIGN
+	 */
+	COMMON_BTN_SIGN: () => LocalizedString
+	/**
+	 * SIGN AND SEND
+	 */
+	COMMON_BTN_SIGN_AND_SEND: () => LocalizedString
+	/**
+	 * Sign out
+	 */
+	COMMON_BTN_SIGN_OUT: () => LocalizedString
+	/**
+	 * Unlock
+	 */
+	COMMON_BTN_UNLOCK: () => LocalizedString
+	/**
+	 * Circulating Supply
+	 */
+	COMMON_CIRCULATING_SUPPLY: () => LocalizedString
+	/**
+	 * DApps
+	 */
+	COMMON_DAPPS: () => LocalizedString
+	/**
+	 * Import
+	 */
+	COMMON_IMPORT: () => LocalizedString
+	/**
+	 * Address
+	 */
+	COMMON_LBL_ADDRESS: () => LocalizedString
+	/**
+	 * and
+	 */
+	COMMON_LBL_AND: () => LocalizedString
+	/**
+	 * Comment
+	 */
+	COMMON_LBL_COMMENT: () => LocalizedString
+	/**
+	 * Data
+	 */
+	COMMON_LBL_DATA: () => LocalizedString
+	/**
+	 * Default
+	 */
+	COMMON_LBL_DEFAULT: () => LocalizedString
+	/**
+	 * Enter the {name}
+	 */
+	COMMON_LBL_ENTER_THE: (arg: { name: string }) => LocalizedString
+	/**
+	 * Error
+	 */
+	COMMON_LBL_ERROR: () => LocalizedString
+	/**
+	 * Favourite
+	 */
+	COMMON_LBL_FAVOURITE: () => LocalizedString
+	/**
+	 * Favourites
+	 */
+	COMMON_LBL_FAVOURITES: () => LocalizedString
+	/**
+	 * Import
+	 */
+	COMMON_LBL_IMPORT: () => LocalizedString
+	/**
+	 * Name
+	 */
+	COMMON_LBL_NAME: () => LocalizedString
+	/**
+	 * No available price history for {tokenName}
+	 */
+	COMMON_LBL_NO_TOKEN_DATA: (arg: { tokenName: string }) => LocalizedString
+	/**
+	 * Privacy Policy
+	 */
+	COMMON_LBL_PRIVACY_POLICY: () => LocalizedString
+	/**
+	 * Read less
+	 */
+	COMMON_LBL_READ_LESS: () => LocalizedString
+	/**
+	 * Read more
+	 */
+	COMMON_LBL_READ_MORE: () => LocalizedString
+	/**
+	 * Success
+	 */
+	COMMON_LBL_SUCCESS: () => LocalizedString
+	/**
+	 * Terms and Conditions
+	 */
+	COMMON_LBL_TERMS_AND_CONDITIONS: () => LocalizedString
+	/**
+	 * URL
+	 */
+	COMMON_LBL_URL: () => LocalizedString
+	/**
+	 * Market Cap
+	 */
+	COMMON_MARKET_CAP: () => LocalizedString
+	/**
+	 * N.A.
+	 */
+	COMMON_NOT_AVAILABLE: () => LocalizedString
+	/**
+	 * Oops!
+	 */
+	COMMON_OOPS: () => LocalizedString
+	/**
+	 * Or
+	 */
+	COMMON_OR: () => LocalizedString
+	/**
+	 * Overall
+	 */
+	COMMON_OVERALL: () => LocalizedString
+	/**
+	 * Price
+	 */
+	COMMON_PRICE: () => LocalizedString
+	/**
+	 * Proceed
+	 */
+	COMMON_PROCEED: () => LocalizedString
+	/**
+	 * Receive
+	 */
+	COMMON_RECEIVE: () => LocalizedString
+	/**
+	 * From
+	 */
+	COMMON_ROOT_ADDRESS: () => LocalizedString
+	/**
+	 * Select account
+	 */
+	COMMON_SELECT_ACCOUNT: () => LocalizedString
+	/**
+	 * Select account to remove
+	 */
+	COMMON_SELECT_ACCOUNT_TO_REMOVE: () => LocalizedString
+	/**
+	 * Today
+	 */
+	COMMON_TODAY: () => LocalizedString
+	/**
+	 * Total Supply
+	 */
+	COMMON_TOTAL_SUPPLY: () => LocalizedString
+	/**
+	 * Confirming this you will disconnect the {name} app from {alias}
+	 */
+	CONNECTED_APPS_CONFIRM_DISCONNECT_MESSAGE: (arg: { alias: string, name: string }) => LocalizedString
+	/**
+	 * Connect your wallet with apps to make transactions and sign certificates.
+	 */
+	CONNECTED_APPS_SCREEN_DESCRIPTION: () => LocalizedString
+	/**
+	 * You have no connected apps. Once you have some, they will displayed here.
+	 */
+	CONNECTED_APPS_SCREEN_NO_CONNECTED_APP: () => LocalizedString
+	/**
+	 * Your connected apps list
+	 */
+	CONNECTED_APPS_SCREEN_SUBTITLE: () => LocalizedString
+	/**
+	 * Connected apps
+	 */
+	CONNECTED_APPS_SCREEN_TITLE: () => LocalizedString
+	/**
+	 * You have previously connected to {dapp} with a different account. Do you want to switch to the account connected to {dapp}?
+	 */
+	CONNECTED_APP_CHANGE_ACCOUNT_REQUEST_DESCRIPTION: (arg: { dapp: string }) => LocalizedString
+	/**
+	 * Change account
+	 */
+	CONNECTED_APP_CHANGE_ACCOUNT_REQUEST_TITLE: () => LocalizedString
+	/**
+	 * Connection requests
+	 */
+	CONNECTED_APP_CONNECTION_REQUESTS: () => LocalizedString
+	/**
+	 * Description
+	 */
+	CONNECTED_APP_DESCRIPTION: () => LocalizedString
+	/**
+	 * Connected with
+	 */
+	CONNECTED_APP_DETAILS_ACCOUNT_LABEL: () => LocalizedString
+	/**
+	 * Connected app
+	 */
+	CONNECTED_APP_DETAILS_TITLE: () => LocalizedString
+	/**
+	 * Message: 
+	 */
+	CONNECTED_APP_MESSAGE_HEADER: () => LocalizedString
+	/**
+	 * External app connection
+	 */
+	CONNECTED_APP_REQUEST: () => LocalizedString
+	/**
+	 * Account
+	 */
+	CONNECTED_APP_SELECTED_ACCOUNT_LABEL: () => LocalizedString
+	/**
+	 * Content
+	 */
+	CONNECTED_APP_SELECTED_CONTENT_LABEL: () => LocalizedString
+	/**
+	 * Message
+	 */
+	CONNECTED_APP_SELECTED_MESSAGE_LABEL: () => LocalizedString
+	/**
+	 * Method
+	 */
+	CONNECTED_APP_SELECTED_METHOD_LABEL: () => LocalizedString
+	/**
+	 * Network
+	 */
+	CONNECTED_APP_SELECTED_NETWORK_LABEL: () => LocalizedString
+	/**
+	 * Origin
+	 */
+	CONNECTED_APP_SELECTED_ORIGIN_LABEL: () => LocalizedString
+	/**
+	 * Purpose
+	 */
+	CONNECTED_APP_SELECTED_PURPOSE_LABEL: () => LocalizedString
+	/**
+	 * Your Signature is being requested to sign a message
+	 */
+	CONNECTED_APP_SIGN_MESSAGE_REQUEST_DESCRIPTION: () => LocalizedString
+	/**
+	 * Sign a message
+	 */
+	CONNECTED_APP_SIGN_MESSAGE_TITLE: () => LocalizedString
+	/**
+	 * Your Signature is being requested to sign a certificate
+	 */
+	CONNECTED_APP_SIGN_REQUEST_DESCRIPTION: () => LocalizedString
+	/**
+	 * Sign a certificate
+	 */
+	CONNECTED_APP_SIGN_REQUEST_TITLE: () => LocalizedString
+	/**
+	 * Your Signature is being requested to sign and send a transaction
+	 */
+	CONNECTED_APP_SIGN_TRANSACTION_REQUEST_DESCRIPTION: () => LocalizedString
+	/**
+	 * Sign and Send a transaction
+	 */
+	CONNECTED_APP_SIGN_TRANSACTION_REQUEST_TITLE: () => LocalizedString
+	/**
+	 * Connected app
+	 */
+	CONNECTED_APP_TITLE: () => LocalizedString
+	/**
+	 * Approve NFT
+	 */
+	CONNECTED_APP_approve_nft: () => LocalizedString
+	/**
+	 * Contract call
+	 */
+	CONNECTED_APP_contract_call: () => LocalizedString
+	/**
+	 * Contract deployment
+	 */
+	CONNECTED_APP_deploy_contract: () => LocalizedString
+	/**
+	 * Swap tokens for tokens
+	 */
+	CONNECTED_APP_swap_tokens_for_tokens: () => LocalizedString
+	/**
+	 * Swap tokens for VET
+	 */
+	CONNECTED_APP_swap_tokens_for_vet: () => LocalizedString
+	/**
+	 * Swap VET for tokens
+	 */
+	CONNECTED_APP_swap_vet_for_tokens: () => LocalizedString
+	/**
+	 * Token transfer
+	 */
+	CONNECTED_APP_token_transfer: () => LocalizedString
+	/**
+	 * ● Request your signature on certificates or identification and agreements
+	 */
+	CONNECTION_REQUEST_SIGN_DESCRIPTION: () => LocalizedString
+	/**
+	 * {name} is asking for access to:
+	 */
+	CONNECTION_REQUEST_SUBTITLE: (arg: { name: unknown }) => LocalizedString
+	/**
+	 * Connection request
+	 */
+	CONNECTION_REQUEST_TITLE: () => LocalizedString
+	/**
+	 * ● Request transactions to send to Vechain Thor
+	 */
+	CONNECTION_REQUEST_TRANSACTION_DESCRIPTION: () => LocalizedString
+	/**
+	 * Content
+	 */
+	CONTENT: () => LocalizedString
+	/**
+	 * Contract ABI
+	 */
+	CONTRACT_ABI: () => LocalizedString
+	/**
+	 * Contract address
+	 */
+	CONTRACT_ADDRESS: () => LocalizedString
+	/**
+	 * Contract data
+	 */
+	CONTRACT_DATA: () => LocalizedString
+	/**
+	 * Click to copy ABI
+	 */
+	COPY_ABI: () => LocalizedString
+	/**
+	 * Custom tokens are not available at the moment. Check your internet connection or try later
+	 */
+	CUSTOM_TOKENS_NOT_AVAIABLE: () => LocalizedString
+	/**
+	 * DApp Transaction
+	 */
+	DAPP_TRANSACTION: () => LocalizedString
+	/**
+	 * Dark
+	 */
+	DARK_THEME: () => LocalizedString
+	/**
+	 * Date not available
+	 */
+	DATE_NOT_AVAILABLE: () => LocalizedString
+	/**
+	 * Details
+	 */
+	DETAILS: () => LocalizedString
+	/**
+	 * One or more of your accounts recovery phrase haven’t been backed up yet. Make sure to backup to never lose access to your crypto.
+	 */
+	DEVICE_BACKUP_MODAL_SUBTITLE: () => LocalizedString
+	/**
+	 * Backup now
+	 */
+	DEVICE_BACKUP_MODAL_TITLE: () => LocalizedString
+	/**
+	 * Device Pin
+	 */
+	DEVICE_PIN: () => LocalizedString
+	/**
+	 * Make your own DApp on Vechain
+	 */
+	DISCOVER_CREATE_YOUR_DAPP: () => LocalizedString
+	/**
+	 * VeBetterDAO DApps
+	 */
+	DISCOVER_DAPPS_TITLE: () => LocalizedString
+	/**
+	 * Ecosystem
+	 */
+	DISCOVER_ECOSYSTEM: () => LocalizedString
+	/**
+	 * All
+	 */
+	DISCOVER_ECOSYSTEM_FILTER_ALL: () => LocalizedString
+	/**
+	 * DApps
+	 */
+	DISCOVER_ECOSYSTEM_FILTER_DAPPS: () => LocalizedString
+	/**
+	 * NFTs
+	 */
+	DISCOVER_ECOSYSTEM_FILTER_NFTS: () => LocalizedString
+	/**
+	 * Sustainability
+	 */
+	DISCOVER_ECOSYSTEM_FILTER_SUSTAINABILITY: () => LocalizedString
+	/**
+	 * Add bookmarks in the browser
+	 */
+	DISCOVER_EMPTY_CUSTOM_NODES: () => LocalizedString
+	/**
+	 * Add from Featured Dapps
+	 */
+	DISCOVER_EMPTY_FAVOURITES: () => LocalizedString
+	/**
+	 * No favourites added
+	 */
+	DISCOVER_EMPTY_FAVOURITES_SUBTITLE: () => LocalizedString
+	/**
+	 * No results found for your search
+	 */
+	DISCOVER_EMPTY_SEARCH: () => LocalizedString
+	/**
+	 * No Dapp found
+	 */
+	DISCOVER_NO_DAPPS_FOUND: () => LocalizedString
+	/**
+	 * Search the Web
+	 */
+	DISCOVER_SEARCH: () => LocalizedString
+	/**
+	 * Search in the browser
+	 */
+	DISCOVER_SEARCH_CTA: () => LocalizedString
+	/**
+	 * See all
+	 */
+	DISCOVER_SEE_ALL_BOOKMARKS: () => LocalizedString
+	/**
+	 * Discover applications in the vechain ecosystem
+	 */
+	DISCOVER_SUB_TITLE: () => LocalizedString
+	/**
+	 * Favourites
+	 */
+	DISCOVER_TAB_FAVOURITES: () => LocalizedString
+	/**
+	 * Featured
+	 */
+	DISCOVER_TAB_FEATURED: () => LocalizedString
+	/**
+	 * Discover
+	 */
+	DISCOVER_TITLE: () => LocalizedString
+	/**
+	 * SEARCH THE WEB
+	 */
+	DISCOVER_WEB_SEARCH_FLOATING_BUTTON_LABEL: () => LocalizedString
 	/**
 	 * Don't see your NFTs?
 	 */
@@ -5335,89 +4711,157 @@ Try reconnect your device to the internet.
 	 */
 	DONT_SEE_NFTS_2: () => LocalizedString
 	/**
-	 * Import NFT
+	 * Error!
 	 */
-	IMPORT_NFT: () => LocalizedString
+	ERROR: () => LocalizedString
 	/**
-	 * Receive NFT
+	 * Account already exists
 	 */
-	RECEIVE_NFT: () => LocalizedString
+	ERROR_ACCOUNT_ALREADY_EXISTS: () => LocalizedString
 	/**
-	 * Woops! There was an error trying to get your NFTs. Please try again in a while.
+	 * Address already exists in contacts
 	 */
-	NFT_DOWNLOAD_ERROR: () => LocalizedString
+	ERROR_ADDRESS_EXISTS: () => LocalizedString
 	/**
-	 * Show collection
+	 * Please enter a valid Vechain address
 	 */
-	SHOW_COLLECTION: () => LocalizedString
+	ERROR_ADDRESS_INVALID: () => LocalizedString
 	/**
-	 * Bring back your hidden collection
+	 * Address not found for domain name
 	 */
-	SHOW_COLLECTION_SUBTITLE: () => LocalizedString
+	ERROR_COULD_NOT_FIND_ADDRESS_FOR_DOMAIN: () => LocalizedString
 	/**
-	 * Show NFT
+	 * Error creating wallet
 	 */
-	SHOW_NFT: () => LocalizedString
+	ERROR_CREATING_WALLET: () => LocalizedString
 	/**
-	 * Hide NFT
+	 * Error getting wallet. Make sure you have the correct password
 	 */
-	HIDE_NFT: () => LocalizedString
+	ERROR_DECRYPTING_WALLET: () => LocalizedString
 	/**
-	 * Hide collection
+	 * Enter a valid URL
 	 */
-	HIDE_COLLECTION: () => LocalizedString
+	ERROR_ENTER_VALID_URL: () => LocalizedString
 	/**
-	 * Hide unwanted collections.
+	 * Error calculating fees, please try again.
 	 */
-	HIDE_COLLECTION_SUBTITLE: () => LocalizedString
+	ERROR_FEES_CALCULATION: () => LocalizedString
 	/**
-	 * Save image on device
+	 * We apologise for the inconvenience.
 	 */
-	SAVE_IMAGE_ON_DEVICE: () => LocalizedString
+	ERROR_GENERIC_BODY_01: () => LocalizedString
 	/**
-	 * Save your NFT image in your Photo Album
+	 * Please, try closing and reopening the app.
 	 */
-	SAVE_IMAGE_ON_DEVICE_SUBTITLE: () => LocalizedString
+	ERROR_GENERIC_BODY_02: () => LocalizedString
 	/**
-	 * Share image
+	 * The operation went wrong. Please, try again.
 	 */
-	SHARE_IMAGE: () => LocalizedString
+	ERROR_GENERIC_OPERATION: () => LocalizedString
 	/**
-	 * Share your NFT image with your friends
+	 * Something went wrong!
 	 */
-	SHARE_IMAGE_SUBTITLE: () => LocalizedString
+	ERROR_GENERIC_SUBTITLE: () => LocalizedString
 	/**
-	 * Error saving media
+	 * This appears to be a duplicate of an existing wallet
 	 */
-	SAVE_MEDIA_ERROR_TITLE: () => LocalizedString
+	ERROR_IMPORT_ADDRESS_EXISTS: () => LocalizedString
 	/**
-	 * There was an error trying to save your media. Media type is unsupported.
+	 * An unknown error occurred while importing the wallet. Please try again.
 	 */
-	SAVE_MEDIA_ERROR_SUBTITLE: () => LocalizedString
+	ERROR_IMPORT_GENERIC: () => LocalizedString
 	/**
-	 * Unable to open marketplace
+	 * Incorrect mnemonic phrase
 	 */
-	NO_MARKETPLACE: () => LocalizedString
+	ERROR_INCORRECT_MNEMONIC: () => LocalizedString
 	/**
-	 * Send your NFT
+	 * Incorrect password. Please try again
 	 */
-	SEND_NFT_TITLE: () => LocalizedString
+	ERROR_INCORRECT_PASSWORD: () => LocalizedString
 	/**
-	 * Fill the required fields
+	 * Incorrect private key
 	 */
-	SEND_NFT_SUB_TITLE: () => LocalizedString
+	ERROR_INCORRECT_PRIVATE_KEY: () => LocalizedString
 	/**
-	 * Recap
+	 * Invalid address
 	 */
-	RECAP: () => LocalizedString
+	ERROR_INVALID_ADDRESS: () => LocalizedString
 	/**
-	 * Collection name
+	 * Incorrect import data
 	 */
-	COLLECTION_NAME: () => LocalizedString
+	ERROR_INVALID_IMPORT_DATA: () => LocalizedString
 	/**
-	 * Unknown collection name
+	 * Contact name too long
 	 */
-	UNKNOWN_COLLECTION: () => LocalizedString
+	ERROR_MAX_INPUT_LENGTH: () => LocalizedString
+	/**
+	 * Name already exists in contacts
+	 */
+	ERROR_NAME_ALREADY_EXISTS: () => LocalizedString
+	/**
+	 * Failed to get token data from Arweave
+	 */
+	ERROR_NFT_FAILED_TO_GET_DATA_FROM_ARWEAVE: () => LocalizedString
+	/**
+	 * Failed to get token data from IPFS
+	 */
+	ERROR_NFT_FAILED_TO_GET_DATA_FROM_IPFS: () => LocalizedString
+	/**
+	 * Failed to get token metadata
+	 */
+	ERROR_NFT_FAILED_TO_GET_METADATA: () => LocalizedString
+	/**
+	 * Failed to get token URI from Thor
+	 */
+	ERROR_NFT_FAILED_TO_GET_URI_FROM_THOR: () => LocalizedString
+	/**
+	 * No assets found
+	 */
+	ERROR_NO_ASSETS_FOUND: () => LocalizedString
+	/**
+	 * Price feed not available
+	 */
+	ERROR_PRICE_FEED_NOT_AVAILABLE: () => LocalizedString
+	/**
+	 * Required
+	 */
+	ERROR_REQUIRED_FIELD: () => LocalizedString
+	/**
+	 * Security action failed. Please check your device and try again.
+	 */
+	ERROR_SECURITY_ACTION: () => LocalizedString
+	/**
+	 * The security update has failed. Locking the application
+	 */
+	ERROR_SECURITY_UPDATE_FAILED: () => LocalizedString
+	/**
+	 * The security update has failed and your security method has been reverted to the previous one.
+	 */
+	ERROR_SECURITY_UPDATE_REVERTED: () => LocalizedString
+	/**
+	 * Too many biometrics authentication attempts, please try again later
+	 */
+	ERROR_TOO_MANY_BIOMETRICS_AUTH_ATTEMPTS: () => LocalizedString
+	/**
+	 * Network already in use
+	 */
+	ERROR_URL_ALREADY_USED: () => LocalizedString
+	/**
+	 * URL must be https or localhost
+	 */
+	ERROR_URL_NOT_VALID: () => LocalizedString
+	/**
+	 * Wallet already exists
+	 */
+	ERROR_WALLET_ALREADY_EXISTS: () => LocalizedString
+	/**
+	 * Wrong words combination
+	 */
+	ERROR_WRONG_WORDS_COMBINATION: () => LocalizedString
+	/**
+	 * The words combination is wrong, try again.
+	 */
+	ERROR_WRONG_WORDS_COMBINATION_DESC: () => LocalizedString
 	/**
 	 * Estimated gas fee
 	 */
@@ -5427,9 +4871,317 @@ Try reconnect your device to the internet.
 	 */
 	ESTIMATED_TIME: () => LocalizedString
 	/**
-	 * Total Supply
+	 * Face ID
 	 */
-	NFT_DETAIL_TOTAL_SUPPLY: () => LocalizedString
+	FACE_ID: () => LocalizedString
+	/**
+	 * Favourites
+	 */
+	FAVOURITES_BOTTOM_SHEET_TITLE: () => LocalizedString
+	/**
+	 * Could not find any dapps with this name
+	 */
+	FAVOURITES_DAPPS_NO_RECORDS: () => LocalizedString
+	/**
+	 * Search
+	 */
+	FAVOURITES_DAPPS_SEARCH_PLACEHOLDER: () => LocalizedString
+	/**
+	 * Favourites
+	 */
+	FAVOURITES_DAPPS_TITLE: () => LocalizedString
+	/**
+	 * Fingerprint
+	 */
+	FINGERPRINT: () => LocalizedString
+	/**
+	 * From
+	 */
+	FROM: () => LocalizedString
+	/**
+	 * Gas fee
+	 */
+	GAS_FEE: () => LocalizedString
+	/**
+	 * Heads up!
+	 */
+	HEADS_UP: () => LocalizedString
+	/**
+	 * Hidden collections
+	 */
+	HIDDEN_COLLECTIONS: () => LocalizedString
+	/**
+	 * Hide collection
+	 */
+	HIDE_COLLECTION: () => LocalizedString
+	/**
+	 * Hide unwanted collections.
+	 */
+	HIDE_COLLECTION_SUBTITLE: () => LocalizedString
+	/**
+	 * Hide NFT
+	 */
+	HIDE_NFT: () => LocalizedString
+	/**
+	 * Import NFT
+	 */
+	IMPORT_NFT: () => LocalizedString
+	/**
+	 * Iris
+	 */
+	IRIS: () => LocalizedString
+	/**
+	 * Certificate is ready
+	 */
+	LEDGER_CERTIFICATE_READ: () => LocalizedString
+	/**
+	 * The certificate is ready to be sent to the DApp, press confirm to continue
+	 */
+	LEDGER_CERTIFICATE_READ_SB: () => LocalizedString
+	/**
+	 * Please follow the instructions below to sign the certificate with your Ledger
+	 */
+	LEDGER_CERT_TITLE_SB: () => LocalizedString
+	/**
+	 * Checking
+	 */
+	LEDGER_CHECKING: () => LocalizedString
+	/**
+	 * Check status
+	 */
+	LEDGER_CHECK_STATUS: () => LocalizedString
+	/**
+	 * Connect
+	 */
+	LEDGER_CONNECT: () => LocalizedString
+	/**
+	 * Connected
+	 */
+	LEDGER_CONNECTED: () => LocalizedString
+	/**
+	 * Connecting
+	 */
+	LEDGER_CONNECTING: () => LocalizedString
+	/**
+	 * Data signed
+	 */
+	LEDGER_DATA_SIGNED: () => LocalizedString
+	/**
+	 * Delegated hardware wallet not supported yet
+	 */
+	LEDGER_DELEGATION_NOT_SUPPORTED: () => LocalizedString
+	/**
+	 * Message is ready
+	 */
+	LEDGER_MESSAGE_READY: () => LocalizedString
+	/**
+	 * The message is ready, press confirm to continue
+	 */
+	LEDGER_MESSAGE_READ_SB: () => LocalizedString
+	/**
+	 * Please follow the instructions below to sign the message with your Ledger
+	 */
+	LEDGER_MESSAGE_TITLE_SB: () => LocalizedString
+	/**
+	 * Signing
+	 */
+	LEDGER_SIGNING: () => LocalizedString
+	/**
+	 * Sign data
+	 */
+	LEDGER_SIGN_DATA: () => LocalizedString
+	/**
+	 * Status OK
+	 */
+	LEDGER_STATUS_OK: () => LocalizedString
+	/**
+	 * Light
+	 */
+	LIGHT_THEME: () => LocalizedString
+	/**
+	 * Are you sure you want to add the selected token?
+	 */
+	MANAGE_CUSTOM_TOKENS_ADD_DESCRIPTION: () => LocalizedString
+	/**
+	 * Add custom token
+	 */
+	MANAGE_CUSTOM_TOKENS_ADD_TOKEN_TITLE: () => LocalizedString
+	/**
+	 * Confirm custom token
+	 */
+	MANAGE_CUSTOM_TOKENS_CONFIRM_TOKEN_TITLE: () => LocalizedString
+	/**
+	 * Are you sure you want to remove this custom token?
+	 */
+	MANAGE_CUSTOM_TOKENS_DELETE_DESC: () => LocalizedString
+	/**
+	 * Remove custom token
+	 */
+	MANAGE_CUSTOM_TOKENS_DELETE_TITLE: () => LocalizedString
+	/**
+	 * Enter an address
+	 */
+	MANAGE_CUSTOM_TOKENS_ENTER_AN_ADDRESS: () => LocalizedString
+	/**
+	 * This custom token is already present
+	 */
+	MANAGE_CUSTOM_TOKENS_ERROR_ALREADY_PRESENT: () => LocalizedString
+	/**
+	 * This is an official token, please select it from the previous list
+	 */
+	MANAGE_CUSTOM_TOKENS_ERROR_OFFICIAL_TOKEN: () => LocalizedString
+	/**
+	 * The address entered is incorrect or can't be added to this network
+	 */
+	MANAGE_CUSTOM_TOKENS_ERROR_WRONG_ADDRESS: () => LocalizedString
+	/**
+	 * Something went wrong, please check the validty of the token and try again
+	 */
+	MANAGE_CUSTOM_TOKENS_GENERIC_ERROR: () => LocalizedString
+	/**
+	 * Receive tokens
+	 */
+	MANAGE_CUSTOM_TOKENS_RECEIVE_TOKENS: () => LocalizedString
+	/**
+	 * Manage NFTs
+	 */
+	MANAGE_NFTS: () => LocalizedString
+	/**
+	 * Add custom token
+	 */
+	MANAGE_TOKEN_ADD_CUSTOM: () => LocalizedString
+	/**
+	 * Select custom tokens for your dashboard
+	 */
+	MANAGE_TOKEN_ADD_CUSTOM_TOKNE_SUBTITLE: () => LocalizedString
+	/**
+	 * Add tokens
+	 */
+	MANAGE_TOKEN_ADD_SUGGESTED_TOKENS: () => LocalizedString
+	/**
+	 * Search a token from the registry
+	 */
+	MANAGE_TOKEN_SEARCH_TOKEN: () => LocalizedString
+	/**
+	 * Selected
+	 */
+	MANAGE_TOKEN_SELECTED: () => LocalizedString
+	/**
+	 * Select a token from the registry or add a custom token
+	 */
+	MANAGE_TOKEN_SELECT_YOUR_TOKEN_BODY: () => LocalizedString
+	/**
+	 * Select your token
+	 */
+	MANAGE_TOKEN_SELECT_YOUR_TOKEN_SUBTITLE: () => LocalizedString
+	/**
+	 * We have noticed that you have tokens with balance, add them directly from here
+	 */
+	MANAGE_TOKEN_SUGGESTED_TOKENS: () => LocalizedString
+	/**
+	 * Manage Tokens
+	 */
+	MANAGE_TOKEN_TITLE: () => LocalizedString
+	/**
+	 * Suggested token
+	 */
+	MANAGE_TOKEN_TITLE_SUGGESTED_TOKENS: () => LocalizedString
+	/**
+	 * Your custom tokens
+	 */
+	MANAGE_TOKEN_TITLE_YOUR_TOKENS: () => LocalizedString
+	/**
+	 * Unselected
+	 */
+	MANAGE_TOKEN_UNSELECTED: () => LocalizedString
+	/**
+	 * Find my custom tokens
+	 */
+	MANAGE_TOKEN_VIEW_CUSTOM_TOKENS_OWNED: () => LocalizedString
+	/**
+	 * You have rejected the message
+	 */
+	MESSAGE_LEDGER_REJECTED: () => LocalizedString
+	/**
+	 * You have rejected the message on your Ledger, please confirm on your device when required
+	 */
+	MESSAGE_LEDGER_REJECTED_SB: () => LocalizedString
+	/**
+	 * We are signing your message
+	 */
+	MESSAGE_LEDGER_SIGN_DATA: () => LocalizedString
+	/**
+	 * We are signing your message with your Ledger, please confirm the signature on your device when required
+	 */
+	MESSAGE_LEDGER_SIGN_DATA_SB: () => LocalizedString
+	/**
+	 * Add custom node
+	 */
+	NETWORK_ADD_CUSTOM_NODE: () => LocalizedString
+	/**
+	 * Add network
+	 */
+	NETWORK_ADD_CUSTOM_NODE_ADD_NETWORK: () => LocalizedString
+	/**
+	 * Edit network
+	 */
+	NETWORK_ADD_CUSTOM_NODE_EDIT_NETWORK: () => LocalizedString
+	/**
+	 * Node name
+	 */
+	NETWORK_ADD_CUSTOM_NODE_NAME: () => LocalizedString
+	/**
+	 * Add network details
+	 */
+	NETWORK_ADD_CUSTOM_NODE_SB: () => LocalizedString
+	/**
+	 * If you are having problems adding your custom node, it usually indicates a poorly formatted URL or a problem with the CORS configuration of the node.
+	 */
+	NETWORK_ADD_CUSTOM_NODE_SB_DESC: () => LocalizedString
+	/**
+	 * Remove custom node
+	 */
+	NETWORK_CONFIRM_REMOVE_NODE: () => LocalizedString
+	/**
+	 * Are you sure you want to remove this custom node?
+	 */
+	NETWORK_CONFIRM_REMOVE_NODE_DESC: () => LocalizedString
+	/**
+	 * Mainnet
+	 */
+	NETWORK_LABEL_MAINNET: () => LocalizedString
+	/**
+	 * Main Networks
+	 */
+	NETWORK_LABEL_MAIN_NETWORKS: () => LocalizedString
+	/**
+	 * Other Networks
+	 */
+	NETWORK_LABEL_OTHER_NETWORKS: () => LocalizedString
+	/**
+	 * Testnet
+	 */
+	NETWORK_LABEL_TESTNET: () => LocalizedString
+	/**
+	 * Test Networks
+	 */
+	NETWORK_LABEL_TEST_NETWORKS: () => LocalizedString
+	/**
+	 * Manage nodes
+	 */
+	NETWORK_MANAGE_NODES: () => LocalizedString
+	/**
+	 * You have successfully saved the NFT image to your photo album
+	 */
+	NFT_ALERT_IMAGE_SAVED_MSG: () => LocalizedString
+	/**
+	 * NFT image saved to photo album
+	 */
+	NFT_ALERT_IMAGE_SAVED_TITLE: () => LocalizedString
+	/**
+	 * Attributes
+	 */
+	NFT_ATTRIBUTES: () => LocalizedString
 	/**
 	 * Creator
 	 */
@@ -5459,281 +5211,581 @@ Try reconnect your device to the internet.
 	 */
 	NFT_DETAIL_SCORES: () => LocalizedString
 	/**
-	 * NFT image saved to photo album
+	 * Total Supply
 	 */
-	NFT_ALERT_IMAGE_SAVED_TITLE: () => LocalizedString
+	NFT_DETAIL_TOTAL_SUPPLY: () => LocalizedString
 	/**
-	 * You have successfully saved the NFT image to your photo album
+	 * Woops! There was an error trying to get your NFTs. Please try again in a while.
 	 */
-	NFT_ALERT_IMAGE_SAVED_MSG: () => LocalizedString
+	NFT_DOWNLOAD_ERROR: () => LocalizedString
 	/**
-	 * Swap tokens
+	 * NFT Receive
 	 */
-	SWAP_TITLE: () => LocalizedString
+	NFT_RECEIVE: () => LocalizedString
 	/**
-	 * Using these Vechain dApps you can swap tokens on your wallet for different ones, without having to buy and sell.
+	 * NFT Send
 	 */
-	SWAP_DESCRIPTION: () => LocalizedString
+	NFT_SEND: () => LocalizedString
 	/**
-	 * {total} dApps
+	 * Go to NFTs
 	 */
-	SWAP_DAPP_NUMBER: (arg: { total: number }) => LocalizedString
+	NOTIFIACTION_INCOMING_NFT_ACTION: () => LocalizedString
 	/**
-	 * No dApps found
+	 * {amount} {token} was successfully sent to {to}.
 	 */
-	SWAP_EMPTY_LIST: () => LocalizedString
+	NOTIFIACTION_OUTGOING_TOKEN_BODY_WITH_TOKEN: (arg: { amount: string, to: string, token: string }) => LocalizedString
 	/**
-	 * Light
+	 * The associated wallet only has 1 account. Please remove the wallet to remove this account
 	 */
-	LIGHT_THEME: () => LocalizedString
+	NOTIFICATION_CANT_REMOVE_ONLY_ACCOUNT: () => LocalizedString
 	/**
-	 * Dark
+	 * {name} has been copied to the clipboard!
 	 */
-	DARK_THEME: () => LocalizedString
+	NOTIFICATION_COPIED_CLIPBOARD: (arg: { name: string }) => LocalizedString
 	/**
-	 * System
+	 * The DApp made an invalid request
 	 */
-	SYSTEM_THEME: () => LocalizedString
+	NOTIFICATION_DAPP_INVALID_REQUEST: () => LocalizedString
 	/**
-	 * Convert balances to fiat
+	 * The DApp requested an account that was not found
 	 */
-	SETTINGS_CURRENCIES_CONVERT_TO_FIAT: () => LocalizedString
+	NOTIFICATION_DAPP_REQUESTED_ACCOUNT_NOT_FOUND: () => LocalizedString
 	/**
-	 * Official site
+	 * The DApp requested an invalid account
 	 */
-	SETTINGS_ABOUT_OFFICIAL_SITE: () => LocalizedString
+	NOTIFICATION_DAPP_REQUEST_INVALID_ACCOUNT: () => LocalizedString
 	/**
-	 * Version {version}
+	 * Domain name / address not found.
 	 */
-	SETTINGS_ABOUT_APP_VERSION: (arg: { version: unknown }) => LocalizedString
+	NOTIFICATION_DOMAIN_NAME_NOT_FOUND: () => LocalizedString
 	/**
-	 * veworld.com
+	 * Failed to remove account
 	 */
-	SETTINGS_ABOUT_WEWORLD_WEBSITE: () => LocalizedString
+	NOTIFICATION_FAILED_TO_REMOVE_ACCOUNT: () => LocalizedString
 	/**
-	 * Support
+	 * Gas fee estimates might vary. Always double-check before confirming.
 	 */
-	SETTINGS_ABOUT_SUPPORT: () => LocalizedString
+	NOTIFICATION_GAS_FEE_INACCURATE: () => LocalizedString
 	/**
-	 * Find solutions to common problems
+	 * {collectionName} You received a new NFT from {from} to {alias}.
 	 */
-	SETTINGS_ABOUT_FIND_COMMON_PROBLEMS: () => LocalizedString
+	NOTIFICATION_INCOMING_NFT_BODY: (arg: { alias: string, collectionName: string, from: string }) => LocalizedString
 	/**
-	 * Suggest a feature
+	 * Incoming!
 	 */
-	SETTINGS_ABOUT_SUGGEST_NEW_FEATURE: () => LocalizedString
+	NOTIFICATION_INCOMING_NFT_TITLE: () => LocalizedString
 	/**
-	 * What would you like to see differently on VeWorld?
+	 * Please scan a WalletConnect, wallet address or valid URL QR code.
 	 */
-	SETTINGS_ABOUT_VEWORLD_NEW_FEATURES: () => LocalizedString
+	NOTIFICATION_INVALID_QR: () => LocalizedString
 	/**
-	 * Our commitment to you
+	 * {collectionName} NFT was successfully sent to {to}.
 	 */
-	SETTINGS_ABOUT_OUR_COMMITMENT: () => LocalizedString
+	NOTIFICATION_OUTGOING_NFT_BODY: (arg: { collectionName: string, to: string }) => LocalizedString
 	/**
-	 * Privacy policy
+	 * Outgoing!
 	 */
-	SETTINGS_ABOUT_PRIVACY_POLICY: () => LocalizedString
+	NOTIFICATION_OUTGOING_NFT_TITLE: () => LocalizedString
 	/**
-	 * Transactions
+	 * QR Code Not Supported
 	 */
-	SETTINGS_TRANSACTIONS_TITLE: () => LocalizedString
+	NOTIFICATION_TITLE_INVALID_QR: () => LocalizedString
 	/**
-	 * Default delegation
+	 * View account
 	 */
-	SETTINGS_TRANSACTIONS_DEFAULT_DELEGATION: () => LocalizedString
+	NOTIFICATION_VIEW_ACCOUNT: () => LocalizedString
 	/**
-	 * Select the default delegation for your transactions
+	 * The DApp is not verified on Wallet Connect
 	 */
-	SETTINGS_TRANSACTIONS_SELECT_DEFAULT_DELEGATION: () => LocalizedString
+	NOTIFICATION_WALLET_CONNECT_DAPP_NOT_VERIFIED: () => LocalizedString
 	/**
-	 * Delegation URLs
+	 * Account changed to: {account}
 	 */
-	SETTINGS_TRANSACTIONS_SELECT_DELEGATION_URLS: () => LocalizedString
+	NOTIFICATION_WC_ACCOUNT_CHANGED: (arg: { account: string }) => LocalizedString
 	/**
-	 * Add or delete a delegation URL so you can select it when sending transactions
+	 * Network changed to: {network}
 	 */
-	SETTINGS_TRANSACTIONS_SELECT_DELEGATION_URLS_BODY: () => LocalizedString
+	NOTIFICATION_WC_NETWORK_CHANGED: (arg: { network: string }) => LocalizedString
 	/**
-	 * Manage URLs
+	 * Found {token} transfer: {amount} on {alias}
 	 */
-	SETTINGS_TRANSACTIONS_MANAGE_URLS: () => LocalizedString
+	NOTIFICATION_found_token_transfer: (arg: { alias: string, amount: string, token: string }) => LocalizedString
 	/**
-	 * Add Wallet
+	 * Transaction {txId} was reverted.
 	 */
-	ADD_WALLET: () => LocalizedString
+	NOTIFICATION_transaction_reverted: (arg: { txId: string }) => LocalizedString
 	/**
-	 * Add Account
+	 * A connected app successfully disconnected from this wallet.
 	 */
-	ADD_ACCOUNT: () => LocalizedString
+	NOTIFICATION_wallet_connect_disconnected_from_remote: () => LocalizedString
 	/**
-	 * What do you want to do?
+	 * Successfully disconnected from app.
 	 */
-	ACCOUNT_OR_WALLET_BOTTOM_SHEET_TITLE: () => LocalizedString
+	NOTIFICATION_wallet_connect_disconnected_success: () => LocalizedString
 	/**
-	 * Do you want to add either a wallet or an account?
+	 * There was a problem delegating the request.
 	 */
-	ACCOUNT_OR_WALLET_BOTTOM_SHEET_SUBTITLE: () => LocalizedString
+	NOTIFICATION_wallet_connect_error_delegating_transaction: () => LocalizedString
 	/**
-	 * Add a new account
+	 * Something went wrong while signing the message
 	 */
-	ACCOUNT_OR_WALLET_BOTTOM_SHEET_ADD_ACCOUNT: () => LocalizedString
+	NOTIFICATION_wallet_connect_error_during_signing: () => LocalizedString
 	/**
-	 * Add a new wallet
+	 * Error executing the transaction.
 	 */
-	ACCOUNT_OR_WALLET_BOTTOM_SHEET_ADD_WALLET: () => LocalizedString
+	NOTIFICATION_wallet_connect_error_on_transaction: () => LocalizedString
 	/**
-	 * Wallet name
+	 * Error pairing with the app, please generate a new QR CODE.
 	 */
-	WALLET_MANAGEMENT_WALLET_NAME: () => LocalizedString
+	NOTIFICATION_wallet_connect_error_pairing: () => LocalizedString
 	/**
-	 * Account created successfully
+	 * The requested dapp is not compatible with VeWorld.
 	 */
-	WALLET_MANAGEMENT_NOTIFICATION_CREATE_ACCOUNT_SUCCESS: () => LocalizedString
+	NOTIFICATION_wallet_connect_incompatible_dapp: () => LocalizedString
 	/**
-	 * Failed to create account
+	 * Invalid Wallet Connect URI.
 	 */
-	WALLET_MANAGEMENT_NOTIFICATION_CREATE_ACCOUNT_ERROR: () => LocalizedString
+	NOTIFICATION_wallet_connect_invalid_uri: () => LocalizedString
 	/**
-	 * You can not delete the last wallet, but you can reset the app by going to Settings > General > Reset App
+	 * Something went wrong while communicating with app, try again.
 	 */
-	WALLET_MANAGEMENT_NOTIFICATION_LAST_WALLET: () => LocalizedString
+	NOTIFICATION_wallet_connect_matching_error: () => LocalizedString
 	/**
-	 * Manage Tokens
+	 * Wallet Connect not initialized.
 	 */
-	MANAGE_TOKEN_TITLE: () => LocalizedString
+	NOTIFICATION_wallet_connect_not_initialized: () => LocalizedString
 	/**
-	 * Select your token
+	 * Certificate signed successfully.
 	 */
-	MANAGE_TOKEN_SELECT_YOUR_TOKEN_SUBTITLE: () => LocalizedString
+	NOTIFICATION_wallet_connect_sign_success: () => LocalizedString
 	/**
-	 * Select a token from the registry or add a custom token
+	 * Successfully connected to {name}.
 	 */
-	MANAGE_TOKEN_SELECT_YOUR_TOKEN_BODY: () => LocalizedString
+	NOTIFICATION_wallet_connect_successfull_connection: (arg: { name: string }) => LocalizedString
 	/**
-	 * Find my custom tokens
+	 * Transaction broadcasted successfully.
 	 */
-	MANAGE_TOKEN_VIEW_CUSTOM_TOKENS_OWNED: () => LocalizedString
+	NOTIFICATION_wallet_connect_transaction_broadcasted: () => LocalizedString
 	/**
-	 * Add custom token
+	 * Transaction broadcasted correctly but an error occurred while communicating to the dapp.
 	 */
-	MANAGE_TOKEN_ADD_CUSTOM: () => LocalizedString
+	NOTIFICATION_wallet_connect_transaction_broadcasted_with_communication_error: () => LocalizedString
 	/**
-	 * Selected
+	 * Connecting may take a few seconds.
 	 */
-	MANAGE_TOKEN_SELECTED: () => LocalizedString
+	NOTIFICATION_warning_wallet_connect_connection_could_delay: () => LocalizedString
 	/**
-	 * Unselected
+	 * You don't have any hidden {name}
 	 */
-	MANAGE_TOKEN_UNSELECTED: () => LocalizedString
+	NO_HIDDEN_COLLECTIONS: (arg: { name: string }) => LocalizedString
 	/**
-	 * Search a token from the registry
+	 * Unable to open marketplace
 	 */
-	MANAGE_TOKEN_SEARCH_TOKEN: () => LocalizedString
+	NO_MARKETPLACE: () => LocalizedString
 	/**
-	 * We have noticed that you have tokens with balance, add them directly from here
+	 * No thanks
 	 */
-	MANAGE_TOKEN_SUGGESTED_TOKENS: () => LocalizedString
+	NO_THANKS: () => LocalizedString
 	/**
-	 * Add tokens
+	 * Origin
 	 */
-	MANAGE_TOKEN_ADD_SUGGESTED_TOKENS: () => LocalizedString
+	ORIGIN: () => LocalizedString
 	/**
-	 * Suggested token
+	 * Outcomes
 	 */
-	MANAGE_TOKEN_TITLE_SUGGESTED_TOKENS: () => LocalizedString
+	OUTCOMES: () => LocalizedString
 	/**
-	 * Your custom tokens
+	 * Paid
 	 */
-	MANAGE_TOKEN_TITLE_YOUR_TOKENS: () => LocalizedString
+	PAID: () => LocalizedString
 	/**
-	 * Select custom tokens for your dashboard
+	 * PIN Code
 	 */
-	MANAGE_TOKEN_ADD_CUSTOM_TOKNE_SUBTITLE: () => LocalizedString
+	PIN_CODE: () => LocalizedString
 	/**
-	 * Add custom token
+	 * Enter the address
 	 */
-	MANAGE_CUSTOM_TOKENS_ADD_TOKEN_TITLE: () => LocalizedString
+	PLACEHOLDER_ENTER_ADDRESS: () => LocalizedString
 	/**
-	 * Enter an address
+	 * Enter the name
 	 */
-	MANAGE_CUSTOM_TOKENS_ENTER_AN_ADDRESS: () => LocalizedString
+	PLACEHOLDER_ENTER_NAME: () => LocalizedString
 	/**
-	 * Confirm custom token
+	 * Search a token
 	 */
-	MANAGE_CUSTOM_TOKENS_CONFIRM_TOKEN_TITLE: () => LocalizedString
+	PLACEHOLDER_SEARCH_TOKEN: () => LocalizedString
 	/**
-	 * Remove custom token
+	 * Recap
 	 */
-	MANAGE_CUSTOM_TOKENS_DELETE_TITLE: () => LocalizedString
+	RECAP: () => LocalizedString
 	/**
-	 * Are you sure you want to remove this custom token?
+	 * Received
 	 */
-	MANAGE_CUSTOM_TOKENS_DELETE_DESC: () => LocalizedString
+	RECEIVED: () => LocalizedString
 	/**
-	 * Are you sure you want to add the selected token?
+	 * Receive
 	 */
-	MANAGE_CUSTOM_TOKENS_ADD_DESCRIPTION: () => LocalizedString
+	RECEIVE_ACTIVITY: () => LocalizedString
 	/**
-	 * The address entered is incorrect or can't be added to this network
+	 * Receive NFT
 	 */
-	MANAGE_CUSTOM_TOKENS_ERROR_WRONG_ADDRESS: () => LocalizedString
+	RECEIVE_NFT: () => LocalizedString
 	/**
-	 * Something went wrong, please check the validty of the token and try again
+	 * restore 
 	 */
-	MANAGE_CUSTOM_TOKENS_GENERIC_ERROR: () => LocalizedString
+	RESTORE: () => LocalizedString
 	/**
-	 * This is an official token, please select it from the previous list
+	 * Restore your Collections or NFTs
 	 */
-	MANAGE_CUSTOM_TOKENS_ERROR_OFFICIAL_TOKEN: () => LocalizedString
+	RESTORE_NFTS: () => LocalizedString
 	/**
-	 * This custom token is already present
+	 * Save image on device
 	 */
-	MANAGE_CUSTOM_TOKENS_ERROR_ALREADY_PRESENT: () => LocalizedString
+	SAVE_IMAGE_ON_DEVICE: () => LocalizedString
 	/**
-	 * Receive tokens
+	 * Save your NFT image in your Photo Album
 	 */
-	MANAGE_CUSTOM_TOKENS_RECEIVE_TOKENS: () => LocalizedString
+	SAVE_IMAGE_ON_DEVICE_SUBTITLE: () => LocalizedString
 	/**
-	 * Send
+	 * There was an error trying to save your media. Media type is unsupported.
 	 */
-	SEND_TOKEN_TITLE: () => LocalizedString
+	SAVE_MEDIA_ERROR_SUBTITLE: () => LocalizedString
 	/**
-	 * Send your token
+	 * Error saving media
 	 */
-	SEND_TOKEN_SUBTITLE: () => LocalizedString
+	SAVE_MEDIA_ERROR_TITLE: () => LocalizedString
 	/**
-	 * Select the asset that you want to transfer
+	 * Accounts
 	 */
-	SEND_TOKEN_SELECT_ASSET: () => LocalizedString
+	SB_ACCOUNTS: () => LocalizedString
 	/**
-	 * Currency balance
+	 * Account management
 	 */
-	SEND_CURRENT_BALANCE: () => LocalizedString
+	SB_ACCOUNT_MANAGEMENT: () => LocalizedString
+	/**
+	 * You have previously denied camera access to VeWorld. Please enable it in your device settings.
+	 */
+	SB_ALERT_CAMERA_PERMISSION: () => LocalizedString
+	/**
+	 * Analytics tracking
+	 */
+	SB_ANALYTICS_TRACKING: () => LocalizedString
+	/**
+	 * Backup your mnemonic
+	 */
+	SB_BACKUP_MNEMONIC: () => LocalizedString
+	/**
+	 * Before updating your security method you need to backup your security phrase. In case the operation fails you will be forced to
+	 */
+	SB_BACKUP_YOUR_PHRASE: () => LocalizedString
+	/**
+	 * RESET the App!
+	 */
+	SB_BACKUP_YOUR_PHRASE_2: () => LocalizedString
+	/**
+	 * Your device does not support this operation.
+	 */
+	SB_CAMERA_ANAVAILABILITY: () => LocalizedString
+	/**
+	 * Choose a wallet
+	 */
+	SB_CHOOSE_A_WALLET: () => LocalizedString
+	/**
+	 * Collectibles
+	 */
+	SB_COLLECTIBLES: () => LocalizedString
+	/**
+	 * Confirm the operation?
+	 */
+	SB_CONFIRM_OPERATION: () => LocalizedString
+	/**
+	 * Insert the pin you created in order to perform the requested operation.
+	 */
+	SB_CONFIRM_PIN: () => LocalizedString
+	/**
+	 * Your contact list is empty
+	 */
+	SB_CONTACT_LIST_EMPTY: () => LocalizedString
+	/**
+	 * Create one
+	 */
+	SB_CREATE_ONE: () => LocalizedString
+	/**
+	 * Description
+	 */
+	SB_DESCRIPTION: () => LocalizedString
+	/**
+	 * Edit contact
+	 */
+	SB_EDIT_CONTACT: () => LocalizedString
+	/**
+	 * Insert your new pin
+	 */
+	SB_EDIT_NEW_PIN: () => LocalizedString
+	/**
+	 * Confirm your new pin
+	 */
+	SB_EDIT_NEW_PIN_CONFIRM: () => LocalizedString
+	/**
+	 * Insert your old pin
+	 */
+	SB_EDIT_OLD_PIN: () => LocalizedString
+	/**
+	 * Edit {name}
+	 */
+	SB_EDIT_WALLET: (arg: { name: string }) => LocalizedString
+	/**
+	 * Enter your language
+	 */
+	SB_ENTER_LANGUAGE: () => LocalizedString
+	/**
+	 * Which kind of wallet do you want to import?
+	 */
+	SB_IMPORT_WALLET_TYPE: () => LocalizedString
+	/**
+	 * Hardware Wallet
+	 */
+	SB_IMPORT_WALLET_TYPE_HARDWARE: () => LocalizedString
+	/**
+	 * Local wallet
+	 */
+	SB_IMPORT_WALLET_TYPE_SEED: () => LocalizedString
+	/**
+	 * Insert your keystore password
+	 */
+	SB_INSERT_KEYSTORE_PASSWORD: () => LocalizedString
+	/**
+	 * Your activities will appear here
+	 */
+	SB_NO_TRANSACTIONS: () => LocalizedString
+	/**
+	 * Password authorization
+	 */
+	SB_PASSWORD_AUTH: () => LocalizedString
+	/**
+	 * Recovery phrase
+	 */
+	SB_RECOVERY_PHRASE: () => LocalizedString
+	/**
+	 * Rename wallet
+	 */
+	SB_RENAME_WALLET: () => LocalizedString
+	/**
+	 * To secure your wallet, you can either use your device's biometric (like a fingerprint) or set up a password. You can change the password anytime if needed.
+	 */
+	SB_SECURITY: () => LocalizedString
+	/**
+	 * Security method
+	 */
+	SB_SECURITY_METHOD: () => LocalizedString
+	/**
+	 * Select your language
+	 */
+	SB_SELECT_LANGUAGE: () => LocalizedString
+	/**
+	 * Insert the pin you created in order to unlock your wallet.
+	 */
+	SB_UNLOCK_WALLET_PIN: () => LocalizedString
+	/**
+	 * Also, you will be asked to use your biometrics security method for each wallet!
+	 */
+	SB_UPGRADE_SECURITY_WARNING_ANDROID: () => LocalizedString
+	/**
+	 * This password will be used to authorize transactions.
+	 */
+	SB_USER_PASSWORD: () => LocalizedString
+	/**
+	 * Your collections
+	 */
+	SB_YOUR_NFTS: () => LocalizedString
+	/**
+	 * Your tokens
+	 */
+	SB_YOUR_TOKENS: () => LocalizedString
+	/**
+	 * Your tokens will appear here
+	 */
+	SB_YOUR_TOKENS_EMPTY: () => LocalizedString
+	/**
+	 * Backup now
+	 */
+	SECURITY_BACKUP_BTN: () => LocalizedString
+	/**
+	 * Before proceeding with the upgrade, please backup your recovery phrase if you haven't done it yet.
+	 */
+	SECURITY_BACKUP_DESC: () => LocalizedString
+	/**
+	 * Backup phrase
+	 */
+	SECURITY_BACKUP_TITLE: () => LocalizedString
+	/**
+	 * Our wallet has always met the highest standards, and now we're taking it a step further. To keep your assets even more secure, please upgrade your wallet.
+	 */
+	SECURITY_ENHANCEMENT_DESC: () => LocalizedString
+	/**
+	 * Security Enhancement
+	 */
+	SECURITY_ENHANCEMENT_TITLE: () => LocalizedString
+	/**
+	 * I've backed up the phrase!
+	 */
+	SECURITY_PHRASE_BACKED_UP: () => LocalizedString
+	/**
+	 * Upgrade now
+	 */
+	SECURITY_UPGRADE_BTN: () => LocalizedString
+	/**
+	 * It looks like you only have a hardware wallet connected to VeWorld. You can upgrade security level without backing up
+	 */
+	SECURITY_UPGRADE_ONLY_HARDWARE: () => LocalizedString
+	/**
+	 * It looks like you only have a private key wallet connected to VeWorld. You can upgrade security level without backing up
+	 */
+	SECURITY_UPGRADE_ONLY_PK: () => LocalizedString
+	/**
+	 * Important Reminder
+	 */
+	SECURITY_UPGRADE_REMINDER: () => LocalizedString
+	/**
+	 * Please, make sure you have backed up your recovery phrase before proceeding with the upgrade.
+	 */
+	SECURITY_UPGRADE_REMINDER_DESC: () => LocalizedString
+	/**
+	 * I UNDERSTAND
+	 */
+	SEND_ACCEPT_NO_GAS_ACCEPT: () => LocalizedString
+	/**
+	 * VTHO is the gas token (not VET). Buy or transfer some VTHO into your account to perform this transaction.
+	 */
+	SEND_ACCEPT_NO_GAS_MESSAGE: () => LocalizedString
+	/**
+	 * INSUFFICIENT GAS
+	 */
+	SEND_ACCEPT_NO_GAS_TITLE: () => LocalizedString
+	/**
+	 * Amount
+	 */
+	SEND_AMOUNT: () => LocalizedString
 	/**
 	 * Balance percentage: {percentage}
 	 */
 	SEND_BALANCE_PERCENTAGE: (arg: { percentage: string }) => LocalizedString
 	/**
-	 * 0%
+	 * Contact address
 	 */
-	SEND_RANGE_ZERO: () => LocalizedString
+	SEND_CREATE_CONTACT_ADDRESS: () => LocalizedString
 	/**
-	 * MAX
+	 * CREATE CONTACT
 	 */
-	SEND_RANGE_MAX: () => LocalizedString
+	SEND_CREATE_CONTACT_CREATE_BUTTON: () => LocalizedString
 	/**
-	 * Insufficient balance
+	 * Contact name
 	 */
-	SEND_INSUFFICIENT_BALANCE: () => LocalizedString
+	SEND_CREATE_CONTACT_NAME: () => LocalizedString
 	/**
-	 * Insufficient gas
+	 * PROCEED ANYWAY
 	 */
-	SEND_INSUFFICIENT_GAS: () => LocalizedString
+	SEND_CREATE_CONTACT_PROCEED_ANYWAY_BUTTON: () => LocalizedString
 	/**
-	 * Error calculating fees, please try again.
+	 * We noticed that the address you entered is not associated with any saved contacts, would you like to create one?
 	 */
-	ERROR_FEES_CALCULATION: () => LocalizedString
+	SEND_CREATE_CONTACT_SUBTITLE: () => LocalizedString
+	/**
+	 * Create contact
+	 */
+	SEND_CREATE_CONTACT_TITLE: () => LocalizedString
+	/**
+	 * Currency balance
+	 */
+	SEND_CURRENT_BALANCE: () => LocalizedString
+	/**
+	 * None, paid by delegator
+	 */
+	SEND_DELEGATED_FEES: () => LocalizedString
+	/**
+	 * Account
+	 */
+	SEND_DELEGATION_ACCOUNT: () => LocalizedString
+	/**
+	 * Add delegation URL
+	 */
+	SEND_DELEGATION_ADD_URL: () => LocalizedString
+	/**
+	 * URL already present!
+	 */
+	SEND_DELEGATION_ADD_URL_ALREADY_PRESENT: () => LocalizedString
+	/**
+	 * Enter URL
+	 */
+	SEND_DELEGATION_ADD_URL_PLACEHOLDER: () => LocalizedString
+	/**
+	 * Insert the URL you want to to use to delegate this transaction
+	 */
+	SEND_DELEGATION_ADD_URL_SUBTITLE: () => LocalizedString
+	/**
+	 * Failed to delegate the transaction with the provided URL
+	 */
+	SEND_DELEGATION_ERROR_SIGNATURE: () => LocalizedString
+	/**
+	 * Manage URLs
+	 */
+	SEND_DELEGATION_MANAGE_URL: () => LocalizedString
+	/**
+	 * None
+	 */
+	SEND_DELEGATION_NONE: () => LocalizedString
+	/**
+	 * Select URL
+	 */
+	SEND_DELEGATION_SELECT_URL: () => LocalizedString
+	/**
+	 * Select delegation
+	 */
+	SEND_DELEGATION_TITLE: () => LocalizedString
+	/**
+	 * URL
+	 */
+	SEND_DELEGATION_URL: () => LocalizedString
+	/**
+	 * Details
+	 */
+	SEND_DETAILS: () => LocalizedString
+	/**
+	 * Enter the address to send to...
+	 */
+	SEND_ENTER_AN_ADDRESS: () => LocalizedString
+	/**
+	 * It looks like you don't have any {tokenName} in your wallet
+	 */
+	SEND_ERROR_TOKEN_NOT_FOUND: (arg: { tokenName: string }) => LocalizedString
+	/**
+	 * Estimated time
+	 */
+	SEND_ESTIMATED_TIME: () => LocalizedString
+	/**
+	 * HIGH
+	 */
+	SEND_FEE_HIGH: () => LocalizedString
+	/**
+	 * MEDIUM
+	 */
+	SEND_FEE_MEDIUM: () => LocalizedString
+	/**
+	 * REGULAR
+	 */
+	SEND_FEE_REGULAR: () => LocalizedString
+	/**
+	 * From
+	 */
+	SEND_FROM: () => LocalizedString
+	/**
+	 * Gas fee
+	 */
+	SEND_GAS_FEE: () => LocalizedString
+	/**
+	 * Accounts
+	 */
+	SEND_INSERT_ACCOUNTS: () => LocalizedString
 	/**
 	 * Send your token
 	 */
@@ -5743,53 +5795,65 @@ Try reconnect your device to the internet.
 	 */
 	SEND_INSERT_ADDRESS_DESCRIPTION: () => LocalizedString
 	/**
-	 * Enter the address to send to...
-	 */
-	SEND_ENTER_AN_ADDRESS: () => LocalizedString
-	/**
-	 * Oops! We couldn’t find any contacts or accounts.
-	 */
-	SEND_NO_CONTACTS_OR_ACCOUNTS_FOUND: () => LocalizedString
-	/**
-	 * Type in an address or a .vet domain name
-	 */
-	SEND_PLEASE_TYPE_ADDRESS: () => LocalizedString
-	/**
 	 * Contacts
 	 */
 	SEND_INSERT_CONTACTS: () => LocalizedString
 	/**
-	 * Accounts
+	 * Insufficient balance
 	 */
-	SEND_INSERT_ACCOUNTS: () => LocalizedString
+	SEND_INSUFFICIENT_BALANCE: () => LocalizedString
 	/**
-	 * From
+	 * Insufficient gas
 	 */
-	SEND_FROM: () => LocalizedString
+	SEND_INSUFFICIENT_GAS: () => LocalizedString
 	/**
-	 * To
+	 * Insufficient Gas -
 	 */
-	SEND_TO: () => LocalizedString
+	SEND_INSUFFICIENT_VTHO: () => LocalizedString
 	/**
-	 * Details
+	 * We are checking your ledger connection
 	 */
-	SEND_DETAILS: () => LocalizedString
+	SEND_LEDGER_CHECK_CONNECTION: () => LocalizedString
 	/**
-	 * Amount
+	 * Please make sure your Ledger is unlocked with the bluetooth enabled and the VeChain app is open (only ledgers with bluetooth are supported at this time)
 	 */
-	SEND_AMOUNT: () => LocalizedString
+	SEND_LEDGER_CHECK_CONNECTION_SB: () => LocalizedString
 	/**
-	 * Total Cost
+	 * You have rejected the transaction
 	 */
-	SEND_TOTAL_COST: () => LocalizedString
+	SEND_LEDGER_REJECTED_TRANSACTION: () => LocalizedString
 	/**
-	 * Gas fee
+	 * You have rejected the transaction on your Ledger, please confirm the transaction on your device when required
 	 */
-	SEND_GAS_FEE: () => LocalizedString
+	SEND_LEDGER_REJECTED_TRANSACTION_SB: () => LocalizedString
 	/**
-	 * Estimated time
+	 * We are signing your transaction
 	 */
-	SEND_ESTIMATED_TIME: () => LocalizedString
+	SEND_LEDGER_SIGN_DATA: () => LocalizedString
+	/**
+	 * We are signing your transaction with your Ledger, please confirm the transaction on your device when required
+	 */
+	SEND_LEDGER_SIGN_DATA_SB: () => LocalizedString
+	/**
+	 * Ledger verification
+	 */
+	SEND_LEDGER_TITLE: () => LocalizedString
+	/**
+	 * Please follow the instructions below to sign the transaction with your Ledger
+	 */
+	SEND_LEDGER_TITLE_SB: () => LocalizedString
+	/**
+	 * Transaction is ready
+	 */
+	SEND_LEDGER_TX_READY: () => LocalizedString
+	/**
+	 * The transaction is ready to be sent, press confirm to send it to the network
+	 */
+	SEND_LEDGER_TX_READY_SB: () => LocalizedString
+	/**
+	 * Validate transaction
+	 */
+	SEND_LEDGER_VALIDATE_TRANSACTION: () => LocalizedString
 	/**
 	 * Less than 1 min
 	 */
@@ -5803,281 +5867,465 @@ Try reconnect your device to the internet.
 	 */
 	SEND_LESS_THAN_A_MOMENT: () => LocalizedString
 	/**
-	 * None, paid by delegator
+	 * Fill the required fields
 	 */
-	SEND_DELEGATED_FEES: () => LocalizedString
+	SEND_NFT_SUB_TITLE: () => LocalizedString
 	/**
-	 * Insufficient Gas -
+	 * Send your NFT
 	 */
-	SEND_INSUFFICIENT_VTHO: () => LocalizedString
+	SEND_NFT_TITLE: () => LocalizedString
 	/**
-	 * Select delegation
+	 * Oops! We couldn’t find any contacts or accounts.
 	 */
-	SEND_DELEGATION_TITLE: () => LocalizedString
-	/**
-	 * None
-	 */
-	SEND_DELEGATION_NONE: () => LocalizedString
-	/**
-	 * Account
-	 */
-	SEND_DELEGATION_ACCOUNT: () => LocalizedString
-	/**
-	 * URL
-	 */
-	SEND_DELEGATION_URL: () => LocalizedString
-	/**
-	 * Select URL
-	 */
-	SEND_DELEGATION_SELECT_URL: () => LocalizedString
-	/**
-	 * Manage URLs
-	 */
-	SEND_DELEGATION_MANAGE_URL: () => LocalizedString
-	/**
-	 * Add delegation URL
-	 */
-	SEND_DELEGATION_ADD_URL: () => LocalizedString
-	/**
-	 * URL already present!
-	 */
-	SEND_DELEGATION_ADD_URL_ALREADY_PRESENT: () => LocalizedString
-	/**
-	 * Insert the URL you want to to use to delegate this transaction
-	 */
-	SEND_DELEGATION_ADD_URL_SUBTITLE: () => LocalizedString
-	/**
-	 * Enter URL
-	 */
-	SEND_DELEGATION_ADD_URL_PLACEHOLDER: () => LocalizedString
-	/**
-	 * Failed to delegate the transaction with the provided URL
-	 */
-	SEND_DELEGATION_ERROR_SIGNATURE: () => LocalizedString
-	/**
-	 * REGULAR
-	 */
-	SEND_FEE_REGULAR: () => LocalizedString
-	/**
-	 * MEDIUM
-	 */
-	SEND_FEE_MEDIUM: () => LocalizedString
-	/**
-	 * HIGH
-	 */
-	SEND_FEE_HIGH: () => LocalizedString
-	/**
-	 * Create contact
-	 */
-	SEND_CREATE_CONTACT_TITLE: () => LocalizedString
-	/**
-	 * We noticed that the address you entered is not associated with any saved contacts, would you like to create one?
-	 */
-	SEND_CREATE_CONTACT_SUBTITLE: () => LocalizedString
-	/**
-	 * CREATE CONTACT
-	 */
-	SEND_CREATE_CONTACT_CREATE_BUTTON: () => LocalizedString
-	/**
-	 * PROCEED ANYWAY
-	 */
-	SEND_CREATE_CONTACT_PROCEED_ANYWAY_BUTTON: () => LocalizedString
-	/**
-	 * Contact name
-	 */
-	SEND_CREATE_CONTACT_NAME: () => LocalizedString
-	/**
-	 * Contact address
-	 */
-	SEND_CREATE_CONTACT_ADDRESS: () => LocalizedString
-	/**
-	 * Ledger verification
-	 */
-	SEND_LEDGER_TITLE: () => LocalizedString
-	/**
-	 * Please follow the instructions below to sign the transaction with your Ledger
-	 */
-	SEND_LEDGER_TITLE_SB: () => LocalizedString
-	/**
-	 * INSUFFICIENT GAS
-	 */
-	SEND_ACCEPT_NO_GAS_TITLE: () => LocalizedString
-	/**
-	 * I UNDERSTAND
-	 */
-	SEND_ACCEPT_NO_GAS_ACCEPT: () => LocalizedString
-	/**
-	 * VTHO is the gas token (not VET). Buy or transfer some VTHO into your account to perform this transaction.
-	 */
-	SEND_ACCEPT_NO_GAS_MESSAGE: () => LocalizedString
-	/**
-	 * Please follow the instructions below to sign the certificate with your Ledger
-	 */
-	LEDGER_CERT_TITLE_SB: () => LocalizedString
-	/**
-	 * Please follow the instructions below to sign the message with your Ledger
-	 */
-	LEDGER_MESSAGE_TITLE_SB: () => LocalizedString
-	/**
-	 * Validate transaction
-	 */
-	SEND_LEDGER_VALIDATE_TRANSACTION: () => LocalizedString
-	/**
-	 * We are checking your ledger connection
-	 */
-	SEND_LEDGER_CHECK_CONNECTION: () => LocalizedString
-	/**
-	 * Please make sure your Ledger is unlocked with the bluetooth enabled and the VeChain app is open (only ledgers with bluetooth are supported at this time)
-	 */
-	SEND_LEDGER_CHECK_CONNECTION_SB: () => LocalizedString
-	/**
-	 * We are signing your transaction
-	 */
-	SEND_LEDGER_SIGN_DATA: () => LocalizedString
-	/**
-	 * We are signing your transaction with your Ledger, please confirm the transaction on your device when required
-	 */
-	SEND_LEDGER_SIGN_DATA_SB: () => LocalizedString
-	/**
-	 * You have rejected the transaction
-	 */
-	SEND_LEDGER_REJECTED_TRANSACTION: () => LocalizedString
-	/**
-	 * You have rejected the transaction on your Ledger, please confirm the transaction on your device when required
-	 */
-	SEND_LEDGER_REJECTED_TRANSACTION_SB: () => LocalizedString
-	/**
-	 * We are signing your certificate
-	 */
-	CERT_LEDGER_SIGN_DATA: () => LocalizedString
-	/**
-	 * We are signing your certificate with your Ledger, please confirm the signature on your device when required
-	 */
-	CERT_LEDGER_SIGN_DATA_SB: () => LocalizedString
-	/**
-	 * You have rejected the certificate
-	 */
-	CERT_LEDGER_REJECTED: () => LocalizedString
-	/**
-	 * You have rejected the certificate on your Ledger, please confirm on your device when required
-	 */
-	CERT_LEDGER_REJECTED_SB: () => LocalizedString
-	/**
-	 * We are signing your message
-	 */
-	MESSAGE_LEDGER_SIGN_DATA: () => LocalizedString
-	/**
-	 * We are signing your message with your Ledger, please confirm the signature on your device when required
-	 */
-	MESSAGE_LEDGER_SIGN_DATA_SB: () => LocalizedString
-	/**
-	 * You have rejected the message
-	 */
-	MESSAGE_LEDGER_REJECTED: () => LocalizedString
-	/**
-	 * You have rejected the message on your Ledger, please confirm on your device when required
-	 */
-	MESSAGE_LEDGER_REJECTED_SB: () => LocalizedString
-	/**
-	 * Transaction is ready
-	 */
-	SEND_LEDGER_TX_READY: () => LocalizedString
-	/**
-	 * Delegated hardware wallet not supported yet
-	 */
-	LEDGER_DELEGATION_NOT_SUPPORTED: () => LocalizedString
-	/**
-	 * Certificate is ready
-	 */
-	LEDGER_CERTIFICATE_READ: () => LocalizedString
-	/**
-	 * Message is ready
-	 */
-	LEDGER_MESSAGE_READY: () => LocalizedString
-	/**
-	 * The transaction is ready to be sent, press confirm to send it to the network
-	 */
-	SEND_LEDGER_TX_READY_SB: () => LocalizedString
-	/**
-	 * The certificate is ready to be sent to the DApp, press confirm to continue
-	 */
-	LEDGER_CERTIFICATE_READ_SB: () => LocalizedString
-	/**
-	 * The message is ready, press confirm to continue
-	 */
-	LEDGER_MESSAGE_READ_SB: () => LocalizedString
+	SEND_NO_CONTACTS_OR_ACCOUNTS_FOUND: () => LocalizedString
 	/**
 	 * This transaction may be reverted if your balance is too low
 	 */
 	SEND_PENDING_TX_REVERT_ALERT: () => LocalizedString
 	/**
-	 * Backup your wallet
+	 * Type in an address or a .vet domain name
 	 */
-	BACKUP_YOUR_DEVICES_TITLE: () => LocalizedString
+	SEND_PLEASE_TYPE_ADDRESS: () => LocalizedString
 	/**
-	 * Before proceeding with the transaction, we suggest to backup the recovery phrase for this account.
+	 * MAX
 	 */
-	BACKUP_YOUR_DEVICES_DESCRIPTION: () => LocalizedString
+	SEND_RANGE_MAX: () => LocalizedString
 	/**
-	 * Backup now
+	 * 0%
 	 */
-	BACKUP_YOUR_DEVICES_CTA: () => LocalizedString
+	SEND_RANGE_ZERO: () => LocalizedString
 	/**
-	 * It looks like you don't have any {tokenName} in your wallet
+	 * To
 	 */
-	SEND_ERROR_TOKEN_NOT_FOUND: (arg: { tokenName: string }) => LocalizedString
+	SEND_TO: () => LocalizedString
 	/**
-	 * Error signing transaction
+	 * Select the asset that you want to transfer
 	 */
-	SIGN_TRANSACTION_ERROR: () => LocalizedString
+	SEND_TOKEN_SELECT_ASSET: () => LocalizedString
+	/**
+	 * Send your token
+	 */
+	SEND_TOKEN_SUBTITLE: () => LocalizedString
+	/**
+	 * Send
+	 */
+	SEND_TOKEN_TITLE: () => LocalizedString
+	/**
+	 * Total Cost
+	 */
+	SEND_TOTAL_COST: () => LocalizedString
 	/**
 	 * There was an error sending the transaction. This may be due to a lack of funds
 	 */
 	SEND_TRANSACTION_ERROR: () => LocalizedString
 	/**
-	 * Vechain uses VTHO for settling transaction fees. To ensure smooth transactions, it's essential to maintain a minimal amount of VTHO in your wallet.
-	 */
-	SEND_VTHO_WARNING_TOKEN: () => LocalizedString
-	/**
 	 * Vechain facilitates transactions using VTHO as the payment medium for transaction fees. Our MAX calculation method will deduct a predefined base fee for transaction gas
 	 */
 	SEND_VTHO_WARNING_MAX: () => LocalizedString
 	/**
-	 * Connecting
+	 * Vechain uses VTHO for settling transaction fees. To ensure smooth transactions, it's essential to maintain a minimal amount of VTHO in your wallet.
 	 */
-	LEDGER_CONNECTING: () => LocalizedString
+	SEND_VTHO_WARNING_TOKEN: () => LocalizedString
 	/**
-	 * Connect
+	 * Version {version}
 	 */
-	LEDGER_CONNECT: () => LocalizedString
+	SETTINGS_ABOUT_APP_VERSION: (arg: { version: unknown }) => LocalizedString
 	/**
-	 * Connected
+	 * Find solutions to common problems
 	 */
-	LEDGER_CONNECTED: () => LocalizedString
+	SETTINGS_ABOUT_FIND_COMMON_PROBLEMS: () => LocalizedString
 	/**
-	 * Signing
+	 * Official site
 	 */
-	LEDGER_SIGNING: () => LocalizedString
+	SETTINGS_ABOUT_OFFICIAL_SITE: () => LocalizedString
 	/**
-	 * Sign data
+	 * Our commitment to you
 	 */
-	LEDGER_SIGN_DATA: () => LocalizedString
+	SETTINGS_ABOUT_OUR_COMMITMENT: () => LocalizedString
 	/**
-	 * Data signed
+	 * Privacy policy
 	 */
-	LEDGER_DATA_SIGNED: () => LocalizedString
+	SETTINGS_ABOUT_PRIVACY_POLICY: () => LocalizedString
 	/**
-	 * Checking
+	 * Suggest a feature
 	 */
-	LEDGER_CHECKING: () => LocalizedString
+	SETTINGS_ABOUT_SUGGEST_NEW_FEATURE: () => LocalizedString
 	/**
-	 * Check status
+	 * Support
 	 */
-	LEDGER_CHECK_STATUS: () => LocalizedString
+	SETTINGS_ABOUT_SUPPORT: () => LocalizedString
 	/**
-	 * Status OK
+	 * What would you like to see differently on VeWorld?
 	 */
-	LEDGER_STATUS_OK: () => LocalizedString
+	SETTINGS_ABOUT_VEWORLD_NEW_FEATURES: () => LocalizedString
+	/**
+	 * veworld.com
+	 */
+	SETTINGS_ABOUT_WEWORLD_WEBSITE: () => LocalizedString
+	/**
+	 * Convert balances to fiat
+	 */
+	SETTINGS_CURRENCIES_CONVERT_TO_FIAT: () => LocalizedString
+	/**
+	 * Default delegation
+	 */
+	SETTINGS_TRANSACTIONS_DEFAULT_DELEGATION: () => LocalizedString
+	/**
+	 * Manage URLs
+	 */
+	SETTINGS_TRANSACTIONS_MANAGE_URLS: () => LocalizedString
+	/**
+	 * Select the default delegation for your transactions
+	 */
+	SETTINGS_TRANSACTIONS_SELECT_DEFAULT_DELEGATION: () => LocalizedString
+	/**
+	 * Delegation URLs
+	 */
+	SETTINGS_TRANSACTIONS_SELECT_DELEGATION_URLS: () => LocalizedString
+	/**
+	 * Add or delete a delegation URL so you can select it when sending transactions
+	 */
+	SETTINGS_TRANSACTIONS_SELECT_DELEGATION_URLS_BODY: () => LocalizedString
+	/**
+	 * Transactions
+	 */
+	SETTINGS_TRANSACTIONS_TITLE: () => LocalizedString
+	/**
+	 * Share image
+	 */
+	SHARE_IMAGE: () => LocalizedString
+	/**
+	 * Share your NFT image with your friends
+	 */
+	SHARE_IMAGE_SUBTITLE: () => LocalizedString
+	/**
+	 * Show collection
+	 */
+	SHOW_COLLECTION: () => LocalizedString
+	/**
+	 * Bring back your hidden collection
+	 */
+	SHOW_COLLECTION_SUBTITLE: () => LocalizedString
+	/**
+	 * Show NFT
+	 */
+	SHOW_NFT: () => LocalizedString
+	/**
+	 * Signed certificate
+	 */
+	SIGNED_CERTIFICATE: () => LocalizedString
+	/**
+	 * Sign certificate
+	 */
+	SIGN_CERTIFICATE: () => LocalizedString
+	/**
+	 * Error signing transaction
+	 */
+	SIGN_TRANSACTION_ERROR: () => LocalizedString
+	/**
+	 * Status
+	 */
+	STATUS: () => LocalizedString
+	/**
+	 * Success!
+	 */
+	SUCCESS_GENERIC: () => LocalizedString
+	/**
+	 * The operation went well!
+	 */
+	SUCCESS_GENERIC_OPERATION: () => LocalizedString
+	/**
+	 * View operation detail.
+	 */
+	SUCCESS_GENERIC_VIEW_DETAIL_LINK: () => LocalizedString
+	/**
+	 * Swap
+	 */
+	SWAP: () => LocalizedString
+	/**
+	 * {total} dApps
+	 */
+	SWAP_DAPP_NUMBER: (arg: { total: number }) => LocalizedString
+	/**
+	 * Using these Vechain dApps you can swap tokens on your wallet for different ones, without having to buy and sell.
+	 */
+	SWAP_DESCRIPTION: () => LocalizedString
+	/**
+	 * No dApps found
+	 */
+	SWAP_EMPTY_LIST: () => LocalizedString
+	/**
+	 * Swap tokens
+	 */
+	SWAP_TITLE: () => LocalizedString
+	/**
+	 * System
+	 */
+	SYSTEM_THEME: () => LocalizedString
+	/**
+	 * Take me to iCloud
+	 */
+	TAKE_ME_TO_ICLOUD: () => LocalizedString
+	/**
+	 * Tap to view Mnemonic
+	 */
+	TAP_TO_VIEW: () => LocalizedString
+	/**
+	 * them?
+	 */
+	THEM: () => LocalizedString
+	/**
+	 * About
+	 */
+	TITLE_ABOUT: () => LocalizedString
+	/**
+	 * Add Contact
+	 */
+	TITLE_ADD_CONTACT: () => LocalizedString
+	/**
+	 * Add Token
+	 */
+	TITLE_ADD_TOKEN: () => LocalizedString
+	/**
+	 * Advanced
+	 */
+	TITLE_ADVANCED: () => LocalizedString
+	/**
+	 * Alerts
+	 */
+	TITLE_ALERTS: () => LocalizedString
+	/**
+	 * Biometrics Cancelled
+	 */
+	TITLE_ALERT_BIOMETRICS_CANCELLED: () => LocalizedString
+	/**
+	 * Camera Permissions
+	 */
+	TITLE_ALERT_CAMERA_PERMISSION: () => LocalizedString
+	/**
+	 * Face ID Cancelled
+	 */
+	TITLE_ALERT_FACE_ID_CANCELLED: () => LocalizedString
+	/**
+	 * Backup your phrase
+	 */
+	TITLE_BACKUP_YOUR_PHRASE: () => LocalizedString
+	/**
+	 * Buy VechainThor tokens
+	 */
+	TITLE_BUY: () => LocalizedString
+	/**
+	 * Confirm your mnemonic
+	 */
+	TITLE_CONFIRM_MNEMONIC: () => LocalizedString
+	/**
+	 * Connected apps
+	 */
+	TITLE_CONNECTED_APPS: () => LocalizedString
+	/**
+	 * My Contacts
+	 */
+	TITLE_CONTACTS: () => LocalizedString
+	/**
+	 * Your vechain wallet is ready!
+	 */
+	TITLE_CREATE_WALLET_SUCCESS: () => LocalizedString
+	/**
+	 * Wallet Setup
+	 */
+	TITLE_CREATE_WALLET_TYPE: () => LocalizedString
+	/**
+	 * Edit wallet
+	 */
+	TITLE_EDIT_WALLET: () => LocalizedString
+	/**
+	 * General settings
+	 */
+	TITLE_GENERAL_SETTINGS: () => LocalizedString
+	/**
+	 * Get support
+	 */
+	TITLE_GET_SUPPORT: () => LocalizedString
+	/**
+	 * Give feedback
+	 */
+	TITLE_GIVE_FEEDBACK: () => LocalizedString
+	/**
+	 * Import Wallet from iCloud
+	 */
+	TITLE_IMPORT_WALLET_FROM_ICLOUD: () => LocalizedString
+	/**
+	 * Import Wallet
+	 */
+	TITLE_IMPORT_WALLET_TYPE: () => LocalizedString
+	/**
+	 * Manage wallets
+	 */
+	TITLE_MANAGE_WALLET: () => LocalizedString
+	/**
+	 * Your Mnemonic
+	 */
+	TITLE_MNEMONIC: () => LocalizedString
+	/**
+	 * Network
+	 */
+	TITLE_NETWORK: () => LocalizedString
+	/**
+	 * Networks
+	 */
+	TITLE_NETWORKS: () => LocalizedString
+	/**
+	 * NFT
+	 */
+	TITLE_NFT: () => LocalizedString
+	/**
+	 * NFTs
+	 */
+	TITLE_NFTS: () => LocalizedString
+	/**
+	 * Observe Wallet
+	 */
+	TITLE_OBSERVE_WALLET: () => LocalizedString
+	/**
+	 * Seamlessly manage your crypto
+	 */
+	TITLE_ONBARDING_SLIDE_01: () => LocalizedString
+	/**
+	 * Sustainable
+	 */
+	TITLE_ONBARDING_SLIDE_02: () => LocalizedString
+	/**
+	 * Customizable, safe and fast
+	 */
+	TITLE_ONBARDING_SLIDE_03: () => LocalizedString
+	/**
+	 * Privacy & Security
+	 */
+	TITLE_PRIVACY: () => LocalizedString
+	/**
+	 * Your QR Code for {accountAlias}
+	 */
+	TITLE_QR_CODE_FOR_ACCOUNT: (arg: { accountAlias: string }) => LocalizedString
+	/**
+	 * Rename {type}
+	 */
+	TITLE_RENAME: (arg: { type: string }) => LocalizedString
+	/**
+	 * VeWorld reset
+	 */
+	TITLE_RESET_APP: () => LocalizedString
+	/**
+	 * Address Copied to Clipboard
+	 */
+	TITLE_SCANED_ADDRESS_COPPIED: () => LocalizedString
+	/**
+	 * Scan QR Code
+	 */
+	TITLE_SCAN_QRCODE: () => LocalizedString
+	/**
+	 * Protect your wallet
+	 */
+	TITLE_SECURITY: () => LocalizedString
+	/**
+	 * Your app is blocked
+	 */
+	TITLE_SECURITY_DOWNGRADE: () => LocalizedString
+	/**
+	 * Settings
+	 */
+	TITLE_SETTINGS: () => LocalizedString
+	/**
+	 * Transactions
+	 */
+	TITLE_TRANSACTIONS: () => LocalizedString
+	/**
+	 * Unlock keystore
+	 */
+	TITLE_UNLOCK_KEYSTORE: () => LocalizedString
+	/**
+	 * Choose your 6-digit PIN
+	 */
+	TITLE_USER_PASSWORD: () => LocalizedString
+	/**
+	 * Insert your 6-digit PIN
+	 */
+	TITLE_USER_PIN: () => LocalizedString
+	/**
+	 * Import Local Wallet
+	 */
+	TITLE_WALLET_IMPORT_LOCAL: () => LocalizedString
+	/**
+	 * Wallets
+	 */
+	TITLE_WALLET_MANAGEMENT: () => LocalizedString
+	/**
+	 * Secret recovery phrase
+	 */
+	TITLE_WALLET_TUTORIAL_SLIDE_01: () => LocalizedString
+	/**
+	 * The key to your crypto
+	 */
+	TITLE_WALLET_TUTORIAL_SLIDE_02: () => LocalizedString
+	/**
+	 * Keep your phrase safe
+	 */
+	TITLE_WALLET_TUTORIAL_SLIDE_03: () => LocalizedString
+	/**
+	 * Welcome to 
+	 */
+	TITLE_WELCOME_TO: () => LocalizedString
+	/**
+	 * To
+	 */
+	TO: () => LocalizedString
+	/**
+	 * Token ID
+	 */
+	TOKEN_ID: () => LocalizedString
+	/**
+	 * Token symbol
+	 */
+	TOKEN_SYMBOL: () => LocalizedString
+	/**
+	 * Touch ID
+	 */
+	TOUCH_ID: () => LocalizedString
+	/**
+	 * Transaction ID
+	 */
+	TRANSACTION_ID: () => LocalizedString
+	/**
+	 * Type
+	 */
+	TYPE: () => LocalizedString
+	/**
+	 * Unknown Account
+	 */
+	UNKNOWN_ACCOUNT: () => LocalizedString
+	/**
+	 * Unknown collection name
+	 */
+	UNKNOWN_COLLECTION: () => LocalizedString
+	/**
+	 * Unverified app
+	 */
+	UNVERIFIED_APP_TITLE: () => LocalizedString
+	/**
+	 * Value
+	 */
+	VALUE_TITLE: () => LocalizedString
+	/**
+	 * VeWorld
+	 */
+	VEWORLD: () => LocalizedString
+	/**
+	 * View on explorer
+	 */
+	VIEW_ON_EXPLORER: () => LocalizedString
+	/**
+	 * wallets saved on iCloud.
+	 */
+	WALLETS_SAVED_ON_ICLOUD: () => LocalizedString
 	/**
 	 * Account
 	 */
@@ -6087,37 +6335,13 @@ Try reconnect your device to the internet.
 	 */
 	WALLET_LABEL_WALLET: () => LocalizedString
 	/**
-	 * We need bluetooth and location permissions to perform bluetooth scanning
-	 */
-	WALLET_LEDGER_ASK_PERMISSIONS_MESSAGE: () => LocalizedString
-	/**
 	 * Give permissions
 	 */
 	WALLET_LEDGER_ASK_PERMISSIONS_BUTTON: () => LocalizedString
 	/**
-	 * Import ledger
+	 * We need bluetooth and location permissions to perform bluetooth scanning
 	 */
-	WALLET_LEDGER_SELECT_DEVICE_TITLE: () => LocalizedString
-	/**
-	 * No devices found
-	 */
-	WALLET_LEDGER_NO_DEVICES_FOUND: () => LocalizedString
-	/**
-	 * 1 device found
-	 */
-	WALLET_LEDGER_ONE_DEVICE_FOUND: () => LocalizedString
-	/**
-	 * {count} devices found
-	 */
-	WALLET_LEDGER_MORE_DEVICES_FOUND: (arg: { count: number }) => LocalizedString
-	/**
-	 * Please make sure your Ledger is unlocked, the bluetooth enabled and location services are on (only ledgers with bluetooth are supported at this time)
-	 */
-	WALLET_LEDGER_SELECT_DEVICE_SB: () => LocalizedString
-	/**
-	 * Enable additional settings
-	 */
-	WALLET_LEDGER_ENABLE_ADDITION_SETTINGS_TITLE: () => LocalizedString
+	WALLET_LEDGER_ASK_PERMISSIONS_MESSAGE: () => LocalizedString
 	/**
 	 * in order to give you the best user experience, you need to enable some additional settings in your ledger (Contract data and Multi-clause). Please follow the instructions below to proceed
 	 */
@@ -6155,37 +6379,9 @@ Try reconnect your device to the internet.
 	 */
 	WALLET_LEDGER_ENABLE_ADDITION_SETTINGS_STEP_4_DESC: () => LocalizedString
 	/**
-	 * Unlock ledger
+	 * Enable additional settings
 	 */
-	WALLET_LEDGER_ERROR_UNLOCK_LEDGER: () => LocalizedString
-	/**
-	 * Please, turn on and unlock your ledger device to continue
-	 */
-	WALLET_LEDGER_ERROR_UNLOCK_LEDGER_DESC: () => LocalizedString
-	/**
-	 * Open VeChain app
-	 */
-	WALLET_LEDGER_ERROR_OPEN_APP: () => LocalizedString
-	/**
-	 * Please, open the VeChain app to continue
-	 */
-	WALLET_LEDGER_ERROR_OPEN_APP_DESC: () => LocalizedString
-	/**
-	 * Connecting...
-	 */
-	WALLET_LEDGER_ERROR_CONNECTING: () => LocalizedString
-	/**
-	 * Connecting to the ledger device, please wait
-	 */
-	WALLET_LEDGER_ERROR_CONNECTING_DESC: () => LocalizedString
-	/**
-	 * Validate signature
-	 */
-	WALLET_LEDGER_ERROR_VALIDATE_SIGNATURE: () => LocalizedString
-	/**
-	 * We've sent a signature request to your ledger, please validate it to continue
-	 */
-	WALLET_LEDGER_ERROR_VALIDATE_SIGNATURE_DESC: () => LocalizedString
+	WALLET_LEDGER_ENABLE_ADDITION_SETTINGS_TITLE: () => LocalizedString
 	/**
 	 * Enable additional settings
 	 */
@@ -6203,6 +6399,14 @@ Try reconnect your device to the internet.
 	 */
 	WALLET_LEDGER_ERROR_CLAUSES_DISABLED_DESC: () => LocalizedString
 	/**
+	 * Connecting...
+	 */
+	WALLET_LEDGER_ERROR_CONNECTING: () => LocalizedString
+	/**
+	 * Connecting to the ledger device, please wait
+	 */
+	WALLET_LEDGER_ERROR_CONNECTING_DESC: () => LocalizedString
+	/**
 	 * Enable contract data
 	 */
 	WALLET_LEDGER_ERROR_CONTRACT_DATA_DISABLED: () => LocalizedString
@@ -6210,6 +6414,14 @@ Try reconnect your device to the internet.
 	 * Contract data is needed to sign transactions. Navigate to Contract data inside your VeChain app and press both buttons to enable it.
 	 */
 	WALLET_LEDGER_ERROR_CONTRACT_DATA_DISABLED_DESC: () => LocalizedString
+	/**
+	 * Open VeChain app
+	 */
+	WALLET_LEDGER_ERROR_OPEN_APP: () => LocalizedString
+	/**
+	 * Please, open the VeChain app to continue
+	 */
+	WALLET_LEDGER_ERROR_OPEN_APP_DESC: () => LocalizedString
 	/**
 	 * Unknown error
 	 */
@@ -6219,6 +6431,26 @@ Try reconnect your device to the internet.
 	 */
 	WALLET_LEDGER_ERROR_UNKNOWN_DESC: () => LocalizedString
 	/**
+	 * Unlock ledger
+	 */
+	WALLET_LEDGER_ERROR_UNLOCK_LEDGER: () => LocalizedString
+	/**
+	 * Please, turn on and unlock your ledger device to continue
+	 */
+	WALLET_LEDGER_ERROR_UNLOCK_LEDGER_DESC: () => LocalizedString
+	/**
+	 * Validate signature
+	 */
+	WALLET_LEDGER_ERROR_VALIDATE_SIGNATURE: () => LocalizedString
+	/**
+	 * We've sent a signature request to your ledger, please validate it to continue
+	 */
+	WALLET_LEDGER_ERROR_VALIDATE_SIGNATURE_DESC: () => LocalizedString
+	/**
+	 * {count} devices found
+	 */
+	WALLET_LEDGER_MORE_DEVICES_FOUND: (arg: { count: number }) => LocalizedString
+	/**
 	 * No devices found
 	 */
 	WALLET_LEDGER_NO_DEVICES: () => LocalizedString
@@ -6227,221 +6459,37 @@ Try reconnect your device to the internet.
 	 */
 	WALLET_LEDGER_NO_DEVICES_DESC: () => LocalizedString
 	/**
-	 * An error occurred while trying to connect to iCloud service. Try again!
+	 * No devices found
 	 */
-	CLOUDKIT_ERROR_GENERIC: () => LocalizedString
+	WALLET_LEDGER_NO_DEVICES_FOUND: () => LocalizedString
 	/**
-	 * Date not available
+	 * 1 device found
 	 */
-	DATE_NOT_AVAILABLE: () => LocalizedString
+	WALLET_LEDGER_ONE_DEVICE_FOUND: () => LocalizedString
 	/**
-	 * Receive
+	 * Please make sure your Ledger is unlocked, the bluetooth enabled and location services are on (only ledgers with bluetooth are supported at this time)
 	 */
-	RECEIVE_ACTIVITY: () => LocalizedString
+	WALLET_LEDGER_SELECT_DEVICE_SB: () => LocalizedString
 	/**
-	 * From
+	 * Import ledger
 	 */
-	FROM: () => LocalizedString
+	WALLET_LEDGER_SELECT_DEVICE_TITLE: () => LocalizedString
 	/**
-	 * To
+	 * Failed to create account
 	 */
-	TO: () => LocalizedString
+	WALLET_MANAGEMENT_NOTIFICATION_CREATE_ACCOUNT_ERROR: () => LocalizedString
 	/**
-	 * Unknown Account
+	 * Account created successfully
 	 */
-	UNKNOWN_ACCOUNT: () => LocalizedString
+	WALLET_MANAGEMENT_NOTIFICATION_CREATE_ACCOUNT_SUCCESS: () => LocalizedString
 	/**
-	 * Value
+	 * You can not delete the last wallet, but you can reset the app by going to Settings > General > Reset App
 	 */
-	VALUE_TITLE: () => LocalizedString
+	WALLET_MANAGEMENT_NOTIFICATION_LAST_WALLET: () => LocalizedString
 	/**
-	 * Gas fee
+	 * Wallet name
 	 */
-	GAS_FEE: () => LocalizedString
-	/**
-	 * Details
-	 */
-	DETAILS: () => LocalizedString
-	/**
-	 * Transaction ID
-	 */
-	TRANSACTION_ID: () => LocalizedString
-	/**
-	 * View on explorer
-	 */
-	VIEW_ON_EXPLORER: () => LocalizedString
-	/**
-	 * Block number
-	 */
-	BLOCK_NUMBER: () => LocalizedString
-	/**
-	 * DApp Transaction
-	 */
-	DAPP_TRANSACTION: () => LocalizedString
-	/**
-	 * Swap
-	 */
-	SWAP: () => LocalizedString
-	/**
-	 * Sign certificate
-	 */
-	SIGN_CERTIFICATE: () => LocalizedString
-	/**
-	 * Signed certificate
-	 */
-	SIGNED_CERTIFICATE: () => LocalizedString
-	/**
-	 * NFT Send
-	 */
-	NFT_SEND: () => LocalizedString
-	/**
-	 * NFT Receive
-	 */
-	NFT_RECEIVE: () => LocalizedString
-	/**
-	 * Origin
-	 */
-	ORIGIN: () => LocalizedString
-	/**
-	 * Content
-	 */
-	CONTENT: () => LocalizedString
-	/**
-	 * Status
-	 */
-	STATUS: () => LocalizedString
-	/**
-	 * Pending
-	 */
-	ACTIVITIES_STATUS_pending: () => LocalizedString
-	/**
-	 * Success
-	 */
-	ACTIVITIES_STATUS_success: () => LocalizedString
-	/**
-	 * Reverted
-	 */
-	ACTIVITIES_STATUS_reverted: () => LocalizedString
-	/**
-	 * Failed
-	 */
-	ACTIVITIES_STATUS_failed: () => LocalizedString
-	/**
-	 * This transaction is pending, details might not be fully accurate
-	 */
-	ACTIVITIES_PENDING_DESCRIPTION: () => LocalizedString
-	/**
-	 * There was an error in executing the transaction
-	 */
-	ACTIVITIES_FAILED_DESCRIPTION: () => LocalizedString
-	/**
-	 * Token transfer
-	 */
-	CONNECTED_APP_token_transfer: () => LocalizedString
-	/**
-	 * Contract call
-	 */
-	CONNECTED_APP_contract_call: () => LocalizedString
-	/**
-	 * Contract deployment
-	 */
-	CONNECTED_APP_deploy_contract: () => LocalizedString
-	/**
-	 * Approve NFT
-	 */
-	CONNECTED_APP_approve_nft: () => LocalizedString
-	/**
-	 * Swap VET for tokens
-	 */
-	CONNECTED_APP_swap_vet_for_tokens: () => LocalizedString
-	/**
-	 * Swap tokens for VET
-	 */
-	CONNECTED_APP_swap_tokens_for_vet: () => LocalizedString
-	/**
-	 * Swap tokens for tokens
-	 */
-	CONNECTED_APP_swap_tokens_for_tokens: () => LocalizedString
-	/**
-	 * Outcomes
-	 */
-	OUTCOMES: () => LocalizedString
-	/**
-	 * Type
-	 */
-	TYPE: () => LocalizedString
-	/**
-	 * Token symbol
-	 */
-	TOKEN_SYMBOL: () => LocalizedString
-	/**
-	 * Contract data
-	 */
-	CONTRACT_DATA: () => LocalizedString
-	/**
-	 * Contract ABI
-	 */
-	CONTRACT_ABI: () => LocalizedString
-	/**
-	 * Click to copy ABI
-	 */
-	COPY_ABI: () => LocalizedString
-	/**
-	 * Token ID
-	 */
-	TOKEN_ID: () => LocalizedString
-	/**
-	 * Paid
-	 */
-	PAID: () => LocalizedString
-	/**
-	 * Received
-	 */
-	RECEIVED: () => LocalizedString
-	/**
-	 * Security Enhancement
-	 */
-	SECURITY_ENHANCEMENT_TITLE: () => LocalizedString
-	/**
-	 * Our wallet has always met the highest standards, and now we're taking it a step further. To keep your assets even more secure, please upgrade your wallet.
-	 */
-	SECURITY_ENHANCEMENT_DESC: () => LocalizedString
-	/**
-	 * Upgrade now
-	 */
-	SECURITY_UPGRADE_BTN: () => LocalizedString
-	/**
-	 * Backup phrase
-	 */
-	SECURITY_BACKUP_TITLE: () => LocalizedString
-	/**
-	 * Before proceeding with the upgrade, please backup your recovery phrase if you haven't done it yet.
-	 */
-	SECURITY_BACKUP_DESC: () => LocalizedString
-	/**
-	 * Backup now
-	 */
-	SECURITY_BACKUP_BTN: () => LocalizedString
-	/**
-	 * I've backed up the phrase!
-	 */
-	SECURITY_PHRASE_BACKED_UP: () => LocalizedString
-	/**
-	 * It looks like you only have a hardware wallet connected to VeWorld. You can upgrade security level without backing up
-	 */
-	SECURITY_UPGRADE_ONLY_HARDWARE: () => LocalizedString
-	/**
-	 * It looks like you only have a private key wallet connected to VeWorld. You can upgrade security level without backing up
-	 */
-	SECURITY_UPGRADE_ONLY_PK: () => LocalizedString
-	/**
-	 * Important Reminder
-	 */
-	SECURITY_UPGRADE_REMINDER: () => LocalizedString
-	/**
-	 * Please, make sure you have backed up your recovery phrase before proceeding with the upgrade.
-	 */
-	SECURITY_UPGRADE_REMINDER_DESC: () => LocalizedString
+	WALLET_MANAGEMENT_WALLET_NAME: () => LocalizedString
 	/**
 	 * Welcome back
 	 */
@@ -6451,41 +6499,9 @@ Try reconnect your device to the internet.
 	 */
 	WE_FOUND: () => LocalizedString
 	/**
-	 * wallets saved on iCloud.
-	 */
-	WALLETS_SAVED_ON_ICLOUD: () => LocalizedString
-	/**
 	 * Would you like to 
 	 */
 	WOULD_YOU_LIKE_TO: () => LocalizedString
-	/**
-	 * restore 
-	 */
-	RESTORE: () => LocalizedString
-	/**
-	 * them?
-	 */
-	THEM: () => LocalizedString
-	/**
-	 * Take me to iCloud
-	 */
-	TAKE_ME_TO_ICLOUD: () => LocalizedString
-	/**
-	 * No thanks
-	 */
-	NO_THANKS: () => LocalizedString
-	/**
-	 * There was an error connecting to iCloud. Please check your network connection and try again.
-	 */
-	CLOUD_ERR_NETWORK: () => LocalizedString
-	/**
-	 * There was an error performing this iCloud wallet operation. Please try again.
-	 */
-	CLOUD_ERR_WALLET_OPERATION: () => LocalizedString
-	/**
-	 * There was an error checking your iCloud status. Please try again.
-	 */
-	CLOUD_ERR_USER_STATUS: () => LocalizedString
 }
 
 export type Formatters = {}

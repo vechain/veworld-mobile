@@ -27,7 +27,7 @@ export const selectCurrencySymbol = createSelector(selectCurrency, currency => {
     }
 })
 
-export const selectLangauge = createSelector(reducer, state => {
+export const selectLanguage = createSelector(reducer, state => {
     return state.language
 })
 

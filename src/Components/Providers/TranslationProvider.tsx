@@ -1,6 +1,5 @@
 import React, { useEffect, useState } from "react"
-import { Locales, TypesafeI18n, isLocale, loadLocale_sync } from "~i18n"
-import { getLocales } from "react-native-localize"
+import { TypesafeI18n, Locales, loadAllLocales_sync } from "~i18n"
 import "~Utils/polyfill"
 import { AppStateType } from "~Model"
 import { useAppState } from "~Hooks"
@@ -11,27 +10,18 @@ type Props = {
 
 export const TranslationProvider = ({ children }: Props) => {
     const { currentState } = useAppState()
-    const [localeLoaded, setLocaleLoaded] = useState<Locales | null>(null)
+    const [loadedLocale, setLoadedLocale] = useState<Locales | null>(null)
 
     useEffect(() => {
-        async function init() {
-            const DEFAULT_LOCALE =
-                getLocales()
-                    .map(loc => loc.languageCode)
-                    .find(isLocale) ?? "en"
-
-            loadLocale_sync(DEFAULT_LOCALE)
-            setLocaleLoaded(DEFAULT_LOCALE)
-        }
-
         if (currentState === AppStateType.ACTIVE) {
-            init()
+            loadAllLocales_sync()
+            setLoadedLocale("en")
         }
     }, [currentState])
 
-    if (localeLoaded === null) {
+    if (loadedLocale === null) {
         return null
     }
 
-    return <TypesafeI18n locale={localeLoaded}>{children}</TypesafeI18n>
+    return <TypesafeI18n locale={loadedLocale}>{children}</TypesafeI18n>
 }
