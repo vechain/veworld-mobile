@@ -185,16 +185,27 @@ Step 1: Prepare the Environment
       xcrun simctl uninstall <device_id> org.vechain.veworld.app
 
 For any issues or further assistance, please refer to the Maestro documentation(https://maestro.mobile.dev/)
-# Translation
 
--   To add new translation strings just add them to `src/i18n/en/index.ts` or any other language that you need i.e. `src/i18n/it/index.ts`.
 
--   To add a new language add a new directory in `src/i18n` and name the folder with the desired language code i.e. `src/i18n/es` for spanish.
+## Translations
 
-to watch i18n changes run:
+### Generate the i18n language files
+
+To generate the i18n files for every language, 
+create a `.env.local` file with the open ai key:
+
+```
+OPENAI_API_KEY=<your_openai_api_key>
+```
+
+and then run `yarn i18n:generate`
+
+### Generate the i18n types
+
+to generate the i18n types run:
 
 ```bash
-yarn i18n
+yarn i18n:types
 ```
 
 to watch i18n changes and starting the metro bundler:
