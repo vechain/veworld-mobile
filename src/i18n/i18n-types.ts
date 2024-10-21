@@ -3214,6 +3214,14 @@ type RootTranslation = {
 	 */
 	SECURITY_UPGRADE_ONLY_PK: string
 	/**
+	 * I​m​p​o​r​t​a​n​t​ ​R​e​m​i​n​d​e​r
+	 */
+	SECURITY_UPGRADE_REMINDER: string
+	/**
+	 * P​l​e​a​s​e​,​ ​m​a​k​e​ ​s​u​r​e​ ​y​o​u​ ​h​a​v​e​ ​b​a​c​k​e​d​ ​u​p​ ​y​o​u​r​ ​r​e​c​o​v​e​r​y​ ​p​h​r​a​s​e​ ​b​e​f​o​r​e​ ​p​r​o​c​e​e​d​i​n​g​ ​w​i​t​h​ ​t​h​e​ ​u​p​g​r​a​d​e​.
+	 */
+	SECURITY_UPGRADE_REMINDER_DESC: string
+	/**
 	 * W​e​l​c​o​m​e​ ​b​a​c​k
 	 */
 	WELCOME_BACK: string
@@ -6426,6 +6434,14 @@ Try reconnect your device to the internet.
 	 * It looks like you only have a private key wallet connected to VeWorld. You can upgrade security level without backing up
 	 */
 	SECURITY_UPGRADE_ONLY_PK: () => LocalizedString
+	/**
+	 * Important Reminder
+	 */
+	SECURITY_UPGRADE_REMINDER: () => LocalizedString
+	/**
+	 * Please, make sure you have backed up your recovery phrase before proceeding with the upgrade.
+	 */
+	SECURITY_UPGRADE_REMINDER_DESC: () => LocalizedString
 	/**
 	 * Welcome back
 	 */

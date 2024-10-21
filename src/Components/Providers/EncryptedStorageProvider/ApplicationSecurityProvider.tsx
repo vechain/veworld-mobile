@@ -1,6 +1,16 @@
 import React, { useCallback, useEffect, useMemo, useState } from "react"
 import { MMKV } from "react-native-mmkv"
-import { BiometricsUtils, CryptoUtils, CryptoUtils_Legacy, debug, error, HexUtils, info, PasswordUtils } from "~Utils"
+import {
+    BiometricsUtils,
+    CryptoUtils,
+    CryptoUtils_Legacy,
+    debug,
+    error,
+    HexUtils,
+    info,
+    PasswordUtils,
+    AnalyticsUtils,
+} from "~Utils"
 import {
     BiometricState,
     DEVICE_TYPE,
@@ -17,18 +27,18 @@ import {
     StorageEncryptionKeyHelper,
     WalletEncryptionKeyHelper,
 } from "~Components/Providers"
-
 import { useAppState, useBiometrics } from "~Hooks"
 import { StandaloneAppBlockedScreen, StandaloneLockScreen, InternetDownScreen } from "~Screens"
 import { AnimatedSplashScreen } from "../../../AnimatedSplashScreen"
 import Onboarding from "./Helpers/Onboarding"
 import NetInfo from "@react-native-community/netinfo"
-import { ERROR_EVENTS } from "~Constants"
+import { AnalyticsEvent, ERROR_EVENTS } from "~Constants"
 import { initializeMMKVFlipper } from "react-native-mmkv-flipper-plugin"
 import RNBootSplash from "react-native-bootsplash"
 import { BackupWalletStack } from "~Screens/Flows/App/SecurityUpgrade_V2/Navigation.standalone"
 import SaltHelper from "./Helpers/SaltHelper"
 import { StorageEncryptionKeys } from "./Model"
+import { mixpanel } from "~Utils/AnalyticsUtils"
 
 const UserEncryptedStorage = new MMKV({
     id: "user_encrypted_storage",
@@ -320,7 +330,9 @@ export const ApplicationSecurityProvider = ({ children }: ApplicationSecurityCon
 
     const upgradeSecurityToV2 = useCallback(async (password?: string) => {
         const encryptedStorageKeys = UserEncryptedStorage.getAllKeys()
+        AnalyticsUtils.initialize()
 
+        mixpanel.track(AnalyticsEvent.SECURITY_UPGRADE, { status: "STARTED" })
         setSecurityMigrationStatus(SecurityMigration.IN_PROGRESS)
 
         if (encryptedStorageKeys.length > 0) {
@@ -418,7 +430,9 @@ export const ApplicationSecurityProvider = ({ children }: ApplicationSecurityCon
                 UserEncryptedStorage.clearAll()
                 Onboarding.prune(UserEncryptedStorage)
                 setSecurityMigrationStatus(SecurityMigration.COMPLETED)
+                mixpanel.track(AnalyticsEvent.SECURITY_UPGRADE, { status: "COMPLETED" })
             } catch (err) {
+                mixpanel.track(AnalyticsEvent.SECURITY_UPGRADE, { status: "FAILED" })
                 error(ERROR_EVENTS.ENCRYPTION, err)
             }
         }
