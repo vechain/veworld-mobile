@@ -39,6 +39,7 @@ export const JsonViewer: React.FC<Props> = ({ data }) => {
             base00: theme.colors.card,
             tree: {
                 paddingTop: 16,
+                borderRadius: 16,
             },
             arrowContainer: {
                 opacity: 0,

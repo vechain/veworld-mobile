@@ -74,7 +74,6 @@ const baseStyles = () =>
         },
         detailTitle: {
             flex: 1,
-            textTransform: "uppercase",
         },
         detailVersionLabel: {
             opacity: 0.7,
