@@ -1,19 +1,34 @@
-name: E2E Testing - Android
+name: Release Android
 
 on:
-    workflow_dispatch:
+  workflow_dispatch:
+    inputs:
+      version: 
+        description: 'Version to build'
+        type: string
+        required: true
+      build: 
+        description: 'Build number'
+        type: number
+        required: true
+
+  workflow_call:
+    inputs:
+      version: 
+        description: 'Version to build'
+        type: string
+        required: true
+      build: 
+        description: 'Build number'
+        type: number
+        required: true
     
-    workflow_call:
 
 jobs:
     build-test-android:
-        name: Maestro Build & Test Android Release
+        name: Build and Release Android
         runs-on: ubuntu-latest
         environment: android-release
-        outputs:
-          app: app/build/outputs/apk/release
-        env:
-          SENTRY_LOG_LEVEL: debug
         steps:
             - name: Checkout repository
               uses: actions/checkout@v3
@@ -65,8 +80,8 @@ jobs:
             - name: Sentry properties
               uses: mobiledevops/secret-to-file-action@v1
               with:
-                base64-encoded-secret: ${{ secrets.ANDROID_FASTLANE_SERVICE_ACCOUNT }}
-                filename: "pc-api-4895632399891248889-903-41060cd0ba40.json"
+                base64-encoded-secret: ${{ secrets.ANDROID_SERVICE_ACCOUNT }}
+                filename: "pc-api-4895632399891248889-903-1f538768f7fe.json"
                 is-executable: false
                 working-directory: "./android"
 
@@ -105,13 +120,6 @@ jobs:
                   is-executable: false
                   working-directory: "."
             
-            - name: datadog-ci decode
-              uses: mobiledevops/secret-to-file-action@v1
-              with:
-                  base64-encoded-secret: ${{ secrets.DATADOG_CI}}
-                  filename: "datadog-ci.json"
-                  is-executable: false
-                  working-directory: "."
 
             - name: Build apk 
               id: build
@@ -120,22 +128,5 @@ jobs:
                   export STORE_PASSWORD="$(<store_password.txt)"
                   export KEY_PASSWORD="$(<store_password.txt)"
                   export KEY_ALIAS="$(<key_alias.txt)"
-                  fastlane build_test_ci version_code:99 version_name:"9.9.9"
-                  cd app/build/outputs/apk/release
-                  OUTPUT_DIR=$(pwd)
-                  echo "output_dir=$OUTPUT_DIR" >> "$GITHUB_ENV"
-                  ls -la
-            
-            - name: Upload apk 
-              uses: actions/upload-artifact@v4
-              with:
-               name: app-release.apk
-               path: ${{ env.output_dir }}/app-release.apk
-
-            - name: Maestro Cloud
-              uses: mobile-dev-inc/action-maestro-cloud@v1.8.1
-              with:
-                name: Android Test
-                api-key: ${{ secrets.MAESTRO_CLOUD_API_KEY }}
-                app-file: android/app/build/outputs/apk/release/app-release.apk
+                  fastlane build_android_ci version_code:${{github.event.inputs.build}} version_name:${{github.event.inputs.version}}
                 

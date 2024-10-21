@@ -79,6 +79,14 @@ Create changelog
 
 Create Release Branch on GitHub for Beta
 
+### ios gh_setup_before_ci
+
+```sh
+[bundle exec] fastlane ios gh_setup_before_ci
+```
+
+Create Release Branch on GitHub via CI
+
 ### ios gh_setup_after
 
 ```sh
@@ -107,6 +115,14 @@ Commit latest artifacts to GitHub
 
 ```sh
 [bundle exec] fastlane ios build
+```
+
+Push a new beta build to TestFlight
+
+### ios build_ci
+
+```sh
+[bundle exec] fastlane ios build_ci
 ```
 
 Push a new beta build to TestFlight

@@ -1,0 +1,144 @@
+name: Release - iOS
+
+on:
+  workflow_dispatch:
+    inputs:
+      version: 
+        description: 'Version to build'
+        type: string
+        required: true
+      build: 
+        description: 'Build number'
+        type: number
+        required: true
+
+  workflow_call:
+    inputs:
+      version: 
+        description: 'Version to build'
+        type: string
+        required: true
+      build: 
+        description: 'Build number'
+        type: number
+        required: true
+
+
+jobs:
+  build-release-ios:
+    name: Build release for iOS
+    runs-on: macos-latest
+    environment: ios-release
+
+    # Proceed only if it's either not a release event or it's a pre-release.
+    if: ${{ github.event_name != 'release' || (github.event_name == 'release' && github.event.release.prerelease) }}
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v3
+        with:
+          # If it's a pre-release, check out the tag corresponding to the pre-release;
+          # otherwise, use the triggering branch unless it's a non-pre-release event.
+          ref: ${{ (github.event_name == 'release' && github.event.release.prerelease && github.event.release.tag_name) || github.ref }}
+    
+      # Setup Node.js
+      - name: Setup Node
+        uses: actions/setup-node@v3
+        with:
+          node-version-file: .nvmrc
+          cache: "yarn"
+
+      - name: Install Node.js dependencies
+        run: |
+          yarn install
+
+      # Install Homebrew and applesimutils for Detox
+      - name: Install macOS dependencies
+        run: |
+          brew tap wix/brew
+          brew install applesimutils
+          brew install fastlane
+          gem install cocoapods # Install CocoaPods globally
+
+          bundle install
+        env:
+          HOMEBREW_NO_AUTO_UPDATE: 1
+          HOMEBREW_NO_INSTALL_CLEANUP: 1
+      
+      # Setup Ruby
+      - name: Setup Ruby
+        uses: ruby/setup-ruby@v1
+        with:
+          bundler-cache: true
+      
+      # Update Bundler and Install Gems
+      - name: Update Bundler and Install Gems
+        run: |
+          gem install bundler -v 2.4.22 
+          bundle install --jobs 4 --retry 3 
+        env:
+          BUNDLE_GEMFILE: ${{ github.workspace }}/ios/Gemfile
+
+      # Install CocoaPods dependencies
+      - name: Install CocoaPods
+        run: |
+          cd ios
+          bundle exec pod install
+
+
+
+      # Install sentry properties
+      - name: Sentry properties
+        uses: mobiledevops/secret-to-file-action@v1
+        with:
+            base64-encoded-secret: ${{ secrets.IOS_SENTRY_PROPERTIES }}
+            filename: "sentry.properties"
+            is-executable: false
+            working-directory: "./ios"
+
+      - name: Env default decode
+        uses: mobiledevops/secret-to-file-action@v1
+        with:
+             base64-encoded-secret: ${{ secrets.IOS_ENV_DEFAULT }}
+             filename: "env.default"
+             is-executable: false
+             working-directory: "./ios/fastlane"
+
+          
+      - name: Env decode 
+        uses: mobiledevops/secret-to-file-action@v1
+        with:
+             base64-encoded-secret: ${{ secrets.IOS_ENV_RELEASE}}
+             filename: ".env"
+             is-executable: false
+             working-directory: "./ios/fastlane"
+
+      - name: datadog-ci decode
+        uses: mobiledevops/secret-to-file-action@v1
+        with:
+            base64-encoded-secret: ${{ secrets.DATADOG_CI}}
+            filename: "datadog-ci.json"
+            is-executable: false
+            working-directory: "."
+      
+      - name: Decode prod env      
+        uses: mobiledevops/secret-to-file-action@v1
+        with:
+            base64-encoded-secret: ${{ secrets.RN_ENV_PROD}}
+            filename: ".env.production"
+            is-executable: false
+            working-directory: "."
+
+      - name: Build apk with fastlane
+        env:
+          MATCH_PASSWORD: ${{ secrets.IOS_MATCH_PASSWORD }}
+        run: |
+              cd ios
+              git config --global url."https://${{ secrets.CI_USER_TOKEN }}@github.com".insteadOf https://github.com
+              pwd
+              ls
+              cd fastlane
+              cat .env
+              fastlane build_ci username:${{secrets.CI_USER}} token:${{secrets.CI_USER_TOKEN}} version:${{github.event.inputs.version}} build:${{github.event.inputs.build}}
+              
+

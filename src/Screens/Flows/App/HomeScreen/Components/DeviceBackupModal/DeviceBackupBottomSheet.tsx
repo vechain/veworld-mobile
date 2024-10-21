@@ -7,7 +7,7 @@ import { SecurityAlertLight } from "~Assets"
 import { BaseBottomSheet, BaseButton, BaseSpacer, BaseText, BaseView } from "~Components"
 import { useBottomSheetModal, useCheckWalletBackup, useThemedStyles } from "~Hooks"
 import { useI18nContext } from "~i18n"
-import { RootStackParamListSettings, Routes, TabStackParamList } from "~Navigation"
+import { Routes, TabStackParamList } from "~Navigation"
 import {
     selectLastBackupRequestTimestamp,
     selectSelectedAccount,
@@ -21,7 +21,6 @@ export const DeviceBackupBottomSheet = () => {
     const { styles } = useThemedStyles(baseStyles)
     const { LL } = useI18nContext()
     const navigation = useNavigation<NativeStackNavigationProp<TabStackParamList>>()
-    const settingsNavigation = useNavigation<NativeStackNavigationProp<RootStackParamListSettings>>()
 
     const lastBackupRequestTimestamp = useAppSelector(selectLastBackupRequestTimestamp)
     const selectedAccount = useAppSelector(selectSelectedAccount)
@@ -89,9 +88,8 @@ export const DeviceBackupBottomSheet = () => {
 
     const goToPrivacyScreen = () => {
         onClose()
-        navigation.navigate("SettingsStack", { screen: Routes.SETTINGS })
-        navigation.navigate("SettingsStack", { screen: Routes.SETTINGS_PRIVACY })
-        settingsNavigation.navigate(Routes.SETTINGS_PRIVACY)
+        navigation.navigate("SettingsStack", { screen: Routes.SETTINGS, initial: true })
+        navigation.navigate("SettingsStack", { screen: Routes.SETTINGS_PRIVACY, initial: false })
     }
 
     return (

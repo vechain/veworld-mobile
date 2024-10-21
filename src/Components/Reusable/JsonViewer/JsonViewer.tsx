@@ -40,6 +40,7 @@ export const JsonViewer: React.FC<Props> = ({ data }) => {
             tree: {
                 paddingTop: 16,
                 borderRadius: 16,
+                paddingLeft: 8,
             },
             arrowContainer: {
                 opacity: 0,

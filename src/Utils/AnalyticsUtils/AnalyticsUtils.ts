@@ -5,7 +5,7 @@ import { AppThunk } from "~Storage/Redux/Types"
 import { info, warn } from "~Utils/Logger"
 
 let isInitialized = false
-let mixpanel: Mixpanel
+export let mixpanel: Mixpanel
 
 export interface AnalyticsProperties {
     [key: string]: unknown
