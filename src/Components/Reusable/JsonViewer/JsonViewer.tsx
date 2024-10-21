@@ -4,6 +4,7 @@ import JSONTree, { Renderable, JSONTreeProps } from "react-native-json-tree"
 import { BaseText, BaseView, CopyToClipboardAddress } from "~Components"
 import { useThemedStyles } from "~Hooks"
 import { AddressUtils } from "~Utils"
+import { isIOS } from "~Utils/PlatformUtils/PlatformUtils"
 
 type Props = {
     data: Record<string, unknown>
@@ -54,7 +55,7 @@ export const JsonViewer: React.FC<Props> = ({ data }) => {
                 flexWrap: "wrap",
             },
             valueLabel: {
-                lineHeight: 1,
+                lineHeight: isIOS() ? 1 : undefined,
             },
             nestedNodeLabel: {
                 pointerEvents: "none",
