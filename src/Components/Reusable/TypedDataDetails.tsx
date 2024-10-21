@@ -26,7 +26,9 @@ export const TypedDataDetails: React.FC<Props> = ({ typedData, origin }) => {
                     </BaseText>
 
                     {/* URL label */}
-                    <BaseText typographyFont="bodyBold">{LL.CONNECTED_APP_URL()}</BaseText>
+                    <BaseText typographyFont="bodyBold" style={styles.detailTitle}>
+                        {LL.CONNECTED_APP_URL()}
+                    </BaseText>
 
                     {/* Contract label */}
                     <BaseText typographyFont="bodyBold" style={styles.detailTitle}>
@@ -74,6 +76,7 @@ const baseStyles = () =>
         },
         detailTitle: {
             flex: 1,
+            textTransform: "capitalize",
         },
         detailVersionLabel: {
             opacity: 0.7,

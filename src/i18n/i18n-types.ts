@@ -749,7 +749,7 @@ type RootTranslation = {
 	 */
 	TITLE_WALLET_MANAGEMENT: string
 	/**
-	 * S​e​t​t​i​n​g​s
+	 * M​e​n​u
 	 */
 	TITLE_SETTINGS: string
 	/**
@@ -3194,7 +3194,7 @@ type RootTranslation = {
 	 */
 	CONNECTED_APP_DOMAIN: string
 	/**
-	 * U​R​L
+	 * U​r​l
 	 */
 	CONNECTED_APP_URL: string
 	/**
@@ -4030,7 +4030,7 @@ VeWorld will never ask you for them.
 	 */
 	TITLE_WALLET_MANAGEMENT: () => LocalizedString
 	/**
-	 * Settings
+	 * Menu
 	 */
 	TITLE_SETTINGS: () => LocalizedString
 	/**
@@ -6443,7 +6443,7 @@ Try reconnect your device to the internet.
 	 */
 	CONNECTED_APP_DOMAIN: () => LocalizedString
 	/**
-	 * URL
+	 * Url
 	 */
 	CONNECTED_APP_URL: () => LocalizedString
 	/**
