@@ -20,7 +20,7 @@ DerivedData
 *.hmap
 *.ipa
 *.xcuserstate
-ios/.xcode.env.local
+**/.xcode.env.local
 
 # Android/IntelliJ
 #
@@ -31,20 +31,14 @@ local.properties
 *.iml
 *.hprof
 .cxx/
-android/app/src/main/assets
-android/app/src/main/res/raw
+*.keystore
+!debug.keystore
 
 # node.js
 #
 node_modules/
 npm-debug.log
 yarn-error.log
-
-# BUCK
-buck-out/
-\.buckd/
-*.keystore
-!debug.keystore
 
 # fastlane
 #
@@ -62,14 +56,26 @@ buck-out/
 *.jsbundle
 
 # Ruby / CocoaPods
-/ios/Pods/
+**/Pods/
 /vendor/bundle/
+
+# Temporary files created by Metro to check the health of the file watcher
+.metro-health-check*
+
 
 # vscode
 .vscode/settings.json
 
-# jest
-coverage
+# testing
+/coverage
+
+# Yarn
+.yarn/*
+!.yarn/patches
+!.yarn/plugins
+!.yarn/releases
+!.yarn/sdks
+!.yarn/versions
 
 # local env files (that override others)
 .env.local
@@ -98,18 +104,18 @@ cucumber.xml
 cucumber.log
 
 # local files
-env.local
-env.production.local
+.env.local
+.env.production.local
 ios/fastlane/env
 ios/fastlane/env.default
 
 # datadog
 datadog-ci.json
 
-# Yarn
-.yarn/*
-!.yarn/patches
-!.yarn/plugins
-!.yarn/releases
-!.yarn/sdks
-!.yarn/versions
+
+# Sentry
+ios/sentry.properties
+android/sentry.properties
+
+# keystore
+android/keystore.properties

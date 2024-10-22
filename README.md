@@ -1,231 +1,79 @@
-# veworld-mobile
+This is a new [**React Native**](https://reactnative.dev) project, bootstrapped using [`@react-native-community/cli`](https://github.com/react-native-community/cli).
 
-# Environment setup
+# Getting Started
 
-I order to run this project install the following dependencies:
+>**Note**: Make sure you have completed the [React Native - Environment Setup](https://reactnative.dev/docs/environment-setup) instructions till "Creating a new application" step, before proceeding.
 
-**Global Dependencies**
+## Step 1: Start the Metro Server
 
-```
-- Homebrew
-- Node - v18.12.1
-- Ruby - v2.7.5
-```
+First, you will need to start **Metro**, the JavaScript _bundler_ that ships _with_ React Native.
 
-**Platform specific**
-
-iOS:
-
-Download Xcode form the Mac AppStore
-
-```
-- Xcode - v15
-```
-
-**Android**
-
-```
-- JDK - zulu11
-- Android Studio
-```
-
-# Run the project
-
-The first time you clone the repo you need to:
-
-copy env files into the repo
-
-then install all the dependencies and pods:
+To start Metro, run the following command from the _root_ of your React Native project:
 
 ```bash
-- yarn install:all
+# using npm
+npm start
+
+# OR using Yarn
+yarn start
 ```
 
-### Run the metro bundler
+## Step 2: Start your Application
+
+Let Metro Bundler run in its _own_ terminal. Open a _new_ terminal from the _root_ of your React Native project. Run the following command to start your _Android_ or _iOS_ app:
+
+### For Android
 
 ```bash
-- yarn start
+# using npm
+npm run android
+
+# OR using Yarn
+yarn android
 ```
 
-or run it with i18n compiler
+### For iOS
 
 ```bash
-- yarn start:i18n
+# using npm
+npm run ios
+
+# OR using Yarn
+yarn ios
 ```
 
-### iOS
+If everything is set up _correctly_, you should see your new app running in your _Android Emulator_ or _iOS Simulator_ shortly provided you have set up your emulator/simulator correctly.
 
-```bash
-- yarn ios
-```
+This is one way to run your app — you can also run it directly from within Android Studio and Xcode respectively.
 
-### Android
+## Step 3: Modifying your App
 
-```bash
-- yarn android
-```
+Now that you have successfully run the app, let's modify it.
 
-Follow the official React Native [documentation](https://reactnative.dev/docs/environment-setup) for detailed explanation and additional steps.
+1. Open `App.tsx` in your text editor of choice and edit some lines.
+2. For **Android**: Press the <kbd>R</kbd> key twice or select **"Reload"** from the **Developer Menu** (<kbd>Ctrl</kbd> + <kbd>M</kbd> (on Window and Linux) or <kbd>Cmd ⌘</kbd> + <kbd>M</kbd> (on macOS)) to see your changes!
 
-# MAC OS X - M2 Processors additional setup
+   For **iOS**: Hit <kbd>Cmd ⌘</kbd> + <kbd>R</kbd> in your iOS Simulator to reload the app and see your changes!
 
-When configuring the WeWorld mobile app for Android on a MAC with an M2 processor, you should also make sure that Rosetta 2 is installed.
+## Congratulations! :tada:
 
-If Rosetta is not installed, you can install it by running:
+You've successfully run and modified your React Native App. :partying_face:
 
-```
-softwareupdate --install-rosetta
-```
+### Now what?
 
-#
-
-# Git Conventions
-
-### Convential commits
-
-Read more [here](./docs/conventional_commits.md)
-
-# Testing
-
-### Unit test
-
-to run unit tests:
-
-```bash
-yarn test
-```
-
-to check unit test coverage:
-
-```bash
-yarn test:coverage
-```
-
-### E2E
-
-This project uses Maestro for E2E tests. Read more [here](https://maestro.mobile.dev/)(https://maestro.mobile.dev/cli/cloud)
-Simple setup. Maestro is a single binary that works anywhere.
-
-Step 1: Install Maestro
-To get started with Maestro, install it using the following command:
- curl -Ls "https://get.maestro.mobile.dev" | bash
-
-To upgrade the Maestro CLI:
- curl -Ls "https://get.maestro.mobile.dev" | bash
-
-Step 2: Prepare the Environment
-
-On the `.env.local` file, that you can find in 1Password you need to paste this two lines and replace the `<e2e_mnemonic>` with the one you find in 1Password
-
-```bash
-# maestro test
-IS_CI_BUILD_ENABLED="true"
-E2E_MNEMONIC="<e2e_mnemonic>"
-```
-
-#### Android Emulator Setup
-
-Step 1: Prepare the Environment
-1. Navigate to your platform tools directory:
- cd /Users/<username>/Library/Android/sdk/platform-tools
-
-2. Install adb
-
-3. Open Android Studio
-
-4. Start an emulator
-   ./adb devices
-You should see an emulator listed.
-
-Step 2: Generate and Install the APK
-1. Generate the APK Locally:
-  yarn purge
-  yarn install:all
-  yarn e2e.android.build.d
-
-2. Start the Metro builder:
-   yarn start:test
-
-3. Install the APK on the emulator:
-   ./adb -s emulator-5554 install ../veworld-mobile/android/app/build/outputs/apk/debug/app-debug.apk
-
-Step 3: Execute Tests
-Run the flow.yaml file to start the test:
- maestro test .maestro (This command looks for the config file in the .maestro folder and picks the flows for execution.)
-
-Uninstall the App (if needed):
- ./adb -s <emulator_id> uninstall org.vechain.veworld.app
-
-#### iOS emulator Setup
-
-Step 1: Prepare the Environment
- 1. List iOS devices:
-   xcrun simctl list (List of ios devices with device ids)
-
- 2. Boot an iOS device:
-   xcrun simctl boot <device_id>
-
- Step 2: Generate and Install the App
-  1. Generate the iOS App Locally:
-     yarn purge
-     yarn install:all
-     yarn e2e.ios.build.d
-
-  2. Start the Metro builder:
-     yarn start:test
-
-  3. Install the App:
-     xcrun simctl install <device_id> <ios_app_location>
-
- Step 3: Execute Tests
-  1. Run tests:
-     maestro test .maestro
-
-   2. Uninstall the App (if needed):
-      xcrun simctl uninstall <device_id> org.vechain.veworld.app
-
-For any issues or further assistance, please refer to the Maestro documentation(https://maestro.mobile.dev/)
-# Translation
-
--   To add new translation strings just add them to `src/i18n/en/index.ts` or any other language that you need i.e. `src/i18n/it/index.ts`.
-
--   To add a new language add a new directory in `src/i18n` and name the folder with the desired language code i.e. `src/i18n/es` for spanish.
-
-to watch i18n changes run:
-
-```bash
-yarn i18n
-```
-
-to watch i18n changes and starting the metro bundler:
-
-```bash
-yarn start:i18n
-```
-
-# Deploy
-
-### Release
-
-Before starting the release process remember to comment or delete this two variables in the `.env.local`
-
-```bash
-# maestro test
-# IS_CI_BUILD_ENABLED="true"
-# E2E_MNEMONIC="<e2e_mnemonic>"
-```
-
-the release process is automated via Fastlane:
-
-[IOS build](./ios/fastlane/BUILD_README.md)
-
-[Android build](./android/fastlane/BUILD_README.md)
+- If you want to add this new React Native code to an existing application, check out the [Integration guide](https://reactnative.dev/docs/integration-with-existing-apps).
+- If you're curious to learn more about React Native, check out the [Introduction to React Native](https://reactnative.dev/docs/getting-started).
 
 # Troubleshooting
 
--   **dlopen failed: library "libexpo-av.so" not found (Android)**: This error can rise when node has not been installed using either Brew or NVM. To solve the issue, reinstall node using one of these two methods and build again the app.
--   **NDK at ~/Library/Android/sdk/ndk did not have a source.properties file (Android)**: To solve this error just delete the NDK folders in the above path and run the build again. The NDKs will be downloaded and read properly.
--  **can't find gem fastlane (>= 0.a) with executable fastlane (Gem::GemNotFoundException)**
-To solve this error when you run the fastlane command to create the app build you can try to run: 
-   - Building for Android: `bundle exec fastlane build_android` and will check for all the gem dependencies, if something is missing you can run `build install` to install them.
-   - Building for iOS : `bundle exec fastlane build` and will check for all the gem dependencies, if something is missing you can run `build install` to install them.
+If you can't get this to work, see the [Troubleshooting](https://reactnative.dev/docs/troubleshooting) page.
+
+# Learn More
+
+To learn more about React Native, take a look at the following resources:
+
+- [React Native Website](https://reactnative.dev) - learn more about React Native.
+- [Getting Started](https://reactnative.dev/docs/environment-setup) - an **overview** of React Native and how setup your environment.
+- [Learn the Basics](https://reactnative.dev/docs/getting-started) - a **guided tour** of the React Native **basics**.
+- [Blog](https://reactnative.dev/blog) - read the latest official React Native **Blog** posts.
+- [`@facebook/react-native`](https://github.com/facebook/react-native) - the Open Source; GitHub **repository** for React Native.

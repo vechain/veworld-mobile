@@ -7,26 +7,30 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		00E356F31AD99517003FC87E /* VeWorldTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 00E356F21AD99517003FC87E /* VeWorldTests.m */; };
+		00E356F31AD99517003FC87E /* veworldTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 00E356F21AD99517003FC87E /* veworldTests.m */; };
 		13B07FBC1A68108700A75B9A /* AppDelegate.mm in Sources */ = {isa = PBXBuildFile; fileRef = 13B07FB01A68108700A75B9A /* AppDelegate.mm */; };
 		13B07FBF1A68108700A75B9A /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 13B07FB51A68108700A75B9A /* Images.xcassets */; };
 		13B07FC11A68108700A75B9A /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 13B07FB71A68108700A75B9A /* main.m */; };
+		2A70FAE6A804FEF809BADE51 /* PrivacyInfo.xcprivacy in Resources */ = {isa = PBXBuildFile; fileRef = 381D08B5B2E6093FA19860A8 /* PrivacyInfo.xcprivacy */; };
 		81AB9BB82411601600AC10FF /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 81AB9BB72411601600AC10FF /* LaunchScreen.storyboard */; };
-		B96607240FA3A4253357B621 /* ExpoModulesProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3740BCB7E6F73B4D78E5967E /* ExpoModulesProvider.swift */; };
-		BE1B42DB52B1D246E9F6FD08 /* libPods-VeWorld.a in Frameworks */ = {isa = PBXBuildFile; fileRef = A484A3290899234A794BBFF3 /* libPods-VeWorld.a */; };
-		EA3BDF922AD5720B00C5E65A /* MaterialCommunityIcons.ttf in Resources */ = {isa = PBXBuildFile; fileRef = EA3BDF902AD5720B00C5E65A /* MaterialCommunityIcons.ttf */; };
-		EA3BDF932AD5720B00C5E65A /* MaterialIcons.ttf in Resources */ = {isa = PBXBuildFile; fileRef = EA3BDF912AD5720B00C5E65A /* MaterialIcons.ttf */; };
-		EA3BDF952AD5B16100C5E65A /* BootSplash.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = EA3BDF942AD5B16000C5E65A /* BootSplash.storyboard */; };
-		EA3C11732BED116000CBE105 /* ScreenShield.swift in Sources */ = {isa = PBXBuildFile; fileRef = EA3C11722BED116000CBE105 /* ScreenShield.swift */; };
-		EA4BE28D2AD5BBF400DA4312 /* SampleModule.m in Sources */ = {isa = PBXBuildFile; fileRef = EA4BE28C2AD5BBF400DA4312 /* SampleModule.m */; };
-		EA4BE28F2AD5BCC000DA4312 /* SampleModule.swift in Sources */ = {isa = PBXBuildFile; fileRef = EA4BE28E2AD5BCC000DA4312 /* SampleModule.swift */; };
-		EA4BE2962AD5BF6300DA4312 /* RCTMinimizer.m in Sources */ = {isa = PBXBuildFile; fileRef = EA4BE2952AD5BF6300DA4312 /* RCTMinimizer.m */; };
-		EAB2E3922BED00130008F719 /* ScreenShieldRN.swift in Sources */ = {isa = PBXBuildFile; fileRef = EAB2E3912BED00130008F719 /* ScreenShieldRN.swift */; };
-		EAB2E3942BED003A0008F719 /* ScreenShieldRN.m in Sources */ = {isa = PBXBuildFile; fileRef = EAB2E3932BED003A0008F719 /* ScreenShieldRN.m */; };
-		EACA73AC2C24278E00D3D207 /* CloudKitManager.m in Sources */ = {isa = PBXBuildFile; fileRef = EACA73AB2C24278E00D3D207 /* CloudKitManager.m */; };
-		EACA73AE2C24286C00D3D207 /* CloudKitManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = EACA73AD2C24286C00D3D207 /* CloudKitManager.swift */; };
-		ECBEFBD45CA678404329CCE6 /* libPods-VeWorld-VeWorldTests.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 2ABB9A2ED09B4083FD4DBA5D /* libPods-VeWorld-VeWorldTests.a */; };
-		F97D63C8AA80DB4FC024258C /* ExpoModulesProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = B7F90587FAC801D5C71E5B75 /* ExpoModulesProvider.swift */; };
+		976EB79C3776E7CFBEAB287B /* libPods-veworld.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 4E0121A8F9F7882701561E4A /* libPods-veworld.a */; };
+		C4475CA9453B4C89AE1AC333 /* ExpoModulesProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4878751E967C53830CDC27B5 /* ExpoModulesProvider.swift */; };
+		D8A21D0B7BF7244D804FC754 /* ExpoModulesProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = 72960317816E2981225B9E1E /* ExpoModulesProvider.swift */; };
+		E3D6B8540BC003F86606CBC5 /* libPods-veworld-veworldTests.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 996C7F0932A9CAB44F283E78 /* libPods-veworld-veworldTests.a */; };
+		F4037AD82CC699A400317CE4 /* ScreenShield.swift in Sources */ = {isa = PBXBuildFile; fileRef = F4037AD52CC699A400317CE4 /* ScreenShield.swift */; };
+		F4037AD92CC699A400317CE4 /* CloudKitManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = F4037AD22CC699A400317CE4 /* CloudKitManager.swift */; };
+		F4037ADA2CC699A400317CE4 /* CloudKitManager.m in Sources */ = {isa = PBXBuildFile; fileRef = F4037AD12CC699A400317CE4 /* CloudKitManager.m */; };
+		F4037ADB2CC699A400317CE4 /* ScreenShieldRN.swift in Sources */ = {isa = PBXBuildFile; fileRef = F4037AD72CC699A400317CE4 /* ScreenShieldRN.swift */; };
+		F4037ADC2CC699A400317CE4 /* RCTMinimizer.m in Sources */ = {isa = PBXBuildFile; fileRef = F4037AD42CC699A400317CE4 /* RCTMinimizer.m */; };
+		F4037ADD2CC699A400317CE4 /* ScreenShieldRN.m in Sources */ = {isa = PBXBuildFile; fileRef = F4037AD62CC699A400317CE4 /* ScreenShieldRN.m */; };
+		F48E090A2CC6A49800C37AD9 /* MaterialCommunityIcons.ttf in Resources */ = {isa = PBXBuildFile; fileRef = F48E09072CC6A49800C37AD9 /* MaterialCommunityIcons.ttf */; };
+		F48E090B2CC6A49800C37AD9 /* MaterialIcons.ttf in Resources */ = {isa = PBXBuildFile; fileRef = F48E09082CC6A49800C37AD9 /* MaterialIcons.ttf */; };
+		F48E090C2CC6A50500C37AD9 /* MaterialCommunityIcons.ttf in Resources */ = {isa = PBXBuildFile; fileRef = F48E09072CC6A49800C37AD9 /* MaterialCommunityIcons.ttf */; };
+		F48E090D2CC6A50500C37AD9 /* MaterialIcons.ttf in Resources */ = {isa = PBXBuildFile; fileRef = F48E09082CC6A49800C37AD9 /* MaterialIcons.ttf */; };
+		F48E090E2CC6A50500C37AD9 /* BootSplash.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = F4F2BCC02CBFD965009DC4ED /* BootSplash.storyboard */; };
+		F48E090F2CC6A50500C37AD9 /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 13B07FB51A68108700A75B9A /* Images.xcassets */; };
+		F48E09102CC6A50500C37AD9 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 81AB9BB72411601600AC10FF /* LaunchScreen.storyboard */; };
+		F4F2BCC12CBFD965009DC4ED /* BootSplash.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = F4F2BCC02CBFD965009DC4ED /* BootSplash.storyboard */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -35,43 +39,43 @@
 			containerPortal = 83CBB9F71A601CBA00E9B192 /* Project object */;
 			proxyType = 1;
 			remoteGlobalIDString = 13B07F861A680F5B00A75B9A;
-			remoteInfo = VeWorld;
+			remoteInfo = veworld;
 		};
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
-		00E356EE1AD99517003FC87E /* VeWorldTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = VeWorldTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
+		00E356EE1AD99517003FC87E /* veworldTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = veworldTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		00E356F11AD99517003FC87E /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
-		00E356F21AD99517003FC87E /* VeWorldTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = VeWorldTests.m; sourceTree = "<group>"; };
-		13B07F961A680F5B00A75B9A /* VeWorld.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = VeWorld.app; sourceTree = BUILT_PRODUCTS_DIR; };
-		13B07FAF1A68108700A75B9A /* AppDelegate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = AppDelegate.h; path = VeWorld/AppDelegate.h; sourceTree = "<group>"; };
-		13B07FB01A68108700A75B9A /* AppDelegate.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; name = AppDelegate.mm; path = VeWorld/AppDelegate.mm; sourceTree = "<group>"; };
-		13B07FB51A68108700A75B9A /* Images.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; name = Images.xcassets; path = VeWorld/Images.xcassets; sourceTree = "<group>"; };
-		13B07FB61A68108700A75B9A /* Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; name = Info.plist; path = VeWorld/Info.plist; sourceTree = "<group>"; };
-		13B07FB71A68108700A75B9A /* main.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = main.m; path = VeWorld/main.m; sourceTree = "<group>"; };
-		2ABB9A2ED09B4083FD4DBA5D /* libPods-VeWorld-VeWorldTests.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-VeWorld-VeWorldTests.a"; sourceTree = BUILT_PRODUCTS_DIR; };
-		3740BCB7E6F73B4D78E5967E /* ExpoModulesProvider.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = ExpoModulesProvider.swift; path = "Pods/Target Support Files/Pods-VeWorld-VeWorldTests/ExpoModulesProvider.swift"; sourceTree = "<group>"; };
-		37CA29DCAEF3B5BBEFFD925C /* Pods-VeWorld-VeWorldTests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-VeWorld-VeWorldTests.release.xcconfig"; path = "Target Support Files/Pods-VeWorld-VeWorldTests/Pods-VeWorld-VeWorldTests.release.xcconfig"; sourceTree = "<group>"; };
-		81AB9BB72411601600AC10FF /* LaunchScreen.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; name = LaunchScreen.storyboard; path = VeWorld/LaunchScreen.storyboard; sourceTree = "<group>"; };
-		9F91A904191653D3D0B3842D /* Pods-VeWorld-VeWorldTests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-VeWorld-VeWorldTests.debug.xcconfig"; path = "Target Support Files/Pods-VeWorld-VeWorldTests/Pods-VeWorld-VeWorldTests.debug.xcconfig"; sourceTree = "<group>"; };
-		A484A3290899234A794BBFF3 /* libPods-VeWorld.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-VeWorld.a"; sourceTree = BUILT_PRODUCTS_DIR; };
-		B7F90587FAC801D5C71E5B75 /* ExpoModulesProvider.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = ExpoModulesProvider.swift; path = "Pods/Target Support Files/Pods-VeWorld/ExpoModulesProvider.swift"; sourceTree = "<group>"; };
-		DE9CC861D48E11250291CE6A /* Pods-VeWorld.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-VeWorld.release.xcconfig"; path = "Target Support Files/Pods-VeWorld/Pods-VeWorld.release.xcconfig"; sourceTree = "<group>"; };
-		EA3BDF902AD5720B00C5E65A /* MaterialCommunityIcons.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = MaterialCommunityIcons.ttf; sourceTree = "<group>"; };
-		EA3BDF912AD5720B00C5E65A /* MaterialIcons.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = MaterialIcons.ttf; sourceTree = "<group>"; };
-		EA3BDF942AD5B16000C5E65A /* BootSplash.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; name = BootSplash.storyboard; path = VeWorld/BootSplash.storyboard; sourceTree = "<group>"; };
-		EA3C11722BED116000CBE105 /* ScreenShield.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ScreenShield.swift; sourceTree = "<group>"; };
-		EA4BE28C2AD5BBF400DA4312 /* SampleModule.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = SampleModule.m; sourceTree = "<group>"; };
-		EA4BE28E2AD5BCC000DA4312 /* SampleModule.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SampleModule.swift; sourceTree = "<group>"; };
-		EA4BE2922AD5BDBD00DA4312 /* VeWorld-Bridging-Header.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "VeWorld-Bridging-Header.h"; sourceTree = "<group>"; };
-		EA4BE2942AD5BF4100DA4312 /* RCTMinimizer.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = RCTMinimizer.h; sourceTree = "<group>"; };
-		EA4BE2952AD5BF6300DA4312 /* RCTMinimizer.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = RCTMinimizer.m; sourceTree = "<group>"; };
-		EAB2E3912BED00130008F719 /* ScreenShieldRN.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ScreenShieldRN.swift; sourceTree = "<group>"; };
-		EAB2E3932BED003A0008F719 /* ScreenShieldRN.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = ScreenShieldRN.m; sourceTree = "<group>"; };
-		EACA73AB2C24278E00D3D207 /* CloudKitManager.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = CloudKitManager.m; sourceTree = "<group>"; };
-		EACA73AD2C24286C00D3D207 /* CloudKitManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CloudKitManager.swift; sourceTree = "<group>"; };
+		00E356F21AD99517003FC87E /* veworldTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = veworldTests.m; sourceTree = "<group>"; };
+		13B07F961A680F5B00A75B9A /* veworld.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = veworld.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		13B07FAF1A68108700A75B9A /* AppDelegate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = AppDelegate.h; path = veworld/AppDelegate.h; sourceTree = "<group>"; };
+		13B07FB01A68108700A75B9A /* AppDelegate.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; name = AppDelegate.mm; path = veworld/AppDelegate.mm; sourceTree = "<group>"; };
+		13B07FB51A68108700A75B9A /* Images.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; name = Images.xcassets; path = veworld/Images.xcassets; sourceTree = "<group>"; };
+		13B07FB61A68108700A75B9A /* Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; name = Info.plist; path = veworld/Info.plist; sourceTree = "<group>"; };
+		13B07FB71A68108700A75B9A /* main.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = main.m; path = veworld/main.m; sourceTree = "<group>"; };
+		381D08B5B2E6093FA19860A8 /* PrivacyInfo.xcprivacy */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xml; name = PrivacyInfo.xcprivacy; path = veworld/PrivacyInfo.xcprivacy; sourceTree = "<group>"; };
+		4878751E967C53830CDC27B5 /* ExpoModulesProvider.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = ExpoModulesProvider.swift; path = "Pods/Target Support Files/Pods-veworld/ExpoModulesProvider.swift"; sourceTree = "<group>"; };
+		4E0121A8F9F7882701561E4A /* libPods-veworld.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-veworld.a"; sourceTree = BUILT_PRODUCTS_DIR; };
+		4E9C89D61C9B559D130015A3 /* Pods-veworld.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-veworld.debug.xcconfig"; path = "Target Support Files/Pods-veworld/Pods-veworld.debug.xcconfig"; sourceTree = "<group>"; };
+		72960317816E2981225B9E1E /* ExpoModulesProvider.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = ExpoModulesProvider.swift; path = "Pods/Target Support Files/Pods-veworld-veworldTests/ExpoModulesProvider.swift"; sourceTree = "<group>"; };
+		7FFF107FA0603F7B6DDD3381 /* Pods-veworld-veworldTests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-veworld-veworldTests.release.xcconfig"; path = "Target Support Files/Pods-veworld-veworldTests/Pods-veworld-veworldTests.release.xcconfig"; sourceTree = "<group>"; };
+		81AB9BB72411601600AC10FF /* LaunchScreen.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; name = LaunchScreen.storyboard; path = veworld/LaunchScreen.storyboard; sourceTree = "<group>"; };
+		8815694E1DCE68C109F72447 /* Pods-veworld-veworldTests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-veworld-veworldTests.debug.xcconfig"; path = "Target Support Files/Pods-veworld-veworldTests/Pods-veworld-veworldTests.debug.xcconfig"; sourceTree = "<group>"; };
+		996C7F0932A9CAB44F283E78 /* libPods-veworld-veworldTests.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-veworld-veworldTests.a"; sourceTree = BUILT_PRODUCTS_DIR; };
+		A271C8C63413161DA32AB8D0 /* Pods-veworld.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-veworld.release.xcconfig"; path = "Target Support Files/Pods-veworld/Pods-veworld.release.xcconfig"; sourceTree = "<group>"; };
 		ED297162215061F000B7C4FE /* JavaScriptCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = JavaScriptCore.framework; path = System/Library/Frameworks/JavaScriptCore.framework; sourceTree = SDKROOT; };
-		F387893E07902C3257C104B2 /* Pods-VeWorld.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-VeWorld.debug.xcconfig"; path = "Target Support Files/Pods-VeWorld/Pods-VeWorld.debug.xcconfig"; sourceTree = "<group>"; };
+		F4037AD12CC699A400317CE4 /* CloudKitManager.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = CloudKitManager.m; sourceTree = "<group>"; };
+		F4037AD22CC699A400317CE4 /* CloudKitManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CloudKitManager.swift; sourceTree = "<group>"; };
+		F4037AD32CC699A400317CE4 /* RCTMinimizer.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = RCTMinimizer.h; sourceTree = "<group>"; };
+		F4037AD42CC699A400317CE4 /* RCTMinimizer.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = RCTMinimizer.m; sourceTree = "<group>"; };
+		F4037AD52CC699A400317CE4 /* ScreenShield.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ScreenShield.swift; sourceTree = "<group>"; };
+		F4037AD62CC699A400317CE4 /* ScreenShieldRN.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = ScreenShieldRN.m; sourceTree = "<group>"; };
+		F4037AD72CC699A400317CE4 /* ScreenShieldRN.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ScreenShieldRN.swift; sourceTree = "<group>"; };
+		F44147102CB9195800FA56C7 /* veworld.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; name = veworld.entitlements; path = veworld/veworld.entitlements; sourceTree = "<group>"; };
+		F48E09072CC6A49800C37AD9 /* MaterialCommunityIcons.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = MaterialCommunityIcons.ttf; sourceTree = "<group>"; };
+		F48E09082CC6A49800C37AD9 /* MaterialIcons.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = MaterialIcons.ttf; sourceTree = "<group>"; };
+		F4F2BCC02CBFD965009DC4ED /* BootSplash.storyboard */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; path = BootSplash.storyboard; sourceTree = "<group>"; };
+		F4F71D982CBD7B270020C0AE /* VeWorld-Bridging-Header.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "VeWorld-Bridging-Header.h"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -79,7 +83,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				ECBEFBD45CA678404329CCE6 /* libPods-VeWorld-VeWorldTests.a in Frameworks */,
+				E3D6B8540BC003F86606CBC5 /* libPods-veworld-veworldTests.a in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -87,20 +91,20 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				BE1B42DB52B1D246E9F6FD08 /* libPods-VeWorld.a in Frameworks */,
+				976EB79C3776E7CFBEAB287B /* libPods-veworld.a in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
-		00E356EF1AD99517003FC87E /* VeWorldTests */ = {
+		00E356EF1AD99517003FC87E /* veworldTests */ = {
 			isa = PBXGroup;
 			children = (
-				00E356F21AD99517003FC87E /* VeWorldTests.m */,
+				00E356F21AD99517003FC87E /* veworldTests.m */,
 				00E356F01AD99517003FC87E /* Supporting Files */,
 			);
-			path = VeWorldTests;
+			path = veworldTests;
 			sourceTree = "<group>";
 		};
 		00E356F01AD99517003FC87E /* Supporting Files */ = {
@@ -111,54 +115,46 @@
 			name = "Supporting Files";
 			sourceTree = "<group>";
 		};
-		13B07FAE1A68108700A75B9A /* VeWorld */ = {
+		13B07FAE1A68108700A75B9A /* veworld */ = {
 			isa = PBXGroup;
 			children = (
-				EA4BE2942AD5BF4100DA4312 /* RCTMinimizer.h */,
-				EA4BE2882AD5BB4200DA4312 /* SampleModule */,
-				EA3BDF942AD5B16000C5E65A /* BootSplash.storyboard */,
+				F4037AD12CC699A400317CE4 /* CloudKitManager.m */,
+				F4037AD22CC699A400317CE4 /* CloudKitManager.swift */,
+				F4037AD32CC699A400317CE4 /* RCTMinimizer.h */,
+				F4037AD42CC699A400317CE4 /* RCTMinimizer.m */,
+				F4037AD52CC699A400317CE4 /* ScreenShield.swift */,
+				F4037AD62CC699A400317CE4 /* ScreenShieldRN.m */,
+				F4037AD72CC699A400317CE4 /* ScreenShieldRN.swift */,
+				F4F2BCC02CBFD965009DC4ED /* BootSplash.storyboard */,
+				F4F71D982CBD7B270020C0AE /* VeWorld-Bridging-Header.h */,
+				F44147102CB9195800FA56C7 /* veworld.entitlements */,
 				13B07FAF1A68108700A75B9A /* AppDelegate.h */,
 				13B07FB01A68108700A75B9A /* AppDelegate.mm */,
 				13B07FB51A68108700A75B9A /* Images.xcassets */,
 				13B07FB61A68108700A75B9A /* Info.plist */,
 				81AB9BB72411601600AC10FF /* LaunchScreen.storyboard */,
 				13B07FB71A68108700A75B9A /* main.m */,
-				EA4BE2922AD5BDBD00DA4312 /* VeWorld-Bridging-Header.h */,
-				EA4BE2952AD5BF6300DA4312 /* RCTMinimizer.m */,
-				EAB2E3912BED00130008F719 /* ScreenShieldRN.swift */,
-				EA3C11722BED116000CBE105 /* ScreenShield.swift */,
-				EAB2E3932BED003A0008F719 /* ScreenShieldRN.m */,
-				EACA73AB2C24278E00D3D207 /* CloudKitManager.m */,
-				EACA73AD2C24286C00D3D207 /* CloudKitManager.swift */,
+				381D08B5B2E6093FA19860A8 /* PrivacyInfo.xcprivacy */,
 			);
-			name = VeWorld;
-			sourceTree = "<group>";
-		};
-		17049F5D89EB6924F9D40660 /* ExpoModulesProviders */ = {
-			isa = PBXGroup;
-			children = (
-				31F1DC3279FE0C62EFD11C2F /* VeWorld */,
-				E74664F7CA643CD2D400DD25 /* VeWorldTests */,
-			);
-			name = ExpoModulesProviders;
+			name = veworld;
 			sourceTree = "<group>";
 		};
 		2D16E6871FA4F8E400B85C8A /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
 				ED297162215061F000B7C4FE /* JavaScriptCore.framework */,
-				A484A3290899234A794BBFF3 /* libPods-VeWorld.a */,
-				2ABB9A2ED09B4083FD4DBA5D /* libPods-VeWorld-VeWorldTests.a */,
+				4E0121A8F9F7882701561E4A /* libPods-veworld.a */,
+				996C7F0932A9CAB44F283E78 /* libPods-veworld-veworldTests.a */,
 			);
 			name = Frameworks;
 			sourceTree = "<group>";
 		};
-		31F1DC3279FE0C62EFD11C2F /* VeWorld */ = {
+		3BA28AA1C3AD97D8E35B3737 /* veworld */ = {
 			isa = PBXGroup;
 			children = (
-				B7F90587FAC801D5C71E5B75 /* ExpoModulesProvider.swift */,
+				4878751E967C53830CDC27B5 /* ExpoModulesProvider.swift */,
 			);
-			name = VeWorld;
+			name = veworld;
 			sourceTree = "<group>";
 		};
 		832341AE1AAA6A7D00B99B32 /* Libraries */ = {
@@ -171,14 +167,14 @@
 		83CBB9F61A601CBA00E9B192 = {
 			isa = PBXGroup;
 			children = (
-				EA3BDF8F2AD5720B00C5E65A /* Fonts */,
-				13B07FAE1A68108700A75B9A /* VeWorld */,
+				F48E09092CC6A49800C37AD9 /* Fonts */,
+				13B07FAE1A68108700A75B9A /* veworld */,
 				832341AE1AAA6A7D00B99B32 /* Libraries */,
-				00E356EF1AD99517003FC87E /* VeWorldTests */,
+				00E356EF1AD99517003FC87E /* veworldTests */,
 				83CBBA001A601CBA00E9B192 /* Products */,
 				2D16E6871FA4F8E400B85C8A /* Frameworks */,
 				BBD78D7AC51CEA395F1C20DB /* Pods */,
-				17049F5D89EB6924F9D40660 /* ExpoModulesProviders */,
+				DB7B8CAC5ECD54DEDC526477 /* ExpoModulesProviders */,
 			);
 			indentWidth = 2;
 			sourceTree = "<group>";
@@ -188,8 +184,8 @@
 		83CBBA001A601CBA00E9B192 /* Products */ = {
 			isa = PBXGroup;
 			children = (
-				13B07F961A680F5B00A75B9A /* VeWorld.app */,
-				00E356EE1AD99517003FC87E /* VeWorldTests.xctest */,
+				13B07F961A680F5B00A75B9A /* veworld.app */,
+				00E356EE1AD99517003FC87E /* veworldTests.xctest */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -197,86 +193,85 @@
 		BBD78D7AC51CEA395F1C20DB /* Pods */ = {
 			isa = PBXGroup;
 			children = (
-				F387893E07902C3257C104B2 /* Pods-VeWorld.debug.xcconfig */,
-				DE9CC861D48E11250291CE6A /* Pods-VeWorld.release.xcconfig */,
-				9F91A904191653D3D0B3842D /* Pods-VeWorld-VeWorldTests.debug.xcconfig */,
-				37CA29DCAEF3B5BBEFFD925C /* Pods-VeWorld-VeWorldTests.release.xcconfig */,
+				4E9C89D61C9B559D130015A3 /* Pods-veworld.debug.xcconfig */,
+				A271C8C63413161DA32AB8D0 /* Pods-veworld.release.xcconfig */,
+				8815694E1DCE68C109F72447 /* Pods-veworld-veworldTests.debug.xcconfig */,
+				7FFF107FA0603F7B6DDD3381 /* Pods-veworld-veworldTests.release.xcconfig */,
 			);
 			path = Pods;
 			sourceTree = "<group>";
 		};
-		E74664F7CA643CD2D400DD25 /* VeWorldTests */ = {
+		C6417690E4B942C42EA6AF86 /* veworldTests */ = {
 			isa = PBXGroup;
 			children = (
-				3740BCB7E6F73B4D78E5967E /* ExpoModulesProvider.swift */,
+				72960317816E2981225B9E1E /* ExpoModulesProvider.swift */,
 			);
-			name = VeWorldTests;
+			name = veworldTests;
 			sourceTree = "<group>";
 		};
-		EA3BDF8F2AD5720B00C5E65A /* Fonts */ = {
+		DB7B8CAC5ECD54DEDC526477 /* ExpoModulesProviders */ = {
 			isa = PBXGroup;
 			children = (
-				EA3BDF902AD5720B00C5E65A /* MaterialCommunityIcons.ttf */,
-				EA3BDF912AD5720B00C5E65A /* MaterialIcons.ttf */,
+				3BA28AA1C3AD97D8E35B3737 /* veworld */,
+				C6417690E4B942C42EA6AF86 /* veworldTests */,
+			);
+			name = ExpoModulesProviders;
+			sourceTree = "<group>";
+		};
+		F48E09092CC6A49800C37AD9 /* Fonts */ = {
+			isa = PBXGroup;
+			children = (
+				F48E09072CC6A49800C37AD9 /* MaterialCommunityIcons.ttf */,
+				F48E09082CC6A49800C37AD9 /* MaterialIcons.ttf */,
 			);
 			path = Fonts;
-			sourceTree = "<group>";
-		};
-		EA4BE2882AD5BB4200DA4312 /* SampleModule */ = {
-			isa = PBXGroup;
-			children = (
-				EA4BE28E2AD5BCC000DA4312 /* SampleModule.swift */,
-				EA4BE28C2AD5BBF400DA4312 /* SampleModule.m */,
-			);
-			name = SampleModule;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
-		00E356ED1AD99517003FC87E /* VeWorldTests */ = {
+		00E356ED1AD99517003FC87E /* veworldTests */ = {
 			isa = PBXNativeTarget;
-			buildConfigurationList = 00E357021AD99517003FC87E /* Build configuration list for PBXNativeTarget "VeWorldTests" */;
+			buildConfigurationList = 00E357021AD99517003FC87E /* Build configuration list for PBXNativeTarget "veworldTests" */;
 			buildPhases = (
-				4314F5A6351D71153E218B6F /* [CP] Check Pods Manifest.lock */,
-				EA618A86C8C3F3710F1DEB40 /* [Expo] Configure project */,
+				D16F490314E131B3FE935C07 /* [CP] Check Pods Manifest.lock */,
+				5FDBB46C770C987FC57A4CB8 /* [Expo] Configure project */,
 				00E356EA1AD99517003FC87E /* Sources */,
 				00E356EB1AD99517003FC87E /* Frameworks */,
 				00E356EC1AD99517003FC87E /* Resources */,
-				B7D1B3471FD50480C3B83A25 /* [CP] Embed Pods Frameworks */,
-				14DB6AE13673A1219CD2C6A5 /* [CP] Copy Pods Resources */,
+				1C7F29D034BC203871161D5C /* [CP] Embed Pods Frameworks */,
+				85E0CC0B330B08B333D92670 /* [CP] Copy Pods Resources */,
 			);
 			buildRules = (
 			);
 			dependencies = (
 				00E356F51AD99517003FC87E /* PBXTargetDependency */,
 			);
-			name = VeWorldTests;
-			productName = VeWorldTests;
-			productReference = 00E356EE1AD99517003FC87E /* VeWorldTests.xctest */;
+			name = veworldTests;
+			productName = veworldTests;
+			productReference = 00E356EE1AD99517003FC87E /* veworldTests.xctest */;
 			productType = "com.apple.product-type.bundle.unit-test";
 		};
-		13B07F861A680F5B00A75B9A /* VeWorld */ = {
+		13B07F861A680F5B00A75B9A /* veworld */ = {
 			isa = PBXNativeTarget;
-			buildConfigurationList = 13B07F931A680F5B00A75B9A /* Build configuration list for PBXNativeTarget "VeWorld" */;
+			buildConfigurationList = 13B07F931A680F5B00A75B9A /* Build configuration list for PBXNativeTarget "veworld" */;
 			buildPhases = (
-				E22D8BDCDE3B1A7BD3B062D0 /* [CP] Check Pods Manifest.lock */,
-				07CEEC66AB3308BADBCD7DDF /* [Expo] Configure project */,
+				D960D14F20DDEBF9FE8BFC87 /* [CP] Check Pods Manifest.lock */,
+				6574953C4226A445210F91E6 /* [Expo] Configure project */,
 				13B07F871A680F5B00A75B9A /* Sources */,
 				13B07F8C1A680F5B00A75B9A /* Frameworks */,
 				13B07F8E1A680F5B00A75B9A /* Resources */,
 				00DD1BFF1BD5951E006B06BC /* Bundle React Native code and images */,
-				286141B448BA4203BC57BAB1 /* Upload Debug Symbols to Sentry */,
-				974AC4A591761334A7C2D255 /* [CP] Embed Pods Frameworks */,
-				D0FB06EE320C737E20576008 /* [CP] Copy Pods Resources */,
+				47862D5C21DA0AF63C968CE5 /* [CP] Embed Pods Frameworks */,
+				F0639312E4812776841AE5FE /* [CP] Copy Pods Resources */,
 			);
 			buildRules = (
 			);
 			dependencies = (
 			);
-			name = VeWorld;
-			productName = VeWorld;
-			productReference = 13B07F961A680F5B00A75B9A /* VeWorld.app */;
+			name = veworld;
+			productName = veworld;
+			productReference = 13B07F961A680F5B00A75B9A /* veworld.app */;
 			productType = "com.apple.product-type.application";
 		};
 /* End PBXNativeTarget section */
@@ -296,7 +291,7 @@
 					};
 				};
 			};
-			buildConfigurationList = 83CBB9FA1A601CBA00E9B192 /* Build configuration list for PBXProject "VeWorld" */;
+			buildConfigurationList = 83CBB9FA1A601CBA00E9B192 /* Build configuration list for PBXProject "veworld" */;
 			compatibilityVersion = "Xcode 12.0";
 			developmentRegion = en;
 			hasScannedForEncodings = 0;
@@ -309,8 +304,8 @@
 			projectDirPath = "";
 			projectRoot = "";
 			targets = (
-				13B07F861A680F5B00A75B9A /* VeWorld */,
-				00E356ED1AD99517003FC87E /* VeWorldTests */,
+				13B07F861A680F5B00A75B9A /* veworld */,
+				00E356ED1AD99517003FC87E /* veworldTests */,
 			);
 		};
 /* End PBXProject section */
@@ -320,6 +315,11 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				F48E090C2CC6A50500C37AD9 /* MaterialCommunityIcons.ttf in Resources */,
+				F48E090D2CC6A50500C37AD9 /* MaterialIcons.ttf in Resources */,
+				F48E090E2CC6A50500C37AD9 /* BootSplash.storyboard in Resources */,
+				F48E090F2CC6A50500C37AD9 /* Images.xcassets in Resources */,
+				F48E09102CC6A50500C37AD9 /* LaunchScreen.storyboard in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -327,11 +327,12 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				EA3BDF952AD5B16100C5E65A /* BootSplash.storyboard in Resources */,
-				EA3BDF932AD5720B00C5E65A /* MaterialIcons.ttf in Resources */,
+				F48E090A2CC6A49800C37AD9 /* MaterialCommunityIcons.ttf in Resources */,
+				F48E090B2CC6A49800C37AD9 /* MaterialIcons.ttf in Resources */,
 				81AB9BB82411601600AC10FF /* LaunchScreen.storyboard in Resources */,
-				EA3BDF922AD5720B00C5E65A /* MaterialCommunityIcons.ttf in Resources */,
 				13B07FBF1A68108700A75B9A /* Images.xcassets in Resources */,
+				2A70FAE6A804FEF809BADE51 /* PrivacyInfo.xcprivacy in Resources */,
+				F4F2BCC12CBFD965009DC4ED /* BootSplash.storyboard in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -352,9 +353,43 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "export SENTRY_PROPERTIES=sentry.properties\nexport EXTRA_PACKAGER_ARGS=\"--sourcemap-output $DERIVED_FILE_DIR/main.jsbundle.map\"\nset -e\n\nexport SOURCEMAP_FILE=\"$(pwd)/../main.jsbundle.map\";\nexport NODE_BINARY=node\n\nWITH_ENVIRONMENT=\"../node_modules/react-native/scripts/xcode/with-environment.sh\"\nREACT_NATIVE_XCODE=\"../node_modules/react-native/scripts/react-native-xcode.sh\"\n\n/bin/sh -c \"$WITH_ENVIRONMENT \\\"../node_modules/@sentry/cli/bin/sentry-cli react-native xcode $REACT_NATIVE_XCODE\\\"\"\n\n/bin/sh -c \"$WITH_ENVIRONMENT ../node_modules/@sentry/react-native/scripts/collect-modules.sh\"\n";
+			shellScript = "if [[ -f \"$PODS_ROOT/../.xcode.env\" ]]; then\n  source \"$PODS_ROOT/../.xcode.env\"\nfi\nif [[ -f \"$PODS_ROOT/../.xcode.env.local\" ]]; then\n  source \"$PODS_ROOT/../.xcode.env.local\"\nfi\n\n# The project root by default is one level up from the ios directory\nexport PROJECT_ROOT=\"$PROJECT_DIR\"/..\n\nif [[ \"$CONFIGURATION\" = *Debug* ]]; then\n  export SKIP_BUNDLING=1\nfi\nif [[ -z \"$ENTRY_FILE\" ]]; then\n  # Set the entry JS file using the bundler's entry resolution.\n  export ENTRY_FILE=\"$(\"$NODE_BINARY\" -e \"require('expo/scripts/resolveAppEntry')\" \"$PROJECT_ROOT\" ios relative | tail -n 1)\"\nfi\n\nif [[ -z \"$CLI_PATH\" ]]; then\n  # Use Expo CLI\n  export CLI_PATH=\"$(\"$NODE_BINARY\" --print \"require.resolve('@expo/cli')\")\"\nfi\nif [[ -z \"$BUNDLE_COMMAND\" ]]; then\n  # Default Expo CLI command for bundling\n  export BUNDLE_COMMAND=\"export:embed\"\nfi\n\n`\"$NODE_BINARY\" --print \"require('path').dirname(require.resolve('react-native/package.json')) + '/scripts/react-native-xcode.sh'\"`\n\n# Sentry\nset -e\n\nWITH_ENVIRONMENT=\"../node_modules/react-native/scripts/xcode/with-environment.sh\"\nREACT_NATIVE_XCODE=\"../node_modules/react-native/scripts/react-native-xcode.sh\"\nSENTRY_XCODE=\"../node_modules/@sentry/react-native/scripts/sentry-xcode.sh\"\nBUNDLE_REACT_NATIVE=\"/bin/sh $SENTRY_XCODE $REACT_NATIVE_XCODE\"\n\n# RN 0.69+\n/bin/sh -c \"$WITH_ENVIRONMENT \\\"$BUNDLE_REACT_NATIVE\\\"\"\n";
 		};
-		07CEEC66AB3308BADBCD7DDF /* [Expo] Configure project */ = {
+		1C7F29D034BC203871161D5C /* [CP] Embed Pods Frameworks */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+				"${PODS_ROOT}/Target Support Files/Pods-veworld-veworldTests/Pods-veworld-veworldTests-frameworks-${CONFIGURATION}-input-files.xcfilelist",
+			);
+			name = "[CP] Embed Pods Frameworks";
+			outputFileListPaths = (
+				"${PODS_ROOT}/Target Support Files/Pods-veworld-veworldTests/Pods-veworld-veworldTests-frameworks-${CONFIGURATION}-output-files.xcfilelist",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-veworld-veworldTests/Pods-veworld-veworldTests-frameworks.sh\"\n";
+			showEnvVarsInLog = 0;
+		};
+		47862D5C21DA0AF63C968CE5 /* [CP] Embed Pods Frameworks */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+				"${PODS_ROOT}/Target Support Files/Pods-veworld/Pods-veworld-frameworks-${CONFIGURATION}-input-files.xcfilelist",
+			);
+			name = "[CP] Embed Pods Frameworks";
+			outputFileListPaths = (
+				"${PODS_ROOT}/Target Support Files/Pods-veworld/Pods-veworld-frameworks-${CONFIGURATION}-output-files.xcfilelist",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-veworld/Pods-veworld-frameworks.sh\"\n";
+			showEnvVarsInLog = 0;
+		};
+		5FDBB46C770C987FC57A4CB8 /* [Expo] Configure project */ = {
 			isa = PBXShellScriptBuildPhase;
 			alwaysOutOfDate = 1;
 			buildActionMask = 2147483647;
@@ -371,135 +406,9 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "# This script configures Expo modules and generates the modules provider file.\nbash -l -c \"./Pods/Target\\ Support\\ Files/Pods-VeWorld/expo-configure-project.sh\"\n";
+			shellScript = "# This script configures Expo modules and generates the modules provider file.\nbash -l -c \"./Pods/Target\\ Support\\ Files/Pods-veworld-veworldTests/expo-configure-project.sh\"\n";
 		};
-		14DB6AE13673A1219CD2C6A5 /* [CP] Copy Pods Resources */ = {
-			isa = PBXShellScriptBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			inputFileListPaths = (
-				"${PODS_ROOT}/Target Support Files/Pods-VeWorld-VeWorldTests/Pods-VeWorld-VeWorldTests-resources-${CONFIGURATION}-input-files.xcfilelist",
-			);
-			name = "[CP] Copy Pods Resources";
-			outputFileListPaths = (
-				"${PODS_ROOT}/Target Support Files/Pods-VeWorld-VeWorldTests/Pods-VeWorld-VeWorldTests-resources-${CONFIGURATION}-output-files.xcfilelist",
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-			shellPath = /bin/sh;
-			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-VeWorld-VeWorldTests/Pods-VeWorld-VeWorldTests-resources.sh\"\n";
-			showEnvVarsInLog = 0;
-		};
-		286141B448BA4203BC57BAB1 /* Upload Debug Symbols to Sentry */ = {
-			isa = PBXShellScriptBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			inputPaths = (
-			);
-			name = "Upload Debug Symbols to Sentry";
-			outputPaths = (
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-			shellPath = /bin/sh;
-			shellScript = "if [ \"$SKIP_SENTRY\" == \"true\" ]; then\n    echo \"Skipping Sentry upload due to SKIP_SENTRY=true\"\nelse\n    echo \"Not skipping Sentry upload due to SKIP_SENTRY=false\"\n    WITH_ENVIRONMENT=\"../node_modules/react-native/scripts/xcode/with-environment.sh\"\n    if [ -f \"$WITH_ENVIRONMENT\" ]; then\n        . \"$WITH_ENVIRONMENT\"\n    fi \n    export SENTRY_PROPERTIES=sentry.properties\n    [ \"$SENTRY_INCLUDE_NATIVE_SOURCES\" = \"true\" ] && INCLUDE_SOURCES_FLAG=\"--include-sources\" || INCLUDE_SOURCES_FLAG=\"\"\n    ../node_modules/@sentry/cli/bin/sentry-cli debug-files upload \"$INCLUDE_SOURCES_FLAG\" \"$DWARF_DSYM_FOLDER_PATH\"\nfi\n";
-		};
-		4314F5A6351D71153E218B6F /* [CP] Check Pods Manifest.lock */ = {
-			isa = PBXShellScriptBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			inputFileListPaths = (
-			);
-			inputPaths = (
-				"${PODS_PODFILE_DIR_PATH}/Podfile.lock",
-				"${PODS_ROOT}/Manifest.lock",
-			);
-			name = "[CP] Check Pods Manifest.lock";
-			outputFileListPaths = (
-			);
-			outputPaths = (
-				"$(DERIVED_FILE_DIR)/Pods-VeWorld-VeWorldTests-checkManifestLockResult.txt",
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-			shellPath = /bin/sh;
-			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
-			showEnvVarsInLog = 0;
-		};
-		974AC4A591761334A7C2D255 /* [CP] Embed Pods Frameworks */ = {
-			isa = PBXShellScriptBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			inputFileListPaths = (
-				"${PODS_ROOT}/Target Support Files/Pods-VeWorld/Pods-VeWorld-frameworks-${CONFIGURATION}-input-files.xcfilelist",
-			);
-			name = "[CP] Embed Pods Frameworks";
-			outputFileListPaths = (
-				"${PODS_ROOT}/Target Support Files/Pods-VeWorld/Pods-VeWorld-frameworks-${CONFIGURATION}-output-files.xcfilelist",
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-			shellPath = /bin/sh;
-			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-VeWorld/Pods-VeWorld-frameworks.sh\"\n";
-			showEnvVarsInLog = 0;
-		};
-		B7D1B3471FD50480C3B83A25 /* [CP] Embed Pods Frameworks */ = {
-			isa = PBXShellScriptBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			inputFileListPaths = (
-				"${PODS_ROOT}/Target Support Files/Pods-VeWorld-VeWorldTests/Pods-VeWorld-VeWorldTests-frameworks-${CONFIGURATION}-input-files.xcfilelist",
-			);
-			name = "[CP] Embed Pods Frameworks";
-			outputFileListPaths = (
-				"${PODS_ROOT}/Target Support Files/Pods-VeWorld-VeWorldTests/Pods-VeWorld-VeWorldTests-frameworks-${CONFIGURATION}-output-files.xcfilelist",
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-			shellPath = /bin/sh;
-			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-VeWorld-VeWorldTests/Pods-VeWorld-VeWorldTests-frameworks.sh\"\n";
-			showEnvVarsInLog = 0;
-		};
-		D0FB06EE320C737E20576008 /* [CP] Copy Pods Resources */ = {
-			isa = PBXShellScriptBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			inputFileListPaths = (
-				"${PODS_ROOT}/Target Support Files/Pods-VeWorld/Pods-VeWorld-resources-${CONFIGURATION}-input-files.xcfilelist",
-			);
-			name = "[CP] Copy Pods Resources";
-			outputFileListPaths = (
-				"${PODS_ROOT}/Target Support Files/Pods-VeWorld/Pods-VeWorld-resources-${CONFIGURATION}-output-files.xcfilelist",
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-			shellPath = /bin/sh;
-			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-VeWorld/Pods-VeWorld-resources.sh\"\n";
-			showEnvVarsInLog = 0;
-		};
-		E22D8BDCDE3B1A7BD3B062D0 /* [CP] Check Pods Manifest.lock */ = {
-			isa = PBXShellScriptBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			inputFileListPaths = (
-			);
-			inputPaths = (
-				"${PODS_PODFILE_DIR_PATH}/Podfile.lock",
-				"${PODS_ROOT}/Manifest.lock",
-			);
-			name = "[CP] Check Pods Manifest.lock";
-			outputFileListPaths = (
-			);
-			outputPaths = (
-				"$(DERIVED_FILE_DIR)/Pods-VeWorld-checkManifestLockResult.txt",
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-			shellPath = /bin/sh;
-			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
-			showEnvVarsInLog = 0;
-		};
-		EA618A86C8C3F3710F1DEB40 /* [Expo] Configure project */ = {
+		6574953C4226A445210F91E6 /* [Expo] Configure project */ = {
 			isa = PBXShellScriptBuildPhase;
 			alwaysOutOfDate = 1;
 			buildActionMask = 2147483647;
@@ -516,7 +425,85 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "# This script configures Expo modules and generates the modules provider file.\nbash -l -c \"./Pods/Target\\ Support\\ Files/Pods-VeWorld-VeWorldTests/expo-configure-project.sh\"\n";
+			shellScript = "# This script configures Expo modules and generates the modules provider file.\nbash -l -c \"./Pods/Target\\ Support\\ Files/Pods-veworld/expo-configure-project.sh\"\n";
+		};
+		85E0CC0B330B08B333D92670 /* [CP] Copy Pods Resources */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+				"${PODS_ROOT}/Target Support Files/Pods-veworld-veworldTests/Pods-veworld-veworldTests-resources-${CONFIGURATION}-input-files.xcfilelist",
+			);
+			name = "[CP] Copy Pods Resources";
+			outputFileListPaths = (
+				"${PODS_ROOT}/Target Support Files/Pods-veworld-veworldTests/Pods-veworld-veworldTests-resources-${CONFIGURATION}-output-files.xcfilelist",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-veworld-veworldTests/Pods-veworld-veworldTests-resources.sh\"\n";
+			showEnvVarsInLog = 0;
+		};
+		D16F490314E131B3FE935C07 /* [CP] Check Pods Manifest.lock */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+			);
+			inputPaths = (
+				"${PODS_PODFILE_DIR_PATH}/Podfile.lock",
+				"${PODS_ROOT}/Manifest.lock",
+			);
+			name = "[CP] Check Pods Manifest.lock";
+			outputFileListPaths = (
+			);
+			outputPaths = (
+				"$(DERIVED_FILE_DIR)/Pods-veworld-veworldTests-checkManifestLockResult.txt",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
+			showEnvVarsInLog = 0;
+		};
+		D960D14F20DDEBF9FE8BFC87 /* [CP] Check Pods Manifest.lock */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+			);
+			inputPaths = (
+				"${PODS_PODFILE_DIR_PATH}/Podfile.lock",
+				"${PODS_ROOT}/Manifest.lock",
+			);
+			name = "[CP] Check Pods Manifest.lock";
+			outputFileListPaths = (
+			);
+			outputPaths = (
+				"$(DERIVED_FILE_DIR)/Pods-veworld-checkManifestLockResult.txt",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
+			showEnvVarsInLog = 0;
+		};
+		F0639312E4812776841AE5FE /* [CP] Copy Pods Resources */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+				"${PODS_ROOT}/Target Support Files/Pods-veworld/Pods-veworld-resources-${CONFIGURATION}-input-files.xcfilelist",
+			);
+			name = "[CP] Copy Pods Resources";
+			outputFileListPaths = (
+				"${PODS_ROOT}/Target Support Files/Pods-veworld/Pods-veworld-resources-${CONFIGURATION}-output-files.xcfilelist",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-veworld/Pods-veworld-resources.sh\"\n";
+			showEnvVarsInLog = 0;
 		};
 /* End PBXShellScriptBuildPhase section */
 
@@ -525,8 +512,8 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				00E356F31AD99517003FC87E /* VeWorldTests.m in Sources */,
-				B96607240FA3A4253357B621 /* ExpoModulesProvider.swift in Sources */,
+				00E356F31AD99517003FC87E /* veworldTests.m in Sources */,
+				D8A21D0B7BF7244D804FC754 /* ExpoModulesProvider.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -534,17 +521,15 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				EA3C11732BED116000CBE105 /* ScreenShield.swift in Sources */,
-				EACA73AE2C24286C00D3D207 /* CloudKitManager.swift in Sources */,
-				EA4BE28D2AD5BBF400DA4312 /* SampleModule.m in Sources */,
-				EA4BE28F2AD5BCC000DA4312 /* SampleModule.swift in Sources */,
+				F4037AD82CC699A400317CE4 /* ScreenShield.swift in Sources */,
+				F4037AD92CC699A400317CE4 /* CloudKitManager.swift in Sources */,
+				F4037ADA2CC699A400317CE4 /* CloudKitManager.m in Sources */,
+				F4037ADB2CC699A400317CE4 /* ScreenShieldRN.swift in Sources */,
+				F4037ADC2CC699A400317CE4 /* RCTMinimizer.m in Sources */,
+				F4037ADD2CC699A400317CE4 /* ScreenShieldRN.m in Sources */,
 				13B07FBC1A68108700A75B9A /* AppDelegate.mm in Sources */,
-				EACA73AC2C24278E00D3D207 /* CloudKitManager.m in Sources */,
 				13B07FC11A68108700A75B9A /* main.m in Sources */,
-				EAB2E3942BED003A0008F719 /* ScreenShieldRN.m in Sources */,
-				EA4BE2962AD5BF6300DA4312 /* RCTMinimizer.m in Sources */,
-				EAB2E3922BED00130008F719 /* ScreenShieldRN.swift in Sources */,
-				F97D63C8AA80DB4FC024258C /* ExpoModulesProvider.swift in Sources */,
+				C4475CA9453B4C89AE1AC333 /* ExpoModulesProvider.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -553,7 +538,7 @@
 /* Begin PBXTargetDependency section */
 		00E356F51AD99517003FC87E /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
-			target = 13B07F861A680F5B00A75B9A /* VeWorld */;
+			target = 13B07F861A680F5B00A75B9A /* veworld */;
 			targetProxy = 00E356F41AD99517003FC87E /* PBXContainerItemProxy */;
 		};
 /* End PBXTargetDependency section */
@@ -561,97 +546,82 @@
 /* Begin XCBuildConfiguration section */
 		00E356F61AD99517003FC87E /* Debug */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = 9F91A904191653D3D0B3842D /* Pods-VeWorld-VeWorldTests.debug.xcconfig */;
+			baseConfigurationReference = 8815694E1DCE68C109F72447 /* Pods-veworld-veworldTests.debug.xcconfig */;
 			buildSettings = {
 				BUNDLE_LOADER = "$(TEST_HOST)";
-				CURRENT_PROJECT_VERSION = 199;
-				DEVELOPMENT_TEAM = RKZMX8AZ6P;
 				GCC_PREPROCESSOR_DEFINITIONS = (
 					"DEBUG=1",
 					"$(inherited)",
 				);
-				INFOPLIST_FILE = VeWorldTests/Info.plist;
-				IPHONEOS_DEPLOYMENT_TARGET = 13.0;
+				INFOPLIST_FILE = veworldTests/Info.plist;
+				IPHONEOS_DEPLOYMENT_TARGET = 13.4;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
 					"@loader_path/Frameworks",
 				);
-				MARKETING_VERSION = 1.9.5;
 				OTHER_LDFLAGS = (
 					"-ObjC",
 					"-lc++",
 					"$(inherited)",
 				);
 				OTHER_SWIFT_FLAGS = "$(inherited) -D EXPO_CONFIGURATION_DEBUG";
-				PRODUCT_BUNDLE_IDENTIFIER = org.vechain.VeWorld.app;
+				PRODUCT_BUNDLE_IDENTIFIER = "org.reactjs.native.example.$(PRODUCT_NAME:rfc1034identifier)";
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				SWIFT_VERSION = 5.0;
-				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/VeWorld.app/VeWorld";
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/veworld.app/veworld";
 			};
 			name = Debug;
 		};
 		00E356F71AD99517003FC87E /* Release */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = 37CA29DCAEF3B5BBEFFD925C /* Pods-VeWorld-VeWorldTests.release.xcconfig */;
+			baseConfigurationReference = 7FFF107FA0603F7B6DDD3381 /* Pods-veworld-veworldTests.release.xcconfig */;
 			buildSettings = {
 				BUNDLE_LOADER = "$(TEST_HOST)";
 				COPY_PHASE_STRIP = NO;
-				CURRENT_PROJECT_VERSION = 199;
-				DEVELOPMENT_TEAM = RKZMX8AZ6P;
-				INFOPLIST_FILE = VeWorldTests/Info.plist;
-				IPHONEOS_DEPLOYMENT_TARGET = 13.0;
+				INFOPLIST_FILE = veworldTests/Info.plist;
+				IPHONEOS_DEPLOYMENT_TARGET = 13.4;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
 					"@loader_path/Frameworks",
 				);
-				MARKETING_VERSION = 1.9.5;
 				OTHER_LDFLAGS = (
 					"-ObjC",
 					"-lc++",
 					"$(inherited)",
 				);
 				OTHER_SWIFT_FLAGS = "$(inherited) -D EXPO_CONFIGURATION_RELEASE";
-				PRODUCT_BUNDLE_IDENTIFIER = org.vechain.VeWorld.app;
+				PRODUCT_BUNDLE_IDENTIFIER = "org.reactjs.native.example.$(PRODUCT_NAME:rfc1034identifier)";
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				SWIFT_VERSION = 5.0;
-				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/VeWorld.app/VeWorld";
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/veworld.app/veworld";
 			};
 			name = Release;
 		};
 		13B07F941A680F5B00A75B9A /* Debug */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = F387893E07902C3257C104B2 /* Pods-VeWorld.debug.xcconfig */;
+			baseConfigurationReference = 4E9C89D61C9B559D130015A3 /* Pods-veworld.debug.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
-				ASSETCATALOG_COMPILER_INCLUDE_ALL_APPICON_ASSETS = NO;
-				CLANG_CXX_LANGUAGE_STANDARD = "c++17";
 				CLANG_ENABLE_MODULES = YES;
-				CODE_SIGN_ENTITLEMENTS = VeWorld/VeWorld.entitlements;
-				CODE_SIGN_IDENTITY = "Apple Development";
-				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 199;
+				CODE_SIGN_ENTITLEMENTS = veworld/veworld.entitlements;
+				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_TEAM = RKZMX8AZ6P;
 				ENABLE_BITCODE = NO;
-				INFOPLIST_FILE = VeWorld/Info.plist;
-				INFOPLIST_KEY_CFBundleDisplayName = VeWorld;
-				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.utilities";
+				INFOPLIST_FILE = veworld/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 1.9.5;
+				MARKETING_VERSION = 1.0;
 				OTHER_LDFLAGS = (
 					"$(inherited)",
 					"-ObjC",
 					"-lc++",
 				);
 				OTHER_SWIFT_FLAGS = "$(inherited) -D EXPO_CONFIGURATION_DEBUG";
-				PRODUCT_BUNDLE_IDENTIFIER = org.vechain.veworld.app;
-				PRODUCT_NAME = VeWorld;
-				PROVISIONING_PROFILE_SPECIFIER = "";
-				"SWIFT_OBJC_BRIDGING_HEADER[arch=*]" = "VeWorld-Bridging-Header.h";
+				PRODUCT_BUNDLE_IDENTIFIER = "org.reactjs.native.example.$(PRODUCT_NAME:rfc1034identifier)";
+				"PRODUCT_BUNDLE_IDENTIFIER[sdk=iphoneos*]" = org.vechain.veworld.app;
+				PRODUCT_NAME = veworld;
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
 				SWIFT_VERSION = 5.0;
 				VERSIONING_SYSTEM = "apple-generic";
@@ -660,37 +630,28 @@
 		};
 		13B07F951A680F5B00A75B9A /* Release */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = DE9CC861D48E11250291CE6A /* Pods-VeWorld.release.xcconfig */;
+			baseConfigurationReference = A271C8C63413161DA32AB8D0 /* Pods-veworld.release.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
-				ASSETCATALOG_COMPILER_INCLUDE_ALL_APPICON_ASSETS = NO;
-				CLANG_CXX_LANGUAGE_STANDARD = "c++17";
 				CLANG_ENABLE_MODULES = YES;
-				CODE_SIGN_ENTITLEMENTS = VeWorld/VeWorld.entitlements;
-				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Distribution";
-				CODE_SIGN_STYLE = Manual;
-				CURRENT_PROJECT_VERSION = 199;
-				DEVELOPMENT_TEAM = "";
-				"DEVELOPMENT_TEAM[sdk=iphoneos*]" = RKZMX8AZ6P;
-				INFOPLIST_FILE = VeWorld/Info.plist;
-				INFOPLIST_KEY_CFBundleDisplayName = VeWorld;
-				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.utilities";
+				CODE_SIGN_ENTITLEMENTS = veworld/veworld.entitlements;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = RKZMX8AZ6P;
+				INFOPLIST_FILE = veworld/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 1.9.5;
+				MARKETING_VERSION = 1.0;
 				OTHER_LDFLAGS = (
 					"$(inherited)",
 					"-ObjC",
 					"-lc++",
 				);
 				OTHER_SWIFT_FLAGS = "$(inherited) -D EXPO_CONFIGURATION_RELEASE";
-				PRODUCT_BUNDLE_IDENTIFIER = org.vechain.veworld.app;
-				PRODUCT_NAME = VeWorld;
-				PROVISIONING_PROFILE_SPECIFIER = "";
-				"PROVISIONING_PROFILE_SPECIFIER[sdk=iphoneos*]" = "match AppStore org.vechain.veworld.app";
-				"SWIFT_OBJC_BRIDGING_HEADER[arch=*]" = "VeWorld-Bridging-Header.h";
+				PRODUCT_BUNDLE_IDENTIFIER = "org.reactjs.native.example.$(PRODUCT_NAME:rfc1034identifier)";
+				"PRODUCT_BUNDLE_IDENTIFIER[sdk=iphoneos*]" = org.vechain.veworld.app;
+				PRODUCT_NAME = veworld;
 				SWIFT_VERSION = 5.0;
 				VERSIONING_SYSTEM = "apple-generic";
 			};
@@ -700,8 +661,9 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
+				CC = "";
 				CLANG_ANALYZER_LOCALIZABILITY_NONLOCALIZED = YES;
-				CLANG_CXX_LANGUAGE_STANDARD = "c++17";
+				CLANG_CXX_LANGUAGE_STANDARD = "c++20";
 				CLANG_CXX_LIBRARY = "libc++";
 				CLANG_ENABLE_MODULES = YES;
 				CLANG_ENABLE_OBJC_ARC = YES;
@@ -727,9 +689,10 @@
 				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				COPY_PHASE_STRIP = NO;
+				CXX = "";
 				ENABLE_STRICT_OBJC_MSGSEND = YES;
 				ENABLE_TESTABILITY = YES;
-				"EXCLUDED_ARCHS[sdk=iphonesimulator*]" = i386;
+				"EXCLUDED_ARCHS[sdk=iphonesimulator*]" = "";
 				GCC_C_LANGUAGE_STANDARD = gnu99;
 				GCC_DYNAMIC_NO_PIC = NO;
 				GCC_NO_COMMON_BLOCKS = YES;
@@ -737,7 +700,6 @@
 				GCC_PREPROCESSOR_DEFINITIONS = (
 					"DEBUG=1",
 					"$(inherited)",
-					_LIBCPP_ENABLE_CXX17_REMOVED_UNARY_BINARY_FUNCTION,
 				);
 				GCC_SYMBOLS_PRIVATE_EXTERN = NO;
 				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
@@ -746,7 +708,9 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 13.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 13.4;
+				LD = "";
+				LDPLUSPLUS = "";
 				LD_RUNPATH_SEARCH_PATHS = (
 					/usr/lib/swift,
 					"$(inherited)",
@@ -758,20 +722,21 @@
 				);
 				MTL_ENABLE_DEBUG_INFO = YES;
 				ONLY_ACTIVE_ARCH = YES;
-				OTHER_CFLAGS = "$(inherited)";
 				OTHER_CPLUSPLUSFLAGS = (
 					"$(OTHER_CFLAGS)",
 					"-DFOLLY_NO_CONFIG",
 					"-DFOLLY_MOBILE=1",
 					"-DFOLLY_USE_LIBCPP=1",
+					"-DFOLLY_CFG_NO_COROUTINES=1",
+					"-DFOLLY_HAVE_CLOCK_GETTIME=1",
 				);
 				OTHER_LDFLAGS = (
 					"$(inherited)",
-					"-Wl",
-					"-ld_classic",
+					" ",
 				);
 				REACT_NATIVE_PATH = "${PODS_ROOT}/../../node_modules/react-native";
 				SDKROOT = iphoneos;
+				USE_HERMES = true;
 			};
 			name = Debug;
 		};
@@ -779,8 +744,9 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
+				CC = "";
 				CLANG_ANALYZER_LOCALIZABILITY_NONLOCALIZED = YES;
-				CLANG_CXX_LANGUAGE_STANDARD = "c++17";
+				CLANG_CXX_LANGUAGE_STANDARD = "c++20";
 				CLANG_CXX_LIBRARY = "libc++";
 				CLANG_ENABLE_MODULES = YES;
 				CLANG_ENABLE_OBJC_ARC = YES;
@@ -806,22 +772,21 @@
 				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				COPY_PHASE_STRIP = YES;
+				CXX = "";
 				ENABLE_NS_ASSERTIONS = NO;
 				ENABLE_STRICT_OBJC_MSGSEND = YES;
-				"EXCLUDED_ARCHS[sdk=iphonesimulator*]" = i386;
+				"EXCLUDED_ARCHS[sdk=iphonesimulator*]" = "";
 				GCC_C_LANGUAGE_STANDARD = gnu99;
 				GCC_NO_COMMON_BLOCKS = YES;
-				GCC_PREPROCESSOR_DEFINITIONS = (
-					"$(inherited)",
-					_LIBCPP_ENABLE_CXX17_REMOVED_UNARY_BINARY_FUNCTION,
-				);
 				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
 				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
 				GCC_WARN_UNDECLARED_SELECTOR = YES;
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 13.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 13.4;
+				LD = "";
+				LDPLUSPLUS = "";
 				LD_RUNPATH_SEARCH_PATHS = (
 					/usr/lib/swift,
 					"$(inherited)",
@@ -832,20 +797,21 @@
 					"\"$(inherited)\"",
 				);
 				MTL_ENABLE_DEBUG_INFO = NO;
-				OTHER_CFLAGS = "$(inherited)";
 				OTHER_CPLUSPLUSFLAGS = (
 					"$(OTHER_CFLAGS)",
 					"-DFOLLY_NO_CONFIG",
 					"-DFOLLY_MOBILE=1",
 					"-DFOLLY_USE_LIBCPP=1",
+					"-DFOLLY_CFG_NO_COROUTINES=1",
+					"-DFOLLY_HAVE_CLOCK_GETTIME=1",
 				);
 				OTHER_LDFLAGS = (
 					"$(inherited)",
-					"-Wl",
-					"-ld_classic",
+					" ",
 				);
 				REACT_NATIVE_PATH = "${PODS_ROOT}/../../node_modules/react-native";
 				SDKROOT = iphoneos;
+				USE_HERMES = true;
 				VALIDATE_PRODUCT = YES;
 			};
 			name = Release;
@@ -853,7 +819,7 @@
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
-		00E357021AD99517003FC87E /* Build configuration list for PBXNativeTarget "VeWorldTests" */ = {
+		00E357021AD99517003FC87E /* Build configuration list for PBXNativeTarget "veworldTests" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				00E356F61AD99517003FC87E /* Debug */,
@@ -862,7 +828,7 @@
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
 		};
-		13B07F931A680F5B00A75B9A /* Build configuration list for PBXNativeTarget "VeWorld" */ = {
+		13B07F931A680F5B00A75B9A /* Build configuration list for PBXNativeTarget "veworld" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				13B07F941A680F5B00A75B9A /* Debug */,
@@ -871,7 +837,7 @@
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
 		};
-		83CBB9FA1A601CBA00E9B192 /* Build configuration list for PBXProject "VeWorld" */ = {
+		83CBB9FA1A601CBA00E9B192 /* Build configuration list for PBXProject "veworld" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				83CBBA201A601CBA00E9B192 /* Debug */,

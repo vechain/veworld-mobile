@@ -44,14 +44,9 @@ import { PersistQueryClientProvider } from "@tanstack/react-query-persist-client
 import { clientPersister, queryClient } from "~Api/QueryProvider"
 import NetInfo from "@react-native-community/netinfo"
 import { onlineManager } from "@tanstack/react-query"
-import { useFlipper } from "@react-navigation/devtools"
 import { Routes } from "~Navigation"
 
 const { fontFamily } = typography
-
-if (__DEV__) {
-    require("basil-ws-flipper").wsDebugPlugin
-}
 
 const isHermes = () => !!global.HermesInternal
 info(ERROR_EVENTS.APP, "is Hermes active : ", isHermes())
@@ -167,7 +162,6 @@ const NavigationProvider = ({ children }) => {
     const navigationRef = useNavigationContainerRef()
     const routeNameRef = useRef(null)
     const dispatch = useAppDispatch()
-    useFlipper(navigationRef)
 
     return (
         <NavigationContainer
