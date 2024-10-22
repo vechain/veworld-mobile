@@ -251,6 +251,7 @@ export const HistoryScreen = () => {
     return (
         <Layout
             safeAreaTestID="History_Screen"
+            noBackButton
             fixedHeader={
                 <BaseView flexDirection="row" justifyContent="space-between">
                     <BaseText typographyFont="title">{LL.BTN_HISTORY()}</BaseText>
