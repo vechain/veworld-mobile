@@ -10,7 +10,7 @@ import {
     NFTTransferCard,
     Layout,
 } from "~Components"
-import { RootStackParamListHome, Routes } from "~Navigation"
+import { HistoryStackParamList, Routes } from "~Navigation"
 import { Linking } from "react-native"
 import { useBottomSheetModal, useTransferAddContact } from "~Hooks"
 import { DateUtils, HexUtils, TransactionUtils } from "~Utils"
@@ -40,9 +40,9 @@ import { selectActivity, selectSelectedNetwork, useAppSelector } from "~Storage/
 import { AddCustomTokenBottomSheet } from "../ManageCustomTokenScreen/BottomSheets"
 import { ExplorerLinkType, getExplorerLink } from "~Utils/AddressUtils/AddressUtils"
 
-type Props = NativeStackScreenProps<RootStackParamListHome, Routes.ACTIVITY_DETAILS>
+type Props = NativeStackScreenProps<HistoryStackParamList, Routes.ACTIVITY_DETAILS>
 
-export const ActivityDetailsScreen = ({ route }: Props) => {
+export const ActivityDetailsScreen = ({ route, navigation }: Props) => {
     const { activity, token, isSwap, decodedClauses } = route.params
 
     const network = useAppSelector(selectSelectedNetwork)
@@ -119,6 +119,10 @@ export const ActivityDetailsScreen = ({ route }: Props) => {
         }
     }, [activity, activityFromStore, token])
 
+    const onGoBack = useCallback(() => {
+        navigation.navigate(Routes.HISTORY)
+    }, [navigation])
+
     const onAddCustomToken = useCallback(
         (tokenAddress: string) => {
             setCustomTokenAddress(tokenAddress)
@@ -134,6 +138,7 @@ export const ActivityDetailsScreen = ({ route }: Props) => {
                 safeAreaTestID="Activity_Details_Screen"
                 noStaticBottomPadding
                 title={getActivityTitle(activity, LL, isSwap)}
+                onGoBack={onGoBack}
                 body={
                     <>
                         <BaseText typographyFont="subSubTitleLight">{dateTimeActivity}</BaseText>
