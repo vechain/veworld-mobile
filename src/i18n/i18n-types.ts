@@ -749,7 +749,7 @@ type RootTranslation = {
 	 */
 	TITLE_WALLET_MANAGEMENT: string
 	/**
-	 * S​e​t​t​i​n​g​s
+	 * M​e​n​u
 	 */
 	TITLE_SETTINGS: string
 	/**
@@ -1809,6 +1809,10 @@ type RootTranslation = {
 	 */
 	CONNECTION_REQUEST_SIGN_DESCRIPTION: string
 	/**
+	 * ●​ ​R​e​q​u​e​s​t​ ​y​o​u​r​ ​s​i​g​n​a​t​u​r​e​ ​o​n​ ​t​y​p​e​d​ ​d​a​t​a​ ​m​e​s​s​a​g​e
+	 */
+	CONNECTION_REQUEST_SIGN_TYPED_DATA_DESCRIPTION: string
+	/**
 	 * S​i​g​n​ ​a​ ​c​e​r​t​i​f​i​c​a​t​e
 	 */
 	CONNECTED_APP_SIGN_REQUEST_TITLE: string
@@ -1833,6 +1837,10 @@ type RootTranslation = {
 	 * Y​o​u​r​ ​S​i​g​n​a​t​u​r​e​ ​i​s​ ​b​e​i​n​g​ ​r​e​q​u​e​s​t​e​d​ ​t​o​ ​s​i​g​n​ ​a​ ​m​e​s​s​a​g​e
 	 */
 	CONNECTED_APP_SIGN_MESSAGE_REQUEST_DESCRIPTION: string
+	/**
+	 * Y​o​u​r​ ​S​i​g​n​a​t​u​r​e​ ​i​s​ ​b​e​i​n​g​ ​r​e​q​u​e​s​t​e​d​ ​t​o​ ​s​i​g​n​ ​t​y​p​e​d​ ​d​a​t​a​ ​m​e​s​s​a​g​e
+	 */
+	CONNECTED_APP_SIGN_TYPED_DATA_REQUEST_DESCRIPTION: string
 	/**
 	 * M​e​s​s​a​g​e​:​ 
 	 */
@@ -3142,6 +3150,10 @@ type RootTranslation = {
 	 */
 	CONNECTED_APP_swap_tokens_for_tokens: string
 	/**
+	 * S​i​g​n​ ​t​y​p​e​d​ ​d​a​t​a
+	 */
+	CONNECTED_APP_SIGN_TYPED_DATA: string
+	/**
 	 * O​u​t​c​o​m​e​s
 	 */
 	OUTCOMES: string
@@ -3177,6 +3189,22 @@ type RootTranslation = {
 	 * R​e​c​e​i​v​e​d
 	 */
 	RECEIVED: string
+	/**
+	 * D​o​m​a​i​n
+	 */
+	CONNECTED_APP_DOMAIN: string
+	/**
+	 * U​r​l
+	 */
+	CONNECTED_APP_URL: string
+	/**
+	 * v​e​r​s​i​o​n
+	 */
+	CONNECTED_APP_VERSION: string
+	/**
+	 * C​o​n​t​r​a​c​t
+	 */
+	CONNECTED_APP_CONTRACT: string
 	/**
 	 * S​e​c​u​r​i​t​y​ ​E​n​h​a​n​c​e​m​e​n​t
 	 */
@@ -4002,7 +4030,7 @@ VeWorld will never ask you for them.
 	 */
 	TITLE_WALLET_MANAGEMENT: () => LocalizedString
 	/**
-	 * Settings
+	 * Menu
 	 */
 	TITLE_SETTINGS: () => LocalizedString
 	/**
@@ -5039,6 +5067,10 @@ Try reconnect your device to the internet.
 	 */
 	CONNECTION_REQUEST_SIGN_DESCRIPTION: () => LocalizedString
 	/**
+	 * ● Request your signature on typed data message
+	 */
+	CONNECTION_REQUEST_SIGN_TYPED_DATA_DESCRIPTION: () => LocalizedString
+	/**
 	 * Sign a certificate
 	 */
 	CONNECTED_APP_SIGN_REQUEST_TITLE: () => LocalizedString
@@ -5062,6 +5094,10 @@ Try reconnect your device to the internet.
 	 * Your Signature is being requested to sign a message
 	 */
 	CONNECTED_APP_SIGN_MESSAGE_REQUEST_DESCRIPTION: () => LocalizedString
+	/**
+	 * Your Signature is being requested to sign typed data message
+	 */
+	CONNECTED_APP_SIGN_TYPED_DATA_REQUEST_DESCRIPTION: () => LocalizedString
 	/**
 	 * Message: 
 	 */
@@ -6363,6 +6399,10 @@ Try reconnect your device to the internet.
 	 */
 	CONNECTED_APP_swap_tokens_for_tokens: () => LocalizedString
 	/**
+	 * Sign typed data
+	 */
+	CONNECTED_APP_SIGN_TYPED_DATA: () => LocalizedString
+	/**
 	 * Outcomes
 	 */
 	OUTCOMES: () => LocalizedString
@@ -6398,6 +6438,22 @@ Try reconnect your device to the internet.
 	 * Received
 	 */
 	RECEIVED: () => LocalizedString
+	/**
+	 * Domain
+	 */
+	CONNECTED_APP_DOMAIN: () => LocalizedString
+	/**
+	 * Url
+	 */
+	CONNECTED_APP_URL: () => LocalizedString
+	/**
+	 * version
+	 */
+	CONNECTED_APP_VERSION: () => LocalizedString
+	/**
+	 * Contract
+	 */
+	CONNECTED_APP_CONTRACT: () => LocalizedString
 	/**
 	 * Security Enhancement
 	 */

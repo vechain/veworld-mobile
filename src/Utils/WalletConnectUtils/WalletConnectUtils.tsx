@@ -115,6 +115,7 @@ export function shouldAutoNavigate(navState: NavigationState<ReactNavigation.Roo
         route =>
             route.name === Routes.CONNECTED_APP_SEND_TRANSACTION_SCREEN ||
             route.name === Routes.CONNECTED_APP_SIGN_CERTIFICATE_SCREEN ||
+            route.name === Routes.CONNECTED_APP_SIGN_TYPED_MESSAGE_SCREEN ||
             route.name === Routes.CONNECT_APP_SCREEN ||
             route.name === Routes.LEDGER_SIGN_TRANSACTION ||
             route.name === Routes.LEDGER_SIGN_CERTIFICATE,
@@ -174,6 +175,17 @@ export function getSendTxOptions(requestEvent: PendingRequestTypes.Struct): Conn
         return requestEvent.params.request.params[0].options || {}
     } catch (e) {
         warn(ERROR_EVENTS.WALLET_CONNECT, "Failed to extract send tx options", e)
+        return {}
+    }
+}
+
+export function getSignTypedDataOptions(
+    requestEvent: PendingRequestTypes.Struct,
+): Omit<Connex.Signer.CertOptions, "link" | "onAccepted"> {
+    try {
+        return requestEvent.params.request.params[0].options ?? {}
+    } catch (e) {
+        warn(ERROR_EVENTS.WALLET_CONNECT, "Failed to extract send typed data options", e)
         return {}
     }
 }

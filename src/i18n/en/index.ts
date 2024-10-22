@@ -499,12 +499,14 @@ const en: BaseTranslation = {
     CONNECTION_REQUEST_SUBTITLE: "{name} is asking for access to:",
     CONNECTION_REQUEST_TRANSACTION_DESCRIPTION: "\u25CF Request transactions to send to Vechain Thor",
     CONNECTION_REQUEST_SIGN_DESCRIPTION: "\u25CF Request your signature on certificates or identification and agreements",
+    CONNECTION_REQUEST_SIGN_TYPED_DATA_DESCRIPTION: "\u25CF Request your signature on typed data message",
     CONNECTED_APP_SIGN_REQUEST_TITLE: "Sign a certificate",
     CONNECTED_APP_SIGN_MESSAGE_TITLE: "Sign a message",
     CONNECTED_APP_CHANGE_ACCOUNT_REQUEST_TITLE: "Change account",
     CONNECTED_APP_SIGN_REQUEST_DESCRIPTION: "Your Signature is being requested to sign a certificate",
     CONNECTED_APP_CHANGE_ACCOUNT_REQUEST_DESCRIPTION: "You have previously connected to {dapp:string} with a different account. Do you want to switch to the account connected to {dapp:string}?",
     CONNECTED_APP_SIGN_MESSAGE_REQUEST_DESCRIPTION: "Your Signature is being requested to sign a message",
+    CONNECTED_APP_SIGN_TYPED_DATA_REQUEST_DESCRIPTION: "Your Signature is being requested to sign typed data message",
     CONNECTED_APP_MESSAGE_HEADER: "Message: ",
     CONNECTED_APP_SIGN_TRANSACTION_REQUEST_TITLE: "Sign and Send a transaction",
     CONNECTED_APP_SIGN_TRANSACTION_REQUEST_DESCRIPTION: "Your Signature is being requested to sign and send a transaction",
@@ -899,6 +901,7 @@ const en: BaseTranslation = {
     CONNECTED_APP_swap_vet_for_tokens: "Swap VET for tokens",
     CONNECTED_APP_swap_tokens_for_vet: "Swap tokens for VET",
     CONNECTED_APP_swap_tokens_for_tokens: "Swap tokens for tokens",
+    CONNECTED_APP_SIGN_TYPED_DATA: "Sign typed data",
     OUTCOMES: "Outcomes",
     TYPE: "Type",
     TOKEN_SYMBOL: "Token symbol",
@@ -913,7 +916,10 @@ const en: BaseTranslation = {
     // Transfers
 
     // Connected App
-
+    CONNECTED_APP_DOMAIN: "Domain",
+    CONNECTED_APP_URL: "Url",
+    CONNECTED_APP_VERSION: "version",
+    CONNECTED_APP_CONTRACT: "Contract",
     // Connected App Labels
 
     // Tokens
