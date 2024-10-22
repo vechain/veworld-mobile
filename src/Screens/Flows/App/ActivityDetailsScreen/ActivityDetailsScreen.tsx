@@ -10,7 +10,7 @@ import {
     NFTTransferCard,
     Layout,
 } from "~Components"
-import { RootStackParamListHome, Routes } from "~Navigation"
+import { HistoryStackParamList, Routes } from "~Navigation"
 import { Linking } from "react-native"
 import { useBottomSheetModal, useTransferAddContact } from "~Hooks"
 import { DateUtils, HexUtils, TransactionUtils } from "~Utils"
@@ -40,7 +40,7 @@ import { selectActivity, selectSelectedNetwork, useAppSelector } from "~Storage/
 import { AddCustomTokenBottomSheet } from "../ManageCustomTokenScreen/BottomSheets"
 import { ExplorerLinkType, getExplorerLink } from "~Utils/AddressUtils/AddressUtils"
 
-type Props = NativeStackScreenProps<RootStackParamListHome, Routes.ACTIVITY_DETAILS>
+type Props = NativeStackScreenProps<HistoryStackParamList, Routes.ACTIVITY_DETAILS>
 
 export const ActivityDetailsScreen = ({ route, navigation }: Props) => {
     const { activity, token, isSwap, decodedClauses } = route.params
