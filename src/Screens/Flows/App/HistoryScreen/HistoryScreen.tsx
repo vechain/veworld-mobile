@@ -23,6 +23,7 @@ import {
     SignedCertificateActivityBox,
     SkeletonActivityBox,
     SwapTransactionActivityBox,
+    TypedDataActivityBox,
 } from "./Components"
 import {
     AccountWithDevice,
@@ -34,6 +35,7 @@ import {
     FungibleTokenActivity,
     NonFungibleTokenActivity,
     SignCertActivity,
+    TypedDataActivity,
     TransactionOutcomes,
     WatchedAccount,
 } from "~Model"
@@ -168,6 +170,14 @@ export const HistoryScreen = () => {
                             onPress={onActivityPress}
                         />
                     )
+                case ActivityType.SIGN_TYPED_DATA:
+                    return (
+                        <TypedDataActivityBox
+                            key={id}
+                            activity={activity as TypedDataActivity}
+                            onPress={onActivityPress}
+                        />
+                    )
             }
         },
         [onActivityPress, tokens],
@@ -241,6 +251,7 @@ export const HistoryScreen = () => {
     return (
         <Layout
             safeAreaTestID="History_Screen"
+            noBackButton
             fixedHeader={
                 <BaseView flexDirection="row" justifyContent="space-between">
                     <BaseText typographyFont="title">{LL.BTN_HISTORY()}</BaseText>

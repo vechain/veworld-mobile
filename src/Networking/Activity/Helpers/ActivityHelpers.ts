@@ -11,6 +11,8 @@ import {
     Network,
     NonFungibleTokenActivity,
     SignCertActivity,
+    TypedDataActivity,
+    TypedData,
 } from "~Model"
 import { EventTypeResponse, IncomingTransferResponse, TransactionsResponse } from "~Networking"
 import { Transaction } from "thor-devkit"
@@ -235,6 +237,27 @@ export const createSignCertificateActivity = (
         linkUrl,
         content,
         purpose,
+    }
+}
+
+/**
+ * This function creates a new sign typed data activity object.
+ *
+ * @param from - The origin of the activity.
+ * @param sender - The sender of the activity
+ * @param content - The typed data
+ * @returns A new sign typed data activity object.
+ */
+export const createSingTypedDataActivity = (from: string, sender: string, content: TypedData): TypedDataActivity => {
+    return {
+        from,
+        id: uuid.v4().toString(),
+        type: ActivityType.SIGN_TYPED_DATA,
+        timestamp: Date.now(),
+        isTransaction: false,
+        typedData: content,
+        sender,
+        clauses: [],
     }
 }
 

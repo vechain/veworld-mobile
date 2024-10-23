@@ -1,4 +1,5 @@
 import { PendingRequestTypes, SessionTypes, SignClientTypes } from "@walletconnect/types"
+import { ethers } from "ethers"
 
 export type DAppSourceType = "wallet-connect" | "in-app"
 
@@ -34,6 +35,15 @@ type BaseTransactionRequest = {
     method: "thor_sendTransaction"
 }
 
+type BaseTypedDataRequest = {
+    domain: ethers.TypedDataDomain
+    origin: string
+    options: Connex.Signer.CertOptions
+    types: Record<string, ethers.TypedDataField[]>
+    value: Record<string, unknown>
+    method: "thor_signTypedData"
+}
+
 type WcConnectAppRequest = BaseRequest & {
     type: "wallet-connect"
     proposal: SignClientTypes.EventArguments["session_proposal"]
@@ -41,7 +51,7 @@ type WcConnectAppRequest = BaseRequest & {
 
 type InAppConnectAppRequest = BaseRequest & {
     type: "in-app"
-    initialRequest: InAppCertRequest | InAppTxRequest
+    initialRequest: InAppCertRequest | InAppTxRequest | InAppTypedDataRequest
 }
 
 type WcCertRequest = BaseCertificateRequest & BaseWcRequest
@@ -52,13 +62,19 @@ type WcTxRequest = BaseTransactionRequest & BaseWcRequest
 
 type InAppTxRequest = BaseTransactionRequest & BaseInAppRequest
 
+type WcSignDataRequest = BaseTypedDataRequest & BaseWcRequest
+
+type InAppTypedDataRequest = BaseTypedDataRequest & BaseInAppRequest
+
 export type CertificateRequest = WcCertRequest | InAppCertRequest
 
 export type TransactionRequest = WcTxRequest | InAppTxRequest
 
+export type TypeDataRequest = WcSignDataRequest | InAppTypedDataRequest
+
 export type ConnectAppRequest = WcConnectAppRequest | InAppConnectAppRequest
 
-export type InAppRequest = InAppCertRequest | InAppTxRequest
+export type InAppRequest = InAppCertRequest | InAppTxRequest | InAppTypedDataRequest
 
 export enum DAppType {
     ALL = "all",

@@ -328,6 +328,7 @@ export const ApplicationSecurityProvider = ({ children }: ApplicationSecurityCon
 
         mixpanel.track(AnalyticsEvent.SECURITY_UPGRADE, { status: "STARTED" })
         setSecurityMigrationStatus(SecurityMigration.IN_PROGRESS)
+        let currentDeviceType: DEVICE_TYPE | null = null
 
         if (encryptedStorageKeys.length > 0) {
             try {
@@ -375,6 +376,8 @@ export const ApplicationSecurityProvider = ({ children }: ApplicationSecurityCon
                         let decryptedDevices: LocalDevice[] = []
 
                         for (const anyDevice of parsedEntryInState) {
+                            currentDeviceType = anyDevice.type
+
                             if (anyDevice.type === DEVICE_TYPE.LEDGER) {
                                 walletState.devices.push(anyDevice)
                             } else {
@@ -426,7 +429,11 @@ export const ApplicationSecurityProvider = ({ children }: ApplicationSecurityCon
                 setSecurityMigrationStatus(SecurityMigration.COMPLETED)
                 mixpanel.track(AnalyticsEvent.SECURITY_UPGRADE, { status: "COMPLETED" })
             } catch (err) {
-                mixpanel.track(AnalyticsEvent.SECURITY_UPGRADE, { status: "FAILED" })
+                mixpanel.track(AnalyticsEvent.SECURITY_UPGRADE, {
+                    status: "FAILED",
+                    walletType: currentDeviceType,
+                    error: JSON.stringify(err),
+                })
                 error(ERROR_EVENTS.ENCRYPTION, err)
             }
         }

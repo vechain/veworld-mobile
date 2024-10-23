@@ -14,6 +14,8 @@ module.exports = {
 
     plugins: [
         ["module:react-native-dotenv"],
+        "@babel/plugin-transform-flow-strip-types",
+        ["@babel/plugin-transform-private-methods", { loose: true }],
         [
             "module-resolver",
             {
