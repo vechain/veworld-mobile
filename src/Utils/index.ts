@@ -28,7 +28,6 @@ import TokenUtils from "./TokenUtils"
 import TransactionUtils from "./TransactionUtils"
 import TransfersUtils from "./TransfersUtils"
 import URIUtils from "./URIUtils"
-import MinimizerUtils from "./MinimizerUtils"
 import ReanimatedUtils from "./ReanimatedUtils"
 import WalletConnectUtils from "./WalletConnectUtils"
 import MediaUtils from "./MediaUtils"
@@ -74,7 +73,6 @@ export {
     WalletConnectUtils,
     MediaUtils,
     MathUtils,
-    MinimizerUtils,
     AnalyticsUtils,
     ColorUtils,
     DeviceUtils,

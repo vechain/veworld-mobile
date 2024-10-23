@@ -30,7 +30,7 @@ if linkage != nil
   use_frameworks! :linkage => linkage.to_sym
 end
 
-target 'veworld' do
+target 'VeWorld' do
   use_expo_modules!
     post_integrate do |installer|
       begin
@@ -50,7 +50,7 @@ target 'veworld' do
   # pod 'OpenSSL-Universal', :modular_headers => true, :configurations => ['Release']
   pod 'react-native-blob-util', :path => '../node_modules/react-native-blob-util'
 
-  target 'veworldTests' do
+  target 'VeWorldTests' do
     inherit! :complete
     # Pods for testing
   end

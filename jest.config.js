@@ -65,7 +65,6 @@ module.exports = {
         "index.ts",
         "<rootDir>/src/Utils/ConnectionUtils/ConnectionUtils.ts",
         "<rootDir>/src/Utils/AnalyticsUtils/AnalyticsUtils.ts",
-        "<rootDir>/src/Utils/MinimizerUtils/MinimizerUtils.ts",
     ],
     coverageThreshold: {
         global: {

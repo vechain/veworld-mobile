@@ -1,4 +1,4 @@
-package com.veworld
+package org.vechain.veworld.app
 
 import android.os.Bundle
 import com.facebook.react.ReactActivity
