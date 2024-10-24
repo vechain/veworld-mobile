@@ -37,6 +37,9 @@ jobs:
               with:
                   node-version: 20.17
 
+            - name: Update yarn
+                run: yarn set version 3.6.4
+                
             - name: Install & Patch packages
               run: yarn install
 
