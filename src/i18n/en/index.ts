@@ -61,7 +61,7 @@ const en: BaseTranslation = {
     BTN_CREATE_CONTACT: "Create contact",
     BTN_EDIT_PIN: "Edit Pin",
     BTN_ENABLE: "Enable",
-    BTN_BACKUP_MENMONIC: "Backup phrase",
+    BTN_BACKUP_MENMONIC: "Recovery phrase",
     BTN_BACKUP_ALERT_CONFIRM: "Backup now",
     BTN_BACKUP_ALERT_CLOSE: "I'll do it later",
     BTN_LETS_GET_SENDING: "Let's get sending!",
@@ -171,7 +171,7 @@ const en: BaseTranslation = {
     BD_BUY_DESCRIPTION_TRANSAK: "Buy with Transak and receive the tokens directly in VeWorld.",
     BD_PASSWORD_NOT_STRONG:   "* Password is not strong enough (min 6 characters, 1 nunber, 1 special character)",
     BD_PASSWORDS_DO_NOT_MATCH: "* Passwords do not match",
-    BD_MNEMONIC_PASSWORD_WARNING: "The 12 words below are your wallet's recovery phrase. This phrase lets you recover your wallet if you lose your device. Back up it up on iCloud (recommended) or write it down. Or both.",
+    BD_MNEMONIC_PASSWORD_WARNING: "In case you lose your device or the app is uninstalled, you can use the 12 words below to recover this wallet and all of your assets.",
     BD_MNEMONIC_WARMNING:  "Never share these words. Anyone who learns them can steal all of your crypto.\nVeWorld will never ask you for them.",
     BD_BACKED_UP_TO_CLOUD: "Backed up to iCloud",
     BD_NOT_BACKED_UP_TO_CLOUD: "Not backed up to iCloud",
@@ -375,6 +375,9 @@ const en: BaseTranslation = {
     ALERT_OPTION_UPDATE_NOW: "Update now",
     ALERT_OPTION_ASK_ME_LATER: "Ask me later",
     ALERT_DONT_SCREENSHOT_MNEMONIC: "Avoid screenshotting your recovery phrase. Store it offline or back it up securely online.",
+    ALERT_TITLE_DONT_SHARE_MNEMONIC: "Important",
+    ALERT_MSG_DONT_SHARE_MNEMONIC: "Never share the words and specific order. Anyone who learns them can steal all of your crypto assets.",
+    ALERT_LAST_BACKUP_TIME: "Wallet is backed up",
 
     // Errors
     ERROR_PRICE_FEED_NOT_AVAILABLE: "Price feed not available",
@@ -453,7 +456,7 @@ const en: BaseTranslation = {
     NETWORK_LABEL_TESTNET: "Testnet",
 
     // Notifications
-    NOTIFICATION_COPIED_CLIPBOARD: "{name : string} has been copied to the clipboard!",
+    NOTIFICATION_COPIED_CLIPBOARD: "{name : string} copied to clipboard!",
     NOTIFICATION_transaction_reverted: "Transaction {txId : string} was reverted.",
     NOTIFICATION_found_token_transfer: "Found {token : string} transfer: {amount : string} on {alias: string}",
     NOTIFICATION_INCOMING_NFT_TITLE: "Incoming!",

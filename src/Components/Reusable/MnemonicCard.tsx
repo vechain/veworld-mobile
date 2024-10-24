@@ -6,7 +6,7 @@ import HapticsService from "~Services/HapticsService"
 import { PlatformBlur } from "./PlatformBlur"
 import { useI18nContext } from "~i18n"
 import { error } from "~Utils"
-import { ERROR_EVENTS } from "~Constants"
+import { COLORS, ERROR_EVENTS } from "~Constants"
 import { useNavigation } from "@react-navigation/native"
 
 type Props = {
@@ -20,8 +20,6 @@ export const MnemonicCard: FC<Props> = ({ mnemonicArray, souceScreen }) => {
     const nav = useNavigation()
     const theme = useTheme()
     const { LL } = useI18nContext()
-
-    const iconColor = useMemo(() => (theme.isDark ? theme.colors.tertiary : theme.colors.card), [theme])
 
     const onPress = useCallback(async () => {
         HapticsService.triggerImpact({ level: "Light" })
@@ -53,11 +51,15 @@ export const MnemonicCard: FC<Props> = ({ mnemonicArray, souceScreen }) => {
 
             return (
                 <BaseText
-                    typographyFont="footNoteAccent"
+                    typographyFont="captionRegular"
+                    color={COLORS.DARK_PURPLE}
                     key={`word${index}`}
-                    my={8}
-                    w={33}
-                    testID={`word-${index}`}>{`${index + 1}. ${word}`}</BaseText>
+                    my={2}
+                    w={24}
+                    align="center"
+                    testID={`word-${index}`}>
+                    {word}
+                </BaseText>
             )
         })
     }, [mnemonicArray, nav, souceScreen])
@@ -65,32 +67,24 @@ export const MnemonicCard: FC<Props> = ({ mnemonicArray, souceScreen }) => {
     return (
         <BaseView>
             <TouchableWithoutFeedback onPress={onPress}>
-                <BaseView flexDirection="row" w={100} borderRadius={16} bg={theme.colors.card}>
+                <BaseView flexDirection="row">
                     <BaseView
-                        px={16}
-                        py={12}
+                        px={8}
+                        py={22}
                         style={[styles.box]}
                         flexDirection="row"
                         flexWrap="wrap"
-                        w={92}
                         justifyContent="space-between">
                         {RenderWords}
                         {!isShow && <PlatformBlur backgroundColor={theme.colors.card} text={LL.TAP_TO_VIEW()} />}
                     </BaseView>
 
-                    <BaseView
-                        w={8}
-                        px={16}
-                        py={12}
-                        style={styles.button}
-                        justifyContent="center"
-                        alignItems="center"
-                        bg={theme.colors.primary}>
+                    <BaseView py={12} style={styles.button} justifyContent="center" alignItems="center">
                         <BaseIcon
                             name={isShow ? "eye-off-outline" : "eye-outline"}
-                            size={18}
-                            color={iconColor}
+                            size={16}
                             style={styles.icon}
+                            color={COLORS.GREY_500}
                             testID="toggle-mnemonic-visibility"
                         />
                     </BaseView>
@@ -102,16 +96,25 @@ export const MnemonicCard: FC<Props> = ({ mnemonicArray, souceScreen }) => {
 
 const styles = StyleSheet.create({
     box: {
-        borderTopLeftRadius: 16,
-        borderBottomStartRadius: 16,
+        flexShrink: 1,
+        backgroundColor: COLORS.GREY_100,
+        borderColor: COLORS.GREY_300,
+        borderRadius: 8,
+        borderBottomRightRadius: 0,
+        borderTopRightRadius: 0,
+        borderWidth: 1,
         overflow: "hidden",
     },
     button: {
-        flexGrow: 1,
-        borderTopRightRadius: 16,
-        borderBottomEndRadius: 16,
+        paddingHorizontal: 6,
+        borderTopRightRadius: 8,
+        borderBottomEndRadius: 8,
+        borderWidth: 1,
+        borderLeftWidth: 0,
+        backgroundColor: COLORS.GREY_200,
+        borderColor: COLORS.GREY_300,
     },
-    icon: { flex: 1, width: 100 },
+    icon: { flex: 1, color: COLORS.GREY_500 },
     androidBlurContainer: {
         justifyContent: "center",
         alignItems: "center",

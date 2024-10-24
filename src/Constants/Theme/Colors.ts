@@ -37,6 +37,12 @@ export type Colors = {
     testnetBackground: string
     gradientBackground: string[]
     alertCards: {
+        success: {
+            border: string
+            background: string
+            icon: string
+            title: string
+        }
         error: {
             border: string
             background: string
@@ -88,7 +94,9 @@ export enum COLORS {
     LIGHT_GREEN = "#AAD836",
     PASTEL_GREEN = "#c5eacd",
     MEDIUM_GREEN = "#30B34E",
+    GREEN_700 = "#276749",
     GREEN_500 = "#38A169",
+    GREEN_200 = "9AE6B4",
     GREEN_100 = "#C6F6D5",
     GREEN_50 = "#F0FFF4",
     PASTEL_ORANGE = "#fedbc0",
@@ -153,6 +161,12 @@ const light: Colors = {
     testnetBackground: COLORS.TESTNET_BACKGROUND_LIGHT,
     gradientBackground: [COLORS.GRADIENT_BACKGROUND_LIGHT_TOP, COLORS.GRADIENT_BACKGROUND_LIGHT_BOTTOM],
     alertCards: {
+        success: {
+            border: COLORS.GREEN_200,
+            background: COLORS.GREEN_50,
+            icon: COLORS.GREEN_500,
+            title: COLORS.GREEN_700,
+        },
         error: {
             border: COLORS.RED_200,
             background: COLORS.RED_50,
@@ -210,6 +224,12 @@ const dark: Colors = {
     horizontalButtonText: COLORS.WHITE,
     horizontalButtonTextReversed: COLORS.WHITE,
     alertCards: {
+        success: {
+            border: COLORS.GREEN_200,
+            background: COLORS.GREEN_50,
+            icon: COLORS.GREEN_500,
+            title: COLORS.GREEN_700,
+        },
         error: {
             border: COLORS.RED_200,
             background: COLORS.RED_50,

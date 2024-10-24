@@ -235,7 +235,7 @@ type RootTranslation = {
 	 */
 	BTN_ENABLE: string
 	/**
-	 * B​a​c​k​u​p​ ​p​h​r​a​s​e
+	 * R​e​c​o​v​e​r​y​ ​p​h​r​a​s​e
 	 */
 	BTN_BACKUP_MENMONIC: string
 	/**
@@ -624,7 +624,7 @@ type RootTranslation = {
 	 */
 	BD_PASSWORDS_DO_NOT_MATCH: string
 	/**
-	 * T​h​e​ ​1​2​ ​w​o​r​d​s​ ​b​e​l​o​w​ ​a​r​e​ ​y​o​u​r​ ​w​a​l​l​e​t​'​s​ ​r​e​c​o​v​e​r​y​ ​p​h​r​a​s​e​.​ ​T​h​i​s​ ​p​h​r​a​s​e​ ​l​e​t​s​ ​y​o​u​ ​r​e​c​o​v​e​r​ ​y​o​u​r​ ​w​a​l​l​e​t​ ​i​f​ ​y​o​u​ ​l​o​s​e​ ​y​o​u​r​ ​d​e​v​i​c​e​.​ ​B​a​c​k​ ​u​p​ ​i​t​ ​u​p​ ​o​n​ ​i​C​l​o​u​d​ ​(​r​e​c​o​m​m​e​n​d​e​d​)​ ​o​r​ ​w​r​i​t​e​ ​i​t​ ​d​o​w​n​.​ ​O​r​ ​b​o​t​h​.
+	 * I​n​ ​c​a​s​e​ ​y​o​u​ ​l​o​s​e​ ​y​o​u​r​ ​d​e​v​i​c​e​ ​o​r​ ​t​h​e​ ​a​p​p​ ​i​s​ ​u​n​i​n​s​t​a​l​l​e​d​,​ ​y​o​u​ ​c​a​n​ ​u​s​e​ ​t​h​e​ ​1​2​ ​w​o​r​d​s​ ​b​e​l​o​w​ ​t​o​ ​r​e​c​o​v​e​r​ ​t​h​i​s​ ​w​a​l​l​e​t​ ​a​n​d​ ​a​l​l​ ​o​f​ ​y​o​u​r​ ​a​s​s​e​t​s​.
 	 */
 	BD_MNEMONIC_PASSWORD_WARNING: string
 	/**
@@ -753,7 +753,7 @@ type RootTranslation = {
 	 */
 	TITLE_WALLET_MANAGEMENT: string
 	/**
-	 * S​e​t​t​i​n​g​s
+	 * M​e​n​u
 	 */
 	TITLE_SETTINGS: string
 	/**
@@ -1380,6 +1380,18 @@ type RootTranslation = {
 	 */
 	ALERT_DONT_SCREENSHOT_MNEMONIC: string
 	/**
+	 * I​m​p​o​r​t​a​n​t
+	 */
+	ALERT_TITLE_DONT_SHARE_MNEMONIC: string
+	/**
+	 * N​e​v​e​r​ ​s​h​a​r​e​ ​t​h​e​ ​w​o​r​d​s​ ​a​n​d​ ​s​p​e​c​i​f​i​c​ ​o​r​d​e​r​.​ ​A​n​y​o​n​e​ ​w​h​o​ ​l​e​a​r​n​s​ ​t​h​e​m​ ​c​a​n​ ​s​t​e​a​l​ ​a​l​l​ ​o​f​ ​y​o​u​r​ ​c​r​y​p​t​o​ ​a​s​s​e​t​s​.
+	 */
+	ALERT_MSG_DONT_SHARE_MNEMONIC: string
+	/**
+	 * W​a​l​l​e​t​ ​i​s​ ​b​a​c​k​e​d​ ​u​p
+	 */
+	ALERT_LAST_BACKUP_TIME: string
+	/**
 	 * P​r​i​c​e​ ​f​e​e​d​ ​n​o​t​ ​a​v​a​i​l​a​b​l​e
 	 */
 	ERROR_PRICE_FEED_NOT_AVAILABLE: string
@@ -1628,7 +1640,7 @@ type RootTranslation = {
 	 */
 	NETWORK_LABEL_TESTNET: string
 	/**
-	 * {​n​a​m​e​}​ ​h​a​s​ ​b​e​e​n​ ​c​o​p​i​e​d​ ​t​o​ ​t​h​e​ ​c​l​i​p​b​o​a​r​d​!
+	 * {​n​a​m​e​}​ ​c​o​p​i​e​d​ ​t​o​ ​c​l​i​p​b​o​a​r​d​!
 	 * @param {string} name
 	 */
 	NOTIFICATION_COPIED_CLIPBOARD: RequiredParams<'name'>
@@ -3497,7 +3509,7 @@ export type TranslationFunctions = {
 	 */
 	BTN_ENABLE: () => LocalizedString
 	/**
-	 * Backup phrase
+	 * Recovery phrase
 	 */
 	BTN_BACKUP_MENMONIC: () => LocalizedString
 	/**
@@ -3885,7 +3897,7 @@ export type TranslationFunctions = {
 	 */
 	BD_PASSWORDS_DO_NOT_MATCH: () => LocalizedString
 	/**
-	 * The 12 words below are your wallet's recovery phrase. This phrase lets you recover your wallet if you lose your device. Back up it up on iCloud (recommended) or write it down. Or both.
+	 * In case you lose your device or the app is uninstalled, you can use the 12 words below to recover this wallet and all of your assets.
 	 */
 	BD_MNEMONIC_PASSWORD_WARNING: () => LocalizedString
 	/**
@@ -4014,7 +4026,7 @@ VeWorld will never ask you for them.
 	 */
 	TITLE_WALLET_MANAGEMENT: () => LocalizedString
 	/**
-	 * Settings
+	 * Menu
 	 */
 	TITLE_SETTINGS: () => LocalizedString
 	/**
@@ -4635,6 +4647,18 @@ Try reconnect your device to the internet.
 	 */
 	ALERT_DONT_SCREENSHOT_MNEMONIC: () => LocalizedString
 	/**
+	 * Important
+	 */
+	ALERT_TITLE_DONT_SHARE_MNEMONIC: () => LocalizedString
+	/**
+	 * Never share the words and specific order. Anyone who learns them can steal all of your crypto assets.
+	 */
+	ALERT_MSG_DONT_SHARE_MNEMONIC: () => LocalizedString
+	/**
+	 * Wallet is backed up
+	 */
+	ALERT_LAST_BACKUP_TIME: () => LocalizedString
+	/**
 	 * Price feed not available
 	 */
 	ERROR_PRICE_FEED_NOT_AVAILABLE: () => LocalizedString
@@ -4883,7 +4907,7 @@ Try reconnect your device to the internet.
 	 */
 	NETWORK_LABEL_TESTNET: () => LocalizedString
 	/**
-	 * {name} has been copied to the clipboard!
+	 * {name} copied to clipboard!
 	 */
 	NOTIFICATION_COPIED_CLIPBOARD: (arg: { name: string }) => LocalizedString
 	/**

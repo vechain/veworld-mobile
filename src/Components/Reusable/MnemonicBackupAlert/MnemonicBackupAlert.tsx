@@ -14,7 +14,7 @@ export const MnemonicBackupAlert = () => {
     }, [theme])
 
     return (
-        <BaseView flexDirection="row" justifyContent="flex-start" alignItems="flex-start">
+        <BaseView flexDirection="row" justifyContent="flex-start" alignItems="flex-start" py={8}>
             <BaseIcon name="information-outline" color={iconColor} size={16} />
             <BaseView ml={8} mr={24}>
                 <BaseText typographyFont="captionRegular" style={styles.infoText}>
