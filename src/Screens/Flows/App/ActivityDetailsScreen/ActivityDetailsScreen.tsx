@@ -10,7 +10,7 @@ import {
     NFTTransferCard,
     Layout,
 } from "~Components"
-import { RootStackParamListHome, Routes } from "~Navigation"
+import { HistoryStackParamList, Routes } from "~Navigation"
 import { Linking } from "react-native"
 import { useBottomSheetModal, useTransferAddContact } from "~Hooks"
 import { DateUtils, HexUtils, TransactionUtils } from "~Utils"
@@ -27,6 +27,7 @@ import {
     NonFungibleTokenActivity,
     SignCertActivity,
     ConnectedAppActivity,
+    TypedDataActivity,
 } from "~Model"
 import {
     FungibleTokenTransferDetails,
@@ -39,10 +40,11 @@ import { ContactManagementBottomSheet } from "../ContactsScreen"
 import { selectActivity, selectSelectedNetwork, useAppSelector } from "~Storage/Redux"
 import { AddCustomTokenBottomSheet } from "../ManageCustomTokenScreen/BottomSheets"
 import { ExplorerLinkType, getExplorerLink } from "~Utils/AddressUtils/AddressUtils"
+import TypedDataTransactionDetails from "./Components/TypedDataTransactionDetails"
 
-type Props = NativeStackScreenProps<RootStackParamListHome, Routes.ACTIVITY_DETAILS>
+type Props = NativeStackScreenProps<HistoryStackParamList, Routes.ACTIVITY_DETAILS>
 
-export const ActivityDetailsScreen = ({ route }: Props) => {
+export const ActivityDetailsScreen = ({ route, navigation }: Props) => {
     const { activity, token, isSwap, decodedClauses } = route.params
 
     const network = useAppSelector(selectSelectedNetwork)
@@ -114,10 +116,17 @@ export const ActivityDetailsScreen = ({ route }: Props) => {
             case ActivityType.CONNECTED_APP_TRANSACTION: {
                 return <ConnectedAppDetails activity={(activityFromStore ?? activity) as ConnectedAppActivity} />
             }
+            case ActivityType.SIGN_TYPED_DATA: {
+                return <TypedDataTransactionDetails activity={(activityFromStore ?? activity) as TypedDataActivity} />
+            }
             default:
                 return <></>
         }
     }, [activity, activityFromStore, token])
+
+    const onGoBack = useCallback(() => {
+        navigation.navigate(Routes.HISTORY)
+    }, [navigation])
 
     const onAddCustomToken = useCallback(
         (tokenAddress: string) => {
@@ -134,6 +143,7 @@ export const ActivityDetailsScreen = ({ route }: Props) => {
                 safeAreaTestID="Activity_Details_Screen"
                 noStaticBottomPadding
                 title={getActivityTitle(activity, LL, isSwap)}
+                onGoBack={onGoBack}
                 body={
                     <>
                         <BaseText typographyFont="subSubTitleLight">{dateTimeActivity}</BaseText>

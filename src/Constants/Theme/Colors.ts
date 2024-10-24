@@ -17,6 +17,7 @@ export type Colors = {
     text: string
     textDisabled: string
     textReversed: string
+    alertDescription: string
     background: string
     backgroundReversed: string
     backgroundTransparent: string
@@ -35,6 +36,14 @@ export type Colors = {
     placeholder: string
     testnetBackground: string
     gradientBackground: string[]
+    alertCards: {
+        error: {
+            border: string
+            background: string
+            icon: string
+            title: string
+        }
+    }
 }
 
 export enum COLORS {
@@ -58,7 +67,11 @@ export enum COLORS {
     PASTEL_RED = "#f7c4bc",
     DARK_RED = "#931536",
     DARK_RED_ALERT = "#9D1800",
+    RED_700 = "#9B2C2C",
     MEDIUM_RED = "#E02200",
+    RED_500 = "#E53E3E",
+    RED_200 = "#FEB2B2",
+    RED_50 = "#FFF5F5",
     DARK_GREEN = "#325B00",
     DARK_GREEN_ALERT = "#185927",
     LIGHT_BLUE = "#90CDF4",
@@ -71,6 +84,7 @@ export enum COLORS {
     PASTEL_ORANGE = "#fedbc0",
     DARK_ORANGE_ALERT = "#AF4F0A",
     MEDIUM_ORANGE = "#FA710E",
+    GREY_600 = "#4A5568",
     DISABLED_GREY = "#E5E5E5",
     MEDIUM_GRAY = "#C4C4C4",
     COINBASE_BACKGROUND_LIGHT = "#ffffff",
@@ -103,6 +117,7 @@ const light: Colors = {
     text: COLORS.DARK_PURPLE,
     textDisabled: COLORS.DARK_PURPLE_DISABLED,
     textReversed: COLORS.WHITE,
+    alertDescription: COLORS.GREY_600,
     background: COLORS.LIGHT_GRAY,
     backgroundReversed: COLORS.DARK_PURPLE,
     backgroundTransparent: COLORS.LIGHT_GRAY_TRANSPARENT,
@@ -121,6 +136,14 @@ const light: Colors = {
     placeholder: COLORS.DISABLED_GREY,
     testnetBackground: COLORS.TESTNET_BACKGROUND_LIGHT,
     gradientBackground: [COLORS.GRADIENT_BACKGROUND_LIGHT_TOP, COLORS.GRADIENT_BACKGROUND_LIGHT_BOTTOM],
+    alertCards: {
+        error: {
+            border: COLORS.RED_200,
+            background: COLORS.RED_50,
+            icon: COLORS.RED_500,
+            title: COLORS.RED_700,
+        },
+    },
 }
 
 const dark: Colors = {
@@ -142,6 +165,7 @@ const dark: Colors = {
     text: COLORS.WHITE,
     textDisabled: COLORS.WHITE_DISABLED,
     textReversed: COLORS.DARK_PURPLE,
+    alertDescription: COLORS.GREY_600,
     background: COLORS.DARK_PURPLE,
     backgroundReversed: COLORS.GRAY,
     backgroundTransparent: COLORS.DARK_PURPLE_TRANSPARENT,
@@ -160,6 +184,14 @@ const dark: Colors = {
     placeholder: COLORS.PURPLE,
     testnetBackground: COLORS.TESTNET_BACKGROUND_DARK,
     gradientBackground: [COLORS.GRADIENT_BACKGROUND_DARK_TOP, COLORS.GRADIENT_BACKGROUND_DARK_BOTTOM],
+    alertCards: {
+        error: {
+            border: COLORS.RED_200,
+            background: COLORS.RED_50,
+            icon: COLORS.RED_500,
+            title: COLORS.RED_700,
+        },
+    },
 }
 
 export const colors = { light, dark }
