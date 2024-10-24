@@ -41,6 +41,19 @@ export const AppConnectionRequests = ({ name, methods }: Props) => {
         }
     }, [methods, LL])
 
+    const renderRequestSignTypedDataDescription = useMemo(() => {
+        if (!methods) return <></>
+
+        if (methods.find(method => method === RequestMethods.SIGN_TYPED_DATA)) {
+            return (
+                <>
+                    <BaseSpacer height={8} />
+                    <BaseText>{LL.CONNECTION_REQUEST_SIGN_TYPED_DATA_DESCRIPTION()}</BaseText>
+                </>
+            )
+        }
+    }, [methods, LL])
+
     return (
         <BaseView>
             <BaseText typographyFont="subTitle">{LL.CONNECTION_REQUEST_TITLE()}</BaseText>
@@ -50,6 +63,7 @@ export const AppConnectionRequests = ({ name, methods }: Props) => {
 
             {renderRequestTransactionDescription}
             {renderRequestSignDescription}
+            {renderRequestSignTypedDataDescription}
         </BaseView>
     )
 }

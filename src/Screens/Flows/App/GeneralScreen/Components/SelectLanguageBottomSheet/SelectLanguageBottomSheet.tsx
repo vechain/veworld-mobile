@@ -1,17 +1,16 @@
 import React, { useCallback, useMemo, useState } from "react"
 import { BottomSheetModalMethods } from "@gorhom/bottom-sheet/lib/typescript/types"
 import { BaseSpacer, BaseText, BaseTouchableBox, BaseView, BaseBottomSheet } from "~Components"
-import { useI18nContext } from "~i18n"
+import { Locales, useI18nContext } from "~i18n"
 import { useScrollableList, useTheme } from "~Hooks"
-import { LANGUAGE } from "~Constants"
-import { LanguageUtils } from "~Utils"
 import { StyleSheet } from "react-native"
 import { BottomSheetFlatList } from "@gorhom/bottom-sheet"
+import { languages } from "~Model"
 
 type Props = {
-    selectedLanguage: LANGUAGE
+    selectedLanguage: Locales
     onClose: () => void
-    handleSelectLanguage: (language: LANGUAGE) => void
+    handleSelectLanguage: (language: Locales) => void
 }
 
 export const SelectLanguageBottomSheet = React.forwardRef<BottomSheetModalMethods, Props>(
@@ -20,15 +19,12 @@ export const SelectLanguageBottomSheet = React.forwardRef<BottomSheetModalMethod
 
         const snapPoints = useMemo(() => ["50%", "75%", "90%"], [])
 
-        // Retrieve the list of supported languages in human readable format (e.g. "English", "Spanish"...)
-        const supportedLanguages = LanguageUtils.getSupportedLanguages()
-
         const theme = useTheme()
 
         const [snapIndex, setSnapIndex] = useState<number>(0)
 
         const { isListScrollable, viewabilityConfig, onViewableItemsChanged } = useScrollableList(
-            supportedLanguages,
+            languages,
             snapIndex,
             snapPoints.length,
         )
@@ -47,8 +43,8 @@ export const SelectLanguageBottomSheet = React.forwardRef<BottomSheetModalMethod
                 <BaseSpacer height={16} />
                 <BaseView flexDirection="row" style={baseStyles.list}>
                     <BottomSheetFlatList
-                        data={supportedLanguages}
-                        keyExtractor={lang => lang}
+                        data={languages}
+                        keyExtractor={({ code }) => code}
                         ItemSeparatorComponent={languagesListSeparator}
                         onViewableItemsChanged={onViewableItemsChanged}
                         viewabilityConfig={viewabilityConfig}
@@ -57,18 +53,20 @@ export const SelectLanguageBottomSheet = React.forwardRef<BottomSheetModalMethod
                                 <BaseTouchableBox
                                     haptics="Light"
                                     action={() => {
-                                        handleSelectLanguage(item as LANGUAGE)
+                                        handleSelectLanguage(item.code as Locales)
                                     }}
                                     containerStyle={baseStyles.languageContainer}
                                     innerContainerStyle={{
                                         backgroundColor:
-                                            item === selectedLanguage ? theme.colors.primary : theme.colors.card,
+                                            item.code === selectedLanguage ? theme.colors.primary : theme.colors.card,
                                     }}>
                                     <BaseText
                                         color={
-                                            item === selectedLanguage ? theme.colors.textReversed : theme.colors.text
+                                            item.code === selectedLanguage
+                                                ? theme.colors.textReversed
+                                                : theme.colors.text
                                         }>
-                                        {item}
+                                        {item.name}
                                     </BaseText>
                                 </BaseTouchableBox>
                             )
@@ -88,6 +86,6 @@ const baseStyles = StyleSheet.create({
         paddingHorizontal: 10,
     },
     list: {
-        height: "90%",
+        height: "95%",
     },
 })

@@ -207,6 +207,40 @@ export const useWcRequest = (isBlackListScreen: () => boolean, activeSessions: A
         [failRequest, nav],
     )
 
+    const goToSignTypedData = useCallback(
+        (requestEvent: PendingRequestTypes.Struct, session: SessionTypes.Struct) => {
+            const { params } = requestEvent.params.request
+            const options = WalletConnectUtils.getSignTypedDataOptions(requestEvent)
+
+            if (!params || params.length < 1) {
+                return failRequest(requestEvent, getRpcError("invalidParams"))
+            }
+
+            const { domain, types, value } = params[0]
+
+            if (!domain || !types || !value) {
+                return failRequest(requestEvent, getRpcError("invalidParams"))
+            }
+
+            nav.navigate(Routes.CONNECTED_APP_SIGN_TYPED_MESSAGE_SCREEN, {
+                request: {
+                    method: "thor_signTypedData",
+                    type: "wallet-connect",
+                    domain,
+                    types,
+                    value,
+                    options,
+                    requestEvent,
+                    session,
+                    origin: session.peer.metadata.url,
+                    appName: session.peer.metadata.name,
+                    appUrl: session.peer.metadata.url,
+                },
+            })
+        },
+        [failRequest, nav],
+    )
+
     const switchAccount = useCallback(
         async (session: SessionTypes.Struct, web3Wallet: IWeb3Wallet) => {
             // Switch to the requested account
@@ -310,6 +344,9 @@ export const useWcRequest = (isBlackListScreen: () => boolean, activeSessions: A
                     case RequestMethods.PERSONAL_SIGN:
                         await goToSignMessage(requestEvent)
                         break
+                    case RequestMethods.SIGN_TYPED_DATA:
+                        await goToSignTypedData(requestEvent, session)
+                        break
                     default:
                         await failRequest(requestEvent, getRpcError("methodNotSupported"))
                         error(
@@ -335,11 +372,12 @@ export const useWcRequest = (isBlackListScreen: () => boolean, activeSessions: A
         [
             switchAccount,
             switchNetwork,
+            sessions,
+            goToSignCertificate,
             goToSendTransaction,
             goToSignMessage,
-            goToSignCertificate,
+            goToSignTypedData,
             failRequest,
-            sessions,
             removePendingRequest,
         ],
     )

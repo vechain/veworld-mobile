@@ -6,6 +6,7 @@ import {
     NETWORK_TYPE,
     NonFungibleTokenActivity,
     SignCertActivity,
+    TypedData,
 } from "~Model"
 import { AppThunk, createAppAsyncThunk } from "~Storage/Redux/Types"
 import {
@@ -26,6 +27,7 @@ import {
     createPendingNFTTransferActivityFromTx,
     createPendingTransferActivityFromTx,
     createSignCertificateActivity,
+    createSingTypedDataActivity,
     DEFAULT_PAGE_SIZE,
 } from "~Networking"
 import { Transaction } from "thor-devkit"
@@ -282,6 +284,32 @@ export const addSignCertificateActivity =
                   upsertActivityTestnet({
                       address: selectedAccount.address.toLowerCase(),
                       activity: connectedAppActivity,
+                  }),
+              )
+    }
+
+export const addSignTypedDataActivity =
+    (from: string, sender: string, typedData: TypedData): AppThunk<void> =>
+    (dispatch, getState) => {
+        const selectedAccount = selectSelectedAccount(getState())
+        const selectedNetwork = selectSelectedNetwork(getState())
+
+        // Ensure selectedAccount is not undefined
+        if (!selectedAccount) return
+
+        const typedDataActivity = createSingTypedDataActivity(from, sender, typedData)
+
+        selectedNetwork.type === NETWORK_TYPE.MAIN
+            ? dispatch(
+                  upsertActivityMainnet({
+                      address: selectedAccount.address.toLowerCase(),
+                      activity: typedDataActivity,
+                  }),
+              )
+            : dispatch(
+                  upsertActivityTestnet({
+                      address: selectedAccount.address.toLowerCase(),
+                      activity: typedDataActivity,
                   }),
               )
     }

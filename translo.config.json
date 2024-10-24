@@ -1,0 +1,79 @@
+{
+  "translationPath": "./src/i18n/translations",
+  "languages": [
+    {
+      "name": "English",
+      "code": "en"
+    },
+    {
+      "name": "Japanese",
+      "code": "ja"
+    },
+    {
+      "name": "Vietnamese",
+      "code": "vi"
+    },
+    {
+      "name": "German",
+      "code": "de"
+    },
+    {
+      "name": "Dutch",
+      "code": "nl"
+    },
+    {
+      "name": "South Korean",
+      "code": "ko"
+    },
+    {
+      "name": "Italian",
+      "code": "it"
+    },
+    {
+      "name": "Swedish",
+      "code": "sv"
+    },
+    {
+      "name": "French",
+      "code": "fr"
+    },
+    {
+      "name": "Taiwanese",
+      "code": "tw"
+    },
+    {
+      "name": "Spanish",
+      "code": "es"
+    },
+    {
+      "name": "Turkey",
+      "code": "tr"
+    },
+    {
+      "name": "Indian",
+      "code": "hi"
+    },
+    {
+      "name": "Chinese",
+      "code": "zh"
+    },
+    {
+      "name": "Russian",
+      "code": "ru"
+    },
+    {
+      "name": "Portuguese",
+      "code": "pt"
+    },
+    {
+      "name": "Polish",
+      "code": "pl"
+    }
+  ],
+  "fixedWords": {
+    "en": {
+      "VeWorld": "VeWorld",
+      "veWorld": "veWorld"
+    }
+  }
+}

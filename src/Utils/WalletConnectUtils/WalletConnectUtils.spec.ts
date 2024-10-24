@@ -8,6 +8,7 @@ import {
     getSessionRequestAttributes,
     getSignCertMessage,
     getSignCertOptions,
+    getSignTypedDataOptions,
     getTopicFromPairUri,
     shouldAutoNavigate,
     validateUri,
@@ -460,6 +461,53 @@ describe("WalletConnectUtils", () => {
             const requestEvent = mockPendingRequest([])
 
             expect(getSendTxOptions(requestEvent)).toEqual({})
+        })
+    })
+
+    describe("getSignTypedDataOptions", () => {
+        it("should return the sign typed data options", () => {
+            const providedOptions: Connex.Signer.CertOptions = {
+                signer: "0xf077b491b355E64048cE21E3A6Fc4751eEeA77fa",
+            }
+
+            const requestEvent = mockPendingRequest([{ options: providedOptions }])
+
+            const extractedOptions = getSignTypedDataOptions(requestEvent)
+
+            expect(extractedOptions).toEqual(providedOptions)
+        })
+
+        it("should return empty object if options are not provided", () => {
+            const requestEvent: PendingRequestTypes.Struct = {
+                topic: "topic",
+                id: 1,
+                params: {
+                    request: {
+                        method: "method",
+                        params: [{}],
+                    },
+                    chainId: "vechain",
+                },
+                verifyContext: {
+                    verified: {
+                        origin: "https://vechain-demo-dapp.netlify.app",
+                        validation: "INVALID",
+                        verifyUrl: "",
+                    },
+                },
+            }
+
+            const extractedOptions = getSignTypedDataOptions(requestEvent)
+
+            expect(extractedOptions).toEqual({})
+        })
+
+        it("empty object if params are empty", () => {
+            const requestEvent = mockPendingRequest([])
+
+            const extractedOptions = getSignTypedDataOptions(requestEvent)
+
+            expect(extractedOptions).toEqual({})
         })
     })
 })

@@ -36,6 +36,7 @@ import {
     useAppSelector,
     useAppDispatch,
     setCurrentMountedScreen,
+    selectLanguage,
 } from "~Storage/Redux"
 import * as Sentry from "@sentry/react-native"
 import "react-native-url-polyfill/auto"
@@ -46,6 +47,8 @@ import NetInfo from "@react-native-community/netinfo"
 import { onlineManager } from "@tanstack/react-query"
 import { useFlipper } from "@react-navigation/devtools"
 import { Routes } from "~Navigation"
+import { isLocale, useI18nContext } from "~i18n"
+import { getLocales } from "react-native-localize"
 
 const { fontFamily } = typography
 
@@ -53,7 +56,7 @@ if (__DEV__) {
     require("basil-ws-flipper").wsDebugPlugin
 }
 
-const isHermes = () => !!global.HermesInternal
+const isHermes = () => !!(global as any).HermesInternal
 info(ERROR_EVENTS.APP, "is Hermes active : ", isHermes())
 
 if (__DEV__ && process.env.REACT_APP_UI_LOG === "false") {
@@ -83,6 +86,21 @@ const Main = () => {
 
     const isAnalyticsEnabled = useAppSelector(selectAnalyticsTrackingEnabled)
 
+    const { setLocale } = useI18nContext()
+    const language = useAppSelector(selectLanguage)
+
+    // set the locale based on the language
+    useEffect(() => {
+        setLocale(
+            language ??
+                getLocales()
+                    .map(loc => loc.languageCode)
+                    .find(isLocale) ??
+                "en",
+        )
+    }, [setLocale, language])
+
+    // init analytics
     useEffect(() => {
         if (isAnalyticsEnabled) {
             // init mixpanel analytics
@@ -140,7 +158,7 @@ const linking = {
                                 path: "browser/:redirect?/:ul/:url",
                                 parse: {
                                     ul: () => true,
-                                    url: url => URIUtils.decodeUrl_HACK(url),
+                                    url: (url: string) => URIUtils.decodeUrl_HACK(url),
                                 },
                             },
                         },
@@ -151,7 +169,7 @@ const linking = {
     },
 }
 
-const NavigationProvider = ({ children }) => {
+const NavigationProvider = ({ children }: { children: React.ReactNode }) => {
     const theme = useTheme()
 
     const [ready, setReady] = useState(false)
@@ -165,7 +183,7 @@ const NavigationProvider = ({ children }) => {
     )
 
     const navigationRef = useNavigationContainerRef()
-    const routeNameRef = useRef(null)
+    const routeNameRef = useRef<string | null>(null)
     const dispatch = useAppDispatch()
     useFlipper(navigationRef)
 
@@ -174,19 +192,19 @@ const NavigationProvider = ({ children }) => {
             ref={navigationRef}
             onReady={() => {
                 if (routeNameRef && routeNameRef.current === null) {
-                    routeNameRef.current = navigationRef.getCurrentRoute()?.name
+                    routeNameRef.current = navigationRef.getCurrentRoute()?.name ?? null
                 }
                 setReady(true)
             }}
             onStateChange={async () => {
                 const previousRouteName = routeNameRef.current
                 const currentRouteName = navigationRef.getCurrentRoute()?.name
-                const trackScreenView = _currentRouteName => {
+                const trackScreenView = (_currentRouteName: string) => {
                     dispatch(setCurrentMountedScreen(_currentRouteName))
                 }
                 if (previousRouteName !== currentRouteName) {
-                    routeNameRef.current = currentRouteName
-                    trackScreenView(currentRouteName)
+                    routeNameRef.current = currentRouteName ?? null
+                    trackScreenView(currentRouteName ?? "")
                 }
             }}
             theme={navigationTheme}
