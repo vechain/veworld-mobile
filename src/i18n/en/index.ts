@@ -71,6 +71,7 @@ const en: BaseTranslation = {
     BTN_ENTER_PASSWORD: "Enter password",
     BTN_CONFIRN_PASSWORD: "Confirm password",
     BTN_IMPORT: "Import",
+    BTN_VERIFY_ICLOUD_BACKUP: "Verify iCloud backup",
 
     // BODY
     BD_WELCOME_SCREEN:
@@ -203,6 +204,8 @@ const en: BaseTranslation = {
     TITLE_ALERT_CAMERA_PERMISSION: "Camera Permissions",
     TITLE_ALERT_BIOMETRICS_CANCELLED: "Biometrics Cancelled",
     DEVICE_BACKUP_MODAL_TITLE: "Backup now",
+    TITLE_BACKUP_MANUALLY: "Backup manually",
+    TITLE_BACKUP_CLOUD: "Backup to a Cloud",
 
     TITLE_CREATE_WALLET_SUCCESS: "Your vechain wallet is ready!",
     TITLE_RESET_APP: "VeWorld reset",
@@ -292,6 +295,7 @@ const en: BaseTranslation = {
     BIOMETRICS_PROMPT: "Please use Biometrics to secure your wallet.",
     BIOMETRICS_PROMPT_UNLOCK: "Unlock VeWorld using Biometric Authentication.",
     VEWORLD: "VeWorld",
+    ICLOUD: "iCloud",
 
 
     // Common Buttons

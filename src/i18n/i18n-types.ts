@@ -275,6 +275,10 @@ type RootTranslation = {
 	 */
 	BTN_IMPORT: string
 	/**
+	 * V​e​r​i​f​y​ ​i​C​l​o​u​d​ ​b​a​c​k​u​p
+	 */
+	BTN_VERIFY_ICLOUD_BACKUP: string
+	/**
 	 * Y​o​u​r​ ​V​e​W​o​r​l​d​.​ ​A​ ​s​e​l​f​ ​c​u​s​t​o​d​y​ ​m​o​b​i​l​e​ ​c​r​y​p​t​o​ ​w​a​l​l​e​t​ ​f​o​r​ ​v​e​c​h​a​i​n
 	 */
 	BD_WELCOME_SCREEN: string
@@ -741,6 +745,14 @@ type RootTranslation = {
 	 */
 	DEVICE_BACKUP_MODAL_TITLE: string
 	/**
+	 * B​a​c​k​u​p​ ​m​a​n​u​a​l​l​y
+	 */
+	TITLE_BACKUP_MANUALLY: string
+	/**
+	 * B​a​c​k​u​p​ ​t​o​ ​a​ ​C​l​o​u​d
+	 */
+	TITLE_BACKUP_CLOUD: string
+	/**
 	 * Y​o​u​r​ ​v​e​c​h​a​i​n​ ​w​a​l​l​e​t​ ​i​s​ ​r​e​a​d​y​!
 	 */
 	TITLE_CREATE_WALLET_SUCCESS: string
@@ -1075,6 +1087,10 @@ type RootTranslation = {
 	 * V​e​W​o​r​l​d
 	 */
 	VEWORLD: string
+	/**
+	 * i​C​l​o​u​d
+	 */
+	ICLOUD: string
 	/**
 	 * C​a​n​c​e​l
 	 */
@@ -3549,6 +3565,10 @@ export type TranslationFunctions = {
 	 */
 	BTN_IMPORT: () => LocalizedString
 	/**
+	 * Verify iCloud backup
+	 */
+	BTN_VERIFY_ICLOUD_BACKUP: () => LocalizedString
+	/**
 	 * Your VeWorld. A self custody mobile crypto wallet for vechain
 	 */
 	BD_WELCOME_SCREEN: () => LocalizedString
@@ -4014,6 +4034,14 @@ VeWorld will never ask you for them.
 	 */
 	DEVICE_BACKUP_MODAL_TITLE: () => LocalizedString
 	/**
+	 * Backup manually
+	 */
+	TITLE_BACKUP_MANUALLY: () => LocalizedString
+	/**
+	 * Backup to a Cloud
+	 */
+	TITLE_BACKUP_CLOUD: () => LocalizedString
+	/**
 	 * Your vechain wallet is ready!
 	 */
 	TITLE_CREATE_WALLET_SUCCESS: () => LocalizedString
@@ -4345,6 +4373,10 @@ VeWorld will never ask you for them.
 	 * VeWorld
 	 */
 	VEWORLD: () => LocalizedString
+	/**
+	 * iCloud
+	 */
+	ICLOUD: () => LocalizedString
 	/**
 	 * Cancel
 	 */
