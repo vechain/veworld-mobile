@@ -381,7 +381,7 @@ const en: BaseTranslation = {
     ALERT_DONT_SCREENSHOT_MNEMONIC: "Avoid screenshotting your recovery phrase. Store it offline or back it up securely online.",
     ALERT_TITLE_DONT_SHARE_MNEMONIC: "Important",
     ALERT_MSG_DONT_SHARE_MNEMONIC: "Never share the words and specific order. Anyone who learns them can steal all of your crypto assets.",
-    ALERT_LAST_BACKUP_TIME: "Wallet is backed up",
+    ALERT_LAST_BACKUP_TIME: "Last backup - {date: string}",
 
     // Errors
     ERROR_PRICE_FEED_NOT_AVAILABLE: "Price feed not available",

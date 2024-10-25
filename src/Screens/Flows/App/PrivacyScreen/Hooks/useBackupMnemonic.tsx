@@ -1,7 +1,6 @@
 import { useCallback, useEffect, useState } from "react"
 import { LocalDevice } from "~Model"
 import { WalletEncryptionKeyHelper } from "~Components"
-import { setDeviceIsBackup, useAppDispatch } from "~Storage/Redux"
 
 type Props = {
     closePasswordPrompt: () => void
@@ -23,7 +22,6 @@ export const useBackupMnemonic = ({
     isWalletSecurityBiometrics,
 }: Props) => {
     const [deviceToBackup, setDeviceToBackup] = useState<LocalDevice | undefined>()
-    const dispatch = useAppDispatch()
 
     /*
     * This function checks if the user has enabled biometrics and if so, it will
@@ -44,7 +42,6 @@ export const useBackupMnemonic = ({
                 if (wallet?.mnemonic) {
                     setDeviceToBackup(devices[0])
                     openBackupPhraseSheetWithDelay(300, wallet.mnemonic, devices[0])
-                    dispatch(setDeviceIsBackup({ rootAddress: devices[0].rootAddress, isBackup: true }))
                 }
             }
         } else {
@@ -52,7 +49,6 @@ export const useBackupMnemonic = ({
         }
     }, [
         devices,
-        dispatch,
         isWalletSecurityBiometrics,
         openBackupPhraseSheetWithDelay,
         openPasswordPrompt,
@@ -77,11 +73,10 @@ export const useBackupMnemonic = ({
 
                 if (wallet?.mnemonic) {
                     openBackupPhraseSheetWithDelay(300, wallet.mnemonic, deviceToBackup)
-                    dispatch(setDeviceIsBackup({ rootAddress: deviceToBackup.rootAddress, isBackup: true }))
                 }
             }
         },
-        [closePasswordPrompt, dispatch, openBackupPhraseSheetWithDelay, deviceToBackup],
+        [closePasswordPrompt, openBackupPhraseSheetWithDelay, deviceToBackup],
     )
 
     /*
@@ -100,19 +95,12 @@ export const useBackupMnemonic = ({
 
                 if (wallet?.mnemonic) {
                     openBackupPhraseSheetWithDelay(300, wallet.mnemonic, device)
-                    dispatch(setDeviceIsBackup({ rootAddress: device.rootAddress, isBackup: true }))
                 }
             } else {
                 openPasswordPrompt()
             }
         },
-        [
-            closeWalletMgmtSheet,
-            dispatch,
-            isWalletSecurityBiometrics,
-            openBackupPhraseSheetWithDelay,
-            openPasswordPrompt,
-        ],
+        [closeWalletMgmtSheet, isWalletSecurityBiometrics, openBackupPhraseSheetWithDelay, openPasswordPrompt],
     )
 
     useEffect(() => {

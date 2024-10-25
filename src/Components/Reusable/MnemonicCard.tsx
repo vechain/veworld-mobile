@@ -5,26 +5,42 @@ import { useDisclosure, useTheme } from "~Hooks"
 import HapticsService from "~Services/HapticsService"
 import { PlatformBlur } from "./PlatformBlur"
 import { useI18nContext } from "~i18n"
-import { error } from "~Utils"
+import { DateUtils, error } from "~Utils"
 import { COLORS, ERROR_EVENTS } from "~Constants"
 import { useNavigation } from "@react-navigation/native"
+import { setDeviceIsBackup, useAppDispatch } from "~Storage/Redux"
+import { LocalDevice } from "~Model"
+import { formatDateTime } from "~Utils/DateUtils/DateUtils"
+import { getTimeZone } from "react-native-localize"
 
 type Props = {
     mnemonicArray: string[]
     souceScreen?: string
+    deviceToBackup?: LocalDevice
 }
 
-export const MnemonicCard: FC<Props> = ({ mnemonicArray, souceScreen }) => {
+export const MnemonicCard: FC<Props> = ({ mnemonicArray, souceScreen, deviceToBackup }) => {
     const { isOpen: isShow, onToggle: toggleShow } = useDisclosure()
 
     const nav = useNavigation()
     const theme = useTheme()
-    const { LL } = useI18nContext()
+    const { LL, locale } = useI18nContext()
+    const dispatch = useAppDispatch()
 
     const onPress = useCallback(async () => {
         HapticsService.triggerImpact({ level: "Light" })
         toggleShow()
-    }, [toggleShow])
+        if (deviceToBackup?.rootAddress) {
+            const formattedDate = formatDateTime(Date.now(), locale, getTimeZone() ?? DateUtils.DEFAULT_TIMEZONE)
+            dispatch(
+                setDeviceIsBackup({
+                    rootAddress: deviceToBackup.rootAddress,
+                    isBackup: true,
+                    date: formattedDate,
+                }),
+            )
+        }
+    }, [deviceToBackup?.rootAddress, dispatch, locale, toggleShow])
 
     const RenderWords = useMemo(() => {
         if (mnemonicArray.length !== 12) {

@@ -1404,9 +1404,10 @@ type RootTranslation = {
 	 */
 	ALERT_MSG_DONT_SHARE_MNEMONIC: string
 	/**
-	 * W​a​l​l​e​t​ ​i​s​ ​b​a​c​k​e​d​ ​u​p
+	 * L​a​s​t​ ​b​a​c​k​u​p​ ​-​ ​{​d​a​t​e​}
+	 * @param {string} date
 	 */
-	ALERT_LAST_BACKUP_TIME: string
+	ALERT_LAST_BACKUP_TIME: RequiredParams<'date'>
 	/**
 	 * P​r​i​c​e​ ​f​e​e​d​ ​n​o​t​ ​a​v​a​i​l​a​b​l​e
 	 */
@@ -4687,9 +4688,9 @@ Try reconnect your device to the internet.
 	 */
 	ALERT_MSG_DONT_SHARE_MNEMONIC: () => LocalizedString
 	/**
-	 * Wallet is backed up
+	 * Last backup - {date}
 	 */
-	ALERT_LAST_BACKUP_TIME: () => LocalizedString
+	ALERT_LAST_BACKUP_TIME: (arg: { date: string }) => LocalizedString
 	/**
 	 * Price feed not available
 	 */
