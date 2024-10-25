@@ -65,8 +65,8 @@ jobs:
             - name: Sentry properties
               uses: mobiledevops/secret-to-file-action@v1
               with:
-                base64-encoded-secret: ${{ secrets.ANDROID_SERVICE_ACCOUNT }}
-                filename: "pc-api-4895632399891248889-903-c30062a54347.json"
+                base64-encoded-secret: ${{ secrets.ANDROID_FASTLANE_SERVICE_ACCOUNT }}
+                filename: "pc-api-4895632399891248889-903-41060cd0ba40.json"
                 is-executable: false
                 working-directory: "./android"
 

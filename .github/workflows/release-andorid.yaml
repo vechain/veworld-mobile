@@ -1,0 +1,132 @@
+name: Release Android
+
+on:
+  workflow_dispatch:
+    inputs:
+      version: 
+        description: 'Version to build'
+        type: string
+        required: true
+      build: 
+        description: 'Build number'
+        type: number
+        required: true
+
+  workflow_call:
+    inputs:
+      version: 
+        description: 'Version to build'
+        type: string
+        required: true
+      build: 
+        description: 'Build number'
+        type: number
+        required: true
+    
+
+jobs:
+    build-test-android:
+        name: Build and Release Android
+        runs-on: ubuntu-latest
+        environment: android-release
+        steps:
+            - name: Checkout repository
+              uses: actions/checkout@v3
+
+            - name: Setup Node
+              uses: actions/setup-node@v3
+              with:
+                  node-version-file: .nvmrc
+                  cache: "yarn"
+
+            - name: Install & Patch packages
+              run: yarn install:all
+
+            - name: Setup Java
+              uses: actions/setup-java@v3
+              with:
+                  cache: gradle
+                  distribution: "zulu"
+                  java-version: "11"
+
+            # Install sentry properties
+            - name: Sentry properties
+              uses: mobiledevops/secret-to-file-action@v1
+              with:
+                base64-encoded-secret: ${{ secrets.ANDROID_SENTRY_PROPERTIES }}
+                filename: "sentry.properties"
+                is-executable: false
+                working-directory: "./android"
+
+            # Decode key_alias 
+            - name: Decode KEY_ALIAS
+              uses: mobiledevops/secret-to-file-action@v1
+              with:
+                base64-encoded-secret: ${{ secrets.ANDROID_KEY_ALIAS }}
+                filename: "key_alias.txt"
+                is-executable: false
+                working-directory: "./android"
+
+             # Decode key_password
+            - name: Decode STORE_PASSWORD
+              uses: mobiledevops/secret-to-file-action@v1
+              with:
+                base64-encoded-secret: ${{ secrets.ANDROID_STORE_PASSWORD }}
+                filename: "store_password.txt"
+                is-executable: false
+                working-directory: "./android"
+
+            # Install env.default 
+            - name: Sentry properties
+              uses: mobiledevops/secret-to-file-action@v1
+              with:
+                base64-encoded-secret: ${{ secrets.ANDROID_SERVICE_ACCOUNT }}
+                filename: "pc-api-4895632399891248889-903-1f538768f7fe.json"
+                is-executable: false
+                working-directory: "./android"
+
+              # Install sentry properties
+            - name: Sentry properties
+              uses: mobiledevops/secret-to-file-action@v1
+              with:
+                base64-encoded-secret: ${{ secrets.ANDROID_FASTLANE_ENV }}
+                filename: ".env.default"
+                is-executable: false
+                working-directory: "./android"
+
+            # Install keystore properties
+            - name: Keystore properties
+              uses: mobiledevops/secret-to-file-action@v1
+              with:
+                base64-encoded-secret: ${{ secrets.ANDROID_KEYSTORE_PROPERTIES }}
+                filename: "keystore.properties"
+                is-executable: false
+                working-directory: "./android"
+
+            # Download Keystore
+            - name: Keystore file
+              uses: mobiledevops/secret-to-file-action@v1
+              with:
+                base64-encoded-secret: ${{ secrets.ANDROID_RELEASE_KEYSTORE }}
+                filename: "release.keystore"
+                is-executable: false
+                working-directory: "./android"
+            
+            - name: Decode prod env      
+              uses: mobiledevops/secret-to-file-action@v1
+              with:
+                  base64-encoded-secret: ${{ secrets.RN_ENV_PROD}}
+                  filename: ".env.production"
+                  is-executable: false
+                  working-directory: "."
+            
+
+            - name: Build apk 
+              id: build
+              run: |
+                  cd android
+                  export STORE_PASSWORD="$(<store_password.txt)"
+                  export KEY_PASSWORD="$(<store_password.txt)"
+                  export KEY_ALIAS="$(<key_alias.txt)"
+                  fastlane build_android_ci version_code:${{github.event.inputs.build}} version_name:${{github.event.inputs.version}}
+                

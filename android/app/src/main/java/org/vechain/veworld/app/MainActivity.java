@@ -8,7 +8,6 @@ import android.os.Bundle;
 import com.zoontek.rnbootsplash.RNBootSplash;
 
 import com.facebook.react.ReactActivity;
-
 import com.facebook.react.ReactActivityDelegate;
 import com.facebook.react.defaults.DefaultNewArchitectureEntryPoint;
 import com.facebook.react.defaults.DefaultReactActivityDelegate;
@@ -28,10 +27,12 @@ public class MainActivity extends ReactActivity {
   protected void onCreate(Bundle savedInstanceState) {
     RNBootSplash.init(this, R.style.BootTheme);
     super.onCreate(null);
+
     // ATTENTION: This was auto-generated to handle app links.
     Intent appLinkIntent = getIntent();
     String appLinkAction = appLinkIntent.getAction();
     Uri appLinkData = appLinkIntent.getData();
+
   }
 
   /**

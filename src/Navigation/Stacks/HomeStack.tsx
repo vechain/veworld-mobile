@@ -2,18 +2,9 @@ import { createNativeStackNavigator } from "@react-navigation/native-stack"
 import React from "react"
 import { Transaction } from "thor-devkit"
 import { TokenWithCompleteInfo, useNavAnimation } from "~Hooks"
-import {
-    Activity,
-    ConnectedLedgerDevice,
-    Device,
-    FungibleToken,
-    FungibleTokenWithBalance,
-    LedgerAccountWithDevice,
-    TransactionOutcomes,
-} from "~Model"
+import { ConnectedLedgerDevice, Device, FungibleTokenWithBalance, LedgerAccountWithDevice } from "~Model"
 import { Routes } from "~Navigation/Enums"
 import {
-    ActivityDetailsScreen,
     AssetDetailScreen,
     ConnectedAppsScreen,
     EnableAdditionalSettings,
@@ -26,7 +17,6 @@ import {
     ManageCustomTokenScreen,
     ManageTokenScreen,
     ObserveWalletScreen,
-    PrivacyScreen,
     SelectAmountSendScreen,
     SelectLedgerAccounts,
     SelectLedgerDevice,
@@ -67,12 +57,6 @@ export type RootStackParamListHome = {
     [Routes.WALLET_MANAGEMENT]: undefined
     [Routes.WALLET_DETAILS]: { device: Device }
     [Routes.CREATE_WALLET_FLOW]: undefined
-    [Routes.ACTIVITY_DETAILS]: {
-        activity: Activity
-        token?: FungibleToken
-        isSwap?: boolean
-        decodedClauses?: TransactionOutcomes
-    }
     [Routes.TOKEN_DETAILS]: { token: TokenWithCompleteInfo }
     [Routes.SETTINGS_CONNECTED_APPS]: undefined
     [Routes.OBSERVE_WALLET]: undefined
@@ -89,7 +73,6 @@ export type RootStackParamListHome = {
         url: string
         ul?: boolean
     }
-    [Routes.SETTINGS_PRIVACY]: undefined
 }
 
 const { Navigator, Group, Screen } = createNativeStackNavigator<RootStackParamListHome>()
@@ -132,11 +115,6 @@ export const HomeStack = () => {
                     component={ConnectedAppsScreen}
                     options={{ headerShown: false }}
                 />
-                <Screen
-                    name={Routes.ACTIVITY_DETAILS}
-                    component={ActivityDetailsScreen}
-                    options={{ headerShown: false }}
-                />
                 <Screen name={Routes.MANAGE_TOKEN} component={ManageTokenScreen} options={{ headerShown: false }} />
                 <Screen
                     name={Routes.MANAGE_CUSTOM_TOKEN}
@@ -170,7 +148,6 @@ export const HomeStack = () => {
                     options={{ headerShown: false }}
                 />
                 <Screen name={Routes.BROWSER} component={InAppBrowser} options={{ headerShown: false }} />
-                <Screen name={Routes.SETTINGS_PRIVACY} component={PrivacyScreen} options={{ headerShown: false }} />
             </Group>
 
             <Group>

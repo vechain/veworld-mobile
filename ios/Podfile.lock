@@ -142,9 +142,9 @@ PODS:
   - MixpanelReactNative (2.4.1):
     - Mixpanel-swift (= 4.2.0)
     - React-Core
-  - MMKV (1.3.9):
-    - MMKVCore (~> 1.3.9)
-  - MMKVCore (1.3.9)
+  - MMKV (2.0.0):
+    - MMKVCore (~> 2.0.0)
+  - MMKVCore (2.0.0)
   - MultiplatformBleAdapter (0.1.9)
   - OpenSSL-Universal (1.1.1100)
   - RCT-Folly (2021.07.22.00):
@@ -447,6 +447,8 @@ PODS:
   - React-jsinspector (0.72.6)
   - React-logger (0.72.6):
     - glog
+  - react-native-background-secure (0.2.0):
+    - React-Core
   - react-native-ble-plx (2.0.3):
     - MultiplatformBleAdapter (= 0.1.9)
     - React-Core
@@ -487,9 +489,9 @@ PODS:
     - React-Core
   - react-native-restart (0.0.27):
     - React-Core
-  - react-native-safe-area-context (4.11.0):
+  - react-native-safe-area-context (4.11.1):
     - React-Core
-  - react-native-slider (4.5.3):
+  - react-native-slider (4.5.4):
     - RCT-Folly (= 2021.07.22.00)
     - React-Core
   - react-native-webview (13.8.1):
@@ -620,7 +622,7 @@ PODS:
   - RNFlashList (1.7.1):
     - RCT-Folly (= 2021.07.22.00)
     - React-Core
-  - RNGestureHandler (2.19.0):
+  - RNGestureHandler (2.20.2):
     - RCT-Folly (= 2021.07.22.00)
     - React-Core
   - RNInAppBrowser (3.7.0):
@@ -661,7 +663,7 @@ PODS:
     - React-RCTText
     - ReactCommon/turbomodule/core
     - Yoga
-  - RNScreens (3.34.0):
+  - RNScreens (3.34.1):
     - RCT-Folly (= 2021.07.22.00)
     - React-Core
     - React-RCTImage
@@ -669,12 +671,12 @@ PODS:
     - React
   - RNScrypt (1.2.1):
     - React
-  - RNSentry (5.32.0):
+  - RNSentry (5.34.0):
     - hermes-engine
     - RCT-Folly (= 2021.07.22.00)
     - React-Core
     - React-hermes
-    - Sentry/HybridSDK (= 8.36.0)
+    - Sentry/HybridSDK (= 8.37.0)
   - RNSVG (13.14.1):
     - React-Core
   - SDWebImage (5.11.1):
@@ -683,7 +685,7 @@ PODS:
   - SDWebImageWebPCoder (0.8.5):
     - libwebp (~> 1.0)
     - SDWebImage/Core (~> 5.10)
-  - Sentry/HybridSDK (8.36.0)
+  - Sentry/HybridSDK (8.37.0)
   - SocketRocket (0.6.1)
   - UMAppLoader (4.2.0)
   - Yoga (1.14.0)
@@ -762,6 +764,7 @@ DEPENDENCIES:
   - React-jsiexecutor (from `../node_modules/react-native/ReactCommon/jsiexecutor`)
   - React-jsinspector (from `../node_modules/react-native/ReactCommon/jsinspector`)
   - React-logger (from `../node_modules/react-native/ReactCommon/logger`)
+  - react-native-background-secure (from `../node_modules/react-native-background-secure`)
   - react-native-ble-plx (from `../node_modules/react-native-ble-plx`)
   - react-native-blob-util (from `../node_modules/react-native-blob-util`)
   - "react-native-blur (from `../node_modules/@react-native-community/blur`)"
@@ -928,6 +931,8 @@ EXTERNAL SOURCES:
     :path: "../node_modules/react-native/ReactCommon/jsinspector"
   React-logger:
     :path: "../node_modules/react-native/ReactCommon/logger"
+  react-native-background-secure:
+    :path: "../node_modules/react-native-background-secure"
   react-native-ble-plx:
     :path: "../node_modules/react-native-ble-plx"
   react-native-blob-util:
@@ -1078,8 +1083,8 @@ SPEC CHECKSUMS:
   lottie-react-native: 17547b2f3c7034e2ae8672833fdb63262164d18a
   Mixpanel-swift: e5dd85295923e6a875acf17ccbab8d2ecb10ea65
   MixpanelReactNative: 0101b8828c2f335c128850e71ab7d3b7adde089a
-  MMKV: 817ba1eea17421547e01e087285606eb270a8dcb
-  MMKVCore: af055b00e27d88cd92fad301c5fecd1ff9b26dd9
+  MMKV: f7d1d5945c8765f97f39c3d121f353d46735d801
+  MMKVCore: c04b296010fcb1d1638f2c69405096aac12f6390
   MultiplatformBleAdapter: 5a6a897b006764392f9cef785e4360f54fb9477d
   OpenSSL-Universal: ebc357f1e6bc71fa463ccb2fe676756aff50e88c
   RCT-Folly: 424b8c9a7a0b9ab2886ffe9c3b041ef628fd4fb1
@@ -1097,6 +1102,7 @@ SPEC CHECKSUMS:
   React-jsiexecutor: 3bf18ff7cb03cd8dfdce08fbbc0d15058c1d71ae
   React-jsinspector: 194e32c6aab382d88713ad3dd0025c5f5c4ee072
   React-logger: cebf22b6cf43434e471dc561e5911b40ac01d289
+  react-native-background-secure: ae3e182ad7c5bcff6064aa6c7e508c75413e25bd
   react-native-ble-plx: f10240444452dfb2d2a13a0e4f58d7783e92d76e
   react-native-blob-util: 30a6c9fd067aadf9177e61a998f2c7efb670598d
   react-native-blur: 4c25fdccf6dc16b0935baa58d9d0fccb0683742b
@@ -1112,8 +1118,8 @@ SPEC CHECKSUMS:
   react-native-quick-base64: 61228d753294ae643294a75fece8e0e80b7558a6
   react-native-quick-crypto: 455c1b411db006dba1026a30681ececb19180187
   react-native-restart: 7595693413fe3ca15893702f2c8306c62a708162
-  react-native-safe-area-context: 851c62c48dce80ccaa5637b6aa5991a1bc36eca9
-  react-native-slider: d50a132035daa10184305d7089a651ce512104ee
+  react-native-safe-area-context: 5141f11858b033636f1788b14f32eaba92cee810
+  react-native-slider: 3bf504f2886e1106adf62937bd4e4d47e1fb8531
   react-native-webview: bdc091de8cf7f8397653e30182efcd9f772e03b3
   React-NativeModulesApple: 02e35e9a51e10c6422f04f5e4076a7c02243fff2
   React-perflogger: e3596db7e753f51766bceadc061936ef1472edc3
@@ -1138,20 +1144,20 @@ SPEC CHECKSUMS:
   RNDeviceInfo: 59344c19152c4b2b32283005f9737c5c64b42fba
   RNFastImage: 5c9c9fed9c076e521b3f509fe79e790418a544e8
   RNFlashList: fadf593d8e195ce2fe261980ac59e9f49808b68c
-  RNGestureHandler: 7ad14a6c7b491add489246611d324f10009083ac
+  RNGestureHandler: 89b845775188bcda3cd2662c46f85c3575586843
   RNInAppBrowser: e36d6935517101ccba0e875bac8ad7b0cb655364
   RNKeychain: a65256b6ca6ba6976132cc4124b238a5b13b3d9c
   RNLocalize: 1ce4263770515f53d3de442ce7657b3661b16a37
   RNReactNativeHapticFeedback: 35ab91df9e7a1e4513806e3c091293c97fe38c83
   RNReanimated: ab2e96c6d5591c3dfbb38a464f54c8d17fb34a87
-  RNScreens: 80369e822c4f123c3f076c9ea4141991c17770f9
+  RNScreens: 50ae87f0c3f80abbdb5fae1c5cf1f8b1f32efca3
   RNScreenshotPrevent: dc9741e416ba80c3739418f112ac4093188315e9
   RNScrypt: 95fdef077b482e9fdf8a761120cb69d129ef4016
-  RNSentry: 50a9b97a1845f557d7a090801af97a6f8752f3bd
+  RNSentry: a490880cadc329b5a16543787c8549f75216fc5b
   RNSVG: af3907ac5d4fa26a862b75a16d8f15bc74f2ceda
   SDWebImage: a7f831e1a65eb5e285e3fb046a23fcfbf08e696d
   SDWebImageWebPCoder: 908b83b6adda48effe7667cd2b7f78c897e5111d
-  Sentry: f8374b5415bc38dfb5645941b3ae31230fbeae57
+  Sentry: ee060c09b2f7ec1240e95c766ab44c04c7bdb052
   SocketRocket: f32cd54efbe0f095c4d7594881e52619cfe80b17
   UMAppLoader: e83f024f75f07802fce99739f04b4537d188caaf
   Yoga: b76f1acfda8212aa16b7e26bcce3983230c82603
