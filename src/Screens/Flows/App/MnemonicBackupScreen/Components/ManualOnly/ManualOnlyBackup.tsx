@@ -14,13 +14,17 @@ export const ManualOnlyBackup = ({ mnemonicArray, deviceToBackup }: Props) => {
     const { LL } = useI18nContext()
     return (
         <BaseView>
-            <IsBackedupAlert />
-            <BaseSpacer height={24} />
+            {deviceToBackup?.isBuckedUp && (
+                <>
+                    <IsBackedupAlert deviceToBackup={deviceToBackup} />
+                    <BaseSpacer height={24} />
+                </>
+            )}
             <BaseText typographyFont="subSubTitleMedium">{deviceToBackup?.alias}</BaseText>
             <BaseSpacer height={16} />
             <BaseText typographyFont="captionRegular">{LL.BD_MNEMONIC_PASSWORD_WARNING()}</BaseText>
             <BaseSpacer height={16} />
-            <ManualOnlyBackupCard mnemonicArray={mnemonicArray} />
+            <ManualOnlyBackupCard mnemonicArray={mnemonicArray} deviceToBackup={deviceToBackup} />
             <BaseSpacer height={16} />
             <MnemonicBackupAlert />
         </BaseView>

@@ -1,11 +1,11 @@
-import React from "react"
+import React, { memo } from "react"
 import { BaseCard, BaseIcon, BaseSpacer, BaseText, BaseView } from "~Components"
 import { ColorThemeType } from "~Constants"
 import { StyleSheet } from "react-native"
 import { useI18nContext } from "~i18n"
 import { useThemedStyles } from "~Hooks"
 
-export const DoNotShareAlert = () => {
+export const DoNotShareAlert = memo(() => {
     const { LL } = useI18nContext()
     const { styles, theme } = useThemedStyles(baseStyles)
 
@@ -26,7 +26,7 @@ export const DoNotShareAlert = () => {
             </BaseView>
         </BaseCard>
     )
-}
+})
 
 const baseStyles = (theme: ColorThemeType) =>
     StyleSheet.create({

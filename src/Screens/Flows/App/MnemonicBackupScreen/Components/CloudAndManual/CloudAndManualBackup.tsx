@@ -18,8 +18,12 @@ export const CloudAndManualBackup: FC<Props> = ({ mnemonicArray, deviceToBackup 
     return (
         <BaseView>
             <BaseText typographyFont="subSubTitleMedium">{deviceToBackup?.alias}</BaseText>
-            <BaseSpacer height={16} />
-            <IsBackedupAlert />
+            {deviceToBackup?.isBuckedUp && (
+                <>
+                    <BaseSpacer height={16} />
+                    <IsBackedupAlert />
+                </>
+            )}
             <BaseSpacer height={16} />
             <CloudBackupCard mnemonicArray={mnemonicArray} deviceToBackup={deviceToBackup} />
             <BaseSpacer height={16} />
@@ -41,7 +45,7 @@ const baseStyles = (theme: ColorThemeType) =>
         container: {
             flexDirection: "row",
             alignItems: "center",
-            width: "100%",
+            width: 100,
         },
         line: {
             flex: 1,
