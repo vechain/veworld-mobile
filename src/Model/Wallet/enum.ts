@@ -46,4 +46,5 @@ export enum IMPORT_TYPE {
     PRIVATE_KEY = "private-key",
     KEYSTORE_FILE = "keystore-file",
     ICLOUD = "icloud",
+    GOOGLE_DRIVE = "google-drive",
 }

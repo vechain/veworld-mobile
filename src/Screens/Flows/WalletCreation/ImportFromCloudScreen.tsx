@@ -24,7 +24,7 @@ import { useBottomSheetModal, useCheckIdentity, useCloudBackup, useDeviceUtils, 
 import { useI18nContext } from "~i18n"
 import { CloudKitWallet, IMPORT_TYPE } from "~Model"
 import { selectDevices, selectHasOnboarded, useAppSelector } from "~Storage/Redux"
-import { CryptoUtils, error, PasswordUtils } from "~Utils"
+import { CryptoUtils, error, PasswordUtils, PlatformUtils } from "~Utils"
 import { useHandleWalletCreation } from "../Onboarding/WelcomeScreen/useHandleWalletCreation"
 import { UserCreatePasswordScreen } from "./UserCreatePasswordScreen"
 
@@ -73,7 +73,7 @@ export const ImportFromCloudScreen = () => {
         onIdentityConfirmed: async (pin?: string) => {
             await importOnboardedWallet({
                 importMnemonic: mnemonicCache.current,
-                importType: IMPORT_TYPE.ICLOUD,
+                importType: PlatformUtils.isIOS() ? IMPORT_TYPE.ICLOUD : IMPORT_TYPE.GOOGLE_DRIVE,
                 pin,
                 derivationPath: selected!.derivationPath,
             })
@@ -147,7 +147,7 @@ export const ImportFromCloudScreen = () => {
                         onCreateWallet({
                             importMnemonic: mnemonic,
                             derivationPath: selected.derivationPath,
-                            importType: IMPORT_TYPE.ICLOUD,
+                            importType: PlatformUtils.isIOS() ? IMPORT_TYPE.ICLOUD : IMPORT_TYPE.GOOGLE_DRIVE,
                         })
                     }
                 } catch (_error) {
@@ -224,7 +224,11 @@ export const ImportFromCloudScreen = () => {
 
     return (
         <Layout
-            fixedHeader={<BaseText typographyFont="title">{LL.TITLE_IMPORT_WALLET_FROM_ICLOUD()}</BaseText>}
+            fixedHeader={
+                <BaseText typographyFont="title">
+                    {PlatformUtils.isIOS() ? LL.TITLE_IMPORT_WALLET_FROM_ICLOUD() : LL.TITLE_IMPORT_WALLET_FROM_DRIVE()}
+                </BaseText>
+            }
             fixedBody={
                 <BaseView flex={1}>
                     {isLoading ? (
@@ -304,7 +308,9 @@ export const ImportFromCloudScreen = () => {
                                     onSuccess({
                                         pin,
                                         mnemonic: mnemonicCache.current,
-                                        importType: IMPORT_TYPE.ICLOUD,
+                                        importType: PlatformUtils.isIOS()
+                                            ? IMPORT_TYPE.ICLOUD
+                                            : IMPORT_TYPE.GOOGLE_DRIVE,
                                         derivationPath: selected!.derivationPath,
                                     })
                                 }

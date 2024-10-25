@@ -5,9 +5,8 @@ import { DerivationPath, ERROR_EVENTS } from "~Constants"
 import { useI18nContext } from "~i18n"
 import { DEVICE_TYPE } from "~Model"
 import { error, PasswordUtils } from "~Utils"
-import { GDError, handleGoogleDriveErrors } from "./ErrorModel"
+import { GDError, handleGoogleDriveErrors, OAUTH_INTERRUPTED } from "./ErrorModel"
 const { GoogleDriveManager } = NativeModules
-const { OAUTH_INTERRUPTED } = GoogleDriveManager.getConstants()
 
 export const useGoogleDrive = () => {
     const { LL } = useI18nContext()
@@ -175,6 +174,25 @@ export const useGoogleDrive = () => {
         }
     }, [])
 
+    const googleAccountSignOut = useCallback(async () => {
+        setIsLoading(true)
+        try {
+            const salt = await GoogleDriveManager.googleAccountSignOut()
+            return salt
+        } catch (err) {
+            let er = err as GDError
+            error(ERROR_EVENTS.CLOUDKIT, er, er.message)
+            if (!isCancelError(er.message)) {
+                showErrorToast({
+                    text1: er.message,
+                    text2: handleGoogleDriveErrors(er),
+                })
+            }
+        } finally {
+            setIsLoading(false)
+        }
+    }, [])
+
     return {
         getGoogleServicesAvailability,
         deleteWallet,
@@ -185,5 +203,6 @@ export const useGoogleDrive = () => {
         getIV,
         isWalletBackedUp,
         isLoading,
+        googleAccountSignOut,
     }
 }

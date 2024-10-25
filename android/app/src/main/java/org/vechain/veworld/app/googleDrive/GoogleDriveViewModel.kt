@@ -17,6 +17,7 @@ import com.google.android.gms.auth.api.signin.GoogleSignInOptions
 import com.google.android.gms.common.api.ApiException
 import com.google.android.gms.common.api.Scope
 import com.google.api.client.googleapis.extensions.android.gms.auth.GoogleAccountCredential
+import com.google.api.client.googleapis.extensions.android.gms.auth.UserRecoverableAuthIOException
 import com.google.api.client.http.ByteArrayContent
 import com.google.api.client.http.javanet.NetHttpTransport
 import com.google.api.client.json.gson.GsonFactory
@@ -34,6 +35,8 @@ import java.io.ByteArrayOutputStream
 import java.io.FileNotFoundException
 import java.nio.charset.StandardCharsets
 
+const val REQUEST_AUTHORIZATION = 1234
+
 object Constants {
     const val SPACE = "drive"
     const val FOLDER_NAME = "VeWorld"
@@ -50,7 +53,11 @@ object GDriveParams {
     const val PAGE_SIZE_SINGLE = 1
 }
 
-class GoogleDriveViewModel(private val gson: Gson = Gson()) : ViewModel() {
+class GoogleDriveViewModel(
+    private val gson: Gson = Gson(),
+) : ViewModel() {
+    private var googleSignInClient: GoogleSignInClient? = null
+
     private fun hasPermissionToGoogleDrive(reactContext: ReactApplicationContext): Boolean {
         val acc = GoogleSignIn.getLastSignedInAccount(reactContext)
         val hasPermissions =
@@ -75,9 +82,14 @@ class GoogleDriveViewModel(private val gson: Gson = Gson()) : ViewModel() {
     private suspend fun getGoogleDrivePermissions(reactContext: ReactApplicationContext): GoogleSignInAccount? =
         suspendCancellableCoroutine { continuation ->
             try {
-                val googleSignInClient = getGoogleSignInClient(reactContext)
-                googleSignInClient.signOut() // Force a sign out so that we can reselect account
-                val signInIntent = googleSignInClient.signInIntent
+                if (googleSignInClient != null) {
+                    val account = GoogleSignIn.getLastSignedInAccount(reactContext)
+                    continuation.resumeWith(Result.success(account))
+                    return@suspendCancellableCoroutine
+                }
+
+                googleSignInClient = getGoogleSignInClient(reactContext)
+                val signInIntent = googleSignInClient?.signInIntent
                 reactContext.currentActivity?.startActivityForResult(
                     signInIntent, Request.GOOGLE_SIGN_IN.value
                 )
@@ -145,18 +157,17 @@ class GoogleDriveViewModel(private val gson: Gson = Gson()) : ViewModel() {
         }
     }
 
-    private fun getFileIdByFileName(drive: Drive, name: String, folderId: String): String? {
-        try {
-            val files: FileList =
-                drive.files().list().setSpaces(Constants.SPACE).setFields(GDriveParams.FIELDS)
-                    .setPageSize(GDriveParams.PAGE_SIZE_SINGLE)
-                    .setQ("'$folderId' in parents and trashed=false and name ='$name.json'")
-                    .execute()
-            return files.files.firstOrNull()?.id
-        } catch (e: Exception) {
-            e.printStackTrace()
-        }
-        return null
+    private fun getFileIdByFileName(
+        drive: Drive,
+        name: String,
+        folderId: String,
+    ): String? {
+        val files: FileList =
+            drive.files().list().setSpaces(Constants.SPACE).setFields(GDriveParams.FIELDS)
+                .setPageSize(GDriveParams.PAGE_SIZE_SINGLE)
+                .setQ("'$folderId' in parents and trashed=false and name ='$name.json'")
+                .execute()
+        return files.files.firstOrNull()?.id
     }
 
     private fun getFolderById(drive: Drive): String? {
@@ -273,6 +284,16 @@ class GoogleDriveViewModel(private val gson: Gson = Gson()) : ViewModel() {
                 }
 
                 promise.resolve(writableNativeArray)
+            } catch (e: UserRecoverableAuthIOException) {
+                reactContext.currentActivity?.startActivityForResult(
+                    e.intent,
+                    REQUEST_AUTHORIZATION
+                )
+                promise.reject(
+                    "cloudError",
+                    GoogleDriveManager.UNAUTHORIZED,
+                    e
+                )
             } catch (e: Exception) {
                 promise.reject("cloudError", e.message, e)
             }
@@ -298,6 +319,16 @@ class GoogleDriveViewModel(private val gson: Gson = Gson()) : ViewModel() {
                     }
                 }
                 promise.resolve(true)
+            } catch (e: UserRecoverableAuthIOException) {
+                reactContext.currentActivity?.startActivityForResult(
+                    e.intent,
+                    REQUEST_AUTHORIZATION
+                )
+                promise.reject(
+                    "deleteBackupError",
+                    GoogleDriveManager.UNAUTHORIZED,
+                    e
+                )
             } catch (e: Exception) {
                 promise.reject(
                     "backupEncryptionError",
@@ -337,8 +368,17 @@ class GoogleDriveViewModel(private val gson: Gson = Gson()) : ViewModel() {
                     }
                 }
                 promise.resolve(true)
+            } catch (e: UserRecoverableAuthIOException) {
+                reactContext.currentActivity?.startActivityForResult(
+                    e.intent,
+                    REQUEST_AUTHORIZATION
+                )
+                promise.reject(
+                    "deleteBackupError",
+                    GoogleDriveManager.UNAUTHORIZED,
+                    e
+                )
             } catch (e: FileNotFoundException) {
-                Log.e("EXCEPTION", "${e.message}")
                 promise.reject(
                     "deleteBackupError",
                     GoogleDriveManager.FAILED_TO_LOCATE_WALLET,
@@ -382,6 +422,16 @@ class GoogleDriveViewModel(private val gson: Gson = Gson()) : ViewModel() {
                         }
                     }
                 }
+            } catch (e: UserRecoverableAuthIOException) {
+                reactContext.currentActivity?.startActivityForResult(
+                    e.intent,
+                    REQUEST_AUTHORIZATION
+                )
+                promise.reject(
+                    "getWallet",
+                    GoogleDriveManager.UNAUTHORIZED,
+                    e
+                )
             } catch (e: Exception) {
                 promise.reject("getWallet", GoogleDriveManager.FAILED_TO_GET_WALLET, e)
             }
@@ -421,6 +471,16 @@ class GoogleDriveViewModel(private val gson: Gson = Gson()) : ViewModel() {
                         }
                     }
                 }
+            } catch (e: UserRecoverableAuthIOException) {
+                reactContext.currentActivity?.startActivityForResult(
+                    e.intent,
+                    REQUEST_AUTHORIZATION
+                )
+                promise.reject(
+                    "getSalt",
+                    GoogleDriveManager.UNAUTHORIZED,
+                    e
+                )
             } catch (e: Exception) {
                 promise.reject("getSalt", GoogleDriveManager.FAILED_TO_GET_SALT, e)
             }
@@ -461,9 +521,29 @@ class GoogleDriveViewModel(private val gson: Gson = Gson()) : ViewModel() {
                         }
                     }
                 }
+            } catch (e: UserRecoverableAuthIOException) {
+                reactContext.currentActivity?.startActivityForResult(
+                    e.intent,
+                    REQUEST_AUTHORIZATION
+                )
+                promise.reject(
+                    "getIV",
+                    GoogleDriveManager.UNAUTHORIZED,
+                    e
+                )
             } catch (e: Exception) {
                 promise.reject("getIV", GoogleDriveManager.FAILED_TO_GET_IV, e)
             }
+        }
+    }
+
+    fun googleAccountSignOut(promise: Promise) {
+        try {
+            googleSignInClient?.signOut()
+            googleSignInClient = null
+            promise.resolve(null)
+        } catch (e: Exception) {
+            promise.reject("googleAccountSignOut", GoogleDriveManager.FAILED_GOOGLE_SIGN_OUT, e)
         }
     }
 }

@@ -23,6 +23,8 @@ class GoogleDriveManager(private val reactContext: ReactApplicationContext) :
         const val FAILED_TO_GET_WALLET = "Failed to retrieve wallet"
         const val FAILED_TO_GET_SALT = "Failed to retrieve salt"
         const val FAILED_TO_GET_IV = "Failed to retrieve IV"
+        const val FAILED_GOOGLE_SIGN_OUT = "Failed to Sign out from Google Account"
+        const val UNAUTHORIZED = "Action not permitted"
     }
 
     private fun initViewModel() {
@@ -99,15 +101,9 @@ class GoogleDriveManager(private val reactContext: ReactApplicationContext) :
         viewModel?.deleteWallet(rootAddress, reactContext, promise)
     }
 
-    override fun getConstants(): MutableMap<String, Any> =
-        hashMapOf(
-            "ACTIVITY_NULL" to ACTIVITY_NULL,
-            "OAUTH_INTERRUPTED" to OAUTH_INTERRUPTED,
-            "FAILED_TO_GET_DRIVE" to FAILED_TO_GET_DRIVE,
-            "FAILED_TO_LOCATE_WALLET" to FAILED_TO_LOCATE_WALLET,
-            "FAILED_TO_DELETE_WALLET" to FAILED_TO_DELETE_WALLET,
-            "FAILED_TO_GET_WALLET" to FAILED_TO_GET_WALLET,
-            "FAILED_TO_GET_SALT" to FAILED_TO_GET_SALT,
-            "FAILED_TO_GET_IV" to FAILED_TO_GET_IV,
-        )
+    @ReactMethod
+    fun googleAccountSignOut(promise: Promise) {
+        initViewModel()
+        viewModel?.googleAccountSignOut(promise)
+    }
 }

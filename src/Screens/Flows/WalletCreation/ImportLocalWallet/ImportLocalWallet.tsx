@@ -31,7 +31,7 @@ import { Routes } from "~Navigation"
 import { useHandleWalletCreation } from "~Screens/Flows/Onboarding/WelcomeScreen/useHandleWalletCreation"
 import HapticsService from "~Services/HapticsService"
 import { selectAreDevFeaturesEnabled, selectHasOnboarded, useAppSelector } from "~Storage/Redux"
-import { CryptoUtils } from "~Utils"
+import { CryptoUtils, PlatformUtils } from "~Utils"
 import { UserCreatePasswordScreen } from "../UserCreatePasswordScreen"
 import { ImportWalletInput } from "./Components/ImportWalletInput"
 import { UnlockKeystoreBottomSheet } from "./Components/UnlockKeystoreBottomSheet"
@@ -41,6 +41,7 @@ const DEMO_MNEMONIC = "denial kitchen pet squirrel other broom bar gas better pr
 enum ButtonType {
     local,
     icloud,
+    googleDrive,
     unknown,
 }
 
@@ -81,8 +82,14 @@ export const ImportLocalWallet = () => {
     }, [getAllWalletFromCloud, isCloudAvailable])
 
     const computeButtonType = useMemo(() => {
-        if (textValue.length) return ButtonType.local
-        if (isCloudAvailable && !textValue.length && !!CloudKitWallets?.length) return ButtonType.icloud
+        if (textValue.length) {
+            return ButtonType.local
+        }
+
+        if (isCloudAvailable && !textValue.length && !!CloudKitWallets?.length) {
+            return PlatformUtils.isIOS() ? ButtonType.icloud : ButtonType.googleDrive
+        }
+
         return ButtonType.unknown
     }, [CloudKitWallets?.length, isCloudAvailable, textValue.length])
 
@@ -302,6 +309,34 @@ export const ImportLocalWallet = () => {
     const handleVerify = useCallback(() => onVerify(textValue, importType), [onVerify, textValue, importType])
     const disabledAction = useCallback(() => setIsError(LL.ERROR_INVALID_IMPORT_DATA()), [LL])
 
+    const footerButtonLeftIcon = useMemo(() => {
+        switch (computeButtonType) {
+            case ButtonType.icloud:
+                return "apple-icloud"
+            case ButtonType.googleDrive:
+                return "google-drive"
+            default:
+                return undefined
+        }
+    }, [computeButtonType])
+
+    const footerButtonTitle = useMemo(() => {
+        switch (computeButtonType) {
+            case ButtonType.icloud:
+                return "or use iCloud"
+            case ButtonType.googleDrive:
+                return "or use Google Drive"
+            default:
+                return LL.BTN_IMPORT_WALLET_VERIFY()
+        }
+    }, [LL, computeButtonType])
+
+    const footerButtonAction = useCallback(() => {
+        computeButtonType === ButtonType.icloud || computeButtonType === ButtonType.googleDrive
+            ? nav.navigate(Routes.IMPORT_FROM_CLOUD)
+            : handleVerify()
+    }, [computeButtonType, handleVerify, nav])
+
     return (
         <DismissKeyboardView>
             <Layout
@@ -408,25 +443,17 @@ export const ImportLocalWallet = () => {
 
                         <BaseButton
                             leftIcon={
-                                computeButtonType === ButtonType.icloud ? (
+                                footerButtonLeftIcon ? (
                                     <BaseIcon
-                                        name="apple-icloud"
+                                        name={footerButtonLeftIcon}
                                         color={theme.colors.textReversed}
                                         style={styles.ickoudIcon}
                                     />
                                 ) : undefined
                             }
-                            action={async () =>
-                                computeButtonType === ButtonType.icloud
-                                    ? nav.navigate(Routes.IMPORT_FROM_CLOUD)
-                                    : handleVerify()
-                            }
+                            action={footerButtonAction}
                             style={styles.button}
-                            title={
-                                computeButtonType === ButtonType.icloud
-                                    ? "or use iCloud "
-                                    : LL.BTN_IMPORT_WALLET_VERIFY()
-                            }
+                            title={footerButtonTitle}
                             disabled={computeButtonType === ButtonType.unknown}
                             disabledAction={disabledAction}
                             disabledActionHaptics="Heavy"

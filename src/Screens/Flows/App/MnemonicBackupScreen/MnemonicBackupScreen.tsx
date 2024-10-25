@@ -1,6 +1,6 @@
 import { useNavigation } from "@react-navigation/native"
 import { NativeStackScreenProps } from "@react-navigation/native-stack"
-import React, { useCallback, useEffect } from "react"
+import React, { useCallback, useEffect, useMemo } from "react"
 import { StyleSheet } from "react-native"
 import {
     BaseButton,
@@ -19,17 +19,16 @@ import { DerivationPath } from "~Constants"
 import { useBottomSheetModal, useCloudBackup, useCopyClipboard, useThemedStyles } from "~Hooks"
 import { useI18nContext } from "~i18n"
 import { RootStackParamListSettings, Routes } from "~Navigation"
-import { AddressUtils, CryptoUtils, HexUtils, PasswordUtils } from "~Utils"
-import { isIOS } from "~Utils/PlatformUtils/PlatformUtils"
+import { AddressUtils, CryptoUtils, HexUtils, PasswordUtils, PlatformUtils } from "~Utils"
 
 type Props = {} & NativeStackScreenProps<RootStackParamListSettings, Routes.ICLOUD_MNEMONIC_BACKUP>
 
 export const MnemonicBackupScreen = ({ route }: Props) => {
     const { LL } = useI18nContext()
     const { styles, theme } = useThemedStyles(baseStyles)
-    const isIOSDevice = isIOS()
     const { isCloudAvailable, isWalletBackedUp, saveWalletToCloud, getWalletByRootAddress, isLoading } =
         useCloudBackup()
+
     const { onCopyToClipboard } = useCopyClipboard()
     const { ref: warningRef, onOpen, onClose: onCloseWarning } = useBottomSheetModal()
     const nav = useNavigation()
@@ -74,6 +73,14 @@ export const MnemonicBackupScreen = ({ route }: Props) => {
         [LL, deviceToBackup, getWalletByRootAddress, mnemonicArray, nav, onCloseWarning, saveWalletToCloud],
     )
 
+    const cloudBackupMessage = useMemo(() => {
+        if (isWalletBackedUp) {
+            return PlatformUtils.isIOS() ? LL.BD_BACKED_UP_TO_CLOUD() : LL.BD_BACKED_UP_TO_DRIVE()
+        } else {
+            return PlatformUtils.isIOS() ? LL.BD_NOT_BACKED_UP_TO_CLOUD() : LL.BD_NOT_BACKED_UP_TO_DRIVE()
+        }
+    }, [LL, isWalletBackedUp])
+
     return (
         <>
             <Layout
@@ -87,24 +94,18 @@ export const MnemonicBackupScreen = ({ route }: Props) => {
                         <BaseSpacer height={24} />
 
                         <BaseView justifyContent="center">
-                            {isIOSDevice && (
-                                <>
-                                    <BaseView flexDirection="row">
-                                        <BaseIcon
-                                            name="apple-icloud"
-                                            size={24}
-                                            color={isWalletBackedUp ? theme.colors.success : theme.colors.danger}
-                                        />
-                                        <BaseSpacer width={8} />
-                                        <BaseText color={isWalletBackedUp ? theme.colors.success : theme.colors.danger}>
-                                            {isWalletBackedUp
-                                                ? LL.BD_BACKED_UP_TO_CLOUD()
-                                                : LL.BD_NOT_BACKED_UP_TO_CLOUD()}
-                                        </BaseText>
-                                    </BaseView>
-                                    <BaseSpacer height={24} />
-                                </>
-                            )}
+                            <BaseView flexDirection="row">
+                                <BaseIcon
+                                    name={PlatformUtils.isIOS() ? "apple-icloud" : "google-drive"}
+                                    size={24}
+                                    color={isWalletBackedUp ? theme.colors.success : theme.colors.danger}
+                                />
+                                <BaseSpacer width={8} />
+                                <BaseText color={isWalletBackedUp ? theme.colors.success : theme.colors.danger}>
+                                    {cloudBackupMessage}
+                                </BaseText>
+                            </BaseView>
+                            <BaseSpacer height={24} />
 
                             <BaseText>{LL.BD_MNEMONIC_WARMNING()}</BaseText>
 
@@ -155,7 +156,7 @@ export const MnemonicBackupScreen = ({ route }: Props) => {
                                 mx={0}
                                 width={"auto"}
                                 action={onOpen}
-                                title={"Back up on iCloud"}
+                                title={PlatformUtils.isIOS() ? "Back up on iCloud" : "Back up on Google Drive"}
                                 disabled={isWalletBackedUp || isLoading}
                             />
                         )}

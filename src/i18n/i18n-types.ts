@@ -240,6 +240,10 @@ type RootTranslation = {
 	 */
 	BD_BACKED_UP_TO_CLOUD: string
 	/**
+	 * B​a​c​k​e​d​ ​u​p​ ​t​o​ ​G​o​o​g​l​e​ ​D​r​i​v​e
+	 */
+	BD_BACKED_UP_TO_DRIVE: string
+	/**
 	 * B​a​c​k​u​p​ ​y​o​u​r​ ​m​n​e​m​o​n​i​c​ ​p​h​r​a​s​e
 	 */
 	BD_BACKUP_MNEMONIC: string
@@ -400,6 +404,10 @@ type RootTranslation = {
 	 * N​o​t​ ​b​a​c​k​e​d​ ​u​p​ ​t​o​ ​i​C​l​o​u​d
 	 */
 	BD_NOT_BACKED_UP_TO_CLOUD: string
+	/**
+	 * N​o​t​ ​b​a​c​k​e​d​ ​u​p​ ​t​o​ ​G​o​o​g​l​e​ ​D​r​i​v​e
+	 */
+	BD_NOT_BACKED_UP_TO_DRIVE: string
 	/**
 	 * N​o​ ​t​o​k​e​n​ ​f​o​u​n​d
 	 */
@@ -1657,6 +1665,22 @@ type RootTranslation = {
 	 */
 	GAS_FEE: string
 	/**
+	 * A​n​ ​e​r​r​o​r​ ​o​c​c​u​r​r​e​d​ ​w​h​i​l​e​ ​t​r​y​i​n​g​ ​t​o​ ​c​o​n​n​e​c​t​ ​t​o​ ​G​o​o​g​l​e​ ​D​r​i​v​e​ ​s​e​r​v​i​c​e​.​ ​T​r​y​ ​a​g​a​i​n​!
+	 */
+	GOOGLE_DRIVE_ERROR_GENERIC: string
+	/**
+	 * T​h​e​r​e​ ​w​a​s​ ​a​n​ ​e​r​r​o​r​ ​c​o​n​n​e​c​t​i​n​g​ ​t​o​ ​G​o​o​g​l​e​ ​D​r​i​v​e​.​ ​P​l​e​a​s​e​ ​c​h​e​c​k​ ​y​o​u​r​ ​n​e​t​w​o​r​k​ ​c​o​n​n​e​c​t​i​o​n​ ​a​n​d​ ​t​r​y​ ​a​g​a​i​n​.
+	 */
+	GOOGLE_DRIVE_ERR_NETWORK: string
+	/**
+	 * T​h​e​r​e​ ​w​a​s​ ​a​n​ ​e​r​r​o​r​ ​p​e​r​f​o​r​m​i​n​g​ ​t​h​i​s​ ​G​o​o​g​l​e​ ​D​r​i​v​e​ ​w​a​l​l​e​t​ ​o​p​e​r​a​t​i​o​n​.​ ​P​l​e​a​s​e​ ​t​r​y​ ​a​g​a​i​n​.
+	 */
+	GOOGLE_DRIVE_ERR_WALLET_OPERATION: string
+	/**
+	 * A​u​t​h​o​r​i​z​a​t​i​o​n​ ​r​e​q​u​i​r​e​d​.​ ​P​l​e​a​s​e​ ​g​r​a​n​t​ ​t​h​e​ ​n​e​c​e​s​s​a​r​y​ ​p​e​r​m​i​s​s​i​o​n​s​ ​a​n​d​ ​t​r​y​ ​a​g​a​i​n​.
+	 */
+	GOOGLE_DRIVE_ERR_UNAUTHORIZED: string
+	/**
 	 * H​e​a​d​s​ ​u​p​!
 	 */
 	HEADS_UP: string
@@ -2843,6 +2867,10 @@ type RootTranslation = {
 	 */
 	TAKE_ME_TO_ICLOUD: string
 	/**
+	 * T​a​k​e​ ​m​e​ ​t​o​ ​G​o​o​g​l​e​ ​D​r​i​v​e
+	 */
+	TAKE_ME_TO_DRIVE: string
+	/**
 	 * T​a​p​ ​t​o​ ​v​i​e​w​ ​M​n​e​m​o​n​i​c
 	 */
 	TAP_TO_VIEW: string
@@ -2930,6 +2958,10 @@ type RootTranslation = {
 	 * I​m​p​o​r​t​ ​W​a​l​l​e​t​ ​f​r​o​m​ ​i​C​l​o​u​d
 	 */
 	TITLE_IMPORT_WALLET_FROM_ICLOUD: string
+	/**
+	 * I​m​p​o​r​t​ ​W​a​l​l​e​t​ ​f​r​o​m​ ​G​o​o​g​l​e​ ​D​r​i​v​e
+	 */
+	TITLE_IMPORT_WALLET_FROM_DRIVE: string
 	/**
 	 * I​m​p​o​r​t​ ​W​a​l​l​e​t
 	 */
@@ -3104,6 +3136,10 @@ type RootTranslation = {
 	 * w​a​l​l​e​t​s​ ​s​a​v​e​d​ ​o​n​ ​i​C​l​o​u​d​.
 	 */
 	WALLETS_SAVED_ON_ICLOUD: string
+	/**
+	 * w​a​l​l​e​t​s​ ​s​a​v​e​d​ ​o​n​ ​G​o​o​g​l​e​ ​D​r​i​v​e​.
+	 */
+	WALLETS_SAVED_ON_DRIVE: string
 	/**
 	 * A​c​c​o​u​n​t
 	 */
@@ -3494,6 +3530,10 @@ Try reconnect your device to the internet.
 	 */
 	BD_BACKED_UP_TO_CLOUD: () => LocalizedString
 	/**
+	 * Backed up to Google Drive
+	 */
+	BD_BACKED_UP_TO_DRIVE: () => LocalizedString
+	/**
 	 * Backup your mnemonic phrase
 	 */
 	BD_BACKUP_MNEMONIC: () => LocalizedString
@@ -3654,6 +3694,10 @@ VeWorld will never ask you for them.
 	 * Not backed up to iCloud
 	 */
 	BD_NOT_BACKED_UP_TO_CLOUD: () => LocalizedString
+	/**
+	 * Not backed up to Google Drive
+	 */
+	BD_NOT_BACKED_UP_TO_DRIVE: () => LocalizedString
 	/**
 	 * No token found
 	 */
@@ -4903,6 +4947,22 @@ VeWorld will never ask you for them.
 	 */
 	GAS_FEE: () => LocalizedString
 	/**
+	 * An error occurred while trying to connect to Google Drive service. Try again!
+	 */
+	GOOGLE_DRIVE_ERROR_GENERIC: () => LocalizedString
+	/**
+	 * There was an error connecting to Google Drive. Please check your network connection and try again.
+	 */
+	GOOGLE_DRIVE_ERR_NETWORK: () => LocalizedString
+	/**
+	 * There was an error performing this Google Drive wallet operation. Please try again.
+	 */
+	GOOGLE_DRIVE_ERR_WALLET_OPERATION: () => LocalizedString
+	/**
+	 * Authorization required. Please grant the necessary permissions and try again.
+	 */
+	GOOGLE_DRIVE_ERR_UNAUTHORIZED: () => LocalizedString
+	/**
 	 * Heads up!
 	 */
 	HEADS_UP: () => LocalizedString
@@ -6067,6 +6127,10 @@ VeWorld will never ask you for them.
 	 */
 	TAKE_ME_TO_ICLOUD: () => LocalizedString
 	/**
+	 * Take me to Google Drive
+	 */
+	TAKE_ME_TO_DRIVE: () => LocalizedString
+	/**
 	 * Tap to view Mnemonic
 	 */
 	TAP_TO_VIEW: () => LocalizedString
@@ -6154,6 +6218,10 @@ VeWorld will never ask you for them.
 	 * Import Wallet from iCloud
 	 */
 	TITLE_IMPORT_WALLET_FROM_ICLOUD: () => LocalizedString
+	/**
+	 * Import Wallet from Google Drive
+	 */
+	TITLE_IMPORT_WALLET_FROM_DRIVE: () => LocalizedString
 	/**
 	 * Import Wallet
 	 */
@@ -6326,6 +6394,10 @@ VeWorld will never ask you for them.
 	 * wallets saved on iCloud.
 	 */
 	WALLETS_SAVED_ON_ICLOUD: () => LocalizedString
+	/**
+	 * wallets saved on Google Drive.
+	 */
+	WALLETS_SAVED_ON_DRIVE: () => LocalizedString
 	/**
 	 * Account
 	 */

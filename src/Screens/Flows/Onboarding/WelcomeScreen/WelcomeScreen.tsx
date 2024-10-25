@@ -24,6 +24,8 @@ import { Routes } from "~Navigation"
 import { UserCreatePasswordScreen } from "~Screens/Flows/WalletCreation"
 import { useDemoWallet } from "./useDemoWallet"
 import { useHandleWalletCreation } from "./useHandleWalletCreation"
+import { PlatformUtils } from "~Utils"
+
 const assetImage = require("~Assets/Img/Clouds.png")
 
 export const WelcomeScreen = () => {
@@ -68,7 +70,7 @@ export const WelcomeScreen = () => {
             }
         }
 
-        isCloudAvailable && init()
+        isCloudAvailable && PlatformUtils.isIOS() && init()
     }, [onQuickCloudModalOpen, isCloudAvailable, getAllWalletFromCloud])
 
     useEffect(() => {
@@ -235,7 +237,9 @@ const CloudKitModalReminder = ({
                                     </BaseText>
 
                                     <BaseText typographyFont="subSubTitle" align="center" color={COLORS.DARK_PURPLE}>
-                                        {LL.WALLETS_SAVED_ON_ICLOUD()}
+                                        {PlatformUtils.isIOS()
+                                            ? LL.WALLETS_SAVED_ON_ICLOUD()
+                                            : LL.WALLETS_SAVED_ON_DRIVE()}
                                     </BaseText>
                                 </BaseView>
 
@@ -261,14 +265,14 @@ const CloudKitModalReminder = ({
                             </BaseView>
 
                             <BaseButton
-                                title={LL.TAKE_ME_TO_ICLOUD()}
+                                title={PlatformUtils.isIOS() ? LL.TAKE_ME_TO_ICLOUD() : LL.TAKE_ME_TO_DRIVE()}
                                 action={onGoToImportFromCLoud}
                                 w={100}
                                 bgColor={theme.isDark ? theme.colors.background : undefined}
                                 textColor={theme.isDark ? theme.colors.text : undefined}
                                 rightIcon={
                                     <BaseIcon
-                                        name="apple-icloud"
+                                        name={PlatformUtils.isIOS() ? "apple-icloud" : "google-drive"}
                                         size={22}
                                         color={theme.isDark ? theme.colors.text : theme.colors.textReversed}
                                         style={s.icon}
