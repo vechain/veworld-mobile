@@ -11,6 +11,7 @@ type Props = {
     noBackButton?: boolean
     noMargin?: boolean
     title?: string
+    pageHeader?: ReactNode
     fixedHeader?: ReactNode
     body?: ReactNode
     fixedBody?: ReactNode
@@ -33,6 +34,7 @@ export const Layout = ({
     noBackButton = false,
     noMargin = false,
     title,
+    pageHeader,
     fixedHeader,
     body,
     fixedBody,
@@ -87,6 +89,15 @@ export const Layout = ({
                             />
                             <BaseSpacer height={8} />
                         </>
+                    )}
+                    {pageHeader && (
+                        <BaseView>
+                            <BaseView mx={noMargin ? 0 : 20}>
+                                {title && <Title />}
+                                {<BaseView>{pageHeader}</BaseView>}
+                            </BaseView>
+                            <BaseSpacer height={12} />
+                        </BaseView>
                     )}
                     {fixedHeader && (
                         <BaseView>
@@ -148,6 +159,7 @@ export const Layout = ({
             noBackButton,
             beforeNavigating,
             onGoBack,
+            pageHeader,
             fixedHeader,
             noMargin,
             title,
