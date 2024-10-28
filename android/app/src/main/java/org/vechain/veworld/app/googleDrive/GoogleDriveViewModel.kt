@@ -418,6 +418,8 @@ class GoogleDriveViewModel(
                                     outputStream.toString(), BackupFile::class.java
                                 )
                                 promise.resolve(backupFile.toWritableMap())
+                            } else {
+                                promise.resolve(null)
                             }
                         }
                     }

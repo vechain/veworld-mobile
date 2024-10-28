@@ -42,12 +42,11 @@ export const MnemonicBackupScreen = ({ route }: Props) => {
             try {
                 setIsLoading(true)
                 if (deviceToBackup?.rootAddress) {
-                    const wallet = await getWalletByRootAddress(deviceToBackup.rootAddress)?.finally(() =>
-                        setIsLoading(false),
-                    )
+                    const wallet = await getWalletByRootAddress(deviceToBackup.rootAddress)
                     setIsWalletBackedUp(!!wallet)
                 }
             } catch (error) {
+                setIsWalletBackedUp(false)
             } finally {
                 setIsLoading(false)
             }
@@ -58,6 +57,7 @@ export const MnemonicBackupScreen = ({ route }: Props) => {
 
     const onHandleBackupToCloudKit = useCallback(
         async (password: string) => {
+            setIsLoading(true)
             onCloseWarning()
 
             if (!deviceToBackup?.xPub) {
@@ -82,10 +82,11 @@ export const MnemonicBackupScreen = ({ route }: Props) => {
                 derivationPath: deviceToBackup?.derivationPath ?? DerivationPath.VET,
             })
 
-            getWalletByRootAddress(deviceToBackup!.rootAddress)
+            setIsLoading(false)
+            setIsWalletBackedUp(true)
             nav.goBack()
         },
-        [LL, deviceToBackup, getWalletByRootAddress, mnemonicArray, nav, onCloseWarning, saveWalletToCloud],
+        [LL, deviceToBackup, mnemonicArray, nav, onCloseWarning, saveWalletToCloud],
     )
 
     const cloudBackupMessage = useMemo(() => {

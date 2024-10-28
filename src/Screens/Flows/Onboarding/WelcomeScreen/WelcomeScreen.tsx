@@ -36,6 +36,8 @@ export const WelcomeScreen = () => {
 
     const { ref, onOpen, onClose } = useBottomSheetModal()
 
+    const [isLoading, setIsLoading] = useState(false)
+
     const onImportWallet = useCallback(async () => {
         track(AnalyticsEvent.SELECT_WALLET_IMPORT_WALLET)
         onOpen()
@@ -51,7 +53,7 @@ export const WelcomeScreen = () => {
         url && Linking.openURL(url)
     }, [])
 
-    const { getAllWalletFromCloud, isLoading, isCloudAvailable } = useCloudBackup()
+    const { getAllWalletFromCloud, isCloudAvailable } = useCloudBackup()
 
     const {
         onOpen: onQuickCloudModalOpen,
@@ -63,8 +65,10 @@ export const WelcomeScreen = () => {
 
     useEffect(() => {
         const init = async () => {
+            setIsLoading(true)
             const wallets = await getAllWalletFromCloud()
             setWalletNumber(wallets.length)
+            setIsLoading(false)
             if (wallets.length) {
                 onQuickCloudModalOpen()
             }

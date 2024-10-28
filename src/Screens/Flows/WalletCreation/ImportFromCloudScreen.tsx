@@ -34,7 +34,7 @@ export const ImportFromCloudScreen = () => {
     const userHasOnboarded = useAppSelector(selectHasOnboarded)
     const nav = useNavigation()
     const theme = useTheme()
-    const { getAllWalletFromCloud, isLoading, getSalt, getIV, deleteWallet } = useCloudBackup()
+    const { getAllWalletFromCloud, getSalt, getIV, deleteWallet } = useCloudBackup()
     const { LL } = useI18nContext()
     const [cloudKitWallets, setCloudKitWallets] = useState<CloudKitWallet[] | null>(null)
     const [selected, setSelected] = useState<CloudKitWallet | null>(null)
@@ -43,6 +43,8 @@ export const ImportFromCloudScreen = () => {
     const { checkCanImportDevice } = useDeviceUtils()
     const devices = useAppSelector(selectDevices)
     const mnemonicCache = useRef<string[]>()
+
+    const [isLoading, setIsLoading] = useState(true)
 
     const {
         onCreateWallet,
@@ -58,8 +60,10 @@ export const ImportFromCloudScreen = () => {
 
     useEffect(() => {
         const init = async () => {
+            setIsLoading(true)
             const wallets = await getAllWalletFromCloud()
             setCloudKitWallets(wallets)
+            setIsLoading(false)
         }
         init()
     }, [getAllWalletFromCloud])
@@ -112,6 +116,7 @@ export const ImportFromCloudScreen = () => {
             onCloseWarning()
 
             if (selected) {
+                setIsLoading(true)
                 const { salt } = await getSalt(selected.rootAddress)
                 const { iv } = await getIV(selected.rootAddress)
 
@@ -119,6 +124,7 @@ export const ImportFromCloudScreen = () => {
                     showErrorToast({
                         text1: LL.CLOUDKIT_ERROR_GENERIC(),
                     })
+                    setIsLoading(false)
                     return
                 }
 
@@ -135,6 +141,7 @@ export const ImportFromCloudScreen = () => {
                     showErrorToast({
                         text1: LL.ERROR_DECRYPTING_WALLET(),
                     })
+                    setIsLoading(false)
                     return
                 }
 
@@ -150,12 +157,14 @@ export const ImportFromCloudScreen = () => {
                             importType: PlatformUtils.isIOS() ? IMPORT_TYPE.ICLOUD : IMPORT_TYPE.GOOGLE_DRIVE,
                         })
                     }
+                    setIsLoading(false)
                 } catch (_error) {
                     let er = _error as Error
                     error(ERROR_EVENTS.CLOUDKIT, er, er.message)
                     showErrorToast({
                         text1: er.message ?? LL.ERROR_CREATING_WALLET(),
                     })
+                    setIsLoading(false)
                 }
             } else {
                 showErrorToast({

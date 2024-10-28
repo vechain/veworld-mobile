@@ -1,4 +1,4 @@
-import { useCallback, useState } from "react"
+import { useCallback } from "react"
 import { NativeModules } from "react-native"
 import { showErrorToast } from "~Components"
 import { DerivationPath, ERROR_EVENTS } from "~Constants"
@@ -10,8 +10,6 @@ const { CloudKitManager } = NativeModules
 
 export const useCloudKit = () => {
     const { LL } = useI18nContext()
-    const [isWalletBackedUp, setIsWalletBackedUp] = useState(false)
-    const [isLoading, setIsLoading] = useState(false)
 
     const getCloudKitAvailability = useCallback(async () => {
         try {
@@ -27,11 +25,9 @@ export const useCloudKit = () => {
     }, [])
 
     const deleteWallet = useCallback(async (_rootAddress: string) => {
-        setIsLoading(true)
         const delWAllet = await CloudKitManager.deleteWallet(_rootAddress)
         const delSalt = await CloudKitManager.deleteSalt(_rootAddress)
         const delIV = await CloudKitManager.deleteIV(_rootAddress)
-        setIsLoading(false)
         return delWAllet && delSalt && delIV
     }, [])
 
@@ -60,8 +56,6 @@ export const useCloudKit = () => {
                 return
             }
 
-            setIsLoading(true)
-
             try {
                 const result = await CloudKitManager.saveToCloudKit(
                     _rootAddress,
@@ -80,13 +74,10 @@ export const useCloudKit = () => {
                         showErrorToast({
                             text1: LL.CLOUDKIT_ERROR_GENERIC(),
                         })
-                        setIsLoading(false)
-                        return
                     }
                 }
             } catch (_error: unknown) {
                 await deleteWallet(_rootAddress)
-                setIsLoading(false)
                 let er = _error as CKError
                 error(ERROR_EVENTS.CLOUDKIT, er, er.message)
                 showErrorToast({
@@ -99,19 +90,17 @@ export const useCloudKit = () => {
     )
 
     const getAllWalletsFromCloudKit = useCallback(async () => {
-        setIsLoading(true)
         try {
             const result = await CloudKitManager.getAllFromCloudKit()
-            setIsLoading(false)
             return result
         } catch (_error) {
-            setIsLoading(false)
             let er = _error as CKError
             error(ERROR_EVENTS.CLOUDKIT, er, er.message)
             showErrorToast({
                 text1: er.message,
                 text2: handleCloudKitErrors(er),
             })
+            return []
         }
     }, [])
 
@@ -119,15 +108,10 @@ export const useCloudKit = () => {
         if (!_rootAddress) {
             return
         }
-
-        setIsLoading(true)
         try {
             const selectedWallet = await CloudKitManager.getWallet(_rootAddress)
-            setIsWalletBackedUp(!!selectedWallet?.rootAddress)
-            setIsLoading(false)
             return selectedWallet
         } catch (_error) {
-            setIsLoading(false)
             let er = _error as CKError
             error(ERROR_EVENTS.CLOUDKIT, er, er.message)
             showErrorToast({
@@ -138,13 +122,10 @@ export const useCloudKit = () => {
     }, [])
 
     const getSalt = useCallback(async (_rootAddress: string) => {
-        setIsLoading(true)
         try {
             const salt = await CloudKitManager.getSalt(_rootAddress)
-            setIsLoading(false)
             return salt
         } catch (_error) {
-            setIsLoading(false)
             let er = _error as CKError
             error(ERROR_EVENTS.CLOUDKIT, er, er.message)
             showErrorToast({
@@ -155,13 +136,10 @@ export const useCloudKit = () => {
     }, [])
 
     const getIV = useCallback(async (_rootAddress: string) => {
-        setIsLoading(true)
         try {
             const iv = await CloudKitManager.getIV(_rootAddress)
-            setIsLoading(false)
             return iv
         } catch (_error) {
-            setIsLoading(false)
             let er = _error as CKError
             error(ERROR_EVENTS.CLOUDKIT, er, er.message)
             showErrorToast({
@@ -175,9 +153,7 @@ export const useCloudKit = () => {
         getCloudKitAvailability,
         saveWalletToCloudKit,
         getAllWalletsFromCloudKit,
-        isWalletBackedUp,
         getWalletByRootAddress,
-        isLoading,
         getSalt,
         getIV,
         deleteWallet,

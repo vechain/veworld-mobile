@@ -1,4 +1,4 @@
-import { useCallback, useState } from "react"
+import { useCallback } from "react"
 import { NativeModules } from "react-native"
 import { showErrorToast } from "~Components"
 import { DerivationPath, ERROR_EVENTS } from "~Constants"
@@ -10,8 +10,6 @@ const { GoogleDriveManager } = NativeModules
 
 export const useGoogleDrive = () => {
     const { LL } = useI18nContext()
-    const [isWalletBackedUp, setIsWalletBackedUp] = useState(false)
-    const [isLoading, setIsLoading] = useState(false)
 
     const isCancelError = (message: string) => {
         return message === OAUTH_INTERRUPTED
@@ -33,14 +31,11 @@ export const useGoogleDrive = () => {
     }, [])
 
     const deleteWallet = useCallback(async (_rootAddress: string) => {
-        setIsLoading(true)
         try {
             await GoogleDriveManager.deleteWallet(_rootAddress)
             return true
         } catch (err) {
             return false
-        } finally {
-            setIsLoading(false)
         }
     }, [])
 
@@ -69,8 +64,6 @@ export const useGoogleDrive = () => {
                 return
             }
 
-            setIsLoading(true)
-
             try {
                 await GoogleDriveManager.saveToGoogleDrive(
                     _rootAddress,
@@ -87,16 +80,12 @@ export const useGoogleDrive = () => {
                         text1: LL.GOOGLE_DRIVE_ERROR_GENERIC(),
                     })
                 }
-            } finally {
-                setIsLoading(false)
             }
         },
         [LL],
     )
 
     const getAllWalletsFromGoogleDrive = useCallback(async () => {
-        setIsLoading(true)
-
         try {
             const result = await GoogleDriveManager.getAllWalletsFromGoogleDrive()
             return result
@@ -110,8 +99,6 @@ export const useGoogleDrive = () => {
                 })
             }
             return []
-        } finally {
-            setIsLoading(false)
         }
     }, [])
 
@@ -120,11 +107,8 @@ export const useGoogleDrive = () => {
             return
         }
 
-        setIsLoading(true)
-
         try {
             const selectedWallet = await GoogleDriveManager.getWallet(_rootAddress)
-            setIsWalletBackedUp(!!selectedWallet?.rootAddress)
             return selectedWallet
         } catch (err) {
             let er = err as GDError
@@ -135,13 +119,10 @@ export const useGoogleDrive = () => {
                     text2: handleGoogleDriveErrors(er),
                 })
             }
-        } finally {
-            setIsLoading(false)
         }
     }, [])
 
     const getSalt = useCallback(async (_rootAddress: string) => {
-        setIsLoading(true)
         try {
             const salt = await GoogleDriveManager.getSalt(_rootAddress)
             return salt
@@ -154,13 +135,10 @@ export const useGoogleDrive = () => {
                     text2: handleGoogleDriveErrors(er),
                 })
             }
-        } finally {
-            setIsLoading(false)
         }
     }, [])
 
     const getIV = useCallback(async (_rootAddress: string) => {
-        setIsLoading(true)
         try {
             const salt = await GoogleDriveManager.getIV(_rootAddress)
             return salt
@@ -173,13 +151,10 @@ export const useGoogleDrive = () => {
                     text2: handleGoogleDriveErrors(er),
                 })
             }
-        } finally {
-            setIsLoading(false)
         }
     }, [])
 
     const googleAccountSignOut = useCallback(async () => {
-        setIsLoading(true)
         try {
             const salt = await GoogleDriveManager.googleAccountSignOut()
             return salt
@@ -192,8 +167,6 @@ export const useGoogleDrive = () => {
                     text2: handleGoogleDriveErrors(er),
                 })
             }
-        } finally {
-            setIsLoading(false)
         }
     }, [])
 
@@ -205,8 +178,6 @@ export const useGoogleDrive = () => {
         getWalletByRootAddress,
         getSalt,
         getIV,
-        isWalletBackedUp,
-        isLoading,
         googleAccountSignOut,
     }
 }

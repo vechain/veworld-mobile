@@ -6,22 +6,37 @@ import { PlatformUtils } from "~Utils"
 export const useCloudBackup = () => {
     const [isAvailable, setisAvailable] = useState(false)
 
-    const { getWalletByRootAddress: getWalletFromDrive, ...googleDrive } = useGoogleDrive()
-    const { getWalletByRootAddress: getWalletFromICloud, ...cloudKit } = useCloudKit()
+    const {
+        getWalletByRootAddress: getWalletFromDrive,
+        saveWalletToGoogleDrive,
+        getAllWalletsFromGoogleDrive,
+        getSalt: getSaltFromDrive,
+        getIV: getIVFromDrive,
+        deleteWallet: deleteWalletFromDrive,
+        getGoogleServicesAvailability,
+    } = useGoogleDrive()
+
+    const {
+        getWalletByRootAddress: getWalletFromICloud,
+        saveWalletToCloudKit,
+        getAllWalletsFromCloudKit,
+        getSalt: getSaltFromICloud,
+        getIV: getIVFromICloud,
+        deleteWallet: deleteWalletFromICloud,
+        getCloudKitAvailability,
+    } = useCloudKit()
 
     useEffect(() => {
         if (PlatformUtils.isIOS()) {
-            cloudKit
-                .getCloudKitAvailability()
+            getCloudKitAvailability()
                 .then(_isAvailable => setisAvailable(_isAvailable))
                 .catch(() => setisAvailable(false))
         } else {
-            googleDrive
-                .getGoogleServicesAvailability()
+            getGoogleServicesAvailability()
                 .then(_isAvailable => setisAvailable(_isAvailable))
                 .catch(() => setisAvailable(false))
         }
-    }, [cloudKit, googleDrive])
+    }, [getCloudKitAvailability, getGoogleServicesAvailability])
 
     const getWalletByRootAddress = useCallback(
         async (_rootAddress: string) => {
@@ -33,22 +48,12 @@ export const useCloudBackup = () => {
     )
 
     return {
-        getCloudAvailability: PlatformUtils.isIOS()
-            ? cloudKit.getCloudKitAvailability
-            : googleDrive.getGoogleServicesAvailability,
-
-        saveWalletToCloud: PlatformUtils.isIOS() ? cloudKit.saveWalletToCloudKit : googleDrive.saveWalletToGoogleDrive,
-
-        getAllWalletFromCloud: PlatformUtils.isIOS()
-            ? cloudKit.getAllWalletsFromCloudKit
-            : googleDrive.getAllWalletsFromGoogleDrive,
-
+        saveWalletToCloud: PlatformUtils.isIOS() ? saveWalletToCloudKit : saveWalletToGoogleDrive,
+        getAllWalletFromCloud: PlatformUtils.isIOS() ? getAllWalletsFromCloudKit : getAllWalletsFromGoogleDrive,
         isCloudAvailable: isAvailable,
-        isWalletBackedUp: PlatformUtils.isIOS() ? cloudKit.isWalletBackedUp : googleDrive.isWalletBackedUp,
         getWalletByRootAddress: getWalletByRootAddress,
-        isLoading: PlatformUtils.isIOS() ? cloudKit.isLoading : googleDrive.isLoading,
-        getSalt: PlatformUtils.isIOS() ? cloudKit.getSalt : googleDrive.getSalt,
-        getIV: PlatformUtils.isIOS() ? cloudKit.getIV : googleDrive.getIV,
-        deleteWallet: PlatformUtils.isIOS() ? cloudKit.deleteWallet : googleDrive.deleteWallet,
+        getSalt: PlatformUtils.isIOS() ? getSaltFromICloud : getSaltFromDrive,
+        getIV: PlatformUtils.isIOS() ? getIVFromICloud : getIVFromDrive,
+        deleteWallet: PlatformUtils.isIOS() ? deleteWalletFromICloud : deleteWalletFromDrive,
     }
 }
