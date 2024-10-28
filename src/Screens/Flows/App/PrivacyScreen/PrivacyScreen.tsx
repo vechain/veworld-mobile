@@ -12,7 +12,7 @@ import {
 } from "~Components"
 import { useBackupMnemonic } from "./Hooks/useBackupMnemonic"
 import { useI18nContext } from "~i18n"
-import { EnableBiometrics } from "./Components"
+import { EnableBiometrics, DevicesBackupState } from "./Components"
 import { DEVICE_TYPE, LocalDevice } from "~Model"
 import { selectAreDevFeaturesEnabled, selectSelectedAccount, useAppDispatch, useAppSelector } from "~Storage/Redux"
 import { selectAnalyticsTrackingEnabled, selectLocalDevices } from "~Storage/Redux/Selectors"
@@ -24,7 +24,6 @@ import { ERROR_EVENTS } from "~Constants"
 import { useSharedValue, withTiming } from "react-native-reanimated"
 import { useNavigation } from "@react-navigation/native"
 import { Routes } from "~Navigation"
-import { DevicesBackupState } from "~Screens/Flows/App/PrivacyScreen/Components/DevicesBackupState"
 
 export const PrivacyScreen = () => {
     // [START] - Hooks setup

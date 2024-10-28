@@ -75,7 +75,7 @@ export const useBackupMnemonic = ({
                     pinCode: password,
                 })
 
-                if (wallet?.mnemonic) {
+                if (wallet?.mnemonic?.length) {
                     openBackupPhraseSheetWithDelay(300, wallet.mnemonic, deviceToBackup)
                     dispatch(setDeviceIsBackup({ rootAddress: deviceToBackup.rootAddress, isBackup: true }))
                 }
