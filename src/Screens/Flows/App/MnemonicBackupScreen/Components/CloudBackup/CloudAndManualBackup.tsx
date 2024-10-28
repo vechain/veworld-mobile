@@ -21,7 +21,7 @@ export const CloudAndManualBackup: FC<Props> = ({ mnemonicArray, deviceToBackup 
             {deviceToBackup?.isBuckedUp && (
                 <>
                     <BaseSpacer height={16} />
-                    <IsBackedupAlert />
+                    <IsBackedupAlert deviceToBackup={deviceToBackup} />
                 </>
             )}
             <BaseSpacer height={16} />
@@ -35,23 +35,15 @@ export const CloudAndManualBackup: FC<Props> = ({ mnemonicArray, deviceToBackup 
                 <BaseSpacer style={styles.line} height={1} />
             </BaseView>
             <BaseSpacer height={16} />
-            <ManualBackupCard mnemonicArray={mnemonicArray} />
+            <ManualBackupCard mnemonicArray={mnemonicArray} deviceToBackup={deviceToBackup} />
         </BaseView>
     )
 }
 
 const baseStyles = (theme: ColorThemeType) =>
     StyleSheet.create({
-        container: {
-            flexDirection: "row",
-            alignItems: "center",
-            width: 100,
-        },
         line: {
             flex: 1,
             backgroundColor: theme.colors.placeholder,
-        },
-        text: {
-            color: theme.colors.placeholder,
         },
     })
