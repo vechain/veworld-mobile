@@ -115,7 +115,11 @@ export const useCloudKit = () => {
         }
     }, [])
 
-    const getWalletByRootAddress = useCallback(async (_rootAddress: string) => {
+    const getWalletByRootAddress = useCallback(async (_rootAddress?: string) => {
+        if (!_rootAddress) {
+            return
+        }
+
         setIsLoading(true)
         try {
             const selectedWallet = await CloudKitManager.getWallet(_rootAddress)

@@ -6,8 +6,8 @@ import { PlatformUtils } from "~Utils"
 export const useCloudBackup = () => {
     const [isAvailable, setisAvailable] = useState(false)
 
-    const googleDrive = useGoogleDrive()
-    const cloudKit = useCloudKit()
+    const { getWalletByRootAddress: getWalletFromDrive, ...googleDrive } = useGoogleDrive()
+    const { getWalletByRootAddress: getWalletFromICloud, ...cloudKit } = useCloudKit()
 
     useEffect(() => {
         if (PlatformUtils.isIOS()) {
@@ -24,16 +24,12 @@ export const useCloudBackup = () => {
     }, [cloudKit, googleDrive])
 
     const getWalletByRootAddress = useCallback(
-        (_rootAddress: string) => {
-            if (!isAvailable) {
-                return
-            }
-
+        async (_rootAddress: string) => {
             return PlatformUtils.isIOS()
-                ? () => cloudKit.getWalletByRootAddress(_rootAddress)
-                : () => googleDrive.getWalletByRootAddress(_rootAddress)
+                ? await getWalletFromICloud(_rootAddress)
+                : await getWalletFromDrive(_rootAddress)
         },
-        [cloudKit, googleDrive, isAvailable],
+        [getWalletFromDrive, getWalletFromICloud],
     )
 
     return {

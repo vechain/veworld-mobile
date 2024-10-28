@@ -1,6 +1,6 @@
 import { useNavigation } from "@react-navigation/native"
 import { NativeStackScreenProps } from "@react-navigation/native-stack"
-import React, { useCallback, useEffect, useMemo } from "react"
+import React, { useCallback, useEffect, useMemo, useState } from "react"
 import { StyleSheet } from "react-native"
 import {
     BaseButton,
@@ -26,8 +26,7 @@ type Props = {} & NativeStackScreenProps<RootStackParamListSettings, Routes.ICLO
 export const MnemonicBackupScreen = ({ route }: Props) => {
     const { LL } = useI18nContext()
     const { styles, theme } = useThemedStyles(baseStyles)
-    const { isCloudAvailable, isWalletBackedUp, saveWalletToCloud, getWalletByRootAddress, isLoading } =
-        useCloudBackup()
+    const { isCloudAvailable, saveWalletToCloud, getWalletByRootAddress } = useCloudBackup()
 
     const { onCopyToClipboard } = useCopyClipboard()
     const { ref: warningRef, onOpen, onClose: onCloseWarning } = useBottomSheetModal()
@@ -35,10 +34,26 @@ export const MnemonicBackupScreen = ({ route }: Props) => {
 
     const { mnemonicArray, deviceToBackup } = route.params
 
+    const [isLoading, setIsLoading] = useState(false)
+    const [isWalletBackedUp, setIsWalletBackedUp] = useState(false)
+
     useEffect(() => {
-        if (deviceToBackup?.rootAddress) {
-            getWalletByRootAddress(deviceToBackup.rootAddress)
+        const init = async () => {
+            try {
+                setIsLoading(true)
+                if (deviceToBackup?.rootAddress) {
+                    const wallet = await getWalletByRootAddress(deviceToBackup.rootAddress)?.finally(() =>
+                        setIsLoading(false),
+                    )
+                    setIsWalletBackedUp(!!wallet)
+                }
+            } catch (error) {
+            } finally {
+                setIsLoading(false)
+            }
         }
+
+        init()
     }, [deviceToBackup?.rootAddress, getWalletByRootAddress])
 
     const onHandleBackupToCloudKit = useCallback(

@@ -115,7 +115,11 @@ export const useGoogleDrive = () => {
         }
     }, [])
 
-    const getWalletByRootAddress = useCallback(async (_rootAddress: string) => {
+    const getWalletByRootAddress = useCallback(async (_rootAddress?: string) => {
+        if (!_rootAddress) {
+            return
+        }
+
         setIsLoading(true)
 
         try {
