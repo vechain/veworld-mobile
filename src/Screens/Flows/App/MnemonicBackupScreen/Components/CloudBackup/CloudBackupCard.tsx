@@ -19,7 +19,7 @@ export const CloudBackupCard: FC<Props> = ({ mnemonicArray, deviceToBackup }) =>
     const { styles, theme } = useThemedStyles(baseStyles)
     const nav = useNavigation()
 
-    const { isCloudKitAvailable, isWalletBackedUp, saveWalletToCloudKit, getWalletByRootAddress } = useCloudKit()
+    const { isWalletBackedUp, saveWalletToCloudKit, getWalletByRootAddress } = useCloudKit()
 
     const { ref: warningRef, onOpen, onClose: onCloseWarning } = useBottomSheetModal()
     useEffect(() => {
@@ -63,39 +63,33 @@ export const CloudBackupCard: FC<Props> = ({ mnemonicArray, deviceToBackup }) =>
         <>
             <BaseView justifyContent="center">
                 <CardWithHeader title={LL.TITLE_BACKUP_CLOUD()} iconName="cloud-outline">
-                    {!isCloudKitAvailable && (
-                        <BaseTouchableBox
-                            containerStyle={[
-                                styles.cloudRow,
-                                {
-                                    backgroundColor: isWalletBackedUp
-                                        ? theme.colors.successBackground
-                                        : theme.colors.primary,
-                                },
-                            ]}
-                            style={styles.cloudRowContent}
-                            action={onOpen}>
-                            <BaseView style={styles.cloudInfo}>
-                                {!isWalletBackedUp ? (
-                                    <BaseText typographyFont="bodyMedium" color={theme.colors.textReversed}>
-                                        {LL.ICLOUD()}
+                    <BaseTouchableBox
+                        containerStyle={[
+                            styles.cloudRow,
+                            {
+                                backgroundColor: isWalletBackedUp
+                                    ? theme.colors.successBackground
+                                    : theme.colors.primary,
+                            },
+                        ]}
+                        style={styles.cloudRowContent}
+                        action={onOpen}>
+                        <BaseView style={styles.cloudInfo}>
+                            {!isWalletBackedUp ? (
+                                <BaseText typographyFont="bodyMedium" color={theme.colors.textReversed}>
+                                    {LL.ICLOUD()}
+                                </BaseText>
+                            ) : (
+                                <BaseView flexDirection="row">
+                                    <BaseIcon name="check-circle-outline" size={16} color={theme.colors.successIcon} />
+                                    <BaseText style={styles.verifyCloudText} typographyFont="captionRegular">
+                                        {LL.BTN_VERIFY_ICLOUD_BACKUP()}
                                     </BaseText>
-                                ) : (
-                                    <BaseView flexDirection="row">
-                                        <BaseIcon
-                                            name="check-circle-outline"
-                                            size={16}
-                                            color={theme.colors.successIcon}
-                                        />
-                                        <BaseText style={styles.verifyCloudText} typographyFont="captionRegular">
-                                            {LL.BTN_VERIFY_ICLOUD_BACKUP()}
-                                        </BaseText>
-                                    </BaseView>
-                                )}
-                            </BaseView>
-                            <BaseIcon name="chevron-right" size={14} color={theme.colors.textReversed} />
-                        </BaseTouchableBox>
-                    )}
+                                </BaseView>
+                            )}
+                        </BaseView>
+                        <BaseIcon name="chevron-right" size={14} color={theme.colors.textReversed} />
+                    </BaseTouchableBox>
                 </CardWithHeader>
             </BaseView>
             <CloudKitWarningBottomSheet
@@ -120,7 +114,7 @@ const baseStyles = () =>
             alignItems: "center",
             paddingLeft: 14,
             paddingRight: 12,
-            paddingVertical: 12,
+            paddingVertical: 10,
         },
         cloudInfo: {
             flexDirection: "row",

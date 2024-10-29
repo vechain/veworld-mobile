@@ -30,7 +30,7 @@ export const ManualBackupCard = memo(({ mnemonicArray, deviceToBackup }: Props) 
                 <BaseSpacer height={12} />
                 <CopyMnemonicButton mnemonicArray={mnemonicArray} deviceToBackup={deviceToBackup} />
             </BaseView>
-            <BaseSpacer height={12} />
+            <BaseSpacer height={20} />
             <MnemonicBackupAlert />
         </CardWithHeader>
     )
