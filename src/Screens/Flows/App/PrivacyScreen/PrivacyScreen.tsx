@@ -1,6 +1,14 @@
 import React, { useCallback, useEffect, useState } from "react"
-import { useBottomSheetModal, useCheckWalletBackup, useDisclosure, useInterval, useWalletSecurity } from "~Hooks"
 import {
+    useBottomSheetModal,
+    useCheckWalletBackup,
+    useDisclosure,
+    useInterval,
+    useTheme,
+    useWalletSecurity,
+} from "~Hooks"
+import {
+    BaseIcon,
     BaseSpacer,
     BaseText,
     BaseTouchable,
@@ -29,6 +37,7 @@ export const PrivacyScreen = () => {
     // [START] - Hooks setup
     const { LL } = useI18nContext()
     const nav = useNavigation()
+    const theme = useTheme()
 
     const dispatch = useAppDispatch()
 
@@ -134,15 +143,33 @@ export const PrivacyScreen = () => {
 
     // [END] - Animations
 
+    const onActionPress = useCallback(async () => {
+        nav.goBack()
+    }, [nav])
+
     return (
         <Layout
             safeAreaTestID="PrivacyScreen"
+            noBackButton
+            pageHeader={
+                <BaseView>
+                    <BaseSpacer height={24} />
+                    <BaseView flexDirection="row" w={100} px={8} justifyContent="space-between">
+                        <BaseIcon
+                            haptics="Light"
+                            action={onActionPress}
+                            name="arrow-left"
+                            size={24}
+                            color={theme.colors.text}
+                        />
+                        <BaseText typographyFont="subTitleBold">{LL.TITLE_PRIVACY()}</BaseText>
+                        <BaseSpacer width={24} />
+                    </BaseView>
+                </BaseView>
+            }
             body={
                 <>
                     <BaseView pt={16}>
-                        <BaseText typographyFont="title">{LL.TITLE_PRIVACY()}</BaseText>
-                        <BaseSpacer height={24} />
-
                         {/*TODO: https://github.com/vechainfoundation/veworld-mobile/issues/1339*/}
                         {__DEV__ && (
                             <>

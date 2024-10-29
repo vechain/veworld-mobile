@@ -69,7 +69,8 @@ export const DevicesBackupState = <T extends BaseDevice = BaseDevice>({ devices,
                         { backgroundColor: itemConfig.backgroundColor, borderColor: itemConfig.borderColor },
                     ]}
                     style={styles.deviceRowContent}
-                    onPress={() => onPress(item)}>
+                    onPress={() => onPress(item)}
+                    haptics="Medium">
                     <BaseView style={styles.deviceInfo}>
                         <BaseIcon name={itemConfig.iconName} size={18} color={itemConfig.iconColor} />
                         <BaseSpacer width={12} />
