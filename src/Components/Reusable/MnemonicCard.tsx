@@ -5,28 +5,42 @@ import { useDisclosure, useTheme } from "~Hooks"
 import HapticsService from "~Services/HapticsService"
 import { PlatformBlur } from "./PlatformBlur"
 import { useI18nContext } from "~i18n"
-import { error } from "~Utils"
-import { ERROR_EVENTS } from "~Constants"
+import { DateUtils, error } from "~Utils"
+import { COLORS, ERROR_EVENTS } from "~Constants"
 import { useNavigation } from "@react-navigation/native"
+import { setDeviceIsBackup, useAppDispatch } from "~Storage/Redux"
+import { LocalDevice } from "~Model"
+import { formatDateTime } from "~Utils/DateUtils/DateUtils"
+import { getTimeZone } from "react-native-localize"
 
 type Props = {
     mnemonicArray: string[]
     souceScreen?: string
+    deviceToBackup?: LocalDevice
 }
 
-export const MnemonicCard: FC<Props> = ({ mnemonicArray, souceScreen }) => {
+export const MnemonicCard: FC<Props> = ({ mnemonicArray, souceScreen, deviceToBackup }) => {
     const { isOpen: isShow, onToggle: toggleShow } = useDisclosure()
 
     const nav = useNavigation()
     const theme = useTheme()
-    const { LL } = useI18nContext()
-
-    const iconColor = useMemo(() => (theme.isDark ? theme.colors.tertiary : theme.colors.card), [theme])
+    const { LL, locale } = useI18nContext()
+    const dispatch = useAppDispatch()
 
     const onPress = useCallback(async () => {
         HapticsService.triggerImpact({ level: "Light" })
         toggleShow()
-    }, [toggleShow])
+        if (deviceToBackup?.rootAddress) {
+            const formattedDate = formatDateTime(Date.now(), locale, getTimeZone() ?? DateUtils.DEFAULT_TIMEZONE)
+            dispatch(
+                setDeviceIsBackup({
+                    rootAddress: deviceToBackup.rootAddress,
+                    isBackup: true,
+                    date: formattedDate,
+                }),
+            )
+        }
+    }, [deviceToBackup?.rootAddress, dispatch, locale, toggleShow])
 
     const RenderWords = useMemo(() => {
         if (mnemonicArray.length !== 12) {
@@ -53,11 +67,15 @@ export const MnemonicCard: FC<Props> = ({ mnemonicArray, souceScreen }) => {
 
             return (
                 <BaseText
-                    typographyFont="footNoteAccent"
+                    typographyFont="captionRegular"
+                    color={COLORS.DARK_PURPLE}
                     key={`word${index}`}
-                    my={8}
-                    w={33}
-                    testID={`word-${index}`}>{`${index + 1}. ${word}`}</BaseText>
+                    my={2}
+                    w={24}
+                    align="center"
+                    testID={`word-${index}`}>
+                    {word}
+                </BaseText>
             )
         })
     }, [mnemonicArray, nav, souceScreen])
@@ -65,32 +83,24 @@ export const MnemonicCard: FC<Props> = ({ mnemonicArray, souceScreen }) => {
     return (
         <BaseView>
             <TouchableWithoutFeedback onPress={onPress}>
-                <BaseView flexDirection="row" w={100} borderRadius={16} bg={theme.colors.card}>
+                <BaseView flexDirection="row">
                     <BaseView
-                        px={16}
-                        py={12}
+                        px={8}
+                        py={22}
                         style={[styles.box]}
                         flexDirection="row"
                         flexWrap="wrap"
-                        w={92}
                         justifyContent="space-between">
                         {RenderWords}
                         {!isShow && <PlatformBlur backgroundColor={theme.colors.card} text={LL.TAP_TO_VIEW()} />}
                     </BaseView>
 
-                    <BaseView
-                        w={8}
-                        px={16}
-                        py={12}
-                        style={styles.button}
-                        justifyContent="center"
-                        alignItems="center"
-                        bg={theme.colors.primary}>
+                    <BaseView py={12} style={styles.button} justifyContent="center" alignItems="center">
                         <BaseIcon
                             name={isShow ? "eye-off-outline" : "eye-outline"}
-                            size={18}
-                            color={iconColor}
+                            size={16}
                             style={styles.icon}
+                            color={COLORS.GREY_500}
                             testID="toggle-mnemonic-visibility"
                         />
                     </BaseView>
@@ -102,16 +112,24 @@ export const MnemonicCard: FC<Props> = ({ mnemonicArray, souceScreen }) => {
 
 const styles = StyleSheet.create({
     box: {
-        borderTopLeftRadius: 16,
-        borderBottomStartRadius: 16,
+        flexShrink: 1,
+        backgroundColor: COLORS.GREY_100,
+        borderColor: COLORS.GREY_300,
+        borderBottomLeftRadius: 8,
+        borderTopLeftRadius: 8,
+        borderWidth: 1,
         overflow: "hidden",
     },
     button: {
-        flexGrow: 1,
-        borderTopRightRadius: 16,
-        borderBottomEndRadius: 16,
+        paddingHorizontal: 6,
+        borderTopRightRadius: 8,
+        borderBottomEndRadius: 8,
+        borderWidth: 1,
+        borderLeftWidth: 0,
+        backgroundColor: COLORS.GREY_200,
+        borderColor: COLORS.GREY_300,
     },
-    icon: { flex: 1, width: 100 },
+    icon: { flex: 1, color: COLORS.GREY_500 },
     androidBlurContainer: {
         justifyContent: "center",
         alignItems: "center",
