@@ -1,15 +1,16 @@
 import React, { useCallback, useMemo, useRef } from "react"
-import { BaseCard, BaseIcon, BaseSafeArea, BaseSpacer, BaseText, BaseView, SelectedNetworkViewer } from "~Components"
+import { BaseSafeArea, BaseSpacer, BaseText, BaseView, SelectedNetworkViewer } from "~Components"
 import { TranslationFunctions, useI18nContext } from "~i18n"
 import { Routes } from "~Navigation"
 import { StyleSheet } from "react-native"
 import { RowProps, SettingsRow } from "./Components/SettingsRow"
-import { useCheckWalletBackup, useTabBarBottomMargin, useTheme, useThemedStyles } from "~Hooks"
+import { useCheckWalletBackup, useTabBarBottomMargin, useThemedStyles } from "~Hooks"
 import { ColorThemeType, isSmallScreen } from "~Constants"
 import { selectAreDevFeaturesEnabled, selectSelectedAccount, useAppSelector } from "~Storage/Redux"
 import { useScrollToTop } from "@react-navigation/native"
 import { FlatList } from "react-native-gesture-handler"
 import SettingsRowDivider, { RowDividerProps } from "./Components/SettingsRowDivider"
+import { AlertCard } from "~Components/Reusable/Alert"
 
 type SettingsRowItem = {
     element: "settingsRow"
@@ -36,30 +37,22 @@ export const SettingsScreen = () => {
     const flatSettingListRef = useRef(null)
 
     useScrollToTop(flatSettingListRef)
-    const theme = useTheme()
 
     const selectedAccount = useAppSelector(selectSelectedAccount)
     const isShowBackupModal = useCheckWalletBackup(selectedAccount)
 
     const renderBackupWarning = useMemo(() => {
         return (
-            <BaseCard containerStyle={themedStyles.cardContainer}>
-                <BaseView w={100}>
-                    <BaseView flexDirection="row">
-                        <BaseIcon name="alert-outline" size={16} color={theme.colors.alertCards.error.icon} />
-                        <BaseSpacer width={8} />
-                        <BaseText typographyFont="bodyMedium" color={theme.colors.alertCards.error.title}>
-                            {"Backup your wallet"}
-                        </BaseText>
-                    </BaseView>
-                    <BaseSpacer height={4} />
-                    <BaseText typographyFont="captionRegular" color={theme.colors.alertDescription} pl={24}>
-                        {"Make sure to backup your recovery phrase and never lose access to your account."}
-                    </BaseText>
-                </BaseView>
-            </BaseCard>
+            <>
+                <AlertCard
+                    title={LL.ALERT_TITLE_BACKUP_YOUR_WALLET()}
+                    message={LL.ALERT_MSG_BACKUP_YOUR_WALLET()}
+                    status={"error"}
+                />
+                <BaseSpacer height={8} />
+            </>
         )
-    }, [themedStyles.cardContainer, theme.colors.alertCards.error, theme.colors.alertDescription])
+    }, [LL])
 
     const renderItem = useCallback(
         (props: { item: SettingsRowItem | DividerItem | BackupBannerItem }) => {
