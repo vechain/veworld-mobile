@@ -39,17 +39,11 @@ export type Colors = {
     horizontalButtonSelected: string
     horizontalButtonText: string
     horizontalButtonTextReversed: string
-    alertCards: {
-        error: {
-            border: string
-            background: string
-            icon: string
-            title: string
-        }
-    }
     cardBorder: string
     switchEnabled: string
     textLight: string
+    successBackground: string
+    successIcon: string
 }
 
 export enum COLORS {
@@ -157,15 +151,9 @@ const light: Colors = {
     horizontalButtonSelected: COLORS.DARK_PURPLE,
     horizontalButtonText: COLORS.WHITE,
     horizontalButtonTextReversed: COLORS.DARK_PURPLE,
-    alertCards: {
-        error: {
-            border: COLORS.RED_200,
-            background: COLORS.RED_50,
-            icon: COLORS.RED_500,
-            title: COLORS.RED_700,
-        },
-    },
     switchEnabled: COLORS.LIGHT_GREEN,
+    successBackground: COLORS.GREEN_50,
+    successIcon: COLORS.GREEN_500,
 }
 
 const dark: Colors = {
@@ -211,15 +199,9 @@ const dark: Colors = {
     horizontalButtonSelected: COLORS.DARK_PURPLE,
     horizontalButtonText: COLORS.WHITE,
     horizontalButtonTextReversed: COLORS.WHITE,
-    alertCards: {
-        error: {
-            border: COLORS.RED_200,
-            background: COLORS.RED_50,
-            icon: COLORS.RED_500,
-            title: COLORS.RED_700,
-        },
-    },
     switchEnabled: COLORS.LIGHT_GREEN,
+    successBackground: COLORS.GREEN_50,
+    successIcon: COLORS.GREEN_500,
 }
 
 export const colors = { light, dark }
