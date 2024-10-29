@@ -119,6 +119,11 @@ type RootTranslation = {
 	 */
 	ALERT_MSG_INTERNET_DOWN: string
 	/**
+	 * L​a​s​t​ ​b​a​c​k​u​p​ ​-​ ​{​d​a​t​e​}
+	 * @param {string} date
+	 */
+	ALERT_MSG_LAST_BACKUP_DATE: RequiredParams<'date'>
+	/**
 	 * A​ ​n​e​w​ ​v​e​r​s​i​o​n​ ​{​v​e​r​s​i​o​n​}​ ​i​s​ ​o​u​t​ ​n​o​w​.​ ​P​l​e​a​s​e​ ​u​p​d​a​t​e​ ​t​o​ ​t​h​e​ ​l​a​t​e​s​t​ ​v​e​r​s​i​o​n
 	 * @param {string} version
 	 */
@@ -159,6 +164,10 @@ type RootTranslation = {
 	 * E​n​a​b​l​e​ ​l​o​c​a​t​i​o​n​ ​s​e​r​v​i​c​e​s
 	 */
 	ALERT_TITLE_ENABLE_LOCATION: string
+	/**
+	 * I​m​p​o​r​t​a​n​t
+	 */
+	ALERT_TITLE_IMPORTANT: string
 	/**
 	 * N​e​w​ ​v​e​r​s​i​o​n
 	 */
@@ -392,7 +401,7 @@ type RootTranslation = {
 	 */
 	BD_MNEMONIC_DISCLAIMER: string
 	/**
-	 * T​h​e​ ​1​2​ ​w​o​r​d​s​ ​b​e​l​o​w​ ​a​r​e​ ​y​o​u​r​ ​w​a​l​l​e​t​'​s​ ​r​e​c​o​v​e​r​y​ ​p​h​r​a​s​e​.​ ​T​h​i​s​ ​p​h​r​a​s​e​ ​l​e​t​s​ ​y​o​u​ ​r​e​c​o​v​e​r​ ​y​o​u​r​ ​w​a​l​l​e​t​ ​i​f​ ​y​o​u​ ​l​o​s​e​ ​y​o​u​r​ ​d​e​v​i​c​e​.​ ​B​a​c​k​ ​u​p​ ​i​t​ ​u​p​ ​o​n​ ​i​C​l​o​u​d​ ​(​r​e​c​o​m​m​e​n​d​e​d​)​ ​o​r​ ​w​r​i​t​e​ ​i​t​ ​d​o​w​n​.​ ​O​r​ ​b​o​t​h​.
+	 * I​n​ ​c​a​s​e​ ​y​o​u​ ​l​o​s​e​ ​y​o​u​r​ ​d​e​v​i​c​e​ ​o​r​ ​t​h​e​ ​a​p​p​ ​i​s​ ​u​n​i​n​s​t​a​l​l​e​d​,​ ​y​o​u​ ​c​a​n​ ​u​s​e​ ​t​h​e​ ​1​2​ ​w​o​r​d​s​ ​b​e​l​o​w​ ​t​o​ ​r​e​c​o​v​e​r​ ​t​h​i​s​ ​w​a​l​l​e​t​ ​a​n​d​ ​a​l​l​ ​o​f​ ​y​o​u​r​ ​a​s​s​e​t​s​.
 	 */
 	BD_MNEMONIC_PASSWORD_WARNING: string
 	/**
@@ -400,8 +409,7 @@ type RootTranslation = {
 	 */
 	BD_MNEMONIC_SUBTITLE: string
 	/**
-	 * N​e​v​e​r​ ​s​h​a​r​e​ ​t​h​e​s​e​ ​w​o​r​d​s​.​ ​A​n​y​o​n​e​ ​w​h​o​ ​l​e​a​r​n​s​ ​t​h​e​m​ ​c​a​n​ ​s​t​e​a​l​ ​a​l​l​ ​o​f​ ​y​o​u​r​ ​c​r​y​p​t​o​.​
-​V​e​W​o​r​l​d​ ​w​i​l​l​ ​n​e​v​e​r​ ​a​s​k​ ​y​o​u​ ​f​o​r​ ​t​h​e​m​.
+	 * N​e​v​e​r​ ​s​h​a​r​e​ ​t​h​e​ ​w​o​r​d​s​ ​a​n​d​ ​s​p​e​c​i​f​i​c​ ​o​r​d​e​r​.​ ​A​n​y​o​n​e​ ​w​h​o​ ​l​e​a​r​n​s​ ​t​h​e​m​ ​c​a​n​ ​s​t​e​a​l​ ​a​l​l​ ​o​f​ ​y​o​u​r​ ​c​r​y​p​t​o​ ​a​s​s​e​t​s​.
 	 */
 	BD_MNEMONIC_WARMNING: string
 	/**
@@ -894,6 +902,10 @@ type RootTranslation = {
 	 * S​w​a​p
 	 */
 	BTN_SWAP: string
+	/**
+	 * V​e​r​i​f​y​ ​i​C​l​o​u​d​ ​b​a​c​k​u​p
+	 */
+	BTN_VERIFY_ICLOUD_BACKUP: string
 	/**
 	 * I​ ​s​t​a​t​e​ ​t​h​a​t​ ​I​ ​w​a​n​t​ ​t​o​ ​d​e​l​e​t​e​ ​t​h​i​s​ ​w​a​l​l​e​t
 	 */
@@ -1693,6 +1705,10 @@ type RootTranslation = {
 	 */
 	IMPORT_NFT: string
 	/**
+	 * i​C​l​o​u​d
+	 */
+	ICLOUD: string
+	/**
 	 * I​r​i​s
 	 */
 	IRIS: string
@@ -2008,7 +2024,7 @@ type RootTranslation = {
 	 */
 	NOTIFICATION_CANT_REMOVE_ONLY_ACCOUNT: string
 	/**
-	 * {​n​a​m​e​}​ ​h​a​s​ ​b​e​e​n​ ​c​o​p​i​e​d​ ​t​o​ ​t​h​e​ ​c​l​i​p​b​o​a​r​d​!
+	 * {​n​a​m​e​}​ ​c​o​p​i​e​d​ ​t​o​ ​c​l​i​p​b​o​a​r​d​!
 	 * @param {string} name
 	 */
 	NOTIFICATION_COPIED_CLIPBOARD: RequiredParams<'name'>
@@ -2903,6 +2919,14 @@ type RootTranslation = {
 	 */
 	TITLE_ALERT_FACE_ID_CANCELLED: string
 	/**
+	 * B​a​c​k​u​p​ ​t​o​ ​a​ ​C​l​o​u​d
+	 */
+	TITLE_BACKUP_CLOUD: string
+	/**
+	 * B​a​c​k​u​p​ ​m​a​n​u​a​l​l​y
+	 */
+	TITLE_BACKUP_MANUALLY: string
+	/**
 	 * B​a​c​k​u​p​ ​y​o​u​r​ ​p​h​r​a​s​e
 	 */
 	TITLE_BACKUP_YOUR_PHRASE: string
@@ -3394,6 +3418,10 @@ Try reconnect your device to the internet.
 	 */
 	ALERT_MSG_INTERNET_DOWN: () => LocalizedString
 	/**
+	 * Last backup - {date}
+	 */
+	ALERT_MSG_LAST_BACKUP_DATE: (arg: { date: string }) => LocalizedString
+	/**
 	 * A new version {version} is out now. Please update to the latest version
 	 */
 	ALERT_MSG_NEW_VERSION: (arg: { version: string }) => LocalizedString
@@ -3433,6 +3461,10 @@ Try reconnect your device to the internet.
 	 * Enable location services
 	 */
 	ALERT_TITLE_ENABLE_LOCATION: () => LocalizedString
+	/**
+	 * Important
+	 */
+	ALERT_TITLE_IMPORTANT: () => LocalizedString
 	/**
 	 * New version
 	 */
@@ -3666,7 +3698,7 @@ Try reconnect your device to the internet.
 	 */
 	BD_MNEMONIC_DISCLAIMER: () => LocalizedString
 	/**
-	 * The 12 words below are your wallet's recovery phrase. This phrase lets you recover your wallet if you lose your device. Back up it up on iCloud (recommended) or write it down. Or both.
+	 * In case you lose your device or the app is uninstalled, you can use the 12 words below to recover this wallet and all of your assets.
 	 */
 	BD_MNEMONIC_PASSWORD_WARNING: () => LocalizedString
 	/**
@@ -3674,8 +3706,7 @@ Try reconnect your device to the internet.
 	 */
 	BD_MNEMONIC_SUBTITLE: () => LocalizedString
 	/**
-	 * Never share these words. Anyone who learns them can steal all of your crypto.
-VeWorld will never ask you for them.
+	 * Never share the words and specific order. Anyone who learns them can steal all of your crypto assets.
 	 */
 	BD_MNEMONIC_WARMNING: () => LocalizedString
 	/**
@@ -4166,6 +4197,10 @@ VeWorld will never ask you for them.
 	 * Swap
 	 */
 	BTN_SWAP: () => LocalizedString
+	/**
+	 * Verify iCloud backup
+	 */
+	BTN_VERIFY_ICLOUD_BACKUP: () => LocalizedString
 	/**
 	 * I state that I want to delete this wallet
 	 */
@@ -4959,6 +4994,10 @@ VeWorld will never ask you for them.
 	 */
 	IMPORT_NFT: () => LocalizedString
 	/**
+	 * iCloud
+	 */
+	ICLOUD: () => LocalizedString
+	/**
 	 * Iris
 	 */
 	IRIS: () => LocalizedString
@@ -5271,7 +5310,7 @@ VeWorld will never ask you for them.
 	 */
 	NOTIFICATION_CANT_REMOVE_ONLY_ACCOUNT: () => LocalizedString
 	/**
-	 * {name} has been copied to the clipboard!
+	 * {name} copied to clipboard!
 	 */
 	NOTIFICATION_COPIED_CLIPBOARD: (arg: { name: string }) => LocalizedString
 	/**
@@ -6146,6 +6185,14 @@ VeWorld will never ask you for them.
 	 * Face ID Cancelled
 	 */
 	TITLE_ALERT_FACE_ID_CANCELLED: () => LocalizedString
+	/**
+	 * Backup to a Cloud
+	 */
+	TITLE_BACKUP_CLOUD: () => LocalizedString
+	/**
+	 * Backup manually
+	 */
+	TITLE_BACKUP_MANUALLY: () => LocalizedString
 	/**
 	 * Backup your phrase
 	 */
