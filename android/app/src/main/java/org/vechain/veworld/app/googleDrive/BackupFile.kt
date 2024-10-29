@@ -3,7 +3,7 @@ package org.vechain.veworld.app.googleDrive
 import com.facebook.react.bridge.WritableMap
 import com.facebook.react.bridge.WritableNativeMap
 
-data class BackupFile(
+data class DriveBackupFile(
     val rootAddress: String,
     val data: String,
     val walletType: String,

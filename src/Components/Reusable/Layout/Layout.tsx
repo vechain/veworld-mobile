@@ -24,6 +24,7 @@ type Props = {
     noStaticBottomPadding?: boolean
     scrollViewRef?: Ref<ScrollView>
     onGoBack?: () => void
+    preventGoBack?: boolean
     beforeNavigating?: () => Promise<void> | void
     hasSafeArea?: boolean
     hasTopSafeAreaOnly?: boolean
@@ -47,6 +48,7 @@ export const Layout = ({
     noStaticBottomPadding = false,
     scrollViewRef,
     onGoBack,
+    preventGoBack = false,
     beforeNavigating,
     hasSafeArea = true,
     hasTopSafeAreaOnly = false,
@@ -84,6 +86,7 @@ export const Layout = ({
                                 beforeNavigating={beforeNavigating}
                                 hasBottomSpacer={false}
                                 onGoBack={onGoBack}
+                                preventGoBack={preventGoBack}
                             />
                             <BaseSpacer height={8} />
                         </>
@@ -148,6 +151,7 @@ export const Layout = ({
             noBackButton,
             beforeNavigating,
             onGoBack,
+            preventGoBack,
             fixedHeader,
             noMargin,
             title,

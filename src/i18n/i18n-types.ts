@@ -368,9 +368,10 @@ type RootTranslation = {
 	 */
 	BD_IMPORT_WALLET_TYPE_HARDWARE: string
 	/**
-	 * T​o​ ​a​c​c​e​s​s​ ​y​o​u​r​ ​p​r​e​v​i​o​u​s​ ​w​a​l​l​e​t​,​ ​y​o​u​ ​c​a​n​ ​e​n​t​e​r​ ​y​o​u​r​ ​r​e​c​o​v​e​r​y​ ​p​h​r​a​s​e​,​ ​p​r​i​v​a​t​e​ ​k​e​y​ ​o​r​ ​k​e​y​s​t​o​r​e​ ​f​i​l​e​.
+	 * T​o​ ​a​c​c​e​s​s​ ​y​o​u​r​ ​p​r​e​v​i​o​u​s​ ​w​a​l​l​e​t​,​ ​y​o​u​ ​c​a​n​ ​e​n​t​e​r​ ​y​o​u​r​ ​r​e​c​o​v​e​r​y​ ​p​h​r​a​s​e​,​ ​p​r​i​v​a​t​e​ ​k​e​y​,​ ​k​e​y​s​t​o​r​e​ ​f​i​l​e​ ​o​r​ ​{​c​l​o​u​d​}​.
+	 * @param {string} cloud
 	 */
-	BD_IMPORT_WALLET_TYPE_SEED: string
+	BD_IMPORT_WALLET_TYPE_SEED: RequiredParams<'cloud'>
 	/**
 	 * S​t​o​r​e​ ​t​h​i​s​ ​p​h​r​a​s​e​ ​i​n​ ​a​ ​p​a​s​s​w​o​r​d​ ​m​a​n​a​g​e​r​,​ ​w​r​i​t​e​ ​i​t​ ​d​o​w​n​ ​o​r​ ​m​e​m​o​r​i​z​e​ ​i​t​.
 	 */
@@ -449,7 +450,7 @@ type RootTranslation = {
 	 */
 	BD_PASSWORDS_DO_NOT_MATCH: string
 	/**
-	 * *​ ​P​a​s​s​w​o​r​d​ ​i​s​ ​n​o​t​ ​s​t​r​o​n​g​ ​e​n​o​u​g​h​ ​(​m​i​n​ ​6​ ​c​h​a​r​a​c​t​e​r​s​,​ ​1​ ​n​u​n​b​e​r​,​ ​1​ ​s​p​e​c​i​a​l​ ​c​h​a​r​a​c​t​e​r​)
+	 * *​ ​P​a​s​s​w​o​r​d​ ​i​s​ ​n​o​t​ ​s​t​r​o​n​g​ ​e​n​o​u​g​h​ ​(​m​i​n​ ​6​ ​c​h​a​r​a​c​t​e​r​s​,​ ​1​ ​n​u​m​b​e​r​,​ ​1​ ​s​p​e​c​i​a​l​ ​c​h​a​r​a​c​t​e​r​)
 	 */
 	BD_PASSWORD_NOT_STRONG: string
 	/**
@@ -942,6 +943,15 @@ type RootTranslation = {
 	 * T​h​e​r​e​ ​w​a​s​ ​a​n​ ​e​r​r​o​r​ ​p​e​r​f​o​r​m​i​n​g​ ​t​h​i​s​ ​i​C​l​o​u​d​ ​w​a​l​l​e​t​ ​o​p​e​r​a​t​i​o​n​.​ ​P​l​e​a​s​e​ ​t​r​y​ ​a​g​a​i​n​.
 	 */
 	CLOUD_ERR_WALLET_OPERATION: string
+	/**
+	 * N​o​ ​w​a​l​l​e​t​s​ ​a​v​a​i​l​a​b​l​e
+	 */
+	CLOUD_NO_WALLETS_AVAILABLE_TITLE: string
+	/**
+	 * W​e​ ​c​o​u​l​d​n​'​t​ ​f​i​n​d​ ​a​n​y​ ​b​a​c​k​e​d​-​u​p​ ​w​a​l​l​e​t​s​ ​i​n​ ​y​o​u​r​ ​{​c​l​o​u​d​}​.​ ​T​r​y​ ​a​g​a​i​n​ ​o​r​ ​u​s​e​ ​y​o​u​r​ ​r​e​c​o​v​e​r​y​ ​p​h​r​a​s​e​.
+	 * @param {string} cloud
+	 */
+	CLOUD_NO_WALLETS_AVAILABLE_DESCRIPTION: RequiredParams<'cloud'>
 	/**
 	 * C​o​l​l​e​c​t​i​o​n​s
 	 */
@@ -3658,9 +3668,9 @@ Try reconnect your device to the internet.
 	 */
 	BD_IMPORT_WALLET_TYPE_HARDWARE: () => LocalizedString
 	/**
-	 * To access your previous wallet, you can enter your recovery phrase, private key or keystore file.
+	 * To access your previous wallet, you can enter your recovery phrase, private key, keystore file or {cloud}.
 	 */
-	BD_IMPORT_WALLET_TYPE_SEED: () => LocalizedString
+	BD_IMPORT_WALLET_TYPE_SEED: (arg: { cloud: string }) => LocalizedString
 	/**
 	 * Store this phrase in a password manager, write it down or memorize it.
 	 */
@@ -3739,7 +3749,7 @@ VeWorld will never ask you for them.
 	 */
 	BD_PASSWORDS_DO_NOT_MATCH: () => LocalizedString
 	/**
-	 * * Password is not strong enough (min 6 characters, 1 nunber, 1 special character)
+	 * * Password is not strong enough (min 6 characters, 1 number, 1 special character)
 	 */
 	BD_PASSWORD_NOT_STRONG: () => LocalizedString
 	/**
@@ -4230,6 +4240,14 @@ VeWorld will never ask you for them.
 	 * There was an error performing this iCloud wallet operation. Please try again.
 	 */
 	CLOUD_ERR_WALLET_OPERATION: () => LocalizedString
+	/**
+	 * No wallets available
+	 */
+	CLOUD_NO_WALLETS_AVAILABLE_TITLE: () => LocalizedString
+	/**
+	 * We couldn't find any backed-up wallets in your {cloud}. Try again or use your recovery phrase.
+	 */
+	CLOUD_NO_WALLETS_AVAILABLE_DESCRIPTION: (arg: { cloud: string }) => LocalizedString
 	/**
 	 * Collections
 	 */

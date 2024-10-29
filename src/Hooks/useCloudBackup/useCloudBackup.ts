@@ -14,6 +14,7 @@ export const useCloudBackup = () => {
         getIV: getIVFromDrive,
         deleteWallet: deleteWalletFromDrive,
         getGoogleServicesAvailability,
+        googleAccountSignOut,
     } = useGoogleDrive()
 
     const {
@@ -55,5 +56,6 @@ export const useCloudBackup = () => {
         getSalt: PlatformUtils.isIOS() ? getSaltFromICloud : getSaltFromDrive,
         getIV: PlatformUtils.isIOS() ? getIVFromICloud : getIVFromDrive,
         deleteWallet: PlatformUtils.isIOS() ? deleteWalletFromICloud : deleteWalletFromDrive,
+        googleAccountSignOut: PlatformUtils.isIOS() ? () => {} : googleAccountSignOut,
     }
 }

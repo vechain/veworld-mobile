@@ -112,6 +112,8 @@ class GoogleDriveViewModel(
 
                         } else {
                             continuation.resumeWith(Result.failure(Exception(GoogleDriveManager.OAUTH_INTERRUPTED)))
+                            googleSignInClient?.signOut()
+                            googleSignInClient = null
                         }
                     }
 
@@ -418,10 +420,11 @@ class GoogleDriveViewModel(
                                     outputStream.toString(), BackupFile::class.java
                                 )
                                 promise.resolve(backupFile.toWritableMap())
-                            } else {
-                                promise.resolve(null)
+                                return@withContext
                             }
                         }
+
+                        promise.resolve(null)
                     }
                 }
             } catch (e: UserRecoverableAuthIOException) {
