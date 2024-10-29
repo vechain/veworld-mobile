@@ -1,10 +1,11 @@
 import React, { useCallback } from "react"
-import { useTheme, useThemedStyles } from "~Hooks"
-import { BaseCard, BaseIcon, BaseSpacer, BaseText, BaseTouchableBox, BaseView } from "~Components"
+import { useThemedStyles } from "~Hooks"
+import { BaseIcon, BaseSpacer, BaseText, BaseTouchableBox, BaseView } from "~Components"
 import { useI18nContext } from "~i18n"
-import { COLORS, ColorThemeType } from "~Constants"
+import { COLORS } from "~Constants"
 import { FlatList, StyleSheet } from "react-native"
 import { BaseDevice, DEVICE_TYPE } from "~Model"
+import { CardWithHeader } from "~Components/Reusable/CardWithHeader"
 
 type Props<T extends BaseDevice = BaseDevice> = {
     devices: T[]
@@ -24,7 +25,6 @@ export const DevicesBackupState = <T extends BaseDevice = BaseDevice>({ devices,
     const { LL } = useI18nContext()
 
     const { styles } = useThemedStyles(baseStyles)
-    const theme = useTheme()
 
     const getStatusConfig = useCallback((item: T): StatusConfig => {
         const statusConfigs: Record<string, StatusConfig> = {
@@ -102,15 +102,7 @@ export const DevicesBackupState = <T extends BaseDevice = BaseDevice>({ devices,
 
             <BaseSpacer height={16} />
 
-            <BaseCard containerStyle={styles.cardContainer} style={styles.card}>
-                <BaseView style={styles.cardHeader}>
-                    <BaseIcon name="wallet-outline" size={12} style={styles.walletIcon} />
-                    <BaseSpacer width={8} />
-                    <BaseText typographyFont="captionMedium" color={theme.colors.text}>
-                        {"Your wallets"}
-                    </BaseText>
-                </BaseView>
-                <BaseSpacer height={12} />
+            <CardWithHeader iconName="wallet-outline" title={LL.SB_YOUR_WALLETS()}>
                 <FlatList
                     data={devices}
                     keyExtractor={device => device.rootAddress}
@@ -118,33 +110,13 @@ export const DevicesBackupState = <T extends BaseDevice = BaseDevice>({ devices,
                     ItemSeparatorComponent={renderItemSeparator}
                     showsVerticalScrollIndicator={false}
                 />
-            </BaseCard>
+            </CardWithHeader>
         </>
     )
 }
 
-const baseStyles = (theme: ColorThemeType) =>
+const baseStyles = () =>
     StyleSheet.create({
-        walletIcon: {
-            backgroundColor: COLORS.GREY_200,
-            color: COLORS.GREY_600,
-            height: 24,
-            width: 24,
-            borderRadius: 4.5,
-        },
-        cardContainer: {
-            borderWidth: 1,
-            borderRadius: 12,
-            borderColor: theme.colors.cardBorder,
-        },
-        card: {
-            flexDirection: "column",
-            padding: 16,
-        },
-        cardHeader: {
-            flexDirection: "row",
-            alignItems: "center",
-        },
         deviceRow: {
             borderRadius: 8,
             borderWidth: 1,

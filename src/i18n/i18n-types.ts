@@ -98,6 +98,10 @@ type RootTranslation = {
 	 */
 	ALERT_MSG_AUTHORIZE_BLUETOOTH: string
 	/**
+	 * M​a​k​e​ ​s​u​r​e​ ​t​o​ ​b​a​c​k​u​p​ ​y​o​u​r​ ​r​e​c​o​v​e​r​y​ ​p​h​r​a​s​e​ ​a​n​d​ ​n​e​v​e​r​ ​l​o​s​e​ ​a​c​c​e​s​s​ ​t​o​ ​y​o​u​r​ ​a​c​c​o​u​n​t​.
+	 */
+	ALERT_MSG_BACKUP_YOUR_WALLET: string
+	/**
 	 * Y​o​u​ ​h​a​v​e​ ​p​r​e​v​i​o​u​s​l​y​ ​d​e​n​i​e​d​ ​b​i​o​m​e​t​r​i​c​ ​a​u​t​h​e​n​t​i​c​a​t​i​o​n​ ​o​r​ ​i​t​'​s​ ​u​n​a​v​a​i​l​a​b​l​e​ ​o​n​ ​t​h​i​s​ ​d​e​v​i​c​e​.​ ​P​l​e​a​s​e​ ​e​n​a​b​l​e​ ​i​t​ ​i​n​ ​y​o​u​r​ ​d​e​v​i​c​e​ ​s​e​t​t​i​n​g​s​.
 	 */
 	ALERT_MSG_BIO_PREVIOUSLY_DENIED_OR_UNAVAILABLE: string
@@ -139,6 +143,10 @@ type RootTranslation = {
 	 * A​u​t​h​o​r​i​z​e​ ​B​l​u​e​t​o​o​t​h
 	 */
 	ALERT_TITLE_AUTHORIZE_BLUETOOTH: string
+	/**
+	 * B​a​c​k​u​p​ ​y​o​u​r​ ​w​a​l​l​e​t
+	 */
+	ALERT_TITLE_BACKUP_YOUR_WALLET: string
 	/**
 	 * B​i​o​m​e​t​r​i​c​s​ ​p​r​e​v​i​o​u​s​l​y​ ​d​e​n​i​e​d​ ​o​r​ ​u​n​a​v​a​i​l​a​b​l​e
 	 */
@@ -2387,6 +2395,10 @@ type RootTranslation = {
 	 */
 	SB_YOUR_TOKENS_EMPTY: string
 	/**
+	 * Y​o​u​r​ ​w​a​l​l​e​t​s
+	 */
+	SB_YOUR_WALLETS: string
+	/**
 	 * B​a​c​k​u​p​ ​n​o​w
 	 */
 	SECURITY_BACKUP_BTN: string
@@ -3361,6 +3373,10 @@ export type TranslationFunctions = {
 	 */
 	ALERT_MSG_AUTHORIZE_BLUETOOTH: () => LocalizedString
 	/**
+	 * Make sure to backup your recovery phrase and never lose access to your account.
+	 */
+	ALERT_MSG_BACKUP_YOUR_WALLET: () => LocalizedString
+	/**
 	 * You have previously denied biometric authentication or it's unavailable on this device. Please enable it in your device settings.
 	 */
 	ALERT_MSG_BIO_PREVIOUSLY_DENIED_OR_UNAVAILABLE: () => LocalizedString
@@ -3401,6 +3417,10 @@ Try reconnect your device to the internet.
 	 * Authorize Bluetooth
 	 */
 	ALERT_TITLE_AUTHORIZE_BLUETOOTH: () => LocalizedString
+	/**
+	 * Backup your wallet
+	 */
+	ALERT_TITLE_BACKUP_YOUR_WALLET: () => LocalizedString
 	/**
 	 * Biometrics previously denied or unavailable
 	 */
@@ -5622,6 +5642,10 @@ VeWorld will never ask you for them.
 	 * Your tokens will appear here
 	 */
 	SB_YOUR_TOKENS_EMPTY: () => LocalizedString
+	/**
+	 * Your wallets
+	 */
+	SB_YOUR_WALLETS: () => LocalizedString
 	/**
 	 * Backup now
 	 */
