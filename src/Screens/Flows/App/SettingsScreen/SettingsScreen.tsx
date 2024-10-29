@@ -116,14 +116,6 @@ const baseStyles = (theme: ColorThemeType) =>
         list: {
             flex: 1,
         },
-        cardContainer: {
-            backgroundColor: theme.colors.alertCards.error.background,
-            borderColor: theme.colors.alertCards.error.border,
-            borderRadius: 8,
-            paddingLeft: 2,
-            paddingRight: 4,
-            marginBottom: 8,
-        },
     })
 
 const getLists = (LL: TranslationFunctions, devEnabled: boolean) => {
