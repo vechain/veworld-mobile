@@ -44,8 +44,8 @@ jobs:
               id: generate-token
               uses: actions/create-github-app-token@v1
               with:
-                app-id: ${{ secrets.app-id }}
-                private-key: ${{ secrets.private-key }}
+                app-id: ${{ secrets.APP_ID }}
+                private-key: ${{ secrets.APP_PRIVATE_KEY }}
 
     setup-version-build:
         runs-on: ubuntu-latest
