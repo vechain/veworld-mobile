@@ -20,12 +20,12 @@ import {
 import { AnalyticsEvent, COLORS, DerivationPath, SCREEN_HEIGHT, SCREEN_WIDTH } from "~Constants"
 import { useAnalyticTracking, useBottomSheetModal, useCloudBackup, useDisclosure, useTheme } from "~Hooks"
 import { useI18nContext } from "~i18n"
-import { Routes } from "~Navigation"
 import { UserCreatePasswordScreen } from "~Screens/Flows/WalletCreation"
+import { PlatformUtils } from "~Utils"
 import { useDemoWallet } from "./useDemoWallet"
 import { useHandleWalletCreation } from "./useHandleWalletCreation"
-import { PlatformUtils } from "~Utils"
 
+import { Routes } from "~Navigation"
 const assetImage = require("~Assets/Img/Clouds.png")
 
 export const WelcomeScreen = () => {

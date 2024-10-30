@@ -202,7 +202,7 @@ class GoogleDriveViewModel(
     private fun saveMnemonicToGoogleDrive(
         drive: Drive,
         fileName: String,
-        backup: BackupFile,
+        backup: DriveBackupFile,
     ) {
         val fileMetadata = File()
         fileMetadata.name = "$fileName.json"
@@ -260,7 +260,7 @@ class GoogleDriveViewModel(
     fun getAllWalletsFromGoogleDrive(reactContext: ReactApplicationContext, promise: Promise) {
         viewModelScope.launch {
             try {
-                val mnemonics = mutableListOf<BackupFile>()
+                val mnemonics = mutableListOf<DriveBackupFile>()
 
                 getGoogleDrive(reactContext).let { (drive) ->
                     if (drive == null) return@launch
@@ -270,10 +270,10 @@ class GoogleDriveViewModel(
                                 launch {
                                     val outputStream = ByteArrayOutputStream()
                                     drive.files()[file.id].executeMediaAndDownloadTo(outputStream)
-                                    val backupFile: BackupFile = gson.fromJson(
-                                        outputStream.toString(), BackupFile::class.java
+                                    val DriveBackupFile: DriveBackupFile = gson.fromJson(
+                                        outputStream.toString(), DriveBackupFile::class.java
                                     )
-                                    mnemonics.add(backupFile)
+                                    mnemonics.add(DriveBackupFile)
                                 }
                             }
                         }
@@ -303,7 +303,7 @@ class GoogleDriveViewModel(
     }
 
     fun saveToGoogleDrive(
-        wallet: BackupFile,
+        wallet: DriveBackupFile,
         reactContext: ReactApplicationContext,
         promise: Promise,
     ) {
@@ -416,10 +416,10 @@ class GoogleDriveViewModel(
                             if (fileId != null) {
                                 val outputStream = ByteArrayOutputStream()
                                 drive.files()[fileId].executeMediaAndDownloadTo(outputStream)
-                                val backupFile: BackupFile = gson.fromJson(
-                                    outputStream.toString(), BackupFile::class.java
+                                val driveBackupFile: DriveBackupFile = gson.fromJson(
+                                    outputStream.toString(), DriveBackupFile::class.java
                                 )
-                                promise.resolve(backupFile.toWritableMap())
+                                promise.resolve(driveBackupFile.toWritableMap())
                                 return@withContext
                             }
                         }
@@ -463,13 +463,13 @@ class GoogleDriveViewModel(
                             if (fileId != null) {
                                 val outputStream = ByteArrayOutputStream()
                                 drive.files()[fileId].executeMediaAndDownloadTo(outputStream)
-                                val backupFile: BackupFile = gson.fromJson(
-                                    outputStream.toString(), BackupFile::class.java
+                                val driveBackupFile: DriveBackupFile = gson.fromJson(
+                                    outputStream.toString(), DriveBackupFile::class.java
                                 )
                                 promise.resolve(WritableNativeMap().apply {
                                     putString(
                                         "salt",
-                                        backupFile.salt
+                                        driveBackupFile.salt
                                     )
                                 })
                             }
@@ -513,13 +513,13 @@ class GoogleDriveViewModel(
                             if (fileId != null) {
                                 val outputStream = ByteArrayOutputStream()
                                 drive.files()[fileId].executeMediaAndDownloadTo(outputStream)
-                                val backupFile: BackupFile = gson.fromJson(
-                                    outputStream.toString(), BackupFile::class.java
+                                val driveBackupFile: DriveBackupFile = gson.fromJson(
+                                    outputStream.toString(), DriveBackupFile::class.java
                                 )
                                 promise.resolve(WritableNativeMap().apply {
                                     putString(
                                         "iv",
-                                        backupFile.iv
+                                        driveBackupFile.iv
                                     )
                                 })
                             }

@@ -252,6 +252,10 @@ type RootTranslation = {
 	 */
 	BD_BACKUP_PASSWORD_TO_KEYCHAIN: string
 	/**
+	 * T​h​e​ ​r​e​c​o​v​e​r​y​ ​p​h​r​a​s​e​s​ ​b​a​c​k​u​p​ ​e​n​s​u​r​e​ ​y​o​u​ ​n​e​v​e​r​ ​l​o​s​e​ ​a​c​c​e​s​s​ ​t​o​ ​y​o​u​r​ ​w​a​l​l​e​t​ ​i​n​ ​c​a​s​e​ ​o​f​ ​a​p​p​ ​r​e​s​e​t​ ​o​r​ ​l​o​s​t​ ​d​e​v​i​c​e​.
+	 */
+	BD_BACKUP_RECOVERY_PHRASE: string
+	/**
 	 * G​O​ ​B​A​C​K​ ​T​O​ ​A​P​P
 	 */
 	BD_BACK_TO_APP: string
@@ -482,7 +486,7 @@ type RootTranslation = {
 	 */
 	BD_SECURITY_DOWNGRADE: string
 	/**
-	 * C​l​i​c​k​ ​t​o​ ​r​e​s​e​t​ ​V​e​W​o​r​l​d​ ​a​n​d​ ​e​r​a​s​e​ ​a​l​l​ ​y​o​u​r​ ​d​a​t​a​ ​s​t​o​r​e​d​ ​o​n​ ​i​t
+	 * S​e​l​e​c​t​ ​t​h​e​ ​s​e​c​u​r​i​t​y​ ​m​e​t​h​o​d​ ​t​o​ ​u​n​l​o​c​k​ ​y​o​u​r​ ​w​a​l​l​e​t​.
 	 */
 	BD_SECURITY_METHOD: string
 	/**
@@ -2280,6 +2284,10 @@ type RootTranslation = {
 	 */
 	SB_BACKUP_MNEMONIC: string
 	/**
+	 * B​a​c​k​u​p​ ​“​R​e​c​o​v​e​r​y​ ​p​h​r​a​s​e​”
+	 */
+	SB_BACKUP_RECOVERY_PHRASE: string
+	/**
 	 * B​e​f​o​r​e​ ​u​p​d​a​t​i​n​g​ ​y​o​u​r​ ​s​e​c​u​r​i​t​y​ ​m​e​t​h​o​d​ ​y​o​u​ ​n​e​e​d​ ​t​o​ ​b​a​c​k​u​p​ ​y​o​u​r​ ​s​e​c​u​r​i​t​y​ ​p​h​r​a​s​e​.​ ​I​n​ ​c​a​s​e​ ​t​h​e​ ​o​p​e​r​a​t​i​o​n​ ​f​a​i​l​s​ ​y​o​u​ ​w​i​l​l​ ​b​e​ ​f​o​r​c​e​d​ ​t​o
 	 */
 	SB_BACKUP_YOUR_PHRASE: string
@@ -3552,6 +3560,10 @@ Try reconnect your device to the internet.
 	 */
 	BD_BACKUP_PASSWORD_TO_KEYCHAIN: () => LocalizedString
 	/**
+	 * The recovery phrases backup ensure you never lose access to your wallet in case of app reset or lost device.
+	 */
+	BD_BACKUP_RECOVERY_PHRASE: () => LocalizedString
+	/**
 	 * GO BACK TO APP
 	 */
 	BD_BACK_TO_APP: () => LocalizedString
@@ -3781,7 +3793,7 @@ VeWorld will never ask you for them.
 	 */
 	BD_SECURITY_DOWNGRADE: () => LocalizedString
 	/**
-	 * Click to reset VeWorld and erase all your data stored on it
+	 * Select the security method to unlock your wallet.
 	 */
 	BD_SECURITY_METHOD: () => LocalizedString
 	/**
@@ -5552,6 +5564,10 @@ VeWorld will never ask you for them.
 	 * Backup your mnemonic
 	 */
 	SB_BACKUP_MNEMONIC: () => LocalizedString
+	/**
+	 * Backup “Recovery phrase”
+	 */
+	SB_BACKUP_RECOVERY_PHRASE: () => LocalizedString
 	/**
 	 * Before updating your security method you need to backup your security phrase. In case the operation fails you will be forced to
 	 */

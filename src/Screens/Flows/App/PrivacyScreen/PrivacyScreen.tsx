@@ -1,14 +1,7 @@
+import { useNavigation } from "@react-navigation/native"
 import React, { useCallback, useEffect, useState } from "react"
+import { useSharedValue, withTiming } from "react-native-reanimated"
 import {
-    useBottomSheetModal,
-    useCheckWalletBackup,
-    useDisclosure,
-    useInterval,
-    useTheme,
-    useWalletSecurity,
-} from "~Hooks"
-import {
-    BaseIcon,
     BaseSpacer,
     BaseText,
     BaseTouchable,
@@ -16,32 +9,21 @@ import {
     EnableFeature,
     Layout,
     RequireUserPassword,
-    SelectDeviceBottomSheet,
     showWarningToast,
 } from "~Components"
-import { useBackupMnemonic } from "./Hooks/useBackupMnemonic"
-import { useI18nContext } from "~i18n"
-import { EnableBiometrics } from "./Components"
-import { DEVICE_TYPE, LocalDevice } from "~Model"
-import { selectAreDevFeaturesEnabled, selectSelectedAccount, useAppDispatch, useAppSelector } from "~Storage/Redux"
-import { selectAnalyticsTrackingEnabled, selectLocalDevices } from "~Storage/Redux/Selectors"
-import { setAnalyticsTrackingEnabled } from "~Storage/Redux/Actions"
-import { useEditPin } from "./Hooks/useEditPin"
-import { BackupWarningBottomSheet } from "./Components/BackupWarningBottomSheet"
-import { warn } from "~Utils"
 import { ERROR_EVENTS } from "~Constants"
-import Animated, {
-    interpolate,
-    interpolateColor,
-    useAnimatedStyle,
-    useSharedValue,
-    withTiming,
-} from "react-native-reanimated"
-import { StyleSheet, Text } from "react-native"
-import { useNavigation } from "@react-navigation/native"
+import { useBottomSheetModal, useCheckWalletBackup, useDisclosure, useInterval, useWalletSecurity } from "~Hooks"
+import { useI18nContext } from "~i18n"
+import { DEVICE_TYPE, LocalDevice } from "~Model"
 import { Routes } from "~Navigation"
-
-const AnimatedBaseText = Animated.createAnimatedComponent(Text)
+import { selectAreDevFeaturesEnabled, selectSelectedAccount, useAppDispatch, useAppSelector } from "~Storage/Redux"
+import { setAnalyticsTrackingEnabled } from "~Storage/Redux/Actions"
+import { selectAnalyticsTrackingEnabled, selectLocalDevices } from "~Storage/Redux/Selectors"
+import { warn } from "~Utils"
+import { DevicesBackupState, EnableBiometrics } from "./Components"
+import { BackupWarningBottomSheet } from "./Components/BackupWarningBottomSheet"
+import { useBackupMnemonic } from "./Hooks/useBackupMnemonic"
+import { useEditPin } from "./Hooks/useEditPin"
 
 export const PrivacyScreen = () => {
     // [START] - Hooks setup
@@ -60,11 +42,7 @@ export const PrivacyScreen = () => {
 
     const { isWalletSecurityBiometrics } = useWalletSecurity()
 
-    const {
-        ref: walletMgmtBottomSheetRef,
-        openWithDelay: openWalletMgmtSheetWithDelay,
-        onClose: closeWalletMgmtSheet,
-    } = useBottomSheetModal()
+    const { openWithDelay: openWalletMgmtSheetWithDelay, onClose: closeWalletMgmtSheet } = useBottomSheetModal()
 
     const { isOpen: isPasswordPromptOpen, onOpen: openPasswordPrompt, onClose: closePasswordPrompt } = useDisclosure()
 
@@ -79,7 +57,7 @@ export const PrivacyScreen = () => {
         [nav],
     )
 
-    const { onPasswordSuccess, checkSecurityBeforeOpening, handleOnSelectedWallet } = useBackupMnemonic({
+    const { onPasswordSuccess, handleOnSelectedWallet } = useBackupMnemonic({
         closePasswordPrompt,
         openBackupPhraseSheetWithDelay,
         openWalletMgmtSheetWithDelay,
@@ -114,6 +92,13 @@ export const PrivacyScreen = () => {
         openBackupWarningSheet()
     }, [selectedAccount, LL, openBackupWarningSheet])
 
+    const handleDeviceBackup = useCallback(
+        (device: LocalDevice) => {
+            handleOnSelectedWallet(device)
+        },
+        [handleOnSelectedWallet],
+    )
+
     // [END] - Hooks setup
 
     // [START] - Internal Methods
@@ -132,7 +117,6 @@ export const PrivacyScreen = () => {
 
     // [START] - Animations
     const animationProgress = useSharedValue(0)
-    const theme = useTheme()
     const [count, setCount] = useState<number>(0)
     useInterval({
         callback: () => {
@@ -147,17 +131,6 @@ export const PrivacyScreen = () => {
             animationProgress.value = withTiming(0, { duration: 400 })
         })
     }, [animationProgress, count])
-
-    const animatedStyle = useAnimatedStyle(() => {
-        return {
-            color: interpolateColor(animationProgress.value, [0, 1], [theme.colors.text, theme.colors.danger]),
-            transform: [
-                {
-                    scale: interpolate(animationProgress.value, [0, 1], [0.99, 1.01]),
-                },
-            ],
-        }
-    }, [theme.isDark])
 
     // [END] - Animations
 
@@ -180,7 +153,7 @@ export const PrivacyScreen = () => {
                                     value={false}
                                 />
 
-                                <BaseSpacer height={24} />
+                                <BaseSpacer height={40} />
                             </>
                         )}
 
@@ -188,42 +161,31 @@ export const PrivacyScreen = () => {
 
                         {!isWalletSecurityBiometrics && (
                             <>
-                                <BaseSpacer height={16} />
-                                <BaseTouchable
-                                    haptics="Light"
-                                    action={handleOnEditPinPress}
-                                    title={LL.BTN_EDIT_PIN()}
-                                    underlined
-                                />
+                                <BaseSpacer height={8} />
+                                <BaseView alignItems="flex-end" w={100}>
+                                    <BaseView alignItems="center" w={50}>
+                                        <BaseTouchable
+                                            haptics="Light"
+                                            action={handleOnEditPinPress}
+                                            title={LL.BTN_EDIT_PIN()}
+                                            underlined
+                                        />
+                                    </BaseView>
+                                </BaseView>
                             </>
                         )}
 
-                        <BaseSpacer height={24} />
+                        <BaseSpacer height={40} />
 
-                        {/** this fix a bug where there are only ledger wallets */}
-                        {!!devices.length && (
-                            <>
-                                {isShowBackupModal ? (
-                                    <BaseTouchable haptics="Light" action={checkSecurityBeforeOpening} underlined>
-                                        <BaseView flexDirection="row" alignItems="baseline">
-                                            <BaseIcon name="alert" size={24} color={theme.colors.danger} />
-                                            <BaseSpacer width={8} />
-                                            <AnimatedBaseText style={[styles.animatedFont, animatedStyle]}>
-                                                {LL.BD_BACKUP_MNEMONIC()}
-                                            </AnimatedBaseText>
-                                        </BaseView>
-                                    </BaseTouchable>
-                                ) : (
-                                    <BaseTouchable
-                                        haptics="Light"
-                                        action={checkSecurityBeforeOpening}
-                                        underlined
-                                        title={LL.BD_BACKUP_MNEMONIC()}
-                                    />
-                                )}
-                                <BaseSpacer height={24} />
-                            </>
-                        )}
+                        <DevicesBackupState devices={devices} onPress={handleDeviceBackup} />
+
+                        <RequireUserPassword
+                            isOpen={isPasswordPromptOpen}
+                            onClose={closePasswordPrompt}
+                            onSuccess={onPasswordSuccess}
+                        />
+
+                        <BaseSpacer height={40} />
 
                         {devFeaturesEnabled && (
                             <>
@@ -235,18 +197,6 @@ export const PrivacyScreen = () => {
                                 />
                             </>
                         )}
-
-                        <SelectDeviceBottomSheet<LocalDevice>
-                            ref={walletMgmtBottomSheetRef}
-                            onClose={handleOnSelectedWallet}
-                            devices={devices}
-                        />
-
-                        <RequireUserPassword
-                            isOpen={isPasswordPromptOpen}
-                            onClose={closePasswordPrompt}
-                            onSuccess={onPasswordSuccess}
-                        />
 
                         <RequireUserPassword
                             isOpen={isEditPinPromptOpen}
@@ -266,9 +216,3 @@ export const PrivacyScreen = () => {
         />
     )
 }
-
-const styles = StyleSheet.create({
-    animatedFont: {
-        fontWeight: "600",
-    },
-})

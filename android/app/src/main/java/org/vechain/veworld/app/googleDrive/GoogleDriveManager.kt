@@ -57,7 +57,7 @@ class GoogleDriveManager(private val reactContext: ReactApplicationContext) :
     ) {
         initViewModel()
 
-        val backupFile = BackupFile(
+        val backupFile = DriveBackupFile(
             rootAddress = rootAddress,
             data = data,
             walletType = walletType,

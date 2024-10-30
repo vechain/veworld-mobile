@@ -22,8 +22,7 @@ export const useBackupMnemonic = ({
     devices,
     isWalletSecurityBiometrics,
 }: Props) => {
-    const [userPin, setUserPin] = useState<string | undefined>(undefined)
-    const [deviceToBackup, setDeviceToBackup] = useState<LocalDevice>()
+    const [deviceToBackup, setDeviceToBackup] = useState<LocalDevice | undefined>()
     const dispatch = useAppDispatch()
 
     /*
@@ -68,25 +67,21 @@ export const useBackupMnemonic = ({
      */
     const onPasswordSuccess = useCallback(
         async (password: string) => {
-            setUserPin(password)
             closePasswordPrompt()
 
-            if (devices.length > 1) {
-                openWalletMgmtSheetWithDelay(300)
-            } else {
+            if (deviceToBackup) {
                 const wallet = await WalletEncryptionKeyHelper.decryptWallet({
-                    encryptedWallet: devices[0].wallet,
+                    encryptedWallet: deviceToBackup.wallet,
                     pinCode: password,
                 })
 
                 if (wallet?.mnemonic?.length) {
-                    setDeviceToBackup(devices[0])
-                    openBackupPhraseSheetWithDelay(300, wallet.mnemonic, devices[0])
-                    dispatch(setDeviceIsBackup({ rootAddress: devices[0].rootAddress, isBackup: true }))
+                    openBackupPhraseSheetWithDelay(300, wallet.mnemonic, deviceToBackup)
+                    dispatch(setDeviceIsBackup({ rootAddress: deviceToBackup.rootAddress, isBackup: true }))
                 }
             }
         },
-        [closePasswordPrompt, devices, dispatch, openBackupPhraseSheetWithDelay, openWalletMgmtSheetWithDelay],
+        [closePasswordPrompt, dispatch, openBackupPhraseSheetWithDelay, deviceToBackup],
     )
 
     /*
@@ -96,26 +91,33 @@ export const useBackupMnemonic = ({
      */
     const handleOnSelectedWallet = useCallback(
         async (device: LocalDevice) => {
+            setDeviceToBackup(device)
             closeWalletMgmtSheet()
+            if (isWalletSecurityBiometrics) {
+                const wallet = await WalletEncryptionKeyHelper.decryptWallet({
+                    encryptedWallet: device.wallet,
+                })
 
-            const wallet = await WalletEncryptionKeyHelper.decryptWallet({
-                encryptedWallet: device.wallet,
-                pinCode: userPin,
-            })
-
-            if (wallet?.mnemonic) {
-                setDeviceToBackup(device)
-                openBackupPhraseSheetWithDelay(300, wallet.mnemonic, device)
-                dispatch(setDeviceIsBackup({ rootAddress: device.rootAddress, isBackup: true }))
+                if (wallet?.mnemonic) {
+                    openBackupPhraseSheetWithDelay(300, wallet.mnemonic, device)
+                    dispatch(setDeviceIsBackup({ rootAddress: device.rootAddress, isBackup: true }))
+                }
+            } else {
+                openPasswordPrompt()
             }
         },
-        [closeWalletMgmtSheet, dispatch, openBackupPhraseSheetWithDelay, userPin],
+        [
+            closeWalletMgmtSheet,
+            dispatch,
+            isWalletSecurityBiometrics,
+            openBackupPhraseSheetWithDelay,
+            openPasswordPrompt,
+        ],
     )
 
     useEffect(() => {
         return () => {
             setDeviceToBackup(undefined)
-            setUserPin(undefined)
         }
     }, [])
 

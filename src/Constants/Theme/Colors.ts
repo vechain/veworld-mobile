@@ -36,6 +36,9 @@ export type Colors = {
     placeholder: string
     testnetBackground: string
     gradientBackground: string[]
+    horizontalButtonSelected: string
+    horizontalButtonText: string
+    horizontalButtonTextReversed: string
     alertCards: {
         error: {
             border: string
@@ -44,6 +47,9 @@ export type Colors = {
             title: string
         }
     }
+    cardBorder: string
+    switchEnabled: string
+    textLight: string
 }
 
 export enum COLORS {
@@ -67,10 +73,11 @@ export enum COLORS {
     PASTEL_RED = "#f7c4bc",
     DARK_RED = "#931536",
     DARK_RED_ALERT = "#9D1800",
-    RED_700 = "#9B2C2C",
     MEDIUM_RED = "#E02200",
+    RED_700 = "#9B2C2C",
     RED_500 = "#E53E3E",
     RED_200 = "#FEB2B2",
+    RED_100 = "#FED7D7",
     RED_50 = "#FFF5F5",
     DARK_GREEN = "#325B00",
     DARK_GREEN_ALERT = "#185927",
@@ -81,12 +88,19 @@ export enum COLORS {
     LIGHT_GREEN = "#AAD836",
     PASTEL_GREEN = "#c5eacd",
     MEDIUM_GREEN = "#30B34E",
+    GREEN_500 = "#38A169",
+    GREEN_100 = "#C6F6D5",
+    GREEN_50 = "#F0FFF4",
     PASTEL_ORANGE = "#fedbc0",
     DARK_ORANGE_ALERT = "#AF4F0A",
     MEDIUM_ORANGE = "#FA710E",
-    GREY_600 = "#4A5568",
     DISABLED_GREY = "#E5E5E5",
     MEDIUM_GRAY = "#C4C4C4",
+    GREY_600 = "#4A5568",
+    GREY_500 = "#718096",
+    GREY_300 = "#CBD5E0",
+    GREY_200 = "#E2E8F0",
+    GREY_100 = "#EDF2F7",
     COINBASE_BACKGROUND_LIGHT = "#ffffff",
     COINBASE_BACKGROUND_DARK = "#0a0b0d",
     COINBASE_BACKGROUND_BLUE = "#0052FF",
@@ -118,12 +132,14 @@ const light: Colors = {
     textDisabled: COLORS.DARK_PURPLE_DISABLED,
     textReversed: COLORS.WHITE,
     alertDescription: COLORS.GREY_600,
+    textLight: COLORS.GREY_500,
     background: COLORS.LIGHT_GRAY,
     backgroundReversed: COLORS.DARK_PURPLE,
     backgroundTransparent: COLORS.LIGHT_GRAY_TRANSPARENT,
     splashColorLayer: COLORS.DARK_PURPLE,
     splashBackground: COLORS.DARK_PURPLE,
     card: COLORS.WHITE,
+    cardBorder: COLORS.GREY_300,
     border: COLORS.DARK_PURPLE,
     notification: COLORS.DARK_PURPLE,
     transparent: COLORS.TRANSPARENT,
@@ -136,6 +152,9 @@ const light: Colors = {
     placeholder: COLORS.DISABLED_GREY,
     testnetBackground: COLORS.TESTNET_BACKGROUND_LIGHT,
     gradientBackground: [COLORS.GRADIENT_BACKGROUND_LIGHT_TOP, COLORS.GRADIENT_BACKGROUND_LIGHT_BOTTOM],
+    horizontalButtonSelected: COLORS.DARK_PURPLE,
+    horizontalButtonText: COLORS.WHITE,
+    horizontalButtonTextReversed: COLORS.DARK_PURPLE,
     alertCards: {
         error: {
             border: COLORS.RED_200,
@@ -144,6 +163,7 @@ const light: Colors = {
             title: COLORS.RED_700,
         },
     },
+    switchEnabled: COLORS.LIGHT_GREEN,
 }
 
 const dark: Colors = {
@@ -166,12 +186,14 @@ const dark: Colors = {
     textDisabled: COLORS.WHITE_DISABLED,
     textReversed: COLORS.DARK_PURPLE,
     alertDescription: COLORS.GREY_600,
+    textLight: COLORS.WHITE,
     background: COLORS.DARK_PURPLE,
     backgroundReversed: COLORS.GRAY,
     backgroundTransparent: COLORS.DARK_PURPLE_TRANSPARENT,
     splashColorLayer: COLORS.LIME_GREEN,
     splashBackground: COLORS.DARK_PURPLE,
     card: COLORS.PURPLE,
+    cardBorder: COLORS.DARK_PURPLE,
     border: COLORS.WHITE,
     notification: COLORS.WHITE,
     transparent: COLORS.TRANSPARENT,
@@ -184,6 +206,9 @@ const dark: Colors = {
     placeholder: COLORS.PURPLE,
     testnetBackground: COLORS.TESTNET_BACKGROUND_DARK,
     gradientBackground: [COLORS.GRADIENT_BACKGROUND_DARK_TOP, COLORS.GRADIENT_BACKGROUND_DARK_BOTTOM],
+    horizontalButtonSelected: COLORS.DARK_PURPLE,
+    horizontalButtonText: COLORS.WHITE,
+    horizontalButtonTextReversed: COLORS.WHITE,
     alertCards: {
         error: {
             border: COLORS.RED_200,
@@ -192,6 +217,7 @@ const dark: Colors = {
             title: COLORS.RED_700,
         },
     },
+    switchEnabled: COLORS.LIGHT_GREEN,
 }
 
 export const colors = { light, dark }

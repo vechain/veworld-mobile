@@ -489,9 +489,9 @@ PODS:
     - React-Core
   - react-native-restart (0.0.27):
     - React-Core
-  - react-native-safe-area-context (4.11.1):
+  - react-native-safe-area-context (4.12.0):
     - React-Core
-  - react-native-slider (4.5.4):
+  - react-native-slider (4.5.5):
     - RCT-Folly (= 2021.07.22.00)
     - React-Core
   - react-native-webview (13.8.1):
@@ -663,7 +663,7 @@ PODS:
     - React-RCTText
     - ReactCommon/turbomodule/core
     - Yoga
-  - RNScreens (3.34.1):
+  - RNScreens (3.35.0):
     - RCT-Folly (= 2021.07.22.00)
     - React-Core
     - React-RCTImage
@@ -1118,8 +1118,8 @@ SPEC CHECKSUMS:
   react-native-quick-base64: 61228d753294ae643294a75fece8e0e80b7558a6
   react-native-quick-crypto: 455c1b411db006dba1026a30681ececb19180187
   react-native-restart: 7595693413fe3ca15893702f2c8306c62a708162
-  react-native-safe-area-context: 5141f11858b033636f1788b14f32eaba92cee810
-  react-native-slider: 3bf504f2886e1106adf62937bd4e4d47e1fb8531
+  react-native-safe-area-context: 142fade490cbebbe428640b8cbdb09daf17e8191
+  react-native-slider: 3ce2efe4e261f6e000622ec44536faca44bb13d3
   react-native-webview: bdc091de8cf7f8397653e30182efcd9f772e03b3
   React-NativeModulesApple: 02e35e9a51e10c6422f04f5e4076a7c02243fff2
   React-perflogger: e3596db7e753f51766bceadc061936ef1472edc3
@@ -1150,7 +1150,7 @@ SPEC CHECKSUMS:
   RNLocalize: 1ce4263770515f53d3de442ce7657b3661b16a37
   RNReactNativeHapticFeedback: 35ab91df9e7a1e4513806e3c091293c97fe38c83
   RNReanimated: ab2e96c6d5591c3dfbb38a464f54c8d17fb34a87
-  RNScreens: 50ae87f0c3f80abbdb5fae1c5cf1f8b1f32efca3
+  RNScreens: 50ad6e3dbea9023272b3aa753e3ee2720b0c9b8f
   RNScreenshotPrevent: dc9741e416ba80c3739418f112ac4093188315e9
   RNScrypt: 95fdef077b482e9fdf8a761120cb69d129ef4016
   RNSentry: a490880cadc329b5a16543787c8549f75216fc5b
