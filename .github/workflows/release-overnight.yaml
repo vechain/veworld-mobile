@@ -28,6 +28,8 @@ jobs:
               uses: actions/checkout@v4
             - name: Check for merged PRs
               id: check_merged_prs
+              env:
+                GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
               run: |
                 merged_prs=$(gh pr list --base main --state merged --json mergedAt --jq '.[] | select(.mergedAt > "'$(date --date="24 hours ago" --iso-8601=seconds)'") | length')
                 echo "Merged PRs in the last 24 hours: $merged_prs"
