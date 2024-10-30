@@ -1,6 +1,6 @@
 import { useCallback, useEffect, useState } from "react"
-import { LocalDevice } from "~Model"
 import { WalletEncryptionKeyHelper } from "~Components"
+import { LocalDevice } from "~Model"
 import { setDeviceIsBackup, useAppDispatch } from "~Storage/Redux"
 
 type Props = {

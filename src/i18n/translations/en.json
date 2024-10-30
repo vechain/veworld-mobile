@@ -112,7 +112,7 @@
   "BD_RESET_DISCLAIMER": "Click to reset VeWorld and erase all your data stored on it",
   "BD_SCANED_ADDRESS_COPPIED": "Address Copied to Clipboard",
   "BD_SECURITY_DOWNGRADE": "Please re-enable biometrics or reset app",
-  "BD_SECURITY_METHOD": "Select the security method to unlock your wallet.",
+  "BD_SECURITY_METHOD": "Click to reset VeWorld and erase all your data stored on it",
   "BD_SELECT_NETWORK": "Select a network",
   "BD_SELECT_NETWORK_DESC": "Select the network you want to transact on",
   "BD_SELECT_PAYMENT_PROVIDER": "Choose a provider:",

@@ -486,7 +486,7 @@ type RootTranslation = {
 	 */
 	BD_SECURITY_DOWNGRADE: string
 	/**
-	 * S​e​l​e​c​t​ ​t​h​e​ ​s​e​c​u​r​i​t​y​ ​m​e​t​h​o​d​ ​t​o​ ​u​n​l​o​c​k​ ​y​o​u​r​ ​w​a​l​l​e​t​.
+	 * C​l​i​c​k​ ​t​o​ ​r​e​s​e​t​ ​V​e​W​o​r​l​d​ ​a​n​d​ ​e​r​a​s​e​ ​a​l​l​ ​y​o​u​r​ ​d​a​t​a​ ​s​t​o​r​e​d​ ​o​n​ ​i​t
 	 */
 	BD_SECURITY_METHOD: string
 	/**
@@ -3793,7 +3793,7 @@ VeWorld will never ask you for them.
 	 */
 	BD_SECURITY_DOWNGRADE: () => LocalizedString
 	/**
-	 * Select the security method to unlock your wallet.
+	 * Click to reset VeWorld and erase all your data stored on it
 	 */
 	BD_SECURITY_METHOD: () => LocalizedString
 	/**
