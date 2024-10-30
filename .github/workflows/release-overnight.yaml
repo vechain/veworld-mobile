@@ -3,25 +3,20 @@ name: Release Overnight - Android & iOS
 on:
     workflow_dispatch:
         inputs:
-        version: 
-            description: 'Version to build'
-            type: string
-            required: true
-        build: 
-            description: 'Build number'
-            type: number
-            required: true
-    
-    workflow_call:
-        inputs:
-        version: 
-            description: 'Version to build'
-            type: string
-            required: true
-        build: 
-            description: 'Build number'
-            type: number
-            required: true
+            version: 
+                description: 'Version to build'
+                type: string
+                required: true
+            build: 
+                description: 'Build number'
+                type: number
+                required: true
+    push:
+        branches:
+            - 2349-release-overnight
+env:
+    version: ${{ vars.version }}
+    build: ${{ vars.build }}
 jobs:
     check-merged-pr:
         runs-on: ubuntu-latest
@@ -34,26 +29,75 @@ jobs:
                 merged_prs=$(gh pr list --base main --state merged --json mergedAt --jq '.[] | select(.mergedAt > "'$(date --date="24 hours ago" --iso-8601=seconds)'") | length')
                 echo "Merged PRs in the last 24 hours: $merged_prs"
                 echo "::set-output name=should_release::$(if [ "$merged_prs" -gt 0 ]; then echo 'true'; else echo 'false'; fi)"
-              
+    generate-token: 
+        runs-on: ubuntu-latest
+        outputs:
+            token: ${{ steps.generate-token.outputs.token }}
+        steps: 
+            - name: Generate a token
+              id: generate-token
+              uses: actions/create-github-app-token@v1
+              with:
+                app-id: ${{ secrets.app-id }}
+                private-key: ${{ secrets.private-key }}
+
+    setup-version-build:
+        runs-on: ubuntu-latest
+        needs: [generate-token, check-merged-pr]
+        
+        outputs:
+            new_version: ${{ steps.increment.outputs.new_version }}
+            new_build: ${{ steps.increment.outputs.new_build }}
+        steps:
+            - name: Checkout repository
+              uses: actions/checkout@v4
+            
+            - name: Increment Version and Build
+              id: increment
+              env:
+                GITHUB_TOKEN: ${{ needs.generate-token.outputs.token }}
+              run: |
+
+                # Split the version into components
+                IFS='.' read -r major minor patch <<< "${{ env.VERSION }}"
+                # Increment the patch version
+                new_patch=$((patch + 1))
+
+                # Increment build number
+                new_build=$((${{ env.BUILD }} + 1))
+
+                # Combine components back to form the new version
+                new_version="$major.$minor.$new_patch"
+
+                # Output the new version and build
+                echo "::set-output name=new_version::$new_version"
+                echo "::set-output name=new_build::$new_build"
+
+                # Update Repo with new version and build
+                gh variable list
+                gh variable set VERSION --body "$new_version"
+                gh variable set BUILD --body "$new_build"
+                gh variable list
+
     build-test-scan:
         if: needs.check_merged_prs.outputs.should_release == 'true'
         needs: check-merged-pr
         uses: ./.github/workflows/install-build-test-scan.yml
         secrets: inherit
     
-    release-ios:
-        uses: ./.github/workflows/release-ios.yml
-        needs: build-test-scan
-        secrets: inherit
-        with:
-            version: ${{ github.event.inputs.version }}
-            build: ${{ github.event.inputs.build }}
-        
-    release-android:
-        uses: ./.github/workflows/release-android.yml
-        needs: build-test-scan
-        secrets: inherit
-        with:
-            version: ${{ github.event.inputs.version }}
-            build: ${{ github.event.inputs.build }}
+    #release-ios:
+    #    uses: ./.github/workflows/release-ios.yml
+    #    needs: build-test-scan
+    #    secrets: inherit
+    #    with:
+    #        version: ${{ needs.setup-version-build.outputs.new_version }}
+    #        build: ${{ needs.setup-version-build.outputs.new_build }}
+    #    
+    #release-android:
+    #    uses: ./.github/workflows/release-android.yml
+    #    needs: build-test-scan
+    #    secrets: inherit
+    #    with:
+    #        version: ${{ needs.setup-version-build.outputs.new_version }}
+    #        build: ${{ needs.setup-version-build.outputs.new_build }}
     
