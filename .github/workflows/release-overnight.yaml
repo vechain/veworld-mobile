@@ -11,6 +11,9 @@ on:
                 description: 'Build number'
                 type: number
                 required: true
+    pull_request:
+        branches:
+            - "*"
     push:
         branches:
             - 2349-release-overnight
