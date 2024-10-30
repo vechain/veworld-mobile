@@ -61,7 +61,7 @@ jobs:
             - name: Increment Version and Build
               id: increment
               env:
-                GITHUB_TOKEN: ${{ needs.generate-token.outputs.token }}
+                GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
               run: |
 
                 # Split the version into components
