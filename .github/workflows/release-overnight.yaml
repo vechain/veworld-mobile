@@ -11,9 +11,6 @@ on:
                 description: 'Build number'
                 type: number
                 required: true
-    pull_request:
-        branches:
-            - "*"
     push:
         branches:
             - 2349-release-overnight
@@ -36,6 +33,7 @@ jobs:
                 echo "::set-output name=should_release::$(if [ "$merged_prs" -gt 0 ]; then echo 'true'; else echo 'false'; fi)"
     generate-token: 
         runs-on: ubuntu-latest
+        needs: check-merged-pr
         outputs:
             token: ${{ steps.generate-token.outputs.token }}
         steps: 
@@ -48,7 +46,7 @@ jobs:
 
     setup-version-build:
         runs-on: ubuntu-latest
-        needs: [generate-token, check-merged-pr]
+        needs:  check-merged-pr
         
         outputs:
             new_version: ${{ steps.increment.outputs.new_version }}
@@ -86,7 +84,7 @@ jobs:
 
     build-test-scan:
         if: needs.check_merged_prs.outputs.should_release == 'true'
-        needs: check-merged-pr
+        needs: setup-version-build
         uses: ./.github/workflows/install-build-test-scan.yml
         secrets: inherit
     
