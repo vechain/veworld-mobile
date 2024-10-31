@@ -36,7 +36,7 @@ export const CopyMnemonicButton = memo(({ mnemonicArray, deviceToBackup }: Props
     return (
         <BaseButton
             px={0}
-            py={0}
+            py={4}
             size="sm"
             variant="ghost"
             selfAlign="flex-start"

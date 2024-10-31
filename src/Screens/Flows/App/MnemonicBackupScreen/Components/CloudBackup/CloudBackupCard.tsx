@@ -4,7 +4,7 @@ import { BaseIcon, BaseText, BaseTouchableBox, BaseView, CloudKitWarningBottomSh
 import { CardWithHeader } from "~Components/Reusable/CardWithHeader"
 import { useI18nContext } from "~i18n"
 import { useBottomSheetModal, useCloudKit, useThemedStyles } from "~Hooks"
-import { COLORS, DerivationPath } from "~Constants"
+import { COLORS, ColorThemeType, DerivationPath } from "~Constants"
 import { LocalDevice } from "~Model"
 import { AddressUtils, CryptoUtils, HexUtils, PasswordUtils } from "~Utils"
 import { useNavigation } from "@react-navigation/native"
@@ -62,7 +62,20 @@ export const CloudBackupCard: FC<Props> = ({ mnemonicArray, deviceToBackup }) =>
     return (
         <>
             <BaseView justifyContent="center">
-                <CardWithHeader title={LL.TITLE_BACKUP_CLOUD()} iconName="cloud-outline">
+                <CardWithHeader
+                    title={LL.TITLE_BACKUP_CLOUD()}
+                    iconName="cloud-outline"
+                    sideHeader={
+                        <BaseView style={styles.sideHeader}>
+                            <BaseText
+                                typographyFont="smallCaptionMedium"
+                                px={6}
+                                py={2}
+                                color={theme.isDark ? COLORS.WHITE : COLORS.GREY_600}>
+                                {LL.RECOMMENDED()}
+                            </BaseText>
+                        </BaseView>
+                    }>
                     <BaseTouchableBox
                         containerStyle={[
                             styles.cloudRow,
@@ -101,7 +114,7 @@ export const CloudBackupCard: FC<Props> = ({ mnemonicArray, deviceToBackup }) =>
     )
 }
 
-const baseStyles = () =>
+const baseStyles = (theme: ColorThemeType) =>
     StyleSheet.create({
         cloudRow: {
             borderRadius: 8,
@@ -124,5 +137,11 @@ const baseStyles = () =>
         verifyCloudText: {
             paddingLeft: 12,
             color: COLORS.DARK_PURPLE,
+        },
+        sideHeader: {
+            borderWidth: 1,
+            borderRadius: 4,
+            borderColor: theme.isDark ? COLORS.DARK_PURPLE_DISABLED : COLORS.GREY_300,
+            backgroundColor: theme.isDark ? COLORS.TRANSPARENT : COLORS.GREY_100,
         },
     })

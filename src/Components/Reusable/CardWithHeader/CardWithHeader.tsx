@@ -11,20 +11,32 @@ type Props = {
     iconSize?: number
     title: string
     titleColor?: string
+    sideHeader?: React.ReactNode
     children?: React.ReactNode
 }
 
-export const CardWithHeader = ({ containerStyle, cardStyle, iconName, iconSize = 12, title, children }: Props) => {
+export const CardWithHeader = ({
+    containerStyle,
+    cardStyle,
+    iconName,
+    iconSize = 12,
+    title,
+    sideHeader,
+    children,
+}: Props) => {
     const { theme, styles } = useThemedStyles(baseStyles)
 
     return (
         <BaseCard containerStyle={[styles.cardContainer, containerStyle]} style={[styles.card, cardStyle]}>
             <BaseView style={styles.cardHeader}>
-                <BaseIcon name={iconName} size={iconSize} style={styles.icon} />
-                <BaseSpacer width={8} />
-                <BaseText typographyFont="captionMedium" color={theme.colors.text}>
-                    {title}
-                </BaseText>
+                <BaseView style={styles.cardHeader}>
+                    <BaseIcon name={iconName} size={iconSize} style={styles.icon} />
+                    <BaseSpacer width={8} />
+                    <BaseText typographyFont="captionMedium" color={theme.colors.text}>
+                        {title}
+                    </BaseText>
+                </BaseView>
+                {sideHeader}
             </BaseView>
             <BaseView>
                 <BaseSpacer height={12} />
@@ -48,6 +60,7 @@ const baseStyles = (theme: ColorThemeType) =>
         cardHeader: {
             flexDirection: "row",
             alignItems: "center",
+            justifyContent: "space-between",
         },
         icon: {
             backgroundColor: COLORS.GREY_200,

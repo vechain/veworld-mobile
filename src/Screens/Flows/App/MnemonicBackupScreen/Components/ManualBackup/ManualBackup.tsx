@@ -1,9 +1,12 @@
 import React from "react"
-import { BaseSpacer, BaseText, BaseView, MnemonicBackupAlert } from "~Components"
+import { BaseCard, BaseSpacer, BaseText, BaseView } from "~Components"
 import { useI18nContext } from "~i18n"
 import { LocalDevice } from "~Model"
 import { LastBackupAlert } from "../index"
-import { ManualOnlyCard } from "./ManualOnlyCard"
+import { ManualBackupContent } from "~Screens/Flows/App/MnemonicBackupScreen/Components/ManualBackupContent"
+import { COLORS, ColorThemeType } from "~Constants"
+import { StyleSheet } from "react-native"
+import { useThemedStyles } from "~Hooks"
 
 type Props = {
     mnemonicArray: string[]
@@ -12,6 +15,8 @@ type Props = {
 
 export const ManualBackup = ({ mnemonicArray, deviceToBackup }: Props) => {
     const { LL } = useI18nContext()
+    const { styles } = useThemedStyles(baseStyles)
+
     return (
         <BaseView>
             {deviceToBackup?.isBuckedUp && (
@@ -24,9 +29,29 @@ export const ManualBackup = ({ mnemonicArray, deviceToBackup }: Props) => {
             <BaseSpacer height={16} />
             <BaseText typographyFont="captionRegular">{LL.BD_MNEMONIC_PASSWORD_WARNING()}</BaseText>
             <BaseSpacer height={16} />
-            <ManualOnlyCard mnemonicArray={mnemonicArray} deviceToBackup={deviceToBackup} />
-            <BaseSpacer height={16} />
-            <MnemonicBackupAlert />
+            <BaseCard containerStyle={styles.cardContainer} style={styles.card}>
+                <ManualBackupContent mnemonicArray={mnemonicArray} deviceToBackup={deviceToBackup} />
+            </BaseCard>
         </BaseView>
     )
 }
+
+const baseStyles = (theme: ColorThemeType) =>
+    StyleSheet.create({
+        card: {
+            display: "flex",
+            flexDirection: "column",
+            alignContent: "center",
+            paddingTop: 16,
+            paddingBottom: 12,
+            paddingHorizontal: 16,
+        },
+        cardContainer: {
+            display: "flex",
+            borderWidth: 1,
+            borderRadius: 12,
+            paddingBottom: 0,
+            paddingVertical: 0,
+            borderColor: theme.isDark ? COLORS.DARK_PURPLE_DISABLED : theme.colors.cardBorder,
+        },
+    })

@@ -1,12 +1,14 @@
 import React, { FC } from "react"
 import { BaseSpacer, BaseText, BaseView } from "~Components"
-import { ManualBackupCard } from "./ManualBackupCard"
 import { CloudBackupCard } from "./CloudBackupCard"
 import { LocalDevice } from "~Model"
 import { useThemedStyles } from "~Hooks"
 import { ColorThemeType } from "~Constants"
 import { StyleSheet } from "react-native"
 import { LastBackupAlert } from "~Screens/Flows/App/MnemonicBackupScreen/Components"
+import { ManualBackupContent } from "~Screens/Flows/App/MnemonicBackupScreen/Components/ManualBackupContent"
+import { CardWithHeader } from "~Components/Reusable/CardWithHeader"
+import { useI18nContext } from "~i18n"
 
 type Props = {
     mnemonicArray: string[]
@@ -14,7 +16,9 @@ type Props = {
 }
 
 export const CloudAndManualBackup: FC<Props> = ({ mnemonicArray, deviceToBackup }) => {
+    const { LL } = useI18nContext()
     const { styles } = useThemedStyles(baseStyles)
+
     return (
         <BaseView>
             <BaseText typographyFont="subSubTitleMedium">{deviceToBackup?.alias}</BaseText>
@@ -35,7 +39,13 @@ export const CloudAndManualBackup: FC<Props> = ({ mnemonicArray, deviceToBackup 
                 <BaseSpacer style={styles.line} height={1} />
             </BaseView>
             <BaseSpacer height={16} />
-            <ManualBackupCard mnemonicArray={mnemonicArray} deviceToBackup={deviceToBackup} />
+            <CardWithHeader title={LL.TITLE_BACKUP_MANUALLY()} iconName="pencil-outline">
+                <BaseView>
+                    <BaseText typographyFont="captionRegular">{LL.BD_MNEMONIC_PASSWORD_WARNING()}</BaseText>
+                    <BaseSpacer height={12} />
+                    <ManualBackupContent mnemonicArray={mnemonicArray} deviceToBackup={deviceToBackup} />
+                </BaseView>
+            </CardWithHeader>
         </BaseView>
     )
 }

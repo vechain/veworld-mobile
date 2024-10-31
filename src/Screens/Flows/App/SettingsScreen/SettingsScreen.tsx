@@ -79,7 +79,8 @@ export const SettingsScreen = () => {
 
     return (
         <BaseSafeArea>
-            <BaseView flexDirection="row" justifyContent="space-between" mx={24} pb={16}>
+            <BaseSpacer height={16} />
+            <BaseView flexDirection="row" justifyContent="space-between" mx={24} mb={8}>
                 <BaseText typographyFont="subTitleBold" testID="settings-screen">
                     {LL.TITLE_SETTINGS()}
                 </BaseText>

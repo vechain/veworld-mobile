@@ -8,7 +8,7 @@ import {
     BaseSpacer,
     MnemonicCard,
     BaseIcon,
-    MnemonicBackupAlert,
+    MnemonicAvoidScreenshotAlert,
 } from "~Components"
 import { useCopyClipboard, useTheme } from "~Hooks"
 import { useI18nContext } from "~i18n"
@@ -60,7 +60,7 @@ export const MnemonicModalSheetStandalone = React.forwardRef<BottomSheetModalMet
                         />
 
                         <BaseSpacer height={16} />
-                        <MnemonicBackupAlert />
+                        <MnemonicAvoidScreenshotAlert />
                     </BaseView>
                 </BaseView>
             </BaseBottomSheet>

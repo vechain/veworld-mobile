@@ -2230,6 +2230,10 @@ type RootTranslation = {
 	 */
 	RECEIVE_NFT: string
 	/**
+	 * R​e​c​o​m​m​e​n​d​e​d
+	 */
+	RECOMMENDED: string
+	/**
 	 * r​e​s​t​o​r​e​ 
 	 */
 	RESTORE: string
@@ -5501,6 +5505,10 @@ Try reconnect your device to the internet.
 	 * Receive NFT
 	 */
 	RECEIVE_NFT: () => LocalizedString
+	/**
+	 * Recommended
+	 */
+	RECOMMENDED: () => LocalizedString
 	/**
 	 * restore 
 	 */

@@ -6,12 +6,13 @@ import { useTabBarBottomMargin, useTheme } from "~Hooks"
 import { isAndroid } from "~Utils/PlatformUtils/PlatformUtils"
 import { SelectedNetworkViewer } from "~Components"
 import { SafeAreaView } from "react-native-safe-area-context"
+import { BackButtonHeaderV2 } from "~Components/Reusable/BackButtonHeader/BackButtonHeaderV2"
 
 type Props = {
     noBackButton?: boolean
     noMargin?: boolean
     title?: string
-    pageHeader?: ReactNode
+    pageHeader?: string
     fixedHeader?: ReactNode
     body?: ReactNode
     fixedBody?: ReactNode
@@ -93,10 +94,8 @@ export const Layout = ({
                     {pageHeader && (
                         <BaseView>
                             <BaseView mx={noMargin ? 0 : 20}>
-                                {title && <Title />}
-                                {<BaseView>{pageHeader}</BaseView>}
+                                <BackButtonHeaderV2 title={pageHeader} />
                             </BaseView>
-                            <BaseSpacer height={12} />
                         </BaseView>
                     )}
                     {fixedHeader && (
