@@ -1226,6 +1226,10 @@ type RootTranslation = {
 	 */
 	CONNECTED_APP_CONNECTION_REQUESTS: string
 	/**
+	 * C​o​n​t​r​a​c​t
+	 */
+	CONNECTED_APP_CONTRACT: string
+	/**
 	 * D​e​s​c​r​i​p​t​i​o​n
 	 */
 	CONNECTED_APP_DESCRIPTION: string
@@ -1237,6 +1241,10 @@ type RootTranslation = {
 	 * C​o​n​n​e​c​t​e​d​ ​a​p​p
 	 */
 	CONNECTED_APP_DETAILS_TITLE: string
+	/**
+	 * D​o​m​a​i​n
+	 */
+	CONNECTED_APP_DOMAIN: string
 	/**
 	 * M​e​s​s​a​g​e​:​ 
 	 */
@@ -1298,9 +1306,25 @@ type RootTranslation = {
 	 */
 	CONNECTED_APP_SIGN_TRANSACTION_REQUEST_TITLE: string
 	/**
+	 * S​i​g​n​ ​t​y​p​e​d​ ​d​a​t​a
+	 */
+	CONNECTED_APP_SIGN_TYPED_DATA: string
+	/**
+	 * Y​o​u​r​ ​S​i​g​n​a​t​u​r​e​ ​i​s​ ​b​e​i​n​g​ ​r​e​q​u​e​s​t​e​d​ ​t​o​ ​s​i​g​n​ ​t​y​p​e​d​ ​d​a​t​a​ ​m​e​s​s​a​g​e
+	 */
+	CONNECTED_APP_SIGN_TYPED_DATA_REQUEST_DESCRIPTION: string
+	/**
 	 * C​o​n​n​e​c​t​e​d​ ​a​p​p
 	 */
 	CONNECTED_APP_TITLE: string
+	/**
+	 * U​r​l
+	 */
+	CONNECTED_APP_URL: string
+	/**
+	 * v​e​r​s​i​o​n
+	 */
+	CONNECTED_APP_VERSION: string
 	/**
 	 * A​p​p​r​o​v​e​ ​N​F​T
 	 */
@@ -1333,6 +1357,10 @@ type RootTranslation = {
 	 * ●​ ​R​e​q​u​e​s​t​ ​y​o​u​r​ ​s​i​g​n​a​t​u​r​e​ ​o​n​ ​c​e​r​t​i​f​i​c​a​t​e​s​ ​o​r​ ​i​d​e​n​t​i​f​i​c​a​t​i​o​n​ ​a​n​d​ ​a​g​r​e​e​m​e​n​t​s
 	 */
 	CONNECTION_REQUEST_SIGN_DESCRIPTION: string
+	/**
+	 * R​e​q​u​e​s​t​ ​y​o​u​r​ ​s​i​g​n​a​t​u​r​e​ ​o​n​ ​t​y​p​e​d​ ​d​a​t​a​ ​m​e​s​s​a​g​e
+	 */
+	CONNECTION_REQUEST_SIGN_TYPED_DATA_DESCRIPTION: string
 	/**
 	 * {​n​a​m​e​}​ ​i​s​ ​a​s​k​i​n​g​ ​f​o​r​ ​a​c​c​e​s​s​ ​t​o​:
 	 * @param {unknown} name
@@ -4525,6 +4553,10 @@ VeWorld will never ask you for them.
 	 */
 	CONNECTED_APP_CONNECTION_REQUESTS: () => LocalizedString
 	/**
+	 * Contract
+	 */
+	CONNECTED_APP_CONTRACT: () => LocalizedString
+	/**
 	 * Description
 	 */
 	CONNECTED_APP_DESCRIPTION: () => LocalizedString
@@ -4536,6 +4568,10 @@ VeWorld will never ask you for them.
 	 * Connected app
 	 */
 	CONNECTED_APP_DETAILS_TITLE: () => LocalizedString
+	/**
+	 * Domain
+	 */
+	CONNECTED_APP_DOMAIN: () => LocalizedString
 	/**
 	 * Message: 
 	 */
@@ -4597,9 +4633,25 @@ VeWorld will never ask you for them.
 	 */
 	CONNECTED_APP_SIGN_TRANSACTION_REQUEST_TITLE: () => LocalizedString
 	/**
+	 * Sign typed data
+	 */
+	CONNECTED_APP_SIGN_TYPED_DATA: () => LocalizedString
+	/**
+	 * Your Signature is being requested to sign typed data message
+	 */
+	CONNECTED_APP_SIGN_TYPED_DATA_REQUEST_DESCRIPTION: () => LocalizedString
+	/**
 	 * Connected app
 	 */
 	CONNECTED_APP_TITLE: () => LocalizedString
+	/**
+	 * Url
+	 */
+	CONNECTED_APP_URL: () => LocalizedString
+	/**
+	 * version
+	 */
+	CONNECTED_APP_VERSION: () => LocalizedString
 	/**
 	 * Approve NFT
 	 */
@@ -4632,6 +4684,10 @@ VeWorld will never ask you for them.
 	 * ● Request your signature on certificates or identification and agreements
 	 */
 	CONNECTION_REQUEST_SIGN_DESCRIPTION: () => LocalizedString
+	/**
+	 * Request your signature on typed data message
+	 */
+	CONNECTION_REQUEST_SIGN_TYPED_DATA_DESCRIPTION: () => LocalizedString
 	/**
 	 * {name} is asking for access to:
 	 */
