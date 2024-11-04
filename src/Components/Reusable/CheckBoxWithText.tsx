@@ -3,7 +3,7 @@ import BouncyCheckbox from "react-native-bouncy-checkbox"
 import { BaseIcon, BaseText } from "~Components/Base"
 import { useThemedStyles } from "~Hooks"
 import { LocalizedString } from "typesafe-i18n"
-import { ColorThemeType, TFonts } from "~Constants"
+import { COLORS, ColorThemeType, TFonts } from "~Constants"
 import HapticsService from "~Services/HapticsService"
 import { StyleSheet } from "react-native"
 
@@ -18,7 +18,7 @@ type Props = {
 }
 
 export const CheckBoxWithText: FC<Props> = ({ font, fontColor, text, checkSize, testID, checkAction, isChecked }) => {
-    const { styles, theme } = useThemedStyles(baseStyles)
+    const { styles } = useThemedStyles(baseStyles)
 
     const onPress = useCallback(
         async (checked: boolean) => {
@@ -31,12 +31,12 @@ export const CheckBoxWithText: FC<Props> = ({ font, fontColor, text, checkSize, 
     return (
         <BouncyCheckbox
             onPress={onPress}
-            size={checkSize ?? 22}
+            size={checkSize ?? 16}
             unfillColor="transparent"
             fillColor="transparent"
             innerIconStyle={styles.innerIcon}
             iconStyle={styles.icon}
-            iconComponent={isChecked ? <BaseIcon name="check" size={20} color={theme.colors.text} /> : <></>}
+            iconComponent={isChecked ? <BaseIcon name="check" size={14} color={COLORS.DARK_PURPLE} /> : <></>}
             isChecked={isChecked}
             textComponent={
                 <BaseText typographyFont={font ? font : "footNote"} color={fontColor} my={14} mx={10} testID={testID}>
@@ -50,12 +50,13 @@ export const CheckBoxWithText: FC<Props> = ({ font, fontColor, text, checkSize, 
 const baseStyles = (theme: ColorThemeType) =>
     StyleSheet.create({
         innerIcon: {
-            borderColor: theme.colors.text,
-            borderRadius: 6,
+            backgroundColor: theme.isDark ? COLORS.WHITE : COLORS.TRANSPARENT,
             color: theme.colors.text,
+            borderRadius: 4,
+            borderWidth: 1,
+            borderColor: COLORS.DARK_PURPLE,
         },
         icon: {
-            borderRadius: 6,
             color: theme.colors.text,
         },
     })

@@ -289,9 +289,17 @@ type RootTranslation = {
 	 */
 	BD_CLOUD_INSERT_PASSWORD: string
 	/**
-	 * T​h​i​s​ ​p​a​s​s​w​o​r​d​ ​w​i​l​l​ ​s​e​c​u​r​e​ ​y​o​u​r​ ​s​e​c​r​e​t​ ​r​e​c​o​v​e​r​y​ ​p​h​r​a​s​e​ ​i​n​ ​t​h​e​ ​c​l​o​u​d​.​ ​V​e​W​o​r​l​d​ ​d​o​e​s​ ​N​O​T​ ​h​a​v​e​ ​a​c​c​e​s​s​ ​t​o​ ​y​o​u​r​ ​p​a​s​s​w​o​r​d​.​ ​W​e​ ​c​a​n​ ​N​O​T​ ​r​e​s​e​t​ ​i​t​ ​i​f​ ​y​o​u​ ​l​o​s​e​ ​i​t​,​ ​s​o​ ​k​e​e​p​ ​i​t​ ​s​a​f​e​.
+	 * T​h​i​s​ ​p​a​s​s​w​o​r​d​ ​i​s​ ​u​s​e​d​ ​t​o​ ​s​e​c​u​r​e​ ​y​o​u​r​ ​s​e​c​r​e​t​ ​r​e​c​o​v​e​r​y​ ​p​h​r​a​s​e​ ​b​a​c​k​u​p​.
 	 */
 	BD_CLOUD_PASSWORD_CREATION_MESSAGE: string
+	/**
+	 * T​h​e​ ​p​a​s​s​w​o​r​d​ ​i​s​ ​n​o​t​ ​r​e​c​o​v​e​r​a​b​l​e​ ​b​y​ ​V​e​W​o​r​l​d​ ​o​r​ ​a​n​y​o​n​e​,​ ​s​o​ ​m​a​k​e​ ​t​o​ ​s​u​r​e​ ​t​o​ ​r​e​m​e​m​b​e​r​ ​i​t​.
+	 */
+	BD_CLOUD_PASSWORD_RECOVER_MESSAGE: string
+	/**
+	 * I​ ​u​n​d​e​r​s​t​a​n​d​ ​t​h​a​t​ ​i​f​ ​I​ ​l​o​s​e​ ​t​h​i​s​ ​p​a​s​s​w​o​r​d​,​ ​I​ ​w​o​n​’​t​ ​b​e​ ​a​b​l​e​ ​t​o​ ​a​c​c​e​s​s​ ​t​h​e​ ​b​a​c​k​u​p​ ​a​n​d​ ​r​e​c​o​v​e​r​ ​m​y​ ​w​a​l​l​e​t​.
+	 */
+	BD_CLOUD_PASSWORD_WARNING_CHECKBOX: string
 	/**
 	 * C​o​l​l​e​c​t​i​o​n
 	 */
@@ -457,11 +465,11 @@ type RootTranslation = {
 	 */
 	BD_OTHER_NETWORKS_INDICATOR_DESC: string
 	/**
-	 * *​ ​P​a​s​s​w​o​r​d​s​ ​d​o​ ​n​o​t​ ​m​a​t​c​h
+	 * P​a​s​s​w​o​r​d​s​ ​d​o​n​'​t​ ​m​a​t​c​h
 	 */
 	BD_PASSWORDS_DO_NOT_MATCH: string
 	/**
-	 * *​ ​P​a​s​s​w​o​r​d​ ​i​s​ ​n​o​t​ ​s​t​r​o​n​g​ ​e​n​o​u​g​h​ ​(​m​i​n​ ​6​ ​c​h​a​r​a​c​t​e​r​s​,​ ​1​ ​n​u​n​b​e​r​,​ ​1​ ​s​p​e​c​i​a​l​ ​c​h​a​r​a​c​t​e​r​)
+	 * M​i​n​ ​6​ ​c​h​a​r​a​c​t​e​r​s​,​ ​1​ ​n​u​m​b​e​r​,​ ​1​ ​s​p​e​c​i​a​l​ ​c​h​a​r​a​c​t​e​r
 	 */
 	BD_PASSWORD_NOT_STRONG: string
 	/**
@@ -686,6 +694,10 @@ type RootTranslation = {
 	 */
 	BTN_BACKUP_MENMONIC: string
 	/**
+	 * B​a​c​k​u​p​ ​t​o​ ​i​C​l​o​u​d
+	 */
+	BTN_BACKUP_TO_ICLOUD: string
+	/**
 	 * B​u​y
 	 */
 	BTN_BUY: string
@@ -850,6 +862,10 @@ type RootTranslation = {
 	 */
 	BTN_RENAME_ACCOUNT: string
 	/**
+	 * R​e​p​e​a​t​ ​p​a​s​s​w​o​r​d
+	 */
+	BTN_REPEAT_PASSWORD: string
+	/**
 	 * R​e​s​e​t​ ​A​p​p
 	 */
 	BTN_RESET_APP: string
@@ -865,6 +881,10 @@ type RootTranslation = {
 	 * S​c​a​n​ ​Q​R​ ​C​o​d​e
 	 */
 	BTN_SCAN_QR_CODE: string
+	/**
+	 * C​r​e​a​t​e​ ​p​a​s​s​w​o​r​d​ ​t​o​ ​b​a​c​k​u​p
+	 */
+	BTN_SECURITY_CREATE_PASSWORD_BACKUP: string
 	/**
 	 * C​r​e​a​t​e​ ​p​a​s​s​w​o​r​d
 	 */
@@ -926,6 +946,10 @@ type RootTranslation = {
 	 * N​E​X​T​:​ ​S​E​C​R​E​T​ ​P​H​R​A​S​E
 	 */
 	BTN_WALLET_TUTORIAL_SLIDE_03: string
+	/**
+	 * W​r​i​t​e​ ​r​e​c​o​v​e​r​y​ ​p​a​s​s​w​o​r​d
+	 */
+	BTN_WRITE_RECOVERY_PASSWORD: string
 	/**
 	 * Y​o​u​ ​h​a​v​e​ ​r​e​j​e​c​t​e​d​ ​t​h​e​ ​c​e​r​t​i​f​i​c​a​t​e
 	 */
@@ -1300,9 +1324,25 @@ type RootTranslation = {
 	 */
 	CONNECTED_APP_SIGN_TRANSACTION_REQUEST_TITLE: string
 	/**
+	 * S​i​g​n​ ​t​y​p​e​d​ ​d​a​t​a
+	 */
+	CONNECTED_APP_SIGN_TYPED_DATA: string
+	/**
+	 * Y​o​u​r​ ​S​i​g​n​a​t​u​r​e​ ​i​s​ ​b​e​i​n​g​ ​r​e​q​u​e​s​t​e​d​ ​t​o​ ​s​i​g​n​ ​t​y​p​e​d​ ​d​a​t​a​ ​m​e​s​s​a​g​e
+	 */
+	CONNECTED_APP_SIGN_TYPED_DATA_REQUEST_DESCRIPTION: string
+	/**
 	 * C​o​n​n​e​c​t​e​d​ ​a​p​p
 	 */
 	CONNECTED_APP_TITLE: string
+	/**
+	 * U​r​l
+	 */
+	CONNECTED_APP_URL: string
+	/**
+	 * v​e​r​s​i​o​n
+	 */
+	CONNECTED_APP_VERSION: string
 	/**
 	 * A​p​p​r​o​v​e​ ​N​F​T
 	 */
@@ -1335,6 +1375,10 @@ type RootTranslation = {
 	 * ●​ ​R​e​q​u​e​s​t​ ​y​o​u​r​ ​s​i​g​n​a​t​u​r​e​ ​o​n​ ​c​e​r​t​i​f​i​c​a​t​e​s​ ​o​r​ ​i​d​e​n​t​i​f​i​c​a​t​i​o​n​ ​a​n​d​ ​a​g​r​e​e​m​e​n​t​s
 	 */
 	CONNECTION_REQUEST_SIGN_DESCRIPTION: string
+	/**
+	 * R​e​q​u​e​s​t​ ​y​o​u​r​ ​s​i​g​n​a​t​u​r​e​ ​o​n​ ​t​y​p​e​d​ ​d​a​t​a​ ​m​e​s​s​a​g​e
+	 */
+	CONNECTION_REQUEST_SIGN_TYPED_DATA_DESCRIPTION: string
 	/**
 	 * {​n​a​m​e​}​ ​i​s​ ​a​s​k​i​n​g​ ​f​o​r​ ​a​c​c​e​s​s​ ​t​o​:
 	 * @param {unknown} name
@@ -3590,9 +3634,17 @@ Try reconnect your device to the internet.
 	 */
 	BD_CLOUD_INSERT_PASSWORD: () => LocalizedString
 	/**
-	 * This password will secure your secret recovery phrase in the cloud. VeWorld does NOT have access to your password. We can NOT reset it if you lose it, so keep it safe.
+	 * This password is used to secure your secret recovery phrase backup.
 	 */
 	BD_CLOUD_PASSWORD_CREATION_MESSAGE: () => LocalizedString
+	/**
+	 * The password is not recoverable by VeWorld or anyone, so make to sure to remember it.
+	 */
+	BD_CLOUD_PASSWORD_RECOVER_MESSAGE: () => LocalizedString
+	/**
+	 * I understand that if I lose this password, I won’t be able to access the backup and recover my wallet.
+	 */
+	BD_CLOUD_PASSWORD_WARNING_CHECKBOX: () => LocalizedString
 	/**
 	 * Collection
 	 */
@@ -3758,11 +3810,11 @@ Try reconnect your device to the internet.
 	 */
 	BD_OTHER_NETWORKS_INDICATOR_DESC: () => LocalizedString
 	/**
-	 * * Passwords do not match
+	 * Passwords don't match
 	 */
 	BD_PASSWORDS_DO_NOT_MATCH: () => LocalizedString
 	/**
-	 * * Password is not strong enough (min 6 characters, 1 nunber, 1 special character)
+	 * Min 6 characters, 1 number, 1 special character
 	 */
 	BD_PASSWORD_NOT_STRONG: () => LocalizedString
 	/**
@@ -3986,6 +4038,10 @@ Try reconnect your device to the internet.
 	 */
 	BTN_BACKUP_MENMONIC: () => LocalizedString
 	/**
+	 * Backup to iCloud
+	 */
+	BTN_BACKUP_TO_ICLOUD: () => LocalizedString
+	/**
 	 * Buy
 	 */
 	BTN_BUY: () => LocalizedString
@@ -4150,6 +4206,10 @@ Try reconnect your device to the internet.
 	 */
 	BTN_RENAME_ACCOUNT: () => LocalizedString
 	/**
+	 * Repeat password
+	 */
+	BTN_REPEAT_PASSWORD: () => LocalizedString
+	/**
 	 * Reset App
 	 */
 	BTN_RESET_APP: () => LocalizedString
@@ -4165,6 +4225,10 @@ Try reconnect your device to the internet.
 	 * Scan QR Code
 	 */
 	BTN_SCAN_QR_CODE: () => LocalizedString
+	/**
+	 * Create password to backup
+	 */
+	BTN_SECURITY_CREATE_PASSWORD_BACKUP: () => LocalizedString
 	/**
 	 * Create password
 	 */
@@ -4225,6 +4289,10 @@ Try reconnect your device to the internet.
 	 * NEXT: SECRET PHRASE
 	 */
 	BTN_WALLET_TUTORIAL_SLIDE_03: () => LocalizedString
+	/**
+	 * Write recovery password
+	 */
+	BTN_WRITE_RECOVERY_PASSWORD: () => LocalizedString
 	/**
 	 * You have rejected the certificate
 	 */
@@ -4594,9 +4662,25 @@ Try reconnect your device to the internet.
 	 */
 	CONNECTED_APP_SIGN_TRANSACTION_REQUEST_TITLE: () => LocalizedString
 	/**
+	 * Sign typed data
+	 */
+	CONNECTED_APP_SIGN_TYPED_DATA: () => LocalizedString
+	/**
+	 * Your Signature is being requested to sign typed data message
+	 */
+	CONNECTED_APP_SIGN_TYPED_DATA_REQUEST_DESCRIPTION: () => LocalizedString
+	/**
 	 * Connected app
 	 */
 	CONNECTED_APP_TITLE: () => LocalizedString
+	/**
+	 * Url
+	 */
+	CONNECTED_APP_URL: () => LocalizedString
+	/**
+	 * version
+	 */
+	CONNECTED_APP_VERSION: () => LocalizedString
 	/**
 	 * Approve NFT
 	 */
@@ -4629,6 +4713,10 @@ Try reconnect your device to the internet.
 	 * ● Request your signature on certificates or identification and agreements
 	 */
 	CONNECTION_REQUEST_SIGN_DESCRIPTION: () => LocalizedString
+	/**
+	 * Request your signature on typed data message
+	 */
+	CONNECTION_REQUEST_SIGN_TYPED_DATA_DESCRIPTION: () => LocalizedString
 	/**
 	 * {name} is asking for access to:
 	 */

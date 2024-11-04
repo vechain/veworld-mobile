@@ -13,6 +13,7 @@ export type BaseTextInputProps = {
     label?: string
     value?: string
     errorMessage?: string
+    isError?: boolean
     testID?: string
     rightIcon?: string
     rightIconTestID?: string
@@ -33,6 +34,7 @@ export const BaseTextInputComponent = forwardRef<TextInput, BaseTextInputProps>(
             label,
             value,
             errorMessage,
+            isError,
             testID,
             rightIcon,
             rightIconTestID,
@@ -48,9 +50,9 @@ export const BaseTextInputComponent = forwardRef<TextInput, BaseTextInputProps>(
         },
         ref,
     ) => {
-        const { styles, theme } = useThemedStyles(baseStyles(!!errorMessage))
+        const { styles, theme } = useThemedStyles(baseStyles(!!isError || !!errorMessage))
 
-        const placeholderColor = theme.isDark ? COLORS.WHITE_DISABLED : COLORS.DARK_PURPLE_DISABLED
+        const placeholderColor = COLORS.GREY_400
 
         const setInputParams = useMemo(() => {
             if (PlatformUtils.isAndroid()) {
@@ -103,9 +105,9 @@ export const BaseTextInputComponent = forwardRef<TextInput, BaseTextInputProps>(
                             haptics="Light"
                             action={onIconPress}
                             name={rightIcon}
-                            size={24}
-                            color={theme.colors.text}
-                            style={styles.rightIconStyle}
+                            p={8}
+                            size={16}
+                            color={COLORS.GREY_500}
                             testID={rightIconTestID}
                         />
                     )}
@@ -129,25 +131,23 @@ const baseStyles = (isError: boolean) => (theme: ColorThemeType) =>
             width: "100%",
             flexDirection: "row",
             alignItems: "center",
-            borderColor: isError ? theme.colors.danger : theme.colors.transparent,
-            borderWidth: 1,
-            borderRadius: 16,
-            backgroundColor: theme.colors.card,
+            borderColor: isError ? COLORS.RED_500 : COLORS.GREY_200,
+            borderWidth: isError ? 2 : 1,
+            borderRadius: 8,
+            paddingVertical: 8,
+            paddingRight: 4,
+            paddingLeft: 16,
+            backgroundColor: COLORS.WHITE,
         },
         input: {
             flex: 1,
-            backgroundColor: theme.colors.card,
+            backgroundColor: COLORS.WHITE,
             borderColor: theme.colors.transparent,
             borderWidth: 1,
-            borderRadius: 16,
+            borderRadius: 8,
             fontSize: defaultTypography.body.fontSize,
             fontFamily: defaultTypography.body.fontFamily,
-            paddingVertical: 12,
-            paddingLeft: 16,
-            paddingRight: 8,
-        },
-        rightIconStyle: {
-            marginRight: 16,
+            lineHeight: defaultTypography.subTitle.lineHeight,
         },
         errorContainer: {
             opacity: isError ? 1 : 0,
