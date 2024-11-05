@@ -5,7 +5,6 @@ import { ColorThemeType } from "~Constants"
 import { useThemedStyles } from "~Hooks"
 import { useI18nContext } from "~i18n"
 import { LocalDevice } from "~Model"
-import { LastBackupAlert } from "../LastBackupAlert"
 import { ManualBackupContent } from "../ManualBackupContent"
 import { CloudBackupCard } from "./CloudBackupCard"
 
@@ -21,12 +20,6 @@ export const CloudAndManualBackup: FC<Props> = ({ mnemonicArray, deviceToBackup 
     return (
         <BaseView>
             <BaseText typographyFont="subSubTitleMedium">{deviceToBackup?.alias}</BaseText>
-            {deviceToBackup?.isBuckedUp && (
-                <>
-                    <BaseSpacer height={16} />
-                    <LastBackupAlert deviceToBackup={deviceToBackup} />
-                </>
-            )}
             <BaseSpacer height={16} />
             <CloudBackupCard mnemonicArray={mnemonicArray} deviceToBackup={deviceToBackup} />
             <BaseSpacer height={16} />

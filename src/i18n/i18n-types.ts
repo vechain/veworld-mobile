@@ -3001,7 +3001,7 @@ type RootTranslation = {
 	 */
 	TITLE_ALERT_FACE_ID_CANCELLED: string
 	/**
-	 * B​a​c​k​u​p​ ​t​o​ ​a​ ​C​l​o​u​d
+	 * B​a​c​k​u​p​ ​t​o​ ​C​l​o​u​d
 	 */
 	TITLE_BACKUP_CLOUD: string
 	/**
@@ -6356,7 +6356,7 @@ Try reconnect your device to the internet.
 	 */
 	TITLE_ALERT_FACE_ID_CANCELLED: () => LocalizedString
 	/**
-	 * Backup to a Cloud
+	 * Backup to Cloud
 	 */
 	TITLE_BACKUP_CLOUD: () => LocalizedString
 	/**

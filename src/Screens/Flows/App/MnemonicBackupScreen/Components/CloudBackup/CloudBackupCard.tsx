@@ -1,7 +1,9 @@
 import { useNavigation } from "@react-navigation/native"
+import Lottie from "lottie-react-native"
 import React, { FC, useCallback, useEffect, useState } from "react"
 import { StyleSheet } from "react-native"
 import { getTimeZone } from "react-native-localize"
+import { LoaderDark, LoaderLight } from "~Assets"
 import {
     BaseIcon,
     BaseText,
@@ -28,18 +30,19 @@ export const CloudBackupCard: FC<Props> = ({ mnemonicArray, deviceToBackup }) =>
     const { LL, locale } = useI18nContext()
     const { styles, theme } = useThemedStyles(baseStyles)
     const nav = useNavigation()
-    const [isWalletBackedUp, setIsWalletBackedUp] = useState(false)
+    const [isWalletBackedUp, setIsWalletBackedUp] = useState(true)
+    const [isLoading, setIsLoading] = useState(false)
 
     const { saveWalletToCloud, getWalletByRootAddress } = useCloudBackup()
 
     const { ref: warningRef, onOpen, onClose: onCloseWarning } = useBottomSheetModal()
 
     const getWallet = useCallback(async () => {
+        setIsLoading(true)
         const wallet = await getWalletByRootAddress(deviceToBackup?.rootAddress)
+        setIsLoading(false)
 
-        if (wallet) {
-            setIsWalletBackedUp(true)
-        }
+        setIsWalletBackedUp(!!wallet)
     }, [deviceToBackup?.rootAddress, getWalletByRootAddress])
 
     useEffect(() => {
@@ -48,6 +51,7 @@ export const CloudBackupCard: FC<Props> = ({ mnemonicArray, deviceToBackup }) =>
 
     const onHandleBackupToCloudKit = useCallback(
         async (password: string) => {
+            setIsLoading(true)
             onCloseWarning()
 
             if (!deviceToBackup?.xPub) {
@@ -71,6 +75,7 @@ export const CloudBackupCard: FC<Props> = ({ mnemonicArray, deviceToBackup }) =>
                 derivationPath: deviceToBackup?.derivationPath ?? DerivationPath.VET,
             })
 
+            setIsLoading(false)
             setIsWalletBackedUp(true)
 
             const formattedDate = DateUtils.formatDateTime(
@@ -123,30 +128,31 @@ export const CloudBackupCard: FC<Props> = ({ mnemonicArray, deviceToBackup }) =>
                         containerStyle={[
                             styles.cloudRow,
                             {
-                                backgroundColor: isWalletBackedUp
-                                    ? theme.colors.successBackground
-                                    : theme.colors.primary,
+                                backgroundColor:
+                                    isWalletBackedUp || isLoading
+                                        ? theme.colors.successBackground
+                                        : theme.colors.primary,
                             },
                         ]}
+                        disabled={isWalletBackedUp || isLoading}
                         style={styles.cloudRowContent}
                         action={onOpen}>
                         <BaseView style={styles.cloudInfo}>
-                            {!isWalletBackedUp ? (
-                                <BaseText typographyFont="bodyMedium" color={theme.colors.textReversed}>
-                                    {PlatformUtils.isIOS() ? LL.ICLOUD() : LL.GOOGLE_DRIVE()}
-                                </BaseText>
-                            ) : (
-                                <BaseView flexDirection="row">
-                                    <BaseIcon name="check-circle-outline" size={16} color={theme.colors.successIcon} />
-                                    <BaseText style={styles.verifyCloudText} typographyFont="captionRegular">
-                                        {PlatformUtils.isIOS()
-                                            ? LL.BTN_VERIFY_ICLOUD_BACKUP()
-                                            : LL.BTN_VERIFY_DRIVE_BACKUP()}
-                                    </BaseText>
-                                </BaseView>
-                            )}
+                            <BaseText typographyFont="bodyMedium" color={COLORS.DARK_PURPLE}>
+                                {PlatformUtils.isIOS() ? LL.ICLOUD() : LL.GOOGLE_DRIVE()}
+                            </BaseText>
                         </BaseView>
-                        <BaseIcon name="chevron-right" size={14} color={theme.colors.textReversed} />
+
+                        {isLoading ? (
+                            <Lottie
+                                source={theme.isDark ? LoaderDark : LoaderLight}
+                                autoPlay
+                                loop
+                                style={styles.lottie}
+                            />
+                        ) : (
+                            !isWalletBackedUp && <BaseIcon name="chevron-right" size={14} color={COLORS.DARK_PURPLE} />
+                        )}
                     </BaseTouchableBox>
                 </CardWithHeader>
             </BaseView>
@@ -188,5 +194,10 @@ const baseStyles = (theme: ColorThemeType) =>
             borderRadius: 4,
             borderColor: theme.isDark ? COLORS.DARK_PURPLE_DISABLED : COLORS.GREY_300,
             backgroundColor: theme.isDark ? COLORS.TRANSPARENT : COLORS.GREY_100,
+        },
+        lottie: {
+            width: 28,
+            height: 20,
+            marginVertical: -2,
         },
     })
