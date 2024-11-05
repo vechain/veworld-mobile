@@ -193,6 +193,10 @@ type RootTranslation = {
 	 */
 	APP_VERIFICATION_UNKNOWN: string
 	/**
+	 * B​a​c​k​i​n​g​ ​u​p​.​.​.
+	 */
+	BACKING_UP: string
+	/**
 	 * Y​o​u​r​ ​r​e​c​o​v​e​r​y​ ​p​h​r​a​s​e​ ​i​s​ ​n​o​w​ ​b​a​c​k​e​d​ ​u​p​ ​a​n​d​ ​s​a​f​e​ ​o​n​ ​{​c​l​o​u​d​T​y​p​e​}
 	 * @param {string} cloudType
 	 */
@@ -3546,6 +3550,10 @@ Try reconnect your device to the internet.
 	 * The application that is making this request could not be verified. Proceed at your own risk.
 	 */
 	APP_VERIFICATION_UNKNOWN: () => LocalizedString
+	/**
+	 * Backing up...
+	 */
+	BACKING_UP: () => LocalizedString
 	/**
 	 * Your recovery phrase is now backed up and safe on {cloudType}
 	 */

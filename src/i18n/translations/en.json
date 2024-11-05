@@ -39,6 +39,7 @@
   "APP_VERIFICATION_CONFIRM": "Please confirm that you would like to process this request.",
   "APP_VERIFICATION_INVALID": "Connection to this application is forbidden as the request looks malicious.",
   "APP_VERIFICATION_UNKNOWN": "The application that is making this request could not be verified. Proceed at your own risk.",
+  "BACKING_UP": "Backing up...",
   "BACKUP_SUCCESSFUL_DESCRIPTION": "Your recovery phrase is now backed up and safe on {cloudType: string}",
   "BACKUP_SUCCESSFUL_TITLE": "Backup successful!",
   "BACKUP_YOUR_DEVICES_CTA": "Backup now",
