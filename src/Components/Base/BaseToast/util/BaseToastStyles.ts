@@ -32,10 +32,18 @@ const generateToastStyles = (
         borderRadius: 8,
         backgroundColor: theme.isDark ? darkColor : lightColor,
         width: Dimensions.get("window").width - 40,
+        shadowColor: COLORS.DARK_PURPLE,
+        shadowOffset: {
+            width: 0,
+            height: 0,
+        },
+        shadowOpacity: 0.16,
+        shadowRadius: 16,
+        elevation: 5,
     },
     contentContainer: {
         flexDirection: "row",
-        alignItems: "center",
+        alignItems: "flex-start",
         justifyContent: "flex-start",
         paddingHorizontal: 12,
         paddingVertical: 12,
@@ -44,8 +52,8 @@ const generateToastStyles = (
         width: Dimensions.get("window").width - 40,
     },
     textContainer: {
-        flexDirection: "row",
-        alignItems: "center",
+        flexDirection: "column",
+        alignItems: "flex-start",
         flexWrap: "wrap",
     },
     textColor: textColor,
@@ -68,7 +76,7 @@ export const successToastStyles = (theme: ColorThemeType): ToastStyles =>
  * @returns {ToastStyles} The generated error toast styles object.
  */
 export const errorToastStyles = (theme: ColorThemeType): ToastStyles =>
-    generateToastStyles(theme, COLORS.PASTEL_RED, COLORS.DARK_RED_ALERT, theme.colors.error)
+    generateToastStyles(theme, COLORS.RED_50, COLORS.RED_50, COLORS.RED_500, COLORS.RED_700)
 
 /**
  * Generates warning toast styles based on the color theme.
