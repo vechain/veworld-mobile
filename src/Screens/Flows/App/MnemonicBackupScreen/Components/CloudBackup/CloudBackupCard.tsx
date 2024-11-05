@@ -1,4 +1,4 @@
-import React, { FC, useCallback, useEffect } from "react"
+import React, { FC, useCallback, useEffect, useRef } from "react"
 import { StyleSheet } from "react-native"
 import { BaseIcon, BaseText, BaseTouchableBox, BaseView, CloudKitWarningBottomSheet, showErrorToast } from "~Components"
 import { CardWithHeader } from "~Components/Reusable/CardWithHeader"
@@ -17,6 +17,7 @@ type Props = {
 export const CloudBackupCard: FC<Props> = ({ mnemonicArray, deviceToBackup }) => {
     const { LL } = useI18nContext()
     const { styles, theme } = useThemedStyles(baseStyles)
+    const backupInProgress = useRef(false)
 
     const { isWalletBackedUp, saveWalletToCloudKit, getWalletByRootAddress } = useCloudKit()
 
@@ -29,6 +30,15 @@ export const CloudBackupCard: FC<Props> = ({ mnemonicArray, deviceToBackup }) =>
         }
     }, [deviceToBackup?.rootAddress, getWalletByRootAddress])
 
+    useEffect(() => {
+        if (isWalletBackedUp && backupInProgress.current) {
+            backupInProgress.current = false
+            onOpenSuccess()
+        } else if (!isWalletBackedUp && backupInProgress.current) {
+            backupInProgress.current = false
+        }
+    }, [isWalletBackedUp, onOpenSuccess])
+
     const onHandleBackupToCloudKit = useCallback(
         async (password: string) => {
             onCloseWarning()
@@ -40,6 +50,7 @@ export const CloudBackupCard: FC<Props> = ({ mnemonicArray, deviceToBackup }) =>
                 return
             }
 
+            backupInProgress.current = true
             const firstAccountAddress = AddressUtils.getAddressFromXPub(deviceToBackup.xPub, 0)
             const salt = HexUtils.generateRandom(256)
             const iv = PasswordUtils.getRandomIV(16)
@@ -55,18 +66,8 @@ export const CloudBackupCard: FC<Props> = ({ mnemonicArray, deviceToBackup }) =>
             })
 
             await getWalletByRootAddress(deviceToBackup!.rootAddress)
-            if (isWalletBackedUp) onOpenSuccess()
         },
-        [
-            LL,
-            deviceToBackup,
-            getWalletByRootAddress,
-            isWalletBackedUp,
-            mnemonicArray,
-            onCloseWarning,
-            onOpenSuccess,
-            saveWalletToCloudKit,
-        ],
+        [LL, deviceToBackup, getWalletByRootAddress, mnemonicArray, onCloseWarning, saveWalletToCloudKit],
     )
 
     return (

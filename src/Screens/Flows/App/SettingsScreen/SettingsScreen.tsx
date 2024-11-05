@@ -40,7 +40,6 @@ export const SettingsScreen = () => {
 
     const selectedAccount = useAppSelector(selectSelectedAccount)
     const isShowBackupModal = useCheckWalletBackup(selectedAccount)
-
     const renderBackupWarning = useMemo(() => {
         return (
             <>
