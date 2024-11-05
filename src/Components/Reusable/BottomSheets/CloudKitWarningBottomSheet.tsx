@@ -16,10 +16,11 @@ import { AlertInlineTransparent } from "~Components/Reusable/Alert"
 type Props = {
     onHandleBackupToCloudKit: (password: string) => void
     openLocation: "Backup_Screen" | "Import_Screen"
+    isLoading?: boolean
 }
 
 export const CloudKitWarningBottomSheet = forwardRef<BottomSheetModalMethods, Props>(
-    ({ onHandleBackupToCloudKit, openLocation }, ref) => {
+    ({ onHandleBackupToCloudKit, openLocation, isLoading }, ref) => {
         const { LL } = useI18nContext()
         const [secureText1, setsecureText1] = useState(true)
         const [secureText2, setsecureText2] = useState(true)
@@ -217,9 +218,9 @@ export const CloudKitWarningBottomSheet = forwardRef<BottomSheetModalMethods, Pr
                                 px={16}
                                 py={16}
                                 typographyFont="bodyMedium"
-                                disabled={!isChecked}
+                                disabled={!isChecked || isLoading}
                                 haptics="Light"
-                                title={LL.BTN_BACKUP_TO_ICLOUD()}
+                                title={isLoading ? LL.BACKING_UP() : LL.BTN_BACKUP_TO_ICLOUD()}
                                 action={checkPasswordValidity}
                             />
                             <BaseSpacer height={24} />

@@ -19,7 +19,7 @@ export const CloudBackupCard: FC<Props> = ({ mnemonicArray, deviceToBackup }) =>
     const { styles, theme } = useThemedStyles(baseStyles)
     const backupInProgress = useRef(false)
 
-    const { isWalletBackedUp, saveWalletToCloudKit, getWalletByRootAddress } = useCloudKit()
+    const { isWalletBackedUp, saveWalletToCloudKit, getWalletByRootAddress, isLoading } = useCloudKit()
 
     const { ref: warningRef, onOpen, onClose: onCloseWarning } = useBottomSheetModal()
     const { ref: successRef, onOpen: onOpenSuccess, onClose: onCloseSuccess } = useBottomSheetModal()
@@ -41,8 +41,6 @@ export const CloudBackupCard: FC<Props> = ({ mnemonicArray, deviceToBackup }) =>
 
     const onHandleBackupToCloudKit = useCallback(
         async (password: string) => {
-            onCloseWarning()
-
             if (!deviceToBackup?.xPub) {
                 showErrorToast({
                     text1: LL.CLOUDKIT_ERROR_GENERIC(),
@@ -66,6 +64,7 @@ export const CloudBackupCard: FC<Props> = ({ mnemonicArray, deviceToBackup }) =>
             })
 
             await getWalletByRootAddress(deviceToBackup!.rootAddress)
+            onCloseWarning()
         },
         [LL, deviceToBackup, getWalletByRootAddress, mnemonicArray, onCloseWarning, saveWalletToCloudKit],
     )
@@ -120,6 +119,7 @@ export const CloudBackupCard: FC<Props> = ({ mnemonicArray, deviceToBackup }) =>
                 ref={warningRef}
                 onHandleBackupToCloudKit={onHandleBackupToCloudKit}
                 openLocation="Backup_Screen"
+                isLoading={isLoading}
             />
             <BackupSuccessfulBottomSheet ref={successRef} onClose={onCloseSuccess} onConfirm={onCloseSuccess} />
         </>
