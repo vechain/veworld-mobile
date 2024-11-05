@@ -4,15 +4,19 @@ import { showErrorToast } from "~Components"
 import { DerivationPath, ERROR_EVENTS } from "~Constants"
 import { useI18nContext } from "~i18n"
 import { DEVICE_TYPE } from "~Model"
-import { PasswordUtils, PlatformUtils, error } from "~Utils"
+import { PasswordUtils, PlatformUtils, error, DateUtils } from "~Utils"
 import { CKError, handleCloudKitErrors } from "./ErrorModel"
+import { setDeviceIsBackup, useAppDispatch } from "~Storage/Redux"
+import { formatDateTime } from "~Utils/DateUtils/DateUtils"
+import { getTimeZone } from "react-native-localize"
 const { CloudKitManager } = NativeModules
 
 export const useCloudKit = () => {
-    const { LL } = useI18nContext()
+    const { LL, locale } = useI18nContext()
     const [isAvailable, setisAvailable] = useState(false)
     const [isWalletBackedUp, setIsWalletBackedUp] = useState(false)
     const [isLoading, setIsLoading] = useState(false)
+    const dispatch = useAppDispatch()
 
     const getCloudKitAvailability = useCallback(async () => {
         try {
@@ -27,14 +31,25 @@ export const useCloudKit = () => {
         }
     }, [])
 
-    const deleteWallet = useCallback(async (_rootAddress: string) => {
-        setIsLoading(true)
-        const delWAllet = await CloudKitManager.deleteWallet(_rootAddress)
-        const delSalt = await CloudKitManager.deleteSalt(_rootAddress)
-        const delIV = await CloudKitManager.deleteIV(_rootAddress)
-        setIsLoading(false)
-        return delWAllet && delSalt && delIV
-    }, [])
+    const deleteWallet = useCallback(
+        async (_rootAddress: string) => {
+            setIsLoading(true)
+            const delWAllet = await CloudKitManager.deleteWallet(_rootAddress)
+            const delSalt = await CloudKitManager.deleteSalt(_rootAddress)
+            const delIV = await CloudKitManager.deleteIV(_rootAddress)
+            setIsLoading(false)
+            dispatch(
+                setDeviceIsBackup({
+                    rootAddress: _rootAddress,
+                    isCloud: true,
+                    isBackup: false,
+                    date: "",
+                }),
+            )
+            return delWAllet && delSalt && delIV
+        },
+        [dispatch],
+    )
 
     const saveWalletToCloudKit = useCallback(
         async ({
@@ -60,7 +75,6 @@ export const useCloudKit = () => {
                 })
                 return
             }
-
             setIsLoading(true)
 
             try {
@@ -75,8 +89,28 @@ export const useCloudKit = () => {
                 if (result) {
                     const isSaltSaved = await CloudKitManager.saveSalt(_rootAddress, salt)
                     const isIvSaved = await CloudKitManager.saveIV(_rootAddress, PasswordUtils.bufferToBase64(iv))
-
+                    const formattedDate = formatDateTime(
+                        Date.now(),
+                        locale,
+                        getTimeZone() ?? DateUtils.DEFAULT_TIMEZONE,
+                    )
+                    dispatch(
+                        setDeviceIsBackup({
+                            rootAddress: _rootAddress,
+                            isCloud: true,
+                            isBackup: true,
+                            date: formattedDate,
+                        }),
+                    )
                     if (!isSaltSaved || !isIvSaved) {
+                        dispatch(
+                            setDeviceIsBackup({
+                                rootAddress: _rootAddress,
+                                isCloud: true,
+                                isBackup: false,
+                                date: "",
+                            }),
+                        )
                         await deleteWallet(_rootAddress)
                         showErrorToast({
                             text1: LL.CLOUDKIT_ERROR_GENERIC(),
@@ -88,6 +122,14 @@ export const useCloudKit = () => {
             } catch (_error: unknown) {
                 await deleteWallet(_rootAddress)
                 setIsLoading(false)
+                dispatch(
+                    setDeviceIsBackup({
+                        rootAddress: _rootAddress,
+                        isCloud: true,
+                        isBackup: false,
+                        date: "",
+                    }),
+                )
                 let er = _error as CKError
                 error(ERROR_EVENTS.CLOUDKIT, er, er.message)
                 showErrorToast({
@@ -96,7 +138,7 @@ export const useCloudKit = () => {
                 })
             }
         },
-        [LL, deleteWallet],
+        [LL, deleteWallet, dispatch, locale],
     )
 
     const getAllWalletsFromCloudKit = useCallback(async () => {

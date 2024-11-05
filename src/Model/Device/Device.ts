@@ -20,6 +20,8 @@ export interface BaseDevice {
     derivationPath?: DerivationPath
     isBuckedUp?: boolean
     lastBackupDate?: string
+    isBackedUpOnCloud?: boolean
+    lastCloudBackupDate?: string
     isMigrated?: boolean
 }
 

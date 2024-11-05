@@ -70,15 +70,23 @@ export const DeviceSlice = createSlice({
                     }),
             )
         },
-        setDeviceIsBackup: (state, action: PayloadAction<{ rootAddress: string; isBackup: boolean; date: string }>) => {
-            const { rootAddress, isBackup, date } = action.payload
+        setDeviceIsBackup: (
+            state,
+            action: PayloadAction<{ rootAddress: string; isBackup: boolean; date: string; isCloud?: boolean }>,
+        ) => {
+            const { rootAddress, isBackup, date, isCloud } = action.payload
             const deviceExistsIndex = state.findIndex(device =>
                 AddressUtils.compareAddresses(device.rootAddress, rootAddress),
             )
             if (deviceExistsIndex === -1) throw new Error(`Device with root address ${rootAddress} does not exist`)
 
-            state[deviceExistsIndex].isBuckedUp = isBackup
-            state[deviceExistsIndex].lastBackupDate = date
+            if (isCloud) {
+                state[deviceExistsIndex].isBackedUpOnCloud = isBackup
+                state[deviceExistsIndex].lastCloudBackupDate = date
+            } else {
+                state[deviceExistsIndex].isBuckedUp = isBackup
+                state[deviceExistsIndex].lastBackupDate = date
+            }
         },
         resetDeviceState: () => initialDeviceState,
         setDeviceState: (
