@@ -193,6 +193,15 @@ type RootTranslation = {
 	 */
 	APP_VERIFICATION_UNKNOWN: string
 	/**
+	 * Y​o​u​r​ ​r​e​c​o​v​e​r​y​ ​p​h​r​a​s​e​ ​i​s​ ​n​o​w​ ​b​a​c​k​e​d​ ​u​p​ ​a​n​d​ ​s​a​f​e​ ​o​n​ ​{​c​l​o​u​d​T​y​p​e​}
+	 * @param {string} cloudType
+	 */
+	BACKUP_SUCCESSFUL_DESCRIPTION: RequiredParams<'cloudType'>
+	/**
+	 * B​a​c​k​u​p​ ​s​u​c​c​e​s​s​f​u​l​!
+	 */
+	BACKUP_SUCCESSFUL_TITLE: string
+	/**
 	 * B​a​c​k​u​p​ ​n​o​w
 	 */
 	BACKUP_YOUR_DEVICES_CTA: string
@@ -882,13 +891,13 @@ type RootTranslation = {
 	 */
 	BTN_SCAN_QR_CODE: string
 	/**
-	 * C​r​e​a​t​e​ ​p​a​s​s​w​o​r​d​ ​t​o​ ​b​a​c​k​u​p
-	 */
-	BTN_SECURITY_CREATE_PASSWORD_BACKUP: string
-	/**
 	 * C​r​e​a​t​e​ ​p​a​s​s​w​o​r​d
 	 */
 	BTN_SECURITY_CREATE_PASSWORD: string
+	/**
+	 * C​r​e​a​t​e​ ​p​a​s​s​w​o​r​d​ ​t​o​ ​b​a​c​k​u​p
+	 */
+	BTN_SECURITY_CREATE_PASSWORD_BACKUP: string
 	/**
 	 * I​ ​s​t​a​t​e​ ​t​h​a​t​ ​I​ ​h​a​v​e​ ​b​a​c​k​e​d​ ​u​p​ ​m​y​ ​s​e​c​r​e​t​ ​p​h​r​a​s​e
 	 */
@@ -1039,7 +1048,7 @@ type RootTranslation = {
 	 */
 	COMMON_BTN_NEXT: string
 	/**
-	 * O​K
+	 * O​k
 	 */
 	COMMON_BTN_OK: string
 	/**
@@ -1745,13 +1754,13 @@ type RootTranslation = {
 	 */
 	HIDE_NFT: string
 	/**
-	 * I​m​p​o​r​t​ ​N​F​T
-	 */
-	IMPORT_NFT: string
-	/**
 	 * i​C​l​o​u​d
 	 */
 	ICLOUD: string
+	/**
+	 * I​m​p​o​r​t​ ​N​F​T
+	 */
+	IMPORT_NFT: string
 	/**
 	 * I​r​i​s
 	 */
@@ -3538,6 +3547,14 @@ Try reconnect your device to the internet.
 	 */
 	APP_VERIFICATION_UNKNOWN: () => LocalizedString
 	/**
+	 * Your recovery phrase is now backed up and safe on {cloudType}
+	 */
+	BACKUP_SUCCESSFUL_DESCRIPTION: (arg: { cloudType: string }) => LocalizedString
+	/**
+	 * Backup successful!
+	 */
+	BACKUP_SUCCESSFUL_TITLE: () => LocalizedString
+	/**
 	 * Backup now
 	 */
 	BACKUP_YOUR_DEVICES_CTA: () => LocalizedString
@@ -4226,13 +4243,13 @@ Try reconnect your device to the internet.
 	 */
 	BTN_SCAN_QR_CODE: () => LocalizedString
 	/**
-	 * Create password to backup
-	 */
-	BTN_SECURITY_CREATE_PASSWORD_BACKUP: () => LocalizedString
-	/**
 	 * Create password
 	 */
 	BTN_SECURITY_CREATE_PASSWORD: () => LocalizedString
+	/**
+	 * Create password to backup
+	 */
+	BTN_SECURITY_CREATE_PASSWORD_BACKUP: () => LocalizedString
 	/**
 	 * I state that I have backed up my secret phrase
 	 */
@@ -4382,7 +4399,7 @@ Try reconnect your device to the internet.
 	 */
 	COMMON_BTN_NEXT: () => LocalizedString
 	/**
-	 * OK
+	 * Ok
 	 */
 	COMMON_BTN_OK: () => LocalizedString
 	/**
@@ -5082,13 +5099,13 @@ Try reconnect your device to the internet.
 	 */
 	HIDE_NFT: () => LocalizedString
 	/**
-	 * Import NFT
-	 */
-	IMPORT_NFT: () => LocalizedString
-	/**
 	 * iCloud
 	 */
 	ICLOUD: () => LocalizedString
+	/**
+	 * Import NFT
+	 */
+	IMPORT_NFT: () => LocalizedString
 	/**
 	 * Iris
 	 */

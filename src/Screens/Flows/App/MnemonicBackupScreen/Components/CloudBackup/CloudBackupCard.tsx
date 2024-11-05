@@ -7,7 +7,7 @@ import { useBottomSheetModal, useCloudKit, useThemedStyles } from "~Hooks"
 import { COLORS, ColorThemeType, DerivationPath } from "~Constants"
 import { LocalDevice } from "~Model"
 import { AddressUtils, CryptoUtils, HexUtils, PasswordUtils } from "~Utils"
-import { useNavigation } from "@react-navigation/native"
+import { BackupSuccessfulBottomSheet } from "~Components/Reusable/BottomSheets/BackupSuccessfulBottomSheet"
 
 type Props = {
     mnemonicArray: string[]
@@ -17,11 +17,12 @@ type Props = {
 export const CloudBackupCard: FC<Props> = ({ mnemonicArray, deviceToBackup }) => {
     const { LL } = useI18nContext()
     const { styles, theme } = useThemedStyles(baseStyles)
-    const nav = useNavigation()
 
     const { isWalletBackedUp, saveWalletToCloudKit, getWalletByRootAddress } = useCloudKit()
 
     const { ref: warningRef, onOpen, onClose: onCloseWarning } = useBottomSheetModal()
+    const { ref: successRef, onOpen: onOpenSuccess, onClose: onCloseSuccess } = useBottomSheetModal()
+
     useEffect(() => {
         if (deviceToBackup?.rootAddress) {
             getWalletByRootAddress(deviceToBackup.rootAddress)
@@ -53,10 +54,19 @@ export const CloudBackupCard: FC<Props> = ({ mnemonicArray, deviceToBackup }) =>
                 derivationPath: deviceToBackup?.derivationPath ?? DerivationPath.VET,
             })
 
-            getWalletByRootAddress(deviceToBackup!.rootAddress)
-            nav.goBack()
+            await getWalletByRootAddress(deviceToBackup!.rootAddress)
+            if (isWalletBackedUp) onOpenSuccess()
         },
-        [LL, deviceToBackup, getWalletByRootAddress, mnemonicArray, nav, onCloseWarning, saveWalletToCloudKit],
+        [
+            LL,
+            deviceToBackup,
+            getWalletByRootAddress,
+            isWalletBackedUp,
+            mnemonicArray,
+            onCloseWarning,
+            onOpenSuccess,
+            saveWalletToCloudKit,
+        ],
     )
 
     return (
@@ -110,6 +120,7 @@ export const CloudBackupCard: FC<Props> = ({ mnemonicArray, deviceToBackup }) =>
                 onHandleBackupToCloudKit={onHandleBackupToCloudKit}
                 openLocation="Backup_Screen"
             />
+            <BackupSuccessfulBottomSheet ref={successRef} onClose={onCloseSuccess} onConfirm={onCloseSuccess} />
         </>
     )
 }

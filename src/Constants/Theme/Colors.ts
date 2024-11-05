@@ -44,6 +44,8 @@ export type Colors = {
     textLight: string
     successBackground: string
     successIcon: string
+    checkboxFilledBackground: string
+    checkboxIcon: string
 }
 
 export enum COLORS {
@@ -56,7 +58,7 @@ export enum COLORS {
     LIME_GREEN = "#E2F895",
     LIME_GREEN_LIGHT = "#E6F5B2",
     LIME_GREEN_DISABLED = "#B7C685",
-    DARK_PURPLE = "#09022f",
+    DARK_PURPLE = "#0B0043",
     DARK_PURPLE_TRANSPARENT = "rgba(11, 0, 67, 0.0)",
     PURPLE_BLUR_TRANSPARENT = "rgba(11, 0, 67, 0.25)",
     DARK_PURPLE_RBGA = "rgba(11, 0, 67, 0.7)",
@@ -157,6 +159,8 @@ const light: Colors = {
     switchEnabled: COLORS.LIGHT_GREEN,
     successBackground: COLORS.GREEN_50,
     successIcon: COLORS.GREEN_500,
+    checkboxFilledBackground: COLORS.DARK_PURPLE,
+    checkboxIcon: COLORS.WHITE,
 }
 
 const dark: Colors = {
@@ -205,6 +209,8 @@ const dark: Colors = {
     switchEnabled: COLORS.LIGHT_GREEN,
     successBackground: COLORS.GREEN_50,
     successIcon: COLORS.GREEN_500,
+    checkboxFilledBackground: COLORS.WHITE,
+    checkboxIcon: COLORS.DARK_PURPLE,
 }
 
 export const colors = { light, dark }

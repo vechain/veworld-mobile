@@ -20,7 +20,7 @@ export const CopyMnemonicButton = memo(({ mnemonicArray, deviceToBackup }: Props
     const dispatch = useAppDispatch()
 
     const handleCopyToClipboard = useCallback(() => {
-        onCopyToClipboard(mnemonicArray.join(" "), LL.BTN_BACKUP_MENMONIC())
+        onCopyToClipboard(mnemonicArray.join(" "), LL.SB_RECOVERY_PHRASE())
         if (deviceToBackup?.rootAddress) {
             const formattedDate = formatDateTime(Date.now(), locale, getTimeZone() ?? DateUtils.DEFAULT_TIMEZONE)
             dispatch(

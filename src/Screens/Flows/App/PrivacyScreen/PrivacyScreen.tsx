@@ -204,6 +204,7 @@ export const PrivacyScreen = () => {
                             isValidatePassword={isValidatePassword}
                         />
                     </BaseView>
+
                     <BackupWarningBottomSheet
                         ref={backupWarningSheetRef}
                         onConfirm={onEditPinPress}

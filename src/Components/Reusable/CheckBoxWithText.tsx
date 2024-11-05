@@ -18,7 +18,7 @@ type Props = {
 }
 
 export const CheckBoxWithText: FC<Props> = ({ font, fontColor, text, checkSize, testID, checkAction, isChecked }) => {
-    const { styles } = useThemedStyles(baseStyles)
+    const { styles, theme } = useThemedStyles(baseStyles)
 
     const onPress = useCallback(
         async (checked: boolean) => {
@@ -32,11 +32,11 @@ export const CheckBoxWithText: FC<Props> = ({ font, fontColor, text, checkSize, 
         <BouncyCheckbox
             onPress={onPress}
             size={checkSize ?? 16}
-            unfillColor="transparent"
-            fillColor="transparent"
+            unfillColor={COLORS.TRANSPARENT}
+            fillColor={theme.colors.checkboxFilledBackground}
             innerIconStyle={styles.innerIcon}
             iconStyle={styles.icon}
-            iconComponent={isChecked ? <BaseIcon name="check" size={14} color={COLORS.DARK_PURPLE} /> : <></>}
+            iconComponent={isChecked ? <BaseIcon name="check" size={14} color={theme.colors.checkboxIcon} /> : <></>}
             isChecked={isChecked}
             textComponent={
                 <BaseText typographyFont={font ? font : "footNote"} color={fontColor} my={14} mx={10} testID={testID}>
@@ -50,13 +50,13 @@ export const CheckBoxWithText: FC<Props> = ({ font, fontColor, text, checkSize, 
 const baseStyles = (theme: ColorThemeType) =>
     StyleSheet.create({
         innerIcon: {
-            backgroundColor: theme.isDark ? COLORS.WHITE : COLORS.TRANSPARENT,
             color: theme.colors.text,
             borderRadius: 4,
             borderWidth: 1,
-            borderColor: COLORS.DARK_PURPLE,
+            borderColor: theme.colors.border,
         },
         icon: {
-            color: theme.colors.text,
+            borderRadius: 4,
+            color: theme.colors.checkboxIcon,
         },
     })
