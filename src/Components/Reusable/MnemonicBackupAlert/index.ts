@@ -1,1 +1,1 @@
-export * from "./MnemonicBackupAlert"
+export * from "./MnemonicAvoidScreenshotAlert"

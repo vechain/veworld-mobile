@@ -199,9 +199,11 @@ export const ImportFromCloudScreen = () => {
 
     const handleOnDeleteFromCloud = useCallback(async () => {
         if (selectedToDelete) {
+            setIsLoading(true)
             await deleteWallet(selectedToDelete.rootAddress)
             closeRemoveWalletBottomSheet()
             const wallets = await getAllWalletFromCloud()
+            setIsLoading(false)
             if (!wallets.length) {
                 nav.dispatch(StackActions.popToTop())
             } else {

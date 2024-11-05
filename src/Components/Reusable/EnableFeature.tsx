@@ -14,7 +14,7 @@ export const EnableFeature = ({ title, subtitle, onValueChange, value }: Props) 
     return (
         <BaseView flexDirection="row" alignItems="center">
             <BaseView flexDirection="column" flex={1}>
-                <BaseText typographyFont="subSubTitleMedium" my={8}>
+                <BaseText typographyFont="subSubTitleMedium" mb={8}>
                     {title}
                 </BaseText>
                 {subtitle && (

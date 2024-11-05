@@ -3,7 +3,6 @@ import React, { useCallback, useEffect, useState } from "react"
 import { useSharedValue, withTiming } from "react-native-reanimated"
 import {
     BaseSpacer,
-    BaseText,
     BaseTouchable,
     BaseView,
     EnableFeature,
@@ -16,14 +15,18 @@ import { useBottomSheetModal, useCheckWalletBackup, useDisclosure, useInterval, 
 import { useI18nContext } from "~i18n"
 import { DEVICE_TYPE, LocalDevice } from "~Model"
 import { Routes } from "~Navigation"
-import { selectAreDevFeaturesEnabled, selectSelectedAccount, useAppDispatch, useAppSelector } from "~Storage/Redux"
-import { setAnalyticsTrackingEnabled } from "~Storage/Redux/Actions"
-import { selectAnalyticsTrackingEnabled, selectLocalDevices } from "~Storage/Redux/Selectors"
+import {
+    selectAnalyticsTrackingEnabled,
+    selectAreDevFeaturesEnabled,
+    selectLocalDevices,
+    selectSelectedAccount,
+    setAnalyticsTrackingEnabled,
+    useAppDispatch,
+    useAppSelector,
+} from "~Storage/Redux"
 import { warn } from "~Utils"
-import { DevicesBackupState, EnableBiometrics } from "./Components"
-import { BackupWarningBottomSheet } from "./Components/BackupWarningBottomSheet"
-import { useBackupMnemonic } from "./Hooks/useBackupMnemonic"
-import { useEditPin } from "./Hooks/useEditPin"
+import { BackupWarningBottomSheet, DevicesBackupState, EnableBiometrics } from "./Components"
+import { useBackupMnemonic, useEditPin } from "./Hooks"
 
 export const PrivacyScreen = () => {
     // [START] - Hooks setup
@@ -137,12 +140,11 @@ export const PrivacyScreen = () => {
     return (
         <Layout
             safeAreaTestID="PrivacyScreen"
+            noBackButton
+            pageHeader={LL.TITLE_PRIVACY()}
             body={
                 <>
-                    <BaseView pt={16}>
-                        <BaseText typographyFont="title">{LL.TITLE_PRIVACY()}</BaseText>
-                        <BaseSpacer height={24} />
-
+                    <BaseView pt={8}>
                         {/*TODO: https://github.com/vechainfoundation/veworld-mobile/issues/1339*/}
                         {__DEV__ && (
                             <>

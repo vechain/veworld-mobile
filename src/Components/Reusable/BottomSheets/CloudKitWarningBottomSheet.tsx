@@ -9,6 +9,7 @@ import { useThemedStyles } from "~Hooks"
 import { useI18nContext } from "~i18n"
 import { Layout } from "../Layout"
 import { PasswordStrengthIndicator } from "../PasswordStrengthIndicator"
+import { PlatformUtils } from "~Utils"
 
 type Props = {
     onHandleBackupToCloudKit: (password: string) => void
@@ -119,7 +120,11 @@ export const CloudKitWarningBottomSheet = forwardRef<BottomSheetModalMethods, Pr
                                     </BaseView>
                                 </BaseView>
 
-                                <BaseText typographyFont="subTitleBold">{LL.BD_CLOUD_BACKUP_PASSWORD()}</BaseText>
+                                <BaseText typographyFont="subTitleBold">
+                                    {PlatformUtils.isIOS()
+                                        ? LL.BD_CLOUD_BACKUP_PASSWORD()
+                                        : LL.BD_DRIVE_BACKUP_PASSWORD()}
+                                </BaseText>
                             </BaseView>
 
                             <BaseSpacer height={24} />

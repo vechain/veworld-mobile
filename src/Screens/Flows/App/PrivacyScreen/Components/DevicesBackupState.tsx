@@ -1,9 +1,9 @@
 import React, { useCallback } from "react"
-import { useTheme, useThemedStyles } from "~Hooks"
-import { BaseCard, BaseIcon, BaseSpacer, BaseText, BaseTouchableBox, BaseView } from "~Components"
-import { useI18nContext } from "~i18n"
-import { COLORS, ColorThemeType } from "~Constants"
 import { FlatList, StyleSheet } from "react-native"
+import { BaseIcon, BaseSpacer, BaseText, BaseTouchableBox, BaseView, CardWithHeader } from "~Components"
+import { COLORS, ColorThemeType } from "~Constants"
+import { useThemedStyles } from "~Hooks"
+import { useI18nContext } from "~i18n"
 import { BaseDevice, DEVICE_TYPE } from "~Model"
 
 type Props<T extends BaseDevice = BaseDevice> = {
@@ -24,7 +24,6 @@ export const DevicesBackupState = <T extends BaseDevice = BaseDevice>({ devices,
     const { LL } = useI18nContext()
 
     const { styles } = useThemedStyles(baseStyles)
-    const theme = useTheme()
 
     const getStatusConfig = useCallback((item: T): StatusConfig => {
         const statusConfigs: Record<string, StatusConfig> = {
@@ -69,7 +68,8 @@ export const DevicesBackupState = <T extends BaseDevice = BaseDevice>({ devices,
                         { backgroundColor: itemConfig.backgroundColor, borderColor: itemConfig.borderColor },
                     ]}
                     style={styles.deviceRowContent}
-                    onPress={() => onPress(item)}>
+                    action={() => onPress(item)}
+                    haptics="Medium">
                     <BaseView style={styles.deviceInfo}>
                         <BaseIcon name={itemConfig.iconName} size={18} color={itemConfig.iconColor} />
                         <BaseSpacer width={12} />
@@ -102,15 +102,7 @@ export const DevicesBackupState = <T extends BaseDevice = BaseDevice>({ devices,
 
             <BaseSpacer height={16} />
 
-            <BaseCard containerStyle={styles.cardContainer} style={styles.card}>
-                <BaseView style={styles.cardHeader}>
-                    <BaseIcon name="wallet-outline" size={12} style={styles.walletIcon} />
-                    <BaseSpacer width={8} />
-                    <BaseText typographyFont="captionMedium" color={theme.colors.text}>
-                        {"Your wallets"}
-                    </BaseText>
-                </BaseView>
-                <BaseSpacer height={12} />
+            <CardWithHeader iconName="wallet-outline" title={LL.SB_YOUR_WALLETS()}>
                 <FlatList
                     data={devices}
                     keyExtractor={device => device.rootAddress}
@@ -118,7 +110,7 @@ export const DevicesBackupState = <T extends BaseDevice = BaseDevice>({ devices,
                     ItemSeparatorComponent={renderItemSeparator}
                     showsVerticalScrollIndicator={false}
                 />
-            </BaseCard>
+            </CardWithHeader>
         </>
     )
 }

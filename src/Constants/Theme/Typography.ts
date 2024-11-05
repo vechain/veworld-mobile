@@ -19,6 +19,7 @@ export type TFonts =
     | "footNote"
     | "caption"
     | "captionBold"
+    | "captionSemiBold"
     | "captionRegular"
     | "captionMedium"
     | "smallCaption"
@@ -182,6 +183,11 @@ export const defaults: Record<TFonts, TypographyObject> = {
         fontFamily: fontFamily["Inter-Bold"],
         fontSize: 12,
         fontWeight: fontWeight[700],
+    },
+    captionSemiBold: {
+        fontFamily: fontFamily["Inter-Bold"],
+        fontSize: 12,
+        fontWeight: fontWeight[600],
     },
     captionMedium: {
         fontFamily: fontFamily["Inter-Medium"],

@@ -40,7 +40,7 @@ export const useCloudBackup = () => {
     }, [getCloudKitAvailability, getGoogleServicesAvailability])
 
     const getWalletByRootAddress = useCallback(
-        async (_rootAddress: string) => {
+        async (_rootAddress?: string) => {
             return PlatformUtils.isIOS()
                 ? await getWalletFromICloud(_rootAddress)
                 : await getWalletFromDrive(_rootAddress)

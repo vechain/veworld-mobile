@@ -50,6 +50,8 @@ export type Colors = {
     cardBorder: string
     switchEnabled: string
     textLight: string
+    successBackground: string
+    successIcon: string
 }
 
 export enum COLORS {
@@ -88,7 +90,9 @@ export enum COLORS {
     LIGHT_GREEN = "#AAD836",
     PASTEL_GREEN = "#c5eacd",
     MEDIUM_GREEN = "#30B34E",
+    GREEN_700 = "#276749",
     GREEN_500 = "#38A169",
+    GREEN_200 = "#9AE6B4",
     GREEN_100 = "#C6F6D5",
     GREEN_50 = "#F0FFF4",
     PASTEL_ORANGE = "#fedbc0",
@@ -164,6 +168,8 @@ const light: Colors = {
         },
     },
     switchEnabled: COLORS.LIGHT_GREEN,
+    successBackground: COLORS.GREEN_50,
+    successIcon: COLORS.GREEN_500,
 }
 
 const dark: Colors = {
@@ -218,6 +224,8 @@ const dark: Colors = {
         },
     },
     switchEnabled: COLORS.LIGHT_GREEN,
+    successBackground: COLORS.GREEN_50,
+    successIcon: COLORS.GREEN_500,
 }
 
 export const colors = { light, dark }
