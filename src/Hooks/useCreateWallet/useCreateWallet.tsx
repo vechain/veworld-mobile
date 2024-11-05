@@ -16,7 +16,7 @@ import { warn } from "~Utils/Logger"
 import { useBiometrics } from "../useBiometrics"
 import { useAnalyticTracking } from "~Hooks/useAnalyticTracking"
 import { AnalyticsEvent, DerivationPath, ERROR_EVENTS } from "~Constants"
-import { WalletEncryptionKeyHelper } from "~Components"
+import { WalletEncryptionKeyHelper } from "~Components/Providers/EncryptedStorageProvider/Helpers"
 
 /**
  * useCreateWallet is a hook that allows you to create a wallet and store it in the store

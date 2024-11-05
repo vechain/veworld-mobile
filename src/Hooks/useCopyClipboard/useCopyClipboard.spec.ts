@@ -1,15 +1,15 @@
 import { act, renderHook } from "@testing-library/react-hooks"
-import { useCopyClipboard } from "./useCopyClipboard"
 import * as Clipboard from "expo-clipboard"
-import { showInfoToast } from "~Components"
+import { showSuccessToast } from "~Components"
 import * as logger from "~Utils/Logger/Logger"
+import { useCopyClipboard } from "./useCopyClipboard"
 
 jest.mock("expo-clipboard", () => ({
     setStringAsync: jest.fn(() => Promise.resolve()),
 }))
 
 jest.mock("~Components", () => ({
-    showInfoToast: jest.fn(),
+    showSuccessToast: jest.fn(),
 }))
 
 jest.mock("~i18n", () => ({
@@ -33,7 +33,7 @@ describe("useCopyClipboard", () => {
         })
 
         expect(Clipboard.setStringAsync).toHaveBeenCalledWith(text)
-        expect(showInfoToast).toHaveBeenCalled()
+        expect(showSuccessToast).toHaveBeenCalled()
     })
 
     it("should handle error when copying to clipboard fails", async () => {
