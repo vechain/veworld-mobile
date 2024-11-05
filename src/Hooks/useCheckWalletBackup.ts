@@ -8,13 +8,11 @@ export const useCheckWalletBackup = (account: AccountWithDevice) => {
     // check if cloud is available?
     // const [isShowBackupModal, setIsShowBackupModal] = useState(false)
 
-    const isShowBackupModal = useMemo(() => {
+    return useMemo(() => {
         return (
-            account.device?.isBuckedUp !== undefined &&
             !account.device?.isBuckedUp &&
+            !account.device?.isBackedUpOnCloud &&
             account.device?.type === DEVICE_TYPE.LOCAL_MNEMONIC
         )
-    }, [account?.device?.isBuckedUp, account?.device?.type])
-
-    return isShowBackupModal
+    }, [account.device])
 }
