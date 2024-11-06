@@ -3,7 +3,7 @@ import { BottomSheetModalMethods } from "@gorhom/bottom-sheet/lib/typescript/typ
 import { useI18nContext } from "~i18n"
 import { BaseBottomSheet, BaseButton, BaseIcon, BaseSpacer, BaseText, BaseView } from "~Components"
 import { useThemedStyles } from "~Hooks"
-import { ColorThemeType } from "~Constants"
+import { COLORS, ColorThemeType } from "~Constants"
 import { StyleSheet } from "react-native"
 
 type Props = {
@@ -22,7 +22,12 @@ export const VerifyAndDeleteCloudBackupBottomSheet = React.forwardRef<BottomShee
         }, [onClose, onProceedToDelete])
 
         return (
-            <BaseBottomSheet ref={ref} dynamicHeight onDismiss={onClose} blurBackdrop={true}>
+            <BaseBottomSheet
+                ref={ref}
+                dynamicHeight
+                onDismiss={onClose}
+                backgroundStyle={styles.bottomSheet}
+                blurBackdrop={true}>
                 <BaseView>
                     <BaseView>
                         <BaseView justifyContent="center" alignItems="center">
@@ -52,7 +57,8 @@ export const VerifyAndDeleteCloudBackupBottomSheet = React.forwardRef<BottomShee
                             w={100}
                             typographyFont="buttonMedium"
                             variant={"outline"}
-                            haptics="Light"
+                            textColor={theme.colors.text}
+                            style={[{ borderColor: theme.colors.text }]}
                             title={LL.BTN_DELETE_BACKUP_FROM_CLOUD({ cloudType: "iCloud" })}
                             action={handleProceedToDelete}
                         />
@@ -69,5 +75,10 @@ const baseStyles = (theme: ColorThemeType) =>
         icon: {
             color: theme.colors.text,
             marginTop: 8,
+        },
+        bottomSheet: {
+            backgroundColor: theme.isDark ? COLORS.PURPLE : COLORS.LIGHT_GRAY,
+            borderTopRightRadius: 24,
+            borderTopLeftRadius: 24,
         },
     })

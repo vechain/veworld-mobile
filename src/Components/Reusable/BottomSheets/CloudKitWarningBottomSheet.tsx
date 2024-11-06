@@ -217,15 +217,13 @@ export const CloudKitWarningBottomSheet = forwardRef<BottomSheetModalMethods, Pr
                             />
                             <BaseSpacer height={10} />
                             <BaseButton
-                                px={16}
-                                py={16}
                                 typographyFont="bodyMedium"
                                 disabled={!isChecked || isLoading}
                                 haptics="Light"
                                 title={isLoading ? LL.BACKING_UP() : LL.BTN_BACKUP_TO_ICLOUD()}
                                 action={checkPasswordValidity}
                             />
-                            <BaseSpacer height={24} />
+                            <BaseSpacer height={16} />
                         </>
                     }
                 />

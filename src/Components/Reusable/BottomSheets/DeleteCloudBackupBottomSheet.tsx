@@ -18,7 +18,12 @@ export const DeleteCloudBackupBottomSheet = React.forwardRef<BottomSheetModalMet
         const { styles, theme } = useThemedStyles(baseStyles)
 
         return (
-            <BaseBottomSheet ref={ref} dynamicHeight onDismiss={onClose} blurBackdrop={true}>
+            <BaseBottomSheet
+                ref={ref}
+                dynamicHeight
+                onDismiss={onClose}
+                backgroundStyle={styles.bottomSheet}
+                blurBackdrop={true}>
                 <BaseView>
                     <BaseView>
                         <BaseView justifyContent="center" alignItems="center">
@@ -51,10 +56,13 @@ export const DeleteCloudBackupBottomSheet = React.forwardRef<BottomSheetModalMet
                         <BaseButton
                             w={100}
                             typographyFont="buttonMedium"
-                            variant="outline"
+                            variant={"outline"}
+                            textColor={theme.colors.text}
+                            style={[{ borderColor: theme.colors.text }]}
                             title={LL.BTN_NO_GO_BACK()}
                             action={onClose}
                         />
+                        <BaseSpacer height={16} />
                     </BaseView>
                 </BaseView>
             </BaseBottomSheet>
@@ -70,7 +78,10 @@ const baseStyles = (theme: ColorThemeType) =>
         },
         confirmDeletionButton: {
             backgroundColor: COLORS.RED_600,
-            borderColor: COLORS.RED_600,
-            borderWidth: 1,
+        },
+        bottomSheet: {
+            backgroundColor: theme.isDark ? COLORS.PURPLE : COLORS.LIGHT_GRAY,
+            borderTopRightRadius: 24,
+            borderTopLeftRadius: 24,
         },
     })
