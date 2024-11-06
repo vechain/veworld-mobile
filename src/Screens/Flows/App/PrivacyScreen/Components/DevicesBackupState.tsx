@@ -67,7 +67,6 @@ const DeviceItem = React.memo(
         styles: StatusStyles
     }) => {
         const itemConfig = useMemo(() => getStatusConfig(item), [item])
-
         return (
             <BaseTouchableBox
                 containerStyle={[

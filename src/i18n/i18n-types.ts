@@ -772,6 +772,15 @@ type RootTranslation = {
 	 */
 	BTN_CREATE_WALLET_TYPE_IMPORT_SUBTITLE: string
 	/**
+	 * D​e​l​e​t​e​ ​b​a​c​k​u​p​ ​f​r​o​m​ ​{​c​l​o​u​d​T​y​p​e​}
+	 * @param {string} cloudType
+	 */
+	BTN_DELETE_BACKUP_FROM_CLOUD: RequiredParams<'cloudType'>
+	/**
+	 * Y​e​s​,​ ​d​e​l​e​t​e​ ​b​a​c​k​u​p
+	 */
+	BTN_DELETE_BACKUP_FROM_CLOUD_CONFIRM: string
+	/**
 	 * D​o​w​n​l​o​a​d​ ​l​o​g​s
 	 */
 	BTN_DOWNLOAD_LOGS: string
@@ -835,6 +844,10 @@ type RootTranslation = {
 	 * C​o​p​y​ ​t​o​ ​c​l​i​p​b​o​a​r​d
 	 */
 	BTN_MNEMONIC_CLIPBOARD: string
+	/**
+	 * N​o​,​ ​g​o​ ​b​a​c​k
+	 */
+	BTN_NO_GO_BACK: string
 	/**
 	 * O​b​s​e​r​v​e​d
 	 */
@@ -2344,6 +2357,14 @@ type RootTranslation = {
 	 */
 	SB_BACKUP_RECOVERY_PHRASE: string
 	/**
+	 * B​a​c​k​u​p​ ​v​e​r​i​f​i​e​d
+	 */
+	SB_BACKUP_VERIFIED: string
+	/**
+	 * A​l​l​ ​o​f​ ​y​o​u​r​ ​w​a​l​l​e​t​’​s​ ​r​e​c​o​v​e​r​y​ ​p​h​r​a​s​e​ ​w​e​r​e​ ​b​a​c​k​e​d​ ​u​p​ ​t​o​ ​i​C​l​o​u​d​.​ ​I​f​ ​y​o​u​ ​n​e​e​d​ ​t​o​ ​r​e​c​o​v​e​r​ ​y​o​u​r​ ​w​a​l​l​e​t​,​ ​y​o​u​ ​c​a​n​ ​i​m​p​o​r​t​ ​f​r​o​m​ ​i​C​l​o​u​d​ ​w​i​t​h​ ​y​o​u​r​ ​r​e​c​o​v​e​r​y​ ​p​a​s​s​w​o​r​d​.
+	 */
+	SB_BACKUP_VERIFIED_DESCRIPTION: string
+	/**
 	 * B​e​f​o​r​e​ ​u​p​d​a​t​i​n​g​ ​y​o​u​r​ ​s​e​c​u​r​i​t​y​ ​m​e​t​h​o​d​ ​y​o​u​ ​n​e​e​d​ ​t​o​ ​b​a​c​k​u​p​ ​y​o​u​r​ ​s​e​c​u​r​i​t​y​ ​p​h​r​a​s​e​.​ ​I​n​ ​c​a​s​e​ ​t​h​e​ ​o​p​e​r​a​t​i​o​n​ ​f​a​i​l​s​ ​y​o​u​ ​w​i​l​l​ ​b​e​ ​f​o​r​c​e​d​ ​t​o
 	 */
 	SB_BACKUP_YOUR_PHRASE: string
@@ -2364,6 +2385,14 @@ type RootTranslation = {
 	 */
 	SB_COLLECTIBLES: string
 	/**
+	 * C​o​n​f​i​r​m​ ​d​e​l​e​t​e
+	 */
+	SB_CONFIRM_DELETE: string
+	/**
+	 * A​r​e​ ​y​o​u​ ​s​u​r​e​ ​y​o​u​ ​w​a​n​t​ ​t​o​ ​d​e​l​e​t​e​ ​t​h​e​ ​b​a​c​k​u​p​ ​o​f​ ​y​o​u​r​ ​r​e​c​o​v​e​r​y​ ​p​h​r​a​s​e​ ​f​r​o​m​ ​i​C​l​o​u​d​?​ ​Y​o​u​ ​c​a​n​ ​b​a​c​k​u​p​ ​a​g​a​i​n​ ​l​a​t​e​r​.
+	 */
+	SB_CONFIRM_DELETE_DESCRIPTION: string
+	/**
 	 * C​o​n​f​i​r​m​ ​t​h​e​ ​o​p​e​r​a​t​i​o​n​?
 	 */
 	SB_CONFIRM_OPERATION: string
@@ -2379,6 +2408,10 @@ type RootTranslation = {
 	 * C​r​e​a​t​e​ ​o​n​e
 	 */
 	SB_CREATE_ONE: string
+	/**
+	 * D​e​l​e​t​i​n​g​ ​b​a​c​k​u​p​.​.​.
+	 */
+	SB_DELETING_CLOUD_BACKUP: string
 	/**
 	 * D​e​s​c​r​i​p​t​i​o​n
 	 */
@@ -4132,6 +4165,14 @@ Try reconnect your device to the internet.
 	 */
 	BTN_CREATE_WALLET_TYPE_IMPORT_SUBTITLE: () => LocalizedString
 	/**
+	 * Delete backup from {cloudType}
+	 */
+	BTN_DELETE_BACKUP_FROM_CLOUD: (arg: { cloudType: string }) => LocalizedString
+	/**
+	 * Yes, delete backup
+	 */
+	BTN_DELETE_BACKUP_FROM_CLOUD_CONFIRM: () => LocalizedString
+	/**
 	 * Download logs
 	 */
 	BTN_DOWNLOAD_LOGS: () => LocalizedString
@@ -4195,6 +4236,10 @@ Try reconnect your device to the internet.
 	 * Copy to clipboard
 	 */
 	BTN_MNEMONIC_CLIPBOARD: () => LocalizedString
+	/**
+	 * No, go back
+	 */
+	BTN_NO_GO_BACK: () => LocalizedString
 	/**
 	 * Observed
 	 */
@@ -5680,6 +5725,14 @@ Try reconnect your device to the internet.
 	 */
 	SB_BACKUP_RECOVERY_PHRASE: () => LocalizedString
 	/**
+	 * Backup verified
+	 */
+	SB_BACKUP_VERIFIED: () => LocalizedString
+	/**
+	 * All of your wallet’s recovery phrase were backed up to iCloud. If you need to recover your wallet, you can import from iCloud with your recovery password.
+	 */
+	SB_BACKUP_VERIFIED_DESCRIPTION: () => LocalizedString
+	/**
 	 * Before updating your security method you need to backup your security phrase. In case the operation fails you will be forced to
 	 */
 	SB_BACKUP_YOUR_PHRASE: () => LocalizedString
@@ -5700,6 +5753,14 @@ Try reconnect your device to the internet.
 	 */
 	SB_COLLECTIBLES: () => LocalizedString
 	/**
+	 * Confirm delete
+	 */
+	SB_CONFIRM_DELETE: () => LocalizedString
+	/**
+	 * Are you sure you want to delete the backup of your recovery phrase from iCloud? You can backup again later.
+	 */
+	SB_CONFIRM_DELETE_DESCRIPTION: () => LocalizedString
+	/**
 	 * Confirm the operation?
 	 */
 	SB_CONFIRM_OPERATION: () => LocalizedString
@@ -5715,6 +5776,10 @@ Try reconnect your device to the internet.
 	 * Create one
 	 */
 	SB_CREATE_ONE: () => LocalizedString
+	/**
+	 * Deleting backup...
+	 */
+	SB_DELETING_CLOUD_BACKUP: () => LocalizedString
 	/**
 	 * Description
 	 */

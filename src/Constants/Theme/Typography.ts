@@ -75,6 +75,7 @@ const fontSize = {
 
 const lineHeight = {
     title: 28,
+    subTitle: 20.8,
     bodyMedium: 18.2,
     caption: 15.6,
 }
@@ -133,6 +134,7 @@ export const defaults: Record<TFonts, TypographyObject> = {
         fontFamily: fontFamily["Inter-Medium"],
         fontSize: 16,
         fontWeight: fontWeight[500],
+        lineHeight: lineHeight.subTitle,
     },
     subSubTitleLight: {
         fontFamily: fontFamily["Inter-Regular"],
@@ -148,6 +150,7 @@ export const defaults: Record<TFonts, TypographyObject> = {
         fontFamily: fontFamily["Inter-Regular"],
         fontSize: 14,
         fontWeight: fontWeight[400],
+        lineHeight: lineHeight.bodyMedium,
     },
     bodyBold: {
         fontFamily: fontFamily["Inter-Bold"],
@@ -169,6 +172,7 @@ export const defaults: Record<TFonts, TypographyObject> = {
         fontFamily: fontFamily["Inter-Medium"],
         fontSize: 14,
         fontWeight: fontWeight[500],
+        lineHeight: lineHeight.bodyMedium,
     },
     buttonSecondary: {
         fontFamily: fontFamily["Inter-Regular"],

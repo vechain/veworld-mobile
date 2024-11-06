@@ -120,7 +120,7 @@ export const BaseButton = ({
         if (Number.isFinite(py)) return py
         if (size === "sm") return 3.5
         if (size === "md") return 9.5
-        if (size === "lg") return 16
+        if (size === "lg") return 14
     }, [py, size])
 
     const computedTypographyFont: TFonts | undefined = useMemo(() => {
