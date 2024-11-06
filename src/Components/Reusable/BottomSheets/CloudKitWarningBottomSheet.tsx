@@ -154,6 +154,7 @@ export const CloudKitWarningBottomSheet = forwardRef<BottomSheetModalMethods, Pr
                                 secureTextEntry={secureText1}
                                 editable={true}
                                 isError={passwordMisMatch || passwordNotStrong}
+                                isPasswordInput
                                 rightIcon={secureText1 ? "eye-off-outline" : "eye-outline"}
                                 onIconPress={() => setsecureText1(prev => !prev)}
                                 value={password1}
@@ -195,6 +196,7 @@ export const CloudKitWarningBottomSheet = forwardRef<BottomSheetModalMethods, Pr
                                         placeholder={LL.BTN_CONFIRN_PASSWORD()}
                                         editable={true}
                                         secureTextEntry={secureText2}
+                                        isPasswordInput
                                         rightIcon={secureText2 ? "eye-off-outline" : "eye-outline"}
                                         onIconPress={() => setsecureText2(prev => !prev)}
                                         value={password2}
@@ -205,17 +207,19 @@ export const CloudKitWarningBottomSheet = forwardRef<BottomSheetModalMethods, Pr
                                     />
                                 </>
                             )}
+                            <BaseSpacer height={24} />
                         </BaseView>
                     }
                     footer={
                         <>
+                            <BaseSpacer height={8} />
                             <CheckBoxWithText
                                 isChecked={isChecked}
                                 text={LL.BD_CLOUD_PASSWORD_WARNING_CHECKBOX()}
                                 checkAction={setChecked}
                                 fontColor={theme.colors.text}
                             />
-                            <BaseSpacer height={10} />
+                            <BaseSpacer height={12} />
                             <BaseButton
                                 typographyFont="bodyMedium"
                                 disabled={!isChecked || isLoading}
@@ -223,7 +227,7 @@ export const CloudKitWarningBottomSheet = forwardRef<BottomSheetModalMethods, Pr
                                 title={isLoading ? LL.BACKING_UP() : LL.BTN_BACKUP_TO_ICLOUD()}
                                 action={checkPasswordValidity}
                             />
-                            <BaseSpacer height={16} />
+                            <BaseSpacer height={24} />
                         </>
                     }
                 />

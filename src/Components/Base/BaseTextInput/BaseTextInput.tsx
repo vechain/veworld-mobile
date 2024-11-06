@@ -11,6 +11,7 @@ const { defaults: defaultTypography } = typography
 export type BaseTextInputProps = {
     placeholder?: string
     label?: string
+    isPasswordInput?: boolean
     value?: string
     errorMessage?: string
     isError?: boolean
@@ -33,6 +34,7 @@ export const BaseTextInputComponent = forwardRef<TextInput, BaseTextInputProps>(
             placeholder,
             label,
             value,
+            isPasswordInput = false,
             errorMessage,
             isError,
             testID,
@@ -50,9 +52,8 @@ export const BaseTextInputComponent = forwardRef<TextInput, BaseTextInputProps>(
         },
         ref,
     ) => {
-        const { styles, theme } = useThemedStyles(baseStyles(!!isError || !!errorMessage))
-
-        const placeholderColor = COLORS.GREY_400
+        const [isFocused, setIsFocused] = React.useState(false)
+        const { styles, theme } = useThemedStyles(baseStyles(!!isError || !!errorMessage, isFocused))
 
         const setInputParams = useMemo(() => {
             if (PlatformUtils.isAndroid()) {
@@ -68,6 +69,37 @@ export const BaseTextInputComponent = forwardRef<TextInput, BaseTextInputProps>(
             }
         }, [])
 
+        const calculateTextColor = useMemo(() => {
+            return isPasswordInput
+                ? COLORS.GREY_600
+                : otherProps.editable
+                ? theme.colors.text
+                : theme.colors.textDisabled
+        }, [isPasswordInput, otherProps.editable, theme.colors.text, theme.colors.textDisabled])
+
+        const calculatePlaceholderColor = useMemo(() => {
+            return isPasswordInput
+                ? COLORS.GREY_400
+                : theme.isDark
+                ? COLORS.WHITE_DISABLED
+                : COLORS.DARK_PURPLE_DISABLED
+        }, [isPasswordInput, theme.isDark])
+
+        const inputStyle = useMemo(
+            () => [isPasswordInput ? styles.inputPassword : styles.input, { color: calculateTextColor }, style],
+            [isPasswordInput, styles.inputPassword, styles.input, calculateTextColor, style],
+        )
+
+        const handleFocusInternal = () => {
+            setIsFocused(true)
+            handleFocus?.()
+        }
+
+        const handleBlurInternal = () => {
+            setIsFocused(false)
+            handleBlur?.()
+        }
+
         return (
             <BaseView style={containerStyle}>
                 {label && (
@@ -75,29 +107,23 @@ export const BaseTextInputComponent = forwardRef<TextInput, BaseTextInputProps>(
                         {label}
                     </BaseText>
                 )}
-                <BaseView style={[styles.container, inputContainerStyle]}>
+                <BaseView style={[isPasswordInput ? styles.containerPassword : styles.container, inputContainerStyle]}>
                     <TextInput
                         ref={ref}
-                        style={[
-                            styles.input,
-                            {
-                                color: otherProps.editable ? COLORS.GREY_600 : theme.colors.textDisabled,
-                            },
-                            style,
-                        ]}
+                        style={inputStyle}
                         // workarounds for android crashing when using the keyboard
                         keyboardType={setInputParams.keyboardType}
                         autoCorrect={setInputParams.autoCorrect}
                         placeholder={placeholder}
-                        placeholderTextColor={placeholderColor}
+                        placeholderTextColor={calculatePlaceholderColor}
                         onChangeText={setValue}
                         value={value}
                         autoCapitalize="none"
                         testID={testID}
                         editable={!disabled}
                         selectTextOnFocus={disabled}
-                        onFocus={handleFocus}
-                        onBlur={handleBlur}
+                        onFocus={handleFocus ?? handleFocusInternal}
+                        onBlur={handleBlur ?? handleBlurInternal}
                         {...otherProps}
                     />
                     {rightIcon && (
@@ -125,13 +151,32 @@ export const BaseTextInputComponent = forwardRef<TextInput, BaseTextInputProps>(
     },
 )
 
-const baseStyles = (isError: boolean) => (theme: ColorThemeType) =>
+const baseStyles = (isError: boolean, isFocused: boolean) => (theme: ColorThemeType) =>
     StyleSheet.create({
         container: {
             width: "100%",
             flexDirection: "row",
             alignItems: "center",
-            borderColor: isError ? COLORS.RED_500 : COLORS.GREY_200,
+            borderColor: isError ? theme.colors.danger : theme.colors.transparent,
+            borderWidth: 1,
+            borderRadius: 16,
+            backgroundColor: theme.colors.card,
+        },
+        input: {
+            flex: 1,
+            backgroundColor: theme.colors.card,
+            borderRadius: 16,
+            fontSize: defaultTypography.body.fontSize,
+            fontFamily: defaultTypography.body.fontFamily,
+            paddingVertical: 12,
+            paddingLeft: 16,
+            paddingRight: 8,
+        },
+        containerPassword: {
+            width: "100%",
+            flexDirection: "row",
+            alignItems: "center",
+            borderColor: isError ? COLORS.RED_500 : isFocused ? COLORS.GREY_400 : COLORS.GREY_200,
             borderWidth: isError ? 2 : 1,
             borderRadius: 8,
             paddingVertical: 8,
@@ -139,7 +184,7 @@ const baseStyles = (isError: boolean) => (theme: ColorThemeType) =>
             paddingLeft: 16,
             backgroundColor: COLORS.WHITE,
         },
-        input: {
+        inputPassword: {
             flex: 1,
             backgroundColor: theme.colors.transparent,
             borderRadius: 8,

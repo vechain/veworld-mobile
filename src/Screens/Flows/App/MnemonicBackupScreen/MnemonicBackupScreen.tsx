@@ -9,6 +9,7 @@ import { ManualBackup } from "./Components/ManualBackup"
 import { useSelector } from "react-redux"
 import { RootState } from "~Storage/Redux/Types"
 import { LocalDevice } from "~Model"
+import { selectDevice } from "~Storage/Redux"
 
 type Props = {} & NativeStackScreenProps<RootStackParamListSettings, Routes.ICLOUD_MNEMONIC_BACKUP>
 
@@ -17,9 +18,7 @@ export const MnemonicBackupScreen = ({ route }: Props) => {
     const { mnemonicArray, deviceToBackup } = route.params
     const { isCloudKitAvailable } = useCloudKit()
 
-    const currentDevice = useSelector((state: RootState) =>
-        state.devices.find(device => device.rootAddress === deviceToBackup?.rootAddress),
-    )
+    const currentDevice = useSelector((state: RootState) => selectDevice(state, deviceToBackup?.rootAddress))
 
     const updatedDevice = useMemo(() => {
         if (!currentDevice) return deviceToBackup
