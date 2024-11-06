@@ -22,7 +22,7 @@ export const CloudAndManualBackup: FC<Props> = ({ mnemonicArray, deviceToBackup 
     return (
         <BaseView>
             <BaseText typographyFont="subSubTitleMedium">{deviceToBackup?.alias}</BaseText>
-            {deviceToBackup?.isBuckedUp && (
+            {(deviceToBackup?.isBuckedUp || deviceToBackup?.isBackedUpOnCloud) && (
                 <>
                     <BaseSpacer height={16} />
                     <LastBackupAlert deviceToBackup={deviceToBackup} />

@@ -8,7 +8,11 @@ export const LastBackupAlert = memo(({ deviceToBackup }: { deviceToBackup?: Loca
 
     return (
         <AlertInline
-            message={LL.ALERT_MSG_LAST_BACKUP_DATE({ date: deviceToBackup?.lastBackupDate ?? "" })}
+            message={
+                deviceToBackup?.isBackedUpOnCloud
+                    ? LL.ALERT_MSG_LAST_BACKUP_ICLOUD_DATE({ date: deviceToBackup?.lastCloudBackupDate ?? "" })
+                    : LL.ALERT_MSG_LAST_BACKUP_DATE({ date: deviceToBackup?.lastBackupDate ?? "" })
+            }
             status="success"
         />
     )
