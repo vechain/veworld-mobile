@@ -1,8 +1,8 @@
 import React, { useCallback } from "react"
-import { BaseSpacer, BaseText, BaseView, EnableFeature, Layout } from "~Components"
-import { Locales, useI18nContext } from "~i18n"
-import { ChangeCurrency, ChangeLanguage, ChangeTheme, SelectLanguageBottomSheet } from "./Components"
+import { BaseSpacer, BaseText, BaseView, EnableFeature, Layout, useNotifications } from "~Components"
 import { useBottomSheetModal } from "~Hooks"
+import { Locales, useI18nContext } from "~i18n"
+import { Reset } from "~Screens/Flows/App/GeneralScreen/Components/Reset"
 import {
     selectAreDevFeaturesEnabled,
     selectHideTokensWithNoBalance,
@@ -14,11 +14,12 @@ import {
     useAppDispatch,
     useAppSelector,
 } from "~Storage/Redux"
-import { Reset } from "~Screens/Flows/App/GeneralScreen/Components/Reset"
+import { ChangeCurrency, ChangeLanguage, ChangeTheme, SelectLanguageBottomSheet } from "./Components"
 import { ChangeSymbolPosition } from "./Components/ChangeSymbolPosition"
 
 export const GeneralScreen = () => {
     const { LL, setLocale } = useI18nContext()
+    const { permissionEnabled, requestPermission } = useNotifications()
 
     const {
         ref: selectLanguageSheetRef,
@@ -58,6 +59,10 @@ export const GeneralScreen = () => {
         [closeSelectLanguageSheet, dispatch, setLocale],
     )
 
+    const toggleNotificationsSwitch = useCallback(() => {
+        requestPermission()
+    }, [requestPermission])
+
     return (
         <Layout
             safeAreaTestID="General_Screen"
@@ -88,6 +93,14 @@ export const GeneralScreen = () => {
                     <BaseText typographyFont="caption">{LL.BD_APP_THEME_DISCLAIMER()}</BaseText>
                     <BaseSpacer height={20} />
                     <ChangeTheme />
+
+                    <BaseSpacer height={24} />
+                    <EnableFeature
+                        title={LL.PUSH_NOTIFICATIONS()}
+                        subtitle={LL.PUSH_NOTIFICATIONS_DESC()}
+                        onValueChange={toggleNotificationsSwitch}
+                        value={permissionEnabled}
+                    />
 
                     <BaseSpacer height={24} />
                     <BaseText typographyFont="bodyMedium" my={8}>

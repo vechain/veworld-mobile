@@ -146,9 +146,9 @@ PODS:
     - MMKVCore (~> 2.0.0)
   - MMKVCore (2.0.0)
   - MultiplatformBleAdapter (0.1.9)
-  - OneSignalXCFramework (5.2.5):
-    - OneSignalXCFramework/OneSignalComplete (= 5.2.5)
-  - OneSignalXCFramework/OneSignal (5.2.5):
+  - OneSignalXCFramework (5.2.7):
+    - OneSignalXCFramework/OneSignalComplete (= 5.2.7)
+  - OneSignalXCFramework/OneSignal (5.2.7):
     - OneSignalXCFramework/OneSignalCore
     - OneSignalXCFramework/OneSignalExtension
     - OneSignalXCFramework/OneSignalLiveActivities
@@ -156,38 +156,38 @@ PODS:
     - OneSignalXCFramework/OneSignalOSCore
     - OneSignalXCFramework/OneSignalOutcomes
     - OneSignalXCFramework/OneSignalUser
-  - OneSignalXCFramework/OneSignalComplete (5.2.5):
+  - OneSignalXCFramework/OneSignalComplete (5.2.7):
     - OneSignalXCFramework/OneSignal
     - OneSignalXCFramework/OneSignalInAppMessages
     - OneSignalXCFramework/OneSignalLocation
-  - OneSignalXCFramework/OneSignalCore (5.2.5)
-  - OneSignalXCFramework/OneSignalExtension (5.2.5):
+  - OneSignalXCFramework/OneSignalCore (5.2.7)
+  - OneSignalXCFramework/OneSignalExtension (5.2.7):
     - OneSignalXCFramework/OneSignalCore
     - OneSignalXCFramework/OneSignalOutcomes
-  - OneSignalXCFramework/OneSignalInAppMessages (5.2.5):
+  - OneSignalXCFramework/OneSignalInAppMessages (5.2.7):
     - OneSignalXCFramework/OneSignalCore
     - OneSignalXCFramework/OneSignalNotifications
     - OneSignalXCFramework/OneSignalOSCore
     - OneSignalXCFramework/OneSignalOutcomes
     - OneSignalXCFramework/OneSignalUser
-  - OneSignalXCFramework/OneSignalLiveActivities (5.2.5):
+  - OneSignalXCFramework/OneSignalLiveActivities (5.2.7):
     - OneSignalXCFramework/OneSignalCore
     - OneSignalXCFramework/OneSignalOSCore
     - OneSignalXCFramework/OneSignalUser
-  - OneSignalXCFramework/OneSignalLocation (5.2.5):
+  - OneSignalXCFramework/OneSignalLocation (5.2.7):
     - OneSignalXCFramework/OneSignalCore
     - OneSignalXCFramework/OneSignalNotifications
     - OneSignalXCFramework/OneSignalOSCore
     - OneSignalXCFramework/OneSignalUser
-  - OneSignalXCFramework/OneSignalNotifications (5.2.5):
+  - OneSignalXCFramework/OneSignalNotifications (5.2.7):
     - OneSignalXCFramework/OneSignalCore
     - OneSignalXCFramework/OneSignalExtension
     - OneSignalXCFramework/OneSignalOutcomes
-  - OneSignalXCFramework/OneSignalOSCore (5.2.5):
+  - OneSignalXCFramework/OneSignalOSCore (5.2.7):
     - OneSignalXCFramework/OneSignalCore
-  - OneSignalXCFramework/OneSignalOutcomes (5.2.5):
+  - OneSignalXCFramework/OneSignalOutcomes (5.2.7):
     - OneSignalXCFramework/OneSignalCore
-  - OneSignalXCFramework/OneSignalUser (5.2.5):
+  - OneSignalXCFramework/OneSignalUser (5.2.7):
     - OneSignalXCFramework/OneSignalCore
     - OneSignalXCFramework/OneSignalNotifications
     - OneSignalXCFramework/OneSignalOSCore
@@ -522,10 +522,10 @@ PODS:
     - React-Core
   - react-native-netinfo (9.5.0):
     - React-Core
-  - react-native-onesignal (5.2.5):
-    - OneSignalXCFramework (= 5.2.5)
+  - react-native-onesignal (5.2.6):
+    - OneSignalXCFramework (= 5.2.7)
     - React (< 1.0.0, >= 0.13.0)
-  - react-native-pager-view (6.4.1):
+  - react-native-pager-view (6.5.0):
     - RCT-Folly (= 2021.07.22.00)
     - React-Core
   - react-native-quick-base64 (2.1.2):
@@ -538,7 +538,7 @@ PODS:
     - React-Core
   - react-native-restart (0.0.27):
     - React-Core
-  - react-native-safe-area-context (4.13.1):
+  - react-native-safe-area-context (4.14.0):
     - React-Core
   - react-native-slider (4.5.5):
     - RCT-Folly (= 2021.07.22.00)
@@ -660,7 +660,8 @@ PODS:
     - React-Core
   - RNCAsyncStorage (1.24.0):
     - React-Core
-  - RNCMaskedView (0.3.1):
+  - RNCMaskedView (0.3.2):
+    - RCT-Folly (= 2021.07.22.00)
     - React-Core
   - RNDeviceInfo (10.14.0):
     - React-Core
@@ -720,7 +721,7 @@ PODS:
     - React
   - RNScrypt (1.2.1):
     - React
-  - RNSentry (5.34.0):
+  - RNSentry (5.35.0):
     - hermes-engine
     - RCT-Folly (= 2021.07.22.00)
     - React-Core
@@ -1140,7 +1141,7 @@ SPEC CHECKSUMS:
   MMKV: f7d1d5945c8765f97f39c3d121f353d46735d801
   MMKVCore: c04b296010fcb1d1638f2c69405096aac12f6390
   MultiplatformBleAdapter: 5a6a897b006764392f9cef785e4360f54fb9477d
-  OneSignalXCFramework: 76ca508fc2b941317729d13fdec96817f8ef5b3b
+  OneSignalXCFramework: c56f9470a6fb23048baf55e02740a09cfd32863c
   OpenSSL-Universal: ebc357f1e6bc71fa463ccb2fe676756aff50e88c
   RCT-Folly: 424b8c9a7a0b9ab2886ffe9c3b041ef628fd4fb1
   RCTRequired: 28469809442eb4eb5528462705f7d852948c8a74
@@ -1169,12 +1170,12 @@ SPEC CHECKSUMS:
   react-native-in-app-review: db8bb167a5f238e7ceca5c242d6b36ce8c4404a4
   react-native-mmkv: 38d484ccd8f5760fe0e46d206ed07add5ddda1fc
   react-native-netinfo: 48c5f79a84fbc3ba1d28a8b0d04adeda72885fa8
-  react-native-onesignal: 505a974a74b97e81d7ab090a63ea065566e2339f
-  react-native-pager-view: d1e43158dd108b1b7377d7972157317e06dcc579
+  react-native-onesignal: 4e06640de88ebecc19509bf6eddc919cc1e160de
+  react-native-pager-view: ae0e94e1f5aa8b8dbdafada296af33b9360b54bb
   react-native-quick-base64: 61228d753294ae643294a75fece8e0e80b7558a6
   react-native-quick-crypto: 455c1b411db006dba1026a30681ececb19180187
   react-native-restart: 7595693413fe3ca15893702f2c8306c62a708162
-  react-native-safe-area-context: 004fe00b8c5aae5d57de1c27ff728cf6d3918b03
+  react-native-safe-area-context: 4532f1a0c5d34a46b9324ccaaedcb5582a302b7d
   react-native-slider: 3ce2efe4e261f6e000622ec44536faca44bb13d3
   react-native-webview: bdc091de8cf7f8397653e30182efcd9f772e03b3
   React-NativeModulesApple: 02e35e9a51e10c6422f04f5e4076a7c02243fff2
@@ -1196,7 +1197,7 @@ SPEC CHECKSUMS:
   ReactCommon: dd03c17275c200496f346af93a7b94c53f3093a4
   RNBootSplash: e025d4ee98d942ee6c8b495a6fe66339a6b5f6dd
   RNCAsyncStorage: ec53e44dc3e75b44aa2a9f37618a49c3bc080a7a
-  RNCMaskedView: 090213d32d8b3bb83a4dcb7d12c18f0152591906
+  RNCMaskedView: a86b134da64b7eca096afca885c0fc74dfb4537f
   RNDeviceInfo: 59344c19152c4b2b32283005f9737c5c64b42fba
   RNFastImage: 5c9c9fed9c076e521b3f509fe79e790418a544e8
   RNFlashList: fadf593d8e195ce2fe261980ac59e9f49808b68c
@@ -1209,7 +1210,7 @@ SPEC CHECKSUMS:
   RNScreens: 50ad6e3dbea9023272b3aa753e3ee2720b0c9b8f
   RNScreenshotPrevent: dc9741e416ba80c3739418f112ac4093188315e9
   RNScrypt: 95fdef077b482e9fdf8a761120cb69d129ef4016
-  RNSentry: a490880cadc329b5a16543787c8549f75216fc5b
+  RNSentry: a2b10b28360ab03954e5d871bc9b20c00de37163
   RNSVG: af3907ac5d4fa26a862b75a16d8f15bc74f2ceda
   SDWebImage: a7f831e1a65eb5e285e3fb046a23fcfbf08e696d
   SDWebImageWebPCoder: 908b83b6adda48effe7667cd2b7f78c897e5111d

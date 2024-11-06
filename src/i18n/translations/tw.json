@@ -531,6 +531,8 @@
   "PLACEHOLDER_ENTER_ADDRESS": "輸入地址",
   "PLACEHOLDER_ENTER_NAME": "輸入姓名",
   "PLACEHOLDER_SEARCH_TOKEN": "搜尋代幣",
+  "PUSH_NOTIFICATIONS": "推送通知",
+  "PUSH_NOTIFICATIONS_DESC": "隨時掌握最新消息和更新",
   "RECAP": "摘要",
   "RECEIVED": "已接收",
   "RECEIVE_ACTIVITY": "接收",

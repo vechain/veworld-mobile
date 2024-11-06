@@ -531,6 +531,8 @@
   "PLACEHOLDER_ENTER_ADDRESS": "주소를 입력하세요",
   "PLACEHOLDER_ENTER_NAME": "이름을 입력하세요",
   "PLACEHOLDER_SEARCH_TOKEN": "토큰 검색",
+  "PUSH_NOTIFICATIONS": "푸시 알림",
+  "PUSH_NOTIFICATIONS_DESC": "최신 뉴스와 업데이트를 계속 받아보세요",
   "RECAP": "개요",
   "RECEIVED": "받음",
   "RECEIVE_ACTIVITY": "받기",

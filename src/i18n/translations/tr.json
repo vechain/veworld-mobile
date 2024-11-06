@@ -531,6 +531,8 @@
   "PLACEHOLDER_ENTER_ADDRESS": "Adresi girin",
   "PLACEHOLDER_ENTER_NAME": "Adı girin",
   "PLACEHOLDER_SEARCH_TOKEN": "Bir jeton ara",
+  "PUSH_NOTIFICATIONS": "Bildirimleri Gönder",
+  "PUSH_NOTIFICATIONS_DESC": "En son haberler ve güncellemelerle güncel kalın",
   "RECAP": "Özet",
   "RECEIVED": "Alındı",
   "RECEIVE_ACTIVITY": "Al",

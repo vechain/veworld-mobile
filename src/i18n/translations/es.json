@@ -531,6 +531,8 @@
   "PLACEHOLDER_ENTER_ADDRESS": "Ingrese la dirección",
   "PLACEHOLDER_ENTER_NAME": "Ingrese el nombre",
   "PLACEHOLDER_SEARCH_TOKEN": "Buscar un token",
+  "PUSH_NOTIFICATIONS": "Notificaciones Push",
+  "PUSH_NOTIFICATIONS_DESC": "Mantente al día con las últimas noticias y actualizaciones",
   "RECAP": "Resumen",
   "RECEIVED": "Recibido",
   "RECEIVE_ACTIVITY": "Recibir",

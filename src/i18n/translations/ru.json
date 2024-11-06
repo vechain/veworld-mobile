@@ -531,6 +531,8 @@
   "PLACEHOLDER_ENTER_ADDRESS": "Введите адрес",
   "PLACEHOLDER_ENTER_NAME": "Введите имя",
   "PLACEHOLDER_SEARCH_TOKEN": "Поиск токена",
+  "PUSH_NOTIFICATIONS": "Уведомления Push",
+  "PUSH_NOTIFICATIONS_DESC": "Будьте в курсе последних новостей и обновлений",
   "RECAP": "Краткий обзор",
   "RECEIVED": "Получено",
   "RECEIVE_ACTIVITY": "Получить",

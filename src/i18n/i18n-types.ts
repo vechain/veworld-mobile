@@ -2186,6 +2186,14 @@ type RootTranslation = {
 	 */
 	PLACEHOLDER_SEARCH_TOKEN: string
 	/**
+	 * P​u​s​h​ ​N​o​t​i​f​i​c​a​t​i​o​n​s
+	 */
+	PUSH_NOTIFICATIONS: string
+	/**
+	 * K​e​e​p​ ​u​p​ ​t​o​ ​d​a​t​e​ ​w​i​t​h​ ​t​h​e​ ​l​a​t​e​s​t​ ​n​e​w​s​ ​a​n​d​ ​u​p​d​a​t​e​s
+	 */
+	PUSH_NOTIFICATIONS_DESC: string
+	/**
 	 * R​e​c​a​p
 	 */
 	RECAP: string
@@ -5414,6 +5422,14 @@ VeWorld will never ask you for them.
 	 * Search a token
 	 */
 	PLACEHOLDER_SEARCH_TOKEN: () => LocalizedString
+	/**
+	 * Push Notifications
+	 */
+	PUSH_NOTIFICATIONS: () => LocalizedString
+	/**
+	 * Keep up to date with the latest news and updates
+	 */
+	PUSH_NOTIFICATIONS_DESC: () => LocalizedString
 	/**
 	 * Recap
 	 */

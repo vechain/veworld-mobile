@@ -531,6 +531,8 @@
   "PLACEHOLDER_ENTER_ADDRESS": "Nhập địa chỉ",
   "PLACEHOLDER_ENTER_NAME": "Nhập tên",
   "PLACEHOLDER_SEARCH_TOKEN": "Tìm kiếm một token",
+  "PUSH_NOTIFICATIONS": "Thông báo đẩy",
+  "PUSH_NOTIFICATIONS_DESC": "Luôn cập nhật với tin tức và thông báo mới nhất",
   "RECAP": "Tóm tắt",
   "RECEIVED": "Đã nhận",
   "RECEIVE_ACTIVITY": "Nhận",

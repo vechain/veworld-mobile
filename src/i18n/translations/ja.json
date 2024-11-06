@@ -531,6 +531,8 @@
   "PLACEHOLDER_ENTER_ADDRESS": "住所を入力",
   "PLACEHOLDER_ENTER_NAME": "名前を入力",
   "PLACEHOLDER_SEARCH_TOKEN": "トークンを検索",
+  "PUSH_NOTIFICATIONS": "プッシュ通知",
+  "PUSH_NOTIFICATIONS_DESC": "最新のニュースや更新情報を常に把握しましょう",
   "RECAP": "要約",
   "RECEIVED": "受信済み",
   "RECEIVE_ACTIVITY": "受け取る",

@@ -531,6 +531,8 @@
   "PLACEHOLDER_ENTER_ADDRESS": "Ange adressen",
   "PLACEHOLDER_ENTER_NAME": "Ange namnet",
   "PLACEHOLDER_SEARCH_TOKEN": "Sök en token",
+  "PUSH_NOTIFICATIONS": "Push-notiser",
+  "PUSH_NOTIFICATIONS_DESC": "Håll dig uppdaterad med de senaste nyheterna och uppdateringarna",
   "RECAP": "Sammanfattning",
   "RECEIVED": "Mottagen",
   "RECEIVE_ACTIVITY": "Ta emot",

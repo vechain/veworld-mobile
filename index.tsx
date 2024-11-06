@@ -29,7 +29,7 @@ import {
 import { ERROR_EVENTS, typography } from "~Constants"
 import { AnalyticsUtils, info, URIUtils } from "~Utils"
 import { BottomSheetModalProvider } from "@gorhom/bottom-sheet"
-import { PersistedThemeProvider, StoreContextProvider } from "~Components/Providers"
+import { NotificationsProvider, PersistedThemeProvider, StoreContextProvider } from "~Components/Providers"
 import {
     selectAnalyticsTrackingEnabled,
     selectSentryTrackingEnabled,
@@ -122,7 +122,9 @@ const Main = () => {
                         <WalletConnectContextProvider>
                             <InAppBrowserProvider>
                                 <BottomSheetModalProvider>
-                                    <EntryPoint />
+                                    <NotificationsProvider>
+                                        <EntryPoint />
+                                    </NotificationsProvider>
                                 </BottomSheetModalProvider>
                             </InAppBrowserProvider>
                         </WalletConnectContextProvider>
