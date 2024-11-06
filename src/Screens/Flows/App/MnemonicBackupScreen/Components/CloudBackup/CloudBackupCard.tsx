@@ -186,15 +186,13 @@ const baseStyles = (theme: ColorThemeType) =>
         cloudRow: {
             borderRadius: 8,
             borderWidth: 1,
-            padding: 0,
             borderColor: COLORS.GREEN_100,
         },
         cloudRowContent: {
             flexDirection: "row",
             alignItems: "center",
-            paddingLeft: 14,
-            paddingRight: 12,
-            paddingVertical: 10,
+            paddingHorizontal: 12,
+            paddingVertical: 12,
         },
         cloudInfo: {
             flexDirection: "row",

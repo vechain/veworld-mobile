@@ -96,6 +96,7 @@ export const Layout = ({
                             <BaseView mx={noMargin ? 0 : 20}>
                                 <BackButtonHeaderV2 title={pageHeader} />
                             </BaseView>
+                            <BaseSpacer height={4} />
                         </BaseView>
                     )}
                     {fixedHeader && (
@@ -115,7 +116,6 @@ export const Layout = ({
                 </BaseView>
                 {/* Separator from header to body */}
                 {(!noBackButton || fixedHeader) && <BaseSpacer height={1} background={theme.colors.card} />}
-
                 {body && (
                     <BaseScrollView
                         onContentSizeChange={(_w: number, h: number) => {
@@ -136,6 +136,7 @@ export const Layout = ({
                             paddingTop: noMargin ? 0 : 16,
                         }}>
                         {!fixedHeader && title && <Title />}
+                        {pageHeader && <BaseSpacer height={6} />}
                         {body}
                     </BaseScrollView>
                 )}

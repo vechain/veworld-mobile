@@ -77,6 +77,7 @@ const lineHeight = {
     title: 28,
     subTitle: 20.8,
     bodyMedium: 18.2,
+    captionMedium: 16,
     caption: 15.6,
 }
 
@@ -208,7 +209,7 @@ export const defaults: Record<TFonts, TypographyObject> = {
         fontFamily: fontFamily["Inter-Regular"],
         fontSize: 12,
         fontWeight: fontWeight[400],
-        lineHeight: lineHeight.caption,
+        lineHeight: lineHeight.captionMedium,
     },
     caption: {
         fontFamily: fontFamily["Inter-Light"],

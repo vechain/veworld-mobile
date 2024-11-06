@@ -1,14 +1,12 @@
-import React, { useMemo } from "react"
+import React from "react"
 import { BaseCard, BaseSpacer, BaseText, BaseView } from "~Components"
 import { useI18nContext } from "~i18n"
 import { LocalDevice } from "~Model"
 import { LastBackupAlert } from "../index"
-import { ManualBackupContent } from "~Screens/Flows/App/MnemonicBackupScreen/Components/ManualBackupContent"
+import { ManualBackupContent } from "~Screens/Flows/App/MnemonicBackupScreen/Components"
 import { COLORS, ColorThemeType } from "~Constants"
 import { StyleSheet } from "react-native"
 import { useThemedStyles } from "~Hooks"
-import { useSelector } from "react-redux"
-import { RootState } from "~Storage/Redux/Types"
 
 type Props = {
     mnemonicArray: string[]
@@ -19,24 +17,12 @@ export const ManualBackup = ({ mnemonicArray, deviceToBackup }: Props) => {
     const { LL } = useI18nContext()
     const { styles } = useThemedStyles(baseStyles)
 
-    const currentDevice = useSelector((state: RootState) =>
-        state.devices.find(device => device.rootAddress === deviceToBackup?.rootAddress),
-    )
-
-    const updatedDevice = useMemo(() => {
-        if (!currentDevice) return deviceToBackup
-        return {
-            ...deviceToBackup,
-            ...currentDevice,
-        } as LocalDevice
-    }, [currentDevice, deviceToBackup])
-
     return (
         <BaseView>
-            {(updatedDevice?.isBuckedUp || updatedDevice?.isBackedUpOnCloud) && (
+            {(deviceToBackup?.isBuckedUp || deviceToBackup?.isBackedUpOnCloud) && (
                 <>
-                    <BaseSpacer height={16} />
-                    <LastBackupAlert deviceToBackup={updatedDevice} />
+                    <LastBackupAlert deviceToBackup={deviceToBackup} />
+                    <BaseSpacer height={24} />
                 </>
             )}
             <BaseText typographyFont="subSubTitleMedium">{deviceToBackup?.alias}</BaseText>
