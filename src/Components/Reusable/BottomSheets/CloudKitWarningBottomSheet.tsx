@@ -152,6 +152,7 @@ export const CloudKitWarningBottomSheet = forwardRef<BottomSheetModalMethods, Pr
                                         : LL.BTN_ENTER_PASSWORD()
                                 }
                                 secureTextEntry={secureText1}
+                                editable={true}
                                 isError={passwordMisMatch || passwordNotStrong}
                                 rightIcon={secureText1 ? "eye-off-outline" : "eye-outline"}
                                 onIconPress={() => setsecureText1(prev => !prev)}
@@ -192,6 +193,7 @@ export const CloudKitWarningBottomSheet = forwardRef<BottomSheetModalMethods, Pr
                                 <>
                                     <BaseTextInput
                                         placeholder={LL.BTN_CONFIRN_PASSWORD()}
+                                        editable={true}
                                         secureTextEntry={secureText2}
                                         rightIcon={secureText2 ? "eye-off-outline" : "eye-outline"}
                                         onIconPress={() => setsecureText2(prev => !prev)}

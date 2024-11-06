@@ -124,6 +124,11 @@ type RootTranslation = {
 	 */
 	ALERT_MSG_LAST_BACKUP_DATE: RequiredParams<'date'>
 	/**
+	 * L​a​s​t​ ​b​a​c​k​u​p​ ​t​o​ ​i​C​l​o​u​d​ ​-​ ​{​d​a​t​e​}
+	 * @param {string} date
+	 */
+	ALERT_MSG_LAST_BACKUP_ICLOUD_DATE: RequiredParams<'date'>
+	/**
 	 * A​ ​n​e​w​ ​v​e​r​s​i​o​n​ ​{​v​e​r​s​i​o​n​}​ ​i​s​ ​o​u​t​ ​n​o​w​.​ ​P​l​e​a​s​e​ ​u​p​d​a​t​e​ ​t​o​ ​t​h​e​ ​l​a​t​e​s​t​ ​v​e​r​s​i​o​n
 	 * @param {string} version
 	 */
@@ -3482,6 +3487,10 @@ Try reconnect your device to the internet.
 	 * Last backup - {date}
 	 */
 	ALERT_MSG_LAST_BACKUP_DATE: (arg: { date: string }) => LocalizedString
+	/**
+	 * Last backup to iCloud - {date}
+	 */
+	ALERT_MSG_LAST_BACKUP_ICLOUD_DATE: (arg: { date: string }) => LocalizedString
 	/**
 	 * A new version {version} is out now. Please update to the latest version
 	 */

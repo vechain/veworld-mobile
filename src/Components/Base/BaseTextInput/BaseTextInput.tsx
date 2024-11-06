@@ -81,7 +81,7 @@ export const BaseTextInputComponent = forwardRef<TextInput, BaseTextInputProps>(
                         style={[
                             styles.input,
                             {
-                                color: otherProps.editable ? theme.colors.text : theme.colors.textDisabled,
+                                color: otherProps.editable ? COLORS.GREY_600 : theme.colors.textDisabled,
                             },
                             style,
                         ]}
@@ -141,9 +141,7 @@ const baseStyles = (isError: boolean) => (theme: ColorThemeType) =>
         },
         input: {
             flex: 1,
-            backgroundColor: COLORS.WHITE,
-            borderColor: theme.colors.transparent,
-            borderWidth: 1,
+            backgroundColor: theme.colors.transparent,
             borderRadius: 8,
             fontSize: defaultTypography.body.fontSize,
             fontFamily: defaultTypography.body.fontFamily,

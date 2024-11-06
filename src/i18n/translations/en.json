@@ -22,6 +22,7 @@
   "ALERT_MSG_ENABLE_LOCATION": "Please, open the device settings and enable location services to continue.",
   "ALERT_MSG_INTERNET_DOWN": "Connection problems detected.\nTry reconnect your device to the internet.",
   "ALERT_MSG_LAST_BACKUP_DATE": "Last backup - {date: string}",
+  "ALERT_MSG_LAST_BACKUP_ICLOUD_DATE": "Last backup to iCloud - {date: string}",
   "ALERT_MSG_NEW_VERSION": "A new version {version: string} is out now. Please update to the latest version",
   "ALERT_MSG_NOT_ENROLLED": "You have not enrolled any biometric authentication method.",
   "ALERT_MSG_UNSUPPORTED_BLUETOOTH": "Your device does not support Bluetooth, which is required to use this feature.",
