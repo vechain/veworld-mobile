@@ -16,6 +16,6 @@ module.exports = mergeConfig(getDefaultConfig(__dirname), {
     },
     resolver: {
         assetExts: [...defaultConfig.resolver.assetExts, "lottie"],
-        sourceExts: [...exts, "cjs"],
+        sourceExts: ["tsx", "ts", "js", "json", "jsx", ...exts, "cjs"],
     },
 })

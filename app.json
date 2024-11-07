@@ -1,4 +1,5 @@
 {
     "name": "VeWorld",
-    "displayName": "VeWorld"
+    "displayName": "VeWorld",
+    "entryFile": "index.tsx"
 }
