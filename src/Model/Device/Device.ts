@@ -19,6 +19,7 @@ export interface BaseDevice {
     position: number
     derivationPath?: DerivationPath
     isBuckedUp?: boolean
+    lastBackupDate?: string
     isMigrated?: boolean
 }
 

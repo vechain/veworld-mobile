@@ -1,6 +1,8 @@
 import React, { useCallback, useEffect, useMemo, useRef, useState } from "react"
 import { FlatList, StyleSheet } from "react-native"
 
+import { StackActions, useNavigation } from "@react-navigation/native"
+import { SwipeableItemImperativeRef } from "react-native-swipeable-item"
 import {
     AnimatedFloatingButton,
     BackButtonHeader,
@@ -18,15 +20,13 @@ import {
     SwipeableRow,
 } from "~Components"
 import { ERROR_EVENTS } from "~Constants"
-import { useBottomSheetModal, useCheckIdentity, useCloudKit, useDeviceUtils, useTheme } from "~Hooks"
+import { useBottomSheetModal, useCheckIdentity, useCloudBackup, useDeviceUtils, useTheme } from "~Hooks"
 import { useI18nContext } from "~i18n"
+import { CloudKitWallet, IMPORT_TYPE } from "~Model"
 import { selectDevices, selectHasOnboarded, useAppSelector } from "~Storage/Redux"
-import { CryptoUtils, error, PasswordUtils } from "~Utils"
+import { CryptoUtils, error, PasswordUtils, PlatformUtils } from "~Utils"
 import { useHandleWalletCreation } from "../Onboarding/WelcomeScreen/useHandleWalletCreation"
 import { UserCreatePasswordScreen } from "./UserCreatePasswordScreen"
-import { StackActions, useNavigation } from "@react-navigation/native"
-import { CloudKitWallet, IMPORT_TYPE } from "~Model"
-import { SwipeableItemImperativeRef } from "react-native-swipeable-item"
 
 const skeletonArray = [1, 2, 3, 4]
 
@@ -34,7 +34,7 @@ export const ImportFromCloudScreen = () => {
     const userHasOnboarded = useAppSelector(selectHasOnboarded)
     const nav = useNavigation()
     const theme = useTheme()
-    const { getAllWalletsFromCloudKit, isLoading, getSalt, getIV, deleteWallet } = useCloudKit()
+    const { getAllWalletFromCloud, getSalt, getIV, deleteWallet } = useCloudBackup()
     const { LL } = useI18nContext()
     const [cloudKitWallets, setCloudKitWallets] = useState<CloudKitWallet[] | null>(null)
     const [selected, setSelected] = useState<CloudKitWallet | null>(null)
@@ -43,6 +43,8 @@ export const ImportFromCloudScreen = () => {
     const { checkCanImportDevice } = useDeviceUtils()
     const devices = useAppSelector(selectDevices)
     const mnemonicCache = useRef<string[]>()
+
+    const [isLoading, setIsLoading] = useState(true)
 
     const {
         onCreateWallet,
@@ -58,11 +60,13 @@ export const ImportFromCloudScreen = () => {
 
     useEffect(() => {
         const init = async () => {
-            const wallets = await getAllWalletsFromCloudKit()
+            setIsLoading(true)
+            const wallets = await getAllWalletFromCloud()
             setCloudKitWallets(wallets)
+            setIsLoading(false)
         }
         init()
-    }, [getAllWalletsFromCloudKit])
+    }, [getAllWalletFromCloud])
 
     const {
         isPasswordPromptOpen: isPasswordPromptOpen,
@@ -73,7 +77,7 @@ export const ImportFromCloudScreen = () => {
         onIdentityConfirmed: async (pin?: string) => {
             await importOnboardedWallet({
                 importMnemonic: mnemonicCache.current,
-                importType: IMPORT_TYPE.ICLOUD,
+                importType: PlatformUtils.isIOS() ? IMPORT_TYPE.ICLOUD : IMPORT_TYPE.GOOGLE_DRIVE,
                 pin,
                 derivationPath: selected!.derivationPath,
             })
@@ -112,6 +116,7 @@ export const ImportFromCloudScreen = () => {
             onCloseWarning()
 
             if (selected) {
+                setIsLoading(true)
                 const { salt } = await getSalt(selected.rootAddress)
                 const { iv } = await getIV(selected.rootAddress)
 
@@ -119,6 +124,7 @@ export const ImportFromCloudScreen = () => {
                     showErrorToast({
                         text1: LL.CLOUDKIT_ERROR_GENERIC(),
                     })
+                    setIsLoading(false)
                     return
                 }
 
@@ -135,6 +141,7 @@ export const ImportFromCloudScreen = () => {
                     showErrorToast({
                         text1: LL.ERROR_DECRYPTING_WALLET(),
                     })
+                    setIsLoading(false)
                     return
                 }
 
@@ -147,15 +154,17 @@ export const ImportFromCloudScreen = () => {
                         onCreateWallet({
                             importMnemonic: mnemonic,
                             derivationPath: selected.derivationPath,
-                            importType: IMPORT_TYPE.ICLOUD,
+                            importType: PlatformUtils.isIOS() ? IMPORT_TYPE.ICLOUD : IMPORT_TYPE.GOOGLE_DRIVE,
                         })
                     }
+                    setIsLoading(false)
                 } catch (_error) {
                     let er = _error as Error
                     error(ERROR_EVENTS.CLOUDKIT, er, er.message)
                     showErrorToast({
                         text1: er.message ?? LL.ERROR_CREATING_WALLET(),
                     })
+                    setIsLoading(false)
                 }
             } else {
                 showErrorToast({
@@ -190,16 +199,18 @@ export const ImportFromCloudScreen = () => {
 
     const handleOnDeleteFromCloud = useCallback(async () => {
         if (selectedToDelete) {
+            setIsLoading(true)
             await deleteWallet(selectedToDelete.rootAddress)
             closeRemoveWalletBottomSheet()
-            const wallets = await getAllWalletsFromCloudKit()
+            const wallets = await getAllWalletFromCloud()
+            setIsLoading(false)
             if (!wallets.length) {
                 nav.dispatch(StackActions.popToTop())
             } else {
                 setCloudKitWallets(wallets)
             }
         }
-    }, [closeRemoveWalletBottomSheet, deleteWallet, getAllWalletsFromCloudKit, nav, selectedToDelete])
+    }, [closeRemoveWalletBottomSheet, deleteWallet, getAllWalletFromCloud, nav, selectedToDelete])
 
     const isWalletActive = useCallback(
         (wallet: CloudKitWallet) => devices.find(w => w.rootAddress === wallet.rootAddress),
@@ -224,7 +235,11 @@ export const ImportFromCloudScreen = () => {
 
     return (
         <Layout
-            fixedHeader={<BaseText typographyFont="title">{LL.TITLE_IMPORT_WALLET_FROM_ICLOUD()}</BaseText>}
+            fixedHeader={
+                <BaseText typographyFont="title">
+                    {PlatformUtils.isIOS() ? LL.TITLE_IMPORT_WALLET_FROM_ICLOUD() : LL.TITLE_IMPORT_WALLET_FROM_DRIVE()}
+                </BaseText>
+            }
             fixedBody={
                 <BaseView flex={1}>
                     {isLoading ? (
@@ -304,7 +319,9 @@ export const ImportFromCloudScreen = () => {
                                     onSuccess({
                                         pin,
                                         mnemonic: mnemonicCache.current,
-                                        importType: IMPORT_TYPE.ICLOUD,
+                                        importType: PlatformUtils.isIOS()
+                                            ? IMPORT_TYPE.ICLOUD
+                                            : IMPORT_TYPE.GOOGLE_DRIVE,
                                         derivationPath: selected!.derivationPath,
                                     })
                                 }

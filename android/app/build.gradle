@@ -64,7 +64,7 @@ react {
 def enableProguardInReleaseBuilds = false
 
 project.ext.vectoricons = [
-    iconFontNames: [ 'MaterialIcons.ttf', 'MaterialCommunityIcons.ttf' ] // Name of the font files you want to copy
+        iconFontNames: ['MaterialIcons.ttf', 'MaterialCommunityIcons.ttf'] // Name of the font files you want to copy
 ]
 
 apply from: file("../../node_modules/react-native-vector-icons/fonts.gradle")
@@ -128,10 +128,11 @@ android {
     }
 
     packagingOptions {
-            pickFirst 'lib/x86/libcrypto.so'
-            pickFirst 'lib/x86_64/libcrypto.so'
-            pickFirst 'lib/armeabi-v7a/libcrypto.so'
-            pickFirst 'lib/arm64-v8a/libcrypto.so'
+        resources.excludes.add("META-INF/*")
+        pickFirst 'lib/x86/libcrypto.so'
+        pickFirst 'lib/x86_64/libcrypto.so'
+        pickFirst 'lib/armeabi-v7a/libcrypto.so'
+        pickFirst 'lib/arm64-v8a/libcrypto.so'
     }
 
     applicationVariants.all { variant ->
@@ -144,15 +145,26 @@ android {
 dependencies {
     androidTestImplementation('com.wix:detox:+')
     implementation 'androidx.appcompat:appcompat:1.6.1'
-    
+
     // The version of react-native is set by the React Native Gradle Plugin
     implementation("com.facebook.react:react-android")
 
     implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:1.9.0"
+    implementation "androidx.lifecycle:lifecycle-viewmodel-ktx:2.7.0"
+
+    implementation "org.jetbrains.kotlinx:kotlinx-coroutines-core:1.8.0"
+    implementation 'com.google.android.gms:play-services-base:18.5.0'
+    implementation 'com.google.android.gms:play-services-auth:21.2.0'
+    implementation('com.google.apis:google-api-services-drive:v3-rev20221023-2.0.0') {
+        exclude group: 'com.google.guava', module: "guava"
+    }
+    implementation 'com.google.guava:guava:31.0.1-android'
+    implementation 'com.google.api-client:google-api-client-android:2.6.0'
+    implementation 'com.google.api-client:google-api-client-gson:1.34.0'
 
     debugImplementation("com.facebook.flipper:flipper:${FLIPPER_VERSION}")
     debugImplementation("com.facebook.flipper:flipper-network-plugin:${FLIPPER_VERSION}") {
-        exclude group:'com.squareup.okhttp3', module:'okhttp'
+        exclude group: 'com.squareup.okhttp3', module: 'okhttp'
     }
 
     debugImplementation("com.facebook.flipper:flipper-fresco-plugin:${FLIPPER_VERSION}")

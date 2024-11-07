@@ -59,7 +59,22 @@ export const LockScreen: React.FC<Props> = memo(
         const handleEditPin = useCallback(
             (userPin: string) => {
                 //User has confirmed the pin code
-                if (firstPin === userPin) return onSuccess(userPin)
+                if (firstPin === userPin) {
+                    /**
+                     * If the new pin is equal to the old one, we should reset first pin
+                     * to start over again the flow correctly (request old, request new, confirm new)
+                     */
+                    if (LOCKSCREEN_SCENARIO.EDIT_NEW_PIN) {
+                        setFirstPin(undefined)
+
+                        setIsError({
+                            type: PinVerificationError.EDIT_PIN,
+                            value: true,
+                        })
+                    }
+
+                    return onSuccess(userPin)
+                }
 
                 //User has entered the first pin
                 if (!firstPin) return setFirstPin(userPin)
