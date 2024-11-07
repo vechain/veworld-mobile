@@ -84,9 +84,6 @@ jobs:
               echo "new_version=$new_version" >> $GITHUB_ENV
               echo "new_build=$new_build" >> $GITHUB_ENV
 
-              # Authenticate gh CLI
-              echo "$GH_TOKEN" | gh auth login --with-token
-
               # Update Repo with new version and build
               gh variable set VERSION --body "$new_version"
               gh variable set BUILD --body "$new_build"
