@@ -56,6 +56,7 @@ jobs:
         permissions:
           contents: read
           actions: write
+          security-events: write 
         env:
           VERSION: ${{ vars.version }}
           BUILD: ${{ vars.build }}
@@ -68,6 +69,7 @@ jobs:
               id: increment
               env:
                 GH_TOKEN: ${{ needs.generate-token.outputs.token }}
+                GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}  
                 VERSION: ${{ env.VERSION }}
                 BUILD: ${{ env.BUILD }}
               run: |
@@ -87,9 +89,6 @@ jobs:
                 # Output the new version and build
                 echo "new_version=$new_version" >> $GITHUB_ENV
                 echo "new_build=$new_build" >> $GITHUB_ENV
-
-                # Update Repo with new version and build
-                echo "$GH_TOKEN" | gh auth login --with-token
 
                 gh variable list
                 gh variable set VERSION --body "$new_version"
