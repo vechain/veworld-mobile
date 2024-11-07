@@ -54,6 +54,7 @@ jobs:
             new_version: ${{ steps.increment.outputs.new_version }}
             new_build: ${{ steps.increment.outputs.new_build }}
         permissions:
+          contents: read
           actions: write
         steps:
             - name: Checkout repository
