@@ -1,7 +1,7 @@
-import React, { memo } from "react"
+import React, { memo, useMemo } from "react"
 import { Modal, ModalProps } from "react-native"
 import { BaseIcon, BaseView } from "~Components"
-import { COLORS } from "~Constants"
+import { COLORS, isSmallScreen } from "~Constants"
 import { useTheme } from "~Hooks"
 
 interface IBaseModal extends ModalProps {
@@ -15,14 +15,18 @@ interface IBaseModal extends ModalProps {
 export const BaseModalWithChildren: React.FC<IBaseModal> = memo(
     ({ isOpen, onClose, transparent, hasBackButton = true, children }) => {
         const theme = useTheme()
-
+        const calculatedPY = useMemo(() => {
+            if (transparent) return 0
+            if (isSmallScreen) return 8
+            return 48
+        }, [transparent])
         return (
             <BaseModal
                 isOpen={isOpen}
                 onClose={onClose}
                 transparent={transparent}
                 style={{ backgroundColor: theme.colors.background }}>
-                <BaseView justifyContent="flex-start" py={transparent ? 0 : 62} bg={theme.colors.background}>
+                <BaseView justifyContent="flex-start" py={calculatedPY} bg={theme.colors.background}>
                     {hasBackButton && (
                         <BaseIcon
                             color={theme.isDark ? COLORS.WHITE : COLORS.PURPLE}

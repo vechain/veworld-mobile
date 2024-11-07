@@ -2,7 +2,7 @@ import React, { useCallback } from "react"
 import { Pressable, StyleSheet } from "react-native"
 import { widthPercentageToDP as wp } from "react-native-responsive-screen"
 import { BaseIcon, BaseText, BaseView } from "~Components"
-import { ColorThemeType, valueToHP } from "~Constants"
+import { ColorThemeType, isSmallScreen, valueToHP } from "~Constants"
 import { useThemedStyles } from "~Hooks"
 
 const numPad = ["1", "2", "3", "4", "5", "6", "7", "8", "9", "blank", "0", "canc"]
@@ -55,7 +55,7 @@ const baseStyles = (theme: ColorThemeType) =>
             width: "33%",
             justifyContent: "center",
             alignItems: "center",
-            paddingVertical: valueToHP[22],
+            paddingVertical: isSmallScreen ? 10 : valueToHP[22],
         },
         pressable: {
             width: wp("18%"),

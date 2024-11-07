@@ -175,7 +175,7 @@ platform :ios do
       sentry_check_cli_installed
 
       # generate source maps for sentry
-      sh("npx react-native bundle --platform ios --dev false --entry-file index.js --reset-cache --bundle-output main.jsbundle --sourcemap-output main.jsbundle.map --minify false")
+      sh("npx react-native bundle --platform ios --dev false --entry-file index.tsx --reset-cache --bundle-output main.jsbundle --sourcemap-output main.jsbundle.map --minify false")
       #compile source maps
       sh("ios/Pods/hermes-engine/destroot/bin/hermesc -O -emit-binary -output-source-map -out=main.jsbundle.hbc main.jsbundle")
       sh("rm -f main.jsbundle")
@@ -529,7 +529,7 @@ platform :ios do
       sh("yarn install:all")
     end
     
-    sh "cd ../.. && pwd && npx react-native bundle --platform ios --dev false --entry-file index.js --bundle-output ios/main.jsbundle --assets-dest ios"
+    sh "cd ../.. && pwd && npx react-native bundle --platform ios --dev false --entry-file index.tsx --bundle-output ios/main.jsbundle --assets-dest ios"
     fetch_certificates_from_gh_for_ci
       # begin -> rescure == try -> catch
       begin

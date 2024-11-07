@@ -476,8 +476,7 @@ PODS:
     - React-Core
   - react-native-netinfo (9.5.0):
     - React-Core
-  - react-native-pager-view (6.4.1):
-    - RCT-Folly (= 2021.07.22.00)
+  - react-native-pager-view (6.2.1):
     - React-Core
   - react-native-quick-base64 (2.1.2):
     - RCT-Folly (= 2021.07.22.00)
@@ -672,7 +671,7 @@ PODS:
     - React
   - RNScrypt (1.2.1):
     - React
-  - RNSentry (5.34.0):
+  - RNSentry (5.35.0):
     - hermes-engine
     - RCT-Folly (= 2021.07.22.00)
     - React-Core
@@ -1115,7 +1114,7 @@ SPEC CHECKSUMS:
   react-native-in-app-review: db8bb167a5f238e7ceca5c242d6b36ce8c4404a4
   react-native-mmkv: 38d484ccd8f5760fe0e46d206ed07add5ddda1fc
   react-native-netinfo: 48c5f79a84fbc3ba1d28a8b0d04adeda72885fa8
-  react-native-pager-view: d1e43158dd108b1b7377d7972157317e06dcc579
+  react-native-pager-view: d211379f61895b6349bd7e571b44a26d005c2975
   react-native-quick-base64: 61228d753294ae643294a75fece8e0e80b7558a6
   react-native-quick-crypto: 455c1b411db006dba1026a30681ececb19180187
   react-native-restart: 7595693413fe3ca15893702f2c8306c62a708162
@@ -1154,7 +1153,7 @@ SPEC CHECKSUMS:
   RNScreens: 50ad6e3dbea9023272b3aa753e3ee2720b0c9b8f
   RNScreenshotPrevent: dc9741e416ba80c3739418f112ac4093188315e9
   RNScrypt: 95fdef077b482e9fdf8a761120cb69d129ef4016
-  RNSentry: a490880cadc329b5a16543787c8549f75216fc5b
+  RNSentry: a2b10b28360ab03954e5d871bc9b20c00de37163
   RNSVG: af3907ac5d4fa26a862b75a16d8f15bc74f2ceda
   SDWebImage: a7f831e1a65eb5e285e3fb046a23fcfbf08e696d
   SDWebImageWebPCoder: 908b83b6adda48effe7667cd2b7f78c897e5111d
