@@ -38,7 +38,6 @@ jobs:
     setup-version-build:
         runs-on: ubuntu-latest
         needs: check-merged-pr
-        if: needs.check-merged-pr.outputs.should_release == 'true'
         permissions:
           actions: write
           contents: read
