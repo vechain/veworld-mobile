@@ -53,7 +53,7 @@ export const BaseTextInputComponent = forwardRef<TextInput, BaseTextInputProps>(
         ref,
     ) => {
         const [isFocused, setIsFocused] = React.useState(false)
-        const { styles, theme } = useThemedStyles(baseStyles(!!isError || !!errorMessage, isFocused))
+        const { styles, theme } = useThemedStyles(baseStyles(!!isError || !!errorMessage, isFocused, disabled))
 
         const setInputParams = useMemo(() => {
             if (PlatformUtils.isAndroid()) {
@@ -151,7 +151,7 @@ export const BaseTextInputComponent = forwardRef<TextInput, BaseTextInputProps>(
     },
 )
 
-const baseStyles = (isError: boolean, isFocused: boolean) => (theme: ColorThemeType) =>
+const baseStyles = (isError: boolean, isFocused: boolean, disabled: boolean) => (theme: ColorThemeType) =>
     StyleSheet.create({
         container: {
             width: "100%",
@@ -176,13 +176,19 @@ const baseStyles = (isError: boolean, isFocused: boolean) => (theme: ColorThemeT
             width: "100%",
             flexDirection: "row",
             alignItems: "center",
-            borderColor: isError ? COLORS.RED_500 : isFocused ? COLORS.GREY_400 : COLORS.GREY_200,
+            borderColor: isError
+                ? COLORS.RED_500
+                : isFocused
+                ? COLORS.GREY_400
+                : disabled
+                ? COLORS.GREY_200
+                : COLORS.GREY_200,
             borderWidth: isError ? 2 : 1,
             borderRadius: 8,
             paddingVertical: 8,
             paddingRight: 4,
             paddingLeft: 16,
-            backgroundColor: COLORS.WHITE,
+            backgroundColor: disabled ? COLORS.GREY_100 : COLORS.WHITE,
         },
         inputPassword: {
             flex: 1,
