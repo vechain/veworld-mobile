@@ -19,7 +19,8 @@ import { ChangeSymbolPosition } from "./Components/ChangeSymbolPosition"
 
 export const GeneralScreen = () => {
     const { LL, setLocale } = useI18nContext()
-    const { permissionEnabled, requestPermission } = useNotifications()
+    const { isNotificationPermissionEnabled, isUserOptedIn, optIn, optOut, requestNotficationPermission } =
+        useNotifications()
 
     const {
         ref: selectLanguageSheetRef,
@@ -60,8 +61,14 @@ export const GeneralScreen = () => {
     )
 
     const toggleNotificationsSwitch = useCallback(() => {
-        requestPermission()
-    }, [requestPermission])
+        if (isUserOptedIn && !isNotificationPermissionEnabled) {
+            requestNotficationPermission()
+        } else if (!isUserOptedIn) {
+            optIn()
+        } else {
+            optOut()
+        }
+    }, [isNotificationPermissionEnabled, isUserOptedIn, optIn, optOut, requestNotficationPermission])
 
     return (
         <Layout
@@ -99,7 +106,7 @@ export const GeneralScreen = () => {
                         title={LL.PUSH_NOTIFICATIONS()}
                         subtitle={LL.PUSH_NOTIFICATIONS_DESC()}
                         onValueChange={toggleNotificationsSwitch}
-                        value={permissionEnabled}
+                        value={isUserOptedIn && isNotificationPermissionEnabled}
                     />
 
                     <BaseSpacer height={24} />
