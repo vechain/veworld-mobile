@@ -7,6 +7,7 @@ import { useNavigation } from "@react-navigation/native"
 import { Routes } from "~Navigation"
 import { AnalyticsEvent } from "~Constants"
 import { selectHasOnboarded, useAppSelector } from "~Storage/Redux"
+import { PlatformUtils } from "~Utils"
 
 type Props = {
     onClose: () => void
@@ -73,7 +74,9 @@ export const CreateOrImportWalletBottomSheet = React.forwardRef<BottomSheetModal
                             {LL.SB_IMPORT_WALLET_TYPE_SEED()}
                         </BaseText>
                         <BaseText pt={4} align="left" typographyFont="captionRegular">
-                            {LL.BD_IMPORT_WALLET_TYPE_SEED()}
+                            {LL.BD_IMPORT_WALLET_TYPE_SEED({
+                                cloud: PlatformUtils.isIOS() ? "iCloud" : "Google Drive",
+                            })}
                         </BaseText>
                     </BaseView>
                     <BaseIcon name="chevron-right" size={24} color={theme.colors.text} />

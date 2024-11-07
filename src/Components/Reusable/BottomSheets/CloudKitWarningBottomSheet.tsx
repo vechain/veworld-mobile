@@ -1,14 +1,15 @@
-import React, { forwardRef, useCallback, useEffect, useRef, useState } from "react"
 import { BottomSheetModalMethods } from "@gorhom/bottom-sheet/lib/typescript/types"
+import React, { forwardRef, useCallback, useEffect, useRef, useState } from "react"
 import { Keyboard, StyleSheet } from "react-native"
-import { BaseBottomSheet, BaseButton, BaseIcon, BaseSpacer, BaseText, BaseTextInput, BaseView } from "~Components/Base"
-import { useThemedStyles } from "~Hooks"
-import { Layout } from "../Layout"
-import { COLORS } from "~Constants"
-import { PasswordStrengthIndicator } from "../PasswordStrengthIndicator"
-import { Easing, useSharedValue, withTiming } from "react-native-reanimated"
-import { useI18nContext } from "~i18n"
 import { TextInput } from "react-native-gesture-handler"
+import { Easing, useSharedValue, withTiming } from "react-native-reanimated"
+import { BaseBottomSheet, BaseButton, BaseIcon, BaseSpacer, BaseText, BaseTextInput, BaseView } from "~Components/Base"
+import { COLORS } from "~Constants"
+import { useThemedStyles } from "~Hooks"
+import { useI18nContext } from "~i18n"
+import { Layout } from "../Layout"
+import { PasswordStrengthIndicator } from "../PasswordStrengthIndicator"
+import { PlatformUtils } from "~Utils"
 
 type Props = {
     onHandleBackupToCloudKit: (password: string) => void
@@ -119,7 +120,11 @@ export const CloudKitWarningBottomSheet = forwardRef<BottomSheetModalMethods, Pr
                                     </BaseView>
                                 </BaseView>
 
-                                <BaseText typographyFont="subTitleBold">{LL.BD_CLOUD_BACKUP_PASSWORD()}</BaseText>
+                                <BaseText typographyFont="subTitleBold">
+                                    {PlatformUtils.isIOS()
+                                        ? LL.BD_CLOUD_BACKUP_PASSWORD()
+                                        : LL.BD_DRIVE_BACKUP_PASSWORD()}
+                                </BaseText>
                             </BaseView>
 
                             <BaseSpacer height={24} />
@@ -137,7 +142,7 @@ export const CloudKitWarningBottomSheet = forwardRef<BottomSheetModalMethods, Pr
                                         : LL.BTN_ENTER_PASSWORD()
                                 }
                                 secureTextEntry={secureText1}
-                                rightIcon={secureText1 ? "eye-off" : "eye"}
+                                rightIcon={!secureText1 ? "eye-off" : "eye"}
                                 onIconPress={() => setsecureText1(prev => !prev)}
                                 value={password1}
                                 autoFocus

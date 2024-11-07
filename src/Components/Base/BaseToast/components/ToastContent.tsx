@@ -24,16 +24,18 @@ export const ToastContent = ({ styles, text1, icon, text2, text3, onPress, testI
         }
     }, [onPress])
 
+    const textColor = styles.textColor ?? theme.colors.textReversed
+
     return (
         <BaseView style={styles.container}>
             <BaseView style={styles.contentContainer}>
                 <BaseIcon name={icon} size={20} color={styles.iconColor} />
                 <BaseView>
                     <BaseView style={styles.textContainer} pl={12}>
-                        <BaseText color={theme.colors.textReversed} typographyFont="buttonPrimary">
+                        <BaseText color={textColor} typographyFont="captionMedium">
                             {text1}{" "}
                         </BaseText>
-                        <BaseText color={theme.colors.textReversed} typographyFont="body">
+                        <BaseText color={textColor} typographyFont="body">
                             {text2}{" "}
                         </BaseText>
                         <BaseText
@@ -41,7 +43,7 @@ export const ToastContent = ({ styles, text1, icon, text2, text3, onPress, testI
                             disabled={!onPress}
                             underline={onPress ? true : false}
                             onPress={handleOnPress}
-                            color={theme.colors.textReversed}
+                            color={textColor}
                             typographyFont="body">
                             {text3}
                         </BaseText>
