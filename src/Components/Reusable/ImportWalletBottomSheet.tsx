@@ -3,7 +3,7 @@ import { BottomSheetModalMethods } from "@gorhom/bottom-sheet/lib/typescript/typ
 import { BaseSpacer, BaseText, BaseView, BaseBottomSheet, BaseIcon, BaseTouchableBox } from "~Components"
 import { useI18nContext } from "~i18n"
 import { useAnalyticTracking, useTheme } from "~Hooks"
-import { debug } from "~Utils"
+import { debug, PlatformUtils } from "~Utils"
 import { useNavigation } from "@react-navigation/native"
 import { Routes } from "~Navigation"
 import { AnalyticsEvent, ERROR_EVENTS } from "~Constants"
@@ -51,7 +51,7 @@ export const ImportWalletBottomSheet = React.forwardRef<BottomSheetModalMethods,
                         {LL.SB_IMPORT_WALLET_TYPE_SEED()}
                     </BaseText>
                     <BaseText pt={4} align="left" typographyFont="captionRegular">
-                        {LL.BD_IMPORT_WALLET_TYPE_SEED()}
+                        {LL.BD_IMPORT_WALLET_TYPE_SEED({ cloud: PlatformUtils.isIOS() ? "iCloud" : "Google Drive" })}
                     </BaseText>
                 </BaseView>
                 <BaseIcon name="chevron-right" size={24} color={theme.colors.text} />

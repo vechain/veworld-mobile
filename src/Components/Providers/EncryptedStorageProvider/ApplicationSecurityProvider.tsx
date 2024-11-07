@@ -138,9 +138,6 @@ export const ApplicationSecurityProvider = ({ children }: ApplicationSecurityCon
         setImageStorage(undefined)
         setMetadataStorage(undefined)
         updateSecurityType(undefined)
-
-        UserEncryptedStorage.clearAll()
-        UserEncryptedStorage_V2.clearAll()
         OnboardingStorage.clearAll()
 
         setReduxStorage({
@@ -150,6 +147,8 @@ export const ApplicationSecurityProvider = ({ children }: ApplicationSecurityCon
 
         await WalletEncryptionKeyHelper.remove()
         await StorageEncryptionKeyHelper.remove()
+        UserEncryptedStorage.clearAll()
+        UserEncryptedStorage_V2.clearAll()
     }, [onboardingKey, updateSecurityType])
 
     /**

@@ -5,7 +5,7 @@ import { addDeviceAndAccounts, addLedgerDeviceAndAccounts, setMnemonic } from "~
 import { TestWrapper } from "~Test"
 import { useCreateWallet } from "./useCreateWallet"
 import { IMPORT_TYPE, NewLedgerDevice } from "~Model"
-import { WalletEncryptionKeyHelper } from "~Components"
+import { WalletEncryptionKeyHelper } from "~Components/Providers/EncryptedStorageProvider/Helpers"
 import { DerivationPath } from "~Constants"
 
 const device = {

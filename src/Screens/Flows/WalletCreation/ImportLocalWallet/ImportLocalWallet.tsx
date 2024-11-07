@@ -1,4 +1,7 @@
+import { useNavigation } from "@react-navigation/native"
+import * as Clipboard from "expo-clipboard"
 import React, { useCallback, useEffect, useMemo, useRef, useState } from "react"
+import { Keyboard, StyleSheet } from "react-native"
 import {
     BackButtonHeader,
     BaseButton,
@@ -12,35 +15,34 @@ import {
     Layout,
     RequireUserPassword,
     SelectDerivationPathBottomSheet,
+    showInfoToast,
 } from "~Components"
-import { useI18nContext } from "~i18n"
-import * as Clipboard from "expo-clipboard"
+import { AnalyticsEvent, DerivationPath } from "~Constants"
 import {
     useAnalyticTracking,
     useBottomSheetModal,
     useCheckIdentity,
-    useCloudKit,
+    useCloudBackup,
     useDeviceUtils,
     useTheme,
 } from "~Hooks"
-import { CryptoUtils } from "~Utils"
-import { Keyboard, StyleSheet } from "react-native"
-import { ImportWalletInput } from "./Components/ImportWalletInput"
-import { selectAreDevFeaturesEnabled, selectHasOnboarded, useAppSelector } from "~Storage/Redux"
-import HapticsService from "~Services/HapticsService"
-import { AnalyticsEvent, DerivationPath } from "~Constants"
-import { CloudKitWallet, DEVICE_CREATION_ERRORS as ERRORS, IMPORT_TYPE } from "~Model"
-import { UnlockKeystoreBottomSheet } from "./Components/UnlockKeystoreBottomSheet"
-import { UserCreatePasswordScreen } from "../UserCreatePasswordScreen"
-import { useHandleWalletCreation } from "~Screens/Flows/Onboarding/WelcomeScreen/useHandleWalletCreation"
-import { useNavigation } from "@react-navigation/native"
+import { useI18nContext } from "~i18n"
+import { CloudKitWallet, DrivetWallet, DEVICE_CREATION_ERRORS as ERRORS, IMPORT_TYPE } from "~Model"
 import { Routes } from "~Navigation"
+import { useHandleWalletCreation } from "~Screens/Flows/Onboarding/WelcomeScreen/useHandleWalletCreation"
+import HapticsService from "~Services/HapticsService"
+import { selectAreDevFeaturesEnabled, selectHasOnboarded, useAppSelector } from "~Storage/Redux"
+import { CryptoUtils, PlatformUtils } from "~Utils"
+import { UserCreatePasswordScreen } from "../UserCreatePasswordScreen"
+import { ImportWalletInput } from "./Components/ImportWalletInput"
+import { UnlockKeystoreBottomSheet } from "./Components/UnlockKeystoreBottomSheet"
 
 const DEMO_MNEMONIC = "denial kitchen pet squirrel other broom bar gas better priority spoil cross"
 
 enum ButtonType {
     local,
     icloud,
+    googleDrive,
     unknown,
 }
 
@@ -67,24 +69,59 @@ export const ImportLocalWallet = () => {
 
     const { checkCanImportDevice } = useDeviceUtils()
 
-    const { isCloudKitAvailable, getAllWalletsFromCloudKit } = useCloudKit()
+    const { isCloudAvailable, getAllWalletFromCloud, googleAccountSignOut } = useCloudBackup()
 
-    const [CloudKitWallets, setCloudKitWallets] = useState<CloudKitWallet[] | null>(null)
+    const [wallets, setWallets] = useState<(CloudKitWallet | DrivetWallet)[] | null>(null)
+    const [isLoading, setIsLoading] = useState<boolean>(false)
+
+    const showNoWalletsFound = useCallback(() => {
+        showInfoToast({
+            text1: LL.CLOUD_NO_WALLETS_AVAILABLE_TITLE(),
+            text2: LL.CLOUD_NO_WALLETS_AVAILABLE_DESCRIPTION({
+                cloud: PlatformUtils.isIOS() ? "iCloud" : "Google Drive",
+            }),
+        })
+    }, [LL])
+
+    const goToImportFromCloud = useCallback(() => {
+        nav.navigate(Routes.IMPORT_FROM_CLOUD)
+    }, [nav])
+
+    const getWalletsFromICloud = useCallback(async () => {
+        setIsLoading(true)
+        const _wallets: CloudKitWallet[] = await getAllWalletFromCloud()
+        setIsLoading(false)
+        setWallets(_wallets)
+    }, [getAllWalletFromCloud])
+
+    const getWalletsFromDrive = useCallback(async () => {
+        setIsLoading(true)
+        const _wallets: DrivetWallet[] = await getAllWalletFromCloud()
+        setIsLoading(false)
+
+        if (_wallets?.length) {
+            goToImportFromCloud()
+        } else {
+            await googleAccountSignOut()
+            showNoWalletsFound()
+        }
+    }, [getAllWalletFromCloud, goToImportFromCloud, googleAccountSignOut, showNoWalletsFound])
 
     useEffect(() => {
-        const init = async () => {
-            const wallets = await getAllWalletsFromCloudKit()
-            setCloudKitWallets(wallets)
-        }
-
-        isCloudKitAvailable && init()
-    }, [getAllWalletsFromCloudKit, isCloudKitAvailable])
+        isCloudAvailable && PlatformUtils.isIOS() && getWalletsFromICloud()
+    }, [getWalletsFromICloud, isCloudAvailable])
 
     const computeButtonType = useMemo(() => {
-        if (textValue.length) return ButtonType.local
-        if (isCloudKitAvailable && !textValue.length && !!CloudKitWallets?.length) return ButtonType.icloud
+        if (textValue.length || PlatformUtils.isAndroid()) {
+            return ButtonType.local
+        }
+
+        if (isCloudAvailable && !textValue.length && !!wallets?.length) {
+            return ButtonType.icloud
+        }
+
         return ButtonType.unknown
-    }, [CloudKitWallets?.length, isCloudKitAvailable, textValue.length])
+    }, [wallets?.length, isCloudAvailable, textValue.length])
 
     const {
         ref: unlockKeystoreBottomSheetRef,
@@ -302,9 +339,36 @@ export const ImportLocalWallet = () => {
     const handleVerify = useCallback(() => onVerify(textValue, importType), [onVerify, textValue, importType])
     const disabledAction = useCallback(() => setIsError(LL.ERROR_INVALID_IMPORT_DATA()), [LL])
 
+    const footerButtonLeftIcon = useMemo(() => {
+        switch (computeButtonType) {
+            case ButtonType.icloud:
+                return "apple-icloud"
+            default:
+                return undefined
+        }
+    }, [computeButtonType])
+
+    const footerButtonTitle = useMemo(() => {
+        switch (computeButtonType) {
+            case ButtonType.icloud:
+                return "or use iCloud"
+            default:
+                return LL.BTN_IMPORT_WALLET_VERIFY()
+        }
+    }, [LL, computeButtonType])
+
+    const footerButtonDisabled = useMemo(() => {
+        return computeButtonType === ButtonType.unknown || (!textValue.length && computeButtonType === ButtonType.local)
+    }, [computeButtonType, textValue.length])
+
+    const footerButtonAction = useCallback(() => {
+        computeButtonType === ButtonType.icloud ? goToImportFromCloud() : handleVerify()
+    }, [computeButtonType, goToImportFromCloud, handleVerify])
+
     return (
         <DismissKeyboardView>
             <Layout
+                preventGoBack={isLoading && PlatformUtils.isAndroid()}
                 body={
                     <>
                         <BaseView justifyContent="space-between">
@@ -407,31 +471,47 @@ export const ImportLocalWallet = () => {
                         )}
 
                         <BaseButton
+                            isLoading={isLoading && PlatformUtils.isIOS()}
                             leftIcon={
-                                computeButtonType === ButtonType.icloud ? (
+                                footerButtonLeftIcon ? (
                                     <BaseIcon
-                                        name="apple-icloud"
+                                        name={footerButtonLeftIcon}
                                         color={theme.colors.textReversed}
                                         style={styles.ickoudIcon}
                                     />
                                 ) : undefined
                             }
-                            action={async () =>
-                                computeButtonType === ButtonType.icloud
-                                    ? nav.navigate(Routes.IMPORT_FROM_CLOUD)
-                                    : handleVerify()
-                            }
+                            action={footerButtonAction}
                             style={styles.button}
-                            title={
-                                computeButtonType === ButtonType.icloud
-                                    ? "or use iCloud "
-                                    : LL.BTN_IMPORT_WALLET_VERIFY()
-                            }
-                            disabled={computeButtonType === ButtonType.unknown}
+                            title={footerButtonTitle}
+                            disabled={footerButtonDisabled}
                             disabledAction={disabledAction}
                             disabledActionHaptics="Heavy"
                             haptics="Light"
                         />
+
+                        {PlatformUtils.isAndroid() && (
+                            <>
+                                <BaseSpacer height={8} />
+                                <BaseButton
+                                    isLoading={isLoading}
+                                    leftIcon={
+                                        <BaseIcon
+                                            name={"google-drive"}
+                                            color={theme.colors.textReversed}
+                                            style={styles.ickoudIcon}
+                                        />
+                                    }
+                                    action={getWalletsFromDrive}
+                                    style={styles.button}
+                                    title={"or use Google Drive"}
+                                    disabled={!isCloudAvailable || isLoading}
+                                    disabledAction={disabledAction}
+                                    disabledActionHaptics="Heavy"
+                                    haptics="Light"
+                                />
+                            </>
+                        )}
 
                         <RequireUserPassword
                             isOpen={isPasswordPromptOpen_1}

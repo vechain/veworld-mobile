@@ -6,7 +6,7 @@ import { useThemedStyles, useVns } from "~Hooks"
 import { useI18nContext } from "~i18n"
 import { CloudKitWallet } from "~Model"
 import { selectDevices, selectSelectedNetwork, useAppSelector } from "~Storage/Redux"
-import { AddressUtils, BalanceUtils, BigNutils, DateUtils } from "~Utils"
+import { AddressUtils, BalanceUtils, BigNutils, DateUtils, PlatformUtils } from "~Utils"
 import { AccountIcon } from "./Account"
 import { StyleSheet } from "react-native"
 
@@ -85,12 +85,12 @@ export const CloudKitWalletCard = ({
                                 <BaseView flexDirection="row" style={styles.icloudTag}>
                                     <BaseIcon
                                         size={18}
-                                        name="apple-icloud"
+                                        name={PlatformUtils.isIOS() ? "apple-icloud" : "google-drive"}
                                         color={theme.colors.textReversed}
                                         style={styles.cloudIcon}
                                     />
                                     <BaseText fontSize={12} color={theme.colors.textReversed}>
-                                        {"iCloud"}
+                                        {PlatformUtils.isIOS() ? "iCloud" : "Google Drive"}
                                     </BaseText>
                                 </BaseView>
                             </BaseView>
