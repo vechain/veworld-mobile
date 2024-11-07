@@ -66,6 +66,10 @@ jobs:
             
             - name: Increment Version and Build
               id: increment
+              env:
+                GH_TOKEN: ${{ needs.generate-token.outputs.token }}
+                VERSION: ${{ env.VERSION }}
+                BUILD: ${{ env.BUILD }}
               run: |
 
                 # Split the version into components
@@ -85,6 +89,8 @@ jobs:
                 echo "new_build=$new_build" >> $GITHUB_ENV
 
                 # Update Repo with new version and build
+                echo "$GH_TOKEN" | gh auth login --with-token
+
                 gh variable list
                 gh variable set VERSION --body "$new_version"
                 gh variable set BUILD --body "$new_build"
