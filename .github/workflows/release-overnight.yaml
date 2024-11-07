@@ -18,8 +18,8 @@ on:
         branches:
             - 2349-release-overnight
 env:
-    version: ${{ vars.version }}
-    build: ${{ vars.build }}
+    VERSION: ${{ vars.version }}
+    BUILD: ${{ vars.build }}
 jobs:
     check-merged-pr:
         runs-on: ubuntu-latest
@@ -56,14 +56,16 @@ jobs:
         permissions:
           contents: read
           actions: write
+        env:
+          VERSION: ${{ vars.version }}
+          BUILD: ${{ vars.build }}
+          GH_TOKEN: ${{ needs.generate-token.outputs.token }}    # Added this line
         steps:
             - name: Checkout repository
               uses: actions/checkout@v4
             
             - name: Increment Version and Build
               id: increment
-              env:
-                GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
               run: |
 
                 # Split the version into components
