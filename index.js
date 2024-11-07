@@ -56,7 +56,7 @@ if (__DEV__) {
     require("basil-ws-flipper").wsDebugPlugin
 }
 
-const isHermes = () => !!(global as any).HermesInternal
+const isHermes = () => !!global.HermesInternal
 info(ERROR_EVENTS.APP, "is Hermes active : ", isHermes())
 
 if (__DEV__ && process.env.REACT_APP_UI_LOG === "false") {
@@ -160,7 +160,7 @@ const linking = {
                                 path: "browser/:redirect?/:ul/:url",
                                 parse: {
                                     ul: () => true,
-                                    url: (url: string) => URIUtils.decodeUrl_HACK(url),
+                                    url: url => URIUtils.decodeUrl_HACK(url),
                                 },
                             },
                         },
@@ -171,7 +171,7 @@ const linking = {
     },
 }
 
-const NavigationProvider = ({ children }: { children: React.ReactNode }) => {
+const NavigationProvider = ({ children }) => {
     const theme = useTheme()
 
     const [ready, setReady] = useState(false)
@@ -185,7 +185,7 @@ const NavigationProvider = ({ children }: { children: React.ReactNode }) => {
     )
 
     const navigationRef = useNavigationContainerRef()
-    const routeNameRef = useRef<string | null>(null)
+    const routeNameRef = useRef(null)
     const dispatch = useAppDispatch()
     useFlipper(navigationRef)
 
@@ -194,19 +194,19 @@ const NavigationProvider = ({ children }: { children: React.ReactNode }) => {
             ref={navigationRef}
             onReady={() => {
                 if (routeNameRef && routeNameRef.current === null) {
-                    routeNameRef.current = navigationRef.getCurrentRoute()?.name ?? null
+                    routeNameRef.current = navigationRef.getCurrentRoute()?.name
                 }
                 setReady(true)
             }}
             onStateChange={async () => {
                 const previousRouteName = routeNameRef.current
                 const currentRouteName = navigationRef.getCurrentRoute()?.name
-                const trackScreenView = (_currentRouteName: string) => {
+                const trackScreenView = _currentRouteName => {
                     dispatch(setCurrentMountedScreen(_currentRouteName))
                 }
                 if (previousRouteName !== currentRouteName) {
-                    routeNameRef.current = currentRouteName ?? null
-                    trackScreenView(currentRouteName ?? "")
+                    routeNameRef.current = currentRouteName
+                    trackScreenView(currentRouteName)
                 }
             }}
             theme={navigationTheme}
