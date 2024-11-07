@@ -5,7 +5,6 @@ import { COLORS, ColorThemeType } from "~Constants"
 import { useThemedStyles } from "~Hooks"
 import { useI18nContext } from "~i18n"
 import { LocalDevice } from "~Model"
-import { LastBackupAlert } from "../index"
 import { ManualBackupContent } from "../ManualBackupContent"
 
 type Props = {
@@ -19,12 +18,6 @@ export const ManualBackup = ({ mnemonicArray, deviceToBackup }: Props) => {
 
     return (
         <BaseView>
-            {deviceToBackup?.isBuckedUp && (
-                <>
-                    <LastBackupAlert deviceToBackup={deviceToBackup} />
-                    <BaseSpacer height={24} />
-                </>
-            )}
             <BaseText typographyFont="subSubTitleMedium">{deviceToBackup?.alias}</BaseText>
             <BaseSpacer height={16} />
             <BaseText typographyFont="captionRegular">{LL.BD_MNEMONIC_PASSWORD_WARNING()}</BaseText>
