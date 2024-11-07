@@ -34,66 +34,68 @@ jobs:
                 merged_prs=$(gh pr list --base main --state merged --json mergedAt --jq '.[] | select(.mergedAt > "'$(date --date="24 hours ago" --iso-8601=seconds)'") | length')
                 echo "Merged PRs in the last 24 hours: $merged_prs"
                 echo "::set-output name=should_release::$(if [ "$merged_prs" -gt 0 ]; then echo 'true'; else echo 'false'; fi)"
-    generate-token: 
-        runs-on: ubuntu-latest
-        needs: check-merged-pr
-        outputs:
-            token: ${{ steps.generate-token.outputs.token }}
-        steps: 
-            - name: Generate a token
-              id: generate-token
-              uses: actions/create-github-app-token@v1
-              with:
-                app-id: ${{ secrets.APP_ID }}
-                private-key: ${{ secrets.APP_PRIVATE_KEY }}
-
+   
     setup-version-build:
         runs-on: ubuntu-latest
-        needs:  generate-token
-        outputs:
-            new_version: ${{ steps.increment.outputs.new_version }}
-            new_build: ${{ steps.increment.outputs.new_build }}
+        needs: check-merged-pr
+        if: needs.check-merged-pr.outputs.should_release == 'true'
         permissions:
-          contents: read
           actions: write
-          security-events: write 
+          contents: read
         env:
           VERSION: ${{ vars.version }}
           BUILD: ${{ vars.build }}
-          GH_TOKEN: ${{ needs.generate-token.outputs.token }}    # Added this line
         steps:
-            - name: Checkout repository
-              uses: actions/checkout@v4
-            
-            - name: Increment Version and Build
-              id: increment
-              env:
-                GH_TOKEN: ${{ needs.generate-token.outputs.token }}
-                GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}  
-                VERSION: ${{ env.VERSION }}
-                BUILD: ${{ env.BUILD }}
-              run: |
+          - name: Generate a token
+            id: generate-token
+            uses: actions/create-github-app-token@v1
+            with:
+              app-id: ${{ secrets.APP_ID }}
+              private-key: ${{ secrets.APP_PRIVATE_KEY }}
 
-                # Split the version into components
-                echo "VERSION=${{ env.VERSION }} or VERSION=$VERSION"
-                IFS='.' read -r major minor patch <<< "${{ env.VERSION }}"
-                # Increment the patch version
-                new_patch=$((patch + 1))
+          - name: Set GH_TOKEN environment variable
+            run: echo "GH_TOKEN=${{ steps.generate-token.outputs.token }}" >> $GITHUB_ENV
 
-                # Increment build number
-                new_build=$((${{ env.BUILD }} + 1))
+          - name: Checkout repository
+            uses: actions/checkout@v4
+            with:
+              token: ${{ steps.generate-token.outputs.token }}
 
-                # Combine components back to form the new version
-                new_version="$major.$minor.$new_patch"
+          - name: Increment Version and Build
+            id: increment
+            env:
+              GH_TOKEN: ${{ steps.generate-token.outputs.token }}
+              VERSION: ${{ env.VERSION }}
+              BUILD: ${{ env.BUILD }}
+            run: |
+              # Split the version into components
+              echo "VERSION=$VERSION"
+              IFS='.' read -r major minor patch <<< "$VERSION"
 
-                # Output the new version and build
-                echo "new_version=$new_version" >> $GITHUB_ENV
-                echo "new_build=$new_build" >> $GITHUB_ENV
+              # Increment the patch version
+              new_patch=$((patch + 1))
 
-                gh variable list
-                gh variable set VERSION --body "$new_version"
-                gh variable set BUILD --body "$new_build"
-                gh variable list
+              # Increment build number
+              new_build=$((BUILD + 1))
+
+              # Combine components back to form the new version
+              new_version="$major.$minor.$new_patch"
+
+              # Output the new version and build
+              echo "new_version=$new_version" >> $GITHUB_ENV
+              echo "new_build=$new_build" >> $GITHUB_ENV
+
+              # Authenticate gh CLI
+              echo "$GH_TOKEN" | gh auth login --with-token
+
+              # Update Repo with new version and build
+              gh variable set VERSION --body "$new_version"
+              gh variable set BUILD --body "$new_build"
+
+          - name: Output new version and build
+            run: |
+              echo "New version: ${{ env.new_version }}"
+              echo "New build: ${{ env.new_build }}"
 
     build-test-scan:
         if: needs.check_merged_prs.outputs.should_release == 'true'
