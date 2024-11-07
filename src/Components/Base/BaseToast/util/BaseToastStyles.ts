@@ -10,6 +10,19 @@ export type ToastStyles = {
     textColor?: string
 }
 
+const generateShadowStyle = (theme: ColorThemeType) =>
+    !theme.isDark
+        ? {
+              shadowOffset: {
+                  width: 0,
+                  height: 0,
+              },
+              shadowOpacity: 0.16,
+              shadowRadius: 16,
+              shadowColor: "#0B0043",
+          }
+        : undefined
+
 /**
  * Helper function to generate toast styles based on theme and colors.
  *
@@ -32,6 +45,7 @@ const generateToastStyles = (
         borderRadius: 8,
         backgroundColor: theme.isDark ? darkColor : lightColor,
         width: Dimensions.get("window").width - 40,
+        ...generateShadowStyle(theme),
     },
     contentContainer: {
         flexDirection: "row",
@@ -68,7 +82,7 @@ export const successToastStyles = (theme: ColorThemeType): ToastStyles =>
  * @returns {ToastStyles} The generated error toast styles object.
  */
 export const errorToastStyles = (theme: ColorThemeType): ToastStyles =>
-    generateToastStyles(theme, COLORS.PASTEL_RED, COLORS.DARK_RED_ALERT, theme.colors.error)
+    generateToastStyles(theme, COLORS.RED_50, COLORS.RED_50, COLORS.RED_500, COLORS.RED_700)
 
 /**
  * Generates warning toast styles based on the color theme.
@@ -77,7 +91,7 @@ export const errorToastStyles = (theme: ColorThemeType): ToastStyles =>
  * @returns {ToastStyles} The generated warning toast styles object.
  */
 export const warningToastStyles = (theme: ColorThemeType): ToastStyles =>
-    generateToastStyles(theme, COLORS.PASTEL_ORANGE, COLORS.DARK_ORANGE_ALERT, theme.colors.warning)
+    generateToastStyles(theme, COLORS.ORANGE_50, COLORS.ORANGE_50, COLORS.ORANGE_500, COLORS.ORANGE_700)
 
 /**
  * Generates info toast styles based on the color theme.
@@ -86,4 +100,4 @@ export const warningToastStyles = (theme: ColorThemeType): ToastStyles =>
  * @returns {ToastStyles} The generated info toast styles object.
  */
 export const infoToastStyles = (theme: ColorThemeType): ToastStyles =>
-    generateToastStyles(theme, COLORS.WHITE, COLORS.PURPLE, theme.colors.info)
+    generateToastStyles(theme, COLORS.BLUE_50, COLORS.BLUE_50, COLORS.MEDIUM_BLUE, COLORS.MEDIUM_BLUE)

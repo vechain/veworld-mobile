@@ -43,7 +43,7 @@ export const toastConfig = (theme: ColorThemeType) => ({
         return (
             <ToastContent
                 styles={styles}
-                icon="alert-circle-outline"
+                icon="alert-outline"
                 text1={text1}
                 text2={text2}
                 text3={textLink}
