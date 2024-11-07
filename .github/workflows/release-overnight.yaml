@@ -53,6 +53,8 @@ jobs:
         outputs:
             new_version: ${{ steps.increment.outputs.new_version }}
             new_build: ${{ steps.increment.outputs.new_build }}
+        permissions:
+          actions: write
         steps:
             - name: Checkout repository
               uses: actions/checkout@v4
