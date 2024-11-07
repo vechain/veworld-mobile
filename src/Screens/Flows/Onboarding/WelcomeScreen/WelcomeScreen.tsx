@@ -1,4 +1,10 @@
+import { useNavigation } from "@react-navigation/native"
 import React, { useCallback, useEffect, useState } from "react"
+import { ImageBackground, Linking, Modal, StyleSheet, View } from "react-native"
+import DropShadow from "react-native-drop-shadow"
+import LinearGradient from "react-native-linear-gradient"
+import Animated, { FadeInDown, FadeOutDown } from "react-native-reanimated"
+import { VeWorldLogoSVG } from "~Assets"
 import {
     BackButtonHeader,
     BaseButton,
@@ -11,19 +17,15 @@ import {
     ImportWalletBottomSheet,
     Layout,
 } from "~Components"
-import { VeWorldLogoSVG } from "~Assets"
-import { useI18nContext } from "~i18n"
-import { ImageBackground, Linking, Modal, StyleSheet, View } from "react-native"
-import { useDemoWallet } from "./useDemoWallet"
-import { UserCreatePasswordScreen } from "~Screens/Flows/WalletCreation"
-import { useHandleWalletCreation } from "./useHandleWalletCreation"
-import { useAnalyticTracking, useBottomSheetModal, useCloudKit, useDisclosure, useTheme } from "~Hooks"
 import { AnalyticsEvent, COLORS, DerivationPath, SCREEN_HEIGHT, SCREEN_WIDTH } from "~Constants"
+import { useAnalyticTracking, useBottomSheetModal, useCloudBackup, useDisclosure, useTheme } from "~Hooks"
+import { useI18nContext } from "~i18n"
+import { UserCreatePasswordScreen } from "~Screens/Flows/WalletCreation"
+import { PlatformUtils } from "~Utils"
+import { useDemoWallet } from "./useDemoWallet"
+import { useHandleWalletCreation } from "./useHandleWalletCreation"
+
 import { Routes } from "~Navigation"
-import { useNavigation } from "@react-navigation/native"
-import LinearGradient from "react-native-linear-gradient"
-import DropShadow from "react-native-drop-shadow"
-import Animated, { FadeInDown, FadeOutDown } from "react-native-reanimated"
 const assetImage = require("~Assets/Img/Clouds.png")
 
 export const WelcomeScreen = () => {
@@ -33,6 +35,8 @@ export const WelcomeScreen = () => {
     const track = useAnalyticTracking()
 
     const { ref, onOpen, onClose } = useBottomSheetModal()
+
+    const [isLoading, setIsLoading] = useState(false)
 
     const onImportWallet = useCallback(async () => {
         track(AnalyticsEvent.SELECT_WALLET_IMPORT_WALLET)
@@ -49,7 +53,7 @@ export const WelcomeScreen = () => {
         url && Linking.openURL(url)
     }, [])
 
-    const { getAllWalletsFromCloudKit, isLoading, isCloudKitAvailable } = useCloudKit()
+    const { getAllWalletFromCloud, isCloudAvailable } = useCloudBackup()
 
     const {
         onOpen: onQuickCloudModalOpen,
@@ -61,15 +65,17 @@ export const WelcomeScreen = () => {
 
     useEffect(() => {
         const init = async () => {
-            const wallets = await getAllWalletsFromCloudKit()
+            setIsLoading(true)
+            const wallets = await getAllWalletFromCloud()
             setWalletNumber(wallets.length)
+            setIsLoading(false)
             if (wallets.length) {
                 onQuickCloudModalOpen()
             }
         }
 
-        isCloudKitAvailable && init()
-    }, [getAllWalletsFromCloudKit, onQuickCloudModalOpen, isCloudKitAvailable])
+        isCloudAvailable && PlatformUtils.isIOS() && init()
+    }, [onQuickCloudModalOpen, isCloudAvailable, getAllWalletFromCloud])
 
     useEffect(() => {
         // Track when a new onboarding start
@@ -235,7 +241,9 @@ const CloudKitModalReminder = ({
                                     </BaseText>
 
                                     <BaseText typographyFont="subSubTitle" align="center" color={COLORS.DARK_PURPLE}>
-                                        {LL.WALLETS_SAVED_ON_ICLOUD()}
+                                        {PlatformUtils.isIOS()
+                                            ? LL.WALLETS_SAVED_ON_ICLOUD()
+                                            : LL.WALLETS_SAVED_ON_DRIVE()}
                                     </BaseText>
                                 </BaseView>
 
@@ -261,14 +269,14 @@ const CloudKitModalReminder = ({
                             </BaseView>
 
                             <BaseButton
-                                title={LL.TAKE_ME_TO_ICLOUD()}
+                                title={PlatformUtils.isIOS() ? LL.TAKE_ME_TO_ICLOUD() : LL.TAKE_ME_TO_DRIVE()}
                                 action={onGoToImportFromCLoud}
                                 w={100}
                                 bgColor={theme.isDark ? theme.colors.background : undefined}
                                 textColor={theme.isDark ? theme.colors.text : undefined}
                                 rightIcon={
                                     <BaseIcon
-                                        name="apple-icloud"
+                                        name={PlatformUtils.isIOS() ? "apple-icloud" : "google-drive"}
                                         size={22}
                                         color={theme.isDark ? theme.colors.text : theme.colors.textReversed}
                                         style={s.icon}

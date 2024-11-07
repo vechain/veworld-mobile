@@ -3,7 +3,7 @@ import { ColorThemeType, ColorTheme } from "../../Constants/Theme/Theme"
 import { useColorScheme } from "../useColorScheme/useColorScheme"
 import { ThemeEnum } from "~Constants"
 import { useCallback } from "react"
-import { usePersistedTheme } from "~Components"
+import { usePersistedTheme } from "~Components/Providers/PersistedThemeProvider/PersistedThemeProvider"
 
 export const useTheme = (): ColorThemeType => {
     const { theme } = usePersistedTheme()
