@@ -53,7 +53,7 @@ export const BaseTextInputComponent = forwardRef<TextInput, BaseTextInputProps>(
         ref,
     ) => {
         const [isFocused, setIsFocused] = React.useState(false)
-        const { styles, theme } = useThemedStyles(baseStyles(!!isError || !!errorMessage, isFocused, disabled))
+        const { styles, theme } = useThemedStyles(baseStyles(!!isError || !!errorMessage, isFocused, !!disabled))
 
         const setInputParams = useMemo(() => {
             if (PlatformUtils.isAndroid()) {

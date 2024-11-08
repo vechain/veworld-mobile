@@ -137,7 +137,11 @@ export const BaseBottomSheet = React.forwardRef<BottomSheetModalMethods, Props>(
         )
 
         const renderHandle = useCallback(
-            (props_: BottomSheetHandleProps) => <BaseView {...props_} style={styles.handleStyle} />,
+            (props_: BottomSheetHandleProps) => (
+                <BaseView style={styles.handleWrapper}>
+                    <BaseView {...props_} style={styles.handleStyle} />
+                </BaseView>
+            ),
             [styles],
         )
 
@@ -242,13 +246,18 @@ const baseStyles = (theme: ColorThemeType) =>
             alignItems: "center",
             opacity: 0.5,
         },
+        handleWrapper: {
+            marginTop: 4,
+            paddingTop: 4,
+            paddingBottom: 16,
+            paddingHorizontal: 8,
+        },
         handleStyle: {
             width: 60,
             height: 4,
             borderRadius: 8,
             backgroundColor: theme.colors.text,
             alignSelf: "center",
-            marginTop: 16,
         },
     })
 
