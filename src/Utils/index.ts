@@ -6,6 +6,7 @@ import BiometricsUtils from "./BiometricsUtils"
 import BloomUtils from "./BloomUtils"
 import ConnectionUtils from "./ConnectionUtils"
 import CryptoUtils from "./CryptoUtils"
+import CryptoUtils_Legacy from "./CryptoUtils_Legacy"
 import HexUtils from "./HexUtils"
 import DateUtils from "./DateUtils"
 import ErrorMessageUtils from "./ErrorMessageUtils"
@@ -13,7 +14,6 @@ import FormattingUtils from "./FormattingUtils"
 import FormUtils from "./FormUtils"
 import AccountUtils from "./AccountUtils"
 import GasUtils from "./GasUtils"
-import LanguageUtils from "./LanguageUtils"
 import LedgerUtils from "./LedgerUtils"
 import DeviceUtils from "./DeviceUtils"
 
@@ -57,7 +57,6 @@ export {
     FormUtils,
     GasUtils,
     AccountUtils,
-    LanguageUtils,
     LedgerUtils,
     LocaleUtils,
     LockScreenUtils,
@@ -78,6 +77,7 @@ export {
     ColorUtils,
     DeviceUtils,
     BigNutils,
+    CryptoUtils_Legacy,
     SemanticVersionUtils,
 }
 

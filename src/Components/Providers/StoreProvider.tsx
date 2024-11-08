@@ -78,9 +78,8 @@ const StoreContextProvider = ({ children }: StoreContextProviderProps) => {
     }, [])
 
     useEffect(() => {
-        if (reduxStorage) initStore(reduxStorage.mmkv, reduxStorage.encryptionKey)
-        // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [reduxStorage])
+        reduxStorage && initStore(reduxStorage.mmkv, reduxStorage.encryptionKey)
+    }, [initStore, reduxStorage])
 
     if (!store.current || !persistor) {
         return <></>

@@ -36,6 +36,7 @@ import {
     useAppSelector,
     useAppDispatch,
     setCurrentMountedScreen,
+    selectLanguage,
 } from "~Storage/Redux"
 import * as Sentry from "@sentry/react-native"
 import "react-native-url-polyfill/auto"
@@ -46,6 +47,8 @@ import NetInfo from "@react-native-community/netinfo"
 import { onlineManager } from "@tanstack/react-query"
 import { useFlipper } from "@react-navigation/devtools"
 import { Routes } from "~Navigation"
+import { isLocale, useI18nContext } from "~i18n"
+import { getLocales } from "react-native-localize"
 
 const { fontFamily } = typography
 
@@ -83,6 +86,21 @@ const Main = () => {
 
     const isAnalyticsEnabled = useAppSelector(selectAnalyticsTrackingEnabled)
 
+    const { setLocale } = useI18nContext()
+    const language = useAppSelector(selectLanguage)
+
+    // set the locale based on the language
+    useEffect(() => {
+        setLocale(
+            language ??
+                getLocales()
+                    .map(loc => loc.languageCode)
+                    .find(isLocale) ??
+                "en",
+        )
+    }, [setLocale, language])
+
+    // init analytics
     useEffect(() => {
         if (isAnalyticsEnabled) {
             // init mixpanel analytics

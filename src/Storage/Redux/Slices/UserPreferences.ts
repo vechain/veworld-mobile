@@ -1,7 +1,7 @@
-import { LANGUAGE } from "../../../Constants/Enums/LanguageEnum"
 import { createSlice, PayloadAction } from "@reduxjs/toolkit"
 import moment from "moment"
 import { CURRENCY, SYMBOL_POSITIONS, ThemeEnum } from "~Constants"
+import { Locales } from "~i18n"
 
 /**
  * @typedef {Object} UserPreferenceState
@@ -13,6 +13,7 @@ import { CURRENCY, SYMBOL_POSITIONS, ThemeEnum } from "~Constants"
  * @property {LANGUAGE} language
  * @property {boolean} isAnalyticsTrackingEnabled
  * @property {boolean} isSentryTrackingEnabled
+ * @property {number} lastBackupRequestTimestamp
  */
 
 export interface UserPreferenceState {
@@ -22,13 +23,14 @@ export interface UserPreferenceState {
     balanceVisible: boolean
     currency: CURRENCY
     symbolPosition: SYMBOL_POSITIONS
-    language: LANGUAGE
+    language: Locales
     isAnalyticsTrackingEnabled: boolean
     isSentryTrackingEnabled: boolean
     devFeaturesEnabled: boolean
     lastReviewTimestamp: string
     lastVersionCheck: string
     appResetTimestamp?: string
+    lastBackupRequestTimestamp?: { [key: string]: number | undefined }
 }
 
 const initialState: UserPreferenceState = {
@@ -38,7 +40,7 @@ const initialState: UserPreferenceState = {
     balanceVisible: true,
     currency: CURRENCY.USD,
     symbolPosition: SYMBOL_POSITIONS.BEFORE,
-    language: LANGUAGE.ENGLISH,
+    language: "en" as Locales,
     isAnalyticsTrackingEnabled: true, // this is enabled by default because otherwise onboarding events won't be tracked
     isSentryTrackingEnabled: true,
     devFeaturesEnabled: __DEV__,
@@ -76,7 +78,7 @@ export const UserPreferencesSlice = createSlice({
             state.symbolPosition = action.payload
         },
 
-        setLanguage: (state, action: PayloadAction<LANGUAGE>) => {
+        setLanguage: (state, action: PayloadAction<Locales>) => {
             state.language = action.payload
         },
 
@@ -100,6 +102,19 @@ export const UserPreferencesSlice = createSlice({
             state.appResetTimestamp = action.payload
         },
 
+        setLastBackupRequestTimestamp: (
+            state,
+            action: PayloadAction<{ address: string; timestamp: number | undefined }>,
+        ) => {
+            if (!state.lastBackupRequestTimestamp) {
+                state.lastBackupRequestTimestamp = {
+                    [action.payload.address]: action.payload.timestamp,
+                }
+            } else {
+                state.lastBackupRequestTimestamp[action.payload.address] = action.payload.timestamp
+            }
+        },
+
         resetUserPreferencesState: () => initialState,
     },
 })
@@ -118,4 +133,5 @@ export const {
     setLastReviewTimestamp,
     setLastVersionCheck,
     setAppResetTimestamp,
+    setLastBackupRequestTimestamp,
 } = UserPreferencesSlice.actions

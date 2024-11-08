@@ -7,7 +7,14 @@ import { showInfoToast, showWarningToast } from "~Components"
 import { AnalyticsEvent, ERROR_EVENTS, RequestMethods } from "~Constants"
 import { useAnalyticTracking, useBottomSheetModal, useSetSelectedAccount } from "~Hooks"
 import { useI18nContext } from "~i18n"
-import { AccountWithDevice, CertificateRequest, InAppRequest, Network, TransactionRequest } from "~Model"
+import {
+    AccountWithDevice,
+    CertificateRequest,
+    InAppRequest,
+    Network,
+    TypeDataRequest,
+    TransactionRequest,
+} from "~Model"
 import { Routes } from "~Navigation"
 import {
     addConnectedDiscoveryApp,
@@ -22,7 +29,7 @@ import {
 } from "~Storage/Redux"
 import { AddressUtils, DAppUtils, debug, warn } from "~Utils"
 import { compareAddresses } from "~Utils/AddressUtils/AddressUtils"
-import { WindowRequest, WindowResponse } from "./types"
+import { CertRequest, SignedDataRequest, TxRequest, WindowRequest, WindowResponse } from "./types"
 
 // Resolve an issue with types for the WebView component
 type EnhancedScrollEvent = Omit<NativeScrollEvent, "zoomScale"> & { zoomScale?: number }
@@ -124,10 +131,10 @@ export const InAppBrowserProvider = ({ children }: Props) => {
 
             webviewRef.current?.injectJavaScript(
                 `
-                setTimeout(function() { 
-                   postMessage(${JSON.stringify(message)}, "*")
-                }, 1);
-                `,
+                    setTimeout(function() { 
+                    postMessage(${JSON.stringify(message)}, "*")
+                    }, 1);
+                    `,
             )
 
             /**
@@ -148,6 +155,14 @@ export const InAppBrowserProvider = ({ children }: Props) => {
                     analyticEvent = AnalyticsEvent.DISCOVERY_CERTIFICATE_ERROR
                 } else {
                     analyticEvent = AnalyticsEvent.DISCOVERY_CERTIFICATE_SUCCESS
+                }
+            }
+
+            if (message.method === RequestMethods.SIGN_TYPED_DATA) {
+                if ("err" in message) {
+                    analyticEvent = AnalyticsEvent.DISCOVERY_SIGNED_DATA_ERROR
+                } else {
+                    analyticEvent = AnalyticsEvent.DISCOVERY_SIGNED_DATA_SUCCESS
                 }
             }
 
@@ -302,8 +317,9 @@ export const InAppBrowserProvider = ({ children }: Props) => {
         ],
     )
 
+    // ~ NAVIGATION TO MESSAGE SCREEN
     const navigateToTransactionScreen = useCallback(
-        (request: WindowRequest, appUrl: string, appName: string) => {
+        (request: TxRequest, appUrl: string, appName: string) => {
             const message = request.message as Connex.Vendor.TxMessage
 
             try {
@@ -345,48 +361,8 @@ export const InAppBrowserProvider = ({ children }: Props) => {
         [connectedDiscoveryApps, nav, switchAccount, switchNetwork],
     )
 
-    const validateTxMessage = useCallback(
-        (request: WindowRequest, appUrl: string, appName: string) => {
-            const message = request.message
-
-            track(AnalyticsEvent.DISCOVERY_TRANSACTION_REQUESTED, {
-                dapp: navigationState?.url,
-            })
-
-            const isValid = DAppUtils.isValidTxMessage(message)
-
-            if (!isValid) {
-                debug(ERROR_EVENTS.DAPP, "Invalid transaction", message)
-                return postMessage({
-                    id: request.id,
-                    error: "Invalid transaction",
-                    method: RequestMethods.REQUEST_TRANSACTION,
-                })
-            }
-
-            if (
-                (!request.options.signer || compareAddresses(selectedAccountAddress, request.options.signer)) &&
-                selectedNetwork.genesis.id === request.genesisId
-            ) {
-                return navigateToTransactionScreen(request, appUrl, appName)
-            }
-
-            setNavigateToOperation(() => () => navigateToTransactionScreen(request, appUrl, appName))
-            initAndOpenChangeAccountNetworkBottomSheet(request)
-        },
-        [
-            track,
-            navigationState?.url,
-            selectedAccountAddress,
-            selectedNetwork.genesis.id,
-            initAndOpenChangeAccountNetworkBottomSheet,
-            postMessage,
-            navigateToTransactionScreen,
-        ],
-    )
-
     const navigateToCertificateScreen = useCallback(
-        (request: WindowRequest, appUrl: string, appName: string) => {
+        (request: CertRequest, appUrl: string, appName: string) => {
             const message = request.message as Connex.Vendor.CertMessage
 
             try {
@@ -427,8 +403,92 @@ export const InAppBrowserProvider = ({ children }: Props) => {
         [connectedDiscoveryApps, nav, switchAccount, switchNetwork],
     )
 
+    const navigateToSignedDataScreen = useCallback(
+        (request: SignedDataRequest, appUrl: string, appName: string) => {
+            try {
+                switchAccount(request)
+                switchNetwork(request)
+            } catch {
+                return
+            }
+
+            const isAlreadyConnected = !!connectedDiscoveryApps?.find(app => app.href === new URL(appUrl).hostname)
+
+            const req: TypeDataRequest = {
+                method: request.method,
+                id: request.id,
+                type: "in-app",
+                options: request.options,
+                appUrl,
+                appName,
+                isFirstRequest: !isAlreadyConnected,
+                domain: request.domain,
+                types: request.types,
+                value: request.value,
+                origin: request.origin,
+            }
+
+            if (isAlreadyConnected) {
+                nav.navigate(Routes.CONNECTED_APP_SIGN_TYPED_MESSAGE_SCREEN, {
+                    request: req,
+                })
+            } else {
+                nav.navigate(Routes.CONNECT_APP_SCREEN, {
+                    request: {
+                        type: "in-app",
+                        initialRequest: req,
+                        appUrl,
+                        appName,
+                    },
+                })
+            }
+        },
+        [connectedDiscoveryApps, nav, switchAccount, switchNetwork],
+    )
+
+    // ~ MESSAGE VALIDATION
+    const validateTxMessage = useCallback(
+        (request: TxRequest, appUrl: string, appName: string) => {
+            const message = request.message
+
+            track(AnalyticsEvent.DISCOVERY_TRANSACTION_REQUESTED, {
+                dapp: navigationState?.url,
+            })
+
+            const isValid = DAppUtils.isValidTxMessage(message)
+
+            if (!isValid) {
+                debug(ERROR_EVENTS.DAPP, "Invalid transaction", message)
+                return postMessage({
+                    id: request.id,
+                    error: "Invalid transaction",
+                    method: RequestMethods.REQUEST_TRANSACTION,
+                })
+            }
+
+            if (
+                (!request.options.signer || compareAddresses(selectedAccountAddress, request.options.signer)) &&
+                selectedNetwork.genesis.id === request.genesisId
+            ) {
+                return navigateToTransactionScreen(request, appUrl, appName)
+            }
+
+            setNavigateToOperation(() => () => navigateToTransactionScreen(request, appUrl, appName))
+            initAndOpenChangeAccountNetworkBottomSheet(request)
+        },
+        [
+            track,
+            navigationState?.url,
+            selectedAccountAddress,
+            selectedNetwork.genesis.id,
+            initAndOpenChangeAccountNetworkBottomSheet,
+            postMessage,
+            navigateToTransactionScreen,
+        ],
+    )
+
     const validateCertMessage = useCallback(
-        (request: WindowRequest, appUrl: string, appName: string) => {
+        (request: CertRequest, appUrl: string, appName: string) => {
             const message = request.message
 
             track(AnalyticsEvent.DISCOVERY_CERTIFICATE_REQUESTED, {
@@ -466,6 +526,45 @@ export const InAppBrowserProvider = ({ children }: Props) => {
         ],
     )
 
+    const validateSignedDataMessage = useCallback(
+        (request: SignedDataRequest, appUrl: string, appName: string) => {
+            const message = request
+
+            const isValid = DAppUtils.isValidSignedDataMessage(message)
+
+            track(AnalyticsEvent.DISCOVERY_SIGNED_DATA_REQUESTED, {
+                dapp: navigationState?.url,
+            })
+
+            if (!isValid) {
+                return postMessage({
+                    id: request.id,
+                    error: "Invalid signed data message",
+                    method: RequestMethods.SIGN_TYPED_DATA,
+                })
+            }
+
+            if (
+                (!request.options.signer || compareAddresses(selectedAccountAddress, request.options.signer)) &&
+                selectedNetwork.genesis.id === request.genesisId
+            ) {
+                return navigateToSignedDataScreen(message, appUrl, appName)
+            }
+
+            setNavigateToOperation(() => () => navigateToSignedDataScreen(request, appUrl, appName))
+            initAndOpenChangeAccountNetworkBottomSheet(message)
+        },
+        [
+            initAndOpenChangeAccountNetworkBottomSheet,
+            navigateToSignedDataScreen,
+            navigationState?.url,
+            postMessage,
+            selectedAccountAddress,
+            selectedNetwork.genesis.id,
+            track,
+        ],
+    )
+
     const addAppAndNavToRequest = useCallback(
         (request: InAppRequest) => {
             dispatch(
@@ -488,6 +587,12 @@ export const InAppBrowserProvider = ({ children }: Props) => {
                     request,
                 })
             }
+
+            if (request.method === "thor_signTypedData") {
+                nav.navigate(Routes.CONNECTED_APP_SIGN_TYPED_MESSAGE_SCREEN, {
+                    request,
+                })
+            }
         },
         [dispatch, nav],
     )
@@ -500,17 +605,19 @@ export const InAppBrowserProvider = ({ children }: Props) => {
                 return
             }
 
-            const data: WindowRequest = JSON.parse(event.nativeEvent.data)
+            const data = JSON.parse(event.nativeEvent.data)
 
             if (data.method === RequestMethods.REQUEST_TRANSACTION) {
                 return validateTxMessage(data, event.nativeEvent.url, event.nativeEvent.title)
             } else if (data.method === RequestMethods.SIGN_CERTIFICATE) {
                 return validateCertMessage(data, event.nativeEvent.url, event.nativeEvent.title)
+            } else if (data.method === RequestMethods.SIGN_TYPED_DATA) {
+                return validateSignedDataMessage(data, event.nativeEvent.url, event.nativeEvent.title)
             } else {
                 warn(ERROR_EVENTS.DAPP, "Unknown method", event.nativeEvent)
             }
         },
-        [validateTxMessage, validateCertMessage],
+        [validateTxMessage, validateCertMessage, validateSignedDataMessage],
     )
 
     const detectScrollDirection = useCallback(
@@ -704,6 +811,23 @@ window.vechain = {
 
                 return newResponseHandler(request.id)
             },
+
+            signTypedData(domain, types, value, options) {
+                const request = {
+                    id: generateRandomId(),
+                    method: "thor_signTypedData",
+                    origin: window.origin,
+                    domain,
+                    types,
+                    value,
+                    genesisId,
+                    options,
+                }
+
+                window.ReactNativeWebView.postMessage(JSON.stringify(request))
+
+                return newResponseHandler(request.id)
+            }, 
         }
     },
 }

@@ -1,12 +1,11 @@
 import { useCallback, useEffect, useState } from "react"
-import { LocalDevice } from "~Model"
 import { WalletEncryptionKeyHelper } from "~Components"
-import { setDeviceIsBackup, useAppDispatch } from "~Storage/Redux"
+import { LocalDevice } from "~Model"
 
 type Props = {
     closePasswordPrompt: () => void
     openWalletMgmtSheetWithDelay: (delay: number) => void
-    openBackupPhraseSheetWithDelay: (delay: number) => void
+    openBackupPhraseSheetWithDelay: (delay: number, mnemonicArray: string[], deviceToBackup: LocalDevice) => void
     openPasswordPrompt: () => void
     closeWalletMgmtSheet: () => void
     devices: LocalDevice[]
@@ -22,30 +21,27 @@ export const useBackupMnemonic = ({
     devices,
     isWalletSecurityBiometrics,
 }: Props) => {
-    const [userPin, setUserPin] = useState<string | undefined>(undefined)
-    const [mnemonicArray, setMnemonicArray] = useState<string[]>([""])
-    const dispatch = useAppDispatch()
+    const [deviceToBackup, setDeviceToBackup] = useState<LocalDevice | undefined>()
 
     /*
-    * This function checks if the user has enabled biometrics and if so, it will
-    * open the biometrics prompt. If the user has not enabled biometrics, it will
-    * open the password prompt.
+   * This function checks if the user has enabled biometrics and if so, it will
+   * open the biometrics prompt. If the user has not enabled biometrics, it will
+   * open the password prompt.
 
-    * If the user has only one wallet, it will decrypt the wallet and open the
-    * backup phrase sheet. If the user has multiple wallets, it will open the
-    * wallet management sheet.
-    */
+   * If the user has only one wallet, it will decrypt the wallet and open the
+   * backup phrase sheet. If the user has multiple wallets, it will open the
+   * wallet management sheet.
+   */
     const checkSecurityBeforeOpening = useCallback(async () => {
         if (isWalletSecurityBiometrics) {
             if (devices.length > 1) {
                 openWalletMgmtSheetWithDelay(300)
             } else {
-                const wallet = await WalletEncryptionKeyHelper.decryptWallet(devices[0].wallet)
+                const wallet = await WalletEncryptionKeyHelper.decryptWallet({ encryptedWallet: devices[0].wallet })
 
                 if (wallet?.mnemonic) {
-                    setMnemonicArray(wallet.mnemonic)
-                    openBackupPhraseSheetWithDelay(300)
-                    dispatch(setDeviceIsBackup({ rootAddress: devices[0].rootAddress, isBackup: true }))
+                    setDeviceToBackup(devices[0])
+                    openBackupPhraseSheetWithDelay(300, wallet.mnemonic, devices[0])
                 }
             }
         } else {
@@ -53,7 +49,6 @@ export const useBackupMnemonic = ({
         }
     }, [
         devices,
-        dispatch,
         isWalletSecurityBiometrics,
         openBackupPhraseSheetWithDelay,
         openPasswordPrompt,
@@ -68,22 +63,20 @@ export const useBackupMnemonic = ({
      */
     const onPasswordSuccess = useCallback(
         async (password: string) => {
-            setUserPin(password)
             closePasswordPrompt()
 
-            if (devices.length > 1) {
-                openWalletMgmtSheetWithDelay(300)
-            } else {
-                const wallet = await WalletEncryptionKeyHelper.decryptWallet(devices[0].wallet, password)
+            if (deviceToBackup) {
+                const wallet = await WalletEncryptionKeyHelper.decryptWallet({
+                    encryptedWallet: deviceToBackup.wallet,
+                    pinCode: password,
+                })
 
-                if (wallet?.mnemonic) {
-                    setMnemonicArray(wallet.mnemonic)
-                    openBackupPhraseSheetWithDelay(300)
-                    dispatch(setDeviceIsBackup({ rootAddress: devices[0].rootAddress, isBackup: true }))
+                if (wallet?.mnemonic?.length) {
+                    openBackupPhraseSheetWithDelay(300, wallet.mnemonic, deviceToBackup)
                 }
             }
         },
-        [closePasswordPrompt, devices, dispatch, openBackupPhraseSheetWithDelay, openWalletMgmtSheetWithDelay],
+        [closePasswordPrompt, openBackupPhraseSheetWithDelay, deviceToBackup],
     )
 
     /*
@@ -93,23 +86,26 @@ export const useBackupMnemonic = ({
      */
     const handleOnSelectedWallet = useCallback(
         async (device: LocalDevice) => {
+            setDeviceToBackup(device)
             closeWalletMgmtSheet()
+            if (isWalletSecurityBiometrics) {
+                const wallet = await WalletEncryptionKeyHelper.decryptWallet({
+                    encryptedWallet: device.wallet,
+                })
 
-            const wallet = await WalletEncryptionKeyHelper.decryptWallet(device.wallet, userPin)
-
-            if (wallet?.mnemonic) {
-                setMnemonicArray(wallet.mnemonic)
-                openBackupPhraseSheetWithDelay(300)
-                dispatch(setDeviceIsBackup({ rootAddress: device.rootAddress, isBackup: true }))
+                if (wallet?.mnemonic) {
+                    openBackupPhraseSheetWithDelay(300, wallet.mnemonic, device)
+                }
+            } else {
+                openPasswordPrompt()
             }
         },
-        [closeWalletMgmtSheet, dispatch, openBackupPhraseSheetWithDelay, userPin],
+        [closeWalletMgmtSheet, isWalletSecurityBiometrics, openBackupPhraseSheetWithDelay, openPasswordPrompt],
     )
 
     useEffect(() => {
         return () => {
-            setMnemonicArray([""])
-            setUserPin(undefined)
+            setDeviceToBackup(undefined)
         }
     }, [])
 
@@ -117,6 +113,6 @@ export const useBackupMnemonic = ({
         onPasswordSuccess,
         checkSecurityBeforeOpening,
         handleOnSelectedWallet,
-        mnemonicArray,
+        deviceToBackup,
     }
 }

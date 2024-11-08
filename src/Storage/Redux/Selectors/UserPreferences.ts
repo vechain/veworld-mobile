@@ -27,7 +27,7 @@ export const selectCurrencySymbol = createSelector(selectCurrency, currency => {
     }
 })
 
-export const selectLangauge = createSelector(reducer, state => {
+export const selectLanguage = createSelector(reducer, state => {
     return state.language
 })
 
@@ -65,4 +65,8 @@ export const selectLastVersionCheck = createSelector(reducer, state => {
 
 export const selectAppResetTimestamp = createSelector(reducer, state => {
     return state.appResetTimestamp
+})
+
+export const selectLastBackupRequestTimestamp = createSelector(reducer, state => {
+    return state.lastBackupRequestTimestamp
 })

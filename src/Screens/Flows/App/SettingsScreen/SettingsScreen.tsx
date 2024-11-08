@@ -1,24 +1,28 @@
+import { useScrollToTop } from "@react-navigation/native"
 import React, { useCallback, useMemo, useRef } from "react"
-import {
-    BaseButton,
-    BaseCard,
-    BaseIcon,
-    BaseSafeArea,
-    BaseSpacer,
-    BaseText,
-    BaseView,
-    SelectedNetworkViewer,
-} from "~Components"
+import { StyleSheet } from "react-native"
+import { FlatList } from "react-native-gesture-handler"
+import { AlertCard, BaseSafeArea, BaseSpacer, BaseText, BaseView, SelectedNetworkViewer } from "~Components"
+import { ColorThemeType, isSmallScreen } from "~Constants"
+import { useCheckWalletBackup, useTabBarBottomMargin, useThemedStyles } from "~Hooks"
 import { TranslationFunctions, useI18nContext } from "~i18n"
 import { Routes } from "~Navigation"
-import { StyleSheet } from "react-native"
-import { RowProps, SettingsRow } from "./Components/SettingsRow"
-import { useCheckWalletBackup, useTabBarBottomMargin, useTheme, useThemedStyles } from "~Hooks"
-import { ColorThemeType, isSmallScreen } from "~Constants"
 import { selectAreDevFeaturesEnabled, selectSelectedAccount, useAppSelector } from "~Storage/Redux"
-import { useNavigation, useScrollToTop } from "@react-navigation/native"
-import { FlatList } from "react-native-gesture-handler"
+import { RowProps, SettingsRow } from "./Components/SettingsRow"
 import SettingsRowDivider, { RowDividerProps } from "./Components/SettingsRowDivider"
+
+type SettingsRowItem = {
+    element: "settingsRow"
+} & RowProps
+
+type DividerItem = {
+    element: "divider"
+} & RowDividerProps
+
+type BackupBannerItem = {
+    element: "backupBanner"
+    title: string
+}
 
 export const SettingsScreen = () => {
     const { LL } = useI18nContext()
@@ -29,50 +33,56 @@ export const SettingsScreen = () => {
     const { styles: themedStyles } = useThemedStyles(baseStyles)
     const { androidOnlyTabBarBottomMargin } = useTabBarBottomMargin()
 
-    const renderItem = useCallback(({ item }: { item: RowProps | RowDividerProps }) => {
-        if ("height" in item) return <SettingsRowDivider {...item} />
-
-        return <SettingsRow title={item.title} screenName={item.screenName} icon={item.icon} url={item.url} />
-    }, [])
-
     const flatSettingListRef = useRef(null)
 
     useScrollToTop(flatSettingListRef)
-    const theme = useTheme()
 
     const selectedAccount = useAppSelector(selectSelectedAccount)
     const isShowBackupModal = useCheckWalletBackup(selectedAccount)
-    const nav = useNavigation()
 
     const renderBackupWarning = useMemo(() => {
         return (
-            <BaseCard containerStyle={themedStyles.cardContainer}>
-                <BaseView w={100}>
-                    <BaseView flexDirection="row">
-                        <BaseIcon name="alert" size={24} color={theme.colors.error} />
-                        <BaseSpacer width={8} />
-                        <BaseText typographyFont="subTitleBold" color={theme.colors.textReversed}>
-                            {"Backup Your Wallet"}
-                        </BaseText>
-                    </BaseView>
-                    <BaseSpacer height={24} />
-                    <BaseText color={theme.colors.textReversed}>
-                        {"Make sure you can recover your crypto if you lose your device or switch to another wallet."}
-                    </BaseText>
-                    <BaseSpacer height={36} />
-                    <BaseButton title={"Backup Now"} action={() => nav.navigate(Routes.SETTINGS_PRIVACY)} />
-                </BaseView>
-            </BaseCard>
+            <>
+                <AlertCard
+                    title={LL.ALERT_TITLE_BACKUP_YOUR_WALLET()}
+                    message={LL.ALERT_MSG_BACKUP_YOUR_WALLET()}
+                    status={"error"}
+                />
+                <BaseSpacer height={8} />
+            </>
         )
-    }, [nav, theme.colors.error, theme.colors.textReversed, themedStyles.cardContainer])
+    }, [LL])
+
+    const renderItem = useCallback(
+        (props: { item: SettingsRowItem | DividerItem | BackupBannerItem }) => {
+            const { item } = props
+
+            switch (item.element) {
+                case "settingsRow":
+                    return (
+                        <SettingsRow title={item.title} screenName={item.screenName} icon={item.icon} url={item.url} />
+                    )
+
+                case "divider":
+                    return <SettingsRowDivider height={item.height} title={item.title} />
+
+                case "backupBanner":
+                    return isShowBackupModal ? renderBackupWarning : null
+
+                default:
+                    return null
+            }
+        },
+        [isShowBackupModal, renderBackupWarning],
+    )
 
     return (
         <BaseSafeArea>
-            <BaseView flexDirection="row" justifyContent="space-between" mx={24} pb={16}>
-                <BaseText typographyFont="largeTitle" testID="settings-screen">
+            <BaseSpacer height={16} />
+            <BaseView flexDirection="row" justifyContent="space-between" mx={24} mb={8}>
+                <BaseText typographyFont="subTitleBold" testID="settings-screen">
                     {LL.TITLE_SETTINGS()}
                 </BaseText>
-
                 <SelectedNetworkViewer />
             </BaseView>
 
@@ -82,12 +92,12 @@ export const SettingsScreen = () => {
                     data={settingsList}
                     contentContainerStyle={[themedStyles.contentContainerStyle]}
                     scrollEnabled={isShowBackupModal || isSmallScreen}
-                    keyExtractor={(item, index) => ("height" in item ? `divider-${index}` : item.screenName)}
+                    keyExtractor={(item, index) =>
+                        item.element === "settingsRow" ? item.screenName : `${item.element}-${index}`
+                    }
                     showsVerticalScrollIndicator={false}
                     showsHorizontalScrollIndicator={false}
                     renderItem={renderItem}
-                    ListHeaderComponent={isShowBackupModal ? renderBackupWarning : undefined}
-                    ListHeaderComponentStyle={themedStyles.headerContainer}
                 />
             </BaseView>
         </BaseSafeArea>
@@ -106,67 +116,77 @@ const baseStyles = (theme: ColorThemeType) =>
         list: {
             flex: 1,
         },
-        cardContainer: {
-            backgroundColor: theme.colors.danger,
-            padding: 8,
-        },
-        headerContainer: { marginVertical: 12 },
     })
 
 const getLists = (LL: TranslationFunctions, devEnabled: boolean) => {
-    const settingsList: (RowProps | RowDividerProps)[] = [
+    const settingsList: (SettingsRowItem | DividerItem | BackupBannerItem)[] = [
         {
+            element: "settingsRow",
             title: LL.TITLE_GENERAL_SETTINGS(),
             screenName: Routes.SETTINGS_GENERAL,
             icon: "cog-outline",
         },
         {
+            element: "settingsRow",
             title: LL.TITLE_MANAGE_WALLET(),
             screenName: Routes.WALLET_MANAGEMENT,
             icon: "wallet-outline",
         },
         {
+            element: "settingsRow",
             title: LL.TITLE_TRANSACTIONS(),
             screenName: Routes.SETTINGS_TRANSACTIONS,
             icon: "currency-usd",
         },
         {
+            element: "settingsRow",
             title: LL.TITLE_NETWORKS(),
             screenName: Routes.SETTINGS_NETWORK,
             icon: "web",
         },
         {
+            element: "settingsRow",
             title: LL.TITLE_CONNECTED_APPS(),
             screenName: Routes.SETTINGS_CONNECTED_APPS,
             icon: "widgets-outline",
         },
         {
+            element: "settingsRow",
             title: LL.TITLE_CONTACTS(),
             screenName: Routes.SETTINGS_CONTACTS,
             icon: "account-multiple-outline",
         },
         {
+            element: "settingsRow",
             title: LL.TITLE_PRIVACY(),
             screenName: Routes.SETTINGS_PRIVACY,
             icon: "shield-check-outline",
         },
         {
+            element: "backupBanner",
+            title: "Backup_Warning",
+        },
+        {
+            element: "divider",
             title: "Support_divider",
             height: 1,
         },
         {
+            element: "settingsRow",
             title: LL.TITLE_GET_SUPPORT(),
             screenName: Routes.SETTINGS_GET_SUPPORT,
             icon: "help-circle-outline",
             url: "https://support.veworld.com",
         },
         {
+            element: "settingsRow",
             title: LL.TITLE_GIVE_FEEDBACK(),
             screenName: Routes.SETTINGS_GIVE_FEEDBACK,
             icon: "message-outline",
             url: "https://forms.office.com/e/Vq1CUJD9Vy",
         },
         {
+            element: "settingsRow",
             title: LL.TITLE_ABOUT(),
             screenName: Routes.SETTINGS_ABOUT,
             icon: "information-outline",
@@ -175,6 +195,7 @@ const getLists = (LL: TranslationFunctions, devEnabled: boolean) => {
 
     if (devEnabled) {
         settingsList.push({
+            element: "settingsRow",
             title: LL.TITLE_ALERTS(),
             screenName: Routes.SETTINGS_ALERTS,
             icon: "bell-outline",

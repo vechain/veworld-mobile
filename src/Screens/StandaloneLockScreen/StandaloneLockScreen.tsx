@@ -1,6 +1,5 @@
 /* eslint-disable react-native/no-inline-styles */
 import React, { memo, useCallback, useEffect, useMemo, useState } from "react"
-import { useOnDigitPress } from "../LockScreen/useOnDigitPress"
 import { PinVerificationError, PinVerificationErrorType } from "~Model"
 import { SafeAreaView } from "react-native-safe-area-context"
 import { StyleSheet, Text, View } from "react-native"
@@ -8,7 +7,7 @@ import { PlatformUtils } from "~Utils"
 import { useI18nContext } from "~i18n"
 import { ColorThemeType, isSmallScreen } from "~Constants"
 import { StandaloneNumPad, StandalonePasswordPins } from "./components"
-import { useThemedStyles } from "~Hooks"
+import { useOnDigitPress, useThemedStyles } from "~Hooks"
 import RNBootSplash from "react-native-bootsplash"
 
 type Props = {

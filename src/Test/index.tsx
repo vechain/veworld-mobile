@@ -1,6 +1,6 @@
 /* eslint-disable max-len */
 import React, { useEffect, useMemo, useState } from "react"
-import { BaseToast, ConnexContext, usePersistedTheme } from "~Components"
+import { BaseToast, ConnexContext } from "~Components"
 import { BottomSheetModalProvider } from "@gorhom/bottom-sheet"
 import { NavigationContainer } from "@react-navigation/native"
 import { useTheme } from "~Hooks"
@@ -18,6 +18,7 @@ import { MMKV } from "react-native-mmkv"
 import { SecurePersistedCache } from "~Storage/PersistedCache"
 import { ThemeEnum } from "~Constants"
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query"
+import { usePersistedTheme } from "../Components/Providers/PersistedThemeProvider/PersistedThemeProvider"
 
 export { default as TestHelpers } from "./helpers"
 

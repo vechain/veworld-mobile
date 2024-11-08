@@ -13,6 +13,14 @@ For _fastlane_ installation instructions, see [Installing _fastlane_](https://do
 
 # Available Actions
 
+### build_android_ci
+
+```sh
+[bundle exec] fastlane build_android_ci
+```
+
+Submit a new Beta Build to Play Store
+
 ### build_test_ci
 
 ```sh

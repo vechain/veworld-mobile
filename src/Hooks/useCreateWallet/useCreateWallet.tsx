@@ -15,8 +15,8 @@ import { selectAccountsState, selectHasOnboarded } from "~Storage/Redux/Selector
 import { warn } from "~Utils/Logger"
 import { useBiometrics } from "../useBiometrics"
 import { useAnalyticTracking } from "~Hooks/useAnalyticTracking"
-import { AnalyticsEvent, ERROR_EVENTS } from "~Constants"
-import { WalletEncryptionKeyHelper } from "~Components"
+import { AnalyticsEvent, DerivationPath, ERROR_EVENTS } from "~Constants"
+import { WalletEncryptionKeyHelper } from "~Components/Providers/EncryptedStorageProvider/Helpers"
 
 /**
  * useCreateWallet is a hook that allows you to create a wallet and store it in the store
@@ -46,19 +46,19 @@ export const useCreateWallet = () => {
             mnemonic,
             privateKey,
             userPassword,
-            importType,
             onError,
+            importType,
+            derivationPath,
         }: {
             mnemonic?: string[]
             privateKey?: string
             userPassword?: string
             importType?: IMPORT_TYPE
             onError?: (error: unknown) => void
+            derivationPath: DerivationPath
         }) => {
             try {
-                const isWalletImported = !!importType
-
-                const { device, wallet } = createDevice(isWalletImported, mnemonic, privateKey)
+                const { device, wallet } = createDevice(derivationPath, mnemonic, privateKey, importType)
 
                 const encryptedWallet = await WalletEncryptionKeyHelper.encryptWallet(wallet, userPassword)
 
@@ -74,6 +74,7 @@ export const useCreateWallet = () => {
                 dispatch(setMnemonic(undefined))
                 dispatch(setPrivateKey(undefined))
                 setIsComplete(true)
+
                 track(AnalyticsEvent.WALLET_ADD_LOCAL_SUCCESS)
                 track(AnalyticsEvent.WALLET_GENERATION, {
                     context: userHasOnboarded ? "management" : "onboarding",

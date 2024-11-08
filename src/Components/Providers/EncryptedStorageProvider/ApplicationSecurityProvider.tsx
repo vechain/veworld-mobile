@@ -1,7 +1,25 @@
 import React, { useCallback, useEffect, useMemo, useState } from "react"
 import { MMKV } from "react-native-mmkv"
-import { BiometricsUtils, debug, error, HexUtils, info } from "~Utils"
-import { BiometricState, SecurityLevelType, WALLET_STATUS } from "~Model"
+import {
+    BiometricsUtils,
+    CryptoUtils,
+    CryptoUtils_Legacy,
+    debug,
+    error,
+    HexUtils,
+    info,
+    PasswordUtils,
+    AnalyticsUtils,
+} from "~Utils"
+import {
+    BiometricState,
+    DEVICE_TYPE,
+    LedgerDevice,
+    LocalDevice,
+    SecurityLevelType,
+    Wallet,
+    WALLET_STATUS,
+} from "~Model"
 import {
     PreviousInstallation,
     SecurityConfig,
@@ -9,16 +27,25 @@ import {
     StorageEncryptionKeyHelper,
     WalletEncryptionKeyHelper,
 } from "~Components/Providers"
-
 import { useAppState, useBiometrics } from "~Hooks"
 import { StandaloneAppBlockedScreen, StandaloneLockScreen, InternetDownScreen } from "~Screens"
 import { AnimatedSplashScreen } from "../../../AnimatedSplashScreen"
 import Onboarding from "./Helpers/Onboarding"
 import NetInfo from "@react-native-community/netinfo"
-import { ERROR_EVENTS } from "~Constants"
+import { AnalyticsEvent, ERROR_EVENTS } from "~Constants"
+import { initializeMMKVFlipper } from "react-native-mmkv-flipper-plugin"
+import RNBootSplash from "react-native-bootsplash"
+import { BackupWalletStack } from "~Screens/Flows/App/SecurityUpgrade_V2/Navigation.standalone"
+import SaltHelper from "./Helpers/SaltHelper"
+import { StorageEncryptionKeys } from "./Model"
+import { mixpanel } from "~Utils/AnalyticsUtils"
 
 const UserEncryptedStorage = new MMKV({
     id: "user_encrypted_storage",
+})
+
+const UserEncryptedStorage_V2 = new MMKV({
+    id: "user_encrypted_storage_V2",
 })
 
 const OnboardingStorage = new MMKV({
@@ -36,6 +63,17 @@ const MetadataStorage = new MMKV({
 export type EncryptedStorage = {
     mmkv: MMKV
     encryptionKey: string
+}
+
+// add this line inside your App.tsx
+if (__DEV__) {
+    initializeMMKVFlipper({ default: UserEncryptedStorage_V2 })
+}
+
+export enum SecurityMigration {
+    NOT_STARTED,
+    IN_PROGRESS,
+    COMPLETED,
 }
 
 type IApplicationSecurity = {
@@ -66,6 +104,9 @@ export const ApplicationSecurityProvider = ({ children }: ApplicationSecurityCon
     const [imageStorage, setImageStorage] = useState<EncryptedStorage>()
     const [metadataStorage, setMetadataStorage] = useState<EncryptedStorage>()
     const [userDisabledBiometrics, setUserDisabledBiometrics] = useState(false)
+    const [_securityMigrationStatus, setSecurityMigrationStatus] = useState(SecurityMigration.NOT_STARTED)
+
+    const [storageKeys, setStorageKeys] = useState<StorageEncryptionKeys | null>(null)
 
     // After unlocking, we need to wait for the redux to be setup before we can render the app
     const [isAppReady, setIsAppReady] = useState(false)
@@ -73,6 +114,8 @@ export const ApplicationSecurityProvider = ({ children }: ApplicationSecurityCon
     const biometrics = useBiometrics()
 
     const onboardingKey = useMemo(() => HexUtils.generateRandom(256), [])
+
+    const oldPersistedState = useMemo(() => UserEncryptedStorage.getString("persist:root"), [])
 
     const triggerAutoLock = () => {
         setAutoLock(true)
@@ -95,8 +138,6 @@ export const ApplicationSecurityProvider = ({ children }: ApplicationSecurityCon
         setImageStorage(undefined)
         setMetadataStorage(undefined)
         updateSecurityType(undefined)
-
-        UserEncryptedStorage.clearAll()
         OnboardingStorage.clearAll()
 
         setReduxStorage({
@@ -106,65 +147,74 @@ export const ApplicationSecurityProvider = ({ children }: ApplicationSecurityCon
 
         await WalletEncryptionKeyHelper.remove()
         await StorageEncryptionKeyHelper.remove()
+        UserEncryptedStorage.clearAll()
+        UserEncryptedStorage_V2.clearAll()
     }, [onboardingKey, updateSecurityType])
 
     /**
      * Unlock the app
      */
-    const unlock = useCallback(async (pinCode?: string): Promise<void> => {
-        let backUpKeys = null
+    const unlock = useCallback(
+        async (pinCode?: string): Promise<void> => {
+            let backUpKeys = null
 
-        if (pinCode) {
-            // Will return null if they don't exist
-            backUpKeys = await SecurityUpgradeBackup.get(pinCode)
-        }
-
-        if (backUpKeys) {
-            // Reset to old keys
-            // We verified pin code because the user was able to decrypt the keys in the backup
-            await WalletEncryptionKeyHelper.set(backUpKeys.wallet, pinCode)
-            await StorageEncryptionKeyHelper.set(backUpKeys.storage, pinCode)
-            await SecurityUpgradeBackup.clear()
-        }
-
-        let keys
-
-        try {
-            keys = backUpKeys?.storage ?? (await StorageEncryptionKeyHelper.get(pinCode))
-        } catch (e) {
-            // handle cases when  the user cancels the biometric prompt and the keychain returns it as an error
-            if (BiometricsUtils.BiometricErrors.isBiometricCanceled(e)) {
-                return unlock()
-            } else {
-                throw e
+            if (pinCode) {
+                // Will return null if they don't exist
+                backUpKeys = await SecurityUpgradeBackup.get(pinCode)
             }
-        }
 
-        if (keys) {
-            setReduxStorage({
-                mmkv: UserEncryptedStorage,
-                encryptionKey: keys.redux,
-            })
+            if (backUpKeys) {
+                // Reset to old keys
+                // We verified pin code because the user was able to decrypt the keys in the backup
+                await WalletEncryptionKeyHelper.set(backUpKeys.wallet, pinCode)
+                await StorageEncryptionKeyHelper.set(backUpKeys.storage, pinCode)
+                await SecurityUpgradeBackup.clear()
+            }
 
-            setImageStorage({
-                mmkv: ImageStorage,
-                encryptionKey: keys.images,
-            })
-            setMetadataStorage({
-                mmkv: MetadataStorage,
-                encryptionKey: keys.metadata,
-            })
+            let keys
 
-            setWalletStatus(WALLET_STATUS.UNLOCKED)
-        }
-    }, [])
+            try {
+                keys = storageKeys
+                    ? storageKeys
+                    : backUpKeys?.storage ?? (await StorageEncryptionKeyHelper.get({ pinCode }))
+
+                setStorageKeys(null)
+            } catch (e) {
+                // handle cases when  the user cancels the biometric prompt and the keychain returns it as an error
+                if (BiometricsUtils.BiometricErrors.isBiometricCanceled(e)) {
+                    return unlock()
+                } else {
+                    throw e
+                }
+            }
+
+            if (keys) {
+                setReduxStorage({
+                    mmkv: UserEncryptedStorage_V2,
+                    encryptionKey: keys.redux,
+                })
+
+                setImageStorage({
+                    mmkv: ImageStorage,
+                    encryptionKey: keys.images,
+                })
+                setMetadataStorage({
+                    mmkv: MetadataStorage,
+                    encryptionKey: keys.metadata,
+                })
+
+                setWalletStatus(WALLET_STATUS.UNLOCKED)
+            }
+        },
+        [storageKeys],
+    )
 
     /**
      * Set the type of security
      * - Attempt to unlock with biometrics if the user has biometrics enabled
      */
     const setUpEncryptionKeys = useCallback(
-        async (_biometrics: BiometricState) => {
+        async (_biometrics: BiometricState, status?: WALLET_STATUS) => {
             try {
                 const _securityType = SecurityConfig.get()
 
@@ -178,6 +228,10 @@ export const ApplicationSecurityProvider = ({ children }: ApplicationSecurityCon
                 const { isDeviceEnrolled, currentSecurityLevel } = _biometrics
 
                 const biometricsDisabled = !isDeviceEnrolled || currentSecurityLevel !== SecurityLevelType.BIOMETRIC
+
+                if (status === WALLET_STATUS.MIGRATING) {
+                    return
+                }
 
                 if (biometricsDisabled) {
                     setUserDisabledBiometrics(true)
@@ -198,9 +252,19 @@ export const ApplicationSecurityProvider = ({ children }: ApplicationSecurityCon
      */
     const intialiseApp = useCallback(
         async (_biometrics: BiometricState) => {
-            const encryptedStorageKeys = UserEncryptedStorage.getAllKeys()
+            const oldStorageKeys = UserEncryptedStorage.getAllKeys()
 
-            if (encryptedStorageKeys.length === 0) {
+            if (oldStorageKeys.length > 0) {
+                info(ERROR_EVENTS.SECURITY, "User has onboarded, migrating to new storage")
+                setWalletStatus(WALLET_STATUS.MIGRATING)
+                await setUpEncryptionKeys(_biometrics, WALLET_STATUS.MIGRATING)
+                RNBootSplash.hide({ fade: true })
+                return
+            }
+
+            const currentStorageKeys = UserEncryptedStorage_V2.getAllKeys()
+
+            if (currentStorageKeys.length === 0) {
                 info(ERROR_EVENTS.SECURITY, "No keys found in encrypted storage, user is onboarding")
 
                 await PreviousInstallation.clearOldStorage()
@@ -231,7 +295,7 @@ export const ApplicationSecurityProvider = ({ children }: ApplicationSecurityCon
             try {
                 Onboarding.migrateState({
                     onboardingStorage: OnboardingStorage,
-                    encryptedStorage: UserEncryptedStorage,
+                    encryptedStorage: UserEncryptedStorage_V2,
                     encryptionKey: encryptionKeys.redux,
                     onboardingKey,
                 })
@@ -239,17 +303,20 @@ export const ApplicationSecurityProvider = ({ children }: ApplicationSecurityCon
                 Onboarding.prune(OnboardingStorage)
 
                 setReduxStorage({
-                    mmkv: UserEncryptedStorage,
+                    mmkv: UserEncryptedStorage_V2,
                     encryptionKey: encryptionKeys.redux,
                 })
+
                 setImageStorage({
                     mmkv: ImageStorage,
                     encryptionKey: encryptionKeys.images,
                 })
+
                 setMetadataStorage({
                     mmkv: MetadataStorage,
                     encryptionKey: encryptionKeys.metadata,
                 })
+
                 setWalletStatus(WALLET_STATUS.UNLOCKED)
             } catch (e) {
                 error(ERROR_EVENTS.SECURITY, e)
@@ -257,8 +324,125 @@ export const ApplicationSecurityProvider = ({ children }: ApplicationSecurityCon
                 await resetApplication()
             }
         },
-        [updateSecurityType, resetApplication, onboardingKey],
+        [updateSecurityType, onboardingKey, resetApplication],
     )
+
+    const upgradeSecurityToV2 = useCallback(async (password?: string) => {
+        const encryptedStorageKeys = UserEncryptedStorage.getAllKeys()
+        AnalyticsUtils.initialize()
+
+        mixpanel.track(AnalyticsEvent.SECURITY_UPGRADE, { status: "STARTED" })
+        setSecurityMigrationStatus(SecurityMigration.IN_PROGRESS)
+        let currentDeviceType: DEVICE_TYPE | null = null
+
+        if (encryptedStorageKeys.length > 0) {
+            try {
+                // Get data related to the decryption/Encryprion of the wallet keys here (instead of doing it inside the loop for every wallet)
+                // so we can reduce the amount of prompting since keys are the same for each wallet
+                const { walletKey } = await WalletEncryptionKeyHelper.get({ pinCode: password, isLegacy: true })
+                const { salt, iv: base64IV } = await SaltHelper.getSaltAndIV()
+                const iv = PasswordUtils.base64ToBuffer(base64IV)
+
+                // Get the storage keys
+                const storageEncryptionKeys = await StorageEncryptionKeyHelper.get({
+                    pinCode: password,
+                    isLegacy: true,
+                })
+
+                setStorageKeys(storageEncryptionKeys)
+
+                const reduxKey = storageEncryptionKeys.redux
+
+                // Get the encrypted state for redux
+                const persistedState = UserEncryptedStorage.getString("persist:root")
+
+                if (!persistedState) return
+                const oldState = JSON.parse(persistedState)
+
+                type Device = LocalDevice | LedgerDevice
+                let newState = {}
+                let walletState = {
+                    devices: [],
+                } as { devices: Device[] }
+
+                // Go over the state enreies and decrypt them
+                for (const key in oldState) {
+                    if (!oldState.hasOwnProperty(key)) return
+
+                    const encrypted = oldState[key] as string
+                    const toDecrypt = encrypted.replace(/['"]+/g, "").replace("0x", "")
+                    const unencrypted = CryptoUtils_Legacy.decryptState(toDecrypt, reduxKey)
+
+                    const parsedEntryInState = JSON.parse(unencrypted)
+
+                    // Get wallets from unencrypted entries and decrypt them
+                    if (key === "devices") {
+                        let decryptedWallets: Wallet[] = []
+                        let decryptedDevices: LocalDevice[] = []
+
+                        for (const anyDevice of parsedEntryInState) {
+                            currentDeviceType = anyDevice.type
+
+                            if (anyDevice.type === DEVICE_TYPE.LEDGER) {
+                                walletState.devices.push(anyDevice)
+                            } else {
+                                // loop on parsedEntryInState for wallets
+                                // First decrypt all wallets with old keys and algos
+                                const decryptedWallet: Wallet = CryptoUtils_Legacy.decrypt<Wallet>(
+                                    anyDevice.wallet,
+                                    walletKey,
+                                )
+
+                                decryptedWallets.push(decryptedWallet)
+                                decryptedDevices.push(anyDevice)
+                            }
+                        }
+
+                        for (const [index, device] of decryptedDevices.entries()) {
+                            const walletEncrypted_V2 = await CryptoUtils.encrypt(
+                                decryptedWallets[index],
+                                walletKey,
+                                salt,
+                                iv,
+                            )
+
+                            device.wallet = walletEncrypted_V2
+                            device.isMigrated = true
+                            walletState.devices.push(device)
+                        }
+                    } else {
+                        newState = {
+                            ...newState,
+                            [key]: encrypted,
+                        }
+                    }
+                }
+
+                await WalletEncryptionKeyHelper.set({ walletKey }, password)
+                await StorageEncryptionKeyHelper.set(storageEncryptionKeys, password)
+
+                newState = {
+                    ...newState,
+                    devices: JSON.stringify(CryptoUtils.encryptState(walletState.devices, reduxKey)),
+                }
+
+                // store the state in the new storage - UserEncryptedStorage_V2
+                UserEncryptedStorage_V2.set("persist:root", JSON.stringify(newState))
+                setWalletStatus(WALLET_STATUS.NOT_INITIALISED)
+                UserEncryptedStorage.clearAll()
+                Onboarding.prune(UserEncryptedStorage)
+                setSecurityMigrationStatus(SecurityMigration.COMPLETED)
+                mixpanel.track(AnalyticsEvent.SECURITY_UPGRADE, { status: "COMPLETED" })
+            } catch (err) {
+                mixpanel.track(AnalyticsEvent.SECURITY_UPGRADE, {
+                    status: "FAILED",
+                    walletType: currentDeviceType,
+                    error: JSON.stringify(err),
+                })
+                error(ERROR_EVENTS.ENCRYPTION, err)
+            }
+        }
+    }, [])
 
     /**
      * Update the security method
@@ -354,6 +538,14 @@ export const ApplicationSecurityProvider = ({ children }: ApplicationSecurityCon
         case WALLET_STATUS.NOT_INITIALISED:
             // App is initialising
             return <></>
+        case WALLET_STATUS.MIGRATING:
+            return (
+                <BackupWalletStack
+                    oldPersistedState={oldPersistedState}
+                    securityType={securityType}
+                    upgradeSecurityToV2={upgradeSecurityToV2}
+                />
+            )
         case WALLET_STATUS.FIRST_TIME_ACCESS:
         case WALLET_STATUS.UNLOCKED:
             if (!value?.redux) return <></>
@@ -369,7 +561,7 @@ export const ApplicationSecurityProvider = ({ children }: ApplicationSecurityCon
 
             if (securityType !== SecurityLevelType.SECRET) return <></>
             return (
-                <AnimatedSplashScreen playAnimation={true} useFadeOutAnimation={false}>
+                <AnimatedSplashScreen playAnimation useFadeOutAnimation={false}>
                     <StandaloneLockScreen onPinInserted={unlock} />
                 </AnimatedSplashScreen>
             )

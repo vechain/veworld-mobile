@@ -10,7 +10,6 @@ type Props = {
 
 export const SplashScreen = ({ children }: Props): React.ReactElement => {
     const { isAppReady } = useApplicationSecurity()
-
     const opacity = useSharedValue(0)
 
     useEffect(() => {
@@ -39,6 +38,7 @@ export const SplashScreen = ({ children }: Props): React.ReactElement => {
                     <Image source={require("../bootsplash_logo_white.png")} style={styles.logo} resizeMode="contain" />
                 </Animated.View>
             )}
+
             {children}
         </>
     )

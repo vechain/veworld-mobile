@@ -2,22 +2,14 @@ import { createNativeStackNavigator } from "@react-navigation/native-stack"
 import React from "react"
 import { Transaction } from "thor-devkit"
 import { TokenWithCompleteInfo, useNavAnimation } from "~Hooks"
-import {
-    Activity,
-    ConnectedLedgerDevice,
-    Device,
-    FungibleToken,
-    FungibleTokenWithBalance,
-    LedgerAccountWithDevice,
-    TransactionOutcomes,
-} from "~Model"
+import { ConnectedLedgerDevice, Device, FungibleTokenWithBalance, LedgerAccountWithDevice } from "~Model"
 import { Routes } from "~Navigation/Enums"
 import {
-    ActivityDetailsScreen,
     AssetDetailScreen,
     ConnectedAppsScreen,
     EnableAdditionalSettings,
     HomeScreen,
+    ImportFromCloudScreen,
     ImportLocalWallet,
     InAppBrowser,
     InsertAddressSendScreen,
@@ -65,12 +57,6 @@ export type RootStackParamListHome = {
     [Routes.WALLET_MANAGEMENT]: undefined
     [Routes.WALLET_DETAILS]: { device: Device }
     [Routes.CREATE_WALLET_FLOW]: undefined
-    [Routes.ACTIVITY_DETAILS]: {
-        activity: Activity
-        token?: FungibleToken
-        isSwap?: boolean
-        decodedClauses?: TransactionOutcomes
-    }
     [Routes.TOKEN_DETAILS]: { token: TokenWithCompleteInfo }
     [Routes.SETTINGS_CONNECTED_APPS]: undefined
     [Routes.OBSERVE_WALLET]: undefined
@@ -82,6 +68,7 @@ export type RootStackParamListHome = {
     [Routes.IMPORT_HW_LEDGER_SELECT_ACCOUNTS]: {
         device: ConnectedLedgerDevice
     }
+    [Routes.IMPORT_FROM_CLOUD]: undefined
     [Routes.BROWSER]: {
         url: string
         ul?: boolean
@@ -128,11 +115,6 @@ export const HomeStack = () => {
                     component={ConnectedAppsScreen}
                     options={{ headerShown: false }}
                 />
-                <Screen
-                    name={Routes.ACTIVITY_DETAILS}
-                    component={ActivityDetailsScreen}
-                    options={{ headerShown: false }}
-                />
                 <Screen name={Routes.MANAGE_TOKEN} component={ManageTokenScreen} options={{ headerShown: false }} />
                 <Screen
                     name={Routes.MANAGE_CUSTOM_TOKEN}
@@ -157,6 +139,12 @@ export const HomeStack = () => {
                 <Screen
                     name={Routes.IMPORT_HW_LEDGER_SELECT_ACCOUNTS}
                     component={SelectLedgerAccounts}
+                    options={{ headerShown: false }}
+                />
+
+                <Screen
+                    name={Routes.IMPORT_FROM_CLOUD}
+                    component={ImportFromCloudScreen}
                     options={{ headerShown: false }}
                 />
                 <Screen name={Routes.BROWSER} component={InAppBrowser} options={{ headerShown: false }} />

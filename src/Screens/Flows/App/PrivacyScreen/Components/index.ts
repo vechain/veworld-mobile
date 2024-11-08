@@ -1,3 +1,3 @@
+export * from "./BackupWarningBottomSheet"
+export * from "./DevicesBackupState"
 export * from "./EnableBiometrics"
-export * from "./BackupMnemonicBottomSheet"
-export * from "./BackupMnemonicBottomSheet"

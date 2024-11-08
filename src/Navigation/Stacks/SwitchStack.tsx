@@ -7,20 +7,22 @@ import {
     BlackListedCollectionsScreen,
     ConnectAppScreen,
     DappChangeAccountScreen,
+    MnemonicBackupScreen,
     SendTransactionScreen,
     SignCertificateScreen,
+    SignDataMessageScreen,
 } from "~Screens"
 import { PendingRequestTypes } from "@walletconnect/types"
 import { AppBlockedScreen } from "~Screens/Flows/App/AppBlockedScreen"
 import { TransferEventListener } from "../../TransferEventListener"
 import { Certificate, Transaction } from "thor-devkit"
-import { CertificateRequest, ConnectAppRequest, LedgerAccountWithDevice, WALLET_STATUS } from "~Model"
+import { CertificateRequest, ConnectAppRequest, LedgerAccountWithDevice, LocalDevice, WALLET_STATUS } from "~Model"
 import { LedgerSignCertificate, LedgerSignTransaction } from "~Screens/Flows/App/LedgerScreen"
 import { useWalletStatus } from "~Components"
 import { BuyStack } from "./BuyStack"
 import { SignMessageScreen } from "~Screens/Flows/App/WalletConnect/SignMessageScreen"
 import { LedgerSignMessage } from "~Screens/Flows/App/LedgerScreen/LedgerSignMessage"
-import { TransactionRequest } from "~Model/DApp"
+import { TypeDataRequest, TransactionRequest } from "~Model/DApp"
 import { WindowRequest } from "~Components/Providers/InAppBrowserProvider/types"
 
 export type RootStackParamListSwitch = {
@@ -39,6 +41,9 @@ export type RootStackParamListSwitch = {
     }
     [Routes.CONNECTED_APP_SIGN_CERTIFICATE_SCREEN]: {
         request: CertificateRequest
+    }
+    [Routes.CONNECTED_APP_SIGN_TYPED_MESSAGE_SCREEN]: {
+        request: TypeDataRequest
     }
     [Routes.CONNECTED_APP_SIGN_MESSAGE_SCREEN]: {
         requestEvent: PendingRequestTypes.Struct
@@ -65,6 +70,8 @@ export type RootStackParamListSwitch = {
     [Routes.DAPP_CHANGE_ACCOUNT_SCREEN]: {
         request: WindowRequest
     }
+
+    [Routes.ICLOUD_MNEMONIC_BACKUP]: { deviceToBackup?: LocalDevice; mnemonicArray: string[] }
 }
 const Switch = createNativeStackNavigator<RootStackParamListSwitch>()
 
@@ -106,6 +113,11 @@ export const SwitchStack = () => {
                             component={SignCertificateScreen}
                         />
 
+                        <Switch.Screen
+                            name={Routes.CONNECTED_APP_SIGN_TYPED_MESSAGE_SCREEN}
+                            component={SignDataMessageScreen}
+                        />
+
                         <Switch.Screen name={Routes.CONNECTED_APP_SIGN_MESSAGE_SCREEN} component={SignMessageScreen} />
 
                         <Switch.Screen name={Routes.BLOCKED_APP_SCREEN} component={AppBlockedScreen} />
@@ -117,6 +129,12 @@ export const SwitchStack = () => {
                         <Switch.Screen name={Routes.LEDGER_SIGN_MESSAGE} component={LedgerSignMessage} />
 
                         <Switch.Screen name={Routes.DAPP_CHANGE_ACCOUNT_SCREEN} component={DappChangeAccountScreen} />
+
+                        <Switch.Screen
+                            name={Routes.ICLOUD_MNEMONIC_BACKUP}
+                            component={MnemonicBackupScreen}
+                            options={{ headerShown: false }}
+                        />
 
                         <Switch.Screen
                             name={Routes.BUY_FLOW}

@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react"
+import { useMemo } from "react"
 import { AccountWithDevice, DEVICE_TYPE } from "~Model"
 
 export const useCheckWalletBackup = (account: AccountWithDevice) => {
@@ -6,20 +6,15 @@ export const useCheckWalletBackup = (account: AccountWithDevice) => {
     // check if device has been backed up
     // check if device type is local mnemonic
     // check if cloud is available?
-    const [isShowBackupModal, setIsShowBackupModal] = useState(false)
+    // const [isShowBackupModal, setIsShowBackupModal] = useState(false)
 
-    useEffect(() => {
-        if (
+    const isShowBackupModal = useMemo(() => {
+        return (
             account.device?.isBuckedUp !== undefined &&
             !account.device?.isBuckedUp &&
             account.device?.type === DEVICE_TYPE.LOCAL_MNEMONIC
-        ) {
-            // show backup modal
-            setIsShowBackupModal(true)
-        } else {
-            setIsShowBackupModal(false)
-        }
-    }, [account.device?.isBuckedUp, account.device?.type])
+        )
+    }, [account?.device?.isBuckedUp, account?.device?.type])
 
     return isShowBackupModal
 }

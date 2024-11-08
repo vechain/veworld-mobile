@@ -4,8 +4,9 @@ import { waitFor } from "@testing-library/react-native"
 import { addDeviceAndAccounts, addLedgerDeviceAndAccounts, setMnemonic } from "~Storage/Redux"
 import { TestWrapper } from "~Test"
 import { useCreateWallet } from "./useCreateWallet"
-import { NewLedgerDevice } from "~Model"
-import { WalletEncryptionKeyHelper } from "~Components"
+import { IMPORT_TYPE, NewLedgerDevice } from "~Model"
+import { WalletEncryptionKeyHelper } from "~Components/Providers/EncryptedStorageProvider/Helpers"
+import { DerivationPath } from "~Constants"
 
 const device = {
     alias: "Wallet 1",
@@ -102,7 +103,11 @@ describe("useCreateWallet", () => {
             })
             const { createLocalWallet } = result.current
 
-            await createLocalWallet({ mnemonic: mnemonic })
+            await createLocalWallet({
+                mnemonic: mnemonic,
+                derivationPath: DerivationPath.VET,
+                importType: IMPORT_TYPE.MNEMONIC,
+            })
             await waitFor(() => result.current.isComplete)
             expect(result.current.accessControl).toBe(true)
             expect(result.current.isComplete).toBe(true)
@@ -129,6 +134,8 @@ describe("useCreateWallet", () => {
                 mnemonic: mnemonic,
                 userPassword: "password",
                 onError: undefined,
+                derivationPath: DerivationPath.VET,
+                importType: IMPORT_TYPE.MNEMONIC,
             })
 
             expect(addDeviceAndAccounts).toHaveBeenCalledWith({

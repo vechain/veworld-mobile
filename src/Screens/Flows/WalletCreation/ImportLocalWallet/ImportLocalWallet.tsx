@@ -1,4 +1,7 @@
-import React, { useCallback, useMemo, useRef, useState } from "react"
+import { useNavigation } from "@react-navigation/native"
+import * as Clipboard from "expo-clipboard"
+import React, { useCallback, useEffect, useMemo, useRef, useState } from "react"
+import { Keyboard, StyleSheet } from "react-native"
 import {
     BackButtonHeader,
     BaseButton,
@@ -12,23 +15,36 @@ import {
     Layout,
     RequireUserPassword,
     SelectDerivationPathBottomSheet,
+    showInfoToast,
 } from "~Components"
+import { AnalyticsEvent, DerivationPath } from "~Constants"
+import {
+    useAnalyticTracking,
+    useBottomSheetModal,
+    useCheckIdentity,
+    useCloudBackup,
+    useDeviceUtils,
+    useTheme,
+} from "~Hooks"
 import { useI18nContext } from "~i18n"
-import * as Clipboard from "expo-clipboard"
-import { useAnalyticTracking, useBottomSheetModal, useCheckIdentity, useDeviceUtils, useTheme } from "~Hooks"
-import { CryptoUtils } from "~Utils"
-import { Keyboard, StyleSheet } from "react-native"
-import { ImportWalletInput } from "./Components/ImportWalletInput"
-import { selectAreDevFeaturesEnabled, selectHasOnboarded, useAppSelector } from "~Storage/Redux"
-import HapticsService from "~Services/HapticsService"
-import { AnalyticsEvent } from "~Constants"
-import { DEVICE_CREATION_ERRORS as ERRORS, IMPORT_TYPE } from "~Model"
-import { UnlockKeystoreBottomSheet } from "./Components/UnlockKeystoreBottomSheet"
-import { UserCreatePasswordScreen } from "../UserCreatePasswordScreen"
+import { CloudKitWallet, DrivetWallet, DEVICE_CREATION_ERRORS as ERRORS, IMPORT_TYPE } from "~Model"
+import { Routes } from "~Navigation"
 import { useHandleWalletCreation } from "~Screens/Flows/Onboarding/WelcomeScreen/useHandleWalletCreation"
-import { useNavigation } from "@react-navigation/native"
+import HapticsService from "~Services/HapticsService"
+import { selectAreDevFeaturesEnabled, selectHasOnboarded, useAppSelector } from "~Storage/Redux"
+import { CryptoUtils, PlatformUtils } from "~Utils"
+import { UserCreatePasswordScreen } from "../UserCreatePasswordScreen"
+import { ImportWalletInput } from "./Components/ImportWalletInput"
+import { UnlockKeystoreBottomSheet } from "./Components/UnlockKeystoreBottomSheet"
 
 const DEMO_MNEMONIC = "denial kitchen pet squirrel other broom bar gas better priority spoil cross"
+
+enum ButtonType {
+    local,
+    icloud,
+    googleDrive,
+    unknown,
+}
 
 export const ImportLocalWallet = () => {
     const { LL } = useI18nContext()
@@ -53,6 +69,60 @@ export const ImportLocalWallet = () => {
 
     const { checkCanImportDevice } = useDeviceUtils()
 
+    const { isCloudAvailable, getAllWalletFromCloud, googleAccountSignOut } = useCloudBackup()
+
+    const [wallets, setWallets] = useState<(CloudKitWallet | DrivetWallet)[] | null>(null)
+    const [isLoading, setIsLoading] = useState<boolean>(false)
+
+    const showNoWalletsFound = useCallback(() => {
+        showInfoToast({
+            text1: LL.CLOUD_NO_WALLETS_AVAILABLE_TITLE(),
+            text2: LL.CLOUD_NO_WALLETS_AVAILABLE_DESCRIPTION({
+                cloud: PlatformUtils.isIOS() ? "iCloud" : "Google Drive",
+            }),
+        })
+    }, [LL])
+
+    const goToImportFromCloud = useCallback(() => {
+        nav.navigate(Routes.IMPORT_FROM_CLOUD)
+    }, [nav])
+
+    const getWalletsFromICloud = useCallback(async () => {
+        setIsLoading(true)
+        const _wallets: CloudKitWallet[] = await getAllWalletFromCloud()
+        setIsLoading(false)
+        setWallets(_wallets)
+    }, [getAllWalletFromCloud])
+
+    const getWalletsFromDrive = useCallback(async () => {
+        setIsLoading(true)
+        const _wallets: DrivetWallet[] = await getAllWalletFromCloud()
+        setIsLoading(false)
+
+        if (_wallets?.length) {
+            goToImportFromCloud()
+        } else {
+            await googleAccountSignOut()
+            showNoWalletsFound()
+        }
+    }, [getAllWalletFromCloud, goToImportFromCloud, googleAccountSignOut, showNoWalletsFound])
+
+    useEffect(() => {
+        isCloudAvailable && PlatformUtils.isIOS() && getWalletsFromICloud()
+    }, [getWalletsFromICloud, isCloudAvailable])
+
+    const computeButtonType = useMemo(() => {
+        if (textValue.length || PlatformUtils.isAndroid()) {
+            return ButtonType.local
+        }
+
+        if (isCloudAvailable && !textValue.length && !!wallets?.length) {
+            return ButtonType.icloud
+        }
+
+        return ButtonType.unknown
+    }, [wallets?.length, isCloudAvailable, textValue.length])
+
     const {
         ref: unlockKeystoreBottomSheetRef,
         onOpen: openUnlockKeystoreBottomSheet,
@@ -67,6 +137,15 @@ export const ImportLocalWallet = () => {
 
     const mnemonicCache = useRef<string[]>()
     const privateKeyCache = useRef<string>()
+    const derivationPathCache = useRef<DerivationPath>()
+
+    const handleOnCloseDerivationPathSheet = useCallback(
+        (path: DerivationPath) => {
+            derivationPathCache.current = path
+            onCloseDerivationPath()
+        },
+        [onCloseDerivationPath],
+    )
 
     const importType = useMemo(() => CryptoUtils.determineKeyImportType(textValue), [textValue])
 
@@ -81,6 +160,7 @@ export const ImportLocalWallet = () => {
                 importMnemonic: mnemonicCache.current,
                 privateKey: privateKeyCache.current,
                 pin,
+                derivationPath: derivationPathCache.current ?? DerivationPath.VET,
                 importType,
             })
             nav.goBack()
@@ -114,13 +194,17 @@ export const ImportLocalWallet = () => {
         (_mnemonic: string) => {
             try {
                 const mnemonic = CryptoUtils.mnemonicStringToArray(_mnemonic)
-                checkCanImportDevice(mnemonic)
+                checkCanImportDevice(derivationPathCache.current ?? DerivationPath.VET, mnemonic)
                 mnemonicCache.current = mnemonic
                 track(AnalyticsEvent.IMPORT_MNEMONIC_SUBMITTED)
                 if (userHasOnboarded) {
                     checkIdentityBeforeOpening_1()
                 } else {
-                    onCreateWallet({ importMnemonic: mnemonic, importType: IMPORT_TYPE.MNEMONIC })
+                    onCreateWallet({
+                        importMnemonic: mnemonic,
+                        derivationPath: derivationPathCache.current ?? DerivationPath.VET,
+                        importType: IMPORT_TYPE.MNEMONIC,
+                    })
                 }
             } catch (err) {
                 processErrorMessage(err)
@@ -140,13 +224,17 @@ export const ImportLocalWallet = () => {
     const importPrivateKey = useCallback(
         (_privKey: string) => {
             try {
-                checkCanImportDevice(undefined, _privKey)
+                checkCanImportDevice(derivationPathCache.current ?? DerivationPath.VET, undefined, _privKey)
                 privateKeyCache.current = _privKey
                 track(AnalyticsEvent.IMPORT_PRIVATE_KEY_SUBMITTED)
                 if (userHasOnboarded) {
                     checkIdentityBeforeOpening_1()
                 } else {
-                    onCreateWallet({ privateKey: _privKey, importType: IMPORT_TYPE.PRIVATE_KEY })
+                    onCreateWallet({
+                        privateKey: _privKey,
+                        derivationPath: derivationPathCache.current ?? DerivationPath.VET,
+                        importType: IMPORT_TYPE.PRIVATE_KEY,
+                    })
                 }
             } catch (err) {
                 processErrorMessage(err)
@@ -167,13 +255,17 @@ export const ImportLocalWallet = () => {
         async (pwd: string) => {
             try {
                 const privateKey = await CryptoUtils.decryptKeystoreFile(textValue, pwd)
-                checkCanImportDevice(undefined, privateKey)
+                checkCanImportDevice(derivationPathCache.current ?? DerivationPath.VET, undefined, privateKey)
                 privateKeyCache.current = privateKey
                 track(AnalyticsEvent.IMPORT_KEYSTORE_FILE_SUBMITTED)
                 if (userHasOnboarded) {
                     checkIdentityBeforeOpening_1()
                 } else {
-                    onCreateWallet({ privateKey, importType: IMPORT_TYPE.KEYSTORE_FILE })
+                    onCreateWallet({
+                        privateKey,
+                        derivationPath: derivationPathCache.current ?? DerivationPath.VET,
+                        importType: IMPORT_TYPE.KEYSTORE_FILE,
+                    })
                 }
             } catch (err) {
                 processErrorMessage(err)
@@ -247,9 +339,36 @@ export const ImportLocalWallet = () => {
     const handleVerify = useCallback(() => onVerify(textValue, importType), [onVerify, textValue, importType])
     const disabledAction = useCallback(() => setIsError(LL.ERROR_INVALID_IMPORT_DATA()), [LL])
 
+    const footerButtonLeftIcon = useMemo(() => {
+        switch (computeButtonType) {
+            case ButtonType.icloud:
+                return "apple-icloud"
+            default:
+                return undefined
+        }
+    }, [computeButtonType])
+
+    const footerButtonTitle = useMemo(() => {
+        switch (computeButtonType) {
+            case ButtonType.icloud:
+                return "or use iCloud"
+            default:
+                return LL.BTN_IMPORT_WALLET_VERIFY()
+        }
+    }, [LL, computeButtonType])
+
+    const footerButtonDisabled = useMemo(() => {
+        return computeButtonType === ButtonType.unknown || (!textValue.length && computeButtonType === ButtonType.local)
+    }, [computeButtonType, textValue.length])
+
+    const footerButtonAction = useCallback(() => {
+        computeButtonType === ButtonType.icloud ? goToImportFromCloud() : handleVerify()
+    }, [computeButtonType, goToImportFromCloud, handleVerify])
+
     return (
         <DismissKeyboardView>
             <Layout
+                preventGoBack={isLoading && PlatformUtils.isAndroid()}
                 body={
                     <>
                         <BaseView justifyContent="space-between">
@@ -320,7 +439,10 @@ export const ImportLocalWallet = () => {
                             </BaseView>
                         </BaseView>
 
-                        <SelectDerivationPathBottomSheet ref={derivationPathRef} onClose={onCloseDerivationPath} />
+                        <SelectDerivationPathBottomSheet
+                            ref={derivationPathRef}
+                            onClose={handleOnCloseDerivationPathSheet}
+                        />
 
                         <BaseModal isOpen={isOpen} onClose={onCloseCreateFlow}>
                             <BaseView justifyContent="flex-start">
@@ -331,6 +453,8 @@ export const ImportLocalWallet = () => {
                                             pin,
                                             mnemonic: mnemonicCache.current,
                                             privateKey: privateKeyCache.current,
+                                            derivationPath: derivationPathCache.current ?? DerivationPath.VET,
+                                            importType,
                                         })
                                     }
                                 />
@@ -347,13 +471,47 @@ export const ImportLocalWallet = () => {
                         )}
 
                         <BaseButton
-                            action={handleVerify}
-                            w={100}
-                            title={LL.BTN_IMPORT_WALLET_VERIFY()}
-                            disabled={importType === IMPORT_TYPE.UNKNOWN}
+                            isLoading={isLoading && PlatformUtils.isIOS()}
+                            leftIcon={
+                                footerButtonLeftIcon ? (
+                                    <BaseIcon
+                                        name={footerButtonLeftIcon}
+                                        color={theme.colors.textReversed}
+                                        style={styles.ickoudIcon}
+                                    />
+                                ) : undefined
+                            }
+                            action={footerButtonAction}
+                            style={styles.button}
+                            title={footerButtonTitle}
+                            disabled={footerButtonDisabled}
                             disabledAction={disabledAction}
                             disabledActionHaptics="Heavy"
+                            haptics="Light"
                         />
+
+                        {PlatformUtils.isAndroid() && (
+                            <>
+                                <BaseSpacer height={8} />
+                                <BaseButton
+                                    isLoading={isLoading}
+                                    leftIcon={
+                                        <BaseIcon
+                                            name={"google-drive"}
+                                            color={theme.colors.textReversed}
+                                            style={styles.ickoudIcon}
+                                        />
+                                    }
+                                    action={getWalletsFromDrive}
+                                    style={styles.button}
+                                    title={"or use Google Drive"}
+                                    disabled={!isCloudAvailable || isLoading}
+                                    disabledAction={disabledAction}
+                                    disabledActionHaptics="Heavy"
+                                    haptics="Light"
+                                />
+                            </>
+                        )}
 
                         <RequireUserPassword
                             isOpen={isPasswordPromptOpen_1}
@@ -369,4 +527,6 @@ export const ImportLocalWallet = () => {
 
 const styles = StyleSheet.create({
     icon: { marginHorizontal: 20 },
+    ickoudIcon: { marginLeft: -12, marginRight: 12 },
+    button: { justifyContent: "center", height: 48 },
 })

@@ -1,19 +1,22 @@
 import React from "react"
 import { useTheme } from "~Hooks"
-import { LANGUAGE } from "~Constants"
 import { BaseIcon, BaseText, BaseTouchableBox } from "~Components"
+import { Locales } from "~i18n"
+import { languages } from "~Model"
 
 type Props = {
-    language: LANGUAGE
+    language: Locales
     onPress: () => void
 }
 
 export const ChangeLanguage: React.FC<Props> = ({ language, onPress }) => {
     const theme = useTheme()
 
+    const selectedLanguageName = languages.find(_language => _language.code === language)?.name
+
     return (
         <BaseTouchableBox action={onPress} justifyContent="space-between" haptics="Light">
-            <BaseText typographyFont="smallButtonPrimary">{language}</BaseText>
+            <BaseText typographyFont="smallButtonPrimary">{selectedLanguageName}</BaseText>
             <BaseIcon name={"web"} color={theme.colors.text} size={24} />
         </BaseTouchableBox>
     )
