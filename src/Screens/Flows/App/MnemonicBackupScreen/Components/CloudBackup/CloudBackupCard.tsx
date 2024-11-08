@@ -130,6 +130,8 @@ export const CloudBackupCard: FC<Props> = ({ mnemonicArray, deviceToBackup }) =>
                             {
                                 backgroundColor:
                                     isWalletBackedUp || isLoading ? theme.colors.successBackground : COLORS.LIME_GREEN,
+                                borderColor:
+                                    isWalletBackedUp || isLoading ? theme.colors.successBackground : COLORS.LIME_GREEN,
                             },
                         ]}
                         disabled={isWalletBackedUp || isLoading}
@@ -169,7 +171,6 @@ const baseStyles = (theme: ColorThemeType) =>
             borderRadius: 8,
             borderWidth: 1,
             padding: 0,
-            borderColor: COLORS.GREEN_100,
         },
         cloudRowContent: {
             flexDirection: "row",
