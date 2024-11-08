@@ -9,6 +9,11 @@ import HapticsService from "~Services/HapticsService"
 
 const IS_CI_BUILD = process.env.IS_CI_BUILD_ENABLED === "true"
 
+export type ToastAddress = {
+    sender: string
+    recipient?: string
+}
+
 /**
  * Creates a toast configuration object for the given theme.
  *

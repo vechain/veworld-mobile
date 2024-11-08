@@ -6,6 +6,7 @@ export type ToastStyles = {
     container: ViewStyle
     contentContainer: ViewStyle
     textContainer: ViewStyle
+    addressesContainer: ViewStyle
     iconColor: ColorValue
     textColor?: string
 }
@@ -61,6 +62,11 @@ const generateToastStyles = (
         flexDirection: "row",
         alignItems: "center",
         flexWrap: "wrap",
+    },
+    addressesContainer: {
+        flexDirection: "row",
+        justifyContent: "flex-start",
+        alignItems: "center",
     },
     textColor: textColor,
     iconColor: iconColor,

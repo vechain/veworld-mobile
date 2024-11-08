@@ -1,7 +1,8 @@
 import React, { useCallback } from "react"
-import { BaseIcon, BaseText, BaseView, hideToast } from "~Components"
+import { BaseIcon, BaseText, BaseView, hideToast, ToastAddress } from "~Components"
 import { useTheme } from "~Hooks"
 import { ToastStyles } from "../util"
+import { ToastAddressesContent } from "./ToastAddressesContent"
 
 type Props = {
     styles: ToastStyles
@@ -9,12 +10,13 @@ type Props = {
     text1?: string
     text2?: string
     text3?: string
+    addresses?: ToastAddress
     onPress?: () => void
     hideToast?: () => void
     testID?: string
 }
 
-export const ToastContent = ({ styles, text1, icon, text2, text3, onPress, testID }: Props) => {
+export const ToastContent = ({ styles, text1, icon, text2, text3, addresses, onPress, testID }: Props) => {
     const theme = useTheme()
 
     const handleOnPress = useCallback(() => {
@@ -32,6 +34,9 @@ export const ToastContent = ({ styles, text1, icon, text2, text3, onPress, testI
                 <BaseIcon name={icon} size={20} color={styles.iconColor} />
                 <BaseView>
                     <BaseView style={styles.textContainer} pl={12}>
+                        {addresses && (
+                            <ToastAddressesContent addresses={addresses} styles={styles.addressesContainer} />
+                        )}
                         <BaseText color={textColor} typographyFont="captionMedium">
                             {text1}{" "}
                         </BaseText>
