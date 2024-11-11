@@ -72,7 +72,7 @@ jobs:
               IFS='.' read -r major minor patch <<< "$VERSION"
 
               # Increment the patch version
-              new_patch=$((patch + 1))
+              #new_patch=$((patch + 1))
 
               # Increment build number
               new_build=$((BUILD + 1))
@@ -99,19 +99,19 @@ jobs:
         uses: ./.github/workflows/install-build-test-scan.yml
         secrets: inherit
     
-    #release-ios:
-    #    uses: ./.github/workflows/release-ios.yml
-    #    needs: build-test-scan
-    #    secrets: inherit
-    #    with:
-    #        version: ${{ needs.setup-version-build.outputs.new_version }}
-    #        build: ${{ needs.setup-version-build.outputs.new_build }}
-    #    
-    #release-android:
-    #    uses: ./.github/workflows/release-android.yml
-    #    needs: build-test-scan
-    #    secrets: inherit
-    #    with:
-    #        version: ${{ needs.setup-version-build.outputs.new_version }}
-    #        build: ${{ needs.setup-version-build.outputs.new_build }}
+    release-ios:
+        uses: ./.github/workflows/release-ios.yml
+        needs: build-test-scan
+        secrets: inherit
+        with:
+            version: ${{ needs.setup-version-build.outputs.new_version }}
+            build: ${{ needs.setup-version-build.outputs.new_build }}
+        
+    release-android:
+        uses: ./.github/workflows/release-android.yml
+        needs: build-test-scan
+        secrets: inherit
+        with:
+            version: ${{ needs.setup-version-build.outputs.new_version }}
+            build: ${{ needs.setup-version-build.outputs.new_build }}
     
