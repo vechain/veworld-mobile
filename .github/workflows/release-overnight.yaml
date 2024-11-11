@@ -44,6 +44,9 @@ jobs:
         env:
           VERSION: ${{ vars.version }}
           BUILD: ${{ vars.build }}
+        outputs:
+          new_version: ${{ steps.increment.outputs.new_version }}
+          new_build: ${{ steps.increment.outputs.new_build }}
         steps:
           - name: Generate a token
             id: generate-token
@@ -84,6 +87,10 @@ jobs:
               echo "new_version=$new_version" >> $GITHUB_ENV
               echo "new_build=$new_build" >> $GITHUB_ENV
 
+              # Set outputs for the job
+              echo "new_version=$new_version" >> $GITHUB_OUTPUT
+              echo "new_build=$new_build" >> $GITHUB_OUTPUT
+
               # Update Repo with new version and build
               gh variable set VERSION --body "$new_version"
               gh variable set BUILD --body "$new_build"
@@ -94,18 +101,17 @@ jobs:
               echo "New build: ${{ env.new_build }}"
     
     release-ios:
-        uses: ./.github/workflows/release-ios.yml
-        needs: setup-version-build
-        secrets: inherit
-        with:
-            version: ${{ needs.setup-version-build.outputs.new_version }}
-            build: ${{ needs.setup-version-build.outputs.new_build }}
-        
+      uses: ./.github/workflows/release-ios.yml
+      needs: setup-version-build
+      secrets: inherit
+      with:
+        version: ${{ needs.setup-version-build.outputs.new_version }}
+        build: ${{ needs.setup-version-build.outputs.new_build }}
+
     release-android:
-        uses: ./.github/workflows/release-andorid.yaml
-        needs: release-ios
-        secrets: inherit
-        with:
-            version: ${{ needs.setup-version-build.outputs.new_version }}
-            build: ${{ needs.setup-version-build.outputs.new_build }}
-    
+      uses: ./.github/workflows/release-andorid.yaml
+      needs: release-ios
+      secrets: inherit
+      with:
+        version: ${{ needs.setup-version-build.outputs.new_version }}
+        build: ${{ needs.setup-version-build.outputs.new_build }}
