@@ -9,7 +9,7 @@ on:
         required: true
       build: 
         description: 'Build number'
-        type: number
+        type: string
         required: true
 
   workflow_call:
@@ -20,7 +20,7 @@ on:
         required: true
       build: 
         description: 'Build number'
-        type: number
+        type: string
         required: true
     
 
@@ -32,7 +32,10 @@ jobs:
         steps:
             - name: Checkout repository
               uses: actions/checkout@v3
-
+              with:
+                  ref: release-build-ci-${{inputs.build}}-${{inputs.version}}
+                  fetch-depth: 0
+                  persist-credentials: false
             - name: Setup Node
               uses: actions/setup-node@v3
               with:
@@ -129,4 +132,9 @@ jobs:
                   export KEY_PASSWORD="$(<store_password.txt)"
                   export KEY_ALIAS="$(<key_alias.txt)"
                   fastlane build_android_ci version_code:${{github.event.inputs.build}} version_name:${{github.event.inputs.version}}
-                
+            
+            - name: Commit and Push Changes
+              run: |
+                git add --all
+                git commit -m "build: Android build artifacts" || echo "No changes to commit"
+                git push origin HEAD:release-build-ci-${{inputs.build}}-${{inputs.version}}

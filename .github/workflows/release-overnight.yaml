@@ -1,0 +1,117 @@
+name: Release Overnight - Android & iOS
+
+on:
+    workflow_dispatch:
+        inputs:
+            version: 
+                description: 'Version to build'
+                type: string
+                required: true
+            build: 
+                description: 'Build number'
+                type: number
+                required: true
+    pull_request:
+        branches:
+            - "*"
+    push:
+        branches:
+            - 2349-release-overnight
+env:
+    VERSION: ${{ vars.version }}
+    BUILD: ${{ vars.build }}
+jobs:
+    check-merged-pr:
+        runs-on: ubuntu-latest
+        steps:
+            - name: Checkout repository
+              uses: actions/checkout@v4
+            - name: Check for merged PRs
+              id: check_merged_prs
+              env:
+                GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+              run: |
+                merged_prs=$(gh pr list --base main --state merged --json mergedAt --jq '.[] | select(.mergedAt > "'$(date --date="24 hours ago" --iso-8601=seconds)'") | length')
+                echo "Merged PRs in the last 24 hours: $merged_prs"
+                echo "::set-output name=should_release::$(if [ "$merged_prs" -gt 0 ]; then echo 'true'; else echo 'false'; fi)"
+   
+    setup-version-build:
+        runs-on: ubuntu-latest
+        needs: check-merged-pr
+        permissions:
+          actions: write
+          contents: read
+        env:
+          VERSION: ${{ vars.version }}
+          BUILD: ${{ vars.build }}
+        outputs:
+          new_version: ${{ steps.increment.outputs.new_version }}
+          new_build: ${{ steps.increment.outputs.new_build }}
+        steps:
+          - name: Generate a token
+            id: generate-token
+            uses: actions/create-github-app-token@v1
+            with:
+              app-id: ${{ secrets.APP_ID }}
+              private-key: ${{ secrets.APP_PRIVATE_KEY }}
+
+          - name: Set GH_TOKEN environment variable
+            run: echo "GH_TOKEN=${{ steps.generate-token.outputs.token }}" >> $GITHUB_ENV
+
+          - name: Checkout repository
+            uses: actions/checkout@v4
+            with:
+              token: ${{ steps.generate-token.outputs.token }}
+
+          - name: Increment Version and Build
+            id: increment
+            env:
+              GH_TOKEN: ${{ steps.generate-token.outputs.token }}
+              VERSION: ${{ env.VERSION }}
+              BUILD: ${{ env.BUILD }}
+            run: |
+              # Split the version into components
+              echo "VERSION=$VERSION"
+              IFS='.' read -r major minor patch <<< "$VERSION"
+
+              # Increment the patch version
+              new_patch=$((patch))
+
+              # Increment build number
+              new_build=$((BUILD + 1))
+
+              # Combine components back to form the new version
+              new_version="$major.$minor.$new_patch"
+
+              # Output the new version and build
+              echo "new_version=$new_version" >> $GITHUB_ENV
+              echo "new_build=$new_build" >> $GITHUB_ENV
+
+              # Set outputs for the job
+              echo "new_version=$new_version" >> $GITHUB_OUTPUT
+              echo "new_build=$new_build" >> $GITHUB_OUTPUT
+
+              # Update Repo with new version and build
+              gh variable set VERSION --body "$new_version"
+              gh variable set BUILD --body "$new_build"
+
+          - name: Output new version and build
+            run: |
+              echo "New version: ${{ env.new_version }}"
+              echo "New build: ${{ env.new_build }}"
+    
+    release-ios:
+      uses: ./.github/workflows/release-ios.yml
+      needs: setup-version-build
+      secrets: inherit
+      with:
+        version: ${{ needs.setup-version-build.outputs.new_version }}
+        build: ${{ needs.setup-version-build.outputs.new_build }}
+
+    release-android:
+      uses: ./.github/workflows/release-andorid.yaml
+      needs: release-ios
+      secrets: inherit
+      with:
+        version: ${{ needs.setup-version-build.outputs.new_version }}
+        build: ${{ needs.setup-version-build.outputs.new_build }}
