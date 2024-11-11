@@ -84,11 +84,11 @@ jobs:
               new_version="$major.$minor.$new_patch"
 
               # Output the new version and build
-              echo "new_version=$new_version" >> $GITHUB_ENV
+              echo "new_version=$VERSION" >> $GITHUB_ENV
               echo "new_build=$new_build" >> $GITHUB_ENV
 
               # Set outputs for the job
-              echo "new_version=$new_version" >> $GITHUB_OUTPUT
+              echo "new_version=$VERSION" >> $GITHUB_OUTPUT
               echo "new_build=$new_build" >> $GITHUB_OUTPUT
 
               # Update Repo with new version and build
