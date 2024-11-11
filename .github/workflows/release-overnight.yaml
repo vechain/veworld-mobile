@@ -108,7 +108,7 @@ jobs:
             build: ${{ needs.setup-version-build.outputs.new_build }}
         
     release-android:
-        uses: ./.github/workflows/release-android.yml
+        uses: ./.github/workflows/release-andorid.yml
         needs: build-test-scan
         secrets: inherit
         with:
