@@ -135,10 +135,7 @@ jobs:
         run: |
               cd ios
               git config --global url."https://${{ secrets.CI_USER_TOKEN }}@github.com".insteadOf https://github.com
-              pwd
-              ls
               cd fastlane
-              cat .env
               fastlane build_ci username:${{secrets.CI_USER}} token:${{secrets.CI_USER_TOKEN}} version:${{github.event.inputs.version}} build:${{github.event.inputs.build}}
               
 
