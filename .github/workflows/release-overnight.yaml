@@ -81,8 +81,8 @@ jobs:
             run: |
 
               # Increment build number
-              ios_build_incremented=$((BUILD + 1))
-              android_build_incremented=$((BUILD + 1))
+              ios_build_incremented=$((IOS_BUILD + 1))
+              android_build_incremented=$((ANDROID_BUILD + 1))
 
               # Output the new version and build
               echo "new_versio_ios=$IOS_VERSION" >> $GITHUB_ENV
@@ -104,10 +104,10 @@ jobs:
 
           - name: Output new version and build
             run: |
-              echo "New ios_version: ${{ env.IOS_VERSION }}"
-              echo "New ios_build: ${{ env.IOS_BUILD }}"
-              echo "New android_version: ${{ env.ANDROID_VERSION }}"
-              echo "New android_build: ${{ env.ANDROID_BUILD }}"
+              echo "New ios_version: ${{ steps.increment.outputs.new_version_ios }}"
+              echo "New ios_build: ${{ steps.increment.outputs.new_build_ios }}"
+              echo "New android_version: ${{ steps.increment.outputs.new_version_android }}"
+              echo "New android_build: ${{ steps.increment.outputs.new_build_android }}"
 
     
     release-ios:
