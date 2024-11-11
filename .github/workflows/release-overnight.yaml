@@ -54,6 +54,7 @@ jobs:
           new_build_ios: ${{ steps.increment.outputs.new_build_ios }}
           new_version_android: ${{ steps.increment.outputs.new_version_android }}
           new_build_android: ${{ steps.increment.outputs.new_build_android }}
+          pr_branch: ${{ steps.check-merged-prs.outputs.pr_branch }}
         steps:
           - name: Generate a token
             id: generate-token
@@ -83,18 +84,22 @@ jobs:
               # Increment build number
               ios_build_incremented=$((IOS_BUILD + 1))
               android_build_incremented=$((ANDROID_BUILD + 1))
+              PR_BRANCH="release-build-ci-${ios_build_incremented}-${IOS_VERSION}"
+
 
               # Output the new version and build
               echo "new_versio_ios=$IOS_VERSION" >> $GITHUB_ENV
               echo "new_build_ios=$ios_build_incremented" >> $GITHUB_ENV
               echo "new_version_android=$ANDROID_VERSION" >> $GITHUB_ENV
               echo "new_build_android=$android_build_incremented" >> $GITHUB_ENV
+              echo "pr_branch=$PR_BRANCH" >> $GITHUB_ENV
 
               # Set outputs for the job
               echo "new_version_ios=$IOS_VERSION" >> $GITHUB_OUTPUT
               echo "new_build_ios=$ios_build_incremented" >> $GITHUB_OUTPUT
               echo "new_version_android=$ANDROID_VERSION" >> $GITHUB_OUTPUT
               echo "new_build_android=$android_build_incremented" >> $GITHUB_OUTPUT
+              echo "pr_branch=$PR_BRANCH" >> $GITHUB_OUTPUT
 
               # Update Repo with new version and build
               gh variable set IOS_VERSION --body "$IOS_VERSION"
@@ -125,3 +130,4 @@ jobs:
       with:
         version: ${{ needs.setup-version-build.outputs.new_version_android }}
         build: ${{ needs.setup-version-build.outputs.new_build_android }}
+        pr_branch: ${{ needs.setup-version-build.outputs.pr_branch }}

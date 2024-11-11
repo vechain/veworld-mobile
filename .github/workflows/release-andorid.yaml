@@ -22,6 +22,10 @@ on:
         description: 'Build number'
         type: string
         required: true
+      pr_branch:
+        description: 'PR branch'
+        type: string
+        required: true
     
 
 jobs:
@@ -33,7 +37,7 @@ jobs:
             - name: Checkout repository
               uses: actions/checkout@v3
               with:
-                  ref: release-build-ci-${{inputs.build}}-${{inputs.version}}
+                  ref: ${{ inputs.pr_branch }}
                   fetch-depth: 0
                   persist-credentials: false
             - name: Setup Node
