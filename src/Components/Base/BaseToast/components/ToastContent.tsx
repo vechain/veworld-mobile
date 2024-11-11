@@ -35,23 +35,29 @@ export const ToastContent = ({ styles, text1, icon, text2, text3, addresses, onP
                 <BaseView>
                     <BaseView style={styles.textContainer} pl={12}>
                         {addresses && (
-                            <ToastAddressesContent addresses={addresses} styles={styles.addressesContainer} />
+                            <ToastAddressesContent addresses={addresses} styles={styles.addressesTextColor} />
                         )}
-                        <BaseText color={textColor} typographyFont="captionMedium">
-                            {text1}{" "}
-                        </BaseText>
-                        <BaseText color={textColor} typographyFont="body">
-                            {text2}{" "}
-                        </BaseText>
-                        <BaseText
-                            testID={testID}
-                            disabled={!onPress}
-                            underline={onPress ? true : false}
-                            onPress={handleOnPress}
-                            color={textColor}
-                            typographyFont="body">
-                            {text3}
-                        </BaseText>
+
+                        <BaseView flexDirection="row" mb={4}>
+                            <BaseText color={textColor} typographyFont="bodyMedium">
+                                {text1}{" "}
+                            </BaseText>
+                            <BaseText color={textColor} typographyFont="body">
+                                {text2}{" "}
+                            </BaseText>
+                        </BaseView>
+
+                        {text3 && (
+                            <BaseText
+                                testID={testID}
+                                disabled={!onPress}
+                                underline={onPress ? true : false}
+                                onPress={handleOnPress}
+                                color={textColor}
+                                typographyFont="body">
+                                {text3} <BaseIcon name="arrow-top-right" color={textColor} size={12} />
+                            </BaseText>
+                        )}
                     </BaseView>
                 </BaseView>
             </BaseView>

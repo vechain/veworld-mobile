@@ -6,9 +6,9 @@ export type ToastStyles = {
     container: ViewStyle
     contentContainer: ViewStyle
     textContainer: ViewStyle
-    addressesContainer: ViewStyle
     iconColor: ColorValue
     textColor?: string
+    addressesTextColor?: string
 }
 
 const generateShadowStyle = (theme: ColorThemeType) =>
@@ -40,6 +40,7 @@ const generateToastStyles = (
     lightColor: string,
     iconColor: string,
     textColor?: string,
+    addressesTextColor: string = COLORS.GREY_600,
 ): ToastStyles => ({
     container: {
         borderLeftColor: theme.isDark ? darkColor : lightColor,
@@ -50,7 +51,7 @@ const generateToastStyles = (
     },
     contentContainer: {
         flexDirection: "row",
-        alignItems: "center",
+        alignItems: "flex-start",
         justifyContent: "flex-start",
         paddingHorizontal: 12,
         paddingVertical: 12,
@@ -59,15 +60,10 @@ const generateToastStyles = (
         width: Dimensions.get("window").width - 40,
     },
     textContainer: {
-        flexDirection: "row",
-        alignItems: "center",
-        flexWrap: "wrap",
+        flexDirection: "column",
+        alignItems: "flex-start",
     },
-    addressesContainer: {
-        flexDirection: "row",
-        justifyContent: "flex-start",
-        alignItems: "center",
-    },
+    addressesTextColor: addressesTextColor,
     textColor: textColor,
     iconColor: iconColor,
 })
