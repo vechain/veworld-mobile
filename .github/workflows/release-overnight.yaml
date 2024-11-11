@@ -18,8 +18,11 @@ on:
         branches:
             - 2349-release-overnight
 env:
-    VERSION: ${{ vars.version }}
-    BUILD: ${{ vars.build }}
+    IOS_VERSION: ${{ vars.ios_version }}
+    IOS_BUILD: ${{ vars.ios_build }}
+    ANDROID_VERSION: ${{ vars.android_version }}
+    ANDROID_BUILD: ${{ vars.android_build }}
+
 jobs:
     check-merged-pr:
         runs-on: ubuntu-latest
@@ -42,11 +45,15 @@ jobs:
           actions: write
           contents: read
         env:
-          VERSION: ${{ vars.version }}
-          BUILD: ${{ vars.build }}
+          IOS_VERSION: ${{ vars.ios_version }}
+          IOS_BUILD: ${{ vars.ios_build }}
+          ANDROID_VERSION: ${{ vars.android_version }}
+          ANDROID_BUILD: ${{ vars.android_build }}
         outputs:
-          new_version: ${{ steps.increment.outputs.new_version }}
-          new_build: ${{ steps.increment.outputs.new_build }}
+          new_version_ios: ${{ steps.increment.outputs.new_version_ios }}
+          new_build_ios: ${{ steps.increment.outputs.new_build_ios }}
+          new_version_android: ${{ steps.increment.outputs.new_version_android }}
+          new_build_android: ${{ steps.increment.outputs.new_build_android }}
         steps:
           - name: Generate a token
             id: generate-token
@@ -67,51 +74,54 @@ jobs:
             id: increment
             env:
               GH_TOKEN: ${{ steps.generate-token.outputs.token }}
-              VERSION: ${{ env.VERSION }}
-              BUILD: ${{ env.BUILD }}
+              IOS_VERSION: ${{ env.IOS_VERSION }}
+              IOS_BUILD: ${{ env.IOS_BUILD }}
+              ANDROID_VERSION: ${{ env.ANDROID_VERSION }}
+              ANDROID_BUILD: ${{ env.ANDROID_BUILD }}
             run: |
-              # Split the version into components
-              echo "VERSION=$VERSION"
-              IFS='.' read -r major minor patch <<< "$VERSION"
-
-              # Increment the patch version
-              new_patch=$((patch))
 
               # Increment build number
-              new_build=$((BUILD + 1))
-
-              # Combine components back to form the new version
-              new_version="$major.$minor.$new_patch"
+              ios_build_incremented=$((BUILD + 1))
+              android_build_incremented=$((BUILD + 1))
 
               # Output the new version and build
-              echo "new_version=$new_version" >> $GITHUB_ENV
-              echo "new_build=$new_build" >> $GITHUB_ENV
+              echo "new_versio_ios=$IOS_VERSION" >> $GITHUB_ENV
+              echo "new_build_ios=$ios_build_incremented" >> $GITHUB_ENV
+              echo "new_version_android=$ANDROID_VERSION" >> $GITHUB_ENV
+              echo "new_build_android=$android_build_incremented" >> $GITHUB_ENV
 
               # Set outputs for the job
-              echo "new_version=$new_version" >> $GITHUB_OUTPUT
-              echo "new_build=$new_build" >> $GITHUB_OUTPUT
+              echo "new_version_ios=$IOS_VERSION" >> $GITHUB_OUTPUT
+              echo "new_build_ios=$ios_build_incremented" >> $GITHUB_OUTPUT
+              echo "new_version_android=$ANDROID_VERSION" >> $GITHUB_OUTPUT
+              echo "new_build_android=$android_build_incremented" >> $GITHUB_OUTPUT
 
               # Update Repo with new version and build
-              gh variable set VERSION --body "$new_version"
-              gh variable set BUILD --body "$new_build"
+              gh variable set IOS_VERSION --body "$IOS_VERSION"
+              gh variable set IOS_BUILD --body "$ios_build_incremented"
+              gh variable set ANDROID_VERSION --body "$ANDROID_VERSION"
+              gh variable set ANDROID_BUILD --body "$android_build_incremented"
 
           - name: Output new version and build
             run: |
-              echo "New version: ${{ env.new_version }}"
-              echo "New build: ${{ env.new_build }}"
+              echo "New ios_version: ${{ env.IOS_VERSION }}"
+              echo "New ios_build: ${{ env.IOS_BUILD }}"
+              echo "New android_version: ${{ env.ANDROID_VERSION }}"
+              echo "New android_build: ${{ env.ANDROID_BUILD }}"
+
     
     release-ios:
       uses: ./.github/workflows/release-ios.yml
       needs: setup-version-build
       secrets: inherit
       with:
-        version: ${{ needs.setup-version-build.outputs.new_version }}
-        build: ${{ needs.setup-version-build.outputs.new_build }}
+        version: ${{ needs.setup-version-build.outputs.new_version_ios }}
+        build: ${{ needs.setup-version-build.outputs.new_build_ios }}
 
     release-android:
       uses: ./.github/workflows/release-andorid.yaml
       needs: release-ios
       secrets: inherit
       with:
-        version: ${{ needs.setup-version-build.outputs.new_version }}
-        build: ${{ needs.setup-version-build.outputs.new_build }}
+        version: ${{ needs.setup-version-build.outputs.new_version_android }}
+        build: ${{ needs.setup-version-build.outputs.new_build_android }}
