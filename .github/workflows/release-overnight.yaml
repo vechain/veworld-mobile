@@ -92,16 +92,10 @@ jobs:
             run: |
               echo "New version: ${{ env.new_version }}"
               echo "New build: ${{ env.new_build }}"
-
-    #build-test-scan:
-    #    if: needs.check_merged_prs.outputs.should_release == 'true'
-    #    needs: setup-version-build
-    #    uses: ./.github/workflows/install-build-test-scan.yml
-    #    secrets: inherit
     
     release-ios:
         uses: ./.github/workflows/release-ios.yml
-        #needs: build-test-scan
+        needs: setup-version-build
         secrets: inherit
         with:
             version: ${{ needs.setup-version-build.outputs.new_version }}
@@ -109,7 +103,6 @@ jobs:
         
     release-android:
         uses: ./.github/workflows/release-andorid.yaml
-        #needs: build-test-scan
         needs: release-ios
         secrets: inherit
         with:
