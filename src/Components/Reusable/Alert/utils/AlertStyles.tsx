@@ -2,6 +2,7 @@ import { COLORS } from "~Constants"
 import { StyleSheet, ViewStyle } from "react-native"
 
 export type AlertStatus = "error" | "success"
+export type AlertVariant = "card" | "inline" | "inlineTransparent"
 
 export type AlertStyles = {
     container: ViewStyle
@@ -44,7 +45,7 @@ const ALERT_CONFIGS = {
     },
 }
 
-export const generateAlertStyles = (status: AlertStatus, variant: "card" | "inline"): AlertStyles => {
+export const generateAlertStyles = (status: AlertStatus, variant: AlertVariant): AlertStyles => {
     const config = ALERT_CONFIGS[status]
 
     const variantStyles = StyleSheet.create({
@@ -60,6 +61,9 @@ export const generateAlertStyles = (status: AlertStatus, variant: "card" | "inli
             paddingHorizontal: 12,
             paddingVertical: 8,
             backgroundColor: config.colors.background,
+        },
+        inlineTransparent: {
+            backgroundColor: COLORS.TRANSPARENT,
         },
     })
 
