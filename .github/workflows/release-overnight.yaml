@@ -81,7 +81,7 @@ jobs:
               # Increment build number
               ios_build_incremented=$((IOS_BUILD + 1))
               android_build_incremented=$((ANDROID_BUILD + 1))
-              PR_BRANCH="release-build-ci-${ios_build_incremented}-${IOS_VERSION}"
+              PR_BRANCH="release-build-ci-238-2.0.3"
 
 
               # Output the new version and build
