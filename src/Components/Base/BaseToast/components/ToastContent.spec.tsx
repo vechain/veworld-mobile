@@ -14,16 +14,19 @@ const findToast = () => {
 
 describe("ToastContent", () => {
     it("should render correctly - no onPress", async () => {
-        render(<ToastContent icon={"close"} styles={successStyles} testID={testID} />, {
+        render(<ToastContent icon={"close"} styles={successStyles} text3="Link text" testID={testID} />, {
             wrapper: TestWrapper,
         })
         const toast = await findToast()
         expect(toast).toBeVisible()
     })
     it("should render correctly - onPress", async () => {
-        render(<ToastContent icon={"close"} styles={successStyles} onPress={onPress} testID={testID} />, {
-            wrapper: TestWrapper,
-        })
+        render(
+            <ToastContent icon={"close"} styles={successStyles} text3="Link text" onPress={onPress} testID={testID} />,
+            {
+                wrapper: TestWrapper,
+            },
+        )
         const toast = await findToast()
         act(() => {
             fireEvent.press(toast)
