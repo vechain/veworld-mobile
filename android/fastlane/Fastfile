@@ -136,11 +136,11 @@ platform :android do
         }
       )
 
-      upload_to_play_store(
-        track: 'internal',
-        skip_upload_changelogs: true,
-        skip_upload_metadata: true
-      )
+      #upload_to_play_store(
+      #  track: 'internal',
+      #  skip_upload_changelogs: true,
+      #  skip_upload_metadata: true
+      #)
 
       # Uncomment and configure Slack notifications if needed
       # slack(
