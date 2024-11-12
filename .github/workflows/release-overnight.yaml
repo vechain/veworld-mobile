@@ -51,7 +51,7 @@ jobs:
           new_build_ios: ${{ steps.increment.outputs.new_build_ios }}
           new_version_android: ${{ steps.increment.outputs.new_version_android }}
           new_build_android: ${{ steps.increment.outputs.new_build_android }}
-          pr_branch: ${{ steps.check-merged-prs.outputs.pr_branch }}
+          pr_branch: ${{ steps.increment.outputs.pr_branch }}
         steps:
           - name: Generate a token
             id: generate-token
