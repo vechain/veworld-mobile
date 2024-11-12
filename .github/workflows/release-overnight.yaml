@@ -112,17 +112,17 @@ jobs:
               echo "New android_build: ${{ steps.increment.outputs.new_build_android }}"
 
     
-    release-ios:
-      uses: ./.github/workflows/release-ios.yml
-      needs: setup-version-build
-      secrets: inherit
-      with:
-        version: ${{ needs.setup-version-build.outputs.new_version_ios }}
-        build: ${{ needs.setup-version-build.outputs.new_build_ios }}
+    #release-ios:
+    #  uses: ./.github/workflows/release-ios.yml
+    #  needs: setup-version-build
+    #  secrets: inherit
+    #  with:
+    #    version: ${{ needs.setup-version-build.outputs.new_version_ios }}
+    #    build: ${{ needs.setup-version-build.outputs.new_build_ios }}
 
     release-android:
       uses: ./.github/workflows/release-andorid.yaml
-      needs: release-ios
+      needs: setup-version-build
       secrets: inherit
       with:
         version: ${{ needs.setup-version-build.outputs.new_version_android }}
