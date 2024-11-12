@@ -478,7 +478,7 @@ platform :ios do
 
       ## send slack message
       slack(
-        message: versionType.nil? ? "CI: Error releasing VeWorld build number: #{build} [iOS]" : "Error releasing VeWorld version number: #{version} [iOS]",
+        message: "CI:Error releasing VeWorld version number: #{version} build number: #{build} [iOS]",
         slack_url: ENV["SLACK_WEBHOOK"],
         success: false,
         payload: {
