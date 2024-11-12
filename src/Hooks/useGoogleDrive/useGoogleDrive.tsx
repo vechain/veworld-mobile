@@ -61,7 +61,7 @@ export const useGoogleDrive = () => {
                 showErrorToast({
                     text1: LL.GOOGLE_DRIVE_ERROR_GENERIC(),
                 })
-                return
+                return false
             }
 
             try {
@@ -74,12 +74,14 @@ export const useGoogleDrive = () => {
                     PasswordUtils.bufferToBase64(iv),
                     derivationPath,
                 )
+                return true
             } catch (err) {
                 if (!isCancelError((err as GDError).message)) {
                     showErrorToast({
                         text1: LL.GOOGLE_DRIVE_ERROR_GENERIC(),
                     })
                 }
+                return false
             }
         },
         [LL],

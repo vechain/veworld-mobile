@@ -1,9 +1,9 @@
 import { useNavigation } from "@react-navigation/native"
 import Lottie from "lottie-react-native"
-import React, { FC, useCallback, useEffect, useState } from "react"
+import React, { FC, useCallback, useEffect, useMemo, useState } from "react"
 import { StyleSheet } from "react-native"
 import { getTimeZone } from "react-native-localize"
-import { LoaderDark, LoaderLight } from "~Assets"
+import { LoaderDark } from "~Assets"
 import {
     BaseIcon,
     BaseText,
@@ -30,7 +30,8 @@ export const CloudBackupCard: FC<Props> = ({ mnemonicArray, deviceToBackup }) =>
     const { LL, locale } = useI18nContext()
     const { styles, theme } = useThemedStyles(baseStyles)
     const nav = useNavigation()
-    const [isWalletBackedUp, setIsWalletBackedUp] = useState(true)
+    const [isWalletBackedUp, setIsWalletBackedUp] = useState(PlatformUtils.isIOS())
+    const [backupVerified, setBackupVerified] = useState(false)
     const [isLoading, setIsLoading] = useState(false)
 
     const { saveWalletToCloud, getWalletByRootAddress } = useCloudBackup()
@@ -41,12 +42,12 @@ export const CloudBackupCard: FC<Props> = ({ mnemonicArray, deviceToBackup }) =>
         setIsLoading(true)
         const wallet = await getWalletByRootAddress(deviceToBackup?.rootAddress)
         setIsLoading(false)
-
         setIsWalletBackedUp(!!wallet)
+        setBackupVerified(true)
     }, [deviceToBackup?.rootAddress, getWalletByRootAddress])
 
     useEffect(() => {
-        getWallet()
+        PlatformUtils.isIOS() && getWallet()
     }, [getWallet])
 
     const onHandleBackupToCloudKit = useCallback(
@@ -65,7 +66,7 @@ export const CloudBackupCard: FC<Props> = ({ mnemonicArray, deviceToBackup }) =>
             const salt = HexUtils.generateRandom(256)
             const iv = PasswordUtils.getRandomIV(16)
             const mnemonic = await CryptoUtils.encrypt(mnemonicArray, password, salt, iv)
-            await saveWalletToCloud({
+            const isResultOk = await saveWalletToCloud({
                 mnemonic,
                 _rootAddress: deviceToBackup?.rootAddress,
                 deviceType: deviceToBackup?.type,
@@ -76,21 +77,26 @@ export const CloudBackupCard: FC<Props> = ({ mnemonicArray, deviceToBackup }) =>
             })
 
             setIsLoading(false)
-            setIsWalletBackedUp(true)
 
-            const formattedDate = DateUtils.formatDateTime(
-                Date.now(),
-                locale,
-                getTimeZone() ?? DateUtils.DEFAULT_TIMEZONE,
-            )
-            dispatch(
-                setDeviceIsBackup({
-                    rootAddress: deviceToBackup.rootAddress,
-                    isBackup: true,
-                    date: formattedDate,
-                }),
-            )
-            nav.goBack()
+            if (isResultOk) {
+                setIsWalletBackedUp(true)
+
+                const formattedDate = DateUtils.formatDateTime(
+                    Date.now(),
+                    locale,
+                    getTimeZone() ?? DateUtils.DEFAULT_TIMEZONE,
+                )
+                dispatch(
+                    setDeviceIsBackup({
+                        rootAddress: deviceToBackup.rootAddress,
+                        isBackup: true,
+                        date: formattedDate,
+                    }),
+                )
+                nav.goBack()
+            } else {
+                setBackupVerified(false)
+            }
         },
         [
             LL,
@@ -106,6 +112,22 @@ export const CloudBackupCard: FC<Props> = ({ mnemonicArray, deviceToBackup }) =>
             saveWalletToCloud,
         ],
     )
+
+    const cardLabel = useMemo(() => {
+        if (PlatformUtils.isIOS()) {
+            return LL.ICLOUD()
+        } else {
+            return !backupVerified ? LL.BTN_VERIFY_DRIVE_BACKUP() : LL.GOOGLE_DRIVE()
+        }
+    }, [LL, backupVerified])
+
+    const cardAction = useCallback(() => {
+        if (PlatformUtils.isAndroid() && !backupVerified) {
+            getWallet()
+        } else {
+            onOpen()
+        }
+    }, [backupVerified, getWallet, onOpen])
 
     return (
         <>
@@ -136,20 +158,15 @@ export const CloudBackupCard: FC<Props> = ({ mnemonicArray, deviceToBackup }) =>
                         ]}
                         disabled={isWalletBackedUp || isLoading}
                         style={styles.cloudRowContent}
-                        action={onOpen}>
+                        action={cardAction}>
                         <BaseView style={styles.cloudInfo}>
                             <BaseText typographyFont="bodyMedium" color={COLORS.DARK_PURPLE}>
-                                {PlatformUtils.isIOS() ? LL.ICLOUD() : LL.GOOGLE_DRIVE()}
+                                {cardLabel}
                             </BaseText>
                         </BaseView>
 
                         {isLoading ? (
-                            <Lottie
-                                source={theme.isDark ? LoaderDark : LoaderLight}
-                                autoPlay
-                                loop
-                                style={styles.lottie}
-                            />
+                            <Lottie source={LoaderDark} autoPlay loop style={styles.lottie} />
                         ) : (
                             !isWalletBackedUp && <BaseIcon name="chevron-right" size={14} color={COLORS.DARK_PURPLE} />
                         )}
