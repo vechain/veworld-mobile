@@ -39,6 +39,10 @@ jobs:
               with:
                   ref: ${{ inputs.pr_branch }}
                   fetch-depth: 0
+
+            - name: Check PR_BRANCH
+              run: echo ${{ inputs.pr_branch }}
+              
             - name: Setup Node
               uses: actions/setup-node@v3
               with:
