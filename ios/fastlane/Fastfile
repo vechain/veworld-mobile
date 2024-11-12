@@ -435,17 +435,17 @@ platform :ios do
         end
         
       # upload to testflight
-      #upload_to_testflight(
-      #  skip_waiting_for_build_processing: true, 
-      #  apple_id: "6446854569",
-      #  ipa: "./build/VeWorld.ipa",
-      #)
+      upload_to_testflight(
+        skip_waiting_for_build_processing: true, 
+        apple_id: "6446854569",
+        ipa: "./build/VeWorld.ipa",
+      )
 
-      #create_changelog(version:version)
+      create_changelog(version:version)
 
-      #create_tags_gh(build:build, version:version)
+      create_tags_gh(build:build, version:version)
 
-      #upload_source_maps(build:build, version:version)
+      upload_source_maps(build:build, version:version)
 
       gh_setup_after
 
