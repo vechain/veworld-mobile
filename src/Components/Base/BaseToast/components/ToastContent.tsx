@@ -33,18 +33,20 @@ export const ToastContent = ({ styles, text1, icon, text2, text3, addresses, onP
             <BaseView style={styles.contentContainer}>
                 <BaseIcon name={icon} size={20} color={styles.iconColor} />
                 <BaseView>
-                    <BaseView style={styles.textContainer} pl={12}>
+                    <BaseView style={styles.textContainer} px={12}>
                         {addresses && (
                             <ToastAddressesContent addresses={addresses} styles={styles.addressesTextColor} />
                         )}
 
-                        <BaseView flexDirection="row" mb={4}>
+                        <BaseView flexDirection="row" flex={1} flexWrap="wrap">
                             <BaseText color={textColor} typographyFont="bodyMedium">
                                 {text1}{" "}
                             </BaseText>
-                            <BaseText color={textColor} typographyFont="body">
-                                {text2}{" "}
-                            </BaseText>
+                            {text2 && (
+                                <BaseText color={textColor} typographyFont="body">
+                                    {text2}{" "}
+                                </BaseText>
+                            )}
                         </BaseView>
 
                         {text3 && (
