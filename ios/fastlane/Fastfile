@@ -458,16 +458,16 @@ platform :ios do
         api_url: "https://api.github.com"
       )
 
-      ## send slack message
-      #slack(
-      #  message: version.nil? ? "CI: VeWorld build number: #{build} was successfully released! [iOS]" : "VeWorld version number: #{version} was successfully released! [iOS]",
-      #  slack_url: ENV["SLACK_WEBHOOK"],
-      #  success: true,
-      #  payload: {
-      #    "Build Date" => Time.new.strftime("%d/%m/%Y %H:%M"),
-      #    "Built by" => github_username,
-      #  },
-      #)
+      # send slack message
+      slack(
+        message:  "CI: VeWorld version number: #{version}  build number: #{build} was successfully released! [iOS]",
+        slack_url: ENV["SLACK_WEBHOOK"],
+        success: true,
+        payload: {
+          "Build Date" => Time.new.strftime("%d/%m/%Y %H:%M"),
+          "Built by" => github_username,
+        },
+      )
 
       # clean build artifacts if any
       clean_build_artifacts
@@ -475,36 +475,36 @@ platform :ios do
 
     rescue => exception # catch
       puts exception
-#
-    #  ## send slack message
-    #  slack(
-    #    message: versionType.nil? ? "CI: Error releasing VeWorld build number: #{build} [iOS]" : "Error releasing VeWorld version number: #{version} [iOS]",
-    #    slack_url: ENV["SLACK_WEBHOOK"],
-    #    success: false,
-    #    payload: {
-    #      "Build Date" => Time.new.strftime("%d/%m/%Y %H:%M"),
-    #      "Built by" => github_username,
-    #    },
-    #  )
-#
-    #  # clean build artifacts if any
-    #  clean_build_artifacts
-#
-    #  # checkout main
-    #  sh("git checkout main")
-#
-    #  # delete branch locally
-    #  sh("git branch -D release-build-#{build}-#{version}")
-    #  
-    #  # delete branch remotely
-    #  sh("git push origin --delete release-build-#{build}-#{version}")
-#
-    #  if git_tag_exists(tag: "v#{version}-#{build}")
-    #    # delete tag locally
-    #    sh("git tag -d v#{version}-#{build}") 
-    #    # delete tag remotely
-    #    sh("git push --delete origin v#{version}-#{build}") 
-    #  end
+
+      ## send slack message
+      slack(
+        message: versionType.nil? ? "CI: Error releasing VeWorld build number: #{build} [iOS]" : "Error releasing VeWorld version number: #{version} [iOS]",
+        slack_url: ENV["SLACK_WEBHOOK"],
+        success: false,
+        payload: {
+          "Build Date" => Time.new.strftime("%d/%m/%Y %H:%M"),
+          "Built by" => github_username,
+        },
+      )
+
+      # clean build artifacts if any
+      clean_build_artifacts
+
+      # checkout main
+      sh("git checkout main")
+
+      # delete branch locally
+      sh("git branch -D release-build-#{build}-#{version}")
+      
+      # delete branch remotely
+      sh("git push origin --delete release-build-#{build}-#{version}")
+
+      if git_tag_exists(tag: "v#{version}-#{build}")
+        # delete tag locally
+        sh("git tag -d v#{version}-#{build}") 
+        # delete tag remotely
+        sh("git push --delete origin v#{version}-#{build}") 
+      end
       sh("echo 'Build failed'")
     end
   end
