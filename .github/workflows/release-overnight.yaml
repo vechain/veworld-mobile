@@ -110,6 +110,7 @@ jobs:
               echo "New ios_build: ${{ steps.increment.outputs.new_build_ios }}"
               echo "New android_version: ${{ steps.increment.outputs.new_version_android }}"
               echo "New android_build: ${{ steps.increment.outputs.new_build_android }}"
+              echo "PR Branch: ${{ steps.increment.outputs.pr_branch }}"
 
     
     #release-ios:
