@@ -158,7 +158,7 @@ platform :android do
 
       
        slack(
-         message: version_name.nil? ? "Error releasing VeWorld build number: #{version_code} [Android]" : "Error releasing VeWorld version number: #{version_name} [Android]",
+         message: "Error releasing VeWorld version number: #{version_name} build number: #{version_code} [Android]",
          slack_url: ENV["SLACK_WEBHOOK"],
          success: false,
          payload: {
