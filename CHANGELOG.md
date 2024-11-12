@@ -1,5 +1,12 @@
 
 
+## 2.0.3 (2024-11-12)
+
+
+### Bug Fixes
+
+* adding directory to install all ([3310f4c](https://github.com/vechain/veworld-mobile/commit/3310f4c10c711eec5eef7d971b53564e1e51c67d))
+
 ## [1.10.0](https://github.com/vechain/veworld-mobile/compare/v1.5.3-52...v1.10.0) (2024-09-20)
 
 
