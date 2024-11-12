@@ -435,17 +435,17 @@ platform :ios do
         end
         
       # upload to testflight
-      upload_to_testflight(
-        skip_waiting_for_build_processing: true, 
-        apple_id: "6446854569",
-        ipa: "./build/VeWorld.ipa",
-      )
+      #upload_to_testflight(
+      #  skip_waiting_for_build_processing: true, 
+      #  apple_id: "6446854569",
+      #  ipa: "./build/VeWorld.ipa",
+      #)
 
-      create_changelog(version:version)
+      #create_changelog(version:version)
 
-      create_tags_gh(build:build, version:version)
+      #create_tags_gh(build:build, version:version)
 
-      upload_source_maps(build:build, version:version)
+      #upload_source_maps(build:build, version:version)
 
       gh_setup_after
 
@@ -459,34 +459,34 @@ platform :ios do
       )
 
       ## send slack message
-      slack(
-        message: version.nil? ? "CI: VeWorld build number: #{build} was successfully released! [iOS]" : "VeWorld version number: #{version} was successfully released! [iOS]",
-        slack_url: ENV["SLACK_WEBHOOK"],
-        success: true,
-        payload: {
-          "Build Date" => Time.new.strftime("%d/%m/%Y %H:%M"),
-          "Built by" => github_username,
-        },
-      )
+      #slack(
+      #  message: version.nil? ? "CI: VeWorld build number: #{build} was successfully released! [iOS]" : "VeWorld version number: #{version} was successfully released! [iOS]",
+      #  slack_url: ENV["SLACK_WEBHOOK"],
+      #  success: true,
+      #  payload: {
+      #    "Build Date" => Time.new.strftime("%d/%m/%Y %H:%M"),
+      #    "Built by" => github_username,
+      #  },
+      #)
 
       # clean build artifacts if any
       clean_build_artifacts
 
 
-    rescue => exception # catch
-      puts exception
-
-      ## send slack message
-      slack(
-        message: versionType.nil? ? "CI: Error releasing VeWorld build number: #{build} [iOS]" : "Error releasing VeWorld version number: #{version} [iOS]",
-        slack_url: ENV["SLACK_WEBHOOK"],
-        success: false,
-        payload: {
-          "Build Date" => Time.new.strftime("%d/%m/%Y %H:%M"),
-          "Built by" => github_username,
-        },
-      )
-
+    #rescue => exception # catch
+    #  puts exception
+#
+    #  ## send slack message
+    #  slack(
+    #    message: versionType.nil? ? "CI: Error releasing VeWorld build number: #{build} [iOS]" : "Error releasing VeWorld version number: #{version} [iOS]",
+    #    slack_url: ENV["SLACK_WEBHOOK"],
+    #    success: false,
+    #    payload: {
+    #      "Build Date" => Time.new.strftime("%d/%m/%Y %H:%M"),
+    #      "Built by" => github_username,
+    #    },
+    #  )
+#
       # clean build artifacts if any
       clean_build_artifacts
 

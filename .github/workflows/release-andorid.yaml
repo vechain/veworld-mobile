@@ -135,7 +135,7 @@ jobs:
                   export STORE_PASSWORD="$(<store_password.txt)"
                   export KEY_PASSWORD="$(<store_password.txt)"
                   export KEY_ALIAS="$(<key_alias.txt)"
-                  fastlane build_android_ci version_code:${{github.event.inputs.build}} version_name:${{github.event.inputs.version}}
+                  fastlane build_android_ci version_code:${{inputs.build}} version_name:${{inputs.version}}
             
             - name: Commit and Push Changes
               run: |
