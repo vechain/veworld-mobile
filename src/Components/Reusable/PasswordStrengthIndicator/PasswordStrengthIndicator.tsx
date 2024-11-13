@@ -1,19 +1,18 @@
 import React from "react"
 import { StyleSheet } from "react-native"
-import Animated, { SharedValue, interpolateColor, useAnimatedStyle, useDerivedValue } from "react-native-reanimated"
-import { BaseText, BaseView } from "~Components/Base"
+import Animated, { useAnimatedStyle, SharedValue, interpolateColor, useDerivedValue } from "react-native-reanimated"
+import { BaseSpacer, BaseText, BaseView } from "~Components/Base"
 import { COLORS, ColorThemeType } from "~Constants"
 import { useThemedStyles } from "~Hooks"
-import { PlatformUtils } from "~Utils"
 import { BaseAnimatedText } from "../AnimatedTextInput"
 
 type Props = {
     strength: SharedValue<number>
+    showComputedStrength?: boolean
 }
 
-export const PasswordStrengthIndicator = ({ strength }: Props) => {
-    const { styles } = useThemedStyles(baseStyles)
-
+export const PasswordStrengthIndicator = ({ strength, showComputedStrength = true }: Props) => {
+    const { styles, theme } = useThemedStyles(baseStyles)
     const animatedStyle = useAnimatedStyle(() => {
         return {
             width: `${strength.value * 25}%`,
@@ -35,16 +34,19 @@ export const PasswordStrengthIndicator = ({ strength }: Props) => {
     }, [strength.value])
 
     return (
-        <BaseView pt={18} px={6} justifyContent="center" mb={12}>
+        <BaseView mt={8} justifyContent="center" mb={12}>
+            <BaseView flexDirection="row" justifyContent="flex-start">
+                <BaseText typographyFont="smallCaptionRegular" color={theme.colors.text}>
+                    {"Security"}
+                </BaseText>
+
+                <BaseSpacer width={4} />
+
+                {showComputedStrength && <BaseAnimatedText text={computedStrength} style={styles.securityText} />}
+            </BaseView>
+            <BaseSpacer height={6} />
             <BaseView style={styles.barBackground}>
                 <Animated.View style={[styles.bar, animatedStyle]} />
-            </BaseView>
-
-            <BaseView pt={PlatformUtils.isIOS() ? 12 : 6} flexDirection="row" justifyContent="flex-start">
-                <BaseText pt={PlatformUtils.isAndroid() ? 3 : 2} pr={4} typographyFont="caption">
-                    {"Security:"}
-                </BaseText>
-                <BaseAnimatedText editable={false} text={computedStrength} style={styles.securityText} />
             </BaseView>
         </BaseView>
     )
@@ -53,22 +55,20 @@ export const PasswordStrengthIndicator = ({ strength }: Props) => {
 const baseStyles = (theme: ColorThemeType) =>
     StyleSheet.create({
         barBackground: {
-            height: 8,
+            height: 4,
             backgroundColor: "#e0e0e0",
             borderRadius: 4,
             overflow: "hidden",
         },
         bar: {
-            height: 8,
+            height: 4,
             borderRadius: 4,
         },
         securityText: {
-            fontFamily: "Inter-Light",
-            // fontSize: 12,
-            // fontWeight: "normal",
-            // lineHeight: 1,
-            padding: 0,
-            color: theme.colors.text,
+            fontFamily: "Inter-Regular",
+            fontSize: 11,
+            lineHeight: 13,
+            color: theme.isDark ? COLORS.WHITE : COLORS.DARK_PURPLE,
         },
     })
 

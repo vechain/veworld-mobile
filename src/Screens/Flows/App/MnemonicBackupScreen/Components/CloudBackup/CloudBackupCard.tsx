@@ -1,6 +1,5 @@
-import { useNavigation } from "@react-navigation/native"
+import React, { FC, useCallback, useEffect, useMemo, useRef, useState } from "react"
 import Lottie from "lottie-react-native"
-import React, { FC, useCallback, useEffect, useState } from "react"
 import { StyleSheet } from "react-native"
 import { getTimeZone } from "react-native-localize"
 import { LoaderDark, LoaderLight } from "~Assets"
@@ -12,6 +11,7 @@ import {
     CardWithHeader,
     CloudKitWarningBottomSheet,
     showErrorToast,
+    BackupSuccessfulBottomSheet,
 } from "~Components"
 import { COLORS, ColorThemeType, DerivationPath } from "~Constants"
 import { useBottomSheetModal, useCloudBackup, useThemedStyles } from "~Hooks"
@@ -29,13 +29,14 @@ export const CloudBackupCard: FC<Props> = ({ mnemonicArray, deviceToBackup }) =>
     const dispatch = useAppDispatch()
     const { LL, locale } = useI18nContext()
     const { styles, theme } = useThemedStyles(baseStyles)
-    const nav = useNavigation()
+    const backupInProgress = useRef(false)
     const [isWalletBackedUp, setIsWalletBackedUp] = useState(true)
     const [isLoading, setIsLoading] = useState(false)
 
     const { saveWalletToCloud, getWalletByRootAddress } = useCloudBackup()
 
     const { ref: warningRef, onOpen, onClose: onCloseWarning } = useBottomSheetModal()
+    const { ref: successRef, onOpen: onOpenSuccess, onClose: onCloseSuccess } = useBottomSheetModal()
 
     const getWallet = useCallback(async () => {
         setIsLoading(true)
@@ -49,6 +50,15 @@ export const CloudBackupCard: FC<Props> = ({ mnemonicArray, deviceToBackup }) =>
         getWallet()
     }, [getWallet])
 
+    useEffect(() => {
+        if (isWalletBackedUp && backupInProgress.current) {
+            backupInProgress.current = false
+            onOpenSuccess()
+        } else if (!isWalletBackedUp && backupInProgress.current) {
+            backupInProgress.current = false
+        }
+    }, [isWalletBackedUp, onOpenSuccess])
+
     const onHandleBackupToCloudKit = useCallback(
         async (password: string) => {
             setIsLoading(true)
@@ -61,6 +71,7 @@ export const CloudBackupCard: FC<Props> = ({ mnemonicArray, deviceToBackup }) =>
                 return
             }
 
+            backupInProgress.current = true
             const firstAccountAddress = AddressUtils.getAddressFromXPub(deviceToBackup.xPub, 0)
             const salt = HexUtils.generateRandom(256)
             const iv = PasswordUtils.getRandomIV(16)
@@ -90,22 +101,30 @@ export const CloudBackupCard: FC<Props> = ({ mnemonicArray, deviceToBackup }) =>
                     date: formattedDate,
                 }),
             )
-            nav.goBack()
+            await getWalletByRootAddress(deviceToBackup!.rootAddress)
+            onCloseWarning()
         },
         [
             LL,
-            deviceToBackup?.derivationPath,
-            deviceToBackup?.rootAddress,
-            deviceToBackup?.type,
-            deviceToBackup?.xPub,
+            deviceToBackup,
             dispatch,
+            getWalletByRootAddress,
             locale,
             mnemonicArray,
-            nav,
             onCloseWarning,
             saveWalletToCloud,
         ],
     )
+
+    const computedStyles = useMemo(
+        () => ({
+            backgroundColor: isWalletBackedUp ? theme.colors.successBackground : theme.colors.primary,
+            borderColor: isWalletBackedUp ? COLORS.GREEN_100 : theme.colors.primary,
+        }),
+        [isWalletBackedUp, theme.colors.successBackground, theme.colors.primary],
+    )
+
+    const containerStyle = useMemo(() => [styles.cloudRow, computedStyles], [styles.cloudRow, computedStyles])
 
     return (
         <>
@@ -125,24 +144,27 @@ export const CloudBackupCard: FC<Props> = ({ mnemonicArray, deviceToBackup }) =>
                         </BaseView>
                     }>
                     <BaseTouchableBox
-                        containerStyle={[
-                            styles.cloudRow,
-                            {
-                                backgroundColor:
-                                    isWalletBackedUp || isLoading ? theme.colors.successBackground : COLORS.LIME_GREEN,
-                                borderColor:
-                                    isWalletBackedUp || isLoading ? theme.colors.successBackground : COLORS.LIME_GREEN,
-                            },
-                        ]}
+                        containerStyle={containerStyle}
                         disabled={isWalletBackedUp || isLoading}
-                        style={styles.cloudRowContent}
+                        style={[
+                            styles.cloudRowContent,
+                            { borderColor: isWalletBackedUp ? COLORS.GREEN_100 : theme.colors.primary },
+                        ]}
                         action={onOpen}>
                         <BaseView style={styles.cloudInfo}>
-                            <BaseText typographyFont="bodyMedium" color={COLORS.DARK_PURPLE}>
-                                {PlatformUtils.isIOS() ? LL.ICLOUD() : LL.GOOGLE_DRIVE()}
-                            </BaseText>
+                            {!isWalletBackedUp ? (
+                                <BaseText typographyFont="bodyMedium" color={theme.colors.textReversed}>
+                                    {PlatformUtils.isIOS() ? LL.ICLOUD() : LL.GOOGLE_DRIVE()}
+                                </BaseText>
+                            ) : (
+                                <BaseView flexDirection="row">
+                                    <BaseIcon name="check-circle-outline" size={14} color={theme.colors.successIcon} />
+                                    <BaseText style={styles.verifyCloudText} typographyFont="captionRegular">
+                                        {PlatformUtils.isIOS() ? LL.ICLOUD() : LL.GOOGLE_DRIVE()}
+                                    </BaseText>
+                                </BaseView>
+                            )}
                         </BaseView>
-
                         {isLoading ? (
                             <Lottie
                                 source={theme.isDark ? LoaderDark : LoaderLight}
@@ -151,7 +173,9 @@ export const CloudBackupCard: FC<Props> = ({ mnemonicArray, deviceToBackup }) =>
                                 style={styles.lottie}
                             />
                         ) : (
-                            !isWalletBackedUp && <BaseIcon name="chevron-right" size={14} color={COLORS.DARK_PURPLE} />
+                            !isWalletBackedUp && (
+                                <BaseIcon name="chevron-right" size={14} color={theme.colors.textReversed} />
+                            )
                         )}
                     </BaseTouchableBox>
                 </CardWithHeader>
@@ -160,7 +184,9 @@ export const CloudBackupCard: FC<Props> = ({ mnemonicArray, deviceToBackup }) =>
                 ref={warningRef}
                 onHandleBackupToCloudKit={onHandleBackupToCloudKit}
                 openLocation="Backup_Screen"
+                isLoading={isLoading}
             />
+            <BackupSuccessfulBottomSheet ref={successRef} onClose={onCloseSuccess} onConfirm={onCloseSuccess} />
         </>
     )
 }
@@ -170,13 +196,15 @@ const baseStyles = (theme: ColorThemeType) =>
         cloudRow: {
             borderRadius: 8,
             borderWidth: 1,
-            padding: 0,
+        },
+        rowStyle: {
+            borderColor: COLORS.GREEN_100,
+            backgroundColor: theme.colors.successBackground,
         },
         cloudRowContent: {
             flexDirection: "row",
             alignItems: "center",
-            paddingLeft: 14,
-            paddingRight: 12,
+            paddingHorizontal: 12,
             paddingVertical: 10,
         },
         cloudInfo: {
