@@ -100,18 +100,6 @@ export const BaseBottomSheet = React.forwardRef<BottomSheetModalMethods, Props>(
         )
 
         const renderBlurBackdrop = useCallback(() => {
-            if (isAndroid())
-                return (
-                    <BaseView
-                        style={[
-                            styles.blurBackdrop,
-                            {
-                                backgroundColor: COLORS.PURPLE_BLUR_TRANSPARENT,
-                            },
-                        ]}
-                    />
-                )
-
             return (
                 <BlurView
                     style={[StyleSheet.absoluteFill, { backgroundColor: COLORS.PURPLE_BLUR_TRANSPARENT }]}
@@ -119,7 +107,7 @@ export const BaseBottomSheet = React.forwardRef<BottomSheetModalMethods, Props>(
                     blurType={"dark"}
                 />
             )
-        }, [styles.blurBackdrop])
+        }, [])
 
         const renderBackdrop = useCallback(
             (props_: BottomSheetBackdropProps) => {
@@ -208,7 +196,6 @@ export const BaseBottomSheet = React.forwardRef<BottomSheetModalMethods, Props>(
                     w={100}
                     px={noMargins ? 0 : 24}
                     py={noMargins ? 0 : 24}
-                    borderRadius={24}
                     flexGrow={1}
                     alignItems="stretch"
                     style={contentStyle}

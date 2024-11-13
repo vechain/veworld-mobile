@@ -111,14 +111,13 @@ export const CloudKitWarningBottomSheet = forwardRef<BottomSheetModalMethods, Pr
             <BaseBottomSheet
                 ref={ref}
                 enableDismissOnClose
-                snapPoints={["74%"]}
+                dynamicHeight
                 onChange={handleOnDismissBottomSheet}
                 backgroundStyle={styles.passwordSheet}
                 contentStyle={styles.contentContainer}
                 bottomSafeArea={true}
-                noMargins={true}
                 blurBackdrop={true}>
-                <BaseView px={24}>
+                <BaseView>
                     <BaseView justifyContent="center" alignItems="center" style={styles.keyIcon}>
                         <FeatherKeySVG size={64} color={theme.colors.text} />
                         <BaseSpacer height={20} />
