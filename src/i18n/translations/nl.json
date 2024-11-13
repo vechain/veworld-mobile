@@ -57,6 +57,7 @@
   "BD_APP_LOCK": "Vraag om de pincode bij het uitvoeren van transacties met lokale wallets",
   "BD_APP_THEME": "App-thema",
   "BD_APP_THEME_DISCLAIMER": "Selecteer het algemene app-thema",
+  "BD_BACKED_UP": "{cloudType: string} gebackupt",
   "BD_BACKED_UP_TO_CLOUD": "Back-up gemaakt naar iCloud",
   "BD_BACKED_UP_TO_DRIVE": "Back-up gemaakt naar Google Drive",
   "BD_BACKUP_MNEMONIC": "Maak een back-up van uw mnemonic zin",

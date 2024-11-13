@@ -57,6 +57,7 @@
   "BD_APP_LOCK": "로컬 지갑으로 거래할 때 PIN이 필요합니다.",
   "BD_APP_THEME": "앱 테마",
   "BD_APP_THEME_DISCLAIMER": "일반적인 앱 테마 선택",
+  "BD_BACKED_UP": "{cloudType: string} 백업됨",
   "BD_BACKED_UP_TO_CLOUD": "iCloud에 백업됨",
   "BD_BACKED_UP_TO_DRIVE": "Google 드라이브에 백업됨",
   "BD_BACKUP_MNEMONIC": "니모닉 구문을 백업하십시오.",

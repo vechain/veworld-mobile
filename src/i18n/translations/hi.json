@@ -57,6 +57,7 @@
   "BD_APP_LOCK": "स्थानीय वॉलेट्स के साथ लेनदेन करते समय पिन की आवश्यकता होती है",
   "BD_APP_THEME": "ऐप थीम",
   "BD_APP_THEME_DISCLAIMER": "सामान्य ऐप थीम चुनें",
+  "BD_BACKED_UP": "{cloudType: string} का बैकअप लिया गया",
   "BD_BACKED_UP_TO_CLOUD": "iCloud में बैकअप किया गया",
   "BD_BACKED_UP_TO_DRIVE": "Google Drive में बैकअप लिया गया",
   "BD_BACKUP_MNEMONIC": "अपनी गुप्त वाक्यांश का बैकअप लें",

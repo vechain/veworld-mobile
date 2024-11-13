@@ -57,6 +57,7 @@
   "BD_APP_LOCK": "Yerel cüzdanlarla işlem yaparken pin gerekli",
   "BD_APP_THEME": "Uygulama teması",
   "BD_APP_THEME_DISCLAIMER": "Genel uygulama temasını seçin",
+  "BD_BACKED_UP": "{cloudType: string} yedeklendi",
   "BD_BACKED_UP_TO_CLOUD": "iCloud'a yedeklendi",
   "BD_BACKED_UP_TO_DRIVE": "Google Drive'a yedeklendi",
   "BD_BACKUP_MNEMONIC": "Anımsatıcı ifadenizi yedekleyin",

@@ -69,19 +69,15 @@ export const BaseTextInputComponent = forwardRef<TextInput, BaseTextInputProps>(
         }, [])
 
         const calculateTextColor = useMemo(() => {
-            return isPasswordInput
-                ? COLORS.GREY_600
-                : otherProps.editable
-                ? theme.colors.text
-                : theme.colors.textDisabled
+            if (isPasswordInput) return COLORS.GREY_600
+            if (!otherProps.editable) return theme.colors.textDisabled
+            return theme.colors.text
         }, [isPasswordInput, otherProps.editable, theme.colors.text, theme.colors.textDisabled])
 
         const calculatePlaceholderColor = useMemo(() => {
-            return isPasswordInput
-                ? COLORS.GREY_400
-                : theme.isDark
-                ? COLORS.WHITE_DISABLED
-                : COLORS.DARK_PURPLE_DISABLED
+            if (isPasswordInput) return COLORS.GREY_400
+            if (theme.isDark) return COLORS.WHITE_DISABLED
+            return COLORS.DARK_PURPLE_DISABLED
         }, [isPasswordInput, theme.isDark])
 
         const inputStyle = useMemo(

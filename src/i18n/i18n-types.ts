@@ -266,6 +266,11 @@ type RootTranslation = {
 	 */
 	BD_APP_THEME_DISCLAIMER: string
 	/**
+	 * {​c​l​o​u​d​T​y​p​e​}​ ​b​a​c​k​e​d​ ​u​p
+	 * @param {string} cloudType
+	 */
+	BD_BACKED_UP: RequiredParams<'cloudType'>
+	/**
 	 * B​a​c​k​e​d​ ​u​p​ ​t​o​ ​i​C​l​o​u​d
 	 */
 	BD_BACKED_UP_TO_CLOUD: string
@@ -3705,6 +3710,10 @@ Try reconnect your device to the internet.
 	 * Select the general app theme
 	 */
 	BD_APP_THEME_DISCLAIMER: () => LocalizedString
+	/**
+	 * {cloudType} backed up
+	 */
+	BD_BACKED_UP: (arg: { cloudType: string }) => LocalizedString
 	/**
 	 * Backed up to iCloud
 	 */

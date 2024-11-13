@@ -57,6 +57,7 @@
   "BD_APP_LOCK": "Requerir el pin al realizar transacciones con billeteras locales",
   "BD_APP_THEME": "Tema de la aplicación",
   "BD_APP_THEME_DISCLAIMER": "Seleccione el tema general de la aplicación",
+  "BD_BACKED_UP": "{cloudType: string} respaldado",
   "BD_BACKED_UP_TO_CLOUD": "Respaldado en iCloud",
   "BD_BACKED_UP_TO_DRIVE": "Respaldado en Google Drive",
   "BD_BACKUP_MNEMONIC": "Respalde su frase mnemónica",

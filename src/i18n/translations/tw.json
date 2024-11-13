@@ -57,6 +57,7 @@
   "BD_APP_LOCK": "在使用本地方錢包進行交易時需要輸入密碼",
   "BD_APP_THEME": "應用程式主題",
   "BD_APP_THEME_DISCLAIMER": "選擇一般應用程式主題",
+  "BD_BACKED_UP": "{cloudType: string} 已備份",
   "BD_BACKED_UP_TO_CLOUD": "備份到 iCloud",
   "BD_BACKED_UP_TO_DRIVE": "已備份到 Google 雲端硬碟",
   "BD_BACKUP_MNEMONIC": "備份你的助記詞",

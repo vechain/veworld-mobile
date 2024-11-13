@@ -43,7 +43,10 @@ export type Colors = {
     switchEnabled: string
     textLight: string
     successBackground: string
+    successBorder: string
     successIcon: string
+    errorBackground: string
+    errorBorder: string
     checkboxFilledBackground: string
     checkboxIcon: string
 }
@@ -160,7 +163,10 @@ const light: Colors = {
     horizontalButtonTextReversed: COLORS.DARK_PURPLE,
     switchEnabled: COLORS.LIGHT_GREEN,
     successBackground: COLORS.GREEN_50,
+    successBorder: COLORS.GREEN_100,
     successIcon: COLORS.GREEN_500,
+    errorBackground: COLORS.RED_50,
+    errorBorder: COLORS.RED_100,
     checkboxFilledBackground: COLORS.DARK_PURPLE,
     checkboxIcon: COLORS.WHITE,
 }
@@ -209,8 +215,11 @@ const dark: Colors = {
     horizontalButtonText: COLORS.WHITE,
     horizontalButtonTextReversed: COLORS.WHITE,
     switchEnabled: COLORS.LIGHT_GREEN,
-    successBackground: COLORS.GREEN_50,
+    successBackground: COLORS.GREEN_100,
+    successBorder: COLORS.GREEN_200,
     successIcon: COLORS.GREEN_500,
+    errorBackground: COLORS.RED_100,
+    errorBorder: COLORS.RED_200,
     checkboxFilledBackground: COLORS.WHITE,
     checkboxIcon: COLORS.DARK_PURPLE,
 }

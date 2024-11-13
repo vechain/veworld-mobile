@@ -13,7 +13,7 @@ import {
     showErrorToast,
     BackupSuccessfulBottomSheet,
 } from "~Components"
-import { COLORS, ColorThemeType, DerivationPath } from "~Constants"
+import { COLORS, ColorThemeType, DerivationPath, typography } from "~Constants"
 import { useBottomSheetModal, useCloudBackup, useThemedStyles } from "~Hooks"
 import { useI18nContext } from "~i18n"
 import { LocalDevice } from "~Model"
@@ -101,7 +101,7 @@ export const CloudBackupCard: FC<Props> = ({ mnemonicArray, deviceToBackup }) =>
                     date: formattedDate,
                 }),
             )
-            await getWalletByRootAddress(deviceToBackup!.rootAddress)
+            await getWalletByRootAddress(deviceToBackup.rootAddress)
             onCloseWarning()
         },
         [
@@ -119,9 +119,9 @@ export const CloudBackupCard: FC<Props> = ({ mnemonicArray, deviceToBackup }) =>
     const computedStyles = useMemo(
         () => ({
             backgroundColor: isWalletBackedUp ? theme.colors.successBackground : theme.colors.primary,
-            borderColor: isWalletBackedUp ? COLORS.GREEN_100 : theme.colors.primary,
+            borderColor: isWalletBackedUp ? theme.colors.successBorder : theme.colors.primary,
         }),
-        [isWalletBackedUp, theme.colors.successBackground, theme.colors.primary],
+        [isWalletBackedUp, theme.colors.successBackground, theme.colors.primary, theme.colors.successBorder],
     )
 
     const containerStyle = useMemo(() => [styles.cloudRow, computedStyles], [styles.cloudRow, computedStyles])
@@ -146,10 +146,7 @@ export const CloudBackupCard: FC<Props> = ({ mnemonicArray, deviceToBackup }) =>
                     <BaseTouchableBox
                         containerStyle={containerStyle}
                         disabled={isWalletBackedUp || isLoading}
-                        style={[
-                            styles.cloudRowContent,
-                            { borderColor: isWalletBackedUp ? COLORS.GREEN_100 : theme.colors.primary },
-                        ]}
+                        style={[styles.cloudRowContent]}
                         action={onOpen}>
                         <BaseView style={styles.cloudInfo}>
                             {!isWalletBackedUp ? (
@@ -158,9 +155,11 @@ export const CloudBackupCard: FC<Props> = ({ mnemonicArray, deviceToBackup }) =>
                                 </BaseText>
                             ) : (
                                 <BaseView flexDirection="row">
-                                    <BaseIcon name="check-circle-outline" size={14} color={theme.colors.successIcon} />
+                                    <BaseIcon name="check-circle-outline" size={16} color={theme.colors.successIcon} />
                                     <BaseText style={styles.verifyCloudText} typographyFont="captionRegular">
-                                        {PlatformUtils.isIOS() ? LL.ICLOUD() : LL.GOOGLE_DRIVE()}
+                                        {LL.BD_BACKED_UP({
+                                            cloudType: PlatformUtils.isIOS() ? LL.ICLOUD() : LL.GOOGLE_DRIVE(),
+                                        })}
                                     </BaseText>
                                 </BaseView>
                             )}
@@ -197,10 +196,6 @@ const baseStyles = (theme: ColorThemeType) =>
             borderRadius: 8,
             borderWidth: 1,
         },
-        rowStyle: {
-            borderColor: COLORS.GREEN_100,
-            backgroundColor: theme.colors.successBackground,
-        },
         cloudRowContent: {
             flexDirection: "row",
             alignItems: "center",
@@ -215,6 +210,7 @@ const baseStyles = (theme: ColorThemeType) =>
         verifyCloudText: {
             paddingLeft: 12,
             color: COLORS.DARK_PURPLE,
+            lineHeight: typography.lineHeight.bodyMedium,
         },
         sideHeader: {
             borderWidth: 1,

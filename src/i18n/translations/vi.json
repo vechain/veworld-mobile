@@ -57,6 +57,7 @@
   "BD_APP_LOCK": "Yêu cầu mã PIN khi thực hiện giao dịch với ví cục bộ",
   "BD_APP_THEME": "Chủ đề ứng dụng",
   "BD_APP_THEME_DISCLAIMER": "Chọn chủ đề chung cho ứng dụng",
+  "BD_BACKED_UP": "{cloudType: string} đã được sao lưu",
   "BD_BACKED_UP_TO_CLOUD": "Đã sao lưu lên iCloud",
   "BD_BACKED_UP_TO_DRIVE": "Đã sao lưu lên Google Drive",
   "BD_BACKUP_MNEMONIC": "Sao lưu cụm từ ghi nhớ của bạn",

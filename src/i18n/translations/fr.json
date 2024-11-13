@@ -57,6 +57,7 @@
   "BD_APP_LOCK": "Exiger le code PIN lors des transactions avec des portefeuilles locaux",
   "BD_APP_THEME": "Thème de l'application",
   "BD_APP_THEME_DISCLAIMER": "Sélectionnez le thème général de l'application",
+  "BD_BACKED_UP": "{cloudType: string} sauvegardé",
   "BD_BACKED_UP_TO_CLOUD": "Sauvegardé sur iCloud",
   "BD_BACKED_UP_TO_DRIVE": "Sauvegardé sur Google Drive",
   "BD_BACKUP_MNEMONIC": "Sauvegardez votre phrase mnémotechnique",

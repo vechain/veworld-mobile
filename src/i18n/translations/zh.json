@@ -57,6 +57,7 @@
   "BD_APP_LOCK": "在使用本地钱包进行交易时需要输入密码",
   "BD_APP_THEME": "应用主题",
   "BD_APP_THEME_DISCLAIMER": "选择应用程序的通用主题",
+  "BD_BACKED_UP": "{cloudType: string} 已备份",
   "BD_BACKED_UP_TO_CLOUD": "已备份到iCloud",
   "BD_BACKED_UP_TO_DRIVE": "已备份到 Google Drive",
   "BD_BACKUP_MNEMONIC": "备份您的助记词",

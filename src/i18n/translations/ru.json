@@ -57,6 +57,7 @@
   "BD_APP_LOCK": "Требовать PIN-код при выполнении транзакций с локальными кошельками",
   "BD_APP_THEME": "Тема приложения",
   "BD_APP_THEME_DISCLAIMER": "Выберите общую тему приложения",
+  "BD_BACKED_UP": "{cloudType: string} сохранено",
   "BD_BACKED_UP_TO_CLOUD": "Сохранено в iCloud",
   "BD_BACKED_UP_TO_DRIVE": "Создана резервная копия в Google Диске",
   "BD_BACKUP_MNEMONIC": "Резервное копирование вашей мнемонической фразы",

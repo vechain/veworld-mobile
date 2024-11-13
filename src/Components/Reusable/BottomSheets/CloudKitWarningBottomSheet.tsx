@@ -28,7 +28,7 @@ export const CloudKitWarningBottomSheet = forwardRef<BottomSheetModalMethods, Pr
         const [passwordMisMatch, setPasswordMisMatch] = useState(false)
         const [passwordNotStrong, setPasswordNotStrong] = useState(false)
         const [isChecking, setIsChecking] = useState(false)
-        const [isChecked, setChecked] = React.useState(false)
+        const [isChecked, setIsChecked] = useState(false)
         const [showStrengthIndicator, setShowStrengthIndicator] = useState(true)
 
         const inputRef = useRef<TextInput>(null)
@@ -147,7 +147,7 @@ export const CloudKitWarningBottomSheet = forwardRef<BottomSheetModalMethods, Pr
                         secureTextEntry={secureText1}
                         isError={passwordMisMatch || passwordNotStrong}
                         isPasswordInput
-                        rightIcon={!secureText1 ? "eye-off-outline" : "eye-outline"}
+                        rightIcon={secureText1 ? "eye-off-outline" : "eye-outline"}
                         onIconPress={() => setsecureText1(prev => !prev)}
                         value={password1}
                         autoFocus
@@ -178,26 +178,24 @@ export const CloudKitWarningBottomSheet = forwardRef<BottomSheetModalMethods, Pr
                     </BaseView>
 
                     {openLocation === "Backup_Screen" && (
-                        <>
-                            <BaseBottomSheetTextInput
-                                placeholder={LL.BTN_CONFIRN_PASSWORD()}
-                                secureTextEntry={secureText2}
-                                isPasswordInput
-                                rightIcon={!secureText2 ? "eye-off-outline" : "eye-outline"}
-                                onIconPress={() => setsecureText2(prev => !prev)}
-                                value={password2}
-                                onChangeText={setPassword2}
-                                ref={inputRef}
-                                onSubmitEditing={() => Keyboard.dismiss()}
-                                returnKeyType="done"
-                            />
-                        </>
+                        <BaseBottomSheetTextInput
+                            placeholder={LL.BTN_CONFIRN_PASSWORD()}
+                            secureTextEntry={secureText2}
+                            isPasswordInput
+                            rightIcon={secureText2 ? "eye-off-outline" : "eye-outline"}
+                            onIconPress={() => setsecureText2(prev => !prev)}
+                            value={password2}
+                            onChangeText={setPassword2}
+                            ref={inputRef}
+                            onSubmitEditing={() => Keyboard.dismiss()}
+                            returnKeyType="done"
+                        />
                     )}
                     <BaseSpacer height={16} />
                     <CheckBoxWithText
                         isChecked={isChecked}
                         text={LL.BD_CLOUD_PASSWORD_WARNING_CHECKBOX()}
-                        checkAction={setChecked}
+                        checkAction={setIsChecked}
                         fontColor={theme.colors.text}
                     />
                     <BaseSpacer height={12} />
@@ -206,13 +204,7 @@ export const CloudKitWarningBottomSheet = forwardRef<BottomSheetModalMethods, Pr
                         w={100}
                         disabled={!isChecked || isLoading}
                         haptics="Light"
-                        title={
-                            isLoading
-                                ? LL.BACKING_UP()
-                                : PlatformUtils.isIOS()
-                                ? LL.BTN_BACKUP_TO_ICLOUD()
-                                : LL.BTN_BACKUP_TO_DRIVE()
-                        }
+                        title={PlatformUtils.isIOS() ? LL.BTN_BACKUP_TO_ICLOUD() : LL.BTN_BACKUP_TO_DRIVE()}
                         action={checkPasswordValidity}
                     />
                     <BaseSpacer height={16} />

@@ -57,6 +57,7 @@
   "BD_APP_LOCK": "Exigir o PIN ao realizar transações com carteiras locais",
   "BD_APP_THEME": "Tema do aplicativo",
   "BD_APP_THEME_DISCLAIMER": "Selecione o tema geral do aplicativo",
+  "BD_BACKED_UP": "backup de {cloudType: string}",
   "BD_BACKED_UP_TO_CLOUD": "Salvo no iCloud",
   "BD_BACKED_UP_TO_DRIVE": "Faz o backup para o Google Drive",
   "BD_BACKUP_MNEMONIC": "Faça backup da sua frase mnemônica",

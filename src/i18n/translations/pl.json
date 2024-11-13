@@ -57,6 +57,7 @@
   "BD_APP_LOCK": "Wymagaj kodu PIN podczas dokonywania transakcji z lokalnymi portfelami",
   "BD_APP_THEME": "Motyw aplikacji",
   "BD_APP_THEME_DISCLAIMER": "Wybierz ogólny motyw aplikacji",
+  "BD_BACKED_UP": "{cloudType: string} zapisano kopię zapasową",
   "BD_BACKED_UP_TO_CLOUD": "Zsynchronizowano z iCloud",
   "BD_BACKED_UP_TO_DRIVE": "Zapisano kopię zapasową w Dysku Google",
   "BD_BACKUP_MNEMONIC": "Zrób kopię zapasową swojej frazy mnemonicznej",

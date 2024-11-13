@@ -57,6 +57,7 @@
   "BD_APP_LOCK": "PIN-Eingabe erforderlich, um Transaktionen mit lokalen Wallets durchzuführen",
   "BD_APP_THEME": "App-Design",
   "BD_APP_THEME_DISCLAIMER": "Wählen Sie das allgemeine App-Design aus",
+  "BD_BACKED_UP": "{cloudType: string} gesichert",
   "BD_BACKED_UP_TO_CLOUD": "In iCloud gesichert",
   "BD_BACKED_UP_TO_DRIVE": "Auf Google Drive gesichert",
   "BD_BACKUP_MNEMONIC": "Sichern Sie Ihre mnemonische Phrase",

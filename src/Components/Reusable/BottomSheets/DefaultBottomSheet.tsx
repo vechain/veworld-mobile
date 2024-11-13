@@ -7,13 +7,11 @@ import { StyleSheet } from "react-native"
 
 type Props = {
     iconName?: string
-    // temporary until we have the new icons set up
     iconComponent?: React.ReactNode
     title: string
     description: string
     mainButton?: { label: string; action: () => void; bg?: string; caution?: boolean }
     secondaryButton?: { label: string; action: () => void }
-    onClose: () => void
 }
 
 export const DefaultBottomSheet = React.forwardRef<BottomSheetModalMethods, Props>(
@@ -50,7 +48,7 @@ export const DefaultBottomSheet = React.forwardRef<BottomSheetModalMethods, Prop
                         {iconName && (
                             <BaseIcon name={iconName} style={styles.icon} size={66} color={theme.colors.text} />
                         )}
-                        {iconComponent && iconComponent}
+                        {iconComponent}
                         <BaseSpacer height={26} />
                         <BaseText align="center" typographyFont="subSubTitleMedium">
                             {title}
@@ -77,7 +75,7 @@ export const DefaultBottomSheet = React.forwardRef<BottomSheetModalMethods, Prop
                         <BaseButton
                             w={100}
                             style={styles.secondaryButton}
-                            variant={"outline"}
+                            variant="outline"
                             textColor={theme.colors.text}
                             typographyFont="buttonMedium"
                             haptics="Light"
@@ -113,6 +111,5 @@ const baseStyles = (theme: ColorThemeType) =>
             borderRadius: 8,
             paddingVertical: 12,
             borderColor: theme.colors.text,
-            backgroundColor: COLORS.TRANSPARENT,
         },
     })
