@@ -12,7 +12,7 @@ on:
                 type: number
                 required: true
     schedule:
-    - cron: '0 10 * * 1-5'  # Runs at 10:00 AM UTC Monday through Friday
+    - cron: '0 12 * * 1-5'  # Runs at 10:00 AM UTC Monday through Friday
 env:
     IOS_VERSION: ${{ vars.ios_version }}
     IOS_BUILD: ${{ vars.ios_build }}
