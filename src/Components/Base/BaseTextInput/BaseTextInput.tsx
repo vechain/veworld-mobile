@@ -11,8 +11,10 @@ const { defaults: defaultTypography } = typography
 export type BaseTextInputProps = {
     placeholder?: string
     label?: string
+    isPasswordInput?: boolean
     value?: string
     errorMessage?: string
+    isError?: boolean
     testID?: string
     rightIcon?: string
     rightIconTestID?: string
@@ -32,7 +34,9 @@ export const BaseTextInputComponent = forwardRef<TextInput, BaseTextInputProps>(
             placeholder,
             label,
             value,
+            isPasswordInput = false,
             errorMessage,
+            isError,
             testID,
             rightIcon,
             rightIconTestID,
@@ -48,9 +52,7 @@ export const BaseTextInputComponent = forwardRef<TextInput, BaseTextInputProps>(
         },
         ref,
     ) => {
-        const { styles, theme } = useThemedStyles(baseStyles(!!errorMessage))
-
-        const placeholderColor = theme.isDark ? COLORS.WHITE_DISABLED : COLORS.DARK_PURPLE_DISABLED
+        const { styles, theme } = useThemedStyles(baseStyles(!!isError || !!errorMessage))
 
         const setInputParams = useMemo(() => {
             if (PlatformUtils.isAndroid()) {
@@ -66,6 +68,27 @@ export const BaseTextInputComponent = forwardRef<TextInput, BaseTextInputProps>(
             }
         }, [])
 
+        const calculateTextColor = useMemo(() => {
+            return isPasswordInput
+                ? COLORS.GREY_600
+                : otherProps.editable
+                ? theme.colors.text
+                : theme.colors.textDisabled
+        }, [isPasswordInput, otherProps.editable, theme.colors.text, theme.colors.textDisabled])
+
+        const calculatePlaceholderColor = useMemo(() => {
+            return isPasswordInput
+                ? COLORS.GREY_400
+                : theme.isDark
+                ? COLORS.WHITE_DISABLED
+                : COLORS.DARK_PURPLE_DISABLED
+        }, [isPasswordInput, theme.isDark])
+
+        const inputStyle = useMemo(
+            () => [isPasswordInput ? styles.inputPassword : styles.input, { color: calculateTextColor }, style],
+            [isPasswordInput, styles.inputPassword, styles.input, calculateTextColor, style],
+        )
+
         return (
             <BaseView style={containerStyle}>
                 {label && (
@@ -73,21 +96,15 @@ export const BaseTextInputComponent = forwardRef<TextInput, BaseTextInputProps>(
                         {label}
                     </BaseText>
                 )}
-                <BaseView style={[styles.container, inputContainerStyle]}>
+                <BaseView style={[isPasswordInput ? styles.containerPassword : styles.container, inputContainerStyle]}>
                     <TextInput
                         ref={ref}
-                        style={[
-                            styles.input,
-                            {
-                                color: otherProps.editable ? theme.colors.text : theme.colors.textDisabled,
-                            },
-                            style,
-                        ]}
+                        style={inputStyle}
                         // workarounds for android crashing when using the keyboard
                         keyboardType={setInputParams.keyboardType}
                         autoCorrect={setInputParams.autoCorrect}
                         placeholder={placeholder}
-                        placeholderTextColor={placeholderColor}
+                        placeholderTextColor={calculatePlaceholderColor}
                         onChangeText={setValue}
                         value={value}
                         autoCapitalize="none"
@@ -103,9 +120,9 @@ export const BaseTextInputComponent = forwardRef<TextInput, BaseTextInputProps>(
                             haptics="Light"
                             action={onIconPress}
                             name={rightIcon}
-                            size={24}
-                            color={theme.colors.text}
-                            style={styles.rightIconStyle}
+                            p={8}
+                            size={16}
+                            color={COLORS.GREY_500}
                             testID={rightIconTestID}
                         />
                     )}
@@ -137,8 +154,6 @@ const baseStyles = (isError: boolean) => (theme: ColorThemeType) =>
         input: {
             flex: 1,
             backgroundColor: theme.colors.card,
-            borderColor: theme.colors.transparent,
-            borderWidth: 1,
             borderRadius: 16,
             fontSize: defaultTypography.body.fontSize,
             fontFamily: defaultTypography.body.fontFamily,
@@ -146,8 +161,25 @@ const baseStyles = (isError: boolean) => (theme: ColorThemeType) =>
             paddingLeft: 16,
             paddingRight: 8,
         },
-        rightIconStyle: {
-            marginRight: 16,
+        containerPassword: {
+            width: "100%",
+            flexDirection: "row",
+            alignItems: "center",
+            borderColor: isError ? COLORS.RED_500 : COLORS.GREY_200,
+            borderWidth: isError ? 2 : 1,
+            borderRadius: 8,
+            paddingVertical: isError ? 6 : 7,
+            paddingRight: 4,
+            paddingLeft: 16,
+            backgroundColor: COLORS.WHITE,
+        },
+        inputPassword: {
+            flex: 1,
+            backgroundColor: theme.colors.transparent,
+            borderRadius: 8,
+            fontSize: defaultTypography.body.fontSize,
+            fontFamily: defaultTypography.body.fontFamily,
+            lineHeight: defaultTypography.subTitle.lineHeight,
         },
         errorContainer: {
             opacity: isError ? 1 : 0,
