@@ -1,8 +1,10 @@
+import { useNavigation } from "@react-navigation/native"
+import { NativeStackScreenProps } from "@react-navigation/native-stack"
 import React, { FC, useCallback, useMemo } from "react"
 import { ScrollView, StyleSheet } from "react-native"
+import { blake2b256, Certificate } from "thor-devkit"
 import {
     AccountCard,
-    BaseButton,
     BaseSafeArea,
     BaseSpacer,
     BaseText,
@@ -11,10 +13,22 @@ import {
     getRpcError,
     RequireUserPassword,
     SelectAccountBottomSheet,
-    useWalletConnect,
+    SignAndReject,
     useInAppBrowser,
+    useWalletConnect,
 } from "~Components"
-import { blake2b256, Certificate } from "thor-devkit"
+import { AnalyticsEvent, ERROR_EVENTS, RequestMethods } from "~Constants"
+import {
+    useAnalyticTracking,
+    useBottomSheetModal,
+    useCheckIdentity,
+    useSetSelectedAccount,
+    useSignMessage,
+} from "~Hooks"
+import { useI18nContext } from "~i18n"
+import { AccountWithDevice, DEVICE_TYPE, LedgerAccountWithDevice, WatchedAccount } from "~Model"
+import { RootStackParamListSwitch, Routes } from "~Navigation"
+import { MessageDetails, UnknownAppMessage } from "~Screens"
 import {
     addSignCertificateActivity,
     selectVerifyContext,
@@ -23,20 +37,6 @@ import {
     useAppSelector,
 } from "~Storage/Redux"
 import { error, HexUtils } from "~Utils"
-import {
-    useAnalyticTracking,
-    useBottomSheetModal,
-    useCheckIdentity,
-    useSetSelectedAccount,
-    useSignMessage,
-} from "~Hooks"
-import { AccountWithDevice, DEVICE_TYPE, LedgerAccountWithDevice, WatchedAccount } from "~Model"
-import { useI18nContext } from "~i18n"
-import { RootStackParamListSwitch, Routes } from "~Navigation"
-import { NativeStackScreenProps } from "@react-navigation/native-stack"
-import { useNavigation } from "@react-navigation/native"
-import { MessageDetails, UnknownAppMessage } from "~Screens"
-import { AnalyticsEvent, ERROR_EVENTS, RequestMethods } from "~Constants"
 import { useObservedAccountExclusion } from "../Hooks"
 
 type Props = NativeStackScreenProps<RootStackParamListSwitch, Routes.CONNECTED_APP_SIGN_CERTIFICATE_SCREEN>
@@ -260,29 +260,16 @@ export const SignCertificateScreen: FC<Props> = ({ route }: Props) => {
                         />
                     )}
                 </BaseView>
-
-                <BaseSpacer height={30} />
-
-                <BaseView style={styles.footer}>
-                    <BaseButton
-                        w={100}
-                        haptics="Light"
-                        title={LL.COMMON_BTN_SIGN()}
-                        action={() => onSubmit(checkIdentityBeforeOpening)}
-                        /* We must assert that `biometrics` is not empty otherwise we don't know if the user has set biometrics or passcode, thus failing to decrypt the wallet when signing */
-                        isLoading={isBiometricsEmpty}
-                        disabled={isBiometricsEmpty || (!validConnectedApp && !isInvalidChecked)}
-                    />
-                    <BaseSpacer height={16} />
-                    <BaseButton
-                        w={100}
-                        haptics="Light"
-                        variant="outline"
-                        title={LL.COMMON_BTN_REJECT()}
-                        action={onReject}
-                    />
-                </BaseView>
             </ScrollView>
+
+            <SignAndReject
+                onConfirmTitle={LL.COMMON_BTN_SIGN()}
+                onRejectTitle={LL.COMMON_BTN_REJECT()}
+                onConfirm={() => onSubmit(checkIdentityBeforeOpening)}
+                onReject={onReject}
+                isConfirmLoading={isBiometricsEmpty}
+                confirmButtonDisabled={isBiometricsEmpty || (!validConnectedApp && !isInvalidChecked)}
+            />
 
             <RequireUserPassword
                 isOpen={isPasswordPromptOpen}

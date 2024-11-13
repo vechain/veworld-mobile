@@ -1,8 +1,10 @@
+import { useNavigation } from "@react-navigation/native"
+import { NativeStackScreenProps } from "@react-navigation/native-stack"
 import React, { FC, useCallback, useMemo } from "react"
 import { ScrollView, StyleSheet } from "react-native"
+import { Transaction } from "thor-devkit"
 import {
     AccountCard,
-    BaseButton,
     BaseSafeArea,
     BaseSpacer,
     BaseText,
@@ -13,9 +15,16 @@ import {
     RequireUserPassword,
     SelectAccountBottomSheet,
     showErrorToast,
-    useWalletConnect,
+    SignAndReject,
     useInAppBrowser,
+    useWalletConnect,
 } from "~Components"
+import { AnalyticsEvent, creteAnalyticsEvent, RequestMethods } from "~Constants"
+import { useAnalyticTracking, useBottomSheetModal, useSetSelectedAccount, useTransactionScreen } from "~Hooks"
+import { useI18nContext } from "~i18n"
+import { AccountWithDevice, WatchedAccount } from "~Model"
+import { RootStackParamListSwitch, Routes } from "~Navigation"
+import { TransactionDetails, UnknownAppMessage } from "~Screens"
 import {
     addPendingDappTransactionActivity,
     selectOfficialTokens,
@@ -28,16 +37,7 @@ import {
     useAppSelector,
 } from "~Storage/Redux"
 import { TransactionUtils } from "~Utils"
-import { useAnalyticTracking, useBottomSheetModal, useSetSelectedAccount, useTransactionScreen } from "~Hooks"
-import { useI18nContext } from "~i18n"
-import { RootStackParamListSwitch, Routes } from "~Navigation"
-import { NativeStackScreenProps } from "@react-navigation/native-stack"
-import { useNavigation } from "@react-navigation/native"
 import { ClausesCarousel } from "../../ActivityDetailsScreen/Components"
-import { Transaction } from "thor-devkit"
-import { TransactionDetails, UnknownAppMessage } from "~Screens"
-import { AnalyticsEvent, RequestMethods, creteAnalyticsEvent } from "~Constants"
-import { AccountWithDevice, WatchedAccount } from "~Model"
 
 type Props = NativeStackScreenProps<RootStackParamListSwitch, Routes.CONNECTED_APP_SEND_TRANSACTION_SCREEN>
 
@@ -279,29 +279,16 @@ export const SendTransactionScreen: FC<Props> = ({ route }: Props) => {
                         />
                     )}
                 </BaseView>
-
-                <BaseSpacer height={40} />
-                <BaseView style={styles.footer}>
-                    <BaseButton
-                        w={100}
-                        haptics="Light"
-                        title={LL.COMMON_BTN_SIGN_AND_SEND()}
-                        action={onSubmit}
-                        disabled={isLoading || isDisabledButtonState || (!validConnectedApp && !isInvalidChecked)}
-                        isLoading={isLoading}
-                    />
-                    <BaseSpacer height={16} />
-                    <BaseButton
-                        w={100}
-                        haptics="Light"
-                        variant="outline"
-                        title={LL.COMMON_BTN_REJECT()}
-                        action={onReject}
-                    />
-                </BaseView>
-
-                <BaseSpacer height={16} />
             </ScrollView>
+
+            <SignAndReject
+                onConfirmTitle={LL.COMMON_BTN_SIGN_AND_SEND()}
+                onConfirm={onSubmit}
+                confirmButtonDisabled={isLoading || isDisabledButtonState || (!validConnectedApp && !isInvalidChecked)}
+                isConfirmLoading={isLoading}
+                onRejectTitle={LL.COMMON_BTN_REJECT()}
+                onReject={onReject}
+            />
 
             <SelectAccountBottomSheet
                 closeBottomSheet={closeSelectAccountBottonSheet}
