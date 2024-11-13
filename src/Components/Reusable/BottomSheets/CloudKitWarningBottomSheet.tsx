@@ -10,6 +10,7 @@ import { useI18nContext } from "~i18n"
 import { TextInput } from "react-native-gesture-handler"
 import { AlertInlineTransparent, CheckBoxWithText } from "~Components"
 import { FeatherKeySVG } from "~Assets"
+import { PlatformUtils } from "~Utils"
 
 type Props = {
     onHandleBackupToCloudKit: (password: string) => void
@@ -205,7 +206,13 @@ export const CloudKitWarningBottomSheet = forwardRef<BottomSheetModalMethods, Pr
                         w={100}
                         disabled={!isChecked || isLoading}
                         haptics="Light"
-                        title={isLoading ? LL.BACKING_UP() : LL.BTN_BACKUP_TO_ICLOUD()}
+                        title={
+                            isLoading
+                                ? LL.BACKING_UP()
+                                : PlatformUtils.isIOS()
+                                ? LL.BTN_BACKUP_TO_ICLOUD()
+                                : LL.BTN_BACKUP_TO_DRIVE()
+                        }
                         action={checkPasswordValidity}
                     />
                     <BaseSpacer height={16} />
