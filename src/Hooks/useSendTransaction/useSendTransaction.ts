@@ -67,7 +67,7 @@ export const useSendTransaction = (onSuccess: (transaction: Transaction, id: str
         showSuccessToast({
             text1: LL.SUCCESS_GENERIC(),
             text2: LL.SUCCESS_GENERIC_OPERATION(),
-            textLink: LL.SUCCESS_GENERIC_VIEW_DETAIL_LINK(),
+            textLink: LL.NOTIFICATION_SEE_TRANSACTION_DETAILS_ACTION(),
             onPress: async () => {
                 await Linking.openURL(
                     `${selectedNetwork.explorerUrl ?? defaultMainNetwork.explorerUrl}/transactions/${id}`,
