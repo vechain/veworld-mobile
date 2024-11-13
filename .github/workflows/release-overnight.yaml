@@ -11,9 +11,8 @@ on:
                 description: 'Build number'
                 type: number
                 required: true
-    push:
-        branches:
-            - 2349-release-schedule-automation
+    schedule:
+    - cron: '0 10 * * 1-5'  # Runs at 10:00 AM UTC Monday through Friday
 env:
     IOS_VERSION: ${{ vars.ios_version }}
     IOS_BUILD: ${{ vars.ios_build }}
@@ -31,9 +30,19 @@ jobs:
               env:
                 GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
               run: |
-                merged_prs=$(gh pr list --base main --state merged --json mergedAt --jq '.[] | select(.mergedAt > "'$(date --date="24 hours ago" --iso-8601=seconds)'") | length')
-                echo "Merged PRs in the last 24 hours: $merged_prs"
-                echo "::set-output name=should_release::$(if [ "$merged_prs" -gt 0 ]; then echo 'true'; else echo 'false'; fi)"
+                  since_date=$(date --iso-8601=seconds --date="24 hours ago")
+                  repo=${GITHUB_REPOSITORY}
+                  merged_prs=$(gh api \
+                    --header "Accept: application/vnd.github+json" \
+                    --method GET \
+                    "search/issues?q=repo:$repo+is:pr+is:merged+base:main+merged:>$since_date" \
+                    --jq '.total_count')
+                  echo "Merged PRs in the last 24 hours: $merged_prs"
+                  if [ "$merged_prs" -gt 0 ]; then
+                    echo "should_release=true" >> $GITHUB_OUTPUT
+                  else
+                    echo "should_release=false" >> $GITHUB_OUTPUT
+                  fi
    
     setup-version-build:
         runs-on: ubuntu-latest
