@@ -59,12 +59,6 @@ const NotificationsProvider = React.memo(({ children }: PropsWithChildren) => {
         dispatch(updateNotificationPermission(_permissionEnabled))
     }, [dispatch])
 
-    const init = useCallback(async () => {
-        initializeIneSignal()
-        getOptInStatus()
-        getPermission()
-    }, [getOptInStatus, getPermission, initializeIneSignal])
-
     const requestPermission = useCallback(() => {
         dispatch(updateNotificationPermission(!permissionEnabled))
 
@@ -107,6 +101,13 @@ const NotificationsProvider = React.memo(({ children }: PropsWithChildren) => {
         },
         [dispatch],
     )
+
+    const init = useCallback(async () => {
+        initializeIneSignal()
+        getOptInStatus()
+        getPermission()
+        OneSignal.User.pushSubscription.optIn()
+    }, [getOptInStatus, getPermission, initializeIneSignal])
 
     useEffect(() => {
         init()
