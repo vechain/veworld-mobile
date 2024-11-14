@@ -2211,6 +2211,10 @@ type RootTranslation = {
 	 */
 	NOTIFICATION_OUTGOING_NFT_TITLE: string
 	/**
+	 * S​e​e​ ​d​e​t​a​i​l​s
+	 */
+	NOTIFICATION_SEE_TRANSACTION_DETAILS_ACTION: string
+	/**
 	 * Q​R​ ​C​o​d​e​ ​N​o​t​ ​S​u​p​p​o​r​t​e​d
 	 */
 	NOTIFICATION_TITLE_INVALID_QR: string
@@ -2233,12 +2237,17 @@ type RootTranslation = {
 	 */
 	NOTIFICATION_WC_NETWORK_CHANGED: RequiredParams<'network'>
 	/**
-	 * F​o​u​n​d​ ​{​t​o​k​e​n​}​ ​t​r​a​n​s​f​e​r​:​ ​{​a​m​o​u​n​t​}​ ​o​n​ ​{​a​l​i​a​s​}
-	 * @param {string} alias
+	 * T​r​a​n​s​f​e​r​ ​r​e​c​e​i​v​e​d​:​ ​{​a​m​o​u​n​t​}​ ​{​t​o​k​e​n​}
 	 * @param {string} amount
 	 * @param {string} token
 	 */
-	NOTIFICATION_found_token_transfer: RequiredParams<'alias' | 'amount' | 'token'>
+	NOTIFICATION_received_token_transfer: RequiredParams<'amount' | 'token'>
+	/**
+	 * T​r​a​n​s​f​e​r​ ​s​e​n​t​:​ ​{​a​m​o​u​n​t​}​ ​{​t​o​k​e​n​}
+	 * @param {string} amount
+	 * @param {string} token
+	 */
+	NOTIFICATION_sent_token_transfer: RequiredParams<'amount' | 'token'>
 	/**
 	 * T​r​a​n​s​a​c​t​i​o​n​ ​{​t​x​I​d​}​ ​w​a​s​ ​r​e​v​e​r​t​e​d​.
 	 * @param {string} txId
@@ -5635,6 +5644,10 @@ Try reconnect your device to the internet.
 	 */
 	NOTIFICATION_OUTGOING_NFT_TITLE: () => LocalizedString
 	/**
+	 * See details
+	 */
+	NOTIFICATION_SEE_TRANSACTION_DETAILS_ACTION: () => LocalizedString
+	/**
 	 * QR Code Not Supported
 	 */
 	NOTIFICATION_TITLE_INVALID_QR: () => LocalizedString
@@ -5655,9 +5668,13 @@ Try reconnect your device to the internet.
 	 */
 	NOTIFICATION_WC_NETWORK_CHANGED: (arg: { network: string }) => LocalizedString
 	/**
-	 * Found {token} transfer: {amount} on {alias}
+	 * Transfer received: {amount} {token}
 	 */
-	NOTIFICATION_found_token_transfer: (arg: { alias: string, amount: string, token: string }) => LocalizedString
+	NOTIFICATION_received_token_transfer: (arg: { amount: string, token: string }) => LocalizedString
+	/**
+	 * Transfer sent: {amount} {token}
+	 */
+	NOTIFICATION_sent_token_transfer: (arg: { amount: string, token: string }) => LocalizedString
 	/**
 	 * Transaction {txId} was reverted.
 	 */

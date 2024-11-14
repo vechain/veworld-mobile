@@ -458,9 +458,9 @@ platform :ios do
         api_url: "https://api.github.com"
       )
 
-      ## send slack message
+      # send slack message
       slack(
-        message: version.nil? ? "CI: VeWorld build number: #{build} was successfully released! [iOS]" : "VeWorld version number: #{version} was successfully released! [iOS]",
+        message:  "CI: VeWorld version number: #{version}  build number: #{build} was successfully released! [iOS]",
         slack_url: ENV["SLACK_WEBHOOK"],
         success: true,
         payload: {
@@ -478,7 +478,7 @@ platform :ios do
 
       ## send slack message
       slack(
-        message: versionType.nil? ? "CI: Error releasing VeWorld build number: #{build} [iOS]" : "Error releasing VeWorld version number: #{version} [iOS]",
+        message: "CI:Error releasing VeWorld version number: #{version} build number: #{build} [iOS]",
         slack_url: ENV["SLACK_WEBHOOK"],
         success: false,
         payload: {
@@ -505,6 +505,7 @@ platform :ios do
         # delete tag remotely
         sh("git push --delete origin v#{version}-#{build}") 
       end
+      sh("echo 'Build failed'")
     end
   end
 

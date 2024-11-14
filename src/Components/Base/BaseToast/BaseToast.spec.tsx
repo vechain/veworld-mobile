@@ -214,7 +214,7 @@ describe("toastConfig", () => {
             type: "error",
         })
 
-        expect(result.props.icon).toBe("alert-circle-outline")
+        expect(result.props.icon).toBe("alert-outline")
         expect(result.props.text1).toBe("Error")
         expect(result.props.text2).toBe("Details")
         expect(result.props.text3).toBe("Click here")
