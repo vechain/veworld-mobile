@@ -119,8 +119,6 @@ export enum COLORS {
     BLUE_200 = "#90CDF4",
     BLUE_100 = "#BEE3F8",
     BLUE_50 = "#EBF8FF",
-    BLUE_50 = "#EBF8FF",
-    BLUE_100 = "#BEE3F8",
     LIGHT_GREEN = "#AAD836",
     PASTEL_GREEN = "#c5eacd",
     MEDIUM_GREEN = "#30B34E",
