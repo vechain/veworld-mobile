@@ -182,11 +182,7 @@ export const CloudKitWarningBottomSheet = forwardRef<BottomSheetModalMethods, Pr
                         <PasswordStrengthIndicator strength={strength} showComputedStrength={false} noMargin={true} />
                     )}
 
-                    {passwordNotStrong && (
-                        <>
-                            <AlertInline message={LL.BD_PASSWORD_NOT_STRONG()} status="error" />
-                        </>
-                    )}
+                    {passwordNotStrong && <AlertInline message={LL.BD_PASSWORD_NOT_STRONG()} status="error" />}
                     <BaseSpacer height={24} />
                     <BaseView>
                         {openLocation === "Backup_Screen" && (
@@ -215,11 +211,7 @@ export const CloudKitWarningBottomSheet = forwardRef<BottomSheetModalMethods, Pr
                             />
                         )}
                         <BaseSpacer height={4} />
-                        {passwordMisMatch && (
-                            <>
-                                <AlertInline message={LL.BD_PASSWORDS_DO_NOT_MATCH()} status="error" />
-                            </>
-                        )}
+                        {passwordMisMatch && <AlertInline message={LL.BD_PASSWORDS_DO_NOT_MATCH()} status="error" />}
                         <BaseSpacer height={14} />
                     </BaseView>
                     <CheckBoxWithText

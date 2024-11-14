@@ -112,11 +112,7 @@ export enum COLORS {
     LIGHT_BLUE = "#90CDF4",
     MEDIUM_BLUE = "#3182CE",
     PASTEL_BLUE = "#4299E1",
-    DARK_BLUE_ALERT = "#2C5282",
     BLUE_700 = "#2C5282",
-    BLUE_500 = "#3182CE",
-    BLUE_400 = "#4299E1",
-    BLUE_200 = "#90CDF4",
     BLUE_100 = "#BEE3F8",
     BLUE_50 = "#EBF8FF",
     LIGHT_GREEN = "#AAD836",
@@ -226,8 +222,8 @@ const light: Colors = {
     },
     infoVariant: {
         background: COLORS.BLUE_50,
-        border: COLORS.BLUE_200,
-        icon: COLORS.BLUE_500,
+        border: COLORS.LIGHT_BLUE,
+        icon: COLORS.MEDIUM_BLUE,
         title: COLORS.BLUE_700,
         titleInline: COLORS.BLUE_700,
     },
@@ -304,10 +300,10 @@ const dark: Colors = {
     },
     infoVariant: {
         background: COLORS.BLUE_100,
-        border: COLORS.BLUE_200,
-        icon: COLORS.BLUE_500,
+        border: COLORS.LIGHT_BLUE,
+        icon: COLORS.MEDIUM_BLUE,
         title: COLORS.BLUE_700,
-        titleInline: COLORS.BLUE_200,
+        titleInline: COLORS.LIGHT_BLUE,
     },
 }
 
