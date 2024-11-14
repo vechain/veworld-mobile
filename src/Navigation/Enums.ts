@@ -79,4 +79,8 @@ export enum Routes {
     SECURITY_UPGRADE_V2 = "Security_Upgrade_V2",
     SECURITY_UPGRADE_V2_HOME = "Security_Upgrade_V2_Home",
     SECURITY_UPGRADE_V2_MNEMONIC_BACKUP = "Security_Upgrade_V2_Mnemonic_Backup",
+    CHAT_CONVERSATIONS = "Chat_Conversations",
+    CHAT_REQUESTS = "Chat_Requests",
+    CHAT_CONVERSATION = "Chat_Conversation",
+    CHAT_BLOCKED_ACCOUNTS = "Chat_Blocked_Accounts",
 }
