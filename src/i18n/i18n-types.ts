@@ -289,10 +289,6 @@ type RootTranslation = {
 	 */
 	BD_CLOUD_BACKUP_PASSWORD: string
 	/**
-	 * G​o​o​g​l​e​ ​D​r​i​v​e​ ​B​a​c​k​u​p​ ​P​a​s​s​w​o​r​d
-	 */
-	BD_DRIVE_BACKUP_PASSWORD: string
-	/**
 	 * E​n​t​e​r​ ​t​h​e​ ​p​a​s​s​w​o​r​d​ ​y​o​u​ ​u​s​e​d​ ​t​o​ ​b​a​c​k​ ​u​p​ ​y​o​u​r​ ​w​a​l​l​e​t​.
 	 */
 	BD_CLOUD_INSERT_PASSWORD: string
@@ -360,6 +356,10 @@ type RootTranslation = {
 	 * M​a​n​a​g​e​ ​y​o​u​r​ ​c​u​s​t​o​m​ ​n​o​d​e​s
 	 */
 	BD_CUSTOM_NODES_DESC: string
+	/**
+	 * G​o​o​g​l​e​ ​D​r​i​v​e​ ​B​a​c​k​u​p​ ​P​a​s​s​w​o​r​d
+	 */
+	BD_DRIVE_BACKUP_PASSWORD: string
 	/**
 	 * E​U​R
 	 */
@@ -916,13 +916,13 @@ type RootTranslation = {
 	 */
 	BTN_SWAP: string
 	/**
-	 * V​e​r​i​f​y​ ​i​C​l​o​u​d​ ​b​a​c​k​u​p
-	 */
-	BTN_VERIFY_ICLOUD_BACKUP: string
-	/**
 	 * V​e​r​i​f​y​ ​G​o​o​g​l​e​ ​D​r​i​v​e​ ​b​a​c​k​u​p
 	 */
 	BTN_VERIFY_DRIVE_BACKUP: string
+	/**
+	 * V​e​r​i​f​y​ ​i​C​l​o​u​d​ ​b​a​c​k​u​p
+	 */
+	BTN_VERIFY_ICLOUD_BACKUP: string
 	/**
 	 * I​ ​s​t​a​t​e​ ​t​h​a​t​ ​I​ ​w​a​n​t​ ​t​o​ ​d​e​l​e​t​e​ ​t​h​i​s​ ​w​a​l​l​e​t
 	 */
@@ -1735,6 +1735,10 @@ type RootTranslation = {
 	 */
 	GAS_FEE: string
 	/**
+	 * G​o​o​g​l​e​ ​D​r​i​v​e
+	 */
+	GOOGLE_DRIVE: string
+	/**
 	 * A​n​ ​e​r​r​o​r​ ​o​c​c​u​r​r​e​d​ ​w​h​i​l​e​ ​t​r​y​i​n​g​ ​t​o​ ​c​o​n​n​e​c​t​ ​t​o​ ​G​o​o​g​l​e​ ​D​r​i​v​e​ ​s​e​r​v​i​c​e​.​ ​T​r​y​ ​a​g​a​i​n​!
 	 */
 	GOOGLE_DRIVE_ERROR_GENERIC: string
@@ -1771,17 +1775,13 @@ type RootTranslation = {
 	 */
 	HIDE_NFT: string
 	/**
-	 * I​m​p​o​r​t​ ​N​F​T
-	 */
-	IMPORT_NFT: string
-	/**
 	 * i​C​l​o​u​d
 	 */
 	ICLOUD: string
 	/**
-	 * G​o​o​g​l​e​ ​D​r​i​v​e
+	 * I​m​p​o​r​t​ ​N​F​T
 	 */
-	GOOGLE_DRIVE: string
+	IMPORT_NFT: string
 	/**
 	 * I​r​i​s
 	 */
@@ -2152,6 +2152,10 @@ type RootTranslation = {
 	 */
 	NOTIFICATION_OUTGOING_NFT_TITLE: string
 	/**
+	 * S​e​e​ ​d​e​t​a​i​l​s
+	 */
+	NOTIFICATION_SEE_TRANSACTION_DETAILS_ACTION: string
+	/**
 	 * Q​R​ ​C​o​d​e​ ​N​o​t​ ​S​u​p​p​o​r​t​e​d
 	 */
 	NOTIFICATION_TITLE_INVALID_QR: string
@@ -2174,12 +2178,17 @@ type RootTranslation = {
 	 */
 	NOTIFICATION_WC_NETWORK_CHANGED: RequiredParams<'network'>
 	/**
-	 * F​o​u​n​d​ ​{​t​o​k​e​n​}​ ​t​r​a​n​s​f​e​r​:​ ​{​a​m​o​u​n​t​}​ ​o​n​ ​{​a​l​i​a​s​}
-	 * @param {string} alias
+	 * T​r​a​n​s​f​e​r​ ​r​e​c​e​i​v​e​d​:​ ​{​a​m​o​u​n​t​}​ ​{​t​o​k​e​n​}
 	 * @param {string} amount
 	 * @param {string} token
 	 */
-	NOTIFICATION_found_token_transfer: RequiredParams<'alias' | 'amount' | 'token'>
+	NOTIFICATION_received_token_transfer: RequiredParams<'amount' | 'token'>
+	/**
+	 * T​r​a​n​s​f​e​r​ ​s​e​n​t​:​ ​{​a​m​o​u​n​t​}​ ​{​t​o​k​e​n​}
+	 * @param {string} amount
+	 * @param {string} token
+	 */
+	NOTIFICATION_sent_token_transfer: RequiredParams<'amount' | 'token'>
 	/**
 	 * T​r​a​n​s​a​c​t​i​o​n​ ​{​t​x​I​d​}​ ​w​a​s​ ​r​e​v​e​r​t​e​d​.
 	 * @param {string} txId
@@ -3684,10 +3693,6 @@ Try reconnect your device to the internet.
 	 */
 	BD_CLOUD_BACKUP_PASSWORD: () => LocalizedString
 	/**
-	 * Google Drive Backup Password
-	 */
-	BD_DRIVE_BACKUP_PASSWORD: () => LocalizedString
-	/**
 	 * Enter the password you used to back up your wallet.
 	 */
 	BD_CLOUD_INSERT_PASSWORD: () => LocalizedString
@@ -3755,6 +3760,10 @@ Try reconnect your device to the internet.
 	 * Manage your custom nodes
 	 */
 	BD_CUSTOM_NODES_DESC: () => LocalizedString
+	/**
+	 * Google Drive Backup Password
+	 */
+	BD_DRIVE_BACKUP_PASSWORD: () => LocalizedString
 	/**
 	 * EUR
 	 */
@@ -4308,13 +4317,13 @@ Try reconnect your device to the internet.
 	 */
 	BTN_SWAP: () => LocalizedString
 	/**
-	 * Verify iCloud backup
-	 */
-	BTN_VERIFY_ICLOUD_BACKUP: () => LocalizedString
-	/**
 	 * Verify Google Drive backup
 	 */
 	BTN_VERIFY_DRIVE_BACKUP: () => LocalizedString
+	/**
+	 * Verify iCloud backup
+	 */
+	BTN_VERIFY_ICLOUD_BACKUP: () => LocalizedString
 	/**
 	 * I state that I want to delete this wallet
 	 */
@@ -5120,6 +5129,10 @@ Try reconnect your device to the internet.
 	 */
 	GAS_FEE: () => LocalizedString
 	/**
+	 * Google Drive
+	 */
+	GOOGLE_DRIVE: () => LocalizedString
+	/**
 	 * An error occurred while trying to connect to Google Drive service. Try again!
 	 */
 	GOOGLE_DRIVE_ERROR_GENERIC: () => LocalizedString
@@ -5156,17 +5169,13 @@ Try reconnect your device to the internet.
 	 */
 	HIDE_NFT: () => LocalizedString
 	/**
-	 * Import NFT
-	 */
-	IMPORT_NFT: () => LocalizedString
-	/**
 	 * iCloud
 	 */
 	ICLOUD: () => LocalizedString
 	/**
-	 * Google Drive
+	 * Import NFT
 	 */
-	GOOGLE_DRIVE: () => LocalizedString
+	IMPORT_NFT: () => LocalizedString
 	/**
 	 * Iris
 	 */
@@ -5528,6 +5537,10 @@ Try reconnect your device to the internet.
 	 */
 	NOTIFICATION_OUTGOING_NFT_TITLE: () => LocalizedString
 	/**
+	 * See details
+	 */
+	NOTIFICATION_SEE_TRANSACTION_DETAILS_ACTION: () => LocalizedString
+	/**
 	 * QR Code Not Supported
 	 */
 	NOTIFICATION_TITLE_INVALID_QR: () => LocalizedString
@@ -5548,9 +5561,13 @@ Try reconnect your device to the internet.
 	 */
 	NOTIFICATION_WC_NETWORK_CHANGED: (arg: { network: string }) => LocalizedString
 	/**
-	 * Found {token} transfer: {amount} on {alias}
+	 * Transfer received: {amount} {token}
 	 */
-	NOTIFICATION_found_token_transfer: (arg: { alias: string, amount: string, token: string }) => LocalizedString
+	NOTIFICATION_received_token_transfer: (arg: { amount: string, token: string }) => LocalizedString
+	/**
+	 * Transfer sent: {amount} {token}
+	 */
+	NOTIFICATION_sent_token_transfer: (arg: { amount: string, token: string }) => LocalizedString
 	/**
 	 * Transaction {txId} was reverted.
 	 */

@@ -9,6 +9,11 @@ import HapticsService from "~Services/HapticsService"
 
 const IS_CI_BUILD = process.env.IS_CI_BUILD_ENABLED === "true"
 
+export type ToastAddress = {
+    sender: string
+    recipient?: string
+}
+
 /**
  * Creates a toast configuration object for the given theme.
  *
@@ -19,12 +24,13 @@ export const toastConfig = (theme: ColorThemeType) => ({
     success: ({ text1, text2, props }: ToastConfigParams<any>) => {
         const styles = successToastStyles(theme)
 
-        const { textLink, onPress, testID } = props
+        const { textLink, onPress, testID, addresses } = props
 
         return (
             <ToastContent
                 styles={styles}
                 icon="check-circle-outline"
+                addresses={addresses}
                 text1={text1}
                 text2={text2}
                 text3={textLink}
@@ -38,12 +44,13 @@ export const toastConfig = (theme: ColorThemeType) => ({
     error: ({ text1, text2, props }: ToastConfigParams<any>) => {
         const styles = errorToastStyles(theme)
 
-        const { textLink, onPress, testID } = props
+        const { textLink, onPress, testID, addresses } = props
 
         return (
             <ToastContent
                 styles={styles}
-                icon="alert-circle-outline"
+                icon="alert-outline"
+                addresses={addresses}
                 text1={text1}
                 text2={text2}
                 text3={textLink}
@@ -57,12 +64,13 @@ export const toastConfig = (theme: ColorThemeType) => ({
     warning: ({ text1, text2, props }: ToastConfigParams<any>) => {
         const styles = warningToastStyles(theme)
 
-        const { textLink, onPress, testID } = props
+        const { textLink, onPress, testID, addresses } = props
 
         return (
             <ToastContent
                 styles={styles}
                 icon="alert-outline"
+                addresses={addresses}
                 text1={text1}
                 text2={text2}
                 text3={textLink}
@@ -76,12 +84,13 @@ export const toastConfig = (theme: ColorThemeType) => ({
     info: ({ text1, text2, props }: ToastConfigParams<any>) => {
         const styles = infoToastStyles(theme)
 
-        const { textLink, onPress, testID } = props
+        const { textLink, onPress, testID, addresses } = props
 
         return (
             <ToastContent
                 styles={styles}
                 icon="alert-circle-outline"
+                addresses={addresses}
                 text1={text1}
                 text2={text2}
                 text3={textLink}
@@ -114,6 +123,7 @@ type CustomToastConfig = {
     text1: string
     text2?: string
     textLink?: string
+    addresses?: ToastAddress
     visibilityTime?: number
     testID?: string
     onPress?: () => void
@@ -141,44 +151,76 @@ export const hideToast = () => {
 
 // Export utility functions to show success, error, warning, and info toasts:
 // showSuccessToast, showErrorToast, showWarningToast, showInfoToast
-export const showSuccessToast = ({ text1, text2, textLink, visibilityTime, testID, onPress }: CustomToastConfig) => {
+export const showSuccessToast = ({
+    addresses,
+    text1,
+    text2,
+    textLink,
+    visibilityTime,
+    testID,
+    onPress,
+}: CustomToastConfig) => {
     Toast.show({
         type: "success",
         text1,
         text2,
         visibilityTime: visibilityTime ?? commonToastParams.visibilityTime,
-        props: { textLink, onPress, testID },
+        props: { textLink, onPress, testID, addresses },
     })
 }
 
-export const showErrorToast = ({ text1, text2, textLink, visibilityTime, testID, onPress }: CustomToastConfig) => {
+export const showErrorToast = ({
+    addresses,
+    text1,
+    text2,
+    textLink,
+    visibilityTime,
+    testID,
+    onPress,
+}: CustomToastConfig) => {
     HapticsService.triggerNotification({ level: "Error" })
     Toast.show({
         type: "error",
         text1,
         text2,
         visibilityTime: visibilityTime ?? commonToastParams.visibilityTime,
-        props: { textLink, onPress, testID },
+        props: { textLink, onPress, testID, addresses },
     })
 }
 
-export const showWarningToast = ({ text1, text2, textLink, visibilityTime, testID, onPress }: CustomToastConfig) => {
+export const showWarningToast = ({
+    addresses,
+    text1,
+    text2,
+    textLink,
+    visibilityTime,
+    testID,
+    onPress,
+}: CustomToastConfig) => {
     Toast.show({
         type: "warning",
         text1,
         text2,
         visibilityTime: visibilityTime ?? commonToastParams.visibilityTime,
-        props: { textLink, onPress, testID },
+        props: { textLink, onPress, testID, addresses },
     })
 }
 
-export const showInfoToast = ({ text1, text2, textLink, visibilityTime, testID, onPress }: CustomToastConfig) => {
+export const showInfoToast = ({
+    addresses,
+    text1,
+    text2,
+    textLink,
+    visibilityTime,
+    testID,
+    onPress,
+}: CustomToastConfig) => {
     Toast.show({
         type: "info",
         text1,
         text2,
         visibilityTime: visibilityTime ?? commonToastParams.visibilityTime,
-        props: { textLink, onPress, testID },
+        props: { textLink, onPress, testID, addresses },
     })
 }
 
