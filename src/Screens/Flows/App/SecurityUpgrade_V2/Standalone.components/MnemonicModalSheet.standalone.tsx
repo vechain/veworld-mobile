@@ -6,13 +6,13 @@ import {
     BaseView,
     BaseText,
     BaseSpacer,
-    MnemonicCard,
     BaseIcon,
     MnemonicAvoidScreenshotAlert,
 } from "~Components"
 import { useCopyClipboard, useTheme } from "~Hooks"
 import { useI18nContext } from "~i18n"
 import { Wallet } from "~Model"
+import { MnemonicCard } from "./MnemonicCard.standalone"
 
 type Props = {
     selectedWallet: Wallet | null

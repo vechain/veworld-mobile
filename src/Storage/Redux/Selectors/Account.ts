@@ -126,6 +126,13 @@ export const selectAccountsByDevice = createSelector(
     },
 )
 
+export const selectAccountByAddress = createSelector(
+    [selectAccounts, (state: RootState, address: string) => address],
+    (accounts, address) => {
+        return accounts.find(account => account.address === address)
+    },
+)
+
 export const selectVnsNameOrAddress = createSelector(
     [
         selectAccounts,

@@ -205,7 +205,9 @@ describe("URIUtils", () => {
         })
 
         it("should return IPFS URL", () => {
-            expect(URIUtils.convertUriToUrl("ipfs://QmZ1YXJzZS5jb20")).toBe("https://api.vorj.app/ipfs/QmZ1YXJzZS5jb20")
+            expect(URIUtils.convertUriToUrl("ipfs://QmZ1YXJzZS5jb20")).toBe(
+                "https://api.gateway-proxy.vechain.org/ipfs/QmZ1YXJzZS5jb20",
+            )
         })
 
         it("should return arweave URL", () => {
