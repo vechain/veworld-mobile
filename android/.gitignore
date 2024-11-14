@@ -12,6 +12,6 @@ fastlane/test_output
 
 # Fastlane builds
 build/*
-pc-api-4895632399891248889-903-c30062a54347.json
+pc-api-4895632399891248889-903-1f538768f7fe.json
 .env
 .env.default
