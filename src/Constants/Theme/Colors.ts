@@ -44,6 +44,7 @@ export type Colors = {
     textLight: string
     checkboxFilledBackground: string
     checkboxIcon: string
+    passwordPlaceholder: string
     successVariant: {
         background: string
         border: string
@@ -196,6 +197,7 @@ const light: Colors = {
     switchEnabled: COLORS.LIGHT_GREEN,
     checkboxFilledBackground: COLORS.DARK_PURPLE,
     checkboxIcon: COLORS.WHITE,
+    passwordPlaceholder: COLORS.GREY_400,
     successVariant: {
         background: COLORS.GREEN_50,
         border: COLORS.GREEN_200,
@@ -273,6 +275,7 @@ const dark: Colors = {
     switchEnabled: COLORS.LIGHT_GREEN,
     checkboxFilledBackground: COLORS.WHITE,
     checkboxIcon: COLORS.DARK_PURPLE,
+    passwordPlaceholder: COLORS.GREY_400,
     successVariant: {
         background: COLORS.GREEN_100,
         border: COLORS.GREEN_200,

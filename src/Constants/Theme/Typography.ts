@@ -208,7 +208,7 @@ export const defaults: Record<TFonts, TypographyObject> = {
         fontFamily: fontFamily["Inter-Regular"],
         fontSize: 12,
         fontWeight: fontWeight[400],
-        lineHeight: lineHeight.captionMedium,
+        lineHeight: lineHeight.caption,
     },
     caption: {
         fontFamily: fontFamily["Inter-Light"],

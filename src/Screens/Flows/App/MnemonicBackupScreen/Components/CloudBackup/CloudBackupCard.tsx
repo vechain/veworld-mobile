@@ -1,4 +1,4 @@
-import React, { FC, useCallback, useEffect, useMemo, useRef, useState } from "react"
+import React, { FC, useCallback, useEffect, useMemo, useState } from "react"
 import Lottie from "lottie-react-native"
 import { StyleSheet } from "react-native"
 import { getTimeZone } from "react-native-localize"
@@ -29,7 +29,6 @@ export const CloudBackupCard: FC<Props> = ({ mnemonicArray, deviceToBackup }) =>
     const dispatch = useAppDispatch()
     const { LL, locale } = useI18nContext()
     const { styles, theme } = useThemedStyles(baseStyles)
-    const backupInProgress = useRef(false)
     const [isWalletBackedUp, setIsWalletBackedUp] = useState(true)
     const [isLoading, setIsLoading] = useState(false)
 
@@ -50,15 +49,6 @@ export const CloudBackupCard: FC<Props> = ({ mnemonicArray, deviceToBackup }) =>
         getWallet()
     }, [getWallet])
 
-    useEffect(() => {
-        if (isWalletBackedUp && backupInProgress.current) {
-            backupInProgress.current = false
-            onOpenSuccess()
-        } else if (!isWalletBackedUp && backupInProgress.current) {
-            backupInProgress.current = false
-        }
-    }, [isWalletBackedUp, onOpenSuccess])
-
     const onHandleBackupToCloudKit = useCallback(
         async (password: string) => {
             setIsLoading(true)
@@ -71,7 +61,6 @@ export const CloudBackupCard: FC<Props> = ({ mnemonicArray, deviceToBackup }) =>
                 return
             }
 
-            backupInProgress.current = true
             const firstAccountAddress = AddressUtils.getAddressFromXPub(deviceToBackup.xPub, 0)
             const salt = HexUtils.generateRandom(256)
             const iv = PasswordUtils.getRandomIV(16)
@@ -103,28 +92,40 @@ export const CloudBackupCard: FC<Props> = ({ mnemonicArray, deviceToBackup }) =>
             )
             await getWalletByRootAddress(deviceToBackup.rootAddress)
             onCloseWarning()
+            setIsWalletBackedUp(true)
+            setIsLoading(false)
+            onOpenSuccess()
         },
         [
             LL,
-            deviceToBackup,
+            deviceToBackup?.derivationPath,
+            deviceToBackup?.rootAddress,
+            deviceToBackup?.type,
+            deviceToBackup?.xPub,
             dispatch,
             getWalletByRootAddress,
             locale,
             mnemonicArray,
             onCloseWarning,
+            onOpenSuccess,
             saveWalletToCloud,
         ],
     )
 
     const computedStyles = useMemo(
         () => ({
+            ...styles.cloudRow,
             backgroundColor: isWalletBackedUp ? theme.colors.successVariant.background : theme.colors.primary,
             borderColor: isWalletBackedUp ? theme.colors.successVariant.borderLight : theme.colors.primary,
         }),
-        [isWalletBackedUp, theme.colors.successVariant, theme.colors.primary],
+        [
+            styles.cloudRow,
+            isWalletBackedUp,
+            theme.colors.successVariant.background,
+            theme.colors.successVariant.borderLight,
+            theme.colors.primary,
+        ],
     )
-
-    const containerStyle = useMemo(() => [styles.cloudRow, computedStyles], [styles.cloudRow, computedStyles])
 
     return (
         <>
@@ -144,7 +145,7 @@ export const CloudBackupCard: FC<Props> = ({ mnemonicArray, deviceToBackup }) =>
                         </BaseView>
                     }>
                     <BaseTouchableBox
-                        containerStyle={containerStyle}
+                        containerStyle={computedStyles}
                         disabled={isWalletBackedUp || isLoading}
                         style={[styles.cloudRowContent]}
                         action={onOpen}>
