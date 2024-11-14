@@ -4,6 +4,8 @@ import { NotificationState } from "../Types"
 export const initialNotificationState: NotificationState = {
     permissionEnabled: false,
     optedIn: false,
+    dappVisitCounter: {},
+    userTags: {},
 }
 
 export const Notification = createSlice({
@@ -16,7 +18,26 @@ export const Notification = createSlice({
         updateNotificationOptedIn: (state, action: PayloadAction<boolean>) => {
             state.optedIn = action.payload
         },
+        increaseDappVisitCounter: (state, action: PayloadAction<{ dappId: string }>) => {
+            const id = action.payload.dappId
+
+            if (state.dappVisitCounter[id]) {
+                if (state.dappVisitCounter[id] < 2) {
+                    state.dappVisitCounter[id] = state.dappVisitCounter[id] + 1
+                }
+            } else {
+                state.dappVisitCounter[id] = 1
+            }
+        },
+        setDappVisitCounter: (state, action: PayloadAction<{ dappId: string; counter: number }>) => {
+            state.dappVisitCounter[action.payload.dappId] = action.payload.counter
+        },
     },
 })
 
-export const { updateNotificationPermission, updateNotificationOptedIn } = Notification.actions
+export const {
+    updateNotificationPermission,
+    updateNotificationOptedIn,
+    increaseDappVisitCounter,
+    setDappVisitCounter,
+} = Notification.actions
