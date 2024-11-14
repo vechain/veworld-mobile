@@ -118,10 +118,10 @@ export const CloudBackupCard: FC<Props> = ({ mnemonicArray, deviceToBackup }) =>
 
     const computedStyles = useMemo(
         () => ({
-            backgroundColor: isWalletBackedUp ? theme.colors.successBackground : theme.colors.primary,
-            borderColor: isWalletBackedUp ? theme.colors.successBorder : theme.colors.primary,
+            backgroundColor: isWalletBackedUp ? theme.colors.successVariant.background : theme.colors.primary,
+            borderColor: isWalletBackedUp ? theme.colors.successVariant.borderLight : theme.colors.primary,
         }),
-        [isWalletBackedUp, theme.colors.successBackground, theme.colors.primary, theme.colors.successBorder],
+        [isWalletBackedUp, theme.colors.successVariant, theme.colors.primary],
     )
 
     const containerStyle = useMemo(() => [styles.cloudRow, computedStyles], [styles.cloudRow, computedStyles])
@@ -155,7 +155,11 @@ export const CloudBackupCard: FC<Props> = ({ mnemonicArray, deviceToBackup }) =>
                                 </BaseText>
                             ) : (
                                 <BaseView flexDirection="row">
-                                    <BaseIcon name="check-circle-outline" size={16} color={theme.colors.successIcon} />
+                                    <BaseIcon
+                                        name="check-circle-outline"
+                                        size={16}
+                                        color={theme.colors.successVariant.icon}
+                                    />
                                     <BaseText style={styles.verifyCloudText} typographyFont="captionRegular">
                                         {LL.BD_BACKED_UP({
                                             cloudType: PlatformUtils.isIOS() ? LL.ICLOUD() : LL.GOOGLE_DRIVE(),

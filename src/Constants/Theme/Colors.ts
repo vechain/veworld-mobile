@@ -42,13 +42,37 @@ export type Colors = {
     cardBorder: string
     switchEnabled: string
     textLight: string
-    successBackground: string
-    successBorder: string
-    successIcon: string
-    errorBackground: string
-    errorBorder: string
     checkboxFilledBackground: string
     checkboxIcon: string
+    successVariant: {
+        background: string
+        border: string
+        borderLight: string
+        icon: string
+        title: string
+        titleInline: string
+    }
+    errorVariant: {
+        background: string
+        border: string
+        icon: string
+        title: string
+        titleInline: string
+    }
+    neutralVariant: {
+        background: string
+        border: string
+        icon: string
+        title: string
+        titleInline: string
+    }
+    infoVariant: {
+        background: string
+        border: string
+        icon: string
+        title: string
+        titleInline: string
+    }
 }
 
 export enum COLORS {
@@ -88,6 +112,12 @@ export enum COLORS {
     MEDIUM_BLUE = "#3182CE",
     PASTEL_BLUE = "#4299E1",
     DARK_BLUE_ALERT = "#2C5282",
+    BLUE_700 = "#2C5282",
+    BLUE_500 = "#3182CE",
+    BLUE_400 = "#4299E1",
+    BLUE_200 = "#90CDF4",
+    BLUE_100 = "#BEE3F8",
+    BLUE_50 = "#EBF8FF",
     LIGHT_GREEN = "#AAD836",
     PASTEL_GREEN = "#c5eacd",
     MEDIUM_GREEN = "#30B34E",
@@ -101,12 +131,14 @@ export enum COLORS {
     MEDIUM_ORANGE = "#FA710E",
     DISABLED_GREY = "#E5E5E5",
     MEDIUM_GRAY = "#C4C4C4",
+    GREY_700 = "#363A3F",
     GREY_600 = "#4A5568",
     GREY_500 = "#718096",
     GREY_400 = "#AAAFB6",
     GREY_300 = "#CBD5E0",
     GREY_200 = "#E2E8F0",
     GREY_100 = "#EDF2F7",
+    GREY_50 = "#F9F9FA",
     COINBASE_BACKGROUND_LIGHT = "#ffffff",
     COINBASE_BACKGROUND_DARK = "#0a0b0d",
     COINBASE_BACKGROUND_BLUE = "#0052FF",
@@ -162,13 +194,37 @@ const light: Colors = {
     horizontalButtonText: COLORS.WHITE,
     horizontalButtonTextReversed: COLORS.DARK_PURPLE,
     switchEnabled: COLORS.LIGHT_GREEN,
-    successBackground: COLORS.GREEN_50,
-    successBorder: COLORS.GREEN_100,
-    successIcon: COLORS.GREEN_500,
-    errorBackground: COLORS.RED_50,
-    errorBorder: COLORS.RED_100,
     checkboxFilledBackground: COLORS.DARK_PURPLE,
     checkboxIcon: COLORS.WHITE,
+    successVariant: {
+        background: COLORS.GREEN_50,
+        border: COLORS.GREEN_200,
+        borderLight: COLORS.GREEN_100,
+        icon: COLORS.GREEN_500,
+        title: COLORS.GREEN_700,
+        titleInline: COLORS.GREEN_700,
+    },
+    errorVariant: {
+        background: COLORS.RED_50,
+        border: COLORS.RED_200,
+        icon: COLORS.RED_500,
+        title: COLORS.RED_700,
+        titleInline: COLORS.RED_700,
+    },
+    neutralVariant: {
+        background: COLORS.GREY_50,
+        border: COLORS.GREY_200,
+        icon: COLORS.GREY_500,
+        title: COLORS.GREY_700,
+        titleInline: COLORS.GREY_700,
+    },
+    infoVariant: {
+        background: COLORS.BLUE_50,
+        border: COLORS.BLUE_200,
+        icon: COLORS.BLUE_500,
+        title: COLORS.BLUE_700,
+        titleInline: COLORS.BLUE_700,
+    },
 }
 
 const dark: Colors = {
@@ -215,13 +271,37 @@ const dark: Colors = {
     horizontalButtonText: COLORS.WHITE,
     horizontalButtonTextReversed: COLORS.WHITE,
     switchEnabled: COLORS.LIGHT_GREEN,
-    successBackground: COLORS.GREEN_100,
-    successBorder: COLORS.GREEN_200,
-    successIcon: COLORS.GREEN_500,
-    errorBackground: COLORS.RED_100,
-    errorBorder: COLORS.RED_200,
     checkboxFilledBackground: COLORS.WHITE,
     checkboxIcon: COLORS.DARK_PURPLE,
+    successVariant: {
+        background: COLORS.GREEN_100,
+        border: COLORS.GREEN_200,
+        borderLight: COLORS.GREEN_200,
+        icon: COLORS.GREEN_500,
+        title: COLORS.GREEN_700,
+        titleInline: COLORS.GREEN_200,
+    },
+    errorVariant: {
+        background: COLORS.RED_100,
+        border: COLORS.RED_200,
+        icon: COLORS.RED_500,
+        title: COLORS.RED_700,
+        titleInline: COLORS.RED_200,
+    },
+    neutralVariant: {
+        background: COLORS.GREY_100,
+        border: COLORS.GREY_300,
+        icon: COLORS.GREY_500,
+        title: COLORS.GREY_700,
+        titleInline: COLORS.GREY_200,
+    },
+    infoVariant: {
+        background: COLORS.BLUE_100,
+        border: COLORS.BLUE_200,
+        icon: COLORS.BLUE_500,
+        title: COLORS.BLUE_700,
+        titleInline: COLORS.BLUE_200,
+    },
 }
 
 export const colors = { light, dark }

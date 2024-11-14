@@ -9,9 +9,10 @@ import { BaseAnimatedText } from "../AnimatedTextInput"
 type Props = {
     strength: SharedValue<number>
     showComputedStrength?: boolean
+    noMargin?: boolean
 }
 
-export const PasswordStrengthIndicator = ({ strength, showComputedStrength = true }: Props) => {
+export const PasswordStrengthIndicator = ({ strength, showComputedStrength = true, noMargin = false }: Props) => {
     const { styles, theme } = useThemedStyles(baseStyles)
     const animatedStyle = useAnimatedStyle(() => {
         return {
@@ -34,7 +35,7 @@ export const PasswordStrengthIndicator = ({ strength, showComputedStrength = tru
     }, [strength.value])
 
     return (
-        <BaseView mt={8} justifyContent="center" mb={12}>
+        <BaseView mt={noMargin ? 0 : 8} justifyContent="center" mb={noMargin ? 0 : 12}>
             <BaseView flexDirection="row" justifyContent="flex-start">
                 <BaseText typographyFont="smallCaptionRegular" color={theme.colors.text}>
                     {"Security"}

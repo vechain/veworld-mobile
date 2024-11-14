@@ -29,8 +29,7 @@ export const BackupSuccessfulBottomSheet = React.forwardRef<BottomSheetModalMeth
                     cloudType: PlatformUtils.isIOS() ? LL.ICLOUD() : LL.GOOGLE_DRIVE(),
                 })}
                 mainButton={{ label: LL.COMMON_BTN_OK(), action: handleOnProceed }}
-                iconComponent={<FeatherCheckCircleIconSVG size={66} color={theme.colors.text} />}
-                onClose={onClose}
+                iconComponent={<FeatherCheckCircleIconSVG width={64} height={64} fill={theme.colors.text} />}
             />
         )
     },

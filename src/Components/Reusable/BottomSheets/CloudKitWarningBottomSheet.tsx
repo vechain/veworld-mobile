@@ -8,7 +8,7 @@ import { PasswordStrengthIndicator } from "../PasswordStrengthIndicator"
 import { Easing, useSharedValue, withTiming } from "react-native-reanimated"
 import { useI18nContext } from "~i18n"
 import { TextInput } from "react-native-gesture-handler"
-import { AlertInlineTransparent, CheckBoxWithText } from "~Components"
+import { AlertInline, CheckBoxWithText } from "~Components"
 import { FeatherKeySVG } from "~Assets"
 import { PlatformUtils } from "~Utils"
 
@@ -120,7 +120,7 @@ export const CloudKitWarningBottomSheet = forwardRef<BottomSheetModalMethods, Pr
                 blurBackdrop={true}>
                 <BaseView>
                     <BaseView justifyContent="center" alignItems="center" style={styles.keyIcon}>
-                        <FeatherKeySVG size={64} color={theme.colors.text} />
+                        <FeatherKeySVG width={64} height={64} stroke={theme.colors.text} />
                         <BaseSpacer height={20} />
                         <BaseView justifyContent="center" alignItems="center">
                             <BaseText align="center" typographyFont="subSubTitleMedium">
@@ -157,41 +157,41 @@ export const CloudKitWarningBottomSheet = forwardRef<BottomSheetModalMethods, Pr
                         onSubmitEditing={() => inputRef?.current?.focus()}
                         returnKeyType={openLocation === "Backup_Screen" ? "next" : "done"}
                     />
-                    <BaseSpacer height={2} />
-                    <BaseView style={styles.passwordInfo}>
-                        {openLocation === "Backup_Screen" && showStrengthIndicator && (
-                            <PasswordStrengthIndicator strength={strength} showComputedStrength={false} />
-                        )}
+                    <BaseSpacer height={4} />
+                    {openLocation === "Backup_Screen" && showStrengthIndicator && (
+                        <PasswordStrengthIndicator strength={strength} showComputedStrength={false} noMargin={true} />
+                    )}
 
+                    {passwordNotStrong && (
+                        <>
+                            <AlertInline message={LL.BD_PASSWORD_NOT_STRONG()} status="error" />
+                        </>
+                    )}
+                    <BaseSpacer height={24} />
+                    <BaseView>
+                        {openLocation === "Backup_Screen" && (
+                            <BaseBottomSheetTextInput
+                                placeholder={LL.BTN_CONFIRN_PASSWORD()}
+                                secureTextEntry={secureText2}
+                                isPasswordInput
+                                isError={passwordMisMatch}
+                                rightIcon={secureText2 ? "eye-off-outline" : "eye-outline"}
+                                onIconPress={() => setsecureText2(prev => !prev)}
+                                value={password2}
+                                onChangeText={setPassword2}
+                                ref={inputRef}
+                                onSubmitEditing={() => Keyboard.dismiss()}
+                                returnKeyType="done"
+                            />
+                        )}
+                        <BaseSpacer height={4} />
                         {passwordMisMatch && (
                             <>
-                                <BaseSpacer height={4} />
-                                <AlertInlineTransparent message={LL.BD_PASSWORDS_DO_NOT_MATCH()} status="error" />
+                                <AlertInline message={LL.BD_PASSWORDS_DO_NOT_MATCH()} status="error" />
                             </>
                         )}
-                        {passwordNotStrong && (
-                            <>
-                                <BaseSpacer height={4} />
-                                <AlertInlineTransparent message={LL.BD_PASSWORD_NOT_STRONG()} status="error" />
-                            </>
-                        )}
+                        <BaseSpacer height={18} />
                     </BaseView>
-
-                    {openLocation === "Backup_Screen" && (
-                        <BaseBottomSheetTextInput
-                            placeholder={LL.BTN_CONFIRN_PASSWORD()}
-                            secureTextEntry={secureText2}
-                            isPasswordInput
-                            rightIcon={secureText2 ? "eye-off-outline" : "eye-outline"}
-                            onIconPress={() => setsecureText2(prev => !prev)}
-                            value={password2}
-                            onChangeText={setPassword2}
-                            ref={inputRef}
-                            onSubmitEditing={() => Keyboard.dismiss()}
-                            returnKeyType="done"
-                        />
-                    )}
-                    <BaseSpacer height={16} />
                     <CheckBoxWithText
                         isChecked={isChecked}
                         text={LL.BD_CLOUD_PASSWORD_WARNING_CHECKBOX()}
@@ -226,10 +226,5 @@ const baseStyles = (theme: ColorThemeType) =>
             backgroundColor: theme.isDark ? COLORS.PURPLE : COLORS.LIGHT_GRAY,
             borderTopRightRadius: 24,
             borderTopLeftRadius: 24,
-        },
-        passwordInfo: {
-            marginTop: 0,
-            paddingTop: 0,
-            height: 52,
         },
     })

@@ -1,30 +1,14 @@
 import React from "react"
 import Svg, { Path, SvgProps } from "react-native-svg"
 
-interface FeatherKeySVGProps extends Omit<SvgProps, "width" | "height"> {
-    size?: number
-    width?: number
-    height?: number
-}
-
-const DEFAULT_SIZE = 24
-
-export const FeatherKeySVG = ({
-    size = DEFAULT_SIZE,
-    width,
-    height,
-    color = "#000000",
-    strokeWidth = 2,
-    ...props
-}: FeatherKeySVGProps) => {
+export const FeatherKeySVG = (props: SvgProps) => {
     return (
         <Svg
             viewBox="0 0 24 24"
-            width={width ?? size}
-            height={height ?? size}
-            stroke={color}
+            width={24}
+            height={24}
+            strokeWidth={2}
             fill="none"
-            strokeWidth={strokeWidth}
             strokeLinecap="round"
             strokeLinejoin="round"
             {...props}>
