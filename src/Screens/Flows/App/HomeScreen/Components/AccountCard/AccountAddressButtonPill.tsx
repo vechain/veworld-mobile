@@ -22,11 +22,11 @@ export const AccountAddressButtonPill = ({ text, openQRCodeSheet, switchAccount 
         <BaseView flexDirection="row" style={themedStyles.container}>
             <BaseTouchable action={openQRCodeSheet} haptics="Light" style={themedStyles.pressable}>
                 <BaseView flexDirection="row" px={8}>
-                    <BaseText color={theme.colors.textReversed} typographyFont="smallCaptionRegular">
+                    <BaseText color={theme.colors.text} typographyFont="smallCaptionRegular">
                         {vnsName || AddressUtils.humanAddress(address || text, 6, 3)}
                     </BaseText>
                     <BaseSpacer width={4} />
-                    <BaseIcon name="content-copy" color={theme.colors.textReversed} size={12} />
+                    <BaseIcon name="content-copy" color={theme.colors.text} size={12} />
                 </BaseView>
             </BaseTouchable>
             <View style={themedStyles.seperator} />
@@ -36,7 +36,7 @@ export const AccountAddressButtonPill = ({ text, openQRCodeSheet, switchAccount 
                 style={themedStyles.pressable}
                 testID="AccountCard_changeAccountButton">
                 <BaseView px={8}>
-                    <BaseIcon name="account-sync-outline" color={theme.colors.textReversed} size={20} />
+                    <BaseIcon name="account-sync-outline" color={theme.colors.text} size={20} />
                 </BaseView>
             </BaseTouchable>
         </BaseView>
@@ -52,12 +52,12 @@ const baseStyles = (theme: ColorThemeType) =>
             flexDirection: "row",
             alignItems: "center",
             justifyContent: "space-evenly",
-            backgroundColor: theme.colors.primary,
+            backgroundColor: theme.colors.primaryReversed,
         },
         seperator: {
             height: "100%",
             width: 1,
-            backgroundColor: theme.colors.primaryReversed,
+            backgroundColor: theme.colors.primary,
         },
         pressable: {
             height: "100%",
