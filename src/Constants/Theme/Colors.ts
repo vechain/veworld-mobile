@@ -8,6 +8,7 @@ export type Colors = {
     tertiary: string
     disabled: string
     disabledButton: string
+    disabledCautionButton: string
     danger: string
     success: string
     successMedium: string
@@ -21,6 +22,7 @@ export type Colors = {
     background: string
     backgroundReversed: string
     backgroundTransparent: string
+    backgroundBottomSheet: string
     splashBackground: string
     splashColorLayer: string
     card: string
@@ -104,6 +106,7 @@ export enum COLORS {
     RED_600 = "#C53030",
     RED_500 = "#E53E3E",
     RED_400 = "#F56565",
+    RED_300 = "#FC8181",
     RED_200 = "#FEB2B2",
     RED_100 = "#FED7D7",
     RED_50 = "#FFF5F5",
@@ -161,6 +164,7 @@ const light: Colors = {
     tertiary: COLORS.LIME_GREEN,
     disabled: COLORS.WHITE_DISABLED,
     disabledButton: COLORS.PURPLE_BLUR_TRANSPARENT,
+    disabledCautionButton: COLORS.RED_300,
     danger: COLORS.DARK_RED,
     success: COLORS.DARK_GREEN,
     successMedium: COLORS.WHITE,
@@ -175,6 +179,7 @@ const light: Colors = {
     background: COLORS.LIGHT_GRAY,
     backgroundReversed: COLORS.DARK_PURPLE,
     backgroundTransparent: COLORS.LIGHT_GRAY_TRANSPARENT,
+    backgroundBottomSheet: COLORS.LIGHT_GRAY,
     splashColorLayer: COLORS.DARK_PURPLE,
     splashBackground: COLORS.DARK_PURPLE,
     card: COLORS.WHITE,
@@ -239,6 +244,7 @@ const dark: Colors = {
     tertiary: COLORS.DARK_PURPLE,
     disabled: COLORS.WHITE_DISABLED,
     disabledButton: COLORS.LIME_GREEN_TRANSPARENT,
+    disabledCautionButton: COLORS.RED_300,
     danger: COLORS.LIGHT_RED,
     success: COLORS.LIGHT_GREEN,
     successMedium: COLORS.MEDIUM_GREEN,
@@ -253,6 +259,7 @@ const dark: Colors = {
     background: COLORS.DARK_PURPLE,
     backgroundReversed: COLORS.GRAY,
     backgroundTransparent: COLORS.DARK_PURPLE_TRANSPARENT,
+    backgroundBottomSheet: COLORS.PURPLE,
     splashColorLayer: COLORS.LIME_GREEN,
     splashBackground: COLORS.DARK_PURPLE,
     card: COLORS.PURPLE,

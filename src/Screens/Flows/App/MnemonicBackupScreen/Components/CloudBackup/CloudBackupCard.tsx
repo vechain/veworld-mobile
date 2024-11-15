@@ -12,13 +12,17 @@ import {
     CloudKitWarningBottomSheet,
     showErrorToast,
     BackupSuccessfulBottomSheet,
+    BackupVerifiedBottomSheet,
+    DeleteCloudBackupBottomSheet,
+    RequireUserPassword,
 } from "~Components"
 import { COLORS, ColorThemeType, DerivationPath, typography } from "~Constants"
-import { useBottomSheetModal, useCloudBackup, useThemedStyles } from "~Hooks"
+import { useBottomSheetModal, useCheckIdentity, useCloudBackup, useThemedStyles } from "~Hooks"
 import { useI18nContext } from "~i18n"
 import { LocalDevice } from "~Model"
 import { setDeviceIsBackup, useAppDispatch } from "~Storage/Redux"
 import { AddressUtils, CryptoUtils, DateUtils, HexUtils, PasswordUtils, PlatformUtils } from "~Utils"
+import { useNavigation } from "@react-navigation/native"
 
 type Props = {
     mnemonicArray: string[]
@@ -27,15 +31,26 @@ type Props = {
 
 export const CloudBackupCard: FC<Props> = ({ mnemonicArray, deviceToBackup }) => {
     const dispatch = useAppDispatch()
+    const nav = useNavigation()
     const { LL, locale } = useI18nContext()
     const { styles, theme } = useThemedStyles(baseStyles)
     const [isWalletBackedUp, setIsWalletBackedUp] = useState(true)
     const [isLoading, setIsLoading] = useState(false)
 
-    const { saveWalletToCloud, getWalletByRootAddress } = useCloudBackup()
+    const { saveWalletToCloud, getWalletByRootAddress, deleteWallet } = useCloudBackup()
 
-    const { ref: warningRef, onOpen, onClose: onCloseWarning } = useBottomSheetModal()
+    const { ref: warningRef, onOpen: onOpenWarning, onClose: onCloseWarning } = useBottomSheetModal()
     const { ref: successRef, onOpen: onOpenSuccess, onClose: onCloseSuccess } = useBottomSheetModal()
+    const {
+        ref: deleteBackupRef,
+        openWithDelay: onOpenDeleteBackup,
+        onClose: onCloseDeleteBackup,
+    } = useBottomSheetModal()
+    const {
+        ref: backupVerifiedRef,
+        onOpen: onOpenBackupVerified,
+        onClose: onCloseBackupVerified,
+    } = useBottomSheetModal()
 
     const getWallet = useCallback(async () => {
         setIsLoading(true)
@@ -49,14 +64,14 @@ export const CloudBackupCard: FC<Props> = ({ mnemonicArray, deviceToBackup }) =>
         getWallet()
     }, [getWallet])
 
-    const onHandleBackupToCloudKit = useCallback(
+    const onHandleBackupToCloud = useCallback(
         async (password: string) => {
             setIsLoading(true)
             onCloseWarning()
 
             if (!deviceToBackup?.xPub) {
                 showErrorToast({
-                    text1: LL.CLOUDKIT_ERROR_GENERIC(),
+                    text1: PlatformUtils.isIOS() ? LL.CLOUDKIT_ERROR_GENERIC() : LL.GOOGLE_DRIVE_ERROR_GENERIC(),
                 })
                 return
             }
@@ -90,9 +105,9 @@ export const CloudBackupCard: FC<Props> = ({ mnemonicArray, deviceToBackup }) =>
                     date: formattedDate,
                 }),
             )
+
             await getWalletByRootAddress(deviceToBackup.rootAddress)
             onCloseWarning()
-            setIsWalletBackedUp(true)
             setIsLoading(false)
             onOpenSuccess()
         },
@@ -127,6 +142,64 @@ export const CloudBackupCard: FC<Props> = ({ mnemonicArray, deviceToBackup }) =>
         ],
     )
 
+    const handleCloudBackupPress = useCallback(() => {
+        if (isWalletBackedUp) {
+            onOpenBackupVerified()
+        } else {
+            onOpenWarning()
+        }
+    }, [isWalletBackedUp, onOpenBackupVerified, onOpenWarning])
+
+    const handleProceedToDelete = useCallback(() => {
+        onCloseBackupVerified()
+        onOpenDeleteBackup(1000)
+    }, [onCloseBackupVerified, onOpenDeleteBackup])
+
+    const handleConfirmDelete = useCallback(async () => {
+        try {
+            if (!deviceToBackup?.rootAddress) {
+                throw new Error("No root address found")
+            }
+            await deleteWallet(deviceToBackup.rootAddress)
+            await getWalletByRootAddress(deviceToBackup.rootAddress)
+
+            const formattedDate = DateUtils.formatDateTime(
+                Date.now(),
+                locale,
+                getTimeZone() ?? DateUtils.DEFAULT_TIMEZONE,
+            )
+            dispatch(
+                setDeviceIsBackup({
+                    rootAddress: deviceToBackup.rootAddress,
+                    isBackup: false,
+                    date: formattedDate,
+                }),
+            )
+            setIsWalletBackedUp(false)
+            onCloseDeleteBackup()
+            nav.goBack()
+        } catch (error) {
+            showErrorToast({
+                text1: PlatformUtils.isIOS() ? LL.CLOUDKIT_ERROR_GENERIC() : LL.GOOGLE_DRIVE_ERROR_GENERIC(),
+            })
+        }
+    }, [
+        LL,
+        deleteWallet,
+        deviceToBackup?.rootAddress,
+        dispatch,
+        getWalletByRootAddress,
+        locale,
+        nav,
+        onCloseDeleteBackup,
+    ])
+
+    const { onPasswordSuccess, checkIdentityBeforeOpening, isPasswordPromptOpen, handleClosePasswordModal } =
+        useCheckIdentity({
+            onIdentityConfirmed: handleConfirmDelete,
+            allowAutoPassword: false,
+        })
+
     return (
         <>
             <BaseView justifyContent="center">
@@ -146,16 +219,16 @@ export const CloudBackupCard: FC<Props> = ({ mnemonicArray, deviceToBackup }) =>
                     }>
                     <BaseTouchableBox
                         containerStyle={computedStyles}
-                        disabled={isWalletBackedUp || isLoading}
+                        disabled={isLoading}
                         style={[styles.cloudRowContent]}
-                        action={onOpen}>
+                        action={handleCloudBackupPress}>
                         <BaseView style={styles.cloudInfo}>
                             {!isWalletBackedUp ? (
                                 <BaseText typographyFont="bodyMedium" color={theme.colors.textReversed}>
                                     {PlatformUtils.isIOS() ? LL.ICLOUD() : LL.GOOGLE_DRIVE()}
                                 </BaseText>
                             ) : (
-                                <BaseView flexDirection="row">
+                                <>
                                     <BaseIcon
                                         name="check-circle-outline"
                                         size={16}
@@ -166,7 +239,7 @@ export const CloudBackupCard: FC<Props> = ({ mnemonicArray, deviceToBackup }) =>
                                             cloudType: PlatformUtils.isIOS() ? LL.ICLOUD() : LL.GOOGLE_DRIVE(),
                                         })}
                                     </BaseText>
-                                </BaseView>
+                                </>
                             )}
                         </BaseView>
                         {isLoading ? (
@@ -177,20 +250,42 @@ export const CloudBackupCard: FC<Props> = ({ mnemonicArray, deviceToBackup }) =>
                                 style={styles.lottie}
                             />
                         ) : (
-                            !isWalletBackedUp && (
-                                <BaseIcon name="chevron-right" size={14} color={theme.colors.textReversed} />
-                            )
+                            <BaseIcon
+                                name="chevron-right"
+                                size={14}
+                                color={!isWalletBackedUp ? theme.colors.textReversed : theme.colors.text}
+                            />
                         )}
                     </BaseTouchableBox>
                 </CardWithHeader>
             </BaseView>
+
             <CloudKitWarningBottomSheet
                 ref={warningRef}
-                onHandleBackupToCloudKit={onHandleBackupToCloudKit}
+                onHandleBackupToCloudKit={onHandleBackupToCloud}
                 openLocation="Backup_Screen"
                 isLoading={isLoading}
             />
+
             <BackupSuccessfulBottomSheet ref={successRef} onClose={onCloseSuccess} onConfirm={onCloseSuccess} />
+
+            <BackupVerifiedBottomSheet
+                ref={backupVerifiedRef}
+                onClose={onCloseBackupVerified}
+                onProceedToDelete={handleProceedToDelete}
+            />
+
+            <DeleteCloudBackupBottomSheet
+                ref={deleteBackupRef}
+                onClose={onCloseDeleteBackup}
+                onConfirm={checkIdentityBeforeOpening}
+            />
+
+            <RequireUserPassword
+                isOpen={isPasswordPromptOpen}
+                onClose={handleClosePasswordModal}
+                onSuccess={onPasswordSuccess}
+            />
         </>
     )
 }

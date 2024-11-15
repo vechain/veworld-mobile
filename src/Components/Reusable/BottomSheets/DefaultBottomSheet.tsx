@@ -12,10 +12,11 @@ type Props = {
     description: string
     mainButton?: { label: string; action: () => void; bg?: string; caution?: boolean }
     secondaryButton?: { label: string; action: () => void }
+    onClose?: () => void
 }
 
 export const DefaultBottomSheet = React.forwardRef<BottomSheetModalMethods, Props>(
-    ({ iconName, iconComponent, title, description, mainButton, secondaryButton }, ref) => {
+    ({ iconName, iconComponent, title, description, mainButton, secondaryButton, onClose }, ref) => {
         const { styles, theme } = useThemedStyles(baseStyles)
 
         const handlePressMain = useCallback(() => {
@@ -41,7 +42,8 @@ export const DefaultBottomSheet = React.forwardRef<BottomSheetModalMethods, Prop
                 noMargins
                 style={styles.bottomSheet}
                 backgroundStyle={styles.bottomSheet}
-                blurBackdrop={true}>
+                blurBackdrop={true}
+                onDismiss={onClose}>
                 <BaseView>
                     <BaseSpacer height={16} />
                     <BaseView justifyContent="center" alignItems="center">
@@ -109,7 +111,7 @@ const baseStyles = (theme: ColorThemeType) =>
         },
         secondaryButton: {
             borderRadius: 8,
-            paddingVertical: 12,
+            paddingVertical: 14,
             borderColor: theme.colors.text,
         },
     })

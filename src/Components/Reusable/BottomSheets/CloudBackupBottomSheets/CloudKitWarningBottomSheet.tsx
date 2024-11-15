@@ -12,7 +12,7 @@ import {
 } from "~Components/Base"
 import { useThemedStyles } from "~Hooks"
 import { COLORS, ColorThemeType, typography } from "~Constants"
-import { PasswordStrengthIndicator } from "../PasswordStrengthIndicator"
+import { PasswordStrengthIndicator } from "../../PasswordStrengthIndicator"
 import { Easing, useSharedValue, withTiming } from "react-native-reanimated"
 import { useI18nContext } from "~i18n"
 import { TextInput } from "react-native-gesture-handler"

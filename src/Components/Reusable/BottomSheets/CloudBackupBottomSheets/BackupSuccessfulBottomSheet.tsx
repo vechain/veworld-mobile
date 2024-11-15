@@ -25,6 +25,7 @@ export const BackupSuccessfulBottomSheet = React.forwardRef<BottomSheetModalMeth
             <DefaultBottomSheet
                 ref={ref}
                 title={LL.BACKUP_SUCCESSFUL_TITLE()}
+                onClose={handleOnProceed}
                 description={LL.BACKUP_SUCCESSFUL_DESCRIPTION({
                     cloudType: PlatformUtils.isIOS() ? LL.ICLOUD() : LL.GOOGLE_DRIVE(),
                 })}
