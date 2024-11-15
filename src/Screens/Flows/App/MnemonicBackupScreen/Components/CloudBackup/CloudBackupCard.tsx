@@ -177,26 +177,19 @@ export const CloudBackupCard: FC<Props> = ({ mnemonicArray, deviceToBackup }) =>
             )
             setIsWalletBackedUp(false)
             onCloseDeleteBackup()
-            nav.goBack()
         } catch (error) {
             showErrorToast({
                 text1: PlatformUtils.isIOS() ? LL.CLOUDKIT_ERROR_GENERIC() : LL.GOOGLE_DRIVE_ERROR_GENERIC(),
             })
         }
-    }, [
-        LL,
-        deleteWallet,
-        deviceToBackup?.rootAddress,
-        dispatch,
-        getWalletByRootAddress,
-        locale,
-        nav,
-        onCloseDeleteBackup,
-    ])
+    }, [LL, deleteWallet, deviceToBackup?.rootAddress, dispatch, getWalletByRootAddress, locale, onCloseDeleteBackup])
 
     const { onPasswordSuccess, checkIdentityBeforeOpening, isPasswordPromptOpen, handleClosePasswordModal } =
         useCheckIdentity({
-            onIdentityConfirmed: handleConfirmDelete,
+            onIdentityConfirmed: async () => {
+                await handleConfirmDelete()
+                nav.goBack()
+            },
             allowAutoPassword: false,
         })
 

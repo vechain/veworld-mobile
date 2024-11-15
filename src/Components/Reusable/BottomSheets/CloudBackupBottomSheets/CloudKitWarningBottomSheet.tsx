@@ -12,13 +12,13 @@ import {
 } from "~Components/Base"
 import { useThemedStyles } from "~Hooks"
 import { COLORS, ColorThemeType, typography } from "~Constants"
-import { PasswordStrengthIndicator } from "../../PasswordStrengthIndicator"
 import { Easing, useSharedValue, withTiming } from "react-native-reanimated"
 import { useI18nContext } from "~i18n"
 import { TextInput } from "react-native-gesture-handler"
 import { AlertInline, CheckBoxWithText } from "~Components"
 import { FeatherKeySVG } from "~Assets"
 import { PlatformUtils } from "~Utils"
+import { PasswordStrengthIndicator } from "~Components/Reusable/PasswordStrengthIndicator"
 const { defaults: defaultTypography } = typography
 
 type Props = {
