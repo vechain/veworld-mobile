@@ -1,3 +1,4 @@
+import { useNavigation } from "@react-navigation/native"
 import React, { createContext, PropsWithChildren, useCallback, useContext, useEffect, useRef } from "react"
 import { LogLevel, NotificationClickEvent, OneSignal, PushSubscriptionChangedState } from "react-native-onesignal"
 import { useAppState } from "~Hooks"
@@ -45,6 +46,7 @@ OneSignal.Debug.setLogLevel(logLevel)
 
 const NotificationsProvider = React.memo(({ children }: PropsWithChildren) => {
     const dispatch = useAppDispatch()
+    const navigation = useNavigation()
 
     const permissionEnabled = useAppSelector(selectNotificationPermissionEnabled)
     const optedIn = useAppSelector(selectNotificationOptedIn)
@@ -107,7 +109,21 @@ const NotificationsProvider = React.memo(({ children }: PropsWithChildren) => {
         dispatch(updateNotificationOptedIn(false))
     }, [dispatch])
 
-    const onNotificationClicked = useCallback((_event: NotificationClickEvent) => {}, [])
+    const onNotificationClicked = useCallback(
+        (event: NotificationClickEvent) => {
+            if (event.notification.additionalData) {
+                const { route, navParams } = event.notification.additionalData as {
+                    route?: string
+                    navParams?: string
+                }
+
+                if (route) {
+                    navigation.navigate(route as any, navParams ? JSON.parse(navParams) : undefined)
+                }
+            }
+        },
+        [navigation],
+    )
 
     const onPermissionChanged = useCallback(
         (_permissionEnabled: boolean) => {
@@ -148,6 +164,7 @@ const NotificationsProvider = React.memo(({ children }: PropsWithChildren) => {
         return () => {
             OneSignal.Notifications.removeEventListener("click", onNotificationClicked)
             OneSignal.Notifications.removeEventListener("permissionChange", onPermissionChanged)
+            OneSignal.User.pushSubscription.removeEventListener("change", onOptInStatusChanged)
         }
     }, [onNotificationClicked, onOptInStatusChanged, onPermissionChanged])
 
