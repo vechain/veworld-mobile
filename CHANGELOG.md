@@ -1,5 +1,12 @@
 
 
+## 2.0.4 (2024-11-15)
+
+
+### Bug Fixes
+
+* remove apple cloudkit warning ([#2408](https://github.com/vechain/veworld-mobile/issues/2408)) ([4f52ed4](https://github.com/vechain/veworld-mobile/commit/4f52ed4477b67d700ed0ebb03faedb1ae079097b))
+
 ## 2.0.3 (2024-11-14)
 
 ## [1.10.0](https://github.com/vechain/veworld-mobile/compare/v1.5.3-52...v1.10.0) (2024-09-20)
