@@ -4283,39 +4283,39 @@
   dependencies:
     defer-to-connect "^2.0.1"
 
-"@tanstack/query-core@5.59.20":
-  version "5.59.20"
-  resolved "https://registry.yarnpkg.com/@tanstack/query-core/-/query-core-5.59.20.tgz#356718976536727b9af0ad1163a21fd6a44ee0a9"
-  integrity sha512-e8vw0lf7KwfGe1if4uPFhvZRWULqHjFcz3K8AebtieXvnMOz5FSzlZe3mTLlPuUBcydCnBRqYs2YJ5ys68wwLg==
+"@tanstack/query-core@5.60.5":
+  version "5.60.5"
+  resolved "https://registry.yarnpkg.com/@tanstack/query-core/-/query-core-5.60.5.tgz#37b7c5ab7e6894cea9ef341299a7a3febc2ea361"
+  integrity sha512-jiS1aC3XI3BJp83ZiTuDLerTmn9P3U95r6p+6/SNauLJaYxfIC4dMuWygwnBHIZxjn2zJqEpj3nysmPieoxfPQ==
 
-"@tanstack/query-persist-client-core@5.59.20":
-  version "5.59.20"
-  resolved "https://registry.yarnpkg.com/@tanstack/query-persist-client-core/-/query-persist-client-core-5.59.20.tgz#3cea731778d8a1503603c03ad54c9dccb3662970"
-  integrity sha512-RUaDys2zyhCw8MGcp0tirbpp8IjU7zrtdMaEYQ6WetrNvn/IOg9Y2Zpk55P7gjBq8fEyFlmuRM3cHVNn/Usg8w==
+"@tanstack/query-persist-client-core@5.60.5":
+  version "5.60.5"
+  resolved "https://registry.yarnpkg.com/@tanstack/query-persist-client-core/-/query-persist-client-core-5.60.5.tgz#0c51bf877cd92dd1b890ca3bc9f6cc523a5befb2"
+  integrity sha512-vA5MR5W8jKv9NvdsbXFztBPi+Hs8ZtiVPiLTWk+nfyqmAKXEGZlxZpUo8zTHr7GgmLZCDgx/l+HntlL58Jbl0w==
   dependencies:
-    "@tanstack/query-core" "5.59.20"
+    "@tanstack/query-core" "5.60.5"
 
 "@tanstack/query-sync-storage-persister@^5.14.1":
-  version "5.59.20"
-  resolved "https://registry.yarnpkg.com/@tanstack/query-sync-storage-persister/-/query-sync-storage-persister-5.59.20.tgz#d2b837f801fadd0154a8f08c3de60fa6627964bc"
-  integrity sha512-uM4vxU2jSRE3lPOysi7GWpSJsUz9ZT6mZKX2dONfzIVng/7baW3Q3L/cyTUyLQtvERiuvbbhgCCTa8w8ZOeyaA==
+  version "5.60.5"
+  resolved "https://registry.yarnpkg.com/@tanstack/query-sync-storage-persister/-/query-sync-storage-persister-5.60.5.tgz#08a09acebe5ec3301bb2477900a33f8fd315da2c"
+  integrity sha512-3hL9GuPLYxraF5pntxCThsYfddIQ1Kp0HSwSK88Pob0JmJUFWm7EhAMgvorYH5ZHR+mTIZfu3E3S01w5PCve2Q==
   dependencies:
-    "@tanstack/query-core" "5.59.20"
-    "@tanstack/query-persist-client-core" "5.59.20"
+    "@tanstack/query-core" "5.60.5"
+    "@tanstack/query-persist-client-core" "5.60.5"
 
 "@tanstack/react-query-persist-client@^5.14.1":
-  version "5.60.2"
-  resolved "https://registry.yarnpkg.com/@tanstack/react-query-persist-client/-/react-query-persist-client-5.60.2.tgz#7c18e53f13ab4dfe71e7baff7856ed08bf78acd0"
-  integrity sha512-gCvgPL7p2lM2ynq8PhFNyfN5rYCSGDkNzsbl03noylcS+WkGDYOLNMI4LYQfalewfaJMitKa2y2IMP1aCrgmmg==
+  version "5.60.5"
+  resolved "https://registry.yarnpkg.com/@tanstack/react-query-persist-client/-/react-query-persist-client-5.60.5.tgz#d3c30976333212bb9be7fdedc925713f2666d1ec"
+  integrity sha512-O+lfL/TVNHQIPIZjQf5LL39ATKgmXXg/uX+MesYUL/v+/R2JiWXysn9LRPNTAQ3EieO91GeH/BTvnvGqnAFMmg==
   dependencies:
-    "@tanstack/query-persist-client-core" "5.59.20"
+    "@tanstack/query-persist-client-core" "5.60.5"
 
 "@tanstack/react-query@^5.14.1":
-  version "5.60.2"
-  resolved "https://registry.yarnpkg.com/@tanstack/react-query/-/react-query-5.60.2.tgz#a65db96702c11f3f868c40372ce66f05c2a77cc6"
-  integrity sha512-JhpJNxIAPuE0YCpP1Py4zAsgx+zY0V531McRMtQbwVlJF8+mlZwcOPrzGmPV248K8IP+mPbsfxXToVNMNwjUcw==
+  version "5.60.5"
+  resolved "https://registry.yarnpkg.com/@tanstack/react-query/-/react-query-5.60.5.tgz#3194c390f7eff20542b321c3042880dc3f1a81e2"
+  integrity sha512-M77bOsPwj1wYE56gk7iJvxGAr4IC12NWdIDhT+Eo8ldkWRHMvIR8I/rufIvT1OXoV/bl7EECwuRuMlxxWtvW2Q==
   dependencies:
-    "@tanstack/query-core" "5.59.20"
+    "@tanstack/query-core" "5.60.5"
 
 "@teppeis/multimaps@3.0.0":
   version "3.0.0"
@@ -7968,9 +7968,9 @@ ejs@^3.1.10:
     jake "^10.8.5"
 
 electron-to-chromium@^1.5.41:
-  version "1.5.60"
-  resolved "https://registry.yarnpkg.com/electron-to-chromium/-/electron-to-chromium-1.5.60.tgz#29944afe568c58c40729e67af0f59f52d4d0ed32"
-  integrity sha512-HcraRUkTKJ+8yA3b10i9qvhUlPBRDlKjn1XGek1zDGVfAKcvi8TsUnImGqLiEm9j6ZulxXIWWIo9BmbkbCTGgA==
+  version "1.5.62"
+  resolved "https://registry.yarnpkg.com/electron-to-chromium/-/electron-to-chromium-1.5.62.tgz#8289468414b0b0b3e9180ef619a763555debe612"
+  integrity sha512-t8c+zLmJHa9dJy96yBZRXGQYoiCEnHYgFwn1asvSPZSUdVxnB62A4RASd7k41ytG3ErFBA0TpHlKg9D9SQBmLg==
 
 elliptic@6.5.4:
   version "6.5.4"
