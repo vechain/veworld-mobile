@@ -13,25 +13,6 @@ For _fastlane_ installation instructions, see [Installing _fastlane_](https://do
 
 # Available Actions
 
-### build_android_ci
-
-```sh
-[bundle exec] fastlane build_android_ci
-```
-
-Submit a new Beta Build to Play Store
-
-### build_test_ci
-
-```sh
-[bundle exec] fastlane build_test_ci
-```
-
-
-
-----
-
-
 ## Android
 
 ### android validate
@@ -49,6 +30,22 @@ Validate the keystore and credentials
 ```
 
 Submit a new Beta Build to Play Store
+
+### android build_android_ci
+
+```sh
+[bundle exec] fastlane android build_android_ci
+```
+
+Submit a new Beta Build to Play Store
+
+### android build_test_ci
+
+```sh
+[bundle exec] fastlane android build_test_ci
+```
+
+
 
 ----
 
