@@ -88,14 +88,21 @@ export const GeneralScreen = () => {
                     <BaseText typographyFont="caption">{LL.BD_APP_THEME_DISCLAIMER()}</BaseText>
                     <BaseSpacer height={20} />
                     <ChangeTheme />
+                    <BaseSpacer height={20} />
 
+                    <BaseText typographyFont="bodyMedium" my={8}>
+                        {LL.BD_APP_LANGUAGE()}
+                    </BaseText>
+                    <BaseText typographyFont="caption">{LL.BD_APP_LANGUAGE_DISCLAIMER()}</BaseText>
+                    <BaseSpacer height={20} />
+                    <ChangeLanguage language={selectedLanguageCode} onPress={openSelectLanguageSheet} />
                     <BaseSpacer height={24} />
+
                     <BaseText typographyFont="bodyMedium" my={8}>
                         {LL.BD_RESET()}
                     </BaseText>
                     <BaseText typographyFont="caption">{LL.BD_RESET_DISCLAIMER()}</BaseText>
                     <BaseSpacer height={16} />
-
                     <Reset />
 
                     {devFeaturesEnabled && (
@@ -123,17 +130,6 @@ export const GeneralScreen = () => {
                     )}
 
                     <BaseSpacer height={20} />
-
-                    {devFeaturesEnabled && (
-                        <>
-                            <BaseText typographyFont="bodyMedium" my={8}>
-                                {LL.BD_APP_LANGUAGE()}
-                            </BaseText>
-                            <BaseText typographyFont="caption">{LL.BD_APP_LANGUAGE_DISCLAIMER()}</BaseText>
-                            <BaseSpacer height={20} />
-                            <ChangeLanguage language={selectedLanguageCode} onPress={openSelectLanguageSheet} />
-                        </>
-                    )}
 
                     <SelectLanguageBottomSheet
                         ref={selectLanguageSheetRef}

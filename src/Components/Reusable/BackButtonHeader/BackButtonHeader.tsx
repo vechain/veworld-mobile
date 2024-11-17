@@ -12,6 +12,7 @@ type Props = {
     beforeNavigating?: () => Promise<void> | void
     action?: () => void
     onGoBack?: () => void
+    preventGoBack?: boolean
     iconStyle?: StyleProp<ViewProps>
 } & ViewProps
 
@@ -22,6 +23,7 @@ export const BackButtonHeader = ({
     iconColor,
     beforeNavigating,
     onGoBack,
+    preventGoBack = false,
     action,
     iconStyle,
     ...otherProps
@@ -30,6 +32,7 @@ export const BackButtonHeader = ({
     const theme = useTheme()
 
     const onActionPress = useCallback(async () => {
+        if (preventGoBack) return
         if (beforeNavigating) await beforeNavigating()
 
         if (action) {
@@ -38,7 +41,7 @@ export const BackButtonHeader = ({
             nav.goBack()
             onGoBack?.()
         }
-    }, [beforeNavigating, action, nav, onGoBack])
+    }, [preventGoBack, beforeNavigating, action, nav, onGoBack])
 
     return (
         <View {...otherProps}>

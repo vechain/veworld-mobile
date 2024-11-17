@@ -6,7 +6,10 @@
 //
 
 import Foundation
+
+#if !targetEnvironment(macCatalyst)
 import CloudKit
+#endif
 
 
 @objc(CloudKitManager)
@@ -220,7 +223,7 @@ class CloudKitManager: NSObject {
     let operation = CKQueryOperation(query: query)
     operation.desiredKeys = [Constants.rootAddress, Constants.walletType, Constants.data, Constants.firstAccountAddress, Constants.creationDate, Constants.derivationPath]
     
-    var wallet: [AnyHashable : Any] = ["" : ""]
+    var wallet: [AnyHashable : Any] = [:]
     
     operation.recordFetchedBlock = { record in
       
@@ -240,7 +243,7 @@ class CloudKitManager: NSObject {
       if error != nil {
         self.handleError(error, reject: reject)
       } else {
-        resolver(wallet)
+        resolver(wallet.isEmpty ? nil : wallet)
       }
     }
     

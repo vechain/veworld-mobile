@@ -175,7 +175,7 @@ platform :ios do
       sentry_check_cli_installed
 
       # generate source maps for sentry
-      sh("npx react-native bundle --platform ios --dev false --entry-file index.tsx --reset-cache --bundle-output main.jsbundle --sourcemap-output main.jsbundle.map --minify false")
+      sh("npx react-native bundle --platform ios --dev false --entry-file index.js --reset-cache --bundle-output main.jsbundle --sourcemap-output main.jsbundle.map --minify false")
       #compile source maps
       sh("ios/Pods/hermes-engine/destroot/bin/hermesc -O -emit-binary -output-source-map -out=main.jsbundle.hbc main.jsbundle")
       sh("rm -f main.jsbundle")
@@ -458,9 +458,9 @@ platform :ios do
         api_url: "https://api.github.com"
       )
 
-      ## send slack message
+      # send slack message
       slack(
-        message: version.nil? ? "CI: VeWorld build number: #{build} was successfully released! [iOS]" : "VeWorld version number: #{version} was successfully released! [iOS]",
+        message:  "CI: VeWorld version number: #{version}  build number: #{build} was successfully released! [iOS]",
         slack_url: ENV["SLACK_WEBHOOK"],
         success: true,
         payload: {
@@ -478,7 +478,7 @@ platform :ios do
 
       ## send slack message
       slack(
-        message: versionType.nil? ? "CI: Error releasing VeWorld build number: #{build} [iOS]" : "Error releasing VeWorld version number: #{version} [iOS]",
+        message: "CI:Error releasing VeWorld version number: #{version} build number: #{build} [iOS]",
         slack_url: ENV["SLACK_WEBHOOK"],
         success: false,
         payload: {
@@ -505,6 +505,7 @@ platform :ios do
         # delete tag remotely
         sh("git push --delete origin v#{version}-#{build}") 
       end
+      sh("echo 'Build failed'")
     end
   end
 
@@ -529,7 +530,7 @@ platform :ios do
       sh("yarn install:all")
     end
     
-    sh "cd ../.. && pwd && npx react-native bundle --platform ios --dev false --entry-file index.tsx --bundle-output ios/main.jsbundle --assets-dest ios"
+    sh "cd ../.. && pwd && npx react-native bundle --platform ios --dev false --entry-file index.js --bundle-output ios/main.jsbundle --assets-dest ios"
     fetch_certificates_from_gh_for_ci
       # begin -> rescure == try -> catch
       begin

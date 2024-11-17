@@ -6,11 +6,13 @@ import { useTabBarBottomMargin, useTheme } from "~Hooks"
 import { isAndroid } from "~Utils/PlatformUtils/PlatformUtils"
 import { SelectedNetworkViewer } from "~Components"
 import { SafeAreaView } from "react-native-safe-area-context"
+import { BackButtonHeaderV2 } from "~Components/Reusable/BackButtonHeader/BackButtonHeaderV2"
 
 type Props = {
     noBackButton?: boolean
     noMargin?: boolean
     title?: string
+    pageHeader?: string
     fixedHeader?: ReactNode
     body?: ReactNode
     fixedBody?: ReactNode
@@ -24,6 +26,7 @@ type Props = {
     noStaticBottomPadding?: boolean
     scrollViewRef?: Ref<ScrollView>
     onGoBack?: () => void
+    preventGoBack?: boolean
     beforeNavigating?: () => Promise<void> | void
     hasSafeArea?: boolean
     hasTopSafeAreaOnly?: boolean
@@ -33,6 +36,7 @@ export const Layout = ({
     noBackButton = false,
     noMargin = false,
     title,
+    pageHeader,
     fixedHeader,
     body,
     fixedBody,
@@ -47,6 +51,7 @@ export const Layout = ({
     noStaticBottomPadding = false,
     scrollViewRef,
     onGoBack,
+    preventGoBack = false,
     beforeNavigating,
     hasSafeArea = true,
     hasTopSafeAreaOnly = false,
@@ -84,9 +89,17 @@ export const Layout = ({
                                 beforeNavigating={beforeNavigating}
                                 hasBottomSpacer={false}
                                 onGoBack={onGoBack}
+                                preventGoBack={preventGoBack}
                             />
                             <BaseSpacer height={8} />
                         </>
+                    )}
+                    {pageHeader && (
+                        <BaseView>
+                            <BaseView mx={noMargin ? 0 : 20}>
+                                <BackButtonHeaderV2 title={pageHeader} />
+                            </BaseView>
+                        </BaseView>
                     )}
                     {fixedHeader && (
                         <BaseView>
@@ -148,6 +161,8 @@ export const Layout = ({
             noBackButton,
             beforeNavigating,
             onGoBack,
+            preventGoBack,
+            pageHeader,
             fixedHeader,
             noMargin,
             title,

@@ -82,7 +82,6 @@ export const handleTokenTransfers = async ({
             amount: transfer.value || "0",
             symbol,
             decimals,
-            alias: foundAccount.account.alias,
             transfer,
             informUser,
         })
@@ -96,7 +95,6 @@ export const handleTokenTransfers = async ({
             decimals,
             transfer,
             informUser,
-            to: transfer.to,
             symbol,
         })
     }
@@ -124,7 +122,8 @@ export const handleVETTransfers = ({
     if (foundAccount.origin === TransactionOrigin.TO) {
         // inform user for successful transfer
         InformUserForIncomingVET({
-            alias: foundAccount.account.alias,
+            txId: transfer.txId,
+            from: transfer.from,
             amount: transfer.value,
             to: transfer.to,
             informUser,

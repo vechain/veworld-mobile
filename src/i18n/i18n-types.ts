@@ -98,6 +98,10 @@ type RootTranslation = {
 	 */
 	ALERT_MSG_AUTHORIZE_BLUETOOTH: string
 	/**
+	 * M​a​k​e​ ​s​u​r​e​ ​t​o​ ​b​a​c​k​u​p​ ​y​o​u​r​ ​r​e​c​o​v​e​r​y​ ​p​h​r​a​s​e​ ​a​n​d​ ​n​e​v​e​r​ ​l​o​s​e​ ​a​c​c​e​s​s​ ​t​o​ ​y​o​u​r​ ​a​c​c​o​u​n​t​.
+	 */
+	ALERT_MSG_BACKUP_YOUR_WALLET: string
+	/**
 	 * Y​o​u​ ​h​a​v​e​ ​p​r​e​v​i​o​u​s​l​y​ ​d​e​n​i​e​d​ ​b​i​o​m​e​t​r​i​c​ ​a​u​t​h​e​n​t​i​c​a​t​i​o​n​ ​o​r​ ​i​t​'​s​ ​u​n​a​v​a​i​l​a​b​l​e​ ​o​n​ ​t​h​i​s​ ​d​e​v​i​c​e​.​ ​P​l​e​a​s​e​ ​e​n​a​b​l​e​ ​i​t​ ​i​n​ ​y​o​u​r​ ​d​e​v​i​c​e​ ​s​e​t​t​i​n​g​s​.
 	 */
 	ALERT_MSG_BIO_PREVIOUSLY_DENIED_OR_UNAVAILABLE: string
@@ -114,6 +118,11 @@ type RootTranslation = {
 ​T​r​y​ ​r​e​c​o​n​n​e​c​t​ ​y​o​u​r​ ​d​e​v​i​c​e​ ​t​o​ ​t​h​e​ ​i​n​t​e​r​n​e​t​.
 	 */
 	ALERT_MSG_INTERNET_DOWN: string
+	/**
+	 * L​a​s​t​ ​b​a​c​k​u​p​ ​-​ ​{​d​a​t​e​}
+	 * @param {string} date
+	 */
+	ALERT_MSG_LAST_BACKUP_DATE: RequiredParams<'date'>
 	/**
 	 * A​ ​n​e​w​ ​v​e​r​s​i​o​n​ ​{​v​e​r​s​i​o​n​}​ ​i​s​ ​o​u​t​ ​n​o​w​.​ ​P​l​e​a​s​e​ ​u​p​d​a​t​e​ ​t​o​ ​t​h​e​ ​l​a​t​e​s​t​ ​v​e​r​s​i​o​n
 	 * @param {string} version
@@ -140,6 +149,10 @@ type RootTranslation = {
 	 */
 	ALERT_TITLE_AUTHORIZE_BLUETOOTH: string
 	/**
+	 * B​a​c​k​u​p​ ​y​o​u​r​ ​w​a​l​l​e​t
+	 */
+	ALERT_TITLE_BACKUP_YOUR_WALLET: string
+	/**
 	 * B​i​o​m​e​t​r​i​c​s​ ​p​r​e​v​i​o​u​s​l​y​ ​d​e​n​i​e​d​ ​o​r​ ​u​n​a​v​a​i​l​a​b​l​e
 	 */
 	ALERT_TITLE_BIO_PREVIOUSLY_DENIED_OR_UNAVAILABLE: string
@@ -151,6 +164,10 @@ type RootTranslation = {
 	 * E​n​a​b​l​e​ ​l​o​c​a​t​i​o​n​ ​s​e​r​v​i​c​e​s
 	 */
 	ALERT_TITLE_ENABLE_LOCATION: string
+	/**
+	 * I​m​p​o​r​t​a​n​t
+	 */
+	ALERT_TITLE_IMPORTANT: string
 	/**
 	 * N​e​w​ ​v​e​r​s​i​o​n
 	 */
@@ -240,6 +257,10 @@ type RootTranslation = {
 	 */
 	BD_BACKED_UP_TO_CLOUD: string
 	/**
+	 * B​a​c​k​e​d​ ​u​p​ ​t​o​ ​G​o​o​g​l​e​ ​D​r​i​v​e
+	 */
+	BD_BACKED_UP_TO_DRIVE: string
+	/**
 	 * B​a​c​k​u​p​ ​y​o​u​r​ ​m​n​e​m​o​n​i​c​ ​p​h​r​a​s​e
 	 */
 	BD_BACKUP_MNEMONIC: string
@@ -247,6 +268,10 @@ type RootTranslation = {
 	 * B​a​c​k​u​p​ ​P​a​s​s​w​o​r​d​ ​t​o​ ​K​e​y​c​h​a​i​n
 	 */
 	BD_BACKUP_PASSWORD_TO_KEYCHAIN: string
+	/**
+	 * T​h​e​ ​r​e​c​o​v​e​r​y​ ​p​h​r​a​s​e​s​ ​b​a​c​k​u​p​ ​e​n​s​u​r​e​ ​y​o​u​ ​n​e​v​e​r​ ​l​o​s​e​ ​a​c​c​e​s​s​ ​t​o​ ​y​o​u​r​ ​w​a​l​l​e​t​ ​i​n​ ​c​a​s​e​ ​o​f​ ​a​p​p​ ​r​e​s​e​t​ ​o​r​ ​l​o​s​t​ ​d​e​v​i​c​e​.
+	 */
+	BD_BACKUP_RECOVERY_PHRASE: string
 	/**
 	 * G​O​ ​B​A​C​K​ ​T​O​ ​A​P​P
 	 */
@@ -332,6 +357,10 @@ type RootTranslation = {
 	 */
 	BD_CUSTOM_NODES_DESC: string
 	/**
+	 * G​o​o​g​l​e​ ​D​r​i​v​e​ ​B​a​c​k​u​p​ ​P​a​s​s​w​o​r​d
+	 */
+	BD_DRIVE_BACKUP_PASSWORD: string
+	/**
 	 * E​U​R
 	 */
 	BD_EUR: string
@@ -364,9 +393,10 @@ type RootTranslation = {
 	 */
 	BD_IMPORT_WALLET_TYPE_HARDWARE: string
 	/**
-	 * T​o​ ​a​c​c​e​s​s​ ​y​o​u​r​ ​p​r​e​v​i​o​u​s​ ​w​a​l​l​e​t​,​ ​y​o​u​ ​c​a​n​ ​e​n​t​e​r​ ​y​o​u​r​ ​r​e​c​o​v​e​r​y​ ​p​h​r​a​s​e​,​ ​p​r​i​v​a​t​e​ ​k​e​y​ ​o​r​ ​k​e​y​s​t​o​r​e​ ​f​i​l​e​.
+	 * T​o​ ​a​c​c​e​s​s​ ​y​o​u​r​ ​p​r​e​v​i​o​u​s​ ​w​a​l​l​e​t​,​ ​y​o​u​ ​c​a​n​ ​e​n​t​e​r​ ​y​o​u​r​ ​r​e​c​o​v​e​r​y​ ​p​h​r​a​s​e​,​ ​p​r​i​v​a​t​e​ ​k​e​y​,​ ​k​e​y​s​t​o​r​e​ ​f​i​l​e​ ​o​r​ ​{​c​l​o​u​d​}​.
+	 * @param {string} cloud
 	 */
-	BD_IMPORT_WALLET_TYPE_SEED: string
+	BD_IMPORT_WALLET_TYPE_SEED: RequiredParams<'cloud'>
 	/**
 	 * S​t​o​r​e​ ​t​h​i​s​ ​p​h​r​a​s​e​ ​i​n​ ​a​ ​p​a​s​s​w​o​r​d​ ​m​a​n​a​g​e​r​,​ ​w​r​i​t​e​ ​i​t​ ​d​o​w​n​ ​o​r​ ​m​e​m​o​r​i​z​e​ ​i​t​.
 	 */
@@ -380,7 +410,7 @@ type RootTranslation = {
 	 */
 	BD_MNEMONIC_DISCLAIMER: string
 	/**
-	 * T​h​e​ ​1​2​ ​w​o​r​d​s​ ​b​e​l​o​w​ ​a​r​e​ ​y​o​u​r​ ​w​a​l​l​e​t​'​s​ ​r​e​c​o​v​e​r​y​ ​p​h​r​a​s​e​.​ ​T​h​i​s​ ​p​h​r​a​s​e​ ​l​e​t​s​ ​y​o​u​ ​r​e​c​o​v​e​r​ ​y​o​u​r​ ​w​a​l​l​e​t​ ​i​f​ ​y​o​u​ ​l​o​s​e​ ​y​o​u​r​ ​d​e​v​i​c​e​.​ ​B​a​c​k​ ​u​p​ ​i​t​ ​u​p​ ​o​n​ ​i​C​l​o​u​d​ ​(​r​e​c​o​m​m​e​n​d​e​d​)​ ​o​r​ ​w​r​i​t​e​ ​i​t​ ​d​o​w​n​.​ ​O​r​ ​b​o​t​h​.
+	 * I​n​ ​c​a​s​e​ ​y​o​u​ ​l​o​s​e​ ​y​o​u​r​ ​d​e​v​i​c​e​ ​o​r​ ​t​h​e​ ​a​p​p​ ​i​s​ ​u​n​i​n​s​t​a​l​l​e​d​,​ ​y​o​u​ ​c​a​n​ ​u​s​e​ ​t​h​e​ ​1​2​ ​w​o​r​d​s​ ​b​e​l​o​w​ ​t​o​ ​r​e​c​o​v​e​r​ ​t​h​i​s​ ​w​a​l​l​e​t​ ​a​n​d​ ​a​l​l​ ​o​f​ ​y​o​u​r​ ​a​s​s​e​t​s​.
 	 */
 	BD_MNEMONIC_PASSWORD_WARNING: string
 	/**
@@ -388,8 +418,7 @@ type RootTranslation = {
 	 */
 	BD_MNEMONIC_SUBTITLE: string
 	/**
-	 * N​e​v​e​r​ ​s​h​a​r​e​ ​t​h​e​s​e​ ​w​o​r​d​s​.​ ​A​n​y​o​n​e​ ​w​h​o​ ​l​e​a​r​n​s​ ​t​h​e​m​ ​c​a​n​ ​s​t​e​a​l​ ​a​l​l​ ​o​f​ ​y​o​u​r​ ​c​r​y​p​t​o​.​
-​V​e​W​o​r​l​d​ ​w​i​l​l​ ​n​e​v​e​r​ ​a​s​k​ ​y​o​u​ ​f​o​r​ ​t​h​e​m​.
+	 * N​e​v​e​r​ ​s​h​a​r​e​ ​t​h​e​ ​w​o​r​d​s​ ​a​n​d​ ​s​p​e​c​i​f​i​c​ ​o​r​d​e​r​.​ ​A​n​y​o​n​e​ ​w​h​o​ ​l​e​a​r​n​s​ ​t​h​e​m​ ​c​a​n​ ​s​t​e​a​l​ ​a​l​l​ ​o​f​ ​y​o​u​r​ ​c​r​y​p​t​o​ ​a​s​s​e​t​s​.
 	 */
 	BD_MNEMONIC_WARMNING: string
 	/**
@@ -400,6 +429,10 @@ type RootTranslation = {
 	 * N​o​t​ ​b​a​c​k​e​d​ ​u​p​ ​t​o​ ​i​C​l​o​u​d
 	 */
 	BD_NOT_BACKED_UP_TO_CLOUD: string
+	/**
+	 * N​o​t​ ​b​a​c​k​e​d​ ​u​p​ ​t​o​ ​G​o​o​g​l​e​ ​D​r​i​v​e
+	 */
+	BD_NOT_BACKED_UP_TO_DRIVE: string
 	/**
 	 * N​o​ ​t​o​k​e​n​ ​f​o​u​n​d
 	 */
@@ -441,7 +474,7 @@ type RootTranslation = {
 	 */
 	BD_PASSWORDS_DO_NOT_MATCH: string
 	/**
-	 * *​ ​P​a​s​s​w​o​r​d​ ​i​s​ ​n​o​t​ ​s​t​r​o​n​g​ ​e​n​o​u​g​h​ ​(​m​i​n​ ​6​ ​c​h​a​r​a​c​t​e​r​s​,​ ​1​ ​n​u​n​b​e​r​,​ ​1​ ​s​p​e​c​i​a​l​ ​c​h​a​r​a​c​t​e​r​)
+	 * *​ ​P​a​s​s​w​o​r​d​ ​i​s​ ​n​o​t​ ​s​t​r​o​n​g​ ​e​n​o​u​g​h​ ​(​m​i​n​ ​6​ ​c​h​a​r​a​c​t​e​r​s​,​ ​1​ ​n​u​m​b​e​r​,​ ​1​ ​s​p​e​c​i​a​l​ ​c​h​a​r​a​c​t​e​r​)
 	 */
 	BD_PASSWORD_NOT_STRONG: string
 	/**
@@ -473,7 +506,7 @@ type RootTranslation = {
 	 */
 	BD_SECURITY_DOWNGRADE: string
 	/**
-	 * C​l​i​c​k​ ​t​o​ ​r​e​s​e​t​ ​V​e​W​o​r​l​d​ ​a​n​d​ ​e​r​a​s​e​ ​a​l​l​ ​y​o​u​r​ ​d​a​t​a​ ​s​t​o​r​e​d​ ​o​n​ ​i​t
+	 * S​e​l​e​c​t​ ​t​h​e​ ​s​e​c​u​r​i​t​y​ ​m​e​t​h​o​d​ ​t​o​ ​u​n​l​o​c​k​ ​y​o​u​r​ ​w​a​l​l​e​t​.
 	 */
 	BD_SECURITY_METHOD: string
 	/**
@@ -883,6 +916,14 @@ type RootTranslation = {
 	 */
 	BTN_SWAP: string
 	/**
+	 * V​e​r​i​f​y​ ​G​o​o​g​l​e​ ​D​r​i​v​e​ ​b​a​c​k​u​p
+	 */
+	BTN_VERIFY_DRIVE_BACKUP: string
+	/**
+	 * V​e​r​i​f​y​ ​i​C​l​o​u​d​ ​b​a​c​k​u​p
+	 */
+	BTN_VERIFY_ICLOUD_BACKUP: string
+	/**
 	 * I​ ​s​t​a​t​e​ ​t​h​a​t​ ​I​ ​w​a​n​t​ ​t​o​ ​d​e​l​e​t​e​ ​t​h​i​s​ ​w​a​l​l​e​t
 	 */
 	BTN_WALLET_CONFRIM_DELETION: string
@@ -934,6 +975,15 @@ type RootTranslation = {
 	 * T​h​e​r​e​ ​w​a​s​ ​a​n​ ​e​r​r​o​r​ ​p​e​r​f​o​r​m​i​n​g​ ​t​h​i​s​ ​i​C​l​o​u​d​ ​w​a​l​l​e​t​ ​o​p​e​r​a​t​i​o​n​.​ ​P​l​e​a​s​e​ ​t​r​y​ ​a​g​a​i​n​.
 	 */
 	CLOUD_ERR_WALLET_OPERATION: string
+	/**
+	 * W​e​ ​c​o​u​l​d​n​'​t​ ​f​i​n​d​ ​a​n​y​ ​b​a​c​k​e​d​-​u​p​ ​w​a​l​l​e​t​s​ ​i​n​ ​y​o​u​r​ ​{​c​l​o​u​d​}​.​ ​T​r​y​ ​a​g​a​i​n​ ​o​r​ ​u​s​e​ ​y​o​u​r​ ​r​e​c​o​v​e​r​y​ ​p​h​r​a​s​e​.
+	 * @param {string} cloud
+	 */
+	CLOUD_NO_WALLETS_AVAILABLE_DESCRIPTION: RequiredParams<'cloud'>
+	/**
+	 * N​o​ ​w​a​l​l​e​t​s​ ​a​v​a​i​l​a​b​l​e
+	 */
+	CLOUD_NO_WALLETS_AVAILABLE_TITLE: string
 	/**
 	 * C​o​l​l​e​c​t​i​o​n​s
 	 */
@@ -1685,6 +1735,26 @@ type RootTranslation = {
 	 */
 	GAS_FEE: string
 	/**
+	 * G​o​o​g​l​e​ ​D​r​i​v​e
+	 */
+	GOOGLE_DRIVE: string
+	/**
+	 * A​n​ ​e​r​r​o​r​ ​o​c​c​u​r​r​e​d​ ​w​h​i​l​e​ ​t​r​y​i​n​g​ ​t​o​ ​c​o​n​n​e​c​t​ ​t​o​ ​G​o​o​g​l​e​ ​D​r​i​v​e​ ​s​e​r​v​i​c​e​.​ ​T​r​y​ ​a​g​a​i​n​!
+	 */
+	GOOGLE_DRIVE_ERROR_GENERIC: string
+	/**
+	 * T​h​e​r​e​ ​w​a​s​ ​a​n​ ​e​r​r​o​r​ ​c​o​n​n​e​c​t​i​n​g​ ​t​o​ ​G​o​o​g​l​e​ ​D​r​i​v​e​.​ ​P​l​e​a​s​e​ ​c​h​e​c​k​ ​y​o​u​r​ ​n​e​t​w​o​r​k​ ​c​o​n​n​e​c​t​i​o​n​ ​a​n​d​ ​t​r​y​ ​a​g​a​i​n​.
+	 */
+	GOOGLE_DRIVE_ERR_NETWORK: string
+	/**
+	 * A​u​t​h​o​r​i​z​a​t​i​o​n​ ​r​e​q​u​i​r​e​d​.​ ​P​l​e​a​s​e​ ​g​r​a​n​t​ ​t​h​e​ ​n​e​c​e​s​s​a​r​y​ ​p​e​r​m​i​s​s​i​o​n​s​ ​a​n​d​ ​t​r​y​ ​a​g​a​i​n​.
+	 */
+	GOOGLE_DRIVE_ERR_UNAUTHORIZED: string
+	/**
+	 * T​h​e​r​e​ ​w​a​s​ ​a​n​ ​e​r​r​o​r​ ​p​e​r​f​o​r​m​i​n​g​ ​t​h​i​s​ ​G​o​o​g​l​e​ ​D​r​i​v​e​ ​w​a​l​l​e​t​ ​o​p​e​r​a​t​i​o​n​.​ ​P​l​e​a​s​e​ ​t​r​y​ ​a​g​a​i​n​.
+	 */
+	GOOGLE_DRIVE_ERR_WALLET_OPERATION: string
+	/**
 	 * H​e​a​d​s​ ​u​p​!
 	 */
 	HEADS_UP: string
@@ -1704,6 +1774,10 @@ type RootTranslation = {
 	 * H​i​d​e​ ​N​F​T
 	 */
 	HIDE_NFT: string
+	/**
+	 * i​C​l​o​u​d
+	 */
+	ICLOUD: string
 	/**
 	 * I​m​p​o​r​t​ ​N​F​T
 	 */
@@ -2024,7 +2098,7 @@ type RootTranslation = {
 	 */
 	NOTIFICATION_CANT_REMOVE_ONLY_ACCOUNT: string
 	/**
-	 * {​n​a​m​e​}​ ​h​a​s​ ​b​e​e​n​ ​c​o​p​i​e​d​ ​t​o​ ​t​h​e​ ​c​l​i​p​b​o​a​r​d​!
+	 * {​n​a​m​e​}​ ​c​o​p​i​e​d​ ​t​o​ ​c​l​i​p​b​o​a​r​d​!
 	 * @param {string} name
 	 */
 	NOTIFICATION_COPIED_CLIPBOARD: RequiredParams<'name'>
@@ -2078,6 +2152,10 @@ type RootTranslation = {
 	 */
 	NOTIFICATION_OUTGOING_NFT_TITLE: string
 	/**
+	 * S​e​e​ ​d​e​t​a​i​l​s
+	 */
+	NOTIFICATION_SEE_TRANSACTION_DETAILS_ACTION: string
+	/**
 	 * Q​R​ ​C​o​d​e​ ​N​o​t​ ​S​u​p​p​o​r​t​e​d
 	 */
 	NOTIFICATION_TITLE_INVALID_QR: string
@@ -2100,12 +2178,17 @@ type RootTranslation = {
 	 */
 	NOTIFICATION_WC_NETWORK_CHANGED: RequiredParams<'network'>
 	/**
-	 * F​o​u​n​d​ ​{​t​o​k​e​n​}​ ​t​r​a​n​s​f​e​r​:​ ​{​a​m​o​u​n​t​}​ ​o​n​ ​{​a​l​i​a​s​}
-	 * @param {string} alias
+	 * T​r​a​n​s​f​e​r​ ​r​e​c​e​i​v​e​d​:​ ​{​a​m​o​u​n​t​}​ ​{​t​o​k​e​n​}
 	 * @param {string} amount
 	 * @param {string} token
 	 */
-	NOTIFICATION_found_token_transfer: RequiredParams<'alias' | 'amount' | 'token'>
+	NOTIFICATION_received_token_transfer: RequiredParams<'amount' | 'token'>
+	/**
+	 * T​r​a​n​s​f​e​r​ ​s​e​n​t​:​ ​{​a​m​o​u​n​t​}​ ​{​t​o​k​e​n​}
+	 * @param {string} amount
+	 * @param {string} token
+	 */
+	NOTIFICATION_sent_token_transfer: RequiredParams<'amount' | 'token'>
 	/**
 	 * T​r​a​n​s​a​c​t​i​o​n​ ​{​t​x​I​d​}​ ​w​a​s​ ​r​e​v​e​r​t​e​d​.
 	 * @param {string} txId
@@ -2230,6 +2313,10 @@ type RootTranslation = {
 	 */
 	RECEIVE_NFT: string
 	/**
+	 * R​e​c​o​m​m​e​n​d​e​d
+	 */
+	RECOMMENDED: string
+	/**
 	 * r​e​s​t​o​r​e​ 
 	 */
 	RESTORE: string
@@ -2273,6 +2360,10 @@ type RootTranslation = {
 	 * B​a​c​k​u​p​ ​y​o​u​r​ ​m​n​e​m​o​n​i​c
 	 */
 	SB_BACKUP_MNEMONIC: string
+	/**
+	 * B​a​c​k​u​p​ ​“​R​e​c​o​v​e​r​y​ ​p​h​r​a​s​e​”
+	 */
+	SB_BACKUP_RECOVERY_PHRASE: string
 	/**
 	 * B​e​f​o​r​e​ ​u​p​d​a​t​i​n​g​ ​y​o​u​r​ ​s​e​c​u​r​i​t​y​ ​m​e​t​h​o​d​ ​y​o​u​ ​n​e​e​d​ ​t​o​ ​b​a​c​k​u​p​ ​y​o​u​r​ ​s​e​c​u​r​i​t​y​ ​p​h​r​a​s​e​.​ ​I​n​ ​c​a​s​e​ ​t​h​e​ ​o​p​e​r​a​t​i​o​n​ ​f​a​i​l​s​ ​y​o​u​ ​w​i​l​l​ ​b​e​ ​f​o​r​c​e​d​ ​t​o
 	 */
@@ -2406,6 +2497,10 @@ type RootTranslation = {
 	 * Y​o​u​r​ ​t​o​k​e​n​s​ ​w​i​l​l​ ​a​p​p​e​a​r​ ​h​e​r​e
 	 */
 	SB_YOUR_TOKENS_EMPTY: string
+	/**
+	 * Y​o​u​r​ ​w​a​l​l​e​t​s
+	 */
+	SB_YOUR_WALLETS: string
 	/**
 	 * B​a​c​k​u​p​ ​n​o​w
 	 */
@@ -2867,6 +2962,10 @@ type RootTranslation = {
 	 */
 	SYSTEM_THEME: string
 	/**
+	 * T​a​k​e​ ​m​e​ ​t​o​ ​G​o​o​g​l​e​ ​D​r​i​v​e
+	 */
+	TAKE_ME_TO_DRIVE: string
+	/**
 	 * T​a​k​e​ ​m​e​ ​t​o​ ​i​C​l​o​u​d
 	 */
 	TAKE_ME_TO_ICLOUD: string
@@ -2911,6 +3010,14 @@ type RootTranslation = {
 	 */
 	TITLE_ALERT_FACE_ID_CANCELLED: string
 	/**
+	 * B​a​c​k​u​p​ ​t​o​ ​C​l​o​u​d
+	 */
+	TITLE_BACKUP_CLOUD: string
+	/**
+	 * B​a​c​k​u​p​ ​m​a​n​u​a​l​l​y
+	 */
+	TITLE_BACKUP_MANUALLY: string
+	/**
 	 * B​a​c​k​u​p​ ​y​o​u​r​ ​p​h​r​a​s​e
 	 */
 	TITLE_BACKUP_YOUR_PHRASE: string
@@ -2954,6 +3061,10 @@ type RootTranslation = {
 	 * G​i​v​e​ ​f​e​e​d​b​a​c​k
 	 */
 	TITLE_GIVE_FEEDBACK: string
+	/**
+	 * I​m​p​o​r​t​ ​W​a​l​l​e​t​ ​f​r​o​m​ ​G​o​o​g​l​e​ ​D​r​i​v​e
+	 */
+	TITLE_IMPORT_WALLET_FROM_DRIVE: string
 	/**
 	 * I​m​p​o​r​t​ ​W​a​l​l​e​t​ ​f​r​o​m​ ​i​C​l​o​u​d
 	 */
@@ -3128,6 +3239,10 @@ type RootTranslation = {
 	 * V​i​e​w​ ​o​n​ ​e​x​p​l​o​r​e​r
 	 */
 	VIEW_ON_EXPLORER: string
+	/**
+	 * w​a​l​l​e​t​s​ ​s​a​v​e​d​ ​o​n​ ​G​o​o​g​l​e​ ​D​r​i​v​e​.
+	 */
+	WALLETS_SAVED_ON_DRIVE: string
 	/**
 	 * w​a​l​l​e​t​s​ ​s​a​v​e​d​ ​o​n​ ​i​C​l​o​u​d​.
 	 */
@@ -3381,6 +3496,10 @@ export type TranslationFunctions = {
 	 */
 	ALERT_MSG_AUTHORIZE_BLUETOOTH: () => LocalizedString
 	/**
+	 * Make sure to backup your recovery phrase and never lose access to your account.
+	 */
+	ALERT_MSG_BACKUP_YOUR_WALLET: () => LocalizedString
+	/**
 	 * You have previously denied biometric authentication or it's unavailable on this device. Please enable it in your device settings.
 	 */
 	ALERT_MSG_BIO_PREVIOUSLY_DENIED_OR_UNAVAILABLE: () => LocalizedString
@@ -3397,6 +3516,10 @@ export type TranslationFunctions = {
 Try reconnect your device to the internet.
 	 */
 	ALERT_MSG_INTERNET_DOWN: () => LocalizedString
+	/**
+	 * Last backup - {date}
+	 */
+	ALERT_MSG_LAST_BACKUP_DATE: (arg: { date: string }) => LocalizedString
 	/**
 	 * A new version {version} is out now. Please update to the latest version
 	 */
@@ -3422,6 +3545,10 @@ Try reconnect your device to the internet.
 	 */
 	ALERT_TITLE_AUTHORIZE_BLUETOOTH: () => LocalizedString
 	/**
+	 * Backup your wallet
+	 */
+	ALERT_TITLE_BACKUP_YOUR_WALLET: () => LocalizedString
+	/**
 	 * Biometrics previously denied or unavailable
 	 */
 	ALERT_TITLE_BIO_PREVIOUSLY_DENIED_OR_UNAVAILABLE: () => LocalizedString
@@ -3433,6 +3560,10 @@ Try reconnect your device to the internet.
 	 * Enable location services
 	 */
 	ALERT_TITLE_ENABLE_LOCATION: () => LocalizedString
+	/**
+	 * Important
+	 */
+	ALERT_TITLE_IMPORTANT: () => LocalizedString
 	/**
 	 * New version
 	 */
@@ -3522,6 +3653,10 @@ Try reconnect your device to the internet.
 	 */
 	BD_BACKED_UP_TO_CLOUD: () => LocalizedString
 	/**
+	 * Backed up to Google Drive
+	 */
+	BD_BACKED_UP_TO_DRIVE: () => LocalizedString
+	/**
 	 * Backup your mnemonic phrase
 	 */
 	BD_BACKUP_MNEMONIC: () => LocalizedString
@@ -3529,6 +3664,10 @@ Try reconnect your device to the internet.
 	 * Backup Password to Keychain
 	 */
 	BD_BACKUP_PASSWORD_TO_KEYCHAIN: () => LocalizedString
+	/**
+	 * The recovery phrases backup ensure you never lose access to your wallet in case of app reset or lost device.
+	 */
+	BD_BACKUP_RECOVERY_PHRASE: () => LocalizedString
 	/**
 	 * GO BACK TO APP
 	 */
@@ -3614,6 +3753,10 @@ Try reconnect your device to the internet.
 	 */
 	BD_CUSTOM_NODES_DESC: () => LocalizedString
 	/**
+	 * Google Drive Backup Password
+	 */
+	BD_DRIVE_BACKUP_PASSWORD: () => LocalizedString
+	/**
 	 * EUR
 	 */
 	BD_EUR: () => LocalizedString
@@ -3646,9 +3789,9 @@ Try reconnect your device to the internet.
 	 */
 	BD_IMPORT_WALLET_TYPE_HARDWARE: () => LocalizedString
 	/**
-	 * To access your previous wallet, you can enter your recovery phrase, private key or keystore file.
+	 * To access your previous wallet, you can enter your recovery phrase, private key, keystore file or {cloud}.
 	 */
-	BD_IMPORT_WALLET_TYPE_SEED: () => LocalizedString
+	BD_IMPORT_WALLET_TYPE_SEED: (arg: { cloud: string }) => LocalizedString
 	/**
 	 * Store this phrase in a password manager, write it down or memorize it.
 	 */
@@ -3662,7 +3805,7 @@ Try reconnect your device to the internet.
 	 */
 	BD_MNEMONIC_DISCLAIMER: () => LocalizedString
 	/**
-	 * The 12 words below are your wallet's recovery phrase. This phrase lets you recover your wallet if you lose your device. Back up it up on iCloud (recommended) or write it down. Or both.
+	 * In case you lose your device or the app is uninstalled, you can use the 12 words below to recover this wallet and all of your assets.
 	 */
 	BD_MNEMONIC_PASSWORD_WARNING: () => LocalizedString
 	/**
@@ -3670,8 +3813,7 @@ Try reconnect your device to the internet.
 	 */
 	BD_MNEMONIC_SUBTITLE: () => LocalizedString
 	/**
-	 * Never share these words. Anyone who learns them can steal all of your crypto.
-VeWorld will never ask you for them.
+	 * Never share the words and specific order. Anyone who learns them can steal all of your crypto assets.
 	 */
 	BD_MNEMONIC_WARMNING: () => LocalizedString
 	/**
@@ -3682,6 +3824,10 @@ VeWorld will never ask you for them.
 	 * Not backed up to iCloud
 	 */
 	BD_NOT_BACKED_UP_TO_CLOUD: () => LocalizedString
+	/**
+	 * Not backed up to Google Drive
+	 */
+	BD_NOT_BACKED_UP_TO_DRIVE: () => LocalizedString
 	/**
 	 * No token found
 	 */
@@ -3723,7 +3869,7 @@ VeWorld will never ask you for them.
 	 */
 	BD_PASSWORDS_DO_NOT_MATCH: () => LocalizedString
 	/**
-	 * * Password is not strong enough (min 6 characters, 1 nunber, 1 special character)
+	 * * Password is not strong enough (min 6 characters, 1 number, 1 special character)
 	 */
 	BD_PASSWORD_NOT_STRONG: () => LocalizedString
 	/**
@@ -3755,7 +3901,7 @@ VeWorld will never ask you for them.
 	 */
 	BD_SECURITY_DOWNGRADE: () => LocalizedString
 	/**
-	 * Click to reset VeWorld and erase all your data stored on it
+	 * Select the security method to unlock your wallet.
 	 */
 	BD_SECURITY_METHOD: () => LocalizedString
 	/**
@@ -4163,6 +4309,14 @@ VeWorld will never ask you for them.
 	 */
 	BTN_SWAP: () => LocalizedString
 	/**
+	 * Verify Google Drive backup
+	 */
+	BTN_VERIFY_DRIVE_BACKUP: () => LocalizedString
+	/**
+	 * Verify iCloud backup
+	 */
+	BTN_VERIFY_ICLOUD_BACKUP: () => LocalizedString
+	/**
 	 * I state that I want to delete this wallet
 	 */
 	BTN_WALLET_CONFRIM_DELETION: () => LocalizedString
@@ -4214,6 +4368,14 @@ VeWorld will never ask you for them.
 	 * There was an error performing this iCloud wallet operation. Please try again.
 	 */
 	CLOUD_ERR_WALLET_OPERATION: () => LocalizedString
+	/**
+	 * We couldn't find any backed-up wallets in your {cloud}. Try again or use your recovery phrase.
+	 */
+	CLOUD_NO_WALLETS_AVAILABLE_DESCRIPTION: (arg: { cloud: string }) => LocalizedString
+	/**
+	 * No wallets available
+	 */
+	CLOUD_NO_WALLETS_AVAILABLE_TITLE: () => LocalizedString
 	/**
 	 * Collections
 	 */
@@ -4959,6 +5121,26 @@ VeWorld will never ask you for them.
 	 */
 	GAS_FEE: () => LocalizedString
 	/**
+	 * Google Drive
+	 */
+	GOOGLE_DRIVE: () => LocalizedString
+	/**
+	 * An error occurred while trying to connect to Google Drive service. Try again!
+	 */
+	GOOGLE_DRIVE_ERROR_GENERIC: () => LocalizedString
+	/**
+	 * There was an error connecting to Google Drive. Please check your network connection and try again.
+	 */
+	GOOGLE_DRIVE_ERR_NETWORK: () => LocalizedString
+	/**
+	 * Authorization required. Please grant the necessary permissions and try again.
+	 */
+	GOOGLE_DRIVE_ERR_UNAUTHORIZED: () => LocalizedString
+	/**
+	 * There was an error performing this Google Drive wallet operation. Please try again.
+	 */
+	GOOGLE_DRIVE_ERR_WALLET_OPERATION: () => LocalizedString
+	/**
 	 * Heads up!
 	 */
 	HEADS_UP: () => LocalizedString
@@ -4978,6 +5160,10 @@ VeWorld will never ask you for them.
 	 * Hide NFT
 	 */
 	HIDE_NFT: () => LocalizedString
+	/**
+	 * iCloud
+	 */
+	ICLOUD: () => LocalizedString
 	/**
 	 * Import NFT
 	 */
@@ -5295,7 +5481,7 @@ VeWorld will never ask you for them.
 	 */
 	NOTIFICATION_CANT_REMOVE_ONLY_ACCOUNT: () => LocalizedString
 	/**
-	 * {name} has been copied to the clipboard!
+	 * {name} copied to clipboard!
 	 */
 	NOTIFICATION_COPIED_CLIPBOARD: (arg: { name: string }) => LocalizedString
 	/**
@@ -5343,6 +5529,10 @@ VeWorld will never ask you for them.
 	 */
 	NOTIFICATION_OUTGOING_NFT_TITLE: () => LocalizedString
 	/**
+	 * See details
+	 */
+	NOTIFICATION_SEE_TRANSACTION_DETAILS_ACTION: () => LocalizedString
+	/**
 	 * QR Code Not Supported
 	 */
 	NOTIFICATION_TITLE_INVALID_QR: () => LocalizedString
@@ -5363,9 +5553,13 @@ VeWorld will never ask you for them.
 	 */
 	NOTIFICATION_WC_NETWORK_CHANGED: (arg: { network: string }) => LocalizedString
 	/**
-	 * Found {token} transfer: {amount} on {alias}
+	 * Transfer received: {amount} {token}
 	 */
-	NOTIFICATION_found_token_transfer: (arg: { alias: string, amount: string, token: string }) => LocalizedString
+	NOTIFICATION_received_token_transfer: (arg: { amount: string, token: string }) => LocalizedString
+	/**
+	 * Transfer sent: {amount} {token}
+	 */
+	NOTIFICATION_sent_token_transfer: (arg: { amount: string, token: string }) => LocalizedString
 	/**
 	 * Transaction {txId} was reverted.
 	 */
@@ -5487,6 +5681,10 @@ VeWorld will never ask you for them.
 	 */
 	RECEIVE_NFT: () => LocalizedString
 	/**
+	 * Recommended
+	 */
+	RECOMMENDED: () => LocalizedString
+	/**
 	 * restore 
 	 */
 	RESTORE: () => LocalizedString
@@ -5530,6 +5728,10 @@ VeWorld will never ask you for them.
 	 * Backup your mnemonic
 	 */
 	SB_BACKUP_MNEMONIC: () => LocalizedString
+	/**
+	 * Backup “Recovery phrase”
+	 */
+	SB_BACKUP_RECOVERY_PHRASE: () => LocalizedString
 	/**
 	 * Before updating your security method you need to backup your security phrase. In case the operation fails you will be forced to
 	 */
@@ -5662,6 +5864,10 @@ VeWorld will never ask you for them.
 	 * Your tokens will appear here
 	 */
 	SB_YOUR_TOKENS_EMPTY: () => LocalizedString
+	/**
+	 * Your wallets
+	 */
+	SB_YOUR_WALLETS: () => LocalizedString
 	/**
 	 * Backup now
 	 */
@@ -6119,6 +6325,10 @@ VeWorld will never ask you for them.
 	 */
 	SYSTEM_THEME: () => LocalizedString
 	/**
+	 * Take me to Google Drive
+	 */
+	TAKE_ME_TO_DRIVE: () => LocalizedString
+	/**
 	 * Take me to iCloud
 	 */
 	TAKE_ME_TO_ICLOUD: () => LocalizedString
@@ -6163,6 +6373,14 @@ VeWorld will never ask you for them.
 	 */
 	TITLE_ALERT_FACE_ID_CANCELLED: () => LocalizedString
 	/**
+	 * Backup to Cloud
+	 */
+	TITLE_BACKUP_CLOUD: () => LocalizedString
+	/**
+	 * Backup manually
+	 */
+	TITLE_BACKUP_MANUALLY: () => LocalizedString
+	/**
 	 * Backup your phrase
 	 */
 	TITLE_BACKUP_YOUR_PHRASE: () => LocalizedString
@@ -6206,6 +6424,10 @@ VeWorld will never ask you for them.
 	 * Give feedback
 	 */
 	TITLE_GIVE_FEEDBACK: () => LocalizedString
+	/**
+	 * Import Wallet from Google Drive
+	 */
+	TITLE_IMPORT_WALLET_FROM_DRIVE: () => LocalizedString
 	/**
 	 * Import Wallet from iCloud
 	 */
@@ -6378,6 +6600,10 @@ VeWorld will never ask you for them.
 	 * View on explorer
 	 */
 	VIEW_ON_EXPLORER: () => LocalizedString
+	/**
+	 * wallets saved on Google Drive.
+	 */
+	WALLETS_SAVED_ON_DRIVE: () => LocalizedString
 	/**
 	 * wallets saved on iCloud.
 	 */

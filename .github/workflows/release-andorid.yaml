@@ -9,7 +9,7 @@ on:
         required: true
       build: 
         description: 'Build number'
-        type: number
+        type: string
         required: true
 
   workflow_call:
@@ -20,7 +20,11 @@ on:
         required: true
       build: 
         description: 'Build number'
-        type: number
+        type: string
+        required: true
+      pr_branch:
+        description: 'PR branch'
+        type: string
         required: true
     
 
@@ -32,15 +36,26 @@ jobs:
         steps:
             - name: Checkout repository
               uses: actions/checkout@v3
+              with:
+                  ref: ${{ inputs.pr_branch }}
+                  fetch-depth: 0
 
+            - name: Check PR_BRANCH
+              run: echo ${{ inputs.pr_branch }}
+              
             - name: Setup Node
               uses: actions/setup-node@v3
               with:
                   node-version-file: .nvmrc
                   cache: "yarn"
 
+            - name: Configure Git user
+              run: |
+                git config user.name "${{ github.actor }}"
+                git config user.email "${{ github.actor }}@users.noreply.github.com"
+
             - name: Install & Patch packages
-              run: yarn install:all
+              run: yarn install
 
             - name: Setup Java
               uses: actions/setup-java@v3
@@ -128,5 +143,12 @@ jobs:
                   export STORE_PASSWORD="$(<store_password.txt)"
                   export KEY_PASSWORD="$(<store_password.txt)"
                   export KEY_ALIAS="$(<key_alias.txt)"
-                  fastlane build_android_ci version_code:${{github.event.inputs.build}} version_name:${{github.event.inputs.version}}
-                
+                  fastlane build_android_ci version_code:${{inputs.build}} version_name:${{inputs.version}}
+
+            - name: Commit and Push Changes
+              run: |
+                git config user.name "${{ github.actor }}"
+                git config user.email "${{ github.actor }}@users.noreply.github.com"
+                git add --all
+                git commit -m "build: android build artifacts" || echo "No changes to commit"
+                git push origin HEAD:${{ inputs.pr_branch }}

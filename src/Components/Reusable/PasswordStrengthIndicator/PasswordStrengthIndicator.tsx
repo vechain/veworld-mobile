@@ -1,8 +1,10 @@
 import React from "react"
 import { StyleSheet } from "react-native"
-import Animated, { useAnimatedStyle, SharedValue, interpolateColor, useDerivedValue } from "react-native-reanimated"
-import { BaseSpacer, BaseText, BaseView } from "~Components/Base"
-import { COLORS } from "~Constants"
+import Animated, { SharedValue, interpolateColor, useAnimatedStyle, useDerivedValue } from "react-native-reanimated"
+import { BaseText, BaseView } from "~Components/Base"
+import { COLORS, ColorThemeType } from "~Constants"
+import { useThemedStyles } from "~Hooks"
+import { PlatformUtils } from "~Utils"
 import { BaseAnimatedText } from "../AnimatedTextInput"
 
 type Props = {
@@ -10,6 +12,8 @@ type Props = {
 }
 
 export const PasswordStrengthIndicator = ({ strength }: Props) => {
+    const { styles } = useThemedStyles(baseStyles)
+
     const animatedStyle = useAnimatedStyle(() => {
         return {
             width: `${strength.value * 25}%`,
@@ -36,37 +40,36 @@ export const PasswordStrengthIndicator = ({ strength }: Props) => {
                 <Animated.View style={[styles.bar, animatedStyle]} />
             </BaseView>
 
-            <BaseView flexDirection="row" justifyContent="flex-start">
-                <BaseText typographyFont="caption" pt={4}>
+            <BaseView pt={PlatformUtils.isIOS() ? 12 : 6} flexDirection="row" justifyContent="flex-start">
+                <BaseText pt={PlatformUtils.isAndroid() ? 3 : 2} pr={4} typographyFont="caption">
                     {"Security:"}
                 </BaseText>
-
-                <BaseSpacer width={4} />
-
-                <BaseAnimatedText text={computedStrength} style={styles.securityText} />
+                <BaseAnimatedText editable={false} text={computedStrength} style={styles.securityText} />
             </BaseView>
         </BaseView>
     )
 }
 
-const styles = StyleSheet.create({
-    barBackground: {
-        height: 8,
-        backgroundColor: "#e0e0e0",
-        borderRadius: 4,
-        overflow: "hidden",
-    },
-    bar: {
-        height: 8,
-        borderRadius: 4,
-    },
-    securityText: {
-        paddingTop: 6,
-        fontFamily: "Inter-Light",
-        fontSize: 12,
-        fontWeight: "normal",
-        lineHeight: 13,
-    },
-})
+const baseStyles = (theme: ColorThemeType) =>
+    StyleSheet.create({
+        barBackground: {
+            height: 8,
+            backgroundColor: "#e0e0e0",
+            borderRadius: 4,
+            overflow: "hidden",
+        },
+        bar: {
+            height: 8,
+            borderRadius: 4,
+        },
+        securityText: {
+            fontFamily: "Inter-Light",
+            // fontSize: 12,
+            // fontWeight: "normal",
+            // lineHeight: 1,
+            padding: 0,
+            color: theme.colors.text,
+        },
+    })
 
 export default PasswordStrengthIndicator
