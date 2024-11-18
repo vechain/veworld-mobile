@@ -6,8 +6,7 @@ import { COLORS, ColorThemeType } from "~Constants"
 import { StyleSheet } from "react-native"
 
 type Props = {
-    iconName?: string
-    iconComponent?: React.ReactNode
+    icon: string | React.ReactNode
     title: string
     description: string
     mainButton?: React.ReactNode
@@ -15,7 +14,7 @@ type Props = {
 }
 
 export const DefaultBottomSheet = React.forwardRef<BottomSheetModalMethods, Props>(
-    ({ iconName, iconComponent, title, description, mainButton, secondaryButton }, ref) => {
+    ({ icon, title, description, mainButton, secondaryButton }, ref) => {
         const { styles, theme } = useThemedStyles(baseStyles)
 
         return (
@@ -29,10 +28,11 @@ export const DefaultBottomSheet = React.forwardRef<BottomSheetModalMethods, Prop
                 <BaseView>
                     <BaseSpacer height={16} />
                     <BaseView justifyContent="center" alignItems="center">
-                        {iconName && (
-                            <BaseIcon name={iconName} style={styles.icon} size={66} color={theme.colors.text} />
+                        {typeof icon === "string" ? (
+                            <BaseIcon name={icon} style={styles.icon} size={66} color={theme.colors.text} />
+                        ) : (
+                            icon
                         )}
-                        {iconComponent}
                         <BaseSpacer height={26} />
                         <BaseText align="center" typographyFont="subSubTitleMedium">
                             {title}
@@ -59,20 +59,11 @@ const baseStyles = (theme: ColorThemeType) =>
         icon: {
             color: theme.colors.text,
         },
-        cautionButton: {
-            backgroundColor: COLORS.RED_600,
-            borderColor: COLORS.RED_600,
-        },
         bottomSheet: {
             backgroundColor: theme.isDark ? COLORS.PURPLE : COLORS.LIGHT_GRAY,
             borderTopRightRadius: 24,
             borderTopLeftRadius: 24,
             paddingHorizontal: 24,
             paddingTop: 8,
-        },
-        secondaryButton: {
-            borderRadius: 8,
-            paddingVertical: 12,
-            borderColor: theme.colors.text,
         },
     })
