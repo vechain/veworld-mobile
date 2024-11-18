@@ -30,8 +30,8 @@ type Props = {
 export const CloudKitWarningBottomSheet = forwardRef<BottomSheetModalMethods, Props>(
     ({ onHandleBackupToCloudKit, openLocation, isLoading }, ref) => {
         const { LL } = useI18nContext()
-        const [secureText1, setsecureText1] = useState(true)
-        const [secureText2, setsecureText2] = useState(true)
+        const [secureText1, setSecureText1] = useState(true)
+        const [secureText2, setSecureText2] = useState(true)
         const [password1, setPassword1] = useState("")
         const [password2, setPassword2] = useState("")
         const [passwordMisMatch, setPasswordMisMatch] = useState(false)
@@ -81,8 +81,10 @@ export const CloudKitWarningBottomSheet = forwardRef<BottomSheetModalMethods, Pr
                     onHandleBackupToCloudKit(password1)
                 } else {
                     if (password1 !== password2) setPasswordMisMatch(true)
-                    if (strength.value < 4) setPasswordNotStrong(true)
-                    setShowStrengthIndicator(false)
+                    if (strength.value < 4) {
+                        setPasswordNotStrong(true)
+                        setShowStrengthIndicator(false)
+                    }
                 }
             }
 
@@ -162,7 +164,7 @@ export const CloudKitWarningBottomSheet = forwardRef<BottomSheetModalMethods, Pr
                         rightIcon={
                             <BaseIcon
                                 haptics="Light"
-                                action={() => setsecureText1(prev => !prev)}
+                                action={() => setSecureText1(prev => !prev)}
                                 name={secureText1 ? "eye-off-outline" : "eye-outline"}
                                 size={16}
                                 color={COLORS.GREY_500}
@@ -196,7 +198,7 @@ export const CloudKitWarningBottomSheet = forwardRef<BottomSheetModalMethods, Pr
                                 rightIcon={
                                     <BaseIcon
                                         haptics="Light"
-                                        action={() => setsecureText2(prev => !prev)}
+                                        action={() => setSecureText2(prev => !prev)}
                                         name={secureText2 ? "eye-off-outline" : "eye-outline"}
                                         size={16}
                                         color={COLORS.GREY_500}
