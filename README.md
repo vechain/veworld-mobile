@@ -48,6 +48,16 @@ Then in Xcode add your account and a new `Bundle Id` for the project
 
 ![Xcode](docs/img/Xcode.png)
 
+Then on the `Signing and capabilities` tab scroll down on the iCloud capability and a new container using the same `Bundle Id` that you used earlier.
+
+![Xcode](docs/img/cloudkit.png)
+
+> **Note:** _You will see the following error on the logs when running the app:_
+>
+> Error: _Couldn't get container configuration from the server for container_
+>
+> _This error is related to the cloudKit container, if you need to use cloudkit you will have to setup the reccords manually through the developer portal clicking at the "Cloudkit Console" button._
+
 Then type the following on your terminal:
 
 `yarn install:all`
@@ -88,17 +98,19 @@ Then open a new instance of the terminal on the project root and type:
 
 to select an android emulator to run the app (you need to have at least once active emulator on your android studio).
 
-# Merge Request Accpetance Criteria
+# How to contribute
+
+## Merge Request Accpetance Criteria
 
 In order to submitng a merge request please do the following:
 
 1. `fork` the repo,
 2. create a branch from `main` using the following convention for naming it.
-3. Before opening a merge request create an issue if htere isn't one already opened.
+3. Before opening a merge request create an issue if there isn't one already opened.
 
 ### Branch naming
 
-Name your branch using the following convertion:
+Name your branch using the following convention:
 
 ### Feature
 
@@ -192,7 +204,7 @@ E2E_MNEMONIC="<e2e_mnemonic>"
 Step 1: Prepare the Environment
 
 1. Navigate to your platform tools directory:
-   cd /Users/<username>/Library/Android/sdk/platform-tools
+   cd `/Users/<username>/Library/Android/sdk/platform-tools`
 
 2. Install adb
 
