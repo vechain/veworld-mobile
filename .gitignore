@@ -113,3 +113,7 @@ datadog-ci.json
 !.yarn/releases
 !.yarn/sdks
 !.yarn/versions
+
+#Android Build Release artifacts
+android/key_alias.txt
+android/store_password.txt
