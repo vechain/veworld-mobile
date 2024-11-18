@@ -103,8 +103,6 @@ env.production.local
 ios/fastlane/env
 ios/fastlane/env.default
 
-# datadog
-datadog-ci.json
 
 # Yarn
 .yarn/*
@@ -113,3 +111,7 @@ datadog-ci.json
 !.yarn/releases
 !.yarn/sdks
 !.yarn/versions
+
+# Android release build artifacts
+android/key_alias.txt
+android/store_password.txt
