@@ -1,7 +1,7 @@
-import React, { useCallback, useMemo } from "react"
+import React from "react"
 import { BottomSheetModalMethods } from "@gorhom/bottom-sheet/lib/typescript/types"
 import { useThemedStyles } from "~Hooks"
-import { BaseBottomSheet, BaseButton, BaseIcon, BaseSpacer, BaseText, BaseView } from "~Components"
+import { BaseBottomSheet, BaseIcon, BaseSpacer, BaseText, BaseView } from "~Components"
 import { COLORS, ColorThemeType } from "~Constants"
 import { StyleSheet } from "react-native"
 
@@ -10,29 +10,13 @@ type Props = {
     iconComponent?: React.ReactNode
     title: string
     description: string
-    mainButton?: { label: string; action: () => void; bg?: string; caution?: boolean }
-    secondaryButton?: { label: string; action: () => void }
+    mainButton?: React.ReactNode
+    secondaryButton?: React.ReactNode
 }
 
 export const DefaultBottomSheet = React.forwardRef<BottomSheetModalMethods, Props>(
     ({ iconName, iconComponent, title, description, mainButton, secondaryButton }, ref) => {
         const { styles, theme } = useThemedStyles(baseStyles)
-
-        const handlePressMain = useCallback(() => {
-            if (mainButton?.action) {
-                mainButton?.action()
-            }
-        }, [mainButton])
-
-        const handlePressSecondary = useCallback(() => {
-            if (secondaryButton?.action) {
-                secondaryButton.action()
-            }
-        }, [secondaryButton])
-
-        const calculateTextColor = useMemo(() => {
-            return mainButton?.caution ? COLORS.WHITE : undefined
-        }, [mainButton?.caution])
 
         return (
             <BaseBottomSheet
@@ -59,30 +43,9 @@ export const DefaultBottomSheet = React.forwardRef<BottomSheetModalMethods, Prop
                         </BaseText>
                     </BaseView>
                     <BaseSpacer height={24} />
-                    {mainButton && (
-                        <BaseButton
-                            w={100}
-                            style={mainButton.caution && styles.cautionButton}
-                            textColor={calculateTextColor}
-                            typographyFont="buttonMedium"
-                            haptics="Light"
-                            title={mainButton.label}
-                            action={handlePressMain}
-                        />
-                    )}
+                    {mainButton}
                     {mainButton && secondaryButton && <BaseSpacer height={12} />}
-                    {secondaryButton && (
-                        <BaseButton
-                            w={100}
-                            style={styles.secondaryButton}
-                            variant="outline"
-                            textColor={theme.colors.text}
-                            typographyFont="buttonMedium"
-                            haptics="Light"
-                            title={secondaryButton?.label}
-                            action={handlePressSecondary}
-                        />
-                    )}
+                    {secondaryButton}
                     <BaseSpacer height={16} />
                 </BaseView>
                 <BaseSpacer height={32} />

@@ -51,50 +51,57 @@ export const CloudBackupCard: FC<Props> = ({ mnemonicArray, deviceToBackup }) =>
 
     const onHandleBackupToCloudKit = useCallback(
         async (password: string) => {
-            setIsLoading(true)
-            onCloseWarning()
+            try {
+                setIsLoading(true)
+                onCloseWarning()
 
-            if (!deviceToBackup?.xPub) {
-                showErrorToast({
-                    text1: LL.CLOUDKIT_ERROR_GENERIC(),
+                if (!deviceToBackup?.xPub) {
+                    showErrorToast({
+                        text1: LL.CLOUDKIT_ERROR_GENERIC(),
+                    })
+                    return
+                }
+
+                const firstAccountAddress = AddressUtils.getAddressFromXPub(deviceToBackup.xPub, 0)
+                const salt = HexUtils.generateRandom(256)
+                const iv = PasswordUtils.getRandomIV(16)
+                const mnemonic = await CryptoUtils.encrypt(mnemonicArray, password, salt, iv)
+                await saveWalletToCloud({
+                    mnemonic,
+                    _rootAddress: deviceToBackup?.rootAddress,
+                    deviceType: deviceToBackup?.type,
+                    firstAccountAddress,
+                    salt,
+                    iv,
+                    derivationPath: deviceToBackup?.derivationPath ?? DerivationPath.VET,
                 })
-                return
+
+                setIsLoading(false)
+                setIsWalletBackedUp(true)
+
+                const formattedDate = DateUtils.formatDateTime(
+                    Date.now(),
+                    locale,
+                    getTimeZone() ?? DateUtils.DEFAULT_TIMEZONE,
+                )
+                dispatch(
+                    setDeviceIsBackup({
+                        rootAddress: deviceToBackup.rootAddress,
+                        isBackup: true,
+                        date: formattedDate,
+                    }),
+                )
+                await getWalletByRootAddress(deviceToBackup.rootAddress)
+                onCloseWarning()
+                setIsWalletBackedUp(true)
+                setIsLoading(false)
+                onOpenSuccess()
+            } catch (error) {
+                setIsLoading(false)
+                showErrorToast({
+                    text1: PlatformUtils.isIOS() ? LL.CLOUDKIT_ERROR_GENERIC() : LL.GOOGLE_DRIVE_ERROR_GENERIC(),
+                })
             }
-
-            const firstAccountAddress = AddressUtils.getAddressFromXPub(deviceToBackup.xPub, 0)
-            const salt = HexUtils.generateRandom(256)
-            const iv = PasswordUtils.getRandomIV(16)
-            const mnemonic = await CryptoUtils.encrypt(mnemonicArray, password, salt, iv)
-            await saveWalletToCloud({
-                mnemonic,
-                _rootAddress: deviceToBackup?.rootAddress,
-                deviceType: deviceToBackup?.type,
-                firstAccountAddress,
-                salt,
-                iv,
-                derivationPath: deviceToBackup?.derivationPath ?? DerivationPath.VET,
-            })
-
-            setIsLoading(false)
-            setIsWalletBackedUp(true)
-
-            const formattedDate = DateUtils.formatDateTime(
-                Date.now(),
-                locale,
-                getTimeZone() ?? DateUtils.DEFAULT_TIMEZONE,
-            )
-            dispatch(
-                setDeviceIsBackup({
-                    rootAddress: deviceToBackup.rootAddress,
-                    isBackup: true,
-                    date: formattedDate,
-                }),
-            )
-            await getWalletByRootAddress(deviceToBackup.rootAddress)
-            onCloseWarning()
-            setIsWalletBackedUp(true)
-            setIsLoading(false)
-            onOpenSuccess()
         },
         [
             LL,
