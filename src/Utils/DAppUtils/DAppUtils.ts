@@ -82,7 +82,7 @@ export const isValidSignedDataMessage = (message: unknown): message is SignedDat
     }
 
     if (
-        typeof _message.domain.chainId !== "number" ||
+        typeof _message.domain.chainId !== "string" ||
         typeof _message.domain.name !== "string" ||
         typeof _message.domain.verifyingContract !== "string" ||
         typeof _message.domain.version !== "string"
