@@ -1,8 +1,9 @@
 import React, { memo } from "react"
 import { StyleSheet } from "react-native"
 import { BaseIcon, BaseSpacer, BaseText, BaseView } from "~Components"
-import { useTheme } from "~Hooks"
-import { AlertStatus, ICON_NAMES } from "~Components/Reusable/Alert/utils/AlertConfigs"
+import { useThemedStyles } from "~Hooks"
+import { AlertStatus, ICON_NAMES, StatusColorVariant } from "~Components/Reusable/Alert/utils/AlertConfigs"
+import { ColorThemeType } from "~Constants"
 
 interface AlertCardProps {
     title: string
@@ -11,17 +12,12 @@ interface AlertCardProps {
 }
 
 export const AlertCard = memo(({ title, message, status }: AlertCardProps) => {
-    const theme = useTheme()
+    const statusVariant = StatusColorVariant[status]
+    const { styles, theme } = useThemedStyles(baseStyles(statusVariant))
     const colors = theme.colors[`${status}Variant`]
 
-    const containerStyle = {
-        ...styles.container,
-        backgroundColor: colors.background,
-        borderColor: colors.border,
-    }
-
     return (
-        <BaseSpacer style={containerStyle}>
+        <BaseView style={styles.container}>
             <BaseView style={styles.head}>
                 <BaseIcon name={ICON_NAMES[status]} size={16} color={colors.icon} />
                 <BaseSpacer width={8} />
@@ -36,27 +32,31 @@ export const AlertCard = memo(({ title, message, status }: AlertCardProps) => {
                 style={styles.textContainer}>
                 {message}
             </BaseText>
-        </BaseSpacer>
+        </BaseView>
     )
 })
 
-const styles = StyleSheet.create({
-    container: {
-        flexDirection: "column",
-        borderRadius: 8,
-        borderWidth: 1,
-        paddingHorizontal: 16,
-        paddingVertical: 12,
-    },
-    head: {
-        flexDirection: "row",
-        alignItems: "center",
-    },
-    content: {
-        flexDirection: "column",
-        alignItems: "flex-start",
-    },
-    textContainer: {
-        paddingLeft: 24,
-    },
-})
+const baseStyles = (status: StatusColorVariant) => (theme: ColorThemeType) =>
+    StyleSheet.create({
+        container: {
+            flexDirection: "column",
+            backgroundColor: theme.colors[status].background,
+            borderColor: theme.colors[status].border,
+            borderRadius: 8,
+            borderWidth: 1,
+            paddingHorizontal: 16,
+            paddingVertical: 12,
+        },
+        head: {
+            flexDirection: "row",
+            alignItems: "flex-start",
+            paddingRight: 16,
+        },
+        content: {
+            flexDirection: "column",
+            alignItems: "flex-start",
+        },
+        textContainer: {
+            paddingLeft: 24,
+        },
+    })
