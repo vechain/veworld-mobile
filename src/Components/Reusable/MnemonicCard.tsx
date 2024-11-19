@@ -95,7 +95,13 @@ export const MnemonicCard: FC<Props> = ({ mnemonicArray, souceScreen, deviceToBa
                         flexWrap="wrap"
                         justifyContent="space-between">
                         {RenderWords}
-                        {!isShow && <PlatformBlur backgroundColor={theme.colors.card} text={LL.TAP_TO_VIEW()} />}
+                        {!isShow && (
+                            <PlatformBlur
+                                backgroundColor={theme.colors.card}
+                                borderRadius={8}
+                                text={LL.TAP_TO_VIEW()}
+                            />
+                        )}
                     </BaseView>
 
                     <BaseView py={12} style={styles.button} justifyContent="center" alignItems="center">
