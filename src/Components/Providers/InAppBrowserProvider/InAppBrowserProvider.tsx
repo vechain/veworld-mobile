@@ -424,6 +424,7 @@ export const InAppBrowserProvider = ({ children }: Props) => {
                 isFirstRequest: !isAlreadyConnected,
                 domain: request.domain,
                 types: request.types,
+                primaryType: request.primaryType,
                 value: request.value,
                 origin: request.origin,
             }

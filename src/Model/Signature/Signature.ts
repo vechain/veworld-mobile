@@ -1,4 +1,4 @@
-import { ethers } from "ethers"
+import { TypedDataDomain, TypedDataParameter } from "viem"
 // import { Certificate, Transaction } from "thor-devkit"
 
 // export type SignPayload = Certificate | Transaction
@@ -6,8 +6,9 @@ import { ethers } from "ethers"
 // export type SignType = "cert" | "tx"
 
 export type TypedData = {
-    domain: ethers.TypedDataDomain
-    types: Record<string, ethers.TypedDataField[]>
+    domain: TypedDataDomain
+    types: Record<string, TypedDataParameter[]>
+    primaryType: string
     value: Record<string, unknown>
     opts?: Record<string, unknown>
     timestamp: number

@@ -79,8 +79,8 @@
     "@vechain/connex-driver": "^2.1.0",
     "@vechain/connex-framework": "^2.1.0",
     "@vechain/picasso": "^2.1.1",
-    "@vechain/sdk-core": "1.0.0-rc.1",
-    "@vechain/sdk-network": "1.0.0-rc.1",
+    "@vechain/sdk-core": "1.0.0-rc.3",
+    "@vechain/sdk-network": "1.0.0-rc.3",
     "@walletconnect/core": "2.15.2",
     "@walletconnect/react-native-compat": "2.15.2",
     "@walletconnect/utils": "2.15.2",
@@ -238,7 +238,8 @@
     "translo-cli": "^1.0.6",
     "ts-jest": "^29.1.0",
     "ts-node": "^10.9.1",
-    "typescript": "4.8.4"
+    "typescript": "4.8.4",
+    "viem": "^2.21.45"
   },
   "resolutions": {
     "browserify-sign": "4.2.2",

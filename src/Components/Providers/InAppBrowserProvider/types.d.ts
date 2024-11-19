@@ -1,4 +1,4 @@
-import { ethers } from "ethers"
+import { TypedDataDomain, TypedDataParameter } from "viem"
 import { RequestMethods } from "~Constants"
 
 type ErrorResponse = {
@@ -21,9 +21,10 @@ interface BaseRequest {
     genesisId: string
     message: Connex.Vendor.TxMessage | Connex.Vendor.CertMessage
     options: Connex.Signer.TxOptions | Connex.Signer.CertOptions
-    domain: ethers.TypedDataDomain
+    domain: TypedDataDomain
     origin: string
-    types: Record<string, ethers.TypedDataField[]>
+    types: Record<string, TypedDataParameter[]>
+    primaryType: string
     value: Record<string, unknown>
 }
 

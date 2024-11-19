@@ -1,5 +1,5 @@
 import { PendingRequestTypes, SessionTypes, SignClientTypes } from "@walletconnect/types"
-import { ethers } from "ethers"
+import { TypedDataDomain, TypedDataParameter } from "viem"
 
 export type DAppSourceType = "wallet-connect" | "in-app"
 
@@ -36,10 +36,11 @@ type BaseTransactionRequest = {
 }
 
 type BaseTypedDataRequest = {
-    domain: ethers.TypedDataDomain
+    domain: TypedDataDomain
     origin: string
     options: Connex.Signer.CertOptions
-    types: Record<string, ethers.TypedDataField[]>
+    types: Record<string, TypedDataParameter[]>
+    primaryType: string
     value: Record<string, unknown>
     method: "thor_signTypedData"
 }

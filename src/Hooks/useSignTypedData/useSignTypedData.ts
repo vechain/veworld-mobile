@@ -13,14 +13,14 @@ export const useSignTypedMessage = ({ typedData }: Props) => {
     const currentNetwork = useAppSelector(selectSelectedNetwork)
 
     const getSignature = (privateKey: Buffer) => {
-        const { domain, types, value } = typedData
+        const { domain, types, primaryType, value } = typedData
 
-        const thorClient = ThorClient.fromUrl(currentNetwork.currentUrl)
+        const thorClient = ThorClient.at(currentNetwork.currentUrl)
 
         const signer = new VeChainPrivateKeySigner(privateKey, new VeChainProvider(thorClient))
 
         //@ts-ignore
-        return signer.signTypedData(domain, types, value)
+        return signer.signTypedData(domain, types, primaryType, value)
     }
 
     const getSignatureByMnemonic = (wallet: Wallet) => {
