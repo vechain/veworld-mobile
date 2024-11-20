@@ -110,6 +110,12 @@ jobs:
         with:
           name: VeWorld.app
           path: ${{ env.APP_PATH }}
+
+      - uses: devicecloud-dev/device-cloud-for-maestro@v1
+        with:
+            api-key: ${{ secrets.DCD_API_KEY }}
+            app-file: ${{ env.APP_PATH }}
+
       - uses: mobile-dev-inc/action-maestro-cloud@v1
         with:
             name: iOS test
