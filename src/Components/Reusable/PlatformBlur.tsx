@@ -10,14 +10,16 @@ export const PlatformBlur = ({
     blurAmount = 3,
     text,
     paddingBottom = 0,
+    borderRadius = 0,
 }: {
     backgroundColor: string
     blurAmount?: number
     text: LocalizedString
     paddingBottom?: number
+    borderRadius?: number
 }) => {
     if (PlatformUtils.isIOS()) {
-        return <BlurView style={StyleSheet.absoluteFill} blurAmount={blurAmount} />
+        return <BlurView style={[StyleSheet.absoluteFill, { borderRadius }]} blurAmount={blurAmount} />
     } else {
         return (
             <>

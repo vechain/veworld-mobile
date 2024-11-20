@@ -14,7 +14,7 @@ export type BaseTextInputProps = {
     value?: string
     errorMessage?: string
     testID?: string
-    rightIcon?: string
+    rightIcon?: string | React.ReactNode
     rightIconTestID?: string
     onIconPress?: () => void
     containerStyle?: StyleProp<ViewStyle>
@@ -51,6 +51,23 @@ export const BaseTextInputComponent = forwardRef<TextInput, BaseTextInputProps>(
         const { styles, theme } = useThemedStyles(baseStyles(!!errorMessage))
 
         const placeholderColor = theme.isDark ? COLORS.WHITE_DISABLED : COLORS.DARK_PURPLE_DISABLED
+
+        const renderRightIcon = useMemo(() => {
+            if (!rightIcon) return null
+            return typeof rightIcon === "string" ? (
+                <BaseIcon
+                    haptics="Light"
+                    action={onIconPress}
+                    name={rightIcon}
+                    size={24}
+                    color={theme.colors.text}
+                    style={styles.rightIconStyle}
+                    testID={rightIconTestID}
+                />
+            ) : (
+                rightIcon
+            )
+        }, [onIconPress, rightIcon, rightIconTestID, styles.rightIconStyle, theme.colors.text])
 
         const setInputParams = useMemo(() => {
             if (PlatformUtils.isAndroid()) {
@@ -98,17 +115,7 @@ export const BaseTextInputComponent = forwardRef<TextInput, BaseTextInputProps>(
                         onBlur={handleBlur}
                         {...otherProps}
                     />
-                    {rightIcon && (
-                        <BaseIcon
-                            haptics="Light"
-                            action={onIconPress}
-                            name={rightIcon}
-                            size={24}
-                            color={theme.colors.text}
-                            style={styles.rightIconStyle}
-                            testID={rightIconTestID}
-                        />
-                    )}
+                    {renderRightIcon}
                 </BaseView>
                 {errorMessage && (
                     <BaseView pt={10} flexDirection="row" justifyContent="flex-start" style={styles.errorContainer}>

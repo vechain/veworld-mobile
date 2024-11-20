@@ -193,6 +193,19 @@ type RootTranslation = {
 	 */
 	APP_VERIFICATION_UNKNOWN: string
 	/**
+	 * B​a​c​k​i​n​g​ ​u​p​.​.​.
+	 */
+	BACKING_UP: string
+	/**
+	 * Y​o​u​r​ ​r​e​c​o​v​e​r​y​ ​p​h​r​a​s​e​ ​i​s​ ​n​o​w​ ​b​a​c​k​e​d​ ​u​p​ ​a​n​d​ ​s​a​f​e​ ​o​n​ ​{​c​l​o​u​d​T​y​p​e​}
+	 * @param {string} cloudType
+	 */
+	BACKUP_SUCCESSFUL_DESCRIPTION: RequiredParams<'cloudType'>
+	/**
+	 * B​a​c​k​u​p​ ​s​u​c​c​e​s​s​f​u​l​!
+	 */
+	BACKUP_SUCCESSFUL_TITLE: string
+	/**
 	 * B​a​c​k​u​p​ ​n​o​w
 	 */
 	BACKUP_YOUR_DEVICES_CTA: string
@@ -253,6 +266,11 @@ type RootTranslation = {
 	 */
 	BD_APP_THEME_DISCLAIMER: string
 	/**
+	 * {​c​l​o​u​d​T​y​p​e​}​ ​b​a​c​k​e​d​ ​u​p
+	 * @param {string} cloudType
+	 */
+	BD_BACKED_UP: RequiredParams<'cloudType'>
+	/**
 	 * B​a​c​k​e​d​ ​u​p​ ​t​o​ ​i​C​l​o​u​d
 	 */
 	BD_BACKED_UP_TO_CLOUD: string
@@ -293,9 +311,17 @@ type RootTranslation = {
 	 */
 	BD_CLOUD_INSERT_PASSWORD: string
 	/**
-	 * T​h​i​s​ ​p​a​s​s​w​o​r​d​ ​w​i​l​l​ ​s​e​c​u​r​e​ ​y​o​u​r​ ​s​e​c​r​e​t​ ​r​e​c​o​v​e​r​y​ ​p​h​r​a​s​e​ ​i​n​ ​t​h​e​ ​c​l​o​u​d​.​ ​V​e​W​o​r​l​d​ ​d​o​e​s​ ​N​O​T​ ​h​a​v​e​ ​a​c​c​e​s​s​ ​t​o​ ​y​o​u​r​ ​p​a​s​s​w​o​r​d​.​ ​W​e​ ​c​a​n​ ​N​O​T​ ​r​e​s​e​t​ ​i​t​ ​i​f​ ​y​o​u​ ​l​o​s​e​ ​i​t​,​ ​s​o​ ​k​e​e​p​ ​i​t​ ​s​a​f​e​.
+	 * T​h​i​s​ ​p​a​s​s​w​o​r​d​ ​i​s​ ​u​s​e​d​ ​t​o​ ​s​e​c​u​r​e​ ​y​o​u​r​ ​s​e​c​r​e​t​ ​r​e​c​o​v​e​r​y​ ​p​h​r​a​s​e​ ​b​a​c​k​u​p​.
 	 */
 	BD_CLOUD_PASSWORD_CREATION_MESSAGE: string
+	/**
+	 * T​h​e​ ​p​a​s​s​w​o​r​d​ ​i​s​ ​n​o​t​ ​r​e​c​o​v​e​r​a​b​l​e​ ​b​y​ ​V​e​W​o​r​l​d​ ​o​r​ ​a​n​y​o​n​e​,​ ​s​o​ ​m​a​k​e​ ​t​o​ ​s​u​r​e​ ​t​o​ ​r​e​m​e​m​b​e​r​ ​i​t​.
+	 */
+	BD_CLOUD_PASSWORD_RECOVER_MESSAGE: string
+	/**
+	 * I​ ​u​n​d​e​r​s​t​a​n​d​ ​t​h​a​t​ ​i​f​ ​I​ ​l​o​s​e​ ​t​h​i​s​ ​p​a​s​s​w​o​r​d​,​ ​I​ ​w​o​n​’​t​ ​b​e​ ​a​b​l​e​ ​t​o​ ​a​c​c​e​s​s​ ​t​h​e​ ​b​a​c​k​u​p​ ​a​n​d​ ​r​e​c​o​v​e​r​ ​m​y​ ​w​a​l​l​e​t​.
+	 */
+	BD_CLOUD_PASSWORD_WARNING_CHECKBOX: string
 	/**
 	 * C​o​l​l​e​c​t​i​o​n
 	 */
@@ -470,11 +496,11 @@ type RootTranslation = {
 	 */
 	BD_OTHER_NETWORKS_INDICATOR_DESC: string
 	/**
-	 * *​ ​P​a​s​s​w​o​r​d​s​ ​d​o​ ​n​o​t​ ​m​a​t​c​h
+	 * P​a​s​s​w​o​r​d​s​ ​d​o​n​'​t​ ​m​a​t​c​h
 	 */
 	BD_PASSWORDS_DO_NOT_MATCH: string
 	/**
-	 * *​ ​P​a​s​s​w​o​r​d​ ​i​s​ ​n​o​t​ ​s​t​r​o​n​g​ ​e​n​o​u​g​h​ ​(​m​i​n​ ​6​ ​c​h​a​r​a​c​t​e​r​s​,​ ​1​ ​n​u​m​b​e​r​,​ ​1​ ​s​p​e​c​i​a​l​ ​c​h​a​r​a​c​t​e​r​)
+	 * M​i​n​ ​6​ ​c​h​a​r​a​c​t​e​r​s​,​ ​1​ ​n​u​m​b​e​r​,​ ​1​ ​s​p​e​c​i​a​l​ ​c​h​a​r​a​c​t​e​r
 	 */
 	BD_PASSWORD_NOT_STRONG: string
 	/**
@@ -699,6 +725,14 @@ type RootTranslation = {
 	 */
 	BTN_BACKUP_MENMONIC: string
 	/**
+	 * B​a​c​k​u​p​ ​t​o​ ​G​o​o​g​l​e​ ​D​r​i​v​e
+	 */
+	BTN_BACKUP_TO_DRIVE: string
+	/**
+	 * B​a​c​k​u​p​ ​t​o​ ​i​C​l​o​u​d
+	 */
+	BTN_BACKUP_TO_ICLOUD: string
+	/**
 	 * B​u​y
 	 */
 	BTN_BUY: string
@@ -754,6 +788,15 @@ type RootTranslation = {
 	 * I​m​p​o​r​t​ ​a​n​ ​e​x​i​s​t​i​n​g​ ​w​a​l​l​e​t​ ​a​n​d​ ​m​a​n​a​g​e​ ​y​o​u​r​ ​v​e​c​h​a​i​n​ ​p​o​r​t​f​o​l​i​o
 	 */
 	BTN_CREATE_WALLET_TYPE_IMPORT_SUBTITLE: string
+	/**
+	 * D​e​l​e​t​e​ ​b​a​c​k​u​p​ ​f​r​o​m​ ​{​c​l​o​u​d​T​y​p​e​}
+	 * @param {string} cloudType
+	 */
+	BTN_DELETE_BACKUP_FROM_CLOUD: RequiredParams<'cloudType'>
+	/**
+	 * Y​e​s​,​ ​d​e​l​e​t​e​ ​b​a​c​k​u​p
+	 */
+	BTN_DELETE_BACKUP_FROM_CLOUD_CONFIRM: string
 	/**
 	 * D​o​w​n​l​o​a​d​ ​l​o​g​s
 	 */
@@ -819,6 +862,10 @@ type RootTranslation = {
 	 */
 	BTN_MNEMONIC_CLIPBOARD: string
 	/**
+	 * N​o​,​ ​g​o​ ​b​a​c​k
+	 */
+	BTN_NO_GO_BACK: string
+	/**
 	 * O​b​s​e​r​v​e​d
 	 */
 	BTN_OBSERVED: string
@@ -863,6 +910,10 @@ type RootTranslation = {
 	 */
 	BTN_RENAME_ACCOUNT: string
 	/**
+	 * R​e​p​e​a​t​ ​p​a​s​s​w​o​r​d
+	 */
+	BTN_REPEAT_PASSWORD: string
+	/**
 	 * R​e​s​e​t​ ​A​p​p
 	 */
 	BTN_RESET_APP: string
@@ -882,6 +933,10 @@ type RootTranslation = {
 	 * C​r​e​a​t​e​ ​p​a​s​s​w​o​r​d
 	 */
 	BTN_SECURITY_CREATE_PASSWORD: string
+	/**
+	 * C​r​e​a​t​e​ ​p​a​s​s​w​o​r​d​ ​t​o​ ​b​a​c​k​u​p
+	 */
+	BTN_SECURITY_CREATE_PASSWORD_BACKUP: string
 	/**
 	 * I​ ​s​t​a​t​e​ ​t​h​a​t​ ​I​ ​h​a​v​e​ ​b​a​c​k​e​d​ ​u​p​ ​m​y​ ​s​e​c​r​e​t​ ​p​h​r​a​s​e
 	 */
@@ -943,6 +998,10 @@ type RootTranslation = {
 	 * N​E​X​T​:​ ​S​E​C​R​E​T​ ​P​H​R​A​S​E
 	 */
 	BTN_WALLET_TUTORIAL_SLIDE_03: string
+	/**
+	 * W​r​i​t​e​ ​r​e​c​o​v​e​r​y​ ​p​a​s​s​w​o​r​d
+	 */
+	BTN_WRITE_RECOVERY_PASSWORD: string
 	/**
 	 * Y​o​u​ ​h​a​v​e​ ​r​e​j​e​c​t​e​d​ ​t​h​e​ ​c​e​r​t​i​f​i​c​a​t​e
 	 */
@@ -1041,7 +1100,7 @@ type RootTranslation = {
 	 */
 	COMMON_BTN_NEXT: string
 	/**
-	 * O​K
+	 * O​k
 	 */
 	COMMON_BTN_OK: string
 	/**
@@ -3010,7 +3069,7 @@ type RootTranslation = {
 	 */
 	TITLE_ALERT_FACE_ID_CANCELLED: string
 	/**
-	 * B​a​c​k​u​p​ ​t​o​ ​C​l​o​u​d
+	 * B​a​c​k​u​p​ ​t​o​ ​a​ ​C​l​o​u​d
 	 */
 	TITLE_BACKUP_CLOUD: string
 	/**
@@ -3589,6 +3648,18 @@ Try reconnect your device to the internet.
 	 */
 	APP_VERIFICATION_UNKNOWN: () => LocalizedString
 	/**
+	 * Backing up...
+	 */
+	BACKING_UP: () => LocalizedString
+	/**
+	 * Your recovery phrase is now backed up and safe on {cloudType}
+	 */
+	BACKUP_SUCCESSFUL_DESCRIPTION: (arg: { cloudType: string }) => LocalizedString
+	/**
+	 * Backup successful!
+	 */
+	BACKUP_SUCCESSFUL_TITLE: () => LocalizedString
+	/**
 	 * Backup now
 	 */
 	BACKUP_YOUR_DEVICES_CTA: () => LocalizedString
@@ -3649,6 +3720,10 @@ Try reconnect your device to the internet.
 	 */
 	BD_APP_THEME_DISCLAIMER: () => LocalizedString
 	/**
+	 * {cloudType} backed up
+	 */
+	BD_BACKED_UP: (arg: { cloudType: string }) => LocalizedString
+	/**
 	 * Backed up to iCloud
 	 */
 	BD_BACKED_UP_TO_CLOUD: () => LocalizedString
@@ -3689,9 +3764,17 @@ Try reconnect your device to the internet.
 	 */
 	BD_CLOUD_INSERT_PASSWORD: () => LocalizedString
 	/**
-	 * This password will secure your secret recovery phrase in the cloud. VeWorld does NOT have access to your password. We can NOT reset it if you lose it, so keep it safe.
+	 * This password is used to secure your secret recovery phrase backup.
 	 */
 	BD_CLOUD_PASSWORD_CREATION_MESSAGE: () => LocalizedString
+	/**
+	 * The password is not recoverable by VeWorld or anyone, so make to sure to remember it.
+	 */
+	BD_CLOUD_PASSWORD_RECOVER_MESSAGE: () => LocalizedString
+	/**
+	 * I understand that if I lose this password, I won’t be able to access the backup and recover my wallet.
+	 */
+	BD_CLOUD_PASSWORD_WARNING_CHECKBOX: () => LocalizedString
 	/**
 	 * Collection
 	 */
@@ -3865,11 +3948,11 @@ Try reconnect your device to the internet.
 	 */
 	BD_OTHER_NETWORKS_INDICATOR_DESC: () => LocalizedString
 	/**
-	 * * Passwords do not match
+	 * Passwords don't match
 	 */
 	BD_PASSWORDS_DO_NOT_MATCH: () => LocalizedString
 	/**
-	 * * Password is not strong enough (min 6 characters, 1 number, 1 special character)
+	 * Min 6 characters, 1 number, 1 special character
 	 */
 	BD_PASSWORD_NOT_STRONG: () => LocalizedString
 	/**
@@ -4093,6 +4176,14 @@ Try reconnect your device to the internet.
 	 */
 	BTN_BACKUP_MENMONIC: () => LocalizedString
 	/**
+	 * Backup to Google Drive
+	 */
+	BTN_BACKUP_TO_DRIVE: () => LocalizedString
+	/**
+	 * Backup to iCloud
+	 */
+	BTN_BACKUP_TO_ICLOUD: () => LocalizedString
+	/**
 	 * Buy
 	 */
 	BTN_BUY: () => LocalizedString
@@ -4148,6 +4239,14 @@ Try reconnect your device to the internet.
 	 * Import an existing wallet and manage your vechain portfolio
 	 */
 	BTN_CREATE_WALLET_TYPE_IMPORT_SUBTITLE: () => LocalizedString
+	/**
+	 * Delete backup from {cloudType}
+	 */
+	BTN_DELETE_BACKUP_FROM_CLOUD: (arg: { cloudType: string }) => LocalizedString
+	/**
+	 * Yes, delete backup
+	 */
+	BTN_DELETE_BACKUP_FROM_CLOUD_CONFIRM: () => LocalizedString
 	/**
 	 * Download logs
 	 */
@@ -4213,6 +4312,10 @@ Try reconnect your device to the internet.
 	 */
 	BTN_MNEMONIC_CLIPBOARD: () => LocalizedString
 	/**
+	 * No, go back
+	 */
+	BTN_NO_GO_BACK: () => LocalizedString
+	/**
 	 * Observed
 	 */
 	BTN_OBSERVED: () => LocalizedString
@@ -4257,6 +4360,10 @@ Try reconnect your device to the internet.
 	 */
 	BTN_RENAME_ACCOUNT: () => LocalizedString
 	/**
+	 * Repeat password
+	 */
+	BTN_REPEAT_PASSWORD: () => LocalizedString
+	/**
 	 * Reset App
 	 */
 	BTN_RESET_APP: () => LocalizedString
@@ -4276,6 +4383,10 @@ Try reconnect your device to the internet.
 	 * Create password
 	 */
 	BTN_SECURITY_CREATE_PASSWORD: () => LocalizedString
+	/**
+	 * Create password to backup
+	 */
+	BTN_SECURITY_CREATE_PASSWORD_BACKUP: () => LocalizedString
 	/**
 	 * I state that I have backed up my secret phrase
 	 */
@@ -4336,6 +4447,10 @@ Try reconnect your device to the internet.
 	 * NEXT: SECRET PHRASE
 	 */
 	BTN_WALLET_TUTORIAL_SLIDE_03: () => LocalizedString
+	/**
+	 * Write recovery password
+	 */
+	BTN_WRITE_RECOVERY_PASSWORD: () => LocalizedString
 	/**
 	 * You have rejected the certificate
 	 */
@@ -4433,7 +4548,7 @@ Try reconnect your device to the internet.
 	 */
 	COMMON_BTN_NEXT: () => LocalizedString
 	/**
-	 * OK
+	 * Ok
 	 */
 	COMMON_BTN_OK: () => LocalizedString
 	/**
@@ -6373,7 +6488,7 @@ Try reconnect your device to the internet.
 	 */
 	TITLE_ALERT_FACE_ID_CANCELLED: () => LocalizedString
 	/**
-	 * Backup to Cloud
+	 * Backup to a Cloud
 	 */
 	TITLE_BACKUP_CLOUD: () => LocalizedString
 	/**
