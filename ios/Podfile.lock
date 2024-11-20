@@ -1,8 +1,11 @@
 PODS:
+  - BigInt (5.0.0)
   - boost (1.76.0)
   - BVLinearGradient (2.8.3):
     - React-Core
   - CocoaAsyncSocket (7.6.5)
+  - Connect-Swift (0.12.0):
+    - SwiftProtobuf (~> 1.25.2)
   - DoubleConversion (1.1.6)
   - EXApplication (5.3.1):
     - ExpoModulesCore
@@ -115,7 +118,9 @@ PODS:
     - FlipperKit/Core
     - FlipperKit/FlipperKitNetworkPlugin
   - fmt (6.2.1)
+  - GenericJSON (2.0.2)
   - glog (0.3.5)
+  - GzipSwift (5.1.1)
   - hermes-engine (0.72.6):
     - hermes-engine/Pre-built (= 0.72.6)
   - hermes-engine/Pre-built (0.72.6)
@@ -132,10 +137,13 @@ PODS:
   - libwebp/sharpyuv (1.3.2)
   - libwebp/webp (1.3.2):
     - libwebp/sharpyuv
+  - LibXMTP (3.0.3)
+  - Logging (1.0.0)
   - lottie-ios (4.4.1)
   - lottie-react-native (6.7.2):
     - lottie-ios (= 4.4.1)
     - React-Core
+  - MessagePacker (0.4.7)
   - Mixpanel-swift (4.2.0):
     - Mixpanel-swift/Complete (= 4.2.0)
   - Mixpanel-swift/Complete (4.2.0)
@@ -620,7 +628,7 @@ PODS:
   - RNFlashList (1.7.2):
     - RCT-Folly (= 2021.07.22.00)
     - React-Core
-  - RNGestureHandler (2.21.0):
+  - RNGestureHandler (2.21.2):
     - RCT-Folly (= 2021.07.22.00)
     - React-Core
   - RNInAppBrowser (3.7.0):
@@ -683,9 +691,26 @@ PODS:
   - SDWebImageWebPCoder (0.8.5):
     - libwebp (~> 1.0)
     - SDWebImage/Core (~> 5.10)
+  - secp256k1.swift (0.1.4)
   - Sentry/HybridSDK (8.37.0)
   - SocketRocket (0.6.1)
+  - SwiftProtobuf (1.25.2)
   - UMAppLoader (4.2.0)
+  - web3.swift (1.6.0):
+    - BigInt (~> 5.0.0)
+    - GenericJSON (~> 2.0)
+    - Logging (~> 1.0.0)
+    - secp256k1.swift (~> 0.1)
+  - XMTP (3.0.6):
+    - Connect-Swift (= 0.12.0)
+    - GzipSwift
+    - LibXMTP (= 3.0.3)
+    - web3.swift
+  - XMTPReactNative (3.0.5):
+    - ExpoModulesCore
+    - MessagePacker
+    - secp256k1.swift
+    - XMTP (= 3.0.6)
   - Yoga (1.14.0)
   - YogaKit (1.18.1):
     - Yoga (~> 1.14)
@@ -815,11 +840,14 @@ DEPENDENCIES:
   - "RNSentry (from `../node_modules/@sentry/react-native`)"
   - RNSVG (from `../node_modules/react-native-svg`)
   - UMAppLoader (from `../node_modules/unimodules-app-loader/ios`)
+  - "XMTPReactNative (from `../node_modules/@xmtp/react-native-sdk/ios`)"
   - Yoga (from `../node_modules/react-native/ReactCommon/yoga`)
 
 SPEC REPOS:
   trunk:
+    - BigInt
     - CocoaAsyncSocket
+    - Connect-Swift
     - Flipper
     - Flipper-Boost-iOSX
     - Flipper-DoubleConversion
@@ -829,9 +857,14 @@ SPEC REPOS:
     - Flipper-PeerTalk
     - FlipperKit
     - fmt
+    - GenericJSON
+    - GzipSwift
     - libevent
     - libwebp
+    - LibXMTP
+    - Logging
     - lottie-ios
+    - MessagePacker
     - Mixpanel-swift
     - MMKV
     - MMKVCore
@@ -839,8 +872,12 @@ SPEC REPOS:
     - OpenSSL-Universal
     - SDWebImage
     - SDWebImageWebPCoder
+    - secp256k1.swift
     - Sentry
     - SocketRocket
+    - SwiftProtobuf
+    - web3.swift
+    - XMTP
     - YogaKit
     - ZXingObjC
 
@@ -1034,13 +1071,17 @@ EXTERNAL SOURCES:
     :path: "../node_modules/react-native-svg"
   UMAppLoader:
     :path: "../node_modules/unimodules-app-loader/ios"
+  XMTPReactNative:
+    :path: "../node_modules/@xmtp/react-native-sdk/ios"
   Yoga:
     :path: "../node_modules/react-native/ReactCommon/yoga"
 
 SPEC CHECKSUMS:
+  BigInt: 74b4d88367b0e819d9f77393549226d36faeb0d8
   boost: 57d2868c099736d80fcd648bf211b4431e51a558
   BVLinearGradient: 880f91a7854faff2df62518f0281afb1c60d49a3
   CocoaAsyncSocket: 065fd1e645c7abab64f7a6a2007a48038fdc6a99
+  Connect-Swift: 1de2ef4a548c59ecaeb9120812dfe0d6e07a0d47
   DoubleConversion: 5189b271737e1565bdce30deb4a08d647e3f5f54
   EXApplication: 042aa2e3f05258a16962ea1a9914bf288db9c9a1
   EXAV: f393dfc0b28214d62855a31e06eb21d426d6e2da
@@ -1070,12 +1111,17 @@ SPEC CHECKSUMS:
   Flipper-PeerTalk: 116d8f857dc6ef55c7a5a75ea3ceaafe878aadc9
   FlipperKit: 0674bb0e923016a5296838ae2aa9a10e7efc6b91
   fmt: ff9d55029c625d3757ed641535fd4a75fedc7ce9
+  GenericJSON: 79a840eeb77030962e8cf02a62d36bd413b67626
   glog: 04b94705f318337d7ead9e6d17c019bd9b1f6b1b
+  GzipSwift: 893f3e48e597a1a4f62fafcb6514220fcf8287fa
   hermes-engine: 8057e75cfc1437b178ac86c8654b24e7fead7f60
   libevent: 4049cae6c81cdb3654a443be001fb9bdceff7913
   libwebp: 1786c9f4ff8a279e4dac1e8f385004d5fc253009
+  LibXMTP: 948d39cf5b978adaa7d0f6ea5c6c0995a0b9e63f
+  Logging: 9ef4ecb546ad3169398d5a723bc9bea1c46bef26
   lottie-ios: e047b1d2e6239b787cc5e9755b988869cf190494
   lottie-react-native: 17547b2f3c7034e2ae8672833fdb63262164d18a
+  MessagePacker: ab2fe250e86ea7aedd1a9ee47a37083edd41fd02
   Mixpanel-swift: e5dd85295923e6a875acf17ccbab8d2ecb10ea65
   MixpanelReactNative: 0101b8828c2f335c128850e71ab7d3b7adde089a
   MMKV: f7d1d5945c8765f97f39c3d121f353d46735d801
@@ -1138,7 +1184,7 @@ SPEC CHECKSUMS:
   RNDeviceInfo: 59344c19152c4b2b32283005f9737c5c64b42fba
   RNFastImage: 5c9c9fed9c076e521b3f509fe79e790418a544e8
   RNFlashList: 1f1266e0cc2ccb5d56917b3a926adeaf1f901fdb
-  RNGestureHandler: d1ac410ba2504c92cfc2ebda0d414d75e5a1c0ff
+  RNGestureHandler: 0972b77a2cab0f1a61ca1a3ce348a424614f65c2
   RNInAppBrowser: e36d6935517101ccba0e875bac8ad7b0cb655364
   RNKeychain: a65256b6ca6ba6976132cc4124b238a5b13b3d9c
   RNLocalize: 1ce4263770515f53d3de442ce7657b3661b16a37
@@ -1151,13 +1197,18 @@ SPEC CHECKSUMS:
   RNSVG: af3907ac5d4fa26a862b75a16d8f15bc74f2ceda
   SDWebImage: a7f831e1a65eb5e285e3fb046a23fcfbf08e696d
   SDWebImageWebPCoder: 908b83b6adda48effe7667cd2b7f78c897e5111d
+  secp256k1.swift: a7e7a214f6db6ce5db32cc6b2b45e5c4dd633634
   Sentry: ee060c09b2f7ec1240e95c766ab44c04c7bdb052
   SocketRocket: f32cd54efbe0f095c4d7594881e52619cfe80b17
+  SwiftProtobuf: 407a385e97fd206c4fbe880cc84123989167e0d1
   UMAppLoader: e83f024f75f07802fce99739f04b4537d188caaf
+  web3.swift: 2263d1e12e121b2c42ffb63a5a7beb1acaf33959
+  XMTP: 48d0c71ef732ac4d79c2942902a132bf71661029
+  XMTPReactNative: 407231f8c776d69cc4160a07fb2279bfeee9724a
   Yoga: b76f1acfda8212aa16b7e26bcce3983230c82603
   YogaKit: f782866e155069a2cca2517aafea43200b01fd5a
   ZXingObjC: 8898711ab495761b2dbbdec76d90164a6d7e14c5
 
-PODFILE CHECKSUM: 226dced8ce96660bbafc2f8a412fbbd5921d6b54
+PODFILE CHECKSUM: 0bcd867197b46e289c37895744dd92fc66972cf2
 
 COCOAPODS: 1.14.3

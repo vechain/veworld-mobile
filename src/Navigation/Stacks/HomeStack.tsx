@@ -6,6 +6,7 @@ import { ConnectedLedgerDevice, Device, FungibleTokenWithBalance, LedgerAccountW
 import { Routes } from "~Navigation/Enums"
 import {
     AssetDetailScreen,
+    ChatScreen,
     ConnectedAppsScreen,
     EnableAdditionalSettings,
     HomeScreen,
@@ -73,6 +74,11 @@ export type RootStackParamListHome = {
         url: string
         ul?: boolean
     }
+    [Routes.CHAT_CONVERSATIONS]: undefined
+    [Routes.CHAT_CONVERSATION]: {
+        recipient: string
+    }
+    [Routes.CHAT_REQUESTS]: undefined
 }
 
 const { Navigator, Group, Screen } = createNativeStackNavigator<RootStackParamListHome>()
@@ -157,6 +163,12 @@ export const HomeStack = () => {
                     options={{ headerShown: false }}
                 />
                 <Screen name={Routes.WALLET_DETAILS} component={WalletDetailScreen} options={{ headerShown: false }} />
+            </Group>
+
+            <Group>
+                <Screen name={Routes.CHAT_CONVERSATIONS} component={ChatScreen} options={{ headerShown: false }} />
+                {/* <Screen name={Routes.CHAT_CONVERSATION} component={placeholder} options={{ headerShown: false }} />
+                <Screen name={Routes.CHAT_REQUESTS} component={placeholder} options={{ headerShown: false }} /> */}
             </Group>
         </Navigator>
     )

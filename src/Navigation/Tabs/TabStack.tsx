@@ -14,7 +14,6 @@ import {
     RootStackParamListSettings,
     SettingsStack,
 } from "~Navigation/Stacks"
-import { ChatStack } from "~Navigation/Stacks/ChatStack"
 import { HistoryStack, HistoryStackParamList } from "~Navigation/Stacks/HistoryStack"
 import { NFTStack, RootStackParamListNFT } from "~Navigation/Stacks/NFTStack"
 import { selectCurrentScreen, selectSelectedAccount, selectSelectedNetwork, useAppSelector } from "~Storage/Redux"
@@ -26,7 +25,6 @@ export type TabStackParamList = {
     DiscoverStack: NavigatorScreenParams<RootStackParamListBrowser>
     SettingsStack: NavigatorScreenParams<RootStackParamListSettings>
     [Routes.HISTORY_STACK]: NavigatorScreenParams<HistoryStackParamList>
-    ChatStack: any
 }
 
 const Tab = createBottomTabNavigator<TabStackParamList>()
@@ -121,16 +119,6 @@ export const TabStack = () => {
                     tabBarLabel: Routes.HISTORY,
                     tabBarTestID: "history-tab",
                     tabBarIcon: ({ focused }) => renderTabBarIcon(focused, "history"),
-                }}
-            />
-
-            <Tab.Screen
-                name="ChatStack"
-                component={ChatStack}
-                options={{
-                    tabBarLabel: "Chat",
-                    tabBarTestID: "chat-tab",
-                    tabBarIcon: ({ focused }) => renderTabBarIcon(focused, "chat-outline"),
                 }}
             />
 

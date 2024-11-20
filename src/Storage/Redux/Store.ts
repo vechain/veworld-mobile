@@ -19,6 +19,7 @@ import {
     WalletConnectSessionsSlice,
     AnalyticsSlice,
     BrowserSlice,
+    XmtpSlice,
 } from "./Slices"
 import { persistReducer } from "redux-persist"
 import { PersistConfig } from "redux-persist/es/types"
@@ -43,4 +44,5 @@ export const reducer = (nftPersistConfig: PersistConfig<NftSliceState>) =>
         [DiscoverySlice.name]: DiscoverySlice.reducer,
         [AnalyticsSlice.name]: AnalyticsSlice.reducer,
         [BrowserSlice.name]: BrowserSlice.reducer,
+        [XmtpSlice.name]: XmtpSlice.reducer,
     })

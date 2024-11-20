@@ -49,6 +49,7 @@ import { useFlipper } from "@react-navigation/devtools"
 import { Routes } from "~Navigation"
 import { isLocale, useI18nContext } from "~i18n"
 import { getLocales } from "react-native-localize"
+import { VeChatContextProvider } from "~Components/Providers/VeChat"
 
 const { fontFamily } = typography
 
@@ -112,24 +113,26 @@ const Main = () => {
 
     return (
         <GestureHandlerRootView style={{ flex: 1 }}>
-            <ConnexContextProvider>
-                <PersistQueryClientProvider
-                    client={queryClient}
-                    persistOptions={{
-                        persister: clientPersister,
-                    }}>
-                    <NavigationProvider>
-                        <WalletConnectContextProvider>
-                            <InAppBrowserProvider>
-                                <BottomSheetModalProvider>
-                                    <EntryPoint />
-                                </BottomSheetModalProvider>
-                            </InAppBrowserProvider>
-                        </WalletConnectContextProvider>
-                    </NavigationProvider>
-                    <BaseToast />
-                </PersistQueryClientProvider>
-            </ConnexContextProvider>
+            <VeChatContextProvider>
+                <ConnexContextProvider>
+                    <PersistQueryClientProvider
+                        client={queryClient}
+                        persistOptions={{
+                            persister: clientPersister,
+                        }}>
+                        <NavigationProvider>
+                            <WalletConnectContextProvider>
+                                <InAppBrowserProvider>
+                                    <BottomSheetModalProvider>
+                                        <EntryPoint />
+                                    </BottomSheetModalProvider>
+                                </InAppBrowserProvider>
+                            </WalletConnectContextProvider>
+                        </NavigationProvider>
+                        <BaseToast />
+                    </PersistQueryClientProvider>
+                </ConnexContextProvider>
+            </VeChatContextProvider>
         </GestureHandlerRootView>
     )
 }

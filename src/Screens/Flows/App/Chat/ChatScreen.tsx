@@ -1,13 +1,20 @@
-import React from "react"
+import React, { useMemo } from "react"
 import { Layout, SelectAccountBottomSheet } from "~Components"
 import Header from "./Components/Header"
-import { NestableScrollContainer } from "react-native-draggable-flatlist"
-import { selectSelectedAccount, selectVisibleAccounts, useAppSelector } from "~Storage/Redux"
+import { selectRegisteredClients, selectSelectedAccount, selectVisibleAccounts, useAppSelector } from "~Storage/Redux"
 import { useBottomSheetModal, useSetSelectedAccount } from "~Hooks"
+import ChatOnboarding from "./Components/ChatOnboarding"
+import ChatConversations from "./Components/ChatConversations"
 
 export const ChatScreen: React.FC = () => {
     const accounts = useAppSelector(selectVisibleAccounts)
     const currentAccount = useAppSelector(selectSelectedAccount)
+    const registeredClients = useAppSelector(selectRegisteredClients)
+
+    const isOnboarding = useMemo(
+        () => !registeredClients.includes(currentAccount.address),
+        [currentAccount.address, registeredClients],
+    )
 
     const { onSetSelectedAccount } = useSetSelectedAccount()
 
@@ -21,10 +28,10 @@ export const ChatScreen: React.FC = () => {
         <Layout
             noMargin
             noBackButton
-            fixedHeader={<Header onChangeAccountPress={openSelectAccountBottomSheet} />}
+            fixedHeader={<Header isOnboarding={isOnboarding} onChangeAccountPress={openSelectAccountBottomSheet} />}
             fixedBody={
                 <>
-                    <NestableScrollContainer />
+                    {isOnboarding ? <ChatOnboarding /> : <ChatConversations />}
 
                     <SelectAccountBottomSheet
                         accounts={accounts}

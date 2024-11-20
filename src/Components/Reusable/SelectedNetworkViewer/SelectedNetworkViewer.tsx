@@ -41,6 +41,7 @@ const selectedNetworkViewerStyle = (isMainnet: boolean) => (theme: ColorThemeTyp
             borderRadius: 10,
             backgroundColor: isMainnet ? theme.colors.card : theme.colors.testnetBackground,
             justifyContent: "center",
+            marginRight: 12,
         },
         networkViewerIconText: {
             flexDirection: "row",

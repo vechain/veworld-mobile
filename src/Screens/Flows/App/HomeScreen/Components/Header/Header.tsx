@@ -67,10 +67,14 @@ export const Header = memo(() => {
         nav.navigate(Routes.WALLET_MANAGEMENT)
     }, [nav])
 
+    const goToChat = useCallback(() => {
+        nav.navigate(Routes.CHAT_CONVERSATIONS)
+    }, [nav])
+
     return (
         <BaseView w={100} px={20} pb={8} flexDirection="row" alignItems="center" justifyContent="space-between">
             <BaseView alignItems="flex-start" alignSelf="flex-start">
-                <BaseText typographyFont="largeTitle" testID="veworld-homepage">
+                <BaseText typographyFont="title" testID="veworld-homepage">
                     {LL.VEWORLD()}
                 </BaseText>
             </BaseView>
@@ -82,17 +86,26 @@ export const Header = memo(() => {
                     size={24}
                     color={theme.colors.text}
                     action={handleOpenCamera}
-                    mx={12}
                     haptics="Light"
                 />
 
                 <BaseIcon
                     name={"wallet-outline"}
                     size={24}
-                    bg={theme.colors.secondary}
+                    color={theme.colors.text}
                     action={goToWalletManagement}
                     haptics="Light"
+                    mx={12}
                     testID="HomeScreen_WalletManagementButton"
+                />
+
+                <BaseIcon
+                    name={"chat-outline"}
+                    size={24}
+                    color={theme.colors.text}
+                    action={goToChat}
+                    haptics="Light"
+                    testID="HomeScreen_ChatButton"
                 />
             </BaseView>
 

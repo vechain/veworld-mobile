@@ -1,4 +1,5 @@
 import crypto from "react-native-quick-crypto"
+import { error } from "~Utils"
 
 const PREFIX = "0x"
 const PREFIX_REGEX = /^0[xX]/
@@ -78,6 +79,26 @@ const compare = (hex1: string, hex2: string): boolean => {
     }
 }
 
+const uint8ArrayToHexString = (byteArray: Uint8Array): string => {
+    return Array.from(byteArray, function (byte) {
+        return ("0" + (byte & 0xff).toString(16)).slice(-2)
+    }).join("")
+}
+
+const hexStringToUint8Array = (hexString: string): Uint8Array => {
+    // Ensure the hex string has an even number of characters for proper parsing
+    if (hexString.length % 2 !== 0) {
+        error("APP", "The hex string must have an even number of characters")
+        return new Uint8Array()
+    }
+    // Split the hex string into an array of byte-sized (2 characters) hex strings
+    const byteStrings = hexString.match(/.{1,2}/g) || []
+    // Convert each byte-sized hex string into a numeric byte value
+    const byteArray = byteStrings.map(byteStr => parseInt(byteStr, 16))
+    // Create a new Uint8Array from the array of numeric byte values
+    return new Uint8Array(byteArray)
+}
+
 export default {
     removePrefix,
     addPrefix,
@@ -87,4 +108,6 @@ export default {
     normalize,
     generateRandom,
     compare,
+    uint8ArrayToHexString,
+    hexStringToUint8Array,
 }
