@@ -53,7 +53,7 @@ export const useCloudKit = () => {
                 showErrorToast({
                     text1: LL.CLOUDKIT_ERROR_GENERIC(),
                 })
-                return
+                return false
             }
 
             try {
@@ -74,8 +74,11 @@ export const useCloudKit = () => {
                         showErrorToast({
                             text1: LL.CLOUDKIT_ERROR_GENERIC(),
                         })
+                        return false
                     }
+                    return true
                 }
+                return false
             } catch (_error: unknown) {
                 await deleteWallet(_rootAddress)
                 let er = _error as CKError
@@ -84,6 +87,7 @@ export const useCloudKit = () => {
                     text1: er.message,
                     text2: handleCloudKitErrors(er),
                 })
+                return false
             }
         },
         [LL, deleteWallet],

@@ -22,7 +22,6 @@ const {
     GET_ALL_BACKUPS,
     USER_UNRECOVERABLE_AUTH,
     GET_BACKUP,
-    BACKUP_NOT_FOUND,
     DELETE_BACKUP,
     SIGN_OUT,
     UNKNOWN_TYPE,
@@ -41,7 +40,6 @@ export const handleGoogleDriveErrors = (err: GDError) => {
         case DRIVE_CREATION:
             return i18n.i18n()[locale].GOOGLE_DRIVE_ERR_NETWORK()
 
-        case BACKUP_NOT_FOUND:
         case DELETE_BACKUP:
         case GET_BACKUP:
         case GET_ALL_BACKUPS:

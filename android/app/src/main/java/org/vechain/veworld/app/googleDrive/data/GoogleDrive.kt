@@ -21,8 +21,6 @@ import com.google.api.services.drive.model.FileList
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 import org.vechain.veworld.app.R
-import org.vechain.veworld.app.googleDrive.Constants
-import org.vechain.veworld.app.googleDrive.GDriveParams
 import java.nio.charset.StandardCharsets
 
 class GoogleDrive(private val context: Context) {
@@ -119,8 +117,8 @@ class GoogleDrive(private val context: Context) {
             do {
                 val result =
                     drive.files().list()
-                        .setSpaces(org.vechain.veworld.app.googleDrive.Constants.SPACE)
-                        .setFields(GDriveParams.FIELDS)
+                        .setSpaces("drive")
+                        .setFields("nextPageToken, files(id, name)")
                         .setQ("'$folderId' in parents and trashed = false")
                         .setPageToken(pageToken).execute()
 

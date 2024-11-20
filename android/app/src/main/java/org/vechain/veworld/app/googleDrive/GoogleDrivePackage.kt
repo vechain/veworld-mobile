@@ -57,7 +57,6 @@ class GoogleDrivePackage(private val reactContext: ReactApplicationContext) :
             DataError.Drive.DRIVE_CREATION.name to DataError.Drive.DRIVE_CREATION.code,
             DataError.Drive.OAUTH_INTERRUPTED.name to DataError.Drive.OAUTH_INTERRUPTED.code,
             DataError.Drive.DELETE_BACKUP.name to DataError.Drive.DELETE_BACKUP.code,
-            DataError.Drive.BACKUP_NOT_FOUND.name to DataError.Drive.BACKUP_NOT_FOUND.code,
             DataError.Drive.FOLDER_NOT_FOUND.name to DataError.Drive.FOLDER_NOT_FOUND.code,
             DataError.Drive.SIGN_IN_INTENT_CREATION.name to DataError.Drive.SIGN_IN_INTENT_CREATION.code,
             DataError.Drive.GOOGLE_SERVICES_UNAVAILABLE.name to DataError.Drive.GOOGLE_SERVICES_UNAVAILABLE.code,
@@ -255,11 +254,11 @@ class GoogleDrivePackage(private val reactContext: ReactApplicationContext) :
         }
 
         val listener = getActivityResultListener({ drive ->
-            viewModel.getBackup(drive, "${Constants.WALLET_ZONE}_$rootAddress") { result ->
+            viewModel.getBackup(drive, "WALLET_ZONE_$rootAddress") { result ->
                 when (result) {
                     is Result.Success -> {
                         val backup = result.data
-                        promise.resolve(backup.toWritableMap())
+                        promise.resolve(backup?.toWritableMap())
                     }
 
                     is Result.Error -> {
@@ -308,7 +307,7 @@ class GoogleDrivePackage(private val reactContext: ReactApplicationContext) :
         }
 
         val listener = getActivityResultListener({ drive ->
-            viewModel.deleteBackup(drive, "${Constants.WALLET_ZONE}_$rootAddress") { result ->
+            viewModel.deleteBackup(drive, "WALLET_ZONE_$rootAddress") { result ->
                 when (result) {
                     is Result.Success -> {
                         promise.resolve(null)

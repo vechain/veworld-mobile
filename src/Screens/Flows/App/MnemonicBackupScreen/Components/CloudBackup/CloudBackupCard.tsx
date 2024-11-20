@@ -1,9 +1,10 @@
-import React, { FC, useCallback, useEffect, useMemo, useState } from "react"
 import Lottie from "lottie-react-native"
+import React, { FC, useCallback, useEffect, useMemo, useState } from "react"
 import { StyleSheet } from "react-native"
 import { getTimeZone } from "react-native-localize"
 import { LoaderDark, LoaderLight } from "~Assets"
 import {
+    BackupSuccessfulBottomSheet,
     BaseIcon,
     BaseText,
     BaseTouchableBox,
@@ -11,7 +12,6 @@ import {
     CardWithHeader,
     CloudKitWarningBottomSheet,
     showErrorToast,
-    BackupSuccessfulBottomSheet,
 } from "~Components"
 import { COLORS, ColorThemeType, DerivationPath, typography } from "~Constants"
 import { useBottomSheetModal, useCloudBackup, useThemedStyles } from "~Hooks"
@@ -66,7 +66,7 @@ export const CloudBackupCard: FC<Props> = ({ mnemonicArray, deviceToBackup }) =>
                 const salt = HexUtils.generateRandom(256)
                 const iv = PasswordUtils.getRandomIV(16)
                 const mnemonic = await CryptoUtils.encrypt(mnemonicArray, password, salt, iv)
-                await saveWalletToCloud({
+                const isOperationSuccessfull = await saveWalletToCloud({
                     mnemonic,
                     _rootAddress: deviceToBackup?.rootAddress,
                     deviceType: deviceToBackup?.type,
@@ -76,26 +76,29 @@ export const CloudBackupCard: FC<Props> = ({ mnemonicArray, deviceToBackup }) =>
                     derivationPath: deviceToBackup?.derivationPath ?? DerivationPath.VET,
                 })
 
-                setIsLoading(false)
-                setIsWalletBackedUp(true)
+                if (isOperationSuccessfull) {
+                    const formattedDate = DateUtils.formatDateTime(
+                        Date.now(),
+                        locale,
+                        getTimeZone() ?? DateUtils.DEFAULT_TIMEZONE,
+                    )
+                    dispatch(
+                        setDeviceIsBackup({
+                            rootAddress: deviceToBackup.rootAddress,
+                            isBackup: true,
+                            date: formattedDate,
+                        }),
+                    )
+                    setIsWalletBackedUp(true)
+                    onOpenSuccess()
+                } else {
+                    showErrorToast({
+                        text1: PlatformUtils.isIOS() ? LL.CLOUDKIT_ERROR_GENERIC() : LL.GOOGLE_DRIVE_ERROR_GENERIC(),
+                    })
+                }
 
-                const formattedDate = DateUtils.formatDateTime(
-                    Date.now(),
-                    locale,
-                    getTimeZone() ?? DateUtils.DEFAULT_TIMEZONE,
-                )
-                dispatch(
-                    setDeviceIsBackup({
-                        rootAddress: deviceToBackup.rootAddress,
-                        isBackup: true,
-                        date: formattedDate,
-                    }),
-                )
-                await getWalletByRootAddress(deviceToBackup.rootAddress)
                 onCloseWarning()
-                setIsWalletBackedUp(true)
                 setIsLoading(false)
-                onOpenSuccess()
             } catch (error) {
                 setIsLoading(false)
                 showErrorToast({
@@ -110,7 +113,6 @@ export const CloudBackupCard: FC<Props> = ({ mnemonicArray, deviceToBackup }) =>
             deviceToBackup?.type,
             deviceToBackup?.xPub,
             dispatch,
-            getWalletByRootAddress,
             locale,
             mnemonicArray,
             onCloseWarning,

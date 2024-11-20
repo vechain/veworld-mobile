@@ -12,7 +12,6 @@ import com.google.gson.GsonBuilder
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
-import org.vechain.veworld.app.googleDrive.Constants
 import org.vechain.veworld.app.googleDrive.data.GoogleDrive
 import org.vechain.veworld.app.googleDrive.domain.DerivationPath
 import org.vechain.veworld.app.googleDrive.domain.DerivationPathDeserializer
@@ -156,7 +155,7 @@ class GoogleDriveViewModel(private val googleDrive: GoogleDrive) : ViewModel() {
     fun getBackup(
         drive: Drive,
         fileName: String,
-        onResult: (Result<DriveBackupFile, DataError.Drive>) -> Unit,
+        onResult: (Result<DriveBackupFile?, DataError.Drive>) -> Unit,
     ) {
         if (!googleDrive.areGooglePlayServicesAvailable()) {
             return onResult(Result.Error(DataError.Drive.GOOGLE_SERVICES_UNAVAILABLE))
@@ -178,7 +177,7 @@ class GoogleDriveViewModel(private val googleDrive: GoogleDrive) : ViewModel() {
                             )
                             onResult(Result.Success(backup))
                         }
-                    } ?: onResult(Result.Error(DataError.Drive.BACKUP_NOT_FOUND))
+                    } ?: onResult(Result.Success(null))
                 } ?: onResult(Result.Error(DataError.Drive.FOLDER_NOT_FOUND))
             } catch (e: UserRecoverableAuthIOException) {
                 googleDrive.signOut()
@@ -211,7 +210,7 @@ class GoogleDriveViewModel(private val googleDrive: GoogleDrive) : ViewModel() {
                             googleDrive.deleteFile(drive, fileId)
                             onResult(Result.Success(null).asEmptyDataResult())
                         }
-                    } ?: onResult(Result.Error(DataError.Drive.BACKUP_NOT_FOUND))
+                    } ?: onResult(Result.Success(null).asEmptyDataResult())
                 } ?: onResult(Result.Error(DataError.Drive.FOLDER_NOT_FOUND))
             } catch (e: UserRecoverableAuthIOException) {
                 googleDrive.signOut()
@@ -235,7 +234,7 @@ class GoogleDriveViewModel(private val googleDrive: GoogleDrive) : ViewModel() {
         viewModelScope.launch {
             try {
                 val fileMetadata = File()
-                fileMetadata.name = "${Constants.WALLET_ZONE}_${driveBackupFile.rootAddress}.json"
+                fileMetadata.name = "WALLET_ZONE_${driveBackupFile.rootAddress}.json"
                 val folderId = googleDrive.getFolderByName(drive) ?: googleDrive.createFolder(drive)
                 fileMetadata.parents = listOf(folderId)
                 val jsonData = gson.toJson(driveBackupFile)
