@@ -8,7 +8,7 @@ import {
     SelectLedgerDevice,
 } from "~Screens"
 import { Routes } from "~Navigation/Enums"
-import { ConnectedLedgerDevice } from "~Model"
+import { CloudKitWallet, ConnectedLedgerDevice, DrivetWallet } from "~Model"
 import { useNavAnimation } from "~Hooks"
 
 export type RootStackParamListCreateWalletApp = {
@@ -21,7 +21,9 @@ export type RootStackParamListCreateWalletApp = {
     [Routes.IMPORT_HW_LEDGER_SELECT_ACCOUNTS]: {
         device: ConnectedLedgerDevice
     }
-    [Routes.IMPORT_FROM_CLOUD]: undefined
+    [Routes.IMPORT_FROM_CLOUD]: {
+        wallets: CloudKitWallet[] | DrivetWallet[]
+    }
 }
 
 const CreateWalletApp = createNativeStackNavigator<RootStackParamListCreateWalletApp>()

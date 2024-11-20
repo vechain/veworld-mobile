@@ -2,7 +2,14 @@ import { createNativeStackNavigator } from "@react-navigation/native-stack"
 import React from "react"
 import { Transaction } from "thor-devkit"
 import { TokenWithCompleteInfo, useNavAnimation } from "~Hooks"
-import { ConnectedLedgerDevice, Device, FungibleTokenWithBalance, LedgerAccountWithDevice } from "~Model"
+import {
+    CloudKitWallet,
+    ConnectedLedgerDevice,
+    Device,
+    DrivetWallet,
+    FungibleTokenWithBalance,
+    LedgerAccountWithDevice,
+} from "~Model"
 import { Routes } from "~Navigation/Enums"
 import {
     AssetDetailScreen,
@@ -68,7 +75,9 @@ export type RootStackParamListHome = {
     [Routes.IMPORT_HW_LEDGER_SELECT_ACCOUNTS]: {
         device: ConnectedLedgerDevice
     }
-    [Routes.IMPORT_FROM_CLOUD]: undefined
+    [Routes.IMPORT_FROM_CLOUD]: {
+        wallets: CloudKitWallet[] | DrivetWallet[]
+    }
     [Routes.BROWSER]: {
         url: string
         ul?: boolean

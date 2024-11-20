@@ -5,15 +5,11 @@ import { DerivationPath, ERROR_EVENTS } from "~Constants"
 import { useI18nContext } from "~i18n"
 import { DEVICE_TYPE } from "~Model"
 import { error, PasswordUtils } from "~Utils"
-import { GDError, handleGoogleDriveErrors, OAUTH_INTERRUPTED } from "./ErrorModel"
+import { GDError, handleGoogleDriveErrors, isCancelError } from "./ErrorModel"
 const { GoogleDriveManager } = NativeModules
 
 export const useGoogleDrive = () => {
     const { LL } = useI18nContext()
-
-    const isCancelError = (message: string) => {
-        return message === OAUTH_INTERRUPTED
-    }
 
     const getGoogleServicesAvailability = useCallback(async () => {
         try {

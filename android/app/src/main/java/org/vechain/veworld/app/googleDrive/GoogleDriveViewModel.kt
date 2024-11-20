@@ -2,7 +2,6 @@ package org.vechain.veworld.app.googleDrive
 
 import android.app.Activity
 import android.content.Intent
-import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.facebook.react.bridge.ActivityEventListener
@@ -31,6 +30,7 @@ import kotlinx.coroutines.launch
 import kotlinx.coroutines.suspendCancellableCoroutine
 import kotlinx.coroutines.withContext
 import org.vechain.veworld.app.R
+import org.vechain.veworld.app.googleDrive.domain.DriveBackupFile
 import java.io.ByteArrayOutputStream
 import java.io.FileNotFoundException
 import java.nio.charset.StandardCharsets
@@ -44,7 +44,8 @@ object Constants {
 }
 
 enum class Request(val value: Int) {
-    GOOGLE_SIGN_IN(122)
+    GOOGLE_SIGN_IN(122),
+    REQUEST_AUTHORIZATION(1234)
 }
 
 object GDriveParams {
@@ -54,14 +55,71 @@ object GDriveParams {
 }
 
 class GoogleDriveViewModel(
-    private val gson: Gson = Gson(),
+    private val reactContext: ReactApplicationContext,
 ) : ViewModel() {
+    private val gson: Gson = Gson()
     private var googleSignInClient: GoogleSignInClient? = null
+    private var pendingOperation: (() -> Unit)? = null
+    private val activityResultHandlers = mutableMapOf<Int, (Int, Activity?, Intent?) -> Unit>()
 
-    private fun hasPermissionToGoogleDrive(reactContext: ReactApplicationContext): Boolean {
-        val acc = GoogleSignIn.getLastSignedInAccount(reactContext)
+    private val activityListener = object : ActivityEventListener {
+        override fun onActivityResult(
+            activity: Activity?,
+            requestCode: Int,
+            resultCode: Int,
+            data: Intent?,
+        ) {
+            if (requestCode == REQUEST_AUTHORIZATION && resultCode == Activity.RESULT_OK) {
+                pendingOperation?.invoke()
+            }
+        }
+
+        override fun onNewIntent(p0: Intent?) {}
+    }
+
+    init {
+        reactContext.addActivityEventListener(activityListener)
+    }
+
+    override fun onCleared() {
+        super.onCleared()
+        reactContext.removeActivityEventListener(activityListener)
+    }
+
+    fun onActivityResultHandler(
+        activity: Activity?,
+        requestCode: Int,
+        resultCode: Int,
+        intent: Intent?,
+    ) {
+        val handler = activityResultHandlers[requestCode]
+        handler?.invoke(resultCode, activity, intent)
+    }
+
+    private fun registerHandler(
+        requestCode: Int,
+        handler: (Int, Activity?, Intent?) -> Unit,
+    ) {
+        activityResultHandlers[requestCode] = handler
+    }
+
+    private fun unregisterHandler(requestCode: Int) {
+        activityResultHandlers.remove(requestCode)
+    }
+
+
+    private fun hasPermissionToGoogleDrive(
+        reactContext: ReactApplicationContext,
+        account: GoogleSignInAccount?,
+    ): Boolean {
         val hasPermissions =
-            acc?.let { GoogleSignIn.hasPermissions(acc, Scope(DriveScopes.DRIVE_FILE)) }
+            account?.let {
+                GoogleSignIn.hasPermissions(
+                    account,
+                    Scope(DriveScopes.DRIVE_FILE),
+                    Scope(DriveScopes.DRIVE_APPDATA)
+                )
+            }
         return hasPermissions == true
     }
 
@@ -71,60 +129,64 @@ class GoogleDriveViewModel(
             val signInOptions =
                 GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN).requestEmail()
                     .requestScopes(
-                        Scope(DriveScopes.DRIVE_FILE),
+                        Scope(DriveScopes.DRIVE_FILE), Scope(DriveScopes.DRIVE_APPDATA)
                     ).build()
             return GoogleSignIn.getClient(activity, signInOptions)
         } else {
-            throw IllegalStateException(GoogleDriveManager.ACTIVITY_NULL)
+            throw IllegalStateException(GoogleDrivePackage.ACTIVITY_NULL)
         }
     }
 
     private suspend fun getGoogleDrivePermissions(reactContext: ReactApplicationContext): GoogleSignInAccount? =
         suspendCancellableCoroutine { continuation ->
             try {
-                if (googleSignInClient != null) {
+                /*if (googleSignInClient != null) {
                     val account = GoogleSignIn.getLastSignedInAccount(reactContext)
-                    continuation.resumeWith(Result.success(account))
+
+                    if (hasPermissionToGoogleDrive(reactContext, account)) {
+                        continuation.resumeWith(Result.success(account))
+                    } else {
+                        googleSignInClient?.signOut()
+                        googleSignInClient = null
+                        continuation.resumeWith(Result.failure(Exception(GoogleDriveManager.OAUTH_INTERRUPTED)))
+                    }
                     return@suspendCancellableCoroutine
-                }
+                }*/
 
                 googleSignInClient = getGoogleSignInClient(reactContext)
                 val signInIntent = googleSignInClient?.signInIntent
+
+                registerHandler(Request.GOOGLE_SIGN_IN.value) { resultCode, _, intent ->
+                    unregisterHandler(Request.GOOGLE_SIGN_IN.value)
+
+                    if (resultCode == Activity.RESULT_OK) {
+                        val signInTask = GoogleSignIn.getSignedInAccountFromIntent(intent)
+                        val account: GoogleSignInAccount? =
+                            signInTask.getResult(ApiException::class.java)
+
+                        if (hasPermissionToGoogleDrive(reactContext, account)) {
+                            continuation.resumeWith(Result.success(account))
+                        } else {
+                            googleSignInClient?.signOut()
+                            googleSignInClient = null
+                            continuation.resumeWith(Result.failure(Exception(GoogleDrivePackage.OAUTH_INTERRUPTED)))
+                        }
+
+                    } else {
+                        googleSignInClient?.signOut()
+                        googleSignInClient = null
+                        continuation.resumeWith(Result.failure(Exception(GoogleDrivePackage.OAUTH_INTERRUPTED)))
+                    }
+                }
+
                 reactContext.currentActivity?.startActivityForResult(
                     signInIntent, Request.GOOGLE_SIGN_IN.value
                 )
 
-                val listener = object : ActivityEventListener {
-                    override fun onActivityResult(
-                        activity: Activity?,
-                        requestCode: Int,
-                        resultCode: Int,
-                        intent: Intent?,
-                    ) {
-                        // Remove the listener after using it
-                        reactContext.removeActivityEventListener(this)
-                        if (requestCode == Request.GOOGLE_SIGN_IN.value && resultCode == Activity.RESULT_OK) {
-
-                            val signInTask = GoogleSignIn.getSignedInAccountFromIntent(intent)
-                            val account: GoogleSignInAccount? =
-                                signInTask.getResult(ApiException::class.java)
-                            continuation.resumeWith(Result.success(account))
-
-                        } else {
-                            continuation.resumeWith(Result.failure(Exception(GoogleDriveManager.OAUTH_INTERRUPTED)))
-                            googleSignInClient?.signOut()
-                            googleSignInClient = null
-                        }
-                    }
-
-                    override fun onNewIntent(p0: Intent?) {}
-                }
-
-                reactContext.addActivityEventListener(listener)
             } catch (e: Exception) {
                 continuation.resumeWith(
                     Result.failure(
-                        Exception(GoogleDriveManager.FAILED_TO_GET_DRIVE)
+                        Exception(GoogleDrivePackage.FAILED_TO_GET_DRIVE)
                     )
                 )
             }
@@ -132,20 +194,12 @@ class GoogleDriveViewModel(
 
     private suspend fun getGoogleDrive(
         reactContext: ReactApplicationContext,
-        useRecentAccount: Boolean = false,
     ): Pair<Drive?, GoogleSignInAccount?> {
         return withContext(Dispatchers.IO) {
-            val canUseRecentAccount = useRecentAccount && hasPermissionToGoogleDrive(reactContext)
-
-            val account = if (canUseRecentAccount) {
-                GoogleSignIn.getLastSignedInAccount(reactContext)
-            } else {
-                getGoogleDrivePermissions(reactContext)
-            }
-
+            val account = getGoogleDrivePermissions(reactContext)
             val drive = account?.let {
                 val credential = GoogleAccountCredential.usingOAuth2(
-                    reactContext, listOf(DriveScopes.DRIVE_APPDATA)
+                    reactContext, listOf(DriveScopes.DRIVE_FILE, DriveScopes.DRIVE_APPDATA)
                 )
 
                 credential.selectedAccount = account.account!!
@@ -153,6 +207,10 @@ class GoogleDriveViewModel(
                 Drive.Builder(
                     NetHttpTransport(), GsonFactory.getDefaultInstance(), credential
                 ).setApplicationName(reactContext.getString(R.string.app_name)).build()
+            }
+
+            if (drive == null) {
+                googleSignInClient = null
             }
 
             Pair(drive, account)
@@ -173,30 +231,18 @@ class GoogleDriveViewModel(
     }
 
     private fun getFolderById(drive: Drive): String? {
-        return try {
-            val result = drive.files().list()
-                .setQ("mimeType='application/vnd.google-apps.folder' and name='${Constants.FOLDER_NAME}' and trashed=false")
-                .setSpaces(Constants.SPACE).setFields("files(id, name)").execute()
-
-            result.files.firstOrNull()?.id
-        } catch (e: Exception) {
-            e.printStackTrace()
-            null
-        }
+        val result = drive.files().list()
+            .setQ("mimeType='application/vnd.google-apps.folder' and name='${Constants.FOLDER_NAME}' and trashed=false")
+            .setSpaces(Constants.SPACE).setFields("files(id, name)").execute()
+        return result.files.firstOrNull()?.id
     }
 
     private fun createFolder(drive: Drive): String? {
-        return try {
-            val fileMetadata = File()
-            fileMetadata.name = Constants.FOLDER_NAME
-            fileMetadata.mimeType = "application/vnd.google-apps.folder"
-
-            val folder = drive.files().create(fileMetadata).setFields("id").execute()
-            folder.id
-        } catch (e: Exception) {
-            e.printStackTrace()
-            null
-        }
+        val fileMetadata = File()
+        fileMetadata.name = Constants.FOLDER_NAME
+        fileMetadata.mimeType = "application/vnd.google-apps.folder"
+        val folder = drive.files().create(fileMetadata).setFields("id").execute()
+        return folder.id
     }
 
     private fun saveMnemonicToGoogleDrive(
@@ -256,7 +302,6 @@ class GoogleDriveViewModel(
         return allFiles
     }
 
-
     fun getAllWalletsFromGoogleDrive(reactContext: ReactApplicationContext, promise: Promise) {
         viewModelScope.launch {
             try {
@@ -269,11 +314,13 @@ class GoogleDriveViewModel(
                             files.files.forEach { file ->
                                 launch {
                                     val outputStream = ByteArrayOutputStream()
-                                    drive.files()[file.id].executeMediaAndDownloadTo(outputStream)
-                                    val DriveBackupFile: DriveBackupFile = gson.fromJson(
+                                    drive.files()[file.id].executeMediaAndDownloadTo(
+                                        outputStream
+                                    )
+                                    val driveBackupFile: DriveBackupFile = gson.fromJson(
                                         outputStream.toString(), DriveBackupFile::class.java
                                     )
-                                    mnemonics.add(DriveBackupFile)
+                                    mnemonics.add(driveBackupFile)
                                 }
                             }
                         }
@@ -293,7 +340,7 @@ class GoogleDriveViewModel(
                 )
                 promise.reject(
                     "cloudError",
-                    GoogleDriveManager.UNAUTHORIZED,
+                    GoogleDrivePackage.UNAUTHORIZED,
                     e
                 )
             } catch (e: Exception) {
@@ -328,7 +375,7 @@ class GoogleDriveViewModel(
                 )
                 promise.reject(
                     "deleteBackupError",
-                    GoogleDriveManager.UNAUTHORIZED,
+                    GoogleDrivePackage.UNAUTHORIZED,
                     e
                 )
             } catch (e: Exception) {
@@ -349,7 +396,7 @@ class GoogleDriveViewModel(
     ) {
         viewModelScope.launch {
             try {
-                getGoogleDrive(reactContext, true).let { (drive) ->
+                getGoogleDrive(reactContext).let { (drive) ->
                     if (drive == null) {
                         return@launch
                     }
@@ -377,19 +424,19 @@ class GoogleDriveViewModel(
                 )
                 promise.reject(
                     "deleteBackupError",
-                    GoogleDriveManager.UNAUTHORIZED,
+                    GoogleDrivePackage.UNAUTHORIZED,
                     e
                 )
             } catch (e: FileNotFoundException) {
                 promise.reject(
                     "deleteBackupError",
-                    GoogleDriveManager.FAILED_TO_LOCATE_WALLET,
+                    GoogleDrivePackage.FAILED_TO_LOCATE_WALLET,
                     e
                 )
             } catch (e: Exception) {
                 promise.reject(
                     "deleteBackupError",
-                    GoogleDriveManager.FAILED_TO_DELETE_WALLET,
+                    GoogleDrivePackage.FAILED_TO_DELETE_WALLET,
                     e
                 )
             }
@@ -397,56 +444,62 @@ class GoogleDriveViewModel(
     }
 
     fun getWallet(rootAddress: String, reactContext: ReactApplicationContext, promise: Promise) {
-        viewModelScope.launch {
-            try {
-                getGoogleDrive(reactContext, true).let { (drive) ->
-                    if (drive == null) {
-                        return@launch
-                    }
-
-                    withContext(Dispatchers.IO) {
-                        val folderId = getFolderById(drive)
-
-                        folderId?.let { id ->
-                            val fileId = getFileIdByFileName(
-                                drive,
-                                "${Constants.WALLET_ZONE}_$rootAddress",
-                                id
-                            )
-                            if (fileId != null) {
-                                val outputStream = ByteArrayOutputStream()
-                                drive.files()[fileId].executeMediaAndDownloadTo(outputStream)
-                                val driveBackupFile: DriveBackupFile = gson.fromJson(
-                                    outputStream.toString(), DriveBackupFile::class.java
-                                )
-                                promise.resolve(driveBackupFile.toWritableMap())
-                                return@withContext
-                            }
+        pendingOperation = {
+            viewModelScope.launch {
+                try {
+                    getGoogleDrive(reactContext).let { (drive) ->
+                        if (drive == null) {
+                            return@launch
                         }
 
-                        promise.resolve(null)
+                        withContext(Dispatchers.IO) {
+                            val folderId = getFolderById(drive)
+
+                            folderId?.let { id ->
+                                val fileId = getFileIdByFileName(
+                                    drive,
+                                    "${Constants.WALLET_ZONE}_$rootAddress",
+                                    id
+                                )
+                                if (fileId != null) {
+                                    val outputStream = ByteArrayOutputStream()
+                                    drive.files()[fileId].executeMediaAndDownloadTo(outputStream)
+                                    val driveBackupFile: DriveBackupFile = gson.fromJson(
+                                        outputStream.toString(), DriveBackupFile::class.java
+                                    )
+                                    promise.resolve(driveBackupFile.toWritableMap())
+                                    pendingOperation = null
+                                    reactContext.removeActivityEventListener(activityListener)
+                                    return@withContext
+                                }
+                            }
+
+                            pendingOperation = null
+                            reactContext.removeActivityEventListener(activityListener)
+                            promise.resolve(null)
+                        }
                     }
+                } catch (e: UserRecoverableAuthIOException) {
+                    reactContext.currentActivity?.startActivityForResult(
+                        e.intent,
+                        REQUEST_AUTHORIZATION
+                    )
+                } catch (e: Exception) {
+                    reactContext.removeActivityEventListener(activityListener)
+                    pendingOperation = null
+                    reactContext.removeActivityEventListener(activityListener)
+                    promise.reject("getWallet", GoogleDrivePackage.FAILED_TO_GET_WALLET, e)
                 }
-            } catch (e: UserRecoverableAuthIOException) {
-                reactContext.currentActivity?.startActivityForResult(
-                    e.intent,
-                    REQUEST_AUTHORIZATION
-                )
-                promise.reject(
-                    "getWallet",
-                    GoogleDriveManager.UNAUTHORIZED,
-                    e
-                )
-            } catch (e: Exception) {
-                promise.reject("getWallet", GoogleDriveManager.FAILED_TO_GET_WALLET, e)
             }
         }
+
+        pendingOperation?.invoke()
     }
 
     fun getSalt(rootAddress: String, reactContext: ReactApplicationContext, promise: Promise) {
         viewModelScope.launch {
             try {
-                getGoogleDrive(reactContext, true).let { (drive) ->
+                getGoogleDrive(reactContext).let { (drive) ->
                     if (drive == null) {
                         return@launch
                     }
@@ -469,7 +522,7 @@ class GoogleDriveViewModel(
                                 promise.resolve(WritableNativeMap().apply {
                                     putString(
                                         "salt",
-                                        driveBackupFile.salt
+                                        driveBackupFile.salt.value
                                     )
                                 })
                             }
@@ -483,11 +536,11 @@ class GoogleDriveViewModel(
                 )
                 promise.reject(
                     "getSalt",
-                    GoogleDriveManager.UNAUTHORIZED,
+                    GoogleDrivePackage.UNAUTHORIZED,
                     e
                 )
             } catch (e: Exception) {
-                promise.reject("getSalt", GoogleDriveManager.FAILED_TO_GET_SALT, e)
+                promise.reject("getSalt", GoogleDrivePackage.FAILED_TO_GET_SALT, e)
             }
 
         }
@@ -496,7 +549,7 @@ class GoogleDriveViewModel(
     fun getIV(rootAddress: String, reactContext: ReactApplicationContext, promise: Promise) {
         viewModelScope.launch {
             try {
-                getGoogleDrive(reactContext, true).let { (drive) ->
+                getGoogleDrive(reactContext).let { (drive) ->
                     if (drive == null) {
                         return@launch
                     }
@@ -519,7 +572,7 @@ class GoogleDriveViewModel(
                                 promise.resolve(WritableNativeMap().apply {
                                     putString(
                                         "iv",
-                                        driveBackupFile.iv
+                                        driveBackupFile.iv.value
                                     )
                                 })
                             }
@@ -533,11 +586,11 @@ class GoogleDriveViewModel(
                 )
                 promise.reject(
                     "getIV",
-                    GoogleDriveManager.UNAUTHORIZED,
+                    GoogleDrivePackage.UNAUTHORIZED,
                     e
                 )
             } catch (e: Exception) {
-                promise.reject("getIV", GoogleDriveManager.FAILED_TO_GET_IV, e)
+                promise.reject("getIV", GoogleDrivePackage.FAILED_TO_GET_IV, e)
             }
         }
     }
@@ -548,7 +601,7 @@ class GoogleDriveViewModel(
             googleSignInClient = null
             promise.resolve(null)
         } catch (e: Exception) {
-            promise.reject("googleAccountSignOut", GoogleDriveManager.FAILED_GOOGLE_SIGN_OUT, e)
+            promise.reject("googleAccountSignOut", GoogleDrivePackage.FAILED_GOOGLE_SIGN_OUT, e)
         }
     }
 }

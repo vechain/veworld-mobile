@@ -1,7 +1,7 @@
 import React, { useCallback, useEffect, useMemo, useRef, useState } from "react"
 import { FlatList, StyleSheet } from "react-native"
 
-import { StackActions, useNavigation } from "@react-navigation/native"
+import { RouteProp, StackActions, useNavigation, useRoute } from "@react-navigation/native"
 import { SwipeableItemImperativeRef } from "react-native-swipeable-item"
 import {
     AnimatedFloatingButton,
@@ -22,7 +22,8 @@ import {
 import { ERROR_EVENTS } from "~Constants"
 import { useBottomSheetModal, useCheckIdentity, useCloudBackup, useDeviceUtils, useTheme } from "~Hooks"
 import { useI18nContext } from "~i18n"
-import { CloudKitWallet, IMPORT_TYPE } from "~Model"
+import { CloudKitWallet, DrivetWallet, IMPORT_TYPE } from "~Model"
+import { RootStackParamListOnboarding, Routes } from "~Navigation"
 import { selectDevices, selectHasOnboarded, useAppSelector } from "~Storage/Redux"
 import { CryptoUtils, error, PasswordUtils, PlatformUtils } from "~Utils"
 import { useHandleWalletCreation } from "../Onboarding/WelcomeScreen/useHandleWalletCreation"
@@ -33,10 +34,14 @@ const skeletonArray = [1, 2, 3, 4]
 export const ImportFromCloudScreen = () => {
     const userHasOnboarded = useAppSelector(selectHasOnboarded)
     const nav = useNavigation()
+
+    const route = useRoute<RouteProp<RootStackParamListOnboarding, Routes.IMPORT_FROM_CLOUD>>()
+    const { wallets } = route.params
+
     const theme = useTheme()
     const { getAllWalletFromCloud, getSalt, getIV, deleteWallet } = useCloudBackup()
     const { LL } = useI18nContext()
-    const [cloudKitWallets, setCloudKitWallets] = useState<CloudKitWallet[] | null>(null)
+    const [cloudKitWallets, setCloudKitWallets] = useState<CloudKitWallet[] | DrivetWallet[]>(wallets ?? [])
     const [selected, setSelected] = useState<CloudKitWallet | null>(null)
     const [selectedToDelete, setSelectedToDelete] = useState<CloudKitWallet | null>(null)
     const { ref: warningRef, onOpen, onClose: onCloseWarning } = useBottomSheetModal()
@@ -44,7 +49,7 @@ export const ImportFromCloudScreen = () => {
     const devices = useAppSelector(selectDevices)
     const mnemonicCache = useRef<string[]>()
 
-    const [isLoading, setIsLoading] = useState(true)
+    const [isLoading, setIsLoading] = useState(false)
 
     const {
         onCreateWallet,
@@ -61,12 +66,12 @@ export const ImportFromCloudScreen = () => {
     useEffect(() => {
         const init = async () => {
             setIsLoading(true)
-            const wallets = await getAllWalletFromCloud()
-            setCloudKitWallets(wallets)
+            const _wallets = await getAllWalletFromCloud()
+            setCloudKitWallets(_wallets)
             setIsLoading(false)
         }
-        init()
-    }, [getAllWalletFromCloud])
+        cloudKitWallets.length <= 0 && init()
+    }, [cloudKitWallets.length, getAllWalletFromCloud])
 
     const {
         isPasswordPromptOpen: isPasswordPromptOpen,
@@ -117,8 +122,8 @@ export const ImportFromCloudScreen = () => {
 
             if (selected) {
                 setIsLoading(true)
-                const { salt } = await getSalt(selected.rootAddress)
-                const { iv } = await getIV(selected.rootAddress)
+                const { salt } = PlatformUtils.isAndroid() ? selected : await getSalt(selected.rootAddress)
+                const { iv } = PlatformUtils.isAndroid() ? selected : await getIV(selected.rootAddress)
 
                 if (!salt || !iv) {
                     showErrorToast({
@@ -199,18 +204,18 @@ export const ImportFromCloudScreen = () => {
 
     const handleOnDeleteFromCloud = useCallback(async () => {
         if (selectedToDelete) {
+            closeRemoveWalletBottomSheet()
             setIsLoading(true)
             await deleteWallet(selectedToDelete.rootAddress)
-            closeRemoveWalletBottomSheet()
-            const wallets = await getAllWalletFromCloud()
+            const newWallets = cloudKitWallets.filter(w => w.rootAddress !== selectedToDelete.rootAddress)
             setIsLoading(false)
-            if (!wallets.length) {
+            if (!newWallets.length) {
                 nav.dispatch(StackActions.popToTop())
             } else {
-                setCloudKitWallets(wallets)
+                setCloudKitWallets(newWallets)
             }
         }
-    }, [closeRemoveWalletBottomSheet, deleteWallet, getAllWalletFromCloud, nav, selectedToDelete])
+    }, [closeRemoveWalletBottomSheet, cloudKitWallets, deleteWallet, nav, selectedToDelete])
 
     const isWalletActive = useCallback(
         (wallet: CloudKitWallet) => devices.find(w => w.rootAddress === wallet.rootAddress),
