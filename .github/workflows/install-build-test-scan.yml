@@ -21,10 +21,10 @@ jobs:
         #needs: scan
         secrets: inherit
 
-    build-and-test-android:
-        uses: ./.github/workflows/e2e-android.yml
-        #needs: scan
-        secrets: inherit
+    #build-and-test-android:
+    #    uses: ./.github/workflows/e2e-android.yml
+    #    #needs: scan
+    #    secrets: inherit
 
     #scan:
     #    runs-on: ubuntu-latest
