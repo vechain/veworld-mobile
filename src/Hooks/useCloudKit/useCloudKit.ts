@@ -4,8 +4,9 @@ import { showErrorToast } from "~Components"
 import { DerivationPath, ERROR_EVENTS } from "~Constants"
 import { useI18nContext } from "~i18n"
 import { DEVICE_TYPE } from "~Model"
-import { PasswordUtils, error } from "~Utils"
+import { error, PasswordUtils } from "~Utils"
 import { CKError, handleCloudKitErrors } from "./ErrorModel"
+
 const { CloudKitManager } = NativeModules
 
 export const useCloudKit = () => {
@@ -25,10 +26,19 @@ export const useCloudKit = () => {
     }, [])
 
     const deleteWallet = useCallback(async (_rootAddress: string) => {
-        const delWAllet = await CloudKitManager.deleteWallet(_rootAddress)
-        const delSalt = await CloudKitManager.deleteSalt(_rootAddress)
-        const delIV = await CloudKitManager.deleteIV(_rootAddress)
-        return delWAllet && delSalt && delIV
+        try {
+            const delWAllet = await CloudKitManager.deleteWallet(_rootAddress)
+            const delSalt = await CloudKitManager.deleteSalt(_rootAddress)
+            const delIV = await CloudKitManager.deleteIV(_rootAddress)
+            return delWAllet && delSalt && delIV
+        } catch (_error: unknown) {
+            let er = _error as CKError
+            showErrorToast({
+                text1: er.message,
+                text2: handleCloudKitErrors(er),
+            })
+            throw error(ERROR_EVENTS.CLOUDKIT, er, er.message)
+        }
     }, [])
 
     const saveWalletToCloudKit = useCallback(
@@ -79,11 +89,11 @@ export const useCloudKit = () => {
             } catch (_error: unknown) {
                 await deleteWallet(_rootAddress)
                 let er = _error as CKError
-                error(ERROR_EVENTS.CLOUDKIT, er, er.message)
                 showErrorToast({
                     text1: er.message,
                     text2: handleCloudKitErrors(er),
                 })
+                throw error(ERROR_EVENTS.CLOUDKIT, er, er.message)
             }
         },
         [LL, deleteWallet],
@@ -127,11 +137,11 @@ export const useCloudKit = () => {
             return salt
         } catch (_error) {
             let er = _error as CKError
-            error(ERROR_EVENTS.CLOUDKIT, er, er.message)
             showErrorToast({
                 text1: er.message,
                 text2: handleCloudKitErrors(er),
             })
+            throw error(ERROR_EVENTS.CLOUDKIT, er, er.message)
         }
     }, [])
 
@@ -141,11 +151,11 @@ export const useCloudKit = () => {
             return iv
         } catch (_error) {
             let er = _error as CKError
-            error(ERROR_EVENTS.CLOUDKIT, er, er.message)
             showErrorToast({
                 text1: er.message,
                 text2: handleCloudKitErrors(er),
             })
+            throw error(ERROR_EVENTS.CLOUDKIT, er, er.message)
         }
     }, [])
 
