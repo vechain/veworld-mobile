@@ -441,6 +441,7 @@
   "GOOGLE_DRIVE_ERR_NETWORK": "Er was een fout bij het verbinden met Google Drive. Controleer uw netwerkverbinding en probeer het opnieuw.",
   "GOOGLE_DRIVE_ERR_UNAUTHORIZED": "Autorisatie vereist. Geef de benodigde toestemmingen en probeer het opnieuw.",
   "GOOGLE_DRIVE_ERR_WALLET_OPERATION": "Er is een fout opgetreden bij het uitvoeren van deze Google Drive-portemonneebewerking. Probeer het opnieuw.",
+  "GOOGLE_DRIVE_GENERIC_ERROR_TITLE": "Google Drive-fout",
   "HEADS_UP": "Let op!",
   "HIDDEN_COLLECTIONS": "Verborgen collecties",
   "HIDE_COLLECTION": "Verberg collectie",

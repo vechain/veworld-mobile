@@ -4,6 +4,7 @@ import {
     EnableAdditionalSettings,
     ImportFromCloudScreen,
     ImportLocalWallet,
+    ImportMnemonicBackupPasswordScreen,
     SelectLedgerAccounts,
     SelectLedgerDevice,
     WelcomeScreen,
@@ -24,6 +25,9 @@ export type RootStackParamListOnboarding = {
     }
     [Routes.IMPORT_FROM_CLOUD]: {
         wallets: CloudKitWallet[] | DrivetWallet[]
+    }
+    [Routes.IMPORT_MNEMONIC_BACKUP_PASSWORD]: {
+        wallet: CloudKitWallet | DrivetWallet
     }
 }
 
@@ -64,6 +68,14 @@ export const OnboardingStack = () => {
                 name={Routes.IMPORT_FROM_CLOUD}
                 component={ImportFromCloudScreen}
                 options={{ headerShown: false }}
+            />
+
+            <Onboarding.Screen
+                name={Routes.IMPORT_MNEMONIC_BACKUP_PASSWORD}
+                component={ImportMnemonicBackupPasswordScreen}
+                options={{
+                    headerShown: false,
+                }}
             />
         </Onboarding.Navigator>
     )

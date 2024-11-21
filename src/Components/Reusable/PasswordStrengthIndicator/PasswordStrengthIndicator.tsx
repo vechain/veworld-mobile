@@ -23,7 +23,7 @@ export const PasswordStrengthIndicator = ({ strength, showComputedStrength = tru
                 [COLORS.DARK_RED, COLORS.MEDIUM_ORANGE, COLORS.LIGHT_GREEN],
             ),
         }
-    })
+    }, [strength.value])
 
     const computedStrength = useDerivedValue(() => {
         if (strength.value === 0) return "None"

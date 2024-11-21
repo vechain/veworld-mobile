@@ -441,6 +441,7 @@
   "GOOGLE_DRIVE_ERR_NETWORK": "Google Drive से कनेक्ट करने में एक त्रुटि हुई। कृपया अपना नेटवर्क कनेक्शन जांचें और पुनः प्रयास करें।",
   "GOOGLE_DRIVE_ERR_UNAUTHORIZED": "अधिकृत करने की आवश्यकता है। कृपया आवश्यक अनुमतियाँ दें और पुनः प्रयास करें।",
   "GOOGLE_DRIVE_ERR_WALLET_OPERATION": "यह Google Drive वॉलेट ऑपरेशन करते समय एक त्रुटि हुई। कृपया पुनः प्रयास करें।",
+  "GOOGLE_DRIVE_GENERIC_ERROR_TITLE": "Google ड्राइव त्रुटि",
   "HEADS_UP": "सावधान!",
   "HIDDEN_COLLECTIONS": "छुपे हुए संग्रह",
   "HIDE_COLLECTION": "संग्रह छुपाएं",

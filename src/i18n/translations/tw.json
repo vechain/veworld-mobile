@@ -441,6 +441,7 @@
   "GOOGLE_DRIVE_ERR_NETWORK": "連接 Google 雲端硬碟時發生錯誤。請檢查您的網絡連接並重試。",
   "GOOGLE_DRIVE_ERR_UNAUTHORIZED": "需要授權。請授予必要的權限並重試。",
   "GOOGLE_DRIVE_ERR_WALLET_OPERATION": "執行此 Google 雲端硬碟錢包操作時發生錯誤。請重試。",
+  "GOOGLE_DRIVE_GENERIC_ERROR_TITLE": "Google Drive 錯誤",
   "HEADS_UP": "注意！",
   "HIDDEN_COLLECTIONS": "隱藏收藏",
   "HIDE_COLLECTION": "隱藏收藏",

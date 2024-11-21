@@ -29,7 +29,7 @@ const {
     ACTIVITY_NOT_FOUND,
 } = GoogleDriveManager?.getConstants() ?? {}
 
-export const handleGoogleDriveErrors = (err: GDError) => {
+export const handleGoogleDriveErrors = (err: GDError): { title: string; description: string } | null => {
     const locale = i18n.detectLocale()
 
     if (err) {
@@ -37,19 +37,30 @@ export const handleGoogleDriveErrors = (err: GDError) => {
     }
 
     switch (err.code) {
+        case OAUTH_INTERRUPTED:
+            return null
         case DRIVE_CREATION:
-            return i18n.i18n()[locale].GOOGLE_DRIVE_ERR_NETWORK()
+            return {
+                title: i18n.i18n()[locale].GOOGLE_DRIVE_GENERIC_ERROR_TITLE(),
+                description: i18n.i18n()[locale].GOOGLE_DRIVE_ERR_NETWORK(),
+            }
 
         case DELETE_BACKUP:
         case GET_BACKUP:
         case GET_ALL_BACKUPS:
         case FOLDER_NOT_FOUND:
         case GET_ACCOUNT:
-            return i18n.i18n()[locale].GOOGLE_DRIVE_ERR_WALLET_OPERATION()
+            return {
+                title: i18n.i18n()[locale].GOOGLE_DRIVE_GENERIC_ERROR_TITLE(),
+                description: i18n.i18n()[locale].GOOGLE_DRIVE_ERR_WALLET_OPERATION(),
+            }
 
         case PERMISSION_GRANTED:
         case USER_UNRECOVERABLE_AUTH:
-            return i18n.i18n()[locale].GOOGLE_DRIVE_ERR_UNAUTHORIZED()
+            return {
+                title: i18n.i18n()[locale].GOOGLE_DRIVE_GENERIC_ERROR_TITLE(),
+                description: i18n.i18n()[locale].GOOGLE_DRIVE_ERR_UNAUTHORIZED(),
+            }
 
         case ACTIVITY_NOT_FOUND:
         case OAUTH_INTERRUPTED:
@@ -61,10 +72,9 @@ export const handleGoogleDriveErrors = (err: GDError) => {
         case SIGN_IN_INTENT_IS_NULL:
         case GOOGLE_SERVICES_UNAVAILABLE:
         default:
-            return i18n.i18n()[locale].GOOGLE_DRIVE_ERROR_GENERIC()
+            return {
+                title: i18n.i18n()[locale].GOOGLE_DRIVE_GENERIC_ERROR_TITLE(),
+                description: i18n.i18n()[locale].GOOGLE_DRIVE_ERROR_GENERIC(),
+            }
     }
-}
-
-export const isCancelError = (message: string) => {
-    return message === OAUTH_INTERRUPTED
 }

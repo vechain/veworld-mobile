@@ -18,6 +18,7 @@ import {
     HomeScreen,
     ImportFromCloudScreen,
     ImportLocalWallet,
+    ImportMnemonicBackupPasswordScreen,
     InAppBrowser,
     InsertAddressSendScreen,
     LedgerSignTransaction,
@@ -77,6 +78,9 @@ export type RootStackParamListHome = {
     }
     [Routes.IMPORT_FROM_CLOUD]: {
         wallets: CloudKitWallet[] | DrivetWallet[]
+    }
+    [Routes.IMPORT_MNEMONIC_BACKUP_PASSWORD]: {
+        wallet: CloudKitWallet | DrivetWallet
     }
     [Routes.BROWSER]: {
         url: string
@@ -155,6 +159,14 @@ export const HomeStack = () => {
                     name={Routes.IMPORT_FROM_CLOUD}
                     component={ImportFromCloudScreen}
                     options={{ headerShown: false }}
+                />
+
+                <Screen
+                    name={Routes.IMPORT_MNEMONIC_BACKUP_PASSWORD}
+                    component={ImportMnemonicBackupPasswordScreen}
+                    options={{
+                        headerShown: false,
+                    }}
                 />
                 <Screen name={Routes.BROWSER} component={InAppBrowser} options={{ headerShown: false }} />
             </Group>

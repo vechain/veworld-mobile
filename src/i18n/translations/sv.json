@@ -441,6 +441,7 @@
   "GOOGLE_DRIVE_ERR_NETWORK": "Det uppstod ett fel vid anslutning till Google Drive. Kontrollera din nätverksanslutning och försök igen.",
   "GOOGLE_DRIVE_ERR_UNAUTHORIZED": "Behörighet krävs. Vänligen ge de nödvändiga tillstånden och försök igen.",
   "GOOGLE_DRIVE_ERR_WALLET_OPERATION": "Det uppstod ett fel vid denna Google Drive-plånboksoperation. Vänligen försök igen.",
+  "GOOGLE_DRIVE_GENERIC_ERROR_TITLE": "Google Drive-fel",
   "HEADS_UP": "Observera!",
   "HIDDEN_COLLECTIONS": "Dolda samlingar",
   "HIDE_COLLECTION": "Dölj samling",

@@ -15,7 +15,6 @@ import {
     Layout,
     RequireUserPassword,
     SelectDerivationPathBottomSheet,
-    showInfoToast,
 } from "~Components"
 import { AnalyticsEvent, DerivationPath } from "~Constants"
 import {
@@ -74,15 +73,6 @@ export const ImportLocalWallet = () => {
     const [wallets, setWallets] = useState<CloudKitWallet[] | DrivetWallet[]>([])
     const [isLoading, setIsLoading] = useState<boolean>(false)
 
-    const showNoWalletsFound = useCallback(() => {
-        showInfoToast({
-            text1: LL.CLOUD_NO_WALLETS_AVAILABLE_TITLE(),
-            text2: LL.CLOUD_NO_WALLETS_AVAILABLE_DESCRIPTION({
-                cloud: PlatformUtils.isIOS() ? "iCloud" : "Google Drive",
-            }),
-        })
-    }, [LL])
-
     const goToImportFromCloud = useCallback(() => {
         nav.navigate(Routes.IMPORT_FROM_CLOUD, { wallets })
     }, [nav, wallets])
@@ -103,9 +93,8 @@ export const ImportLocalWallet = () => {
             nav.navigate(Routes.IMPORT_FROM_CLOUD, { wallets: _wallets })
         } else {
             await googleAccountSignOut()
-            showNoWalletsFound()
         }
-    }, [getAllWalletFromCloud, googleAccountSignOut, nav, showNoWalletsFound])
+    }, [getAllWalletFromCloud, googleAccountSignOut, nav])
 
     useFocusEffect(
         useCallback(() => {

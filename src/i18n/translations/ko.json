@@ -441,6 +441,7 @@
   "GOOGLE_DRIVE_ERR_NETWORK": "Google 드라이브에 연결하는 동안 오류가 발생했습니다. 네트워크 연결을 확인하고 다시 시도하세요.",
   "GOOGLE_DRIVE_ERR_UNAUTHORIZED": "권한이 필요합니다. 필요한 권한을 부여하고 다시 시도하세요.",
   "GOOGLE_DRIVE_ERR_WALLET_OPERATION": "이 Google 드라이브 지갑 작업을 수행하는 동안 오류가 발생했습니다. 다시 시도하세요.",
+  "GOOGLE_DRIVE_GENERIC_ERROR_TITLE": "Google 드라이브 오류",
   "HEADS_UP": "주의!",
   "HIDDEN_COLLECTIONS": "숨겨진 컬렉션",
   "HIDE_COLLECTION": "컬렉션 숨기기",

@@ -16,6 +16,7 @@ import {
     WalletManagementScreen,
     WalletDetailScreen,
     MnemonicBackupScreen,
+    ChooseMnemonicBackupPassword,
 } from "~Screens"
 import { Routes } from "~Navigation/Enums"
 import { AboutScreen } from "~Screens/Flows/App/AboutScreen"
@@ -41,6 +42,7 @@ export type RootStackParamListSettings = {
     [Routes.RESET_APP]: undefined
     [Routes.SETTINGS_CONNECTED_APPS]: undefined
     [Routes.ICLOUD_MNEMONIC_BACKUP]: { deviceToBackup?: LocalDevice; mnemonicArray: string[] }
+    [Routes.CHOOSE_MNEMONIC_BACKUP_PASSWORD]: { mnemonicArray: string[]; device: LocalDevice }
     [Routes.SETTINGS_GET_SUPPORT]: { url: string }
     [Routes.SETTINGS_GIVE_FEEDBACK]: { url: string }
 }
@@ -132,6 +134,17 @@ export const SettingsStack = () => {
                 name={Routes.ICLOUD_MNEMONIC_BACKUP}
                 component={MnemonicBackupScreen}
                 options={{ headerShown: false }}
+            />
+
+            <Settings.Screen
+                name={Routes.CHOOSE_MNEMONIC_BACKUP_PASSWORD}
+                component={ChooseMnemonicBackupPassword}
+                options={{
+                    headerShown: false,
+                    // presentation: "card",
+                    // animation: "slide_from_bottom",
+                    // animationDuration: 300,
+                }}
             />
 
             <Settings.Screen

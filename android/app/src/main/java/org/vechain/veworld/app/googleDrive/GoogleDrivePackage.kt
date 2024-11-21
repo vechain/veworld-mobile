@@ -2,6 +2,7 @@ package org.vechain.veworld.app.googleDrive
 
 import android.app.Activity
 import android.content.Intent
+import android.util.Log
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.ViewModelStoreOwner
 import com.facebook.react.bridge.ActivityEventListener
@@ -11,6 +12,7 @@ import com.facebook.react.bridge.ReactApplicationContext
 import com.facebook.react.bridge.ReactContextBaseJavaModule
 import com.facebook.react.bridge.ReactMethod
 import com.facebook.react.bridge.WritableNativeArray
+import com.google.android.gms.auth.api.signin.GoogleSignIn
 import com.google.android.gms.common.ConnectionResult
 import com.google.android.gms.common.GoogleApiAvailability
 import com.google.api.services.drive.Drive
@@ -31,19 +33,6 @@ class GoogleDrivePackage(private val reactContext: ReactApplicationContext) :
     ReactContextBaseJavaModule(reactContext), LifecycleEventListener {
     private lateinit var viewModel: GoogleDriveViewModel
     private var googleDrive: GoogleDrive? = null
-
-    companion object {
-        const val ACTIVITY_NULL = "Activity cannot be null"
-        const val OAUTH_INTERRUPTED = "Oauth process has been interrupted"
-        const val FAILED_TO_GET_DRIVE = "Failed to get google drive account"
-        const val FAILED_TO_LOCATE_WALLET = "Failed to locate wallet"
-        const val FAILED_TO_DELETE_WALLET = "Failed to delete wallet"
-        const val FAILED_TO_GET_WALLET = "Failed to retrieve wallet"
-        const val FAILED_TO_GET_SALT = "Failed to retrieve salt"
-        const val FAILED_TO_GET_IV = "Failed to retrieve IV"
-        const val FAILED_GOOGLE_SIGN_OUT = "Failed to Sign out from Google Account"
-        const val UNAUTHORIZED = "Action not permitted"
-    }
 
     override fun getName(): String = "GoogleDriveManager"
 
@@ -104,6 +93,49 @@ class GoogleDrivePackage(private val reactContext: ReactApplicationContext) :
         }
     }
 
+    private fun startGoogleDriveOperation(promise: Promise, operation: (Drive) -> Unit) {
+        val lastSignedAccount = currentActivity?.let { viewModel.getLastSignedAccount(it) }
+
+        if (lastSignedAccount != null) {
+            val drive = when (val result = viewModel.getDriveFromAccount(lastSignedAccount)) {
+                is Result.Success -> result.data
+                is Result.Error -> {
+                    promise.reject(result.error.code, result.error.name, result.throwable)
+                    return
+                }
+            }
+
+            operation.invoke(drive)
+        } else {
+            val intent = when (val result = viewModel.getSignInIntent()) {
+                is Result.Success -> result.data
+                is Result.Error -> return promise.reject(
+                    result.error.code,
+                    result.error.name,
+                    result.throwable
+                )
+            }
+
+            val listener = getActivityResultListener(
+                successCallback = { drive ->
+                    operation.invoke(drive)
+                    return@getActivityResultListener
+                },
+                errorCallback = { result ->
+                    promise.reject(result.error.code, result.error.name, result.throwable)
+                    return@getActivityResultListener
+                })
+
+            reactContext.addActivityEventListener(listener)
+
+            currentActivity?.startActivityForResult(intent, Request.GOOGLE_SIGN_IN.code)
+                ?: promise.reject(
+                    DataError.Android.ACTIVITY_NOT_FOUND.code,
+                    DataError.Android.ACTIVITY_NOT_FOUND.name
+                )
+        }
+    }
+
 
     @ReactMethod
     fun checkGoogleServicesAvailability(promise: Promise) {
@@ -147,16 +179,7 @@ class GoogleDrivePackage(private val reactContext: ReactApplicationContext) :
             creationDate = Date().time / 1000.0
         )
 
-        val intent = when (val result = viewModel.getSignInIntent()) {
-            is Result.Success -> result.data
-            is Result.Error -> return promise.reject(
-                result.error.code,
-                result.error.name,
-                result.throwable
-            )
-        }
-
-        val listener = getActivityResultListener({ drive ->
+        val operation = { drive: Drive ->
             viewModel.saveBackup(drive, backupFile) { result ->
                 when (result) {
                     is Result.Success -> {
@@ -182,33 +205,14 @@ class GoogleDrivePackage(private val reactContext: ReactApplicationContext) :
                     }
                 }
             }
-            return@getActivityResultListener
-        }, { result ->
-            promise.reject(result.error.code, result.error.name, result.throwable)
-            return@getActivityResultListener
-        })
+        }
 
-        reactContext.addActivityEventListener(listener)
-
-        currentActivity?.startActivityForResult(intent, Request.GOOGLE_SIGN_IN.code)
-            ?: promise.reject(
-                DataError.Android.ACTIVITY_NOT_FOUND.code,
-                DataError.Android.ACTIVITY_NOT_FOUND.name
-            )
+        startGoogleDriveOperation(promise, operation)
     }
 
     @ReactMethod
     fun getAllWalletsFromGoogleDrive(promise: Promise) {
-        val intent = when (val result = viewModel.getSignInIntent()) {
-            is Result.Success -> result.data
-            is Result.Error -> return promise.reject(
-                result.error.code,
-                result.error.name,
-                result.throwable
-            )
-        }
-
-        val listener = getActivityResultListener({ drive ->
+        val operation = { drive: Drive ->
             viewModel.getAllBackups(drive) { result ->
                 when (result) {
                     is Result.Success -> {
@@ -227,33 +231,14 @@ class GoogleDrivePackage(private val reactContext: ReactApplicationContext) :
                     }
                 }
             }
-            return@getActivityResultListener
-        }, { result ->
-            promise.reject(result.error.code, result.error.name, result.throwable)
-            return@getActivityResultListener
-        })
+        }
 
-        reactContext.addActivityEventListener(listener)
-
-        currentActivity?.startActivityForResult(intent, Request.GOOGLE_SIGN_IN.code)
-            ?: promise.reject(
-                DataError.Android.ACTIVITY_NOT_FOUND.code,
-                DataError.Android.ACTIVITY_NOT_FOUND.name
-            )
+        startGoogleDriveOperation(promise, operation)
     }
 
     @ReactMethod
     fun getWallet(rootAddress: String, promise: Promise) {
-        val intent = when (val result = viewModel.getSignInIntent()) {
-            is Result.Success -> result.data
-            is Result.Error -> return promise.reject(
-                result.error.code,
-                result.error.name,
-                result.throwable
-            )
-        }
-
-        val listener = getActivityResultListener({ drive ->
+        val operation = { drive: Drive ->
             viewModel.getBackup(drive, "WALLET_ZONE_$rootAddress") { result ->
                 when (result) {
                     is Result.Success -> {
@@ -270,19 +255,9 @@ class GoogleDrivePackage(private val reactContext: ReactApplicationContext) :
                     }
                 }
             }
-            return@getActivityResultListener
-        }, { result ->
-            promise.reject(result.error.code, result.error.name, result.throwable)
-            return@getActivityResultListener
-        })
+        }
 
-        reactContext.addActivityEventListener(listener)
-
-        currentActivity?.startActivityForResult(intent, Request.GOOGLE_SIGN_IN.code)
-            ?: promise.reject(
-                DataError.Android.ACTIVITY_NOT_FOUND.code,
-                DataError.Android.ACTIVITY_NOT_FOUND.name
-            )
+        startGoogleDriveOperation(promise, operation)
     }
 
     @ReactMethod
@@ -297,16 +272,7 @@ class GoogleDrivePackage(private val reactContext: ReactApplicationContext) :
 
     @ReactMethod
     fun deleteWallet(rootAddress: String, promise: Promise) {
-        val intent = when (val result = viewModel.getSignInIntent()) {
-            is Result.Success -> result.data
-            is Result.Error -> return promise.reject(
-                result.error.code,
-                result.error.name,
-                result.throwable
-            )
-        }
-
-        val listener = getActivityResultListener({ drive ->
+        val operation = { drive: Drive ->
             viewModel.deleteBackup(drive, "WALLET_ZONE_$rootAddress") { result ->
                 when (result) {
                     is Result.Success -> {
@@ -323,19 +289,9 @@ class GoogleDrivePackage(private val reactContext: ReactApplicationContext) :
                     }
                 }
             }
-            return@getActivityResultListener
-        }, { result ->
-            promise.reject(result.error.code, result.error.name, result.throwable)
-            return@getActivityResultListener
-        })
+        }
 
-        reactContext.addActivityEventListener(listener)
-
-        currentActivity?.startActivityForResult(intent, Request.GOOGLE_SIGN_IN.code)
-            ?: promise.reject(
-                DataError.Android.ACTIVITY_NOT_FOUND.code,
-                DataError.Android.ACTIVITY_NOT_FOUND.name
-            )
+        startGoogleDriveOperation(promise, operation)
     }
 
     @ReactMethod

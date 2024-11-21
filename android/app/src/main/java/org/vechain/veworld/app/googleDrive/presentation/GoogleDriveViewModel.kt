@@ -1,9 +1,12 @@
 package org.vechain.veworld.app.googleDrive.presentation
 
+import android.content.Context
 import android.content.Intent
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.google.android.gms.auth.api.signin.GoogleSignIn
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount
+import com.google.android.gms.auth.api.signin.SignInAccount
 import com.google.api.client.googleapis.extensions.android.gms.auth.UserRecoverableAuthIOException
 import com.google.api.services.drive.Drive
 import com.google.api.services.drive.model.File
@@ -54,11 +57,16 @@ class GoogleDriveViewModel(private val googleDrive: GoogleDrive) : ViewModel() {
                 Result.Success(googleDrive.getAccountFromIntent(intent))
             } ?: Result.Error(DataError.Drive.SIGN_IN_INTENT_IS_NULL)
         } catch (e: Exception) {
+            signOut()
             Result.Error(DataError.Drive.GET_ACCOUNT, e)
         }
     }
 
     private fun hasAccountAllPermissions(account: GoogleSignInAccount): Result<Boolean, DataError.Drive> {
+        if (!googleDrive.areGooglePlayServicesAvailable()) {
+            return Result.Error(DataError.Drive.GOOGLE_SERVICES_UNAVAILABLE)
+        }
+
         return try {
             Result.Success(googleDrive.hasAccountAllRequiredPermissions(account))
         } catch (e: Exception) {
@@ -70,6 +78,28 @@ class GoogleDriveViewModel(private val googleDrive: GoogleDrive) : ViewModel() {
         return googleDrive.areGooglePlayServicesAvailable()
     }
 
+    fun getLastSignedAccount(context: Context): GoogleSignInAccount? {
+        if (!googleDrive.areGooglePlayServicesAvailable()) {
+            return null
+        }
+
+        return try {
+            val account = GoogleSignIn.getLastSignedInAccount(context)
+            account?.let {
+                val hasAllPermissions = googleDrive.hasAccountAllRequiredPermissions(account)
+                if (hasAllPermissions) {
+                    account
+                } else {
+                    googleDrive.signOut()
+                    null
+                }
+            }
+        } catch (e: Exception) {
+            googleDrive.signOut()
+            null
+        }
+    }
+
     fun getSignInIntent(): Result<Intent, DataError.Drive> {
         return try {
             if (!googleDrive.areGooglePlayServicesAvailable()) {
@@ -79,6 +109,18 @@ class GoogleDriveViewModel(private val googleDrive: GoogleDrive) : ViewModel() {
             }
         } catch (e: Exception) {
             Result.Error(DataError.Drive.SIGN_IN_INTENT_CREATION, e)
+        }
+    }
+
+    fun getDriveFromAccount(account: GoogleSignInAccount): Result<Drive, DataError.Drive> {
+        if (!googleDrive.areGooglePlayServicesAvailable()) {
+            return Result.Error(DataError.Drive.GOOGLE_SERVICES_UNAVAILABLE)
+        }
+
+        return try {
+            Result.Success(googleDrive.getDriveFromAccount(account))
+        } catch (e: Exception) {
+            Result.Error(DataError.Drive.DRIVE_CREATION, e)
         }
     }
 
@@ -99,11 +141,7 @@ class GoogleDriveViewModel(private val googleDrive: GoogleDrive) : ViewModel() {
         }
 
         return if (hasPermissions) {
-            try {
-                Result.Success(googleDrive.getDriveFromAccount(account))
-            } catch (e: Exception) {
-                Result.Error(DataError.Drive.DRIVE_CREATION, e)
-            }
+            getDriveFromAccount(account)
         } else {
             Result.Error(DataError.Drive.PERMISSION_GRANTED)
         }
@@ -127,14 +165,16 @@ class GoogleDriveViewModel(private val googleDrive: GoogleDrive) : ViewModel() {
 
                     withContext(Dispatchers.IO) {
                         allFiles.files.forEach { file ->
-                            val outputStream = ByteArrayOutputStream()
-                            drive.files()[file.id].executeMediaAndDownloadTo(
-                                outputStream
-                            )
-                            val driveBackupFile: DriveBackupFile = gson.fromJson(
-                                outputStream.toString(), DriveBackupFile::class.java
-                            )
-                            mnemonics.add(driveBackupFile)
+                            launch {
+                                val outputStream = ByteArrayOutputStream()
+                                drive.files()[file.id].executeMediaAndDownloadTo(
+                                    outputStream
+                                )
+                                val driveBackupFile: DriveBackupFile = gson.fromJson(
+                                    outputStream.toString(), DriveBackupFile::class.java
+                                )
+                                mnemonics.add(driveBackupFile)
+                            }
                         }
                     }
                     onResult(Result.Success(mnemonics))

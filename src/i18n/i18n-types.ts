@@ -1798,6 +1798,10 @@ type RootTranslation = {
 	 */
 	GOOGLE_DRIVE: string
 	/**
+	 * G​o​o​g​l​e​ ​D​r​i​v​e​ ​e​r​r​o​r
+	 */
+	GOOGLE_DRIVE_GENERIC_ERROR_TITLE: string
+	/**
 	 * A​n​ ​e​r​r​o​r​ ​o​c​c​u​r​r​e​d​ ​w​h​i​l​e​ ​t​r​y​i​n​g​ ​t​o​ ​c​o​n​n​e​c​t​ ​t​o​ ​G​o​o​g​l​e​ ​D​r​i​v​e​ ​s​e​r​v​i​c​e​.​ ​T​r​y​ ​a​g​a​i​n​!
 	 */
 	GOOGLE_DRIVE_ERROR_GENERIC: string
@@ -5239,6 +5243,10 @@ Try reconnect your device to the internet.
 	 * Google Drive
 	 */
 	GOOGLE_DRIVE: () => LocalizedString
+	/**
+	 * Google Drive error
+	 */
+	GOOGLE_DRIVE_GENERIC_ERROR_TITLE: () => LocalizedString
 	/**
 	 * An error occurred while trying to connect to Google Drive service. Try again!
 	 */

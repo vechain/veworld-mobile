@@ -1,6 +1,6 @@
 import { useCallback } from "react"
 import { NativeModules } from "react-native"
-import { showErrorToast } from "~Components"
+import { showErrorToast, showInfoToast } from "~Components"
 import { DerivationPath, ERROR_EVENTS } from "~Constants"
 import { useI18nContext } from "~i18n"
 import { DEVICE_TYPE } from "~Model"
@@ -96,6 +96,14 @@ export const useCloudKit = () => {
     const getAllWalletsFromCloudKit = useCallback(async () => {
         try {
             const result = await CloudKitManager.getAllFromCloudKit()
+            if (Array.isArray(result) && result.length === 0) {
+                showInfoToast({
+                    text1: LL.CLOUD_NO_WALLETS_AVAILABLE_TITLE(),
+                    text2: LL.CLOUD_NO_WALLETS_AVAILABLE_DESCRIPTION({
+                        cloud: "ICloud",
+                    }),
+                })
+            }
             return result
         } catch (_error) {
             let er = _error as CKError
@@ -106,7 +114,7 @@ export const useCloudKit = () => {
             })
             return []
         }
-    }, [])
+    }, [LL])
 
     const getWalletByRootAddress = useCallback(async (_rootAddress?: string) => {
         if (!_rootAddress) {

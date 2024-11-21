@@ -441,6 +441,7 @@
   "GOOGLE_DRIVE_ERR_NETWORK": "连接 Google Drive 时出错。请检查您的网络连接并重试。",
   "GOOGLE_DRIVE_ERR_UNAUTHORIZED": "需要授权。请授予必要的权限并重试。",
   "GOOGLE_DRIVE_ERR_WALLET_OPERATION": "执行此 Google Drive 钱包操作时出错。请重试。",
+  "GOOGLE_DRIVE_GENERIC_ERROR_TITLE": "Google Drive错误",
   "HEADS_UP": "注意！",
   "HIDDEN_COLLECTIONS": "隐藏的收藏",
   "HIDE_COLLECTION": "隐藏收藏",

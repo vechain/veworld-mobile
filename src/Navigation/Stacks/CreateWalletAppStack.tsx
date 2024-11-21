@@ -4,6 +4,7 @@ import {
     EnableAdditionalSettings,
     ImportFromCloudScreen,
     ImportLocalWallet,
+    ImportMnemonicBackupPasswordScreen,
     SelectLedgerAccounts,
     SelectLedgerDevice,
 } from "~Screens"
@@ -23,6 +24,9 @@ export type RootStackParamListCreateWalletApp = {
     }
     [Routes.IMPORT_FROM_CLOUD]: {
         wallets: CloudKitWallet[] | DrivetWallet[]
+    }
+    [Routes.IMPORT_MNEMONIC_BACKUP_PASSWORD]: {
+        wallet: CloudKitWallet | DrivetWallet
     }
 }
 
@@ -58,6 +62,14 @@ export const CreateWalletAppStack = () => {
                 name={Routes.IMPORT_FROM_CLOUD}
                 component={ImportFromCloudScreen}
                 options={{ headerShown: false }}
+            />
+
+            <CreateWalletApp.Screen
+                name={Routes.IMPORT_MNEMONIC_BACKUP_PASSWORD}
+                component={ImportMnemonicBackupPasswordScreen}
+                options={{
+                    headerShown: false,
+                }}
             />
         </CreateWalletApp.Navigator>
     )

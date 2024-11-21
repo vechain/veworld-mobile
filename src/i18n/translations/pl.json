@@ -441,6 +441,7 @@
   "GOOGLE_DRIVE_ERR_NETWORK": "Wystąpił błąd podczas łączenia z Dyskiem Google. Sprawdź swoje połączenie sieciowe i spróbuj ponownie.",
   "GOOGLE_DRIVE_ERR_UNAUTHORIZED": "Wymagana autoryzacja. Proszę udzielić niezbędnych uprawnień i spróbować ponownie.",
   "GOOGLE_DRIVE_ERR_WALLET_OPERATION": "Wystąpił błąd podczas wykonywania operacji na portfelu w Dysku Google. Spróbuj ponownie.",
+  "GOOGLE_DRIVE_GENERIC_ERROR_TITLE": "Błąd Google Drive",
   "HEADS_UP": "Uwaga!",
   "HIDDEN_COLLECTIONS": "Ukryte kolekcje",
   "HIDE_COLLECTION": "Ukryj kolekcję",

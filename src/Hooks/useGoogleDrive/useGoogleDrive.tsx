@@ -1,11 +1,11 @@
 import { useCallback } from "react"
 import { NativeModules } from "react-native"
-import { showErrorToast } from "~Components"
+import { showErrorToast, showInfoToast } from "~Components"
 import { DerivationPath, ERROR_EVENTS } from "~Constants"
 import { useI18nContext } from "~i18n"
 import { DEVICE_TYPE } from "~Model"
 import { error, PasswordUtils } from "~Utils"
-import { GDError, handleGoogleDriveErrors, isCancelError } from "./ErrorModel"
+import { GDError, handleGoogleDriveErrors } from "./ErrorModel"
 const { GoogleDriveManager } = NativeModules
 
 export const useGoogleDrive = () => {
@@ -14,13 +14,15 @@ export const useGoogleDrive = () => {
     const getGoogleServicesAvailability = useCallback(async () => {
         try {
             return await GoogleDriveManager.checkGoogleServicesAvailability()
-        } catch (_error) {
-            let er = _error as GDError
+        } catch (err) {
+            const er = err as GDError
             error(ERROR_EVENTS.GOOGLE_DRIVE, er, er.message)
-            if (!isCancelError(er.message)) {
+            const errorInfo = handleGoogleDriveErrors(er)
+
+            if (errorInfo) {
                 showErrorToast({
-                    text1: er.message,
-                    text2: handleGoogleDriveErrors(er),
+                    text1: errorInfo.title,
+                    text2: errorInfo.description,
                 })
             }
         }
@@ -72,9 +74,14 @@ export const useGoogleDrive = () => {
                 )
                 return true
             } catch (err) {
-                if (!isCancelError((err as GDError).message)) {
+                const er = err as GDError
+                error(ERROR_EVENTS.GOOGLE_DRIVE, er, er.message)
+                const errorInfo = handleGoogleDriveErrors(er)
+
+                if (errorInfo) {
                     showErrorToast({
-                        text1: LL.GOOGLE_DRIVE_ERROR_GENERIC(),
+                        text1: errorInfo.title,
+                        text2: errorInfo.description,
                     })
                 }
                 return false
@@ -86,19 +93,29 @@ export const useGoogleDrive = () => {
     const getAllWalletsFromGoogleDrive = useCallback(async () => {
         try {
             const result = await GoogleDriveManager.getAllWalletsFromGoogleDrive()
+            if (Array.isArray(result) && result.length === 0) {
+                showInfoToast({
+                    text1: LL.CLOUD_NO_WALLETS_AVAILABLE_TITLE(),
+                    text2: LL.CLOUD_NO_WALLETS_AVAILABLE_DESCRIPTION({
+                        cloud: "Google Drive",
+                    }),
+                })
+            }
             return result
         } catch (err) {
-            let er = err as GDError
+            const er = err as GDError
             error(ERROR_EVENTS.GOOGLE_DRIVE, er, er.message)
-            if (!isCancelError(er.message)) {
+            const errorInfo = handleGoogleDriveErrors(er)
+
+            if (errorInfo) {
                 showErrorToast({
-                    text1: er.message,
-                    text2: handleGoogleDriveErrors(er),
+                    text1: errorInfo.title,
+                    text2: errorInfo.description,
                 })
             }
             return []
         }
-    }, [])
+    }, [LL])
 
     const getWalletByRootAddress = useCallback(async (_rootAddress?: string) => {
         if (!_rootAddress) {
@@ -109,12 +126,14 @@ export const useGoogleDrive = () => {
             const selectedWallet = await GoogleDriveManager.getWallet(_rootAddress)
             return selectedWallet
         } catch (err) {
-            let er = err as GDError
+            const er = err as GDError
             error(ERROR_EVENTS.GOOGLE_DRIVE, er, er.message)
-            if (!isCancelError(er.message)) {
+            const errorInfo = handleGoogleDriveErrors(er)
+
+            if (errorInfo) {
                 showErrorToast({
-                    text1: er.message,
-                    text2: handleGoogleDriveErrors(er),
+                    text1: errorInfo.title,
+                    text2: errorInfo.description,
                 })
             }
         }
@@ -125,12 +144,14 @@ export const useGoogleDrive = () => {
             const salt = await GoogleDriveManager.getSalt(_rootAddress)
             return salt
         } catch (err) {
-            let er = err as GDError
-            error(ERROR_EVENTS.CLOUDKIT, er, er.message)
-            if (!isCancelError(er.message)) {
+            const er = err as GDError
+            error(ERROR_EVENTS.GOOGLE_DRIVE, er, er.message)
+            const errorInfo = handleGoogleDriveErrors(er)
+
+            if (errorInfo) {
                 showErrorToast({
-                    text1: er.message,
-                    text2: handleGoogleDriveErrors(er),
+                    text1: errorInfo.title,
+                    text2: errorInfo.description,
                 })
             }
         }
@@ -141,12 +162,14 @@ export const useGoogleDrive = () => {
             const salt = await GoogleDriveManager.getIV(_rootAddress)
             return salt
         } catch (err) {
-            let er = err as GDError
-            error(ERROR_EVENTS.CLOUDKIT, er, er.message)
-            if (!isCancelError(er.message)) {
+            const er = err as GDError
+            error(ERROR_EVENTS.GOOGLE_DRIVE, er, er.message)
+            const errorInfo = handleGoogleDriveErrors(er)
+
+            if (errorInfo) {
                 showErrorToast({
-                    text1: er.message,
-                    text2: handleGoogleDriveErrors(er),
+                    text1: errorInfo.title,
+                    text2: errorInfo.description,
                 })
             }
         }
@@ -157,12 +180,14 @@ export const useGoogleDrive = () => {
             const salt = await GoogleDriveManager.googleAccountSignOut()
             return salt
         } catch (err) {
-            let er = err as GDError
-            error(ERROR_EVENTS.CLOUDKIT, er, er.message)
-            if (!isCancelError(er.message)) {
+            const er = err as GDError
+            error(ERROR_EVENTS.GOOGLE_DRIVE, er, er.message)
+            const errorInfo = handleGoogleDriveErrors(er)
+
+            if (errorInfo) {
                 showErrorToast({
-                    text1: er.message,
-                    text2: handleGoogleDriveErrors(er),
+                    text1: errorInfo.title,
+                    text2: errorInfo.description,
                 })
             }
         }

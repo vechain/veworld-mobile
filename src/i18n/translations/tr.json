@@ -441,6 +441,7 @@
   "GOOGLE_DRIVE_ERR_NETWORK": "Google Drive'a bağlanırken bir hata oluştu. Lütfen ağ bağlantınızı kontrol edin ve tekrar deneyin.",
   "GOOGLE_DRIVE_ERR_UNAUTHORIZED": "Yetkilendirme gerekli. Lütfen gerekli izinleri verin ve tekrar deneyin.",
   "GOOGLE_DRIVE_ERR_WALLET_OPERATION": "Bu Google Drive cüzdan işlemi gerçekleştirilirken bir hata oluştu. Lütfen tekrar deneyin.",
+  "GOOGLE_DRIVE_GENERIC_ERROR_TITLE": "Google Drive hatası",
   "HEADS_UP": "Dikkat!",
   "HIDDEN_COLLECTIONS": "Gizli koleksiyonlar",
   "HIDE_COLLECTION": "Koleksiyonu gizle",

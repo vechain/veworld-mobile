@@ -5,29 +5,21 @@ import { RouteProp, StackActions, useNavigation, useRoute } from "@react-navigat
 import { SwipeableItemImperativeRef } from "react-native-swipeable-item"
 import {
     AnimatedFloatingButton,
-    BackButtonHeader,
-    BaseModal,
     BaseSkeleton,
     BaseSpacer,
     BaseText,
     BaseView,
     CloudKitWalletCard,
-    CloudKitWarningBottomSheet,
     DeleteCloudKitWalletBottomSheet,
     Layout,
-    RequireUserPassword,
-    showErrorToast,
     SwipeableRow,
 } from "~Components"
-import { ERROR_EVENTS } from "~Constants"
-import { useBottomSheetModal, useCheckIdentity, useCloudBackup, useDeviceUtils, useTheme } from "~Hooks"
+import { useBottomSheetModal, useCloudBackup, useTheme } from "~Hooks"
 import { useI18nContext } from "~i18n"
-import { CloudKitWallet, DrivetWallet, IMPORT_TYPE } from "~Model"
+import { CloudKitWallet, DrivetWallet } from "~Model"
 import { RootStackParamListOnboarding, Routes } from "~Navigation"
 import { selectDevices, selectHasOnboarded, useAppSelector } from "~Storage/Redux"
-import { CryptoUtils, error, PasswordUtils, PlatformUtils } from "~Utils"
-import { useHandleWalletCreation } from "../Onboarding/WelcomeScreen/useHandleWalletCreation"
-import { UserCreatePasswordScreen } from "./UserCreatePasswordScreen"
+import { PlatformUtils } from "~Utils"
 
 const skeletonArray = [1, 2, 3, 4]
 
@@ -39,26 +31,14 @@ export const ImportFromCloudScreen = () => {
     const { wallets } = route.params
 
     const theme = useTheme()
-    const { getAllWalletFromCloud, getSalt, getIV, deleteWallet } = useCloudBackup()
+    const { getAllWalletFromCloud, deleteWallet } = useCloudBackup()
     const { LL } = useI18nContext()
     const [cloudKitWallets, setCloudKitWallets] = useState<CloudKitWallet[] | DrivetWallet[]>(wallets ?? [])
     const [selected, setSelected] = useState<CloudKitWallet | null>(null)
     const [selectedToDelete, setSelectedToDelete] = useState<CloudKitWallet | null>(null)
-    const { ref: warningRef, onOpen, onClose: onCloseWarning } = useBottomSheetModal()
-    const { checkCanImportDevice } = useDeviceUtils()
     const devices = useAppSelector(selectDevices)
-    const mnemonicCache = useRef<string[]>()
 
     const [isLoading, setIsLoading] = useState(false)
-
-    const {
-        onCreateWallet,
-        importOnboardedWallet,
-        isOpen,
-        isError: isCreateError,
-        onSuccess,
-        onClose: onCloseCreateFlow,
-    } = useHandleWalletCreation()
 
     const Seperator = useMemo(() => <BaseSpacer height={16} />, [])
     const variableSeperator = useCallback((height: number) => <BaseSpacer height={height} />, [])
@@ -72,24 +52,6 @@ export const ImportFromCloudScreen = () => {
         }
         cloudKitWallets.length <= 0 && init()
     }, [cloudKitWallets.length, getAllWalletFromCloud])
-
-    const {
-        isPasswordPromptOpen: isPasswordPromptOpen,
-        handleClosePasswordModal: handleClosePasswordModal,
-        onPasswordSuccess: onPasswordSuccess,
-        checkIdentityBeforeOpening: checkIdentityBeforeOpening,
-    } = useCheckIdentity({
-        onIdentityConfirmed: async (pin?: string) => {
-            await importOnboardedWallet({
-                importMnemonic: mnemonicCache.current,
-                importType: PlatformUtils.isIOS() ? IMPORT_TYPE.ICLOUD : IMPORT_TYPE.GOOGLE_DRIVE,
-                pin,
-                derivationPath: selected!.derivationPath,
-            })
-            nav.dispatch(StackActions.popToTop())
-        },
-        allowAutoPassword: false,
-    })
 
     // - [START] - Swippable Actions
     const [walletToRemove, setWalletToRemove] = useState<CloudKitWallet>()
@@ -113,81 +75,6 @@ export const ImportFromCloudScreen = () => {
             openRemoveWalletBottomSheet()
         },
         [openRemoveWalletBottomSheet],
-    )
-    // - [END] - Swippable Actions
-
-    const handleOnPress = useCallback(
-        async (password: string) => {
-            onCloseWarning()
-
-            if (selected) {
-                setIsLoading(true)
-                const { salt } = PlatformUtils.isAndroid() ? selected : await getSalt(selected.rootAddress)
-                const { iv } = PlatformUtils.isAndroid() ? selected : await getIV(selected.rootAddress)
-
-                if (!salt || !iv) {
-                    showErrorToast({
-                        text1: LL.CLOUDKIT_ERROR_GENERIC(),
-                    })
-                    setIsLoading(false)
-                    return
-                }
-
-                let mnemonic: string[] = []
-
-                try {
-                    mnemonic = await CryptoUtils.decrypt(
-                        selected.data,
-                        password,
-                        salt,
-                        PasswordUtils.base64ToBuffer(iv),
-                    )
-                } catch (err) {
-                    showErrorToast({
-                        text1: LL.ERROR_DECRYPTING_WALLET(),
-                    })
-                    setIsLoading(false)
-                    return
-                }
-
-                try {
-                    checkCanImportDevice(selected.derivationPath, mnemonic)
-                    mnemonicCache.current = mnemonic
-                    if (userHasOnboarded) {
-                        checkIdentityBeforeOpening()
-                    } else {
-                        onCreateWallet({
-                            importMnemonic: mnemonic,
-                            derivationPath: selected.derivationPath,
-                            importType: PlatformUtils.isIOS() ? IMPORT_TYPE.ICLOUD : IMPORT_TYPE.GOOGLE_DRIVE,
-                        })
-                    }
-                    setIsLoading(false)
-                } catch (_error) {
-                    let er = _error as Error
-                    error(ERROR_EVENTS.CLOUDKIT, er, er.message)
-                    showErrorToast({
-                        text1: er.message ?? LL.ERROR_CREATING_WALLET(),
-                    })
-                    setIsLoading(false)
-                }
-            } else {
-                showErrorToast({
-                    text1: LL.CLOUDKIT_ERROR_GENERIC(),
-                })
-            }
-        },
-        [
-            LL,
-            checkCanImportDevice,
-            checkIdentityBeforeOpening,
-            getIV,
-            getSalt,
-            onCloseWarning,
-            onCreateWallet,
-            selected,
-            userHasOnboarded,
-        ],
     )
 
     const onWalletSelected = useCallback(
@@ -294,7 +181,11 @@ export const ImportFromCloudScreen = () => {
                         title={LL.BTN_IMPORT()}
                         extraBottom={userHasOnboarded ? 0 : 24}
                         isVisible={!!selected}
-                        onPress={onOpen}
+                        onPress={() => {
+                            if (selected) {
+                                nav.navigate(Routes.IMPORT_MNEMONIC_BACKUP_PASSWORD, { wallet: selected })
+                            }
+                        }}
                         isDisabled={!selected}
                         isLoading={isLoading}
                     />
@@ -304,39 +195,6 @@ export const ImportFromCloudScreen = () => {
                         onClose={closeRemoveWalletBottomSheet}
                         onConfirm={handleOnDeleteFromCloud}
                         selectedWallet={selectedToDelete!}
-                    />
-
-                    <CloudKitWarningBottomSheet
-                        ref={warningRef}
-                        onHandleBackupToCloudKit={handleOnPress}
-                        openLocation="Import_Screen"
-                    />
-                    {!!isCreateError && (
-                        <BaseText my={10} color={theme.colors.danger}>
-                            {isCreateError}
-                        </BaseText>
-                    )}
-                    <BaseModal isOpen={isOpen} onClose={onCloseCreateFlow}>
-                        <BaseView justifyContent="flex-start">
-                            <BackButtonHeader action={onCloseCreateFlow} hasBottomSpacer={false} />
-                            <UserCreatePasswordScreen
-                                onSuccess={pin =>
-                                    onSuccess({
-                                        pin,
-                                        mnemonic: mnemonicCache.current,
-                                        importType: PlatformUtils.isIOS()
-                                            ? IMPORT_TYPE.ICLOUD
-                                            : IMPORT_TYPE.GOOGLE_DRIVE,
-                                        derivationPath: selected!.derivationPath,
-                                    })
-                                }
-                            />
-                        </BaseView>
-                    </BaseModal>
-                    <RequireUserPassword
-                        isOpen={isPasswordPromptOpen}
-                        onClose={handleClosePasswordModal}
-                        onSuccess={onPasswordSuccess}
                     />
                 </BaseView>
             }

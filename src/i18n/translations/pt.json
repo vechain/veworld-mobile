@@ -441,6 +441,7 @@
   "GOOGLE_DRIVE_ERR_NETWORK": "Houve um erro ao conectar ao Google Drive. Verifique sua conexão de rede e tente novamente.",
   "GOOGLE_DRIVE_ERR_UNAUTHORIZED": "Autorização necessária. Por favor, conceda as permissões necessárias e tente novamente.",
   "GOOGLE_DRIVE_ERR_WALLET_OPERATION": "Houve um erro ao realizar esta operação na carteira do Google Drive. Por favor, tente novamente.",
+  "GOOGLE_DRIVE_GENERIC_ERROR_TITLE": "Erro do Google Drive",
   "HEADS_UP": "Atenção!",
   "HIDDEN_COLLECTIONS": "Coleções ocultas",
   "HIDE_COLLECTION": "Ocultar coleção",

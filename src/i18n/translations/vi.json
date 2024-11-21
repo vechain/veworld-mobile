@@ -441,6 +441,7 @@
   "GOOGLE_DRIVE_ERR_NETWORK": "Đã xảy ra lỗi khi kết nối với Google Drive. Vui lòng kiểm tra kết nối mạng của bạn và thử lại.",
   "GOOGLE_DRIVE_ERR_UNAUTHORIZED": "Yêu cầu cấp quyền. Vui lòng cấp quyền cần thiết và thử lại.",
   "GOOGLE_DRIVE_ERR_WALLET_OPERATION": "Đã xảy ra lỗi khi thực hiện thao tác ví trên Google Drive này. Vui lòng thử lại.",
+  "GOOGLE_DRIVE_GENERIC_ERROR_TITLE": "Lỗi Google Drive",
   "HEADS_UP": "Chú ý!",
   "HIDDEN_COLLECTIONS": "Bộ sưu tập ẩn",
   "HIDE_COLLECTION": "Ẩn bộ sưu tập",
