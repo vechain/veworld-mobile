@@ -119,7 +119,7 @@ export const useGoogleDrive = () => {
 
     const getWalletByRootAddress = useCallback(async (_rootAddress?: string) => {
         if (!_rootAddress) {
-            return
+            throw new Error("Root address is required")
         }
 
         try {
@@ -136,6 +136,8 @@ export const useGoogleDrive = () => {
                     text2: errorInfo.description,
                 })
             }
+
+            throw er
         }
     }, [])
 

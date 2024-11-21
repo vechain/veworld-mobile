@@ -118,8 +118,9 @@ export const useCloudKit = () => {
 
     const getWalletByRootAddress = useCallback(async (_rootAddress?: string) => {
         if (!_rootAddress) {
-            return
+            throw new Error("Root address is required")
         }
+
         try {
             const selectedWallet = await CloudKitManager.getWallet(_rootAddress)
             return selectedWallet
@@ -130,6 +131,7 @@ export const useCloudKit = () => {
                 text1: er.message,
                 text2: handleCloudKitErrors(er),
             })
+            throw er
         }
     }, [])
 

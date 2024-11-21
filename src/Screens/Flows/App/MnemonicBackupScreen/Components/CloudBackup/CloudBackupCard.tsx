@@ -9,7 +9,7 @@ import { useCloudBackup, useThemedStyles } from "~Hooks"
 import { useI18nContext } from "~i18n"
 import { LocalDevice } from "~Model"
 import { Routes } from "~Navigation"
-import { selectIsAppLoading, setIsAppLoading, useAppDispatch, useAppSelector } from "~Storage/Redux"
+import { selectAccounts, selectIsAppLoading, setIsAppLoading, useAppDispatch, useAppSelector } from "~Storage/Redux"
 import { PlatformUtils } from "~Utils"
 
 type Props = {
@@ -20,26 +20,39 @@ type Props = {
 export const CloudBackupCard: FC<Props> = ({ mnemonicArray, deviceToBackup }) => {
     const dispatch = useAppDispatch()
     const { LL } = useI18nContext()
-    const navigaiton = useNavigation()
+    const navigation = useNavigation()
     const { styles, theme } = useThemedStyles(baseStyles)
 
     const isAppLoading = useAppSelector(selectIsAppLoading)
+    const accounts = useAppSelector(selectAccounts)
 
     const [isWalletBackedUp, setIsWalletBackedUp] = useState(true)
+    const [isCloudError, setIsCloudError] = useState(false)
 
     const { getWalletByRootAddress } = useCloudBackup()
 
     const getWallet = useCallback(async () => {
         dispatch(setIsAppLoading(true))
-        const wallet = await getWalletByRootAddress(deviceToBackup?.rootAddress)
-        setIsWalletBackedUp(!!wallet)
-        dispatch(setIsAppLoading(false))
+        try {
+            const wallet = await getWalletByRootAddress(deviceToBackup?.rootAddress)
+            setIsWalletBackedUp(!!wallet)
+            setIsCloudError(false)
+        } catch {
+            setIsWalletBackedUp(false)
+            setIsCloudError(true)
+        } finally {
+            dispatch(setIsAppLoading(false))
+        }
     }, [deviceToBackup?.rootAddress, dispatch, getWalletByRootAddress])
 
     useFocusEffect(
         useCallback(() => {
-            getWallet()
-        }, [getWallet]),
+            if (!accounts.find(account => account.rootAddress === deviceToBackup?.rootAddress)) {
+                navigation.goBack()
+            } else {
+                getWallet()
+            }
+        }, [accounts, deviceToBackup?.rootAddress, getWallet, navigation]),
     )
 
     const computedStyles = useMemo(
@@ -57,14 +70,29 @@ export const CloudBackupCard: FC<Props> = ({ mnemonicArray, deviceToBackup }) =>
         ],
     )
 
-    const goToChoosePasswordScreen = useCallback(() => {
-        if (deviceToBackup) {
-            navigaiton.navigate(Routes.CHOOSE_MNEMONIC_BACKUP_PASSWORD, {
-                mnemonicArray,
-                device: deviceToBackup,
-            })
+    const goToChoosePasswordScreen = useCallback(async () => {
+        if (isCloudError) {
+            dispatch(setIsAppLoading(true))
+            try {
+                const wallet = await getWalletByRootAddress(deviceToBackup?.rootAddress)
+                const isBackuped = !!wallet
+                setIsWalletBackedUp(isBackuped)
+                setIsCloudError(false)
+
+                if (!isBackuped && deviceToBackup) {
+                    navigation.navigate(Routes.CHOOSE_MNEMONIC_BACKUP_PASSWORD, {
+                        mnemonicArray,
+                        device: deviceToBackup,
+                    })
+                }
+            } catch {
+                setIsWalletBackedUp(false)
+                setIsCloudError(true)
+            } finally {
+                dispatch(setIsAppLoading(false))
+            }
         }
-    }, [deviceToBackup, mnemonicArray, navigaiton])
+    }, [deviceToBackup, dispatch, getWalletByRootAddress, isCloudError, mnemonicArray, navigation])
 
     return (
         <BaseView justifyContent="center">
