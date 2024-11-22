@@ -4,20 +4,27 @@ import { StyleSheet } from "react-native"
 import { getTimeZone } from "react-native-localize"
 import { LoaderDark, LoaderLight } from "~Assets"
 import {
+    BackupSuccessfulBottomSheet,
+    BackupVerifiedBottomSheet,
     BaseIcon,
     BaseText,
     BaseTouchableBox,
     BaseView,
     CardWithHeader,
     CloudKitWarningBottomSheet,
-    showErrorToast,
-    BackupSuccessfulBottomSheet,
-    BackupVerifiedBottomSheet,
     DeleteCloudBackupBottomSheet,
     RequireUserPassword,
+    showErrorToast,
 } from "~Components"
 import { COLORS, ColorThemeType, DerivationPath, typography } from "~Constants"
-import { useBottomSheetModal, useCheckIdentity, useCloudBackup, useThemedStyles } from "~Hooks"
+import {
+    useBiometricsValidation,
+    useBottomSheetModal,
+    useCheckIdentity,
+    useCloudBackup,
+    useThemedStyles,
+    useWalletSecurity,
+} from "~Hooks"
 import { useI18nContext } from "~i18n"
 import { LocalDevice } from "~Model"
 import { setDeviceIsBackup, useAppDispatch } from "~Storage/Redux"
@@ -39,6 +46,9 @@ export const CloudBackupCard: FC<Props> = ({ mnemonicArray, deviceToBackup }) =>
 
     const { saveWalletToCloud, getWalletByRootAddress, deleteWallet } = useCloudBackup()
 
+    const { isWalletSecurityBiometrics } = useWalletSecurity()
+    const { authenticateBiometrics } = useBiometricsValidation()
+
     const { ref: warningRef, onOpen: onOpenWarning, onClose: onCloseWarning } = useBottomSheetModal()
     const { ref: successRef, onOpen: onOpenSuccess, onClose: onCloseSuccess } = useBottomSheetModal()
     const {
@@ -56,7 +66,6 @@ export const CloudBackupCard: FC<Props> = ({ mnemonicArray, deviceToBackup }) =>
         setIsLoading(true)
         const wallet = await getWalletByRootAddress(deviceToBackup?.rootAddress)
         setIsLoading(false)
-
         setIsWalletBackedUp(!!wallet)
     }, [deviceToBackup?.rootAddress, getWalletByRootAddress])
 
@@ -76,40 +85,43 @@ export const CloudBackupCard: FC<Props> = ({ mnemonicArray, deviceToBackup }) =>
                 return
             }
 
-            const firstAccountAddress = AddressUtils.getAddressFromXPub(deviceToBackup.xPub, 0)
-            const salt = HexUtils.generateRandom(256)
-            const iv = PasswordUtils.getRandomIV(16)
-            const mnemonic = await CryptoUtils.encrypt(mnemonicArray, password, salt, iv)
-            await saveWalletToCloud({
-                mnemonic,
-                _rootAddress: deviceToBackup?.rootAddress,
-                deviceType: deviceToBackup?.type,
-                firstAccountAddress,
-                salt,
-                iv,
-                derivationPath: deviceToBackup?.derivationPath ?? DerivationPath.VET,
-            })
+            try {
+                const firstAccountAddress = AddressUtils.getAddressFromXPub(deviceToBackup.xPub, 0)
+                const salt = HexUtils.generateRandom(256)
+                const iv = PasswordUtils.getRandomIV(16)
+                const mnemonic = await CryptoUtils.encrypt(mnemonicArray, password, salt, iv)
+                await saveWalletToCloud({
+                    mnemonic,
+                    _rootAddress: deviceToBackup?.rootAddress,
+                    deviceType: deviceToBackup?.type,
+                    firstAccountAddress,
+                    salt,
+                    iv,
+                    derivationPath: deviceToBackup?.derivationPath ?? DerivationPath.VET,
+                })
+                await getWalletByRootAddress(deviceToBackup.rootAddress)
 
-            setIsLoading(false)
-            setIsWalletBackedUp(true)
+                const formattedDate = DateUtils.formatDateTime(
+                    Date.now(),
+                    locale,
+                    getTimeZone() ?? DateUtils.DEFAULT_TIMEZONE,
+                )
+                dispatch(
+                    setDeviceIsBackup({
+                        rootAddress: deviceToBackup.rootAddress,
+                        isBackup: true,
+                        date: formattedDate,
+                    }),
+                )
 
-            const formattedDate = DateUtils.formatDateTime(
-                Date.now(),
-                locale,
-                getTimeZone() ?? DateUtils.DEFAULT_TIMEZONE,
-            )
-            dispatch(
-                setDeviceIsBackup({
-                    rootAddress: deviceToBackup.rootAddress,
-                    isBackup: true,
-                    date: formattedDate,
-                }),
-            )
-
-            await getWalletByRootAddress(deviceToBackup.rootAddress)
-            onCloseWarning()
-            setIsLoading(false)
-            onOpenSuccess()
+                onCloseWarning()
+                setIsWalletBackedUp(true)
+                setIsLoading(false)
+                onOpenSuccess()
+            } catch (error) {
+                onCloseWarning()
+                setIsLoading(false)
+            }
         },
         [
             LL,
@@ -156,10 +168,12 @@ export const CloudBackupCard: FC<Props> = ({ mnemonicArray, deviceToBackup }) =>
     }, [onCloseBackupVerified, onOpenDeleteBackup])
 
     const handleConfirmDelete = useCallback(async () => {
+        if (!deviceToBackup?.rootAddress) {
+            throw new Error("No root address found")
+        }
+
+        setIsLoading(true)
         try {
-            if (!deviceToBackup?.rootAddress) {
-                throw new Error("No root address found")
-            }
             await deleteWallet(deviceToBackup.rootAddress)
             await getWalletByRootAddress(deviceToBackup.rootAddress)
 
@@ -177,19 +191,17 @@ export const CloudBackupCard: FC<Props> = ({ mnemonicArray, deviceToBackup }) =>
             )
             setIsWalletBackedUp(false)
             onCloseDeleteBackup()
+            nav.goBack()
+            setIsLoading(false)
         } catch (error) {
-            showErrorToast({
-                text1: PlatformUtils.isIOS() ? LL.CLOUDKIT_ERROR_GENERIC() : LL.GOOGLE_DRIVE_ERROR_GENERIC(),
-            })
+            setIsLoading(false)
+            nav.goBack()
         }
-    }, [LL, deleteWallet, deviceToBackup?.rootAddress, dispatch, getWalletByRootAddress, locale, onCloseDeleteBackup])
+    }, [deleteWallet, deviceToBackup?.rootAddress, dispatch, getWalletByRootAddress, locale, nav, onCloseDeleteBackup])
 
     const { onPasswordSuccess, checkIdentityBeforeOpening, isPasswordPromptOpen, handleClosePasswordModal } =
         useCheckIdentity({
-            onIdentityConfirmed: async () => {
-                await handleConfirmDelete()
-                nav.goBack()
-            },
+            onIdentityConfirmed: handleConfirmDelete,
             allowAutoPassword: false,
         })
 
@@ -237,7 +249,7 @@ export const CloudBackupCard: FC<Props> = ({ mnemonicArray, deviceToBackup }) =>
                         </BaseView>
                         {isLoading ? (
                             <Lottie
-                                source={theme.isDark ? LoaderDark : LoaderLight}
+                                source={isWalletBackedUp ? LoaderDark : LoaderLight}
                                 autoPlay
                                 loop
                                 style={styles.lottie}
@@ -246,7 +258,7 @@ export const CloudBackupCard: FC<Props> = ({ mnemonicArray, deviceToBackup }) =>
                             <BaseIcon
                                 name="chevron-right"
                                 size={14}
-                                color={!isWalletBackedUp ? theme.colors.textReversed : theme.colors.text}
+                                color={isWalletBackedUp ? COLORS.DARK_PURPLE : theme.colors.textReversed}
                             />
                         )}
                     </BaseTouchableBox>
@@ -271,7 +283,11 @@ export const CloudBackupCard: FC<Props> = ({ mnemonicArray, deviceToBackup }) =>
             <DeleteCloudBackupBottomSheet
                 ref={deleteBackupRef}
                 onClose={onCloseDeleteBackup}
-                onConfirm={checkIdentityBeforeOpening}
+                onConfirm={
+                    isWalletSecurityBiometrics
+                        ? () => authenticateBiometrics(handleConfirmDelete)
+                        : checkIdentityBeforeOpening
+                }
             />
 
             <RequireUserPassword

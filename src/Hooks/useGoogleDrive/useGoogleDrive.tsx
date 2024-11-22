@@ -6,6 +6,7 @@ import { useI18nContext } from "~i18n"
 import { DEVICE_TYPE } from "~Model"
 import { error, PasswordUtils } from "~Utils"
 import { GDError, handleGoogleDriveErrors, OAUTH_INTERRUPTED } from "./ErrorModel"
+
 const { GoogleDriveManager } = NativeModules
 
 export const useGoogleDrive = () => {
@@ -35,7 +36,8 @@ export const useGoogleDrive = () => {
             await GoogleDriveManager.deleteWallet(_rootAddress)
             return true
         } catch (err) {
-            return false
+            let er = err as GDError
+            throw error(ERROR_EVENTS.GOOGLE_DRIVE, er, er.message)
         }
     }, [])
 
@@ -75,11 +77,13 @@ export const useGoogleDrive = () => {
                     derivationPath,
                 )
             } catch (err) {
+                let er = err as GDError
                 if (!isCancelError((err as GDError).message)) {
                     showErrorToast({
                         text1: LL.GOOGLE_DRIVE_ERROR_GENERIC(),
                     })
                 }
+                throw error(ERROR_EVENTS.GOOGLE_DRIVE, er, er.message)
             }
         },
         [LL],
@@ -160,13 +164,13 @@ export const useGoogleDrive = () => {
             return salt
         } catch (err) {
             let er = err as GDError
-            error(ERROR_EVENTS.CLOUDKIT, er, er.message)
             if (!isCancelError(er.message)) {
                 showErrorToast({
                     text1: er.message,
                     text2: handleGoogleDriveErrors(er),
                 })
             }
+            throw error(ERROR_EVENTS.CLOUDKIT, er, er.message)
         }
     }, [])
 
