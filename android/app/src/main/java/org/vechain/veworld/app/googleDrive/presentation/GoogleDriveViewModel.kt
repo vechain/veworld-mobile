@@ -1,12 +1,9 @@
 package org.vechain.veworld.app.googleDrive.presentation
 
-import android.content.Context
 import android.content.Intent
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.google.android.gms.auth.api.signin.GoogleSignIn
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount
-import com.google.android.gms.auth.api.signin.SignInAccount
 import com.google.api.client.googleapis.extensions.android.gms.auth.UserRecoverableAuthIOException
 import com.google.api.services.drive.Drive
 import com.google.api.services.drive.model.File
@@ -78,25 +75,38 @@ class GoogleDriveViewModel(private val googleDrive: GoogleDrive) : ViewModel() {
         return googleDrive.areGooglePlayServicesAvailable()
     }
 
-    fun getLastSignedAccount(context: Context): GoogleSignInAccount? {
+    fun getLastSignedAccount(
+        onResult: (Result<GoogleSignInAccount, DataError.Drive>) -> Unit,
+    ) {
         if (!googleDrive.areGooglePlayServicesAvailable()) {
-            return null
+            onResult(Result.Error(DataError.Drive.GOOGLE_SERVICES_UNAVAILABLE))
+            return
         }
 
-        return try {
-            val account = GoogleSignIn.getLastSignedInAccount(context)
-            account?.let {
-                val hasAllPermissions = googleDrive.hasAccountAllRequiredPermissions(account)
-                if (hasAllPermissions) {
-                    account
+        viewModelScope.launch {
+            try {
+                val signInClient = googleDrive.getSignInClient()
+
+                val task = signInClient.silentSignIn()
+
+                if (task.isSuccessful) {
+                    val account = task.result
+
+                    val hasAllPermissions = googleDrive.hasAccountAllRequiredPermissions(account)
+                    if (hasAllPermissions) {
+                        onResult(Result.Success(account))
+                    } else {
+                        googleDrive.signOut()
+                        onResult(Result.Error(DataError.Drive.GET_ACCOUNT))
+                    }
                 } else {
                     googleDrive.signOut()
-                    null
+                    onResult(Result.Error(DataError.Drive.GET_ACCOUNT))
                 }
+            } catch (e: Exception) {
+                googleDrive.signOut()
+                onResult(Result.Error(DataError.Drive.GET_ACCOUNT))
             }
-        } catch (e: Exception) {
-            googleDrive.signOut()
-            null
         }
     }
 
@@ -183,8 +193,7 @@ class GoogleDriveViewModel(private val googleDrive: GoogleDrive) : ViewModel() {
                     onResult(Result.Error(DataError.Drive.FOLDER_NOT_FOUND))
                 }
             } catch (e: UserRecoverableAuthIOException) {
-                googleDrive.signOut()
-                onResult(Result.Error(DataError.Drive.USER_UNRECOVERABLE_AUTH))
+                onResult(Result.Error(DataError.Drive.USER_UNRECOVERABLE_AUTH, e))
             } catch (e: Exception) {
                 googleDrive.signOut()
                 onResult(Result.Error(DataError.Drive.GET_ALL_BACKUPS, e))
@@ -220,8 +229,7 @@ class GoogleDriveViewModel(private val googleDrive: GoogleDrive) : ViewModel() {
                     } ?: onResult(Result.Success(null))
                 } ?: onResult(Result.Error(DataError.Drive.FOLDER_NOT_FOUND))
             } catch (e: UserRecoverableAuthIOException) {
-                googleDrive.signOut()
-                onResult(Result.Error(DataError.Drive.USER_UNRECOVERABLE_AUTH))
+                onResult(Result.Error(DataError.Drive.USER_UNRECOVERABLE_AUTH, e))
             } catch (e: Exception) {
                 googleDrive.signOut()
                 onResult(Result.Error(DataError.Drive.GET_BACKUP, e))
@@ -253,8 +261,7 @@ class GoogleDriveViewModel(private val googleDrive: GoogleDrive) : ViewModel() {
                     } ?: onResult(Result.Success(null).asEmptyDataResult())
                 } ?: onResult(Result.Error(DataError.Drive.FOLDER_NOT_FOUND))
             } catch (e: UserRecoverableAuthIOException) {
-                googleDrive.signOut()
-                onResult(Result.Error(DataError.Drive.USER_UNRECOVERABLE_AUTH))
+                onResult(Result.Error(DataError.Drive.USER_UNRECOVERABLE_AUTH, e))
             } catch (e: Exception) {
                 googleDrive.signOut()
                 onResult(Result.Error(DataError.Drive.DELETE_BACKUP, e))
@@ -283,8 +290,7 @@ class GoogleDriveViewModel(private val googleDrive: GoogleDrive) : ViewModel() {
                 googleDrive.saveFileToCloud(drive, fileMetadata, jsonData)
                 onResult(Result.Success(null).asEmptyDataResult())
             } catch (e: UserRecoverableAuthIOException) {
-                googleDrive.signOut()
-                onResult(Result.Error(DataError.Drive.USER_UNRECOVERABLE_AUTH))
+                onResult(Result.Error(DataError.Drive.USER_UNRECOVERABLE_AUTH, e))
             } catch (e: Exception) {
                 googleDrive.signOut()
                 onResult(Result.Error(DataError.Drive.DELETE_BACKUP, e))

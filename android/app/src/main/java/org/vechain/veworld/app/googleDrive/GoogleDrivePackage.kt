@@ -2,7 +2,6 @@ package org.vechain.veworld.app.googleDrive
 
 import android.app.Activity
 import android.content.Intent
-import android.util.Log
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.ViewModelStoreOwner
 import com.facebook.react.bridge.ActivityEventListener
@@ -12,9 +11,7 @@ import com.facebook.react.bridge.ReactApplicationContext
 import com.facebook.react.bridge.ReactContextBaseJavaModule
 import com.facebook.react.bridge.ReactMethod
 import com.facebook.react.bridge.WritableNativeArray
-import com.google.android.gms.auth.api.signin.GoogleSignIn
-import com.google.android.gms.common.ConnectionResult
-import com.google.android.gms.common.GoogleApiAvailability
+import com.google.api.client.googleapis.extensions.android.gms.auth.UserRecoverableAuthIOException
 import com.google.api.services.drive.Drive
 import org.vechain.veworld.app.googleDrive.data.GoogleDrive
 import org.vechain.veworld.app.googleDrive.domain.DerivationPath
@@ -63,7 +60,7 @@ class GoogleDrivePackage(private val reactContext: ReactApplicationContext) :
 
 
     private fun getActivityResultListener(
-        successCallback: (drive: Drive) -> Unit,
+        successCallback: (drive: Drive?) -> Unit,
         errorCallback: (Result.Error<DataError.Drive>) -> Unit,
     ): ActivityEventListener {
         return object : ActivityEventListener {
@@ -87,6 +84,14 @@ class GoogleDrivePackage(private val reactContext: ReactApplicationContext) :
                         errorCallback(Result.Error(DataError.Drive.OAUTH_INTERRUPTED))
                     }
                 }
+
+                if (requestCode == Request.USER_RECOVERABLE_AUTH.code) {
+                    if (resultCode == Activity.RESULT_OK) {
+                        successCallback(null)
+                    } else {
+                        errorCallback(Result.Error(DataError.Drive.OAUTH_INTERRUPTED))
+                    }
+                }
             }
 
             override fun onNewIntent(p0: Intent?) {}
@@ -94,52 +99,119 @@ class GoogleDrivePackage(private val reactContext: ReactApplicationContext) :
     }
 
     private fun startGoogleDriveOperation(promise: Promise, operation: (Drive) -> Unit) {
-        val lastSignedAccount = currentActivity?.let { viewModel.getLastSignedAccount(it) }
+        viewModel.getLastSignedAccount { result ->
+            when (result) {
+                is Result.Success -> {
+                    val account = result.data
+                    val drive = when (val driveResult = viewModel.getDriveFromAccount(account)) {
+                        is Result.Success -> driveResult.data
+                        is Result.Error -> {
+                            promise.reject(
+                                driveResult.error.code,
+                                driveResult.error.name,
+                                driveResult.throwable
+                            )
+                            return@getLastSignedAccount
+                        }
+                    }
 
-        if (lastSignedAccount != null) {
-            val drive = when (val result = viewModel.getDriveFromAccount(lastSignedAccount)) {
-                is Result.Success -> result.data
+                    operation.invoke(drive)
+                }
+
                 is Result.Error -> {
-                    promise.reject(result.error.code, result.error.name, result.throwable)
-                    return
+                    val intent = when (val signInResult = viewModel.getSignInIntent()) {
+                        is Result.Success -> signInResult.data
+                        is Result.Error -> {
+                            promise.reject(
+                                signInResult.error.code,
+                                signInResult.error.name,
+                                signInResult.throwable
+                            )
+                            return@getLastSignedAccount
+                        }
+                    }
+
+                    val listener = getActivityResultListener(
+                        successCallback = { drive ->
+                            drive?.let { operation.invoke(it) }
+                            return@getActivityResultListener
+                        },
+                        errorCallback = { listenerResult ->
+                            promise.reject(
+                                listenerResult.error.code,
+                                listenerResult.error.name,
+                                listenerResult.throwable
+                            )
+                            return@getActivityResultListener
+                        })
+
+                    reactContext.addActivityEventListener(listener)
+
+                    currentActivity?.startActivityForResult(intent, Request.GOOGLE_SIGN_IN.code)
+                        ?: promise.reject(
+                            DataError.Android.ACTIVITY_NOT_FOUND.code,
+                            DataError.Android.ACTIVITY_NOT_FOUND.name
+                        )
                 }
             }
-
-            operation.invoke(drive)
-        } else {
-            val intent = when (val result = viewModel.getSignInIntent()) {
-                is Result.Success -> result.data
-                is Result.Error -> return promise.reject(
-                    result.error.code,
-                    result.error.name,
-                    result.throwable
-                )
-            }
-
-            val listener = getActivityResultListener(
-                successCallback = { drive ->
-                    operation.invoke(drive)
-                    return@getActivityResultListener
-                },
-                errorCallback = { result ->
-                    promise.reject(result.error.code, result.error.name, result.throwable)
-                    return@getActivityResultListener
-                })
-
-            reactContext.addActivityEventListener(listener)
-
-            currentActivity?.startActivityForResult(intent, Request.GOOGLE_SIGN_IN.code)
-                ?: promise.reject(
-                    DataError.Android.ACTIVITY_NOT_FOUND.code,
-                    DataError.Android.ACTIVITY_NOT_FOUND.name
-                )
         }
+    }
+
+    private fun userRecoverableAuthExceptionHandler(
+        intent: Intent,
+        promise: Promise,
+        operation: () -> Unit,
+    ) {
+        val listener = getActivityResultListener(
+            successCallback = {
+                operation.invoke()
+                return@getActivityResultListener
+            },
+            errorCallback = { result ->
+                promise.reject(result.error.code, result.error.name, result.throwable)
+                return@getActivityResultListener
+            })
+
+        reactContext.addActivityEventListener(listener)
+
+        currentActivity?.startActivityForResult(intent, Request.USER_RECOVERABLE_AUTH.code)
+            ?: promise.reject(
+                DataError.Android.ACTIVITY_NOT_FOUND.code,
+                DataError.Android.ACTIVITY_NOT_FOUND.name
+            )
     }
 
 
     @ReactMethod
     fun checkGoogleServicesAvailability(promise: Promise) {
         promise.resolve(viewModel.areGoogleServicesAvailable())
+    }
+
+    private fun backupToCloud(
+        drive: Drive, backupFile: DriveBackupFile, promise: Promise, isRetry: Boolean = false,
+    ) {
+        viewModel.saveBackup(drive, backupFile) { result ->
+            when (result) {
+                is Result.Success -> {
+                    promise.resolve(null)
+                }
+
+                is Result.Error -> {
+                    if (result.error == DataError.Drive.USER_UNRECOVERABLE_AUTH) {
+                        val exception = result.throwable as UserRecoverableAuthIOException
+                        val intent = exception.intent
+
+                        val operation = {
+                            backupToCloud(drive, backupFile, promise, true)
+                        }
+                        userRecoverableAuthExceptionHandler(intent, promise, operation)
+                    } else {
+                        googleDrive?.signOut()
+                        promise.reject(result.error.code, result.error.name, result.throwable)
+                    }
+                }
+            }
+        }
     }
 
     @ReactMethod
@@ -180,81 +252,83 @@ class GoogleDrivePackage(private val reactContext: ReactApplicationContext) :
         )
 
         val operation = { drive: Drive ->
-            viewModel.saveBackup(drive, backupFile) { result ->
-                when (result) {
-                    is Result.Success -> {
-                        promise.resolve(null)
-                    }
+            backupToCloud(drive, backupFile, promise, false)
+        }
 
-                    is Result.Error -> {
-                        if (result.error == DataError.Drive.USER_UNRECOVERABLE_AUTH) {
-                            saveToGoogleDrive(
-                                rootAddress,
-                                data,
-                                walletType,
-                                firstAccountAddress,
-                                salt,
-                                iv,
-                                derivationPath,
-                                promise,
-                            )
-                        } else {
-                            googleDrive?.signOut()
-                            promise.reject(result.error.code, result.error.name, result.throwable)
+        startGoogleDriveOperation(promise, operation)
+    }
+
+    private fun getAllBackups(drive: Drive, promise: Promise, isRetry: Boolean = false) {
+        viewModel.getAllBackups(drive) { result ->
+            when (result) {
+                is Result.Success -> {
+                    val backups = result.data
+                    val writableNativeArray = WritableNativeArray()
+                    backups.forEach { writableNativeArray.pushMap(it.toWritableMap()) }
+                    promise.resolve(writableNativeArray)
+                }
+
+                is Result.Error -> {
+                    if (result.error == DataError.Drive.USER_UNRECOVERABLE_AUTH && !isRetry) {
+                        val exception = result.throwable as UserRecoverableAuthIOException
+                        val intent = exception.intent
+
+                        val operation = {
+                            getAllBackups(drive, promise, true)
                         }
+                        userRecoverableAuthExceptionHandler(intent, promise, operation)
+                    } else {
+                        promise.reject(result.error.code, result.error.name, result.throwable)
                     }
                 }
             }
         }
-
-        startGoogleDriveOperation(promise, operation)
     }
 
     @ReactMethod
     fun getAllWalletsFromGoogleDrive(promise: Promise) {
         val operation = { drive: Drive ->
-            viewModel.getAllBackups(drive) { result ->
-                when (result) {
-                    is Result.Success -> {
-                        val backups = result.data
-                        val writableNativeArray = WritableNativeArray()
-                        backups.forEach { writableNativeArray.pushMap(it.toWritableMap()) }
-                        promise.resolve(writableNativeArray)
-                    }
-
-                    is Result.Error -> {
-                        if (result.error == DataError.Drive.USER_UNRECOVERABLE_AUTH) {
-                            getAllWalletsFromGoogleDrive(promise)
-                        } else {
-                            promise.reject(result.error.code, result.error.name, result.throwable)
-                        }
-                    }
-                }
-            }
+            getAllBackups(drive, promise, false)
         }
 
         startGoogleDriveOperation(promise, operation)
     }
 
-    @ReactMethod
-    fun getWallet(rootAddress: String, promise: Promise) {
-        val operation = { drive: Drive ->
-            viewModel.getBackup(drive, "WALLET_ZONE_$rootAddress") { result ->
-                when (result) {
-                    is Result.Success -> {
-                        val backup = result.data
-                        promise.resolve(backup?.toWritableMap())
-                    }
+    private fun getBackup(
+        drive: Drive,
+        rootAddress: String,
+        promise: Promise,
+        isRetry: Boolean = false,
+    ) {
+        viewModel.getBackup(drive, "WALLET_ZONE_$rootAddress") { result ->
+            when (result) {
+                is Result.Success -> {
+                    val backup = result.data
+                    promise.resolve(backup?.toWritableMap())
+                }
 
-                    is Result.Error -> {
-                        if (result.error == DataError.Drive.USER_UNRECOVERABLE_AUTH) {
-                            getWallet(rootAddress, promise)
-                        } else {
-                            promise.reject(result.error.code, result.error.name, result.throwable)
+                is Result.Error -> {
+                    if (result.error == DataError.Drive.USER_UNRECOVERABLE_AUTH && !isRetry) {
+                        val exception = result.throwable as UserRecoverableAuthIOException
+                        val intent = exception.intent
+
+                        val operation = {
+                            getBackup(drive, rootAddress, promise, true)
                         }
+
+                        userRecoverableAuthExceptionHandler(intent, promise, operation)
+                    } else {
+                        promise.reject(result.error.code, result.error.name, result.throwable)
                     }
                 }
             }
+        }
+    }
+
+    @ReactMethod
+    fun getWallet(rootAddress: String, promise: Promise) {
+        val operation = { drive: Drive ->
+            getBackup(drive, rootAddress, promise, false)
         }
 
         startGoogleDriveOperation(promise, operation)
@@ -270,25 +344,41 @@ class GoogleDrivePackage(private val reactContext: ReactApplicationContext) :
         promise.resolve(rootAddress)
     }
 
-    @ReactMethod
-    fun deleteWallet(rootAddress: String, promise: Promise) {
-        val operation = { drive: Drive ->
-            viewModel.deleteBackup(drive, "WALLET_ZONE_$rootAddress") { result ->
-                when (result) {
-                    is Result.Success -> {
-                        promise.resolve(null)
-                    }
+    private fun deleteBackup(
+        drive: Drive,
+        rootAddress: String,
+        promise: Promise,
+        isRetry: Boolean = false,
+    ) {
+        viewModel.deleteBackup(drive, "WALLET_ZONE_$rootAddress") { result ->
+            when (result) {
+                is Result.Success -> {
+                    promise.resolve(null)
+                }
 
-                    is Result.Error -> {
-                        if (result.error == DataError.Drive.USER_UNRECOVERABLE_AUTH) {
-                            deleteWallet(rootAddress, promise)
-                        } else {
-                            googleDrive?.signOut()
-                            promise.reject(result.error.code, result.error.name, result.throwable)
+                is Result.Error -> {
+                    if (result.error == DataError.Drive.USER_UNRECOVERABLE_AUTH && !isRetry) {
+                        val exception = result.throwable as UserRecoverableAuthIOException
+                        val intent = exception.intent
+
+                        val operation = {
+                            deleteBackup(drive, rootAddress, promise, true)
                         }
+
+                        userRecoverableAuthExceptionHandler(intent, promise, operation)
+                    } else {
+                        googleDrive?.signOut()
+                        promise.reject(result.error.code, result.error.name, result.throwable)
                     }
                 }
             }
+        }
+    }
+
+    @ReactMethod
+    fun deleteWallet(rootAddress: String, promise: Promise) {
+        val operation = { drive: Drive ->
+            deleteBackup(drive, rootAddress, promise, false)
         }
 
         startGoogleDriveOperation(promise, operation)

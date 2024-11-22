@@ -36,7 +36,7 @@ class GoogleDrive(private val context: Context) {
         return resultCode == ConnectionResult.SUCCESS
     }
 
-    private fun getSignInClient(): GoogleSignInClient {
+    fun getSignInClient(): GoogleSignInClient {
         val googleSignInOptions =
             GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN).requestEmail()
                 .requestScopes(

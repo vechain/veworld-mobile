@@ -91,6 +91,13 @@ export const CloudBackupCard: FC<Props> = ({ mnemonicArray, deviceToBackup }) =>
             } finally {
                 dispatch(setIsAppLoading(false))
             }
+        } else {
+            if (deviceToBackup) {
+                navigation.navigate(Routes.CHOOSE_MNEMONIC_BACKUP_PASSWORD, {
+                    mnemonicArray,
+                    device: deviceToBackup,
+                })
+            }
         }
     }, [deviceToBackup, dispatch, getWalletByRootAddress, isCloudError, mnemonicArray, navigation])
 
