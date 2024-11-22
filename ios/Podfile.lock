@@ -620,7 +620,7 @@ PODS:
   - RNFlashList (1.7.2):
     - RCT-Folly (= 2021.07.22.00)
     - React-Core
-  - RNGestureHandler (2.20.2):
+  - RNGestureHandler (2.21.2):
     - RCT-Folly (= 2021.07.22.00)
     - React-Core
   - RNInAppBrowser (3.7.0):
@@ -1138,7 +1138,7 @@ SPEC CHECKSUMS:
   RNDeviceInfo: 59344c19152c4b2b32283005f9737c5c64b42fba
   RNFastImage: 5c9c9fed9c076e521b3f509fe79e790418a544e8
   RNFlashList: 1f1266e0cc2ccb5d56917b3a926adeaf1f901fdb
-  RNGestureHandler: 89b845775188bcda3cd2662c46f85c3575586843
+  RNGestureHandler: 0972b77a2cab0f1a61ca1a3ce348a424614f65c2
   RNInAppBrowser: e36d6935517101ccba0e875bac8ad7b0cb655364
   RNKeychain: a65256b6ca6ba6976132cc4124b238a5b13b3d9c
   RNLocalize: 1ce4263770515f53d3de442ce7657b3661b16a37
