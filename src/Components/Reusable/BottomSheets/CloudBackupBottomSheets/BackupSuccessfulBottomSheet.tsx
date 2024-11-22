@@ -3,7 +3,7 @@ import { BottomSheetModalMethods } from "@gorhom/bottom-sheet/lib/typescript/typ
 import { useI18nContext } from "~i18n"
 import { useTheme } from "~Hooks"
 import { FeatherCheckCircleIconSVG } from "~Assets"
-import { DefaultBottomSheet } from "~Components"
+import { BaseButton, DefaultBottomSheet } from "~Components"
 import { PlatformUtils } from "~Utils"
 
 type Props = {
@@ -21,16 +21,25 @@ export const BackupSuccessfulBottomSheet = React.forwardRef<BottomSheetModalMeth
             onClose()
         }, [onClose, onConfirm])
 
+        const mainButton = (
+            <BaseButton
+                w={100}
+                typographyFont="buttonMedium"
+                haptics="Light"
+                title={LL.COMMON_BTN_OK()}
+                action={handleOnProceed}
+            />
+        )
+
         return (
             <DefaultBottomSheet
                 ref={ref}
                 title={LL.BACKUP_SUCCESSFUL_TITLE()}
-                onClose={handleOnProceed}
                 description={LL.BACKUP_SUCCESSFUL_DESCRIPTION({
                     cloudType: PlatformUtils.isIOS() ? LL.ICLOUD() : LL.GOOGLE_DRIVE(),
                 })}
-                mainButton={{ label: LL.COMMON_BTN_OK(), action: handleOnProceed }}
-                iconComponent={<FeatherCheckCircleIconSVG width={64} height={64} fill={theme.colors.text} />}
+                mainButton={mainButton}
+                icon={<FeatherCheckCircleIconSVG width={64} height={64} fill={theme.colors.text} />}
             />
         )
     },

@@ -249,7 +249,7 @@ export const CloudBackupCard: FC<Props> = ({ mnemonicArray, deviceToBackup }) =>
                         </BaseView>
                         {isLoading ? (
                             <Lottie
-                                source={isWalletBackedUp ? LoaderDark : LoaderLight}
+                                source={isWalletBackedUp ? LoaderDark : theme.isDark ? LoaderDark : LoaderLight}
                                 autoPlay
                                 loop
                                 style={styles.lottie}
