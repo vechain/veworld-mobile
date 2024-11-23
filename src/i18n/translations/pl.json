@@ -66,6 +66,7 @@
   "BD_BACK_TO_APP": "WRÓĆ DO APLIKACJI",
   "BD_BUY_DESCRIPTION_COINBASE": "Kupuj z Coinbase i odbieraj tokeny bezpośrednio w VeWorld.",
   "BD_BUY_DESCRIPTION_TRANSAK": "Kupuj z Transak i odbieraj tokeny bezpośrednio w VeWorld.",
+  "BD_CANT_BE_BACKED_UP": "(Nie można utworzyć kopii zapasowej)",
   "BD_CLOUD_BACKUP_PASSWORD": "Hasło Kopii Zapasowej iCloud",
   "BD_CLOUD_INSERT_PASSWORD": "Wprowadź hasło użyte do zapisania kopii zapasowej portfela.",
   "BD_CLOUD_PASSWORD_CREATION_MESSAGE": "To hasło zabezpieczy twoją tajną frazę odzyskiwania w chmurze. VeWorld NIE ma dostępu do twojego hasła. NIE możemy go zresetować, jeśli je zgubisz, więc przechowuj je bezpiecznie.",

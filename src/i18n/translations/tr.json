@@ -66,6 +66,7 @@
   "BD_BACK_TO_APP": "UYGULAMAYA GERİ DÖN",
   "BD_BUY_DESCRIPTION_COINBASE": "Coinbase ile satın alın ve token'ları doğrudan VeWorld'e alın.",
   "BD_BUY_DESCRIPTION_TRANSAK": "Transak ile satın alın ve token'ları doğrudan VeWorld'e alın.",
+  "BD_CANT_BE_BACKED_UP": "(Yedeklenemez)",
   "BD_CLOUD_BACKUP_PASSWORD": "iCloud Yedekleme Parolası",
   "BD_CLOUD_INSERT_PASSWORD": "Cüzdanınızı yedeklemek için kullandığınız parolayı girin.",
   "BD_CLOUD_PASSWORD_CREATION_MESSAGE": "Bu parola, gizli kurtarma ifadenizi bulutta koruyacaktır. VeWorld, parolanıza erişemez. Kaybederseniz sıfırlayamayız, bu yüzden güvende tutun.",

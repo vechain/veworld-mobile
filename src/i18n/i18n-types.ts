@@ -303,6 +303,10 @@ type RootTranslation = {
 	 */
 	BD_BUY_DESCRIPTION_TRANSAK: string
 	/**
+	 * (​C​a​n​'​t​ ​b​e​ ​b​a​c​k​e​d​ ​u​p​)
+	 */
+	BD_CANT_BE_BACKED_UP: string
+	/**
 	 * i​C​l​o​u​d​ ​B​a​c​k​u​p​ ​P​a​s​s​w​o​r​d
 	 */
 	BD_CLOUD_BACKUP_PASSWORD: string
@@ -1798,10 +1802,6 @@ type RootTranslation = {
 	 */
 	GOOGLE_DRIVE: string
 	/**
-	 * G​o​o​g​l​e​ ​D​r​i​v​e​ ​e​r​r​o​r
-	 */
-	GOOGLE_DRIVE_GENERIC_ERROR_TITLE: string
-	/**
 	 * A​n​ ​e​r​r​o​r​ ​o​c​c​u​r​r​e​d​ ​w​h​i​l​e​ ​t​r​y​i​n​g​ ​t​o​ ​c​o​n​n​e​c​t​ ​t​o​ ​G​o​o​g​l​e​ ​D​r​i​v​e​ ​s​e​r​v​i​c​e​.​ ​T​r​y​ ​a​g​a​i​n​!
 	 */
 	GOOGLE_DRIVE_ERROR_GENERIC: string
@@ -1817,6 +1817,10 @@ type RootTranslation = {
 	 * T​h​e​r​e​ ​w​a​s​ ​a​n​ ​e​r​r​o​r​ ​p​e​r​f​o​r​m​i​n​g​ ​t​h​i​s​ ​G​o​o​g​l​e​ ​D​r​i​v​e​ ​w​a​l​l​e​t​ ​o​p​e​r​a​t​i​o​n​.​ ​P​l​e​a​s​e​ ​t​r​y​ ​a​g​a​i​n​.
 	 */
 	GOOGLE_DRIVE_ERR_WALLET_OPERATION: string
+	/**
+	 * G​o​o​g​l​e​ ​D​r​i​v​e​ ​e​r​r​o​r
+	 */
+	GOOGLE_DRIVE_GENERIC_ERROR_TITLE: string
 	/**
 	 * H​e​a​d​s​ ​u​p​!
 	 */
@@ -3760,6 +3764,10 @@ Try reconnect your device to the internet.
 	 */
 	BD_BUY_DESCRIPTION_TRANSAK: () => LocalizedString
 	/**
+	 * (Can't be backed up)
+	 */
+	BD_CANT_BE_BACKED_UP: () => LocalizedString
+	/**
 	 * iCloud Backup Password
 	 */
 	BD_CLOUD_BACKUP_PASSWORD: () => LocalizedString
@@ -5244,10 +5252,6 @@ Try reconnect your device to the internet.
 	 */
 	GOOGLE_DRIVE: () => LocalizedString
 	/**
-	 * Google Drive error
-	 */
-	GOOGLE_DRIVE_GENERIC_ERROR_TITLE: () => LocalizedString
-	/**
 	 * An error occurred while trying to connect to Google Drive service. Try again!
 	 */
 	GOOGLE_DRIVE_ERROR_GENERIC: () => LocalizedString
@@ -5263,6 +5267,10 @@ Try reconnect your device to the internet.
 	 * There was an error performing this Google Drive wallet operation. Please try again.
 	 */
 	GOOGLE_DRIVE_ERR_WALLET_OPERATION: () => LocalizedString
+	/**
+	 * Google Drive error
+	 */
+	GOOGLE_DRIVE_GENERIC_ERROR_TITLE: () => LocalizedString
 	/**
 	 * Heads up!
 	 */

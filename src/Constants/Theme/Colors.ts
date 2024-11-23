@@ -57,6 +57,7 @@ export type Colors = {
     errorVariant: {
         background: string
         border: string
+        borderLight: string
         icon: string
         title: string
         titleInline: string
@@ -64,6 +65,7 @@ export type Colors = {
     neutralVariant: {
         background: string
         border: string
+        borderLight: string
         icon: string
         title: string
         titleInline: string
@@ -211,6 +213,7 @@ const light: Colors = {
     errorVariant: {
         background: COLORS.RED_50,
         border: COLORS.RED_200,
+        borderLight: COLORS.RED_100,
         icon: COLORS.RED_500,
         title: COLORS.RED_700,
         titleInline: COLORS.RED_700,
@@ -218,6 +221,7 @@ const light: Colors = {
     neutralVariant: {
         background: COLORS.GREY_50,
         border: COLORS.GREY_200,
+        borderLight: COLORS.GREY_200,
         icon: COLORS.GREY_500,
         title: COLORS.GREY_700,
         titleInline: COLORS.GREY_700,
@@ -290,6 +294,7 @@ const dark: Colors = {
     errorVariant: {
         background: COLORS.RED_100,
         border: COLORS.RED_200,
+        borderLight: COLORS.RED_200,
         icon: COLORS.RED_500,
         title: COLORS.RED_700,
         titleInline: COLORS.RED_200,
@@ -297,6 +302,7 @@ const dark: Colors = {
     neutralVariant: {
         background: COLORS.GREY_100,
         border: COLORS.GREY_300,
+        borderLight: COLORS.GREY_300,
         icon: COLORS.GREY_500,
         title: COLORS.GREY_700,
         titleInline: COLORS.GREY_200,

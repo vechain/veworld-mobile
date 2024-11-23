@@ -66,6 +66,7 @@
   "BD_BACK_TO_APP": "GA TERUG NAAR APP",
   "BD_BUY_DESCRIPTION_COINBASE": "Koop met Coinbase en ontvang de tokens direct in VeWorld.",
   "BD_BUY_DESCRIPTION_TRANSAK": "Koop met Transak en ontvang de tokens direct in VeWorld.",
+  "BD_CANT_BE_BACKED_UP": "(Kan niet worden geback-upt)",
   "BD_CLOUD_BACKUP_PASSWORD": "iCloud-back-up wachtwoord",
   "BD_CLOUD_INSERT_PASSWORD": "Voer het wachtwoord in dat u gebruikte om uw wallet te back-uppen.",
   "BD_CLOUD_PASSWORD_CREATION_MESSAGE": "Dit wachtwoord beveiligt uw geheime herstelzin in de cloud. VeWorld heeft GEEN toegang tot uw wachtwoord. We kunnen het niet resetten als u het verliest, dus bewaar het veilig.",

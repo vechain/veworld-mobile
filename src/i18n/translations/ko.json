@@ -66,6 +66,7 @@
   "BD_BACK_TO_APP": "앱으로 돌아가기",
   "BD_BUY_DESCRIPTION_COINBASE": "Coinbase를 통해 구매하고 VeWorld에서 직접 토큰을 받으세요.",
   "BD_BUY_DESCRIPTION_TRANSAK": "Transak을 통해 구매하고 VeWorld에서 직접 토큰을 받으세요.",
+  "BD_CANT_BE_BACKED_UP": "(백업할 수 없음)",
   "BD_CLOUD_BACKUP_PASSWORD": "iCloud 백업 비밀번호",
   "BD_CLOUD_INSERT_PASSWORD": "지갑을 백업할 때 사용한 비밀번호를 입력하십시오.",
   "BD_CLOUD_PASSWORD_CREATION_MESSAGE": "이 비밀번호는 클라우드에서 비밀 복구 구문을 보호합니다. VeWorld는 귀하의 비밀번호에 액세스할 수 없습니다. 비밀번호를 잃어버린 경우 재설정할 수 없으므로 안전하게 보관하십시오.",

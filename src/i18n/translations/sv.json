@@ -66,6 +66,7 @@
   "BD_BACK_TO_APP": "TILLBAKA TILL APPEN",
   "BD_BUY_DESCRIPTION_COINBASE": "Köp med Coinbase och ta emot tokens direkt i VeWorld.",
   "BD_BUY_DESCRIPTION_TRANSAK": "Köp med Transak och ta emot tokens direkt i VeWorld.",
+  "BD_CANT_BE_BACKED_UP": "(Kan inte säkerhetskopieras)",
   "BD_CLOUD_BACKUP_PASSWORD": "iCloud Säkerhetskopieringslösenord",
   "BD_CLOUD_INSERT_PASSWORD": "Ange lösenordet du använde för att säkerhetskopiera din plånbok.",
   "BD_CLOUD_PASSWORD_CREATION_MESSAGE": "Detta lösenord kommer att skydda din hemliga återställningsfras i molnet. VeWorld har INTE tillgång till ditt lösenord. Vi kan INTE återställa det om du tappar det, så håll det säkert.",

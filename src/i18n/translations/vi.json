@@ -66,6 +66,7 @@
   "BD_BACK_TO_APP": "QUAY LẠI ỨNG DỤNG",
   "BD_BUY_DESCRIPTION_COINBASE": "Mua với Coinbase và nhận token trực tiếp tại VeWorld.",
   "BD_BUY_DESCRIPTION_TRANSAK": "Mua với Transak và nhận token trực tiếp tại VeWorld.",
+  "BD_CANT_BE_BACKED_UP": "(Không thể sao lưu)",
   "BD_CLOUD_BACKUP_PASSWORD": "Mật khẩu sao lưu iCloud",
   "BD_CLOUD_INSERT_PASSWORD": "Nhập mật khẩu bạn đã sử dụng để sao lưu ví của mình.",
   "BD_CLOUD_PASSWORD_CREATION_MESSAGE": "Mật khẩu này sẽ bảo vệ cụm từ khôi phục bí mật của bạn trên đám mây. VeWorld KHÔNG có quyền truy cập vào mật khẩu của bạn. Chúng tôi KHÔNG thể đặt lại nếu bạn mất nó, vì vậy hãy giữ nó an toàn.",
