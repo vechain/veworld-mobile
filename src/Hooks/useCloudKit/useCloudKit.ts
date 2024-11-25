@@ -1,15 +1,17 @@
 import { useCallback } from "react"
 import { NativeModules } from "react-native"
 import { showErrorToast, showInfoToast } from "~Components"
-import { DerivationPath, ERROR_EVENTS } from "~Constants"
+import { AnalyticsEvent, DerivationPath, ERROR_EVENTS } from "~Constants"
 import { useI18nContext } from "~i18n"
 import { DEVICE_TYPE } from "~Model"
 import { PasswordUtils, error } from "~Utils"
 import { CKError, handleCloudKitErrors } from "./ErrorModel"
+import { useAnalyticTracking } from "~Hooks/useAnalyticTracking"
 const { CloudKitManager } = NativeModules
 
 export const useCloudKit = () => {
     const { LL } = useI18nContext()
+    const track = useAnalyticTracking()
 
     const getCloudKitAvailability = useCallback(async () => {
         try {
@@ -24,12 +26,17 @@ export const useCloudKit = () => {
         }
     }, [])
 
-    const deleteWallet = useCallback(async (_rootAddress: string) => {
-        const delWAllet = await CloudKitManager.deleteWallet(_rootAddress)
-        const delSalt = await CloudKitManager.deleteSalt(_rootAddress)
-        const delIV = await CloudKitManager.deleteIV(_rootAddress)
-        return delWAllet && delSalt && delIV
-    }, [])
+    const deleteWallet = useCallback(
+        async (_rootAddress: string) => {
+            track(AnalyticsEvent.DELETE_BACKUP)
+            const delWAllet = await CloudKitManager.deleteWallet(_rootAddress)
+            const delSalt = await CloudKitManager.deleteSalt(_rootAddress)
+            const delIV = await CloudKitManager.deleteIV(_rootAddress)
+            delWAllet && delSalt && delIV && track(AnalyticsEvent.DELETE_BACKUP_SUCCESS)
+            return delWAllet && delSalt && delIV
+        },
+        [track],
+    )
 
     const saveWalletToCloudKit = useCallback(
         async ({
@@ -49,6 +56,7 @@ export const useCloudKit = () => {
             iv: Uint8Array
             derivationPath: DerivationPath
         }) => {
+            track(AnalyticsEvent.SAVE_BACKUP_TO_CLOUD_START)
             if (!mnemonic || !_rootAddress || !deviceType || !salt || !iv || !firstAccountAddress) {
                 showErrorToast({
                     text1: LL.CLOUDKIT_ERROR_GENERIC(),
@@ -76,6 +84,8 @@ export const useCloudKit = () => {
                         })
                         return false
                     }
+
+                    track(AnalyticsEvent.SAVE_BACKUP_TO_CLOUD_SUCCESS)
                     return true
                 }
                 return false
@@ -90,10 +100,11 @@ export const useCloudKit = () => {
                 return false
             }
         },
-        [LL, deleteWallet],
+        [LL, deleteWallet, track],
     )
 
     const getAllWalletsFromCloudKit = useCallback(async () => {
+        track(AnalyticsEvent.IMPORT_ALL_BACKUPS_FROM_WALLET_START)
         try {
             const result = await CloudKitManager.getAllFromCloudKit()
             if (Array.isArray(result) && result.length === 0) {
@@ -104,6 +115,7 @@ export const useCloudKit = () => {
                     }),
                 })
             }
+            track(AnalyticsEvent.IMPORT_ALL_BACKUPS_FROM_WALLET_SUCCESS)
             return result
         } catch (_error) {
             let er = _error as CKError
@@ -114,26 +126,32 @@ export const useCloudKit = () => {
             })
             return []
         }
-    }, [LL])
+    }, [LL, track])
 
-    const getWalletByRootAddress = useCallback(async (_rootAddress?: string) => {
-        if (!_rootAddress) {
-            throw new Error("Root address is required")
-        }
+    const getWalletByRootAddress = useCallback(
+        async (_rootAddress?: string) => {
+            track(AnalyticsEvent.IMPORT_FROM_CLOUD_START)
 
-        try {
-            const selectedWallet = await CloudKitManager.getWallet(_rootAddress)
-            return selectedWallet
-        } catch (_error) {
-            let er = _error as CKError
-            error(ERROR_EVENTS.CLOUDKIT, er, er.message)
-            showErrorToast({
-                text1: er.message,
-                text2: handleCloudKitErrors(er),
-            })
-            throw er
-        }
-    }, [])
+            if (!_rootAddress) {
+                throw new Error("Root address is required")
+            }
+
+            try {
+                const selectedWallet = await CloudKitManager.getWallet(_rootAddress)
+                track(AnalyticsEvent.IMPORT_FROM_CLOUD_SUCCESS)
+                return selectedWallet
+            } catch (_error) {
+                let er = _error as CKError
+                error(ERROR_EVENTS.CLOUDKIT, er, er.message)
+                showErrorToast({
+                    text1: er.message,
+                    text2: handleCloudKitErrors(er),
+                })
+                throw er
+            }
+        },
+        [track],
+    )
 
     const getSalt = useCallback(async (_rootAddress: string) => {
         try {
