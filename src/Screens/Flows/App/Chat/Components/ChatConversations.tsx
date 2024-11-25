@@ -13,7 +13,7 @@ const ChatConversations: React.FC<Props> = () => {
     const theme = useTheme()
     // Get the client associated with the current selected address
     // Get the list of all the conversations allowed
-    const { data: convs, isLoading } = useConversations()
+    const { data: convs, isLoading, isFetching, isRefetching, refetch: refetchConversations } = useConversations()
     // Get list of all conversations unknown (to be added in Requests tab)
 
     const allowedConvs = convs?.filter(c => c.state === "allowed")
@@ -34,6 +34,8 @@ const ChatConversations: React.FC<Props> = () => {
                     <NestableScrollContainer>
                         <FlatList
                             data={allowedConvs}
+                            onRefresh={refetchConversations}
+                            refreshing={isFetching || isRefetching}
                             keyExtractor={item => item.topic}
                             ItemSeparatorComponent={itemSeparator}
                             renderItem={({ item }) => <ConversationRow item={item} />}

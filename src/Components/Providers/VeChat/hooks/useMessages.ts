@@ -10,6 +10,9 @@ export function useMessages({ topic }: { topic: string }): UseQueryResult<Decode
     return useQuery<DecodedMessage[]>({
         queryKey: ["veChat", "messages", selectedClient?.address, conversation?.topic],
         queryFn: () => conversation!.messages(),
+        select: messages => {
+            return messages
+        },
         enabled: !!selectedClient && !!topic && !!conversation,
     })
 }

@@ -1,7 +1,7 @@
 import { NativeStackScreenProps } from "@react-navigation/native-stack"
 import { DecodedMessage } from "@xmtp/react-native-sdk"
 import React, { useCallback, useState } from "react"
-import { FlatList, StyleSheet } from "react-native"
+import { FlatList, RefreshControl, StyleSheet } from "react-native"
 import {
     AccountIcon,
     BaseIcon,
@@ -11,6 +11,7 @@ import {
     BaseTextInput,
     BaseView,
     Layout,
+    useConversation,
     useMessages,
     useVeChat,
 } from "~Components"
@@ -27,26 +28,49 @@ const ConversationScreen = ({ route, navigation }: Props) => {
     const { styles, theme } = useThemedStyles(baseStyles)
 
     const { selectedClient } = useVeChat()
-    const { data: messages } = useMessages({ topic })
-    // const { data: conversation } = useConversation({ topic })
+    const {
+        data: messages,
+        refetch: refetchMessages,
+        isRefetching: isMsgRefetching,
+        isFetching: isMsgFetching,
+    } = useMessages({ topic })
+    const { data: conversation } = useConversation({ topic })
 
     const onGoBack = useCallback(() => {
         navigation.goBack()
     }, [navigation])
 
+    const onSendMessage = useCallback(async () => {
+        if (!conversation) return
+        await conversation.send(message)
+        refetchMessages()
+        setMessage("")
+    }, [conversation, message, refetchMessages])
+
+    const humanDate = useCallback((timestamp: number) => {
+        const date = new Date(timestamp)
+        const hours = date.getHours()
+        const mins = date.getMinutes()
+        return `${hours}:${mins}`
+    }, [])
+
     const messageItem = ({ item }: { item: DecodedMessage }) => {
+        const isSender = item.senderAddress === selectedClient?.inboxId
         return (
-            <BaseView
-                flexDirection="row"
-                w={100}
-                px={12}
-                py={6}
-                justifyContent={item.senderAddress !== selectedClient?.address ? "flex-start" : "flex-end"}>
-                <BaseView>
-                    <BaseText typographyFont="captionBold">{humanAddress(recipient)}</BaseText>
-                    <BaseText>{item.content()} </BaseText>
+            <BaseView flexDirection="row" w={100} px={12} py={6} justifyContent={!isSender ? "flex-start" : "flex-end"}>
+                <BaseView p={12} bg={!isSender ? theme.colors.card : theme.colors.primary}>
+                    <BaseText
+                        typographyFont="captionBold"
+                        color={!isSender ? theme.colors.text : theme.colors.textReversed}>
+                        {!isSender ? humanAddress(recipient) : humanAddress(selectedClient.address)}
+                    </BaseText>
+                    <BaseText color={!isSender ? theme.colors.text : theme.colors.textReversed}>
+                        {item.content()}{" "}
+                    </BaseText>
                     <BaseView flexDirection="row" justifyContent="flex-end">
-                        <BaseText>{new Date(item.sentNs / 1000000).toISOString()}</BaseText>
+                        <BaseText color={!isSender ? theme.colors.text : theme.colors.textReversed}>
+                            {humanDate(item.sentNs / 1000000)}
+                        </BaseText>
                     </BaseView>
                 </BaseView>
             </BaseView>
@@ -70,15 +94,26 @@ const ConversationScreen = ({ route, navigation }: Props) => {
                 </BaseView>
             }
             fixedBody={
-                <BaseScrollView h={100}>
-                    <FlatList
-                        data={messages}
-                        inverted
-                        initialScrollIndex={message?.length}
-                        keyExtractor={i => i.id}
-                        renderItem={messageItem}
-                        ItemSeparatorComponent={() => <BaseSpacer height={6} />}
-                    />
+                <BaseScrollView
+                    h={100}
+                    style={{ transform: [{ scaleY: -1 }] }}
+                    refreshControl={
+                        <RefreshControl
+                            refreshing={isMsgRefetching || isMsgFetching}
+                            onRefresh={refetchMessages}
+                            tintColor={theme.colors.border}
+                        />
+                    }>
+                    <BaseView style={{ transform: [{ scaleY: -1 }] }}>
+                        <FlatList
+                            data={messages}
+                            inverted
+                            initialScrollIndex={message?.length}
+                            keyExtractor={i => i.id}
+                            renderItem={messageItem}
+                            ItemSeparatorComponent={() => <BaseSpacer height={6} />}
+                        />
+                    </BaseView>
                 </BaseScrollView>
             }
             footer={
@@ -86,9 +121,15 @@ const ConversationScreen = ({ route, navigation }: Props) => {
                     <BaseSpacer height={2} background={theme.colors.card} />
                     <BaseView w={100} flexDirection="row" p={12}>
                         <BaseView flex={1} mx={6}>
-                            <BaseTextInput value={message} onChange={e => setMessage(e.nativeEvent.text)} />
+                            <BaseTextInput value={message} setValue={s => setMessage(s)} placeholder={"Message..."} />
                         </BaseView>
-                        <BaseIcon name={"send"} bg={theme.colors.primaryLight} />
+                        <BaseIcon
+                            name={"send"}
+                            bg={theme.colors.primaryLight}
+                            color={theme.colors.textReversed}
+                            disabled={!message}
+                            action={() => onSendMessage()}
+                        />
                     </BaseView>
                 </BaseView>
             }

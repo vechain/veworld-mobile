@@ -23,7 +23,7 @@ export const ConversationRow: React.FC<Props> = ({ item }) => {
     }, [item, selectedClient?.address])
 
     const goToConversation = () => {
-        nav.navigate(Routes.CHAT_CONVERSATION, { recipient: recipientAddr, topic: item.topic })
+        nav.navigate(Routes.CHAT_CONVERSATION, { recipient: recipientAddr, inboxId: item.id, topic: item.topic })
     }
 
     useEffect(() => {

@@ -11,7 +11,7 @@ type Props = NativeStackScreenProps<RootStackParamListHome, Routes.CHAT_REQUESTS
 
 const RequestsScreen: React.FC<Props> = () => {
     const theme = useTheme()
-    const { data } = useConversations()
+    const { data, refetch, isFetching, isRefetching } = useConversations()
 
     const requests = useMemo(() => {
         return data?.filter(req => req.state === "unknown")
@@ -29,6 +29,8 @@ const RequestsScreen: React.FC<Props> = () => {
                     <NestableScrollContainer>
                         <FlatList
                             data={requests}
+                            refreshing={isFetching || isRefetching}
+                            onRefresh={refetch}
                             keyExtractor={item => item.topic}
                             renderItem={({ item }) => <ConversationRow item={item} />}
                             ItemSeparatorComponent={itemSeparator}
