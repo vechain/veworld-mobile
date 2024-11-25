@@ -481,7 +481,7 @@ export const ImportLocalWallet = () => {
                             haptics="Light"
                         />
 
-                        {PlatformUtils.isAndroid() && (
+                        {PlatformUtils.isAndroid() && isCloudAvailable && (
                             <>
                                 <BaseSpacer height={8} />
                                 <BaseButton

@@ -1,10 +1,12 @@
 import { useCallback, useEffect, useState } from "react"
 import { useCloudKit } from "~Hooks/useCloudKit"
 import { useGoogleDrive } from "~Hooks/useGoogleDrive"
+import { selectGoogleDriveBackupEnabled, useAppSelector } from "~Storage/Redux"
 import { PlatformUtils } from "~Utils"
 
 export const useCloudBackup = () => {
     const [isAvailable, setisAvailable] = useState(false)
+    const googleDriveBackupEnabled = useAppSelector(selectGoogleDriveBackupEnabled)
 
     const {
         getWalletByRootAddress: getWalletFromDrive,
@@ -34,10 +36,10 @@ export const useCloudBackup = () => {
                 .catch(() => setisAvailable(false))
         } else {
             getGoogleServicesAvailability()
-                .then(_isAvailable => setisAvailable(_isAvailable))
+                .then(_isAvailable => setisAvailable(_isAvailable && googleDriveBackupEnabled))
                 .catch(() => setisAvailable(false))
         }
-    }, [getCloudKitAvailability, getGoogleServicesAvailability])
+    }, [getCloudKitAvailability, getGoogleServicesAvailability, googleDriveBackupEnabled])
 
     const getWalletByRootAddress = useCallback(
         async (_rootAddress?: string) => {
