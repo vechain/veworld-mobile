@@ -57,22 +57,16 @@ export const getTokenInfo = async (coinGeckoId?: string) => {
         // Just for better react-query support. We'll never reach this point if used via react-query hooks
         if (!coinGeckoId) throw new Error("CoinGecko ID is not defined")
 
-        // TODO - Re -enable proxy endoint when issues with encoding are fixed
-        // const response = await axiosInstance.get<TokenInfoResponse>(`/coins/${coinGeckoId}`, {
-        //     params: {
-        //         localization: false,
-        //         tickers: false,
-        //         market_data: true,
-        //         community_data: false,
-        //         developer_data: false,
-        //         sparkline: false,
-        //     },
-        // })
-
-        const response = await axiosInstance.get<TokenInfoResponse>(
-            // eslint-disable-next-line max-len
-            `https://api.coingecko.com/api/v3/coins/${coinGeckoId}?localization=false&tickers=false&market_data=true&community_data=false&developer_data=false&sparkline=false`,
-        )
+        const response = await axiosInstance.get<TokenInfoResponse>(`/coins/${coinGeckoId}`, {
+            params: {
+                localization: false,
+                tickers: false,
+                market_data: true,
+                community_data: false,
+                developer_data: false,
+                sparkline: false,
+            },
+        })
 
         const zodParsed = TokenInfoResponseSchema.parse(response.data)
 
@@ -117,19 +111,13 @@ export const getMarketChart = async ({
             prices: number[][]
         }
 
-        // TODO - Re -enable proxy endoint when issues with encoding are fixed
-        // const pricesResponse = await axiosInstance.get<PriceChangeResponse>(`/coins/${coinGeckoId}/market_chart`, {
-        //     params: {
-        //         days,
-        //         vs_currency,
-        //         interval,
-        //     },
-        // })
-
-        const pricesResponse = await axiosInstance.get<PriceChangeResponse>(
-            // eslint-disable-next-line max-len
-            `https://api.coingecko.com/api/v3/coins/${coinGeckoId}/market_chart?vs_currency=${vs_currency}&days=${days}&interval=${interval}`,
-        )
+        const pricesResponse = await axiosInstance.get<PriceChangeResponse>(`/coins/${coinGeckoId}/market_chart`, {
+            params: {
+                days,
+                vs_currency,
+                interval,
+            },
+        })
 
         const zodParsed = MarketChartResponseSchema.parse(pricesResponse.data)
 
