@@ -27,6 +27,8 @@ import {
     WalletDetailScreen,
     WalletManagementScreen,
 } from "~Screens"
+import ConversationScreen from "~Screens/Flows/App/Chat/ConversationScreen"
+import RequestsScreen from "~Screens/Flows/App/Chat/RequestsScreen"
 
 export type RootStackParamListHome = {
     [Routes.HOME]: undefined
@@ -77,6 +79,7 @@ export type RootStackParamListHome = {
     [Routes.CHAT_CONVERSATIONS]: undefined
     [Routes.CHAT_CONVERSATION]: {
         recipient: string
+        topic: string
     }
     [Routes.CHAT_REQUESTS]: undefined
 }
@@ -167,8 +170,12 @@ export const HomeStack = () => {
 
             <Group>
                 <Screen name={Routes.CHAT_CONVERSATIONS} component={ChatScreen} options={{ headerShown: false }} />
-                {/* <Screen name={Routes.CHAT_CONVERSATION} component={placeholder} options={{ headerShown: false }} />
-                <Screen name={Routes.CHAT_REQUESTS} component={placeholder} options={{ headerShown: false }} /> */}
+                <Screen
+                    name={Routes.CHAT_CONVERSATION}
+                    component={ConversationScreen}
+                    options={{ headerShown: false }}
+                />
+                <Screen name={Routes.CHAT_REQUESTS} component={RequestsScreen} options={{ headerShown: false }} />
             </Group>
         </Navigator>
     )

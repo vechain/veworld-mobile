@@ -1,0 +1,43 @@
+import { NativeStackScreenProps } from "@react-navigation/native-stack"
+import React, { useCallback, useMemo } from "react"
+import { FlatList } from "react-native"
+import { BaseSpacer, BaseView, Layout, useConversations } from "~Components"
+import { RootStackParamListHome, Routes } from "~Navigation"
+import { ConversationRow } from "./Components/ConversationRow"
+import { useTheme } from "~Hooks"
+import { NestableScrollContainer } from "react-native-draggable-flatlist"
+
+type Props = NativeStackScreenProps<RootStackParamListHome, Routes.CHAT_REQUESTS>
+
+const RequestsScreen: React.FC<Props> = () => {
+    const theme = useTheme()
+    const { data } = useConversations()
+
+    const requests = useMemo(() => {
+        return data?.filter(req => req.state === "unknown")
+    }, [data])
+
+    const itemSeparator = useCallback(() => {
+        return <BaseSpacer height={1} background={theme.colors.card} />
+    }, [theme])
+
+    return (
+        <Layout
+            noMargin
+            fixedBody={
+                <BaseView h={100}>
+                    <NestableScrollContainer>
+                        <FlatList
+                            data={requests}
+                            keyExtractor={item => item.topic}
+                            renderItem={({ item }) => <ConversationRow item={item} />}
+                            ItemSeparatorComponent={itemSeparator}
+                        />
+                    </NestableScrollContainer>
+                </BaseView>
+            }
+        />
+    )
+}
+
+export default RequestsScreen

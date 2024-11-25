@@ -7,7 +7,7 @@ import {
     VeChainSigner,
 } from "@vechain/sdk-network"
 import { Client } from "@xmtp/react-native-sdk"
-import React, { useCallback, useEffect, useState } from "react"
+import React, { useCallback, useEffect, useMemo, useState } from "react"
 import { HDNode } from "thor-devkit"
 import { DEVICE_TYPE, Wallet } from "~Model"
 import {
@@ -15,7 +15,7 @@ import {
     getDbEncryptionKey,
     selectDevice,
     selectRegisteredClients,
-    selectSelectedAccount,
+    selectSelectedAccountOrNull,
     selectSelectedNetwork,
     setDbEncryptionKey,
     useAppDispatch,
@@ -28,6 +28,7 @@ type VeChatContextProps = { children: React.ReactNode }
 
 interface VeChatContextValue {
     clients: Client[]
+    selectedClient: Client | undefined
     newClient: (pinCode?: string) => void
 }
 
@@ -36,13 +37,17 @@ export const VeChatContext = React.createContext<VeChatContextValue | undefined>
 const VeChatContextProvider: React.FC<VeChatContextProps> = ({ children }) => {
     const [clients, setClients] = useState<Client[]>([])
 
-    const currentAccount = useAppSelector(selectSelectedAccount)
-    const signerDevice = useAppSelector(state => selectDevice(state, currentAccount.rootAddress))
+    const currentAccount = useAppSelector(selectSelectedAccountOrNull)
+    const signerDevice = useAppSelector(state => selectDevice(state, currentAccount?.rootAddress))
 
     const selectedNetwork = useAppSelector(selectSelectedNetwork)
     const registeredClients = useAppSelector(selectRegisteredClients)
     const dbEncryptionKey = useAppSelector(getDbEncryptionKey)
     const dispatch = useAppDispatch()
+
+    const selectedClient = useMemo(() => {
+        return clients.find(client => client.address === currentAccount?.address)
+    }, [clients, currentAccount?.address])
 
     const generateDbEncryptionKey = useCallback(async () => {
         if (!dbEncryptionKey) {
@@ -57,7 +62,6 @@ const VeChatContextProvider: React.FC<VeChatContextProps> = ({ children }) => {
             return
         }
         const loadedClients = await loadXmtpClients(registeredClients, dbEncryptionKey)
-
         loadedClients.forEach(initClientListeners)
         setClients(loadedClients)
 
@@ -68,6 +72,7 @@ const VeChatContextProvider: React.FC<VeChatContextProps> = ({ children }) => {
         async (pinCode?: string) => {
             if (!dbEncryptionKey) throw new Error("Cannot create a new client no keys found")
             if (!signerDevice) throw new Error("No device found to create a signer")
+            if (!currentAccount) throw new Error("")
             if (signerDevice.type === DEVICE_TYPE.LEDGER) throw new Error("Ledger devices not supported in this hook")
 
             const thorClient = ThorClient.at(selectedNetwork.currentUrl)
@@ -119,6 +124,7 @@ const VeChatContextProvider: React.FC<VeChatContextProps> = ({ children }) => {
 
     const value: VeChatContextValue = {
         clients,
+        selectedClient,
         newClient,
     }
 

@@ -81,6 +81,6 @@ export {
     SemanticVersionUtils,
 }
 
-export * from "./XmtpUtils"
+export * from "./VeChatUtils"
 
 export { BigNumberUtils }

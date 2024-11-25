@@ -23,7 +23,7 @@ const Header: React.FC<Props> = ({ isOnboarding, onChangeAccountPress }) => {
     }, [nav])
 
     return (
-        <BaseView w={100} px={20} pb={8} flexDirection="row" alignItems="center" justifyContent="space-between">
+        <BaseView w={100} px={12} pb={8} flexDirection="row" alignItems="center" justifyContent="space-between">
             <BaseView flexDirection="row" style={styles.titleContainer}>
                 <BaseIcon haptics="Light" action={onGoBack} name="arrow-left" size={24} color={theme.colors.text} />
                 <BaseTouchable testID="Chat_change_account" action={onChangeAccountPress}>
