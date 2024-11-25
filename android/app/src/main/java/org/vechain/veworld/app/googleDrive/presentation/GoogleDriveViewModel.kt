@@ -163,6 +163,7 @@ class GoogleDriveViewModel(private val googleDrive: GoogleDrive) : ViewModel() {
     ) {
         if (!googleDrive.areGooglePlayServicesAvailable()) {
             onResult(Result.Error(DataError.Drive.GOOGLE_SERVICES_UNAVAILABLE))
+            return
         }
 
         viewModelScope.launch {
@@ -188,7 +189,7 @@ class GoogleDriveViewModel(private val googleDrive: GoogleDrive) : ViewModel() {
                         }
                     }
                     onResult(Result.Success(mnemonics))
-                } ?: {
+                } ?: run {
                     googleDrive.signOut()
                     onResult(Result.Error(DataError.Drive.FOLDER_NOT_FOUND))
                 }

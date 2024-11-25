@@ -6,7 +6,7 @@ import { useI18nContext } from "~i18n"
 import { RootStackParamListSettings, Routes } from "~Navigation"
 import { CloudAndManualBackup, ManualBackup } from "./Components"
 
-type Props = {} & NativeStackScreenProps<RootStackParamListSettings, Routes.ICLOUD_MNEMONIC_BACKUP>
+type Props = NativeStackScreenProps<RootStackParamListSettings, Routes.ICLOUD_MNEMONIC_BACKUP>
 
 export const MnemonicBackupScreen = ({ route }: Props) => {
     const { LL } = useI18nContext()
