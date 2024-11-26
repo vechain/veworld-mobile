@@ -269,17 +269,20 @@ class GoogleDrivePackage(private val reactContext: ReactApplicationContext) :
                 }
 
                 is Result.Error -> {
-                    if (result.error == DataError.Drive.USER_UNRECOVERABLE_AUTH && !isRetry) {
-                        val exception = result.throwable as UserRecoverableAuthIOException
-                        val intent = exception.intent
+                    if (result.error == DataError.Drive.FOLDER_NOT_FOUND) {
+                        promise.resolve(WritableNativeArray())
+                    } else
+                        if (result.error == DataError.Drive.USER_UNRECOVERABLE_AUTH && !isRetry) {
+                            val exception = result.throwable as UserRecoverableAuthIOException
+                            val intent = exception.intent
 
-                        val operation = {
-                            getAllBackups(drive, promise, true)
+                            val operation = {
+                                getAllBackups(drive, promise, true)
+                            }
+                            userRecoverableAuthExceptionHandler(intent, promise, operation)
+                        } else {
+                            promise.reject(result.error.code, result.error.name, result.throwable)
                         }
-                        userRecoverableAuthExceptionHandler(intent, promise, operation)
-                    } else {
-                        promise.reject(result.error.code, result.error.name, result.throwable)
-                    }
                 }
             }
         }
@@ -308,7 +311,9 @@ class GoogleDrivePackage(private val reactContext: ReactApplicationContext) :
                 }
 
                 is Result.Error -> {
-                    if (result.error == DataError.Drive.USER_UNRECOVERABLE_AUTH && !isRetry) {
+                    if (result.error == DataError.Drive.FOLDER_NOT_FOUND) {
+                        promise.resolve(null)
+                    } else if (result.error == DataError.Drive.USER_UNRECOVERABLE_AUTH && !isRetry) {
                         val exception = result.throwable as UserRecoverableAuthIOException
                         val intent = exception.intent
 
@@ -357,7 +362,9 @@ class GoogleDrivePackage(private val reactContext: ReactApplicationContext) :
                 }
 
                 is Result.Error -> {
-                    if (result.error == DataError.Drive.USER_UNRECOVERABLE_AUTH && !isRetry) {
+                    if (result.error == DataError.Drive.FOLDER_NOT_FOUND) {
+                        promise.resolve(null)
+                    } else if (result.error == DataError.Drive.USER_UNRECOVERABLE_AUTH && !isRetry) {
                         val exception = result.throwable as UserRecoverableAuthIOException
                         val intent = exception.intent
 

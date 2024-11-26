@@ -70,6 +70,7 @@ export const ImportMnemonicBackupPasswordScreen = () => {
                 pin,
                 derivationPath: wallet!.derivationPath,
             })
+            dispatch(setIsAppLoading(false))
             navigation.dispatch(StackActions.popToTop())
         },
         allowAutoPassword: false,
@@ -106,13 +107,13 @@ export const ImportMnemonicBackupPasswordScreen = () => {
             if (userHasOnboarded) {
                 checkIdentityBeforeOpening()
             } else {
-                onCreateWallet({
+                await onCreateWallet({
                     importMnemonic: mnemonic,
                     derivationPath: wallet.derivationPath,
                     importType: PlatformUtils.isIOS() ? IMPORT_TYPE.ICLOUD : IMPORT_TYPE.GOOGLE_DRIVE,
                 })
+                dispatch(setIsAppLoading(false))
             }
-            dispatch(setIsAppLoading(false))
         } catch (_error) {
             let er = _error as Error
             error(ERROR_EVENTS.CLOUDKIT, er, er.message)
