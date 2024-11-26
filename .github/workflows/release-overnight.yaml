@@ -13,6 +13,7 @@ on:
                 required: true
     schedule:
     - cron: '0 23 * * 1-5'  # Runs at 23:00 UTC Monday through Friday 
+
 env:
     IOS_VERSION: ${{ vars.ios_version }}
     IOS_BUILD: ${{ vars.ios_build }}
@@ -22,6 +23,8 @@ env:
 jobs:
     check-merged-pr:
         runs-on: ubuntu-latest
+        outputs:
+          should_release: ${{ steps.check_merged_prs.outputs.should_release }}
         steps:
             - name: Checkout repository
               uses: actions/checkout@v4
@@ -47,6 +50,7 @@ jobs:
     setup-version-build:
         runs-on: ubuntu-latest
         needs: check-merged-pr
+        if: needs.check-merged-pr.outputs.should_release == 'true'
         permissions:
           actions: write
           contents: read
