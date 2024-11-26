@@ -1,6 +1,6 @@
 import { RouteProp, useNavigation, useRoute } from "@react-navigation/native"
 import React, { useCallback, useEffect, useRef, useState } from "react"
-import { Keyboard, StyleSheet } from "react-native"
+import { Keyboard } from "react-native"
 import { TextInput } from "react-native-gesture-handler"
 import { getTimeZone } from "react-native-localize"
 import { Easing, useSharedValue, withTiming } from "react-native-reanimated"
@@ -19,17 +19,16 @@ import {
     PasswordStrengthIndicator,
     showErrorToast,
 } from "~Components"
-import { COLORS, ColorThemeType, DerivationPath, typography } from "~Constants"
+import { COLORS, DerivationPath } from "~Constants"
 import { useBottomSheetModal, useCloudBackup, useThemedStyles } from "~Hooks"
 import { useI18nContext } from "~i18n"
 import { RootStackParamListSettings, Routes } from "~Navigation"
 import { selectIsAppLoading, setDeviceIsBackup, setIsAppLoading, useAppDispatch, useAppSelector } from "~Storage/Redux"
 import { AddressUtils, CryptoUtils, DateUtils, HexUtils, PasswordUtils, PlatformUtils } from "~Utils"
-
-const { defaults: defaultTypography } = typography
+import { commonStyle } from "./utils"
 
 export const ChooseMnemonicBackupPassword = () => {
-    const { styles, theme } = useThemedStyles(baseStyle)
+    const { styles, theme } = useThemedStyles(commonStyle)
     const { LL, locale } = useI18nContext()
     const navigation = useNavigation()
     const dispatch = useAppDispatch()
@@ -283,35 +282,3 @@ export const ChooseMnemonicBackupPassword = () => {
         />
     )
 }
-
-const baseStyle = (theme: ColorThemeType) =>
-    StyleSheet.create({
-        rootContainer: {
-            flex: 1,
-            backgroundColor: theme.colors.background,
-        },
-        keyIcon: {
-            color: theme.colors.text,
-        },
-        containerPassword: {
-            flexDirection: "row",
-            alignItems: "center",
-            borderColor: COLORS.GREY_200,
-            borderWidth: 1,
-            borderRadius: 8,
-            paddingRight: 8,
-            backgroundColor: COLORS.WHITE,
-        },
-        inputPassword: {
-            flex: 1,
-            backgroundColor: theme.colors.transparent,
-            color: COLORS.GREY_600,
-            borderRadius: 8,
-            fontSize: defaultTypography.body.fontSize,
-            fontFamily: defaultTypography.body.fontFamily,
-            lineHeight: defaultTypography.subTitle.lineHeight,
-        },
-        toggleIcon: {
-            marginRight: 4,
-        },
-    })
