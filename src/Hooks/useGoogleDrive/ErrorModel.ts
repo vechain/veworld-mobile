@@ -63,7 +63,6 @@ export const handleGoogleDriveErrors = (err: GDError): { title: string; descript
             }
 
         case ACTIVITY_NOT_FOUND:
-        case OAUTH_INTERRUPTED:
         case SIGN_OUT:
         case UNKNOWN_TYPE:
         case UNKNOWN_DERIVATION_PATH:

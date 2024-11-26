@@ -57,24 +57,20 @@ export const ImportMnemonicBackupPasswordScreen = () => {
         onClose: onCloseCreateFlow,
     } = useHandleWalletCreation()
 
-    const {
-        isPasswordPromptOpen: isPasswordPromptOpen,
-        handleClosePasswordModal: handleClosePasswordModal,
-        onPasswordSuccess: onPasswordSuccess,
-        checkIdentityBeforeOpening: checkIdentityBeforeOpening,
-    } = useCheckIdentity({
-        onIdentityConfirmed: async (pin?: string) => {
-            await importOnboardedWallet({
-                importMnemonic: mnemonicCache.current,
-                importType: PlatformUtils.isIOS() ? IMPORT_TYPE.ICLOUD : IMPORT_TYPE.GOOGLE_DRIVE,
-                pin,
-                derivationPath: wallet!.derivationPath,
-            })
-            dispatch(setIsAppLoading(false))
-            navigation.dispatch(StackActions.popToTop())
-        },
-        allowAutoPassword: false,
-    })
+    const { isPasswordPromptOpen, handleClosePasswordModal, onPasswordSuccess, checkIdentityBeforeOpening } =
+        useCheckIdentity({
+            onIdentityConfirmed: async (pin?: string) => {
+                await importOnboardedWallet({
+                    importMnemonic: mnemonicCache.current,
+                    importType: PlatformUtils.isIOS() ? IMPORT_TYPE.ICLOUD : IMPORT_TYPE.GOOGLE_DRIVE,
+                    pin,
+                    derivationPath: wallet.derivationPath,
+                })
+                dispatch(setIsAppLoading(false))
+                navigation.dispatch(StackActions.popToTop())
+            },
+            allowAutoPassword: false,
+        })
 
     const importWallet = useCallback(async () => {
         dispatch(setIsAppLoading(true))
@@ -224,7 +220,7 @@ export const ImportMnemonicBackupPasswordScreen = () => {
                                         importType: PlatformUtils.isIOS()
                                             ? IMPORT_TYPE.ICLOUD
                                             : IMPORT_TYPE.GOOGLE_DRIVE,
-                                        derivationPath: wallet!.derivationPath,
+                                        derivationPath: wallet.derivationPath,
                                     })
                                 }
                             />
