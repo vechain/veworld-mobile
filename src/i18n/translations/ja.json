@@ -22,6 +22,7 @@
   "ALERT_MSG_ENABLE_LOCATION": "デバイスの設定を開き、位置情報サービスを有効にしてください。",
   "ALERT_MSG_INTERNET_DOWN": "接続の問題が検出されました。\nデバイスを再接続してください。",
   "ALERT_MSG_LAST_BACKUP_DATE": "最終バックアップ - {date: string}",
+  "ALERT_MSG_MANUAL_BACKUP_DONE": "手動バックアップが完了しました！",
   "ALERT_MSG_NEW_VERSION": "新しいバージョン{version: string}が利用可能です。最新バージョンに更新してください。",
   "ALERT_MSG_NOT_ENROLLED": "生体認証方法が登録されていません。",
   "ALERT_MSG_UNSUPPORTED_BLUETOOTH": "このデバイスはBluetoothをサポートしていないため、この機能を使用するには必要です。",

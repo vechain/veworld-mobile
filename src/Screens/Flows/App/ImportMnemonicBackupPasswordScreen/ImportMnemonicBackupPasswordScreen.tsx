@@ -11,7 +11,6 @@ import {
     BaseText,
     BaseTextInput,
     BaseView,
-    CheckBoxWithText,
     Layout,
     RequireUserPassword,
     showErrorToast,
@@ -48,7 +47,6 @@ export const ImportMnemonicBackupPasswordScreen = () => {
 
     const [secureText, setSecureText] = useState(true)
     const [password, setPassword] = useState("")
-    const [isChecked, setIsChecked] = useState(false)
 
     const {
         onCreateWallet,
@@ -163,16 +161,13 @@ export const ImportMnemonicBackupPasswordScreen = () => {
                         <BaseSpacer height={20} />
                         <BaseView justifyContent="center" alignItems="center">
                             <BaseText align="center" typographyFont="subSubTitleMedium">
-                                {LL.BTN_SECURITY_CREATE_PASSWORD_BACKUP()}
+                                {PlatformUtils.isIOS() ? LL.BD_CLOUD_BACKUP_PASSWORD() : LL.BD_DRIVE_BACKUP_PASSWORD()}
                             </BaseText>
                             <BaseSpacer height={8} />
                             <BaseText align="center" typographyFont="body">
-                                {LL.BD_CLOUD_PASSWORD_CREATION_MESSAGE()}
+                                {LL.BD_CLOUD_INSERT_PASSWORD()}
                             </BaseText>
                             <BaseSpacer height={8} />
-                            <BaseText align="center" typographyFont="bodyBold">
-                                {LL.BD_CLOUD_PASSWORD_RECOVER_MESSAGE()}
-                            </BaseText>
                         </BaseView>
                     </BaseView>
                     <BaseSpacer height={32} />
@@ -201,13 +196,6 @@ export const ImportMnemonicBackupPasswordScreen = () => {
                         returnKeyType={"done"}
                     />
                     <BaseSpacer height={24} />
-
-                    <CheckBoxWithText
-                        isChecked={isChecked}
-                        text={LL.BD_CLOUD_PASSWORD_WARNING_CHECKBOX()}
-                        checkAction={setIsChecked}
-                        fontColor={theme.colors.text}
-                    />
                     <BaseSpacer height={12} />
                     {!!isCreateError && (
                         <BaseText my={10} color={theme.colors.danger}>
@@ -217,9 +205,9 @@ export const ImportMnemonicBackupPasswordScreen = () => {
                     <BaseButton
                         typographyFont="bodyMedium"
                         w={100}
-                        disabled={!isChecked || isAppLoading}
+                        disabled={isAppLoading}
                         haptics="Light"
-                        title={PlatformUtils.isIOS() ? LL.BTN_BACKUP_TO_ICLOUD() : LL.BTN_BACKUP_TO_DRIVE()}
+                        title={LL.COMMON_PROCEED()}
                         action={importWallet}
                     />
                     <BaseSpacer height={16} />

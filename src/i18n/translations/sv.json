@@ -22,6 +22,7 @@
   "ALERT_MSG_ENABLE_LOCATION": "Öppna enhetsinställningarna och aktivera platstjänster för att fortsätta.",
   "ALERT_MSG_INTERNET_DOWN": "Anslutningsproblem upptäcktes.\nFörsök att återansluta din enhet till internet.",
   "ALERT_MSG_LAST_BACKUP_DATE": "Senaste säkerhetskopiering - {date: string}",
+  "ALERT_MSG_MANUAL_BACKUP_DONE": "Manuell säkerhetskopiering klar!",
   "ALERT_MSG_NEW_VERSION": "En ny version {version: string} är nu tillgänglig. Uppdatera till den senaste versionen.",
   "ALERT_MSG_NOT_ENROLLED": "Du har inte registrerat någon biometrisk autentiseringsmetod.",
   "ALERT_MSG_UNSUPPORTED_BLUETOOTH": "Din enhet stöder inte Bluetooth, vilket krävs för att använda denna funktion.",

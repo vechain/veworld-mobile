@@ -22,6 +22,7 @@
   "ALERT_MSG_ENABLE_LOCATION": "请打开设备设置并启用定位服务以继续。",
   "ALERT_MSG_INTERNET_DOWN": "检测到连接问题。\n请尝试重新连接您的设备到互联网。",
   "ALERT_MSG_LAST_BACKUP_DATE": "最后备份 - {date: string}",
+  "ALERT_MSG_MANUAL_BACKUP_DONE": "手动备份完成！",
   "ALERT_MSG_NEW_VERSION": "新版本 {version: string} 已推出。请更新到最新版本。",
   "ALERT_MSG_NOT_ENROLLED": "您尚未注册任何生物识别认证方法。",
   "ALERT_MSG_UNSUPPORTED_BLUETOOTH": "您的设备不支持蓝牙，而这是此功能所必需的。",

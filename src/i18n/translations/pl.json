@@ -22,6 +22,7 @@
   "ALERT_MSG_ENABLE_LOCATION": "Otwórz ustawienia urządzenia i włącz usługi lokalizacyjne, aby kontynuować.",
   "ALERT_MSG_INTERNET_DOWN": "Wykryto problemy z połączeniem.\nSpróbuj ponownie połączyć urządzenie z internetem.",
   "ALERT_MSG_LAST_BACKUP_DATE": "Ostatnia kopia zapasowa - {date: string}",
+  "ALERT_MSG_MANUAL_BACKUP_DONE": "Ręczna kopia zapasowa wykonana!",
   "ALERT_MSG_NEW_VERSION": "Jest dostępna nowa wersja {version: string}. Uaktualnij do najnowszej wersji.",
   "ALERT_MSG_NOT_ENROLLED": "Nie zarejestrowałeś żadnej metody autoryzacji biometrycznej.",
   "ALERT_MSG_UNSUPPORTED_BLUETOOTH": "Twoje urządzenie nie obsługuje Bluetooth, co jest wymagane do korzystania z tej funkcji.",

@@ -22,6 +22,7 @@
   "ALERT_MSG_ENABLE_LOCATION": "Open de apparaatinstellingen en schakel locatievoorzieningen in om door te gaan.",
   "ALERT_MSG_INTERNET_DOWN": "Verbindingsproblemen gedetecteerd. Probeer uw apparaat opnieuw met het internet te verbinden.",
   "ALERT_MSG_LAST_BACKUP_DATE": "Laatste backup - {date: string}",
+  "ALERT_MSG_MANUAL_BACKUP_DONE": "Handmatige backup voltooid!",
   "ALERT_MSG_NEW_VERSION": "Een nieuwe versie {version: string} is nu beschikbaar. Werk alstublieft bij naar de nieuwste versie.",
   "ALERT_MSG_NOT_ENROLLED": "U heeft geen biometrische authenticatiemethode geregistreerd.",
   "ALERT_MSG_UNSUPPORTED_BLUETOOTH": "Uw apparaat ondersteunt geen Bluetooth, wat vereist is om deze functie te gebruiken.",

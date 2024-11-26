@@ -124,6 +124,10 @@ type RootTranslation = {
 	 */
 	ALERT_MSG_LAST_BACKUP_DATE: RequiredParams<'date'>
 	/**
+	 * M​a​n​u​a​l​ ​b​a​c​k​u​p​ ​d​o​n​e​!
+	 */
+	ALERT_MSG_MANUAL_BACKUP_DONE: string
+	/**
 	 * A​ ​n​e​w​ ​v​e​r​s​i​o​n​ ​{​v​e​r​s​i​o​n​}​ ​i​s​ ​o​u​t​ ​n​o​w​.​ ​P​l​e​a​s​e​ ​u​p​d​a​t​e​ ​t​o​ ​t​h​e​ ​l​a​t​e​s​t​ ​v​e​r​s​i​o​n
 	 * @param {string} version
 	 */
@@ -3037,7 +3041,7 @@ type RootTranslation = {
 	 */
 	TAKE_ME_TO_ICLOUD: string
 	/**
-	 * T​a​p​ ​t​o​ ​v​i​e​w​ ​M​n​e​m​o​n​i​c
+	 * T​a​p​ ​t​o​ ​v​i​e​w​ ​p​h​r​a​s​e
 	 */
 	TAP_TO_VIEW: string
 	/**
@@ -3587,6 +3591,10 @@ Try reconnect your device to the internet.
 	 * Last backup - {date}
 	 */
 	ALERT_MSG_LAST_BACKUP_DATE: (arg: { date: string }) => LocalizedString
+	/**
+	 * Manual backup done!
+	 */
+	ALERT_MSG_MANUAL_BACKUP_DONE: () => LocalizedString
 	/**
 	 * A new version {version} is out now. Please update to the latest version
 	 */
@@ -6464,7 +6472,7 @@ Try reconnect your device to the internet.
 	 */
 	TAKE_ME_TO_ICLOUD: () => LocalizedString
 	/**
-	 * Tap to view Mnemonic
+	 * Tap to view phrase
 	 */
 	TAP_TO_VIEW: () => LocalizedString
 	/**

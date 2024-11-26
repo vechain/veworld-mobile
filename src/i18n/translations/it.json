@@ -22,6 +22,7 @@
   "ALERT_MSG_ENABLE_LOCATION": "Per favore, apri le impostazioni del dispositivo e abilita i servizi di localizzazione per continuare.",
   "ALERT_MSG_INTERNET_DOWN": "Rilevati problemi di connessione.\nProva a riconnettere il tuo dispositivo a Internet.",
   "ALERT_MSG_LAST_BACKUP_DATE": "Ultimo backup - {date: string}",
+  "ALERT_MSG_MANUAL_BACKUP_DONE": "Backup manuale completato!",
   "ALERT_MSG_NEW_VERSION": "È disponibile una nuova versione {version: string}. Si prega di aggiornare all'ultima versione",
   "ALERT_MSG_NOT_ENROLLED": "Non hai registrato alcun metodo di autenticazione biometrica.",
   "ALERT_MSG_UNSUPPORTED_BLUETOOTH": "Il tuo dispositivo non supporta il Bluetooth, necessario per utilizzare questa funzione.",
