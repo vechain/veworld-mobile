@@ -1,6 +1,6 @@
 import { RouteProp, StackActions, useFocusEffect, useNavigation, useRoute } from "@react-navigation/native"
 import React, { useCallback, useRef, useState } from "react"
-import { Keyboard, StyleSheet } from "react-native"
+import { Keyboard } from "react-native"
 import { FeatherKeySVG } from "~Assets"
 import {
     BackButtonHeader,
@@ -11,12 +11,11 @@ import {
     BaseText,
     BaseTextInput,
     BaseView,
-    CheckBoxWithText,
     Layout,
     RequireUserPassword,
     showErrorToast,
 } from "~Components"
-import { COLORS, ColorThemeType, ERROR_EVENTS, typography } from "~Constants"
+import { COLORS, ERROR_EVENTS } from "~Constants"
 import { useCheckIdentity, useCloudBackup, useDeviceUtils, useThemedStyles } from "~Hooks"
 import { useI18nContext } from "~i18n"
 import { DrivetWallet, IMPORT_TYPE } from "~Model"
@@ -25,11 +24,10 @@ import { useHandleWalletCreation } from "~Screens/Flows/Onboarding/WelcomeScreen
 import { UserCreatePasswordScreen } from "~Screens/Flows/WalletCreation"
 import { selectHasOnboarded, selectIsAppLoading, setIsAppLoading, useAppDispatch, useAppSelector } from "~Storage/Redux"
 import { CryptoUtils, error, PasswordUtils, PlatformUtils } from "~Utils"
-
-const { defaults: defaultTypography } = typography
+import { commonStyle } from "./utils"
 
 export const ImportMnemonicBackupPasswordScreen = () => {
-    const { styles, theme } = useThemedStyles(baseStyle)
+    const { styles, theme } = useThemedStyles(commonStyle)
     const { LL } = useI18nContext()
     const navigation = useNavigation()
     const dispatch = useAppDispatch()
@@ -48,7 +46,6 @@ export const ImportMnemonicBackupPasswordScreen = () => {
 
     const [secureText, setSecureText] = useState(true)
     const [password, setPassword] = useState("")
-    const [isChecked, setIsChecked] = useState(false)
 
     const {
         onCreateWallet,
@@ -59,24 +56,20 @@ export const ImportMnemonicBackupPasswordScreen = () => {
         onClose: onCloseCreateFlow,
     } = useHandleWalletCreation()
 
-    const {
-        isPasswordPromptOpen: isPasswordPromptOpen,
-        handleClosePasswordModal: handleClosePasswordModal,
-        onPasswordSuccess: onPasswordSuccess,
-        checkIdentityBeforeOpening: checkIdentityBeforeOpening,
-    } = useCheckIdentity({
-        onIdentityConfirmed: async (pin?: string) => {
-            await importOnboardedWallet({
-                importMnemonic: mnemonicCache.current,
-                importType: PlatformUtils.isIOS() ? IMPORT_TYPE.ICLOUD : IMPORT_TYPE.GOOGLE_DRIVE,
-                pin,
-                derivationPath: wallet!.derivationPath,
-            })
-            dispatch(setIsAppLoading(false))
-            navigation.dispatch(StackActions.popToTop())
-        },
-        allowAutoPassword: false,
-    })
+    const { isPasswordPromptOpen, handleClosePasswordModal, onPasswordSuccess, checkIdentityBeforeOpening } =
+        useCheckIdentity({
+            onIdentityConfirmed: async (pin?: string) => {
+                await importOnboardedWallet({
+                    importMnemonic: mnemonicCache.current,
+                    importType: PlatformUtils.isIOS() ? IMPORT_TYPE.ICLOUD : IMPORT_TYPE.GOOGLE_DRIVE,
+                    pin,
+                    derivationPath: wallet.derivationPath,
+                })
+                dispatch(setIsAppLoading(false))
+                navigation.dispatch(StackActions.popToTop())
+            },
+            allowAutoPassword: false,
+        })
 
     const importWallet = useCallback(async () => {
         dispatch(setIsAppLoading(true))
@@ -164,16 +157,13 @@ export const ImportMnemonicBackupPasswordScreen = () => {
                         <BaseSpacer height={20} />
                         <BaseView justifyContent="center" alignItems="center">
                             <BaseText align="center" typographyFont="subSubTitleMedium">
-                                {LL.BTN_SECURITY_CREATE_PASSWORD_BACKUP()}
+                                {PlatformUtils.isIOS() ? LL.BD_CLOUD_BACKUP_PASSWORD() : LL.BD_DRIVE_BACKUP_PASSWORD()}
                             </BaseText>
                             <BaseSpacer height={8} />
                             <BaseText align="center" typographyFont="body">
-                                {LL.BD_CLOUD_PASSWORD_CREATION_MESSAGE()}
+                                {LL.BD_CLOUD_INSERT_PASSWORD()}
                             </BaseText>
                             <BaseSpacer height={8} />
-                            <BaseText align="center" typographyFont="bodyBold">
-                                {LL.BD_CLOUD_PASSWORD_RECOVER_MESSAGE()}
-                            </BaseText>
                         </BaseView>
                     </BaseView>
                     <BaseSpacer height={32} />
@@ -202,13 +192,6 @@ export const ImportMnemonicBackupPasswordScreen = () => {
                         returnKeyType={"done"}
                     />
                     <BaseSpacer height={24} />
-
-                    <CheckBoxWithText
-                        isChecked={isChecked}
-                        text={LL.BD_CLOUD_PASSWORD_WARNING_CHECKBOX()}
-                        checkAction={setIsChecked}
-                        fontColor={theme.colors.text}
-                    />
                     <BaseSpacer height={12} />
                     {!!isCreateError && (
                         <BaseText my={10} color={theme.colors.danger}>
@@ -218,9 +201,9 @@ export const ImportMnemonicBackupPasswordScreen = () => {
                     <BaseButton
                         typographyFont="bodyMedium"
                         w={100}
-                        disabled={!isChecked || isAppLoading}
+                        disabled={isAppLoading}
                         haptics="Light"
-                        title={PlatformUtils.isIOS() ? LL.BTN_BACKUP_TO_ICLOUD() : LL.BTN_BACKUP_TO_DRIVE()}
+                        title={LL.COMMON_PROCEED()}
                         action={importWallet}
                     />
                     <BaseSpacer height={16} />
@@ -236,7 +219,7 @@ export const ImportMnemonicBackupPasswordScreen = () => {
                                         importType: PlatformUtils.isIOS()
                                             ? IMPORT_TYPE.ICLOUD
                                             : IMPORT_TYPE.GOOGLE_DRIVE,
-                                        derivationPath: wallet!.derivationPath,
+                                        derivationPath: wallet.derivationPath,
                                     })
                                 }
                             />
@@ -253,35 +236,3 @@ export const ImportMnemonicBackupPasswordScreen = () => {
         />
     )
 }
-
-const baseStyle = (theme: ColorThemeType) =>
-    StyleSheet.create({
-        rootContainer: {
-            flex: 1,
-            backgroundColor: theme.colors.background,
-        },
-        keyIcon: {
-            color: theme.colors.text,
-        },
-        containerPassword: {
-            flexDirection: "row",
-            alignItems: "center",
-            borderColor: COLORS.GREY_200,
-            borderWidth: 1,
-            borderRadius: 8,
-            paddingRight: 8,
-            backgroundColor: COLORS.WHITE,
-        },
-        inputPassword: {
-            flex: 1,
-            backgroundColor: theme.colors.transparent,
-            color: COLORS.GREY_600,
-            borderRadius: 8,
-            fontSize: defaultTypography.body.fontSize,
-            fontFamily: defaultTypography.body.fontFamily,
-            lineHeight: defaultTypography.subTitle.lineHeight,
-        },
-        toggleIcon: {
-            marginRight: 4,
-        },
-    })

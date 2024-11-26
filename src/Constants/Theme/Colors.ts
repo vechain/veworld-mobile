@@ -46,6 +46,9 @@ export type Colors = {
     checkboxIcon: string
     passwordPlaceholder: string
     blurBackdropBottomSheet: string
+    mnemonicCardBackground: string
+    mnemonicCardBorder: string
+    toggleMnemonicButtonBackground: string
     successVariant: {
         background: string
         border: string
@@ -57,6 +60,7 @@ export type Colors = {
     errorVariant: {
         background: string
         border: string
+        borderLight: string
         icon: string
         title: string
         titleInline: string
@@ -64,6 +68,7 @@ export type Colors = {
     neutralVariant: {
         background: string
         border: string
+        borderLight: string
         icon: string
         title: string
         titleInline: string
@@ -200,6 +205,9 @@ const light: Colors = {
     checkboxIcon: COLORS.WHITE,
     passwordPlaceholder: COLORS.GREY_400,
     blurBackdropBottomSheet: COLORS.PURPLE_BLUR_TRANSPARENT,
+    mnemonicCardBackground: COLORS.GREY_100,
+    mnemonicCardBorder: COLORS.GREY_300,
+    toggleMnemonicButtonBackground: COLORS.GREY_200,
     successVariant: {
         background: COLORS.GREEN_50,
         border: COLORS.GREEN_200,
@@ -211,6 +219,7 @@ const light: Colors = {
     errorVariant: {
         background: COLORS.RED_50,
         border: COLORS.RED_200,
+        borderLight: COLORS.RED_100,
         icon: COLORS.RED_500,
         title: COLORS.RED_700,
         titleInline: COLORS.RED_700,
@@ -218,6 +227,7 @@ const light: Colors = {
     neutralVariant: {
         background: COLORS.GREY_50,
         border: COLORS.GREY_200,
+        borderLight: COLORS.GREY_200,
         icon: COLORS.GREY_500,
         title: COLORS.GREY_700,
         titleInline: COLORS.GREY_700,
@@ -279,6 +289,9 @@ const dark: Colors = {
     checkboxIcon: COLORS.DARK_PURPLE,
     passwordPlaceholder: COLORS.GREY_400,
     blurBackdropBottomSheet: COLORS.PURPLE_BLUR_TRANSPARENT,
+    mnemonicCardBackground: COLORS.DARK_PURPLE_DISABLED,
+    mnemonicCardBorder: COLORS.DARK_PURPLE,
+    toggleMnemonicButtonBackground: COLORS.PURPLE,
     successVariant: {
         background: COLORS.GREEN_100,
         border: COLORS.GREEN_200,
@@ -290,6 +303,7 @@ const dark: Colors = {
     errorVariant: {
         background: COLORS.RED_100,
         border: COLORS.RED_200,
+        borderLight: COLORS.RED_200,
         icon: COLORS.RED_500,
         title: COLORS.RED_700,
         titleInline: COLORS.RED_200,
@@ -297,6 +311,7 @@ const dark: Colors = {
     neutralVariant: {
         background: COLORS.GREY_100,
         border: COLORS.GREY_300,
+        borderLight: COLORS.GREY_300,
         icon: COLORS.GREY_500,
         title: COLORS.GREY_700,
         titleInline: COLORS.GREY_200,

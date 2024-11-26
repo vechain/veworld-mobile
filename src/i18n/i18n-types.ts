@@ -124,6 +124,10 @@ type RootTranslation = {
 	 */
 	ALERT_MSG_LAST_BACKUP_DATE: RequiredParams<'date'>
 	/**
+	 * M​a​n​u​a​l​ ​b​a​c​k​u​p​ ​d​o​n​e​!
+	 */
+	ALERT_MSG_MANUAL_BACKUP_DONE: string
+	/**
 	 * A​ ​n​e​w​ ​v​e​r​s​i​o​n​ ​{​v​e​r​s​i​o​n​}​ ​i​s​ ​o​u​t​ ​n​o​w​.​ ​P​l​e​a​s​e​ ​u​p​d​a​t​e​ ​t​o​ ​t​h​e​ ​l​a​t​e​s​t​ ​v​e​r​s​i​o​n
 	 * @param {string} version
 	 */
@@ -302,6 +306,10 @@ type RootTranslation = {
 	 * B​u​y​ ​w​i​t​h​ ​T​r​a​n​s​a​k​ ​a​n​d​ ​r​e​c​e​i​v​e​ ​t​h​e​ ​t​o​k​e​n​s​ ​d​i​r​e​c​t​l​y​ ​i​n​ ​V​e​W​o​r​l​d​.
 	 */
 	BD_BUY_DESCRIPTION_TRANSAK: string
+	/**
+	 * (​C​a​n​'​t​ ​b​e​ ​b​a​c​k​e​d​ ​u​p​)
+	 */
+	BD_CANT_BE_BACKED_UP: string
 	/**
 	 * i​C​l​o​u​d​ ​B​a​c​k​u​p​ ​P​a​s​s​w​o​r​d
 	 */
@@ -1798,10 +1806,6 @@ type RootTranslation = {
 	 */
 	GOOGLE_DRIVE: string
 	/**
-	 * G​o​o​g​l​e​ ​D​r​i​v​e​ ​e​r​r​o​r
-	 */
-	GOOGLE_DRIVE_GENERIC_ERROR_TITLE: string
-	/**
 	 * A​n​ ​e​r​r​o​r​ ​o​c​c​u​r​r​e​d​ ​w​h​i​l​e​ ​t​r​y​i​n​g​ ​t​o​ ​c​o​n​n​e​c​t​ ​t​o​ ​G​o​o​g​l​e​ ​D​r​i​v​e​ ​s​e​r​v​i​c​e​.​ ​T​r​y​ ​a​g​a​i​n​!
 	 */
 	GOOGLE_DRIVE_ERROR_GENERIC: string
@@ -1817,6 +1821,10 @@ type RootTranslation = {
 	 * T​h​e​r​e​ ​w​a​s​ ​a​n​ ​e​r​r​o​r​ ​p​e​r​f​o​r​m​i​n​g​ ​t​h​i​s​ ​G​o​o​g​l​e​ ​D​r​i​v​e​ ​w​a​l​l​e​t​ ​o​p​e​r​a​t​i​o​n​.​ ​P​l​e​a​s​e​ ​t​r​y​ ​a​g​a​i​n​.
 	 */
 	GOOGLE_DRIVE_ERR_WALLET_OPERATION: string
+	/**
+	 * G​o​o​g​l​e​ ​D​r​i​v​e​ ​e​r​r​o​r
+	 */
+	GOOGLE_DRIVE_GENERIC_ERROR_TITLE: string
 	/**
 	 * H​e​a​d​s​ ​u​p​!
 	 */
@@ -3033,7 +3041,7 @@ type RootTranslation = {
 	 */
 	TAKE_ME_TO_ICLOUD: string
 	/**
-	 * T​a​p​ ​t​o​ ​v​i​e​w​ ​M​n​e​m​o​n​i​c
+	 * T​a​p​ ​t​o​ ​v​i​e​w​ ​p​h​r​a​s​e
 	 */
 	TAP_TO_VIEW: string
 	/**
@@ -3584,6 +3592,10 @@ Try reconnect your device to the internet.
 	 */
 	ALERT_MSG_LAST_BACKUP_DATE: (arg: { date: string }) => LocalizedString
 	/**
+	 * Manual backup done!
+	 */
+	ALERT_MSG_MANUAL_BACKUP_DONE: () => LocalizedString
+	/**
 	 * A new version {version} is out now. Please update to the latest version
 	 */
 	ALERT_MSG_NEW_VERSION: (arg: { version: string }) => LocalizedString
@@ -3759,6 +3771,10 @@ Try reconnect your device to the internet.
 	 * Buy with Transak and receive the tokens directly in VeWorld.
 	 */
 	BD_BUY_DESCRIPTION_TRANSAK: () => LocalizedString
+	/**
+	 * (Can't be backed up)
+	 */
+	BD_CANT_BE_BACKED_UP: () => LocalizedString
 	/**
 	 * iCloud Backup Password
 	 */
@@ -5244,10 +5260,6 @@ Try reconnect your device to the internet.
 	 */
 	GOOGLE_DRIVE: () => LocalizedString
 	/**
-	 * Google Drive error
-	 */
-	GOOGLE_DRIVE_GENERIC_ERROR_TITLE: () => LocalizedString
-	/**
 	 * An error occurred while trying to connect to Google Drive service. Try again!
 	 */
 	GOOGLE_DRIVE_ERROR_GENERIC: () => LocalizedString
@@ -5263,6 +5275,10 @@ Try reconnect your device to the internet.
 	 * There was an error performing this Google Drive wallet operation. Please try again.
 	 */
 	GOOGLE_DRIVE_ERR_WALLET_OPERATION: () => LocalizedString
+	/**
+	 * Google Drive error
+	 */
+	GOOGLE_DRIVE_GENERIC_ERROR_TITLE: () => LocalizedString
 	/**
 	 * Heads up!
 	 */
@@ -6456,7 +6472,7 @@ Try reconnect your device to the internet.
 	 */
 	TAKE_ME_TO_ICLOUD: () => LocalizedString
 	/**
-	 * Tap to view Mnemonic
+	 * Tap to view phrase
 	 */
 	TAP_TO_VIEW: () => LocalizedString
 	/**
