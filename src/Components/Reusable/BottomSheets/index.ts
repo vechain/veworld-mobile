@@ -1,5 +1,6 @@
 export * from "./BackupSuccessfulBottomSheet"
 export * from "./BluetoothStatusBottomSheet"
+export * from "./CloudBackupBottomSheets"
 export * from "./DefaultBottomSheet"
 export * from "./DeleteCloudKitWalletBottomSheet"
 export * from "./DeleteConfirmationBottomSheet"

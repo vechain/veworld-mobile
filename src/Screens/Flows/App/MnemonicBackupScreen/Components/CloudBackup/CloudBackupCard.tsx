@@ -112,7 +112,7 @@ export const CloudBackupCard: FC<Props> = ({ mnemonicArray, deviceToBackup }) =>
                                 style={styles.lottie}
                             />
                         ) : (
-                            !isWalletBackedUp && <BaseIcon name="chevron-right" size={14} color={COLORS.DARK_PURPLE} />
+                            <BaseIcon name="chevron-right" size={14} color={COLORS.DARK_PURPLE} />
                         )
                     }
                     onPress={goToChoosePasswordScreen}
