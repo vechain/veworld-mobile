@@ -24,6 +24,7 @@ on:
         required: true
 
 
+
 jobs:
   build-release-ios:
     name: Build release for iOS
@@ -128,6 +129,15 @@ jobs:
               cd ios
               git config --global url."https://${{ secrets.CI_USER_TOKEN }}@github.com".insteadOf https://github.com
               cd fastlane
-              fastlane build_ci username:${{secrets.CI_USER}} token:${{secrets.CI_USER_TOKEN}} version:${{inputs.version}} build:${{inputs.build}}
+              pwd
+              echo "Printing files"
+              echo ".env"
+              cat .env
+              echo "env.default"
+              cat env.default
+              echo ".env.production"
+              cat ./.env.production
+            
+              # fastlane build_ci username:${{secrets.CI_USER}} token:${{secrets.CI_USER_TOKEN}} version:${{inputs.version}} build:${{inputs.build}}
               
 
