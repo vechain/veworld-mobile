@@ -59,6 +59,7 @@ export const DevicesBackupState = <T extends BaseDevice = BaseDevice>({ devices,
                     rightElement={rightElement}
                     onPress={handlePress}
                     disabled={variant === "neutral"}
+                    testID={`deviceBackupStateRow_${item.rootAddress}`}
                 />
             )
         },

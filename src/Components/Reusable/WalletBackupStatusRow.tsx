@@ -28,6 +28,7 @@ type Props = {
     onPress?: () => void
     disabled?: boolean
     loading?: boolean
+    testID?: string
 }
 
 export const WalletBackupStatusRow = ({
@@ -38,12 +39,14 @@ export const WalletBackupStatusRow = ({
     onPress,
     disabled = false,
     loading = false,
+    testID,
 }: Props) => {
     const statusVariant = StatusColorVariant[variant]
     const { styles, theme } = useThemedStyles(baseStyles(statusVariant))
     const colors = theme.colors[statusVariant]
     return (
         <BaseTouchableBox
+            testID={testID}
             containerStyle={[styles.container]}
             style={styles.content}
             disabled={disabled || loading}
