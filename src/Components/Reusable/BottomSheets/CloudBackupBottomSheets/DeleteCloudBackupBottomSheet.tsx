@@ -31,7 +31,9 @@ export const DeleteCloudBackupBottomSheet = React.forwardRef<BottomSheetModalMet
                 textColor={theme.colors.text}
                 typographyFont="buttonMedium"
                 haptics="Light"
-                title={LL.COMMON_BTN_OK()}
+                title={LL.BTN_DELETE_BACKUP_FROM_CLOUD({
+                    cloudType: PlatformUtils.isIOS() ? LL.ICLOUD() : LL.GOOGLE_DRIVE(),
+                })}
                 action={handleProceedToDelete}
             />
         )
