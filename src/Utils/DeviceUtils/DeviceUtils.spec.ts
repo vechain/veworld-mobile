@@ -1,9 +1,9 @@
 import DeviceInfo from "react-native-device-info"
-import { generateDeviceForMnemonic, generateDeviceForPrivateKey, isSlowDevice } from "./DeviceUtils"
 import { HDNode } from "thor-devkit"
-import { CryptoUtils, HexUtils } from "~Utils"
-import { DEVICE_TYPE, IMPORT_TYPE } from "~Model"
 import { DerivationPath } from "~Constants"
+import { DEVICE_TYPE, IMPORT_TYPE } from "~Model"
+import { CryptoUtils, HexUtils } from "~Utils"
+import { generateDeviceForMnemonic, generateDeviceForPrivateKey, isSlowDevice } from "./DeviceUtils"
 
 // Mock the methods from react-native-device-info
 jest.mock("react-native-device-info", () => ({
@@ -50,6 +50,7 @@ describe("generateDeviceForMnemonic", () => {
         expect(result.device.type).toEqual(DEVICE_TYPE.LOCAL_MNEMONIC)
         expect(result.device.index).toEqual(deviceIndex)
         expect(result.device.isBuckedUp).toEqual(false)
+        expect(result.device.isBackedUpManual).toEqual(false)
     })
 
     it("valid imported menemonic phrase", () => {
@@ -92,7 +93,8 @@ describe("generateDeviceForMnemonic", () => {
         expect(result.device.rootAddress).toEqual(hdNode.address)
         expect(result.device.type).toEqual(DEVICE_TYPE.LOCAL_MNEMONIC)
         expect(result.device.index).toEqual(deviceIndex)
-        expect(result.device.isBuckedUp).toEqual(true)
+        expect(result.device.isBuckedUp).toEqual(false)
+        expect(result.device.isBackedUpManual).toEqual(true)
     })
 })
 describe("generateDeviceForPrivateKey", () => {

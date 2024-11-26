@@ -91,6 +91,7 @@ export const ChooseMnemonicBackupPassword = () => {
                         setDeviceIsBackup({
                             rootAddress: device.rootAddress,
                             isBackup: true,
+                            isBackupManual: !!device.isBackedUpManual,
                             date: formattedDate,
                         }),
                     )
@@ -115,6 +116,7 @@ export const ChooseMnemonicBackupPassword = () => {
             device.rootAddress,
             device?.type,
             device?.derivationPath,
+            device?.isBackedUpManual,
             mnemonicArray,
             saveWalletToCloud,
             LL,
@@ -129,11 +131,11 @@ export const ChooseMnemonicBackupPassword = () => {
         // Check for length of at least 6 characters
         if (_password.length >= 6) _strength += 1
         // Check for at least one letter (either lowercase or uppercase)
-        if (_password.match(/[a-zA-Z]/)) _strength += 1
+        if (RegExp(/[a-zA-Z]/).exec(_password)) _strength += 1
         // Check for at least one number
-        if (_password.match(/[0-9]/)) _strength += 1
+        if (RegExp(/\d/).exec(_password)) _strength += 1
         // Check for at least one special character
-        if (_password.match(/[^a-zA-Z0-9]/)) _strength += 1
+        if (RegExp(/[^a-zA-Z0-9]/).exec(_password)) _strength += 1
 
         return _strength
     }, [])

@@ -1,10 +1,10 @@
 import { useFocusEffect, useNavigation } from "@react-navigation/native"
 import Lottie from "lottie-react-native"
-import React, { FC, useCallback, useMemo, useState } from "react"
+import React, { FC, useCallback, useState } from "react"
 import { StyleSheet } from "react-native"
 import { LoaderDark, LoaderLight } from "~Assets"
-import { BaseIcon, BaseText, BaseTouchableBox, BaseView, CardWithHeader } from "~Components"
-import { COLORS, ColorThemeType, typography } from "~Constants"
+import { BaseIcon, BaseText, BaseView, CardWithHeader, WalletBackupStatusRow } from "~Components"
+import { COLORS, ColorThemeType } from "~Constants"
 import { useCloudBackup, useThemedStyles } from "~Hooks"
 import { useI18nContext } from "~i18n"
 import { LocalDevice } from "~Model"
@@ -55,21 +55,6 @@ export const CloudBackupCard: FC<Props> = ({ mnemonicArray, deviceToBackup }) =>
         }, [accounts, deviceToBackup?.rootAddress, getWallet, navigation]),
     )
 
-    const computedStyles = useMemo(
-        () => ({
-            ...styles.cloudRow,
-            backgroundColor: isWalletBackedUp ? theme.colors.successVariant.background : theme.colors.primary,
-            borderColor: isWalletBackedUp ? theme.colors.successVariant.borderLight : theme.colors.primary,
-        }),
-        [
-            styles.cloudRow,
-            isWalletBackedUp,
-            theme.colors.successVariant.background,
-            theme.colors.successVariant.borderLight,
-            theme.colors.primary,
-        ],
-    )
-
     const goToChoosePasswordScreen = useCallback(async () => {
         if (isCloudError) {
             dispatch(setIsAppLoading(true))
@@ -117,39 +102,25 @@ export const CloudBackupCard: FC<Props> = ({ mnemonicArray, deviceToBackup }) =>
                         </BaseText>
                     </BaseView>
                 }>
-                <BaseTouchableBox
-                    containerStyle={computedStyles}
-                    disabled={isWalletBackedUp || isAppLoading}
-                    style={[styles.cloudRowContent]}
-                    action={goToChoosePasswordScreen}>
-                    <BaseView style={styles.cloudInfo}>
-                        {!isWalletBackedUp ? (
-                            <BaseText typographyFont="bodyMedium" color={theme.colors.textReversed}>
-                                {PlatformUtils.isIOS() ? LL.ICLOUD() : LL.GOOGLE_DRIVE()}
-                            </BaseText>
+                <WalletBackupStatusRow
+                    variant={isWalletBackedUp ? "success" : "error"}
+                    title={PlatformUtils.isIOS() ? LL.ICLOUD() : LL.GOOGLE_DRIVE()}
+                    rightElement={
+                        isAppLoading ? (
+                            <Lottie
+                                source={theme.isDark ? LoaderDark : LoaderLight}
+                                autoPlay
+                                loop
+                                style={styles.lottie}
+                            />
                         ) : (
-                            <BaseView flexDirection="row">
-                                <BaseIcon
-                                    name="check-circle-outline"
-                                    size={16}
-                                    color={theme.colors.successVariant.icon}
-                                />
-                                <BaseText style={styles.verifyCloudText} typographyFont="captionRegular">
-                                    {LL.BD_BACKED_UP({
-                                        cloudType: PlatformUtils.isIOS() ? LL.ICLOUD() : LL.GOOGLE_DRIVE(),
-                                    })}
-                                </BaseText>
-                            </BaseView>
-                        )}
-                    </BaseView>
-                    {isAppLoading ? (
-                        <Lottie source={theme.isDark ? LoaderDark : LoaderLight} autoPlay loop style={styles.lottie} />
-                    ) : (
-                        !isWalletBackedUp && (
-                            <BaseIcon name="chevron-right" size={14} color={theme.colors.textReversed} />
+                            !isWalletBackedUp && <BaseIcon name="chevron-right" size={14} color={COLORS.DARK_PURPLE} />
                         )
-                    )}
-                </BaseTouchableBox>
+                    }
+                    onPress={goToChoosePasswordScreen}
+                    disabled={isWalletBackedUp || isAppLoading}
+                    loading={isAppLoading}
+                />
             </CardWithHeader>
         </BaseView>
     )
@@ -157,26 +128,6 @@ export const CloudBackupCard: FC<Props> = ({ mnemonicArray, deviceToBackup }) =>
 
 const baseStyles = (theme: ColorThemeType) =>
     StyleSheet.create({
-        cloudRow: {
-            borderRadius: 8,
-            borderWidth: 1,
-        },
-        cloudRowContent: {
-            flexDirection: "row",
-            alignItems: "center",
-            paddingHorizontal: 12,
-            paddingVertical: 10,
-        },
-        cloudInfo: {
-            flexDirection: "row",
-            alignItems: "center",
-            flex: 1,
-        },
-        verifyCloudText: {
-            paddingLeft: 12,
-            color: COLORS.DARK_PURPLE,
-            lineHeight: typography.lineHeight.bodyMedium,
-        },
         sideHeader: {
             borderWidth: 1,
             borderRadius: 4,

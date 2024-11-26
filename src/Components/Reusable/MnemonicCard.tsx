@@ -3,8 +3,8 @@ import React, { FC, useCallback, useMemo } from "react"
 import { StyleSheet, TouchableWithoutFeedback } from "react-native"
 import { getTimeZone } from "react-native-localize"
 import { BaseIcon, BaseText, BaseView } from "~Components/Base"
-import { COLORS, ERROR_EVENTS } from "~Constants"
-import { useDisclosure, useTheme } from "~Hooks"
+import { COLORS, ColorThemeType, ERROR_EVENTS } from "~Constants"
+import { useDisclosure, useThemedStyles } from "~Hooks"
 import { useI18nContext } from "~i18n"
 import { LocalDevice } from "~Model"
 import HapticsService from "~Services/HapticsService"
@@ -22,7 +22,7 @@ export const MnemonicCard: FC<Props> = ({ mnemonicArray, souceScreen, deviceToBa
     const { isOpen: isShow, onToggle: toggleShow } = useDisclosure()
 
     const nav = useNavigation()
-    const theme = useTheme()
+    const { styles, theme } = useThemedStyles(baseStyles)
     const { LL, locale } = useI18nContext()
     const dispatch = useAppDispatch()
 
@@ -38,12 +38,13 @@ export const MnemonicCard: FC<Props> = ({ mnemonicArray, souceScreen, deviceToBa
             dispatch(
                 setDeviceIsBackup({
                     rootAddress: deviceToBackup.rootAddress,
-                    isBackup: true,
+                    isBackup: !!deviceToBackup.isBuckedUp,
+                    isBackupManual: true,
                     date: formattedDate,
                 }),
             )
         }
-    }, [deviceToBackup?.rootAddress, dispatch, locale, toggleShow])
+    }, [deviceToBackup?.rootAddress, deviceToBackup?.isBuckedUp, dispatch, locale, toggleShow])
 
     const RenderWords = useMemo(() => {
         if (mnemonicArray.length !== 12) {
@@ -71,7 +72,7 @@ export const MnemonicCard: FC<Props> = ({ mnemonicArray, souceScreen, deviceToBa
             return (
                 <BaseText
                     typographyFont="captionRegular"
-                    color={COLORS.DARK_PURPLE}
+                    color={theme.colors.text}
                     key={`word${index}`}
                     my={2}
                     w={24}
@@ -81,12 +82,12 @@ export const MnemonicCard: FC<Props> = ({ mnemonicArray, souceScreen, deviceToBa
                 </BaseText>
             )
         })
-    }, [mnemonicArray, nav, souceScreen])
+    }, [mnemonicArray, nav, souceScreen, theme.colors])
 
     return (
         <BaseView>
             <TouchableWithoutFeedback onPress={onPress}>
-                <BaseView flexDirection="row">
+                <BaseView flexDirection="row" style={styles.container}>
                     <BaseView
                         px={8}
                         py={22}
@@ -97,19 +98,19 @@ export const MnemonicCard: FC<Props> = ({ mnemonicArray, souceScreen, deviceToBa
                         {RenderWords}
                         {!isShow && (
                             <PlatformBlur
-                                backgroundColor={theme.colors.card}
-                                borderRadius={8}
+                                backgroundColor={theme.colors.mnemonicCardBackground}
+                                showTextOnIOS
                                 text={LL.TAP_TO_VIEW()}
                             />
                         )}
                     </BaseView>
 
-                    <BaseView py={12} style={styles.button} justifyContent="center" alignItems="center">
+                    <BaseView style={styles.button} justifyContent="center" alignItems="center">
                         <BaseIcon
                             name={isShow ? "eye-off-outline" : "eye-outline"}
                             size={16}
                             style={styles.icon}
-                            color={COLORS.GREY_500}
+                            color={theme.isDark ? COLORS.GREY_300 : COLORS.GREY_500}
                             testID="toggle-mnemonic-visibility"
                         />
                     </BaseView>
@@ -119,34 +120,35 @@ export const MnemonicCard: FC<Props> = ({ mnemonicArray, souceScreen, deviceToBa
     )
 }
 
-const styles = StyleSheet.create({
-    box: {
-        flexShrink: 1,
-        backgroundColor: COLORS.GREY_100,
-        borderColor: COLORS.GREY_300,
-        borderBottomLeftRadius: 8,
-        borderTopLeftRadius: 8,
-        borderWidth: 1,
-        overflow: "hidden",
-    },
-    button: {
-        paddingHorizontal: 6,
-        borderTopRightRadius: 8,
-        borderBottomEndRadius: 8,
-        borderWidth: 1,
-        borderLeftWidth: 0,
-        backgroundColor: COLORS.GREY_200,
-        borderColor: COLORS.GREY_300,
-    },
-    icon: { flex: 1, color: COLORS.GREY_500 },
-    androidBlurContainer: {
-        justifyContent: "center",
-        alignItems: "center",
-    },
-    androidBlur: {
-        width: "100%",
-        height: "100%",
-        justifyContent: "center",
-        alignItems: "center",
-    },
-})
+const baseStyles = (theme: ColorThemeType) =>
+    StyleSheet.create({
+        container: {
+            borderRadius: 8,
+            borderColor: theme.colors.mnemonicCardBorder,
+            borderWidth: 1,
+            overflow: "hidden",
+        },
+        box: {
+            flexShrink: 1,
+            backgroundColor: theme.colors.mnemonicCardBackground,
+        },
+        button: {
+            justifyContent: "center",
+            alignItems: "center",
+            paddingHorizontal: 8,
+            borderLeftWidth: 1,
+            borderColor: theme.colors.mnemonicCardBorder,
+            backgroundColor: theme.colors.toggleMnemonicButtonBackground,
+        },
+        icon: { flex: 1 },
+        androidBlurContainer: {
+            justifyContent: "center",
+            alignItems: "center",
+        },
+        androidBlur: {
+            width: "100%",
+            height: "100%",
+            justifyContent: "center",
+            alignItems: "center",
+        },
+    })

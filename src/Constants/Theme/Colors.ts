@@ -46,6 +46,9 @@ export type Colors = {
     checkboxIcon: string
     passwordPlaceholder: string
     blurBackdropBottomSheet: string
+    mnemonicCardBackground: string
+    mnemonicCardBorder: string
+    toggleMnemonicButtonBackground: string
     successVariant: {
         background: string
         border: string
@@ -202,6 +205,9 @@ const light: Colors = {
     checkboxIcon: COLORS.WHITE,
     passwordPlaceholder: COLORS.GREY_400,
     blurBackdropBottomSheet: COLORS.PURPLE_BLUR_TRANSPARENT,
+    mnemonicCardBackground: COLORS.GREY_100,
+    mnemonicCardBorder: COLORS.GREY_300,
+    toggleMnemonicButtonBackground: COLORS.GREY_200,
     successVariant: {
         background: COLORS.GREEN_50,
         border: COLORS.GREEN_200,
@@ -283,6 +289,9 @@ const dark: Colors = {
     checkboxIcon: COLORS.DARK_PURPLE,
     passwordPlaceholder: COLORS.GREY_400,
     blurBackdropBottomSheet: COLORS.PURPLE_BLUR_TRANSPARENT,
+    mnemonicCardBackground: COLORS.DARK_PURPLE_DISABLED,
+    mnemonicCardBorder: COLORS.DARK_PURPLE,
+    toggleMnemonicButtonBackground: COLORS.PURPLE,
     successVariant: {
         background: COLORS.GREEN_100,
         border: COLORS.GREEN_200,

@@ -49,11 +49,9 @@ export const WalletBackupStatusRow = ({
             disabled={disabled || loading}
             action={onPress}>
             <BaseView style={styles.info}>
-                <BaseIcon name={ICON_NAMES[variant]} size={icon?.size || 16} color={colors.icon} />
+                <BaseIcon name={ICON_NAMES[variant]} size={icon?.size ?? 16} color={colors.icon} />
                 <BaseView w={12} />
-                <BaseText
-                    typographyFont="buttonSecondary"
-                    color={variant === "neutral" ? COLORS.GREY_600 : COLORS.DARK_PURPLE}>
+                <BaseText typographyFont="body" color={variant === "neutral" ? COLORS.GREY_600 : COLORS.DARK_PURPLE}>
                     {title}
                 </BaseText>
             </BaseView>
