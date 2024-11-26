@@ -131,12 +131,12 @@ jobs:
               cd fastlane
               pwd
               echo "Printing files"
-              echo ".env"
+              echo ".env /n"
               cat .env
-              echo "env.default"
+              echo "env.default /n"
               cat env.default
-              echo ".env.production"
-              cat ./.env.production
+              echo ".env.production /n"
+              cat ../../.env.production
             
               # fastlane build_ci username:${{secrets.CI_USER}} token:${{secrets.CI_USER_TOKEN}} version:${{inputs.version}} build:${{inputs.build}}
               
