@@ -2440,10 +2440,11 @@ type RootTranslation = {
 	 */
 	SB_BACKUP_VERIFIED: string
 	/**
-	 * A​l​l​ ​o​f​ ​y​o​u​r​ ​w​a​l​l​e​t​’​s​ ​r​e​c​o​v​e​r​y​ ​p​h​r​a​s​e​ ​w​e​r​e​ ​b​a​c​k​e​d​ ​u​p​ ​t​o​ ​{​c​l​o​u​d​T​y​p​e​}​.​ ​I​f​ ​y​o​u​ ​n​e​e​d​ ​t​o​ ​r​e​c​o​v​e​r​ ​y​o​u​r​ ​w​a​l​l​e​t​,​ ​y​o​u​ ​c​a​n​ ​i​m​p​o​r​t​ ​f​r​o​m​ ​{​c​l​o​u​d​T​y​p​e​}​ ​w​i​t​h​ ​y​o​u​r​ ​r​e​c​o​v​e​r​y​ ​p​a​s​s​w​o​r​d​.
+	 * A​l​l​ ​o​f​ ​y​o​u​r​ ​w​a​l​l​e​t​’​s​ ​r​e​c​o​v​e​r​y​ ​p​h​r​a​s​e​ ​w​e​r​e​ ​b​a​c​k​e​d​ ​u​p​ ​t​o​ ​{​c​l​o​u​d​T​y​p​e​}​.​ ​I​f​ ​y​o​u​ ​n​e​e​d​ ​t​o​ ​r​e​c​o​v​e​r​ ​y​o​u​r​ ​w​a​l​l​e​t​,​ ​y​o​u​ ​c​a​n​ ​i​m​p​o​r​t​ ​f​r​o​m​ ​{​r​e​p​e​a​t​C​l​o​u​d​T​y​p​e​}​ ​w​i​t​h​ ​y​o​u​r​ ​r​e​c​o​v​e​r​y​ ​p​a​s​s​w​o​r​d​.
 	 * @param {string} cloudType
+	 * @param {string} repeatCloudType
 	 */
-	SB_BACKUP_VERIFIED_DESCRIPTION: RequiredParams<'cloudType' | 'cloudType'>
+	SB_BACKUP_VERIFIED_DESCRIPTION: RequiredParams<'cloudType' | 'repeatCloudType'>
 	/**
 	 * B​e​f​o​r​e​ ​u​p​d​a​t​i​n​g​ ​y​o​u​r​ ​s​e​c​u​r​i​t​y​ ​m​e​t​h​o​d​ ​y​o​u​ ​n​e​e​d​ ​t​o​ ​b​a​c​k​u​p​ ​y​o​u​r​ ​s​e​c​u​r​i​t​y​ ​p​h​r​a​s​e​.​ ​I​n​ ​c​a​s​e​ ​t​h​e​ ​o​p​e​r​a​t​i​o​n​ ​f​a​i​l​s​ ​y​o​u​ ​w​i​l​l​ ​b​e​ ​f​o​r​c​e​d​ ​t​o
 	 */
@@ -5898,9 +5899,9 @@ Try reconnect your device to the internet.
 	 */
 	SB_BACKUP_VERIFIED: () => LocalizedString
 	/**
-	 * All of your wallet’s recovery phrase were backed up to {cloudType}. If you need to recover your wallet, you can import from {cloudType} with your recovery password.
+	 * All of your wallet’s recovery phrase were backed up to {cloudType}. If you need to recover your wallet, you can import from {repeatCloudType} with your recovery password.
 	 */
-	SB_BACKUP_VERIFIED_DESCRIPTION: (arg: { cloudType: string }) => LocalizedString
+	SB_BACKUP_VERIFIED_DESCRIPTION: (arg: { cloudType: string, repeatCloudType: string }) => LocalizedString
 	/**
 	 * Before updating your security method you need to backup your security phrase. In case the operation fails you will be forced to
 	 */

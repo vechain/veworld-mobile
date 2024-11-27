@@ -17,6 +17,7 @@ export const DeleteCloudBackupBottomSheet = React.forwardRef<BottomSheetModalMet
     ({ onClose, onProceedToDelete }, ref) => {
         const { LL } = useI18nContext()
         const { styles, theme } = useThemedStyles(baseStyles)
+        const cloudType = PlatformUtils.isIOS() ? LL.ICLOUD() : LL.GOOGLE_DRIVE()
 
         const handleProceedToDelete = useCallback(() => {
             onProceedToDelete()
@@ -43,7 +44,8 @@ export const DeleteCloudBackupBottomSheet = React.forwardRef<BottomSheetModalMet
                 ref={ref}
                 title={LL.SB_BACKUP_VERIFIED()}
                 description={LL.SB_BACKUP_VERIFIED_DESCRIPTION({
-                    cloudType: PlatformUtils.isIOS() ? LL.ICLOUD() : LL.GOOGLE_DRIVE(),
+                    cloudType: cloudType,
+                    repeatCloudType: cloudType,
                 })}
                 secondaryButton={secondaryButton}
                 icon="cloud-outline"

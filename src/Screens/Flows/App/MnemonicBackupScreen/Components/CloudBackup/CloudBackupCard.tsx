@@ -133,7 +133,7 @@ export const CloudBackupCard: FC<Props> = ({ mnemonicArray, deviceToBackup }) =>
 
     const { onPasswordSuccess, checkIdentityBeforeOpening, isPasswordPromptOpen, handleClosePasswordModal } =
         useCheckIdentity({
-            onIdentityConfirmed: handleConfirmDelete,
+            onIdentityConfirmed: async () => await handleConfirmDelete(),
             allowAutoPassword: false,
         })
 
