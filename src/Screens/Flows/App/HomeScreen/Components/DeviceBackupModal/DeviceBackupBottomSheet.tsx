@@ -93,7 +93,7 @@ export const DeviceBackupBottomSheet = () => {
     }
 
     return (
-        <BaseBottomSheet style={styles.contentContainer} bottomSafeArea dynamicHeight ref={ref}>
+        <BaseBottomSheet bottomSafeArea dynamicHeight ref={ref}>
             <BaseView style={styles.contentContainer}>
                 <SecurityAlertLight />
                 <BaseSpacer height={24} />
@@ -102,6 +102,7 @@ export const DeviceBackupBottomSheet = () => {
                 <BaseText typographyFont="body">{LL.DEVICE_BACKUP_MODAL_SUBTITLE()}</BaseText>
                 <BaseSpacer height={24} />
                 <BaseButton
+                    testID="Backup_now_button"
                     accessible
                     variant="solid"
                     size="lg"
@@ -113,6 +114,7 @@ export const DeviceBackupBottomSheet = () => {
                 />
                 <BaseSpacer height={16} />
                 <BaseButton
+                    testID="Backup_later_button"
                     accessible
                     variant="outline"
                     size="lg"

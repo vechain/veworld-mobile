@@ -63,6 +63,7 @@ export const DevicesBackupState = <T extends BaseDevice = BaseDevice>({ devices,
 
             return (
                 <BaseTouchableBox
+                    testID={`deviceBackupStateRow_${item.rootAddress}`}
                     containerStyle={[
                         styles.deviceRow,
                         { backgroundColor: itemConfig.backgroundColor, borderColor: itemConfig.borderColor },
