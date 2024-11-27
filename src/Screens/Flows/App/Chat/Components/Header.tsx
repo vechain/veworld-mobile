@@ -9,9 +9,10 @@ import { humanAddress } from "~Utils/AddressUtils/AddressUtils"
 interface Props {
     isOnboarding: boolean
     onChangeAccountPress: () => void
+    onNewConversation: () => void
 }
 
-const Header: React.FC<Props> = ({ isOnboarding, onChangeAccountPress }) => {
+const Header: React.FC<Props> = ({ isOnboarding, onChangeAccountPress, onNewConversation }) => {
     const { styles, theme } = useThemedStyles(baseStyles)
     const currentAccount = useAppSelector(selectSelectedAccount)
     const nav = useNavigation()
@@ -44,7 +45,7 @@ const Header: React.FC<Props> = ({ isOnboarding, onChangeAccountPress }) => {
                         size={24}
                         color={theme.colors.text}
                         mx={8}
-                        action={() => {}}
+                        action={onNewConversation}
                         haptics="Light"
                     />
                     <BaseIcon

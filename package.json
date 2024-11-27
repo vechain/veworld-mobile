@@ -86,7 +86,7 @@
     "@walletconnect/react-native-compat": "2.15.2",
     "@walletconnect/utils": "2.15.2",
     "@walletconnect/web3wallet": "1.14.2",
-    "@xmtp/react-native-sdk": "^3.0.3",
+    "@xmtp/react-native-sdk": "3.0.7",
     "add": "^2.0.6",
     "aes-js": "3",
     "arweave": "1.13.7",

@@ -79,7 +79,6 @@ export type RootStackParamListHome = {
     [Routes.CHAT_CONVERSATIONS]: undefined
     [Routes.CHAT_CONVERSATION]: {
         recipient: string
-        inboxId: string
         topic: string
     }
     [Routes.CHAT_REQUESTS]: undefined

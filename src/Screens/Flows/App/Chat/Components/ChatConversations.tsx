@@ -1,7 +1,6 @@
 import { useNavigation } from "@react-navigation/native"
 import React, { useCallback } from "react"
-import { FlatList } from "react-native"
-import { NestableScrollContainer } from "react-native-draggable-flatlist"
+import { FlatList, RefreshControl } from "react-native"
 import { BaseIcon, BaseSpacer, BaseText, BaseTouchable, BaseView, useConversations } from "~Components"
 import { useTheme } from "~Hooks"
 import { Routes } from "~Navigation"
@@ -23,27 +22,27 @@ const ChatConversations: React.FC<Props> = () => {
         return <BaseSpacer height={1} background={theme.colors.card} />
     }, [theme])
 
-    return (
-        <BaseView h={100}>
-            {isLoading ? (
-                <BaseText>{"Loading..."}</BaseText>
-            ) : (
-                <>
-                    <HeaderComponent counter={requestsConvs?.length ?? 0} />
+    const headerComponent = useCallback(() => {
+        return <HeaderComponent counter={requestsConvs?.length ?? 0} />
+    }, [requestsConvs?.length])
 
-                    <NestableScrollContainer>
-                        <FlatList
-                            data={allowedConvs}
-                            onRefresh={refetchConversations}
-                            refreshing={isFetching || isRefetching}
-                            keyExtractor={item => item.topic}
-                            ItemSeparatorComponent={itemSeparator}
-                            renderItem={({ item }) => <ConversationRow item={item} />}
-                        />
-                    </NestableScrollContainer>
-                </>
-            )}
-        </BaseView>
+    return isLoading ? (
+        <BaseText>{"Loading..."}</BaseText>
+    ) : (
+        <FlatList
+            data={allowedConvs}
+            keyExtractor={item => item.topic}
+            ListHeaderComponent={headerComponent}
+            ItemSeparatorComponent={itemSeparator}
+            renderItem={({ item }) => <ConversationRow item={item} />}
+            refreshControl={
+                <RefreshControl
+                    refreshing={isFetching || isRefetching}
+                    onRefresh={refetchConversations}
+                    tintColor={theme.colors.border}
+                />
+            }
+        />
     )
 }
 

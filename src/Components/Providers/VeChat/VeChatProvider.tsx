@@ -72,39 +72,41 @@ const VeChatContextProvider: React.FC<VeChatContextProps> = ({ children }) => {
         async (pinCode?: string) => {
             if (!dbEncryptionKey) throw new Error("Cannot create a new client no keys found")
             if (!signerDevice) throw new Error("No device found to create a signer")
-            if (!currentAccount) throw new Error("")
+            if (!currentAccount) throw new Error("No current account")
             if (signerDevice.type === DEVICE_TYPE.LEDGER) throw new Error("Ledger devices not supported in this hook")
+            try {
+                const thorClient = ThorClient.at(selectedNetwork.currentUrl)
+                const wallet: Wallet = await WalletEncryptionKeyHelper.decryptWallet({
+                    encryptedWallet: signerDevice.wallet,
+                    pinCode,
+                })
 
-            const thorClient = ThorClient.at(selectedNetwork.currentUrl)
-            const wallet: Wallet = await WalletEncryptionKeyHelper.decryptWallet({
-                encryptedWallet: signerDevice.wallet,
-                pinCode,
-            })
+                const hdNode = HDNode.fromMnemonic(wallet.mnemonic!)
+                const derivedNode = hdNode.derive(currentAccount.index)
 
-            const hdNode = HDNode.fromMnemonic(wallet.mnemonic!)
-            const derivedNode = hdNode.derive(currentAccount.index)
+                const privateKey = derivedNode.privateKey as Buffer
 
-            const privateKey = derivedNode.privateKey as Buffer
+                const deployerAccount: ProviderInternalWalletAccount = {
+                    address: currentAccount.address,
+                    privateKey,
+                }
 
-            const deployerAccount: ProviderInternalWalletAccount = {
-                address: currentAccount.address,
-                privateKey,
+                const provider = new VeChainProvider(thorClient, new ProviderInternalBaseWallet([deployerAccount]))
+                const vechainSigner = (await provider.getSigner(deployerAccount.address)) as VeChainSigner
+
+                if (!vechainSigner) throw new Error("Invalid signer")
+
+                const signer = convertAccountToXmtpSigner(vechainSigner)
+                const client = await createXmtpClient(signer, dbEncryptionKey)
+                dispatch(addXmtpClient(client.address))
+                setClients(prev => [...prev, client])
+
+                // Clean up thor client and provider to avoid duplicate polling
+                thorClient.destroy()
+                provider.destroy()
+            } catch (e) {
+                error("APP", e)
             }
-
-            const provider = new VeChainProvider(thorClient, new ProviderInternalBaseWallet([deployerAccount]))
-            const vechainSigner = (await provider.getSigner(deployerAccount.address)) as VeChainSigner
-
-            if (!vechainSigner) throw new Error("Invalid signer")
-
-            const signer = convertAccountToXmtpSigner(vechainSigner)
-            const client = await createXmtpClient(signer, dbEncryptionKey)
-
-            dispatch(addXmtpClient(client.address))
-            setClients(prev => [...prev, client])
-
-            // Clean up thor client and provider to avoid duplicate polling
-            thorClient.destroy()
-            provider.destroy()
         },
         [currentAccount, dbEncryptionKey, selectedNetwork.currentUrl, signerDevice, dispatch],
     )

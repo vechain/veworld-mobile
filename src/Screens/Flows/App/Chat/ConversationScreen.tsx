@@ -1,11 +1,11 @@
 import { NativeStackScreenProps } from "@react-navigation/native-stack"
 import { DecodedMessage } from "@xmtp/react-native-sdk"
 import React, { useCallback, useState } from "react"
-import { FlatList, RefreshControl, StyleSheet } from "react-native"
+import { FlatList, Keyboard, StyleSheet } from "react-native"
+import { NestableScrollContainer } from "react-native-draggable-flatlist"
 import {
     AccountIcon,
     BaseIcon,
-    BaseScrollView,
     BaseSpacer,
     BaseText,
     BaseTextInput,
@@ -15,7 +15,7 @@ import {
     useMessages,
     useVeChat,
 } from "~Components"
-import { useThemedStyles } from "~Hooks"
+import { useTabBarBottomMargin, useThemedStyles } from "~Hooks"
 import { RootStackParamListHome, Routes } from "~Navigation"
 import { humanAddress } from "~Utils/AddressUtils/AddressUtils"
 
@@ -26,13 +26,14 @@ const ConversationScreen = ({ route, navigation }: Props) => {
     const [message, setMessage] = useState("")
 
     const { styles, theme } = useThemedStyles(baseStyles)
+    const { androidOnlyTabBarBottomMargin } = useTabBarBottomMargin()
 
     const { selectedClient } = useVeChat()
     const {
         data: messages,
         refetch: refetchMessages,
-        isRefetching: isMsgRefetching,
-        isFetching: isMsgFetching,
+        // isRefetching: isMsgRefetching,
+        // isFetching: isMsgFetching,
     } = useMessages({ topic })
     const { data: conversation } = useConversation({ topic })
 
@@ -43,6 +44,7 @@ const ConversationScreen = ({ route, navigation }: Props) => {
     const onSendMessage = useCallback(async () => {
         if (!conversation) return
         await conversation.send(message)
+        Keyboard.dismiss()
         refetchMessages()
         setMessage("")
     }, [conversation, message, refetchMessages])
@@ -54,10 +56,20 @@ const ConversationScreen = ({ route, navigation }: Props) => {
         return `${hours}:${mins}`
     }, [])
 
-    const messageItem = ({ item }: { item: DecodedMessage }) => {
+    const separatorComponent = useCallback(() => {
+        return <BaseSpacer height={6} />
+    }, [])
+
+    const messageItem = ({ item, index }: { item: DecodedMessage; index: number }) => {
         const isSender = item.senderAddress === selectedClient?.inboxId
+        const isLastItem = index === 0
         return (
-            <BaseView flexDirection="row" w={100} px={12} py={6} justifyContent={!isSender ? "flex-start" : "flex-end"}>
+            <BaseView
+                flexDirection="row"
+                w={100}
+                px={12}
+                mb={isLastItem ? 6 : 0}
+                justifyContent={!isSender ? "flex-start" : "flex-end"}>
                 <BaseView p={12} bg={!isSender ? theme.colors.card : theme.colors.primary}>
                     <BaseText
                         typographyFont="captionBold"
@@ -79,12 +91,12 @@ const ConversationScreen = ({ route, navigation }: Props) => {
 
     return (
         <Layout
+            hasTopSafeAreaOnly
             noMargin
             noBackButton
             fixedHeader={
                 <BaseView flexDirection="row" px={20} pb={8} style={styles.titleContainer}>
                     <BaseIcon haptics="Light" action={onGoBack} name="arrow-left" size={24} color={theme.colors.text} />
-
                     <BaseView flexDirection="row" flex={1} pr={10} alignItems="center">
                         <AccountIcon address={recipient} size={24} />
                         <BaseText typographyFont="subTitleBold" mx={8}>
@@ -94,30 +106,22 @@ const ConversationScreen = ({ route, navigation }: Props) => {
                 </BaseView>
             }
             fixedBody={
-                <BaseScrollView
-                    h={100}
-                    style={{ transform: [{ scaleY: -1 }] }}
-                    refreshControl={
-                        <RefreshControl
-                            refreshing={isMsgRefetching || isMsgFetching}
-                            onRefresh={refetchMessages}
-                            tintColor={theme.colors.border}
-                        />
-                    }>
-                    <BaseView style={{ transform: [{ scaleY: -1 }] }}>
-                        <FlatList
-                            data={messages}
-                            inverted
-                            initialScrollIndex={message?.length}
-                            keyExtractor={i => i.id}
-                            renderItem={messageItem}
-                            ItemSeparatorComponent={() => <BaseSpacer height={6} />}
-                        />
-                    </BaseView>
-                </BaseScrollView>
+                <BaseView flex={1}>
+                    <NestableScrollContainer style={[styles.reversedView]}>
+                        <BaseView style={[styles.reversedView]}>
+                            <FlatList
+                                data={messages}
+                                inverted
+                                keyExtractor={i => i.id}
+                                renderItem={messageItem}
+                                ItemSeparatorComponent={separatorComponent}
+                            />
+                        </BaseView>
+                    </NestableScrollContainer>
+                </BaseView>
             }
             footer={
-                <BaseView>
+                <BaseView mb={androidOnlyTabBarBottomMargin} flex={0}>
                     <BaseSpacer height={2} background={theme.colors.card} />
                     <BaseView w={100} flexDirection="row" p={12}>
                         <BaseView flex={1} mx={6}>
@@ -143,5 +147,11 @@ const baseStyles = () =>
     StyleSheet.create({
         titleContainer: {
             gap: 16,
+        },
+        reversedView: {
+            transform: [{ scaleY: -1 }],
+        },
+        messagesContainer: {
+            marginBottom: 12,
         },
     })
