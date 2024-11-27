@@ -126,12 +126,23 @@ export const VechainTokenCard = memo(({ tokenWithInfo, isAnimation, isBalanceVis
 
                 <BaseSpacer height={3} />
 
-                {/* //TODO: add skeleton */}
-                <BaseText
-                    typographyFont="captionBold"
-                    color={isPositive24hChange ? theme.colors.success : theme.colors.danger}>
-                    {change24h}
-                </BaseText>
+                {isLoading ? (
+                    <BaseView flexDirection="row" alignItems="center">
+                        <BaseSkeleton
+                            animationDirection="horizontalLeft"
+                            boneColor={theme.colors.skeletonBoneColor}
+                            highlightColor={theme.colors.skeletonHighlightColor}
+                            height={14}
+                            width={60}
+                        />
+                    </BaseView>
+                ) : (
+                    <BaseText
+                        typographyFont="captionBold"
+                        color={isPositive24hChange ? theme.colors.success : theme.colors.danger}>
+                        {change24h}
+                    </BaseText>
+                )}
             </Animated.View>
         </Animated.View>
     )
