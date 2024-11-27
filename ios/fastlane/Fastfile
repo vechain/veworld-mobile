@@ -455,6 +455,7 @@ platform :ios do
         repo: "vechain/veworld-mobile",
         title: version.nil? ? "build: build artifacts build-#{build} [iOS]" : "version: build artifacts version-#{version} [iOS]", 
         base: "main",
+        body: "This PR was automatically created by the CI pipeline.",
         api_url: "https://api.github.com"
       )
 
