@@ -6,7 +6,6 @@ import { useTheme } from "~Hooks"
 
 type Props = {
     title?: string
-    hasBottomSpacer?: boolean
     beforeNavigating?: () => Promise<void> | void
     action?: () => void
     onGoBack?: () => void
