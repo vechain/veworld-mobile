@@ -31,7 +31,6 @@ export interface UserPreferenceState {
     lastVersionCheck: string
     appResetTimestamp?: string
     lastBackupRequestTimestamp?: { [key: string]: number | undefined }
-    googleDriveBackupEnabled?: boolean
 }
 
 const initialState: UserPreferenceState = {
@@ -49,7 +48,6 @@ const initialState: UserPreferenceState = {
     lastReviewTimestamp: moment().subtract(3, "weeks").add(3, "days").toISOString(),
     lastVersionCheck: moment().toISOString(),
     appResetTimestamp: undefined,
-    googleDriveBackupEnabled: false,
 }
 
 export const UserPreferencesSlice = createSlice({

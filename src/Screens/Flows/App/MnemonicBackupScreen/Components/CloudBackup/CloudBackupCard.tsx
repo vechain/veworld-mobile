@@ -43,7 +43,7 @@ export const CloudBackupCard: FC<Props> = ({ mnemonicArray, deviceToBackup }) =>
     const isAppLoading = useAppSelector(selectIsAppLoading)
     const accounts = useAppSelector(selectAccounts)
 
-    const { getWalletByRootAddress, deleteWallet } = useCloudBackup()
+    const { getWalletByRootAddress, deleteWallet, isCloudAvailable } = useCloudBackup()
 
     const { isWalletSecurityBiometrics } = useWalletSecurity()
     const { authenticateBiometrics } = useBiometricsValidation()
@@ -72,12 +72,16 @@ export const CloudBackupCard: FC<Props> = ({ mnemonicArray, deviceToBackup }) =>
 
     useFocusEffect(
         useCallback(() => {
+            if (!isCloudAvailable) {
+                return
+            }
+
             if (!accounts.find(account => account.rootAddress === deviceToBackup?.rootAddress)) {
                 navigation.goBack()
             } else {
                 getWallet()
             }
-        }, [accounts, deviceToBackup?.rootAddress, getWallet, navigation]),
+        }, [accounts, deviceToBackup?.rootAddress, getWallet, isCloudAvailable, navigation]),
     )
 
     const goToChoosePasswordScreen = useCallback(async () => {
