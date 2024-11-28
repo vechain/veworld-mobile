@@ -1,16 +1,16 @@
 import React from "react"
-import { StyleSheet } from "react-native"
+import { StyleSheet, ViewStyle } from "react-native"
 import { useThemedStyles } from "~Hooks"
 import { ColorThemeType } from "~Constants"
 import { BaseIcon, BaseTouchable, BaseView } from "~Components/Base"
 
-type Props = { onPress?: () => void; isObservable: boolean }
-export const DeleteUnderlay: React.FC<Props> = ({ onPress, isObservable }) => {
+type Props = { onPress?: () => void; isObservable: boolean; touchableComponentStyles?: ViewStyle }
+export const DeleteUnderlay: React.FC<Props> = ({ onPress, isObservable, touchableComponentStyles }) => {
     const { styles, theme } = useThemedStyles(baseStyles)
 
     return (
         <BaseView style={styles.underlayContainer}>
-            <BaseTouchable action={onPress} style={styles.underlayLeft}>
+            <BaseTouchable action={onPress} style={[styles.underlayLeft, touchableComponentStyles]}>
                 <BaseIcon
                     name="delete"
                     size={24}

@@ -6,11 +6,12 @@ import {
     VeChainProvider,
     VeChainSigner,
 } from "@vechain/sdk-network"
-import { Client } from "@xmtp/react-native-sdk"
+import { Client, Conversation, DecodedMessage } from "@xmtp/react-native-sdk"
 import React, { useCallback, useEffect, useMemo, useState } from "react"
 import { HDNode } from "thor-devkit"
 import { DEVICE_TYPE, Wallet } from "~Model"
 import {
+    addConversation,
     addXmtpClient,
     getDbEncryptionKey,
     selectDevice,
@@ -18,11 +19,14 @@ import {
     selectSelectedAccountOrNull,
     selectSelectedNetwork,
     setDbEncryptionKey,
+    updateConversation,
     useAppDispatch,
     useAppSelector,
 } from "~Storage/Redux"
-import { convertAccountToXmtpSigner, createXmtpClient, error, initClientListeners, loadXmtpClients } from "~Utils"
+import { convertAccountToXmtpSigner, createXmtpClient, error, info, loadXmtpClients } from "~Utils"
 import { WalletEncryptionKeyHelper } from "../EncryptedStorageProvider"
+import { useQueryClient } from "@tanstack/react-query"
+import { VeChatConversation } from "~Storage/Redux/Types"
 
 type VeChatContextProps = { children: React.ReactNode }
 
@@ -39,10 +43,11 @@ const VeChatContextProvider: React.FC<VeChatContextProps> = ({ children }) => {
 
     const currentAccount = useAppSelector(selectSelectedAccountOrNull)
     const signerDevice = useAppSelector(state => selectDevice(state, currentAccount?.rootAddress))
-
     const selectedNetwork = useAppSelector(selectSelectedNetwork)
     const registeredClients = useAppSelector(selectRegisteredClients)
     const dbEncryptionKey = useAppSelector(getDbEncryptionKey)
+
+    const queryClient = useQueryClient()
     const dispatch = useAppDispatch()
 
     const selectedClient = useMemo(() => {
@@ -56,17 +61,54 @@ const VeChatContextProvider: React.FC<VeChatContextProps> = ({ children }) => {
         }
     }, [dbEncryptionKey, dispatch])
 
+    const initListeners = useCallback(
+        async (client: Client) => {
+            info("APP", client.address, client.inboxId)
+
+            await client.conversations.stream(async (conversation: Conversation<any>) => {
+                const currentTimestamp = new Date().getTime()
+                queryClient.setQueryData<Conversation[]>(["veChat", "conversations", client.address], oldConv =>
+                    oldConv ? [...oldConv, conversation] : [conversation],
+                )
+
+                const messages = await conversation.messages()
+
+                const conversationState: VeChatConversation = {
+                    createdAt: currentTimestamp,
+                    updatedAt: currentTimestamp,
+                    unreadMessages: messages.length,
+                    lastRead: currentTimestamp - 1,
+                }
+                dispatch(addConversation({ topic: conversation.topic, conversation: conversationState }))
+            })
+            await client.conversations.streamAllMessages(async msg => {
+                const currentTimestamp = new Date().getTime()
+                queryClient.setQueryData<DecodedMessage[]>(["veChat", "messages", client.address, msg.topic], oldMsgs =>
+                    oldMsgs && !oldMsgs.some(oldMsg => oldMsg.id === msg.id) ? [msg, ...oldMsgs] : [msg],
+                )
+                if (msg.senderAddress !== client.inboxId)
+                    dispatch(
+                        updateConversation({
+                            topic: msg.topic,
+                            conversation: { updatedAt: currentTimestamp, unreadMessages: 1 },
+                        }),
+                    )
+            })
+        },
+        [dispatch, queryClient],
+    )
+
     const initRegisteredClients = useCallback(async () => {
         if (!dbEncryptionKey) {
             error("APP", "Cannot load database encryption key")
             return
         }
         const loadedClients = await loadXmtpClients(registeredClients, dbEncryptionKey)
-        loadedClients.forEach(initClientListeners)
+        loadedClients.forEach(initListeners)
         setClients(loadedClients)
 
         // console.log("REGISTERED CLIENTS", registeredClients, dbEncryptionKey)
-    }, [dbEncryptionKey, registeredClients])
+    }, [dbEncryptionKey, initListeners, registeredClients])
 
     const newClient = useCallback(
         async (pinCode?: string) => {

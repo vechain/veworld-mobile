@@ -30,7 +30,7 @@ export const NewConversationBottomSheet = forwardRef<BottomSheetModalMethods, Pr
     const [availableContacts, setAvailableContacts] = useState<Contact[]>([])
     const [seachValue, setSeachValue] = useState("")
     const [searchError, setSearchError] = useState("")
-    const [filteredContact, setFilteredContact] = useState("")
+    const [filteredAddress, setFilteredAddress] = useState("")
 
     const contacts = useAppSelector(selectContacts)
 
@@ -45,17 +45,13 @@ export const NewConversationBottomSheet = forwardRef<BottomSheetModalMethods, Pr
         const canMessageContacts = await selectedClient.canMessage(
             contacts.map(contact => contact.address.toLowerCase()),
         )
-        const filteredContacts = contacts.filter(contact => canMessageContacts[contact.address.toLowerCase()])
-        setAvailableContacts(filteredContacts)
+        const filteredAddresss = contacts.filter(contact => canMessageContacts[contact.address.toLowerCase()])
+        setAvailableContacts(filteredAddresss)
     }, [contacts, selectedClient])
 
     const onSearch = useCallback((value: string) => {
-        if (!AddressUtils.isValid(value) && value !== "") {
-            setSearchError("invalid address")
-        }
-
         if (value === "") {
-            setFilteredContact("")
+            setFilteredAddress("")
         }
 
         setSeachValue(value.toLowerCase())
@@ -66,8 +62,8 @@ export const NewConversationBottomSheet = forwardRef<BottomSheetModalMethods, Pr
         (contact?: Contact) => {
             if (!contact) {
                 selectedClient?.conversations
-                    .findOrCreateDm(filteredContact)
-                    .then(dm => onConfirm(filteredContact, dm.topic))
+                    .findOrCreateDm(filteredAddress)
+                    .then(dm => onConfirm(filteredAddress, dm.topic))
                 return
             }
 
@@ -75,12 +71,12 @@ export const NewConversationBottomSheet = forwardRef<BottomSheetModalMethods, Pr
                 .findOrCreateDm(contact.address)
                 .then(dm => onConfirm(contact.address, dm.topic))
         },
-        [filteredContact, onConfirm, selectedClient?.conversations],
+        [filteredAddress, onConfirm, selectedClient?.conversations],
     )
 
     const onDismissBottomSheet = useCallback(() => {
         setSeachValue("")
-        setFilteredContact("")
+        setFilteredAddress("")
         setSearchError("")
         onClose()
     }, [onClose])
@@ -101,13 +97,13 @@ export const NewConversationBottomSheet = forwardRef<BottomSheetModalMethods, Pr
 
                 if (AddressUtils.isValid(address) && address) {
                     const canMessage = await selectedClient?.canMessage([address])
-                    setFilteredContact(canMessage && canMessage[address] ? address : "")
+                    setFilteredAddress(canMessage && canMessage[address] ? address : "")
                     Keyboard.dismiss()
                 }
             } else {
                 if (seachValue.length === 42 && AddressUtils.isValid(seachValue)) {
                     const canMessage = await selectedClient?.canMessage([seachValue])
-                    setFilteredContact(canMessage && canMessage[seachValue] ? seachValue : "")
+                    setFilteredAddress(canMessage && canMessage[seachValue] ? seachValue : "")
                     Keyboard.dismiss()
                 }
             }
@@ -130,7 +126,7 @@ export const NewConversationBottomSheet = forwardRef<BottomSheetModalMethods, Pr
                 />
                 <BaseSpacer height={16} />
 
-                {filteredContact && (
+                {filteredAddress && (
                     <>
                         <BaseText typographyFont="subSubTitleMedium">{"Search result"}</BaseText>
 
@@ -138,8 +134,8 @@ export const NewConversationBottomSheet = forwardRef<BottomSheetModalMethods, Pr
 
                         <BaseTouchable onPress={() => onSelectRecipient()}>
                             <BaseView flexDirection="row" bg={theme.colors.card} p={12} borderRadius={8}>
-                                <AccountIcon address={filteredContact} size={20} />
-                                <BaseText mx={12}>{humanAddress(filteredContact)}</BaseText>
+                                <AccountIcon address={filteredAddress} size={20} />
+                                <BaseText mx={12}>{humanAddress(filteredAddress)}</BaseText>
                             </BaseView>
                         </BaseTouchable>
                     </>

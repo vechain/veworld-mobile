@@ -45,6 +45,7 @@ export const initClientListeners = async (client: Client) => {
         queryClient.setQueryData<Conversation[]>(["veChat", "conversations", client.address], oldConv =>
             oldConv ? [...oldConv, conversation] : [conversation],
         )
+
         // conversation.streamMessages(async (message: DecodedMessage<any>) => {
         //     console.log("NEW MESSAGE", conversation.topic, message.content())
         // })

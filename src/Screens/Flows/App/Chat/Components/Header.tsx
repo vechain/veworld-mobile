@@ -43,7 +43,8 @@ const Header: React.FC<Props> = ({ isOnboarding, onChangeAccountPress, onNewConv
                     <BaseIcon
                         name={"plus"}
                         size={24}
-                        color={theme.colors.text}
+                        color={theme.colors.textReversed}
+                        bg={theme.colors.primary}
                         mx={8}
                         action={onNewConversation}
                         haptics="Light"

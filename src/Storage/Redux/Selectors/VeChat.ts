@@ -10,6 +10,18 @@ export const selectRegisteredClients = createSelector(
     (state: VeChatState) => state.registerdClients[state.selectedNetwork],
 )
 
+export const selectConversationByTopic = createSelector(
+    [selectVeChatState, (_: RootState, topic: string) => topic],
+    (state, topic) => {
+        if (!state.conversations[topic]) return undefined
+        return state.conversations[topic]
+    },
+)
+
+export const selectConversations = createSelector([selectVeChatState], state => {
+    return state.conversations
+})
+
 export const getDbEncryptionKey = createSelector([selectVeChatState], state => {
     const dbEncryptionKey = state.dbEncryptionKeys[`veChat-${state.selectedNetwork}`]
     if (!dbEncryptionKey) return undefined

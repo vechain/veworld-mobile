@@ -13,11 +13,11 @@ import {
     Layout,
     useConversation,
     useMessages,
-    useVeChat,
 } from "~Components"
 import { useTabBarBottomMargin, useThemedStyles } from "~Hooks"
 import { RootStackParamListHome, Routes } from "~Navigation"
 import { humanAddress } from "~Utils/AddressUtils/AddressUtils"
+import MessageBubble from "./Components/MessageBubble"
 
 type Props = NativeStackScreenProps<RootStackParamListHome, Routes.CHAT_CONVERSATION>
 
@@ -28,7 +28,6 @@ const ConversationScreen = ({ route, navigation }: Props) => {
     const { styles, theme } = useThemedStyles(baseStyles)
     const { androidOnlyTabBarBottomMargin } = useTabBarBottomMargin()
 
-    const { selectedClient } = useVeChat()
     const {
         data: messages,
         refetch: refetchMessages,
@@ -49,43 +48,15 @@ const ConversationScreen = ({ route, navigation }: Props) => {
         setMessage("")
     }, [conversation, message, refetchMessages])
 
-    const humanDate = useCallback((timestamp: number) => {
-        const date = new Date(timestamp)
-        const hours = date.getHours()
-        const mins = date.getMinutes()
-        return `${hours}:${mins}`
-    }, [])
-
     const separatorComponent = useCallback(() => {
         return <BaseSpacer height={6} />
     }, [])
 
     const messageItem = ({ item, index }: { item: DecodedMessage; index: number }) => {
-        const isSender = item.senderAddress === selectedClient?.inboxId
-        const isLastItem = index === 0
         return (
-            <BaseView
-                flexDirection="row"
-                w={100}
-                px={12}
-                mb={isLastItem ? 6 : 0}
-                justifyContent={!isSender ? "flex-start" : "flex-end"}>
-                <BaseView p={12} bg={!isSender ? theme.colors.card : theme.colors.primary}>
-                    <BaseText
-                        typographyFont="captionBold"
-                        color={!isSender ? theme.colors.text : theme.colors.textReversed}>
-                        {!isSender ? humanAddress(recipient) : humanAddress(selectedClient.address)}
-                    </BaseText>
-                    <BaseText color={!isSender ? theme.colors.text : theme.colors.textReversed}>
-                        {item.content()}{" "}
-                    </BaseText>
-                    <BaseView flexDirection="row" justifyContent="flex-end">
-                        <BaseText color={!isSender ? theme.colors.text : theme.colors.textReversed}>
-                            {humanDate(item.sentNs / 1000000)}
-                        </BaseText>
-                    </BaseView>
-                </BaseView>
-            </BaseView>
+            <MessageBubble item={item} index={index} recipient={recipient}>
+                {item.content()}{" "}
+            </MessageBubble>
         )
     }
 
@@ -108,7 +79,7 @@ const ConversationScreen = ({ route, navigation }: Props) => {
             fixedBody={
                 <BaseView flex={1}>
                     <NestableScrollContainer style={[styles.reversedView]}>
-                        <BaseView style={[styles.reversedView]}>
+                        <BaseView style={[styles.reversedView, styles.insetView]}>
                             <FlatList
                                 data={messages}
                                 inverted
@@ -124,16 +95,25 @@ const ConversationScreen = ({ route, navigation }: Props) => {
                 <BaseView mb={androidOnlyTabBarBottomMargin} flex={0}>
                     <BaseSpacer height={2} background={theme.colors.card} />
                     <BaseView w={100} flexDirection="row" p={12}>
+                        {/* TODO: Implement sending token flows */}
+                        <BaseIcon name="currency-usd" color={theme.colors.text} bg={theme.colors.card} />
                         <BaseView flex={1} mx={6}>
-                            <BaseTextInput value={message} setValue={s => setMessage(s)} placeholder={"Message..."} />
+                            <BaseTextInput
+                                value={message}
+                                setValue={s => setMessage(s)}
+                                placeholder={"Message..."}
+                                inputMode="text"
+                                style={styles.smallTextInput}
+                            />
                         </BaseView>
-                        <BaseIcon
-                            name={"send"}
-                            bg={theme.colors.primaryLight}
-                            color={theme.colors.textReversed}
-                            disabled={!message}
-                            action={() => onSendMessage()}
-                        />
+                        {message && (
+                            <BaseIcon
+                                name={"send"}
+                                bg={theme.colors.primaryLight}
+                                color={theme.colors.textReversed}
+                                action={() => onSendMessage()}
+                            />
+                        )}
                     </BaseView>
                 </BaseView>
             }
@@ -151,7 +131,9 @@ const baseStyles = () =>
         reversedView: {
             transform: [{ scaleY: -1 }],
         },
-        messagesContainer: {
-            marginBottom: 12,
+        insetView: {
+            paddingVertical: 10,
         },
+        smallTextInput: { paddingVertical: 8 },
+        messagesContainer: {},
     })

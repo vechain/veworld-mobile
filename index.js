@@ -113,14 +113,14 @@ const Main = () => {
 
     return (
         <GestureHandlerRootView style={{ flex: 1 }}>
-            <VeChatContextProvider>
-                <ConnexContextProvider>
-                    <PersistQueryClientProvider
-                        client={queryClient}
-                        persistOptions={{
-                            persister: clientPersister,
-                        }}>
-                        <NavigationProvider>
+            <ConnexContextProvider>
+                <PersistQueryClientProvider
+                    client={queryClient}
+                    persistOptions={{
+                        persister: clientPersister,
+                    }}>
+                    <NavigationProvider>
+                        <VeChatContextProvider>
                             <WalletConnectContextProvider>
                                 <InAppBrowserProvider>
                                     <BottomSheetModalProvider>
@@ -128,11 +128,11 @@ const Main = () => {
                                     </BottomSheetModalProvider>
                                 </InAppBrowserProvider>
                             </WalletConnectContextProvider>
-                        </NavigationProvider>
-                        <BaseToast />
-                    </PersistQueryClientProvider>
-                </ConnexContextProvider>
-            </VeChatContextProvider>
+                        </VeChatContextProvider>
+                    </NavigationProvider>
+                    <BaseToast />
+                </PersistQueryClientProvider>
+            </ConnexContextProvider>
         </GestureHandlerRootView>
     )
 }

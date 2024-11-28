@@ -1,7 +1,13 @@
 export type VeChatNetwork = "local" | "dev" | "production"
 
-type VeChatConversation = {}
+export type VeChatConversation = {
+    unreadMessages: number
+    lastRead: number
+    createdAt: number
+    updatedAt: number
+    deletedAt?: number
+}
 
 export type VeChatConversations = {
-    [conversationId: string]: VeChatConversation
+    [topic: string]: VeChatConversation
 }

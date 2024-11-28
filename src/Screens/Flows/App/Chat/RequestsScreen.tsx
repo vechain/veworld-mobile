@@ -21,6 +21,10 @@ const RequestsScreen: React.FC<Props> = () => {
         return <BaseSpacer height={1} background={theme.colors.card} />
     }, [theme])
 
+    const onConversationStateChange = useCallback(() => {
+        refetch()
+    }, [refetch])
+
     return (
         <Layout
             noMargin
@@ -32,7 +36,14 @@ const RequestsScreen: React.FC<Props> = () => {
                             refreshing={isFetching || isRefetching}
                             onRefresh={refetch}
                             keyExtractor={item => item.topic}
-                            renderItem={({ item }) => <ConversationRow item={item} />}
+                            renderItem={({ item }) => (
+                                <ConversationRow
+                                    item={item}
+                                    swipeEnabled={false}
+                                    onAllow={onConversationStateChange}
+                                    onDeny={onConversationStateChange}
+                                />
+                            )}
                             ItemSeparatorComponent={itemSeparator}
                         />
                     </NestableScrollContainer>

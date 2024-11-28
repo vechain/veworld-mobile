@@ -1,10 +1,11 @@
 import { useNavigation } from "@react-navigation/native"
-import React, { useCallback } from "react"
+import React, { useCallback, useRef } from "react"
 import { FlatList, RefreshControl } from "react-native"
 import { BaseIcon, BaseSpacer, BaseText, BaseTouchable, BaseView, useConversations } from "~Components"
 import { useTheme } from "~Hooks"
 import { Routes } from "~Navigation"
 import { ConversationRow } from "./ConversationRow"
+import { SwipeableItemImperativeRef } from "react-native-swipeable-item"
 
 type Props = {}
 
@@ -18,8 +19,11 @@ const ChatConversations: React.FC<Props> = () => {
     const allowedConvs = convs?.filter(c => c.state === "allowed")
     const requestsConvs = convs?.filter(c => c.state === "unknown")
 
+    // Keep track of the swipeable items refs
+    const swipeableItemRefs = useRef<Map<string, SwipeableItemImperativeRef>>(new Map())
+
     const itemSeparator = useCallback(() => {
-        return <BaseSpacer height={1} background={theme.colors.card} />
+        return <BaseSpacer height={1} background={theme.colors.cardBorder} />
     }, [theme])
 
     const headerComponent = useCallback(() => {
@@ -34,7 +38,9 @@ const ChatConversations: React.FC<Props> = () => {
             keyExtractor={item => item.topic}
             ListHeaderComponent={headerComponent}
             ItemSeparatorComponent={itemSeparator}
-            renderItem={({ item }) => <ConversationRow item={item} />}
+            renderItem={({ item }) => (
+                <ConversationRow item={item} itemKey={item.id} swipeableItemRefs={swipeableItemRefs} />
+            )}
             refreshControl={
                 <RefreshControl
                     refreshing={isFetching || isRefetching}
@@ -55,7 +61,7 @@ const HeaderComponent = ({ counter }: { counter: number }) => {
             <BaseTouchable onPress={() => nav.navigate(Routes.CHAT_REQUESTS)}>
                 <BaseView flexDirection="row" justifyContent="space-between" p={12} w={100}>
                     <BaseView flexDirection="row" flex={1}>
-                        <BaseIcon name="tray-alert" color={"white"} />
+                        <BaseIcon name="tray-alert" color={theme.colors.text} />
                         <BaseText typographyFont="subSubTitle" mx={12}>
                             {"Requests"}
                         </BaseText>
