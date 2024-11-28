@@ -25,7 +25,7 @@ jobs:
                   cache: "yarn"
 
             - name: Install & Patch packages
-              run: yarn install:all
+              run: yarn install
 
             - name: Setup Java
               uses: actions/setup-java@v3
@@ -100,7 +100,7 @@ jobs:
             - name: Decode prod env      
               uses: mobiledevops/secret-to-file-action@v1
               with:
-                  base64-encoded-secret: ${{ secrets.RN_ENV_PROD}}
+                  base64-encoded-secret: ${{ secrets.RN_ENV_PROD_E2E }}
                   filename: ".env.production"
                   is-executable: false
                   working-directory: "."

@@ -55,7 +55,7 @@ jobs:
                 git config user.email "${{ github.actor }}@users.noreply.github.com"
 
             - name: Install & Patch packages
-              run: yarn install:all
+              run: yarn install
 
             - name: Setup Java
               uses: actions/setup-java@v3
@@ -147,8 +147,8 @@ jobs:
 
             - name: Commit and Push Changes
               run: |
-                git config user.name "${{ github.actor }}"
-                git config user.email "${{ github.actor }}@users.noreply.github.com"
+                git config user.name "vechain-ci"
+                git config user.email "vechain.ci@vechain.org"
                 git add --all
                 git commit -m "build: android build artifacts" || echo "No changes to commit"
                 git push origin HEAD:${{ inputs.pr_branch }}

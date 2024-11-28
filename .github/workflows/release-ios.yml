@@ -24,6 +24,7 @@ on:
         required: true
 
 
+
 jobs:
   build-release-ios:
     name: Build release for iOS
@@ -112,15 +113,7 @@ jobs:
              filename: ".env"
              is-executable: false
              working-directory: "./ios/fastlane"
-
-      - name: datadog-ci decode
-        uses: mobiledevops/secret-to-file-action@v1
-        with:
-            base64-encoded-secret: ${{ secrets.DATADOG_CI}}
-            filename: "datadog-ci.json"
-            is-executable: false
-            working-directory: "."
-      
+             
       - name: Decode prod env      
         uses: mobiledevops/secret-to-file-action@v1
         with:
