@@ -440,6 +440,7 @@
   "GAS_FEE": "Gas ücreti",
   "GOOGLE_DRIVE": "Google Drive",
   "GOOGLE_DRIVE_ERROR_GENERIC": "Google Drive hizmetine bağlanmaya çalışırken bir hata oluştu. Tekrar deneyin!",
+  "GOOGLE_DRIVE_ERR_GOOGLE_SERVICES": "Google hizmetleri mevcut değil. Lütfen ağ bağlantınızı kontrol edin ve tekrar deneyin.",
   "GOOGLE_DRIVE_ERR_NETWORK": "Google Drive'a bağlanırken bir hata oluştu. Lütfen ağ bağlantınızı kontrol edin ve tekrar deneyin.",
   "GOOGLE_DRIVE_ERR_UNAUTHORIZED": "Yetkilendirme gerekli. Lütfen gerekli izinleri verin ve tekrar deneyin.",
   "GOOGLE_DRIVE_ERR_WALLET_OPERATION": "Bu Google Drive cüzdan işlemi gerçekleştirilirken bir hata oluştu. Lütfen tekrar deneyin.",

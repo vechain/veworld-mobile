@@ -440,6 +440,7 @@
   "GAS_FEE": "Phí gas",
   "GOOGLE_DRIVE": "Google Drive",
   "GOOGLE_DRIVE_ERROR_GENERIC": "Đã xảy ra lỗi khi cố gắng kết nối với dịch vụ Google Drive. Thử lại!",
+  "GOOGLE_DRIVE_ERR_GOOGLE_SERVICES": "Dịch vụ Google không khả dụng. Vui lòng kiểm tra kết nối mạng của bạn và thử lại.",
   "GOOGLE_DRIVE_ERR_NETWORK": "Đã xảy ra lỗi khi kết nối với Google Drive. Vui lòng kiểm tra kết nối mạng của bạn và thử lại.",
   "GOOGLE_DRIVE_ERR_UNAUTHORIZED": "Yêu cầu cấp quyền. Vui lòng cấp quyền cần thiết và thử lại.",
   "GOOGLE_DRIVE_ERR_WALLET_OPERATION": "Đã xảy ra lỗi khi thực hiện thao tác ví trên Google Drive này. Vui lòng thử lại.",

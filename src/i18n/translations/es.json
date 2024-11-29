@@ -440,6 +440,7 @@
   "GAS_FEE": "Tarifa de gas",
   "GOOGLE_DRIVE": "Google Drive",
   "GOOGLE_DRIVE_ERROR_GENERIC": "Ocurrió un error al intentar conectar con el servicio de Google Drive. ¡Inténtalo de nuevo!",
+  "GOOGLE_DRIVE_ERR_GOOGLE_SERVICES": "Los servicios de Google no están disponibles. Por favor, comprueba tu conexión de red y vuelve a intentarlo.",
   "GOOGLE_DRIVE_ERR_NETWORK": "Hubo un error al conectar con Google Drive. Por favor, verifica tu conexión de red e inténtalo de nuevo.",
   "GOOGLE_DRIVE_ERR_UNAUTHORIZED": "Autorización requerida. Por favor, concede los permisos necesarios e inténtalo de nuevo.",
   "GOOGLE_DRIVE_ERR_WALLET_OPERATION": "Hubo un error al realizar esta operación de billetera en Google Drive. Por favor, inténtalo de nuevo.",

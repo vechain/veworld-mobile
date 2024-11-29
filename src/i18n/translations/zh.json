@@ -440,6 +440,7 @@
   "GAS_FEE": "燃气费",
   "GOOGLE_DRIVE": "Google Drive",
   "GOOGLE_DRIVE_ERROR_GENERIC": "尝试连接到 Google Drive 服务时发生错误。请重试！",
+  "GOOGLE_DRIVE_ERR_GOOGLE_SERVICES": "Google 服务不可用。请检查您的网络连接，然后重试。",
   "GOOGLE_DRIVE_ERR_NETWORK": "连接 Google Drive 时出错。请检查您的网络连接并重试。",
   "GOOGLE_DRIVE_ERR_UNAUTHORIZED": "需要授权。请授予必要的权限并重试。",
   "GOOGLE_DRIVE_ERR_WALLET_OPERATION": "执行此 Google Drive 钱包操作时出错。请重试。",

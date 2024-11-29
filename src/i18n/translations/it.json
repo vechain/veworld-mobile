@@ -440,6 +440,7 @@
   "GAS_FEE": "Commissione gas",
   "GOOGLE_DRIVE": "Google Drive",
   "GOOGLE_DRIVE_ERROR_GENERIC": "Si è verificato un errore durante il tentativo di connessione al servizio Google Drive. Riprova!",
+  "GOOGLE_DRIVE_ERR_GOOGLE_SERVICES": "I servizi di Google non sono disponibili. Controlla la tua connessione di rete e riprova.",
   "GOOGLE_DRIVE_ERR_NETWORK": "C'è stato un errore durante la connessione a Google Drive. Si prega di controllare la connessione di rete e riprovare.",
   "GOOGLE_DRIVE_ERR_UNAUTHORIZED": "Autorizzazione richiesta. Si prega di concedere i permessi necessari e riprovare.",
   "GOOGLE_DRIVE_ERR_WALLET_OPERATION": "Si è verificato un errore durante l'esecuzione di questa operazione sul portafoglio di Google Drive. Si prega di riprovare.",

@@ -440,6 +440,7 @@
   "GAS_FEE": "Gaskosten",
   "GOOGLE_DRIVE": "Google Drive",
   "GOOGLE_DRIVE_ERROR_GENERIC": "Er is een fout opgetreden bij het proberen om verbinding te maken met de Google Drive-service. Probeer het opnieuw!",
+  "GOOGLE_DRIVE_ERR_GOOGLE_SERVICES": "Google-services zijn niet beschikbaar. Controleer uw netwerkverbinding en probeer het opnieuw.",
   "GOOGLE_DRIVE_ERR_NETWORK": "Er was een fout bij het verbinden met Google Drive. Controleer uw netwerkverbinding en probeer het opnieuw.",
   "GOOGLE_DRIVE_ERR_UNAUTHORIZED": "Autorisatie vereist. Geef de benodigde toestemmingen en probeer het opnieuw.",
   "GOOGLE_DRIVE_ERR_WALLET_OPERATION": "Er is een fout opgetreden bij het uitvoeren van deze Google Drive-portemonneebewerking. Probeer het opnieuw.",

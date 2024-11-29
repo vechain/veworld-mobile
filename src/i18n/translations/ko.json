@@ -440,6 +440,7 @@
   "GAS_FEE": "가스 요금",
   "GOOGLE_DRIVE": "Google Drive",
   "GOOGLE_DRIVE_ERROR_GENERIC": "Google 드라이브 서비스에 연결하려는 동안 오류가 발생했습니다. 다시 시도하세요!",
+  "GOOGLE_DRIVE_ERR_GOOGLE_SERVICES": "Google 서비스에 연결할 수 없습니다. 네트워크 연결을 확인하고 다시 시도하세요.",
   "GOOGLE_DRIVE_ERR_NETWORK": "Google 드라이브에 연결하는 동안 오류가 발생했습니다. 네트워크 연결을 확인하고 다시 시도하세요.",
   "GOOGLE_DRIVE_ERR_UNAUTHORIZED": "권한이 필요합니다. 필요한 권한을 부여하고 다시 시도하세요.",
   "GOOGLE_DRIVE_ERR_WALLET_OPERATION": "이 Google 드라이브 지갑 작업을 수행하는 동안 오류가 발생했습니다. 다시 시도하세요.",

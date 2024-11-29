@@ -38,11 +38,11 @@ export const useCloudKit = () => {
                 return delWAllet && delSalt && delIV
             } catch (_error) {
                 let er = _error as CKError
+                error(ERROR_EVENTS.CLOUDKIT, er, er.message)
                 showErrorToast({
                     text1: er.message,
                     text2: handleCloudKitErrors(er),
                 })
-                throw error(ERROR_EVENTS.CLOUDKIT, er, er.message)
             }
         },
         [track],
@@ -105,11 +105,11 @@ export const useCloudKit = () => {
             } catch (_error: unknown) {
                 await deleteWallet(_rootAddress)
                 let er = _error as CKError
+                error(ERROR_EVENTS.CLOUDKIT, er, er.message)
                 showErrorToast({
                     text1: er.message,
                     text2: handleCloudKitErrors(er),
                 })
-                throw error(ERROR_EVENTS.CLOUDKIT, er, er.message)
             }
         },
         [LL, deleteWallet, track],
@@ -145,6 +145,7 @@ export const useCloudKit = () => {
             track(AnalyticsEvent.IMPORT_FROM_CLOUD_START)
 
             if (!_rootAddress) {
+                error(ERROR_EVENTS.CLOUDKIT, "Root address is required.")
                 throw new Error("Root address is required")
             }
 
@@ -171,11 +172,11 @@ export const useCloudKit = () => {
             return salt
         } catch (_error) {
             let er = _error as CKError
+            error(ERROR_EVENTS.CLOUDKIT, er, er.message)
             showErrorToast({
                 text1: er.message,
                 text2: handleCloudKitErrors(er),
             })
-            throw error(ERROR_EVENTS.CLOUDKIT, er, er.message)
         }
     }, [])
 
@@ -185,11 +186,11 @@ export const useCloudKit = () => {
             return iv
         } catch (_error) {
             let er = _error as CKError
+            error(ERROR_EVENTS.CLOUDKIT, er, er.message)
             showErrorToast({
                 text1: er.message,
                 text2: handleCloudKitErrors(er),
             })
-            throw error(ERROR_EVENTS.CLOUDKIT, er, er.message)
         }
     }, [])
 

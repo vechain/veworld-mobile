@@ -440,6 +440,7 @@
   "GAS_FEE": "燃料費",
   "GOOGLE_DRIVE": "Google 雲端硬碟",
   "GOOGLE_DRIVE_ERROR_GENERIC": "連接 Google 雲端硬碟服務時發生錯誤。請重試！",
+  "GOOGLE_DRIVE_ERR_GOOGLE_SERVICES": "Google 服務無法使用。請檢查您的網絡連接並重試。",
   "GOOGLE_DRIVE_ERR_NETWORK": "連接 Google 雲端硬碟時發生錯誤。請檢查您的網絡連接並重試。",
   "GOOGLE_DRIVE_ERR_UNAUTHORIZED": "需要授權。請授予必要的權限並重試。",
   "GOOGLE_DRIVE_ERR_WALLET_OPERATION": "執行此 Google 雲端硬碟錢包操作時發生錯誤。請重試。",

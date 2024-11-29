@@ -440,6 +440,7 @@
   "GAS_FEE": "Opłata za gaz",
   "GOOGLE_DRIVE": "Google Drive",
   "GOOGLE_DRIVE_ERROR_GENERIC": "Wystąpił błąd podczas próby połączenia z usługą Dysku Google. Spróbuj ponownie!",
+  "GOOGLE_DRIVE_ERR_GOOGLE_SERVICES": "Usługi Google są niedostępne. Sprawdź połączenie sieciowe i spróbuj ponownie.",
   "GOOGLE_DRIVE_ERR_NETWORK": "Wystąpił błąd podczas łączenia z Dyskiem Google. Sprawdź swoje połączenie sieciowe i spróbuj ponownie.",
   "GOOGLE_DRIVE_ERR_UNAUTHORIZED": "Wymagana autoryzacja. Proszę udzielić niezbędnych uprawnień i spróbować ponownie.",
   "GOOGLE_DRIVE_ERR_WALLET_OPERATION": "Wystąpił błąd podczas wykonywania operacji na portfelu w Dysku Google. Spróbuj ponownie.",

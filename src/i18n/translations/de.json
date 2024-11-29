@@ -440,6 +440,7 @@
   "GAS_FEE": "Gasgebühr",
   "GOOGLE_DRIVE": "Google Drive",
   "GOOGLE_DRIVE_ERROR_GENERIC": "Beim Versuch, eine Verbindung zum Google Drive-Dienst herzustellen, ist ein Fehler aufgetreten. Versuchen Sie es erneut!",
+  "GOOGLE_DRIVE_ERR_GOOGLE_SERVICES": "Google-Dienste sind nicht verfügbar. Bitte überprüfen Sie Ihre Netzwerkverbindung und versuchen Sie es erneut.",
   "GOOGLE_DRIVE_ERR_NETWORK": "Es gab einen Fehler bei der Verbindung mit Google Drive. Bitte überprüfen Sie Ihre Netzwerkverbindung und versuchen Sie es erneut.",
   "GOOGLE_DRIVE_ERR_UNAUTHORIZED": "Autorisierung erforderlich. Bitte erteilen Sie die notwendigen Berechtigungen und versuchen Sie es erneut.",
   "GOOGLE_DRIVE_ERR_WALLET_OPERATION": "Bei dieser Google Drive Wallet-Operation ist ein Fehler aufgetreten. Bitte versuchen Sie es erneut.",

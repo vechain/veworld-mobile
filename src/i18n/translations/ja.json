@@ -440,6 +440,7 @@
   "GAS_FEE": "ガス料金",
   "GOOGLE_DRIVE": "Google ドライブ",
   "GOOGLE_DRIVE_ERROR_GENERIC": "Google ドライブのサービスに接続中にエラーが発生しました。再試行してください。",
+  "GOOGLE_DRIVE_ERR_GOOGLE_SERVICES": "Google サービスを利用できません。ネットワーク接続を確認し、再試行してください。",
   "GOOGLE_DRIVE_ERR_NETWORK": "Google ドライブへの接続中にエラーが発生しました。ネットワーク接続を確認して、もう一度お試しください。",
   "GOOGLE_DRIVE_ERR_UNAUTHORIZED": "認証が必要です。必要な権限を許可し、再試行してください。",
   "GOOGLE_DRIVE_ERR_WALLET_OPERATION": "Google ドライブウォレット操作中にエラーが発生しました。もう一度やり直してください。",

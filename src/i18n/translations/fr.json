@@ -440,6 +440,7 @@
   "GAS_FEE": "Frais de gaz",
   "GOOGLE_DRIVE": "Google Drive",
   "GOOGLE_DRIVE_ERROR_GENERIC": "Une erreur s'est produite lors de la tentative de connexion au service Google Drive. Réessayez !",
+  "GOOGLE_DRIVE_ERR_GOOGLE_SERVICES": "Les services Google ne sont pas disponibles. Veuillez vérifier votre connexion réseau et réessayer.",
   "GOOGLE_DRIVE_ERR_NETWORK": "Il y a eu une erreur de connexion à Google Drive. Veuillez vérifier votre connexion réseau et réessayer.",
   "GOOGLE_DRIVE_ERR_UNAUTHORIZED": "Autorisation requise. Veuillez accorder les autorisations nécessaires et réessayer.",
   "GOOGLE_DRIVE_ERR_WALLET_OPERATION": "Il y a eu une erreur lors de cette opération de portefeuille Google Drive. Veuillez réessayer.",

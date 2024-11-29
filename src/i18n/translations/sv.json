@@ -440,6 +440,7 @@
   "GAS_FEE": "Gasavgift",
   "GOOGLE_DRIVE": "Google Drive",
   "GOOGLE_DRIVE_ERROR_GENERIC": "Ett fel uppstod när vi försökte ansluta till Google Drive-tjänsten. Försök igen!",
+  "GOOGLE_DRIVE_ERR_GOOGLE_SERVICES": "Google-tjänster är inte tillgängliga. Kontrollera din nätverksanslutning och försök igen.",
   "GOOGLE_DRIVE_ERR_NETWORK": "Det uppstod ett fel vid anslutning till Google Drive. Kontrollera din nätverksanslutning och försök igen.",
   "GOOGLE_DRIVE_ERR_UNAUTHORIZED": "Behörighet krävs. Vänligen ge de nödvändiga tillstånden och försök igen.",
   "GOOGLE_DRIVE_ERR_WALLET_OPERATION": "Det uppstod ett fel vid denna Google Drive-plånboksoperation. Vänligen försök igen.",
