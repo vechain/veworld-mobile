@@ -71,7 +71,8 @@ export const useCloudKit = () => {
                 showErrorToast({
                     text1: LL.CLOUDKIT_ERROR_GENERIC(),
                 })
-                throw new Error("Missing required parameters")
+                error(ERROR_EVENTS.CLOUDKIT, "Validation failed: Missing required fields.")
+                return false
             }
 
             try {
@@ -92,14 +93,15 @@ export const useCloudKit = () => {
                         showErrorToast({
                             text1: LL.CLOUDKIT_ERROR_GENERIC(),
                         })
-                        throw new Error("Error saving salt or iv")
+                        error(ERROR_EVENTS.CLOUDKIT, "Failed to save salt or iv to CloudKit.")
+                        return false
                     }
 
                     track(AnalyticsEvent.SAVE_BACKUP_TO_CLOUD_SUCCESS)
                     return true
-                } else {
-                    throw new Error("Error backing up wallet to cloud")
                 }
+                error(ERROR_EVENTS.CLOUDKIT, "CloudKit save operation returned an invalid result.")
+                return false
             } catch (_error: unknown) {
                 await deleteWallet(_rootAddress)
                 let er = _error as CKError

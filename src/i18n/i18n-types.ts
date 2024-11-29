@@ -1826,6 +1826,10 @@ type RootTranslation = {
 	 */
 	GOOGLE_DRIVE_GENERIC_ERROR_TITLE: string
 	/**
+	 * G​o​o​g​l​e​ ​s​e​r​v​i​c​e​s​ ​a​r​e​ ​n​o​t​ ​a​v​a​i​l​a​b​l​e​.​ ​P​l​e​a​s​e​ ​c​h​e​c​k​ ​y​o​u​r​ ​n​e​t​w​o​r​k​ ​c​o​n​n​e​c​t​i​o​n​ ​a​n​d​ ​t​r​y​ ​a​g​a​i​n​.
+	 */
+	GOOGLE_DRIVE_ERR_GOOGLE_SERVICES: string
+	/**
 	 * H​e​a​d​s​ ​u​p​!
 	 */
 	HEADS_UP: string
@@ -5302,6 +5306,10 @@ Try reconnect your device to the internet.
 	 * Google Drive error
 	 */
 	GOOGLE_DRIVE_GENERIC_ERROR_TITLE: () => LocalizedString
+	/**
+	 * Google services are not available. Please check your network connection and try again.
+	 */
+	GOOGLE_DRIVE_ERR_GOOGLE_SERVICES: () => LocalizedString
 	/**
 	 * Heads up!
 	 */

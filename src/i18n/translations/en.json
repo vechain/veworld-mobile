@@ -444,6 +444,7 @@
   "GOOGLE_DRIVE_ERR_UNAUTHORIZED": "Authorization required. Please grant the necessary permissions and try again.",
   "GOOGLE_DRIVE_ERR_WALLET_OPERATION": "There was an error performing this Google Drive wallet operation. Please try again.",
   "GOOGLE_DRIVE_GENERIC_ERROR_TITLE": "Google Drive error",
+  "GOOGLE_DRIVE_ERR_GOOGLE_SERVICES": "Google services are not available. Please check your network connection and try again.",
   "HEADS_UP": "Heads up!",
   "HIDDEN_COLLECTIONS": "Hidden collections",
   "HIDE_COLLECTION": "Hide collection",

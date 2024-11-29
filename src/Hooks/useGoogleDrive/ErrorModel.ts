@@ -33,7 +33,7 @@ export const handleGoogleDriveErrors = (err: GDError): { title: string; descript
     const locale = i18n.detectLocale()
 
     if (err) {
-        error(ERROR_EVENTS.GOOGLE_DRIVE, err)
+        error(ERROR_EVENTS.GOOGLE_DRIVE, err, err.message)
     }
 
     switch (err.code) {
@@ -62,6 +62,12 @@ export const handleGoogleDriveErrors = (err: GDError): { title: string; descript
                 description: i18n.i18n()[locale].GOOGLE_DRIVE_ERR_UNAUTHORIZED(),
             }
 
+        case GOOGLE_SERVICES_UNAVAILABLE:
+            return {
+                title: i18n.i18n()[locale].GOOGLE_DRIVE_GENERIC_ERROR_TITLE(),
+                description: i18n.i18n()[locale].GOOGLE_DRIVE_ERR_GOOGLE_SERVICES(),
+            }
+
         case ACTIVITY_NOT_FOUND:
         case SIGN_OUT:
         case UNKNOWN_TYPE:
@@ -69,7 +75,6 @@ export const handleGoogleDriveErrors = (err: GDError): { title: string; descript
         case CHECK_PERMISSIONS:
         case SIGN_IN_INTENT_CREATION:
         case SIGN_IN_INTENT_IS_NULL:
-        case GOOGLE_SERVICES_UNAVAILABLE:
         default:
             return {
                 title: i18n.i18n()[locale].GOOGLE_DRIVE_GENERIC_ERROR_TITLE(),
