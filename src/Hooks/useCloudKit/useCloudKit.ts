@@ -110,6 +110,7 @@ export const useCloudKit = () => {
                     text1: er.message,
                     text2: handleCloudKitErrors(er),
                 })
+                return false
             }
         },
         [LL, deleteWallet, track],
