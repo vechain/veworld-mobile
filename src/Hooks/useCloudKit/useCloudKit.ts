@@ -2,11 +2,12 @@ import { useCallback } from "react"
 import { NativeModules } from "react-native"
 import { showErrorToast, showInfoToast } from "~Components"
 import { AnalyticsEvent, DerivationPath, ERROR_EVENTS } from "~Constants"
+import { useAnalyticTracking } from "~Hooks/useAnalyticTracking"
 import { useI18nContext } from "~i18n"
 import { DEVICE_TYPE } from "~Model"
-import { PasswordUtils, error } from "~Utils"
+import { error, PasswordUtils } from "~Utils"
 import { CKError, handleCloudKitErrors } from "./ErrorModel"
-import { useAnalyticTracking } from "~Hooks/useAnalyticTracking"
+
 const { CloudKitManager } = NativeModules
 
 export const useCloudKit = () => {
@@ -28,12 +29,21 @@ export const useCloudKit = () => {
 
     const deleteWallet = useCallback(
         async (_rootAddress: string) => {
-            track(AnalyticsEvent.DELETE_BACKUP)
-            const delWAllet = await CloudKitManager.deleteWallet(_rootAddress)
-            const delSalt = await CloudKitManager.deleteSalt(_rootAddress)
-            const delIV = await CloudKitManager.deleteIV(_rootAddress)
-            delWAllet && delSalt && delIV && track(AnalyticsEvent.DELETE_BACKUP_SUCCESS)
-            return delWAllet && delSalt && delIV
+            try {
+                track(AnalyticsEvent.DELETE_BACKUP)
+                const delWAllet = await CloudKitManager.deleteWallet(_rootAddress)
+                const delSalt = await CloudKitManager.deleteSalt(_rootAddress)
+                const delIV = await CloudKitManager.deleteIV(_rootAddress)
+                delWAllet && delSalt && delIV && track(AnalyticsEvent.DELETE_BACKUP_SUCCESS)
+                return delWAllet && delSalt && delIV
+            } catch (_error) {
+                let er = _error as CKError
+                showErrorToast({
+                    text1: er.message,
+                    text2: handleCloudKitErrors(er),
+                })
+                throw error(ERROR_EVENTS.CLOUDKIT, er, er.message)
+            }
         },
         [track],
     )
@@ -61,7 +71,7 @@ export const useCloudKit = () => {
                 showErrorToast({
                     text1: LL.CLOUDKIT_ERROR_GENERIC(),
                 })
-                return false
+                throw new Error("Missing required parameters")
             }
 
             try {
@@ -82,22 +92,22 @@ export const useCloudKit = () => {
                         showErrorToast({
                             text1: LL.CLOUDKIT_ERROR_GENERIC(),
                         })
-                        return false
+                        throw new Error("Error saving salt or iv")
                     }
 
                     track(AnalyticsEvent.SAVE_BACKUP_TO_CLOUD_SUCCESS)
                     return true
+                } else {
+                    throw new Error("Error backing up wallet to cloud")
                 }
-                return false
             } catch (_error: unknown) {
                 await deleteWallet(_rootAddress)
                 let er = _error as CKError
-                error(ERROR_EVENTS.CLOUDKIT, er, er.message)
                 showErrorToast({
                     text1: er.message,
                     text2: handleCloudKitErrors(er),
                 })
-                return false
+                throw error(ERROR_EVENTS.CLOUDKIT, er, er.message)
             }
         },
         [LL, deleteWallet, track],
@@ -159,11 +169,11 @@ export const useCloudKit = () => {
             return salt
         } catch (_error) {
             let er = _error as CKError
-            error(ERROR_EVENTS.CLOUDKIT, er, er.message)
             showErrorToast({
                 text1: er.message,
                 text2: handleCloudKitErrors(er),
             })
+            throw error(ERROR_EVENTS.CLOUDKIT, er, er.message)
         }
     }, [])
 
@@ -173,11 +183,11 @@ export const useCloudKit = () => {
             return iv
         } catch (_error) {
             let er = _error as CKError
-            error(ERROR_EVENTS.CLOUDKIT, er, er.message)
             showErrorToast({
                 text1: er.message,
                 text2: handleCloudKitErrors(er),
             })
+            throw error(ERROR_EVENTS.CLOUDKIT, er, er.message)
         }
     }, [])
 

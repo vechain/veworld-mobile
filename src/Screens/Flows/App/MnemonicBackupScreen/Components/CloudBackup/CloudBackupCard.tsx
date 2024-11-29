@@ -1,6 +1,6 @@
 import { useFocusEffect, useNavigation } from "@react-navigation/native"
 import Lottie from "lottie-react-native"
-import React, { FC, useCallback } from "react"
+import React, { FC, useCallback, useState } from "react"
 import { StyleSheet } from "react-native"
 import { LoaderDark, LoaderLight } from "~Assets"
 import {
@@ -25,9 +25,16 @@ import {
 import { useI18nContext } from "~i18n"
 import { LocalDevice } from "~Model"
 import { Routes } from "~Navigation"
-import { selectAccounts, selectIsAppLoading, setIsAppLoading, useAppDispatch, useAppSelector } from "~Storage/Redux"
-import { PlatformUtils } from "~Utils"
-import { useCloudBackupDelete, useCloudBackupState } from "../../Hooks"
+import {
+    selectAccounts,
+    selectIsAppLoading,
+    setDeviceIsBackup,
+    setIsAppLoading,
+    useAppDispatch,
+    useAppSelector,
+} from "~Storage/Redux"
+import { DateUtils, PlatformUtils } from "~Utils"
+import { getTimeZone } from "react-native-localize"
 
 type Props = {
     mnemonicArray: string[]
@@ -48,20 +55,62 @@ export const CloudBackupCard: FC<Props> = ({ mnemonicArray, deviceToBackup }) =>
     const { isWalletSecurityBiometrics } = useWalletSecurity()
     const { authenticateBiometrics } = useBiometricsValidation()
 
-    const { isWalletBackedUp, setIsWalletBackedUp, isCloudError, setIsCloudError, getWallet } = useCloudBackupState(
-        deviceToBackup,
-        getWalletByRootAddress,
-    )
+    const [isWalletBackedUp, setIsWalletBackedUp] = useState(false)
+    const [isCloudError, setIsCloudError] = useState(false)
 
-    const { handleConfirmDelete } = useCloudBackupDelete(
-        deviceToBackup,
+    const getWallet = useCallback(async () => {
+        dispatch(setIsAppLoading(true))
+        try {
+            const wallet = await getWalletByRootAddress(deviceToBackup?.rootAddress)
+            setIsWalletBackedUp(!!wallet)
+            setIsCloudError(false)
+        } catch {
+            setIsWalletBackedUp(false)
+            setIsCloudError(true)
+        } finally {
+            dispatch(setIsAppLoading(false))
+        }
+    }, [deviceToBackup?.rootAddress, dispatch, getWalletByRootAddress])
+
+    const handleConfirmDelete = useCallback(async () => {
+        if (!deviceToBackup?.rootAddress) {
+            throw new Error("No root address found")
+        }
+
+        dispatch(setIsAppLoading(true))
+        try {
+            await deleteWallet(deviceToBackup.rootAddress)
+            const wallet = await getWalletByRootAddress(deviceToBackup.rootAddress)
+            const formattedDate = DateUtils.formatDateTime(
+                Date.now(),
+                locale,
+                getTimeZone() ?? DateUtils.DEFAULT_TIMEZONE,
+            )
+            dispatch(
+                setDeviceIsBackup({
+                    rootAddress: deviceToBackup.rootAddress,
+                    isBackup: !!wallet,
+                    isBackupManual: !!deviceToBackup.isBackedUpManual,
+                    date: formattedDate,
+                }),
+            )
+            setIsWalletBackedUp(!!wallet)
+            navigation.goBack()
+        } catch (error) {
+            setIsCloudError(true)
+            dispatch(setIsAppLoading(false))
+        }
+    }, [
+        deviceToBackup?.rootAddress,
+        deviceToBackup?.isBackedUpManual,
         deleteWallet,
         getWalletByRootAddress,
+        locale,
+        dispatch,
         setIsWalletBackedUp,
         setIsCloudError,
         navigation,
-        locale,
-    )
+    ])
 
     const {
         ref: confirmDeleteBackupRef,

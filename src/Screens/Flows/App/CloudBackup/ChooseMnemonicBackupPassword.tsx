@@ -25,10 +25,10 @@ import { useI18nContext } from "~i18n"
 import { RootStackParamListSettings, Routes } from "~Navigation"
 import { selectIsAppLoading, setDeviceIsBackup, setIsAppLoading, useAppDispatch, useAppSelector } from "~Storage/Redux"
 import { AddressUtils, CryptoUtils, DateUtils, HexUtils, PasswordUtils, PlatformUtils } from "~Utils"
-import { commonStyle } from "./utils"
+import { cloudBackupPasswordStyle } from "./utils"
 
 export const ChooseMnemonicBackupPassword = () => {
-    const { styles, theme } = useThemedStyles(commonStyle)
+    const { styles, theme } = useThemedStyles(cloudBackupPasswordStyle)
     const { LL, locale } = useI18nContext()
     const navigation = useNavigation()
     const dispatch = useAppDispatch()
@@ -80,27 +80,20 @@ export const ChooseMnemonicBackupPassword = () => {
                     derivationPath: device?.derivationPath ?? DerivationPath.VET,
                 })
 
-                if (isOperationSuccessfull) {
-                    const formattedDate = DateUtils.formatDateTime(
-                        Date.now(),
-                        locale,
-                        getTimeZone() ?? DateUtils.DEFAULT_TIMEZONE,
-                    )
-                    dispatch(
-                        setDeviceIsBackup({
-                            rootAddress: device.rootAddress,
-                            isBackup: true,
-                            isBackupManual: !!device.isBackedUpManual,
-                            date: formattedDate,
-                        }),
-                    )
-
-                    onOpenSuccess()
-                } else {
-                    showErrorToast({
-                        text1: PlatformUtils.isIOS() ? LL.CLOUDKIT_ERROR_GENERIC() : LL.GOOGLE_DRIVE_ERROR_GENERIC(),
-                    })
-                }
+                const formattedDate = DateUtils.formatDateTime(
+                    Date.now(),
+                    locale,
+                    getTimeZone() ?? DateUtils.DEFAULT_TIMEZONE,
+                )
+                dispatch(
+                    setDeviceIsBackup({
+                        rootAddress: device.rootAddress,
+                        isBackup: isOperationSuccessfull,
+                        isBackupManual: !!device.isBackedUpManual,
+                        date: formattedDate,
+                    }),
+                )
+                onOpenSuccess()
             } catch (error) {
                 showErrorToast({
                     text1: PlatformUtils.isIOS() ? LL.CLOUDKIT_ERROR_GENERIC() : LL.GOOGLE_DRIVE_ERROR_GENERIC(),

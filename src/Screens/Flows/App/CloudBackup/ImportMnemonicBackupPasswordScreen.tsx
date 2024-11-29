@@ -24,10 +24,10 @@ import { useHandleWalletCreation } from "~Screens/Flows/Onboarding/WelcomeScreen
 import { UserCreatePasswordScreen } from "~Screens/Flows/WalletCreation"
 import { selectHasOnboarded, selectIsAppLoading, setIsAppLoading, useAppDispatch, useAppSelector } from "~Storage/Redux"
 import { CryptoUtils, error, PasswordUtils, PlatformUtils } from "~Utils"
-import { commonStyle } from "./utils"
+import { cloudBackupPasswordStyle } from "./utils"
 
 export const ImportMnemonicBackupPasswordScreen = () => {
-    const { styles, theme } = useThemedStyles(commonStyle)
+    const { styles, theme } = useThemedStyles(cloudBackupPasswordStyle)
     const { LL } = useI18nContext()
     const navigation = useNavigation()
     const dispatch = useAppDispatch()

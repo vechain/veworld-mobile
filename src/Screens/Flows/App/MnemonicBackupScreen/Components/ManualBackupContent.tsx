@@ -27,8 +27,12 @@ export const ManualBackupContent = ({
             <CopyMnemonicButton mnemonicArray={mnemonicArray} deviceToBackup={deviceToBackup} />
             <BaseSpacer height={20} />
             <MnemonicAvoidScreenshotAlert />
-            {deviceToBackup?.isBackedUpManual && <BaseSpacer height={12} />}
-            {deviceToBackup?.isBackedUpManual && <ManualBackupDoneBanner />}
+            {deviceToBackup?.isBackedUpManual && (
+                <>
+                    <BaseSpacer height={12} />
+                    <ManualBackupDoneBanner />
+                </>
+            )}
         </BaseView>
     )
 }

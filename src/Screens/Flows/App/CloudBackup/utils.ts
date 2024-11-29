@@ -3,7 +3,7 @@ import { COLORS, ColorThemeType, typography } from "~Constants"
 
 const { defaults: defaultTypography } = typography
 
-export const commonStyle = (theme: ColorThemeType) =>
+export const cloudBackupPasswordStyle = (theme: ColorThemeType) =>
     StyleSheet.create({
         rootContainer: {
             flex: 1,
