@@ -143,9 +143,6 @@ export const SwitchStack = () => {
                             component={ChooseMnemonicBackupPassword}
                             options={{
                                 headerShown: false,
-                                // presentation: "card",
-                                // animation: "slide_from_bottom",
-                                // animationDuration: 300,
                             }}
                         />
 
