@@ -756,9 +756,8 @@ const injectedJs = `
 function newResponseHandler(id) {
     return new Promise((resolve, reject) => {
         addEventListener("message", event => {
-            try {                
-                if (event.data.id !== id) 
-                    return
+            try {
+                if (event.data.id !== id) return
 
                 if (event.data.error) {
                     reject(new Error(event.data.error))
@@ -779,7 +778,7 @@ function generateRandomId() {
 window.vechain = {
     isVeWorld: true,
     isInAppBrowser: true,
-    
+
     newConnexSigner: function (genesisId) {
         return {
             signTx(message, options) {
@@ -827,9 +826,12 @@ window.vechain = {
                 window.ReactNativeWebView.postMessage(JSON.stringify(request))
 
                 return newResponseHandler(request.id)
-            }, 
+            },
         }
     },
+    request: function (method, params) {},
+    on: function (event, callback) {},
+    removeListener: function (event, callback) {},
 }
 
 true
