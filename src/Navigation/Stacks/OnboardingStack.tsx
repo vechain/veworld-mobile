@@ -4,12 +4,13 @@ import {
     EnableAdditionalSettings,
     ImportFromCloudScreen,
     ImportLocalWallet,
+    ImportMnemonicBackupPasswordScreen,
     SelectLedgerAccounts,
     SelectLedgerDevice,
     WelcomeScreen,
 } from "~Screens"
 import { Routes } from "~Navigation/Enums"
-import { ConnectedLedgerDevice } from "~Model"
+import { CloudKitWallet, ConnectedLedgerDevice, DrivetWallet } from "~Model"
 import { useNavAnimation } from "~Hooks"
 
 export type RootStackParamListOnboarding = {
@@ -22,7 +23,12 @@ export type RootStackParamListOnboarding = {
     [Routes.IMPORT_HW_LEDGER_SELECT_ACCOUNTS]: {
         device: ConnectedLedgerDevice
     }
-    [Routes.IMPORT_FROM_CLOUD]: undefined
+    [Routes.IMPORT_FROM_CLOUD]: {
+        wallets: CloudKitWallet[] | DrivetWallet[]
+    }
+    [Routes.IMPORT_MNEMONIC_BACKUP_PASSWORD]: {
+        wallet: CloudKitWallet | DrivetWallet
+    }
 }
 
 const Onboarding = createNativeStackNavigator<RootStackParamListOnboarding>()
@@ -62,6 +68,14 @@ export const OnboardingStack = () => {
                 name={Routes.IMPORT_FROM_CLOUD}
                 component={ImportFromCloudScreen}
                 options={{ headerShown: false }}
+            />
+
+            <Onboarding.Screen
+                name={Routes.IMPORT_MNEMONIC_BACKUP_PASSWORD}
+                component={ImportMnemonicBackupPasswordScreen}
+                options={{
+                    headerShown: false,
+                }}
             />
         </Onboarding.Navigator>
     )

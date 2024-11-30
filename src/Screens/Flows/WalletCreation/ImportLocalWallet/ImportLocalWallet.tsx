@@ -1,6 +1,6 @@
-import { useNavigation } from "@react-navigation/native"
+import { useFocusEffect, useNavigation } from "@react-navigation/native"
 import * as Clipboard from "expo-clipboard"
-import React, { useCallback, useEffect, useMemo, useRef, useState } from "react"
+import React, { useCallback, useMemo, useRef, useState } from "react"
 import { Keyboard, StyleSheet } from "react-native"
 import {
     BackButtonHeader,
@@ -15,7 +15,6 @@ import {
     Layout,
     RequireUserPassword,
     SelectDerivationPathBottomSheet,
-    showInfoToast,
 } from "~Components"
 import { AnalyticsEvent, DerivationPath } from "~Constants"
 import {
@@ -71,21 +70,12 @@ export const ImportLocalWallet = () => {
 
     const { isCloudAvailable, getAllWalletFromCloud, googleAccountSignOut } = useCloudBackup()
 
-    const [wallets, setWallets] = useState<(CloudKitWallet | DrivetWallet)[] | null>(null)
+    const [wallets, setWallets] = useState<CloudKitWallet[] | DrivetWallet[]>([])
     const [isLoading, setIsLoading] = useState<boolean>(false)
 
-    const showNoWalletsFound = useCallback(() => {
-        showInfoToast({
-            text1: LL.CLOUD_NO_WALLETS_AVAILABLE_TITLE(),
-            text2: LL.CLOUD_NO_WALLETS_AVAILABLE_DESCRIPTION({
-                cloud: PlatformUtils.isIOS() ? "iCloud" : "Google Drive",
-            }),
-        })
-    }, [LL])
-
     const goToImportFromCloud = useCallback(() => {
-        nav.navigate(Routes.IMPORT_FROM_CLOUD)
-    }, [nav])
+        nav.navigate(Routes.IMPORT_FROM_CLOUD, { wallets })
+    }, [nav, wallets])
 
     const getWalletsFromICloud = useCallback(async () => {
         setIsLoading(true)
@@ -100,16 +90,17 @@ export const ImportLocalWallet = () => {
         setIsLoading(false)
 
         if (_wallets?.length) {
-            goToImportFromCloud()
+            nav.navigate(Routes.IMPORT_FROM_CLOUD, { wallets: _wallets })
         } else {
             await googleAccountSignOut()
-            showNoWalletsFound()
         }
-    }, [getAllWalletFromCloud, goToImportFromCloud, googleAccountSignOut, showNoWalletsFound])
+    }, [getAllWalletFromCloud, googleAccountSignOut, nav])
 
-    useEffect(() => {
-        isCloudAvailable && PlatformUtils.isIOS() && getWalletsFromICloud()
-    }, [getWalletsFromICloud, isCloudAvailable])
+    useFocusEffect(
+        useCallback(() => {
+            isCloudAvailable && PlatformUtils.isIOS() && getWalletsFromICloud()
+        }, [getWalletsFromICloud, isCloudAvailable]),
+    )
 
     const computeButtonType = useMemo(() => {
         if (textValue.length || PlatformUtils.isAndroid()) {
@@ -490,7 +481,7 @@ export const ImportLocalWallet = () => {
                             haptics="Light"
                         />
 
-                        {PlatformUtils.isAndroid() && (
+                        {PlatformUtils.isAndroid() && isCloudAvailable && (
                             <>
                                 <BaseSpacer height={8} />
                                 <BaseButton
