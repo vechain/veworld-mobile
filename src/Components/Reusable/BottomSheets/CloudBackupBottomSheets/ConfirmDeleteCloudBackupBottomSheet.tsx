@@ -46,7 +46,7 @@ export const ConfirmDeleteCloudBackupBottomSheet = React.forwardRef<BottomSheetM
         return (
             <DefaultBottomSheet
                 ref={ref}
-                icon="trash-can-outline"
+                icon="icon-trash-2"
                 title={LL.SB_CONFIRM_DELETE()}
                 description={LL.SB_CONFIRM_DELETE_DESCRIPTION({
                     cloudType: PlatformUtils.isIOS() ? LL.ICLOUD() : LL.GOOGLE_DRIVE(),

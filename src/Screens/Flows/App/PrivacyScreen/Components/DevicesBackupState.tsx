@@ -83,7 +83,7 @@ export const DevicesBackupState = <T extends BaseDevice = BaseDevice>({ devices,
     return (
         <>
             {ListHeaderComponent}
-            <CardWithHeader iconName="wallet-outline" title={LL.SB_YOUR_WALLETS()}>
+            <CardWithHeader iconName="icon-wallet" title={LL.SB_YOUR_WALLETS()}>
                 <FlatList
                     data={devices}
                     keyExtractor={keyExtractor}

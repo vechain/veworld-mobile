@@ -34,7 +34,7 @@ export const SettingsRow = ({ title, screenName, icon, url }: RowProps) => {
     return (
         <BaseTouchable action={onPress} style={baseStyles.container} haptics="Light" testID={title}>
             <BaseView flexDirection="row">
-                <BaseIcon color={theme.colors.text} name={icon} size={24} />
+                <BaseIcon iconSet="DesignSystem" color={theme.colors.text} name={icon} size={24} />
                 <BaseText mx={14} typographyFont="button" color={theme.colors.text}>
                     {title}
                 </BaseText>

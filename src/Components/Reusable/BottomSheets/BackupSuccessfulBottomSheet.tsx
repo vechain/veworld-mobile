@@ -1,8 +1,7 @@
 import React, { useCallback } from "react"
 import { BottomSheetModalMethods } from "@gorhom/bottom-sheet/lib/typescript/types"
 import { useI18nContext } from "~i18n"
-import { useTheme } from "~Hooks"
-import { BaseButton, BaseIcon, DefaultBottomSheet } from "~Components"
+import { BaseButton, DefaultBottomSheet } from "~Components"
 import { PlatformUtils } from "~Utils"
 
 type Props = {
@@ -11,7 +10,6 @@ type Props = {
 
 export const BackupSuccessfulBottomSheet = React.forwardRef<BottomSheetModalMethods, Props>(({ onConfirm }, ref) => {
     const { LL } = useI18nContext()
-    const theme = useTheme()
 
     const handleOnProceed = useCallback(() => {
         onConfirm()
@@ -36,7 +34,7 @@ export const BackupSuccessfulBottomSheet = React.forwardRef<BottomSheetModalMeth
             })}
             mainButton={mainButton}
             enablePanDownToClose={false}
-            icon={<BaseIcon name="icon-check-circle" iconSet="DesignSystem" size={64} color={theme.colors.text} />}
+            icon="icon-check-circle"
         />
     )
 })

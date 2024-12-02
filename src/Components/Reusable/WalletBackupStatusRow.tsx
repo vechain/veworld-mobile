@@ -14,7 +14,7 @@ enum StatusColorVariant {
 
 const ICON_NAMES: Record<BackupStatusVariant, string> = {
     success: "icon-check-circle-2",
-    error: "icon-circle-x",
+    error: "icon-x-circle",
     neutral: "icon-info",
 }
 

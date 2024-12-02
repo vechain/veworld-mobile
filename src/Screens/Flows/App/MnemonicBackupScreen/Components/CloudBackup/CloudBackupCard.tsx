@@ -202,7 +202,7 @@ export const CloudBackupCard: FC<Props> = ({ mnemonicArray, deviceToBackup }) =>
             <BaseView justifyContent="center">
                 <CardWithHeader
                     title={LL.TITLE_BACKUP_CLOUD()}
-                    iconName="cloud-outline"
+                    iconName="icon-cloud"
                     sideHeader={
                         <BaseView style={styles.sideHeader}>
                             <BaseText

@@ -3,7 +3,7 @@ import { BottomSheetModalMethods } from "@gorhom/bottom-sheet/lib/typescript/typ
 import { useI18nContext } from "~i18n"
 import { PlatformUtils } from "~Utils"
 import { DefaultBottomSheet } from "../DefaultBottomSheet"
-import { BaseButton, BaseIcon } from "~Components"
+import { BaseButton } from "~Components"
 import { StyleSheet } from "react-native"
 import { ColorThemeType } from "~Constants"
 import { useThemedStyles } from "~Hooks"
@@ -48,7 +48,7 @@ export const DeleteCloudBackupBottomSheet = React.forwardRef<BottomSheetModalMet
                     repeatCloudType: cloudType,
                 })}
                 secondaryButton={secondaryButton}
-                icon={<BaseIcon name="icon-cloud" iconSet="DesignSystem" size={64} color={theme.colors.text} />}
+                icon="icon-cloud"
             />
         )
     },

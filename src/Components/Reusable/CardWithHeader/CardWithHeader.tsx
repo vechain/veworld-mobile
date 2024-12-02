@@ -30,7 +30,7 @@ export const CardWithHeader = ({
         <BaseCard containerStyle={[styles.cardContainer, containerStyle]} style={[styles.card, cardStyle]}>
             <BaseView style={styles.cardHeader}>
                 <BaseView style={styles.cardHeader}>
-                    <BaseIcon name={iconName} size={iconSize} style={styles.icon} />
+                    <BaseIcon iconSet="DesignSystem" name={iconName} size={iconSize} style={styles.icon} />
                     <BaseSpacer width={8} />
                     <BaseText typographyFont="captionMedium" color={theme.colors.text}>
                         {title}
