@@ -13,9 +13,9 @@ enum StatusColorVariant {
 }
 
 const ICON_NAMES: Record<BackupStatusVariant, string> = {
-    success: "check-circle-outline",
-    error: "close-circle-outline",
-    neutral: "information-outline",
+    success: "icon-check-circle-2",
+    error: "icon-circle-x",
+    neutral: "icon-info",
 }
 
 type Props = {
@@ -52,7 +52,12 @@ export const WalletBackupStatusRow = ({
             disabled={disabled || loading}
             action={onPress}>
             <BaseView style={styles.info}>
-                <BaseIcon name={ICON_NAMES[variant]} size={icon?.size ?? 16} color={colors.icon} />
+                <BaseIcon
+                    iconSet="DesignSystem"
+                    name={ICON_NAMES[variant]}
+                    size={icon?.size ?? 16}
+                    color={colors.icon}
+                />
                 <BaseView w={12} />
                 <BaseText typographyFont="body" color={variant === "neutral" ? COLORS.GREY_600 : COLORS.DARK_PURPLE}>
                     {title}

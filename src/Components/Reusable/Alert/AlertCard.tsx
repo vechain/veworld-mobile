@@ -19,7 +19,7 @@ export const AlertCard = memo(({ title, message, status }: AlertCardProps) => {
     return (
         <BaseView style={styles.container}>
             <BaseView style={styles.head}>
-                <BaseIcon name={ICON_NAMES[status]} size={16} color={colors.icon} />
+                <BaseIcon iconSet="DesignSystem" name={ICON_NAMES[status]} size={16} color={colors.icon} />
                 <BaseSpacer width={8} />
                 <BaseText typographyFont="bodyMedium" color={colors.title}>
                     {title}

@@ -2,8 +2,7 @@ import React, { useCallback } from "react"
 import { BottomSheetModalMethods } from "@gorhom/bottom-sheet/lib/typescript/types"
 import { useI18nContext } from "~i18n"
 import { useTheme } from "~Hooks"
-import { FeatherCheckCircleIconSVG } from "~Assets"
-import { BaseButton, DefaultBottomSheet } from "~Components"
+import { BaseButton, BaseIcon, DefaultBottomSheet } from "~Components"
 import { PlatformUtils } from "~Utils"
 
 type Props = {
@@ -37,7 +36,7 @@ export const BackupSuccessfulBottomSheet = React.forwardRef<BottomSheetModalMeth
             })}
             mainButton={mainButton}
             enablePanDownToClose={false}
-            icon={<FeatherCheckCircleIconSVG width={64} height={64} fill={theme.colors.text} />}
+            icon={<BaseIcon name="icon-check-circle" iconSet="DesignSystem" size={64} color={theme.colors.text} />}
         />
     )
 })

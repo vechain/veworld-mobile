@@ -49,7 +49,7 @@ export const DevicesBackupState = <T extends BaseDevice = BaseDevice>({ devices,
                     {statusText}
                 </BaseText>
             ) : (
-                <BaseIcon name="chevron-right" size={14} color={COLORS.DARK_PURPLE} />
+                <BaseIcon iconSet="DesignSystem" name="icon-chevron-right" size={14} color={COLORS.DARK_PURPLE} />
             )
 
             return (

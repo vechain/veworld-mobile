@@ -67,7 +67,7 @@ export const BaseIcon: React.FC<Props> = memo(props => {
                 <DesignSystemIcon
                     size={props.size ?? 22}
                     testID={testID}
-                    color={String(iconColor)}
+                    color={typeof iconColor === "number" ? theme.colors.text : iconColor}
                     style={{ padding: props.iconPadding ?? 0 }}
                     name={props.name as keyof typeof designSystemIconMap}
                     {...otherProps}
