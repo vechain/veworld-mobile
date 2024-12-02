@@ -30,6 +30,7 @@ jobs:
               id: check_merged_prs
               env:
                 GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+                MERGED_OVERRIDE: ${{ github.event.inputs.merged_override }}
               run: |
                 since_date=$(date -u +"%Y-%m-%dT%H:%M:%SZ" --date="24 hours ago")
                 repo=${GITHUB_REPOSITORY}
@@ -58,7 +59,7 @@ jobs:
                   -f per_page=5 \
                   --jq '.items[] | {number: .number, title: .title, merged_at: .closed_at}'
             
-                if [ "$merged_prs_count" -gt 0 ] || [ "$MERGED_OVERRIDE" == 'true' ]; then
+                if [ "$merged_prs_count" -gt 0 ] || [ "$MERGED_OVERRIDE" ]; then
                   echo "should_release=true" >> $GITHUB_OUTPUT
                 else
                   echo "should_release=false" >> $GITHUB_OUTPUT
