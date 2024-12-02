@@ -5,6 +5,8 @@ import { useTheme } from "~Hooks"
 import Icon from "react-native-vector-icons/MaterialCommunityIcons"
 import { IconProps } from "react-native-vector-icons/Icon"
 import HapticsService from "~Services/HapticsService"
+import designSystemIconMap from "~Assets/IconSets/DesignSystemIconMap.json"
+import { DesignSystemIcon } from "~Assets"
 
 type Props =
     | {
@@ -20,18 +22,29 @@ type Props =
           borderRadius?: number
           iconPadding?: number
           haptics?: "Success" | "Warning" | "Error" | "Light" | "Medium" | "Heavy"
+          iconSet?: "MaterialCommunityIcons" | "DesignSystem"
       } & IconProps &
           TouchableOpacityProps &
           ViewProps
 
 export const BaseIcon: React.FC<Props> = memo(props => {
-    const { color, style, borderRadius, testID, haptics, ...otherProps } = props
+    const {
+        color,
+        style,
+        borderRadius,
+        testID,
+        haptics,
+        iconSet = "MaterialCommunityIcons",
+        name,
+        ...otherProps
+    } = props
     const theme = useTheme()
 
     const iconColor = useMemo(
         () => color || (theme.isDark ? theme.colors.tertiary : theme.colors.primary),
         [theme, color],
     )
+
     return (
         <BaseIconWrapper
             testID={`${testID}-wrapper`}
@@ -39,14 +52,27 @@ export const BaseIcon: React.FC<Props> = memo(props => {
             color={color}
             haptics={haptics}
             borderRadius={borderRadius}
+            name={name}
             {...otherProps}>
-            <Icon
-                size={props.size ?? 22}
-                testID={testID}
-                color={iconColor}
-                style={{ padding: props.iconPadding ?? 0 }}
-                {...otherProps}
-            />
+            {iconSet !== "DesignSystem" ? (
+                <Icon
+                    size={props.size ?? 22}
+                    testID={testID}
+                    color={iconColor}
+                    name={name}
+                    style={{ padding: props.iconPadding ?? 0 }}
+                    {...otherProps}
+                />
+            ) : (
+                <DesignSystemIcon
+                    size={props.size ?? 22}
+                    testID={testID}
+                    color={String(iconColor)}
+                    style={{ padding: props.iconPadding ?? 0 }}
+                    name={props.name as keyof typeof designSystemIconMap}
+                    {...otherProps}
+                />
+            )}
         </BaseIconWrapper>
     )
 })
