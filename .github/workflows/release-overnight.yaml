@@ -6,7 +6,8 @@ on:
             merged_override:
               description: 'Override the merged PRs check'
               required: false
-              default: 'false'
+              default: false
+              type: boolean
     schedule:
     - cron: '0 23 * * 1-5'  # Runs at 23:00 UTC Monday through Friday 
 
