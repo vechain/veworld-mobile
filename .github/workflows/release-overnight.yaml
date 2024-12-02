@@ -62,6 +62,7 @@ jobs:
                   echo "should_release=true" >> $GITHUB_OUTPUT
                 else
                   echo "should_release=false" >> $GITHUB_OUTPUT
+                fi
 
    
     setup-version-build:
