@@ -40,7 +40,7 @@ export const SettingsRow = ({ title, screenName, icon, url }: RowProps) => {
                 </BaseText>
             </BaseView>
 
-            <BaseIcon color={theme.colors.text} name={"chevron-right"} size={24} />
+            <BaseIcon color={theme.colors.text} name={"chevron-right"} size={16} />
         </BaseTouchable>
     )
 }
