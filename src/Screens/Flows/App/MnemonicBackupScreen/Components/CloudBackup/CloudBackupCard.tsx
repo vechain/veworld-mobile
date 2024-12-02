@@ -10,6 +10,7 @@ import {
     CardWithHeader,
     ConfirmDeleteCloudBackupBottomSheet,
     DeleteCloudBackupBottomSheet,
+    EnableCloudBottomSheet,
     RequireUserPassword,
     WalletBackupStatusRow,
 } from "~Components"
@@ -118,6 +119,7 @@ export const CloudBackupCard: FC<Props> = ({ mnemonicArray, deviceToBackup }) =>
         onClose: onCloseConfirmDeleteBackup,
     } = useBottomSheetModal()
     const { ref: deleteBackupRef, onOpen: onOpenDeleteBackup, onClose: onCloseDeleteBackup } = useBottomSheetModal()
+    const { ref: EnableCloudRef, onOpen: onOpenEnableCloud, onClose: onCloseEnableCloud } = useBottomSheetModal()
 
     useFocusEffect(
         useCallback(() => {
@@ -172,12 +174,14 @@ export const CloudBackupCard: FC<Props> = ({ mnemonicArray, deviceToBackup }) =>
     ])
 
     const handleCloudBackupPress = useCallback(() => {
-        if (isWalletBackedUp) {
+        if (!isCloudAvailable) {
+            onOpenEnableCloud()
+        } else if (isWalletBackedUp) {
             onOpenDeleteBackup()
-        } else {
+        } else if (!isWalletBackedUp) {
             goToChoosePasswordScreen()
         }
-    }, [isWalletBackedUp, goToChoosePasswordScreen, onOpenDeleteBackup])
+    }, [isCloudAvailable, isWalletBackedUp, onOpenEnableCloud, onOpenDeleteBackup, goToChoosePasswordScreen])
 
     const handleProceedToDelete = useCallback(() => {
         onCloseDeleteBackup()
@@ -247,6 +251,8 @@ export const CloudBackupCard: FC<Props> = ({ mnemonicArray, deviceToBackup }) =>
                 onClose={onCloseConfirmDeleteBackup}
                 onConfirm={handleConfirmDeleteWithAuth}
             />
+
+            <EnableCloudBottomSheet ref={EnableCloudRef} onClose={onCloseEnableCloud} />
 
             <RequireUserPassword
                 isOpen={isPasswordPromptOpen}
