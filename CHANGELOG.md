@@ -1,5 +1,12 @@
 
 
+## 2.0.4 (2024-12-02)
+
+
+### Bug Fixes
+
+* adding new var to check step ([fff691a](https://github.com/vechain/veworld-mobile/commit/fff691ae5fa0e11edac05d8e3121a3677ffb6657))
+
 ## 2.0.4 (2024-11-27)
 
 ## 2.0.4 (2024-11-25)
