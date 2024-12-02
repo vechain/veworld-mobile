@@ -1,4 +1,4 @@
-import { useNavigation } from "@react-navigation/native"
+import { useFocusEffect, useNavigation } from "@react-navigation/native"
 import React, { useCallback, useEffect, useState } from "react"
 import { ImageBackground, Linking, Modal, StyleSheet, View } from "react-native"
 import DropShadow from "react-native-drop-shadow"
@@ -26,6 +26,7 @@ import { useDemoWallet } from "./useDemoWallet"
 import { useHandleWalletCreation } from "./useHandleWalletCreation"
 
 import { Routes } from "~Navigation"
+import { CloudKitWallet, DrivetWallet } from "~Model"
 const assetImage = require("~Assets/Img/Clouds.png")
 
 export const WelcomeScreen = () => {
@@ -37,6 +38,7 @@ export const WelcomeScreen = () => {
     const { ref, onOpen, onClose } = useBottomSheetModal()
 
     const [isLoading, setIsLoading] = useState(false)
+    const [wallets, setWallets] = useState<CloudKitWallet[] | DrivetWallet[]>([])
 
     const onImportWallet = useCallback(async () => {
         track(AnalyticsEvent.SELECT_WALLET_IMPORT_WALLET)
@@ -63,19 +65,22 @@ export const WelcomeScreen = () => {
 
     const [walletNumber, setWalletNumber] = useState(0)
 
-    useEffect(() => {
-        const init = async () => {
-            setIsLoading(true)
-            const wallets = await getAllWalletFromCloud()
-            setWalletNumber(wallets.length)
-            setIsLoading(false)
-            if (wallets.length) {
-                onQuickCloudModalOpen()
+    useFocusEffect(
+        useCallback(() => {
+            const init = async () => {
+                setIsLoading(true)
+                const _wallets = await getAllWalletFromCloud()
+                setWalletNumber(_wallets.length)
+                setWallets(_wallets)
+                setIsLoading(false)
+                if (_wallets.length) {
+                    onQuickCloudModalOpen()
+                }
             }
-        }
 
-        isCloudAvailable && PlatformUtils.isIOS() && init()
-    }, [onQuickCloudModalOpen, isCloudAvailable, getAllWalletFromCloud])
+            isCloudAvailable && PlatformUtils.isIOS() && init()
+        }, [onQuickCloudModalOpen, isCloudAvailable, getAllWalletFromCloud]),
+    )
 
     useEffect(() => {
         // Track when a new onboarding start
@@ -88,8 +93,8 @@ export const WelcomeScreen = () => {
 
     const onGoToImportFromCLoud = useCallback(() => {
         onQuickCloudModalClose()
-        nav.navigate(Routes.IMPORT_FROM_CLOUD)
-    }, [nav, onQuickCloudModalClose])
+        nav.navigate(Routes.IMPORT_FROM_CLOUD, { wallets })
+    }, [nav, onQuickCloudModalClose, wallets])
 
     return (
         <>

@@ -26,12 +26,21 @@ export const CopyMnemonicButton = memo(({ mnemonicArray, deviceToBackup }: Props
             dispatch(
                 setDeviceIsBackup({
                     rootAddress: deviceToBackup.rootAddress,
-                    isBackup: true,
+                    isBackup: !!deviceToBackup.isBuckedUp,
+                    isBackupManual: true,
                     date: formattedDate,
                 }),
             )
         }
-    }, [deviceToBackup?.rootAddress, locale, mnemonicArray, dispatch, onCopyToClipboard, LL])
+    }, [
+        deviceToBackup?.rootAddress,
+        deviceToBackup?.isBuckedUp,
+        locale,
+        mnemonicArray,
+        dispatch,
+        onCopyToClipboard,
+        LL,
+    ])
 
     return (
         <BaseButton

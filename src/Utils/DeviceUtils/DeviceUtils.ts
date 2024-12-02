@@ -28,6 +28,9 @@ export const generateDeviceForMnemonic = (
         derivationPath: path,
     }
 
+    const importTypeIsCloud = importType === IMPORT_TYPE.ICLOUD || importType === IMPORT_TYPE.GOOGLE_DRIVE
+    const importTypeIsManual = !!importType && !importTypeIsCloud
+
     const device: Omit<LocalDevice, "wallet"> = {
         alias: alias,
         xPub: CryptoUtils.xPubFromHdNode(hdNode),
@@ -36,7 +39,8 @@ export const generateDeviceForMnemonic = (
         index: deviceIndex,
         position: 0, // this will be updated when the device is added to the redux store
         derivationPath: path,
-        isBuckedUp: !!importType,
+        isBackedUpManual: importTypeIsManual,
+        isBuckedUp: importTypeIsCloud,
     }
 
     return { wallet, device }
@@ -68,7 +72,7 @@ export const generateDeviceForPrivateKey = (
         type: DEVICE_TYPE.LOCAL_PRIVATE_KEY,
         index: deviceIndex,
         position: 0, // this will be updated when the device is added to the redux store
-        isBuckedUp: true,
+        isBackedUpManual: true,
     }
 
     return { wallet, device }

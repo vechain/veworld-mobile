@@ -11,10 +11,11 @@ type Props = {
     description: string
     mainButton?: React.ReactNode
     secondaryButton?: React.ReactNode
+    enablePanDownToClose?: boolean
 }
 
 export const DefaultBottomSheet = React.forwardRef<BottomSheetModalMethods, Props>(
-    ({ icon, title, description, mainButton, secondaryButton }, ref) => {
+    ({ icon, title, description, mainButton, secondaryButton, enablePanDownToClose = true }, ref) => {
         const { styles, theme } = useThemedStyles(baseStyles)
 
         return (
@@ -24,6 +25,7 @@ export const DefaultBottomSheet = React.forwardRef<BottomSheetModalMethods, Prop
                 noMargins
                 style={styles.bottomSheet}
                 backgroundStyle={styles.bottomSheet}
+                enablePanDownToClose={enablePanDownToClose}
                 blurBackdrop={true}>
                 <BaseView>
                     <BaseSpacer height={16} />

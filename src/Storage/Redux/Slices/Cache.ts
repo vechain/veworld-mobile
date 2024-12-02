@@ -17,6 +17,7 @@ export interface CacheState {
     isTokensOwnedLoading: boolean
     derivedPath: DerivationPath
     userHasBeenAskedForBuckup?: boolean
+    googleDriveBackupEnabled?: boolean
 }
 
 const initialState: CacheState = {
@@ -27,6 +28,7 @@ const initialState: CacheState = {
     isTokensOwnedLoading: false,
     derivedPath: DerivationPath.VET,
     userHasBeenAskedForBuckup: false,
+    googleDriveBackupEnabled: false,
 }
 
 export const CacheSlice = createSlice({
