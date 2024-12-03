@@ -28,6 +28,7 @@ import { WalletEncryptionKeyHelper } from "../EncryptedStorageProvider"
 import { useQueryClient } from "@tanstack/react-query"
 import { VeChatConversation } from "~Storage/Redux/Types"
 import { useMMKV } from "react-native-mmkv"
+import { VeChatMessage } from "~Model/VeChat"
 
 type VeChatContextProps = { children: React.ReactNode }
 
@@ -75,7 +76,7 @@ const VeChatContextProvider: React.FC<VeChatContextProps> = ({ children }) => {
                 )
 
                 const messages = await conversation.messages()
-                const storedMessages: Omit<DecodedMessage, "client">[] = JSON.parse(
+                const storedMessages: VeChatMessage[] = JSON.parse(
                     chatStorage.getString(`${client.address}-${conversation.topic}`) ?? "[]",
                 )
 

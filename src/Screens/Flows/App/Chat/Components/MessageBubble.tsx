@@ -1,5 +1,5 @@
 import { DecodedMessage } from "@xmtp/react-native-sdk"
-import React, { useCallback } from "react"
+import React, { useCallback, useMemo } from "react"
 import { StyleSheet } from "react-native"
 import { BaseView, BaseText, useVeChat } from "~Components"
 import { ColorThemeType } from "~Constants"
@@ -9,10 +9,9 @@ type Props = {
     item: DecodedMessage
     index: number
     recipient: string
-    children: React.ReactNode
 }
 
-const MessageBubble: React.FC<Props> = ({ item, index, children }) => {
+const MessageBubble: React.FC<Props> = ({ item, index }) => {
     const { selectedClient } = useVeChat()
     const isSender = item.senderAddress === selectedClient?.inboxId
     const isLastItem = index === 0
@@ -26,6 +25,12 @@ const MessageBubble: React.FC<Props> = ({ item, index, children }) => {
         return `${hours}:${mins}`
     }, [])
 
+    const messageContent = useMemo(() => {
+        if (item.contentTypeId === "xmtp.org/text:1.0") {
+            return item.content()
+        }
+    }, [item])
+
     return (
         <BaseView>
             <BaseView flexDirection="row" w={100} px={12} mb={isLastItem ? 6 : 0} style={[styles.messageContainer]}>
@@ -36,7 +41,7 @@ const MessageBubble: React.FC<Props> = ({ item, index, children }) => {
                     {/* <BaseText typographyFont="captionBold" style={[styles.textColor]}>
                     {!isSender ? humanAddress(recipient) : humanAddress(selectedClient.address)}
                 </BaseText> */}
-                    <BaseText style={[styles.textColor]}>{children} </BaseText>
+                    <BaseText style={[styles.textColor]}>{messageContent}</BaseText>
                     <BaseView flexDirection="row" justifyContent="flex-end">
                         <BaseText typographyFont="smallCaption" style={[styles.textColor]}>
                             {humanDate(item.sentNs / 1000000)}

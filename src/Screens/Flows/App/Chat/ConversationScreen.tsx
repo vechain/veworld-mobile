@@ -18,7 +18,7 @@ import { useTabBarBottomMargin, useThemedStyles } from "~Hooks"
 import { RootStackParamListHome, Routes } from "~Navigation"
 import { humanAddress } from "~Utils/AddressUtils/AddressUtils"
 import MessageBubble from "./Components/MessageBubble"
-import { error } from "~Utils"
+import { error, info } from "~Utils"
 
 type Props = NativeStackScreenProps<RootStackParamListHome, Routes.CHAT_CONVERSATION>
 
@@ -53,13 +53,9 @@ const ConversationScreen = ({ route, navigation }: Props) => {
 
     const messageItem = useCallback(
         ({ item, index }: { item: DecodedMessage; index: number }) => {
+            info("VE_CHAT", "ITEM", item.contentTypeId)
             if (item.contentTypeId === "xmtp.org/group_updated:1.0") return <></>
-
-            return (
-                <MessageBubble item={item} index={index} recipient={recipient}>
-                    {item.nativeContent.text}{" "}
-                </MessageBubble>
-            )
+            return <MessageBubble item={item} index={index} recipient={recipient} />
         },
         [recipient],
     )
