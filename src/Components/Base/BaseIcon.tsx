@@ -5,7 +5,7 @@ import { useTheme } from "~Hooks"
 import Icon from "react-native-vector-icons/MaterialCommunityIcons"
 import { IconProps } from "react-native-vector-icons/Icon"
 import HapticsService from "~Services/HapticsService"
-import designSystemIconMap from "~Assets/IconSets/DesignSystemIconMap.json"
+import designSystemIconMap from "~Assets/Fonts/DesignSystemIcons/DesignSystemIconMap.json"
 import { DesignSystemIcon } from "~Assets"
 
 type Props =
