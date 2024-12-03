@@ -60,6 +60,10 @@ const MetadataStorage = new MMKV({
     id: "metadata_storage",
 })
 
+const ChatStorage = new MMKV({
+    id: "chat_storage",
+})
+
 export type EncryptedStorage = {
     mmkv: MMKV
     encryptionKey: string
@@ -77,6 +81,7 @@ export enum SecurityMigration {
 }
 
 type IApplicationSecurity = {
+    chats?: EncryptedStorage
     redux?: EncryptedStorage
     images?: EncryptedStorage
     metadata?: EncryptedStorage
@@ -100,6 +105,7 @@ export const ApplicationSecurityProvider = ({ children }: ApplicationSecurityCon
     const [walletStatus, setWalletStatus] = useState<WALLET_STATUS>(WALLET_STATUS.NOT_INITIALISED)
     const { currentState } = useAppState()
     const [securityType, setSecurityType] = useState<SecurityLevelType>(SecurityLevelType.NONE)
+    const [chatStorage, setChatStorage] = useState<EncryptedStorage>()
     const [reduxStorage, setReduxStorage] = useState<EncryptedStorage>()
     const [imageStorage, setImageStorage] = useState<EncryptedStorage>()
     const [metadataStorage, setMetadataStorage] = useState<EncryptedStorage>()
@@ -137,6 +143,7 @@ export const ApplicationSecurityProvider = ({ children }: ApplicationSecurityCon
         setWalletStatus(WALLET_STATUS.FIRST_TIME_ACCESS)
         setImageStorage(undefined)
         setMetadataStorage(undefined)
+        setChatStorage(undefined)
         updateSecurityType(undefined)
         OnboardingStorage.clearAll()
 
@@ -201,6 +208,10 @@ export const ApplicationSecurityProvider = ({ children }: ApplicationSecurityCon
                 setMetadataStorage({
                     mmkv: MetadataStorage,
                     encryptionKey: keys.metadata,
+                })
+                setChatStorage({
+                    mmkv: ChatStorage,
+                    encryptionKey: keys.chats,
                 })
 
                 setWalletStatus(WALLET_STATUS.UNLOCKED)
@@ -315,6 +326,11 @@ export const ApplicationSecurityProvider = ({ children }: ApplicationSecurityCon
                 setMetadataStorage({
                     mmkv: MetadataStorage,
                     encryptionKey: encryptionKeys.metadata,
+                })
+
+                setChatStorage({
+                    mmkv: ChatStorage,
+                    encryptionKey: encryptionKeys.chats,
                 })
 
                 setWalletStatus(WALLET_STATUS.UNLOCKED)
@@ -469,6 +485,7 @@ export const ApplicationSecurityProvider = ({ children }: ApplicationSecurityCon
         setReduxStorage(undefined)
         setImageStorage(undefined)
         setMetadataStorage(undefined)
+        setChatStorage(undefined)
     }, [walletStatus])
 
     /**
@@ -509,6 +526,7 @@ export const ApplicationSecurityProvider = ({ children }: ApplicationSecurityCon
             migrateOnboarding,
             images: imageStorage,
             metadata: metadataStorage,
+            chats: chatStorage,
             resetApplication,
             walletStatus,
             setWalletStatus,
@@ -525,6 +543,7 @@ export const ApplicationSecurityProvider = ({ children }: ApplicationSecurityCon
         migrateOnboarding,
         imageStorage,
         metadataStorage,
+        chatStorage,
         resetApplication,
         isAppReady,
         updateSecurityMethod,

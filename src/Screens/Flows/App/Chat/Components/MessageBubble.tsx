@@ -27,31 +27,36 @@ const MessageBubble: React.FC<Props> = ({ item, index, children }) => {
     }, [])
 
     return (
-        <BaseView flexDirection="row" w={100} px={12} mb={isLastItem ? 6 : 0} style={[styles.messageContainer]}>
-            <BaseView p={12} style={[styles.messageBubble, isSender ? styles.sendedMessage : styles.receivedMessage]}>
-                {/* Enable it if you want to show the address */}
-                {/* <BaseText typographyFont="captionBold" style={[styles.textColor]}>
+        <BaseView>
+            <BaseView flexDirection="row" w={100} px={12} mb={isLastItem ? 6 : 0} style={[styles.messageContainer]}>
+                <BaseView
+                    p={12}
+                    style={[styles.messageBubble, isSender ? styles.sendedMessage : styles.receivedMessage]}>
+                    {/* Enable it if you want to show the address */}
+                    {/* <BaseText typographyFont="captionBold" style={[styles.textColor]}>
                     {!isSender ? humanAddress(recipient) : humanAddress(selectedClient.address)}
                 </BaseText> */}
-                <BaseText style={[styles.textColor]}>{children} </BaseText>
-                <BaseView flexDirection="row" justifyContent="flex-end">
-                    <BaseText typographyFont="smallCaption" style={[styles.textColor]}>
-                        {humanDate(item.sentNs / 1000000)}
-                    </BaseText>
+                    <BaseText style={[styles.textColor]}>{children} </BaseText>
+                    <BaseView flexDirection="row" justifyContent="flex-end">
+                        <BaseText typographyFont="smallCaption" style={[styles.textColor]}>
+                            {humanDate(item.sentNs / 1000000)}
+                        </BaseText>
+                    </BaseView>
                 </BaseView>
+                {/* Renders arrows */}
+                {isSender ? (
+                    <>
+                        <BaseView style={styles.rightArrow} />
+                        <BaseView style={styles.rightArrowOverlap} />
+                    </>
+                ) : (
+                    <>
+                        <BaseView style={styles.leftArrow} />
+                        <BaseView style={styles.leftArrowOverlap} />
+                    </>
+                )}
             </BaseView>
-            {/* Renders arrows */}
-            {isSender ? (
-                <>
-                    <BaseView style={styles.rightArrow} />
-                    <BaseView style={styles.rightArrowOverlap} />
-                </>
-            ) : (
-                <>
-                    <BaseView style={styles.leftArrow} />
-                    <BaseView style={styles.leftArrowOverlap} />
-                </>
-            )}
+            {isSender && <BaseText align="right">{item.deliveryStatus}</BaseText>}
         </BaseView>
     )
 }

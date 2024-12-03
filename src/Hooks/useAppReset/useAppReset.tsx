@@ -3,7 +3,7 @@ import KeychainService from "~Services/KeychainService"
 import { CACHE_NFT_MEDIA_KEY, CACHE_NFT_METADATA_KEY } from "~Storage/PersistedCache/constants"
 import { resetApp, useAppDispatch } from "~Storage/Redux"
 import { info } from "~Utils/Logger"
-import { useApplicationSecurity, usePersistedCache, usePersistedTheme } from "~Components/Providers"
+import { useApplicationSecurity, usePersistedCache, usePersistedTheme, useVeChat } from "~Components/Providers"
 import { ERROR_EVENTS } from "~Constants"
 import { useQueryClient } from "@tanstack/react-query"
 import { useGoogleDrive } from "~Hooks/useGoogleDrive"
@@ -15,6 +15,7 @@ export const useAppReset = () => {
     const { resetApplication } = useApplicationSecurity()
     const { resetThemeCache } = usePersistedTheme()
     const { googleAccountSignOut } = useGoogleDrive()
+    const { deleteAllChatsDb } = useVeChat()
 
     const queryClient = useQueryClient()
 
@@ -42,6 +43,8 @@ export const useAppReset = () => {
 
         await resetApplication()
 
+        await deleteAllChatsDb()
+
         queryClient.removeQueries()
 
         // TODO: Move this to a more appropriate place
@@ -54,6 +57,7 @@ export const useAppReset = () => {
         removeEncryptionKeysFromKeychain,
         resetCaches,
         resetApplication,
+        deleteAllChatsDb,
         queryClient,
         initAllCaches,
         dispatch,

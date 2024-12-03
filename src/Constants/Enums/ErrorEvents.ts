@@ -20,4 +20,5 @@ export enum ERROR_EVENTS {
     MNEMONIC = "MNEMONIC",
     CLOUDKIT = "CLOUDKIT",
     GOOGLE_DRIVE = "GOOGLE_DRIVE",
+    VE_CHAT = "VE_CHAT",
 }

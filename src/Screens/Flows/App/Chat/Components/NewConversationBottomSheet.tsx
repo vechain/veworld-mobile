@@ -115,9 +115,17 @@ export const NewConversationBottomSheet = forwardRef<BottomSheetModalMethods, Pr
         return <ContactCard contact={item} onPress={() => onSelectRecipient(item)} />
     }
 
+    const separatorItem = useCallback(() => <BaseSpacer height={8} />, [])
+
     return (
-        <BaseBottomSheet ref={ref} enableDismissOnClose onDismiss={onDismissBottomSheet}>
+        <BaseBottomSheet ref={ref} snapPoints={["90%"]} enableDismissOnClose onDismiss={onDismissBottomSheet}>
             <BaseView>
+                <BaseText typographyFont="subTitleBold" align="center">
+                    {"New conversation"}
+                </BaseText>
+
+                <BaseSpacer height={12} />
+
                 <BaseTextInput
                     placeholder={"Search an address or a contact"}
                     value={seachValue}
@@ -138,14 +146,19 @@ export const NewConversationBottomSheet = forwardRef<BottomSheetModalMethods, Pr
                                 <BaseText mx={12}>{humanAddress(filteredAddress)}</BaseText>
                             </BaseView>
                         </BaseTouchable>
+                        <BaseSpacer height={16} />
                     </>
                 )}
 
-                <BaseSpacer height={16} />
                 <BaseText typographyFont="subSubTitleMedium">{"Contacts"}</BaseText>
                 <BaseSpacer height={10} />
                 <NestableScrollContainer>
-                    <FlatList data={availableContacts} keyExtractor={item => item.address} renderItem={contactItem} />
+                    <FlatList
+                        data={availableContacts}
+                        keyExtractor={item => item.address}
+                        renderItem={contactItem}
+                        ItemSeparatorComponent={separatorItem}
+                    />
                 </NestableScrollContainer>
 
                 <BaseSpacer height={16} />

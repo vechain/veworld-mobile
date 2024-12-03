@@ -1,15 +1,7 @@
 import { useNavigation } from "@react-navigation/native"
 // import { Conversation } from "@xmtp/react-native-sdk"
 import React, { MutableRefObject, useCallback, useEffect, useState } from "react"
-import {
-    AccountIcon,
-    BaseButton,
-    BaseText,
-    BaseView,
-    DeleteUnderlay,
-    EnhancedConversation,
-    useVeChat,
-} from "~Components"
+import { AccountIcon, BaseText, BaseView, DeleteUnderlay, EnhancedConversation, useVeChat } from "~Components"
 import { Routes } from "~Navigation"
 import { deleteConversation, updateConversation, useAppDispatch } from "~Storage/Redux"
 import { humanAddress } from "~Utils/AddressUtils/AddressUtils"
@@ -17,6 +9,7 @@ import SwipeableItem, { OpenDirection, SwipeableItemImperativeRef } from "react-
 import { Pressable, StyleSheet } from "react-native"
 import { useThemedStyles } from "~Hooks"
 import { ColorThemeType } from "~Constants"
+import { DeletedConversationUnderlay, PendingConversationUnderlay } from "./ConversationUnderlay"
 
 interface Props<Swipeable extends boolean> {
     item: EnhancedConversation
@@ -80,9 +73,9 @@ export const ConversationRow: React.FC<Props<boolean>> = ({
         onDeny?.()
     }, [item, onDeny])
 
-    useEffect(() => {
-        getRecipientAddr()
-    }, [getRecipientAddr])
+    const restoreConversation = useCallback(() => {
+        item.updateConsent("allowed")
+    }, [item])
 
     const closeSwipeableItems = useCallback(
         (closeCurrentOne = false) => {
@@ -105,11 +98,42 @@ export const ConversationRow: React.FC<Props<boolean>> = ({
         }
     }
 
-    const onTrashIconPress = useCallback(() => {
+    const onDeleteConversation = useCallback(() => {
         closeSwipeableItems(true) // close all swipeable items
         dispatch(deleteConversation(item.topic))
         onDeletePress?.(item)
     }, [closeSwipeableItems, dispatch, item, onDeletePress])
+
+    const renderUnderlay = useCallback(() => {
+        if (item.state === "unknown")
+            return (
+                <PendingConversationUnderlay
+                    onAcceptConversation={allowConversation}
+                    onRejectConversation={denyConversation}
+                />
+            )
+        if (item.state === "allowed")
+            return (
+                <DeleteUnderlay
+                    isObservable={false}
+                    touchableComponentStyles={styles.underlayDelete}
+                    onPress={onDeleteConversation}
+                />
+            )
+
+        if (item.state === "denied") return <DeletedConversationUnderlay onPress={restoreConversation} />
+    }, [
+        allowConversation,
+        denyConversation,
+        item.state,
+        onDeleteConversation,
+        restoreConversation,
+        styles.underlayDelete,
+    ])
+
+    useEffect(() => {
+        getRecipientAddr()
+    }, [getRecipientAddr])
 
     return (
         <SwipeableItem
@@ -118,14 +142,8 @@ export const ConversationRow: React.FC<Props<boolean>> = ({
                 swipeEnabled && el && swipeableItemRefs?.current.set(itemKey!, el)
             }}
             swipeEnabled={swipeEnabled}
-            snapPointsLeft={[58]}
-            renderUnderlayLeft={() => (
-                <DeleteUnderlay
-                    onPress={onTrashIconPress}
-                    isObservable={false}
-                    touchableComponentStyles={styles.underlayDelete}
-                />
-            )}
+            snapPointsLeft={[item.state === "unknown" ? 140 : 58]}
+            renderUnderlayLeft={renderUnderlay}
             onChange={handleSwipe}>
             <Pressable
                 onPress={goToConversation}
@@ -149,16 +167,6 @@ export const ConversationRow: React.FC<Props<boolean>> = ({
                             <BaseText style={[styles.unreadBadge]}>{item.unreadMessages}</BaseText>
                         )}
                     </BaseView>
-                    {item.state === "unknown" && (
-                        <BaseView flexDirection="row" style={[styles.stateControlsContainer]}>
-                            <BaseButton variant="outline" action={allowConversation} size="sm">
-                                {"Allow"}
-                            </BaseButton>
-                            <BaseButton variant="ghost" action={denyConversation} size="sm">
-                                {"Deny"}
-                            </BaseButton>
-                        </BaseView>
-                    )}
                 </BaseView>
             </Pressable>
         </SwipeableItem>

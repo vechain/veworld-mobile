@@ -6,4 +6,5 @@ export type StorageEncryptionKeys = {
     redux: string
     metadata: string
     images: string
+    chats: string
 }

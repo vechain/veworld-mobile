@@ -27,6 +27,7 @@ import { convertAccountToXmtpSigner, createXmtpClient, error, info, loadXmtpClie
 import { WalletEncryptionKeyHelper } from "../EncryptedStorageProvider"
 import { useQueryClient } from "@tanstack/react-query"
 import { VeChatConversation } from "~Storage/Redux/Types"
+import { useMMKV } from "react-native-mmkv"
 
 type VeChatContextProps = { children: React.ReactNode }
 
@@ -34,6 +35,7 @@ interface VeChatContextValue {
     clients: Client[]
     selectedClient: Client | undefined
     newClient: (pinCode?: string) => void
+    deleteAllChatsDb: () => Promise<void>
 }
 
 export const VeChatContext = React.createContext<VeChatContextValue | undefined>(undefined)
@@ -48,6 +50,7 @@ const VeChatContextProvider: React.FC<VeChatContextProps> = ({ children }) => {
     const dbEncryptionKey = useAppSelector(getDbEncryptionKey)
 
     const queryClient = useQueryClient()
+    const chatStorage = useMMKV({ id: "chat_storage" })
     const dispatch = useAppDispatch()
 
     const selectedClient = useMemo(() => {
@@ -63,7 +66,7 @@ const VeChatContextProvider: React.FC<VeChatContextProps> = ({ children }) => {
 
     const initListeners = useCallback(
         async (client: Client) => {
-            info("APP", client.address, client.inboxId)
+            info("VE_CHAT", client.address, client.inboxId)
 
             await client.conversations.stream(async (conversation: Conversation<any>) => {
                 const currentTimestamp = new Date().getTime()
@@ -72,6 +75,18 @@ const VeChatContextProvider: React.FC<VeChatContextProps> = ({ children }) => {
                 )
 
                 const messages = await conversation.messages()
+                const storedMessages: Omit<DecodedMessage, "client">[] = JSON.parse(
+                    chatStorage.getString(`${client.address}-${conversation.topic}`) ?? "[]",
+                )
+
+                const deduplicatedMessages = messages.filter(
+                    msg => !storedMessages.some(storedMsg => storedMsg.id === msg.id),
+                )
+
+                chatStorage.set(
+                    `${client.address}-${conversation.topic}`,
+                    JSON.stringify([...deduplicatedMessages, storedMessages]),
+                )
 
                 const conversationState: VeChatConversation = {
                     createdAt: currentTimestamp,
@@ -82,20 +97,37 @@ const VeChatContextProvider: React.FC<VeChatContextProps> = ({ children }) => {
                 dispatch(addConversation({ topic: conversation.topic, conversation: conversationState }))
             })
             await client.conversations.streamAllMessages(async msg => {
+                // //TODO: Fix when a new message arrive all the messages disappear
+                // queryClient.setQueryData<DecodedMessage[]>(
+                //     ["veChat", "messages", client.address, msg.topic],
+                //     oldMessages => {
+                //         return oldMessages && !oldMessages.some(_msg => msg.id === _msg.id)
+                //             ? [msg, ...oldMessages]
+                //             : [msg]
+                //     },
+                //     { updatedAt: currentTimestamp },
+                // )
                 const currentTimestamp = new Date().getTime()
-                queryClient.setQueryData<DecodedMessage[]>(["veChat", "messages", client.address, msg.topic], oldMsgs =>
-                    oldMsgs && !oldMsgs.some(oldMsg => oldMsg.id === msg.id) ? [msg, ...oldMsgs] : [msg],
+                const conversationKey = `${client.address}-${msg.topic}`
+                const oldMessages: Omit<DecodedMessage[], "client"> = JSON.parse(
+                    chatStorage.getString(conversationKey) ?? "[]",
                 )
-                if (msg.senderAddress !== client.inboxId)
+                delete (msg as Partial<DecodedMessage>).client
+                if (!oldMessages.some(oldMsg => oldMsg.id === msg.id)) {
+                    chatStorage.set(conversationKey, JSON.stringify([msg, ...oldMessages]))
+                }
+
+                if (msg.senderAddress !== client.inboxId) {
                     dispatch(
                         updateConversation({
                             topic: msg.topic,
                             conversation: { updatedAt: currentTimestamp, unreadMessages: 1 },
                         }),
                     )
+                }
             })
         },
-        [dispatch, queryClient],
+        [chatStorage, dispatch, queryClient],
     )
 
     const initRegisteredClients = useCallback(async () => {
@@ -153,6 +185,10 @@ const VeChatContextProvider: React.FC<VeChatContextProps> = ({ children }) => {
         [currentAccount, dbEncryptionKey, selectedNetwork.currentUrl, signerDevice, dispatch],
     )
 
+    const deleteAllChatsDb = useCallback(async () => {
+        await clients.forEach(async client => client.deleteLocalDatabase())
+    }, [clients])
+
     useEffect(() => {
         generateDbEncryptionKey()
     }, [generateDbEncryptionKey])
@@ -170,6 +206,7 @@ const VeChatContextProvider: React.FC<VeChatContextProps> = ({ children }) => {
         clients,
         selectedClient,
         newClient,
+        deleteAllChatsDb,
     }
 
     return <VeChatContext.Provider value={value}>{children}</VeChatContext.Provider>

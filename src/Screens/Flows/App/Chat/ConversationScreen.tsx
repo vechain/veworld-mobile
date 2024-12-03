@@ -18,6 +18,7 @@ import { useTabBarBottomMargin, useThemedStyles } from "~Hooks"
 import { RootStackParamListHome, Routes } from "~Navigation"
 import { humanAddress } from "~Utils/AddressUtils/AddressUtils"
 import MessageBubble from "./Components/MessageBubble"
+import { error } from "~Utils"
 
 type Props = NativeStackScreenProps<RootStackParamListHome, Routes.CHAT_CONVERSATION>
 
@@ -28,12 +29,7 @@ const ConversationScreen = ({ route, navigation }: Props) => {
     const { styles, theme } = useThemedStyles(baseStyles)
     const { androidOnlyTabBarBottomMargin } = useTabBarBottomMargin()
 
-    const {
-        data: messages,
-        refetch: refetchMessages,
-        // isRefetching: isMsgRefetching,
-        // isFetching: isMsgFetching,
-    } = useMessages({ topic })
+    const messages = useMessages({ topic })
     const { data: conversation } = useConversation({ topic })
 
     const onGoBack = useCallback(() => {
@@ -41,24 +37,32 @@ const ConversationScreen = ({ route, navigation }: Props) => {
     }, [navigation])
 
     const onSendMessage = useCallback(async () => {
-        if (!conversation) return
-        await conversation.send(message)
+        if (!conversation) {
+            error("VE_CHAT", "Cannot send message, no coversation found")
+            return
+        }
         Keyboard.dismiss()
-        refetchMessages()
+        await conversation.send(message)
+        // refetchMessages()
         setMessage("")
-    }, [conversation, message, refetchMessages])
+    }, [conversation, message])
 
     const separatorComponent = useCallback(() => {
         return <BaseSpacer height={6} />
     }, [])
 
-    const messageItem = ({ item, index }: { item: DecodedMessage; index: number }) => {
-        return (
-            <MessageBubble item={item} index={index} recipient={recipient}>
-                {item.content()}{" "}
-            </MessageBubble>
-        )
-    }
+    const messageItem = useCallback(
+        ({ item, index }: { item: DecodedMessage; index: number }) => {
+            if (item.contentTypeId === "xmtp.org/group_updated:1.0") return <></>
+
+            return (
+                <MessageBubble item={item} index={index} recipient={recipient}>
+                    {item.nativeContent.text}{" "}
+                </MessageBubble>
+            )
+        },
+        [recipient],
+    )
 
     return (
         <Layout
