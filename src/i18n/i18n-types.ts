@@ -114,6 +114,10 @@ type RootTranslation = {
 	 */
 	ALERT_MSG_ENABLE_LOCATION: string
 	/**
+	 * T​h​e​r​e​ ​w​a​s​ ​a​n​ ​e​r​r​o​r​ ​w​h​i​l​e​ ​a​c​c​e​s​s​i​n​g​ ​y​o​u​r​ ​i​C​l​o​u​d​ ​o​n​ ​t​h​i​s​ ​d​e​v​i​c​e​.​ ​P​l​e​a​s​e​ ​e​n​s​u​r​e​ ​y​o​u​ ​h​a​v​e​ ​y​o​u​r​ ​i​C​l​o​u​d​ ​a​c​t​i​v​a​t​e​d​ ​i​n​ ​t​h​e​ ​i​P​h​o​n​e​ ​s​e​t​t​i​n​g​s​.
+	 */
+	ALERT_MSG_ICLOUD_ERROR: string
+	/**
 	 * C​o​n​n​e​c​t​i​o​n​ ​p​r​o​b​l​e​m​s​ ​d​e​t​e​c​t​e​d​.​
 ​T​r​y​ ​r​e​c​o​n​n​e​c​t​ ​y​o​u​r​ ​d​e​v​i​c​e​ ​t​o​ ​t​h​e​ ​i​n​t​e​r​n​e​t​.
 	 */
@@ -168,6 +172,10 @@ type RootTranslation = {
 	 * E​n​a​b​l​e​ ​l​o​c​a​t​i​o​n​ ​s​e​r​v​i​c​e​s
 	 */
 	ALERT_TITLE_ENABLE_LOCATION: string
+	/**
+	 * i​C​l​o​u​d​ ​e​r​r​o​r
+	 */
+	ALERT_TITLE_ICLOUD_ERROR: string
 	/**
 	 * I​m​p​o​r​t​a​n​t
 	 */
@@ -1810,6 +1818,10 @@ type RootTranslation = {
 	 */
 	GOOGLE_DRIVE_ERROR_GENERIC: string
 	/**
+	 * G​o​o​g​l​e​ ​s​e​r​v​i​c​e​s​ ​a​r​e​ ​n​o​t​ ​a​v​a​i​l​a​b​l​e​.​ ​P​l​e​a​s​e​ ​c​h​e​c​k​ ​y​o​u​r​ ​n​e​t​w​o​r​k​ ​c​o​n​n​e​c​t​i​o​n​ ​a​n​d​ ​t​r​y​ ​a​g​a​i​n​.
+	 */
+	GOOGLE_DRIVE_ERR_GOOGLE_SERVICES: string
+	/**
 	 * T​h​e​r​e​ ​w​a​s​ ​a​n​ ​e​r​r​o​r​ ​c​o​n​n​e​c​t​i​n​g​ ​t​o​ ​G​o​o​g​l​e​ ​D​r​i​v​e​.​ ​P​l​e​a​s​e​ ​c​h​e​c​k​ ​y​o​u​r​ ​n​e​t​w​o​r​k​ ​c​o​n​n​e​c​t​i​o​n​ ​a​n​d​ ​t​r​y​ ​a​g​a​i​n​.
 	 */
 	GOOGLE_DRIVE_ERR_NETWORK: string
@@ -1825,10 +1837,6 @@ type RootTranslation = {
 	 * G​o​o​g​l​e​ ​D​r​i​v​e​ ​e​r​r​o​r
 	 */
 	GOOGLE_DRIVE_GENERIC_ERROR_TITLE: string
-	/**
-	 * G​o​o​g​l​e​ ​s​e​r​v​i​c​e​s​ ​a​r​e​ ​n​o​t​ ​a​v​a​i​l​a​b​l​e​.​ ​P​l​e​a​s​e​ ​c​h​e​c​k​ ​y​o​u​r​ ​n​e​t​w​o​r​k​ ​c​o​n​n​e​c​t​i​o​n​ ​a​n​d​ ​t​r​y​ ​a​g​a​i​n​.
-	 */
-	GOOGLE_DRIVE_ERR_GOOGLE_SERVICES: string
 	/**
 	 * H​e​a​d​s​ ​u​p​!
 	 */
@@ -3618,6 +3626,10 @@ export type TranslationFunctions = {
 	 */
 	ALERT_MSG_ENABLE_LOCATION: () => LocalizedString
 	/**
+	 * There was an error while accessing your iCloud on this device. Please ensure you have your iCloud activated in the iPhone settings.
+	 */
+	ALERT_MSG_ICLOUD_ERROR: () => LocalizedString
+	/**
 	 * Connection problems detected.
 Try reconnect your device to the internet.
 	 */
@@ -3670,6 +3682,10 @@ Try reconnect your device to the internet.
 	 * Enable location services
 	 */
 	ALERT_TITLE_ENABLE_LOCATION: () => LocalizedString
+	/**
+	 * iCloud error
+	 */
+	ALERT_TITLE_ICLOUD_ERROR: () => LocalizedString
 	/**
 	 * Important
 	 */
@@ -5299,6 +5315,10 @@ Try reconnect your device to the internet.
 	 */
 	GOOGLE_DRIVE_ERROR_GENERIC: () => LocalizedString
 	/**
+	 * Google services are not available. Please check your network connection and try again.
+	 */
+	GOOGLE_DRIVE_ERR_GOOGLE_SERVICES: () => LocalizedString
+	/**
 	 * There was an error connecting to Google Drive. Please check your network connection and try again.
 	 */
 	GOOGLE_DRIVE_ERR_NETWORK: () => LocalizedString
@@ -5314,10 +5334,6 @@ Try reconnect your device to the internet.
 	 * Google Drive error
 	 */
 	GOOGLE_DRIVE_GENERIC_ERROR_TITLE: () => LocalizedString
-	/**
-	 * Google services are not available. Please check your network connection and try again.
-	 */
-	GOOGLE_DRIVE_ERR_GOOGLE_SERVICES: () => LocalizedString
 	/**
 	 * Heads up!
 	 */

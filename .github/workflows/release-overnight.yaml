@@ -3,14 +3,11 @@ name: Release Overnight - Android & iOS
 on:
     workflow_dispatch:
         inputs:
-            version: 
-                description: 'Version to build'
-                type: string
-                required: true
-            build: 
-                description: 'Build number'
-                type: number
-                required: true
+            merged_override:
+              description: 'Override the merged PRs check'
+              required: false
+              default: false
+              type: boolean
     schedule:
     - cron: '0 23 * * 1-5'  # Runs at 23:00 UTC Monday through Friday 
 
@@ -23,6 +20,7 @@ env:
 jobs:
     check-merged-pr:
         runs-on: ubuntu-latest
+        if: ${{ github.event.inputs.merged_override == 'true' }}
         outputs:
           should_release: ${{ steps.check_merged_prs.outputs.should_release }}
         steps:
@@ -32,6 +30,7 @@ jobs:
               id: check_merged_prs
               env:
                 GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+                MERGED_OVERRIDE: ${{ github.event.inputs.merged_override }}
               run: |
                 since_date=$(date -u +"%Y-%m-%dT%H:%M:%SZ" --date="24 hours ago")
                 repo=${GITHUB_REPOSITORY}
@@ -60,11 +59,12 @@ jobs:
                   -f per_page=5 \
                   --jq '.items[] | {number: .number, title: .title, merged_at: .closed_at}'
             
-                if [ "$merged_prs_count" -gt 0 ]; then
+                if [ "$merged_prs_count" -gt 0 ] || [ "$MERGED_OVERRIDE" ]; then
                   echo "should_release=true" >> $GITHUB_OUTPUT
                 else
                   echo "should_release=false" >> $GITHUB_OUTPUT
                 fi
+
    
     setup-version-build:
         runs-on: ubuntu-latest
