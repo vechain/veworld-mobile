@@ -39,9 +39,10 @@ export const BackButtonHeaderV2 = ({
                 <BaseSpacer height={12} />
                 <BaseView flexDirection="row" w={100} px={8} py={4} justifyContent="space-between">
                     <BaseIcon
+                        iconSet="DesignSystem"
                         haptics="Light"
                         action={onActionPress}
-                        name="arrow-left"
+                        name="icon-arrow-left"
                         size={24}
                         color={theme.colors.text}
                         testID={iconTestID}
