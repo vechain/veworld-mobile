@@ -4,7 +4,6 @@ import { Keyboard } from "react-native"
 import { TextInput } from "react-native-gesture-handler"
 import { getTimeZone } from "react-native-localize"
 import { Easing, useSharedValue, withTiming } from "react-native-reanimated"
-import { FeatherKeySVG } from "~Assets"
 import {
     AlertInline,
     BackupSuccessfulBottomSheet,
@@ -177,7 +176,7 @@ export const ChooseMnemonicBackupPassword = () => {
             body={
                 <BaseView>
                     <BaseView justifyContent="center" alignItems="center" style={styles.keyIcon}>
-                        <FeatherKeySVG width={64} height={64} stroke={theme.colors.text} />
+                        <BaseIcon dsIcons name="icon-key" size={64} color={theme.colors.text} />
                         <BaseSpacer height={20} />
                         <BaseView justifyContent="center" alignItems="center">
                             <BaseText align="center" typographyFont="subSubTitleMedium">

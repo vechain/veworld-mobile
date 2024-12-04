@@ -31,7 +31,7 @@ export const DefaultBottomSheet = React.forwardRef<BottomSheetModalMethods, Prop
                     <BaseSpacer height={16} />
                     <BaseView justifyContent="center" alignItems="center">
                         {typeof icon === "string" ? (
-                            <BaseIcon name={icon} style={styles.icon} size={66} color={theme.colors.text} />
+                            <BaseIcon dsIcons name={icon} style={styles.icon} size={66} color={theme.colors.text} />
                         ) : (
                             icon
                         )}
