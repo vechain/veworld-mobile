@@ -3,11 +3,11 @@ import { FlatList } from "react-native"
 import { BaseIcon, BaseSpacer, BaseText, CardWithHeader, WalletBackupStatusRow } from "~Components"
 import { COLORS } from "~Constants"
 import { useI18nContext } from "~i18n"
-import { BaseDevice, DEVICE_TYPE } from "~Model"
+import { BaseDevice, DEVICE_TYPE, LocalDevice } from "~Model"
 
-type Props<T extends BaseDevice = BaseDevice> = {
-    devices: T[]
-    onPress: (device: T) => void
+type Props = {
+    devices: BaseDevice[]
+    onPress: (device: LocalDevice) => void
 }
 
 type StatusConfig = {
@@ -17,32 +17,40 @@ type StatusConfig = {
 
 const ItemSeparator = React.memo(() => <BaseSpacer height={4} />)
 
-export const DevicesBackupState = <T extends BaseDevice = BaseDevice>({ devices, onPress }: Props<T>) => {
+export const DevicesBackupState = ({ devices, onPress }: Props) => {
     const { LL } = useI18nContext()
 
+    const handlePress = useCallback(
+        (device: BaseDevice) => {
+            if (device.type !== DEVICE_TYPE.LEDGER) {
+                onPress(device as LocalDevice)
+            }
+        },
+        [onPress],
+    )
+
     const getStatusConfig = useCallback(
-        (item: T): StatusConfig => {
+        (item: BaseDevice): StatusConfig => {
+            if (item.type === DEVICE_TYPE.LEDGER) {
+                return {
+                    variant: "neutral",
+                    statusText: LL.BD_CANT_BE_BACKED_UP(),
+                }
+            }
             if (item.isBuckedUp || item.isBackedUpManual) {
                 return { variant: "success" }
             }
-            if (!item?.isBuckedUp && !item?.isBackedUpManual && item?.type !== DEVICE_TYPE.LEDGER) {
-                return { variant: "error" }
-            }
-            return {
-                variant: "neutral",
-                statusText: LL.BD_CANT_BE_BACKED_UP(),
-            }
+            return { variant: "error" }
         },
         [LL],
     )
 
-    const keyExtractor = useCallback((device: T) => device.rootAddress, [])
+    const keyExtractor = useCallback((device: BaseDevice) => device.rootAddress, [])
 
     const renderDeviceItem = useCallback(
-        (props: { item: T }) => {
+        (props: { item: BaseDevice }) => {
             const { item } = props
             const { variant, statusText } = getStatusConfig(item)
-            const handlePress = () => onPress(item)
 
             const rightElement = statusText ? (
                 <BaseText typographyFont="smallCaptionRegular" color={COLORS.GREY_600}>
@@ -57,13 +65,13 @@ export const DevicesBackupState = <T extends BaseDevice = BaseDevice>({ devices,
                     variant={variant}
                     title={item.alias}
                     rightElement={rightElement}
-                    onPress={handlePress}
+                    onPress={() => handlePress(item)}
                     disabled={variant === "neutral"}
                     testID={`deviceBackupStateRow_${item.rootAddress}`}
                 />
             )
         },
-        [getStatusConfig, onPress],
+        [handlePress, getStatusConfig],
     )
 
     const ListHeaderComponent = useMemo(
