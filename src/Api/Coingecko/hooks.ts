@@ -1,12 +1,11 @@
 import { useQuery } from "@tanstack/react-query"
 import { MarketChartResponse, getMarketChart, getSmartMarketChart, getTokenInfo } from "./endpoints"
-import BigNumber from "bignumber.js"
 import { max } from "lodash"
 import { marketChartTimeframes } from "./constants"
 import { VETHOR_COINGECKO_ID, VET_COINGECKO_ID } from "~Constants"
 
-const EXCHANGE_RATE_SYNC_PERIOD = new BigNumber(process.env.REACT_APP_EXCHANGE_RATE_SYNC_PERIOD ?? "120000").toNumber()
-const CHART_DATA_SYNC_PERIOD = new BigNumber(process.env.REACT_APP_CHART_DATA_SYNC_PERIOD ?? "300000").toNumber()
+// const EXCHANGE_RATE_SYNC_PERIOD = new BigNumber(process.env.REACT_APP_EXCHANGE_RATE_SYNC_PERIOD ?? "120000").toNumber()
+// const CHART_DATA_SYNC_PERIOD = new BigNumber(process.env.REACT_APP_CHART_DATA_SYNC_PERIOD ?? "300000").toNumber()
 
 const getTokenInfoQueryKey = ({ id }: { id?: string }) => ["TOKEN_INFO", id]
 
@@ -20,9 +19,10 @@ export const useTokenInfo = ({ id }: { id?: string }) => {
         queryKey: getTokenInfoQueryKey({ id }),
         queryFn: () => getTokenInfo(id),
         enabled: !!id,
-        staleTime: EXCHANGE_RATE_SYNC_PERIOD,
+        //staleTime: EXCHANGE_RATE_SYNC_PERIOD,
     })
 }
+
 export const getMarketChartQueryKey = ({
     id,
     vs_currency,
@@ -57,7 +57,7 @@ export const useMarketChart = ({
         queryFn: () => getMarketChart({ coinGeckoId: id, vs_currency, days }),
         enabled: !!id,
         placeholderData,
-        staleTime: CHART_DATA_SYNC_PERIOD,
+        // staleTime: CHART_DATA_SYNC_PERIOD,
     })
 }
 
@@ -92,7 +92,7 @@ export const useSmartMarketChart = ({
         queryKey: getMarketChartQueryKey({ id, vs_currency, days }),
         queryFn: () => getSmartMarketChart({ highestResolutionMarketChartData, days }),
         enabled: !!highestResolutionMarketChartData,
-        staleTime: CHART_DATA_SYNC_PERIOD,
+        // staleTime: CHART_DATA_SYNC_PERIOD,
         placeholderData,
     })
 }
@@ -117,7 +117,7 @@ export const useExchangeRate = ({ id, vs_currency }: { id?: string; vs_currency:
         queryKey: getExchangeRateQueryKey({ id, vs_currency }),
         queryFn: () => tokenInfo?.market_data.current_price[currency],
         enabled: !!tokenInfo,
-        staleTime: EXCHANGE_RATE_SYNC_PERIOD,
+        // staleTime: EXCHANGE_RATE_SYNC_PERIOD,
     })
 }
 

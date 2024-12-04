@@ -28,7 +28,7 @@ export const AnimatedChartCard = memo(({ tokenWithInfo, isEdit, isBalanceVisible
     const { data: chartData } = useSmartMarketChart({
         id: getCoinGeckoIdBySymbol[tokenWithInfo.symbol],
         vs_currency: currency,
-        days: 7,
+        days: 1,
         placeholderData: DEFAULT_LINE_CHART_DATA,
     })
 
