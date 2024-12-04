@@ -107,7 +107,8 @@ export const MnemonicCard: FC<Props> = ({ mnemonicArray, souceScreen, deviceToBa
 
                     <BaseView style={styles.button} justifyContent="center" alignItems="center">
                         <BaseIcon
-                            name={isShow ? "eye-off-outline" : "eye-outline"}
+                            dsIcons
+                            name={isShow ? "icon-eye-off" : "icon-eye"}
                             size={16}
                             style={styles.icon}
                             color={theme.isDark ? COLORS.GREY_300 : COLORS.GREY_500}
