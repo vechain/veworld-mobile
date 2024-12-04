@@ -72,7 +72,7 @@ export const BaseTextInputComponent = forwardRef<TextInput, BaseTextInputProps>(
         const setInputParams = useMemo(() => {
             if (PlatformUtils.isAndroid()) {
                 return {
-                    keyboardType: "email-address" as KeyboardTypeOptions,
+                    keyboardType: "default" as KeyboardTypeOptions,
                     autoCorrect: false,
                 }
             } else {

@@ -1,43 +1,58 @@
 import { useCallback } from "react"
 import { NativeModules } from "react-native"
-import { showErrorToast } from "~Components"
-import { DerivationPath, ERROR_EVENTS } from "~Constants"
+import { showErrorToast, showInfoToast } from "~Components"
+import { AnalyticsEvent, DerivationPath, ERROR_EVENTS } from "~Constants"
 import { useI18nContext } from "~i18n"
 import { DEVICE_TYPE } from "~Model"
 import { error, PasswordUtils } from "~Utils"
-import { GDError, handleGoogleDriveErrors, OAUTH_INTERRUPTED } from "./ErrorModel"
+import { GDError, handleGoogleDriveErrors } from "./ErrorModel"
+import { useAnalyticTracking } from "~Hooks/useAnalyticTracking"
 const { GoogleDriveManager } = NativeModules
 
 export const useGoogleDrive = () => {
     const { LL } = useI18nContext()
-
-    const isCancelError = (message: string) => {
-        return message === OAUTH_INTERRUPTED
-    }
+    const track = useAnalyticTracking()
 
     const getGoogleServicesAvailability = useCallback(async () => {
         try {
             return await GoogleDriveManager.checkGoogleServicesAvailability()
-        } catch (_error) {
-            let er = _error as GDError
+        } catch (err) {
+            const er = err as GDError
             error(ERROR_EVENTS.GOOGLE_DRIVE, er, er.message)
-            if (!isCancelError(er.message)) {
+            const errorInfo = handleGoogleDriveErrors(er)
+
+            if (errorInfo) {
                 showErrorToast({
-                    text1: er.message,
-                    text2: handleGoogleDriveErrors(er),
+                    text1: errorInfo.title,
+                    text2: errorInfo.description,
                 })
             }
         }
     }, [])
 
-    const deleteWallet = useCallback(async (_rootAddress: string) => {
-        try {
-            await GoogleDriveManager.deleteWallet(_rootAddress)
-            return true
-        } catch (err) {
-            return false
-        }
-    }, [])
+    const deleteWallet = useCallback(
+        async (_rootAddress: string) => {
+            try {
+                track(AnalyticsEvent.DELETE_BACKUP)
+                await GoogleDriveManager.deleteWallet(_rootAddress)
+                track(AnalyticsEvent.DELETE_BACKUP_SUCCESS)
+                return true
+            } catch (err) {
+                const er = err as GDError
+                error(ERROR_EVENTS.GOOGLE_DRIVE, er, er.message)
+                const errorInfo = handleGoogleDriveErrors(er)
+
+                if (errorInfo) {
+                    showErrorToast({
+                        text1: errorInfo.title,
+                        text2: errorInfo.description,
+                    })
+                }
+                return false
+            }
+        },
+        [track],
+    )
 
     const saveWalletToGoogleDrive = useCallback(
         async ({
@@ -57,11 +72,12 @@ export const useGoogleDrive = () => {
             iv: Uint8Array
             derivationPath: DerivationPath
         }) => {
+            track(AnalyticsEvent.SAVE_BACKUP_TO_CLOUD_START)
             if (!mnemonic || !_rootAddress || !deviceType || !salt || !iv || !firstAccountAddress) {
                 showErrorToast({
                     text1: LL.GOOGLE_DRIVE_ERROR_GENERIC(),
                 })
-                return
+                return false
             }
 
             try {
@@ -74,65 +90,96 @@ export const useGoogleDrive = () => {
                     PasswordUtils.bufferToBase64(iv),
                     derivationPath,
                 )
+                track(AnalyticsEvent.SAVE_BACKUP_TO_CLOUD_SUCCESS)
+                return true
             } catch (err) {
-                if (!isCancelError((err as GDError).message)) {
+                const er = err as GDError
+                error(ERROR_EVENTS.GOOGLE_DRIVE, er, er.message)
+                const errorInfo = handleGoogleDriveErrors(er)
+
+                if (errorInfo) {
                     showErrorToast({
-                        text1: LL.GOOGLE_DRIVE_ERROR_GENERIC(),
+                        text1: errorInfo.title,
+                        text2: errorInfo.description,
                     })
                 }
+                return false
             }
         },
-        [LL],
+        [LL, track],
     )
 
     const getAllWalletsFromGoogleDrive = useCallback(async () => {
         try {
+            track(AnalyticsEvent.IMPORT_ALL_BACKUPS_FROM_WALLET_START)
             const result = await GoogleDriveManager.getAllWalletsFromGoogleDrive()
+            if (Array.isArray(result) && result.length === 0) {
+                showInfoToast({
+                    text1: LL.CLOUD_NO_WALLETS_AVAILABLE_TITLE(),
+                    text2: LL.CLOUD_NO_WALLETS_AVAILABLE_DESCRIPTION({
+                        cloud: "Google Drive",
+                    }),
+                })
+            }
+            track(AnalyticsEvent.IMPORT_ALL_BACKUPS_FROM_WALLET_SUCCESS)
             return result
         } catch (err) {
-            let er = err as GDError
+            const er = err as GDError
             error(ERROR_EVENTS.GOOGLE_DRIVE, er, er.message)
-            if (!isCancelError(er.message)) {
+            const errorInfo = handleGoogleDriveErrors(er)
+
+            if (errorInfo) {
                 showErrorToast({
-                    text1: er.message,
-                    text2: handleGoogleDriveErrors(er),
+                    text1: errorInfo.title,
+                    text2: errorInfo.description,
                 })
             }
             return []
         }
-    }, [])
+    }, [LL, track])
 
-    const getWalletByRootAddress = useCallback(async (_rootAddress?: string) => {
-        if (!_rootAddress) {
-            return
-        }
-
-        try {
-            const selectedWallet = await GoogleDriveManager.getWallet(_rootAddress)
-            return selectedWallet
-        } catch (err) {
-            let er = err as GDError
-            error(ERROR_EVENTS.GOOGLE_DRIVE, er, er.message)
-            if (!isCancelError(er.message)) {
-                showErrorToast({
-                    text1: er.message,
-                    text2: handleGoogleDriveErrors(er),
-                })
+    const getWalletByRootAddress = useCallback(
+        async (_rootAddress?: string) => {
+            track(AnalyticsEvent.IMPORT_FROM_CLOUD_START)
+            if (!_rootAddress) {
+                throw new Error("Root address is required")
             }
-        }
-    }, [])
+
+            try {
+                const selectedWallet = await GoogleDriveManager.getWallet(_rootAddress)
+                track(AnalyticsEvent.IMPORT_FROM_CLOUD_SUCCESS)
+                return selectedWallet
+            } catch (err) {
+                const er = err as GDError
+                error(ERROR_EVENTS.GOOGLE_DRIVE, er, er.message)
+                const errorInfo = handleGoogleDriveErrors(er)
+
+                if (errorInfo) {
+                    showErrorToast({
+                        text1: errorInfo.title,
+                        text2: errorInfo.description,
+                    })
+                }
+
+                throw er
+            }
+        },
+        [track],
+    )
 
     const getSalt = useCallback(async (_rootAddress: string) => {
         try {
             const salt = await GoogleDriveManager.getSalt(_rootAddress)
             return salt
         } catch (err) {
-            let er = err as GDError
-            error(ERROR_EVENTS.CLOUDKIT, er, er.message)
-            if (!isCancelError(er.message)) {
+            const er = err as GDError
+            error(ERROR_EVENTS.GOOGLE_DRIVE, er, er.message)
+            const errorInfo = handleGoogleDriveErrors(er)
+
+            if (errorInfo) {
                 showErrorToast({
-                    text1: er.message,
-                    text2: handleGoogleDriveErrors(er),
+                    text1: errorInfo.title,
+                    text2: errorInfo.description,
                 })
             }
         }
@@ -143,12 +190,14 @@ export const useGoogleDrive = () => {
             const salt = await GoogleDriveManager.getIV(_rootAddress)
             return salt
         } catch (err) {
-            let er = err as GDError
-            error(ERROR_EVENTS.CLOUDKIT, er, er.message)
-            if (!isCancelError(er.message)) {
+            const er = err as GDError
+            error(ERROR_EVENTS.GOOGLE_DRIVE, er, er.message)
+            const errorInfo = handleGoogleDriveErrors(er)
+
+            if (errorInfo) {
                 showErrorToast({
-                    text1: er.message,
-                    text2: handleGoogleDriveErrors(er),
+                    text1: errorInfo.title,
+                    text2: errorInfo.description,
                 })
             }
         }
@@ -159,12 +208,14 @@ export const useGoogleDrive = () => {
             const salt = await GoogleDriveManager.googleAccountSignOut()
             return salt
         } catch (err) {
-            let er = err as GDError
-            error(ERROR_EVENTS.CLOUDKIT, er, er.message)
-            if (!isCancelError(er.message)) {
+            const er = err as GDError
+            error(ERROR_EVENTS.GOOGLE_DRIVE, er, er.message)
+            const errorInfo = handleGoogleDriveErrors(er)
+
+            if (errorInfo) {
                 showErrorToast({
-                    text1: er.message,
-                    text2: handleGoogleDriveErrors(er),
+                    text1: errorInfo.title,
+                    text2: errorInfo.description,
                 })
             }
         }

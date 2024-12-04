@@ -6,3 +6,4 @@ flows:
   - contactManagement/contactManagement.yaml
   - contactManagement/addContactsToScroll.yaml
   - tokenManagement/tokenManagement.yaml
+  - onboarding/createNewWalletAndBackupMnemonic.yaml

@@ -1,4 +1,4 @@
-package org.vechain.veworld.app.googleDrive
+package org.vechain.veworld.app.googleDrive.domain
 
 import com.facebook.react.bridge.WritableMap
 import com.facebook.react.bridge.WritableNativeMap
@@ -6,22 +6,22 @@ import com.facebook.react.bridge.WritableNativeMap
 data class DriveBackupFile(
     val rootAddress: String,
     val data: String,
-    val walletType: String,
+    val walletType: DeviceType,
     val firstAccountAddress: String,
-    val derivationPath: String,
-    val salt: String,
-    val iv: String,
+    val derivationPath: DerivationPath,
+    val salt: Salt,
+    val iv: Iv,
     val creationDate: Double
 ) {
     fun toWritableMap(): WritableMap {
         return WritableNativeMap().apply {
             putString("rootAddress", rootAddress)
             putString("data", data)
-            putString("walletType", walletType)
+            putString("walletType", walletType.value)
             putString("firstAccountAddress", firstAccountAddress)
-            putString("derivationPath", derivationPath)
-            putString("salt", salt)
-            putString("iv", iv)
+            putString("derivationPath", derivationPath.value)
+            putString("salt", salt.value)
+            putString("iv", iv.value)
             putDouble("creationDate", creationDate)
         }
     }

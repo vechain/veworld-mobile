@@ -2,7 +2,14 @@ import { createNativeStackNavigator } from "@react-navigation/native-stack"
 import React from "react"
 import { Transaction } from "thor-devkit"
 import { TokenWithCompleteInfo, useNavAnimation } from "~Hooks"
-import { ConnectedLedgerDevice, Device, FungibleTokenWithBalance, LedgerAccountWithDevice } from "~Model"
+import {
+    CloudKitWallet,
+    ConnectedLedgerDevice,
+    Device,
+    DrivetWallet,
+    FungibleTokenWithBalance,
+    LedgerAccountWithDevice,
+} from "~Model"
 import { Routes } from "~Navigation/Enums"
 import {
     AssetDetailScreen,
@@ -11,6 +18,7 @@ import {
     HomeScreen,
     ImportFromCloudScreen,
     ImportLocalWallet,
+    ImportMnemonicBackupPasswordScreen,
     InAppBrowser,
     InsertAddressSendScreen,
     LedgerSignTransaction,
@@ -68,7 +76,12 @@ export type RootStackParamListHome = {
     [Routes.IMPORT_HW_LEDGER_SELECT_ACCOUNTS]: {
         device: ConnectedLedgerDevice
     }
-    [Routes.IMPORT_FROM_CLOUD]: undefined
+    [Routes.IMPORT_FROM_CLOUD]: {
+        wallets: CloudKitWallet[] | DrivetWallet[]
+    }
+    [Routes.IMPORT_MNEMONIC_BACKUP_PASSWORD]: {
+        wallet: CloudKitWallet | DrivetWallet
+    }
     [Routes.BROWSER]: {
         url: string
         ul?: boolean
@@ -146,6 +159,14 @@ export const HomeStack = () => {
                     name={Routes.IMPORT_FROM_CLOUD}
                     component={ImportFromCloudScreen}
                     options={{ headerShown: false }}
+                />
+
+                <Screen
+                    name={Routes.IMPORT_MNEMONIC_BACKUP_PASSWORD}
+                    component={ImportMnemonicBackupPasswordScreen}
+                    options={{
+                        headerShown: false,
+                    }}
                 />
                 <Screen name={Routes.BROWSER} component={InAppBrowser} options={{ headerShown: false }} />
             </Group>
