@@ -2,7 +2,7 @@ import React, { JSXElementConstructor, ReactElement, ReactNode, Ref, useCallback
 import { BaseSafeArea, BaseScrollView, BaseSpacer, BaseText, BaseView } from "~Components/Base"
 import { BackButtonHeader } from "../BackButtonHeader"
 import { RefreshControlProps, ScrollView, StyleSheet } from "react-native"
-import { useTabBarBottomMargin, useTheme } from "~Hooks"
+import { useTabBarBottomMargin } from "~Hooks"
 import { isAndroid } from "~Utils/PlatformUtils/PlatformUtils"
 import { SelectedNetworkViewer } from "~Components"
 import { SafeAreaView } from "react-native-safe-area-context"
@@ -56,7 +56,6 @@ export const Layout = ({
     hasSafeArea = true,
     hasTopSafeAreaOnly = false,
 }: Props) => {
-    const theme = useTheme()
     const { androidOnlyTabBarBottomMargin, tabBarBottomMargin } = useTabBarBottomMargin()
 
     // this value is for automate bottom padding instead of having to set a custom padding
@@ -117,7 +116,6 @@ export const Layout = ({
                     )}
                 </BaseView>
                 {/* Separator from header to body */}
-                {(!noBackButton || fixedHeader) && <BaseSpacer height={1} background={theme.colors.card} />}
 
                 {body && (
                     <BaseScrollView
@@ -168,7 +166,6 @@ export const Layout = ({
             title,
             Title,
             showSelectedNetwork,
-            theme.colors.card,
             body,
             scrollViewRef,
             refreshControl,
