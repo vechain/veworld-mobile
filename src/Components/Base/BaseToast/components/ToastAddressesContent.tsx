@@ -22,14 +22,14 @@ export const ToastAddressesContent: React.FC<Props> = ({ addresses, styles }) =>
     const { name: recipientName } = useVns({ address: addresses.recipient, name: "" })
 
     const senderTitle = useMemo(() => {
-        if (senderAccount) return formatAlias(senderName ? senderName : senderAccount.alias, 18, 6, 8)
+        if (senderAccount && !senderName) return formatAlias(senderAccount.alias, 18, 6, 8)
         if (senderName) return formatAlias(senderName, 18, 6, 8)
         return humanAddress(addresses.sender, 4, 6)
     }, [addresses.sender, senderAccount, senderName])
 
     const recipientTitle = useMemo(() => {
         if (!addresses.recipient) return ""
-        if (recipientAccount) return formatAlias(recipientName ? recipientName : recipientAccount.alias, 18, 6, 8)
+        if (recipientAccount && !recipientName) return formatAlias(recipientAccount.alias, 18, 6, 8)
         if (recipientName) return formatAlias(recipientName, 18, 6, 8)
         return humanAddress(addresses.recipient, 4, 6)
     }, [addresses.recipient, recipientAccount, recipientName])
