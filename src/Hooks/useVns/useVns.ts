@@ -5,6 +5,7 @@ import { useQuery, useQueryClient } from "@tanstack/react-query"
 import { Network, NETWORK_TYPE } from "~Model"
 import { abi } from "thor-devkit"
 import { queryClient } from "~Api/QueryProvider"
+import { abis } from "~Constants"
 
 export const ZERO_ADDRESS = "0x0000000000000000000000000000000000000000"
 
@@ -12,6 +13,8 @@ const VNS_RESOLVER: Partial<{ [key in NETWORK_TYPE]: string }> = {
     mainnet: "0xA11413086e163e41901bb81fdc5617c975Fa5a1A",
     testnet: "0xc403b8EA53F707d7d4de095f0A20bC491Cf2bc94",
 } as const
+
+// const VNS_BASE_DOMAIN = "veworld.vet"
 
 export const getVnsName = async (thor: Connex.Thor, network: Network, address?: string) => {
     if (!address) return ""
@@ -22,7 +25,7 @@ export const getVnsName = async (thor: Connex.Thor, network: Network, address?: 
             decoded: { names },
         } = await thor
             .account(NETWORK_RESOLVER ?? "")
-            .method(ABI.getNames)
+            .method(abis.VetDomains.getNames)
             .call([address])
 
         // Add VNS to the react-query cache
@@ -40,7 +43,7 @@ export const getVnsAddress = async (thor: Connex.Thor, network: Network, name?: 
         decoded: { addresses },
     } = await thor
         .account(NETWORK_RESOLVER ?? "")
-        .method(ABI.getAddresses)
+        .method(abis.VetDomains.getAddresses)
         .call([(name ?? "").toLowerCase()])
     const isEmpty = addresses?.[0] === ZERO_ADDRESS
 
@@ -102,51 +105,7 @@ export const useVns = (props?: Vns): VnsHook => {
     }
 }
 
-const ABI: {
-    getAddresses: abi.Function.Definition
-    getNames: abi.Function.Definition
-} = {
-    getAddresses: {
-        inputs: [
-            {
-                internalType: "string[]",
-                name: "names",
-                type: "string[]",
-            },
-        ],
-        name: "getAddresses",
-        outputs: [
-            {
-                internalType: "address[]",
-                name: "addresses",
-                type: "address[]",
-            },
-        ],
-        stateMutability: "view",
-        type: "function",
-    },
-    getNames: {
-        inputs: [
-            {
-                internalType: "address[]",
-                name: "addresses",
-                type: "address[]",
-            },
-        ],
-        name: "getNames",
-        outputs: [
-            {
-                internalType: "string[]",
-                name: "names",
-                type: "string[]",
-            },
-        ],
-        stateMutability: "view",
-        type: "function",
-    },
-}
-
-const namesABi = new abi.Function(ABI.getNames)
+const namesABi = new abi.Function(abis.VetDomains.getNames)
 
 const getAllAccoutsNameClauses = (addresses: string[], networkType: NETWORK_TYPE) => {
     const NETWORK_RESOLVER = VNS_RESOLVER[networkType]
@@ -203,3 +162,5 @@ export const usePrefetchAllVns = () => {
 
     return vnsResults
 }
+
+// export const useAssignVnsToAddress = (domainName: string) => {}
