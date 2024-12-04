@@ -44,8 +44,20 @@ const TokenInfoResponseSchema = z.object({
     market_data: TokenInfoMarketDataSchema,
 })
 
+const VechainStatsTokenInfoResponse = z.record(
+    z.string(),
+    z.object({
+        price_usd: z.nullable(z.string()),
+        price_eur: z.nullable(z.string()),
+        price_cny: z.nullable(z.string()),
+        price_vet: z.nullable(z.string()),
+        last_updated: z.number(),
+    }),
+)
+
 export type TokenInfoMarketData = z.infer<typeof TokenInfoMarketDataSchema>
 export type TokenInfoResponse = z.infer<typeof TokenInfoResponseSchema>
+export type VechainStatsTokenInfoResponse = z.infer<typeof VechainStatsTokenInfoResponse>
 
 /**
  *  Get the token info for a given coinGeckoId, including market data
@@ -76,6 +88,19 @@ export const getTokenInfo = async (coinGeckoId?: string) => {
         throw e
     }
 }
+
+export const getVechainStatsTokensInfo = async () => {
+    try {
+        const response = await axiosInstance.get<VechainStatsTokenInfoResponse>("/price-list")
+
+        const zodParsed = VechainStatsTokenInfoResponse.parse(response.data)
+        return zodParsed
+    } catch (e) {
+        error(ERROR_EVENTS.TOKENS, e)
+        throw e
+    }
+}
+
 export type MarketChartResponse = {
     timestamp: number
     value: number
@@ -96,7 +121,7 @@ export const getMarketChart = async ({
     coinGeckoId,
     vs_currency,
     days,
-    interval = "daily",
+    interval,
 }: {
     coinGeckoId?: string
     vs_currency: string

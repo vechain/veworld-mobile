@@ -1,9 +1,17 @@
 import { useQuery } from "@tanstack/react-query"
-import { MarketChartResponse, getMarketChart, getSmartMarketChart, getTokenInfo } from "./endpoints"
+import {
+    MarketChartResponse,
+    getMarketChart,
+    getSmartMarketChart,
+    getTokenInfo,
+    getVechainStatsTokensInfo,
+} from "./endpoints"
 import { max } from "lodash"
 import { marketChartTimeframes } from "./constants"
 import { VETHOR_COINGECKO_ID, VET_COINGECKO_ID } from "~Constants"
+import { selectCurrency, useAppSelector } from "~Storage/Redux"
 
+// Enable it if we are switching back to a direct call to coingecko instead of using the proxy
 // const EXCHANGE_RATE_SYNC_PERIOD = new BigNumber(process.env.REACT_APP_EXCHANGE_RATE_SYNC_PERIOD ?? "120000").toNumber()
 // const CHART_DATA_SYNC_PERIOD = new BigNumber(process.env.REACT_APP_CHART_DATA_SYNC_PERIOD ?? "300000").toNumber()
 
@@ -45,16 +53,18 @@ export const useMarketChart = ({
     id,
     vs_currency,
     days,
+    interval,
     placeholderData,
 }: {
     id?: string
     vs_currency: string
     days: number
+    interval?: string
     placeholderData?: MarketChartResponse
 }) => {
     return useQuery({
         queryKey: getMarketChartQueryKey({ id, vs_currency, days }),
-        queryFn: () => getMarketChart({ coinGeckoId: id, vs_currency, days }),
+        queryFn: () => getMarketChart({ coinGeckoId: id, vs_currency, days, interval }),
         enabled: !!id,
         placeholderData,
         // staleTime: CHART_DATA_SYNC_PERIOD,
@@ -90,10 +100,36 @@ export const useSmartMarketChart = ({
 
     return useQuery({
         queryKey: getMarketChartQueryKey({ id, vs_currency, days }),
-        queryFn: () => getSmartMarketChart({ highestResolutionMarketChartData, days }),
+        queryFn: () =>
+            days > 1
+                ? getSmartMarketChart({ highestResolutionMarketChartData, days })
+                : getMarketChart({ coinGeckoId: id, vs_currency, days }),
         enabled: !!highestResolutionMarketChartData,
         // staleTime: CHART_DATA_SYNC_PERIOD,
         placeholderData,
+    })
+}
+
+export const getVechainStatsTokenQueryKey = () => ["VechainStats", "TOKENS_INFO"]
+
+export const useVechainStatsTokensInfo = () => {
+    return useQuery({
+        queryKey: getVechainStatsTokenQueryKey(),
+        queryFn: () => getVechainStatsTokensInfo(),
+    })
+}
+
+export const useVechainStatsTokenInfo = (tokenSymbol: string) => {
+    const currency = useAppSelector(selectCurrency)
+
+    return useQuery({
+        queryKey: getVechainStatsTokenQueryKey(),
+        queryFn: () => getVechainStatsTokensInfo(),
+        select: data => {
+            if (!data[tokenSymbol]) return null
+            const exchageRates = data[tokenSymbol]
+            return currency === "USD" ? exchageRates.price_eur : exchageRates.price_eur
+        },
     })
 }
 

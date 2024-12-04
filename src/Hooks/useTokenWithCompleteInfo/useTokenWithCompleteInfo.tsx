@@ -26,6 +26,7 @@ export const useTokenWithCompleteInfo = (token: FungibleToken): TokenWithComplet
         id: getCoinGeckoIdBySymbol[token.symbol],
         vs_currency: currency,
     })
+
     const { fiatBalance, tokenUnitBalance, tokenUnitFullBalance } = useBalances({
         token: { ...token, balance },
         exchangeRate,

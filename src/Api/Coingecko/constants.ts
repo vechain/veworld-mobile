@@ -3,11 +3,11 @@ import { B3TR, VET, VTHO } from "~Constants"
 export type MarketChartTimeFrame = {
     label: string
     value: number
-    interval: string
+    interval?: string
 }
 
 export const marketChartTimeframes: MarketChartTimeFrame[] = [
-    { label: "1D", value: 1, interval: "daily" },
+    { label: "1D", value: 1, interval: "hourly" },
     { label: "1W", value: 7, interval: "daily" },
     { label: "1M", value: 30, interval: "daily" },
     { label: "3M", value: 90, interval: "daily" },
