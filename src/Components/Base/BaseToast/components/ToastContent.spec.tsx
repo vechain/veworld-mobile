@@ -25,8 +25,16 @@ const findToastRecipientAddress = () => {
 }
 
 describe("ToastContent", () => {
+    afterEach(() => {
+        jest.clearAllTimers()
+    })
+
+    beforeEach(() => {
+        jest.useFakeTimers()
+    })
+
     it("should render correctly - no onPress", async () => {
-        render(<ToastContent icon={"close"} styles={successStyles} text3="Link text" testID={testID} />, {
+        render(<ToastContent icon="icon-check-circle-2" styles={successStyles} text3="Link text" testID={testID} />, {
             wrapper: TestWrapper,
         })
         const toast = await findToast()
@@ -34,7 +42,13 @@ describe("ToastContent", () => {
     })
     it("should render correctly - onPress", async () => {
         render(
-            <ToastContent icon={"close"} styles={successStyles} text3="Link text" onPress={onPress} testID={testID} />,
+            <ToastContent
+                icon="icon-check-circle-2"
+                styles={successStyles}
+                text3="Link text"
+                onPress={onPress}
+                testID={testID}
+            />,
             {
                 wrapper: TestWrapper,
             },
@@ -49,7 +63,7 @@ describe("ToastContent", () => {
         render(
             <ToastContent
                 addresses={{ sender: account1D1.address, recipient: account2D1.address }}
-                icon={"close"}
+                icon="icon-check-circle-2"
                 styles={successStyles}
                 text3="Link text"
                 testID={testID}
@@ -69,7 +83,7 @@ describe("ToastContent", () => {
         render(
             <ToastContent
                 addresses={{ sender: account1D1.address }}
-                icon={"close"}
+                icon="icon-check-circle-2"
                 styles={successStyles}
                 text3="Link text"
                 testID={testID}

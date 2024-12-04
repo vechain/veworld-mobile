@@ -31,7 +31,7 @@ export const ToastContent = ({ styles, text1, icon, text2, text3, addresses, onP
     return (
         <BaseView style={styles.container}>
             <BaseView style={styles.contentContainer}>
-                <BaseIcon name={icon} size={20} color={styles.iconColor} />
+                <BaseIcon dsIcons name={icon} size={20} color={styles.iconColor} />
                 <BaseView>
                     <BaseView style={styles.textContainer} px={12}>
                         {addresses && (
