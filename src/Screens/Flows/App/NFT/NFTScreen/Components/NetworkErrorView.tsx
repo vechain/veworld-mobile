@@ -16,7 +16,7 @@ export const NetworkErrorView = () => {
             style={{ marginBottom: iosOnlyTabBarBottomMargin }}
             px={24}
             w={100}>
-            <BaseIcon name="alert-circle-outline" color={theme.colors.text} size={64} />
+            <BaseIcon name="alert-circle-outline" color={theme.colors.text} size={72} />
             <BaseSpacer height={24} />
             <BaseText typographyFont="subSubTitleMedium">{LL.COMMON_WHOOPS()}</BaseText>
             <BaseSpacer height={8} />
