@@ -7,10 +7,10 @@ import { BaseSearchInput, BaseView } from "~Components"
 type AnimatedSearchBarProps = {
     placeholder: string
     value: string
-    iconName: string
+    iconName?: string
     iconColor: string
     onTextChange: (text: string) => void
-    onIconPress: () => void
+    onIconPress?: () => void
 }
 
 export const AnimatedSearchBar = ({
@@ -25,15 +25,17 @@ export const AnimatedSearchBar = ({
 
     const dimensions = useRef(
         (() => {
-            const paddingHorizontal = 24
+            const paddingRight = iconName ? 12 : 0
             const iconSize = 32
-            const totalIconContainerSize = paddingHorizontal + iconSize
+            const totalIconContainerSize = paddingRight + iconSize
             const fullWidthPercentage = 100
-            const iconContainerWidthPercentage = (totalIconContainerSize / windowWidth) * fullWidthPercentage
+            const iconContainerWidthPercentage = iconName
+                ? (totalIconContainerSize / windowWidth) * fullWidthPercentage
+                : 0
             const initialInputContainerWidthPercentage = fullWidthPercentage - iconContainerWidthPercentage
 
             return {
-                paddingHorizontal,
+                paddingRight,
                 iconSize,
                 initialInputContainerWidthPercentage,
                 fullWidthPercentage,
@@ -68,7 +70,7 @@ export const AnimatedSearchBar = ({
 
     return (
         <BaseView flexDirection="row" alignItems="center">
-            <Animated.View style={[animatedInputStyle, { paddingHorizontal: dimensions.current.paddingHorizontal }]}>
+            <Animated.View style={[animatedInputStyle, { paddingRight: dimensions.current.paddingRight }]}>
                 <BaseSearchInput
                     placeholder={placeholder}
                     setValue={onTextChange}
@@ -79,9 +81,11 @@ export const AnimatedSearchBar = ({
                     onIconPress={() => onTextChange("")}
                 />
             </Animated.View>
-            <BaseView justifyContent={"center"} alignItems={"center"}>
-                <Icon name={iconName} size={dimensions.current.iconSize} color={iconColor} onPress={onIconPress} />
-            </BaseView>
+            {iconName && onIconPress && (
+                <BaseView justifyContent={"center"} alignItems={"center"}>
+                    <Icon name={iconName} size={dimensions.current.iconSize} color={iconColor} onPress={onIconPress} />
+                </BaseView>
+            )}
         </BaseView>
     )
 }

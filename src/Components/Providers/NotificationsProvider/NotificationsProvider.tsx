@@ -2,11 +2,13 @@ import { useNavigation } from "@react-navigation/native"
 import React, { createContext, PropsWithChildren, useCallback, useContext, useEffect, useRef } from "react"
 import { LogLevel, NotificationClickEvent, OneSignal, PushSubscriptionChangedState } from "react-native-onesignal"
 import { useAppState } from "~Hooks"
-import { AppStateType } from "~Model"
+import { AppStateType, NETWORK_TYPE } from "~Model"
 import {
+    increaseDappVisitCounter,
     selectDappVisitCounter,
     selectNotificationOptedIn,
     selectNotificationPermissionEnabled,
+    selectSelectedNetwork,
     setDappVisitCounter,
     updateNotificationOptedIn,
     updateNotificationPermission,
@@ -31,7 +33,9 @@ import {
 //     st3pr: "0x698555a1fc7b34a52900e3df2d68dd380fa3dfae3b3ed65dba0d230cdab17689",
 // }
 
-export const ecosystemDappIdToVeBetterDappId = {
+const veBetterDaoTagKey = "VeBetterDao"
+
+const ecosystemDappIdToVeBetterDappId = {
     "vet.mugshot": "0x2fc30c2ad41a2994061efaf218f1d52dc92bc4a31a0f02a4916490076a7a393a",
     "vet.cleanify": "0x899de0d0f0b39e484c8835b2369194c4c102b230c813862db383d44a4efe14d3",
     "vet.greencart": "0x9643ed1637948cc571b23f836ade2bdb104de88e627fa6e8e3ffef1ee5a1739a",
@@ -45,6 +49,9 @@ export const ecosystemDappIdToVeBetterDappId = {
     "vet.solarwise.app": "0x1cdf0d2cc9bb81296647c3b6baae1006471a719e67c6431155db920d71242afb",
     carbonlarity: "0xca0b325c7d08aa29642c6a82e490c99bac53e5e53dce402faa1ec12b7e382409",
     "vet.st3pr": "0x698555a1fc7b34a52900e3df2d68dd380fa3dfae3b3ed65dba0d230cdab17689",
+    "vet.vedelegate": "0x9bc95bbe51b41d526e45466b32a95c2f170a79e74fe31a5782762f7a545e567a",
+    "vet.tbc.swap": "0x2703ee39ee00a34177202a3fd1fd031bb37ab1eddd70fa1ed73ad6eee86c6ee0",
+    "io.veswap": "0x640b464f03912be5a4dbc4e860c8131a1a0e7c13ce78d75c0f18101b5e8cd743",
 } as { [key: string]: string }
 
 type ContextType = {
@@ -53,6 +60,13 @@ type ContextType = {
     requestNotficationPermission: () => void
     isNotificationPermissionEnabled: boolean
     isUserOptedIn: boolean
+    increaseDappCounter: (dappId: string) => void
+    getTags: () => Promise<{
+        [key: string]: string
+    }>
+    addTag: (key: string, value: string) => void
+    removeTag: (key: string) => void
+    removeAllTags: () => void
 }
 
 const Context = createContext<ContextType | undefined>(undefined)
@@ -66,9 +80,12 @@ const NotificationsProvider = React.memo(({ children }: PropsWithChildren) => {
     const permissionEnabled = useAppSelector(selectNotificationPermissionEnabled)
     const optedIn = useAppSelector(selectNotificationOptedIn)
     const dappVisitCounter = useAppSelector(selectDappVisitCounter)
+    const selectedNetwork = useAppSelector(selectSelectedNetwork)
     const isFetcingTags = useRef(false)
 
     const { currentState, previousState } = useAppState()
+
+    const isMainnet = selectedNetwork.type === NETWORK_TYPE.MAIN
 
     const initializeIneSignal = useCallback(() => {
         if (!process.env.ONE_SIGNAL_APP_ID) {
@@ -161,11 +178,31 @@ const NotificationsProvider = React.memo(({ children }: PropsWithChildren) => {
 
     const init = useCallback(async () => {
         initializeIneSignal()
-        getOptInStatus()
-        getPermission()
         OneSignal.User.pushSubscription.optIn()
-        OneSignal.User.addTag("VeBetterDao", "true")
+        await getOptInStatus()
+        await getPermission()
+        OneSignal.User.addTag(veBetterDaoTagKey, "true")
     }, [getOptInStatus, getPermission, initializeIneSignal])
+
+    const getTags = useCallback(() => {
+        return OneSignal.User.getTags()
+    }, [])
+
+    const addTag = useCallback((key: string, value: string) => {
+        OneSignal.User.addTag(key, value)
+    }, [])
+
+    const removeTag = useCallback((key: string) => {
+        OneSignal.User.removeTag(key)
+    }, [])
+
+    const removeAllTags = useCallback(() => {
+        getTags().then(tags => {
+            const tagKeys = Object.keys(tags)
+            const tagsToRemove = tagKeys.filter(tag => tag !== veBetterDaoTagKey)
+            OneSignal.User.removeTags(tagsToRemove)
+        })
+    }, [getTags])
 
     useEffect(() => {
         init()
@@ -184,15 +221,20 @@ const NotificationsProvider = React.memo(({ children }: PropsWithChildren) => {
     }, [onNotificationClicked, onOptInStatusChanged, onPermissionChanged])
 
     useEffect(() => {
-        if (currentState === AppStateType.ACTIVE && currentState !== previousState && !isFetcingTags.current) {
+        if (
+            currentState === AppStateType.ACTIVE &&
+            currentState !== previousState &&
+            !isFetcingTags.current &&
+            isMainnet
+        ) {
             isFetcingTags.current = true
-            OneSignal.User.getTags()
+            getTags()
                 .then(tags => {
                     Object.entries(dappVisitCounter).forEach(([dappId, counter]) => {
                         if (tags[dappId] && !dappVisitCounter[dappId]) {
                             dispatch(setDappVisitCounter({ dappId: dappId, counter: 2 }))
                         } else if (counter >= 2) {
-                            OneSignal.User.addTag(dappId, "true")
+                            addTag(dappId, "true")
                         }
                     })
                 })
@@ -200,7 +242,17 @@ const NotificationsProvider = React.memo(({ children }: PropsWithChildren) => {
                     isFetcingTags.current = false
                 })
         }
-    }, [dappVisitCounter, dispatch, currentState, previousState])
+    }, [dappVisitCounter, dispatch, currentState, previousState, isMainnet, addTag, getTags])
+
+    const increaseDappCounter = useCallback(
+        (dappId: string) => {
+            if (isMainnet) {
+                const id = ecosystemDappIdToVeBetterDappId[dappId]
+                dispatch(increaseDappVisitCounter({ dappId: id ?? dappId }))
+            }
+        },
+        [dispatch, isMainnet],
+    )
 
     return (
         <Context.Provider
@@ -210,6 +262,11 @@ const NotificationsProvider = React.memo(({ children }: PropsWithChildren) => {
                 requestNotficationPermission: requestPermission,
                 isNotificationPermissionEnabled: permissionEnabled,
                 isUserOptedIn: optedIn,
+                increaseDappCounter: increaseDappCounter,
+                addTag: addTag,
+                removeTag: removeTag,
+                getTags: getTags,
+                removeAllTags: removeAllTags,
             }}>
             {children}
         </Context.Provider>

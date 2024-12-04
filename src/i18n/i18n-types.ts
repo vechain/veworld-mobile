@@ -2384,9 +2384,33 @@ type RootTranslation = {
 	 */
 	PUSH_NOTIFICATIONS: string
 	/**
+	 * S​u​b​s​c​r​i​p​t​i​o​n​ ​L​i​m​i​t​ ​R​e​a​c​h​e​d
+	 */
+	PUSH_NOTIFICATIONS_SUBSCRIPTION_LIMIT_REACHED_TITLE: string
+	/**
+	 * Y​o​u​'​v​e​ ​r​e​a​c​h​e​d​ ​t​h​e​ ​m​a​x​i​m​u​m​ ​n​u​m​b​e​r​ ​o​f​ ​s​u​b​s​c​r​i​p​t​i​o​n​s​ ​a​l​l​o​w​e​d​.​ ​P​l​e​a​s​e​ ​u​n​s​u​b​s​c​r​i​b​e​ ​f​r​o​m​ ​a​n​o​t​h​e​r​ ​s​u​b​s​c​r​i​p​t​i​o​n​ ​b​e​f​o​r​e​ ​a​d​d​i​n​g​ ​a​ ​n​e​w​ ​o​n​e​.
+	 */
+	PUSH_NOTIFICATIONS_SUBSCRIPTION_LIMIT_REACHED_DESC: string
+	/**
+	 * A​c​t​i​v​e
+	 */
+	PUSH_NOTIFICATIONS_ACTIVE: string
+	/**
 	 * K​e​e​p​ ​u​p​ ​t​o​ ​d​a​t​e​ ​w​i​t​h​ ​t​h​e​ ​l​a​t​e​s​t​ ​n​e​w​s​ ​a​n​d​ ​u​p​d​a​t​e​s
 	 */
 	PUSH_NOTIFICATIONS_DESC: string
+	/**
+	 * E​r​r​o​r
+	 */
+	PUSH_NOTIFICATIONS_PREFERENCES_GENERIC_ERROR_TITLE: string
+	/**
+	 * A​n​ ​e​r​r​o​r​ ​o​c​c​u​r​r​e​d​ ​w​h​i​l​e​ ​t​r​y​i​n​g​ ​t​o​ ​l​o​a​d​ ​y​o​u​r​ ​p​r​e​f​e​r​e​n​c​e​s​.​ ​P​l​e​a​s​e​ ​t​r​y​ ​a​g​a​i​n​.
+	 */
+	PUSH_NOTIFICATIONS_PREFERENCES_GENERIC_ERROR_DESC: string
+	/**
+	 * S​e​a​r​c​h​ ​D​A​p​p​s
+	 */
+	PUSH_NOTIFICATIONS_PREFERENCES_PLACEHOLDER: string
 	/**
 	 * R​e​c​a​p
 	 */
@@ -5863,9 +5887,33 @@ Try reconnect your device to the internet.
 	 */
 	PUSH_NOTIFICATIONS: () => LocalizedString
 	/**
+	 * Subscription Limit Reached
+	 */
+	PUSH_NOTIFICATIONS_SUBSCRIPTION_LIMIT_REACHED_TITLE: () => LocalizedString
+	/**
+	 * You've reached the maximum number of subscriptions allowed. Please unsubscribe from another subscription before adding a new one.
+	 */
+	PUSH_NOTIFICATIONS_SUBSCRIPTION_LIMIT_REACHED_DESC: () => LocalizedString
+	/**
+	 * Active
+	 */
+	PUSH_NOTIFICATIONS_ACTIVE: () => LocalizedString
+	/**
 	 * Keep up to date with the latest news and updates
 	 */
 	PUSH_NOTIFICATIONS_DESC: () => LocalizedString
+	/**
+	 * Error
+	 */
+	PUSH_NOTIFICATIONS_PREFERENCES_GENERIC_ERROR_TITLE: () => LocalizedString
+	/**
+	 * An error occurred while trying to load your preferences. Please try again.
+	 */
+	PUSH_NOTIFICATIONS_PREFERENCES_GENERIC_ERROR_DESC: () => LocalizedString
+	/**
+	 * Search DApps
+	 */
+	PUSH_NOTIFICATIONS_PREFERENCES_PLACEHOLDER: () => LocalizedString
 	/**
 	 * Recap
 	 */

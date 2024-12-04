@@ -718,12 +718,12 @@ PODS:
     - React
   - RNScrypt (1.2.1):
     - React
-  - RNSentry (5.35.0):
+  - RNSentry (5.36.0):
     - hermes-engine
     - RCT-Folly (= 2021.07.22.00)
     - React-Core
     - React-hermes
-    - Sentry/HybridSDK (= 8.37.0)
+    - Sentry/HybridSDK (= 8.41.0)
   - RNSVG (13.14.1):
     - React-Core
   - SDWebImage (5.11.1):
@@ -732,7 +732,7 @@ PODS:
   - SDWebImageWebPCoder (0.8.5):
     - libwebp (~> 1.0)
     - SDWebImage/Core (~> 5.10)
-  - Sentry/HybridSDK (8.37.0)
+  - Sentry/HybridSDK (8.41.0)
   - SocketRocket (0.6.1)
   - UMAppLoader (4.2.0)
   - Yoga (1.14.0)
@@ -1203,11 +1203,11 @@ SPEC CHECKSUMS:
   RNScreens: 50ad6e3dbea9023272b3aa753e3ee2720b0c9b8f
   RNScreenshotPrevent: dc9741e416ba80c3739418f112ac4093188315e9
   RNScrypt: 95fdef077b482e9fdf8a761120cb69d129ef4016
-  RNSentry: a2b10b28360ab03954e5d871bc9b20c00de37163
+  RNSentry: f655b42e3d102f66a475a6588b92fa6d2fc359f1
   RNSVG: af3907ac5d4fa26a862b75a16d8f15bc74f2ceda
   SDWebImage: a7f831e1a65eb5e285e3fb046a23fcfbf08e696d
   SDWebImageWebPCoder: 908b83b6adda48effe7667cd2b7f78c897e5111d
-  Sentry: ee060c09b2f7ec1240e95c766ab44c04c7bdb052
+  Sentry: 54d0fe6c0df448497c8ed4cce66ccf7027e1823e
   SocketRocket: f32cd54efbe0f095c4d7594881e52619cfe80b17
   UMAppLoader: e83f024f75f07802fce99739f04b4537d188caaf
   Yoga: b76f1acfda8212aa16b7e26bcce3983230c82603

@@ -1,12 +1,14 @@
 import React, { useCallback } from "react"
-import { BaseSpacer, BaseText, BaseView, EnableFeature, Layout, useNotifications } from "~Components"
+import { BaseSpacer, BaseText, BaseView, EnableFeature, Layout } from "~Components"
 import { useBottomSheetModal } from "~Hooks"
 import { Locales, useI18nContext } from "~i18n"
+import { NETWORK_TYPE } from "~Model"
 import { Reset } from "~Screens/Flows/App/GeneralScreen/Components/Reset"
 import {
     selectAreDevFeaturesEnabled,
     selectHideTokensWithNoBalance,
     selectLanguage,
+    selectSelectedNetwork,
     selectSentryTrackingEnabled,
     setHideTokensWithNoBalance,
     setLanguage,
@@ -14,13 +16,13 @@ import {
     useAppDispatch,
     useAppSelector,
 } from "~Storage/Redux"
-import { ChangeCurrency, ChangeLanguage, ChangeTheme, SelectLanguageBottomSheet } from "./Components"
+import { ChangeCurrency, ChangeLanguage, ChangeTheme, NotificationBox, SelectLanguageBottomSheet } from "./Components"
 import { ChangeSymbolPosition } from "./Components/ChangeSymbolPosition"
 
 export const GeneralScreen = () => {
     const { LL, setLocale } = useI18nContext()
-    const { isNotificationPermissionEnabled, isUserOptedIn, optIn, optOut, requestNotficationPermission } =
-        useNotifications()
+    const selectedNetwork = useAppSelector(selectSelectedNetwork)
+    const isMainnet = selectedNetwork.type === NETWORK_TYPE.MAIN
 
     const {
         ref: selectLanguageSheetRef,
@@ -60,16 +62,6 @@ export const GeneralScreen = () => {
         [closeSelectLanguageSheet, dispatch, setLocale],
     )
 
-    const toggleNotificationsSwitch = useCallback(() => {
-        if (isUserOptedIn && !isNotificationPermissionEnabled) {
-            requestNotficationPermission()
-        } else if (!isUserOptedIn) {
-            optIn()
-        } else {
-            optOut()
-        }
-    }, [isNotificationPermissionEnabled, isUserOptedIn, optIn, optOut, requestNotficationPermission])
-
     return (
         <Layout
             safeAreaTestID="General_Screen"
@@ -108,13 +100,12 @@ export const GeneralScreen = () => {
                     <BaseText typographyFont="caption">{LL.BD_APP_LANGUAGE_DISCLAIMER()}</BaseText>
                     <BaseSpacer height={20} />
                     <ChangeLanguage language={selectedLanguageCode} onPress={openSelectLanguageSheet} />
-                    <BaseSpacer height={24} />
-                    <EnableFeature
-                        title={LL.PUSH_NOTIFICATIONS()}
-                        subtitle={LL.PUSH_NOTIFICATIONS_DESC()}
-                        onValueChange={toggleNotificationsSwitch}
-                        value={isUserOptedIn && isNotificationPermissionEnabled}
-                    />
+                    {isMainnet && (
+                        <>
+                            <BaseSpacer height={24} />
+                            <NotificationBox />
+                        </>
+                    )}
 
                     <BaseSpacer height={24} />
                     <BaseText typographyFont="bodyMedium" my={8}>
