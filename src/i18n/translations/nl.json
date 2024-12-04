@@ -312,6 +312,7 @@
   "COMMON_SELECT_ACCOUNT_TO_REMOVE": "Selecteer account om te verwijderen",
   "COMMON_TODAY": "Vandaag",
   "COMMON_TOTAL_SUPPLY": "Totale aanbod",
+  "COMMON_WHOOPS": "Oeps!",
   "CONNECTED_APPS_CONFIRM_DISCONNECT_MESSAGE": "Bevestig dit om de {name: string} app te ontkoppelen van {alias: string}",
   "CONNECTED_APPS_SCREEN_DESCRIPTION": "Verbind je wallet met apps om transacties te maken en certificaten te ondertekenen.",
   "CONNECTED_APPS_SCREEN_NO_CONNECTED_APP": "Je hebt geen verbonden apps. Zodra je er een paar hebt, worden ze hier getoond.",

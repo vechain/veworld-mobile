@@ -312,6 +312,7 @@
   "COMMON_SELECT_ACCOUNT_TO_REMOVE": "Chọn tài khoản để xóa",
   "COMMON_TODAY": "Hôm nay",
   "COMMON_TOTAL_SUPPLY": "Tổng cung",
+  "COMMON_WHOOPS": "Ối!",
   "CONNECTED_APPS_CONFIRM_DISCONNECT_MESSAGE": "Xác nhận điều này, bạn sẽ ngắt kết nối ứng dụng {name: string} khỏi {alias: string}",
   "CONNECTED_APPS_SCREEN_DESCRIPTION": "Kết nối ví của bạn với các ứng dụng để thực hiện giao dịch và ký chứng chỉ.",
   "CONNECTED_APPS_SCREEN_NO_CONNECTED_APP": "Bạn không có ứng dụng nào được kết nối. Khi bạn có, chúng sẽ được hiển thị ở đây.",

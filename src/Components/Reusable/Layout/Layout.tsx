@@ -115,7 +115,6 @@ export const Layout = ({
                         </BaseView>
                     )}
                 </BaseView>
-                {/* Separator from header to body */}
 
                 {body && (
                     <BaseScrollView

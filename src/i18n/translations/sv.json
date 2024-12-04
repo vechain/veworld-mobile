@@ -312,6 +312,7 @@
   "COMMON_SELECT_ACCOUNT_TO_REMOVE": "Välj konto att ta bort",
   "COMMON_TODAY": "Idag",
   "COMMON_TOTAL_SUPPLY": "Total tillgång",
+  "COMMON_WHOOPS": "Hoppsan!",
   "CONNECTED_APPS_CONFIRM_DISCONNECT_MESSAGE": "Genom att bekräfta detta kommer du att koppla bort appen {name: string} från {alias: string}",
   "CONNECTED_APPS_SCREEN_DESCRIPTION": "Anslut din plånbok med appar för att genomföra transaktioner och signera certifikat.",
   "CONNECTED_APPS_SCREEN_NO_CONNECTED_APP": "Du har inga anslutna appar. När du har några kommer de att visas här.",
