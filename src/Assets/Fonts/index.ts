@@ -8,4 +8,16 @@ const Mono_Extra_Bold = require("./Mono/JetBrainsMono-ExtraBold.ttf")
 const Mono_Light = require("./Mono/JetBrainsMono-Light.ttf")
 const Mono_Regular = require("./Mono/JetBrainsMono-Regular.ttf")
 
-export { Inter_Regular, Inter_Medium, Inter_Bold, Inter_Light, Mono_Bold, Mono_Extra_Bold, Mono_Light, Mono_Regular }
+const DesignSystemIcons = require("./DesignSystemIcons/DesignSystemIcons.ttf")
+
+export {
+    Inter_Regular,
+    Inter_Medium,
+    Inter_Bold,
+    Inter_Light,
+    Mono_Bold,
+    Mono_Extra_Bold,
+    Mono_Light,
+    Mono_Regular,
+    DesignSystemIcons,
+}

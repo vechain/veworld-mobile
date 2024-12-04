@@ -7,7 +7,7 @@ export enum StatusColorVariant {
 }
 
 export const ICON_NAMES: Record<AlertStatus, string> = {
-    success: "check-circle-outline",
-    error: "alert-outline",
-    info: "information-outline",
+    success: "icon-check-circle-2",
+    error: "icon-alert-triangle",
+    info: "icon-info",
 }
