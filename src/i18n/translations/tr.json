@@ -312,6 +312,7 @@
   "COMMON_SELECT_ACCOUNT_TO_REMOVE": "Kaldırmak için hesap seç",
   "COMMON_TODAY": "Bugün",
   "COMMON_TOTAL_SUPPLY": "Toplam Arz",
+  "COMMON_WHOOPS": "Tüh!",
   "CONNECTED_APPS_CONFIRM_DISCONNECT_MESSAGE": "Bunu onaylayarak {name: string} uygulamasını {alias: string} adresinden bağlantısını keseceksiniz",
   "CONNECTED_APPS_SCREEN_DESCRIPTION": "İşlem yapmak ve sertifikaları imzalamak için cüzdanınızı uygulamalara bağlayın.",
   "CONNECTED_APPS_SCREEN_NO_CONNECTED_APP": "Bağlı uygulamanız yok. Bir tane bağladığınızda, burada görünecek.",

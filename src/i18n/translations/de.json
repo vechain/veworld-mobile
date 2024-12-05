@@ -312,6 +312,7 @@
   "COMMON_SELECT_ACCOUNT_TO_REMOVE": "Zu entfernendes Konto auswählen",
   "COMMON_TODAY": "Heute",
   "COMMON_TOTAL_SUPPLY": "Gesamtangebot",
+  "COMMON_WHOOPS": "Hoppla!",
   "CONNECTED_APPS_CONFIRM_DISCONNECT_MESSAGE": "Wenn Sie dies bestätigen, wird die {name: string} App von {alias: string} getrennt",
   "CONNECTED_APPS_SCREEN_DESCRIPTION": "Verbinden Sie Ihre Geldbörse mit Apps, um Transaktionen durchzuführen und Zertifikate zu signieren.",
   "CONNECTED_APPS_SCREEN_NO_CONNECTED_APP": "Sie haben keine verbundenen Apps. Sobald Sie welche haben, werden sie hier angezeigt.",
