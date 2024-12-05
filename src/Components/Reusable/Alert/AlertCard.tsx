@@ -1,6 +1,6 @@
 import React, { memo } from "react"
 import { StyleSheet } from "react-native"
-import { BaseIcon, BaseSpacer, BaseText, BaseView } from "~Components"
+import { BaseIconV2, BaseSpacer, BaseText, BaseView } from "~Components"
 import { useThemedStyles } from "~Hooks"
 import { AlertStatus, ICON_NAMES, StatusColorVariant } from "~Components/Reusable/Alert/utils/AlertConfigs"
 import { ColorThemeType } from "~Constants"
@@ -19,7 +19,7 @@ export const AlertCard = memo(({ title, message, status }: AlertCardProps) => {
     return (
         <BaseView style={styles.container}>
             <BaseView style={styles.head}>
-                <BaseIcon dsIcons name={ICON_NAMES[status]} size={16} color={colors.icon} />
+                <BaseIconV2 name={ICON_NAMES[status]} size={16} color={colors.icon} />
                 <BaseSpacer width={8} />
                 <BaseText typographyFont="bodyMedium" color={colors.title}>
                     {title}

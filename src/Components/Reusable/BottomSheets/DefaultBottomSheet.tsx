@@ -1,12 +1,13 @@
 import React from "react"
 import { BottomSheetModalMethods } from "@gorhom/bottom-sheet/lib/typescript/types"
 import { useThemedStyles } from "~Hooks"
-import { BaseBottomSheet, BaseIcon, BaseSpacer, BaseText, BaseView } from "~Components"
+import { BaseBottomSheet, BaseIconV2, BaseSpacer, BaseText, BaseView } from "~Components"
 import { COLORS, ColorThemeType } from "~Constants"
 import { StyleSheet } from "react-native"
+import { DesignSystemIconMap } from "~Assets"
 
 type Props = {
-    icon: string | React.ReactNode
+    icon: keyof typeof DesignSystemIconMap
     title: string
     description: string
     mainButton?: React.ReactNode
@@ -31,7 +32,7 @@ export const DefaultBottomSheet = React.forwardRef<BottomSheetModalMethods, Prop
                     <BaseSpacer height={16} />
                     <BaseView justifyContent="center" alignItems="center">
                         {typeof icon === "string" ? (
-                            <BaseIcon dsIcons name={icon} style={styles.icon} size={66} color={theme.colors.text} />
+                            <BaseIconV2 name={icon} style={styles.icon} size={66} color={theme.colors.text} />
                         ) : (
                             icon
                         )}

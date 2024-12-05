@@ -1,8 +1,9 @@
 import React from "react"
 import { StyleSheet } from "react-native"
-import { BaseIcon, BaseText, BaseTouchableBox, BaseView } from "~Components"
+import { BaseIconV2, BaseText, BaseTouchableBox, BaseView } from "~Components"
 import { COLORS, ColorThemeType } from "~Constants"
 import { useThemedStyles } from "~Hooks"
+import { DesignSystemIconMap } from "~Assets"
 
 type BackupStatusVariant = "success" | "error" | "neutral"
 
@@ -12,7 +13,7 @@ enum StatusColorVariant {
     "neutral" = "neutralVariant",
 }
 
-const ICON_NAMES: Record<BackupStatusVariant, string> = {
+const ICON_NAMES: Record<BackupStatusVariant, keyof typeof DesignSystemIconMap> = {
     success: "icon-check-circle-2",
     error: "icon-x-circle",
     neutral: "icon-info",
@@ -52,7 +53,7 @@ export const WalletBackupStatusRow = ({
             disabled={disabled || loading}
             action={onPress}>
             <BaseView style={styles.info}>
-                <BaseIcon dsIcons name={ICON_NAMES[variant]} size={icon?.size ?? 16} color={colors.icon} />
+                <BaseIconV2 name={ICON_NAMES[variant]} size={icon?.size ?? 16} color={colors.icon} />
                 <BaseView w={12} />
                 <BaseText typographyFont="body" color={variant === "neutral" ? COLORS.GREY_600 : COLORS.DARK_PURPLE}>
                     {title}

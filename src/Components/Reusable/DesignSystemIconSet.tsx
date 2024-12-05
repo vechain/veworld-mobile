@@ -1,8 +1,8 @@
 import { createIconSet } from "@expo/vector-icons"
-import designSystemIconMap from "~Assets/Fonts/DesignSystemIcons/DesignSystemIconMap.json"
+import { DesignSystemIconMap } from "~Assets"
 
-export const DesignSystemIcon = createIconSet(
-    designSystemIconMap,
+export const Icon = createIconSet(
+    DesignSystemIconMap,
     "DesignSystemIcons",
     require("~Assets/Fonts/DesignSystemIcons/DesignSystemIcons.ttf"),
 )

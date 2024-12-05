@@ -9,6 +9,7 @@ import {
     BackupSuccessfulBottomSheet,
     BaseButton,
     BaseIcon,
+    BaseIconV2,
     BaseSpacer,
     BaseText,
     BaseTextInput,
@@ -176,7 +177,7 @@ export const ChooseMnemonicBackupPassword = () => {
             body={
                 <BaseView>
                     <BaseView justifyContent="center" alignItems="center" style={styles.keyIcon}>
-                        <BaseIcon dsIcons name="icon-key" size={64} color={theme.colors.text} />
+                        <BaseIconV2 name="icon-key" size={64} color={theme.colors.text} />
                         <BaseSpacer height={20} />
                         <BaseView justifyContent="center" alignItems="center">
                             <BaseText align="center" typographyFont="subSubTitleMedium">

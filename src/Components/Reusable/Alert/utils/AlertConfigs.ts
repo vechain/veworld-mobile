@@ -1,3 +1,5 @@
+import { DesignSystemIconMap } from "~Assets"
+
 export type AlertStatus = "success" | "error" | "info"
 
 export enum StatusColorVariant {
@@ -6,7 +8,7 @@ export enum StatusColorVariant {
     "info" = "infoVariant",
 }
 
-export const ICON_NAMES: Record<AlertStatus, string> = {
+export const ICON_NAMES: Record<AlertStatus, keyof typeof DesignSystemIconMap> = {
     success: "icon-check-circle-2",
     error: "icon-alert-triangle",
     info: "icon-info",

@@ -4,7 +4,7 @@ import React, { FC, useCallback, useState } from "react"
 import { StyleSheet } from "react-native"
 import { LoaderDark, LoaderLight } from "~Assets"
 import {
-    BaseIcon,
+    BaseIconV2,
     BaseText,
     BaseView,
     CardWithHeader,
@@ -230,7 +230,7 @@ export const CloudBackupCard: FC<Props> = ({ mnemonicArray, deviceToBackup }) =>
                                     style={styles.lottie}
                                 />
                             ) : (
-                                <BaseIcon dsIcons name="icon-chevron-right" size={14} color={COLORS.DARK_PURPLE} />
+                                <BaseIconV2 name="icon-chevron-right" size={14} color={COLORS.DARK_PURPLE} />
                             )
                         }
                         onPress={handleCloudBackupPress}

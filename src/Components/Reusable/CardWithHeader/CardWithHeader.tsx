@@ -1,13 +1,14 @@
 import { StyleSheet, ViewStyle } from "react-native"
-import { BaseCard, BaseIcon, BaseSpacer, BaseText, BaseView } from "~Components"
+import { BaseCard, BaseIconV2, BaseSpacer, BaseText, BaseView } from "~Components"
 import React from "react"
 import { useThemedStyles } from "~Hooks"
 import { COLORS, ColorThemeType } from "~Constants"
+import { DesignSystemIconMap } from "~Assets"
 
 type Props = {
     containerStyle?: ViewStyle
     cardStyle?: ViewStyle
-    iconName: string
+    iconName: keyof typeof DesignSystemIconMap
     iconSize?: number
     title: string
     titleColor?: string
@@ -30,7 +31,7 @@ export const CardWithHeader = ({
         <BaseCard containerStyle={[styles.cardContainer, containerStyle]} style={[styles.card, cardStyle]}>
             <BaseView style={styles.cardHeader}>
                 <BaseView style={styles.cardHeader}>
-                    <BaseIcon dsIcons name={iconName} size={iconSize} style={styles.icon} />
+                    <BaseIconV2 name={iconName} size={iconSize} style={styles.icon} />
                     <BaseSpacer width={8} />
                     <BaseText typographyFont="captionMedium" color={theme.colors.text}>
                         {title}

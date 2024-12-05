@@ -1,10 +1,11 @@
 /* eslint-disable react-native/no-inline-styles */
 import React, { memo, useCallback, useMemo } from "react"
-import { TouchableOpacity, TouchableOpacityProps, View, ViewProps } from "react-native"
+import { OpaqueColorValue, TouchableOpacity, TouchableOpacityProps, View, ViewProps } from "react-native"
 import { useTheme } from "~Hooks"
-import Icon from "react-native-vector-icons/MaterialCommunityIcons"
 import { IconProps } from "react-native-vector-icons/Icon"
 import HapticsService from "~Services/HapticsService"
+import { DesignSystemIconMap } from "~Assets"
+import { Icon } from "~Components/Reusable/DesignSystemIconSet"
 
 type Props =
     | {
@@ -20,11 +21,13 @@ type Props =
           borderRadius?: number
           iconPadding?: number
           haptics?: "Success" | "Warning" | "Error" | "Light" | "Medium" | "Heavy"
+          name: keyof typeof DesignSystemIconMap
+          color?: string | OpaqueColorValue
       } & IconProps &
           TouchableOpacityProps &
           ViewProps
 
-export const BaseIcon: React.FC<Props> = memo(props => {
+export const BaseIconV2: React.FC<Props> = memo(props => {
     const { color, style, borderRadius, testID, haptics, name, ...otherProps } = props
     const theme = useTheme()
 
@@ -46,8 +49,8 @@ export const BaseIcon: React.FC<Props> = memo(props => {
                 size={props.size ?? 22}
                 testID={testID}
                 color={iconColor}
-                name={name}
                 style={{ padding: props.iconPadding ?? 0 }}
+                name={name}
                 {...otherProps}
             />
         </BaseIconWrapper>

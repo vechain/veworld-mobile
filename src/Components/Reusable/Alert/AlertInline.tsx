@@ -1,6 +1,6 @@
 import React, { memo, useMemo } from "react"
 import { StyleSheet } from "react-native"
-import { BaseIcon, BaseSpacer, BaseText, BaseView } from "~Components"
+import { BaseIconV2, BaseSpacer, BaseText, BaseView } from "~Components"
 import { useThemedStyles } from "~Hooks"
 import { AlertStatus, ICON_NAMES, StatusColorVariant } from "~Components/Reusable/Alert/utils/AlertConfigs"
 import { ColorThemeType } from "~Constants"
@@ -22,7 +22,7 @@ export const AlertInline = memo(({ message, status, variant = "inline" }: AlertI
     return (
         <BaseView style={styles.container}>
             <BaseView style={styles.row}>
-                <BaseIcon dsIcons name={ICON_NAMES[status]} size={16} color={colors.icon} />
+                <BaseIconV2 name={ICON_NAMES[status]} size={16} color={colors.icon} />
                 <BaseSpacer width={8} />
                 <BaseText typographyFont="captionRegular" color={isInline ? colors.titleInline : colors.title}>
                     {message}
