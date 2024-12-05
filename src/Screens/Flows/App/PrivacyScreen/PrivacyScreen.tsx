@@ -18,6 +18,7 @@ import { Routes } from "~Navigation"
 import {
     selectAnalyticsTrackingEnabled,
     selectAreDevFeaturesEnabled,
+    selectDevicesState,
     selectLocalDevices,
     selectSelectedAccount,
     setAnalyticsTrackingEnabled,
@@ -38,7 +39,8 @@ export const PrivacyScreen = () => {
     const devFeaturesEnabled = useAppSelector(selectAreDevFeaturesEnabled)
 
     const isAnalyticsTrackingEnabled = useAppSelector(selectAnalyticsTrackingEnabled)
-    const devices = useAppSelector(selectLocalDevices) as LocalDevice[]
+    const devices = useAppSelector(selectDevicesState)
+    const localDevices = useAppSelector(selectLocalDevices) as LocalDevice[]
 
     const selectedAccount = useAppSelector(selectSelectedAccount)
     const isShowBackupModal = useCheckWalletBackup(selectedAccount)
@@ -66,7 +68,7 @@ export const PrivacyScreen = () => {
         openWalletMgmtSheetWithDelay,
         openPasswordPrompt,
         closeWalletMgmtSheet,
-        devices,
+        devices: localDevices,
         isWalletSecurityBiometrics,
     })
 
