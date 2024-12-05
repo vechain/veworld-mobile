@@ -312,6 +312,7 @@
   "COMMON_SELECT_ACCOUNT_TO_REMOVE": "削除するアカウントを選択",
   "COMMON_TODAY": "今日",
   "COMMON_TOTAL_SUPPLY": "総供給量",
+  "COMMON_WHOOPS": "おっと!",
   "CONNECTED_APPS_CONFIRM_DISCONNECT_MESSAGE": "これを確認すると、{alias: string}から{name: string}アプリの接続が解除されます。",
   "CONNECTED_APPS_SCREEN_DESCRIPTION": "アプリとウォレットを接続し、取引や証明書に署名します。",
   "CONNECTED_APPS_SCREEN_NO_CONNECTED_APP": "接続されたアプリはありません。アプリが接続されると、ここに表示されます。",
