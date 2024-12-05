@@ -3,6 +3,7 @@ import { NativeStackScreenProps } from "@react-navigation/native-stack"
 import React, { useMemo } from "react"
 import { useBottomSheetModal, useThemedStyles } from "~Hooks"
 import {
+    AlertInline,
     BaseIcon,
     BaseSpacer,
     BaseText,
@@ -96,6 +97,12 @@ export const AssetDetailScreen = ({ route }: Props) => {
                 <ScrollView>
                     <BaseView style={styles.assetDetailsHeader}>
                         <AssetHeader name={token.name} symbol={token.symbol} icon={token.icon} />
+
+                        <BaseSpacer height={12} />
+
+                        {token.symbol === "B3TR" && (
+                            <AlertInline status="info" variant="inline" message={LL.ALERT_TITLE_INVALID_CHARTS()} />
+                        )}
 
                         <BaseSpacer height={24} />
                         <AssetChart token={token} />

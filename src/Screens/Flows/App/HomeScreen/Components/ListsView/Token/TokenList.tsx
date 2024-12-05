@@ -155,6 +155,7 @@ export const TokenList = memo(({ isEdit, isBalanceVisible, ...animatedViewProps 
                     tokenWithInfo={tokenWithInfoVTHO}
                     isEdit={isEdit}
                     isBalanceVisible={isBalanceVisible}
+                    hideChart
                 />
 
                 <NestableDraggableFlatList

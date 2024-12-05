@@ -90,14 +90,16 @@ export const TokenCard = memo(({ tokenWithBalance, isEdit, isBalanceVisible }: P
                 </BaseView>
             </BaseView>
 
-            <BaseView style={[styles.balancesContainer]}>
-                <FiatBalance
-                    balances={[fiatBalance]}
-                    typographyFont="subTitleBold"
-                    isVisible={isBalanceVisible}
-                    isLoading={isTokensOwnedLoading}
-                />
-            </BaseView>
+            {!isEdit && (
+                <BaseView style={[styles.balancesContainer]}>
+                    <FiatBalance
+                        balances={[fiatBalance]}
+                        typographyFont="subTitleBold"
+                        isVisible={isBalanceVisible}
+                        isLoading={isTokensOwnedLoading}
+                    />
+                </BaseView>
+            )}
         </BaseView>
     )
 })
@@ -115,8 +117,6 @@ const baseStyles = (isEdit: boolean) =>
         innerRow: {
             flexDirection: "row",
             justifyContent: "space-between",
-            width: "100%",
-            // flexWrap: "wrap",
             flexGrow: 1,
             paddingHorizontal: 12,
             paddingLeft: isEdit ? 0 : 12,
