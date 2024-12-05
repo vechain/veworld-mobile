@@ -88,6 +88,7 @@ export const useCreateWallet = () => {
                         signature: "local",
                         importType: importType,
                     })
+                    // TODO: Navigate to vns creation if no vns assigned to it
                 }
             } catch (e) {
                 warn(ERROR_EVENTS.WALLET_CREATION, e)
