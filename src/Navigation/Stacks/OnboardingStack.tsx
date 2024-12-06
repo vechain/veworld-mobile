@@ -7,8 +7,8 @@ import {
     ImportMnemonicBackupPasswordScreen,
     SelectLedgerAccounts,
     SelectLedgerDevice,
-    UserCreateVns,
-    UserVnsCreated,
+    UsernameClaimed,
+    ClaimUsername,
     WelcomeScreen,
 } from "~Screens"
 import { Routes } from "~Navigation/Enums"
@@ -18,7 +18,7 @@ import { useNavAnimation } from "~Hooks"
 export type RootStackParamListOnboarding = {
     [Routes.WELCOME]: undefined
     [Routes.CLAIM_USERNAME]: undefined
-    [Routes.USERNAME_CLAIMED_SUCCESSFULLY]: undefined
+    [Routes.USERNAME_CLAIMED]: undefined
     [Routes.IMPORT_MNEMONIC]: undefined
     [Routes.IMPORT_HW_LEDGER_SELECT_DEVICE]: undefined
     [Routes.IMPORT_HW_LEDGER_ENABLE_ADDITIONAL_SETTINGS]: {
@@ -84,13 +84,13 @@ export const OnboardingStack = () => {
 
             <Onboarding.Screen
                 name={Routes.CLAIM_USERNAME}
-                component={UserCreateVns}
+                component={ClaimUsername}
                 options={{ headerShown: false }}
             />
 
             <Onboarding.Screen
-                name={Routes.USERNAME_CLAIMED_SUCCESSFULLY}
-                component={UserVnsCreated}
+                name={Routes.USERNAME_CLAIMED}
+                component={UsernameClaimed}
                 options={{ headerShown: false }}
             />
         </Onboarding.Navigator>

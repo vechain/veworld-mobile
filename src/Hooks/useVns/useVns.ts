@@ -14,8 +14,6 @@ const VNS_RESOLVER: Partial<{ [key in NETWORK_TYPE]: string }> = {
     testnet: "0xc403b8EA53F707d7d4de095f0A20bC491Cf2bc94",
 } as const
 
-// const VNS_BASE_DOMAIN = "veworld.vet"
-
 export const getVnsName = async (thor: Connex.Thor, network: Network, address?: string) => {
     if (!address) return ""
     const NETWORK_RESOLVER = VNS_RESOLVER[network.type]

@@ -1,14 +1,17 @@
+import { useNavigation } from "@react-navigation/native"
 import React, { useCallback, useState } from "react"
 import { StyleSheet } from "react-native"
 import { BaseButton, BaseSafeArea, BaseSpacer, BaseText, BaseTextInput, BaseView } from "~Components"
 import { COLORS, ColorThemeType } from "~Constants"
 import { useThemedStyles } from "~Hooks"
+import { Routes } from "~Navigation"
 
-export const UserCreateVns = () => {
-    const [isLoading, setIsLoading] = useState(false)
+export const ClaimUsername = () => {
+    const [isLoading] = useState(false)
     const [subdomain, setSubdomain] = useState("")
 
     const { styles } = useThemedStyles(baseStyles)
+    const nav = useNavigation()
 
     const onSetSubdomain = useCallback((value: string) => {
         setSubdomain(value)
@@ -24,7 +27,7 @@ export const UserCreateVns = () => {
                 <BaseSpacer height={24} />
                 {/* Body */}
                 <BaseView flexGrow={1}>
-                    <BaseText typographyFont="body">
+                    <BaseText typographyFont="subSubTitleLight">
                         {"You can claim for free your unique username for this wallet:"}
                     </BaseText>
                     <BaseSpacer height={40} />
@@ -62,7 +65,8 @@ export const UserCreateVns = () => {
                         flex={1}
                         disabled={isLoading || !subdomain}
                         action={() => {
-                            setIsLoading(true)
+                            // setIsLoading(true)
+                            nav.navigate(Routes.USERNAME_CLAIMED)
                         }}>
                         {isLoading ? "Confirming..." : "Confirm"}
                     </BaseButton>

@@ -19,7 +19,7 @@ export enum Routes {
     CHOOSE_MNEMONIC_BACKUP_PASSWORD = "Choose_Mnemonic_Backup_Password",
     USER_CREATE_PASSWORD = "User_Create_Password",
     CLAIM_USERNAME = "Claim_Username",
-    USERNAME_CLAIMED_SUCCESSFULLY = "Username_Claimed_Successfully",
+    USERNAME_CLAIMED = "Username_Claimed",
     APP_SECURITY = "App_Security",
     SETTINGS = "Settings",
     CREATE_WALLET_FLOW = "Create_Wallet_Flow",
