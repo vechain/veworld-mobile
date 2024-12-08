@@ -96,7 +96,7 @@ export const DappTransactionDetails: React.FC<Props> = memo(({ activity }) => {
             value: `${transactionIDshort}`,
             typographyFont: "subSubTitle",
             underline: false,
-            icon: "content-copy",
+            icon: "icon-copy",
             onValuePress: () => onCopyToClipboard(activity.id, LL.COMMON_LBL_ADDRESS()),
         },
         {

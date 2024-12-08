@@ -1,4 +1,5 @@
 import { TFonts } from "~Constants"
+import { IconKey } from "~Components"
 
 export type ActivityDetail = {
     id: number
@@ -7,6 +8,6 @@ export type ActivityDetail = {
     typographyFont: TFonts
     underline: boolean
     valueAdditional?: string
-    icon?: string
+    icon?: IconKey
     onValuePress?: () => void
 }

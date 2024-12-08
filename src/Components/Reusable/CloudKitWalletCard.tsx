@@ -85,7 +85,8 @@ export const CloudKitWalletCard = ({
                                 <BaseView flexDirection="row" style={styles.icloudTag}>
                                     <BaseIcon
                                         size={18}
-                                        name={PlatformUtils.isIOS() ? "apple-icloud" : "google-drive"}
+                                        // TODO replace icon-cloud with icon-google-drive
+                                        name={PlatformUtils.isIOS() ? "icon-cloud" : "icon-cloud"}
                                         color={theme.colors.textReversed}
                                         style={styles.cloudIcon}
                                     />
@@ -98,7 +99,7 @@ export const CloudKitWalletCard = ({
                             {wallet.derivationPath === DerivationPath.ETH && (
                                 <>
                                     <BaseSpacer width={4} />
-                                    <BaseIcon name="ethereum" size={20} color={theme.colors.primaryDisabled} />
+                                    <BaseIcon name="icon-ethereum" size={20} color={theme.colors.primaryDisabled} />
                                 </>
                             )}
                         </BaseView>

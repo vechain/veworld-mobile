@@ -36,7 +36,9 @@ export const CheckBoxWithText: FC<Props> = ({ font, fontColor, text, checkSize, 
             fillColor={theme.colors.checkboxFilledBackground}
             innerIconStyle={styles.innerIcon}
             iconStyle={styles.icon}
-            iconComponent={isChecked ? <BaseIcon name="check" size={14} color={theme.colors.checkboxIcon} /> : <></>}
+            iconComponent={
+                isChecked ? <BaseIcon name="icon-check" size={14} color={theme.colors.checkboxIcon} /> : <></>
+            }
             isChecked={isChecked}
             textComponent={
                 <BaseText typographyFont={font ? font : "footNote"} color={fontColor} my={14} mx={10} testID={testID}>

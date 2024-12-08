@@ -41,7 +41,7 @@ export const BackButtonHeaderV2 = ({
                     <BaseIcon
                         haptics="Light"
                         action={onActionPress}
-                        name="arrow-left"
+                        name="icon-arrow-left"
                         size={24}
                         color={theme.colors.text}
                         testID={iconTestID}

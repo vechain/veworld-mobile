@@ -5,6 +5,9 @@ import { useTheme } from "~Hooks"
 import Icon from "react-native-vector-icons/MaterialCommunityIcons"
 import { IconProps } from "react-native-vector-icons/Icon"
 import HapticsService from "~Services/HapticsService"
+import { DesignSystemIconMap } from "~Assets"
+
+export type IconKey = keyof typeof DesignSystemIconMap
 
 type Props =
     | {
@@ -19,6 +22,7 @@ type Props =
           py?: number
           borderRadius?: number
           iconPadding?: number
+          name: IconKey
           haptics?: "Success" | "Warning" | "Error" | "Light" | "Medium" | "Heavy"
       } & IconProps &
           TouchableOpacityProps &

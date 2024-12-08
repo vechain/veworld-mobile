@@ -2,7 +2,7 @@ import { useNavigation } from "@react-navigation/native"
 import React, { FC, useCallback, useMemo } from "react"
 import { StyleSheet, TouchableWithoutFeedback } from "react-native"
 import { getTimeZone } from "react-native-localize"
-import { BaseIconV2, BaseText, BaseView } from "~Components/Base"
+import { BaseIcon, BaseText, BaseView } from "~Components/Base"
 import { COLORS, ColorThemeType, ERROR_EVENTS } from "~Constants"
 import { useDisclosure, useThemedStyles } from "~Hooks"
 import { useI18nContext } from "~i18n"
@@ -106,7 +106,7 @@ export const MnemonicCard: FC<Props> = ({ mnemonicArray, souceScreen, deviceToBa
                     </BaseView>
 
                     <BaseView style={styles.button} justifyContent="center" alignItems="center">
-                        <BaseIconV2
+                        <BaseIcon
                             name={isShow ? "icon-eye-off" : "icon-eye"}
                             size={16}
                             style={styles.icon}

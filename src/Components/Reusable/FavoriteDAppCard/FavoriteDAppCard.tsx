@@ -1,6 +1,6 @@
 import React, { memo, useCallback } from "react"
 import { StyleSheet, TouchableOpacityProps, ViewStyle } from "react-native"
-import { BaseIcon, BaseSpacer, BaseText, BaseTouchableBox, BaseView } from "~Components"
+import { BaseIcon, BaseSpacer, BaseText, BaseTouchableBox, BaseView, IconKey } from "~Components"
 import { DiscoveryDApp } from "~Constants"
 import { useDappBookmarking, useThemedStyles } from "~Hooks"
 import { DAppUtils } from "~Utils"
@@ -11,7 +11,7 @@ type Props = {
     onDAppPress: ({ href }: { href: string; custom?: boolean }) => void
     disabled?: boolean
     iconPressDisabled?: boolean
-    iconName?: string
+    iconName?: IconKey
     activeOpacity?: TouchableOpacityProps["activeOpacity"]
     opacity?: ViewStyle["opacity"]
     backgroundColor?: string
@@ -40,7 +40,7 @@ export const FavoriteDAppCard: React.FC<Props> = memo(
             if (iconName) {
                 return iconName
             } else {
-                return isBookMarked ? "bookmark" : "bookmark-outline"
+                return isBookMarked ? "icon-bookmark-minus" : "icon-bookmark-plus"
             }
         }
 

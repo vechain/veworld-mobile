@@ -38,25 +38,25 @@ describe("FastActionsBar component", () => {
             {
                 name: "Buy",
                 action: mocked_action_buy,
-                icon: <BaseIcon name="cart-outline" />,
+                icon: <BaseIcon name="icon-shopping-cart" />,
                 testID: "buyButton",
             },
             {
                 name: "Send",
                 action: mocked_action_send,
-                icon: <BaseIcon name="send-outline" />,
+                icon: <BaseIcon name="icon-send" />,
                 testID: "sendButton",
             },
             {
                 name: "Swap",
                 action: mocked_action_swap,
-                icon: <BaseIcon name="swap-horizontal" />,
+                icon: <BaseIcon name="icon-arrow-left-right" />,
                 testID: "swapButton",
             },
             {
                 name: "History",
                 action: mocked_action_history,
-                icon: <BaseIcon name="history" />,
+                icon: <BaseIcon name="icon-history" />,
                 testID: "historyButton",
             },
         ]

@@ -41,7 +41,7 @@ export const ToastAddressesContent: React.FC<Props> = ({ addresses, styles }) =>
             </BaseText>
             {recipientTitle ? (
                 <>
-                    <BaseIcon testID="transactionDirection" name="arrow-right" color={styles} size={12} />
+                    <BaseIcon testID="transactionDirection" name="icon-arrow-right" color={styles} size={12} />
                     <BaseText
                         testID="transactionAccountRecipient"
                         typographyFont="caption"

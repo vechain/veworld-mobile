@@ -73,14 +73,14 @@ export const AssetDetailScreen = ({ route }: Props) => {
                         })
                     }
                 },
-                icon: <BaseIcon color={theme.colors.text} name="send-outline" />,
+                icon: <BaseIcon color={theme.colors.text} name="icon-send" />,
                 testID: "sendButton",
             },
 
             {
                 name: LL.COMMON_RECEIVE(),
                 action: openQRCodeSheet,
-                icon: <BaseIcon color={theme.colors.text} name="qrcode" />,
+                icon: <BaseIcon color={theme.colors.text} name="icon-qr-code" />,
                 testID: "reciveButton",
             },
         ],

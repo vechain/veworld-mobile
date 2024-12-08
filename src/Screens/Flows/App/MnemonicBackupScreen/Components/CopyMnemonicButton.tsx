@@ -1,4 +1,4 @@
-import { BaseButton, BaseIconV2 } from "~Components"
+import { BaseButton, BaseIcon } from "~Components"
 import { LocalDevice } from "~Model"
 import React, { memo, useCallback } from "react"
 import { formatDateTime } from "~Utils/DateUtils/DateUtils"
@@ -54,7 +54,7 @@ export const CopyMnemonicButton = memo(({ mnemonicArray, deviceToBackup }: Props
             typographyFont="smallButtonPrimary"
             disabled={!mnemonicArray.length}
             textColor={theme.colors.text}
-            rightIcon={<BaseIconV2 name="icon-copy" color={theme.colors.text} size={12} style={styles.icon} />}
+            rightIcon={<BaseIcon name="icon-copy" color={theme.colors.text} size={12} style={styles.icon} />}
         />
     )
 })

@@ -1,6 +1,6 @@
 import React, { useCallback, useMemo } from "react"
 import { FlatList } from "react-native"
-import { BaseIconV2, BaseSpacer, BaseText, CardWithHeader, WalletBackupStatusRow } from "~Components"
+import { BaseIcon, BaseSpacer, BaseText, CardWithHeader, WalletBackupStatusRow } from "~Components"
 import { COLORS } from "~Constants"
 import { useI18nContext } from "~i18n"
 import { BaseDevice, DEVICE_TYPE, LocalDevice } from "~Model"
@@ -57,7 +57,7 @@ export const DevicesBackupState = ({ devices, onPress }: Props) => {
                     {statusText}
                 </BaseText>
             ) : (
-                <BaseIconV2 name="icon-chevron-right" size={14} color={COLORS.DARK_PURPLE} />
+                <BaseIcon name="icon-chevron-right" size={14} color={COLORS.DARK_PURPLE} />
             )
 
             return (

@@ -24,7 +24,7 @@ export const AddressButton: React.FC<Props> = memo(({ address }) => {
             bgColor={theme.colors.primaryReversed}
             title={AddressUtils.humanAddress(address, 5, 4)}
             action={() => onCopyToClipboard(address, LL.COMMON_LBL_ADDRESS())}
-            rightIcon={<BaseIcon name="content-copy" color={color} size={12} style={baseStyles.marginLeft} />}
+            rightIcon={<BaseIcon name="icon-copy" color={color} size={12} style={baseStyles.marginLeft} />}
         />
     )
 })

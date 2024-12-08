@@ -38,7 +38,7 @@ export const EditTokensBar = memo(({ isEdit, setIsEdit }: Props) => {
                         <>
                             <BaseIcon
                                 haptics="Light"
-                                name="priority-low"
+                                name="icon-list-end"
                                 action={onButtonPress}
                                 size={24}
                                 color={theme.colors.text}
@@ -49,7 +49,7 @@ export const EditTokensBar = memo(({ isEdit, setIsEdit }: Props) => {
                     )}
                     <BaseIcon
                         haptics="Light"
-                        name="pencil-outline"
+                        name="icon-pencil"
                         bg={COLORS.LIME_GREEN}
                         color={COLORS.DARK_PURPLE}
                         action={handleManageToken}
@@ -67,7 +67,7 @@ export const EditTokensBar = memo(({ isEdit, setIsEdit }: Props) => {
                 textColor={COLORS.DARK_PURPLE}
                 radius={30}
                 py={10}
-                leftIcon={<BaseIcon name="check" size={20} color={COLORS.DARK_PURPLE} />}>
+                leftIcon={<BaseIcon name="icon-check" size={20} color={COLORS.DARK_PURPLE} />}>
                 <BaseSpacer width={8} />
                 {LL.COMMON_BTN_SAVE()}
             </BaseButton>

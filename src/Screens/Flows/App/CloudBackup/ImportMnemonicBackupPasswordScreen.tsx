@@ -5,7 +5,6 @@ import {
     BackButtonHeader,
     BaseButton,
     BaseIcon,
-    BaseIconV2,
     BaseModal,
     BaseSpacer,
     BaseText,
@@ -153,7 +152,7 @@ export const ImportMnemonicBackupPasswordScreen = () => {
             body={
                 <BaseView style={styles.rootContainer}>
                     <BaseView justifyContent="center" alignItems="center" style={styles.keyIcon}>
-                        <BaseIconV2 name="icon-key" size={64} color={theme.colors.text} />
+                        <BaseIcon name="icon-key" size={64} color={theme.colors.text} />
                         <BaseSpacer height={20} />
                         <BaseView justifyContent="center" alignItems="center">
                             <BaseText align="center" typographyFont="subSubTitleMedium">
@@ -179,7 +178,7 @@ export const ImportMnemonicBackupPasswordScreen = () => {
                             <BaseIcon
                                 haptics="Light"
                                 action={() => setSecureText(prev => !prev)}
-                                name={secureText ? "eye-off-outline" : "eye-outline"}
+                                name={secureText ? "icon-eye-off" : "icon-eye"}
                                 size={16}
                                 color={COLORS.GREY_500}
                                 style={styles.toggleIcon}

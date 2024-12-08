@@ -74,7 +74,7 @@ export const AnimatedSearchBar = ({
                     setValue={onTextChange}
                     value={value}
                     showIcon={value.length > 0}
-                    iconName="close"
+                    iconName="icon-x"
                     iconSize={18}
                     onIconPress={() => onTextChange("")}
                 />

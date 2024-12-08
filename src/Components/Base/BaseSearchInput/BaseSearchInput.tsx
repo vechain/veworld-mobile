@@ -2,7 +2,7 @@ import React, { memo, useMemo } from "react"
 import { TextInput, StyleSheet, KeyboardTypeOptions } from "react-native"
 import { useTheme, useThemedStyles } from "~Hooks"
 import { typography, ColorThemeType, COLORS } from "~Constants"
-import { BaseIcon } from "../BaseIcon"
+import { BaseIcon, IconKey } from "../BaseIcon"
 import { BaseView } from "../BaseView"
 import { PlatformUtils } from "~Utils"
 import { BaseTouchable } from "../BaseTouchable"
@@ -14,7 +14,7 @@ type Props = {
     setValue?: (s: string) => void
     testID?: string
     showIcon?: boolean
-    iconName?: string
+    iconName?: IconKey
     iconSize?: number
     onIconPress?: () => void
 }
@@ -26,7 +26,7 @@ export const BaseSearchInput = memo(
         setValue,
         testID,
         showIcon = true,
-        iconName = "magnify",
+        iconName = "icon-zoom-in",
         iconSize = 24,
         onIconPress,
     }: Props) => {

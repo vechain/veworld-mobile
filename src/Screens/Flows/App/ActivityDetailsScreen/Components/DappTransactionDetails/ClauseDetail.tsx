@@ -2,13 +2,13 @@ import React, { memo } from "react"
 import { StyleSheet } from "react-native"
 import { useThemedStyles } from "~Hooks"
 import { ColorThemeType, SCREEN_WIDTH } from "~Constants"
-import { BaseIcon, BaseText, BaseTouchable, BaseView } from "~Components"
+import { BaseIcon, BaseText, BaseTouchable, BaseView, IconKey } from "~Components"
 
 type Props = {
     title: string
     value: string
     border?: boolean
-    valueIcon?: string
+    valueIcon?: IconKey
     onValuePress?: () => void
 }
 

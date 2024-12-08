@@ -1,13 +1,12 @@
 import React, { useCallback } from "react"
-import { BaseIcon, BaseIconV2, BaseText, BaseView, hideToast, ToastAddress } from "~Components"
+import { BaseIcon, BaseText, BaseView, hideToast, IconKey, ToastAddress } from "~Components"
 import { useTheme } from "~Hooks"
 import { ToastStyles } from "../util"
 import { ToastAddressesContent } from "./ToastAddressesContent"
-import { DesignSystemIconMap } from "~Assets"
 
 type Props = {
     styles: ToastStyles
-    icon: keyof typeof DesignSystemIconMap
+    icon: IconKey
     text1?: string
     text2?: string
     text3?: string
@@ -32,7 +31,7 @@ export const ToastContent = ({ styles, text1, icon, text2, text3, addresses, onP
     return (
         <BaseView style={styles.container}>
             <BaseView style={styles.contentContainer}>
-                <BaseIconV2 name={icon} size={20} color={styles.iconColor} />
+                <BaseIcon name={icon} size={20} color={styles.iconColor} />
                 <BaseView>
                     <BaseView style={styles.textContainer} px={12}>
                         {addresses && (
@@ -58,7 +57,7 @@ export const ToastContent = ({ styles, text1, icon, text2, text3, addresses, onP
                                 onPress={handleOnPress}
                                 color={textColor}
                                 typographyFont="body">
-                                {text3} <BaseIcon name="arrow-top-right" color={textColor} size={12} />
+                                {text3} <BaseIcon name="icon-arrow-link" color={textColor} size={12} />
                             </BaseText>
                         )}
                     </BaseView>

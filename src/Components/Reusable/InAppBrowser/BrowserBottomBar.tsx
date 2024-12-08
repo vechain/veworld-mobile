@@ -1,6 +1,6 @@
 import React, { useCallback, useEffect, useMemo } from "react"
 import { BackHandler, StyleSheet } from "react-native"
-import { BaseIcon, useInAppBrowser } from "~Components"
+import { BaseIcon, IconKey, useInAppBrowser } from "~Components"
 import { useBlockchainNetwork, useDappBookmarking, useTheme, useThemedStyles } from "~Hooks"
 import { ColorThemeType } from "~Constants"
 import { isIOS } from "~Utils/PlatformUtils/PlatformUtils"
@@ -9,7 +9,7 @@ import { useRoute } from "@react-navigation/native"
 import { Routes } from "~Navigation"
 
 type IconProps = {
-    name: string
+    name: IconKey
     onPress: () => void
     disabled?: boolean
 }
@@ -70,24 +70,25 @@ export const BrowserBottomBar: React.FC = () => {
     const IconConfig: IconProps[] = useMemo(() => {
         return [
             {
-                name: "chevron-left",
+                name: "icon-chevron-left",
                 onPress: onBackHandler,
                 disabled: !canGoBack,
             },
             {
-                name: "chevron-right",
+                name: "icon-chevron-right",
                 onPress: goForward,
                 disabled: !canGoForward,
             },
             {
-                name: isBookMarked ? "bookmark" : "bookmark-outline",
+                // TODO icon-bookmark-full
+                name: isBookMarked ? "icon-bookmark" : "icon-bookmark",
                 onPress: () => {
                     toggleBookmark()
                 },
                 disabled: !fromDiscovery,
             },
             {
-                name: "refresh",
+                name: "icon-refresh-cw",
                 onPress: () => webviewRef.current?.reload(),
             },
         ]

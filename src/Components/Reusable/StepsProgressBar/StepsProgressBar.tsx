@@ -64,7 +64,13 @@ export const StepsProgressBar: React.FC<Props> = ({ steps, currentStep, isCurren
                         ? step.isDoneText
                         : step.isActiveText
 
-                    const icon = isError ? "close" : isDone ? "check" : isNext ? "dots-horizontal" : "circle"
+                    const icon = isError
+                        ? "icon-x"
+                        : isDone
+                        ? "icon-check"
+                        : isNext
+                        ? "icon-more-horizontal"
+                        : "icon-circle"
 
                     return (
                         <BaseView key={index} justifyContent="flex-start" alignItems="center">

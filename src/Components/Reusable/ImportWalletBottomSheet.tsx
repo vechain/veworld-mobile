@@ -1,6 +1,6 @@
 import React, { useCallback } from "react"
 import { BottomSheetModalMethods } from "@gorhom/bottom-sheet/lib/typescript/types"
-import { BaseSpacer, BaseText, BaseView, BaseBottomSheet, BaseIcon, BaseTouchableBox } from "~Components"
+import { BaseBottomSheet, BaseIcon, BaseSpacer, BaseText, BaseTouchableBox, BaseView } from "~Components"
 import { useI18nContext } from "~i18n"
 import { useAnalyticTracking, useTheme } from "~Hooks"
 import { debug, PlatformUtils } from "~Utils"
@@ -45,7 +45,7 @@ export const ImportWalletBottomSheet = React.forwardRef<BottomSheetModalMethods,
             <BaseSpacer height={24} />
 
             <BaseTouchableBox action={navigateToImportLocalWallet} py={16} haptics="Medium">
-                <BaseIcon name="wallet-plus-outline" size={20} color={theme.colors.text} />
+                <BaseIcon name="icon-file-spreadsheet" size={20} color={theme.colors.text} />
                 <BaseView flex={1} px={12}>
                     <BaseText align="left" typographyFont="subSubTitle">
                         {LL.SB_IMPORT_WALLET_TYPE_SEED()}
@@ -54,11 +54,11 @@ export const ImportWalletBottomSheet = React.forwardRef<BottomSheetModalMethods,
                         {LL.BD_IMPORT_WALLET_TYPE_SEED({ cloud: PlatformUtils.isIOS() ? "iCloud" : "Google Drive" })}
                     </BaseText>
                 </BaseView>
-                <BaseIcon name="chevron-right" size={24} color={theme.colors.text} />
+                <BaseIcon name="icon-chevron-right" size={24} color={theme.colors.text} />
             </BaseTouchableBox>
             <BaseSpacer height={16} />
             <BaseTouchableBox action={navigateToImportHardwareWallet} py={16} haptics="Medium">
-                <BaseIcon name="bluetooth-connect" size={20} color={theme.colors.text} />
+                <BaseIcon name="icon-bluetooth-connected" size={20} color={theme.colors.text} />
                 <BaseView flex={1} px={12}>
                     <BaseText align="left" typographyFont="subSubTitle">
                         {LL.SB_IMPORT_WALLET_TYPE_HARDWARE()}
@@ -67,7 +67,7 @@ export const ImportWalletBottomSheet = React.forwardRef<BottomSheetModalMethods,
                         {LL.BD_IMPORT_WALLET_TYPE_HARDWARE()}
                     </BaseText>
                 </BaseView>
-                <BaseIcon name="chevron-right" size={24} color={theme.colors.text} />
+                <BaseIcon name="icon-chevron-right" size={24} color={theme.colors.text} />
             </BaseTouchableBox>
             <BaseSpacer height={16} />
         </BaseBottomSheet>

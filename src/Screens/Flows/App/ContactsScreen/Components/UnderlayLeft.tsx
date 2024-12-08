@@ -30,7 +30,7 @@ export const UnderlayLeft = ({ onDelete }: Props) => {
             <BaseView style={styles.underlayLeft}>
                 <TouchableOpacity onPress={handleDelete}>
                     <BaseIcon
-                        name={"delete"}
+                        name={"icon-trash-2"}
                         size={24}
                         bg={theme.colors.danger}
                         color={theme.colors.card}

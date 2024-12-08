@@ -1,6 +1,8 @@
+import { IconKey } from "~Components"
+
 export type PaymentMethod = {
     id: string
-    icon: string
+    icon: IconKey
 }
 
 export enum PaymentMethodsIds {
@@ -11,10 +13,10 @@ export enum PaymentMethodsIds {
 export const PaymentMethodsList: Record<PaymentMethodsIds, PaymentMethod> = {
     [PaymentMethodsIds.CreditCard]: {
         id: PaymentMethodsIds.CreditCard,
-        icon: "credit-card-outline",
+        icon: "icon-credit-card",
     },
     [PaymentMethodsIds.BankAccount]: {
         id: PaymentMethodsIds.BankAccount,
-        icon: "bank-outline",
+        icon: "icon-landmark",
     },
 }

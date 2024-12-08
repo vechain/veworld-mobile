@@ -9,7 +9,6 @@ import {
     BackupSuccessfulBottomSheet,
     BaseButton,
     BaseIcon,
-    BaseIconV2,
     BaseSpacer,
     BaseText,
     BaseTextInput,
@@ -177,7 +176,7 @@ export const ChooseMnemonicBackupPassword = () => {
             body={
                 <BaseView>
                     <BaseView justifyContent="center" alignItems="center" style={styles.keyIcon}>
-                        <BaseIconV2 name="icon-key" size={64} color={theme.colors.text} />
+                        <BaseIcon name="icon-key" size={64} color={theme.colors.text} />
                         <BaseSpacer height={20} />
                         <BaseView justifyContent="center" alignItems="center">
                             <BaseText align="center" typographyFont="subSubTitleMedium">
@@ -206,7 +205,7 @@ export const ChooseMnemonicBackupPassword = () => {
                             <BaseIcon
                                 haptics="Light"
                                 action={() => setSecureText1(prev => !prev)}
-                                name={secureText1 ? "eye-off-outline" : "eye-outline"}
+                                name={secureText1 ? "icon-eye-off" : "icon-eye"}
                                 size={16}
                                 color={COLORS.GREY_500}
                                 style={styles.toggleIcon}
@@ -237,7 +236,7 @@ export const ChooseMnemonicBackupPassword = () => {
                                 <BaseIcon
                                     haptics="Light"
                                     action={() => setSecureText2(prev => !prev)}
-                                    name={secureText2 ? "eye-off-outline" : "eye-outline"}
+                                    name={secureText2 ? "icon-eye-off" : "icon-eye"}
                                     size={16}
                                     color={COLORS.GREY_500}
                                     style={styles.toggleIcon}

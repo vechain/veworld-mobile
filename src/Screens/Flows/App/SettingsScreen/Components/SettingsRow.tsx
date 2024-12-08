@@ -3,9 +3,8 @@ import React, { useCallback } from "react"
 import { StyleSheet } from "react-native"
 import { LocalizedString } from "typesafe-i18n"
 import { useTheme } from "~Hooks"
-import { BaseIconV2, BaseText, BaseTouchable, BaseView } from "~Components"
+import { BaseIcon, BaseText, BaseTouchable, BaseView, IconKey } from "~Components"
 import { RootStackParamListSettings, Routes } from "~Navigation"
-import { DesignSystemIconMap } from "~Assets"
 
 type Excluded = Routes.WALLET_DETAILS | Routes.ICLOUD_MNEMONIC_BACKUP | Routes.CHOOSE_MNEMONIC_BACKUP_PASSWORD
 
@@ -14,7 +13,7 @@ type ExcludedSettingRoutes = Excluded | Routes.SETTINGS_GET_SUPPORT | Routes.SET
 export type RowProps = {
     title: LocalizedString
     screenName: keyof Omit<RootStackParamListSettings, Excluded>
-    icon: keyof typeof DesignSystemIconMap
+    icon: IconKey
     url?: string
 }
 
@@ -35,13 +34,13 @@ export const SettingsRow = ({ title, screenName, icon, url }: RowProps) => {
     return (
         <BaseTouchable action={onPress} style={baseStyles.container} haptics="Light" testID={title}>
             <BaseView flexDirection="row">
-                <BaseIconV2 color={theme.colors.text} name={icon} size={24} />
+                <BaseIcon color={theme.colors.text} name={icon} size={24} />
                 <BaseText mx={14} typographyFont="button" color={theme.colors.text}>
                     {title}
                 </BaseText>
             </BaseView>
 
-            <BaseIconV2 color={theme.colors.text} name={"icon-chevron-right"} size={16} />
+            <BaseIcon color={theme.colors.text} name={"icon-chevron-right"} size={16} />
         </BaseTouchable>
     )
 }
