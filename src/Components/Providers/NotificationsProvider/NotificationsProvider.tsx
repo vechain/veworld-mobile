@@ -5,6 +5,7 @@ import { useAppState } from "~Hooks"
 import { AppStateType, NETWORK_TYPE } from "~Model"
 import {
     increaseDappVisitCounter,
+    removeDappVisitCounter,
     selectDappVisitCounter,
     selectNotificationOptedIn,
     selectNotificationPermissionEnabled,
@@ -188,13 +189,21 @@ const NotificationsProvider = React.memo(({ children }: PropsWithChildren) => {
         return OneSignal.User.getTags()
     }, [])
 
-    const addTag = useCallback((key: string, value: string) => {
-        OneSignal.User.addTag(key, value)
-    }, [])
+    const addTag = useCallback(
+        (key: string, value: string) => {
+            OneSignal.User.addTag(key, value)
+            dispatch(setDappVisitCounter({ dappId: key, counter: 2 }))
+        },
+        [dispatch],
+    )
 
-    const removeTag = useCallback((key: string) => {
-        OneSignal.User.removeTag(key)
-    }, [])
+    const removeTag = useCallback(
+        (key: string) => {
+            OneSignal.User.removeTag(key)
+            dispatch(removeDappVisitCounter({ dappId: key }))
+        },
+        [dispatch],
+    )
 
     const removeAllTags = useCallback(() => {
         getTags().then(tags => {
@@ -231,7 +240,7 @@ const NotificationsProvider = React.memo(({ children }: PropsWithChildren) => {
             getTags()
                 .then(tags => {
                     Object.entries(dappVisitCounter).forEach(([dappId, counter]) => {
-                        if (tags[dappId] && !dappVisitCounter[dappId]) {
+                        if (tags[dappId] && tags[dappId] === "true" && dappVisitCounter[dappId] !== 2) {
                             dispatch(setDappVisitCounter({ dappId: dappId, counter: 2 }))
                         } else if (counter >= 2) {
                             addTag(dappId, "true")
