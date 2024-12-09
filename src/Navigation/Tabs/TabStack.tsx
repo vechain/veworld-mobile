@@ -141,8 +141,6 @@ export const tabbarBaseStyles = StyleSheet.create({
         left: 0,
         right: 0,
         borderTopWidth: 0,
-        borderTopLeftRadius: 20,
-        borderTopRightRadius: 20,
         padding: 8,
         height: PlatformUtils.isIOS() ? 86 : 68,
     },

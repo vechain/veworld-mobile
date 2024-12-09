@@ -2,7 +2,6 @@ import React, { useMemo } from "react"
 import { StyleSheet } from "react-native"
 import { BaseCard, BaseIcon, BaseSpacer, BaseText, BaseView, IconKey } from "~Components/Base"
 import { useTheme } from "~Hooks"
-import { DesignSystemIconMap } from "~Assets"
 
 type Props = {
     leftIcon?: IconKey | React.ReactNode
@@ -14,7 +13,7 @@ export const CardButton = ({ leftIcon, rightIcon, title, action }: Props) => {
     const theme = useTheme()
 
     const isDesignSystemIcon = (icon: IconKey | React.ReactNode): icon is IconKey => {
-        return typeof icon === "string" && icon in DesignSystemIconMap
+        return typeof icon === "string"
     }
 
     const renderLeftIcon = useMemo(() => {
