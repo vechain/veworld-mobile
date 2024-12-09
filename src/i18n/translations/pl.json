@@ -312,6 +312,7 @@
   "COMMON_SELECT_ACCOUNT_TO_REMOVE": "Wybierz konto do usunięcia",
   "COMMON_TODAY": "Dzisiaj",
   "COMMON_TOTAL_SUPPLY": "Całkowita podaż",
+  "COMMON_WHOOPS": "Ups!",
   "CONNECTED_APPS_CONFIRM_DISCONNECT_MESSAGE": "Potwierdzając to, odłączysz aplikację {name: string} od {alias: string}",
   "CONNECTED_APPS_SCREEN_DESCRIPTION": "Połącz swój portfel z aplikacjami, aby dokonywać transakcji i podpisywać certyfikaty.",
   "CONNECTED_APPS_SCREEN_NO_CONNECTED_APP": "Nie masz połączonych aplikacji. Gdy będziesz miał, pojawią się tutaj.",

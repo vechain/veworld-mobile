@@ -312,6 +312,7 @@
   "COMMON_SELECT_ACCOUNT_TO_REMOVE": "Выберите аккаунт для удаления",
   "COMMON_TODAY": "Сегодня",
   "COMMON_TOTAL_SUPPLY": "Общий объем",
+  "COMMON_WHOOPS": "Упс!",
   "CONNECTED_APPS_CONFIRM_DISCONNECT_MESSAGE": "Подтверждая это, вы отключите приложение {name: string} от {alias: string}",
   "CONNECTED_APPS_SCREEN_DESCRIPTION": "Подключите свой кошелек к приложениям для совершения транзакций и подписания сертификатов.",
   "CONNECTED_APPS_SCREEN_NO_CONNECTED_APP": "У вас нет подключенных приложений. Когда у вас будут, они будут отображены здесь.",

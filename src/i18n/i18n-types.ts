@@ -1294,6 +1294,10 @@ type RootTranslation = {
 	 */
 	COMMON_TOTAL_SUPPLY: string
 	/**
+	 * W​h​o​o​p​s​!
+	 */
+	COMMON_WHOOPS: string
+	/**
 	 * C​o​n​f​i​r​m​i​n​g​ ​t​h​i​s​ ​y​o​u​ ​w​i​l​l​ ​d​i​s​c​o​n​n​e​c​t​ ​t​h​e​ ​{​n​a​m​e​}​ ​a​p​p​ ​f​r​o​m​ ​{​a​l​i​a​s​}
 	 * @param {string} alias
 	 * @param {string} name
@@ -2154,7 +2158,8 @@ type RootTranslation = {
 	 */
 	NFT_DETAIL_TOTAL_SUPPLY: string
 	/**
-	 * W​o​o​p​s​!​ ​T​h​e​r​e​ ​w​a​s​ ​a​n​ ​e​r​r​o​r​ ​t​r​y​i​n​g​ ​t​o​ ​g​e​t​ ​y​o​u​r​ ​N​F​T​s​.​ ​P​l​e​a​s​e​ ​t​r​y​ ​a​g​a​i​n​ ​i​n​ ​a​ ​w​h​i​l​e​.
+	 * T​h​e​r​e​ ​w​a​s​ ​a​n​ ​e​r​r​o​r​ ​t​r​y​i​n​g​ ​t​o​ ​g​e​t​ ​y​o​u​r​ ​N​F​T​s​.​ ​
+​ ​P​l​e​a​s​e​ ​t​r​y​ ​a​g​a​i​n​ ​i​n​ ​a​ ​w​h​i​l​e​.
 	 */
 	NFT_DOWNLOAD_ERROR: string
 	/**
@@ -4819,6 +4824,10 @@ Try reconnect your device to the internet.
 	 */
 	COMMON_TOTAL_SUPPLY: () => LocalizedString
 	/**
+	 * Whoops!
+	 */
+	COMMON_WHOOPS: () => LocalizedString
+	/**
 	 * Confirming this you will disconnect the {name} app from {alias}
 	 */
 	CONNECTED_APPS_CONFIRM_DISCONNECT_MESSAGE: (arg: { alias: string, name: string }) => LocalizedString
@@ -5675,7 +5684,8 @@ Try reconnect your device to the internet.
 	 */
 	NFT_DETAIL_TOTAL_SUPPLY: () => LocalizedString
 	/**
-	 * Woops! There was an error trying to get your NFTs. Please try again in a while.
+	 * There was an error trying to get your NFTs. 
+ Please try again in a while.
 	 */
 	NFT_DOWNLOAD_ERROR: () => LocalizedString
 	/**

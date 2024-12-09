@@ -312,6 +312,7 @@
   "COMMON_SELECT_ACCOUNT_TO_REMOVE": "選擇要移除的帳戶",
   "COMMON_TODAY": "今天",
   "COMMON_TOTAL_SUPPLY": "總供應量",
+  "COMMON_WHOOPS": "哎呀!",
   "CONNECTED_APPS_CONFIRM_DISCONNECT_MESSAGE": "確認此操作將您從{alias: string}中斷連接{name: string}應用程式",
   "CONNECTED_APPS_SCREEN_DESCRIPTION": "將您的錢包與應用程式連接以進行交易和簽署證書。",
   "CONNECTED_APPS_SCREEN_NO_CONNECTED_APP": "您沒有已連接的應用程式。一旦連接，它們將顯示在此處。",
