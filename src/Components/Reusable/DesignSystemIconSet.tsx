@@ -6,5 +6,3 @@ export const Icon = createIconSet(
     "DesignSystemIcons",
     require("~Assets/Fonts/DesignSystemIcons/DesignSystemIcons.ttf"),
 )
-
-export type IconKey = keyof typeof designSystemIconMap

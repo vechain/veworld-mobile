@@ -2,8 +2,8 @@ import React, { FC, memo } from "react"
 import { StyleSheet, TextStyle } from "react-native"
 import { useThemedStyles } from "~Hooks"
 import { COLORS, ColorThemeType } from "~Constants"
-import { BaseView } from "~Components/Base"
-import { Icon, IconKey } from "~Components/Reusable/DesignSystemIconSet"
+import { BaseView, IconKey } from "~Components/Base"
+import { Icon } from "~Components/Reusable/DesignSystemIconSet"
 
 type Props = {
     focused: boolean
