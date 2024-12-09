@@ -70,8 +70,12 @@ const resolveMimeTypeFromUri = async (resource: string) => {
             return resource.split(";")[0].split(":")[1]
         }
 
-        const res = await axios.head(URIUtils.convertUriToUrl(resource), {
+        const url = URIUtils.convertUriToUrl(resource)
+
+        const res = await axios.head(url, {
             timeout: NFT_MIME_TYPE_AXIOS_TIMEOUT,
+            // Add project id to ipfs requests to track the project
+            headers: url.includes("vechain.org/ipfs") ? { "x-project-id": "veworld-mobile" } : undefined,
         })
 
         const contentType = res.headers["content-type"]
