@@ -2,7 +2,7 @@ import { createBottomTabNavigator } from "@react-navigation/bottom-tabs"
 import { NavigatorScreenParams } from "@react-navigation/native"
 import React, { useCallback, useMemo } from "react"
 import { StyleSheet } from "react-native"
-import { TabIcon } from "~Components"
+import { IconKey, TabIcon } from "~Components"
 import { useCheckWalletBackup, useTheme } from "~Hooks"
 import { NETWORK_TYPE } from "~Model"
 import { Routes } from "~Navigation/Enums"
@@ -38,8 +38,8 @@ export const TabStack = () => {
     const isShowBackupModal = useCheckWalletBackup(selectedAccount)
 
     const renderTabBarIcon = useCallback(
-        (focused: boolean, iconName: string) => {
-            const isSettings = iconName === "menu"
+        (focused: boolean, iconName: IconKey) => {
+            const isSettings = iconName === "icon-menu"
 
             return (
                 <TabIcon
@@ -87,7 +87,7 @@ export const TabStack = () => {
                 options={{
                     tabBarLabel: "Wallet",
                     tabBarTestID: "wallet-tab",
-                    tabBarIcon: ({ focused }) => renderTabBarIcon(focused, focused ? "home" : "home-outline"),
+                    tabBarIcon: ({ focused }) => renderTabBarIcon(focused, "icon-home"),
                 }}
             />
 
@@ -97,8 +97,7 @@ export const TabStack = () => {
                 options={{
                     tabBarLabel: "NFT",
                     tabBarTestID: "nft-tab",
-                    tabBarIcon: ({ focused }) =>
-                        renderTabBarIcon(focused, focused ? "image-multiple" : "image-multiple-outline"),
+                    tabBarIcon: ({ focused }) => renderTabBarIcon(focused, "icon-image"),
                 }}
             />
 
@@ -108,7 +107,7 @@ export const TabStack = () => {
                 options={{
                     tabBarLabel: "Discover",
                     tabBarTestID: "discover-tab",
-                    tabBarIcon: ({ focused }) => renderTabBarIcon(focused, focused ? "compass" : "compass-outline"),
+                    tabBarIcon: ({ focused }) => renderTabBarIcon(focused, "icon-explorer"),
                 }}
             />
 
@@ -118,7 +117,7 @@ export const TabStack = () => {
                 options={{
                     tabBarLabel: Routes.HISTORY,
                     tabBarTestID: "history-tab",
-                    tabBarIcon: ({ focused }) => renderTabBarIcon(focused, "history"),
+                    tabBarIcon: ({ focused }) => renderTabBarIcon(focused, "icon-history"),
                 }}
             />
 
@@ -128,7 +127,7 @@ export const TabStack = () => {
                 options={{
                     tabBarLabel: "Settings",
                     tabBarTestID: "settings-tab",
-                    tabBarIcon: ({ focused }) => renderTabBarIcon(focused, "menu"),
+                    tabBarIcon: ({ focused }) => renderTabBarIcon(focused, "icon-menu"),
                 }}
             />
         </Tab.Navigator>
@@ -144,6 +143,7 @@ export const tabbarBaseStyles = StyleSheet.create({
         borderTopWidth: 0,
         borderTopLeftRadius: 20,
         borderTopRightRadius: 20,
+        padding: 8,
         height: PlatformUtils.isIOS() ? 86 : 68,
     },
     shadow: {

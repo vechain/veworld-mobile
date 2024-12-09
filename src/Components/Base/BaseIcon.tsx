@@ -1,11 +1,11 @@
 /* eslint-disable react-native/no-inline-styles */
 import React, { memo, useCallback, useMemo } from "react"
-import { TouchableOpacity, TouchableOpacityProps, View, ViewProps } from "react-native"
+import { OpaqueColorValue, TouchableOpacity, TouchableOpacityProps, View, ViewProps } from "react-native"
 import { useTheme } from "~Hooks"
-import Icon from "react-native-vector-icons/MaterialCommunityIcons"
 import { IconProps } from "react-native-vector-icons/Icon"
 import HapticsService from "~Services/HapticsService"
 import { DesignSystemIconMap } from "~Assets"
+import { Icon } from "~Components/Reusable/DesignSystemIconSet"
 
 export type IconKey = keyof typeof DesignSystemIconMap
 
@@ -23,6 +23,7 @@ type Props =
           borderRadius?: number
           iconPadding?: number
           name: IconKey
+          color?: string | OpaqueColorValue
           haptics?: "Success" | "Warning" | "Error" | "Light" | "Medium" | "Heavy"
       } & IconProps &
           TouchableOpacityProps &
@@ -33,7 +34,7 @@ export const BaseIcon: React.FC<Props> = memo(props => {
     const theme = useTheme()
 
     const iconColor = useMemo(
-        () => color || (theme.isDark ? theme.colors.tertiary : theme.colors.primary),
+        () => color ?? (theme.isDark ? theme.colors.tertiary : theme.colors.primary),
         [theme, color],
     )
 

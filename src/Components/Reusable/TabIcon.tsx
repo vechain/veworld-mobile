@@ -1,13 +1,13 @@
 import React, { FC, memo } from "react"
 import { StyleSheet, TextStyle } from "react-native"
-import Icon from "react-native-vector-icons/MaterialCommunityIcons"
 import { useThemedStyles } from "~Hooks"
-import { ColorThemeType } from "~Constants"
-import { BaseView } from "~Components/Base"
+import { COLORS, ColorThemeType } from "~Constants"
+import { BaseView, IconKey } from "~Components/Base"
+import { Icon } from "~Components/Reusable/DesignSystemIconSet"
 
 type Props = {
     focused: boolean
-    title: string
+    title: IconKey
     isSettings: boolean
     isShowBackupModal: boolean
 }
@@ -19,26 +19,26 @@ export const TabIcon: FC<Props> = memo(({ focused, title, isSettings, isShowBack
         <BaseView justifyContent="center" alignItems="center" style={styles.container}>
             {isSettings && isShowBackupModal && <BaseView style={styles.warningLabel} />}
 
-            <Icon name={title.toLowerCase()} size={24} color={(styles.icon as TextStyle).color} />
+            <Icon name={title.toLowerCase() as IconKey} size={20} color={(styles.icon as TextStyle).color} />
         </BaseView>
     )
 })
 
 const baseStyles = (isFocused: boolean) => (theme: ColorThemeType) => {
     const iconColor = () => {
-        if (isFocused) return theme.isDark ? theme.colors.tertiary : theme.colors.primary
-        return theme.colors.primary
+        if (isFocused) return theme.isDark ? COLORS.WHITE : theme.colors.textReversed
+        return theme.colors.text
     }
 
-    const bgColor = isFocused ? theme.colors.secondary : "transparent"
+    const bgColor = isFocused ? COLORS.DARK_PURPLE : "transparent"
     return StyleSheet.create({
         icon: {
             color: iconColor(),
         },
         container: {
-            borderRadius: 10,
-            paddingHorizontal: 12,
-            paddingVertical: 8.5,
+            borderRadius: 8,
+            paddingHorizontal: 20,
+            paddingVertical: 10,
             backgroundColor: bgColor,
             position: "relative",
         },
