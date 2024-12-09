@@ -312,6 +312,7 @@
   "COMMON_SELECT_ACCOUNT_TO_REMOVE": "제거할 계정 선택",
   "COMMON_TODAY": "오늘",
   "COMMON_TOTAL_SUPPLY": "총 공급량",
+  "COMMON_WHOOPS": "웁스!",
   "CONNECTED_APPS_CONFIRM_DISCONNECT_MESSAGE": "{name: string} 앱을 {alias: string}에서 연결 해제하려면 확인해 주세요",
   "CONNECTED_APPS_SCREEN_DESCRIPTION": "트랜잭션을 수행하고 인증서에 서명하려면 지갑을 앱에 연결하세요.",
   "CONNECTED_APPS_SCREEN_NO_CONNECTED_APP": "연결된 앱이 없습니다. 연결 후에는 여기에 표시됩니다.",
