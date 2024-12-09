@@ -17,6 +17,7 @@ import {
 import { GestureHandlerRootView } from "react-native-gesture-handler"
 import { useFonts } from "expo-font"
 import {
+    DesignSystemIcons,
     Inter_Bold,
     Inter_Light,
     Inter_Medium,
@@ -74,6 +75,7 @@ const Main = () => {
         [fontFamily["Mono-Bold"]]: Mono_Bold,
         [fontFamily["Mono-Regular"]]: Mono_Regular,
         [fontFamily["Mono-Light"]]: Mono_Light,
+        [fontFamily.DesignSystemIcons]: DesignSystemIcons,
     })
 
     // Online status management
