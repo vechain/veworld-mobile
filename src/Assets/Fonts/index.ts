@@ -9,16 +9,18 @@ const Mono_Light = require("./Mono/JetBrainsMono-Light.ttf")
 const Mono_Regular = require("./Mono/JetBrainsMono-Regular.ttf")
 
 const DesignSystemIcons = require("./DesignSystemIcons/DesignSystemIcons.ttf")
-export { default as DesignSystemIconMap } from "./DesignSystemIcons/designSystemIconMap.json"
+
+import * as DesignSystemIconMap from "./DesignSystemIcons/designSystemIconMap.json"
+export { DesignSystemIconMap }
 
 export {
-    Inter_Regular,
-    Inter_Medium,
+    DesignSystemIcons,
     Inter_Bold,
     Inter_Light,
+    Inter_Medium,
+    Inter_Regular,
     Mono_Bold,
     Mono_Extra_Bold,
     Mono_Light,
     Mono_Regular,
-    DesignSystemIcons,
 }
