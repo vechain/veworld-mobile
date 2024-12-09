@@ -5,15 +5,15 @@ import { useTheme } from "~Hooks"
 import { IconKey } from "~Components"
 
 type Props = {
-    leftIcon?: IconKey | React.ReactNode
-    rightIcon?: IconKey | React.ReactNode
+    leftIcon?: IconKey | Exclude<React.ReactNode, string>
+    rightIcon?: IconKey | Exclude<React.ReactNode, string>
     title: string
     action?: () => void
 }
 export const CardButton = ({ leftIcon, rightIcon, title, action }: Props) => {
     const theme = useTheme()
 
-    const isDesignSystemIcon = (icon: IconKey | React.ReactNode): icon is IconKey => {
+    const isDesignSystemIcon = (icon: IconKey | Exclude<React.ReactNode, string>): icon is IconKey => {
         return typeof icon === "string"
     }
 

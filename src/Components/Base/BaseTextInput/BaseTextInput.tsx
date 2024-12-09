@@ -14,7 +14,7 @@ export type BaseTextInputProps = {
     value?: string
     errorMessage?: string
     testID?: string
-    rightIcon?: IconKey | React.ReactNode
+    rightIcon?: IconKey | Exclude<React.ReactNode, string>
     rightIconTestID?: string
     onIconPress?: () => void
     containerStyle?: StyleProp<ViewStyle>
