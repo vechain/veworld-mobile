@@ -2,10 +2,11 @@ import React, { memo, useMemo } from "react"
 import { TextInput, StyleSheet, KeyboardTypeOptions } from "react-native"
 import { useTheme, useThemedStyles } from "~Hooks"
 import { typography, ColorThemeType, COLORS } from "~Constants"
-import { BaseIcon, IconKey } from "../BaseIcon"
+import { BaseIcon } from "../BaseIcon"
 import { BaseView } from "../BaseView"
 import { PlatformUtils } from "~Utils"
 import { BaseTouchable } from "../BaseTouchable"
+import { IconKey } from "~Components"
 const { defaults: defaultTypography } = typography
 
 type Props = {

@@ -1,7 +1,8 @@
 import React, { useMemo } from "react"
 import { StyleSheet } from "react-native"
-import { BaseCard, BaseIcon, BaseSpacer, BaseText, BaseView, IconKey } from "~Components/Base"
+import { BaseCard, BaseIcon, BaseSpacer, BaseText, BaseView } from "~Components/Base"
 import { useTheme } from "~Hooks"
+import { IconKey } from "~Components"
 
 type Props = {
     leftIcon?: IconKey | React.ReactNode

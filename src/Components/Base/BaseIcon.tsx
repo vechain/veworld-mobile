@@ -3,11 +3,8 @@ import React, { memo, useCallback, useMemo } from "react"
 import { OpaqueColorValue, TouchableOpacity, TouchableOpacityProps, View, ViewProps } from "react-native"
 import { useTheme } from "~Hooks"
 import HapticsService from "~Services/HapticsService"
-import { designSystemIconMap } from "~Assets"
-import { Icon } from "~Components/Reusable/DesignSystemIconSet"
+import { Icon, IconKey } from "~Components"
 import { IconProps } from "react-native-vector-icons/Icon"
-
-export type IconKey = keyof typeof designSystemIconMap
 
 type Props =
     | {
