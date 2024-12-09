@@ -1,4 +1,4 @@
-{
+export const designSystemIconMap = {
     "icon-accessibility": 59905,
     "icon-activity": 59906,
     "icon-air-vent": 59907,
@@ -895,5 +895,5 @@
     "icon-zap": 60798,
     "icon-zap-off": 60799,
     "icon-zoom-in": 60800,
-    "icon-zoom-out": 60801
+    "icon-zoom-out": 60801,
 }

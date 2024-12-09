@@ -124,7 +124,7 @@ export const DiscoverScreen: React.FC = () => {
                 <AnimatedSearchBar
                     placeholder={LL.DISCOVER_SEARCH()}
                     value={filteredSearch}
-                    iconName={"history"}
+                    iconName={"icon-history"}
                     iconColor={visitedUrls.length > 0 ? theme.colors.primary : theme.colors.disabledButton}
                     onTextChange={onTextChange}
                     onIconPress={onNavigateToBrowserHistory}
