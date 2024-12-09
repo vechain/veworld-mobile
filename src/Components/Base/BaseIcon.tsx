@@ -7,7 +7,7 @@ import { designSystemIconMap } from "~Assets"
 import { Icon } from "~Components/Reusable/DesignSystemIconSet"
 import { IconProps } from "react-native-vector-icons/Icon"
 
-export type IconKey = Extract<keyof typeof designSystemIconMap, string>
+export type IconKey = keyof typeof designSystemIconMap
 
 type Props =
     | {

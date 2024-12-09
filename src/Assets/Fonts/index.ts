@@ -10,11 +10,11 @@ const Mono_Regular = require("./Mono/JetBrainsMono-Regular.ttf")
 
 const DesignSystemIcons = require("./DesignSystemIcons/DesignSystemIcons.ttf")
 
-const designSystemIconMap = require("./DesignSystemIcons/designSystemIconMap.json")
-export { designSystemIconMap }
+import designSystemIconMap from "~Assets/Fonts/DesignSystemIcons/designSystemIconMap.json"
 
 export {
     DesignSystemIcons,
+    designSystemIconMap,
     Inter_Bold,
     Inter_Light,
     Inter_Medium,
